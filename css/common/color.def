@@ -1,0 +1,35 @@
+Header Background = 94, 151, 230
+Header MainColor = 255,255,255
+Header SubColor = 255,255,0
+
+Gray Background = 240,240,240
+Dark Gray Border = 190,190,190
+
+Label Background = 255,255,212
+
+Red = 255, 0, 0
+Green = 0,255,0
+Blue = 0,0,255
+Yellow = 255,255,0
+Purple = 128,0,255
+
+SI = 173, 216, 230
+BO = 235, 199, 232
+TB = 255, 232, 173
+TS = 234, 202, 176
+LI = 196, 236, 196 
+
+dipole = 0, 137, 182
+quadrupole = 237, 107, 33
+sextupole = 138, 153, 119
+corrector = 187, 187, 187
+
+User Shift = 90, 170, 250
+Accelerator Shift = 30, 200, 30
+Maintenance Shift = 240, 220, 0
+Conditioning Shift = 230, 100, 230
+
+button = 225, 225, 225
+
+Horizontal Orbit = 21, 21, 196
+Vertical Orbit = 201, 21, 4
