@@ -7,6 +7,7 @@ import multiprocessing as _multiprocessing
 import signal as _signal
 import main as _main
 
+
 INTERVAL = 0.1
 stop_event = _multiprocessing.Event()
 

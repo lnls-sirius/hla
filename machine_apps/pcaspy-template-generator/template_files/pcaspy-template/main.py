@@ -36,7 +36,9 @@ class App:
         _time.sleep(interval)
 
     def read(self,reason):
-        self.driver.updatePVs()
+        value = None # this should be implemented.
+        self.driver.updatePVs() # this should be used in case PV states have changed.
+        return value
 
     def write(self,reason,value):
         return False # False: no write implemented.
