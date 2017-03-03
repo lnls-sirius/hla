@@ -15,22 +15,14 @@ __version__ = _pvs.__version__
 class App:
 
     PVS_PREFIX = 'TEST-'
+    pvs_database = _pvs.pvs_database
 
-    def __init__(self):
-        self._driver = None # This should latter be set by the Driver __init__ using driver.setter
-        self._pvs_database = _pvs.pvs_database
-
-    @property
-    def pvs_database(self):
-        return self._pvs_database
+    def __init__(self,driver):
+        self._driver = driver
 
     @property
     def driver(self):
         return self._driver
-
-    @driver.setter
-    def driver(self,value):
-        self._driver = value
 
     def process(self,interval):
         _time.sleep(interval)

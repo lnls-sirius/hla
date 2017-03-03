@@ -19,10 +19,9 @@ def stop_now(signum, frame):
 
 class PCASDriver(_pcaspy.Driver):
 
-    def __init__(self, app):
+    def __init__(self):
         super().__init__()
-        self.app = app
-        self.app.driver = self
+        self.app = _main.App(self)
 
     def read(self, reason):
         value = self.app.read(reason)
@@ -32,8 +31,7 @@ class PCASDriver(_pcaspy.Driver):
             return value
 
     def write(self, reason, value):
-        if self.app.write(reason, value):
-            super().write(reason, value)
+        return self.app.write(reason, value)
 
 
 def run():
@@ -41,13 +39,10 @@ def run():
     # define abort function
     _signal.signal(_signal.SIGINT, stop_now)
 
-    # create application object
-    app = _main.App()
-
     # create a new simple pcaspy server and driver to responde client's requests
     server = _pcaspy.SimpleServer()
-    server.createPV(_main.App.PVS_PREFIX, app.pvs_database)
-    pcas_driver = PCASDriver(app)
+    server.createPV(_main.App.PVS_PREFIX, _main.App.pvs_database)
+    pcas_driver = PCASDriver()
 
     # initiate a new thread responsible for listening for client connections
     server_thread = _pcaspy_tools.ServerThread(server)
@@ -55,7 +50,7 @@ def run():
 
     # main loop
     while not stop_event.is_set():
-        app.process(INTERVAL)
+        pcas_driver.app.process(INTERVAL)
 
     print('exiting...')
     # sends stop signal to server thread
