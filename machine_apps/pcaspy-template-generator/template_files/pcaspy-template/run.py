@@ -32,7 +32,8 @@ class PCASDriver(_pcaspy.Driver):
             return value
 
     def write(self, reason, value):
-        return self.app.write(reason, value)
+        if self.app.write(reason, value):
+            super().write(reason, value)
 
 
 def run():

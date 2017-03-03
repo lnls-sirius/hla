@@ -36,9 +36,11 @@ class App:
         _time.sleep(interval)
 
     def read(self,reason):
-        value = None # this should be implemented.
-        self.driver.updatePVs() # this should be used in case PV states have changed.
+        value = None # implementation here
+        #self.driver.updatePVs() # this should be used in case PV states change.
         return value
 
     def write(self,reason,value):
-        return False # False: no write implemented.
+        # implementation here
+        #self.driver.updatePVs() # this should be used in case PV states change.
+        return True # when returning True super().write of PCASDrive is invoked
