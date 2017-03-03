@@ -3704,7 +3704,17 @@ $(pv_value)</tooltip>
           <y>1</y>
         </widget>
         <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="2.0.0">
-          <actions hook="false" hook_all="false" />
+          <actions hook="false" hook_all="false">
+            <action type="OPEN_DISPLAY">
+              <path>si_magnets_QuadTrimTable.opi</path>
+              <macros>
+                <include_parent_macros>true</include_parent_macros>
+                <quad_name>QFA</quad_name>
+              </macros>
+              <mode>0</mode>
+              <description></description>
+            </action>
+          </actions>
           <alarm_pulsing>false</alarm_pulsing>
           <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
           <background_color>
