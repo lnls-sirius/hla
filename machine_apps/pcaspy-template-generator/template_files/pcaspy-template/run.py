@@ -24,10 +24,14 @@ class PCASDriver(_pcaspy.Driver):
         self.app.driver = self
 
     def read(self, reason):
-        return super().read(reason)
+        value = self.app.read(reason)
+        if value is None:
+            return super().read(reason)
+        else:
+            return value
 
     def write(self, reason, value):
-        return super().write(reason, value)
+        return self.app.write(reason, value)
 
 
 def run():
