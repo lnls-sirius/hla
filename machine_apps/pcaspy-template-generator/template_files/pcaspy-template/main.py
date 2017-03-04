@@ -14,7 +14,6 @@ __version__ = _pvs.__version__
 
 class App:
 
-    PVS_PREFIX = 'TEST-'
     pvs_database = _pvs.pvs_database
 
     def __init__(self,driver):

@@ -41,7 +41,8 @@ def run():
 
     # create a new simple pcaspy server and driver to responde client's requests
     server = _pcaspy.SimpleServer()
-    server.createPV(_main.App.PVS_PREFIX, _main.App.pvs_database)
+    for prefix, database in _main.App.pvs_database.items():
+        server.createPV(prefix, database)
     pcas_driver = PCASDriver()
 
     # initiate a new thread responsible for listening for client connections
