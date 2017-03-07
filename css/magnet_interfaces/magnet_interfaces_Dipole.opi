@@ -55,7 +55,7 @@
     <macros>
       <include_parent_macros>true</include_parent_macros>
     </macros>
-    <name>$(AreaName):MA-$(dip_name)</name>
+    <name>$(AreaName):MA-$(devName)</name>
     <rules />
     <scale_options>
       <width_scalable>true</width_scalable>
@@ -139,7 +139,7 @@
           <include_parent_macros>true</include_parent_macros>
         </macros>
         <name>Array_1</name>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(dip_name):IntlkNames-Cte</pv_name>
+        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):IntlkNames-Cte</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -311,7 +311,7 @@ $(pv_value)</tooltip>
           <color name="Green" red="0" green="255" blue="0" />
         </on_color>
         <on_label>ON</on_label>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(dip_name):Intlk-Mon</pv_name>
+        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):Intlk-Mon</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -369,7 +369,7 @@ $(pv_value)</tooltip>
           <color name="Green" red="0" green="255" blue="0" />
         </on_color>
         <on_label>ON</on_label>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(dip_name):Intlk-Mon</pv_name>
+        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):Intlk-Mon</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -427,7 +427,7 @@ $(pv_value)</tooltip>
           <color name="Green" red="0" green="255" blue="0" />
         </on_color>
         <on_label>ON</on_label>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(dip_name):Intlk-Mon</pv_name>
+        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):Intlk-Mon</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -485,7 +485,7 @@ $(pv_value)</tooltip>
           <color name="Green" red="0" green="255" blue="0" />
         </on_color>
         <on_label>ON</on_label>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(dip_name):Intlk-Mon</pv_name>
+        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):Intlk-Mon</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -543,7 +543,7 @@ $(pv_value)</tooltip>
           <color name="Green" red="0" green="255" blue="0" />
         </on_color>
         <on_label>ON</on_label>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(dip_name):Intlk-Mon</pv_name>
+        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):Intlk-Mon</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -601,7 +601,7 @@ $(pv_value)</tooltip>
           <color name="Green" red="0" green="255" blue="0" />
         </on_color>
         <on_label>ON</on_label>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(dip_name):Intlk-Mon</pv_name>
+        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):Intlk-Mon</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -659,7 +659,7 @@ $(pv_value)</tooltip>
           <color name="Green" red="0" green="255" blue="0" />
         </on_color>
         <on_label>ON</on_label>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(dip_name):Intlk-Mon</pv_name>
+        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):Intlk-Mon</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -717,7 +717,7 @@ $(pv_value)</tooltip>
           <color name="Green" red="0" green="255" blue="0" />
         </on_color>
         <on_label>ON</on_label>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(dip_name):Intlk-Mon</pv_name>
+        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):Intlk-Mon</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -775,7 +775,7 @@ $(pv_value)</tooltip>
           <color name="Green" red="0" green="255" blue="0" />
         </on_color>
         <on_label>ON</on_label>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(dip_name):Intlk-Mon</pv_name>
+        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):Intlk-Mon</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -833,7 +833,7 @@ $(pv_value)</tooltip>
           <color name="Green" red="0" green="255" blue="0" />
         </on_color>
         <on_label>ON</on_label>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(dip_name):Intlk-Mon</pv_name>
+        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):Intlk-Mon</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -891,7 +891,7 @@ $(pv_value)</tooltip>
           <color name="Green" red="0" green="255" blue="0" />
         </on_color>
         <on_label>ON</on_label>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(dip_name):Intlk-Mon</pv_name>
+        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):Intlk-Mon</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -949,7 +949,7 @@ $(pv_value)</tooltip>
           <color name="Green" red="0" green="255" blue="0" />
         </on_color>
         <on_label>ON</on_label>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(dip_name):Intlk-Mon</pv_name>
+        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):Intlk-Mon</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -1007,7 +1007,7 @@ $(pv_value)</tooltip>
           <color name="Green" red="0" green="255" blue="0" />
         </on_color>
         <on_label>ON</on_label>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(dip_name):Intlk-Mon</pv_name>
+        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):Intlk-Mon</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -1065,7 +1065,7 @@ $(pv_value)</tooltip>
           <color name="Green" red="0" green="255" blue="0" />
         </on_color>
         <on_label>ON</on_label>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(dip_name):Intlk-Mon</pv_name>
+        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):Intlk-Mon</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -1123,7 +1123,7 @@ $(pv_value)</tooltip>
           <color name="Green" red="0" green="255" blue="0" />
         </on_color>
         <on_label>ON</on_label>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(dip_name):Intlk-Mon</pv_name>
+        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):Intlk-Mon</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -1181,7 +1181,7 @@ $(pv_value)</tooltip>
           <color name="Green" red="0" green="255" blue="0" />
         </on_color>
         <on_label>ON</on_label>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(dip_name):Intlk-Mon</pv_name>
+        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):Intlk-Mon</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -1234,7 +1234,7 @@ $(pv_value)</tooltip>
         <image></image>
         <name>Action Button_1</name>
         <push_action_index>0</push_action_index>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(dip_name):Reset-Cmd</pv_name>
+        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):Reset-Cmd</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -1369,7 +1369,7 @@ $(pv_value)</tooltip>
         <name>Text Input</name>
         <precision>0</precision>
         <precision_from_pv>true</precision_from_pv>
-        <pv_name>$(AreaName):MA-$(dip_name):Current-SP</pv_name>
+        <pv_name>$(AreaName):MA-$(devName):Current-SP</pv_name>
         <pv_value />
         <rotation_angle>0.0</rotation_angle>
         <rules />
@@ -1421,7 +1421,7 @@ $(pv_value)</tooltip>
         <name>Text Update</name>
         <precision>0</precision>
         <precision_from_pv>true</precision_from_pv>
-        <pv_name>$(AreaName):MA-$(dip_name):Current-RB</pv_name>
+        <pv_name>$(AreaName):MA-$(devName):Current-RB</pv_name>
         <pv_value />
         <rotation_angle>0.0</rotation_angle>
         <rules />
@@ -1474,7 +1474,7 @@ $(pv_value)</tooltip>
         <minimum>0.0</minimum>
         <name>Scrollbar</name>
         <page_increment>10.0</page_increment>
-        <pv_name>$(AreaName):MA-$(dip_name):Current-SP</pv_name>
+        <pv_name>$(AreaName):MA-$(devName):Current-SP</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -1653,7 +1653,7 @@ $(pv_value)</tooltip>
         <on_label>ON</on_label>
         <password></password>
         <push_action_index>0</push_action_index>
-        <pv_name>$(AreaName):MA-$(dip_name):PwrState-Sel</pv_name>
+        <pv_name>$(AreaName):MA-$(devName):PwrState-Sel</pv_name>
         <pv_value />
         <released_action_index>0</released_action_index>
         <rules />
@@ -1708,7 +1708,7 @@ $(pv_value)</tooltip>
         <name>LED</name>
         <off_state></off_state>
         <on_state></on_state>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(dip_name):PwrState-Sts</pv_name>
+        <pv_name>$(AreaName):MA-$(devName):PwrState-Sts</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -1822,7 +1822,7 @@ $(pv_value)</tooltip>
         <name>Text Input</name>
         <precision>0</precision>
         <precision_from_pv>true</precision_from_pv>
-        <pv_name>$(AreaName):MA-$(dip_name):Energy-SP</pv_name>
+        <pv_name>$(AreaName):MA-$(devName):Energy-SP</pv_name>
         <pv_value />
         <rotation_angle>0.0</rotation_angle>
         <rules />
@@ -1874,7 +1874,7 @@ $(pv_value)</tooltip>
         <name>Text Update</name>
         <precision>0</precision>
         <precision_from_pv>true</precision_from_pv>
-        <pv_name>$(AreaName):MA-$(dip_name):Energy-RB</pv_name>
+        <pv_name>$(AreaName):MA-$(devName):Energy-RB</pv_name>
         <pv_value />
         <rotation_angle>0.0</rotation_angle>
         <rules />
@@ -1927,7 +1927,7 @@ $(pv_value)</tooltip>
         <minimum>0.0</minimum>
         <name>Scrollbar</name>
         <page_increment>10.0</page_increment>
-        <pv_name>$(AreaName):MA-$(dip_name):Energy-SP</pv_name>
+        <pv_name>$(AreaName):MA-$(devName):Energy-SP</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -2092,7 +2092,7 @@ $(pv_value)</tooltip>
         <height>31</height>
         <items_from_pv>true</items_from_pv>
         <name>Combo</name>
-        <pv_name>$(AreaName):MA-$(dip_name):OpMode-Sel</pv_name>
+        <pv_name>$(AreaName):MA-$(devName):OpMode-Sel</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -2148,7 +2148,7 @@ $(pv_value)</tooltip>
           <color red="0" green="255" blue="0" />
         </on_color>
         <on_label>Remote</on_label>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(dip_name):CtrlMode-Mon</pv_name>
+        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):CtrlMode-Mon</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -2199,7 +2199,7 @@ $(pv_value)</tooltip>
         <name>LED</name>
         <off_state></off_state>
         <on_state></on_state>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(dip_name):OpMode-Sts</pv_name>
+        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):OpMode-Sts</pv_name>
         <pv_value />
         <rules />
         <scale_options>
