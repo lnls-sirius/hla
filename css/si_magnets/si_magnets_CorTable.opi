@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<display typeId="org.csstudio.opibuilder.Display" version="1.0.0">
+  <actions hook="false" hook_all="false" />
+  <auto_scale_widgets>
+    <auto_scale_widgets>false</auto_scale_widgets>
+    <min_width>-1</min_width>
+    <min_height>-1</min_height>
+  </auto_scale_widgets>
+  <auto_zoom_to_fit_all>false</auto_zoom_to_fit_all>
+  <background_color>
+    <color red="240" green="240" blue="240" />
+  </background_color>
+  <boy_version>5.1.0.201702201459</boy_version>
+  <foreground_color>
+    <color red="192" green="192" blue="192" />
+  </foreground_color>
+  <grid_space>6</grid_space>
+  <height>510</height>
+  <macros>
+    <include_parent_macros>true</include_parent_macros>
+  </macros>
+  <name>Display</name>
+  <rules />
+  <scripts>
+    <path pathString="EmbeddedPy" checkConnect="true" sfe="false" seoe="false">
+      <scriptName>si_magnets_main_CorTable</scriptName>
+      <scriptText><![CDATA[from org.csstudio.opibuilder.scriptUtil import PVUtil, WidgetUtil, DataUtil
+import si_magnets_main
+import imp
+imp.reload(si_magnets_main)
+
+plane    = PVUtil.getString(pvs[0])
+slowfast    = PVUtil.getString(pvs[1])
+si_magnets_main. create_SI_CorsTable(display, plane,slowfast)
+
+
+
+
+
+]]></scriptText>
+      <pv trig="true">sim://const("$(plane)")</pv>
+      <pv trig="false">sim://const("$(CorType)")</pv>
+    </path>
+  </scripts>
+  <show_close_button>true</show_close_button>
+  <show_edit_range>true</show_edit_range>
+  <show_grid>true</show_grid>
+  <show_ruler>true</show_ruler>
+  <snap_to_geometry>true</snap_to_geometry>
+  <widget_type>Display</widget_type>
+  <width>720</width>
+  <wuid>-27d6497c:15a9098b41d:-7e8b</wuid>
+  <x>0</x>
+  <y>0</y>
+  <widget typeId="org.csstudio.opibuilder.widgets.groupingContainer" version="1.0.0">
+    <actions hook="false" hook_all="false" />
+    <background_color>
+      <color name="Background" red="255" green="255" blue="255" />
+    </background_color>
+    <border_color>
+      <color red="255" green="255" blue="255" />
+    </border_color>
+    <border_style>0</border_style>
+    <border_width>0</border_width>
+    <enabled>true</enabled>
+    <fc>false</fc>
+    <font>
+      <opifont.name fontName="Ubuntu" height="11" style="1" pixels="false">Default Bold</opifont.name>
+    </font>
+    <foreground_color>
+      <color name="MEDM_COLOR_26" red="89" green="126" blue="225" />
+    </foreground_color>
+    <height>500</height>
+    <lock_children>false</lock_children>
+    <macros>
+      <include_parent_macros>true</include_parent_macros>
+    </macros>
+    <name>$(CorType)CorsTable_$(plane)</name>
+    <rules />
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <scripts />
+    <show_scrollbar>false</show_scrollbar>
+    <tooltip></tooltip>
+    <transparent>false</transparent>
+    <visible>true</visible>
+    <widget_type>Grouping Container</widget_type>
+    <width>715</width>
+    <wuid>-3c59c58c:15a9f6bf1b9:-6a31</wuid>
+    <x>1</x>
+    <y>1</y>
+  </widget>
+</display>
