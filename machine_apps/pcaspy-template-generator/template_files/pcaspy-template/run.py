@@ -9,7 +9,7 @@ import main as _main
 
 
 INTERVAL = 0.1
-stop_event = _multiprocessing.Event()
+stop_event = False # _multiprocessing.Event()
 
 
 def stop_now(signum, frame):
@@ -50,12 +50,14 @@ def run():
     server_thread.start()
 
     # main loop
-    while not stop_event.is_set():
+    #while not stop_event.is_set():
+    while not stop_event:
         pcas_driver.app.process(INTERVAL)
 
     print('exiting...')
     # sends stop signal to server thread
     server_thread.stop()
+    server_thread.join()
 
 
 if __name__ == '__main__':
