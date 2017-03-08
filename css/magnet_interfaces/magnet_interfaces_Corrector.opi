@@ -21,7 +21,11 @@
   </macros>
   <name></name>
   <rules />
-  <scripts />
+  <scripts>
+    <path pathString="change_window_name.py" checkConnect="true" sfe="false" seoe="false">
+      <pv trig="true">sim://const("$(AreaName):MA-$(devName)")</pv>
+    </path>
+  </scripts>
   <show_close_button>true</show_close_button>
   <show_edit_range>true</show_edit_range>
   <show_grid>true</show_grid>
@@ -2139,7 +2143,7 @@ $(pv_value)</tooltip>
           <color red="255" green="255" blue="255" />
         </foreground_color>
         <height>28</height>
-        <name>LED_1</name>
+        <name>LED</name>
         <off_color>
           <color name="Red" red="255" green="0" blue="0" />
         </off_color>
@@ -2168,75 +2172,56 @@ $(pv_value)</tooltip>
         <x>30</x>
         <y>94</y>
       </widget>
-      <widget typeId="org.csstudio.opibuilder.widgets.LED" version="1.0.0">
+      <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
         <actions hook="false" hook_all="false" />
         <alarm_pulsing>false</alarm_pulsing>
+        <auto_size>false</auto_size>
         <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
         <background_color>
-          <color red="255" green="255" blue="255" />
+          <color red="0" green="130" blue="255" />
         </background_color>
-        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <border_alarm_sensitive>true</border_alarm_sensitive>
         <border_color>
-          <color red="255" green="255" blue="255" />
+          <color red="0" green="128" blue="255" />
         </border_color>
         <border_style>0</border_style>
         <border_width>0</border_width>
-        <bulb_border>3</bulb_border>
-        <bulb_border_color>
-          <color red="255" green="255" blue="255" />
-        </bulb_border_color>
-        <data_type>1</data_type>
-        <effect_3d>false</effect_3d>
         <enabled>true</enabled>
         <font>
           <opifont.name fontName="Ubuntu" height="11" style="0" pixels="false">Default</opifont.name>
         </font>
         <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
         <foreground_color>
-          <color name="Header Background" red="94" green="151" blue="230" />
+          <color red="255" green="255" blue="255" />
         </foreground_color>
-        <height>28</height>
-        <name>LED</name>
-        <off_state></off_state>
-        <on_state></on_state>
+        <format_type>0</format_type>
+        <height>22</height>
+        <horizontal_alignment>1</horizontal_alignment>
+        <name>Text Update</name>
+        <precision>0</precision>
+        <precision_from_pv>true</precision_from_pv>
         <pv_name>$(PREFIX)$(AreaName):PS-$(devName):OpMode-Sts</pv_name>
         <pv_value />
+        <rotation_angle>0.0</rotation_angle>
         <rules />
         <scale_options>
           <width_scalable>true</width_scalable>
           <height_scalable>true</height_scalable>
-          <keep_wh_ratio>true</keep_wh_ratio>
+          <keep_wh_ratio>false</keep_wh_ratio>
         </scale_options>
         <scripts />
-        <show_boolean_label>true</show_boolean_label>
-        <square_led>true</square_led>
-        <state_color_0>
-          <color name="dipole" red="0" green="137" blue="182" />
-        </state_color_0>
-        <state_color_1>
-          <color name="dipole" red="0" green="137" blue="182" />
-        </state_color_1>
-        <state_color_2>
-          <color name="dipole" red="0" green="137" blue="182" />
-        </state_color_2>
-        <state_color_fallback>
-          <color red="100" green="100" blue="100" />
-        </state_color_fallback>
-        <state_count>3</state_count>
-        <state_label_0>DC</state_label_0>
-        <state_label_1>Ramp</state_label_1>
-        <state_label_2>Wave</state_label_2>
-        <state_label_fallback>ERR</state_label_fallback>
-        <state_value_0>0.0</state_value_0>
-        <state_value_1>1.0</state_value_1>
-        <state_value_2>2.0</state_value_2>
+        <show_units>true</show_units>
+        <text>$(pv_value)</text>
         <tooltip>$(pv_name)
 $(pv_value)</tooltip>
+        <transparent>false</transparent>
+        <vertical_alignment>1</vertical_alignment>
         <visible>true</visible>
-        <widget_type>LED</widget_type>
-        <width>70</width>
-        <wuid>5b43d9d8:15a66fc6a4a:-5d73</wuid>
-        <x>30</x>
+        <widget_type>Text Update</widget_type>
+        <width>65</width>
+        <wrap_words>false</wrap_words>
+        <wuid>-166f1643:15aaa8197ec:-6a2a</wuid>
+        <x>32</x>
         <y>60</y>
       </widget>
     </widget>

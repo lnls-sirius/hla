@@ -15,24 +15,27 @@
     <color red="192" green="192" blue="192" />
   </foreground_color>
   <grid_space>6</grid_space>
-  <height>350</height>
+  <height>500</height>
   <macros>
     <include_parent_macros>true</include_parent_macros>
-    <qname>loc://qname("$(devName)")</qname>
   </macros>
   <name>Display</name>
   <rules />
   <scripts>
     <path pathString="EmbeddedPy" checkConnect="true" sfe="false" seoe="false">
-      <scriptName>si_magnets_main</scriptName>
+      <scriptName>quad_trim_table</scriptName>
       <scriptText><![CDATA[from org.csstudio.opibuilder.scriptUtil import PVUtil, WidgetUtil, DataUtil
 import si_magnets_main
+import si_magnets_initialize
 import imp
 imp.reload(si_magnets_main)
+imp.reload(si_magnets_initialize)
 
-QuadFamName   = PVUtil.getString(pvs[0]).upper() 
-
+QuadFamName   = PVUtil.getString(pvs[0])
 si_magnets_main. create_SI_QuadTrimTable(display,QuadFamName)
+
+WName = "SI-Fam:MA-" + QuadFamName
+si_magnets_initialize. change_window_name(WName)
 
 
 
