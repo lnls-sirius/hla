@@ -15,7 +15,7 @@
     <color red="192" green="192" blue="192" />
   </foreground_color>
   <grid_space>6</grid_space>
-  <height>510</height>
+  <height>490</height>
   <macros>
     <include_parent_macros>true</include_parent_macros>
   </macros>
@@ -67,7 +67,7 @@ si_magnets_main. create_SI_SkewQuadTable(display)
     <foreground_color>
       <color name="MEDM_COLOR_26" red="89" green="126" blue="225" />
     </foreground_color>
-    <height>500</height>
+    <height>480</height>
     <lock_children>false</lock_children>
     <macros>
       <include_parent_macros>true</include_parent_macros>
@@ -87,7 +87,7 @@ si_magnets_main. create_SI_SkewQuadTable(display)
     <widget_type>Grouping Container</widget_type>
     <width>715</width>
     <wuid>-3c59c58c:15a9f6bf1b9:-6a31</wuid>
-    <x>1</x>
-    <y>1</y>
+    <x>0</x>
+    <y>0</y>
   </widget>
 </display>
