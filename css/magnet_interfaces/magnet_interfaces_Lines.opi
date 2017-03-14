@@ -80,7 +80,7 @@
         <color red="240" green="240" blue="240" />
       </background_color>
       <bar_length>10.0</bar_length>
-      <border_alarm_sensitive>true</border_alarm_sensitive>
+      <border_alarm_sensitive>false</border_alarm_sensitive>
       <border_color>
         <color name="Dark Gray Border" red="190" green="190" blue="190" />
       </border_color>
@@ -129,7 +129,7 @@ $(pv_value)</tooltip>
       <background_color>
         <color red="255" green="255" blue="255" />
       </background_color>
-      <border_alarm_sensitive>true</border_alarm_sensitive>
+      <border_alarm_sensitive>false</border_alarm_sensitive>
       <border_color>
         <color name="Dark Gray Border" red="190" green="190" blue="190" />
       </border_color>
@@ -238,7 +238,7 @@ $(pv_value)</tooltip>
       <background_color>
         <color red="255" green="255" blue="255" />
       </background_color>
-      <border_alarm_sensitive>true</border_alarm_sensitive>
+      <border_alarm_sensitive>false</border_alarm_sensitive>
       <border_color>
         <color name="Dark Gray Border" red="190" green="190" blue="190" />
       </border_color>
@@ -292,9 +292,9 @@ $(pv_value)</tooltip>
       <alarm_pulsing>false</alarm_pulsing>
       <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
       <background_color>
-        <color red="240" green="240" blue="240" />
+        <color red="255" green="255" blue="255" />
       </background_color>
-      <border_alarm_sensitive>true</border_alarm_sensitive>
+      <border_alarm_sensitive>false</border_alarm_sensitive>
       <border_color>
         <color red="0" green="128" blue="255" />
       </border_color>
@@ -302,7 +302,7 @@ $(pv_value)</tooltip>
       <border_width>1</border_width>
       <bulb_border>3</bulb_border>
       <bulb_border_color>
-        <color red="150" green="150" blue="150" />
+        <color red="255" green="255" blue="255" />
       </bulb_border_color>
       <data_type>1</data_type>
       <effect_3d>true</effect_3d>
@@ -513,7 +513,7 @@ $(pv_value)</tooltip>
         <color red="240" green="240" blue="240" />
       </background_color>
       <bar_length>10.0</bar_length>
-      <border_alarm_sensitive>true</border_alarm_sensitive>
+      <border_alarm_sensitive>false</border_alarm_sensitive>
       <border_color>
         <color name="Dark Gray Border" red="190" green="190" blue="190" />
       </border_color>
@@ -562,7 +562,7 @@ $(pv_value)</tooltip>
       <background_color>
         <color red="255" green="255" blue="255" />
       </background_color>
-      <border_alarm_sensitive>true</border_alarm_sensitive>
+      <border_alarm_sensitive>false</border_alarm_sensitive>
       <border_color>
         <color name="Dark Gray Border" red="190" green="190" blue="190" />
       </border_color>
@@ -671,7 +671,7 @@ $(pv_value)</tooltip>
       <background_color>
         <color red="255" green="255" blue="255" />
       </background_color>
-      <border_alarm_sensitive>true</border_alarm_sensitive>
+      <border_alarm_sensitive>false</border_alarm_sensitive>
       <border_color>
         <color name="Dark Gray Border" red="190" green="190" blue="190" />
       </border_color>
@@ -725,9 +725,9 @@ $(pv_value)</tooltip>
       <alarm_pulsing>false</alarm_pulsing>
       <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
       <background_color>
-        <color red="240" green="240" blue="240" />
+        <color red="255" green="255" blue="255" />
       </background_color>
-      <border_alarm_sensitive>true</border_alarm_sensitive>
+      <border_alarm_sensitive>false</border_alarm_sensitive>
       <border_color>
         <color red="0" green="128" blue="255" />
       </border_color>
@@ -735,7 +735,7 @@ $(pv_value)</tooltip>
       <border_width>1</border_width>
       <bulb_border>3</bulb_border>
       <bulb_border_color>
-        <color red="150" green="150" blue="150" />
+        <color red="255" green="255" blue="255" />
       </bulb_border_color>
       <data_type>1</data_type>
       <effect_3d>true</effect_3d>
@@ -1028,7 +1028,7 @@ $(pv_value)</tooltip>
         <color red="240" green="240" blue="240" />
       </background_color>
       <bar_length>10.0</bar_length>
-      <border_alarm_sensitive>true</border_alarm_sensitive>
+      <border_alarm_sensitive>false</border_alarm_sensitive>
       <border_color>
         <color name="Dark Gray Border" red="190" green="190" blue="190" />
       </border_color>
@@ -1077,7 +1077,7 @@ $(pv_value)</tooltip>
       <background_color>
         <color red="255" green="255" blue="255" />
       </background_color>
-      <border_alarm_sensitive>true</border_alarm_sensitive>
+      <border_alarm_sensitive>false</border_alarm_sensitive>
       <border_color>
         <color name="Dark Gray Border" red="190" green="190" blue="190" />
       </border_color>
@@ -1186,7 +1186,7 @@ $(pv_value)</tooltip>
       <background_color>
         <color red="255" green="255" blue="255" />
       </background_color>
-      <border_alarm_sensitive>true</border_alarm_sensitive>
+      <border_alarm_sensitive>false</border_alarm_sensitive>
       <border_color>
         <color name="Dark Gray Border" red="190" green="190" blue="190" />
       </border_color>
@@ -1240,9 +1240,9 @@ $(pv_value)</tooltip>
       <alarm_pulsing>false</alarm_pulsing>
       <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
       <background_color>
-        <color red="240" green="240" blue="240" />
+        <color red="255" green="255" blue="255" />
       </background_color>
-      <border_alarm_sensitive>true</border_alarm_sensitive>
+      <border_alarm_sensitive>false</border_alarm_sensitive>
       <border_color>
         <color red="0" green="128" blue="255" />
       </border_color>
@@ -1250,7 +1250,7 @@ $(pv_value)</tooltip>
       <border_width>1</border_width>
       <bulb_border>3</bulb_border>
       <bulb_border_color>
-        <color red="150" green="150" blue="150" />
+        <color red="255" green="255" blue="255" />
       </bulb_border_color>
       <data_type>1</data_type>
       <effect_3d>true</effect_3d>
@@ -1449,7 +1449,7 @@ $(pv_value)</tooltip>
         <color red="240" green="240" blue="240" />
       </background_color>
       <bar_length>10.0</bar_length>
-      <border_alarm_sensitive>true</border_alarm_sensitive>
+      <border_alarm_sensitive>false</border_alarm_sensitive>
       <border_color>
         <color name="Dark Gray Border" red="190" green="190" blue="190" />
       </border_color>
@@ -1498,7 +1498,7 @@ $(pv_value)</tooltip>
       <background_color>
         <color red="255" green="255" blue="255" />
       </background_color>
-      <border_alarm_sensitive>true</border_alarm_sensitive>
+      <border_alarm_sensitive>false</border_alarm_sensitive>
       <border_color>
         <color name="Dark Gray Border" red="190" green="190" blue="190" />
       </border_color>
@@ -1607,7 +1607,7 @@ $(pv_value)</tooltip>
       <background_color>
         <color red="255" green="255" blue="255" />
       </background_color>
-      <border_alarm_sensitive>true</border_alarm_sensitive>
+      <border_alarm_sensitive>false</border_alarm_sensitive>
       <border_color>
         <color name="Dark Gray Border" red="190" green="190" blue="190" />
       </border_color>
@@ -1661,9 +1661,9 @@ $(pv_value)</tooltip>
       <alarm_pulsing>false</alarm_pulsing>
       <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
       <background_color>
-        <color red="240" green="240" blue="240" />
+        <color red="255" green="255" blue="255" />
       </background_color>
-      <border_alarm_sensitive>true</border_alarm_sensitive>
+      <border_alarm_sensitive>false</border_alarm_sensitive>
       <border_color>
         <color red="0" green="128" blue="255" />
       </border_color>
@@ -1671,7 +1671,7 @@ $(pv_value)</tooltip>
       <border_width>1</border_width>
       <bulb_border>3</bulb_border>
       <bulb_border_color>
-        <color red="150" green="150" blue="150" />
+        <color red="255" green="255" blue="255" />
       </bulb_border_color>
       <data_type>1</data_type>
       <effect_3d>true</effect_3d>
@@ -1876,7 +1876,7 @@ $(pv_value)</tooltip>
         <color red="240" green="240" blue="240" />
       </background_color>
       <bar_length>10.0</bar_length>
-      <border_alarm_sensitive>true</border_alarm_sensitive>
+      <border_alarm_sensitive>false</border_alarm_sensitive>
       <border_color>
         <color name="Dark Gray Border" red="190" green="190" blue="190" />
       </border_color>
@@ -1925,7 +1925,7 @@ $(pv_value)</tooltip>
       <background_color>
         <color red="255" green="255" blue="255" />
       </background_color>
-      <border_alarm_sensitive>true</border_alarm_sensitive>
+      <border_alarm_sensitive>false</border_alarm_sensitive>
       <border_color>
         <color name="Dark Gray Border" red="190" green="190" blue="190" />
       </border_color>
@@ -2034,7 +2034,7 @@ $(pv_value)</tooltip>
       <background_color>
         <color red="255" green="255" blue="255" />
       </background_color>
-      <border_alarm_sensitive>true</border_alarm_sensitive>
+      <border_alarm_sensitive>false</border_alarm_sensitive>
       <border_color>
         <color name="Dark Gray Border" red="190" green="190" blue="190" />
       </border_color>
@@ -2088,9 +2088,9 @@ $(pv_value)</tooltip>
       <alarm_pulsing>false</alarm_pulsing>
       <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
       <background_color>
-        <color red="240" green="240" blue="240" />
+        <color red="255" green="255" blue="255" />
       </background_color>
-      <border_alarm_sensitive>true</border_alarm_sensitive>
+      <border_alarm_sensitive>false</border_alarm_sensitive>
       <border_color>
         <color red="0" green="128" blue="255" />
       </border_color>
@@ -2098,7 +2098,7 @@ $(pv_value)</tooltip>
       <border_width>1</border_width>
       <bulb_border>3</bulb_border>
       <bulb_border_color>
-        <color red="150" green="150" blue="150" />
+        <color red="255" green="255" blue="255" />
       </bulb_border_color>
       <data_type>1</data_type>
       <effect_3d>true</effect_3d>

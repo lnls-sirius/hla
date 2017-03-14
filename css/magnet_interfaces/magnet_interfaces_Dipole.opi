@@ -15,7 +15,7 @@
     <color red="192" green="192" blue="192" />
   </foreground_color>
   <grid_space>6</grid_space>
-  <height>568</height>
+  <height>575</height>
   <macros>
     <include_parent_macros>false</include_parent_macros>
   </macros>
@@ -32,7 +32,7 @@
   <show_ruler>true</show_ruler>
   <snap_to_geometry>true</snap_to_geometry>
   <widget_type>Display</widget_type>
-  <width>620</width>
+  <width>625</width>
   <wuid>cb20292:15a615bbfb9:-7d60</wuid>
   <x>0</x>
   <y>0</y>
@@ -49,12 +49,12 @@
     <enabled>true</enabled>
     <fc>false</fc>
     <font>
-      <opifont.name fontName="Ubuntu" height="11" style="1" pixels="false">Default Bold</opifont.name>
+      <opifont.name fontName="Ubuntu" height="13" style="1" pixels="false">Header 3</opifont.name>
     </font>
     <foreground_color>
       <color red="192" green="192" blue="192" />
     </foreground_color>
-    <height>565</height>
+    <height>570</height>
     <lock_children>false</lock_children>
     <macros>
       <include_parent_macros>true</include_parent_macros>
@@ -72,10 +72,10 @@
     <transparent>false</transparent>
     <visible>true</visible>
     <widget_type>Grouping Container</widget_type>
-    <width>619</width>
+    <width>620</width>
     <wuid>cb20292:15a615bbfb9:-77cf</wuid>
-    <x>0</x>
-    <y>0</y>
+    <x>5</x>
+    <y>5</y>
     <widget typeId="org.csstudio.opibuilder.widgets.groupingContainer" version="1.0.0">
       <actions hook="false" hook_all="false" />
       <background_color>
@@ -282,10 +282,10 @@ $(pv_value)</tooltip>
         <alarm_pulsing>false</alarm_pulsing>
         <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
         <background_color>
-          <color red="240" green="240" blue="240" />
+          <color red="255" green="255" blue="255" />
         </background_color>
         <bit>0</bit>
-        <border_alarm_sensitive>true</border_alarm_sensitive>
+        <border_alarm_sensitive>false</border_alarm_sensitive>
         <border_color>
           <color red="0" green="128" blue="255" />
         </border_color>
@@ -293,7 +293,7 @@ $(pv_value)</tooltip>
         <border_width>1</border_width>
         <bulb_border>3</bulb_border>
         <bulb_border_color>
-          <color red="150" green="150" blue="150" />
+          <color red="255" green="255" blue="255" />
         </bulb_border_color>
         <data_type>0</data_type>
         <effect_3d>true</effect_3d>
@@ -315,7 +315,7 @@ $(pv_value)</tooltip>
           <color name="Green" red="0" green="255" blue="0" />
         </on_color>
         <on_label>ON</on_label>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):Intlk-Mon</pv_name>
+        <pv_name>$(AreaName):MA-$(devName):Intlk-Mon</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -340,10 +340,10 @@ $(pv_value)</tooltip>
         <alarm_pulsing>false</alarm_pulsing>
         <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
         <background_color>
-          <color red="240" green="240" blue="240" />
+          <color red="255" green="255" blue="255" />
         </background_color>
         <bit>1</bit>
-        <border_alarm_sensitive>true</border_alarm_sensitive>
+        <border_alarm_sensitive>false</border_alarm_sensitive>
         <border_color>
           <color red="0" green="128" blue="255" />
         </border_color>
@@ -351,7 +351,7 @@ $(pv_value)</tooltip>
         <border_width>1</border_width>
         <bulb_border>3</bulb_border>
         <bulb_border_color>
-          <color red="150" green="150" blue="150" />
+          <color red="255" green="255" blue="255" />
         </bulb_border_color>
         <data_type>0</data_type>
         <effect_3d>true</effect_3d>
@@ -373,7 +373,7 @@ $(pv_value)</tooltip>
           <color name="Green" red="0" green="255" blue="0" />
         </on_color>
         <on_label>ON</on_label>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):Intlk-Mon</pv_name>
+        <pv_name>$(AreaName):MA-$(devName):Intlk-Mon</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -398,10 +398,10 @@ $(pv_value)</tooltip>
         <alarm_pulsing>false</alarm_pulsing>
         <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
         <background_color>
-          <color red="240" green="240" blue="240" />
+          <color red="255" green="255" blue="255" />
         </background_color>
         <bit>2</bit>
-        <border_alarm_sensitive>true</border_alarm_sensitive>
+        <border_alarm_sensitive>false</border_alarm_sensitive>
         <border_color>
           <color red="0" green="128" blue="255" />
         </border_color>
@@ -409,7 +409,7 @@ $(pv_value)</tooltip>
         <border_width>1</border_width>
         <bulb_border>3</bulb_border>
         <bulb_border_color>
-          <color red="150" green="150" blue="150" />
+          <color red="255" green="255" blue="255" />
         </bulb_border_color>
         <data_type>0</data_type>
         <effect_3d>true</effect_3d>
@@ -431,7 +431,7 @@ $(pv_value)</tooltip>
           <color name="Green" red="0" green="255" blue="0" />
         </on_color>
         <on_label>ON</on_label>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):Intlk-Mon</pv_name>
+        <pv_name>$(AreaName):MA-$(devName):Intlk-Mon</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -456,10 +456,10 @@ $(pv_value)</tooltip>
         <alarm_pulsing>false</alarm_pulsing>
         <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
         <background_color>
-          <color red="240" green="240" blue="240" />
+          <color red="255" green="255" blue="255" />
         </background_color>
         <bit>3</bit>
-        <border_alarm_sensitive>true</border_alarm_sensitive>
+        <border_alarm_sensitive>false</border_alarm_sensitive>
         <border_color>
           <color red="0" green="128" blue="255" />
         </border_color>
@@ -467,7 +467,7 @@ $(pv_value)</tooltip>
         <border_width>1</border_width>
         <bulb_border>3</bulb_border>
         <bulb_border_color>
-          <color red="150" green="150" blue="150" />
+          <color red="255" green="255" blue="255" />
         </bulb_border_color>
         <data_type>0</data_type>
         <effect_3d>true</effect_3d>
@@ -489,7 +489,7 @@ $(pv_value)</tooltip>
           <color name="Green" red="0" green="255" blue="0" />
         </on_color>
         <on_label>ON</on_label>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):Intlk-Mon</pv_name>
+        <pv_name>$(AreaName):MA-$(devName):Intlk-Mon</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -514,10 +514,10 @@ $(pv_value)</tooltip>
         <alarm_pulsing>false</alarm_pulsing>
         <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
         <background_color>
-          <color red="240" green="240" blue="240" />
+          <color red="255" green="255" blue="255" />
         </background_color>
         <bit>4</bit>
-        <border_alarm_sensitive>true</border_alarm_sensitive>
+        <border_alarm_sensitive>false</border_alarm_sensitive>
         <border_color>
           <color red="0" green="128" blue="255" />
         </border_color>
@@ -525,7 +525,7 @@ $(pv_value)</tooltip>
         <border_width>1</border_width>
         <bulb_border>3</bulb_border>
         <bulb_border_color>
-          <color red="150" green="150" blue="150" />
+          <color red="255" green="255" blue="255" />
         </bulb_border_color>
         <data_type>0</data_type>
         <effect_3d>true</effect_3d>
@@ -547,7 +547,7 @@ $(pv_value)</tooltip>
           <color name="Green" red="0" green="255" blue="0" />
         </on_color>
         <on_label>ON</on_label>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):Intlk-Mon</pv_name>
+        <pv_name>$(AreaName):MA-$(devName):Intlk-Mon</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -572,10 +572,10 @@ $(pv_value)</tooltip>
         <alarm_pulsing>false</alarm_pulsing>
         <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
         <background_color>
-          <color red="240" green="240" blue="240" />
+          <color red="255" green="255" blue="255" />
         </background_color>
         <bit>5</bit>
-        <border_alarm_sensitive>true</border_alarm_sensitive>
+        <border_alarm_sensitive>false</border_alarm_sensitive>
         <border_color>
           <color red="0" green="128" blue="255" />
         </border_color>
@@ -583,7 +583,7 @@ $(pv_value)</tooltip>
         <border_width>1</border_width>
         <bulb_border>3</bulb_border>
         <bulb_border_color>
-          <color red="150" green="150" blue="150" />
+          <color red="255" green="255" blue="255" />
         </bulb_border_color>
         <data_type>0</data_type>
         <effect_3d>true</effect_3d>
@@ -605,7 +605,7 @@ $(pv_value)</tooltip>
           <color name="Green" red="0" green="255" blue="0" />
         </on_color>
         <on_label>ON</on_label>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):Intlk-Mon</pv_name>
+        <pv_name>$(AreaName):MA-$(devName):Intlk-Mon</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -630,10 +630,10 @@ $(pv_value)</tooltip>
         <alarm_pulsing>false</alarm_pulsing>
         <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
         <background_color>
-          <color red="240" green="240" blue="240" />
+          <color red="255" green="255" blue="255" />
         </background_color>
         <bit>6</bit>
-        <border_alarm_sensitive>true</border_alarm_sensitive>
+        <border_alarm_sensitive>false</border_alarm_sensitive>
         <border_color>
           <color red="0" green="128" blue="255" />
         </border_color>
@@ -641,7 +641,7 @@ $(pv_value)</tooltip>
         <border_width>1</border_width>
         <bulb_border>3</bulb_border>
         <bulb_border_color>
-          <color red="150" green="150" blue="150" />
+          <color red="255" green="255" blue="255" />
         </bulb_border_color>
         <data_type>0</data_type>
         <effect_3d>true</effect_3d>
@@ -663,7 +663,7 @@ $(pv_value)</tooltip>
           <color name="Green" red="0" green="255" blue="0" />
         </on_color>
         <on_label>ON</on_label>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):Intlk-Mon</pv_name>
+        <pv_name>$(AreaName):MA-$(devName):Intlk-Mon</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -688,10 +688,10 @@ $(pv_value)</tooltip>
         <alarm_pulsing>false</alarm_pulsing>
         <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
         <background_color>
-          <color red="240" green="240" blue="240" />
+          <color red="255" green="255" blue="255" />
         </background_color>
         <bit>7</bit>
-        <border_alarm_sensitive>true</border_alarm_sensitive>
+        <border_alarm_sensitive>false</border_alarm_sensitive>
         <border_color>
           <color red="0" green="128" blue="255" />
         </border_color>
@@ -699,7 +699,7 @@ $(pv_value)</tooltip>
         <border_width>1</border_width>
         <bulb_border>3</bulb_border>
         <bulb_border_color>
-          <color red="150" green="150" blue="150" />
+          <color red="255" green="255" blue="255" />
         </bulb_border_color>
         <data_type>0</data_type>
         <effect_3d>true</effect_3d>
@@ -721,7 +721,7 @@ $(pv_value)</tooltip>
           <color name="Green" red="0" green="255" blue="0" />
         </on_color>
         <on_label>ON</on_label>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):Intlk-Mon</pv_name>
+        <pv_name>$(AreaName):MA-$(devName):Intlk-Mon</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -746,10 +746,10 @@ $(pv_value)</tooltip>
         <alarm_pulsing>false</alarm_pulsing>
         <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
         <background_color>
-          <color red="240" green="240" blue="240" />
+          <color red="255" green="255" blue="255" />
         </background_color>
         <bit>8</bit>
-        <border_alarm_sensitive>true</border_alarm_sensitive>
+        <border_alarm_sensitive>false</border_alarm_sensitive>
         <border_color>
           <color red="0" green="128" blue="255" />
         </border_color>
@@ -757,7 +757,7 @@ $(pv_value)</tooltip>
         <border_width>1</border_width>
         <bulb_border>3</bulb_border>
         <bulb_border_color>
-          <color red="150" green="150" blue="150" />
+          <color red="255" green="255" blue="255" />
         </bulb_border_color>
         <data_type>0</data_type>
         <effect_3d>true</effect_3d>
@@ -779,7 +779,7 @@ $(pv_value)</tooltip>
           <color name="Green" red="0" green="255" blue="0" />
         </on_color>
         <on_label>ON</on_label>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):Intlk-Mon</pv_name>
+        <pv_name>$(AreaName):MA-$(devName):Intlk-Mon</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -804,10 +804,10 @@ $(pv_value)</tooltip>
         <alarm_pulsing>false</alarm_pulsing>
         <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
         <background_color>
-          <color red="240" green="240" blue="240" />
+          <color red="255" green="255" blue="255" />
         </background_color>
         <bit>9</bit>
-        <border_alarm_sensitive>true</border_alarm_sensitive>
+        <border_alarm_sensitive>false</border_alarm_sensitive>
         <border_color>
           <color red="0" green="128" blue="255" />
         </border_color>
@@ -815,7 +815,7 @@ $(pv_value)</tooltip>
         <border_width>1</border_width>
         <bulb_border>3</bulb_border>
         <bulb_border_color>
-          <color red="150" green="150" blue="150" />
+          <color red="255" green="255" blue="255" />
         </bulb_border_color>
         <data_type>0</data_type>
         <effect_3d>true</effect_3d>
@@ -837,7 +837,7 @@ $(pv_value)</tooltip>
           <color name="Green" red="0" green="255" blue="0" />
         </on_color>
         <on_label>ON</on_label>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):Intlk-Mon</pv_name>
+        <pv_name>$(AreaName):MA-$(devName):Intlk-Mon</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -862,10 +862,10 @@ $(pv_value)</tooltip>
         <alarm_pulsing>false</alarm_pulsing>
         <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
         <background_color>
-          <color red="240" green="240" blue="240" />
+          <color red="255" green="255" blue="255" />
         </background_color>
         <bit>10</bit>
-        <border_alarm_sensitive>true</border_alarm_sensitive>
+        <border_alarm_sensitive>false</border_alarm_sensitive>
         <border_color>
           <color red="0" green="128" blue="255" />
         </border_color>
@@ -873,7 +873,7 @@ $(pv_value)</tooltip>
         <border_width>1</border_width>
         <bulb_border>3</bulb_border>
         <bulb_border_color>
-          <color red="150" green="150" blue="150" />
+          <color red="255" green="255" blue="255" />
         </bulb_border_color>
         <data_type>0</data_type>
         <effect_3d>true</effect_3d>
@@ -895,7 +895,7 @@ $(pv_value)</tooltip>
           <color name="Green" red="0" green="255" blue="0" />
         </on_color>
         <on_label>ON</on_label>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):Intlk-Mon</pv_name>
+        <pv_name>$(AreaName):MA-$(devName):Intlk-Mon</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -920,10 +920,10 @@ $(pv_value)</tooltip>
         <alarm_pulsing>false</alarm_pulsing>
         <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
         <background_color>
-          <color red="240" green="240" blue="240" />
+          <color red="255" green="255" blue="255" />
         </background_color>
         <bit>11</bit>
-        <border_alarm_sensitive>true</border_alarm_sensitive>
+        <border_alarm_sensitive>false</border_alarm_sensitive>
         <border_color>
           <color red="0" green="128" blue="255" />
         </border_color>
@@ -931,7 +931,7 @@ $(pv_value)</tooltip>
         <border_width>1</border_width>
         <bulb_border>3</bulb_border>
         <bulb_border_color>
-          <color red="150" green="150" blue="150" />
+          <color red="255" green="255" blue="255" />
         </bulb_border_color>
         <data_type>0</data_type>
         <effect_3d>true</effect_3d>
@@ -953,7 +953,7 @@ $(pv_value)</tooltip>
           <color name="Green" red="0" green="255" blue="0" />
         </on_color>
         <on_label>ON</on_label>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):Intlk-Mon</pv_name>
+        <pv_name>$(AreaName):MA-$(devName):Intlk-Mon</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -978,10 +978,10 @@ $(pv_value)</tooltip>
         <alarm_pulsing>false</alarm_pulsing>
         <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
         <background_color>
-          <color red="240" green="240" blue="240" />
+          <color red="255" green="255" blue="255" />
         </background_color>
         <bit>12</bit>
-        <border_alarm_sensitive>true</border_alarm_sensitive>
+        <border_alarm_sensitive>false</border_alarm_sensitive>
         <border_color>
           <color red="0" green="128" blue="255" />
         </border_color>
@@ -989,7 +989,7 @@ $(pv_value)</tooltip>
         <border_width>1</border_width>
         <bulb_border>3</bulb_border>
         <bulb_border_color>
-          <color red="150" green="150" blue="150" />
+          <color red="255" green="255" blue="255" />
         </bulb_border_color>
         <data_type>0</data_type>
         <effect_3d>true</effect_3d>
@@ -1011,7 +1011,7 @@ $(pv_value)</tooltip>
           <color name="Green" red="0" green="255" blue="0" />
         </on_color>
         <on_label>ON</on_label>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):Intlk-Mon</pv_name>
+        <pv_name>$(AreaName):MA-$(devName):Intlk-Mon</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -1036,10 +1036,10 @@ $(pv_value)</tooltip>
         <alarm_pulsing>false</alarm_pulsing>
         <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
         <background_color>
-          <color red="240" green="240" blue="240" />
+          <color red="255" green="255" blue="255" />
         </background_color>
         <bit>13</bit>
-        <border_alarm_sensitive>true</border_alarm_sensitive>
+        <border_alarm_sensitive>false</border_alarm_sensitive>
         <border_color>
           <color red="0" green="128" blue="255" />
         </border_color>
@@ -1047,7 +1047,7 @@ $(pv_value)</tooltip>
         <border_width>1</border_width>
         <bulb_border>3</bulb_border>
         <bulb_border_color>
-          <color red="150" green="150" blue="150" />
+          <color red="255" green="255" blue="255" />
         </bulb_border_color>
         <data_type>0</data_type>
         <effect_3d>true</effect_3d>
@@ -1069,7 +1069,7 @@ $(pv_value)</tooltip>
           <color name="Green" red="0" green="255" blue="0" />
         </on_color>
         <on_label>ON</on_label>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):Intlk-Mon</pv_name>
+        <pv_name>$(AreaName):MA-$(devName):Intlk-Mon</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -1094,10 +1094,10 @@ $(pv_value)</tooltip>
         <alarm_pulsing>false</alarm_pulsing>
         <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
         <background_color>
-          <color red="240" green="240" blue="240" />
+          <color red="255" green="255" blue="255" />
         </background_color>
         <bit>14</bit>
-        <border_alarm_sensitive>true</border_alarm_sensitive>
+        <border_alarm_sensitive>false</border_alarm_sensitive>
         <border_color>
           <color red="0" green="128" blue="255" />
         </border_color>
@@ -1105,7 +1105,7 @@ $(pv_value)</tooltip>
         <border_width>1</border_width>
         <bulb_border>3</bulb_border>
         <bulb_border_color>
-          <color red="150" green="150" blue="150" />
+          <color red="255" green="255" blue="255" />
         </bulb_border_color>
         <data_type>0</data_type>
         <effect_3d>true</effect_3d>
@@ -1127,7 +1127,7 @@ $(pv_value)</tooltip>
           <color name="Green" red="0" green="255" blue="0" />
         </on_color>
         <on_label>ON</on_label>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):Intlk-Mon</pv_name>
+        <pv_name>$(AreaName):MA-$(devName):Intlk-Mon</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -1152,10 +1152,10 @@ $(pv_value)</tooltip>
         <alarm_pulsing>false</alarm_pulsing>
         <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
         <background_color>
-          <color red="240" green="240" blue="240" />
+          <color red="255" green="255" blue="255" />
         </background_color>
         <bit>15</bit>
-        <border_alarm_sensitive>true</border_alarm_sensitive>
+        <border_alarm_sensitive>false</border_alarm_sensitive>
         <border_color>
           <color red="0" green="128" blue="255" />
         </border_color>
@@ -1163,7 +1163,7 @@ $(pv_value)</tooltip>
         <border_width>1</border_width>
         <bulb_border>3</bulb_border>
         <bulb_border_color>
-          <color red="150" green="150" blue="150" />
+          <color red="255" green="255" blue="255" />
         </bulb_border_color>
         <data_type>0</data_type>
         <effect_3d>true</effect_3d>
@@ -1185,7 +1185,7 @@ $(pv_value)</tooltip>
           <color name="Green" red="0" green="255" blue="0" />
         </on_color>
         <on_label>ON</on_label>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):Intlk-Mon</pv_name>
+        <pv_name>$(AreaName):MA-$(devName):Intlk-Mon</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -1236,9 +1236,9 @@ $(pv_value)</tooltip>
         </foreground_color>
         <height>30</height>
         <image></image>
-        <name>Action Button_1</name>
+        <name>Action Button</name>
         <push_action_index>0</push_action_index>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):Reset-Cmd</pv_name>
+        <pv_name>$(AreaName):MA-$(devName):Reset-Cmd</pv_name>
         <pv_value />
         <rules />
         <scale_options>
@@ -1457,7 +1457,7 @@ $(pv_value)</tooltip>
           <color red="240" green="240" blue="240" />
         </background_color>
         <bar_length>10.0</bar_length>
-        <border_alarm_sensitive>true</border_alarm_sensitive>
+        <border_alarm_sensitive>false</border_alarm_sensitive>
         <border_color>
           <color name="Dark Gray Border" red="190" green="190" blue="190" />
         </border_color>
@@ -1577,180 +1577,6 @@ $(pv_value)</tooltip>
         <wuid>cb20292:15a615bbfb9:-6f46</wuid>
         <x>12</x>
         <y>72</y>
-      </widget>
-    </widget>
-    <widget typeId="org.csstudio.opibuilder.widgets.groupingContainer" version="1.0.0">
-      <actions hook="false" hook_all="false" />
-      <background_color>
-        <color red="255" green="255" blue="255" />
-      </background_color>
-      <border_color>
-        <color name="Dark Gray Border" red="190" green="190" blue="190" />
-      </border_color>
-      <border_style>13</border_style>
-      <border_width>1</border_width>
-      <enabled>true</enabled>
-      <fc>false</fc>
-      <font>
-        <opifont.name fontName="Ubuntu" height="11" style="0" pixels="false">Default</opifont.name>
-      </font>
-      <foreground_color>
-        <color red="192" green="192" blue="192" />
-      </foreground_color>
-      <height>160</height>
-      <lock_children>false</lock_children>
-      <macros>
-        <include_parent_macros>true</include_parent_macros>
-      </macros>
-      <name>On/Off</name>
-      <rules />
-      <scale_options>
-        <width_scalable>true</width_scalable>
-        <height_scalable>true</height_scalable>
-        <keep_wh_ratio>false</keep_wh_ratio>
-      </scale_options>
-      <scripts />
-      <show_scrollbar>true</show_scrollbar>
-      <tooltip></tooltip>
-      <transparent>false</transparent>
-      <visible>true</visible>
-      <widget_type>Grouping Container</widget_type>
-      <width>115</width>
-      <wuid>cb20292:15a615bbfb9:-70f3</wuid>
-      <x>462</x>
-      <y>12</y>
-      <widget typeId="org.csstudio.opibuilder.widgets.BoolButton" version="1.0.0">
-        <actions hook="false" hook_all="false" />
-        <alarm_pulsing>false</alarm_pulsing>
-        <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-        <background_color>
-          <color red="240" green="240" blue="240" />
-        </background_color>
-        <bit>-1</bit>
-        <border_alarm_sensitive>true</border_alarm_sensitive>
-        <border_color>
-          <color red="0" green="128" blue="255" />
-        </border_color>
-        <border_style>0</border_style>
-        <border_width>1</border_width>
-        <confirm_message>Are you sure you want to do this?</confirm_message>
-        <data_type>0</data_type>
-        <effect_3d>true</effect_3d>
-        <enabled>true</enabled>
-        <font>
-          <opifont.name fontName="Ubuntu" height="11" style="0" pixels="false">Default</opifont.name>
-        </font>
-        <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-        <foreground_color>
-          <color red="0" green="0" blue="0" />
-        </foreground_color>
-        <height>45</height>
-        <labels_from_pv>false</labels_from_pv>
-        <name>Boolean Button</name>
-        <off_color>
-          <color name="Red" red="255" green="0" blue="0" />
-        </off_color>
-        <off_label>OFF</off_label>
-        <on_color>
-          <color red="0" green="255" blue="0" />
-        </on_color>
-        <on_label>ON</on_label>
-        <password></password>
-        <push_action_index>0</push_action_index>
-        <pv_name>$(AreaName):MA-$(devName):PwrState-Sel</pv_name>
-        <pv_value />
-        <released_action_index>0</released_action_index>
-        <rules />
-        <scale_options>
-          <width_scalable>true</width_scalable>
-          <height_scalable>true</height_scalable>
-          <keep_wh_ratio>true</keep_wh_ratio>
-        </scale_options>
-        <scripts />
-        <show_boolean_label>false</show_boolean_label>
-        <show_confirm_dialog>0</show_confirm_dialog>
-        <show_led>true</show_led>
-        <square_button>false</square_button>
-        <toggle_button>true</toggle_button>
-        <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-        <visible>true</visible>
-        <widget_type>Boolean Button</widget_type>
-        <width>65</width>
-        <wuid>cb20292:15a615bbfb9:-703a</wuid>
-        <x>8</x>
-        <y>20</y>
-      </widget>
-      <widget typeId="org.csstudio.opibuilder.widgets.LED" version="1.0.0">
-        <actions hook="false" hook_all="false" />
-        <alarm_pulsing>false</alarm_pulsing>
-        <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-        <background_color>
-          <color red="255" green="255" blue="255" />
-        </background_color>
-        <border_alarm_sensitive>false</border_alarm_sensitive>
-        <border_color>
-          <color red="255" green="255" blue="255" />
-        </border_color>
-        <border_style>0</border_style>
-        <border_width>0</border_width>
-        <bulb_border>3</bulb_border>
-        <bulb_border_color>
-          <color red="255" green="255" blue="255" />
-        </bulb_border_color>
-        <data_type>1</data_type>
-        <effect_3d>false</effect_3d>
-        <enabled>true</enabled>
-        <font>
-          <opifont.name fontName="Ubuntu" height="11" style="0" pixels="false">Default</opifont.name>
-        </font>
-        <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-        <foreground_color>
-          <color name="Header Background" red="94" green="151" blue="230" />
-        </foreground_color>
-        <height>28</height>
-        <name>LED</name>
-        <off_state></off_state>
-        <on_state></on_state>
-        <pv_name>$(AreaName):MA-$(devName):PwrState-Sts</pv_name>
-        <pv_value />
-        <rules />
-        <scale_options>
-          <width_scalable>true</width_scalable>
-          <height_scalable>true</height_scalable>
-          <keep_wh_ratio>true</keep_wh_ratio>
-        </scale_options>
-        <scripts />
-        <show_boolean_label>true</show_boolean_label>
-        <square_led>true</square_led>
-        <state_color_0>
-          <color name="Red" red="255" green="0" blue="0" />
-        </state_color_0>
-        <state_color_1>
-          <color red="0" green="255" blue="0" />
-        </state_color_1>
-        <state_color_2>
-          <color name="Yellow" red="255" green="255" blue="0" />
-        </state_color_2>
-        <state_color_fallback>
-          <color red="100" green="100" blue="100" />
-        </state_color_fallback>
-        <state_count>3</state_count>
-        <state_label_0>Off</state_label_0>
-        <state_label_1>On</state_label_1>
-        <state_label_2>Wait</state_label_2>
-        <state_label_fallback>ERR</state_label_fallback>
-        <state_value_0>0.0</state_value_0>
-        <state_value_1>1.0</state_value_1>
-        <state_value_2>2.0</state_value_2>
-        <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-        <visible>true</visible>
-        <widget_type>LED</widget_type>
-        <width>70</width>
-        <wuid>5b43d9d8:15a66fc6a4a:-5e22</wuid>
-        <x>6</x>
-        <y>84</y>
       </widget>
     </widget>
     <widget typeId="org.csstudio.opibuilder.widgets.groupingContainer" version="1.0.0">
@@ -1910,7 +1736,7 @@ $(pv_value)</tooltip>
           <color red="240" green="240" blue="240" />
         </background_color>
         <bar_length>10.0</bar_length>
-        <border_alarm_sensitive>true</border_alarm_sensitive>
+        <border_alarm_sensitive>false</border_alarm_sensitive>
         <border_color>
           <color name="Dark Gray Border" red="190" green="190" blue="190" />
         </border_color>
@@ -2055,7 +1881,7 @@ $(pv_value)</tooltip>
       <macros>
         <include_parent_macros>true</include_parent_macros>
       </macros>
-      <name>Op Mode</name>
+      <name>Pwr State</name>
       <rules />
       <scale_options>
         <width_scalable>true</width_scalable>
@@ -2068,18 +1894,152 @@ $(pv_value)</tooltip>
       <transparent>false</transparent>
       <visible>true</visible>
       <widget_type>Grouping Container</widget_type>
-      <width>157</width>
-      <wuid>-166f1643:15aaa8197ec:-6994</wuid>
-      <x>300</x>
+      <width>115</width>
+      <wuid>2dc4f7f4:15accd91bbd:-498d</wuid>
+      <x>462</x>
       <y>12</y>
-      <widget typeId="org.csstudio.opibuilder.widgets.combo" version="1.0.0">
+      <widget typeId="org.csstudio.opibuilder.widgets.BoolButton" version="1.0.0">
+        <actions hook="false" hook_all="false" />
+        <alarm_pulsing>false</alarm_pulsing>
+        <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+        <background_color>
+          <color red="240" green="240" blue="240" />
+        </background_color>
+        <bit>-1</bit>
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <border_color>
+          <color red="0" green="128" blue="255" />
+        </border_color>
+        <border_style>0</border_style>
+        <border_width>1</border_width>
+        <confirm_message>Are you sure you want to do this?</confirm_message>
+        <data_type>0</data_type>
+        <effect_3d>true</effect_3d>
+        <enabled>true</enabled>
+        <font>
+          <opifont.name fontName="Ubuntu" height="11" style="0" pixels="false">Default</opifont.name>
+        </font>
+        <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+        <foreground_color>
+          <color red="0" green="0" blue="0" />
+        </foreground_color>
+        <height>45</height>
+        <labels_from_pv>false</labels_from_pv>
+        <name>Boolean Button</name>
+        <off_color>
+          <color name="Red" red="255" green="0" blue="0" />
+        </off_color>
+        <off_label>OFF</off_label>
+        <on_color>
+          <color red="0" green="255" blue="0" />
+        </on_color>
+        <on_label>ON</on_label>
+        <password></password>
+        <push_action_index>0</push_action_index>
+        <pv_name>$(AreaName):MA-$(devName):PwrState-Sel</pv_name>
+        <pv_value />
+        <released_action_index>0</released_action_index>
+        <rules />
+        <scale_options>
+          <width_scalable>true</width_scalable>
+          <height_scalable>true</height_scalable>
+          <keep_wh_ratio>true</keep_wh_ratio>
+        </scale_options>
+        <scripts />
+        <show_boolean_label>false</show_boolean_label>
+        <show_confirm_dialog>0</show_confirm_dialog>
+        <show_led>true</show_led>
+        <square_button>false</square_button>
+        <toggle_button>true</toggle_button>
+        <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+        <visible>true</visible>
+        <widget_type>Boolean Button</widget_type>
+        <width>65</width>
+        <wuid>2dc4f7f4:15accd91bbd:-498c</wuid>
+        <x>8</x>
+        <y>20</y>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.LED" version="1.0.0">
         <actions hook="false" hook_all="false" />
         <alarm_pulsing>false</alarm_pulsing>
         <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
         <background_color>
           <color red="255" green="255" blue="255" />
         </background_color>
-        <border_alarm_sensitive>true</border_alarm_sensitive>
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <border_color>
+          <color red="0" green="128" blue="255" />
+        </border_color>
+        <border_style>0</border_style>
+        <border_width>1</border_width>
+        <bulb_border>3</bulb_border>
+        <bulb_border_color>
+          <color red="255" green="255" blue="255" />
+        </bulb_border_color>
+        <data_type>1</data_type>
+        <effect_3d>true</effect_3d>
+        <enabled>true</enabled>
+        <font>
+          <opifont.name fontName="Ubuntu" height="11" style="0" pixels="false">Default</opifont.name>
+        </font>
+        <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+        <foreground_color>
+          <color name="Header Background" red="94" green="151" blue="230" />
+        </foreground_color>
+        <height>20</height>
+        <name>LED</name>
+        <off_state></off_state>
+        <on_state></on_state>
+        <pv_name>$(AreaName):MA-$(devName):PwrState-Sts</pv_name>
+        <pv_value />
+        <rules />
+        <scale_options>
+          <width_scalable>true</width_scalable>
+          <height_scalable>true</height_scalable>
+          <keep_wh_ratio>true</keep_wh_ratio>
+        </scale_options>
+        <scripts />
+        <show_boolean_label>true</show_boolean_label>
+        <square_led>false</square_led>
+        <state_color_0>
+          <color name="Red" red="255" green="0" blue="0" />
+        </state_color_0>
+        <state_color_1>
+          <color red="0" green="255" blue="0" />
+        </state_color_1>
+        <state_color_2>
+          <color name="Yellow" red="255" green="255" blue="0" />
+        </state_color_2>
+        <state_color_fallback>
+          <color red="100" green="100" blue="100" />
+        </state_color_fallback>
+        <state_count>3</state_count>
+        <state_label_0></state_label_0>
+        <state_label_1></state_label_1>
+        <state_label_2></state_label_2>
+        <state_label_fallback>ERR</state_label_fallback>
+        <state_value_0>0.0</state_value_0>
+        <state_value_1>1.0</state_value_1>
+        <state_value_2>2.0</state_value_2>
+        <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+        <visible>true</visible>
+        <widget_type>LED</widget_type>
+        <width>20</width>
+        <wuid>2dc4f7f4:15accd91bbd:-498b</wuid>
+        <x>7</x>
+        <y>90</y>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
+        <actions hook="false" hook_all="false" />
+        <alarm_pulsing>false</alarm_pulsing>
+        <auto_size>false</auto_size>
+        <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+        <background_color>
+          <color red="255" green="255" blue="255" />
+        </background_color>
+        <border_alarm_sensitive>false</border_alarm_sensitive>
         <border_color>
           <color red="0" green="128" blue="255" />
         </border_color>
@@ -2093,114 +2053,13 @@ $(pv_value)</tooltip>
         <foreground_color>
           <color red="0" green="0" blue="0" />
         </foreground_color>
-        <height>31</height>
-        <items_from_pv>true</items_from_pv>
-        <name>Combo</name>
-        <pv_name>$(AreaName):MA-$(devName):OpMode-Sel</pv_name>
-        <pv_value />
-        <rules />
-        <scale_options>
-          <width_scalable>true</width_scalable>
-          <height_scalable>false</height_scalable>
-          <keep_wh_ratio>false</keep_wh_ratio>
-        </scale_options>
-        <scripts />
-        <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-        <visible>true</visible>
-        <widget_type>Combo</widget_type>
-        <width>107</width>
-        <wuid>-166f1643:15aaa8197ec:-6993</wuid>
-        <x>10</x>
-        <y>12</y>
-      </widget>
-      <widget typeId="org.csstudio.opibuilder.widgets.LED" version="1.0.0">
-        <actions hook="false" hook_all="false" />
-        <alarm_pulsing>false</alarm_pulsing>
-        <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-        <background_color>
-          <color red="255" green="255" blue="255" />
-        </background_color>
-        <bit>-1</bit>
-        <border_alarm_sensitive>false</border_alarm_sensitive>
-        <border_color>
-          <color red="255" green="255" blue="255" />
-        </border_color>
-        <border_style>0</border_style>
-        <border_width>0</border_width>
-        <bulb_border>3</bulb_border>
-        <bulb_border_color>
-          <color red="255" green="255" blue="255" />
-        </bulb_border_color>
-        <data_type>0</data_type>
-        <effect_3d>false</effect_3d>
-        <enabled>true</enabled>
-        <font>
-          <opifont.name fontName="Ubuntu" height="11" style="0" pixels="false">Default</opifont.name>
-        </font>
-        <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-        <foreground_color>
-          <color red="255" green="255" blue="255" />
-        </foreground_color>
-        <height>28</height>
-        <name>LED</name>
-        <off_color>
-          <color name="Red" red="255" green="0" blue="0" />
-        </off_color>
-        <off_label>Local</off_label>
-        <on_color>
-          <color red="0" green="255" blue="0" />
-        </on_color>
-        <on_label>Remote</on_label>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):CtrlMode-Mon</pv_name>
-        <pv_value />
-        <rules />
-        <scale_options>
-          <width_scalable>true</width_scalable>
-          <height_scalable>true</height_scalable>
-          <keep_wh_ratio>true</keep_wh_ratio>
-        </scale_options>
-        <scripts />
-        <show_boolean_label>true</show_boolean_label>
-        <square_led>true</square_led>
-        <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-        <visible>true</visible>
-        <widget_type>LED</widget_type>
-        <width>70</width>
-        <wuid>-166f1643:15aaa8197ec:-6992</wuid>
-        <x>30</x>
-        <y>94</y>
-      </widget>
-      <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
-        <actions hook="false" hook_all="false" />
-        <alarm_pulsing>false</alarm_pulsing>
-        <auto_size>false</auto_size>
-        <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-        <background_color>
-          <color red="0" green="130" blue="255" />
-        </background_color>
-        <border_alarm_sensitive>true</border_alarm_sensitive>
-        <border_color>
-          <color red="0" green="128" blue="255" />
-        </border_color>
-        <border_style>0</border_style>
-        <border_width>0</border_width>
-        <enabled>true</enabled>
-        <font>
-          <opifont.name fontName="Ubuntu" height="11" style="0" pixels="false">Default</opifont.name>
-        </font>
-        <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-        <foreground_color>
-          <color red="255" green="255" blue="255" />
-        </foreground_color>
         <format_type>0</format_type>
-        <height>22</height>
-        <horizontal_alignment>1</horizontal_alignment>
+        <height>20</height>
+        <horizontal_alignment>0</horizontal_alignment>
         <name>Text Update</name>
         <precision>0</precision>
         <precision_from_pv>true</precision_from_pv>
-        <pv_name>$(PREFIX)$(AreaName):PS-$(devName):OpMode-Sts</pv_name>
+        <pv_name>$(AreaName):MA-$(devName):PwrState-Sts</pv_name>
         <pv_value />
         <rotation_angle>0.0</rotation_angle>
         <rules />
@@ -2218,11 +2077,256 @@ $(pv_value)</tooltip>
         <vertical_alignment>1</vertical_alignment>
         <visible>true</visible>
         <widget_type>Text Update</widget_type>
-        <width>65</width>
+        <width>50</width>
         <wrap_words>false</wrap_words>
-        <wuid>-166f1643:15aaa8197ec:-6991</wuid>
-        <x>32</x>
-        <y>60</y>
+        <wuid>2dc4f7f4:15accd91bbd:-498a</wuid>
+        <x>30</x>
+        <y>90</y>
+      </widget>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.groupingContainer" version="1.0.0">
+      <actions hook="false" hook_all="false" />
+      <background_color>
+        <color red="255" green="255" blue="255" />
+      </background_color>
+      <border_color>
+        <color name="Dark Gray Border" red="190" green="190" blue="190" />
+      </border_color>
+      <border_style>13</border_style>
+      <border_width>1</border_width>
+      <enabled>true</enabled>
+      <fc>false</fc>
+      <font>
+        <opifont.name fontName="Ubuntu" height="11" style="0" pixels="false">Default</opifont.name>
+      </font>
+      <foreground_color>
+        <color red="192" green="192" blue="192" />
+      </foreground_color>
+      <height>160</height>
+      <lock_children>false</lock_children>
+      <macros>
+        <include_parent_macros>true</include_parent_macros>
+      </macros>
+      <name>Op Mode</name>
+      <rules />
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>false</keep_wh_ratio>
+      </scale_options>
+      <scripts />
+      <show_scrollbar>true</show_scrollbar>
+      <tooltip></tooltip>
+      <transparent>false</transparent>
+      <visible>true</visible>
+      <widget_type>Grouping Container</widget_type>
+      <width>157</width>
+      <wuid>2dc4f7f4:15accd91bbd:-4989</wuid>
+      <x>300</x>
+      <y>12</y>
+      <widget typeId="org.csstudio.opibuilder.widgets.combo" version="1.0.0">
+        <actions hook="false" hook_all="false" />
+        <alarm_pulsing>false</alarm_pulsing>
+        <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+        <background_color>
+          <color red="255" green="255" blue="255" />
+        </background_color>
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <border_color>
+          <color red="0" green="128" blue="255" />
+        </border_color>
+        <border_style>0</border_style>
+        <border_width>1</border_width>
+        <enabled>true</enabled>
+        <font>
+          <opifont.name fontName="Ubuntu" height="11" style="0" pixels="false">Default</opifont.name>
+        </font>
+        <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+        <foreground_color>
+          <color red="0" green="0" blue="0" />
+        </foreground_color>
+        <height>27</height>
+        <items_from_pv>true</items_from_pv>
+        <name>Combo</name>
+        <pv_name>$(AreaName):MA-$(devName):OpMode-Sel</pv_name>
+        <pv_value />
+        <rules />
+        <scale_options>
+          <width_scalable>true</width_scalable>
+          <height_scalable>false</height_scalable>
+          <keep_wh_ratio>false</keep_wh_ratio>
+        </scale_options>
+        <scripts />
+        <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+        <visible>true</visible>
+        <widget_type>Combo</widget_type>
+        <width>107</width>
+        <wuid>2dc4f7f4:15accd91bbd:-4988</wuid>
+        <x>10</x>
+        <y>12</y>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.LED" version="1.0.0">
+        <actions hook="false" hook_all="false" />
+        <alarm_pulsing>false</alarm_pulsing>
+        <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+        <background_color>
+          <color red="255" green="255" blue="255" />
+        </background_color>
+        <bit>-1</bit>
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <border_color>
+          <color red="0" green="128" blue="255" />
+        </border_color>
+        <border_style>0</border_style>
+        <border_width>1</border_width>
+        <bulb_border>3</bulb_border>
+        <bulb_border_color>
+          <color red="255" green="255" blue="255" />
+        </bulb_border_color>
+        <data_type>0</data_type>
+        <effect_3d>true</effect_3d>
+        <enabled>true</enabled>
+        <font>
+          <opifont.name fontName="Ubuntu" height="11" style="0" pixels="false">Default</opifont.name>
+        </font>
+        <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+        <foreground_color>
+          <color red="255" green="255" blue="255" />
+        </foreground_color>
+        <height>20</height>
+        <name>LED</name>
+        <off_color>
+          <color red="0" green="128" blue="0" />
+        </off_color>
+        <off_label></off_label>
+        <on_color>
+          <color name="Red" red="255" green="0" blue="0" />
+        </on_color>
+        <on_label></on_label>
+        <pv_name>$(AreaName):MA-$(devName):CtrlMode-Mon</pv_name>
+        <pv_value />
+        <rules />
+        <scale_options>
+          <width_scalable>true</width_scalable>
+          <height_scalable>true</height_scalable>
+          <keep_wh_ratio>true</keep_wh_ratio>
+        </scale_options>
+        <scripts />
+        <show_boolean_label>true</show_boolean_label>
+        <square_led>false</square_led>
+        <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+        <visible>true</visible>
+        <widget_type>LED</widget_type>
+        <width>20</width>
+        <wuid>2dc4f7f4:15accd91bbd:-4987</wuid>
+        <x>22</x>
+        <y>90</y>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
+        <actions hook="false" hook_all="false" />
+        <alarm_pulsing>false</alarm_pulsing>
+        <auto_size>false</auto_size>
+        <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+        <background_color>
+          <color name="Gray Background" red="240" green="240" blue="240" />
+        </background_color>
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <border_color>
+          <color red="0" green="128" blue="255" />
+        </border_color>
+        <border_style>0</border_style>
+        <border_width>0</border_width>
+        <enabled>true</enabled>
+        <font>
+          <opifont.name fontName="Ubuntu" height="11" style="0" pixels="false">Default</opifont.name>
+        </font>
+        <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+        <foreground_color>
+          <color red="0" green="0" blue="0" />
+        </foreground_color>
+        <format_type>0</format_type>
+        <height>25</height>
+        <horizontal_alignment>1</horizontal_alignment>
+        <name>Text Update</name>
+        <precision>0</precision>
+        <precision_from_pv>true</precision_from_pv>
+        <pv_name>$(AreaName):MA-$(devName):OpMode-Sts</pv_name>
+        <pv_value />
+        <rotation_angle>0.0</rotation_angle>
+        <rules />
+        <scale_options>
+          <width_scalable>true</width_scalable>
+          <height_scalable>true</height_scalable>
+          <keep_wh_ratio>false</keep_wh_ratio>
+        </scale_options>
+        <scripts />
+        <show_units>true</show_units>
+        <text>$(pv_value)</text>
+        <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+        <transparent>false</transparent>
+        <vertical_alignment>1</vertical_alignment>
+        <visible>true</visible>
+        <widget_type>Text Update</widget_type>
+        <width>75</width>
+        <wrap_words>false</wrap_words>
+        <wuid>2dc4f7f4:15accd91bbd:-4986</wuid>
+        <x>26</x>
+        <y>54</y>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
+        <actions hook="false" hook_all="false" />
+        <alarm_pulsing>false</alarm_pulsing>
+        <auto_size>false</auto_size>
+        <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+        <background_color>
+          <color red="255" green="255" blue="255" />
+        </background_color>
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <border_color>
+          <color red="0" green="128" blue="255" />
+        </border_color>
+        <border_style>0</border_style>
+        <border_width>1</border_width>
+        <enabled>true</enabled>
+        <font>
+          <opifont.name fontName="Ubuntu" height="11" style="0" pixels="false">Default</opifont.name>
+        </font>
+        <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+        <foreground_color>
+          <color red="0" green="0" blue="0" />
+        </foreground_color>
+        <format_type>0</format_type>
+        <height>20</height>
+        <horizontal_alignment>0</horizontal_alignment>
+        <name>Text Update_1</name>
+        <precision>0</precision>
+        <precision_from_pv>true</precision_from_pv>
+        <pv_name>$(AreaName):MA-$(devName):CtrlMode-Mon</pv_name>
+        <pv_value />
+        <rotation_angle>0.0</rotation_angle>
+        <rules />
+        <scale_options>
+          <width_scalable>true</width_scalable>
+          <height_scalable>true</height_scalable>
+          <keep_wh_ratio>false</keep_wh_ratio>
+        </scale_options>
+        <scripts />
+        <show_units>true</show_units>
+        <text>$(pv_value)</text>
+        <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+        <transparent>false</transparent>
+        <vertical_alignment>1</vertical_alignment>
+        <visible>true</visible>
+        <widget_type>Text Update</widget_type>
+        <width>75</width>
+        <wrap_words>false</wrap_words>
+        <wuid>2dc4f7f4:15accd91bbd:-4985</wuid>
+        <x>45</x>
+        <y>90</y>
       </widget>
     </widget>
   </widget>
