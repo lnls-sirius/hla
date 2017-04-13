@@ -10,7 +10,7 @@
   <background_color>
     <color red="240" green="240" blue="240" />
   </background_color>
-  <boy_version>5.1.0.201703161405</boy_version>
+  <boy_version>5.1.0.201703161444</boy_version>
   <foreground_color>
     <color red="192" green="192" blue="192" />
   </foreground_color>
@@ -29,7 +29,7 @@
   <show_ruler>true</show_ruler>
   <snap_to_geometry>true</snap_to_geometry>
   <widget_type>Display</widget_type>
-  <width>800</width>
+  <width>1500</width>
   <wuid>-30853e18:15ad8752a89:11d</wuid>
   <x>-1</x>
   <y>-1</y>
@@ -524,7 +524,7 @@ widget.setPropertyValue("bar_length",1*sc)
         <pv trig="false">$(pv_name)</pv>
       </path>
     </scripts>
-    <show_value_tip>true</show_value_tip>
+    <show_value_tip>false</show_value_tip>
     <step_increment>8.0E-9</step_increment>
     <tooltip>Page Increment: 10.0
 Step Increment:   1.0</tooltip>
