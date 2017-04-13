@@ -16,16 +16,23 @@ __version__  = _pvs.__version__
 
 class App:
 
-    devices = _pvs.get_ps_devices()
+    ma_devices = _pvs.get_ma_devices()
     pvs_database = _pvs.get_pvs_database()
 
     def __init__(self,driver):
 
-        self._driver = driver
-        self._set_callbacks()
+        _siriuspy.util.print_ioc_banner(
+            ioc_name = 'si-fam-ma',
+            db = App.pvs_database[_pvs._PREFIX],
+            description = 'SI Magnet Power Supply Soft IOC',
+            version = __version__,
+            prefix = _pvs._PREFIX)
 
-    def _set_callbacks(self):
-        for family, device in App.devices.items():
+        self._driver = driver
+        self._set_callback()
+
+    def _set_callback(self):
+        for family, device in App.ma_devices.items():
             device.set_callback(self._mycallback)
             device.update_state()
 
@@ -34,11 +41,14 @@ class App:
         return self._driver
 
     def process(self,interval):
-        #_time.sleep(interval)
-        pass
+        _time.sleep(interval)
+        #print(_siriuspy.util.get_timestamp())
+        #pass
 
     def read(self,reason):
-        ps, propty = self._get_dev_propty(reason)
+        if 'Version-Cte' in reason: return None
+
+        ma, ps, propty = self._get_dev_propty(reason)
         if propty == 'CtrlMode-Mon':
             return ps.ctrlmode_mon
         elif propty == 'PwrState-Sel':
@@ -53,15 +63,21 @@ class App:
             return ps.current_rb
         elif propty == 'Current-SP':
             return ps.current_sp
+        elif propty in ('KL-SP','SL-SP'):
+            return ma.kl_sp
+        elif propty == ('KL-RB','SL-RB'):
+            return ma.kl_rb
         return None
 
     @staticmethod
     def _get_dev_propty(reason):
         family, propty = reason.split(':')
-        device = App.devices[family]
-        return device, propty
+        ma = App.ma_devices[family]
+        ps = ma.get_ps('SI-Fam:PS-'+family) # there is only one PS anyway
+        return ma, ps, propty
 
     def _mycallback(self, pvname, value, **kwargs):
+        #print('main', pvname, value)
         _, reason = pvname.split('PS-')
         prev_value = self._driver.getParam(reason)
         if value != prev_value:
@@ -71,12 +87,14 @@ class App:
 
     def write(self,reason,value):
         """Write value to reason and let callback update PV database."""
-        ps, propty = self._get_dev_propty(reason)
+        ma, ps, propty = self._get_dev_propty(reason)
         if propty == 'PwrState-Sel':
             ps.pwrstate_sel = value
         elif propty == 'OpMode-Sel':
             ps.opmode_sel = value
         elif propty == 'Current-SP':
             ps.current_sp = value
+        elif propty in ('KL-SP','SL-SP'):
+            ma.kl_sp = value
         else:
             return
