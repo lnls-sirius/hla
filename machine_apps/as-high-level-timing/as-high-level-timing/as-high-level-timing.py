@@ -1,30 +1,29 @@
 #!/usr/bin/env python3
-
-#import siriuspy as _siriuspy
-#_siriuspy.util.set_ioc_ca_port_number('si-ap-currlt')
+import siriuspy.util as _util
+_util.set_ioc_ca_port_number('as-high-level-timing')
 
 import pcaspy as _pcaspy
 import pcaspy.tools as _pcaspy_tools
-import threading as _threading
+import pvs as _pvs
+import multiprocessing as _multiprocessing
 import signal as _signal
 import main as _main
-import pvs as _pvs
+
 
 INTERVAL = 0.1
-stop_event = False
+stop_event = False # _multiprocessing.Event()
+
 
 def stop_now(signum, frame):
-    global stop_event
     print(' - SIGINT received.')
-    stop_event = True
+    return stop_event.set()
 
 
 class PCASDriver(_pcaspy.Driver):
 
-    def __init__(self, app):
+    def __init__(self):
         super().__init__()
-        self.app = app
-        self.app.driver = self
+        self.app = _main.App(self)
 
     def read(self, reason):
         value = self.app.read(reason)
@@ -34,40 +33,33 @@ class PCASDriver(_pcaspy.Driver):
             return value
 
     def write(self, reason, value):
-        if self.app.write(reason, value):
-            super().write(reason, value)
-        else:
-            return False
+        return self.app.write(reason, value)
 
 
 def run():
-    global stop_event
 
     # define abort function
     _signal.signal(_signal.SIGINT, stop_now)
 
-    # create application object
-    app = _main.App()
-
     # create a new simple pcaspy server and driver to responde client's requests
     server = _pcaspy.SimpleServer()
-    server.createPV(_main.App.PVS_PREFIX, app.pvs_database)
-    pcas_driver = PCASDriver(app)
+    for prefix, database in _main.App.pvs_database.items():
+        server.createPV(prefix, database)
+    pcas_driver = PCASDriver()
 
     # initiate a new thread responsible for listening for client connections
     server_thread = _pcaspy_tools.ServerThread(server)
     server_thread.start()
 
     # main loop
-    try:
-        while not stop_event:
-            app.process(INTERVAL)
-    except:
-        app.finilize()
+    #while not stop_event.is_set():
+    while not stop_event:
+        pcas_driver.app.process(INTERVAL)
 
     print('exiting...')
     # sends stop signal to server thread
     server_thread.stop()
+    server_thread.join()
 
 
 if __name__ == '__main__':

@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<display version="2.0.0">
+  <macros>
+    <trig_name></trig_name>
+  </macros>
+  <background_color>
+    <color red="240" green="240" blue="240">
+    </color>
+  </background_color>
+  <widget type="group" version="2.0.0">
+    <name>GC_ScrollControl</name>
+    <x>227</x>
+    <y>170</y>
+    <width>73</width>
+    <height>60</height>
+    <style>2</style>
+    <foreground_color>
+      <color red="0" green="128" blue="255">
+      </color>
+    </foreground_color>
+    <widget type="combo" version="2.0.0">
+      <name>CB_ChooseScale</name>
+      <pv_name>loc://$(P)$(trig_name)scale("0.1ns")</pv_name>
+      <width>65</width>
+      <height>25</height>
+      <background_color>
+        <color red="255" green="255" blue="255">
+        </color>
+      </background_color>
+      <tooltip>Unit the Scrollbar will control.</tooltip>
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <items>
+        <item>10ms</item>
+        <item>0.1ms</item>
+        <item>1us</item>
+        <item>10ns</item>
+        <item>0.1ns</item>
+      </items>
+      <items_from_pv>false</items_from_pv>
+    </widget>
+    <widget type="action_button" version="3.0.0">
+      <name>AB_DecreaseScale</name>
+      <actions>
+        <action type="execute">
+          <script file="EmbeddedPy">
+            <text><![CDATA[from org.csstudio.opibuilder.scriptUtil import PVUtil
+
+ls = ("10ms","0.1ms","1us","10ns","0.1ns")
+
+val = widget.runtimePropName().toString()
+
+idx = ls.index( str(val) ) + 1
+if idx >= len(ls): idx = len(ls)-1
+
+PVUtil.writePV('$(pv_name)', ls[idx])]]></text>
+          </script>
+        </action>
+      </actions>
+      <pv_name>loc://$(P)$(trig_name)scale("0.1ns")</pv_name>
+      <text>&lt;&gt;</text>
+      <y>29</y>
+      <width>25</width>
+      <height>20</height>
+      <font>
+        <font family="Sans" style="REGULAR" size="7.920792079207921">
+        </font>
+      </font>
+      <background_color>
+        <color red="240" green="240" blue="240">
+        </color>
+      </background_color>
+    </widget>
+    <widget type="action_button" version="3.0.0">
+      <name>AB_IncreaseScale</name>
+      <actions>
+        <action type="execute">
+          <script file="EmbeddedPy">
+            <text><![CDATA[from org.csstudio.opibuilder.scriptUtil import PVUtil
+
+ls = ("10ms","0.1ms","1us","10ns","0.1ns")
+
+val = widget.runtimePropValue().toString()
+
+idx = ls.index( str(val) ) - 1
+if idx <0: idx = 0
+
+PVUtil.writePV('$(pv_name)', ls[idx])]]></text>
+          </script>
+        </action>
+      </actions>
+      <pv_name>loc://$(P)$(trig_name)scale("0.1ns")</pv_name>
+      <text>&gt;&lt;</text>
+      <x>40</x>
+      <y>29</y>
+      <width>25</width>
+      <height>20</height>
+      <font>
+        <font family="Sans" style="REGULAR" size="7.920792079207921">
+        </font>
+      </font>
+      <background_color>
+        <color red="240" green="240" blue="240">
+        </color>
+      </background_color>
+    </widget>
+  </widget>
+  <widget type="group" version="2.0.0">
+    <name>Grouping Container_1</name>
+    <x>306</x>
+    <y>164</y>
+    <width>127</width>
+    <height>71</height>
+    <style>2</style>
+    <foreground_color>
+      <color red="0" green="128" blue="255">
+      </color>
+    </foreground_color>
+    <widget type="textupdate" version="2.0.0">
+      <name>TU_Delay</name>
+      <pv_name>loc://$(P)$(trig_name)Delay-SP(0)</pv_name>
+      <y>36</y>
+      <width>94</width>
+      <height>23</height>
+      <transparent>true</transparent>
+      <format>1</format>
+      <precision>4</precision>
+      <show_units>false</show_units>
+      <horizontal_alignment>2</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+      <wrap_words>false</wrap_words>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>LB_ShowScale</name>
+      <text>                         ^</text>
+      <y>26</y>
+      <width>94</width>
+      <height>23</height>
+      <horizontal_alignment>2</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+      <wrap_words>false</wrap_words>
+      <scripts>
+        <script file="EmbeddedPy">
+          <text><![CDATA[from org.csstudio.opibuilder.scriptUtil import PVUtil, ConsoleUtil
+
+pv0 = PVUtil.getString(pvs[0])
+
+props = {
+	"0.1ns" :  "                         ^",
+	"10ns"  :  "                     ^    ",
+	"1us"    :  "                ^         ",
+	"0.1ms":  "            ^             ",
+	"10ms" :  "        ^                 ",
+	}
+
+widget.setPropertyValue(  "text", props[ str(pv0) ]  )
+
+]]></text>
+          <pv_name>loc://$(P)$(trig_name)scale("0.1ns")</pv_name>
+        </script>
+      </scripts>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>Spinner</name>
+      <pv_name>loc://$(P)$(trig_name)Delay-SP(0)</pv_name>
+      <y>2</y>
+      <width>95</width>
+      <height>25</height>
+      <background_color>
+        <color red="255" green="255" blue="255">
+        </color>
+      </background_color>
+      <precision>4</precision>
+    </widget>
+  </widget>
+  <widget type="scrollbar" version="2.0.0">
+    <name>SC_DelayControl</name>
+    <pv_name>loc://$(P)$(trig_name)Delay-SP(0)</pv_name>
+    <x>310</x>
+    <y>258</y>
+    <width>120</width>
+    <show_value_tip>false</show_value_tip>
+    <scripts>
+      <script file="EmbeddedPy">
+        <text><![CDATA[from org.csstudio.opibuilder.scriptUtil import PVUtil, ConsoleUtil
+
+pv0 = PVUtil.getString(pvs[0])
+pv1 = PVUtil.getDouble(pvs[1])
+
+props = {
+	"0.1ns": 1e-4,
+	"10ns": 1e-2,
+	"1us": 1e0,
+	"0.1ms": 1e2,
+	"10ms": 1e4,
+	}
+
+sc = props[str(pv0)]
+
+neg_lim = pv1 - 100*sc
+if neg_lim <0: neg_lim = 0.0
+widget.setPropertyValue("maximum",pv1 + 100*sc)
+widget.setPropertyValue("minimum", neg_lim)
+widget.setPropertyValue("page_increment",10*sc)
+widget.setPropertyValue("step_increment",1*sc)
+widget.setPropertyValue("bar_length",1*sc)
+
+]]></text>
+        <pv_name>loc://$(P)$(trig_name)scale("0.1ns")</pv_name>
+        <pv_name trigger="false">$(pv_name)</pv_name>
+      </script>
+    </scripts>
+    <tooltip>Page Increment: 10.0
+Step Increment:   1.0</tooltip>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <maximum>0.5</maximum>
+    <bar_length>1.0</bar_length>
+    <increment>8.0E-9</increment>
+  </widget>
+</display>
