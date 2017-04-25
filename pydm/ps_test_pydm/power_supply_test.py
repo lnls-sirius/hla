@@ -11,7 +11,8 @@ class PowerSupplyTest(object):
     __ps_current = 0   # Current to return
     __pv_object_sp = None
     __pv_object_rb = None
-
+    __low_limit = 0.0   # I can pass this as argument in callback and use a local variable?
+    __high_limit = 0.0  # I can pass this as argument in callback and use a local variable?
     @staticmethod
     def start_test(item):
         #if PowerSupplyTest.__validate_item(item) == False:
@@ -20,14 +21,14 @@ class PowerSupplyTest(object):
         pv_name_sp = PVNaming.get_sp_pv_name(item[0])
         pv_name_rb = PVNaming.get_rb_pv_name(item[0])
         setpoint = item[1]
-        low_limit = item[2]
-        high_limit = item[3]
+        PowerSupplyTest.__low_limit = item[2]
+        PowerSupplyTest.__high_limit = item[3]
 
         PowerSupplyTest.__pv_object_sp = PV(pv_name_sp)
         PowerSupplyTest.__pv_object_rb = PV(pv_name_rb)
 
         # Add callback for read back pv
-        PowerSupplyTest.__pv_object_rb.add_callback(lambda: PowerSupplyTest.__read_back_changed(low_limit, high_limit))
+        PowerSupplyTest.__pv_object_rb.add_callback(PowerSupplyTest.__read_back_changed)
         PowerSupplyTest.__pv_object_sp.put(setpoint)
 
         #start timer
@@ -45,15 +46,16 @@ class PowerSupplyTest(object):
     @classmethod
     def __timer_interrupt(self, pv):
         self.__elapsed_time = 0
-        # pv.remove_callback()
+        pv.clear_callbacks()
         self.__ps_current = pv.value
 
     @classmethod
-    def __read_back_changed(self, pvname, value, low, high, **kwargs):
+    def __read_back_changed(self, pvname, value, **kws):
         # Remove callback?
+        print("********Entrou Callback********")
         self.__flag_read_back_change = True
         self.__ps_current = value
-        if value < low or value > high:
+        if value < PowerSupplyTest.__low_limit or value > PowerSupplyTest.__high_limit:
             self.__pass = False
         else:
             self.__pass = True
