@@ -1,6 +1,6 @@
 from pydm import Display
 from PyQt4.QtCore import pyqtSlot
-from PyQt4.QtGui import QFileDialog
+from PyQt4.QtGui import QFileDialog, QApplication
 from epics import PV
 from os import path
 #from test_sequence import TestSequence
@@ -71,6 +71,7 @@ class ControlMainWindow(Display):
             pv_object = PV(pv_name)
             pv_object.value = VALUE
             self.ui.te_test_sequence.append(item[0] + '\n')
+            QApplication.processEvents()
         self.ui.te_test_sequence.append('Finished...')
 
     @pyqtSlot()
@@ -87,9 +88,10 @@ class ControlMainWindow(Display):
                 print(item)
                 result, current = PowerSupplyTest.start_test(item)
                 if result == True:
-                    self.ui.te_test_sequence.append(item[0] + ' ... ' + str(current) + ' A')
+                    self.ui.te_test_sequence.append(item[0] + ' | ' + str(round(current, 3)) + ' A')
                 else:
-                    self.ui.te_pane_report.append(item[0] + ' ... ' + str(current) + ' A')
+                    self.ui.te_pane_report.append(item[0] + ' | ' + str(round(current, 3)) + ' A')
+                QApplication.processEvents() # Avoid freeze in interface
             bt.setEnabled(True)
             bt.setChecked(False)
         else:
@@ -111,6 +113,7 @@ class ControlMainWindow(Display):
                 pv_object = PV(pv_name)
                 pv_object.value = ON
                 self.ui.te_test_sequence.append(item[0] + '\n')
+                QApplication.processEvents()
         else:
             bt.setText('ON')
             self.ui.te_test_sequence.clear()
@@ -120,6 +123,7 @@ class ControlMainWindow(Display):
                 pv_object = PV(pv_name)
                 pv_object.value = OFF
                 self.ui.te_test_sequence.append(item[0] + '\n')
+                QApplication.processEvents()
         self.ui.te_test_sequence.append('Finished...' + '\n')
 
     @pyqtSlot()
