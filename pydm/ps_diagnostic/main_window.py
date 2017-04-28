@@ -14,6 +14,8 @@ class DiagnosticsMainWindow(Display):
         # Buttons
         self.ui.pb_start.clicked.connect(self.startSequence)
         self.ui.pb_stop.clicked.connect(self.stopSequence)
+        self.stop_flag = False
+
 
     def ui_filename(self):
         return 'main_window.ui'
@@ -29,51 +31,41 @@ class DiagnosticsMainWindow(Display):
 
     @pyqtSlot()
     def startSequence(self):
+        print("Entrou Start Sequence")
         bt = self.ui.pb_start
-        test_list = self._get_ps_list(self._ps_list_filepath)
+        test_list = self._get_ps_list(self._ps_list_filepath())
+        print(test_list)
         if bt.isChecked() == True:
+            print('Botao Pressionado')
+            self.stop_flag = False
             bt.setEnabled(False)
             self.ui.te_test_sequence.clear()
             self.ui.te_pane_report.clear()
             self.ui.te_test_sequence.setText('Start Test...\n')
             self.ui.te_pane_report.setText('Pane List:')
-            for item in test_list:
+            counter = 0
+            list_size = len(test_list)
+            while self.stop_flag == False:
+                QApplication.processEvents() # Avoid freeze in interface
+                item = test_list[counter]
                 print(item)
                 result, current = PowerSupplyTest.start_test(item)
                 if result == True:
                     self.ui.te_test_sequence.append(item[0] + ' | ' + str(round(current, 3)) + ' A')
                 else:
                     self.ui.te_pane_report.append(item[0] + ' | ' + str(round(current, 3)) + ' A')
-                QApplication.processEvents() # Avoid freeze in interface
+                counter += 1
+                if counter == list_size:
+                    counter = 0
+                #QApplication.processEvents() # Avoid freeze in interface
             bt.setEnabled(True)
             bt.setChecked(False)
-        else:
-            # TODO: stopSequence()
-            pass
+
 
     @pyqtSlot()
     def stopSequence(self):
-        bt = self.ui.pb_start
-        test_list = self._get_ps_list(self._ps_list_filepath)
-        if bt.isChecked() == True:
-            bt.setEnabled(False)
-            self.ui.te_test_sequence.clear()
-            self.ui.te_pane_report.clear()
-            self.ui.te_test_sequence.setText('Start Test...\n')
-            self.ui.te_pane_report.setText('Pane List:')
-            for item in test_list:
-                print(item)
-                result, current = PowerSupplyTest.start_test(item)
-                if result == True:
-                    self.ui.te_test_sequence.append(item[0] + ' | ' + str(round(current, 3)) + ' A')
-                else:
-                    self.ui.te_pane_report.append(item[0] + ' | ' + str(round(current, 3)) + ' A')
-                QApplication.processEvents() # Avoid freeze in interface
-            bt.setEnabled(True)
-            bt.setChecked(False)
-        else:
-            # TODO: stopSequence()
-            pass
+        self.stop_flag = True
+        self.ui.te_test_sequence.setText('End Test...\n')
 
     # List of all power supplies
     def _get_ps_list(self, file_name):

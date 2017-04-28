@@ -1,6 +1,6 @@
 class FileParser(object):
     def __init__(self, file_name):
-        self._file_name = file_name
+        #self._file_name = file_name
         self._file_object = open(file_name, 'r')
         self._params_table = self._file_object.readlines()
         for line_index in range(len(self._params_table)):
