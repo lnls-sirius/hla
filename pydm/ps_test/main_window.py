@@ -82,14 +82,17 @@ class ControlMainWindow(Display):
             self.ui.te_test_sequence.clear()
             self.ui.te_pane_report.clear()
             self.ui.te_test_sequence.setText('Start Test...\n')
-            self.ui.te_pane_report.setText('Pane List:')
+            self.ui.te_pane_report.setText('Pane List...\n')
             for item in test_list:
                 print(item)
                 result, current = PowerSupplyTest.start_test(item)
+                text_output = '{0:20s} {0:>4.3f} A'.format(item[0], current)
                 if result == True:
-                    self.ui.te_test_sequence.append(item[0] + ' | ' + str(round(current, 3)) + ' A')
+                    self.ui.te_test_sequence.append(text_output)
+                    #self.ui.te_test_sequence.append(item[0] + ' | ' + str(round(current, 3)) + ' A')
                 else:
-                    self.ui.te_pane_report.append(item[0] + ' | ' + str(round(current, 3)) + ' A')
+                    self.ui.te_pane_report.append(text_output)
+                    #self.ui.te_pane_report.append(item[0] + ' | ' + str(round(current, 3)) + ' A')
                 QApplication.processEvents() # Avoid freeze in interface
             bt.setEnabled(True)
             bt.setChecked(False)
