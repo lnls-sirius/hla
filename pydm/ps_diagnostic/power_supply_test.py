@@ -1,23 +1,23 @@
 from epics import PV
-from threading import Thread
 import time
 from pv_naming import PVNaming
+from PyQt5.QtWidgets import QApplication
 
 class PowerSupplyTest(object):
     _pass = False     # PS pass in test?
     _elapsed_time = 0
     _time_limit = 5
     _flag_read_back_change = False
-    _ps_current = 0   # Current to return
+    _ps_current = 0.0   # Current to return
     _pv_object_sp = None
     _pv_object_rb = None
-    _low_limit = 0.0   # I can pass this as argument in callback and use a local variable?
-    _high_limit = 0.0  # I can pass this as argument in callback and use a local variable?
+    _low_limit = 0.0    # I can pass this as argument in callback and use a local variable?
+    _high_limit = 0.0   # I can pass this as argument in callback and use a local variable?
 
     @staticmethod
     def start_test(item):
-        #if PowerSupplyTest._validate_item(item) == False:
-            #return None, None
+        if PowerSupplyTest._validate_item(item) == False:
+            return False, 0.0
 
         pv_name_sp = PVNaming.get_sp_pv_name(item[0])
         pv_name_rb = PVNaming.get_rb_pv_name(item[0])
@@ -39,6 +39,7 @@ class PowerSupplyTest(object):
             if PowerSupplyTest._flag_read_back_change == True:
                 PowerSupplyTest._elapsed_time = 0
                 break
+            QApplication.processEvents()
         if PowerSupplyTest._flag_read_back_change == False:
             PowerSupplyTest._timer_interrupt(PowerSupplyTest._pv_object_rb)
 
