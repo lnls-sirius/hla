@@ -8,6 +8,7 @@ class FileParser(object):
 
     def getParamsTable(self):
         for item in self._params_table:
+            item[1] = float(item[1])
             item[2] = float(item[2])
             item[3] = float(item[3])
         return self._params_table

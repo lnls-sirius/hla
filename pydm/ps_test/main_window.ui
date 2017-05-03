@@ -829,6 +829,9 @@
        <property name="enabled">
         <bool>true</bool>
        </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(240, 230, 140);</string>
+       </property>
        <property name="readOnly">
         <bool>true</bool>
        </property>
@@ -838,6 +841,9 @@
       <widget class="QTextEdit" name="te_pane_report">
        <property name="enabled">
         <bool>true</bool>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 192, 203);</string>
        </property>
        <property name="readOnly">
         <bool>true</bool>

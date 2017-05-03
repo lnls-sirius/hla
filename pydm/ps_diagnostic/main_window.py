@@ -16,7 +16,6 @@ class DiagnosticsMainWindow(Display):
         self.ui.pb_stop.clicked.connect(self.stopSequence)
         self.stop_flag = False
 
-
     def ui_filename(self):
         return 'main_window.ui'
 
@@ -34,7 +33,7 @@ class DiagnosticsMainWindow(Display):
         print("Entrou Start Sequence")
         bt = self.ui.pb_start
         test_list = self._get_ps_list(self._ps_list_filepath())
-        print(test_list)
+        #print(test_list)
         if bt.isChecked() == True:
             print('Botao Pressionado')
             self.stop_flag = False
@@ -48,16 +47,20 @@ class DiagnosticsMainWindow(Display):
             while self.stop_flag == False:
                 QApplication.processEvents() # Avoid freeze in interface
                 item = test_list[counter]
-                print(item)
                 result, current = PowerSupplyTest.start_test(item)
+                print(item)
+                result_text = "<table><tr><td align='left' width=150>" + item[0] + \
+                '</td><td width=70>' + str(round(current, 3)) + '</td> \
+                <td><b>A</b></td></tr></table>'
                 if result == True:
-                    self.ui.te_test_sequence.append(item[0] + ' | ' + str(round(current, 3)) + ' A')
+                    # self.ui.te_test_sequence.append(item[0] + ' | ' + str(round(current, 3)) + ' A')
+                    self.ui.te_test_sequence.append(result_text)
                 else:
-                    self.ui.te_pane_report.append(item[0] + ' | ' + str(round(current, 3)) + ' A')
+                    # self.ui.te_pane_report.append(item[0] + ' | ' + str(round(current, 3)) + ' A')
+                    self.ui.te_pane_report.append(result_text)
                 counter += 1
                 if counter == list_size:
                     counter = 0
-                #QApplication.processEvents() # Avoid freeze in interface
             bt.setEnabled(True)
             bt.setChecked(False)
 

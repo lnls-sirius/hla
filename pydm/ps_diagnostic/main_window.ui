@@ -163,6 +163,9 @@
         <height>410</height>
        </size>
       </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 192, 203);</string>
+      </property>
      </widget>
     </item>
    </layout>
