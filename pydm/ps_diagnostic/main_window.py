@@ -4,8 +4,7 @@ from PyQt5.QtWidgets import QApplication
 from epics import PV
 from os import path
 from power_supply_test import PowerSupplyTest
-from pv_naming import PVNaming
-from file_parser import FileParser
+from siriuspy.magnet import magdata
 
 class DiagnosticsMainWindow(Display):
 
@@ -22,17 +21,12 @@ class DiagnosticsMainWindow(Display):
     def ui_filepath(self):
         return path.join(path.dirname(path.realpath(__file__)), self.ui_filename())
 
-    def _ps_list_filename(self):
-        return 'ps_names.txt'
-
-    def _ps_list_filepath(self):
-        return path.join(path.dirname(path.realpath(__file__)), self._ps_list_filename())
 
     @pyqtSlot()
     def startSequence(self):
         print("Entrou Start Sequence")
         bt = self.ui.pb_start
-        test_list = self._get_ps_list(self._ps_list_filepath())
+        test_list = magdata.get_ps_names()
         #print(test_list)
         if bt.isChecked() == True:
             print('Botao Pressionado')
@@ -49,7 +43,7 @@ class DiagnosticsMainWindow(Display):
                 item = test_list[counter]
                 result, current = PowerSupplyTest.start_test(item)
                 print(item)
-                result_text = "<table><tr><td align='left' width=150>" + item[0] + \
+                result_text = "<table><tr><td align='left' width=150>" + item + \
                 '</td><td width=70>' + str(round(current, 3)) + '</td> \
                 <td><b>A</b></td></tr></table>'
                 if result == True:
@@ -70,11 +64,5 @@ class DiagnosticsMainWindow(Display):
         self.stop_flag = True
         self.ui.te_test_sequence.setText('End Test...\n')
 
-    # List of all power supplies
-    def _get_ps_list(self, file_name):
-            # get power supplies list
-            parsed_file = FileParser(file_name)
-            power_suply_list = parsed_file.getParamsTable()
-            return power_suply_list
 
 intelclass = DiagnosticsMainWindow

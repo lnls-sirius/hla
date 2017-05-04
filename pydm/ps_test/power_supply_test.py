@@ -1,7 +1,7 @@
 from epics import PV
-from threading import Thread
 import time
-from pv_naming import PVNaming
+import pvnaming
+from siriuspy.magnet import magdata
 
 class PowerSupplyTest(object):
     _pass = False     # PS pass in test?
@@ -15,15 +15,20 @@ class PowerSupplyTest(object):
     _high_limit = 0.0  # I can pass this as argument in callback and use a local variable?
 
     @staticmethod
-    def start_test(item):
+    def start_test(magps_name):
         #if PowerSupplyTest._validate_item(item) == False:
             #return None, None
 
-        pv_name_sp = PVNaming.get_sp_pv_name(item[0])
-        pv_name_rb = PVNaming.get_rb_pv_name(item[0])
-        setpoint = item[1]
-        PowerSupplyTest._low_limit = item[2]
-        PowerSupplyTest._high_limit = item[3]
+        pv_name_sp = pvnaming.get_sp_pv_name(magps_name)
+        pv_name_rb = pvnaming.get_rb_pv_name(magps_name)
+
+        # Dictionary with all test values for power supply
+        test_values_dict = magdata.get_magps_setpoint_limits(magps_name)
+        setpoint = test_values_dict['TSTV']
+        test_range = test_values_dict['TSTR']
+
+        PowerSupplyTest._low_limit = setpoint - (test_range / 2)
+        PowerSupplyTest._high_limit = setpoint + (test_range / 2)
 
         PowerSupplyTest._pv_object_sp = PV(pv_name_sp)
         PowerSupplyTest._pv_object_rb = PV(pv_name_rb)
@@ -49,7 +54,10 @@ class PowerSupplyTest(object):
         print("********Time Overflow********")
         self._elapsed_time = 0
         pv.clear_callbacks()
-        self._ps_current = pv.value
+        if pv.value == None:
+            self._ps_current = 0.0
+        else:
+            self._ps_current = pv.value
 
     @classmethod
     def _read_back_changed(self, pvname, value, **kws):
@@ -61,13 +69,3 @@ class PowerSupplyTest(object):
             self._pass = False
         else:
             self._pass = True
-
-    # validate item format and data types
-    @classmethod
-    def _validate_item(self, item):
-        if len(item) < 4: return False
-        if type(item[0]) is not str: return False
-        if type(item[1]) is not float: return False
-        if type(item[2]) is not float: return False
-        if type(item[3]) is not float: return False
-        return True

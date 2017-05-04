@@ -4,8 +4,8 @@ from PyQt5.QtWidgets import QApplication, QFileDialog
 from epics import PV
 from os import path
 from power_supply_test import PowerSupplyTest
-from pv_naming import PVNaming
-from file_parser import FileParser
+from siriuspy.magnet import magdata
+import pvnaming
 
 class ControlMainWindow(Display):
     # Accelerator sections
@@ -42,7 +42,7 @@ class ControlMainWindow(Display):
         self.ui.pb_browse.clicked.connect(self.browseFile)
 
         # Power supplies list (All power supplies)
-        self._power_supply_list = self._get_ps_list(self._ps_list_filepath())
+        self._power_supply_list = magdata.get_ps_names()
 
         # Set of power supplies to be tested
         #self._test_set = set()
@@ -53,11 +53,6 @@ class ControlMainWindow(Display):
     def ui_filepath(self):
         return path.join(path.dirname(path.realpath(__file__)), self.ui_filename())
 
-    def _ps_list_filename(self):
-        return 'ps_names.txt'
-
-    def _ps_list_filepath(self):
-        return path.join(path.dirname(path.realpath(__file__)), self._ps_list_filename())
 
     @pyqtSlot()
     def reset(self):
@@ -66,10 +61,10 @@ class ControlMainWindow(Display):
         self.ui.te_test_sequence.clear()
         self.ui.te_test_sequence.setText('Start Reset...\n')
         for item in reset_list:
-            pv_name = PVNaming.get_reset_pv_name(item[0])
+            pv_name = pvnaming.get_reset_pv_name(item)
             pv_object = PV(pv_name)
             pv_object.value = VALUE
-            self.ui.te_test_sequence.append(item[0] + '\n')
+            self.ui.te_test_sequence.append(item + '\n')
             QApplication.processEvents()
         self.ui.te_test_sequence.append('Finished...')
 
@@ -86,7 +81,7 @@ class ControlMainWindow(Display):
             for item in test_list:
                 print(item)
                 result, current = PowerSupplyTest.start_test(item)
-                result_text = "<table><tr><td align='left' width=150>" + item[0] + \
+                result_text = "<table><tr><td align='left' width=150>" + item + \
                                 '</td><td width=70>' + str(round(current, 3)) + '</td> \
                                 <td><b>A</b></td></tr></table>'
                 if result == True:
@@ -113,20 +108,20 @@ class ControlMainWindow(Display):
             self.ui.te_test_sequence.clear()
             self.ui.te_test_sequence.setText('Power On...\n')
             for item in on_off_list:
-                pv_name = PVNaming.get_pwr_state_sel_pv_name(item[0])
+                pv_name = pvnaming.get_pwr_state_sel_pv_name(item)
                 pv_object = PV(pv_name)
                 pv_object.value = ON
-                self.ui.te_test_sequence.append(item[0] + '\n')
+                self.ui.te_test_sequence.append(item + '\n')
                 QApplication.processEvents()
         else:
             bt.setText('ON')
             self.ui.te_test_sequence.clear()
             self.ui.te_test_sequence.setText('Power Off...\n')
             for item in on_off_list:
-                pv_name = PVNaming.get_pwr_state_sel_pv_name(item[0])
+                pv_name = pvnaming.get_pwr_state_sel_pv_name(item)
                 pv_object = PV(pv_name)
                 pv_object.value = OFF
-                self.ui.te_test_sequence.append(item[0] + '\n')
+                self.ui.te_test_sequence.append(item + '\n')
                 QApplication.processEvents()
         self.ui.te_test_sequence.append('Finished...' + '\n')
 
@@ -196,12 +191,6 @@ class ControlMainWindow(Display):
                 self.ui.cb_sextupole_ts.setChecked(False)
                 self.ui.cb_dipole_ts.setChecked(False)
 
-    # List of all power supplies
-    def _get_ps_list(self, file_name):
-            # get power supplies list
-            parsed_file = FileParser(file_name)
-            power_suply_list = parsed_file.getParamsTable()
-            return power_suply_list
 
     # Set of power supplies to be tested
     def _get_test_list(self):
@@ -243,12 +232,12 @@ class ControlMainWindow(Display):
         ps_set = set()
         if ps_group == self._FAMILY:
             for item in self._power_supply_list:
-                if accel_section in item[0] and ps_group in item[0] and ps_type in item[0]:
-                    ps_set.add(tuple(item))
+                if accel_section in item and ps_group in item and ps_type in item:
+                    ps_set.add(item)
         else:
             for item in self._power_supply_list:
-                if accel_section in item[0] and self._FAMILY not in item[0] and ps_type in item[0]:
-                    ps_set.add(tuple(item))
+                if accel_section in item and self._FAMILY not in item and ps_type in item:
+                    ps_set.add(item)
 
         return ps_set
 
