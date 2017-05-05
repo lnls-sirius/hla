@@ -3,7 +3,7 @@ from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QApplication, QFileDialog
 from epics import PV
 from os import path
-from power_supply_test import PowerSupplyTest
+from pstest import PowerSupplyTest
 from siriuspy.magnet import magdata
 import pvnaming
 
@@ -86,10 +86,8 @@ class ControlMainWindow(Display):
                                 <td><b>A</b></td></tr></table>'
                 if result == True:
                     self.ui.te_test_sequence.append(result_text)
-                    #self.ui.te_test_sequence.append(item[0] + ' | ' + str(round(current, 3)) + ' A')
                 else:
                     self.ui.te_pane_report.append(result_text)
-                    #self.ui.te_pane_report.append(item[0] + ' | ' + str(round(current, 3)) + ' A')
                 QApplication.processEvents() # Avoid freeze in interface
             bt.setEnabled(True)
             bt.setChecked(False)

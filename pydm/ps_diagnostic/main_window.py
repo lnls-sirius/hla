@@ -3,66 +3,52 @@ from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QApplication
 from epics import PV
 from os import path
-from power_supply_test import PowerSupplyTest
+#from pstest import PowerSupplyTest
+import pstest
 from siriuspy.magnet import magdata
+import threading
 
 class DiagnosticsMainWindow(Display):
 
     def __init__(self, parent=None, args=None):
+
         super(DiagnosticsMainWindow, self).__init__(parent)
-        # Buttons
-        self.ui.pb_start.clicked.connect(self.startSequence)
-        self.ui.pb_stop.clicked.connect(self.stopSequence)
-        self.stop_flag = False
+
+        self.ui.sb_time_interval.setValue(1)
+        self.ui.sb_time_interval.valueChanged.connect(self._update_time_interval)
+
+        self._time_between_readings = self.ui.sb_time_interval.value()
+        self._magps_list = magdata.get_ps_names()
+
+        self._start_sequence()
+
 
     def ui_filename(self):
+
         return 'main_window.ui'
 
     def ui_filepath(self):
+
         return path.join(path.dirname(path.realpath(__file__)), self.ui_filename())
 
-
     @pyqtSlot()
-    def startSequence(self):
-        print("Entrou Start Sequence")
-        bt = self.ui.pb_start
-        test_list = magdata.get_ps_names()
-        #print(test_list)
-        if bt.isChecked() == True:
-            print('Botao Pressionado')
-            self.stop_flag = False
-            bt.setEnabled(False)
-            self.ui.te_test_sequence.clear()
-            self.ui.te_pane_report.clear()
-            self.ui.te_test_sequence.setText('Start Test...\n')
-            self.ui.te_pane_report.setText('Pane List:')
-            counter = 0
-            list_size = len(test_list)
-            while self.stop_flag == False:
-                QApplication.processEvents() # Avoid freeze in interface
-                item = test_list[counter]
-                result, current = PowerSupplyTest.start_test(item)
-                print(item)
-                result_text = "<table><tr><td align='left' width=150>" + item + \
-                '</td><td width=70>' + str(round(current, 3)) + '</td> \
-                <td><b>A</b></td></tr></table>'
-                if result == True:
-                    # self.ui.te_test_sequence.append(item[0] + ' | ' + str(round(current, 3)) + ' A')
-                    self.ui.te_test_sequence.append(result_text)
-                else:
-                    # self.ui.te_pane_report.append(item[0] + ' | ' + str(round(current, 3)) + ' A')
-                    self.ui.te_pane_report.append(result_text)
-                counter += 1
-                if counter == list_size:
-                    counter = 0
-            bt.setEnabled(True)
-            bt.setChecked(False)
+    def _update_time_interval(self):
 
+        self._time_between_readings = self.ui.sb_time_interval.value()
 
-    @pyqtSlot()
-    def stopSequence(self):
-        self.stop_flag = True
-        self.ui.te_test_sequence.setText('End Test...\n')
+    def _start_sequence(self):
+
+        threading.Timer(self._time_between_readings, self._start_sequence).start()
+        hist, status, pane = pstest.start_test(self._magps_list)
+        self._print_list(hist, self.ui.te_historic)
+        self._print_list(status, self.ui.te_current_status)
+        self._print_list(pane, self.ui.te_pane_report)
+
+    def _print_list(self, items, text_edit):
+
+        text_edit.clear()
+        for item in item:
+            text_edit.append(item)
 
 
 intelclass = DiagnosticsMainWindow
