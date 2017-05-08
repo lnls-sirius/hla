@@ -1,29 +1,28 @@
 from pydm import Display
-from PyQt4.QtCore import pyqtSlot
-from PyQt4.QtGui import QFileDialog
+from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtWidgets import QApplication, QFileDialog
 from epics import PV
 from os import path
-#from test_sequence import TestSequence
-from power_supply_test import PowerSupplyTest
-from pv_naming import PVNaming
-from file_parser import FileParser
+from pstest import PowerSupplyTest
+from siriuspy.magnet import magdata
+import pvnaming
 
 class ControlMainWindow(Display):
     # Accelerator sections
-    __STORAGE_RING = 'SI'
-    __BOOSTER = 'BO'
-    __LINAC = 'LI'
-    __TRANSPORT_LINE_SI = 'TS'
-    __TRANSPORT_LINE_BO = 'TB'
+    _STORAGE_RING = 'SI'
+    _BOOSTER = 'BO'
+    _LINAC = 'LI'
+    _TRANSPORT_LINE_SI = 'TS'
+    _TRANSPORT_LINE_BO = 'TB'
 
     # Power supply groups
-    __FAMILY = 'Fam'
-    __TRIM = 'Trim'
+    _FAMILY = 'Fam'
+    _TRIM = 'Trim'
 
     # Power supply types
-    __QUADRUPOLE = '-Q'
-    __SEXTUPOLE = '-S'
-    __DIPOLE = '-B'
+    _QUADRUPOLE = '-Q'
+    _SEXTUPOLE = '-S'
+    _DIPOLE = '-B'
 
     def __init__(self, parent=None, args=None):
         super(ControlMainWindow, self).__init__(parent)
@@ -43,53 +42,53 @@ class ControlMainWindow(Display):
         self.ui.pb_browse.clicked.connect(self.browseFile)
 
         # Power supplies list (All power supplies)
-        self.__power_supply_list = self.__get_ps_list(self.__ps_list_filepath())
+        self._power_supply_list = magdata.get_ps_names()
 
         # Set of power supplies to be tested
-        #self.__test_set = set()
+        #self._test_set = set()
 
     def ui_filename(self):
-        return 'main_window_2.ui'
+        return 'main_window.ui'
 
     def ui_filepath(self):
         return path.join(path.dirname(path.realpath(__file__)), self.ui_filename())
 
-    def __ps_list_filename(self):
-        return 'ps_names.txt'
-
-    def __ps_list_filepath(self):
-        return path.join(path.dirname(path.realpath(__file__)), self.__ps_list_filename())
 
     @pyqtSlot()
     def reset(self):
         VALUE = 0
-        reset_list = list(self.__get_test_list())
+        reset_list = list(self._get_test_list())
         self.ui.te_test_sequence.clear()
         self.ui.te_test_sequence.setText('Start Reset...\n')
         for item in reset_list:
-            pv_name = PVNaming.get_reset_pv_name(item[0])
+            pv_name = pvnaming.get_reset_pv_name(item)
             pv_object = PV(pv_name)
             pv_object.value = VALUE
-            self.ui.te_test_sequence.append(item[0] + '\n')
+            self.ui.te_test_sequence.append(item + '\n')
+            QApplication.processEvents()
         self.ui.te_test_sequence.append('Finished...')
 
     @pyqtSlot()
     def testSequence(self):
         bt = self.ui.pb_test_sequence
-        test_list = list(self.__get_test_list())
+        test_list = list(self._get_test_list())
         if bt.isChecked() == True:
             bt.setEnabled(False)
             self.ui.te_test_sequence.clear()
             self.ui.te_pane_report.clear()
             self.ui.te_test_sequence.setText('Start Test...\n')
-            self.ui.te_pane_report.setText('Pane List:')
+            self.ui.te_pane_report.setText('Pane List...\n')
             for item in test_list:
                 print(item)
                 result, current = PowerSupplyTest.start_test(item)
+                result_text = "<table><tr><td align='left' width=150>" + item + \
+                                '</td><td width=70>' + str(round(current, 3)) + '</td> \
+                                <td><b>A</b></td></tr></table>'
                 if result == True:
-                    self.ui.te_test_sequence.append(item[0] + ' ... ' + str(current) + ' A')
+                    self.ui.te_test_sequence.append(result_text)
                 else:
-                    self.ui.te_pane_report.append(item[0] + ' ... ' + str(current) + ' A')
+                    self.ui.te_pane_report.append(result_text)
+                QApplication.processEvents() # Avoid freeze in interface
             bt.setEnabled(True)
             bt.setChecked(False)
         else:
@@ -100,26 +99,28 @@ class ControlMainWindow(Display):
     def treatOnOffButton(self):
         OFF = 0
         ON = 1
-        on_off_list = list(self.__get_test_list())
+        on_off_list = list(self._get_test_list())
         bt = self.ui.pb_on_off
         if bt.isChecked() == True:
             bt.setText('OFF')
             self.ui.te_test_sequence.clear()
             self.ui.te_test_sequence.setText('Power On...\n')
             for item in on_off_list:
-                pv_name = PVNaming.get_pwr_state_sel_pv_name(item[0])
+                pv_name = pvnaming.get_pwr_state_sel_pv_name(item)
                 pv_object = PV(pv_name)
                 pv_object.value = ON
-                self.ui.te_test_sequence.append(item[0] + '\n')
+                self.ui.te_test_sequence.append(item + '\n')
+                QApplication.processEvents()
         else:
             bt.setText('ON')
             self.ui.te_test_sequence.clear()
             self.ui.te_test_sequence.setText('Power Off...\n')
             for item in on_off_list:
-                pv_name = PVNaming.get_pwr_state_sel_pv_name(item[0])
+                pv_name = pvnaming.get_pwr_state_sel_pv_name(item)
                 pv_object = PV(pv_name)
                 pv_object.value = OFF
-                self.ui.te_test_sequence.append(item[0] + '\n')
+                self.ui.te_test_sequence.append(item + '\n')
+                QApplication.processEvents()
         self.ui.te_test_sequence.append('Finished...' + '\n')
 
     @pyqtSlot()
@@ -188,59 +189,53 @@ class ControlMainWindow(Display):
                 self.ui.cb_sextupole_ts.setChecked(False)
                 self.ui.cb_dipole_ts.setChecked(False)
 
-    # List of all power supplies
-    def __get_ps_list(self, file_name):
-            # get power supplies list
-            parsed_file = FileParser(file_name)
-            power_suply_list = parsed_file.getParamsTable()
-            return power_suply_list
 
     # Set of power supplies to be tested
-    def __get_test_list(self):
+    def _get_test_list(self):
         test_set = set()
         if self.ui.cb_quadrupole_si.isChecked() == True:
-            test_set = test_set | self.__search_ps(self.__STORAGE_RING, self.__FAMILY, self.__QUADRUPOLE)
+            test_set = test_set | self._search_ps(self._STORAGE_RING, self._FAMILY, self._QUADRUPOLE)
         if self.ui.cb_sextupole_si.isChecked() == True:
-            test_set = test_set | self.__search_ps(self.__STORAGE_RING, self.__FAMILY, self.__SEXTUPOLE)
+            test_set = test_set | self._search_ps(self._STORAGE_RING, self._FAMILY, self._SEXTUPOLE)
         if self.ui.cb_dipole_si.isChecked() == True:
-            test_set = test_set | self.__search_ps(self.__STORAGE_RING, self.__FAMILY, self.__DIPOLE)
+            test_set = test_set | self._search_ps(self._STORAGE_RING, self._FAMILY, self._DIPOLE)
         if self.ui.cb_quadrupole_bo.isChecked() == True:
-            test_set = test_set | self.__search_ps(self.__BOOSTER, self.__FAMILY, self.__QUADRUPOLE)
+            test_set = test_set | self._search_ps(self._BOOSTER, self._FAMILY, self._QUADRUPOLE)
         if self.ui.cb_sextupole_bo.isChecked() == True:
-            test_set = test_set | self.__search_ps(self.__BOOSTER, self.__FAMILY, self.__SEXTUPOLE)
+            test_set = test_set | self._search_ps(self._BOOSTER, self._FAMILY, self._SEXTUPOLE)
         if self.ui.cb_dipole_bo.isChecked() == True:
-            test_set = test_set | self.__search_ps(self.__BOOSTER, self.__FAMILY, self.__DIPOLE)
+            test_set = test_set | self._search_ps(self._BOOSTER, self._FAMILY, self._DIPOLE)
         if self.ui.cb_quadrupole_linac.isChecked() == True:
-            test_set = test_set | self.__search_ps(self.__LINAC, self.__FAMILY, self.__QUADRUPOLE)
+            test_set = test_set | self._search_ps(self._LINAC, self._FAMILY, self._QUADRUPOLE)
         if self.ui.cb_sextupole_linac.isChecked() == True:
-            test_set = test_set | self.__search_ps(self.__LINAC, self.__FAMILY, self.__SEXTUPOLE)
+            test_set = test_set | self._search_ps(self._LINAC, self._FAMILY, self._SEXTUPOLE)
         if self.ui.cb_dipole_linac.isChecked() == True:
-            test_set = test_set | self.__search_ps(self.__LINAC, self.__FAMILY, self.__DIPOLE)
+            test_set = test_set | self._search_ps(self._LINAC, self._FAMILY, self._DIPOLE)
         if self.ui.cb_quadrupole_ts.isChecked() == True:
-            test_set = test_set | self.__search_ps(self.__TRANSPORT_LINE_SI, self.__FAMILY, self.__QUADRUPOLE)
+            test_set = test_set | self._search_ps(self._TRANSPORT_LINE_SI, self._FAMILY, self._QUADRUPOLE)
         if self.ui.cb_sextupole_ts.isChecked() == True:
-            test_set = test_set | self.__search_ps(self.__TRANSPORT_LINE_SI, self.__FAMILY, self.__SEXTUPOLE)
+            test_set = test_set | self._search_ps(self._TRANSPORT_LINE_SI, self._FAMILY, self._SEXTUPOLE)
         if self.ui.cb_dipole_ts.isChecked() == True:
-            test_set = test_set | self.__search_ps(self.__TRANSPORT_LINE_SI, self.__FAMILY, self.__DIPOLE)
+            test_set = test_set | self._search_ps(self._TRANSPORT_LINE_SI, self._FAMILY, self._DIPOLE)
         if self.ui.cb_quadrupole_tb.isChecked() == True:
-            test_set = test_set | self.__search_ps(self.__TRANSPORT_LINE_BO, self.__FAMILY, self.__QUADRUPOLE)
+            test_set = test_set | self._search_ps(self._TRANSPORT_LINE_BO, self._FAMILY, self._QUADRUPOLE)
         if self.ui.cb_sextupole_tb.isChecked() == True:
-            test_set = test_set | self.__search_ps(self.__TRANSPORT_LINE_BO, self.__FAMILY, self.__SEXTUPOLE)
+            test_set = test_set | self._search_ps(self._TRANSPORT_LINE_BO, self._FAMILY, self._SEXTUPOLE)
         if self.ui.cb_dipole_tb.isChecked() == True:
-            test_set = test_set | self.__search_ps(self.__TRANSPORT_LINE_BO, self.__FAMILY, self.__DIPOLE)
+            test_set = test_set | self._search_ps(self._TRANSPORT_LINE_BO, self._FAMILY, self._DIPOLE)
         return test_set
 
     # search selected power supplies
-    def __search_ps(self, accel_section, ps_group, ps_type):
+    def _search_ps(self, accel_section, ps_group, ps_type):
         ps_set = set()
-        if ps_group == self.__FAMILY:
-            for item in self.__power_supply_list:
-                if accel_section in item[0] and ps_group in item[0] and ps_type in item[0]:
-                    ps_set.add(tuple(item))
+        if ps_group == self._FAMILY:
+            for item in self._power_supply_list:
+                if accel_section in item and ps_group in item and ps_type in item:
+                    ps_set.add(item)
         else:
-            for item in self.__power_supply_list:
-                if accel_section in item[0] and self.__FAMILY not in item[0] and ps_type in item[0]:
-                    ps_set.add(tuple(item))
+            for item in self._power_supply_list:
+                if accel_section in item and self._FAMILY not in item and ps_type in item:
+                    ps_set.add(item)
 
         return ps_set
 
