@@ -3,7 +3,7 @@ from PyQt5.QtCore import pyqtSlot, QTimer
 from PyQt5.QtWidgets import QApplication
 from epics import PV
 from os import path
-from pstest import Test
+from psdiag import Test
 from siriuspy.magnet import magdata
 import threading
 import datetime
@@ -28,11 +28,7 @@ class DiagnosticsMainWindow(Display):
 
         self.test_thread = Test(self._magps_list)
         self.test_thread.job_done.connect(self.update_interface)
-        self.test_thread.finished.connect(self.teste)
 
-    @pyqtSlot()
-    def teste(self):
-        print('*******Thread Finalizada***********')
 
     def ui_filename(self):
 
@@ -57,17 +53,21 @@ class DiagnosticsMainWindow(Display):
         self._timer.setInterval(1000 * self._time_between_readings)
         self.test_thread.start()
 
-    @pyqtSlot()
+    @pyqtSlot(list, list)
     def update_interface(self, magps_ok, magps_pane):
+        self.ui.te_current_status.clear()
+        self.ui.te_pane_report.clear()
         for item in magps_ok:
             self.add_to_status_report(item)
-            self.add_to_historic(item, "Pass")
+            self.add_to_historic(item, "OK")
+            QApplication.processEvents()
         for item in magps_pane:
             self.add_to_pane_report(item)
-            self.add_to_historic(item, "Fail")
+            self.add_to_historic(item, "Pane")
+            QApplication.processEvents()
 
     def print_headers(self):
-        self.ui.te_current_status.clear()
+        #self.ui.te_current_status.clear()
         self.ui.te_pane_report.clear()
         self.ui.te_historic.clear()
         ok_header ="<table><tr><td align='center' width=150><b>Fonte</b>\
@@ -90,17 +90,17 @@ class DiagnosticsMainWindow(Display):
 
     def add_to_status_report(self, item):
 
-        status_report ="<table><tr><td align='center' width=150><b>" + item(0) +"</b>\
-                    </td><td width=100 align='center'><b>" + str(item(1)) + "<b></td> \
-                    <td align='center' width=100><b>" + str(item(2)) + "</b></td></tr></table>"
+        status_report ="<table><tr><td align='center' width=150>" + item[0] + \
+                    "</td><td width=100 align='center'>" + str(item[1]) + "</td> \
+                    <td align='center' width=100>" + str(item[2]) + "</td></tr></table>"
 
         self.ui.te_current_status.append(status_report)
 
     def add_to_pane_report(self, item):
 
-        pane_report ="<table><tr><td align='center' width=150><b>" + item(0) +"</b>\
-                    </td><td width=100 align='center'><b>" + str(item(1)) + "<b></td> \
-                    <td align='center' width=100><b>" + str(item(2)) + "</b></td></tr></table>"
+        pane_report ="<table><tr><td align='center' width=150>" + item[0] + \
+                    " </td><td width=100 align='center'>" + str(item[1]) + "</td> \
+                    <td align='center' width=100>" + str(item[2]) + "</td></tr></table>"
 
         self.ui.te_pane_report.append(pane_report)
 
@@ -110,12 +110,11 @@ class DiagnosticsMainWindow(Display):
         index_round_sec = time_now.find('.')
         time_now = time_now[0:index_round_sec]
 
-        historic ="<table><tr><td align='center' width=150><b>" + item(0) + "</b></td>\
-                            <td width=100 align='center'><b>" + str(item(1)) + "<b></td> \
-                            <td align='center' width=100><b>" + str(item(2)) + "</b></td>\
-                            <td align='center' width=100><b>" + time_now + "</b></td>\
+        historic ="<table><tr><td align='center' width=150>" + item[0] + "</td>\
+                            <td width=100 align='center'>" + str(item[1]) + "</td> \
+                            <td align='center' width=100>" + str(item[2]) + "</td>\
+                            <td align='center' width=100>" + time_now + "</td>\
                             <td align='center' width=100><b>" + status + "</b></td></tr></table>"
-
 
         self.ui.te_historic.append(historic)
 
