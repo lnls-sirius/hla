@@ -1,0 +1,4394 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1000</width>
+    <height>950</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1000</width>
+    <height>950</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>1039</width>
+    <height>950</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Sistema de RF do Anel</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(19, 68, 17);</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout_4">
+   <item>
+    <widget class="QSplitter" name="splitter_7">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(238, 238, 236);</string>
+      </property>
+      <property name="tabPosition">
+       <enum>QTabWidget::North</enum>
+      </property>
+      <property name="tabShape">
+       <enum>QTabWidget::Rounded</enum>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>Rack de RF</string>
+       </attribute>
+       <widget class="QFrame" name="frame">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>981</width>
+          <height>651</height>
+         </rect>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::VLine</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <widget class="QWidget" name="layoutWidget">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>981</width>
+           <height>673</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_13">
+          <item>
+           <widget class="QGroupBox" name="groupBox">
+            <property name="minimumSize">
+             <size>
+              <width>481</width>
+              <height>671</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
+            <property name="title">
+             <string>Sistema A</string>
+            </property>
+            <property name="flat">
+             <bool>false</bool>
+            </property>
+            <widget class="QWidget" name="layoutWidget">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>20</y>
+               <width>483</width>
+               <height>632</height>
+              </rect>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_2">
+              <item>
+               <widget class="QFrame" name="frame_2">
+                <property name="minimumSize">
+                 <size>
+                  <width>481</width>
+                  <height>251</height>
+                 </size>
+                </property>
+                <property name="frameShape">
+                 <enum>QFrame::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <widget class="QWidget" name="layoutWidget">
+                 <property name="geometry">
+                  <rect>
+                   <x>11</x>
+                   <y>100</y>
+                   <width>460</width>
+                   <height>141</height>
+                  </rect>
+                 </property>
+                 <layout class="QHBoxLayout" name="horizontalLayout_2">
+                  <item>
+                   <widget class="QGroupBox" name="groupBox_8">
+                    <property name="minimumSize">
+                     <size>
+                      <width>181</width>
+                      <height>139</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>181</width>
+                      <height>139</height>
+                     </size>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true"/>
+                    </property>
+                    <property name="title">
+                     <string>Controle Freq. Cavidade</string>
+                    </property>
+                    <widget class="QWidget" name="layoutWidget">
+                     <property name="geometry">
+                      <rect>
+                       <x>10</x>
+                       <y>50</y>
+                       <width>139</width>
+                       <height>56</height>
+                      </rect>
+                     </property>
+                     <layout class="QHBoxLayout" name="horizontalLayout_6">
+                      <item>
+                       <widget class="PyDMLed" name="PyDMLed_6">
+                        <property name="maximumSize">
+                         <size>
+                          <width>21</width>
+                          <height>41</height>
+                         </size>
+                        </property>
+                        <property name="toolTip">
+                         <string/>
+                        </property>
+                        <property name="whatsThis">
+                         <string/>
+                        </property>
+                        <property name="value">
+                         <bool>true</bool>
+                        </property>
+                        <property name="onColour">
+                         <enum>QLed::Yellow</enum>
+                        </property>
+                        <property name="offColour">
+                         <enum>QLed::Red</enum>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <layout class="QVBoxLayout" name="verticalLayout">
+                        <item>
+                         <widget class="QRadioButton" name="radioButton">
+                          <property name="font">
+                           <font>
+                            <weight>75</weight>
+                            <bold>true</bold>
+                           </font>
+                          </property>
+                          <property name="text">
+                           <string>Estacionado</string>
+                          </property>
+                          <property name="checked">
+                           <bool>false</bool>
+                          </property>
+                          <property name="autoExclusive">
+                           <bool>true</bool>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QRadioButton" name="radioButton_2">
+                          <property name="font">
+                           <font>
+                            <weight>75</weight>
+                            <bold>true</bold>
+                           </font>
+                          </property>
+                          <property name="text">
+                           <string>Automático</string>
+                          </property>
+                         </widget>
+                        </item>
+                       </layout>
+                      </item>
+                     </layout>
+                    </widget>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QGroupBox" name="groupBox_9">
+                    <property name="minimumSize">
+                     <size>
+                      <width>271</width>
+                      <height>139</height>
+                     </size>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true"/>
+                    </property>
+                    <property name="title">
+                     <string>Ajustes</string>
+                    </property>
+                    <widget class="QWidget" name="layoutWidget">
+                     <property name="geometry">
+                      <rect>
+                       <x>10</x>
+                       <y>50</y>
+                       <width>252</width>
+                       <height>58</height>
+                      </rect>
+                     </property>
+                     <layout class="QGridLayout" name="gridLayout_5">
+                      <item row="0" column="0">
+                       <widget class="PyDMLabel" name="PyDMLabel">
+                        <property name="toolTip">
+                         <string/>
+                        </property>
+                        <property name="whatsThis">
+                         <string/>
+                        </property>
+                        <property name="text">
+                         <string>Ref. p/ tensão de GAP</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="0" column="1">
+                       <widget class="PyDMLineEdit" name="PyDMLineEdit">
+                        <property name="maximumSize">
+                         <size>
+                          <width>80</width>
+                          <height>16777215</height>
+                         </size>
+                        </property>
+                        <property name="toolTip">
+                         <string/>
+                        </property>
+                        <property name="whatsThis">
+                         <string>
+    Writeable text field to send and display channel values
+    </string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="0" column="2">
+                       <widget class="PyDMLabel" name="PyDMLabel_23">
+                        <property name="font">
+                         <font>
+                          <weight>75</weight>
+                          <bold>true</bold>
+                         </font>
+                        </property>
+                        <property name="toolTip">
+                         <string/>
+                        </property>
+                        <property name="whatsThis">
+                         <string/>
+                        </property>
+                        <property name="text">
+                         <string>V</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="1" column="0">
+                       <widget class="PyDMLabel" name="PyDMLabel_2">
+                        <property name="toolTip">
+                         <string/>
+                        </property>
+                        <property name="whatsThis">
+                         <string/>
+                        </property>
+                        <property name="text">
+                         <string>Detune</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="1" column="1">
+                       <widget class="PyDMLineEdit" name="PyDMLineEdit_2">
+                        <property name="maximumSize">
+                         <size>
+                          <width>80</width>
+                          <height>16777215</height>
+                         </size>
+                        </property>
+                        <property name="toolTip">
+                         <string/>
+                        </property>
+                        <property name="whatsThis">
+                         <string>
+    Writeable text field to send and display channel values
+    </string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="1" column="2">
+                       <widget class="PyDMLabel" name="PyDMLabel_37">
+                        <property name="font">
+                         <font>
+                          <weight>75</weight>
+                          <bold>true</bold>
+                         </font>
+                        </property>
+                        <property name="toolTip">
+                         <string/>
+                        </property>
+                        <property name="whatsThis">
+                         <string/>
+                        </property>
+                        <property name="text">
+                         <string>V</string>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="layoutWidget">
+                 <property name="geometry">
+                  <rect>
+                   <x>300</x>
+                   <y>10</y>
+                   <width>165</width>
+                   <height>72</height>
+                  </rect>
+                 </property>
+                 <layout class="QHBoxLayout" name="horizontalLayout_5">
+                  <item>
+                   <widget class="PyDMLabel" name="PyDMLabel_40">
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="toolTip">
+                     <string/>
+                    </property>
+                    <property name="whatsThis">
+                     <string/>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true"/>
+                    </property>
+                    <property name="text">
+                     <string>Chave L/D 
+ Rack</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <layout class="QVBoxLayout" name="verticalLayout_3">
+                    <item>
+                     <widget class="PyDMPushButton" name="PyDMPushButton">
+                      <property name="enabled">
+                       <bool>true</bool>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>81</width>
+                        <height>31</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>81</width>
+                        <height>31</height>
+                       </size>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string>
+    Basic PushButton to send a fixed value.
+
+    The PyDMPushButton is meant to hold a specific value, and send that value
+    to a channel when it is clicked, much like the MessageButton does in EDM.
+    The PyDMPushButton works in two different modes of operation, first, a
+    fixed value can be given to the :attr:`.pressValue` attribute, whenever the
+    button is clicked a signal containing this value will be sent to the
+    connected channel. This is the default behavior of the button. However, if
+    the :attr:`.relativeChange` is set to True, the fixed value will be added
+    to the current value of the channel. This means that the button will
+    increment a channel by a fixed amount with every click, a consistent
+    relative move
+    
+    Parameters
+    ----------
+    pressValue : int, float, str
+        Value to be sent when the button is clicked
+    
+    channel : str
+        ID of channel to manipulate
+
+    parent : QObject, optional
+        Parent of PyDMPushButton
+
+    label : str, optional
+        String to place on button
+
+    icon : QIcon, optional
+        An Icon to display on the PyDMPushButton
+
+
+    relative : bool, optional
+        Choice to have the button peform a relative put, instead of always
+        setting to an absolute value
+    </string>
+                      </property>
+                      <property name="text">
+                       <string>Liga</string>
+                      </property>
+                      <property name="checkable">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="PyDMPushButton" name="PyDMPushButton_2">
+                      <property name="enabled">
+                       <bool>true</bool>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>81</width>
+                        <height>31</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>81</width>
+                        <height>31</height>
+                       </size>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string>
+    Basic PushButton to send a fixed value.
+
+    The PyDMPushButton is meant to hold a specific value, and send that value
+    to a channel when it is clicked, much like the MessageButton does in EDM.
+    The PyDMPushButton works in two different modes of operation, first, a
+    fixed value can be given to the :attr:`.pressValue` attribute, whenever the
+    button is clicked a signal containing this value will be sent to the
+    connected channel. This is the default behavior of the button. However, if
+    the :attr:`.relativeChange` is set to True, the fixed value will be added
+    to the current value of the channel. This means that the button will
+    increment a channel by a fixed amount with every click, a consistent
+    relative move
+    
+    Parameters
+    ----------
+    pressValue : int, float, str
+        Value to be sent when the button is clicked
+    
+    channel : str
+        ID of channel to manipulate
+
+    parent : QObject, optional
+        Parent of PyDMPushButton
+
+    label : str, optional
+        String to place on button
+
+    icon : QIcon, optional
+        An Icon to display on the PyDMPushButton
+
+
+    relative : bool, optional
+        Choice to have the button peform a relative put, instead of always
+        setting to an absolute value
+    </string>
+                      </property>
+                      <property name="text">
+                       <string>Desliga</string>
+                      </property>
+                      <property name="checkable">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="layoutWidget">
+                 <property name="geometry">
+                  <rect>
+                   <x>10</x>
+                   <y>20</y>
+                   <width>123</width>
+                   <height>43</height>
+                  </rect>
+                 </property>
+                 <layout class="QHBoxLayout" name="horizontalLayout_7">
+                  <item>
+                   <widget class="PyDMLabel" name="PyDMLabel_39">
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="toolTip">
+                     <string/>
+                    </property>
+                    <property name="whatsThis">
+                     <string/>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true"/>
+                    </property>
+                    <property name="text">
+                     <string>Rack</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="PyDMLed" name="PyDMLed_5">
+                    <property name="maximumSize">
+                     <size>
+                      <width>21</width>
+                      <height>41</height>
+                     </size>
+                    </property>
+                    <property name="toolTip">
+                     <string/>
+                    </property>
+                    <property name="whatsThis">
+                     <string/>
+                    </property>
+                    <property name="onColour">
+                     <enum>QLed::Green</enum>
+                    </property>
+                    <property name="offColour">
+                     <enum>QLed::Red</enum>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="PyDMLabel" name="PyDMLabel_41">
+                    <property name="toolTip">
+                     <string/>
+                    </property>
+                    <property name="whatsThis">
+                     <string/>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true"/>
+                    </property>
+                    <property name="text">
+                     <string>Remoto</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </widget>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_3">
+                <item>
+                 <widget class="QGroupBox" name="groupBox_6">
+                  <property name="minimumSize">
+                   <size>
+                    <width>231</width>
+                    <height>371</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="title">
+                   <string>Potências de RF</string>
+                  </property>
+                  <widget class="QWidget" name="layoutWidget">
+                   <property name="geometry">
+                    <rect>
+                     <x>10</x>
+                     <y>30</y>
+                     <width>221</width>
+                     <height>331</height>
+                    </rect>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout">
+                    <item row="0" column="0">
+                     <widget class="PyDMLabel" name="PyDMLabel_7">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>Ent. AES</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="PyDMLabel" name="PyDMLabel_8">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>Saída AES</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="0">
+                     <widget class="PyDMLabel" name="PyDMLabel_9">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>Refl. p/ AES</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="1">
+                     <widget class="PyDMLineEdit" name="PyDMLineEdit_8">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string>
+    Writeable text field to send and display channel values
+    </string>
+                      </property>
+                      <property name="readOnly">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="2">
+                     <widget class="PyDMLabel" name="PyDMLabel_16">
+                      <property name="font">
+                       <font>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>KW</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="0">
+                     <widget class="PyDMLabel" name="PyDMLabel_12">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>Refl. p/ Circ.</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="0">
+                     <widget class="PyDMLabel" name="PyDMLabel_10">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>Ent. Cav.</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="1">
+                     <widget class="PyDMLineEdit" name="PyDMLineEdit_7">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string>
+    Writeable text field to send and display channel values
+    </string>
+                      </property>
+                      <property name="readOnly">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="2">
+                     <widget class="PyDMLabel" name="PyDMLabel_15">
+                      <property name="font">
+                       <font>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>KW</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="0">
+                     <widget class="PyDMLabel" name="PyDMLabel_11">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>Pot Int. Cav</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="2">
+                     <widget class="PyDMLabel" name="PyDMLabel_17">
+                      <property name="font">
+                       <font>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>KW</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="1">
+                     <widget class="PyDMLineEdit" name="PyDMLineEdit_9">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string>
+    Writeable text field to send and display channel values
+    </string>
+                      </property>
+                      <property name="readOnly">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="2">
+                     <widget class="PyDMLabel" name="PyDMLabel_18">
+                      <property name="font">
+                       <font>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>KW</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="1">
+                     <widget class="PyDMLineEdit" name="PyDMLineEdit_6">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string>
+    Writeable text field to send and display channel values
+    </string>
+                      </property>
+                      <property name="readOnly">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="2">
+                     <widget class="PyDMLabel" name="PyDMLabel_13">
+                      <property name="font">
+                       <font>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>W</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="PyDMLineEdit" name="PyDMLineEdit_5">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string>
+    Writeable text field to send and display channel values
+    </string>
+                      </property>
+                      <property name="readOnly">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="PyDMLineEdit" name="PyDMLineEdit_4">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string>
+    Writeable text field to send and display channel values
+    </string>
+                      </property>
+                      <property name="readOnly">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="2">
+                     <widget class="PyDMLabel" name="PyDMLabel_14">
+                      <property name="font">
+                       <font>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>W</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QGroupBox" name="groupBox_7">
+                  <property name="minimumSize">
+                   <size>
+                    <width>231</width>
+                    <height>371</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="title">
+                   <string>Monitorações</string>
+                  </property>
+                  <widget class="QWidget" name="layoutWidget">
+                   <property name="geometry">
+                    <rect>
+                     <x>10</x>
+                     <y>40</y>
+                     <width>211</width>
+                     <height>321</height>
+                    </rect>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout_4">
+                    <item row="0" column="0">
+                     <widget class="PyDMLabel" name="PyDMLabel_22">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>Fase da Cav.</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="PyDMLineEdit" name="PyDMLineEdit_10">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string>
+    Writeable text field to send and display channel values
+    </string>
+                      </property>
+                      <property name="readOnly">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="2">
+                     <widget class="PyDMLabel" name="PyDMLabel_36">
+                      <property name="font">
+                       <font>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>rad</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="PyDMLabel" name="PyDMLabel_24">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>Tempo Cav.</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="PyDMLineEdit" name="PyDMLineEdit_11">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string>
+    Writeable text field to send and display channel values
+    </string>
+                      </property>
+                      <property name="readOnly">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="2">
+                     <widget class="PyDMLabel" name="PyDMLabel_25">
+                      <property name="font">
+                       <font>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>°C</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="0">
+                     <widget class="PyDMLabel" name="PyDMLabel_26">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>Pos. Eixo</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="1">
+                     <widget class="PyDMLineEdit" name="PyDMLineEdit_12">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string>
+    Writeable text field to send and display channel values
+    </string>
+                      </property>
+                      <property name="readOnly">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="2">
+                     <widget class="PyDMLabel" name="PyDMLabel_27">
+                      <property name="font">
+                       <font>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>V</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="0">
+                     <widget class="PyDMLabel" name="PyDMLabel_28">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>Tens. Aten.</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="1">
+                     <widget class="PyDMLineEdit" name="PyDMLineEdit_13">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string>
+    Writeable text field to send and display channel values
+    </string>
+                      </property>
+                      <property name="readOnly">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="2">
+                     <widget class="PyDMLabel" name="PyDMLabel_29">
+                      <property name="font">
+                       <font>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>V</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="0">
+                     <widget class="PyDMLabel" name="PyDMLabel_30">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>Tens. Acel.</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="1">
+                     <widget class="PyDMLineEdit" name="PyDMLineEdit_14">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string>
+    Writeable text field to send and display channel values
+    </string>
+                      </property>
+                      <property name="readOnly">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="2">
+                     <widget class="PyDMLabel" name="PyDMLabel_31">
+                      <property name="font">
+                       <font>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>KV</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="0">
+                     <widget class="PyDMLabel" name="PyDMLabel_32">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>Pos. Êmbolo</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="1">
+                     <widget class="PyDMLineEdit" name="PyDMLineEdit_15">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string>
+    Writeable text field to send and display channel values
+    </string>
+                      </property>
+                      <property name="readOnly">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="2">
+                     <widget class="PyDMLabel" name="PyDMLabel_33">
+                      <property name="font">
+                       <font>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>V</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="6" column="0">
+                     <widget class="PyDMLabel" name="PyDMLabel_34">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>Pressão</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="6" column="1">
+                     <widget class="PyDMLineEdit" name="PyDMLineEdit_16">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string>
+    Writeable text field to send and display channel values
+    </string>
+                      </property>
+                      <property name="readOnly">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="6" column="2">
+                     <widget class="PyDMLabel" name="PyDMLabel_35">
+                      <property name="font">
+                       <font>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>mbar</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="groupBox_2">
+            <property name="minimumSize">
+             <size>
+              <width>481</width>
+              <height>671</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
+            <property name="title">
+             <string>Sistema B</string>
+            </property>
+            <widget class="QWidget" name="layoutWidget">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>20</y>
+               <width>483</width>
+               <height>632</height>
+              </rect>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_4">
+              <item>
+               <widget class="QFrame" name="frame_3">
+                <property name="minimumSize">
+                 <size>
+                  <width>481</width>
+                  <height>251</height>
+                 </size>
+                </property>
+                <property name="frameShape">
+                 <enum>QFrame::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <widget class="QWidget" name="layoutWidget_2">
+                 <property name="geometry">
+                  <rect>
+                   <x>11</x>
+                   <y>100</y>
+                   <width>460</width>
+                   <height>141</height>
+                  </rect>
+                 </property>
+                 <layout class="QHBoxLayout" name="horizontalLayout_8">
+                  <item>
+                   <widget class="QGroupBox" name="groupBox_10">
+                    <property name="minimumSize">
+                     <size>
+                      <width>181</width>
+                      <height>139</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>181</width>
+                      <height>139</height>
+                     </size>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true"/>
+                    </property>
+                    <property name="title">
+                     <string>Controle Freq. Cavidade</string>
+                    </property>
+                    <widget class="QWidget" name="layoutWidget_3">
+                     <property name="geometry">
+                      <rect>
+                       <x>10</x>
+                       <y>50</y>
+                       <width>139</width>
+                       <height>56</height>
+                      </rect>
+                     </property>
+                     <layout class="QHBoxLayout" name="horizontalLayout_9">
+                      <item>
+                       <widget class="PyDMLed" name="PyDMLed_7">
+                        <property name="maximumSize">
+                         <size>
+                          <width>21</width>
+                          <height>41</height>
+                         </size>
+                        </property>
+                        <property name="toolTip">
+                         <string/>
+                        </property>
+                        <property name="whatsThis">
+                         <string/>
+                        </property>
+                        <property name="value">
+                         <bool>true</bool>
+                        </property>
+                        <property name="onColour">
+                         <enum>QLed::Yellow</enum>
+                        </property>
+                        <property name="offColour">
+                         <enum>QLed::Red</enum>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <layout class="QVBoxLayout" name="verticalLayout_5">
+                        <item>
+                         <widget class="QRadioButton" name="radioButton_3">
+                          <property name="font">
+                           <font>
+                            <weight>75</weight>
+                            <bold>true</bold>
+                           </font>
+                          </property>
+                          <property name="text">
+                           <string>Estacionado</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QRadioButton" name="radioButton_4">
+                          <property name="font">
+                           <font>
+                            <weight>75</weight>
+                            <bold>true</bold>
+                           </font>
+                          </property>
+                          <property name="text">
+                           <string>Automático</string>
+                          </property>
+                         </widget>
+                        </item>
+                       </layout>
+                      </item>
+                     </layout>
+                    </widget>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QGroupBox" name="groupBox_11">
+                    <property name="minimumSize">
+                     <size>
+                      <width>271</width>
+                      <height>139</height>
+                     </size>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true"/>
+                    </property>
+                    <property name="title">
+                     <string>Ajustes</string>
+                    </property>
+                    <widget class="QWidget" name="layoutWidget_4">
+                     <property name="geometry">
+                      <rect>
+                       <x>10</x>
+                       <y>50</y>
+                       <width>252</width>
+                       <height>58</height>
+                      </rect>
+                     </property>
+                     <layout class="QGridLayout" name="gridLayout_6">
+                      <item row="0" column="0">
+                       <widget class="PyDMLabel" name="PyDMLabel_43">
+                        <property name="toolTip">
+                         <string/>
+                        </property>
+                        <property name="whatsThis">
+                         <string/>
+                        </property>
+                        <property name="text">
+                         <string>Ref. p/ tensão de GAP</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="0" column="1">
+                       <widget class="PyDMLineEdit" name="PyDMLineEdit_17">
+                        <property name="maximumSize">
+                         <size>
+                          <width>80</width>
+                          <height>16777215</height>
+                         </size>
+                        </property>
+                        <property name="toolTip">
+                         <string/>
+                        </property>
+                        <property name="whatsThis">
+                         <string>
+    Writeable text field to send and display channel values
+    </string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="0" column="2">
+                       <widget class="PyDMLabel" name="PyDMLabel_44">
+                        <property name="font">
+                         <font>
+                          <weight>75</weight>
+                          <bold>true</bold>
+                         </font>
+                        </property>
+                        <property name="toolTip">
+                         <string/>
+                        </property>
+                        <property name="whatsThis">
+                         <string/>
+                        </property>
+                        <property name="text">
+                         <string>V</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="1" column="0">
+                       <widget class="PyDMLabel" name="PyDMLabel_45">
+                        <property name="toolTip">
+                         <string/>
+                        </property>
+                        <property name="whatsThis">
+                         <string/>
+                        </property>
+                        <property name="text">
+                         <string>Detune</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="1" column="1">
+                       <widget class="PyDMLineEdit" name="PyDMLineEdit_18">
+                        <property name="maximumSize">
+                         <size>
+                          <width>80</width>
+                          <height>16777215</height>
+                         </size>
+                        </property>
+                        <property name="toolTip">
+                         <string/>
+                        </property>
+                        <property name="whatsThis">
+                         <string>
+    Writeable text field to send and display channel values
+    </string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="1" column="2">
+                       <widget class="PyDMLabel" name="PyDMLabel_46">
+                        <property name="font">
+                         <font>
+                          <weight>75</weight>
+                          <bold>true</bold>
+                         </font>
+                        </property>
+                        <property name="toolTip">
+                         <string/>
+                        </property>
+                        <property name="whatsThis">
+                         <string/>
+                        </property>
+                        <property name="text">
+                         <string>V</string>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="layoutWidget_5">
+                 <property name="geometry">
+                  <rect>
+                   <x>300</x>
+                   <y>10</y>
+                   <width>165</width>
+                   <height>72</height>
+                  </rect>
+                 </property>
+                 <layout class="QHBoxLayout" name="horizontalLayout_10">
+                  <item>
+                   <widget class="PyDMLabel" name="PyDMLabel_47">
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="toolTip">
+                     <string/>
+                    </property>
+                    <property name="whatsThis">
+                     <string/>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true"/>
+                    </property>
+                    <property name="text">
+                     <string>Chave L/D 
+ Rack</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <layout class="QVBoxLayout" name="verticalLayout_6">
+                    <item>
+                     <widget class="PyDMPushButton" name="PyDMPushButton_3">
+                      <property name="enabled">
+                       <bool>true</bool>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>81</width>
+                        <height>31</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>81</width>
+                        <height>31</height>
+                       </size>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string>
+    Basic PushButton to send a fixed value.
+
+    The PyDMPushButton is meant to hold a specific value, and send that value
+    to a channel when it is clicked, much like the MessageButton does in EDM.
+    The PyDMPushButton works in two different modes of operation, first, a
+    fixed value can be given to the :attr:`.pressValue` attribute, whenever the
+    button is clicked a signal containing this value will be sent to the
+    connected channel. This is the default behavior of the button. However, if
+    the :attr:`.relativeChange` is set to True, the fixed value will be added
+    to the current value of the channel. This means that the button will
+    increment a channel by a fixed amount with every click, a consistent
+    relative move
+    
+    Parameters
+    ----------
+    pressValue : int, float, str
+        Value to be sent when the button is clicked
+    
+    channel : str
+        ID of channel to manipulate
+
+    parent : QObject, optional
+        Parent of PyDMPushButton
+
+    label : str, optional
+        String to place on button
+
+    icon : QIcon, optional
+        An Icon to display on the PyDMPushButton
+
+
+    relative : bool, optional
+        Choice to have the button peform a relative put, instead of always
+        setting to an absolute value
+    </string>
+                      </property>
+                      <property name="text">
+                       <string>Liga</string>
+                      </property>
+                      <property name="checkable">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="PyDMPushButton" name="PyDMPushButton_4">
+                      <property name="enabled">
+                       <bool>true</bool>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>81</width>
+                        <height>31</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>81</width>
+                        <height>31</height>
+                       </size>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string>
+    Basic PushButton to send a fixed value.
+
+    The PyDMPushButton is meant to hold a specific value, and send that value
+    to a channel when it is clicked, much like the MessageButton does in EDM.
+    The PyDMPushButton works in two different modes of operation, first, a
+    fixed value can be given to the :attr:`.pressValue` attribute, whenever the
+    button is clicked a signal containing this value will be sent to the
+    connected channel. This is the default behavior of the button. However, if
+    the :attr:`.relativeChange` is set to True, the fixed value will be added
+    to the current value of the channel. This means that the button will
+    increment a channel by a fixed amount with every click, a consistent
+    relative move
+    
+    Parameters
+    ----------
+    pressValue : int, float, str
+        Value to be sent when the button is clicked
+    
+    channel : str
+        ID of channel to manipulate
+
+    parent : QObject, optional
+        Parent of PyDMPushButton
+
+    label : str, optional
+        String to place on button
+
+    icon : QIcon, optional
+        An Icon to display on the PyDMPushButton
+
+
+    relative : bool, optional
+        Choice to have the button peform a relative put, instead of always
+        setting to an absolute value
+    </string>
+                      </property>
+                      <property name="text">
+                       <string>Desliga</string>
+                      </property>
+                      <property name="checkable">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="layoutWidget_6">
+                 <property name="geometry">
+                  <rect>
+                   <x>10</x>
+                   <y>20</y>
+                   <width>123</width>
+                   <height>43</height>
+                  </rect>
+                 </property>
+                 <layout class="QHBoxLayout" name="horizontalLayout_11">
+                  <item>
+                   <widget class="PyDMLabel" name="PyDMLabel_48">
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="toolTip">
+                     <string/>
+                    </property>
+                    <property name="whatsThis">
+                     <string/>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true"/>
+                    </property>
+                    <property name="text">
+                     <string>Rack</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="PyDMLed" name="PyDMLed_8">
+                    <property name="maximumSize">
+                     <size>
+                      <width>21</width>
+                      <height>41</height>
+                     </size>
+                    </property>
+                    <property name="toolTip">
+                     <string/>
+                    </property>
+                    <property name="whatsThis">
+                     <string/>
+                    </property>
+                    <property name="onColour">
+                     <enum>QLed::Green</enum>
+                    </property>
+                    <property name="offColour">
+                     <enum>QLed::Red</enum>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="PyDMLabel" name="PyDMLabel_49">
+                    <property name="toolTip">
+                     <string/>
+                    </property>
+                    <property name="whatsThis">
+                     <string/>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true"/>
+                    </property>
+                    <property name="text">
+                     <string>Remoto</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </widget>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_12">
+                <item>
+                 <widget class="QGroupBox" name="groupBox_12">
+                  <property name="minimumSize">
+                   <size>
+                    <width>231</width>
+                    <height>371</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="title">
+                   <string>Potências de RF</string>
+                  </property>
+                  <widget class="QWidget" name="layoutWidget_7">
+                   <property name="geometry">
+                    <rect>
+                     <x>10</x>
+                     <y>30</y>
+                     <width>221</width>
+                     <height>331</height>
+                    </rect>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout_7">
+                    <item row="0" column="0">
+                     <widget class="PyDMLabel" name="PyDMLabel_50">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>Ent. AES</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="PyDMLabel" name="PyDMLabel_51">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>Saída AES</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="0">
+                     <widget class="PyDMLabel" name="PyDMLabel_52">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>Refl. p/ AES</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="1">
+                     <widget class="PyDMLineEdit" name="PyDMLineEdit_19">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string>
+    Writeable text field to send and display channel values
+    </string>
+                      </property>
+                      <property name="readOnly">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="2">
+                     <widget class="PyDMLabel" name="PyDMLabel_53">
+                      <property name="font">
+                       <font>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>KW</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="0">
+                     <widget class="PyDMLabel" name="PyDMLabel_54">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>Refl. p/ Circ.</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="0">
+                     <widget class="PyDMLabel" name="PyDMLabel_55">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>Ent. Cav.</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="1">
+                     <widget class="PyDMLineEdit" name="PyDMLineEdit_20">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string>
+    Writeable text field to send and display channel values
+    </string>
+                      </property>
+                      <property name="readOnly">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="2">
+                     <widget class="PyDMLabel" name="PyDMLabel_56">
+                      <property name="font">
+                       <font>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>KW</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="0">
+                     <widget class="PyDMLabel" name="PyDMLabel_57">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>Pot Int. Cav</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="2">
+                     <widget class="PyDMLabel" name="PyDMLabel_58">
+                      <property name="font">
+                       <font>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>KW</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="1">
+                     <widget class="PyDMLineEdit" name="PyDMLineEdit_21">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string>
+    Writeable text field to send and display channel values
+    </string>
+                      </property>
+                      <property name="readOnly">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="2">
+                     <widget class="PyDMLabel" name="PyDMLabel_59">
+                      <property name="font">
+                       <font>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>KW</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="1">
+                     <widget class="PyDMLineEdit" name="PyDMLineEdit_22">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string>
+    Writeable text field to send and display channel values
+    </string>
+                      </property>
+                      <property name="readOnly">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="2">
+                     <widget class="PyDMLabel" name="PyDMLabel_60">
+                      <property name="font">
+                       <font>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>W</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="PyDMLineEdit" name="PyDMLineEdit_23">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string>
+    Writeable text field to send and display channel values
+    </string>
+                      </property>
+                      <property name="readOnly">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="PyDMLineEdit" name="PyDMLineEdit_24">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string>
+    Writeable text field to send and display channel values
+    </string>
+                      </property>
+                      <property name="readOnly">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="2">
+                     <widget class="PyDMLabel" name="PyDMLabel_61">
+                      <property name="font">
+                       <font>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>W</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QGroupBox" name="groupBox_13">
+                  <property name="minimumSize">
+                   <size>
+                    <width>231</width>
+                    <height>371</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="title">
+                   <string>Monitorações</string>
+                  </property>
+                  <widget class="QWidget" name="layoutWidget_8">
+                   <property name="geometry">
+                    <rect>
+                     <x>10</x>
+                     <y>40</y>
+                     <width>211</width>
+                     <height>321</height>
+                    </rect>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout_8">
+                    <item row="0" column="0">
+                     <widget class="PyDMLabel" name="PyDMLabel_62">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>Fase da Cav.</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="PyDMLineEdit" name="PyDMLineEdit_25">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string>
+    Writeable text field to send and display channel values
+    </string>
+                      </property>
+                      <property name="readOnly">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="2">
+                     <widget class="PyDMLabel" name="PyDMLabel_63">
+                      <property name="font">
+                       <font>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>rad</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="PyDMLabel" name="PyDMLabel_64">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>Tempo Cav.</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="PyDMLineEdit" name="PyDMLineEdit_26">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string>
+    Writeable text field to send and display channel values
+    </string>
+                      </property>
+                      <property name="readOnly">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="2">
+                     <widget class="PyDMLabel" name="PyDMLabel_65">
+                      <property name="font">
+                       <font>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>°C</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="0">
+                     <widget class="PyDMLabel" name="PyDMLabel_66">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>Pos. Eixo</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="1">
+                     <widget class="PyDMLineEdit" name="PyDMLineEdit_27">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string>
+    Writeable text field to send and display channel values
+    </string>
+                      </property>
+                      <property name="readOnly">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="2">
+                     <widget class="PyDMLabel" name="PyDMLabel_67">
+                      <property name="font">
+                       <font>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>V</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="0">
+                     <widget class="PyDMLabel" name="PyDMLabel_68">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>Tens. Aten.</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="1">
+                     <widget class="PyDMLineEdit" name="PyDMLineEdit_28">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string>
+    Writeable text field to send and display channel values
+    </string>
+                      </property>
+                      <property name="readOnly">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="2">
+                     <widget class="PyDMLabel" name="PyDMLabel_69">
+                      <property name="font">
+                       <font>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>V</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="0">
+                     <widget class="PyDMLabel" name="PyDMLabel_70">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>Tens. Acel.</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="1">
+                     <widget class="PyDMLineEdit" name="PyDMLineEdit_29">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string>
+    Writeable text field to send and display channel values
+    </string>
+                      </property>
+                      <property name="readOnly">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="2">
+                     <widget class="PyDMLabel" name="PyDMLabel_71">
+                      <property name="font">
+                       <font>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>KV</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="0">
+                     <widget class="PyDMLabel" name="PyDMLabel_72">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>Pos. Êmbolo</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="1">
+                     <widget class="PyDMLineEdit" name="PyDMLineEdit_30">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string>
+    Writeable text field to send and display channel values
+    </string>
+                      </property>
+                      <property name="readOnly">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="2">
+                     <widget class="PyDMLabel" name="PyDMLabel_73">
+                      <property name="font">
+                       <font>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>V</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="6" column="0">
+                     <widget class="PyDMLabel" name="PyDMLabel_74">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>Pressão</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="6" column="1">
+                     <widget class="PyDMLineEdit" name="PyDMLineEdit_31">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string>
+    Writeable text field to send and display channel values
+    </string>
+                      </property>
+                      <property name="readOnly">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="6" column="2">
+                     <widget class="PyDMLabel" name="PyDMLabel_75">
+                      <property name="font">
+                       <font>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string>mbar</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="layoutWidget">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>660</y>
+          <width>981</width>
+          <height>231</height>
+         </rect>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QGroupBox" name="groupBox_3">
+           <property name="font">
+            <font>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="title">
+            <string>Opções</string>
+           </property>
+           <widget class="QWidget" name="layoutWidget">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>50</y>
+              <width>274</width>
+              <height>140</height>
+             </rect>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_3">
+             <item row="4" column="0" colspan="2">
+              <widget class="PyDMCheckbox" name="PyDMCheckbox_3">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="whatsThis">
+                <string/>
+               </property>
+               <property name="text">
+                <string>Média das leituras</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0" colspan="3">
+              <widget class="PyDMCheckbox" name="PyDMCheckbox_2">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="whatsThis">
+                <string/>
+               </property>
+               <property name="text">
+                <string>Zerar tensão de GAP para corrente &lt;</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0" colspan="3">
+              <widget class="PyDMCheckbox" name="PyDMCheckbox">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="whatsThis">
+                <string/>
+               </property>
+               <property name="text">
+                <string>Ajuste acoplado da tensão de GAP</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="2">
+              <widget class="QSpinBox" name="spinBox"/>
+             </item>
+             <item row="2" column="1">
+              <widget class="PyDMLineEdit" name="PyDMLineEdit_3">
+               <property name="minimumSize">
+                <size>
+                 <width>80</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>80</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="whatsThis">
+                <string>
+    Writeable text field to send and display channel values
+    </string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <widget class="PyDMLabel" name="PyDMLabel_19">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="whatsThis">
+                <string/>
+               </property>
+               <property name="text">
+                <string>mA</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupBox_4">
+           <property name="font">
+            <font>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="title">
+            <string>Aviso Geral de Falhas</string>
+           </property>
+           <widget class="QWidget" name="layoutWidget">
+            <property name="geometry">
+             <rect>
+              <x>20</x>
+              <y>30</y>
+              <width>271</width>
+              <height>181</height>
+             </rect>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_2">
+             <item row="0" column="0">
+              <widget class="PyDMLabel" name="PyDMLabel_3">
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="whatsThis">
+                <string/>
+               </property>
+               <property name="text">
+                <string>Chave PIN Sistema A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="PyDMLed" name="PyDMLed">
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="whatsThis">
+                <string/>
+               </property>
+               <property name="onColour">
+                <enum>QLed::Green</enum>
+               </property>
+               <property name="offColour">
+                <enum>QLed::Red</enum>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="PyDMLabel" name="PyDMLabel_4">
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="whatsThis">
+                <string/>
+               </property>
+               <property name="text">
+                <string>Chave PIN Sistema B</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="PyDMLed" name="PyDMLed_2">
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="whatsThis">
+                <string/>
+               </property>
+               <property name="onColour">
+                <enum>QLed::Green</enum>
+               </property>
+               <property name="offColour">
+                <enum>QLed::Red</enum>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="PyDMLabel" name="PyDMLabel_5">
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="whatsThis">
+                <string/>
+               </property>
+               <property name="text">
+                <string>Fonte AC/DC 150 KVA - A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="PyDMLed" name="PyDMLed_3">
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="whatsThis">
+                <string/>
+               </property>
+               <property name="onColour">
+                <enum>QLed::Green</enum>
+               </property>
+               <property name="offColour">
+                <enum>QLed::Red</enum>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="PyDMLabel" name="PyDMLabel_6">
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="whatsThis">
+                <string/>
+               </property>
+               <property name="text">
+                <string>Fonte AC/DC 150KVA - B</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="PyDMLed" name="PyDMLed_4">
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="whatsThis">
+                <string/>
+               </property>
+               <property name="onColour">
+                <enum>QLed::Green</enum>
+               </property>
+               <property name="offColour">
+                <enum>QLed::Red</enum>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupBox_5">
+           <property name="font">
+            <font>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="title">
+            <string>Reset</string>
+           </property>
+           <property name="flat">
+            <bool>false</bool>
+           </property>
+           <widget class="QWidget" name="layoutWidget">
+            <property name="geometry">
+             <rect>
+              <x>50</x>
+              <y>40</y>
+              <width>231</width>
+              <height>151</height>
+             </rect>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_9">
+             <item row="0" column="0">
+              <widget class="PyDMLabel" name="PyDMLabel_20">
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="whatsThis">
+                <string/>
+               </property>
+               <property name="text">
+                <string>Chave PIN Sistema A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <layout class="QVBoxLayout" name="verticalLayout_9">
+               <item>
+                <widget class="PyDMPushButton" name="PyDMPushButton_9">
+                 <property name="enabled">
+                  <bool>true</bool>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>81</width>
+                   <height>31</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>81</width>
+                   <height>31</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="toolTip">
+                  <string/>
+                 </property>
+                 <property name="whatsThis">
+                  <string>
+    Basic PushButton to send a fixed value.
+
+    The PyDMPushButton is meant to hold a specific value, and send that value
+    to a channel when it is clicked, much like the MessageButton does in EDM.
+    The PyDMPushButton works in two different modes of operation, first, a
+    fixed value can be given to the :attr:`.pressValue` attribute, whenever the
+    button is clicked a signal containing this value will be sent to the
+    connected channel. This is the default behavior of the button. However, if
+    the :attr:`.relativeChange` is set to True, the fixed value will be added
+    to the current value of the channel. This means that the button will
+    increment a channel by a fixed amount with every click, a consistent
+    relative move
+    
+    Parameters
+    ----------
+    pressValue : int, float, str
+        Value to be sent when the button is clicked
+    
+    channel : str
+        ID of channel to manipulate
+
+    parent : QObject, optional
+        Parent of PyDMPushButton
+
+    label : str, optional
+        String to place on button
+
+    icon : QIcon, optional
+        An Icon to display on the PyDMPushButton
+
+
+    relative : bool, optional
+        Choice to have the button peform a relative put, instead of always
+        setting to an absolute value
+    </string>
+                 </property>
+                 <property name="text">
+                  <string>Liga</string>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="PyDMPushButton" name="PyDMPushButton_10">
+                 <property name="enabled">
+                  <bool>true</bool>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>81</width>
+                   <height>31</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>81</width>
+                   <height>31</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="toolTip">
+                  <string/>
+                 </property>
+                 <property name="whatsThis">
+                  <string>
+    Basic PushButton to send a fixed value.
+
+    The PyDMPushButton is meant to hold a specific value, and send that value
+    to a channel when it is clicked, much like the MessageButton does in EDM.
+    The PyDMPushButton works in two different modes of operation, first, a
+    fixed value can be given to the :attr:`.pressValue` attribute, whenever the
+    button is clicked a signal containing this value will be sent to the
+    connected channel. This is the default behavior of the button. However, if
+    the :attr:`.relativeChange` is set to True, the fixed value will be added
+    to the current value of the channel. This means that the button will
+    increment a channel by a fixed amount with every click, a consistent
+    relative move
+    
+    Parameters
+    ----------
+    pressValue : int, float, str
+        Value to be sent when the button is clicked
+    
+    channel : str
+        ID of channel to manipulate
+
+    parent : QObject, optional
+        Parent of PyDMPushButton
+
+    label : str, optional
+        String to place on button
+
+    icon : QIcon, optional
+        An Icon to display on the PyDMPushButton
+
+
+    relative : bool, optional
+        Choice to have the button peform a relative put, instead of always
+        setting to an absolute value
+    </string>
+                 </property>
+                 <property name="text">
+                  <string>Desliga</string>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="1" column="0">
+              <widget class="PyDMLabel" name="PyDMLabel_21">
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="whatsThis">
+                <string/>
+               </property>
+               <property name="text">
+                <string>Chave PIN Sistema B</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <layout class="QVBoxLayout" name="verticalLayout_10">
+               <item>
+                <widget class="PyDMPushButton" name="PyDMPushButton_11">
+                 <property name="enabled">
+                  <bool>true</bool>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>81</width>
+                   <height>31</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>81</width>
+                   <height>31</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="toolTip">
+                  <string/>
+                 </property>
+                 <property name="whatsThis">
+                  <string>
+    Basic PushButton to send a fixed value.
+
+    The PyDMPushButton is meant to hold a specific value, and send that value
+    to a channel when it is clicked, much like the MessageButton does in EDM.
+    The PyDMPushButton works in two different modes of operation, first, a
+    fixed value can be given to the :attr:`.pressValue` attribute, whenever the
+    button is clicked a signal containing this value will be sent to the
+    connected channel. This is the default behavior of the button. However, if
+    the :attr:`.relativeChange` is set to True, the fixed value will be added
+    to the current value of the channel. This means that the button will
+    increment a channel by a fixed amount with every click, a consistent
+    relative move
+    
+    Parameters
+    ----------
+    pressValue : int, float, str
+        Value to be sent when the button is clicked
+    
+    channel : str
+        ID of channel to manipulate
+
+    parent : QObject, optional
+        Parent of PyDMPushButton
+
+    label : str, optional
+        String to place on button
+
+    icon : QIcon, optional
+        An Icon to display on the PyDMPushButton
+
+
+    relative : bool, optional
+        Choice to have the button peform a relative put, instead of always
+        setting to an absolute value
+    </string>
+                 </property>
+                 <property name="text">
+                  <string>Liga</string>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="PyDMPushButton" name="PyDMPushButton_12">
+                 <property name="enabled">
+                  <bool>true</bool>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>81</width>
+                   <height>31</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>81</width>
+                   <height>31</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="toolTip">
+                  <string/>
+                 </property>
+                 <property name="whatsThis">
+                  <string>
+    Basic PushButton to send a fixed value.
+
+    The PyDMPushButton is meant to hold a specific value, and send that value
+    to a channel when it is clicked, much like the MessageButton does in EDM.
+    The PyDMPushButton works in two different modes of operation, first, a
+    fixed value can be given to the :attr:`.pressValue` attribute, whenever the
+    button is clicked a signal containing this value will be sent to the
+    connected channel. This is the default behavior of the button. However, if
+    the :attr:`.relativeChange` is set to True, the fixed value will be added
+    to the current value of the channel. This means that the button will
+    increment a channel by a fixed amount with every click, a consistent
+    relative move
+    
+    Parameters
+    ----------
+    pressValue : int, float, str
+        Value to be sent when the button is clicked
+    
+    channel : str
+        ID of channel to manipulate
+
+    parent : QObject, optional
+        Parent of PyDMPushButton
+
+    label : str, optional
+        String to place on button
+
+    icon : QIcon, optional
+        An Icon to display on the PyDMPushButton
+
+
+    relative : bool, optional
+        Choice to have the button peform a relative put, instead of always
+        setting to an absolute value
+    </string>
+                 </property>
+                 <property name="text">
+                  <string>Desliga</string>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="tab_3">
+       <attribute name="title">
+        <string>Fase e Êmbolo</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tab_2">
+       <attribute name="title">
+        <string>Fonte AC/DC</string>
+       </attribute>
+       <widget class="QFrame" name="frame_6">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>370</y>
+          <width>951</width>
+          <height>78</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>78</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>78</height>
+         </size>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <widget class="PyDMLineEdit" name="PyDMLineEdit_39">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>43</y>
+           <width>931</width>
+           <height>25</height>
+          </rect>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>870</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>
+    Writeable text field to send and display channel values
+    </string>
+         </property>
+        </widget>
+        <widget class="QWidget" name="layoutWidget">
+         <property name="geometry">
+          <rect>
+           <x>350</x>
+           <y>10</y>
+           <width>213</width>
+           <height>27</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_25">
+          <item>
+           <widget class="PyDMLabel" name="PyDMLabel_90">
+            <property name="font">
+             <font>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="whatsThis">
+             <string/>
+            </property>
+            <property name="text">
+             <string>Corrente Anel</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PyDMLineEdit" name="PyDMLineEdit_38">
+            <property name="maximumSize">
+             <size>
+              <width>80</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="whatsThis">
+             <string>
+    Writeable text field to send and display channel values
+    </string>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PyDMLabel" name="PyDMLabel_91">
+            <property name="font">
+             <font>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="whatsThis">
+             <string/>
+            </property>
+            <property name="text">
+             <string>mA</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="layoutWidget">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>950</width>
+          <height>333</height>
+         </rect>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_24">
+         <item>
+          <widget class="QGroupBox" name="groupBox_14">
+           <property name="minimumSize">
+            <size>
+             <width>471</width>
+             <height>331</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>471</width>
+             <height>331</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+             <kerning>true</kerning>
+            </font>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
+           </property>
+           <property name="autoFillBackground">
+            <bool>false</bool>
+           </property>
+           <property name="title">
+            <string>Sistema A - Fonte AC/DC 150 KVA</string>
+           </property>
+           <widget class="QFrame" name="frame_4">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>40</y>
+              <width>450</width>
+              <height>111</height>
+             </rect>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>450</width>
+              <height>92</height>
+             </size>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Box</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <widget class="QWidget" name="layoutWidget_11">
+             <property name="geometry">
+              <rect>
+               <x>220</x>
+               <y>20</y>
+               <width>205</width>
+               <height>72</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_14">
+              <item>
+               <widget class="PyDMLabel" name="PyDMLabel_42">
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="toolTip">
+                 <string/>
+                </property>
+                <property name="whatsThis">
+                 <string/>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="text">
+                 <string>Chave L/D</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_11">
+                <item>
+                 <widget class="PyDMPushButton" name="PyDMPushButton_13">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>81</width>
+                    <height>31</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>81</width>
+                    <height>31</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="toolTip">
+                   <string/>
+                  </property>
+                  <property name="whatsThis">
+                   <string>
+    Basic PushButton to send a fixed value.
+
+    The PyDMPushButton is meant to hold a specific value, and send that value
+    to a channel when it is clicked, much like the MessageButton does in EDM.
+    The PyDMPushButton works in two different modes of operation, first, a
+    fixed value can be given to the :attr:`.pressValue` attribute, whenever the
+    button is clicked a signal containing this value will be sent to the
+    connected channel. This is the default behavior of the button. However, if
+    the :attr:`.relativeChange` is set to True, the fixed value will be added
+    to the current value of the channel. This means that the button will
+    increment a channel by a fixed amount with every click, a consistent
+    relative move
+    
+    Parameters
+    ----------
+    pressValue : int, float, str
+        Value to be sent when the button is clicked
+    
+    channel : str
+        ID of channel to manipulate
+
+    parent : QObject, optional
+        Parent of PyDMPushButton
+
+    label : str, optional
+        String to place on button
+
+    icon : QIcon, optional
+        An Icon to display on the PyDMPushButton
+
+
+    relative : bool, optional
+        Choice to have the button peform a relative put, instead of always
+        setting to an absolute value
+    </string>
+                  </property>
+                  <property name="text">
+                   <string>Liga</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="PyDMPushButton" name="PyDMPushButton_14">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>81</width>
+                    <height>31</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>81</width>
+                    <height>31</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="toolTip">
+                   <string/>
+                  </property>
+                  <property name="whatsThis">
+                   <string>
+    Basic PushButton to send a fixed value.
+
+    The PyDMPushButton is meant to hold a specific value, and send that value
+    to a channel when it is clicked, much like the MessageButton does in EDM.
+    The PyDMPushButton works in two different modes of operation, first, a
+    fixed value can be given to the :attr:`.pressValue` attribute, whenever the
+    button is clicked a signal containing this value will be sent to the
+    connected channel. This is the default behavior of the button. However, if
+    the :attr:`.relativeChange` is set to True, the fixed value will be added
+    to the current value of the channel. This means that the button will
+    increment a channel by a fixed amount with every click, a consistent
+    relative move
+    
+    Parameters
+    ----------
+    pressValue : int, float, str
+        Value to be sent when the button is clicked
+    
+    channel : str
+        ID of channel to manipulate
+
+    parent : QObject, optional
+        Parent of PyDMPushButton
+
+    label : str, optional
+        String to place on button
+
+    icon : QIcon, optional
+        An Icon to display on the PyDMPushButton
+
+
+    relative : bool, optional
+        Choice to have the button peform a relative put, instead of always
+        setting to an absolute value
+    </string>
+                  </property>
+                  <property name="text">
+                   <string>Desliga</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="layoutWidget">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>30</y>
+               <width>125</width>
+               <height>43</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_15">
+              <item>
+               <widget class="PyDMLed" name="PyDMLed_9">
+                <property name="minimumSize">
+                 <size>
+                  <width>21</width>
+                  <height>41</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>21</width>
+                  <height>41</height>
+                 </size>
+                </property>
+                <property name="toolTip">
+                 <string/>
+                </property>
+                <property name="whatsThis">
+                 <string/>
+                </property>
+                <property name="onColour">
+                 <enum>QLed::Green</enum>
+                </property>
+                <property name="offColour">
+                 <enum>QLed::Red</enum>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="PyDMLabel" name="PyDMLabel_38">
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="toolTip">
+                 <string/>
+                </property>
+                <property name="whatsThis">
+                 <string/>
+                </property>
+                <property name="text">
+                 <string>Status 
+ Fonte Ligada</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+           <widget class="QWidget" name="layoutWidget">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>190</y>
+              <width>451</width>
+              <height>71</height>
+             </rect>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_10">
+             <item row="0" column="0">
+              <widget class="PyDMLabel" name="PyDMLabel_79">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="whatsThis">
+                <string/>
+               </property>
+               <property name="text">
+                <string>Tensão DC</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="PyDMLabel" name="PyDMLabel_80">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="whatsThis">
+                <string/>
+               </property>
+               <property name="text">
+                <string>Corrente DC</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="PyDMLabel" name="PyDMLabel_81">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="whatsThis">
+                <string/>
+               </property>
+               <property name="text">
+                <string>Potência DC</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <layout class="QHBoxLayout" name="horizontalLayout_16">
+               <item>
+                <widget class="PyDMLineEdit" name="PyDMLineEdit_32">
+                 <property name="maximumSize">
+                  <size>
+                   <width>80</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string/>
+                 </property>
+                 <property name="whatsThis">
+                  <string>
+    Writeable text field to send and display channel values
+    </string>
+                 </property>
+                 <property name="readOnly">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="PyDMLabel" name="PyDMLabel_76">
+                 <property name="font">
+                  <font>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="toolTip">
+                  <string/>
+                 </property>
+                 <property name="whatsThis">
+                  <string/>
+                 </property>
+                 <property name="text">
+                  <string>V</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="1" column="1">
+              <layout class="QHBoxLayout" name="horizontalLayout_17">
+               <item>
+                <widget class="PyDMLineEdit" name="PyDMLineEdit_33">
+                 <property name="maximumSize">
+                  <size>
+                   <width>80</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string/>
+                 </property>
+                 <property name="whatsThis">
+                  <string>
+    Writeable text field to send and display channel values
+    </string>
+                 </property>
+                 <property name="readOnly">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="PyDMLabel" name="PyDMLabel_77">
+                 <property name="font">
+                  <font>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="toolTip">
+                  <string/>
+                 </property>
+                 <property name="whatsThis">
+                  <string/>
+                 </property>
+                 <property name="text">
+                  <string>A</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="1" column="2">
+              <layout class="QHBoxLayout" name="horizontalLayout_18">
+               <item>
+                <widget class="PyDMLineEdit" name="PyDMLineEdit_34">
+                 <property name="maximumSize">
+                  <size>
+                   <width>80</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string/>
+                 </property>
+                 <property name="whatsThis">
+                  <string>
+    Writeable text field to send and display channel values
+    </string>
+                 </property>
+                 <property name="readOnly">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="PyDMLabel" name="PyDMLabel_78">
+                 <property name="font">
+                  <font>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="toolTip">
+                  <string/>
+                 </property>
+                 <property name="whatsThis">
+                  <string/>
+                 </property>
+                 <property name="text">
+                  <string>W</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupBox_15">
+           <property name="minimumSize">
+            <size>
+             <width>471</width>
+             <height>331</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>471</width>
+             <height>331</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="title">
+            <string>Sistema B - Fonte AC/DC 150 KVA</string>
+           </property>
+           <widget class="QFrame" name="frame_5">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>40</y>
+              <width>450</width>
+              <height>111</height>
+             </rect>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>450</width>
+              <height>92</height>
+             </size>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Box</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <widget class="QWidget" name="layoutWidget_14">
+             <property name="geometry">
+              <rect>
+               <x>220</x>
+               <y>20</y>
+               <width>208</width>
+               <height>72</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_19">
+              <item>
+               <widget class="PyDMLabel" name="PyDMLabel_82">
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="toolTip">
+                 <string/>
+                </property>
+                <property name="whatsThis">
+                 <string/>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="text">
+                 <string>Chave L/D</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_12">
+                <item>
+                 <widget class="PyDMPushButton" name="PyDMPushButton_15">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>81</width>
+                    <height>31</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>81</width>
+                    <height>31</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="toolTip">
+                   <string/>
+                  </property>
+                  <property name="whatsThis">
+                   <string>
+    Basic PushButton to send a fixed value.
+
+    The PyDMPushButton is meant to hold a specific value, and send that value
+    to a channel when it is clicked, much like the MessageButton does in EDM.
+    The PyDMPushButton works in two different modes of operation, first, a
+    fixed value can be given to the :attr:`.pressValue` attribute, whenever the
+    button is clicked a signal containing this value will be sent to the
+    connected channel. This is the default behavior of the button. However, if
+    the :attr:`.relativeChange` is set to True, the fixed value will be added
+    to the current value of the channel. This means that the button will
+    increment a channel by a fixed amount with every click, a consistent
+    relative move
+    
+    Parameters
+    ----------
+    pressValue : int, float, str
+        Value to be sent when the button is clicked
+    
+    channel : str
+        ID of channel to manipulate
+
+    parent : QObject, optional
+        Parent of PyDMPushButton
+
+    label : str, optional
+        String to place on button
+
+    icon : QIcon, optional
+        An Icon to display on the PyDMPushButton
+
+
+    relative : bool, optional
+        Choice to have the button peform a relative put, instead of always
+        setting to an absolute value
+    </string>
+                  </property>
+                  <property name="text">
+                   <string>Liga</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="PyDMPushButton" name="PyDMPushButton_16">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>81</width>
+                    <height>31</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>81</width>
+                    <height>31</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="toolTip">
+                   <string/>
+                  </property>
+                  <property name="whatsThis">
+                   <string>
+    Basic PushButton to send a fixed value.
+
+    The PyDMPushButton is meant to hold a specific value, and send that value
+    to a channel when it is clicked, much like the MessageButton does in EDM.
+    The PyDMPushButton works in two different modes of operation, first, a
+    fixed value can be given to the :attr:`.pressValue` attribute, whenever the
+    button is clicked a signal containing this value will be sent to the
+    connected channel. This is the default behavior of the button. However, if
+    the :attr:`.relativeChange` is set to True, the fixed value will be added
+    to the current value of the channel. This means that the button will
+    increment a channel by a fixed amount with every click, a consistent
+    relative move
+    
+    Parameters
+    ----------
+    pressValue : int, float, str
+        Value to be sent when the button is clicked
+    
+    channel : str
+        ID of channel to manipulate
+
+    parent : QObject, optional
+        Parent of PyDMPushButton
+
+    label : str, optional
+        String to place on button
+
+    icon : QIcon, optional
+        An Icon to display on the PyDMPushButton
+
+
+    relative : bool, optional
+        Choice to have the button peform a relative put, instead of always
+        setting to an absolute value
+    </string>
+                  </property>
+                  <property name="text">
+                   <string>Desliga</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="layoutWidget_15">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>30</y>
+               <width>125</width>
+               <height>43</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_20">
+              <item>
+               <widget class="PyDMLed" name="PyDMLed_10">
+                <property name="minimumSize">
+                 <size>
+                  <width>21</width>
+                  <height>41</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>21</width>
+                  <height>41</height>
+                 </size>
+                </property>
+                <property name="toolTip">
+                 <string/>
+                </property>
+                <property name="whatsThis">
+                 <string/>
+                </property>
+                <property name="onColour">
+                 <enum>QLed::Green</enum>
+                </property>
+                <property name="offColour">
+                 <enum>QLed::Red</enum>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="PyDMLabel" name="PyDMLabel_83">
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="toolTip">
+                 <string/>
+                </property>
+                <property name="whatsThis">
+                 <string/>
+                </property>
+                <property name="text">
+                 <string>Status 
+ Fonte Ligada</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+           <widget class="QWidget" name="layoutWidget_16">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>190</y>
+              <width>451</width>
+              <height>71</height>
+             </rect>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_11">
+             <item row="0" column="0">
+              <widget class="PyDMLabel" name="PyDMLabel_84">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="whatsThis">
+                <string/>
+               </property>
+               <property name="text">
+                <string>Tensão DC</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="PyDMLabel" name="PyDMLabel_85">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="whatsThis">
+                <string/>
+               </property>
+               <property name="text">
+                <string>Corrente DC</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="PyDMLabel" name="PyDMLabel_86">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="whatsThis">
+                <string/>
+               </property>
+               <property name="text">
+                <string>Potência DC</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <layout class="QHBoxLayout" name="horizontalLayout_21">
+               <item>
+                <widget class="PyDMLineEdit" name="PyDMLineEdit_35">
+                 <property name="maximumSize">
+                  <size>
+                   <width>80</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string/>
+                 </property>
+                 <property name="whatsThis">
+                  <string>
+    Writeable text field to send and display channel values
+    </string>
+                 </property>
+                 <property name="readOnly">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="PyDMLabel" name="PyDMLabel_87">
+                 <property name="font">
+                  <font>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="toolTip">
+                  <string/>
+                 </property>
+                 <property name="whatsThis">
+                  <string/>
+                 </property>
+                 <property name="text">
+                  <string>V</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="1" column="1">
+              <layout class="QHBoxLayout" name="horizontalLayout_22">
+               <item>
+                <widget class="PyDMLineEdit" name="PyDMLineEdit_36">
+                 <property name="maximumSize">
+                  <size>
+                   <width>80</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string/>
+                 </property>
+                 <property name="whatsThis">
+                  <string>
+    Writeable text field to send and display channel values
+    </string>
+                 </property>
+                 <property name="readOnly">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="PyDMLabel" name="PyDMLabel_88">
+                 <property name="font">
+                  <font>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="toolTip">
+                  <string/>
+                 </property>
+                 <property name="whatsThis">
+                  <string/>
+                 </property>
+                 <property name="text">
+                  <string>A</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="1" column="2">
+              <layout class="QHBoxLayout" name="horizontalLayout_23">
+               <item>
+                <widget class="PyDMLineEdit" name="PyDMLineEdit_37">
+                 <property name="maximumSize">
+                  <size>
+                   <width>80</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string/>
+                 </property>
+                 <property name="whatsThis">
+                  <string>
+    Writeable text field to send and display channel values
+    </string>
+                 </property>
+                 <property name="readOnly">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="PyDMLabel" name="PyDMLabel_89">
+                 <property name="font">
+                  <font>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="toolTip">
+                  <string/>
+                 </property>
+                 <property name="whatsThis">
+                  <string/>
+                 </property>
+                 <property name="text">
+                  <string>W</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PyDMLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>pydm.widgets.line_edit</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMCheckbox</class>
+   <extends>QCheckBox</extends>
+   <header>pydm.widgets.checkbox</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMLabel</class>
+   <extends>QLabel</extends>
+   <header>pydm.widgets.label</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMPushButton</class>
+   <extends>QPushButton</extends>
+   <header>pydm.widgets.pushbutton</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMLed</class>
+   <extends>QWidget</extends>
+   <header>pydm.widgets.led</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
