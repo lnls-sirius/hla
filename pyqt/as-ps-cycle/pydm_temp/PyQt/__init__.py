@@ -1,3 +1,0 @@
-from . import QtCore
-from . import QtGui
-from . import uic
