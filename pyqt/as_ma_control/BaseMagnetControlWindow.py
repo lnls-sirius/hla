@@ -28,6 +28,8 @@ class BaseMagnetControlWindow(QDialog):
 
         self.app = QApplication.instance()
         self.app.establish_widget_connections(self)
+
+        
     def _setupUi(self):
         self.layout = QVBoxLayout()
 
