@@ -29,7 +29,6 @@ class DiagnosticsMainWindow(Display):
         self.test_thread = Test(self._magps_list)
         self.test_thread.job_done.connect(self.update_interface)
 
-
     def ui_filename(self):
 
         return 'main_window.ui'
@@ -42,7 +41,6 @@ class DiagnosticsMainWindow(Display):
         super(Display, self).showEvent(event)
         self._timer.start()
 
-
     @pyqtSlot()
     def _update_time_interval(self):
 
@@ -50,12 +48,14 @@ class DiagnosticsMainWindow(Display):
 
     @pyqtSlot()
     def _start_sequence(self):
+
         self._timer.setInterval(1000 * self._time_between_readings)
         self.test_thread.start()
 
     @pyqtSlot(list, list)
     def update_interface(self, magps_ok, magps_pane):
-        self.ui.te_current_status.clear()
+
+        # self.ui.te_current_status.clear()
         self.ui.te_pane_report.clear()
         for item in magps_ok:
             self.add_to_status_report(item)
@@ -67,9 +67,10 @@ class DiagnosticsMainWindow(Display):
             QApplication.processEvents()
 
     def print_headers(self):
-        #self.ui.te_current_status.clear()
+        self.ui.te_current_status.clear()
         self.ui.te_pane_report.clear()
         self.ui.te_historic.clear()
+
         ok_header ="<table><tr><td align='center' width=150><b>Fonte</b>\
                     </td><td width=100 align='center'><b>Setpoint(A)<b></td> \
                     <td align='center' width=100><b>Readback(A)</b></td></tr></table>"

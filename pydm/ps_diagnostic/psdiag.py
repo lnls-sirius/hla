@@ -36,10 +36,12 @@ class Test(QThread):
             low_limit = test_setpoint - (test_value_dict['TSTR'] / 2)
             high_limit = test_setpoint + (test_value_dict['TSTR'] / 2)
             result = [item, test_setpoint, value_mon]
+
             print(result)
-            if value_mon != None:
-                if value_mon < low_limit or value_mon > high_limit:
-                    self._pane_list.append(result)
-                else:
-                    self._pass_list.append(result)
+
+            if value_mon < low_limit or value_mon > high_limit:
+                self._pane_list.append(result)
+            else:
+                self._pass_list.append(result)
+
         self.job_done.emit(self._pass_list, self._pane_list)
