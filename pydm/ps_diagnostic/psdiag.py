@@ -1,7 +1,12 @@
+''' Worker thread for power supply diagnostic.
+    When one thread is initialized, the app run
+    in a infinite loop checking in the current values
+    are igual to reference values, with a tolerance
+'''
 from epics import PV
 import time
-import pvnaming
-from siriuspy.magnet import magdata
+from pvnaming import PVNaming as _pvnaming
+from siriuspy.magnet import magdata as _magdata
 from PyQt5.QtCore import QThread, pyqtSignal
 
 
@@ -27,9 +32,9 @@ class Test(QThread):
     def _start_test(self, magps_list):
 
         for item in magps_list:
-            # Use vaca PVs for now
-            pv_name_mon = pvnaming.get_mon_pv_name(item.replace('MA','PS'))
-            test_value_dict = magdata.get_magps_setpoint_limits(item)
+            # pv_name_mon = _pvnaming.get_mon_pv_name(item)
+            pv_name_mon = _pvnaming.get_mon_pv_name(item.replace('MA','PS')) # Use vaca PVs for now
+            test_value_dict = _magdata.get_magps_setpoint_limits(item)
             pv_mon = PV(pv_name_mon)
             value_mon = pv_mon.value
             test_setpoint = test_value_dict['TSTV']
@@ -39,7 +44,9 @@ class Test(QThread):
 
             print(result)
 
-            if value_mon < low_limit or value_mon > high_limit:
+            if value_mon == None:
+                self._pane_list.append(result)
+            elif value_mon < low_limit or value_mon > high_limit:
                 self._pane_list.append(result)
             else:
                 self._pass_list.append(result)

@@ -4,8 +4,7 @@ from PyQt5.QtWidgets import QApplication
 from epics import PV
 from os import path
 from psdiag import Test
-from siriuspy.magnet import magdata
-import threading
+from siriuspy.magnet import magdata as _magdata
 import datetime
 
 class DiagnosticsMainWindow(Display):
@@ -20,7 +19,7 @@ class DiagnosticsMainWindow(Display):
         self.print_headers()
 
         self._time_between_readings = self.ui.sb_time_interval.value()
-        self._magps_list = magdata.get_ps_names()
+        self._magps_list = _magdata.get_ps_names()
 
         self._timer = QTimer(self)
         self._timer.setInterval(1000 * self._time_between_readings)
