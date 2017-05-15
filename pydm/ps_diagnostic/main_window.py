@@ -18,6 +18,8 @@ class DiagnosticsMainWindow(Display):
 
         self.print_headers()
 
+        self.ui.lb_msg_inicio.setText("<p style='color:red;'>Por favor, aguarde o início...</p>")
+
         self._time_between_readings = self.ui.sb_time_interval.value()
         self._magps_list = _magdata.get_ps_names()
 
@@ -55,6 +57,7 @@ class DiagnosticsMainWindow(Display):
     def update_interface(self, magps_ok, magps_pane):
 
         # self.ui.te_current_status.clear()
+        self.ui.lb_msg_inicio.clear()
         self.ui.te_pane_report.clear()
         for item in magps_ok:
             self.add_to_status_report(item)
@@ -117,12 +120,6 @@ class DiagnosticsMainWindow(Display):
                             <td align='center' width=100><b>" + status + "</b></td></tr></table>"
 
         self.ui.te_historic.append(historic)
-
-
-    def __del__(self):
-        self.test_thread.stop()
-        if not self.test_thread.finished():
-            self.test_thread.wait()
 
 
 intelclass = DiagnosticsMainWindow
