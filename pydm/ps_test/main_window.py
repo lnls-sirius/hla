@@ -1,6 +1,6 @@
 from pydm import Display
 from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QApplication, QFileDialog
+from PyQt5.QtWidgets import QApplication, QFileDialog, QMessageBox
 from epics import PV
 from os import path
 from pstest import PowerSupplyTest
@@ -24,28 +24,30 @@ class ControlMainWindow(Display):
     _SEXTUPOLE = '-S'
     _DIPOLE = '-B'
 
+    # Actions for Test test_thread
+    _TEST = 'TEST'
+    _ON_OFF = 'ON_OFF'
+    _RESET = 'RESET'
+
     def __init__(self, parent=None, args=None):
         super(ControlMainWindow, self).__init__(parent)
 
         # Checkbox
-        self.ui.cb_select_all_si.stateChanged.connect(lambda: self.selectAll(self.ui.cb_select_all_si))
-        self.ui.cb_select_all_bo.stateChanged.connect(lambda: self.selectAll(self.ui.cb_select_all_bo))
-        self.ui.cb_select_all_linac.stateChanged.connect(lambda: self.selectAll(self.ui.cb_select_all_linac))
-        self.ui.cb_select_all_ts.stateChanged.connect(lambda: self.selectAll(self.ui.cb_select_all_ts))
-        self.ui.cb_select_all_tb.stateChanged.connect(lambda: self.selectAll(self.ui.cb_select_all_tb))
+        self.ui.cb_select_all_si.stateChanged.connect(lambda: self.select_all(self.ui.cb_select_all_si))
+        self.ui.cb_select_all_bo.stateChanged.connect(lambda: self.select_all(self.ui.cb_select_all_bo))
+        self.ui.cb_select_all_linac.stateChanged.connect(lambda: self.select_all(self.ui.cb_select_all_linac))
+        self.ui.cb_select_all_ts.stateChanged.connect(lambda: self.select_all(self.ui.cb_select_all_ts))
+        self.ui.cb_select_all_tb.stateChanged.connect(lambda: self.select_all(self.ui.cb_select_all_tb))
 
         # Button
-        self.ui.pb_on_off.clicked.connect(self.treatOnOffButton)
-        self.ui.pb_test_sequence.clicked.connect(self.testSequence)
-        self.ui.pb_reset.clicked.connect(self.reset)
-        self.ui.pb_export.clicked.connect(self.exportPaneReport)
-        self.ui.pb_browse.clicked.connect(self.browseFile)
+        self.ui.pb_on_off.clicked.connect(self._treat_on_off_button)
+        self.ui.pb_test_sequence.clicked.connect(self._test_sequence)
+        self.ui.pb_reset.clicked.connect(self._reset)
+        self.ui.pb_export.clicked.connect(self._export_pane_report)
 
         # Power supplies list (All power supplies)
         self._power_supply_list = magdata.get_ps_names()
 
-        # Set of power supplies to be tested
-        #self._test_set = set()
 
     def ui_filename(self):
         return 'main_window.ui'
@@ -55,81 +57,149 @@ class ControlMainWindow(Display):
 
 
     @pyqtSlot()
-    def reset(self):
-        VALUE = 0
+    def _reset(self):
+        bt = self.ui.pb_reset
         reset_list = list(self._get_test_list())
-        self.ui.te_test_sequence.clear()
-        self.ui.te_test_sequence.setText('Start Reset...\n')
-        for item in reset_list:
-            pv_name = pvnaming.get_reset_pv_name(item)
-            pv_object = PV(pv_name)
-            pv_object.value = VALUE
-            self.ui.te_test_sequence.append(item + '\n')
-            QApplication.processEvents()
-        self.ui.te_test_sequence.append('Finished...')
 
-    @pyqtSlot()
-    def testSequence(self):
-        bt = self.ui.pb_test_sequence
-        test_list = list(self._get_test_list())
+        if len(reset_list) < 1:
+            self.messsage_box = QMessageBox.information(self,
+                                'Alerta', 'Selecione pelo menos uma fonte')
+            bt.setChecked(False)
+
         if bt.isChecked() == True:
             bt.setEnabled(False)
-            self.ui.te_test_sequence.clear()
-            self.ui.te_pane_report.clear()
-            self.ui.te_test_sequence.setText('Start Test...\n')
-            self.ui.te_pane_report.setText('Pane List...\n')
-            for item in test_list:
-                print(item)
-                result, current = PowerSupplyTest.start_test(item)
-                result_text = "<table><tr><td align='left' width=150>" + item + \
-                                '</td><td width=70>' + str(round(current, 3)) + '</td> \
-                                <td><b>A</b></td></tr></table>'
-                if result == True:
-                    self.ui.te_test_sequence.append(result_text)
-                else:
-                    self.ui.te_pane_report.append(result_text)
-                QApplication.processEvents() # Avoid freeze in interface
-            bt.setEnabled(True)
-            bt.setChecked(False)
-        else:
-            # TODO: stopSequence()
-            pass
+            self.ui.lb_status.setText("<p style='color:red;'>Resetando fontes, aguarde...</p>")
+
+            self.test_thread = PowerSupplyTest(reset_list, self._RESET)
+            self.test_thread.reset_complete.connect(self._finish_reset)
+            self.test_thread.start()
 
     @pyqtSlot()
-    def treatOnOffButton(self):
+    def _test_sequence(self):
+
+        bt = self.ui.pb_test_sequence
+        test_list = list(self._get_test_list())
+
+        if len(test_list) < 1:
+            self.messsage_box = QMessageBox.information(self,
+                                'Alerta', 'Selecione pelo menos uma fonte')
+            bt.setChecked(False)
+
+        if bt.isChecked() == True:
+            bt.setEnabled(False)
+
+            self.ui.lb_status.setText("<p style='color:red;'>Teste Iniciado. \
+                                        Por favor, aguarde...</p>")
+            self.ui.te_test_sequence.clear()
+            self.ui.te_pane_report.clear()
+            self.ui.te_test_sequence.append('Por favor, aguarde...')
+            self.ui.te_pane_report.append('Por favor, aguarde...')
+
+            self.test_thread = PowerSupplyTest(test_list, self._TEST)
+            self.test_thread.test_complete.connect(self._finish_test)
+            self.test_thread.start()
+
+    @pyqtSlot()
+    def _treat_on_off_button(self):
         OFF = 0
         ON = 1
         on_off_list = list(self._get_test_list())
         bt = self.ui.pb_on_off
-        if bt.isChecked() == True:
-            bt.setText('OFF')
-            self.ui.te_test_sequence.clear()
-            self.ui.te_test_sequence.setText('Power On...\n')
-            for item in on_off_list:
-                pv_name = pvnaming.get_pwr_state_sel_pv_name(item)
-                pv_object = PV(pv_name)
-                pv_object.value = ON
-                self.ui.te_test_sequence.append(item + '\n')
-                QApplication.processEvents()
+
+        if len(on_off_list) < 1:
+            self.messsage_box = QMessageBox.information(self,
+                                'Alerta', 'Selecione pelo menos uma fonte')
+            if bt.isChecked() == True:
+                bt.setChecked(False)
+            else:
+                bt.setChecked(True)
         else:
-            bt.setText('ON')
-            self.ui.te_test_sequence.clear()
-            self.ui.te_test_sequence.setText('Power Off...\n')
-            for item in on_off_list:
-                pv_name = pvnaming.get_pwr_state_sel_pv_name(item)
-                pv_object = PV(pv_name)
-                pv_object.value = OFF
-                self.ui.te_test_sequence.append(item + '\n')
-                QApplication.processEvents()
-        self.ui.te_test_sequence.append('Finished...' + '\n')
+            if bt.isChecked() == True:
+                bt.setText('DESLIGAR')
+                self.ui.lb_status.setText("<p style='color:red;'>Ligando Fontes. \
+                                            Por favor, aguarde...</p>")
+                self.test_thread = PowerSupplyTest(on_off_list, self._ON_OFF, ON)
+                self.test_thread.pwr_state_changed.connect(self._pwr_toggled_magps)
+                self.test_thread.start()
+
+            else:
+                bt.setText('LIGAR')
+                self.ui.lb_status.setText("<p style='color:red;'>Desligando Fontes. \
+                                            Por favor, aguarde...</p>")
+                self.test_thread = PowerSupplyTest(on_off_list, self._ON_OFF, OFF)
+                self.test_thread.pwr_state_changed.connect(self._pwr_toggled_magps)
+                self.test_thread.start()
+
+    @pyqtSlot(list, list)
+    def _finish_test(self, pass_list, pane_list):
+
+        bt = self.ui.pb_test_sequence
+        self.ui.te_test_sequence.clear()
+        self.ui.te_pane_report.clear()
+
+        self._print_headers()
+
+        for item in pass_list:
+            self._add_to_test_sequence(item)
+            QApplication.processEvents()
+
+        for item in pane_list:
+            self._add_to_pane_report(item)
+            QApplication.processEvents()
+
+        bt.setEnabled(True)
+        bt.setChecked(False)
+        self.ui.lb_status.setText("<p style='color:blue;'>Teste Completo!</p>")
 
     @pyqtSlot()
-    def browseFile(self):
-        # TODO: Open File Chooser
-        pass
+    def _finish_reset(self):
+        bt = self.ui.pb_reset
+        self.ui.lb_status.setText("<p style='color:blue;'>Fontes Resetadas!</p>")
+        bt.setEnabled(True)
+        bt.setChecked(False)
+
+    @pyqtSlot(bool)
+    def _pwr_toggled_magps(self, pwr_state):
+        print('*************Entrou AQUI***********')
+        if pwr_state == True:
+            self.ui.lb_status.setText("<p style='color:blue;'>Fontes Ligadas!</p>")
+        else:
+            self.ui.lb_status.setText("<p style='color:blue;'>Fontes Desligas!</p>")
+
+    def _print_headers(self):
+        self.ui.te_test_sequence.clear()
+        self.ui.te_pane_report.clear()
+
+        ok_header ="<table><tr><td align='center' width=140><b>Fonte</b>\
+                    </td><td width=90 align='center'><b>Setpoint(A)<b></td> \
+                    <td align='center' width=90><b>Readback(A)</b></td></tr></table>"
+
+        pane_header ="<table><tr><td align='center' width=140><b>Fonte</b>\
+                    </td><td width=90 align='center'><b>Setpoint(A)<b></td> \
+                    <td align='center' width=90><b>Readback(A)</b></td></tr></table>"
+
+        self.ui.te_test_sequence.append(ok_header)
+        self.ui.te_pane_report.append(pane_header)
+
+    def _add_to_test_sequence(self, item):
+
+        pass_report ="<table><tr><td align='left' width=140>" + item[0] + \
+                    "</td><td width=90 align='center'>" + str(item[1]) + "</td> \
+                    <td align='center' width=90>" + str(item[2]) + "</td></tr></table>"
+
+        self.ui.te_test_sequence.append(pass_report)
+
+    def _add_to_pane_report(self, item):
+
+        pane_report ="<table><tr><td align='left' width=140>" + item[0] + \
+                    " </td><td width=90 align='center'>" + str(item[1]) + "</td> \
+                    <td align='center' width=90>" + str(item[2]) + "</td></tr></table>"
+
+        self.ui.te_pane_report.append(pane_report)
+
 
     @pyqtSlot()
-    def exportPaneReport(self):
+    def _export_pane_report(self):
         text = self.ui.te_pane_report.toPlainText()
         name = QFileDialog.getSaveFileName(self, 'pane_report.txt')
         file_object = open(name, 'w')
@@ -137,7 +207,7 @@ class ControlMainWindow(Display):
         file_object.close()
 
     @pyqtSlot()
-    def selectAll(self, cb):
+    def select_all(self, cb):
 
         if cb.text() == 'Storage Ring':
             if cb.isChecked() == True:
@@ -238,6 +308,7 @@ class ControlMainWindow(Display):
                     ps_set.add(item)
 
         return ps_set
+
 
 
 intelclass = ControlMainWindow

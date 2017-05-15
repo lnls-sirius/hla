@@ -2,70 +2,99 @@ from epics import PV
 import time
 import pvnaming
 from siriuspy.magnet import magdata
+from PyQt5.QtCore import pyqtSlot, QTimer, QThread, pyqtSignal
 
-class PowerSupplyTest(object):
-    _pass = False     # PS pass in test?
-    _elapsed_time = 0
-    _time_limit = 5
-    _flag_read_back_change = False
-    _ps_current = 0   # Current to return
-    _pv_object_sp = None
-    _pv_object_rb = None
-    _low_limit = 0.0   # I can pass this as argument in callback and use a local variable?
-    _high_limit = 0.0  # I can pass this as argument in callback and use a local variable?
+class PowerSupplyTest(QThread):
 
-    @staticmethod
-    def start_test(magps_name):
-        #if PowerSupplyTest._validate_item(item) == False:
-            #return None, None
+    test_complete = pyqtSignal(list, list)
+    reset_complete = pyqtSignal()
+    pwr_state_changed = pyqtSignal(bool)
 
-        pv_name_sp = pvnaming.get_sp_pv_name(magps_name)
-        pv_name_rb = pvnaming.get_rb_pv_name(magps_name)
+    def __init__(self, magps_list, action = 'TEST', pwr_state = 'ON'):
+        QThread.__init__(self)
+        self._magps_list = magps_list
+        self._action = action
+        self._pwr_state = pwr_state
+        self._pass_list = []
+        self._pane_list = []
 
-        # Dictionary with all test values for power supply
-        test_values_dict = magdata.get_magps_setpoint_limits(magps_name)
-        setpoint = test_values_dict['TSTV']
-        test_range = test_values_dict['TSTR']
+    def run(self):
 
-        PowerSupplyTest._low_limit = setpoint - (test_range / 2)
-        PowerSupplyTest._high_limit = setpoint + (test_range / 2)
+        if self._action == 'TEST':
+            self._teste_magps()
+        elif self._action == 'ON_OFF':
+            self._set_magps_power_state(self._pwr_state)
+        elif self._action == 'RESET':
+            self._reset_magps()
 
-        PowerSupplyTest._pv_object_sp = PV(pv_name_sp)
-        PowerSupplyTest._pv_object_rb = PV(pv_name_rb)
 
-        # Add callback for read back pv
-        PowerSupplyTest._pv_object_rb.add_callback(PowerSupplyTest._read_back_changed)
-        PowerSupplyTest._pv_object_sp.put(setpoint)
+    def _teste_magps(self):
 
-        #start timer
-        start_time = time.time()
-        while PowerSupplyTest._elapsed_time < PowerSupplyTest._time_limit:
-            PowerSupplyTest._elapsed_time = time.time() - start_time
-            if PowerSupplyTest._flag_read_back_change == True:
-                PowerSupplyTest._elapsed_time = 0
-                break
-        if PowerSupplyTest._flag_read_back_change == False:
-            PowerSupplyTest._timer_interrupt(PowerSupplyTest._pv_object_rb)
+        self._set_test_values()
+        time.sleep(3)
+        self._get_test_result()
 
-        return PowerSupplyTest._pass, PowerSupplyTest._ps_current
+    def _set_test_values(self):
 
-    @classmethod
-    def _timer_interrupt(self, pv):
-        print("********Time Overflow********")
-        self._elapsed_time = 0
-        pv.clear_callbacks()
-        if pv.value == None:
-            self._ps_current = 0.0
+        for item in self._magps_list:
+
+            # pv_name_sp = pvnaming.get_sp_pv_name(item)
+            pv_name_sp = pvnaming.get_sp_pv_name(item.replace('MA', 'PS')) # Use VACA pvs for now
+            test_values_dict = magdata.get_magps_setpoint_limits(item)
+            pv_sp = PV(pv_name_sp)
+            test_value = test_values_dict['TSTV']
+            pv_sp.put(test_value)
+
+    def _get_test_result(self):
+
+        for item in self._magps_list:
+            # pv_name_sp = pvnaming.get_sp_pv_name(item)
+            pv_name_mon = pvnaming.get_mon_pv_name(item.replace('MA','PS')) # Use VACA pvs for now
+            test_values_dict = magdata.get_magps_setpoint_limits(item)
+            pv_mon = PV(pv_name_mon)
+            value_mon = pv_mon.value
+            test_value = test_values_dict['TSTV']
+            low_limit = test_value - (test_values_dict['TSTR'] / 2)
+            high_limit = test_value + (test_values_dict['TSTR'] / 2)
+            result = [item, test_value, value_mon]
+
+            print(result)
+
+            if value_mon == None:
+                self._pane_list.append(result)
+            elif value_mon < low_limit or value_mon > high_limit:
+                self._pane_list.append(result)
+            else:
+                self._pass_list.append(result)
+
+        self.test_complete.emit(self._pass_list, self._pane_list)
+
+    def _reset_magps(self):
+
+        RESET_VALUE = 0
+
+        for item in self._magps_list:
+            # pv_name_reset = pvnaming.get_reset_pv_name(item)
+            pv_name_reset = pvnaming.get_reset_pv_name(item.replace('MA', 'PS')) # Use VACA pvs for now
+            pv_reset = PV(pv_name_reset)
+            pv_reset.put(RESET_VALUE)
+
+        self.reset_complete.emit()
+
+    def _set_magps_power_state(self, state):
+
+        if state == 0:
+            on_off_state = state
         else:
-            self._ps_current = pv.value
+            on_off_state = 1
 
-    @classmethod
-    def _read_back_changed(self, pvname, value, **kws):
-        # Remove callback?
-        print("********Inside Callback********")
-        self._flag_read_back_change = True
-        self._ps_current = value
-        if value < PowerSupplyTest._low_limit or value > PowerSupplyTest._high_limit:
-            self._pass = False
+        for item in self._magps_list:
+            # pv_name = pvnaming.get_pwr_state_sel_pv(item)
+            pv_name_on_off = pvnaming.get_pwr_state_sel_pv_name(item.replace('MA', 'PS')) # Use VACA pvs for now
+            pv_on_off = PV(pv_name_on_off)
+            pv_on_off.put(on_off_state)
+
+        if on_off_state == 0:
+            self.pwr_state_changed.emit(False)
         else:
-            self._pass = True
+            self.pwr_state_changed.emit(True)
