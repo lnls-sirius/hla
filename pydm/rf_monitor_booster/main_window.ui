@@ -61,9 +61,9 @@
         <property name="geometry">
          <rect>
           <x>0</x>
-          <y>0</y>
-          <width>981</width>
-          <height>461</height>
+          <y>10</y>
+          <width>750</width>
+          <height>326</height>
          </rect>
         </property>
         <property name="font">
@@ -75,673 +75,69 @@
         <property name="title">
          <string>Rack de RF</string>
         </property>
-        <widget class="QGroupBox" name="groupBox_3">
-         <property name="geometry">
-          <rect>
-           <x>310</x>
-           <y>30</y>
-           <width>161</width>
-           <height>71</height>
-          </rect>
-         </property>
-         <property name="title">
-          <string>Pressão (mbar)</string>
-         </property>
-         <widget class="QWidget" name="">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>30</y>
-            <width>136</width>
-            <height>28</height>
-           </rect>
-          </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <layout class="QVBoxLayout" name="verticalLayout_20">
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_8">
            <item>
-            <widget class="PyDMLineEdit" name="PyDMLineEdit_3">
-             <property name="minimumSize">
-              <size>
-               <width>80</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>80</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="toolTip">
-              <string/>
-             </property>
-             <property name="whatsThis">
-              <string>
-    Writeable text field to send and display channel values
-    </string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QSpinBox" name="spinBox">
-             <property name="minimumSize">
-              <size>
-               <width>48</width>
-               <height>26</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>48</width>
-               <height>26</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </widget>
-        <widget class="QGroupBox" name="groupBox_4">
-         <property name="geometry">
-          <rect>
-           <x>140</x>
-           <y>30</y>
-           <width>161</width>
-           <height>81</height>
-          </rect>
-         </property>
-         <property name="title">
-          <string>Frequência (KHz)</string>
-         </property>
-         <widget class="QWidget" name="">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>30</y>
-            <width>143</width>
-            <height>49</height>
-           </rect>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout">
-           <item>
-            <widget class="PyDMCheckbox" name="PyDMCheckbox_2">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>141</width>
-               <height>16</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>141</width>
-               <height>16</height>
-              </size>
-             </property>
-             <property name="toolTip">
-              <string/>
-             </property>
-             <property name="whatsThis">
-              <string/>
-             </property>
-             <property name="text">
-              <string>Atualizar Leitura</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="PyDMLineEdit" name="PyDMLineEdit_5">
-             <property name="minimumSize">
-              <size>
-               <width>140</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>140</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="toolTip">
-              <string/>
-             </property>
-             <property name="whatsThis">
-              <string>
-    Writeable text field to send and display channel values
-    </string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </widget>
-        <widget class="QGroupBox" name="groupBox_5">
-         <property name="geometry">
-          <rect>
-           <x>540</x>
-           <y>70</y>
-           <width>201</width>
-           <height>101</height>
-          </rect>
-         </property>
-         <property name="title">
-          <string>Aceleração</string>
-         </property>
-         <widget class="QWidget" name="">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>30</y>
-            <width>181</width>
-            <height>58</height>
-           </rect>
-          </property>
-          <layout class="QGridLayout" name="gridLayout">
-           <item row="0" column="0">
-            <widget class="PyDMLabel" name="PyDMLabel">
-             <property name="toolTip">
-              <string/>
-             </property>
-             <property name="whatsThis">
-              <string/>
-             </property>
-             <property name="text">
-              <string>Tensão</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="PyDMLineEdit" name="PyDMLineEdit_6">
-             <property name="minimumSize">
-              <size>
-               <width>80</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>80</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="toolTip">
-              <string/>
-             </property>
-             <property name="whatsThis">
-              <string>
-    Writeable text field to send and display channel values
-    </string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="2">
-            <widget class="PyDMLabel" name="PyDMLabel_4">
-             <property name="toolTip">
-              <string/>
-             </property>
-             <property name="whatsThis">
-              <string/>
-             </property>
-             <property name="text">
-              <string>KV</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="PyDMLabel" name="PyDMLabel_2">
-             <property name="toolTip">
-              <string/>
-             </property>
-             <property name="whatsThis">
-              <string/>
-             </property>
-             <property name="text">
-              <string>Potência</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="PyDMLineEdit" name="PyDMLineEdit_7">
-             <property name="minimumSize">
-              <size>
-               <width>80</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>80</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="toolTip">
-              <string/>
-             </property>
-             <property name="whatsThis">
-              <string>
-    Writeable text field to send and display channel values
-    </string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="2">
-            <widget class="PyDMLabel" name="PyDMLabel_3">
-             <property name="toolTip">
-              <string/>
-             </property>
-             <property name="whatsThis">
-              <string/>
-             </property>
-             <property name="text">
-              <string>W</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </widget>
-        <widget class="QGroupBox" name="groupBox_6">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>130</y>
-           <width>161</width>
-           <height>111</height>
-          </rect>
-         </property>
-         <property name="title">
-          <string>Eixo da Cavidade (V)</string>
-         </property>
-         <widget class="QWidget" name="">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>30</y>
-            <width>142</width>
-            <height>76</height>
-           </rect>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_2">
-           <item>
-            <widget class="PyDMLineEdit" name="PyDMLineEdit_8">
-             <property name="minimumSize">
-              <size>
-               <width>140</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>140</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="toolTip">
-              <string/>
-             </property>
-             <property name="whatsThis">
-              <string>
-    Writeable text field to send and display channel values
-    </string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <layout class="QVBoxLayout" name="verticalLayout_18">
              <item>
-              <widget class="PyDMLed" name="PyDMLed_12">
-               <property name="minimumSize">
-                <size>
-                 <width>21</width>
-                 <height>41</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>21</width>
-                 <height>41</height>
-                </size>
-               </property>
-               <property name="toolTip">
-                <string/>
-               </property>
-               <property name="whatsThis">
-                <string/>
-               </property>
-               <property name="onColour">
-                <enum>QLed::Green</enum>
-               </property>
-               <property name="offColour">
-                <enum>QLed::Red</enum>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="PyDMLed" name="PyDMLed_13">
-               <property name="minimumSize">
-                <size>
-                 <width>21</width>
-                 <height>41</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>21</width>
-                 <height>41</height>
-                </size>
-               </property>
-               <property name="toolTip">
-                <string/>
-               </property>
-               <property name="whatsThis">
-                <string/>
-               </property>
-               <property name="onColour">
-                <enum>QLed::Green</enum>
-               </property>
-               <property name="offColour">
-                <enum>QLed::Red</enum>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="PyDMLed" name="PyDMLed_14">
-               <property name="minimumSize">
-                <size>
-                 <width>21</width>
-                 <height>41</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>21</width>
-                 <height>41</height>
-                </size>
-               </property>
-               <property name="toolTip">
-                <string/>
-               </property>
-               <property name="whatsThis">
-                <string/>
-               </property>
-               <property name="onColour">
-                <enum>QLed::Green</enum>
-               </property>
-               <property name="offColour">
-                <enum>QLed::Red</enum>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-        </widget>
-        <widget class="QGroupBox" name="groupBox_7">
-         <property name="geometry">
-          <rect>
-           <x>180</x>
-           <y>130</y>
-           <width>161</width>
-           <height>111</height>
-          </rect>
-         </property>
-         <property name="title">
-          <string>Posição do Êmbolo (V)</string>
-         </property>
-         <widget class="QWidget" name="layoutWidget_2">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>30</y>
-            <width>142</width>
-            <height>76</height>
-           </rect>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_3">
-           <item>
-            <widget class="PyDMLineEdit" name="PyDMLineEdit_9">
-             <property name="minimumSize">
-              <size>
-               <width>140</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>140</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="toolTip">
-              <string/>
-             </property>
-             <property name="whatsThis">
-              <string>
-    Writeable text field to send and display channel values
-    </string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_5">
-             <item>
-              <widget class="PyDMLed" name="PyDMLed_15">
-               <property name="minimumSize">
-                <size>
-                 <width>21</width>
-                 <height>41</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>21</width>
-                 <height>41</height>
-                </size>
-               </property>
-               <property name="toolTip">
-                <string/>
-               </property>
-               <property name="whatsThis">
-                <string/>
-               </property>
-               <property name="onColour">
-                <enum>QLed::Green</enum>
-               </property>
-               <property name="offColour">
-                <enum>QLed::Red</enum>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="PyDMLed" name="PyDMLed_16">
-               <property name="minimumSize">
-                <size>
-                 <width>21</width>
-                 <height>41</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>21</width>
-                 <height>41</height>
-                </size>
-               </property>
-               <property name="toolTip">
-                <string/>
-               </property>
-               <property name="whatsThis">
-                <string/>
-               </property>
-               <property name="onColour">
-                <enum>QLed::Green</enum>
-               </property>
-               <property name="offColour">
-                <enum>QLed::Red</enum>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="PyDMLed" name="PyDMLed_17">
-               <property name="minimumSize">
-                <size>
-                 <width>21</width>
-                 <height>41</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>21</width>
-                 <height>41</height>
-                </size>
-               </property>
-               <property name="toolTip">
-                <string/>
-               </property>
-               <property name="whatsThis">
-                <string/>
-               </property>
-               <property name="onColour">
-                <enum>QLed::Green</enum>
-               </property>
-               <property name="offColour">
-                <enum>QLed::Red</enum>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-        </widget>
-        <widget class="QGroupBox" name="groupBox_9">
-         <property name="geometry">
-          <rect>
-           <x>550</x>
-           <y>340</y>
-           <width>101</width>
-           <height>71</height>
-          </rect>
-         </property>
-         <property name="title">
-          <string>Ganho (dB)</string>
-         </property>
-         <widget class="PyDMLineEdit" name="PyDMLineEdit_11">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>30</y>
-            <width>80</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>80</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>80</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string/>
-          </property>
-          <property name="whatsThis">
-           <string>
-    Writeable text field to send and display channel values
-    </string>
-          </property>
-         </widget>
-        </widget>
-        <widget class="QGroupBox" name="groupBox_8">
-         <property name="geometry">
-          <rect>
-           <x>720</x>
-           <y>300</y>
-           <width>161</width>
-           <height>71</height>
-          </rect>
-         </property>
-         <property name="title">
-          <string>Temperatura (°C)</string>
-         </property>
-         <widget class="PyDMLineEdit" name="PyDMLineEdit_10">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>30</y>
-            <width>140</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>140</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>140</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string/>
-          </property>
-          <property name="whatsThis">
-           <string>
-    Writeable text field to send and display channel values
-    </string>
-          </property>
-         </widget>
-        </widget>
-        <widget class="QWidget" name="">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>40</y>
-           <width>112</width>
-           <height>72</height>
-          </rect>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout">
-          <item>
-           <layout class="QVBoxLayout" name="verticalLayout_4">
-            <item>
-             <widget class="PyDMPushButton" name="PyDMPushButton_3">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>81</width>
-                <height>31</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>81</width>
-                <height>31</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <weight>75</weight>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="toolTip">
-               <string/>
-              </property>
-              <property name="whatsThis">
-               <string>
+              <layout class="QHBoxLayout" name="horizontalLayout_7">
+               <item>
+                <widget class="QGroupBox" name="groupBox_2">
+                 <property name="minimumSize">
+                  <size>
+                   <width>136</width>
+                   <height>116</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>136</width>
+                   <height>116</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="title">
+                  <string>On / Off</string>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_17">
+                  <item>
+                   <layout class="QHBoxLayout" name="horizontalLayout">
+                    <item>
+                     <layout class="QVBoxLayout" name="verticalLayout_4">
+                      <item>
+                       <widget class="PyDMPushButton" name="PyDMPushButton_3">
+                        <property name="enabled">
+                         <bool>true</bool>
+                        </property>
+                        <property name="minimumSize">
+                         <size>
+                          <width>81</width>
+                          <height>31</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>81</width>
+                          <height>31</height>
+                         </size>
+                        </property>
+                        <property name="font">
+                         <font>
+                          <weight>75</weight>
+                          <bold>true</bold>
+                         </font>
+                        </property>
+                        <property name="toolTip">
+                         <string/>
+                        </property>
+                        <property name="whatsThis">
+                         <string>
     Basic PushButton to send a fixed value.
 
     The PyDMPushButton is meant to hold a specific value, and send that value
@@ -754,12 +150,12 @@
     to the current value of the channel. This means that the button will
     increment a channel by a fixed amount with every click, a consistent
     relative move
-    
+
     Parameters
     ----------
     pressValue : int, float, str
         Value to be sent when the button is clicked
-    
+
     channel : str
         ID of channel to manipulate
 
@@ -777,43 +173,43 @@
         Choice to have the button peform a relative put, instead of always
         setting to an absolute value
     </string>
-              </property>
-              <property name="text">
-               <string>Liga</string>
-              </property>
-              <property name="checkable">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="PyDMPushButton" name="PyDMPushButton_4">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>81</width>
-                <height>31</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>81</width>
-                <height>31</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <weight>75</weight>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="toolTip">
-               <string/>
-              </property>
-              <property name="whatsThis">
-               <string>
+                        </property>
+                        <property name="text">
+                         <string>Liga</string>
+                        </property>
+                        <property name="checkable">
+                         <bool>true</bool>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="PyDMPushButton" name="PyDMPushButton_4">
+                        <property name="enabled">
+                         <bool>true</bool>
+                        </property>
+                        <property name="minimumSize">
+                         <size>
+                          <width>81</width>
+                          <height>31</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>81</width>
+                          <height>31</height>
+                         </size>
+                        </property>
+                        <property name="font">
+                         <font>
+                          <weight>75</weight>
+                          <bold>true</bold>
+                         </font>
+                        </property>
+                        <property name="toolTip">
+                         <string/>
+                        </property>
+                        <property name="whatsThis">
+                         <string>
     Basic PushButton to send a fixed value.
 
     The PyDMPushButton is meant to hold a specific value, and send that value
@@ -826,12 +222,12 @@
     to the current value of the channel. This means that the button will
     increment a channel by a fixed amount with every click, a consistent
     relative move
-    
+
     Parameters
     ----------
     pressValue : int, float, str
         Value to be sent when the button is clicked
-    
+
     channel : str
         ID of channel to manipulate
 
@@ -849,47 +245,1471 @@
         Choice to have the button peform a relative put, instead of always
         setting to an absolute value
     </string>
-              </property>
-              <property name="text">
-               <string>Desliga</string>
-              </property>
-              <property name="checkable">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <widget class="PyDMLed" name="PyDMLed_11">
-            <property name="minimumSize">
-             <size>
-              <width>21</width>
-              <height>41</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>21</width>
-              <height>41</height>
-             </size>
-            </property>
-            <property name="toolTip">
-             <string/>
-            </property>
-            <property name="whatsThis">
-             <string/>
-            </property>
-            <property name="onColour">
-             <enum>QLed::Green</enum>
-            </property>
-            <property name="offColour">
-             <enum>QLed::Red</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
+                        </property>
+                        <property name="text">
+                         <string>Desliga</string>
+                        </property>
+                        <property name="checkable">
+                         <bool>true</bool>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                    <item>
+                     <widget class="PyDMLed" name="PyDMLed_11">
+                      <property name="minimumSize">
+                       <size>
+                        <width>21</width>
+                        <height>41</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>21</width>
+                        <height>41</height>
+                       </size>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string/>
+                      </property>
+                      <property name="onColour">
+                       <enum>QLed::Green</enum>
+                      </property>
+                      <property name="offColour">
+                       <enum>QLed::Red</enum>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_6">
+                 <item>
+                  <widget class="QGroupBox" name="groupBox_6">
+                   <property name="minimumSize">
+                    <size>
+                     <width>166</width>
+                     <height>120</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>166</width>
+                     <height>120</height>
+                    </size>
+                   </property>
+                   <property name="font">
+                    <font>
+                     <weight>75</weight>
+                     <bold>true</bold>
+                    </font>
+                   </property>
+                   <property name="title">
+                    <string>Eixo da Cavidade (V)</string>
+                   </property>
+                   <layout class="QVBoxLayout" name="verticalLayout_8">
+                    <item>
+                     <layout class="QVBoxLayout" name="verticalLayout_2">
+                      <item>
+                       <widget class="PyDMLineEdit" name="PyDMLineEdit_8">
+                        <property name="minimumSize">
+                         <size>
+                          <width>140</width>
+                          <height>25</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>140</width>
+                          <height>25</height>
+                         </size>
+                        </property>
+                        <property name="toolTip">
+                         <string/>
+                        </property>
+                        <property name="whatsThis">
+                         <string>
+    Writeable text field to send and display channel values
+    </string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <layout class="QHBoxLayout" name="horizontalLayout_3">
+                        <item>
+                         <widget class="PyDMLed" name="PyDMLed_12">
+                          <property name="minimumSize">
+                           <size>
+                            <width>21</width>
+                            <height>41</height>
+                           </size>
+                          </property>
+                          <property name="maximumSize">
+                           <size>
+                            <width>21</width>
+                            <height>41</height>
+                           </size>
+                          </property>
+                          <property name="toolTip">
+                           <string/>
+                          </property>
+                          <property name="whatsThis">
+                           <string/>
+                          </property>
+                          <property name="onColour">
+                           <enum>QLed::Green</enum>
+                          </property>
+                          <property name="offColour">
+                           <enum>QLed::Red</enum>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="PyDMLed" name="PyDMLed_13">
+                          <property name="minimumSize">
+                           <size>
+                            <width>21</width>
+                            <height>41</height>
+                           </size>
+                          </property>
+                          <property name="maximumSize">
+                           <size>
+                            <width>21</width>
+                            <height>41</height>
+                           </size>
+                          </property>
+                          <property name="toolTip">
+                           <string/>
+                          </property>
+                          <property name="whatsThis">
+                           <string/>
+                          </property>
+                          <property name="onColour">
+                           <enum>QLed::Green</enum>
+                          </property>
+                          <property name="offColour">
+                           <enum>QLed::Red</enum>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="PyDMLed" name="PyDMLed_14">
+                          <property name="minimumSize">
+                           <size>
+                            <width>21</width>
+                            <height>41</height>
+                           </size>
+                          </property>
+                          <property name="maximumSize">
+                           <size>
+                            <width>21</width>
+                            <height>41</height>
+                           </size>
+                          </property>
+                          <property name="toolTip">
+                           <string/>
+                          </property>
+                          <property name="whatsThis">
+                           <string/>
+                          </property>
+                          <property name="onColour">
+                           <enum>QLed::Green</enum>
+                          </property>
+                          <property name="offColour">
+                           <enum>QLed::Red</enum>
+                          </property>
+                         </widget>
+                        </item>
+                       </layout>
+                      </item>
+                     </layout>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QGroupBox" name="groupBox_7">
+                   <property name="minimumSize">
+                    <size>
+                     <width>166</width>
+                     <height>120</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>166</width>
+                     <height>120</height>
+                    </size>
+                   </property>
+                   <property name="font">
+                    <font>
+                     <weight>75</weight>
+                     <bold>true</bold>
+                    </font>
+                   </property>
+                   <property name="title">
+                    <string>Posição do Êmbolo (V)</string>
+                   </property>
+                   <layout class="QVBoxLayout" name="verticalLayout_9">
+                    <item>
+                     <layout class="QVBoxLayout" name="verticalLayout_3">
+                      <item>
+                       <widget class="PyDMLineEdit" name="PyDMLineEdit_9">
+                        <property name="minimumSize">
+                         <size>
+                          <width>140</width>
+                          <height>25</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>140</width>
+                          <height>25</height>
+                         </size>
+                        </property>
+                        <property name="toolTip">
+                         <string/>
+                        </property>
+                        <property name="whatsThis">
+                         <string>
+    Writeable text field to send and display channel values
+    </string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <layout class="QHBoxLayout" name="horizontalLayout_5">
+                        <item>
+                         <widget class="PyDMLed" name="PyDMLed_15">
+                          <property name="minimumSize">
+                           <size>
+                            <width>21</width>
+                            <height>41</height>
+                           </size>
+                          </property>
+                          <property name="maximumSize">
+                           <size>
+                            <width>21</width>
+                            <height>41</height>
+                           </size>
+                          </property>
+                          <property name="toolTip">
+                           <string/>
+                          </property>
+                          <property name="whatsThis">
+                           <string/>
+                          </property>
+                          <property name="onColour">
+                           <enum>QLed::Green</enum>
+                          </property>
+                          <property name="offColour">
+                           <enum>QLed::Red</enum>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="PyDMLed" name="PyDMLed_16">
+                          <property name="minimumSize">
+                           <size>
+                            <width>21</width>
+                            <height>41</height>
+                           </size>
+                          </property>
+                          <property name="maximumSize">
+                           <size>
+                            <width>21</width>
+                            <height>41</height>
+                           </size>
+                          </property>
+                          <property name="toolTip">
+                           <string/>
+                          </property>
+                          <property name="whatsThis">
+                           <string/>
+                          </property>
+                          <property name="onColour">
+                           <enum>QLed::Green</enum>
+                          </property>
+                          <property name="offColour">
+                           <enum>QLed::Red</enum>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="PyDMLed" name="PyDMLed_17">
+                          <property name="minimumSize">
+                           <size>
+                            <width>21</width>
+                            <height>41</height>
+                           </size>
+                          </property>
+                          <property name="maximumSize">
+                           <size>
+                            <width>21</width>
+                            <height>41</height>
+                           </size>
+                          </property>
+                          <property name="toolTip">
+                           <string/>
+                          </property>
+                          <property name="whatsThis">
+                           <string/>
+                          </property>
+                          <property name="onColour">
+                           <enum>QLed::Green</enum>
+                          </property>
+                          <property name="offColour">
+                           <enum>QLed::Red</enum>
+                          </property>
+                         </widget>
+                        </item>
+                       </layout>
+                      </item>
+                     </layout>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QGridLayout" name="gridLayout_2">
+               <item row="0" column="2">
+                <widget class="QGroupBox" name="groupBox_10">
+                 <property name="minimumSize">
+                  <size>
+                   <width>170</width>
+                   <height>70</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>170</width>
+                   <height>70</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="title">
+                  <string>Pot. Saída Pré-Amp (W)</string>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_15">
+                  <item>
+                   <widget class="PyDMLineEdit" name="PyDMLineEdit_12">
+                    <property name="minimumSize">
+                     <size>
+                      <width>140</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>140</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="toolTip">
+                     <string/>
+                    </property>
+                    <property name="whatsThis">
+                     <string>
+    Writeable text field to send and display channel values
+    </string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QGroupBox" name="groupBox_8">
+                 <property name="minimumSize">
+                  <size>
+                   <width>160</width>
+                   <height>70</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>160</width>
+                   <height>70</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="title">
+                  <string>Temperatura (°C)</string>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_10">
+                  <item>
+                   <widget class="PyDMLineEdit" name="PyDMLineEdit_10">
+                    <property name="minimumSize">
+                     <size>
+                      <width>140</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>140</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="toolTip">
+                     <string/>
+                    </property>
+                    <property name="whatsThis">
+                     <string>
+    Writeable text field to send and display channel values
+    </string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item row="0" column="3">
+                <widget class="QGroupBox" name="groupBox_12">
+                 <property name="minimumSize">
+                  <size>
+                   <width>160</width>
+                   <height>70</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>160</width>
+                   <height>70</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="title">
+                  <string>Pot. Ref. Cav. (W)</string>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_16">
+                  <item>
+                   <widget class="PyDMLineEdit" name="PyDMLineEdit_14">
+                    <property name="minimumSize">
+                     <size>
+                      <width>140</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>140</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="toolTip">
+                     <string/>
+                    </property>
+                    <property name="whatsThis">
+                     <string>
+    Writeable text field to send and display channel values
+    </string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item row="0" column="0" colspan="2">
+                <widget class="QGroupBox" name="groupBox_11">
+                 <property name="minimumSize">
+                  <size>
+                   <width>170</width>
+                   <height>70</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>170</width>
+                   <height>70</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="title">
+                  <string>Pot. Incidente Cav. (W)</string>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_13">
+                  <item>
+                   <widget class="PyDMLineEdit" name="PyDMLineEdit_13">
+                    <property name="minimumSize">
+                     <size>
+                      <width>140</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>140</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="toolTip">
+                     <string/>
+                    </property>
+                    <property name="whatsThis">
+                     <string>
+    Writeable text field to send and display channel values
+    </string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item row="1" column="1" colspan="2" alignment="Qt::AlignHCenter">
+                <widget class="QGroupBox" name="groupBox_3">
+                 <property name="minimumSize">
+                  <size>
+                   <width>160</width>
+                   <height>70</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>160</width>
+                   <height>70</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="title">
+                  <string>Pressão (mbar)</string>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_7">
+                  <item>
+                   <layout class="QHBoxLayout" name="horizontalLayout_2">
+                    <item>
+                     <widget class="PyDMLineEdit" name="PyDMLineEdit_3">
+                      <property name="minimumSize">
+                       <size>
+                        <width>80</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>80</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="whatsThis">
+                       <string>
+    Writeable text field to send and display channel values
+    </string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QSpinBox" name="spinBox">
+                      <property name="minimumSize">
+                       <size>
+                        <width>48</width>
+                        <height>26</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>48</width>
+                        <height>26</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item row="1" column="3" alignment="Qt::AlignHCenter">
+                <widget class="QGroupBox" name="groupBox_9">
+                 <property name="minimumSize">
+                  <size>
+                   <width>100</width>
+                   <height>70</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>100</width>
+                   <height>70</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="title">
+                  <string>Ganho (dB)</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_14">
+                  <item>
+                   <widget class="PyDMLineEdit" name="PyDMLineEdit_11">
+                    <property name="minimumSize">
+                     <size>
+                      <width>80</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>80</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="toolTip">
+                     <string/>
+                    </property>
+                    <property name="whatsThis">
+                     <string>
+    Writeable text field to send and display channel values
+    </string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout_19">
+             <item>
+              <widget class="QGroupBox" name="groupBox_5">
+               <property name="minimumSize">
+                <size>
+                 <width>200</width>
+                 <height>100</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>200</width>
+                 <height>100</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="title">
+                <string>Aceleração</string>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_6">
+                <item>
+                 <layout class="QGridLayout" name="gridLayout">
+                  <item row="0" column="0">
+                   <widget class="PyDMLabel" name="PyDMLabel">
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="toolTip">
+                     <string/>
+                    </property>
+                    <property name="whatsThis">
+                     <string/>
+                    </property>
+                    <property name="text">
+                     <string>Tensão</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="PyDMLineEdit" name="PyDMLineEdit_6">
+                    <property name="minimumSize">
+                     <size>
+                      <width>80</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>80</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="toolTip">
+                     <string/>
+                    </property>
+                    <property name="whatsThis">
+                     <string>
+    Writeable text field to send and display channel values
+    </string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="2">
+                   <widget class="PyDMLabel" name="PyDMLabel_4">
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="toolTip">
+                     <string/>
+                    </property>
+                    <property name="whatsThis">
+                     <string/>
+                    </property>
+                    <property name="text">
+                     <string>KV</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="PyDMLabel" name="PyDMLabel_2">
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="toolTip">
+                     <string/>
+                    </property>
+                    <property name="whatsThis">
+                     <string/>
+                    </property>
+                    <property name="text">
+                     <string>Potência</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="PyDMLineEdit" name="PyDMLineEdit_7">
+                    <property name="minimumSize">
+                     <size>
+                      <width>80</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>80</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="toolTip">
+                     <string/>
+                    </property>
+                    <property name="whatsThis">
+                     <string>
+    Writeable text field to send and display channel values
+    </string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="2">
+                   <widget class="PyDMLabel" name="PyDMLabel_3">
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="toolTip">
+                     <string/>
+                    </property>
+                    <property name="whatsThis">
+                     <string/>
+                    </property>
+                    <property name="text">
+                     <string>W</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item alignment="Qt::AlignLeft|Qt::AlignTop">
+              <widget class="QGroupBox" name="groupBox_4">
+               <property name="minimumSize">
+                <size>
+                 <width>170</width>
+                 <height>100</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>170</width>
+                 <height>100</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="title">
+                <string>Frequência (KHz)</string>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_5">
+                <item>
+                 <layout class="QVBoxLayout" name="verticalLayout">
+                  <item>
+                   <widget class="PyDMCheckbox" name="PyDMCheckbox_2">
+                    <property name="enabled">
+                     <bool>true</bool>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>141</width>
+                      <height>16</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>141</width>
+                      <height>16</height>
+                     </size>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="toolTip">
+                     <string/>
+                    </property>
+                    <property name="whatsThis">
+                     <string/>
+                    </property>
+                    <property name="text">
+                     <string>Atualizar Leitura</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="PyDMLineEdit" name="PyDMLineEdit_5">
+                    <property name="minimumSize">
+                     <size>
+                      <width>140</width>
+                      <height>25</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>140</width>
+                      <height>25</height>
+                     </size>
+                    </property>
+                    <property name="toolTip">
+                     <string/>
+                    </property>
+                    <property name="whatsThis">
+                     <string>
+    Writeable text field to send and display channel values
+    </string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QGroupBox" name="groupBox_13">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>350</y>
+          <width>393</width>
+          <height>120</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="title">
+         <string>Defasador</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_22">
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_12">
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout_21">
+             <item>
+              <widget class="PyDMCheckbox" name="PyDMCheckbox">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="whatsThis">
+                <string/>
+               </property>
+               <property name="text">
+                <string>Graus</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_9">
+               <item>
+                <widget class="PyDMLed" name="PyDMLed_18">
+                 <property name="minimumSize">
+                  <size>
+                   <width>21</width>
+                   <height>41</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>21</width>
+                   <height>41</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string/>
+                 </property>
+                 <property name="whatsThis">
+                  <string/>
+                 </property>
+                 <property name="onColour">
+                  <enum>QLed::Green</enum>
+                 </property>
+                 <property name="offColour">
+                  <enum>QLed::Red</enum>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="label">
+                 <property name="font">
+                  <font>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>L/R</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_10">
+             <item>
+              <widget class="QLabel" name="label_2">
+               <property name="minimumSize">
+                <size>
+                 <width>52</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>52</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>Ajuste:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="PyDMLineEdit" name="PyDMLineEdit">
+               <property name="minimumSize">
+                <size>
+                 <width>80</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>80</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="sizeIncrement">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="whatsThis">
+                <string>
+    Writeable text field to send and display channel values
+    </string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_11">
+             <item>
+              <widget class="QLabel" name="label_3">
+               <property name="minimumSize">
+                <size>
+                 <width>58</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>58</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>Leitura:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="PyDMLineEdit" name="PyDMLineEdit_2">
+               <property name="minimumSize">
+                <size>
+                 <width>80</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>80</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="sizeIncrement">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="whatsThis">
+                <string>
+    Writeable text field to send and display channel values
+    </string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QFrame" name="frame">
+        <property name="geometry">
+         <rect>
+          <x>400</x>
+          <y>370</y>
+          <width>351</width>
+          <height>101</height>
+         </rect>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Box</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_25">
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_13">
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout_23">
+             <item alignment="Qt::AlignHCenter">
+              <widget class="PyDMLineEdit" name="PyDMLineEdit_4">
+               <property name="minimumSize">
+                <size>
+                 <width>80</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>80</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="whatsThis">
+                <string>
+    Writeable text field to send and display channel values
+    </string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_4">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>Realimentação 
+ Atenuador</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout_24">
+             <item alignment="Qt::AlignHCenter">
+              <widget class="PyDMLineEdit" name="PyDMLineEdit_15">
+               <property name="minimumSize">
+                <size>
+                 <width>80</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>80</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="whatsThis">
+                <string>
+    Writeable text field to send and display channel values
+    </string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_5">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>Realimentação 
+ Defasador</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QLabel" name="label_6">
+        <property name="geometry">
+         <rect>
+          <x>21</x>
+          <y>501</y>
+          <width>201</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Ref. Tensão de Aceleração (V)</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_7">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>550</y>
+          <width>161</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Difer. Frequência (KHz)</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_8">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>590</y>
+          <width>151</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Difer. Frequência (V)</string>
+        </property>
+       </widget>
+       <widget class="PyDMLineEdit" name="PyDMLineEdit_16">
+        <property name="geometry">
+         <rect>
+          <x>228</x>
+          <y>501</y>
+          <width>80</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>80</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>
+    Writeable text field to send and display channel values
+    </string>
+        </property>
+       </widget>
+       <widget class="PyDMLineEdit" name="PyDMLineEdit_17">
+        <property name="geometry">
+         <rect>
+          <x>240</x>
+          <y>580</y>
+          <width>80</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>80</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>
+    Writeable text field to send and display channel values
+    </string>
+        </property>
+       </widget>
+       <widget class="PyDMLineEdit" name="PyDMLineEdit_18">
+        <property name="geometry">
+         <rect>
+          <x>240</x>
+          <y>540</y>
+          <width>80</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>80</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>
+    Writeable text field to send and display channel values
+    </string>
+        </property>
+       </widget>
+       <widget class="PyDMScrollBar" name="PyDMScrollBar">
+        <property name="geometry">
+         <rect>
+          <x>340</x>
+          <y>500</y>
+          <width>301</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string/>
+        </property>
+       </widget>
+       <widget class="PyDMScrollBar" name="PyDMScrollBar_2">
+        <property name="geometry">
+         <rect>
+          <x>340</x>
+          <y>540</y>
+          <width>301</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string/>
+        </property>
+       </widget>
+       <widget class="PyDMCheckbox" name="PyDMCheckbox_3">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>630</x>
+          <y>700</y>
+          <width>161</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string/>
+        </property>
+        <property name="text">
+         <string>Leituras em Watts</string>
+        </property>
+       </widget>
+       <widget class="PyDMCheckbox" name="PyDMCheckbox_4">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>800</x>
+          <y>700</y>
+          <width>131</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string/>
+        </property>
+        <property name="text">
+         <string>Atualiza Média</string>
+        </property>
        </widget>
       </widget>
       <widget class="QWidget" name="tab_3">
@@ -1163,12 +1983,12 @@
     to the current value of the channel. This means that the button will
     increment a channel by a fixed amount with every click, a consistent
     relative move
-    
+
     Parameters
     ----------
     pressValue : int, float, str
         Value to be sent when the button is clicked
-    
+
     channel : str
         ID of channel to manipulate
 
@@ -1235,12 +2055,12 @@
     to the current value of the channel. This means that the button will
     increment a channel by a fixed amount with every click, a consistent
     relative move
-    
+
     Parameters
     ----------
     pressValue : int, float, str
         Value to be sent when the button is clicked
-    
+
     channel : str
         ID of channel to manipulate
 
@@ -1324,7 +2144,7 @@
                  <string/>
                 </property>
                 <property name="text">
-                 <string>Status 
+                 <string>Status
  Fonte Ligada</string>
                 </property>
                 <property name="alignment">
@@ -1678,12 +2498,12 @@
     to the current value of the channel. This means that the button will
     increment a channel by a fixed amount with every click, a consistent
     relative move
-    
+
     Parameters
     ----------
     pressValue : int, float, str
         Value to be sent when the button is clicked
-    
+
     channel : str
         ID of channel to manipulate
 
@@ -1750,12 +2570,12 @@
     to the current value of the channel. This means that the button will
     increment a channel by a fixed amount with every click, a consistent
     relative move
-    
+
     Parameters
     ----------
     pressValue : int, float, str
         Value to be sent when the button is clicked
-    
+
     channel : str
         ID of channel to manipulate
 
@@ -1839,7 +2659,7 @@
                  <string/>
                 </property>
                 <property name="text">
-                 <string>Status 
+                 <string>Status
  Fonte Ligada</string>
                 </property>
                 <property name="alignment">
@@ -2081,9 +2901,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PyDMCheckbox</class>
-   <extends>QCheckBox</extends>
-   <header>pydm.widgets.checkbox</header>
+   <class>PyDMLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>pydm.widgets.line_edit</header>
   </customwidget>
   <customwidget>
    <class>PyDMPushButton</class>
@@ -2091,9 +2911,9 @@
    <header>pydm.widgets.pushbutton</header>
   </customwidget>
   <customwidget>
-   <class>PyDMLabel</class>
-   <extends>QLabel</extends>
-   <header>pydm.widgets.label</header>
+   <class>PyDMCheckbox</class>
+   <extends>QCheckBox</extends>
+   <header>pydm.widgets.checkbox</header>
   </customwidget>
   <customwidget>
    <class>PyDMLed</class>
@@ -2101,9 +2921,14 @@
    <header>pydm.widgets.led</header>
   </customwidget>
   <customwidget>
-   <class>PyDMLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>pydm.widgets.line_edit</header>
+   <class>PyDMLabel</class>
+   <extends>QLabel</extends>
+   <header>pydm.widgets.label</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMScrollBar</class>
+   <extends>QScrollBar</extends>
+   <header>pydm.widgets.scrollbar</header>
   </customwidget>
  </customwidgets>
  <resources/>
