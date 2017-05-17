@@ -1497,11 +1497,17 @@
        <widget class="QLabel" name="label_6">
         <property name="geometry">
          <rect>
-          <x>21</x>
-          <y>501</y>
-          <width>201</width>
+          <x>20</x>
+          <y>530</y>
+          <width>212</width>
           <height>17</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
         </property>
         <property name="text">
          <string>Ref. Tensão de Aceleração (V)</string>
@@ -1510,11 +1516,17 @@
        <widget class="QLabel" name="label_7">
         <property name="geometry">
          <rect>
-          <x>20</x>
-          <y>550</y>
-          <width>161</width>
+          <x>30</x>
+          <y>570</y>
+          <width>165</width>
           <height>17</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
         </property>
         <property name="text">
          <string>Difer. Frequência (KHz)</string>
@@ -1524,10 +1536,16 @@
         <property name="geometry">
          <rect>
           <x>20</x>
-          <y>590</y>
-          <width>151</width>
+          <y>600</y>
+          <width>148</width>
           <height>17</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
         </property>
         <property name="text">
          <string>Difer. Frequência (V)</string>
@@ -1536,8 +1554,8 @@
        <widget class="PyDMLineEdit" name="PyDMLineEdit_16">
         <property name="geometry">
          <rect>
-          <x>228</x>
-          <y>501</y>
+          <x>280</x>
+          <y>520</y>
           <width>80</width>
           <height>25</height>
          </rect>
@@ -1566,8 +1584,8 @@
        <widget class="PyDMLineEdit" name="PyDMLineEdit_17">
         <property name="geometry">
          <rect>
-          <x>240</x>
-          <y>580</y>
+          <x>297</x>
+          <y>800</y>
           <width>80</width>
           <height>25</height>
          </rect>
@@ -1596,8 +1614,8 @@
        <widget class="PyDMLineEdit" name="PyDMLineEdit_18">
         <property name="geometry">
          <rect>
-          <x>240</x>
-          <y>540</y>
+          <x>280</x>
+          <y>560</y>
           <width>80</width>
           <height>25</height>
          </rect>
@@ -1626,11 +1644,23 @@
        <widget class="PyDMScrollBar" name="PyDMScrollBar">
         <property name="geometry">
          <rect>
-          <x>340</x>
-          <y>500</y>
-          <width>301</width>
-          <height>16</height>
+          <x>480</x>
+          <y>540</y>
+          <width>380</width>
+          <height>20</height>
          </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>380</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>380</width>
+          <height>20</height>
+         </size>
         </property>
         <property name="toolTip">
          <string/>
@@ -1642,11 +1672,23 @@
        <widget class="PyDMScrollBar" name="PyDMScrollBar_2">
         <property name="geometry">
          <rect>
-          <x>340</x>
-          <y>540</y>
-          <width>301</width>
-          <height>16</height>
+          <x>480</x>
+          <y>580</y>
+          <width>380</width>
+          <height>20</height>
          </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>380</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>380</width>
+          <height>16777215</height>
+         </size>
         </property>
         <property name="toolTip">
          <string/>
@@ -1661,10 +1703,10 @@
         </property>
         <property name="geometry">
          <rect>
-          <x>630</x>
-          <y>700</y>
-          <width>161</width>
-          <height>16</height>
+          <x>410</x>
+          <y>810</y>
+          <width>156</width>
+          <height>23</height>
          </rect>
         </property>
         <property name="font">
@@ -1683,16 +1725,239 @@
          <string>Leituras em Watts</string>
         </property>
        </widget>
+       <widget class="QFrame" name="frame_2">
+        <property name="geometry">
+         <rect>
+          <x>130</x>
+          <y>680</y>
+          <width>105</width>
+          <height>63</height>
+         </rect>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_27">
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_27">
+           <item>
+            <widget class="PyDMLed" name="PyDMLed_19">
+             <property name="minimumSize">
+              <size>
+               <width>21</width>
+               <height>41</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>21</width>
+               <height>41</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string/>
+             </property>
+             <property name="whatsThis">
+              <string/>
+             </property>
+             <property name="onColour">
+              <enum>QLed::Green</enum>
+             </property>
+             <property name="offColour">
+              <enum>QLed::Red</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_9">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Remoto</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QFrame" name="frame_3">
+        <property name="geometry">
+         <rect>
+          <x>250</x>
+          <y>640</y>
+          <width>122</width>
+          <height>63</height>
+         </rect>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_28">
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_28">
+           <item>
+            <widget class="PyDMLed" name="PyDMLed_20">
+             <property name="minimumSize">
+              <size>
+               <width>21</width>
+               <height>41</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>21</width>
+               <height>41</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string/>
+             </property>
+             <property name="whatsThis">
+              <string/>
+             </property>
+             <property name="onColour">
+              <enum>QLed::Green</enum>
+             </property>
+             <property name="offColour">
+              <enum>QLed::Red</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_10">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Chave PIN</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QFrame" name="frame_7">
+        <property name="geometry">
+         <rect>
+          <x>390</x>
+          <y>640</y>
+          <width>297</width>
+          <height>63</height>
+         </rect>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_29">
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_29">
+           <item>
+            <widget class="PyDMLed" name="PyDMLed_21">
+             <property name="minimumSize">
+              <size>
+               <width>21</width>
+               <height>41</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>21</width>
+               <height>41</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string/>
+             </property>
+             <property name="whatsThis">
+              <string/>
+             </property>
+             <property name="onColour">
+              <enum>QLed::Green</enum>
+             </property>
+             <property name="offColour">
+              <enum>QLed::Red</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_11">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Amplificador / Intertrav. / Motores</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+       <widget class="PyDMLed" name="PyDMLed_22">
+        <property name="geometry">
+         <rect>
+          <x>890</x>
+          <y>500</y>
+          <width>21</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>21</width>
+          <height>41</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>21</width>
+          <height>41</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string/>
+        </property>
+        <property name="onColour">
+         <enum>QLed::Green</enum>
+        </property>
+        <property name="offColour">
+         <enum>QLed::Red</enum>
+        </property>
+       </widget>
        <widget class="PyDMCheckbox" name="PyDMCheckbox_4">
         <property name="enabled">
          <bool>true</bool>
         </property>
         <property name="geometry">
          <rect>
-          <x>800</x>
-          <y>700</y>
-          <width>131</width>
-          <height>16</height>
+          <x>620</x>
+          <y>840</y>
+          <width>156</width>
+          <height>23</height>
          </rect>
         </property>
         <property name="font">
@@ -2916,14 +3181,14 @@
    <header>pydm.widgets.checkbox</header>
   </customwidget>
   <customwidget>
-   <class>PyDMLed</class>
-   <extends>QWidget</extends>
-   <header>pydm.widgets.led</header>
-  </customwidget>
-  <customwidget>
    <class>PyDMLabel</class>
    <extends>QLabel</extends>
    <header>pydm.widgets.label</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMLed</class>
+   <extends>QWidget</extends>
+   <header>pydm.widgets.led</header>
   </customwidget>
   <customwidget>
    <class>PyDMScrollBar</class>

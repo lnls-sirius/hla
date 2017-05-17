@@ -121,5 +121,4 @@ class DiagnosticsMainWindow(Display):
 
         self.ui.te_historic.append(historic)
 
-
 intelclass = DiagnosticsMainWindow
