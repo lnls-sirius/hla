@@ -4,8 +4,7 @@ from PyQt5.QtWidgets import QApplication, QFileDialog, QMessageBox
 from epics import PV
 from os import path
 from pstest import PowerSupplyTest
-from siriuspy.magnet import magdata
-import pvnaming
+from siriuspy.magnet import magdata as _magdata
 
 class ControlMainWindow(Display):
     # Accelerator sections
@@ -33,11 +32,11 @@ class ControlMainWindow(Display):
         super(ControlMainWindow, self).__init__(parent)
 
         # Checkbox
-        self.ui.cb_select_all_si.stateChanged.connect(lambda: self.select_all(self.ui.cb_select_all_si))
-        self.ui.cb_select_all_bo.stateChanged.connect(lambda: self.select_all(self.ui.cb_select_all_bo))
-        self.ui.cb_select_all_linac.stateChanged.connect(lambda: self.select_all(self.ui.cb_select_all_linac))
-        self.ui.cb_select_all_ts.stateChanged.connect(lambda: self.select_all(self.ui.cb_select_all_ts))
-        self.ui.cb_select_all_tb.stateChanged.connect(lambda: self.select_all(self.ui.cb_select_all_tb))
+        self.ui.cb_select_all_si.stateChanged.connect(lambda: self._select_all(self.ui.cb_select_all_si))
+        self.ui.cb_select_all_bo.stateChanged.connect(lambda: self._select_all(self.ui.cb_select_all_bo))
+        self.ui.cb_select_all_linac.stateChanged.connect(lambda: self._select_all(self.ui.cb_select_all_linac))
+        self.ui.cb_select_all_ts.stateChanged.connect(lambda: self._select_all(self.ui.cb_select_all_ts))
+        self.ui.cb_select_all_tb.stateChanged.connect(lambda: self._select_all(self.ui.cb_select_all_tb))
 
         # Button
         self.ui.pb_on_off.clicked.connect(self._treat_on_off_button)
@@ -46,7 +45,7 @@ class ControlMainWindow(Display):
         self.ui.pb_export.clicked.connect(self._export_pane_report)
 
         # Power supplies list (All power supplies)
-        self._power_supply_list = magdata.get_ps_names()
+        self._power_supply_list = _magdata.get_ps_names()
 
 
     def ui_filename(self):
@@ -55,7 +54,8 @@ class ControlMainWindow(Display):
     def ui_filepath(self):
         return path.join(path.dirname(path.realpath(__file__)), self.ui_filename())
 
-
+    ''' Executed when the button Reset is pressed.
+    '''
     @pyqtSlot()
     def _reset(self):
         bt = self.ui.pb_reset
@@ -74,6 +74,8 @@ class ControlMainWindow(Display):
             self.test_thread.reset_complete.connect(self._finish_reset)
             self.test_thread.start()
 
+    ''' Executed when the button Start Sequence is pressed.
+    '''
     @pyqtSlot()
     def _test_sequence(self):
 
@@ -99,6 +101,8 @@ class ControlMainWindow(Display):
             self.test_thread.test_complete.connect(self._finish_test)
             self.test_thread.start()
 
+    ''' Executed when button On Off is pressed
+    '''
     @pyqtSlot()
     def _treat_on_off_button(self):
         OFF = 0
@@ -130,6 +134,17 @@ class ControlMainWindow(Display):
                 self.test_thread.pwr_state_changed.connect(self._pwr_toggled_magps)
                 self.test_thread.start()
 
+    ''' Executed when reset process is finished.
+    '''
+    @pyqtSlot()
+    def _finish_reset(self):
+        bt = self.ui.pb_reset
+        self.ui.lb_status.setText("<p style='color:blue;'>Fontes Resetadas!</p>")
+        bt.setEnabled(True)
+        bt.setChecked(False)
+
+    ''' Executed when test process is finished
+    '''
     @pyqtSlot(list, list)
     def _finish_test(self, pass_list, pane_list):
 
@@ -151,21 +166,18 @@ class ControlMainWindow(Display):
         bt.setChecked(False)
         self.ui.lb_status.setText("<p style='color:blue;'>Teste Completo!</p>")
 
-    @pyqtSlot()
-    def _finish_reset(self):
-        bt = self.ui.pb_reset
-        self.ui.lb_status.setText("<p style='color:blue;'>Fontes Resetadas!</p>")
-        bt.setEnabled(True)
-        bt.setChecked(False)
 
-    @pyqtSlot(bool)
+    ''' Executed when On or Off rotine is finished
+    '''
+    @pyqtSlot(int)
     def _pwr_toggled_magps(self, pwr_state):
-        print('*************Entrou AQUI***********')
-        if pwr_state == True:
+        if pwr_state == 1:
             self.ui.lb_status.setText("<p style='color:blue;'>Fontes Ligadas!</p>")
         else:
             self.ui.lb_status.setText("<p style='color:blue;'>Fontes Desligas!</p>")
 
+    ''' Print header for OK textedit and for Pane textedit
+    '''
     def _print_headers(self):
         self.ui.te_test_sequence.clear()
         self.ui.te_pane_report.clear()
@@ -181,6 +193,8 @@ class ControlMainWindow(Display):
         self.ui.te_test_sequence.append(ok_header)
         self.ui.te_pane_report.append(pane_header)
 
+    ''' Append a new result line to OK textedit
+    '''
     def _add_to_test_sequence(self, item):
 
         pass_report ="<table><tr><td align='left' width=140>" + item[0] + \
@@ -189,6 +203,8 @@ class ControlMainWindow(Display):
 
         self.ui.te_test_sequence.append(pass_report)
 
+    ''' Append a new result line to Pane textedit
+    '''
     def _add_to_pane_report(self, item):
 
         pane_report ="<table><tr><td align='left' width=140>" + item[0] + \
@@ -198,6 +214,8 @@ class ControlMainWindow(Display):
         self.ui.te_pane_report.append(pane_report)
 
 
+    ''' Export a list with all power supplies in pane list.
+    '''
     @pyqtSlot()
     def _export_pane_report(self):
         text = self.ui.te_pane_report.toPlainText()
@@ -206,8 +224,10 @@ class ControlMainWindow(Display):
         file_object.write(text)
         file_object.close()
 
+    ''' Update checkbox when a group is selected
+    '''
     @pyqtSlot()
-    def select_all(self, cb):
+    def _select_all(self, cb):
 
         if cb.text() == 'Storage Ring':
             if cb.isChecked() == True:
@@ -260,7 +280,8 @@ class ControlMainWindow(Display):
                 self.ui.cb_dipole_ts.setChecked(False)
 
 
-    # Set of power supplies to be tested
+    ''' Get a list of power supplies to be tested based on selected items.
+    '''
     def _get_test_list(self):
         test_set = set()
         if self.ui.cb_quadrupole_si.isChecked() == True:
@@ -295,7 +316,8 @@ class ControlMainWindow(Display):
             test_set = test_set | self._search_ps(self._TRANSPORT_LINE_BO, self._FAMILY, self._DIPOLE)
         return test_set
 
-    # search selected power supplies
+    ''' Select items in power supply list based on name composition.
+    '''
     def _search_ps(self, accel_section, ps_group, ps_type):
         ps_set = set()
         if ps_group == self._FAMILY:

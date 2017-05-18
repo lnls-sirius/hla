@@ -4,8 +4,7 @@ from PyQt5.QtWidgets import QApplication
 from epics import PV
 from os import path
 from psdiag import Test
-from siriuspy.magnet import magdata
-import threading
+from siriuspy.magnet import magdata as _magdata
 import datetime
 
 class DiagnosticsMainWindow(Display):
@@ -15,12 +14,13 @@ class DiagnosticsMainWindow(Display):
         super(DiagnosticsMainWindow, self).__init__(parent)
 
         self.ui.sb_time_interval.setValue(3)
-        self.ui.sb_time_interval.valueChanged.connect(self._update_time_interval)
 
         self.print_headers()
 
+        self.ui.lb_msg_inicio.setText("<p style='color:red;'>Por favor, aguarde o início...</p>")
+
         self._time_between_readings = self.ui.sb_time_interval.value()
-        self._magps_list = magdata.get_ps_names()
+        self._magps_list = _magdata.get_ps_names()
 
         self._timer = QTimer(self)
         self._timer.setInterval(1000 * self._time_between_readings)
@@ -38,6 +38,7 @@ class DiagnosticsMainWindow(Display):
         return path.join(path.dirname(path.realpath(__file__)), self.ui_filename())
 
     def showEvent(self, event):
+
         super(Display, self).showEvent(event)
         self._timer.start()
 
@@ -55,7 +56,7 @@ class DiagnosticsMainWindow(Display):
     @pyqtSlot(list, list)
     def update_interface(self, magps_ok, magps_pane):
 
-        # self.ui.te_current_status.clear()
+        self.ui.lb_msg_inicio.clear()
         self.ui.te_pane_report.clear()
         for item in magps_ok:
             self.add_to_status_report(item)
@@ -67,22 +68,23 @@ class DiagnosticsMainWindow(Display):
             QApplication.processEvents()
 
     def print_headers(self):
+
         self.ui.te_current_status.clear()
         self.ui.te_pane_report.clear()
         self.ui.te_historic.clear()
 
-        ok_header ="<table><tr><td align='center' width=150><b>Fonte</b>\
+        ok_header ="<table><tr><td align='center' width=150><b>Fonte</b> \
                     </td><td width=100 align='center'><b>Setpoint(A)<b></td> \
                     <td align='center' width=100><b>Readback(A)</b></td></tr></table>"
 
-        pane_header ="<table><tr><td align='center' width=150><b>Fonte</b>\
+        pane_header ="<table><tr><td align='center' width=150><b>Fonte</b> \
                     </td><td width=100 align='center'><b>Setpoint(A)<b></td> \
                     <td align='center' width=100><b>Readback(A)</b></td></tr></table>"
 
-        historic_header ="<table><tr><td align='center' width=150><b>Fonte</b></td>\
+        historic_header ="<table><tr><td align='center' width=150><b>Fonte</b></td> \
                             <td width=100 align='center'><b>Setpoint(A)<b></td> \
-                            <td align='center' width=100><b>Readback(A)</b></td>\
-                            <td align='center' width=100><b>Hora</b></td>\
+                            <td align='center' width=100><b>Readback(A)</b></td> \
+                            <td align='center' width=100><b>Hora</b></td> \
                             <td align='center' width=100><b>Status</b></td></tr></table>"
 
         self.ui.te_current_status.append(ok_header)
@@ -111,19 +113,12 @@ class DiagnosticsMainWindow(Display):
         index_round_sec = time_now.find('.')
         time_now = time_now[0:index_round_sec]
 
-        historic ="<table><tr><td align='center' width=150>" + item[0] + "</td>\
+        historic ="<table><tr><td align='center' width=150>" + item[0] + "</td> \
                             <td width=100 align='center'>" + str(item[1]) + "</td> \
-                            <td align='center' width=100>" + str(item[2]) + "</td>\
-                            <td align='center' width=100>" + time_now + "</td>\
+                            <td align='center' width=100>" + str(item[2]) + "</td> \
+                            <td align='center' width=100>" + time_now + "</td> \
                             <td align='center' width=100><b>" + status + "</b></td></tr></table>"
 
         self.ui.te_historic.append(historic)
-
-
-    def __del__(self):
-        self.test_thread.stop()
-        if not self.test_thread.finished():
-            self.test_thread.wait()
-
 
 intelclass = DiagnosticsMainWindow
