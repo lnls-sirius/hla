@@ -202,12 +202,6 @@
                                 <property name="whatsThis">
                                  <string/>
                                 </property>
-                                <property name="onColour">
-                                 <enum>QLed::Green</enum>
-                                </property>
-                                <property name="offColour">
-                                 <enum>QLed::Red</enum>
-                                </property>
                                </widget>
                               </item>
                               <item>
@@ -386,12 +380,6 @@
                                 </property>
                                 <property name="value">
                                  <bool>true</bool>
-                                </property>
-                                <property name="onColour">
-                                 <enum>QLed::Yellow</enum>
-                                </property>
-                                <property name="offColour">
-                                 <enum>QLed::Red</enum>
                                 </property>
                                </widget>
                               </item>
@@ -1430,12 +1418,6 @@
                                 <property name="whatsThis">
                                  <string/>
                                 </property>
-                                <property name="onColour">
-                                 <enum>QLed::Green</enum>
-                                </property>
-                                <property name="offColour">
-                                 <enum>QLed::Red</enum>
-                                </property>
                                </widget>
                               </item>
                               <item>
@@ -1614,12 +1596,6 @@
                                 </property>
                                 <property name="value">
                                  <bool>true</bool>
-                                </property>
-                                <property name="onColour">
-                                 <enum>QLed::Yellow</enum>
-                                </property>
-                                <property name="offColour">
-                                 <enum>QLed::Red</enum>
                                 </property>
                                </widget>
                               </item>
@@ -2725,12 +2701,6 @@
                   <property name="whatsThis">
                    <string/>
                   </property>
-                  <property name="onColour">
-                   <enum>QLed::Green</enum>
-                  </property>
-                  <property name="offColour">
-                   <enum>QLed::Red</enum>
-                  </property>
                  </widget>
                 </item>
                 <item row="1" column="0">
@@ -2753,12 +2723,6 @@
                   </property>
                   <property name="whatsThis">
                    <string/>
-                  </property>
-                  <property name="onColour">
-                   <enum>QLed::Green</enum>
-                  </property>
-                  <property name="offColour">
-                   <enum>QLed::Red</enum>
                   </property>
                  </widget>
                 </item>
@@ -2783,12 +2747,6 @@
                   <property name="whatsThis">
                    <string/>
                   </property>
-                  <property name="onColour">
-                   <enum>QLed::Green</enum>
-                  </property>
-                  <property name="offColour">
-                   <enum>QLed::Red</enum>
-                  </property>
                  </widget>
                 </item>
                 <item row="3" column="0">
@@ -2811,12 +2769,6 @@
                   </property>
                   <property name="whatsThis">
                    <string/>
-                  </property>
-                  <property name="onColour">
-                   <enum>QLed::Green</enum>
-                  </property>
-                  <property name="offColour">
-                   <enum>QLed::Red</enum>
                   </property>
                  </widget>
                 </item>
@@ -3285,12 +3237,6 @@
                             <property name="whatsThis">
                              <string/>
                             </property>
-                            <property name="onColour">
-                             <enum>QLed::Green</enum>
-                            </property>
-                            <property name="offColour">
-                             <enum>QLed::Red</enum>
-                            </property>
                            </widget>
                           </item>
                           <item>
@@ -3574,7 +3520,7 @@
                          </property>
                          <property name="maximumSize">
                           <size>
-                           <width>130</width>
+                           <width>140</width>
                            <height>100</height>
                           </size>
                          </property>
@@ -3640,12 +3586,6 @@
                                 <property name="whatsThis">
                                  <string/>
                                 </property>
-                                <property name="onColour">
-                                 <enum>QLed::Green</enum>
-                                </property>
-                                <property name="offColour">
-                                 <enum>QLed::Red</enum>
-                                </property>
                                </widget>
                               </item>
                              </layout>
@@ -3706,12 +3646,6 @@
                                 <property name="whatsThis">
                                  <string/>
                                 </property>
-                                <property name="onColour">
-                                 <enum>QLed::Green</enum>
-                                </property>
-                                <property name="offColour">
-                                 <enum>QLed::Red</enum>
-                                </property>
                                </widget>
                               </item>
                              </layout>
@@ -3763,12 +3697,6 @@
                                 <property name="whatsThis">
                                  <string/>
                                 </property>
-                                <property name="onColour">
-                                 <enum>QLed::Green</enum>
-                                </property>
-                                <property name="offColour">
-                                 <enum>QLed::Red</enum>
-                                </property>
                                </widget>
                               </item>
                               <item>
@@ -3801,12 +3729,6 @@
                                 </property>
                                 <property name="whatsThis">
                                  <string/>
-                                </property>
-                                <property name="onColour">
-                                 <enum>QLed::Green</enum>
-                                </property>
-                                <property name="offColour">
-                                 <enum>QLed::Red</enum>
                                 </property>
                                </widget>
                               </item>
@@ -4369,12 +4291,6 @@
                                 <property name="whatsThis">
                                  <string/>
                                 </property>
-                                <property name="onColour">
-                                 <enum>QLed::Green</enum>
-                                </property>
-                                <property name="offColour">
-                                 <enum>QLed::Red</enum>
-                                </property>
                                </widget>
                               </item>
                              </layout>
@@ -4391,6 +4307,9 @@
                          </property>
                          <property name="whatsThis">
                           <string/>
+                         </property>
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
                          </property>
                         </widget>
                        </item>
@@ -4951,12 +4870,6 @@
                             <property name="whatsThis">
                              <string/>
                             </property>
-                            <property name="onColour">
-                             <enum>QLed::Green</enum>
-                            </property>
-                            <property name="offColour">
-                             <enum>QLed::Red</enum>
-                            </property>
                            </widget>
                           </item>
                           <item>
@@ -5306,12 +5219,6 @@
                                 <property name="whatsThis">
                                  <string/>
                                 </property>
-                                <property name="onColour">
-                                 <enum>QLed::Green</enum>
-                                </property>
-                                <property name="offColour">
-                                 <enum>QLed::Red</enum>
-                                </property>
                                </widget>
                               </item>
                              </layout>
@@ -5372,12 +5279,6 @@
                                 <property name="whatsThis">
                                  <string/>
                                 </property>
-                                <property name="onColour">
-                                 <enum>QLed::Green</enum>
-                                </property>
-                                <property name="offColour">
-                                 <enum>QLed::Red</enum>
-                                </property>
                                </widget>
                               </item>
                              </layout>
@@ -5429,12 +5330,6 @@
                                 <property name="whatsThis">
                                  <string/>
                                 </property>
-                                <property name="onColour">
-                                 <enum>QLed::Green</enum>
-                                </property>
-                                <property name="offColour">
-                                 <enum>QLed::Red</enum>
-                                </property>
                                </widget>
                               </item>
                               <item>
@@ -5467,12 +5362,6 @@
                                 </property>
                                 <property name="whatsThis">
                                  <string/>
-                                </property>
-                                <property name="onColour">
-                                 <enum>QLed::Green</enum>
-                                </property>
-                                <property name="offColour">
-                                 <enum>QLed::Red</enum>
                                 </property>
                                </widget>
                               </item>
@@ -6035,12 +5924,6 @@
                                 <property name="whatsThis">
                                  <string/>
                                 </property>
-                                <property name="onColour">
-                                 <enum>QLed::Green</enum>
-                                </property>
-                                <property name="offColour">
-                                 <enum>QLed::Red</enum>
-                                </property>
                                </widget>
                               </item>
                              </layout>
@@ -6057,6 +5940,9 @@
                          </property>
                          <property name="whatsThis">
                           <string/>
+                         </property>
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
                          </property>
                         </widget>
                        </item>
@@ -6949,12 +6835,6 @@
                 <property name="whatsThis">
                  <string/>
                 </property>
-                <property name="onColour">
-                 <enum>QLed::Green</enum>
-                </property>
-                <property name="offColour">
-                 <enum>QLed::Red</enum>
-                </property>
                </widget>
               </item>
               <item>
@@ -7464,12 +7344,6 @@
                 <property name="whatsThis">
                  <string/>
                 </property>
-                <property name="onColour">
-                 <enum>QLed::Green</enum>
-                </property>
-                <property name="offColour">
-                 <enum>QLed::Red</enum>
-                </property>
                </widget>
               </item>
               <item>
@@ -7729,24 +7603,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QLed</class>
-   <extends>QWidget</extends>
-   <header>pydm.widgets.QLed</header>
-  </customwidget>
-  <customwidget>
-   <class>PyDMLabel</class>
-   <extends>QLabel</extends>
-   <header>pydm.widgets.label</header>
-  </customwidget>
-  <customwidget>
    <class>PyDMPushButton</class>
    <extends>QPushButton</extends>
    <header>pydm.widgets.pushbutton</header>
-  </customwidget>
-  <customwidget>
-   <class>PyDMLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>pydm.widgets.line_edit</header>
   </customwidget>
   <customwidget>
    <class>PyDMCheckbox</class>
@@ -7759,9 +7618,24 @@
    <header>pydm.widgets.scrollbar</header>
   </customwidget>
   <customwidget>
+   <class>PyDMLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>pydm.widgets.line_edit</header>
+  </customwidget>
+  <customwidget>
    <class>PyDMLed</class>
    <extends>QLed</extends>
    <header>pydm.widgets.led</header>
+  </customwidget>
+  <customwidget>
+   <class>QLed</class>
+   <extends>QWidget</extends>
+   <header>pydm.widgets.QLed</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMLabel</class>
+   <extends>QLabel</extends>
+   <header>pydm.widgets.label</header>
   </customwidget>
  </customwidgets>
  <resources/>
