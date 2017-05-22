@@ -3196,7 +3196,7 @@
           <x>0</x>
           <y>0</y>
           <width>971</width>
-          <height>811</height>
+          <height>831</height>
          </rect>
         </property>
         <property name="frameShape">
@@ -3233,13 +3233,13 @@
                   <property name="minimumSize">
                    <size>
                     <width>460</width>
-                    <height>125</height>
+                    <height>135</height>
                    </size>
                   </property>
                   <property name="maximumSize">
                    <size>
                     <width>460</width>
-                    <height>125</height>
+                    <height>135</height>
                    </size>
                   </property>
                   <property name="font">
@@ -3541,13 +3541,13 @@
                   <property name="minimumSize">
                    <size>
                     <width>460</width>
-                    <height>220</height>
+                    <height>230</height>
                    </size>
                   </property>
                   <property name="maximumSize">
                    <size>
                     <width>460</width>
-                    <height>2222</height>
+                    <height>230</height>
                    </size>
                   </property>
                   <property name="font">
@@ -4899,13 +4899,13 @@
                   <property name="minimumSize">
                    <size>
                     <width>460</width>
-                    <height>125</height>
+                    <height>135</height>
                    </size>
                   </property>
                   <property name="maximumSize">
                    <size>
                     <width>460</width>
-                    <height>125</height>
+                    <height>135</height>
                    </size>
                   </property>
                   <property name="font">
@@ -5207,13 +5207,13 @@
                   <property name="minimumSize">
                    <size>
                     <width>460</width>
-                    <height>220</height>
+                    <height>230</height>
                    </size>
                   </property>
                   <property name="maximumSize">
                    <size>
                     <width>460</width>
-                    <height>2222</height>
+                    <height>230</height>
                    </size>
                   </property>
                   <property name="font">
@@ -7729,9 +7729,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QLed</class>
-   <extends>QWidget</extends>
-   <header>pydm.widgets.QLed</header>
+   <class>PyDMLed</class>
+   <extends>QLed</extends>
+   <header>pydm.widgets.led</header>
   </customwidget>
   <customwidget>
    <class>PyDMLabel</class>
@@ -7739,19 +7739,9 @@
    <header>pydm.widgets.label</header>
   </customwidget>
   <customwidget>
-   <class>PyDMPushButton</class>
-   <extends>QPushButton</extends>
-   <header>pydm.widgets.pushbutton</header>
-  </customwidget>
-  <customwidget>
    <class>PyDMLineEdit</class>
    <extends>QLineEdit</extends>
    <header>pydm.widgets.line_edit</header>
-  </customwidget>
-  <customwidget>
-   <class>PyDMCheckbox</class>
-   <extends>QCheckBox</extends>
-   <header>pydm.widgets.checkbox</header>
   </customwidget>
   <customwidget>
    <class>PyDMScrollBar</class>
@@ -7759,9 +7749,19 @@
    <header>pydm.widgets.scrollbar</header>
   </customwidget>
   <customwidget>
-   <class>PyDMLed</class>
-   <extends>QLed</extends>
-   <header>pydm.widgets.led</header>
+   <class>PyDMPushButton</class>
+   <extends>QPushButton</extends>
+   <header>pydm.widgets.pushbutton</header>
+  </customwidget>
+  <customwidget>
+   <class>QLed</class>
+   <extends>QWidget</extends>
+   <header>pydm.widgets.QLed</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMCheckbox</class>
+   <extends>QCheckBox</extends>
+   <header>pydm.widgets.checkbox</header>
   </customwidget>
  </customwidgets>
  <resources/>
