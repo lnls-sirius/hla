@@ -6,8 +6,7 @@ from os import path
 class showCurrLT(Display):
     def __init__(self, parent=None, args=None):
         super(showCurrLT, self).__init__(parent=parent)
-        self._currlt_pv = PV('SI-Glob:AP-CurrLT:Lifetime-Mon')
-        self._currlt_pv.add_callback(self.formatCurrLT)
+        self.ui.PyDMMultiTimePlot.trace0_receive_value.connect(self.formatCurrLT)
         self.ui.CurrLT.setText("0:00:00")
 
     def ui_filename(self):
@@ -16,7 +15,7 @@ class showCurrLT(Display):
     def ui_filepath(self):
         return path.join(path.dirname(path.realpath(__file__)), self.ui_filename())
 
-    def formatCurrLT(self, value, **kwargs):
+    def formatCurrLT(self, value):
         lt = value
         H = str(int(lt//3600))
         m = str(int((lt%3600)//60))
