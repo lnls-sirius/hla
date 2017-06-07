@@ -3,6 +3,7 @@ import sys
 from pydm import PyDMApplication
 from pydm.PyQt.QtCore import pyqtSlot
 from pydm.PyQt.QtGui import QMainWindow, QAction, QMenuBar
+from siriusdm.as_ps_cycle import PsCycleWindow
 from siriusdm.as_ma_control import ToBoosterMagnetControlWindow
 from siriusdm.as_ma_control import BoosterMagnetControlWindow
 from siriusdm.as_ma_control import ToSiriusMagnetControlWindow
@@ -16,6 +17,9 @@ class ControlApplication(QMainWindow):
         self._setupUi()
 
     def _setupUi(self):
+        openCyclePanel = QAction("PS Cycling", self)
+        openCyclePanel.triggered.connect(self._openCyclePanel)
+
         openLTBMagnetControlPanel = QAction("LTB Magnets", self)
         openLTBMagnetControlPanel.triggered.connect(self._openLTBMagnetsWindow)
         openBoosterMagnetControlPanel = QAction("Booster Magnets", self)
@@ -26,12 +30,15 @@ class ControlApplication(QMainWindow):
         openSiriusMagnetControlPanel.triggered.connect(self._openSiriusMagnetsWindow)
 
         openBoosterConfiguration = QAction("Booster Configuration", self)
-        openBoosterConfiguration.triggered.connect(lambda: self._openConfigurationWindow('BO'))
+        openBoosterConfiguration.triggered.connect(lambda: self._openConfigurationWindow('BoForcePvs'))
         openSiriusConfiguration = QAction("Sirius Configuration", self)
-        openSiriusConfiguration.triggered.connect(lambda: self._openConfigurationWindow('SI'))
+        openSiriusConfiguration.triggered.connect(lambda: self._openConfigurationWindow('SiForcePvs'))
 
         menubar = QMenuBar(self)
         menubar.setNativeMenuBar(False)
+
+        psMenu = menubar.addMenu("Power Supplies")
+        psMenu.addAction(openCyclePanel)
 
         magnetsMenu = menubar.addMenu("&Magnet")
         magnetsMenu.addAction(openLTBMagnetControlPanel)
@@ -47,6 +54,10 @@ class ControlApplication(QMainWindow):
         self.setGeometry(300, 300, 300, 300)
         self.setWindowTitle("Test Application")
         self.show()
+
+    def _openCyclePanel(self, section):
+        self._windows.append(PsCycleWindow(self))
+        self._windows[-1].open()
 
     def _openConfigurationWindow(self, section):
         self._windows.append(ConfigManagerWindow(section, self))

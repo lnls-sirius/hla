@@ -3,6 +3,6 @@ from pydm import PyDMApplication
 from siriusdm.as_config_manager import ConfigManagerWindow
 
 app = PyDMApplication(None, sys.argv)
-window = ConfigManagerWindow('BO')
+window = ConfigManagerWindow('BoForcePvs')
 window.show()
 sys.exit(app.exec_())
