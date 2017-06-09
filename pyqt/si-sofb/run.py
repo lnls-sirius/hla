@@ -1,15 +1,14 @@
-from PyQt5 import uic
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QLabel
-from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QGridLayout
-from PyQt5.QtWidgets import QSizePolicy, QSpacerItem
-from pydm import PyDMApplication
-from pydm.widgets.checkbox import PyDMCheckbox
-from pydm.widgets.led import PyDMLed
 import sys
+from PyQt5 import uic
+from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtCore import Qt
+from pydm import PyDMApplication
+from selection_matrix import SelectionMatrix
+from register_menu import RegisterMenu
 
-subsections = ('M1', 'M2', 'C1-1', 'C1-2', 'C2', 'C3-1', 'C3-2', 'C4')
-dev = 'BPMX'
-indices = list(range(1,20*len(subsections)+1))
+NR_BPMs = 160
+NR_CHs  = 120
+NR_CVs  = 160
 
 def main():
     app = PyDMApplication()
@@ -18,70 +17,42 @@ def main():
     #uii = Ui_MainWindow()
     #uii.setupUi(main_win)
     main_win = uic.loadUi('main_window.ui')
-    wid = main_win.tab_2
-    gl = QGridLayout(wid)
-    vl = mk_matrix(wid,subsections,dev,indices)
-    gl.addItem(vl,0,0)
-    vspace = QSpacerItem(40, 20, QSizePolicy.Minimum, QSizePolicy.Expanding)
-    gl.addItem(vl,1,0)
+    for dev in ('BPMX', 'BPMY', 'CH', 'CV'):
+        wid = getattr(main_win,'Widget_'+dev+'List')
+        SelectionMatrix(wid,dev)
+
+    IndividualInteligence(main_win)
+    Signal2Slots(main_win)
     main_win.show()
     sys.exit(app.exec_())
 
-def mk_matrix(parent,subsections,dev,indices):
-    len_ = len(subsections)
-    sections = ['{0:02d}'.format(i) for i in range(1,21)]
-    vl = QVBoxLayout()
-    wid = mk_line(parent, '00', subsections, dev, list(range(len_)), True)
-    vl.addWidget(wid)
-    for i,section in enumerate(sections):
-        wid = mk_line(parent, section, subsections, dev, indices[i*len_:(i+1)*len_], False)
-        vl.addWidget(wid)
-    return vl
+class Signal2Slots:
+    def __init__(self,main_window):
+        self.main_window = main_window
+        self.main_window.PyDMCB_OrbitMode.valueChanged.connect(self.PyDMCB_OrbitMode_2_OfflineOrbit)
 
-def mk_line(parent, section, subsections, dev, indices, header):
-    label = section+dev
-    wid = QWidget(parent)
-    if int(section) % 2:
-        wid.setStyleSheet('background-color: rgb(220, 220, 220);')
-    wid.setObjectName('Wid_'+label)
-    hl = QHBoxLayout(wid)
-    hl.setObjectName('HL_'+label)
-    hspace = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-    hl.addItem(hspace)
-    lab = QLabel(wid)
-    lab.setObjectName('LB_'+label)
-    lab.setText('  ' if header else section)
-    hl.addWidget(lab)
-    hspace = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-    hl.addItem(hspace)
-    for subsection, index in zip(subsections, indices):
-        if header:
-            lab = QLabel(wid)
-            lab.setObjectName('LB_'+dev+subsection)
-            lab.setText(subsection)
-            hl.addWidget(lab)
+    def PyDMCB_OrbitMode_2_OfflineOrbit(self,int_):
+        if int_:
+            self.main_window.LB_OfflineOrbit.setDisabled()
+            self.main_window.CB_OfflineOrbit.setDisabled()
         else:
-            subhl = mk_unit(wid, section, subsection, dev, index)
-            hl.addLayout(subhl)
-        hspace = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-        hl.addItem(hspace)
-    return wid
+            self.main_window.LB_OfflineOrbit.setEnabled()
+            self.main_window.CB_OfflineOrbit.setEnabled()
 
-def mk_unit(parent, section, subsection, dev, index):
-    label = dev+section+subsection
-    hl = QHBoxLayout()
-    hl.setObjectName('HL_'+label)
-    cb = PyDMCheckbox(parent)
-    cb.setObjectName('PyDMCB_'+label)
-    cb.channel = 'ca://'+dev+'EnblList-SP'
-    cb.pvbit   = index
-    hl.addWidget(cb)
-    led = PyDMLed(parent)
-    led.setObjectName('PyDMLed_'+label)
-    led.channel = 'ca://'+dev+'EnblList-RB'
-    led.pvbit   = index
-    hl.addWidget(led)
-    return hl
+class IndividualInteligence:
+    def __init__(self,main_window):
+        self.main_window = main_window
+        self.setup()
+
+    def setup(self):
+        # Create Context Menus for Registers and assign them to the clicked signal
+        for i in range(1,10):
+            cm  = RegisterMenu(self.main_window,i)
+            setattr(self.main_window,'CM_Register'+str(i),cm)
+            pb = getattr(self.main_window,'PB_Register'+str(i))
+            pb.setContextMenuPolicy(Qt.CustomContextMenu)
+            pb.setMenu(cm)
+            pb.clicked.connect(pb.showMenu)
 
 #    QtCore.QMetaObject.connectSlotsByName(Form)
 if __name__ == '__main__':
