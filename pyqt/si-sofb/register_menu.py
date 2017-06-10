@@ -37,8 +37,15 @@ class RegisterMenu(QMenu):
     def setupUi(self):
         act = self.addAction('&Load Orbit')
         act.triggered.connect(self._load_orbit)
-        act = self.addAction('Register &Current Orbit')
-        act.triggered.connect(self._register_orbit)
+        # act = self.addAction('Register &Current Orbit')
+        # act.triggered.connect(self._register_orbit)
+        menu = self.addMenu('Register &Orbit')
+        act = menu.addAction('Last &Measured Orbit')
+        act.triggered.connect(self._register_orbit('orb'))
+        act = menu.addAction('Re&ference Orbit')
+        act.triggered.connect(self._register_orbit('ref'))
+        act = menu.addAction('&Offline Orbit')
+        act.triggered.connect(self._register_orbit('off'))
         act = self.addAction('&Reset Orbit')
         act.triggered.connect(self._reset_orbit)
         act = self.addAction('&Save Registered Orbit')
@@ -59,10 +66,19 @@ class RegisterMenu(QMenu):
         ze = _np.zeros(self._orbx.shape)
         self._update_and_emit(ze, ze.copy(),'', 'Empty')
 
-    def _register_orbit(self):
-        orbx = self.main_window.SOFB_orbx
-        orby = self.main_window.SOFB_orby
-        self._update_and_emit(orbx,orby,'', 'Orbit Registered.')
+    def _register_orbit(self,flag):
+        def register(self):
+            if flag == 'orb':
+                orbx = self.main_window.SOFB_orbx
+                orby = self.main_window.SOFB_orby
+            elif flag == 'ref':
+                orbx = self.main_window.SOFB_reforbx
+                orby = self.main_window.SOFB_reforby
+            elif flag == 'off':
+                orbx = self.main_window.SOFB_offlineorbx
+                orby = self.main_window.SOFB_offlineorby
+            self._update_and_emit(orbx,orby,'', 'Orbit Registered.')
+        return register
 
     def _save_orbit(self,register):
         sub_orbx = _np.zeros(self._orbx.shape)
