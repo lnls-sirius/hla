@@ -14,18 +14,18 @@ NR_CVs  = 160
 def create_additional_PVs(main_window):
     main_window.PV_SOFBOnOffline = PyDMWidget(main_window,'ca://SI-Glob:AP-SOFB:OrbitOnOffline-Sel')
 
-    main_window.PV_SOFBOnOffline = PyDMWidget(main_window,'ca://SI-Glob:AP-SOFB:OfflineOrbitX-SP')
-    main_window.PV_SOFBOnOffline = PyDMWidget(main_window,'ca://SI-Glob:AP-SOFB:OfflineOrbitX-RB')
-    main_window.PV_SOFBOnOffline = PyDMWidget(main_window,'ca://SI-Glob:AP-SOFB:OfflineOrbitY-SP')
-    main_window.PV_SOFBOnOffline = PyDMWidget(main_window,'ca://SI-Glob:AP-SOFB:OfflineOrbitY-RB')
+    main_window.PV_SOFBOOfflineOrbitXSP = PyDMWidget(main_window,'ca://SI-Glob:AP-SOFB:OfflineOrbitX-SP')
+    main_window.PV_SOFBOOfflineOrbitXRB = PyDMWidget(main_window,'ca://SI-Glob:AP-SOFB:OfflineOrbitX-RB')
+    main_window.PV_SOFBOOfflineOrbitYSP = PyDMWidget(main_window,'ca://SI-Glob:AP-SOFB:OfflineOrbitY-SP')
+    main_window.PV_SOFBOOfflineOrbitYRB = PyDMWidget(main_window,'ca://SI-Glob:AP-SOFB:OfflineOrbitY-RB')
 
-    main_window.PV_SOFBOnOffline = PyDMWidget(main_window,'ca://SI-Glob:AP-SOFB:OrbitRefX-SP')
-    main_window.PV_SOFBOnOffline = PyDMWidget(main_window,'ca://SI-Glob:AP-SOFB:OrbitRefX-RB')
-    main_window.PV_SOFBOnOffline = PyDMWidget(main_window,'ca://SI-Glob:AP-SOFB:OrbitRefY-SP')
-    main_window.PV_SOFBOnOffline = PyDMWidget(main_window,'ca://SI-Glob:AP-SOFB:OrbitRefY-RB')
+    main_window.PV_SOFBOOrbitRefXSP = PyDMWidget(main_window,'ca://SI-Glob:AP-SOFB:OrbitRefX-SP')
+    main_window.PV_SOFBOOrbitRefXRB = PyDMWidget(main_window,'ca://SI-Glob:AP-SOFB:OrbitRefX-RB')
+    main_window.PV_SOFBOOrbitRefYSP = PyDMWidget(main_window,'ca://SI-Glob:AP-SOFB:OrbitRefY-SP')
+    main_window.PV_SOFBOOrbitRefYRB = PyDMWidget(main_window,'ca://SI-Glob:AP-SOFB:OrbitRefY-RB')
 
-    main_window.PV_SOFBOnOffline = PyDMWidget(main_window,'ca://SI-Glob:AP-SOFB:OnlineOrbitX-Mon')
-    main_window.PV_SOFBOnOffline = PyDMWidget(main_window,'ca://SI-Glob:AP-SOFB:OnlineOrbitY-Mon')
+    main_window.PV_SOFBOOnlineOrbitXMon = PyDMWidget(main_window,'ca://SI-Glob:AP-SOFB:OnlineOrbitX-Mon')
+    main_window.PV_SOFBOOnlineOrbitYMon = PyDMWidget(main_window,'ca://SI-Glob:AP-SOFB:OnlineOrbitY-Mon')
 
 def main():
     app = PyDMApplication()
