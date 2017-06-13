@@ -3,6 +3,7 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtCore import Qt
 from pydm import PyDMApplication
+from pydm.widgets.widget import PyDMWidget
 from selection_matrix import SelectionMatrix
 from register_menu import RegisterMenu
 
@@ -10,19 +11,32 @@ NR_BPMs = 160
 NR_CHs  = 120
 NR_CVs  = 160
 
+def create_additional_PVs(main_window):
+    main_window.PV_SOFBOnOffline = PyDMWidget(main_window,'ca://SI-Glob:AP-SOFB:OrbitOnOffline-Sel')
+
+    main_window.PV_SOFBOnOffline = PyDMWidget(main_window,'ca://SI-Glob:AP-SOFB:OfflineOrbitX-SP')
+    main_window.PV_SOFBOnOffline = PyDMWidget(main_window,'ca://SI-Glob:AP-SOFB:OfflineOrbitX-RB')
+    main_window.PV_SOFBOnOffline = PyDMWidget(main_window,'ca://SI-Glob:AP-SOFB:OfflineOrbitY-SP')
+    main_window.PV_SOFBOnOffline = PyDMWidget(main_window,'ca://SI-Glob:AP-SOFB:OfflineOrbitY-RB')
+
+    main_window.PV_SOFBOnOffline = PyDMWidget(main_window,'ca://SI-Glob:AP-SOFB:OrbitRefX-SP')
+    main_window.PV_SOFBOnOffline = PyDMWidget(main_window,'ca://SI-Glob:AP-SOFB:OrbitRefX-RB')
+    main_window.PV_SOFBOnOffline = PyDMWidget(main_window,'ca://SI-Glob:AP-SOFB:OrbitRefY-SP')
+    main_window.PV_SOFBOnOffline = PyDMWidget(main_window,'ca://SI-Glob:AP-SOFB:OrbitRefY-RB')
+
+    main_window.PV_SOFBOnOffline = PyDMWidget(main_window,'ca://SI-Glob:AP-SOFB:OnlineOrbitX-Mon')
+    main_window.PV_SOFBOnOffline = PyDMWidget(main_window,'ca://SI-Glob:AP-SOFB:OnlineOrbitY-Mon')
+
 def main():
     app = PyDMApplication()
-    #app = QApplication([])
-    #main_win = QMainWindow()
-    #uii = Ui_MainWindow()
-    #uii.setupUi(main_win)
     main_win = uic.loadUi('main_window.ui')
+    create_additional_PVs(main_win)
     for dev in ('BPMX', 'BPMY', 'CH', 'CV'):
         wid = getattr(main_win,'Widget_'+dev+'List')
         SelectionMatrix(wid,dev)
 
     IndividualInteligence(main_win)
-    Signal2Slots(main_win)
+    # Signal2Slots(main_win)
     main_win.show()
     sys.exit(app.exec_())
 
@@ -53,6 +67,7 @@ class IndividualInteligence:
             pb.setContextMenuPolicy(Qt.CustomContextMenu)
             pb.setMenu(cm)
             pb.clicked.connect(pb.showMenu)
+
 
 #    QtCore.QMetaObject.connectSlotsByName(Form)
 if __name__ == '__main__':

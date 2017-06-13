@@ -18,7 +18,7 @@ class RegisterMenu(QMenu):
         self.register = register
         self.string_status = 'Empty'
         regLB = getattr(self.main_window,'LB_Register'+str(register))
-        self.new_string_signal.connect(regLb.setText)
+        self.new_string_signal.connect(regLB.setText)
         self.new_string_signal.emit(self.string_status)
 
         self.last_dir = self.DEFAULT_DIR
