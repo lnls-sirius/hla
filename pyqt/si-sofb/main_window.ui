@@ -24,7 +24,7 @@
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="cursor">
-       <cursorShape>IBeamCursor</cursorShape>
+       <cursorShape>ArrowCursor</cursorShape>
       </property>
       <property name="tabShape">
        <enum>QTabWidget::Triangular</enum>
@@ -577,6 +577,9 @@
                <height>0</height>
               </size>
              </property>
+             <property name="editable">
+              <bool>true</bool>
+             </property>
              <property name="currentIndex">
               <number>0</number>
              </property>
@@ -761,6 +764,11 @@
              <item>
               <property name="text">
                <string>Register 9</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Zero</string>
               </property>
              </item>
             </widget>
@@ -1033,6 +1041,13 @@
           </property>
           <property name="tracesCount" stdset="0">
            <number>1</number>
+          </property>
+          <property name="trace0Color" stdset="0">
+           <color>
+            <red>255</red>
+            <green>0</green>
+            <blue>0</blue>
+           </color>
           </property>
           <property name="trace0Symbol" stdset="0">
            <enum>BaseMultiPlot::Circle</enum>
@@ -1329,6 +1344,13 @@
           <property name="trace0Title" stdset="0">
            <string>Line 1</string>
           </property>
+          <property name="trace1Color" stdset="0">
+           <color>
+            <red>0</red>
+            <green>0</green>
+            <blue>255</blue>
+           </color>
+          </property>
           <property name="trace1LineStyle" stdset="0">
            <enum>BaseMultiPlot::Dash</enum>
           </property>
@@ -1567,7 +1589,33 @@
         <string>Correctors</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_14">
-        <item row="0" column="0">
+        <item row="2" column="0">
+         <spacer name="horizontalSpacer_11">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="2" column="2">
+         <spacer name="horizontalSpacer_12">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="0" column="0" colspan="9">
          <widget class="PyDMMultiWaveformPlot" name="PyDMMWP_CH">
           <property name="toolTip">
            <string/>
@@ -1584,9 +1632,125 @@
             </color>
            </brush>
           </property>
+          <property name="showLegend">
+           <bool>true</bool>
+          </property>
+          <property name="XAxis1Label">
+           <string>Longidutinal Position [m]</string>
+          </property>
+          <property name="XAxis1ShowLabel">
+           <bool>true</bool>
+          </property>
+          <property name="YAxis1Label">
+           <string>a1b</string>
+          </property>
+          <property name="tracesCount" stdset="0">
+           <number>8</number>
+          </property>
+          <property name="trace0Color" stdset="0">
+           <color>
+            <red>0</red>
+            <green>0</green>
+            <blue>255</blue>
+           </color>
+          </property>
+          <property name="trace0Symbol" stdset="0">
+           <enum>BaseMultiPlot::Circle</enum>
+          </property>
+          <property name="trace0Title" stdset="0">
+           <string>Setpoint</string>
+          </property>
+          <property name="trace1Color" stdset="0">
+           <color>
+            <red>172</red>
+            <green>172</green>
+            <blue>172</blue>
+           </color>
+          </property>
+          <property name="trace1LineStyle" stdset="0">
+           <enum>BaseMultiPlot::NoLine</enum>
+          </property>
+          <property name="trace1Symbol" stdset="0">
+           <enum>BaseMultiPlot::Circle</enum>
+          </property>
+          <property name="trace1Title" stdset="0">
+           <string/>
+          </property>
+          <property name="trace2Color" stdset="0">
+           <color>
+            <red>125</red>
+            <green>125</green>
+            <blue>255</blue>
+           </color>
+          </property>
+          <property name="trace2Symbol" stdset="0">
+           <enum>BaseMultiPlot::Circle</enum>
+          </property>
+          <property name="trace2Title" stdset="0">
+           <string>Readback</string>
+          </property>
+          <property name="trace3Color" stdset="0">
+           <color>
+            <red>172</red>
+            <green>172</green>
+            <blue>172</blue>
+           </color>
+          </property>
+          <property name="trace3LineStyle" stdset="0">
+           <enum>BaseMultiPlot::NoLine</enum>
+          </property>
+          <property name="trace3Symbol" stdset="0">
+           <enum>BaseMultiPlot::Circle</enum>
+          </property>
+          <property name="trace3Title" stdset="0">
+           <string/>
+          </property>
+          <property name="trace4Color" stdset="0">
+           <color>
+            <red>205</red>
+            <green>205</green>
+            <blue>255</blue>
+           </color>
+          </property>
+          <property name="trace4Symbol" stdset="0">
+           <enum>BaseMultiPlot::Circle</enum>
+          </property>
+          <property name="trace4Title" stdset="0">
+           <string>Reference</string>
+          </property>
+          <property name="trace5Color" stdset="0">
+           <color>
+            <red>172</red>
+            <green>172</green>
+            <blue>172</blue>
+           </color>
+          </property>
+          <property name="trace5LineStyle" stdset="0">
+           <enum>BaseMultiPlot::NoLine</enum>
+          </property>
+          <property name="trace5Symbol" stdset="0">
+           <enum>BaseMultiPlot::Circle</enum>
+          </property>
+          <property name="trace5Title" stdset="0">
+           <string/>
+          </property>
          </widget>
         </item>
-        <item row="1" column="0">
+        <item row="2" column="5">
+         <widget class="QCheckBox" name="checkBox_3">
+          <property name="text">
+           <string>Reference</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="7">
+         <widget class="QCheckBox" name="checkBox_2">
+          <property name="text">
+           <string>Calculated Kicks</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" colspan="9">
          <widget class="PyDMMultiWaveformPlot" name="PyDMMWP_CV">
           <property name="toolTip">
            <string/>
@@ -1605,6 +1769,59 @@
           </property>
          </widget>
         </item>
+        <item row="2" column="3">
+         <widget class="QCheckBox" name="checkBox_4">
+          <property name="text">
+           <string>Readback</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="8">
+         <spacer name="horizontalSpacer_10">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="2" column="1">
+         <widget class="QCheckBox" name="checkBox">
+          <property name="text">
+           <string>Setpoint</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="4">
+         <spacer name="horizontalSpacer_13">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="2" column="6">
+         <spacer name="horizontalSpacer_14">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="ResponseMatrix">
@@ -1612,7 +1829,41 @@
         <string>Response Matrix</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_6">
-        <item row="2" column="1">
+        <item row="3" column="2" rowspan="3">
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="0" column="1" colspan="3">
+         <widget class="QLabel" name="label">
+          <property name="styleSheet">
+           <string notr="true">font: 16pt &quot;Sans Serif&quot;;
+font-weight: bold;</string>
+          </property>
+          <property name="text">
+           <string>Response Matrix</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1" rowspan="4">
+         <widget class="QPushButton" name="PB_LoadRespMatrix">
+          <property name="text">
+           <string>Load Matrix From File</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="3">
          <widget class="PyDMPushButton" name="PyDMPB_MeasMat">
           <property name="enabled">
            <bool>true</bool>
@@ -1663,47 +1914,7 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="0">
-         <widget class="QPushButton" name="PB_LoadRespMatrix">
-          <property name="text">
-           <string>Load Matrix</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="0">
-         <widget class="PyDMLabel" name="PyDMLB_MeasStatus">
-          <property name="toolTip">
-           <string/>
-          </property>
-          <property name="whatsThis">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="0">
-         <widget class="QLabel" name="LB_NrSIngVals">
-          <property name="text">
-           <string>Number of SVs:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="1">
-         <widget class="PyDMSpinBox" name="PyDMSB_NrSingVals">
-          <property name="toolTip">
-           <string/>
-          </property>
-          <property name="whatsThis">
-           <string/>
-          </property>
-          <property name="decimals">
-           <number>0</number>
-          </property>
-          <property name="limitsFromPV" stdset="0">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="2">
+        <item row="3" column="4">
          <widget class="PyDMPushButton" name="PyDMPB_AbortMeas">
           <property name="enabled">
            <bool>true</bool>
@@ -1754,83 +1965,7 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="0" colspan="4">
-         <widget class="PyDMMultiWaveformPlot" name="PyDMMWP_SingVals">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>1</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string/>
-          </property>
-          <property name="whatsThis">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2" colspan="2">
-         <widget class="PyDMImageView" name="PyDMIV_InvMatrix">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>2</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="toolTip">
-           <string/>
-          </property>
-          <property name="whatsThis">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0" colspan="2">
-         <widget class="PyDMImageView" name="PyDMIV_RespMatrix">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>2</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="toolTip">
-           <string/>
-          </property>
-          <property name="whatsThis">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="2">
-         <widget class="PyDMLabel" name="PyDMLB_NrSingVals">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string/>
-          </property>
-          <property name="whatsThis">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="1">
+        <item row="5" column="3">
          <widget class="PyDMPushButton" name="PyDMPB_ResetStatus">
           <property name="enabled">
            <bool>true</bool>
@@ -1881,6 +2016,215 @@
           </property>
          </widget>
         </item>
+        <item row="5" column="7">
+         <widget class="PyDMLabel" name="PyDMLB_NrSingVals">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="whatsThis">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="6">
+         <widget class="PyDMSpinBox" name="PyDMSB_NrSingVals">
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="whatsThis">
+           <string/>
+          </property>
+          <property name="decimals">
+           <number>0</number>
+          </property>
+          <property name="limitsFromPV" stdset="0">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="5" rowspan="3">
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="1" column="0" colspan="4">
+         <widget class="PyDMImageView" name="PyDMIV_RespMatrix">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>2</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="whatsThis">
+           <string/>
+          </property>
+          <property name="imageChannel">
+           <string>ca://SI-Glob:AP-SOFB:RSPMatrix-RB</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="4" colspan="4">
+         <widget class="QLabel" name="label_2">
+          <property name="styleSheet">
+           <string notr="true">font: 16pt &quot;Sans Serif&quot;;
+font-weight: bold;</string>
+          </property>
+          <property name="text">
+           <string>Inverse of Response Matrix</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="4">
+         <widget class="PyDMLabel" name="PyDMLB_MeasStatus">
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="whatsThis">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="6" colspan="2">
+         <widget class="QLabel" name="LB_NrSIngVals">
+          <property name="text">
+           <string>Number of SVs to use:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0" colspan="9">
+         <widget class="PyDMMultiWaveformPlot" name="PyDMMWP_SingVals">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>1</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="whatsThis">
+           <string/>
+          </property>
+          <property name="showXGrid">
+           <bool>true</bool>
+          </property>
+          <property name="showYGrid">
+           <bool>true</bool>
+          </property>
+          <property name="backgroundColor">
+           <color>
+            <red>255</red>
+            <green>255</green>
+            <blue>255</blue>
+           </color>
+          </property>
+          <property name="showLegend">
+           <bool>false</bool>
+          </property>
+          <property name="XAxis1Label">
+           <string>Number</string>
+          </property>
+          <property name="XAxis1ShowLabel">
+           <bool>true</bool>
+          </property>
+          <property name="YAxis1Label">
+           <string>Singular Values</string>
+          </property>
+          <property name="YAxis1ShowLabel">
+           <bool>true</bool>
+          </property>
+          <property name="trace0Color" stdset="0">
+           <color>
+            <red>0</red>
+            <green>0</green>
+            <blue>0</blue>
+           </color>
+          </property>
+          <property name="trace0Title" stdset="0">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="4" colspan="5">
+         <widget class="PyDMImageView" name="PyDMIV_InvMatrix">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>2</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="whatsThis">
+           <string/>
+          </property>
+          <property name="imageChannel">
+           <string>ca://SI-Glob:AP-SOFB:InvRSPMatrix-Mon</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="8" rowspan="3">
+         <spacer name="horizontalSpacer_4">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="3" column="0" rowspan="3">
+         <spacer name="horizontalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="BPMXList">
@@ -1898,7 +2242,7 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1067</width>
+             <width>1064</width>
              <height>887</height>
             </rect>
            </property>
@@ -1958,6 +2302,15 @@ font-weight: bold;</string>
         setting to an absolute value
     </string>
           </property>
+          <property name="text">
+           <string>Enable All</string>
+          </property>
+          <property name="channel" stdset="0">
+           <string>ca://SI-Glob:AP-SOFB:BPMXEnblList-SP</string>
+          </property>
+          <property name="pressValue" stdset="0">
+           <string>1</string>
+          </property>
          </widget>
         </item>
         <item row="0" column="0">
@@ -1991,7 +2344,7 @@ font-weight: bold;</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1067</width>
+             <width>1064</width>
              <height>887</height>
             </rect>
            </property>
@@ -2051,6 +2404,12 @@ font-weight: bold;</string>
         setting to an absolute value
     </string>
           </property>
+          <property name="text">
+           <string>Enable All</string>
+          </property>
+          <property name="channel" stdset="0">
+           <string>ca://SI-Glob:AP-SOFB:BPMYEnblList-SP</string>
+          </property>
          </widget>
         </item>
         <item row="0" column="0">
@@ -2084,7 +2443,7 @@ font-weight: bold;</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1067</width>
+             <width>1064</width>
              <height>887</height>
             </rect>
            </property>
@@ -2144,6 +2503,12 @@ font-weight: bold;</string>
         setting to an absolute value
     </string>
           </property>
+          <property name="text">
+           <string>Enable All</string>
+          </property>
+          <property name="channel" stdset="0">
+           <string>ca://SI-Glob:AP-SOFB:CHEnblList-SP</string>
+          </property>
          </widget>
         </item>
         <item row="0" column="0">
@@ -2177,7 +2542,7 @@ font-weight: bold;</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1067</width>
+             <width>1064</width>
              <height>887</height>
             </rect>
            </property>
@@ -2237,6 +2602,12 @@ font-weight: bold;</string>
         setting to an absolute value
     </string>
           </property>
+          <property name="text">
+           <string>Enable All</string>
+          </property>
+          <property name="channel" stdset="0">
+           <string>ca://SI-Glob:AP-SOFB:CVEnblList-SP</string>
+          </property>
          </widget>
         </item>
         <item row="0" column="0">
@@ -2270,7 +2641,7 @@ font-weight: bold;</string>
    </property>
    <widget class="QMenu" name="Menu_Open">
     <property name="title">
-     <string>open</string>
+     <string>&amp;Open</string>
     </property>
     <addaction name="Action_openCorrParams"/>
     <addaction name="Action_openIOCLog"/>
@@ -3498,7 +3869,7 @@ font-weight: bold;</string>
           <x>0</x>
           <y>0</y>
           <width>254</width>
-          <height>324</height>
+          <height>293</height>
          </rect>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_17">
@@ -4023,6 +4394,9 @@ font-weight: bold;</string>
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
    <property name="enabled">
     <bool>true</bool>
    </property>
@@ -4040,6 +4414,9 @@ font-weight: bold;</string>
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>IOC Log</string>
    </property>
@@ -4049,6 +4426,9 @@ font-weight: bold;</string>
   </action>
   <action name="Action_openOrbRegs">
    <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
     <bool>true</bool>
    </property>
    <property name="text">
@@ -4182,7 +4562,6 @@ font-weight: bold;</string>
   <tabstop>PB_LoadRespMatrix</tabstop>
   <tabstop>PyDMPB_MeasMat</tabstop>
   <tabstop>PyDMPB_ResetStatus</tabstop>
-  <tabstop>PyDMSB_NrSingVals</tabstop>
   <tabstop>PyDMPB_AbortMeas</tabstop>
   <tabstop>SA_BPMXList</tabstop>
   <tabstop>PyDMPB_BPMXList</tabstop>
