@@ -7,6 +7,7 @@ from pydm import PyDMApplication
 from pydm.widgets.widget import PyDMWidget
 from selection_matrix import SelectionMatrix, NR_BPMs
 from register_menu import RegisterMenu
+from graphic_controller import GraphicOrbitControllers
 
 def create_additional_PVs(main_window):
     opts = dict(parent=main_window, visible = False)
@@ -84,6 +85,8 @@ class IndividualInteligence:
         # Define Behaviour of Orbit Visualization buttons
         for i in range(1,4):
             orbC = GraphicOrbitControllers(self.main_window,i)
+
+        #
 
 
 #    QtCore.QMetaObject.connectSlotsByName(Form)
