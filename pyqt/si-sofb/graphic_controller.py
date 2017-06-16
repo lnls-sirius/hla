@@ -1,9 +1,15 @@
 import numpy as _np
+import datetime as _datetime
 from PyQt5.QtCore import pyqtSignal, QObject
+from PyQt5.QtWidgets import QFileDialog
 from selection_matrix import NR_BPMs
 
 class GraphicOrbitControllers(QObject):
+    DEFAULT_DIR = '/home/fernando'
+    EXT = '.txt'
+    EXT_FLT = 'Text Files (*.txt)'
     FMT = '{0:9.3g}'
+
     averagex_str_signal  = pyqtSignal(str)
     stdx_str_signal      = pyqtSignal(str)
     averagey_str_signal  = pyqtSignal(str)
@@ -23,6 +29,10 @@ class GraphicOrbitControllers(QObject):
     def __init__(self,main_window,index):
         super().__init__(main_window)
         self.main_window = main_window
+        self.last_dir = self.DEFAULT_DIR
+
+        pbSave= getattr(self.main_window,'PB_Line'+str(index)+'Save')
+        pbSave.clicked.connect(self._save_difference)
         cbOrb = getattr(self.main_window,'CB_Line'+str(index)+'Orb')
         cbRef = getattr(self.main_window,'CB_Line'+str(index)+'Ref')
         cbOrb.currentTextChanged.connect(self._orb_changed)
@@ -49,22 +59,23 @@ class GraphicOrbitControllers(QObject):
         self.stdx_str_signal.connect(stdx.setText)
         self.stdy_str_signal.connect(stdy.setText)
 
-        diffx = getattr(main_window.PyDMMWP_OrbitX,'setTrace'+str(index-1)+'Value')
-        avex = getattr(main_window.PyDMMWP_OrbitX,'setTrace'+str(index)+'Value')
-        aveMstdx = getattr(main_window.PyDMMWP_OrbitX,'setTrace'+str(index+1)+'Value')
-        avePstdx = getattr(main_window.PyDMMWP_OrbitX,'setTrace'+str(index+2)+'Value')
-        maskx = getattr(main_window.PyDMMWP_OrbitX,'setTrace'+str(index+3)+'Value')
+        base_ind = (index-1)*5
+        diffx = getattr(main_window.PyDMMWP_OrbitX,'setTrace'+str(base_ind)+'Value')
+        avex = getattr(main_window.PyDMMWP_OrbitX,'setTrace'+str(base_ind+1)+'Value')
+        aveMstdx = getattr(main_window.PyDMMWP_OrbitX,'setTrace'+str(base_ind+2)+'Value')
+        avePstdx = getattr(main_window.PyDMMWP_OrbitX,'setTrace'+str(base_ind+3)+'Value')
+        maskx = getattr(main_window.PyDMMWP_OrbitX,'setTrace'+str(base_ind+4)+'Value')
         self.diffx_signal.connect(diffx)
         self.averagex_signal.connect(avex)
         self.aveMstdx_signal.connect(aveMstdx)
         self.avePstdx_signal.connect(avePstdx)
         self.maskx_signal.connect(maskx)
 
-        diffy = getattr(main_window.PyDMMWP_Orbity,'setTrace'+str(index-1)+'Value')
-        avey = getattr(main_window.PyDMMWP_Orbity,'setTrace'+str(index)+'Value')
-        aveMstdy = getattr(main_window.PyDMMWP_Orbity,'setTrace'+str(index+1)+'Value')
-        avePstdy = getattr(main_window.PyDMMWP_Orbity,'setTrace'+str(index+2)+'Value')
-        masky = getattr(main_window.PyDMMWP_Orbity,'setTrace'+str(index+3)+'Value')
+        diffy = getattr(main_window.PyDMMWP_Orbity,'setTrace'+str(base_ind)+'Value')
+        avey = getattr(main_window.PyDMMWP_Orbity,'setTrace'+str(base_ind+1)+'Value')
+        aveMstdy = getattr(main_window.PyDMMWP_Orbity,'setTrace'+str(base_ind+2)+'Value')
+        avePstdy = getattr(main_window.PyDMMWP_Orbity,'setTrace'+str(base_ind+3)+'Value')
+        masky = getattr(main_window.PyDMMWP_Orbity,'setTrace'+str(base_ind+4)+'Value')
         self.diffy_signal.connect(diffy)
         self.averagey_signal.connect(avey)
         self.aveMstdy_signal.connect(aveMstdy)
@@ -160,5 +171,17 @@ class GraphicOrbitControllers(QObject):
             getattr(self,'average'+pl+'_signal').emit(ave)
             getattr(self,'aveMstd'+pl+'_signal').emit(ave-std)
             getattr(self,'avePstd'+pl+'_signal').emit(ave+std)
-            getattr(self,'mask'+pl+'_signal').emit(mask)
             getattr(self,'diff'+pl+'_signal').emit(diff)
+            if not _np.all(_np.isnan(mask)):
+                getattr(self,'mask'+pl+'_signal').emit(mask)
+
+    def _save_difference(self):
+        diffx = self.orbx - self.refx
+        diffy = self.orby - self.refy
+        header = '# ' + _datetime.datetime.now().strftime('%Y/%M/%d-%H:%M:%S') + '\n'
+        filename = QFileDialog.getSaveFileName(caption='Define a File Name to Save the Orbit',
+                                               directory=self.last_dir,
+                                               filter=self.EXT_FLT)
+        fname = filename[0]
+        fname += '' if fname.endswith(self.EXT) else self.EXT
+        _np.savetxt(fname,_np.vstack([diffx,diffy]).T, header=header)

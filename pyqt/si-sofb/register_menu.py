@@ -59,7 +59,7 @@ class RegisterMenu(QMenu):
         self._update_and_emit(ze, ze.copy(),'', 'Empty')
 
     def _register_orbit(self,flag):
-        def register(self):
+        def register(trig):
             if flag == 'orb':
                 orbx = self.main_window.PV_SOFBOrbitXMon.value
                 orby = self.main_window.PV_SOFBOrbitYMon.value
@@ -78,7 +78,7 @@ class RegisterMenu(QMenu):
                 self._update_and_emit(orbx,orby,'', 'Orbit Registered.')
         return register
 
-    def _save_orbit(self,register):
+    def _save_orbit(self,trig):
         sub_orbx = _np.zeros(self._orbx.shape)
         sub_orby = _np.zeros(self._orby.shape)
         header = '# ' + _datetime.datetime.now().strftime('%Y/%M/%d-%H:%M:%S') + '\n'
@@ -95,7 +95,7 @@ class RegisterMenu(QMenu):
                                                directory= self.last_dir,
                                                filter= self.EXT_FLT)
         if not filename[0]: return
-        orbx, orby = _np.loadtxt(filename,unpack=True)
+        orbx, orby = _np.loadtxt(filename[0],unpack=True)
         self._update_and_emit(orbx,orby,filename[0], 'Orbit Loaded: ' )
 
     def _update_and_emit(self,orbx,orby,fname, string):
