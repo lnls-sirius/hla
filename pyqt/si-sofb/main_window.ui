@@ -708,6 +708,9 @@
                <height>0</height>
               </size>
              </property>
+             <property name="editable">
+              <bool>true</bool>
+             </property>
              <property name="currentIndex">
               <number>0</number>
              </property>
@@ -802,6 +805,9 @@
                <width>0</width>
                <height>0</height>
               </size>
+             </property>
+             <property name="editable">
+              <bool>true</bool>
              </property>
              <property name="currentIndex">
               <number>1</number>
@@ -921,6 +927,9 @@
                <height>0</height>
               </size>
              </property>
+             <property name="editable">
+              <bool>true</bool>
+             </property>
              <property name="currentIndex">
               <number>0</number>
              </property>
@@ -1005,7 +1014,7 @@
          </widget>
         </item>
         <item row="3" column="0" colspan="19">
-         <widget class="PyDMMultiWaveformPlot" name="PyDMMWP_Orbity">
+         <widget class="PyDMMultiWaveformPlot" name="PyDMMWP_OrbitY">
           <property name="toolTip">
            <string/>
           </property>
@@ -3056,6 +3065,9 @@ font-weight: bold;</string>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="editable">
+             <bool>true</bool>
+            </property>
             <item>
              <property name="text">
               <string>Golden</string>
@@ -3147,6 +3159,9 @@ font-weight: bold;</string>
               <horstretch>1</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
+            </property>
+            <property name="editable">
+             <bool>true</bool>
             </property>
             <item>
              <property name="text">
@@ -4527,7 +4542,7 @@ font-weight: bold;</string>
   <tabstop>CB_Line1ShowYStat</tabstop>
   <tabstop>CB_Line2ShowYStat</tabstop>
   <tabstop>CB_Line3ShowYStat</tabstop>
-  <tabstop>PyDMMWP_Orbity</tabstop>
+  <tabstop>PyDMMWP_OrbitY</tabstop>
   <tabstop>CB_Line1Show</tabstop>
   <tabstop>CB_Line1Orb</tabstop>
   <tabstop>CB_Line1Ref</tabstop>
@@ -4721,7 +4736,7 @@ font-weight: bold;</string>
   <connection>
    <sender>CB_Line1ShowYStat</sender>
    <signal>toggled(bool)</signal>
-   <receiver>PyDMMWP_Orbity</receiver>
+   <receiver>PyDMMWP_OrbitY</receiver>
    <slot>trace1setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -4737,7 +4752,7 @@ font-weight: bold;</string>
   <connection>
    <sender>CB_Line1Show</sender>
    <signal>toggled(bool)</signal>
-   <receiver>PyDMMWP_Orbity</receiver>
+   <receiver>PyDMMWP_OrbitY</receiver>
    <slot>trace0setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -4753,7 +4768,7 @@ font-weight: bold;</string>
   <connection>
    <sender>CB_Line1Show</sender>
    <signal>toggled(bool)</signal>
-   <receiver>PyDMMWP_Orbity</receiver>
+   <receiver>PyDMMWP_OrbitY</receiver>
    <slot>trace4setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -4785,7 +4800,7 @@ font-weight: bold;</string>
   <connection>
    <sender>CB_Line2ShowYStat</sender>
    <signal>toggled(bool)</signal>
-   <receiver>PyDMMWP_Orbity</receiver>
+   <receiver>PyDMMWP_OrbitY</receiver>
    <slot>trace6setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -4801,7 +4816,7 @@ font-weight: bold;</string>
   <connection>
    <sender>CB_Line2ShowYStat</sender>
    <signal>toggled(bool)</signal>
-   <receiver>PyDMMWP_Orbity</receiver>
+   <receiver>PyDMMWP_OrbitY</receiver>
    <slot>trace7setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -4817,7 +4832,7 @@ font-weight: bold;</string>
   <connection>
    <sender>CB_Line2ShowYStat</sender>
    <signal>toggled(bool)</signal>
-   <receiver>PyDMMWP_Orbity</receiver>
+   <receiver>PyDMMWP_OrbitY</receiver>
    <slot>trace8setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -4833,7 +4848,7 @@ font-weight: bold;</string>
   <connection>
    <sender>CB_Line2Show</sender>
    <signal>toggled(bool)</signal>
-   <receiver>PyDMMWP_Orbity</receiver>
+   <receiver>PyDMMWP_OrbitY</receiver>
    <slot>trace5setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -4849,7 +4864,7 @@ font-weight: bold;</string>
   <connection>
    <sender>CB_Line2Show</sender>
    <signal>toggled(bool)</signal>
-   <receiver>PyDMMWP_Orbity</receiver>
+   <receiver>PyDMMWP_OrbitY</receiver>
    <slot>trace9setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -4881,7 +4896,7 @@ font-weight: bold;</string>
   <connection>
    <sender>CB_Line3Show</sender>
    <signal>toggled(bool)</signal>
-   <receiver>PyDMMWP_Orbity</receiver>
+   <receiver>PyDMMWP_OrbitY</receiver>
    <slot>trace10setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -4897,7 +4912,7 @@ font-weight: bold;</string>
   <connection>
    <sender>CB_Line3Show</sender>
    <signal>toggled(bool)</signal>
-   <receiver>PyDMMWP_Orbity</receiver>
+   <receiver>PyDMMWP_OrbitY</receiver>
    <slot>trace14setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -4929,7 +4944,7 @@ font-weight: bold;</string>
   <connection>
    <sender>CB_Line3ShowYStat</sender>
    <signal>toggled(bool)</signal>
-   <receiver>PyDMMWP_Orbity</receiver>
+   <receiver>PyDMMWP_OrbitY</receiver>
    <slot>trace11setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -4945,7 +4960,7 @@ font-weight: bold;</string>
   <connection>
    <sender>CB_Line3ShowYStat</sender>
    <signal>toggled(bool)</signal>
-   <receiver>PyDMMWP_Orbity</receiver>
+   <receiver>PyDMMWP_OrbitY</receiver>
    <slot>trace12setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -4961,7 +4976,7 @@ font-weight: bold;</string>
   <connection>
    <sender>CB_Line3ShowYStat</sender>
    <signal>toggled(bool)</signal>
-   <receiver>PyDMMWP_Orbity</receiver>
+   <receiver>PyDMMWP_OrbitY</receiver>
    <slot>trace13setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -5073,7 +5088,7 @@ font-weight: bold;</string>
   <connection>
    <sender>CB_Line1ShowYStat</sender>
    <signal>toggled(bool)</signal>
-   <receiver>PyDMMWP_Orbity</receiver>
+   <receiver>PyDMMWP_OrbitY</receiver>
    <slot>trace2setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -5089,7 +5104,7 @@ font-weight: bold;</string>
   <connection>
    <sender>CB_Line1ShowYStat</sender>
    <signal>toggled(bool)</signal>
-   <receiver>PyDMMWP_Orbity</receiver>
+   <receiver>PyDMMWP_OrbitY</receiver>
    <slot>trace3setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
