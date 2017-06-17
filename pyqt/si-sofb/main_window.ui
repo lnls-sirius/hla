@@ -1040,7 +1040,7 @@
            <bool>true</bool>
           </property>
           <property name="tracesCount" stdset="0">
-           <number>1</number>
+           <number>15</number>
           </property>
           <property name="trace0Color" stdset="0">
            <color>
@@ -1192,7 +1192,7 @@
            <enum>BaseMultiPlot::Circle</enum>
           </property>
           <property name="trace10Title" stdset="0">
-           <string>Line 3</string>
+           <string> Line 3</string>
           </property>
           <property name="trace11Color" stdset="0">
            <color>
