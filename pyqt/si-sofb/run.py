@@ -8,10 +8,12 @@ from pydm.widgets.widget import PyDMWidget
 from selection_matrix import SelectionMatrix, NR_BPMs
 from register_menu import RegisterMenu
 from graphic_controller import GraphicOrbitControllers
+from ioc_orbit_controllers import ReferenceController, CorrectionOrbitController
 
 def create_additional_PVs(main_window):
     opts = dict(parent=main_window, visible = False)
-    main_window.PV_SOFBOnOffline = PyDMWidget(init_channel='ca://SI-Glob:AP-SOFB:OrbitOnOffline-Sel', **opts)
+    main_window.PV_SOFBCorrectionModeSP = PyDMWidget(init_channel='ca://SI-Glob:AP-SOFB:CorrectionMode-Sel', **opts)
+    main_window.PV_SOFBCorrectionModeRB = PyDMWidget(init_channel='ca://SI-Glob:AP-SOFB:CorrectionMode-Sts', **opts)
 
     main_window.PV_SOFBOfflineOrbitXSP = PyDMWidget(init_channel='ca://SI-Glob:AP-SOFB:OfflineOrbitX-SP', **opts)
     main_window.PV_SOFBOfflineOrbitXRB = PyDMWidget(init_channel='ca://SI-Glob:AP-SOFB:OfflineOrbitX-RB', **opts)
@@ -86,7 +88,9 @@ class IndividualInteligence:
         for i in range(1,4):
             orbC = GraphicOrbitControllers(self.main_window,i)
 
-        #
+        # Define controllers for the IOC orbit and reference selection:
+        ReferenceController(self.main_window)
+        CorrectionOrbitController(self.main_window)
 
 
 #    QtCore.QMetaObject.connectSlotsByName(Form)
