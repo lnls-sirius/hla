@@ -30,7 +30,7 @@
        <enum>QTabWidget::Triangular</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -284,6 +284,9 @@
                <height>0</height>
               </size>
              </property>
+             <property name="editable">
+              <bool>true</bool>
+             </property>
              <item>
               <property name="text">
                <string>SOFB Orbit</string>
@@ -389,6 +392,9 @@
                <width>0</width>
                <height>0</height>
               </size>
+             </property>
+             <property name="editable">
+              <bool>true</bool>
              </property>
              <item>
               <property name="text">
@@ -1921,6 +1927,12 @@ font-weight: bold;</string>
           <property name="text">
            <string>Measure Matrix</string>
           </property>
+          <property name="channel" stdset="0">
+           <string>ca://SI-Glob:AP-SOFB:StartMeasRSPMtx-Cmd</string>
+          </property>
+          <property name="pressValue" stdset="0">
+           <string>1</string>
+          </property>
          </widget>
         </item>
         <item row="3" column="4">
@@ -1971,6 +1983,9 @@ font-weight: bold;</string>
           </property>
           <property name="text">
            <string>Abort</string>
+          </property>
+          <property name="channel" stdset="0">
+           <string>ca://SI-Glob:AP-SOFB:AbortMeasRSPMtx-Cmd</string>
           </property>
          </widget>
         </item>
@@ -2023,6 +2038,9 @@ font-weight: bold;</string>
           <property name="text">
            <string>Reset</string>
           </property>
+          <property name="channel" stdset="0">
+           <string>ca://SI-Glob:AP-SOFB:ResetMeasRSPMtx-Cmd</string>
+          </property>
          </widget>
         </item>
         <item row="5" column="7">
@@ -2045,6 +2063,9 @@ font-weight: bold;</string>
           <property name="whatsThis">
            <string/>
           </property>
+          <property name="channel">
+           <string>ca://SI-Glob:AP-SOFB:NumSingValues-RB</string>
+          </property>
          </widget>
         </item>
         <item row="5" column="6">
@@ -2057,6 +2078,9 @@ font-weight: bold;</string>
           </property>
           <property name="decimals">
            <number>0</number>
+          </property>
+          <property name="channel" stdset="0">
+           <string>ca://SI-Glob:AP-SOFB:NumSingValues-SP</string>
           </property>
           <property name="limitsFromPV" stdset="0">
            <bool>true</bool>
@@ -2116,6 +2140,9 @@ font-weight: bold;</string>
           </property>
           <property name="whatsThis">
            <string/>
+          </property>
+          <property name="channel">
+           <string>ca://SI-Glob:AP-SOFB:MeasRSPMtxState-Sts</string>
           </property>
          </widget>
         </item>
@@ -2187,6 +2214,9 @@ font-weight: bold;</string>
           <property name="trace0Title" stdset="0">
            <string/>
           </property>
+          <property name="trace0Channel" stdset="0">
+           <string>ca://SI-Glob:AP-SOFB:SingVals-Mon</string>
+          </property>
          </widget>
         </item>
         <item row="1" column="4" colspan="5">
@@ -2251,7 +2281,7 @@ font-weight: bold;</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1064</width>
+             <width>1067</width>
              <height>887</height>
             </rect>
            </property>
@@ -2353,7 +2383,7 @@ font-weight: bold;</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1064</width>
+             <width>1067</width>
              <height>887</height>
             </rect>
            </property>
@@ -2452,7 +2482,7 @@ font-weight: bold;</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1064</width>
+             <width>1067</width>
              <height>887</height>
             </rect>
            </property>
@@ -2551,7 +2581,7 @@ font-weight: bold;</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1064</width>
+             <width>1067</width>
              <height>887</height>
             </rect>
            </property>
@@ -3017,7 +3047,7 @@ font-weight: bold;</string>
              <double>1.000000000000000</double>
             </property>
             <property name="channel" stdset="0">
-             <string>ca://SI-Glob:AP-SOFB:OrbitAvgNum-SP</string>
+             <string>ca://SI-Glob:AP-SOFB:OrbitPointsNum-SP</string>
             </property>
             <property name="limitsFromPV" stdset="0">
              <bool>true</bool>
@@ -3033,7 +3063,7 @@ font-weight: bold;</string>
              <string/>
             </property>
             <property name="channel">
-             <string>ca://SI-Glob:AP-SOFB:OrbitAvgNum-RB</string>
+             <string>ca://SI-Glob:AP-SOFB:OrbitPointsNum-RB</string>
             </property>
            </widget>
           </item>
@@ -3067,6 +3097,9 @@ font-weight: bold;</string>
             </property>
             <property name="editable">
              <bool>true</bool>
+            </property>
+            <property name="currentIndex">
+             <number>11</number>
             </property>
             <item>
              <property name="text">
@@ -3123,6 +3156,11 @@ font-weight: bold;</string>
               <string>Zero</string>
              </property>
             </item>
+            <item>
+             <property name="text">
+              <string>Out of Date</string>
+             </property>
+            </item>
            </widget>
           </item>
          </layout>
@@ -3130,7 +3168,7 @@ font-weight: bold;</string>
         <item row="9" column="1">
          <widget class="QLabel" name="label_13">
           <property name="text">
-           <string>Number of Averages:</string>
+           <string>Number of points for median:</string>
           </property>
          </widget>
         </item>
@@ -3162,6 +3200,9 @@ font-weight: bold;</string>
             </property>
             <property name="editable">
              <bool>true</bool>
+            </property>
+            <property name="currentIndex">
+             <number>11</number>
             </property>
             <item>
              <property name="text">
@@ -3218,52 +3259,11 @@ font-weight: bold;</string>
               <string>Golden</string>
              </property>
             </item>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item row="12" column="1">
-         <widget class="QLabel" name="label_15">
-          <property name="text">
-           <string>Number of neglected:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="13" column="1">
-         <layout class="QHBoxLayout" name="horizontalLayout_183">
-          <item>
-           <widget class="PyDMSpinBox" name="PyDMSB_NrNeglected">
-            <property name="toolTip">
-             <string/>
-            </property>
-            <property name="whatsThis">
-             <string/>
-            </property>
-            <property name="decimals">
-             <number>0</number>
-            </property>
-            <property name="singleStep">
-             <double>1.000000000000000</double>
-            </property>
-            <property name="channel" stdset="0">
-             <string>ca://SI-Glob:AP-SOFB:OrbitNeglectNum-SP</string>
-            </property>
-            <property name="limitsFromPV" stdset="0">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="PyDMLabel" name="PyDMLB_NrNeglected">
-            <property name="toolTip">
-             <string/>
-            </property>
-            <property name="whatsThis">
-             <string/>
-            </property>
-            <property name="channel">
-             <string>ca://SI-Glob:AP-SOFB:OrbitNeglectNum-RB</string>
-            </property>
+            <item>
+             <property name="text">
+              <string>Out of Date</string>
+             </property>
+            </item>
            </widget>
           </item>
          </layout>
@@ -3399,6 +3399,9 @@ font-weight: bold;</string>
           </property>
           <property name="channel" stdset="0">
            <string>ca://SI-Glob:AP-SOFB:CVStrength-SP</string>
+          </property>
+          <property name="limitsFromPV" stdset="0">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -3575,6 +3578,9 @@ font-weight: bold;</string>
           <property name="channel" stdset="0">
            <string>ca://SI-Glob:AP-SOFB:RFStrength-SP</string>
           </property>
+          <property name="limitsFromPV" stdset="0">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item row="5" column="1" colspan="4">
@@ -3641,26 +3647,8 @@ font-weight: bold;</string>
           <property name="channel" stdset="0">
            <string>ca://SI-Glob:AP-SOFB:AutoCorrMaxKick-SP</string>
           </property>
-         </widget>
-        </item>
-        <item row="4" column="1" colspan="2">
-         <widget class="PyDMLineEdit" name="PyDMLE_AutoCorrFreq">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-            <horstretch>1</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="toolTip">
-           <string/>
-          </property>
-          <property name="whatsThis">
-           <string>
-    Writeable text field to send and display channel values
-    </string>
-          </property>
-          <property name="channel" stdset="0">
-           <string>ca://SI-Glob:AP-SOFB:AutoCorrFreq-SP</string>
+          <property name="limitsFromPV" stdset="0">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -3831,12 +3819,37 @@ font-weight: bold;</string>
           <property name="channel" stdset="0">
            <string>ca://SI-Glob:AP-SOFB:AutoCorrMaxDist-SP</string>
           </property>
+          <property name="limitsFromPV" stdset="0">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item row="6" column="1" colspan="3">
          <widget class="QLabel" name="label_16">
           <property name="text">
            <string>Maximum Kick [urad]</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="2">
+         <widget class="PyDMSpinBox" name="PyDMSB_AutoCorrFreq">
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="whatsThis">
+           <string/>
+          </property>
+          <property name="decimals">
+           <number>3</number>
+          </property>
+          <property name="singleStep">
+           <double>0.100000000000000</double>
+          </property>
+          <property name="channel" stdset="0">
+           <string>ca://SI-Glob:AP-SOFB:AutoCorrFreq-SP</string>
+          </property>
+          <property name="limitsFromPV" stdset="0">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -4210,196 +4223,6 @@ font-weight: bold;</string>
        <property name="maxCount" stdset="0">
         <number>2000</number>
        </property>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>a</string>
-        </property>
-       </item>
       </widget>
      </item>
     </layout>
@@ -4417,9 +4240,6 @@ font-weight: bold;</string>
    </property>
    <property name="text">
     <string>Correction Parameters</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+O</string>
    </property>
    <property name="visible">
     <bool>true</bool>
@@ -4463,6 +4283,9 @@ font-weight: bold;</string>
    <property name="toolTip">
     <string>Open all dockable windows</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
   </action>
  </widget>
  <customwidgets>
@@ -4490,11 +4313,6 @@ font-weight: bold;</string>
    <class>PyDMLed</class>
    <extends>QLed</extends>
    <header>pydm.widgets.led</header>
-  </customwidget>
-  <customwidget>
-   <class>PyDMLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>pydm.widgets.line_edit</header>
   </customwidget>
   <customwidget>
    <class>PyDMLogLabel</class>
@@ -4558,14 +4376,13 @@ font-weight: bold;</string>
   <tabstop>CB_CorrectionOrbit</tabstop>
   <tabstop>CB_RefOrbit</tabstop>
   <tabstop>PyDMSB_NrAverages</tabstop>
-  <tabstop>PyDMSB_NrNeglected</tabstop>
   <tabstop>PyDMSB_CHStrength</tabstop>
   <tabstop>PyDMSB_CVStrength</tabstop>
   <tabstop>PyDMCB_SyncKicks</tabstop>
   <tabstop>PyDMCB_RFEnbl</tabstop>
   <tabstop>PyDMSB_RFStrength</tabstop>
   <tabstop>PyDMCB_AutoCorr</tabstop>
-  <tabstop>PyDMLE_AutoCorrFreq</tabstop>
+  <tabstop>PyDMSB_AutoCorrFreq</tabstop>
   <tabstop>PyDMSB_NrAverages_2</tabstop>
   <tabstop>PyDMSB_NrAverages_3</tabstop>
   <tabstop>PyDMPBCalcKicks</tabstop>
@@ -4586,6 +4403,13 @@ font-weight: bold;</string>
   <tabstop>PyDMPB_CHList</tabstop>
   <tabstop>SA_CVList</tabstop>
   <tabstop>PyDMPB_CVList</tabstop>
+  <tabstop>checkBox_3</tabstop>
+  <tabstop>checkBox_2</tabstop>
+  <tabstop>checkBox_4</tabstop>
+  <tabstop>checkBox</tabstop>
+  <tabstop>PyDMSB_NrSingVals</tabstop>
+  <tabstop>PyDMPBApplyCH</tabstop>
+  <tabstop>PyDMPBApplyCV</tabstop>
  </tabstops>
  <resources/>
  <connections>
