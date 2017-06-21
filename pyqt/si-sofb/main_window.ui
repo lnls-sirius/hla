@@ -30,7 +30,7 @@
        <enum>QTabWidget::Triangular</enum>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>3</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -1987,6 +1987,9 @@ font-weight: bold;</string>
           <property name="channel" stdset="0">
            <string>ca://SI-Glob:AP-SOFB:AbortMeasRSPMtx-Cmd</string>
           </property>
+          <property name="pressValue" stdset="0">
+           <string>1</string>
+          </property>
          </widget>
         </item>
         <item row="5" column="3">
@@ -2040,6 +2043,9 @@ font-weight: bold;</string>
           </property>
           <property name="channel" stdset="0">
            <string>ca://SI-Glob:AP-SOFB:ResetMeasRSPMtx-Cmd</string>
+          </property>
+          <property name="pressValue" stdset="0">
+           <string>1</string>
           </property>
          </widget>
         </item>
@@ -2449,6 +2455,9 @@ font-weight: bold;</string>
           <property name="channel" stdset="0">
            <string>ca://SI-Glob:AP-SOFB:BPMYEnblList-SP</string>
           </property>
+          <property name="pressValue" stdset="0">
+           <string>1</string>
+          </property>
          </widget>
         </item>
         <item row="0" column="0">
@@ -2548,6 +2557,9 @@ font-weight: bold;</string>
           <property name="channel" stdset="0">
            <string>ca://SI-Glob:AP-SOFB:CHEnblList-SP</string>
           </property>
+          <property name="pressValue" stdset="0">
+           <string>1</string>
+          </property>
          </widget>
         </item>
         <item row="0" column="0">
@@ -2646,6 +2658,9 @@ font-weight: bold;</string>
           </property>
           <property name="channel" stdset="0">
            <string>ca://SI-Glob:AP-SOFB:CVEnblList-SP</string>
+          </property>
+          <property name="pressValue" stdset="0">
+           <string>1</string>
           </property>
          </widget>
         </item>
@@ -2774,7 +2789,7 @@ font-weight: bold;</string>
            <string>ca://SI-Glob:AP-SOFB:ApplyKicks-Cmd</string>
           </property>
           <property name="pressValue" stdset="0">
-           <string>RF</string>
+           <string>2</string>
           </property>
          </widget>
         </item>
@@ -2831,7 +2846,7 @@ font-weight: bold;</string>
            <string>ca://SI-Glob:AP-SOFB:ApplyKicks-Cmd</string>
           </property>
           <property name="pressValue" stdset="0">
-           <string>All</string>
+           <string>3</string>
           </property>
          </widget>
         </item>
@@ -2888,7 +2903,7 @@ font-weight: bold;</string>
            <string>ca://SI-Glob:AP-SOFB:ApplyKicks-Cmd</string>
           </property>
           <property name="pressValue" stdset="0">
-           <string>CH</string>
+           <string>0</string>
           </property>
          </widget>
         </item>
@@ -2945,7 +2960,7 @@ font-weight: bold;</string>
            <string>ca://SI-Glob:AP-SOFB:ApplyKicks-Cmd</string>
           </property>
           <property name="pressValue" stdset="0">
-           <string>CV</string>
+           <string>1</string>
           </property>
          </widget>
         </item>
@@ -3442,6 +3457,9 @@ font-weight: bold;</string>
           <property name="whatsThis">
            <string/>
           </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
           <property name="text">
            <string>Synchronized Kicks?</string>
           </property>
@@ -3645,7 +3663,7 @@ font-weight: bold;</string>
            <double>100.000000000000000</double>
           </property>
           <property name="channel" stdset="0">
-           <string>ca://SI-Glob:AP-SOFB:AutoCorrMaxKick-SP</string>
+           <string>ca://SI-Glob:AP-SOFB:MaxKickStrength-SP</string>
           </property>
           <property name="limitsFromPV" stdset="0">
            <bool>true</bool>
@@ -3789,7 +3807,7 @@ font-weight: bold;</string>
            <string/>
           </property>
           <property name="channel">
-           <string>ca://SI-Glob:AP-SOFB:AutoCorrMaxKick-RB</string>
+           <string>ca://SI-Glob:AP-SOFB:MaxKickStrength-RB</string>
           </property>
           <property name="precision">
            <number>3</number>
