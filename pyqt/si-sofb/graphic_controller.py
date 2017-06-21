@@ -1,6 +1,6 @@
 import numpy as _np
 import datetime as _datetime
-from PyQt5.QtCore import pyqtSignal, QObject
+from PyQt5.QtCore import pyqtSignal, pyqtSlot, QObject
 from PyQt5.QtWidgets import QFileDialog
 from selection_matrix import NR_BPMs
 
@@ -37,8 +37,8 @@ class GraphicOrbitControllers(QObject):
         cbRef = getattr(self.main_window,'CB_Line'+str(index)+'Ref')
         cbOrb.currentTextChanged.connect(self._orb_changed)
         cbRef.currentTextChanged.connect(self._ref_changed)
-        self.main_window.PV_SOFBBPMXEnblListRB.value_signal.connect(self.update_enable_list_x)
-        self.main_window.PV_SOFBBPMYEnblListRB.value_signal.connect(self.update_enable_list_y)
+        self.main_window.PV_SOFBBPMXEnblListRB.value_signal[_np.ndarray].connect(self.update_enable_list_x)
+        self.main_window.PV_SOFBBPMYEnblListRB.value_signal[_np.ndarray].connect(self.update_enable_list_y)
         self.orbx = _np.zeros(NR_BPMs,dtype=float)
         self.orby = _np.zeros(NR_BPMs,dtype=float)
         self.refx = _np.zeros(NR_BPMs,dtype=float)
@@ -133,12 +133,14 @@ class GraphicOrbitControllers(QObject):
 
         self.update_graphic()
 
+    @pyqtSlot(_np.ndarray)
     def update_enable_list_x(self,array):
-        self.enblx = array
+        self.enblx = _np.array(array,dtype=bool)
         self.update_graphic('x')
 
+    @pyqtSlot(_np.ndarray)
     def update_enable_list_y(self,array):
-        self.enbly = array
+        self.enbly = _np.array(array,dtype=bool)
         self.update_graphic('y')
 
     def update_orbx(self,orbx):
