@@ -4,6 +4,7 @@ from pydm import PyDMApplication
 from pydm.widgets.checkbox import PyDMCheckbox
 from pydm.widgets.led import PyDMLed
 
+SOFB_PREFIX = 'ca://SI-Glob:AP-SOFB:'
 NR_BPMs = 160
 NR_CHs  = 120
 NR_CVs  = 160
@@ -33,8 +34,8 @@ class SelectionMatrix(QVBoxLayout):
             self.addWidget(wid2)
 
     def _get_matrix_params(self):
-        indices = list(range(1,self.INDICES_LENGTH[self.dev]))
-        indices = [self.INDICES_LENGTH[self.dev]] + indices
+        indices = list(range(self.INDICES_LENGTH[self.dev]-1))
+        indices = [self.INDICES_LENGTH[self.dev]-1] + indices
         return self.SUBSECTIONS[self.dev], indices
 
     def _make_line(self, section, subsections, indices, header):
@@ -73,7 +74,7 @@ class SelectionMatrix(QVBoxLayout):
         cb = PyDMCheckbox(parent)
         cb.setObjectName('PyDMCB_'+label)
         cb.setToolTip(label)
-        cb.channel = 'ca://'+self.dev+'EnblList-SP'
+        cb.channel = SOFB_PREFIX+self.dev+'EnblList-SP'
         cb.pvbit   = index
         hl.addWidget(cb)
         led = PyDMLed(parent)
@@ -81,7 +82,7 @@ class SelectionMatrix(QVBoxLayout):
         led.setSizePolicy(sizePolicy)
         led.setObjectName('PyDMLed_'+label)
         led.setToolTip(label)
-        led.channel = 'ca://'+self.dev+'EnblList-RB'
+        led.channel = SOFB_PREFIX+self.dev+'EnblList-RB'
         led.pvbit   = index
         hl.addWidget(led)
         return hl
