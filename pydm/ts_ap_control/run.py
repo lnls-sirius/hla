@@ -1,3 +1,4 @@
+#!/usr/bin/env python3.6
 from pydm.PyQt.uic import loadUi
 from pydm.PyQt.QtCore import pyqtSlot
 from pydm.PyQt.QtGui import QMainWindow, QDialog, QVBoxLayout, QWidget, QLabel, QPixmap, QGraphicsPixmapItem, QFileDialog
@@ -9,8 +10,8 @@ from matplotlib.backends.backend_qt5agg import (
 import sys
 import pyaccel as _pyaccel
 import pymodels as _pymodels
-from siriusdm.as_ma_control.MagnetDetailWindow import MagnetDetailWindow
-from siriusdm.as_ma_control import ToSiriusMagnetControlWindow
+# from siriusdm.as_ma_control.MagnetDetailWindow import MagnetDetailWindow
+# from siriusdm.as_ma_control import ToSiriusMagnetControlWindow
 
 CALC_LABELS_INITIALIZE = """
 self.centralwidget.PyDMEnumComboBox_CalcMethod_Scrn{0}.currentIndexChanged.connect(self._visibility_handle)
@@ -29,9 +30,9 @@ self.centralwidget.PyDMLabel_Stats1SigmaY_Scrn{0}.setVisible(visible)
 self.centralwidget.PyDMLabel_Stats2SigmaY_Scrn{0}.setVisible(not visible)
 """
 
-class TSControlWindow(QMainWindow):
+class BTSControlWindow(QMainWindow):
     def __init__(self, parent=None):
-        super(TSControl, self).__init__(parent)
+        super(BTSControlWindow, self).__init__(parent)
 
         #TS Optics Widget
         self._ts,self._twiss_in = _pymodels.ts.create_accelerator()
@@ -57,6 +58,7 @@ class TSControlWindow(QMainWindow):
             exec(CALC_LABELS_VISIBILITY.format(i))
 
         #Reference Widget
+        self.centralwidget.tabWidget_Scrns.setCurrentIndex(0)
         self._currScrn = 0
         self.reference_window = ShowImage()
         self.centralwidget.tabWidget_Scrns.currentChanged.connect(self._setCurrentScrn)
@@ -85,10 +87,11 @@ class TSControlWindow(QMainWindow):
         self.centralwidget.toolButton_CHApp_Scrn42.clicked.connect(self._openWindow)
         self.centralwidget.toolButton_CV2App_Scrn43.clicked.connect(self._openWindow)
 
-        #Open TSApps
-        self.centralwidget.pushButton_TSPSApp.clicked.connect(self._openTSPSApp)
-        self.centralwidget.pushButton_TSBPMApp.clicked.connect(self._openTSBPMApp)
+        #Open BTSApps
+        self.centralwidget.pushButton_BTS_MAApp.clicked.connect(self._openMAApp)
+        self.centralwidget.pushButton_BTS_BPMApp.clicked.connect(self._openBPMApp)
         self.centralwidget.pushButton_FCTApp.clicked.connect(self._openFCTApp)
+        self.centralwidget.pushButton_BTS_PosAngleCorrApp.clicked.connect(self._openPosAngleCorrApp)
 
         #Initialize Channels of each widget
         allwidgets = self.centralwidget.findChildren(QWidget)
@@ -98,7 +101,7 @@ class TSControlWindow(QMainWindow):
             if i.objectName().startswith("PyDM"):
                 name = i.objectName().split("_")
 
-                if name[-1] in ("ICT1","ICT2","TransportEfficiancy"):
+                if name[-1] in ("ICT1","ICT2","TransportEfficiency"):
                     pass
                     #TODO
 
@@ -229,18 +232,23 @@ class TSControlWindow(QMainWindow):
         elif sender.objectName() == "toolButton_CHApp_Scrn42":  ma = "TS-04:MA-CH"
         elif sender.objectName() == "toolButton_CV2App_Scrn43": ma = "TS-04:MA-CV-2"
 
-        self._corrector_detail_window = MagnetDetailWindow(ma,self)
-        self._corrector_detail_window.show()
+        # self._corrector_detail_window = MagnetDetailWindow(ma,self)
+        # self._corrector_detail_window.show()
 
-    def _openTSPSApp(self):
-        self._TSPS_window = ToSiriusMagnetControlWindow(self)
-        self._TSPS_window.show()
+    def _openMAApp(self):
+        pass
+        # self._BTS_MA_window = ToSiriusMagnetControlWindow(self)
+        # self._BTS_MA_window.show()
 
-    def _openTSBPMApp(self):
+    def _openBPMApp(self):
         pass
         #TODO
 
     def _openFCTApp(self):
+        pass
+        #TODO
+
+    def _openPosAngleCorrApp(self):
         pass
         #TODO
 
@@ -258,6 +266,6 @@ class ShowImage(QWidget):
         self.setGeometry(300,300,self.pixmap.width(),self.pixmap.height())
 
 app = PyDMApplication(None, sys.argv)
-window = TSControlWindow()
+window = BTSControlWindow()
 window.show()
 sys.exit(app.exec_())
