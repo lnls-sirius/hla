@@ -114,8 +114,8 @@ class GraphicOrbitControllers(QObject):
             y_wave = reg.orby
         elif text.lower() in other_:
             regx, regy = other_[text.lower()]
-            x_sig = regx.value_signal
-            y_sig = regy.value_signal
+            x_sig = regx.value_signal[_np.ndarray]
+            y_sig = regy.value_signal[_np.ndarray]
             x_sig.connect(x_slot)
             y_sig.connect(y_slot)
             x_wave = regx.value
