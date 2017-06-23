@@ -103,7 +103,7 @@ class GraphicOrbitControllers(QObject):
         if x_sig is not None:
             x_sig.disconnect(x_slot)
             y_sig.disconnect(y_slot)
-        if text.startswith('Register'):
+        if text.lower().startswith('register'):
             ind = text[-1]
             reg = getattr(self.main_window,'CM_Register'+ind)
             x_sig = reg.new_orbitx_signal
@@ -120,7 +120,7 @@ class GraphicOrbitControllers(QObject):
             y_sig.connect(y_slot)
             x_wave = regx.value
             y_wave = regy.value
-        elif text.lower().startswith('Zero'):
+        elif text.lower().startswith('zero'):
             x_sig = None
             y_sig = None
             x_wave = _np.zeros(NR_BPMs,dtype=float)

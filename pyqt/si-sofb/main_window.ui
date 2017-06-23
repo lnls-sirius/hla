@@ -30,7 +30,7 @@
        <enum>QTabWidget::Triangular</enum>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>1</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -1114,9 +1114,9 @@
           </property>
           <property name="trace4Color" stdset="0">
            <color>
-            <red>172</red>
-            <green>172</green>
-            <blue>172</blue>
+            <red>100</red>
+            <green>100</green>
+            <blue>100</blue>
            </color>
           </property>
           <property name="trace4LineStyle" stdset="0">
@@ -1131,8 +1131,8 @@
           <property name="trace5Color" stdset="0">
            <color>
             <red>255</red>
-            <green>75</green>
-            <blue>75</blue>
+            <green>125</green>
+            <blue>125</blue>
            </color>
           </property>
           <property name="trace5Symbol" stdset="0">
@@ -1144,8 +1144,8 @@
           <property name="trace6Color" stdset="0">
            <color>
             <red>255</red>
-            <green>75</green>
-            <blue>75</blue>
+            <green>125</green>
+            <blue>125</blue>
            </color>
           </property>
           <property name="trace6LineStyle" stdset="0">
@@ -1157,8 +1157,8 @@
           <property name="trace7Color" stdset="0">
            <color>
             <red>255</red>
-            <green>75</green>
-            <blue>75</blue>
+            <green>125</green>
+            <blue>125</blue>
            </color>
           </property>
           <property name="trace7LineStyle" stdset="0">
@@ -1170,8 +1170,8 @@
           <property name="trace8Color" stdset="0">
            <color>
             <red>255</red>
-            <green>75</green>
-            <blue>75</blue>
+            <green>125</green>
+            <blue>125</blue>
            </color>
           </property>
           <property name="trace8LineStyle" stdset="0">
@@ -1182,9 +1182,9 @@
           </property>
           <property name="trace9Color" stdset="0">
            <color>
-            <red>172</red>
-            <green>172</green>
-            <blue>172</blue>
+            <red>100</red>
+            <green>100</green>
+            <blue>100</blue>
            </color>
           </property>
           <property name="trace9LineStyle" stdset="0">
@@ -1250,9 +1250,9 @@
           </property>
           <property name="trace14Color" stdset="0">
            <color>
-            <red>172</red>
-            <green>172</green>
-            <blue>172</blue>
+            <red>100</red>
+            <green>100</green>
+            <blue>100</blue>
            </color>
           </property>
           <property name="trace14LineStyle" stdset="0">
@@ -1263,6 +1263,9 @@
           </property>
           <property name="trace14Title" stdset="0">
            <string/>
+          </property>
+          <property name="XChannel" stdset="0">
+           <string>ca://SI-Glob:AP-Orbit:PosS-Mon</string>
           </property>
           <property name="Trace0Title" stdset="0">
            <string>Line 1</string>
@@ -1400,9 +1403,9 @@
           </property>
           <property name="trace4Color" stdset="0">
            <color>
-            <red>172</red>
-            <green>172</green>
-            <blue>172</blue>
+            <red>100</red>
+            <green>100</green>
+            <blue>100</blue>
            </color>
           </property>
           <property name="trace4LineStyle" stdset="0">
@@ -1468,9 +1471,9 @@
           </property>
           <property name="trace9Color" stdset="0">
            <color>
-            <red>172</red>
-            <green>172</green>
-            <blue>172</blue>
+            <red>100</red>
+            <green>100</green>
+            <blue>100</blue>
            </color>
           </property>
           <property name="trace9LineStyle" stdset="0">
@@ -1536,9 +1539,9 @@
           </property>
           <property name="trace14Color" stdset="0">
            <color>
-            <red>172</red>
-            <green>172</green>
-            <blue>172</blue>
+            <red>100</red>
+            <green>100</green>
+            <blue>100</blue>
            </color>
           </property>
           <property name="trace14LineStyle" stdset="0">
@@ -1549,6 +1552,9 @@
           </property>
           <property name="trace14Title" stdset="0">
            <string/>
+          </property>
+          <property name="XChannel" stdset="0">
+           <string>ca://SI-Glob:AP-Orbit:PosS-Mon</string>
           </property>
           <property name="Trace0Title" stdset="0">
            <string>Line 1</string>
@@ -1647,6 +1653,12 @@
             </color>
            </brush>
           </property>
+          <property name="showXGrid">
+           <bool>true</bool>
+          </property>
+          <property name="showYGrid">
+           <bool>true</bool>
+          </property>
           <property name="showLegend">
            <bool>true</bool>
           </property>
@@ -1657,10 +1669,13 @@
            <bool>true</bool>
           </property>
           <property name="YAxis1Label">
-           <string>a1b</string>
+           <string>CH Correctors Strength [urad]</string>
+          </property>
+          <property name="YAxis1ShowLabel">
+           <bool>true</bool>
           </property>
           <property name="tracesCount" stdset="0">
-           <number>8</number>
+           <number>1</number>
           </property>
           <property name="trace0Color" stdset="0">
            <color>
@@ -1749,6 +1764,9 @@
           <property name="trace5Title" stdset="0">
            <string/>
           </property>
+          <property name="trace0Channel" stdset="0">
+           <string>ca://SI-Glob:AP-SOFB:CHCalcdKicks-Mon</string>
+          </property>
          </widget>
         </item>
         <item row="2" column="5">
@@ -1781,6 +1799,34 @@
              <blue>255</blue>
             </color>
            </brush>
+          </property>
+          <property name="showXGrid">
+           <bool>true</bool>
+          </property>
+          <property name="showYGrid">
+           <bool>true</bool>
+          </property>
+          <property name="XAxis1Label">
+           <string>Longitudinal Position [m]</string>
+          </property>
+          <property name="XAxis1ShowLabel">
+           <bool>true</bool>
+          </property>
+          <property name="YAxis1Label">
+           <string>CV Correctors Strength [urad]</string>
+          </property>
+          <property name="YAxis1ShowLabel">
+           <bool>true</bool>
+          </property>
+          <property name="trace0Color" stdset="0">
+           <color>
+            <red>255</red>
+            <green>0</green>
+            <blue>0</blue>
+           </color>
+          </property>
+          <property name="trace0Channel" stdset="0">
+           <string>ca://SI-Glob:AP-SOFB:CVCalcdKicks-Mon</string>
           </property>
          </widget>
         </item>
