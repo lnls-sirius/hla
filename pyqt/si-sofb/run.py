@@ -30,8 +30,11 @@ def create_additional_PVs(main_window):
     main_window.PV_SOFBGoldenOrbitYSP = PyDMWidget(init_channel='ca://SI-Glob:AP-SOFB:GoldenOrbitY-SP', **opts)
     main_window.PV_SOFBGoldenOrbitYRB = PyDMWidget(init_channel='ca://SI-Glob:AP-SOFB:GoldenOrbitY-RB', **opts)
 
-    main_window.PV_SOFBOrbitXMon = PyDMWidget(init_channel='ca://SI-Glob:AP-SOFB:OrbitX-Mon', **opts)
-    main_window.PV_SOFBOrbitYMon = PyDMWidget(init_channel='ca://SI-Glob:AP-SOFB:OrbitY-Mon', **opts)
+    main_window.PV_SOFBCorrOrbitXMon = PyDMWidget(init_channel='ca://SI-Glob:AP-SOFB:CorrOrbitX-Mon', **opts)
+    main_window.PV_SOFBCorrOrbitYMon = PyDMWidget(init_channel='ca://SI-Glob:AP-SOFB:CorrOrbitY-Mon', **opts)
+
+    main_window.PV_SOFBOnlineOrbitXMon = PyDMWidget(init_channel='ca://SI-Glob:AP-SOFB:OnlineOrbitX-Mon', **opts)
+    main_window.PV_SOFBOnlineOrbitYMon = PyDMWidget(init_channel='ca://SI-Glob:AP-SOFB:OnlineOrbitY-Mon', **opts)
 
     main_window.PV_OrbitOrbitXMon = PyDMWidget(init_channel='ca://SI-Glob:AP-Orbit:PosX-Mon', **opts)
     main_window.PV_OrbitOrbitYMon = PyDMWidget(init_channel='ca://SI-Glob:AP-Orbit:PosY-Mon', **opts)

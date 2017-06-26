@@ -2333,8 +2333,8 @@ font-weight: bold;</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1067</width>
-             <height>887</height>
+             <width>98</width>
+             <height>28</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -2435,8 +2435,8 @@ font-weight: bold;</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1067</width>
-             <height>887</height>
+             <width>98</width>
+             <height>28</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -2537,8 +2537,8 @@ font-weight: bold;</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1067</width>
-             <height>887</height>
+             <width>98</width>
+             <height>28</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -2639,8 +2639,8 @@ font-weight: bold;</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1067</width>
-             <height>887</height>
+             <width>98</width>
+             <height>28</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -3409,14 +3409,33 @@ font-weight: bold;</string>
         <property name="bottomMargin">
          <number>9</number>
         </property>
-        <item row="0" column="1">
+        <item row="8" column="1" colspan="3">
+         <widget class="PyDMCheckbox" name="PyDMCB_RFEnbl">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="whatsThis">
+           <string/>
+          </property>
+          <property name="text">
+           <string>Use RF?</string>
+          </property>
+          <property name="channel" stdset="0">
+           <string>ca://SI-Glob:AP-SOFB:RFEnbl-Sel</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
          <widget class="QLabel" name="LB_CHStrength">
           <property name="text">
            <string>CH %:</string>
           </property>
          </widget>
         </item>
-        <item row="4" column="4">
+        <item row="6" column="4">
          <widget class="PyDMLed" name="PyDMLed_SyncKicks">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -3435,7 +3454,7 @@ font-weight: bold;</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="2">
+        <item row="3" column="2">
          <widget class="PyDMSpinBox" name="PyDMSB_CVStrength">
           <property name="maximumSize">
            <size>
@@ -3466,7 +3485,7 @@ font-weight: bold;</string>
           </property>
          </widget>
         </item>
-        <item row="6" column="4">
+        <item row="8" column="4">
          <widget class="PyDMLed" name="PyDMLed_RFEnbl">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -3485,14 +3504,14 @@ font-weight: bold;</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="1">
+        <item row="3" column="1">
          <widget class="QLabel" name="LB_CVStrength">
           <property name="text">
            <string>CV %:</string>
           </property>
          </widget>
         </item>
-        <item row="4" column="1" colspan="3">
+        <item row="6" column="1" colspan="3">
          <widget class="PyDMCheckbox" name="PyDMCB_SyncKicks">
           <property name="enabled">
            <bool>false</bool>
@@ -3514,14 +3533,14 @@ font-weight: bold;</string>
           </property>
          </widget>
         </item>
-        <item row="7" column="1">
+        <item row="9" column="1">
          <widget class="QLabel" name="LB_RFStrength">
           <property name="text">
            <string>RF %:</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="3" colspan="2">
+        <item row="3" column="3" colspan="2">
          <widget class="PyDMLabel" name="PyDMLB_CVStrength">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -3540,7 +3559,7 @@ font-weight: bold;</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="2">
+        <item row="2" column="2">
          <widget class="PyDMSpinBox" name="PyDMSB_CHStrength">
           <property name="maximumSize">
            <size>
@@ -3571,7 +3590,7 @@ font-weight: bold;</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="3" colspan="2">
+        <item row="2" column="3" colspan="2">
          <widget class="PyDMLabel" name="PyDMLB_CHStrength">
           <property name="toolTip">
            <string>Percentage to Apply (Readback)</string>
@@ -3584,26 +3603,7 @@ font-weight: bold;</string>
           </property>
          </widget>
         </item>
-        <item row="6" column="1" colspan="3">
-         <widget class="PyDMCheckbox" name="PyDMCB_RFEnbl">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="toolTip">
-           <string/>
-          </property>
-          <property name="whatsThis">
-           <string/>
-          </property>
-          <property name="text">
-           <string>Use RF?</string>
-          </property>
-          <property name="channel" stdset="0">
-           <string>ca://SI-Glob:AP-SOFB:RFEnbl-Sel</string>
-          </property>
-         </widget>
-        </item>
-        <item row="7" column="3" colspan="2">
+        <item row="9" column="3" colspan="2">
          <widget class="PyDMLabel" name="PyDMLB_RFStrength">
           <property name="toolTip">
            <string>Percentage to Apply (Readback)</string>
@@ -3616,7 +3616,7 @@ font-weight: bold;</string>
           </property>
          </widget>
         </item>
-        <item row="7" column="2">
+        <item row="9" column="2">
          <widget class="PyDMSpinBox" name="PyDMSB_RFStrength">
           <property name="maximumSize">
            <size>
@@ -3647,7 +3647,7 @@ font-weight: bold;</string>
           </property>
          </widget>
         </item>
-        <item row="5" column="1" colspan="4">
+        <item row="7" column="1" colspan="4">
          <spacer name="verticalSpacer_9">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
@@ -3659,6 +3659,41 @@ font-weight: bold;</string>
            </size>
           </property>
          </spacer>
+        </item>
+        <item row="0" column="1" colspan="4">
+         <widget class="PyDMScrollBar" name="PyDMScrollBar">
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="whatsThis">
+           <string/>
+          </property>
+          <property name="minimum">
+           <double>-1000.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>1000.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>2.000000000000000</double>
+          </property>
+          <property name="pageStep">
+           <double>20.000000000000000</double>
+          </property>
+          <property name="channel" stdset="0">
+           <string>ca://SI-Glob:AP-SOFB:CVStrength-SP</string>
+          </property>
+          <property name="limitsFromPV" stdset="0">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1" colspan="4">
+         <widget class="QScrollBar" name="horizontalScrollBar">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -4392,6 +4427,11 @@ font-weight: bold;</string>
    <class>PyDMPushButton</class>
    <extends>QPushButton</extends>
    <header>pydm.widgets.pushbutton</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMScrollBar</class>
+   <extends>QScrollBar</extends>
+   <header>pydm.widgets.scrollbar</header>
   </customwidget>
   <customwidget>
    <class>PyDMSpinBox</class>

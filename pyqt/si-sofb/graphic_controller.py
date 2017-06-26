@@ -8,7 +8,7 @@ class GraphicOrbitControllers(QObject):
     DEFAULT_DIR = '/home/fernando'
     EXT = '.txt'
     EXT_FLT = 'Text Files (*.txt)'
-    FMT = '{0:9.3g}'
+    FMT = '{0:8.3g}'
 
     averagex_str_signal  = pyqtSignal(str)
     stdx_str_signal      = pyqtSignal(str)
@@ -95,7 +95,7 @@ class GraphicOrbitControllers(QObject):
 
         main_ = self.main_window
         other_ = {
-                'current raw orbit':(main_.PV_OrbitOrbitXMon, main_.PV_OrbitOrbitXMon),
+                'current raw orbit':(main_.PV_OrbitOrbitXMon, main_.PV_OrbitOrbitYMon),
                 'sofb orbit':(main_.PV_SOFBOrbitXMon, main_.PV_SOFBOrbitYMon),
                 'sofb reference':(main_.PV_SOFBOrbitRefXRB, main_.PV_SOFBOrbitRefYRB),
                 'golden':(main_.PV_SOFBGoldenOrbitXRB , main_.PV_SOFBGoldenOrbitYRB),
@@ -160,6 +160,7 @@ class GraphicOrbitControllers(QObject):
         self.update_graphic('y')
 
     def update_graphic(self,plane=None):
+        unit = 1/1000 #um
         plane = ('x','y') if plane is None else (plane,)
         for pl in plane:
             diff = getattr(self,'orb'+pl) - getattr(self,'ref'+pl)
@@ -168,14 +169,14 @@ class GraphicOrbitControllers(QObject):
             std = mask.std(ddof=1)
             mask = diff.copy()
             mask[getattr(self,'enbl'+pl)] = _np.nan
-            getattr(self,'average'+pl+'_str_signal').emit(self.FMT.format(ave/1000))
-            getattr(self,'std'+pl+'_str_signal').emit(self.FMT.format(std/1000))
-            getattr(self,'average'+pl+'_signal').emit(ave)
-            getattr(self,'aveMstd'+pl+'_signal').emit(ave-std)
-            getattr(self,'avePstd'+pl+'_signal').emit(ave+std)
-            getattr(self,'diff'+pl+'_signal').emit(diff)
+            getattr(self,'average'+pl+'_str_signal').emit(self.FMT.format(ave*unit))
+            getattr(self,'std'+pl+'_str_signal').emit(self.FMT.format(std*unit))
+            getattr(self,'average'+pl+'_signal').emit(ave*unit)
+            getattr(self,'aveMstd'+pl+'_signal').emit((ave-std)*unit)
+            getattr(self,'avePstd'+pl+'_signal').emit((ave+std)*unit)
+            getattr(self,'diff'+pl+'_signal').emit(diff*unit)
             if not _np.all(_np.isnan(mask)):
-                getattr(self,'mask'+pl+'_signal').emit(mask)
+                getattr(self,'mask'+pl+'_signal').emit(mask*unit)
 
     def _save_difference(self):
         diffx = self.orbx - self.refx
