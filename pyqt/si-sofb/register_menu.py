@@ -61,8 +61,8 @@ class RegisterMenu(QMenu):
     def _register_orbit(self,flag):
         def register(trig):
             if flag == 'orb':
-                orbx = self.main_window.PV_SOFBOrbitXMon.value
-                orby = self.main_window.PV_SOFBOrbitYMon.value
+                orbx = self.main_window.PV_SOFBCorrOrbitXMon.value
+                orby = self.main_window.PV_SOFBCorrOrbitYMon.value
             elif flag == 'ref':
                 orbx = self.main_window.PV_SOFBOrbitRefXRB.value
                 orby = self.main_window.PV_SOFBOrbitRefYRB.value
