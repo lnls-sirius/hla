@@ -30,7 +30,7 @@
        <enum>QTabWidget::Triangular</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -108,6 +108,9 @@
           <property name="text">
            <string/>
           </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item row="0" column="0">
@@ -137,7 +140,7 @@
         <item row="0" column="15">
          <widget class="QLabel" name="LB_Line3XAve">
           <property name="text">
-           <string>TextLabel</string>
+           <string>-0.004533</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -167,7 +170,7 @@
         <item row="2" column="1">
          <widget class="QLabel" name="LB_Line1YAve">
           <property name="text">
-           <string>TextLabel</string>
+           <string>-0.004533</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -194,6 +197,9 @@
          <widget class="QCheckBox" name="CB_Line2ShowYStat">
           <property name="text">
            <string/>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -241,7 +247,7 @@
         <item row="0" column="9">
          <widget class="QLabel" name="LB_Line2XAve">
           <property name="text">
-           <string>TextLabel</string>
+           <string>-0.004533</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -486,7 +492,7 @@
         <item row="0" column="1">
          <widget class="QLabel" name="LB_Line1XAve">
           <property name="text">
-           <string>TextLabel</string>
+           <string>-0.004533</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -498,12 +504,15 @@
           <property name="text">
            <string/>
           </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item row="2" column="9">
          <widget class="QLabel" name="LB_Line2YAve">
           <property name="text">
-           <string>TextLabel</string>
+           <string>-0.004533</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -526,7 +535,7 @@
         <item row="2" column="15">
          <widget class="QLabel" name="LB_Line3YAve">
           <property name="text">
-           <string>TextLabel</string>
+           <string>-0.004533</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -545,12 +554,18 @@
           <property name="text">
            <string/>
           </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item row="5" column="14">
          <widget class="QCheckBox" name="CB_Line3Show">
           <property name="text">
            <string/>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -565,6 +580,9 @@
          <widget class="QCheckBox" name="CB_Line3ShowXStat">
           <property name="text">
            <string/>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -1075,20 +1093,26 @@
            <bool>true</bool>
           </property>
           <property name="tracesCount" stdset="0">
-           <number>15</number>
+           <number>12</number>
           </property>
           <property name="trace0Color" stdset="0">
            <color>
             <red>255</red>
-            <green>0</green>
-            <blue>0</blue>
+            <green>205</green>
+            <blue>205</blue>
            </color>
           </property>
+          <property name="trace0LineStyle" stdset="0">
+           <enum>BaseMultiPlot::DashDot</enum>
+          </property>
           <property name="trace0Symbol" stdset="0">
-           <enum>BaseMultiPlot::Circle</enum>
+           <enum>BaseMultiPlot::NoSymbol</enum>
+          </property>
+          <property name="trace0SymbolSize" stdset="0">
+           <number>6</number>
           </property>
           <property name="trace0Title" stdset="0">
-           <string>Line 1</string>
+           <string/>
           </property>
           <property name="trace0YAxisIndex" stdset="0">
            <number>1</number>
@@ -1096,12 +1120,15 @@
           <property name="trace1Color" stdset="0">
            <color>
             <red>255</red>
-            <green>0</green>
-            <blue>0</blue>
+            <green>205</green>
+            <blue>205</blue>
            </color>
           </property>
           <property name="trace1LineStyle" stdset="0">
-           <enum>BaseMultiPlot::Dash</enum>
+           <enum>BaseMultiPlot::DashDot</enum>
+          </property>
+          <property name="trace1SymbolSize" stdset="0">
+           <number>6</number>
           </property>
           <property name="trace1Title" stdset="0">
            <string/>
@@ -1109,12 +1136,15 @@
           <property name="trace2Color" stdset="0">
            <color>
             <red>255</red>
-            <green>0</green>
-            <blue>0</blue>
+            <green>205</green>
+            <blue>205</blue>
            </color>
           </property>
           <property name="trace2LineStyle" stdset="0">
-           <enum>BaseMultiPlot::DashDot</enum>
+           <enum>BaseMultiPlot::Dash</enum>
+          </property>
+          <property name="trace2SymbolSize" stdset="0">
+           <number>6</number>
           </property>
           <property name="trace2Title" stdset="0">
            <string/>
@@ -1122,28 +1152,43 @@
           <property name="trace3Color" stdset="0">
            <color>
             <red>255</red>
-            <green>0</green>
-            <blue>0</blue>
+            <green>205</green>
+            <blue>205</blue>
            </color>
           </property>
           <property name="trace3LineStyle" stdset="0">
-           <enum>BaseMultiPlot::DashDot</enum>
+           <enum>BaseMultiPlot::Solid</enum>
+          </property>
+          <property name="trace3LineWidth" stdset="0">
+           <number>2</number>
+          </property>
+          <property name="trace3Symbol" stdset="0">
+           <enum>BaseMultiPlot::Circle</enum>
+          </property>
+          <property name="trace3SymbolSize" stdset="0">
+           <number>6</number>
           </property>
           <property name="trace3Title" stdset="0">
-           <string/>
+           <string>Line 3</string>
           </property>
           <property name="trace4Color" stdset="0">
            <color>
-            <red>100</red>
-            <green>100</green>
-            <blue>100</blue>
+            <red>255</red>
+            <green>125</green>
+            <blue>125</blue>
            </color>
           </property>
           <property name="trace4LineStyle" stdset="0">
-           <enum>BaseMultiPlot::NoLine</enum>
+           <enum>BaseMultiPlot::DashDot</enum>
+          </property>
+          <property name="trace4LineWidth" stdset="0">
+           <number>2</number>
           </property>
           <property name="trace4Symbol" stdset="0">
-           <enum>BaseMultiPlot::Circle</enum>
+           <enum>BaseMultiPlot::NoSymbol</enum>
+          </property>
+          <property name="trace4SymbolSize" stdset="0">
+           <number>6</number>
           </property>
           <property name="trace4Title" stdset="0">
            <string/>
@@ -1155,11 +1200,17 @@
             <blue>125</blue>
            </color>
           </property>
+          <property name="trace5LineStyle" stdset="0">
+           <enum>BaseMultiPlot::DashDot</enum>
+          </property>
           <property name="trace5Symbol" stdset="0">
-           <enum>BaseMultiPlot::Circle</enum>
+           <enum>BaseMultiPlot::NoSymbol</enum>
+          </property>
+          <property name="trace5SymbolSize" stdset="0">
+           <number>6</number>
           </property>
           <property name="trace5Title" stdset="0">
-           <string>Line 2</string>
+           <string/>
           </property>
           <property name="trace6Color" stdset="0">
            <color>
@@ -1170,6 +1221,9 @@
           </property>
           <property name="trace6LineStyle" stdset="0">
            <enum>BaseMultiPlot::Dash</enum>
+          </property>
+          <property name="trace6SymbolSize" stdset="0">
+           <number>6</number>
           </property>
           <property name="trace6Title" stdset="0">
            <string/>
@@ -1182,36 +1236,57 @@
            </color>
           </property>
           <property name="trace7LineStyle" stdset="0">
-           <enum>BaseMultiPlot::DashDot</enum>
+           <enum>BaseMultiPlot::Solid</enum>
+          </property>
+          <property name="trace7LineWidth" stdset="0">
+           <number>2</number>
+          </property>
+          <property name="trace7Symbol" stdset="0">
+           <enum>BaseMultiPlot::Circle</enum>
+          </property>
+          <property name="trace7SymbolSize" stdset="0">
+           <number>6</number>
           </property>
           <property name="trace7Title" stdset="0">
-           <string/>
+           <string>Line 2</string>
           </property>
           <property name="trace8Color" stdset="0">
            <color>
             <red>255</red>
-            <green>125</green>
-            <blue>125</blue>
+            <green>0</green>
+            <blue>0</blue>
            </color>
           </property>
           <property name="trace8LineStyle" stdset="0">
            <enum>BaseMultiPlot::DashDot</enum>
+          </property>
+          <property name="trace8LineWidth" stdset="0">
+           <number>3</number>
+          </property>
+          <property name="trace8SymbolSize" stdset="0">
+           <number>8</number>
           </property>
           <property name="trace8Title" stdset="0">
            <string/>
           </property>
           <property name="trace9Color" stdset="0">
            <color>
-            <red>100</red>
-            <green>100</green>
-            <blue>100</blue>
+            <red>255</red>
+            <green>0</green>
+            <blue>0</blue>
            </color>
           </property>
           <property name="trace9LineStyle" stdset="0">
-           <enum>BaseMultiPlot::NoLine</enum>
+           <enum>BaseMultiPlot::DashDot</enum>
+          </property>
+          <property name="trace9LineWidth" stdset="0">
+           <number>3</number>
           </property>
           <property name="trace9Symbol" stdset="0">
-           <enum>BaseMultiPlot::Circle</enum>
+           <enum>BaseMultiPlot::NoSymbol</enum>
+          </property>
+          <property name="trace9SymbolSize" stdset="0">
+           <number>8</number>
           </property>
           <property name="trace9Title" stdset="0">
            <string/>
@@ -1219,28 +1294,43 @@
           <property name="trace10Color" stdset="0">
            <color>
             <red>255</red>
-            <green>205</green>
-            <blue>205</blue>
+            <green>0</green>
+            <blue>0</blue>
            </color>
           </property>
+          <property name="trace10LineStyle" stdset="0">
+           <enum>BaseMultiPlot::Dash</enum>
+          </property>
+          <property name="trace10LineWidth" stdset="0">
+           <number>3</number>
+          </property>
           <property name="trace10Symbol" stdset="0">
-           <enum>BaseMultiPlot::Circle</enum>
+           <enum>BaseMultiPlot::NoSymbol</enum>
+          </property>
+          <property name="trace10SymbolSize" stdset="0">
+           <number>8</number>
           </property>
           <property name="trace10Title" stdset="0">
-           <string> Line 3</string>
+           <string/>
           </property>
           <property name="trace11Color" stdset="0">
            <color>
             <red>255</red>
-            <green>205</green>
-            <blue>205</blue>
+            <green>0</green>
+            <blue>0</blue>
            </color>
           </property>
           <property name="trace11LineStyle" stdset="0">
-           <enum>BaseMultiPlot::Dash</enum>
+           <enum>BaseMultiPlot::Solid</enum>
+          </property>
+          <property name="trace11LineWidth" stdset="0">
+           <number>3</number>
+          </property>
+          <property name="trace11Symbol" stdset="0">
+           <enum>BaseMultiPlot::Circle</enum>
           </property>
           <property name="trace11Title" stdset="0">
-           <string/>
+           <string>Line 1</string>
           </property>
           <property name="trace12Color" stdset="0">
            <color>
@@ -1287,51 +1377,6 @@
           <property name="XChannel" stdset="0">
            <string>ca://SI-Glob:AP-Orbit:PosS-Cte</string>
           </property>
-          <property name="Trace0Title" stdset="0">
-           <string>Line 1</string>
-          </property>
-          <property name="Trace1Title" stdset="0">
-           <string/>
-          </property>
-          <property name="Trace2Title" stdset="0">
-           <string/>
-          </property>
-          <property name="Trace3Title" stdset="0">
-           <string/>
-          </property>
-          <property name="Trace4Title" stdset="0">
-           <string/>
-          </property>
-          <property name="Trace5Title" stdset="0">
-           <string>Line 2</string>
-          </property>
-          <property name="Trace6Title" stdset="0">
-           <string/>
-          </property>
-          <property name="Trace7Title" stdset="0">
-           <string/>
-          </property>
-          <property name="Trace8Title" stdset="0">
-           <string/>
-          </property>
-          <property name="Trace9Title" stdset="0">
-           <string/>
-          </property>
-          <property name="Trace10Title" stdset="0">
-           <string>Line 3</string>
-          </property>
-          <property name="Trace11Title" stdset="0">
-           <string/>
-          </property>
-          <property name="Trace12Title" stdset="0">
-           <string/>
-          </property>
-          <property name="Trace13Title" stdset="0">
-           <string/>
-          </property>
-          <property name="Trace14Title" stdset="0">
-           <string/>
-          </property>
          </widget>
         </item>
         <item row="1" column="0" colspan="19">
@@ -1360,6 +1405,9 @@
           <property name="showYGrid">
            <bool>true</bool>
           </property>
+          <property name="XAxis1Label">
+           <string>Longitudinal Position [m]</string>
+          </property>
           <property name="YAxis1Label">
            <string>Horizontal Position [um]</string>
           </property>
@@ -1367,72 +1415,96 @@
            <bool>true</bool>
           </property>
           <property name="tracesCount" stdset="0">
-           <number>15</number>
+           <number>12</number>
           </property>
           <property name="trace0Color" stdset="0">
            <color>
-            <red>0</red>
-            <green>0</green>
+            <red>205</red>
+            <green>205</green>
             <blue>255</blue>
            </color>
           </property>
+          <property name="trace0LineStyle" stdset="0">
+           <enum>BaseMultiPlot::DashDot</enum>
+          </property>
           <property name="trace0Symbol" stdset="0">
-           <enum>BaseMultiPlot::Circle</enum>
+           <enum>BaseMultiPlot::NoSymbol</enum>
+          </property>
+          <property name="trace0SymbolSize" stdset="0">
+           <number>6</number>
           </property>
           <property name="trace0Title" stdset="0">
-           <string>Line 1</string>
+           <string/>
           </property>
           <property name="trace1Color" stdset="0">
            <color>
-            <red>0</red>
-            <green>0</green>
+            <red>205</red>
+            <green>205</green>
             <blue>255</blue>
            </color>
           </property>
           <property name="trace1LineStyle" stdset="0">
-           <enum>BaseMultiPlot::Dash</enum>
+           <enum>BaseMultiPlot::DashDot</enum>
+          </property>
+          <property name="trace1SymbolSize" stdset="0">
+           <number>6</number>
           </property>
           <property name="trace1Title" stdset="0">
            <string/>
           </property>
           <property name="trace2Color" stdset="0">
            <color>
-            <red>0</red>
-            <green>0</green>
+            <red>205</red>
+            <green>205</green>
             <blue>255</blue>
            </color>
           </property>
           <property name="trace2LineStyle" stdset="0">
-           <enum>BaseMultiPlot::DashDot</enum>
+           <enum>BaseMultiPlot::Dash</enum>
+          </property>
+          <property name="trace2SymbolSize" stdset="0">
+           <number>6</number>
           </property>
           <property name="trace2Title" stdset="0">
            <string/>
           </property>
           <property name="trace3Color" stdset="0">
            <color>
-            <red>0</red>
-            <green>0</green>
+            <red>205</red>
+            <green>205</green>
             <blue>255</blue>
            </color>
           </property>
           <property name="trace3LineStyle" stdset="0">
-           <enum>BaseMultiPlot::DashDot</enum>
+           <enum>BaseMultiPlot::Solid</enum>
+          </property>
+          <property name="trace3LineWidth" stdset="0">
+           <number>2</number>
+          </property>
+          <property name="trace3Symbol" stdset="0">
+           <enum>BaseMultiPlot::Circle</enum>
+          </property>
+          <property name="trace3SymbolSize" stdset="0">
+           <number>6</number>
           </property>
           <property name="trace3Title" stdset="0">
-           <string/>
+           <string>Line 3</string>
           </property>
           <property name="trace4Color" stdset="0">
            <color>
-            <red>100</red>
-            <green>100</green>
-            <blue>100</blue>
+            <red>125</red>
+            <green>125</green>
+            <blue>255</blue>
            </color>
           </property>
           <property name="trace4LineStyle" stdset="0">
-           <enum>BaseMultiPlot::NoLine</enum>
+           <enum>BaseMultiPlot::DashDot</enum>
           </property>
           <property name="trace4Symbol" stdset="0">
-           <enum>BaseMultiPlot::Circle</enum>
+           <enum>BaseMultiPlot::NoSymbol</enum>
+          </property>
+          <property name="trace4SymbolSize" stdset="0">
+           <number>6</number>
           </property>
           <property name="trace4Title" stdset="0">
            <string/>
@@ -1444,11 +1516,17 @@
             <blue>255</blue>
            </color>
           </property>
+          <property name="trace5LineStyle" stdset="0">
+           <enum>BaseMultiPlot::DashDot</enum>
+          </property>
           <property name="trace5Symbol" stdset="0">
-           <enum>BaseMultiPlot::Circle</enum>
+           <enum>BaseMultiPlot::NoSymbol</enum>
+          </property>
+          <property name="trace5SymbolSize" stdset="0">
+           <number>6</number>
           </property>
           <property name="trace5Title" stdset="0">
-           <string>Line 2</string>
+           <string/>
           </property>
           <property name="trace6Color" stdset="0">
            <color>
@@ -1459,6 +1537,9 @@
           </property>
           <property name="trace6LineStyle" stdset="0">
            <enum>BaseMultiPlot::Dash</enum>
+          </property>
+          <property name="trace6SymbolSize" stdset="0">
+           <number>6</number>
           </property>
           <property name="trace6Title" stdset="0">
            <string/>
@@ -1471,65 +1552,95 @@
            </color>
           </property>
           <property name="trace7LineStyle" stdset="0">
-           <enum>BaseMultiPlot::DashDot</enum>
+           <enum>BaseMultiPlot::Solid</enum>
+          </property>
+          <property name="trace7LineWidth" stdset="0">
+           <number>2</number>
+          </property>
+          <property name="trace7Symbol" stdset="0">
+           <enum>BaseMultiPlot::Circle</enum>
+          </property>
+          <property name="trace7SymbolSize" stdset="0">
+           <number>6</number>
           </property>
           <property name="trace7Title" stdset="0">
-           <string/>
+           <string>Line 2</string>
           </property>
           <property name="trace8Color" stdset="0">
            <color>
-            <red>125</red>
-            <green>125</green>
+            <red>0</red>
+            <green>0</green>
             <blue>255</blue>
            </color>
           </property>
           <property name="trace8LineStyle" stdset="0">
            <enum>BaseMultiPlot::DashDot</enum>
           </property>
+          <property name="trace8LineWidth" stdset="0">
+           <number>3</number>
+          </property>
           <property name="trace8Title" stdset="0">
            <string/>
           </property>
           <property name="trace9Color" stdset="0">
            <color>
-            <red>100</red>
-            <green>100</green>
-            <blue>100</blue>
+            <red>0</red>
+            <green>0</green>
+            <blue>255</blue>
            </color>
           </property>
           <property name="trace9LineStyle" stdset="0">
-           <enum>BaseMultiPlot::NoLine</enum>
+           <enum>BaseMultiPlot::DashDot</enum>
+          </property>
+          <property name="trace9LineWidth" stdset="0">
+           <number>3</number>
           </property>
           <property name="trace9Symbol" stdset="0">
-           <enum>BaseMultiPlot::Circle</enum>
+           <enum>BaseMultiPlot::NoSymbol</enum>
           </property>
           <property name="trace9Title" stdset="0">
            <string/>
           </property>
           <property name="trace10Color" stdset="0">
            <color>
-            <red>205</red>
-            <green>205</green>
+            <red>0</red>
+            <green>0</green>
             <blue>255</blue>
            </color>
           </property>
+          <property name="trace10LineStyle" stdset="0">
+           <enum>BaseMultiPlot::Dash</enum>
+          </property>
+          <property name="trace10LineWidth" stdset="0">
+           <number>3</number>
+          </property>
           <property name="trace10Symbol" stdset="0">
-           <enum>BaseMultiPlot::Circle</enum>
+           <enum>BaseMultiPlot::NoSymbol</enum>
+          </property>
+          <property name="trace10SymbolSize" stdset="0">
+           <number>8</number>
           </property>
           <property name="trace10Title" stdset="0">
-           <string>Line 3</string>
+           <string/>
           </property>
           <property name="trace11Color" stdset="0">
            <color>
-            <red>205</red>
-            <green>205</green>
+            <red>0</red>
+            <green>0</green>
             <blue>255</blue>
            </color>
           </property>
           <property name="trace11LineStyle" stdset="0">
-           <enum>BaseMultiPlot::Dash</enum>
+           <enum>BaseMultiPlot::Solid</enum>
+          </property>
+          <property name="trace11LineWidth" stdset="0">
+           <number>3</number>
+          </property>
+          <property name="trace11Symbol" stdset="0">
+           <enum>BaseMultiPlot::Circle</enum>
           </property>
           <property name="trace11Title" stdset="0">
-           <string/>
+           <string>Line 1</string>
           </property>
           <property name="trace12Color" stdset="0">
            <color>
@@ -1574,7 +1685,7 @@
            <string/>
           </property>
           <property name="XChannel" stdset="0">
-           <string>ca://SI-Glob:AP-Orbit:PosS-Mon</string>
+           <string>ca://SI-Glob:AP-Orbit:PosS-Cte</string>
           </property>
           <property name="Trace0Title" stdset="0">
            <string>Line 1</string>
@@ -2186,7 +2297,10 @@ font-weight: bold;</string>
           <property name="whatsThis">
            <string/>
           </property>
-          <property name="imageChannel">
+          <property name="imageWidth" stdset="0">
+           <number>281</number>
+          </property>
+          <property name="imageChannel" stdset="0">
            <string>ca://SI-Glob:AP-SOFB:RSPMatrix-RB</string>
           </property>
          </widget>
@@ -2305,7 +2419,10 @@ font-weight: bold;</string>
           <property name="whatsThis">
            <string/>
           </property>
-          <property name="imageChannel">
+          <property name="imageWidth" stdset="0">
+           <number>320</number>
+          </property>
+          <property name="imageChannel" stdset="0">
            <string>ca://SI-Glob:AP-SOFB:InvRSPMatrix-Mon</string>
           </property>
          </widget>
@@ -2353,8 +2470,8 @@ font-weight: bold;</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>98</width>
-             <height>28</height>
+             <width>1067</width>
+             <height>887</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -2455,8 +2572,8 @@ font-weight: bold;</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>98</width>
-             <height>28</height>
+             <width>1067</width>
+             <height>887</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -2557,8 +2674,8 @@ font-weight: bold;</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>98</width>
-             <height>28</height>
+             <width>1067</width>
+             <height>887</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -2659,8 +2776,8 @@ font-weight: bold;</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>98</width>
-             <height>28</height>
+             <width>1067</width>
+             <height>887</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -3249,7 +3366,7 @@ font-weight: bold;</string>
         <item row="9" column="1">
          <widget class="QLabel" name="label_13">
           <property name="text">
-           <string>Number of points for median:</string>
+           <string>Number of points for average:</string>
           </property>
          </widget>
         </item>
@@ -3429,7 +3546,20 @@ font-weight: bold;</string>
         <property name="bottomMargin">
          <number>9</number>
         </property>
-        <item row="8" column="1" colspan="3">
+        <item row="0" column="3" colspan="2">
+         <widget class="PyDMLabel" name="PyDMLB_CHStrength">
+          <property name="toolTip">
+           <string>Percentage to Apply (Readback)</string>
+          </property>
+          <property name="whatsThis">
+           <string/>
+          </property>
+          <property name="channel">
+           <string>ca://SI-Glob:AP-SOFB:CHStrength-RB</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="1" colspan="3">
          <widget class="PyDMCheckbox" name="PyDMCB_RFEnbl">
           <property name="enabled">
            <bool>false</bool>
@@ -3448,14 +3578,14 @@ font-weight: bold;</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="1">
+        <item row="0" column="1">
          <widget class="QLabel" name="LB_CHStrength">
           <property name="text">
            <string>CH %:</string>
           </property>
          </widget>
         </item>
-        <item row="6" column="4">
+        <item row="4" column="4">
          <widget class="PyDMLed" name="PyDMLed_SyncKicks">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -3474,7 +3604,7 @@ font-weight: bold;</string>
           </property>
          </widget>
         </item>
-        <item row="3" column="2">
+        <item row="1" column="2">
          <widget class="PyDMSpinBox" name="PyDMSB_CVStrength">
           <property name="maximumSize">
            <size>
@@ -3505,7 +3635,7 @@ font-weight: bold;</string>
           </property>
          </widget>
         </item>
-        <item row="8" column="4">
+        <item row="6" column="4">
          <widget class="PyDMLed" name="PyDMLed_RFEnbl">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -3524,14 +3654,14 @@ font-weight: bold;</string>
           </property>
          </widget>
         </item>
-        <item row="3" column="1">
+        <item row="1" column="1">
          <widget class="QLabel" name="LB_CVStrength">
           <property name="text">
            <string>CV %:</string>
           </property>
          </widget>
         </item>
-        <item row="6" column="1" colspan="3">
+        <item row="4" column="1" colspan="3">
          <widget class="PyDMCheckbox" name="PyDMCB_SyncKicks">
           <property name="enabled">
            <bool>false</bool>
@@ -3553,14 +3683,14 @@ font-weight: bold;</string>
           </property>
          </widget>
         </item>
-        <item row="9" column="1">
+        <item row="7" column="1">
          <widget class="QLabel" name="LB_RFStrength">
           <property name="text">
            <string>RF %:</string>
           </property>
          </widget>
         </item>
-        <item row="3" column="3" colspan="2">
+        <item row="1" column="3" colspan="2">
          <widget class="PyDMLabel" name="PyDMLB_CVStrength">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -3579,7 +3709,7 @@ font-weight: bold;</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="2">
+        <item row="0" column="2">
          <widget class="PyDMSpinBox" name="PyDMSB_CHStrength">
           <property name="maximumSize">
            <size>
@@ -3592,6 +3722,9 @@ font-weight: bold;</string>
           </property>
           <property name="whatsThis">
            <string/>
+          </property>
+          <property name="decimals">
+           <number>2</number>
           </property>
           <property name="minimum">
            <double>-1000.000000000000000</double>
@@ -3610,20 +3743,7 @@ font-weight: bold;</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="3" colspan="2">
-         <widget class="PyDMLabel" name="PyDMLB_CHStrength">
-          <property name="toolTip">
-           <string>Percentage to Apply (Readback)</string>
-          </property>
-          <property name="whatsThis">
-           <string/>
-          </property>
-          <property name="channel">
-           <string>ca://SI-Glob:AP-SOFB:CHStrength-RB</string>
-          </property>
-         </widget>
-        </item>
-        <item row="9" column="3" colspan="2">
+        <item row="7" column="3" colspan="2">
          <widget class="PyDMLabel" name="PyDMLB_RFStrength">
           <property name="toolTip">
            <string>Percentage to Apply (Readback)</string>
@@ -3636,7 +3756,7 @@ font-weight: bold;</string>
           </property>
          </widget>
         </item>
-        <item row="9" column="2">
+        <item row="7" column="2">
          <widget class="PyDMSpinBox" name="PyDMSB_RFStrength">
           <property name="maximumSize">
            <size>
@@ -3667,7 +3787,7 @@ font-weight: bold;</string>
           </property>
          </widget>
         </item>
-        <item row="7" column="1" colspan="4">
+        <item row="5" column="1" colspan="4">
          <spacer name="verticalSpacer_9">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
@@ -3679,41 +3799,6 @@ font-weight: bold;</string>
            </size>
           </property>
          </spacer>
-        </item>
-        <item row="0" column="1" colspan="4">
-         <widget class="PyDMScrollBar" name="PyDMScrollBar">
-          <property name="toolTip">
-           <string/>
-          </property>
-          <property name="whatsThis">
-           <string/>
-          </property>
-          <property name="minimum">
-           <double>-1000.000000000000000</double>
-          </property>
-          <property name="maximum">
-           <double>1000.000000000000000</double>
-          </property>
-          <property name="singleStep">
-           <double>2.000000000000000</double>
-          </property>
-          <property name="pageStep">
-           <double>20.000000000000000</double>
-          </property>
-          <property name="channel" stdset="0">
-           <string>ca://SI-Glob:AP-SOFB:CVStrength-SP</string>
-          </property>
-          <property name="limitsFromPV" stdset="0">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1" colspan="4">
-         <widget class="QScrollBar" name="horizontalScrollBar">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
         </item>
        </layout>
       </widget>
@@ -4344,6 +4429,13 @@ font-weight: bold;</string>
        </property>
       </widget>
      </item>
+     <item row="1" column="0">
+      <widget class="QPushButton" name="PB_Clear_IOCLog">
+       <property name="text">
+        <string>Clear</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </widget>
   </widget>
@@ -4447,11 +4539,6 @@ font-weight: bold;</string>
    <class>PyDMPushButton</class>
    <extends>QPushButton</extends>
    <header>pydm.widgets.pushbutton</header>
-  </customwidget>
-  <customwidget>
-   <class>PyDMScrollBar</class>
-   <extends>QScrollBar</extends>
-   <header>pydm.widgets.scrollbar</header>
   </customwidget>
   <customwidget>
    <class>PyDMSpinBox</class>
@@ -4685,7 +4772,7 @@ font-weight: bold;</string>
    <sender>CB_Line1ShowYStat</sender>
    <signal>toggled(bool)</signal>
    <receiver>PyDMMWP_OrbitY</receiver>
-   <slot>trace1setVisible(bool)</slot>
+   <slot>trace8setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>313</x>
@@ -4701,7 +4788,7 @@ font-weight: bold;</string>
    <sender>CB_Line1Show</sender>
    <signal>toggled(bool)</signal>
    <receiver>PyDMMWP_OrbitY</receiver>
-   <slot>trace0setVisible(bool)</slot>
+   <slot>trace11setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>309</x>
@@ -4710,22 +4797,6 @@ font-weight: bold;</string>
     <hint type="destinationlabel">
      <x>438</x>
      <y>850</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>CB_Line1Show</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>PyDMMWP_OrbitY</receiver>
-   <slot>trace4setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>309</x>
-     <y>953</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>309</x>
-     <y>871</y>
     </hint>
    </hints>
   </connection>
@@ -4752,7 +4823,7 @@ font-weight: bold;</string>
    <slot>trace6setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>703</x>
+     <x>717</x>
      <y>496</y>
     </hint>
     <hint type="destinationlabel">
@@ -4765,11 +4836,11 @@ font-weight: bold;</string>
    <sender>CB_Line2ShowYStat</sender>
    <signal>toggled(bool)</signal>
    <receiver>PyDMMWP_OrbitY</receiver>
-   <slot>trace7setVisible(bool)</slot>
+   <slot>trace5setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>703</x>
-     <y>495</y>
+     <x>717</x>
+     <y>496</y>
     </hint>
     <hint type="destinationlabel">
      <x>703</x>
@@ -4781,7 +4852,7 @@ font-weight: bold;</string>
    <sender>CB_Line2ShowYStat</sender>
    <signal>toggled(bool)</signal>
    <receiver>PyDMMWP_OrbitY</receiver>
-   <slot>trace8setVisible(bool)</slot>
+   <slot>trace4setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>714</x>
@@ -4797,7 +4868,7 @@ font-weight: bold;</string>
    <sender>CB_Line2Show</sender>
    <signal>toggled(bool)</signal>
    <receiver>PyDMMWP_OrbitY</receiver>
-   <slot>trace5setVisible(bool)</slot>
+   <slot>trace7setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>707</x>
@@ -4806,22 +4877,6 @@ font-weight: bold;</string>
     <hint type="destinationlabel">
      <x>682</x>
      <y>875</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>CB_Line2Show</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>PyDMMWP_OrbitY</receiver>
-   <slot>trace9setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>711</x>
-     <y>967</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>736</x>
-     <y>866</y>
     </hint>
    </hints>
   </connection>
@@ -4845,31 +4900,15 @@ font-weight: bold;</string>
    <sender>CB_Line3Show</sender>
    <signal>toggled(bool)</signal>
    <receiver>PyDMMWP_OrbitY</receiver>
-   <slot>trace10setVisible(bool)</slot>
+   <slot>trace3setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1095</x>
-     <y>959</y>
+     <x>1109</x>
+     <y>967</y>
     </hint>
     <hint type="destinationlabel">
      <x>1020</x>
      <y>873</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>CB_Line3Show</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>PyDMMWP_OrbitY</receiver>
-   <slot>trace14setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1093</x>
-     <y>953</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1093</x>
-     <y>879</y>
     </hint>
    </hints>
   </connection>
@@ -4893,11 +4932,11 @@ font-weight: bold;</string>
    <sender>CB_Line3ShowYStat</sender>
    <signal>toggled(bool)</signal>
    <receiver>PyDMMWP_OrbitY</receiver>
-   <slot>trace11setVisible(bool)</slot>
+   <slot>trace0setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1095</x>
-     <y>486</y>
+     <x>1109</x>
+     <y>496</y>
     </hint>
     <hint type="destinationlabel">
      <x>1195</x>
@@ -4909,11 +4948,11 @@ font-weight: bold;</string>
    <sender>CB_Line3ShowYStat</sender>
    <signal>toggled(bool)</signal>
    <receiver>PyDMMWP_OrbitY</receiver>
-   <slot>trace12setVisible(bool)</slot>
+   <slot>trace1setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1095</x>
-     <y>494</y>
+     <x>1109</x>
+     <y>496</y>
     </hint>
     <hint type="destinationlabel">
      <x>1270</x>
@@ -4925,11 +4964,11 @@ font-weight: bold;</string>
    <sender>CB_Line3ShowYStat</sender>
    <signal>toggled(bool)</signal>
    <receiver>PyDMMWP_OrbitY</receiver>
-   <slot>trace13setVisible(bool)</slot>
+   <slot>trace2setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1095</x>
-     <y>491</y>
+     <x>1109</x>
+     <y>496</y>
     </hint>
     <hint type="destinationlabel">
      <x>986</x>
@@ -4941,7 +4980,7 @@ font-weight: bold;</string>
    <sender>CB_Line1Show</sender>
    <signal>toggled(bool)</signal>
    <receiver>PyDMMWP_OrbitX</receiver>
-   <slot>trace0setVisible(bool)</slot>
+   <slot>trace11setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>313</x>
@@ -4950,22 +4989,6 @@ font-weight: bold;</string>
     <hint type="destinationlabel">
      <x>313</x>
      <y>414</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>CB_Line1Show</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>PyDMMWP_OrbitX</receiver>
-   <slot>trace4setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>311</x>
-     <y>956</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>547</x>
-     <y>451</y>
     </hint>
    </hints>
   </connection>
@@ -4989,7 +5012,7 @@ font-weight: bold;</string>
    <sender>CB_Line1ShowXStat</sender>
    <signal>toggled(bool)</signal>
    <receiver>PyDMMWP_OrbitX</receiver>
-   <slot>trace2setVisible(bool)</slot>
+   <slot>trace8setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>313</x>
@@ -5005,7 +5028,7 @@ font-weight: bold;</string>
    <sender>CB_Line1ShowXStat</sender>
    <signal>toggled(bool)</signal>
    <receiver>PyDMMWP_OrbitX</receiver>
-   <slot>trace3setVisible(bool)</slot>
+   <slot>trace9setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>313</x>
@@ -5021,7 +5044,7 @@ font-weight: bold;</string>
    <sender>CB_Line1ShowXStat</sender>
    <signal>toggled(bool)</signal>
    <receiver>PyDMMWP_OrbitX</receiver>
-   <slot>trace1setVisible(bool)</slot>
+   <slot>trace10setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>312</x>
@@ -5037,7 +5060,7 @@ font-weight: bold;</string>
    <sender>CB_Line1ShowYStat</sender>
    <signal>toggled(bool)</signal>
    <receiver>PyDMMWP_OrbitY</receiver>
-   <slot>trace2setVisible(bool)</slot>
+   <slot>trace9setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>305</x>
@@ -5053,7 +5076,7 @@ font-weight: bold;</string>
    <sender>CB_Line1ShowYStat</sender>
    <signal>toggled(bool)</signal>
    <receiver>PyDMMWP_OrbitY</receiver>
-   <slot>trace3setVisible(bool)</slot>
+   <slot>trace10setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>308</x>
@@ -5069,7 +5092,7 @@ font-weight: bold;</string>
    <sender>CB_Line2ShowXStat</sender>
    <signal>toggled(bool)</signal>
    <receiver>PyDMMWP_OrbitX</receiver>
-   <slot>trace6setVisible(bool)</slot>
+   <slot>trace4setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>708</x>
@@ -5085,7 +5108,7 @@ font-weight: bold;</string>
    <sender>CB_Line2ShowXStat</sender>
    <signal>toggled(bool)</signal>
    <receiver>PyDMMWP_OrbitX</receiver>
-   <slot>trace7setVisible(bool)</slot>
+   <slot>trace5setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>715</x>
@@ -5101,7 +5124,7 @@ font-weight: bold;</string>
    <sender>CB_Line2ShowXStat</sender>
    <signal>toggled(bool)</signal>
    <receiver>PyDMMWP_OrbitX</receiver>
-   <slot>trace8setVisible(bool)</slot>
+   <slot>trace6setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>710</x>
@@ -5117,7 +5140,7 @@ font-weight: bold;</string>
    <sender>CB_Line2Show</sender>
    <signal>toggled(bool)</signal>
    <receiver>PyDMMWP_OrbitX</receiver>
-   <slot>trace5setVisible(bool)</slot>
+   <slot>trace7setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>709</x>
@@ -5126,22 +5149,6 @@ font-weight: bold;</string>
     <hint type="destinationlabel">
      <x>781</x>
      <y>438</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>CB_Line2Show</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>PyDMMWP_OrbitX</receiver>
-   <slot>trace9setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>707</x>
-     <y>964</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>837</x>
-     <y>466</y>
     </hint>
    </hints>
   </connection>
@@ -5165,7 +5172,7 @@ font-weight: bold;</string>
    <sender>CB_Line3ShowXStat</sender>
    <signal>toggled(bool)</signal>
    <receiver>PyDMMWP_OrbitX</receiver>
-   <slot>trace11setVisible(bool)</slot>
+   <slot>trace0setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>1096</x>
@@ -5181,7 +5188,7 @@ font-weight: bold;</string>
    <sender>CB_Line3ShowXStat</sender>
    <signal>toggled(bool)</signal>
    <receiver>PyDMMWP_OrbitX</receiver>
-   <slot>trace12setVisible(bool)</slot>
+   <slot>trace1setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>1101</x>
@@ -5197,7 +5204,7 @@ font-weight: bold;</string>
    <sender>CB_Line3ShowXStat</sender>
    <signal>toggled(bool)</signal>
    <receiver>PyDMMWP_OrbitX</receiver>
-   <slot>trace13setVisible(bool)</slot>
+   <slot>trace2setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>1105</x>
@@ -5213,7 +5220,7 @@ font-weight: bold;</string>
    <sender>CB_Line3Show</sender>
    <signal>toggled(bool)</signal>
    <receiver>PyDMMWP_OrbitX</receiver>
-   <slot>trace10setVisible(bool)</slot>
+   <slot>trace3setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>1098</x>
@@ -5228,32 +5235,32 @@ font-weight: bold;</string>
   <connection>
    <sender>CB_Line3Show</sender>
    <signal>toggled(bool)</signal>
-   <receiver>PyDMMWP_OrbitX</receiver>
-   <slot>trace14setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1100</x>
-     <y>958</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1174</x>
-     <y>461</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>CB_Line3Show</sender>
-   <signal>toggled(bool)</signal>
    <receiver>CB_Line3ShowXStat</receiver>
    <slot>setChecked(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1094</x>
-     <y>959</y>
+     <x>1109</x>
+     <y>967</y>
     </hint>
     <hint type="destinationlabel">
      <x>1099</x>
      <y>75</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>PB_Clear_IOCLog</sender>
+   <signal>clicked()</signal>
+   <receiver>PyDMLL_IOCLog</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>136</x>
+     <y>1021</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>136</x>
+     <y>709</y>
     </hint>
    </hints>
   </connection>

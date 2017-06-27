@@ -61,8 +61,8 @@ class RegisterMenu(QMenu):
     def _register_orbit(self,flag):
         def register(trig):
             if flag == 'orb':
-                orbx = self.main_window.PV_SOFBCorrOrbitXMon.value
-                orby = self.main_window.PV_SOFBCorrOrbitYMon.value
+                orbx = self.main_window.PV_SOFBOnlineOrbitXMon.value
+                orby = self.main_window.PV_SOFBOnlineOrbitYMon.value
             elif flag == 'ref':
                 orbx = self.main_window.PV_SOFBOrbitRefXRB.value
                 orby = self.main_window.PV_SOFBOrbitRefYRB.value
@@ -86,7 +86,7 @@ class RegisterMenu(QMenu):
         fname = filename[0]
         fname += '' if fname.endswith(self.EXT) else self.EXT
         _np.savetxt(fname,_np.vstack([self.orbx,self.orby]).T, header=header)
-        self._update_and_emit(orbx,orby,fname, 'Orbit Saved: ')
+        self._update_and_emit(self.orbx,self.orby,fname, 'Orbit Saved: ')
 
     def _load_orbit(self):
         filename = QFileDialog.getOpenFileName(caption='Select an Orbit File.',
