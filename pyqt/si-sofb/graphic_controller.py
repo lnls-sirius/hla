@@ -95,10 +95,10 @@ class GraphicOrbitControllers(QObject):
 
         main_ = self.main_window
         other_ = {
-                'current raw orbit':(main_.PV_OrbitOrbitXMon, main_.PV_OrbitOrbitYMon),
-                'sofb orbit':(main_.PV_SOFBOrbitXMon, main_.PV_SOFBOrbitYMon),
-                'sofb reference':(main_.PV_SOFBOrbitRefXRB, main_.PV_SOFBOrbitRefYRB),
-                'golden':(main_.PV_SOFBGoldenOrbitXRB , main_.PV_SOFBGoldenOrbitYRB),
+                'online orbit':(main_.PV_SOFBOnlineOrbitXMon, main_.PV_SOFBOnlineOrbitYMon),
+                'correction orbit':(main_.PV_SOFBCorrOrbitXMon, main_.PV_SOFBCorrOrbitYMon),
+                'reference orbit':(main_.PV_SOFBOrbitRefXRB, main_.PV_SOFBOrbitRefYRB),
+                'golden orbit':(main_.PV_SOFBGoldenOrbitXRB , main_.PV_SOFBGoldenOrbitYRB),
                 }
         if x_sig is not None:
             x_sig.disconnect(x_slot)

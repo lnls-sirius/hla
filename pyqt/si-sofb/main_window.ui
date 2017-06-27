@@ -289,12 +289,12 @@
              </property>
              <item>
               <property name="text">
-               <string>SOFB Orbit</string>
+               <string>Correction Orbit</string>
               </property>
              </item>
              <item>
               <property name="text">
-               <string>Current Raw Orbit</string>
+               <string>Online Orbit</string>
               </property>
              </item>
              <item>
@@ -344,7 +344,12 @@
              </item>
              <item>
               <property name="text">
-               <string>Golden</string>
+               <string>Golden Orbit</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Reference Orbit</string>
               </property>
              </item>
              <item>
@@ -398,12 +403,12 @@
              </property>
              <item>
               <property name="text">
-               <string>SOFB Reference</string>
+               <string>Reference Orbit</string>
               </property>
              </item>
              <item>
               <property name="text">
-               <string>Golden</string>
+               <string>Golden Orbit</string>
               </property>
              </item>
              <item>
@@ -591,12 +596,12 @@
              </property>
              <item>
               <property name="text">
-               <string>SOFB Orbit</string>
+               <string>Correction Orbit</string>
               </property>
              </item>
              <item>
               <property name="text">
-               <string>Current Raw Orbit</string>
+               <string>Online Orbit</string>
               </property>
              </item>
              <item>
@@ -646,7 +651,12 @@
              </item>
              <item>
               <property name="text">
-               <string>Golden</string>
+               <string>Golden Orbit</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Reference Orbit</string>
               </property>
              </item>
              <item>
@@ -722,12 +732,12 @@
              </property>
              <item>
               <property name="text">
-               <string>SOFB Reference</string>
+               <string>Reference Orbit</string>
               </property>
              </item>
              <item>
               <property name="text">
-               <string>Golden</string>
+               <string>Golden Orbit</string>
               </property>
              </item>
              <item>
@@ -820,12 +830,12 @@
              </property>
              <item>
               <property name="text">
-               <string>SOFB Reference</string>
+               <string>Reference Orbit</string>
               </property>
              </item>
              <item>
               <property name="text">
-               <string>Golden</string>
+               <string>Golden Orbit</string>
               </property>
              </item>
              <item>
@@ -871,6 +881,11 @@
              <item>
               <property name="text">
                <string>Register 9</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Zero</string>
               </property>
              </item>
             </widget>
@@ -944,12 +959,12 @@
              </property>
              <item>
               <property name="text">
-               <string>SOFB Orbit</string>
+               <string>Correction Orbit</string>
               </property>
              </item>
              <item>
               <property name="text">
-               <string>Current Raw Orbit</string>
+               <string>Online Orbit</string>
               </property>
              </item>
              <item>
@@ -999,7 +1014,12 @@
              </item>
              <item>
               <property name="text">
-               <string>Golden</string>
+               <string>Golden Orbit</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Reference Orbit</string>
               </property>
              </item>
              <item>
@@ -1265,7 +1285,7 @@
            <string/>
           </property>
           <property name="XChannel" stdset="0">
-           <string>ca://SI-Glob:AP-Orbit:PosS-Mon</string>
+           <string>ca://SI-Glob:AP-Orbit:PosS-Cte</string>
           </property>
           <property name="Trace0Title" stdset="0">
            <string>Line 1</string>
