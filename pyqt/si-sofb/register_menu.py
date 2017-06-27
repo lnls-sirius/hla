@@ -79,8 +79,6 @@ class RegisterMenu(QMenu):
         return register
 
     def _save_orbit(self,trig):
-        sub_orbx = _np.zeros(self._orbx.shape)
-        sub_orby = _np.zeros(self._orby.shape)
         header = '# ' + _datetime.datetime.now().strftime('%Y/%M/%d-%H:%M:%S') + '\n'
         filename = QFileDialog.getSaveFileName(caption='Define a File Name to Save the Orbit',
                                                directory=self.last_dir,
