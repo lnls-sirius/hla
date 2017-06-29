@@ -1815,6 +1815,9 @@
             <blue>255</blue>
            </color>
           </property>
+          <property name="trace0LineWidth" stdset="0">
+           <number>3</number>
+          </property>
           <property name="trace0Symbol" stdset="0">
            <enum>BaseMultiPlot::Circle</enum>
           </property>
@@ -1823,9 +1826,9 @@
           </property>
           <property name="trace1Color" stdset="0">
            <color>
-            <red>172</red>
-            <green>172</green>
-            <blue>172</blue>
+            <red>100</red>
+            <green>100</green>
+            <blue>100</blue>
            </color>
           </property>
           <property name="trace1LineStyle" stdset="0">
@@ -1852,9 +1855,9 @@
           </property>
           <property name="trace3Color" stdset="0">
            <color>
-            <red>172</red>
-            <green>172</green>
-            <blue>172</blue>
+            <red>100</red>
+            <green>100</green>
+            <blue>100</blue>
            </color>
           </property>
           <property name="trace3LineStyle" stdset="0">
@@ -1955,6 +1958,15 @@
             <green>0</green>
             <blue>0</blue>
            </color>
+          </property>
+          <property name="trace0LineWidth" stdset="0">
+           <number>3</number>
+          </property>
+          <property name="trace0Symbol" stdset="0">
+           <enum>BaseMultiPlot::Circle</enum>
+          </property>
+          <property name="trace0Title" stdset="0">
+           <string>Calculated Kick</string>
           </property>
           <property name="trace0Channel" stdset="0">
            <string>ca://SI-Glob:AP-SOFB:CVCalcdKicks-Mon</string>
@@ -2283,28 +2295,6 @@ font-weight: bold;</string>
           </property>
          </spacer>
         </item>
-        <item row="1" column="0" colspan="4">
-         <widget class="PyDMImageView" name="PyDMIV_RespMatrix">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>2</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="toolTip">
-           <string/>
-          </property>
-          <property name="whatsThis">
-           <string/>
-          </property>
-          <property name="imageWidth" stdset="0">
-           <number>281</number>
-          </property>
-          <property name="imageChannel" stdset="0">
-           <string>ca://SI-Glob:AP-SOFB:RSPMatrix-RB</string>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="4" colspan="4">
          <widget class="QLabel" name="label_2">
           <property name="styleSheet">
@@ -2397,33 +2387,17 @@ font-weight: bold;</string>
             <blue>0</blue>
            </color>
           </property>
+          <property name="trace0LineWidth" stdset="0">
+           <number>3</number>
+          </property>
+          <property name="trace0Symbol" stdset="0">
+           <enum>BaseMultiPlot::Circle</enum>
+          </property>
           <property name="trace0Title" stdset="0">
            <string/>
           </property>
           <property name="trace0Channel" stdset="0">
-           <string>ca://SI-Glob:AP-SOFB:SingVals-Mon</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="4" colspan="5">
-         <widget class="PyDMImageView" name="PyDMIV_InvMatrix">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>2</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="toolTip">
-           <string/>
-          </property>
-          <property name="whatsThis">
-           <string/>
-          </property>
-          <property name="imageWidth" stdset="0">
-           <number>320</number>
-          </property>
-          <property name="imageChannel" stdset="0">
-           <string>ca://SI-Glob:AP-SOFB:InvRSPMatrix-Mon</string>
+           <string>ca://SI-Glob:AP-SOFB:SingValues-Mon</string>
           </property>
          </widget>
         </item>
@@ -2452,6 +2426,62 @@ font-weight: bold;</string>
            </size>
           </property>
          </spacer>
+        </item>
+        <item row="1" column="4" colspan="5">
+         <widget class="PyDMImageView" name="PyDMIV_InvMatrix">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>2</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="whatsThis">
+           <string/>
+          </property>
+          <property name="imageWidth" stdset="0">
+           <number>281</number>
+          </property>
+          <property name="normalizeData" stdset="0">
+           <bool>true</bool>
+          </property>
+          <property name="readingOrder" stdset="0">
+           <enum>PyDMImageView::Clike</enum>
+          </property>
+          <property name="imageChannel" stdset="0">
+           <string>ca://SI-Glob:AP-SOFB:InvRSPMatrix-Mon</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" colspan="4">
+         <widget class="PyDMImageView" name="PyDMIV_RespMatrix">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>2</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="whatsThis">
+           <string/>
+          </property>
+          <property name="imageWidth" stdset="0">
+           <number>320</number>
+          </property>
+          <property name="normalizeData" stdset="0">
+           <bool>true</bool>
+          </property>
+          <property name="readingOrder" stdset="0">
+           <enum>PyDMImageView::Clike</enum>
+          </property>
+          <property name="imageChannel" stdset="0">
+           <string>ca://SI-Glob:AP-SOFB:RSPMatrix-RB</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
