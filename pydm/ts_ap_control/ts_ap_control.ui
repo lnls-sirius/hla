@@ -49,7 +49,7 @@ font-weight:bold;
 background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, stop:0 rgba(173, 190, 207, 255), stop:1 rgba(213, 213, 213, 255));</string>
      </property>
      <property name="text">
-      <string>TS Control Window</string>
+      <string>BTS Control Window</string>
      </property>
     </widget>
    </item>
@@ -3338,7 +3338,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
      </property>
      <property name="minimumSize">
       <size>
-       <width>1300</width>
+       <width>1315</width>
        <height>770</height>
       </size>
      </property>
@@ -3356,6 +3356,18 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout_9">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
       <item row="0" column="2">
        <widget class="QWidget" name="widget_BTSApp" native="true">
         <property name="sizePolicy">
@@ -3482,7 +3494,7 @@ font-weight:bold;
        <widget class="QWidget" name="widget_lattice" native="true">
         <property name="minimumSize">
          <size>
-          <width>1300</width>
+          <width>1315</width>
           <height>180</height>
          </size>
         </property>

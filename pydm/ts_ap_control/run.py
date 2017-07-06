@@ -2,7 +2,7 @@
 from pydm.PyQt.uic import loadUi
 from pydm.PyQt.QtCore import pyqtSlot, Qt
 from pydm.PyQt.QtGui import (QMainWindow, QVBoxLayout, QHBoxLayout, QGridLayout, QFileDialog, QSizePolicy, QDoubleValidator,
-                            QWidget, QFrame, QScrollArea, QLabel, QPixmap, QPushButton, QSpacerItem)
+                            QWidget, QFrame, QLabel, QPixmap, QPushButton, QSpacerItem)
 from pydm import PyDMApplication
 from pydm.widgets.led import PyDMLed
 from pydm.widgets.label import PyDMLabel
@@ -77,8 +77,11 @@ class BTSControlWindow(QMainWindow):
         scrn_headerline = QWidget()
         scrn_headerline.setLayout(QHBoxLayout())
         label_scrn = QLabel('Scrn')
+        label_scrn.setAlignment(Qt.AlignHCenter)
         label_position = QLabel('Position')
+        label_position.setAlignment(Qt.AlignHCenter)
         label_lamp = QLabel('Lamp')
+        label_lamp.setAlignment(Qt.AlignHCenter)
         scrn_headerline.layout().addWidget(label_scrn)
         scrn_headerline.layout().addWidget(label_position)
         scrn_headerline.layout().addWidget(label_lamp)
@@ -88,36 +91,36 @@ class BTSControlWindow(QMainWindow):
         ch_headerline = QWidget()
         ch_headerline.setLayout(QHBoxLayout())
         label_ch_led = QLabel('')
+        label_ch_led.setAlignment(Qt.AlignHCenter)
         label_ch = QLabel('CH')
+        label_ch.setAlignment(Qt.AlignHCenter)
         label_ch.setStyleSheet("""font-size:16pt""")
-        # label_ch_sp_ctrlvar = QLabel('PS SP')
-        # label_ch_rb_ctrlvar = QLabel('PS RB')
-        label_ch_sp_kick = QLabel('Kick SP')
-        label_ch_rb_kick = QLabel('Kick RB')
+        label_ch_sp_kick = QLabel('Kick-SP')
+        label_ch_sp_kick.setAlignment(Qt.AlignHCenter)
+        label_ch_mon_kick = QLabel('Kick-Mon')
+        label_ch_mon_kick.setAlignment(Qt.AlignHCenter)
         ch_headerline.layout().addWidget(label_ch_led)
         ch_headerline.layout().addWidget(label_ch)
-        # ch_headerline.layout().addWidget(label_ch_sp_ctrlvar)
-        # ch_headerline.layout().addWidget(label_ch_rb_ctrlvar)
         ch_headerline.layout().addWidget(label_ch_sp_kick)
-        ch_headerline.layout().addWidget(label_ch_rb_kick)
+        ch_headerline.layout().addWidget(label_ch_mon_kick)
         ch_headerline.layout().setContentsMargins(0,0,0,0)
         # ch_headerline.setStyleSheet('''QLabel{background-color:blue;}''')
 
         cv_headerline = QWidget()
         cv_headerline.setLayout(QHBoxLayout())
         label_cv_led = QLabel('')
+        label_cv_led.setAlignment(Qt.AlignHCenter)
         label_cv = QLabel('CV')
+        label_cv.setAlignment(Qt.AlignHCenter)
         label_cv.setStyleSheet("""font-size:16pt""")
-        # label_cv_sp_ctrlvar = QLabel('PS SP')
-        # label_cv_rb_ctrlvar = QLabel('PS RB')
-        label_cv_sp_kick = QLabel('Kick SP')
-        label_cv_rb_kick = QLabel('Kick RB')
+        label_cv_sp_kick = QLabel('Kick-SP')
+        label_cv_sp_kick.setAlignment(Qt.AlignHCenter)
+        label_cv_mon_kick = QLabel('Kick-Mon')
+        label_cv_mon_kick.setAlignment(Qt.AlignHCenter)
         cv_headerline.layout().addWidget(label_cv_led)
         cv_headerline.layout().addWidget(label_cv)
-        # cv_headerline.layout().addWidget(label_cv_sp_ctrlvar)
-        # cv_headerline.layout().addWidget(label_cv_rb_ctrlvar)
         cv_headerline.layout().addWidget(label_cv_sp_kick)
-        cv_headerline.layout().addWidget(label_cv_rb_kick)
+        cv_headerline.layout().addWidget(label_cv_mon_kick)
         cv_headerline.layout().setContentsMargins(0,0,0,0)
         # cv_headerline.setStyleSheet('''QLabel{background-color:blue;}''')
 
@@ -125,18 +128,19 @@ class BTSControlWindow(QMainWindow):
         headerline.setMaximumHeight(40)
         headerline.setLayout(QHBoxLayout())
         headerline.layout().addWidget(scrn_headerline)
-        headerline.layout().addItem(QSpacerItem(40,20,QSizePolicy.Expanding,QSizePolicy.Minimum))
+        headerline.layout().addItem(QSpacerItem(40,20,QSizePolicy.Fixed,QSizePolicy.Minimum))
         headerline.layout().addWidget(ch_headerline)
-        headerline.layout().addItem(QSpacerItem(40,20,QSizePolicy.Expanding,QSizePolicy.Minimum))
+        headerline.layout().addItem(QSpacerItem(40,20,QSizePolicy.Fixed,QSizePolicy.Minimum))
         headerline.layout().addWidget(cv_headerline)
-        headerline.setStyleSheet("""font-weight:bold;text-align:center;""")
+        headerline.setStyleSheet("""font-weight:bold;""")
+        headerline.layout().setContentsMargins(4,9,4,9)
         correctors_gridlayout = QGridLayout()
         correctors_gridlayout.addWidget(headerline,1,1)
         line = 2
         for ch_group,cv,scrn,scrnpv in [[['01:PM-EjeSF','01:PM-EjeSG'],'01:MA-CV-1',1,'01:DI-Scrn'],\
                                         [['01:MA-CH'],'01:MA-CV-2',2,'02:DI-Scrn'],\
                                         [['02:MA-CH'],'02:MA-CV',3,'03:DI-Scrn'],\
-                                        [['02:MA-CH'],'03:MA-CV',41,'04:DI-Scrn-1'],\
+                                        [['03:MA-CH'],'03:MA-CV',41,'04:DI-Scrn-1'],\
                                         [['04:MA-CH'],'04:MA-CV-1',42,'04:DI-Scrn-2'],\
                                         [['04:PM-InjSG-1','04:PM-InjSG-2','04:PM-InjSF'],'04:MA-CV-2',43,'04:DI-Scrn-3']]:
             #Scrn
@@ -152,38 +156,39 @@ class BTSControlWindow(QMainWindow):
             widget_position_sp = QWidget()
             widget_position_sp.setLayout(QVBoxLayout())
             widget_position_sp.layout().setContentsMargins(0,0,0,0)
-            pydmcombobox = PyDMEnumComboBox(scrn_details,'ca://TS-' + scrnpv + ':Position-SP')
-            pydmcombobox.setObjectName('PyDMEnumComboBox_Position_SP_Scrn' + str(scrn))
-            pydmcombobox.setMinimumWidth(80)
-            widget_position_sp.layout().addWidget(pydmcombobox)
-            pydmlabel_position = PyDMLabel(scrn_details, 'ca://TS-' + scrnpv + ':Position-RB')
-            pydmlabel_position.setObjectName('PyDMLabel_Position_RB_Scrn' + str(scrn))
-            pydmlabel_position.setPrecision(3)
-            pydmlabel_position.setMinimumWidth(80)
-            frame_label = QFrame()
-            frame_label.setFrameShadow(QFrame.Raised)
-            frame_label.setFrameShape(QFrame.Box)
-            frame_label.setLayout(QVBoxLayout())
-            frame_label.layout().setContentsMargins(3,3,3,3)
-            frame_label.setMinimumHeight(28)
-            frame_label.setSizePolicy(QSizePolicy.Preferred,QSizePolicy.Fixed)
-            frame_label.layout().addWidget(pydmlabel_position)
-            widget_position_sp.layout().addWidget(frame_label)
+            pydmcombobox_position = PyDMEnumComboBox(scrn_details,'ca://TS-' + scrnpv + ':Position-SP')
+            pydmcombobox_position.setObjectName('PyDMEnumComboBox_Position_SP_Scrn' + str(scrn))
+            pydmcombobox_position.setMinimumWidth(80)
+            widget_position_sp.layout().addWidget(pydmcombobox_position)
+            pydmled_position = PyDMLed(scrn_details,'ca://TS-' + scrnpv + ':Position-Mon',enum_map={'Home':-1,'Position 1': 2,'Position 2':0})#TODO
+            pydmled_position.setObjectName('PyDMLed_Position_Mon_Scrn' + str(scrn))
+            pydmled_position.setMinimumWidth(86)
+            pydmled_position.shape = 2
+            # pydmlabel_position = PyDMLabel(scrn_details, 'ca://' + acc + scrnpv + ':Position-Mon')
+            # pydmlabel_position.setObjectName('PyDMLabel_Position_Mon_Scrn' + str(scrn))
+            # pydmlabel_position.setMinimumWidth(80)
+            # frame_label = QFrame()
+            # frame_label.setFrameShadow(QFrame.Raised)
+            # frame_label.setFrameShape(QFrame.Box)
+            # frame_label.setLayout(QVBoxLayout())
+            # frame_label.layout().setContentsMargins(3,3,3,3)
+            # frame_label.setMinimumHeight(28)
+            # frame_label.setSizePolicy(QSizePolicy.Preferred,QSizePolicy.Fixed)
+            # frame_label.layout().addWidget(pydmlabel_position)
+            # widget_position_sp.layout().addWidget(frame_label)
+            widget_position_sp.layout().addWidget(pydmled_position)
             widget_position_sp.setSizePolicy(QSizePolicy.Minimum,QSizePolicy.Fixed)
             scrn_details.layout().addWidget(widget_position_sp)
 
             scrn_details.layout().addItem(QSpacerItem(40,20,QSizePolicy.Fixed,QSizePolicy.Minimum))
-
             pydmcheckbox = PyDMCheckbox(scrn_details, 'ca://TS-' + scrnpv + ':LampState-SP')
             pydmcheckbox.setObjectName('PyDMCheckbox_LampState_SP_Scrn' + str(scrn))
             pydmcheckbox.setSizePolicy(QSizePolicy.Fixed,QSizePolicy.Fixed)
             scrn_details.layout().addWidget(pydmcheckbox)
-
             pydmled = PyDMLed(scrn_details,'ca://TS-' + scrnpv + ':LampState-Sts')
             pydmled.setObjectName('PyDMLed_LampState_Sts_Scrn' + str(scrn))
             pydmled.setMinimumWidth(24)
             scrn_details.layout().addWidget(pydmled)
-
             scrn_details.layout().addItem(QSpacerItem(40,20,QSizePolicy.Fixed,QSizePolicy.Minimum))
 
             #CH
@@ -222,43 +227,24 @@ class BTSControlWindow(QMainWindow):
                 pushbutton.setMinimumHeight(24)
                 ch_details.layout().addWidget(pushbutton,1,2)
 
-                # pydmlineedit_ctrlvar = PyDMLineEdit(ch_details, 'ca://TS-' + ch + ':' + ctrlvar + '-SP')
-                # pydmlineedit_ctrlvar.setObjectName('PyDMLineEdit_' + name + ctrlvar + '_SP' + '_Scrn' + str(scrn))
-                # pydmlineedit_ctrlvar.receivePrecision(3)
-                # pydmlineedit_ctrlvar.setValidator(QDoubleValidator())
-                # pydmlineedit_ctrlvar._useunits = False
-                # pydmlineedit_ctrlvar.setMinimumWidth(80)
-                # ch_details.layout().addWidget(pydmlineedit_ctrlvar,1,3)
-                #
-                # scrollbar_ctrlvar = PyDMScrollBar(ch_details, Qt.Horizontal, 'ca://TS-' + ch + ':' + ctrlvar + '-SP')
-                # scrollbar_ctrlvar.setObjectName('PyDMScrollBar_' + name + ctrlvar + '_SP' + '_Scrn' + str(scrn))
-                # scrollbar_ctrlvar.setMinimumWidth(80)
-                # ch_details.layout().addWidget(scrollbar_ctrlvar,2,3)
-                #
-                # pydmlabel_ctrlvar = PyDMLabel(ch_details, 'ca://TS-' + ch + ':' + ctrlvar + '-RB')
-                # pydmlabel_ctrlvar.setObjectName('PyDMLabel_' + name + ctrlvar + '_RB' + '_Scrn' + str(scrn))
-                # pydmlabel_ctrlvar.setPrecision(3)
-                # pydmlabel_ctrlvar.setMinimumWidth(80)
-                # ch_details.layout().addWidget(pydmlabel_ctrlvar,1,4)
-
                 pydmlineedit_kick = PyDMLineEdit(ch_details, 'ca://TS-' + ch + ':Kick-SP')
                 pydmlineedit_kick.setObjectName('PyDMLineEdit' + name + '_Kick_SP_Scrn' + str(scrn))
-                pydmlineedit_kick.receivePrecision(3)
                 pydmlineedit_kick.setValidator(QDoubleValidator())
                 pydmlineedit_kick._useunits = False
                 pydmlineedit_kick.setMinimumWidth(80)
                 pydmlineedit_kick.setMinimumHeight(24)
                 ch_details.layout().addWidget(pydmlineedit_kick,1,5)
 
-                scrollbar_kick = PyDMScrollBar(ch_details, Qt.Horizontal, 'ca://TS-' + ch + ':Kick-SP')
+                scrollbar_kick = PyDMScrollBar(ch_details, Qt.Horizontal, 'ca://TS-' + ch + ':Kick-SP',1)
                 scrollbar_kick.setObjectName('PyDMScrollBar' + name + '_Kick_SP_Scrn' + str(scrn))
                 scrollbar_kick.setMinimumWidth(80)
+                scrollbar_kick.limitsFromPV = True
                 ch_details.layout().addWidget(scrollbar_kick,2,5)
 
-                pydmlabel_kick = PyDMLabel(ch_details, 'ca://TS-' + ch + ':Kick-RB')
-                pydmlabel_kick.setObjectName('PyDMLabel_' + name + '_Kick_RB_Scrn' + str(scrn))
-                pydmlabel_kick.setPrecision(3)
-                pydmlabel_kick.setMinimumWidth(80)
+                pydmlabel_kick = PyDMLabel(ch_details, 'ca://TS-' + ch + ':Kick-Mon')
+                pydmlabel_kick.setObjectName('PyDMLabel_' + name + '_Kick_Mon_Scrn' + str(scrn))
+                pydmlabel_kick.setMinimumWidth(90)
+                pydmlabel_kick.setMaximumWidth(90)
                 pydmlabel_kick.setMinimumHeight(24)
                 frame_label = QFrame()
                 frame_label.setFrameShadow(QFrame.Raised)
@@ -298,45 +284,24 @@ class BTSControlWindow(QMainWindow):
             pushbutton.setMinimumHeight(24)
             cv_details.layout().addWidget(pushbutton,1,2)
 
-            # pydmlineedit_ctrlvar = PyDMLineEdit(cv_details, 'ca://TS-' + cv + ':' + ctrlvar + '-SP')
-            # pydmlineedit_ctrlvar.setObjectName('PyDMLineEdit_' + name + ctrlvar + '_SP' + '_Scrn' + str(scrn))
-            # pydmlineedit_ctrlvar.receivePrecision(3)
-            # pydmlineedit_ctrlvar.setValidator(QDoubleValidator())
-            # pydmlineedit_ctrlvar._useunits = False
-            # pydmlineedit_ctrlvar.setMinimumWidth(80)
-            # pydmlineedit_ctrlvar.setMinimumHeight(24)
-            # cv_details.layout().addWidget(pydmlineedit_ctrlvar,1,3)
-            #
-            # scrollbar_ctrlvar = PyDMScrollBar(cv_details, Qt.Horizontal, 'ca://TS-' + cv + ':' + ctrlvar + '-SP')
-            # scrollbar_ctrlvar.setObjectName('PyDMScrollBar_' + name + ctrlvar + '_SP' + '_Scrn' + str(scrn))
-            # scrollbar_ctrlvar.setMinimumWidth(80)
-            # cv_details.layout().addWidget(scrollbar_ctrlvar,2,3)
-            #
-            # pydmlabel_ctrlvar = PyDMLabel(cv_details, 'ca://TS-' + cv + ':' + ctrlvar + '-RB')
-            # pydmlabel_ctrlvar.setObjectName('PyDMLabel_' + name + ctrlvar + '_RB' + '_Scrn' + str(scrn))
-            # pydmlabel_ctrlvar.setPrecision(3)
-            # pydmlabel_ctrlvar.setMinimumWidth(80)
-            # pydmlabel_ctrlvar.setMinimumHeight(24)
-            # cv_details.layout().addWidget(pydmlabel_ctrlvar,1,4)
-
             pydmlineedit_kick = PyDMLineEdit(cv_details, 'ca://TS-' + cv + ':Kick-SP')
             pydmlineedit_kick.setObjectName('PyDMLineEdit' + name + '_Kick_SP_Scrn' + str(scrn))
-            pydmlineedit_kick.receivePrecision(3)
             pydmlineedit_kick.setValidator(QDoubleValidator())
             pydmlineedit_kick._useunits = False
             pydmlineedit_kick.setMinimumWidth(80)
             pydmlineedit_kick.setMinimumHeight(24)
             cv_details.layout().addWidget(pydmlineedit_kick,1,5)
 
-            scrollbar_kick = PyDMScrollBar(cv_details, Qt.Horizontal, 'ca://TS-' + cv + ':Kick-SP')
+            scrollbar_kick = PyDMScrollBar(cv_details, Qt.Horizontal, 'ca://TS-' + cv + ':Kick-SP',1)
             scrollbar_kick.setObjectName('PyDMScrollBar' + name + '_Kick_SP_Scrn' + str(scrn))
             scrollbar_kick.setMinimumWidth(80)
+            scrollbar_kick.limitsFromPV = True
             cv_details.layout().addWidget(scrollbar_kick,2,5)
 
-            pydmlabel_kick = PyDMLabel(cv_details, 'ca://TS-' + cv + ':Kick-RB')
-            pydmlabel_kick.setObjectName('PyDMLabel_' + name + '_Kick_RB_Scrn' + str(scrn))
-            pydmlabel_kick.setPrecision(3)
-            pydmlabel_kick.setMinimumWidth(80)
+            pydmlabel_kick = PyDMLabel(cv_details, 'ca://TS-' + cv + ':Kick-Mon')
+            pydmlabel_kick.setObjectName('PyDMLabel_' + name + '_Kick_Mon_Scrn' + str(scrn))
+            pydmlabel_kick.setMinimumWidth(90)
+            pydmlabel_kick.setMaximumWidth(90)
             pydmlabel_kick.setMinimumHeight(24)
             frame_label = QFrame()
             frame_label.setFrameShadow(QFrame.Raised)
@@ -365,28 +330,11 @@ class BTSControlWindow(QMainWindow):
 
         self.centralwidget.groupBox_allcorrectorsPanel.setLayout(correctors_gridlayout)
         self.centralwidget.groupBox_allcorrectorsPanel.layout().setContentsMargins(2,2,2,2)
-        label_scrn.setMaximumWidth(100)
-        label_scrn.setMinimumWidth(100)
-        label_position.setMaximumWidth(140)
-        label_position.setMinimumWidth(140)
-        label_lamp.setMaximumWidth(100)
-        label_lamp.setMinimumWidth(100)
-        label_ch_led.setMaximumWidth(25)
-        label_ch_led.setMinimumWidth(25)
-        label_ch.setMaximumWidth(100)
-        label_ch.setMinimumWidth(100)
-        label_ch_sp_kick.setMaximumWidth(180)
-        label_ch_sp_kick.setMinimumWidth(180)
-        label_ch_rb_kick.setMaximumWidth(100)
-        label_ch_rb_kick.setMinimumWidth(100)
-        label_cv_led.setMaximumWidth(25)
-        label_cv_led.setMinimumWidth(25)
-        label_cv.setMaximumWidth(100)
-        label_cv.setMinimumWidth(100)
-        label_cv_sp_kick.setMaximumWidth(180)
-        label_cv_sp_kick.setMinimumWidth(180)
-        label_cv_rb_kick.setMaximumWidth(100)
-        label_cv_rb_kick.setMinimumWidth(100)
+        for item,width in [[label_scrn,100],[label_position,110],[label_lamp,110],
+                           [label_ch_led,25],[label_ch,100],[label_ch_sp_kick,180],[label_ch_mon_kick,100],
+                           [label_cv_led,25],[label_cv,100],[label_cv_sp_kick,180],[label_cv_mon_kick,100]]:
+            item.setMaximumWidth(width)
+            item.setMinimumWidth(width)
 
     @pyqtSlot(int)
     def _visibility_handle(self,index):
@@ -478,7 +426,7 @@ class ShowLatticeAndTwiss(QWidget):
         self.vbox.addWidget(self.canvas)
         self.setLayout(self.vbox)
         self.layout().setContentsMargins(0,0,0,0)
-        self.setGeometry(10,10,400,1500)
+        self.setGeometry(10,10,1500,400)
 
 
 class ShowImage(QWidget):
