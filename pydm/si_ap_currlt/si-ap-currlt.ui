@@ -16,75 +16,23 @@
     <height>440</height>
    </size>
   </property>
-  <property name="palette">
-   <palette>
-    <active>
-     <colorrole role="Base">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>255</red>
-        <green>255</green>
-        <blue>255</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="Window">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>255</red>
-        <green>255</green>
-        <blue>255</blue>
-       </color>
-      </brush>
-     </colorrole>
-    </active>
-    <inactive>
-     <colorrole role="Base">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>255</red>
-        <green>255</green>
-        <blue>255</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="Window">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>255</red>
-        <green>255</green>
-        <blue>255</blue>
-       </color>
-      </brush>
-     </colorrole>
-    </inactive>
-    <disabled>
-     <colorrole role="Base">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>255</red>
-        <green>255</green>
-        <blue>255</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="Window">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>255</red>
-        <green>255</green>
-        <blue>255</blue>
-       </color>
-      </brush>
-     </colorrole>
-    </disabled>
-   </palette>
-  </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <property name="autoFillBackground">
-   <bool>true</bool>
+  <property name="styleSheet">
+   <string notr="true">        QGroupBox {
+            font-size:14pt;
+            font-weight:bold;
+        }
+
+        QScrollBar {
+            border: 1px solid black;
+        }
+	
+		QTabWidget{
+				font-size:12pt;
+				font-weight:bold;
+		}</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="1">
@@ -190,7 +138,7 @@
           <bool>false</bool>
          </property>
          <property name="frameShape">
-          <enum>QFrame::NoFrame</enum>
+          <enum>QFrame::Box</enum>
          </property>
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
@@ -301,7 +249,7 @@
             <set>Qt::ImhNone</set>
            </property>
            <property name="frameShape">
-            <enum>QFrame::Panel</enum>
+            <enum>QFrame::Box</enum>
            </property>
            <property name="frameShadow">
             <enum>QFrame::Raised</enum>
@@ -428,6 +376,13 @@
           <blue>255</blue>
          </color>
         </property>
+        <property name="axisColor">
+         <color>
+          <red>85</red>
+          <green>87</green>
+          <blue>83</blue>
+         </color>
+        </property>
         <property name="YAxis1Label">
          <string>Lifetime [s]</string>
         </property>
@@ -501,24 +456,6 @@
       <string>Settings</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="1" column="2" colspan="2">
-       <widget class="PyDMLineEdit" name="PyDMLineEdit">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>
-    Writeable text field to send and display channel values
-    </string>
-        </property>
-        <property name="channel" stdset="0">
-         <string>ca://SI-Glob:AP-CurrLT:TotTs</string>
-        </property>
-        <property name="showUnits" stdset="0">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="1">
        <widget class="QLabel" name="SamplingTimeLabel">
         <property name="sizePolicy">
@@ -683,6 +620,12 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="minimumSize">
+            <size>
+             <width>50</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="toolTip">
             <string/>
            </property>
@@ -696,7 +639,7 @@
             <set>Qt::ImhNone</set>
            </property>
            <property name="frameShape">
-            <enum>QFrame::Panel</enum>
+            <enum>QFrame::Box</enum>
            </property>
            <property name="frameShadow">
             <enum>QFrame::Raised</enum>
@@ -716,20 +659,43 @@
        </widget>
       </item>
       <item row="2" column="2" colspan="2">
-       <widget class="PyDMLineEdit" name="PyDMLineEdit_2">
+       <widget class="PyDMSpinBox" name="PyDMSpinBox">
         <property name="toolTip">
          <string/>
         </property>
         <property name="whatsThis">
-         <string>
-    Writeable text field to send and display channel values
-    </string>
+         <string/>
+        </property>
+        <property name="decimals">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <double>10000.000000000000000</double>
         </property>
         <property name="channel" stdset="0">
          <string>ca://SI-Glob:AP-CurrLT:SplNr-Sel</string>
         </property>
-        <property name="showUnits" stdset="0">
-         <bool>false</bool>
+       </widget>
+      </item>
+      <item row="1" column="2" colspan="2">
+       <widget class="PyDMSpinBox" name="PyDMSpinBox_2">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string/>
+        </property>
+        <property name="decimals">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <double>1000.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="channel" stdset="0">
+         <string>ca://SI-Glob:AP-CurrLT:TotTs</string>
         </property>
        </widget>
       </item>
@@ -755,11 +721,6 @@
    <header>pydm.widgets.label</header>
   </customwidget>
   <customwidget>
-   <class>PyDMLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>pydm.widgets.line_edit</header>
-  </customwidget>
-  <customwidget>
    <class>PyDMMultiTimePlot</class>
    <extends>BaseMultiPlot</extends>
    <header>pydm.widgets.multitimeplot</header>
@@ -768,6 +729,11 @@
    <class>PyDMPushButton</class>
    <extends>QPushButton</extends>
    <header>pydm.widgets.pushbutton</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>pydm.widgets.spinbox</header>
   </customwidget>
  </customwidgets>
  <resources/>

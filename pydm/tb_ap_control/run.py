@@ -18,8 +18,8 @@ from pydm.PyQt.QtSvg import QSvgWidget
 import sys
 import pyaccel as _pyaccel
 import pymodels as _pymodels
-# from siriusdm.as_ma_control.MagnetDetailWindow import MagnetDetailWindow
-# from siriusdm.as_ma_control import ToBoosterMagnetControlWindow
+from siriusdm.as_ma_control.MagnetDetailWindow import MagnetDetailWindow
+from siriusdm.as_ma_control import ToBoosterMagnetControlWindow
 
 CALC_LABELS_INITIALIZE = """
 self.centralwidget.PyDMEnumComboBox_CalcMethod_Scrn{0}.currentIndexChanged.connect(self._visibility_handle)
@@ -77,12 +77,16 @@ class LTBControlWindow(QMainWindow):
         #Create Scrn+Correctors Panel
         scrn_headerline = QWidget()
         scrn_headerline.setLayout(QHBoxLayout())
+        scrn_headerline.setSizePolicy(QSizePolicy.Fixed,QSizePolicy.Minimum)
         label_scrn = QLabel('Scrn')
         label_scrn.setAlignment(Qt.AlignHCenter)
+        label_scrn.setSizePolicy(QSizePolicy.Fixed,QSizePolicy.Minimum)
         label_position = QLabel('Position')
         label_position.setAlignment(Qt.AlignHCenter)
+        label_position.setSizePolicy(QSizePolicy.Fixed,QSizePolicy.Minimum)
         label_lamp = QLabel('Lamp')
         label_lamp.setAlignment(Qt.AlignHCenter)
+        label_lamp.setSizePolicy(QSizePolicy.Fixed,QSizePolicy.Minimum)
         scrn_headerline.layout().addWidget(label_scrn)
         scrn_headerline.layout().addWidget(label_position)
         scrn_headerline.layout().addWidget(label_lamp)
@@ -91,15 +95,20 @@ class LTBControlWindow(QMainWindow):
 
         ch_headerline = QWidget()
         ch_headerline.setLayout(QHBoxLayout())
+        ch_headerline.setSizePolicy(QSizePolicy.Fixed,QSizePolicy.Minimum)
         label_ch_led = QLabel('')
         label_ch_led.setAlignment(Qt.AlignHCenter)
+        label_ch_led.setSizePolicy(QSizePolicy.Fixed,QSizePolicy.Minimum)
         label_ch = QLabel('CH')
         label_ch.setAlignment(Qt.AlignHCenter)
+        label_ch.setSizePolicy(QSizePolicy.Fixed,QSizePolicy.Minimum)
         label_ch.setStyleSheet("""font-size:16pt""")
         label_ch_sp_kick = QLabel('Kick-SP')
         label_ch_sp_kick.setAlignment(Qt.AlignHCenter)
+        label_ch_sp_kick.setSizePolicy(QSizePolicy.Expanding,QSizePolicy.Minimum)
         label_ch_mon_kick = QLabel('Kick-Mon')
         label_ch_mon_kick.setAlignment(Qt.AlignHCenter)
+        label_ch_mon_kick.setSizePolicy(QSizePolicy.Fixed,QSizePolicy.Minimum)
         ch_headerline.layout().addWidget(label_ch_led)
         ch_headerline.layout().addWidget(label_ch)
         ch_headerline.layout().addWidget(label_ch_sp_kick)
@@ -109,15 +118,20 @@ class LTBControlWindow(QMainWindow):
 
         cv_headerline = QWidget()
         cv_headerline.setLayout(QHBoxLayout())
+        cv_headerline.setSizePolicy(QSizePolicy.Fixed,QSizePolicy.Minimum)
         label_cv_led = QLabel('')
         label_cv_led.setAlignment(Qt.AlignHCenter)
+        label_cv_led.setSizePolicy(QSizePolicy.Fixed,QSizePolicy.Minimum)
         label_cv = QLabel('CV')
         label_cv.setAlignment(Qt.AlignHCenter)
+        label_cv.setSizePolicy(QSizePolicy.Fixed,QSizePolicy.Minimum)
         label_cv.setStyleSheet("""font-size:16pt""")
         label_cv_sp_kick = QLabel('Kick-SP')
         label_cv_sp_kick.setAlignment(Qt.AlignHCenter)
+        label_cv_sp_kick.setSizePolicy(QSizePolicy.Expanding,QSizePolicy.Minimum)
         label_cv_mon_kick = QLabel('Kick-Mon')
         label_cv_mon_kick.setAlignment(Qt.AlignHCenter)
+        label_cv_mon_kick.setSizePolicy(QSizePolicy.Fixed,QSizePolicy.Minimum)
         cv_headerline.layout().addWidget(label_cv_led)
         cv_headerline.layout().addWidget(label_cv)
         cv_headerline.layout().addWidget(label_cv_sp_kick)
@@ -134,11 +148,15 @@ class LTBControlWindow(QMainWindow):
         headerline.layout().addItem(QSpacerItem(40,20,QSizePolicy.Fixed,QSizePolicy.Minimum))
         headerline.layout().addWidget(cv_headerline)
         headerline.setStyleSheet("""font-weight:bold;""")
-        headerline.layout().setContentsMargins(4,9,4,9)
+        headerline.layout().setContentsMargins(0,9,0,9)
         correctors_gridlayout = QGridLayout()
         correctors_gridlayout.addWidget(headerline,1,1)
-        self.framelist = []
-        self.comboboxlist = []
+        for item,width in [[label_scrn,100],[label_position,110],[label_lamp,118],
+                           [label_ch_led,24],[label_ch,100],[label_ch_sp_kick,180],[label_ch_mon_kick,100],
+                           [label_cv_led,24],[label_cv,100],[label_cv_sp_kick,180],[label_cv_mon_kick,100]]:
+            item.setMaximumWidth(width)
+            item.setMinimumWidth(width)
+
         line = 2
         for ch,cv,scrn,scrnpv in [['LI-01:MA-CH-7','LI-01:MA-CV-7',11,'01:DI-Scrn-1'],\
                                  ['01:MA-CH-1','01:MA-CV-1',12,'01:DI-Scrn-2'],\
@@ -154,6 +172,7 @@ class LTBControlWindow(QMainWindow):
             scrn_details = QWidget()
             scrn_details.setObjectName('widget_Scrn' + str(scrn))
             scrn_details.setLayout(QHBoxLayout())
+            scrn_details.layout().setContentsMargins(3,3,3,3)
 
             scrn_label = QLabel(scrnpv)
             scrn_label.setMinimumWidth(100)
@@ -165,14 +184,14 @@ class LTBControlWindow(QMainWindow):
             widget_position_sp.layout().setContentsMargins(0,0,0,0)
             pydmcombobox_position = PyDMEnumComboBox(scrn_details,'ca://' + acc + scrnpv + ':Position-SP')
             pydmcombobox_position.setObjectName('PyDMEnumComboBox_Position_SP_Scrn' + str(scrn))
-            pydmcombobox_position.setMinimumWidth(80)
             widget_position_sp.layout().addWidget(pydmcombobox_position)
             pydmcombobox_position_items = [pydmcombobox_position.itemText(i) for i in range(pydmcombobox_position.count())]
             pydmled_position = PyDMLed(scrn_details,'ca://' + acc + scrnpv + ':Position-Mon')
                                     #    enum_map={pydmcombobox_position_items[0]:-1,pydmcombobox_position_items[1]: 2,pydmcombobox_position_items[2]:0})#TODO
             pydmled_position.setObjectName('PyDMLed_Position_Mon_Scrn' + str(scrn))
-            pydmled_position.setMinimumWidth(86)
             pydmled_position.shape = 2
+            pydmled_position.setMinimumWidth(110)
+            pydmled_position.setSizePolicy(QSizePolicy.Fixed,QSizePolicy.Fixed)
             # pydmlabel_position = PyDMLabel(scrn_details, 'ca://' + acc + scrnpv + ':Position-Mon')
             # pydmlabel_position.setObjectName('PyDMLabel_Position_Mon_Scrn' + str(scrn))
             # pydmlabel_position.setMinimumWidth(80)
@@ -186,17 +205,20 @@ class LTBControlWindow(QMainWindow):
             # frame_label.layout().addWidget(pydmlabel_position)
             # widget_position_sp.layout().addWidget(frame_label)
             widget_position_sp.layout().addWidget(pydmled_position)
-            widget_position_sp.setSizePolicy(QSizePolicy.Minimum,QSizePolicy.Fixed)
+            widget_position_sp.setMinimumWidth(110)
+            widget_position_sp.setSizePolicy(QSizePolicy.Fixed,QSizePolicy.Fixed)
             scrn_details.layout().addWidget(widget_position_sp)
 
             scrn_details.layout().addItem(QSpacerItem(40,20,QSizePolicy.Fixed,QSizePolicy.Minimum))
             pydmcheckbox = PyDMCheckbox(scrn_details, 'ca://' + acc + scrnpv + ':LampState-SP')
             pydmcheckbox.setObjectName('PyDMCheckbox_LampState_SP_Scrn' + str(scrn))
-            pydmcheckbox.setSizePolicy(QSizePolicy.Fixed,QSizePolicy.Fixed)
+            pydmcheckbox.setMinimumWidth(14)
+            pydmcheckbox.setSizePolicy(QSizePolicy.Fixed,QSizePolicy.Minimum)
             scrn_details.layout().addWidget(pydmcheckbox)
             pydmled = PyDMLed(scrn_details,'ca://' + acc + scrnpv + ':LampState-Sts')
             pydmled.setObjectName('PyDMLed_LampState_Sts_Scrn' + str(scrn))
             pydmled.setMinimumWidth(24)
+            pydmled.setSizePolicy(QSizePolicy.Fixed,QSizePolicy.Minimum)
             scrn_details.layout().addWidget(pydmled)
             scrn_details.layout().addItem(QSpacerItem(40,20,QSizePolicy.Fixed,QSizePolicy.Minimum))
 
@@ -216,6 +238,7 @@ class LTBControlWindow(QMainWindow):
             pydmled.setObjectName('PyDMLed_' + name + '_PwrState' + '_Scrn' + str(scrn))
             pydmled.setMinimumWidth(24)
             pydmled.setMinimumHeight(24)
+            pydmled.setSizePolicy(QSizePolicy.Fixed,QSizePolicy.Minimum)
             ch_details.layout().addWidget(pydmled,1,1)
 
             pushbutton = QPushButton(ch, ch_details)
@@ -223,36 +246,36 @@ class LTBControlWindow(QMainWindow):
             pushbutton.clicked.connect(self._openWindow)
             pushbutton.setMinimumWidth(100)
             pushbutton.setMinimumHeight(24)
+            pushbutton.setSizePolicy(QSizePolicy.Fixed,QSizePolicy.Minimum)
             ch_details.layout().addWidget(pushbutton,1,2)
 
             pydmlineedit_kick = PyDMLineEdit(ch_details, 'ca://' + acc + ch + ':Kick-SP')
             pydmlineedit_kick.setObjectName('PyDMLineEdit' + name + '_Kick_SP_Scrn' + str(scrn))
             pydmlineedit_kick.setValidator(QDoubleValidator())
             pydmlineedit_kick._useunits = False
-            pydmlineedit_kick.setMinimumWidth(80)
+            pydmlineedit_kick.setMinimumWidth(180)
             pydmlineedit_kick.setMinimumHeight(24)
+            pydmlineedit_kick.setSizePolicy(QSizePolicy.Expanding,QSizePolicy.Minimum)
             ch_details.layout().addWidget(pydmlineedit_kick,1,5)
 
             scrollbar_kick = PyDMScrollBar(ch_details, Qt.Horizontal, 'ca://' + acc + ch + ':Kick-SP')
             scrollbar_kick.setObjectName('PyDMScrollBar' + name + '_Kick_SP_Scrn' + str(scrn))
-            scrollbar_kick.setMinimumWidth(80)
+            scrollbar_kick.setMinimumWidth(180)
+            scrollbar_kick.setSizePolicy(QSizePolicy.Expanding,QSizePolicy.Minimum)
             scrollbar_kick.limitsFromPV = True
             ch_details.layout().addWidget(scrollbar_kick,2,5)
 
             pydmlabel_kick = PyDMLabel(ch_details, 'ca://' + acc + ch + ':Kick-Mon')
             pydmlabel_kick.setObjectName('PyDMLabel_' + name + '_Kick_Mon_Scrn' + str(scrn))
-            pydmlabel_kick.setMinimumWidth(90)
-            pydmlabel_kick.setMaximumWidth(90)
-            pydmlabel_kick.setMinimumHeight(24)
-            frame_label = QFrame()
-            frame_label.setFrameShadow(QFrame.Raised)
-            frame_label.setFrameShape(QFrame.Box)
-            frame_label.setLayout(QVBoxLayout())
-            frame_label.layout().setContentsMargins(3,3,3,3)
-            frame_label.setMinimumHeight(28)
-            frame_label.setSizePolicy(QSizePolicy.Preferred,QSizePolicy.Fixed)
-            frame_label.layout().addWidget(pydmlabel_kick)
-            ch_details.layout().addWidget(frame_label,1,6)
+            pydmlabel_kick.setMinimumWidth(100)
+            pydmlabel_kick.setMinimumHeight(28)
+            pydmlabel_kick.precFromPV = True
+            pydmlabel_kick.setFrameShadow(QFrame.Raised)
+            pydmlabel_kick.setFrameShape(QFrame.Box)
+            pydmlabel_kick.setLayout(QVBoxLayout())
+            pydmlabel_kick.layout().setContentsMargins(3,3,3,3)
+            pydmlabel_kick.setSizePolicy(QSizePolicy.Fixed,QSizePolicy.Fixed)
+            ch_details.layout().addWidget(pydmlabel_kick,1,6)
             ch_details.setSizePolicy(QSizePolicy.Minimum,QSizePolicy.Fixed)
 
             name = cv.split('-')
@@ -269,7 +292,7 @@ class LTBControlWindow(QMainWindow):
             pydmled = PyDMLed(cv_details,'ca://' + acc + cv + ':PwrState-Sts')
             pydmled.setObjectName('PyDMLed_' + name + '_PwrState' + '_Scrn' + str(scrn))
             pydmled.setMinimumWidth(24)
-            pydmled.setMinimumHeight(24)
+            pydmled.setSizePolicy(QSizePolicy.Fixed,QSizePolicy.Minimum)
             cv_details.layout().addWidget(pydmled,1,1)
 
             pushbutton = QPushButton(cv, cv_details)
@@ -277,36 +300,36 @@ class LTBControlWindow(QMainWindow):
             pushbutton.clicked.connect(self._openWindow)
             pushbutton.setMinimumWidth(100)
             pushbutton.setMinimumHeight(24)
+            pushbutton.setSizePolicy(QSizePolicy.Fixed,QSizePolicy.Minimum)
             cv_details.layout().addWidget(pushbutton,1,2)
 
             pydmlineedit_kick = PyDMLineEdit(cv_details, 'ca://' + acc + cv + ':Kick-SP')
             pydmlineedit_kick.setObjectName('PyDMLineEdit' + name + '_Kick_SP_Scrn' + str(scrn))
             pydmlineedit_kick.setValidator(QDoubleValidator())
             pydmlineedit_kick._useunits = False
-            pydmlineedit_kick.setMinimumWidth(80)
+            pydmlineedit_kick.setMinimumWidth(180)
             pydmlineedit_kick.setMinimumHeight(24)
+            pydmlineedit_kick.setSizePolicy(QSizePolicy.Expanding,QSizePolicy.Minimum)
             cv_details.layout().addWidget(pydmlineedit_kick,1,5)
 
             scrollbar_kick = PyDMScrollBar(cv_details, Qt.Horizontal, 'ca://' + acc + cv + ':Kick-SP')
             scrollbar_kick.setObjectName('PyDMScrollBar' + name + '_Kick_SP_Scrn' + str(scrn))
-            scrollbar_kick.setMinimumWidth(80)
+            scrollbar_kick.setMinimumWidth(180)
+            scrollbar_kick.setSizePolicy(QSizePolicy.Expanding,QSizePolicy.Minimum)
             scrollbar_kick.limitsFromPV = True
             cv_details.layout().addWidget(scrollbar_kick,2,5)
 
             pydmlabel_kick = PyDMLabel(cv_details, 'ca://' + acc + cv + ':Kick-Mon')
             pydmlabel_kick.setObjectName('PyDMLabel_' + name + '_Kick_Mon_Scrn' + str(scrn))
-            pydmlabel_kick.setMinimumWidth(90)
-            pydmlabel_kick.setMaximumWidth(90)
-            pydmlabel_kick.setMinimumHeight(24)
-            frame_label = QFrame()
-            frame_label.setFrameShadow(QFrame.Raised)
-            frame_label.setFrameShape(QFrame.Box)
-            frame_label.setLayout(QVBoxLayout())
-            frame_label.layout().setContentsMargins(3,3,3,3)
-            frame_label.setMinimumHeight(28)
-            frame_label.setSizePolicy(QSizePolicy.Preferred,QSizePolicy.Fixed)
-            frame_label.layout().addWidget(pydmlabel_kick)
-            cv_details.layout().addWidget(frame_label,1,6)
+            pydmlabel_kick.setMinimumWidth(100)
+            pydmlabel_kick.setMinimumHeight(28)
+            pydmlabel_kick.precFromPV = True
+            pydmlabel_kick.setFrameShadow(QFrame.Raised)
+            pydmlabel_kick.setFrameShape(QFrame.Box)
+            pydmlabel_kick.setLayout(QVBoxLayout())
+            pydmlabel_kick.layout().setContentsMargins(3,3,3,3)
+            pydmlabel_kick.setSizePolicy(QSizePolicy.Fixed,QSizePolicy.Fixed)
+            cv_details.layout().addWidget(pydmlabel_kick,1,6)
             cv_details.setSizePolicy(QSizePolicy.Minimum,QSizePolicy.Fixed)
 
             widget_scrnch = QWidget()
@@ -325,11 +348,7 @@ class LTBControlWindow(QMainWindow):
 
         self.centralwidget.groupBox_allcorrectorsPanel.setLayout(correctors_gridlayout)
         self.centralwidget.groupBox_allcorrectorsPanel.layout().setContentsMargins(2,2,2,2)
-        for item,width in [[label_scrn,100],[label_position,110],[label_lamp,110],
-                           [label_ch_led,25],[label_ch,100],[label_ch_sp_kick,180],[label_ch_mon_kick,100],
-                           [label_cv_led,25],[label_cv,100],[label_cv_sp_kick,180],[label_cv_mon_kick,100]]:
-            item.setMaximumWidth(width)
-            item.setMinimumWidth(width)
+
 
     @pyqtSlot(int)
     def _visibility_handle(self,index):
@@ -379,15 +398,18 @@ class LTBControlWindow(QMainWindow):
 
     def _openWindow(self):
         sender = self.sender()
-        ma = 'TB-' + sender.text()
-
-        # self._corrector_detail_window = MagnetDetailWindow(ma,self)
-        # self._corrector_detail_window.show()
+        
+        if sender.text().split('-')[0] == 'LI':
+            pass
+        else:
+            ma = 'TB-' + sender.text()
+            self._corrector_detail_window = MagnetDetailWindow(ma,self)
+            self._corrector_detail_window.show()
 
     def _openMAApp(self):
-        pass
-        # self._LTB_MA_window = ToBoosterMagnetControlWindow(self)
-        # self._LTB_MA_window.show()
+        # pass
+        self._LTB_MA_window = ToBoosterMagnetControlWindow(self)
+        self._LTB_MA_window.show()
 
     def _openBPMApp(self):
         pass
