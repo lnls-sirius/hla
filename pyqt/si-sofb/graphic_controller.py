@@ -21,7 +21,7 @@ class GraphicOrbitControllers(QObject):
         super().__init__(main_window)
         self.main_window = main_window
         self.last_dir = self.DEFAULT_DIR
-        self.update_rate = 0.25 #seconds
+        self.update_rate = 4 #Hz
 
         pbSave= getattr(self.main_window,'PB_Line'+str(index)+'Save')
         pbSave.clicked.connect(self._save_difference)
@@ -80,7 +80,7 @@ class GraphicOrbitControllers(QObject):
 
         self.timer_update_graph = QTimer()
         self.timer_update_graph.timeout.connect(self.update_graphic)
-        self.timer_update_graph.start(self.update_rate*1000)
+        self.timer_update_graph.start(1000/self.update_rate) # im miliseconds
 
     def _orb_changed(self,text): self._some_changed('orb',text)
     def _ref_changed(self,text): self._some_changed('ref',text)
@@ -140,7 +140,6 @@ class GraphicOrbitControllers(QObject):
             trace.opts['symbolBrush'] = mask_brush
             trace.opts['symbolPen']   = mask_pen
         return update
-
 
     def update_orbx(self,orbx):
         self.orbx = orbx
