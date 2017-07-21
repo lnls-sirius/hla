@@ -1,9 +1,10 @@
 import numpy as _np
 import datetime as _datetime
-from PyQt5.QtCore import pyqtSignal, pyqtSlot, QObject
+from PyQt5.QtCore import pyqtSignal, pyqtSlot, QObject, QTimer
 from pyqtgraph import  mkBrush, mkPen
 from PyQt5.QtWidgets import QFileDialog
 from selection_matrix import NR_BPMs
+import time
 
 class GraphicOrbitControllers(QObject):
     DEFAULT_DIR = '/home/fernando'
@@ -20,6 +21,7 @@ class GraphicOrbitControllers(QObject):
         super().__init__(main_window)
         self.main_window = main_window
         self.last_dir = self.DEFAULT_DIR
+        self.update_rate = 0.25 #seconds
 
         pbSave= getattr(self.main_window,'PB_Line'+str(index)+'Save')
         pbSave.clicked.connect(self._save_difference)
@@ -76,6 +78,10 @@ class GraphicOrbitControllers(QObject):
         self._orb_changed(cbOrb.currentText())
         self._ref_changed(cbRef.currentText())
 
+        self.timer_update_graph = QTimer()
+        self.timer_update_graph.timeout.connect(self.update_graphic)
+        self.timer_update_graph.start(self.update_rate*1000)
+
     def _orb_changed(self,text): self._some_changed('orb',text)
     def _ref_changed(self,text): self._some_changed('ref',text)
     def _some_changed(self,ref,text):
@@ -122,8 +128,6 @@ class GraphicOrbitControllers(QObject):
         if x_wave is not None: setattr(self,ref+'x', x_wave)
         if y_wave is not None: setattr(self,ref+'y', y_wave)
 
-        self.update_graphic()
-
     def update_enable_list(self,pl):
         def update(array):
             setattr(self,'enbl'+pl, _np.array(array,dtype=bool))
@@ -135,25 +139,17 @@ class GraphicOrbitControllers(QObject):
             mask_pen   = [  (pen   if v else self.offpen)    for v in enbl   ]
             trace.opts['symbolBrush'] = mask_brush
             trace.opts['symbolPen']   = mask_pen
-            self.update_graphic(pl)
         return update
 
 
     def update_orbx(self,orbx):
         self.orbx = orbx
-        self.update_graphic('x')
-
     def update_orby(self,orby):
         self.orby = orby
-        self.update_graphic('y')
-
     def update_refx(self,refx):
         self.refx = refx
-        self.update_graphic('x')
-
     def update_refy(self,refy):
         self.refy = refy
-        self.update_graphic('y')
 
     def update_graphic(self,plane=None):
         unit = 1/1000 #um
