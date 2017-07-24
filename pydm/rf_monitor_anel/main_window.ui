@@ -459,7 +459,7 @@
                                  <string notr="true"/>
                                 </property>
                                 <property name="text">
-                                 <string>Chave L/D 
+                                 <string>Chave L/D
  Rack</string>
                                 </property>
                                 <property name="alignment">
@@ -509,12 +509,12 @@
     to the current value of the channel. This means that the button will
     increment a channel by a fixed amount with every click, a consistent
     relative move
-    
+
     Parameters
     ----------
     pressValue : int, float, str
         Value to be sent when the button is clicked
-    
+
     channel : str
         ID of channel to manipulate
 
@@ -581,12 +581,12 @@
     to the current value of the channel. This means that the button will
     increment a channel by a fixed amount with every click, a consistent
     relative move
-    
+
     Parameters
     ----------
     pressValue : int, float, str
         Value to be sent when the button is clicked
-    
+
     channel : str
         ID of channel to manipulate
 
@@ -1675,7 +1675,7 @@
                                  <string notr="true"/>
                                 </property>
                                 <property name="text">
-                                 <string>Chave L/D 
+                                 <string>Chave L/D
  Rack</string>
                                 </property>
                                 <property name="alignment">
@@ -1725,12 +1725,12 @@
     to the current value of the channel. This means that the button will
     increment a channel by a fixed amount with every click, a consistent
     relative move
-    
+
     Parameters
     ----------
     pressValue : int, float, str
         Value to be sent when the button is clicked
-    
+
     channel : str
         ID of channel to manipulate
 
@@ -1797,12 +1797,12 @@
     to the current value of the channel. This means that the button will
     increment a channel by a fixed amount with every click, a consistent
     relative move
-    
+
     Parameters
     ----------
     pressValue : int, float, str
         Value to be sent when the button is clicked
-    
+
     channel : str
         ID of channel to manipulate
 
@@ -2861,12 +2861,12 @@
     to the current value of the channel. This means that the button will
     increment a channel by a fixed amount with every click, a consistent
     relative move
-    
+
     Parameters
     ----------
     pressValue : int, float, str
         Value to be sent when the button is clicked
-    
+
     channel : str
         ID of channel to manipulate
 
@@ -2933,12 +2933,12 @@
     to the current value of the channel. This means that the button will
     increment a channel by a fixed amount with every click, a consistent
     relative move
-    
+
     Parameters
     ----------
     pressValue : int, float, str
         Value to be sent when the button is clicked
-    
+
     channel : str
         ID of channel to manipulate
 
@@ -3022,12 +3022,12 @@
     to the current value of the channel. This means that the button will
     increment a channel by a fixed amount with every click, a consistent
     relative move
-    
+
     Parameters
     ----------
     pressValue : int, float, str
         Value to be sent when the button is clicked
-    
+
     channel : str
         ID of channel to manipulate
 
@@ -3094,12 +3094,12 @@
     to the current value of the channel. This means that the button will
     increment a channel by a fixed amount with every click, a consistent
     relative move
-    
+
     Parameters
     ----------
     pressValue : int, float, str
         Value to be sent when the button is clicked
-    
+
     channel : str
         ID of channel to manipulate
 
@@ -3368,12 +3368,12 @@
     to the current value of the channel. This means that the button will
     increment a channel by a fixed amount with every click, a consistent
     relative move
-    
+
     Parameters
     ----------
     pressValue : int, float, str
         Value to be sent when the button is clicked
-    
+
     channel : str
         ID of channel to manipulate
 
@@ -3440,12 +3440,12 @@
     to the current value of the channel. This means that the button will
     increment a channel by a fixed amount with every click, a consistent
     relative move
-    
+
     Parameters
     ----------
     pressValue : int, float, str
         Value to be sent when the button is clicked
-    
+
     channel : str
         ID of channel to manipulate
 
@@ -3809,12 +3809,12 @@
     to the current value of the channel. This means that the button will
     increment a channel by a fixed amount with every click, a consistent
     relative move
-    
+
     Parameters
     ----------
     pressValue : int, float, str
         Value to be sent when the button is clicked
-    
+
     channel : str
         ID of channel to manipulate
 
@@ -3881,12 +3881,12 @@
     to the current value of the channel. This means that the button will
     increment a channel by a fixed amount with every click, a consistent
     relative move
-    
+
     Parameters
     ----------
     pressValue : int, float, str
         Value to be sent when the button is clicked
-    
+
     channel : str
         ID of channel to manipulate
 
@@ -4552,12 +4552,12 @@
     to the current value of the channel. This means that the button will
     increment a channel by a fixed amount with every click, a consistent
     relative move
-    
+
     Parameters
     ----------
     pressValue : int, float, str
         Value to be sent when the button is clicked
-    
+
     channel : str
         ID of channel to manipulate
 
@@ -4624,12 +4624,12 @@
     to the current value of the channel. This means that the button will
     increment a channel by a fixed amount with every click, a consistent
     relative move
-    
+
     Parameters
     ----------
     pressValue : int, float, str
         Value to be sent when the button is clicked
-    
+
     channel : str
         ID of channel to manipulate
 
@@ -5001,12 +5001,12 @@
     to the current value of the channel. This means that the button will
     increment a channel by a fixed amount with every click, a consistent
     relative move
-    
+
     Parameters
     ----------
     pressValue : int, float, str
         Value to be sent when the button is clicked
-    
+
     channel : str
         ID of channel to manipulate
 
@@ -5073,12 +5073,12 @@
     to the current value of the channel. This means that the button will
     increment a channel by a fixed amount with every click, a consistent
     relative move
-    
+
     Parameters
     ----------
     pressValue : int, float, str
         Value to be sent when the button is clicked
-    
+
     channel : str
         ID of channel to manipulate
 
@@ -5442,12 +5442,12 @@
     to the current value of the channel. This means that the button will
     increment a channel by a fixed amount with every click, a consistent
     relative move
-    
+
     Parameters
     ----------
     pressValue : int, float, str
         Value to be sent when the button is clicked
-    
+
     channel : str
         ID of channel to manipulate
 
@@ -5514,12 +5514,12 @@
     to the current value of the channel. This means that the button will
     increment a channel by a fixed amount with every click, a consistent
     relative move
-    
+
     Parameters
     ----------
     pressValue : int, float, str
         Value to be sent when the button is clicked
-    
+
     channel : str
         ID of channel to manipulate
 
@@ -6185,12 +6185,12 @@
     to the current value of the channel. This means that the button will
     increment a channel by a fixed amount with every click, a consistent
     relative move
-    
+
     Parameters
     ----------
     pressValue : int, float, str
         Value to be sent when the button is clicked
-    
+
     channel : str
         ID of channel to manipulate
 
@@ -6257,12 +6257,12 @@
     to the current value of the channel. This means that the button will
     increment a channel by a fixed amount with every click, a consistent
     relative move
-    
+
     Parameters
     ----------
     pressValue : int, float, str
         Value to be sent when the button is clicked
-    
+
     channel : str
         ID of channel to manipulate
 
@@ -6697,12 +6697,12 @@
     to the current value of the channel. This means that the button will
     increment a channel by a fixed amount with every click, a consistent
     relative move
-    
+
     Parameters
     ----------
     pressValue : int, float, str
         Value to be sent when the button is clicked
-    
+
     channel : str
         ID of channel to manipulate
 
@@ -6769,12 +6769,12 @@
     to the current value of the channel. This means that the button will
     increment a channel by a fixed amount with every click, a consistent
     relative move
-    
+
     Parameters
     ----------
     pressValue : int, float, str
         Value to be sent when the button is clicked
-    
+
     channel : str
         ID of channel to manipulate
 
@@ -6852,7 +6852,7 @@
                  <string/>
                 </property>
                 <property name="text">
-                 <string>Status 
+                 <string>Status
  Fonte Ligada</string>
                 </property>
                 <property name="alignment">
@@ -7206,12 +7206,12 @@
     to the current value of the channel. This means that the button will
     increment a channel by a fixed amount with every click, a consistent
     relative move
-    
+
     Parameters
     ----------
     pressValue : int, float, str
         Value to be sent when the button is clicked
-    
+
     channel : str
         ID of channel to manipulate
 
@@ -7278,12 +7278,12 @@
     to the current value of the channel. This means that the button will
     increment a channel by a fixed amount with every click, a consistent
     relative move
-    
+
     Parameters
     ----------
     pressValue : int, float, str
         Value to be sent when the button is clicked
-    
+
     channel : str
         ID of channel to manipulate
 
@@ -7361,7 +7361,7 @@
                  <string/>
                 </property>
                 <property name="text">
-                 <string>Status 
+                 <string>Status
  Fonte Ligada</string>
                 </property>
                 <property name="alignment">
@@ -7603,21 +7603,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-<<<<<<< HEAD
-   <class>PyDMLed</class>
-   <extends>QLed</extends>
-   <header>pydm.widgets.led</header>
-  </customwidget>
-  <customwidget>
-   <class>PyDMLabel</class>
-   <extends>QLabel</extends>
-   <header>pydm.widgets.label</header>
-  </customwidget>
-  <customwidget>
-   <class>PyDMLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>pydm.widgets.line_edit</header>
-=======
    <class>PyDMPushButton</class>
    <extends>QPushButton</extends>
    <header>pydm.widgets.pushbutton</header>
@@ -7626,7 +7611,6 @@
    <class>PyDMCheckbox</class>
    <extends>QCheckBox</extends>
    <header>pydm.widgets.checkbox</header>
->>>>>>> d1c539a3b11ae8d9e21aa9861b61892d7173abfa
   </customwidget>
   <customwidget>
    <class>PyDMScrollBar</class>
@@ -7634,21 +7618,6 @@
    <header>pydm.widgets.scrollbar</header>
   </customwidget>
   <customwidget>
-<<<<<<< HEAD
-   <class>PyDMPushButton</class>
-   <extends>QPushButton</extends>
-   <header>pydm.widgets.pushbutton</header>
-  </customwidget>
-  <customwidget>
-   <class>QLed</class>
-   <extends>QWidget</extends>
-   <header>pydm.widgets.QLed</header>
-  </customwidget>
-  <customwidget>
-   <class>PyDMCheckbox</class>
-   <extends>QCheckBox</extends>
-   <header>pydm.widgets.checkbox</header>
-=======
    <class>PyDMLineEdit</class>
    <extends>QLineEdit</extends>
    <header>pydm.widgets.line_edit</header>
@@ -7657,7 +7626,6 @@
    <class>PyDMLed</class>
    <extends>QLed</extends>
    <header>pydm.widgets.led</header>
->>>>>>> d1c539a3b11ae8d9e21aa9861b61892d7173abfa
   </customwidget>
   <customwidget>
    <class>QLed</class>
