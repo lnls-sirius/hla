@@ -30,7 +30,7 @@
        <enum>QTabWidget::Triangular</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -2501,7 +2501,7 @@ font-weight: bold;</string>
              <x>0</x>
              <y>0</y>
              <width>1067</width>
-             <height>887</height>
+             <height>892</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -2603,7 +2603,7 @@ font-weight: bold;</string>
              <x>0</x>
              <y>0</y>
              <width>1067</width>
-             <height>887</height>
+             <height>892</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -2705,7 +2705,7 @@ font-weight: bold;</string>
              <x>0</x>
              <y>0</y>
              <width>1067</width>
-             <height>887</height>
+             <height>892</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -2807,7 +2807,7 @@ font-weight: bold;</string>
              <x>0</x>
              <y>0</y>
              <width>1067</width>
-             <height>887</height>
+             <height>892</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -2903,7 +2903,7 @@ font-weight: bold;</string>
      <x>0</x>
      <y>0</y>
      <width>1630</width>
-     <height>20</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="Menu_Open">
@@ -4131,7 +4131,7 @@ font-weight: bold;</string>
           <x>0</x>
           <y>0</y>
           <width>254</width>
-          <height>293</height>
+          <height>284</height>
          </rect>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_17">
