@@ -45,7 +45,7 @@ class LTBControlWindow(QMainWindow):
         self.setCentralWidget(self.centralwidget)
 
         #TB Lattice Widget
-        lattice = QSvgWidget() #'devnames-TB.svg'
+        lattice = QSvgWidget('LTB.svg')
         self.centralwidget.widget_lattice.setLayout(QVBoxLayout())
         self.centralwidget.widget_lattice.layout().addWidget(lattice)
 
@@ -398,7 +398,7 @@ class LTBControlWindow(QMainWindow):
 
     def _openWindow(self):
         sender = self.sender()
-        
+
         if sender.text().split('-')[0] == 'LI':
             pass
         else:
