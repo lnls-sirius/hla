@@ -1,27 +1,28 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python-sirius
 
 import pcaspy as _pcaspy
 import pcaspy.tools as _pcaspy_tools
-import pvs as _pvs
-import multiprocessing as _multiprocessing
 import signal as _signal
 import main as _main
 
 
 INTERVAL = 0.1
-stop_event = False # _multiprocessing.Event()
+stop_event = False
+PREFIX = ''
 
 
-def stop_now(signum, frame):
-    print(' - SIGINT received.')
-    return stop_event.set()
+def _stop_now(signum, frame):
+    print(' - SIGNAL received.')
+    global stop_event
+    stop_event = True
 
 
-class PCASDriver(_pcaspy.Driver):
+class _PCASDriver(_pcaspy.Driver):
 
-    def __init__(self):
+    def __init__(self, app=None):
         super().__init__()
-        self.app = _main.App(self)
+        self.app = app or _main.App()
+        self.app.driver = self
 
     def read(self, reason):
         value = self.app.read(reason)
@@ -31,31 +32,42 @@ class PCASDriver(_pcaspy.Driver):
             return value
 
     def write(self, reason, value):
-        return self.app.write(reason, value)
+        app_ret = self.app.write(reason, value)
+        if app_ret:
+            self.setParam(reason, value)
+        self.updatePVs()
+        return app_ret
 
 
 def run():
-
+    """Run the IOC."""
     # define abort function
-    _signal.signal(_signal.SIGINT, stop_now)
+    _signal.signal(_signal.SIGINT, _stop_now)
+    _signal.signal(_signal.SIGTERM, _stop_now)
 
-    # create a new simple pcaspy server and driver to responde client's requests
+    # create the application model
+    app = _main.App()
+
+    db = app.get_database()
+
+    # create a new simple pcaspy server and driver to respond client's requests
     server = _pcaspy.SimpleServer()
-    for prefix, database in _main.App.pvs_database.items():
-        server.createPV(prefix, database)
-    pcas_driver = PCASDriver()
+    server.createPV(PREFIX, db)
+
+    # create the driver
+    pcas_driver = _PCASDriver(app)
 
     # initiate a new thread responsible for listening for client connections
     server_thread = _pcaspy_tools.ServerThread(server)
     server_thread.start()
 
     # main loop
-    #while not stop_event.is_set():
+    # while not stop_event.is_set():
     while not stop_event:
         pcas_driver.app.process(INTERVAL)
 
     print('exiting...')
-    # sends stop signal to server thread
+    # send stop signal to server thread
     server_thread.stop()
     server_thread.join()
 
