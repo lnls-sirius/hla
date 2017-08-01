@@ -4,6 +4,6 @@ from siriusdm.as_config_manager import ConfigManagerWindow
 
 
 app = PyDMApplication(None, sys.argv)
-window = ConfigManagerWindow('SiForcePvs')
+window = ConfigManagerWindow('SiStrengthPvs')
 window.show()
 sys.exit(app.exec_())
