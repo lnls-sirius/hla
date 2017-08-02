@@ -21,7 +21,7 @@
   </property>
   <property name="styleSheet">
    <string notr="true">        QGroupBox {
-            font-size:14pt;
+            font-size:10pt;
             font-weight:bold;
         }
 
@@ -30,7 +30,7 @@
         }
 
 		QTabWidget{
-				font-size:12pt;
+				font-size:10pt;
 				font-weight:bold;
 		}</string>
   </property>
@@ -137,7 +137,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
        </item>
        <item>
         <widget class="QWidget" name="widget_Scrn1" native="true">
-         <layout class="QGridLayout" name="gridLayout_2">
+         <layout class="QVBoxLayout" name="verticalLayout_3">
           <property name="leftMargin">
            <number>0</number>
           </property>
@@ -150,7 +150,42 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
           <property name="bottomMargin">
            <number>0</number>
           </property>
-          <item row="3" column="0" colspan="2">
+          <item>
+           <widget class="PyDMImageView" name="PyDMImageView_Scrn1">
+            <property name="minimumSize">
+             <size>
+              <width>499</width>
+              <height>390</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>499</width>
+              <height>390</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="whatsThis">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
            <widget class="QWidget" name="widget_Calculations_Scrn1" native="true">
             <layout class="QGridLayout" name="gridLayout_68">
              <property name="horizontalSpacing">
@@ -289,6 +324,9 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="text">
                  <string>1-PyDMLabel</string>
                 </property>
+                <property name="channel">
+                 <string>ca://TEST:Centroid</string>
+                </property>
                </widget>
               </widget>
              </item>
@@ -377,6 +415,9 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="text">
                  <string>1-PyDMLabel</string>
                 </property>
+                <property name="channel">
+                 <string>ca://TEST:Moment1</string>
+                </property>
                </widget>
               </widget>
              </item>
@@ -431,6 +472,9 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 </property>
                 <property name="text">
                  <string>1-PyDMLabel</string>
+                </property>
+                <property name="channel">
+                 <string>ca://TEST:Centroid</string>
                 </property>
                </widget>
                <widget class="PyDMLabel" name="PyDMLabel_Stats2CentroidY_Scrn1">
@@ -514,6 +558,9 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="text">
                  <string>1-PyDMLabel</string>
                 </property>
+                <property name="channel">
+                 <string>ca://TEST:Moment2</string>
+                </property>
                </widget>
               </widget>
              </item>
@@ -574,6 +621,9 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
                 </property>
+                <property name="channel">
+                 <string>ca://TEST:Theta</string>
+                </property>
                </widget>
               </widget>
              </item>
@@ -618,47 +668,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
             </layout>
            </widget>
-          </item>
-          <item row="0" column="0" colspan="2">
-           <widget class="PyDMImageView" name="PyDMImageView_Scrn1">
-            <property name="minimumSize">
-             <size>
-              <width>499</width>
-              <height>390</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>499</width>
-              <height>390</height>
-             </size>
-            </property>
-            <property name="toolTip">
-             <string/>
-            </property>
-            <property name="whatsThis">
-             <string/>
-            </property>
-            <property name="imageChannel" stdset="0">
-             <string>ca://TS-01:DI-Scrn:&amp;&amp;dataarray$$</string>
-            </property>
-            <property name="widthChannel" stdset="0">
-             <string>ca://TS-01:DI-Scrn:$$width$$</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0" colspan="2">
-           <spacer name="verticalSpacer">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
           </item>
          </layout>
         </widget>
@@ -1741,7 +1750,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
      </widget>
      <widget class="QWidget" name="Scrn41">
       <attribute name="title">
-       <string> Scrn 4.1 </string>
+       <string>Scrn 4.1</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_14">
        <item>
@@ -2270,7 +2279,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
      </widget>
      <widget class="QWidget" name="Scrn42">
       <attribute name="title">
-       <string> Scrn 4.2 </string>
+       <string>Scrn 4.2</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_16">
        <item>
@@ -2799,7 +2808,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
      </widget>
      <widget class="QWidget" name="Scrn43">
       <attribute name="title">
-       <string> Scrn 4.3 </string>
+       <string>Scrn 4.3</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_18">
        <item>
@@ -3392,9 +3401,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">font-size:14pt;
-font-weight:bold;
-</string>
+            <string notr="true">font-size:10pt;
+font-weight:bold;</string>
            </property>
            <property name="text">
             <string>Open...</string>
@@ -3498,6 +3506,12 @@ font-weight:bold;
           <height>180</height>
          </size>
         </property>
+        <property name="maximumSize">
+         <size>
+          <width>1315</width>
+          <height>180</height>
+         </size>
+        </property>
        </widget>
       </item>
       <item row="0" column="5">
@@ -3524,9 +3538,8 @@ font-weight:bold;
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">font-size:14pt;
-font-weight:bold;
-</string>
+            <string notr="true">font-size:10pt;
+font-weight:bold;</string>
            </property>
            <property name="text">
             <string>Transport Efficiency</string>
@@ -3588,7 +3601,10 @@ font-weight:bold;
                <string/>
               </property>
               <property name="text">
-               <string>PyDMLabel</string>
+               <string>...</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
               </property>
              </widget>
             </item>
@@ -3647,7 +3663,10 @@ font-weight:bold;
                <string/>
               </property>
               <property name="text">
-               <string>PyDMLabel</string>
+               <string>...</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
               </property>
              </widget>
             </item>
@@ -3705,7 +3724,7 @@ font-weight:bold;
                <string/>
               </property>
               <property name="styleSheet">
-               <string notr="true">font-size:14pt;
+               <string notr="true">font-size:10pt;
 </string>
               </property>
               <property name="text">
@@ -3713,6 +3732,9 @@ font-weight:bold;
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
+              </property>
+              <property name="channel">
+               <string>ca://TEST:Eff</string>
               </property>
              </widget>
             </item>
