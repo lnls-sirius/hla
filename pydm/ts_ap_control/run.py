@@ -44,8 +44,13 @@ class BTSControlWindow(QMainWindow):
         self.centralwidget = loadUi('ts_ap_control.ui')
         self.setCentralWidget(self.centralwidget)
 
+        # self.centralwidget.PyDMImageView_Scrn1.imageWidth = 200
+        # self.centralwidget.PyDMImageView_Scrn1.imageChannel = 'ca://TEST:Vector'
+        # self.centralwidget.PyDMImageView_Scrn1.colormap = 2
+        # self.centralwidget.PyDMImageView_Scrn1.normalizeData = True
+
         #TS Lattice Widget
-        lattice = QSvgWidget('devnames-TS.svg')
+        lattice = QSvgWidget('BTS.svg')
         self.centralwidget.widget_lattice.setLayout(QVBoxLayout())
         self.centralwidget.widget_lattice.layout().addWidget(lattice)
 
