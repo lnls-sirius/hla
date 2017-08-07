@@ -48,6 +48,9 @@
      <property name="whatsThis">
       <string/>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
      <property name="channel">
       <string>ca://&amp;PRE&amp;DelayType-Sts</string>
      </property>
