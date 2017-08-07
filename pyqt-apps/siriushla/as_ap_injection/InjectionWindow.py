@@ -142,16 +142,18 @@ class InjectionWindow(QMainWindow):
         self._setupUi()
         self.setStyleSheet(self.StyleSheet)
 
-        self.multiBandRadio.clicked.connect(
-            lambda: self.setInjectionMode(self.controller.MultiBand))
-        self.singleBandRadio.clicked.connect(
-            lambda: self.setInjectionMode(self.controller.SingleBand))
+        self.multiBunchRadio.clicked.connect(
+            lambda: self.setInjectionMode(self.controller.MultiBunch))
+        self.singleBunchRadio.clicked.connect(
+            lambda: self.setInjectionMode(self.controller.SingleBunch))
+        self.singleBunchRadio.setEnabled(False)
         self.startInjectionBtn.clicked.connect(self.startInjection)
         self.stopInjectionBtn.clicked.connect(self.stopInjection)
         self.initialBucketSpinBox.valueChanged.connect(self.setInitialBucket)
         self.finalBucketSpinBox.valueChanged.connect(self.setFinalBucket)
         self.stepSpinBox.valueChanged.connect(self.setStep)
         self.cycleSpinBox.valueChanged.connect(self.setCycle)
+        self.cycleSpinBox.setEnabled(False)
         self._enableButtons(False)
         self.injectingLed.connected_signal.connect(
             lambda: self._enableButtons(True))
@@ -160,8 +162,8 @@ class InjectionWindow(QMainWindow):
 
         # bl = self.controller.bucket_list
 
-        self.multiBandRadio.setChecked(True)
-        self.setInjectionMode(self.controller.MultiBand)
+        self.multiBunchRadio.setChecked(True)
+        self.setInjectionMode(self.controller.MultiBunch)
 
         self.initialBucketSpinBox.setRange(1, InjectionController.Harmonic)
         self.initialBucketSpinBox.setValue(1)
@@ -174,74 +176,7 @@ class InjectionWindow(QMainWindow):
 
         self.show()
 
-    def _setupUi(self):
-        self._dialog = None
-
-        self.central_widget = QWidget()
-        self.central_widget.layout = QGridLayout()
-
-        radio_layout = QVBoxLayout()
-        self.multiBandRadio = QRadioButton("Multi Band", self.central_widget)
-        self.multiBandRadio.setObjectName("multiBandRadio")
-        self.singleBandRadio = QRadioButton("Single Band", self.central_widget)
-        self.singleBandRadio.setObjectName("singleBandRadio")
-        radio_layout.addWidget(self.multiBandRadio)
-        radio_layout.addWidget(self.singleBandRadio)
-
-        cycle_layout = QHBoxLayout()
-        self.cycleSpinBox = QSpinBox(self.central_widget)
-        self.cycleSpinBox.setObjectName("cycleSpinBox")
-        cycle_layout.addWidget(self.cycleSpinBox)
-
-        button_layout = QHBoxLayout()
-        self.startInjectionBtn = \
-            QPushButton("Start Injection", self.central_widget)
-        self.startInjectionBtn.setObjectName("startInjectionBtn")
-        self.stopInjectionBtn = \
-            QPushButton("Stop Injection", self.central_widget)
-        self.stopInjectionBtn.setObjectName("stopInjectionBtn")
-        button_layout.addWidget(self.startInjectionBtn)
-        button_layout.addWidget(self.stopInjectionBtn)
-
-        bucket_list_layout = QHBoxLayout()
-        self.initialBucketSpinBox = QSpinBox(self.central_widget)
-        self.initialBucketSpinBox.setObjectName("initialBucketSpinBox")
-        self.finalBucketSpinBox = QSpinBox(self.central_widget)
-        self.finalBucketSpinBox.setObjectName("finalBucketSpinBox")
-        self.stepSpinBox = QSpinBox(self.central_widget)
-        self.stepSpinBox.setObjectName("stepSpinBox")
-        bucket_list_layout.addWidget(self.initialBucketSpinBox)
-        bucket_list_layout.addWidget(self.finalBucketSpinBox)
-        bucket_list_layout.addWidget(self.stepSpinBox)
-
-        self.bucket_graph = pg.PlotWidget()
-        self.bucket_graph.setYRange(min=0, max=2)
-        # self.bucket_graph.mouseEnabled = False
-        # self.bucket_graph.setAspectLocked(1)
-        # self.bucket_graph.showAxis("left", show=False)
-        # self.bucket_graph.showAxis("bottom", show=False)
-
-        led_layout = QHBoxLayout()
-        self.ledLabel = QLabel("Injecting")
-        self.ledLabel.setObjectName("ledLabel")
-        pv = InjectionController.TimingPrefix + '-' + \
-            InjectionController.InjectionToggle
-        self.injectingLed = PyDMLed(self, init_channel="ca://" + pv)
-        self.injectingLed.setObjectName("injectingLed")
-        led_layout.addWidget(self.ledLabel)
-        led_layout.addWidget(self.injectingLed)
-
-        self.central_widget.layout.addLayout(radio_layout, 0, 0)
-        self.central_widget.layout.addLayout(cycle_layout, 0, 2)
-        self.central_widget.layout.addLayout(bucket_list_layout, 1, 0, 1, 3)
-        self.central_widget.layout.addWidget(self.bucket_graph, 2, 0, 1, 3)
-        self.central_widget.layout.addLayout(button_layout, 3, 0)
-        self.central_widget.layout.addLayout(led_layout, 3, 2)
-
-        self.central_widget.setLayout(self.central_widget.layout)
-        self.setCentralWidget(self.central_widget)
-        self.setWindowTitle("Injection Control Window")
-
+    # Public
     @pyqtSlot()
     def startInjection(self):
         """Start injection."""
@@ -279,6 +214,34 @@ class InjectionWindow(QMainWindow):
 
         # self._dialog = None
 
+    @pyqtSlot(int)
+    def setInitialBucket(self, value):
+        """Set controller initial bucket and update bucket profile."""
+        self.controller.initial_bucket = value
+        self._setBucketProfile()
+
+    @pyqtSlot(int)
+    def setFinalBucket(self, value):
+        """Set controller final graph and update bucket profile."""
+        self.controller.final_bucket = value
+        self._setBucketProfile()
+
+    @pyqtSlot(int)
+    def setStep(self, value):
+        """Set controller step and update bucket profile."""
+        self.controller.step = value
+        self._setBucketProfile()
+
+    @pyqtSlot(int)
+    def setCycle(self, value):
+        """Set controller cycles."""
+        self.controller.cycles = value
+
+    def setInjectionMode(self, value):
+        """Set controller injection mode."""
+        self.controller.mode = value
+
+    # Private
     def _startInjection(self):
         # # Set worker to start injection
         # self._worker = StartInjectionWorker(self.controller)
@@ -298,14 +261,20 @@ class InjectionWindow(QMainWindow):
 
         try:
             self.controller.put_bucket_list()
-            self._dialog.main_label.setText("Setting injection mode")
-            qApp.processEvents()
-            self.controller.put_injection_mode()
-            self._dialog.main_label.setText("Setting number of cycles")
-            qApp.processEvents()
-            self.controller.put_cycles()
+
+            # self._dialog.main_label.setText("Setting injection mode")
+            # qApp.processEvents()
+            #
+            # self.controller.put_injection_mode()
+
+            # self._dialog.main_label.setText("Setting number of cycles")
+            # qApp.processEvents()
+            #
+            # self.controller.put_cycles()
+
             self._dialog.main_label.setText("Starting injection")
             qApp.processEvents()
+
             self.controller.start_injection()
         except PVConnectionError as e:
             self._dialog.reject()
@@ -363,7 +332,6 @@ class InjectionWindow(QMainWindow):
         self._dialog = WaitingDlg(title, msg)
         return self._dialog.exec_()
 
-    @pyqtSlot()
     def _enableButtons(self, value):
         self.startInjectionBtn.setEnabled(value)
         self.stopInjectionBtn.setEnabled(value)
@@ -392,32 +360,73 @@ class InjectionWindow(QMainWindow):
 
         self.bucket_graph.plot(x, profile)
 
-    def setInjectionMode(self, value):
-        """Set controller injection mode."""
-        self.controller.mode = value
+    def _setupUi(self):
+        self._dialog = None
 
-    @pyqtSlot(int)
-    def setInitialBucket(self, value):
-        """Set controller initial bucket and update bucket profile."""
-        self.controller.initial_bucket = value
-        self._setBucketProfile()
+        self.central_widget = QWidget()
+        self.central_widget.layout = QGridLayout()
 
-    @pyqtSlot(int)
-    def setFinalBucket(self, value):
-        """Set controller final graph and update bucket profile."""
-        self.controller.final_bucket = value
-        self._setBucketProfile()
+        radio_layout = QVBoxLayout()
+        self.multiBunchRadio = QRadioButton("Multi Bunch", self.central_widget)
+        self.multiBunchRadio.setObjectName("multiBunchRadio")
+        self.singleBunchRadio = QRadioButton("Single Bunch", self.central_widget)
+        self.singleBunchRadio.setObjectName("singleBunchRadio")
+        radio_layout.addWidget(self.multiBunchRadio)
+        radio_layout.addWidget(self.singleBunchRadio)
 
-    @pyqtSlot(int)
-    def setStep(self, value):
-        """Set controller step and update bucket profile."""
-        self.controller.step = value
-        self._setBucketProfile()
+        cycle_layout = QHBoxLayout()
+        self.cycleSpinBox = QSpinBox(self.central_widget)
+        self.cycleSpinBox.setObjectName("cycleSpinBox")
+        cycle_layout.addWidget(self.cycleSpinBox)
 
-    @pyqtSlot(int)
-    def setCycle(self, value):
-        """Set controller cycles."""
-        self.controller.cycles = value
+        button_layout = QHBoxLayout()
+        self.startInjectionBtn = \
+            QPushButton("Start Injection", self.central_widget)
+        self.startInjectionBtn.setObjectName("startInjectionBtn")
+        self.stopInjectionBtn = \
+            QPushButton("Stop Injection", self.central_widget)
+        self.stopInjectionBtn.setObjectName("stopInjectionBtn")
+        button_layout.addWidget(self.startInjectionBtn)
+        button_layout.addWidget(self.stopInjectionBtn)
+
+        bucket_list_layout = QHBoxLayout()
+        self.initialBucketSpinBox = QSpinBox(self.central_widget)
+        self.initialBucketSpinBox.setObjectName("initialBucketSpinBox")
+        self.finalBucketSpinBox = QSpinBox(self.central_widget)
+        self.finalBucketSpinBox.setObjectName("finalBucketSpinBox")
+        self.stepSpinBox = QSpinBox(self.central_widget)
+        self.stepSpinBox.setObjectName("stepSpinBox")
+        bucket_list_layout.addWidget(self.initialBucketSpinBox)
+        bucket_list_layout.addWidget(self.finalBucketSpinBox)
+        bucket_list_layout.addWidget(self.stepSpinBox)
+
+        self.bucket_graph = pg.PlotWidget()
+        self.bucket_graph.setYRange(min=0, max=2)
+        # self.bucket_graph.mouseEnabled = False
+        # self.bucket_graph.setAspectLocked(1)
+        # self.bucket_graph.showAxis("left", show=False)
+        # self.bucket_graph.showAxis("bottom", show=False)
+
+        led_layout = QHBoxLayout()
+        self.ledLabel = QLabel("Injecting")
+        self.ledLabel.setObjectName("ledLabel")
+        pv = InjectionController.TimingPrefix + ':' + \
+            InjectionController.InjectionToggle
+        self.injectingLed = PyDMLed(self, init_channel="ca://" + pv)
+        self.injectingLed.setObjectName("injectingLed")
+        led_layout.addWidget(self.ledLabel)
+        led_layout.addWidget(self.injectingLed)
+
+        self.central_widget.layout.addLayout(radio_layout, 0, 0)
+        self.central_widget.layout.addLayout(cycle_layout, 0, 2)
+        self.central_widget.layout.addLayout(bucket_list_layout, 1, 0, 1, 3)
+        self.central_widget.layout.addWidget(self.bucket_graph, 2, 0, 1, 3)
+        self.central_widget.layout.addLayout(button_layout, 3, 0)
+        self.central_widget.layout.addLayout(led_layout, 3, 2)
+
+        self.central_widget.setLayout(self.central_widget.layout)
+        self.setCentralWidget(self.central_widget)
+        self.setWindowTitle("Injection Control Window")
 
 
 if __name__ == "__main__":

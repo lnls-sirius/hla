@@ -16,17 +16,17 @@ from CustomExceptions import PVConnectionError
 class InjectionController:
     """Class that controls the injection."""
 
-    SingleBand, MultiBand = range(2)
-    MultiBandSpan = 75
+    SingleBunch, MultiBunch = range(2)
+    MultiBunchSpan = 75
     Harmonic = 864
     MaxCurrent = 250
 
-    TimingPrefix = "TIMING"
+    TimingPrefix = "VAG-AS-Glob:TI-EVG"
     LifeTimePrefix = "lifetime"
 
     # Timing Attrs
-    BucketList = "BucketList"
-    InjectionToggle = "InjectionToggle"
+    BucketList = "BucketList-SP"
+    InjectionToggle = "InjectionState-Sel"
     InjectionMode = "InjectionMode"
     InjectionCycles = "InjectionCycles"
 
@@ -37,7 +37,7 @@ class InjectionController:
 
     def __init__(self):
         """Class constructor."""
-        self._mode = InjectionController.MultiBand
+        self._mode = InjectionController.MultiBunch
         self._initial_bucket = 1
         self._final_bucket = InjectionController.Harmonic
         self._step = 75
@@ -46,7 +46,7 @@ class InjectionController:
         self._bucket_list = list()
 
         # try connecting
-        self._timing = epics.Device(self.TimingPrefix, delim='-',
+        self._timing = epics.Device(self.TimingPrefix, delim=':',
                                     attrs=self.TimingAttrs)
         self._lifetime = epics.Device(self.LifeTimePrefix, delim=':',
                                       attrs='')
