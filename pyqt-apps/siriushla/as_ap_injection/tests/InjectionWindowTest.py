@@ -1,7 +1,7 @@
 """Test Injection window."""
 import sys
 import unittest
-# import threading
+import threading
 import time
 from unittest import mock
 from unittest.mock import create_autospec
@@ -20,11 +20,12 @@ class InjectionWindowTest(unittest.TestCase):
         """Common setup for all tests."""
         self.mock_controller = create_autospec(InjectionController)
         self.form = InjectionWindow(self.mock_controller)
+        self.form._enableButtons(True)
 
     def test_setup(self):
         """Test initial values."""
-        self.assertEqual(self.form.multiBandRadio.isChecked(), True)
-        self.assertEqual(self.form.singleBandRadio.isChecked(), False)
+        self.assertEqual(self.form.multiBunchRadio.isChecked(), True)
+        self.assertEqual(self.form.singleBunchRadio.isChecked(), False)
         self.assertEqual(self.form.initialBucketSpinBox.value(), 1)
         self.assertEqual(self.form.finalBucketSpinBox.value(),
                          InjectionController.Harmonic)
@@ -33,17 +34,17 @@ class InjectionWindowTest(unittest.TestCase):
 
     @mock.patch.object(InjectionWindow, 'setInjectionMode', autospec=True)
     def test_set_injection_mode(self, window_mock):
-        """Test injection mode radios."""
-        self.form.singleBandRadio.click()
-        self.assertEqual(self.form.multiBandRadio.isChecked(), False)
-        self.assertEqual(self.form.singleBandRadio.isChecked(), True)
+        """Test injection mode radio."""
+        # self.form.singleBunchRadio.click()
+        # self.assertEqual(self.form.multiBunchRadio.isChecked(), False)
+        # self.assertEqual(self.form.singleBunchRadio.isChecked(), True)
+        # window_mock.assert_called_with(
+        #     self.form, self.mock_controller.SingleBunch)
+        self.form.multiBunchRadio.click()
+        self.assertEqual(self.form.multiBunchRadio.isChecked(), True)
+        self.assertEqual(self.form.singleBunchRadio.isChecked(), False)
         window_mock.assert_called_with(
-            self.form, self.mock_controller.SingleBand)
-        self.form.multiBandRadio.click()
-        self.assertEqual(self.form.multiBandRadio.isChecked(), True)
-        self.assertEqual(self.form.singleBandRadio.isChecked(), False)
-        window_mock.assert_called_with(
-            self.form, self.mock_controller.MultiBand)
+            self.form, self.mock_controller.MultiBunch)
 
     @mock.patch.object(InjectionWindow, "_setBucketProfile", autospec=True)
     def test_set_initial_bucket(self, window_mock):
@@ -71,57 +72,65 @@ class InjectionWindowTest(unittest.TestCase):
         self.form.cycleSpinBox.setValue(10)
         self.assertEqual(self.form.cycleSpinBox.value(), 10)
 
-    # @mock.patch.object(InjectionWindow, '_startInjection', autospec=True)
-    # def test_accept_start_injection(self, mock_injection):
-    #     """Test clicking button to start injection and accept it."""
-    #     self.mock_controller.injecting = False
-    #     self.assertIsNone(self.form._dialog)
-    #
-    #     t = threading.Thread(target=self._accept_dialog)
-    #     t.start()
-    #     self.form.startInjectionBtn.click()
-    #
-    #     mock_injection.assert_called_with(self.form)
-    #     # self.assertIsNone(self.form._dialog)
+    @mock.patch.object(InjectionWindow, "_showMsgBox", autospec=True)
+    def test_inject_when_injecting(self, mock_dlg):
+        """Try start injection when injection is already running."""
+        self.mock_controller.injecting = True
+        self.form.startInjectionBtn.click()
+        mock_dlg.assert_called_with(self.form,
+                                    "[InjectionControlWindow]",
+                                    "Injection is already running")
 
-    # @mock.patch.object(InjectionWindow, '_startInjection', autospec=True)
-    # def test_reject_start_injection(self, mock_injection):
-    #     """Test clicking button to start injection and rejecting it."""
-    #     self.mock_controller.injecting = False
-    #     self.assertIsNone(self.form._dialog)
-    #
-    #     t = threading.Thread(target=self._reject_dialog)
-    #     t.start()
-    #     self.form.startInjectionBtn.click()
-    #
-    #     mock_injection.assert_not_called()
-    #     # self.assertIsNone(self.form._dialog)
+    def test_accept_start_injection(self):
+        """Test clicking button to start injection and accept it."""
+        self.mock_controller.injecting = False
+        self.assertIsNone(self.form._dialog)
 
-    # @mock.patch.object(InjectionWindow, '_stopInjection', autospec=True)
-    # def test_accept_stop_injection(self, mock_injection):
-    #     """Test clicking button to stop injection and accepting it."""
-    #     self.mock_controller.injecting = True
-    #     self.assertIsNone(self.form._dialog)
-    #
-    #     t = threading.Thread(target=self._accept_dialog)
-    #     t.start()
-    #     self.form.stopInjectionBtn.click()
-    #
-    #     mock_injection.assert_called_with(self.form)
-    #     # self.assertIsNone(self.form._dialog)
+        t = threading.Thread(target=self._accept_dialog)
+        t.start()
+        self.form.startInjectionBtn.click()
 
-    # @mock.patch.object(InjectionWindow, '_stopInjection', autospec=True)
-    # def test_reject_stop_injection(self, mock_injection):
-    #     """Test clicking button to stop injection and rejecting."""
-    #     self.form.controller._injecting = True
-    #     self.assertIsNone(self.form._dialog)
-    #
-    #     t = threading.Thread(target=self._reject_dialog)
-    #     t.start()
-    #     self.form.stopInjectionBtn.click()
-    #
-    #     mock_injection.assert_not_called()
-    #     # self.assertIsNone(self.form._dialog)
+        self.mock_controller.put_bucket_list.assert_called()
+        # self.mock_controller.put_injection_mode.assert_called()
+        # self.mock_controller.put_cycles.assert_called()
+        self.mock_controller.start_injection.assert_called()
+        # self.assertIsNone(self.form._dialog)
+
+    def test_reject_start_injection(self):
+        """Test clicking button to start injection and rejecting it."""
+        self.mock_controller.injecting = False
+        self.assertIsNone(self.form._dialog)
+
+        t = threading.Thread(target=self._reject_dialog)
+        t.start()
+        self.form.startInjectionBtn.click()
+
+        self.mock_controller.put_bucket_list.assert_not_called()
+        self.mock_controller.put_injection_mode.assert_not_called()
+        self.mock_controller.put_cycles.assert_not_called()
+        self.mock_controller.start_injection.assert_not_called()
+
+    def test_accept_stop_injection(self):
+        """Test clicking button to stop injection and accepting it."""
+        self.mock_controller.injecting = True
+        self.assertIsNone(self.form._dialog)
+
+        t = threading.Thread(target=self._accept_dialog)
+        t.start()
+        self.form.stopInjectionBtn.click()
+
+        self.mock_controller.stop_injection.assert_called()
+
+    def test_reject_stop_injection(self):
+        """Test clicking button to stop injection and rejecting."""
+        self.form.controller._injecting = True
+        self.assertIsNone(self.form._dialog)
+
+        t = threading.Thread(target=self._reject_dialog)
+        t.start()
+        self.form.stopInjectionBtn.click()
+
+        self.mock_controller.stop_injection.assert_not_called()
 
     def _accept_dialog(self):
         time.sleep(0.2)

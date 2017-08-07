@@ -1,7 +1,9 @@
 """Test injection class."""
-import epics
 import unittest
 from unittest import mock
+
+import epics
+
 from InjectionController import InjectionController
 
 
@@ -20,7 +22,7 @@ class InjectionControllerTest(unittest.TestCase):
         self.assertEqual(
             self.injection.final_bucket, InjectionController.Harmonic)
         self.assertEqual(self.injection.step, 75)
-        self.assertEqual(self.injection.mode, InjectionController.MultiBand)
+        self.assertEqual(self.injection.mode, InjectionController.MultiBunch)
         self.assertEqual(self.injection.cycles, 0)
 
         # self.assertEqual(self.injection.bucket_list, list())
@@ -41,9 +43,9 @@ class InjectionControllerTest(unittest.TestCase):
         self.assertEqual(self.injection.step, 75)
 
     def test_set_injection_mode(self):
-        """Set injection mode to single band."""
-        self.injection.mode = InjectionController.SingleBand
-        self.assertEqual(self.injection.mode, InjectionController.SingleBand)
+        """Set injection mode to single Bunch."""
+        self.injection.mode = InjectionController.SingleBunch
+        self.assertEqual(self.injection.mode, InjectionController.SingleBunch)
 
     def test_set_injection_cycles(self):
         """Set injection cycles to 10."""
