@@ -26,6 +26,7 @@ class EventCntrler(QGroupBox):
         pv_pref = 'ca://' + PREFIX + self.prefix
         lh = QHBoxLayout(self)
         self.setLayout(lh)
+        self.setTitle(self.prefix.propty)
 
         lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
 
@@ -33,13 +34,6 @@ class EventCntrler(QGroupBox):
         lv = QVBoxLayout()
         lv.addWidget(QLabel('External Trigger', self))
         lv.addWidget(PyDMPushButton(self, init_channel=pv_pref+'ExtTrig-Cmd'))
-        lh.addItem(lv)
-        lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
-
-        # Event Name
-        lv = QVBoxLayout()
-        lv.addWidget(QLabel('Event Name', self))
-        lv.addWidget(QLabel(self.prefix.propty, self))
         lh.addItem(lv)
         lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
 

@@ -22,8 +22,14 @@ class Ui_Form(object):
         self.PyDMECBDelayType = PyDMEnumComboBox(Form)
         self.PyDMECBDelayType.setToolTip("")
         self.PyDMECBDelayType.setWhatsThis("")
+        self.PyDMECBDelayType.setMaxVisibleItems(6)
         self.PyDMECBDelayType.setObjectName("PyDMECBDelayType")
         self.horizontalLayout.addWidget(self.PyDMECBDelayType)
+        self.PyDMCheckbox = PyDMCheckbox(Form)
+        self.PyDMCheckbox.setToolTip("")
+        self.PyDMCheckbox.setWhatsThis("")
+        self.PyDMCheckbox.setObjectName("PyDMCheckbox")
+        self.horizontalLayout.addWidget(self.PyDMCheckbox)
         self.PyDMLbDelayType = PyDMLabel(Form)
         self.PyDMLbDelayType.setToolTip("")
         self.PyDMLbDelayType.setWhatsThis("")
@@ -37,6 +43,11 @@ class Ui_Form(object):
         self.PyDMLbDelay.setPrecision(3)
         self.PyDMLbDelay.setObjectName("PyDMLbDelay")
         self.horizontalLayout.addWidget(self.PyDMLbDelay)
+        self.PyDMLed = PyDMLed(Form)
+        self.PyDMLed.setToolTip("")
+        self.PyDMLed.setWhatsThis("")
+        self.PyDMLed.setObjectName("PyDMLed")
+        self.horizontalLayout.addWidget(self.PyDMLed)
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -50,5 +61,7 @@ class Ui_Form(object):
         self.PyDMLbDelay.setText(_translate("Form", "Delay"))
         self.PyDMLbDelay.setChannel(_translate("Form", "ca://&PRE&Delay-RB"))
 
+from pydm.widgets.checkbox import PyDMCheckbox
 from pydm.widgets.enum_combo_box import PyDMEnumComboBox
 from pydm.widgets.label import PyDMLabel
+from pydm.widgets.led import PyDMLed
