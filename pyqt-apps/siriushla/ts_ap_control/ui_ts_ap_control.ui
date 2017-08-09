@@ -257,12 +257,12 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                </property>
                <item>
                 <property name="text">
-                 <string>Stats1</string>
+                 <string>Dimfei</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>Stats2</string>
+                 <string>NDStats</string>
                 </property>
                </item>
               </widget>
@@ -287,7 +287,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2CentroidX_Scrn1">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterXNDStats_Scrn1">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -306,7 +306,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                  <string>2-PyDMLabel</string>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1CentroidX_Scrn1">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterXDimfei_Scrn1">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -378,7 +378,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2SigmaX_Scrn1">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaXNDStats_Scrn1">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -397,7 +397,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                  <string>2-PyDMLabel</string>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1SigmaX_Scrn1">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaXDimfei_Scrn1">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -455,7 +455,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1CentroidY_Scrn1">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterYDimfei_Scrn1">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -477,7 +477,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                  <string>ca://TEST:Centroid</string>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2CentroidY_Scrn1">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterYNDStats_Scrn1">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -496,8 +496,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                  <string>2-PyDMLabel</string>
                 </property>
                </widget>
-               <zorder>PyDMLabel_Stats2CentroidY_Scrn1</zorder>
-               <zorder>PyDMLabel_Stats1CentroidY_Scrn1</zorder>
+               <zorder>PyDMLabel_CenterYNDStats_Scrn1</zorder>
+               <zorder>PyDMLabel_CenterYDimfei_Scrn1</zorder>
               </widget>
              </item>
              <item row="4" column="5" colspan="6">
@@ -521,7 +521,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2SigmaY_Scrn1">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaYNDStats_Scrn1">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -540,7 +540,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                  <string>2-PyDMLabel</string>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1SigmaY_Scrn1">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaYDimfei_Scrn1">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -578,7 +578,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2Orientation_Scrn1">
+               <widget class="PyDMLabel" name="PyDMLabel_ThetaNDStats_Scrn1">
                 <property name="geometry">
                  <rect>
                   <x>70</x>
@@ -600,7 +600,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                  <set>Qt::AlignCenter</set>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1Orientation_Scrn1">
+               <widget class="PyDMLabel" name="PyDMLabel_ThetaDimfei_Scrn1">
                 <property name="geometry">
                  <rect>
                   <x>70</x>
@@ -801,7 +801,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1CentroidY_Scrn2">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterYDimfei_Scrn2">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -817,7 +817,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2CentroidY_Scrn2">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterYNDStats_Scrn2">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -859,7 +859,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2SigmaX_Scrn2">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaXNDStats_Scrn2">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -875,7 +875,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1SigmaX_Scrn2">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaXDimfei_Scrn2">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -907,7 +907,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2CentroidX_Scrn2">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterXNDStats_Scrn2">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -923,7 +923,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1CentroidX_Scrn2">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterXDimfei_Scrn2">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -965,7 +965,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2Orientation_Scrn2">
+               <widget class="PyDMLabel" name="PyDMLabel_ThetaNDStats_Scrn2">
                 <property name="geometry">
                  <rect>
                   <x>80</x>
@@ -984,7 +984,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                  <set>Qt::AlignCenter</set>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1Orientation_Scrn2">
+               <widget class="PyDMLabel" name="PyDMLabel_ThetaDimfei_Scrn2">
                 <property name="geometry">
                  <rect>
                   <x>80</x>
@@ -1034,12 +1034,12 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                </property>
                <item>
                 <property name="text">
-                 <string>Stats1</string>
+                 <string>Dimfei</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>Stats2</string>
+                 <string>NDStats</string>
                 </property>
                </item>
               </widget>
@@ -1058,7 +1058,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2SigmaY_Scrn2">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaYNDStats_Scrn2">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -1074,7 +1074,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1SigmaY_Scrn2">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaYDimfei_Scrn2">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -1312,7 +1312,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1CentroidY_Scrn3">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterYDimfei_Scrn3">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -1328,7 +1328,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2CentroidY_Scrn3">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterYNDStats_Scrn3">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -1360,7 +1360,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2SigmaX_Scrn3">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaXNDStats_Scrn3">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -1376,7 +1376,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1SigmaX_Scrn3">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaXDimfei_Scrn3">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -1452,7 +1452,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2SigmaY_Scrn3">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaYNDStats_Scrn3">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -1468,7 +1468,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1SigmaY_Scrn3">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaYDimfei_Scrn3">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -1505,12 +1505,12 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                </property>
                <item>
                 <property name="text">
-                 <string>Stats1</string>
+                 <string>Dimfei</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>Stats2</string>
+                 <string>NDStats</string>
                 </property>
                </item>
               </widget>
@@ -1529,7 +1529,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2CentroidX_Scrn3">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterXNDStats_Scrn3">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -1545,7 +1545,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1CentroidX_Scrn3">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterXDimfei_Scrn3">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -1597,7 +1597,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2Orientation_Scrn3">
+               <widget class="PyDMLabel" name="PyDMLabel_ThetaNDStats_Scrn3">
                 <property name="geometry">
                  <rect>
                   <x>80</x>
@@ -1616,7 +1616,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                  <set>Qt::AlignCenter</set>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1Orientation_Scrn3">
+               <widget class="PyDMLabel" name="PyDMLabel_ThetaDimfei_Scrn3">
                 <property name="geometry">
                  <rect>
                   <x>80</x>
@@ -1807,7 +1807,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2Orientation_Scrn41">
+               <widget class="PyDMLabel" name="PyDMLabel_ThetaNDStats_Scrn41">
                 <property name="geometry">
                  <rect>
                   <x>80</x>
@@ -1826,7 +1826,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                  <set>Qt::AlignCenter</set>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1Orientation_Scrn41">
+               <widget class="PyDMLabel" name="PyDMLabel_ThetaDimfei_Scrn41">
                 <property name="geometry">
                  <rect>
                   <x>80</x>
@@ -1888,7 +1888,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2SigmaX_Scrn41">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaXNDStats_Scrn41">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -1904,7 +1904,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1SigmaX_Scrn41">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaXDimfei_Scrn41">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -1936,7 +1936,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1CentroidY_Scrn41">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterYDimfei_Scrn41">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -1952,7 +1952,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2CentroidY_Scrn41">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterYNDStats_Scrn41">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -2008,7 +2008,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2SigmaY_Scrn41">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaYNDStats_Scrn41">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -2024,7 +2024,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1SigmaY_Scrn41">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaYDimfei_Scrn41">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -2061,12 +2061,12 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                </property>
                <item>
                 <property name="text">
-                 <string>Stats1</string>
+                 <string>Dimfei</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>Stats2</string>
+                 <string>NDStats</string>
                 </property>
                </item>
               </widget>
@@ -2135,7 +2135,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2CentroidX_Scrn41">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterXNDStats_Scrn41">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -2151,7 +2151,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1CentroidX_Scrn41">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterXDimfei_Scrn41">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -2336,7 +2336,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1CentroidY_Scrn42">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterYDimfei_Scrn42">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -2352,7 +2352,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2CentroidY_Scrn42">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterYNDStats_Scrn42">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -2404,7 +2404,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2CentroidX_Scrn42">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterXNDStats_Scrn42">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -2420,7 +2420,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1CentroidX_Scrn42">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterXDimfei_Scrn42">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -2452,7 +2452,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2SigmaX_Scrn42">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaXNDStats_Scrn42">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -2468,7 +2468,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1SigmaX_Scrn42">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaXDimfei_Scrn42">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -2510,7 +2510,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2SigmaY_Scrn42">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaYNDStats_Scrn42">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -2526,7 +2526,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1SigmaY_Scrn42">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaYDimfei_Scrn42">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -2558,7 +2558,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2Orientation_Scrn42">
+               <widget class="PyDMLabel" name="PyDMLabel_ThetaNDStats_Scrn42">
                 <property name="geometry">
                  <rect>
                   <x>80</x>
@@ -2577,7 +2577,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                  <set>Qt::AlignCenter</set>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1Orientation_Scrn42">
+               <widget class="PyDMLabel" name="PyDMLabel_ThetaDimfei_Scrn42">
                 <property name="geometry">
                  <rect>
                   <x>80</x>
@@ -2661,12 +2661,12 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                </property>
                <item>
                 <property name="text">
-                 <string>Stats1</string>
+                 <string>Dimfei</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>Stats2</string>
+                 <string>NDStats</string>
                 </property>
                </item>
               </widget>
@@ -2882,7 +2882,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2Orientation_Scrn43">
+               <widget class="PyDMLabel" name="PyDMLabel_ThetaNDStats_Scrn43">
                 <property name="geometry">
                  <rect>
                   <x>80</x>
@@ -2901,7 +2901,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                  <set>Qt::AlignCenter</set>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1Orientation_Scrn43">
+               <widget class="PyDMLabel" name="PyDMLabel_ThetaDimfei_Scrn43">
                 <property name="geometry">
                  <rect>
                   <x>80</x>
@@ -2999,7 +2999,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2SigmaX_Scrn43">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaXNDStats_Scrn43">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -3015,7 +3015,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1SigmaX_Scrn43">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaXDimfei_Scrn43">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -3067,7 +3067,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1CentroidY_Scrn43">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterYDimfei_Scrn43">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -3083,7 +3083,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2CentroidY_Scrn43">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterYNDStats_Scrn43">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -3130,12 +3130,12 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                </property>
                <item>
                 <property name="text">
-                 <string>Stats1</string>
+                 <string>Dimfei</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>Stats2</string>
+                 <string>NDStats</string>
                 </property>
                </item>
               </widget>
@@ -3161,7 +3161,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2SigmaY_Scrn43">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaYNDStats_Scrn43">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -3177,7 +3177,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1SigmaY_Scrn43">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaYDimfei_Scrn43">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -3219,7 +3219,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2CentroidX_Scrn43">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterXNDStats_Scrn43">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -3235,7 +3235,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1CentroidX_Scrn43">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterXDimfei_Scrn43">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
