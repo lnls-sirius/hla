@@ -22,6 +22,26 @@ PREFIX = 'fac' + PREFIX[8:]
 HLTriggers = None
 
 
+def _setupTrigs(main, map_, nc, hide_evg=True):
+        lv = QVBoxLayout()
+        main.setLayout(lv)
+        lv.addItem(QSpIt(40, 20, QSzPol.Minimum, QSzPol.Expanding))
+        nc = 1
+        for k, v in map_.items():
+            gb = QGroupBox(k, main)
+            lv.addWidget(gb)
+            lv.addItem(QSpIt(40, 20, QSzPol.Minimum, QSzPol.Expanding))
+            lg = QGridLayout()
+            gb.setLayout(lg)
+            for i, tr in enumerate(v):
+                if hide_evg:
+                    hl_props = HLTriggers[tr]['hl_props'] - {'evg_param'}
+                else:
+                    hl_props = HLTriggers[tr]['hl_props']
+                lg.addWidget(HLTrigCntrler(prefix=tr, hl_props=hl_props),
+                             i // nc, i % nc)
+
+
 def _setupDiagTrigs(HLTiming):
     main = HLTiming.WDTrigsInjDig
     map_ = {
@@ -36,25 +56,14 @@ def _setupDiagTrigs(HLTiming):
         'Storage Ring Injection': (
             'TS-01:TI-ICT:', 'TS-04:TI-FCT:', 'TS-04:TI-ICT:',
             'TS-Fam:TI-BPM:', 'TS-Fam:TI-Scrn:',
+            'SI-Fam:TI-BPM:'),
+        'Storage Ring Studies': (
             'SI-01SA:TI-HPing:', 'SI-01SA:TI-HTuneS:', 'SI-13C4:TI-DCCT:',
             'SI-14C4:TI-DCCT:', 'SI-16C4:TI-GBPM:', 'SI-17C4:TI-VTuneP:',
             'SI-17SA:TI-HTuneP:', 'SI-18C4:TI-VTuneS:', 'SI-19C4:TI-VPing:',
-            'SI-19SP:TI-GSL15:', 'SI-20SB:TI-GSL07:', 'SI-Fam:TI-BPM:'),
+            'SI-19SP:TI-GSL15:', 'SI-20SB:TI-GSL07:'),
         }
-    lv = QVBoxLayout()
-    main.setLayout(lv)
-    lv.addItem(QSpIt(40, 20, QSzPol.Minimum, QSzPol.Expanding))
-    nc = 1
-    for k, v in map_.items():
-        gb = QGroupBox(k, main)
-        lv.addWidget(gb)
-        lv.addItem(QSpIt(40, 20, QSzPol.Minimum, QSzPol.Expanding))
-        lg = QGridLayout()
-        gb.setLayout(lg)
-        for i, tr in enumerate(v):
-            hl_props = HLTriggers[tr]['hl_props']  #- {'evg_param'}
-            lg.addWidget(HLTrigCntrler(prefix=tr, hl_props=hl_props),
-                         i // nc, i % nc)
+    _setupTrigs(main, map_, 1, hide_evg=False)
 
 
 def _setupInjTrigs(HLTiming):
@@ -73,28 +82,16 @@ def _setupInjTrigs(HLTiming):
             'TS-Fam:TI-EjeS:', 'TS-Fam:TI-InjSG:',
             'SI-01SA:TI-InjK:'),
         }
-
-    lv = QVBoxLayout()
-    main.setLayout(lv)
-    lv.addItem(QSpIt(40, 20, QSzPol.Minimum, QSzPol.Expanding))
-    nc = 3
-    for k, v in map_.items():
-        gb = QGroupBox(k, main)
-        lv.addWidget(gb)
-        lv.addItem(QSpIt(40, 20, QSzPol.Minimum, QSzPol.Expanding))
-        lg = QGridLayout()
-        gb.setLayout(lg)
-        for i, tr in enumerate(v):
-            hl_props = HLTriggers[tr]['hl_props'] - {'evg_param'}
-            lg.addWidget(HLTrigCntrler(prefix=tr, hl_props=hl_props),
-                         i // nc, i % nc)
+    _setupTrigs(main, map_, 3, hide_evg=True)
 
 
 def _setupSIMagsTrigs(HLTiming):
-    trigs = (
-        'SI-Glob:TI-Corrs:', 'SI-Glob:TI-Dips:', 'SI-Glob:TI-Quads:',
-        'SI-Glob:TI-Sexts:', 'SI-Glob:TI-Skews:',
-        )
+    trigs = {
+        'Storage Ring Magnets': (
+            'SI-Glob:TI-Corrs:', 'SI-Glob:TI-Dips:', 'SI-Glob:TI-Quads:',
+            'SI-Glob:TI-Sexts:', 'SI-Glob:TI-Skews:',
+            )
+        }
 
 
 def _setupEVGParams(HLTiming):
