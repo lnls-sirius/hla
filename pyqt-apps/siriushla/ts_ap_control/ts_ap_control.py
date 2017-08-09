@@ -2,7 +2,7 @@
 from pydm.PyQt.uic import loadUi
 from pydm.PyQt.QtCore import pyqtSlot, Qt
 from pydm.PyQt.QtGui import (QMainWindow, QVBoxLayout, QHBoxLayout, QGridLayout, QFileDialog, QSizePolicy, QDoubleValidator,
-                            QWidget, QFrame, QLabel, QPixmap, QPushButton, QSpacerItem)
+                            QWidget, QFrame, QLabel, QPixmap, QPushButton, QSpacerItem, QApplication)
 from pydm import PyDMApplication
 from pydm.widgets.led import PyDMLed
 from pydm.widgets.label import PyDMLabel
@@ -16,33 +16,41 @@ from matplotlib.backends.backend_qt5agg import (
     NavigationToolbar2QT as NavigationToolbar)
 from pydm.PyQt.QtSvg import QSvgWidget
 import sys
+import socket
 import pyaccel as _pyaccel
 import pymodels as _pymodels
 from siriusdm.as_ma_control.MagnetDetailWindow import MagnetDetailWindow
 from siriusdm.as_ma_control import ToSiriusMagnetControlWindow
+from siriushla.ts_ap_posang.ts_ap_posang import BTSPosAngCorr
+
 
 CALC_LABELS_INITIALIZE = '''
 self.centralwidget.PyDMEnumComboBox_CalcMethod_Scrn{0}.currentIndexChanged.connect(self._visibility_handle)
 '''
 
 CALC_LABELS_VISIBILITY = '''
-self.centralwidget.PyDMLabel_Stats1CentroidX_Scrn{0}.setVisible(visible)
-self.centralwidget.PyDMLabel_Stats2CentroidX_Scrn{0}.setVisible(not visible)
-self.centralwidget.PyDMLabel_Stats1CentroidY_Scrn{0}.setVisible(visible)
-self.centralwidget.PyDMLabel_Stats2CentroidY_Scrn{0}.setVisible(not visible)
-self.centralwidget.PyDMLabel_Stats1Orientation_Scrn{0}.setVisible(visible)
-self.centralwidget.PyDMLabel_Stats2Orientation_Scrn{0}.setVisible(not visible)
-self.centralwidget.PyDMLabel_Stats1SigmaX_Scrn{0}.setVisible(visible)
-self.centralwidget.PyDMLabel_Stats2SigmaX_Scrn{0}.setVisible(not visible)
-self.centralwidget.PyDMLabel_Stats1SigmaY_Scrn{0}.setVisible(visible)
-self.centralwidget.PyDMLabel_Stats2SigmaY_Scrn{0}.setVisible(not visible)
+self.centralwidget.PyDMLabel_CenterXDimfei_Scrn{0}.setVisible(visible)
+self.centralwidget.PyDMLabel_CenterXNDStats_Scrn{0}.setVisible(not visible)
+self.centralwidget.PyDMLabel_CenterYDimfei_Scrn{0}.setVisible(visible)
+self.centralwidget.PyDMLabel_CenterYNDStats_Scrn{0}.setVisible(not visible)
+self.centralwidget.PyDMLabel_ThetaDimfei_Scrn{0}.setVisible(visible)
+self.centralwidget.PyDMLabel_ThetaNDStats_Scrn{0}.setVisible(not visible)
+self.centralwidget.PyDMLabel_SigmaXDimfei_Scrn{0}.setVisible(visible)
+self.centralwidget.PyDMLabel_SigmaXNDStats_Scrn{0}.setVisible(not visible)
+self.centralwidget.PyDMLabel_SigmaYDimfei_Scrn{0}.setVisible(visible)
+self.centralwidget.PyDMLabel_SigmaYNDStats_Scrn{0}.setVisible(not visible)
 '''
+
 
 class BTSControlWindow(QMainWindow):
     def __init__(self, parent=None):
         super(BTSControlWindow, self).__init__(parent)
-        self.centralwidget = loadUi('ts_ap_control.ui')
+        self.centralwidget = loadUi('/home/fac_files/lnls-sirius/hla/pyqt-apps/siriushla/ts_ap_control/ui_ts_ap_control.ui')
         self.setCentralWidget(self.centralwidget)
+
+        # Estabilish widget connections
+        self.app = QApplication.instance()
+        self.app.establish_widget_connections(self)
 
         # self.centralwidget.PyDMImageView_Scrn1.imageWidth = 200
         # self.centralwidget.PyDMImageView_Scrn1.imageChannel = 'ca://TEST:Vector'
@@ -183,17 +191,17 @@ class BTSControlWindow(QMainWindow):
             widget_position_sp = QWidget()
             widget_position_sp.setLayout(QVBoxLayout())
             widget_position_sp.layout().setContentsMargins(0,0,0,0)
-            pydmcombobox_position = PyDMEnumComboBox(scrn_details,'ca://TS-' + scrnpv + ':Position-SP')
+            pydmcombobox_position = PyDMEnumComboBox(scrn_details,'ca://' + 'fac-' + socket.gethostname() + '-TS-' + scrnpv + ':Position-SP')
             pydmcombobox_position.setObjectName('PyDMEnumComboBox_Position_SP_Scrn' + str(scrn))
             widget_position_sp.layout().addWidget(pydmcombobox_position)
             pydmcombobox_position_items = [pydmcombobox_position.itemText(i) for i in range(pydmcombobox_position.count())]
-            pydmled_position = PyDMLed(scrn_details,'ca://TS-' + scrnpv + ':Position-Mon')
+            pydmled_position = PyDMLed(scrn_details,'ca://' + 'fac-' + socket.gethostname() + '-TS-' + scrnpv + ':Position-Mon')
                                     #    enum_map={pydmcombobox_position_items[0]:-1,pydmcombobox_position_items[1]: 2,pydmcombobox_position_items[2]:0})#TODO
             pydmled_position.setObjectName('PyDMLed_Position_Mon_Scrn' + str(scrn))
             pydmled_position.shape = 2
             pydmled_position.setMinimumWidth(110)
             pydmled_position.setSizePolicy(QSizePolicy.Fixed,QSizePolicy.Fixed)
-            # pydmlabel_position = PyDMLabel(scrn_details, 'ca://' + acc + scrnpv + ':Position-Mon')
+            # pydmlabel_position = PyDMLabel(scrn_details, 'ca://' + 'fac' + socket.gethostname() + acc + scrnpv + ':Position-Mon')
             # pydmlabel_position.setObjectName('PyDMLabel_Position_Mon_Scrn' + str(scrn))
             # pydmlabel_position.setMinimumWidth(80)
             # frame_label = QFrame()
@@ -211,12 +219,12 @@ class BTSControlWindow(QMainWindow):
             scrn_details.layout().addWidget(widget_position_sp)
 
             scrn_details.layout().addItem(QSpacerItem(40,20,QSizePolicy.Fixed,QSizePolicy.Minimum))
-            pydmcheckbox = PyDMCheckbox(scrn_details, 'ca://TS-' + scrnpv + ':LampState-SP')
+            pydmcheckbox = PyDMCheckbox(scrn_details, 'ca://' + 'fac-' + socket.gethostname() + '-TS-' + scrnpv + ':LampState-SP')
             pydmcheckbox.setObjectName('PyDMCheckbox_LampState_SP_Scrn' + str(scrn))
             pydmcheckbox.setMinimumWidth(14)
             pydmcheckbox.setSizePolicy(QSizePolicy.Fixed,QSizePolicy.Minimum)
             scrn_details.layout().addWidget(pydmcheckbox)
-            pydmled = PyDMLed(scrn_details,'ca://TS-' + scrnpv + ':LampState-Sts')
+            pydmled = PyDMLed(scrn_details,'ca://' + 'fac-' + socket.gethostname() + '-TS-' + scrnpv + ':LampState-Sts')
             pydmled.setObjectName('PyDMLed_LampState_Sts_Scrn' + str(scrn))
             pydmled.setMinimumWidth(24)
             pydmled.setSizePolicy(QSizePolicy.Fixed,QSizePolicy.Minimum)
@@ -246,7 +254,7 @@ class BTSControlWindow(QMainWindow):
                 ch_details.setLayout(QGridLayout())
                 ch_details.layout().setContentsMargins(3,3,3,3)
 
-                pydmled = PyDMLed(ch_details,'ca://TS-' + ch + ':PwrState-Sts')
+                pydmled = PyDMLed(ch_details,'ca://' + 'fac-' + socket.gethostname() + '-TS-' + ch + ':PwrState-Sts')
                 pydmled.setObjectName('PyDMLed_' + name + '_PwrState' + '_Scrn' + str(scrn))
                 pydmled.setMinimumWidth(24)
                 pydmled.setMinimumHeight(24)
@@ -261,7 +269,7 @@ class BTSControlWindow(QMainWindow):
                 pushbutton.setSizePolicy(QSizePolicy.Fixed,QSizePolicy.Minimum)
                 ch_details.layout().addWidget(pushbutton,1,2)
 
-                pydmlineedit_kick = PyDMLineEdit(ch_details, 'ca://TS-' + ch + ':Kick-SP')
+                pydmlineedit_kick = PyDMLineEdit(ch_details, 'ca://' + 'fac-' + socket.gethostname() + '-TS-' + ch + ':Kick-SP')
                 pydmlineedit_kick.setObjectName('PyDMLineEdit' + name + '_Kick_SP_Scrn' + str(scrn))
                 pydmlineedit_kick.setValidator(QDoubleValidator())
                 pydmlineedit_kick._useunits = False
@@ -270,14 +278,14 @@ class BTSControlWindow(QMainWindow):
                 pydmlineedit_kick.setSizePolicy(QSizePolicy.Expanding,QSizePolicy.Minimum)
                 ch_details.layout().addWidget(pydmlineedit_kick,1,5)
 
-                scrollbar_kick = PyDMScrollBar(ch_details, Qt.Horizontal, 'ca://TS-' + ch + ':Kick-SP',1)
+                scrollbar_kick = PyDMScrollBar(ch_details, Qt.Horizontal, 'ca://' + 'fac-' + socket.gethostname() + '-TS-' + ch + ':Kick-SP',1)
                 scrollbar_kick.setObjectName('PyDMScrollBar' + name + '_Kick_SP_Scrn' + str(scrn))
                 scrollbar_kick.setMinimumWidth(180)
                 scrollbar_kick.setSizePolicy(QSizePolicy.Expanding,QSizePolicy.Minimum)
                 scrollbar_kick.limitsFromPV = True
                 ch_details.layout().addWidget(scrollbar_kick,2,5)
 
-                pydmlabel_kick = PyDMLabel(ch_details, 'ca://TS-' + ch + ':Kick-Mon')
+                pydmlabel_kick = PyDMLabel(ch_details, 'ca://' + 'fac-' + socket.gethostname() + '-TS-' + ch + ':Kick-Mon')
                 pydmlabel_kick.setObjectName('PyDMLabel_' + name + '_Kick_Mon_Scrn' + str(scrn))
                 pydmlabel_kick.setMinimumWidth(100)
                 pydmlabel_kick.setMinimumHeight(28)
@@ -305,7 +313,7 @@ class BTSControlWindow(QMainWindow):
             cv_details.setLayout(QGridLayout())
             cv_details.layout().setContentsMargins(3,3,3,3)
 
-            pydmled = PyDMLed(cv_details,'ca://TS-' + cv + ':PwrState-Sts')
+            pydmled = PyDMLed(cv_details,'ca://' + 'fac-' + socket.gethostname() + '-TS-' + cv + ':PwrState-Sts')
             pydmled.setObjectName('PyDMLed_' + name + '_PwrState' + '_Scrn' + str(scrn))
             pydmled.setMinimumWidth(24)
             pydmled.setSizePolicy(QSizePolicy.Fixed,QSizePolicy.Minimum)
@@ -319,7 +327,7 @@ class BTSControlWindow(QMainWindow):
             pushbutton.setSizePolicy(QSizePolicy.Fixed,QSizePolicy.Minimum)
             cv_details.layout().addWidget(pushbutton,1,2)
 
-            pydmlineedit_kick = PyDMLineEdit(cv_details, 'ca://TS-' + cv + ':Kick-SP')
+            pydmlineedit_kick = PyDMLineEdit(cv_details, 'ca://' + 'fac-' + socket.gethostname() + '-TS-' + cv + ':Kick-SP')
             pydmlineedit_kick.setObjectName('PyDMLineEdit' + name + '_Kick_SP_Scrn' + str(scrn))
             pydmlineedit_kick.setValidator(QDoubleValidator())
             pydmlineedit_kick._useunits = False
@@ -328,14 +336,14 @@ class BTSControlWindow(QMainWindow):
             pydmlineedit_kick.setSizePolicy(QSizePolicy.Expanding,QSizePolicy.Minimum)
             cv_details.layout().addWidget(pydmlineedit_kick,1,5)
 
-            scrollbar_kick = PyDMScrollBar(cv_details, Qt.Horizontal, 'ca://TS-' + cv + ':Kick-SP',1)
+            scrollbar_kick = PyDMScrollBar(cv_details, Qt.Horizontal, 'ca://' + 'fac-' + socket.gethostname() + '-TS-' + cv + ':Kick-SP',1)
             scrollbar_kick.setObjectName('PyDMScrollBar' + name + '_Kick_SP_Scrn' + str(scrn))
             scrollbar_kick.setMinimumWidth(180)
             scrollbar_kick.setSizePolicy(QSizePolicy.Expanding,QSizePolicy.Minimum)
             scrollbar_kick.limitsFromPV = True
             cv_details.layout().addWidget(scrollbar_kick,2,5)
 
-            pydmlabel_kick = PyDMLabel(cv_details, 'ca://TS-' + cv + ':Kick-Mon')
+            pydmlabel_kick = PyDMLabel(cv_details, 'ca://' + 'fac-' + socket.gethostname() + '-TS-' + cv + ':Kick-Mon')
             pydmlabel_kick.setObjectName('PyDMLabel_' + name + '_Kick_Mon_Scrn' + str(scrn))
             pydmlabel_kick.setMinimumWidth(100)
             pydmlabel_kick.setMinimumHeight(28)
@@ -422,7 +430,6 @@ class BTSControlWindow(QMainWindow):
             self._corrector_detail_window.show()
 
     def _openMAApp(self):
-        # pass
         self._BTS_MA_window = ToSiriusMagnetControlWindow(self)
         self._BTS_MA_window.show()
 
@@ -435,13 +442,16 @@ class BTSControlWindow(QMainWindow):
         #TODO
 
     def _openPosAngleCorrApp(self):
-        pass
-        #TODO
-        # self._BTS_PosAng_window = loadUi('/home/fac_files/lnls-sirius/hla/pydm/ts_ap_posang/ts_ap_posang.ui')
-        # self._BTS_PosAng_window.show()
+        self._BTS_PosAng_window = BTSPosAngCorr(self)
+        self._BTS_PosAng_window.show()
 
     def _openLaticeAndTwiss(self):
         self.lattice_and_twiss_window.show()
+
+    def closeEvent(self, event):
+        """Reimplement close event to close widget connections."""
+        self.app.close_widget_connections(self)
+        super().closeEvent(event)
 
 
 class ShowLatticeAndTwiss(QWidget):
@@ -476,8 +486,8 @@ class ShowImage(QWidget):
         self.label.setPixmap(self.pixmap)
         self.setGeometry(300,300,self.pixmap.width(),self.pixmap.height())
 
-
-app = PyDMApplication(None, sys.argv)
-window = BTSControlWindow()
-window.show()
-sys.exit(app.exec_())
+if __name__ == '__main__':
+    app = PyDMApplication(None, sys.argv)
+    window = BTSControlWindow()
+    window.show()
+    sys.exit(app.exec_())

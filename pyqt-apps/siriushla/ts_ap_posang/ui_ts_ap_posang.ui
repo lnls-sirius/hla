@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>753</width>
-    <height>326</height>
+    <width>750</width>
+    <height>330</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,7 +15,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="3" column="7">
-    <widget class="PyDMLabel" name="PyDMLabel_3">
+    <widget class="PyDMLabel" name="PyDMLabel_OrbXDeltaAng_RB">
      <property name="minimumSize">
       <size>
        <width>0</width>
@@ -37,13 +37,10 @@
      <property name="precFromPV">
       <bool>true</bool>
      </property>
-     <property name="channel">
-      <string>ca://TS-Glob:AP-PosAng:OrbXDeltaAng-RB</string>
-     </property>
     </widget>
    </item>
    <item row="8" column="2" colspan="2">
-    <widget class="PyDMScrollBar" name="PyDMScrollBar_2">
+    <widget class="PyDMScrollBar" name="PyDMScrollBar_OrbYDeltaPos_SP">
      <property name="minimumSize">
       <size>
        <width>160</width>
@@ -56,16 +53,13 @@
      <property name="whatsThis">
       <string/>
      </property>
-     <property name="channel" stdset="0">
-      <string>ca://TS-Glob:AP-PosAng:OrbYDeltaPos-SP</string>
-     </property>
      <property name="limitsFromPV" stdset="0">
       <bool>true</bool>
      </property>
     </widget>
    </item>
    <item row="6" column="7">
-    <widget class="PyDMLabel" name="PyDMLabel_4">
+    <widget class="PyDMLabel" name="PyDMLabel_OrbYDeltaAng_RB">
      <property name="minimumSize">
       <size>
        <width>0</width>
@@ -86,14 +80,11 @@
      </property>
      <property name="precFromPV">
       <bool>true</bool>
-     </property>
-     <property name="channel">
-      <string>ca://TS-Glob:AP-PosAng:OrbYDeltaAng-RB</string>
      </property>
     </widget>
    </item>
    <item row="6" column="4">
-    <widget class="PyDMLabel" name="PyDMLabel_2">
+    <widget class="PyDMLabel" name="PyDMLabel_OrbYDeltaPos_RB">
      <property name="minimumSize">
       <size>
        <width>0</width>
@@ -114,9 +105,6 @@
      </property>
      <property name="precFromPV">
       <bool>true</bool>
-     </property>
-     <property name="channel">
-      <string>ca://TS-Glob:AP-PosAng:OrbYDeltaPos-RB</string>
      </property>
     </widget>
    </item>
@@ -151,7 +139,7 @@ font-size:12pt;
     </widget>
    </item>
    <item row="3" column="2" colspan="2">
-    <widget class="PyDMLineEdit" name="PyDMLineEdit">
+    <widget class="PyDMLineEdit" name="PyDMLineEdit_OrbXDeltaPos_SP">
      <property name="minimumSize">
       <size>
        <width>160</width>
@@ -166,13 +154,10 @@ font-size:12pt;
     Writeable text field to send and display channel values
     </string>
      </property>
-     <property name="channel" stdset="0">
-      <string>ca://TS-Glob:AP-PosAng:OrbXDeltaPos-SP</string>
-     </property>
     </widget>
    </item>
    <item row="4" column="2" colspan="2">
-    <widget class="PyDMScrollBar" name="PyDMScrollBar">
+    <widget class="PyDMScrollBar" name="PyDMScrollBar_OrbXDeltaPos_SP">
      <property name="minimumSize">
       <size>
        <width>160</width>
@@ -184,9 +169,6 @@ font-size:12pt;
      </property>
      <property name="whatsThis">
       <string/>
-     </property>
-     <property name="channel" stdset="0">
-      <string>ca://TS-Glob:AP-PosAng:OrbXDeltaPos-SP</string>
      </property>
      <property name="limitsFromPV" stdset="0">
       <bool>true</bool>
@@ -215,7 +197,7 @@ font-size:14pt;
     </widget>
    </item>
    <item row="8" column="6">
-    <widget class="PyDMScrollBar" name="PyDMScrollBar_4">
+    <widget class="PyDMScrollBar" name="PyDMScrollBar_OrbYDeltaAng_SP">
      <property name="minimumSize">
       <size>
        <width>160</width>
@@ -227,9 +209,6 @@ font-size:14pt;
      </property>
      <property name="whatsThis">
       <string/>
-     </property>
-     <property name="channel" stdset="0">
-      <string>ca://TS-Glob:AP-PosAng:OrbYDeltaAng-SP</string>
      </property>
      <property name="limitsFromPV" stdset="0">
       <bool>true</bool>
@@ -265,7 +244,7 @@ font-size:12pt;
     </spacer>
    </item>
    <item row="6" column="6">
-    <widget class="PyDMLineEdit" name="PyDMLineEdit_3">
+    <widget class="PyDMLineEdit" name="PyDMLineEdit_OrbYDeltaAng_SP">
      <property name="minimumSize">
       <size>
        <width>160</width>
@@ -279,9 +258,6 @@ font-size:12pt;
       <string>
     Writeable text field to send and display channel values
     </string>
-     </property>
-     <property name="channel" stdset="0">
-      <string>ca://TS-Glob:AP-PosAng:OrbYDeltaAng-SP</string>
      </property>
     </widget>
    </item>
@@ -320,7 +296,7 @@ font-size:14pt;
     </widget>
    </item>
    <item row="3" column="6">
-    <widget class="PyDMLineEdit" name="PyDMLineEdit_4">
+    <widget class="PyDMLineEdit" name="PyDMLineEdit_OrbXDeltaAng_SP">
      <property name="minimumSize">
       <size>
        <width>160</width>
@@ -334,9 +310,6 @@ font-size:14pt;
       <string>
     Writeable text field to send and display channel values
     </string>
-     </property>
-     <property name="channel" stdset="0">
-      <string>ca://TS-Glob:AP-PosAng:OrbXDeltaAng-SP</string>
      </property>
     </widget>
    </item>
@@ -354,7 +327,7 @@ font-size:14pt;
     </spacer>
    </item>
    <item row="6" column="2" colspan="2">
-    <widget class="PyDMLineEdit" name="PyDMLineEdit_2">
+    <widget class="PyDMLineEdit" name="PyDMLineEdit_OrbYDeltaPos_SP">
      <property name="minimumSize">
       <size>
        <width>160</width>
@@ -369,13 +342,10 @@ font-size:14pt;
     Writeable text field to send and display channel values
     </string>
      </property>
-     <property name="channel" stdset="0">
-      <string>ca://TS-Glob:AP-PosAng:OrbYDeltaPos-SP</string>
-     </property>
     </widget>
    </item>
    <item row="4" column="6">
-    <widget class="PyDMScrollBar" name="PyDMScrollBar_3">
+    <widget class="PyDMScrollBar" name="PyDMScrollBar_OrbXDeltaAng_SP">
      <property name="minimumSize">
       <size>
        <width>160</width>
@@ -387,9 +357,6 @@ font-size:14pt;
      </property>
      <property name="whatsThis">
       <string/>
-     </property>
-     <property name="channel" stdset="0">
-      <string>ca://TS-Glob:AP-PosAng:OrbXDeltaAng-SP</string>
      </property>
      <property name="limitsFromPV" stdset="0">
       <bool>true</bool>
@@ -425,7 +392,7 @@ font-size:12pt;
     </spacer>
    </item>
    <item row="3" column="4">
-    <widget class="PyDMLabel" name="PyDMLabel">
+    <widget class="PyDMLabel" name="PyDMLabel_OrbXDeltaPos_RB">
      <property name="minimumSize">
       <size>
        <width>0</width>
@@ -447,13 +414,10 @@ font-size:12pt;
      <property name="precFromPV">
       <bool>true</bool>
      </property>
-     <property name="channel">
-      <string>ca://TS-Glob:AP-PosAng:OrbXDeltaPos-RB</string>
-     </property>
     </widget>
    </item>
    <item row="10" column="2" colspan="6">
-    <widget class="PyDMPushButton" name="PyDMPushButton">
+    <widget class="PyDMPushButton" name="PyDMPushButton_SetNewRef">
      <property name="minimumSize">
       <size>
        <width>0</width>
@@ -503,9 +467,6 @@ font-size:12pt;
      </property>
      <property name="text">
       <string>Set Current Position and Angle as Reference</string>
-     </property>
-     <property name="channel" stdset="0">
-      <string>ca://TS-Glob:AP-PosAng:SetNewRef</string>
      </property>
      <property name="pressValue" stdset="0">
       <string>0</string>

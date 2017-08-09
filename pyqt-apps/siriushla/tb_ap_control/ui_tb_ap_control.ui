@@ -28,7 +28,7 @@
         QScrollBar {
             border: 1px solid black;
         }
-	
+
 		QTabWidget{
 				font-size:12pt;
 				font-weight:bold;
@@ -245,53 +245,20 @@ font-weight:bold;
           <string>ICTs</string>
          </attribute>
          <layout class="QGridLayout" name="gridLayout">
-          <item row="3" column="1">
-           <widget class="QFrame" name="frame_ICT2">
-            <property name="frameShape">
-             <enum>QFrame::Box</enum>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_ICT1">
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>16777215</height>
+             </size>
             </property>
-            <property name="frameShadow">
-             <enum>QFrame::Raised</enum>
+            <property name="text">
+             <string>ICT1 - Charge:</string>
             </property>
-            <layout class="QVBoxLayout" name="verticalLayout_14">
-             <property name="spacing">
-              <number>4</number>
-             </property>
-             <property name="leftMargin">
-              <number>4</number>
-             </property>
-             <property name="topMargin">
-              <number>4</number>
-             </property>
-             <property name="rightMargin">
-              <number>4</number>
-             </property>
-             <property name="bottomMargin">
-              <number>4</number>
-             </property>
-             <item>
-              <widget class="PyDMLabel" name="PyDMLabel_ICT2">
-               <property name="maximumSize">
-                <size>
-                 <width>160</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-               <property name="toolTip">
-                <string/>
-               </property>
-               <property name="whatsThis">
-                <string/>
-               </property>
-               <property name="text">
-                <string>PyDMLabel</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
            </widget>
           </item>
-          <item row="3" column="0">
+          <item row="4" column="0">
            <widget class="QLabel" name="label_ICT2">
             <property name="maximumSize">
              <size>
@@ -304,7 +271,7 @@ font-weight:bold;
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
+          <item row="3" column="1">
            <widget class="QFrame" name="frame_ICT1">
             <property name="frameShape">
              <enum>QFrame::Box</enum>
@@ -350,41 +317,53 @@ font-weight:bold;
             </layout>
            </widget>
           </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_ICT1">
-            <property name="maximumSize">
-             <size>
-              <width>200</width>
-              <height>16777215</height>
-             </size>
+          <item row="4" column="1">
+           <widget class="QFrame" name="frame_ICT2">
+            <property name="frameShape">
+             <enum>QFrame::Box</enum>
             </property>
-            <property name="text">
-             <string>ICT1 - Charge:</string>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
             </property>
+            <layout class="QVBoxLayout" name="verticalLayout_14">
+             <property name="spacing">
+              <number>4</number>
+             </property>
+             <property name="leftMargin">
+              <number>4</number>
+             </property>
+             <property name="topMargin">
+              <number>4</number>
+             </property>
+             <property name="rightMargin">
+              <number>4</number>
+             </property>
+             <property name="bottomMargin">
+              <number>4</number>
+             </property>
+             <item>
+              <widget class="PyDMLabel" name="PyDMLabel_ICT2">
+               <property name="maximumSize">
+                <size>
+                 <width>160</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="whatsThis">
+                <string/>
+               </property>
+               <property name="text">
+                <string>PyDMLabel</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </item>
-          <item row="0" column="0" colspan="2">
-           <widget class="QLabel" name="label_Efficiency">
-            <property name="maximumSize">
-             <size>
-              <width>200</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">font-size:14pt;
-font-weight:bold;
-</string>
-            </property>
-            <property name="text">
-             <string>Transport Efficiency</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0" colspan="2">
+          <item row="2" column="0" colspan="2">
            <widget class="QFrame" name="frame_TransportEfficiency">
             <property name="minimumSize">
              <size>
@@ -441,6 +420,27 @@ font-weight:bold;
               </widget>
              </item>
             </layout>
+           </widget>
+          </item>
+          <item row="0" column="0" colspan="2">
+           <widget class="QLabel" name="label_Efficiency">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">font-size:14pt;
+font-weight:bold;
+</string>
+            </property>
+            <property name="text">
+             <string>Transport Efficiency</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
            </widget>
           </item>
          </layout>
@@ -857,7 +857,7 @@ font-weight:bold;
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1CentroidY_Scrn11">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterYDimfei_Scrn11">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -876,7 +876,7 @@ font-weight:bold;
                  <string>1-PyDMLabel</string>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2CentroidY_Scrn11">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterYNDStats_Scrn11">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -895,8 +895,8 @@ font-weight:bold;
                  <string>2-PyDMLabel</string>
                 </property>
                </widget>
-               <zorder>PyDMLabel_Stats2CentroidY_Scrn11</zorder>
-               <zorder>PyDMLabel_Stats1CentroidY_Scrn11</zorder>
+               <zorder>PyDMLabel_CenterYNDStats_Scrn11</zorder>
+               <zorder>PyDMLabel_CenterYDimfei_Scrn11</zorder>
               </widget>
              </item>
              <item row="6" column="8">
@@ -959,7 +959,7 @@ font-weight:bold;
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2CentroidX_Scrn11">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterXNDStats_Scrn11">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -978,7 +978,7 @@ font-weight:bold;
                  <string>2-PyDMLabel</string>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1CentroidX_Scrn11">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterXDimfei_Scrn11">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -1020,7 +1020,7 @@ font-weight:bold;
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2SigmaY_Scrn11">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaYNDStats_Scrn11">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -1039,7 +1039,7 @@ font-weight:bold;
                  <string>2-PyDMLabel</string>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1SigmaY_Scrn11">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaYDimfei_Scrn11">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -1074,7 +1074,7 @@ font-weight:bold;
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2Orientation_Scrn11">
+               <widget class="PyDMLabel" name="PyDMLabel_ThetaNDStats_Scrn11">
                 <property name="geometry">
                  <rect>
                   <x>70</x>
@@ -1096,7 +1096,7 @@ font-weight:bold;
                  <set>Qt::AlignCenter</set>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1Orientation_Scrn11">
+               <widget class="PyDMLabel" name="PyDMLabel_ThetaDimfei_Scrn11">
                 <property name="geometry">
                  <rect>
                   <x>70</x>
@@ -1171,7 +1171,7 @@ font-weight:bold;
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2SigmaX_Scrn11">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaXNDStats_Scrn11">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -1190,7 +1190,7 @@ font-weight:bold;
                  <string>2-PyDMLabel</string>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1SigmaX_Scrn11">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaXDimfei_Scrn11">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -1260,12 +1260,12 @@ font-weight:bold;
                </property>
                <item>
                 <property name="text">
-                 <string>Stats1</string>
+                 <string>Dimfei</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>Stats2</string>
+                 <string>NDStats</string>
                 </property>
                </item>
               </widget>
@@ -1419,12 +1419,12 @@ font-weight:bold;
                </property>
                <item>
                 <property name="text">
-                 <string>Stats1</string>
+                 <string>Dimfei</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>Stats2</string>
+                 <string>NDStats</string>
                 </property>
                </item>
               </widget>
@@ -1453,7 +1453,7 @@ font-weight:bold;
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2SigmaY_Scrn12">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaYNDStats_Scrn12">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -1469,7 +1469,7 @@ font-weight:bold;
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1SigmaY_Scrn12">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaYDimfei_Scrn12">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -1548,7 +1548,7 @@ font-weight:bold;
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2SigmaX_Scrn12">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaXNDStats_Scrn12">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -1564,7 +1564,7 @@ font-weight:bold;
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1SigmaX_Scrn12">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaXDimfei_Scrn12">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -1630,7 +1630,7 @@ font-weight:bold;
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1CentroidY_Scrn12">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterYDimfei_Scrn12">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -1646,7 +1646,7 @@ font-weight:bold;
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2CentroidY_Scrn12">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterYNDStats_Scrn12">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -1678,7 +1678,7 @@ font-weight:bold;
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2CentroidX_Scrn12">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterXNDStats_Scrn12">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -1694,7 +1694,7 @@ font-weight:bold;
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1CentroidX_Scrn12">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterXDimfei_Scrn12">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -1726,7 +1726,7 @@ font-weight:bold;
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2Orientation_Scrn12">
+               <widget class="PyDMLabel" name="PyDMLabel_ThetaNDStats_Scrn12">
                 <property name="geometry">
                  <rect>
                   <x>80</x>
@@ -1745,7 +1745,7 @@ font-weight:bold;
                  <set>Qt::AlignCenter</set>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1Orientation_Scrn12">
+               <widget class="PyDMLabel" name="PyDMLabel_ThetaDimfei_Scrn12">
                 <property name="geometry">
                  <rect>
                   <x>80</x>
@@ -1960,7 +1960,7 @@ font-weight:bold;
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1CentroidY_Scrn21">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterYDimfei_Scrn21">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -1976,7 +1976,7 @@ font-weight:bold;
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2CentroidY_Scrn21">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterYNDStats_Scrn21">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -2048,7 +2048,7 @@ font-weight:bold;
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2CentroidX_Scrn21">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterXNDStats_Scrn21">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -2064,7 +2064,7 @@ font-weight:bold;
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1CentroidX_Scrn21">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterXDimfei_Scrn21">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -2103,7 +2103,7 @@ font-weight:bold;
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2SigmaY_Scrn21">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaYNDStats_Scrn21">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -2119,7 +2119,7 @@ font-weight:bold;
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1SigmaY_Scrn21">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaYDimfei_Scrn21">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -2151,7 +2151,7 @@ font-weight:bold;
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2Orientation_Scrn21">
+               <widget class="PyDMLabel" name="PyDMLabel_ThetaNDStats_Scrn21">
                 <property name="geometry">
                  <rect>
                   <x>80</x>
@@ -2170,7 +2170,7 @@ font-weight:bold;
                  <set>Qt::AlignCenter</set>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1Orientation_Scrn21">
+               <widget class="PyDMLabel" name="PyDMLabel_ThetaDimfei_Scrn21">
                 <property name="geometry">
                  <rect>
                   <x>80</x>
@@ -2242,7 +2242,7 @@ font-weight:bold;
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2SigmaX_Scrn21">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaXNDStats_Scrn21">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -2258,7 +2258,7 @@ font-weight:bold;
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1SigmaX_Scrn21">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaXDimfei_Scrn21">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -2312,12 +2312,12 @@ font-weight:bold;
                </property>
                <item>
                 <property name="text">
-                 <string>Stats1</string>
+                 <string>Dimfei</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>Stats2</string>
+                 <string>NDStats</string>
                 </property>
                </item>
               </widget>
@@ -2460,7 +2460,7 @@ font-weight:bold;
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1CentroidY_Scrn22">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterYDimfei_Scrn22">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -2476,7 +2476,7 @@ font-weight:bold;
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2CentroidY_Scrn22">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterYNDStats_Scrn22">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -2548,7 +2548,7 @@ font-weight:bold;
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2CentroidX_Scrn22">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterXNDStats_Scrn22">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -2564,7 +2564,7 @@ font-weight:bold;
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1CentroidX_Scrn22">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterXDimfei_Scrn22">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -2603,7 +2603,7 @@ font-weight:bold;
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2SigmaY_Scrn22">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaYNDStats_Scrn22">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -2619,7 +2619,7 @@ font-weight:bold;
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1SigmaY_Scrn22">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaYDimfei_Scrn22">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -2651,7 +2651,7 @@ font-weight:bold;
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2Orientation_Scrn22">
+               <widget class="PyDMLabel" name="PyDMLabel_ThetaNDStats_Scrn22">
                 <property name="geometry">
                  <rect>
                   <x>80</x>
@@ -2670,7 +2670,7 @@ font-weight:bold;
                  <set>Qt::AlignCenter</set>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1Orientation_Scrn22">
+               <widget class="PyDMLabel" name="PyDMLabel_ThetaDimfei_Scrn22">
                 <property name="geometry">
                  <rect>
                   <x>80</x>
@@ -2742,7 +2742,7 @@ font-weight:bold;
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2SigmaX_Scrn22">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaXNDStats_Scrn22">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -2758,7 +2758,7 @@ font-weight:bold;
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1SigmaX_Scrn22">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaXDimfei_Scrn22">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -2838,12 +2838,12 @@ font-weight:bold;
                </property>
                <item>
                 <property name="text">
-                 <string>Stats1</string>
+                 <string>Dimfei</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>Stats2</string>
+                 <string>NDStats</string>
                 </property>
                </item>
               </widget>
@@ -2991,12 +2991,12 @@ font-weight:bold;
                </property>
                <item>
                 <property name="text">
-                 <string>Stats1</string>
+                 <string>Dimfei</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>Stats2</string>
+                 <string>NDStats</string>
                 </property>
                </item>
               </widget>
@@ -3015,7 +3015,7 @@ font-weight:bold;
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1CentroidY_Scrn3">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterYDimfei_Scrn3">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -3031,7 +3031,7 @@ font-weight:bold;
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2CentroidY_Scrn3">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterYNDStats_Scrn3">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -3103,7 +3103,7 @@ font-weight:bold;
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2CentroidX_Scrn3">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterXNDStats_Scrn3">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -3119,7 +3119,7 @@ font-weight:bold;
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1CentroidX_Scrn3">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterXDimfei_Scrn3">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -3158,7 +3158,7 @@ font-weight:bold;
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2SigmaY_Scrn3">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaYNDStats_Scrn3">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -3174,7 +3174,7 @@ font-weight:bold;
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1SigmaY_Scrn3">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaYDimfei_Scrn3">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -3206,7 +3206,7 @@ font-weight:bold;
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2Orientation_Scrn3">
+               <widget class="PyDMLabel" name="PyDMLabel_ThetaNDStats_Scrn3">
                 <property name="geometry">
                  <rect>
                   <x>80</x>
@@ -3225,7 +3225,7 @@ font-weight:bold;
                  <set>Qt::AlignCenter</set>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1Orientation_Scrn3">
+               <widget class="PyDMLabel" name="PyDMLabel_ThetaDimfei_Scrn3">
                 <property name="geometry">
                  <rect>
                   <x>80</x>
@@ -3297,7 +3297,7 @@ font-weight:bold;
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2SigmaX_Scrn3">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaXNDStats_Scrn3">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -3313,7 +3313,7 @@ font-weight:bold;
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1SigmaX_Scrn3">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaXDimfei_Scrn3">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -3421,7 +3421,7 @@ font-weight:bold;
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>9</height>
+           <height>40</height>
           </size>
          </property>
         </spacer>
@@ -3483,7 +3483,7 @@ font-weight:bold;
             <property name="sizeHint" stdset="0">
              <size>
               <width>20</width>
-              <height>8</height>
+              <height>40</height>
              </size>
             </property>
            </spacer>
@@ -3524,12 +3524,12 @@ font-weight:bold;
                </property>
                <item>
                 <property name="text">
-                 <string>Stats1</string>
+                 <string>Dimfei</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>Stats2</string>
+                 <string>NDStats</string>
                 </property>
                </item>
               </widget>
@@ -3548,7 +3548,7 @@ font-weight:bold;
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1CentroidY_Scrn4">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterYDimfei_Scrn4">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -3564,7 +3564,7 @@ font-weight:bold;
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2CentroidY_Scrn4">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterYNDStats_Scrn4">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -3636,7 +3636,7 @@ font-weight:bold;
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2CentroidX_Scrn4">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterXNDStats_Scrn4">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -3652,7 +3652,7 @@ font-weight:bold;
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1CentroidX_Scrn4">
+               <widget class="PyDMLabel" name="PyDMLabel_CenterXDimfei_Scrn4">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -3691,7 +3691,7 @@ font-weight:bold;
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2SigmaY_Scrn4">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaYNDStats_Scrn4">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -3707,7 +3707,7 @@ font-weight:bold;
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1SigmaY_Scrn4">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaYDimfei_Scrn4">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -3739,7 +3739,7 @@ font-weight:bold;
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2Orientation_Scrn4">
+               <widget class="PyDMLabel" name="PyDMLabel_ThetaNDStats_Scrn4">
                 <property name="geometry">
                  <rect>
                   <x>80</x>
@@ -3758,7 +3758,7 @@ font-weight:bold;
                  <set>Qt::AlignCenter</set>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1Orientation_Scrn4">
+               <widget class="PyDMLabel" name="PyDMLabel_ThetaDimfei_Scrn4">
                 <property name="geometry">
                  <rect>
                   <x>80</x>
@@ -3823,7 +3823,7 @@ font-weight:bold;
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats2SigmaX_Scrn4">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaXNDStats_Scrn4">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -3839,7 +3839,7 @@ font-weight:bold;
                  <string/>
                 </property>
                </widget>
-               <widget class="PyDMLabel" name="PyDMLabel_Stats1SigmaX_Scrn4">
+               <widget class="PyDMLabel" name="PyDMLabel_SigmaXDimfei_Scrn4">
                 <property name="geometry">
                  <rect>
                   <x>10</x>
@@ -3927,7 +3927,7 @@ font-weight:bold;
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>9</height>
+           <height>40</height>
           </size>
          </property>
         </spacer>
