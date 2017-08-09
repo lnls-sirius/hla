@@ -16,10 +16,11 @@ PREFIX = 'fac' + PREFIX[8:]
 class EventCntrler(QGroupBox):
     """Template for control of High and Low Level Events."""
 
-    def __init__(self, parent=None, prefix=''):
+    def __init__(self, parent=None, prefix='', tp='ll'):
         """Initialize the instance."""
         super().__init__(parent)
         self.prefix = _PVName(prefix)
+        self.event_type = tp
         self._setupUi()
 
     def _setupUi(self):
@@ -31,10 +32,9 @@ class EventCntrler(QGroupBox):
         lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
 
         # External Trigger
-        lv = QVBoxLayout()
-        lv.addWidget(QLabel('External Trigger', self))
-        lv.addWidget(PyDMPushButton(self, init_channel=pv_pref+'ExtTrig-Cmd'))
-        lh.addItem(lv)
+        pb = PyDMPushButton(self, init_channel=pv_pref+'ExtTrig-Cmd')
+        pb.setText('< External >')
+        lh.addWidget(pb)
         lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
 
         # Control of event Mode
@@ -46,12 +46,13 @@ class EventCntrler(QGroupBox):
         lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
 
         # Control of DelayType
-        lv = QVBoxLayout()
-        lv.addWidget(QLabel('Delay Type', self))
-        lv.addWidget(PyDMECB(self, init_channel=pv_pref + "DelayType-Sel"))
-        lv.addWidget(PyDMLabel(self, init_channel=pv_pref + "DelayType-Sts"))
-        lh.addItem(lv)
-        lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
+        if self.event_type == 'll':
+            lv = QVBoxLayout()
+            lv.addWidget(QLabel('Delay Type', self))
+            lv.addWidget(PyDMECB(self, init_channel=pv_pref+"DelayType-Sel"))
+            lv.addWidget(PyDMLabel(self, init_channel=pv_pref+"DelayType-Sts"))
+            lh.addItem(lv)
+            lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
 
         # Control of Delay
         lv = QVBoxLayout()

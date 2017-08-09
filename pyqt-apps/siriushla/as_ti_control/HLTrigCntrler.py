@@ -16,7 +16,7 @@ from siriuspy.namesys import SiriusPVName as _PVName
 PREFIX = 'fac' + PREFIX[8:]
 
 
-class HLTriggerCntrler(QGroupBox):
+class HLTrigCntrler(QGroupBox):
     """Template for control of High Level Triggers."""
 
     def __init__(self, parent=None, prefix='', hl_props=set()):
@@ -96,8 +96,7 @@ def main():
     """Run Example."""
     app = PyDMApplication()
     hl_props = {'evg_param', 'state', 'pulses', 'duration'}
-    cl_ctrl = HLTriggerCntrler(prefix='SI-Glob:TI-Corrs:',
-                               hl_props=hl_props)
+    cl_ctrl = HLTrigCntrler(prefix='SI-Glob:TI-Corrs:', hl_props=hl_props)
     cl_ctrl.show()
     sys.exit(app.exec_())
 

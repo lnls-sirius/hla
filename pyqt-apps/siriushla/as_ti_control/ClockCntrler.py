@@ -17,6 +17,7 @@ class ClockCntrler(QGroupBox):
     """Template for control of High and Low Level Clocks."""
 
     def __init__(self, parent=None, prefix=''):
+        """Initialize the instance."""
         super().__init__(parent)
         self.prefix = _PVName(prefix)
         self._setupUi()
@@ -27,6 +28,7 @@ class ClockCntrler(QGroupBox):
         self.setLayout(lh)
         # Clock name
         self.setTitle(self.prefix.propty)
+        lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
 
         # Clock State
         lv = QVBoxLayout()
