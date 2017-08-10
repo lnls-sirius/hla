@@ -28,7 +28,7 @@ class ClockCntrler(QGroupBox):
         self.setLayout(lh)
         # Clock name
         self.setTitle(self.prefix.propty)
-        lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
+        # lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
 
         # Clock State
         lv = QVBoxLayout()
@@ -36,7 +36,7 @@ class ClockCntrler(QGroupBox):
         lv.addWidget(PyDMCb(self, init_channel=pv_pref + "State-Sel"))
         lv.addWidget(PyDMLed(self, init_channel=pv_pref + "State-Sts"))
         lh.addItem(lv)
-        lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
+        # lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
 
         # Control of Delay
         lv = QVBoxLayout()
@@ -47,7 +47,7 @@ class ClockCntrler(QGroupBox):
         lv.addWidget(PyDMLabel(self, init_channel=pv_pref + "Freq-RB",
                                prec_from_pv=True))
         lh.addItem(lv)
-        lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
+        # lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
 
 
 def main():

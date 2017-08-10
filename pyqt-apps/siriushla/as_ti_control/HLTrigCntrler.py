@@ -32,7 +32,7 @@ class HLTrigCntrler(QGroupBox):
         self.setLayout(lh)
         # Trigger Name
         self.setTitle(self.prefix[:-1])
-        lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
+        # lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
         # Control of Trigger State
         if 'state' in self.hl_props:
             lv = QVBoxLayout()
@@ -40,7 +40,7 @@ class HLTrigCntrler(QGroupBox):
             lv.addWidget(PyDMCb(self, init_channel=pv_pref + "State-Sel"))
             lv.addWidget(PyDMLed(self, init_channel=pv_pref + "State-Sts"))
             lh.addItem(lv)
-            lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
+            # lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
         if 'evg_param' in self.hl_props:
             # Control of event EVG Param
             lv = QVBoxLayout()
@@ -48,7 +48,7 @@ class HLTrigCntrler(QGroupBox):
             lv.addWidget(PyDMECB(self, init_channel=pv_pref + "EVGParam-Sel"))
             lv.addWidget(PyDMLabel(self, init_channel=pv_pref+"EVGParam-Sts"))
             lh.addItem(lv)
-            lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
+            # lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
         if 'pulses' in self.hl_props:
             # Control of Number of Pulses
             lv = QVBoxLayout()
@@ -59,7 +59,7 @@ class HLTrigCntrler(QGroupBox):
             lv.addWidget(PyDMLabel(self, init_channel=pv_pref + "Pulses-RB",
                                    prec_from_pv=True))
             lh.addItem(lv)
-            lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
+            # lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
         if 'duration' in self.hl_props:
             # Control of Number of Duration
             lv = QVBoxLayout()
@@ -70,7 +70,7 @@ class HLTrigCntrler(QGroupBox):
             lv.addWidget(PyDMLabel(self, init_channel=pv_pref + "Duration-RB",
                                    prec_from_pv=True))
             lh.addItem(lv)
-            lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
+            # lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
         if 'polarity' in self.hl_props:
             # Control of Number of Polarity
             lv = QVBoxLayout()
@@ -78,7 +78,7 @@ class HLTrigCntrler(QGroupBox):
             lv.addWidget(PyDMECB(self, init_channel=pv_pref + "Polrty-Sel"))
             lv.addWidget(PyDMLabel(self, init_channel=pv_pref+"Polrty-Sts"))
             lh.addItem(lv)
-            lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
+            # lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
         if 'delay' in self.hl_props:
             # Control of Number of Duration
             lv = QVBoxLayout()
@@ -89,7 +89,7 @@ class HLTrigCntrler(QGroupBox):
             lv.addWidget(PyDMLabel(self, init_channel=pv_pref + "Delay-RB",
                                    prec_from_pv=True))
             lh.addItem(lv)
-            lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
+            # lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
 
 
 def main():

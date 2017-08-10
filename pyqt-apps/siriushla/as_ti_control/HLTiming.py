@@ -26,7 +26,6 @@ def _setupTrigs(main, map_, nc, hide_evg=True):
         lv = QVBoxLayout()
         main.setLayout(lv)
         lv.addItem(QSpIt(40, 20, QSzPol.Minimum, QSzPol.Expanding))
-        nc = 1
         for k, v in map_.items():
             gb = QGroupBox(k, main)
             lv.addWidget(gb)
@@ -42,8 +41,26 @@ def _setupTrigs(main, map_, nc, hide_evg=True):
                              i // nc, i % nc)
 
 
-def _setupDiagTrigs(HLTiming):
-    main = HLTiming.WDTrigsInjDig
+def _setupTriggers(HLTiming):
+    map_ = {
+        'Linac': (
+            'LI-01:TI-EGun:MultBun', 'LI-01:TI-EGun:SglBun',
+            'LI-01:TI-Modltr-1:', 'LI-01:TI-Modltr-2:',
+            'LI-Glob:TI-LLRF-1:', 'LI-Glob:TI-LLRF-2:',
+            'LI-Glob:TI-LLRF-3:', 'LI-Glob:TI-RFAmp-1:',
+            'LI-Glob:TI-RFAmp-2:', 'LI-Glob:TI-SHAmp:'),
+        'Booster Injection': ('TB-04:TI-InjS:', 'BO-01D:TI-InjK:'),
+        }
+    _setupTrigs(HLTiming.WDTrigsInjLITB, map_, 3, hide_evg=True)
+    map_ = {
+        'Booster Ramping': ('BO-05D:TI-P5Cav:', 'BO-Glob:TI-Mags:'),
+        'Storage Ring Injection': (
+            'BO-48D:TI-EjeK:', 'TS-04:TI-InjSF:',
+            'TS-Fam:TI-EjeS:', 'TS-Fam:TI-InjSG:',
+            'SI-01SA:TI-InjK:'),
+        }
+    _setupTrigs(HLTiming.WDTrigsInjBOSI, map_, 3, hide_evg=True)
+
     map_ = {
         'Linac': (
             'LI-01:TI-ICT-1:', 'LI-01:TI-ICT-2:',
@@ -57,41 +74,20 @@ def _setupDiagTrigs(HLTiming):
             'TS-01:TI-ICT:', 'TS-04:TI-FCT:', 'TS-04:TI-ICT:',
             'TS-Fam:TI-BPM:', 'TS-Fam:TI-Scrn:',
             'SI-Fam:TI-BPM:'),
+        }
+    _setupTrigs(HLTiming.WDTrigsInjDig, map_, 1, hide_evg=False)
+    map_ = {
         'Storage Ring Studies': (
             'SI-01SA:TI-HPing:', 'SI-01SA:TI-HTuneS:', 'SI-13C4:TI-DCCT:',
             'SI-14C4:TI-DCCT:', 'SI-16C4:TI-GBPM:', 'SI-17C4:TI-VTuneP:',
             'SI-17SA:TI-HTuneP:', 'SI-18C4:TI-VTuneS:', 'SI-19C4:TI-VPing:',
             'SI-19SP:TI-GSL15:', 'SI-20SB:TI-GSL07:'),
-        }
-    _setupTrigs(main, map_, 1, hide_evg=False)
-
-
-def _setupInjTrigs(HLTiming):
-    main = HLTiming.WDTrigsInj
-    map_ = {
-        'Linac': (
-            'LI-01:TI-EGun:MultBun', 'LI-01:TI-EGun:SglBun',
-            'LI-01:TI-Modltr-1:', 'LI-01:TI-Modltr-2:',
-            'LI-Glob:TI-LLRF-1:', 'LI-Glob:TI-LLRF-2:',
-            'LI-Glob:TI-LLRF-3:', 'LI-Glob:TI-RFAmp-1:',
-            'LI-Glob:TI-RFAmp-2:', 'LI-Glob:TI-SHAmp:'),
-        'Booster Injection': ('TB-04:TI-InjS:', 'BO-01D:TI-InjK:'),
-        'Booster Ramping': ('BO-05D:TI-P5Cav:', 'BO-Glob:TI-Mags:'),
-        'Storage Ring Injection': (
-            'BO-48D:TI-EjeK:', 'TS-04:TI-InjSF:',
-            'TS-Fam:TI-EjeS:', 'TS-Fam:TI-InjSG:',
-            'SI-01SA:TI-InjK:'),
-        }
-    _setupTrigs(main, map_, 3, hide_evg=True)
-
-
-def _setupSIMagsTrigs(HLTiming):
-    trigs = {
         'Storage Ring Magnets': (
             'SI-Glob:TI-Corrs:', 'SI-Glob:TI-Dips:', 'SI-Glob:TI-Quads:',
             'SI-Glob:TI-Sexts:', 'SI-Glob:TI-Skews:',
             )
         }
+    _setupTrigs(HLTiming.WDTrigsSI, map_, 1, hide_evg=True)
 
 
 def _setupEVGParams(HLTiming):
@@ -121,7 +117,7 @@ def _setupEvents(HLTiming):
     map_ = {
         'Injection': ('Linac', 'InjBO', 'RmpBO', 'InjSI'),
         'Diagnostics': ('DigLI', 'DigTB', 'DigBO', 'DigTS', 'DigSI'),
-        'Storage Ring Control': ('Orbit', 'Tunes', 'Coupl'),
+        'Storage Ring Control': ('Orbit', 'Tunes', 'Coupl', 'Study'),
         }
     main = HLTiming.DWCEvents
 
@@ -149,8 +145,7 @@ def setupMainWindow():
     _setupEvents(HLTiming)
     _setupClocks(HLTiming)
     _setupEVGParams(HLTiming)
-    _setupInjTrigs(HLTiming)
-    _setupDiagTrigs(HLTiming)
+    _setupTriggers(HLTiming)
     return HLTiming
 
 

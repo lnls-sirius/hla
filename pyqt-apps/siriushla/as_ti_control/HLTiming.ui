@@ -36,11 +36,11 @@
        </sizepolicy>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="WDTrigsInj_">
        <attribute name="title">
-        <string>Injection Triggers</string>
+        <string>Injection: Linac and InjBO</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
@@ -48,7 +48,7 @@
           <property name="widgetResizable">
            <bool>true</bool>
           </property>
-          <widget class="QWidget" name="WDTrigsInj">
+          <widget class="QWidget" name="WDTrigsInjLITB">
            <property name="geometry">
             <rect>
              <x>0</x>
@@ -66,9 +66,39 @@
        <zorder>PyDMLedInjectionState</zorder>
        <zorder>scrollArea_3</zorder>
       </widget>
+      <widget class="QWidget" name="WDTrigsInjBOSI_">
+       <attribute name="title">
+        <string>Injection: RmpBO and InjSI</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_7">
+        <item>
+         <widget class="QScrollArea" name="scrollArea_6">
+          <property name="frameShadow">
+           <enum>QFrame::Sunken</enum>
+          </property>
+          <property name="sizeAdjustPolicy">
+           <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
+          </property>
+          <property name="widgetResizable">
+           <bool>true</bool>
+          </property>
+          <widget class="QWidget" name="WDTrigsInjBOSI">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>1713</width>
+             <height>744</height>
+            </rect>
+           </property>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
       <widget class="QWidget" name="WDTrigsInjDig_">
        <attribute name="title">
-        <string>Injection Diagnostics Triggers</string>
+        <string>Injection Diagnostics: DigLI, DigTB and DigBO</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_5">
         <item>
@@ -82,13 +112,45 @@
              <x>0</x>
              <y>0</y>
              <width>1713</width>
-             <height>733</height>
+             <height>744</height>
             </rect>
            </property>
           </widget>
          </widget>
         </item>
        </layout>
+      </widget>
+      <widget class="QWidget" name="WDTrigsSI_">
+       <attribute name="title">
+        <string>Storage Ring Operation</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_8">
+        <item>
+         <widget class="QScrollArea" name="scrollArea_7">
+          <property name="lineWidth">
+           <number>1</number>
+          </property>
+          <property name="widgetResizable">
+           <bool>true</bool>
+          </property>
+          <widget class="QWidget" name="WDTrigsSI">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>1713</width>
+             <height>744</height>
+            </rect>
+           </property>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_3">
+       <attribute name="title">
+        <string>Page</string>
+       </attribute>
       </widget>
      </widget>
     </item>

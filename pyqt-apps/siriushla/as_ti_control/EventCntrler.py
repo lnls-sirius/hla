@@ -29,13 +29,14 @@ class EventCntrler(QGroupBox):
         self.setLayout(lh)
         self.setTitle(self.prefix.propty)
 
-        lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
+        # lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
 
         # External Trigger
-        pb = PyDMPushButton(self, init_channel=pv_pref+'ExtTrig-Cmd')
+        pb = PyDMPushButton(self, init_channel=pv_pref+'ExtTrig-Cmd',
+                            pressValue=1)
         pb.setText('< External >')
         lh.addWidget(pb)
-        lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
+        # lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
 
         # Control of event Mode
         lv = QVBoxLayout()
@@ -43,7 +44,7 @@ class EventCntrler(QGroupBox):
         lv.addWidget(PyDMECB(self, init_channel=pv_pref + "Mode-Sel"))
         lv.addWidget(PyDMLabel(self, init_channel=pv_pref + "Mode-Sts"))
         lh.addItem(lv)
-        lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
+        # lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
 
         # Control of DelayType
         if self.event_type == 'll':
@@ -52,7 +53,7 @@ class EventCntrler(QGroupBox):
             lv.addWidget(PyDMECB(self, init_channel=pv_pref+"DelayType-Sel"))
             lv.addWidget(PyDMLabel(self, init_channel=pv_pref+"DelayType-Sts"))
             lh.addItem(lv)
-            lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
+            # lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
 
         # Control of Delay
         lv = QVBoxLayout()
@@ -63,7 +64,7 @@ class EventCntrler(QGroupBox):
         lv.addWidget(PyDMLabel(self, init_channel=pv_pref + "Delay-RB",
                                prec_from_pv=True))
         lh.addItem(lv)
-        lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
+        # lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
 
 
 def main():
