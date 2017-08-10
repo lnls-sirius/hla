@@ -1,8 +1,11 @@
-""""""
+"""Widget for controlling a dipole."""
 import re
+
 from pydm.PyQt.QtCore import Qt
 from pydm.PyQt.QtGui import QGridLayout, QVBoxLayout, QHBoxLayout, QLabel, \
     QSizePolicy
+
+from siriuspy.envars import vaca_prefix
 from pydm.widgets.label import PyDMLabel
 from pydm.widgets.pushbutton import PyDMPushButton
 from pydm.widgets.line_edit import PyDMLineEdit
@@ -17,13 +20,14 @@ class DipoleDetailWidget(MagnetDetailWidget):
 
     def __init__(self, magnet_name, parent=None):
         """Class constructor."""
+        self._vaca_prefix = vaca_prefix
         if re.match("(SI|BO)-Fam:MA-B\w*", magnet_name):
             self._magnet_name = magnet_name
+            self._prefixed_magnet = self._vaca_prefix + self._magnet_name
         else:
             raise ValueError("Magnet not supported by this class!")
 
-        self._vaca_prefix = "VAG-"
-        ps_name = self._vaca_prefix + re.sub(":MA", ":PS", self._magnet_name)
+        ps_name = re.sub(":MA", ":PS", self._prefixed_magnet)
         self._ps_list = [ps_name + "-1",
                          ps_name + "-2"]
 
@@ -47,7 +51,7 @@ class DipoleDetailWidget(MagnetDetailWidget):
         layout = QGridLayout()
 
         self.opmode_sp = PyDMEnumComboBox(
-            self, init_channel="ca://" + self._magnet_name + ":OpMode-Sel")
+            self, init_channel="ca://" + self._prefixed_magnet + ":OpMode-Sel")
         self.opmode1_rb = PyDMLabel(
             self, "ca://" + self._ps_list[0] + ":OpMode-Sts")
         self.ctrlmode1_led = PyDMLed(
@@ -89,10 +93,10 @@ class DipoleDetailWidget(MagnetDetailWidget):
 
         self.on_btn = PyDMPushButton(
             self, label="On", pressValue=1,
-            init_channel="ca://" + self._magnet_name + ":PwrState-Sel")
+            init_channel="ca://" + self._prefixed_magnet + ":PwrState-Sel")
         self.off_btn = PyDMPushButton(
             self, label="Off", pressValue=0,
-            init_channel="ca://" + self._magnet_name + ":PwrState-Sel")
+            init_channel="ca://" + self._prefixed_magnet + ":PwrState-Sel")
 
         self.pwrstate1_led = PyDMLed(
             self, "ca://" + self._ps_list[0] + ":PwrState-Sts")
@@ -131,17 +135,19 @@ class DipoleDetailWidget(MagnetDetailWidget):
         self.current_sp_label = QLabel("Setpoint")
 
         self.current_rb_val = PyDMLabel(
-            self, "ca://" + self._magnet_name + ":Current-RB")
+            self, "ca://" + self._prefixed_magnet + ":Current-RB")
         self.current_rb_val.precFromPV = True
         # self.current_rb_val.setPrecision(3)
 
         self.current_sp_val = PyDMLineEdit(
-            self, "ca://" + self._magnet_name + ":Current-SP")
+            self, "ca://" + self._prefixed_magnet + ":Current-SP")
         # self.current_sp_val.receivePrecision(3)
 
         self.current_sp_slider = PyDMScrollBar(
-            self, Qt.Horizontal, "ca://" + self._magnet_name + ":Current-SP")
-        self.current_sp_slider.setObjectName("current-sp_" + self._magnet_name)
+            self, Qt.Horizontal,
+            "ca://" + self._prefixed_magnet + ":Current-SP")
+        self.current_sp_slider.setObjectName(
+            "current-sp_" + self._prefixed_magnet)
         self.current_sp_slider.setMinimumSize(80, 15)
         self.current_sp_slider.limitsFromPV = True
         self.current_sp_slider.setSizePolicy(

@@ -1,16 +1,17 @@
 """MagnetDetailWidget definition."""
-
 import re
+
 from pydm.PyQt.QtCore import Qt
 from pydm.PyQt.QtGui import QWidget, QGroupBox, QGridLayout, QVBoxLayout, \
     QHBoxLayout, QLabel, QSizePolicy
+
+from siriuspy.envars import vaca_prefix
 from pydm.widgets.label import PyDMLabel
 from pydm.widgets.pushbutton import PyDMPushButton
 from pydm.widgets.line_edit import PyDMLineEdit
 from pydm.widgets.enum_combo_box import PyDMEnumComboBox
 from pydm.widgets.led import PyDMLed
 from pydm.widgets.scrollbar import PyDMScrollBar
-from pydm.widgets.QDoubleScrollBar import QDoubleScrollBar
 
 
 class MagnetDetailWidget(QWidget):
@@ -19,8 +20,9 @@ class MagnetDetailWidget(QWidget):
     def __init__(self, magnet_name, parent=None):
         """Class constructor."""
         super(MagnetDetailWidget, self).__init__(parent)
-
+        self._vaca_prefix = vaca_prefix
         self._magnet_name = magnet_name
+        self._prefixed_magnet = self._vaca_prefix + self._magnet_name
         self._ps_name = re.sub(":MA-", ":PS-", self._magnet_name)
 
         self._magnet_type = self._getElementType()
@@ -84,7 +86,7 @@ class MagnetDetailWidget(QWidget):
         layout = QGridLayout()
         for i in range(16):
             led = PyDMLed(
-                self, "ca://" + self._magnet_name + ":Intlk-Mon", i)
+                self, "ca://" + self._prefixed_magnet + ":Intlk-Mon", i)
             led.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
             layout.addWidget(led, i, 0)
             layout.addWidget(QLabel("Bit " + str(i)), i, 1)
@@ -96,13 +98,13 @@ class MagnetDetailWidget(QWidget):
         layout = QVBoxLayout()
 
         self.opmode_sp = PyDMEnumComboBox(
-            self, "ca://" + self._magnet_name + ":OpMode-Sel")
+            self, "ca://" + self._prefixed_magnet + ":OpMode-Sel")
         self.opmode_rb = PyDMLabel(
-            self, "ca://" + self._magnet_name + ":OpMode-Sts")
+            self, "ca://" + self._prefixed_magnet + ":OpMode-Sts")
         self.ctrlmode_led = PyDMLed(
-            self, "ca://" + self._magnet_name + ":CtrlMode-Mon")
+            self, "ca://" + self._prefixed_magnet + ":CtrlMode-Mon")
         self.ctrlmode_label = PyDMLabel(
-            self, "ca://" + self._magnet_name + ":CtrlMode-Mon")
+            self, "ca://" + self._prefixed_magnet + ":CtrlMode-Mon")
 
         self.ctrlmode_led.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
 
@@ -121,14 +123,14 @@ class MagnetDetailWidget(QWidget):
 
         self.on_btn = PyDMPushButton(
             self, label="On", pressValue=1,
-            init_channel="ca://" + self._magnet_name + ":PwrState-Sel")
+            init_channel="ca://" + self._prefixed_magnet + ":PwrState-Sel")
         self.off_btn = PyDMPushButton(
             self, label="Off", pressValue=0,
-            init_channel="ca://" + self._magnet_name + ":PwrState-Sel")
+            init_channel="ca://" + self._prefixed_magnet + ":PwrState-Sel")
         self.pwrstate_led = PyDMLed(
-            self, "ca://" + self._magnet_name + ":PwrState-Sts")
+            self, "ca://" + self._prefixed_magnet + ":PwrState-Sts")
         self.pwrstate_label = PyDMLabel(
-            self, "ca://" + self._magnet_name + ":PwrState-Sts")
+            self, "ca://" + self._prefixed_magnet + ":PwrState-Sts")
 
         self.pwrstate_led.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
 
@@ -152,17 +154,19 @@ class MagnetDetailWidget(QWidget):
         self.current_sp_label = QLabel("Setpoint")
 
         self.current_rb_val = PyDMLabel(
-            self, "ca://" + self._magnet_name + ":Current-RB")
+            self, "ca://" + self._prefixed_magnet + ":Current-RB")
         self.current_rb_val.precFromPV = True
         # self.current_rb_val.setPrecision(3)
 
         self.current_sp_val = PyDMLineEdit(
-            self, "ca://" + self._magnet_name + ":Current-SP")
+            self, "ca://" + self._prefixed_magnet + ":Current-SP")
         # self.current_sp_val.receivePrecision(3)
 
         self.current_sp_slider = PyDMScrollBar(
-            self, Qt.Horizontal, "ca://" + self._magnet_name + ":Current-SP")
-        self.current_sp_slider.setObjectName("current-sp_" + self._magnet_name)
+            self, Qt.Horizontal,
+            "ca://" + self._prefixed_magnet + ":Current-SP")
+        self.current_sp_slider.setObjectName(
+            "current-sp_" + self._prefixed_magnet)
         self.current_sp_slider.setMinimumSize(80, 15)
         self.current_sp_slider.limitsFromPV = True
         self.current_sp_slider.setSizePolicy(
@@ -185,17 +189,17 @@ class MagnetDetailWidget(QWidget):
         self.metric_sp_label = QLabel("Setpoint")
 
         self.metric_rb_val = PyDMLabel(
-            self, "ca://" + self._magnet_name + ":" + self._metric + "-RB")
+            self, "ca://" + self._prefixed_magnet + ":" + self._metric + "-RB")
         self.metric_rb_val.precFromPV = True
         # self.metric_rb_val.setPrecision(3)
 
         self.metric_sp_val = PyDMLineEdit(
-            self, "ca://" + self._magnet_name + ":" + self._metric + "-SP")
+            self, "ca://" + self._prefixed_magnet + ":" + self._metric + "-SP")
         # self.metric_sp_val.receivePrecision(3)
 
         self.metric_sp_slider = PyDMScrollBar(
             self, Qt.Horizontal,
-            "ca://" + self._magnet_name + ":" + self._metric + "-SP")
+            "ca://" + self._prefixed_magnet + ":" + self._metric + "-SP")
         self.metric_sp_slider.setObjectName("metric-sp_" + self._magnet_name)
         self.metric_sp_slider.setMinimumSize(80, 15)
         self.metric_sp_slider.limitsFromPV = True

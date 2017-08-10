@@ -1,10 +1,12 @@
 """Base class for controlling a magnet."""
-
 import re
+
 from pydm.PyQt.QtCore import Qt
 from pydm.PyQt.QtGui import QWidget, QVBoxLayout, QPushButton, \
     QDoubleValidator, QGroupBox, QGridLayout, QLabel, QHBoxLayout, \
     QScrollArea, QSizePolicy
+
+from siriuspy.envars import vaca_prefix
 from pydm.widgets.label import PyDMLabel
 from pydm.widgets.line_edit import PyDMLineEdit
 from pydm.widgets.led import PyDMLed
@@ -98,6 +100,8 @@ class BaseMagnetControlWidget(QWidget):
 
     def _createGroupWidgets(self, ma):
 
+        prefixed_ma = vaca_prefix + ma
+
         magnet_widgets = list()
 
         led_width = 30
@@ -109,7 +113,7 @@ class BaseMagnetControlWidget(QWidget):
         magnet_widget.layout = QHBoxLayout()
 
         # Create magnet widgets
-        state_led = PyDMLed(self, "ca://" + ma + ":PwrState-Sts")
+        state_led = PyDMLed(self, "ca://" + prefixed_ma + ":PwrState-Sts")
         state_led.setObjectName("pwr-state_" + ma)
         state_led.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         state_led.setMinimumSize(led_width, state_led.minimumSize().height())
@@ -127,7 +131,7 @@ class BaseMagnetControlWidget(QWidget):
 
         scroll_bar = PyDMScrollBar(
             self, orientation=Qt.Horizontal,
-            init_channel="ca://" + ma + ":Current-SP")
+            init_channel="ca://" + prefixed_ma + ":Current-SP")
         scroll_bar.setObjectName("current-sp_" + ma)
         scroll_bar.setMinimumSize(bar_width, 15)
         scroll_bar.limitsFromPV = True
@@ -136,7 +140,7 @@ class BaseMagnetControlWidget(QWidget):
         magnet_widgets.append(scroll_bar)
         magnet_widget.layout.addWidget(scroll_bar)
 
-        current_sp = PyDMLineEdit(self, "ca://" + ma + ":Current-SP")
+        current_sp = PyDMLineEdit(self, "ca://" + prefixed_ma + ":Current-SP")
         current_sp.setObjectName("current-sp_" + ma)
         current_sp.setMinimumSize(
             value_width, current_sp.minimumSize().height())
@@ -147,7 +151,7 @@ class BaseMagnetControlWidget(QWidget):
         magnet_widgets.append(current_sp)
         magnet_widget.layout.addWidget(current_sp)
 
-        current_rb = PyDMLabel(self, "ca://" + ma + ":Current-Mon")
+        current_rb = PyDMLabel(self, "ca://" + prefixed_ma + ":Current-Mon")
         current_rb.setObjectName("current-mon_" + ma)
         current_rb.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         current_rb.setMinimumSize(
@@ -158,7 +162,7 @@ class BaseMagnetControlWidget(QWidget):
         magnet_widget.layout.addWidget(current_rb)
 
         metric_rb = PyDMLineEdit(
-            self, "ca://" + ma + ":" + self._getMetric() + "-SP")
+            self, "ca://" + prefixed_ma + ":" + self._getMetric() + "-SP")
         metric_rb.setObjectName("metric-sp_" + ma)
         metric_rb.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         metric_rb.setMinimumSize(

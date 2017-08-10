@@ -3,12 +3,12 @@ import sys
 from pydm import PyDMApplication
 from pydm.PyQt.QtCore import pyqtSlot
 from pydm.PyQt.QtGui import QMainWindow, QAction, QMenuBar
-from siriusdm.as_ps_cycle import PsCycleWindow
-from siriusdm.as_ma_control import ToBoosterMagnetControlWindow
-from siriusdm.as_ma_control import BoosterMagnetControlWindow
-from siriusdm.as_ma_control import ToSiriusMagnetControlWindow
-from siriusdm.as_ma_control import SiriusMagnetControlWindow
-from siriusdm.as_config_manager import ConfigManagerWindow
+from siriushla.as_ps_cycle import PsCycleWindow
+from siriushla.as_ma_control import ToBoosterMagnetControlWindow
+from siriushla.as_ma_control import BoosterMagnetControlWindow
+from siriushla.as_ma_control import ToSiriusMagnetControlWindow
+from siriushla.as_ma_control import SiriusMagnetControlWindow
+from siriushla.as_config_manager import ConfigManagerWindow
 
 class ControlApplication(QMainWindow):
     def __init__(self):
