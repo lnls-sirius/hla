@@ -51,7 +51,7 @@ def _setupTriggers(HLTiming):
             'LI-Glob:TI-RFAmp-2:', 'LI-Glob:TI-SHAmp:'),
         'Booster Injection': ('TB-04:TI-InjS:', 'BO-01D:TI-InjK:'),
         }
-    _setupTrigs(HLTiming.WDTrigsInjLITB, map_, 3, hide_evg=True)
+    _setupTrigs(HLTiming.WDTrigsInjLITB, map_, 2, hide_evg=True)
     map_ = {
         'Booster Ramping': ('BO-05D:TI-P5Cav:', 'BO-Glob:TI-Mags:'),
         'Storage Ring Injection': (
@@ -59,7 +59,7 @@ def _setupTriggers(HLTiming):
             'TS-Fam:TI-EjeS:', 'TS-Fam:TI-InjSG:',
             'SI-01SA:TI-InjK:'),
         }
-    _setupTrigs(HLTiming.WDTrigsInjBOSI, map_, 3, hide_evg=True)
+    _setupTrigs(HLTiming.WDTrigsInjBOSI, map_, 2, hide_evg=True)
 
     map_ = {
         'Linac': (
@@ -141,7 +141,7 @@ def setupMainWindow():
     global HLTriggers
     HLTriggers = _Triggers().hl_triggers
     HLTiming = uic.loadUi('HLTiming.ui')
-    HLTiming.setStyleSheet('font: 12pt "Sans Serif";')
+    # HLTiming.setStyleSheet('font: 12pt "Sans Serif";')
     _setupEvents(HLTiming)
     _setupClocks(HLTiming)
     _setupEVGParams(HLTiming)

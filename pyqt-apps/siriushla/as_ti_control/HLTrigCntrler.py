@@ -31,65 +31,67 @@ class HLTrigCntrler(QGroupBox):
         lh = QHBoxLayout(self)
         self.setLayout(lh)
         # Trigger Name
-        self.setTitle(self.prefix[:-1])
+        # self.setTitle(self.prefix[:-1])
         # lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
         # Control of Trigger State
         if 'state' in self.hl_props:
             lv = QVBoxLayout()
-            lv.addWidget(QLabel('State', self))
-            lv.addWidget(PyDMCb(self, init_channel=pv_pref + "State-Sel"))
+            # lv.addWidget(QLabel('State', self))
+            cb = PyDMCb(self, init_channel=pv_pref + "State-Sel")
+            cb.setText(self.prefix[:-1])
+            lv.addWidget(cb)
             lv.addWidget(PyDMLed(self, init_channel=pv_pref + "State-Sts"))
             lh.addItem(lv)
-            # lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
+            lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
         if 'evg_param' in self.hl_props:
             # Control of event EVG Param
             lv = QVBoxLayout()
-            lv.addWidget(QLabel('EVG Parameter', self))
+            # lv.addWidget(QLabel('EVG Parameter', self))
             lv.addWidget(PyDMECB(self, init_channel=pv_pref + "EVGParam-Sel"))
             lv.addWidget(PyDMLabel(self, init_channel=pv_pref+"EVGParam-Sts"))
             lh.addItem(lv)
-            # lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
+            lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
         if 'pulses' in self.hl_props:
             # Control of Number of Pulses
             lv = QVBoxLayout()
-            lv.addWidget(QLabel('Nr Pulses', self))
+            # lv.addWidget(QLabel('Nr Pulses', self))
             lv.addWidget(PyDMSpinBox(self,
                                      init_channel=pv_pref + "Pulses-SP",
                                      step=1, limits_from_pv=True))
             lv.addWidget(PyDMLabel(self, init_channel=pv_pref + "Pulses-RB",
                                    prec_from_pv=True))
             lh.addItem(lv)
-            # lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
+            lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
         if 'duration' in self.hl_props:
             # Control of Number of Duration
             lv = QVBoxLayout()
-            lv.addWidget(QLabel('Duration of Train [ms]', self))
+            # lv.addWidget(QLabel('Duration of Train [ms]', self))
             lv.addWidget(PyDMSpinBox(self,
                                      init_channel=pv_pref + "Duration-SP",
                                      step=1e-4, limits_from_pv=True))
             lv.addWidget(PyDMLabel(self, init_channel=pv_pref + "Duration-RB",
                                    prec_from_pv=True))
             lh.addItem(lv)
-            # lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
+            lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
         if 'polarity' in self.hl_props:
             # Control of Number of Polarity
             lv = QVBoxLayout()
-            lv.addWidget(QLabel('Polarity', self))
+            # lv.addWidget(QLabel('Polarity', self))
             lv.addWidget(PyDMECB(self, init_channel=pv_pref + "Polrty-Sel"))
             lv.addWidget(PyDMLabel(self, init_channel=pv_pref+"Polrty-Sts"))
             lh.addItem(lv)
-            # lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
+            lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
         if 'delay' in self.hl_props:
             # Control of Number of Duration
             lv = QVBoxLayout()
-            lv.addWidget(QLabel('Delay [us]', self))
+            # lv.addWidget(QLabel('Delay [us]', self))
             lv.addWidget(PyDMSpinBox(self,
                                      init_channel=pv_pref + "Delay-SP",
                                      step=1e-4, limits_from_pv=True))
             lv.addWidget(PyDMLabel(self, init_channel=pv_pref + "Delay-RB",
                                    prec_from_pv=True))
             lh.addItem(lv)
-            # lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
+            lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
 
 
 def main():

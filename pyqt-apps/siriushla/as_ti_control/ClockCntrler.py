@@ -27,20 +27,22 @@ class ClockCntrler(QGroupBox):
         lh = QHBoxLayout(self)
         self.setLayout(lh)
         # Clock name
-        self.setTitle(self.prefix.propty)
+        # self.setTitle(self.prefix.propty)
         # lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
 
         # Clock State
         lv = QVBoxLayout()
-        lv.addWidget(QLabel('State', self))
-        lv.addWidget(PyDMCb(self, init_channel=pv_pref + "State-Sel"))
+        # lv.addWidget(QLabel('State', self))
+        cb = PyDMCb(self, init_channel=pv_pref + "State-Sel")
+        cb.setText(self.prefix.propty)
+        lv.addWidget(cb)
         lv.addWidget(PyDMLed(self, init_channel=pv_pref + "State-Sts"))
         lh.addItem(lv)
-        # lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
+        lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
 
         # Control of Delay
         lv = QVBoxLayout()
-        lv.addWidget(QLabel('Frequency [kHz]', self))
+        # lv.addWidget(QLabel('Frequency [kHz]', self))
         lv.addWidget(PyDMSpinBox(self,
                                  init_channel=pv_pref + "Freq-SP",
                                  step=1e-4, limits_from_pv=True))

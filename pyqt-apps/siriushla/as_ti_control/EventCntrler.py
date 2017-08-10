@@ -27,37 +27,41 @@ class EventCntrler(QGroupBox):
         pv_pref = 'ca://' + PREFIX + self.prefix
         lh = QHBoxLayout(self)
         self.setLayout(lh)
-        self.setTitle(self.prefix.propty)
+        # self.setTitle(self.prefix.propty)
 
         # lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
 
         # External Trigger
+        lv = QVBoxLayout()
+        lv.addWidget(QLabel('Generate:', self))
         pb = PyDMPushButton(self, init_channel=pv_pref+'ExtTrig-Cmd',
                             pressValue=1)
-        pb.setText('< External >')
-        lh.addWidget(pb)
-        # lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
+        # pb.setText('< External >')
+        pb.setText(self.prefix.propty)
+        lv.addWidget(pb)
+        lh.addItem(lv)
+        lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
 
         # Control of event Mode
         lv = QVBoxLayout()
-        lv.addWidget(QLabel('Mode Selection', self))
+        # lv.addWidget(QLabel('Mode Selection', self))
         lv.addWidget(PyDMECB(self, init_channel=pv_pref + "Mode-Sel"))
         lv.addWidget(PyDMLabel(self, init_channel=pv_pref + "Mode-Sts"))
         lh.addItem(lv)
-        # lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
+        lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
 
         # Control of DelayType
         if self.event_type == 'll':
             lv = QVBoxLayout()
-            lv.addWidget(QLabel('Delay Type', self))
+            # lv.addWidget(QLabel('Delay Type', self))
             lv.addWidget(PyDMECB(self, init_channel=pv_pref+"DelayType-Sel"))
             lv.addWidget(PyDMLabel(self, init_channel=pv_pref+"DelayType-Sts"))
             lh.addItem(lv)
-            # lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
+            lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
 
         # Control of Delay
         lv = QVBoxLayout()
-        lv.addWidget(QLabel('Delay [us]', self))
+        # lv.addWidget(QLabel('Delay [us]', self))
         lv.addWidget(PyDMSpinBox(self,
                                  init_channel=pv_pref + "Delay-SP",
                                  step=1e-3, limits_from_pv=True))
