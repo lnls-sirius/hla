@@ -12,9 +12,8 @@ from siriuspy.timesys import time_data
 from siriuspy.timesys.time_data import Clocks as _Clocks
 from siriuspy.timesys.time_data import Events as _Events
 from siriuspy.timesys.time_data import Triggers as _Triggers
-from siriushla.as_ti_control.ClockCntrler import ClockCntrler
-from siriushla.as_ti_control.EventCntrler import EventCntrler, HLTrigCntrler
-# from siriushla.as_ti_control.HLTrigCntrler import
+from siriushla.as_ti_control.Controllers import (EventCntrler, HLTrigCntrler,
+                                                 ClockCntrler)
 
 time_data._LOCAL = True
 
@@ -115,9 +114,13 @@ def _setupClocks(HLTiming):
     main = HLTiming.DWCClocks
     lg = QGridLayout(main)
     main.setLayout(lg)
+    hl_props = {'state', 'frequency'}
     for i, cl in enumerate(sorted(_Clocks.HL2LL_MAP.keys())):
         pref = _Clocks.HL_PREF + cl
-        lg.addWidget(ClockCntrler(main, prefix=pref), i, 0)
+        if i == 0:
+            lg.addWidget(ClockCntrler(prefix=pref, hl_props=hl_props,
+                                      header=True), 0, 0)
+        lg.addWidget(ClockCntrler(prefix=pref, hl_props=hl_props), i + 1, 0)
 
 
 def _setupEvents(HLTiming):
@@ -142,10 +145,10 @@ def _setupEvents(HLTiming):
         for i, ev in enumerate(v):
             pref = _Events.HL_PREF + ev
             if not i // nc:
-                header = EventCntrler(main, prefix=pref,
-                                      hl_props=hl_props, header=True)
+                header = EventCntrler(prefix=pref, hl_props=hl_props,
+                                      header=True)
                 lg.addWidget(header, 0, i % nc)
-            ev_ctrl = EventCntrler(main, prefix=pref, hl_props=hl_props)
+            ev_ctrl = EventCntrler(prefix=pref, hl_props=hl_props)
             lg.addWidget(ev_ctrl, (i // nc) + 1, i % nc)
 
 

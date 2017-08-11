@@ -12,6 +12,8 @@ from pydm.widgets.spinbox import PyDMSpinBox
 from pydm.widgets.pushbutton import PyDMPushButton
 from siriuspy.envars import vaca_prefix as PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
+from siriuspy.timesys.time_data import Events as _Events
+from siriuspy.timesys.time_data import Clocks as _Clocks
 
 PREFIX = 'fac' + PREFIX[8:]
 
@@ -139,6 +141,119 @@ class HLTrigCntrler(_BaseCntrler):
             rb = PyDMLabel(self, init_channel=pv_pref + "Delay-RB",
                            prec_from_pv=True)
         return sp, rb
+
+
+class ClockCntrler(_BaseCntrler):
+    """Template for control of High and Low Level Clocks."""
+
+    _MIN_WIDs = {'state': 100, 'frequency': 100}
+    _LABELS = {'state': 'State', 'frequency': 'Freq. [kHz]'}
+    _ALL_PROPS = ('state', 'frequency')
+
+    def _createObjs(self, prop):
+        pv_pref = 'ca://' + PREFIX + self.prefix
+        if 'state' == prop:
+            sp = PyDMCb(self, init_channel=pv_pref + "State-Sel")
+            sp.setText(self.prefix.propty)
+            rb = PyDMLed(self, init_channel=pv_pref + "State-Sts")
+        elif 'frequency' == prop:
+            sp = PyDMSpinBox(self, init_channel=pv_pref + "Freq-SP", step=1e-4,
+                             limits_from_pv=True)
+            rb = PyDMLabel(self, init_channel=pv_pref + "Freq-RB",
+                           prec_from_pv=True)
+        return sp, rb
+
+
+class IntTrigCntrler(_BaseCntrler):
+    """Template for control of Timing devices Internal Triggers."""
+
+    _MIN_WIDs = {'state': 200, 'evg_param': 100, 'pulses': 70, 'width': 150,
+                 'polarity': 70, 'delay': 150}
+    _LABELS = {'state': 'State', 'evg_param': 'EVG Params',
+               'pulses': 'Nr Pulses', 'width': 'Width [us]',
+               'polarity': 'Polarity', 'delay': 'Delay [us]'}
+    _ALL_PROPS = ('state', 'evg_param', 'pulses', 'width', 'polarity',
+                  'delay')
+
+    def __init__(self, parent=None, prefix='', hl_props=set(), header=False,
+                 device='evr'):
+        """Initialize object."""
+        self.device = device
+        super().__init__(parent, prefix, hl_props, header)
+
+    def _createObjs(self, prop):
+        pv_pref = 'ca://' + PREFIX + self.prefix
+        if 'state' == prop:
+            sp = PyDMCb(self, init_channel=pv_pref + "State-Sel")
+            rb = PyDMLed(self, init_channel=pv_pref + "State-Sts")
+        elif 'evg_param' == prop:
+            name = pv_pref + 'Event'
+            enum_strings = _Events.LL_EVENTS
+            if self.device.lower() == 'afc':
+                name = pv_pref + 'EVGParam'
+                enum_strings += sorted(_Clocks.LL2HL_MAP.keys())
+            sp = PyDMECB(self, init_channel=name + "-Sel", type_value=str)
+            sp.set_items(enum_strings)
+            sp.setEditable(True)
+            rb = PyDMLabel(self, init_channel=name + "-Sts")
+        elif 'pulses' == prop:
+            sp = PyDMSpinBox(self, init_channel=pv_pref + "Pulses-SP", step=1,
+                             limits_from_pv=True, precision=0)
+            rb = PyDMLabel(self, init_channel=pv_pref + "Pulses-RB",
+                           prec_from_pv=True)
+        elif 'width' == prop:
+            sp = PyDMSpinBox(self, init_channel=pv_pref+"Width-SP", step=1e-3,
+                             limits_from_pv=True)
+            rb = PyDMLabel(self, init_channel=pv_pref+"Width-RB",
+                           prec_from_pv=True)
+        elif 'polarity' == prop:
+            sp = PyDMECB(self, init_channel=pv_pref + "Polrty-Sel")
+            rb = PyDMLabel(self, init_channel=pv_pref+"Polrty-Sts")
+        elif 'delay' == prop:
+            sp = PyDMSpinBox(self, init_channel=pv_pref + "Delay-SP",
+                             step=1e-3, limits_from_pv=True)
+            rb = PyDMLabel(self, init_channel=pv_pref + "Delay-RB",
+                           prec_from_pv=True)
+        return sp, rb
+
+
+class OutChanCntrler(QGroupBox):
+    """Template for control of Timing Devices Output Channels."""
+
+    _MIN_WIDs = {'int_chan': 200, 'delay': 150, 'fine_delay': 150}
+    _LABELS = {'int_chan': 'Inter. Trig.', 'delay': 'Delay [us]',
+               'fine_delay': 'Fine Delay [us]'}
+    _ALL_PROPS = ('int_chan', 'delay', 'fine_delay')
+
+    def __init__(self, parent=None, prefix='', hl_props=set(), header=False,
+                 device='evr'):
+        """Initialize object."""
+        self.device = device
+        super().__init__(parent, prefix, hl_props, header)
+
+    def _createObjs(self, prop):
+        pv_pref = 'ca://' + PREFIX + self.prefix
+        if 'int_chan' == prop:
+            num = 24 if self.device.lower() == 'evr' else 16
+            enum_strings = (['IntTrig{0:02d}'.format(i) for i in range(num)] +
+                            sorted(_Clocks.LL2HL_MAP.keys()))
+            sp = PyDMECB(self, init_channel=pv_pref+"IntChan-Sel",
+                         type_value=str)
+            sp.set_items(enum_strings)
+            sp.setEditable(True)
+            # sp.setMaxVisibleItems(6)
+            rb = PyDMLabel(self, init_channel=pv_pref + "IntChan-Sts")
+        elif 'delay' == prop:
+            sp = PyDMSpinBox(self, init_channel=pv_pref + "Delay-SP",
+                             step=1e-4, limits_from_pv=True)
+            rb = PyDMLabel(self, init_channel=pv_pref + "Delay-RB",
+                           prec_from_pv=True)
+        elif 'fine_delay' == prop:
+            sp = PyDMSpinBox(self, init_channel=pv_pref + "FineDelay-SP",
+                             step=1, limits_from_pv=True)
+            rb = PyDMLabel(self, init_channel=pv_pref + "FineDelay-RB",
+                           prec_from_pv=True)
+        return rb, sp
 
 
 def main():
