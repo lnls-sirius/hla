@@ -12,19 +12,19 @@ class BTSPosAngCorr(QMainWindow):
         self.centralwidget = loadUi('/home/fac_files/lnls-sirius/hla/pyqt-apps/siriushla/ts_ap_posang/ui_ts_ap_posang.ui')
         self.setCentralWidget(self.centralwidget)
 
-        widget2pv_list = [[self.centralwidget.PyDMLineEdit_OrbXDeltaPos_SP, 'TS-Glob:AP-PosAng:OrbXDeltaPos-SP'],
-                          [self.centralwidget.PyDMScrollBar_OrbXDeltaPos_SP,'TS-Glob:AP-PosAng:OrbXDeltaPos-SP'],
-                          [self.centralwidget.PyDMLabel_OrbXDeltaPos_RB,    'TS-Glob:AP-PosAng:OrbXDeltaPos-RB'],
-                          [self.centralwidget.PyDMLineEdit_OrbXDeltaAng_SP, 'TS-Glob:AP-PosAng:OrbXDeltaAng-SP'],
-                          [self.centralwidget.PyDMScrollBar_OrbXDeltaAng_SP,'TS-Glob:AP-PosAng:OrbXDeltaAng-SP'],
-                          [self.centralwidget.PyDMLabel_OrbXDeltaAng_RB,    'TS-Glob:AP-PosAng:OrbXDeltaAng-RB'],
-                          [self.centralwidget.PyDMLineEdit_OrbYDeltaPos_SP, 'TS-Glob:AP-PosAng:OrbYDeltaPos-SP'],
-                          [self.centralwidget.PyDMScrollBar_OrbYDeltaPos_SP,'TS-Glob:AP-PosAng:OrbYDeltaPos-SP'],
-                          [self.centralwidget.PyDMLabel_OrbYDeltaPos_RB,    'TS-Glob:AP-PosAng:OrbYDeltaPos-RB'],
-                          [self.centralwidget.PyDMLineEdit_OrbYDeltaAng_SP, 'TS-Glob:AP-PosAng:OrbYDeltaAng-SP'],
-                          [self.centralwidget.PyDMScrollBar_OrbYDeltaAng_SP,'TS-Glob:AP-PosAng:OrbYDeltaAng-SP'],
-                          [self.centralwidget.PyDMLabel_OrbYDeltaAng_RB,    'TS-Glob:AP-PosAng:OrbYDeltaAng-RB'],
-                          [self.centralwidget.PyDMPushButton_SetNewRef,     'TS-Glob:AP-PosAng:SetNewRef']]
+        widget2pv_list = [[self.centralwidget.PyDMLineEdit_OrbXDeltaPos_SP, 'TS-Glob:AP-PosAng:DeltaPosX-SP'],
+                          [self.centralwidget.PyDMScrollBar_OrbXDeltaPos_SP,'TS-Glob:AP-PosAng:DeltaPosX-SP'],
+                          [self.centralwidget.PyDMLabel_OrbXDeltaPos_RB,    'TS-Glob:AP-PosAng:DeltaPosX-RB'],
+                          [self.centralwidget.PyDMLineEdit_OrbXDeltaAng_SP, 'TS-Glob:AP-PosAng:DeltaAngX-SP'],
+                          [self.centralwidget.PyDMScrollBar_OrbXDeltaAng_SP,'TS-Glob:AP-PosAng:DeltaAngX-SP'],
+                          [self.centralwidget.PyDMLabel_OrbXDeltaAng_RB,    'TS-Glob:AP-PosAng:DeltaAngX-RB'],
+                          [self.centralwidget.PyDMLineEdit_OrbYDeltaPos_SP, 'TS-Glob:AP-PosAng:DeltaPosY-SP'],
+                          [self.centralwidget.PyDMScrollBar_OrbYDeltaPos_SP,'TS-Glob:AP-PosAng:DeltaPosY-SP'],
+                          [self.centralwidget.PyDMLabel_OrbYDeltaPos_RB,    'TS-Glob:AP-PosAng:DeltaPosY-RB'],
+                          [self.centralwidget.PyDMLineEdit_OrbYDeltaAng_SP, 'TS-Glob:AP-PosAng:DeltaAngY-SP'],
+                          [self.centralwidget.PyDMScrollBar_OrbYDeltaAng_SP,'TS-Glob:AP-PosAng:DeltaAngY-SP'],
+                          [self.centralwidget.PyDMLabel_OrbYDeltaAng_RB,    'TS-Glob:AP-PosAng:DeltaAngY-RB'],
+                          [self.centralwidget.PyDMPushButton_SetNewRef,     'TS-Glob:AP-PosAng:SetNewRef-Cmd']]
         self.set_widgets_channel(widget2pv_list)
 
         # Estabilish widget connections
