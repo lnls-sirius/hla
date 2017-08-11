@@ -36,7 +36,7 @@
        </sizepolicy>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="WDTrigsInj_">
        <attribute name="title">
@@ -54,7 +54,7 @@
              <x>0</x>
              <y>0</y>
              <width>1713</width>
-             <height>744</height>
+             <height>819</height>
             </rect>
            </property>
           </widget>
@@ -88,7 +88,7 @@
              <x>0</x>
              <y>0</y>
              <width>1713</width>
-             <height>744</height>
+             <height>819</height>
             </rect>
            </property>
           </widget>
@@ -112,7 +112,7 @@
              <x>0</x>
              <y>0</y>
              <width>1713</width>
-             <height>744</height>
+             <height>819</height>
             </rect>
            </property>
           </widget>
@@ -139,7 +139,7 @@
              <x>0</x>
              <y>0</y>
              <width>1713</width>
-             <height>744</height>
+             <height>819</height>
             </rect>
            </property>
           </widget>
@@ -196,7 +196,7 @@
           <x>0</x>
           <y>0</y>
           <width>89</width>
-          <height>771</height>
+          <height>846</height>
          </rect>
         </property>
        </widget>
@@ -231,7 +231,7 @@
           <x>0</x>
           <y>0</y>
           <width>84</width>
-          <height>771</height>
+          <height>846</height>
          </rect>
         </property>
        </widget>
@@ -254,50 +254,29 @@
     <number>4</number>
    </attribute>
    <widget class="QWidget" name="DWCEVGParams">
-    <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="4">
-      <spacer name="horizontalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="0" column="2">
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="0" column="1">
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <property name="spacing">
+      <number>10</number>
+     </property>
+     <property name="leftMargin">
+      <number>5</number>
+     </property>
+     <property name="topMargin">
+      <number>9</number>
+     </property>
+     <property name="rightMargin">
+      <number>5</number>
+     </property>
+     <item>
       <widget class="QGroupBox" name="GBContinuous">
        <property name="title">
         <string>Continuous Mode</string>
        </property>
-       <layout class="QHBoxLayout" name="HLEVGParams">
-        <item>
-         <widget class="PyDMLed" name="PyDMLedContinuous">
-          <property name="toolTip">
-           <string/>
-          </property>
-          <property name="whatsThis">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item>
+       <layout class="QFormLayout" name="formLayout_2">
+        <property name="formAlignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+        <item row="1" column="0">
          <widget class="PyDMCheckbox" name="PyDMCbContinuous">
           <property name="toolTip">
            <string/>
@@ -310,62 +289,50 @@
           </property>
          </widget>
         </item>
+        <item row="1" column="1">
+         <widget class="PyDMLed" name="PyDMLedContinuous">
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="whatsThis">
+           <string/>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
      </item>
-     <item row="0" column="3">
+     <item>
       <widget class="QGroupBox" name="GBInjection">
        <property name="title">
         <string>Injection Mode</string>
        </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <item>
-         <widget class="PyDMLed" name="PyDMLedInjectionState">
-          <property name="toolTip">
-           <string/>
-          </property>
-          <property name="whatsThis">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="PyDMCheckbox" name="PyDMCbInjectionState">
-          <property name="toolTip">
-           <string/>
-          </property>
-          <property name="whatsThis">
-           <string/>
-          </property>
-          <property name="text">
-           <string>Enbl/Dsbl</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer_3">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="PyDMLed" name="PyDMLedInjectionCyc">
-          <property name="toolTip">
-           <string/>
-          </property>
-          <property name="whatsThis">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item>
+       <property name="flat">
+        <bool>false</bool>
+       </property>
+       <property name="checkable">
+        <bool>false</bool>
+       </property>
+       <layout class="QFormLayout" name="formLayout">
+        <property name="formAlignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+        <property name="verticalSpacing">
+         <number>2</number>
+        </property>
+        <property name="leftMargin">
+         <number>2</number>
+        </property>
+        <property name="topMargin">
+         <number>2</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item row="1" column="0">
          <widget class="PyDMCheckbox" name="PyDMCbInjectionCyc">
           <property name="toolTip">
            <string/>
@@ -378,15 +345,146 @@
           </property>
          </widget>
         </item>
+        <item row="4" column="0">
+         <widget class="PyDMCheckbox" name="PyDMCbInjectionState">
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="whatsThis">
+           <string/>
+          </property>
+          <property name="text">
+           <string>Enbl/Dsbl</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="PyDMLed" name="PyDMLedInjectionCyc">
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="whatsThis">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="PyDMLed" name="PyDMLedInjectionState">
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="whatsThis">
+           <string/>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
      </item>
-     <item row="0" column="5">
+     <item>
+      <widget class="QGroupBox" name="GBBucketList">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>1</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="title">
+        <string>Bucket List</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QScrollArea" name="scrollArea">
+          <property name="widgetResizable">
+           <bool>true</bool>
+          </property>
+          <widget class="QWidget" name="scrollAreaWidgetContents">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>1492</width>
+             <height>86</height>
+            </rect>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_2">
+            <item>
+             <widget class="PyDMLineEdit" name="PyDMLEBucketList">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="toolTip">
+               <string/>
+              </property>
+              <property name="whatsThis">
+               <string>
+    Writeable text field to send and display channel values
+    </string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="PyDMLabel" name="PyDMLbBucketList">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="toolTip">
+               <string/>
+              </property>
+              <property name="whatsThis">
+               <string/>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
       <widget class="QGroupBox" name="GBRepetitionRate">
        <property name="title">
         <string>Repetition Rate [Hz]</string>
        </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <layout class="QVBoxLayout" name="verticalLayout_9">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <property name="leftMargin">
+         <number>2</number>
+        </property>
+        <property name="topMargin">
+         <number>9</number>
+        </property>
+        <property name="rightMargin">
+         <number>2</number>
+        </property>
+        <property name="bottomMargin">
+         <number>9</number>
+        </property>
         <item>
          <widget class="PyDMSpinBox" name="PyDMSBRepetitionRate">
           <property name="toolTip">
@@ -414,91 +512,12 @@
           <property name="whatsThis">
            <string/>
           </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
           <property name="precFromPV">
            <bool>true</bool>
           </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <spacer name="horizontalSpacer_4">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="0" column="6">
-      <spacer name="horizontalSpacer_5">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="1" column="0" colspan="7">
-      <widget class="QGroupBox" name="GBBucketList">
-       <property name="title">
-        <string>Bucket List</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <item>
-         <widget class="QScrollArea" name="scrollArea">
-          <property name="widgetResizable">
-           <bool>true</bool>
-          </property>
-          <widget class="QWidget" name="scrollAreaWidgetContents">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>1936</width>
-             <height>68</height>
-            </rect>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_2">
-            <item>
-             <widget class="PyDMLineEdit" name="PyDMLEBucketList">
-              <property name="toolTip">
-               <string/>
-              </property>
-              <property name="whatsThis">
-               <string>
-    Writeable text field to send and display channel values
-    </string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="PyDMLabel" name="PyDMLbBucketList">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="toolTip">
-               <string/>
-              </property>
-              <property name="whatsThis">
-               <string/>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
          </widget>
         </item>
        </layout>

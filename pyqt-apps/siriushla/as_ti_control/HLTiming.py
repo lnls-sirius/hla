@@ -13,8 +13,8 @@ from siriuspy.timesys.time_data import Clocks as _Clocks
 from siriuspy.timesys.time_data import Events as _Events
 from siriuspy.timesys.time_data import Triggers as _Triggers
 from siriushla.as_ti_control.ClockCntrler import ClockCntrler
-from siriushla.as_ti_control.EventCntrler import EventCntrler
-from siriushla.as_ti_control.HLTrigCntrler import HLTrigCntrler
+from siriushla.as_ti_control.EventCntrler import EventCntrler, HLTrigCntrler
+# from siriushla.as_ti_control.HLTrigCntrler import
 
 time_data._LOCAL = True
 
@@ -24,6 +24,7 @@ HLTriggers = None
 
 def _setupTrigs(main, map_, nc, hide_evg=True):
         lv = QVBoxLayout()
+        # lv.setSpacing(0)
         main.setLayout(lv)
         lv.addItem(QSpIt(40, 20, QSzPol.Minimum, QSzPol.Expanding))
         for k, v in map_.items():
@@ -32,13 +33,18 @@ def _setupTrigs(main, map_, nc, hide_evg=True):
             lv.addItem(QSpIt(40, 20, QSzPol.Minimum, QSzPol.Expanding))
             lg = QGridLayout()
             gb.setLayout(lg)
+            lg.setVerticalSpacing(0)
             for i, tr in enumerate(v):
                 if hide_evg:
                     hl_props = HLTriggers[tr]['hl_props'] - {'evg_param'}
                 else:
                     hl_props = HLTriggers[tr]['hl_props']
                 lg.addWidget(HLTrigCntrler(prefix=tr, hl_props=hl_props),
-                             i // nc, i % nc)
+                             (i // nc) + 1, i % nc)
+                if not i // nc:
+                    header = HLTrigCntrler(prefix=tr, hl_props=hl_props,
+                                           header=True)
+                    lg.addWidget(header, 0, i % nc)
 
 
 def _setupTriggers(HLTiming):
@@ -51,7 +57,7 @@ def _setupTriggers(HLTiming):
             'LI-Glob:TI-RFAmp-2:', 'LI-Glob:TI-SHAmp:'),
         'Booster Injection': ('TB-04:TI-InjS:', 'BO-01D:TI-InjK:'),
         }
-    _setupTrigs(HLTiming.WDTrigsInjLITB, map_, 2, hide_evg=True)
+    _setupTrigs(HLTiming.WDTrigsInjLITB, map_, 2, hide_evg=False)
     map_ = {
         'Booster Ramping': ('BO-05D:TI-P5Cav:', 'BO-Glob:TI-Mags:'),
         'Storage Ring Injection': (
@@ -59,15 +65,16 @@ def _setupTriggers(HLTiming):
             'TS-Fam:TI-EjeS:', 'TS-Fam:TI-InjSG:',
             'SI-01SA:TI-InjK:'),
         }
-    _setupTrigs(HLTiming.WDTrigsInjBOSI, map_, 2, hide_evg=True)
+    _setupTrigs(HLTiming.WDTrigsInjBOSI, map_, 2, hide_evg=False)
 
     map_ = {
         'Linac': (
             'LI-01:TI-ICT-1:', 'LI-01:TI-ICT-2:',
             'LI-Fam:TI-BPM:', 'LI-Fam:TI-Scrn:'),
-        'Booster Injection': (
+        'Booster Transfer Line': (
             'TB-02:TI-ICT:', 'TB-04:TI-FCT:', 'TB-04:TI-ICT:',
-            'TB-Fam:TI-BPM:', 'TB-Fam:TI-Scrn:',
+            'TB-Fam:TI-BPM:', 'TB-Fam:TI-Scrn:'),
+        'Booster': (
             'BO-02D:TI-TuneS:', 'BO-04D:TI-TuneP:', 'BO-04U:TI-GSL:',
             'BO-35D:TI-DCCT:', 'BO-Fam:TI-BPM:', 'BO-Fam:TI-Scrn:'),
         'Storage Ring Injection': (
@@ -87,7 +94,7 @@ def _setupTriggers(HLTiming):
             'SI-Glob:TI-Sexts:', 'SI-Glob:TI-Skews:',
             )
         }
-    _setupTrigs(HLTiming.WDTrigsSI, map_, 1, hide_evg=True)
+    _setupTrigs(HLTiming.WDTrigsSI, map_, 1, hide_evg=False)
 
 
 def _setupEVGParams(HLTiming):
@@ -125,6 +132,7 @@ def _setupEvents(HLTiming):
     main.setLayout(lv)
     lv.addItem(QSpIt(40, 20, QSzPol.Minimum, QSzPol.Expanding))
     nc = 1
+    hl_props = {'ext_trig', 'mode', 'delay'}
     for k, v in map_.items():
         gb = QGroupBox(k, main)
         lv.addWidget(gb)
@@ -133,15 +141,19 @@ def _setupEvents(HLTiming):
         gb.setLayout(lg)
         for i, ev in enumerate(v):
             pref = _Events.HL_PREF + ev
-            ev_ctrl = EventCntrler(main, prefix=pref, tp='hl')
-            lg.addWidget(ev_ctrl, i // nc, i % nc)
+            if not i // nc:
+                header = EventCntrler(main, prefix=pref,
+                                      hl_props=hl_props, header=True)
+                lg.addWidget(header, 0, i % nc)
+            ev_ctrl = EventCntrler(main, prefix=pref, hl_props=hl_props)
+            lg.addWidget(ev_ctrl, (i // nc) + 1, i % nc)
 
 
 def setupMainWindow():
     global HLTriggers
     HLTriggers = _Triggers().hl_triggers
     HLTiming = uic.loadUi('HLTiming.ui')
-    # HLTiming.setStyleSheet('font: 12pt "Sans Serif";')
+    HLTiming.setStyleSheet('font: 12pt "Sans Serif";')
     _setupEvents(HLTiming)
     _setupClocks(HLTiming)
     _setupEVGParams(HLTiming)
