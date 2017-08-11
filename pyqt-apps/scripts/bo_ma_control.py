@@ -1,6 +1,6 @@
 import sys
 from pydm import PyDMApplication
-from siriusdm.as_ma_control import BoosterMagnetControlWindow
+from siriushla.as_ma_control import BoosterMagnetControlWindow
 
 
 app = PyDMApplication(None, sys.argv)

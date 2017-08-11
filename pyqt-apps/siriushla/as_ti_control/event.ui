@@ -35,8 +35,21 @@
      <property name="whatsThis">
       <string/>
      </property>
+     <property name="maxVisibleItems">
+      <number>6</number>
+     </property>
      <property name="channel" stdset="0">
       <string>ca://&amp;PRE&amp;Delaytype-Sel</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="PyDMCheckbox" name="PyDMCheckbox">
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="whatsThis">
+      <string/>
      </property>
     </widget>
    </item>
@@ -47,6 +60,9 @@
      </property>
      <property name="whatsThis">
       <string/>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
      <property name="channel">
       <string>ca://&amp;PRE&amp;DelayType-Sts</string>
@@ -75,9 +91,24 @@
      </property>
     </widget>
    </item>
+   <item>
+    <widget class="PyDMLed" name="PyDMLed">
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="whatsThis">
+      <string/>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>PyDMCheckbox</class>
+   <extends>QCheckBox</extends>
+   <header>pydm.widgets.checkbox</header>
+  </customwidget>
   <customwidget>
    <class>PyDMEnumComboBox</class>
    <extends>QComboBox</extends>
@@ -87,6 +118,16 @@
    <class>PyDMLabel</class>
    <extends>QLabel</extends>
    <header>pydm.widgets.label</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMLed</class>
+   <extends>QLed</extends>
+   <header>pydm.widgets.led</header>
+  </customwidget>
+  <customwidget>
+   <class>QLed</class>
+   <extends>QWidget</extends>
+   <header>pydm.widgets.QLed</header>
   </customwidget>
  </customwidgets>
  <resources/>
