@@ -30,6 +30,7 @@ class HLTrigCntrler(QGroupBox):
         pv_pref = 'ca://' + PREFIX + self.prefix
         lh = QHBoxLayout(self)
         self.setLayout(lh)
+        self.setContentsMargins(0, 0, 0, 0)
         # Trigger Name
         # self.setTitle(self.prefix[:-1])
         # lh.addItem(QSpIt(40, 20, QSzPol.Expanding, QSzPol.Minimum))
@@ -38,7 +39,7 @@ class HLTrigCntrler(QGroupBox):
             lv = QVBoxLayout()
             # lv.addWidget(QLabel('State', self))
             cb = PyDMCb(self, init_channel=pv_pref + "State-Sel")
-            cb.setText(self.prefix[:-1])
+            cb.setText(self.prefix)
             lv.addWidget(cb)
             lv.addWidget(PyDMLed(self, init_channel=pv_pref + "State-Sts"))
             lh.addItem(lv)
