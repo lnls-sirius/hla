@@ -36,7 +36,7 @@
        </sizepolicy>
       </property>
       <property name="currentIndex">
-       <number>4</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="WDTrigsInj_">
        <attribute name="title">
@@ -98,7 +98,7 @@
       </widget>
       <widget class="QWidget" name="WDTrigsInjDig_">
        <attribute name="title">
-        <string>Injection Diagnostics: DigLI, DigTB and DigBO</string>
+        <string>Injection Diagnostics</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_5">
         <item>
