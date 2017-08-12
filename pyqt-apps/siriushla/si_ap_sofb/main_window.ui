@@ -2914,6 +2914,7 @@ font-weight: bold;</string>
     <addaction name="Action_openIOCLog"/>
     <addaction name="Action_openOrbRegs"/>
     <addaction name="Action_openAll"/>
+    <addaction name="Action_Close_All"/>
    </widget>
    <addaction name="Menu_Open"/>
   </widget>
@@ -4480,7 +4481,7 @@ font-weight: bold;</string>
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Correction Parameters</string>
+    <string>Correction &amp;Parameters</string>
    </property>
    <property name="visible">
     <bool>true</bool>
@@ -4494,7 +4495,7 @@ font-weight: bold;</string>
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>IOC Log</string>
+    <string>IOC &amp;Log</string>
    </property>
    <property name="toolTip">
     <string>IOC Log</string>
@@ -4508,24 +4509,29 @@ font-weight: bold;</string>
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Orbit Registers</string>
+    <string>Orbit &amp;Registers</string>
    </property>
   </action>
   <action name="Action_openAll">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
    <property name="checked">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="text">
-    <string>Open All</string>
+    <string>&amp;Open All</string>
    </property>
    <property name="toolTip">
     <string>Open all dockable windows</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+O</string>
+    <string>Alt+O</string>
+   </property>
+  </action>
+  <action name="Action_Close_All">
+   <property name="text">
+    <string>&amp;Close All</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+C</string>
    </property>
   </action>
  </widget>
@@ -4752,9 +4758,9 @@ font-weight: bold;</string>
   </connection>
   <connection>
    <sender>Action_openAll</sender>
-   <signal>toggled(bool)</signal>
+   <signal>triggered()</signal>
    <receiver>DW_CorrParams</receiver>
-   <slot>setVisible(bool)</slot>
+   <slot>show()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -4768,9 +4774,9 @@ font-weight: bold;</string>
   </connection>
   <connection>
    <sender>Action_openAll</sender>
-   <signal>toggled(bool)</signal>
+   <signal>triggered()</signal>
    <receiver>DW_IOCLog</receiver>
-   <slot>setVisible(bool)</slot>
+   <slot>show()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -4784,9 +4790,9 @@ font-weight: bold;</string>
   </connection>
   <connection>
    <sender>Action_openAll</sender>
-   <signal>toggled(bool)</signal>
+   <signal>triggered()</signal>
    <receiver>DW_OrbRegs</receiver>
-   <slot>setVisible(bool)</slot>
+   <slot>show()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -5291,6 +5297,54 @@ font-weight: bold;</string>
     <hint type="destinationlabel">
      <x>136</x>
      <y>709</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Action_Close_All</sender>
+   <signal>triggered()</signal>
+   <receiver>DW_CorrParams</receiver>
+   <slot>hide()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1512</x>
+     <y>530</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Action_Close_All</sender>
+   <signal>triggered()</signal>
+   <receiver>DW_IOCLog</receiver>
+   <slot>hide()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>136</x>
+     <y>694</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Action_Close_All</sender>
+   <signal>triggered()</signal>
+   <receiver>DW_OrbRegs</receiver>
+   <slot>hide()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>136</x>
+     <y>180</y>
     </hint>
    </hints>
   </connection>
