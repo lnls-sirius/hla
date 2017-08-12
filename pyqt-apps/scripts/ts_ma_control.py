@@ -1,6 +1,6 @@
 import sys
 from pydm import PyDMApplication
-from siriusdm.as_ma_control import ToSiriusMagnetControlWindow
+from siriushla.as_ma_control import ToSiriusMagnetControlWindow
 
 
 app = PyDMApplication(None, sys.argv)

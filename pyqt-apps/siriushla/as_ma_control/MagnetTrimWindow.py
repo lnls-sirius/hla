@@ -1,9 +1,12 @@
 """Defines window class to show trims of a magnet."""
 import re
+
 from pydm.PyQt.QtCore import Qt
 from pydm.PyQt.QtGui import QLabel, QDialog, QGridLayout, QGroupBox, \
         QHBoxLayout, QApplication, QSizePolicy, QWidget, QDoubleValidator, \
         QPushButton
+
+from siriuspy.envars import vaca_prefix
 from pydm.widgets.label import PyDMLabel
 from pydm.widgets.line_edit import PyDMLineEdit
 from pydm.widgets.led import PyDMLed
@@ -34,6 +37,7 @@ class MagnetTrimWindow(QDialog):
         super(MagnetTrimWindow, self).__init__(parent)
 
         self._ma = ma_name
+        self._prefixed_ma = vaca_prefix + self._ma
         self._ps = re.sub(":MA-", ":PS-", self._ma)
 
         self._setupUi()
@@ -54,15 +58,17 @@ class MagnetTrimWindow(QDialog):
         self.fam_box = QGroupBox(self._ma)
 
         fam_box_layout = QHBoxLayout()
-        self.fam_led = PyDMLed(self, "ca://" + self._ma + ":PwrState-Sts")
+        self.fam_led = PyDMLed(
+            self, "ca://" + self._prefixed_ma + ":PwrState-Sts")
         self.fam_label = QLabel(self._ma, self)
         self.fam_current_sb = PyDMScrollBar(
-            self, Qt.Horizontal, "ca://" + self._ma + ":Current-SP")
+            self, Qt.Horizontal, "ca://" + self._prefixed_ma + ":Current-SP")
         self.fam_current_sp = PyDMLineEdit(
-            self, "ca://" + self._ma + ":Current-SP")
+            self, "ca://" + self._prefixed_ma + ":Current-SP")
         self.fam_current_rb = PyDMLabel(
-            self, "ca://" + self._ma + ":Current-RB")
-        self.fam_kl = PyDMLineEdit(self, "ca://" + self._ma + ":KL-SP")
+            self, "ca://" + self._prefixed_ma + ":Current-RB")
+        self.fam_kl = PyDMLineEdit(
+            self, "ca://" + self._prefixed_ma + ":KL-SP")
 
         # Led config
         self.fam_led.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
@@ -151,15 +157,18 @@ class MagnetTrimWindow(QDialog):
         layout.addWidget(QLabel("KL Total [1/m]", self), 0, 6)
 
         for i, magnet in enumerate(magnets):
-            state_led = PyDMLed(self, "ca://" + magnet + ":PwrState-Sts")
+            prefixed_ma = vaca_prefix + magnet
+            state_led = PyDMLed(self, "ca://" + prefixed_ma + ":PwrState-Sts")
             # name_label = QLabel(magnet, self)
             name_label = QPushButton(magnet, self)
             setpoint_sb = PyDMScrollBar(
-                self, Qt.Horizontal, "ca://" + magnet + ":Current-SP")
-            current_sp = PyDMLineEdit(self, "ca://" + magnet + ":Current-SP")
-            current_rb = PyDMLabel(self, "ca://" + magnet + ":Current-Mon")
-            kl_trim = PyDMLineEdit(self, "ca://" + magnet + ":KL-SP")
-            kl_total = PyDMLabel(self, "ca://" + magnet + ":KL-Mon")
+                self, Qt.Horizontal, "ca://" + prefixed_ma + ":Current-SP")
+            current_sp = PyDMLineEdit(
+                self, "ca://" + prefixed_ma + ":Current-SP")
+            current_rb = PyDMLabel(
+                self, "ca://" + prefixed_ma + ":Current-Mon")
+            kl_trim = PyDMLineEdit(self, "ca://" + prefixed_ma + ":KL-SP")
+            kl_total = PyDMLabel(self, "ca://" + prefixed_ma + ":KL-Mon")
 
             # Led config
             state_led.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
