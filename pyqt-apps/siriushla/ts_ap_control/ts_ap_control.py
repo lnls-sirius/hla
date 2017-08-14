@@ -19,8 +19,8 @@ import sys
 import socket
 import pyaccel as _pyaccel
 import pymodels as _pymodels
-from siriusdm.as_ma_control.MagnetDetailWindow import MagnetDetailWindow
-from siriusdm.as_ma_control import ToSiriusMagnetControlWindow
+from siriushla.as_ma_control.MagnetDetailWindow import MagnetDetailWindow
+from siriushla.as_ma_control import ToSiriusMagnetControlWindow
 from siriushla.ts_ap_posang.ts_ap_posang import BTSPosAngCorr
 
 
