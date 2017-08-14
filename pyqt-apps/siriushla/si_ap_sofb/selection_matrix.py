@@ -6,8 +6,10 @@ from PyQt5.QtWidgets import (QWidget, QLabel, QHBoxLayout, QVBoxLayout,
 from pydm import PyDMApplication
 from pydm.widgets.checkbox import PyDMCheckbox
 from pydm.widgets.led import PyDMLed
+from siriuspy.envars import vaca_prefix as LL_PREF
 
-SOFB_PREFIX = 'ca://SI-Glob:AP-SOFB:'
+LL_PREF = 'fac' + LL_PREF[8:]
+SOFB_PREFIX = 'ca://'+LL_PREF+'SI-Glob:AP-SOFB:'
 NR_BPMs = 160
 NR_CHs = 120
 NR_CVs = 160
