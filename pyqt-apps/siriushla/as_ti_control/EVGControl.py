@@ -87,6 +87,7 @@ class EVGCntrler(QWidget):
     def _setupGBClocks(self):
         lg = QGridLayout(self)
         self.GBClocks.setLayout(lg)
+        hl_props = {'state', 'frequency'}
         for i, cl in enumerate(sorted(_Clocks.LL2HL_MAP.keys())):
             pref = _Clocks.HL_PREF + cl
             clock = ClockCntrler(prefix=pref, hl_props=hl_props)
@@ -95,9 +96,11 @@ class EVGCntrler(QWidget):
     def _setupGBEvents(self):
         lg = QGridLayout(self)
         self.WDEvents.setLayout(lg)
+        hl_props = {'ext_trig', 'mode', 'delay_type', 'delay'}
         for i, ev in enumerate(_Events.LL_EVENTS):
             pref = _Events.HL_PREF + ev
-            lg.addWidget(EventCntrler(self, prefix=pref), i // 2, i % 2)
+            lg.addWidget(EventCntrler(prefix=pref, hl_props=hl_props),
+                         i // 2, i % 2)
 
 
 def main():
