@@ -135,6 +135,9 @@ class HLTrigCntrler(_BaseCntrler):
         elif 'polarity' == prop:
             sp = PyDMECB(self, init_channel=pv_pref + "Polrty-Sel")
             rb = PyDMLabel(self, init_channel=pv_pref+"Polrty-Sts")
+        elif 'delay_type' == prop:
+            sp = PyDMECB(self, init_channel=pv_pref+"DelayType-Sel")
+            rb = PyDMLabel(self, init_channel=pv_pref+"DelayType-Sts")
         elif 'delay' == prop:
             sp = PyDMSpinBox(self, init_channel=pv_pref + "Delay-SP",
                              step=1e-4, limits_from_pv=True)
