@@ -30,9 +30,6 @@ class BaseMagnetControlWidget(QWidget):
     .PyDMLineEdit {
         width: 100px;
     }
-    # QWidget {
-    #     border: 1px solid red;
-    # }
     """
 
     def __init__(self, magnet_list, orientation=0, parent=None):
@@ -125,7 +122,7 @@ class BaseMagnetControlWidget(QWidget):
         name_label.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         name_label.setMinimumSize(
             name_width, name_label.minimumSize().height())
-        # name_label.setFlat(True) #Trasparent button
+        # name_label.setFlat(True)  # Trasparent button
         magnet_widgets.append(name_label)
         magnet_widget.layout.addWidget(name_label)
 
@@ -133,10 +130,10 @@ class BaseMagnetControlWidget(QWidget):
             self, orientation=Qt.Horizontal,
             init_channel="ca://" + prefixed_ma + ":Current-SP")
         scroll_bar.setObjectName("current-sp_" + ma)
-        scroll_bar.setMinimumSize(bar_width, 15)
         scroll_bar.limitsFromPV = True
         scroll_bar.setSizePolicy(
             QSizePolicy.MinimumExpanding, QSizePolicy.Fixed)
+        scroll_bar.setMinimumSize(bar_width, 15)
         magnet_widgets.append(scroll_bar)
         magnet_widget.layout.addWidget(scroll_bar)
 
@@ -145,7 +142,7 @@ class BaseMagnetControlWidget(QWidget):
         current_sp.setMinimumSize(
             value_width, current_sp.minimumSize().height())
         current_sp.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        # current_sp.receivePrecision(3)
+        current_sp.receivePrecision(3)
         current_sp.setValidator(QDoubleValidator())
         current_sp._useunits = False
         magnet_widgets.append(current_sp)
