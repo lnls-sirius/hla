@@ -1,3 +1,11 @@
+
+/* General CSS Style file for SIRIUS
+  
+   It should be used with Qt tools so that it is applied as default widget resources
+   when python packages are imported.
+*/
+
+
 * {
   font-size: 23px;
 }
