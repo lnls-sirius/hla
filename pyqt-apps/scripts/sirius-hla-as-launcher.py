@@ -1,4 +1,7 @@
+#!/usr/bin/env python-sirius
+
 """Mock application launcher."""
+
 import sys
 from pydm import PyDMApplication
 from pydm.PyQt.QtCore import pyqtSlot
@@ -109,8 +112,12 @@ class ControlApplication(QMainWindow):
 
 if __name__ == "__main__":
     app = PyDMApplication(None, sys.argv)
-    with open("style.css", "r") as fd:
+
+    # Implement sirius-style.css as default Qt resource file for Sirius !
+
+    with open("/usr/local/etc/sirius-hla-as-style.css", "r") as fd:
         style = fd.read()
     app.setStyleSheet(style)
+
     window = ControlApplication()
     sys.exit(app.exec_())
