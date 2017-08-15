@@ -1,0 +1,91 @@
+* {
+  font-size: 23px;
+}
+
+/* Tab Widget */
+QTabWidget::pane {
+    border-top: 2px solid black;
+}
+
+QTabWidget::tab-bar {
+    left: 5px;
+}
+
+QTabBar::tab {
+    color: black;
+    /*background-color: white;*/
+    padding: 0 8px 0 8px;
+    margin: 0 1px 0 1px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border: 1px solid black;
+    margin-top: 15px;
+}
+
+QTabBar::tab:selected, QTabBar::tab:hover {
+    color: white;
+    background-color: green;
+    border: 1px solid white;
+}
+
+QTabBar::tab:!selected {
+    margin-top: 20px; /* make non-selected tabs look smaller */
+}
+
+/* Led */
+PyDMLed {
+    min-width: 40px;
+    max-width: 40px;
+}
+
+/* Scroll Bar */
+QScrollBar:horizontal {
+    border: 2px solid grey;
+    min-width: 150px;
+    margin: 0 20px 0 20px;
+    height: 20px;
+}
+
+QScrollBar::handle:horizontal {
+    min-width: 20px;
+}
+
+QScrollBar::add-line:horizontal {
+    width: 20px;
+    subcontrol-position: right;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:horizontal {
+    width: 20px;
+    subcontrol-position: left;
+    subcontrol-origin: margin;
+}
+
+QLineEdit {
+    border: 2px solid grey;
+    min-width: 150px;
+}
+
+/* Group Box*/
+QGroupBox {
+    border: 2px solid grey;
+    font-weight: bold;
+    margin-top: 1.5ex;
+}
+
+QGroupBox::title {
+    font-weight: bold;
+}
+
+PulsedMagnetControlWindow {
+  min-width: 1440px;
+  max-width: 1440px;
+  min-height: 600px;
+  max-height: 600px;
+}
+
+BaseMagnetControlWindow {
+  min-width: 2336px;
+  max-width: 2336px;
+}

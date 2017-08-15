@@ -13,14 +13,7 @@ class BaseMagnetControlWindow(QDialog):
     _window = None
 
     STYLESHEET = """
-    * {font-size: 16px;}
-    .QGroupBox {
-        font-size: 20px;
-        font-weight: bold;
-    }
-    .PyDMScrollBar {
-        border: 1px solid black;
-    }
+
     """
 
     def __init__(self, parent=None):
@@ -28,7 +21,6 @@ class BaseMagnetControlWindow(QDialog):
         super(BaseMagnetControlWindow, self).__init__(parent)
         self._setupUi()
         self.setStyleSheet(self.STYLESHEET)
-
         self.app = QApplication.instance()
         self.app.establish_widget_connections(self)
 
