@@ -96,7 +96,7 @@ class EventCntrler(_BaseCntrler):
             rb = PyDMLabel(self, init_channel=pv_pref+"Polrty-Sts")
         elif 'delay' == prop:
             sp = PyDMSpinBox(self, init_channel=pv_pref + "Delay-SP",
-                             step=1e-4, limits_from_pv=True)
+                             step=1e-3, limits_from_pv=True)
             rb = PyDMLabel(self, init_channel=pv_pref + "Delay-RB",
                            prec_from_pv=True)
         return sp, rb
