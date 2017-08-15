@@ -173,8 +173,8 @@ class IntTrigCntrler(_BaseCntrler):
     _MIN_WIDs = {'state': 200, 'evg_param': 100, 'pulses': 70, 'width': 150,
                  'polarity': 70, 'delay': 150}
     _LABELS = {'state': 'State', 'evg_param': 'EVG Params',
-               'pulses': 'Nr Pulses', 'width': 'Width [us]',
-               'polarity': 'Polarity', 'delay': 'Delay [us]'}
+               'pulses': 'Nr Pulses', 'width': 'Width',
+               'polarity': 'Polarity', 'delay': 'Delay'}
     _ALL_PROPS = ('state', 'evg_param', 'pulses', 'width', 'polarity',
                   'delay')
 
@@ -224,8 +224,8 @@ class OutChanCntrler(QGroupBox):
     """Template for control of Timing Devices Output Channels."""
 
     _MIN_WIDs = {'int_chan': 200, 'delay': 150, 'fine_delay': 150}
-    _LABELS = {'int_chan': 'Inter. Trig.', 'delay': 'Delay [us]',
-               'fine_delay': 'Fine Delay [us]'}
+    _LABELS = {'int_chan': 'Inter. Trig.', 'delay': 'RFDelay',
+               'fine_delay': 'Fine Delay'}
     _ALL_PROPS = ('int_chan', 'delay', 'fine_delay')
 
     def __init__(self, parent=None, prefix='', hl_props=set(), header=False,
@@ -247,9 +247,9 @@ class OutChanCntrler(QGroupBox):
             # sp.setMaxVisibleItems(6)
             rb = PyDMLabel(self, init_channel=pv_pref + "IntChan-Sts")
         elif 'delay' == prop:
-            sp = PyDMSpinBox(self, init_channel=pv_pref + "Delay-SP",
+            sp = PyDMSpinBox(self, init_channel=pv_pref + "RFDelay-SP",
                              step=1e-4, limits_from_pv=True)
-            rb = PyDMLabel(self, init_channel=pv_pref + "Delay-RB",
+            rb = PyDMLabel(self, init_channel=pv_pref + "RFDelay-RB",
                            prec_from_pv=True)
         elif 'fine_delay' == prop:
             sp = PyDMSpinBox(self, init_channel=pv_pref + "FineDelay-SP",
