@@ -72,7 +72,7 @@ class PulsedMagnetWidget(QWidget):
         self.setObjectName(self._maname)
 
     def _create_pvs(self):
-        self._pwrstate_sp_pv = self._prefixed_maname + pu_props.PwrStateSts
+        self._pwrstate_sp_pv = self._prefixed_maname + pu_props.PwrStateSel
         self._tension_sp_pv = self._prefixed_maname + pu_props.TensionSP
         self._tension_mon_pv = self._prefixed_maname + pu_props.TensionMon
         self._kick_sp_pv = self._prefixed_maname + pm_props.StrengthSP
