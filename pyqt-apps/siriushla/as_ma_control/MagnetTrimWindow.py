@@ -19,12 +19,7 @@ class MagnetTrimWindow(QDialog):
     """Allow controlling the trims of a given magnet."""
 
     STYLESHEET = """
-    * {
-        font-size: 16px;
-    }
-    .QGroupBox {
-        width: 600px;
-    }
+
     """
     # Widthes
     LEDW = 30
