@@ -88,6 +88,9 @@ class MagnetDetailWidget(QWidget):
             led = PyDMLed(
                 self, "ca://" + self._prefixed_magnet + ":Intlk-Mon", i)
             led.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
+            led.setOnColour(0)
+            led.setOffColour(1)
+
             layout.addWidget(led, i, 0)
             layout.addWidget(QLabel("Bit " + str(i)), i, 1)
         layout.setRowStretch(17, 1)
@@ -102,7 +105,8 @@ class MagnetDetailWidget(QWidget):
         self.opmode_rb = PyDMLabel(
             self, "ca://" + self._prefixed_magnet + ":OpMode-Sts")
         self.ctrlmode_led = PyDMLed(
-            self, "ca://" + self._prefixed_magnet + ":CtrlMode-Mon")
+            self, "ca://" + self._prefixed_magnet + ":CtrlMode-Mon",
+            enum_map={'Remote': 1, 'Local': 0})
         self.ctrlmode_label = PyDMLabel(
             self, "ca://" + self._prefixed_magnet + ":CtrlMode-Mon")
 

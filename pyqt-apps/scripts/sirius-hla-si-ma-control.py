@@ -1,3 +1,5 @@
+#!/usr/bin/env python-sirius
+
 import sys
 from pydm import PyDMApplication
 from siriushla.as_ma_control import SiriusMagnetControlWindow
