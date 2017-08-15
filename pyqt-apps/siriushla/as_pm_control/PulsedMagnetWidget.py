@@ -8,7 +8,7 @@ Exposes basic controls like:
 from pydm.PyQt.QtGui import QWidget, QHBoxLayout, QVBoxLayout, QLabel, \
     QPushButton
 
-# from pydm.widgets.led import PyDMLed
+from pydm.widgets.led import PyDMLed
 from pydm.widgets.state_button import PyDMStateButton
 from pydm.widgets.line_edit import PyDMLineEdit
 from pydm.widgets.scrollbar import PyDMScrollBar
@@ -27,7 +27,8 @@ class PulsedMagnetWidget(QWidget):
         #tension_sp_header,
         #tension_mon_header,
         #kick_sp_header,
-        #kick_mon_header {
+        #kick_mon_header,
+        #button_header {
             font-weight: bold;
         }
         #maname_header,
@@ -37,6 +38,8 @@ class PulsedMagnetWidget(QWidget):
             margin-right: 20px;
         }
         #state_header,
+        #state_led,
+        #button_header,
         #pwrstate_button {
             min-width: 100px;
             max-width: 100px;
@@ -73,6 +76,7 @@ class PulsedMagnetWidget(QWidget):
 
     def _create_pvs(self):
         self._pwrstate_sp_pv = self._prefixed_maname + pu_props.PwrStateSel
+        self._pwrstate_rb_pv = self._prefixed_maname + pu_props.PwrStateSts
         self._tension_sp_pv = self._prefixed_maname + pu_props.TensionSP
         self._tension_mon_pv = self._prefixed_maname + pu_props.TensionMon
         self._kick_sp_pv = self._prefixed_maname + pm_props.StrengthSP
@@ -95,6 +99,8 @@ class PulsedMagnetWidget(QWidget):
             self.kick_sp_header.setObjectName("kick_sp_header")
             self.kick_mon_header = QLabel("Kick-Mon", self)
             self.kick_mon_header.setObjectName("kick_mon_header")
+            self.button_header = QLabel("On/Off", self)
+            self.button_header.setObjectName("button_header")
 
             self.header_layout.addWidget(self.maname_header)
             self.header_layout.addWidget(self.state_header)
@@ -102,6 +108,7 @@ class PulsedMagnetWidget(QWidget):
             self.header_layout.addWidget(self.tension_mon_header)
             self.header_layout.addWidget(self.kick_sp_header)
             self.header_layout.addWidget(self.kick_mon_header)
+            self.header_layout.addWidget(self.button_header)
             self.header_layout.addStretch()
 
         self.layout = QHBoxLayout()
@@ -111,10 +118,8 @@ class PulsedMagnetWidget(QWidget):
         self.maname_label.setObjectName("maname_button")
         # self.pwrstate_button = PyDMLed(
         #     parent=self, init_channel="ca://" + self._pwrstate_sp_pv)
-        # self.pwrstate_button = LedWidget(self._pwrstate_sp_pv, self)
-        self.pwrstate_button = PyDMStateButton(
-            parent=self, init_channel="ca://" + self._pwrstate_sp_pv)
-        self.pwrstate_button.setObjectName("pwrstate_button")
+        self.state_led = LedWidget(self._pwrstate_sp_pv, self)
+        self.state_led.setObjectName("state_led")
         self.tension_widget = PMTensionWidget(device=self._maname, parent=self)
         self.tension_widget.setObjectName("tension_widget")
         self.tension_mon_label = PyDMLabel(
@@ -125,6 +130,9 @@ class PulsedMagnetWidget(QWidget):
         self.kick_mon_label = PyDMLabel(
             parent=self, init_channel="ca://" + self._kick_mon_pv)
         self.kick_mon_label.setObjectName("kick_label")
+        self.pwrstate_button = PyDMStateButton(
+            parent=self, init_channel="ca://" + self._pwrstate_sp_pv)
+        self.pwrstate_button.setObjectName("pwrstate_button")
 
         # Configuration
         self.tension_mon_label.setPrecFromPV(True)
@@ -133,11 +141,12 @@ class PulsedMagnetWidget(QWidget):
         self.kick_widget.set_limits_from_pv(True)
 
         self.layout.addWidget(self.maname_label)
-        self.layout.addWidget(self.pwrstate_button)
+        self.layout.addWidget(self.state_led)
         self.layout.addWidget(self.tension_widget)
         self.layout.addWidget(self.tension_mon_label)
         self.layout.addWidget(self.kick_widget)
         self.layout.addWidget(self.kick_mon_label)
+        self.layout.addWidget(self.pwrstate_button)
         self.layout.addStretch()
 
         if self._header:
