@@ -1,3 +1,5 @@
+#!/usr/local/env python-sirius
+
 import sys
 from pydm import PyDMApplication
 from siriushla.as_config_manager import ConfigManagerWindow

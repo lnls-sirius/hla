@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python-sirius
 
 from setuptools import setup
 
@@ -20,6 +20,15 @@ setup(
     ],
     packages=['siriushla'],
     package_data={'siriushla': ['VERSION', '*/*.py']},
-    # scripts=['scripts/*.py'],
+    scripts=['scripts/sirius-hla-as-launcher.py',
+	     'scripts/sirius-hla-as-ps-cycle.py',
+	     'scripts/sirius-hla-bo-config-manager.py',
+	     'scripts/sirius-hla-bo-ma-control.py',
+	     'scripts/sirius-hla-si-config-manager.py',
+	     'scripts/sirius-hla-si-ma-control.py',
+	     'scripts/sirius-hla-tb-ma-control.py',
+	     'scripts/sirius-hla-ts-ma-control.py',
+	     'scripts/resources.py',
+	    ],
     zip_safe=False
 )

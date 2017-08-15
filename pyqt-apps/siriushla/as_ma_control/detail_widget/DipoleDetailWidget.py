@@ -41,6 +41,8 @@ class DipoleDetailWidget(MagnetDetailWidget):
             for i in range(16):
                 led = PyDMLed(self, "ca://" + ps + ":Intlk-Mon", i)
                 led.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
+                led.setOnColour(0)
+                led.setOffColour(1)
                 layout.addWidget(led, i + 1, col)
                 layout.addWidget(QLabel("Bit " + str(i)), i + 1, 3)
         layout.setRowStretch(17, 1)
@@ -55,13 +57,15 @@ class DipoleDetailWidget(MagnetDetailWidget):
         self.opmode1_rb = PyDMLabel(
             self, "ca://" + self._ps_list[0] + ":OpMode-Sts")
         self.ctrlmode1_led = PyDMLed(
-            self, "ca://" + self._ps_list[0] + ":CtrlMode-Mon")
+            self, "ca://" + self._ps_list[0] + ":CtrlMode-Mon",
+            enum_map={'Remote': 1, 'Local': 0})
         self.ctrlmode1_label = PyDMLabel(
             self, "ca://" + self._ps_list[0] + ":CtrlMode-Mon")
         self.opmode2_rb = PyDMLabel(
             self, "ca://" + self._ps_list[1] + ":OpMode-Sts")
         self.ctrlmode2_led = PyDMLed(
-            self, "ca://" + self._ps_list[1] + ":CtrlMode-Mon")
+            self, "ca://" + self._ps_list[1] + ":CtrlMode-Mon",
+            enum_map={'Remote': 1, 'Local': 0})
         self.ctrlmode2_label = PyDMLabel(
             self, "ca://" + self._ps_list[1] + ":CtrlMode-Mon")
 
