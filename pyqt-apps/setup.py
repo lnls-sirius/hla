@@ -28,6 +28,7 @@ setup(
 	     'scripts/sirius-hla-si-ma-control.py',
 	     'scripts/sirius-hla-tb-ma-control.py',
 	     'scripts/sirius-hla-ts-ma-control.py',
+	     'scripts/resources.py',
 	    ],
     zip_safe=False
 )

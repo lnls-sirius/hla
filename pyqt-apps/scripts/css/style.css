@@ -1,6 +1,6 @@
 
 /* General CSS Style file for SIRIUS
-  
+
    It should be used with Qt tools so that it is applied as default widget resources
    when python packages are imported.
 */
@@ -87,8 +87,8 @@ QGroupBox::title {
 }
 
 PulsedMagnetControlWindow {
-  min-width: 1440px;
-  max-width: 1440px;
+  min-width: 1568px;
+  max-width: 1568px;
   min-height: 600px;
   max-height: 600px;
 }

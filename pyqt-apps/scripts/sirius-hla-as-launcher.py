@@ -4,7 +4,7 @@
 
 import sys
 from pydm import PyDMApplication
-from pydm.PyQt.QtCore import pyqtSlot
+from pydm.PyQt.QtCore import pyqtSlot, QFile
 from pydm.PyQt.QtGui import QMainWindow, QAction, QMenuBar
 # from siriushla.as_ps_cycle import PsCycleWindow
 from siriushla.as_ma_control import ToBoosterMagnetControlWindow
@@ -58,13 +58,13 @@ class ControlApplication(QMainWindow):
         # psMenu = menubar.addMenu("Power Supplies")
         # psMenu.addAction(openCyclePanel)
 
-        magnetsMenu = menubar.addMenu("&Magnet")
+        magnetsMenu = menubar.addMenu("&Magnets")
         magnetsMenu.addAction(openLTBMagnetControlPanel)
         magnetsMenu.addAction(openBoosterMagnetControlPanel)
         magnetsMenu.addAction(openBTSMagnetControlPanel)
         magnetsMenu.addAction(openSiriusMagnetControlPanel)
 
-        pulsedMagnetsMenu = menubar.addMenu("&Pulseds")
+        pulsedMagnetsMenu = menubar.addMenu("&Pulsed Magnets")
         pulsedMagnetsMenu.addAction(openPulsedMagnetsControlPanel)
 
         # configMenu = menubar.addMenu("&Configuration Control")
@@ -72,7 +72,7 @@ class ControlApplication(QMainWindow):
         # configMenu.addAction(openSiriusConfiguration)
 
         self.setMenuBar(menubar)
-        self.setGeometry(300, 300, 300, 300)
+        self.setGeometry(50, 50, 1024, 800)
         self.setWindowTitle("Test Application")
         self.show()
 
@@ -111,12 +111,17 @@ class ControlApplication(QMainWindow):
 
 
 if __name__ == "__main__":
+    import resources
     app = PyDMApplication(None, sys.argv)
 
     # Implement sirius-style.css as default Qt resource file for Sirius !
+    stream = QFile(':/css/style.css')
+    if stream.open(QFile.ReadOnly):
+        style = str(stream.readAll(), 'utf-8')
+        stream.close()
+    else:
+        print(stream.errorString())
 
-    with open("/usr/local/etc/sirius-hla-as-style.css", "r") as fd:
-        style = fd.read()
     app.setStyleSheet(style)
 
     window = ControlApplication()
