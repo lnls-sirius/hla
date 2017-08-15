@@ -8,78 +8,14 @@ Exposes basic controls like:
 from pydm.PyQt.QtGui import QWidget, QHBoxLayout, QVBoxLayout, QLabel, \
     QPushButton
 
-from pydm.widgets.led import PyDMLed
+# from pydm.widgets.led import PyDMLed
+from pydm.widgets.state_button import PyDMStateButton
 from pydm.widgets.line_edit import PyDMLineEdit
 from pydm.widgets.scrollbar import PyDMScrollBar
 from pydm.widgets.label import PyDMLabel
 from siriuspy.envars import vaca_prefix as _VACA_PREFIX
 from siriuspy.pulsedps import properties as pu_props
 from siriuspy.pulsedma import properties as pm_props
-
-
-class PMTensionWidget(QWidget):
-    """Widget to set tension of a pulsed magnet."""
-
-    def __init__(self, device, parent=None):
-        """Constructor sets channel name."""
-        super().__init__(parent)
-        self._device = device
-        self._channel = _VACA_PREFIX + self._device + ":" + pu_props.TensionSP
-        self._setup_ui()
-
-    def _setup_ui(self):
-        self.layout = QVBoxLayout()
-        self.tension_sp_lineedit = PyDMLineEdit(
-            parent=self, init_channel="ca://" + self._channel)
-        self.tension_sp_lineedit.setObjectName("tension_sp_lineedit")
-        self.tension_sp_scrollbar = PyDMScrollBar(
-            parent=self, init_channel="ca://" + self._channel)
-        self.tension_sp_scrollbar.setObjectName("tension_sp_scrollbar")
-        self.layout.addWidget(self.tension_sp_lineedit)
-        self.layout.addWidget(self.tension_sp_scrollbar)
-        self.setLayout(self.layout)
-
-    def set_limits_from_pv(self, value):
-        """Set wether to use limiits from the pv channel."""
-        self.tension_sp_scrollbar.limitsFromPV = value
-
-
-class PMKickWidget(QWidget):
-    """Widget to set kick of a pulsed magnet."""
-
-    def __init__(self, device, parent=None):
-        """Constructor sets channel name."""
-        super().__init__(parent)
-        self._device = device
-        self._channel = _VACA_PREFIX + self._device + ":" + pm_props.StrengthSP
-        self._setup_ui()
-
-    def _setup_ui(self):
-        self.layout = QVBoxLayout()
-        self.kick_sp_lineedit = PyDMLineEdit(
-            parent=self, init_channel="ca://" + self._channel)
-        self.kick_sp_scrollbar = PyDMScrollBar(
-            parent=self, init_channel="ca://" + self._channel)
-        self.layout.addWidget(self.kick_sp_lineedit)
-        self.layout.addWidget(self.kick_sp_scrollbar)
-        self.setLayout(self.layout)
-
-    def set_limits_from_pv(self, value):
-        """Set wether to use limiits from the pv channel."""
-        self.kick_sp_scrollbar.limitsFromPV = value
-
-
-class LedWidget(QWidget):
-    """Led class."""
-
-    def __init__(self, channel, parent=None):
-        """Constructor."""
-        super().__init__(parent)
-        layout = QVBoxLayout()
-        self.led = PyDMLed(
-            parent=self, init_channel="ca://" + channel)
-        layout.addWidget(self.led)
-        self.setLayout(layout)
 
 
 class PulsedMagnetWidget(QWidget):
@@ -175,7 +111,9 @@ class PulsedMagnetWidget(QWidget):
         self.maname_label.setObjectName("maname_button")
         # self.pwrstate_button = PyDMLed(
         #     parent=self, init_channel="ca://" + self._pwrstate_sp_pv)
-        self.pwrstate_button = LedWidget(self._pwrstate_sp_pv, self)
+        # self.pwrstate_button = LedWidget(self._pwrstate_sp_pv, self)
+        self.pwrstate_button = PyDMStateButton(
+            parent=self, init_channel="ca://" + self._pwrstate_sp_pv)
         self.pwrstate_button.setObjectName("pwrstate_button")
         self.tension_widget = PMTensionWidget(device=self._maname, parent=self)
         self.tension_widget.setObjectName("tension_widget")
@@ -209,6 +147,71 @@ class PulsedMagnetWidget(QWidget):
             self.setLayout(self.layout_with_header)
         else:
             self.setLayout(self.layout)
+
+
+class PMTensionWidget(QWidget):
+    """Widget to set tension of a pulsed magnet."""
+
+    def __init__(self, device, parent=None):
+        """Constructor sets channel name."""
+        super().__init__(parent)
+        self._device = device
+        self._channel = _VACA_PREFIX + self._device + ":" + pu_props.TensionSP
+        self._setup_ui()
+
+    def _setup_ui(self):
+        self.layout = QVBoxLayout()
+        self.tension_sp_lineedit = PyDMLineEdit(
+            parent=self, init_channel="ca://" + self._channel)
+        self.tension_sp_lineedit.setObjectName("tension_sp_lineedit")
+        self.tension_sp_scrollbar = PyDMScrollBar(
+            parent=self, init_channel="ca://" + self._channel)
+        self.tension_sp_scrollbar.setObjectName("tension_sp_scrollbar")
+        self.layout.addWidget(self.tension_sp_lineedit)
+        self.layout.addWidget(self.tension_sp_scrollbar)
+        self.setLayout(self.layout)
+
+    def set_limits_from_pv(self, value):
+        """Set wether to use limiits from the pv channel."""
+        self.tension_sp_scrollbar.limitsFromPV = value
+
+
+class PMKickWidget(QWidget):
+    """Widget to set kick of a pulsed magnet."""
+
+    def __init__(self, device, parent=None):
+        """Constructor sets channel name."""
+        super().__init__(parent)
+        self._device = device
+        self._channel = _VACA_PREFIX + self._device + ":" + pm_props.StrengthSP
+        self._setup_ui()
+
+    def _setup_ui(self):
+        self.layout = QVBoxLayout()
+        self.kick_sp_lineedit = PyDMLineEdit(
+            parent=self, init_channel="ca://" + self._channel)
+        self.kick_sp_scrollbar = PyDMScrollBar(
+            parent=self, init_channel="ca://" + self._channel)
+        self.layout.addWidget(self.kick_sp_lineedit)
+        self.layout.addWidget(self.kick_sp_scrollbar)
+        self.setLayout(self.layout)
+
+    def set_limits_from_pv(self, value):
+        """Set wether to use limiits from the pv channel."""
+        self.kick_sp_scrollbar.limitsFromPV = value
+
+
+class LedWidget(QWidget):
+    """Led class."""
+
+    def __init__(self, channel, parent=None):
+        """Constructor."""
+        super().__init__(parent)
+        layout = QVBoxLayout()
+        self.led = PyDMLed(
+            parent=self, init_channel="ca://" + channel)
+        layout.addWidget(self.led)
+        self.setLayout(layout)
 
 
 if __name__ == "__main__":
