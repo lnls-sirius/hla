@@ -10,11 +10,17 @@ from register_menu import RegisterMenu
 from graphic_controller import GraphicOrbitControllers
 from ioc_orbit_controllers import ReferenceController
 from ioc_orbit_controllers import CorrectionOrbitController
+from siriuspy.envars import vaca_prefix as LL_PREF
+from pydm.utilities.macro import substitute_in_file
+
+LL_PREF = 'ca://' + 'fac' + LL_PREF[8:]
+PREFIX = LL_PREF + 'SI-Glob:AP-SOFB:'
 
 
 def _main():
     app = PyDMApplication()
-    main_win = uic.loadUi('main_window.ui')
+    tmp_file = substitute_in_file('main_window.ui', {'PREFIX': LL_PREF})
+    main_win = uic.loadUi(tmp_file)
     _create_additional_PVs(main_win)
     _create_additional_widgets(main_win)
     _create_context_menus(main_win)
@@ -35,51 +41,51 @@ def _main():
 def _create_additional_PVs(main_window):
     opts = dict(parent=main_window, visible=False)
     main_window.PV_SOFBCorrectionModeSP = PyDMWidget(
-        init_channel='ca://SI-Glob:AP-SOFB:CorrectionMode-Sel', **opts)
+        init_channel=PREFIX + 'CorrectionMode-Sel', **opts)
     main_window.PV_SOFBCorrectionModeRB = PyDMWidget(
-        init_channel='ca://SI-Glob:AP-SOFB:CorrectionMode-Sts', **opts)
+        init_channel=PREFIX + 'CorrectionMode-Sts', **opts)
 
     main_window.PV_SOFBOfflineOrbitXSP = PyDMWidget(
-        init_channel='ca://SI-Glob:AP-SOFB:OfflineOrbitX-SP', **opts)
+        init_channel=PREFIX + 'OfflineOrbitX-SP', **opts)
     main_window.PV_SOFBOfflineOrbitXRB = PyDMWidget(
-        init_channel='ca://SI-Glob:AP-SOFB:OfflineOrbitX-RB', **opts)
+        init_channel=PREFIX + 'OfflineOrbitX-RB', **opts)
     main_window.PV_SOFBOfflineOrbitYSP = PyDMWidget(
-        init_channel='ca://SI-Glob:AP-SOFB:OfflineOrbitY-SP', **opts)
+        init_channel=PREFIX + 'OfflineOrbitY-SP', **opts)
     main_window.PV_SOFBOfflineOrbitYRB = PyDMWidget(
-        init_channel='ca://SI-Glob:AP-SOFB:OfflineOrbitY-RB', **opts)
+        init_channel=PREFIX + 'OfflineOrbitY-RB', **opts)
 
     main_window.PV_SOFBOrbitRefXSP = PyDMWidget(
-        init_channel='ca://SI-Glob:AP-SOFB:OrbitRefX-SP', **opts)
+        init_channel=PREFIX + 'OrbitRefX-SP', **opts)
     main_window.PV_SOFBOrbitRefXRB = PyDMWidget(
-        init_channel='ca://SI-Glob:AP-SOFB:OrbitRefX-RB', **opts)
+        init_channel=PREFIX + 'OrbitRefX-RB', **opts)
     main_window.PV_SOFBOrbitRefYSP = PyDMWidget(
-        init_channel='ca://SI-Glob:AP-SOFB:OrbitRefY-SP', **opts)
+        init_channel=PREFIX + 'OrbitRefY-SP', **opts)
     main_window.PV_SOFBOrbitRefYRB = PyDMWidget(
-        init_channel='ca://SI-Glob:AP-SOFB:OrbitRefY-RB', **opts)
+        init_channel=PREFIX + 'OrbitRefY-RB', **opts)
 
     main_window.PV_SOFBGoldenOrbitXSP = PyDMWidget(
-        init_channel='ca://SI-Glob:AP-SOFB:GoldenOrbitX-SP', **opts)
+        init_channel=PREFIX + 'GoldenOrbitX-SP', **opts)
     main_window.PV_SOFBGoldenOrbitXRB = PyDMWidget(
-        init_channel='ca://SI-Glob:AP-SOFB:GoldenOrbitX-RB', **opts)
+        init_channel=PREFIX + 'GoldenOrbitX-RB', **opts)
     main_window.PV_SOFBGoldenOrbitYSP = PyDMWidget(
-        init_channel='ca://SI-Glob:AP-SOFB:GoldenOrbitY-SP', **opts)
+        init_channel=PREFIX + 'GoldenOrbitY-SP', **opts)
     main_window.PV_SOFBGoldenOrbitYRB = PyDMWidget(
-        init_channel='ca://SI-Glob:AP-SOFB:GoldenOrbitY-RB', **opts)
+        init_channel=PREFIX + 'GoldenOrbitY-RB', **opts)
 
     main_window.PV_SOFBCorrOrbitXMon = PyDMWidget(
-        init_channel='ca://SI-Glob:AP-SOFB:CorrOrbitX-Mon', **opts)
+        init_channel=PREFIX + 'CorrOrbitX-Mon', **opts)
     main_window.PV_SOFBCorrOrbitYMon = PyDMWidget(
-        init_channel='ca://SI-Glob:AP-SOFB:CorrOrbitY-Mon', **opts)
+        init_channel=PREFIX + 'CorrOrbitY-Mon', **opts)
 
     main_window.PV_SOFBOnlineOrbitXMon = PyDMWidget(
-        init_channel='ca://SI-Glob:AP-SOFB:OnlineOrbitX-Mon', **opts)
+        init_channel=PREFIX + 'OnlineOrbitX-Mon', **opts)
     main_window.PV_SOFBOnlineOrbitYMon = PyDMWidget(
-        init_channel='ca://SI-Glob:AP-SOFB:OnlineOrbitY-Mon', **opts)
+        init_channel=PREFIX + 'OnlineOrbitY-Mon', **opts)
 
     main_window.PV_SOFBBPMXEnblListRB = PyDMWidget(
-        init_channel='ca://SI-Glob:AP-SOFB:BPMXEnblList-RB', **opts)
+        init_channel=PREFIX + 'BPMXEnblList-RB', **opts)
     main_window.PV_SOFBBPMYEnblListRB = PyDMWidget(
-        init_channel='ca://SI-Glob:AP-SOFB:BPMYEnblList-RB', **opts)
+        init_channel=PREFIX + 'BPMYEnblList-RB', **opts)
 
 
 def _create_additional_widgets(main_window):

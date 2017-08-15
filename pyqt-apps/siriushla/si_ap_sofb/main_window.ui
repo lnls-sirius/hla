@@ -1375,7 +1375,7 @@
            <string/>
           </property>
           <property name="XChannel" stdset="0">
-           <string>ca://SI-Glob:AP-Orbit:PosS-Cte</string>
+           <string>${PREFIX}SI-Glob:AP-Orbit:PosS-Cte</string>
           </property>
          </widget>
         </item>
@@ -1685,7 +1685,7 @@
            <string/>
           </property>
           <property name="XChannel" stdset="0">
-           <string>ca://SI-Glob:AP-Orbit:PosS-Cte</string>
+           <string>${PREFIX}SI-Glob:AP-Orbit:PosS-Cte</string>
           </property>
           <property name="Trace0Title" stdset="0">
            <string>Line 1</string>
@@ -1899,7 +1899,7 @@
            <string/>
           </property>
           <property name="trace0Channel" stdset="0">
-           <string>ca://SI-Glob:AP-SOFB:CHCalcdKicks-Mon</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:CHCalcdKicks-Mon</string>
           </property>
          </widget>
         </item>
@@ -1969,7 +1969,7 @@
            <string>Calculated Kick</string>
           </property>
           <property name="trace0Channel" stdset="0">
-           <string>ca://SI-Glob:AP-SOFB:CVCalcdKicks-Mon</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:CVCalcdKicks-Mon</string>
           </property>
          </widget>
         </item>
@@ -2117,7 +2117,7 @@ font-weight: bold;</string>
            <string>Measure Matrix</string>
           </property>
           <property name="channel" stdset="0">
-           <string>ca://SI-Glob:AP-SOFB:StartMeasRSPMtx-Cmd</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:StartMeasRSPMtx-Cmd</string>
           </property>
           <property name="pressValue" stdset="0">
            <string>1</string>
@@ -2174,7 +2174,7 @@ font-weight: bold;</string>
            <string>Abort</string>
           </property>
           <property name="channel" stdset="0">
-           <string>ca://SI-Glob:AP-SOFB:AbortMeasRSPMtx-Cmd</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:AbortMeasRSPMtx-Cmd</string>
           </property>
           <property name="pressValue" stdset="0">
            <string>1</string>
@@ -2231,7 +2231,7 @@ font-weight: bold;</string>
            <string>Reset</string>
           </property>
           <property name="channel" stdset="0">
-           <string>ca://SI-Glob:AP-SOFB:ResetMeasRSPMtx-Cmd</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:ResetMeasRSPMtx-Cmd</string>
           </property>
           <property name="pressValue" stdset="0">
            <string>1</string>
@@ -2259,7 +2259,7 @@ font-weight: bold;</string>
            <string/>
           </property>
           <property name="channel">
-           <string>ca://SI-Glob:AP-SOFB:NumSingValues-RB</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:NumSingValues-RB</string>
           </property>
          </widget>
         </item>
@@ -2275,7 +2275,7 @@ font-weight: bold;</string>
            <number>0</number>
           </property>
           <property name="channel" stdset="0">
-           <string>ca://SI-Glob:AP-SOFB:NumSingValues-SP</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:NumSingValues-SP</string>
           </property>
           <property name="limitsFromPV" stdset="0">
            <bool>true</bool>
@@ -2318,7 +2318,7 @@ font-weight: bold;</string>
            <string/>
           </property>
           <property name="channel">
-           <string>ca://SI-Glob:AP-SOFB:MeasRSPMtxState-Sts</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:MeasRSPMtxState-Sts</string>
           </property>
          </widget>
         </item>
@@ -2397,7 +2397,7 @@ font-weight: bold;</string>
            <string/>
           </property>
           <property name="trace0Channel" stdset="0">
-           <string>ca://SI-Glob:AP-SOFB:SingValues-Mon</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:SingValues-Mon</string>
           </property>
          </widget>
         </item>
@@ -2451,7 +2451,7 @@ font-weight: bold;</string>
            <enum>PyDMImageView::Clike</enum>
           </property>
           <property name="imageChannel" stdset="0">
-           <string>ca://SI-Glob:AP-SOFB:InvRSPMatrix-Mon</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:InvRSPMatrix-Mon</string>
           </property>
          </widget>
         </item>
@@ -2479,7 +2479,7 @@ font-weight: bold;</string>
            <enum>PyDMImageView::Clike</enum>
           </property>
           <property name="imageChannel" stdset="0">
-           <string>ca://SI-Glob:AP-SOFB:RSPMatrix-RB</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:RSPMatrix-RB</string>
           </property>
          </widget>
         </item>
@@ -2564,7 +2564,7 @@ font-weight: bold;</string>
            <string>Enable All</string>
           </property>
           <property name="channel" stdset="0">
-           <string>ca://SI-Glob:AP-SOFB:BPMXEnblList-SP</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:BPMXEnblList-SP</string>
           </property>
           <property name="pressValue" stdset="0">
            <string>1</string>
@@ -2666,7 +2666,7 @@ font-weight: bold;</string>
            <string>Enable All</string>
           </property>
           <property name="channel" stdset="0">
-           <string>ca://SI-Glob:AP-SOFB:BPMYEnblList-SP</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:BPMYEnblList-SP</string>
           </property>
           <property name="pressValue" stdset="0">
            <string>1</string>
@@ -2768,7 +2768,7 @@ font-weight: bold;</string>
            <string>Enable All</string>
           </property>
           <property name="channel" stdset="0">
-           <string>ca://SI-Glob:AP-SOFB:CHEnblList-SP</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:CHEnblList-SP</string>
           </property>
           <property name="pressValue" stdset="0">
            <string>1</string>
@@ -2870,7 +2870,7 @@ font-weight: bold;</string>
            <string>Enable All</string>
           </property>
           <property name="channel" stdset="0">
-           <string>ca://SI-Glob:AP-SOFB:CVEnblList-SP</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:CVEnblList-SP</string>
           </property>
           <property name="pressValue" stdset="0">
            <string>1</string>
@@ -2914,6 +2914,7 @@ font-weight: bold;</string>
     <addaction name="Action_openIOCLog"/>
     <addaction name="Action_openOrbRegs"/>
     <addaction name="Action_openAll"/>
+    <addaction name="Action_Close_All"/>
    </widget>
    <addaction name="Menu_Open"/>
   </widget>
@@ -2999,7 +3000,7 @@ font-weight: bold;</string>
            <string>Apply RF</string>
           </property>
           <property name="channel" stdset="0">
-           <string>ca://SI-Glob:AP-SOFB:ApplyKicks-Cmd</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:ApplyKicks-Cmd</string>
           </property>
           <property name="pressValue" stdset="0">
            <string>2</string>
@@ -3056,7 +3057,7 @@ font-weight: bold;</string>
            <string>Apply All</string>
           </property>
           <property name="channel" stdset="0">
-           <string>ca://SI-Glob:AP-SOFB:ApplyKicks-Cmd</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:ApplyKicks-Cmd</string>
           </property>
           <property name="pressValue" stdset="0">
            <string>3</string>
@@ -3113,7 +3114,7 @@ font-weight: bold;</string>
            <string>Apply CH</string>
           </property>
           <property name="channel" stdset="0">
-           <string>ca://SI-Glob:AP-SOFB:ApplyKicks-Cmd</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:ApplyKicks-Cmd</string>
           </property>
           <property name="pressValue" stdset="0">
            <string>0</string>
@@ -3170,7 +3171,7 @@ font-weight: bold;</string>
            <string>Apply CV</string>
           </property>
           <property name="channel" stdset="0">
-           <string>ca://SI-Glob:AP-SOFB:ApplyKicks-Cmd</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:ApplyKicks-Cmd</string>
           </property>
           <property name="pressValue" stdset="0">
            <string>1</string>
@@ -3227,7 +3228,7 @@ font-weight: bold;</string>
            <string>Calculate Kicks</string>
           </property>
           <property name="channel" stdset="0">
-           <string>ca://SI-Glob:AP-SOFB:CalcCorr-Cmd</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:CalcCorr-Cmd</string>
           </property>
           <property name="pressValue" stdset="0">
            <string>1</string>
@@ -3275,7 +3276,7 @@ font-weight: bold;</string>
              <double>1.000000000000000</double>
             </property>
             <property name="channel" stdset="0">
-             <string>ca://SI-Glob:AP-SOFB:OrbitPointsNum-SP</string>
+             <string>${PREFIX}SI-Glob:AP-SOFB:OrbitPointsNum-SP</string>
             </property>
             <property name="limitsFromPV" stdset="0">
              <bool>true</bool>
@@ -3291,7 +3292,7 @@ font-weight: bold;</string>
              <string/>
             </property>
             <property name="channel">
-             <string>ca://SI-Glob:AP-SOFB:OrbitPointsNum-RB</string>
+             <string>${PREFIX}SI-Glob:AP-SOFB:OrbitPointsNum-RB</string>
             </property>
            </widget>
           </item>
@@ -3585,7 +3586,7 @@ font-weight: bold;</string>
            <string/>
           </property>
           <property name="channel">
-           <string>ca://SI-Glob:AP-SOFB:CHStrength-RB</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:CHStrength-RB</string>
           </property>
          </widget>
         </item>
@@ -3604,7 +3605,7 @@ font-weight: bold;</string>
            <string>Use RF?</string>
           </property>
           <property name="channel" stdset="0">
-           <string>ca://SI-Glob:AP-SOFB:RFEnbl-Sel</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:RFEnbl-Sel</string>
           </property>
          </widget>
         </item>
@@ -3630,7 +3631,7 @@ font-weight: bold;</string>
            <string/>
           </property>
           <property name="channel">
-           <string>ca://SI-Glob:AP-SOFB:SyncKicks-Sts</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:SyncKicks-Sts</string>
           </property>
          </widget>
         </item>
@@ -3658,7 +3659,7 @@ font-weight: bold;</string>
            <double>2.000000000000000</double>
           </property>
           <property name="channel" stdset="0">
-           <string>ca://SI-Glob:AP-SOFB:CVStrength-SP</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:CVStrength-SP</string>
           </property>
           <property name="limitsFromPV" stdset="0">
            <bool>true</bool>
@@ -3680,7 +3681,7 @@ font-weight: bold;</string>
            <string/>
           </property>
           <property name="channel">
-           <string>ca://SI-Glob:AP-SOFB:RFEnbl-Sts</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:RFEnbl-Sts</string>
           </property>
          </widget>
         </item>
@@ -3709,7 +3710,7 @@ font-weight: bold;</string>
            <string>Synchronized Kicks?</string>
           </property>
           <property name="channel" stdset="0">
-           <string>ca://SI-Glob:AP-SOFB:SyncKicks-Sel</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:SyncKicks-Sel</string>
           </property>
          </widget>
         </item>
@@ -3735,7 +3736,7 @@ font-weight: bold;</string>
            <string/>
           </property>
           <property name="channel">
-           <string>ca://SI-Glob:AP-SOFB:CVStrength-RB</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:CVStrength-RB</string>
           </property>
          </widget>
         </item>
@@ -3766,7 +3767,7 @@ font-weight: bold;</string>
            <double>2.000000000000000</double>
           </property>
           <property name="channel" stdset="0">
-           <string>ca://SI-Glob:AP-SOFB:CHStrength-SP</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:CHStrength-SP</string>
           </property>
           <property name="limitsFromPV" stdset="0">
            <bool>true</bool>
@@ -3782,7 +3783,7 @@ font-weight: bold;</string>
            <string/>
           </property>
           <property name="channel">
-           <string>ca://SI-Glob:AP-SOFB:RFStrength-RB</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:RFStrength-RB</string>
           </property>
          </widget>
         </item>
@@ -3810,7 +3811,7 @@ font-weight: bold;</string>
            <double>2.000000000000000</double>
           </property>
           <property name="channel" stdset="0">
-           <string>ca://SI-Glob:AP-SOFB:RFStrength-SP</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:RFStrength-SP</string>
           </property>
           <property name="limitsFromPV" stdset="0">
            <bool>true</bool>
@@ -3879,7 +3880,7 @@ font-weight: bold;</string>
            <double>100.000000000000000</double>
           </property>
           <property name="channel" stdset="0">
-           <string>ca://SI-Glob:AP-SOFB:MaxKickStrength-SP</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:MaxKickStrength-SP</string>
           </property>
           <property name="limitsFromPV" stdset="0">
            <bool>true</bool>
@@ -3915,7 +3916,7 @@ font-weight: bold;</string>
            <string/>
           </property>
           <property name="channel">
-           <string>ca://SI-Glob:AP-SOFB:AutoCorrFreq-RB</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:AutoCorrFreq-RB</string>
           </property>
           <property name="precision">
            <number>3</number>
@@ -3931,7 +3932,7 @@ font-weight: bold;</string>
            <string/>
           </property>
           <property name="channel">
-           <string>ca://SI-Glob:AP-SOFB:AutoCorrMaxDist-RB</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:AutoCorrMaxDist-RB</string>
           </property>
           <property name="precision">
            <number>3</number>
@@ -3966,7 +3967,7 @@ font-weight: bold;</string>
            <string/>
           </property>
           <property name="channel">
-           <string>ca://SI-Glob:AP-SOFB:AutoCorrState-Sts</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:AutoCorrState-Sts</string>
           </property>
          </widget>
         </item>
@@ -3997,7 +3998,7 @@ font-weight: bold;</string>
            <bool>false</bool>
           </property>
           <property name="channel" stdset="0">
-           <string>ca://SI-Glob:AP-SOFB:AutoCorrState-Sel</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:AutoCorrState-Sel</string>
           </property>
          </widget>
         </item>
@@ -4023,7 +4024,7 @@ font-weight: bold;</string>
            <string/>
           </property>
           <property name="channel">
-           <string>ca://SI-Glob:AP-SOFB:MaxKickStrength-RB</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:MaxKickStrength-RB</string>
           </property>
           <property name="precision">
            <number>3</number>
@@ -4051,7 +4052,7 @@ font-weight: bold;</string>
            <double>200.000000000000000</double>
           </property>
           <property name="channel" stdset="0">
-           <string>ca://SI-Glob:AP-SOFB:AutoCorrMaxDist-SP</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:AutoCorrMaxDist-SP</string>
           </property>
           <property name="limitsFromPV" stdset="0">
            <bool>true</bool>
@@ -4080,7 +4081,7 @@ font-weight: bold;</string>
            <double>0.100000000000000</double>
           </property>
           <property name="channel" stdset="0">
-           <string>ca://SI-Glob:AP-SOFB:AutoCorrFreq-SP</string>
+           <string>${PREFIX}SI-Glob:AP-SOFB:AutoCorrFreq-SP</string>
           </property>
           <property name="limitsFromPV" stdset="0">
            <bool>true</bool>
@@ -4452,7 +4453,7 @@ font-weight: bold;</string>
         <bool>true</bool>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://SI-Glob:AP-SOFB:Log-Mon</string>
+        <string>${PREFIX}SI-Glob:AP-SOFB:Log-Mon</string>
        </property>
        <property name="maxCount" stdset="0">
         <number>2000</number>
@@ -4480,7 +4481,7 @@ font-weight: bold;</string>
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Correction Parameters</string>
+    <string>Correction &amp;Parameters</string>
    </property>
    <property name="visible">
     <bool>true</bool>
@@ -4494,7 +4495,7 @@ font-weight: bold;</string>
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>IOC Log</string>
+    <string>IOC &amp;Log</string>
    </property>
    <property name="toolTip">
     <string>IOC Log</string>
@@ -4508,24 +4509,29 @@ font-weight: bold;</string>
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Orbit Registers</string>
+    <string>Orbit &amp;Registers</string>
    </property>
   </action>
   <action name="Action_openAll">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
    <property name="checked">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="text">
-    <string>Open All</string>
+    <string>&amp;Open All</string>
    </property>
    <property name="toolTip">
     <string>Open all dockable windows</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+O</string>
+    <string>Alt+O</string>
+   </property>
+  </action>
+  <action name="Action_Close_All">
+   <property name="text">
+    <string>&amp;Close All</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+C</string>
    </property>
   </action>
  </widget>
@@ -4752,9 +4758,9 @@ font-weight: bold;</string>
   </connection>
   <connection>
    <sender>Action_openAll</sender>
-   <signal>toggled(bool)</signal>
+   <signal>triggered()</signal>
    <receiver>DW_CorrParams</receiver>
-   <slot>setVisible(bool)</slot>
+   <slot>show()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -4768,9 +4774,9 @@ font-weight: bold;</string>
   </connection>
   <connection>
    <sender>Action_openAll</sender>
-   <signal>toggled(bool)</signal>
+   <signal>triggered()</signal>
    <receiver>DW_IOCLog</receiver>
-   <slot>setVisible(bool)</slot>
+   <slot>show()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -4784,9 +4790,9 @@ font-weight: bold;</string>
   </connection>
   <connection>
    <sender>Action_openAll</sender>
-   <signal>toggled(bool)</signal>
+   <signal>triggered()</signal>
    <receiver>DW_OrbRegs</receiver>
-   <slot>setVisible(bool)</slot>
+   <slot>show()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -5291,6 +5297,54 @@ font-weight: bold;</string>
     <hint type="destinationlabel">
      <x>136</x>
      <y>709</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Action_Close_All</sender>
+   <signal>triggered()</signal>
+   <receiver>DW_CorrParams</receiver>
+   <slot>hide()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1512</x>
+     <y>530</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Action_Close_All</sender>
+   <signal>triggered()</signal>
+   <receiver>DW_IOCLog</receiver>
+   <slot>hide()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>136</x>
+     <y>694</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Action_Close_All</sender>
+   <signal>triggered()</signal>
+   <receiver>DW_OrbRegs</receiver>
+   <slot>hide()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>136</x>
+     <y>180</y>
     </hint>
    </hints>
   </connection>

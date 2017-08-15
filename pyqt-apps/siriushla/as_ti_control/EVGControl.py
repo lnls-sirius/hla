@@ -12,8 +12,7 @@ from pydm.widgets.led import PyDMLed
 from pydm.widgets.spinbox import PyDMSpinBox
 from siriuspy.timesys.time_data import Clocks as _Clocks
 from siriuspy.timesys.time_data import Events as _Events
-from siriushla.as_ti_control.ClockCntrler import ClockCntrler
-from siriushla.as_ti_control.EventCntrler import EventCntrler
+from siriushla.as_ti_control.Controllers import ClockCntrler, EventCntrler
 
 
 class EVGCntrler(QWidget):
@@ -90,7 +89,8 @@ class EVGCntrler(QWidget):
         self.GBClocks.setLayout(lg)
         for i, cl in enumerate(sorted(_Clocks.LL2HL_MAP.keys())):
             pref = _Clocks.HL_PREF + cl
-            lg.addWidget(ClockCntrler(self, prefix=pref), i % 4, i//4)
+            clock = ClockCntrler(prefix=pref, hl_props=hl_props)
+            lg.addWidget(clock, i % 4, i//4)
 
     def _setupGBEvents(self):
         lg = QGridLayout(self)
