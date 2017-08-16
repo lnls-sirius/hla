@@ -22,6 +22,7 @@ setup(
     package_data={'siriushla': ['VERSION', '*/*.py']},
     scripts=[
         'scripts/sirius-hla-as-launcher.py',
+        'scripts/sirius-hla-as-ti-control.py',
         'scripts/sirius-hla-as-ps-cycle.py',
         'scripts/sirius-hla-bo-config-manager.py',
         'scripts/sirius-hla-bo-ma-control.py',

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1980</width>
-    <height>1080</height>
+    <width>2368</width>
+    <height>1288</height>
    </rect>
   </property>
   <property name="acceptDrops">
@@ -53,18 +53,14 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1713</width>
-             <height>819</height>
+             <width>2138</width>
+             <height>1020</height>
             </rect>
            </property>
           </widget>
          </widget>
         </item>
        </layout>
-       <zorder>PyDMCbContinuous</zorder>
-       <zorder>PyDMLedContinuous</zorder>
-       <zorder>PyDMLedInjectionState</zorder>
-       <zorder>scrollArea_3</zorder>
       </widget>
       <widget class="QWidget" name="WDTrigsInjBOSI_">
        <attribute name="title">
@@ -87,8 +83,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1713</width>
-             <height>819</height>
+             <width>2138</width>
+             <height>1027</height>
             </rect>
            </property>
           </widget>
@@ -111,8 +107,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1713</width>
-             <height>819</height>
+             <width>2138</width>
+             <height>1027</height>
             </rect>
            </property>
           </widget>
@@ -138,8 +134,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1713</width>
-             <height>819</height>
+             <width>2138</width>
+             <height>1027</height>
             </rect>
            </property>
           </widget>
@@ -156,7 +152,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1980</width>
+     <width>2368</width>
      <height>19</height>
     </rect>
    </property>
@@ -201,8 +197,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>89</width>
-          <height>846</height>
+          <width>68</width>
+          <height>1047</height>
          </rect>
         </property>
        </widget>
@@ -236,8 +232,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>84</width>
-          <height>846</height>
+          <width>68</width>
+          <height>1047</height>
          </rect>
         </property>
        </widget>
@@ -247,6 +243,18 @@
    </widget>
   </widget>
   <widget class="QDockWidget" name="DWEVGParams">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>1</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>540</width>
+     <height>155</height>
+    </size>
+   </property>
    <property name="styleSheet">
     <string notr="true"/>
    </property>
@@ -279,22 +287,12 @@
         <string>Continuous Mode</string>
        </property>
        <layout class="QFormLayout" name="formLayout_2">
-        <property name="formAlignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        <property name="labelAlignment">
+         <set>Qt::AlignCenter</set>
         </property>
-        <item row="1" column="0">
-         <widget class="PyDMCheckbox" name="PyDMCbContinuous">
-          <property name="toolTip">
-           <string/>
-          </property>
-          <property name="whatsThis">
-           <string/>
-          </property>
-          <property name="text">
-           <string>Enbl/Dsbl</string>
-          </property>
-         </widget>
-        </item>
+        <property name="formAlignment">
+         <set>Qt::AlignCenter</set>
+        </property>
         <item row="1" column="1">
          <widget class="PyDMLed" name="PyDMLedContinuous">
           <property name="toolTip">
@@ -302,6 +300,25 @@
           </property>
           <property name="whatsThis">
            <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="PyDMStateButton" name="PyDMStBContinuous">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="whatsThis">
+           <string>PyDM State Button Class.</string>
+          </property>
+          <property name="shape" stdset="0">
+           <enum>PyDMStateButton::Rounded</enum>
           </property>
          </widget>
         </item>
@@ -320,17 +337,20 @@
         <bool>false</bool>
        </property>
        <layout class="QFormLayout" name="formLayout">
+        <property name="labelAlignment">
+         <set>Qt::AlignCenter</set>
+        </property>
         <property name="formAlignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+         <set>Qt::AlignCenter</set>
         </property>
         <property name="verticalSpacing">
-         <number>2</number>
+         <number>6</number>
         </property>
         <property name="leftMargin">
          <number>2</number>
         </property>
         <property name="topMargin">
-         <number>2</number>
+         <number>4</number>
         </property>
         <property name="rightMargin">
          <number>0</number>
@@ -339,6 +359,35 @@
          <number>0</number>
         </property>
         <item row="1" column="0">
+         <widget class="PyDMStateButton" name="PyDMStBInjectionState">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="whatsThis">
+           <string>PyDM State Button Class.</string>
+          </property>
+          <property name="shape" stdset="0">
+           <enum>PyDMStateButton::Rounded</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="PyDMLed" name="PyDMLedInjectionState">
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="whatsThis">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="0">
          <widget class="PyDMCheckbox" name="PyDMCbInjectionCyc">
           <property name="toolTip">
            <string/>
@@ -347,35 +396,12 @@
            <string/>
           </property>
           <property name="text">
-           <string>Cyclic Injection</string>
+           <string>Cyclic</string>
           </property>
          </widget>
         </item>
-        <item row="4" column="0">
-         <widget class="PyDMCheckbox" name="PyDMCbInjectionState">
-          <property name="toolTip">
-           <string/>
-          </property>
-          <property name="whatsThis">
-           <string/>
-          </property>
-          <property name="text">
-           <string>Enbl/Dsbl</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
+        <item row="6" column="1">
          <widget class="PyDMLed" name="PyDMLedInjectionCyc">
-          <property name="toolTip">
-           <string/>
-          </property>
-          <property name="whatsThis">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="1">
-         <widget class="PyDMLed" name="PyDMLedInjectionState">
           <property name="toolTip">
            <string/>
           </property>
@@ -400,13 +426,13 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout">
         <property name="spacing">
-         <number>0</number>
+         <number>4</number>
         </property>
         <property name="leftMargin">
          <number>0</number>
         </property>
         <property name="topMargin">
-         <number>0</number>
+         <number>4</number>
         </property>
         <property name="rightMargin">
          <number>0</number>
@@ -424,8 +450,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1492</width>
-             <height>86</height>
+             <width>1916</width>
+             <height>89</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -475,9 +501,9 @@
        <property name="title">
         <string>Repetition Rate [Hz]</string>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout_9">
+       <layout class="QVBoxLayout" name="verticalLayout_9" stretch="0,1">
         <property name="spacing">
-         <number>0</number>
+         <number>4</number>
         </property>
         <property name="leftMargin">
          <number>2</number>
@@ -489,10 +515,16 @@
          <number>2</number>
         </property>
         <property name="bottomMargin">
-         <number>9</number>
+         <number>2</number>
         </property>
         <item>
          <widget class="PyDMSpinBox" name="PyDMSBRepetitionRate">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="toolTip">
            <string/>
           </property>
@@ -600,6 +632,11 @@
    <header>pydm.widgets.spinbox</header>
   </customwidget>
   <customwidget>
+   <class>PyDMStateButton</class>
+   <extends>QWidget</extends>
+   <header>pydm.widgets.state_button</header>
+  </customwidget>
+  <customwidget>
    <class>QLed</class>
    <extends>QWidget</extends>
    <header>pydm.widgets.QLed</header>
@@ -614,8 +651,8 @@
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>90</x>
-     <y>50</y>
+     <x>-1</x>
+     <y>-1</y>
     </hint>
     <hint type="destinationlabel">
      <x>54</x>

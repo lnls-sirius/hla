@@ -10,12 +10,9 @@ from pydm.widgets.led import PyDMLed
 from pydm.widgets.label import PyDMLabel
 from pydm.widgets.spinbox import PyDMSpinBox
 from pydm.widgets.pushbutton import PyDMPushButton
-from siriuspy.envars import vaca_prefix as PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.timesys.time_data import Events as _Events
 from siriuspy.timesys.time_data import Clocks as _Clocks
-
-PREFIX = 'fac' + PREFIX[8:]
 
 
 class _BaseCntrler(QGroupBox):
@@ -25,11 +22,11 @@ class _BaseCntrler(QGroupBox):
     _LABELS = {}
     _ALL_PROPS = tuple()
 
-    def __init__(self, parent=None, prefix='', hl_props=set(), header=False):
+    def __init__(self, parent=None, prefix='', props=set(), header=False):
         """Initialize object."""
         super().__init__(parent)
         self.prefix = _PVName(prefix)
-        self.hl_props = hl_props
+        self.props = props
         self.header = header
         self.setupUi()
 
@@ -42,7 +39,7 @@ class _BaseCntrler(QGroupBox):
             self.addColumn(prop)
 
     def addColumn(self, prop):
-        if prop not in self.hl_props:
+        if prop not in self.props:
             return
         if not self.header:
             lv = QVBoxLayout()
@@ -74,7 +71,7 @@ class EventCntrler(_BaseCntrler):
     _ALL_PROPS = ('ext_trig', 'mode', 'delay_type', 'delay')
 
     def _createObjs(self, prop):
-        pv_pref = 'ca://' + PREFIX + self.prefix
+        pv_pref = self.prefix
         if 'ext_trig' == prop:
             sp = PyDMPushButton(self, init_channel=pv_pref+'ExtTrig-Cmd',
                                 pressValue=1)
@@ -114,10 +111,10 @@ class HLTrigCntrler(_BaseCntrler):
                   'delay')
 
     def _createObjs(self, prop):
-        pv_pref = 'ca://' + PREFIX + self.prefix
+        pv_pref = self.prefix
         if 'state' == prop:
             sp = PyDMCb(self, init_channel=pv_pref + "State-Sel")
-            sp.setText(self.prefix)
+            sp.setText(self.prefix.dev_name)
             rb = PyDMLed(self, init_channel=pv_pref + "State-Sts")
         elif 'evg_param' == prop:
             sp = PyDMECB(self, init_channel=pv_pref + "EVGParam-Sel")
@@ -154,7 +151,7 @@ class ClockCntrler(_BaseCntrler):
     _ALL_PROPS = ('state', 'frequency')
 
     def _createObjs(self, prop):
-        pv_pref = 'ca://' + PREFIX + self.prefix
+        pv_pref = self.prefix
         if 'state' == prop:
             sp = PyDMCb(self, init_channel=pv_pref + "State-Sel")
             sp.setText(self.prefix.propty)
@@ -178,14 +175,14 @@ class IntTrigCntrler(_BaseCntrler):
     _ALL_PROPS = ('state', 'evg_param', 'pulses', 'width', 'polarity',
                   'delay')
 
-    def __init__(self, parent=None, prefix='', hl_props=set(), header=False,
+    def __init__(self, parent=None, prefix='', props=set(), header=False,
                  device='evr'):
         """Initialize object."""
         self.device = device
-        super().__init__(parent, prefix, hl_props, header)
+        super().__init__(parent, prefix, props, header)
 
     def _createObjs(self, prop):
-        pv_pref = 'ca://' + PREFIX + self.prefix
+        pv_pref = self.prefix
         if 'state' == prop:
             sp = PyDMCb(self, init_channel=pv_pref + "State-Sel")
             rb = PyDMLed(self, init_channel=pv_pref + "State-Sts")
@@ -228,14 +225,14 @@ class OutChanCntrler(QGroupBox):
                'fine_delay': 'Fine Delay'}
     _ALL_PROPS = ('int_chan', 'delay', 'fine_delay')
 
-    def __init__(self, parent=None, prefix='', hl_props=set(), header=False,
+    def __init__(self, parent=None, prefix='', props=set(), header=False,
                  device='evr'):
         """Initialize object."""
         self.device = device
-        super().__init__(parent, prefix, hl_props, header)
+        super().__init__(parent, prefix, props, header)
 
     def _createObjs(self, prop):
-        pv_pref = 'ca://' + PREFIX + self.prefix
+        pv_pref = self.prefix
         if 'int_chan' == prop:
             num = 24 if self.device.lower() == 'evr' else 16
             enum_strings = (['IntTrig{0:02d}'.format(i) for i in range(num)] +
@@ -259,16 +256,12 @@ class OutChanCntrler(QGroupBox):
         return rb, sp
 
 
-def main():
+if __name__ == '__main__':
     """Run Example."""
     app = PyDMApplication()
     ev_ctrl = EventCntrler(prefix='AS-Glob:TI-EVG:Linac')
     ev_ctrl.show()
-    hl_props = {'evg_param', 'state', 'pulses', 'duration'}
-    cl_ctrl = HLTrigCntrler(prefix='SI-Glob:TI-Corrs:', hl_props=hl_props)
+    props = {'evg_param', 'state', 'pulses', 'duration'}
+    cl_ctrl = HLTrigCntrler(prefix='SI-Glob:TI-Corrs:', props=props)
     cl_ctrl.show()
     sys.exit(app.exec_())
-
-
-if __name__ == '__main__':
-    main()
