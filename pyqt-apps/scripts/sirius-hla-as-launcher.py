@@ -87,22 +87,22 @@ class ControlApplication(QMainWindow):
     @pyqtSlot()
     def _openSiriusMagnetsWindow(self):
         self._windows.append(SiriusMagnetControlWindow(self))
-        self._windows[-1].open()
+        self._windows[-1].show()
 
     @pyqtSlot()
     def _openBTSMagnetsWindow(self):
         self._windows.append(ToSiriusMagnetControlWindow(self))
-        self._windows[-1].open()
+        self._windows[-1].show()
 
     @pyqtSlot()
     def _openBoosterMagnetsWindow(self):
         self._windows.append(BoosterMagnetControlWindow(self))
-        self._windows[-1].open()
+        self._windows[-1].show()
 
     @pyqtSlot()
     def _openLTBMagnetsWindow(self):
         self._windows.append(ToBoosterMagnetControlWindow(self))
-        self._windows[-1].open()
+        self._windows[-1].show()
 
     @pyqtSlot()
     def _openPulsedMagnetWindow(self):
@@ -111,17 +111,16 @@ class ControlApplication(QMainWindow):
 
 
 if __name__ == "__main__":
-    import resources
+    import siriushla.resources
     app = PyDMApplication(None, sys.argv)
 
     # Implement sirius-style.css as default Qt resource file for Sirius !
-    stream = QFile(':/css/style.css')
+    stream = QFile(':/style.css')
     if stream.open(QFile.ReadOnly):
         style = str(stream.readAll(), 'utf-8')
         stream.close()
     else:
         print(stream.errorString())
-
     app.setStyleSheet(style)
 
     window = ControlApplication()

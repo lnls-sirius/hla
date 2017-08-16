@@ -59,7 +59,7 @@ class BaseMagnetControlWindow(QDialog):
             elif type_ == "trim":
                 self._window = MagnetTrimWindow(ma, self)
 
-        self._window.exec_()
+        self._window.show()
 
     def closeEvent(self, event):
         """Reimplement closed event to close widget connections."""
