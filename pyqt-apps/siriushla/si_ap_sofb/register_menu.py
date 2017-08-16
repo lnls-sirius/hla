@@ -10,7 +10,7 @@ from selection_matrix import NR_BPMs
 class RegisterMenu(QMenu):
     """Create the Context Menu for the Registers."""
 
-    DEFAULT_DIR = '/home/fernando'
+    DEFAULT_DIR = '/home/fac/sirius-iocs/si-ap-sofb'
     EXT = '.siorb'
     EXT_FLT = 'Sirius Orbit Files (*.siorb)'
 

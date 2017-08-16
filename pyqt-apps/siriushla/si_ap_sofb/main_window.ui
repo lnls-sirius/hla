@@ -1375,7 +1375,7 @@
            <string/>
           </property>
           <property name="XChannel" stdset="0">
-           <string>${PREFIX}SI-Glob:AP-Orbit:PosS-Cte</string>
+           <string>${LL_PREF}SI-Glob:AP-Orbit:PosS-Cte</string>
           </property>
          </widget>
         </item>
@@ -1685,7 +1685,7 @@
            <string/>
           </property>
           <property name="XChannel" stdset="0">
-           <string>${PREFIX}SI-Glob:AP-Orbit:PosS-Cte</string>
+           <string>${LL_PREF}SI-Glob:AP-Orbit:PosS-Cte</string>
           </property>
           <property name="Trace0Title" stdset="0">
            <string>Line 1</string>
@@ -1899,7 +1899,7 @@
            <string/>
           </property>
           <property name="trace0Channel" stdset="0">
-           <string>${PREFIX}SI-Glob:AP-SOFB:CHCalcdKicks-Mon</string>
+           <string>${PREFIX}CHCalcdKicks-Mon</string>
           </property>
          </widget>
         </item>
@@ -1969,7 +1969,7 @@
            <string>Calculated Kick</string>
           </property>
           <property name="trace0Channel" stdset="0">
-           <string>${PREFIX}SI-Glob:AP-SOFB:CVCalcdKicks-Mon</string>
+           <string>${PREFIX}CVCalcdKicks-Mon</string>
           </property>
          </widget>
         </item>
@@ -2117,7 +2117,7 @@ font-weight: bold;</string>
            <string>Measure Matrix</string>
           </property>
           <property name="channel" stdset="0">
-           <string>${PREFIX}SI-Glob:AP-SOFB:StartMeasRSPMtx-Cmd</string>
+           <string>${PREFIX}StartMeasRSPMtx-Cmd</string>
           </property>
           <property name="pressValue" stdset="0">
            <string>1</string>
@@ -2174,7 +2174,7 @@ font-weight: bold;</string>
            <string>Abort</string>
           </property>
           <property name="channel" stdset="0">
-           <string>${PREFIX}SI-Glob:AP-SOFB:AbortMeasRSPMtx-Cmd</string>
+           <string>${PREFIX}AbortMeasRSPMtx-Cmd</string>
           </property>
           <property name="pressValue" stdset="0">
            <string>1</string>
@@ -2231,7 +2231,7 @@ font-weight: bold;</string>
            <string>Reset</string>
           </property>
           <property name="channel" stdset="0">
-           <string>${PREFIX}SI-Glob:AP-SOFB:ResetMeasRSPMtx-Cmd</string>
+           <string>${PREFIX}ResetMeasRSPMtx-Cmd</string>
           </property>
           <property name="pressValue" stdset="0">
            <string>1</string>
@@ -2259,7 +2259,7 @@ font-weight: bold;</string>
            <string/>
           </property>
           <property name="channel">
-           <string>${PREFIX}SI-Glob:AP-SOFB:NumSingValues-RB</string>
+           <string>${PREFIX}NumSingValues-RB</string>
           </property>
          </widget>
         </item>
@@ -2275,7 +2275,7 @@ font-weight: bold;</string>
            <number>0</number>
           </property>
           <property name="channel" stdset="0">
-           <string>${PREFIX}SI-Glob:AP-SOFB:NumSingValues-SP</string>
+           <string>${PREFIX}NumSingValues-SP</string>
           </property>
           <property name="limitsFromPV" stdset="0">
            <bool>true</bool>
@@ -2318,7 +2318,7 @@ font-weight: bold;</string>
            <string/>
           </property>
           <property name="channel">
-           <string>${PREFIX}SI-Glob:AP-SOFB:MeasRSPMtxState-Sts</string>
+           <string>${PREFIX}MeasRSPMtxState-Sts</string>
           </property>
          </widget>
         </item>
@@ -2397,7 +2397,7 @@ font-weight: bold;</string>
            <string/>
           </property>
           <property name="trace0Channel" stdset="0">
-           <string>${PREFIX}SI-Glob:AP-SOFB:SingValues-Mon</string>
+           <string>${PREFIX}SingValues-Mon</string>
           </property>
          </widget>
         </item>
@@ -2451,7 +2451,7 @@ font-weight: bold;</string>
            <enum>PyDMImageView::Clike</enum>
           </property>
           <property name="imageChannel" stdset="0">
-           <string>${PREFIX}SI-Glob:AP-SOFB:InvRSPMatrix-Mon</string>
+           <string>${PREFIX}InvRSPMatrix-Mon</string>
           </property>
          </widget>
         </item>
@@ -2479,7 +2479,7 @@ font-weight: bold;</string>
            <enum>PyDMImageView::Clike</enum>
           </property>
           <property name="imageChannel" stdset="0">
-           <string>${PREFIX}SI-Glob:AP-SOFB:RSPMatrix-RB</string>
+           <string>${PREFIX}RSPMatrix-RB</string>
           </property>
          </widget>
         </item>
@@ -2564,7 +2564,7 @@ font-weight: bold;</string>
            <string>Enable All</string>
           </property>
           <property name="channel" stdset="0">
-           <string>${PREFIX}SI-Glob:AP-SOFB:BPMXEnblList-SP</string>
+           <string>${PREFIX}BPMXEnblList-SP</string>
           </property>
           <property name="pressValue" stdset="0">
            <string>1</string>
@@ -2666,7 +2666,7 @@ font-weight: bold;</string>
            <string>Enable All</string>
           </property>
           <property name="channel" stdset="0">
-           <string>${PREFIX}SI-Glob:AP-SOFB:BPMYEnblList-SP</string>
+           <string>${PREFIX}BPMYEnblList-SP</string>
           </property>
           <property name="pressValue" stdset="0">
            <string>1</string>
@@ -2768,7 +2768,7 @@ font-weight: bold;</string>
            <string>Enable All</string>
           </property>
           <property name="channel" stdset="0">
-           <string>${PREFIX}SI-Glob:AP-SOFB:CHEnblList-SP</string>
+           <string>${PREFIX}CHEnblList-SP</string>
           </property>
           <property name="pressValue" stdset="0">
            <string>1</string>
@@ -2870,7 +2870,7 @@ font-weight: bold;</string>
            <string>Enable All</string>
           </property>
           <property name="channel" stdset="0">
-           <string>${PREFIX}SI-Glob:AP-SOFB:CVEnblList-SP</string>
+           <string>${PREFIX}CVEnblList-SP</string>
           </property>
           <property name="pressValue" stdset="0">
            <string>1</string>
@@ -3000,7 +3000,7 @@ font-weight: bold;</string>
            <string>Apply RF</string>
           </property>
           <property name="channel" stdset="0">
-           <string>${PREFIX}SI-Glob:AP-SOFB:ApplyKicks-Cmd</string>
+           <string>${PREFIX}ApplyKicks-Cmd</string>
           </property>
           <property name="pressValue" stdset="0">
            <string>2</string>
@@ -3057,7 +3057,7 @@ font-weight: bold;</string>
            <string>Apply All</string>
           </property>
           <property name="channel" stdset="0">
-           <string>${PREFIX}SI-Glob:AP-SOFB:ApplyKicks-Cmd</string>
+           <string>${PREFIX}ApplyKicks-Cmd</string>
           </property>
           <property name="pressValue" stdset="0">
            <string>3</string>
@@ -3114,7 +3114,7 @@ font-weight: bold;</string>
            <string>Apply CH</string>
           </property>
           <property name="channel" stdset="0">
-           <string>${PREFIX}SI-Glob:AP-SOFB:ApplyKicks-Cmd</string>
+           <string>${PREFIX}ApplyKicks-Cmd</string>
           </property>
           <property name="pressValue" stdset="0">
            <string>0</string>
@@ -3171,7 +3171,7 @@ font-weight: bold;</string>
            <string>Apply CV</string>
           </property>
           <property name="channel" stdset="0">
-           <string>${PREFIX}SI-Glob:AP-SOFB:ApplyKicks-Cmd</string>
+           <string>${PREFIX}ApplyKicks-Cmd</string>
           </property>
           <property name="pressValue" stdset="0">
            <string>1</string>
@@ -3228,7 +3228,7 @@ font-weight: bold;</string>
            <string>Calculate Kicks</string>
           </property>
           <property name="channel" stdset="0">
-           <string>${PREFIX}SI-Glob:AP-SOFB:CalcCorr-Cmd</string>
+           <string>${PREFIX}CalcCorr-Cmd</string>
           </property>
           <property name="pressValue" stdset="0">
            <string>1</string>
@@ -3276,7 +3276,7 @@ font-weight: bold;</string>
              <double>1.000000000000000</double>
             </property>
             <property name="channel" stdset="0">
-             <string>${PREFIX}SI-Glob:AP-SOFB:OrbitPointsNum-SP</string>
+             <string>${PREFIX}OrbitPointsNum-SP</string>
             </property>
             <property name="limitsFromPV" stdset="0">
              <bool>true</bool>
@@ -3292,7 +3292,7 @@ font-weight: bold;</string>
              <string/>
             </property>
             <property name="channel">
-             <string>${PREFIX}SI-Glob:AP-SOFB:OrbitPointsNum-RB</string>
+             <string>${PREFIX}OrbitPointsNum-RB</string>
             </property>
            </widget>
           </item>
@@ -3586,7 +3586,7 @@ font-weight: bold;</string>
            <string/>
           </property>
           <property name="channel">
-           <string>${PREFIX}SI-Glob:AP-SOFB:CHStrength-RB</string>
+           <string>${PREFIX}CHStrength-RB</string>
           </property>
          </widget>
         </item>
@@ -3605,7 +3605,7 @@ font-weight: bold;</string>
            <string>Use RF?</string>
           </property>
           <property name="channel" stdset="0">
-           <string>${PREFIX}SI-Glob:AP-SOFB:RFEnbl-Sel</string>
+           <string>${PREFIX}RFEnbl-Sel</string>
           </property>
          </widget>
         </item>
@@ -3631,7 +3631,7 @@ font-weight: bold;</string>
            <string/>
           </property>
           <property name="channel">
-           <string>${PREFIX}SI-Glob:AP-SOFB:SyncKicks-Sts</string>
+           <string>${PREFIX}SyncKicks-Sts</string>
           </property>
          </widget>
         </item>
@@ -3659,7 +3659,7 @@ font-weight: bold;</string>
            <double>2.000000000000000</double>
           </property>
           <property name="channel" stdset="0">
-           <string>${PREFIX}SI-Glob:AP-SOFB:CVStrength-SP</string>
+           <string>${PREFIX}CVStrength-SP</string>
           </property>
           <property name="limitsFromPV" stdset="0">
            <bool>true</bool>
@@ -3681,7 +3681,7 @@ font-weight: bold;</string>
            <string/>
           </property>
           <property name="channel">
-           <string>${PREFIX}SI-Glob:AP-SOFB:RFEnbl-Sts</string>
+           <string>${PREFIX}RFEnbl-Sts</string>
           </property>
          </widget>
         </item>
@@ -3710,7 +3710,7 @@ font-weight: bold;</string>
            <string>Synchronized Kicks?</string>
           </property>
           <property name="channel" stdset="0">
-           <string>${PREFIX}SI-Glob:AP-SOFB:SyncKicks-Sel</string>
+           <string>${PREFIX}SyncKicks-Sel</string>
           </property>
          </widget>
         </item>
@@ -3736,7 +3736,7 @@ font-weight: bold;</string>
            <string/>
           </property>
           <property name="channel">
-           <string>${PREFIX}SI-Glob:AP-SOFB:CVStrength-RB</string>
+           <string>${PREFIX}CVStrength-RB</string>
           </property>
          </widget>
         </item>
@@ -3767,7 +3767,7 @@ font-weight: bold;</string>
            <double>2.000000000000000</double>
           </property>
           <property name="channel" stdset="0">
-           <string>${PREFIX}SI-Glob:AP-SOFB:CHStrength-SP</string>
+           <string>${PREFIX}CHStrength-SP</string>
           </property>
           <property name="limitsFromPV" stdset="0">
            <bool>true</bool>
@@ -3783,7 +3783,7 @@ font-weight: bold;</string>
            <string/>
           </property>
           <property name="channel">
-           <string>${PREFIX}SI-Glob:AP-SOFB:RFStrength-RB</string>
+           <string>${PREFIX}RFStrength-RB</string>
           </property>
          </widget>
         </item>
@@ -3811,7 +3811,7 @@ font-weight: bold;</string>
            <double>2.000000000000000</double>
           </property>
           <property name="channel" stdset="0">
-           <string>${PREFIX}SI-Glob:AP-SOFB:RFStrength-SP</string>
+           <string>${PREFIX}RFStrength-SP</string>
           </property>
           <property name="limitsFromPV" stdset="0">
            <bool>true</bool>
@@ -3880,7 +3880,7 @@ font-weight: bold;</string>
            <double>100.000000000000000</double>
           </property>
           <property name="channel" stdset="0">
-           <string>${PREFIX}SI-Glob:AP-SOFB:MaxKickStrength-SP</string>
+           <string>${PREFIX}MaxKickStrength-SP</string>
           </property>
           <property name="limitsFromPV" stdset="0">
            <bool>true</bool>
@@ -3916,7 +3916,7 @@ font-weight: bold;</string>
            <string/>
           </property>
           <property name="channel">
-           <string>${PREFIX}SI-Glob:AP-SOFB:AutoCorrFreq-RB</string>
+           <string>${PREFIX}AutoCorrFreq-RB</string>
           </property>
           <property name="precision">
            <number>3</number>
@@ -3932,7 +3932,7 @@ font-weight: bold;</string>
            <string/>
           </property>
           <property name="channel">
-           <string>${PREFIX}SI-Glob:AP-SOFB:AutoCorrMaxDist-RB</string>
+           <string>${PREFIX}AutoCorrMaxDist-RB</string>
           </property>
           <property name="precision">
            <number>3</number>
@@ -3967,7 +3967,7 @@ font-weight: bold;</string>
            <string/>
           </property>
           <property name="channel">
-           <string>${PREFIX}SI-Glob:AP-SOFB:AutoCorrState-Sts</string>
+           <string>${PREFIX}AutoCorrState-Sts</string>
           </property>
          </widget>
         </item>
@@ -3998,7 +3998,7 @@ font-weight: bold;</string>
            <bool>false</bool>
           </property>
           <property name="channel" stdset="0">
-           <string>${PREFIX}SI-Glob:AP-SOFB:AutoCorrState-Sel</string>
+           <string>${PREFIX}AutoCorrState-Sel</string>
           </property>
          </widget>
         </item>
@@ -4024,7 +4024,7 @@ font-weight: bold;</string>
            <string/>
           </property>
           <property name="channel">
-           <string>${PREFIX}SI-Glob:AP-SOFB:MaxKickStrength-RB</string>
+           <string>${PREFIX}MaxKickStrength-RB</string>
           </property>
           <property name="precision">
            <number>3</number>
@@ -4052,7 +4052,7 @@ font-weight: bold;</string>
            <double>200.000000000000000</double>
           </property>
           <property name="channel" stdset="0">
-           <string>${PREFIX}SI-Glob:AP-SOFB:AutoCorrMaxDist-SP</string>
+           <string>${PREFIX}AutoCorrMaxDist-SP</string>
           </property>
           <property name="limitsFromPV" stdset="0">
            <bool>true</bool>
@@ -4081,7 +4081,7 @@ font-weight: bold;</string>
            <double>0.100000000000000</double>
           </property>
           <property name="channel" stdset="0">
-           <string>${PREFIX}SI-Glob:AP-SOFB:AutoCorrFreq-SP</string>
+           <string>${PREFIX}AutoCorrFreq-SP</string>
           </property>
           <property name="limitsFromPV" stdset="0">
            <bool>true</bool>
@@ -4453,7 +4453,7 @@ font-weight: bold;</string>
         <bool>true</bool>
        </property>
        <property name="channel" stdset="0">
-        <string>${PREFIX}SI-Glob:AP-SOFB:Log-Mon</string>
+        <string>${PREFIX}Log-Mon</string>
        </property>
        <property name="maxCount" stdset="0">
         <number>2000</number>

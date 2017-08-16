@@ -11,7 +11,7 @@ from selection_matrix import NR_BPMs
 class GraphicOrbitControllers(QObject):
     """Control the Orbit Graphic Display."""
 
-    DEFAULT_DIR = '/home/fernando'
+    DEFAULT_DIR = '/home/fac/sirius-iocs/si-ap-sofb'
     EXT = '.txt'
     EXT_FLT = 'Text Files (*.txt)'
     FMT = '{0:8.3g}'
@@ -64,32 +64,32 @@ class GraphicOrbitControllers(QObject):
         wid = mWin.PyDMMWP_OrbitX
         self.diffTracex = getattr(wid, 'trace')[base_ind]
         self.brushx = mkBrush(getattr(
-                wid, 'trace' + str(base_ind) + 'Color'))
+                                wid, 'trace' + str(base_ind) + 'Color'))
         self.penx = mkPen(getattr(
-                wid, 'trace' + str(base_ind) + 'Color'))
+                                wid, 'trace' + str(base_ind) + 'Color'))
         self.diffSetValuex = getattr(
-                wid, 'setTrace' + str(base_ind) + 'Value')
+                                wid, 'setTrace' + str(base_ind) + 'Value')
         self.aveSetValuex = getattr(
-                wid, 'setTrace' + str(base_ind-1) + 'Value')
+                                wid, 'setTrace' + str(base_ind-1) + 'Value')
         self.aveMstdSetValuex = getattr(
-                wid, 'setTrace' + str(base_ind-2) + 'Value')
+                                wid, 'setTrace' + str(base_ind-2) + 'Value')
         self.avePstdSetValuex = getattr(
-                wid, 'setTrace' + str(base_ind-3) + 'Value')
+                                wid, 'setTrace' + str(base_ind-3) + 'Value')
 
         wid = mWin.PyDMMWP_OrbitY
         self.diffTracey = getattr(wid, 'trace')[base_ind]
         self.brushy = mkBrush(getattr(
-                wid, 'trace' + str(base_ind) + 'Color'))
+                                wid, 'trace' + str(base_ind) + 'Color'))
         self.peny = mkPen(getattr(
-                wid, 'trace' + str(base_ind) + 'Color'))
+                                wid, 'trace' + str(base_ind) + 'Color'))
         self.diffSetValuey = getattr(
-                wid, 'setTrace' + str(base_ind) + 'Value')
+                                wid, 'setTrace' + str(base_ind) + 'Value')
         self.aveSetValuey = getattr(
-                wid, 'setTrace' + str(base_ind-1) + 'Value')
+                                wid, 'setTrace' + str(base_ind-1) + 'Value')
         self.aveMstdSetValuey = getattr(
-                wid, 'setTrace' + str(base_ind-2) + 'Value')
+                                wid, 'setTrace' + str(base_ind-2) + 'Value')
         self.avePstdSetValuey = getattr(
-                wid, 'setTrace' + str(base_ind-3) + 'Value')
+                                wid, 'setTrace' + str(base_ind-3) + 'Value')
 
         if index > 1:
             getattr(mWin, 'CB_Line' + str(index) + 'Show').setChecked(False)

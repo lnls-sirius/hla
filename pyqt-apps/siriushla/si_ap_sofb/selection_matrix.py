@@ -6,10 +6,7 @@ from PyQt5.QtWidgets import (QWidget, QLabel, QHBoxLayout, QVBoxLayout,
 from pydm import PyDMApplication
 from pydm.widgets.checkbox import PyDMCheckbox
 from pydm.widgets.led import PyDMLed
-from siriuspy.envars import vaca_prefix as LL_PREF
 
-LL_PREF = 'fac' + LL_PREF[8:]
-SOFB_PREFIX = 'ca://'+LL_PREF+'SI-Glob:AP-SOFB:'
 NR_BPMs = 160
 NR_CHs = 120
 NR_CVs = 160
@@ -26,9 +23,10 @@ class SelectionMatrix(QVBoxLayout):
     INDICES_LENGTH = {
         'BPMX': NR_BPMs, 'BPMY': NR_BPMs, 'CH': NR_CHs, 'CV': NR_CVs}
 
-    def __init__(self, parent, dev):
+    def __init__(self, parent, dev, prefix):
         """Initialize the matrix of the specified dev."""
         super().__init__(parent)
+        self.prefix = prefix
         self.dev = dev
         self._setupUi()
 
@@ -87,7 +85,7 @@ class SelectionMatrix(QVBoxLayout):
         cb = PyDMCheckbox(parent)
         cb.setObjectName('PyDMCB_'+label)
         cb.setToolTip(label)
-        cb.channel = SOFB_PREFIX+self.dev+'EnblList-SP'
+        cb.channel = self.prefix + self.dev+'EnblList-SP'
         cb.pvbit = index
         hl.addWidget(cb)
         led = PyDMLed(parent)
@@ -95,13 +93,12 @@ class SelectionMatrix(QVBoxLayout):
         led.setSizePolicy(sizePolicy)
         led.setObjectName('PyDMLed_'+label)
         led.setToolTip(label)
-        led.channel = SOFB_PREFIX+self.dev+'EnblList-RB'
+        led.channel = self.prefix + self.dev+'EnblList-RB'
         led.pvbit = index
         hl.addWidget(led)
         return hl
 
 
-#    QtCore.QMetaObject.connectSlotsByName(Form)
 if __name__ == '__main__':
     app = PyDMApplication()
     widget = QWidget()
