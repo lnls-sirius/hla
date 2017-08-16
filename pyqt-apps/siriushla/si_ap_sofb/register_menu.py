@@ -4,7 +4,7 @@ import numpy as _np
 from datetime import datetime as _datetime
 from PyQt5.QtWidgets import QMenu, QFileDialog
 from PyQt5.QtCore import pyqtSignal
-from selection_matrix import NR_BPMs
+from siriushla.si_ap_sofb.selection_matrix import NR_BPMs
 
 
 class RegisterMenu(QMenu):

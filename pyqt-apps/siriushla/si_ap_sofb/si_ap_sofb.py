@@ -1,24 +1,30 @@
 """Main module of the Application Interface."""
 
 import sys as _sys
+import os as _os
 from PyQt5 import uic as _uic
 from PyQt5.QtCore import Qt as _Qt
 from pydm import PyDMApplication as _PyDMApplication
 from pydm.widgets.widget import PyDMWidget as _PyDMWidget
-from selection_matrix import SelectionMatrix
-from register_menu import RegisterMenu
-from graphic_controller import GraphicOrbitControllers
-from ioc_orbit_controllers import ReferenceController
-from ioc_orbit_controllers import CorrectionOrbitController
-from siriuspy.envars import vaca_prefix as LL_PREF
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
+from siriuspy.envars import vaca_prefix as LL_PREF
+
+from siriushla.si_ap_sofb.selection_matrix import SelectionMatrix
+from siriushla.si_ap_sofb.selection_matrix import NR_BPMs, NR_CHs, NR_CVs
+from siriushla.si_ap_sofb.register_menu import RegisterMenu
+from siriushla.si_ap_sofb.graphic_controller import GraphicOrbitControllers
+from siriushla.si_ap_sofb.orbit_controllers import ReferenceController
+from siriushla.si_ap_sofb.orbit_controllers import CorrectionOrbitController
+
+_dir = _os.path.dirname(_os.path.abspath(__file__))
+UI_FILE = _os.path.sep.join([_dir, 'main_window.ui'])
 
 
 def main(prefix=None):
     """Return Main window of the interface."""
     ll_pref = 'ca://' + (prefix or LL_PREF)
     prefix = ll_pref + 'SI-Glob:AP-SOFB:'
-    tmp_file = _substitute_in_file('main_window.ui',
+    tmp_file = _substitute_in_file(UI_FILE,
                                    {'PREFIX': prefix, 'LL_PREF': ll_pref})
     main_win = _uic.loadUi(tmp_file)
     _create_additional_PVs(main_win, prefix)

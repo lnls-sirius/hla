@@ -2,7 +2,7 @@
 
 import numpy as _np
 from PyQt5.QtCore import QObject
-from selection_matrix import NR_BPMs
+from siriushla.si_ap_sofb.selection_matrix import NR_BPMs
 
 
 class _ComboboxController(QObject):

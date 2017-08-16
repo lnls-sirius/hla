@@ -17,17 +17,19 @@ setup(
         'Intended Audience :: Science/Research',
         'Programming Language :: Python',
         'Topic :: Scientific/Engineering'
-    ],
+        ],
     packages=['siriushla'],
     package_data={'siriushla': ['VERSION', '*/*.py']},
-    scripts=['scripts/sirius-hla-as-launcher.py',
-	     'scripts/sirius-hla-as-ps-cycle.py',
-	     'scripts/sirius-hla-bo-config-manager.py',
-	     'scripts/sirius-hla-bo-ma-control.py',
-	     'scripts/sirius-hla-si-config-manager.py',
-	     'scripts/sirius-hla-si-ma-control.py',
-	     'scripts/sirius-hla-tb-ma-control.py',
-	     'scripts/sirius-hla-ts-ma-control.py',
-	    ],
+    scripts=[
+        'scripts/sirius-hla-as-launcher.py',
+        'scripts/sirius-hla-as-ps-cycle.py',
+        'scripts/sirius-hla-bo-config-manager.py',
+        'scripts/sirius-hla-bo-ma-control.py',
+        'scripts/sirius-hla-si-config-manager.py',
+        'scripts/sirius-hla-si-ap-sofb.py',
+        'scripts/sirius-hla-si-ma-control.py',
+        'scripts/sirius-hla-tb-ma-control.py',
+        'scripts/sirius-hla-ts-ma-control.py',
+        ],
     zip_safe=False
-)
+    )
