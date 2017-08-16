@@ -17,7 +17,7 @@ from siriushla.si_ap_sofb.orbit_controllers import ReferenceController
 from siriushla.si_ap_sofb.orbit_controllers import CorrectionOrbitController
 
 _dir = _os.path.dirname(_os.path.abspath(__file__))
-UI_FILE = _os.path.sep.join([_dir, 'main_window.ui'])
+UI_FILE = _os.path.sep.join([_dir, 'SOFBMain.ui'])
 
 
 def main(prefix=None):

@@ -9,12 +9,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1630</width>
-    <height>1064</height>
+    <width>2290</width>
+    <height>1268</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Slow Orbit Feedback System</string>
+  </property>
+  <property name="documentMode">
+   <bool>false</bool>
   </property>
   <property name="dockNestingEnabled">
    <bool>true</bool>
@@ -23,6 +26,12 @@
    <layout class="QGridLayout" name="gridLayout_3">
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
+      <property name="minimumSize">
+       <size>
+        <width>120</width>
+        <height>0</height>
+       </size>
+      </property>
       <property name="cursor">
        <cursorShape>ArrowCursor</cursorShape>
       </property>
@@ -30,7 +39,7 @@
        <enum>QTabWidget::Triangular</enum>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -45,8 +54,14 @@
        <layout class="QGridLayout" name="gridLayout">
         <item row="0" column="11">
          <widget class="QLabel" name="LB_Line2XStd">
+          <property name="minimumSize">
+           <size>
+            <width>120</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="text">
-           <string>TextLabel</string>
+           <string>0</string>
           </property>
          </widget>
         </item>
@@ -132,15 +147,27 @@
         </item>
         <item row="0" column="3">
          <widget class="QLabel" name="LB_Line1XStd">
+          <property name="minimumSize">
+           <size>
+            <width>120</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="text">
-           <string>TextLabel</string>
+           <string>0</string>
           </property>
          </widget>
         </item>
         <item row="0" column="15">
          <widget class="QLabel" name="LB_Line3XAve">
+          <property name="minimumSize">
+           <size>
+            <width>120</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="text">
-           <string>-0.004533</string>
+           <string>0</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -149,8 +176,14 @@
         </item>
         <item row="2" column="17">
          <widget class="QLabel" name="LB_Line3YStd">
+          <property name="minimumSize">
+           <size>
+            <width>120</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="text">
-           <string>TextLabel</string>
+           <string>0</string>
           </property>
          </widget>
         </item>
@@ -169,8 +202,14 @@
         </item>
         <item row="2" column="1">
          <widget class="QLabel" name="LB_Line1YAve">
+          <property name="minimumSize">
+           <size>
+            <width>120</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="text">
-           <string>-0.004533</string>
+           <string>0</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -205,8 +244,14 @@
         </item>
         <item row="2" column="11">
          <widget class="QLabel" name="LB_Line2YStd">
+          <property name="minimumSize">
+           <size>
+            <width>120</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="text">
-           <string>TextLabel</string>
+           <string>0</string>
           </property>
          </widget>
         </item>
@@ -218,8 +263,14 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="minimumSize">
+           <size>
+            <width>120</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="text">
-           <string>TextLabel</string>
+           <string>0</string>
           </property>
          </widget>
         </item>
@@ -246,8 +297,14 @@
         </item>
         <item row="0" column="9">
          <widget class="QLabel" name="LB_Line2XAve">
+          <property name="minimumSize">
+           <size>
+            <width>120</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="text">
-           <string>-0.004533</string>
+           <string>0</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -491,8 +548,14 @@
         </item>
         <item row="0" column="1">
          <widget class="QLabel" name="LB_Line1XAve">
+          <property name="minimumSize">
+           <size>
+            <width>120</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="text">
-           <string>-0.004533</string>
+           <string>0</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -511,8 +574,14 @@
         </item>
         <item row="2" column="9">
          <widget class="QLabel" name="LB_Line2YAve">
+          <property name="minimumSize">
+           <size>
+            <width>120</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="text">
-           <string>-0.004533</string>
+           <string>0</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -534,8 +603,14 @@
         </item>
         <item row="2" column="15">
          <widget class="QLabel" name="LB_Line3YAve">
+          <property name="minimumSize">
+           <size>
+            <width>120</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="text">
-           <string>-0.004533</string>
+           <string>0</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -571,8 +646,14 @@
         </item>
         <item row="0" column="17">
          <widget class="QLabel" name="LB_Line3XStd">
+          <property name="minimumSize">
+           <size>
+            <width>120</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="text">
-           <string>TextLabel</string>
+           <string>0</string>
           </property>
          </widget>
         </item>
@@ -2500,8 +2581,8 @@ font-weight: bold;</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1067</width>
-             <height>892</height>
+             <width>1892</width>
+             <height>895</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -2602,8 +2683,8 @@ font-weight: bold;</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1067</width>
-             <height>892</height>
+             <width>1892</width>
+             <height>895</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -2704,8 +2785,8 @@ font-weight: bold;</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1067</width>
-             <height>892</height>
+             <width>1892</width>
+             <height>895</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -2806,8 +2887,8 @@ font-weight: bold;</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1067</width>
-             <height>892</height>
+             <width>1892</width>
+             <height>895</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -2902,7 +2983,7 @@ font-weight: bold;</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1630</width>
+     <width>2290</width>
      <height>19</height>
     </rect>
    </property>
@@ -2925,10 +3006,16 @@ font-weight: bold;</string>
   </widget>
   <widget class="QDockWidget" name="DW_CorrParams">
    <property name="sizePolicy">
-    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>350</width>
+     <height>764</height>
+    </size>
    </property>
    <property name="floating">
     <bool>false</bool>
@@ -3637,6 +3724,12 @@ font-weight: bold;</string>
         </item>
         <item row="1" column="2">
          <widget class="PyDMSpinBox" name="PyDMSB_CVStrength">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="maximumSize">
            <size>
             <width>70</width>
@@ -3742,6 +3835,12 @@ font-weight: bold;</string>
         </item>
         <item row="0" column="2">
          <widget class="PyDMSpinBox" name="PyDMSB_CHStrength">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="maximumSize">
            <size>
             <width>70</width>
@@ -3789,6 +3888,12 @@ font-weight: bold;</string>
         </item>
         <item row="7" column="2">
          <widget class="PyDMSpinBox" name="PyDMSB_RFStrength">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="maximumSize">
            <size>
             <width>70</width>
@@ -3892,12 +3997,18 @@ font-weight: bold;</string>
           <property name="text">
            <string>Frequency [Hz]:</string>
           </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
          </widget>
         </item>
         <item row="11" column="0" colspan="4">
          <widget class="QLabel" name="label_17">
           <property name="text">
            <string>Maximum Distortion [um]</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
@@ -4064,6 +4175,9 @@ font-weight: bold;</string>
           <property name="text">
            <string>Maximum Kick [urad]</string>
           </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
          </widget>
         </item>
         <item row="4" column="2">
@@ -4096,7 +4210,7 @@ font-weight: bold;</string>
   </widget>
   <widget class="QDockWidget" name="DW_OrbRegs">
    <property name="sizePolicy">
-    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
      <horstretch>0</horstretch>
      <verstretch>1</verstretch>
     </sizepolicy>
@@ -4114,7 +4228,7 @@ font-weight: bold;</string>
     <string>Orbit Registers</string>
    </property>
    <attribute name="dockWidgetArea">
-    <number>1</number>
+    <number>8</number>
    </attribute>
    <widget class="QWidget" name="dockWidgetContents_2">
     <layout class="QGridLayout" name="gridLayout_8">
@@ -4131,7 +4245,7 @@ font-weight: bold;</string>
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>254</width>
+          <width>1021</width>
           <height>284</height>
          </rect>
         </property>
@@ -4427,7 +4541,7 @@ font-weight: bold;</string>
    <property name="sizePolicy">
     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
      <horstretch>0</horstretch>
-     <verstretch>1</verstretch>
+     <verstretch>0</verstretch>
     </sizepolicy>
    </property>
    <property name="floating">
@@ -4437,7 +4551,7 @@ font-weight: bold;</string>
     <string>IOC Log</string>
    </property>
    <attribute name="dockWidgetArea">
-    <number>1</number>
+    <number>8</number>
    </attribute>
    <widget class="QWidget" name="dockWidgetContents_7">
     <layout class="QGridLayout" name="gridLayout_10">
