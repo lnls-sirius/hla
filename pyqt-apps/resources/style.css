@@ -87,6 +87,11 @@ QGroupBox::title {
     font-weight: bold;
 }
 
+QCheckBox::indicator {
+    width: 25px;
+    height: 25px;
+}
+
 PulsedMagnetControlWindow {
   min-width: 1568px;
   max-width: 1568px;
