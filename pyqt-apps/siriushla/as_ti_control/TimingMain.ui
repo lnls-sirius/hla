@@ -30,13 +30,13 @@
     <item>
      <widget class="QTabWidget" name="TbWTriggers">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="WDTrigsInj_">
        <attribute name="title">
@@ -53,8 +53,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>2138</width>
-             <height>1020</height>
+             <width>1800</width>
+             <height>928</height>
             </rect>
            </property>
           </widget>
@@ -83,8 +83,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>2138</width>
-             <height>1020</height>
+             <width>1800</width>
+             <height>928</height>
             </rect>
            </property>
           </widget>
@@ -107,8 +107,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>98</width>
-             <height>28</height>
+             <width>1800</width>
+             <height>928</height>
             </rect>
            </property>
           </widget>
@@ -134,8 +134,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>98</width>
-             <height>28</height>
+             <width>1800</width>
+             <height>928</height>
             </rect>
            </property>
           </widget>
@@ -170,6 +170,12 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QDockWidget" name="DWEvents">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
    <property name="floating">
     <bool>false</bool>
    </property>
@@ -197,8 +203,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>68</width>
-          <height>1047</height>
+          <width>208</width>
+          <height>955</height>
          </rect>
         </property>
        </widget>
@@ -208,6 +214,12 @@
    </widget>
   </widget>
   <widget class="QDockWidget" name="DWClocks">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
    <property name="floating">
     <bool>false</bool>
    </property>
@@ -232,8 +244,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>68</width>
-          <height>1047</height>
+          <width>266</width>
+          <height>955</height>
          </rect>
         </property>
        </widget>
@@ -244,7 +256,7 @@
   </widget>
   <widget class="QDockWidget" name="DWEVGParams">
    <property name="sizePolicy">
-    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
      <horstretch>0</horstretch>
      <verstretch>1</verstretch>
     </sizepolicy>
@@ -252,7 +264,7 @@
    <property name="minimumSize">
     <size>
      <width>540</width>
-     <height>155</height>
+     <height>180</height>
     </size>
    </property>
    <property name="styleSheet">
@@ -295,6 +307,18 @@
         </property>
         <item row="1" column="1">
          <widget class="PyDMLed" name="PyDMLedContinuous">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="toolTip">
            <string/>
           </property>
@@ -306,10 +330,16 @@
         <item row="1" column="0">
          <widget class="PyDMStateButton" name="PyDMStBContinuous">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>40</height>
+           </size>
           </property>
           <property name="toolTip">
            <string/>
@@ -366,11 +396,20 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>30</height>
+           </size>
+          </property>
           <property name="toolTip">
            <string/>
           </property>
           <property name="whatsThis">
            <string>PyDM State Button Class.</string>
+          </property>
+          <property name="value" stdset="0">
+           <bool>false</bool>
           </property>
           <property name="shape" stdset="0">
            <enum>PyDMStateButton::Rounded</enum>
@@ -379,6 +418,12 @@
         </item>
         <item row="1" column="1">
          <widget class="PyDMLed" name="PyDMLedInjectionState">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="toolTip">
            <string/>
           </property>
@@ -389,11 +434,26 @@
         </item>
         <item row="6" column="0">
          <widget class="PyDMCheckbox" name="PyDMCbInjectionCyc">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="toolTip">
            <string/>
           </property>
           <property name="whatsThis">
            <string/>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
           </property>
           <property name="text">
            <string>Cyclic</string>
@@ -442,6 +502,33 @@
         </property>
         <item>
          <widget class="QScrollArea" name="scrollArea">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>100</height>
+           </size>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Box</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Sunken</enum>
+          </property>
+          <property name="lineWidth">
+           <number>1</number>
+          </property>
+          <property name="verticalScrollBarPolicy">
+           <enum>Qt::ScrollBarAlwaysOff</enum>
+          </property>
+          <property name="sizeAdjustPolicy">
+           <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
+          </property>
           <property name="widgetResizable">
            <bool>true</bool>
           </property>
@@ -450,8 +537,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1916</width>
-             <height>89</height>
+             <width>1914</width>
+             <height>179</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -505,11 +592,14 @@
         <property name="spacing">
          <number>4</number>
         </property>
+        <property name="sizeConstraint">
+         <enum>QLayout::SetMinimumSize</enum>
+        </property>
         <property name="leftMargin">
          <number>2</number>
         </property>
         <property name="topMargin">
-         <number>9</number>
+         <number>5</number>
         </property>
         <property name="rightMargin">
          <number>2</number>
