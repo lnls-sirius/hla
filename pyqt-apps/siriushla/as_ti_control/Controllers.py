@@ -50,8 +50,7 @@ class _BaseCntrler(QGroupBox):
             for ob in objs:
                 lv.addWidget(ob)
                 ob.setMinimumWidth(self._MIN_WIDs[prop])
-                # ob.setAlignment(Qt.AlignHCenter)
-                ob.setSizePolicy(QSzPol.Minimum, QSzPol.Maximum)
+                ob.setSizePolicy(QSzPol.Fixed, QSzPol.Maximum)
             self.lh.addItem(lv)
         else:
             self.lh.addWidget(self._headerLabel(prop))
@@ -60,11 +59,9 @@ class _BaseCntrler(QGroupBox):
 
     def _headerLabel(self, prop):
         lb = QLabel(self._LABELS[prop], self)
-        lb.setFrameShape(1)
-        lb.setFrameShadow(1)
         lb.setAlignment(Qt.AlignHCenter)
         lb.setMinimumWidth(self._MIN_WIDs[prop])
-        lb.setSizePolicy(QSzPol.Minimum, QSzPol.Maximum)
+        lb.setSizePolicy(QSzPol.Fixed, QSzPol.Maximum)
         return lb
 
     def _createObjs(self, prop):
@@ -111,10 +108,10 @@ class EventCntrler(_BaseCntrler):
 class HLTrigCntrler(_BaseCntrler):
     """Template for control of High Level Triggers."""
 
-    _MIN_WIDs = {'state': 280, 'evg_param': 120, 'pulses': 100,
+    _MIN_WIDs = {'state': 300, 'evg_param': 120, 'pulses': 100,
                  'duration': 230, 'polarity': 130, 'delay': 160,
                  'delay_type': 130}
-    _LABELS = {'state': 'Enable', 'evg_param': 'Param', 'pulses': 'Pulses',
+    _LABELS = {'state': 'Enabled', 'evg_param': 'Param', 'pulses': 'Pulses',
                'duration': 'Duration [ms]', 'polarity': 'Polarity',
                'delay': 'Delay [us]', 'delay_type': 'Type'}
     _ALL_PROPS = ('state', 'evg_param', 'pulses', 'duration', 'polarity',
@@ -156,8 +153,8 @@ class HLTrigCntrler(_BaseCntrler):
 class ClockCntrler(_BaseCntrler):
     """Template for control of High and Low Level Clocks."""
 
-    _MIN_WIDs = {'state': 100, 'frequency': 100}
-    _LABELS = {'state': 'State', 'frequency': 'Freq. [kHz]'}
+    _MIN_WIDs = {'state': 150, 'frequency': 150}
+    _LABELS = {'state': 'Enabled', 'frequency': 'Freq. [kHz]'}
     _ALL_PROPS = ('state', 'frequency')
 
     def _createObjs(self, prop):
