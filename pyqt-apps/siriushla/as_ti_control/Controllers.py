@@ -33,8 +33,9 @@ class _BaseCntrler(QGroupBox):
     def setupUi(self):
         self.lh = QHBoxLayout(self)
         self.setLayout(self.lh)
-        self.setContentsMargins(0, 0, 0, 0)
-        self.lh.addItem(QSpIt(5, 20, QSzPol.Expanding, QSzPol.Minimum))
+        self.setSizePolicy(QSzPol.Expanding, QSzPol.Maximum)
+        # self.setContentsMargins(0, 0, 0, 0)
+        self.lh.addItem(QSpIt(5, 5, QSzPol.Expanding, QSzPol.Minimum))
         for prop in self._ALL_PROPS:
             self.addColumn(prop)
 
@@ -47,15 +48,17 @@ class _BaseCntrler(QGroupBox):
             for ob in objs:
                 lv.addWidget(ob)
                 ob.setMinimumWidth(self._MIN_WIDs[prop])
+                ob.setSizePolicy(QSzPol.Minimum, QSzPol.Maximum)
             self.lh.addItem(lv)
         else:
             self.lh.addWidget(self._headerLabel(prop))
-        self.lh.addItem(QSpIt(5, 20, QSzPol.Expanding, QSzPol.Minimum))
+        self.lh.addItem(QSpIt(5, 5, QSzPol.Expanding, QSzPol.Minimum))
 
     def _headerLabel(self, prop):
         lb = QLabel(self._LABELS[prop], self)
         lb.setAlignment(Qt.AlignHCenter)
         lb.setMinimumWidth(self._MIN_WIDs[prop])
+        lb.setSizePolicy(QSzPol.Minimum, QSzPol.Maximum)
         return lb
 
     def _createObjs(self, prop):
@@ -65,7 +68,7 @@ class _BaseCntrler(QGroupBox):
 class EventCntrler(_BaseCntrler):
     """Template for control of Events."""
 
-    _MIN_WIDs = {'ext_trig': 70, 'mode': 120, 'delay_type': 70, 'delay': 100}
+    _MIN_WIDs = {'ext_trig': 80, 'mode': 170, 'delay_type': 90, 'delay': 100}
     _LABELS = {'ext_trig': 'Ext. Trig.', 'mode': 'Mode',
                'delay_type': 'Delay Type', 'delay': 'Delay [us]'}
     _ALL_PROPS = ('ext_trig', 'mode', 'delay_type', 'delay')
@@ -102,10 +105,10 @@ class EventCntrler(_BaseCntrler):
 class HLTrigCntrler(_BaseCntrler):
     """Template for control of High Level Triggers."""
 
-    _MIN_WIDs = {'state': 200, 'evg_param': 100, 'pulses': 70, 'duration': 150,
-                 'polarity': 70, 'delay': 150}
+    _MIN_WIDs = {'state': 250, 'evg_param': 120, 'pulses': 70, 'duration': 150,
+                 'polarity': 90, 'delay': 130}
     _LABELS = {'state': 'State', 'evg_param': 'EVG Params',
-               'pulses': 'Nr Pulses', 'duration': 'Train Duration [ms]',
+               'pulses': 'Nr Pulses', 'duration': 'Duration [ms]',
                'polarity': 'Polarity', 'delay': 'Delay [us]'}
     _ALL_PROPS = ('state', 'evg_param', 'pulses', 'duration', 'polarity',
                   'delay')

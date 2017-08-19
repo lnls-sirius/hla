@@ -26,7 +26,7 @@ def main(prefix=None):
     prefix = 'ca://' + (prefix or PREFIX)
     hl_trigs = _Triggers().hl_triggers
     HLTiming = _uic.loadUi(UI_FILE)
-    HLTiming.setStyleSheet('font-size: 13pt;')
+    # HLTiming.setStyleSheet('font-size: 21px')
     _setupEvents(prefix, HLTiming)
     _setupClocks(prefix, HLTiming)
     _setupEVGParams(prefix, HLTiming)
