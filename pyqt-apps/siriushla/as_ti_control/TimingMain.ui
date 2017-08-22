@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>2368</width>
-    <height>1288</height>
+    <width>2842</width>
+    <height>1342</height>
    </rect>
   </property>
   <property name="acceptDrops">
@@ -36,7 +36,7 @@
        </sizepolicy>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="WDTrigsInj_">
        <attribute name="title">
@@ -53,8 +53,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1800</width>
-             <height>928</height>
+             <width>2612</width>
+             <height>1049</height>
             </rect>
            </property>
           </widget>
@@ -83,8 +83,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1800</width>
-             <height>928</height>
+             <width>2612</width>
+             <height>1049</height>
             </rect>
            </property>
           </widget>
@@ -107,8 +107,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1800</width>
-             <height>928</height>
+             <width>2612</width>
+             <height>1049</height>
             </rect>
            </property>
           </widget>
@@ -134,8 +134,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1800</width>
-             <height>928</height>
+             <width>2612</width>
+             <height>1049</height>
             </rect>
            </property>
           </widget>
@@ -152,7 +152,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>2368</width>
+     <width>2842</width>
      <height>19</height>
     </rect>
    </property>
@@ -203,8 +203,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>208</width>
-          <height>955</height>
+          <width>68</width>
+          <height>1076</height>
          </rect>
         </property>
        </widget>
@@ -244,8 +244,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>266</width>
-          <height>955</height>
+          <width>68</width>
+          <height>1076</height>
          </rect>
         </property>
        </widget>
@@ -263,7 +263,7 @@
    </property>
    <property name="minimumSize">
     <size>
-     <width>540</width>
+     <width>577</width>
      <height>180</height>
     </size>
    </property>
@@ -273,11 +273,14 @@
    <property name="floating">
     <bool>false</bool>
    </property>
+   <property name="features">
+    <set>QDockWidget::AllDockWidgetFeatures</set>
+   </property>
    <property name="windowTitle">
     <string>EVG Global Parameters</string>
    </property>
    <attribute name="dockWidgetArea">
-    <number>4</number>
+    <number>8</number>
    </attribute>
    <widget class="QWidget" name="DWCEVGParams">
     <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -434,6 +437,9 @@
         </item>
         <item row="6" column="0">
          <widget class="PyDMCheckbox" name="PyDMCbInjectionCyc">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Maximum" vsizetype="Minimum">
             <horstretch>0</horstretch>
@@ -452,11 +458,17 @@
           <property name="whatsThis">
            <string/>
           </property>
+          <property name="autoFillBackground">
+           <bool>false</bool>
+          </property>
           <property name="styleSheet">
            <string notr="true"/>
           </property>
           <property name="text">
            <string>Cyclic</string>
+          </property>
+          <property name="checked">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -537,8 +549,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1914</width>
-             <height>179</height>
+             <width>2380</width>
+             <height>112</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -639,6 +651,12 @@
           </property>
           <property name="whatsThis">
            <string/>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Box</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>

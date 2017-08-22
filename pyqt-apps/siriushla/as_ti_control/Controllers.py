@@ -49,19 +49,20 @@ class _BaseCntrler(QGroupBox):
             objs = self._createObjs(prop)
             for ob in objs:
                 lv.addWidget(ob)
-                ob.setMinimumWidth(self._MIN_WIDs[prop])
-                ob.setSizePolicy(QSzPol.Fixed, QSzPol.Maximum)
             self.lh.addItem(lv)
         else:
-            self.lh.addWidget(self._headerLabel(prop))
+            ob = self._headerLabel(prop)
+            self.lh.addWidget(ob)
+            objs = (ob, )
+        for ob in objs:
+            ob.setMinimumWidth(self._MIN_WIDs[prop])
+            ob.setSizePolicy(QSzPol.Minimum, QSzPol.Maximum)
         spc = QSpIt(5, 5, QSzPol.Expanding, QSzPol.Minimum)
         self.lh.addItem(spc)
 
     def _headerLabel(self, prop):
         lb = QLabel(self._LABELS[prop], self)
         lb.setAlignment(Qt.AlignHCenter)
-        lb.setMinimumWidth(self._MIN_WIDs[prop])
-        lb.setSizePolicy(QSzPol.Fixed, QSzPol.Maximum)
         return lb
 
     def _createObjs(self, prop):
@@ -109,7 +110,7 @@ class HLTrigCntrler(_BaseCntrler):
     """Template for control of High Level Triggers."""
 
     _MIN_WIDs = {'state': 300, 'evg_param': 120, 'pulses': 100,
-                 'duration': 230, 'polarity': 130, 'delay': 160,
+                 'duration': 230, 'polarity': 130, 'delay': 260,
                  'delay_type': 130}
     _LABELS = {'state': 'Enabled', 'evg_param': 'Param', 'pulses': 'Pulses',
                'duration': 'Duration [ms]', 'polarity': 'Polarity',
