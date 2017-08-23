@@ -8,10 +8,6 @@
 
 * {
   font-size: 20pt;
-<<<<<<< HEAD
-=======
-  font-family: Sans Serif;
->>>>>>> 225ced2d92e80b05d4599e7148b1de47925c683d
 }
 
 /* Tab Widget */
@@ -92,16 +88,12 @@ QGroupBox::title {
     font-weight: bold;
 }
 
-<<<<<<< HEAD
-/*PulsedMagnetControlWindow {
-=======
 QCheckBox::indicator {
     width: 25px;
     height: 25px;
 }
 
 PulsedMagnetControlWindow {
->>>>>>> 225ced2d92e80b05d4599e7148b1de47925c683d
   min-width: 1568px;
   max-width: 1568px;
   min-height: 600px;
@@ -111,4 +103,4 @@ PulsedMagnetControlWindow {
 BaseMagnetControlWindow {
   min-width: 2336px;
   max-width: 2336px;
-}*/
+}
