@@ -64,9 +64,6 @@ class WaitingDlg(QDialog):
     """Window that shows message to user."""
 
     StyleSheet = """
-        * {
-            font: 23px;
-        }
     """
 
     def __init__(self, title, message, parent=None):
@@ -116,9 +113,6 @@ class InjectionWindow(QMainWindow):
     """Window to set injection parameters and control the injection."""
 
     StyleSheet = """
-        * {
-            font-size: 23px;
-        }
         #startInjectionBtn {
             background-color: #478547;
         }

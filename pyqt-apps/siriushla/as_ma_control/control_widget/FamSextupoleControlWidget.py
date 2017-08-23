@@ -1,15 +1,18 @@
+"""Define control widget for family sextupoles."""
 from .BaseMagnetControlWidget import BaseMagnetControlWidget
 
+
 class SiFamSextupoleControlWidget(BaseMagnetControlWidget):
+    """Storage ring sextupoles."""
 
     def _getPattern(self):
         return "SI-Fam:MA-S(\w+[0-9]*|[0-9])"
 
-    def _getMetric(self):
+    def _getStrength(self):
         return "SL"
 
     def _getHeader(self):
-        return [None, None, None, "Setpoint [A]", "Cur-Mon [A]", "SL [1/m<sup>2</sup>]"]
+        return ["State", "Magnet", "Cur-SP", "Cur-Mon", "SL-SP", "SL-Mon"]
 
     def _hasTrimButton(self):
         return False
@@ -21,9 +24,12 @@ class SiFamSextupoleControlWidget(BaseMagnetControlWidget):
         return False
 
     def _getGroups(self):
-        return [    ('Focusing Sextupoles', '-SF'),
-                    ('Defocusing Sextupoles', '-SD')]
+        return [('Focusing Sextupoles', '-SF'),
+                ('Defocusing Sextupoles', '-SD')]
+
 
 class BoFamSextupoleControlWidget(SiFamSextupoleControlWidget):
+    """Booster sextupoles."""
+
     def _getPattern(self):
         return "BO-Fam:MA-S(\w+[0-9]*|[0-9])"

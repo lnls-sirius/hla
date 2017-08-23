@@ -1,15 +1,18 @@
+"""Define control widget for fast correctors."""
 from .BaseMagnetControlWidget import BaseMagnetControlWidget
 
+
 class SiFastCorrectorControlWidget(BaseMagnetControlWidget):
+    """Storage ring fast correctors."""
 
     def _getPattern(self):
         return "SI-\w{3,4}:MA-(FCH|FCV)(-[1-2])*"
 
-    def _getMetric(self):
+    def _getStrength(self):
         return "Kick"
 
     def _getHeader(self):
-        return [None, None, None, "Setpoint [A]", "Cur-Mon [A]", "Kick [mrad]"]
+        return ["State", "Magnet", "Cur-SP", "Cur-Mon", "Kick-SP", "Kick-Mon"]
 
     def _hasTrimButton(self):
         return False
@@ -21,5 +24,5 @@ class SiFastCorrectorControlWidget(BaseMagnetControlWidget):
         return True
 
     def _getGroups(self):
-        return [    ('Horizontal Fast Correctors', '-FCH'),
-                    ('Vertical Fast Corretors', '-FCV')]
+        return [('Horizontal Fast Correctors', '-FCH'),
+                ('Vertical Fast Corretors', '-FCV')]

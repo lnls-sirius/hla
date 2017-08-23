@@ -21,7 +21,7 @@ class InjectionController:
     Harmonic = 864
     MaxCurrent = 250
 
-    TimingPrefix = "VAG-AS-Glob:TI-EVG"
+    TimingPrefix = "fac-lnls455-linux-AS-Glob:TI-EVG"
     LifeTimePrefix = "lifetime"
 
     # Timing Attrs

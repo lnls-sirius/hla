@@ -1,16 +1,18 @@
+"""Define widget for controlling slow correctors."""
 from .BaseMagnetControlWidget import BaseMagnetControlWidget
 
 
 class SiSlowCorrectorControlWidget(BaseMagnetControlWidget):
+    """Storage ring slow correctors."""
 
     def _getPattern(self):
         return "SI-\w{4}:MA-(CH|CV)(-[1-2])*"
 
-    def _getMetric(self):
+    def _getStrength(self):
         return "Kick"
 
     def _getHeader(self):
-        return [None, None, None, "Setpoint [A]", "Cur-Mon [A]", "Kick [mrad]"]
+        return ["State", "Magnet", "Cur-SP", "Cur-Mon", "Kick-SP", "Kick-Mon"]
 
     def _hasTrimButton(self):
         return False
@@ -27,6 +29,8 @@ class SiSlowCorrectorControlWidget(BaseMagnetControlWidget):
 
 
 class BoSlowCorrectorControlWidget(SiSlowCorrectorControlWidget):
+    """Booster slow corretors."""
+
     def _getPattern(self):
         return "BO-\w{3}:MA-(CH|CV)(-[1-2])*"
 
@@ -35,6 +39,8 @@ class BoSlowCorrectorControlWidget(SiSlowCorrectorControlWidget):
 
 
 class TBSlowCorrectorControlWidget(SiSlowCorrectorControlWidget):
+    """To booster transport line slow corrector."""
+
     def _getPattern(self):
         return "TB-\d{2}:MA-(CH|CV).*"
 
@@ -46,6 +52,8 @@ class TBSlowCorrectorControlWidget(SiSlowCorrectorControlWidget):
 
 
 class TSSlowCorrectorControlWidget(SiSlowCorrectorControlWidget):
+    """To sirius transport line slow correctors."""
+
     def _getPattern(self):
         return "TS-\w{2}:MA-(CH|CV)(-[1-2])*"
 

@@ -10,12 +10,12 @@ class SiFamQuadrupoleControlWidget(BaseMagnetControlWidget):
     def _getPattern(self):
         return "SI-Fam:MA-Q(\w+[0-9]*|[0-9])"
 
-    def _getMetric(self):
+    def _getStrength(self):
         return "KL"
 
     def _getHeader(self):
-        return [None, None, None, "Setpoint [A]", "Cur-Mon [A]",
-                "KL [1/m]", "Trim"]
+        return ["State", "Magnet", "Cur-SP", "Cur-Mon",
+                "KL-SP", "KL-Mon", "Trim"]
 
     def _hasTrimButton(self):
         return True
@@ -31,21 +31,16 @@ class SiFamQuadrupoleControlWidget(BaseMagnetControlWidget):
                 ('Defocusing Quadrupoles', "-QD"),
                 ('Dispersive Quadrupoles', "-Q[0-9]")]
 
-    def _createGroupWidgets(self, ma):
-        # magnet_widgets = super()._createGroupWidgets(ma)
-        magnet_widget = super()._createGroupWidgets(ma)
-
-        if self._hasTrimButton():
-            trim_btn = QPushButton(">", self)
-            trim_btn.setObjectName("trim_" + ma)
-            # trim_btn.setMaximumWidth(40)
-            trim_btn.setMinimumSize(50, trim_btn.minimumSizeHint().height())
-            trim_btn.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-
-            # magnet_widgets.append(trim_btn)
-            magnet_widget.layout.addWidget(trim_btn)
-
-        return magnet_widget
+    # def _createGroupWidgets(self, ma):
+    #     # magnet_widgets = super()._createGroupWidgets(ma)
+    #     magnet_widget = super()._createGroupWidgets(ma)
+    #
+    #     # if self._hasTrimButton():
+    #     #     trim_btn = QPushButton(">", self)
+    #     #     trim_btn.setObjectName("trim_" + ma)
+    #     #     magnet_widget.layout.addWidget(trim_btn)
+    #
+    #     return magnet_widget
 
 
 class BoFamQuadrupoleControlWidget(SiFamQuadrupoleControlWidget):
@@ -55,8 +50,8 @@ class BoFamQuadrupoleControlWidget(SiFamQuadrupoleControlWidget):
         return "BO-Fam:MA-Q(\w+[0-9]*|[0-9])"
 
     def _getHeader(self):
-        return [None, None, None, "Setpoint [A]", "Cur-Mon [A]",
-                "KL [1/m]"]
+        return ["State", "Magnet", "Cur-SP", "Cur-Mon",
+                "KL-SP", "KL-Mon"]
 
     def _hasTrimButton(self):
         return False

@@ -13,7 +13,6 @@ class BaseMagnetControlWindow(QDialog):
     _window = None
 
     STYLESHEET = """
-
     """
 
     def __init__(self, parent=None):
