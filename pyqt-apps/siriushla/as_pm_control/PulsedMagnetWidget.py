@@ -6,16 +6,16 @@ Exposes basic controls like:
     turning on/off
 """
 from pydm.PyQt.QtGui import QWidget, QHBoxLayout, QVBoxLayout, QLabel, \
-    QPushButton
-
+    QPushButton, QStyleOption, QStyle, QPainter
 from pydm.widgets.led import PyDMLed
 from pydm.widgets.state_button import PyDMStateButton
-from pydm.widgets.line_edit import PyDMLineEdit
-from pydm.widgets.scrollbar import PyDMScrollBar
 from pydm.widgets.label import PyDMLabel
+
 from siriuspy.envars import vaca_prefix as _VACA_PREFIX
 from siriuspy.pulsedps import properties as pu_props
 from siriuspy.pulsedma import properties as pm_props
+from siriushla.as_pm_control.PMTensionWidget import PMTensionWidget
+from siriushla.as_pm_control.PMKickWidget import PMKickWidget
 
 
 class PulsedMagnetWidget(QWidget):
@@ -157,57 +157,20 @@ class PulsedMagnetWidget(QWidget):
         else:
             self.setLayout(self.layout)
 
+    def paintEvent(self, event):
+        """Need to override paintEvent in order to apply CSS."""
+        opt = QStyleOption()
+        opt.initFrom(self)
+        p = QPainter(self)
+        self.style().drawPrimitive(QStyle.PE_Widget, opt, p, self)
 
-class PMTensionWidget(QWidget):
-    """Widget to set tension of a pulsed magnet."""
+    def get_magnet_button(self):
+        """Return the push button."""
+        return self.maname_label
 
-    def __init__(self, device, parent=None):
-        """Constructor sets channel name."""
-        super().__init__(parent)
-        self._device = device
-        self._channel = _VACA_PREFIX + self._device + ":" + pu_props.TensionSP
-        self._setup_ui()
-
-    def _setup_ui(self):
-        self.layout = QVBoxLayout()
-        self.tension_sp_lineedit = PyDMLineEdit(
-            parent=self, init_channel="ca://" + self._channel)
-        self.tension_sp_lineedit.setObjectName("tension_sp_lineedit")
-        self.tension_sp_scrollbar = PyDMScrollBar(
-            parent=self, init_channel="ca://" + self._channel)
-        self.tension_sp_scrollbar.setObjectName("tension_sp_scrollbar")
-        self.layout.addWidget(self.tension_sp_lineedit)
-        self.layout.addWidget(self.tension_sp_scrollbar)
-        self.setLayout(self.layout)
-
-    def set_limits_from_pv(self, value):
-        """Set wether to use limiits from the pv channel."""
-        self.tension_sp_scrollbar.limitsFromPV = value
-
-
-class PMKickWidget(QWidget):
-    """Widget to set kick of a pulsed magnet."""
-
-    def __init__(self, device, parent=None):
-        """Constructor sets channel name."""
-        super().__init__(parent)
-        self._device = device
-        self._channel = _VACA_PREFIX + self._device + ":" + pm_props.StrengthSP
-        self._setup_ui()
-
-    def _setup_ui(self):
-        self.layout = QVBoxLayout()
-        self.kick_sp_lineedit = PyDMLineEdit(
-            parent=self, init_channel="ca://" + self._channel)
-        self.kick_sp_scrollbar = PyDMScrollBar(
-            parent=self, init_channel="ca://" + self._channel)
-        self.layout.addWidget(self.kick_sp_lineedit)
-        self.layout.addWidget(self.kick_sp_scrollbar)
-        self.setLayout(self.layout)
-
-    def set_limits_from_pv(self, value):
-        """Set wether to use limiits from the pv channel."""
-        self.kick_sp_scrollbar.limitsFromPV = value
+    def get_magnet_name(self):
+        """Return magnet name."""
+        return self._maname
 
 
 class LedWidget(QWidget):

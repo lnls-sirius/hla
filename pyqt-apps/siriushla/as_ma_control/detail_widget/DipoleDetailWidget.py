@@ -7,7 +7,8 @@ from pydm.PyQt.QtGui import QGridLayout, QVBoxLayout, QHBoxLayout, QLabel, \
 
 from siriuspy.envars import vaca_prefix
 from pydm.widgets.label import PyDMLabel
-from pydm.widgets.pushbutton import PyDMPushButton
+# from pydm.widgets.pushbutton import PyDMPushButton
+from pydm.widgets.state_button import PyDMStateButton
 from pydm.widgets.line_edit import PyDMLineEdit
 from pydm.widgets.enum_combo_box import PyDMEnumComboBox
 from pydm.widgets.led import PyDMLed
@@ -95,11 +96,15 @@ class DipoleDetailWidget(MagnetDetailWidget):
     def _powerStateLayout(self):
         layout = QVBoxLayout()
 
-        self.on_btn = PyDMPushButton(
-            self, label="On", pressValue=1,
-            init_channel="ca://" + self._prefixed_magnet + ":PwrState-Sel")
-        self.off_btn = PyDMPushButton(
-            self, label="Off", pressValue=0,
+        # self.on_btn = PyDMPushButton(
+        #     self, label="On", pressValue=1,
+        #     init_channel="ca://" + self._prefixed_magnet + ":PwrState-Sel")
+        # self.off_btn = PyDMPushButton(
+        #     self, label="Off", pressValue=0,
+        #     init_channel="ca://" + self._prefixed_magnet + ":PwrState-Sel")
+
+        self.state_button = PyDMStateButton(
+            parent=self,
             init_channel="ca://" + self._prefixed_magnet + ":PwrState-Sel")
 
         self.pwrstate1_led = PyDMLed(
@@ -116,9 +121,9 @@ class DipoleDetailWidget(MagnetDetailWidget):
         self.pwrstate2_led.setSizePolicy(
             QSizePolicy.Minimum, QSizePolicy.Fixed)
 
-        buttons_layout = QHBoxLayout()
-        buttons_layout.addWidget(self.on_btn)
-        buttons_layout.addWidget(self.off_btn)
+        # buttons_layout = QHBoxLayout()
+        # buttons_layout.addWidget(self.on_btn)
+        # buttons_layout.addWidget(self.off_btn)
         pwrstatus_layout = QGridLayout()
         pwrstatus_layout.addWidget(QLabel("PS1"), 0, 0, 1, 2)
         pwrstatus_layout.addWidget(QLabel("PS2"), 0, 2, 1, 2)
@@ -127,7 +132,7 @@ class DipoleDetailWidget(MagnetDetailWidget):
         pwrstatus_layout.addWidget(self.pwrstate2_led, 1, 2)
         pwrstatus_layout.addWidget(self.pwrstate2_label, 1, 3)
 
-        layout.addLayout(buttons_layout)
+        layout.addWidget(self.state_button)
         layout.addLayout(pwrstatus_layout)
 
         return layout

@@ -7,7 +7,7 @@
 
 
 * {
-  font-size: 23px;
+  font-size: 20pt;
 }
 
 /* Tab Widget */
@@ -43,7 +43,9 @@ QTabBar::tab:!selected {
 /* Led */
 PyDMLed {
     min-width: 40px;
+    min-height: 40px;
     max-width: 40px;
+    max-height: 40px;
 }
 
 /* Scroll Bar */
@@ -86,7 +88,7 @@ QGroupBox::title {
     font-weight: bold;
 }
 
-PulsedMagnetControlWindow {
+/*PulsedMagnetControlWindow {
   min-width: 1568px;
   max-width: 1568px;
   min-height: 600px;
@@ -96,4 +98,4 @@ PulsedMagnetControlWindow {
 BaseMagnetControlWindow {
   min-width: 2336px;
   max-width: 2336px;
-}
+}*/

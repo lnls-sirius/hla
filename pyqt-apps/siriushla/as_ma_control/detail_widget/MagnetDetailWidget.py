@@ -7,7 +7,8 @@ from pydm.PyQt.QtGui import QWidget, QGroupBox, QGridLayout, QVBoxLayout, \
 
 from siriuspy.envars import vaca_prefix
 from pydm.widgets.label import PyDMLabel
-from pydm.widgets.pushbutton import PyDMPushButton
+# from pydm.widgets.pushbutton import PyDMPushButton
+from pydm.widgets.state_button import PyDMStateButton
 from pydm.widgets.line_edit import PyDMLineEdit
 from pydm.widgets.enum_combo_box import PyDMEnumComboBox
 from pydm.widgets.led import PyDMLed
@@ -125,11 +126,14 @@ class MagnetDetailWidget(QWidget):
     def _powerStateLayout(self):
         layout = QVBoxLayout()
 
-        self.on_btn = PyDMPushButton(
-            self, label="On", pressValue=1,
-            init_channel="ca://" + self._prefixed_magnet + ":PwrState-Sel")
-        self.off_btn = PyDMPushButton(
-            self, label="Off", pressValue=0,
+        # self.on_btn = PyDMPushButton(
+        #     self, label="On", pressValue=1,
+        #     init_channel="ca://" + self._prefixed_magnet + ":PwrState-Sel")
+        # self.off_btn = PyDMPushButton(
+        #     self, label="Off", pressValue=0,
+        #     init_channel="ca://" + self._prefixed_magnet + ":PwrState-Sel")
+        self.state_button = PyDMStateButton(
+            parent=self,
             init_channel="ca://" + self._prefixed_magnet + ":PwrState-Sel")
         self.pwrstate_led = PyDMLed(
             self, "ca://" + self._prefixed_magnet + ":PwrState-Sts")
@@ -138,14 +142,14 @@ class MagnetDetailWidget(QWidget):
 
         self.pwrstate_led.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
 
-        buttons_layout = QHBoxLayout()
-        buttons_layout.addWidget(self.on_btn)
-        buttons_layout.addWidget(self.off_btn)
+        # buttons_layout = QHBoxLayout()
+        # buttons_layout.addWidget(self.on_btn)
+        # buttons_layout.addWidget(self.off_btn)
         pwrstatus_layout = QHBoxLayout()
         pwrstatus_layout.addWidget(self.pwrstate_led)
         pwrstatus_layout.addWidget(self.pwrstate_label)
 
-        layout.addLayout(buttons_layout)
+        layout.addWidget(self.state_button)
         layout.addLayout(pwrstatus_layout)
 
         return layout

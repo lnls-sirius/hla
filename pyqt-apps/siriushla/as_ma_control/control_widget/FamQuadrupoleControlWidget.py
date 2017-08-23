@@ -35,14 +35,15 @@ class SiFamQuadrupoleControlWidget(BaseMagnetControlWidget):
         # magnet_widgets = super()._createGroupWidgets(ma)
         magnet_widget = super()._createGroupWidgets(ma)
 
-        trim_btn = QPushButton(">", self)
-        trim_btn.setObjectName("trim_" + ma)
-        # trim_btn.setMaximumWidth(40)
-        trim_btn.setMinimumSize(50, trim_btn.minimumSizeHint().height())
-        trim_btn.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        if self._hasTrimButton():
+            trim_btn = QPushButton(">", self)
+            trim_btn.setObjectName("trim_" + ma)
+            # trim_btn.setMaximumWidth(40)
+            trim_btn.setMinimumSize(50, trim_btn.minimumSizeHint().height())
+            trim_btn.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
-        # magnet_widgets.append(trim_btn)
-        magnet_widget.layout.addWidget(trim_btn)
+            # magnet_widgets.append(trim_btn)
+            magnet_widget.layout.addWidget(trim_btn)
 
         return magnet_widget
 
@@ -52,6 +53,13 @@ class BoFamQuadrupoleControlWidget(SiFamQuadrupoleControlWidget):
 
     def _getPattern(self):
         return "BO-Fam:MA-Q(\w+[0-9]*|[0-9])"
+
+    def _getHeader(self):
+        return [None, None, None, "Setpoint [A]", "Cur-Mon [A]",
+                "KL [1/m]"]
+
+    def _hasTrimButton(self):
+        return False
 
     def _getGroups(self):
         return [('Focusing Quadrupoles', "-QF"),

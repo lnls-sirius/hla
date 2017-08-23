@@ -30,6 +30,7 @@ class MagnetDetailWindow(QDialog):
         self.setLayout(self.layout)
 
     def closeEvent(self, event):
+        """Override closeEvent in order to close iwdget connections."""
         self.app.close_widget_connections(self)
 
 
