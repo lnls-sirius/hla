@@ -12,7 +12,7 @@ setup(
     description='Client Applications for Sirius',
     url='https://github.com/lnls-sirius/hla/pyqt-apps',
     download_url='https://github.com/lnls-sirius/hla',
-    license='GPL (version 3)',
+    license='GNU GPLv3',
     classifiers=[
         'Intended Audience :: Science/Research',
         'Programming Language :: Python',
