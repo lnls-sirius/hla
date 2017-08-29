@@ -29,7 +29,11 @@ setup(
         'scripts/sirius-hla-si-config-manager.py',
         'scripts/sirius-hla-si-ap-sofb.py',
         'scripts/sirius-hla-si-ma-control.py',
+        'scripts/sirius-hla-tb-ap-control.py',
+        'scripts/sirius-hla-tb-ap-posang.py',
         'scripts/sirius-hla-tb-ma-control.py',
+        'scripts/sirius-hla-ts-ap-control.py',
+        'scripts/sirius-hla-ts-ap-posang.py',
         'scripts/sirius-hla-ts-ma-control.py',
         ],
     zip_safe=False
