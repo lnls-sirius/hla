@@ -21,6 +21,7 @@ class FloatSetPointWidget(QWidget):
         # self.sp_lineedit.setObjectName("lineedit")
         self.sp_scrollbar = PyDMScrollBar(
             parent=self, init_channel=self._channel)
+        self.sp_scrollbar.setMouseTracking(False)
         # self.tension_sp_scrollbar.setObjectName("scrollbar")
         self.layout.addWidget(self.sp_lineedit)
         self.layout.addWidget(self.sp_scrollbar)

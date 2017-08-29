@@ -13,6 +13,7 @@ from siriushla.as_ma_control import ToSiriusMagnetControlWindow
 from siriushla.as_ma_control import SiriusMagnetControlWindow
 from siriushla.as_pm_control.PulsedMagnetControlWindow \
     import PulsedMagnetControlWindow
+from siriushla.as_ap_injection.InjectionWindow import InjectionWindow
 # from siriushla.as_config_manager import ConfigManagerWindow
 
 
@@ -45,6 +46,10 @@ class ControlApplication(QMainWindow):
         openPulsedMagnetsControlPanel.triggered.connect(
             self._openPulsedMagnetWindow)
 
+        # Injection actions
+        openInjectionWindow = QAction("Injection", self)
+        openInjectionWindow.triggered.connect(self._openInjectionWindow)
+
         # openBoosterConfiguration = QAction("Booster Configuration", self)
         # openBoosterConfiguration.triggered.connect(
         #     lambda: self._openConfigurationWindow('BoForcePvs'))
@@ -66,6 +71,9 @@ class ControlApplication(QMainWindow):
 
         pulsedMagnetsMenu = menubar.addMenu("&Pulsed Magnets")
         pulsedMagnetsMenu.addAction(openPulsedMagnetsControlPanel)
+
+        injectionMenu = menubar.addMenu("&Injection")
+        injectionMenu.addAction(openInjectionWindow)
 
         # configMenu = menubar.addMenu("&Configuration Control")
         # configMenu.addAction(openBoosterConfiguration)
@@ -107,7 +115,12 @@ class ControlApplication(QMainWindow):
     @pyqtSlot()
     def _openPulsedMagnetWindow(self):
         if PulsedMagnetControlWindow.Instance is None:
-            PulsedMagnetControlWindow(self).show()
+            PulsedMagnetControlWindow(parent=self).show()
+
+    @pyqtSlot()
+    def _openInjectionWindow(self):
+        if InjectionWindow.Instance is None:
+            InjectionWindow(parent=self).show()
 
 
 if __name__ == "__main__":

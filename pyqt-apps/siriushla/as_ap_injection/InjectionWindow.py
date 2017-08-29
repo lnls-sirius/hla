@@ -1,63 +1,17 @@
 """GUI for injection."""
-from CustomExceptions import PVConnectionError
-from InjectionController import InjectionController
-from pydm.PyQt.QtCore import pyqtSlot, QTimer
+from siriushla.as_ap_injection.CustomExceptions import PVConnectionError
+from siriushla.as_ap_injection.InjectionController import InjectionController
+from pydm import PyDMApplication
+from pydm.PyQt.QtCore import pyqtSlot, QTimer, Qt
 from pydm.PyQt.QtGui import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, \
     QRadioButton, QPushButton, QSpinBox, QGridLayout, QMessageBox, QDialog, \
-    QLabel, qApp
+    QLabel, QDockWidget
 from pydm.widgets.led import PyDMLed
-import pyqtgraph as pg
-
-
-# class StartInjectionWorker(QObject):
-#     """Start injection. Run in QThread."""
-#
-#     finished = pyqtSignal()
-#     error = pyqtSignal(str)
-#
-#     def __init__(self, controller):
-#         """Call super and set controller member."""
-#         super(StartInjectionWorker, self).__init__()
-#         self.controller = controller
-#
-#     @pyqtSlot()
-#     def run(self):
-#         """Set configurations and start injection."""
-#         time.sleep(0.1)
-#         try:
-#             self.controller.put_bucket_list()
-#             self.controller.put_injection_mode()
-#             self.controller.put_cycles()
-#             self.controller.start_injection()
-#         except PVConnectionError as e:
-#             self.error.emit("{}".format(e))
-#             # print("error: leaving")
-#         else:
-#             self.finished.emit()
-#             # print("finished: leaving")
-#
-#
-# class StopInjectionWorker(QObject):
-#     """Stop injection. Run in QThread."""
-#
-#     finished = pyqtSignal()
-#     error = pyqtSignal(str)
-#
-#     def __init__(self, controller):
-#         """Call super and set controller member."""
-#         super(StopInjectionWorker, self).__init__()
-#         self.controller = controller
-#
-#     @pyqtSlot()
-#     def run(self):
-#         """Set configurations and start injection."""
-#         time.sleep(0.1)
-#         try:
-#             self.controller.stop_injection()
-#         except PVConnectionError as e:
-#             self.error.emit("{}".format(e))
-#         else:
-#             self.finished.emit()
+from pydm.widgets.label import PyDMLabel
+from pydm.widgets.checkbox import PyDMCheckbox
+from siriushla.as_ap_injection.BarGraphWidget \
+    import BarGraphWidget, PyDMBarGraph
+from siriuspy.envars import vaca_prefix as _VACA_PREFIX
 
 
 class WaitingDlg(QDialog):
@@ -95,12 +49,6 @@ class WaitingDlg(QDialog):
         self.may_close = True
         super(WaitingDlg, self).done(r)
 
-    # @pyqtSlot()
-    # def finished(self):
-    #     """Slot that closes window."""
-    #     self.may_close = True
-    #     self.close()
-
     def closeEvent(self, event):
         """Override closeEvent."""
         if self.may_close:
@@ -123,11 +71,22 @@ class InjectionWindow(QMainWindow):
             padding: 0;
         }
         """
+    Instance = None
 
-    def __init__(self, controller, parent=None):
+    def __init__(self, controller=None, parent=None):
         """Init window."""
+        if InjectionWindow.Instance is not None:
+            return InjectionWindow.Instance
+
         super(InjectionWindow, self).__init__(parent)
-        self.controller = controller
+
+        self.app = PyDMApplication.instance()
+        InjectionWindow.Instance = self
+
+        if controller is None:
+            self.controller = InjectionController()
+        else:
+            self.controller = controller
 
         # self._dialog = None
         # self._worker = None
@@ -141,14 +100,18 @@ class InjectionWindow(QMainWindow):
         self.singleBunchRadio.clicked.connect(
             lambda: self.setInjectionMode(self.controller.SingleBunch))
         self.singleBunchRadio.setEnabled(False)
-        self.startInjectionBtn.clicked.connect(self.startInjection)
-        self.stopInjectionBtn.clicked.connect(self.stopInjection)
+
+        # self.cycleSpinBox.valueChanged.connect(self.setCycle)
+        # self.cycleSpinBox.setEnabled(False)
+
         self.initialBucketSpinBox.valueChanged.connect(self.setInitialBucket)
         self.finalBucketSpinBox.valueChanged.connect(self.setFinalBucket)
         self.stepSpinBox.valueChanged.connect(self.setStep)
-        self.cycleSpinBox.valueChanged.connect(self.setCycle)
-        self.cycleSpinBox.setEnabled(False)
+
+        self.startInjectionBtn.clicked.connect(self.startInjection)
+        self.stopInjectionBtn.clicked.connect(self.stopInjection)
         self._enableButtons(False)
+
         self.injectingLed.connected_signal.connect(
             lambda: self._enableButtons(True))
         self.injectingLed.disconnected_signal.connect(
@@ -165,10 +128,13 @@ class InjectionWindow(QMainWindow):
         self.finalBucketSpinBox.setValue(InjectionController.Harmonic)
         self.stepSpinBox.setRange(1, 200)
         self.stepSpinBox.setValue(75)
-        self.cycleSpinBox.setRange(1, 20)
-        self.cycleSpinBox.setValue(1)
 
-        self.show()
+        self.beamCurrentLabel.precFromPV = True
+        # self.cycleSpinBox.setRange(1, 20)
+        # self.cycleSpinBox.setValue(1)
+
+        self.app.establish_widget_connections(self)
+        # self.show()
 
     # Public
     @pyqtSlot()
@@ -179,8 +145,10 @@ class InjectionWindow(QMainWindow):
                 "[InjectionControlWindow]", "Injection is already running")
             return
 
-        msg = ("Injection will run "
-               "for {} cycles.").format(self.cycleSpinBox.value())
+        if self.cycleCheckBox.isChecked():
+            msg = ("Injection will run in cyclic mode.")
+        else:
+            msg = "Injection will be executed once."
 
         res = self._showQuestionBox("Start Injection?", msg + "\nProceed?")
         if res in (QMessageBox.Yes, QMessageBox.Accepted):
@@ -237,37 +205,11 @@ class InjectionWindow(QMainWindow):
 
     # Private
     def _startInjection(self):
-        # # Set worker to start injection
-        # self._worker = StartInjectionWorker(self.controller)
-        # self._worker.moveToThread(self._thread)
-        # # Connect signal to handle error and close thread and waiting dlg
-        # self._worker.error.connect(self._showErrorMsg)
-        # self._worker.error.connect(self._thread.quit)
-        # self._worker.finished.connect(self._showStartedMsg)
-        # self._worker.finished.connect(self._thread.quit)
-        # # Start thread
-        # self._thread.started.connect(lambda: self._enableButtons(False))
-        # self._thread.finished.connect(lambda: self._enableButtons(True))
-        # self._thread.started.connect(self._worker.run)
-        # self._thread.setTerminationEnabled(True)
-        # self._thread.start()
-        # # Show message
-
         try:
             self.controller.put_bucket_list()
 
-            # self._dialog.main_label.setText("Setting injection mode")
-            # qApp.processEvents()
-            #
-            # self.controller.put_injection_mode()
-
-            # self._dialog.main_label.setText("Setting number of cycles")
-            # qApp.processEvents()
-            #
-            # self.controller.put_cycles()
-
             self._dialog.main_label.setText("Starting injection")
-            qApp.processEvents()
+            PyDMApplication.processEvents()
 
             self.controller.start_injection()
         except PVConnectionError as e:
@@ -347,31 +289,42 @@ class InjectionWindow(QMainWindow):
     def _setBucketProfile(self):
         self.bucket_graph.clear()
         profile = [0 for _ in range(864)]
-        x = list(range(864))
         for b in self.controller.bucket_list:
             for i in range(75):
                 profile[(b - 1 + i) % 864] += 1
 
-        self.bucket_graph.plot(x, profile)
+        self.bucket_graph.set_waveform(profile)
 
     def _setupUi(self):
         self._dialog = None
 
         self.central_widget = QWidget()
+        # self.central_widget.setSizePolicy(
+        #      QSizePolicy.Maximum, QSizePolicy.Maximum)
         self.central_widget.layout = QGridLayout()
 
         radio_layout = QVBoxLayout()
         self.multiBunchRadio = QRadioButton("Multi Bunch", self.central_widget)
         self.multiBunchRadio.setObjectName("multiBunchRadio")
-        self.singleBunchRadio = QRadioButton("Single Bunch", self.central_widget)
+        self.singleBunchRadio = QRadioButton(
+            "Single Bunch", self.central_widget)
         self.singleBunchRadio.setObjectName("singleBunchRadio")
         radio_layout.addWidget(self.multiBunchRadio)
         radio_layout.addWidget(self.singleBunchRadio)
 
         cycle_layout = QHBoxLayout()
-        self.cycleSpinBox = QSpinBox(self.central_widget)
-        self.cycleSpinBox.setObjectName("cycleSpinBox")
-        cycle_layout.addWidget(self.cycleSpinBox)
+        # self.cycleSpinBox = QSpinBox(self.central_widget)
+        # self.cycleSpinBox.setObjectName("cycleSpinBox")
+        pv = _VACA_PREFIX + "AS-Glob:TI-EVG:InjectionCyc-Sel"
+        self.cycleCheckBox = PyDMCheckbox(parent=self,
+                                          init_channel="ca://" + pv)
+        self.cycleCheckBox.setObjectName("cycleCheckBox")
+        self.cycleCheckBox.setText("Cyclic mode")
+        pv = _VACA_PREFIX + "AS-Glob:TI-EVG:InjectionCyc-Sts"
+        self.cycleLed = PyDMLed(parent=self, init_channel="ca://" + pv)
+        self.cycleLed.setObjectName("cycleLed")
+        cycle_layout.addWidget(self.cycleCheckBox)
+        cycle_layout.addWidget(self.cycleLed)
 
         button_layout = QHBoxLayout()
         self.startInjectionBtn = \
@@ -383,23 +336,33 @@ class InjectionWindow(QMainWindow):
         button_layout.addWidget(self.startInjectionBtn)
         button_layout.addWidget(self.stopInjectionBtn)
 
-        bucket_list_layout = QHBoxLayout()
+        bucket_list_layout = QVBoxLayout()
+        self.initialBucketLabel = QLabel("&Initial bucket")
+        self.initialBucketLabel.setObjectName("initialBucketLabel")
         self.initialBucketSpinBox = QSpinBox(self.central_widget)
         self.initialBucketSpinBox.setObjectName("initialBucketSpinBox")
+        self.initialBucketLabel.setBuddy(self.initialBucketSpinBox)
+        self.finalBucketLabel = QLabel("&Final bucket")
+        self.finalBucketLabel.setObjectName("finalBucketLabel")
         self.finalBucketSpinBox = QSpinBox(self.central_widget)
         self.finalBucketSpinBox.setObjectName("finalBucketSpinBox")
+        self.finalBucketLabel.setBuddy(self.finalBucketSpinBox)
+        self.stepLabel = QLabel("&Step")
+        self.stepLabel.setObjectName("stepLabel")
         self.stepSpinBox = QSpinBox(self.central_widget)
         self.stepSpinBox.setObjectName("stepSpinBox")
+        self.stepLabel.setBuddy(self.stepSpinBox)
+        bucket_list_layout.addWidget(self.initialBucketLabel)
         bucket_list_layout.addWidget(self.initialBucketSpinBox)
+        bucket_list_layout.addWidget(self.finalBucketLabel)
         bucket_list_layout.addWidget(self.finalBucketSpinBox)
+        bucket_list_layout.addWidget(self.stepLabel)
         bucket_list_layout.addWidget(self.stepSpinBox)
+        bucket_list_layout.addStretch()
 
-        self.bucket_graph = pg.PlotWidget()
+        self.bucket_graph = BarGraphWidget()
+        self.bucket_graph.setTitle("Bucket List")
         self.bucket_graph.setYRange(min=0, max=2)
-        # self.bucket_graph.mouseEnabled = False
-        # self.bucket_graph.setAspectLocked(1)
-        # self.bucket_graph.showAxis("left", show=False)
-        # self.bucket_graph.showAxis("bottom", show=False)
 
         led_layout = QHBoxLayout()
         self.ledLabel = QLabel("Injecting")
@@ -408,24 +371,52 @@ class InjectionWindow(QMainWindow):
             InjectionController.InjectionToggle
         self.injectingLed = PyDMLed(self, init_channel="ca://" + pv)
         self.injectingLed.setObjectName("injectingLed")
+        pv = _VACA_PREFIX + "SI-Glob:AP-CurrInfo:Current-Mon"
+        self.beamCurrentLabel = PyDMLabel(parent=self,
+                                          init_channel="ca://" + pv)
+        led_layout.addStretch()
         led_layout.addWidget(self.ledLabel)
         led_layout.addWidget(self.injectingLed)
+        led_layout.addWidget(self.beamCurrentLabel)
+
+        self.profile_bar_graph = PyDMBarGraph()
+        self.profile_bar_graph.setTitle("Bunch by bunch charge")
+        pv = _VACA_PREFIX + "SI-13C4:DI-DCCT:BbBCurrent-Mon"
+        self.profile_bar_graph.model.channel = "ca://" + pv
+        # self.profile_bar_graph.set_scale (100)
+        self.profile_bar_graph.set_brush("b")
 
         self.central_widget.layout.addLayout(radio_layout, 0, 0)
         self.central_widget.layout.addLayout(cycle_layout, 0, 2)
         self.central_widget.layout.addLayout(bucket_list_layout, 1, 0, 1, 3)
-        self.central_widget.layout.addWidget(self.bucket_graph, 2, 0, 1, 3)
+        # self.central_widget.layout.addWidget(self.bucket_graph, 2, 0, 1, 3)
         self.central_widget.layout.addLayout(button_layout, 3, 0)
         self.central_widget.layout.addLayout(led_layout, 3, 2)
+        # self.central_widget.layout.addWidget(
+        #     self.profile_bar_graph, 0, 3, 4, 1)
 
         self.central_widget.setLayout(self.central_widget.layout)
         self.setCentralWidget(self.central_widget)
         self.setWindowTitle("Injection Control Window")
 
+        # Create dock windows
+        dock_widget = QDockWidget(self)
+        dock_widget.setWidget(self.profile_bar_graph)
+        self.addDockWidget(Qt.BottomDockWidgetArea, dock_widget)
+
+        dock_widget = QDockWidget(self)
+        dock_widget.setWidget(self.bucket_graph)
+        self.addDockWidget(Qt.RightDockWidgetArea, dock_widget)
+
+    def closeEvent(self, event):
+        """Clear open instance."""
+        self.app.close_widget_connections(self)
+        InjectionWindow.Instance = None
+        super().closeEvent(event)
+
 
 if __name__ == "__main__":
     import sys
-    from pydm import PyDMApplication
 
     app = PyDMApplication(None, sys.argv)
     controller = InjectionController()
