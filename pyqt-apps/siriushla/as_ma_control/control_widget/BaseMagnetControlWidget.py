@@ -2,14 +2,13 @@
 import re
 
 # from pydm.PyQt.QtCore import Qt
-from pydm.PyQt.QtGui import QWidget, QVBoxLayout, QPushButton, \
-    QGroupBox, QGridLayout, QLabel, QHBoxLayout, \
-    QScrollArea
-from pydm.widgets.label import PyDMLabel
 from pydm.widgets.led import PyDMLed
+from pydm.widgets.label import PyDMLabel
 from pydm.widgets.state_button import PyDMStateButton
 from siriuspy.envars import vaca_prefix as _VACA_PREFIX
 from siriushla.FloatSetPointWidget import FloatSetPointWidget
+from pydm.PyQt.QtGui import QWidget, QVBoxLayout, QPushButton, QGroupBox, \
+    QGridLayout, QLabel, QHBoxLayout, QScrollArea
 
 
 class BaseMagnetControlWidget(QWidget):

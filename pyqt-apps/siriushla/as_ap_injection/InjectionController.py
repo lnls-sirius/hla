@@ -10,7 +10,7 @@ behaviour.
 
 import epics
 import threading
-from CustomExceptions import PVConnectionError
+from siriushla.as_ap_injection.CustomExceptions import PVConnectionError
 
 
 class InjectionController:
@@ -22,22 +22,28 @@ class InjectionController:
     MaxCurrent = 250
 
     TimingPrefix = "fac-lnls455-linux-AS-Glob:TI-EVG"
-    LifeTimePrefix = "lifetime"
+    CurrInfoPrefix = "fac-lnls455-linux-SI-Glob:AP-CurrInfo"
 
     # Timing Attrs
     BucketList = "BucketList-SP"
     InjectionToggle = "InjectionState-Sel"
+    InjectionCycleToggle = "InjectionCyc-Sel"
     InjectionMode = "InjectionMode"
     InjectionCycles = "InjectionCycles"
 
     TimingAttrs = (BucketList, InjectionToggle, InjectionMode, InjectionCycles)
 
     # Lifetime Attrs
-    Current = "current"
+    BeamCurrent = "Current-Mon"
+
+    CurrInfoAttrs = (BeamCurrent, )
 
     def __init__(self):
         """Class constructor."""
         self._mode = InjectionController.MultiBunch
+        self._injecting = None
+        self._beam_current = None
+
         self._initial_bucket = 1
         self._final_bucket = InjectionController.Harmonic
         self._step = 75
@@ -46,15 +52,33 @@ class InjectionController:
         self._bucket_list = list()
 
         # try connecting
-        self._timing = epics.Device(self.TimingPrefix, delim=':',
-                                    attrs=self.TimingAttrs)
-        self._lifetime = epics.Device(self.LifeTimePrefix, delim=':',
-                                      attrs='')
+        self._timing = epics.Device(self.TimingPrefix, delim=':')
 
+        for attr in self.TimingAttrs:
+            self._timing.add_pv(self.TimingPrefix + ":" + attr,
+                                connection_callback=self._pv_connected)
+
+        self._currinfo = epics.Device(self.CurrInfoPrefix, delim=':')
+
+        for attr in self.CurrInfoAttrs:
+            self._currinfo.add_pv(self.CurrInfoPrefix + ":" + attr,
+                                  connection_callback=self._pv_connected)
         # add injection status callback
-        self._timing.add_callback(self.InjectionToggle, self._injection_status)
+        # self._timing.add_callback(
+        #   self.InjectionToggle, self._injection_status)
+        # self._timing.PV(
+        #   self.InjectionToggle, connection_callback=self._pv_connected)
 
-        self._injecting = self._timing.get(self.InjectionToggle)
+    def _pv_connected(self, conn, pvname, **kwargs):
+        if self.InjectionToggle in pvname:
+            if conn:
+                self._timing.add_callback(self.InjectionToggle,
+                                          self._injection_status)
+        if self.BeamCurrent in pvname:
+            if conn:
+                print(conn, pvname)
+                self._currinfo.add_callback(self.BeamCurrent,
+                                            self._current_value)
 
     # Public methods
     def put_bucket_list(self):
@@ -77,7 +101,7 @@ class InjectionController:
 
     def start_injection(self):
         """Communicate with timing system to start injecting."""
-        if self._injecting:
+        if self._injecting or self._beam_current >= self.MaxCurrent:
             return
         self._put(self._timing, self.InjectionToggle, 1)
 
@@ -103,8 +127,10 @@ class InjectionController:
         self._injecting = value
 
     def _current_value(self, pvname, value, **kwargs):
-        if value == self.MaxCurrent:
-            t = threading.Thread(target=self.stop_injection())
+        self._beam_current = value
+        if value > self.MaxCurrent and self._injecting:
+            print(self._injecting, value, pvname)
+            t = threading.Thread(target=self.stop_injection)
             t.start()
 
     # Properties getters and setters
