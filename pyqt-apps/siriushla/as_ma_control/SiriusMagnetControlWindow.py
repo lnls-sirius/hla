@@ -1,8 +1,8 @@
 """Module that defines the window resposible for controlling the SR magnets."""
 import re
 
-from pydm.PyQt.QtGui import QPushButton
-
+from siriushla.as_ma_control.MagnetWidget import MagnetWidget
+from siriushla.as_ma_control.MagnetTrimWindow import MagnetTrimWindow
 from siriuspy.search import MASearch
 from .BaseMagnetControlWindow import BaseMagnetControlWindow
 from .detail_widget.DipoleDetailWidget import DipoleDetailWidget
@@ -24,6 +24,7 @@ class SiriusMagnetControlWindow(BaseMagnetControlWindow):
         """Class constructor."""
         self._magnets = [re.sub("PS-", "MA-", x)
                          for x in MASearch.get_manames([{"section": "SI"}])]
+        self._trim_windows = dict()
         super(SiriusMagnetControlWindow, self).__init__(parent)
         self.setWindowTitle('Sirius Magnet Control Panel')
 
@@ -45,8 +46,23 @@ class SiriusMagnetControlWindow(BaseMagnetControlWindow):
         self.tabs.addTab(self.fast_tab, "Fast Correctors")
         self.tabs.addTab(self.skew_tab, "Skew Quad")
         # Make button connections
-        self._connectButtons(self.quad_tab.findChildren(QPushButton))
-        self._connectButtons(self.sext_tab.findChildren(QPushButton))
-        self._connectButtons(self.slow_tab.findChildren(QPushButton))
-        self._connectButtons(self.fast_tab.findChildren(QPushButton))
-        self._connectButtons(self.skew_tab.findChildren(QPushButton))
+        for magnet_widget in self.quad_tab.findChildren(MagnetWidget):
+            try:
+                button = magnet_widget.trim_button
+            except Exception:
+                pass
+            else:
+                button.clicked.connect(self._open_trim_window)
+        # self._connectButtons(self.quad_tab.findChildren(QPushButton))
+        # self._connectButtons(self.sext_tab.findChildren(QPushButton))
+        # self._connectButtons(self.slow_tab.findChildren(QPushButton))
+        # self._connectButtons(self.fast_tab.findChildren(QPushButton))
+        # self._connectButtons(self.skew_tab.findChildren(QPushButton))
+
+    def _open_trim_window(self):
+        button = self.sender()
+        maname = button.parent().maname
+        if maname not in self._trim_windows:
+            self._trim_windows[maname] = MagnetTrimWindow(
+                maname=maname, parent=self)
+        self._trim_windows[maname].show()

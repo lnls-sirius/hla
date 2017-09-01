@@ -4,7 +4,7 @@ from pydm.PyQt.QtCore import Qt, pyqtSlot
 from pydm.PyQt.QtGui import QMainWindow, QWidget, QVBoxLayout, QTabWidget
 
 from siriuspy.search import MASearch
-from siriushla.as_pm_control.PulsedMagnetWidget import PulsedMagnetWidget
+from siriushla.as_ma_control.MagnetWidget import PulsedMagnetWidget
 from siriushla.as_pm_control.PulsedMagnetDetailWidget \
     import PulsedMagnetDetailWidget
 
@@ -46,7 +46,7 @@ class PulsedMagnetControlWindow(QMainWindow):
         self.main_widget.addTab(self._make_tab_widget("TS"), "LTS")
         self.main_widget.addTab(self._make_tab_widget("SI"), "Storage Ring")
 
-        self._connect_buttons()
+        # self._connect_buttons()
 
     def _make_tab_widget(self, section):
         widget = QWidget(self)

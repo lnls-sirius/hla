@@ -20,4 +20,4 @@ class ToBoosterMagnetControlWindow(BaseMagnetControlWindow):
         self.tabs.addTab(self.dipo_tab, "Dipoles")
         self.tabs.addTab(self.slow_tab, "Slow Correctors")
         #Make button connections
-        self._connectButtons(self.slow_tab.findChildren(QPushButton))
+        # self._connectButtons(self.slow_tab.findChildren(QPushButton))

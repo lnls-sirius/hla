@@ -13,6 +13,7 @@ from pydm.widgets.line_edit import PyDMLineEdit
 from pydm.widgets.enum_combo_box import PyDMEnumComboBox
 from pydm.widgets.led import PyDMLed
 from pydm.widgets.scrollbar import PyDMScrollBar
+from siriushla.FloatSetPointWidget import FloatSetPointWidget
 
 
 class MagnetDetailWidget(QWidget):
@@ -79,6 +80,7 @@ class MagnetDetailWidget(QWidget):
         layout.addWidget(self.current_box, 2, 1, 1, 2)
         layout.addWidget(self.metric_box, 3, 1, 1, 2)
         layout.setColumnStretch(4, 1)
+        layout.setRowStretch(4, 1)
 
         return layout
 
@@ -166,25 +168,30 @@ class MagnetDetailWidget(QWidget):
         self.current_rb_val.precFromPV = True
         # self.current_rb_val.setPrecision(3)
 
-        self.current_sp_val = PyDMLineEdit(
-            self, "ca://" + self._prefixed_magnet + ":Current-SP")
-        # self.current_sp_val.receivePrecision(3)
+        self.current_sp_widget = FloatSetPointWidget(
+            parent=self,
+            channel="ca://" + self._prefixed_magnet + ":Current-SP")
+        self.current_sp_widget.set_limits_from_pv(True)
 
-        self.current_sp_slider = PyDMScrollBar(
-            self, Qt.Horizontal,
-            "ca://" + self._prefixed_magnet + ":Current-SP")
-        self.current_sp_slider.setObjectName(
-            "current-sp_" + self._prefixed_magnet)
-        self.current_sp_slider.setMinimumSize(80, 15)
-        self.current_sp_slider.limitsFromPV = True
-        self.current_sp_slider.setSizePolicy(
-            QSizePolicy.MinimumExpanding, QSizePolicy.Fixed)
+        # self.current_sp_val = PyDMLineEdit(
+        #     self, "ca://" + self._prefixed_magnet + ":Current-SP")
+        # # self.current_sp_val.receivePrecision(3)
+        #
+        # self.current_sp_slider = PyDMScrollBar(
+        #     self, Qt.Horizontal,
+        #     "ca://" + self._prefixed_magnet + ":Current-SP")
+        # self.current_sp_slider.setObjectName(
+        #     "current-sp_" + self._prefixed_magnet)
+        #     self.current_sp_slider.setMinimumSize(80, 15)
+        # self.current_sp_slider.limitsFromPV = True
+        # self.current_sp_slider.setSizePolicy(
+        #     QSizePolicy.MinimumExpanding, QSizePolicy.Fixed)
 
         layout.addWidget(self.current_rb_label, 0, 0)
         layout.addWidget(self.current_rb_val, 0, 1)
         layout.addWidget(self.current_sp_label, 1, 0)
-        layout.addWidget(self.current_sp_val, 1, 1)
-        layout.addWidget(self.current_sp_slider, 2, 1)
+        layout.addWidget(self.current_sp_widget, 1, 1)
+        # layout.addWidget(self.current_sp_slider, 2, 1)
         layout.setRowStretch(3, 1)
         layout.setRowStretch(2, 1)
 
@@ -201,24 +208,28 @@ class MagnetDetailWidget(QWidget):
         self.metric_rb_val.precFromPV = True
         # self.metric_rb_val.setPrecision(3)
 
-        self.metric_sp_val = PyDMLineEdit(
-            self, "ca://" + self._prefixed_magnet + ":" + self._metric + "-SP")
-        # self.metric_sp_val.receivePrecision(3)
-
-        self.metric_sp_slider = PyDMScrollBar(
-            self, Qt.Horizontal,
-            "ca://" + self._prefixed_magnet + ":" + self._metric + "-SP")
-        self.metric_sp_slider.setObjectName("metric-sp_" + self._magnet_name)
-        self.metric_sp_slider.setMinimumSize(80, 15)
-        self.metric_sp_slider.limitsFromPV = True
-        self.metric_sp_slider.setSizePolicy(
-            QSizePolicy.MinimumExpanding, QSizePolicy.Fixed)
+        self.metric_sp_widget = FloatSetPointWidget(
+            parent=self,
+            channel="ca://" + self._prefixed_magnet + ":" + self._metric + "-SP")
+        self.metric_sp_widget.set_limits_from_pv(True)
+        # self.metric_sp_val = PyDMLineEdit(
+        #     self, "ca://" + self._prefixed_magnet + ":" + self._metric + "-SP")
+        # # self.metric_sp_val.receivePrecision(3)
+        #
+        # self.metric_sp_slider = PyDMScrollBar(
+        #     self, Qt.Horizontal,
+        #     "ca://" + self._prefixed_magnet + ":" + self._metric + "-SP")
+        # self.metric_sp_slider.setObjectName("metric-sp_" + self._magnet_name)
+        # self.metric_sp_slider.setMinimumSize(80, 15)
+        # self.metric_sp_slider.limitsFromPV = True
+        # self.metric_sp_slider.setSizePolicy(
+        #     QSizePolicy.MinimumExpanding, QSizePolicy.Fixed)
 
         layout.addWidget(self.metric_rb_label, 0, 0)
         layout.addWidget(self.metric_rb_val, 0, 1)
         layout.addWidget(self.metric_sp_label, 1, 0)
-        layout.addWidget(self.metric_sp_val, 1, 1)
-        layout.addWidget(self.metric_sp_slider, 2, 1)
+        layout.addWidget(self.metric_sp_widget, 1, 1)
+        # layout.addWidget(self.metric_sp_slider, 2, 1)
         layout.setRowStretch(3, 1)
         layout.setColumnStretch(3, 1)
 

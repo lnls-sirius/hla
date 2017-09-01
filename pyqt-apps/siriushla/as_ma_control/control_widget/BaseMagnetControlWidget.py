@@ -7,8 +7,9 @@ from pydm.widgets.label import PyDMLabel
 from pydm.widgets.state_button import PyDMStateButton
 from siriuspy.envars import vaca_prefix as _VACA_PREFIX
 from siriushla.FloatSetPointWidget import FloatSetPointWidget
+from siriushla.as_ma_control.MagnetWidget import MagnetWidget
 from pydm.PyQt.QtGui import QWidget, QVBoxLayout, QPushButton, QGroupBox, \
-    QGridLayout, QLabel, QHBoxLayout, QScrollArea
+    QGridLayout, QLabel, QHBoxLayout, QScrollArea, QLineEdit
 
 
 class BaseMagnetControlWidget(QWidget):
@@ -19,7 +20,7 @@ class BaseMagnetControlWidget(QWidget):
     VERTICAL = 2
 
     STYLESHEET = """
-        #header_widget QLabel {
+        /*#header_widget QLabel {
             font-weight: bold;
         }
         #h_state,
@@ -49,7 +50,7 @@ class BaseMagnetControlWidget(QWidget):
         }
         QGroupBox {
             min-width: 1600px;
-        }
+        }*/
     """
 
     def __init__(self, magnet_list, orientation=0, parent=None):
@@ -61,11 +62,34 @@ class BaseMagnetControlWidget(QWidget):
         self._setupUi()
         self.setStyleSheet(self.STYLESHEET)
 
-    def _setupUi(self):
-        self.layout = self._getLayout()
+    def filter_magnets(self, text):
+        count = 0
+        for key, widget in self.widgets_list.items():
+            if text.lower() in key.lower():
+                widget.setVisible(True)
+                count += 1
+            else:
+                widget.setVisible(False)
+        self.count_label.setText("Showing {} magnets".format(count))
 
+    def _setupUi(self):
+        self.layout = QVBoxLayout()
+        self.magnets_layout = self._getLayout()
+
+        self.search_lineedit = QLineEdit(parent=self)
+        self.search_lineedit.setObjectName("search_lineedit")
+        self.search_lineedit.setPlaceholderText("Search for a magnet...")
+        self.search_lineedit.textEdited.connect(self.filter_magnets)
+
+        self.count_label = QLabel(parent=self)
+
+        self.layout.addWidget(self.search_lineedit)
+        self.layout.addWidget(self.count_label)
+        self.layout.addLayout(self.magnets_layout)
+
+        self.widgets_list = dict()
         groups = self._getGroups()
-        last_section = 0
+        # last_section = 0
 
         # Create group boxes and pop. layout
         for idx, group in enumerate(groups):
@@ -83,20 +107,22 @@ class BaseMagnetControlWidget(QWidget):
             group_widgets = list()
             for n, ma in enumerate(magnets):
                 # Add section label widget for individual magnets
-                if self._divideBySection():
-                    section = self._getSection(ma)
-                    if section != last_section:
-                        last_section = section
-                        section_label = QLabel(
-                            "Section {:02d}:".format(section))
-                        # Create a new line with a QLabel only
-                        group_widgets.append(section_label)
+                # if self._divideBySection():
+                #     section = self._getSection(ma)
+                #     if section != last_section:
+                #         last_section = section
+                #         section_label = QLabel(
+                #             "Section {:02d}:".format(section))
+                #         # Create a new line with a QLabel only
+                #         group_widgets.append(section_label)
                 # Add magnet widgets
-                group_widgets.append(self._createGroupWidgets(ma))
+                # group_widgets.append(self._createGroupWidgets(ma))
+                magnet_widget = MagnetWidget(maname=ma, parent=self)
+                group_widgets.append(magnet_widget)
+                self.widgets_list[ma] = magnet_widget
 
             # Create group and scroll area
-            group_box = self._createGroupBox(
-                group[0], self._getHeader(), group_widgets)
+            group_box = self._createGroupBox(group[0], group_widgets)
             if self._hasScrollArea():
                 widget = QScrollArea()
                 widget.setWidget(group_box)
@@ -107,86 +133,91 @@ class BaseMagnetControlWidget(QWidget):
             # Add group box or scroll area to grid layout
             if self._orientation == self.SQUARE:
                 if idx % 2 == 0:
-                    self.layout.addWidget(widget, int(idx), 0)
+                    self.magnets_layout.addWidget(widget, int(idx), 0)
                 else:
-                    self.layout.addWidget(widget, int(idx/2), 1)
+                    self.magnets_layout.addWidget(widget, int(idx/2), 1)
             else:
-                self.layout.addWidget(widget)
+                self.magnets_layout.addWidget(widget)
+
+        self.count_label.setText(
+            "Showing {} magnets.".format(len(self.widgets_list)))
 
         self.setLayout(self.layout)
 
     def _createGroupWidgets(self, ma):
 
-        prefixed_ma = _VACA_PREFIX + ma
+        # prefixed_ma = _VACA_PREFIX + ma
+        #
+        # magnet_widget = QWidget()
+        # magnet_widget.layout = QHBoxLayout()
+        # magnet_widget.setLayout(magnet_widget.layout)
+        #
+        # # Create magnet widgets
+        # state_widget = QWidget(self)
+        # state_widget.setObjectName("state_widget")
+        # state_widget.layout = QHBoxLayout()
+        # state_widget.setLayout(state_widget.layout)
+        # state_button = PyDMStateButton(
+        #     parent=self, init_channel="ca://" + prefixed_ma + ":PwrState-Sel")
+        # state_led = PyDMLed(
+        #     parent=self, init_channel="ca://" + prefixed_ma + ":PwrState-Sts")
+        # state_widget.layout.addWidget(state_button)
+        # state_widget.layout.addWidget(state_led)
+        # name_label = QPushButton(ma, parent=self)
+        # name_label.setObjectName("label_" + ma)
+        # current_widget = FloatSetPointWidget(
+        #     parent=self, channel="ca://" + prefixed_ma + ":Current-SP")
+        # current_rb = PyDMLabel(
+        #     parent=self, init_channel="ca://" + prefixed_ma + ":Current-Mon")
+        # strength_name = self._getStrength()
+        # strength_widget = FloatSetPointWidget(
+        #     parent=self,
+        #     channel="ca://" + prefixed_ma + ":" + strength_name + "-SP")
+        # strength_rb = PyDMLabel(
+        #     parent=self,
+        #     init_channel="ca://" + prefixed_ma + ":" + strength_name + "-SP")
+        #
+        # # Setting
+        # current_widget.set_limits_from_pv(True)
+        # current_rb.precFromPV = True
+        # strength_widget.set_limits_from_pv(True)
+        # strength_rb.precFromPV = True
+        #
+        # magnet_widget.layout.addWidget(state_widget)
+        # magnet_widget.layout.addWidget(name_label)
+        # magnet_widget.layout.addWidget(current_widget)
+        # magnet_widget.layout.addWidget(current_rb)
+        # magnet_widget.layout.addWidget(strength_widget)
+        # magnet_widget.layout.addWidget(strength_rb)
+        # if self._hasTrimButton():
+        #     trim_btn = QPushButton(">", self)
+        #     trim_btn.setObjectName("trim_" + ma)
+        #     magnet_widget.layout.addWidget(trim_btn)
+        # magnet_widget.layout.addStretch()
 
-        magnet_widget = QWidget()
-        magnet_widget.layout = QHBoxLayout()
-        magnet_widget.setLayout(magnet_widget.layout)
 
-        # Create magnet widgets
-        state_widget = QWidget(self)
-        state_widget.setObjectName("state_widget")
-        state_widget.layout = QHBoxLayout()
-        state_widget.setLayout(state_widget.layout)
-        state_button = PyDMStateButton(
-            parent=self, init_channel="ca://" + prefixed_ma + ":PwrState-Sel")
-        state_led = PyDMLed(
-            parent=self, init_channel="ca://" + prefixed_ma + ":PwrState-Sts")
-        state_widget.layout.addWidget(state_button)
-        state_widget.layout.addWidget(state_led)
-        name_label = QPushButton(ma, parent=self)
-        name_label.setObjectName("label_" + ma)
-        current_widget = FloatSetPointWidget(
-            parent=self, channel="ca://" + prefixed_ma + ":Current-SP")
-        current_rb = PyDMLabel(
-            parent=self, init_channel="ca://" + prefixed_ma + ":Current-Mon")
-        strength_name = self._getStrength()
-        strength_widget = FloatSetPointWidget(
-            parent=self,
-            channel="ca://" + prefixed_ma + ":" + strength_name + "-SP")
-        strength_rb = PyDMLabel(
-            parent=self,
-            init_channel="ca://" + prefixed_ma + ":" + strength_name + "-SP")
-
-        # Setting
-        current_widget.set_limits_from_pv(True)
-        current_rb.precFromPV = True
-        strength_widget.set_limits_from_pv(True)
-        strength_rb.precFromPV = True
-
-        magnet_widget.layout.addWidget(state_widget)
-        magnet_widget.layout.addWidget(name_label)
-        magnet_widget.layout.addWidget(current_widget)
-        magnet_widget.layout.addWidget(current_rb)
-        magnet_widget.layout.addWidget(strength_widget)
-        magnet_widget.layout.addWidget(strength_rb)
-        if self._hasTrimButton():
-            trim_btn = QPushButton(">", self)
-            trim_btn.setObjectName("trim_" + ma)
-            magnet_widget.layout.addWidget(trim_btn)
-        magnet_widget.layout.addStretch()
-
+        magnet_widget = MagnetWidget(maname=ma, parent=self)
         return magnet_widget
 
-    def _createGroupBox(self, title, headers, widget_group):
+    def _createGroupBox(self, title, widget_group):
         group_box = QGroupBox(title)
         group_box.layout = QVBoxLayout()
         # Build header
-        header_widget = QWidget()
-        header_widget.setObjectName("header_widget")
-        header_widget.layout = QHBoxLayout()
+        # header_widget = QWidget()
+        # header_widget.setObjectName("header_widget")
+        # header_widget.layout = QHBoxLayout()
 
-        header_ids = ["h_state", "h_magnet_name", "h_current_sp",
-                      "h_current_mon", "h_str_sp", "h_str_mon", "h_trim"]
+        # header_ids = ["h_state", "h_magnet_name", "h_current_sp",
+        #               "h_current_mon", "h_str_sp", "h_str_mon", "h_trim"]
 
-        for col, header in enumerate(headers):
-            label = QLabel(header)
-            label.setObjectName(header_ids[col])
-            header_widget.layout.addWidget(label)
-        header_widget.layout.addStretch()
-        header_widget.setLayout(header_widget.layout)
+        # for col, header in enumerate(headers):
+        #     label = QLabel(header)
+        #     label.setObjectName(header_ids[col])
+        #     header_widget.layout.addWidget(label)
+        # header_widget.layout.addStretch()
+        # header_widget.setLayout(header_widget.layout)
         # Set groupbox layout
-        group_box.layout.addWidget(header_widget)
+        # group_box.layout.addWidget(header_widget)
         for line, widget in enumerate(widget_group):
             group_box.layout.addWidget(widget)
         group_box.layout.addStretch()
