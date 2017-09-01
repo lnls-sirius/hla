@@ -20,10 +20,17 @@ from siriushla.as_ap_injection.InjectionWindow import InjectionWindow
 class ControlApplication(QMainWindow):
     """Application that act as a launcher."""
 
+    LTBMagnetWindow = "ltb_magnets"
+    BoosterMagnetWindow = "bo_magnets"
+    BTSMagnetWindow = "bts_magnets"
+    SiriusMagnetWindow = "sirius_magnets"
+    PulsedMagnetsWindow = "pulsed_magnets"
+    InjectionWindow = "injection"
+
     def __init__(self):
         """Constructor."""
         super().__init__()
-        self._windows = list()
+        self._windows = dict()
         self._setupUi()
 
     def _setupUi(self):
@@ -48,7 +55,9 @@ class ControlApplication(QMainWindow):
 
         # Injection actions
         openInjectionWindow = QAction("Injection", self)
-        openInjectionWindow.triggered.connect(self._openInjectionWindow)
+        openInjectionWindow.triggered.connect(
+            lambda: self._open_window(
+                ControlApplication.InjectionWindow, InjectionWindow))
 
         # openBoosterConfiguration = QAction("Booster Configuration", self)
         # openBoosterConfiguration.triggered.connect(
@@ -92,35 +101,39 @@ class ControlApplication(QMainWindow):
     #     self._windows.append(ConfigManagerWindow(section, self))
     #     self._windows[-1].show()
 
+    def _open_window(self, window, window_class, **kwargs):
+        if window not in self._windows:
+            self._windows[window] = window_class(parent=self, **kwargs)
+        self._windows[window].show()
+
     @pyqtSlot()
     def _openSiriusMagnetsWindow(self):
-        self._windows.append(SiriusMagnetControlWindow(self))
-        self._windows[-1].show()
+        self._open_window(
+            ControlApplication.SiriusMagnetWindow, SiriusMagnetControlWindow)
 
     @pyqtSlot()
     def _openBTSMagnetsWindow(self):
-        self._windows.append(ToSiriusMagnetControlWindow(self))
-        self._windows[-1].show()
+        self._open_window(
+            ControlApplication.BTSMagnetWindow, ToSiriusMagnetControlWindow)
 
     @pyqtSlot()
     def _openBoosterMagnetsWindow(self):
-        self._windows.append(BoosterMagnetControlWindow(self))
-        self._windows[-1].show()
+        self._open_window(
+            ControlApplication.BoosterMagnetWindow, BoosterMagnetControlWindow)
 
     @pyqtSlot()
     def _openLTBMagnetsWindow(self):
-        self._windows.append(ToBoosterMagnetControlWindow(self))
-        self._windows[-1].show()
+        self._open_window(
+            ControlApplication.LTBMagnetWindow, ToBoosterMagnetControlWindow)
 
     @pyqtSlot()
     def _openPulsedMagnetWindow(self):
-        if PulsedMagnetControlWindow.Instance is None:
-            PulsedMagnetControlWindow(parent=self).show()
+        self._open_window(
+            ControlApplication.PulsedMagnetsWindow, PulsedMagnetControlWindow)
 
     @pyqtSlot()
     def _openInjectionWindow(self):
-        if InjectionWindow.Instance is None:
-            InjectionWindow(parent=self).show()
+        self._open_window(ControlApplication.InjectionWindow, InjectionWindow)
 
 
 if __name__ == "__main__":
