@@ -71,13 +71,9 @@ class InjectionWindow(QMainWindow):
             padding: 0;
         }
         """
-    Instance = None
 
     def __init__(self, controller=None, parent=None):
         """Init window."""
-        if InjectionWindow.Instance is not None:
-            return InjectionWindow.Instance
-
         super(InjectionWindow, self).__init__(parent)
 
         self.app = PyDMApplication.instance()
@@ -408,10 +404,13 @@ class InjectionWindow(QMainWindow):
         dock_widget.setWidget(self.bucket_graph)
         self.addDockWidget(Qt.RightDockWidgetArea, dock_widget)
 
+    def showEvent(self, event):
+        self.profile_bar_graph.start()
+
     def closeEvent(self, event):
         """Clear open instance."""
-        self.app.close_widget_connections(self)
-        InjectionWindow.Instance = None
+        # self.app.close_widget_connections(self)
+        self.profile_bar_graph.stop()
         super().closeEvent(event)
 
 

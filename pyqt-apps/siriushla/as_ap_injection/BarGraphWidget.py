@@ -310,9 +310,16 @@ class PyDMBarGraph(BaseBarGraphWidget):
         self.model = PyDMBarGraphModel(init_channel=channel, **kwargs)
         self.update_timer = QTimer(self)
         self.update_timer.timeout.connect(self._update)
-        self.update_timer.start(self.model.update_interval)
 
     # Public interface
+    def start(self):
+        """Start running timer."""
+        self.update_timer.start(self.model.update_interval)
+
+    def stop(self):
+        """Stop."""
+        self.update_timer.stop()
+
     def set_update_interval(self, interval):
         """Set timer update interval."""
         self.update_timer.stop()
