@@ -6,19 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>750</width>
-    <height>330</height>
+    <width>1141</width>
+    <height>456</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">font-size:20pt;</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="2" column="1">
     <widget class="QLabel" name="label_2">
      <property name="styleSheet">
       <string notr="true">font-weight:bold;
-font-size:12pt;
 </string>
      </property>
      <property name="text">
@@ -33,7 +35,6 @@ font-size:12pt;
     <widget class="QLabel" name="label_6">
      <property name="styleSheet">
       <string notr="true">font-weight:bold;
-font-size:12pt;
 </string>
      </property>
      <property name="text">
@@ -48,7 +49,6 @@ font-size:12pt;
     <widget class="QLabel" name="label_3">
      <property name="styleSheet">
       <string notr="true">font-weight:bold;
-font-size:12pt;
 </string>
      </property>
      <property name="text">
@@ -70,16 +70,16 @@ font-size:12pt;
      <property name="maximumSize">
       <size>
        <width>16777215</width>
-       <height>25</height>
+       <height>40</height>
       </size>
      </property>
      <property name="styleSheet">
-      <string notr="true">font-size:16pt;
+      <string notr="true">font-size:24pt;
 font-weight:bold;
 background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, stop:0 rgba(173, 190, 207, 255), stop:1 rgba(213, 213, 213, 255));</string>
      </property>
      <property name="text">
-      <string>LTB Position and Angle Correction</string>
+      <string>${TRANSPORTLINE} Position and Angle Correction</string>
      </property>
     </widget>
    </item>
@@ -381,7 +381,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
      </property>
      <property name="styleSheet">
       <string notr="true">font-weight:bold;
-font-size:14pt;
 </string>
      </property>
      <property name="text">
@@ -396,7 +395,6 @@ font-size:14pt;
     <widget class="QLabel" name="label_7">
      <property name="styleSheet">
       <string notr="true">font-weight:bold;
-font-size:12pt;
 </string>
      </property>
      <property name="text">
@@ -417,7 +415,6 @@ font-size:12pt;
      </property>
      <property name="styleSheet">
       <string notr="true">font-weight:bold;
-font-size:14pt;
 </string>
      </property>
      <property name="text">

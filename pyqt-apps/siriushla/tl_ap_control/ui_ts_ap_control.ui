@@ -6,33 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1860</width>
-    <height>1030</height>
+    <width>3100</width>
+    <height>2020</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>1860</width>
-    <height>1030</height>
+    <width>3100</width>
+    <height>2020</height>
    </size>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">        QGroupBox {
-            font-size:10pt;
-            font-weight:bold;
-        }
-
-        QScrollBar {
-            border: 1px solid black;
-        }
-
-		QTabWidget{
-				font-size:10pt;
-				font-weight:bold;
-		}</string>
+   <string notr="true">font-size:20pt;</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_4">
    <item row="0" column="0" colspan="2">
@@ -43,13 +31,19 @@
        <height>0</height>
       </size>
      </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>40</height>
+      </size>
+     </property>
      <property name="styleSheet">
-      <string notr="true">font-size:16pt;
+      <string notr="true">font-size:24pt;
 font-weight:bold;
 background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, stop:0 rgba(173, 190, 207, 255), stop:1 rgba(213, 213, 213, 255));</string>
      </property>
      <property name="text">
-      <string>BTS Control Window</string>
+      <string>TS Control Window</string>
      </property>
     </widget>
    </item>
@@ -73,7 +67,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>40</height>
+          <height>80</height>
          </size>
         </property>
         <property name="text">
@@ -86,11 +80,15 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>40</height>
+          <height>80</height>
          </size>
         </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
         <property name="text">
-         <string>Save Current Scrn as Reference</string>
+         <string>Save Current Scrn
+ as Reference</string>
         </property>
        </widget>
       </item>
@@ -100,19 +98,19 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
    <item row="2" column="0">
     <widget class="QTabWidget" name="tabWidget_Scrns">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+      <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
      <property name="minimumSize">
       <size>
-       <width>520</width>
+       <width>810</width>
        <height>0</height>
       </size>
      </property>
      <property name="tabShape">
-      <enum>QTabWidget::Triangular</enum>
+      <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
       <number>0</number>
@@ -154,14 +152,14 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
            <widget class="PyDMImageView" name="PyDMImageView_Scrn1">
             <property name="minimumSize">
              <size>
-              <width>499</width>
-              <height>390</height>
+              <width>800</width>
+              <height>640</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>499</width>
-              <height>390</height>
+              <width>800</width>
+              <height>640</height>
              </size>
             </property>
             <property name="toolTip">
@@ -193,9 +191,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </property>
              <item row="2" column="5">
               <widget class="QLabel" name="label_1_11">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>(</string>
                </property>
@@ -210,9 +205,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="7" column="5">
               <widget class="QLabel" name="label_1_31">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>(</string>
                </property>
@@ -220,9 +212,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="5" column="8">
               <widget class="QLabel" name="label_1_22">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string> , </string>
                </property>
@@ -230,9 +219,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="2" column="8">
               <widget class="QLabel" name="label_1_12">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string> , </string>
                </property>
@@ -277,8 +263,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                </property>
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -291,9 +277,9 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
                 </property>
                 <property name="toolTip">
@@ -310,9 +296,9 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
                 </property>
                 <property name="toolTip">
@@ -339,9 +325,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="2" column="10">
               <widget class="QLabel" name="label_1_13">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>)</string>
                </property>
@@ -356,9 +339,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="5" column="10">
               <widget class="QLabel" name="label_1_23">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>)</string>
                </property>
@@ -368,8 +348,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <widget class="QFrame" name="frame_SigmaX_Scrn1">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -382,9 +362,9 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
                 </property>
                 <property name="toolTip">
@@ -401,9 +381,9 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
                 </property>
                 <property name="toolTip">
@@ -423,9 +403,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="5" column="5">
               <widget class="QLabel" name="label_1_21">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>(</string>
                </property>
@@ -433,9 +410,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="7" column="10">
               <widget class="QLabel" name="label_1_33">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>)</string>
                </property>
@@ -445,8 +419,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <widget class="QFrame" name="frame_CentroidY_Scrn1">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -459,9 +433,9 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
                 </property>
                 <property name="toolTip">
@@ -481,9 +455,9 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
                 </property>
                 <property name="toolTip">
@@ -511,8 +485,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <widget class="QFrame" name="frame_SigmaY_Scrn1">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -525,9 +499,9 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
                 </property>
                 <property name="toolTip">
@@ -544,9 +518,9 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
                 </property>
                 <property name="toolTip">
@@ -568,8 +542,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <widget class="QFrame" name="frame_Orientation_Scrn1">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -581,10 +555,10 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <widget class="PyDMLabel" name="PyDMLabel_ThetaNDStats_Scrn1">
                 <property name="geometry">
                  <rect>
-                  <x>70</x>
-                  <y>10</y>
-                  <width>100</width>
-                  <height>18</height>
+                  <x>100</x>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
                 </property>
                 <property name="toolTip">
@@ -603,10 +577,10 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <widget class="PyDMLabel" name="PyDMLabel_ThetaDimfei_Scrn1">
                 <property name="geometry">
                  <rect>
-                  <x>70</x>
-                  <y>10</y>
-                  <width>100</width>
-                  <height>18</height>
+                  <x>100</x>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
                 </property>
                 <property name="toolTip">
@@ -730,14 +704,14 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
            <widget class="PyDMImageView" name="PyDMImageView_Scrn2">
             <property name="minimumSize">
              <size>
-              <width>499</width>
-              <height>390</height>
+              <width>800</width>
+              <height>640</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>499</width>
-              <height>390</height>
+              <width>800</width>
+              <height>640</height>
              </size>
             </property>
             <property name="toolTip">
@@ -762,9 +736,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </property>
              <item row="2" column="9">
               <widget class="QLabel" name="label_1_16">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>)</string>
                </property>
@@ -779,9 +750,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="4" column="9">
               <widget class="QLabel" name="label_1_24">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>)</string>
                </property>
@@ -791,8 +759,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <widget class="QFrame" name="frame_CentroidY_Scrn2">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -805,10 +773,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -821,10 +795,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -837,9 +817,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="6" column="9">
               <widget class="QLabel" name="label_1_34">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>)</string>
                </property>
@@ -849,8 +826,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <widget class="QFrame" name="frame_SigmaX_Scrn2">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -863,10 +840,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -879,10 +862,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -897,8 +886,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <widget class="QFrame" name="frame_CentroidX_Scrn2">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -911,10 +900,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -927,10 +922,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -943,9 +944,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="2" column="4">
               <widget class="QLabel" name="label_1_15">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>(</string>
                </property>
@@ -955,8 +953,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <widget class="QFrame" name="frame_Orientation_Scrn2">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -968,11 +966,17 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <widget class="PyDMLabel" name="PyDMLabel_ThetaNDStats_Scrn2">
                 <property name="geometry">
                  <rect>
-                  <x>80</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <x>100</x>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -987,11 +991,17 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <widget class="PyDMLabel" name="PyDMLabel_ThetaDimfei_Scrn2">
                 <property name="geometry">
                  <rect>
-                  <x>80</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <x>100</x>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1007,9 +1017,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="2" column="7">
               <widget class="QLabel" name="label_1_14">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string> , </string>
                </property>
@@ -1048,8 +1055,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <widget class="QFrame" name="frame_SigmaY_Scrn2">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -1062,10 +1069,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1078,10 +1091,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1101,9 +1120,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="6" column="4">
               <widget class="QLabel" name="label_1_32">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>(</string>
                </property>
@@ -1125,9 +1141,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="4" column="4">
               <widget class="QLabel" name="label_1_25">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>(</string>
                </property>
@@ -1135,9 +1148,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="4" column="7">
               <widget class="QLabel" name="label_1_26">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string> , </string>
                </property>
@@ -1266,9 +1276,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </property>
              <item row="1" column="5">
               <widget class="QLabel" name="label_1_18">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>(</string>
                </property>
@@ -1290,9 +1297,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="3" column="5">
               <widget class="QLabel" name="label_1_28">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>(</string>
                </property>
@@ -1302,8 +1306,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <widget class="QFrame" name="frame_CentroidY_Scrn3">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -1316,10 +1320,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1332,10 +1342,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1350,8 +1366,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <widget class="QFrame" name="frame_SigmaX_Scrn3">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -1364,10 +1380,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1380,10 +1402,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1396,9 +1424,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="5" column="10">
               <widget class="QLabel" name="label_1_35">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>)</string>
                </property>
@@ -1420,9 +1445,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="3" column="10">
               <widget class="QLabel" name="label_1_27">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>)</string>
                </property>
@@ -1430,9 +1452,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="5" column="5">
               <widget class="QLabel" name="label_1_36">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>(</string>
                </property>
@@ -1442,8 +1461,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <widget class="QFrame" name="frame_SigmaY_Scrn3">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -1456,10 +1475,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1472,10 +1497,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1519,8 +1550,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <widget class="QFrame" name="frame_CentroidX_Scrn3">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -1533,10 +1564,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1549,10 +1586,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1565,9 +1608,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="1" column="8">
               <widget class="QLabel" name="label_1_17">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string> , </string>
                </property>
@@ -1575,9 +1615,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="3" column="8">
               <widget class="QLabel" name="label_1_29">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string> , </string>
                </property>
@@ -1587,8 +1624,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <widget class="QFrame" name="frame_Orientation_Scrn3">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -1600,11 +1637,17 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <widget class="PyDMLabel" name="PyDMLabel_ThetaNDStats_Scrn3">
                 <property name="geometry">
                  <rect>
-                  <x>80</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <x>100</x>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1619,11 +1662,17 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <widget class="PyDMLabel" name="PyDMLabel_ThetaDimfei_Scrn3">
                 <property name="geometry">
                  <rect>
-                  <x>80</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <x>100</x>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1652,9 +1701,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="1" column="10">
               <widget class="QLabel" name="label_1_19">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>)</string>
                </property>
@@ -1693,14 +1739,14 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
            <widget class="PyDMImageView" name="PyDMImageView_Scrn3">
             <property name="minimumSize">
              <size>
-              <width>499</width>
-              <height>390</height>
+              <width>800</width>
+              <height>640</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>499</width>
-              <height>390</height>
+              <width>800</width>
+              <height>640</height>
              </size>
             </property>
             <property name="toolTip">
@@ -1797,8 +1843,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <widget class="QFrame" name="frame_Orientation_Scrn41">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -1810,11 +1856,17 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <widget class="PyDMLabel" name="PyDMLabel_ThetaNDStats_Scrn41">
                 <property name="geometry">
                  <rect>
-                  <x>80</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <x>100</x>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1829,11 +1881,17 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <widget class="PyDMLabel" name="PyDMLabel_ThetaDimfei_Scrn41">
                 <property name="geometry">
                  <rect>
-                  <x>80</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <x>100</x>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1849,9 +1907,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="3" column="8">
               <widget class="QLabel" name="label_1_30">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>)</string>
                </property>
@@ -1859,9 +1914,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="5" column="8">
               <widget class="QLabel" name="label_1_37">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>)</string>
                </property>
@@ -1878,8 +1930,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <widget class="QFrame" name="frame_SigmaX_Scrn41">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -1892,10 +1944,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1908,10 +1966,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1926,8 +1990,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <widget class="QFrame" name="frame_CentroidY_Scrn41">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -1940,10 +2004,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1956,10 +2026,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1979,9 +2055,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="3" column="6">
               <widget class="QLabel" name="label_1_42">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string> , </string>
                </property>
@@ -1998,8 +2071,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <widget class="QFrame" name="frame_SigmaY_Scrn41">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -2012,10 +2085,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -2028,10 +2107,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -2080,9 +2165,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="3" column="3">
               <widget class="QLabel" name="label_1_38">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>(</string>
                </property>
@@ -2090,9 +2172,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="1" column="6">
               <widget class="QLabel" name="label_1_20">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string> , </string>
                </property>
@@ -2100,9 +2179,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="5" column="3">
               <widget class="QLabel" name="label_1_39">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>(</string>
                </property>
@@ -2125,8 +2201,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <widget class="QFrame" name="frame_CentroidX_Scrn41">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -2139,10 +2215,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -2155,10 +2237,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -2171,9 +2259,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="1" column="3">
               <widget class="QLabel" name="label_1_40">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>(</string>
                </property>
@@ -2194,9 +2279,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="1" column="8">
               <widget class="QLabel" name="label_1_41">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>)</string>
                </property>
@@ -2222,14 +2304,14 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
            <widget class="PyDMImageView" name="PyDMImageView_Scrn41">
             <property name="minimumSize">
              <size>
-              <width>499</width>
-              <height>390</height>
+              <width>800</width>
+              <height>640</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>499</width>
-              <height>390</height>
+              <width>800</width>
+              <height>640</height>
              </size>
             </property>
             <property name="toolTip">
@@ -2326,8 +2408,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <widget class="QFrame" name="frame_CentroidY_Scrn42">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -2340,10 +2422,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -2356,10 +2444,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -2372,9 +2466,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="1" column="3">
               <widget class="QLabel" name="label_1_48">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>(</string>
                </property>
@@ -2382,9 +2473,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="1" column="8">
               <widget class="QLabel" name="label_1_49">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>)</string>
                </property>
@@ -2394,8 +2482,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <widget class="QFrame" name="frame_CentroidX_Scrn42">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -2408,10 +2496,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -2424,10 +2518,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -2442,8 +2542,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <widget class="QFrame" name="frame_SigmaX_Scrn42">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -2456,10 +2556,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -2472,10 +2578,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -2488,9 +2600,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="3" column="6">
               <widget class="QLabel" name="label_1_50">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string> , </string>
                </property>
@@ -2500,8 +2609,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <widget class="QFrame" name="frame_SigmaY_Scrn42">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -2514,10 +2623,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -2530,10 +2645,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -2548,8 +2669,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <widget class="QFrame" name="frame_Orientation_Scrn42">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -2561,11 +2682,17 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <widget class="PyDMLabel" name="PyDMLabel_ThetaNDStats_Scrn42">
                 <property name="geometry">
                  <rect>
-                  <x>80</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <x>100</x>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -2580,11 +2707,17 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <widget class="PyDMLabel" name="PyDMLabel_ThetaDimfei_Scrn42">
                 <property name="geometry">
                  <rect>
-                  <x>80</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <x>100</x>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -2607,9 +2740,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="1" column="6">
               <widget class="QLabel" name="label_1_44">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string> , </string>
                </property>
@@ -2624,9 +2754,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="3" column="3">
               <widget class="QLabel" name="label_1_46">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>(</string>
                </property>
@@ -2634,9 +2761,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="5" column="8">
               <widget class="QLabel" name="label_1_43">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>)</string>
                </property>
@@ -2673,9 +2797,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="3" column="8">
               <widget class="QLabel" name="label_1_45">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>)</string>
                </property>
@@ -2683,9 +2804,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="5" column="3">
               <widget class="QLabel" name="label_1_47">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>(</string>
                </property>
@@ -2751,14 +2869,14 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
            <widget class="PyDMImageView" name="PyDMImageView_Scrn42">
             <property name="minimumSize">
              <size>
-              <width>499</width>
-              <height>390</height>
+              <width>800</width>
+              <height>640</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>499</width>
-              <height>390</height>
+              <width>800</width>
+              <height>640</height>
              </size>
             </property>
             <property name="toolTip">
@@ -2860,9 +2978,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="3" column="3">
               <widget class="QLabel" name="label_1_54">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>(</string>
                </property>
@@ -2872,8 +2987,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <widget class="QFrame" name="frame_Orientation_Scrn43">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -2885,11 +3000,17 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <widget class="PyDMLabel" name="PyDMLabel_ThetaNDStats_Scrn43">
                 <property name="geometry">
                  <rect>
-                  <x>80</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <x>100</x>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -2904,11 +3025,17 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <widget class="PyDMLabel" name="PyDMLabel_ThetaDimfei_Scrn43">
                 <property name="geometry">
                  <rect>
-                  <x>80</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <x>100</x>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -2924,9 +3051,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="5" column="7">
               <widget class="QLabel" name="label_1_51">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>)</string>
                </property>
@@ -2934,9 +3058,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="3" column="7">
               <widget class="QLabel" name="label_1_53">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>)</string>
                </property>
@@ -2964,9 +3085,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="3" column="5">
               <widget class="QLabel" name="label_1_58">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string> , </string>
                </property>
@@ -2989,8 +3107,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <widget class="QFrame" name="frame_SigmaX_Scrn43">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -3003,10 +3121,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -3019,10 +3143,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -3035,9 +3165,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="5" column="3">
               <widget class="QLabel" name="label_1_55">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>(</string>
                </property>
@@ -3045,9 +3172,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="1" column="5">
               <widget class="QLabel" name="label_1_52">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string> , </string>
                </property>
@@ -3057,8 +3181,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <widget class="QFrame" name="frame_CentroidY_Scrn43">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -3071,10 +3195,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -3087,10 +3217,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -3103,9 +3239,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="1" column="3">
               <widget class="QLabel" name="label_1_56">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>(</string>
                </property>
@@ -3151,8 +3284,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <widget class="QFrame" name="frame_SigmaY_Scrn43">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -3165,10 +3298,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -3181,10 +3320,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -3197,9 +3342,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </item>
              <item row="1" column="7">
               <widget class="QLabel" name="label_1_57">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>)</string>
                </property>
@@ -3209,8 +3351,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <widget class="QFrame" name="frame_CentroidX_Scrn43">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -3223,10 +3365,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -3239,10 +3387,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -3280,14 +3434,14 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
            <widget class="PyDMImageView" name="PyDMImageView_Scrn43">
             <property name="minimumSize">
              <size>
-              <width>499</width>
-              <height>390</height>
+              <width>800</width>
+              <height>640</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>499</width>
-              <height>390</height>
+              <width>800</width>
+              <height>640</height>
              </size>
             </property>
             <property name="toolTip">
@@ -3338,7 +3492,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
     </widget>
    </item>
    <item row="2" column="1" rowspan="2">
-    <widget class="QGroupBox" name="groupBox_allcorrectorsPanel">
+    <widget class="QGroupBox" name="groupBox_allcorrPanel">
      <property name="sizePolicy">
       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
        <horstretch>0</horstretch>
@@ -3347,8 +3501,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
      </property>
      <property name="minimumSize">
       <size>
-       <width>1315</width>
-       <height>770</height>
+       <width>2250</width>
+       <height>1600</height>
       </size>
      </property>
      <property name="title">
@@ -3385,8 +3539,15 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout">
-         <item>
+        <layout class="QGridLayout" name="gridLayout_2">
+         <item row="3" column="0">
+          <widget class="QPushButton" name="pushButton_MAApp">
+           <property name="text">
+            <string>MA</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
           <widget class="QLabel" name="label_BTSApp">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
@@ -3401,8 +3562,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">font-size:10pt;
-font-weight:bold;</string>
+            <string notr="true">font-weight:bold;</string>
            </property>
            <property name="text">
             <string>Open...</string>
@@ -3412,43 +3572,59 @@ font-weight:bold;</string>
            </property>
           </widget>
          </item>
-         <item>
-          <widget class="QPushButton" name="pushButton_LatticeAndTwiss">
+         <item row="3" column="1">
+          <widget class="QPushButton" name="pushButton_PMApp">
            <property name="text">
-            <string>Lattice and Twiss</string>
+            <string>PM</string>
            </property>
           </widget>
          </item>
-         <item>
-          <widget class="QPushButton" name="pushButton_BTS_PosAngleCorrApp">
-           <property name="text">
-            <string>PosAngleCorr</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButton_BTS_MAApp">
-           <property name="text">
-            <string>MA</string>
-           </property>
-          </widget>
-         </item>
-         <item>
+         <item row="4" column="0" colspan="2">
           <widget class="QPushButton" name="pushButton_FCTApp">
            <property name="text">
             <string>FCT</string>
            </property>
           </widget>
          </item>
-         <item>
-          <widget class="QPushButton" name="pushButton_BTS_BPMApp">
+         <item row="5" column="0" colspan="2">
+          <widget class="QPushButton" name="pushButton_BPMApp">
            <property name="text">
             <string>BPM </string>
            </property>
           </widget>
          </item>
+         <item row="2" column="0" colspan="2">
+          <widget class="QPushButton" name="pushButton_PosAngCorrApp">
+           <property name="text">
+            <string>PosAngCorr</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0" colspan="2">
+          <widget class="QPushButton" name="pushButton_LatticeAndTwiss">
+           <property name="text">
+            <string>Lattice and Twiss</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </widget>
+      </item>
+      <item row="0" column="6">
+       <spacer name="horizontalSpacer_21">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Expanding</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
       </item>
       <item row="0" column="3">
        <spacer name="horizontalSpacer_19">
@@ -3482,38 +3658,6 @@ font-weight:bold;</string>
         </property>
        </spacer>
       </item>
-      <item row="0" column="6">
-       <spacer name="horizontalSpacer_21">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Expanding</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="0" column="7">
-       <widget class="QWidget" name="widget_lattice" native="true">
-        <property name="minimumSize">
-         <size>
-          <width>1315</width>
-          <height>180</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>1315</width>
-          <height>180</height>
-         </size>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="5">
        <widget class="QWidget" name="widget_ICTs" native="true">
         <property name="sizePolicy">
@@ -3538,8 +3682,7 @@ font-weight:bold;</string>
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">font-size:10pt;
-font-weight:bold;</string>
+            <string notr="true">font-weight:bold;</string>
            </property>
            <property name="text">
             <string>Transport Efficiency</string>
@@ -3558,7 +3701,7 @@ font-weight:bold;</string>
             </size>
            </property>
            <property name="text">
-            <string>ICT1 - Charge:</string>
+            <string>Charge ICT1:</string>
            </property>
           </widget>
          </item>
@@ -3604,7 +3747,7 @@ font-weight:bold;</string>
                <string>...</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignCenter</set>
+               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -3620,7 +3763,7 @@ font-weight:bold;</string>
             </size>
            </property>
            <property name="text">
-            <string>ICT2 - Charge:</string>
+            <string>Charge ICT2:</string>
            </property>
           </widget>
          </item>
@@ -3666,7 +3809,7 @@ font-weight:bold;</string>
                <string>...</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignCenter</set>
+               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -3723,10 +3866,6 @@ font-weight:bold;</string>
               <property name="whatsThis">
                <string/>
               </property>
-              <property name="styleSheet">
-               <string notr="true">font-size:10pt;
-</string>
-              </property>
               <property name="text">
                <string>PyDMLabel</string>
               </property>
@@ -3742,6 +3881,28 @@ font-weight:bold;</string>
           </widget>
          </item>
         </layout>
+       </widget>
+      </item>
+      <item row="0" column="7">
+       <widget class="QWidget" name="widget_lattice" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>2250</width>
+          <height>350</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
        </widget>
       </item>
      </layout>

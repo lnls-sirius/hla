@@ -6,33 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1860</width>
-    <height>1030</height>
+    <width>3100</width>
+    <height>2020</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>1860</width>
-    <height>1030</height>
+    <width>3100</width>
+    <height>2020</height>
    </size>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">        QGroupBox {
-            font-size:14pt;
-            font-weight:bold;
-        }
-
-        QScrollBar {
-            border: 1px solid black;
-        }
-
-		QTabWidget{
-				font-size:12pt;
-				font-weight:bold;
-		}</string>
+   <string notr="true">font-size:20pt;</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0" colspan="2">
@@ -44,12 +32,12 @@
       </size>
      </property>
      <property name="styleSheet">
-      <string notr="true">font-size:16pt;
+      <string notr="true">font-size:24pt;
 font-weight:bold;
 background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, stop:0 rgba(173, 190, 207, 255), stop:1 rgba(213, 213, 213, 255));</string>
      </property>
      <property name="text">
-      <string>LTB Control Window</string>
+      <string>TB Control Window</string>
      </property>
     </widget>
    </item>
@@ -89,31 +77,18 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
          <property name="bottomMargin">
           <number>0</number>
          </property>
-         <item row="3" column="1">
-          <widget class="QPushButton" name="pushButton_LTB_PosAngleCorrApp">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
+         <item row="4" column="0">
+          <spacer name="horizontalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
            </property>
-           <property name="text">
-            <string>PosAngleCorr</string>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
            </property>
-          </widget>
-         </item>
-         <item row="5" column="1">
-          <widget class="QPushButton" name="pushButton_FCTApp">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>FCT</string>
-           </property>
-          </widget>
+          </spacer>
          </item>
          <item row="1" column="1">
           <widget class="QLabel" name="label_LTBApp">
@@ -130,8 +105,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">font-size:14pt;
-font-weight:bold;
+            <string notr="true">font-weight:bold;
 </string>
            </property>
            <property name="text">
@@ -140,7 +114,7 @@ font-weight:bold;
           </widget>
          </item>
          <item row="4" column="1">
-          <widget class="QPushButton" name="pushButton_LTB_MAApp">
+          <widget class="QPushButton" name="pushButton_MAApp">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -152,8 +126,15 @@ font-weight:bold;
            </property>
           </widget>
          </item>
-         <item row="6" column="1">
-          <widget class="QPushButton" name="pushButton_LTB_BPMApp">
+         <item row="4" column="2">
+          <widget class="QPushButton" name="pushButton_PMApp">
+           <property name="text">
+            <string>PM</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1" colspan="2">
+          <widget class="QPushButton" name="pushButton_PosAngCorrApp">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -161,24 +142,11 @@ font-weight:bold;
             </sizepolicy>
            </property>
            <property name="text">
-            <string>BPM</string>
+            <string>PosAngleCorr</string>
            </property>
           </widget>
          </item>
-         <item row="9" column="1">
-          <widget class="QPushButton" name="pushButton_SplitApp">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>Slits</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
+         <item row="2" column="1" colspan="2">
           <widget class="QPushButton" name="pushButton_LatticeAndTwiss">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -191,18 +159,44 @@ font-weight:bold;
            </property>
           </widget>
          </item>
-         <item row="4" column="0">
-          <spacer name="horizontalSpacer_3">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+         <item row="5" column="1" colspan="2">
+          <widget class="QPushButton" name="pushButton_FCTApp">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
            </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
+           <property name="text">
+            <string>FCT</string>
            </property>
-          </spacer>
+          </widget>
+         </item>
+         <item row="6" column="1" colspan="2">
+          <widget class="QPushButton" name="pushButton_BPMApp">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>BPM</string>
+           </property>
+          </widget>
+         </item>
+         <item row="9" column="1" colspan="2">
+          <widget class="QPushButton" name="pushButton_SplitApp">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Slits</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -223,10 +217,16 @@ font-weight:bold;
       <item>
        <widget class="QTabWidget" name="tabWidget">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>410</width>
+          <height>16777215</height>
+         </size>
         </property>
         <property name="tabPosition">
          <enum>QTabWidget::North</enum>
@@ -235,7 +235,7 @@ font-weight:bold;
          <enum>QTabWidget::Triangular</enum>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <property name="elideMode">
          <enum>Qt::ElideMiddle</enum>
@@ -254,7 +254,7 @@ font-weight:bold;
              </size>
             </property>
             <property name="text">
-             <string>ICT1 - Charge:</string>
+             <string>Charge ICT1:</string>
             </property>
            </widget>
           </item>
@@ -267,7 +267,7 @@ font-weight:bold;
              </size>
             </property>
             <property name="text">
-             <string>ICT2 - Charge:</string>
+             <string>Charge ICT2:</string>
             </property>
            </widget>
           </item>
@@ -407,10 +407,6 @@ font-weight:bold;
                <property name="whatsThis">
                 <string/>
                </property>
-               <property name="styleSheet">
-                <string notr="true">font-size:14pt;
-</string>
-               </property>
                <property name="text">
                 <string>PyDMLabel</string>
                </property>
@@ -431,9 +427,7 @@ font-weight:bold;
              </size>
             </property>
             <property name="styleSheet">
-             <string notr="true">font-size:14pt;
-font-weight:bold;
-</string>
+             <string notr="true">font-weight:bold;</string>
             </property>
             <property name="text">
              <string>Transport Efficiency</string>
@@ -454,7 +448,7 @@ font-weight:bold;
            <widget class="PyDMScrollBar" name="PyDMScrollBar_HSlit_SP">
             <property name="minimumSize">
              <size>
-              <width>100</width>
+              <width>150</width>
               <height>0</height>
              </size>
             </property>
@@ -468,6 +462,12 @@ font-weight:bold;
           </item>
           <item row="10" column="2">
            <widget class="PyDMScrollBar" name="PyDMScrollBar_VSlit_SP">
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="toolTip">
              <string/>
             </property>
@@ -478,11 +478,17 @@ font-weight:bold;
           </item>
           <item row="0" column="2">
            <widget class="QLabel" name="label_3">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>40</height>
+             </size>
+            </property>
             <property name="styleSheet">
              <string notr="true">font-weight:bold;</string>
             </property>
             <property name="text">
-             <string>SP</string>
+             <string>Setpoint</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -491,9 +497,15 @@ font-weight:bold;
           </item>
           <item row="9" column="2">
            <widget class="PyDMLineEdit" name="PyDMLineEdit_VSlit_SP">
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="maximumSize">
              <size>
-              <width>160</width>
+              <width>16777215</width>
               <height>16777215</height>
              </size>
             </property>
@@ -512,6 +524,12 @@ font-weight:bold;
           </item>
           <item row="1" column="2">
            <widget class="PyDMLineEdit" name="PyDMLineEdit_HSlit_SP">
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="maximumSize">
              <size>
               <width>16777215</width>
@@ -569,6 +587,12 @@ font-weight:bold;
           </item>
           <item row="1" column="3">
            <widget class="QFrame" name="frame_HSlit">
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="frameShape">
              <enum>QFrame::Box</enum>
             </property>
@@ -595,7 +619,7 @@ font-weight:bold;
               <widget class="PyDMLabel" name="PyDMLabel_HSlit_RB">
                <property name="maximumSize">
                 <size>
-                 <width>160</width>
+                 <width>150</width>
                  <height>16777215</height>
                 </size>
                </property>
@@ -608,6 +632,9 @@ font-weight:bold;
                <property name="text">
                 <string>PyDMLabel</string>
                </property>
+               <property name="alignment">
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               </property>
               </widget>
              </item>
             </layout>
@@ -615,6 +642,12 @@ font-weight:bold;
           </item>
           <item row="9" column="3">
            <widget class="QFrame" name="frame_VSlit">
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="frameShape">
              <enum>QFrame::Box</enum>
             </property>
@@ -641,7 +674,7 @@ font-weight:bold;
               <widget class="PyDMLabel" name="PyDMLabel_VSlit_RB">
                <property name="maximumSize">
                 <size>
-                 <width>160</width>
+                 <width>150</width>
                  <height>16777215</height>
                 </size>
                </property>
@@ -654,6 +687,9 @@ font-weight:bold;
                <property name="text">
                 <string>PyDMLabel</string>
                </property>
+               <property name="alignment">
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               </property>
               </widget>
              </item>
             </layout>
@@ -661,11 +697,17 @@ font-weight:bold;
           </item>
           <item row="0" column="3">
            <widget class="QLabel" name="label_2">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>40</height>
+             </size>
+            </property>
             <property name="styleSheet">
              <string notr="true">font-weight:bold;</string>
             </property>
             <property name="text">
-             <string>Mon</string>
+             <string>Monitor</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -699,8 +741,8 @@ font-weight:bold;
         </property>
         <property name="minimumSize">
          <size>
-          <width>1315</width>
-          <height>180</height>
+          <width>2250</width>
+          <height>350</height>
          </size>
         </property>
        </widget>
@@ -718,13 +760,13 @@ font-weight:bold;
      </property>
      <property name="minimumSize">
       <size>
-       <width>520</width>
+       <width>820</width>
        <height>0</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>520</width>
+       <width>16777215</width>
        <height>16777215</height>
       </size>
      </property>
@@ -732,11 +774,11 @@ font-weight:bold;
       <enum>QTabWidget::Triangular</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>4</number>
      </property>
      <widget class="QWidget" name="Scrn11">
       <attribute name="title">
-       <string>Scrn 1.1 </string>
+       <string>Scrn 1.1</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
@@ -783,14 +825,14 @@ font-weight:bold;
            <widget class="PyDMImageView" name="PyDMImageView_Scrn11">
             <property name="minimumSize">
              <size>
-              <width>499</width>
-              <height>390</height>
+              <width>800</width>
+              <height>640</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>499</width>
-              <height>390</height>
+              <width>800</width>
+              <height>640</height>
              </size>
             </property>
             <property name="toolTip">
@@ -847,8 +889,8 @@ font-weight:bold;
               <widget class="QFrame" name="frame_CentroidY_Scrn11">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -861,10 +903,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -880,10 +928,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -901,9 +955,6 @@ font-weight:bold;
              </item>
              <item row="6" column="8">
               <widget class="QLabel" name="label_1_33">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>)</string>
                </property>
@@ -911,9 +962,6 @@ font-weight:bold;
              </item>
              <item row="2" column="6">
               <widget class="QLabel" name="label_1_12">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string> , </string>
                </property>
@@ -921,9 +969,6 @@ font-weight:bold;
              </item>
              <item row="4" column="8">
               <widget class="QLabel" name="label_1_23">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>)</string>
                </property>
@@ -931,9 +976,6 @@ font-weight:bold;
              </item>
              <item row="4" column="3">
               <widget class="QLabel" name="label_1_21">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>(</string>
                </property>
@@ -949,8 +991,8 @@ font-weight:bold;
                </property>
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -963,10 +1005,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -982,10 +1030,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1010,8 +1064,8 @@ font-weight:bold;
               <widget class="QFrame" name="frame_SigmaY_Scrn11">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -1024,10 +1078,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1043,10 +1103,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1064,8 +1130,8 @@ font-weight:bold;
               <widget class="QFrame" name="frame_Orientation_Scrn11">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -1077,11 +1143,17 @@ font-weight:bold;
                <widget class="PyDMLabel" name="PyDMLabel_ThetaNDStats_Scrn11">
                 <property name="geometry">
                  <rect>
-                  <x>70</x>
-                  <y>10</y>
-                  <width>100</width>
-                  <height>18</height>
+                  <x>100</x>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1099,11 +1171,17 @@ font-weight:bold;
                <widget class="PyDMLabel" name="PyDMLabel_ThetaDimfei_Scrn11">
                 <property name="geometry">
                  <rect>
-                  <x>70</x>
-                  <y>10</y>
-                  <width>100</width>
-                  <height>18</height>
+                  <x>100</x>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1122,9 +1200,6 @@ font-weight:bold;
              </item>
              <item row="6" column="3">
               <widget class="QLabel" name="label_1_31">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>(</string>
                </property>
@@ -1139,9 +1214,6 @@ font-weight:bold;
              </item>
              <item row="2" column="3">
               <widget class="QLabel" name="label_1_11">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>(</string>
                </property>
@@ -1149,9 +1221,6 @@ font-weight:bold;
              </item>
              <item row="2" column="8">
               <widget class="QLabel" name="label_1_13">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>)</string>
                </property>
@@ -1161,8 +1230,8 @@ font-weight:bold;
               <widget class="QFrame" name="frame_SigmaX_Scrn11">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -1175,10 +1244,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1194,10 +1269,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1213,9 +1294,6 @@ font-weight:bold;
              </item>
              <item row="4" column="6">
               <widget class="QLabel" name="label_1_22">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string> , </string>
                </property>
@@ -1306,7 +1384,7 @@ font-weight:bold;
      </widget>
      <widget class="QWidget" name="Scrn12">
       <attribute name="title">
-       <string>Scrn 1.2 </string>
+       <string>Scrn 1.2</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
@@ -1347,14 +1425,14 @@ font-weight:bold;
            <widget class="PyDMImageView" name="PyDMImageView_Scrn12">
             <property name="minimumSize">
              <size>
-              <width>499</width>
-              <height>390</height>
+              <width>800</width>
+              <height>640</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>499</width>
-              <height>390</height>
+              <width>800</width>
+              <height>640</height>
              </size>
             </property>
             <property name="toolTip">
@@ -1431,9 +1509,6 @@ font-weight:bold;
              </item>
              <item row="4" column="3">
               <widget class="QLabel" name="label_1_25">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>(</string>
                </property>
@@ -1443,8 +1518,8 @@ font-weight:bold;
               <widget class="QFrame" name="frame_SigmaY_Scrn12">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -1457,10 +1532,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1473,10 +1554,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1489,9 +1576,6 @@ font-weight:bold;
              </item>
              <item row="6" column="8">
               <widget class="QLabel" name="label_1_34">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>)</string>
                </property>
@@ -1499,9 +1583,6 @@ font-weight:bold;
              </item>
              <item row="2" column="3">
               <widget class="QLabel" name="label_1_15">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>(</string>
                </property>
@@ -1516,9 +1597,6 @@ font-weight:bold;
              </item>
              <item row="4" column="8">
               <widget class="QLabel" name="label_1_24">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>)</string>
                </property>
@@ -1526,9 +1604,6 @@ font-weight:bold;
              </item>
              <item row="6" column="3">
               <widget class="QLabel" name="label_1_32">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>(</string>
                </property>
@@ -1538,8 +1613,8 @@ font-weight:bold;
               <widget class="QFrame" name="frame_SigmaX_Scrn12">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -1552,10 +1627,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1568,10 +1649,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1584,9 +1671,6 @@ font-weight:bold;
              </item>
              <item row="2" column="8">
               <widget class="QLabel" name="label_1_16">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>)</string>
                </property>
@@ -1601,9 +1685,6 @@ font-weight:bold;
              </item>
              <item row="4" column="6">
               <widget class="QLabel" name="label_1_26">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string> , </string>
                </property>
@@ -1620,8 +1701,8 @@ font-weight:bold;
               <widget class="QFrame" name="frame_CentroidY_Scrn12">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -1634,10 +1715,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1650,10 +1737,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1668,8 +1761,8 @@ font-weight:bold;
               <widget class="QFrame" name="frame_CentroidX_Scrn12">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -1682,10 +1775,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1698,10 +1797,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1716,8 +1821,8 @@ font-weight:bold;
               <widget class="QFrame" name="frame_Orientation_Scrn12">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -1729,11 +1834,17 @@ font-weight:bold;
                <widget class="PyDMLabel" name="PyDMLabel_ThetaNDStats_Scrn12">
                 <property name="geometry">
                  <rect>
-                  <x>80</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <x>100</x>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1748,11 +1859,17 @@ font-weight:bold;
                <widget class="PyDMLabel" name="PyDMLabel_ThetaDimfei_Scrn12">
                 <property name="geometry">
                  <rect>
-                  <x>80</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <x>100</x>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1768,9 +1885,6 @@ font-weight:bold;
              </item>
              <item row="2" column="6">
               <widget class="QLabel" name="label_1_14">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string> , </string>
                </property>
@@ -1832,7 +1946,7 @@ font-weight:bold;
      </widget>
      <widget class="QWidget" name="Scrn21">
       <attribute name="title">
-       <string>Scrn 2.1 </string>
+       <string>Scrn 2.1</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_6">
        <item>
@@ -1873,14 +1987,14 @@ font-weight:bold;
            <widget class="PyDMImageView" name="PyDMImageView_Scrn21">
             <property name="minimumSize">
              <size>
-              <width>499</width>
-              <height>390</height>
+              <width>800</width>
+              <height>640</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>499</width>
-              <height>390</height>
+              <width>800</width>
+              <height>640</height>
              </size>
             </property>
             <property name="toolTip">
@@ -1950,8 +2064,8 @@ font-weight:bold;
               <widget class="QFrame" name="frame_CentroidY_Scrn21">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -1964,10 +2078,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1980,10 +2100,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -1996,9 +2122,6 @@ font-weight:bold;
              </item>
              <item row="7" column="8">
               <widget class="QLabel" name="label_1_35">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>)</string>
                </property>
@@ -2006,9 +2129,6 @@ font-weight:bold;
              </item>
              <item row="3" column="6">
               <widget class="QLabel" name="label_1_17">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string> , </string>
                </property>
@@ -2016,9 +2136,6 @@ font-weight:bold;
              </item>
              <item row="5" column="8">
               <widget class="QLabel" name="label_1_27">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>)</string>
                </property>
@@ -2026,9 +2143,6 @@ font-weight:bold;
              </item>
              <item row="5" column="3">
               <widget class="QLabel" name="label_1_28">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>(</string>
                </property>
@@ -2038,8 +2152,8 @@ font-weight:bold;
               <widget class="QFrame" name="frame_CentroidX_Scrn21">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -2052,10 +2166,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -2068,10 +2188,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -2093,8 +2219,8 @@ font-weight:bold;
               <widget class="QFrame" name="frame_SigmaY_Scrn21">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -2107,10 +2233,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -2123,10 +2255,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -2141,8 +2279,8 @@ font-weight:bold;
               <widget class="QFrame" name="frame_Orientation_Scrn21">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -2154,11 +2292,17 @@ font-weight:bold;
                <widget class="PyDMLabel" name="PyDMLabel_ThetaNDStats_Scrn21">
                 <property name="geometry">
                  <rect>
-                  <x>80</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <x>100</x>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -2173,11 +2317,17 @@ font-weight:bold;
                <widget class="PyDMLabel" name="PyDMLabel_ThetaDimfei_Scrn21">
                 <property name="geometry">
                  <rect>
-                  <x>80</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <x>100</x>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -2193,9 +2343,6 @@ font-weight:bold;
              </item>
              <item row="7" column="3">
               <widget class="QLabel" name="label_1_36">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>(</string>
                </property>
@@ -2210,9 +2357,6 @@ font-weight:bold;
              </item>
              <item row="3" column="3">
               <widget class="QLabel" name="label_1_18">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>(</string>
                </property>
@@ -2220,9 +2364,6 @@ font-weight:bold;
              </item>
              <item row="3" column="8">
               <widget class="QLabel" name="label_1_19">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>)</string>
                </property>
@@ -2232,8 +2373,8 @@ font-weight:bold;
               <widget class="QFrame" name="frame_SigmaX_Scrn21">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -2246,10 +2387,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -2262,10 +2409,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -2278,9 +2431,6 @@ font-weight:bold;
              </item>
              <item row="5" column="6">
               <widget class="QLabel" name="label_1_29">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string> , </string>
                </property>
@@ -2358,7 +2508,7 @@ font-weight:bold;
      </widget>
      <widget class="QWidget" name="Scrn22">
       <attribute name="title">
-       <string>Scrn 2.2 </string>
+       <string>Scrn 2.2</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_8">
        <item>
@@ -2399,14 +2549,14 @@ font-weight:bold;
            <widget class="PyDMImageView" name="PyDMImageView_Scrn22">
             <property name="minimumSize">
              <size>
-              <width>499</width>
-              <height>390</height>
+              <width>800</width>
+              <height>640</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>499</width>
-              <height>390</height>
+              <width>800</width>
+              <height>640</height>
              </size>
             </property>
             <property name="toolTip">
@@ -2450,8 +2600,8 @@ font-weight:bold;
               <widget class="QFrame" name="frame_CentroidY_Scrn22">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -2464,10 +2614,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -2480,10 +2636,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -2496,9 +2658,6 @@ font-weight:bold;
              </item>
              <item row="6" column="8">
               <widget class="QLabel" name="label_1_37">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>)</string>
                </property>
@@ -2506,9 +2665,6 @@ font-weight:bold;
              </item>
              <item row="2" column="6">
               <widget class="QLabel" name="label_1_20">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string> , </string>
                </property>
@@ -2516,9 +2672,6 @@ font-weight:bold;
              </item>
              <item row="4" column="8">
               <widget class="QLabel" name="label_1_30">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>)</string>
                </property>
@@ -2526,9 +2679,6 @@ font-weight:bold;
              </item>
              <item row="4" column="3">
               <widget class="QLabel" name="label_1_38">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>(</string>
                </property>
@@ -2538,8 +2688,8 @@ font-weight:bold;
               <widget class="QFrame" name="frame_CentroidX_Scrn22">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -2552,10 +2702,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -2568,10 +2724,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -2593,8 +2755,8 @@ font-weight:bold;
               <widget class="QFrame" name="frame_SigmaY_Scrn22">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -2607,10 +2769,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -2623,10 +2791,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -2641,8 +2815,8 @@ font-weight:bold;
               <widget class="QFrame" name="frame_Orientation_Scrn22">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -2654,11 +2828,17 @@ font-weight:bold;
                <widget class="PyDMLabel" name="PyDMLabel_ThetaNDStats_Scrn22">
                 <property name="geometry">
                  <rect>
-                  <x>80</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <x>100</x>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -2673,11 +2853,17 @@ font-weight:bold;
                <widget class="PyDMLabel" name="PyDMLabel_ThetaDimfei_Scrn22">
                 <property name="geometry">
                  <rect>
-                  <x>80</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <x>100</x>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -2693,9 +2879,6 @@ font-weight:bold;
              </item>
              <item row="6" column="3">
               <widget class="QLabel" name="label_1_39">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>(</string>
                </property>
@@ -2710,9 +2893,6 @@ font-weight:bold;
              </item>
              <item row="2" column="3">
               <widget class="QLabel" name="label_1_40">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>(</string>
                </property>
@@ -2720,9 +2900,6 @@ font-weight:bold;
              </item>
              <item row="2" column="8">
               <widget class="QLabel" name="label_1_41">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>)</string>
                </property>
@@ -2732,8 +2909,8 @@ font-weight:bold;
               <widget class="QFrame" name="frame_SigmaX_Scrn22">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -2746,10 +2923,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -2762,10 +2945,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -2778,9 +2967,6 @@ font-weight:bold;
              </item>
              <item row="4" column="6">
               <widget class="QLabel" name="label_1_42">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string> , </string>
                </property>
@@ -2925,14 +3111,14 @@ font-weight:bold;
            <widget class="PyDMImageView" name="PyDMImageView_Scrn3">
             <property name="minimumSize">
              <size>
-              <width>499</width>
-              <height>390</height>
+              <width>800</width>
+              <height>640</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>499</width>
-              <height>390</height>
+              <width>800</width>
+              <height>640</height>
              </size>
             </property>
             <property name="toolTip">
@@ -3005,8 +3191,8 @@ font-weight:bold;
               <widget class="QFrame" name="frame_CentroidY_Scrn3">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -3019,10 +3205,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -3035,10 +3227,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -3051,9 +3249,6 @@ font-weight:bold;
              </item>
              <item row="6" column="8">
               <widget class="QLabel" name="label_1_43">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>)</string>
                </property>
@@ -3061,9 +3256,6 @@ font-weight:bold;
              </item>
              <item row="2" column="6">
               <widget class="QLabel" name="label_1_44">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string> , </string>
                </property>
@@ -3071,9 +3263,6 @@ font-weight:bold;
              </item>
              <item row="4" column="8">
               <widget class="QLabel" name="label_1_45">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>)</string>
                </property>
@@ -3081,9 +3270,6 @@ font-weight:bold;
              </item>
              <item row="4" column="3">
               <widget class="QLabel" name="label_1_46">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>(</string>
                </property>
@@ -3093,8 +3279,8 @@ font-weight:bold;
               <widget class="QFrame" name="frame_CentroidX_Scrn3">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -3107,10 +3293,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -3123,10 +3315,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -3148,8 +3346,8 @@ font-weight:bold;
               <widget class="QFrame" name="frame_SigmaY_Scrn3">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -3162,10 +3360,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -3178,10 +3382,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -3196,8 +3406,8 @@ font-weight:bold;
               <widget class="QFrame" name="frame_Orientation_Scrn3">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -3209,11 +3419,17 @@ font-weight:bold;
                <widget class="PyDMLabel" name="PyDMLabel_ThetaNDStats_Scrn3">
                 <property name="geometry">
                  <rect>
-                  <x>80</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <x>100</x>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -3228,11 +3444,17 @@ font-weight:bold;
                <widget class="PyDMLabel" name="PyDMLabel_ThetaDimfei_Scrn3">
                 <property name="geometry">
                  <rect>
-                  <x>80</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <x>100</x>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -3248,9 +3470,6 @@ font-weight:bold;
              </item>
              <item row="6" column="3">
               <widget class="QLabel" name="label_1_47">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>(</string>
                </property>
@@ -3265,9 +3484,6 @@ font-weight:bold;
              </item>
              <item row="2" column="3">
               <widget class="QLabel" name="label_1_48">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>(</string>
                </property>
@@ -3275,9 +3491,6 @@ font-weight:bold;
              </item>
              <item row="2" column="8">
               <widget class="QLabel" name="label_1_49">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>)</string>
                </property>
@@ -3287,8 +3500,8 @@ font-weight:bold;
               <widget class="QFrame" name="frame_SigmaX_Scrn3">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -3301,10 +3514,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -3317,10 +3536,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -3333,9 +3558,6 @@ font-weight:bold;
              </item>
              <item row="4" column="6">
               <widget class="QLabel" name="label_1_50">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string> , </string>
                </property>
@@ -3451,14 +3673,14 @@ font-weight:bold;
            <widget class="PyDMImageView" name="PyDMImageView_Scrn4">
             <property name="minimumSize">
              <size>
-              <width>499</width>
-              <height>390</height>
+              <width>800</width>
+              <height>640</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>499</width>
-              <height>390</height>
+              <width>800</width>
+              <height>640</height>
              </size>
             </property>
             <property name="toolTip">
@@ -3538,8 +3760,8 @@ font-weight:bold;
               <widget class="QFrame" name="frame_CentroidY_Scrn4">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -3552,10 +3774,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -3568,10 +3796,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -3584,9 +3818,6 @@ font-weight:bold;
              </item>
              <item row="6" column="8">
               <widget class="QLabel" name="label_1_51">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>)</string>
                </property>
@@ -3594,9 +3825,6 @@ font-weight:bold;
              </item>
              <item row="2" column="6">
               <widget class="QLabel" name="label_1_52">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string> , </string>
                </property>
@@ -3604,9 +3832,6 @@ font-weight:bold;
              </item>
              <item row="4" column="8">
               <widget class="QLabel" name="label_1_53">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>)</string>
                </property>
@@ -3614,9 +3839,6 @@ font-weight:bold;
              </item>
              <item row="4" column="3">
               <widget class="QLabel" name="label_1_54">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>(</string>
                </property>
@@ -3626,8 +3848,8 @@ font-weight:bold;
               <widget class="QFrame" name="frame_CentroidX_Scrn4">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -3640,10 +3862,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -3656,10 +3884,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -3681,8 +3915,8 @@ font-weight:bold;
               <widget class="QFrame" name="frame_SigmaY_Scrn4">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -3695,10 +3929,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -3711,10 +3951,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -3729,8 +3975,8 @@ font-weight:bold;
               <widget class="QFrame" name="frame_Orientation_Scrn4">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -3742,11 +3988,17 @@ font-weight:bold;
                <widget class="PyDMLabel" name="PyDMLabel_ThetaNDStats_Scrn4">
                 <property name="geometry">
                  <rect>
-                  <x>80</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <x>100</x>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -3761,11 +4013,17 @@ font-weight:bold;
                <widget class="PyDMLabel" name="PyDMLabel_ThetaDimfei_Scrn4">
                 <property name="geometry">
                  <rect>
-                  <x>80</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <x>100</x>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -3781,9 +4039,6 @@ font-weight:bold;
              </item>
              <item row="6" column="3">
               <widget class="QLabel" name="label_1_55">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>(</string>
                </property>
@@ -3791,9 +4046,6 @@ font-weight:bold;
              </item>
              <item row="2" column="3">
               <widget class="QLabel" name="label_1_56">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>(</string>
                </property>
@@ -3801,9 +4053,6 @@ font-weight:bold;
              </item>
              <item row="2" column="8">
               <widget class="QLabel" name="label_1_57">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string>)</string>
                </property>
@@ -3813,8 +4062,8 @@ font-weight:bold;
               <widget class="QFrame" name="frame_SigmaX_Scrn4">
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
-                 <height>35</height>
+                 <width>180</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -3827,10 +4076,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -3843,10 +4098,16 @@ font-weight:bold;
                 <property name="geometry">
                  <rect>
                   <x>10</x>
-                  <y>10</y>
-                  <width>80</width>
-                  <height>18</height>
+                  <y>0</y>
+                  <width>180</width>
+                  <height>40</height>
                  </rect>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>40</height>
+                 </size>
                 </property>
                 <property name="toolTip">
                  <string/>
@@ -3859,9 +4120,6 @@ font-weight:bold;
              </item>
              <item row="4" column="6">
               <widget class="QLabel" name="label_1_58">
-               <property name="styleSheet">
-                <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-               </property>
                <property name="text">
                 <string> , </string>
                </property>
@@ -3937,7 +4195,7 @@ font-weight:bold;
     </widget>
    </item>
    <item row="2" column="1" rowspan="2">
-    <widget class="QGroupBox" name="groupBox_allcorrectorsPanel">
+    <widget class="QGroupBox" name="groupBox_allcorrPanel">
      <property name="sizePolicy">
       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
        <horstretch>0</horstretch>
@@ -3946,8 +4204,8 @@ font-weight:bold;
      </property>
      <property name="minimumSize">
       <size>
-       <width>1315</width>
-       <height>770</height>
+       <width>2250</width>
+       <height>1600</height>
       </size>
      </property>
      <property name="title">
@@ -3975,7 +4233,7 @@ font-weight:bold;
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>40</height>
+          <height>80</height>
          </size>
         </property>
         <property name="text">
@@ -3994,11 +4252,12 @@ font-weight:bold;
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>40</height>
+          <height>80</height>
          </size>
         </property>
         <property name="text">
-         <string>Save Current Scrn as Reference</string>
+         <string>Save Current Scrn
+ as Reference</string>
         </property>
        </widget>
       </item>
