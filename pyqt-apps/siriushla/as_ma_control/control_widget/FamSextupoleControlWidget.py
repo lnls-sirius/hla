@@ -18,7 +18,7 @@ class SiFamSextupoleControlWidget(BaseMagnetControlWidget):
         return False
 
     def _hasScrollArea(self):
-        return False
+        return True
 
     def _divideBySection(self):
         return False
@@ -33,3 +33,6 @@ class BoFamSextupoleControlWidget(SiFamSextupoleControlWidget):
 
     def _getPattern(self):
         return "BO-Fam:MA-S(\w+[0-9]*|[0-9])"
+
+    def _hasScrollArea(self):
+        return False
