@@ -123,17 +123,17 @@ class EpicsBarGraphModel:
 
 
 class PyDMBarGraphModel:
-    """Implement a data model for the bar graph widget based on PyDMChannel.
-
-    init_channel - pv to be represented as a graph
-    size - size of the array
-    scale - scale the array values
-    update_interval - interval to read PV and update view
-    """
+    """Data model for the bar graph widget based on PyDMChannel."""
 
     def __init__(self, init_channel=None, width=1, brush=None,
                  scale=1, update_interval=1000):
-        """Set epics channel connection."""
+        """Set epics channel connection.
+
+        init_channel - pv to be represented as a graph
+        size - size of the array
+        scale - scale the array values
+        update_interval - interval to read PV and update view
+        """
         self.channel = init_channel
         self._channels = None
 
@@ -327,7 +327,7 @@ class PyDMBarGraph(BaseBarGraphWidget):
         self.update_timer.start(self.model.update_interval)
 
     def channels(self):
-        """Used by PYDmApplication to set the model channel."""
+        """Used by PyDmApplication to set the model channel."""
         if isinstance(self.model, PyDMBarGraphModel):
             return self.model.channels()
         return [PyDMChannel()]

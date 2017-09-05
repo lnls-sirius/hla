@@ -105,6 +105,7 @@ class ControlApplication(QMainWindow):
         if window not in self._windows:
             self._windows[window] = window_class(parent=self, **kwargs)
         self._windows[window].show()
+        self._windows[window].activateWindow()
 
     @pyqtSlot()
     def _openSiriusMagnetsWindow(self):
