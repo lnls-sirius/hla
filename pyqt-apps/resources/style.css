@@ -90,7 +90,7 @@ QCheckBox::indicator {
     width: 25px;
     height: 25px;
 }
-
+/*
 PulsedMagnetControlWindow {
   min-width: 1568px;
   max-width: 1568px;
@@ -101,4 +101,4 @@ PulsedMagnetControlWindow {
 BaseMagnetControlWindow {
   min-width: 2336px;
   max-width: 2336px;
-}
+}*/

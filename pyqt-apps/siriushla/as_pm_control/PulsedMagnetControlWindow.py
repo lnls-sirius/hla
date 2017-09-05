@@ -1,6 +1,6 @@
 """Modulet that defines the window class that control pulsed mangets."""
 from pydm import PyDMApplication
-from pydm.PyQt.QtCore import Qt, pyqtSlot
+from pydm.PyQt.QtCore import pyqtSlot
 from pydm.PyQt.QtGui import QMainWindow, QWidget, QVBoxLayout, QTabWidget
 
 from siriuspy.search import MASearch
@@ -12,26 +12,19 @@ from siriushla.as_pm_control.PulsedMagnetDetailWidget \
 class PulsedMagnetControlWindow(QMainWindow):
     """Window to control pulsed magnets."""
 
-    Instance = None
-
     StyleSheet = """
     """
 
     def __init__(self, parent=None):
         """Constructor."""
-        if PulsedMagnetControlWindow.Instance is not None:
-            return PulsedMagnetControlWindow.Instance
-
         self.app = PyDMApplication.instance()
 
         super().__init__(parent)
         self._setup_ui()
         self.setStyleSheet(PulsedMagnetControlWindow.StyleSheet)
 
-        self.setAttribute(Qt.WA_DeleteOnClose)
+        # self.setAttribute(Qt.WA_DeleteOnClose)
         self.app.establish_widget_connections(self)
-
-        PulsedMagnetControlWindow.Instance = self
 
     def _setup_ui(self):
         self.main_widget = QTabWidget(self)
@@ -84,7 +77,7 @@ class PulsedMagnetControlWindow(QMainWindow):
 
     def closeEvent(self, event):
         """Reimplement closed event to close widget connections."""
-        self.app.close_widget_connections(self)
+        # self.app.close_widget_connections(self)
         PulsedMagnetControlWindow.Instance = None
         super().closeEvent(event)
 

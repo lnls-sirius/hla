@@ -1,18 +1,15 @@
 """Widget for controlling a dipole."""
 import re
 
-from pydm.PyQt.QtCore import Qt
-from pydm.PyQt.QtGui import QGridLayout, QVBoxLayout, QHBoxLayout, QLabel, \
-    QSizePolicy
+from pydm.PyQt.QtGui import QGridLayout, QVBoxLayout, QLabel, QSizePolicy, \
+    QFrame
 
 from siriuspy.envars import vaca_prefix
 from pydm.widgets.label import PyDMLabel
 # from pydm.widgets.pushbutton import PyDMPushButton
 from pydm.widgets.state_button import PyDMStateButton
-from pydm.widgets.line_edit import PyDMLineEdit
 from pydm.widgets.enum_combo_box import PyDMEnumComboBox
 from pydm.widgets.led import PyDMLed
-from pydm.widgets.scrollbar import PyDMScrollBar
 from .MagnetDetailWidget import MagnetDetailWidget
 from siriushla.FloatSetPointWidget import FloatSetPointWidget
 
@@ -77,16 +74,16 @@ class DipoleDetailWidget(MagnetDetailWidget):
             QSizePolicy.Minimum, QSizePolicy.Fixed)
 
         ps1_layout = QGridLayout()
-        ps1_layout.addWidget(QLabel("PS1"), 0, 0, 1, 2)
-        ps1_layout.addWidget(self.opmode1_rb, 1, 0, 1, 2)
-        ps1_layout.addWidget(self.ctrlmode1_led, 2, 0)
-        ps1_layout.addWidget(self.ctrlmode1_label, 2, 1)
+        # ps1_layout.addWidget(QLabel("PS1"), 0, 0, 1, 2)
+        ps1_layout.addWidget(self.opmode1_rb, 0, 0, 1, 2)
+        ps1_layout.addWidget(self.ctrlmode1_led, 1, 0)
+        ps1_layout.addWidget(self.ctrlmode1_label, 1, 1)
 
         ps2_layout = QGridLayout()
-        ps2_layout.addWidget(QLabel("PS2"), 0, 0, 1, 2)
-        ps2_layout.addWidget(self.opmode2_rb, 1, 0, 1, 2)
-        ps2_layout.addWidget(self.ctrlmode2_led, 2, 0)
-        ps2_layout.addWidget(self.ctrlmode2_label, 2, 1)
+        # ps2_layout.addWidget(QLabel("PS2"), 0, 0, 1, 2)
+        ps2_layout.addWidget(self.opmode2_rb, 0, 0, 1, 2)
+        ps2_layout.addWidget(self.ctrlmode2_led, 1, 0)
+        ps2_layout.addWidget(self.ctrlmode2_label, 1, 1)
 
         layout.addWidget(self.opmode_sp, 0, 0, 1, 2)
         layout.addLayout(ps1_layout, 1, 0)
@@ -126,12 +123,12 @@ class DipoleDetailWidget(MagnetDetailWidget):
         # buttons_layout.addWidget(self.on_btn)
         # buttons_layout.addWidget(self.off_btn)
         pwrstatus_layout = QGridLayout()
-        pwrstatus_layout.addWidget(QLabel("PS1"), 0, 0, 1, 2)
-        pwrstatus_layout.addWidget(QLabel("PS2"), 0, 2, 1, 2)
-        pwrstatus_layout.addWidget(self.pwrstate1_led, 1, 0)
-        pwrstatus_layout.addWidget(self.pwrstate1_label, 1, 1)
-        pwrstatus_layout.addWidget(self.pwrstate2_led, 1, 2)
-        pwrstatus_layout.addWidget(self.pwrstate2_label, 1, 3)
+        # pwrstatus_layout.addWidget(QLabel("PS1"), 0, 0, 1, 2)
+        # pwrstatus_layout.addWidget(QLabel("PS2"), 0, 2, 1, 2)
+        pwrstatus_layout.addWidget(self.pwrstate1_led, 0, 0)
+        pwrstatus_layout.addWidget(self.pwrstate1_label, 0, 1)
+        pwrstatus_layout.addWidget(self.pwrstate2_led, 0, 2)
+        pwrstatus_layout.addWidget(self.pwrstate2_label, 0, 3)
 
         layout.addWidget(self.state_button)
         layout.addLayout(pwrstatus_layout)
@@ -141,52 +138,82 @@ class DipoleDetailWidget(MagnetDetailWidget):
     def _currentLayout(self):
         layout = QGridLayout()
 
-        self.current_rb_label = QLabel("Readback")
         self.current_sp_label = QLabel("Setpoint")
-
-        self.current_rb_val = PyDMLabel(
-            self, "ca://" + self._prefixed_magnet + ":Current-RB")
-        self.current_rb_val.precFromPV = True
-        # self.current_rb_val.setPrecision(3)
-
-        # self.current_sp_val = PyDMLineEdit(
-        #     self, "ca://" + self._prefixed_magnet + ":Current-SP")
-        # # self.current_sp_val.receivePrecision(3)
-        #
-        # self.current_sp_slider = PyDMScrollBar(
-        #     self, Qt.Horizontal,
-        #     "ca://" + self._prefixed_magnet + ":Current-SP")
-        # self.current_sp_slider.setObjectName(
-        #     "current-sp_" + self._prefixed_magnet)
-        # self.current_sp_slider.setMinimumSize(80, 15)
-        # self.current_sp_slider.limitsFromPV = True
-        # self.current_sp_slider.setSizePolicy(
-        #     QSizePolicy.MinimumExpanding, QSizePolicy.Fixed)
+        self.current_rb_label = QLabel("Readback")
+        self.current_ref_label = QLabel("Ref Mon")
+        self.current_mon_label = QLabel("Mon")
 
         self.current_sp_widget = FloatSetPointWidget(
             parent=self,
             channel="ca://" + self._prefixed_magnet + ":Current-SP")
         self.current_sp_widget.set_limits_from_pv(True)
-
+        # Current RB
+        self.current_rb_val = PyDMLabel(
+            self, "ca://" + self._prefixed_magnet + ":Current-RB")
+        self.current_rb_val.precFromPV = True
         self.ps1_current_rb = PyDMLabel(
             self, "ca://" + self._ps_list[0] + ":Current-RB")
-        # self.ps1_current_rb.setPrecision(3)
         self.ps1_current_rb.precFromPV = True
         self.ps2_current_rb = PyDMLabel(
             self, "ca://" + self._ps_list[1] + ":Current-RB")
-        # self.ps2_current_rb.setPrecision(3)
         self.ps2_current_rb.precFromPV = True
+        # Current Ref
+        self.current_ref_val = PyDMLabel(
+            self, "ca://" + self._prefixed_magnet + ":CurrentRef-Mon")
+        self.current_ref_val.precFromPV = True
+        self.ps1_current_ref = PyDMLabel(
+            self, "ca://" + self._ps_list[0] + ":CurrentRef-Mon")
+        self.ps1_current_ref.precFromPV = True
+        self.ps2_current_ref = PyDMLabel(
+            self, "ca://" + self._ps_list[1] + ":CurrentRef-Mon")
+        self.ps2_current_ref.precFromPV = True
+        # Current Mon
+        self.current_mon_val = PyDMLabel(
+            self, "ca://" + self._prefixed_magnet + ":Current-Mon")
+        self.current_mon_val.precFromPV = True
+        self.ps1_current_mon = PyDMLabel(
+            self, "ca://" + self._ps_list[0] + ":Current-Mon")
+        self.ps1_current_mon.precFromPV = True
+        self.ps2_current_mon = PyDMLabel(
+            self, "ca://" + self._ps_list[1] + ":Current-Mon")
+        self.ps2_current_mon.precFromPV = True
 
-        layout.addWidget(self.current_rb_label, 0, 0)
-        layout.addWidget(self.current_rb_val, 0, 1)
-        layout.addWidget(QLabel("PS1"), 0, 2)
-        layout.addWidget(self.ps1_current_rb, 0, 3)
-        layout.addWidget(QLabel("PS2"), 1, 2)
-        layout.addWidget(self.ps2_current_rb, 1, 3)
-        layout.addWidget(self.current_sp_label, 2, 0)
-        layout.addWidget(self.current_sp_widget, 2, 1)
+        # Horizontal rulers
+        hr1 = QFrame(self)
+        hr1.setFrameShape(QFrame.HLine)
+        hr1.setFrameShadow(QFrame.Sunken)
+        hr2 = QFrame(self)
+        hr2.setFrameShape(QFrame.HLine)
+        hr2.setFrameShadow(QFrame.Sunken)
+        hr3 = QFrame(self)
+        hr3.setFrameShape(QFrame.HLine)
+        hr3.setFrameShadow(QFrame.Sunken)
+
+        layout.addWidget(self.current_sp_label, 0, 0)
+        layout.addWidget(self.current_sp_widget, 0, 1)
+        layout.addWidget(hr3, 1, 0, 1, 3)
+        layout.addWidget(self.current_rb_label, 2, 0)
+        layout.addWidget(self.current_rb_val, 2, 1)
+        # layout.addWidget(QLabel("PS1"), 1, 2)
+        layout.addWidget(self.ps1_current_rb, 2, 2)
+        # layout.addWidget(QLabel("PS2"), 2, 2)
+        layout.addWidget(self.ps2_current_rb, 3, 2)
+        layout.addWidget(hr1, 4, 0, 1, 3)
+        layout.addWidget(self.current_ref_label, 5, 0)
+        layout.addWidget(self.current_ref_val, 5, 1)
+        # layout.addWidget(QLabel("PS1"), 3, 2)
+        layout.addWidget(self.ps1_current_ref, 5, 2)
+        # layout.addWidget(QLabel("PS2"), 4, 2)
+        layout.addWidget(self.ps2_current_ref, 6, 2)
+        layout.addWidget(hr2, 7, 0, 1, 3)
+        layout.addWidget(self.current_mon_label, 8, 0)
+        layout.addWidget(self.current_mon_val, 8, 1)
+        # layout.addWidget(QLabel("PS1"), 5, 2)
+        layout.addWidget(self.ps1_current_mon, 8, 2)
+        # layout.addWidget(QLabel("PS2"), 6, 2)
+        layout.addWidget(self.ps2_current_mon, 9, 2)
         # layout.addWidget(self.current_sp_slider, 3, 1)
-        layout.setRowStretch(4, 1)
+        layout.setRowStretch(10, 1)
         layout.setColumnStretch(4, 1)
 
         return layout
