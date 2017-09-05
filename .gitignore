@@ -1,5 +1,7 @@
 *~
 
+resources.py
+
 # IOC Files
 *.siorb
 *.boorb
