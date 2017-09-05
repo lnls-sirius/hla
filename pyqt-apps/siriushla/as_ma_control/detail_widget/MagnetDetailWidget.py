@@ -1,7 +1,6 @@
 """MagnetDetailWidget definition."""
 import re
 
-from pydm.PyQt.QtCore import Qt
 from pydm.PyQt.QtGui import QWidget, QGroupBox, QGridLayout, QVBoxLayout, \
     QHBoxLayout, QLabel, QSizePolicy
 
@@ -9,10 +8,9 @@ from siriuspy.envars import vaca_prefix
 from pydm.widgets.label import PyDMLabel
 # from pydm.widgets.pushbutton import PyDMPushButton
 from pydm.widgets.state_button import PyDMStateButton
-from pydm.widgets.line_edit import PyDMLineEdit
 from pydm.widgets.enum_combo_box import PyDMEnumComboBox
 from pydm.widgets.led import PyDMLed
-from pydm.widgets.scrollbar import PyDMScrollBar
+from pydm.widgets.pushbutton import PyDMPushButton
 from siriushla.FloatSetPointWidget import FloatSetPointWidget
 
 
@@ -55,6 +53,8 @@ class MagnetDetailWidget(QWidget):
         self.current_box.setObjectName("current")
         self.metric_box = QGroupBox(self._metric_text)
         self.metric_box.setObjectName("metric")
+        self.command_box = QGroupBox("Commands")
+        self.command_box.setObjectName("command_box")
 
         # Set group boxes layouts
         self.interlock_box.setLayout(self._interlockLayout())
@@ -62,6 +62,7 @@ class MagnetDetailWidget(QWidget):
         self.pwrstate_box.setLayout(self._powerStateLayout())
         self.current_box.setLayout(self._currentLayout())
         self.metric_box.setLayout(self._metricLayout())
+        self.command_box.setLayout(self._commandLayout())
 
         # Add group boxes to laytout
         self.layout = self._setWidgetLayout()
@@ -79,8 +80,9 @@ class MagnetDetailWidget(QWidget):
         layout.addWidget(self.pwrstate_box, 1, 2)
         layout.addWidget(self.current_box, 2, 1, 1, 2)
         layout.addWidget(self.metric_box, 3, 1, 1, 2)
+        layout.addWidget(self.command_box, 4, 0, 1, 3)
         layout.setColumnStretch(4, 1)
-        layout.setRowStretch(4, 1)
+        layout.setRowStretch(5, 1)
 
         return layout
 
@@ -159,79 +161,91 @@ class MagnetDetailWidget(QWidget):
     def _currentLayout(self):
         layout = QGridLayout()
 
-        self.current_rb_label = QLabel("Readback")
-
         self.current_sp_label = QLabel("Setpoint")
-
-        self.current_rb_val = PyDMLabel(
-            self, "ca://" + self._prefixed_magnet + ":Current-RB")
-        self.current_rb_val.precFromPV = True
-        # self.current_rb_val.setPrecision(3)
+        self.current_rb_label = QLabel("Readback")
+        self.current_ref_label = QLabel("Ref Mon")
+        self.current_mon_label = QLabel("Mon")
 
         self.current_sp_widget = FloatSetPointWidget(
             parent=self,
             channel="ca://" + self._prefixed_magnet + ":Current-SP")
         self.current_sp_widget.set_limits_from_pv(True)
+        self.current_rb_val = PyDMLabel(
+            self, "ca://" + self._prefixed_magnet + ":Current-RB")
+        self.current_rb_val.precFromPV = True
+        self.current_ref_val = PyDMLabel(
+            self, "ca://" + self._prefixed_magnet + ":CurrentRef-Mon")
+        self.current_ref_val.precFromPV = True
+        self.current_mon_val = PyDMLabel(
+            self, "ca://" + self._prefixed_magnet + ":Current-Mon")
+        self.current_mon_val.precFromPV = True
 
-        # self.current_sp_val = PyDMLineEdit(
-        #     self, "ca://" + self._prefixed_magnet + ":Current-SP")
-        # # self.current_sp_val.receivePrecision(3)
-        #
-        # self.current_sp_slider = PyDMScrollBar(
-        #     self, Qt.Horizontal,
-        #     "ca://" + self._prefixed_magnet + ":Current-SP")
-        # self.current_sp_slider.setObjectName(
-        #     "current-sp_" + self._prefixed_magnet)
-        #     self.current_sp_slider.setMinimumSize(80, 15)
-        # self.current_sp_slider.limitsFromPV = True
-        # self.current_sp_slider.setSizePolicy(
-        #     QSizePolicy.MinimumExpanding, QSizePolicy.Fixed)
-
-        layout.addWidget(self.current_rb_label, 0, 0)
-        layout.addWidget(self.current_rb_val, 0, 1)
-        layout.addWidget(self.current_sp_label, 1, 0)
-        layout.addWidget(self.current_sp_widget, 1, 1)
+        layout.addWidget(self.current_sp_label, 0, 0)
+        layout.addWidget(self.current_sp_widget, 0, 1)
+        layout.addWidget(self.current_rb_label, 1, 0)
+        layout.addWidget(self.current_rb_val, 1, 1)
+        layout.addWidget(self.current_ref_label, 2, 0)
+        layout.addWidget(self.current_ref_val, 2, 1)
+        layout.addWidget(self.current_mon_label, 3, 0)
+        layout.addWidget(self.current_mon_val, 3, 1)
         # layout.addWidget(self.current_sp_slider, 2, 1)
-        layout.setRowStretch(3, 1)
-        layout.setRowStretch(2, 1)
+        layout.setRowStretch(4, 1)
+        layout.setColumnStretch(3, 1)
+        # layout.setRowStretch(2, 1)
 
         return layout
 
     def _metricLayout(self):
         layout = QGridLayout()
 
-        self.metric_rb_label = QLabel("Readback")
         self.metric_sp_label = QLabel("Setpoint")
+        self.metric_rb_label = QLabel("Readback")
+        self.metric_ref_label = QLabel("Ref Mon")
+        self.metric_mon_label = QLabel("Mon")
 
+        self.metric_sp_widget = FloatSetPointWidget(
+            "ca://" + self._prefixed_magnet + ":" + self._metric + "-SP",
+            self)
+        self.metric_sp_widget.set_limits_from_pv(True)
         self.metric_rb_val = PyDMLabel(
             self, "ca://" + self._prefixed_magnet + ":" + self._metric + "-RB")
         self.metric_rb_val.precFromPV = True
-        # self.metric_rb_val.setPrecision(3)
+        self.metric_ref_val = PyDMLabel(
+            self,
+            "ca://" + self._prefixed_magnet + ":" + self._metric + "Ref-Mon")
+        self.metric_ref_val.precFromPV = True
+        self.metric_mon_val = PyDMLabel(
+            self,
+            "ca://" + self._prefixed_magnet + ":" + self._metric + "-Mon")
+        self.metric_mon_val.precFromPV = True
 
-        self.metric_sp_widget = FloatSetPointWidget(
-            parent=self,
-            channel="ca://" + self._prefixed_magnet + ":" + self._metric + "-SP")
-        self.metric_sp_widget.set_limits_from_pv(True)
-        # self.metric_sp_val = PyDMLineEdit(
-        #     self, "ca://" + self._prefixed_magnet + ":" + self._metric + "-SP")
-        # # self.metric_sp_val.receivePrecision(3)
-        #
-        # self.metric_sp_slider = PyDMScrollBar(
-        #     self, Qt.Horizontal,
-        #     "ca://" + self._prefixed_magnet + ":" + self._metric + "-SP")
-        # self.metric_sp_slider.setObjectName("metric-sp_" + self._magnet_name)
-        # self.metric_sp_slider.setMinimumSize(80, 15)
-        # self.metric_sp_slider.limitsFromPV = True
-        # self.metric_sp_slider.setSizePolicy(
-        #     QSizePolicy.MinimumExpanding, QSizePolicy.Fixed)
-
-        layout.addWidget(self.metric_rb_label, 0, 0)
-        layout.addWidget(self.metric_rb_val, 0, 1)
-        layout.addWidget(self.metric_sp_label, 1, 0)
-        layout.addWidget(self.metric_sp_widget, 1, 1)
+        layout.addWidget(self.metric_sp_label, 0, 0)
+        layout.addWidget(self.metric_sp_widget, 0, 1)
+        layout.addWidget(self.metric_rb_label, 1, 0)
+        layout.addWidget(self.metric_rb_val, 1, 1)
+        layout.addWidget(self.metric_ref_label, 2, 0)
+        layout.addWidget(self.metric_ref_val, 2, 1)
+        layout.addWidget(self.metric_mon_label, 3, 0)
+        layout.addWidget(self.metric_mon_val, 3, 1)
         # layout.addWidget(self.metric_sp_slider, 2, 1)
-        layout.setRowStretch(3, 1)
+        layout.setRowStretch(4, 1)
         layout.setColumnStretch(3, 1)
+
+        return layout
+
+    def _commandLayout(self):
+        layout = QHBoxLayout()
+
+        reset_pv = "ca://" + self._prefixed_magnet + ":Reset-Cmd"
+        abort_pv = "ca://" + self._prefixed_magnet + ":Abort-Cmd"
+
+        self.abort_btn = PyDMPushButton(
+            parent=self, label="Abort", pressValue=1, init_channel=abort_pv)
+        self.reset_btn = PyDMPushButton(
+            parent=self, label="Reset", pressValue=1, init_channel=reset_pv)
+
+        layout.addWidget(self.abort_btn)
+        layout.addWidget(self.reset_btn)
 
         return layout
 
