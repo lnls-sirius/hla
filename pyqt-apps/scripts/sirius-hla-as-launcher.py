@@ -4,9 +4,8 @@
 
 import sys
 from pydm import PyDMApplication
-from pydm.PyQt.QtCore import pyqtSlot, QFile
+from pydm.PyQt.QtCore import pyqtSlot
 from pydm.PyQt.QtGui import QMainWindow, QAction, QMenuBar
-# from siriushla.as_ps_cycle import PsCycleWindow
 from siriushla.as_ma_control import ToBoosterMagnetControlWindow
 from siriushla.as_ma_control import BoosterMagnetControlWindow
 from siriushla.as_ma_control import ToSiriusMagnetControlWindow
@@ -14,7 +13,7 @@ from siriushla.as_ma_control import SiriusMagnetControlWindow
 from siriushla.as_pm_control.PulsedMagnetControlWindow \
     import PulsedMagnetControlWindow
 from siriushla.as_ap_injection.InjectionWindow import InjectionWindow
-# from siriushla.as_config_manager import ConfigManagerWindow
+from siriushla import util as _util
 
 
 class ControlApplication(QMainWindow):
@@ -138,17 +137,20 @@ class ControlApplication(QMainWindow):
 
 
 if __name__ == "__main__":
-    import siriushla.resources
+
     app = PyDMApplication(None, sys.argv)
 
     # Implement sirius-style.css as default Qt resource file for Sirius !
-    stream = QFile(':/style.css')
-    if stream.open(QFile.ReadOnly):
-        style = str(stream.readAll(), 'utf-8')
-        stream.close()
-    else:
-        print(stream.errorString())
-    app.setStyleSheet(style)
+    # import siriushla.resources
+    # from pydm.PyQt.QtCore import QFile
+    # stream = QFile(':/style.css')
+    # if stream.open(QFile.ReadOnly):
+    #     style = str(stream.readAll(), 'utf-8')
+    #     stream.close()
+    # else:
+    #     print(stream.errorString())
+    # app.setStyleSheet(style)
+    _util.set_style(app)
 
     window = ControlApplication()
     sys.exit(app.exec_())
