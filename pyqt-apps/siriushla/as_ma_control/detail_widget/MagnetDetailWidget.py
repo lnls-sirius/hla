@@ -17,6 +17,14 @@ from siriushla.FloatSetPointWidget import FloatSetPointWidget
 class MagnetDetailWidget(QWidget):
     """Widget with control interface for a given magnet."""
 
+    StyleSheet = """
+        #current > PyDMLabel,
+        #metric > PyDMLabel {
+            min-width: 7em;
+            max-width: 7em;
+        }
+    """
+
     def __init__(self, magnet_name, parent=None):
         """Class constructor."""
         super(MagnetDetailWidget, self).__init__(parent)
@@ -39,9 +47,10 @@ class MagnetDetailWidget(QWidget):
             self._metric = "Kick"
             self._metric_text = "Kick [mrad]"
 
-        self._setupUi()
+        self._setup_ui()
+        self.setStyleSheet(self.StyleSheet)
 
-    def _setupUi(self):
+    def _setup_ui(self):
         # Group boxes that compose the widget
         self.interlock_box = QGroupBox("Interlock")
         self.interlock_box.setObjectName("interlock")
@@ -229,7 +238,7 @@ class MagnetDetailWidget(QWidget):
         layout.addWidget(self.metric_mon_val, 3, 1)
         # layout.addWidget(self.metric_sp_slider, 2, 1)
         layout.setRowStretch(4, 1)
-        layout.setColumnStretch(3, 1)
+        # layout.setColumnStretch(3, 1)
 
         return layout
 

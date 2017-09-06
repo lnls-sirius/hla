@@ -17,6 +17,14 @@ from siriushla.FloatSetPointWidget import FloatSetPointWidget
 class DipoleDetailWidget(MagnetDetailWidget):
     """Widget that allows controlling a dipole magnet."""
 
+    StyleSheet = """
+        /*#current > FloatSetPointWidget,
+        #metric > FloatSetPointWidget {
+            min-width: 8em;
+            max-width: 8em;
+        }*/
+    """
+
     def __init__(self, magnet_name, parent=None):
         """Class constructor."""
         self._vaca_prefix = vaca_prefix
@@ -190,7 +198,7 @@ class DipoleDetailWidget(MagnetDetailWidget):
         hr3.setFrameShadow(QFrame.Sunken)
 
         layout.addWidget(self.current_sp_label, 0, 0)
-        layout.addWidget(self.current_sp_widget, 0, 1)
+        layout.addWidget(self.current_sp_widget, 0, 1, 1, 2)
         layout.addWidget(hr3, 1, 0, 1, 3)
         layout.addWidget(self.current_rb_label, 2, 0)
         layout.addWidget(self.current_rb_val, 2, 1)
@@ -214,6 +222,6 @@ class DipoleDetailWidget(MagnetDetailWidget):
         layout.addWidget(self.ps2_current_mon, 9, 2)
         # layout.addWidget(self.current_sp_slider, 3, 1)
         layout.setRowStretch(10, 1)
-        layout.setColumnStretch(4, 1)
+        # layout.setColumnStretch(3, 1)
 
         return layout
