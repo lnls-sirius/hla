@@ -1,11 +1,11 @@
 """Base class for controlling a magnet."""
 import re
 
-# from pydm.PyQt.QtCore import Qt
 from siriushla.as_ma_control.MagnetWidget import MagnetWidget
-from pydm.PyQt.QtCore import pyqtSlot
+from pydm.PyQt.QtCore import Qt, QPoint, pyqtSlot
 from pydm.PyQt.QtGui import QWidget, QVBoxLayout, QGroupBox, \
-    QGridLayout, QLabel, QHBoxLayout, QScrollArea, QLineEdit
+    QGridLayout, QLabel, QHBoxLayout, QScrollArea, QLineEdit, QAction, \
+    QMenu, QInputDialog
 
 
 class BaseMagnetControlWidget(QWidget):
@@ -19,32 +19,89 @@ class BaseMagnetControlWidget(QWidget):
     """
 
     def __init__(self, magnet_list, orientation=0, parent=None):
-        """Class constructor."""
+        """Class constructor.
+
+        Parameters:
+        magnet list - a list of magnets, will be filtered based on patterns
+                      defined in the subclass;
+        orientation - how the different groups(defined in subclasses) will be
+                      laid out.
+        """
         super(BaseMagnetControlWidget, self).__init__(parent)
         self._orientation = orientation
         self._magnet_list = magnet_list
+        # Data structures used to filter the widgets
         self.widgets_list = dict()
-
+        self.filtered_widgets = set()  # Set with key of visible widgets
+        # Setup the UI and apply css
         self._setup_ui()
         self.setStyleSheet(self.StyleSheet)
+        # Set custom context menu
+        self.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.customContextMenuRequested.connect(self.show_context_menu)
 
     @pyqtSlot(str)
     def filter_magnets(self, text):
         """Filter magnet widgets based on text inserted at line edit."""
-        count = 0
         try:
             pattern = re.compile(text, re.I)
-        except Exception as e:
-            print("{}".format(e))
-            pattern = re.compile(re.escape(text), re.I)
+        except Exception as e:  # Ignore malformed patterns?
+            pattern = re.compile("malformed")
+        # Clear filtered widgets and add the ones that match the new pattern
+        self.filtered_widgets.clear()
+        for widget in self.widgets_list:
+            if pattern.search(widget):
+                self.filtered_widgets.add(widget)
+        # Set widgets visibility and the number of widgets matched
+        self.set_widgets_visibility()
+        self.count_label.setText(
+            "Showing {} magnets".format(len(self.filtered_widgets)))
+        # Sroll to top
+        for scroll_area in self.findChildren(QScrollArea):
+            scroll_area.verticalScrollBar().setValue(0)
+
+    def set_widgets_visibility(self):
+        """Set visibility of the widgets."""
         for key, widget in self.widgets_list.items():
-            # if text.lower() in key.lower():
-            if pattern.match(key):
+            if key in self.filtered_widgets:
                 widget.setVisible(True)
-                count += 1
             else:
                 widget.setVisible(False)
-        self.count_label.setText("Showing {} magnets".format(count))
+
+    @pyqtSlot(bool)
+    def pwrstate_action(self, state):
+        """Execute actions from context menu."""
+        for key, widget in self.widgets_list.items():
+            if key in self.filtered_widgets:
+                widget.pwrstate_button.sendValue(state)
+
+    @pyqtSlot()
+    def set_current_sp_action(self):
+        """Set current setpoint for every visible widget."""
+        new_value = QInputDialog.getDouble(
+            self, "Insert current setpoint", "Value")
+        # print(new_value)
+        for key, widget in self.widgets_list.items():
+            if key in self.filtered_widgets:
+                widget.analog_widget.sp_lineedit.setText(str(new_value[0]))
+                widget.analog_widget.sp_lineedit.sendValue()
+
+    @pyqtSlot(QPoint)
+    def show_context_menu(self, point):
+        """Show a custom context menu."""
+        menu = QMenu("Actions", self)
+
+        turn_on = QAction("Turn On", self)
+        turn_on.triggered.connect(lambda: self.pwrstate_action(True))
+        turn_off = QAction("Turn Off", self)
+        turn_off.triggered.connect(lambda: self.pwrstate_action(False))
+        set_current_sp = QAction("Set Current SP", self)
+        set_current_sp.triggered.connect(self.set_current_sp_action)
+        menu.addAction(turn_on)
+        menu.addAction(turn_off)
+        menu.addAction(set_current_sp)
+
+        menu.popup(self.mapToGlobal(point))
 
     def _setup_ui(self):
         self.layout = QVBoxLayout()
@@ -61,6 +118,7 @@ class BaseMagnetControlWidget(QWidget):
         self.layout.addWidget(self.count_label)
         self.layout.addLayout(self.magnets_layout)
 
+        # Build Magnet Layout
         groups = self._getGroups()
 
         # Create group boxes and pop. layout
@@ -80,6 +138,7 @@ class BaseMagnetControlWidget(QWidget):
                 magnet_widget = MagnetWidget(maname=ma, parent=self)
                 group_widgets.append(magnet_widget)
                 self.widgets_list[ma] = magnet_widget
+                self.filtered_widgets.add(ma)
 
             # Create group and scroll area
             group_box = self._createGroupBox(group[0], group_widgets)
