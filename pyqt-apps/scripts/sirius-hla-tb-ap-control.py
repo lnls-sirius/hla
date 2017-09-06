@@ -1,30 +1,22 @@
 #!/usr/bin/env python-sirius
-"""High Level Application TB Control Window."""
 
-import sys as _sys
-import argparse as _argparse
-from pydm.PyQt.QtCore import QFile as _QFile
-from pydm import PyDMApplication as _PyDMApplication
-import siriushla.resources
+"""TB High Level Control Window Application."""
+
+import sys as sys
+import argparse as argparse
+from pydm import PyDMApplication as PyDMApplication
 from siriushla.tl_ap_control.HLTLControl import TLAPControlWindow
+from siriushla import util
 
 
-if __name__ == '__main__':
-    parser = _argparse.ArgumentParser(
-                        description="Run TB Control HLA Interface.")
-    parser.add_argument('-p', "--prefix", type=str, default='',
-                        help="Define the prefix for the PVs in the window.")
-    args = parser.parse_args()
+parser = argparse.ArgumentParser(
+                    description="Run TB Control HLA Interface.")
+parser.add_argument('-p', "--prefix", type=str, default='',
+                    help="Define the prefix for the PVs in the window.")
+args = parser.parse_args()
 
-    app = _PyDMApplication(None, _sys.argv)
-    stream = _QFile(':/style.css')
-    if stream.open(_QFile.ReadOnly):
-        style = str(stream.readAll(), 'utf-8')
-        stream.close()
-    else:
-        print(stream.errorString())
-    app.setStyleSheet(style)
-
-    window = TLAPControlWindow(prefix=args.prefix, tl='tb')
-    window.show()
-    _sys.exit(app.exec_())
+app = PyDMApplication(None, sys.argv)
+util.set_style(app)
+window = TLAPControlWindow(prefix=args.prefix, tl='tb')
+window.show()
+sys.exit(app.exec_())

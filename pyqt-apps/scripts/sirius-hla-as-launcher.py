@@ -6,7 +6,6 @@ import sys
 from pydm import PyDMApplication
 from pydm.PyQt.QtCore import pyqtSlot
 from pydm.PyQt.QtGui import QMainWindow, QAction, QMenuBar
-# from siriushla.as_ps_cycle import PsCycleWindow
 from siriushla.as_ma_control import ToBoosterMagnetControlWindow
 from siriushla.as_ma_control import BoosterMagnetControlWindow
 from siriushla.as_ma_control import ToSiriusMagnetControlWindow
@@ -15,7 +14,6 @@ from siriushla.as_pm_control.PulsedMagnetControlWindow \
     import PulsedMagnetControlWindow
 from siriushla.as_ap_injection.InjectionWindow import InjectionWindow
 from siriushla import util as _util
-# from siriushla.as_config_manager import ConfigManagerWindow
 
 
 class ControlApplication(QMainWindow):
