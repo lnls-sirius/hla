@@ -90,7 +90,7 @@ class MagnetDetailWidget(QWidget):
         layout.addWidget(self.current_box, 2, 1, 1, 2)
         layout.addWidget(self.metric_box, 3, 1, 1, 2)
         layout.addWidget(self.command_box, 4, 0, 1, 3)
-        layout.setColumnStretch(4, 1)
+        layout.setColumnStretch(3, 1)
         layout.setRowStretch(5, 1)
 
         return layout

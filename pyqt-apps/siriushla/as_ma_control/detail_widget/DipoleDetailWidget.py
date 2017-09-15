@@ -10,7 +10,8 @@ from pydm.widgets.label import PyDMLabel
 from pydm.widgets.state_button import PyDMStateButton
 from pydm.widgets.enum_combo_box import PyDMEnumComboBox
 from pydm.widgets.led import PyDMLed
-from .MagnetDetailWidget import MagnetDetailWidget
+from siriushla.as_ma_control.detail_widget.MagnetDetailWidget \
+    import MagnetDetailWidget
 from siriushla.FloatSetPointWidget import FloatSetPointWidget
 
 
@@ -18,11 +19,6 @@ class DipoleDetailWidget(MagnetDetailWidget):
     """Widget that allows controlling a dipole magnet."""
 
     StyleSheet = """
-        /*#current > FloatSetPointWidget,
-        #metric > FloatSetPointWidget {
-            min-width: 8em;
-            max-width: 8em;
-        }*/
     """
 
     def __init__(self, magnet_name, parent=None):
@@ -227,3 +223,18 @@ class DipoleDetailWidget(MagnetDetailWidget):
         # layout.setColumnStretch(3, 1)
 
         return layout
+
+
+if __name__ == "__main__":
+    import sys
+    from pydm import PyDMApplication
+    from PyQt5.QtWidgets import QMainWindow
+    app = PyDMApplication(None, [])
+
+    w = QMainWindow()
+    w.setCentralWidget(DipoleDetailWidget("SI-Fam:MA-B1B2", w))
+    w.setStyleSheet("""
+    """)
+    w.show()
+
+    sys.exit(app.exec_())
