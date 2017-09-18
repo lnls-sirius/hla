@@ -175,12 +175,12 @@ class BaseMagnetWidget(QWidget):
         # LineEdit settings to display booster correctors
         if re.match("BO-\d{2}\w:MA-(CH|CV).*", self.maname):
             self.strength_widget.sp_lineedit.unit = "mrad"
-            self.strength_widget.sp_lineedit.scale = 1000
+            # self.strength_widget.sp_lineedit.scale = 1000
             self.strength_widget.sp_lineedit.prec = 4
         # LineEdit settings to display sirius correctors
         if re.match("SI-\d{2}\w\d:MA-(C|FC)[HV].*", self.maname):
             self.strength_widget.sp_lineedit.unit = "urad"
-            self.strength_widget.sp_lineedit.scale = 1000000
+            # self.strength_widget.sp_lineedit.scale = 1000000
             self.strength_widget.sp_lineedit.prec = 4
 
         self.layout.addWidget(self.state_widget)
