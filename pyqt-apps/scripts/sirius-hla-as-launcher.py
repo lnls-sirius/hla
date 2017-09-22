@@ -61,18 +61,18 @@ class ControlApplication(QMainWindow):
         openSIMagnetControlPanel = QAction("All", self)
         openSIMagnetControlPanel.triggered.connect(
             self._openSIMagnetsWindow)
-        openSiriusDipoleWindow = QAction("Dipole", self)
-        openSiriusDipoleWindow.triggered.connect(self._openSiriusDipoleWindow)
-        openSiriusQuadrupolesWindow = QAction("Quadrupoles", self)
-        openSiriusQuadrupolesWindow.triggered.connect(self._openSiriusQuadrupolesWindow)
-        openSiriusSextupolesWindow = QAction("Sextupoles", self)
-        openSiriusSextupolesWindow.triggered.connect(self._openSiriusSextupolesWindow)
-        openSiriusSlowCorrectorsWindow = QAction("Slow Correctors", self)
-        openSiriusSlowCorrectorsWindow.triggered.connect(self._openSiriusSlowCorrectorsWindow)
-        openSiriusFastCorrectorsWindow = QAction("Fast Correctors", self)
-        openSiriusFastCorrectorsWindow.triggered.connect(self._openSiriusFastCorrectorsWindow)
-        openSiriusSkewQuadsWindow = QAction("Skew Quadrupoles", self)
-        openSiriusSkewQuadsWindow.triggered.connect(self._openSiriusSkewQuadsWindow)
+        openSIDipoleWindow = QAction("Dipole", self)
+        openSIDipoleWindow.triggered.connect(self._openSIDipoleWindow)
+        openSIQuadrupolesWindow = QAction("Quadrupoles", self)
+        openSIQuadrupolesWindow.triggered.connect(self._openSIQuadrupolesWindow)
+        openSISextupolesWindow = QAction("Sextupoles", self)
+        openSISextupolesWindow.triggered.connect(self._openSISextupolesWindow)
+        openSISlowCorrectorsWindow = QAction("Slow Correctors", self)
+        openSISlowCorrectorsWindow.triggered.connect(self._openSISlowCorrectorsWindow)
+        openSIFastCorrectorsWindow = QAction("Fast Correctors", self)
+        openSIFastCorrectorsWindow.triggered.connect(self._openSIFastCorrectorsWindow)
+        openSISkewQuadsWindow = QAction("Skew Quadrupoles", self)
+        openSISkewQuadsWindow.triggered.connect(self._openSISkewQuadsWindow)
 
         openPulsedMagnetsControlPanel = QAction("Pulsed Magnets", self)
         openPulsedMagnetsControlPanel.triggered.connect(
@@ -87,8 +87,8 @@ class ControlApplication(QMainWindow):
         # openBoosterConfiguration = QAction("Booster Configuration", self)
         # openBoosterConfiguration.triggered.connect(
         #     lambda: self._openConfigurationWindow('BoForcePvs'))
-        # openSiriusConfiguration = QAction("Sirius Configuration", self)
-        # openSiriusConfiguration.triggered.connect(
+        # openSIConfiguration = QAction("Sirius Configuration", self)
+        # openSIConfiguration.triggered.connect(
         #     lambda: self._openConfigurationWindow('SiForcePvs'))
 
         menubar = QMenuBar(self)
@@ -101,14 +101,14 @@ class ControlApplication(QMainWindow):
         magnetsMenu.addAction(openTBMagnetControlPanel)
         magnetsMenu.addAction(openBoosterMagnetControlPanel)
         magnetsMenu.addAction(openTSMagnetControlPanel)
-        siriusMagnetMenu = magnetsMenu.addMenu("Sirius Magnets")
-        siriusMagnetMenu.addAction(openSIMagnetControlPanel)
-        siriusMagnetMenu.addAction(openSiriusDipoleWindow)
-        siriusMagnetMenu.addAction(openSiriusQuadrupolesWindow)
-        siriusMagnetMenu.addAction(openSiriusSextupolesWindow)
-        siriusMagnetMenu.addAction(openSiriusSlowCorrectorsWindow)
-        siriusMagnetMenu.addAction(openSiriusFastCorrectorsWindow)
-        siriusMagnetMenu.addAction(openSiriusSkewQuadsWindow)
+        SIMagentMenu = magnetsMenu.addMenu("Sirius Magnets")
+        SIMagentMenu.addAction(openSIMagnetControlPanel)
+        SIMagentMenu.addAction(openSIDipoleWindow)
+        SIMagentMenu.addAction(openSIQuadrupolesWindow)
+        SIMagentMenu.addAction(openSISextupolesWindow)
+        SIMagentMenu.addAction(openSISlowCorrectorsWindow)
+        SIMagentMenu.addAction(openSIFastCorrectorsWindow)
+        SIMagentMenu.addAction(openSISkewQuadsWindow)
         # magnetsMenu.addAction(openSIMagnetControlPanel)
 
         pulsedMagnetsMenu = menubar.addMenu("&Pulsed Magnets")
@@ -119,7 +119,7 @@ class ControlApplication(QMainWindow):
 
         # configMenu = menubar.addMenu("&Configuration Control")
         # configMenu.addAction(openBoosterConfiguration)
-        # configMenu.addAction(openSiriusConfiguration)
+        # configMenu.addAction(openSIConfiguration)
 
         self.setMenuBar(menubar)
         self.setGeometry(50, 50, 1024, 800)
@@ -151,36 +151,36 @@ class ControlApplication(QMainWindow):
         self._windows[widget].activateWindow()
 
     @pyqtSlot()
-    def _openSiriusDipoleWindow(self):
+    def _openSIDipoleWindow(self):
         self._create_and_open_window(
             "si-ma-dipole", DipoleDetailWidget, magnet_name="SI-Fam:MA-B1B2")
 
     @pyqtSlot()
-    def _openSiriusQuadrupolesWindow(self):
+    def _openSIQuadrupolesWindow(self):
         self._create_and_open_window(
             "si-ma-quadruole", SiFamQuadrupoleControlWidget,
             magnet_list=self._magnets, orientation=2)
 
     @pyqtSlot()
-    def _openSiriusSextupolesWindow(self):
+    def _openSISextupolesWindow(self):
         self._create_and_open_window(
             "si-ma-sextupole", SiFamSextupoleControlWidget,
             magnet_list=self._magnets, orientation=2)
 
     @pyqtSlot()
-    def _openSiriusSlowCorrectorsWindow(self):
+    def _openSISlowCorrectorsWindow(self):
         self._create_and_open_window(
             "si-ma-correctors-slow", SiSlowCorrectorControlWidget,
             magnet_list=self._magnets)
 
     @pyqtSlot()
-    def _openSiriusFastCorrectorsWindow(self):
+    def _openSIFastCorrectorsWindow(self):
         self._create_and_open_window(
             "si-ma-correctors-fast", SiFastCorrectorControlWidget,
             magnet_list=self._magnets)
 
     @pyqtSlot()
-    def _openSiriusSkewQuadsWindow(self):
+    def _openSISkewQuadsWindow(self):
         self._create_and_open_window(
             "si-ma-quadruole-skew", SiSkewQuadControlWidget,
             magnet_list=self._magnets)
