@@ -123,7 +123,7 @@ class ControlApplication(QMainWindow):
 
         self.setMenuBar(menubar)
         self.setGeometry(50, 50, 1024, 800)
-        self.setWindowTitle("Test Application")
+        self.setWindowTitle("AS Launcher")
         self.show()
 
     # def _openCyclePanel(self, section):
