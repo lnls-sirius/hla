@@ -20,7 +20,7 @@ import pyaccel as _pyaccel
 import pymodels as _pymodels
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla.as_ma_control.MagnetDetailWindow import MagnetDetailWindow
-from siriushla.as_ma_control import ToSiriusMagnetControlWindow
+from siriushla.as_ma_control import TSMagnetControlWindow
 from siriushla.as_ma_control import TBMagnetControlWindow
 from siriushla.as_pm_control.PulsedMagnetDetailWidget import (
                                 PulsedMagnetDetailWidget)
@@ -98,7 +98,7 @@ class TLAPControlWindow(QMainWindow):
                 [3, 'TB-03:DI-Scrn'], [4, 'TB-04:DI-Scrn']]
         elif tl.lower() == 'ts':
             UI_FILE = ('ui_ts_ap_control.ui')
-            SVG_FILE = ('BTS.svg')
+            SVG_FILE = ('TS.svg')
             correctors_list = [
                 [['01:PM-EjeSF', '01:PM-EjeSG'],
                  '01:MA-CV-1', 1, '01:DI-Scrn'],
@@ -592,7 +592,7 @@ class TLAPControlWindow(QMainWindow):
             self._TB_MA_window = TBMagnetControlWindow(self)
             self._TB_MA_window.show()
         elif self._tl.lower() == 'ts':
-            self._TS_MA_window = ToSiriusMagnetControlWindow(self)
+            self._TS_MA_window = TSMagnetControlWindow(self)
             self._TS_MA_window.show()
 
     def _openPMApp(self):
@@ -614,10 +614,10 @@ class TLAPControlWindow(QMainWindow):
                                                      tl='tb')
             self._TB_PosAng_window.show()
         elif self._tl.lower() == 'ts':
-            self._BTS_PosAng_window = ASAPPosAngCorr(parent=self,
+            self._TS_PosAng_window = ASAPPosAngCorr(parent=self,
                                                      prefix=self.prefix,
                                                      tl='ts')
-            self._BTS_PosAng_window.show()
+            self._TS_PosAng_window.show()
 
     def _openLaticeAndTwiss(self):
         self.lattice_and_twiss_window.show()

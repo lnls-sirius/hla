@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>widget_BTS</class>
- <widget class="QWidget" name="widget_BTS">
+ <class>widget_TS</class>
+ <widget class="QWidget" name="widget_TS">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -3532,7 +3532,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
        <number>0</number>
       </property>
       <item row="0" column="2">
-       <widget class="QWidget" name="widget_BTSApp" native="true">
+       <widget class="QWidget" name="widget_TSApp" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -3548,7 +3548,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
           </widget>
          </item>
          <item row="0" column="0">
-          <widget class="QLabel" name="label_BTSApp">
+          <widget class="QLabel" name="label_TSApp">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
              <horstretch>0</horstretch>

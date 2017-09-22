@@ -36,7 +36,7 @@ class PulsedMagnetControlWindow(QMainWindow):
 
         self.main_widget.addTab(self._make_tab_widget("TB"), "TB")
         self.main_widget.addTab(self._make_tab_widget("BO"), "Booster")
-        self.main_widget.addTab(self._make_tab_widget("TS"), "LTS")
+        self.main_widget.addTab(self._make_tab_widget("TS"), "TS")
         self.main_widget.addTab(self._make_tab_widget("SI"), "Storage Ring")
 
         # self._connect_buttons()
