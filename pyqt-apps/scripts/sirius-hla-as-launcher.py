@@ -19,7 +19,7 @@ from siriushla.as_ma_control.control_widget.FastCorrectorControlWidget import \
 from siriushla.as_ma_control.control_widget.SkewQuadControlWidget import \
     SiSkewQuadControlWidget
 from siriushla.as_ma_control import TBMagnetControlWindow
-from siriushla.as_ma_control import BoosterMagnetControlWindow
+from siriushla.as_ma_control import BOMagnetControlWindow
 from siriushla.as_ma_control import TSMagnetControlWindow
 from siriushla.as_ma_control import SIMagnetControlWindow
 from siriushla.as_pm_control.PulsedMagnetControlWindow \
@@ -32,10 +32,10 @@ from siriuspy.search import MASearch
 class ControlApplication(QMainWindow):
     """Application that act as a launcher."""
 
-    TBMagnetWindow = "ltb_magnets"
-    BoosterMagnetWindow = "bo_magnets"
-    TSMagnetWindow = "bts_magnets"
-    SIMagnetWindow = "sirius_magnets"
+    TBMagnetWindow = "tb_magnets"
+    BOMagnetWindow = "bo_magnets"
+    TSMagnetWindow = "ts_magnets"
+    SIMagnetWindow = "si_magnets"
     PulsedMagnetsWindow = "pulsed_magnets"
     InjectionWindow = "injection"
 
@@ -52,9 +52,9 @@ class ControlApplication(QMainWindow):
 
         openTBMagnetControlPanel = QAction("TB Magnets", self)
         openTBMagnetControlPanel.triggered.connect(self._openTBMagnetsWindow)
-        openBoosterMagnetControlPanel = QAction("Booster Magnets", self)
-        openBoosterMagnetControlPanel.triggered.connect(
-            self._openBoosterMagnetsWindow)
+        openBOMagnetControlPanel = QAction("BO Magnets", self)
+        openBOMagnetControlPanel.triggered.connect(
+            self._openBOMagnetsWindow)
         openTSMagnetControlPanel = QAction("TS Magnets", self)
         openTSMagnetControlPanel.triggered.connect(
             self._openTSMagnetsWindow)
@@ -99,7 +99,7 @@ class ControlApplication(QMainWindow):
 
         magnetsMenu = menubar.addMenu("&Magnets")
         magnetsMenu.addAction(openTBMagnetControlPanel)
-        magnetsMenu.addAction(openBoosterMagnetControlPanel)
+        magnetsMenu.addAction(openBOMagnetControlPanel)
         magnetsMenu.addAction(openTSMagnetControlPanel)
         SIMagentMenu = magnetsMenu.addMenu("Sirius Magnets")
         SIMagentMenu.addAction(openSIMagnetControlPanel)
@@ -196,9 +196,9 @@ class ControlApplication(QMainWindow):
             ControlApplication.TSMagnetWindow, TSMagnetControlWindow)
 
     @pyqtSlot()
-    def _openBoosterMagnetsWindow(self):
+    def _openBOMagnetsWindow(self):
         self._open_window(
-            ControlApplication.BoosterMagnetWindow, BoosterMagnetControlWindow)
+            ControlApplication.BOMagnetWindow, BOMagnetControlWindow)
 
     @pyqtSlot()
     def _openTBMagnetsWindow(self):

@@ -10,14 +10,14 @@ from .control_widget.FamSextupoleControlWidget import BoFamSextupoleControlWidge
 from .control_widget.SlowCorrectorControlWidget import BoSlowCorrectorControlWidget
 from .control_widget.SkewQuadControlWidget import BoSkewQuadControlWidget
 
-class BoosterMagnetControlWindow(BaseMagnetControlWindow):
+class BOMagnetControlWindow(BaseMagnetControlWindow):
     """"""
 
     def __init__(self, parent=None):
         """Class constructor."""
         self._magnets = [re.sub("PS-", "MA-", x) for x in MASearch.get_manames([{"section": "BO"}])]
-        super(BoosterMagnetControlWindow, self).__init__(parent)
-        self.setWindowTitle('Booster Magnet Control Panel')
+        super(BOMagnetControlWindow, self).__init__(parent)
+        self.setWindowTitle('BO Magnet Control Panel')
 
     def _addTabs(self):
         orientation = BaseMagnetControlWidget.VERTICAL

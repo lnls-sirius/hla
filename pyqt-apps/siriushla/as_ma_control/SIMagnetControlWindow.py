@@ -26,7 +26,7 @@ class SIMagnetControlWindow(BaseMagnetControlWindow):
                          for x in MASearch.get_manames([{"section": "SI"}])]
         self._trim_windows = dict()
         super(SIMagnetControlWindow, self).__init__(parent)
-        self.setWindowTitle('Sirius Magnet Control Panel')
+        self.setWindowTitle('SI Magnet Control Panel')
 
     def _addTabs(self):
         self.dipo_tab = DipoleDetailWidget("SI-Fam:MA-B1B2", self)
