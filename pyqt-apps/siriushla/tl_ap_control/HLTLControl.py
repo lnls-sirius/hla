@@ -21,7 +21,7 @@ import pymodels as _pymodels
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla.as_ma_control.MagnetDetailWindow import MagnetDetailWindow
 from siriushla.as_ma_control import ToSiriusMagnetControlWindow
-from siriushla.as_ma_control import ToBoosterMagnetControlWindow
+from siriushla.as_ma_control import TBMagnetControlWindow
 from siriushla.as_pm_control.PulsedMagnetDetailWidget import (
                                 PulsedMagnetDetailWidget)
 from siriushla.as_pm_control.PulsedMagnetControlWindow import (
@@ -84,7 +84,7 @@ class TLAPControlWindow(QMainWindow):
 
         if tl.lower() == 'tb':
             UI_FILE = ('ui_tb_ap_control.ui')
-            SVG_FILE = ('LTB.svg')
+            SVG_FILE = ('TB.svg')
             correctors_list = [
                 [['01:MA-CH-7'], '01:MA-CV-7', 11, '01:DI-Scrn-1'],
                 [['01:MA-CH-1'], '01:MA-CV-1', 12, '01:DI-Scrn-2'],
@@ -589,7 +589,7 @@ class TLAPControlWindow(QMainWindow):
 
     def _openMAApp(self):
         if self._tl.lower() == 'tb':
-            self._TB_MA_window = ToBoosterMagnetControlWindow(self)
+            self._TB_MA_window = TBMagnetControlWindow(self)
             self._TB_MA_window.show()
         elif self._tl.lower() == 'ts':
             self._TS_MA_window = ToSiriusMagnetControlWindow(self)
@@ -609,10 +609,10 @@ class TLAPControlWindow(QMainWindow):
 
     def _openPosAngCorrApp(self):
         if self._tl.lower() == 'tb':
-            self._LTB_PosAng_window = ASAPPosAngCorr(parent=self,
+            self._TB_PosAng_window = ASAPPosAngCorr(parent=self,
                                                      prefix=self.prefix,
                                                      tl='tb')
-            self._LTB_PosAng_window.show()
+            self._TB_PosAng_window.show()
         elif self._tl.lower() == 'ts':
             self._BTS_PosAng_window = ASAPPosAngCorr(parent=self,
                                                      prefix=self.prefix,

@@ -1,4 +1,4 @@
-from .ToBoosterMagnetControlWindow import ToBoosterMagnetControlWindow
+from .TBMagnetControlWindow import TBMagnetControlWindow
 from .BoosterMagnetControlWindow import BoosterMagnetControlWindow
 from .ToSiriusMagnetControlWindow import ToSiriusMagnetControlWindow
 from .SiriusMagnetControlWindow import SiriusMagnetControlWindow

@@ -34,7 +34,7 @@ class PulsedMagnetControlWindow(QMainWindow):
         self.setWindowTitle("Pulsed magnets control window")
         self.setFocus()
 
-        self.main_widget.addTab(self._make_tab_widget("TB"), "LTB")
+        self.main_widget.addTab(self._make_tab_widget("TB"), "TB")
         self.main_widget.addTab(self._make_tab_widget("BO"), "Booster")
         self.main_widget.addTab(self._make_tab_widget("TS"), "LTS")
         self.main_widget.addTab(self._make_tab_widget("SI"), "Storage Ring")

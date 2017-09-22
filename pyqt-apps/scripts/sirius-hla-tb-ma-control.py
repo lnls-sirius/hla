@@ -4,12 +4,12 @@
 
 import sys
 from pydm import PyDMApplication
-from siriushla.as_ma_control import ToBoosterMagnetControlWindow
+from siriushla.as_ma_control import TBMagnetControlWindow
 from siriushla import util
 
 
 app = PyDMApplication(None, sys.argv)
 util.set_style(app)
-window = ToBoosterMagnetControlWindow()
+window = TBMagnetControlWindow()
 window.show()
 sys.exit(app.exec_())

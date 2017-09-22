@@ -18,7 +18,7 @@ from siriushla.as_ma_control.control_widget.FastCorrectorControlWidget import \
     SiFastCorrectorControlWidget
 from siriushla.as_ma_control.control_widget.SkewQuadControlWidget import \
     SiSkewQuadControlWidget
-from siriushla.as_ma_control import ToBoosterMagnetControlWindow
+from siriushla.as_ma_control import TBMagnetControlWindow
 from siriushla.as_ma_control import BoosterMagnetControlWindow
 from siriushla.as_ma_control import ToSiriusMagnetControlWindow
 from siriushla.as_ma_control import SiriusMagnetControlWindow
@@ -32,7 +32,7 @@ from siriuspy.search import MASearch
 class ControlApplication(QMainWindow):
     """Application that act as a launcher."""
 
-    LTBMagnetWindow = "ltb_magnets"
+    TBMagnetWindow = "ltb_magnets"
     BoosterMagnetWindow = "bo_magnets"
     BTSMagnetWindow = "bts_magnets"
     SiriusMagnetWindow = "sirius_magnets"
@@ -50,8 +50,8 @@ class ControlApplication(QMainWindow):
         # openCyclePanel = QAction("PS Cycling", self)
         # openCyclePanel.triggered.connect(self._openCyclePanel)
 
-        openLTBMagnetControlPanel = QAction("LTB Magnets", self)
-        openLTBMagnetControlPanel.triggered.connect(self._openLTBMagnetsWindow)
+        openTBMagnetControlPanel = QAction("TB Magnets", self)
+        openTBMagnetControlPanel.triggered.connect(self._openTBMagnetsWindow)
         openBoosterMagnetControlPanel = QAction("Booster Magnets", self)
         openBoosterMagnetControlPanel.triggered.connect(
             self._openBoosterMagnetsWindow)
@@ -98,7 +98,7 @@ class ControlApplication(QMainWindow):
         # psMenu.addAction(openCyclePanel)
 
         magnetsMenu = menubar.addMenu("&Magnets")
-        magnetsMenu.addAction(openLTBMagnetControlPanel)
+        magnetsMenu.addAction(openTBMagnetControlPanel)
         magnetsMenu.addAction(openBoosterMagnetControlPanel)
         magnetsMenu.addAction(openBTSMagnetControlPanel)
         siriusMagnetMenu = magnetsMenu.addMenu("Sirius Magnets")
@@ -201,9 +201,9 @@ class ControlApplication(QMainWindow):
             ControlApplication.BoosterMagnetWindow, BoosterMagnetControlWindow)
 
     @pyqtSlot()
-    def _openLTBMagnetsWindow(self):
+    def _openTBMagnetsWindow(self):
         self._open_window(
-            ControlApplication.LTBMagnetWindow, ToBoosterMagnetControlWindow)
+            ControlApplication.TBMagnetWindow, TBMagnetControlWindow)
 
     @pyqtSlot()
     def _openPulsedMagnetWindow(self):
