@@ -12,6 +12,7 @@ from pydm.widgets.enum_combo_box import PyDMEnumComboBox
 from pydm.widgets.led import PyDMLed
 from pydm.widgets.pushbutton import PyDMPushButton
 from siriushla.FloatSetPointWidget import FloatSetPointWidget
+from siriushla import util as _util
 
 
 class MagnetDetailWidget(QWidget):
@@ -45,7 +46,8 @@ class MagnetDetailWidget(QWidget):
             self._metric_text = "SL [1/m^2]"
         elif self._magnet_type in ["sc", "fc"]:
             self._metric = "Kick"
-            self._metric_text = "Kick [mrad]"
+            unit = _util.get_kick_unit(self._magnet_name)
+            self._metric_text = "Kick [{}]".format(unit)
 
         self._setup_ui()
         self.setStyleSheet(self.StyleSheet)

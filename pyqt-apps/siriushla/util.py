@@ -39,7 +39,7 @@ def get_kick_unit(channel):
 
     pvname = channel[channel.find(section):]
 
-    if _re.search("-(CH|CV|FCH|FCV).*:", pvname):
+    if _re.search("-(CH|CV|FCH|FCV).*", pvname):
         if section in ["SI", "BO"]:
             return "urad"
         elif section in ["TS", "TB"]:
