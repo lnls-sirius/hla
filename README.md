@@ -8,10 +8,20 @@ Sirius High Level Applications
 * si-lifetime
 * as-status
 
-### PyQt Client Application
+### SiriusDM/PyDM/PyQt Client Application
 * as-topup
-
-### Machine Applications
-* pcaspy_template (to generate a initial pcaspy CA server)
-* si-ap-currlt (SI current and lifetime soft iocs)
-* si-fam-ma (SI soft ioc to provide high level PVs associated with magnet families' power supplies)
+* sirius-hla-as-launcher.py
+* sirius-hla-bo-ma-control.py
+* sirius-hla-si-ma-control.py
+* sirius-hla-ts-ap-control.py
+* sirius-hla-as-ps-cycle.py
+* sirius-hla-si-ap-currlt.py
+* sirius-hla-tb-ap-control.py
+* sirius-hla-ts-ap-posang.py
+* sirius-hla-as-ti-control.py
+* sirius-hla-si-ap-sofb.py
+* sirius-hla-tb-ap-posang.py
+* sirius-hla-ts-ma-control.py
+* sirius-hla-bo-config-manager.py
+* sirius-hla-si-config-manager.py
+* sirius-hla-tb-ma-control.py

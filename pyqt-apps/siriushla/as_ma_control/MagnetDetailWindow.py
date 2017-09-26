@@ -28,7 +28,8 @@ class MagnetDetailWindow(QDialog):
         self.widget = DetailWidgetFactory.factory(self._ma, self)
         self.layout.addWidget(self.widget)
 
-        self.setWindowTitle(self._ma + ' Detail')
+        #self.setWindowTitle(self._ma + ' Detail')
+        self.setWindowTitle(self._ma)
         self.setLayout(self.layout)
 
     def showEvent(self, event):

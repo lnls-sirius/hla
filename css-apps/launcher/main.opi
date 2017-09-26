@@ -217,7 +217,7 @@ $(pv_value)</tooltip>
     </background_color>
     <width>210</width>
     <x>15</x>
-    <name>ABTS</name>
+    <name>ATS</name>
     <y>230</y>
     <style>0</style>
     <foreground_color>

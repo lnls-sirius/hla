@@ -18,10 +18,10 @@ from siriushla.as_ma_control.control_widget.FastCorrectorControlWidget import \
     SiFastCorrectorControlWidget
 from siriushla.as_ma_control.control_widget.SkewQuadControlWidget import \
     SiSkewQuadControlWidget
-from siriushla.as_ma_control import ToBoosterMagnetControlWindow
-from siriushla.as_ma_control import BoosterMagnetControlWindow
-from siriushla.as_ma_control import ToSiriusMagnetControlWindow
-from siriushla.as_ma_control import SiriusMagnetControlWindow
+from siriushla.as_ma_control import TBMagnetControlWindow
+from siriushla.as_ma_control import BOMagnetControlWindow
+from siriushla.as_ma_control import TSMagnetControlWindow
+from siriushla.as_ma_control import SIMagnetControlWindow
 from siriushla.as_pm_control.PulsedMagnetControlWindow \
     import PulsedMagnetControlWindow
 from siriushla.as_ap_injection.InjectionWindow import InjectionWindow
@@ -32,10 +32,10 @@ from siriuspy.search import MASearch
 class ControlApplication(QMainWindow):
     """Application that act as a launcher."""
 
-    LTBMagnetWindow = "ltb_magnets"
-    BoosterMagnetWindow = "bo_magnets"
-    BTSMagnetWindow = "bts_magnets"
-    SiriusMagnetWindow = "sirius_magnets"
+    TBMagnetWindow = "tb_magnets"
+    BOMagnetWindow = "bo_magnets"
+    TSMagnetWindow = "ts_magnets"
+    SIMagnetWindow = "si_magnets"
     PulsedMagnetsWindow = "pulsed_magnets"
     InjectionWindow = "injection"
 
@@ -50,29 +50,29 @@ class ControlApplication(QMainWindow):
         # openCyclePanel = QAction("PS Cycling", self)
         # openCyclePanel.triggered.connect(self._openCyclePanel)
 
-        openLTBMagnetControlPanel = QAction("LTB Magnets", self)
-        openLTBMagnetControlPanel.triggered.connect(self._openLTBMagnetsWindow)
-        openBoosterMagnetControlPanel = QAction("Booster Magnets", self)
-        openBoosterMagnetControlPanel.triggered.connect(
-            self._openBoosterMagnetsWindow)
-        openBTSMagnetControlPanel = QAction("BTS Magnets", self)
-        openBTSMagnetControlPanel.triggered.connect(
-            self._openBTSMagnetsWindow)
-        openSiriusMagnetControlPanel = QAction("All", self)
-        openSiriusMagnetControlPanel.triggered.connect(
-            self._openSiriusMagnetsWindow)
-        openSiriusDipoleWindow = QAction("Dipole", self)
-        openSiriusDipoleWindow.triggered.connect(self._openSiriusDipoleWindow)
-        openSiriusQuadrupolesWindow = QAction("Quadrupoles", self)
-        openSiriusQuadrupolesWindow.triggered.connect(self._openSiriusQuadrupolesWindow)
-        openSiriusSextupolesWindow = QAction("Sextupoles", self)
-        openSiriusSextupolesWindow.triggered.connect(self._openSiriusSextupolesWindow)
-        openSiriusSlowCorrectorsWindow = QAction("Slow Correctors", self)
-        openSiriusSlowCorrectorsWindow.triggered.connect(self._openSiriusSlowCorrectorsWindow)
-        openSiriusFastCorrectorsWindow = QAction("Fast Correctors", self)
-        openSiriusFastCorrectorsWindow.triggered.connect(self._openSiriusFastCorrectorsWindow)
-        openSiriusSkewQuadsWindow = QAction("Skew Quadrupoles", self)
-        openSiriusSkewQuadsWindow.triggered.connect(self._openSiriusSkewQuadsWindow)
+        openTBMagnetControlPanel = QAction("TB Magnets", self)
+        openTBMagnetControlPanel.triggered.connect(self._openTBMagnetsWindow)
+        openBOMagnetControlPanel = QAction("BO Magnets", self)
+        openBOMagnetControlPanel.triggered.connect(
+            self._openBOMagnetsWindow)
+        openTSMagnetControlPanel = QAction("TS Magnets", self)
+        openTSMagnetControlPanel.triggered.connect(
+            self._openTSMagnetsWindow)
+        openSIMagnetControlPanel = QAction("All", self)
+        openSIMagnetControlPanel.triggered.connect(
+            self._openSIMagnetsWindow)
+        openSIDipoleWindow = QAction("Dipole", self)
+        openSIDipoleWindow.triggered.connect(self._openSIDipoleWindow)
+        openSIQuadrupolesWindow = QAction("Quadrupoles", self)
+        openSIQuadrupolesWindow.triggered.connect(self._openSIQuadrupolesWindow)
+        openSISextupolesWindow = QAction("Sextupoles", self)
+        openSISextupolesWindow.triggered.connect(self._openSISextupolesWindow)
+        openSISlowCorrectorsWindow = QAction("Slow Correctors", self)
+        openSISlowCorrectorsWindow.triggered.connect(self._openSISlowCorrectorsWindow)
+        openSIFastCorrectorsWindow = QAction("Fast Correctors", self)
+        openSIFastCorrectorsWindow.triggered.connect(self._openSIFastCorrectorsWindow)
+        openSISkewQuadsWindow = QAction("Skew Quadrupoles", self)
+        openSISkewQuadsWindow.triggered.connect(self._openSISkewQuadsWindow)
 
         openPulsedMagnetsControlPanel = QAction("Pulsed Magnets", self)
         openPulsedMagnetsControlPanel.triggered.connect(
@@ -87,8 +87,8 @@ class ControlApplication(QMainWindow):
         # openBoosterConfiguration = QAction("Booster Configuration", self)
         # openBoosterConfiguration.triggered.connect(
         #     lambda: self._openConfigurationWindow('BoForcePvs'))
-        # openSiriusConfiguration = QAction("Sirius Configuration", self)
-        # openSiriusConfiguration.triggered.connect(
+        # openSIConfiguration = QAction("Sirius Configuration", self)
+        # openSIConfiguration.triggered.connect(
         #     lambda: self._openConfigurationWindow('SiForcePvs'))
 
         menubar = QMenuBar(self)
@@ -98,18 +98,18 @@ class ControlApplication(QMainWindow):
         # psMenu.addAction(openCyclePanel)
 
         magnetsMenu = menubar.addMenu("&Magnets")
-        magnetsMenu.addAction(openLTBMagnetControlPanel)
-        magnetsMenu.addAction(openBoosterMagnetControlPanel)
-        magnetsMenu.addAction(openBTSMagnetControlPanel)
-        siriusMagnetMenu = magnetsMenu.addMenu("Sirius Magnets")
-        siriusMagnetMenu.addAction(openSiriusMagnetControlPanel)
-        siriusMagnetMenu.addAction(openSiriusDipoleWindow)
-        siriusMagnetMenu.addAction(openSiriusQuadrupolesWindow)
-        siriusMagnetMenu.addAction(openSiriusSextupolesWindow)
-        siriusMagnetMenu.addAction(openSiriusSlowCorrectorsWindow)
-        siriusMagnetMenu.addAction(openSiriusFastCorrectorsWindow)
-        siriusMagnetMenu.addAction(openSiriusSkewQuadsWindow)
-        # magnetsMenu.addAction(openSiriusMagnetControlPanel)
+        magnetsMenu.addAction(openTBMagnetControlPanel)
+        magnetsMenu.addAction(openBOMagnetControlPanel)
+        magnetsMenu.addAction(openTSMagnetControlPanel)
+        SIMagentMenu = magnetsMenu.addMenu("Sirius Magnets")
+        SIMagentMenu.addAction(openSIMagnetControlPanel)
+        SIMagentMenu.addAction(openSIDipoleWindow)
+        SIMagentMenu.addAction(openSIQuadrupolesWindow)
+        SIMagentMenu.addAction(openSISextupolesWindow)
+        SIMagentMenu.addAction(openSISlowCorrectorsWindow)
+        SIMagentMenu.addAction(openSIFastCorrectorsWindow)
+        SIMagentMenu.addAction(openSISkewQuadsWindow)
+        # magnetsMenu.addAction(openSIMagnetControlPanel)
 
         pulsedMagnetsMenu = menubar.addMenu("&Pulsed Magnets")
         pulsedMagnetsMenu.addAction(openPulsedMagnetsControlPanel)
@@ -119,11 +119,11 @@ class ControlApplication(QMainWindow):
 
         # configMenu = menubar.addMenu("&Configuration Control")
         # configMenu.addAction(openBoosterConfiguration)
-        # configMenu.addAction(openSiriusConfiguration)
+        # configMenu.addAction(openSIConfiguration)
 
         self.setMenuBar(menubar)
         self.setGeometry(50, 50, 1024, 800)
-        self.setWindowTitle("Test Application")
+        self.setWindowTitle("AS Launcher")
         self.show()
 
     # def _openCyclePanel(self, section):
@@ -151,59 +151,59 @@ class ControlApplication(QMainWindow):
         self._windows[widget].activateWindow()
 
     @pyqtSlot()
-    def _openSiriusDipoleWindow(self):
+    def _openSIDipoleWindow(self):
         self._create_and_open_window(
             "si-ma-dipole", DipoleDetailWidget, magnet_name="SI-Fam:MA-B1B2")
 
     @pyqtSlot()
-    def _openSiriusQuadrupolesWindow(self):
+    def _openSIQuadrupolesWindow(self):
         self._create_and_open_window(
             "si-ma-quadruole", SiFamQuadrupoleControlWidget,
             magnet_list=self._magnets, orientation=2)
 
     @pyqtSlot()
-    def _openSiriusSextupolesWindow(self):
+    def _openSISextupolesWindow(self):
         self._create_and_open_window(
             "si-ma-sextupole", SiFamSextupoleControlWidget,
             magnet_list=self._magnets, orientation=2)
 
     @pyqtSlot()
-    def _openSiriusSlowCorrectorsWindow(self):
+    def _openSISlowCorrectorsWindow(self):
         self._create_and_open_window(
             "si-ma-correctors-slow", SiSlowCorrectorControlWidget,
             magnet_list=self._magnets)
 
     @pyqtSlot()
-    def _openSiriusFastCorrectorsWindow(self):
+    def _openSIFastCorrectorsWindow(self):
         self._create_and_open_window(
             "si-ma-correctors-fast", SiFastCorrectorControlWidget,
             magnet_list=self._magnets)
 
     @pyqtSlot()
-    def _openSiriusSkewQuadsWindow(self):
+    def _openSISkewQuadsWindow(self):
         self._create_and_open_window(
             "si-ma-quadruole-skew", SiSkewQuadControlWidget,
             magnet_list=self._magnets)
 
     @pyqtSlot()
-    def _openSiriusMagnetsWindow(self):
+    def _openSIMagnetsWindow(self):
         self._open_window(
-            ControlApplication.SiriusMagnetWindow, SiriusMagnetControlWindow)
+            ControlApplication.SIMagnetWindow, SIMagnetControlWindow)
 
     @pyqtSlot()
-    def _openBTSMagnetsWindow(self):
+    def _openTSMagnetsWindow(self):
         self._open_window(
-            ControlApplication.BTSMagnetWindow, ToSiriusMagnetControlWindow)
+            ControlApplication.TSMagnetWindow, TSMagnetControlWindow)
 
     @pyqtSlot()
-    def _openBoosterMagnetsWindow(self):
+    def _openBOMagnetsWindow(self):
         self._open_window(
-            ControlApplication.BoosterMagnetWindow, BoosterMagnetControlWindow)
+            ControlApplication.BOMagnetWindow, BOMagnetControlWindow)
 
     @pyqtSlot()
-    def _openLTBMagnetsWindow(self):
+    def _openTBMagnetsWindow(self):
         self._open_window(
-            ControlApplication.LTBMagnetWindow, ToBoosterMagnetControlWindow)
+            ControlApplication.TBMagnetWindow, TBMagnetControlWindow)
 
     @pyqtSlot()
     def _openPulsedMagnetWindow(self):
