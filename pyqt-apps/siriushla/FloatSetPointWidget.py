@@ -1,6 +1,7 @@
 """Defines PyDM widget with a line edit and a double scrollbar."""
+from pydm.PyQt.QtCore import Qt, QRegExp, QLocale
 from pydm.PyQt.QtGui import QWidget, QVBoxLayout, QStyle, QStyleOption, \
-    QPainter
+    QPainter, QDoubleValidator, QRegExpValidator
 from pydm.widgets.line_edit import PyDMLineEdit
 from pydm.widgets.scrollbar import PyDMScrollBar
 
@@ -18,7 +19,12 @@ class FloatSetPointWidget(QWidget):
         self.layout = QVBoxLayout()
         self.sp_lineedit = PyDMLineEdit(
             parent=self, init_channel=self._channel)
-        # self.sp_lineedit.setObjectName("lineedit")
+        locale = QLocale(QLocale.English)
+        locale.setNumberOptions(locale.RejectGroupSeparator)
+        validator = QDoubleValidator()
+        validator.setLocale(locale)
+        self.sp_lineedit.setValidator(validator)
+        self.sp_lineedit.showUnits = False
         self.sp_scrollbar = PyDMScrollBar(
             parent=self, init_channel=self._channel)
         self.sp_scrollbar.wheelEvent = lambda event: event.ignore()
