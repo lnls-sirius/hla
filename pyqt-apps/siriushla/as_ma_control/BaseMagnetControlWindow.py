@@ -1,13 +1,9 @@
 """Defines a class to control elements from a given class."""
-from pydm.PyQt.QtGui import QDialog, QTabWidget, QVBoxLayout, QApplication, \
-    QMessageBox
-from .MagnetDetailWindow import MagnetDetailWindow
-from .MagnetTrimWindow import MagnetTrimWindow
-
-from threading import Thread
+from pydm.PyQt.QtGui import QMainWindow, QTabWidget, QVBoxLayout, \
+    QApplication
 
 
-class BaseMagnetControlWindow(QDialog):
+class BaseMagnetControlWindow(QMainWindow):
     """Base window class to control elements of a given section."""
 
     DETAIL = 0
@@ -33,15 +29,11 @@ class BaseMagnetControlWindow(QDialog):
         # self.msg.accept()
 
     def _setup_ui(self):
-        self.layout = QVBoxLayout()
-
         # Create Tabs
         self.tabs = QTabWidget()
         self._addTabs()
-
         # Set widget layout
-        self.layout.addWidget(self.tabs)
-        self.setLayout(self.layout)
+        self.setCentralWidget(self.tabs)
 
     def _addTabs(self): pass
 
