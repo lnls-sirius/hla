@@ -1,9 +1,9 @@
 """Define a window with detailed controls for a given magnet."""
-from pydm.PyQt.QtGui import QApplication, QDialog, QVBoxLayout
+from pydm.PyQt.QtGui import QApplication, QMainWindow, QVBoxLayout
 from .detail_widget.DetailWidgetFactory import DetailWidgetFactory
 
 
-class MagnetDetailWindow(QDialog):
+class MagnetDetailWindow(QMainWindow):
     """Window to control a detailed widget."""
 
     STYLESHEET = """
@@ -19,18 +19,11 @@ class MagnetDetailWindow(QDialog):
         self._setup_ui()
         self.setStyleSheet(self.STYLESHEET)
 
-        # self.app.establish_widget_connections(self)
-
     def _setup_ui(self):
         # Set window layout
-        self.layout = QVBoxLayout()
-
-        self.widget = DetailWidgetFactory.factory(self._ma, self)
-        self.layout.addWidget(self.widget)
-
-        #self.setWindowTitle(self._ma + ' Detail')
         self.setWindowTitle(self._ma)
-        self.setLayout(self.layout)
+        self.widget = DetailWidgetFactory.factory(self._ma, self)
+        self.setCentralWidget(self.widget)
 
     def showEvent(self, event):
         self.app.establish_widget_connections(self)
