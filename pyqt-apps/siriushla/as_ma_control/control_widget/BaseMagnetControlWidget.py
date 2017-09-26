@@ -2,7 +2,7 @@
 import re
 
 from siriushla.as_ma_control.MagnetWidget import MagnetWidget
-from pydm.PyQt.QtCore import Qt, QPoint, pyqtSlot
+from pydm.PyQt.QtCore import Qt, QPoint, pyqtSlot,QLocale
 from pydm.PyQt.QtGui import QWidget, QVBoxLayout, QGroupBox, \
     QGridLayout, QLabel, QHBoxLayout, QScrollArea, QLineEdit, QAction, \
     QMenu, QInputDialog
@@ -78,13 +78,15 @@ class BaseMagnetControlWidget(QWidget):
     @pyqtSlot()
     def set_current_sp_action(self):
         """Set current setpoint for every visible widget."""
-        new_value = QInputDialog.getDouble(
+        dlg = QInputDialog(self)
+        dlg.setLocale(QLocale(QLocale.English))
+        new_value, ok = dlg.getDouble(
             self, "Insert current setpoint", "Value")
-        # print(new_value)
-        for key, widget in self.widgets_list.items():
-            if key in self.filtered_widgets:
-                widget.analog_widget.sp_lineedit.setText(str(new_value[0]))
-                widget.analog_widget.sp_lineedit.sendValue()
+        if ok:
+            for key, widget in self.widgets_list.items():
+                if key in self.filtered_widgets:
+                    widget.analog_widget.sp_lineedit.setText(str(new_value))
+                    widget.analog_widget.sp_lineedit.sendValue()
 
     @pyqtSlot(QPoint)
     def show_context_menu(self, point):
