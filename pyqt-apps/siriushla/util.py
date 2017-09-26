@@ -1,9 +1,10 @@
 """Util module."""
-
-import siriushla.resources as _resources
-from pydm.PyQt.QtCore import QFile as _QFile
-import pathlib as _pathlib
 import os as _os
+import re as _re
+import pathlib as _pathlib
+
+from pydm.PyQt.QtCore import QFile as _QFile
+import siriushla.resources as _resources
 
 
 def set_style(app, force_default=False):
@@ -24,3 +25,24 @@ def set_style(app, force_default=False):
     else:
         print('set_style: "{0}": {1}'.format(fname, stream.errorString()))
     _resources.qCleanupResources()
+
+
+def get_kick_unit(channel):
+    if channel.find("SI-") > -1:
+        section = "SI"
+    elif channel.find("TS-") > -1:
+        section = "TS"
+    elif channel.find("BO-") > -1:
+        section = "BO"
+    elif channel.find("TB-") > -1:
+        section = "TB"
+
+    pvname = channel[channel.find(section):]
+
+    if _re.search("-(CH|CV|FCH|FCV).*:", pvname):
+        if section in ["SI", "BO"]:
+            return "urad"
+        elif section in ["TS", "TB"]:
+            return "mrad"
+    else:
+        return "rad"

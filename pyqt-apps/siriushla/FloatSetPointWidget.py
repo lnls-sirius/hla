@@ -4,6 +4,7 @@ from pydm.PyQt.QtGui import QWidget, QVBoxLayout, QStyle, QStyleOption, \
     QPainter, QDoubleValidator, QRegExpValidator
 from pydm.widgets.line_edit import PyDMLineEdit
 from pydm.widgets.scrollbar import PyDMScrollBar
+from siriushla.util import get_kick_unit
 
 
 class FloatSetPointWidget(QWidget):
@@ -24,7 +25,10 @@ class FloatSetPointWidget(QWidget):
         validator = QDoubleValidator()
         validator.setLocale(locale)
         self.sp_lineedit.setValidator(validator)
-        self.sp_lineedit.showUnits = False
+        # self.sp_lineedit.showUnits = False
+        if "Kick" in self._channel:
+            unit = get_kick_unit(self._channel)
+            self.sp_lineedit.unit = unit
         self.sp_scrollbar = PyDMScrollBar(
             parent=self, init_channel=self._channel)
         self.sp_scrollbar.wheelEvent = lambda event: event.ignore()
