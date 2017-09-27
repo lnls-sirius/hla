@@ -1,6 +1,7 @@
 """MagnetDetailWidget definition."""
 import re
 
+from pydm.PyQt.QtCore import Qt
 from pydm.PyQt.QtGui import QWidget, QGroupBox, QGridLayout, QVBoxLayout, \
     QHBoxLayout, QLabel, QSizePolicy
 
@@ -18,6 +19,22 @@ class MagnetDetailWidget(QWidget):
     """Widget with control interface for a given magnet."""
 
     StyleSheet = """
+        #opmode1_rb_label,
+        #opmode2_rb_label {
+            min-width: 7em;
+            max-width: 7em;
+        }
+        #ctrlmode1_label,
+        #ctrlmode2_label {
+            min-width: 4em;
+            max-width: 4em;
+        }
+        #pwrstate_label,
+        #pwrstate1_label,
+        #pwrstate2_label {
+            min-width: 2em;
+            max-width: 2em;
+        }
         #current > PyDMLabel,
         #metric > PyDMLabel {
             min-width: 7em;
@@ -83,15 +100,15 @@ class MagnetDetailWidget(QWidget):
         layout = QGridLayout()
 
         layout.addWidget(
-            QLabel("<h1>" + self._magnet_name + "</h1>"), 0, 0, 1, 3)
-        layout.addWidget(self.interlock_box, 1, 0, 3, 1)
+            QLabel("<h1>" + self._magnet_name + "</h1>"), 0, 0, 1, 2)
+        layout.addWidget(self.interlock_box, 1, 0, 4, 1)
         layout.addWidget(self.opmode_box, 1, 1)
-        layout.addWidget(self.pwrstate_box, 1, 2)
-        layout.addWidget(self.current_box, 2, 1, 1, 2)
-        layout.addWidget(self.metric_box, 3, 1, 1, 2)
-        layout.addWidget(self.command_box, 4, 0, 1, 3)
-        layout.setColumnStretch(3, 1)
-        layout.setRowStretch(5, 1)
+        layout.addWidget(self.pwrstate_box, 2, 1)
+        layout.addWidget(self.current_box, 3, 1, 1, 1)
+        layout.addWidget(self.metric_box, 4, 1, 1, 1)
+        layout.addWidget(self.command_box, 5, 0, 1, 2)
+        # layout.setRowStretch(6, 1)
+        # layout.setColumnStretch(3, 1)
 
         return layout
 
@@ -107,22 +124,25 @@ class MagnetDetailWidget(QWidget):
 
             layout.addWidget(led, i, 0)
             layout.addWidget(QLabel("Bit " + str(i)), i, 1)
-        layout.setRowStretch(17, 1)
+        # layout.setRowStretch(17, 1)
+        layout.setColumnStretch(2, 1)
 
         return layout
 
     def _opModeLayout(self):
-        layout = QVBoxLayout()
+        layout = QGridLayout()
 
         self.opmode_sp = PyDMEnumComboBox(
             self, "ca://" + self._prefixed_magnet + ":OpMode-Sel")
         self.opmode_rb = PyDMLabel(
             self, "ca://" + self._prefixed_magnet + ":OpMode-Sts")
+        self.opmode_rb.setObjectName("opmode1_rb_label")
         self.ctrlmode_led = PyDMLed(
             self, "ca://" + self._prefixed_magnet + ":CtrlMode-Mon",
             enum_map={'Remote': 1, 'Local': 0})
         self.ctrlmode_label = PyDMLabel(
             self, "ca://" + self._prefixed_magnet + ":CtrlMode-Mon")
+        self.ctrlmode_label.setObjectName("ctrlmode1_label")
 
         self.ctrlmode_led.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
 
@@ -130,14 +150,16 @@ class MagnetDetailWidget(QWidget):
         ctrlmode_layout.addWidget(self.ctrlmode_led)
         ctrlmode_layout.addWidget(self.ctrlmode_label)
 
-        layout.addWidget(self.opmode_sp)
-        layout.addWidget(self.opmode_rb)
-        layout.addLayout(ctrlmode_layout)
+        layout.addWidget(self.opmode_sp, 0, 0, Qt.AlignHCenter)
+        layout.addWidget(self.opmode_rb, 1, 0, Qt.AlignHCenter)
+        layout.addLayout(ctrlmode_layout, 2, 0, Qt.AlignHCenter)
+        # layout.setRowStretch(3, 1)
+        # layout.setColumnStretch(1, 1)
 
         return layout
 
     def _powerStateLayout(self):
-        layout = QVBoxLayout()
+        layout = QGridLayout()
 
         # self.on_btn = PyDMPushButton(
         #     self, label="On", pressValue=1,
@@ -152,6 +174,7 @@ class MagnetDetailWidget(QWidget):
             self, "ca://" + self._prefixed_magnet + ":PwrState-Sts")
         self.pwrstate_label = PyDMLabel(
             self, "ca://" + self._prefixed_magnet + ":PwrState-Sts")
+        self.pwrstate_label.setObjectName("pwrstate_label")
 
         self.pwrstate_led.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
 
@@ -162,8 +185,12 @@ class MagnetDetailWidget(QWidget):
         pwrstatus_layout.addWidget(self.pwrstate_led)
         pwrstatus_layout.addWidget(self.pwrstate_label)
 
-        layout.addWidget(self.state_button)
-        layout.addLayout(pwrstatus_layout)
+        # layout.addStretch(1)
+        layout.addWidget(self.state_button, 0, 0, Qt.AlignHCenter)
+        layout.addLayout(pwrstatus_layout, 1, 0, Qt.AlignHCenter)
+        # layout.addWidget(self.pwrstate_led)
+        # layout.addWidget(self.pwrstate_label)
+        # layout.addStretch(1)
 
         return layout
 
@@ -200,8 +227,8 @@ class MagnetDetailWidget(QWidget):
         layout.addWidget(self.current_mon_label, 3, 0)
         layout.addWidget(self.current_mon_val, 3, 1)
         # layout.addWidget(self.current_sp_slider, 2, 1)
-        layout.setRowStretch(4, 1)
-        layout.setColumnStretch(3, 1)
+        # layout.setRowStretch(4, 1)
+        layout.setColumnStretch(2, 1)
         # layout.setRowStretch(2, 1)
 
         return layout
@@ -241,8 +268,8 @@ class MagnetDetailWidget(QWidget):
         layout.addWidget(self.metric_mon_label, 3, 0)
         layout.addWidget(self.metric_mon_val, 3, 1)
         # layout.addWidget(self.metric_sp_slider, 2, 1)
-        layout.setRowStretch(4, 1)
-        # layout.setColumnStretch(3, 1)
+        # layout.setRowStretch(4, 1)
+        layout.setColumnStretch(3, 1)
 
         return layout
 
