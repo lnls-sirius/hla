@@ -32,8 +32,23 @@ QTabBar::tab {
 
 QTabBar::tab:selected, QTabBar::tab:hover {
     color: white;
-    background-color: green;
     border: 1px solid white;
+}
+
+#ToBoosterTab QTabBar::tab:selected, #ToBoosterTab QTabBar::tab:hover {
+  background-color: purple;
+}
+QTabBar::tab[index="1"] {
+  background-color: purple;
+}
+#BoosterTab QTabBar::tab:selected, #BoosterTab QTabBar::tab:hover {
+  background-color: green;
+}
+#ToSiriusTab QTabBar::tab:selected, #ToSiriusTab QTabBar::tab:hover {
+  background-color: red;
+}
+#SiriusTab QTabBar::tab:selected, #SiriusTab QTabBar::tab:hover {
+  background-color: blue;
 }
 
 QTabBar::tab:!selected {

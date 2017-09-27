@@ -29,6 +29,7 @@ class SIMagnetControlWindow(BaseMagnetControlWindow):
         self.setWindowTitle('SI Magnet Control Panel')
 
     def _addTabs(self):
+        self.tabs.setObjectName("SiriusTab")
         self.dipo_tab = DipoleDetailWidget("SI-Fam:MA-B1B2", self)
         self.quad_tab = \
             SiFamQuadrupoleControlWidget(self._magnets, parent=self)

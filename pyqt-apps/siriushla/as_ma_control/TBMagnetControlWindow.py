@@ -20,6 +20,7 @@ class TBMagnetControlWindow(BaseMagnetControlWindow):
         self.setWindowTitle('TB Magnet Control Panel')
 
     def _addTabs(self):
+        self.tabs.setObjectName("ToBoosterTab")
         self.dipo_tab = MagnetDetailWidget("TB-Fam:MA-B", self)
         self.slow_tab = TBSlowCorrectorControlWidget(
                             self._magnets,

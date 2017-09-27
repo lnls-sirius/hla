@@ -20,6 +20,7 @@ class BOMagnetControlWindow(BaseMagnetControlWindow):
         self.setWindowTitle('BO Magnet Control Panel')
 
     def _addTabs(self):
+        self.tabs.setObjectName("BoosterTab")
         orientation = BaseMagnetControlWidget.VERTICAL
         self.dipo_tab = DipoleDetailWidget("BO-Fam:MA-B", self)
         self.quad_tab = BoFamQuadrupoleControlWidget(self._magnets, orientation, parent=self)

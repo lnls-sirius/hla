@@ -20,6 +20,7 @@ class TSMagnetControlWindow(BaseMagnetControlWindow):
         self.setWindowTitle('TS Magnet Control Panel')
 
     def _addTabs(self):
+        self.tabs.setObjectName("ToSiriusTab")
         self.dipo_tab = MagnetDetailWidget("TS-Fam:MA-B", self)
         self.slow_tab = TSSlowCorrectorControlWidget(
             self._magnets, BaseMagnetControlWidget.VERTICAL, parent=self)
