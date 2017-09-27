@@ -1,4 +1,4 @@
-"""Module that defines the window resposible for controlling the SR magnets."""
+"""Module that defines the window resposible for controlling the SI magnets."""
 import re
 
 from siriushla.as_ma_control.MagnetWidget import MagnetWidget
@@ -30,7 +30,8 @@ class SIMagnetControlWindow(BaseMagnetControlWindow):
 
     def _addTabs(self):
         self.tabs.setObjectName("SiriusTab")
-        self.dipo_tab = DipoleDetailWidget("SI-Fam:MA-B1B2", self)
+        self.dipo_tab = self._dipoleWidgetWrapper(
+            DipoleDetailWidget("SI-Fam:MA-B1B2", self))
         self.quad_tab = \
             SiFamQuadrupoleControlWidget(self._magnets, parent=self)
         self.sext_tab = SiFamSextupoleControlWidget(self._magnets, parent=self)
@@ -54,11 +55,6 @@ class SIMagnetControlWindow(BaseMagnetControlWindow):
                 pass
             else:
                 button.clicked.connect(self._open_trim_window)
-        # self._connectButtons(self.quad_tab.findChildren(QPushButton))
-        # self._connectButtons(self.sext_tab.findChildren(QPushButton))
-        # self._connectButtons(self.slow_tab.findChildren(QPushButton))
-        # self._connectButtons(self.fast_tab.findChildren(QPushButton))
-        # self._connectButtons(self.skew_tab.findChildren(QPushButton))
 
     def _open_trim_window(self):
         button = self.sender()

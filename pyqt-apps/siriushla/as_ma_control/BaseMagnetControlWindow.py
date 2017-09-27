@@ -1,6 +1,6 @@
 """Defines a class to control elements from a given class."""
-from pydm.PyQt.QtGui import QMainWindow, QTabWidget, QVBoxLayout, \
-    QApplication
+from pydm.PyQt.QtGui import QMainWindow, QTabWidget, QApplication, QWidget, \
+    QGridLayout
 
 
 class BaseMagnetControlWindow(QMainWindow):
@@ -60,6 +60,17 @@ class BaseMagnetControlWindow(QMainWindow):
     #             self._window = MagnetTrimWindow(ma, self)
     #
     #     self._window.show()
+
+    def _dipoleWidgetWrapper(self, widget):
+        wrapper = QWidget(self)
+        wrapper.layout = QGridLayout()
+        wrapper.setLayout(wrapper.layout)
+
+        wrapper.layout.addWidget(widget, 0, 0)
+        wrapper.layout.setRowStretch(1, 1)
+        wrapper.layout.setColumnStretch(1, 1)
+
+        return wrapper
 
     def closeEvent(self, event):
         """Reimplement closed event to close widget connections."""

@@ -21,13 +21,10 @@ class TBMagnetControlWindow(BaseMagnetControlWindow):
 
     def _addTabs(self):
         self.tabs.setObjectName("ToBoosterTab")
-        self.dipo_tab = MagnetDetailWidget("TB-Fam:MA-B", self)
+        self.dipo_tab = \
+            self._dipoleWidgetWrapper(MagnetDetailWidget("TB-Fam:MA-B", self))
         self.slow_tab = TBSlowCorrectorControlWidget(
-                            self._magnets,
-                            BaseMagnetControlWidget.VERTICAL,
-                            parent=self)
+            self._magnets, BaseMagnetControlWidget.VERTICAL, parent=self)
         # Add Tabs
         self.tabs.addTab(self.dipo_tab, "Dipoles")
         self.tabs.addTab(self.slow_tab, "Slow Correctors")
-        # Make button connections
-        # self._connectButtons(self.slow_tab.findChildren(QPushButton))

@@ -1,6 +1,5 @@
-""""""
+"""Definition of window to control TS devices."""
 import re
-from pydm.PyQt.QtGui import QPushButton
 from siriuspy.search import MASearch
 from .BaseMagnetControlWindow import BaseMagnetControlWindow
 from .control_widget.BaseMagnetControlWidget import BaseMagnetControlWidget
@@ -21,7 +20,8 @@ class TSMagnetControlWindow(BaseMagnetControlWindow):
 
     def _addTabs(self):
         self.tabs.setObjectName("ToSiriusTab")
-        self.dipo_tab = MagnetDetailWidget("TS-Fam:MA-B", self)
+        self.dipo_tab = \
+            self._dipoleWidgetWrapper(MagnetDetailWidget("TS-Fam:MA-B", self))
         self.slow_tab = TSSlowCorrectorControlWidget(
             self._magnets, BaseMagnetControlWidget.VERTICAL, parent=self)
         # Add Tabs
