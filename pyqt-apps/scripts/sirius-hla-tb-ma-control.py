@@ -4,7 +4,8 @@
 
 import sys
 from pydm import PyDMApplication
-from siriushla.as_ma_control.MagnetTabControlWindow import MagnetTabControlWindow
+from siriushla.as_ma_control.MagnetTabControlWindow \
+    import MagnetTabControlWindow
 from siriushla import util
 
 

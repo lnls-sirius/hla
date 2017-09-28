@@ -37,7 +37,7 @@ class MagnetTrimWindow(QMainWindow):
         device = self._maname.split("-")[-1]
         self.trim_widget = TrimControlWidget(
             MASearch.get_manames({"section": "SI", "device": device}),
-            parent=self)
+            parent=self, orientation=TrimControlWidget.VERTICAL)
 
         self.central_widget.layout.addWidget(self.fam_widget)
         self.central_widget.layout.addWidget(self.trim_widget)
