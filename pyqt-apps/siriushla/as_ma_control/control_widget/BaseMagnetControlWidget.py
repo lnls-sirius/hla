@@ -1,8 +1,9 @@
 """Base class for controlling a magnet."""
 import re
 
+from siriuspy.search import MASearch
 from siriushla.as_ma_control.MagnetWidget import MagnetWidget
-from pydm.PyQt.QtCore import Qt, QPoint, pyqtSlot,QLocale
+from pydm.PyQt.QtCore import Qt, QPoint, pyqtSlot, QLocale
 from pydm.PyQt.QtGui import QWidget, QVBoxLayout, QGroupBox, \
     QGridLayout, QLabel, QHBoxLayout, QScrollArea, QLineEdit, QAction, \
     QMenu, QInputDialog
@@ -18,7 +19,7 @@ class BaseMagnetControlWidget(QWidget):
     StyleSheet = """
     """
 
-    def __init__(self, magnet_list, orientation=0, parent=None):
+    def __init__(self, magnet_list=None, orientation=0, parent=None):
         """Class constructor.
 
         Parameters:
@@ -29,7 +30,10 @@ class BaseMagnetControlWidget(QWidget):
         """
         super(BaseMagnetControlWidget, self).__init__(parent)
         self._orientation = orientation
-        self._magnet_list = magnet_list
+        if magnet_list is None:
+            self._magnet_list = MASearch.get_manames(self._getFilter())
+        else:
+            self._magnet_list = magnet_list
         # Data structures used to filter the widgets
         self.widgets_list = dict()
         self.filtered_widgets = set()  # Set with key of visible widgets
@@ -104,6 +108,10 @@ class BaseMagnetControlWidget(QWidget):
         menu.addAction(set_current_sp)
 
         menu.popup(self.mapToGlobal(point))
+
+    def get_magnet_widgets(self):
+        """Return MagnetWidget widgets."""
+        return self.findChildren(MagnetWidget)
 
     def _setup_ui(self):
         self.layout = QVBoxLayout()

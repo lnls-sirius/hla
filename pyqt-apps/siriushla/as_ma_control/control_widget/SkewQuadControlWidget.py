@@ -8,6 +8,9 @@ class SiSkewQuadControlWidget(BaseMagnetControlWidget):
     def _getPattern(self):
         return "SI-\w{4}:MA-QS"
 
+    def _getFilter(self):
+        return {"section": "SI", "subsection": "\w{4}", "device": "QS"}
+
     def _getStrength(self):
         return "KL"
 
@@ -33,6 +36,9 @@ class BoSkewQuadControlWidget(SiSkewQuadControlWidget):
 
     def _getPattern(self):
         return "BO-\w{3}:MA-QS"
+
+    def _getFilter(self):
+        return {"section": "BO", "subsection": "\w{3}", "device": "QS"}
 
     def _hasScrollArea(self):
         return False

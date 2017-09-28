@@ -8,6 +8,9 @@ class SiFamSextupoleControlWidget(BaseMagnetControlWidget):
     def _getPattern(self):
         return "SI-Fam:MA-S(\w+[0-9]*|[0-9])"
 
+    def _getFilter(self):
+        return {"section": "SI", "subsection": "Fam", "device": "S[DF].*"}
+
     def _getStrength(self):
         return "SL"
 
@@ -33,6 +36,9 @@ class BoFamSextupoleControlWidget(SiFamSextupoleControlWidget):
 
     def _getPattern(self):
         return "BO-Fam:MA-S(\w+[0-9]*|[0-9])"
+
+    def _getFilter(self):
+        return {"section": "BO", "subsection": "Fam", "device": "S[DF].*"}
 
     def _hasScrollArea(self):
         return False

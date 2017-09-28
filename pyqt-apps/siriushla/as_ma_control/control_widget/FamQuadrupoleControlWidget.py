@@ -10,6 +10,9 @@ class SiFamQuadrupoleControlWidget(BaseMagnetControlWidget):
     def _getPattern(self):
         return "SI-Fam:MA-Q(\w+[0-9]*|[0-9])"
 
+    def _getFilter(self):
+        return {"section": "SI", "subsection": "Fam", "device": "Q[DF0-9].*"}
+
     def _getStrength(self):
         return "KL"
 
@@ -48,6 +51,9 @@ class BoFamQuadrupoleControlWidget(SiFamQuadrupoleControlWidget):
 
     def _getPattern(self):
         return "BO-Fam:MA-Q(\w+[0-9]*|[0-9])"
+
+    def _getFilter(self):
+        return {"section": "BO", "subsection": "Fam", "device": "Q[DF0-9].*"}
 
     def _getHeader(self):
         return ["State", "Magnet", "Cur-SP", "Cur-Mon",

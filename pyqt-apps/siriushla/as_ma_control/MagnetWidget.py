@@ -18,7 +18,7 @@ from siriuspy.envars import vaca_prefix as _VACA_PREFIX
 from siriuspy.pulsedps import properties as pu_props
 from siriuspy.pulsedma import properties as pm_props
 from siriushla.FloatSetPointWidget import FloatSetPointWidget
-from siriushla.as_ma_control.MagnetDetailWindow import MagnetDetailWindow
+# from siriushla.as_ma_control.MagnetDetailWindow import MagnetDetailWindow
 # from siriushla.as_ma_control.MagnetTrimWindow import MagnetTrimWindow
 
 StorageRingFam = re.compile("^SI-Fam:.*$")
@@ -89,7 +89,7 @@ class BaseMagnetWidget(QWidget):
         self._create_pvs()
 
         self._setup_ui()
-        self.maname_label.clicked.connect(self._open_detail_window)
+        # self.maname_label.clicked.connect(self._open_detail_window)
         # if self._has_trim:
         #     self.trim_button.clicked.connect(self._open_trim_window)
         self.setStyleSheet(self.StyleSheet)
@@ -202,11 +202,12 @@ class BaseMagnetWidget(QWidget):
         else:
             self.setLayout(self.layout)
 
-    def _open_detail_window(self):
-        if self._detail_window is None:
-            self._detail_window = MagnetDetailWindow(
-                maname=self._maname, parent=self)
-        self._detail_window.show()
+    # def _open_detail_window(self):
+    #     if self._detail_window is None:
+    #         self._detail_window = MagnetDetailWindow(
+    #             maname=self._maname, parent=self)
+    #     self._detail_window.show()
+    #     self._detail_window.activateWindow()
 
     # def _open_trim_window(self):
     #     if self._trim_window is None:
@@ -220,6 +221,16 @@ class BaseMagnetWidget(QWidget):
         opt.initFrom(self)
         p = QPainter(self)
         self.style().drawPrimitive(QStyle.PE_Widget, opt, p, self)
+
+    def get_detail_button(self):
+        """Return maname button."""
+        return self.maname_label
+
+    def get_trim_button(self):
+        """Return trim button."""
+        if self._has_trim:
+            return self.trim_button
+        return None
 
 
 class PulsedMagnetWidget(BaseMagnetWidget):

@@ -8,6 +8,9 @@ class SiFastCorrectorControlWidget(BaseMagnetControlWidget):
     def _getPattern(self):
         return "SI-\w{3,4}:MA-(FCH|FCV)(-[1-2])*"
 
+    def _getFilter(self):
+        return {"section": "SI", "subsection": "\w{4}", "device": "(FCH|FCV).*"}
+
     def _getStrength(self):
         return "Kick"
 

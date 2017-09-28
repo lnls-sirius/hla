@@ -8,6 +8,9 @@ class TrimControlWidget(BaseMagnetControlWidget):
     def _getPattern(self):
         return "SI-\d{2}\w\d:MA-Q[DF0-9].*"
 
+    def _getFilter(self):
+        return {"section": "SI", "subsection": "\w{4}", "device": "Q[DF0-9].*"}
+
     def _getStrength(self):
         return "KL"
 

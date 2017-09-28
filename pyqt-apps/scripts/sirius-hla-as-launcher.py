@@ -6,25 +6,29 @@ import sys
 from pydm import PyDMApplication
 from pydm.PyQt.QtCore import pyqtSlot
 from pydm.PyQt.QtGui import QMainWindow, QAction, QMenuBar, QSizePolicy
-from siriushla.as_ma_control.detail_widget.DipoleDetailWidget \
-    import DipoleDetailWidget
-from siriushla.as_ma_control.control_widget.FamQuadrupoleControlWidget import \
-    SiFamQuadrupoleControlWidget
-from siriushla.as_ma_control.control_widget.FamSextupoleControlWidget import \
-    SiFamSextupoleControlWidget
-from siriushla.as_ma_control.control_widget.SlowCorrectorControlWidget import \
-    SiSlowCorrectorControlWidget
-from siriushla.as_ma_control.control_widget.FastCorrectorControlWidget import \
-    SiFastCorrectorControlWidget
-from siriushla.as_ma_control.control_widget.SkewQuadControlWidget import \
-    SiSkewQuadControlWidget
-from siriushla.as_ma_control import TBMagnetControlWindow
-from siriushla.as_ma_control import BOMagnetControlWindow
-from siriushla.as_ma_control import TSMagnetControlWindow
-from siriushla.as_ma_control import SIMagnetControlWindow
+from siriushla.as_ma_control.MagnetControlWindow import MagnetControlWindow
+from siriushla.as_ma_control.MagnetTabControlWindow \
+    import MagnetTabControlWindow
+# from siriushla.as_ma_control.detail_widget.DipoleDetailWidget \
+#     import DipoleDetailWidget
+# from siriushla.as_ma_control.control_widget.FamQuadrupoleControlWidget import \
+#     SiFamQuadrupoleControlWidget
+# from siriushla.as_ma_control.control_widget.FamSextupoleControlWidget import \
+#     SiFamSextupoleControlWidget
+# from siriushla.as_ma_control.control_widget.SlowCorrectorControlWidget import \
+#     SiSlowCorrectorControlWidget
+# from siriushla.as_ma_control.control_widget.FastCorrectorControlWidget import \
+#     SiFastCorrectorControlWidget
+# from siriushla.as_ma_control.control_widget.SkewQuadControlWidget import \
+#     SiSkewQuadControlWidget
+# from siriushla.as_ma_control import TBMagnetControlWindow
+# from siriushla.as_ma_control import BOMagnetControlWindow
+# from siriushla.as_ma_control import TSMagnetControlWindow
+# from siriushla.as_ma_control import SIMagnetControlWindow
 from siriushla.as_pm_control.PulsedMagnetControlWindow \
     import PulsedMagnetControlWindow
 from siriushla.as_ap_injection.InjectionWindow import InjectionWindow
+from siriushla.WindowManager import WindowManager
 from siriushla import util as _util
 from siriuspy.search import MASearch
 
@@ -42,11 +46,53 @@ class ControlApplication(QMainWindow):
     def __init__(self):
         """Constructor."""
         super().__init__()
-        self._windows = dict()
-        self._magnets = [x for x in MASearch.get_manames()]
-        self._setupUi()
+        self._window_manager = WindowManager()
+        self._register_windows()
+        self._setup_ui()
 
-    def _setupUi(self):
+    def _register_windows(self):
+        self._window_manager.register_window(
+            "si-ma-dipole", MagnetControlWindow, section="SI", device="dipole",
+            window_manager=self._window_manager, parent=self)
+        self._window_manager.register_window(
+            "si-ma-quadruole", MagnetControlWindow,
+            section="SI", device="quadrupole",
+            window_manager=self._window_manager, parent=self)
+        self._window_manager.register_window(
+            "si-ma-sextupole", MagnetControlWindow,
+            section="SI", device="sextupole",
+            window_manager=self._window_manager, parent=self)
+        self._window_manager.register_window(
+            "si-ma-correctors-slow", MagnetControlWindow,
+            section="SI", device="corrector-slow",
+            window_manager=self._window_manager, parent=self)
+        self._window_manager.register_window(
+            "si-ma-correctors-fast", MagnetControlWindow,
+            section="SI", device="corrector-fast",
+            window_manager=self._window_manager, parent=self)
+        self._window_manager.register_window(
+            "si-ma-quadruole-skew", MagnetControlWindow,
+            section="SI", device="quadrupole-skew",
+            window_manager=self._window_manager, parent=self)
+        self._window_manager.register_window(
+            ControlApplication.SIMagnetWindow, MagnetTabControlWindow,
+            section="SI", window_manager=self._window_manager, parent=self)
+        self._window_manager.register_window(
+            ControlApplication.TSMagnetWindow, MagnetTabControlWindow,
+            section="TS", window_manager=self._window_manager, parent=self)
+        self._window_manager.register_window(
+            ControlApplication.BOMagnetWindow, MagnetTabControlWindow,
+            section="BO", window_manager=self._window_manager, parent=self)
+        self._window_manager.register_window(
+            ControlApplication.TBMagnetWindow, MagnetTabControlWindow,
+            section="TB", window_manager=self._window_manager, parent=self)
+        self._window_manager.register_window(
+            ControlApplication.PulsedMagnetsWindow, PulsedMagnetControlWindow,
+            window_manager=self._window_manager, parent=self)
+        self._window_manager.register_window(
+            ControlApplication.InjectionWindow, InjectionWindow, parent=self)
+
+    def _setup_ui(self):
         # openCyclePanel = QAction("PS Cycling", self)
         # openCyclePanel.triggered.connect(self._openCyclePanel)
 
@@ -80,9 +126,7 @@ class ControlApplication(QMainWindow):
 
         # Injection actions
         openInjectionWindow = QAction("Injection", self)
-        openInjectionWindow.triggered.connect(
-            lambda: self._open_window(
-                ControlApplication.InjectionWindow, InjectionWindow))
+        openInjectionWindow.triggered.connect(self._openInjectionWindow)
 
         # openBoosterConfiguration = QAction("Booster Configuration", self)
         # openBoosterConfiguration.triggered.connect(
@@ -126,93 +170,55 @@ class ControlApplication(QMainWindow):
         self.setWindowTitle("AS Launcher")
         self.show()
 
-    # def _openCyclePanel(self, section):
-    #     self._windows.append(PsCycleWindow(self))
-    #     self._windows[-1].open()
-
-    # def _openConfigurationWindow(self, section):
-    #     self._windows.append(ConfigManagerWindow(section, self))
-    #     self._windows[-1].show()
-
-    def _open_window(self, window, window_class, **kwargs):
-        if window not in self._windows:
-            self._windows[window] = window_class(parent=self, **kwargs)
-        self._windows[window].show()
-        self._windows[window].activateWindow()
-
-    def _create_and_open_window(self, widget, widget_class, **kwargs):
-        if widget not in self._windows:
-            self._windows[widget] = QMainWindow(self)
-            self._windows[widget].setCentralWidget(
-                widget_class(parent=self._windows[widget], **kwargs))
-            PyDMApplication.instance().establish_widget_connections(
-                self._windows[widget])
-        self._windows[widget].show()
-        self._windows[widget].activateWindow()
-
     @pyqtSlot()
     def _openSIDipoleWindow(self):
-        self._create_and_open_window(
-            "si-ma-dipole", DipoleDetailWidget, magnet_name="SI-Fam:MA-B1B2")
+        self._window_manager.open_window("si-ma-dipole")
 
     @pyqtSlot()
     def _openSIQuadrupolesWindow(self):
-        self._create_and_open_window(
-            "si-ma-quadruole", SiFamQuadrupoleControlWidget,
-            magnet_list=self._magnets, orientation=2)
+        self._window_manager.open_window("si-ma-quadruole")
 
     @pyqtSlot()
     def _openSISextupolesWindow(self):
-        self._create_and_open_window(
-            "si-ma-sextupole", SiFamSextupoleControlWidget,
-            magnet_list=self._magnets, orientation=2)
+        self._window_manager.open_window("si-ma-sextupole")
 
     @pyqtSlot()
     def _openSISlowCorrectorsWindow(self):
-        self._create_and_open_window(
-            "si-ma-correctors-slow", SiSlowCorrectorControlWidget,
-            magnet_list=self._magnets)
+        self._window_manager.open_window("si-ma-correctors-slow")
 
     @pyqtSlot()
     def _openSIFastCorrectorsWindow(self):
-        self._create_and_open_window(
-            "si-ma-correctors-fast", SiFastCorrectorControlWidget,
-            magnet_list=self._magnets)
+        self._window_manager.open_window("si-ma-correctors-fast")
 
     @pyqtSlot()
     def _openSISkewQuadsWindow(self):
-        self._create_and_open_window(
-            "si-ma-quadruole-skew", SiSkewQuadControlWidget,
-            magnet_list=self._magnets)
+        self._window_manager.open_window(
+            "si-ma-quadruole-skew")
 
     @pyqtSlot()
     def _openSIMagnetsWindow(self):
-        self._open_window(
-            ControlApplication.SIMagnetWindow, SIMagnetControlWindow)
+        self._window_manager.open_window(ControlApplication.SIMagnetWindow)
 
     @pyqtSlot()
     def _openTSMagnetsWindow(self):
-        self._open_window(
-            ControlApplication.TSMagnetWindow, TSMagnetControlWindow)
+        self._window_manager.open_window(ControlApplication.TSMagnetWindow)
 
     @pyqtSlot()
     def _openBOMagnetsWindow(self):
-        self._open_window(
-            ControlApplication.BOMagnetWindow, BOMagnetControlWindow)
+        self._window_manager.open_window(ControlApplication.BOMagnetWindow)
 
     @pyqtSlot()
     def _openTBMagnetsWindow(self):
-        self._open_window(
-            ControlApplication.TBMagnetWindow, TBMagnetControlWindow)
+        self._window_manager.open_window(ControlApplication.TBMagnetWindow)
 
     @pyqtSlot()
     def _openPulsedMagnetWindow(self):
-        self._open_window(
-            ControlApplication.PulsedMagnetsWindow, PulsedMagnetControlWindow)
+        self._window_manager.open_window(
+            ControlApplication.PulsedMagnetsWindow)
 
     @pyqtSlot()
     def _openInjectionWindow(self):
-        self._open_window(ControlApplication.InjectionWindow, InjectionWindow)
+        self._window_manager.open_window(ControlApplication.InjectionWindow)
 
 
 if __name__ == "__main__":

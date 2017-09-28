@@ -8,6 +8,9 @@ class SiSlowCorrectorControlWidget(BaseMagnetControlWidget):
     def _getPattern(self):
         return "SI-\w{4}:MA-(CH|CV)(-[1-2])*"
 
+    def _getFilter(self):
+        return {"section": "SI", "subsection": "\w{4}", "device": "(CH|CV).*"}
+
     def _getStrength(self):
         return "Kick"
 
@@ -34,6 +37,9 @@ class BoSlowCorrectorControlWidget(SiSlowCorrectorControlWidget):
     def _getPattern(self):
         return "BO-\w{3}:MA-(CH|CV)(-[1-2])*"
 
+    def _getFilter(self):
+        return {"section": "BO", "subsection": "\w{3}", "device": "(CH|CV).*"}
+
     def _divideBySection(self):
         return False
 
@@ -43,6 +49,9 @@ class TBSlowCorrectorControlWidget(SiSlowCorrectorControlWidget):
 
     def _getPattern(self):
         return "TB-\d{2}:MA-(CH|CV).*"
+
+    def _getFilter(self):
+        return {"section": "TB", "subsection": "\d{2}", "device": "(CH|CV).*"}
 
     def _hasScrollArea(self):
         return False
@@ -56,6 +65,9 @@ class TSSlowCorrectorControlWidget(SiSlowCorrectorControlWidget):
 
     def _getPattern(self):
         return "TS-\w{2}:MA-(CH|CV)(-[1-2])*"
+
+    def _getFilter(self):
+        return {"section": "TS", "subsection": "\w{2}", "device": "(CH|CV).*"}
 
     def _hasScrollArea(self):
         return False
