@@ -35,19 +35,16 @@ QTabBar::tab:selected, QTabBar::tab:hover {
     border: 1px solid white;
 }
 
-#TBTab QTabBar::tab:selected, #ToBoosterTab QTabBar::tab:hover {
+#TBTab QTabBar::tab:selected, #TBTab QTabBar::tab:hover {
   background-color: purple;
 }
-QTabBar::tab[index="1"] {
-  background-color: purple;
-}
-#BOTab QTabBar::tab:selected, #BoosterTab QTabBar::tab:hover {
+#BOTab QTabBar::tab:selected, #BOTab QTabBar::tab:hover {
   background-color: green;
 }
-#TSTab QTabBar::tab:selected, #ToSiriusTab QTabBar::tab:hover {
+#TSTab QTabBar::tab:selected, #TSTab QTabBar::tab:hover {
   background-color: red;
 }
-#SITab QTabBar::tab:selected, #SiriusTab QTabBar::tab:hover {
+#SITab QTabBar::tab:selected, #SITab QTabBar::tab:hover {
   background-color: blue;
 }
 
