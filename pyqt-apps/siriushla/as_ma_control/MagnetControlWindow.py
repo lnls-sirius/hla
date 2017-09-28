@@ -51,4 +51,4 @@ class MagnetControlWindow(QMainWindow):
                     maname + "_trim", MagnetTrimWindow,
                     maname=maname, parent=self)
                 trim_button.clicked.connect(
-                    lambda: self._window_manager.open_window(self.sender().text() + "_trim"))
+                    lambda: self._window_manager.open_window(self.sender().parent().maname + "_trim"))
