@@ -5,8 +5,9 @@ from pydm.PyQt.QtGui import QMainWindow, QWidget, QVBoxLayout, QTabWidget
 
 from siriuspy.search import MASearch
 from siriushla.as_ma_control.MagnetWidget import PulsedMagnetWidget
-from siriushla.as_pm_control.PulsedMagnetDetailWidget \
-    import PulsedMagnetDetailWidget
+from siriushla.as_pm_control.PulsedMagnetDetailWindow \
+    import PulsedMagnetDetailWindow
+from ..WindowManager import WindowManager
 
 
 class PulsedMagnetControlWindow(QMainWindow):
@@ -15,9 +16,14 @@ class PulsedMagnetControlWindow(QMainWindow):
     StyleSheet = """
     """
 
-    def __init__(self, parent=None):
+    def __init__(self, window_manager=None, parent=None):
         """Constructor."""
         self.app = PyDMApplication.instance()
+
+        if window_manager is None:
+            self._window_manager = WindowManager()
+        else:
+            self._window_manager = window_manager
 
         super().__init__(parent)
         self._setup_ui()
@@ -39,7 +45,7 @@ class PulsedMagnetControlWindow(QMainWindow):
         self.main_widget.addTab(self._make_tab_widget("TS"), "TS")
         self.main_widget.addTab(self._make_tab_widget("SI"), "Storage Ring")
 
-        # self._connect_buttons()
+        self._connect_buttons()
 
     def _make_tab_widget(self, section):
         widget = QWidget(self)
@@ -63,23 +69,13 @@ class PulsedMagnetControlWindow(QMainWindow):
         """Return buttons in the PulsedMagnetWidgets."""
         widgets = self.main_widget.findChildren(PulsedMagnetWidget)
         for widget in widgets:
-            button = widget.get_magnet_button()
-            button.clicked.connect(self._openMagnetDetailWindow)
-
-    @pyqtSlot()
-    def _openMagnetDetailWindow(self):
-        sender = self.sender()
-        maname = sender.text()
-        self.w = QMainWindow(self)
-        self.w.setCentralWidget(PulsedMagnetDetailWidget(maname, self.w))
-        self.app.establish_widget_connections(self.w)
-        self.w.show()
-
-    def closeEvent(self, event):
-        """Reimplement closed event to close widget connections."""
-        # self.app.close_widget_connections(self)
-        PulsedMagnetControlWindow.Instance = None
-        super().closeEvent(event)
+            maname = widget.maname
+            button = widget.get_detail_button()
+            self._window_manager.register_window(
+                maname + "_detail", PulsedMagnetDetailWindow,
+                maname=maname, parent=self)
+            button.clicked.connect(lambda: self._window_manager.open_window(
+                self.sender().text() + "_detail"))
 
 
 if __name__ == "__main__":
