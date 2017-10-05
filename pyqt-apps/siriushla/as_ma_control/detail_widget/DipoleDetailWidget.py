@@ -161,7 +161,7 @@ class DipoleDetailWidget(MagnetDetailWidget):
         self.current_sp_widget = FloatSetPointWidget(
             parent=self,
             channel="ca://" + self._prefixed_magnet + ":Current-SP")
-        self.current_sp_widget.set_limits_from_pv(True)
+        # self.current_sp_widget.set_limits_from_pv(True)
         self.current_sp_widget.sp_scrollbar.setTracking(False)
         # Current RB
         self.current_rb_val = PyDMLabel(

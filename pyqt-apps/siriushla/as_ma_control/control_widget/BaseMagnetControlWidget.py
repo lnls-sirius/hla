@@ -77,7 +77,7 @@ class BaseMagnetControlWidget(QWidget):
         """Execute actions from context menu."""
         for key, widget in self.widgets_list.items():
             if key in self.filtered_widgets:
-                widget.pwrstate_button.sendValue(state)
+                widget.pwrstate_button.send_value(state)
 
     @pyqtSlot()
     def set_current_sp_action(self):
@@ -90,7 +90,7 @@ class BaseMagnetControlWidget(QWidget):
             for key, widget in self.widgets_list.items():
                 if key in self.filtered_widgets:
                     widget.analog_widget.sp_lineedit.setText(str(new_value))
-                    widget.analog_widget.sp_lineedit.sendValue()
+                    widget.analog_widget.sp_lineedit.send_value()
 
     @pyqtSlot(QPoint)
     def show_context_menu(self, point):

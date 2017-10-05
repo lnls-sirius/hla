@@ -207,7 +207,7 @@ class MagnetDetailWidget(QWidget):
         self.current_sp_widget = FloatSetPointWidget(
             parent=self,
             channel="ca://" + self._prefixed_magnet + ":Current-SP")
-        self.current_sp_widget.set_limits_from_pv(True)
+        # self.current_sp_widget.set_limits_from_pv(True)
         if self._magnet_type == "b":
             self.current_sp_widget.sp_scrollbar.setTracking(False)
         self.current_rb_val = PyDMLabel(
@@ -246,7 +246,7 @@ class MagnetDetailWidget(QWidget):
         self.metric_sp_widget = FloatSetPointWidget(
             "ca://" + self._prefixed_magnet + ":" + self._metric + "-SP",
             self)
-        self.metric_sp_widget.set_limits_from_pv(True)
+        # self.metric_sp_widget.set_limits_from_pv(True)
         if self._magnet_type == "b":
             self.metric_sp_widget.sp_scrollbar.setTracking(False)
         self.metric_rb_val = PyDMLabel(
