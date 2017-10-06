@@ -8,11 +8,26 @@ from pydm.widgets.checkbox import PyDMCheckbox as PyDMCb
 from pydm.widgets.enum_combo_box import PyDMEnumComboBox as PyDMECB
 from pydm.widgets.led import PyDMLed
 from pydm.widgets.label import PyDMLabel
-from pydm.widgets.spinbox import PyDMSpinBox
+from pydm.widgets.spinbox import PyDMSpinbox
 from pydm.widgets.pushbutton import PyDMPushButton
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.timesys.time_data import Events as _Events
 from siriuspy.timesys.time_data import Clocks as _Clocks
+
+
+class PseudoPyDMECB(PyDMECB):
+
+    def value_changed(self, new_val):
+        if isinstance(new_val, str) and self.combo_box.findText(new_val) >= 0:
+            new_val = self.combo_box.findText(new_val)
+        super(PseudoPyDMECB, self).value_changed(new_val)
+
+    def internal_combo_box_activated_int(self, index):
+        self.activated[int].emit(index)
+
+    def internal_combo_box_activated_str(self, text):
+        self.send_value_signal[str].emit(text)
+        self.activated[str].emit(text)
 
 
 class _BaseCntrler(QGroupBox):
@@ -91,18 +106,15 @@ class EventCntrler(_BaseCntrler):
             sp = PyDMECB(self, init_channel=pv_pref+"DelayType-Sel")
             rb = PyDMLabel(self, init_channel=pv_pref+"DelayType-Sts")
         elif 'duration' == prop:
-            sp = PyDMSpinBox(self, init_channel=pv_pref + "Delay-SP",
-                             step=1e-3, limits_from_pv=True)
-            rb = PyDMLabel(self, init_channel=pv_pref + "Delay-RB",
-                           prec_from_pv=True)
+            sp = PyDMSpinbox(self, init_channel=pv_pref + "Delay-SP")
+
+            rb = PyDMLabel(self, init_channel=pv_pref + "Delay-RB")
         elif 'polarity' == prop:
             sp = PyDMECB(self, init_channel=pv_pref + "Polrty-Sel")
             rb = PyDMLabel(self, init_channel=pv_pref+"Polrty-Sts")
         elif 'delay' == prop:
-            sp = PyDMSpinBox(self, init_channel=pv_pref + "Delay-SP",
-                             step=1e-3, limits_from_pv=True)
-            rb = PyDMLabel(self, init_channel=pv_pref + "Delay-RB",
-                           prec_from_pv=True)
+            sp = PyDMSpinbox(self, init_channel=pv_pref + "Delay-SP")
+            rb = PyDMLabel(self, init_channel=pv_pref + "Delay-RB")
         return sp, rb
 
 
@@ -128,15 +140,11 @@ class HLTrigCntrler(_BaseCntrler):
             sp = PyDMECB(self, init_channel=pv_pref + "EVGParam-Sel")
             rb = PyDMLabel(self, init_channel=pv_pref+"EVGParam-Sts")
         elif 'pulses' == prop:
-            sp = PyDMSpinBox(self, init_channel=pv_pref + "Pulses-SP",
-                             step=1, limits_from_pv=True, precision=0)
-            rb = PyDMLabel(self, init_channel=pv_pref + "Pulses-RB",
-                           prec_from_pv=True)
+            sp = PyDMSpinbox(self, init_channel=pv_pref + "Pulses-SP")
+            rb = PyDMLabel(self, init_channel=pv_pref + "Pulses-RB")
         elif 'duration' == prop:
-            sp = PyDMSpinBox(self, init_channel=pv_pref + "Duration-SP",
-                             step=1e-4, limits_from_pv=True)
-            rb = PyDMLabel(self, init_channel=pv_pref + "Duration-RB",
-                           prec_from_pv=True)
+            sp = PyDMSpinbox(self, init_channel=pv_pref + "Duration-SP")
+            rb = PyDMLabel(self, init_channel=pv_pref + "Duration-RB")
         elif 'polarity' == prop:
             sp = PyDMECB(self, init_channel=pv_pref + "Polrty-Sel")
             rb = PyDMLabel(self, init_channel=pv_pref+"Polrty-Sts")
@@ -144,10 +152,8 @@ class HLTrigCntrler(_BaseCntrler):
             sp = PyDMECB(self, init_channel=pv_pref+"DelayType-Sel")
             rb = PyDMLabel(self, init_channel=pv_pref+"DelayType-Sts")
         elif 'delay' == prop:
-            sp = PyDMSpinBox(self, init_channel=pv_pref + "Delay-SP",
-                             step=1e-4, limits_from_pv=True)
-            rb = PyDMLabel(self, init_channel=pv_pref + "Delay-RB",
-                           prec_from_pv=True)
+            sp = PyDMSpinbox(self, init_channel=pv_pref + "Delay-SP")
+            rb = PyDMLabel(self, init_channel=pv_pref + "Delay-RB")
         return sp, rb
 
 
@@ -165,10 +171,8 @@ class ClockCntrler(_BaseCntrler):
             sp.setText(self.prefix.propty)
             rb = PyDMLed(self, init_channel=pv_pref + "State-Sts")
         elif 'frequency' == prop:
-            sp = PyDMSpinBox(self, init_channel=pv_pref + "Freq-SP", step=1e-4,
-                             limits_from_pv=True)
-            rb = PyDMLabel(self, init_channel=pv_pref + "Freq-RB",
-                           prec_from_pv=True)
+            sp = PyDMSpinbox(self, init_channel=pv_pref + "Freq-SP")
+            rb = PyDMLabel(self, init_channel=pv_pref + "Freq-RB")
         return sp, rb
 
 
@@ -200,28 +204,22 @@ class IntTrigCntrler(_BaseCntrler):
             if self.device.lower() == 'afc':
                 name = pv_pref + 'EVGParam'
                 enum_strings += sorted(_Clocks.LL2HL_MAP.keys())
-            sp = PyDMECB(self, init_channel=name + "-Sel", type_value=str)
-            sp.set_items(enum_strings)
-            sp.setEditable(True)
+            sp = PseudoPyDMECB(self, init_channel=name + "-Sel")
+            sp.enum_strings_changed(enum_strings)
+            sp.combo_box.setEditable(True)
             rb = PyDMLabel(self, init_channel=name + "-Sts")
         elif 'pulses' == prop:
-            sp = PyDMSpinBox(self, init_channel=pv_pref + "Pulses-SP", step=1,
-                             limits_from_pv=True, precision=0)
-            rb = PyDMLabel(self, init_channel=pv_pref + "Pulses-RB",
-                           prec_from_pv=True)
+            sp = PyDMSpinbox(self, init_channel=pv_pref + "Pulses-SP")
+            rb = PyDMLabel(self, init_channel=pv_pref + "Pulses-RB")
         elif 'width' == prop:
-            sp = PyDMSpinBox(self, init_channel=pv_pref+"Width-SP", step=1e-3,
-                             limits_from_pv=True)
-            rb = PyDMLabel(self, init_channel=pv_pref+"Width-RB",
-                           prec_from_pv=True)
+            sp = PyDMSpinbox(self, init_channel=pv_pref+"Width-SP")
+            rb = PyDMLabel(self, init_channel=pv_pref+"Width-RB")
         elif 'polarity' == prop:
             sp = PyDMECB(self, init_channel=pv_pref + "Polrty-Sel")
             rb = PyDMLabel(self, init_channel=pv_pref+"Polrty-Sts")
         elif 'delay' == prop:
-            sp = PyDMSpinBox(self, init_channel=pv_pref + "Delay-SP",
-                             step=1e-3, limits_from_pv=True)
-            rb = PyDMLabel(self, init_channel=pv_pref + "Delay-RB",
-                           prec_from_pv=True)
+            sp = PyDMSpinbox(self, init_channel=pv_pref + "Delay-SP")
+            rb = PyDMLabel(self, init_channel=pv_pref + "Delay-RB")
         return sp, rb
 
 
@@ -245,22 +243,17 @@ class OutChanCntrler(QGroupBox):
             num = 24 if self.device.lower() == 'evr' else 16
             enum_strings = (['IntTrig{0:02d}'.format(i) for i in range(num)] +
                             sorted(_Clocks.LL2HL_MAP.keys()))
-            sp = PyDMECB(self, init_channel=pv_pref+"IntChan-Sel",
-                         type_value=str)
-            sp.set_items(enum_strings)
-            sp.setEditable(True)
+            sp = PseudoPyDMECB(self, init_channel=pv_pref+"IntChan-Sel")
+            sp.enum_strings_changed(enum_strings)
+            sp.combo_box.setEditable(True)
             # sp.setMaxVisibleItems(6)
             rb = PyDMLabel(self, init_channel=pv_pref + "IntChan-Sts")
         elif 'delay' == prop:
-            sp = PyDMSpinBox(self, init_channel=pv_pref + "RFDelay-SP",
-                             step=1e-4, limits_from_pv=True)
-            rb = PyDMLabel(self, init_channel=pv_pref + "RFDelay-RB",
-                           prec_from_pv=True)
+            sp = PyDMSpinbox(self, init_channel=pv_pref + "RFDelay-SP")
+            rb = PyDMLabel(self, init_channel=pv_pref + "RFDelay-RB")
         elif 'fine_delay' == prop:
-            sp = PyDMSpinBox(self, init_channel=pv_pref + "FineDelay-SP",
-                             step=1, limits_from_pv=True)
-            rb = PyDMLabel(self, init_channel=pv_pref + "FineDelay-RB",
-                           prec_from_pv=True)
+            sp = PyDMSpinbox(self, init_channel=pv_pref + "FineDelay-SP")
+            rb = PyDMLabel(self, init_channel=pv_pref + "FineDelay-RB")
         return rb, sp
 
 
