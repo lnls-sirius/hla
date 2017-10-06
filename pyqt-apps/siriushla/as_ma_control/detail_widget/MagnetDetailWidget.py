@@ -121,8 +121,8 @@ class MagnetDetailWidget(QWidget):
             led = PyDMLed(
                 self, "ca://" + self._prefixed_magnet + ":Intlk-Mon", i)
             led.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
-            led.setOnColour(0)
-            led.setOffColour(1)
+            led.setOnColor(PyDMLed.Red)
+            led.setOffColor(PyDMLed.Green)
 
             layout.addWidget(led, i, 0)
             layout.addWidget(QLabel("Bit " + str(i)), i, 1)
@@ -141,7 +141,7 @@ class MagnetDetailWidget(QWidget):
         self.opmode_rb.setObjectName("opmode1_rb_label")
         self.ctrlmode_led = PyDMLed(
             self, "ca://" + self._prefixed_magnet + ":CtrlMode-Mon",
-            enum_map={'Remote': 1, 'Local': 0})
+            enum_map={'Remote': PyDMLed.Green, 'Local': PyDMLed.Red})
         self.ctrlmode_label = PyDMLabel(
             self, "ca://" + self._prefixed_magnet + ":CtrlMode-Mon")
         self.ctrlmode_label.setObjectName("ctrlmode1_label")
@@ -174,6 +174,7 @@ class MagnetDetailWidget(QWidget):
             init_channel="ca://" + self._prefixed_magnet + ":PwrState-Sel")
         self.pwrstate_led = PyDMLed(
             self, "ca://" + self._prefixed_magnet + ":PwrState-Sts")
+        # enum_map={'On': PyDMLed.Green, 'Off': PyDMLed.Red})
         self.pwrstate_label = PyDMLabel(
             self, "ca://" + self._prefixed_magnet + ":PwrState-Sts")
         self.pwrstate_label.setObjectName("pwrstate_label")

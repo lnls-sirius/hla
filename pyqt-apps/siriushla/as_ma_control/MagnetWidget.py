@@ -142,7 +142,9 @@ class BaseMagnetWidget(QWidget):
         self.pwrstate_button = PyDMStateButton(
             parent=self, init_channel="ca://" + self._pwrstate_sp_pv)
         self.pwrstate_button.setObjectName("pwrstate_button")
-        self.state_led = LedWidget(self._pwrstate_sp_pv, self)
+        self.state_led = PyDMLed(
+            self, "ca://" + self._pwrstate_sp_pv)
+            # enum_map={'On': PyDMLed.Green, 'Off': PyDMLed.Red})
         self.state_led.setObjectName("state_led")
         self.state_widget = QWidget(self)
         self.state_widget.setObjectName("state_widget")
@@ -263,14 +265,14 @@ class MagnetWidget(BaseMagnetWidget):
             self._prefixed_maname + self._strength_name + "-Mon"
 
 
-class LedWidget(QWidget):
-    """Led class."""
-
-    def __init__(self, channel, parent=None):
-        """Constructor."""
-        super().__init__(parent)
-        layout = QVBoxLayout()
-        self.led = PyDMLed(
-            parent=self, init_channel="ca://" + channel)
-        layout.addWidget(self.led)
-        self.setLayout(layout)
+# class LedWidget(QWidget):
+#     """Led class."""
+#
+#     def __init__(self, channel, parent=None):
+#         """Constructor."""
+#         super().__init__(parent)
+#         layout = QVBoxLayout()
+#         self.led = PyDMLed(
+#             parent=self, init_channel="ca://" + channel)
+#         layout.addWidget(self.led)
+#         self.setLayout(layout)
