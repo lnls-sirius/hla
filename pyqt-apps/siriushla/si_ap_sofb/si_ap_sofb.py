@@ -2,15 +2,15 @@
 
 import sys as _sys
 import os as _os
+import numpy as np
 from PyQt5 import uic as _uic
-from PyQt5.QtCore import Qt as _Qt
+from PyQt5.QtCore import Qt, pyqtSignal
+from PyQt5.QtWidgets import QWidget
 from pydm import PyDMApplication as _PyDMApplication
-from pydm.widgets.widget import PyDMWidget as _PyDMWidget
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
+from pydm.widgets.base import PyDMWritableWidget
 from siriuspy.envars import vaca_prefix as LL_PREF
-
 from siriushla.si_ap_sofb.selection_matrix import SelectionMatrix
-from siriushla.si_ap_sofb.selection_matrix import NR_BPMs, NR_CHs, NR_CVs
 from siriushla.si_ap_sofb.register_menu import RegisterMenu
 from siriushla.si_ap_sofb.graphic_controller import GraphicOrbitControllers
 from siriushla.si_ap_sofb.orbit_controllers import ReferenceController
@@ -18,6 +18,24 @@ from siriushla.si_ap_sofb.orbit_controllers import CorrectionOrbitController
 
 _dir = _os.path.dirname(_os.path.abspath(__file__))
 UI_FILE = _os.path.sep.join([_dir, 'SOFBMain.ui'])
+
+
+class _PyDMWidget(PyDMWritableWidget, QWidget):
+
+    receive_value_signal = pyqtSignal([int], [float], [str], [np.ndarray])
+
+    def __init__(self, parent=None, init_channel=None, visible=False):
+        QWidget.__init__(self, parent=parent)
+        PyDMWritableWidget.__init__(self, init_channel=init_channel)
+        self.setVisible(visible)
+
+    def value_changed(self, new_val):
+        super(_PyDMWidget, self).value_changed(new_val)
+        if new_val is not None:
+            self.receive_value_signal[self.channeltype].emit(new_val)
+
+    def send_value(self, new_val):
+        self.send_value_signal[self.channeltype].emit(new_val)
 
 
 def main(prefix=None):
@@ -106,7 +124,7 @@ def _create_context_menus(MWin):
         cm = RegisterMenu(MWin, i)
         setattr(MWin, 'CM_Register' + str(i), cm)
         pb = getattr(MWin, 'PB_Register' + str(i))
-        pb.setContextMenuPolicy(_Qt.CustomContextMenu)
+        pb.setContextMenuPolicy(Qt.CustomContextMenu)
         pb.setMenu(cm)
         pb.clicked.connect(pb.showMenu)
 

@@ -1,15 +1,64 @@
 """Create the Selection Matrices for BPMs and Correctors."""
 
 import sys
+import numpy as np
 from PyQt5.QtWidgets import (QWidget, QLabel, QHBoxLayout, QVBoxLayout,
-                             QSizePolicy, QSpacerItem)
+                             QSizePolicy, QSpacerItem, QCheckBox)
 from pydm import PyDMApplication
-from pydm.widgets.checkbox import PyDMCheckbox
+from pydm.widgets.base import PyDMWidget, PyDMWritableWidget
 from pydm.widgets.led import PyDMLed
+from pydm.widgets.QLed import QLed
 
 NR_BPMs = 160
 NR_CHs = 120
 NR_CVs = 160
+
+
+class _PyDMCheckBoxList(PyDMWritableWidget, QWidget):
+
+    def __init__(self, parent=None, init_channel=None, size=0):
+        QWidget.__init__(self, parent=parent)
+        PyDMWritableWidget.__init__(self, init_channel=init_channel)
+        self.setVisible(False)
+        self.cb_list = []
+        for i in range(size):
+            cb = QCheckBox()
+            cb.clicked.connect(self._send_value_index(i))
+            self.cb_list.append(cb)
+
+    def _send_value_index(self, index):
+        def send_value(checked):
+            if self.value is None:
+                return
+            self.value[index] = checked
+            self.send_value_signal[np.ndarray].emit(self.value)
+        return send_value
+
+    def value_changed(self, new_val):
+        super(_PyDMCheckBoxList, self).value_changed(new_val)
+        for i, checked in enumerate(self.value):
+            self.cb_list[i].setChecked(checked)
+
+
+class _PyDMLedList(PyDMWidget, QWidget):
+
+    def __init__(self, parent=None, init_channel=None, size=0):
+        QWidget.__init__(self, parent=parent)
+        PyDMWidget.__init__(self, init_channel=init_channel)
+        self.setVisible(False)
+        self.led_list = []
+        sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        for i in range(size):
+            led = QLed()
+            led.setOffColor(PyDMLed.default_colorlist[0])
+            led.setOnColor(PyDMLed.default_colorlist[1])
+            led.setSizePolicy(sizePolicy)
+            self.led_list.append(led)
+
+    def value_changed(self, new_val):
+        super(_PyDMLedList, self).value_changed(new_val)
+        for i, checked in enumerate(self.value):
+            self.led_list[i].setState(checked)
 
 
 class SelectionMatrix(QVBoxLayout):
@@ -28,6 +77,14 @@ class SelectionMatrix(QVBoxLayout):
         super().__init__(parent)
         self.prefix = prefix
         self.dev = dev
+        self.PV_sp = _PyDMCheckBoxList(
+                parent=None,
+                init_channel=self.prefix + self.dev + 'EnblList-SP',
+                size=self.INDICES_LENGTH[self.dev])
+        self.PV_rb = _PyDMLedList(
+                parent=None,
+                init_channel=self.prefix + self.dev + 'EnblList-RB',
+                size=self.INDICES_LENGTH[self.dev])
         self._setupUi()
 
     def _setupUi(self):
@@ -82,19 +139,14 @@ class SelectionMatrix(QVBoxLayout):
         label = self.dev+section+subsection
         hl = QHBoxLayout()
         hl.setObjectName('HL_'+label)
-        cb = PyDMCheckbox(parent)
-        cb.setObjectName('PyDMCB_'+label)
+        cb = self.PV_sp.cb_list[index]
+        cb.setParent(parent)
         cb.setToolTip(label)
-        cb.channel = self.prefix + self.dev+'EnblList-SP'
-        cb.pvbit = index
         hl.addWidget(cb)
-        led = PyDMLed(parent)
-        sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Preferred)
-        led.setSizePolicy(sizePolicy)
-        led.setObjectName('PyDMLed_'+label)
+
+        led = self.PV_rb.led_list[index]
+        led.setParent(parent)
         led.setToolTip(label)
-        led.channel = self.prefix + self.dev+'EnblList-RB'
-        led.pvbit = index
         hl.addWidget(led)
         return hl
 
