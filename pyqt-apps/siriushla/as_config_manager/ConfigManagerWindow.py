@@ -318,6 +318,8 @@ class ConfigManagerWindow(QMainWindow):
             self._showWarningBox(message)
         except OperationalError as e:
             self._showWarningBox("Unable to connect to database")
+        except Exception as e:
+            self._showWarningBox("{}".format(e))
 
         return
 
@@ -355,17 +357,23 @@ class ConfigManagerWindow(QMainWindow):
                     # self._showMessageBox(msg)
         except OperationalError as e:
             self._showWarningBox("Unable to connect to database")
+        except Exception as e:
+            self._showWarningBox("{}".format(e))
 
     @pyqtSlot()
     def _loadCurrentConfiguration(self):
         # TODO: Loading box
-        t = LoadingThread(
-            self._getNextName(), self._model._vertical_header, self)
-        dlg = LoadingDlg("Loading", len(self._model._vertical_header), self)
-        t.taskUpdated.connect(dlg.update)
-        t.taskFinished.connect(dlg.done)
-        t.start()
-        dlg.exec_()
+        try:
+            t = LoadingThread(
+                self._getNextName(), self._model._vertical_header, self)
+            dlg = \
+                LoadingDlg("Loading", len(self._model._vertical_header), self)
+            t.taskUpdated.connect(dlg.update)
+            t.taskFinished.connect(dlg.done)
+            t.start()
+            dlg.exec_()
+        except Exception as e:
+            self._showWarningBox("{}".format(e))
 
     # Actions binded with keys
     def _saveChanges(self):
