@@ -60,8 +60,9 @@ class DipoleDetailWidget(MagnetDetailWidget):
             self, "ca://" + self._ps_list[0] + ":OpMode-Sts")
         self.opmode1_rb.setObjectName("opmode1_rb_label")
         self.ctrlmode1_led = PyDMLed(
-            self, "ca://" + self._ps_list[0] + ":CtrlMode-Mon",
-            enum_map={'Remote': PyDMLed.Green, 'Local': PyDMLed.Red})
+            self, "ca://" + self._ps_list[0] + ":CtrlMode-Mon")
+        self.ctrlmode1_led.setOnColor(PyDMLed.Red)
+        self.ctrlmode1_led.setOffColor(PyDMLed.Green)
         self.ctrlmode1_label = PyDMLabel(
             self, "ca://" + self._ps_list[0] + ":CtrlMode-Mon")
         self.ctrlmode1_label.setObjectName("ctrlmode1_label")
@@ -69,8 +70,9 @@ class DipoleDetailWidget(MagnetDetailWidget):
             self, "ca://" + self._ps_list[1] + ":OpMode-Sts")
         self.opmode2_rb.setObjectName("opmode2_rb_label")
         self.ctrlmode2_led = PyDMLed(
-            self, "ca://" + self._ps_list[1] + ":CtrlMode-Mon",
-            enum_map={'Remote': PyDMLed.Green, 'Local': PyDMLed.Red})
+            self, "ca://" + self._ps_list[1] + ":CtrlMode-Mon")
+        self.ctrlmode2_led.setOnColor(PyDMLed.Red)
+        self.ctrlmode2_led.setOffColor(PyDMLed.Green)
         self.ctrlmode2_label = PyDMLabel(
             self, "ca://" + self._ps_list[1] + ":CtrlMode-Mon")
         self.ctrlmode2_label.setObjectName("ctrlmode2_label")
@@ -116,14 +118,12 @@ class DipoleDetailWidget(MagnetDetailWidget):
             init_channel="ca://" + self._prefixed_magnet + ":PwrState-Sel")
 
         self.pwrstate1_led = PyDMLed(
-            self, "ca://" + self._ps_list[0] + ":PwrState-Sts",
-            enum_map={'On': PyDMLed.Green, 'Off': PyDMLed.Red})
+            self, "ca://" + self._ps_list[0] + ":PwrState-Sts")
         self.pwrstate1_label = PyDMLabel(
             self, "ca://" + self._ps_list[0] + ":PwrState-Sts")
         self.pwrstate1_label.setObjectName("pwrstate1_label")
         self.pwrstate2_led = PyDMLed(
-            self, "ca://" + self._ps_list[1] + ":PwrState-Sts",
-            enum_map={'On': PyDMLed.Green, 'Off': PyDMLed.Red})
+            self, "ca://" + self._ps_list[1] + ":PwrState-Sts")
         self.pwrstate2_label = PyDMLabel(
             self, "ca://" + self._ps_list[1] + ":PwrState-Sts")
         self.pwrstate2_label.setObjectName("pwrstate2_label")

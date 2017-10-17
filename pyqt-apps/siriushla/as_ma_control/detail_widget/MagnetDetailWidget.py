@@ -140,8 +140,9 @@ class MagnetDetailWidget(QWidget):
             self, "ca://" + self._prefixed_magnet + ":OpMode-Sts")
         self.opmode_rb.setObjectName("opmode1_rb_label")
         self.ctrlmode_led = PyDMLed(
-            self, "ca://" + self._prefixed_magnet + ":CtrlMode-Mon",
-            enum_map={'Remote': PyDMLed.Green, 'Local': PyDMLed.Red})
+            self, "ca://" + self._prefixed_magnet + ":CtrlMode-Mon")
+        self.ctrlmode_led.setOnColor(PyDMLed.Red)
+        self.ctrlmode_led.setOffColor(PyDMLed.Green)
         self.ctrlmode_label = PyDMLabel(
             self, "ca://" + self._prefixed_magnet + ":CtrlMode-Mon")
         self.ctrlmode_label.setObjectName("ctrlmode1_label")
