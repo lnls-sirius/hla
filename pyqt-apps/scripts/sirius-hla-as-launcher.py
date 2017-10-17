@@ -11,6 +11,7 @@ from siriushla.as_ma_control.MagnetTabControlWindow \
 from siriushla.as_pm_control.PulsedMagnetControlWindow \
     import PulsedMagnetControlWindow
 from siriushla.as_ap_injection.InjectionWindow import InjectionWindow
+from siriushla.as_config_manager.ConfigManagerWindow import ConfigManagerWindow
 from siriushla.WindowManager import WindowManager
 from siriushla import util as _util
 
@@ -73,11 +74,18 @@ class ControlApplication(QMainWindow):
             window_manager=self._window_manager, parent=self)
         self._window_manager.register_window(
             ControlApplication.InjectionWindow, InjectionWindow, parent=self)
+        self._window_manager.register_window(
+            "bo-config", ConfigManagerWindow,
+            config_type="BoStrengthPvs", parent=self)
+        self._window_manager.register_window(
+            "si-config", ConfigManagerWindow,
+            config_type="SiStrengthPvs", parent=self)
 
     def _setup_ui(self):
         # openCyclePanel = QAction("PS Cycling", self)
         # openCyclePanel.triggered.connect(self._openCyclePanel)
 
+        # Create Actions
         openTBMagnetControlPanel = QAction("TB Magnets", self)
         openTBMagnetControlPanel.triggered.connect(
             lambda: self._open_window(ControlApplication.TBMagnetWindow))
@@ -106,24 +114,25 @@ class ControlApplication(QMainWindow):
         openSIFastCorrectorsWindow.triggered.connect(
             lambda: self._open_window("si-ma-correctors-fast"))
         openSISkewQuadsWindow = QAction("Skew Quadrupoles", self)
-        openSISkewQuadsWindow.triggered.connect(self._openSISkewQuadsWindow)
+        openSISkewQuadsWindow.triggered.connect(
+            lambda: self._open_window("si-ma-quadruole-skew"))
 
         openPulsedMagnetsControlPanel = QAction("Pulsed Magnets", self)
         openPulsedMagnetsControlPanel.triggered.connect(
             lambda: self._open_window(ControlApplication.PulsedMagnetsWindow))
 
-        # Injection actions
         openInjectionWindow = QAction("Injection", self)
         openInjectionWindow.triggered.connect(
             lambda: self._open_window(ControlApplication.InjectionWindow))
 
-        # openBoosterConfiguration = QAction("Booster Configuration", self)
-        # openBoosterConfiguration.triggered.connect(
-        #     lambda: self._openConfigurationWindow('BoForcePvs'))
-        # openSIConfiguration = QAction("Sirius Configuration", self)
-        # openSIConfiguration.triggered.connect(
-        #     lambda: self._openConfigurationWindow('SiForcePvs'))
+        openBoosterConfiguration = QAction("Booster Configuration", self)
+        openBoosterConfiguration.triggered.connect(
+            lambda: self._open_window("bo-config"))
+        openSIConfiguration = QAction("Sirius Configuration", self)
+        openSIConfiguration.triggered.connect(
+            lambda: self._open_window("si-config"))
 
+        # Build Menu
         menubar = QMenuBar(self)
         menubar.setNativeMenuBar(False)
 
@@ -150,9 +159,9 @@ class ControlApplication(QMainWindow):
         injectionMenu = menubar.addMenu("&Injection")
         injectionMenu.addAction(openInjectionWindow)
 
-        # configMenu = menubar.addMenu("&Configuration Control")
-        # configMenu.addAction(openBoosterConfiguration)
-        # configMenu.addAction(openSIConfiguration)
+        configMenu = menubar.addMenu("&Offline Configuration")
+        configMenu.addAction(openBoosterConfiguration)
+        configMenu.addAction(openSIConfiguration)
 
         self.setMenuBar(menubar)
         self.setGeometry(50, 50, 1024, 800)
@@ -169,6 +178,12 @@ if __name__ == "__main__":
 
     # Implement sirius-style.css as default Qt resource file for Sirius!
     _util.set_style(app)
+    # app.setStyleSheet("""
+    #     QMenuBar {
+    #         border: 1px solid black;
+    #     }
+    #
+    # """)
 
     window = ControlApplication()
     sys.exit(app.exec_())
