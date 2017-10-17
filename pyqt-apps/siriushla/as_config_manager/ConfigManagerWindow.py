@@ -1,5 +1,5 @@
 """Define a window to manage offline configurations."""
-from pymysql.err import IntegrityError, InternalError, OperationalError
+# from pymysql.err import IntegrityError, InternalError, OperationalError
 from pydm.PyQt.QtCore import Qt, QPoint, pyqtSlot
 from pydm.PyQt.QtGui import QVBoxLayout, QPushButton, QMainWindow, \
         QTableView, QWidget, QHBoxLayout, QInputDialog, QMenu, QAction, \
@@ -168,12 +168,12 @@ class ConfigManagerWindow(QMainWindow):
         try:
             self._model.saveConfiguration(column)
             return True
-        except (IntegrityError, InternalError):
-            QMessageBox(
-                QMessageBox.Warning, "Couldn't save",
-                "Name already exists!").exec_()
-        except OperationalError as e:
-            self._showWarningBox("Unable to connect to database")
+        # except (IntegrityError, InternalError):
+        #     QMessageBox(
+        #         QMessageBox.Warning, "Couldn't save",
+        #         "Name already exists!").exec_()
+        # except OperationalError as e:
+        #     self._showWarningBox("Unable to connect to database")
         except Exception as e:
             QMessageBox(
                 QMessageBox.Warning, "Couldn't save",
@@ -316,8 +316,8 @@ class ConfigManagerWindow(QMainWindow):
                        "the actual configuaration of elements in the<br>"
                        "Ring/Booster. It should be either deleted or updated")
             self._showWarningBox(message)
-        except OperationalError as e:
-            self._showWarningBox("Unable to connect to database")
+        # except OperationalError as e:
+        #     self._showWarningBox("Unable to connect to database")
         except Exception as e:
             self._showWarningBox("{}".format(e))
 
@@ -355,8 +355,8 @@ class ConfigManagerWindow(QMainWindow):
                     #     msg = \
                     #       "Failed to delete configuration {}.".format(config)
                     # self._showMessageBox(msg)
-        except OperationalError as e:
-            self._showWarningBox("Unable to connect to database")
+        # except OperationalError as e:
+        #     self._showWarningBox("Unable to connect to database")
         except Exception as e:
             self._showWarningBox("{}".format(e))
 
