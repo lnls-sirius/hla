@@ -3,7 +3,7 @@
 """Mock application launcher."""
 
 import sys
-from pydm import PyDMApplication
+from siriushla.SiriusApplication import SiriusApplication
 from pydm.PyQt.QtGui import QMainWindow, QAction, QMenuBar
 from siriushla.as_ma_control.MagnetControlWindow import MagnetControlWindow
 from siriushla.as_ma_control.MagnetTabControlWindow \
@@ -12,7 +12,6 @@ from siriushla.as_pm_control.PulsedMagnetControlWindow \
     import PulsedMagnetControlWindow
 from siriushla.as_ap_injection.InjectionWindow import InjectionWindow
 from siriushla.as_config_manager.ConfigManagerWindow import ConfigManagerWindow
-from siriushla.WindowManager import WindowManager
 from siriushla import util as _util
 
 
@@ -29,57 +28,10 @@ class ControlApplication(QMainWindow):
     def __init__(self):
         """Constructor."""
         super().__init__()
-        self._window_manager = WindowManager()
-        self._register_windows()
+        self.app = SiriusApplication.instance()
+        # self._window_manager = WindowManager()
+        # self._register_windows()
         self._setup_ui()
-
-    def _register_windows(self):
-        self._window_manager.register_window(
-            "si-ma-dipole", MagnetControlWindow, section="SI", device="dipole",
-            window_manager=self._window_manager, parent=self)
-        self._window_manager.register_window(
-            "si-ma-quadruole", MagnetControlWindow,
-            section="SI", device="quadrupole",
-            window_manager=self._window_manager, parent=self)
-        self._window_manager.register_window(
-            "si-ma-sextupole", MagnetControlWindow,
-            section="SI", device="sextupole",
-            window_manager=self._window_manager, parent=self)
-        self._window_manager.register_window(
-            "si-ma-correctors-slow", MagnetControlWindow,
-            section="SI", device="corrector-slow",
-            window_manager=self._window_manager, parent=self)
-        self._window_manager.register_window(
-            "si-ma-correctors-fast", MagnetControlWindow,
-            section="SI", device="corrector-fast",
-            window_manager=self._window_manager, parent=self)
-        self._window_manager.register_window(
-            "si-ma-quadruole-skew", MagnetControlWindow,
-            section="SI", device="quadrupole-skew",
-            window_manager=self._window_manager, parent=self)
-        self._window_manager.register_window(
-            ControlApplication.SIMagnetWindow, MagnetTabControlWindow,
-            section="SI", window_manager=self._window_manager, parent=self)
-        self._window_manager.register_window(
-            ControlApplication.TSMagnetWindow, MagnetTabControlWindow,
-            section="TS", window_manager=self._window_manager, parent=self)
-        self._window_manager.register_window(
-            ControlApplication.BOMagnetWindow, MagnetTabControlWindow,
-            section="BO", window_manager=self._window_manager, parent=self)
-        self._window_manager.register_window(
-            ControlApplication.TBMagnetWindow, MagnetTabControlWindow,
-            section="TB", window_manager=self._window_manager, parent=self)
-        self._window_manager.register_window(
-            ControlApplication.PulsedMagnetsWindow, PulsedMagnetControlWindow,
-            window_manager=self._window_manager, parent=self)
-        self._window_manager.register_window(
-            ControlApplication.InjectionWindow, InjectionWindow, parent=self)
-        self._window_manager.register_window(
-            "bo-config", ConfigManagerWindow,
-            config_type="BoStrengthPvs", parent=self)
-        self._window_manager.register_window(
-            "si-config", ConfigManagerWindow,
-            config_type="SiStrengthPvs", parent=self)
 
     def _setup_ui(self):
         # openCyclePanel = QAction("PS Cycling", self)
@@ -87,50 +39,49 @@ class ControlApplication(QMainWindow):
 
         # Create Actions
         openTBMagnetControlPanel = QAction("TB Magnets", self)
-        openTBMagnetControlPanel.triggered.connect(
-            lambda: self._open_window(ControlApplication.TBMagnetWindow))
+        _util.connect_window(openTBMagnetControlPanel,
+                             MagnetTabControlWindow, self, section="TB")
         openBOMagnetControlPanel = QAction("BO Magnets", self)
-        openBOMagnetControlPanel.triggered.connect(
-            lambda: self._open_window(ControlApplication.BOMagnetWindow))
+        _util.connect_window(openBOMagnetControlPanel,
+                             MagnetTabControlWindow, self, section="BO")
         openTSMagnetControlPanel = QAction("TS Magnets", self)
-        openTSMagnetControlPanel.triggered.connect(
-            lambda: self._open_window(ControlApplication.TSMagnetWindow))
+        _util.connect_window(openTSMagnetControlPanel,
+                             MagnetTabControlWindow, self, section="TS")
         openSIMagnetControlPanel = QAction("All", self)
-        openSIMagnetControlPanel.triggered.connect(
-            lambda: self._open_window(ControlApplication.SIMagnetWindow))
+        _util.connect_window(openSIMagnetControlPanel,
+                             MagnetTabControlWindow, self, section="SI")
         openSIDipoleWindow = QAction("Dipole", self)
-        openSIDipoleWindow.triggered.connect(
-            lambda: self._open_window("si-ma-dipole"))
+        _util.connect_window(openSIDipoleWindow, MagnetControlWindow, self,
+                             section="SI", device="dipole")
         openSIQuadrupolesWindow = QAction("Quadrupoles", self)
-        openSIQuadrupolesWindow.triggered.connect(
-            lambda: self._open_window("si-ma-quadruole"))
+        _util.connect_window(openSIQuadrupolesWindow, MagnetControlWindow,
+                             self, section="SI", device="quadrupole")
         openSISextupolesWindow = QAction("Sextupoles", self)
-        openSISextupolesWindow.triggered.connect(
-            lambda: self._open_window("si-ma-sextupole"))
+        _util.connect_window(openSISextupolesWindow, MagnetControlWindow, self,
+                             section="SI", device="sextupole")
         openSISlowCorrectorsWindow = QAction("Slow Correctors", self)
-        openSISlowCorrectorsWindow.triggered.connect(
-            lambda: self._open_window("si-ma-correctors-slow"))
+        _util.connect_window(openSISlowCorrectorsWindow, MagnetControlWindow,
+                             self, section="SI", device="corrector-slow")
         openSIFastCorrectorsWindow = QAction("Fast Correctors", self)
-        openSIFastCorrectorsWindow.triggered.connect(
-            lambda: self._open_window("si-ma-correctors-fast"))
+        _util.connect_window(openSIFastCorrectorsWindow, MagnetControlWindow,
+                             self, section="SI", device="corrector-fast")
         openSISkewQuadsWindow = QAction("Skew Quadrupoles", self)
-        openSISkewQuadsWindow.triggered.connect(
-            lambda: self._open_window("si-ma-quadruole-skew"))
+        _util.connect_window(openSISkewQuadsWindow, MagnetControlWindow, self,
+                             section="SI", device="quadrupole-skew")
 
         openPulsedMagnetsControlPanel = QAction("Pulsed Magnets", self)
-        openPulsedMagnetsControlPanel.triggered.connect(
-            lambda: self._open_window(ControlApplication.PulsedMagnetsWindow))
+        _util.connect_window(openPulsedMagnetsControlPanel,
+                             PulsedMagnetControlWindow, self)
 
         openInjectionWindow = QAction("Injection", self)
-        openInjectionWindow.triggered.connect(
-            lambda: self._open_window(ControlApplication.InjectionWindow))
+        _util.connect_window(openInjectionWindow, InjectionWindow, self)
 
         openBoosterConfiguration = QAction("Booster Configuration", self)
-        openBoosterConfiguration.triggered.connect(
-            lambda: self._open_window("bo-config"))
+        _util.connect_window(openBoosterConfiguration, ConfigManagerWindow,
+                             self, config_type="BoStrengthPvs")
         openSIConfiguration = QAction("Sirius Configuration", self)
-        openSIConfiguration.triggered.connect(
-            lambda: self._open_window("si-config"))
+        _util.connect_window(openSIConfiguration, ConfigManagerWindow,
+                             self, config_type="SiStrengthPvs")
 
         # Build Menu
         menubar = QMenuBar(self)
@@ -168,22 +119,13 @@ class ControlApplication(QMainWindow):
         self.setWindowTitle("AS Launcher")
         self.show()
 
-    def _open_window(self, id):
-        self._window_manager.open_window(id)
-
 
 if __name__ == "__main__":
 
-    app = PyDMApplication(None, sys.argv)
+    app = SiriusApplication()
 
     # Implement sirius-style.css as default Qt resource file for Sirius!
     _util.set_style(app)
-    # app.setStyleSheet("""
-    #     QMenuBar {
-    #         border: 1px solid black;
-    #     }
-    #
-    # """)
 
     window = ControlApplication()
     sys.exit(app.exec_())
