@@ -11,10 +11,20 @@ class PulsedMagnetDetailWindow(QMainWindow):
         """Constructor."""
         super().__init__(parent)
         self._maname = maname
-        app = PyDMApplication.instance()
+        self.app = PyDMApplication.instance()
         self._setup_ui()
-        app.establish_widget_connections(self)
+        # app.establish_widget_connections(self)
 
     def _setup_ui(self):
         self.central_widget = PulsedMagnetDetailWidget(self._maname, self)
         self.setCentralWidget(self.central_widget)
+
+    def showEvent(self, event):
+        """Establish connections and call super."""
+        self.app.establish_widget_connections(self)
+        super().showEvent(event)
+
+    def closeEvent(self, event):
+        """Override closeEvent in order to close iwdget connections."""
+        self.app.close_widget_connections(self)
+        super().closeEvent(event)

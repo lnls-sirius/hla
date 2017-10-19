@@ -11,19 +11,6 @@ from siriuspy.pulsedma import properties as pm_props
 from siriushla.FloatSetPointWidget import FloatSetPointWidget
 
 
-class LedWidget(QWidget):
-    """Led class."""
-
-    def __init__(self, init_channel, parent=None, bit=-1):
-        """Constructor."""
-        super().__init__(parent)
-        layout = QVBoxLayout()
-        self.led = PyDMLed(
-            parent=self, init_channel="ca://" + init_channel, bit=bit)
-        layout.addWidget(self.led)
-        self.setLayout(layout)
-
-
 class PulsedMagnetDetailWidget(QWidget):
     """Detailed widget for controlling a pulsed magnet."""
 
@@ -101,12 +88,11 @@ class PulsedMagnetDetailWidget(QWidget):
                             "Bit6", "Bit7"]
         for i in range(8):
             label_widget = QLabel(interlock_labels[i])
-            led_widget = LedWidget(parent=self,
-                                   init_channel=self._intlk_mon_pv,
-                                   bit=i)
-            led_widget.led.setOffColour(1)
-            led_widget.led.setOnColour(0)
-            interlock_layout.addWidget(led_widget, i, 0)
+            led = PyDMLed(
+                self, "ca://" + self._intlk_mon_pv, i)
+            led.setOnColor(PyDMLed.Red)
+            led.setOffColor(PyDMLed.Green)
+            interlock_layout.addWidget(led, i, 0)
             interlock_layout.addWidget(label_widget, i, 1)
 
         interlock_layout.setRowStretch(8, 1)
@@ -118,8 +104,8 @@ class PulsedMagnetDetailWidget(QWidget):
 
         self.state_button = PyDMStateButton(
             parent=self, init_channel="ca://" + self._pwrstate_sel_pv)
-        self.state_led = LedWidget(
-            parent=self, init_channel=self._pwrstate_sts_pv)
+        self.state_led = PyDMLed(
+            self, "ca://" + self._pwrstate_sts_pv)
 
         pwrstate_layout.addStretch()
         pwrstate_layout.addWidget(self.state_button)
@@ -133,8 +119,8 @@ class PulsedMagnetDetailWidget(QWidget):
 
         self.pulses_state_button = PyDMStateButton(
             parent=self, init_channel="ca://" + self._enablepulses_sel_pv)
-        self.pulses_state_led = LedWidget(
-            parent=self, init_channel=self._enablepulses_sts_pv)
+        self.pulses_state_led = PyDMLed(
+            parent=self, init_channel="ca://" + self._enablepulses_sts_pv)
 
         pulses_layout.addStretch()
         pulses_layout.addWidget(self.pulses_state_button)
@@ -151,8 +137,8 @@ class PulsedMagnetDetailWidget(QWidget):
         self.tension_rb_label = PyDMLabel(
             parent=self, init_channel="ca://" + self._tension_mon_pv)
 
-        self.tension_sp_widget.set_limits_from_pv(True)
-        self.tension_rb_label.precFromPV = True
+        # self.tension_sp_widget.set_limits_from_pv(True)
+        # self.tension_rb_label.precFromPV = True
 
         tension_layout.addWidget(self.tension_sp_widget)
         tension_layout.addWidget(self.tension_rb_label)
@@ -167,8 +153,8 @@ class PulsedMagnetDetailWidget(QWidget):
         self.kick_rb_label = PyDMLabel(
             parent=self, init_channel="ca://" + self._kick_mon_pv)
 
-        self.kick_sp_widget.set_limits_from_pv(True)
-        self.kick_rb_label.precFromPV = True
+        # self.kick_sp_widget.set_limits_from_pv(True)
+        # self.kick_rb_label.precFromPV = True
 
         kick_layout.addWidget(self.kick_sp_widget)
         kick_layout.addWidget(self.kick_rb_label)
@@ -179,8 +165,9 @@ class PulsedMagnetDetailWidget(QWidget):
         ctrlmode_layout = QHBoxLayout()
 
         self.ctrlmode_led = PyDMLed(
-            parent=self, init_channel="ca://" + self._ctrlmode_pv,
-            enum_map={"Remote": 1, "Local": 0})
+            parent=self, init_channel="ca://" + self._ctrlmode_pv)
+        self.ctrlmode_led.setOnColor(PyDMLed.Red)
+        self.ctrlmode_led.setOffColor(PyDMLed.Green)
         self.ctrlmode_label = PyDMLabel(
             parent=self, init_channel="ca://" + self._ctrlmode_pv)
 
