@@ -108,10 +108,10 @@ class InjectionWindow(QMainWindow):
         self.stopInjectionBtn.clicked.connect(self.stopInjection)
         self._enableButtons(False)
 
-        self.injectingLed.connected_signal.connect(
-            lambda: self._enableButtons(True))
-        self.injectingLed.disconnected_signal.connect(
-            lambda: self._enableButtons(False))
+        # self.injectingLed.connected_signal.connect(
+        #     lambda: self._enableButtons(True))
+        # self.injectingLed.disconnected_signal.connect(
+        #     lambda: self._enableButtons(False))
 
         # bl = self.controller.bucket_list
 
