@@ -118,8 +118,8 @@ def _setupTriggers(prefix, HLTiming, hl_trigs):
 
 def _setupEVGParams(prefix, HLTiming):
     pv_pref = prefix + 'AS-Glob:TI-EVG:'
-    HLTiming.PyDMLEBucketList.channel = pv_pref + 'BucketList-SP'
-    HLTiming.PyDMLbBucketList.channel = pv_pref + 'BucketList-RB'
+    HLTiming.PyDMWfTBucketListSP.channel = pv_pref + 'BucketList-SP'
+    HLTiming.PyDMWfTBucketListRB.channel = pv_pref + 'BucketList-RB'
     HLTiming.PyDMStBContinuous.channel = pv_pref + 'ContinuousState-Sel'
     HLTiming.PyDMLedContinuous.channel = pv_pref + 'ContinuousState-Sts'
     HLTiming.PyDMStBInjectionState.channel = pv_pref + 'InjectionState-Sel'

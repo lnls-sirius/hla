@@ -34,9 +34,9 @@ class GraphicOrbitControllers(QObject):
         cbRef = getattr(self.mWin, 'CB_Line'+str(index) + 'Ref')
         cbOrb.currentTextChanged.connect(self._orb_changed)
         cbRef.currentTextChanged.connect(self._ref_changed)
-        self.mWin.PV_SOFBBPMXEnblListRB.value_signal[_np.ndarray].connect(
+        mWin.PV_SOFBBPMXEnblListRB.receive_value_signal[_np.ndarray].connect(
                 self._update_enable_list('x'))
-        self.mWin.PV_SOFBBPMYEnblListRB.value_signal[_np.ndarray].connect(
+        mWin.PV_SOFBBPMYEnblListRB.receive_value_signal[_np.ndarray].connect(
                 self._update_enable_list('y'))
         self.orbx = _np.zeros(NR_BPMs, dtype=float)
         self.orby = _np.zeros(NR_BPMs, dtype=float)
@@ -61,35 +61,43 @@ class GraphicOrbitControllers(QObject):
         self.stdy_str_signal.connect(stdy.setText)
 
         base_ind = (4-index)*4-1
-        wid = mWin.PyDMMWP_OrbitX
-        self.diffTracex = getattr(wid, 'trace')[base_ind]
-        self.brushx = mkBrush(getattr(
-                                wid, 'trace' + str(base_ind) + 'Color'))
-        self.penx = mkPen(getattr(
-                                wid, 'trace' + str(base_ind) + 'Color'))
-        self.diffSetValuex = getattr(
-                                wid, 'setTrace' + str(base_ind) + 'Value')
-        self.aveSetValuex = getattr(
-                                wid, 'setTrace' + str(base_ind-1) + 'Value')
-        self.aveMstdSetValuex = getattr(
-                                wid, 'setTrace' + str(base_ind-2) + 'Value')
-        self.avePstdSetValuex = getattr(
-                                wid, 'setTrace' + str(base_ind-3) + 'Value')
 
-        wid = mWin.PyDMMWP_OrbitY
-        self.diffTracey = getattr(wid, 'trace')[base_ind]
-        self.brushy = mkBrush(getattr(
-                                wid, 'trace' + str(base_ind) + 'Color'))
-        self.peny = mkPen(getattr(
-                                wid, 'trace' + str(base_ind) + 'Color'))
-        self.diffSetValuey = getattr(
-                                wid, 'setTrace' + str(base_ind) + 'Value')
-        self.aveSetValuey = getattr(
-                                wid, 'setTrace' + str(base_ind-1) + 'Value')
-        self.aveMstdSetValuey = getattr(
-                                wid, 'setTrace' + str(base_ind-2) + 'Value')
-        self.avePstdSetValuey = getattr(
-                                wid, 'setTrace' + str(base_ind-3) + 'Value')
+        mWin.PyDMWP_OrbitX._legend.removeItem("")
+        mWin.PyDMWP_OrbitX.plotItem.showButtons()
+        curves = mWin.PyDMWP_OrbitX._curves
+        self.diffTracex = curves[base_ind]
+        self.brushx = mkBrush(curves[base_ind].color)
+        self.penx = mkPen(curves[base_ind].color)
+        self.diffSetValuex = curves[base_ind].receiveYWaveform
+        self.aveSetValuex = curves[base_ind-1].receiveYWaveform
+        self.aveMstdSetValuex = curves[base_ind-2].receiveYWaveform
+        self.avePstdSetValuex = curves[base_ind-3].receiveYWaveform
+        cb = getattr(mWin, 'CB_Line'+str(index)+'Show')
+        cbx = getattr(mWin, 'CB_Line'+str(index)+'ShowXStat')
+        cb.toggled.connect(cbx.setEnabled)
+        cb.toggled.connect(cbx.setChecked)
+        for i in range(4):
+            cb.toggled.connect(curves[base_ind-i].setVisible)
+            if i != 0:
+                cbx.toggled.connect(curves[base_ind-i].setVisible)
+
+        mWin.PyDMWP_OrbitY._legend.removeItem("")
+        mWin.PyDMWP_OrbitY.plotItem.showButtons()
+        curves = mWin.PyDMWP_OrbitY._curves
+        self.diffTracey = curves[base_ind]
+        self.brushy = mkBrush(curves[base_ind].color)
+        self.peny = mkPen(curves[base_ind].color)
+        self.diffSetValuey = curves[base_ind].receiveYWaveform
+        self.aveSetValuey = curves[base_ind-1].receiveYWaveform
+        self.aveMstdSetValuey = curves[base_ind-2].receiveYWaveform
+        self.avePstdSetValuey = curves[base_ind-3].receiveYWaveform
+        cby = getattr(mWin, 'CB_Line'+str(index)+'ShowYStat')
+        cb.toggled.connect(cby.setEnabled)
+        cb.toggled.connect(cby.setChecked)
+        for i in range(4):
+            cb.toggled.connect(curves[base_ind-i].setVisible)
+            if i != 0:
+                cby.toggled.connect(curves[base_ind-i].setVisible)
 
         if index > 1:
             getattr(mWin, 'CB_Line' + str(index) + 'Show').setChecked(False)
@@ -136,8 +144,8 @@ class GraphicOrbitControllers(QObject):
             y_wave = reg.orby
         elif text.lower() in other_:
             regx, regy = other_[text.lower()]
-            x_sig = regx.value_signal[_np.ndarray]
-            y_sig = regy.value_signal[_np.ndarray]
+            x_sig = regx.receive_value_signal[_np.ndarray]
+            y_sig = regy.receive_value_signal[_np.ndarray]
             x_sig.connect(x_slot)
             y_sig.connect(y_slot)
             x_wave = regx.value
@@ -196,6 +204,7 @@ class GraphicOrbitControllers(QObject):
                                                         self.FMT.format(ave))
             getattr(self, 'std' + pl + '_str_signal').emit(
                                                     self.FMT.format(std))
+            ave = _np.array(len(diff)*[ave])
             getattr(self, 'diffSetValue' + pl)(diff)
             getattr(self, 'aveSetValue' + pl)(ave)
             getattr(self, 'aveMstdSetValue' + pl)(ave-std)

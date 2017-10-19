@@ -9,9 +9,9 @@ class _ComboboxController(QObject):
     def __init__(self, mWin):
         super().__init__(mWin)
         self.mWin = mWin
-        self.readbackx.value_signal[_np.ndarray].connect(
+        self.readbackx.receive_value_signal[_np.ndarray].connect(
                 self.ioc_orbitx_changed)
-        self.readbacky.value_signal[_np.ndarray].connect(
+        self.readbacky.receive_value_signal[_np.ndarray].connect(
                 self.ioc_orbity_changed)
         self.combo.currentTextChanged.connect(self._selection_changed)
         self.orbx = _np.zeros(NR_BPMs, dtype=float)
@@ -30,8 +30,9 @@ class _ComboboxController(QObject):
         elif text.lower().startswith('golden'):
             x_wave = self.mWin.PV_SOFBGoldenOrbitXRB.value
             y_wave = self.mWin.PV_SOFBGoldenOrbitYRB.value
-            sigs = (self.mWin.PV_SOFBGoldenOrbitXRB.value_signal[_np.ndarray],
-                    self.mWin.PV_SOFBGoldenOrbitYRB.value_signal[_np.ndarray])
+            sigs = (
+             self.mWin.PV_SOFBGoldenOrbitXRB.receive_value_signal[_np.ndarray],
+             self.mWin.PV_SOFBGoldenOrbitYRB.receive_value_signal[_np.ndarray])
         elif text.lower().startswith('zero'):
             x_wave = _np.zeros(NR_BPMs, dtype=float)
             y_wave = _np.zeros(NR_BPMs, dtype=float)
@@ -44,8 +45,8 @@ class _ComboboxController(QObject):
         for sig in sigs:
             sig.connect(self._watch_interface)
         self.signals_to_watch = sigs
-        self.setpointx.sendValue(x_wave)
-        self.setpointy.sendValue(y_wave)
+        self.setpointx.send_value(x_wave)
+        self.setpointy.send_value(y_wave)
         return True
 
     def ioc_orbitx_changed(self, orb):
@@ -86,17 +87,17 @@ class CorrectionOrbitController(_ComboboxController):
         self.readbacky = mWin.PV_SOFBOfflineOrbitYRB
         self.combo = getattr(mWin, 'CB_CorrectionOrbit')
         self._online = True
-        mWin.PV_SOFBCorrectionModeRB.value_signal[int].connect(
+        mWin.PV_SOFBCorrectionModeRB.receive_value_signal[int].connect(
                 self._ioc_mode_changed)
         super().__init__(mWin)
 
     def _selection_changed(self, text):
         if text.lower().startswith('current orbit'):
             self._online = True
-            self.mWin.PV_SOFBCorrectionModeSP.sendValue(1)
-            self.readbackx.value_signal[_np.ndarray].disconnect(
+            self.mWin.PV_SOFBCorrectionModeSP.send_value(1)
+            self.readbackx.receive_value_signal[_np.ndarray].disconnect(
                     self.ioc_orbitx_changed)
-            self.readbacky.value_signal[_np.ndarray].disconnect(
+            self.readbacky.receive_value_signal[_np.ndarray].disconnect(
                     self.ioc_orbity_changed)
             for sig in self.signals_to_watch:
                 sig.disconnect(self._watch_interface)
@@ -105,10 +106,10 @@ class CorrectionOrbitController(_ComboboxController):
         if not super()._selection_changed(text):
             return False
         self._online = False
-        self.mWin.PV_SOFBCorrectionModeSP.sendValue(0)
-        self.readbackx.value_signal[_np.ndarray].connect(
+        self.mWin.PV_SOFBCorrectionModeSP.send_value(0)
+        self.readbackx.receive_value_signal[_np.ndarray].connect(
                 self.ioc_orbitx_changed)
-        self.readbacky.value_signal[_np.ndarray].connect(
+        self.readbacky.receive_value_signal[_np.ndarray].connect(
                 self.ioc_orbity_changed)
         return True
 

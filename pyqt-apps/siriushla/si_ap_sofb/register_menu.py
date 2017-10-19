@@ -96,6 +96,8 @@ class RegisterMenu(QMenu):
             directory=self.last_dir,
             filter=self.EXT_FLT)
         fname = filename[0]
+        if not fname:
+            return
         fname += '' if fname.endswith(self.EXT) else self.EXT
         _np.savetxt(fname, _np.vstack([self.orbx, self.orby]).T, header=header)
         self._update_and_emit(self.orbx, self.orby, fname, 'Orbit Saved: ')
