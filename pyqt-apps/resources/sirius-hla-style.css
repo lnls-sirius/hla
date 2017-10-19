@@ -10,6 +10,20 @@
   font-size: 20pt;
 }
 
+QMenuBar {
+  border-bottom: 2px solid black;
+}
+
+QMenuBar::item {
+    padding: 0 15px 0 5px;
+}
+
+QMenuBar::item:selected {
+  color: white;
+  background-color: #007db3;
+  border-bottom: black;
+}
+
 /* Tab Widget */
 QTabWidget::pane {
     border-top: 2px solid black;
@@ -55,7 +69,9 @@ QTabBar::tab:!selected {
 /* Led */
 PyDMLed {
     min-width: 40px;
+    max-width: 40px;
     min-height: 40px;
+    max-height: 40px;
 }
 
 /* Scroll Bar */
