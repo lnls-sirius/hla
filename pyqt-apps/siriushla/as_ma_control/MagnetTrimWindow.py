@@ -7,27 +7,23 @@ from siriushla.as_ma_control.MagnetWidget import MagnetWidget
 from siriushla.as_ma_control.control_widget.TrimControlWidget \
     import TrimControlWidget
 from siriushla.as_ma_control.MagnetDetailWindow import MagnetDetailWindow
-from siriushla.WindowManager import WindowManager
 # from siriushla.as_ma_control.MagnetTrimWindow import MagnetTrimWindow
+
+from ..util import connect_window
 
 
 class MagnetTrimWindow(QMainWindow):
     """Allow controlling the trims of a given magnet."""
 
-    def __init__(self, maname, window_manager=None, parent=None):
+    def __init__(self, maname, parent=None):
         """Class constructor."""
         super(MagnetTrimWindow, self).__init__(parent)
         self.app = PyDMApplication.instance()
         self._maname = maname
-        # Set window manager
-        if window_manager is None:
-            self._window_manager = WindowManager()
-        else:
-            self._window_manager = window_manager
         # Setup UI
         self._setup_ui()
         # Establish PyDM epics connections
-        self.app.establish_widget_connections(self)
+        # self.app.establish_widget_connections(self)
 
     def _setup_ui(self):
         self.setWindowTitle(self._maname + ' Trims')
@@ -39,12 +35,9 @@ class MagnetTrimWindow(QMainWindow):
         self.fam_widget = MagnetWidget(self._maname, self)
         self.fam_widget.trim_button.setEnabled(False)
         # Connect family detail window
-        self._window_manager.register_window(
-            self._maname + "_detail", MagnetDetailWindow,
-            maname=self._maname, parent=self)
-        self.fam_widget.get_detail_button().clicked.connect(
-            lambda: self._window_manager.open_window(
-                self.sender().parent().maname + "_detail"))
+        fam_button = self.fam_widget.get_detail_button()
+        connect_window(fam_button, MagnetDetailWindow,
+                       self, maname=self._maname)
         # Create TrimWidget
         device = self._maname.split("-")[-1]
         self.trim_widget = TrimControlWidget(
@@ -60,10 +53,15 @@ class MagnetTrimWindow(QMainWindow):
         for widget in widget.get_magnet_widgets():
             maname = widget.maname
             detail_button = widget.get_detail_button()
+            connect_window(detail_button, MagnetDetailWindow,
+                           self, maname=maname)
 
-            self._window_manager.register_window(
-                maname + "_detail", MagnetDetailWindow,
-                maname=maname, parent=self)
-            detail_button.clicked.connect(
-                lambda:  self._window_manager.open_window(
-                    self.sender().text() + "_detail"))
+    def showEvent(self, event):
+        """Establish connections and call super."""
+        self.app.establish_widget_connections(self)
+        super().showEvent(event)
+
+    def closeEvent(self, event):
+        """Override closeEvent in order to close iwdget connections."""
+        self.app.close_widget_connections(self)
+        super().closeEvent(event)

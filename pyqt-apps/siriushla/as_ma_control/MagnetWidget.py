@@ -142,7 +142,9 @@ class BaseMagnetWidget(QWidget):
         self.pwrstate_button = PyDMStateButton(
             parent=self, init_channel="ca://" + self._pwrstate_sp_pv)
         self.pwrstate_button.setObjectName("pwrstate_button")
-        self.state_led = LedWidget(self._pwrstate_sp_pv, self)
+        self.state_led = PyDMLed(
+            self, "ca://" + self._pwrstate_sp_pv)
+            # enum_map={'On': PyDMLed.Green, 'Off': PyDMLed.Red})
         self.state_led.setObjectName("state_led")
         self.state_widget = QWidget(self)
         self.state_widget.setObjectName("state_widget")
@@ -166,22 +168,6 @@ class BaseMagnetWidget(QWidget):
         self.strength_mon_label = PyDMLabel(
             parent=self, init_channel="ca://" + self._strength_mon_pv)
         self.strength_mon_label.setObjectName("strength_label")
-
-        # Configuration
-        self.analog_mon_label.setPrecFromPV(True)
-        self.analog_widget.set_limits_from_pv(True)
-        self.strength_mon_label.setPrecFromPV(True)
-        self.strength_widget.set_limits_from_pv(True)
-        # # LineEdit settings to display booster correctors
-        # if re.match("BO-\d{2}\w:MA-(CH|CV).*", self.maname):
-        #     self.strength_widget.sp_lineedit.unit = "mrad"
-        #     # self.strength_widget.sp_lineedit.scale = 1000
-        #     self.strength_widget.sp_lineedit.prec = 4
-        # # LineEdit settings to display sirius correctors
-        # if re.match("SI-\d{2}\w\d:MA-(C|FC)[HV].*", self.maname):
-        #     self.strength_widget.sp_lineedit.unit = "urad"
-        #     # self.strength_widget.sp_lineedit.scale = 1000000
-        #     self.strength_widget.sp_lineedit.prec = 4
 
         self.layout.addWidget(self.state_widget)
         self.layout.addWidget(self.maname_label)
@@ -279,81 +265,14 @@ class MagnetWidget(BaseMagnetWidget):
             self._prefixed_maname + self._strength_name + "-Mon"
 
 
-class LedWidget(QWidget):
-    """Led class."""
-
-    def __init__(self, channel, parent=None):
-        """Constructor."""
-        super().__init__(parent)
-        layout = QVBoxLayout()
-        self.led = PyDMLed(
-            parent=self, init_channel="ca://" + channel)
-        layout.addWidget(self.led)
-        self.setLayout(layout)
-
-
-# class MagnetTrimWidget(QWidget):
-#     """Widget that show trim of family mangnet."""
+# class LedWidget(QWidget):
+#     """Led class."""
 #
-#     def __init__(self, maname, parent=None):
-#         """Init UI."""
-#         self._maname = maname
-#         self._setup_ui()
-#
-#     def _setup_ui(self):
-#         self.layout = QGridLayout()
-#
-#         self.fam_magnet = MagnetWidget(self._ma, self)
-#         # Fam Magnet
-#         self.fam_box = QGroupBox(self._ma)
-#         fam_box_layout = QHBoxLayout()
-#         fam_box_layout.addWidget(self.fam_magnet)
-#         self.fam_box.setLayout(fam_box_layout)
-#         # Trims
-#         trims = self._getTrims()
-#
-#         self.trims_group_1 = QGroupBox()
-#         self.trims_group_2 = QGroupBox()
-#         self.trims_group_1.setLayout(self._createGroupBoxLayout(trims[::2]))
-#         self.trims_group_2.setLayout(self._createGroupBoxLayout(trims[1::2]))
-#         # Set layout
-#         self.layout.addWidget(self.fam_box, 0, 0)
-#         self.layout.addWidget(self.trims_group_1, 1, 0)
-#         self.layout.addWidget(self.trims_group_2, 1, 1)
-#         # Set widget layout
-#         self.setLayout(self.layout)
-#
-#     def _createGroupBoxLayout(self, magnets):
+#     def __init__(self, channel, parent=None):
+#         """Constructor."""
+#         super().__init__(parent)
 #         layout = QVBoxLayout()
-#
-#         for i, magnet in enumerate(magnets):
-#             layout.addWidget(MagnetWidget(magnet, self))
-#
-#         return layout
-#
-#     def _getTrims(self):
-#         trims = list()
-#         ma_pattern = re.compile(re.sub("Fam", "\d{2}[A-Z]\d", self._ma))
-#         for magnet in MASearch.get_manames():
-#             if ma_pattern.match(magnet):
-#                 trims.append(magnet)
-#
-#         trims.sort()
-#
-#         return trims
-#
-#
-# if __name__ == "__main__":
-#     import sys
-#     from pydm import PyDMApplication
-#     app = PyDMApplication(None, sys.argv)
-#     app.setStyleSheet("""""")
-#     w1 = MagnetWidget(maname="SI-Fam:MA-B1B2")
-#     w1.show()
-#     q = MagnetWidget(maname="SI-Fam:MA-QDA")
-#     q.show()
-#     q1 = MagnetWidget(maname="SI-01M1:MA-QDA")
-#     q1.show()
-#     w2 = PulsedMagnetWidget(maname="SI-01SA:PM-InjDpK")
-#     w2.show()
-#     sys.exit(app.exec_())
+#         self.led = PyDMLed(
+#             parent=self, init_channel="ca://" + channel)
+#         layout.addWidget(self.led)
+#         self.setLayout(layout)

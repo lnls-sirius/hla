@@ -121,8 +121,8 @@ class MagnetDetailWidget(QWidget):
             led = PyDMLed(
                 self, "ca://" + self._prefixed_magnet + ":Intlk-Mon", i)
             led.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
-            led.setOnColour(0)
-            led.setOffColour(1)
+            led.setOnColor(PyDMLed.Red)
+            led.setOffColor(PyDMLed.Green)
 
             layout.addWidget(led, i, 0)
             layout.addWidget(QLabel("Bit " + str(i)), i, 1)
@@ -140,8 +140,9 @@ class MagnetDetailWidget(QWidget):
             self, "ca://" + self._prefixed_magnet + ":OpMode-Sts")
         self.opmode_rb.setObjectName("opmode1_rb_label")
         self.ctrlmode_led = PyDMLed(
-            self, "ca://" + self._prefixed_magnet + ":CtrlMode-Mon",
-            enum_map={'Remote': 1, 'Local': 0})
+            self, "ca://" + self._prefixed_magnet + ":CtrlMode-Mon")
+        self.ctrlmode_led.setOnColor(PyDMLed.Red)
+        self.ctrlmode_led.setOffColor(PyDMLed.Green)
         self.ctrlmode_label = PyDMLabel(
             self, "ca://" + self._prefixed_magnet + ":CtrlMode-Mon")
         self.ctrlmode_label.setObjectName("ctrlmode1_label")
@@ -174,6 +175,7 @@ class MagnetDetailWidget(QWidget):
             init_channel="ca://" + self._prefixed_magnet + ":PwrState-Sel")
         self.pwrstate_led = PyDMLed(
             self, "ca://" + self._prefixed_magnet + ":PwrState-Sts")
+        # enum_map={'On': PyDMLed.Green, 'Off': PyDMLed.Red})
         self.pwrstate_label = PyDMLabel(
             self, "ca://" + self._prefixed_magnet + ":PwrState-Sts")
         self.pwrstate_label.setObjectName("pwrstate_label")
@@ -207,7 +209,7 @@ class MagnetDetailWidget(QWidget):
         self.current_sp_widget = FloatSetPointWidget(
             parent=self,
             channel="ca://" + self._prefixed_magnet + ":Current-SP")
-        self.current_sp_widget.set_limits_from_pv(True)
+        # self.current_sp_widget.set_limits_from_pv(True)
         if self._magnet_type == "b":
             self.current_sp_widget.sp_scrollbar.setTracking(False)
         self.current_rb_val = PyDMLabel(
@@ -246,7 +248,7 @@ class MagnetDetailWidget(QWidget):
         self.metric_sp_widget = FloatSetPointWidget(
             "ca://" + self._prefixed_magnet + ":" + self._metric + "-SP",
             self)
-        self.metric_sp_widget.set_limits_from_pv(True)
+        # self.metric_sp_widget.set_limits_from_pv(True)
         if self._magnet_type == "b":
             self.metric_sp_widget.sp_scrollbar.setTracking(False)
         self.metric_rb_val = PyDMLabel(

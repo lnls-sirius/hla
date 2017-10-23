@@ -23,11 +23,10 @@ class MagnetTabControlWindow(MagnetControlWindow):
                "corrector-fast": "Fast Correctors",
                "quadrupole-skew": "Quadrupoles Skew"}
 
-    def __init__(self, section, window_manager=None, parent=None):
+    def __init__(self, section, parent=None):
         """Class constructor."""
         super().__init__(section=section,
                          device=None,
-                         window_manager=window_manager,
                          parent=parent)
 
     def _setup_ui(self):

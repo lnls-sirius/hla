@@ -42,8 +42,8 @@ class DipoleDetailWidget(MagnetDetailWidget):
             for col, ps in enumerate(self._ps_list):
                 led = PyDMLed(self, "ca://" + ps + ":Intlk-Mon", i)
                 led.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
-                led.setOnColour(0)
-                led.setOffColour(1)
+                led.setOnColor(PyDMLed.Red)
+                led.setOffColor(PyDMLed.Green)
                 layout.addWidget(led, i, col)
             layout.addWidget(QLabel("Bit " + str(i)), i, 2)
         # layout.setRowStretch(17, 1)
@@ -60,8 +60,9 @@ class DipoleDetailWidget(MagnetDetailWidget):
             self, "ca://" + self._ps_list[0] + ":OpMode-Sts")
         self.opmode1_rb.setObjectName("opmode1_rb_label")
         self.ctrlmode1_led = PyDMLed(
-            self, "ca://" + self._ps_list[0] + ":CtrlMode-Mon",
-            enum_map={'Remote': 1, 'Local': 0})
+            self, "ca://" + self._ps_list[0] + ":CtrlMode-Mon")
+        self.ctrlmode1_led.setOnColor(PyDMLed.Red)
+        self.ctrlmode1_led.setOffColor(PyDMLed.Green)
         self.ctrlmode1_label = PyDMLabel(
             self, "ca://" + self._ps_list[0] + ":CtrlMode-Mon")
         self.ctrlmode1_label.setObjectName("ctrlmode1_label")
@@ -69,8 +70,9 @@ class DipoleDetailWidget(MagnetDetailWidget):
             self, "ca://" + self._ps_list[1] + ":OpMode-Sts")
         self.opmode2_rb.setObjectName("opmode2_rb_label")
         self.ctrlmode2_led = PyDMLed(
-            self, "ca://" + self._ps_list[1] + ":CtrlMode-Mon",
-            enum_map={'Remote': 1, 'Local': 0})
+            self, "ca://" + self._ps_list[1] + ":CtrlMode-Mon")
+        self.ctrlmode2_led.setOnColor(PyDMLed.Red)
+        self.ctrlmode2_led.setOffColor(PyDMLed.Green)
         self.ctrlmode2_label = PyDMLabel(
             self, "ca://" + self._ps_list[1] + ":CtrlMode-Mon")
         self.ctrlmode2_label.setObjectName("ctrlmode2_label")
@@ -161,7 +163,7 @@ class DipoleDetailWidget(MagnetDetailWidget):
         self.current_sp_widget = FloatSetPointWidget(
             parent=self,
             channel="ca://" + self._prefixed_magnet + ":Current-SP")
-        self.current_sp_widget.set_limits_from_pv(True)
+        # self.current_sp_widget.set_limits_from_pv(True)
         self.current_sp_widget.sp_scrollbar.setTracking(False)
         # Current RB
         self.current_rb_val = PyDMLabel(

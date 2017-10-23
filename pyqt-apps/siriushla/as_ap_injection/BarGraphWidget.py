@@ -147,17 +147,20 @@ class PyDMBarGraphModel:
         self.scale = scale
         self.update_interval = update_interval
 
+        self._value = None
         self._waveform = []
 
     @property
     def waveform(self):
         """Return waveform array."""
-        waveform = self._waveform
+        waveform = self._value
+        if waveform is None:
+            return None
         return np.array([val*self.scale for val in waveform])
 
     @waveform.setter
     def waveform(self, waveform):
-        self._waveform = waveform
+        self._value = waveform
 
     @property
     def size(self):
@@ -182,17 +185,18 @@ class PyDMBarGraphModel:
 
     def valueChanged(self, value):
         """Slot called when value changes."""
-        pass
+        self.waveform = value
+        self.size = len(value)
 
     # @pyqtSlot(list)
-    def waveformChanged(self, waveform):
-        """Slot called when value changes (PV of type array)."""
-        self.waveform = waveform
+    # def waveformChanged(self, waveform):
+    #     """Slot called when value changes (PV of type array)."""
+    #     self.waveform = waveform
 
     # @pyqtSlot(int)
-    def countChanged(self, count):
-        """Slot called when count changes."""
-        self.size = count
+    # def countChanged(self, count):
+    #     """Slot called when count changes."""
+    #     self.size = count
 
     def channels(self):
         """Define slots and signals mappings for the epics channel."""
@@ -201,9 +205,9 @@ class PyDMBarGraphModel:
                 PyDMChannel(
                     address=self.channel,
                     connection_slot=lambda conn: self.connectionChanged(conn),
-                    value_slot=lambda val: self.valueChanged(val),
-                    waveform_slot=lambda wvfrm: self.waveformChanged(wvfrm),
-                    count_slot=lambda count: self.countChanged(count))]
+                    value_slot=lambda val: self.valueChanged(val))]
+                    # waveform_slot=lambda wvfrm: self.waveformChanged(wvfrm),
+                    # count_slot=lambda count: self.countChanged(count))]
         return self._channels
 
 

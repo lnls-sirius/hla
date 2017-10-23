@@ -2,30 +2,26 @@
 from pydm import PyDMApplication
 from pydm.PyQt.QtGui import QMainWindow
 
-from ..WindowManager import WindowManager
 from .control_widget.ControlWidgetFactory import ControlWidgetFactory
 from .MagnetDetailWindow import MagnetDetailWindow
 from .MagnetTrimWindow import MagnetTrimWindow
+
+from ..util import connect_window
 
 
 class MagnetControlWindow(QMainWindow):
     """Base window to show devices of a section in tabs."""
 
-    def __init__(self, section, device, window_manager=None, parent=None):
+    def __init__(self, section, device, parent=None):
         """Class constructor."""
         super(MagnetControlWindow, self).__init__(parent)
         self.app = PyDMApplication.instance()
         self._section = section
         self._device = device
 
-        if window_manager is None:
-            self._window_manager = WindowManager()
-        else:
-            self._window_manager = window_manager
-
         self._setup_ui()
 
-        self.app.establish_widget_connections(self)
+        # self.app.establish_widget_connections(self)
 
     def _setup_ui(self):
         # Set Widget
@@ -41,16 +37,19 @@ class MagnetControlWindow(QMainWindow):
             detail_button = widget.get_detail_button()
             trim_button = widget.get_trim_button()
 
-            self._window_manager.register_window(
-                maname + "_detail", MagnetDetailWindow,
-                maname=maname, parent=self)
-            detail_button.clicked.connect(
-                lambda:  self._window_manager.open_window(
-                    self.sender().text() + "_detail"))
+            connect_window(detail_button, MagnetDetailWindow,
+                           self, maname=maname)
+
             if trim_button is not None:
-                self._window_manager.register_window(
-                    maname + "_trim", MagnetTrimWindow, maname=maname,
-                    window_manager=self._window_manager, parent=self)
-                trim_button.clicked.connect(
-                    lambda: self._window_manager.open_window(
-                        self.sender().parent().maname + "_trim"))
+                connect_window(trim_button, MagnetTrimWindow,
+                               self, maname=maname)
+
+    def showEvent(self, event):
+        """Establish connections and call super."""
+        self.app.establish_widget_connections(self)
+        super().showEvent(event)
+
+    def closeEvent(self, event):
+        """Override closeEvent in order to close iwdget connections."""
+        self.app.close_widget_connections(self)
+        super().closeEvent(event)

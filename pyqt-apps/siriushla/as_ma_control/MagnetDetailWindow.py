@@ -1,5 +1,6 @@
 """Define a window with detailed controls for a given magnet."""
-from pydm.PyQt.QtGui import QApplication, QMainWindow, QVBoxLayout
+from pydm import PyDMApplication
+from pydm.PyQt.QtGui import QMainWindow
 from .detail_widget.DetailWidgetFactory import DetailWidgetFactory
 
 
@@ -12,7 +13,7 @@ class MagnetDetailWindow(QMainWindow):
     def __init__(self, maname, parent=None):
         """Init UI."""
         super(MagnetDetailWindow, self).__init__(parent)
-        self.app = QApplication.instance()
+        self.app = PyDMApplication.instance()
 
         self._ma = maname
 
@@ -26,17 +27,18 @@ class MagnetDetailWindow(QMainWindow):
         self.setCentralWidget(self.widget)
 
     def showEvent(self, event):
+        """Establish connections and call super."""
         self.app.establish_widget_connections(self)
         super().showEvent(event)
 
     def closeEvent(self, event):
         """Override closeEvent in order to close iwdget connections."""
         self.app.close_widget_connections(self)
+        super().closeEvent(event)
 
 
 if __name__ == '__main__':
     import sys
-    from pydm import PyDMApplication
     app = PyDMApplication(None, sys.argv)
     window = MagnetDetailWindow("SI-Fam:MA-QFA")
     window.show()
