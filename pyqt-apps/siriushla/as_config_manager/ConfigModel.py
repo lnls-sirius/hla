@@ -2,11 +2,11 @@
 import re
 from pydm.PyQt.QtCore import Qt, QAbstractTableModel, QModelIndex, QVariant
 from pydm.PyQt.QtGui import QItemDelegate, QColor, QDoubleSpinBox
-from siriuspy.servconf import ConfigurationPvs
-from siriuspy.servconf.ConfigurationService import ConfigurationService
+from siriuspy.servconf import conf_pvs
+from siriuspy.servconf.conf_service import ConfigService
 
 
-CONFIG_SERVICE_HOSTNAME = "guilherme-linux"
+conf_service_HOSTNAME = "guilherme-linux"
 
 
 class Configuration:
@@ -48,7 +48,7 @@ class Configuration:
 
     @staticmethod
     def _load(id):
-        db = ConfigurationService(CONFIG_SERVICE_HOSTNAME)
+        db = ConfigService(conf_service_HOSTNAME)
         resp = db.get_pv_configuration_by_id(id)
 
         if resp != 200:
@@ -59,7 +59,7 @@ class Configuration:
     @staticmethod
     def delete(id):
         """Delete configuration."""
-        db = ConfigurationService(CONFIG_SERVICE_HOSTNAME)
+        db = ConfigService(conf_service_HOSTNAME)
         resp = db.delete_pv_configuration(id)
         if resp != 200:
             raise Exception("server error {}".format(resp))
@@ -116,7 +116,7 @@ class Configuration:
 
     def save(self):
         """Save data."""
-        db = ConfigurationService(CONFIG_SERVICE_HOSTNAME)
+        db = conf_service(conf_service_HOSTNAME)
         if self._is_new:
             # Insert configuration
             resp = db.insert_pv_configuration(self._name, self._config_type)
@@ -341,7 +341,7 @@ class ConfigModel(QAbstractTableModel):
                 return 20
 
         self._vertical_header = list()
-        pvs = getattr(ConfigurationPvs, self._config_type)().pvs()
+        pvs = getattr(conf_pvs, self._config_type)().pvs()
         for name, type_ in pvs.items():
             self._vertical_header.append({'name': name, 'type': type_})
         self._vertical_header.sort(
@@ -389,7 +389,7 @@ class ConfigModel(QAbstractTableModel):
         #     qry_res = cursor.fetchall()
         #
         # configurations = [x['name'] for x in qry_res]
-        db = ConfigurationService(CONFIG_SERVICE_HOSTNAME)
+        db = conf_service(conf_service_HOSTNAME)
         resp = db.get_pv_configurations({"config_type": self._config_type})
         if resp != 200:
             raise Exception("server error {}".format(resp))
@@ -397,7 +397,7 @@ class ConfigModel(QAbstractTableModel):
 
     def getTuneMatrix(self):
         """Get tune matrix from db."""
-        db = ConfigurationService(CONFIG_SERVICE_HOSTNAME)
+        db = conf_service(conf_service_HOSTNAME)
         resp = db.get_configuration("tune_matrix")
         if resp != 200:
             raise Exception("server error {}".format(resp))
