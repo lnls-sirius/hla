@@ -22,7 +22,8 @@ UI_FILE = _os.path.sep.join([_dir, 'SOFBMain.ui'])
 
 class _PyDMWidget(PyDMWritableWidget, QWidget):
 
-    receive_value_signal = pyqtSignal([int], [float], [str], [np.ndarray])
+    receive_value_signal = pyqtSignal([int], [float], [str], [bool],
+                                      [np.ndarray])
 
     def __init__(self, parent=None, init_channel=None, visible=False):
         QWidget.__init__(self, parent=parent)
@@ -111,10 +112,18 @@ def _create_additional_PVs(MWin, prefix):
 
 
 def _create_additional_widgets(MWin, prefix):
+    def send_value(but, dev):
+        def send():
+            but.send_value_signal[np.ndarray].emit(
+                np.ones(SelectionMatrix.INDICES_LENGTH[dev], dtype=bool))
+        return send
     # Create Matrix with Selection List of BPMs and Correctors:
     for dev in ('BPMX', 'BPMY', 'CH', 'CV'):
         wid = getattr(MWin, 'Widget_' + dev + 'List')
         SelectionMatrix(wid, dev, prefix)
+        but = getattr(MWin, 'PyDMPB_' + dev + 'List')
+        but.clicked.disconnect(but.sendValue)
+        but.clicked.connect(send_value(but, dev))
 
 
 def _create_context_menus(MWin):
