@@ -1171,9 +1171,6 @@
         will accept.
     </string>
           </property>
-          <property name="optimizationFlags">
-           <set>QGraphicsView::DontClipPainter|QGraphicsView::DontSavePainterState</set>
-          </property>
           <property name="showXGrid">
            <bool>true</bool>
           </property>
@@ -1440,7 +1437,7 @@
           </property>
           <property name="curves">
            <stringlist>
-            <string>{&quot;y_channel&quot;: &quot;${PREFIX}CHCalcdKicks-Mon&quot;, &quot;x_channel&quot;: null, &quot;name&quot;: &quot;&quot;, &quot;color&quot;: &quot;blue&quot;, &quot;lineStyle&quot;: 1, &quot;lineWidth&quot;: 3, &quot;symbol&quot;: &quot;o&quot;, &quot;symbolSize&quot;: 10, &quot;redraw_mode&quot;: 2}</string>
+            <string>{&quot;y_channel&quot;: &quot;${PREFIX}CHCalcdKicks-Mon&quot;, &quot;x_channel&quot;: null, &quot;name&quot;: &quot;Calculated Kick&quot;, &quot;color&quot;: &quot;blue&quot;, &quot;lineStyle&quot;: 1, &quot;lineWidth&quot;: 3, &quot;symbol&quot;: &quot;o&quot;, &quot;symbolSize&quot;: 10, &quot;redraw_mode&quot;: 2}</string>
            </stringlist>
           </property>
          </widget>
@@ -1827,14 +1824,20 @@ font-weight: bold;</string>
           <property name="whatsThis">
            <string/>
           </property>
-          <property name="imageChannel" stdset="0">
-           <string>${PREFIX}InvRSPMatrix-Mon</string>
-          </property>
           <property name="imageWidth" stdset="0">
            <number>281</number>
           </property>
+          <property name="colormap" stdset="0">
+           <enum>PyDMImageView::inferno</enum>
+          </property>
           <property name="normalizeData" stdset="0">
            <bool>true</bool>
+          </property>
+          <property name="readingOrder" stdset="0">
+           <enum>PyDMImageView::Clike</enum>
+          </property>
+          <property name="imageChannel" stdset="0">
+           <string>${PREFIX}InvRSPMatrix-Mon</string>
           </property>
          </widget>
         </item>
@@ -1852,14 +1855,17 @@ font-weight: bold;</string>
           <property name="whatsThis">
            <string/>
           </property>
-          <property name="imageChannel" stdset="0">
-           <string>${PREFIX}RSPMatrix-RB</string>
-          </property>
           <property name="imageWidth" stdset="0">
            <number>320</number>
           </property>
           <property name="normalizeData" stdset="0">
            <bool>true</bool>
+          </property>
+          <property name="readingOrder" stdset="0">
+           <enum>PyDMImageView::Clike</enum>
+          </property>
+          <property name="imageChannel" stdset="0">
+           <string>${PREFIX}RSPMatrix-RB</string>
           </property>
          </widget>
         </item>
@@ -1964,8 +1970,8 @@ font-weight: bold;</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1892</width>
-             <height>1355</height>
+             <width>98</width>
+             <height>28</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -2066,8 +2072,8 @@ font-weight: bold;</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1892</width>
-             <height>1355</height>
+             <width>98</width>
+             <height>28</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -2168,8 +2174,8 @@ font-weight: bold;</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1892</width>
-             <height>1355</height>
+             <width>98</width>
+             <height>28</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -2270,8 +2276,8 @@ font-weight: bold;</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1892</width>
-             <height>1355</height>
+             <width>98</width>
+             <height>28</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -2372,7 +2378,7 @@ font-weight: bold;</string>
    </property>
    <widget class="QMenu" name="Menu_Open">
     <property name="title">
-     <string>&amp;Open</string>
+     <string>Open</string>
     </property>
     <addaction name="Action_openCorrParams"/>
     <addaction name="Action_openIOCLog"/>
