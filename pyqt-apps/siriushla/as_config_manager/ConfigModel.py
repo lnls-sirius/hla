@@ -2,18 +2,10 @@
 import re
 from pydm.PyQt.QtCore import Qt, QAbstractTableModel, QModelIndex, QVariant
 from pydm.PyQt.QtGui import QItemDelegate, QColor, QDoubleSpinBox
-<<<<<<< HEAD
 from siriuspy.servconf.conf_service import ConfigService
 
 
 CONFIG_SERVICE_HOSTNAME = "http://guilherme-linux"
-=======
-from siriuspy.servconf import conf_pvs
-from siriuspy.servconf.conf_service import ConfigService
-
-
-conf_service_HOSTNAME = "guilherme-linux"
->>>>>>> 7439ca4cc92b3437cf34e372417a93651f6df603
 
 
 class Configuration:
@@ -57,19 +49,10 @@ class Configuration:
             raise Exception("{}".format(e))
 
     @staticmethod
-<<<<<<< HEAD
     def _load(config_type, name):
         db = ConfigService(CONFIG_SERVICE_HOSTNAME)
         response = db.get_config(config_type, name)
         return Configuration._handle_response(response)
-=======
-    def _load(id):
-        db = ConfigService(conf_service_HOSTNAME)
-        resp = db.get_pv_configuration_by_id(id)
-
-        if resp != 200:
-            raise Exception("error")
->>>>>>> 7439ca4cc92b3437cf34e372417a93651f6df603
 
         # if resp != 200:
         #     raise Exception("error")
@@ -79,18 +62,11 @@ class Configuration:
     @staticmethod
     def delete_config(config):
         """Delete configuration."""
-<<<<<<< HEAD
         db = ConfigService(CONFIG_SERVICE_HOSTNAME)
         response = db.delete_config(config)
         return Configuration._handle_response(response)
         # if resp != 200:
         #     raise Exception("server error {}".format(resp))
-=======
-        db = ConfigService(conf_service_HOSTNAME)
-        resp = db.delete_pv_configuration(id)
-        if resp != 200:
-            raise Exception("server error {}".format(resp))
->>>>>>> 7439ca4cc92b3437cf34e372417a93651f6df603
 
     @property
     def id(self):
@@ -147,11 +123,7 @@ class Configuration:
 
     def save(self):
         """Save data."""
-<<<<<<< HEAD
         db = ConfigService(CONFIG_SERVICE_HOSTNAME)
-=======
-        db = conf_service(conf_service_HOSTNAME)
->>>>>>> 7439ca4cc92b3437cf34e372417a93651f6df603
         if self._is_new:
             # Insert configuration
             response = db.insert_config(
@@ -366,7 +338,6 @@ class ConfigModel(QAbstractTableModel):
                 return 20
 
         self._vertical_header = list()
-<<<<<<< HEAD
         if self._config_type == "bo_strength_pvs":
             from siriuspy.servconf.types.bo_strength_pvs import get_dict
         elif self._config_type == "si_strength_pvs":
@@ -377,11 +348,6 @@ class ConfigModel(QAbstractTableModel):
         # pvs = getattr(ConfigurationPvs, self._config_type)().pvs()
         for name, value in pvs.items():
             self._vertical_header.append({'name': name, 'type': type(value)})
-=======
-        pvs = getattr(conf_pvs, self._config_type)().pvs()
-        for name, type_ in pvs.items():
-            self._vertical_header.append({'name': name, 'type': type_})
->>>>>>> 7439ca4cc92b3437cf34e372417a93651f6df603
         self._vertical_header.sort(
             key=lambda x: elem(x['name']) + subSection(x['name']))
 
@@ -414,7 +380,6 @@ class ConfigModel(QAbstractTableModel):
 
     def getConfigurations(self, deleted=False):
         """Return name of saved configurations."""
-<<<<<<< HEAD
         db = ConfigService(CONFIG_SERVICE_HOSTNAME)
         response = db.find_configs(
             config_type=self._config_type, deleted=deleted)
@@ -431,60 +396,6 @@ class ConfigModel(QAbstractTableModel):
             return response["result"]
         except KeyError:
             raise Exception("{}".format(response["message"]))
-=======
-        # connection = db.get_connection()
-        # with connection.cursor() as cursor:
-        #     sql = "SELECT name FROM configuration WHERE classname=%s"
-        #     # r = cursor.execute(sql, (self._config_type))
-        #     cursor.execute(sql, (self._config_type))
-        #     qry_res = cursor.fetchall()
-        #
-        # configurations = [x['name'] for x in qry_res]
-        db = conf_service(conf_service_HOSTNAME)
-        resp = db.get_pv_configurations({"config_type": self._config_type})
-        if resp != 200:
-            raise Exception("server error {}".format(resp))
-        return db.get_result()
-
-    def getTuneMatrix(self):
-        """Get tune matrix from db."""
-        db = conf_service(conf_service_HOSTNAME)
-        resp = db.get_configuration("tune_matrix")
-        if resp != 200:
-            raise Exception("server error {}".format(resp))
-        return db.get_result()["value"]
-    #     conn = db.get_connection()
-    #     with conn.cursor() as cursor:
-    #         sql = ("SELECT `line`, `column`, value "
-    #                "FROM parameter_values "
-    #                "WHERE name='standard_matrix' AND type='tune' "
-    #                "ORDER BY `line`, `column`")
-    #         # ret = cursor.execute(sql)
-    #         cursor.execute(sql)
-    #         qry = cursor.fetchall()
-    #
-    #     new_line = list()
-    #     last_line = -1
-    #     result = list()
-    #     for row in qry:
-    #         line = row['line']
-    #         if line != last_line:
-    #             if last_line > -1:
-    #                 result.append(new_line)
-    #             last_line = line
-    #             new_line = list()
-    #
-    #         if row['column'] == len(new_line):
-    #             new_line.append(row['value'])
-    #         else:
-    #             return 0
-    #     result.append(new_line)
-    #
-    #     if len(result) > 1:
-    #         return result
-    #     else:
-    #         return result[0]
->>>>>>> 7439ca4cc92b3437cf34e372417a93651f6df603
 
     # Actions
     def saveConfiguration(self, column):
