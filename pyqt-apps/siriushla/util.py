@@ -72,4 +72,4 @@ def connect_window(widget, w_class, parent, **kwargs):
     widget.w_class = w_class
     widget.kwargs = kwargs
     signal.connect(lambda: app.open_window(
-        parent.sender().w_class, parent=parent, **parent.sender().kwargs))
+        app.sender().w_class, parent=parent, **app.sender().kwargs))

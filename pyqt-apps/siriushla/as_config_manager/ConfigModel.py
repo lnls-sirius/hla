@@ -382,7 +382,7 @@ class ConfigModel(QAbstractTableModel):
         """Return name of saved configurations."""
         db = ConfigService(CONFIG_SERVICE_HOSTNAME)
         response = db.find_configs(
-            config_type=self._config_type, deleted=deleted)
+            config_type=self._config_type, discarded=deleted)
         try:
             return response["result"]
         except KeyError:
