@@ -14,7 +14,7 @@ from .LoadingThread import LoadingThread
 class ConfigManagerWindow(QMainWindow):
     """Window to manage offline configuration of BO and SI devices.
 
-    This window allow the user to create new configurations as well as
+    This window allows the user to create new configurations as well as
     interpolate or apply a tune or chromaticity delta to a configuration.
     """
 
@@ -168,18 +168,9 @@ class ConfigManagerWindow(QMainWindow):
         try:
             self._model.saveConfiguration(column)
             return True
-        # except (IntegrityError, InternalError):
-        #     QMessageBox(
-        #         QMessageBox.Warning, "Couldn't save",
-        #         "Name already exists!").exec_()
-        # except OperationalError as e:
-        #     self._showWarningBox("Unable to connect to database")
         except Exception as e:
-            QMessageBox(
-                QMessageBox.Warning, "Couldn't save",
-                "Exception {} of type {} was caught".format(e, type(e))
-            ).exec_()
-
+            QMessageBox(QMessageBox.Warning, "Failed to save data",
+                        "{}, {}".format(e, type(e))).exec_()
         return False
 
     @pyqtSlot(int)
@@ -251,25 +242,29 @@ class ConfigManagerWindow(QMainWindow):
         if ok1:
             # Get Matrix Calculate deltaK and show to user
             tune = [dlg.tune_x.value(), dlg.tune_y.value()]
-            inv_matrix = self._model.getTuneMatrix()
-            if not inv_matrix:
-                self._showWarningBox("Tune Matrix corrupted")
-            delta_f = tune[0]*inv_matrix[0][0] + tune[1]*inv_matrix[0][1]
-            delta_d = tune[0]*inv_matrix[1][0] + tune[1]*inv_matrix[1][1]
-            # config_name, ok2 = QInputDialog.getText(
-            #   self, "Select value", "New Configuration Name:")
-            # if ok2:
-            #    if not config_name:
-            proceed = QMessageBox(
-                QMessageBox.Question, "Delta K",
-                ("\u0394K<sub>d</sub> = {:1.3f}<br>"
-                 "\u0394K<sub>f</sub> = {:1.3f}<br>"
-                 "Proceed?").format(delta_d, delta_f),
-                QMessageBox.Ok | QMessageBox.Cancel, self).exec_()
-            if proceed == QMessageBox.Ok:
-                config_name = self._getNextName()
-                self._model.deriveConfiguration(
-                    config_name, column, ConfigModel.TUNE, [delta_d, delta_f])
+            try:
+                inv_matrix = self._model.getTuneMatrix()
+            except Exception as e:
+                self._showWarningBox("{}".format(e),
+                                     "Failed to retrieve tune matrix")
+            else:
+                delta_f = tune[0]*inv_matrix[0][0] + tune[1]*inv_matrix[0][1]
+                delta_d = tune[0]*inv_matrix[1][0] + tune[1]*inv_matrix[1][1]
+                # config_name, ok2 = QInputDialog.getText(
+                #   self, "Select value", "New Configuration Name:")
+                # if ok2:
+                #    if not config_name:
+                proceed = QMessageBox(
+                    QMessageBox.Question, "Delta K",
+                    ("\u0394K<sub>d</sub> = {:1.3f}<br>"
+                     "\u0394K<sub>f</sub> = {:1.3f}<br>"
+                     "Proceed?").format(delta_d, delta_f),
+                    QMessageBox.Ok | QMessageBox.Cancel, self).exec_()
+                if proceed == QMessageBox.Ok:
+                    config_name = self._getNextName()
+                    self._model.deriveConfiguration(config_name, column,
+                                                    ConfigModel.TUNE,
+                                                    [delta_d, delta_f])
 
     @pyqtSlot(int)
     def _barConfiguration(self, cols):
@@ -288,6 +283,9 @@ class ConfigManagerWindow(QMainWindow):
     def _addConfiguration(self):
         try:
             configs = self._model.getConfigurations()
+        except Exception as e:
+            self._showWarningBox(e, "Failed to retrieve configurations")
+        else:
             if configs:
                 options = [item["name"] for item in configs]
                 config_name, ok = QInputDialog.getItem(
@@ -295,8 +293,7 @@ class ConfigManagerWindow(QMainWindow):
                     "Select a configuration:", options, 0, False)
                 if ok and config_name:
                     if not self._isConfigurationLoaded(config_name):
-                        id = configs[options.index(config_name)]["_id"]
-                        self._model.loadConfiguration(id)
+                        self._model.loadConfiguration(name=config_name)
                     else:
                         QMessageBox(
                             QMessageBox.Information,
@@ -306,27 +303,17 @@ class ConfigManagerWindow(QMainWindow):
                     # Highlight new column; or the one that is already loaded
                     col = self._model.getConfigurationColumn(config_name)
                     self.table.selectColumn(col)
-
-            pass
-        except FileNotFoundError as e:
-            self._showWarningBox(e)
-        except KeyError as e:
-            message = ("Configuration corrupted<br><br>"
-                       "This configuration no longer represents<br>"
-                       "the actual configuaration of elements in the<br>"
-                       "Ring/Booster. It should be either deleted or updated")
-            self._showWarningBox(message)
-        # except OperationalError as e:
-        #     self._showWarningBox("Unable to connect to database")
-        except Exception as e:
-            self._showWarningBox("{}".format(e))
-
+            else:
+                self._showMessageBox("No configuration found")
         return
 
     @pyqtSlot()
     def _removeConfiguration(self):
         try:
             configs = self._model.getConfigurations()
+        except Exception as e:
+            self._showWarningBox(e, "Failed to retrieve configurations")
+        else:
             if configs:
                 # Show configs available
                 options = [item["name"] for item in configs]
@@ -334,6 +321,7 @@ class ConfigManagerWindow(QMainWindow):
                         self, "Available Configurations",
                         "Select a configuration:", options, 0, False)
                 if ok and config:
+                    # Ask for confirmation
                     if self._isConfigurationLoaded(config):
                         msg = ("Configuration is currenty loaded."
                                "Delete it anyway?")
@@ -343,26 +331,22 @@ class ConfigManagerWindow(QMainWindow):
 
                     if self._showDialogBox(msg) == QMessageBox.Cancel:
                         return
-
-                    id = configs[options.index(config)]["_id"]
+                    # Delete configuration
+                    config = configs[options.index(config)]
                     try:
-                        self._model.deleteConfiguration(id, config)
+                        self._model.deleteConfiguration(config)
                     except Exception as e:
                         self._showWarningBox(e)
-                    # if self._model.deleteConfiguration(id, config):
-                    #     msg = "Configuration {} was deleted.".format(config)
-                    # else:
-                    #     msg = \
-                    #       "Failed to delete configuration {}.".format(config)
-                    # self._showMessageBox(msg)
-        # except OperationalError as e:
-        #     self._showWarningBox("Unable to connect to database")
-        except Exception as e:
-            self._showWarningBox("{}".format(e))
+                    else:
+                        self._showMessageBox(
+                            "Configuration {} was deleted.".format(
+                                config['name']))
+            else:
+                self._showMessageBox("No configuration found")
+        return
 
     @pyqtSlot()
     def _loadCurrentConfiguration(self):
-        # TODO: Loading box
         try:
             t = LoadingThread(
                 self._getNextName(), self._model._vertical_header, self)
@@ -404,7 +388,7 @@ class ConfigManagerWindow(QMainWindow):
 
     def _getNextName(self):
         # Treat if there already exist saved configuration with this name
-        configs = self._model.getConfigurations()
+        configs = self._model.getConfigurations(deleted=None)
         configs = [item["name"] for item in configs]
         configs.extend([item.name for item in self._model.configurations])
         new_name = 'config-{}'.format(self.NEW_CONFIGURATION)
