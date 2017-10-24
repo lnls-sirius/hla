@@ -8,11 +8,11 @@ from pydm.PyQt.QtGui import QWidget, QGroupBox, QGridLayout, QVBoxLayout, \
 from siriuspy.envars import vaca_prefix
 from pydm.widgets.label import PyDMLabel
 # from pydm.widgets.pushbutton import PyDMPushButton
-from pydm.widgets.state_button import PyDMStateButton
+from siriushla.widgets.state_button import PyDMStateButton
 from pydm.widgets.enum_combo_box import PyDMEnumComboBox
-from pydm.widgets.led import PyDMLed
 from pydm.widgets.pushbutton import PyDMPushButton
 from siriushla.FloatSetPointWidget import FloatSetPointWidget
+from siriushla.widgets.led import PyDMLed
 from siriushla import util as _util
 
 

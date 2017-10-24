@@ -3,7 +3,7 @@ from pydm.PyQt.QtCore import Qt, QRegExp, QLocale
 from pydm.PyQt.QtGui import QWidget, QVBoxLayout, QStyle, QStyleOption, \
     QPainter, QDoubleValidator, QRegExpValidator
 from pydm.widgets.line_edit import PyDMLineEdit
-from pydm.widgets.scrollbar import PyDMScrollBar
+from siriushla.widgets.scrollbar import PyDMScrollBar
 from siriushla.util import get_kick_unit
 
 

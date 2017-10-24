@@ -1,13 +1,13 @@
 """Detailed widget for controlling a pulsed mangnet."""
 from pydm.PyQt.QtGui import QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, \
     QLabel, QGroupBox
-from pydm.widgets.led import PyDMLed
-from pydm.widgets.state_button import PyDMStateButton
 from pydm.widgets.label import PyDMLabel
 
 from siriuspy.envars import vaca_prefix as _VACA_PREFIX
 from siriuspy.pulsedps import properties as pu_props
 from siriuspy.pulsedma import properties as pm_props
+from siriushla.widgets.led import PyDMLed
+from siriushla.widgets.state_button import PyDMStateButton
 from siriushla.FloatSetPointWidget import FloatSetPointWidget
 
 

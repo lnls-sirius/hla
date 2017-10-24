@@ -1,14 +1,15 @@
 """GUI for injection."""
-from siriushla.as_ap_injection.CustomExceptions import PVConnectionError
-from siriushla.as_ap_injection.InjectionController import InjectionController
 from pydm import PyDMApplication
 from pydm.PyQt.QtCore import pyqtSlot, QTimer, Qt
 from pydm.PyQt.QtGui import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, \
     QRadioButton, QPushButton, QSpinBox, QGridLayout, QMessageBox, QDialog, \
     QLabel, QDockWidget
-from pydm.widgets.led import PyDMLed
 from pydm.widgets.label import PyDMLabel
 from pydm.widgets.checkbox import PyDMCheckbox
+
+from siriushla.widgets.led import PyDMLed
+from siriushla.as_ap_injection.CustomExceptions import PVConnectionError
+from siriushla.as_ap_injection.InjectionController import InjectionController
 from siriushla.as_ap_injection.BarGraphWidget \
     import BarGraphWidget, PyDMBarGraph
 from siriuspy.envars import vaca_prefix as _VACA_PREFIX
