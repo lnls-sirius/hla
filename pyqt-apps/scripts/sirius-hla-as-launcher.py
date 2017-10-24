@@ -78,10 +78,10 @@ class ControlApplication(QMainWindow):
 
         openBoosterConfiguration = QAction("Booster Configuration", self)
         _util.connect_window(openBoosterConfiguration, ConfigManagerWindow,
-                             self, config_type="BoStrengthPvs")
+                             self, config_type="bo_strength_pvs")
         openSIConfiguration = QAction("Sirius Configuration", self)
         _util.connect_window(openSIConfiguration, ConfigManagerWindow,
-                             self, config_type="SiStrengthPvs")
+                             self, config_type="si_strength_pvs")
 
         # Build Menu
         menubar = QMenuBar(self)
