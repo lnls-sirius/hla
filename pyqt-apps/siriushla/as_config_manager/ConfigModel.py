@@ -139,7 +139,7 @@ class Configuration:
                 config = {"_id": self._id,
                           "name": self._name,
                           "config_type": self._config_type,
-                          "deletable": False,
+                          "discarded": False,
                           "value": self._values}
                 # Update it
                 response = db.update_config(config)
