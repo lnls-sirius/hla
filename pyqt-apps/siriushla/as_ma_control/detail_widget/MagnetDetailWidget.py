@@ -12,7 +12,7 @@ from siriushla.widgets.state_button import PyDMStateButton
 from pydm.widgets.enum_combo_box import PyDMEnumComboBox
 from pydm.widgets.pushbutton import PyDMPushButton
 from siriushla.FloatSetPointWidget import FloatSetPointWidget
-from siriushla.widgets.led import PyDMLed
+from siriushla.widgets.led import SiriusLedState, SiriusLedAlarm
 from siriushla import util as _util
 
 
@@ -118,11 +118,9 @@ class MagnetDetailWidget(QWidget):
         # layout = QVBoxLayout()
         layout = QGridLayout()
         for i in range(16):
-            led = PyDMLed(
+            led = SiriusLedAlarm(
                 self, "ca://" + self._prefixed_magnet + ":Intlk-Mon", i)
             led.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
-            led.setOnColor(PyDMLed.Red)
-            led.setOffColor(PyDMLed.Green)
 
             layout.addWidget(led, i, 0)
             layout.addWidget(QLabel("Bit " + str(i)), i, 1)
@@ -139,10 +137,8 @@ class MagnetDetailWidget(QWidget):
         self.opmode_rb = PyDMLabel(
             self, "ca://" + self._prefixed_magnet + ":OpMode-Sts")
         self.opmode_rb.setObjectName("opmode1_rb_label")
-        self.ctrlmode_led = PyDMLed(
+        self.ctrlmode_led = SiriusLedAlarm(
             self, "ca://" + self._prefixed_magnet + ":CtrlMode-Mon")
-        self.ctrlmode_led.setOnColor(PyDMLed.Red)
-        self.ctrlmode_led.setOffColor(PyDMLed.Green)
         self.ctrlmode_label = PyDMLabel(
             self, "ca://" + self._prefixed_magnet + ":CtrlMode-Mon")
         self.ctrlmode_label.setObjectName("ctrlmode1_label")
@@ -173,7 +169,7 @@ class MagnetDetailWidget(QWidget):
         self.state_button = PyDMStateButton(
             parent=self,
             init_channel="ca://" + self._prefixed_magnet + ":PwrState-Sel")
-        self.pwrstate_led = PyDMLed(
+        self.pwrstate_led = SiriusLedState(
             self, "ca://" + self._prefixed_magnet + ":PwrState-Sts")
         # enum_map={'On': PyDMLed.Green, 'Off': PyDMLed.Red})
         self.pwrstate_label = PyDMLabel(
