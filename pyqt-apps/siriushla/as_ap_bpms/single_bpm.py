@@ -323,6 +323,7 @@ class SinglePassConfigWid(QGroupBox):
         fl.addRow('Hysteresis', sb)
         hl.addWidget(gb)
 
+
 if __name__ == '__main__':
     app = PyDMApplication()
     wind = SingleBPM(prefix=vaca_prefix + 'SI-01M1:DI-BPM:')
