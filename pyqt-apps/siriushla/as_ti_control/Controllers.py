@@ -6,10 +6,10 @@ from PyQt5.QtWidgets import QSizePolicy as QSzPol
 from pydm import PyDMApplication
 from pydm.widgets.checkbox import PyDMCheckbox as PyDMCb
 from pydm.widgets.enum_combo_box import PyDMEnumComboBox as PyDMECB
-from pydm.widgets.led import PyDMLed
 from pydm.widgets.label import PyDMLabel
 from pydm.widgets.spinbox import PyDMSpinbox
 from pydm.widgets.pushbutton import PyDMPushButton
+from siriushla.widgets.led import PyDMLed
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.timesys.time_data import Events as _Events
 from siriuspy.timesys.time_data import Clocks as _Clocks

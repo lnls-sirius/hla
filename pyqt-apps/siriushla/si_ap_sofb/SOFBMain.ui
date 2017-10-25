@@ -4020,17 +4020,17 @@ font-weight: bold;</string>
   <customwidget>
    <class>PyDMLogLabel</class>
    <extends>QListWidget</extends>
-   <header>pydm.widgets.log_label</header>
+   <header>siriushla.widgets.log_label</header>
   </customwidget>
   <customwidget>
    <class>QLed</class>
    <extends>QFrame</extends>
-   <header>pydm.widgets.QLed</header>
+   <header>siriushla.widgets.QLed</header>
   </customwidget>
   <customwidget>
    <class>PyDMLed</class>
    <extends>QLed</extends>
-   <header>pydm.widgets.led</header>
+   <header>siriushla.widgets.led</header>
   </customwidget>
   <customwidget>
    <class>PyDMPushButton</class>

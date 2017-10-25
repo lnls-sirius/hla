@@ -8,8 +8,8 @@ from PyQt5.QtWidgets import QSpacerItem as QSpIt
 from pydm import PyDMApplication
 from pydm.widgets.checkbox import PyDMCheckbox
 from pydm.widgets.label import PyDMLabel
-from pydm.widgets.led import PyDMLed
 from pydm.widgets.spinbox import PyDMSpinBox
+from siriushla.widgets.led import PyDMLed
 from siriuspy.timesys.time_data import Clocks as _Clocks
 from siriuspy.timesys.time_data import Events as _Events
 from siriushla.as_ti_control.Controllers import ClockCntrler, EventCntrler

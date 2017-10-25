@@ -6,8 +6,8 @@ from PyQt5.QtWidgets import (QWidget, QLabel, QHBoxLayout, QVBoxLayout,
                              QSizePolicy, QSpacerItem, QCheckBox)
 from pydm import PyDMApplication
 from pydm.widgets.base import PyDMWidget, PyDMWritableWidget
-from pydm.widgets.led import PyDMLed
-from pydm.widgets.QLed import QLed
+from siriushla.widgets.led import PyDMLed
+from siriushla.widgets.QLed import QLed
 
 NR_BPMs = 160
 NR_CHs = 120
