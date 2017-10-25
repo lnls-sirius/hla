@@ -17,6 +17,9 @@ class BaseMagnetControlWidget(QWidget):
     VERTICAL = 2
 
     StyleSheet = """
+        QScrollArea {
+            min-width: 1450px;
+        }
     """
 
     def __init__(self, magnet_list=None, orientation=0, parent=None):
@@ -145,27 +148,35 @@ class BaseMagnetControlWidget(QWidget):
             # Loop magnets to create all the widgets of a groupbox
             group_widgets = list()
             for n, ma in enumerate(magnets):
-                magnet_widget = MagnetWidget(maname=ma, parent=self)
+                if n > 0:
+                    magnet_widget = MagnetWidget(maname=ma, parent=self, header=False)
+                else:
+                    magnet_widget = MagnetWidget(maname=ma, parent=self)
                 group_widgets.append(magnet_widget)
                 self.widgets_list[ma] = magnet_widget
                 self.filtered_widgets.add(ma)
 
             # Create group and scroll area
-            group_box = self._createGroupBox(group[0], group_widgets)
+            main_widget = self._createGroupBox(group[0], group_widgets)
             if self._hasScrollArea():
-                widget = QScrollArea()
-                widget.setWidget(group_box)
+                widget = QScrollArea(self)
+                widget.setWidget(main_widget)
             else:
-                widget = group_box
+                widget = main_widget
+
+            group_box = QGroupBox(group[0])
+            group_box.layout = QVBoxLayout()
+            group_box.setLayout(group_box.layout)
+            group_box.layout.addWidget(widget)
 
             # Add group box or scroll area to grid layout
             if self._orientation == self.SQUARE:
                 if idx % 2 == 0:
-                    self.magnets_layout.addWidget(widget, int(idx), 0)
+                    self.magnets_layout.addWidget(group_box, int(idx), 0)
                 else:
-                    self.magnets_layout.addWidget(widget, int(idx/2), 1)
+                    self.magnets_layout.addWidget(group_box, int(idx/2), 1)
             else:
-                self.magnets_layout.addWidget(widget)
+                self.magnets_layout.addWidget(group_box)
 
         self.count_label.setText(
             "Showing {} magnets.".format(len(self.widgets_list)))
@@ -173,14 +184,14 @@ class BaseMagnetControlWidget(QWidget):
         self.setLayout(self.layout)
 
     def _createGroupBox(self, title, widget_group):
-        group_box = QGroupBox(title)
-        group_box.layout = QVBoxLayout()
+        w = QWidget()
+        w.layout = QVBoxLayout()
+        w.setLayout(w.layout)
         for line, widget in enumerate(widget_group):
-            group_box.layout.addWidget(widget)
-        group_box.layout.addStretch()
-        group_box.setLayout(group_box.layout)
+            w.layout.addWidget(widget)
+        w.layout.addStretch()
 
-        return group_box
+        return w
 
     def _getElementList(self):
         return filter(lambda magnet: re.match(

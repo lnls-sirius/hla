@@ -24,6 +24,7 @@ class MagnetDetailWidget(QWidget):
         #opmode2_rb_label {
             min-width: 7em;
             max-width: 7em;
+            qproperty-alignment: AlignCenter;
         }
         #ctrlmode1_label,
         #ctrlmode2_label {
@@ -40,6 +41,7 @@ class MagnetDetailWidget(QWidget):
         #metric > PyDMLabel {
             min-width: 7em;
             max-width: 7em;
+            qproperty-alignment: AlignCenter;
         }
     """
 

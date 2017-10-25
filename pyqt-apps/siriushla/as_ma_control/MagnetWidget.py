@@ -9,6 +9,7 @@ import re
 
 from pydm.PyQt.QtGui import QWidget, QHBoxLayout, QVBoxLayout, QLabel, \
     QPushButton, QStyleOption, QStyle, QPainter
+from pydm.PyQt.QtCore import QSize
 from pydm.widgets.label import PyDMLabel
 
 # from siriuspy.search import MASearch
@@ -42,6 +43,7 @@ class BaseMagnetWidget(QWidget):
         #button_header,
         #trim_header {
             font-weight: bold;
+            qproperty-alignment: AlignCenter;
         }
         #state_header,
         #state_widget {
@@ -65,8 +67,9 @@ class BaseMagnetWidget(QWidget):
         #strength_mon_header,
         #analog_label,
         #strength_label {
-            min-width: 250px;
-            max-width: 250px;
+            min-width: 200px;
+            max-width: 200px;
+            qproperty-alignment: AlignCenter;
         }
         #trim_header,
         #trim_button {
@@ -218,6 +221,8 @@ class BaseMagnetWidget(QWidget):
             return self.trim_button
         return None
 
+    def sizeHint(self):
+        return QSize(1600, 60)
 
 class PulsedMagnetWidget(BaseMagnetWidget):
     """Widget to control a pulsed magnet."""
