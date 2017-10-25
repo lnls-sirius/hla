@@ -12,7 +12,7 @@ from siriushla.widgets.state_button import PyDMStateButton
 from pydm.widgets.enum_combo_box import PyDMEnumComboBox
 from pydm.widgets.pushbutton import PyDMPushButton
 from siriushla.FloatSetPointWidget import FloatSetPointWidget
-from siriushla.widgets.led import SiriusLedState, SiriusLedAlarm
+from siriushla.widgets.led import SiriusLedState, SiriusLedAlert
 from siriushla import util as _util
 
 
@@ -120,7 +120,7 @@ class MagnetDetailWidget(QWidget):
         # layout = QVBoxLayout()
         layout = QGridLayout()
         for i in range(16):
-            led = SiriusLedAlarm(
+            led = SiriusLedAlert(
                 self, "ca://" + self._prefixed_magnet + ":Intlk-Mon", i)
             led.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
 
@@ -139,7 +139,7 @@ class MagnetDetailWidget(QWidget):
         self.opmode_rb = PyDMLabel(
             self, "ca://" + self._prefixed_magnet + ":OpMode-Sts")
         self.opmode_rb.setObjectName("opmode1_rb_label")
-        self.ctrlmode_led = SiriusLedAlarm(
+        self.ctrlmode_led = SiriusLedAlert(
             self, "ca://" + self._prefixed_magnet + ":CtrlMode-Mon")
         self.ctrlmode_label = PyDMLabel(
             self, "ca://" + self._prefixed_magnet + ":CtrlMode-Mon")

@@ -80,7 +80,7 @@ class SiriusLedState(PyDMLed):
         self.setOnColor(PyDMLed.LightGreen)
 
 
-class SiriusLedAlarm(PyDMLed):
+class SiriusLedAlert(PyDMLed):
     """PyDMLed specialization to represent 2 states in red/light green."""
 
     def __init__(self, parent=None, init_channel='', bit=-1):

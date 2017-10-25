@@ -6,7 +6,7 @@ from pydm.widgets.label import PyDMLabel
 from siriuspy.envars import vaca_prefix as _VACA_PREFIX
 from siriuspy.pulsedps import properties as pu_props
 from siriuspy.pulsedma import properties as pm_props
-from siriushla.widgets.led import SiriusLedState, SiriusLedAlarm
+from siriushla.widgets.led import SiriusLedState, SiriusLedAlert
 from siriushla.widgets.state_button import PyDMStateButton
 from siriushla.FloatSetPointWidget import FloatSetPointWidget
 
@@ -88,7 +88,7 @@ class PulsedMagnetDetailWidget(QWidget):
                             "Bit6", "Bit7"]
         for i in range(8):
             label_widget = QLabel(interlock_labels[i])
-            led = SiriusLedAlarm(
+            led = SiriusLedAlert(
                 self, "ca://" + self._intlk_mon_pv, i)
             interlock_layout.addWidget(led, i, 0)
             interlock_layout.addWidget(label_widget, i, 1)
@@ -161,7 +161,7 @@ class PulsedMagnetDetailWidget(QWidget):
     def _ctrlmode_layout(self):
         ctrlmode_layout = QHBoxLayout()
 
-        self.ctrlmode_led = SiriusLedAlarm(
+        self.ctrlmode_led = SiriusLedAlert(
             parent=self, init_channel="ca://" + self._ctrlmode_pv)
         self.ctrlmode_label = PyDMLabel(
             parent=self, init_channel="ca://" + self._ctrlmode_pv)

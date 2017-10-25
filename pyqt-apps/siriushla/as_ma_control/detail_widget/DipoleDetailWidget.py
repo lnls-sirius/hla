@@ -13,7 +13,7 @@ from pydm.widgets.enum_combo_box import PyDMEnumComboBox
 from siriushla.as_ma_control.detail_widget.MagnetDetailWidget \
     import MagnetDetailWidget
 from siriushla.FloatSetPointWidget import FloatSetPointWidget
-from siriushla.widgets.led import SiriusLedState, SiriusLedAlarm
+from siriushla.widgets.led import SiriusLedState, SiriusLedAlert
 
 
 class DipoleDetailWidget(MagnetDetailWidget):
@@ -40,7 +40,7 @@ class DipoleDetailWidget(MagnetDetailWidget):
         # layout.addWidget(QLabel("PS2"), 0, 1)
         for i in range(16):
             for col, ps in enumerate(self._ps_list):
-                led = SiriusLedAlarm(self, "ca://" + ps + ":Intlk-Mon", i)
+                led = SiriusLedAlert(self, "ca://" + ps + ":Intlk-Mon", i)
                 led.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
                 layout.addWidget(led, i, col)
             layout.addWidget(QLabel("Bit " + str(i)), i, 2)
@@ -57,7 +57,7 @@ class DipoleDetailWidget(MagnetDetailWidget):
         self.opmode1_rb = PyDMLabel(
             self, "ca://" + self._ps_list[0] + ":OpMode-Sts")
         self.opmode1_rb.setObjectName("opmode1_rb_label")
-        self.ctrlmode1_led = SiriusLedAlarm(
+        self.ctrlmode1_led = SiriusLedAlert(
             self, "ca://" + self._ps_list[0] + ":CtrlMode-Mon")
         self.ctrlmode1_label = PyDMLabel(
             self, "ca://" + self._ps_list[0] + ":CtrlMode-Mon")
@@ -65,7 +65,7 @@ class DipoleDetailWidget(MagnetDetailWidget):
         self.opmode2_rb = PyDMLabel(
             self, "ca://" + self._ps_list[1] + ":OpMode-Sts")
         self.opmode2_rb.setObjectName("opmode2_rb_label")
-        self.ctrlmode2_led = SiriusLedAlarm(
+        self.ctrlmode2_led = SiriusLedAlert(
             self, "ca://" + self._ps_list[1] + ":CtrlMode-Mon")
         self.ctrlmode2_label = PyDMLabel(
             self, "ca://" + self._ps_list[1] + ":CtrlMode-Mon")
