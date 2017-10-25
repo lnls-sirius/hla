@@ -2541,7 +2541,7 @@
   <customwidget>
    <class>PyDMStateButton</class>
    <extends>QWidget</extends>
-   <header>pydm.widgets.state_button</header>
+   <header>siriushla.widgets.state_button</header>
   </customwidget>
   <customwidget>
    <class>QLed</class>
@@ -2551,7 +2551,7 @@
   <customwidget>
    <class>PyDMLed</class>
    <extends>QLed</extends>
-   <header>pydm.widgets.led</header>
+   <header>siriushla.widgets.led</header>
   </customwidget>
  </customwidgets>
  <resources/>
