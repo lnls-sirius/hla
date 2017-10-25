@@ -1,14 +1,15 @@
 """GUI for injection."""
-from siriushla.as_ap_injection.CustomExceptions import PVConnectionError
-from siriushla.as_ap_injection.InjectionController import InjectionController
 from pydm import PyDMApplication
 from pydm.PyQt.QtCore import pyqtSlot, QTimer, Qt
 from pydm.PyQt.QtGui import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, \
     QRadioButton, QPushButton, QSpinBox, QGridLayout, QMessageBox, QDialog, \
     QLabel, QDockWidget
-from pydm.widgets.led import PyDMLed
 from pydm.widgets.label import PyDMLabel
 from pydm.widgets.checkbox import PyDMCheckbox
+
+from siriushla.widgets.led import SiriusLedState
+from siriushla.as_ap_injection.CustomExceptions import PVConnectionError
+from siriushla.as_ap_injection.InjectionController import InjectionController
 from siriushla.as_ap_injection.BarGraphWidget \
     import BarGraphWidget, PyDMBarGraph
 from siriuspy.envars import vaca_prefix as _VACA_PREFIX
@@ -317,7 +318,7 @@ class InjectionWindow(QMainWindow):
         self.cycleCheckBox.setObjectName("cycleCheckBox")
         self.cycleCheckBox.setText("Cyclic mode")
         pv = _VACA_PREFIX + "AS-Glob:TI-EVG:InjectionCyc-Sts"
-        self.cycleLed = PyDMLed(parent=self, init_channel="ca://" + pv)
+        self.cycleLed = SiriusLedState(parent=self, init_channel="ca://" + pv)
         self.cycleLed.setObjectName("cycleLed")
         cycle_layout.addWidget(self.cycleCheckBox)
         cycle_layout.addWidget(self.cycleLed)
@@ -365,7 +366,7 @@ class InjectionWindow(QMainWindow):
         self.ledLabel.setObjectName("ledLabel")
         pv = InjectionController.TimingPrefix + ':' + \
             InjectionController.InjectionToggle
-        self.injectingLed = PyDMLed(self, init_channel="ca://" + pv)
+        self.injectingLed = SiriusLedState(self, init_channel="ca://" + pv)
         self.injectingLed.setObjectName("injectingLed")
         pv = _VACA_PREFIX + "SI-Glob:AP-CurrInfo:Current-Mon"
         self.beamCurrentLabel = PyDMLabel(parent=self,

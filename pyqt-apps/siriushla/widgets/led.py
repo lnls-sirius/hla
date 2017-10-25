@@ -68,3 +68,23 @@ class PyDMLed(QLed, PyDMWidget):
         else:  # Led represents specific bit of PV
             bit_val = (value & self._mask) >> self._bit
             self.setState(bit_val)
+
+
+class SiriusLedState(PyDMLed):
+    """PyDMLed specialization to represent 2 states in dark/light green."""
+
+    def __init__(self, parent=None, init_channel='', bit=-1):
+        """Call super and set on/off colors."""
+        super().__init__(parent, init_channel, bit)
+        self.setOffColor(PyDMLed.DarkGreen)
+        self.setOnColor(PyDMLed.LightGreen)
+
+
+class SiriusLedAlarm(PyDMLed):
+    """PyDMLed specialization to represent 2 states in red/light green."""
+
+    def __init__(self, parent=None, init_channel='', bit=-1):
+        """Call super and set on/off colors."""
+        super().__init__(parent, init_channel, bit)
+        self.setOnColor(PyDMLed.Red)
+        self.setOffColor(PyDMLed.LightGreen)

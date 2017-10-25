@@ -9,20 +9,24 @@ from .state_button import PyDMStateButton
 
 SIRIUS_CATEGORY = 'Sirius Widgets'
 
+# Led plugin
+PyDMLedPlugin = qtplugin_factory(PyDMLed, group=SIRIUS_CATEGORY)
+
 # Log Label
 PyDMLogLabelPlugin = qtplugin_factory(PyDMLogLabel,
                                       group=SIRIUS_CATEGORY)
 
-# Led plugin
-QLedPlugin = qtplugin_factory(QLed, group=SIRIUS_CATEGORY)
-PyDMLedPlugin = qtplugin_factory(PyDMLed, group=SIRIUS_CATEGORY)
-
 # Scrollbar plugin
-QDoubleScrollBarPlugin = qtplugin_factory(QDoubleScrollBar,
-                                          group=SIRIUS_CATEGORY)
 PyDMScrollBarPlugin = qtplugin_factory(PyDMScrollBar,
                                        group=SIRIUS_CATEGORY)
 
 # State Button
 PyDMStateButtonPlugin = qtplugin_factory(PyDMStateButton,
                                          group=SIRIUS_CATEGORY)
+
+# Scrollbar plugin
+QDoubleScrollBarPlugin = qtplugin_factory(QDoubleScrollBar,
+                                          group=SIRIUS_CATEGORY)
+
+# Led plugin
+QLedPlugin = qtplugin_factory(QLed, group=SIRIUS_CATEGORY)

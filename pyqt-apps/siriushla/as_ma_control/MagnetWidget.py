@@ -9,8 +9,6 @@ import re
 
 from pydm.PyQt.QtGui import QWidget, QHBoxLayout, QVBoxLayout, QLabel, \
     QPushButton, QStyleOption, QStyle, QPainter
-from pydm.widgets.led import PyDMLed
-from pydm.widgets.state_button import PyDMStateButton
 from pydm.widgets.label import PyDMLabel
 
 # from siriuspy.search import MASearch
@@ -18,6 +16,8 @@ from siriuspy.envars import vaca_prefix as _VACA_PREFIX
 from siriuspy.pulsedps import properties as pu_props
 from siriuspy.pulsedma import properties as pm_props
 from siriushla.FloatSetPointWidget import FloatSetPointWidget
+from siriushla.widgets.state_button import PyDMStateButton
+from siriushla.widgets.led import PyDMLed
 # from siriushla.as_ma_control.MagnetDetailWindow import MagnetDetailWindow
 # from siriushla.as_ma_control.MagnetTrimWindow import MagnetTrimWindow
 
