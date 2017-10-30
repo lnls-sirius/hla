@@ -19,6 +19,7 @@ class MagnetDetailWindow(QMainWindow):
 
         self._setup_ui()
         self.setStyleSheet(self.STYLESHEET)
+        self.app.establish_widget_connections(self)
 
     def _setup_ui(self):
         # Set window layout
@@ -26,15 +27,15 @@ class MagnetDetailWindow(QMainWindow):
         self.widget = DetailWidgetFactory.factory(self._ma, self)
         self.setCentralWidget(self.widget)
 
-    def showEvent(self, event):
-        """Establish connections and call super."""
-        self.app.establish_widget_connections(self)
-        super().showEvent(event)
-
-    def closeEvent(self, event):
-        """Override closeEvent in order to close iwdget connections."""
-        self.app.close_widget_connections(self)
-        super().closeEvent(event)
+    # def showEvent(self, event):
+    #     """Establish connections and call super."""
+    #     self.app.establish_widget_connections(self)
+    #     super().showEvent(event)
+    #
+    # def closeEvent(self, event):
+    #     """Override closeEvent in order to close iwdget connections."""
+    #     self.app.close_widget_connections(self)
+    #     super().closeEvent(event)
 
 
 if __name__ == '__main__':
