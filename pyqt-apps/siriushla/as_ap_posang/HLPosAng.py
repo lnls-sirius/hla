@@ -66,11 +66,7 @@ class ASAPPosAngCorr(_QMainWindow):
         if prefix is None:
             prefix = _vaca_prefix
         for widget, pv in widget2pv_list:
-            wname = widget.objectName().split('_')
-            if wname[0] in ('PyDMLineEdit', 'PyDMScrollBar', 'PyDMPushButton'):
-                widget.channel = 'ca://' + prefix + pv
-            elif wname[0] in ('PyDMLabel'):
-                widget.setChannel('ca://' + prefix + pv)
+            widget.channel = 'ca://' + prefix + pv
 
     def closeEvent(self, event):
         """Reimplement close event to close widget connections."""

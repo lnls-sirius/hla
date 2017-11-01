@@ -83,25 +83,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
      </property>
     </widget>
    </item>
-   <item row="5" column="4">
-    <widget class="PyDMScrollBar" name="PyDMScrollBar_OrbXDeltaAng_SP">
-     <property name="minimumSize">
-      <size>
-       <width>160</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="toolTip">
-      <string/>
-     </property>
-     <property name="whatsThis">
-      <string/>
-     </property>
-     <property name="limitsFromPV" stdset="0">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
    <item row="4" column="4">
     <widget class="PyDMLineEdit" name="PyDMLineEdit_OrbXDeltaAng_SP">
      <property name="minimumSize">
@@ -120,63 +101,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
      </property>
     </widget>
    </item>
-   <item row="5" column="1">
-    <widget class="PyDMScrollBar" name="PyDMScrollBar_OrbXDeltaPos_SP">
-     <property name="minimumSize">
-      <size>
-       <width>160</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="toolTip">
-      <string/>
-     </property>
-     <property name="whatsThis">
-      <string/>
-     </property>
-     <property name="limitsFromPV" stdset="0">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="1">
-    <widget class="PyDMScrollBar" name="PyDMScrollBar_OrbYDeltaPos_SP">
-     <property name="minimumSize">
-      <size>
-       <width>160</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="toolTip">
-      <string/>
-     </property>
-     <property name="whatsThis">
-      <string/>
-     </property>
-     <property name="limitsFromPV" stdset="0">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="4">
-    <widget class="PyDMScrollBar" name="PyDMScrollBar_OrbYDeltaAng_SP">
-     <property name="minimumSize">
-      <size>
-       <width>160</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="toolTip">
-      <string/>
-     </property>
-     <property name="whatsThis">
-      <string/>
-     </property>
-     <property name="limitsFromPV" stdset="0">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
    <item row="7" column="1">
     <widget class="PyDMLineEdit" name="PyDMLineEdit_OrbYDeltaPos_SP">
      <property name="minimumSize">
@@ -192,56 +116,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
       <string>
     Writeable text field to send and display channel values
     </string>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="2">
-    <widget class="PyDMLabel" name="PyDMLabel_OrbYDeltaPos_RB">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>28</height>
-      </size>
-     </property>
-     <property name="toolTip">
-      <string/>
-     </property>
-     <property name="whatsThis">
-      <string/>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::Box</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <property name="precFromPV">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="5" rowspan="2">
-    <widget class="PyDMLabel" name="PyDMLabel_OrbXDeltaAng_RB">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>28</height>
-      </size>
-     </property>
-     <property name="toolTip">
-      <string/>
-     </property>
-     <property name="whatsThis">
-      <string/>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::Box</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <property name="precFromPV">
-      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -346,31 +220,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
      </property>
     </spacer>
    </item>
-   <item row="3" column="2" rowspan="2">
-    <widget class="PyDMLabel" name="PyDMLabel_OrbXDeltaPos_RB">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>28</height>
-      </size>
-     </property>
-     <property name="toolTip">
-      <string/>
-     </property>
-     <property name="whatsThis">
-      <string/>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::Box</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <property name="precFromPV">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
    <item row="7" column="0">
     <widget class="QLabel" name="label_5">
      <property name="minimumSize">
@@ -443,31 +292,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
      </property>
     </widget>
    </item>
-   <item row="7" column="5">
-    <widget class="PyDMLabel" name="PyDMLabel_OrbYDeltaAng_RB">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>28</height>
-      </size>
-     </property>
-     <property name="toolTip">
-      <string/>
-     </property>
-     <property name="whatsThis">
-      <string/>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::Box</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <property name="precFromPV">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
    <item row="6" column="3">
     <spacer name="verticalSpacer_4">
      <property name="orientation">
@@ -507,6 +331,210 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
      </property>
     </spacer>
    </item>
+   <item row="4" column="2">
+    <widget class="PyDMLabel" name="PyDMLabel_OrbXDeltaPos_RB">
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="whatsThis">
+      <string>
+    A QLabel with support for Channels and more from PyDM
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="2">
+    <widget class="PyDMLabel" name="PyDMLabel_OrbYDeltaPos_RB">
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="whatsThis">
+      <string>
+    A QLabel with support for Channels and more from PyDM
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="5">
+    <widget class="PyDMLabel" name="PyDMLabel_OrbXDeltaAng_RB">
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="whatsThis">
+      <string>
+    A QLabel with support for Channels and more from PyDM
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="5">
+    <widget class="PyDMLabel" name="PyDMLabel_OrbYDeltaAng_RB">
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="whatsThis">
+      <string>
+    A QLabel with support for Channels and more from PyDM
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="4">
+    <widget class="PyDMScrollBar" name="PyDMScrollBar_OrbYDeltaAng_SP">
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="whatsThis">
+      <string>
+    A QDoubleScrollBar with support for Channels and more from PyDM.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the scroll bar
+    init_channel : str, optional
+        The channel to be used by the widget.
+    orientation : Qt.Horizontal, Qt.Vertical
+        Orientation of the scroll bar
+    precision : int
+        Precision to be use. Used to calculate size of the scroll bar step
+    </string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="4">
+    <widget class="PyDMScrollBar" name="PyDMScrollBar_OrbXDeltaAng_SP">
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="whatsThis">
+      <string>
+    A QDoubleScrollBar with support for Channels and more from PyDM.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the scroll bar
+    init_channel : str, optional
+        The channel to be used by the widget.
+    orientation : Qt.Horizontal, Qt.Vertical
+        Orientation of the scroll bar
+    precision : int
+        Precision to be use. Used to calculate size of the scroll bar step
+    </string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
+    <widget class="PyDMScrollBar" name="PyDMScrollBar_OrbXDeltaPos_SP">
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="whatsThis">
+      <string>
+    A QDoubleScrollBar with support for Channels and more from PyDM.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the scroll bar
+    init_channel : str, optional
+        The channel to be used by the widget.
+    orientation : Qt.Horizontal, Qt.Vertical
+        Orientation of the scroll bar
+    precision : int
+        Precision to be use. Used to calculate size of the scroll bar step
+    </string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="1">
+    <widget class="PyDMScrollBar" name="PyDMScrollBar_OrbYDeltaPos_SP">
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="whatsThis">
+      <string>
+    A QDoubleScrollBar with support for Channels and more from PyDM.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the scroll bar
+    init_channel : str, optional
+        The channel to be used by the widget.
+    orientation : Qt.Horizontal, Qt.Vertical
+        Orientation of the scroll bar
+    precision : int
+        Precision to be use. Used to calculate size of the scroll bar step
+    </string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -528,12 +556,12 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
   <customwidget>
    <class>PyDMScrollBar</class>
    <extends>QDoubleScrollBar</extends>
-   <header>pydm.widgets.scrollbar</header>
+   <header>siriushla.widgets.scrollbar</header>
   </customwidget>
   <customwidget>
    <class>QDoubleScrollBar</class>
    <extends>QScrollBar</extends>
-   <header>pydm.widgets.QDoubleScrollBar</header>
+   <header>siriushla.widgets.QDoubleScrollBar</header>
   </customwidget>
  </customwidgets>
  <resources/>

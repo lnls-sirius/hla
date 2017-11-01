@@ -241,16 +241,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="whatsThis">
                 <string/>
                </property>
-               <item>
-                <property name="text">
-                 <string>Dimfei</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>NDStats</string>
-                </property>
-               </item>
               </widget>
              </item>
              <item row="2" column="6">
@@ -310,7 +300,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="text">
                  <string>1-PyDMLabel</string>
                 </property>
-                <property name="channel">
+                <property name="channel" stdset="0">
                  <string>ca://TEST:Centroid</string>
                 </property>
                </widget>
@@ -395,7 +385,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="text">
                  <string>1-PyDMLabel</string>
                 </property>
-                <property name="channel">
+                <property name="channel" stdset="0">
                  <string>ca://TEST:Moment1</string>
                 </property>
                </widget>
@@ -447,7 +437,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="text">
                  <string>1-PyDMLabel</string>
                 </property>
-                <property name="channel">
+                <property name="channel" stdset="0">
                  <string>ca://TEST:Centroid</string>
                 </property>
                </widget>
@@ -532,7 +522,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="text">
                  <string>1-PyDMLabel</string>
                 </property>
-                <property name="channel">
+                <property name="channel" stdset="0">
                  <string>ca://TEST:Moment2</string>
                 </property>
                </widget>
@@ -595,7 +585,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
                 </property>
-                <property name="channel">
+                <property name="channel" stdset="0">
                  <string>ca://TEST:Theta</string>
                 </property>
                </widget>
@@ -1039,16 +1029,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="whatsThis">
                 <string/>
                </property>
-               <item>
-                <property name="text">
-                 <string>Dimfei</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>NDStats</string>
-                </property>
-               </item>
               </widget>
              </item>
              <item row="4" column="8">
@@ -1534,16 +1514,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="whatsThis">
                 <string/>
                </property>
-               <item>
-                <property name="text">
-                 <string>Dimfei</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>NDStats</string>
-                </property>
-               </item>
               </widget>
              </item>
              <item row="1" column="6">
@@ -2144,16 +2114,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="whatsThis">
                 <string/>
                </property>
-               <item>
-                <property name="text">
-                 <string>Dimfei</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>NDStats</string>
-                </property>
-               </item>
               </widget>
              </item>
              <item row="2" column="3" colspan="6">
@@ -2783,16 +2743,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="whatsThis">
                 <string/>
                </property>
-               <item>
-                <property name="text">
-                 <string>Dimfei</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>NDStats</string>
-                </property>
-               </item>
               </widget>
              </item>
              <item row="3" column="8">
@@ -3261,16 +3211,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="whatsThis">
                 <string/>
                </property>
-               <item>
-                <property name="text">
-                 <string>Dimfei</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>NDStats</string>
-                </property>
-               </item>
               </widget>
              </item>
              <item row="2" column="3" colspan="2">
@@ -3872,9 +3812,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <property name="alignment">
                <set>Qt::AlignCenter</set>
               </property>
-              <property name="channel">
-               <string>ca://TEST:Eff</string>
-              </property>
              </widget>
             </item>
            </layout>
@@ -3913,7 +3850,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
  <customwidgets>
   <customwidget>
    <class>PyDMEnumComboBox</class>
-   <extends>QComboBox</extends>
+   <extends>QFrame</extends>
    <header>pydm.widgets.enum_combo_box</header>
   </customwidget>
   <customwidget>

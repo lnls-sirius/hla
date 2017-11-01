@@ -4,7 +4,7 @@
 
 import sys as sys
 import argparse as argparse
-from pydm import PyDMApplication as PyDMApplication
+from siriushla.SiriusApplication import SiriusApplication
 from siriushla.as_ap_posang.HLPosAng import ASAPPosAngCorr
 from siriushla import util
 
@@ -15,7 +15,7 @@ parser.add_argument('-p', "--prefix", type=str, default='',
                     help="Define the prefix for the PVs in the window.")
 args = parser.parse_args()
 
-app = PyDMApplication(None, sys.argv)
+app = SiriusApplication()
 util.set_style(app)
 window = ASAPPosAngCorr(prefix=args.prefix, tl='tb')
 window.show()
