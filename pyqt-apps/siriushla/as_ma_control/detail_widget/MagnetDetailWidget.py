@@ -75,9 +75,9 @@ class MagnetDetailWidget(QWidget):
         # Group boxes that compose the widget
         self.interlock_box = QGroupBox("Interlock")
         self.interlock_box.setObjectName("interlock")
-        self.opmode_box = QGroupBox("Op Mode")
+        self.opmode_box = QGroupBox("OpMode")
         self.opmode_box.setObjectName("operation_mode")
-        self.pwrstate_box = QGroupBox("Pwr State")
+        self.pwrstate_box = QGroupBox("PwrState")
         self.pwrstate_box.setObjectName("power_state")
         self.current_box = QGroupBox("Current [A]")
         self.current_box.setObjectName("current")

@@ -23,7 +23,7 @@ class MagnetTrimWindow(QMainWindow):
         # Setup UI
         self._setup_ui()
         # Establish PyDM epics connections
-        # self.app.establish_widget_connections(self)
+        self.app.establish_widget_connections(self)
 
     def _setup_ui(self):
         self.setWindowTitle(self._maname + ' Trims')
@@ -56,12 +56,12 @@ class MagnetTrimWindow(QMainWindow):
             connect_window(detail_button, MagnetDetailWindow,
                            self, maname=maname)
 
-    def showEvent(self, event):
-        """Establish connections and call super."""
-        self.app.establish_widget_connections(self)
-        super().showEvent(event)
-
-    def closeEvent(self, event):
-        """Override closeEvent in order to close iwdget connections."""
-        self.app.close_widget_connections(self)
-        super().closeEvent(event)
+    # def showEvent(self, event):
+    #     """Establish connections and call super."""
+    #     self.app.establish_widget_connections(self)
+    #     super().showEvent(event)
+    #
+    # def closeEvent(self, event):
+    #     """Override closeEvent in order to close iwdget connections."""
+    #     self.app.close_widget_connections(self)
+    #     super().closeEvent(event)
