@@ -6,8 +6,17 @@ from .QLed import QLed
 from .QDoubleScrollBar import QDoubleScrollBar
 from .scrollbar import PyDMScrollBar
 from .state_button import PyDMStateButton
+from .windows import SiriusDialog, SiriusMainWindow
 
 SIRIUS_CATEGORY = 'Sirius Widgets'
+
+# windows
+SiriusMainWindowPlugin = qtplugin_factory(SiriusMainWindow,
+                                          is_container=True,
+                                          group=SIRIUS_CATEGORY)
+SiriusDialogPlugin = qtplugin_factory(SiriusDialog,
+                                      is_container=True,
+                                      group=SIRIUS_CATEGORY)
 
 # Led plugin
 PyDMLedPlugin = qtplugin_factory(PyDMLed, group=SIRIUS_CATEGORY)
