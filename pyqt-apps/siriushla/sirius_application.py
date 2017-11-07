@@ -23,5 +23,7 @@ class SiriusApplication(PyDMApplication):
             self._windows[id].show()
             self._windows[id].activateWindow()
         else:  # Create new window
-            self._windows[id] = w_class(parent=parent, **kwargs)
+            wid = w_class(parent=parent, **kwargs)
+            self._windows[id] = wid
+            self.establish_widget_connections(wid)
             self._windows[id].show()
