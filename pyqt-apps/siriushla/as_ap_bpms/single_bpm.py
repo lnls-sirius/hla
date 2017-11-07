@@ -7,7 +7,7 @@ from pydm.widgets import (PyDMWaveformPlot, PyDMTimePlot, PyDMLineEdit,
                           PyDMSpinbox, PyDMLabel, PyDMCheckbox)
 from pydm.widgets import PyDMPushButton as PyDMPB
 from pydm.widgets import PyDMEnumComboBox as PyDMECB
-from siriushla.SiriusApplication import SiriusApplication
+from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, SiriusDialog
 from siriuspy.envars import vaca_prefix
 

@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QMainWindow, QDialog
-from siriushla.SiriusApplication import SiriusApplication
+from siriushla.sirius_application import SiriusApplication
 
 
 class SiriusMainWindow(QMainWindow):

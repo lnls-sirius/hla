@@ -3,7 +3,7 @@
 """Mock application launcher."""
 
 import sys
-from siriushla.SiriusApplication import SiriusApplication
+from siriushla.sirius_application import SiriusApplication
 from pydm.PyQt.QtGui import QAction, QMenuBar
 from siriushla.as_ma_control.MagnetControlWindow import MagnetControlWindow
 from siriushla.as_ma_control.MagnetTabControlWindow \
