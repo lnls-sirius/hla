@@ -1,18 +1,16 @@
 #!/usr/bin/env python-sirius
 """HLA Current and Lifetime Modules."""
 
-import sys
-from pydm import PyDMApplication
 from pydm.PyQt.uic import loadUi
 from pydm.PyQt.QtCore import pyqtSlot
-from pydm.PyQt.QtGui import QMainWindow
+from siriushla.widgets import SiriusMainWindow
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 
 UI_FILE = ('/home/fac_files/lnls-sirius/hla/pyqt-apps/siriushla/'
            'si_ap_currlt/ui_si_ap_currlt.ui')
 
 
-class CurrLTWindow(QMainWindow):
+class CurrLTWindow(SiriusMainWindow):
     """Class to include some intelligence in the .ui file."""
 
     def __init__(self, parent=None, prefix=None):

@@ -3,7 +3,7 @@
 
 from pydm.PyQt.uic import loadUi
 from pydm.PyQt.QtCore import pyqtSlot, Qt
-from pydm.PyQt.QtGui import (QMainWindow, QVBoxLayout, QHBoxLayout,
+from pydm.PyQt.QtGui import (QVBoxLayout, QHBoxLayout,
                              QGridLayout, QFileDialog, QSizePolicy,
                              QDoubleValidator, QWidget, QFrame, QLabel,
                              QPixmap, QPushButton, QSpacerItem, QApplication)
@@ -19,6 +19,7 @@ from pydm.PyQt.QtSvg import QSvgWidget
 import pyaccel as _pyaccel
 import pymodels as _pymodels
 from siriuspy.envars import vaca_prefix as _vaca_prefix
+from siriushla.widgets import SiriusMainWindow
 from siriushla.as_ma_control.MagnetDetailWindow import MagnetDetailWindow
 from siriushla.as_ma_control import TSMagnetControlWindow
 from siriushla.as_ma_control import TBMagnetControlWindow
@@ -70,7 +71,7 @@ self.centralwidget.PyDMLabel_SigmaYNDStats_Scrn{0}.setChannel('ca://'
 """
 
 
-class TLAPControlWindow(QMainWindow):
+class TLAPControlWindow(SiriusMainWindow):
     """Class to create the main window for TB and TS HLA."""
 
     def __init__(self, parent=None, prefix=None, tl=None):
@@ -578,7 +579,7 @@ class TLAPControlWindow(QMainWindow):
             # TODO
         elif sender.text().split('-')[0].split(':')[1] == 'PM':
             corr = self._tl.upper() + '-' + sender.text()
-            self.w = QMainWindow(self)
+            self.w = SiriusMainWindow(self)
             self.w.setCentralWidget(PulsedMagnetDetailWidget(corr, self.w))
             self.app.establish_widget_connections(self.w)
             self.w.show()
@@ -628,7 +629,7 @@ class TLAPControlWindow(QMainWindow):
         super().closeEvent(event)
 
 
-class ShowLatticeAndTwiss(QMainWindow):
+class ShowLatticeAndTwiss(SiriusMainWindow):
     """Class to create Lattice and Twiss Widget."""
 
     def __init__(self, parent=None, tl=None):
@@ -664,7 +665,7 @@ class ShowLatticeAndTwiss(QMainWindow):
         self.setGeometry(10, 10, 2000, 500)
 
 
-class ShowImage(QMainWindow):
+class ShowImage(SiriusMainWindow):
     """Class to create Show Reference Image Widget."""
 
     def __init__(self, parent=None):

@@ -1,17 +1,18 @@
 """Define a window to manage offline configurations."""
 # from pymysql.err import IntegrityError, InternalError, OperationalError
 from pydm.PyQt.QtCore import Qt, QPoint, pyqtSlot
-from pydm.PyQt.QtGui import QVBoxLayout, QPushButton, QMainWindow, \
+from pydm.PyQt.QtGui import QVBoxLayout, QPushButton, \
         QTableView, QWidget, QHBoxLayout, QInputDialog, QMenu, QAction, \
         QMessageBox, QKeySequence
-from ..LoadingDlg import LoadingDlg
+from siriushla.widgets import SiriusMainWindow
+from siriushla.widgets import LoadingDialog
 from .ConfigModel import ConfigModel
 from .ConfigModel import ConfigDelegate
 from .TuneDlg import TuneDlg
 from .LoadingThread import LoadingThread
 
 
-class ConfigManagerWindow(QMainWindow):
+class ConfigManagerWindow(SiriusMainWindow):
     """Window to manage offline configuration of BO and SI devices.
 
     This window allows the user to create new configurations as well as
@@ -351,7 +352,7 @@ class ConfigManagerWindow(QMainWindow):
             t = LoadingThread(
                 self._getNextName(), self._model._vertical_header, self)
             dlg = \
-                LoadingDlg("Loading", len(self._model._vertical_header), self)
+                LoadingDialog("Loading", len(self._model._vertical_header), self)
             t.taskUpdated.connect(dlg.update)
             t.taskFinished.connect(dlg.done)
             t.start()

@@ -1,15 +1,16 @@
 """Modulet that defines the window class that control pulsed mangets."""
 from pydm import PyDMApplication
-from pydm.PyQt.QtGui import QMainWindow, QWidget, QVBoxLayout, QTabWidget
+from pydm.PyQt.QtGui import QWidget, QVBoxLayout, QTabWidget
 
 from siriuspy.search import MASearch
+from siriushla.widgets import SiriusMainWindow
 from siriushla.as_ma_control.MagnetWidget import PulsedMagnetWidget
 from siriushla.as_pm_control.PulsedMagnetDetailWindow \
     import PulsedMagnetDetailWindow
 from ..util import connect_window
 
 
-class PulsedMagnetControlWindow(QMainWindow):
+class PulsedMagnetControlWindow(SiriusMainWindow):
     """Window to control pulsed magnets."""
 
     StyleSheet = """

@@ -2,7 +2,7 @@
 import re
 
 from pydm.PyQt.QtCore import Qt
-from pydm.PyQt.QtGui import QWidget, QGroupBox, QGridLayout, QVBoxLayout, \
+from pydm.PyQt.QtGui import QWidget, QGroupBox, QGridLayout, \
     QHBoxLayout, QLabel, QSizePolicy
 
 from siriuspy.envars import vaca_prefix
@@ -11,7 +11,7 @@ from pydm.widgets.label import PyDMLabel
 from siriushla.widgets.state_button import PyDMStateButton
 from pydm.widgets.enum_combo_box import PyDMEnumComboBox
 from pydm.widgets.pushbutton import PyDMPushButton
-from siriushla.FloatSetPointWidget import FloatSetPointWidget
+from siriushla.widgets import PyDMLinEditScrollbar
 from siriushla.widgets.led import SiriusLedState, SiriusLedAlert
 from siriushla import util as _util
 
@@ -204,7 +204,7 @@ class MagnetDetailWidget(QWidget):
         self.current_ref_label = QLabel("Ref Mon")
         self.current_mon_label = QLabel("Mon")
 
-        self.current_sp_widget = FloatSetPointWidget(
+        self.current_sp_widget = PyDMLinEditScrollbar(
             parent=self,
             channel="ca://" + self._prefixed_magnet + ":Current-SP")
         # self.current_sp_widget.set_limits_from_pv(True)
@@ -243,7 +243,7 @@ class MagnetDetailWidget(QWidget):
         self.metric_ref_label = QLabel("Ref Mon")
         self.metric_mon_label = QLabel("Mon")
 
-        self.metric_sp_widget = FloatSetPointWidget(
+        self.metric_sp_widget = PyDMLinEditScrollbar(
             "ca://" + self._prefixed_magnet + ":" + self._metric + "-SP",
             self)
         # self.metric_sp_widget.set_limits_from_pv(True)

@@ -3,16 +3,16 @@
 """HLA as_ap_posang module."""
 
 from pydm.PyQt.uic import loadUi as _loadUi
-from pydm.PyQt.QtGui import QMainWindow as _QMainWindow
 from pydm.PyQt.QtGui import QApplication as _QApplication
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 from siriuspy.envars import vaca_prefix as _vaca_prefix
+from siriushla.widgets import SiriusMainWindow as _SiriusMainWindow
 
 UI_FILE = ('/home/fac_files/lnls-sirius/hla/pyqt-apps/siriushla/'
            'as_ap_posang/ui_as_ap_posang.ui')
 
 
-class ASAPPosAngCorr(_QMainWindow):
+class ASAPPosAngCorr(_SiriusMainWindow):
     """Main Class."""
 
     def __init__(self, parent=None, prefix=None, tl=None):

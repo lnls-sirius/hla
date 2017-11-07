@@ -4,7 +4,7 @@
 
 import sys
 from siriushla.SiriusApplication import SiriusApplication
-from pydm.PyQt.QtGui import QMainWindow, QAction, QMenuBar
+from pydm.PyQt.QtGui import QAction, QMenuBar
 from siriushla.as_ma_control.MagnetControlWindow import MagnetControlWindow
 from siriushla.as_ma_control.MagnetTabControlWindow \
     import MagnetTabControlWindow
@@ -13,9 +13,10 @@ from siriushla.as_pm_control.PulsedMagnetControlWindow \
 from siriushla.as_ap_injection.InjectionWindow import InjectionWindow
 from siriushla.as_config_manager.ConfigManagerWindow import ConfigManagerWindow
 from siriushla import util as _util
+from siriushla.widgets import SiriusMainWindow
 
 
-class ControlApplication(QMainWindow):
+class ControlApplication(SiriusMainWindow):
     """Application that act as a launcher."""
 
     TBMagnetWindow = "tb_magnets"
