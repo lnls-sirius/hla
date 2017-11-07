@@ -1,13 +1,13 @@
 import sys
-from PyQt5.QtWidgets import (QWidget, QHBoxLayout, QVBoxLayout,
-                             QGridLayout, QTabWidget, QStackedWidget, QDialog,
-                             QRadioButton, QGroupBox, QFormLayout, QLabel)
+from PyQt5.QtWidgets import (QWidget, QHBoxLayout, QVBoxLayout, QRadioButton,
+                             QGridLayout, QTabWidget, QStackedWidget, QLabel,
+                             QGroupBox, QFormLayout)
 from PyQt5.QtCore import Qt
 from pydm.widgets import (PyDMWaveformPlot, PyDMTimePlot, PyDMLineEdit,
                           PyDMSpinbox, PyDMLabel, PyDMCheckbox)
 from pydm.widgets import PyDMPushButton as PyDMPB
 from pydm.widgets import PyDMEnumComboBox as PyDMECB
-from siriushla.SiriusApplication import SiriusApplication
+from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, SiriusDialog
 from siriuspy.envars import vaca_prefix
 
@@ -31,7 +31,6 @@ class SingleBPM(SiriusMainWindow):
         calibr.triggered.connect(self.open_calibration_window)
 
     def open_calibration_window(self):
-
         app = SiriusApplication.instance()
         app.open_window(CalibrationWindow, parent=self, prefix=self.prefix)
 
@@ -215,7 +214,7 @@ class MultiPassData(QWidget):
         return toggle
 
     def control_visibility_buttons(self, text):
-        bo = text.startswith('adc')
+        bo = not text.startswith('adc')
         for rb in self.radio_buttons[4:]:
             rb.setVisible(bo)
         self.radio_buttons[0].setChecked(True)
@@ -272,7 +271,7 @@ class SinglePassData(QWidget):
     def __init__(self, parent=None, prefix=''):
         self.prefix = prefix
         super().__init__(parent=parent)
-        gl = QGridLayout(self)
+        vl = QVBoxLayout(self)
 
         plot_prop = PyDMWaveformPlot(
             parent=self,
@@ -285,10 +284,10 @@ class SinglePassData(QWidget):
         plot_prop._curves[1].color = 'red'
         plot_prop._curves[2].color = 'black'
         plot_prop._curves[3].color = 'green'
-        gl.addWidget(plot_prop, 0, 0)
+        vl.addWidget(plot_prop)
 
-        vl = QVBoxLayout()
-        self.stack = QStackedWidget(self)
+        self.stack = QStackedWidget()
+        vl.addWidget(self.stack)
         plotXY = PyDMTimePlot(
                         self, init_y_channels=[self.prefix + 'SPPosX-Mon',
                                                self.prefix + 'SPPosY-Mon'])
@@ -297,23 +296,39 @@ class SinglePassData(QWidget):
         plotXY._curves[1].color = 'red'
         plotXY._curves[0].lineWidth = 2
         plotXY._curves[1].lineWidth = 2
-        gl.addWidget(plot_prop, 0, 0)
         self.stack.addWidget(plotXY)
+        hl = QHBoxLayout()
         plotSum = PyDMTimePlot(
                     self, init_y_channels=[self.prefix + 'SPSum-Mon', ])
         plotSum.timeSpan = 60
         plotSum._curves[0].color = 'black'
         plotSum._curves[0].lineWidth = 2
-        self.stack.addWidget(plotSum)
-        plotSum = PyDMTimePlot(
+        hl.addWidget(plotSum)
+        plotQ = PyDMTimePlot(
                     self, init_y_channels=[self.prefix + 'SPPosQ-Mon', ])
-        plotSum.timeSpan = 60
-        plotSum._curves[0].color = 'black'
-        plotSum._curves[0].lineWidth = 2
-        self.stack.addWidget(plotSum)
+        plotQ.timeSpan = 60
+        plotQ._curves[0].color = 'black'
+        plotQ._curves[0].lineWidth = 2
+        hl.addWidget(plotQ)
+        wid = QWidget()
+        wid.setLayout(hl)
+        self.stack.addWidget(wid)
+
+        plotAmp = PyDMTimePlot(
+            parent=self,
+            init_y_channels=[self.prefix + 'SP_AArrayData-Mon',
+                             self.prefix + 'SP_BArrayData-Mon',
+                             self.prefix + 'SP_CArrayData-Mon',
+                             self.prefix + 'SP_DArrayData-Mon'],
+            background='w')
+        plotAmp._curves[0].color = 'blue'
+        plotAmp._curves[1].color = 'red'
+        plotAmp._curves[2].color = 'black'
+        plotAmp._curves[3].color = 'green'
+        self.stack.addWidget(plotAmp)
 
         hl = QHBoxLayout()
-        for i, pos in enumerate(['X and Y', 'Sum', 'Q']):
+        for i, pos in enumerate(['X and Y', 'Sum and Q', 'Amplitudes']):
             rb = QRadioButton(pos, self)
             rb.toggled.connect(self.toggle_button(i))
             if not i:
@@ -321,6 +336,8 @@ class SinglePassData(QWidget):
             hl.addWidget(rb)
         vl.addItem(hl)
 
+        hl = QHBoxLayout()
+        vl.addItem(hl)
         gb = QGroupBox('Positions', self)
         fl = QFormLayout(gb)
         lb = PyDMLabel(gb, init_channel=self.prefix + 'SPPosX-Mon')
@@ -331,7 +348,7 @@ class SinglePassData(QWidget):
         fl.addRow('PosS', lb)
         lb = PyDMLabel(gb, init_channel=self.prefix + 'SPPosQ-Mon')
         fl.addRow('PosQ', lb)
-        gl.addWidget(gb, 2, 0)
+        hl.addWidget(gb)
         gb = QGroupBox('Processed Antennas', self)
         fl = QFormLayout(gb)
         lb = PyDMLabel(gb, init_channel=self.prefix + 'SPAmplA-Mon')
@@ -342,7 +359,7 @@ class SinglePassData(QWidget):
         fl.addRow('AmplC', lb)
         lb = PyDMLabel(gb, init_channel=self.prefix + 'SPAmplD-Mon')
         fl.addRow('AmplD', lb)
-        gl.addWidget(gb, 2, 1)
+        hl.addWidget(gb)
 
     def toggle_button(self, i):
         def toggle(tog):
