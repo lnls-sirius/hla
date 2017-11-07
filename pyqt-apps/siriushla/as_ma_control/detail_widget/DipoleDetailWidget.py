@@ -2,17 +2,17 @@
 import re
 
 from pydm.PyQt.QtCore import Qt
-from pydm.PyQt.QtGui import QGridLayout, QVBoxLayout, QLabel, QSizePolicy, \
+from pydm.PyQt.QtGui import QGridLayout, QLabel, QSizePolicy, \
     QFrame, QHBoxLayout
 
 from siriuspy.envars import vaca_prefix
 from pydm.widgets.label import PyDMLabel
-# from pydm.widgets.pushbutton import PyDMPushButton
+from siriushla.widgets import SiriusMainWindow
 from siriushla.widgets.state_button import PyDMStateButton
 from pydm.widgets.enum_combo_box import PyDMEnumComboBox
 from siriushla.as_ma_control.detail_widget.MagnetDetailWidget \
     import MagnetDetailWidget
-from siriushla.FloatSetPointWidget import FloatSetPointWidget
+from siriushla.widgets import PyDMLinEditScrollbar
 from siriushla.widgets.led import SiriusLedState, SiriusLedAlert
 
 
@@ -154,7 +154,7 @@ class DipoleDetailWidget(MagnetDetailWidget):
         self.current_ref_label = QLabel("Ref Mon")
         self.current_mon_label = QLabel("Mon")
 
-        self.current_sp_widget = FloatSetPointWidget(
+        self.current_sp_widget = PyDMLinEditScrollbar(
             parent=self,
             channel="ca://" + self._prefixed_magnet + ":Current-SP")
         # self.current_sp_widget.set_limits_from_pv(True)
@@ -234,10 +234,10 @@ class DipoleDetailWidget(MagnetDetailWidget):
 if __name__ == "__main__":
     import sys
     from pydm import PyDMApplication
-    from PyQt5.QtWidgets import QMainWindow
+    from PyQt5.QtWidgets import SiriusMainWindow
     app = PyDMApplication(None, [])
 
-    w = QMainWindow()
+    w = SiriusMainWindow()
     w.setCentralWidget(DipoleDetailWidget("SI-Fam:MA-B1B2", w))
     w.setStyleSheet("""
     """)

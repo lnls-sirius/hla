@@ -3,7 +3,7 @@
 """SI Magnets Application."""
 
 import sys
-from siriushla.SiriusApplication import SiriusApplication
+from siriushla.sirius_application import SiriusApplication
 from siriushla.as_ma_control.MagnetTabControlWindow \
     import MagnetTabControlWindow
 from siriushla import util

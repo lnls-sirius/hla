@@ -1,8 +1,9 @@
 """Defines window class to show trims of a magnet."""
 from pydm import PyDMApplication
-from pydm.PyQt.QtGui import QWidget, QVBoxLayout, QMainWindow
+from pydm.PyQt.QtGui import QWidget, QVBoxLayout
 
 from siriuspy.search import MASearch
+from siriushla.widgets import SiriusMainWindow
 from siriushla.as_ma_control.MagnetWidget import MagnetWidget
 from siriushla.as_ma_control.control_widget.TrimControlWidget \
     import TrimControlWidget
@@ -12,7 +13,7 @@ from siriushla.as_ma_control.MagnetDetailWindow import MagnetDetailWindow
 from ..util import connect_window
 
 
-class MagnetTrimWindow(QMainWindow):
+class MagnetTrimWindow(SiriusMainWindow):
     """Allow controlling the trims of a given magnet."""
 
     def __init__(self, maname, parent=None):

@@ -1,7 +1,7 @@
 """Defines a class to control a set of a device from a given class."""
 from pydm import PyDMApplication
-from pydm.PyQt.QtGui import QMainWindow
 
+from siriushla.widgets import SiriusMainWindow
 from .control_widget.ControlWidgetFactory import ControlWidgetFactory
 from .MagnetDetailWindow import MagnetDetailWindow
 from .MagnetTrimWindow import MagnetTrimWindow
@@ -9,7 +9,7 @@ from .MagnetTrimWindow import MagnetTrimWindow
 from ..util import connect_window
 
 
-class MagnetControlWindow(QMainWindow):
+class MagnetControlWindow(SiriusMainWindow):
     """Base window to show devices of a section in tabs."""
 
     def __init__(self, section, device, parent=None):

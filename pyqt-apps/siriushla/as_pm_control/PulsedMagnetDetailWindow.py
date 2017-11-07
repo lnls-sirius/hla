@@ -1,10 +1,10 @@
 """Define detail window for a pulsed magnet."""
 from pydm import PyDMApplication
-from pydm.PyQt.QtGui import QMainWindow
+from siriushla.widgets import SiriusMainWindow
 from .PulsedMagnetDetailWidget import PulsedMagnetDetailWidget
 
 
-class PulsedMagnetDetailWindow(QMainWindow):
+class PulsedMagnetDetailWindow(SiriusMainWindow):
     """Window with all controls of Pulsed Manget."""
 
     def __init__(self, maname, parent=None):

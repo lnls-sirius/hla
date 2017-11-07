@@ -3,8 +3,8 @@
 """Mock application launcher."""
 
 import sys
-from siriushla.SiriusApplication import SiriusApplication
-from pydm.PyQt.QtGui import QMainWindow, QAction, QMenuBar
+from siriushla.sirius_application import SiriusApplication
+from pydm.PyQt.QtGui import QAction, QMenuBar
 from siriushla.as_ma_control.MagnetControlWindow import MagnetControlWindow
 from siriushla.as_ma_control.MagnetTabControlWindow \
     import MagnetTabControlWindow
@@ -13,9 +13,10 @@ from siriushla.as_pm_control.PulsedMagnetControlWindow \
 from siriushla.as_ap_injection.InjectionWindow import InjectionWindow
 from siriushla.as_config_manager.ConfigManagerWindow import ConfigManagerWindow
 from siriushla import util as _util
+from siriushla.widgets import SiriusMainWindow
 
 
-class ControlApplication(QMainWindow):
+class ControlApplication(SiriusMainWindow):
     """Application that act as a launcher."""
 
     TBMagnetWindow = "tb_magnets"
@@ -94,7 +95,7 @@ class ControlApplication(QMainWindow):
         magnetsMenu.addAction(openTBMagnetControlPanel)
         magnetsMenu.addAction(openBOMagnetControlPanel)
         magnetsMenu.addAction(openTSMagnetControlPanel)
-        SIMagentMenu = magnetsMenu.addMenu("Sirius Magnets")
+        SIMagentMenu = magnetsMenu.addMenu("SI Magnets")
         SIMagentMenu.addAction(openSIMagnetControlPanel)
         SIMagentMenu.addAction(openSIDipoleWindow)
         SIMagentMenu.addAction(openSIQuadrupolesWindow)

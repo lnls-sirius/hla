@@ -8,7 +8,7 @@ from siriuspy.pulsedps import properties as pu_props
 from siriuspy.pulsedma import properties as pm_props
 from siriushla.widgets.led import SiriusLedState, SiriusLedAlert
 from siriushla.widgets.state_button import PyDMStateButton
-from siriushla.FloatSetPointWidget import FloatSetPointWidget
+from siriushla.widgets import PyDMLinEditScrollbar
 
 
 class PulsedMagnetDetailWidget(QWidget):
@@ -129,7 +129,7 @@ class PulsedMagnetDetailWidget(QWidget):
     def _tension_layout(self):
         tension_layout = QVBoxLayout()
 
-        self.tension_sp_widget = FloatSetPointWidget(
+        self.tension_sp_widget = PyDMLinEditScrollbar(
             parent=self, channel="ca://" + self._tension_sp_pv)
         self.tension_rb_label = PyDMLabel(
             parent=self, init_channel="ca://" + self._tension_mon_pv)
@@ -145,7 +145,7 @@ class PulsedMagnetDetailWidget(QWidget):
     def _kick_layout(self):
         kick_layout = QVBoxLayout()
 
-        self.kick_sp_widget = FloatSetPointWidget(
+        self.kick_sp_widget = PyDMLinEditScrollbar(
             parent=self, channel="ca://" + self._kick_sp_pv)
         self.kick_rb_label = PyDMLabel(
             parent=self, init_channel="ca://" + self._kick_mon_pv)
