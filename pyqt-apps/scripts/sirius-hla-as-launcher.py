@@ -95,7 +95,7 @@ class ControlApplication(SiriusMainWindow):
         magnetsMenu.addAction(openTBMagnetControlPanel)
         magnetsMenu.addAction(openBOMagnetControlPanel)
         magnetsMenu.addAction(openTSMagnetControlPanel)
-        SIMagentMenu = magnetsMenu.addMenu("Sirius Magnets")
+        SIMagentMenu = magnetsMenu.addMenu("SI Magnets")
         SIMagentMenu.addAction(openSIMagnetControlPanel)
         SIMagentMenu.addAction(openSIDipoleWindow)
         SIMagentMenu.addAction(openSIQuadrupolesWindow)
