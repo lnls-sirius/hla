@@ -24,7 +24,7 @@ class MagnetTrimWindow(SiriusMainWindow):
         # Setup UI
         self._setup_ui()
         # Establish PyDM epics connections
-        self.app.establish_widget_connections(self)
+        # self.app.establish_widget_connections(self)
 
     def _setup_ui(self):
         self.setWindowTitle(self._maname + ' Trims')
@@ -61,8 +61,8 @@ class MagnetTrimWindow(SiriusMainWindow):
     #     """Establish connections and call super."""
     #     self.app.establish_widget_connections(self)
     #     super().showEvent(event)
-    #
-    # def closeEvent(self, event):
-    #     """Override closeEvent in order to close iwdget connections."""
-    #     self.app.close_widget_connections(self)
-    #     super().closeEvent(event)
+
+    def closeEvent(self, event):
+        """Override closeEvent in order to close iwdget connections."""
+        self.app.close_widget_connections(self)
+        super().closeEvent(event)

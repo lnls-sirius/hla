@@ -21,7 +21,7 @@ class MagnetControlWindow(SiriusMainWindow):
 
         self._setup_ui()
 
-        self.app.establish_widget_connections(self)
+        # self.app.establish_widget_connections(self)
 
     def _setup_ui(self):
         # Set Widget
@@ -48,8 +48,8 @@ class MagnetControlWindow(SiriusMainWindow):
     #     """Establish connections and call super."""
     #     self.app.establish_widget_connections(self)
     #     super().showEvent(event)
-    #
-    # def closeEvent(self, event):
-    #     """Override closeEvent in order to close iwdget connections."""
-    #     self.app.close_widget_connections(self)
-    #     super().closeEvent(event)
+
+    def closeEvent(self, event):
+        """Override closeEvent in order to close iwdget connections."""
+        self.app.close_widget_connections(self)
+        super().closeEvent(event)
