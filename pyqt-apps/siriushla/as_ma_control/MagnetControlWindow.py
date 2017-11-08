@@ -1,7 +1,7 @@
 """Defines a class to control a set of a device from a given class."""
 from pydm import PyDMApplication
-from pydm.PyQt.QtGui import QMainWindow
 
+from siriushla.widgets import SiriusMainWindow
 from .control_widget.ControlWidgetFactory import ControlWidgetFactory
 from .MagnetDetailWindow import MagnetDetailWindow
 from .MagnetTrimWindow import MagnetTrimWindow
@@ -9,7 +9,7 @@ from .MagnetTrimWindow import MagnetTrimWindow
 from ..util import connect_window
 
 
-class MagnetControlWindow(QMainWindow):
+class MagnetControlWindow(SiriusMainWindow):
     """Base window to show devices of a section in tabs."""
 
     def __init__(self, section, device, parent=None):
@@ -21,7 +21,7 @@ class MagnetControlWindow(QMainWindow):
 
         self._setup_ui()
 
-        self.app.establish_widget_connections(self)
+        # self.app.establish_widget_connections(self)
 
     def _setup_ui(self):
         # Set Widget
@@ -48,8 +48,8 @@ class MagnetControlWindow(QMainWindow):
     #     """Establish connections and call super."""
     #     self.app.establish_widget_connections(self)
     #     super().showEvent(event)
-    #
-    # def closeEvent(self, event):
-    #     """Override closeEvent in order to close iwdget connections."""
-    #     self.app.close_widget_connections(self)
-    #     super().closeEvent(event)
+
+    def closeEvent(self, event):
+        """Override closeEvent in order to close iwdget connections."""
+        self.app.close_widget_connections(self)
+        super().closeEvent(event)

@@ -2,9 +2,9 @@ from pydm.PyQt.QtCore import pyqtSlot
 from pydm.PyQt.QtGui import QDialog, QLabel, QVBoxLayout, QProgressBar
 
 
-class LoadingDlg(QDialog):
+class LoadingDialog(QDialog):
     def __init__(self, title,  maximum, parent=None):
-        super(LoadingDlg, self).__init__(parent)
+        super(LoadingDialog, self).__init__(parent)
         #self.setAttribute(Qt.WA_DeleteOnClose)
 
         self._may_close = False
@@ -26,10 +26,10 @@ class LoadingDlg(QDialog):
     @pyqtSlot(int)
     def done(self, r):
         self._may_close = True
-        super(LoadingDlg, self).done(r)
+        super(LoadingDialog, self).done(r)
 
     def closeEvent(self, event):
         if self._may_close:
-            super(LoadingDlg, self).closeEvent(event)
+            super(LoadingDialog, self).closeEvent(event)
         else:
             event.ignore()

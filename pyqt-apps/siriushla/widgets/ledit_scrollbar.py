@@ -7,7 +7,7 @@ from siriushla.widgets.scrollbar import PyDMScrollBar
 from siriushla.util import get_kick_unit
 
 
-class FloatSetPointWidget(QWidget):
+class PyDMLinEditScrollbar(QWidget):
     """Widget to set the setpoint of a float PV."""
 
     def __init__(self, channel, parent=None):

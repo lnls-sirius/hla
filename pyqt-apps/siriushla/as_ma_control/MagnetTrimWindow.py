@@ -1,8 +1,9 @@
 """Defines window class to show trims of a magnet."""
 from pydm import PyDMApplication
-from pydm.PyQt.QtGui import QWidget, QVBoxLayout, QMainWindow
+from pydm.PyQt.QtGui import QWidget, QVBoxLayout
 
 from siriuspy.search import MASearch
+from siriushla.widgets import SiriusMainWindow
 from siriushla.as_ma_control.MagnetWidget import MagnetWidget
 from siriushla.as_ma_control.control_widget.TrimControlWidget \
     import TrimControlWidget
@@ -12,7 +13,7 @@ from siriushla.as_ma_control.MagnetDetailWindow import MagnetDetailWindow
 from ..util import connect_window
 
 
-class MagnetTrimWindow(QMainWindow):
+class MagnetTrimWindow(SiriusMainWindow):
     """Allow controlling the trims of a given magnet."""
 
     def __init__(self, maname, parent=None):
@@ -23,7 +24,7 @@ class MagnetTrimWindow(QMainWindow):
         # Setup UI
         self._setup_ui()
         # Establish PyDM epics connections
-        self.app.establish_widget_connections(self)
+        # self.app.establish_widget_connections(self)
 
     def _setup_ui(self):
         self.setWindowTitle(self._maname + ' Trims')
@@ -60,8 +61,8 @@ class MagnetTrimWindow(QMainWindow):
     #     """Establish connections and call super."""
     #     self.app.establish_widget_connections(self)
     #     super().showEvent(event)
-    #
-    # def closeEvent(self, event):
-    #     """Override closeEvent in order to close iwdget connections."""
-    #     self.app.close_widget_connections(self)
-    #     super().closeEvent(event)
+
+    def closeEvent(self, event):
+        """Override closeEvent in order to close iwdget connections."""
+        self.app.close_widget_connections(self)
+        super().closeEvent(event)

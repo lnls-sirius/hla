@@ -2,7 +2,7 @@ from pydm.PyQt.QtCore import *
 from pydm.PyQt.QtGui import *
 from pydm import PyDMApplication
 from siriuspy.pwrsupply import psdata
-from ..LoadingDlg import LoadingDlg
+from siriushla.widgets import LoadingDialog
 from .CyclePowerSupplies import CyclePowerSupplies
 from .PrepareCycleThread import PrepareCycleThread
 #from .PsCycleControlItem import PsCycleControlItem
@@ -38,7 +38,7 @@ class PsCycleWindow(QDialog):
             # Thread that'll execute the cycling
             t = PrepareCycleThread(self._ps_cycle, self)
             # Dlg with a progress bar
-            dlg = LoadingDlg("Preparing to Cycle", len(self._selected_ps), self)
+            dlg = LoadingDialog("Preparing to Cycle", len(self._selected_ps), self)
             # Signals/Slots to update progress bar and close it
             t.taskUpdated.connect(dlg.update)
             t.taskFinished.connect(dlg.done)

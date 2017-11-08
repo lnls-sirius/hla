@@ -16,7 +16,7 @@ from pydm.widgets.label import PyDMLabel
 from siriuspy.envars import vaca_prefix as _VACA_PREFIX
 from siriuspy.pulsedps import properties as pu_props
 from siriuspy.pulsedma import properties as pm_props
-from siriushla.FloatSetPointWidget import FloatSetPointWidget
+from siriushla.widgets import PyDMLinEditScrollbar
 from siriushla.widgets.state_button import PyDMStateButton
 from siriushla.widgets.led import PyDMLed
 # from siriushla.as_ma_control.MagnetDetailWindow import MagnetDetailWindow
@@ -159,13 +159,13 @@ class BaseMagnetWidget(QWidget):
         self.maname_label.setObjectName("maname_button")
         # self.pwrstate_button = PyDMLed(
         #     parent=self, init_channel="ca://" + self._pwrstate_sp_pv)
-        self.analog_widget = FloatSetPointWidget(
+        self.analog_widget = PyDMLinEditScrollbar(
             parent=self, channel="ca://" + self._analog_sp_pv,)
         self.analog_widget.setObjectName("analog_widget")
         self.analog_mon_label = PyDMLabel(
             parent=self, init_channel="ca://" + self._analog_mon_pv)
         self.analog_mon_label.setObjectName("analog_label")
-        self.strength_widget = FloatSetPointWidget(
+        self.strength_widget = PyDMLinEditScrollbar(
             parent=self, channel="ca://" + self._strength_sp_pv)
         self.strength_widget.setObjectName("strength_widget")
         self.strength_mon_label = PyDMLabel(

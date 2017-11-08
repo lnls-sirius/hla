@@ -20,8 +20,14 @@ class SiriusApplication(PyDMApplication):
         # One top level widget as the parent?
         id = get_window_id(w_class, **kwargs)
         if id in self._windows:  # Show existing window
-            self._windows[id].show()
+            if self._windows[id].isHidden():
+                self.establish_widget_connections(self._windows[id])
+                self._windows[id].show()
+            elif self._windows[id].isMinimized():
+                self._windows[id].showNormal()
             self._windows[id].activateWindow()
         else:  # Create new window
-            self._windows[id] = w_class(parent=parent, **kwargs)
+            wid = w_class(parent=parent, **kwargs)
+            self._windows[id] = wid
+            self.establish_widget_connections(wid)
             self._windows[id].show()

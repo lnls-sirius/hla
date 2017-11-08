@@ -1,10 +1,10 @@
 """Define a window with detailed controls for a given magnet."""
 from pydm import PyDMApplication
-from pydm.PyQt.QtGui import QMainWindow
+from siriushla.widgets import SiriusMainWindow
 from .detail_widget.DetailWidgetFactory import DetailWidgetFactory
 
 
-class MagnetDetailWindow(QMainWindow):
+class MagnetDetailWindow(SiriusMainWindow):
     """Window to control a detailed widget."""
 
     STYLESHEET = """
@@ -19,7 +19,7 @@ class MagnetDetailWindow(QMainWindow):
 
         self._setup_ui()
         self.setStyleSheet(self.STYLESHEET)
-        self.app.establish_widget_connections(self)
+        # self.app.establish_widget_connections(self)
 
     def _setup_ui(self):
         # Set window layout
@@ -31,11 +31,11 @@ class MagnetDetailWindow(QMainWindow):
     #     """Establish connections and call super."""
     #     self.app.establish_widget_connections(self)
     #     super().showEvent(event)
-    #
-    # def closeEvent(self, event):
-    #     """Override closeEvent in order to close iwdget connections."""
-    #     self.app.close_widget_connections(self)
-    #     super().closeEvent(event)
+
+    def closeEvent(self, event):
+        """Override closeEvent in order to close iwdget connections."""
+        self.app.close_widget_connections(self)
+        super().closeEvent(event)
 
 
 if __name__ == '__main__':

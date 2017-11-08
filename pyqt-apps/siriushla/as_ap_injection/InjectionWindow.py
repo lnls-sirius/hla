@@ -1,13 +1,14 @@
 """GUI for injection."""
 from pydm import PyDMApplication
 from pydm.PyQt.QtCore import pyqtSlot, QTimer, Qt
-from pydm.PyQt.QtGui import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, \
+from pydm.PyQt.QtGui import QWidget, QVBoxLayout, QHBoxLayout, \
     QRadioButton, QPushButton, QSpinBox, QGridLayout, QMessageBox, QDialog, \
     QLabel, QDockWidget
 from pydm.widgets.label import PyDMLabel
 from pydm.widgets.checkbox import PyDMCheckbox
 
 from siriushla.widgets.led import SiriusLedState
+from siriushla.widgets import SiriusMainWindow
 from siriushla.as_ap_injection.CustomExceptions import PVConnectionError
 from siriushla.as_ap_injection.InjectionController import InjectionController
 from siriushla.as_ap_injection.BarGraphWidget \
@@ -58,7 +59,7 @@ class WaitingDlg(QDialog):
             event.ignore()
 
 
-class InjectionWindow(QMainWindow):
+class InjectionWindow(SiriusMainWindow):
     """Window to set injection parameters and control the injection."""
 
     StyleSheet = """

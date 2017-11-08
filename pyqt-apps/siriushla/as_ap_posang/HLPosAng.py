@@ -16,7 +16,7 @@ UI_FILE = ('/home/fac_files/lnls-sirius/hla/pyqt-apps/siriushla/'
            'as_ap_posang/ui_as_ap_posang.ui')
 
 
-class ASAPPosAngCorr(_QMainWindow):
+class ASAPPosAngCorr(_SiriusMainWindow):
     """Main Class."""
 
     def __init__(self, parent=None, prefix=None, tl=None):
