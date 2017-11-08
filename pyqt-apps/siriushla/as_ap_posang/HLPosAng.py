@@ -5,7 +5,6 @@
 import epics as _epics
 from pydm.PyQt.uic import loadUi as _loadUi
 from pydm.PyQt.QtGui import QMainWindow as _QMainWindow
-from pydm.PyQt.QtGui import QApplication as _QApplication
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla import util as _hlautil

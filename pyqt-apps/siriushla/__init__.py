@@ -1,4 +1,5 @@
 __all__ = ['as_ap_injection',
+           'as_ap_opticscorr',
            'as_ap_posang',
            'as_ps_diagnostic',
            'as_ps_test',
