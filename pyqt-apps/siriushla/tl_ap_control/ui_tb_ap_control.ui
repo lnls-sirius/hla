@@ -444,57 +444,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
           <string>Slits</string>
          </attribute>
          <layout class="QGridLayout" name="gridLayout_8">
-          <item row="2" column="2">
-           <widget class="PyDMScrollBar" name="PyDMScrollBar_HSlit_SP">
-            <property name="minimumSize">
-             <size>
-              <width>150</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="toolTip">
-             <string/>
-            </property>
-            <property name="whatsThis">
-             <string/>
-            </property>
-           </widget>
-          </item>
-          <item row="10" column="2">
-           <widget class="PyDMScrollBar" name="PyDMScrollBar_VSlit_SP">
-            <property name="minimumSize">
-             <size>
-              <width>150</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="toolTip">
-             <string/>
-            </property>
-            <property name="whatsThis">
-             <string/>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QLabel" name="label_3">
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">font-weight:bold;</string>
-            </property>
-            <property name="text">
-             <string>Setpoint</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
           <item row="9" column="2">
            <widget class="PyDMLineEdit" name="PyDMLineEdit_VSlit_SP">
             <property name="minimumSize">
@@ -519,69 +468,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             </property>
             <property name="showUnits" stdset="0">
              <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="PyDMLineEdit" name="PyDMLineEdit_HSlit_SP">
-            <property name="minimumSize">
-             <size>
-              <width>150</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="toolTip">
-             <string/>
-            </property>
-            <property name="whatsThis">
-             <string>
-    Writeable text field to send and display channel values
-    </string>
-            </property>
-            <property name="showUnits" stdset="0">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="0" colspan="3">
-           <spacer name="verticalSpacer">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Maximum</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_HSlit_RB">
-            <property name="styleSheet">
-             <string notr="true">font-weight:bold;</string>
-            </property>
-            <property name="text">
-             <string>HSlit</string>
-            </property>
-           </widget>
-          </item>
-          <item row="9" column="0">
-           <widget class="QLabel" name="label_VSlit_RB">
-            <property name="styleSheet">
-             <string notr="true">font-weight:bold;</string>
-            </property>
-            <property name="text">
-             <string>VSlit</string>
             </property>
            </widget>
           </item>
@@ -640,6 +526,107 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             </layout>
            </widget>
           </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="label_3">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">font-weight:bold;</string>
+            </property>
+            <property name="text">
+             <string>Setpoint</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="0" colspan="3">
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Maximum</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="1" column="2">
+           <widget class="PyDMLineEdit" name="PyDMLineEdit_HSlit_SP">
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="whatsThis">
+             <string>
+    Writeable text field to send and display channel values
+    </string>
+            </property>
+            <property name="showUnits" stdset="0">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="0">
+           <widget class="QLabel" name="label_VSlit_RB">
+            <property name="styleSheet">
+             <string notr="true">font-weight:bold;</string>
+            </property>
+            <property name="text">
+             <string>VSlit</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_HSlit_RB">
+            <property name="styleSheet">
+             <string notr="true">font-weight:bold;</string>
+            </property>
+            <property name="text">
+             <string>HSlit</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QLabel" name="label_2">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">font-weight:bold;</string>
+            </property>
+            <property name="text">
+             <string>Monitor</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
           <item row="9" column="3">
            <widget class="QFrame" name="frame_VSlit">
             <property name="minimumSize">
@@ -695,22 +682,49 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             </layout>
            </widget>
           </item>
-          <item row="0" column="3">
-           <widget class="QLabel" name="label_2">
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>40</height>
-             </size>
+          <item row="3" column="2">
+           <widget class="PyDMScrollBar" name="PyDMScrollBar">
+            <property name="toolTip">
+             <string/>
             </property>
-            <property name="styleSheet">
-             <string notr="true">font-weight:bold;</string>
+            <property name="whatsThis">
+             <string>
+    A QDoubleScrollBar with support for Channels and more from PyDM.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the scroll bar
+    init_channel : str, optional
+        The channel to be used by the widget.
+    orientation : Qt.Horizontal, Qt.Vertical
+        Orientation of the scroll bar
+    precision : int
+        Precision to be use. Used to calculate size of the scroll bar step
+    </string>
             </property>
-            <property name="text">
-             <string>Monitor</string>
+           </widget>
+          </item>
+          <item row="10" column="2">
+           <widget class="PyDMScrollBar" name="PyDMScrollBar_2">
+            <property name="toolTip">
+             <string/>
             </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
+            <property name="whatsThis">
+             <string>
+    A QDoubleScrollBar with support for Channels and more from PyDM.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the scroll bar
+    init_channel : str, optional
+        The channel to be used by the widget.
+    orientation : Qt.Horizontal, Qt.Vertical
+        Orientation of the scroll bar
+    precision : int
+        Precision to be use. Used to calculate size of the scroll bar step
+    </string>
             </property>
            </widget>
           </item>
@@ -1336,16 +1350,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="whatsThis">
                 <string/>
                </property>
-               <item>
-                <property name="text">
-                 <string>Dimfei</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>NDStats</string>
-                </property>
-               </item>
               </widget>
              </item>
              <item row="2" column="9">
@@ -1495,16 +1499,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="whatsThis">
                 <string/>
                </property>
-               <item>
-                <property name="text">
-                 <string>Dimfei</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>NDStats</string>
-                </property>
-               </item>
               </widget>
              </item>
              <item row="4" column="3">
@@ -2460,16 +2454,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="whatsThis">
                 <string/>
                </property>
-               <item>
-                <property name="text">
-                 <string>Dimfei</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>NDStats</string>
-                </property>
-               </item>
               </widget>
              </item>
              <item row="3" column="9">
@@ -3022,16 +3006,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="whatsThis">
                 <string/>
                </property>
-               <item>
-                <property name="text">
-                 <string>Dimfei</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>NDStats</string>
-                </property>
-               </item>
               </widget>
              </item>
              <item row="2" column="9">
@@ -3175,16 +3149,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="whatsThis">
                 <string/>
                </property>
-               <item>
-                <property name="text">
-                 <string>Dimfei</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>NDStats</string>
-                </property>
-               </item>
               </widget>
              </item>
              <item row="2" column="7">
@@ -3744,16 +3708,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="whatsThis">
                 <string/>
                </property>
-               <item>
-                <property name="text">
-                 <string>Dimfei</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>NDStats</string>
-                </property>
-               </item>
               </widget>
              </item>
              <item row="2" column="7">
@@ -4269,7 +4223,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
  <customwidgets>
   <customwidget>
    <class>PyDMEnumComboBox</class>
-   <extends>QComboBox</extends>
+   <extends>QFrame</extends>
    <header>pydm.widgets.enum_combo_box</header>
   </customwidget>
   <customwidget>
@@ -4290,12 +4244,12 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
   <customwidget>
    <class>PyDMScrollBar</class>
    <extends>QDoubleScrollBar</extends>
-   <header>pydm.widgets.scrollbar</header>
+   <header>siriushla.widgets.scrollbar</header>
   </customwidget>
   <customwidget>
    <class>QDoubleScrollBar</class>
    <extends>QScrollBar</extends>
-   <header>pydm.widgets.QDoubleScrollBar</header>
+   <header>siriushla.widgets.QDoubleScrollBar</header>
   </customwidget>
  </customwidgets>
  <resources/>

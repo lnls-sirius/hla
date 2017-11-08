@@ -4,7 +4,7 @@
 
 import sys as sys
 import argparse as argparse
-from pydm import PyDMApplication as PyDMApplication
+from siriushla.SiriusApplication import SiriusApplication
 from siriushla.tl_ap_control.HLTLControl import TLAPControlWindow
 from siriushla import util
 
@@ -14,7 +14,8 @@ parser = argparse.ArgumentParser(
 parser.add_argument('-p', "--prefix", type=str, default='',
                     help="Define the prefix for the PVs in the window.")
 args = parser.parse_args()
-app = PyDMApplication(None, sys.argv)
+
+app = SiriusApplication()
 util.set_style(app)
 window = TLAPControlWindow(prefix=args.prefix, tl='ts')
 window.show()

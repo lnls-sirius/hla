@@ -1,33 +1,33 @@
 #!/usr/bin/env python-sirius
 """HLA TB and TS AP Control Window."""
 
+from matplotlib.backends.backend_qt5agg import (
+    FigureCanvasQTAgg as FigureCanvas)
 from pydm.PyQt.uic import loadUi
 from pydm.PyQt.QtCore import pyqtSlot, Qt
 from pydm.PyQt.QtGui import (QVBoxLayout, QHBoxLayout,
                              QGridLayout, QFileDialog, QSizePolicy,
                              QDoubleValidator, QWidget, QFrame, QLabel,
-                             QPixmap, QPushButton, QSpacerItem, QApplication)
-from pydm.widgets.led import PyDMLed
+                             QPixmap, QPushButton, QSpacerItem)
+from pydm.PyQt.QtSvg import QSvgWidget
 from pydm.widgets.label import PyDMLabel
 from pydm.widgets.line_edit import PyDMLineEdit
-from pydm.widgets.scrollbar import PyDMScrollBar
 from pydm.widgets.enum_combo_box import PyDMEnumComboBox
-from pydm.widgets.state_button import PyDMStateButton
-from matplotlib.backends.backend_qt5agg import (
-        FigureCanvasQTAgg as FigureCanvas)
-from pydm.PyQt.QtSvg import QSvgWidget
 import pyaccel as _pyaccel
 import pymodels as _pymodels
 from siriuspy.envars import vaca_prefix as _vaca_prefix
-from siriushla.widgets import SiriusMainWindow
+from siriushla import util as _hlautil
+from siriushla.widgets.led import PyDMLed
+from siriushla.widgets.scrollbar import PyDMScrollBar
+from siriushla.widgets.state_button import PyDMStateButton
+from siriushla.as_ap_posang.HLPosAng import ASAPPosAngCorr
 from siriushla.as_ma_control.MagnetDetailWindow import MagnetDetailWindow
-from siriushla.as_ma_control import TSMagnetControlWindow
-from siriushla.as_ma_control import TBMagnetControlWindow
-from siriushla.as_pm_control.PulsedMagnetDetailWidget import (
-                                PulsedMagnetDetailWidget)
+from siriushla.as_ma_control.MagnetTabControlWindow import (
+                                MagnetTabControlWindow)
+from siriushla.as_pm_control.PulsedMagnetDetailWindow import (
+                                PulsedMagnetDetailWindow)
 from siriushla.as_pm_control.PulsedMagnetControlWindow import (
                                 PulsedMagnetControlWindow)
-from siriushla.as_ap_posang.HLPosAng import ASAPPosAngCorr
 
 
 CALC_LABELS_INITIALIZE = """
@@ -48,25 +48,25 @@ self.centralwidget.PyDMLabel_SigmaYNDStats_Scrn{0}.setVisible(not visible)
 """
 
 CALC_LABELS_CHANNELS = """
-self.centralwidget.PyDMLabel_CenterXDimfei_Scrn{0}.setChannel('ca://'
+self.centralwidget.PyDMLabel_CenterXDimfei_Scrn{0}.channel = ('ca://'
     + self.prefix + '{1}' + ':CenterXDimfei-Mon')
-self.centralwidget.PyDMLabel_CenterXNDStats_Scrn{0}.setChannel('ca://'
+self.centralwidget.PyDMLabel_CenterXNDStats_Scrn{0}.channel = ('ca://'
     + self.prefix + '{1}' + ':CenterXNDStats-Mon')
-self.centralwidget.PyDMLabel_CenterYDimfei_Scrn{0}.setChannel('ca://'
+self.centralwidget.PyDMLabel_CenterYDimfei_Scrn{0}.channel = ('ca://'
     + self.prefix + '{1}' + ':CenterYDimfei-Mon')
-self.centralwidget.PyDMLabel_CenterYNDStats_Scrn{0}.setChannel('ca://'
+self.centralwidget.PyDMLabel_CenterYNDStats_Scrn{0}.channel = ('ca://'
     + self.prefix + '{1}' + ':CenterYNDStats-Mon')
-self.centralwidget.PyDMLabel_ThetaDimfei_Scrn{0}.setChannel('ca://'
+self.centralwidget.PyDMLabel_ThetaDimfei_Scrn{0}.channel = ('ca://'
     + self.prefix + '{1}' + ':ThetaDimfei-Mon')
-self.centralwidget.PyDMLabel_ThetaNDStats_Scrn{0}.setChannel('ca://'
+self.centralwidget.PyDMLabel_ThetaNDStats_Scrn{0}.channel = ('ca://'
     + self.prefix + '{1}' + ':ThetaNDStats-Mon')
-self.centralwidget.PyDMLabel_SigmaXDimfei_Scrn{0}.setChannel('ca://'
+self.centralwidget.PyDMLabel_SigmaXDimfei_Scrn{0}.channel = ('ca://'
     + self.prefix + '{1}' + ':SigmaXDimfei-Mon')
-self.centralwidget.PyDMLabel_SigmaXNDStats_Scrn{0}.setChannel('ca://'
+self.centralwidget.PyDMLabel_SigmaXNDStats_Scrn{0}.channel = ('ca://'
     + self.prefix + '{1}' + ':SigmaXNDStats-Mon')
-self.centralwidget.PyDMLabel_SigmaYDimfei_Scrn{0}.setChannel('ca://'
+self.centralwidget.PyDMLabel_SigmaYDimfei_Scrn{0}.channel = ('ca://'
     + self.prefix + '{1}' + ':SigmaYDimfei-Mon')
-self.centralwidget.PyDMLabel_SigmaYNDStats_Scrn{0}.setChannel('ca://'
+self.centralwidget.PyDMLabel_SigmaYNDStats_Scrn{0}.channel = ('ca://'
     + self.prefix + '{1}' + ':SigmaYNDStats-Mon')
 """
 
@@ -87,7 +87,7 @@ class TLAPControlWindow(SiriusMainWindow):
             UI_FILE = ('ui_tb_ap_control.ui')
             SVG_FILE = ('TB.svg')
             correctors_list = [
-                [['01:MA-CH-7'], '01:MA-CV-7', 11, '01:DI-Scrn-1'],
+                [['LI-01:MA-CH-7'], 'LI-01:MA-CV-7', 11, '01:DI-Scrn-1'],
                 [['01:MA-CH-1'], '01:MA-CV-1', 12, '01:DI-Scrn-2'],
                 [['01:MA-CH-2'], '01:MA-CV-2', 21, '02:DI-Scrn-1'],
                 [['02:MA-CH-1'], '02:MA-CV-1', 22, '02:DI-Scrn-2'],
@@ -119,10 +119,6 @@ class TLAPControlWindow(SiriusMainWindow):
                                     + UI_FILE)
         self.setCentralWidget(self.centralwidget)
 
-        # Estabilish widget connections
-        self.app = QApplication.instance()
-        self.app.establish_widget_connections(self)
-
         # TL Lattice Widget
         lattice = QSvgWidget('/home/fac_files/lnls-sirius/hla/pyqt-apps/'
                              'siriushla/tl_ap_control/' + SVG_FILE)
@@ -143,10 +139,14 @@ class TLAPControlWindow(SiriusMainWindow):
             exec(CALC_LABELS_CHANNELS.format(i, device))
 
         # Open TL Apps
-        self.centralwidget.pushButton_PosAngCorrApp.clicked.connect(
-                                                    self._openPosAngCorrApp)
-        self.centralwidget.pushButton_MAApp.clicked.connect(self._openMAApp)
-        self.centralwidget.pushButton_PMApp.clicked.connect(self._openPMApp)
+        _hlautil.connect_window(self.centralwidget.pushButton_PosAngCorrApp,
+                                ASAPPosAngCorr, parent=self,
+                                prefix=self.prefix, tl=self._tl)
+        _hlautil.connect_window(self.centralwidget.pushButton_MAApp,
+                                MagnetTabControlWindow,
+                                self, section=self._tl.upper())
+        _hlautil.connect_window(self.centralwidget.pushButton_PMApp,
+                                PulsedMagnetControlWindow, self)
         self.centralwidget.pushButton_FCTApp.clicked.connect(self._openFCTApp)
         self.centralwidget.pushButton_BPMApp.clicked.connect(self._openBPMApp)
 
@@ -307,8 +307,8 @@ class TLAPControlWindow(SiriusMainWindow):
                                                       QSizePolicy.Minimum))
             pydmstatebutton = PyDMStateButton(
                 parent=scrn_details,
-                init_channel='ca://' + prefix + acc + scrnpv + ':LedState-SP',
-                shape=1)
+                init_channel='ca://' + prefix + acc + scrnpv + ':LedState-SP')
+            pydmstatebutton.shape = 1
             pydmstatebutton.setObjectName(
                 'PyDMStateButton_LedState_SP_Scrn' + str(scrn))
             pydmstatebutton.setSizePolicy(QSizePolicy.Fixed,
@@ -332,7 +332,7 @@ class TLAPControlWindow(SiriusMainWindow):
 
             for ch in ch_group:
                 name = ch.split('-')
-                if len(name) > 3:
+                if len(name) > 2:
                     name = name[-2]+name[-1]
                 else:
                     name = name[-1]
@@ -356,7 +356,19 @@ class TLAPControlWindow(SiriusMainWindow):
                 pushbutton = QPushButton(ch, ch_details)
                 pushbutton.setObjectName(
                     'pushButton_' + name + 'App_Scrn' + str(scrn))
-                pushbutton.clicked.connect(self._openWindow)
+                if ch.split('-')[0] == 'LI':
+                    pass
+                    # TODO
+                elif ch.split('-')[0].split(':')[1] == 'PM':
+                    corr = self._tl.upper() + '-' + ch
+                    _hlautil.connect_window(pushbutton,
+                                            PulsedMagnetDetailWindow,
+                                            parent=self, maname=corr)
+                else:
+                    corr = self._tl.upper() + '-' + ch
+                    _hlautil.connect_window(pushbutton,
+                                            MagnetDetailWindow,
+                                            parent=self, maname=corr)
                 pushbutton.setMinimumWidth(180)
                 pushbutton.setMinimumHeight(40)
                 pushbutton.setSizePolicy(QSizePolicy.Fixed,
@@ -408,7 +420,7 @@ class TLAPControlWindow(SiriusMainWindow):
 
             # CV
             name = cv.split('-')
-            if len(name) > 3:
+            if len(name) > 2:
                 name = name[-2]+name[-1]
             else:
                 name = name[-1]
@@ -432,7 +444,19 @@ class TLAPControlWindow(SiriusMainWindow):
             pushbutton = QPushButton(cv, cv_details)
             pushbutton.setObjectName(
                 'pushButton_' + name + 'App_Scrn' + str(scrn))
-            pushbutton.clicked.connect(self._openWindow)
+            if cv.split('-')[0] == 'LI':
+                pass
+                # TODO
+            elif cv.split('-')[0].split(':')[1] == 'PM':
+                corr = self._tl.upper() + '-' + cv
+                _hlautil.connect_window(pushbutton,
+                                        PulsedMagnetDetailWindow,
+                                        parent=self, maname=corr)
+            else:
+                corr = self._tl.upper() + '-' + cv
+                _hlautil.connect_window(pushbutton,
+                                        MagnetDetailWindow,
+                                        parent=self, maname=corr)
             pushbutton.setMinimumWidth(180)
             pushbutton.setMinimumHeight(40)
             pushbutton.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
@@ -571,35 +595,6 @@ class TLAPControlWindow(SiriusMainWindow):
         reference = scrn_widget.grab()
         reference.save(fn)
 
-    def _openWindow(self):
-        sender = self.sender()
-
-        if sender.text().split('-')[0] == 'LI':
-            pass
-            # TODO
-        elif sender.text().split('-')[0].split(':')[1] == 'PM':
-            corr = self._tl.upper() + '-' + sender.text()
-            self.w = SiriusMainWindow(self)
-            self.w.setCentralWidget(PulsedMagnetDetailWidget(corr, self.w))
-            self.app.establish_widget_connections(self.w)
-            self.w.show()
-        else:
-            corr = self._tl.upper() + '-' + sender.text()
-            self._corrector_detail_window = MagnetDetailWindow(corr, self)
-            self._corrector_detail_window.show()
-
-    def _openMAApp(self):
-        if self._tl.lower() == 'tb':
-            self._TB_MA_window = TBMagnetControlWindow(self)
-            self._TB_MA_window.show()
-        elif self._tl.lower() == 'ts':
-            self._TS_MA_window = TSMagnetControlWindow(self)
-            self._TS_MA_window.show()
-
-    def _openPMApp(self):
-        self._PM_window = PulsedMagnetControlWindow(self)
-        self._PM_window.show()
-
     def _openBPMApp(self):
         pass
         # TODO
@@ -608,25 +603,8 @@ class TLAPControlWindow(SiriusMainWindow):
         pass
         # TODO
 
-    def _openPosAngCorrApp(self):
-        if self._tl.lower() == 'tb':
-            self._TB_PosAng_window = ASAPPosAngCorr(parent=self,
-                                                     prefix=self.prefix,
-                                                     tl='tb')
-            self._TB_PosAng_window.show()
-        elif self._tl.lower() == 'ts':
-            self._TS_PosAng_window = ASAPPosAngCorr(parent=self,
-                                                     prefix=self.prefix,
-                                                     tl='ts')
-            self._TS_PosAng_window.show()
-
     def _openLaticeAndTwiss(self):
         self.lattice_and_twiss_window.show()
-
-    def closeEvent(self, event):
-        """Reimplement close event to close widget connections."""
-        self.app.close_widget_connections(self)
-        super().closeEvent(event)
 
 
 class ShowLatticeAndTwiss(SiriusMainWindow):
