@@ -1414,6 +1414,7 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
                                     </svg>
                                     """
                                }
+
     clicked = pyqtSignal()
 
     def __init__(self, parent=None, init_channel=None):
@@ -1428,7 +1429,7 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
         self.renderer = QSvgRenderer()
 
     def mousePressEvent(self, ev):
-        """ Deal with mouse click."""
+        """Deal with mouse click."""
         self.clicked.emit()
 
     def value_changed(self, new_val):
@@ -1459,6 +1460,7 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
         the n-th digit of the channel. Otherwise it toggles the whole value.
         """
         checked = not self._bit_val
+        val = checked
         if self._bit >= 0:
             val = int(self.value)
             val ^= (-checked ^ val) & (1 << self._bit)
