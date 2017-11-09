@@ -4,7 +4,7 @@
 
 import sys as sys
 import argparse as argparse
-from siriushla.SiriusApplication import SiriusApplication
+from siriushla.sirius_application import SiriusApplication
 from siriushla.tl_ap_control.HLTLControl import TLAPControlWindow
 from siriushla import util as _util
 

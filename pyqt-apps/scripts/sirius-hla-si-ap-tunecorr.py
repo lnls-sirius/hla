@@ -3,7 +3,7 @@
 
 import sys as _sys
 import argparse as _argparse
-from siriushla.SiriusApplication import SiriusApplication
+from siriushla.sirius_application import SiriusApplication
 from siriushla import util as _util
 from siriushla.as_ap_opticscorr.HLOpticsCorr import OpticsCorrWindow
 
