@@ -1,7 +1,8 @@
 """PyDM State Button Class."""
 
 from pydm.PyQt.QtGui import QPainter, QStyleOption, QFrame
-from pydm.PyQt.QtCore import pyqtProperty, Q_ENUMS, QByteArray, QRectF, QSize
+from pydm.PyQt.QtCore import (pyqtProperty, Q_ENUMS, QByteArray, QRectF,
+                              QSize, pyqtSignal)
 from pydm.PyQt.QtSvg import QSvgRenderer
 from pydm.widgets.base import PyDMWritableWidget
 
@@ -1413,6 +1414,7 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
                                     </svg>
                                     """
                                }
+    clicked = pyqtSignal()
 
     def __init__(self, parent=None, init_channel=None):
         """Initialize all internal states and properties."""
@@ -1424,6 +1426,10 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
         self.clicked.connect(self.send_value)
         self.shape = 0
         self.renderer = QSvgRenderer()
+
+    def mousePressEvent(self, ev):
+        """ Deal with mouse click."""
+        self.clicked.emit()
 
     def value_changed(self, new_val):
         """
@@ -1445,14 +1451,14 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
         self._bit_val = value
         self.update()
 
-    def send_value(self, checked):
+    def send_value(self):
         """
         Emit a :attr:`send_value_signal` to update channel value.
 
         If :attr:'pvBit' is n>=0 or positive the button toggles the state of
         the n-th digit of the channel. Otherwise it toggles the whole value.
         """
-        val = 1 if checked else 0
+        checked = not self._bit_val
         if self._bit >= 0:
             val = int(self.value)
             val ^= (-checked ^ val) & (1 << self._bit)
