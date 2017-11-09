@@ -21,6 +21,7 @@ class CurrLTWindow(SiriusMainWindow):
 
         self.centralwidget = loadUi(tmp_file)
         self.setCentralWidget(self.centralwidget)
+        self.setWindowTitle('SI Current Info: Current and Lifetime')
 
         self.lifetime_pv = _epics.PV(
             prefix+'SI-Glob:AP-CurrInfo:Lifetime-Mon')

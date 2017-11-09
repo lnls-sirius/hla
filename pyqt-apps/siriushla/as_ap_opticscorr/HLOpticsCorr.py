@@ -26,6 +26,7 @@ class OpticsCorrWindow(QMainWindow):
         self.setCentralWidget(self.centralwidget)
 
         if opticsparam == 'tune':
+            text = 'Tune'
             self.corrMatrix_pv = _epics.PV(
                 prefix+acc.upper()+'-Glob:AP-TuneCorr:CorrMat-SP')
             self.nomKL_pv = _epics.PV(
@@ -35,6 +36,7 @@ class OpticsCorrWindow(QMainWindow):
             self.statusLabel_pv.add_callback(self._setStatusLabels)
 
         elif opticsparam == 'chrom':
+            text = 'Chromaticity'
             self.corrMatrix_pv = _epics.PV(
                 prefix+acc.upper()+'-Glob:AP-ChromCorr:CorrMat-SP')
             self.nomChrom_pv = _epics.PV(
@@ -47,6 +49,7 @@ class OpticsCorrWindow(QMainWindow):
 
         self.acc = acc
         self.opticsparam = opticsparam
+        self.setWindowTitle(acc.upper() + ' ' + text + ' Correction')
 
         self.centralwidget.pushButton_getCorrParams.clicked.connect(
             self._getCorrParams)

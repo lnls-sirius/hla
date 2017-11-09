@@ -4,10 +4,10 @@
 
 import epics as _epics
 from pydm.PyQt.uic import loadUi as _loadUi
-from pydm.PyQt.QtGui import QMainWindow as _QMainWindow
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla import util as _hlautil
+from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.as_ma_control.MagnetDetailWindow import MagnetDetailWindow
 from siriushla.as_pm_control.PulsedMagnetDetailWindow import (
                                 PulsedMagnetDetailWindow)
@@ -16,7 +16,7 @@ UI_FILE = ('/home/fac_files/lnls-sirius/hla/pyqt-apps/siriushla/'
            'as_ap_posang/ui_as_ap_posang.ui')
 
 
-class ASAPPosAngCorr(_SiriusMainWindow):
+class ASAPPosAngCorr(SiriusMainWindow):
     """Main Class."""
 
     def __init__(self, parent=None, prefix=None, tl=None):
@@ -29,6 +29,9 @@ class ASAPPosAngCorr(_SiriusMainWindow):
         self.setCentralWidget(self.centralwidget)
 
         self._tl = tl
+        self.setWindowTitle(self._tl.upper() +
+                            ' Position and Angle Correction Window')
+
         widget2pv_list = [[self.centralwidget.PyDMLineEdit_OrbXDeltaPos_SP,
                            tl.upper() + '-Glob:AP-PosAng:DeltaPosX-SP'],
                           [self.centralwidget.PyDMScrollBar_OrbXDeltaPos_SP,
@@ -144,8 +147,3 @@ class ASAPPosAngCorr(_SiriusMainWindow):
         for i in range(4):
             exec('self.centralwidget.label_status{0}.setText'
                  '(labels[{0}])'.format(i))
-
-    def closeEvent(self, event):
-        """Reimplement close event to close widget connections."""
-        self.app.close_widget_connections(self)
-        super().closeEvent(event)
