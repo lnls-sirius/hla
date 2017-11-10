@@ -74,16 +74,6 @@ class PulsedMagnetControlWindow(SiriusMainWindow):
             # button.clicked.connect(lambda: self._window_manager.open_window(
             #     self.sender().text() + "_detail"))
 
-    def showEvent(self, event):
-        """Establish connections and call super."""
-        self.app.establish_widget_connections(self)
-        super().showEvent(event)
-
-    def closeEvent(self, event):
-        """Override closeEvent in order to close iwdget connections."""
-        self.app.close_widget_connections(self)
-        super().closeEvent(event)
-
 
 if __name__ == "__main__":
     import sys
