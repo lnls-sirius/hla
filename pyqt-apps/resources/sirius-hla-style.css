@@ -45,25 +45,34 @@ QTabBar::tab {
 }
 
 QTabBar::tab:selected, QTabBar::tab:hover {
-    color: white;
-    border: 1px solid white;
+    /*font-weight: 900;*/
+    border: 2px solid black;
 }
 
 #TBTab QTabBar::tab:selected, #TBTab QTabBar::tab:hover {
   background-color: purple;
+  color: white;
+  border: 1px solid white;
 }
 #BOTab QTabBar::tab:selected, #BOTab QTabBar::tab:hover {
   background-color: green;
+  color: white;
+  border: 1px solid white;
 }
 #TSTab QTabBar::tab:selected, #TSTab QTabBar::tab:hover {
   background-color: red;
+  color: white;
+  border: 1px solid white;
 }
 #SITab QTabBar::tab:selected, #SITab QTabBar::tab:hover {
   background-color: blue;
+  color: white;
+  border: 1px solid white;
 }
 
 QTabBar::tab:!selected {
     margin-top: 20px; /* make non-selected tabs look smaller */
+    font-weight: 200;
 }
 
 /* Led */
@@ -96,6 +105,14 @@ QScrollBar::sub-line:horizontal {
     width: 20px;
     subcontrol-position: left;
     subcontrol-origin: margin;
+}
+
+QAbstractSpinBox::up-button {
+    width: 32px;
+}
+
+QAbstractSpinBox::down-button {
+    width: 32px;
 }
 
 QLineEdit {

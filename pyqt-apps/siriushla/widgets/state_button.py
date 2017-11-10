@@ -1,7 +1,8 @@
 """PyDM State Button Class."""
 
-from pydm.PyQt.QtGui import QPainter, QStyleOption, QAbstractButton
-from pydm.PyQt.QtCore import pyqtProperty, Q_ENUMS, QByteArray, QRectF, QSize
+from pydm.PyQt.QtGui import QPainter, QStyleOption, QFrame
+from pydm.PyQt.QtCore import (pyqtProperty, Q_ENUMS, QByteArray, QRectF,
+                              QSize, pyqtSignal)
 from pydm.PyQt.QtSvg import QSvgRenderer
 from pydm.widgets.base import PyDMWritableWidget
 
@@ -9,7 +10,7 @@ from pydm.widgets.base import PyDMWritableWidget
 BUTTONSHAPE = {'Squared': 0, 'Rounded': 1}
 
 
-class PyDMStateButton(QAbstractButton, PyDMWritableWidget):
+class PyDMStateButton(QFrame, PyDMWritableWidget):
     """
     A StateButton with support for Channels and much more from PyDM.
 
@@ -1414,16 +1415,22 @@ class PyDMStateButton(QAbstractButton, PyDMWritableWidget):
                                     """
                                }
 
+    clicked = pyqtSignal()
+
     def __init__(self, parent=None, init_channel=None):
         """Initialize all internal states and properties."""
-        QAbstractButton.__init__(self, parent)
+        QFrame.__init__(self, parent)
         PyDMWritableWidget.__init__(self, init_channel=init_channel)
         self._bit = -1
+        self._bit_val = 0
         self.value = 0
         self.clicked.connect(self.send_value)
         self.shape = 0
         self.renderer = QSvgRenderer()
-        self.setCheckable(True)
+
+    def mousePressEvent(self, ev):
+        """Deal with mouse click."""
+        self.clicked.emit()
 
     def value_changed(self, new_val):
         """
@@ -1439,22 +1446,21 @@ class PyDMStateButton(QAbstractButton, PyDMWritableWidget):
         """
         super(PyDMStateButton, self).value_changed(new_val)
         value = int(new_val)
+        self.value = value
         if self._bit >= 0:
             value = (value >> self._bit) & 1
-        if value:
-            self.setChecked(True)
-        else:
-            self.setChecked(False)
+        self._bit_val = value
         self.update()
 
-    def send_value(self, checked):
+    def send_value(self):
         """
         Emit a :attr:`send_value_signal` to update channel value.
 
         If :attr:'pvBit' is n>=0 or positive the button toggles the state of
         the n-th digit of the channel. Otherwise it toggles the whole value.
         """
-        val = 1 if checked else 0
+        checked = not self._bit_val
+        val = checked
         if self._bit >= 0:
             val = int(self.value)
             val ^= (-checked ^ val) & (1 << self._bit)
@@ -1470,9 +1476,9 @@ class PyDMStateButton(QAbstractButton, PyDMWritableWidget):
         """Treat appearence changes based on connection state and value."""
         if self._connected is False:
             state = 'Disconnected'
-        elif self.value == 1:
+        elif self._bit_val == 1:
             state = 'On'
-        elif self.value == 0:
+        elif self._bit_val == 0:
             state = 'Off'
 
         if self.shape == 0:

@@ -20,6 +20,7 @@ class SingleBPM(SiriusMainWindow):
         wid = OperationModes(parent=self, prefix=prefix)
         self.setCentralWidget(wid)
         self.setWindowTitle(prefix)
+        self.resize(1500, 1800)
         self.configure_menuBar()
 
     def configure_menuBar(self):
@@ -379,10 +380,10 @@ class MultiPassConfig(QGroupBox):
         hl = QHBoxLayout(self)
         gb = QGroupBox(self)
         fl = QFormLayout(gb)
-        ecb = PyDMECB(self, init_channel=pv_pref+'BPMMode-Sel')
+        ecb = PyDMECB(self, init_channel=prefix+'ACQBPMMode-Sel')
         fl.addRow('BPM Mode Sel', ecb)
         self.acq_bpm_mode = ecb
-        lb = PyDMLabel(self, init_channel=pv_pref+'BPMMode-Sts')
+        lb = PyDMLabel(self, init_channel=prefix+'ACQBPMMode-Sts')
         fl.addRow('BPM Mode Sts', lb)
         ecb = PyDMECB(self, init_channel=pv_pref+'Channel-Sel')
         self.acq_channel = ecb
@@ -399,8 +400,6 @@ class MultiPassConfig(QGroupBox):
         sb = PyDMSpinbox(self, init_channel=pv_pref+'SamplesPost-SP')
         sb.showStepExponent = False
         fl.addRow('# Samples Pos', sb)
-        ecb = PyDMECB(self, init_channel=pv_pref+'Trigger-Sel')
-        fl.addRow('Trigger Type', ecb)
         ecb = PyDMECB(self, init_channel=pv_pref+'TriggerRep-Sel')
         fl.addRow('Repetitive', ecb)
         sb = PyDMSpinbox(self, init_channel=pv_pref+'UpdateTime-SP')
@@ -426,6 +425,11 @@ class MultiPassConfig(QGroupBox):
 
         gb = QGroupBox(self)
         fl = QFormLayout(gb)
+        ecb = PyDMECB(self, init_channel=pv_pref+'Trigger-Sel')
+        fl.addRow('Trigger Type', ecb)
+        lb = QLabel('External Trigger Configurations')
+        lb.setAlignment(Qt.AlignHCenter)
+        fl.addRow(lb)
         ecb = PyDMECB(self, init_channel=pv_pref+'TriggerExternalChan-Sel')
         fl.addRow('External Trigger', ecb)
         lb = QLabel('Auto Trigger Configurations')
@@ -439,9 +443,11 @@ class MultiPassConfig(QGroupBox):
         fl.addRow('Slope', ecb)
         sb = PyDMSpinbox(self,
                          init_channel=pv_pref+'TriggerDataThres-SP')
+        sb.showStepExponent = False
         fl.addRow('Threshold', sb)
         sb = PyDMSpinbox(self,
                          init_channel=pv_pref+'TriggerDataHyst-SP')
+        sb.showStepExponent = False
         fl.addRow('Hysteresis', sb)
         hl.addWidget(gb)
 
