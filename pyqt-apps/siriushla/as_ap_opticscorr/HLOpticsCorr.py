@@ -3,15 +3,16 @@
 
 import epics as _epics
 from pydm.PyQt.uic import loadUi
-from pydm.PyQt.QtGui import QMainWindow, QFileDialog, QPushButton
+from pydm.PyQt.QtGui import QFileDialog, QPushButton
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 from siriuspy import util as _util
 from siriushla import util as _hlautil
+from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.as_ma_control.MagnetDetailWindow import MagnetDetailWindow
 from siriushla.as_ma_control.MagnetControlWindow import MagnetControlWindow
 
 
-class OpticsCorrWindow(QMainWindow):
+class OpticsCorrWindow(SiriusMainWindow):
     """Class to include some intelligence in the .ui files."""
 
     def __init__(self, acc, opticsparam, parent=None, prefix=None):
@@ -26,6 +27,7 @@ class OpticsCorrWindow(QMainWindow):
         self.setCentralWidget(self.centralwidget)
 
         if opticsparam == 'tune':
+            text = 'Tune'
             self.corrMatrix_pv = _epics.PV(
                 prefix+acc.upper()+'-Glob:AP-TuneCorr:CorrMat-SP')
             self.nomKL_pv = _epics.PV(
@@ -35,6 +37,7 @@ class OpticsCorrWindow(QMainWindow):
             self.statusLabel_pv.add_callback(self._setStatusLabels)
 
         elif opticsparam == 'chrom':
+            text = 'Chromaticity'
             self.corrMatrix_pv = _epics.PV(
                 prefix+acc.upper()+'-Glob:AP-ChromCorr:CorrMat-SP')
             self.nomChrom_pv = _epics.PV(
@@ -47,6 +50,7 @@ class OpticsCorrWindow(QMainWindow):
 
         self.acc = acc
         self.opticsparam = opticsparam
+        self.setWindowTitle(acc.upper() + ' ' + text + ' Correction')
 
         self.centralwidget.pushButton_getCorrParams.clicked.connect(
             self._getCorrParams)

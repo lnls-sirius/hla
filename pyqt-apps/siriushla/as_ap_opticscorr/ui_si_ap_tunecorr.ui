@@ -2722,7 +2722,7 @@ as New Reference</string>
   </customwidget>
   <customwidget>
    <class>PyDMStateButton</class>
-   <extends>QWidget</extends>
+   <extends>QFrame</extends>
    <header>siriushla.widgets.state_button</header>
   </customwidget>
   <customwidget>

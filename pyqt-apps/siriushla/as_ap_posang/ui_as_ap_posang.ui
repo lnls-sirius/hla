@@ -626,121 +626,6 @@
      </layout>
     </widget>
    </item>
-   <item row="3" column="1">
-    <widget class="PyDMPushButton" name="PyDMPushButton_SetNewRef">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>70</height>
-      </size>
-     </property>
-     <property name="toolTip">
-      <string/>
-     </property>
-     <property name="whatsThis">
-      <string>
-    Basic PushButton to send a fixed value.
-
-    The PyDMPushButton is meant to hold a specific value, and send that value
-    to a channel when it is clicked, much like the MessageButton does in EDM.
-    The PyDMPushButton works in two different modes of operation, first, a
-    fixed value can be given to the :attr:`.pressValue` attribute, whenever the
-    button is clicked a signal containing this value will be sent to the
-    connected channel. This is the default behavior of the button. However, if
-    the :attr:`.relativeChange` is set to True, the fixed value will be added
-    to the current value of the channel. This means that the button will
-    increment a channel by a fixed amount with every click, a consistent
-    relative move
-
-    Parameters
-    ----------
-    pressValue : int, float, str
-        Value to be sent when the button is clicked
-
-    channel : str
-        ID of channel to manipulate
-
-    parent : QObject, optional
-        Parent of PyDMPushButton
-
-    label : str, optional
-        String to place on button
-
-    icon : QIcon, optional
-        An Icon to display on the PyDMPushButton
-
-
-    relative : bool, optional
-        Choice to have the button peform a relative put, instead of always
-        setting to an absolute value
-    </string>
-     </property>
-     <property name="text">
-      <string>Set Current Kicks
- as Reference</string>
-     </property>
-     <property name="pressValue" stdset="0">
-      <string>0</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="3">
-    <widget class="PyDMPushButton" name="PyDMPushButton_ConfigPS">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>70</height>
-      </size>
-     </property>
-     <property name="toolTip">
-      <string/>
-     </property>
-     <property name="whatsThis">
-      <string>
-    Basic PushButton to send a fixed value.
-
-    The PyDMPushButton is meant to hold a specific value, and send that value
-    to a channel when it is clicked, much like the MessageButton does in EDM.
-    The PyDMPushButton works in two different modes of operation, first, a
-    fixed value can be given to the :attr:`.pressValue` attribute, whenever the
-    button is clicked a signal containing this value will be sent to the
-    connected channel. This is the default behavior of the button. However, if
-    the :attr:`.relativeChange` is set to True, the fixed value will be added
-    to the current value of the channel. This means that the button will
-    increment a channel by a fixed amount with every click, a consistent
-    relative move
-
-    Parameters
-    ----------
-    parent : QObject, optional
-        Parent of PyDMPushButton
-
-    label : str, optional
-        String to place on button
-
-    icon : QIcon, optional
-        An Icon to display on the PyDMPushButton
-
-    pressValue : int, float, str
-        Value to be sent when the button is clicked
-
-    relative : bool, optional
-        Choice to have the button perform a relative put, instead of always
-        setting to an absolute value
-
-    init_channel : str, optional
-        ID of channel to manipulate
-
-    </string>
-     </property>
-     <property name="text">
-      <string>Configure PS</string>
-     </property>
-     <property name="pressValue" stdset="0">
-      <string>0</string>
-     </property>
-    </widget>
-   </item>
    <item row="5" column="1" colspan="3">
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
@@ -1436,6 +1321,152 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
      <property name="text">
       <string>${TRANSPORTLINE} Position and Angle Correction</string>
      </property>
+    </widget>
+   </item>
+   <item row="3" column="1" colspan="3">
+    <widget class="QWidget" name="widget" native="true">
+     <layout class="QGridLayout" name="gridLayout_6">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="PyDMPushButton" name="PyDMPushButton_SetNewRef">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>70</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>
+    Basic PushButton to send a fixed value.
+
+    The PyDMPushButton is meant to hold a specific value, and send that value
+    to a channel when it is clicked, much like the MessageButton does in EDM.
+    The PyDMPushButton works in two different modes of operation, first, a
+    fixed value can be given to the :attr:`.pressValue` attribute, whenever the
+    button is clicked a signal containing this value will be sent to the
+    connected channel. This is the default behavior of the button. However, if
+    the :attr:`.relativeChange` is set to True, the fixed value will be added
+    to the current value of the channel. This means that the button will
+    increment a channel by a fixed amount with every click, a consistent
+    relative move
+
+    Parameters
+    ----------
+    pressValue : int, float, str
+        Value to be sent when the button is clicked
+
+    channel : str
+        ID of channel to manipulate
+
+    parent : QObject, optional
+        Parent of PyDMPushButton
+
+    label : str, optional
+        String to place on button
+
+    icon : QIcon, optional
+        An Icon to display on the PyDMPushButton
+
+
+    relative : bool, optional
+        Choice to have the button peform a relative put, instead of always
+        setting to an absolute value
+    </string>
+        </property>
+        <property name="text">
+         <string>Set Current Kicks
+ as Reference</string>
+        </property>
+        <property name="pressValue" stdset="0">
+         <string>0</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="PyDMPushButton" name="PyDMPushButton_ConfigPS">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>70</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>
+    Basic PushButton to send a fixed value.
+
+    The PyDMPushButton is meant to hold a specific value, and send that value
+    to a channel when it is clicked, much like the MessageButton does in EDM.
+    The PyDMPushButton works in two different modes of operation, first, a
+    fixed value can be given to the :attr:`.pressValue` attribute, whenever the
+    button is clicked a signal containing this value will be sent to the
+    connected channel. This is the default behavior of the button. However, if
+    the :attr:`.relativeChange` is set to True, the fixed value will be added
+    to the current value of the channel. This means that the button will
+    increment a channel by a fixed amount with every click, a consistent
+    relative move
+
+    Parameters
+    ----------
+    parent : QObject, optional
+        Parent of PyDMPushButton
+
+    label : str, optional
+        String to place on button
+
+    icon : QIcon, optional
+        An Icon to display on the PyDMPushButton
+
+    pressValue : int, float, str
+        Value to be sent when the button is clicked
+
+    relative : bool, optional
+        Choice to have the button perform a relative put, instead of always
+        setting to an absolute value
+
+    init_channel : str, optional
+        ID of channel to manipulate
+
+    </string>
+        </property>
+        <property name="text">
+         <string>Configure Correctors PS</string>
+        </property>
+        <property name="pressValue" stdset="0">
+         <string>0</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QPushButton" name="pushButton_getRespMat">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>70</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Choose Response Matrix</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
   </layout>

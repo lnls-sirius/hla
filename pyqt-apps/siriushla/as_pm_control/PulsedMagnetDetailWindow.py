@@ -18,13 +18,3 @@ class PulsedMagnetDetailWindow(SiriusMainWindow):
     def _setup_ui(self):
         self.central_widget = PulsedMagnetDetailWidget(self._maname, self)
         self.setCentralWidget(self.central_widget)
-
-    def showEvent(self, event):
-        """Establish connections and call super."""
-        self.app.establish_widget_connections(self)
-        super().showEvent(event)
-
-    def closeEvent(self, event):
-        """Override closeEvent in order to close iwdget connections."""
-        self.app.close_widget_connections(self)
-        super().closeEvent(event)

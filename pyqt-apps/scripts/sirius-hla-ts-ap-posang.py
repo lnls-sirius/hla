@@ -4,7 +4,7 @@
 
 import sys as sys
 import argparse as argparse
-from siriushla.SiriusApplication import SiriusApplication
+from siriushla.sirius_application import SiriusApplication
 from siriushla.as_ap_posang.HLPosAng import ASAPPosAngCorr
 from siriushla import util
 

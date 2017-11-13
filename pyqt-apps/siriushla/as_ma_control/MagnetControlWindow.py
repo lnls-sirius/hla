@@ -43,13 +43,3 @@ class MagnetControlWindow(SiriusMainWindow):
             if trim_button is not None:
                 connect_window(trim_button, MagnetTrimWindow,
                                self, maname=maname)
-
-    # def showEvent(self, event):
-    #     """Establish connections and call super."""
-    #     self.app.establish_widget_connections(self)
-    #     super().showEvent(event)
-
-    def closeEvent(self, event):
-        """Override closeEvent in order to close iwdget connections."""
-        self.app.close_widget_connections(self)
-        super().closeEvent(event)

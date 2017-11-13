@@ -4,10 +4,12 @@
 
 import epics as _epics
 from pydm.PyQt.uic import loadUi as _loadUi
-from pydm.PyQt.QtGui import QMainWindow as _QMainWindow
+from pydm.PyQt.QtGui import QFileDialog
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 from siriuspy.envars import vaca_prefix as _vaca_prefix
+from siriuspy import util as _util
 from siriushla import util as _hlautil
+from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.as_ma_control.MagnetDetailWindow import MagnetDetailWindow
 from siriushla.as_pm_control.PulsedMagnetDetailWindow import (
                                 PulsedMagnetDetailWindow)
@@ -16,7 +18,7 @@ UI_FILE = ('/home/fac_files/lnls-sirius/hla/pyqt-apps/siriushla/'
            'as_ap_posang/ui_as_ap_posang.ui')
 
 
-class ASAPPosAngCorr(_SiriusMainWindow):
+class ASAPPosAngCorr(SiriusMainWindow):
     """Main Class."""
 
     def __init__(self, parent=None, prefix=None, tl=None):
@@ -29,6 +31,9 @@ class ASAPPosAngCorr(_SiriusMainWindow):
         self.setCentralWidget(self.centralwidget)
 
         self._tl = tl
+        self.setWindowTitle(self._tl.upper() +
+                            ' Position and Angle Correction Window')
+
         widget2pv_list = [[self.centralwidget.PyDMLineEdit_OrbXDeltaPos_SP,
                            tl.upper() + '-Glob:AP-PosAng:DeltaPosX-SP'],
                           [self.centralwidget.PyDMScrollBar_OrbXDeltaPos_SP,
@@ -68,17 +73,24 @@ class ASAPPosAngCorr(_SiriusMainWindow):
         self.set_widgets_channel(widget2pv_list, prefix)
 
         correctors = ['', '', '', '']
-        if tl.upper() == 'TS':
+        if tl == 'ts':
             correctors[0] = 'TS-04:MA-CH'
             correctors[1] = 'TS-04:PM-InjSF'
             correctors[2] = 'TS-04:MA-CV-1'
             correctors[3] = 'TS-04:MA-CV-2'
-        elif tl.upper() == 'TB':
+        elif tl == 'tb':
             correctors[0] = 'TB-03:MA-CH'
             correctors[1] = 'TB-04:PM-InjS'
             correctors[2] = 'TB-04:MA-CV-1'
             correctors[3] = 'TB-04:MA-CV-2'
         self._setCorrectorsLabels(correctors, prefix)
+
+        self.respMatX_pv = _epics.PV(
+            prefix+tl.upper()+'-Glob:AP-PosAng:RespMatX-SP')
+        self.respMatY_pv = _epics.PV(
+            prefix+tl.upper()+'-Glob:AP-PosAng:RespMatY-SP')
+        self.centralwidget.pushButton_getRespMat.clicked.connect(
+            self._getRespMat)
 
         self.statusLabel_pv = _epics.PV(
             prefix + tl.upper() + '-Glob:AP-PosAng:Status-Cte')
@@ -145,7 +157,29 @@ class ASAPPosAngCorr(_SiriusMainWindow):
             exec('self.centralwidget.label_status{0}.setText'
                  '(labels[{0}])'.format(i))
 
-    def closeEvent(self, event):
-        """Reimplement close event to close widget connections."""
-        self.app.close_widget_connections(self)
-        super().closeEvent(event)
+    def _getRespMat(self):
+        """Get response matrix from local file."""
+        fn, _ = QFileDialog.getOpenFileName(
+            self, 'Choose Correction Parameters...', None,
+            'Correction Parameters Files (*.' +
+            self._tl + 'posang)')
+
+        if fn:
+            f = open(fn, 'r')
+            text = f.read()
+            f.close()
+            m, _ = _util.read_text_data(text)
+
+            respmat_x = 4*[0]
+            respmat_x[0] = float(m[0][0])
+            respmat_x[1] = float(m[0][1])
+            respmat_x[2] = float(m[1][0])
+            respmat_x[3] = float(m[1][1])
+
+            respmat_y = 4*[0]
+            respmat_y[0] = float(m[2][0])
+            respmat_y[1] = float(m[2][1])
+            respmat_y[2] = float(m[3][0])
+            respmat_y[3] = float(m[3][1])
+            self.respMatX_pv.put(respmat_x)
+            self.respMatY_pv.put(respmat_y)
