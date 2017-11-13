@@ -1,15 +1,17 @@
 import sys
 from PyQt5.QtWidgets import (QWidget, QHBoxLayout, QVBoxLayout, QRadioButton,
                              QGridLayout, QTabWidget, QStackedWidget, QLabel,
-                             QGroupBox, QFormLayout)
+                             QGroupBox, QFormLayout, QPushButton)
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QFont
 from pydm.widgets import (PyDMWaveformPlot, PyDMTimePlot, PyDMLineEdit,
                           PyDMSpinbox, PyDMLabel, PyDMCheckbox)
 from pydm.widgets import PyDMPushButton as PyDMPB
 from pydm.widgets import PyDMEnumComboBox as PyDMECB
+from siriuspy.envars import vaca_prefix
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, SiriusDialog
-from siriuspy.envars import vaca_prefix
+from siriushla import util
 
 
 class SingleBPM(SiriusMainWindow):
@@ -42,6 +44,7 @@ class CalibrationWindow(SiriusDialog):
         self.prefix = prefix
         super().__init__(parent=parent)
         self.fl = QFormLayout(self)
+        self.fl.setLabelAlignment(Qt.AlignVCenter)
         lb = QLabel('Acquisition Mode')
         lb.setAlignment(Qt.AlignCenter)
         self.fl.addRow(lb)
@@ -97,62 +100,80 @@ class ContinuousMonit(QWidget):
         self.prefix = prefix
         super().__init__(parent=parent)
         gl = QGridLayout(self)
-        plotPosX = PyDMTimePlot(
-            parent=self,
-            init_y_channels=[self.prefix+'PosX-Mon'],
-            background='w')
-        plotPosX.timeSpan = 60
-        plotPosX._curves[0].color = 'blue'
-        plotPosX._curves[0].lineWidth = 2
-        gl.addWidget(plotPosX, 0, 0, 1, 2)
+        prps = {}
+        prps['colors'] = ['blue', ]
+        prps['init_channels'] = [self.prefix+'PosX-Mon', ]
+        prps['label'] = 'Position X [nm]'
+        plotPosX = self.createPlot(**prps)
+        gl.addWidget(plotPosX, 0, 0, 1, 1)
 
-        plotPosY = PyDMTimePlot(
-            parent=self,
-            init_y_channels=[self.prefix+'PosY-Mon'],
-            background='w')
-        plotPosY.timeSpan = 60
-        plotPosY._curves[0].color = 'red'
-        plotPosY._curves[0].lineWidth = 2
-        gl.addWidget(plotPosY, 1, 0, 1, 2)
+        prps['colors'] = ['red', ]
+        prps['init_channels'] = [self.prefix+'PosY-Mon', ]
+        prps['label'] = 'Position Y [nm]'
+        plotPosY = self.createPlot(**prps)
+        gl.addWidget(plotPosY, 1, 0, 1, 1)
 
-        plotPosS = PyDMTimePlot(
-            parent=self,
-            init_y_channels=[self.prefix+'Sum-Mon'],
-            background='w')
-        plotPosS.timeSpan = 60
-        plotPosS._curves[0].color = 'black'
-        plotPosS._curves[0].lineWidth = 2
-        gl.addWidget(plotPosS, 2, 0, 1, 1)
+        # prps['colors'] = ['black', ]
+        # prps['init_channels'] = [self.prefix+'Sum-Mon', ]
+        # prps['label'] = 'Sum'
+        # plotPosS = self.createPlot(**prps)
+        # gl.addWidget(plotPosS, 2, 0, 1, 1)
 
-        plotPosQ = PyDMTimePlot(
-            parent=self,
-            init_y_channels=[self.prefix+'PosQ-Mon'],
-            background='w')
-        plotPosQ.timeSpan = 60
-        plotPosQ._curves[0].color = 'green'
-        plotPosQ._curves[0].lineWidth = 2
-        gl.addWidget(plotPosQ, 2, 1, 1, 1)
+        prps['colors'] = ['green', ]
+        prps['init_channels'] = [self.prefix+'PosQ-Mon', ]
+        prps['label'] = 'Skew'
+        plotPosQ = self.createPlot(**prps)
+        gl.addWidget(plotPosQ, 2, 0, 1, 1)
 
-        plotAmps = PyDMTimePlot(
-            parent=self,
-            init_y_channels=[self.prefix+'AmplA-Mon',
-                             self.prefix+'AmplB-Mon',
-                             self.prefix+'AmplC-Mon',
-                             self.prefix+'AmplD-Mon'],
-            background='w')
-        plotAmps.timeSpan = 60
-        plotAmps._curves[0].color = 'blue'
-        plotAmps._curves[0].lineWidth = 2
-        plotAmps._curves[1].color = 'green'
-        plotAmps._curves[0].lineWidth = 2
-        plotAmps._curves[2].color = 'red'
-        plotAmps._curves[0].lineWidth = 2
-        plotAmps._curves[3].color = 'black'
-        plotAmps._curves[0].lineWidth = 2
-        gl.addWidget(plotAmps, 3, 0, 1, 2)
+        prps['colors'] = ['blue', 'red', 'black', 'green']
+        prps['init_channels'] = [self.prefix+'AmplA-Mon',
+                                 self.prefix+'AmplB-Mon',
+                                 self.prefix+'AmplC-Mon',
+                                 self.prefix+'AmplD-Mon']
+        prps['label'] = 'Antennas'
+        plotAmps = self.createPlot(**prps)
+        gl.addWidget(plotAmps, 3, 0, 1, 1)
+
+    def createPlot(self, colors=None, init_channels=None, label=None):
+        plot = PyDMTimePlot(
+                            parent=self,
+                            init_y_channels=init_channels,
+                            background='w')
+        plot.timeSpan = 60
+        for i, color in enumerate(colors):
+            plot._curves[i].color = color
+            plot._curves[i].lineWidth = 2
+        pl_item = plot.getPlotItem()
+        pl_item.showButtons()
+        pl_item.setTitle(label, **{'size': '32px'})
+        font = QFont()
+        font.setPixelSize(32)
+        ax = pl_item.getAxis('left')
+        # ax.setLabel(label, **{'font-size': '32px'})
+        # ax.showLabel()
+        ax.setTickFont(font)
+        ax.setStyle(autoExpandTextSpace=False,
+                    tickTextWidth=100)
+        ax = pl_item.getAxis('bottom')
+        ax.setTickFont(font)
+        ax.setStyle(autoExpandTextSpace=False,
+                    tickTextHeight=30,
+                    tickTextOffset=15)
+        ax = pl_item.getAxis('right')
+        ax.show()
+        ax.setStyle(showValues=False)
+        ax = pl_item.getAxis('top')
+        ax.show()
+        ax.setStyle(showValues=False)
+        pl_item.showGrid(x=True, y=True)
+        # pl_item.titleLabel.setMaximumHeight(100)
+        # pl_item.layout.setRowFixedHeight(0, 100)
+        # pl_item.titleLabel.setText('PosX-Mon', **labelStyle)
+        return plot
 
 
 class TrigAcquisitions(QWidget):
+
     def __init__(self, parent=None, prefix=''):
         self.prefix = prefix
         super().__init__(parent=parent)
@@ -251,6 +272,7 @@ class MultiPassData(QWidget):
         fft_amp._curves[0].lineWidth = 2
         gl.addWidget(fft_pha, 1, 1)
 
+        vl = QVBoxLayout()
         gb = QGroupBox('Statistics', wid)
         fl = QFormLayout(gb)
         fl.addRow('Property', QLabel(prop))
@@ -262,9 +284,20 @@ class MultiPassData(QWidget):
                   PyDMLabel(gb, init_channel=pv_prefix+'_STATSMeanValue_RBV'))
         fl.addRow('Deviation',
                   PyDMLabel(gb, init_channel=pv_prefix+'_STATSSigma_RBV'))
-        gl.addWidget(gb, 1, 0)
+        vl.addWidget(gb)
+        pb = QPushButton('Open FFT Config', wid)
+        pb.clicked.connect(self.open_fft_config_window(wid, pv_prefix))
+        vl.addWidget(pb)
+        gl.addItem(vl, 1, 0)
 
         return wid
+
+    def open_fft_config_window(self, wid, pv_prefix):
+        app = SiriusApplication.instance()
+
+        def open_window():
+            app.open_window(FFTConfigs, parent=wid, prefix=pv_prefix)
+        return open_window
 
 
 class SinglePassData(QWidget):
@@ -290,8 +323,10 @@ class SinglePassData(QWidget):
         self.stack = QStackedWidget()
         vl.addWidget(self.stack)
         plotXY = PyDMTimePlot(
-                        self, init_y_channels=[self.prefix + 'SPPosX-Mon',
-                                               self.prefix + 'SPPosY-Mon'])
+                        self,
+                        init_y_channels=[self.prefix + 'SPPosX-Mon',
+                                         self.prefix + 'SPPosY-Mon'],
+                        background='w')
         plotXY.timeSpan = 60
         plotXY._curves[0].color = 'blue'
         plotXY._curves[1].color = 'red'
@@ -300,13 +335,17 @@ class SinglePassData(QWidget):
         self.stack.addWidget(plotXY)
         hl = QHBoxLayout()
         plotSum = PyDMTimePlot(
-                    self, init_y_channels=[self.prefix + 'SPSum-Mon', ])
+                    self,
+                    init_y_channels=[self.prefix + 'SPSum-Mon', ],
+                    background='w')
         plotSum.timeSpan = 60
         plotSum._curves[0].color = 'black'
         plotSum._curves[0].lineWidth = 2
         hl.addWidget(plotSum)
         plotQ = PyDMTimePlot(
-                    self, init_y_channels=[self.prefix + 'SPPosQ-Mon', ])
+                    self,
+                    init_y_channels=[self.prefix + 'SPPosQ-Mon', ],
+                    background='w')
         plotQ.timeSpan = 60
         plotQ._curves[0].color = 'black'
         plotQ._curves[0].lineWidth = 2
@@ -317,10 +356,10 @@ class SinglePassData(QWidget):
 
         plotAmp = PyDMTimePlot(
             parent=self,
-            init_y_channels=[self.prefix + 'SP_AArrayData-Mon',
-                             self.prefix + 'SP_BArrayData-Mon',
-                             self.prefix + 'SP_CArrayData-Mon',
-                             self.prefix + 'SP_DArrayData-Mon'],
+            init_y_channels=[self.prefix + 'SPAmplA-Mon',
+                             self.prefix + 'SPAmplB-Mon',
+                             self.prefix + 'SPAmplC-Mon',
+                             self.prefix + 'SPAmplD-Mon'],
             background='w')
         plotAmp._curves[0].color = 'blue'
         plotAmp._curves[1].color = 'red'
@@ -346,7 +385,7 @@ class SinglePassData(QWidget):
         lb = PyDMLabel(gb, init_channel=self.prefix + 'SPPosY-Mon')
         fl.addRow('PosY', lb)
         lb = PyDMLabel(gb, init_channel=self.prefix + 'SPSum-Mon')
-        fl.addRow('PosS', lb)
+        fl.addRow('Sum', lb)
         lb = PyDMLabel(gb, init_channel=self.prefix + 'SPPosQ-Mon')
         fl.addRow('PosQ', lb)
         hl.addWidget(gb)
@@ -369,6 +408,30 @@ class SinglePassData(QWidget):
         return toggle
 
 
+class FFTConfigs(SiriusDialog):
+
+    def __init__(self, parent=None, prefix=''):
+        self.prefix = prefix
+        super().__init__(parent=None)
+        self.fl = QFormLayout(self)
+        self.fl.setLabelAlignment(Qt.AlignVCenter)
+        self._add_row('FFTData.SPAN', 'Number of points')
+        self._add_row('FFTData.INDX', 'Start Index')
+        self._add_row('FFTData.MXIX', 'Maximum Index')
+        self._add_row('FFTData.WIND', 'Window type', enum=True)
+        self._add_row('FFTData.CDIR', 'Direction', enum=True)
+        self._add_row('FFTData.ASUB', 'Subtract Avg', enum=True)
+
+    def _add_row(self, pv, label, enum=False):
+        CLASS_ = PyDMECB if enum else PyDMSpinbox
+        le = CLASS_(self, init_channel=self.prefix+pv)
+        if not enum:
+            le.showStepExponent = False
+        lb = QLabel(label)
+        lb.setAlignment(Qt.AlignCenter)
+        self.fl.addRow(lb, le)
+
+
 class MultiPassConfig(QGroupBox):
 
     def __init__(self, parent=None, prefix='', acq_type='ACQ'):
@@ -380,14 +443,12 @@ class MultiPassConfig(QGroupBox):
         hl = QHBoxLayout(self)
         gb = QGroupBox(self)
         fl = QFormLayout(gb)
+        fl.setLabelAlignment(Qt.AlignVCenter)
         ecb = PyDMECB(self, init_channel=prefix+'ACQBPMMode-Sel')
         fl.addRow('BPM Mode Sel', ecb)
         self.acq_bpm_mode = ecb
-        lb = PyDMLabel(self, init_channel=prefix+'ACQBPMMode-Sts')
-        fl.addRow('BPM Mode Sts', lb)
-        ecb = PyDMECB(self, init_channel=pv_pref+'Channel-Sel')
-        self.acq_channel = ecb
-        fl.addRow('Rate', ecb)
+        # lb = PyDMLabel(self, init_channel=prefix+'ACQBPMMode-Sts')
+        # fl.addRow('BPM Mode Sts', lb)
         sb = PyDMSpinbox(self, init_channel=pv_pref+'Shots-SP')
         sb.showStepExponent = False
         fl.addRow('# shots', sb)
@@ -405,51 +466,89 @@ class MultiPassConfig(QGroupBox):
         sb = PyDMSpinbox(self, init_channel=pv_pref+'UpdateTime-SP')
         sb.showStepExponent = False
         fl.addRow('Update Interval', sb)
+        gl = QGridLayout()
         pb1 = PyDMPB(self, init_channel=pv_pref+'TriggerEvent-Sel')
         pb1.pressValue = 0
         pb1.setText('Start')
+        gl.addWidget(pb1, 0, 0)
         pb2 = PyDMPB(self, init_channel=pv_pref+'TriggerEvent-Sel')
         pb2.pressValue = 1
         pb2.setText('Stop')
-        fl.addRow(pb1, pb2)
+        gl.addWidget(pb2, 0, 1)
         pb1 = PyDMPB(self, init_channel=pv_pref+'TriggerEvent-Sel')
         pb1.pressValue = 2
         pb1.setText('Abort')
+        gl.addWidget(pb1, 1, 0)
         pb2 = PyDMPB(self, init_channel=pv_pref+'TriggerEvent-Sel')
         pb2.pressValue = 3
         pb2.setText('Reset')
-        fl.addRow(pb1, pb2)
+        gl.addWidget(pb2, 1, 1)
+        fl.addRow('Events', gl)
         lb = PyDMLabel(self, init_channel=pv_pref+'Status-Sts')
         fl.addRow('Status', lb)
         hl.addWidget(gb)
 
         gb = QGroupBox(self)
         fl = QFormLayout(gb)
-        ecb = PyDMECB(self, init_channel=pv_pref+'Trigger-Sel')
-        fl.addRow('Trigger Type', ecb)
-        lb = QLabel('External Trigger Configurations')
-        lb.setAlignment(Qt.AlignHCenter)
-        fl.addRow(lb)
-        ecb = PyDMECB(self, init_channel=pv_pref+'TriggerExternalChan-Sel')
-        fl.addRow('External Trigger', ecb)
+        ecb = PyDMECB(self, init_channel=pv_pref+'Channel-Sel')
+        self.acq_channel = ecb
+        lb = QLabel('Rate', self)
+        fl.addRow(lb, ecb)
+        self.acq_bpm_mode.currentIndexChanged[str].connect(
+                            self.set_widgets_visibility([lb, ecb], 'multi'))
+        ecb_trig_type = PyDMECB(self, init_channel=pv_pref+'Trigger-Sel')
+        fl.addRow('Trigger Type', ecb_trig_type)
+        lb1 = QLabel('External Trigger Configurations')
+        lb1.setAlignment(Qt.AlignHCenter)
+        fl.addRow(lb1)
+        ecb1 = PyDMECB(self, init_channel=pv_pref+'TriggerExternalChan-Sel')
+        lb2 = QLabel('External Trigger')
+        fl.addRow(lb2, ecb1)
+        ecb_trig_type.currentIndexChanged[str].connect(
+                    self.set_widgets_visibility([lb1, lb2, ecb1], 'external'))
         lb = QLabel('Auto Trigger Configurations')
+        wids = [lb]
         lb.setAlignment(Qt.AlignHCenter)
         fl.addRow(lb)
         ecb = PyDMECB(self, init_channel=pv_pref+'TriggerDataChan-Sel')
-        fl.addRow('Type of Rate as Trigger', ecb)
+        wids.append(ecb)
+        lb = QLabel('Type of Rate as Trigger', self)
+        wids.append(lb)
+        fl.addRow(lb, ecb)
         ecb = PyDMECB(self, init_channel=pv_pref+'TriggerDataSel-Sel')
-        fl.addRow('Channel', ecb)
+        wids.append(ecb)
+        lb = QLabel('Channel', self)
+        wids.append(lb)
+        fl.addRow(lb, ecb)
         ecb = PyDMECB(self, init_channel=pv_pref+'TriggerDataPol-Sel')
-        fl.addRow('Slope', ecb)
+        wids.append(ecb)
+        lb = QLabel('Slope', self)
+        wids.append(lb)
+        fl.addRow(lb, ecb)
         sb = PyDMSpinbox(self,
                          init_channel=pv_pref+'TriggerDataThres-SP')
         sb.showStepExponent = False
-        fl.addRow('Threshold', sb)
+        wids.append(sb)
+        lb = QLabel('Threshold', self)
+        wids.append(lb)
+        fl.addRow(lb, sb)
         sb = PyDMSpinbox(self,
                          init_channel=pv_pref+'TriggerDataHyst-SP')
         sb.showStepExponent = False
-        fl.addRow('Hysteresis', sb)
+        wids.append(sb)
+        lb = QLabel('Hysteresis', self)
+        wids.append(lb)
+        fl.addRow(lb, sb)
+        ecb_trig_type.currentIndexChanged[str].connect(
+                                self.set_widgets_visibility(wids, 'data'))
         hl.addWidget(gb)
+
+    def set_widgets_visibility(self, wids, selec):
+        def toggle(text):
+            bo_ = text.lower().startswith(selec)
+            for wid in wids:
+                wid.setVisible(bo_)
+        return toggle
 
 
 class PostMortemWid(QWidget):
@@ -468,6 +567,7 @@ class PostMortemWid(QWidget):
 
 if __name__ == '__main__':
     app = SiriusApplication()
+    util.set_style(app)
     wind = SingleBPM(prefix='ca://'+vaca_prefix + 'SI-01M1:DI-BPM:')
     wind.show()
     sys.exit(app.exec_())
