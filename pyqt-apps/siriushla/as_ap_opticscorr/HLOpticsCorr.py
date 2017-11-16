@@ -3,15 +3,16 @@
 
 import epics as _epics
 from pydm.PyQt.uic import loadUi
-from pydm.PyQt.QtGui import QMainWindow, QFileDialog, QPushButton
+from pydm.PyQt.QtGui import QFileDialog, QPushButton
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 from siriuspy import util as _util
 from siriushla import util as _hlautil
+from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.as_ma_control.MagnetDetailWindow import MagnetDetailWindow
 from siriushla.as_ma_control.MagnetControlWindow import MagnetControlWindow
 
 
-class OpticsCorrWindow(QMainWindow):
+class OpticsCorrWindow(SiriusMainWindow):
     """Class to include some intelligence in the .ui files."""
 
     def __init__(self, acc, opticsparam, parent=None, prefix=None):
