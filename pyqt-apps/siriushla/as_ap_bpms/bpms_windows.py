@@ -12,7 +12,6 @@ from siriuspy.envars import vaca_prefix
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, SiriusDialog, SiriusLedAlert
 from siriushla import util
-from siriushla.as_ap_bpms.single_bpm import SingleBPM
 
 
 class _WidgetsCreator:
@@ -94,6 +93,9 @@ class SingleBPMSelectionWindow(SiriusDialog, _WidgetsCreator):
         self.app = SiriusApplication.instance()
 
         lb = QLabel('BPMs controlled by This interface')
+        f = lb.font()
+        f.setBold(True)
+        lb.setFont(f)
         lb.setAlignment(Qt.AlignCenter)
         fl.addRow(lb)
         fl.addRow('Status', QLabel('BPM Name', self))
@@ -106,7 +108,7 @@ class SingleBPMSelectionWindow(SiriusDialog, _WidgetsCreator):
 
     def open_bpm_window(self, bpm):
         def open(bool):
-            self.app.open_window(BPMsInterface, parent=self,
+            self.app.open_window(BPMsInterface, parent=self.parent(),
                                  prefix=self.prefix, bpm_list=(bpm,))
         return open
 
@@ -123,12 +125,16 @@ class CalibrationWindow(SiriusDialog, _WidgetsCreator):
         self.fl.addRow(lb)
         self._add_row('ACQBPMMode-Sel', 'ACQBPMMode-Sts', 'Offset PosQ')
         lb = QLabel('Offset Parameters')
+        f = lb.font()
+        f.setBold(True)
+        lb.setFont(f)
         lb.setAlignment(Qt.AlignCenter)
         self.fl.addRow(lb)
         self._add_row('PosQOffset-SP', 'PosQOffset-RB', 'Offset PosQ')
         self._add_row('PosXOffset-SP', 'PosXOffset-RB', 'Offset PosX')
         self._add_row('PosYOffset-SP', 'PosYOffset-RB', 'Offset PosY')
         lb = QLabel('Gain Parameters')
+        lb.setFont(f)
         lb.setAlignment(Qt.AlignCenter)
         self.fl.addRow(lb)
         self._add_row('PosKq-SP', 'PosKq-RB', 'Gain PosQ')
@@ -136,6 +142,7 @@ class CalibrationWindow(SiriusDialog, _WidgetsCreator):
         self._add_row('PosKx-SP', 'PosKx-RB', 'Gain PosX')
         self._add_row('PosKy-SP', 'PosKy-RB', 'Gain PosY')
         lb = QLabel('Informations')
+        lb.setFont(f)
         lb.setAlignment(Qt.AlignCenter)
         self.fl.addRow(lb)
         self._add_row('INFOHarmonicNumber-SP', 'INFOHarmonicNumber-RB',
@@ -179,7 +186,6 @@ class ContinuousMonitMultiBPM(QWidget, _WidgetsCreator):
     def __init__(self, parent=None, **kwargs):
         QWidget.__init__(self, parent=parent)
         _WidgetsCreator.__init__(self, **kwargs)
-        print('multi')
 
 
 class ContinuousMonitSingleBPM(QWidget, _WidgetsCreator):
@@ -188,7 +194,6 @@ class ContinuousMonitSingleBPM(QWidget, _WidgetsCreator):
         QWidget.__init__(self, parent=parent)
         _WidgetsCreator.__init__(self, **kwargs)
         gl = QGridLayout(self)
-        print('single')
         pv_pref = self.prefix + self.bpm_list[0]
         prps = {}
         prps['colors'] = ['blue', ]
@@ -605,6 +610,9 @@ class MultiPassConfig(QGroupBox, _WidgetsCreator):
         fl.addRow('Trigger Type', ecb_trig_type)
 
         lb1 = QLabel('External Trigger Configurations')
+        f = lb1.font()
+        f.setBold(True)
+        lb1.setFont(f)
         lb1.setAlignment(Qt.AlignHCenter)
         fl.addRow(lb1)
         ecb1 = self.create_wid(PyDMECB, propty='TriggerExternalChan-Sel')
@@ -614,6 +622,7 @@ class MultiPassConfig(QGroupBox, _WidgetsCreator):
                 self.set_widgets_visibility([lb1, lb2, ecb1], 'external'))
 
         lb = QLabel('Auto Trigger Configurations')
+        lb.setFont(f)
         wids = [lb]
         lb.setAlignment(Qt.AlignHCenter)
         fl.addRow(lb)
