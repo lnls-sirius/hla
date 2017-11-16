@@ -1,5 +1,5 @@
 from siriushla.widgets.QLed import QLed
-from siriushla.widgets.led import PyDMLed
+from siriushla.widgets.led import PyDMLed, SiriusLedAlert, SiriusLedState
 from siriushla.widgets.log_label import PyDMLogLabel
 from siriushla.widgets.QDoubleScrollBar import QDoubleScrollBar
 from siriushla.widgets.scrollbar import PyDMScrollBar
