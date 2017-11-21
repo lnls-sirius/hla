@@ -35,41 +35,49 @@ class ASAPPosAngCorr(SiriusMainWindow):
                             ' Position and Angle Correction Window')
 
         widget2pv_list = [[self.centralwidget.PyDMLineEdit_OrbXDeltaPos_SP,
-                           tl.upper() + '-Glob:AP-PosAng:DeltaPosX-SP'],
+                           tl.upper()+'-Glob:AP-PosAng:DeltaPosX-SP'],
                           [self.centralwidget.PyDMScrollBar_OrbXDeltaPos_SP,
-                           tl.upper() + '-Glob:AP-PosAng:DeltaPosX-SP'],
+                           tl.upper()+'-Glob:AP-PosAng:DeltaPosX-SP'],
                           [self.centralwidget.PyDMLabel_OrbXDeltaPos_RB,
-                           tl.upper() + '-Glob:AP-PosAng:DeltaPosX-RB'],
+                           tl.upper()+'-Glob:AP-PosAng:DeltaPosX-RB'],
                           [self.centralwidget.PyDMLineEdit_OrbXDeltaAng_SP,
-                           tl.upper() + '-Glob:AP-PosAng:DeltaAngX-SP'],
+                           tl.upper()+'-Glob:AP-PosAng:DeltaAngX-SP'],
                           [self.centralwidget.PyDMScrollBar_OrbXDeltaAng_SP,
-                           tl.upper() + '-Glob:AP-PosAng:DeltaAngX-SP'],
+                           tl.upper()+'-Glob:AP-PosAng:DeltaAngX-SP'],
                           [self.centralwidget.PyDMLabel_OrbXDeltaAng_RB,
-                           tl.upper() + '-Glob:AP-PosAng:DeltaAngX-RB'],
+                           tl.upper()+'-Glob:AP-PosAng:DeltaAngX-RB'],
                           [self.centralwidget.PyDMLineEdit_OrbYDeltaPos_SP,
-                           tl.upper() + '-Glob:AP-PosAng:DeltaPosY-SP'],
+                           tl.upper()+'-Glob:AP-PosAng:DeltaPosY-SP'],
                           [self.centralwidget.PyDMScrollBar_OrbYDeltaPos_SP,
-                           tl.upper() + '-Glob:AP-PosAng:DeltaPosY-SP'],
+                           tl.upper()+'-Glob:AP-PosAng:DeltaPosY-SP'],
                           [self.centralwidget.PyDMLabel_OrbYDeltaPos_RB,
-                           tl.upper() + '-Glob:AP-PosAng:DeltaPosY-RB'],
+                           tl.upper()+'-Glob:AP-PosAng:DeltaPosY-RB'],
                           [self.centralwidget.PyDMLineEdit_OrbYDeltaAng_SP,
-                           tl.upper() + '-Glob:AP-PosAng:DeltaAngY-SP'],
+                           tl.upper()+'-Glob:AP-PosAng:DeltaAngY-SP'],
                           [self.centralwidget.PyDMScrollBar_OrbYDeltaAng_SP,
-                           tl.upper() + '-Glob:AP-PosAng:DeltaAngY-SP'],
+                           tl.upper()+'-Glob:AP-PosAng:DeltaAngY-SP'],
                           [self.centralwidget.PyDMLabel_OrbYDeltaAng_RB,
-                           tl.upper() + '-Glob:AP-PosAng:DeltaAngY-RB'],
+                           tl.upper()+'-Glob:AP-PosAng:DeltaAngY-RB'],
                           [self.centralwidget.PyDMPushButton_SetNewRef,
-                           tl.upper() + '-Glob:AP-PosAng:SetNewRef-Cmd'],
+                           tl.upper()+'-Glob:AP-PosAng:SetNewRef-Cmd'],
                           [self.centralwidget.PyDMPushButton_ConfigPS,
-                           tl.upper() + '-Glob:AP-PosAng:ConfigPS-Cmd'],
+                           tl.upper()+'-Glob:AP-PosAng:ConfigPS-Cmd'],
                           [self.centralwidget.PyDMLabel_RefKickMonCH1,
-                           tl.upper() + '-Glob:AP-PosAng:CH1RefKick-Mon'],
+                           tl.upper()+'-Glob:AP-PosAng:CH1RefKick-Mon'],
                           [self.centralwidget.PyDMLabel_RefKickMonCH2,
-                           tl.upper() + '-Glob:AP-PosAng:CH2RefKick-Mon'],
+                           tl.upper()+'-Glob:AP-PosAng:CH2RefKick-Mon'],
                           [self.centralwidget.PyDMLabel_RefKickMonCV1,
-                           tl.upper() + '-Glob:AP-PosAng:CV1RefKick-Mon'],
+                           tl.upper()+'-Glob:AP-PosAng:CV1RefKick-Mon'],
                           [self.centralwidget.PyDMLabel_RefKickMonCV2,
-                           tl.upper() + '-Glob:AP-PosAng:CV2RefKick-Mon']]
+                           tl.upper()+'-Glob:AP-PosAng:CV2RefKick-Mon'],
+                          [self.centralwidget.PyDMLineEdit_RespMatConfigName,
+                           tl.upper()+'-Glob:AP-PosAng:RespMatConfigName-SP'],
+                          [self.centralwidget.PyDMLabel_RespMatConfigName,
+                           tl.upper()+'-Glob:AP-PosAng:RespMatConfigName-RB'],
+                          [self.centralwidget.PyDMLabel_RespMatX,
+                           tl.upper()+'-Glob:AP-PosAng:RespMatX-Mon'],
+                          [self.centralwidget.PyDMLabel_RespMatY,
+                           tl.upper()+'-Glob:AP-PosAng:RespMatY-Mon']]
         self.set_widgets_channel(widget2pv_list, prefix)
 
         correctors = ['', '', '', '']
@@ -84,13 +92,6 @@ class ASAPPosAngCorr(SiriusMainWindow):
             correctors[2] = 'TB-04:MA-CV-1'
             correctors[3] = 'TB-04:MA-CV-2'
         self._setCorrectorsLabels(correctors, prefix)
-
-        self.respMatX_pv = _epics.PV(
-            prefix+tl.upper()+'-Glob:AP-PosAng:RespMatX-SP')
-        self.respMatY_pv = _epics.PV(
-            prefix+tl.upper()+'-Glob:AP-PosAng:RespMatY-SP')
-        self.centralwidget.pushButton_getRespMat.clicked.connect(
-            self._getRespMat)
 
         self.statusLabel_pv = _epics.PV(
             prefix + tl.upper() + '-Glob:AP-PosAng:Status-Cte')
@@ -156,30 +157,3 @@ class ASAPPosAngCorr(SiriusMainWindow):
         for i in range(4):
             exec('self.centralwidget.label_status{0}.setText'
                  '(labels[{0}])'.format(i))
-
-    def _getRespMat(self):
-        """Get response matrix from local file."""
-        fn, _ = QFileDialog.getOpenFileName(
-            self, 'Choose Correction Parameters...', None,
-            'Correction Parameters Files (*.' +
-            self._tl + 'posang)')
-
-        if fn:
-            f = open(fn, 'r')
-            text = f.read()
-            f.close()
-            m, _ = _util.read_text_data(text)
-
-            respmat_x = 4*[0]
-            respmat_x[0] = float(m[0][0])
-            respmat_x[1] = float(m[0][1])
-            respmat_x[2] = float(m[1][0])
-            respmat_x[3] = float(m[1][1])
-
-            respmat_y = 4*[0]
-            respmat_y[0] = float(m[2][0])
-            respmat_y[1] = float(m[2][1])
-            respmat_y[2] = float(m[3][0])
-            respmat_y[3] = float(m[3][1])
-            self.respMatX_pv.put(respmat_x)
-            self.respMatY_pv.put(respmat_y)
