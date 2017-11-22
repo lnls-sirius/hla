@@ -7,24 +7,23 @@ from pydm.PyQt.QtCore import pyqtSlot
 from siriushla.widgets import SiriusMainWindow
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 
-UI_FILE = ('/home/fac_files/lnls-sirius/hla/pyqt-apps/siriushla/'
-           'si_ap_currlt/ui_si_ap_currlt.ui')
-
 
 class CurrLTWindow(SiriusMainWindow):
     """Class to include some intelligence in the .ui file."""
 
-    def __init__(self, parent=None, prefix=None):
+    def __init__(self, parent=None, prefix=None, acc=None):
         """Initialize some widgets."""
         super(CurrLTWindow, self).__init__(parent)
+        UI_FILE = ('/home/fac_files/lnls-sirius/hla/pyqt-apps/siriushla/'
+                   'as_ap_currlt/ui_'+acc.lower()+'_ap_currlt.ui')
         tmp_file = _substitute_in_file(UI_FILE, {'PREFIX': prefix})
 
         self.centralwidget = loadUi(tmp_file)
         self.setCentralWidget(self.centralwidget)
-        self.setWindowTitle('SI Current Info: Current and Lifetime')
+        self.setWindowTitle(acc.upper()+' Current Info: Current and Lifetime')
 
         self.lifetime_pv = _epics.PV(
-            prefix+'SI-Glob:AP-CurrInfo:Lifetime-Mon')
+            prefix+acc.upper()+'-Glob:AP-CurrInfo:Lifetime-Mon')
         self.lifetime_pv.add_callback(self.formatLifetime)
         self.centralwidget.CurrLT.setText("0:00:00")
 
