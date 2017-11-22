@@ -1,31 +1,37 @@
-import sys
 from PyQt5.QtWidgets import (QWidget, QHBoxLayout, QVBoxLayout, QRadioButton,
                              QGridLayout, QTabWidget, QStackedWidget, QLabel,
                              QGroupBox, QFormLayout, QPushButton)
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
-from pydm.widgets import (PyDMWaveformPlot, PyDMTimePlot, PyDMLineEdit,
-                          PyDMSpinbox, PyDMLabel, PyDMCheckbox)
+from pydm.widgets import (PyDMWaveformPlot, PyDMTimePlot, PyDMSpinbox,
+                          PyDMLabel, PyDMCheckbox)
 from pydm.widgets import PyDMPushButton as PyDMPB
 from pydm.widgets import PyDMEnumComboBox as PyDMECB
 from pydm.widgets.channel import PyDMChannel
 from siriuspy.envars import vaca_prefix
 from siriushla.sirius_application import SiriusApplication
-from siriushla.widgets import SiriusMainWindow, SiriusDialog
+from siriushla.widgets import SiriusMainWindow, SiriusDialog, SiriusLedAlert
 from siriushla import util
+from siriushla.as_ap_bpms.single_bpm import SingleBPM
 
 
-class _WidgetsFactory(object):
+class _WidgetsCreator:
 
-    def __init__(self, prefix, bpm_list):
+    def __init__(self, prefix='', bpm_list=tuple(), data_prefix=''):
         self.prefix = prefix
         self.bpm_list = bpm_list
+        self.data_prefix = data_prefix
 
-    def add_channels(self, wid, propty, write=True):
-
+    def create_wid(self, cls, propty, parent=None, write=True,
+                   use_data_prefix=True):
+        wid = cls(parent or self)
+        wid._channels = []
         for bpm in self.bpm_list:
+            addr = self.prefix + bpm
+            addr += self.data_prefix if use_data_prefix else ''
+            addr += propty
             chan = PyDMChannel(
-                    address=self.prefix + bpm + propty,
+                    address=addr,
                     connection_slot=wid.connectionStateChanged,
                     value_slot=wid.channelValueChanged,
                     severity_slot=wid.alarmSeverityChanged,
@@ -33,46 +39,83 @@ class _WidgetsFactory(object):
                     unit_slot=wid.unitChanged,
                     prec_slot=wid.precisionChanged,
                     upper_ctrl_limit_slot=wid.upperCtrlLimitChanged,
-                    lower_ctrl_limit_slot=wid.lowerCtrlLimitChanged,
-                    value_signal=None,
-                    write_access_slot=None)
+                    lower_ctrl_limit_slot=wid.lowerCtrlLimitChanged)
             if write:
                 chan.value_signal = wid.send_value_signal
                 chan.write_access_slot = wid.writeAccessChanged
             wid._channels.append(chan)
+        return wid
+
+    def isSingleBPM(self):
+        return len(self.bpm_list) == 1
 
 
-class MultipleBPM(SiriusMainWindow, _WidgetsFactory):
+class BPMsInterface(SiriusMainWindow, _WidgetsCreator):
 
-    def __init__(self, parent=None, prefix='', bpm_list=[]):
-        _WidgetsFactory.__init__(self, prefix=prefix, bpm_list=bpm_list)
+    def __init__(self, parent=None, **kwargs):
         SiriusMainWindow.__init__(self, parent=parent)
-        wid = OperationModes(parent=self, prefix=prefix, bpm_list=bpm_list)
+        _WidgetsCreator.__init__(self, **kwargs)
+        wid = OperationModes(parent=self, **kwargs)
         self.setCentralWidget(wid)
-        self.setWindowTitle(prefix)
+        self.setWindowTitle(self.prefix)
         self.resize(1500, 1800)
         self.configure_menuBar()
 
     def configure_menuBar(self):
         menubar = self.menuBar()
-        cb = PyDMCheckbox(self)
-        self.add_channels(cb, propty='OpMode-Sel')
+        cb = self.create_wid(PyDMCheckbox, propty='OpMode-Sel')
         cb.setVisible(False)
 
-        calibr = menubar.addAction('&Calibration')
-        calibr.triggered.connect(self.open_calibration_window)
+        if self.isSingleBPM():
+            menubar.addAction('&Calibration').triggered.connect(
+                                                self.open_calibration_window)
+        else:
+            menubar.addAction('&Open Individual BPMs').triggered.connect(
+                                                self.open_single_bpm_window)
 
     def open_calibration_window(self):
         app = SiriusApplication.instance()
         app.open_window(CalibrationWindow, parent=self,
                         prefix=self.prefix, bpm_list=self.bpm_list)
 
+    def open_single_bpm_window(self):
+        app = SiriusApplication.instance()
+        app.open_window(SingleBPMSelectionWindow, parent=self,
+                        prefix=self.prefix, bpm_list=self.bpm_list)
 
-class CalibrationWindow(SiriusDialog, _WidgetsFactory):
 
-    def __init__(self, parent=None, prefix='', bpm_list=[]):
-        _WidgetsFactory.__init__(self, prefix=prefix, bpm_list=bpm_list)
-        SiriusMainWindow.__init__(self, parent=parent)
+class SingleBPMSelectionWindow(SiriusDialog, _WidgetsCreator):
+
+    def __init__(self, parent=None, **kwargs):
+        SiriusDialog.__init__(self, parent=parent)
+        _WidgetsCreator.__init__(self, **kwargs)
+        fl = QFormLayout(self)
+        fl.setAlignment(Qt.AlignCenter)
+        self.app = SiriusApplication.instance()
+
+        lb = QLabel('BPMs controlled by This interface')
+        lb.setAlignment(Qt.AlignCenter)
+        fl.addRow(lb)
+        fl.addRow('Status', QLabel('BPM Name', self))
+        for bpm in self.bpm_list:
+            pv_pref = kwargs['prefix'] + bpm
+            led = SiriusLedAlert(self, init_channel=pv_pref+'asyn.CNCT')
+            pb = QPushButton(bpm[:-1], self)
+            pb.clicked.connect(self.open_bpm_window(bpm))
+            fl.addRow(led, pb)
+
+    def open_bpm_window(self, bpm):
+        def open(bool):
+            self.app.open_window(BPMsInterface, parent=self,
+                                 prefix=self.prefix, bpm_list=(bpm,))
+        return open
+
+
+class CalibrationWindow(SiriusDialog, _WidgetsCreator):
+
+    def __init__(self, parent=None, **kwargs):
+        SiriusDialog.__init__(self, parent=parent)
+        _WidgetsCreator.__init__(self, **kwargs)
         self.fl = QFormLayout(self)
         self.fl.setLabelAlignment(Qt.AlignVCenter)
         lb = QLabel('Acquisition Mode')
@@ -102,11 +145,12 @@ class CalibrationWindow(SiriusDialog, _WidgetsFactory):
         self._add_row('INFOTBTRate-SP', 'INFOTBTRate-RB', 'TbT Rate')
 
     def _add_row(self, pv1, pv2, label):
-        CLASS_ = PyDMLineEdit if pv1.endswith('-SP') else PyDMECB
-        le = CLASS_(self)
-        self.add_channels(le, pv1, write=False)
-        lb = PyDMLabel(self)
-        self.add_channels(le, pv2)
+        not_enum = pv1.endswith('-SP')
+        CLASS_ = PyDMSpinbox if not_enum else PyDMECB
+        le = self.create_wid(CLASS_, pv1)
+        if not_enum:
+            le.showStepExponent = False
+        lb = self.create_wid(PyDMLabel, pv2, write=False)
         hl = QHBoxLayout()
         hl.addWidget(le)
         hl.addWidget(lb)
@@ -115,56 +159,67 @@ class CalibrationWindow(SiriusDialog, _WidgetsFactory):
         self.fl.addRow(lb2, hl)
 
 
-class OperationModes(QTabWidget):
-    def __init__(self, parent=None, prefix='', bpm_list=[]):
-        _WidgetsFactory.__init__(self, prefix=prefix, bpm_list=bpm_list)
+class OperationModes(QTabWidget, _WidgetsCreator):
+    def __init__(self, parent=None, **kwargs):
         QTabWidget.__init__(self, parent=parent)
-        self.prefix = prefix
-        super().__init__(parent=parent)
-        wid = ContinuousMonit(parent=self, prefix=prefix, bpm_list=bpm_list)
+        _WidgetsCreator.__init__(self, **kwargs)
+        if self.isSingleBPM():
+            wid = ContinuousMonitSingleBPM(parent=self, **kwargs)
+        else:
+            wid = ContinuousMonitMultiBPM(parent=self, **kwargs)
         self.addTab(wid, 'Continuous Monitoring')
-        wid = TrigAcquisitions(parent=self, prefix=prefix, bpm_list=bpm_list)
+        wid = TrigAcquisitions(parent=self, **kwargs)
         self.addTab(wid, 'Triggered Acquisitions')
-        wid = PostMortemWid(parent=self, prefix=prefix, bpm_list=bpm_list)
+        wid = PostMortemWid(parent=self, **kwargs)
         self.addTab(wid, 'Post Mortem')
 
 
-class ContinuousMonit(QWidget, _WidgetsFactory):
+class ContinuousMonitMultiBPM(QWidget, _WidgetsCreator):
 
-    def __init__(self, parent=None, prefix='', bpm_list=[]):
-        _WidgetsFactory.__init__(self, prefix=prefix, bpm_list=bpm_list)
+    def __init__(self, parent=None, **kwargs):
         QWidget.__init__(self, parent=parent)
+        _WidgetsCreator.__init__(self, **kwargs)
+        print('multi')
+
+
+class ContinuousMonitSingleBPM(QWidget, _WidgetsCreator):
+
+    def __init__(self, parent=None, **kwargs):
+        QWidget.__init__(self, parent=parent)
+        _WidgetsCreator.__init__(self, **kwargs)
         gl = QGridLayout(self)
+        print('single')
+        pv_pref = self.prefix + self.bpm_list[0]
         prps = {}
         prps['colors'] = ['blue', ]
-        prps['init_channels'] = [self.prefix+'PosX-Mon', ]
+        prps['init_channels'] = [pv_pref+'PosX-Mon', ]
         prps['label'] = 'Position X [nm]'
         plotPosX = self.createPlot(**prps)
         gl.addWidget(plotPosX, 0, 0, 1, 1)
 
         prps['colors'] = ['red', ]
-        prps['init_channels'] = [self.prefix+'PosY-Mon', ]
+        prps['init_channels'] = [pv_pref+'PosY-Mon', ]
         prps['label'] = 'Position Y [nm]'
         plotPosY = self.createPlot(**prps)
         gl.addWidget(plotPosY, 1, 0, 1, 1)
 
         # prps['colors'] = ['black', ]
-        # prps['init_channels'] = [self.prefix+'Sum-Mon', ]
+        # prps['init_channels'] = [pv_pref+'Sum-Mon', ]
         # prps['label'] = 'Sum'
         # plotPosS = self.createPlot(**prps)
         # gl.addWidget(plotPosS, 2, 0, 1, 1)
 
         prps['colors'] = ['green', ]
-        prps['init_channels'] = [self.prefix+'PosQ-Mon', ]
+        prps['init_channels'] = [pv_pref+'PosQ-Mon', ]
         prps['label'] = 'Skew'
         plotPosQ = self.createPlot(**prps)
         gl.addWidget(plotPosQ, 2, 0, 1, 1)
 
         prps['colors'] = ['blue', 'red', 'black', 'green']
-        prps['init_channels'] = [self.prefix+'AmplA-Mon',
-                                 self.prefix+'AmplB-Mon',
-                                 self.prefix+'AmplC-Mon',
-                                 self.prefix+'AmplD-Mon']
+        prps['init_channels'] = [pv_pref+'AmplA-Mon',
+                                 pv_pref+'AmplB-Mon',
+                                 pv_pref+'AmplC-Mon',
+                                 pv_pref+'AmplD-Mon']
         prps['label'] = 'Antennas'
         plotAmps = self.createPlot(**prps)
         gl.addWidget(plotAmps, 3, 0, 1, 1)
@@ -180,14 +235,15 @@ class ContinuousMonit(QWidget, _WidgetsFactory):
             plot._curves[i].lineWidth = 2
         pl_item = plot.getPlotItem()
         pl_item.showButtons()
-        # pl_item.setTitle(label, **{'size': '32px'})
+        pl_item.setTitle(label, **{'size': '32px'})
         font = QFont()
         font.setPixelSize(32)
         ax = pl_item.getAxis('left')
-        ax.setLabel(label, **{'font-size': '32px'})
-        ax.showLabel()
+        # ax.setLabel(label, **{'font-size': '32px'})
+        # ax.showLabel()
         ax.setTickFont(font)
-        ax.setStyle(autoExpandTextSpace=True)
+        ax.setStyle(autoExpandTextSpace=False,
+                    tickTextWidth=100)
         ax = pl_item.getAxis('bottom')
         ax.setTickFont(font)
         ax.setStyle(autoExpandTextSpace=False,
@@ -206,25 +262,30 @@ class ContinuousMonit(QWidget, _WidgetsFactory):
         return plot
 
 
-class TrigAcquisitions(QWidget, _WidgetsFactory):
+class TrigAcquisitions(QWidget, _WidgetsCreator):
 
-    def __init__(self, parent=None, prefix='', bpm_list=[]):
-        _WidgetsFactory.__init__(self, prefix=prefix, bpm_list=bpm_list)
+    def __init__(self, parent=None, **kwargs):
         QWidget.__init__(self, parent=parent)
+        _WidgetsCreator.__init__(self, **kwargs)
         vl = QVBoxLayout(self)
         stack = QStackedWidget(parent=self)
-        acq_multi_pass = MultiPassData(
-                parent=self, prefix=prefix, bpm_list=bpm_list, acq_type='ACQ')
-        stack.addWidget(acq_multi_pass)
-        acq_single_pass = SinglePassData(
-                parent=self, prefix=prefix, bpm_list=bpm_list)
-        stack.addWidget(acq_single_pass)
+        if self.isSingleBPM:
+            multi_pass = MultiPassDataSingleBPM(
+                                    parent=self, **kwargs, acq_type='ACQ')
+            single_pass = SinglePassDataSingleBPM(parent=self, **kwargs)
+        else:
+            multi_pass = MultiPassDataMultiBPM(
+                                    parent=self, **kwargs, acq_type='ACQ')
+            single_pass = SinglePassDataMultiBPM(parent=self, **kwargs)
+
+        stack.addWidget(multi_pass)
+        stack.addWidget(single_pass)
         self.stack = stack
         vl.addWidget(stack)
         config = MultiPassConfig(
-                parent=self, prefix=prefix, bpm_list=bpm_list, acq_type='ACQ')
+                parent=self, **kwargs, data_prefix='ACQ')
         config.acq_channel.currentIndexChanged[str].connect(
-                                    acq_multi_pass.control_visibility_buttons)
+                                    multi_pass.control_visibility_buttons)
         config.acq_bpm_mode.currentIndexChanged[str].connect(
                                     self.toggle_multi_single)
         vl.addWidget(config)
@@ -236,16 +297,14 @@ class TrigAcquisitions(QWidget, _WidgetsFactory):
             self.stack.setCurrentIndex(0)
 
 
-class MultiPassData(QWidget):
+class MultiPassDataSingleBPM(QWidget, _WidgetsCreator):
     _PROPS = ('A', 'B', 'C', 'D', 'X', 'Y', 'Sum', 'Q')
     _COLORS = ('blue', 'red', 'black', 'green')
 
-    def __init__(self, parent=None, prefix='', bpm_list=[], acq_type='ACQ'):
-        _WidgetsFactory.__init__(self, prefix=prefix, bpm_list=bpm_list)
+    def __init__(self, parent=None, acq_type='ACQ', **kwargs):
         QWidget.__init__(self, parent=parent)
-        self.acq_type = acq_type
+        _WidgetsCreator.__init__(self, **kwargs)
         self.data_prefix = 'GEN_' if acq_type == 'ACQ' else 'PM_'
-        super().__init__(parent=parent)
         vl = QVBoxLayout(self)
         stack = QStackedWidget(self)
         self.stack = stack
@@ -277,7 +336,7 @@ class MultiPassData(QWidget):
         self.radio_buttons[0].setChecked(True)
 
     def create_prop_widget(self, ind, prop):
-        pv_prefix = self.prefix + self.data_prefix + prop
+        pv_prefix = self.prefix + self.bpm_list[0] + self.data_prefix + prop
         color = self._COLORS[ind % 4]
         wid = QWidget(self)
         gl = QGridLayout(wid)
@@ -321,34 +380,40 @@ class MultiPassData(QWidget):
                   PyDMLabel(gb, init_channel=pv_prefix+'_STATSSigma_RBV'))
         vl.addWidget(gb)
         pb = QPushButton('Open FFT Config', wid)
-        pb.clicked.connect(self.open_fft_config_window(wid, pv_prefix))
+        pb.clicked.connect(self.open_fft_config_window(wid, prop))
         vl.addWidget(pb)
         gl.addItem(vl, 1, 0)
 
         return wid
 
-    def open_fft_config_window(self, wid, pv_prefix):
+    def open_fft_config_window(self, wid, prop):
         app = SiriusApplication.instance()
 
         def open_window():
-            app.open_window(FFTConfigs, parent=wid, prefix=pv_prefix)
+            app.open_window(
+                    FFTConfigs, parent=wid, prefix=self.prefix,
+                    bpm_list=self.bpm_list, data_prefix=self.data_prefix+prop)
         return open_window
 
 
-class SinglePassData(QWidget):
+class MultiPassDataMultiBPM(MultiPassDataSingleBPM):
+    pass
 
-    def __init__(self, parent=None, prefix='', bpm_list=[]):
+
+class SinglePassDataSingleBPM(QWidget, _WidgetsCreator):
+
+    def __init__(self, parent=None, **kwargs):
         """Initialize object."""
-        _WidgetsFactory.__init__(self, prefix=prefix, bpm_list=bpm_list)
         QWidget.__init__(self, parent=parent)
+        _WidgetsCreator.__init__(self, **kwargs)
         vl = QVBoxLayout(self)
-
+        pv_pref = self.prefix + self.bpm_list[0]
         plot_prop = PyDMWaveformPlot(
             parent=self,
-            init_y_channels=[self.prefix + 'SP_AArrayData-Mon',
-                             self.prefix + 'SP_BArrayData-Mon',
-                             self.prefix + 'SP_CArrayData-Mon',
-                             self.prefix + 'SP_DArrayData-Mon'],
+            init_y_channels=[pv_pref + 'SP_AArrayData-Mon',
+                             pv_pref + 'SP_BArrayData-Mon',
+                             pv_pref + 'SP_CArrayData-Mon',
+                             pv_pref + 'SP_DArrayData-Mon'],
             background='w')
         plot_prop._curves[0].color = 'blue'
         plot_prop._curves[1].color = 'red'
@@ -360,8 +425,8 @@ class SinglePassData(QWidget):
         vl.addWidget(self.stack)
         plotXY = PyDMTimePlot(
                         self,
-                        init_y_channels=[self.prefix + 'SPPosX-Mon',
-                                         self.prefix + 'SPPosY-Mon'],
+                        init_y_channels=[pv_pref + 'SPPosX-Mon',
+                                         pv_pref + 'SPPosY-Mon'],
                         background='w')
         plotXY.timeSpan = 60
         plotXY._curves[0].color = 'blue'
@@ -372,7 +437,7 @@ class SinglePassData(QWidget):
         hl = QHBoxLayout()
         plotSum = PyDMTimePlot(
                     self,
-                    init_y_channels=[self.prefix + 'SPSum-Mon', ],
+                    init_y_channels=[pv_pref + 'SPSum-Mon', ],
                     background='w')
         plotSum.timeSpan = 60
         plotSum._curves[0].color = 'black'
@@ -380,7 +445,7 @@ class SinglePassData(QWidget):
         hl.addWidget(plotSum)
         plotQ = PyDMTimePlot(
                     self,
-                    init_y_channels=[self.prefix + 'SPPosQ-Mon', ],
+                    init_y_channels=[pv_pref + 'SPPosQ-Mon', ],
                     background='w')
         plotQ.timeSpan = 60
         plotQ._curves[0].color = 'black'
@@ -392,10 +457,10 @@ class SinglePassData(QWidget):
 
         plotAmp = PyDMTimePlot(
             parent=self,
-            init_y_channels=[self.prefix + 'SPAmplA-Mon',
-                             self.prefix + 'SPAmplB-Mon',
-                             self.prefix + 'SPAmplC-Mon',
-                             self.prefix + 'SPAmplD-Mon'],
+            init_y_channels=[pv_pref + 'SPAmplA-Mon',
+                             pv_pref + 'SPAmplB-Mon',
+                             pv_pref + 'SPAmplC-Mon',
+                             pv_pref + 'SPAmplD-Mon'],
             background='w')
         plotAmp._curves[0].color = 'blue'
         plotAmp._curves[1].color = 'red'
@@ -416,24 +481,24 @@ class SinglePassData(QWidget):
         vl.addItem(hl)
         gb = QGroupBox('Positions', self)
         fl = QFormLayout(gb)
-        lb = PyDMLabel(gb, init_channel=self.prefix + 'SPPosX-Mon')
+        lb = PyDMLabel(gb, init_channel=pv_pref + 'SPPosX-Mon')
         fl.addRow('PosX', lb)
-        lb = PyDMLabel(gb, init_channel=self.prefix + 'SPPosY-Mon')
+        lb = PyDMLabel(gb, init_channel=pv_pref + 'SPPosY-Mon')
         fl.addRow('PosY', lb)
-        lb = PyDMLabel(gb, init_channel=self.prefix + 'SPSum-Mon')
+        lb = PyDMLabel(gb, init_channel=pv_pref + 'SPSum-Mon')
         fl.addRow('Sum', lb)
-        lb = PyDMLabel(gb, init_channel=self.prefix + 'SPPosQ-Mon')
+        lb = PyDMLabel(gb, init_channel=pv_pref + 'SPPosQ-Mon')
         fl.addRow('PosQ', lb)
         hl.addWidget(gb)
         gb = QGroupBox('Processed Antennas', self)
         fl = QFormLayout(gb)
-        lb = PyDMLabel(gb, init_channel=self.prefix + 'SPAmplA-Mon')
+        lb = PyDMLabel(gb, init_channel=pv_pref + 'SPAmplA-Mon')
         fl.addRow('AmplA', lb)
-        lb = PyDMLabel(gb, init_channel=self.prefix + 'SPAmplB-Mon')
+        lb = PyDMLabel(gb, init_channel=pv_pref + 'SPAmplB-Mon')
         fl.addRow('AmplB', lb)
-        lb = PyDMLabel(gb, init_channel=self.prefix + 'SPAmplC-Mon')
+        lb = PyDMLabel(gb, init_channel=pv_pref + 'SPAmplC-Mon')
         fl.addRow('AmplC', lb)
-        lb = PyDMLabel(gb, init_channel=self.prefix + 'SPAmplD-Mon')
+        lb = PyDMLabel(gb, init_channel=pv_pref + 'SPAmplD-Mon')
         fl.addRow('AmplD', lb)
         hl.addWidget(gb)
 
@@ -444,11 +509,15 @@ class SinglePassData(QWidget):
         return toggle
 
 
-class FFTConfigs(SiriusDialog):
+class SinglePassDataMultiBPM(SinglePassDataSingleBPM):
+    pass
 
-    def __init__(self, parent=None, prefix='', bpm_list=[]):
-        _WidgetsFactory.__init__(self, prefix=prefix, bpm_list=bpm_list)
+
+class FFTConfigs(SiriusDialog, _WidgetsCreator):
+
+    def __init__(self, parent=None, **kwargs):
         SiriusDialog.__init__(self, parent=parent)
+        _WidgetsCreator.__init__(self, **kwargs)
         self.fl = QFormLayout(self)
         self.fl.setLabelAlignment(Qt.AlignVCenter)
         self._add_row('FFTData.SPAN', 'Number of points')
@@ -460,7 +529,7 @@ class FFTConfigs(SiriusDialog):
 
     def _add_row(self, pv, label, enum=False):
         CLASS_ = PyDMECB if enum else PyDMSpinbox
-        le = CLASS_(self, init_channel=self.prefix+pv)
+        le = self.create_wid(CLASS_, pv)
         if not enum:
             le.showStepExponent = False
         lb = QLabel(label)
@@ -468,92 +537,77 @@ class FFTConfigs(SiriusDialog):
         self.fl.addRow(lb, le)
 
 
-class MultiPassConfig(QGroupBox, _WidgetsFactory):
+class MultiPassConfig(QGroupBox, _WidgetsCreator):
 
-    def __init__(self, parent=None, prefix='', bpm_list=[], acq_type='ACQ'):
-        _WidgetsFactory.__init__(self, prefix=prefix, bpm_list=bpm_list)
+    def __init__(self, parent=None, **kwargs):
         QGroupBox.__init__(self, parent=parent)
-        self.data_prefix = acq_type
-        pv_pref = prefix + acq_type
+        _WidgetsCreator.__init__(self, **kwargs)
         self.setTitle('Acquisition Configurations')
         hl = QHBoxLayout(self)
         gb = QGroupBox(self)
         fl = QFormLayout(gb)
         fl.setLabelAlignment(Qt.AlignVCenter)
-        ecb = PyDMECB(self)
-        self.add_channels(ecb, propty='ACQBPMMode-Sel')
+        ecb = self.create_wid(PyDMECB, propty='ACQBPMMode-Sel',
+                              use_data_prefix=False)
         fl.addRow('BPM Mode Sel', ecb)
         self.acq_bpm_mode = ecb
-        # lb = PyDMLabel(self, init_channel=prefix+'ACQBPMMode-Sts')
-        # fl.addRow('BPM Mode Sts', lb)
-        sb = PyDMSpinbox(self)
-        self.add_channels(sb, propty=acq_type+'Shots-SP')
+        sb = self.create_wid(PyDMSpinbox, propty='Shots-SP')
         sb.showStepExponent = False
         fl.addRow('# shots', sb)
-        sb = PyDMSpinbox(self)
-        self.add_channels(sb, propty=acq_type+'TriggerHwDly-SP')
+        sb = self.create_wid(PyDMSpinbox, propty='TriggerHwDly-SP')
         sb.showStepExponent = False
         fl.addRow('Delay [us]', sb)
-        sb = PyDMSpinbox(self)
-        self.add_channels(sb, propty=acq_type+'SamplesPre-SP')
+        sb = self.create_wid(PyDMSpinbox, propty='SamplesPre-SP')
         sb.showStepExponent = False
         fl.addRow('# Samples Pre', sb)
-        sb = PyDMSpinbox(self)
-        self.add_channels(sb, propty=acq_type+'SamplesPost-SP')
+        sb = self.create_wid(PyDMSpinbox, propty='SamplesPost-SP')
         sb.showStepExponent = False
         fl.addRow('# Samples Pos', sb)
-        ecb = PyDMECB(self)
-        self.add_channels(ecb, propty=acq_type+'TriggerRep-Sel')
+        ecb = self.create_wid(PyDMECB, propty='TriggerRep-Sel')
         fl.addRow('Repetitive', ecb)
-        sb = PyDMSpinbox(self)
-        self.add_channels(sb, propty=acq_type+'UpdateTime-SP')
+        sb = self.create_wid(PyDMSpinbox, propty='UpdateTime-SP')
         sb.showStepExponent = False
         fl.addRow('Update Interval', sb)
         gl = QGridLayout()
-        pb1 = PyDMPB(self)
-        self.add_channels(pb1, propty=acq_type+'TriggerEvent-Sel')
+        pb1 = self.create_wid(PyDMPB, propty='TriggerEvent-Sel')
         pb1.pressValue = 0
         pb1.setText('Start')
         gl.addWidget(pb1, 0, 0)
-        pb2 = PyDMPB(self)
-        self.add_channels(pb2, propty=acq_type+'TriggerEvent-Sel')
+        pb2 = self.create_wid(PyDMPB, propty='TriggerEvent-Sel')
         pb2.pressValue = 1
         pb2.setText('Stop')
         gl.addWidget(pb2, 0, 1)
-        pb1 = PyDMPB(self)
-        self.add_channels(pb1, propty=acq_type+'TriggerEvent-Sel')
+        pb1 = self.create_wid(PyDMPB, propty='TriggerEvent-Sel')
         pb1.pressValue = 2
         pb1.setText('Abort')
         gl.addWidget(pb1, 1, 0)
-        pb2 = PyDMPB(self)
-        self.add_channels(pb2, propty=acq_type+'TriggerEvent-Sel')
+        pb2 = self.create_wid(PyDMPB, propty='TriggerEvent-Sel')
         pb2.pressValue = 3
         pb2.setText('Reset')
         gl.addWidget(pb2, 1, 1)
-        fl.addRow('Events', gl)
-        lb = PyDMLabel(self)
-        self.add_channels(lb, propty=acq_type+'Status-Sts', write=False)
+        lb = QLabel('COMMANDS', self)
+        lb.setAlignment(Qt.AlignVCenter)
+        fl.addRow(lb, gl)
+        lb = self.create_wid(PyDMLabel, propty='Status-Sts', write=False)
         fl.addRow('Status', lb)
         hl.addWidget(gb)
 
         gb = QGroupBox(self)
         fl = QFormLayout(gb)
-        ecb = PyDMECB(self)
-        self.add_channels(ecb, propty=acq_type+'Channel-Sel')
+        ecb = self.create_wid(PyDMECB, propty='Channel-Sel')
         self.acq_channel = ecb
         lb = QLabel('Rate', self)
         fl.addRow(lb, ecb)
         self.acq_bpm_mode.currentIndexChanged[str].connect(
                 self.set_widgets_visibility([lb, ecb], 'multi'))
 
-        ecb_trig_type = PyDMECB(self, init_channel=pv_pref+'Trigger-Sel')
+        ecb_trig_type = self.create_wid(PyDMECB, propty='Trigger-Sel')
         fl.addRow('Trigger Type', ecb_trig_type)
 
         lb1 = QLabel('External Trigger Configurations')
         lb1.setAlignment(Qt.AlignHCenter)
         fl.addRow(lb1)
-        ecb1 = PyDMECB(self)
-        self.add_channels(ecb1, propty=acq_type+'TriggerExternalChan-Sel')
+        ecb1 = self.create_wid(PyDMECB, propty='TriggerExternalChan-Sel')
         lb2 = QLabel('External Trigger')
         fl.addRow(lb2, ecb1)
         ecb_trig_type.currentIndexChanged[str].connect(
@@ -563,33 +617,28 @@ class MultiPassConfig(QGroupBox, _WidgetsFactory):
         wids = [lb]
         lb.setAlignment(Qt.AlignHCenter)
         fl.addRow(lb)
-        ecb = PyDMECB(self)
-        self.add_channels(ecb, propty=acq_type+'TriggerDataChan-Sel')
+        ecb = self.create_wid(PyDMECB, propty='TriggerDataChan-Sel')
         wids.append(ecb)
         lb = QLabel('Type of Rate as Trigger', self)
         wids.append(lb)
         fl.addRow(lb, ecb)
-        ecb = PyDMECB(self)
-        self.add_channels(ecb, propty=acq_type+'TriggerDataSel-Sel')
+        ecb = self.create_wid(PyDMECB, propty='TriggerDataSel-Sel')
         wids.append(ecb)
         lb = QLabel('Channel', self)
         wids.append(lb)
         fl.addRow(lb, ecb)
-        ecb = PyDMECB(self)
-        self.add_channels(ecb, propty=acq_type+'TriggerDataPol-Sel')
+        ecb = self.create_wid(PyDMECB, propty='TriggerDataPol-Sel')
         wids.append(ecb)
         lb = QLabel('Slope', self)
         wids.append(lb)
         fl.addRow(lb, ecb)
-        sb = PyDMSpinbox(self)
-        self.add_channels(ecb, propty=acq_type+'TriggerDataThres-SP')
+        sb = self.create_wid(PyDMSpinbox, propty='TriggerDataThres-SP')
         sb.showStepExponent = False
         wids.append(sb)
         lb = QLabel('Threshold', self)
         wids.append(lb)
         fl.addRow(lb, sb)
-        sb = PyDMSpinbox(self)
-        self.add_channels(ecb, propty=acq_type+'TriggerDataHyst-SP')
+        sb = self.create_wid(PyDMSpinbox, propty='TriggerDataHyst-SP')
         sb.showStepExponent = False
         wids.append(sb)
         lb = QLabel('Hysteresis', self)
@@ -607,14 +656,18 @@ class MultiPassConfig(QGroupBox, _WidgetsFactory):
         return toggle
 
 
-class PostMortemWid(QWidget):
+class PostMortemWid(QWidget, _WidgetsCreator):
 
-    def __init__(self, parent=None, prefix=''):
-        self.prefix = prefix
-        super().__init__(parent=parent)
+    def __init__(self, parent=None, **kwargs):
+        QWidget.__init__(self, parent=parent)
+        _WidgetsCreator.__init__(self, **kwargs)
         vl = QVBoxLayout(self)
-        data = MultiPassData(self, prefix=prefix, acq_type='ACQ_PM')
-        config = MultiPassConfig(self, prefix=prefix, acq_type='ACQ_PM')
+        if self.isSingleBPM():
+            CL = MultiPassDataSingleBPM
+        else:
+            CL = MultiPassDataMultiBPM
+        data = CL(self, acq_type='ACQ_PM', **kwargs)
+        config = MultiPassConfig(self, data_prefix='ACQ_PM', **kwargs)
         vl.addWidget(data)
         vl.addWidget(config)
         config.acq_channel.currentIndexChanged[str].connect(
@@ -622,8 +675,11 @@ class PostMortemWid(QWidget):
 
 
 if __name__ == '__main__':
+    import sys
+
     app = SiriusApplication()
     util.set_style(app)
-    wind = MultipleBPM(prefix='ca://'+vaca_prefix + 'SI-01M1:DI-BPM:')
+    bpm_list = ('SI-01M1:DI-BPM:', 'SI-01M2:DI-BPM:')
+    wind = BPMsInterface(prefix='ca://'+vaca_prefix, bpm_list=bpm_list)
     wind.show()
     sys.exit(app.exec_())

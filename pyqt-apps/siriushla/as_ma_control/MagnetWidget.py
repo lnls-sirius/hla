@@ -146,7 +146,7 @@ class BaseMagnetWidget(QWidget):
             parent=self, init_channel="ca://" + self._pwrstate_sp_pv)
         self.pwrstate_button.setObjectName("pwrstate_button")
         self.state_led = PyDMLed(
-            self, "ca://" + self._pwrstate_sp_pv)
+            self, "ca://" + self._pwrstate_rb_pv)
             # enum_map={'On': PyDMLed.Green, 'Off': PyDMLed.Red})
         self.state_led.setObjectName("state_led")
         self.state_widget = QWidget(self)
