@@ -2,6 +2,7 @@
 """HLA Current and Lifetime Modules."""
 
 import epics as _epics
+import numpy as _np
 from pydm.PyQt.uic import loadUi
 from pydm.PyQt.QtCore import pyqtSlot
 from siriushla.widgets import SiriusMainWindow
@@ -39,15 +40,16 @@ class CurrLTWindow(SiriusMainWindow):
     def formatLifetime(self, value, **kws):
         """Format lifetime label."""
         lt = value
-        H = str(int(lt // 3600))
-        m = str(int((lt % 3600) // 60))
-        if len(m) == 1:
-            m = '0' + m
-        s = str(int((lt % 3600) % 60))
-        if len(s) == 1:
-            s = '0' + s
-        lt_str = H + ':' + m + ':' + s
-        self.centralwidget.CurrLT.setText(lt_str)
+        if not _np.isnan(lt):
+            H = str(int(lt // 3600))
+            m = str(int((lt % 3600) // 60))
+            if len(m) == 1:
+                m = '0' + m
+            s = str(int((lt % 3600) % 60))
+            if len(s) == 1:
+                s = '0' + s
+            lt_str = H + ':' + m + ':' + s
+            self.centralwidget.CurrLT.setText(lt_str)
 
     @pyqtSlot(int)
     def setGraphBufferSize(self, value):
