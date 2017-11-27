@@ -221,6 +221,14 @@ class BaseMagnetWidget(QWidget):
             return self.trim_button
         return None
 
+    def turn_on(self):
+        if not self.pwrstate_button._bit_val:
+            self.pwrstate_button.send_value()
+
+    def turn_off(self):
+        if self.pwrstate_button._bit_val:
+            self.pwrstate_button.send_value()
+
     def sizeHint(self):
         return QSize(1600, 60)
 

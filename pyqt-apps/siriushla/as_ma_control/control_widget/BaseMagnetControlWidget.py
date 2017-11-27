@@ -80,7 +80,10 @@ class BaseMagnetControlWidget(QWidget):
         """Execute actions from context menu."""
         for key, widget in self.widgets_list.items():
             if key in self.filtered_widgets:
-                widget.pwrstate_button.send_value(state)
+                if state:
+                    widget.turn_on()
+                else:
+                    widget.turn_off()
 
     @pyqtSlot()
     def set_current_sp_action(self):
