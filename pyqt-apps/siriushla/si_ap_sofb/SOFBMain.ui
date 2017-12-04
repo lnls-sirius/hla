@@ -3998,6 +3998,11 @@ font-weight: bold;</string>
  </widget>
  <customwidgets>
   <customwidget>
+   <class>SiriusMainWindow</class>
+   <extends>MainWindow</extends>
+   <header>siriushla.widgets.windows</header>
+  </customwidget>
+  <customwidget>
    <class>PyDMWaveformPlot</class>
    <extends>QGraphicsView</extends>
    <header>pydm.widgets.waveformplot</header>
