@@ -4,8 +4,6 @@ from pydm.PyQt.QtGui import QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, \
 from pydm.widgets.label import PyDMLabel
 
 from siriuspy.envars import vaca_prefix as _VACA_PREFIX
-from siriuspy.pulsedps import properties as pu_props
-from siriuspy.pulsedma import properties as pm_props
 from siriushla.widgets.led import SiriusLedState, SiriusLedAlert
 from siriushla.widgets.state_button import PyDMStateButton
 from siriushla.widgets import PyDMLinEditScrollbar
@@ -31,24 +29,24 @@ class PulsedMagnetDetailWidget(QWidget):
 
     def _create_pvs(self):
         """Create variables with pvs that'll be used."""
-        self._tension_sp_pv = self._prefixed_maname + ":" + pu_props.TensionSP
+        self._tension_sp_pv = self._prefixed_maname + ":Voltage-SP"
         self._tension_mon_pv = \
-            self._prefixed_maname + ":" + pu_props.TensionMon
+            self._prefixed_maname + ":Voltage-Mon"
         self._kick_sp_pv = \
-            self._prefixed_maname + ":" + pm_props.StrengthSP
+            self._prefixed_maname + ":Kick-SP"
         self._kick_mon_pv = \
-            self._prefixed_maname + ":" + pm_props.StrengthMon
+            self._prefixed_maname + ":Kick-Mon"
         self._pwrstate_sel_pv = \
-            self._prefixed_maname + ":" + pu_props.PwrStateSel
+            self._prefixed_maname + ":PwrState-Sel"
         self._pwrstate_sts_pv = \
-            self._prefixed_maname + ":" + pu_props.PwrStateSts
+            self._prefixed_maname + ":PwrState-Sts"
         self._enablepulses_sel_pv = \
-            self._prefixed_maname + ":" + pu_props.EnablePulsesSel
+            self._prefixed_maname + ":Pulsed-Sel"
         self._enablepulses_sts_pv = \
-            self._prefixed_maname + ":" + pu_props.EnablePulsesSts
+            self._prefixed_maname + ":Pulsed-Sts"
         self._intlk_mon_pv = \
-            self._prefixed_maname + ":" + pu_props.ExternalInterlock
-        self._ctrlmode_pv = self._prefixed_maname + ":" + pu_props.CtrlMode
+            self._prefixed_maname + ":Intlk-Mon"
+        self._ctrlmode_pv = self._prefixed_maname + ":CtrlMode-Mon"
 
     def _setup_ui(self):
         self.layout = QGridLayout()
