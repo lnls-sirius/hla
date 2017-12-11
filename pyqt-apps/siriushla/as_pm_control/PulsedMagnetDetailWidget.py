@@ -29,8 +29,8 @@ class PulsedMagnetDetailWidget(QWidget):
 
     def _create_pvs(self):
         """Create variables with pvs that'll be used."""
-        self._tension_sp_pv = self._prefixed_maname + ":Voltage-SP"
-        self._tension_mon_pv = \
+        self._voltage_sp_pv = self._prefixed_maname + ":Voltage-SP"
+        self._voltage_mon_pv = \
             self._prefixed_maname + ":Voltage-Mon"
         self._kick_sp_pv = \
             self._prefixed_maname + ":Kick-SP"
@@ -63,9 +63,9 @@ class PulsedMagnetDetailWidget(QWidget):
         pulses_box = QGroupBox(parent=self, title="Pulses")
         pulses_box.setObjectName("pulses_box")
         pulses_box.setLayout(self._pulses_layout())
-        tension_box = QGroupBox(parent=self, title="Tension")
-        tension_box.setObjectName("tension_box")
-        tension_box.setLayout(self._tension_layout())
+        voltage_box = QGroupBox(parent=self, title="Tension")
+        voltage_box.setObjectName("voltage_box")
+        voltage_box.setLayout(self._voltage_layout())
         kick_box = QGroupBox(parent=self, title="Kick")
         kick_box.setObjectName("kick_box")
         kick_box.setLayout(self._kick_layout())
@@ -74,7 +74,7 @@ class PulsedMagnetDetailWidget(QWidget):
         self.layout.addWidget(interlock_box, 1, 0, 2, 1)
         self.layout.addWidget(pwrstate_box, 1, 1)
         self.layout.addWidget(pulses_box, 2, 1)
-        self.layout.addWidget(tension_box, 1, 2)
+        self.layout.addWidget(voltage_box, 1, 2)
         self.layout.addWidget(kick_box, 2, 2)
         self.layout.addLayout(self._ctrlmode_layout(), 3, 1, 1, 3)
 
@@ -124,21 +124,21 @@ class PulsedMagnetDetailWidget(QWidget):
 
         return pulses_layout
 
-    def _tension_layout(self):
-        tension_layout = QVBoxLayout()
+    def _voltage_layout(self):
+        voltage_layout = QVBoxLayout()
 
-        self.tension_sp_widget = PyDMLinEditScrollbar(
-            parent=self, channel="ca://" + self._tension_sp_pv)
-        self.tension_rb_label = PyDMLabel(
-            parent=self, init_channel="ca://" + self._tension_mon_pv)
+        self.voltage_sp_widget = PyDMLinEditScrollbar(
+            parent=self, channel="ca://" + self._voltage_sp_pv)
+        self.voltage_rb_label = PyDMLabel(
+            parent=self, init_channel="ca://" + self._voltage_mon_pv)
 
-        # self.tension_sp_widget.set_limits_from_pv(True)
-        # self.tension_rb_label.precFromPV = True
+        # self.voltage_sp_widget.set_limits_from_pv(True)
+        # self.voltage_rb_label.precFromPV = True
 
-        tension_layout.addWidget(self.tension_sp_widget)
-        tension_layout.addWidget(self.tension_rb_label)
+        voltage_layout.addWidget(self.voltage_sp_widget)
+        voltage_layout.addWidget(self.voltage_rb_label)
 
-        return tension_layout
+        return voltage_layout
 
     def _kick_layout(self):
         kick_layout = QVBoxLayout()
