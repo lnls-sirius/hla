@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1334</width>
-    <height>1506</height>
+    <height>1532</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -166,7 +166,7 @@
       <item row="0" column="5">
        <widget class="QLabel" name="label_10">
         <property name="text">
-         <string>RefKick-Mon</string>
+         <string>RefKick-Mon [mrad]</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -176,7 +176,7 @@
       <item row="0" column="4">
        <widget class="QLabel" name="label_9">
         <property name="text">
-         <string>Kick-RB</string>
+         <string>Kick-RB [rad]</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -775,7 +775,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
       <item row="0" column="2">
        <widget class="QGroupBox" name="groupBox_4">
         <property name="title">
-         <string>ΔAngle</string>
+         <string>ΔAngle [mrad]</string>
         </property>
         <layout class="QGridLayout" name="gridLayout_3">
          <item row="0" column="2">
@@ -1344,7 +1344,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
       <item row="0" column="0">
        <widget class="QGroupBox" name="groupBox">
         <property name="title">
-         <string>ΔPosition</string>
+         <string>ΔPosition [mm]</string>
         </property>
         <layout class="QGridLayout" name="gridLayout">
          <item row="2" column="4">
