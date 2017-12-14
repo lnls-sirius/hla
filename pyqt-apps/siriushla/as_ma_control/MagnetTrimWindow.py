@@ -42,7 +42,7 @@ class MagnetTrimWindow(SiriusMainWindow):
         # Create TrimWidget
         device = self._maname.split("-")[-1]
         self.trim_widget = TrimControlWidget(
-            MASearch.get_manames({"section": "SI", "device": device}),
+            MASearch.get_manames({"sec": "SI", "dev": device}),
             parent=self, orientation=TrimControlWidget.VERTICAL)
         # Connect Trim detail buttons
         self._connect_buttons(self.trim_widget)
