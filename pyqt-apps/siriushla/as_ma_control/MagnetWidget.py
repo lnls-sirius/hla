@@ -156,6 +156,7 @@ class BaseMagnetWidget(QWidget):
         #     parent=self, init_channel="ca://" + self._pwrstate_sp_pv)
         self.analog_widget = PyDMLinEditScrollbar(
             parent=self, channel="ca://" + self._analog_sp_pv,)
+        self.analog_widget.sp_scrollbar.setTracking(False)
         self.analog_widget.setObjectName("analog_widget")
         self.analog_mon_label = PyDMLabel(
             parent=self, init_channel="ca://" + self._analog_mon_pv)
@@ -163,6 +164,7 @@ class BaseMagnetWidget(QWidget):
         self.strength_widget = PyDMLinEditScrollbar(
             parent=self, channel="ca://" + self._strength_sp_pv)
         self.strength_widget.setObjectName("strength_widget")
+        self.strength_widget.sp_scrollbar.setTracking(False)
         self.strength_mon_label = PyDMLabel(
             parent=self, init_channel="ca://" + self._strength_mon_pv)
         self.strength_mon_label.setObjectName("strength_label")
