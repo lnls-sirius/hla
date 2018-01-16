@@ -100,6 +100,7 @@ class MagnetDetailWidget(QWidget):
 
         # Set widget layout
         self.setLayout(self.layout)
+        self.setFocus(True)
 
     def _setWidgetLayout(self):
         layout = QGridLayout()
