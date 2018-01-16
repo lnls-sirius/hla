@@ -4,6 +4,7 @@ import re
 from pydm.PyQt.QtCore import Qt
 from pydm.PyQt.QtGui import QGridLayout, QLabel, QSizePolicy, \
     QFrame, QHBoxLayout
+from epics import get_pv
 
 from siriuspy.envars import vaca_prefix
 from pydm.widgets.label import PyDMLabel
@@ -38,12 +39,16 @@ class DipoleDetailWidget(MagnetDetailWidget):
         layout = QGridLayout()
         # layout.addWidget(QLabel("PS1"), 0, 0)
         # layout.addWidget(QLabel("PS2"), 0, 1)
-        for i in range(16):
+        pv = get_pv(self._prefixed_magnet + ':IntlkLabels-Cte')
+        labels = pv.get()
+        if labels is None:
+            labels = ['invalid' for i in range(8)]
+        for i, label in enumerate(labels):
             for col, ps in enumerate(self._ps_list):
                 led = SiriusLedAlert(self, "ca://" + ps + ":Intlk-Mon", i)
                 led.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
                 layout.addWidget(led, i, col)
-            layout.addWidget(QLabel("Bit " + str(i)), i, 2)
+            layout.addWidget(QLabel(label), i, 2)
         # layout.setRowStretch(17, 1)
         layout.setColumnStretch(3, 1)
 

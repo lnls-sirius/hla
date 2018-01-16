@@ -4,6 +4,7 @@ import re
 from pydm.PyQt.QtCore import Qt
 from pydm.PyQt.QtGui import QWidget, QGroupBox, QGridLayout, \
     QHBoxLayout, QLabel, QSizePolicy
+from epics import get_pv
 
 from siriuspy.envars import vaca_prefix
 from pydm.widgets.label import PyDMLabel
@@ -119,13 +120,18 @@ class MagnetDetailWidget(QWidget):
     def _interlockLayout(self):
         # layout = QVBoxLayout()
         layout = QGridLayout()
-        for i in range(16):
+        pv = get_pv(self._prefixed_magnet + ':IntlkLabels-Cte')
+        labels = pv.get()
+        if labels is None:
+            labels = ['invalid' for i in range(8)]
+        for i, label in enumerate(labels):
             led = SiriusLedAlert(
                 self, "ca://" + self._prefixed_magnet + ":Intlk-Mon", i)
             led.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
 
             layout.addWidget(led, i, 0)
-            layout.addWidget(QLabel("Bit " + str(i)), i, 1)
+            # layout.addWidget(QLabel("Bit " + str(i)), i, 1)
+            layout.addWidget(QLabel(label), i, 1)
         # layout.setRowStretch(17, 1)
         layout.setColumnStretch(2, 1)
 
