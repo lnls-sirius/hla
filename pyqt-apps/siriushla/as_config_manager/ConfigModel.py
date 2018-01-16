@@ -5,7 +5,7 @@ from pydm.PyQt.QtGui import QItemDelegate, QColor, QDoubleSpinBox
 from siriuspy.servconf.conf_service import ConfigService
 
 
-CONFIG_SERVICE_HOSTNAME = "http://guilherme-linux"
+CONFIG_SERVICE_HOSTNAME = "http://lnls350-linux"
 
 
 class Configuration:
@@ -50,7 +50,7 @@ class Configuration:
 
     @staticmethod
     def _load(config_type, name):
-        db = ConfigService(CONFIG_SERVICE_HOSTNAME)
+        db = ConfigService()
         response = db.get_config(config_type, name)
         return Configuration._handle_response(response)
 
@@ -62,7 +62,7 @@ class Configuration:
     @staticmethod
     def delete_config(config):
         """Delete configuration."""
-        db = ConfigService(CONFIG_SERVICE_HOSTNAME)
+        db = ConfigService()
         response = db.delete_config(config)
         return Configuration._handle_response(response)
         # if resp != 200:
@@ -123,7 +123,7 @@ class Configuration:
 
     def save(self):
         """Save data."""
-        db = ConfigService(CONFIG_SERVICE_HOSTNAME)
+        db = ConfigService()
         if self._is_new:
             # Insert configuration
             response = db.insert_config(
@@ -150,7 +150,7 @@ class Configuration:
 
     def delete(self):
         """Delete configuration."""
-        db = ConfigService(CONFIG_SERVICE_HOSTNAME)
+        db = ConfigService()
         config = {"_id": self._id,
                   "name": self._name,
                   "config_type": self._config_type,
@@ -380,7 +380,7 @@ class ConfigModel(QAbstractTableModel):
 
     def getConfigurations(self, deleted=False):
         """Return name of saved configurations."""
-        db = ConfigService(CONFIG_SERVICE_HOSTNAME)
+        db = ConfigService()
         response = db.find_configs(
             config_type=self._config_type, discarded=deleted)
         try:
@@ -390,7 +390,7 @@ class ConfigModel(QAbstractTableModel):
 
     def getTuneMatrix(self):
         """Get tune matrix from db."""
-        db = ConfigService(CONFIG_SERVICE_HOSTNAME)
+        db = ConfigService()
         response = db.get_config("tune_matrix", "tune_matrix")
         try:
             return response["result"]
