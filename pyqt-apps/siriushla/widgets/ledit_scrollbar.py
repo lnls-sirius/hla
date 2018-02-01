@@ -1,10 +1,9 @@
 """Defines PyDM widget with a line edit and a double scrollbar."""
-from pydm.PyQt.QtCore import Qt, QRegExp, QLocale
+from pydm.PyQt.QtCore import QLocale
 from pydm.PyQt.QtGui import QWidget, QVBoxLayout, QStyle, QStyleOption, \
-    QPainter, QDoubleValidator, QRegExpValidator
+    QPainter, QDoubleValidator
 from pydm.widgets.line_edit import PyDMLineEdit
 from siriushla.widgets.scrollbar import PyDMScrollBar
-from siriushla.util import get_kick_unit
 
 
 class PyDMLinEditScrollbar(QWidget):
@@ -20,7 +19,7 @@ class PyDMLinEditScrollbar(QWidget):
         self.layout = QVBoxLayout()
         self.sp_lineedit = PyDMLineEdit(
             parent=self, init_channel=self._channel)
-        locale = QLocale(QLocale.English)
+        locale = QLocale()
         locale.setNumberOptions(locale.RejectGroupSeparator)
         validator = QDoubleValidator()
         validator.setLocale(locale)
