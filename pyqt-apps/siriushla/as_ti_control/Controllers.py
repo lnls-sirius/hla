@@ -134,7 +134,7 @@ class HLTrigCntrler(_BaseCntrler):
         pv_pref = self.prefix
         if 'state' == prop:
             sp = PyDMCb(self, init_channel=pv_pref + "State-Sel")
-            sp.setText(self.prefix.dev_name)
+            sp.setText(self.prefix.device_name)
             rb = PyDMLed(self, init_channel=pv_pref + "State-Sts")
         elif 'evg_param' == prop:
             sp = PyDMECB(self, init_channel=pv_pref + "EVGParam-Sel")
