@@ -3,7 +3,7 @@ import re
 
 from pydm.PyQt.QtCore import Qt
 from pydm.PyQt.QtGui import QGridLayout, QLabel, QSizePolicy, \
-    QFrame, QHBoxLayout
+    QFrame, QHBoxLayout, QPushButton
 
 from siriuspy.envars import vaca_prefix
 from pydm.widgets.label import PyDMLabel
@@ -14,6 +14,8 @@ from siriushla.as_ma_control.detail_widget.MagnetDetailWidget \
     import MagnetDetailWidget
 from siriushla.widgets import PyDMLinEditScrollbar
 from siriushla.widgets.led import SiriusLedState, SiriusLedAlert
+from siriushla import util as _util
+from .MagnetInterlockWidget import MagnetInterlockWindow
 
 
 class DipoleDetailWidget(MagnetDetailWidget):
@@ -36,17 +38,25 @@ class DipoleDetailWidget(MagnetDetailWidget):
 
     def _interlockLayout(self):
         layout = QGridLayout()
-        # layout.addWidget(QLabel("PS1"), 0, 0)
-        # layout.addWidget(QLabel("PS2"), 0, 1)
-        for i in range(16):
-            for col, ps in enumerate(self._ps_list):
-                led = SiriusLedAlert(self, "ca://" + ps + ":Intlk-Mon", i)
-                led.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
-                layout.addWidget(led, i, col)
-            layout.addWidget(QLabel("Bit " + str(i)), i, 2)
-        # layout.setRowStretch(17, 1)
-        layout.setColumnStretch(3, 1)
-
+        soft_intlk_button = QPushButton('Soft Interlock', self)
+        hard_intlk_button = QPushButton('Hard Interlock', self)
+        layout.addWidget(soft_intlk_button, 0, 0, 1, 2)
+        layout.addWidget(SiriusLedAlert(
+            self, "ca://" + self._ps_list[0] + ":IntlkSoft-Mon"), 1, 0)
+        layout.addWidget(SiriusLedAlert(
+            self, "ca://" + self._ps_list[1] + ":IntlkSoft-Mon"), 1, 1)
+        layout.addWidget(hard_intlk_button, 2, 0, 1, 2)
+        layout.addWidget(SiriusLedAlert(
+            self, "ca://" + self._ps_list[0] + ":IntlkHard-Mon"), 3, 0)
+        layout.addWidget(SiriusLedAlert(
+            self, "ca://" + self._ps_list[1] + ":IntlkHard-Mon"), 3, 1)
+        # Connect buttons to open magnet interlock windows
+        _util.connect_window(soft_intlk_button, MagnetInterlockWindow, self,
+                             **{'magnet': self._prefixed_magnet,
+                                'interlock': 0})
+        _util.connect_window(hard_intlk_button, MagnetInterlockWindow, self,
+                             **{'magnet': self._prefixed_magnet,
+                                'interlock': 1})
         return layout
 
     def _opModeLayout(self):
@@ -122,6 +132,8 @@ class DipoleDetailWidget(MagnetDetailWidget):
             self, "ca://" + self._ps_list[1] + ":PwrState-Sts")
         self.pwrstate2_label.setObjectName("pwrstate2_label")
 
+        self.state_button.setSizePolicy(
+            QSizePolicy.Minimum, QSizePolicy.Fixed)
         self.pwrstate1_led.setSizePolicy(
             QSizePolicy.Minimum, QSizePolicy.Fixed)
         self.pwrstate2_led.setSizePolicy(
@@ -234,7 +246,6 @@ class DipoleDetailWidget(MagnetDetailWidget):
 if __name__ == "__main__":
     import sys
     from pydm import PyDMApplication
-    from PyQt5.QtWidgets import SiriusMainWindow
     app = PyDMApplication(None, [])
 
     w = SiriusMainWindow()

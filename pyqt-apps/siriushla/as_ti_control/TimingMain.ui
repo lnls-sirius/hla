@@ -2519,6 +2519,11 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>SiriusMainWindow</class>
+   <extends>MainWindow</extends>
+   <header>siriushla.widgets.windows</header>
+  </customwidget>
+  <customwidget>
    <class>PyDMCheckbox</class>
    <extends>QCheckBox</extends>
    <header>pydm.widgets.checkbox</header>

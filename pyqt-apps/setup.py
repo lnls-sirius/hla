@@ -24,6 +24,7 @@ setup(
         'scripts/sirius-hla-as-launcher.py',
         'scripts/sirius-hla-as-ti-control.py',
         'scripts/sirius-hla-as-ps-cycle.py',
+        'scripts/sirius-hla-bo-ap-currlt.py',
         'scripts/sirius-hla-bo-ap-chromcorr.py',
         'scripts/sirius-hla-bo-ap-tunecorr.py',
         'scripts/sirius-hla-bo-config-manager.py',

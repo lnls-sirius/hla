@@ -7,7 +7,7 @@ from siriushla.widgets import SiriusMainWindow
 from siriushla.as_ma_control.MagnetWidget import PulsedMagnetWidget
 from siriushla.as_pm_control.PulsedMagnetDetailWindow \
     import PulsedMagnetDetailWindow
-from ..util import connect_window
+from siriushla.util import connect_window
 
 
 class PulsedMagnetControlWindow(SiriusMainWindow):
@@ -47,7 +47,7 @@ class PulsedMagnetControlWindow(SiriusMainWindow):
         widget.layout = QVBoxLayout()
 
         magnets = MASearch.get_manames(
-            {"section": section, "discipline": "PM"})
+            {"sec": section, "dis": "PM"})
 
         header = True
         for magnet in magnets:

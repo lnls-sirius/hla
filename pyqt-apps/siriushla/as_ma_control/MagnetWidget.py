@@ -12,15 +12,10 @@ from pydm.PyQt.QtGui import QWidget, QHBoxLayout, QVBoxLayout, QLabel, \
 from pydm.PyQt.QtCore import QSize
 from pydm.widgets.label import PyDMLabel
 
-# from siriuspy.search import MASearch
 from siriuspy.envars import vaca_prefix as _VACA_PREFIX
-from siriuspy.pulsedps import properties as pu_props
-from siriuspy.pulsedma import properties as pm_props
 from siriushla.widgets import PyDMLinEditScrollbar
 from siriushla.widgets.state_button import PyDMStateButton
 from siriushla.widgets.led import PyDMLed
-# from siriushla.as_ma_control.MagnetDetailWindow import MagnetDetailWindow
-# from siriushla.as_ma_control.MagnetTrimWindow import MagnetTrimWindow
 
 StorageRingFam = re.compile("^SI-Fam:.*$")
 Dipole = re.compile("^.*:MA-B.*$")
@@ -146,7 +141,7 @@ class BaseMagnetWidget(QWidget):
             parent=self, init_channel="ca://" + self._pwrstate_sp_pv)
         self.pwrstate_button.setObjectName("pwrstate_button")
         self.state_led = PyDMLed(
-            self, "ca://" + self._pwrstate_sp_pv)
+            self, "ca://" + self._pwrstate_rb_pv)
             # enum_map={'On': PyDMLed.Green, 'Off': PyDMLed.Red})
         self.state_led.setObjectName("state_led")
         self.state_widget = QWidget(self)
@@ -161,6 +156,7 @@ class BaseMagnetWidget(QWidget):
         #     parent=self, init_channel="ca://" + self._pwrstate_sp_pv)
         self.analog_widget = PyDMLinEditScrollbar(
             parent=self, channel="ca://" + self._analog_sp_pv,)
+        self.analog_widget.sp_scrollbar.setTracking(False)
         self.analog_widget.setObjectName("analog_widget")
         self.analog_mon_label = PyDMLabel(
             parent=self, init_channel="ca://" + self._analog_mon_pv)
@@ -168,6 +164,7 @@ class BaseMagnetWidget(QWidget):
         self.strength_widget = PyDMLinEditScrollbar(
             parent=self, channel="ca://" + self._strength_sp_pv)
         self.strength_widget.setObjectName("strength_widget")
+        self.strength_widget.sp_scrollbar.setTracking(False)
         self.strength_mon_label = PyDMLabel(
             parent=self, init_channel="ca://" + self._strength_mon_pv)
         self.strength_mon_label.setObjectName("strength_label")
@@ -221,6 +218,14 @@ class BaseMagnetWidget(QWidget):
             return self.trim_button
         return None
 
+    def turn_on(self):
+        if not self.pwrstate_button._bit_val:
+            self.pwrstate_button.send_value()
+
+    def turn_off(self):
+        if self.pwrstate_button._bit_val:
+            self.pwrstate_button.send_value()
+
     def sizeHint(self):
         return QSize(1600, 60)
 
@@ -228,15 +233,15 @@ class PulsedMagnetWidget(BaseMagnetWidget):
     """Widget to control a pulsed magnet."""
 
     def _create_pvs(self):
-        self._analog_name = "Tension"
+        self._analog_name = "Voltage"
         self._strength_name = "Kick"
 
-        self._pwrstate_sp_pv = self._prefixed_maname + pu_props.PwrStateSel
-        self._pwrstate_rb_pv = self._prefixed_maname + pu_props.PwrStateSts
-        self._analog_sp_pv = self._prefixed_maname + pu_props.TensionSP
-        self._analog_mon_pv = self._prefixed_maname + pu_props.TensionMon
-        self._strength_sp_pv = self._prefixed_maname + pm_props.StrengthSP
-        self._strength_mon_pv = self._prefixed_maname + pm_props.StrengthMon
+        self._pwrstate_sp_pv = self._prefixed_maname + 'PwrState-Sel'
+        self._pwrstate_rb_pv = self._prefixed_maname + 'PwrState-Sts'
+        self._analog_sp_pv = self._prefixed_maname + 'Voltage-SP'
+        self._analog_mon_pv = self._prefixed_maname + 'Voltage-Mon'
+        self._strength_sp_pv = self._prefixed_maname + 'Kick-SP'
+        self._strength_mon_pv = self._prefixed_maname + 'Kick-Mon'
 
 
 class MagnetWidget(BaseMagnetWidget):

@@ -88,3 +88,13 @@ class SiriusLedAlert(PyDMLed):
         super().__init__(parent, init_channel, bit)
         self.setOnColor(PyDMLed.Red)
         self.setOffColor(PyDMLed.LightGreen)
+
+    def value_changed(self, new_val):
+        """If no bit is set, treat new_val as 2 states, zero and non-zero."""
+        if self._bit < 0:
+            if new_val == 0:
+                super().value_changed(0)
+            else:
+                super().value_changed(1)
+        else:
+            super().value_changed(new_val)

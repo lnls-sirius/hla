@@ -1480,6 +1480,8 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
             state = 'On'
         elif self._bit_val == 0:
             state = 'Off'
+        else:
+            state = 'Disconnected'
 
         if self.shape == 0:
             shape_dict = PyDMStateButton.squaredbuttonstatesdict

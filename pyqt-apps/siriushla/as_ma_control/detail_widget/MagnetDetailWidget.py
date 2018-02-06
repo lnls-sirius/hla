@@ -3,7 +3,8 @@ import re
 
 from pydm.PyQt.QtCore import Qt
 from pydm.PyQt.QtGui import QWidget, QGroupBox, QGridLayout, \
-    QHBoxLayout, QLabel, QSizePolicy
+    QLabel, QSizePolicy, QPushButton, QVBoxLayout, QHBoxLayout
+# from epics import get_pv
 
 from siriuspy.envars import vaca_prefix
 from pydm.widgets.label import PyDMLabel
@@ -14,6 +15,7 @@ from pydm.widgets.pushbutton import PyDMPushButton
 from siriushla.widgets import PyDMLinEditScrollbar
 from siriushla.widgets.led import SiriusLedState, SiriusLedAlert
 from siriushla import util as _util
+from .MagnetInterlockWidget import MagnetInterlockWindow
 
 
 class MagnetDetailWidget(QWidget):
@@ -70,6 +72,7 @@ class MagnetDetailWidget(QWidget):
 
         self._setup_ui()
         self.setStyleSheet(self.StyleSheet)
+        self.setFocus(True)
 
     def _setup_ui(self):
         # Group boxes that compose the widget
@@ -101,33 +104,45 @@ class MagnetDetailWidget(QWidget):
         self.setLayout(self.layout)
 
     def _setWidgetLayout(self):
-        layout = QGridLayout()
+        layout = QVBoxLayout()
+        boxes_layout = QHBoxLayout()
+        controls = QVBoxLayout()
+        analogs = QVBoxLayout()
+        boxes_layout.addLayout(controls)
+        boxes_layout.addLayout(analogs)
 
-        layout.addWidget(
-            QLabel("<h1>" + self._magnet_name + "</h1>"), 0, 0, 1, 2)
-        layout.addWidget(self.interlock_box, 1, 0, 4, 1)
-        layout.addWidget(self.opmode_box, 1, 1)
-        layout.addWidget(self.pwrstate_box, 2, 1)
-        layout.addWidget(self.current_box, 3, 1, 1, 1)
-        layout.addWidget(self.metric_box, 4, 1, 1, 1)
-        layout.addWidget(self.command_box, 5, 0, 1, 2)
-        # layout.setRowStretch(6, 1)
-        # layout.setColumnStretch(3, 1)
+        layout.addWidget(QLabel("<h1>" + self._magnet_name + "</h1>"))
+        layout.addLayout(boxes_layout)
+
+        controls.addWidget(self.interlock_box)
+        controls.addWidget(self.opmode_box)
+        controls.addWidget(self.pwrstate_box)
+        controls.addWidget(self.command_box)
+
+        analogs.addWidget(self.current_box)
+        analogs.addWidget(self.metric_box)
 
         return layout
 
     def _interlockLayout(self):
         # layout = QVBoxLayout()
         layout = QGridLayout()
-        for i in range(16):
-            led = SiriusLedAlert(
-                self, "ca://" + self._prefixed_magnet + ":Intlk-Mon", i)
-            led.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
+        soft_intlk_button = QPushButton('Soft Interlock', self)
+        hard_intlk_button = QPushButton('Hard Interlock', self)
+        # _util.connect_window(soft_intlk_button, )
+        layout.addWidget(soft_intlk_button, 0, 0)
+        layout.addWidget(SiriusLedAlert(
+            self, "ca://" + self._prefixed_magnet + ":IntlkSoft-Mon"), 0, 1)
+        layout.addWidget(hard_intlk_button, 1, 0)
+        layout.addWidget(SiriusLedAlert(
+            self, "ca://" + self._prefixed_magnet + ":IntlkHard-Mon"), 1, 1)
 
-            layout.addWidget(led, i, 0)
-            layout.addWidget(QLabel("Bit " + str(i)), i, 1)
-        # layout.setRowStretch(17, 1)
-        layout.setColumnStretch(2, 1)
+        _util.connect_window(soft_intlk_button, MagnetInterlockWindow, self,
+                             **{'magnet': self._magnet_name,
+                                'interlock': 0})
+        _util.connect_window(hard_intlk_button, MagnetInterlockWindow, self,
+                             **{'magnet': self._magnet_name,
+                                'interlock': 1})
 
         return layout
 
@@ -208,8 +223,8 @@ class MagnetDetailWidget(QWidget):
             parent=self,
             channel="ca://" + self._prefixed_magnet + ":Current-SP")
         # self.current_sp_widget.set_limits_from_pv(True)
-        if self._magnet_type == "b":
-            self.current_sp_widget.sp_scrollbar.setTracking(False)
+        # if self._magnet_type == "b":
+        self.current_sp_widget.sp_scrollbar.setTracking(False)
         self.current_rb_val = PyDMLabel(
             self, "ca://" + self._prefixed_magnet + ":Current-RB")
         self.current_rb_val.precFromPV = True
@@ -247,8 +262,8 @@ class MagnetDetailWidget(QWidget):
             "ca://" + self._prefixed_magnet + ":" + self._metric + "-SP",
             self)
         # self.metric_sp_widget.set_limits_from_pv(True)
-        if self._magnet_type == "b":
-            self.metric_sp_widget.sp_scrollbar.setTracking(False)
+        # if self._magnet_type == "b":
+        self.metric_sp_widget.sp_scrollbar.setTracking(False)
         self.metric_rb_val = PyDMLabel(
             self, "ca://" + self._prefixed_magnet + ":" + self._metric + "-RB")
         self.metric_rb_val.precFromPV = True
