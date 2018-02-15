@@ -59,7 +59,163 @@
       <string>Correction Parameters</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_5">
-      <item row="7" column="0">
+      <item row="1" column="0" colspan="2">
+       <widget class="QLabel" name="label_2">
+        <property name="styleSheet">
+         <string notr="true">font-weight:bold;</string>
+        </property>
+        <property name="text">
+         <string>Configuration Name</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="0" colspan="2">
+       <spacer name="verticalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>10</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="2" column="0">
+       <widget class="PyDMLineEdit" name="PyDMLineEdit_2">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string/>
+        </property>
+        <property name="channel" stdset="0">
+         <string>ca://${PREFIX}BO-Glob:AP-TuneCorr:ConfigName-SP</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0" colspan="2">
+       <widget class="QLabel" name="label_10">
+        <property name="styleSheet">
+         <string notr="true">font-weight:bold;
+</string>
+        </property>
+        <property name="text">
+         <string>Syncronization</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="1">
+       <widget class="PyDMLabel" name="PyDMLabel_2">
+        <property name="minimumSize">
+         <size>
+          <width>180</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>180</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string/>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Box</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>ca://${PREFIX}BO-Glob:AP-TuneCorr:CorrFactor-RB</string>
+        </property>
+        <property name="precFromPV" stdset="0">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="PyDMLabel" name="PyDMLabel">
+        <property name="minimumSize">
+         <size>
+          <width>180</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>180</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string/>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Box</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>ca://${PREFIX}BO-Glob:AP-TuneCorr:SyncCorr-Sts</string>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="0" colspan="2">
+       <widget class="QLabel" name="label_11">
+        <property name="styleSheet">
+         <string notr="true">font-weight:bold;</string>
+        </property>
+        <property name="text">
+         <string>Correction Factor (%)</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" colspan="2">
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>10</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="10" column="0">
        <widget class="PyDMLineEdit" name="PyDMLineEdit">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -93,23 +249,7 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="0" colspan="2">
-       <spacer name="verticalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>10</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="2" column="0">
+      <item row="5" column="0">
        <widget class="PyDMStateButton" name="PyDMStateButton">
         <property name="minimumSize">
          <size>
@@ -148,72 +288,8 @@
         </property>
        </widget>
       </item>
-      <item row="7" column="1">
-       <widget class="PyDMLabel" name="PyDMLabel_2">
-        <property name="minimumSize">
-         <size>
-          <width>180</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>180</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string/>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::Box</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="channel" stdset="0">
-         <string>ca://${PREFIX}BO-Glob:AP-TuneCorr:CorrFactor-RB</string>
-        </property>
-        <property name="precFromPV" stdset="0">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="9" column="1">
-       <widget class="QPushButton" name="pushButton_CorrParams">
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Details...</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" colspan="2">
-       <widget class="QLabel" name="label_10">
-        <property name="styleSheet">
-         <string notr="true">font-weight:bold;
-</string>
-        </property>
-        <property name="text">
-         <string>Syncronization</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0" colspan="2">
-       <spacer name="verticalSpacer">
+      <item row="11" column="0" colspan="2">
+       <spacer name="verticalSpacer_8">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
         </property>
@@ -228,54 +304,20 @@
         </property>
        </spacer>
       </item>
-      <item row="2" column="1">
-       <widget class="PyDMLabel" name="PyDMLabel">
-        <property name="minimumSize">
-         <size>
-          <width>180</width>
-          <height>0</height>
-         </size>
-        </property>
+      <item row="15" column="1">
+       <widget class="QPushButton" name="pushButton_CorrParams">
         <property name="maximumSize">
          <size>
-          <width>180</width>
-          <height>16777215</height>
+          <width>16777215</width>
+          <height>30</height>
          </size>
         </property>
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string/>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::Box</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="channel" stdset="0">
-         <string>ca://${PREFIX}BO-Glob:AP-TuneCorr:SyncCorr-Sts</string>
+        <property name="text">
+         <string>Details...</string>
         </property>
        </widget>
       </item>
       <item row="6" column="0" colspan="2">
-       <widget class="QLabel" name="label_11">
-        <property name="styleSheet">
-         <string notr="true">font-weight:bold;</string>
-        </property>
-        <property name="text">
-         <string>CorrFactor [%]</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0" colspan="2">
        <widget class="PyDMPushButton" name="PyDMPushButton_2">
         <property name="toolTip">
          <string/>
@@ -329,8 +371,27 @@
         </property>
        </widget>
       </item>
-      <item row="8" column="0" colspan="2">
-       <spacer name="verticalSpacer_8">
+      <item row="2" column="1">
+       <widget class="PyDMLabel" name="PyDMLabel_13">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string/>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Box</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <property name="channel" stdset="0">
+         <string>ca://${PREFIX}BO-Glob:AP-TuneCorr:ConfigName-RB</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" colspan="2">
+       <spacer name="verticalSpacer_9">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
         </property>
@@ -372,7 +433,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}BO-Glob:AP-TuneCorr:LastCalcQFKL-Mon</string>
+         <string>ca://${PREFIX}BO-Glob:AP-TuneCorr:DeltaKLQF-Mon</string>
         </property>
         <property name="precFromPV" stdset="0">
          <bool>false</bool>
@@ -423,7 +484,7 @@
          <string notr="true">font-weight:bold;</string>
         </property>
         <property name="text">
-         <string>LastCalcKL</string>
+         <string>DeltaKL-Mon</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -479,7 +540,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}BO-Glob:AP-TuneCorr:QFRefKL-Mon</string>
+         <string>ca://${PREFIX}BO-Glob:AP-TuneCorr:RefKLQF-Mon</string>
         </property>
         <property name="precFromPV" stdset="0">
          <bool>true</bool>
@@ -691,7 +752,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}BO-Glob:AP-TuneCorr:QDRefKL-Mon</string>
+         <string>ca://${PREFIX}BO-Glob:AP-TuneCorr:RefKLQD-Mon</string>
         </property>
         <property name="precFromPV" stdset="0">
          <bool>true</bool>
@@ -716,7 +777,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}BO-Glob:AP-TuneCorr:LastCalcQDKL-Mon</string>
+         <string>ca://${PREFIX}BO-Glob:AP-TuneCorr:DeltaKLQD-Mon</string>
         </property>
         <property name="precFromPV" stdset="0">
          <bool>false</bool>
@@ -1023,7 +1084,7 @@
 Quadrupoles</string>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${PREFIX}BO-Glob:AP-TuneCorr:ConfigPS-Cmd</string>
+        <string>ca://${PREFIX}BO-Glob:AP-TuneCorr:ConfigMA-Cmd</string>
        </property>
        <property name="pressValue" stdset="0">
         <string>0</string>
@@ -1203,10 +1264,11 @@ as New Reference</string>
     </string>
        </property>
        <property name="text">
-        <string>Apply KLs</string>
+        <string>Apply
+Correction</string>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${PREFIX}BO-Glob:AP-TuneCorr:ApplyKL-Cmd</string>
+        <string>ca://${PREFIX}BO-Glob:AP-TuneCorr:ApplyCorr-Cmd</string>
        </property>
        <property name="pressValue" stdset="0">
         <string>0</string>

@@ -8,8 +8,9 @@ from pydm.PyQt.QtGui import (QPushButton, QGridLayout, QLabel, QSizePolicy,
                              QFrame, QSpacerItem, QAbstractItemView, QGroupBox)
 from pydm.widgets import (PyDMEnumComboBox, PyDMLabel, PyDMLineEdit,
                           PyDMWaveformTable)
-from siriushla.widgets.state_button import PyDMStateButton
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
+from siriuspy.envars import vaca_prefix as _vaca_prefix
+from siriushla.widgets.state_button import PyDMStateButton
 from siriushla import util as _hlautil
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.as_ma_control.MagnetDetailWindow import MagnetDetailWindow
@@ -18,9 +19,11 @@ from siriushla.as_ma_control.MagnetDetailWindow import MagnetDetailWindow
 class OpticsCorrWindow(SiriusMainWindow):
     """Class to include some intelligence in the .ui files."""
 
-    def __init__(self, acc, opticsparam, parent=None, prefix=None):
+    def __init__(self, acc, opticsparam, parent=None, prefix=''):
         """Initialize some widgets."""
         super(OpticsCorrWindow, self).__init__(parent)
+        if prefix == '':
+            prefix = _vaca_prefix
 
         UI_FILE = ('/home/fac_files/lnls-sirius/hla/pyqt-apps/siriushla/'
                    'as_ap_opticscorr/ui_'+acc+'_ap_'+opticsparam+'corr.ui')
@@ -162,7 +165,7 @@ class CorrParamsDetailWindow(SiriusMainWindow):
 
         if opticsparam == 'Tune':
             self.label_corrfactor = QLabel()
-            self.label_corrfactor.setText("CorrFactor [%]")
+            self.label_corrfactor.setText("Correction Factor (%)")
             self.label_corrfactor.setStyleSheet("font-weight:bold;")
             self.label_corrfactor.setAlignment(QtCore.Qt.AlignCenter)
             self.layout.addWidget(self.label_corrfactor, 7, 1, 1, nfam)
@@ -202,11 +205,52 @@ class CorrParamsDetailWindow(SiriusMainWindow):
                 QSizePolicy.Minimum, QSizePolicy.Fixed)
             self.layout.addItem(spacer2, 9, 1, 1, 1)
 
+        self.label_configname = QLabel()
+        self.label_configname.setText("Configuration Name")
+        self.label_configname.setStyleSheet("font-weight:bold;")
+        self.label_configname.setAlignment(QtCore.Qt.AlignCenter)
+        self.layout.addWidget(self.label_configname, 10, 1, 1, nfam)
+
+        self.pydmlinedit_configname = PyDMLineEdit()
+        sizePolicy = QSizePolicy(
+            QSizePolicy.Fixed, QSizePolicy.Fixed)
+        self.pydmlinedit_configname.setSizePolicy(sizePolicy)
+        self.pydmlinedit_configname.setAlignment(QtCore.Qt.AlignCenter)
+        self.pydmlinedit_configname.setMinimumSize(QtCore.QSize(200, 0))
+        self.pydmlinedit_configname.setProperty(
+            "channel",
+            "ca://" + prefix + acc + "-Glob:AP-" + opticsparam +
+            "Corr:ConfigName-SP")
+        self.layout.addWidget(self.pydmlinedit_configname,
+                              11, nfam//2, 1, 1)
+
+        self.pydmlabel_configname = PyDMLabel()
+        sizePolicy = QSizePolicy(
+            QSizePolicy.Fixed, QSizePolicy.Preferred)
+        self.pydmlabel_configname.setSizePolicy(sizePolicy)
+        self.pydmlabel_configname.setMinimumSize(QtCore.QSize(180, 0))
+        self.pydmlabel_configname.setMaximumSize(
+            QtCore.QSize(180, 16777215))
+        self.pydmlabel_configname.setFrameShape(QFrame.Box)
+        self.pydmlabel_configname.setFrameShadow(QFrame.Raised)
+        self.pydmlabel_configname.setAlignment(QtCore.Qt.AlignLeft)
+        self.pydmlabel_configname.setProperty(
+            "channel",
+            "ca://" + prefix + acc + "-Glob:AP-" + opticsparam +
+            "Corr:ConfigName-RB")
+        self.layout.addWidget(self.pydmlabel_configname,
+                              11, nfam//2+1, 1, 1)
+
+        spacer2 = QSpacerItem(
+            20, 10,
+            QSizePolicy.Minimum, QSizePolicy.Fixed)
+        self.layout.addItem(spacer2, 12, 1, 1, 1)
+
         self.label_matrix = QLabel()
         self.label_matrix.setText("Matrix")
         self.label_matrix.setStyleSheet("font-weight:bold;")
         self.label_matrix.setAlignment(QtCore.Qt.AlignCenter)
-        self.layout.addWidget(self.label_matrix, 10, 1, 1, nfam)
+        self.layout.addWidget(self.label_matrix, 13, 1, 1, nfam)
 
         self.table_matrix = PyDMWaveformTable()
         self.table_matrix.setEnabled(False)
@@ -226,18 +270,18 @@ class CorrParamsDetailWindow(SiriusMainWindow):
         self.table_matrix.verticalHeader().setDefaultSectionSize(48)
         self.table_matrix.setProperty(
             "channel",
-            "ca://"+prefix+acc+"-Glob:AP-"+opticsparam+"Corr:CorrMat-Mon")
-        self.layout.addWidget(self.table_matrix, 11, 1, 1, nfam)
+            "ca://"+prefix+acc+"-Glob:AP-"+opticsparam+"Corr:RespMat-Mon")
+        self.layout.addWidget(self.table_matrix, 14, 1, 1, nfam)
 
         spacer3 = QSpacerItem(
             20, 10, QSizePolicy.Minimum, QSizePolicy.Fixed)
-        self.layout.addItem(spacer3, 12, 1, 1, 1)
+        self.layout.addItem(spacer3, 15, 1, 1, 1)
 
         self.label_nomintstrength = QLabel()
         self.label_nomintstrength.setText("Nominal "+intstrength+"s")
         self.label_nomintstrength.setStyleSheet("font-weight:bold;")
         self.label_nomintstrength.setAlignment(QtCore.Qt.AlignCenter)
-        self.layout.addWidget(self.label_nomintstrength, 13, 1, 1, nfam)
+        self.layout.addWidget(self.label_nomintstrength, 16, 1, 1, nfam)
 
         self.table_nomintstrength = PyDMWaveformTable()
         self.table_nomintstrength.setEnabled(False)
@@ -260,18 +304,18 @@ class CorrParamsDetailWindow(SiriusMainWindow):
             "channel",
             "ca://" + prefix + acc + "-Glob:AP-" + opticsparam +
             "Corr:Nominal" + intstrength + "-Mon")
-        self.layout.addWidget(self.table_nomintstrength, 14, 1, 1, nfam)
+        self.layout.addWidget(self.table_nomintstrength, 17, 1, 1, nfam)
 
         spacer4 = QSpacerItem(
             20, 10, QSizePolicy.Minimum, QSizePolicy.Fixed)
-        self.layout.addItem(spacer4, 15, 1, 1, 1)
+        self.layout.addItem(spacer4, 18, 1, 1, 1)
 
         if opticsparam == 'Chrom':
             self.label_nomchrom = QLabel()
             self.label_nomchrom.setText("Nominal Chrom")
             self.label_nomchrom.setStyleSheet("font-weight: bold;")
             self.label_nomchrom.setAlignment(QtCore.Qt.AlignCenter)
-            self.layout.addWidget(self.label_nomchrom, 16, 1, 1, nfam)
+            self.layout.addWidget(self.label_nomchrom, 19, 1, 1, nfam)
 
             self.pydmlabel_nomchrom = PyDMLabel()
             self.pydmlabel_nomchrom.setMinimumSize(QtCore.QSize(0, 48))
@@ -282,7 +326,7 @@ class CorrParamsDetailWindow(SiriusMainWindow):
                 "channel",
                 "ca://" + prefix + acc + "-Glob:AP-" + opticsparam +
                 "Corr:NominalChrom-Mon")
-            self.layout.addWidget(self.pydmlabel_nomchrom, 17, 1, 1, nfam)
+            self.layout.addWidget(self.pydmlabel_nomchrom, 20, 1, 1, nfam)
 
         self.centralwidget = QGroupBox()
         self.centralwidget.setTitle("Correction Parameters")
