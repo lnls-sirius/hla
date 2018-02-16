@@ -24,6 +24,7 @@ class OpticsCorrWindow(SiriusMainWindow):
         super(OpticsCorrWindow, self).__init__(parent)
         if prefix == '':
             prefix = _vaca_prefix
+        self._acc = acc
 
         UI_FILE = ('/home/fac_files/lnls-sirius/hla/pyqt-apps/siriushla/'
                    'as_ap_opticscorr/ui_'+acc+'_ap_'+opticsparam+'corr.ui')
@@ -58,7 +59,11 @@ class OpticsCorrWindow(SiriusMainWindow):
                                         opticsparam=opticsparam, prefix=prefix)
 
     def _setStatusLabels(self, value, **kws):
-        for i in range(5):
+        if self._acc == 'si':
+            status_bits = 5
+        elif self._acc == 'bo':
+            status_bits = 4
+        for i in range(status_bits):
             exec('self.centralwidget.label_status{0}.setText'
                  '(value[{0}])'.format(i))
 
@@ -130,38 +135,38 @@ class CorrParamsDetailWindow(SiriusMainWindow):
                 QSizePolicy.Minimum, QSizePolicy.Fixed)
             self.layout.addItem(spacer0, 3, 1, 1, 1)
 
-        self.label_sync = QLabel()
-        self.label_sync.setText("Syncronization")
-        self.label_sync.setStyleSheet("font-weight:bold;")
-        self.label_sync.setAlignment(QtCore.Qt.AlignCenter)
-        self.layout.addWidget(self.label_sync, 4, 1, 1, nfam)
+            self.label_sync = QLabel()
+            self.label_sync.setText("Syncronization")
+            self.label_sync.setStyleSheet("font-weight:bold;")
+            self.label_sync.setAlignment(QtCore.Qt.AlignCenter)
+            self.layout.addWidget(self.label_sync, 4, 1, 1, nfam)
 
-        self.button_sync = PyDMStateButton()
-        self.button_sync.setMinimumSize(QtCore.QSize(0, 36))
-        self.button_sync.setMaximumSize(QtCore.QSize(16777215, 36))
-        self.button_sync.setProperty("shape", PyDMStateButton.Rounded)
-        self.button_sync.setProperty(
-            "channel",
-            "ca://"+prefix+acc+"-Glob:AP-"+opticsparam+"Corr:SyncCorr-Sel")
-        self.layout.addWidget(self.button_sync, 5, nfam//2, 1, 1)
+            self.button_sync = PyDMStateButton()
+            self.button_sync.setMinimumSize(QtCore.QSize(0, 36))
+            self.button_sync.setMaximumSize(QtCore.QSize(16777215, 36))
+            self.button_sync.setProperty("shape", PyDMStateButton.Rounded)
+            self.button_sync.setProperty(
+                "channel",
+                "ca://"+prefix+acc+"-Glob:AP-"+opticsparam+"Corr:SyncCorr-Sel")
+            self.layout.addWidget(self.button_sync, 5, nfam//2, 1, 1)
 
-        self.pydmlabel_sync = PyDMLabel()
-        sizePolicy = QSizePolicy(
-            QSizePolicy.Fixed, QSizePolicy.Preferred)
-        self.pydmlabel_sync.setSizePolicy(sizePolicy)
-        self.pydmlabel_sync.setMinimumSize(QtCore.QSize(180, 0))
-        self.pydmlabel_sync.setMaximumSize(QtCore.QSize(180, 16777215))
-        self.pydmlabel_sync.setFrameShape(QFrame.Box)
-        self.pydmlabel_sync.setFrameShadow(QFrame.Raised)
-        self.pydmlabel_sync.setAlignment(QtCore.Qt.AlignLeft)
-        self.pydmlabel_sync.setProperty(
-            "channel",
-            "ca://"+prefix+acc+"-Glob:AP-"+opticsparam+"Corr:SyncCorr-Sts")
-        self.layout.addWidget(self.pydmlabel_sync, 5, nfam//2+1, 1, 1)
+            self.pydmlabel_sync = PyDMLabel()
+            sizePolicy = QSizePolicy(
+                QSizePolicy.Fixed, QSizePolicy.Preferred)
+            self.pydmlabel_sync.setSizePolicy(sizePolicy)
+            self.pydmlabel_sync.setMinimumSize(QtCore.QSize(180, 0))
+            self.pydmlabel_sync.setMaximumSize(QtCore.QSize(180, 16777215))
+            self.pydmlabel_sync.setFrameShape(QFrame.Box)
+            self.pydmlabel_sync.setFrameShadow(QFrame.Raised)
+            self.pydmlabel_sync.setAlignment(QtCore.Qt.AlignLeft)
+            self.pydmlabel_sync.setProperty(
+                "channel",
+                "ca://"+prefix+acc+"-Glob:AP-"+opticsparam+"Corr:SyncCorr-Sts")
+            self.layout.addWidget(self.pydmlabel_sync, 5, nfam//2+1, 1, 1)
 
-        spacer1 = QSpacerItem(
-            20, 10, QSizePolicy.Minimum, QSizePolicy.Fixed)
-        self.layout.addItem(spacer1, 6, 1, 1, 1)
+            spacer1 = QSpacerItem(
+                20, 10, QSizePolicy.Minimum, QSizePolicy.Fixed)
+            self.layout.addItem(spacer1, 6, 1, 1, 1)
 
         if opticsparam == 'Tune':
             self.label_corrfactor = QLabel()
