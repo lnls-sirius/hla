@@ -4,10 +4,8 @@
 
 import epics as _epics
 from pydm.PyQt.uic import loadUi as _loadUi
-from pydm.PyQt.QtGui import QFileDialog
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 from siriuspy.envars import vaca_prefix as _vaca_prefix
-from siriuspy import util as _util
 from siriushla import util as _hlautil
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.as_ma_control.MagnetDetailWindow import MagnetDetailWindow
@@ -21,9 +19,11 @@ UI_FILE = ('/home/fac_files/lnls-sirius/hla/pyqt-apps/siriushla/'
 class ASAPPosAngCorr(SiriusMainWindow):
     """Main Class."""
 
-    def __init__(self, parent=None, prefix=None, tl=None):
+    def __init__(self, parent=None, prefix='', tl=None):
         """Class construc."""
         super(ASAPPosAngCorr, self).__init__(parent)
+        if prefix == '':
+            prefix = _vaca_prefix
 
         tmp_file = _substitute_in_file(UI_FILE, {'TRANSPORTLINE': tl.upper(),
                                                  'PREFIX': prefix})
@@ -58,22 +58,22 @@ class ASAPPosAngCorr(SiriusMainWindow):
                            tl.upper()+'-Glob:AP-PosAng:DeltaAngY-SP'],
                           [self.centralwidget.PyDMLabel_OrbYDeltaAng_RB,
                            tl.upper()+'-Glob:AP-PosAng:DeltaAngY-RB'],
-                          [self.centralwidget.PyDMPushButton_SetNewRef,
-                           tl.upper()+'-Glob:AP-PosAng:SetNewRef-Cmd'],
-                          [self.centralwidget.PyDMPushButton_ConfigPS,
-                           tl.upper()+'-Glob:AP-PosAng:ConfigPS-Cmd'],
-                          [self.centralwidget.PyDMLabel_RefKickMonCH1,
-                           tl.upper()+'-Glob:AP-PosAng:CH1RefKick-Mon'],
-                          [self.centralwidget.PyDMLabel_RefKickMonCH2,
-                           tl.upper()+'-Glob:AP-PosAng:CH2RefKick-Mon'],
-                          [self.centralwidget.PyDMLabel_RefKickMonCV1,
-                           tl.upper()+'-Glob:AP-PosAng:CV1RefKick-Mon'],
-                          [self.centralwidget.PyDMLabel_RefKickMonCV2,
-                           tl.upper()+'-Glob:AP-PosAng:CV2RefKick-Mon'],
-                          [self.centralwidget.PyDMLineEdit_RespMatConfigName,
-                           tl.upper()+'-Glob:AP-PosAng:RespMatConfigName-SP'],
-                          [self.centralwidget.PyDMLabel_RespMatConfigName,
-                           tl.upper()+'-Glob:AP-PosAng:RespMatConfigName-RB'],
+                          [self.centralwidget.PyDMPushButton_SetNewRefKick,
+                           tl.upper()+'-Glob:AP-PosAng:SetNewRefKick-Cmd'],
+                          [self.centralwidget.PyDMPushButton_ConfigMA,
+                           tl.upper()+'-Glob:AP-PosAng:ConfigMA-Cmd'],
+                          [self.centralwidget.PyDMLabel_RefKickCH1Mon,
+                           tl.upper()+'-Glob:AP-PosAng:RefKickCH1-Mon'],
+                          [self.centralwidget.PyDMLabel_RefKickCH2Mon,
+                           tl.upper()+'-Glob:AP-PosAng:RefKickCH2-Mon'],
+                          [self.centralwidget.PyDMLabel_RefKickCV1Mon,
+                           tl.upper()+'-Glob:AP-PosAng:RefKickCV1-Mon'],
+                          [self.centralwidget.PyDMLabel_RefKickCV2Mon,
+                           tl.upper()+'-Glob:AP-PosAng:RefKickCV2-Mon'],
+                          [self.centralwidget.PyDMLineEdit_ConfigName,
+                           tl.upper()+'-Glob:AP-PosAng:ConfigName-SP'],
+                          [self.centralwidget.PyDMLabel_ConfigName,
+                           tl.upper()+'-Glob:AP-PosAng:ConfigName-RB'],
                           [self.centralwidget.PyDMLabel_RespMatX,
                            tl.upper()+'-Glob:AP-PosAng:RespMatX-Mon'],
                           [self.centralwidget.PyDMLabel_RespMatY,
@@ -104,8 +104,6 @@ class ASAPPosAngCorr(SiriusMainWindow):
         widget_list --list of widgets to set channel
         pv_list     --list of correspondent pvs
         """
-        if prefix is None:
-            prefix = _vaca_prefix
         for widget, pv in widget2pv_list:
             widget.channel = 'ca://' + prefix + pv
 
