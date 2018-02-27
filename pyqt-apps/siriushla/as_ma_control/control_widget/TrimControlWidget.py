@@ -9,14 +9,10 @@ class TrimControlWidget(BaseMagnetControlWidget):
         return "SI-\d{2}\w\d:MA-Q[DF0-9].*"
 
     def _getFilter(self):
-        return {"section": "SI", "subsection": "\w{4}", "device": "Q[DF0-9].*"}
+        return {"sec": "SI", "sub": "\w{4}", "dev": "Q[DF0-9].*"}
 
     def _getStrength(self):
         return "KL"
-
-    def _getHeader(self):
-        return ["State", "Magnet", "Cur-SP", "Cur-Mon",
-                "KL-SP", "KL-Mon"]
 
     def _hasTrimButton(self):
         return False

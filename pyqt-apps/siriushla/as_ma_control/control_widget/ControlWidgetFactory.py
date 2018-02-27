@@ -31,13 +31,13 @@ class ControlWidgetFactory:
             if device == "dipole":
                 return DetailWidgetFactory.factory("BO-Fam:MA-B")
             elif device == "quadrupole":
-                return BoFamQuadrupoleControlWidget(orientation=orientation)
+                return BOFamQuadrupoleControlWidget(orientation=orientation)
             elif device == "sextupole":
-                return BoFamSextupoleControlWidget(orientation=orientation)
+                return BOFamSextupoleControlWidget(orientation=orientation)
             elif device == "corrector-slow":
                 return BoSlowCorrectorControlWidget(orientation=orientation)
             elif device == "quadrupole-skew":
-                return BoSkewQuadControlWidget(orientation=orientation)
+                return BOSkewQuadControlWidget(orientation=orientation)
             else:
                 ControlWidgetFactory._device_not_found(section, device)
         elif section == "TS":
@@ -51,15 +51,15 @@ class ControlWidgetFactory:
             if device == "dipole":
                 return DetailWidgetFactory.factory("SI-Fam:MA-B1B2")
             elif device == "quadrupole":
-                return SiFamQuadrupoleControlWidget(orientation=orientation)
+                return SIFamQuadrupoleControlWidget(orientation=orientation)
             elif device == "sextupole":
-                return SiFamSextupoleControlWidget(orientation=orientation)
+                return SIFamSextupoleControlWidget(orientation=orientation)
             elif device == "corrector-slow":
-                return SiSlowCorrectorControlWidget(orientation=orientation)
+                return SISlowCorrectorControlWidget(orientation=orientation)
             elif device == "corrector-fast":
-                return SiFastCorrectorControlWidget(orientation=orientation)
+                return SIFastCorrectorControlWidget(orientation=orientation)
             elif device == "quadrupole-skew":
-                return SiSkewQuadControlWidget(orientation=orientation)
+                return SISkewQuadControlWidget(orientation=orientation)
             else:
                 ControlWidgetFactory._device_not_found(section, device)
         else:

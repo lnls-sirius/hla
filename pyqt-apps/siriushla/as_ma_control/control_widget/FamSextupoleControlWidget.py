@@ -2,20 +2,17 @@
 from .BaseMagnetControlWidget import BaseMagnetControlWidget
 
 
-class SiFamSextupoleControlWidget(BaseMagnetControlWidget):
+class SIFamSextupoleControlWidget(BaseMagnetControlWidget):
     """Storage ring sextupoles."""
 
     def _getPattern(self):
         return "SI-Fam:MA-S(\w+[0-9]*|[0-9])"
 
     def _getFilter(self):
-        return {"section": "SI", "subsection": "Fam", "device": "S[DF].*"}
+        return {"sec": "SI", "sub": "Fam", "dev": "S[DF].*"}
 
     def _getStrength(self):
         return "SL"
-
-    def _getHeader(self):
-        return ["State", "Magnet", "Cur-SP", "Cur-Mon", "SL-SP", "SL-Mon"]
 
     def _hasTrimButton(self):
         return False
@@ -31,14 +28,14 @@ class SiFamSextupoleControlWidget(BaseMagnetControlWidget):
                 ('Defocusing Sextupoles', '-SD')]
 
 
-class BoFamSextupoleControlWidget(SiFamSextupoleControlWidget):
+class BOFamSextupoleControlWidget(SIFamSextupoleControlWidget):
     """Booster sextupoles."""
 
     def _getPattern(self):
         return "BO-Fam:MA-S(\w+[0-9]*|[0-9])"
 
     def _getFilter(self):
-        return {"section": "BO", "subsection": "Fam", "device": "S[DF].*"}
+        return {"sec": "BO", "sub": "Fam", "dev": "S[DF].*"}
 
     def _hasScrollArea(self):
         return False

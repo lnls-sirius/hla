@@ -4,21 +4,17 @@ from pydm.PyQt.QtGui import QPushButton, QSizePolicy
 from .BaseMagnetControlWidget import BaseMagnetControlWidget
 
 
-class SiFamQuadrupoleControlWidget(BaseMagnetControlWidget):
+class SIFamQuadrupoleControlWidget(BaseMagnetControlWidget):
     """Class to control a Fam Quad from the Sirius section."""
 
     def _getPattern(self):
         return "SI-Fam:MA-Q(\w+[0-9]*|[0-9])"
 
     def _getFilter(self):
-        return {"section": "SI", "subsection": "Fam", "device": "Q[DF0-9].*"}
+        return {"sec": "SI", "sub": "Fam", "dev": "Q[DF0-9].*"}
 
     def _getStrength(self):
         return "KL"
-
-    def _getHeader(self):
-        return ["State", "Magnet", "Cur-SP", "Cur-Mon",
-                "KL-SP", "KL-Mon", "Trim"]
 
     def _hasTrimButton(self):
         return True
@@ -46,7 +42,7 @@ class SiFamQuadrupoleControlWidget(BaseMagnetControlWidget):
     #     return magnet_widget
 
 
-class BoFamQuadrupoleControlWidget(SiFamQuadrupoleControlWidget):
+class BOFamQuadrupoleControlWidget(SIFamQuadrupoleControlWidget):
     """Class to control a Fam Quad from the Booster section."""
 
     def _getPattern(self):
@@ -54,10 +50,6 @@ class BoFamQuadrupoleControlWidget(SiFamQuadrupoleControlWidget):
 
     def _getFilter(self):
         return {"section": "BO", "subsection": "Fam", "device": "Q[DF0-9].*"}
-
-    def _getHeader(self):
-        return ["State", "Magnet", "Cur-SP", "Cur-Mon",
-                "KL-SP", "KL-Mon"]
 
     def _hasTrimButton(self):
         return False

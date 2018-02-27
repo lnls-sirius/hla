@@ -2,20 +2,17 @@
 from .BaseMagnetControlWidget import BaseMagnetControlWidget
 
 
-class SiSlowCorrectorControlWidget(BaseMagnetControlWidget):
+class SISlowCorrectorControlWidget(BaseMagnetControlWidget):
     """Storage ring slow correctors."""
 
     def _getPattern(self):
         return "SI-\w{4}:MA-(CH|CV)(-[1-2])*"
 
     def _getFilter(self):
-        return {"section": "SI", "subsection": "\w{4}", "device": "(CH|CV).*"}
+        return {"sec": "SI", "sub": "\w{4}", "dev": "(CH|CV).*"}
 
     def _getStrength(self):
         return "Kick"
-
-    def _getHeader(self):
-        return ["State", "Magnet", "Cur-SP", "Cur-Mon", "Kick-SP", "Kick-Mon"]
 
     def _hasTrimButton(self):
         return False
@@ -31,27 +28,27 @@ class SiSlowCorrectorControlWidget(BaseMagnetControlWidget):
                 ('Vertical Slow Corretors', '-CV')]
 
 
-class BoSlowCorrectorControlWidget(SiSlowCorrectorControlWidget):
+class BoSlowCorrectorControlWidget(SISlowCorrectorControlWidget):
     """Booster slow corretors."""
 
     def _getPattern(self):
         return "BO-\w{3}:MA-(CH|CV)(-[1-2])*"
 
     def _getFilter(self):
-        return {"section": "BO", "subsection": "\w{3}", "device": "(CH|CV).*"}
+        return {"sec": "BO", "sub": "\w{3}", "dev": "(CH|CV).*"}
 
     def _divideBySection(self):
         return False
 
 
-class TBSlowCorrectorControlWidget(SiSlowCorrectorControlWidget):
+class TBSlowCorrectorControlWidget(SISlowCorrectorControlWidget):
     """To booster transport line slow corrector."""
 
     def _getPattern(self):
         return "TB-\d{2}:MA-(CH|CV).*"
 
     def _getFilter(self):
-        return {"section": "TB", "subsection": "\d{2}", "device": "(CH|CV).*"}
+        return {"sec": "TB", "sub": "\d{2}", "dev": "(CH|CV).*"}
 
     def _hasScrollArea(self):
         return False
@@ -60,14 +57,14 @@ class TBSlowCorrectorControlWidget(SiSlowCorrectorControlWidget):
         return True
 
 
-class TSSlowCorrectorControlWidget(SiSlowCorrectorControlWidget):
+class TSSlowCorrectorControlWidget(SISlowCorrectorControlWidget):
     """To sirius transport line slow correctors."""
 
     def _getPattern(self):
         return "TS-\w{2}:MA-(CH|CV)(-[1-2])*"
 
     def _getFilter(self):
-        return {"section": "TS", "subsection": "\w{2}", "device": "(CH|CV).*"}
+        return {"sec": "TS", "sub": "\w{2}", "dev": "(CH|CV).*"}
 
     def _hasScrollArea(self):
         return False

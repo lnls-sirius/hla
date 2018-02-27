@@ -1,4 +1,4 @@
-"""Widget to control a pulsed magnet.
+"""Widget to control a magnet.
 
 Exposes basic controls like:
     setpoint/readbacks tension
@@ -140,9 +140,8 @@ class BaseMagnetWidget(QWidget):
         self.pwrstate_button = PyDMStateButton(
             parent=self, init_channel="ca://" + self._pwrstate_sp_pv)
         self.pwrstate_button.setObjectName("pwrstate_button")
-        self.state_led = PyDMLed(
-            self, "ca://" + self._pwrstate_rb_pv)
-            # enum_map={'On': PyDMLed.Green, 'Off': PyDMLed.Red})
+        self.state_led = PyDMLed(self, "ca://" + self._pwrstate_rb_pv)
+
         self.state_led.setObjectName("state_led")
         self.state_widget = QWidget(self)
         self.state_widget.setObjectName("state_widget")
@@ -219,15 +218,19 @@ class BaseMagnetWidget(QWidget):
         return None
 
     def turn_on(self):
+        """Turn power supply on."""
         if not self.pwrstate_button._bit_val:
             self.pwrstate_button.send_value()
 
     def turn_off(self):
+        """Turn power supply off."""
         if self.pwrstate_button._bit_val:
             self.pwrstate_button.send_value()
 
     def sizeHint(self):
+        """Return sizeHint."""
         return QSize(1600, 60)
+
 
 class PulsedMagnetWidget(BaseMagnetWidget):
     """Widget to control a pulsed magnet."""
@@ -286,3 +289,20 @@ class MagnetWidget(BaseMagnetWidget):
 #             parent=self, init_channel="ca://" + channel)
 #         layout.addWidget(self.led)
 #         self.setLayout(layout)
+
+def run_test(maname=None):
+    """Run test application."""
+    import sys
+    from siriushla.sirius_application import SiriusApplication
+    from siriushla import util
+
+    maname = 'SI-Fam:MA-B1B2' if maname is None else maname
+    app = SiriusApplication()
+    util.set_style(app)
+    window = MagnetWidget(maname=maname)
+    window.show()
+    sys.exit(app.exec_())
+
+
+if __name__ == '__main__':
+    run_test()

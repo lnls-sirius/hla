@@ -2,20 +2,17 @@
 from .BaseMagnetControlWidget import BaseMagnetControlWidget
 
 
-class SiSkewQuadControlWidget(BaseMagnetControlWidget):
+class SISkewQuadControlWidget(BaseMagnetControlWidget):
     """Storage ring skew quads."""
 
     def _getPattern(self):
         return "SI-\w{4}:MA-QS"
 
     def _getFilter(self):
-        return {"section": "SI", "subsection": "\w{4}", "device": "QS"}
+        return {"sec": "SI", "sub": "\w{4}", "dev": "QS"}
 
     def _getStrength(self):
         return "KL"
-
-    def _getHeader(self):
-        return ["State", "Magnet", "Cur-SP", "Cur-Mon", "KL-SP", "KL-Mon"]
 
     def _hasTrimButton(self):
         return False
@@ -31,14 +28,14 @@ class SiSkewQuadControlWidget(BaseMagnetControlWidget):
                 ('Skew Quad (11 - 20)', '(1[1-9]|20)')]
 
 
-class BoSkewQuadControlWidget(SiSkewQuadControlWidget):
+class BOSkewQuadControlWidget(SISkewQuadControlWidget):
     """Booster skew quads."""
 
     def _getPattern(self):
         return "BO-\w{3}:MA-QS"
 
     def _getFilter(self):
-        return {"section": "BO", "subsection": "\w{3}", "device": "QS"}
+        return {"sec": "BO", "sub": "\w{3}", "dev": "QS"}
 
     def _hasScrollArea(self):
         return False
