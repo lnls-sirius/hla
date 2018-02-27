@@ -22,9 +22,6 @@ class SIFamQuadrupoleControlWidget(BaseMagnetControlWidget):
     def _hasScrollArea(self):
         return False
 
-    def _divideBySection(self):
-        return False
-
     def _getGroups(self):
         return [('Focusing Quadrupoles', "-QF"),
                 ('Defocusing Quadrupoles', "-QD"),

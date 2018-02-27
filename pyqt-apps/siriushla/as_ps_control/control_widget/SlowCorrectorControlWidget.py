@@ -1,18 +1,16 @@
 """Define widget for controlling slow correctors."""
-from .BaseMagnetControlWidget import BaseMagnetControlWidget
+from siriushla.as_ps_control.control_widget.BasePSControlWidget import \
+    BasePSControlWidget
 
 
-class SISlowCorrectorControlWidget(BaseMagnetControlWidget):
+class SISlowCorrectorControlWidget(BasePSControlWidget):
     """Storage ring slow correctors."""
 
     def _getPattern(self):
-        return "SI-\w{4}:MA-(CH|CV)(-[1-2])*"
+        return "SI-\w{4}:PS-(CH|CV)(-[1-2])*"
 
     def _getFilter(self):
         return {"sec": "SI", "sub": "\w{4}", "dev": "(CH|CV).*"}
-
-    def _getStrength(self):
-        return "Kick"
 
     def _hasTrimButton(self):
         return False
@@ -39,7 +37,7 @@ class TBSlowCorrectorControlWidget(SISlowCorrectorControlWidget):
     """To booster transport line slow corrector."""
 
     def _getPattern(self):
-        return "TB-\d{2}:MA-(CH|CV).*"
+        return "TB-\d{2}:PS-(CH|CV).*"
 
     def _getFilter(self):
         return {"sec": "TB", "sub": "\d{2}", "dev": "(CH|CV).*"}
@@ -52,7 +50,7 @@ class TSSlowCorrectorControlWidget(SISlowCorrectorControlWidget):
     """To sirius transport line slow correctors."""
 
     def _getPattern(self):
-        return "TS-\w{2}:MA-(CH|CV)(-[1-2])*"
+        return "TS-\w{2}:PS-(CH|CV)(-[1-2])*"
 
     def _getFilter(self):
         return {"sec": "TS", "sub": "\w{2}", "dev": "(CH|CV).*"}

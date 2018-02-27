@@ -1,18 +1,16 @@
 """Define control widget for fast correctors."""
-from .BaseMagnetControlWidget import BaseMagnetControlWidget
+from siriushla.as_ps_control.control_widget.BasePSControlWidget import \
+    BasePSControlWidget
 
 
-class SIFastCorrectorControlWidget(BaseMagnetControlWidget):
+class SIFastCorrectorControlWidget(BasePSControlWidget):
     """Storage ring fast correctors."""
 
     def _getPattern(self):
-        return "SI-\w{3,4}:MA-(FCH|FCV)(-[1-2])*"
+        return "SI-\w{3,4}:PS-(FCH|FCV)(-[1-2])*"
 
     def _getFilter(self):
         return {"sec": "SI", "sub": "\w{4}", "dev": "(FCH|FCV).*"}
-
-    def _getStrength(self):
-        return "Kick"
 
     def _hasTrimButton(self):
         return False

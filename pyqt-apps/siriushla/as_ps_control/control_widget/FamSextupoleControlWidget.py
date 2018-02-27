@@ -22,9 +22,6 @@ class SIFamSextupoleControlWidget(BasePSControlWidget):
     def _hasScrollArea(self):
         return True
 
-    def _divideBySection(self):
-        return False
-
     def _getGroups(self):
         return [('Focusing Sextupoles', '-SF'),
                 ('Defocusing Sextupoles', '-SD')]
