@@ -52,10 +52,10 @@ class DipoleDetailWidget(MagnetDetailWidget):
             self, "ca://" + self._ps_list[1] + ":IntlkHard-Mon"), 3, 1)
         # Connect buttons to open magnet interlock windows
         _util.connect_window(soft_intlk_button, MagnetInterlockWindow, self,
-                             **{'magnet': self._prefixed_magnet,
+                             **{'magnet': self._magnet_name,
                                 'interlock': 0})
         _util.connect_window(hard_intlk_button, MagnetInterlockWindow, self,
-                             **{'magnet': self._prefixed_magnet,
+                             **{'magnet': self._magnet_name,
                                 'interlock': 1})
         return layout
 
