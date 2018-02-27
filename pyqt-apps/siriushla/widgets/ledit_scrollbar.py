@@ -23,7 +23,7 @@ class PyDMLinEditScrollbar(QWidget):
         locale.setNumberOptions(locale.RejectGroupSeparator)
         validator = QDoubleValidator()
         validator.setLocale(locale)
-        self.sp_lineedit.setValidator(validator)
+        # self.sp_lineedit.setValidator(validator)
         self.sp_lineedit.showUnits = True
         # self.sp_lineedit.showUnits = False
         # if "Kick" in self._channel:
