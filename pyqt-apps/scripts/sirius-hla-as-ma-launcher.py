@@ -5,9 +5,9 @@
 import sys
 from siriushla.sirius_application import SiriusApplication
 from pydm.PyQt.QtGui import QAction, QMenuBar
-from siriushla.as_ma_control.MagnetControlWindow import MagnetControlWindow
-from siriushla.as_ma_control.MagnetTabControlWindow \
-    import MagnetTabControlWindow
+from siriushla.as_ps_control.PSControlWindow import PSControlWindow
+from siriushla.as_ps_control.PSTabControlWindow \
+    import PSTabControlWindow
 from siriushla.as_pm_control.PulsedMagnetControlWindow \
     import PulsedMagnetControlWindow
 from siriushla.as_ap_injection.InjectionWindow import InjectionWindow
@@ -41,34 +41,42 @@ class ControlApplication(SiriusMainWindow):
         # Create Actions
         openTBMagnetControlPanel = QAction("TB Magnets", self)
         _util.connect_window(openTBMagnetControlPanel,
-                             MagnetTabControlWindow, self, section="TB")
+                             PSTabControlWindow, self, section="TB",
+                             discipline=1)
         openBOMagnetControlPanel = QAction("BO Magnets", self)
         _util.connect_window(openBOMagnetControlPanel,
-                             MagnetTabControlWindow, self, section="BO")
+                             PSTabControlWindow, self, section="BO",
+                             discipline=1)
         openTSMagnetControlPanel = QAction("TS Magnets", self)
         _util.connect_window(openTSMagnetControlPanel,
-                             MagnetTabControlWindow, self, section="TS")
+                             PSTabControlWindow, self, section="TS",
+                             discipline=1)
         openSIMagnetControlPanel = QAction("All", self)
         _util.connect_window(openSIMagnetControlPanel,
-                             MagnetTabControlWindow, self, section="SI")
+                             PSTabControlWindow, self, section="SI",
+                             discipline=1)
         openSIDipoleWindow = QAction("Dipole", self)
-        _util.connect_window(openSIDipoleWindow, MagnetControlWindow, self,
-                             section="SI", device="dipole")
+        _util.connect_window(openSIDipoleWindow, PSControlWindow, self,
+                             section="SI", discipline=1, device="dipole")
         openSIQuadrupolesWindow = QAction("Quadrupoles", self)
-        _util.connect_window(openSIQuadrupolesWindow, MagnetControlWindow,
-                             self, section="SI", device="quadrupole")
+        _util.connect_window(openSIQuadrupolesWindow, PSControlWindow,
+                             self, section="SI", discipline=1,
+                             device="quadrupole")
         openSISextupolesWindow = QAction("Sextupoles", self)
-        _util.connect_window(openSISextupolesWindow, MagnetControlWindow, self,
-                             section="SI", device="sextupole")
+        _util.connect_window(openSISextupolesWindow, PSControlWindow, self,
+                             section="SI", discipline=1, device="sextupole")
         openSISlowCorrectorsWindow = QAction("Slow Correctors", self)
-        _util.connect_window(openSISlowCorrectorsWindow, MagnetControlWindow,
-                             self, section="SI", device="corrector-slow")
+        _util.connect_window(openSISlowCorrectorsWindow, PSControlWindow,
+                             self, section="SI", discipline=1,
+                             device="corrector-slow")
         openSIFastCorrectorsWindow = QAction("Fast Correctors", self)
-        _util.connect_window(openSIFastCorrectorsWindow, MagnetControlWindow,
-                             self, section="SI", device="corrector-fast")
+        _util.connect_window(openSIFastCorrectorsWindow, PSControlWindow,
+                             self, section="SI", discipline=1,
+                             device="corrector-fast")
         openSISkewQuadsWindow = QAction("Skew Quadrupoles", self)
-        _util.connect_window(openSISkewQuadsWindow, MagnetControlWindow, self,
-                             section="SI", device="quadrupole-skew")
+        _util.connect_window(openSISkewQuadsWindow, PSControlWindow, self,
+                             section="SI", discipline=1,
+                             device="quadrupole-skew")
 
         openPulsedMagnetsControlPanel = QAction("Pulsed Magnets", self)
         _util.connect_window(openPulsedMagnetsControlPanel,
