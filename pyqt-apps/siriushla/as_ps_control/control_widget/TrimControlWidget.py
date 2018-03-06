@@ -3,17 +3,19 @@ from siriushla.as_ps_control.control_widget.BasePSControlWidget import \
     BasePSControlWidget
 
 
-class TrimControlWidget(BaseMagnetControlWidget):
+class TrimControlWidget(BasePSControlWidget):
     """Class to control a Fam Quad from the Sirius section."""
 
-    def _getPattern(self):
-        return "SI-\d{2}\w\d:PS-Q[DF0-9].*"
+    def __init__(self, trim, **kwargs):
+        """Get trim name."""
+        self._trim = trim
+        super().__init__(**kwargs)
 
     def _getFilter(self):
-        return {"sec": "SI", "sub": "\w{4}", "dev": "Q[DF0-9].*"}
+        return {"sec": "SI", "sub": "\w{4}", "dev": self._trim}
 
     def _hasTrimButton(self):
-        return False
+        return True
 
     def _hasScrollArea(self):
         return True

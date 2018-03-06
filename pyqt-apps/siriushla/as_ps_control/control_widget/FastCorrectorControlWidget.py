@@ -6,9 +6,6 @@ from siriushla.as_ps_control.control_widget.BasePSControlWidget import \
 class SIFastCorrectorControlWidget(BasePSControlWidget):
     """Storage ring fast correctors."""
 
-    def _getPattern(self):
-        return "SI-\w{3,4}:PS-(FCH|FCV)(-[1-2])*"
-
     def _getFilter(self):
         return {"sec": "SI", "sub": "\w{4}", "dev": "(FCH|FCV).*"}
 

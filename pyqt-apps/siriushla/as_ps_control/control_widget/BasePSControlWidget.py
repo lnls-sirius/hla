@@ -1,8 +1,8 @@
 """Base class for controlling a power supply."""
 import re
 
-from siriuspy.search import PSSearch
-from siriushla.as_ps_control.PSWidget import PSWidget
+from siriuspy.search import PSSearch, MASearch
+from siriushla.as_ps_control.PSWidget import BasePSWidget, PSWidget, MAWidget
 from pydm.PyQt.QtCore import Qt, QPoint, pyqtSlot, QLocale
 from pydm.PyQt.QtGui import QWidget, QVBoxLayout, QGroupBox, \
     QGridLayout, QLabel, QHBoxLayout, QScrollArea, QLineEdit, QAction, \
@@ -16,13 +16,16 @@ class BasePSControlWidget(QWidget):
     HORIZONTAL = 1
     VERTICAL = 2
 
+    PS = 0
+    MA = 1
+
     StyleSheet = """
         QScrollArea {
             min-width: 1450px;
         }
     """
 
-    def __init__(self, psname_list=None, orientation=0, parent=None):
+    def __init__(self, dev_type, orientation=0, parent=None):
         """Class constructor.
 
         Parameters:
@@ -32,11 +35,16 @@ class BasePSControlWidget(QWidget):
                       laid out.
         """
         super(BasePSControlWidget, self).__init__(parent)
+        self._dev_type = dev_type
         self._orientation = orientation
-        if psname_list is None:
-            self._psname_list = PSSearch.get_psnames(self._getFilter())
+        if dev_type == self.PS:
+            self._dev_list = PSSearch.get_psnames(self._getFilter())
+            self._widget_class = PSWidget
+        elif dev_type == self.MA:
+            self._dev_list = MASearch.get_manames(self._getFilter())
+            self._widget_class = MAWidget
         else:
-            self._psname_list = psname_list
+            raise ValueError("Invalid device type, must be either PS or MA.")
         # Data structures used to filter the widgets
         self.widgets_list = dict()
         self.filtered_widgets = set()  # Set with key of visible widgets
@@ -44,6 +52,7 @@ class BasePSControlWidget(QWidget):
         self._setup_ui()
         self.setStyleSheet(self.StyleSheet)
         # Set custom context menu
+        # TODO: maybe no here
         self.setContextMenuPolicy(Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self.show_context_menu)
 
@@ -116,13 +125,13 @@ class BasePSControlWidget(QWidget):
         menu.popup(self.mapToGlobal(point))
 
     def get_ps_widgets(self):
-        """Return PSWidget widgets."""
-        return self.findChildren(PSWidget)
+        """Return PSWidget and MAWidget widgets."""
+        return self.findChildren(BasePSWidget)
 
     def _setup_ui(self):
         self.layout = QVBoxLayout()
         self.pwrsupplies_layout = self._getLayout()
-
+        # Create search bar
         self.search_lineedit = QLineEdit(parent=self)
         self.search_lineedit.setObjectName("search_lineedit")
         self.search_lineedit.setPlaceholderText("Search for a power supply...")
@@ -140,11 +149,11 @@ class BasePSControlWidget(QWidget):
         # Create group boxes and pop. layout
         for idx, group in enumerate(groups):
 
-            # Get power supply that belong to group
+            # Get power supplies that belong to group
             pwrsupplies = list()
-            element_list = self._getElementList()
+            # element_list = self._getElementList()
             pattern = re.compile(group[1])
-            for el in element_list:
+            for el in self._dev_list:
                 if pattern.search(el):
                     pwrsupplies.append(el)
 
@@ -152,21 +161,21 @@ class BasePSControlWidget(QWidget):
             group_widgets = list()
             for n, psname in enumerate(pwrsupplies):
                 if n > 0:
-                    ps_widget = PSWidget(psname=psname,
-                                         parent=self, header=False)
+                    ps_widget = self._widget_class(psname=psname,
+                                                   parent=self, header=False)
                 else:
-                    ps_widget = PSWidget(psname=psname, parent=self)
+                    ps_widget = self._widget_class(psname=psname, parent=self)
                 group_widgets.append(ps_widget)
                 self.widgets_list[psname] = ps_widget
                 self.filtered_widgets.add(psname)
 
             # Create group and scroll area
             main_widget = self._createGroupBox(group[0], group_widgets)
-            if self._hasScrollArea():
-                widget = QScrollArea(self)
-                widget.setWidget(main_widget)
-            else:
-                widget = main_widget
+            # if self._hasScrollArea():
+            widget = QScrollArea(self)
+            widget.setWidget(main_widget)
+            # else:
+            #     widget = main_widget
 
             group_box = QGroupBox(group[0])
             group_box.layout = QVBoxLayout()
@@ -197,18 +206,18 @@ class BasePSControlWidget(QWidget):
 
         return w
 
-    def _getElementList(self):
-        return filter(lambda ps: re.match(
-            self._getPattern(), ps), self._psname_list)
+    # def _getElementList(self):
+    #     return filter(lambda ps: re.match(
+    #         self._getPattern(), ps), self._psname_list)
 
-    def _getSection(self, name):
-        section = name.split(":")[0].split("-")[1][:2]
-        try:
-            int(section)
-        except Exception:
-            return 0
-
-        return int(section)
+    # def _getSection(self, name):
+    #     section = name.split(":")[0].split("-")[1][:2]
+    #     try:
+    #         int(section)
+    #     except Exception:
+    #         return 0
+    #
+    #     return int(section)
 
     def _getLayout(self):
         if self._orientation == self.SQUARE:

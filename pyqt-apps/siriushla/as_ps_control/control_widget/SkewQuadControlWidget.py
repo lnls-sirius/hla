@@ -7,9 +7,6 @@ from siriushla.as_ps_control.control_widget.BasePSControlWidget import \
 class SISkewQuadControlWidget(BasePSControlWidget):
     """Storage ring skew quads."""
 
-    def _getPattern(self):
-        return "SI-\w{4}:PS-QS"
-
     def _getFilter(self):
         return {"sec": "SI", "sub": "\w{4}", "dev": "QS"}
 
@@ -29,9 +26,6 @@ class SISkewQuadControlWidget(BasePSControlWidget):
 
 class BOSkewQuadControlWidget(SISkewQuadControlWidget):
     """Booster skew quads."""
-
-    def _getPattern(self):
-        return "BO-\w{3}:PS-QS"
 
     def _getFilter(self):
         return {"sec": "BO", "sub": "\w{3}", "dev": "QS"}

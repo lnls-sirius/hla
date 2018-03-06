@@ -7,9 +7,6 @@ from siriushla.as_ps_control.control_widget.BasePSControlWidget import \
 class SIFamQuadrupoleControlWidget(BasePSControlWidget):
     """Class to control a Fam Quad from the Sirius section."""
 
-    def _getPattern(self):
-        return "SI-Fam:PS-Q(\w+[0-9]*|[0-9])"
-
     def _getFilter(self):
         return {"sec": "SI", "sub": "Fam", "dev": "Q[DF0-9].*"}
 
@@ -39,9 +36,6 @@ class SIFamQuadrupoleControlWidget(BasePSControlWidget):
 class BOFamQuadrupoleControlWidget(SIFamQuadrupoleControlWidget):
     """Class to control a Fam Quad from the Booster section."""
 
-    def _getPattern(self):
-        return "BO-Fam:PS-Q(\w+[0-9]*|[0-9])"
-
     def _getFilter(self):
         return {"sec": "BO", "sub": "Fam", "dev": "Q[DF0-9].*"}
 
@@ -61,7 +55,7 @@ def run_test(psname_list=None):
 
     app = SiriusApplication()
     util.set_style(app)
-    window = SIFamQuadrupoleControlWidget(psname_list=psname_list)
+    window = SIFamQuadrupoleControlWidget(dev_type=0)
     window.show()
     sys.exit(app.exec_())
 

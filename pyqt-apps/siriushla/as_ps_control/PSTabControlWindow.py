@@ -2,7 +2,7 @@
 from pydm.PyQt.QtGui import QTabWidget, QWidget, QGridLayout
 
 from siriushla.as_ps_control.PSControlWindow import PSControlWindow
-# from .control_widget.ControlWidgetFactory import ControlWidgetFactory
+from .control_widget.ControlWidgetFactory import ControlWidgetFactory
 
 
 class PSTabControlWindow(PSControlWindow):
@@ -23,9 +23,10 @@ class PSTabControlWindow(PSControlWindow):
                "corrector-fast": "Fast Correctors",
                "quadrupole-skew": "Quadrupoles Skew"}
 
-    def __init__(self, section, parent=None):
+    def __init__(self, section, discipline, parent=None):
         """Class constructor."""
         super().__init__(section=section,
+                         discipline=discipline,
                          device=None,
                          parent=parent)
 
@@ -39,10 +40,11 @@ class PSTabControlWindow(PSControlWindow):
 
     def _addTabs(self):
         for device in self.Devices[self._section]:
-            widget = ControlWidgetFactory.factory(self._section, device)
-            if device == "dipole":
+            widget = ControlWidgetFactory.factory(
+                self._section, self._discipline, device)
+            if device == "dipole" and self._discipline == 1:
                 widget = self._dipoleWidgetWrapper(widget)
-            if device != "dipole":
+            if device != "dipole" or self._discipline == 0:
                 self._connect_buttons(widget)
             self.tabs.addTab(widget, self.TabName[device])
 

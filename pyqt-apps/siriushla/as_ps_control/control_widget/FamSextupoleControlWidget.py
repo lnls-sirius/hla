@@ -7,9 +7,6 @@ from siriushla.as_ps_control.control_widget.BasePSControlWidget import \
 class SIFamSextupoleControlWidget(BasePSControlWidget):
     """Storage ring sextupoles."""
 
-    def _getPattern(self):
-        return "SI-Fam:PS-S(\w+[0-9]*|[0-9])"
-
     def _getFilter(self):
         return {"sec": "SI", "sub": "Fam", "dev": "S[DF].*"}
 
@@ -29,9 +26,6 @@ class SIFamSextupoleControlWidget(BasePSControlWidget):
 
 class BOFamSextupoleControlWidget(SIFamSextupoleControlWidget):
     """Booster sextupoles."""
-
-    def _getPattern(self):
-        return "BO-Fam:PS-S(\w+[0-9]*|[0-9])"
 
     def _getFilter(self):
         return {"sec": "BO", "sub": "Fam", "dev": "S[DF].*"}
