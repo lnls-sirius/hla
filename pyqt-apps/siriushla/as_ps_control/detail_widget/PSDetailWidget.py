@@ -12,6 +12,7 @@ from pydm.widgets.label import PyDMLabel
 from siriushla.widgets.state_button import PyDMStateButton
 from pydm.widgets.enum_combo_box import PyDMEnumComboBox
 from pydm.widgets.pushbutton import PyDMPushButton
+from pydm.widgets.line_edit import PyDMLineEdit
 from siriushla.widgets import PyDMLinEditScrollbar
 from siriushla.widgets.led import SiriusLedState, SiriusLedAlert
 from siriushla import util as _util
@@ -95,6 +96,8 @@ class PSDetailWidget(QWidget):
             self.metric_box.setObjectName("metric")
         self.command_box = QGroupBox("Commands")
         self.command_box.setObjectName("command_box")
+        self.wfm_box = QGroupBox("Waveforms")
+        self.wfm_box.setObjectName("wfm_box")
 
         # Set group boxes layouts
         self.interlock_box.setLayout(self._interlockLayout())
@@ -104,6 +107,7 @@ class PSDetailWidget(QWidget):
         if self._is_magnet:
             self.metric_box.setLayout(self._metricLayout())
         self.command_box.setLayout(self._commandLayout())
+        self.wfm_box.setLayout(self._waveformLayout())
 
         # Add group boxes to laytout
         self.layout = self._setWidgetLayout()
@@ -125,6 +129,7 @@ class PSDetailWidget(QWidget):
         controls.addWidget(self.interlock_box)
         controls.addWidget(self.opmode_box)
         controls.addWidget(self.pwrstate_box)
+        controls.addWidget(self.wfm_box)
         controls.addWidget(self.command_box)
 
         analogs.addWidget(self.current_box)
@@ -312,6 +317,35 @@ class PSDetailWidget(QWidget):
 
         layout.addWidget(self.abort_btn)
         layout.addWidget(self.reset_btn)
+
+        return layout
+
+    def _waveformLayout(self):
+        layout = QGridLayout()
+
+        wfm_index_ch = "ca://" + self._prefixed_psname + ":WfmIndex-Mon"
+        wfm_data_sp_ch = "ca://" + self._prefixed_psname + ":WfmData-SP"
+        wfm_data_rb_ch = "ca://" + self._prefixed_psname + ":WfmData-RB"
+
+        self.wfmindex_label = QLabel('Index')
+        self.wfmdata_sp_label = QLabel('WfmData-SP')
+        self.wfmdata_rb_label = QLabel('WfmData-RB')
+
+        self.wfmindex_value = PyDMLabel(parent=self, init_channel=wfm_index_ch)
+        self.wfmdata_sp_value = PyDMLineEdit(self, wfm_data_sp_ch)
+        self.wfmdata_rb_value = PyDMLabel(self, wfm_data_rb_ch)
+
+        self.wfmindex_label.setBuddy(self.wfmindex_value)
+        self.wfmdata_sp_label.setBuddy(self.wfmdata_sp_value)
+        self.wfmdata_rb_label.setBuddy(self.wfmdata_rb_value)
+
+        layout.addWidget(self.wfmindex_label, 0, 0)
+        layout.addWidget(self.wfmindex_value, 0, 1)
+        # layout.addWidget(self.wfmdata_sp)
+        layout.addWidget(self.wfmdata_sp_label, 1, 0)
+        layout.addWidget(self.wfmdata_sp_value, 1, 1)
+        layout.addWidget(self.wfmdata_rb_label, 2, 0)
+        layout.addWidget(self.wfmdata_rb_value, 2, 1)
 
         return layout
 
