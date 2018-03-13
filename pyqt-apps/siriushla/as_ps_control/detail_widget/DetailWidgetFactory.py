@@ -3,7 +3,7 @@ import re
 
 from siriushla.as_ps_control.detail_widget.PSDetailWidget \
     import PSDetailWidget
-from siriushla.as_ma_control.detail_widget.DipoleDetailWidget \
+from siriushla.as_ps_control.detail_widget.DipoleDetailWidget \
     import DipoleDetailWidget
 from siriushla.as_pm_control.PulsedMagnetDetailWidget \
     import PulsedMagnetDetailWidget
