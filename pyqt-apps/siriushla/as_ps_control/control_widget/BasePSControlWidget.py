@@ -1,20 +1,23 @@
-"""Base class for controlling a magnet."""
+"""Base class for controlling a power supply."""
 import re
 
-from siriuspy.search import MASearch
-from siriushla.as_ma_control.MagnetWidget import MagnetWidget
+from siriuspy.search import PSSearch, MASearch
+from siriushla.as_ps_control.PSWidget import BasePSWidget, PSWidget, MAWidget
 from pydm.PyQt.QtCore import Qt, QPoint, pyqtSlot, QLocale
 from pydm.PyQt.QtGui import QWidget, QVBoxLayout, QGroupBox, \
     QGridLayout, QLabel, QHBoxLayout, QScrollArea, QLineEdit, QAction, \
     QMenu, QInputDialog
 
 
-class BaseMagnetControlWidget(QWidget):
-    """Base widget class to control magnet."""
+class BasePSControlWidget(QWidget):
+    """Base widget class to control power supply."""
 
     SQUARE = 0
     HORIZONTAL = 1
     VERTICAL = 2
+
+    PS = 0
+    MA = 1
 
     StyleSheet = """
         QScrollArea {
@@ -22,21 +25,26 @@ class BaseMagnetControlWidget(QWidget):
         }
     """
 
-    def __init__(self, magnet_list=None, orientation=0, parent=None):
+    def __init__(self, dev_type, orientation=0, parent=None):
         """Class constructor.
 
         Parameters:
-        magnet list - a list of magnets, will be filtered based on patterns
-                      defined in the subclass;
+        psname_list - a list of power supplies, will be filtered based on
+                      patterns defined in the subclass;
         orientation - how the different groups(defined in subclasses) will be
                       laid out.
         """
-        super(BaseMagnetControlWidget, self).__init__(parent)
+        super(BasePSControlWidget, self).__init__(parent)
+        self._dev_type = dev_type
         self._orientation = orientation
-        if magnet_list is None:
-            self._magnet_list = MASearch.get_manames(self._getFilter())
+        if dev_type == self.PS:
+            self._dev_list = PSSearch.get_psnames(self._getFilter())
+            self._widget_class = PSWidget
+        elif dev_type == self.MA:
+            self._dev_list = MASearch.get_manames(self._getFilter())
+            self._widget_class = MAWidget
         else:
-            self._magnet_list = magnet_list
+            raise ValueError("Invalid device type, must be either PS or MA.")
         # Data structures used to filter the widgets
         self.widgets_list = dict()
         self.filtered_widgets = set()  # Set with key of visible widgets
@@ -44,12 +52,13 @@ class BaseMagnetControlWidget(QWidget):
         self._setup_ui()
         self.setStyleSheet(self.StyleSheet)
         # Set custom context menu
+        # TODO: maybe no here
         self.setContextMenuPolicy(Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self.show_context_menu)
 
     @pyqtSlot(str)
-    def filter_magnets(self, text):
-        """Filter magnet widgets based on text inserted at line edit."""
+    def filter_pwrsupplies(self, text):
+        """Filter power supply widgets based on text inserted at line edit."""
         try:
             pattern = re.compile(text, re.I)
         except Exception as e:  # Ignore malformed patterns?
@@ -62,7 +71,7 @@ class BaseMagnetControlWidget(QWidget):
         # Set widgets visibility and the number of widgets matched
         self.set_widgets_visibility()
         self.count_label.setText(
-            "Showing {} magnets".format(len(self.filtered_widgets)))
+            "Showing {} power supplies".format(len(self.filtered_widgets)))
         # Sroll to top
         for scroll_area in self.findChildren(QScrollArea):
             scroll_area.verticalScrollBar().setValue(0)
@@ -115,57 +124,58 @@ class BaseMagnetControlWidget(QWidget):
 
         menu.popup(self.mapToGlobal(point))
 
-    def get_magnet_widgets(self):
-        """Return MagnetWidget widgets."""
-        return self.findChildren(MagnetWidget)
+    def get_ps_widgets(self):
+        """Return PSWidget and MAWidget widgets."""
+        return self.findChildren(BasePSWidget)
 
     def _setup_ui(self):
         self.layout = QVBoxLayout()
-        self.magnets_layout = self._getLayout()
-
+        self.pwrsupplies_layout = self._getLayout()
+        # Create search bar
         self.search_lineedit = QLineEdit(parent=self)
         self.search_lineedit.setObjectName("search_lineedit")
-        self.search_lineedit.setPlaceholderText("Search for a magnet...")
-        self.search_lineedit.textEdited.connect(self.filter_magnets)
+        self.search_lineedit.setPlaceholderText("Search for a power supply...")
+        self.search_lineedit.textEdited.connect(self.filter_pwrsupplies)
 
         self.count_label = QLabel(parent=self)
 
         self.layout.addWidget(self.search_lineedit)
         self.layout.addWidget(self.count_label)
-        self.layout.addLayout(self.magnets_layout)
+        self.layout.addLayout(self.pwrsupplies_layout)
 
-        # Build Magnet Layout
+        # Build power supply Layout
         groups = self._getGroups()
 
         # Create group boxes and pop. layout
         for idx, group in enumerate(groups):
 
-            # Get magnets that belong to group
-            magnets = list()
-            element_list = self._getElementList()
+            # Get power supplies that belong to group
+            pwrsupplies = list()
+            # element_list = self._getElementList()
             pattern = re.compile(group[1])
-            for el in element_list:
+            for el in self._dev_list:
                 if pattern.search(el):
-                    magnets.append(el)
+                    pwrsupplies.append(el)
 
-            # Loop magnets to create all the widgets of a groupbox
+            # Loop power supply to create all the widgets of a groupbox
             group_widgets = list()
-            for n, ma in enumerate(magnets):
+            for n, psname in enumerate(pwrsupplies):
                 if n > 0:
-                    magnet_widget = MagnetWidget(maname=ma, parent=self, header=False)
+                    ps_widget = self._widget_class(psname=psname,
+                                                   parent=self, header=False)
                 else:
-                    magnet_widget = MagnetWidget(maname=ma, parent=self)
-                group_widgets.append(magnet_widget)
-                self.widgets_list[ma] = magnet_widget
-                self.filtered_widgets.add(ma)
+                    ps_widget = self._widget_class(psname=psname, parent=self)
+                group_widgets.append(ps_widget)
+                self.widgets_list[psname] = ps_widget
+                self.filtered_widgets.add(psname)
 
             # Create group and scroll area
             main_widget = self._createGroupBox(group[0], group_widgets)
-            if self._hasScrollArea():
-                widget = QScrollArea(self)
-                widget.setWidget(main_widget)
-            else:
-                widget = main_widget
+            # if self._hasScrollArea():
+            widget = QScrollArea(self)
+            widget.setWidget(main_widget)
+            # else:
+            #     widget = main_widget
 
             group_box = QGroupBox(group[0])
             group_box.layout = QVBoxLayout()
@@ -175,14 +185,14 @@ class BaseMagnetControlWidget(QWidget):
             # Add group box or scroll area to grid layout
             if self._orientation == self.SQUARE:
                 if idx % 2 == 0:
-                    self.magnets_layout.addWidget(group_box, int(idx), 0)
+                    self.pwrsupplies_layout.addWidget(group_box, int(idx), 0)
                 else:
-                    self.magnets_layout.addWidget(group_box, int(idx/2), 1)
+                    self.pwrsupplies_layout.addWidget(group_box, int(idx/2), 1)
             else:
-                self.magnets_layout.addWidget(group_box)
+                self.pwrsupplies_layout.addWidget(group_box)
 
         self.count_label.setText(
-            "Showing {} magnets.".format(len(self.widgets_list)))
+            "Showing {} power supplies.".format(len(self.widgets_list)))
 
         self.setLayout(self.layout)
 
@@ -196,18 +206,18 @@ class BaseMagnetControlWidget(QWidget):
 
         return w
 
-    def _getElementList(self):
-        return filter(lambda magnet: re.match(
-            self._getPattern(), magnet), self._magnet_list)
+    # def _getElementList(self):
+    #     return filter(lambda ps: re.match(
+    #         self._getPattern(), ps), self._psname_list)
 
-    def _getSection(self, name):
-        section = name.split(":")[0].split("-")[1][:2]
-        try:
-            int(section)
-        except Exception:
-            return 0
-
-        return int(section)
+    # def _getSection(self, name):
+    #     section = name.split(":")[0].split("-")[1][:2]
+    #     try:
+    #         int(section)
+    #     except Exception:
+    #         return 0
+    #
+    #     return int(section)
 
     def _getLayout(self):
         if self._orientation == self.SQUARE:

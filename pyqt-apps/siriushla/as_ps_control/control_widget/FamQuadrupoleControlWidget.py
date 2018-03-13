@@ -1,32 +1,19 @@
 """Widgets to control Fam Quadrupoles magnets."""
 
-from pydm.PyQt.QtGui import QPushButton, QSizePolicy
-from .BaseMagnetControlWidget import BaseMagnetControlWidget
+from siriushla.as_ps_control.control_widget.BasePSControlWidget import \
+    BasePSControlWidget
 
 
-class SiFamQuadrupoleControlWidget(BaseMagnetControlWidget):
+class SIFamQuadrupoleControlWidget(BasePSControlWidget):
     """Class to control a Fam Quad from the Sirius section."""
 
-    def _getPattern(self):
-        return "SI-Fam:MA-Q(\w+[0-9]*|[0-9])"
-
     def _getFilter(self):
-        return {"section": "SI", "subsection": "Fam", "device": "Q[DF0-9].*"}
-
-    def _getStrength(self):
-        return "KL"
-
-    def _getHeader(self):
-        return ["State", "Magnet", "Cur-SP", "Cur-Mon",
-                "KL-SP", "KL-Mon", "Trim"]
+        return {"sec": "SI", "sub": "Fam", "dev": "Q[DF0-9].*"}
 
     def _hasTrimButton(self):
         return True
 
     def _hasScrollArea(self):
-        return False
-
-    def _divideBySection(self):
         return False
 
     def _getGroups(self):
@@ -46,18 +33,11 @@ class SiFamQuadrupoleControlWidget(BaseMagnetControlWidget):
     #     return magnet_widget
 
 
-class BoFamQuadrupoleControlWidget(SiFamQuadrupoleControlWidget):
+class BOFamQuadrupoleControlWidget(SIFamQuadrupoleControlWidget):
     """Class to control a Fam Quad from the Booster section."""
 
-    def _getPattern(self):
-        return "BO-Fam:MA-Q(\w+[0-9]*|[0-9])"
-
     def _getFilter(self):
-        return {"section": "BO", "subsection": "Fam", "device": "Q[DF0-9].*"}
-
-    def _getHeader(self):
-        return ["State", "Magnet", "Cur-SP", "Cur-Mon",
-                "KL-SP", "KL-Mon"]
+        return {"sec": "BO", "sub": "Fam", "dev": "Q[DF0-9].*"}
 
     def _hasTrimButton(self):
         return False
@@ -65,3 +45,20 @@ class BoFamQuadrupoleControlWidget(SiFamQuadrupoleControlWidget):
     def _getGroups(self):
         return [('Focusing Quadrupoles', "-QF"),
                 ('Defocusing Quadrupoles', "-QD")]
+
+
+def run_test(psname_list=None):
+    """Run test application."""
+    import sys
+    from siriushla.sirius_application import SiriusApplication
+    from siriushla import util
+
+    app = SiriusApplication()
+    util.set_style(app)
+    window = SIFamQuadrupoleControlWidget(dev_type=0)
+    window.show()
+    sys.exit(app.exec_())
+
+
+if __name__ == '__main__':
+    run_test()

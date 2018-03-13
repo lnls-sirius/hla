@@ -2,48 +2,46 @@
 from pydm import PyDMApplication
 from pydm.PyQt.QtGui import QWidget, QVBoxLayout
 
-from siriuspy.search import MASearch
 from siriushla.widgets import SiriusMainWindow
-from siriushla.as_ma_control.MagnetWidget import MagnetWidget
-from siriushla.as_ma_control.control_widget.TrimControlWidget \
+from siriushla.as_ps_control.PSWidget import PSWidgetFactory
+from siriushla.as_ps_control.control_widget.TrimControlWidget \
     import TrimControlWidget
-from siriushla.as_ma_control.MagnetDetailWindow import MagnetDetailWindow
+from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
 # from siriushla.as_ma_control.MagnetTrimWindow import MagnetTrimWindow
 
 from ..util import connect_window
 
 
-class MagnetTrimWindow(SiriusMainWindow):
+class PSTrimWindow(SiriusMainWindow):
     """Allow controlling the trims of a given magnet."""
 
-    def __init__(self, maname, parent=None):
+    def __init__(self, psname, parent=None):
         """Class constructor."""
-        super(MagnetTrimWindow, self).__init__(parent)
+        super(PSTrimWindow, self).__init__(parent)
         self.app = PyDMApplication.instance()
-        self._maname = maname
+        self._psname = psname
         # Setup UI
         self._setup_ui()
-        # Establish PyDM epics connections
-        # self.app.establish_widget_connections(self)
 
     def _setup_ui(self):
-        self.setWindowTitle(self._maname + ' Trims')
+        self.setWindowTitle(self._psname + ' Trims')
         self.central_widget = QWidget()
         self.central_widget.layout = QVBoxLayout()
         self.central_widget.setLayout(self.central_widget.layout)
         self.setCentralWidget(self.central_widget)
         # Create family MagnetWidget
-        self.fam_widget = MagnetWidget(self._maname, self)
+        self.fam_widget = PSWidgetFactory.factory(
+            psname=self._psname, parent=self)
         self.fam_widget.trim_button.setEnabled(False)
         # Connect family detail window
         fam_button = self.fam_widget.get_detail_button()
-        connect_window(fam_button, MagnetDetailWindow,
-                       self, maname=self._maname)
+        connect_window(fam_button, PSDetailWindow,
+                       self, psname=self._psname)
         # Create TrimWidget
-        device = self._maname.split("-")[-1]
+        device = self._psname.split("-")[-1]
         self.trim_widget = TrimControlWidget(
-            MASearch.get_manames({"sec": "SI", "dev": device}),
-            parent=self, orientation=TrimControlWidget.VERTICAL)
+            dev_type=0, trim=device, parent=self,
+            orientation=TrimControlWidget.VERTICAL)
         # Connect Trim detail buttons
         self._connect_buttons(self.trim_widget)
         # Add to leyout
@@ -51,8 +49,8 @@ class MagnetTrimWindow(SiriusMainWindow):
         self.central_widget.layout.addWidget(self.trim_widget)
 
     def _connect_buttons(self, widget):
-        for widget in widget.get_magnet_widgets():
-            maname = widget.maname
+        for widget in widget.get_ps_widgets():
+            psname = widget.psname
             detail_button = widget.get_detail_button()
-            connect_window(detail_button, MagnetDetailWindow,
-                           self, maname=maname)
+            connect_window(detail_button, PSDetailWindow,
+                           self, psname=psname)

@@ -10,15 +10,15 @@ from pydm.widgets.label import PyDMLabel
 from siriushla.widgets import SiriusMainWindow
 from siriushla.widgets.state_button import PyDMStateButton
 from pydm.widgets.enum_combo_box import PyDMEnumComboBox
-from siriushla.as_ma_control.detail_widget.MagnetDetailWidget \
-    import MagnetDetailWidget
+from siriushla.as_ps_control.detail_widget.PSDetailWidget \
+    import PSDetailWidget
 from siriushla.widgets import PyDMLinEditScrollbar
 from siriushla.widgets.led import SiriusLedState, SiriusLedAlert
 from siriushla import util as _util
 from .MagnetInterlockWidget import MagnetInterlockWindow
 
 
-class DipoleDetailWidget(MagnetDetailWidget):
+class DipoleDetailWidget(PSDetailWidget):
     """Widget that allows controlling a dipole magnet."""
 
     def __init__(self, magnet_name, parent=None):

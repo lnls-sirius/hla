@@ -5,9 +5,9 @@
 import sys
 from siriushla.sirius_application import SiriusApplication
 from pydm.PyQt.QtGui import QAction, QMenuBar
-from siriushla.as_ma_control.MagnetControlWindow import MagnetControlWindow
-from siriushla.as_ma_control.MagnetTabControlWindow \
-    import MagnetTabControlWindow
+from siriushla.as_ps_control.PSControlWindow import PSControlWindow
+from siriushla.as_ps_control.PSTabControlWindow \
+    import PSTabControlWindow
 from siriushla.as_pm_control.PulsedMagnetControlWindow \
     import PulsedMagnetControlWindow
 from siriushla.as_ap_injection.InjectionWindow import InjectionWindow
@@ -39,36 +39,44 @@ class ControlApplication(SiriusMainWindow):
         # openCyclePanel.triggered.connect(self._openCyclePanel)
 
         # Create Actions
-        openTBMagnetControlPanel = QAction("TB Magnets", self)
+        openTBMagnetControlPanel = QAction("TB Power Supplies", self)
         _util.connect_window(openTBMagnetControlPanel,
-                             MagnetTabControlWindow, self, section="TB")
-        openBOMagnetControlPanel = QAction("BO Magnets", self)
+                             PSTabControlWindow, self, section="TB",
+                             discipline=0)
+        openBOMagnetControlPanel = QAction("BO Power Supplies", self)
         _util.connect_window(openBOMagnetControlPanel,
-                             MagnetTabControlWindow, self, section="BO")
-        openTSMagnetControlPanel = QAction("TS Magnets", self)
+                             PSTabControlWindow, self, section="BO",
+                             discipline=0)
+        openTSMagnetControlPanel = QAction("TS Power Supplies", self)
         _util.connect_window(openTSMagnetControlPanel,
-                             MagnetTabControlWindow, self, section="TS")
+                             PSTabControlWindow, self, section="TS",
+                             discipline=0)
         openSIMagnetControlPanel = QAction("All", self)
         _util.connect_window(openSIMagnetControlPanel,
-                             MagnetTabControlWindow, self, section="SI")
+                             PSTabControlWindow, self, section="SI",
+                             discipline=0)
         openSIDipoleWindow = QAction("Dipole", self)
-        _util.connect_window(openSIDipoleWindow, MagnetControlWindow, self,
-                             section="SI", device="dipole")
+        _util.connect_window(openSIDipoleWindow, PSControlWindow, self,
+                             section="SI", discipline=0, device="dipole")
         openSIQuadrupolesWindow = QAction("Quadrupoles", self)
-        _util.connect_window(openSIQuadrupolesWindow, MagnetControlWindow,
-                             self, section="SI", device="quadrupole")
+        _util.connect_window(openSIQuadrupolesWindow, PSControlWindow,
+                             self, section="SI", discipline=0,
+                             device="quadrupole")
         openSISextupolesWindow = QAction("Sextupoles", self)
-        _util.connect_window(openSISextupolesWindow, MagnetControlWindow, self,
-                             section="SI", device="sextupole")
+        _util.connect_window(openSISextupolesWindow, PSControlWindow, self,
+                             section="SI", discipline=0, device="sextupole")
         openSISlowCorrectorsWindow = QAction("Slow Correctors", self)
-        _util.connect_window(openSISlowCorrectorsWindow, MagnetControlWindow,
-                             self, section="SI", device="corrector-slow")
+        _util.connect_window(openSISlowCorrectorsWindow, PSControlWindow,
+                             self, section="SI", discipline=0,
+                             device="corrector-slow")
         openSIFastCorrectorsWindow = QAction("Fast Correctors", self)
-        _util.connect_window(openSIFastCorrectorsWindow, MagnetControlWindow,
-                             self, section="SI", device="corrector-fast")
+        _util.connect_window(openSIFastCorrectorsWindow, PSControlWindow,
+                             self, section="SI", discipline=0,
+                             device="corrector-fast")
         openSISkewQuadsWindow = QAction("Skew Quadrupoles", self)
-        _util.connect_window(openSISkewQuadsWindow, MagnetControlWindow, self,
-                             section="SI", device="quadrupole-skew")
+        _util.connect_window(openSISkewQuadsWindow, PSControlWindow, self,
+                             section="SI", discipline=0,
+                             device="quadrupole-skew")
 
         openPulsedMagnetsControlPanel = QAction("Pulsed Magnets", self)
         _util.connect_window(openPulsedMagnetsControlPanel,
@@ -91,11 +99,11 @@ class ControlApplication(SiriusMainWindow):
         # psMenu = menubar.addMenu("Power Supplies")
         # psMenu.addAction(openCyclePanel)
 
-        magnetsMenu = menubar.addMenu("&Magnets")
+        magnetsMenu = menubar.addMenu("&Power Supplies")
         magnetsMenu.addAction(openTBMagnetControlPanel)
         magnetsMenu.addAction(openBOMagnetControlPanel)
         magnetsMenu.addAction(openTSMagnetControlPanel)
-        SIMagentMenu = magnetsMenu.addMenu("SI Magnets")
+        SIMagentMenu = magnetsMenu.addMenu("SI Power Supplies")
         SIMagentMenu.addAction(openSIMagnetControlPanel)
         SIMagentMenu.addAction(openSIDipoleWindow)
         SIMagentMenu.addAction(openSIQuadrupolesWindow)
@@ -105,15 +113,8 @@ class ControlApplication(SiriusMainWindow):
         SIMagentMenu.addAction(openSISkewQuadsWindow)
         # magnetsMenu.addAction(openSIMagnetControlPanel)
 
-        pulsedMagnetsMenu = menubar.addMenu("&Pulsed Magnets")
-        pulsedMagnetsMenu.addAction(openPulsedMagnetsControlPanel)
-
-        injectionMenu = menubar.addMenu("&Injection")
-        injectionMenu.addAction(openInjectionWindow)
-
-        configMenu = menubar.addMenu("&Offline Configuration")
-        configMenu.addAction(openBoosterConfiguration)
-        configMenu.addAction(openSIConfiguration)
+        # pulsedMagnetsMenu = menubar.addMenu("&Pulsed Magnets")
+        # pulsedMagnetsMenu.addAction(openPulsedMagnetsControlPanel)
 
         self.setMenuBar(menubar)
         self.setGeometry(50, 50, 1024, 800)

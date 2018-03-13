@@ -1,21 +1,22 @@
 """Define a window with detailed controls for a given magnet."""
 from pydm import PyDMApplication
 from siriushla.widgets import SiriusMainWindow
-from .detail_widget.DetailWidgetFactory import DetailWidgetFactory
+from siriushla.as_ps_control.detail_widget.DetailWidgetFactory \
+    import DetailWidgetFactory
 
 
-class MagnetDetailWindow(SiriusMainWindow):
+class PSDetailWindow(SiriusMainWindow):
     """Window to control a detailed widget."""
 
     STYLESHEET = """
     """
 
-    def __init__(self, maname, parent=None):
+    def __init__(self, psname, parent=None):
         """Init UI."""
-        super(MagnetDetailWindow, self).__init__(parent)
+        super(PSDetailWindow, self).__init__(parent)
         self.app = PyDMApplication.instance()
 
-        self._ma = maname
+        self._ma = psname
 
         self._setup_ui()
         self.setStyleSheet(self.STYLESHEET)
@@ -26,11 +27,3 @@ class MagnetDetailWindow(SiriusMainWindow):
         self.setWindowTitle(self._ma)
         self.widget = DetailWidgetFactory.factory(self._ma, self)
         self.setCentralWidget(self.widget)
-
-
-if __name__ == '__main__':
-    import sys
-    app = PyDMApplication(None, sys.argv)
-    window = MagnetDetailWindow("SI-Fam:MA-QFA")
-    window.show()
-    app.exec_()
