@@ -24,7 +24,7 @@ QuadrupoleSkew = re.compile("^.*:MA-QS.*$")
 Sextupole = re.compile("^.*:MA-S.*$")
 Corrector = re.compile("^.*:MA-(CH|CV|FCH|FCV).*$")
 
-HasTrim = re.compile("^.*\w{2}-Fam:(PS|MA)-Q.*$")
+HasTrim = re.compile("^.*SI-Fam:(PS|MA)-Q.*$")
 
 
 class BasePSWidget(QWidget):
