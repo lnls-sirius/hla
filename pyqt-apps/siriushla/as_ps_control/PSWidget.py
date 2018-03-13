@@ -15,7 +15,7 @@ from pydm.widgets.label import PyDMLabel
 from siriuspy.envars import vaca_prefix as _VACA_PREFIX
 from siriushla.widgets import PyDMLinEditScrollbar
 from siriushla.widgets.state_button import PyDMStateButton
-from siriushla.widgets.led import PyDMLed
+from siriushla.widgets.led import PyDMLed, SiriusLedAlert
 
 StorageRingFam = re.compile("^SI-Fam:.*$")
 Dipole = re.compile("^.*:MA-B.*$")
@@ -31,8 +31,9 @@ class BasePSWidget(QWidget):
     """Base widget with basic controls to control a magnet."""
 
     StyleSheet = """
-        #psname_header,
         #state_header,
+        #psname_header,
+        #intlk_header,
         #analog_sp_header,
         #analog_mon_header,
         #strength_sp_header,
@@ -52,6 +53,11 @@ class BasePSWidget(QWidget):
             min-width: 300px;
             max-width: 300px;
             margin-right: 20px;
+        }
+        #intlk_header,
+        #intlk_widget {
+            min-width: 200px;
+            max-width: 200px;
         }
         #analog_sp_header,
         #strength_sp_header,
@@ -116,6 +122,8 @@ class BasePSWidget(QWidget):
         self.state_header.setObjectName("state_header")
         self.psname_header = QLabel("Power Supply", self)
         self.psname_header.setObjectName("psname_header")
+        self.intlk_header = QLabel("Interlocks", self)
+        self.intlk_header.setObjectName("intlk_header")
         self.analog_sp_header = QLabel(self._analog_name + "-SP", self)
         self.analog_sp_header.setObjectName("analog_sp_header")
         self.analog_mon_header = QLabel(self._analog_name + "-Mon", self)
@@ -123,6 +131,7 @@ class BasePSWidget(QWidget):
 
         self.header_layout.addWidget(self.state_header)
         self.header_layout.addWidget(self.psname_header)
+        self.header_layout.addWidget(self.intlk_header)
         self.header_layout.addWidget(self.analog_sp_header)
         self.header_layout.addWidget(self.analog_mon_header)
         # Add magnet strength related widgets
@@ -145,6 +154,8 @@ class BasePSWidget(QWidget):
 
     def _build_widget(self):
         # Widgets
+
+        # PwrState widgets
         self.pwrstate_button = PyDMStateButton(
             parent=self, init_channel="ca://" + self._pwrstate_sp_pv)
         self.pwrstate_button.setObjectName("pwrstate_button")
@@ -156,20 +167,33 @@ class BasePSWidget(QWidget):
         self.state_widget.setLayout(self.state_widget.layout)
         self.state_widget.layout.addWidget(self.pwrstate_button)
         self.state_widget.layout.addWidget(self.state_led)
+        # Power Supply button to access detailed window
         self.psname_label = QPushButton(self._psname, self)
         self.psname_label.setObjectName("psname_button")
-        # self.pwrstate_button = PyDMLed(
-        #     parent=self, init_channel="ca://" + self._pwrstate_sp_pv)
+        # Interlock leds
+        self.intlksoft_led = \
+            SiriusLedAlert(self, "ca://" + self._intlksoft_mon_pv)
+        self.intlkhard_led = \
+            SiriusLedAlert(self, "ca://" + self._intlkhard_mon_pv)
+        self.intlk_widget = QWidget(self)
+        self.intlk_widget.setObjectName("intlk_widget")
+        self.intlk_widget.layout = QHBoxLayout()
+        self.intlk_widget.setLayout(self.intlk_widget.layout)
+        self.intlk_widget.layout.addWidget(self.intlksoft_led)
+        self.intlk_widget.layout.addWidget(self.intlkhard_led)
+        # Analog setpoint widget
         self.analog_widget = PyDMLinEditScrollbar(
             parent=self, channel="ca://" + self._analog_sp_pv,)
         self.analog_widget.sp_scrollbar.setTracking(False)
         self.analog_widget.setObjectName("analog_widget")
+        # Analog mon widget
         self.analog_mon_label = PyDMLabel(
             parent=self, init_channel="ca://" + self._analog_mon_pv)
         self.analog_mon_label.setObjectName("analog_label")
 
         self.layout.addWidget(self.state_widget)
         self.layout.addWidget(self.psname_label)
+        self.layout.addWidget(self.intlk_widget)
         self.layout.addWidget(self.analog_widget)
         self.layout.addWidget(self.analog_mon_label)
         # Add strength related widgets
@@ -263,6 +287,8 @@ class PSWidget(BasePSWidget):
         self._pwrstate_rb_pv = self._prefixed_psname + "PwrState-Sts"
         self._analog_sp_pv = self._prefixed_psname + "Current-SP"
         self._analog_mon_pv = self._prefixed_psname + "Current-Mon"
+        self._intlksoft_mon_pv = self._prefixed_psname + "IntlkSoft-Mon"
+        self._intlkhard_mon_pv = self._prefixed_psname + "IntlkHard-Mon"
 
 
 class PulsedMAWidget(BasePSWidget):
@@ -305,6 +331,8 @@ class MAWidget(BasePSWidget):
         self._pwrstate_rb_pv = self._prefixed_psname + "PwrState-Sts"
         self._analog_sp_pv = self._prefixed_psname + "Current-SP"
         self._analog_mon_pv = self._prefixed_psname + "Current-Mon"
+        self._intlksoft_mon_pv = self._prefixed_psname + "IntlkSoft-Mon"
+        self._intlkhard_mon_pv = self._prefixed_psname + "IntlkHard-Mon"
         self._strength_sp_pv = \
             self._prefixed_psname + self._strength_name + "-SP"
         self._strength_mon_pv = \
