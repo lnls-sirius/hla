@@ -39,15 +39,15 @@ class ControlApplication(SiriusMainWindow):
         # openCyclePanel.triggered.connect(self._openCyclePanel)
 
         # Create Actions
-        openTBMagnetControlPanel = QAction("TB Magnets", self)
+        openTBMagnetControlPanel = QAction("TB Power Supplies", self)
         _util.connect_window(openTBMagnetControlPanel,
                              PSTabControlWindow, self, section="TB",
                              discipline=0)
-        openBOMagnetControlPanel = QAction("BO Magnets", self)
+        openBOMagnetControlPanel = QAction("BO Power Supplies", self)
         _util.connect_window(openBOMagnetControlPanel,
                              PSTabControlWindow, self, section="BO",
                              discipline=0)
-        openTSMagnetControlPanel = QAction("TS Magnets", self)
+        openTSMagnetControlPanel = QAction("TS Power Supplies", self)
         _util.connect_window(openTSMagnetControlPanel,
                              PSTabControlWindow, self, section="TS",
                              discipline=0)
@@ -99,11 +99,11 @@ class ControlApplication(SiriusMainWindow):
         # psMenu = menubar.addMenu("Power Supplies")
         # psMenu.addAction(openCyclePanel)
 
-        magnetsMenu = menubar.addMenu("&Magnets")
+        magnetsMenu = menubar.addMenu("&Power Supplies")
         magnetsMenu.addAction(openTBMagnetControlPanel)
         magnetsMenu.addAction(openBOMagnetControlPanel)
         magnetsMenu.addAction(openTSMagnetControlPanel)
-        SIMagentMenu = magnetsMenu.addMenu("SI Magnets")
+        SIMagentMenu = magnetsMenu.addMenu("SI Power Supplies")
         SIMagentMenu.addAction(openSIMagnetControlPanel)
         SIMagentMenu.addAction(openSIDipoleWindow)
         SIMagentMenu.addAction(openSIQuadrupolesWindow)
