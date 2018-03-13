@@ -4,7 +4,7 @@ from pydm.PyQt.QtGui import QWidget, QVBoxLayout, QTabWidget
 
 from siriuspy.search import MASearch
 from siriushla.widgets import SiriusMainWindow
-from siriushla.as_ma_control.MagnetWidget import PulsedMagnetWidget
+from siriushla.as_ps_control.PSWidget import PulsedMAWidget
 from siriushla.as_pm_control.PulsedMagnetDetailWindow \
     import PulsedMagnetDetailWindow
 from siriushla.util import connect_window
@@ -51,7 +51,7 @@ class PulsedMagnetControlWindow(SiriusMainWindow):
 
         header = True
         for magnet in magnets:
-            ma_widget = PulsedMagnetWidget(magnet, header, self)
+            ma_widget = PulsedMAWidget(magnet, header, self)
             widget.layout.addWidget(ma_widget)
             header &= False
 
@@ -61,8 +61,8 @@ class PulsedMagnetControlWindow(SiriusMainWindow):
         return widget
 
     def _connect_buttons(self):
-        """Return buttons in the PulsedMagnetWidgets."""
-        widgets = self.main_widget.findChildren(PulsedMagnetWidget)
+        """Return buttons in the PulsedMAWidgets."""
+        widgets = self.main_widget.findChildren(PulsedMAWidget)
         for widget in widgets:
             maname = widget.maname
             button = widget.get_detail_button()
