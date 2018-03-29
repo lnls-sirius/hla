@@ -1885,7 +1885,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-04D:DI-TuneP:TuneY-Mon</string>
+         <string>ca://${PREFIX}SI-17C4:DI-VTuneP:TuneY-Mon</string>
         </property>
        </widget>
       </item>
@@ -2037,7 +2037,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-04D:DI-TuneP:TuneX-Mon</string>
+         <string>ca://${PREFIX}SI-18SB:DI-HTuneP:TuneX-Mon</string>
         </property>
        </widget>
       </item>
