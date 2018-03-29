@@ -323,8 +323,8 @@ class QLed(QFrame):
     @stateColors.setter
     def stateColors(self, new_colors):
         """Color list property setter."""
-        if not isinstance(new_colors, (list, tuple)) and\
-                len(new_colors) < 2 and not isinstance(new_colors[0], QColor):
+        if not isinstance(new_colors, (list, tuple)) or\
+                len(new_colors) < 2 or not isinstance(new_colors[0], QColor):
             return
         self.m_stateColors = list(new_colors)
 
