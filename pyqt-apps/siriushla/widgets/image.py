@@ -50,6 +50,12 @@ class SiriusImageView(ImageView, PyDMWidget):
         information
     """
 
+    for k in sorted(READINGORDER.keys()):
+        locals()[k] = READINGORDER[k]
+
+    for k in sorted(COLORMAP.keys()):
+        locals()[k] = COLORMAP[k]
+
     Q_ENUMS(_ReadingOrderMap)
     Q_ENUMS(_ColormapMap)
 
