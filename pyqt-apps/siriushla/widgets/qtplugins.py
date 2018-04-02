@@ -7,6 +7,7 @@ from .QDoubleScrollBar import QDoubleScrollBar
 from .scrollbar import PyDMScrollBar
 from .state_button import PyDMStateButton
 from .windows import SiriusDialog, SiriusMainWindow
+from .image import SiriusImageView
 
 SIRIUS_CATEGORY = 'Sirius Widgets'
 
@@ -22,6 +23,10 @@ SiriusDialogPlugin = qtplugin_factory(SiriusDialog,
 PyDMLedPlugin = qtplugin_factory(PyDMLed, group=SIRIUS_CATEGORY)
 SiriusLedStatePlugin = qtplugin_factory(SiriusLedState, group=SIRIUS_CATEGORY)
 SiriusLedAlertPlugin = qtplugin_factory(SiriusLedAlert, group=SIRIUS_CATEGORY)
+
+# Image plugin
+SiriusImageViewPlugin = qtplugin_factory(SiriusImageView,
+                                         group=SIRIUS_CATEGORY)
 
 # Log Label
 PyDMLogLabelPlugin = qtplugin_factory(PyDMLogLabel,
