@@ -1,12 +1,12 @@
-from ..PyQt.QtGui import QActionGroup
-from ..PyQt.QtCore import pyqtSlot, pyqtProperty, Q_ENUMS, QTimer
-from pyqtgraph import ImageView, ColorMap
 import numpy as np
-from .channel import PyDMChannel
-from .colormaps import cmaps
-from .base import PyDMWidget
-from collections import OrderedDict
 import pyqtgraph
+from pyqtgraph import ImageView, ColorMap
+from pydm.PyQt.QtGui import QActionGroup
+from pydm.PyQt.QtCore import pyqtSlot, pyqtProperty, Q_ENUMS, QTimer
+from pydm.widgets.channel import PyDMChannel
+from pydm.widgets.colormaps import cmaps, cmap_names
+from pydm.widgets.base import PyDMWidget
+from collections import OrderedDict
 pyqtgraph.setConfigOption('imageAxisOrder', 'row-major')
 
 READINGORDER = OrderedDict([
@@ -14,8 +14,8 @@ READINGORDER = OrderedDict([
                             ('Clike', 1),
                             ])
 COLORMAP = OrderedDict()
-for i, cm in enumerate(sorted(cmaps.keys())):
-    COLORMAP[cm] = i
+for cm in sorted(cmap_names.keys()):
+    COLORMAP[cmap_names[cm]] = cm
 
 
 class _ReadingOrderMap(object):
@@ -28,7 +28,7 @@ class _ColormapMap(object):
         locals()[k] = COLORMAP[k]
 
 
-class SiriusImageView(ImageView, PyDMWidget, _ColormapMap, _ReadingOrderMap):
+class SiriusImageView(ImageView, PyDMWidget):
     """
     A PyQtGraph ImageView with support for Channels and more from PyDM.
 
@@ -57,9 +57,7 @@ class SiriusImageView(ImageView, PyDMWidget, _ColormapMap, _ReadingOrderMap):
     for rd, i in READINGORDER.items():
         readingorderdict[i] = rd
 
-    colormapdict = {}
-    for cm, i in COLORMAP.items():
-        colormapdict[i] = cmaps[cm]
+    colormapdict = cmaps
 
     def __init__(self, parent=None, image_channel=None, width_channel=None):
         """Initialize the object."""
@@ -86,7 +84,7 @@ class SiriusImageView(ImageView, PyDMWidget, _ColormapMap, _ReadingOrderMap):
         # Reading order of numpy array data
         self._readingOrder = 0
 
-        self._colormapindex = COLORMAP["inferno"]
+        self._colormapindex = COLORMAP["Inferno"]
         self._cm_colors = self.colormapdict[self._colormapindex]
         self.setColorMap()
 
@@ -107,6 +105,15 @@ class SiriusImageView(ImageView, PyDMWidget, _ColormapMap, _ReadingOrderMap):
         self.redraw_timer.timeout.connect(self.redrawImage)
         self._redraw_rate = 30
         self.maxRedrawRate = self._redraw_rate
+
+    def context_menu(self):
+        """Return custom context menu created on ImageView.
+
+        Returns
+        -------
+        context_menu : ViewBoxMenu
+        """
+        return self.getView().getMenu(None)
 
     def _changeColorMap(self, action):
         """
@@ -185,7 +192,7 @@ class SiriusImageView(ImageView, PyDMWidget, _ColormapMap, _ReadingOrderMap):
         """
         if new_width is None:
             return
-        self.imageWidth = new_width
+        self._image_width = new_width
 
     def redrawImage(self):
         """Set the image data into the ImageItem."""
