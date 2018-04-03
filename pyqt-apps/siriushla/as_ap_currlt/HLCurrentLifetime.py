@@ -7,6 +7,7 @@ from pydm.PyQt.uic import loadUi
 from pydm.PyQt.QtCore import pyqtSlot
 from siriushla.widgets import SiriusMainWindow
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
+from siriuspy.envars import vaca_prefix as _vaca_prefix
 
 
 class CurrLTWindow(SiriusMainWindow):
@@ -15,6 +16,9 @@ class CurrLTWindow(SiriusMainWindow):
     def __init__(self, parent=None, prefix=None, acc=None):
         """Initialize some widgets."""
         super(CurrLTWindow, self).__init__(parent)
+        if prefix == '':
+            prefix = _vaca_prefix
+
         UI_FILE = ('/home/fac_files/lnls-sirius/hla/pyqt-apps/siriushla/'
                    'as_ap_currlt/ui_'+acc.lower()+'_ap_currlt.ui')
         tmp_file = _substitute_in_file(UI_FILE, {'PREFIX': prefix})

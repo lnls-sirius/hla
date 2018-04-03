@@ -13,7 +13,7 @@ from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla.widgets.state_button import PyDMStateButton
 from siriushla import util as _hlautil
 from siriushla.widgets.windows import SiriusMainWindow
-from siriushla.as_ma_control.MagnetDetailWindow import MagnetDetailWindow
+from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
 
 
 class OpticsCorrWindow(SiriusMainWindow):
@@ -51,8 +51,8 @@ class OpticsCorrWindow(SiriusMainWindow):
         for button in self.centralwidget.findChildren(QPushButton):
             if 'MADetail' in button.objectName():
                 ma = button.text()
-                _hlautil.connect_window(button, MagnetDetailWindow, self,
-                                        maname=ma)
+                _hlautil.connect_window(button, PSDetailWindow, self,
+                                        psname=ma)
             if 'CorrParams' in button.objectName():
                 _hlautil.connect_window(button, CorrParamsDetailWindow,
                                         parent=self, acc=acc.upper(),
