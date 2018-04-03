@@ -3,13 +3,12 @@ import re
 
 from pydm.PyQt.QtCore import Qt
 from pydm.PyQt.QtGui import QGridLayout, QLabel, QSizePolicy, \
-    QFrame, QHBoxLayout, QPushButton
+    QFrame, QHBoxLayout, QPushButton, QVBoxLayout
 
 from siriuspy.envars import vaca_prefix
-from pydm.widgets.label import PyDMLabel
+from pydm.widgets import PyDMLabel, PyDMEnumComboBox, PyDMSpinbox, PyDMLineEdit
 from siriushla.widgets import SiriusMainWindow
 from siriushla.widgets.state_button import PyDMStateButton
-from pydm.widgets.enum_combo_box import PyDMEnumComboBox
 from siriushla.as_ps_control.detail_widget.PSDetailWidget \
     import PSDetailWidget
 from siriushla.widgets import PyDMLinEditScrollbar
@@ -213,24 +212,24 @@ class DipoleDetailWidget(PSDetailWidget):
         hr3.setFrameShape(QFrame.HLine)
         hr3.setFrameShadow(QFrame.Sunken)
 
-        layout.addWidget(self.current_sp_label, 0, 0)
+        layout.addWidget(self.current_sp_label, 0, 0, Qt.AlignRight)
         layout.addWidget(self.current_sp_widget, 0, 1, 1, 2)
         layout.addWidget(hr3, 1, 0, 1, 3)
-        layout.addWidget(self.current_rb_label, 2, 0)
+        layout.addWidget(self.current_rb_label, 2, 0, Qt.AlignRight)
         layout.addWidget(self.current_rb_val, 2, 1)
         # layout.addWidget(QLabel("PS1"), 1, 2)
         layout.addWidget(self.ps1_current_rb, 2, 2)
         # layout.addWidget(QLabel("PS2"), 2, 2)
         layout.addWidget(self.ps2_current_rb, 3, 2)
         layout.addWidget(hr1, 4, 0, 1, 3)
-        layout.addWidget(self.current_ref_label, 5, 0)
+        layout.addWidget(self.current_ref_label, 5, 0, Qt.AlignRight)
         layout.addWidget(self.current_ref_val, 5, 1)
         # layout.addWidget(QLabel("PS1"), 3, 2)
         layout.addWidget(self.ps1_current_ref, 5, 2)
         # layout.addWidget(QLabel("PS2"), 4, 2)
         layout.addWidget(self.ps2_current_ref, 6, 2)
         layout.addWidget(hr2, 7, 0, 1, 3)
-        layout.addWidget(self.current_mon_label, 8, 0)
+        layout.addWidget(self.current_mon_label, 8, 0, Qt.AlignRight)
         layout.addWidget(self.current_mon_val, 8, 1)
         # layout.addWidget(QLabel("PS1"), 5, 2)
         layout.addWidget(self.ps1_current_mon, 8, 2)
@@ -239,6 +238,116 @@ class DipoleDetailWidget(PSDetailWidget):
         # layout.addWidget(self.current_sp_slider, 3, 1)
         # layout.setRowStretch(10, 1)
         layout.setColumnStretch(3, 1)
+
+        return layout
+
+    def _cycleLayout(self):
+        layout = QGridLayout()
+        # 15 cycle pvs
+        enbl_sp_ca = 'ca://' + self._prefixed_magnet + ':CycleEnbl-SP'
+        enbl_rb_ca1 = 'ca://' + self._ps_list[0] + ':CycleEnbl-RB'
+        enbl_rb_ca2 = 'ca://' + self._ps_list[1] + ':CycleEnbl-RB'
+        type_sp_ca = 'ca://' + self._prefixed_magnet + ':CycleType-Sel'
+        type_rb_ca1 = 'ca://' + self._ps_list[0] + ':CycleType-Sts'
+        type_rb_ca2 = 'ca://' + self._ps_list[1] + ':CycleType-Sts'
+        nrcycles_sp_ca = 'ca://' + self._prefixed_magnet + ':CycleNrCycles-SP'
+        nrcycles_rb_ca1 = 'ca://' + self._ps_list[0] + ':CycleNrCycles-RB'
+        nrcycles_rb_ca2 = 'ca://' + self._ps_list[1] + ':CycleNrCycles-RB'
+        index_ca1 = 'ca://' + self._ps_list[0] + ':CycleIndex-Mon'
+        index_ca2 = 'ca://' + self._ps_list[1] + ':CycleIndex-Mon'
+        freq_sp_ca = 'ca://' + self._prefixed_magnet + ':CycleFreq-SP'
+        freq_rb_ca1 = 'ca://' + self._ps_list[0] + ':CycleFreq-RB'
+        freq_rb_ca2 = 'ca://' + self._ps_list[1] + ':CycleFreq-RB'
+        ampl_sp_ca = 'ca://' + self._prefixed_magnet + ':CycleAmpl-SP'
+        ampl_rb_ca1 = 'ca://' + self._ps_list[0] + ':CycleAmpl-RB'
+        ampl_rb_ca2 = 'ca://' + self._ps_list[1] + ':CycleAmpl-RB'
+        offset_sp_ca = 'ca://' + self._prefixed_magnet + ':CycleOffset-SP'
+        offset_rb_ca1 = 'ca://' + self._ps_list[0] + ':CycleOffset-RB'
+        offset_rb_ca2 = 'ca://' + self._ps_list[1] + ':CycleOffset-RB'
+        auxparam_sp_ca = 'ca://' + self._prefixed_magnet + ':CycleAuxParam-SP'
+        auxparam_rb_ca1 = 'ca://' + self._ps_list[0] + ':CycleAuxParam-RB'
+        auxparam_rb_ca2 = 'ca://' + self._ps_list[1] + ':CycleAuxParam-RB'
+        # 8 labels
+        self.cycle_enbl_label = QLabel('Enabled', self)
+        self.cycle_type_label = QLabel('Type', self)
+        self.cycle_nr_label = QLabel('Nr. Cycles', self)
+        self.cycle_index_label = QLabel('Index', self)
+        self.cycle_freq_label = QLabel('Frequency', self)
+        self.cycle_ampl_label = QLabel('Amplitude', self)
+        self.cycle_offset_label = QLabel('Offset', self)
+        self.cycle_auxparam_label = QLabel('AuxParams', self)
+        # 15 widgets
+        self.cycle_enbl_sp_button = PyDMStateButton(self, enbl_sp_ca)
+        self.cycle_enbl_rb_led1 = SiriusLedState(self, enbl_rb_ca1)
+        self.cycle_enbl_rb_led2 = SiriusLedState(self, enbl_rb_ca2)
+        enbl_rb_layout = QVBoxLayout()
+        enbl_rb_layout.addWidget(self.cycle_enbl_rb_led1)
+        enbl_rb_layout.addWidget(self.cycle_enbl_rb_led2)
+        self.cycle_type_sp_cb = PyDMEnumComboBox(self, type_sp_ca)
+        self.cycle_type_rb_label1 = PyDMLabel(self, type_rb_ca1)
+        self.cycle_type_rb_label2 = PyDMLabel(self, type_rb_ca2)
+        type_rb_layout = QVBoxLayout()
+        type_rb_layout.addWidget(self.cycle_type_rb_label1)
+        type_rb_layout.addWidget(self.cycle_type_rb_label2)
+        self.cycle_nr_sp_sb = PyDMSpinbox(self, nrcycles_sp_ca)
+        self.cycle_nr_rb_label1 = PyDMLabel(self, nrcycles_rb_ca1)
+        self.cycle_nr_rb_label2 = PyDMLabel(self, nrcycles_rb_ca2)
+        nrcycles_rb_layout = QVBoxLayout()
+        nrcycles_rb_layout.addWidget(self.cycle_nr_rb_label1)
+        nrcycles_rb_layout.addWidget(self.cycle_nr_rb_label2)
+        self.cycle_index_mon_label1 = PyDMLabel(self, index_ca1)
+        self.cycle_index_mon_label2 = PyDMLabel(self, index_ca2)
+        index_mon_layout = QVBoxLayout()
+        index_mon_layout.addWidget(self.cycle_index_mon_label1)
+        index_mon_layout.addWidget(self.cycle_index_mon_label2)
+        self.cycle_freq_sp_sb = PyDMSpinbox(self, freq_sp_ca)
+        self.cycle_freq_rb_label1 = PyDMLabel(self, freq_rb_ca1)
+        self.cycle_freq_rb_label2 = PyDMLabel(self, freq_rb_ca2)
+        freq_rb_layout = QVBoxLayout()
+        freq_rb_layout.addWidget(self.cycle_freq_rb_label1)
+        freq_rb_layout.addWidget(self.cycle_freq_rb_label2)
+        self.cycle_ampl_sp_sb = PyDMSpinbox(self, ampl_sp_ca)
+        self.cycle_ampl_rb_label1 = PyDMLabel(self, ampl_rb_ca1)
+        self.cycle_ampl_rb_label2 = PyDMLabel(self, ampl_rb_ca2)
+        ampl_rb_layout = QVBoxLayout()
+        ampl_rb_layout.addWidget(self.cycle_ampl_rb_label1)
+        ampl_rb_layout.addWidget(self.cycle_ampl_rb_label2)
+        self.cycle_offset_sp_sb = PyDMSpinbox(self, offset_sp_ca)
+        self.cycle_offset_rb_label1 = PyDMLabel(self, offset_rb_ca1)
+        self.cycle_offset_rb_label2 = PyDMLabel(self, offset_rb_ca2)
+        offset_rb_layout = QVBoxLayout()
+        offset_rb_layout.addWidget(self.cycle_offset_rb_label1)
+        offset_rb_layout.addWidget(self.cycle_offset_rb_label2)
+        self.cycle_auxparam_sp_le = PyDMLineEdit(self, auxparam_sp_ca)
+        self.cycle_auxparam_rb_label1 = PyDMLabel(self, auxparam_rb_ca1)
+        self.cycle_auxparam_rb_label2 = PyDMLabel(self, auxparam_rb_ca2)
+        auxparam_rb_layout = QVBoxLayout()
+        auxparam_rb_layout.addWidget(self.cycle_auxparam_rb_label1)
+        auxparam_rb_layout.addWidget(self.cycle_auxparam_rb_label2)
+
+        layout.addWidget(self.cycle_enbl_label, 0, 0, Qt.AlignRight)
+        layout.addWidget(self.cycle_enbl_sp_button, 0, 1)
+        layout.addLayout(enbl_rb_layout, 0, 2)
+        layout.addWidget(self.cycle_type_label, 1, 0, Qt.AlignRight)
+        layout.addWidget(self.cycle_type_sp_cb, 1, 1)
+        layout.addLayout(type_rb_layout, 1, 2)
+        layout.addWidget(self.cycle_nr_label, 2, 0, Qt.AlignRight)
+        layout.addWidget(self.cycle_nr_sp_sb, 2, 1)
+        layout.addLayout(nrcycles_rb_layout, 2, 2)
+        layout.addWidget(self.cycle_index_label, 3, 0, Qt.AlignRight)
+        layout.addLayout(index_mon_layout, 3, 2)
+        layout.addWidget(self.cycle_freq_label, 4, 0, Qt.AlignRight)
+        layout.addWidget(self.cycle_freq_sp_sb, 4, 1)
+        layout.addLayout(freq_rb_layout, 4, 2)
+        layout.addWidget(self.cycle_ampl_label, 5, 0, Qt.AlignRight)
+        layout.addWidget(self.cycle_ampl_sp_sb, 5, 1)
+        layout.addLayout(ampl_rb_layout, 5, 2)
+        layout.addWidget(self.cycle_offset_label, 6, 0, Qt.AlignRight)
+        layout.addWidget(self.cycle_offset_sp_sb, 6, 1)
+        layout.addLayout(offset_rb_layout, 6, 2)
+        layout.addWidget(self.cycle_auxparam_label, 7, 0, Qt.AlignRight)
+        layout.addWidget(self.cycle_auxparam_sp_le, 7, 1)
+        layout.addLayout(auxparam_rb_layout, 7, 2)
 
         return layout
 

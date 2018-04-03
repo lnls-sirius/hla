@@ -7,12 +7,9 @@ from pydm.PyQt.QtGui import QWidget, QGroupBox, QGridLayout, \
 # from epics import get_pv
 
 from siriuspy.envars import vaca_prefix
-from pydm.widgets.label import PyDMLabel
-# from pydm.widgets.pushbutton import PyDMPushButton
+from pydm.widgets import PyDMLabel, PyDMEnumComboBox, PyDMPushButton, \
+    PyDMLineEdit, PyDMSpinbox
 from siriushla.widgets.state_button import PyDMStateButton
-from pydm.widgets.enum_combo_box import PyDMEnumComboBox
-from pydm.widgets.pushbutton import PyDMPushButton
-from pydm.widgets.line_edit import PyDMLineEdit
 from siriushla.widgets import PyDMLinEditScrollbar
 from siriushla.widgets.led import SiriusLedState, SiriusLedAlert
 from siriushla import util as _util
@@ -100,6 +97,8 @@ class PSDetailWidget(QWidget):
         self.command_box.setObjectName("command_box")
         self.wfm_box = QGroupBox("Waveforms")
         self.wfm_box.setObjectName("wfm_box")
+        self.cycle_box = QGroupBox('Cycle')
+        self.cycle_box.setObjectName('cycle_box')
 
         # Set group boxes layouts
         self.version_box.setLayout(self._versionLayout())
@@ -111,6 +110,7 @@ class PSDetailWidget(QWidget):
             self.metric_box.setLayout(self._metricLayout())
         self.command_box.setLayout(self._commandLayout())
         self.wfm_box.setLayout(self._waveformLayout())
+        self.cycle_box.setLayout(self._cycleLayout())
 
         # Add group boxes to laytout
         self.layout = self._setWidgetLayout()
@@ -139,6 +139,7 @@ class PSDetailWidget(QWidget):
         analogs.addWidget(self.current_box)
         if self._is_magnet:
             analogs.addWidget(self.metric_box)
+        analogs.addWidget(self.cycle_box)
 
         return layout
 
@@ -266,13 +267,13 @@ class PSDetailWidget(QWidget):
             self, "ca://" + self._prefixed_psname + ":Current-Mon")
         self.current_mon_val.precFromPV = True
 
-        layout.addWidget(self.current_sp_label, 0, 0)
+        layout.addWidget(self.current_sp_label, 0, 0, Qt.AlignRight)
         layout.addWidget(self.current_sp_widget, 0, 1)
-        layout.addWidget(self.current_rb_label, 1, 0)
+        layout.addWidget(self.current_rb_label, 1, 0, Qt.AlignRight)
         layout.addWidget(self.current_rb_val, 1, 1)
-        layout.addWidget(self.current_ref_label, 2, 0)
+        layout.addWidget(self.current_ref_label, 2, 0, Qt.AlignRight)
         layout.addWidget(self.current_ref_val, 2, 1)
-        layout.addWidget(self.current_mon_label, 3, 0)
+        layout.addWidget(self.current_mon_label, 3, 0, Qt.AlignRight)
         layout.addWidget(self.current_mon_val, 3, 1)
         # layout.addWidget(self.current_sp_slider, 2, 1)
         # layout.setRowStretch(4, 1)
@@ -307,17 +308,87 @@ class PSDetailWidget(QWidget):
             "ca://" + self._prefixed_psname + ":" + self._metric + "-Mon")
         self.metric_mon_val.precFromPV = True
 
-        layout.addWidget(self.metric_sp_label, 0, 0)
+        layout.addWidget(self.metric_sp_label, 0, 0, Qt.AlignRight)
         layout.addWidget(self.metric_sp_widget, 0, 1)
-        layout.addWidget(self.metric_rb_label, 1, 0)
+        layout.addWidget(self.metric_rb_label, 1, 0, Qt.AlignRight)
         layout.addWidget(self.metric_rb_val, 1, 1)
-        layout.addWidget(self.metric_ref_label, 2, 0)
+        layout.addWidget(self.metric_ref_label, 2, 0, Qt.AlignRight)
         layout.addWidget(self.metric_ref_val, 2, 1)
-        layout.addWidget(self.metric_mon_label, 3, 0)
+        layout.addWidget(self.metric_mon_label, 3, 0, Qt.AlignRight)
         layout.addWidget(self.metric_mon_val, 3, 1)
         # layout.addWidget(self.metric_sp_slider, 2, 1)
         # layout.setRowStretch(4, 1)
         layout.setColumnStretch(3, 1)
+
+        return layout
+
+    def _cycleLayout(self):
+        layout = QGridLayout()
+        # 15 cycle pvs
+        enbl_sp_ca = 'ca://' + self._prefixed_psname + ':CycleEnbl-SP'
+        enbl_rb_ca = 'ca://' + self._prefixed_psname + ':CycleEnbl-RB'
+        type_sp_ca = 'ca://' + self._prefixed_psname + ':CycleType-Sel'
+        type_rb_ca = 'ca://' + self._prefixed_psname + ':CycleType-Sts'
+        nrcycles_sp_ca = 'ca://' + self._prefixed_psname + ':CycleNrCycles-SP'
+        nrcycles_rb_ca = 'ca://' + self._prefixed_psname + ':CycleNrCycles-RB'
+        index_ca = 'ca://' + self._prefixed_psname + ':CycleIndex-Mon'
+        freq_sp_ca = 'ca://' + self._prefixed_psname + ':CycleFreq-SP'
+        freq_rb_ca = 'ca://' + self._prefixed_psname + ':CycleFreq-RB'
+        ampl_sp_ca = 'ca://' + self._prefixed_psname + ':CycleAmpl-SP'
+        ampl_rb_ca = 'ca://' + self._prefixed_psname + ':CycleAmpl-RB'
+        offset_sp_ca = 'ca://' + self._prefixed_psname + ':CycleOffset-SP'
+        offset_rb_ca = 'ca://' + self._prefixed_psname + ':CycleOffset-RB'
+        auxparam_sp_ca = 'ca://' + self._prefixed_psname + ':CycleAuxParam-SP'
+        auxparam_rb_ca = 'ca://' + self._prefixed_psname + ':CycleAuxParam-RB'
+        # 8 labels
+        self.cycle_enbl_label = QLabel('Enabled', self)
+        self.cycle_type_label = QLabel('Type', self)
+        self.cycle_nr_label = QLabel('Nr. Cycles', self)
+        self.cycle_index_label = QLabel('Index', self)
+        self.cycle_freq_label = QLabel('Frequency', self)
+        self.cycle_ampl_label = QLabel('Amplitude', self)
+        self.cycle_offset_label = QLabel('Offset', self)
+        self.cycle_auxparam_label = QLabel('AuxParams', self)
+        # 15 widgets
+        self.cycle_enbl_sp_button = PyDMStateButton(self, enbl_sp_ca)
+        self.cycle_enbl_rb_led = SiriusLedState(self, enbl_rb_ca)
+        self.cycle_type_sp_cb = PyDMEnumComboBox(self, type_sp_ca)
+        self.cycle_type_rb_label = PyDMLabel(self, type_rb_ca)
+        self.cycle_nr_sp_sb = PyDMSpinbox(self, nrcycles_sp_ca)
+        self.cycle_nr_rb_label = PyDMLabel(self, nrcycles_rb_ca)
+        self.cycle_index_mon_label = PyDMLabel(self, index_ca)
+        self.cycle_freq_sp_sb = PyDMSpinbox(self, freq_sp_ca)
+        self.cycle_freq_rb_label = PyDMLabel(self, freq_rb_ca)
+        self.cycle_ampl_sp_sb = PyDMSpinbox(self, ampl_sp_ca)
+        self.cycle_ampl_rb_label = PyDMLabel(self, ampl_rb_ca)
+        self.cycle_offset_sp_sb = PyDMSpinbox(self, offset_sp_ca)
+        self.cycle_offset_rb_label = PyDMLabel(self, offset_rb_ca)
+        self.cycle_auxparam_sp_le = PyDMLineEdit(self, auxparam_sp_ca)
+        self.cycle_auxparam_rb_label = PyDMLabel(self, auxparam_rb_ca)
+
+        layout.addWidget(self.cycle_enbl_label, 0, 0, Qt.AlignRight)
+        layout.addWidget(self.cycle_enbl_sp_button, 0, 1)
+        layout.addWidget(self.cycle_enbl_rb_led, 0, 2)
+        layout.addWidget(self.cycle_type_label, 1, 0, Qt.AlignRight)
+        layout.addWidget(self.cycle_type_sp_cb, 1, 1)
+        layout.addWidget(self.cycle_type_rb_label, 1, 2)
+        layout.addWidget(self.cycle_nr_label, 2, 0, Qt.AlignRight)
+        layout.addWidget(self.cycle_nr_sp_sb, 2, 1)
+        layout.addWidget(self.cycle_nr_rb_label, 2, 2)
+        layout.addWidget(self.cycle_index_label, 3, 0, Qt.AlignRight)
+        layout.addWidget(self.cycle_index_mon_label, 3, 2)
+        layout.addWidget(self.cycle_freq_label, 4, 0, Qt.AlignRight)
+        layout.addWidget(self.cycle_freq_sp_sb, 4, 1)
+        layout.addWidget(self.cycle_freq_rb_label, 4, 2)
+        layout.addWidget(self.cycle_ampl_label, 5, 0, Qt.AlignRight)
+        layout.addWidget(self.cycle_ampl_sp_sb, 5, 1)
+        layout.addWidget(self.cycle_ampl_rb_label, 5, 2)
+        layout.addWidget(self.cycle_offset_label, 6, 0, Qt.AlignRight)
+        layout.addWidget(self.cycle_offset_sp_sb, 6, 1)
+        layout.addWidget(self.cycle_offset_rb_label, 6, 2)
+        layout.addWidget(self.cycle_auxparam_label, 7, 0, Qt.AlignRight)
+        layout.addWidget(self.cycle_auxparam_sp_le, 7, 1)
+        layout.addWidget(self.cycle_auxparam_rb_label, 7, 2)
 
         return layout
 
@@ -356,12 +427,12 @@ class PSDetailWidget(QWidget):
         self.wfmdata_sp_label.setBuddy(self.wfmdata_sp_value)
         self.wfmdata_rb_label.setBuddy(self.wfmdata_rb_value)
 
-        layout.addWidget(self.wfmindex_label, 0, 0)
+        layout.addWidget(self.wfmindex_label, 0, 0, Qt.AlignRight)
         layout.addWidget(self.wfmindex_value, 0, 1)
         # layout.addWidget(self.wfmdata_sp)
-        layout.addWidget(self.wfmdata_sp_label, 1, 0)
+        layout.addWidget(self.wfmdata_sp_label, 1, 0, Qt.AlignRight)
         layout.addWidget(self.wfmdata_sp_value, 1, 1)
-        layout.addWidget(self.wfmdata_rb_label, 2, 0)
+        layout.addWidget(self.wfmdata_rb_label, 2, 0, Qt.AlignRight)
         layout.addWidget(self.wfmdata_rb_value, 2, 1)
 
         return layout
