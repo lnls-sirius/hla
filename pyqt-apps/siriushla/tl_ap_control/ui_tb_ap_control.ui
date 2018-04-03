@@ -794,7 +794,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
       </size>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>5</number>
      </property>
      <widget class="QWidget" name="Scrn11">
       <attribute name="title">
@@ -842,7 +842,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
            <number>0</number>
           </property>
           <item>
-           <widget class="PyDMImageView" name="PyDMImageView_Scrn11">
+           <widget class="SiriusImageView" name="SiriusImageView_Scrn11">
             <property name="minimumSize">
              <size>
               <width>800</width>
@@ -861,11 +861,14 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             <property name="whatsThis">
              <string/>
             </property>
-            <property name="imageChannel" stdset="0">
-             <string>ca://TS-01:DI-Scrn:&amp;&amp;dataarray$$</string>
+            <property name="readingOrder" stdset="0">
+             <enum>SiriusImageView::Clike</enum>
             </property>
             <property name="widthChannel" stdset="0">
-             <string>ca://TS-01:DI-Scrn:$$width$$</string>
+             <string>ca://TB-01:DI-Scrn-1:ImgWidth-Cte</string>
+            </property>
+            <property name="imageChannel" stdset="0">
+             <string>ca://TB-01:DI-Scrn-1:ImgData-Mon</string>
             </property>
            </widget>
           </item>
@@ -1339,25 +1342,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                </property>
               </widget>
              </item>
-             <item row="2" column="1">
-              <widget class="PyDMEnumComboBox" name="PyDMEnumComboBox_CalcMethod_Scrn11">
-               <property name="enabled">
-                <bool>true</bool>
-               </property>
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="toolTip">
-                <string/>
-               </property>
-               <property name="whatsThis">
-                <string/>
-               </property>
-              </widget>
-             </item>
              <item row="2" column="9">
               <spacer name="horizontalSpacer_6">
                <property name="orientation">
@@ -1370,6 +1354,20 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 </size>
                </property>
               </spacer>
+             </item>
+             <item row="2" column="1">
+              <widget class="QComboBox" name="comboBox_CalcMethod_Scrn11">
+               <item>
+                <property name="text">
+                 <string>Dimfei</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>NDStats</string>
+                </property>
+               </item>
+              </widget>
              </item>
             </layout>
            </widget>
@@ -1432,7 +1430,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
            <number>0</number>
           </property>
           <item>
-           <widget class="PyDMImageView" name="PyDMImageView_Scrn12">
+           <widget class="SiriusImageView" name="SiriusImageView_Scrn12">
             <property name="minimumSize">
              <size>
               <width>800</width>
@@ -1451,11 +1449,14 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             <property name="whatsThis">
              <string/>
             </property>
-            <property name="imageChannel" stdset="0">
-             <string>ca://TS-02:DI-Scrn:&amp;&amp;dataarray$$</string>
+            <property name="readingOrder" stdset="0">
+             <enum>SiriusImageView::Clike</enum>
             </property>
             <property name="widthChannel" stdset="0">
-             <string>ca://TS-02:DI-Scrn:$$width$$</string>
+             <string>ca://TB-01:DI-Scrn-2:ImgWidth-Cte</string>
+            </property>
+            <property name="imageChannel" stdset="0">
+             <string>ca://TB-01:DI-Scrn-2:ImgData-Mon</string>
             </property>
            </widget>
           </item>
@@ -1487,25 +1488,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 </size>
                </property>
               </spacer>
-             </item>
-             <item row="2" column="1">
-              <widget class="PyDMEnumComboBox" name="PyDMEnumComboBox_CalcMethod_Scrn12">
-               <property name="enabled">
-                <bool>true</bool>
-               </property>
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="toolTip">
-                <string/>
-               </property>
-               <property name="whatsThis">
-                <string/>
-               </property>
-              </widget>
              </item>
              <item row="4" column="3">
               <widget class="QLabel" name="label_1_25">
@@ -1923,6 +1905,20 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                </property>
               </spacer>
              </item>
+             <item row="2" column="1">
+              <widget class="QComboBox" name="comboBox_CalcMethod_Scrn12">
+               <item>
+                <property name="text">
+                 <string>Dimfei</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>NDStats</string>
+                </property>
+               </item>
+              </widget>
+             </item>
             </layout>
            </widget>
           </item>
@@ -1984,7 +1980,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
            <number>0</number>
           </property>
           <item>
-           <widget class="PyDMImageView" name="PyDMImageView_Scrn21">
+           <widget class="SiriusImageView" name="SiriusImageView_Scrn21">
             <property name="minimumSize">
              <size>
               <width>800</width>
@@ -2003,11 +1999,14 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             <property name="whatsThis">
              <string/>
             </property>
-            <property name="imageChannel" stdset="0">
-             <string>ca://TS-03:DI-Scrn:&amp;&amp;dataarray$$</string>
+            <property name="readingOrder" stdset="0">
+             <enum>SiriusImageView::Clike</enum>
             </property>
             <property name="widthChannel" stdset="0">
-             <string>ca://TS-03:DI-Scrn:$$width$$</string>
+             <string>ca://TB-02:DI-Scrn-1:ImgWidth-Cte</string>
+            </property>
+            <property name="imageChannel" stdset="0">
+             <string>ca://TB-02:DI-Scrn-1:ImgData-Mon</string>
             </property>
            </widget>
           </item>
@@ -2443,25 +2442,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                </property>
               </widget>
              </item>
-             <item row="3" column="1">
-              <widget class="PyDMEnumComboBox" name="PyDMEnumComboBox_CalcMethod_Scrn21">
-               <property name="enabled">
-                <bool>true</bool>
-               </property>
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="toolTip">
-                <string/>
-               </property>
-               <property name="whatsThis">
-                <string/>
-               </property>
-              </widget>
-             </item>
              <item row="3" column="9">
               <spacer name="horizontalSpacer_12">
                <property name="orientation">
@@ -2474,6 +2454,20 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 </size>
                </property>
               </spacer>
+             </item>
+             <item row="3" column="1">
+              <widget class="QComboBox" name="comboBox_CalcMethod_Scrn21">
+               <item>
+                <property name="text">
+                 <string>Dimfei</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>NDStats</string>
+                </property>
+               </item>
+              </widget>
              </item>
             </layout>
            </widget>
@@ -2536,7 +2530,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
            <number>0</number>
           </property>
           <item>
-           <widget class="PyDMImageView" name="PyDMImageView_Scrn22">
+           <widget class="SiriusImageView" name="SiriusImageView_Scrn22">
             <property name="minimumSize">
              <size>
               <width>800</width>
@@ -2555,11 +2549,14 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             <property name="whatsThis">
              <string/>
             </property>
-            <property name="imageChannel" stdset="0">
-             <string>ca://TS-04:DI-Scrn-1:&amp;&amp;dataarray$$</string>
+            <property name="readingOrder" stdset="0">
+             <enum>SiriusImageView::Clike</enum>
             </property>
             <property name="widthChannel" stdset="0">
-             <string>ca://TS-04:DI-Scrn-1:$$width$$</string>
+             <string>ca://TB-02:DI-Scrn-2:ImgWidth-Cte</string>
+            </property>
+            <property name="imageChannel" stdset="0">
+             <string>ca://TB-02:DI-Scrn-2:ImgData-Mon</string>
             </property>
            </widget>
           </item>
@@ -2995,25 +2992,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                </property>
               </spacer>
              </item>
-             <item row="2" column="1">
-              <widget class="PyDMEnumComboBox" name="PyDMEnumComboBox_CalcMethod_Scrn22">
-               <property name="enabled">
-                <bool>true</bool>
-               </property>
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="toolTip">
-                <string/>
-               </property>
-               <property name="whatsThis">
-                <string/>
-               </property>
-              </widget>
-             </item>
              <item row="2" column="9">
               <spacer name="horizontalSpacer_15">
                <property name="orientation">
@@ -3026,6 +3004,20 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 </size>
                </property>
               </spacer>
+             </item>
+             <item row="2" column="1">
+              <widget class="QComboBox" name="comboBox_CalcMethod_Scrn22">
+               <item>
+                <property name="text">
+                 <string>Dimfei</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>NDStats</string>
+                </property>
+               </item>
+              </widget>
              </item>
             </layout>
            </widget>
@@ -3088,7 +3080,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
            <number>0</number>
           </property>
           <item>
-           <widget class="PyDMImageView" name="PyDMImageView_Scrn3">
+           <widget class="SiriusImageView" name="SiriusImageView_Scrn3">
             <property name="minimumSize">
              <size>
               <width>800</width>
@@ -3107,11 +3099,14 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             <property name="whatsThis">
              <string/>
             </property>
-            <property name="imageChannel" stdset="0">
-             <string>ca://TS-04:DI-Scrn-2:&amp;&amp;dataarray$$</string>
+            <property name="readingOrder" stdset="0">
+             <enum>SiriusImageView::Clike</enum>
             </property>
             <property name="widthChannel" stdset="0">
-             <string>ca://TS-04:DI-Scrn-2:$$width$$</string>
+             <string>ca://TB-03:DI-Scrn:ImgWidth-Cte</string>
+            </property>
+            <property name="imageChannel" stdset="0">
+             <string>ca://TB-03:DI-Scrn:ImgData-Mon</string>
             </property>
            </widget>
           </item>
@@ -3135,25 +3130,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <widget class="QLabel" name="label_Centroid_Scrn3">
                <property name="text">
                 <string>Centroid</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <widget class="PyDMEnumComboBox" name="PyDMEnumComboBox_CalcMethod_Scrn3">
-               <property name="enabled">
-                <bool>true</bool>
-               </property>
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="toolTip">
-                <string/>
-               </property>
-               <property name="whatsThis">
-                <string/>
                </property>
               </widget>
              </item>
@@ -3579,6 +3555,20 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                </property>
               </spacer>
              </item>
+             <item row="2" column="1">
+              <widget class="QComboBox" name="comboBox_CalcMethod_Scrn3">
+               <item>
+                <property name="text">
+                 <string>Dimfei</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>NDStats</string>
+                </property>
+               </item>
+              </widget>
+             </item>
             </layout>
            </widget>
           </item>
@@ -3640,7 +3630,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
            <number>0</number>
           </property>
           <item>
-           <widget class="PyDMImageView" name="PyDMImageView_Scrn4">
+           <widget class="SiriusImageView" name="SiriusImageView_Scrn4">
             <property name="minimumSize">
              <size>
               <width>800</width>
@@ -3659,11 +3649,14 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             <property name="whatsThis">
              <string/>
             </property>
-            <property name="imageChannel" stdset="0">
-             <string>ca://TS-04:DI-Scrn-3:&amp;&amp;dataarray$$</string>
+            <property name="readingOrder" stdset="0">
+             <enum>SiriusImageView::Clike</enum>
             </property>
             <property name="widthChannel" stdset="0">
-             <string>ca://TS-04:DI-Scrn-3:$$width$$</string>
+             <string>ca://TB-04:DI-Scrn:ImgWidth-Cte</string>
+            </property>
+            <property name="imageChannel" stdset="0">
+             <string>ca://TB-04:DI-Scrn:ImgData-Mon</string>
             </property>
            </widget>
           </item>
@@ -3694,25 +3687,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <widget class="QLabel" name="label_Centroid_Scrn4">
                <property name="text">
                 <string>Centroid</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <widget class="PyDMEnumComboBox" name="PyDMEnumComboBox_CalcMethod_Scrn4">
-               <property name="enabled">
-                <bool>true</bool>
-               </property>
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="toolTip">
-                <string/>
-               </property>
-               <property name="whatsThis">
-                <string/>
                </property>
               </widget>
              </item>
@@ -4131,6 +4105,20 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                </property>
               </spacer>
              </item>
+             <item row="2" column="1">
+              <widget class="QComboBox" name="comboBox_CalcMethod_Scrn4">
+               <item>
+                <property name="text">
+                 <string>Dimfei</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>NDStats</string>
+                </property>
+               </item>
+              </widget>
+             </item>
             </layout>
            </widget>
           </item>
@@ -4228,16 +4216,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PyDMEnumComboBox</class>
-   <extends>QFrame</extends>
-   <header>pydm.widgets.enum_combo_box</header>
-  </customwidget>
-  <customwidget>
-   <class>PyDMImageView</class>
-   <extends>QWidget</extends>
-   <header>pydm.widgets.image</header>
-  </customwidget>
-  <customwidget>
    <class>PyDMLabel</class>
    <extends>QLabel</extends>
    <header>pydm.widgets.label</header>
@@ -4246,6 +4224,11 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
    <class>PyDMLineEdit</class>
    <extends>QLineEdit</extends>
    <header>pydm.widgets.line_edit</header>
+  </customwidget>
+  <customwidget>
+   <class>SiriusImageView</class>
+   <extends>QWidget</extends>
+   <header>siriushla.widgets.image</header>
   </customwidget>
   <customwidget>
    <class>PyDMScrollBar</class>

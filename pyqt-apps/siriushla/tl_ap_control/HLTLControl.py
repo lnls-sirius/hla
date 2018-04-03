@@ -8,23 +8,20 @@ from pydm.PyQt.QtCore import pyqtSlot, Qt
 from pydm.PyQt.QtGui import (QVBoxLayout, QHBoxLayout,
                              QGridLayout, QFileDialog, QSizePolicy,
                              QDoubleValidator, QWidget, QFrame, QLabel,
-                             QPixmap, QPushButton, QSpacerItem, QColor)
+                             QPixmap, QPushButton, QSpacerItem)
 from pydm.PyQt.QtSvg import QSvgWidget
-from pydm.widgets.label import PyDMLabel
-from pydm.widgets.line_edit import PyDMLineEdit
-from pydm.widgets.enum_combo_box import PyDMEnumComboBox
+from pydm.widgets import PyDMLabel, PyDMLineEdit, PyDMEnumComboBox
 import pyaccel as _pyaccel
 import pymodels as _pymodels
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla import util as _hlautil
-from siriushla.widgets.led import PyDMLed
-from siriushla.widgets.scrollbar import PyDMScrollBar
-from siriushla.widgets.state_button import PyDMStateButton
+from siriushla.widgets import (SiriusLedAlert, SiriusLedState,
+                               PyDMScrollBar, PyDMStateButton,
+                               SiriusMainWindow)
 from siriushla.as_ap_posang.HLPosAng import ASAPPosAngCorr
-from siriushla.widgets.windows import SiriusMainWindow
-from siriushla.as_ma_control.MagnetDetailWindow import MagnetDetailWindow
-from siriushla.as_ma_control.MagnetTabControlWindow import (
-                                MagnetTabControlWindow)
+from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
+from siriushla.as_ps_control.PSTabControlWindow import (
+                                PSTabControlWindow)
 from siriushla.as_pm_control.PulsedMagnetDetailWindow import (
                                 PulsedMagnetDetailWindow)
 from siriushla.as_pm_control.PulsedMagnetControlWindow import (
@@ -32,20 +29,20 @@ from siriushla.as_pm_control.PulsedMagnetControlWindow import (
 
 
 CALC_LABELS_INITIALIZE = """
-self.centralwidget.PyDMEnumComboBox_CalcMethod_Scrn{0}.currentIndexChanged.connect(self._visibility_handle)
+self.centralwidget.comboBox_CalcMethod_Scrn{0}.currentIndexChanged.connect(self._visibility_handle)
 """
 
 CALC_LABELS_VISIBILITY = """
-self.centralwidget.PyDMLabel_CenterXDimfei_Scrn{0}.setVisible(visible)
-self.centralwidget.PyDMLabel_CenterXNDStats_Scrn{0}.setVisible(not visible)
-self.centralwidget.PyDMLabel_CenterYDimfei_Scrn{0}.setVisible(visible)
-self.centralwidget.PyDMLabel_CenterYNDStats_Scrn{0}.setVisible(not visible)
-self.centralwidget.PyDMLabel_ThetaDimfei_Scrn{0}.setVisible(visible)
-self.centralwidget.PyDMLabel_ThetaNDStats_Scrn{0}.setVisible(not visible)
-self.centralwidget.PyDMLabel_SigmaXDimfei_Scrn{0}.setVisible(visible)
-self.centralwidget.PyDMLabel_SigmaXNDStats_Scrn{0}.setVisible(not visible)
-self.centralwidget.PyDMLabel_SigmaYDimfei_Scrn{0}.setVisible(visible)
-self.centralwidget.PyDMLabel_SigmaYNDStats_Scrn{0}.setVisible(not visible)
+self.centralwidget.PyDMLabel_CenterXDimfei_Scrn{0}.setVisible({1})
+self.centralwidget.PyDMLabel_CenterXNDStats_Scrn{0}.setVisible(not {1})
+self.centralwidget.PyDMLabel_CenterYDimfei_Scrn{0}.setVisible({1})
+self.centralwidget.PyDMLabel_CenterYNDStats_Scrn{0}.setVisible(not {1})
+self.centralwidget.PyDMLabel_ThetaDimfei_Scrn{0}.setVisible({1})
+self.centralwidget.PyDMLabel_ThetaNDStats_Scrn{0}.setVisible(not {1})
+self.centralwidget.PyDMLabel_SigmaXDimfei_Scrn{0}.setVisible({1})
+self.centralwidget.PyDMLabel_SigmaXNDStats_Scrn{0}.setVisible(not {1})
+self.centralwidget.PyDMLabel_SigmaYDimfei_Scrn{0}.setVisible({1})
+self.centralwidget.PyDMLabel_SigmaYNDStats_Scrn{0}.setVisible(not {1})
 """
 
 CALC_LABELS_CHANNELS = """
@@ -75,10 +72,10 @@ self.centralwidget.PyDMLabel_SigmaYNDStats_Scrn{0}.channel = ('ca://'
 class TLAPControlWindow(SiriusMainWindow):
     """Class to create the main window for TB and TS HLA."""
 
-    def __init__(self, parent=None, prefix=None, tl=None):
+    def __init__(self, parent=None, prefix='', tl=None):
         """Initialize widgets in main window."""
         super(TLAPControlWindow, self).__init__(parent)
-        if prefix is None:
+        if prefix == '':
             self.prefix = _vaca_prefix
         else:
             self.prefix = prefix
@@ -89,12 +86,12 @@ class TLAPControlWindow(SiriusMainWindow):
             UI_FILE = ('ui_tb_ap_control.ui')
             SVG_FILE = ('TB.svg')
             correctors_list = [
-                [['LI-01:MA-CH-7'], 'LI-01:MA-CV-7', 11, '01:DI-Scrn-1'],
-                [['01:MA-CH-1'], '01:MA-CV-1', 12, '01:DI-Scrn-2'],
-                [['01:MA-CH-2'], '01:MA-CV-2', 21, '02:DI-Scrn-1'],
-                [['02:MA-CH-1'], '02:MA-CV-1', 22, '02:DI-Scrn-2'],
-                [['02:MA-CH-2'], '02:MA-CV-2', 3, '03:DI-Scrn'],
-                [['03:MA-CH'], '04:MA-CV-1', 4, '04:DI-Scrn']]
+                [['LI-01:MA-CH-7'], 'LI-01:MA-CV-7', 11, 'TB-01:DI-Scrn-1'],
+                [['TB-01:MA-CH-1'], 'TB-01:MA-CV-1', 12, 'TB-01:DI-Scrn-2'],
+                [['TB-01:MA-CH-2'], 'TB-01:MA-CV-2', 21, 'TB-02:DI-Scrn-1'],
+                [['TB-02:MA-CH-1'], 'TB-02:MA-CV-1', 22, 'TB-02:DI-Scrn-2'],
+                [['TB-02:MA-CH-2'], 'TB-02:MA-CV-2', 3, 'TB-03:DI-Scrn'],
+                [['TB-03:MA-CH'], 'TB-04:MA-CV-1', 4, 'TB-04:DI-Scrn']]
             scrn_list = [
                 [11, 'TB-01:DI-Scrn-1'], [12, 'TB-01:DI-Scrn-2'],
                 [21, 'TB-02:DI-Scrn-1'], [22, 'TB-02:DI-Scrn-2'],
@@ -103,18 +100,18 @@ class TLAPControlWindow(SiriusMainWindow):
             UI_FILE = ('ui_ts_ap_control.ui')
             SVG_FILE = ('TS.svg')
             correctors_list = [
-                [['01:PM-EjeSF', '01:PM-EjeSG'],
-                 '01:MA-CV-1', 1, '01:DI-Scrn'],
-                [['01:MA-CH'], '01:MA-CV-2', 2, '02:DI-Scrn'],
-                [['02:MA-CH'], '02:MA-CV', 3, '03:DI-Scrn'],
-                [['03:MA-CH'], '03:MA-CV', 41, '04:DI-Scrn-1'],
-                [['04:MA-CH'], '04:MA-CV-1', 42, '04:DI-Scrn-2'],
-                [['04:PM-InjSG-1', '04:PM-InjSG-2', '04:PM-InjSF'],
-                 '04:MA-CV-2', 43, '04:DI-Scrn-3']]
+                [['TS-01:PM-EjeSF', 'TS-01:PM-EjeSG'],
+                 'TS-01:MA-CV-1', 1, 'TS-01:DI-Scrn'],
+                [['TS-01:MA-CH'], 'TS-01:MA-CV-2', 2, 'TS-02:DI-Scrn'],
+                [['TS-02:MA-CH'], 'TS-02:MA-CV', 3, 'TS-03:DI-Scrn'],
+                [['TS-03:MA-CH'], 'TS-03:MA-CV', 41, 'TS-04:DI-Scrn-1'],
+                [['TS-04:MA-CH'], 'TS-04:MA-CV-1', 42, 'TS-04:DI-Scrn-2'],
+                [['TS-04:PM-InjSG-1', 'TS-04:PM-InjSG-2', 'TS-04:PM-InjSF'],
+                 'TS-04:MA-CV-2', 43, 'TS-04:DI-Scrn-3']]
             scrn_list = [
-                [1, 'TB-01:DI-Scrn'], [2, 'TB-02:DI-Scrn'],
-                [3, 'TB-03:DI-Scrn'], [41, 'TB-04:DI-Scrn-1'],
-                [42, 'TB-04:DI-Scrn-2'], [43, 'TB-04:DI-Scrn-3']]
+                [1, 'TS-01:DI-Scrn'], [2, 'TS-02:DI-Scrn'],
+                [3, 'TS-03:DI-Scrn'], [41, 'TS-04:DI-Scrn-1'],
+                [42, 'TS-04:DI-Scrn-2'], [43, 'TS-04:DI-Scrn-3']]
 
         self.centralwidget = loadUi('/home/fac_files/lnls-sirius/hla/'
                                     'pyqt-apps/siriushla/tl_ap_control/'
@@ -128,16 +125,16 @@ class TLAPControlWindow(SiriusMainWindow):
         self.centralwidget.widget_lattice.layout().addWidget(lattice)
 
         # TL Optics Widget
-        self.lattice_and_twiss_window = ShowLatticeAndTwiss(parent=self,
-                                                            tl=self._tl)
+        self.lattice_and_twiss_window = ShowLatticeAndTwiss(
+            parent=self, tl=self._tl)
         self.centralwidget.pushButton_LatticeAndTwiss.clicked.connect(
-                                                    self._openLaticeAndTwiss)
+            self._openLaticeAndTwiss)
 
         # Set Visibility of Scrn Calculations Labels
         for i, device in scrn_list:
             exec(CALC_LABELS_INITIALIZE.format(i))
             visible = True
-            exec(CALC_LABELS_VISIBILITY.format(i))
+            exec(CALC_LABELS_VISIBILITY.format(i, visible))
             exec(CALC_LABELS_CHANNELS.format(i, device))
 
         # Open TL Apps
@@ -145,8 +142,8 @@ class TLAPControlWindow(SiriusMainWindow):
                                 ASAPPosAngCorr, parent=self,
                                 prefix=self.prefix, tl=self._tl)
         _hlautil.connect_window(self.centralwidget.pushButton_MAApp,
-                                MagnetTabControlWindow,
-                                self, section=self._tl.upper())
+                                PSTabControlWindow, parent=self,
+                                section=self._tl.upper(), discipline=1)  # MA
         _hlautil.connect_window(self.centralwidget.pushButton_PMApp,
                                 PulsedMagnetControlWindow, self)
         self.centralwidget.pushButton_FCTApp.clicked.connect(self._openFCTApp)
@@ -237,6 +234,7 @@ class TLAPControlWindow(SiriusMainWindow):
         headerline.layout().setContentsMargins(0, 9, 0, 9)
         correctors_gridlayout = QGridLayout()
         correctors_gridlayout.addWidget(headerline, 1, 1)
+
         for item, width in [[label_scrn, 200], [label_fluorscrn, 200],
                             [label_lamp, 200], [label_ch_led, 40],
                             [label_ch, 250], [label_ch_sp_kick, 250],
@@ -249,14 +247,6 @@ class TLAPControlWindow(SiriusMainWindow):
 
         line = 2
         for ch_group, cv, scrn, scrnpv in correctors_list:
-
-            if self._tl.lower() == 'tb':
-                if scrn == 11:
-                    acc = ''
-                else:
-                    acc = 'TB-'
-            elif self._tl.lower() == 'ts':
-                acc = 'TS-'
 
             # Scrn
             scrn_details = QWidget()
@@ -271,49 +261,51 @@ class TLAPControlWindow(SiriusMainWindow):
             scrn_details.layout().addWidget(scrn_label)
 
             widget_fluorscrn_sp = QWidget()
-            widget_fluorscrn_sp.setLayout(QVBoxLayout())
+            widget_fluorscrn_sp.setLayout(QGridLayout())
             widget_fluorscrn_sp.layout().setContentsMargins(0, 0, 0, 0)
             pydmcombobox_fluorscrn = PyDMEnumComboBox(
-                self, 'ca://' + prefix + acc + scrnpv + ':FluorScrn-Sel')
+                self, 'ca://' + self.prefix + scrnpv + ':FluorScrn-Sel')
             pydmcombobox_fluorscrn.setObjectName(
-                'PyDMEnumComboBox_FluorScrn_Sel_Scrn' + str(scrn))
-            widget_fluorscrn_sp.layout().addWidget(pydmcombobox_fluorscrn)
-            # pydmcombobox_fluorscrn_items = [
-            #     pydmcombobox_fluorscrn.itemText(i)
-            #     for i in range(pydmcombobox_fluorscrn.count())]
-            pydmled_fluorscrn = PyDMLed(
-                self, 'ca://' + prefix + acc + scrnpv + ':FluorScrn-Sts')
-            #     enum_map = {pydmcombobox_fluorscrn_items[0]: -1,
-            #     pydmcombobox_fluorscrn_items[1]: 2,
-            #     pydmcombobox_fluorscrn_items[2]: 0})
-            #     TODO
+                'PyDMEnumComboBox_FluorScrn_Sel_Scrn'+str(scrn))
+            widget_fluorscrn_sp.layout().addWidget(
+                pydmcombobox_fluorscrn, 1, 1, 1, 3)
+            pydmled_fluorscrn = SiriusLedAlert(
+                self, 'ca://' + self.prefix + scrnpv + ':FluorScrn-Sts')
             pydmled_fluorscrn.shape = 2
             pydmled_fluorscrn.setObjectName(
                 'PyDMLed_FluorScrn_Sts_Scrn' + str(scrn))
-            widget_fluorscrn_sp.layout().addWidget(pydmled_fluorscrn)
+            widget_fluorscrn_sp.layout().addItem(
+                QSpacerItem(10, 20, QSizePolicy.Fixed, QSizePolicy.Minimum),
+                2, 1)
+            widget_fluorscrn_sp.layout().addWidget(pydmled_fluorscrn, 2, 2)
+            widget_fluorscrn_sp.layout().addItem(
+                QSpacerItem(10, 20, QSizePolicy.Fixed, QSizePolicy.Minimum),
+                2, 3)
             widget_fluorscrn_sp.setMinimumWidth(200)
             widget_fluorscrn_sp.setMaximumWidth(200)
-            widget_fluorscrn_sp.setSizePolicy(QSizePolicy.Fixed,
-                                              QSizePolicy.Fixed)
+            widget_fluorscrn_sp.setSizePolicy(
+                QSizePolicy.Fixed, QSizePolicy.Fixed)
             scrn_details.layout().addWidget(widget_fluorscrn_sp)
 
             scrn_details.layout().addItem(QSpacerItem(40, 20,
                                                       QSizePolicy.Fixed,
                                                       QSizePolicy.Minimum))
+
             pydmstatebutton = PyDMStateButton(
                 parent=self,
-                init_channel='ca://' + prefix + acc + scrnpv + ':LedState-SP')
+                init_channel='ca://' + self.prefix + scrnpv + ':LedState-SP')
             pydmstatebutton.shape = 1
             pydmstatebutton.setObjectName(
                 'PyDMStateButton_LedState_SP_Scrn' + str(scrn))
             pydmstatebutton.setSizePolicy(QSizePolicy.Fixed,
                                           QSizePolicy.Minimum)
             scrn_details.layout().addWidget(pydmstatebutton)
-            pydmled = PyDMLed(
-                self, 'ca://' + prefix + acc + scrnpv + ':LedState-RB')
+            pydmled = SiriusLedState(
+                self, 'ca://' + self.prefix + scrnpv + ':LedState-RB')
             pydmled.setObjectName('PyDMLed_LedState_RB_Scrn' + str(scrn))
             pydmled.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
             scrn_details.layout().addWidget(pydmled)
+
             scrn_details.layout().addItem(QSpacerItem(40, 20,
                                                       QSizePolicy.Fixed,
                                                       QSizePolicy.Minimum))
@@ -337,9 +329,8 @@ class TLAPControlWindow(SiriusMainWindow):
                 ch_details.setLayout(QGridLayout())
                 ch_details.layout().setContentsMargins(3, 3, 3, 3)
 
-                pydmled = PyDMLed(
-                    self,
-                    'ca://' + prefix + acc + ch + ':PwrState-Sts')
+                pydmled = SiriusLedState(
+                    self, 'ca://' + self.prefix + ch + ':PwrState-Sts')
                 pydmled.setObjectName(
                     'PyDMLed_' + name + '_PwrState' + '_Scrn' + str(scrn))
                 pydmled.setMinimumWidth(40)
@@ -353,16 +344,14 @@ class TLAPControlWindow(SiriusMainWindow):
                 if ch.split('-')[0] == 'LI':
                     pass
                     # TODO
-                elif ch.split('-')[0].split(':')[1] == 'PM':
-                    corr = self._tl.upper() + '-' + ch
+                elif ch.split('-')[1].split(':')[1] == 'PM':
                     _hlautil.connect_window(pushbutton,
                                             PulsedMagnetDetailWindow,
-                                            parent=self, maname=corr)
+                                            parent=self, maname=ch)
                 else:
-                    corr = self._tl.upper() + '-' + ch
                     _hlautil.connect_window(pushbutton,
-                                            MagnetDetailWindow,
-                                            parent=self, maname=corr)
+                                            PSDetailWindow,
+                                            parent=self, psname=ch)
                 pushbutton.setMinimumWidth(250)
                 pushbutton.setMaximumWidth(250)
                 pushbutton.setMinimumHeight(40)
@@ -375,7 +364,7 @@ class TLAPControlWindow(SiriusMainWindow):
                 frame.setLayout(QVBoxLayout())
                 frame.layout().setContentsMargins(0, 0, 0, 0)
                 pydmlineedit_kick = PyDMLineEdit(
-                    self, 'ca://' + prefix + acc + ch + ':Kick-SP')
+                    self, 'ca://' + self.prefix + ch + ':Kick-SP')
                 pydmlineedit_kick.setObjectName(
                     'PyDMLineEdit' + name + '_Kick_SP_Scrn' + str(scrn))
                 pydmlineedit_kick.setValidator(QDoubleValidator())
@@ -390,7 +379,7 @@ class TLAPControlWindow(SiriusMainWindow):
 
                 scrollbar_kick = PyDMScrollBar(
                     self, Qt.Horizontal,
-                    'ca://' + prefix + acc + ch + ':Kick-SP')
+                    'ca://' + self.prefix + ch + ':Kick-SP')
                 scrollbar_kick.setObjectName(
                     'PyDMScrollBar' + name + '_Kick_SP_Scrn' + str(scrn))
                 scrollbar_kick.setMinimumWidth(250)
@@ -405,7 +394,7 @@ class TLAPControlWindow(SiriusMainWindow):
                 frame.setFrameShadow(QFrame.Raised)
                 frame.setFrameShape(QFrame.Box)
                 pydmlabel_kick = PyDMLabel(
-                    self, 'ca://' + prefix + acc + ch + ':Kick-Mon')
+                    self, 'ca://' + self.prefix + ch + ':Kick-Mon')
                 pydmlabel_kick.setObjectName(
                     'PyDMLabel_' + name + '_Kick_Mon_Scrn' + str(scrn))
                 pydmlabel_kick.setMinimumWidth(180)
@@ -434,9 +423,8 @@ class TLAPControlWindow(SiriusMainWindow):
             cv_details.setLayout(QGridLayout())
             cv_details.layout().setContentsMargins(3, 3, 3, 3)
 
-            pydmled = PyDMLed(
-                self,
-                'ca://' + prefix + acc + cv + ':PwrState-Sts')
+            pydmled = SiriusLedState(
+                self, 'ca://' + self.prefix + cv + ':PwrState-Sts')
             pydmled.setObjectName(
                 'PyDMLed_' + name + '_PwrState' + '_Scrn' + str(scrn))
             pydmled.setMinimumWidth(40)
@@ -450,16 +438,14 @@ class TLAPControlWindow(SiriusMainWindow):
             if cv.split('-')[0] == 'LI':
                 pass
                 # TODO
-            elif cv.split('-')[0].split(':')[1] == 'PM':
-                corr = self._tl.upper() + '-' + cv
+            elif cv.split('-')[1].split(':')[1] == 'PM':
                 _hlautil.connect_window(pushbutton,
                                         PulsedMagnetDetailWindow,
-                                        parent=self, maname=corr)
+                                        parent=self, maname=cv)
             else:
-                corr = self._tl.upper() + '-' + cv
                 _hlautil.connect_window(pushbutton,
-                                        MagnetDetailWindow,
-                                        parent=self, maname=corr)
+                                        PSDetailWindow,
+                                        parent=self, psname=cv)
             pushbutton.setMinimumWidth(250)
             pushbutton.setMaximumWidth(250)
             pushbutton.setMinimumHeight(40)
@@ -471,7 +457,7 @@ class TLAPControlWindow(SiriusMainWindow):
             frame.setLayout(QVBoxLayout())
             frame.layout().setContentsMargins(0, 0, 0, 0)
             pydmlineedit_kick = PyDMLineEdit(
-                self, 'ca://' + prefix + acc + cv + ':Kick-SP')
+                self, 'ca://' + self.prefix + cv + ':Kick-SP')
             pydmlineedit_kick.setObjectName(
                 'PyDMLineEdit' + name + '_Kick_SP_Scrn' + str(scrn))
             pydmlineedit_kick.setValidator(QDoubleValidator())
@@ -486,7 +472,7 @@ class TLAPControlWindow(SiriusMainWindow):
 
             scrollbar_kick = PyDMScrollBar(
                 self, Qt.Horizontal,
-                'ca://' + prefix + acc + cv + ':Kick-SP')
+                'ca://' + self.prefix + cv + ':Kick-SP')
             scrollbar_kick.setObjectName(
                 'PyDMScrollBar' + name + '_Kick_SP_Scrn' + str(scrn))
             scrollbar_kick.setMinimumWidth(250)
@@ -501,7 +487,7 @@ class TLAPControlWindow(SiriusMainWindow):
             frame.setFrameShadow(QFrame.Raised)
             frame.setFrameShape(QFrame.Box)
             pydmlabel_kick = PyDMLabel(
-                self, 'ca://' + prefix + acc + cv + ':Kick-Mon')
+                self, 'ca://' + self.prefix + cv + ':Kick-Mon')
             pydmlabel_kick.setObjectName(
                 'PyDMLabel_' + name + '_Kick_Mon_Scrn' + str(scrn))
             pydmlabel_kick.setMinimumWidth(180)
@@ -569,8 +555,8 @@ class TLAPControlWindow(SiriusMainWindow):
                          'ts4': 42,
                          'ts5': 43,
                          }
-        scrn = scrn_dict[self._tl.lower() + str(self._currScrn)]
-        exec(CALC_LABELS_VISIBILITY.format(scrn))
+        scrn = scrn_dict[self._tl.lower()+str(self._currScrn)]
+        exec(CALC_LABELS_VISIBILITY.format(scrn, visible))
 
     @pyqtSlot(int)
     def _setCurrentScrn(self, currScrn):

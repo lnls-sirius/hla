@@ -8,7 +8,7 @@ from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla import util as _hlautil
 from siriushla.widgets.windows import SiriusMainWindow
-from siriushla.as_ma_control.MagnetDetailWindow import MagnetDetailWindow
+from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
 from siriushla.as_pm_control.PulsedMagnetDetailWindow import (
                                 PulsedMagnetDetailWindow)
 
@@ -113,7 +113,7 @@ class ASAPPosAngCorr(SiriusMainWindow):
 
         self.centralwidget.pushButton_CH1.setText(correctors[0])
         _hlautil.connect_window(self.centralwidget.pushButton_CH1,
-                                MagnetDetailWindow, self,
+                                PSDetailWindow, self,
                                 maname=correctors[0])
         self.centralwidget.SiriusLedState_CH1.channel = (
             'ca://' + prefix + correctors[0] + ':PwrState-Sts')
@@ -131,7 +131,7 @@ class ASAPPosAngCorr(SiriusMainWindow):
             'ca://' + prefix + correctors[1] + ':Kick-RB')
         self.centralwidget.pushButton_CV1.setText(correctors[2])
         _hlautil.connect_window(self.centralwidget.pushButton_CV1,
-                                MagnetDetailWindow, self,
+                                PSDetailWindow, self,
                                 maname=correctors[2])
         self.centralwidget.SiriusLedState_CV1.channel = (
             'ca://' + prefix + correctors[2] + ':PwrState-Sts')
@@ -141,7 +141,7 @@ class ASAPPosAngCorr(SiriusMainWindow):
             'ca://' + prefix + correctors[2] + ':Kick-RB')
         self.centralwidget.pushButton_CV2.setText(correctors[3])
         _hlautil.connect_window(self.centralwidget.pushButton_CV2,
-                                MagnetDetailWindow, self,
+                                PSDetailWindow, self,
                                 maname=correctors[3])
         self.centralwidget.SiriusLedState_CV2.channel = (
             'ca://' + prefix + correctors[3] + ':PwrState-Sts')
@@ -151,7 +151,6 @@ class ASAPPosAngCorr(SiriusMainWindow):
             'ca://' + prefix + correctors[3] + ':Kick-RB')
 
     def _setStatusLabels(self, value, **kws):
-        labels = value
         for i in range(4):
             exec('self.centralwidget.label_status{0}.setText'
-                 '(labels[{0}])'.format(i))
+                 '(value[{0}])'.format(i))
