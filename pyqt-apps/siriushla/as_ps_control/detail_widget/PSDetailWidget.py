@@ -80,6 +80,8 @@ class PSDetailWidget(QWidget):
 
     def _setup_ui(self):
         # Group boxes that compose the widget
+        self.version_box = QGroupBox("Version")
+        self.version_box.setObjectName("version")
         self.interlock_box = QGroupBox("Interlock")
         self.interlock_box.setObjectName("interlock")
         self.opmode_box = QGroupBox("OpMode")
@@ -99,6 +101,7 @@ class PSDetailWidget(QWidget):
         self.cycle_box.setObjectName('cycle_box')
 
         # Set group boxes layouts
+        self.version_box.setLayout(self._versionLayout())
         self.interlock_box.setLayout(self._interlockLayout())
         self.opmode_box.setLayout(self._opModeLayout())
         self.pwrstate_box.setLayout(self._powerStateLayout())
@@ -126,6 +129,7 @@ class PSDetailWidget(QWidget):
         layout.addWidget(QLabel("<h1>" + self._psname + "</h1>"))
         layout.addLayout(boxes_layout)
 
+        controls.addWidget(self.version_box)
         controls.addWidget(self.interlock_box)
         controls.addWidget(self.opmode_box)
         controls.addWidget(self.pwrstate_box)
@@ -136,6 +140,19 @@ class PSDetailWidget(QWidget):
         if self._is_magnet:
             analogs.addWidget(self.metric_box)
         analogs.addWidget(self.cycle_box)
+
+        return layout
+
+    def _versionLayout(self):
+        layout = QGridLayout()
+
+        self.version_cte = PyDMLabel(
+            self, "ca://" + self._prefixed_psname + ":Version-Cte")
+        self.version_cte.setObjectName("version_cte_label")
+
+        self.version_cte.setSizePolicy(QSizePolicy.Minimum,
+                                       QSizePolicy.Maximum)
+        layout.addWidget(self.version_cte, 0, 0, Qt.AlignHCenter)
 
         return layout
 
