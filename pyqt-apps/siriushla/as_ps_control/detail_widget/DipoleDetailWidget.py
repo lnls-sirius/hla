@@ -6,7 +6,7 @@ from pydm.PyQt.QtGui import QGridLayout, QLabel, QSizePolicy, \
     QFrame, QHBoxLayout, QPushButton, QVBoxLayout
 
 from siriuspy.envars import vaca_prefix
-from pydm.widgets import PyDMLabel, PyDMEnumComboBox, PyDMSpinbox, PyDMLineEdit
+from pydm.widgets import PyDMLabel, PyDMEnumComboBox, PyDMLineEdit
 from siriushla.widgets import SiriusMainWindow
 from siriushla.widgets.state_button import PyDMStateButton
 from siriushla.as_ps_control.detail_widget.PSDetailWidget \
@@ -289,7 +289,7 @@ class DipoleDetailWidget(PSDetailWidget):
         type_rb_layout = QVBoxLayout()
         type_rb_layout.addWidget(self.cycle_type_rb_label1)
         type_rb_layout.addWidget(self.cycle_type_rb_label2)
-        self.cycle_nr_sp_sb = PyDMSpinbox(self, nrcycles_sp_ca)
+        self.cycle_nr_sp_sb = PyDMLineEdit(self, nrcycles_sp_ca)
         self.cycle_nr_rb_label1 = PyDMLabel(self, nrcycles_rb_ca1)
         self.cycle_nr_rb_label2 = PyDMLabel(self, nrcycles_rb_ca2)
         nrcycles_rb_layout = QVBoxLayout()
@@ -300,19 +300,19 @@ class DipoleDetailWidget(PSDetailWidget):
         index_mon_layout = QVBoxLayout()
         index_mon_layout.addWidget(self.cycle_index_mon_label1)
         index_mon_layout.addWidget(self.cycle_index_mon_label2)
-        self.cycle_freq_sp_sb = PyDMSpinbox(self, freq_sp_ca)
+        self.cycle_freq_sp_sb = PyDMLineEdit(self, freq_sp_ca)
         self.cycle_freq_rb_label1 = PyDMLabel(self, freq_rb_ca1)
         self.cycle_freq_rb_label2 = PyDMLabel(self, freq_rb_ca2)
         freq_rb_layout = QVBoxLayout()
         freq_rb_layout.addWidget(self.cycle_freq_rb_label1)
         freq_rb_layout.addWidget(self.cycle_freq_rb_label2)
-        self.cycle_ampl_sp_sb = PyDMSpinbox(self, ampl_sp_ca)
+        self.cycle_ampl_sp_sb = PyDMLineEdit(self, ampl_sp_ca)
         self.cycle_ampl_rb_label1 = PyDMLabel(self, ampl_rb_ca1)
         self.cycle_ampl_rb_label2 = PyDMLabel(self, ampl_rb_ca2)
         ampl_rb_layout = QVBoxLayout()
         ampl_rb_layout.addWidget(self.cycle_ampl_rb_label1)
         ampl_rb_layout.addWidget(self.cycle_ampl_rb_label2)
-        self.cycle_offset_sp_sb = PyDMSpinbox(self, offset_sp_ca)
+        self.cycle_offset_sp_sb = PyDMLineEdit(self, offset_sp_ca)
         self.cycle_offset_rb_label1 = PyDMLabel(self, offset_rb_ca1)
         self.cycle_offset_rb_label2 = PyDMLabel(self, offset_rb_ca2)
         offset_rb_layout = QVBoxLayout()

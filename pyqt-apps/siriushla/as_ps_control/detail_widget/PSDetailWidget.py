@@ -8,7 +8,7 @@ from pydm.PyQt.QtGui import QWidget, QGroupBox, QGridLayout, \
 
 from siriuspy.envars import vaca_prefix
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox, PyDMPushButton, \
-    PyDMLineEdit, PyDMSpinbox
+    PyDMLineEdit
 from siriushla.widgets.state_button import PyDMStateButton
 from siriushla.widgets import PyDMLinEditScrollbar
 from siriushla.widgets.led import SiriusLedState, SiriusLedAlert
@@ -337,14 +337,14 @@ class PSDetailWidget(QWidget):
         self.cycle_enbl_rb_led = SiriusLedState(self, enbl_rb_ca)
         self.cycle_type_sp_cb = PyDMEnumComboBox(self, type_sp_ca)
         self.cycle_type_rb_label = PyDMLabel(self, type_rb_ca)
-        self.cycle_nr_sp_sb = PyDMSpinbox(self, nrcycles_sp_ca)
+        self.cycle_nr_sp_sb = PyDMLineEdit(self, nrcycles_sp_ca)
         self.cycle_nr_rb_label = PyDMLabel(self, nrcycles_rb_ca)
         self.cycle_index_mon_label = PyDMLabel(self, index_ca)
-        self.cycle_freq_sp_sb = PyDMSpinbox(self, freq_sp_ca)
+        self.cycle_freq_sp_sb = PyDMLineEdit(self, freq_sp_ca)
         self.cycle_freq_rb_label = PyDMLabel(self, freq_rb_ca)
-        self.cycle_ampl_sp_sb = PyDMSpinbox(self, ampl_sp_ca)
+        self.cycle_ampl_sp_sb = PyDMLineEdit(self, ampl_sp_ca)
         self.cycle_ampl_rb_label = PyDMLabel(self, ampl_rb_ca)
-        self.cycle_offset_sp_sb = PyDMSpinbox(self, offset_sp_ca)
+        self.cycle_offset_sp_sb = PyDMLineEdit(self, offset_sp_ca)
         self.cycle_offset_rb_label = PyDMLabel(self, offset_rb_ca)
         self.cycle_auxparam_sp_le = PyDMLineEdit(self, auxparam_sp_ca)
         self.cycle_auxparam_rb_label = PyDMLabel(self, auxparam_rb_ca)
