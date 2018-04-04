@@ -269,15 +269,16 @@ class TLAPControlWindow(SiriusMainWindow):
                 'PyDMEnumComboBox_FluorScrn_Sel_Scrn'+str(scrn))
             widget_fluorscrn_sp.layout().addWidget(
                 pydmcombobox_fluorscrn, 1, 1, 1, 3)
-            pydmled_fluorscrn = SiriusLedAlert(
+            led_fluorscrn = SiriusLedAlert(
                 self, 'ca://' + self.prefix + scrnpv + ':FluorScrn-Sts')
-            pydmled_fluorscrn.shape = 2
-            pydmled_fluorscrn.setObjectName(
-                'PyDMLed_FluorScrn_Sts_Scrn' + str(scrn))
+            led_fluorscrn.shape = 2
+            led_fluorscrn.setObjectName(
+                'Led_FluorScrn_Sts_Scrn' + str(scrn))
+            led_fluorscrn.setMaximumHeight(40)
             widget_fluorscrn_sp.layout().addItem(
                 QSpacerItem(10, 20, QSizePolicy.Fixed, QSizePolicy.Minimum),
                 2, 1)
-            widget_fluorscrn_sp.layout().addWidget(pydmled_fluorscrn, 2, 2)
+            widget_fluorscrn_sp.layout().addWidget(led_fluorscrn, 2, 2)
             widget_fluorscrn_sp.layout().addItem(
                 QSpacerItem(10, 20, QSizePolicy.Fixed, QSizePolicy.Minimum),
                 2, 3)
@@ -300,11 +301,14 @@ class TLAPControlWindow(SiriusMainWindow):
             pydmstatebutton.setSizePolicy(QSizePolicy.Fixed,
                                           QSizePolicy.Minimum)
             scrn_details.layout().addWidget(pydmstatebutton)
-            pydmled = SiriusLedState(
+            led = SiriusLedState(
                 self, 'ca://' + self.prefix + scrnpv + ':LedState-RB')
-            pydmled.setObjectName('PyDMLed_LedState_RB_Scrn' + str(scrn))
-            pydmled.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
-            scrn_details.layout().addWidget(pydmled)
+            led.setObjectName('SiriusLed_LedState_RB_Scrn' + str(scrn))
+            led.setMinimumWidth(40)
+            led.setMinimumHeight(40)
+            led.setMaximumHeight(40)
+            led.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
+            scrn_details.layout().addWidget(led)
 
             scrn_details.layout().addItem(QSpacerItem(40, 20,
                                                       QSizePolicy.Fixed,
@@ -329,14 +333,15 @@ class TLAPControlWindow(SiriusMainWindow):
                 ch_details.setLayout(QGridLayout())
                 ch_details.layout().setContentsMargins(3, 3, 3, 3)
 
-                pydmled = SiriusLedState(
+                led = SiriusLedState(
                     self, 'ca://' + self.prefix + ch + ':PwrState-Sts')
-                pydmled.setObjectName(
-                    'PyDMLed_' + name + '_PwrState' + '_Scrn' + str(scrn))
-                pydmled.setMinimumWidth(40)
-                pydmled.setMinimumHeight(40)
-                pydmled.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
-                ch_details.layout().addWidget(pydmled, 1, 1)
+                led.setObjectName(
+                    'SiriusLed_' + name + '_PwrState' + '_Scrn' + str(scrn))
+                led.setMinimumWidth(40)
+                led.setMinimumHeight(40)
+                led.setMaximumHeight(40)
+                led.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
+                ch_details.layout().addWidget(led, 1, 1)
 
                 pushbutton = QPushButton(ch, self)
                 pushbutton.setObjectName(
@@ -423,14 +428,15 @@ class TLAPControlWindow(SiriusMainWindow):
             cv_details.setLayout(QGridLayout())
             cv_details.layout().setContentsMargins(3, 3, 3, 3)
 
-            pydmled = SiriusLedState(
+            led = SiriusLedState(
                 self, 'ca://' + self.prefix + cv + ':PwrState-Sts')
-            pydmled.setObjectName(
-                'PyDMLed_' + name + '_PwrState' + '_Scrn' + str(scrn))
-            pydmled.setMinimumWidth(40)
-            pydmled.setSizePolicy(QSizePolicy.Fixed,
-                                  QSizePolicy.Minimum)
-            cv_details.layout().addWidget(pydmled, 1, 1)
+            led.setObjectName(
+                'SiriusLed_' + name + '_PwrState' + '_Scrn' + str(scrn))
+            led.setMinimumWidth(40)
+            led.setMinimumHeight(40)
+            led.setMaximumHeight(40)
+            led.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
+            cv_details.layout().addWidget(led, 1, 1)
 
             pushbutton = QPushButton(cv, self)
             pushbutton.setObjectName(
