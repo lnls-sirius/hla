@@ -10,9 +10,9 @@ from pydm import PyDMApplication as _PyDMApplication
 from siriuspy.envars import vaca_prefix as PREFIX
 from siriuspy.timesys.time_data import Clocks as _Clocks
 from siriuspy.timesys.time_data import Events as _Events
-from .Controllers import EventList as _EventList
-from .Controllers import HLTriggerList as _HLTriggerList
-from .Controllers import ClockList as _ClockList
+from .list_widgets import EventList as _EventList
+from .list_widgets import HLTriggerList as _HLTriggerList
+from .list_widgets import ClockList as _ClockList
 
 _dir = _os.path.dirname(_os.path.abspath(__file__))
 UI_FILE = _os.path.sep.join([_dir, 'TimingMain.ui'])
