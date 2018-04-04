@@ -5,6 +5,7 @@
 import sys
 import argparse as _argparse
 from pydm import PyDMApplication
+from siriushla.sirius_application import SiriusApplication
 from siriushla.as_ti_control import main
 from siriushla import util
 
@@ -14,7 +15,7 @@ parser.add_argument('-p', "--prefix", type=str, default='',
                     help="Define the prefix for the PVs in the window.")
 args = parser.parse_args()
 
-app = PyDMApplication(None, sys.argv)
+app = SiriusApplication(None, sys.argv)
 util.set_style(app)
 window = main(args.prefix)
 window.show()
