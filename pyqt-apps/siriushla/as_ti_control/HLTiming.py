@@ -12,8 +12,6 @@ from pydm import PyDMApplication as _PyDMApplication
 from siriuspy.envars import vaca_prefix as PREFIX
 from siriuspy.timesys.time_data import Clocks as _Clocks
 from siriuspy.timesys.time_data import Events as _Events
-from siriuspy.timesys.time_data import Triggers as _Triggers
-from siriushla.as_ti_control.Controllers import IntTrigCntrler, OutChanCntrler
 from siriushla.as_ti_control.Controllers import (EventCntrler, HLTrigCntrler,
                                                  ClockCntrler)
 
@@ -24,21 +22,22 @@ UI_FILE = _os.path.sep.join([_dir, 'TimingMain.ui'])
 def main(prefix=None):
     """Setup the main window."""
     prefix = 'ca://' + (prefix or PREFIX)
-    hl_trigs = _Triggers().hl_triggers
     HLTiming = _uic.loadUi(UI_FILE)
     # HLTiming.setStyleSheet('font-size: 21px')
     _setupEvents(prefix, HLTiming)
     _setupClocks(prefix, HLTiming)
     _setupEVGParams(prefix, HLTiming)
-    _setupTriggers(prefix, HLTiming, hl_trigs)
+    _setupTriggers(prefix, HLTiming)
     return HLTiming
 
 
-def _setupTrigs(prefix, main, map_, hl_trigs, nc=1, hide_evg=False):
+def _setupTrigs(prefix, main, map_, nc=1, hide_evg=False):
     lv = _QVBoxLayout()
     # lv.setSpacing(0)
     main.setLayout(lv)
     lv.addItem(_QSpIt(40, 20, _QSzPol.Minimum, _QSzPol.Expanding))
+    props = {
+        'status', 'state', 'source', 'pulses', 'duration', 'polarity', 'delay'}
     for k, v in map_.items():
         gb = _QGroupBox(k, main)
         lv.addWidget(gb)
@@ -48,10 +47,6 @@ def _setupTrigs(prefix, main, map_, hl_trigs, nc=1, hide_evg=False):
         lg.setVerticalSpacing(0)
         for i, tr in enumerate(v):
             pref = prefix + tr
-            if hide_evg:
-                props = hl_trigs[tr]['hl_props'] - {'evg_param'}
-            else:
-                props = hl_trigs[tr]['hl_props']
             trig = HLTrigCntrler(prefix=pref, props=props)
             lg.addWidget(trig, (i // nc) + 1, i % nc)
             if i // nc:
@@ -60,7 +55,7 @@ def _setupTrigs(prefix, main, map_, hl_trigs, nc=1, hide_evg=False):
             lg.addWidget(header, 0, i % nc)
 
 
-def _setupTriggers(prefix, HLTiming, hl_trigs):
+def _setupTriggers(prefix, HLTiming):
     map_ = {
         'Linac': (
             'LI-01:TI-EGun:MultBun', 'LI-01:TI-EGun:SglBun',
@@ -71,7 +66,7 @@ def _setupTriggers(prefix, HLTiming, hl_trigs):
         'Booster Injection': ('TB-04:TI-InjS:', 'BO-01D:TI-InjK:'),
         }
     main = HLTiming.WDTrigsInjLITB
-    _setupTrigs(prefix, main, map_, hl_trigs, 2)
+    _setupTrigs(prefix, main, map_, 1)
 
     map_ = {
         'Booster Ramping': ('BO-05D:TI-P5Cav:', 'BO-Glob:TI-Mags:'),
@@ -81,7 +76,7 @@ def _setupTriggers(prefix, HLTiming, hl_trigs):
             'SI-01SA:TI-InjK:'),
         }
     main = HLTiming.WDTrigsInjBOSI
-    _setupTrigs(prefix, main, map_, hl_trigs, 2)
+    _setupTrigs(prefix, main, map_, 1)
 
     map_ = {
         'Linac': (
@@ -99,7 +94,7 @@ def _setupTriggers(prefix, HLTiming, hl_trigs):
             'SI-Fam:TI-BPM:'),
         }
     main = HLTiming.WDTrigsInjDig
-    _setupTrigs(prefix, main, map_, hl_trigs)
+    _setupTrigs(prefix, main, map_)
 
     map_ = {
         'Storage Ring Studies': (
@@ -113,19 +108,19 @@ def _setupTriggers(prefix, HLTiming, hl_trigs):
             )
         }
     main = HLTiming.WDTrigsSI
-    _setupTrigs(prefix, main, map_, hl_trigs)
+    _setupTrigs(prefix, main, map_)
 
 
 def _setupEVGParams(prefix, HLTiming):
     pv_pref = prefix + 'AS-Glob:TI-EVG:'
     HLTiming.PyDMWfTBucketListSP.channel = pv_pref + 'BucketList-SP'
     HLTiming.PyDMWfTBucketListRB.channel = pv_pref + 'BucketList-RB'
-    HLTiming.PyDMStBContinuous.channel = pv_pref + 'ContinuousState-Sel'
-    HLTiming.PyDMLedContinuous.channel = pv_pref + 'ContinuousState-Sts'
-    HLTiming.PyDMStBInjectionState.channel = pv_pref + 'InjectionState-Sel'
-    HLTiming.PyDMLedInjectionState.channel = pv_pref + 'InjectionState-Sts'
-    HLTiming.PyDMCbInjectionCyc.channel = pv_pref + 'InjectionCyc-Sel'
-    HLTiming.PyDMLedInjectionCyc.channel = pv_pref + 'InjectionCyc-Sts'
+    HLTiming.PyDMStBContinuous.channel = pv_pref + 'ContinuousEvt-Sel'
+    HLTiming.PyDMLedContinuous.channel = pv_pref + 'ContinuousEvt-Sts'
+    HLTiming.PyDMStBInjectionState.channel = pv_pref + 'InjectionEvt-Sel'
+    HLTiming.PyDMLedInjectionState.channel = pv_pref + 'InjectionEvt-Sts'
+    HLTiming.PyDMCbInjectionCyc.channel = pv_pref + 'RepeatBucketList-SP'
+    HLTiming.PyDMLedInjectionCyc.channel = pv_pref + 'RepeatBucketList-RB'
     HLTiming.PyDMSBRepetitionRate.channel = pv_pref + 'RepRate-SP'
     HLTiming.PyDMLbRepetitionRate.channel = pv_pref + 'RepRate-RB'
 
@@ -134,7 +129,8 @@ def _setupClocks(prefix, HLTiming):
     main = HLTiming.DWCClocks
     lg = _QGridLayout(main)
     main.setLayout(lg)
-    props = {'state', 'frequency'}
+    # props = {'state', 'frequency'}
+    props = set()
     for i, cl in enumerate(sorted(_Clocks.HL2LL_MAP.keys())):
         pref = prefix + _Clocks.HL_PREF + cl
         if i == 0:
@@ -155,7 +151,8 @@ def _setupEvents(prefix, HLTiming):
     main.setLayout(lv)
     lv.addItem(_QSpIt(40, 20, _QSzPol.Minimum, _QSzPol.Expanding))
     nc = 1
-    props = {'ext_trig', 'mode', 'delay'}
+    # props = {'ext_trig', 'mode', 'delay'}
+    props = set()
     for k, v in map_.items():
         gb = _QGroupBox(k, main)
         lv.addWidget(gb)
