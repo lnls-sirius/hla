@@ -3,8 +3,6 @@
 import sys as _sys
 import os as _os
 from PyQt5 import uic as _uic
-from PyQt5.QtWidgets import QGridLayout as _QGridLayout
-from PyQt5.QtWidgets import QGroupBox as _QGroupBox
 from PyQt5.QtWidgets import QVBoxLayout as _QVBoxLayout
 from PyQt5.QtWidgets import QSizePolicy as _QSzPol
 from PyQt5.QtWidgets import QSpacerItem as _QSpIt
@@ -12,8 +10,9 @@ from pydm import PyDMApplication as _PyDMApplication
 from siriuspy.envars import vaca_prefix as PREFIX
 from siriuspy.timesys.time_data import Clocks as _Clocks
 from siriuspy.timesys.time_data import Events as _Events
-from siriushla.as_ti_control.Controllers import (EventCntrler, HLTrigCntrler,
-                                                 ClockCntrler)
+from .Controllers import EventList as _EventList
+from .Controllers import HLTriggerList as _HLTriggerList
+from .Controllers import ClockList as _ClockList
 
 _dir = _os.path.dirname(_os.path.abspath(__file__))
 UI_FILE = _os.path.sep.join([_dir, 'TimingMain.ui'])
@@ -23,39 +22,23 @@ def main(prefix=None):
     """Setup the main window."""
     prefix = 'ca://' + (prefix or PREFIX)
     HLTiming = _uic.loadUi(UI_FILE)
-    # HLTiming.setStyleSheet('font-size: 21px')
-    _setupEvents(prefix, HLTiming)
-    _setupClocks(prefix, HLTiming)
     _setupEVGParams(prefix, HLTiming)
-    _setupTriggers(prefix, HLTiming)
-    return HLTiming
+    # HLTiming.setStyleSheet('font-size: 21px')
 
+    main = HLTiming.DWCClocks
+    map_ = {'Clocks': sorted(_Clocks.HL2LL_MAP.keys())}
+    pref = prefix + _Clocks.HL_PREF
+    _setupLists(pref, main, map_, listType='clock')
 
-def _setupTrigs(prefix, main, map_, nc=1, hide_evg=False):
-    lv = _QVBoxLayout()
-    # lv.setSpacing(0)
-    main.setLayout(lv)
-    lv.addItem(_QSpIt(40, 20, _QSzPol.Minimum, _QSzPol.Expanding))
-    props = {
-        'status', 'state', 'source', 'pulses', 'duration', 'polarity', 'delay'}
-    for k, v in map_.items():
-        gb = _QGroupBox(k, main)
-        lv.addWidget(gb)
-        lv.addItem(_QSpIt(40, 20, _QSzPol.Minimum, _QSzPol.Expanding))
-        lg = _QGridLayout()
-        gb.setLayout(lg)
-        lg.setVerticalSpacing(0)
-        for i, tr in enumerate(v):
-            pref = prefix + tr
-            trig = HLTrigCntrler(prefix=pref, props=props)
-            lg.addWidget(trig, (i // nc) + 1, i % nc)
-            if i // nc:
-                continue
-            header = HLTrigCntrler(prefix=pref, props=props, header=True)
-            lg.addWidget(header, 0, i % nc)
+    map_ = {
+        'Injection': ('Linac', 'InjBO', 'RmpBO', 'InjSI'),
+        'Diagnostics': ('DigLI', 'DigTB', 'DigBO', 'DigTS', 'DigSI'),
+        'Storage Ring Control': ('Orbit', 'Tunes', 'Coupl', 'Study'),
+        }
+    main = HLTiming.DWCEvents
+    pref = prefix + _Events.HL_PREF
+    _setupLists(pref, main, map_, listType='event')
 
-
-def _setupTriggers(prefix, HLTiming):
     map_ = {
         'Linac': (
             'LI-01:TI-EGun:MultBun', 'LI-01:TI-EGun:SglBun',
@@ -66,7 +49,7 @@ def _setupTriggers(prefix, HLTiming):
         'Booster Injection': ('TB-04:TI-InjS:', 'BO-01D:TI-InjK:'),
         }
     main = HLTiming.WDTrigsInjLITB
-    _setupTrigs(prefix, main, map_, 1)
+    _setupLists(prefix, main, map_)
 
     map_ = {
         'Booster Ramping': ('BO-05D:TI-P5Cav:', 'BO-Glob:TI-Mags:'),
@@ -76,7 +59,7 @@ def _setupTriggers(prefix, HLTiming):
             'SI-01SA:TI-InjK:'),
         }
     main = HLTiming.WDTrigsInjBOSI
-    _setupTrigs(prefix, main, map_, 1)
+    _setupLists(prefix, main, map_)
 
     map_ = {
         'Linac': (
@@ -94,7 +77,7 @@ def _setupTriggers(prefix, HLTiming):
             'SI-Fam:TI-BPM:'),
         }
     main = HLTiming.WDTrigsInjDig
-    _setupTrigs(prefix, main, map_)
+    _setupLists(prefix, main, map_)
 
     map_ = {
         'Storage Ring Studies': (
@@ -108,7 +91,32 @@ def _setupTriggers(prefix, HLTiming):
             )
         }
     main = HLTiming.WDTrigsSI
-    _setupTrigs(prefix, main, map_)
+    _setupLists(prefix, main, map_)
+    return HLTiming
+
+
+def _setupLists(prefix, main, map_, listType='Trig'):
+    props = set()
+    if listType.lower().startswith('trig'):
+        ListClass = _HLTriggerList
+        props = {
+            'detailed', 'status', 'state', 'source',
+            'pulses', 'duration', 'polarity', 'delay'
+            }
+    elif listType.lower().startswith('ev'):
+        ListClass = _EventList
+    elif listType.lower().startswith('cl'):
+        ListClass = _ClockList
+
+    lv = _QVBoxLayout()
+    main.setLayout(lv)
+    lv.addItem(_QSpIt(40, 20, _QSzPol.Minimum, _QSzPol.Expanding))
+    for name, obj_names in map_.items():
+        hl_obj = ListClass(
+            name=name, parent=main, prefix=prefix, props=props,
+            obj_names=obj_names)
+        lv.addWidget(hl_obj)
+        lv.addItem(_QSpIt(40, 20, _QSzPol.Minimum, _QSzPol.Expanding))
 
 
 def _setupEVGParams(prefix, HLTiming):
@@ -123,49 +131,6 @@ def _setupEVGParams(prefix, HLTiming):
     HLTiming.PyDMLedInjectionCyc.channel = pv_pref + 'RepeatBucketList-RB'
     HLTiming.PyDMSBRepetitionRate.channel = pv_pref + 'RepRate-SP'
     HLTiming.PyDMLbRepetitionRate.channel = pv_pref + 'RepRate-RB'
-
-
-def _setupClocks(prefix, HLTiming):
-    main = HLTiming.DWCClocks
-    lg = _QGridLayout(main)
-    main.setLayout(lg)
-    # props = {'state', 'frequency'}
-    props = set()
-    for i, cl in enumerate(sorted(_Clocks.HL2LL_MAP.keys())):
-        pref = prefix + _Clocks.HL_PREF + cl
-        if i == 0:
-            lg.addWidget(ClockCntrler(prefix=pref, props=props,
-                                      header=True), 0, 0)
-        lg.addWidget(ClockCntrler(prefix=pref, props=props), i + 1, 0)
-
-
-def _setupEvents(prefix, HLTiming):
-    map_ = {
-        'Injection': ('Linac', 'InjBO', 'RmpBO', 'InjSI'),
-        'Diagnostics': ('DigLI', 'DigTB', 'DigBO', 'DigTS', 'DigSI'),
-        'Storage Ring Control': ('Orbit', 'Tunes', 'Coupl', 'Study'),
-        }
-    main = HLTiming.DWCEvents
-
-    lv = _QVBoxLayout()
-    main.setLayout(lv)
-    lv.addItem(_QSpIt(40, 20, _QSzPol.Minimum, _QSzPol.Expanding))
-    nc = 1
-    # props = {'ext_trig', 'mode', 'delay'}
-    props = set()
-    for k, v in map_.items():
-        gb = _QGroupBox(k, main)
-        lv.addWidget(gb)
-        lv.addItem(_QSpIt(40, 20, _QSzPol.Minimum, _QSzPol.Expanding))
-        lg = _QGridLayout()
-        gb.setLayout(lg)
-        for i, ev in enumerate(v):
-            pref = prefix + _Events.HL_PREF + ev
-            if not i // nc:
-                header = EventCntrler(prefix=pref, props=props, header=True)
-                lg.addWidget(header, 0, i % nc)
-            ev_ctrl = EventCntrler(prefix=pref, props=props)
-            lg.addWidget(ev_ctrl, (i // nc) + 1, i % nc)
 
 
 if __name__ == '__main__':
