@@ -325,8 +325,9 @@ class PSDetailWidget(QWidget):
     def _cycleLayout(self):
         layout = QGridLayout()
         # 15 cycle pvs
-        enbl_sp_ca = 'ca://' + self._prefixed_psname + ':CycleEnbl-SP'
-        enbl_rb_ca = 'ca://' + self._prefixed_psname + ':CycleEnbl-RB'
+        enbl_sp_ca = 'ca://' + self._prefixed_psname + ':CycleEnbl-Cmd'
+        dsbl_sp_ca = 'ca://' + self._prefixed_psname + ':CycleDsbl-Cmd'
+        enbl_mon_ca = 'ca://' + self._prefixed_psname + ':CycleEnbl-Mon'
         type_sp_ca = 'ca://' + self._prefixed_psname + ':CycleType-Sel'
         type_rb_ca = 'ca://' + self._prefixed_psname + ':CycleType-Sts'
         nrcycles_sp_ca = 'ca://' + self._prefixed_psname + ':CycleNrCycles-SP'
@@ -350,8 +351,15 @@ class PSDetailWidget(QWidget):
         self.cycle_offset_label = QLabel('Offset', self)
         self.cycle_auxparam_label = QLabel('AuxParams', self)
         # 15 widgets
-        self.cycle_enbl_sp_button = PyDMStateButton(self, enbl_sp_ca)
-        self.cycle_enbl_rb_led = SiriusLedState(self, enbl_rb_ca)
+        # self.cycle_enbl_sp_button = PyDMStateButton(self, enbl_sp_ca)
+        self.cycle_enbl_sp_button = PyDMPushButton(
+            parent=self, label="Enable", pressValue=1,
+            init_channel=enbl_sp_ca)
+        self.cycle_dsbl_sp_button = PyDMPushButton(
+            parent=self, label="Disable", pressValue=1,
+            init_channel=dsbl_sp_ca)
+
+        self.cycle_enbl_mon_led = SiriusLedState(self, enbl_mon_ca)
         self.cycle_type_sp_cb = PyDMEnumComboBox(self, type_sp_ca)
         self.cycle_type_rb_label = PyDMLabel(self, type_rb_ca)
         self.cycle_nr_sp_sb = PyDMLineEdit(self, nrcycles_sp_ca)
@@ -368,7 +376,8 @@ class PSDetailWidget(QWidget):
 
         layout.addWidget(self.cycle_enbl_label, 0, 0, Qt.AlignRight)
         layout.addWidget(self.cycle_enbl_sp_button, 0, 1)
-        layout.addWidget(self.cycle_enbl_rb_led, 0, 2)
+        layout.addWidget(self.cycle_dsbl_sp_button, 0, 2)
+        layout.addWidget(self.cycle_enbl_mon_led, 0, 3)
         layout.addWidget(self.cycle_type_label, 1, 0, Qt.AlignRight)
         layout.addWidget(self.cycle_type_sp_cb, 1, 1)
         layout.addWidget(self.cycle_type_rb_label, 1, 2)
@@ -604,7 +613,8 @@ class PSDetailWidget(QWidget):
 #             self, "ca://" + self._prefixed_magnet + ":CtrlMode-Mon")
 #         self.ctrlmode_label.setObjectName("ctrlmode1_label")
 #
-#         self.ctrlmode_led.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
+#         self.ctrlmode_led.setSizePolicy(
+#             QSizePolicy.Minimum, QSizePolicy.Fixed)
 #
 #         ctrlmode_layout = QHBoxLayout()
 #         ctrlmode_layout.addWidget(self.ctrlmode_led)
@@ -637,7 +647,8 @@ class PSDetailWidget(QWidget):
 #             self, "ca://" + self._prefixed_magnet + ":PwrState-Sts")
 #         self.pwrstate_label.setObjectName("pwrstate_label")
 #
-#         self.pwrstate_led.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
+#         self.pwrstate_led.setSizePolicy(
+#             QSizePolicy.Minimum, QSizePolicy.Fixed)
 #
 #         # buttons_layout = QHBoxLayout()
 #         # buttons_layout.addWidget(self.on_btn)
@@ -709,7 +720,8 @@ class PSDetailWidget(QWidget):
 #         # if self._magnet_type == "b":
 #         self.metric_sp_widget.sp_scrollbar.setTracking(False)
 #         self.metric_rb_val = PyDMLabel(
-#             self, "ca://" + self._prefixed_magnet + ":" + self._metric + "-RB")
+#             self, "ca://" + self._prefixed_magnet + ":" +
+#             self._metric + "-RB")
 #         self.metric_rb_val.precFromPV = True
 #         self.metric_ref_val = PyDMLabel(
 #             self,
