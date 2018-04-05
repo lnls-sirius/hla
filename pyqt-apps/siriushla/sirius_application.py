@@ -1,7 +1,7 @@
 """Definition of the Sirius Application class."""
 from pydm import PyDMApplication
 from .util import get_window_id
-from pydm.PyQt.QtGui import QWidget, QMainWindow
+from pydm.PyQt.QtGui import QWidget, QDialog, QMainWindow
 from pydm.PyQt.QtCore import Qt
 
 
@@ -14,39 +14,75 @@ class SiriusApplication(PyDMApplication):
         self._windows = dict()
 
     def establish_widget_connections(self, widget, propagate=True):
+        """Establish widgets connections.
+
+        The `propagate` property defines how widgets are searchedself.
+        When True, super will handle connections. It will try to connect
+        all children widgets.
+        When False, widgets will be searched recursevely in a breadth first
+        manner. The recursion will be cut if the widget is a Window or Dialog.
+        """
         if propagate:
             super().establish_widget_connections(widget)
         else:
-            central_widget = widget.findChildren(
-                QWidget, options=Qt.FindDirectChildrenOnly)[0]
-            widgets = [central_widget]
-            widgets.extend(central_widget.findChildren(QWidget))
-            for child_widget in widgets:
-                try:
-                    if hasattr(child_widget, 'channels'):
-                        for channel in child_widget.channels():
-                            self.add_connection(channel)
-                        # Take this opportunity to install a filter that intercepts middle-mouse clicks,
-                        # which we use to display a tooltip with the address of the widget's first channel.
-                        child_widget.installEventFilter(self)
-                except NameError:
-                    pass
+            direct_children = widget.findChildren(
+                QWidget, options=Qt.FindDirectChildrenOnly)
+            # If no direct children, establish connections
+            if not direct_children:
+                return self._establish_connections(widget)
+            else:
+                # For each widget, look into all its children widgets and then
+                # establish its connections
+                for widget in direct_children:
+                    if isinstance(widget, (QDialog, QMainWindow)):
+                        continue
+                    self.establish_widget_connections(widget, False)
+                    self._establish_connections(widget)
+            return
 
     def close_widget_connections(self, widget, propagate=True):
+        """Close widgets connections.
+
+        The `propagate` property defines how widgets are searchedself.
+        When True, super will handle connections. It will try to connect
+        all children widgets.
+        When False, widgets will be searched recursevely. The recursion will be
+        cut if the widget is a Window or Dialog.
+        """
         if propagate:
             super().establish_widget_connections(widget)
         else:
-            central_widget = widget.findChildren(
-                QWidget, options=Qt.FindDirectChildrenOnly)[0]
-            widgets = [central_widget]
-            widgets.extend(central_widget.findChildren(QWidget))
-            for child_widget in widgets:
-                try:
-                    if hasattr(child_widget, 'channels'):
-                        for channel in child_widget.channels():
-                            self.remove_connection(channel)
-                except NameError:
-                    pass
+            direct_children = widget.findChildren(
+                QWidget, options=Qt.FindDirectChildrenOnly)
+            # If no direct children, close connection
+            if not direct_children:
+                return self._remove_connections(widget)
+            else:
+                # For each widget, look into all its children widgets and then
+                # close its connections
+                for widget in direct_children:
+                    if isinstance(widget, (QDialog, QMainWindow)):
+                        continue
+                    self.close_widget_connections(widget, False)
+                    self._remove_connections(widget)
+            return
+
+    def _has_channel(self, widget):
+        try:
+            if hasattr(widget, 'channels'):
+                return True
+        except NameError:
+            return False
+
+    def _establish_connections(self, widget):
+        if self._has_channel(widget):
+            for channel in widget.channels():
+                return self.add_connection(channel)
+
+    def _remove_connections(self, widget):
+        if self._has_channel(widget):
+            for channel in widget.channels():
+                return self.remove_connection(channel)
 
     def open_window(self, w_class, parent=None, **kwargs):
         """Open new window.
