@@ -101,7 +101,7 @@ def _setupLists(prefix, main, map_, listType='Trig'):
         ListClass = _HLTriggerList
         props = {
             'detailed', 'status', 'state', 'source',
-            'pulses', 'duration', 'polarity', 'delay'
+            'pulses', 'duration', 'delay'
             }
     elif listType.lower().startswith('ev'):
         ListClass = _EventList

@@ -9,12 +9,14 @@ from pydm.widgets.enum_combo_box import PyDMEnumComboBox as PyDMECB
 from pydm.widgets.label import PyDMLabel
 from pydm.widgets.spinbox import PyDMSpinbox
 from pydm.widgets.pushbutton import PyDMPushButton
+from siriuspy.namesys import SiriusPVName as _PVName
 from siriushla.widgets.led import PyDMLed, SiriusLedAlert
 from siriushla.widgets.state_button import PyDMStateButton
-from siriuspy.namesys import SiriusPVName as _PVName
+from siriushla import util as _util
+from .detailed_view import HLTriggerDetailed as _HLTriggerDetailed
 
 
-class _BaseList(QGroupBox):
+class BaseList(QGroupBox):
     """Template for control of High Level Triggers."""
 
     _MIN_WIDs = {}
@@ -74,7 +76,7 @@ class _BaseList(QGroupBox):
         return tuple()  # return tuple of widgets
 
 
-class EventList(_BaseList):
+class EventList(BaseList):
     """Template for control of Events."""
 
     _MIN_WIDs = {'ext_trig': 150, 'mode': 205, 'delay_type': 130, 'delay': 150}
@@ -103,7 +105,7 @@ class EventList(_BaseList):
         return sp, rb
 
 
-class ClockList(_BaseList):
+class ClockList(BaseList):
     """Template for control of High and Low Level Clocks."""
 
     _MIN_WIDs = {
@@ -129,7 +131,7 @@ class ClockList(_BaseList):
         return sp, rb
 
 
-class HLTriggerList(_BaseList):
+class HLTriggerList(BaseList):
     """Template for control of High Level Triggers."""
 
     _MIN_WIDs = {
@@ -164,6 +166,8 @@ class HLTriggerList(_BaseList):
     def _createObjs(self, prefix, prop):
         if 'detailed' == prop:
             but = (QPushButton(prefix.device_name, self), )
+            _util.connect_window(
+                but[0], _HLTriggerDetailed, self, prefix=prefix)
         elif 'status' == prop:
             rb = SiriusLedAlert(self, init_channel=prefix + "Status-Mon")
             rb.setShape(rb.shapeMap.Square)
@@ -206,7 +210,7 @@ class HLTriggerList(_BaseList):
         return but
 
 
-class AFCOUTList(_BaseList):
+class AFCOUTList(BaseList):
     """Template for control of Timing devices Internal Triggers."""
 
     _MIN_WIDs = {
@@ -260,7 +264,7 @@ class AFCOUTList(_BaseList):
         return sp, rb
 
 
-class OTPList(_BaseList):
+class OTPList(BaseList):
     """Template for control of Timing devices Internal Triggers."""
 
     _MIN_WIDs = {
@@ -309,7 +313,7 @@ class OTPList(_BaseList):
         return sp, rb
 
 
-class OUTList(_BaseList):
+class OUTList(BaseList):
     """Template for control of Timing Devices Output Channels."""
 
     _MIN_WIDs = {
