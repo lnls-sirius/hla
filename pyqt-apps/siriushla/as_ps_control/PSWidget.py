@@ -118,10 +118,10 @@ class BasePSWidget(QWidget):
         self.header_layout = QHBoxLayout()
         self.layout_with_header = QVBoxLayout()
 
-        self.state_header = QLabel("State", self)
-        self.state_header.setObjectName("state_header")
         self.psname_header = QLabel("Power Supply", self)
         self.psname_header.setObjectName("psname_header")
+        self.state_header = QLabel("State", self)
+        self.state_header.setObjectName("state_header")
         self.intlk_header = QLabel("Interlocks", self)
         self.intlk_header.setObjectName("intlk_header")
         self.analog_sp_header = QLabel(self._analog_name + "-SP", self)
@@ -129,8 +129,8 @@ class BasePSWidget(QWidget):
         self.analog_mon_header = QLabel(self._analog_name + "-Mon", self)
         self.analog_mon_header.setObjectName("analog_mon_header")
 
-        self.header_layout.addWidget(self.state_header)
         self.header_layout.addWidget(self.psname_header)
+        self.header_layout.addWidget(self.state_header)
         self.header_layout.addWidget(self.intlk_header)
         self.header_layout.addWidget(self.analog_sp_header)
         self.header_layout.addWidget(self.analog_mon_header)
@@ -155,6 +155,9 @@ class BasePSWidget(QWidget):
     def _build_widget(self):
         # Widgets
 
+        # Power Supply button to access detailed window
+        self.psname_label = QPushButton(self._psname, self)
+        self.psname_label.setObjectName("psname_button")
         # PwrState widgets
         self.pwrstate_button = PyDMStateButton(
             parent=self, init_channel="ca://" + self._pwrstate_sp_pv)
@@ -167,9 +170,6 @@ class BasePSWidget(QWidget):
         self.state_widget.setLayout(self.state_widget.layout)
         self.state_widget.layout.addWidget(self.pwrstate_button)
         self.state_widget.layout.addWidget(self.state_led)
-        # Power Supply button to access detailed window
-        self.psname_label = QPushButton(self._psname, self)
-        self.psname_label.setObjectName("psname_button")
         # Interlock leds
         self.intlksoft_led = \
             SiriusLedAlert(self, "ca://" + self._intlksoft_mon_pv)
@@ -191,8 +191,8 @@ class BasePSWidget(QWidget):
             parent=self, init_channel="ca://" + self._analog_mon_pv)
         self.analog_mon_label.setObjectName("analog_label")
 
-        self.layout.addWidget(self.state_widget)
         self.layout.addWidget(self.psname_label)
+        self.layout.addWidget(self.state_widget)
         self.layout.addWidget(self.intlk_widget)
         self.layout.addWidget(self.analog_widget)
         self.layout.addWidget(self.analog_mon_label)
