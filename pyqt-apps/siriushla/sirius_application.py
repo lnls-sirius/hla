@@ -25,20 +25,17 @@ class SiriusApplication(PyDMApplication):
         if propagate:
             super().establish_widget_connections(widget)
         else:
+            # Establish connections of input widget
+            self._establish_connections(widget)
+
+            # Look into all its children widgets and then
+            # establish its connections
             direct_children = widget.findChildren(
                 QWidget, options=Qt.FindDirectChildrenOnly)
-            # If no direct children, establish connections
-            if not direct_children:
-                return self._establish_connections(widget)
-            else:
-                # For each widget, look into all its children widgets and then
-                # establish its connections
-                for widget in direct_children:
-                    if isinstance(widget, (QDialog, QMainWindow)):
-                        continue
-                    self.establish_widget_connections(widget, False)
-                    self._establish_connections(widget)
-            return
+            for wid in direct_children:
+                if isinstance(wid, (QDialog, QMainWindow)):
+                    continue
+                self.establish_widget_connections(wid, False)
 
     def close_widget_connections(self, widget, propagate=True):
         """Close widgets connections.
@@ -50,22 +47,19 @@ class SiriusApplication(PyDMApplication):
         cut if the widget is a Window or Dialog.
         """
         if propagate:
-            super().establish_widget_connections(widget)
+            super().close_widget_connections(widget)
         else:
+            # Close connection of input widget
+            self._remove_connections(widget)
+
+            # Look into all its children widgets and then
+            # close their connections
             direct_children = widget.findChildren(
                 QWidget, options=Qt.FindDirectChildrenOnly)
-            # If no direct children, close connection
-            if not direct_children:
-                return self._remove_connections(widget)
-            else:
-                # For each widget, look into all its children widgets and then
-                # close its connections
-                for widget in direct_children:
-                    if isinstance(widget, (QDialog, QMainWindow)):
-                        continue
-                    self.close_widget_connections(widget, False)
-                    self._remove_connections(widget)
-            return
+            for wid in direct_children:
+                if isinstance(wid, (QDialog, QMainWindow)):
+                    continue
+                self.close_widget_connections(wid, False)
 
     def _has_channel(self, widget):
         try:
