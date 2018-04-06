@@ -6,13 +6,13 @@ from PyQt5 import uic as _uic
 from PyQt5.QtWidgets import QVBoxLayout as _QVBoxLayout
 from PyQt5.QtWidgets import QSizePolicy as _QSzPol
 from PyQt5.QtWidgets import QSpacerItem as _QSpIt
-from pydm import PyDMApplication as _PyDMApplication
 from siriuspy.envars import vaca_prefix as PREFIX
 from siriuspy.timesys.time_data import Clocks as _Clocks
 from siriuspy.timesys.time_data import Events as _Events
-from .list_widgets import EventList as _EventList
-from .list_widgets import HLTriggerList as _HLTriggerList
-from .list_widgets import ClockList as _ClockList
+from siriushla.sirius_application import SiriusApplication
+from base_list import EventList as _EventList
+from base_list import ClockList as _ClockList
+from hl_trigger import HLTriggerList as _HLTriggerList
 
 _dir = _os.path.dirname(_os.path.abspath(__file__))
 UI_FILE = _os.path.sep.join([_dir, 'TimingMain.ui'])
@@ -96,7 +96,6 @@ def main(prefix=None):
 
 
 def _setupLists(prefix, main, map_, listType='Trig'):
-    props = set()
     if listType.lower().startswith('trig'):
         ListClass = _HLTriggerList
         props = {
@@ -104,8 +103,10 @@ def _setupLists(prefix, main, map_, listType='Trig'):
             'pulses', 'duration', 'delay'
             }
     elif listType.lower().startswith('ev'):
+        props = {'ext_trig', 'mode', 'delay_type', 'delay'}
         ListClass = _EventList
     elif listType.lower().startswith('cl'):
+        props = {'state', 'frequency'}
         ListClass = _ClockList
 
     lv = _QVBoxLayout()
@@ -127,15 +128,17 @@ def _setupEVGParams(prefix, HLTiming):
     HLTiming.PyDMLedContinuous.channel = pv_pref + 'ContinuousEvt-Sts'
     HLTiming.PyDMStBInjectionState.channel = pv_pref + 'InjectionEvt-Sel'
     HLTiming.PyDMLedInjectionState.channel = pv_pref + 'InjectionEvt-Sts'
-    HLTiming.PyDMCbInjectionCyc.channel = pv_pref + 'RepeatBucketList-SP'
-    HLTiming.PyDMLedInjectionCyc.channel = pv_pref + 'RepeatBucketList-RB'
+    HLTiming.PyDMSBRepeatBL.channel = pv_pref + 'RepeatBucketList-SP'
+    HLTiming.PyDMSBRepeatBL.showStepExponent = False
+    HLTiming.PyDMLbRepeatBL.channel = pv_pref + 'RepeatBucketList-RB'
     HLTiming.PyDMSBRepetitionRate.channel = pv_pref + 'RepRate-SP'
+    HLTiming.PyDMSBRepetitionRate.showStepExponent = False
     HLTiming.PyDMLbRepetitionRate.channel = pv_pref + 'RepRate-RB'
 
 
 if __name__ == '__main__':
     """Run Example."""
-    app = _PyDMApplication()
+    app = SiriusApplication()
     HLTiming = main()
     HLTiming.show()
     _sys.exit(app.exec_())
