@@ -7,11 +7,8 @@ from PyQt5.QtWidgets import QVBoxLayout as _QVBoxLayout
 from PyQt5.QtWidgets import QSizePolicy as _QSzPol
 from PyQt5.QtWidgets import QSpacerItem as _QSpIt
 from siriuspy.envars import vaca_prefix as PREFIX
-from siriuspy.timesys.time_data import Clocks as _Clocks
-from siriuspy.timesys.time_data import Events as _Events
+from siriuspy.csdevice import timesys as _cstime
 from siriushla.sirius_application import SiriusApplication
-from base_list import EventList as _EventList
-from base_list import ClockList as _ClockList
 from hl_trigger import HLTriggerList as _HLTriggerList
 
 _dir = _os.path.dirname(_os.path.abspath(__file__))
@@ -26,8 +23,8 @@ def main(prefix=None):
     # HLTiming.setStyleSheet('font-size: 21px')
 
     main = HLTiming.DWCClocks
-    map_ = {'Clocks': sorted(_Clocks.HL2LL_MAP.keys())}
-    pref = prefix + _Clocks.HL_PREF
+    map_ = {'Clocks': sorted(_cstime.clocks_hl2ll_map.keys())}
+    pref = prefix + _cstime.clocks_hl_pref
     _setupLists(pref, main, map_, listType='clock')
 
     map_ = {
@@ -36,7 +33,7 @@ def main(prefix=None):
         'Storage Ring Control': ('Orbit', 'Tunes', 'Coupl', 'Study'),
         }
     main = HLTiming.DWCEvents
-    pref = prefix + _Events.HL_PREF
+    pref = prefix + _cstime.events_hl_pref
     _setupLists(pref, main, map_, listType='event')
 
     map_ = {

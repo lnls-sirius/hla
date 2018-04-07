@@ -9,8 +9,7 @@ from pydm.widgets.spinbox import PyDMSpinbox
 from pydm.widgets.pushbutton import PyDMPushButton
 from pydm.widgets.enum_combo_box import PyDMEnumComboBox as PyDMECB
 from pydm.widgets.checkbox import PyDMCheckbox as PyDMCb
-from siriuspy.timesys.time_data.hl_types_data import Events as _Events
-from siriuspy.timesys.time_data.hl_types_data import Clocks as _Clocks
+from siriuspy.csdevice import timesys as _cstime
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets.led import PyDMLed, SiriusLedAlert
 from siriushla.widgets.state_button import PyDMStateButton
@@ -44,7 +43,7 @@ class EVG(SiriusMainWindow):
         # scr_ar.setSizePolicy(QSzPol.)
         self.events_wid = EventList(
             name='Events', parent=scr_ar, prefix=self.prefix,
-            obj_names=sorted(_Events.LL_EVENTS)
+            obj_names=sorted(_cstime.events_ll_names)
             )
         scr_ar.setWidget(self.events_wid)
         scr_ar.setMinimumWidth(1150)
@@ -54,7 +53,7 @@ class EVG(SiriusMainWindow):
         self.clocks_wid = ClockList(
             name='Clocks', parent=self, prefix=self.prefix,
             props={'mux_div', 'mux_enbl'},
-            obj_names=sorted(_Clocks.LL2HL_MAP.keys())
+            obj_names=sorted(_cstime.clocks_ll2hl_map.keys())
             )
         self.my_layout.addWidget(self.clocks_wid, 2, 1)
 
