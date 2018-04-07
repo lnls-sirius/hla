@@ -8,7 +8,17 @@ from PyQt5.QtWidgets import QSizePolicy as _QSzPol
 from PyQt5.QtWidgets import QSpacerItem as _QSpIt
 from siriuspy.envars import vaca_prefix as PREFIX
 from siriuspy.csdevice import timesys as _cstime
+from siriuspy.namesys import SiriusPVName as _PVName
+from siriuspy.timesys.time_data.connections import Connections as _Connections
 from siriushla.sirius_application import SiriusApplication
+from siriushla import util as _util
+from evg import EventList as _EventList
+from evg import ClockList as _ClockList
+from evg import EVG as _EVG
+from evr_eve import EVR as _EVR
+from evr_eve import EVE as _EVE
+from afc import AFC as _AFC
+from fout import FOUT as _FOUT
 from hl_trigger import HLTriggerList as _HLTriggerList
 
 _dir = _os.path.dirname(_os.path.abspath(__file__))
@@ -20,6 +30,7 @@ def main(prefix=None):
     prefix = 'ca://' + (prefix or PREFIX)
     HLTiming = _uic.loadUi(UI_FILE)
     _setupEVGParams(prefix, HLTiming)
+    _setupMenus(prefix, HLTiming)
     # HLTiming.setStyleSheet('font-size: 21px')
 
     main = HLTiming.DWCClocks
@@ -131,6 +142,38 @@ def _setupEVGParams(prefix, HLTiming):
     HLTiming.PyDMSBRepetitionRate.channel = pv_pref + 'RepRate-SP'
     HLTiming.PyDMSBRepetitionRate.showStepExponent = False
     HLTiming.PyDMLbRepetitionRate.channel = pv_pref + 'RepRate-RB'
+
+
+def _setupMenus(prefix, HLTiming):
+    main_menu = HLTiming.menuBar()
+    menu = main_menu.addMenu('&Devices')
+    action = menu.addAction('EVG')
+    _util.connect_window(
+        action, _EVG, HLTiming, prefix=prefix + 'AS-Glob:TI-EVG:')
+
+    menu_evr = menu.addMenu('EVRs')
+    for evr in sorted(_Connections.get_devices('EVR')):
+        name = _PVName(evr)
+        action = menu_evr.addAction(name.dev + '-' + name.idx)
+        _util.connect_window(action, _EVR, HLTiming, prefix=prefix+name+':')
+
+    menu_eve = menu.addMenu('EVEs')
+    for eve in sorted(_Connections.get_devices('EVE')):
+        name = _PVName(eve)
+        action = menu_eve.addAction(name.dev + '-' + name.idx)
+        _util.connect_window(action, _EVE, HLTiming, prefix=prefix+name+':')
+
+    menu_afc = menu.addMenu('AFCs')
+    for afc in sorted(_Connections.get_devices('AFC')):
+        name = _PVName(afc)
+        action = menu_afc.addAction(name.sub + ':' + name.dev + '-' + name.idx)
+        _util.connect_window(action, _AFC, HLTiming, prefix=prefix+name+':')
+
+    menu_fout = menu.addMenu('FOUTs')
+    for fout in sorted(_Connections.get_devices('FOUT')):
+        name = _PVName(fout)
+        action = menu_fout.addAction(name.dev + '-' + name.idx)
+        _util.connect_window(action, _FOUT, HLTiming, prefix=prefix+name+':')
 
 
 if __name__ == '__main__':
