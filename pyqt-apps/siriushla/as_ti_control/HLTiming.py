@@ -6,13 +6,20 @@ from PyQt5 import uic as _uic
 from PyQt5.QtWidgets import QVBoxLayout as _QVBoxLayout
 from PyQt5.QtWidgets import QSizePolicy as _QSzPol
 from PyQt5.QtWidgets import QSpacerItem as _QSpIt
-from pydm import PyDMApplication as _PyDMApplication
 from siriuspy.envars import vaca_prefix as PREFIX
-from siriuspy.timesys.time_data import Clocks as _Clocks
-from siriuspy.timesys.time_data import Events as _Events
-from .list_widgets import EventList as _EventList
-from .list_widgets import HLTriggerList as _HLTriggerList
-from .list_widgets import ClockList as _ClockList
+from siriuspy.csdevice import timesys as _cstime
+from siriuspy.namesys import SiriusPVName as _PVName
+from siriuspy.timesys.time_data.connections import Connections as _Connections
+from siriushla.sirius_application import SiriusApplication
+from siriushla import util as _util
+from evg import EventList as _EventList
+from evg import ClockList as _ClockList
+from evg import EVG as _EVG
+from evr_eve import EVR as _EVR
+from evr_eve import EVE as _EVE
+from afc import AFC as _AFC
+from fout import FOUT as _FOUT
+from hl_trigger import HLTriggerList as _HLTriggerList
 
 _dir = _os.path.dirname(_os.path.abspath(__file__))
 UI_FILE = _os.path.sep.join([_dir, 'TimingMain.ui'])
@@ -23,11 +30,12 @@ def main(prefix=None):
     prefix = 'ca://' + (prefix or PREFIX)
     HLTiming = _uic.loadUi(UI_FILE)
     _setupEVGParams(prefix, HLTiming)
+    _setupMenus(prefix, HLTiming)
     # HLTiming.setStyleSheet('font-size: 21px')
 
     main = HLTiming.DWCClocks
-    map_ = {'Clocks': sorted(_Clocks.HL2LL_MAP.keys())}
-    pref = prefix + _Clocks.HL_PREF
+    map_ = {'Clocks': sorted(_cstime.clocks_hl2ll_map.keys())}
+    pref = prefix + _cstime.clocks_hl_pref
     _setupLists(pref, main, map_, listType='clock')
 
     map_ = {
@@ -36,7 +44,7 @@ def main(prefix=None):
         'Storage Ring Control': ('Orbit', 'Tunes', 'Coupl', 'Study'),
         }
     main = HLTiming.DWCEvents
-    pref = prefix + _Events.HL_PREF
+    pref = prefix + _cstime.events_hl_pref
     _setupLists(pref, main, map_, listType='event')
 
     map_ = {
@@ -96,7 +104,6 @@ def main(prefix=None):
 
 
 def _setupLists(prefix, main, map_, listType='Trig'):
-    props = set()
     if listType.lower().startswith('trig'):
         ListClass = _HLTriggerList
         props = {
@@ -104,8 +111,10 @@ def _setupLists(prefix, main, map_, listType='Trig'):
             'pulses', 'duration', 'delay'
             }
     elif listType.lower().startswith('ev'):
+        props = {'ext_trig', 'mode', 'delay_type', 'delay'}
         ListClass = _EventList
     elif listType.lower().startswith('cl'):
+        props = {'state', 'frequency'}
         ListClass = _ClockList
 
     lv = _QVBoxLayout()
@@ -127,15 +136,49 @@ def _setupEVGParams(prefix, HLTiming):
     HLTiming.PyDMLedContinuous.channel = pv_pref + 'ContinuousEvt-Sts'
     HLTiming.PyDMStBInjectionState.channel = pv_pref + 'InjectionEvt-Sel'
     HLTiming.PyDMLedInjectionState.channel = pv_pref + 'InjectionEvt-Sts'
-    HLTiming.PyDMCbInjectionCyc.channel = pv_pref + 'RepeatBucketList-SP'
-    HLTiming.PyDMLedInjectionCyc.channel = pv_pref + 'RepeatBucketList-RB'
+    HLTiming.PyDMSBRepeatBL.channel = pv_pref + 'RepeatBucketList-SP'
+    HLTiming.PyDMSBRepeatBL.showStepExponent = False
+    HLTiming.PyDMLbRepeatBL.channel = pv_pref + 'RepeatBucketList-RB'
     HLTiming.PyDMSBRepetitionRate.channel = pv_pref + 'RepRate-SP'
+    HLTiming.PyDMSBRepetitionRate.showStepExponent = False
     HLTiming.PyDMLbRepetitionRate.channel = pv_pref + 'RepRate-RB'
+
+
+def _setupMenus(prefix, HLTiming):
+    main_menu = HLTiming.menuBar()
+    menu = main_menu.addMenu('&Devices')
+    action = menu.addAction('EVG')
+    _util.connect_window(
+        action, _EVG, HLTiming, prefix=prefix + 'AS-Glob:TI-EVG:')
+
+    menu_evr = menu.addMenu('EVRs')
+    for evr in sorted(_Connections.get_devices('EVR')):
+        name = _PVName(evr)
+        action = menu_evr.addAction(name.dev + '-' + name.idx)
+        _util.connect_window(action, _EVR, HLTiming, prefix=prefix+name+':')
+
+    menu_eve = menu.addMenu('EVEs')
+    for eve in sorted(_Connections.get_devices('EVE')):
+        name = _PVName(eve)
+        action = menu_eve.addAction(name.dev + '-' + name.idx)
+        _util.connect_window(action, _EVE, HLTiming, prefix=prefix+name+':')
+
+    menu_afc = menu.addMenu('AFCs')
+    for afc in sorted(_Connections.get_devices('AFC')):
+        name = _PVName(afc)
+        action = menu_afc.addAction(name.sub + ':' + name.dev + '-' + name.idx)
+        _util.connect_window(action, _AFC, HLTiming, prefix=prefix+name+':')
+
+    menu_fout = menu.addMenu('FOUTs')
+    for fout in sorted(_Connections.get_devices('FOUT')):
+        name = _PVName(fout)
+        action = menu_fout.addAction(name.dev + '-' + name.idx)
+        _util.connect_window(action, _FOUT, HLTiming, prefix=prefix+name+':')
 
 
 if __name__ == '__main__':
     """Run Example."""
-    app = _PyDMApplication()
+    app = SiriusApplication()
     HLTiming = main()
     HLTiming.show()
     _sys.exit(app.exec_())

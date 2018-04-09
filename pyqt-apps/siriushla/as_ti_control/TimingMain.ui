@@ -53,7 +53,7 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>2612</width>
+             <width>2644</width>
              <height>997</height>
             </rect>
            </property>
@@ -83,7 +83,7 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>2612</width>
+             <width>2644</width>
              <height>997</height>
             </rect>
            </property>
@@ -107,7 +107,7 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>2612</width>
+             <width>2644</width>
              <height>997</height>
             </rect>
            </property>
@@ -134,7 +134,7 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>2612</width>
+             <width>2644</width>
              <height>997</height>
             </rect>
            </property>
@@ -161,7 +161,6 @@
      <string>Open</string>
     </property>
     <addaction name="actionEvents"/>
-    <addaction name="actionClocks"/>
     <addaction name="actionEVG_Params"/>
     <addaction name="actionOpen_All"/>
     <addaction name="action_Close_All"/>
@@ -185,69 +184,22 @@
    <attribute name="dockWidgetArea">
     <number>1</number>
    </attribute>
-   <widget class="QWidget" name="DWCEvents_">
+   <widget class="QWidget" name="DWCEvtClk">
     <layout class="QVBoxLayout" name="verticalLayout_3">
      <item>
-      <widget class="QScrollArea" name="scrollArea_2">
-       <property name="horizontalScrollBarPolicy">
-        <enum>Qt::ScrollBarAsNeeded</enum>
-       </property>
-       <property name="sizeAdjustPolicy">
-        <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
-       </property>
-       <property name="widgetResizable">
-        <bool>true</bool>
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="currentIndex">
+        <number>1</number>
        </property>
        <widget class="QWidget" name="DWCEvents">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>68</width>
-          <height>1024</height>
-         </rect>
-        </property>
+        <attribute name="title">
+         <string>Events</string>
+        </attribute>
        </widget>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-  </widget>
-  <widget class="QDockWidget" name="DWClocks">
-   <property name="sizePolicy">
-    <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-   <property name="floating">
-    <bool>false</bool>
-   </property>
-   <property name="windowTitle">
-    <string>Clocks</string>
-   </property>
-   <attribute name="dockWidgetArea">
-    <number>2</number>
-   </attribute>
-   <widget class="QWidget" name="DWCClocks_">
-    <layout class="QVBoxLayout" name="verticalLayout_6">
-     <item>
-      <widget class="QScrollArea" name="scrollArea_5">
-       <property name="sizeAdjustPolicy">
-        <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
-       </property>
-       <property name="widgetResizable">
-        <bool>true</bool>
-       </property>
        <widget class="QWidget" name="DWCClocks">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>68</width>
-          <height>1024</height>
-         </rect>
-        </property>
+        <attribute name="title">
+         <string>Clocks</string>
+        </attribute>
        </widget>
       </widget>
      </item>
@@ -263,7 +215,7 @@
    </property>
    <property name="minimumSize">
     <size>
-     <width>577</width>
+     <width>702</width>
      <height>180</height>
     </size>
    </property>
@@ -280,12 +232,12 @@
     <string>EVG Global Parameters</string>
    </property>
    <attribute name="dockWidgetArea">
-    <number>8</number>
+    <number>4</number>
    </attribute>
    <widget class="QWidget" name="DWCEVGParams">
     <layout class="QHBoxLayout" name="horizontalLayout_4">
      <property name="spacing">
-      <number>10</number>
+      <number>30</number>
      </property>
      <property name="leftMargin">
       <number>5</number>
@@ -298,8 +250,14 @@
      </property>
      <item>
       <widget class="QGroupBox" name="GBContinuous">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="title">
-        <string>Continuous Mode</string>
+        <string>Continuous Events</string>
        </property>
        <layout class="QFormLayout" name="formLayout_2">
         <property name="labelAlignment">
@@ -309,9 +267,9 @@
          <set>Qt::AlignCenter</set>
         </property>
         <item row="1" column="1">
-         <widget class="PyDMLed" name="PyDMLedContinuous" native="true">
+         <widget class="PyDMLed" name="PyDMLedContinuous">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -331,7 +289,7 @@
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="PyDMStateButton" name="PyDMStBContinuous" native="true">
+         <widget class="PyDMStateButton" name="PyDMStBContinuous">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -357,8 +315,14 @@
      </item>
      <item>
       <widget class="QGroupBox" name="GBInjection">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="title">
-        <string>Injection Mode</string>
+        <string>Injection Events</string>
        </property>
        <property name="flat">
         <bool>false</bool>
@@ -389,7 +353,7 @@
          <number>0</number>
         </property>
         <item row="1" column="0">
-         <widget class="PyDMStateButton" name="PyDMStBInjectionState" native="true">
+         <widget class="PyDMStateButton" name="PyDMStBInjectionState">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -411,28 +375,9 @@
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="PyDMLed" name="PyDMLedInjectionState" native="true">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string/>
-          </property>
-          <property name="whatsThis">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item row="6" column="0">
-         <widget class="PyDMCheckbox" name="PyDMCbInjectionCyc">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
+         <widget class="PyDMLed" name="PyDMLedInjectionState">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Maximum" vsizetype="Minimum">
+           <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -449,22 +394,56 @@
           <property name="whatsThis">
            <string/>
           </property>
-          <property name="autoFillBackground">
-           <bool>false</bool>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="GBInjection_2">
+       <property name="title">
+        <string>Repeat BL</string>
+       </property>
+       <property name="flat">
+        <bool>false</bool>
+       </property>
+       <property name="checkable">
+        <bool>false</bool>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_6">
+        <property name="leftMargin">
+         <number>2</number>
+        </property>
+        <property name="topMargin">
+         <number>4</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="PyDMSpinbox" name="PyDMSBRepeatBL">
+          <property name="toolTip">
+           <string/>
           </property>
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-          <property name="text">
-           <string>Cyclic</string>
-          </property>
-          <property name="checked">
-           <bool>false</bool>
+          <property name="whatsThis">
+           <string>
+    A QDoubleSpinBox with support for Channels and more from PyDM.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
           </property>
          </widget>
         </item>
-        <item row="6" column="1">
-         <widget class="PyDMLed" name="PyDMLedInjectionCyc" native="true">
+        <item>
+         <widget class="PyDMLabel" name="PyDMLbRepeatBL">
           <property name="toolTip">
            <string/>
           </property>
@@ -477,10 +456,84 @@
       </widget>
      </item>
      <item>
+      <widget class="QGroupBox" name="GBRepetitionRate">
+       <property name="title">
+        <string>Rep Rate [Hz]</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_9" stretch="0,1">
+        <property name="spacing">
+         <number>4</number>
+        </property>
+        <property name="sizeConstraint">
+         <enum>QLayout::SetMinimumSize</enum>
+        </property>
+        <property name="leftMargin">
+         <number>2</number>
+        </property>
+        <property name="topMargin">
+         <number>5</number>
+        </property>
+        <property name="rightMargin">
+         <number>2</number>
+        </property>
+        <property name="bottomMargin">
+         <number>2</number>
+        </property>
+        <item>
+         <widget class="PyDMSpinbox" name="PyDMSBRepetitionRate">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::ClickFocus</enum>
+          </property>
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="whatsThis">
+           <string/>
+          </property>
+          <property name="inputMethodHints">
+           <set>Qt::ImhFormattedNumbersOnly</set>
+          </property>
+          <property name="showGroupSeparator" stdset="0">
+           <bool>false</bool>
+          </property>
+          <property name="singleStep">
+           <double>0.200000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="PyDMLabel" name="PyDMLbRepetitionRate">
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="whatsThis">
+           <string/>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Box</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
       <widget class="QGroupBox" name="GBBucketList">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>1</horstretch>
+         <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
@@ -543,7 +596,7 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>2388</width>
+             <width>2230</width>
              <height>164</height>
             </rect>
            </property>
@@ -1511,9 +1564,6 @@
               <property name="columnHeaderLabels" stdset="0">
                <stringlist/>
               </property>
-              <property name="itemsFlags" stdset="0">
-               <set>Qt::ItemIsSelectable</set>
-              </property>
               <attribute name="horizontalHeaderVisible">
                <bool>false</bool>
               </attribute>
@@ -2399,80 +2449,6 @@
        </layout>
       </widget>
      </item>
-     <item>
-      <widget class="QGroupBox" name="GBRepetitionRate">
-       <property name="title">
-        <string>Repetition Rate [Hz]</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_9" stretch="0,1">
-        <property name="spacing">
-         <number>4</number>
-        </property>
-        <property name="sizeConstraint">
-         <enum>QLayout::SetMinimumSize</enum>
-        </property>
-        <property name="leftMargin">
-         <number>2</number>
-        </property>
-        <property name="topMargin">
-         <number>5</number>
-        </property>
-        <property name="rightMargin">
-         <number>2</number>
-        </property>
-        <property name="bottomMargin">
-         <number>2</number>
-        </property>
-        <item>
-         <widget class="PyDMSpinbox" name="PyDMSBRepetitionRate">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::ClickFocus</enum>
-          </property>
-          <property name="toolTip">
-           <string/>
-          </property>
-          <property name="whatsThis">
-           <string/>
-          </property>
-          <property name="inputMethodHints">
-           <set>Qt::ImhFormattedNumbersOnly</set>
-          </property>
-          <property name="showGroupSeparator" stdset="0">
-           <bool>false</bool>
-          </property>
-          <property name="singleStep">
-           <double>0.200000000000000</double>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="PyDMLabel" name="PyDMLbRepetitionRate">
-          <property name="toolTip">
-           <string/>
-          </property>
-          <property name="whatsThis">
-           <string/>
-          </property>
-          <property name="frameShape">
-           <enum>QFrame::Box</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Raised</enum>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
     </layout>
    </widget>
   </widget>
@@ -2482,14 +2458,6 @@
    </property>
    <property name="text">
     <string>&amp;Events</string>
-   </property>
-  </action>
-  <action name="actionClocks">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>&amp;Clocks</string>
    </property>
   </action>
   <action name="actionEVG_Params">
@@ -2519,16 +2487,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>SiriusMainWindow</class>
-   <extends>MainWindow</extends>
-   <header>siriushla.widgets.windows</header>
-  </customwidget>
-  <customwidget>
-   <class>PyDMCheckbox</class>
-   <extends>QCheckBox</extends>
-   <header>pydm.widgets.checkbox</header>
-  </customwidget>
-  <customwidget>
    <class>PyDMLabel</class>
    <extends>QLabel</extends>
    <header>pydm.widgets.label</header>
@@ -2544,19 +2502,25 @@
    <header>pydm.widgets.waveformtable</header>
   </customwidget>
   <customwidget>
-   <class>PyDMStateButton</class>
-   <extends>QWidget</extends>
-   <header>siriushla.widgets.state_button</header>
-  </customwidget>
-  <customwidget>
-   <class>QLed</class>
-   <extends>QWidget</extends>
-   <header>pydm.widgets.QLed</header>
+   <class>SiriusMainWindow</class>
+   <extends>QMainWindow</extends>
+   <header>siriushla.widgets.windows</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>PyDMLed</class>
    <extends>QLed</extends>
    <header>siriushla.widgets.led</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMStateButton</class>
+   <extends>QFrame</extends>
+   <header>siriushla.widgets.state_button</header>
+  </customwidget>
+  <customwidget>
+   <class>QLed</class>
+   <extends>QFrame</extends>
+   <header>siriushla.widgets.QLed</header>
   </customwidget>
  </customwidgets>
  <resources/>
@@ -2626,54 +2590,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionClocks</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>DWClocks</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1927</x>
-     <y>615</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>DWClocks</sender>
-   <signal>visibilityChanged(bool)</signal>
-   <receiver>actionClocks</receiver>
-   <slot>setChecked(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1927</x>
-     <y>615</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionOpen_All</sender>
-   <signal>triggered()</signal>
-   <receiver>DWClocks</receiver>
-   <slot>show()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1927</x>
-     <y>615</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>actionOpen_All</sender>
    <signal>triggered()</signal>
    <receiver>DWEVGParams</receiver>
@@ -2701,22 +2617,6 @@
     </hint>
     <hint type="destinationlabel">
      <x>54</x>
-     <y>615</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>action_Close_All</sender>
-   <signal>triggered()</signal>
-   <receiver>DWClocks</receiver>
-   <slot>hide()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1927</x>
      <y>615</y>
     </hint>
    </hints>

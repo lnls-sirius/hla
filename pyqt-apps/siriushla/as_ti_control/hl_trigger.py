@@ -1,19 +1,21 @@
 import sys
 from epics import PV as _PV
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import (QGroupBox, QLabel, QVBoxLayout, QPushButton,
-                             QGridLayout, QWidget, QFormLayout)
+from PyQt5.QtWidgets import QGroupBox, QLabel
+from PyQt5.QtWidgets import QFormLayout, QVBoxLayout, QGridLayout
 from PyQt5.QtWidgets import QSizePolicy as QSzPol
+from PyQt5.QtWidgets import QPushButton
+from pydm.widgets.checkbox import PyDMCheckbox as PyDMCb
 from pydm.widgets.enum_combo_box import PyDMEnumComboBox as PyDMECB
 from pydm.widgets.label import PyDMLabel
 from pydm.widgets.spinbox import PyDMSpinbox
+from siriuspy.namesys import SiriusPVName as _PVName
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets.led import PyDMLed, SiriusLedAlert
 from siriushla.widgets.state_button import PyDMStateButton
 from siriushla.widgets.windows import SiriusDialog
-from siriuspy.namesys import SiriusPVName as _PVName
 from siriushla import util as _util
-from .list_widgets import BaseList
+from base_list import BaseList
 
 
 class HLTriggerDetailed(SiriusDialog):
@@ -23,10 +25,9 @@ class HLTriggerDetailed(SiriusDialog):
         """Initialize object."""
         super().__init__(parent)
         self.prefix = _PVName(prefix)
-        self.setupUi()
+        self._setupUi()
 
-    def setupUi(self):
-        self.resize(800, 1000)
+    def _setupUi(self):
         self.my_layout = QGridLayout(self)
         self.my_layout.setHorizontalSpacing(20)
         self.my_layout.setVerticalSpacing(20)
@@ -65,7 +66,7 @@ class HLTriggerDetailed(SiriusDialog):
 
         but = QPushButton('Open LL Triggers', self)
         # _util.connect_window(
-        #     but, _HLTriggerDetailed, self,
+        #     but, _LLTriggerList, self,
         #     **{'prefix': self.prefix, 'interlock': 0})
         ll_list_layout.addWidget(but, 0, 0, 1, 2)
 
@@ -126,11 +127,97 @@ class HLTriggerDetailed(SiriusDialog):
         return gb
 
 
+class HLTriggerList(BaseList):
+    """Template for control of High Level Triggers."""
+
+    _MIN_WIDs = {
+        'detailed': 280,
+        'status': 150,
+        'state': 120,
+        'interlock': 200,
+        'source': 150,
+        'pulses': 100,
+        'duration': 190,
+        'polarity': 150,
+        'delay_type': 130,
+        'delay': 170,
+        }
+    _LABELS = {
+        'detailed': 'Detailed View',
+        'status': 'Status',
+        'state': 'Enabled',
+        'interlock': 'Interlock',
+        'source': 'Source',
+        'pulses': 'Pulses',
+        'duration': 'Duration [ms]',
+        'polarity': 'Polarity',
+        'delay_type': 'Type',
+        'delay': 'Delay [us]',
+        }
+    _ALL_PROPS = (
+        'detailed', 'state', 'interlock', 'source', 'polarity', 'pulses',
+        'duration', 'delay_type', 'delay', 'status',
+        )
+
+    def _createObjs(self, prefix, prop):
+        if 'detailed' == prop:
+            but = (QPushButton(prefix.device_name, self), )
+            _util.connect_window(
+                but[0], HLTriggerDetailed, self, prefix=prefix)
+        elif 'status' == prop:
+            rb = SiriusLedAlert(self, init_channel=prefix + "Status-Mon")
+            rb.setShape(rb.shapeMap.Square)
+            but = (rb, )
+        elif 'state' == prop:
+            sp = PyDMStateButton(self, init_channel=prefix + "State-Sel")
+            # rb = PyDMLed(self, init_channel=prefix + "State-Sts")
+            but = (sp, )
+        elif 'interlock' == prop:
+            but = (PyDMCb(self, init_channel=prefix + "Intlk-Sel"),
+                   PyDMLed(self, init_channel=prefix + "Intlk-Sts"))
+        elif 'source' == prop:
+            sp = PyDMECB(self, init_channel=prefix + "Src-Sel")
+            # rb = PyDMLabel(self, init_channel=prefix+"Src-Sts")
+            but = (sp, )
+        elif 'pulses' == prop:
+            sp = PyDMSpinbox(self, init_channel=prefix + "Pulses-SP")
+            sp.showStepExponent = False
+            # rb = PyDMLabel(self, init_channel=prefix + "Pulses-RB")
+            but = (sp, )
+        elif 'duration' == prop:
+            sp = PyDMSpinbox(self, init_channel=prefix + "Duration-SP")
+            sp.showStepExponent = False
+            rb = PyDMLabel(self, init_channel=prefix + "Duration-RB")
+            but = (sp, rb)
+        elif 'polarity' == prop:
+            sp = PyDMECB(self, init_channel=prefix + "Polarity-Sel")
+            # rb = PyDMLabel(self, init_channel=prefix+"Polarity-Sts")
+            but = (sp, )
+        elif 'delay_type' == prop:
+            but = (PyDMECB(self, init_channel=prefix+"DelayType-Sel"),
+                   PyDMLabel(self, init_channel=prefix+"DelayType-Sts"))
+        elif 'delay' == prop:
+            sp = PyDMSpinbox(self, init_channel=prefix + "Delay-SP")
+            sp.showStepExponent = False
+            rb = PyDMLabel(self, init_channel=prefix + "Delay-RB")
+            but = (sp, rb)
+        else:
+            raise Exception('Property unknown')
+        return but
+
+
 if __name__ == '__main__':
     """Run Example."""
     app = SiriusApplication()
-    _util.set_style(app)
-    cl_ctrl = HLTriggerDetailed(
+    detail_ctrl = HLTriggerDetailed(
         prefix='ca://fernando-lnls452-linux-SI-01SA:TI-HPing:')
-    cl_ctrl.show()
+    detail_ctrl.show()
+    props = {'detailed', 'state', 'pulses', 'duration'}
+    list_ctrl = HLTriggerList(
+        name="Triggers",
+        prefix='ca://fernando-lnls452-linux-',
+        props=props,
+        obj_names=['SI-01SA:TI-HPing:', 'SI-01SA:TI-VPing:'],
+        )
+    list_ctrl.show()
     sys.exit(app.exec_())
