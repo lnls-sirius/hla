@@ -93,6 +93,32 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
          <property name="bottomMargin">
           <number>0</number>
          </property>
+         <item row="2" column="1" colspan="2">
+          <widget class="QPushButton" name="pushButton_LatticeAndTwiss">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Lattice and Twiss</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1" colspan="2">
+          <widget class="QPushButton" name="pushButton_BPMApp">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>BPM</string>
+           </property>
+          </widget>
+         </item>
          <item row="1" column="1">
           <widget class="QLabel" name="label_TBApp">
            <property name="sizePolicy">
@@ -113,6 +139,19 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
            </property>
            <property name="text">
             <string>Open...</string>
+           </property>
+          </widget>
+         </item>
+         <item row="8" column="1" colspan="2">
+          <widget class="QPushButton" name="pushButton_SlitApp">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Slits</string>
            </property>
           </widget>
          </item>
@@ -149,58 +188,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
            </property>
           </widget>
          </item>
-         <item row="2" column="1" colspan="2">
-          <widget class="QPushButton" name="pushButton_LatticeAndTwiss">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>Lattice and Twiss</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="1" colspan="2">
-          <widget class="QPushButton" name="pushButton_FCTApp">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>FCT</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="1" colspan="2">
-          <widget class="QPushButton" name="pushButton_BPMApp">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>BPM</string>
-           </property>
-          </widget>
-         </item>
-         <item row="9" column="1" colspan="2">
-          <widget class="QPushButton" name="pushButton_SplitApp">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>Slits</string>
-           </property>
-          </widget>
-         </item>
         </layout>
        </widget>
       </item>
@@ -228,6 +215,12 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="minimumSize">
+         <size>
+          <width>450</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
           <width>410</width>
@@ -241,7 +234,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
          <enum>QTabWidget::Triangular</enum>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <property name="elideMode">
          <enum>Qt::ElideMiddle</enum>
@@ -305,7 +298,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <widget class="PyDMLabel" name="PyDMLabel_ICT1">
                <property name="maximumSize">
                 <size>
-                 <width>160</width>
+                 <width>16777215</width>
                  <height>16777215</height>
                 </size>
                </property>
@@ -317,6 +310,9 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                </property>
                <property name="text">
                 <string>PyDMLabel</string>
+               </property>
+               <property name="channel" stdset="0">
+                <string>ca://TB-02:DI-ICT:Charge-Mon</string>
                </property>
               </widget>
              </item>
@@ -351,7 +347,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <widget class="PyDMLabel" name="PyDMLabel_ICT2">
                <property name="maximumSize">
                 <size>
-                 <width>160</width>
+                 <width>16777215</width>
                  <height>16777215</height>
                 </size>
                </property>
@@ -363,6 +359,9 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                </property>
                <property name="text">
                 <string>PyDMLabel</string>
+               </property>
+               <property name="channel" stdset="0">
+                <string>ca://TB-04:DI-ICT:Charge-Mon</string>
                </property>
               </widget>
              </item>
@@ -419,6 +418,9 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
                </property>
+               <property name="channel" stdset="0">
+                <string>ca://TB-Glob:AP-TranspEff:Eff-Mon</string>
+               </property>
               </widget>
              </item>
             </layout>
@@ -447,14 +449,14 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
         </widget>
         <widget class="QWidget" name="tab_Slits">
          <attribute name="title">
-          <string>Slits</string>
+          <string>HSlit</string>
          </attribute>
          <layout class="QGridLayout" name="gridLayout_8">
           <item row="9" column="2">
-           <widget class="PyDMLineEdit" name="PyDMLineEdit_VSlit_SP">
+           <widget class="PyDMLineEdit" name="PyDMLineEdit_HSlit_Width_SP">
             <property name="minimumSize">
              <size>
-              <width>150</width>
+              <width>0</width>
               <height>0</height>
              </size>
             </property>
@@ -475,13 +477,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             <property name="showUnits" stdset="0">
              <bool>false</bool>
             </property>
+            <property name="channel" stdset="0">
+             <string>ca://TB-01:DI-HSlit:Width-SP</string>
+            </property>
            </widget>
           </item>
           <item row="1" column="3">
-           <widget class="QFrame" name="frame_HSlit">
+           <widget class="QFrame" name="frame_HSlit_Center_SP">
             <property name="minimumSize">
              <size>
-              <width>150</width>
+              <width>0</width>
               <height>0</height>
              </size>
             </property>
@@ -508,7 +513,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <number>4</number>
              </property>
              <item>
-              <widget class="PyDMLabel" name="PyDMLabel_HSlit_RB">
+              <widget class="PyDMLabel" name="PyDMLabel_HSlit_Center_RB">
                <property name="maximumSize">
                 <size>
                  <width>150</width>
@@ -526,6 +531,9 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                </property>
                <property name="alignment">
                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               </property>
+               <property name="channel" stdset="0">
+                <string>ca://TB-01:DI-HSlit:Center-RB</string>
                </property>
               </widget>
              </item>
@@ -551,27 +559,11 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             </property>
            </widget>
           </item>
-          <item row="7" column="0" colspan="3">
-           <spacer name="verticalSpacer">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Maximum</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
           <item row="1" column="2">
-           <widget class="PyDMLineEdit" name="PyDMLineEdit_HSlit_SP">
+           <widget class="PyDMLineEdit" name="PyDMLineEdit_HSlit_Center_SP">
             <property name="minimumSize">
              <size>
-              <width>150</width>
+              <width>0</width>
               <height>0</height>
              </size>
             </property>
@@ -592,25 +584,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             <property name="showUnits" stdset="0">
              <bool>false</bool>
             </property>
-           </widget>
-          </item>
-          <item row="9" column="0">
-           <widget class="QLabel" name="label_VSlit_RB">
-            <property name="styleSheet">
-             <string notr="true">font-weight:bold;</string>
-            </property>
-            <property name="text">
-             <string>VSlit</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_HSlit_RB">
-            <property name="styleSheet">
-             <string notr="true">font-weight:bold;</string>
-            </property>
-            <property name="text">
-             <string>HSlit</string>
+            <property name="channel" stdset="0">
+             <string>ca://TB-01:DI-HSlit:Center-SP</string>
             </property>
            </widget>
           </item>
@@ -634,10 +609,10 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
            </widget>
           </item>
           <item row="9" column="3">
-           <widget class="QFrame" name="frame_VSlit">
+           <widget class="QFrame" name="frame_HSlit_Width_SP">
             <property name="minimumSize">
              <size>
-              <width>150</width>
+              <width>0</width>
               <height>0</height>
              </size>
             </property>
@@ -664,7 +639,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <number>4</number>
              </property>
              <item>
-              <widget class="PyDMLabel" name="PyDMLabel_VSlit_RB">
+              <widget class="PyDMLabel" name="PyDMLabel_HSlit_Width_RB">
                <property name="maximumSize">
                 <size>
                  <width>150</width>
@@ -683,13 +658,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                <property name="alignment">
                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
                </property>
+               <property name="channel" stdset="0">
+                <string>ca://TB-01:DI-HSlit:Width-RB</string>
+               </property>
               </widget>
              </item>
             </layout>
            </widget>
           </item>
           <item row="3" column="2">
-           <widget class="PyDMScrollBar" name="PyDMScrollBar">
+           <widget class="PyDMScrollBar" name="PyDMScrollBar_HSlit_Center_SP">
             <property name="toolTip">
              <string/>
             </property>
@@ -708,11 +686,14 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
     precision : int
         Precision to be use. Used to calculate size of the scroll bar step
     </string>
+            </property>
+            <property name="channel" stdset="0">
+             <string>ca://TB-01:DI-HSlit:Center-SP</string>
             </property>
            </widget>
           </item>
           <item row="10" column="2">
-           <widget class="PyDMScrollBar" name="PyDMScrollBar_2">
+           <widget class="PyDMScrollBar" name="PyDMScrollBar_HSlit_Width_SP">
             <property name="toolTip">
              <string/>
             </property>
@@ -732,7 +713,355 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
         Precision to be use. Used to calculate size of the scroll bar step
     </string>
             </property>
+            <property name="channel" stdset="0">
+             <string>ca://TB-01:DI-HSlit:Width-SP</string>
+            </property>
            </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_HSlit_Width">
+            <property name="styleSheet">
+             <string notr="true">font-weight:bold;</string>
+            </property>
+            <property name="text">
+             <string>Center</string>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="0">
+           <widget class="QLabel" name="label_HSlit_Center">
+            <property name="styleSheet">
+             <string notr="true">font-weight:bold;</string>
+            </property>
+            <property name="text">
+             <string>Width</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Maximum</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="tab">
+         <attribute name="title">
+          <string>VSlit</string>
+         </attribute>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="0" column="2">
+           <widget class="QLabel" name="label_4">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">font-weight:bold;</string>
+            </property>
+            <property name="text">
+             <string>Monitor</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_VSlit_Width">
+            <property name="styleSheet">
+             <string notr="true">font-weight:bold;</string>
+            </property>
+            <property name="text">
+             <string>Width</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="2">
+           <widget class="QFrame" name="frame_VSlit_VSlit_Width_RB">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Box</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_30">
+             <property name="spacing">
+              <number>4</number>
+             </property>
+             <property name="leftMargin">
+              <number>4</number>
+             </property>
+             <property name="topMargin">
+              <number>4</number>
+             </property>
+             <property name="rightMargin">
+              <number>4</number>
+             </property>
+             <property name="bottomMargin">
+              <number>4</number>
+             </property>
+             <item>
+              <widget class="PyDMLabel" name="PyDMLabel_VSlit_Width_RB">
+               <property name="maximumSize">
+                <size>
+                 <width>150</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="whatsThis">
+                <string/>
+               </property>
+               <property name="text">
+                <string>PyDMLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               </property>
+               <property name="channel" stdset="0">
+                <string>ca://TB-01:DI-VSlit:Width-RB</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="PyDMScrollBar" name="PyDMScrollBar_VSlit_Width_SP">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="whatsThis">
+             <string>
+    A QDoubleScrollBar with support for Channels and more from PyDM.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the scroll bar
+    init_channel : str, optional
+        The channel to be used by the widget.
+    orientation : Qt.Horizontal, Qt.Vertical
+        Orientation of the scroll bar
+    precision : int
+        Precision to be use. Used to calculate size of the scroll bar step
+    </string>
+            </property>
+            <property name="channel" stdset="0">
+             <string>ca://TB-01:DI-VSlit:Width-SP</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_VSlit_Center">
+            <property name="styleSheet">
+             <string notr="true">font-weight:bold;</string>
+            </property>
+            <property name="text">
+             <string>Center</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="PyDMLineEdit" name="PyDMLineEdit_VSlit_Center_SP">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="whatsThis">
+             <string>
+    Writeable text field to send and display channel values
+    </string>
+            </property>
+            <property name="showUnits" stdset="0">
+             <bool>false</bool>
+            </property>
+            <property name="channel" stdset="0">
+             <string>ca://TB-01:DI-VSlit:Center-SP</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QFrame" name="frame_VSlit_Center_RB">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Box</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_32">
+             <property name="spacing">
+              <number>4</number>
+             </property>
+             <property name="leftMargin">
+              <number>4</number>
+             </property>
+             <property name="topMargin">
+              <number>4</number>
+             </property>
+             <property name="rightMargin">
+              <number>4</number>
+             </property>
+             <property name="bottomMargin">
+              <number>4</number>
+             </property>
+             <item>
+              <widget class="PyDMLabel" name="PyDMLabel_VSlit_Center_RB">
+               <property name="maximumSize">
+                <size>
+                 <width>150</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="whatsThis">
+                <string/>
+               </property>
+               <property name="text">
+                <string>PyDMLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               </property>
+               <property name="channel" stdset="0">
+                <string>ca://TB-01:DI-VSlit:Center-RB</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="PyDMScrollBar" name="PyDMScrollBar_VSlit_Center_SP">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="whatsThis">
+             <string>
+    A QDoubleScrollBar with support for Channels and more from PyDM.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the scroll bar
+    init_channel : str, optional
+        The channel to be used by the widget.
+    orientation : Qt.Horizontal, Qt.Vertical
+        Orientation of the scroll bar
+    precision : int
+        Precision to be use. Used to calculate size of the scroll bar step
+    </string>
+            </property>
+            <property name="channel" stdset="0">
+             <string>ca://TB-01:DI-VSlit:Center-SP</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="PyDMLineEdit" name="PyDMLineEdit_VSlit_Width_SP">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="whatsThis">
+             <string>
+    Writeable text field to send and display channel values
+    </string>
+            </property>
+            <property name="showUnits" stdset="0">
+             <bool>false</bool>
+            </property>
+            <property name="channel" stdset="0">
+             <string>ca://TB-01:DI-VSlit:Width-SP</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="label_5">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">font-weight:bold;</string>
+            </property>
+            <property name="text">
+             <string>Setpoint</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <spacer name="verticalSpacer_20">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </widget>
@@ -794,7 +1123,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
       </size>
      </property>
      <property name="currentIndex">
-      <number>5</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="Scrn11">
       <attribute name="title">

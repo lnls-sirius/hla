@@ -146,26 +146,30 @@ class TLAPControlWindow(SiriusMainWindow):
                                 section=self._tl.upper(), discipline=1)  # MA
         _hlautil.connect_window(self.centralwidget.pushButton_PMApp,
                                 PulsedMagnetControlWindow, self)
-        self.centralwidget.pushButton_FCTApp.clicked.connect(self._openFCTApp)
-        self.centralwidget.pushButton_BPMApp.clicked.connect(self._openBPMApp)
+        self.centralwidget.pushButton_SlitApp.clicked.connect(
+                                self._openSlitsApp)
+        self.centralwidget.pushButton_BPMApp.clicked.connect(
+                                self._openBPMApp)
+        # self.centralwidget.pushButton_FCTApp.clicked.connect(
+        #                         self._openFCTApp)
 
         # Reference Widget
         self.centralwidget.tabWidget_Scrns.setCurrentIndex(0)
         self._currScrn = 0
-        self.reference_window = ShowImage(parent=self)
         self.centralwidget.tabWidget_Scrns.currentChanged.connect(
-                                                    self._setCurrentScrn)
+                                self._setCurrentScrn)
         self.centralwidget.pushButton_SaveRef.clicked.connect(
-                                                    self._saveReference)
+                                self._saveReference)
+        self.reference_window = ShowImage(parent=self)
         self.centralwidget.pushButton_OpenRef.clicked.connect(
-                                                    self._openReference)
+                                self._openReference)
 
         # Create Scrn+Correctors Panel
         scrn_headerline = QWidget()
         scrn_headerline.setLayout(QHBoxLayout())
-        label_scrn = QLabel('Scrn')
+        label_scrn = QLabel('Device')
         label_scrn.setAlignment(Qt.AlignHCenter)
-        label_fluorscrn = QLabel('Position')
+        label_fluorscrn = QLabel('Screen Type')
         label_fluorscrn.setAlignment(Qt.AlignHCenter)
         label_lamp = QLabel('Led')
         label_lamp.setAlignment(Qt.AlignHCenter)
@@ -264,16 +268,16 @@ class TLAPControlWindow(SiriusMainWindow):
             widget_fluorscrn_sp.setLayout(QGridLayout())
             widget_fluorscrn_sp.layout().setContentsMargins(0, 0, 0, 0)
             pydmcombobox_fluorscrn = PyDMEnumComboBox(
-                self, 'ca://' + self.prefix + scrnpv + ':FluorScrn-Sel')
+                self, 'ca://' + self.prefix + scrnpv + ':ScrnType-Sel')
             pydmcombobox_fluorscrn.setObjectName(
-                'PyDMEnumComboBox_FluorScrn_Sel_Scrn'+str(scrn))
+                'PyDMEnumComboBox_ScrnType_Sel_Scrn'+str(scrn))
             widget_fluorscrn_sp.layout().addWidget(
                 pydmcombobox_fluorscrn, 1, 1, 1, 3)
             led_fluorscrn = SiriusLedAlert(
-                self, 'ca://' + self.prefix + scrnpv + ':FluorScrn-Sts')
+                self, 'ca://' + self.prefix + scrnpv + ':ScrnType-Sts')
             led_fluorscrn.shape = 2
             led_fluorscrn.setObjectName(
-                'Led_FluorScrn_Sts_Scrn' + str(scrn))
+                'Led_ScrnType_Sts_Scrn' + str(scrn))
             led_fluorscrn.setMaximumHeight(40)
             widget_fluorscrn_sp.layout().addItem(
                 QSpacerItem(10, 20, QSizePolicy.Fixed, QSizePolicy.Minimum),
@@ -294,16 +298,16 @@ class TLAPControlWindow(SiriusMainWindow):
 
             pydmstatebutton = PyDMStateButton(
                 parent=self,
-                init_channel='ca://' + self.prefix + scrnpv + ':LedState-SP')
+                init_channel='ca://' + self.prefix + scrnpv + ':LedEnbl-Sel')
             pydmstatebutton.shape = 1
             pydmstatebutton.setObjectName(
-                'PyDMStateButton_LedState_SP_Scrn' + str(scrn))
+                'PyDMStateButton_LedEnbl_Sel_Scrn' + str(scrn))
             pydmstatebutton.setSizePolicy(QSizePolicy.Fixed,
                                           QSizePolicy.Minimum)
             scrn_details.layout().addWidget(pydmstatebutton)
             led = SiriusLedState(
-                self, 'ca://' + self.prefix + scrnpv + ':LedState-RB')
-            led.setObjectName('SiriusLed_LedState_RB_Scrn' + str(scrn))
+                self, 'ca://' + self.prefix + scrnpv + ':LedEnbl-Sts')
+            led.setObjectName('SiriusLed_LedEnbl_Sts_Scrn' + str(scrn))
             led.setMinimumWidth(40)
             led.setMinimumHeight(40)
             led.setMaximumHeight(40)
@@ -336,7 +340,7 @@ class TLAPControlWindow(SiriusMainWindow):
                 led = SiriusLedState(
                     self, 'ca://' + self.prefix + ch + ':PwrState-Sts')
                 led.setObjectName(
-                    'SiriusLed_' + name + '_PwrState' + '_Scrn' + str(scrn))
+                    'SiriusLed_' + name + '_PwrState_Scrn' + str(scrn))
                 led.setMinimumWidth(40)
                 led.setMinimumHeight(40)
                 led.setMaximumHeight(40)
@@ -431,7 +435,7 @@ class TLAPControlWindow(SiriusMainWindow):
             led = SiriusLedState(
                 self, 'ca://' + self.prefix + cv + ':PwrState-Sts')
             led.setObjectName(
-                'SiriusLed_' + name + '_PwrState' + '_Scrn' + str(scrn))
+                'SiriusLed_' + name + '_PwrState_Scrn' + str(scrn))
             led.setMinimumWidth(40)
             led.setMinimumHeight(40)
             led.setMaximumHeight(40)
@@ -611,7 +615,11 @@ class TLAPControlWindow(SiriusMainWindow):
         pass
         # TODO
 
-    def _openFCTApp(self):
+    # def _openFCTApp(self):
+    #     pass
+    #     # TODO
+
+    def _openSlitsApp(self):
         pass
         # TODO
 
