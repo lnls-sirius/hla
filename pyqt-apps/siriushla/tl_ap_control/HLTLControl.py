@@ -167,15 +167,15 @@ class TLAPControlWindow(SiriusMainWindow):
         # Create Scrn+Correctors Panel
         scrn_headerline = QWidget()
         scrn_headerline.setLayout(QHBoxLayout())
-        label_scrn = QLabel('Device')
-        label_scrn.setAlignment(Qt.AlignHCenter)
-        label_fluorscrn = QLabel('Screen Type')
-        label_fluorscrn.setAlignment(Qt.AlignHCenter)
-        label_lamp = QLabel('Led')
-        label_lamp.setAlignment(Qt.AlignHCenter)
-        scrn_headerline.layout().addWidget(label_scrn)
-        scrn_headerline.layout().addWidget(label_fluorscrn)
-        scrn_headerline.layout().addWidget(label_lamp)
+        label_device = QLabel('Device')
+        label_device.setAlignment(Qt.AlignHCenter)
+        label_scrntype = QLabel('Screen Type')
+        label_scrntype.setAlignment(Qt.AlignHCenter)
+        label_led = QLabel('Led')
+        label_led.setAlignment(Qt.AlignHCenter)
+        scrn_headerline.layout().addWidget(label_device)
+        scrn_headerline.layout().addWidget(label_scrntype)
+        scrn_headerline.layout().addWidget(label_led)
         scrn_headerline.layout().setContentsMargins(0, 0, 0, 0)
         scrn_headerline.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
         # scrn_headerline.setStyleSheet('''QLabel{background-color:blue;}''')
@@ -239,8 +239,8 @@ class TLAPControlWindow(SiriusMainWindow):
         correctors_gridlayout = QGridLayout()
         correctors_gridlayout.addWidget(headerline, 1, 1)
 
-        for item, width in [[label_scrn, 200], [label_fluorscrn, 200],
-                            [label_lamp, 200], [label_ch_led, 40],
+        for item, width in [[label_device, 250], [label_scrntype, 200],
+                            [label_led, 200], [label_ch_led, 40],
                             [label_ch, 250], [label_ch_sp_kick, 250],
                             [label_ch_mon_kick, 180], [label_cv_led, 40],
                             [label_cv, 250], [label_cv_sp_kick, 250],
@@ -250,7 +250,7 @@ class TLAPControlWindow(SiriusMainWindow):
             item.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
 
         line = 2
-        for ch_group, cv, scrn, scrnpv in correctors_list:
+        for ch_group, cv, scrn, scrnprefix in correctors_list:
 
             # Scrn
             scrn_details = QWidget()
@@ -258,39 +258,33 @@ class TLAPControlWindow(SiriusMainWindow):
             scrn_details.setLayout(QHBoxLayout())
             scrn_details.layout().setContentsMargins(3, 3, 3, 3)
 
-            scrn_label = QLabel(scrnpv)
-            scrn_label.setMinimumWidth(200)
+            scrn_label = QLabel(scrnprefix)
+            scrn_label.setMinimumWidth(250)
             scrn_label.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
             scrn_label.setStyleSheet("""font-weight:bold;""")
             scrn_details.layout().addWidget(scrn_label)
 
-            widget_fluorscrn_sp = QWidget()
-            widget_fluorscrn_sp.setLayout(QGridLayout())
-            widget_fluorscrn_sp.layout().setContentsMargins(0, 0, 0, 0)
-            pydmcombobox_fluorscrn = PyDMEnumComboBox(
-                self, 'ca://' + self.prefix + scrnpv + ':ScrnType-Sel')
-            pydmcombobox_fluorscrn.setObjectName(
+            widget_scrntype_sp = QWidget()
+            widget_scrntype_sp.setLayout(QVBoxLayout())
+            widget_scrntype_sp.layout().setContentsMargins(0, 0, 0, 0)
+            widget_scrntype_sp.layout().setAlignment(Qt.AlignHCenter)
+            pydmcombobox_scrntype = PyDMEnumComboBox(
+                self, 'ca://' + self.prefix + scrnprefix + ':ScrnType-Sel')
+            pydmcombobox_scrntype.setObjectName(
                 'PyDMEnumComboBox_ScrnType_Sel_Scrn'+str(scrn))
-            widget_fluorscrn_sp.layout().addWidget(
-                pydmcombobox_fluorscrn, 1, 1, 1, 3)
-            led_fluorscrn = SiriusLedAlert(
-                self, 'ca://' + self.prefix + scrnpv + ':ScrnType-Sts')
-            led_fluorscrn.shape = 2
-            led_fluorscrn.setObjectName(
+            widget_scrntype_sp.layout().addWidget(pydmcombobox_scrntype)
+            led_scrntype = SiriusLedAlert(
+                self, 'ca://' + self.prefix + scrnprefix + ':ScrnType-Sts')
+            led_scrntype.shape = 2
+            led_scrntype.setObjectName(
                 'Led_ScrnType_Sts_Scrn' + str(scrn))
-            led_fluorscrn.setMaximumHeight(40)
-            widget_fluorscrn_sp.layout().addItem(
-                QSpacerItem(10, 20, QSizePolicy.Fixed, QSizePolicy.Minimum),
-                2, 1)
-            widget_fluorscrn_sp.layout().addWidget(led_fluorscrn, 2, 2)
-            widget_fluorscrn_sp.layout().addItem(
-                QSpacerItem(10, 20, QSizePolicy.Fixed, QSizePolicy.Minimum),
-                2, 3)
-            widget_fluorscrn_sp.setMinimumWidth(200)
-            widget_fluorscrn_sp.setMaximumWidth(200)
-            widget_fluorscrn_sp.setSizePolicy(
+            led_scrntype.setMaximumHeight(40)
+            widget_scrntype_sp.layout().addWidget(led_scrntype)
+            widget_scrntype_sp.setMinimumWidth(200)
+            widget_scrntype_sp.setMaximumWidth(200)
+            widget_scrntype_sp.setSizePolicy(
                 QSizePolicy.Fixed, QSizePolicy.Fixed)
-            scrn_details.layout().addWidget(widget_fluorscrn_sp)
+            scrn_details.layout().addWidget(widget_scrntype_sp)
 
             scrn_details.layout().addItem(QSpacerItem(40, 20,
                                                       QSizePolicy.Fixed,
@@ -298,7 +292,7 @@ class TLAPControlWindow(SiriusMainWindow):
 
             pydmstatebutton = PyDMStateButton(
                 parent=self,
-                init_channel='ca://' + self.prefix + scrnpv + ':LedEnbl-Sel')
+                init_channel='ca://'+self.prefix + scrnprefix + ':LedEnbl-Sel')
             pydmstatebutton.shape = 1
             pydmstatebutton.setObjectName(
                 'PyDMStateButton_LedEnbl_Sel_Scrn' + str(scrn))
@@ -306,7 +300,7 @@ class TLAPControlWindow(SiriusMainWindow):
                                           QSizePolicy.Minimum)
             scrn_details.layout().addWidget(pydmstatebutton)
             led = SiriusLedState(
-                self, 'ca://' + self.prefix + scrnpv + ':LedEnbl-Sts')
+                self, 'ca://' + self.prefix + scrnprefix + ':LedEnbl-Sts')
             led.setObjectName('SiriusLed_LedEnbl_Sts_Scrn' + str(scrn))
             led.setMinimumWidth(40)
             led.setMinimumHeight(40)
