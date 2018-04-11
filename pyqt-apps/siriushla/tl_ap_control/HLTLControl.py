@@ -3,14 +3,17 @@
 
 from matplotlib.backends.backend_qt5agg import (
     FigureCanvasQTAgg as FigureCanvas)
+import epics as _epics
 from pydm.PyQt.uic import loadUi
-from pydm.PyQt.QtCore import pyqtSlot, Qt
-from pydm.PyQt.QtGui import (QVBoxLayout, QHBoxLayout,
-                             QGridLayout, QFileDialog, QSizePolicy,
-                             QDoubleValidator, QWidget, QFrame, QLabel,
-                             QPixmap, QPushButton, QSpacerItem)
+from pydm.PyQt.QtCore import pyqtSlot, Qt, QPoint
+from pydm.PyQt.QtGui import (QVBoxLayout, QHBoxLayout, QGridLayout,
+                             QFileDialog, QAction, QDoubleValidator,
+                             QWidget, QFrame, QLabel, QPixmap, QPushButton,
+                             QSpacerItem, QMenuBar)
+from pydm.PyQt.QtGui import QSizePolicy as QSzPlcy
 from pydm.PyQt.QtSvg import QSvgWidget
 from pydm.widgets import PyDMLabel, PyDMLineEdit, PyDMEnumComboBox
+from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 import pyaccel as _pyaccel
 import pymodels as _pymodels
 from siriuspy.envars import vaca_prefix as _vaca_prefix
@@ -80,8 +83,153 @@ class TLAPControlWindow(SiriusMainWindow):
         else:
             self.prefix = prefix
         self._tl = tl
+        self._setupUi()
+
+    def _setupUi(self):
         self.setWindowTitle(self._tl.upper() + ' Control Window')
 
+        [UI_FILE, SVG_FILE, correctors_list, scrn_list] = self._getTLData(
+                                                                self._tl)
+
+        # Set central widget
+        tmp_file = _substitute_in_file(
+            '/home/fac_files/lnls-sirius/hla/pyqt-apps/siriushla'
+            '/tl_ap_control/' + UI_FILE, {'PREFIX': self.prefix})
+        self.centralwidget = loadUi(tmp_file)
+        self.setCentralWidget(self.centralwidget)
+
+        # Fill TL Lattice Widget
+        lattice = QSvgWidget('/home/fac_files/lnls-sirius/hla/pyqt-apps/'
+                             'siriushla/tl_ap_control/' + SVG_FILE)
+        self.centralwidget.widget_lattice.setLayout(QVBoxLayout())
+        self.centralwidget.widget_lattice.layout().addWidget(lattice)
+
+        # Create MenuBar and connect TL apps
+        menubar = QMenuBar(self)
+        menubar.setNativeMenuBar(False)
+        openLatticeAndTwiss = QAction("Show Lattice and Twiss", self)
+        _hlautil.connect_window(openLatticeAndTwiss, ShowLatticeAndTwiss,
+                                parent=self, tl=self._tl)
+        openPosAngCorrApp = QAction("Position and Angle Correction", self)
+        _hlautil.connect_window(openPosAngCorrApp, ASAPPosAngCorr, parent=self,
+                                prefix=self.prefix, tl=self._tl)
+        openMAApp = QAction("MA", self)
+        _hlautil.connect_window(openMAApp, PSTabControlWindow, parent=self,
+                                section=self._tl.upper(), discipline=1)  # MA
+        openPMApp = QAction("PM", self)
+        _hlautil.connect_window(openPMApp, PulsedMagnetControlWindow, self)
+        openBPMApp = QAction("BPMs", self)
+        # _hlautil.connect_window(openBPMApp)
+        appsMenu = menubar.addMenu("Open...")
+        appsMenu.addAction(openLatticeAndTwiss)
+        appsMenu.addAction(openPosAngCorrApp)
+        appsMenu.addAction(openMAApp)
+        appsMenu.addAction(openPMApp)
+        appsMenu.addAction(openBPMApp)
+        self.setMenuBar(menubar)
+
+        # Connect and initialize reference widget
+        self.centralwidget.tabWidget_Scrns.setCurrentIndex(0)
+        self._currScrn = 0
+        self.centralwidget.tabWidget_Scrns.currentChanged.connect(
+                                self._setCurrentScrn)
+        self.centralwidget.pushButton_SaveRef.clicked.connect(
+                                self._saveReference)
+        self.reference_window = ShowImage(parent=self)
+        self.centralwidget.pushButton_OpenRef.clicked.connect(
+                                self._openReference)
+
+        # Connect Slits View widget
+        if self._tl == 'tb':
+            self._HSlit_Center = 0
+            self._HSlit_Width = 0
+            self._hslitcenterpv = _epics.PV(
+                self.prefix + 'TB-01:DI-HSlit:Center-RB',
+                callback=self._setHSlitPos)
+            self._hslitwidthpv = _epics.PV(
+                self.prefix + 'TB-01:DI-HSlit:Width-RB',
+                callback=self._setHSlitPos)
+            self._VSlit_Center = 0
+            self._VSlit_Width = 0
+            self._vslitcenterpv = _epics.PV(
+                self.prefix + 'TB-01:DI-VSlit:Center-RB',
+                callback=self._setVSlitPos)
+            self._vslitwidthpv = _epics.PV(
+                self.prefix + 'TB-01:DI-VSlit:Width-RB',
+                callback=self._setVSlitPos)
+
+        # Set Visibility of Scrn Calculations Labels
+        for i, device in scrn_list:
+            exec(CALC_LABELS_INITIALIZE.format(i))
+            visible = True
+            exec(CALC_LABELS_VISIBILITY.format(i, visible))
+            exec(CALC_LABELS_CHANNELS.format(i, device))
+
+        # Create Scrn+Correctors Panel
+        headerline = QWidget()
+        headerline.setMaximumHeight(60)
+        headerline.setLayout(QHBoxLayout())
+        headerline.layout().addItem(
+            QSpacerItem(40, 20, QSzPlcy.MinimumExpanding, QSzPlcy.Minimum))
+        scrn_headerline = self._create_headerline(
+            [['Device', 250], ['Screen Type', 200], ['Led', 200]])
+        headerline.layout().addWidget(scrn_headerline)
+        headerline.layout().addItem(
+            QSpacerItem(40, 20, QSzPlcy.MinimumExpanding, QSzPlcy.Minimum))
+        ch_headerline = self._create_headerline(
+            [['', 40], ['CH', 250], ['Kick-SP', 250], ['Kick-Mon', 180]])
+        headerline.layout().addWidget(ch_headerline)
+        headerline.layout().addItem(
+            QSpacerItem(40, 20, QSzPlcy.MinimumExpanding, QSzPlcy.Minimum))
+        cv_headerline = self._create_headerline(
+            [['', 40], ['CV', 250], ['Kick-SP', 250], ['Kick-Mon', 180]])
+        headerline.layout().addWidget(cv_headerline)
+        headerline.layout().addItem(
+            QSpacerItem(40, 20, QSzPlcy.MinimumExpanding, QSzPlcy.Minimum))
+        headerline.setStyleSheet("""font-weight:bold;""")
+        headerline.layout().setContentsMargins(0, 9, 0, 9)
+
+        correctors_gridlayout = QGridLayout()
+        correctors_gridlayout.addWidget(headerline, 1, 1)
+        line = 2
+        for ch_group, cv, scrn, scrnprefix in correctors_list:
+            widget_scrncorr = QWidget()
+            widget_scrncorr.setLayout(QHBoxLayout())
+            widget_scrncorr.layout().addItem(
+                QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
+            scrn_details = self._create_scrndetailwidget(scrnprefix, scrn)
+            widget_scrncorr.layout().addWidget(scrn_details)
+            widget_scrncorr.layout().addItem(
+                QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
+            ch_widget = QWidget()
+            ch_widget.setObjectName('widget_CHs_Scrn' + str(scrn))
+            ch_widget.setLayout(QVBoxLayout())
+            ch_widget.layout().setContentsMargins(0, 0, 0, 0)
+            for ch in ch_group:
+                ch_details = self._create_correctordetailwidget(scrn, ch)
+                ch_widget.layout().addWidget(ch_details)
+            widget_scrncorr.layout().addWidget(ch_widget)
+            widget_scrncorr.layout().addItem(
+                QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
+            cv_details = self._create_correctordetailwidget(scrn, cv)
+            widget_scrncorr.layout().addWidget(cv_details)
+            widget_scrncorr.layout().addItem(
+                QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
+            widget_scrncorr.layout().setContentsMargins(2, 2, 2, 2)
+
+            if line % 2 == 0:
+                widget_scrncorr.setStyleSheet(
+                    """background-color: rgb(211, 211, 211);""")
+            correctors_gridlayout.addWidget(widget_scrncorr, line, 1)
+            line += 1
+
+        self.centralwidget.groupBox_allcorrPanel.setLayout(
+            correctors_gridlayout)
+        self.centralwidget.groupBox_allcorrPanel.layout().setContentsMargins(
+            2, 2, 2, 2)
+
+    def _getTLData(self, tl):
+        """Return transport line data based on input 'tl'."""
         if tl.lower() == 'tb':
             UI_FILE = ('ui_tb_ap_control.ui')
             SVG_FILE = ('TB.svg')
@@ -113,428 +261,7 @@ class TLAPControlWindow(SiriusMainWindow):
                 [3, 'TS-03:DI-Scrn'], [41, 'TS-04:DI-Scrn-1'],
                 [42, 'TS-04:DI-Scrn-2'], [43, 'TS-04:DI-Scrn-3']]
 
-        self.centralwidget = loadUi('/home/fac_files/lnls-sirius/hla/'
-                                    'pyqt-apps/siriushla/tl_ap_control/'
-                                    + UI_FILE)
-        self.setCentralWidget(self.centralwidget)
-
-        # TL Lattice Widget
-        lattice = QSvgWidget('/home/fac_files/lnls-sirius/hla/pyqt-apps/'
-                             'siriushla/tl_ap_control/' + SVG_FILE)
-        self.centralwidget.widget_lattice.setLayout(QVBoxLayout())
-        self.centralwidget.widget_lattice.layout().addWidget(lattice)
-
-        # TL Optics Widget
-        self.lattice_and_twiss_window = ShowLatticeAndTwiss(
-            parent=self, tl=self._tl)
-        self.centralwidget.pushButton_LatticeAndTwiss.clicked.connect(
-            self._openLaticeAndTwiss)
-
-        # Set Visibility of Scrn Calculations Labels
-        for i, device in scrn_list:
-            exec(CALC_LABELS_INITIALIZE.format(i))
-            visible = True
-            exec(CALC_LABELS_VISIBILITY.format(i, visible))
-            exec(CALC_LABELS_CHANNELS.format(i, device))
-
-        # Open TL Apps
-        _hlautil.connect_window(self.centralwidget.pushButton_PosAngCorrApp,
-                                ASAPPosAngCorr, parent=self,
-                                prefix=self.prefix, tl=self._tl)
-        _hlautil.connect_window(self.centralwidget.pushButton_MAApp,
-                                PSTabControlWindow, parent=self,
-                                section=self._tl.upper(), discipline=1)  # MA
-        _hlautil.connect_window(self.centralwidget.pushButton_PMApp,
-                                PulsedMagnetControlWindow, self)
-        self.centralwidget.pushButton_SlitApp.clicked.connect(
-                                self._openSlitsApp)
-        self.centralwidget.pushButton_BPMApp.clicked.connect(
-                                self._openBPMApp)
-        # self.centralwidget.pushButton_FCTApp.clicked.connect(
-        #                         self._openFCTApp)
-
-        # Reference Widget
-        self.centralwidget.tabWidget_Scrns.setCurrentIndex(0)
-        self._currScrn = 0
-        self.centralwidget.tabWidget_Scrns.currentChanged.connect(
-                                self._setCurrentScrn)
-        self.centralwidget.pushButton_SaveRef.clicked.connect(
-                                self._saveReference)
-        self.reference_window = ShowImage(parent=self)
-        self.centralwidget.pushButton_OpenRef.clicked.connect(
-                                self._openReference)
-
-        # Create Scrn+Correctors Panel
-        scrn_headerline = QWidget()
-        scrn_headerline.setLayout(QHBoxLayout())
-        label_device = QLabel('Device')
-        label_device.setAlignment(Qt.AlignHCenter)
-        label_scrntype = QLabel('Screen Type')
-        label_scrntype.setAlignment(Qt.AlignHCenter)
-        label_led = QLabel('Led')
-        label_led.setAlignment(Qt.AlignHCenter)
-        scrn_headerline.layout().addWidget(label_device)
-        scrn_headerline.layout().addWidget(label_scrntype)
-        scrn_headerline.layout().addWidget(label_led)
-        scrn_headerline.layout().setContentsMargins(0, 0, 0, 0)
-        scrn_headerline.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
-        # scrn_headerline.setStyleSheet('''QLabel{background-color:blue;}''')
-
-        ch_headerline = QWidget()
-        ch_headerline.setLayout(QHBoxLayout())
-        label_ch_led = QLabel('')
-        label_ch_led.setAlignment(Qt.AlignHCenter)
-        label_ch = QLabel('CH')
-        label_ch.setAlignment(Qt.AlignHCenter)
-        label_ch_sp_kick = QLabel('Kick-SP')
-        label_ch_sp_kick.setAlignment(Qt.AlignHCenter)
-        label_ch_mon_kick = QLabel('Kick-Mon')
-        label_ch_mon_kick.setAlignment(Qt.AlignHCenter)
-        ch_headerline.layout().addWidget(label_ch_led)
-        ch_headerline.layout().addWidget(label_ch)
-        ch_headerline.layout().addWidget(label_ch_sp_kick)
-        ch_headerline.layout().addWidget(label_ch_mon_kick)
-        ch_headerline.layout().setContentsMargins(0, 0, 0, 0)
-        ch_headerline.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
-        # ch_headerline.setStyleSheet('''QLabel{background-color:blue;}''')
-
-        cv_headerline = QWidget()
-        cv_headerline.setLayout(QHBoxLayout())
-        label_cv_led = QLabel('')
-        label_cv_led.setAlignment(Qt.AlignHCenter)
-        label_cv = QLabel('CV')
-        label_cv.setAlignment(Qt.AlignHCenter)
-        label_cv_sp_kick = QLabel('Kick-SP')
-        label_cv_sp_kick.setAlignment(Qt.AlignHCenter)
-        label_cv_mon_kick = QLabel('Kick-Mon')
-        label_cv_mon_kick.setAlignment(Qt.AlignHCenter)
-        cv_headerline.layout().addWidget(label_cv_led)
-        cv_headerline.layout().addWidget(label_cv)
-        cv_headerline.layout().addWidget(label_cv_sp_kick)
-        cv_headerline.layout().addWidget(label_cv_mon_kick)
-        cv_headerline.layout().setContentsMargins(0, 0, 0, 0)
-        cv_headerline.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
-        # cv_headerline.setStyleSheet('''QLabel{background-color:blue;}''')
-
-        headerline = QWidget()
-        headerline.setMaximumHeight(60)
-        headerline.setLayout(QHBoxLayout())
-        headerline.layout().addItem(QSpacerItem(40, 20,
-                                                QSizePolicy.Expanding,
-                                                QSizePolicy.Minimum))
-        headerline.layout().addWidget(scrn_headerline)
-        headerline.layout().addItem(QSpacerItem(40, 20,
-                                                QSizePolicy.MinimumExpanding,
-                                                QSizePolicy.Minimum))
-        headerline.layout().addWidget(ch_headerline)
-        headerline.layout().addItem(QSpacerItem(40, 20,
-                                                QSizePolicy.MinimumExpanding,
-                                                QSizePolicy.Minimum))
-        headerline.layout().addWidget(cv_headerline)
-        headerline.layout().addItem(QSpacerItem(40, 20,
-                                                QSizePolicy.Expanding,
-                                                QSizePolicy.Minimum))
-        headerline.setStyleSheet("""font-weight:bold;""")
-        headerline.layout().setContentsMargins(0, 9, 0, 9)
-        correctors_gridlayout = QGridLayout()
-        correctors_gridlayout.addWidget(headerline, 1, 1)
-
-        for item, width in [[label_device, 250], [label_scrntype, 200],
-                            [label_led, 200], [label_ch_led, 40],
-                            [label_ch, 250], [label_ch_sp_kick, 250],
-                            [label_ch_mon_kick, 180], [label_cv_led, 40],
-                            [label_cv, 250], [label_cv_sp_kick, 250],
-                            [label_cv_mon_kick, 180]]:
-            item.setMaximumWidth(width)
-            item.setMinimumWidth(width)
-            item.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
-
-        line = 2
-        for ch_group, cv, scrn, scrnprefix in correctors_list:
-
-            # Scrn
-            scrn_details = QWidget()
-            scrn_details.setObjectName('widget_Scrn' + str(scrn))
-            scrn_details.setLayout(QHBoxLayout())
-            scrn_details.layout().setContentsMargins(3, 3, 3, 3)
-
-            scrn_label = QLabel(scrnprefix)
-            scrn_label.setMinimumWidth(250)
-            scrn_label.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
-            scrn_label.setStyleSheet("""font-weight:bold;""")
-            scrn_details.layout().addWidget(scrn_label)
-
-            widget_scrntype_sp = QWidget()
-            widget_scrntype_sp.setLayout(QVBoxLayout())
-            widget_scrntype_sp.layout().setContentsMargins(0, 0, 0, 0)
-            widget_scrntype_sp.layout().setAlignment(Qt.AlignHCenter)
-            pydmcombobox_scrntype = PyDMEnumComboBox(
-                self, 'ca://' + self.prefix + scrnprefix + ':ScrnType-Sel')
-            pydmcombobox_scrntype.setObjectName(
-                'PyDMEnumComboBox_ScrnType_Sel_Scrn'+str(scrn))
-            widget_scrntype_sp.layout().addWidget(pydmcombobox_scrntype)
-            led_scrntype = SiriusLedAlert(
-                self, 'ca://' + self.prefix + scrnprefix + ':ScrnType-Sts')
-            led_scrntype.shape = 2
-            led_scrntype.setObjectName(
-                'Led_ScrnType_Sts_Scrn' + str(scrn))
-            led_scrntype.setMaximumHeight(40)
-            widget_scrntype_sp.layout().addWidget(led_scrntype)
-            widget_scrntype_sp.setMinimumWidth(200)
-            widget_scrntype_sp.setMaximumWidth(200)
-            widget_scrntype_sp.setSizePolicy(
-                QSizePolicy.Fixed, QSizePolicy.Fixed)
-            scrn_details.layout().addWidget(widget_scrntype_sp)
-
-            scrn_details.layout().addItem(QSpacerItem(40, 20,
-                                                      QSizePolicy.Fixed,
-                                                      QSizePolicy.Minimum))
-
-            pydmstatebutton = PyDMStateButton(
-                parent=self,
-                init_channel='ca://'+self.prefix + scrnprefix + ':LedEnbl-Sel')
-            pydmstatebutton.shape = 1
-            pydmstatebutton.setObjectName(
-                'PyDMStateButton_LedEnbl_Sel_Scrn' + str(scrn))
-            pydmstatebutton.setSizePolicy(QSizePolicy.Fixed,
-                                          QSizePolicy.Minimum)
-            scrn_details.layout().addWidget(pydmstatebutton)
-            led = SiriusLedState(
-                self, 'ca://' + self.prefix + scrnprefix + ':LedEnbl-Sts')
-            led.setObjectName('SiriusLed_LedEnbl_Sts_Scrn' + str(scrn))
-            led.setMinimumWidth(40)
-            led.setMinimumHeight(40)
-            led.setMaximumHeight(40)
-            led.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
-            scrn_details.layout().addWidget(led)
-
-            scrn_details.layout().addItem(QSpacerItem(40, 20,
-                                                      QSizePolicy.Fixed,
-                                                      QSizePolicy.Minimum))
-
-            # CH
-            ch_widget = QWidget()
-            ch_widget.setObjectName('widget_CHs_Scrn' + str(scrn))
-            ch_widget.setLayout(QVBoxLayout())
-            ch_widget.layout().setContentsMargins(0, 0, 0, 0)
-
-            for ch in ch_group:
-                name = ch.split('-')
-                if len(name) > 2:
-                    name = name[-2]+name[-1]
-                else:
-                    name = name[-1]
-
-                ch_details = QWidget()
-                ch_details.setObjectName(
-                    'widget_details_' + name + '_Scrn' + str(scrn))
-                ch_details.setLayout(QGridLayout())
-                ch_details.layout().setContentsMargins(3, 3, 3, 3)
-
-                led = SiriusLedState(
-                    self, 'ca://' + self.prefix + ch + ':PwrState-Sts')
-                led.setObjectName(
-                    'SiriusLed_' + name + '_PwrState_Scrn' + str(scrn))
-                led.setMinimumWidth(40)
-                led.setMinimumHeight(40)
-                led.setMaximumHeight(40)
-                led.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
-                ch_details.layout().addWidget(led, 1, 1)
-
-                pushbutton = QPushButton(ch, self)
-                pushbutton.setObjectName(
-                    'pushButton_' + name + 'App_Scrn' + str(scrn))
-                if ch.split('-')[0] == 'LI':
-                    pass
-                    # TODO
-                elif ch.split('-')[1].split(':')[1] == 'PM':
-                    _hlautil.connect_window(pushbutton,
-                                            PulsedMagnetDetailWindow,
-                                            parent=self, maname=ch)
-                else:
-                    _hlautil.connect_window(pushbutton,
-                                            PSDetailWindow,
-                                            parent=self, psname=ch)
-                pushbutton.setMinimumWidth(250)
-                pushbutton.setMaximumWidth(250)
-                pushbutton.setMinimumHeight(40)
-                pushbutton.setSizePolicy(QSizePolicy.Fixed,
-                                         QSizePolicy.Minimum)
-                ch_details.layout().addWidget(pushbutton, 1, 2)
-
-                frame = QFrame()
-                frame.setStyleSheet("background-color: rgb(255, 255, 255);")
-                frame.setLayout(QVBoxLayout())
-                frame.layout().setContentsMargins(0, 0, 0, 0)
-                pydmlineedit_kick = PyDMLineEdit(
-                    self, 'ca://' + self.prefix + ch + ':Kick-SP')
-                pydmlineedit_kick.setObjectName(
-                    'PyDMLineEdit' + name + '_Kick_SP_Scrn' + str(scrn))
-                pydmlineedit_kick.setValidator(QDoubleValidator())
-                pydmlineedit_kick.showUnits = True
-                pydmlineedit_kick.setMinimumWidth(250)
-                pydmlineedit_kick.setMaximumWidth(250)
-                pydmlineedit_kick.setMinimumHeight(40)
-                pydmlineedit_kick.setSizePolicy(QSizePolicy.Fixed,
-                                                QSizePolicy.Minimum)
-                frame.layout().addWidget(pydmlineedit_kick)
-                ch_details.layout().addWidget(frame, 1, 5)
-
-                scrollbar_kick = PyDMScrollBar(
-                    self, Qt.Horizontal,
-                    'ca://' + self.prefix + ch + ':Kick-SP')
-                scrollbar_kick.setObjectName(
-                    'PyDMScrollBar' + name + '_Kick_SP_Scrn' + str(scrn))
-                scrollbar_kick.setMinimumWidth(250)
-                scrollbar_kick.setSizePolicy(QSizePolicy.Expanding,
-                                             QSizePolicy.Minimum)
-                scrollbar_kick.limitsFromPV = True
-                ch_details.layout().addWidget(scrollbar_kick, 2, 5)
-
-                frame = QFrame()
-                frame.setLayout(QVBoxLayout())
-                frame.layout().setContentsMargins(0, 0, 0, 0)
-                frame.setFrameShadow(QFrame.Raised)
-                frame.setFrameShape(QFrame.Box)
-                pydmlabel_kick = PyDMLabel(
-                    self, 'ca://' + self.prefix + ch + ':Kick-Mon')
-                pydmlabel_kick.setObjectName(
-                    'PyDMLabel_' + name + '_Kick_Mon_Scrn' + str(scrn))
-                pydmlabel_kick.setMinimumWidth(180)
-                pydmlabel_kick.setMinimumHeight(40)
-                pydmlabel_kick.precFromPV = True
-                pydmlabel_kick.setLayout(QVBoxLayout())
-                pydmlabel_kick.layout().setContentsMargins(3, 3, 3, 3)
-                pydmlabel_kick.setSizePolicy(QSizePolicy.Fixed,
-                                             QSizePolicy.Fixed)
-                frame.layout().addWidget(pydmlabel_kick)
-                ch_details.layout().addWidget(frame, 1, 6)
-                ch_details.setSizePolicy(QSizePolicy.Minimum,
-                                         QSizePolicy.Fixed)
-                ch_widget.layout().addWidget(ch_details)
-
-            # CV
-            name = cv.split('-')
-            if len(name) > 2:
-                name = name[-2]+name[-1]
-            else:
-                name = name[-1]
-
-            cv_details = QWidget()
-            cv_details.setObjectName(
-                'widget_details_' + name + '_Scrn' + str(scrn))
-            cv_details.setLayout(QGridLayout())
-            cv_details.layout().setContentsMargins(3, 3, 3, 3)
-
-            led = SiriusLedState(
-                self, 'ca://' + self.prefix + cv + ':PwrState-Sts')
-            led.setObjectName(
-                'SiriusLed_' + name + '_PwrState_Scrn' + str(scrn))
-            led.setMinimumWidth(40)
-            led.setMinimumHeight(40)
-            led.setMaximumHeight(40)
-            led.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
-            cv_details.layout().addWidget(led, 1, 1)
-
-            pushbutton = QPushButton(cv, self)
-            pushbutton.setObjectName(
-                'pushButton_' + name + 'App_Scrn' + str(scrn))
-            if cv.split('-')[0] == 'LI':
-                pass
-                # TODO
-            elif cv.split('-')[1].split(':')[1] == 'PM':
-                _hlautil.connect_window(pushbutton,
-                                        PulsedMagnetDetailWindow,
-                                        parent=self, maname=cv)
-            else:
-                _hlautil.connect_window(pushbutton,
-                                        PSDetailWindow,
-                                        parent=self, psname=cv)
-            pushbutton.setMinimumWidth(250)
-            pushbutton.setMaximumWidth(250)
-            pushbutton.setMinimumHeight(40)
-            pushbutton.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
-            cv_details.layout().addWidget(pushbutton, 1, 2)
-
-            frame = QFrame()
-            frame.setStyleSheet("background-color: rgb(255, 255, 255);")
-            frame.setLayout(QVBoxLayout())
-            frame.layout().setContentsMargins(0, 0, 0, 0)
-            pydmlineedit_kick = PyDMLineEdit(
-                self, 'ca://' + self.prefix + cv + ':Kick-SP')
-            pydmlineedit_kick.setObjectName(
-                'PyDMLineEdit' + name + '_Kick_SP_Scrn' + str(scrn))
-            pydmlineedit_kick.setValidator(QDoubleValidator())
-            pydmlineedit_kick.showUnits = True
-            pydmlineedit_kick.setMinimumWidth(250)
-            pydmlineedit_kick.setMaximumWidth(250)
-            pydmlineedit_kick.setMinimumHeight(40)
-            pydmlineedit_kick.setSizePolicy(QSizePolicy.Fixed,
-                                            QSizePolicy.Minimum)
-            frame.layout().addWidget(pydmlineedit_kick)
-            cv_details.layout().addWidget(frame, 1, 5)
-
-            scrollbar_kick = PyDMScrollBar(
-                self, Qt.Horizontal,
-                'ca://' + self.prefix + cv + ':Kick-SP')
-            scrollbar_kick.setObjectName(
-                'PyDMScrollBar' + name + '_Kick_SP_Scrn' + str(scrn))
-            scrollbar_kick.setMinimumWidth(250)
-            scrollbar_kick.setSizePolicy(QSizePolicy.Expanding,
-                                         QSizePolicy.Minimum)
-            scrollbar_kick.limitsFromPV = True
-            cv_details.layout().addWidget(scrollbar_kick, 2, 5)
-
-            frame = QFrame()
-            frame.setLayout(QVBoxLayout())
-            frame.layout().setContentsMargins(0, 0, 0, 0)
-            frame.setFrameShadow(QFrame.Raised)
-            frame.setFrameShape(QFrame.Box)
-            pydmlabel_kick = PyDMLabel(
-                self, 'ca://' + self.prefix + cv + ':Kick-Mon')
-            pydmlabel_kick.setObjectName(
-                'PyDMLabel_' + name + '_Kick_Mon_Scrn' + str(scrn))
-            pydmlabel_kick.setMinimumWidth(180)
-            pydmlabel_kick.setMinimumHeight(40)
-            pydmlabel_kick.precFromPV = True
-            pydmlabel_kick.setFrameShadow(QFrame.Raised)
-            pydmlabel_kick.setFrameShape(QFrame.Box)
-            pydmlabel_kick.setLayout(QVBoxLayout())
-            pydmlabel_kick.layout().setContentsMargins(3, 3, 3, 3)
-            pydmlabel_kick.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-            frame.layout().addWidget(pydmlabel_kick)
-            cv_details.layout().addWidget(frame, 1, 6)
-            cv_details.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
-
-            widget_scrncorr = QWidget()
-            widget_scrncorr.setLayout(QHBoxLayout())
-            widget_scrncorr.layout().addItem(QSpacerItem(40, 20,
-                                                         QSizePolicy.Expanding,
-                                                         QSizePolicy.Minimum))
-            widget_scrncorr.layout().addWidget(scrn_details)
-            widget_scrncorr.layout().addItem(QSpacerItem(40, 20,
-                                                         QSizePolicy.Expanding,
-                                                         QSizePolicy.Minimum))
-            widget_scrncorr.layout().addWidget(ch_widget)
-            widget_scrncorr.layout().addItem(QSpacerItem(40, 20,
-                                                         QSizePolicy.Expanding,
-                                                         QSizePolicy.Minimum))
-            widget_scrncorr.layout().addWidget(cv_details)
-            widget_scrncorr.layout().addItem(QSpacerItem(40, 20,
-                                                         QSizePolicy.Expanding,
-                                                         QSizePolicy.Minimum))
-            widget_scrncorr.layout().setContentsMargins(2, 2, 2, 2)
-
-            if line % 2 == 0:
-                widget_scrncorr.setStyleSheet(
-                    """background-color: rgb(211, 211, 211);""")
-            correctors_gridlayout.addWidget(widget_scrncorr, line, 1)
-            line += 1
-
-        self.centralwidget.groupBox_allcorrPanel.setLayout(
-            correctors_gridlayout)
-        self.centralwidget.groupBox_allcorrPanel.layout().setContentsMargins(
-            2, 2, 2, 2)
+        return [UI_FILE, SVG_FILE, correctors_list, scrn_list]
 
     @pyqtSlot(int)
     def _visibility_handle(self, index):
@@ -564,9 +291,11 @@ class TLAPControlWindow(SiriusMainWindow):
 
     @pyqtSlot(int)
     def _setCurrentScrn(self, currScrn):
+        """Return current index of tabWidget_Scrns."""
         self._currScrn = currScrn
 
     def _openReference(self):
+        """Load and show reference image."""
         fn, _ = QFileDialog.getOpenFileName(
                                 self, 'Open Reference...', None,
                                 'Images (*.png *.xpm *.jpg);;All Files (*)')
@@ -575,6 +304,7 @@ class TLAPControlWindow(SiriusMainWindow):
             self.reference_window.show()
 
     def _saveReference(self):
+        """Save reference image."""
         fn, _ = QFileDialog.getSaveFileName(
                                 self, 'Save Reference As...', None,
                                 'Images (*.png *.xpm *.jpg);;All Files (*)')
@@ -605,20 +335,237 @@ class TLAPControlWindow(SiriusMainWindow):
         reference = scrn_widget.grab()
         reference.save(fn)
 
+    def _setHSlitPos(self, pvname, value, **kws):
+        """Callback to set HSlits Widget positions."""
+        if 'Center' in pvname:
+            self._HSlit_Center = value/1000  # considering um
+        elif 'Width' in pvname:
+            self._HSlit_Width = value/1000
+
+        rect_width = 110
+        circle_diameter = 140
+        widget_width = 300
+        vacuum_chamber_diameter = 36
+
+        xc = (circle_diameter*self._HSlit_Center/vacuum_chamber_diameter
+              + widget_width/2)
+        xw = circle_diameter*self._HSlit_Width/vacuum_chamber_diameter
+
+        left = round(xc - rect_width - xw/2)
+        right = round(xc + xw/2)
+
+        self.centralwidget.PyDMDrawingRectangle_HSlitLeft.move(
+            QPoint(left, (widget_width/2 - rect_width)))
+        self.centralwidget.PyDMDrawingRectangle_HSlitRight.move(
+            QPoint(right, (widget_width/2 - rect_width)))
+
+    def _setVSlitPos(self, pvname, value, **kws):
+        """Callback to set VSlits Widget positions."""
+        if 'Center' in pvname:
+            self._VSlit_Center = value/1000  # considering um
+        elif 'Width' in pvname:
+            self._VSlit_Width = value/1000
+
+        rect_width = 110
+        circle_diameter = 140
+        widget_width = 300
+        vacuum_chamber_diameter = 36
+
+        xc = (circle_diameter*self._VSlit_Center/vacuum_chamber_diameter
+              + widget_width/2)
+        xw = circle_diameter*self._VSlit_Width/vacuum_chamber_diameter
+
+        up = round(xc - rect_width - xw/2)
+        down = round(xc + xw/2)
+
+        self.centralwidget.PyDMDrawingRectangle_VSlitUp.move(
+            QPoint((widget_width/2 - rect_width), up))
+        self.centralwidget.PyDMDrawingRectangle_VSlitDown.move(
+            QPoint((widget_width/2 - rect_width), down))
+
+    def _create_headerline(self, labels):
+        """Create and return a headerline."""
+        hl = QWidget()
+        hl.setLayout(QHBoxLayout())
+        hl.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Minimum)
+        hl.layout().setContentsMargins(0, 0, 0, 0)
+
+        for text, width in labels:
+            label = QLabel(text)
+            label.setMaximumWidth(width)
+            label.setMinimumWidth(width)
+            label.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Fixed)
+            label.setAlignment(Qt.AlignHCenter)
+            hl.layout().addWidget(label)
+        return hl
+
+    def _create_scrndetailwidget(self, scrnprefix, scrn):
+        """Create and return a screen detail widget."""
+        scrn_details = QWidget()
+        scrn_details.setObjectName('widget_Scrn' + str(scrn))
+        scrn_details.setLayout(QHBoxLayout())
+        scrn_details.layout().setContentsMargins(3, 3, 3, 3)
+
+        scrn_label = QLabel(scrnprefix)
+        scrn_label.setMinimumWidth(250)
+        scrn_label.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Fixed)
+        scrn_label.setStyleSheet("""font-weight:bold;""")
+        scrn_details.layout().addWidget(scrn_label)
+
+        widget_scrntype_sp = QWidget()
+        widget_scrntype_sp.setLayout(QVBoxLayout())
+        widget_scrntype_sp.layout().setContentsMargins(0, 0, 0, 0)
+        widget_scrntype_sp.layout().setAlignment(Qt.AlignHCenter)
+        widget_scrntype_sp.setMinimumWidth(200)
+        widget_scrntype_sp.setMaximumWidth(200)
+        widget_scrntype_sp.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Fixed)
+
+        pydmcombobox_scrntype = PyDMEnumComboBox(
+            self, 'ca://' + self.prefix + scrnprefix + ':ScrnType-Sel')
+        pydmcombobox_scrntype.setObjectName(
+            'PyDMEnumComboBox_ScrnType_Sel_Scrn'+str(scrn))
+        widget_scrntype_sp.layout().addWidget(pydmcombobox_scrntype)
+
+        led_scrntype = SiriusLedAlert(
+            self, 'ca://' + self.prefix + scrnprefix + ':ScrnType-Sts')
+        led_scrntype.shape = 2
+        led_scrntype.setObjectName(
+            'Led_ScrnType_Sts_Scrn' + str(scrn))
+        led_scrntype.setMaximumHeight(40)
+        widget_scrntype_sp.layout().addWidget(led_scrntype)
+
+        scrn_details.layout().addWidget(widget_scrntype_sp)
+        scrn_details.layout().addItem(QSpacerItem(40, 20,
+                                                  QSzPlcy.Fixed,
+                                                  QSzPlcy.Minimum))
+
+        pydmstatebutton = PyDMStateButton(
+            parent=self,
+            init_channel='ca://'+self.prefix + scrnprefix + ':LedEnbl-Sel')
+        pydmstatebutton.shape = 1
+        pydmstatebutton.setObjectName(
+            'PyDMStateButton_LedEnbl_Sel_Scrn' + str(scrn))
+        pydmstatebutton.setMaximumHeight(40)
+        pydmstatebutton.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Maximum)
+        scrn_details.layout().addWidget(pydmstatebutton)
+
+        led = SiriusLedState(
+            self, 'ca://' + self.prefix + scrnprefix + ':LedEnbl-Sts')
+        led.setObjectName('SiriusLed_LedEnbl_Sts_Scrn' + str(scrn))
+        led.setMinimumSize(40, 40)
+        led.setMaximumHeight(40)
+        led.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        scrn_details.layout().addWidget(led)
+
+        scrn_details.layout().addItem(QSpacerItem(40, 20,
+                                                  QSzPlcy.Fixed,
+                                                  QSzPlcy.Minimum))
+        return scrn_details
+
+    def _create_correctordetailwidget(self, scrn, corr):
+        """Create and return a corrector detail widget."""
+        name = corr.split('-')
+        if len(name) > 2:
+            name = name[-2]+name[-1]
+        else:
+            name = name[-1]
+
+        corr_details = QWidget()
+        corr_details.setObjectName(
+            'widget_details_' + name + '_Scrn' + str(scrn))
+        corr_details.setLayout(QGridLayout())
+        corr_details.layout().setContentsMargins(3, 3, 3, 3)
+
+        led = SiriusLedState(
+            self, 'ca://' + self.prefix + corr + ':PwrState-Sts')
+        led.setObjectName(
+            'SiriusLed_' + name + '_PwrState_Scrn' + str(scrn))
+        led.setMinimumSize(40, 40)
+        led.setMaximumHeight(40)
+        led.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        corr_details.layout().addWidget(led, 1, 1)
+
+        pushbutton = QPushButton(corr, self)
+        pushbutton.setObjectName(
+            'pushButton_' + name + 'App_Scrn' + str(scrn))
+        if corr.split('-')[0] == 'LI':
+            pass
+            # TODO
+        elif corr.split('-')[1].split(':')[1] == 'PM':
+            _hlautil.connect_window(pushbutton,
+                                    PulsedMagnetDetailWindow,
+                                    parent=self, maname=corr)
+        else:
+            _hlautil.connect_window(pushbutton,
+                                    PSDetailWindow,
+                                    parent=self, psname=corr)
+        pushbutton.setMinimumSize(250, 40)
+        pushbutton.setMaximumWidth(250)
+        pushbutton.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Minimum)
+        corr_details.layout().addWidget(pushbutton, 1, 2)
+
+        frame = QFrame()
+        frame.setStyleSheet("background-color: rgb(255, 255, 255);")
+        frame.setLayout(QVBoxLayout())
+        frame.layout().setContentsMargins(0, 0, 0, 0)
+        pydmlineedit_kick = PyDMLineEdit(
+            self, 'ca://' + self.prefix + corr + ':Kick-SP')
+        pydmlineedit_kick.setObjectName(
+            'PyDMLineEdit' + name + '_Kick_SP_Scrn' + str(scrn))
+        pydmlineedit_kick.setValidator(QDoubleValidator())
+        pydmlineedit_kick.showUnits = True
+        pydmlineedit_kick.setMinimumSize(250, 40)
+        pydmlineedit_kick.setMaximumWidth(250)
+        pydmlineedit_kick.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Minimum)
+        frame.layout().addWidget(pydmlineedit_kick)
+        corr_details.layout().addWidget(frame, 1, 5)
+
+        scrollbar_kick = PyDMScrollBar(
+            self, Qt.Horizontal,
+            'ca://' + self.prefix + corr + ':Kick-SP')
+        scrollbar_kick.setObjectName(
+            'PyDMScrollBar' + name + '_Kick_SP_Scrn' + str(scrn))
+        scrollbar_kick.setMinimumWidth(250)
+        scrollbar_kick.setMaximumHeight(20)
+        scrollbar_kick.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        scrollbar_kick.limitsFromPV = True
+        corr_details.layout().addWidget(scrollbar_kick, 2, 5)
+
+        frame = QFrame()
+        frame.setLayout(QVBoxLayout())
+        frame.layout().setContentsMargins(0, 0, 0, 0)
+        frame.setFrameShadow(QFrame.Raised)
+        frame.setFrameShape(QFrame.Box)
+        pydmlabel_kick = PyDMLabel(
+            self, 'ca://' + self.prefix + corr + ':Kick-Mon')
+        pydmlabel_kick.setObjectName(
+            'PyDMLabel_' + name + '_Kick_Mon_Scrn' + str(scrn))
+        pydmlabel_kick.setMinimumWidth(180)
+        pydmlabel_kick.setMinimumHeight(40)
+        pydmlabel_kick.precFromPV = True
+        pydmlabel_kick.setLayout(QVBoxLayout())
+        pydmlabel_kick.layout().setContentsMargins(3, 3, 3, 3)
+        pydmlabel_kick.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Fixed)
+        frame.layout().addWidget(pydmlabel_kick)
+        corr_details.layout().addWidget(frame, 1, 6)
+        corr_details.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Fixed)
+        return corr_details
+
     def _openBPMApp(self):
+        """Open BPM HLA."""
         pass
         # TODO
 
-    # def _openFCTApp(self):
-    #     pass
-    #     # TODO
-
-    def _openSlitsApp(self):
-        pass
-        # TODO
-
-    def _openLaticeAndTwiss(self):
-        self.lattice_and_twiss_window.show()
+    def _closeEvent(self, ev):
+        self._hslitcenterpv.disconnect()
+        self._hslitcenterpv = None
+        self._hslitwidthpv.disconnect()
+        self._hslitwidthpv = None
+        self._vslitcenterpv.disconnect()
+        self._vslitcenterpv = None
+        self._vslitwidthpv.disconnect()
+        self._vslitwidthpv = None
+        super().closeEvent(ev)
 
 
 class ShowLatticeAndTwiss(SiriusMainWindow):
