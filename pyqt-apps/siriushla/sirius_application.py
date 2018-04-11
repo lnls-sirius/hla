@@ -74,9 +74,15 @@ class SiriusApplication(PyDMApplication):
                 return self.add_connection(channel)
 
     def _remove_connections(self, widget):
-        if self._has_channel(widget):
-            for channel in widget.channels():
-                return self.remove_connection(channel)
+        try:
+            if self._has_channel(widget):
+                for channel in widget.channels():
+                    return self.remove_connection(channel)
+        except NameError:
+            pass
+        # This imitates the solution adopted by pydm to handle protocol errors.
+        # Errors like a channel address equal 'None' (type str) are also catched
+        # TODO: It would be better if these errors were reported or raised.
 
     def open_window(self, w_class, parent=None, **kwargs):
         """Open new window.
