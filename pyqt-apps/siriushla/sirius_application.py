@@ -81,7 +81,7 @@ class SiriusApplication(PyDMApplication):
         except NameError:
             pass
         # This imitates the solution adopted by pydm to handle protocol errors.
-        # Errors like a channel address equal 'None' (type str) are also catched
+        # Errors like a channel address equal 'None'(type str) are also catched
         # TODO: It would be better if these errors were reported or raised.
 
     def open_window(self, w_class, parent=None, **kwargs):
