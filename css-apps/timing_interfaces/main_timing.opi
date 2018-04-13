@@ -3417,7 +3417,7 @@
           <height>26</height>
           <macros>
             <include_parent_macros>true</include_parent_macros>
-            <trig_name>SI-01SA:TI-HTuneS:</trig_name>
+            <trig_name>SI-01SA:TI-TuneShkrH:</trig_name>
           </macros>
           <name>LC_$(trig_name)</name>
           <opi_file>templates_timing.opi</opi_file>
@@ -3458,7 +3458,7 @@
           <height>26</height>
           <macros>
             <include_parent_macros>true</include_parent_macros>
-            <trig_name>SI-17SA:TI-HTuneP:</trig_name>
+            <trig_name>SI-17SA:TI-TunePkupH:</trig_name>
           </macros>
           <name>LC_$(trig_name)</name>
           <opi_file>templates_timing.opi</opi_file>
@@ -3499,7 +3499,7 @@
           <height>26</height>
           <macros>
             <include_parent_macros>true</include_parent_macros>
-            <trig_name>SI-18C4:TI-VTuneS:</trig_name>
+            <trig_name>SI-18C4:TI-TuneShkrV:</trig_name>
           </macros>
           <name>LC_$(trig_name)</name>
           <opi_file>templates_timing.opi</opi_file>
@@ -3540,7 +3540,7 @@
           <height>26</height>
           <macros>
             <include_parent_macros>true</include_parent_macros>
-            <trig_name>SI-17C4:TI-VTuneP:</trig_name>
+            <trig_name>SI-17C4:TI-TunePkupV:</trig_name>
           </macros>
           <name>LC_$(trig_name)</name>
           <opi_file>templates_timing.opi</opi_file>

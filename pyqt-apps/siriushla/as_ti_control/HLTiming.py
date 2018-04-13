@@ -89,9 +89,9 @@ def main(prefix=None):
 
     map_ = {
         'Storage Ring Studies': (
-            'SI-01SA:TI-HPing:', 'SI-01SA:TI-HTuneS:', 'SI-13C4:TI-DCCT:',
-            'SI-14C4:TI-DCCT:', 'SI-16C4:TI-GBPM:', 'SI-17C4:TI-VTuneP:',
-            'SI-17SA:TI-HTuneP:', 'SI-18C4:TI-VTuneS:', 'SI-19C4:TI-VPing:',
+            'SI-01SA:TI-HPing:', 'SI-01SA:TI-TuneShkrH:', 'SI-13C4:TI-DCCT:',
+            'SI-14C4:TI-DCCT:', 'SI-16C4:TI-GBPM:', 'SI-17C4:TI-TunePkupV:',
+            'SI-17SA:TI-TunePkupH:', 'SI-18C4:TI-TuneShkrV:', 'SI-19C4:TI-VPing:',
             'SI-19SP:TI-GSL15:', 'SI-20SB:TI-GSL07:'),
         'Storage Ring Magnets': (
             'SI-Glob:TI-Corrs:', 'SI-Glob:TI-Dips:', 'SI-Glob:TI-Quads:',
