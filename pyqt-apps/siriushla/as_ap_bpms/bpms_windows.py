@@ -83,6 +83,36 @@ class BPMsInterface(SiriusMainWindow, _WidgetsCreator):
                         prefix=self.prefix, bpm_list=self.bpm_list)
 
 
+class BPMsInterfaceTL(BPMsInterface):
+    """BPMs interface for Sirius Transport Lines."""
+
+    BPM_DICT = {
+        'TB': [
+            'TB-01:DI-BPM-1', 'TB-01:DI-BPM-2',
+            'TB-02:DI-BPM-1', 'TB-02:DI-BPM-1',
+            'TB-03:DI-BPM',
+            'TB-04:DI-BPM',
+            ],
+        'TS': [
+            'TS-01:DI-BPM', 'TS-02:DI-BPM', 'TS-03:DI-BPM',
+            'TS-04:DI-BPM-1', 'TS-04:DI-BPM-2',
+            ],
+        }
+
+    def __init__(self, parent=None, prefix='', TL=''):
+        """Initialize the Instance.
+
+        INPUTS:
+            parent = parent widget;
+            prefix = prefix for the BPM PVs;
+            TL = string especifying the Transport Line ('TB' or 'TS').
+        """
+        if TL not in self.BPM_DICT.keys():
+            raise Exception("TL must be 'TB' or 'TS'")
+        bpm_list = self.BPM_DICT[TL]
+        super().__init__(parent=parent, prefix=prefix, bpm_list=bpm_list)
+
+
 class SingleBPMSelectionWindow(SiriusDialog, _WidgetsCreator):
 
     def __init__(self, parent=None, **kwargs):
