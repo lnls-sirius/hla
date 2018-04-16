@@ -176,6 +176,6 @@ if __name__ == "__main__":
     from pydm import PyDMApplication
 
     app = PyDMApplication(None, sys.argv)
-    w = PulsedMagnetDetailWidget(maname="SI-01SA:PM-InjDpK")
+    w = PulsedMagnetDetailWidget(maname="SI-01SA:PM-InjDpKckr")
     w.show()
     sys.exit(app.exec_())
