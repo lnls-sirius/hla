@@ -8,7 +8,7 @@ from pydm.widgets.enum_combo_box import PyDMEnumComboBox as PyDMECB
 from pydm.widgets.checkbox import PyDMCheckbox as PyDMCb
 from pydm.widgets.spinbox import PyDMSpinbox
 from siriuspy.namesys import SiriusPVName as _PVName
-from siriuspy.timesys.time_data.connections import IOs as _IOs
+from siriuspy.search import LLTimeSearch as _LLTimeSearch
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets.led import PyDMLed, SiriusLedAlert
 from siriushla.widgets.state_button import PyDMStateButton
@@ -37,7 +37,7 @@ class AFC(SiriusMainWindow):
         self.my_layout.setAlignment(lab, Qt.AlignCenter)
 
         scr_ar = QScrollArea(cw)
-        set_ = _IOs.I2O_MAP['AFC']['SFP']
+        set_ = _LLTimeSearch.i2o_map['AFC']['SFP']
         obj_names = sorted([out for out in set_ if out.startswith('FMC')])
         self.fmcs_wid = AFCOUTList(
             name='FMC Outputs', parent=scr_ar,
