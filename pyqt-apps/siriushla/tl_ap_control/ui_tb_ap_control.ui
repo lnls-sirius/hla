@@ -401,11 +401,11 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
         </widget>
         <widget class="QWidget" name="tab_Slits">
          <attribute name="title">
-          <string>HSlit</string>
+          <string>SlitH</string>
          </attribute>
          <layout class="QGridLayout" name="gridLayout_8">
           <item row="1" column="4">
-           <widget class="QFrame" name="frame_HSlit_Center_SP">
+           <widget class="QFrame" name="frame_SlitH_Center_SP">
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -435,7 +435,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <number>0</number>
              </property>
              <item>
-              <widget class="PyDMLabel" name="PyDMLabel_HSlit_Center_RB">
+              <widget class="PyDMLabel" name="PyDMLabel_SlitH_Center_RB">
                <property name="maximumSize">
                 <size>
                  <width>150</width>
@@ -455,7 +455,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
                </property>
                <property name="channel" stdset="0">
-                <string>ca://${PREFIX}TB-01:DI-HSlit:Center-RB</string>
+                <string>ca://${PREFIX}TB-01:DI-SlitH:Center-RB</string>
                </property>
               </widget>
              </item>
@@ -482,7 +482,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
            </widget>
           </item>
           <item row="1" column="3">
-           <widget class="PyDMLineEdit" name="PyDMLineEdit_HSlit_Center_SP">
+           <widget class="PyDMLineEdit" name="PyDMLineEdit_SlitH_Center_SP">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -513,12 +513,12 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              <bool>false</bool>
             </property>
             <property name="channel" stdset="0">
-             <string>ca://${PREFIX}TB-01:DI-HSlit:Center-SP</string>
+             <string>ca://${PREFIX}TB-01:DI-SlitH:Center-SP</string>
             </property>
            </widget>
           </item>
           <item row="2" column="3">
-           <widget class="PyDMScrollBar" name="PyDMScrollBar_HSlit_Center_SP">
+           <widget class="PyDMScrollBar" name="PyDMScrollBar_SlitH_Center_SP">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -526,7 +526,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </sizepolicy>
             </property>
             <property name="channel" stdset="0">
-             <string>ca://${PREFIX}TB-01:DI-HSlit:Center-SP</string>
+             <string>ca://${PREFIX}TB-01:DI-SlitH:Center-SP</string>
             </property>
            </widget>
           </item>
@@ -547,7 +547,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
            </spacer>
           </item>
           <item row="4" column="3">
-           <widget class="PyDMLineEdit" name="PyDMLineEdit_HSlit_Width_SP">
+           <widget class="PyDMLineEdit" name="PyDMLineEdit_SlitH_Width_SP">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -578,12 +578,12 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              <bool>false</bool>
             </property>
             <property name="channel" stdset="0">
-             <string>ca://${PREFIX}TB-01:DI-HSlit:Width-SP</string>
+             <string>ca://${PREFIX}TB-01:DI-SlitH:Width-SP</string>
             </property>
            </widget>
           </item>
           <item row="4" column="4">
-           <widget class="QFrame" name="frame_HSlit_Width_SP">
+           <widget class="QFrame" name="frame_SlitH_Width_SP">
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -613,7 +613,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <number>0</number>
              </property>
              <item>
-              <widget class="PyDMLabel" name="PyDMLabel_HSlit_Width_RB">
+              <widget class="PyDMLabel" name="PyDMLabel_SlitH_Width_RB">
                <property name="maximumSize">
                 <size>
                  <width>150</width>
@@ -633,7 +633,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
                </property>
                <property name="channel" stdset="0">
-                <string>ca://${PREFIX}TB-01:DI-HSlit:Width-RB</string>
+                <string>ca://${PREFIX}TB-01:DI-SlitH:Width-RB</string>
                </property>
               </widget>
              </item>
@@ -660,7 +660,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
            </widget>
           </item>
           <item row="5" column="3">
-           <widget class="PyDMScrollBar" name="PyDMScrollBar_HSlit_Width_SP">
+           <widget class="PyDMScrollBar" name="PyDMScrollBar_SlitH_Width_SP">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -668,7 +668,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </sizepolicy>
             </property>
             <property name="channel" stdset="0">
-             <string>ca://${PREFIX}TB-01:DI-HSlit:Width-SP</string>
+             <string>ca://${PREFIX}TB-01:DI-SlitH:Width-SP</string>
             </property>
            </widget>
           </item>
@@ -712,7 +712,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
     </string>
              </property>
             </widget>
-            <widget class="PyDMDrawingRectangle" name="PyDMDrawingRectangle_HSlitLeft">
+            <widget class="PyDMDrawingRectangle" name="PyDMDrawingRectangle_SlitHLeft">
              <property name="geometry">
               <rect>
                <x>40</x>
@@ -753,7 +753,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               </brush>
              </property>
             </widget>
-            <widget class="PyDMDrawingRectangle" name="PyDMDrawingRectangle_HSlitRight">
+            <widget class="PyDMDrawingRectangle" name="PyDMDrawingRectangle_SlitHRight">
              <property name="geometry">
               <rect>
                <x>150</x>
@@ -797,7 +797,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
            </widget>
           </item>
           <item row="1" column="1" rowspan="2">
-           <widget class="QLabel" name="label_HSlit_Width">
+           <widget class="QLabel" name="label_SlitH_Width">
             <property name="styleSheet">
              <string notr="true">font-weight:bold;</string>
             </property>
@@ -808,7 +808,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
            </widget>
           </item>
           <item row="4" column="1" rowspan="2">
-           <widget class="QLabel" name="label_HSlit_Center">
+           <widget class="QLabel" name="label_SlitH_Center">
             <property name="styleSheet">
              <string notr="true">font-weight:bold;</string>
             </property>
@@ -822,7 +822,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
         </widget>
         <widget class="QWidget" name="tab">
          <attribute name="title">
-          <string>VSlit</string>
+          <string>SlitV</string>
          </attribute>
          <layout class="QGridLayout" name="gridLayout_3">
           <item row="0" column="1">
@@ -861,7 +861,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
            </spacer>
           </item>
           <item row="2" column="1">
-           <widget class="PyDMScrollBar" name="PyDMScrollBar_VSlit_Center_SP">
+           <widget class="PyDMScrollBar" name="PyDMScrollBar_SlitV_Center_SP">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -888,12 +888,12 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
     </string>
             </property>
             <property name="channel" stdset="0">
-             <string>ca://${PREFIX}TB-01:DI-VSlit:Center-SP</string>
+             <string>ca://${PREFIX}TB-01:DI-SlitV:Center-SP</string>
             </property>
            </widget>
           </item>
           <item row="4" column="1">
-           <widget class="PyDMLineEdit" name="PyDMLineEdit_VSlit_Width_SP">
+           <widget class="PyDMLineEdit" name="PyDMLineEdit_SlitV_Width_SP">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -924,12 +924,12 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              <bool>false</bool>
             </property>
             <property name="channel" stdset="0">
-             <string>ca://${PREFIX}TB-01:DI-VSlit:Width-SP</string>
+             <string>ca://${PREFIX}TB-01:DI-SlitV:Width-SP</string>
             </property>
            </widget>
           </item>
           <item row="1" column="2">
-           <widget class="QFrame" name="frame_VSlit_Center_RB">
+           <widget class="QFrame" name="frame_SlitV_Center_RB">
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -959,7 +959,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <number>0</number>
              </property>
              <item>
-              <widget class="PyDMLabel" name="PyDMLabel_VSlit_Center_RB">
+              <widget class="PyDMLabel" name="PyDMLabel_SlitV_Center_RB">
                <property name="maximumSize">
                 <size>
                  <width>150</width>
@@ -979,7 +979,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
                </property>
                <property name="channel" stdset="0">
-                <string>ca://${PREFIX}TB-01:DI-VSlit:Center-RB</string>
+                <string>ca://${PREFIX}TB-01:DI-SlitV:Center-RB</string>
                </property>
               </widget>
              </item>
@@ -987,7 +987,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="PyDMLineEdit" name="PyDMLineEdit_VSlit_Center_SP">
+           <widget class="PyDMLineEdit" name="PyDMLineEdit_SlitV_Center_SP">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -1018,7 +1018,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              <bool>false</bool>
             </property>
             <property name="channel" stdset="0">
-             <string>ca://${PREFIX}TB-01:DI-VSlit:Center-SP</string>
+             <string>ca://${PREFIX}TB-01:DI-SlitV:Center-SP</string>
             </property>
            </widget>
           </item>
@@ -1042,7 +1042,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
            </widget>
           </item>
           <item row="4" column="2">
-           <widget class="QFrame" name="frame_VSlit_VSlit_Width_RB">
+           <widget class="QFrame" name="frame_SlitV_SlitV_Width_RB">
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -1072,7 +1072,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               <number>0</number>
              </property>
              <item>
-              <widget class="PyDMLabel" name="PyDMLabel_VSlit_Width_RB">
+              <widget class="PyDMLabel" name="PyDMLabel_SlitV_Width_RB">
                <property name="maximumSize">
                 <size>
                  <width>150</width>
@@ -1092,7 +1092,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
                </property>
                <property name="channel" stdset="0">
-                <string>ca://${PREFIX}TB-01:DI-VSlit:Width-RB</string>
+                <string>ca://${PREFIX}TB-01:DI-SlitV:Width-RB</string>
                </property>
               </widget>
              </item>
@@ -1100,7 +1100,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
            </widget>
           </item>
           <item row="5" column="1">
-           <widget class="PyDMScrollBar" name="PyDMScrollBar_VSlit_Width_SP">
+           <widget class="PyDMScrollBar" name="PyDMScrollBar_SlitV_Width_SP">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -1127,7 +1127,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
     </string>
             </property>
             <property name="channel" stdset="0">
-             <string>ca://${PREFIX}TB-01:DI-VSlit:Width-SP</string>
+             <string>ca://${PREFIX}TB-01:DI-SlitV:Width-SP</string>
             </property>
            </widget>
           </item>
@@ -1171,7 +1171,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
     </string>
              </property>
             </widget>
-            <widget class="PyDMDrawingRectangle" name="PyDMDrawingRectangle_VSlitDown">
+            <widget class="PyDMDrawingRectangle" name="PyDMDrawingRectangle_SlitVDown">
              <property name="geometry">
               <rect>
                <x>40</x>
@@ -1212,7 +1212,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
               </brush>
              </property>
             </widget>
-            <widget class="PyDMDrawingRectangle" name="PyDMDrawingRectangle_VSlitUp">
+            <widget class="PyDMDrawingRectangle" name="PyDMDrawingRectangle_SlitVUp">
              <property name="geometry">
               <rect>
                <x>40</x>
@@ -1256,7 +1256,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
            </widget>
           </item>
           <item row="1" column="0" rowspan="2">
-           <widget class="QLabel" name="label_VSlit_Center">
+           <widget class="QLabel" name="label_SlitV_Center">
             <property name="styleSheet">
              <string notr="true">font-weight:bold;</string>
             </property>
@@ -1267,7 +1267,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
            </widget>
           </item>
           <item row="4" column="0" rowspan="2">
-           <widget class="QLabel" name="label_VSlit_Width">
+           <widget class="QLabel" name="label_SlitV_Width">
             <property name="styleSheet">
              <string notr="true">font-weight:bold;</string>
             </property>

@@ -54,7 +54,7 @@ def main(prefix=None):
             'LI-Glob:TI-LLRF-1:', 'LI-Glob:TI-LLRF-2:',
             'LI-Glob:TI-LLRF-3:', 'LI-Glob:TI-RFAmp-1:',
             'LI-Glob:TI-RFAmp-2:', 'LI-Glob:TI-SHAmp:'),
-        'Booster Injection': ('TB-04:TI-InjS:', 'BO-01D:TI-InjK:'),
+        'Booster Injection': ('TB-04:TI-InjSept:', 'BO-01D:TI-InjKckr:'),
         }
     main = HLTiming.WDTrigsInjLITB
     _setupLists(prefix, main, map_)
@@ -62,9 +62,9 @@ def main(prefix=None):
     map_ = {
         'Booster Ramping': ('BO-05D:TI-P5Cav:', 'BO-Glob:TI-Mags:'),
         'Storage Ring Injection': (
-            'BO-48D:TI-EjeK:', 'TS-04:TI-InjSF:',
-            'TS-Fam:TI-EjeS:', 'TS-Fam:TI-InjSG:',
-            'SI-01SA:TI-InjK:'),
+            'BO-48D:TI-EjeKckr:', 'TS-04:TI-InjSeptF:',
+            'TS-Fam:TI-EjeSept:', 'TS-Fam:TI-InjSeptG:',
+            'SI-01SA:TI-InjKckr:'),
         }
     main = HLTiming.WDTrigsInjBOSI
     _setupLists(prefix, main, map_)
@@ -77,7 +77,7 @@ def main(prefix=None):
             'TB-02:TI-ICT:', 'TB-04:TI-FCT:', 'TB-04:TI-ICT:',
             'TB-Fam:TI-BPM:', 'TB-Fam:TI-Scrn:'),
         'Booster': (
-            'BO-02D:TI-TuneS:', 'BO-04D:TI-TuneP:', 'BO-04U:TI-GSL:',
+            'BO-02D:TI-TuneShkr:', 'BO-04D:TI-TunePkup:', 'BO-04U:TI-GSL:',
             'BO-35D:TI-DCCT:', 'BO-Fam:TI-BPM:', 'BO-Fam:TI-Scrn:'),
         'Storage Ring Injection': (
             'TS-01:TI-ICT:', 'TS-04:TI-FCT:', 'TS-04:TI-ICT:',
@@ -89,9 +89,9 @@ def main(prefix=None):
 
     map_ = {
         'Storage Ring Studies': (
-            'SI-01SA:TI-HPing:', 'SI-01SA:TI-HTuneS:', 'SI-13C4:TI-DCCT:',
-            'SI-14C4:TI-DCCT:', 'SI-16C4:TI-GBPM:', 'SI-17C4:TI-VTuneP:',
-            'SI-17SA:TI-HTuneP:', 'SI-18C4:TI-VTuneS:', 'SI-19C4:TI-VPing:',
+            'SI-01SA:TI-PingH:', 'SI-01SA:TI-TuneShkrH:', 'SI-13C4:TI-DCCT:',
+            'SI-14C4:TI-DCCT:', 'SI-16C4:TI-GBPM:', 'SI-17C4:TI-TunePkupV:',
+            'SI-17SA:TI-TunePkupH:', 'SI-18C4:TI-TuneShkrV:', 'SI-19C4:TI-PingV:',
             'SI-19SP:TI-GSL15:', 'SI-20SB:TI-GSL07:'),
         'Storage Ring Magnets': (
             'SI-Glob:TI-Corrs:', 'SI-Glob:TI-Dips:', 'SI-Glob:TI-Quads:',
