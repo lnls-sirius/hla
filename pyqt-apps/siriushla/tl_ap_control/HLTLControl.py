@@ -141,22 +141,22 @@ class TLAPControlWindow(SiriusMainWindow):
 
         # Connect Slits View widget
         if self._tl == 'tb':
-            self._HSlit_Center = 0
-            self._HSlit_Width = 0
+            self._SlitH_Center = 0
+            self._SlitH_Width = 0
             self._hslitcenterpv = _epics.PV(
-                self.prefix + 'TB-01:DI-HSlit:Center-RB',
-                callback=self._setHSlitPos)
+                self.prefix + 'TB-01:DI-SlitH:Center-RB',
+                callback=self._setSlitHPos)
             self._hslitwidthpv = _epics.PV(
-                self.prefix + 'TB-01:DI-HSlit:Width-RB',
-                callback=self._setHSlitPos)
-            self._VSlit_Center = 0
-            self._VSlit_Width = 0
+                self.prefix + 'TB-01:DI-SlitH:Width-RB',
+                callback=self._setSlitHPos)
+            self._SlitV_Center = 0
+            self._SlitV_Width = 0
             self._vslitcenterpv = _epics.PV(
-                self.prefix + 'TB-01:DI-VSlit:Center-RB',
-                callback=self._setVSlitPos)
+                self.prefix + 'TB-01:DI-SlitV:Center-RB',
+                callback=self._setSlitVPos)
             self._vslitwidthpv = _epics.PV(
-                self.prefix + 'TB-01:DI-VSlit:Width-RB',
-                callback=self._setVSlitPos)
+                self.prefix + 'TB-01:DI-SlitV:Width-RB',
+                callback=self._setSlitVPos)
 
         # Set Visibility of Scrn Calculations Labels
         for i, device in scrn_list:
@@ -248,13 +248,13 @@ class TLAPControlWindow(SiriusMainWindow):
             UI_FILE = ('ui_ts_ap_control.ui')
             SVG_FILE = ('TS.svg')
             correctors_list = [
-                [['TS-01:PM-EjeSF', 'TS-01:PM-EjeSG'],
+                [['TS-01:PM-EjeSeptF', 'TS-01:PM-EjeSeptG'],
                  'TS-01:MA-CV-1', 1, 'TS-01:DI-Scrn'],
                 [['TS-01:MA-CH'], 'TS-01:MA-CV-2', 2, 'TS-02:DI-Scrn'],
                 [['TS-02:MA-CH'], 'TS-02:MA-CV', 3, 'TS-03:DI-Scrn'],
                 [['TS-03:MA-CH'], 'TS-03:MA-CV', 41, 'TS-04:DI-Scrn-1'],
                 [['TS-04:MA-CH'], 'TS-04:MA-CV-1', 42, 'TS-04:DI-Scrn-2'],
-                [['TS-04:PM-InjSG-1', 'TS-04:PM-InjSG-2', 'TS-04:PM-InjSF'],
+                [['TS-04:PM-InjSeptG-1', 'TS-04:PM-InjSeptG-2', 'TS-04:PM-InjSeptF'],
                  'TS-04:MA-CV-2', 43, 'TS-04:DI-Scrn-3']]
             scrn_list = [
                 [1, 'TS-01:DI-Scrn'], [2, 'TS-02:DI-Scrn'],
@@ -335,52 +335,52 @@ class TLAPControlWindow(SiriusMainWindow):
         reference = scrn_widget.grab()
         reference.save(fn)
 
-    def _setHSlitPos(self, pvname, value, **kws):
-        """Callback to set HSlits Widget positions."""
+    def _setSlitHPos(self, pvname, value, **kws):
+        """Callback to set SlitHs Widget positions."""
         if 'Center' in pvname:
-            self._HSlit_Center = value/1000  # considering um
+            self._SlitH_Center = value/1000  # considering um
         elif 'Width' in pvname:
-            self._HSlit_Width = value/1000
+            self._SlitH_Width = value/1000
 
         rect_width = 110
         circle_diameter = 140
         widget_width = 300
         vacuum_chamber_diameter = 36
 
-        xc = (circle_diameter*self._HSlit_Center/vacuum_chamber_diameter
+        xc = (circle_diameter*self._SlitH_Center/vacuum_chamber_diameter
               + widget_width/2)
-        xw = circle_diameter*self._HSlit_Width/vacuum_chamber_diameter
+        xw = circle_diameter*self._SlitH_Width/vacuum_chamber_diameter
 
         left = round(xc - rect_width - xw/2)
         right = round(xc + xw/2)
 
-        self.centralwidget.PyDMDrawingRectangle_HSlitLeft.move(
+        self.centralwidget.PyDMDrawingRectangle_SlitHLeft.move(
             QPoint(left, (widget_width/2 - rect_width)))
-        self.centralwidget.PyDMDrawingRectangle_HSlitRight.move(
+        self.centralwidget.PyDMDrawingRectangle_SlitHRight.move(
             QPoint(right, (widget_width/2 - rect_width)))
 
-    def _setVSlitPos(self, pvname, value, **kws):
-        """Callback to set VSlits Widget positions."""
+    def _setSlitVPos(self, pvname, value, **kws):
+        """Callback to set SlitVs Widget positions."""
         if 'Center' in pvname:
-            self._VSlit_Center = value/1000  # considering um
+            self._SlitV_Center = value/1000  # considering um
         elif 'Width' in pvname:
-            self._VSlit_Width = value/1000
+            self._SlitV_Width = value/1000
 
         rect_width = 110
         circle_diameter = 140
         widget_width = 300
         vacuum_chamber_diameter = 36
 
-        xc = (circle_diameter*self._VSlit_Center/vacuum_chamber_diameter
+        xc = (circle_diameter*self._SlitV_Center/vacuum_chamber_diameter
               + widget_width/2)
-        xw = circle_diameter*self._VSlit_Width/vacuum_chamber_diameter
+        xw = circle_diameter*self._SlitV_Width/vacuum_chamber_diameter
 
         up = round(xc - rect_width - xw/2)
         down = round(xc + xw/2)
 
-        self.centralwidget.PyDMDrawingRectangle_VSlitUp.move(
+        self.centralwidget.PyDMDrawingRectangle_SlitVUp.move(
             QPoint((widget_width/2 - rect_width), up))
-        self.centralwidget.PyDMDrawingRectangle_VSlitDown.move(
+        self.centralwidget.PyDMDrawingRectangle_SlitVDown.move(
             QPoint((widget_width/2 - rect_width), down))
 
     def _create_headerline(self, labels):

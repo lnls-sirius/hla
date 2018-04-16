@@ -83,12 +83,12 @@ class ASAPPosAngCorr(SiriusMainWindow):
         correctors = ['', '', '', '']
         if tl == 'ts':
             correctors[0] = 'TS-04:MA-CH'
-            correctors[1] = 'TS-04:PM-InjSF'
+            correctors[1] = 'TS-04:PM-InjSeptF'
             correctors[2] = 'TS-04:MA-CV-1'
             correctors[3] = 'TS-04:MA-CV-2'
         elif tl == 'tb':
             correctors[0] = 'TB-03:MA-CH'
-            correctors[1] = 'TB-04:PM-InjS'
+            correctors[1] = 'TB-04:PM-InjSept'
             correctors[2] = 'TB-04:MA-CV-1'
             correctors[3] = 'TB-04:MA-CV-2'
         self._setCorrectorsLabels(correctors, prefix)
