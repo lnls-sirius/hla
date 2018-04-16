@@ -210,14 +210,14 @@ if __name__ == '__main__':
     """Run Example."""
     app = SiriusApplication()
     detail_ctrl = HLTriggerDetailed(
-        prefix='ca://fernando-lnls452-linux-SI-01SA:TI-HPing:')
+        prefix='ca://fernando-lnls452-linux-SI-01SA:TI-PingH:')
     detail_ctrl.show()
     props = {'detailed', 'state', 'pulses', 'duration'}
     list_ctrl = HLTriggerList(
         name="Triggers",
         prefix='ca://fernando-lnls452-linux-',
         props=props,
-        obj_names=['SI-01SA:TI-HPing:', 'SI-01SA:TI-VPing:'],
+        obj_names=['SI-01SA:TI-PingH:', 'SI-01SA:TI-PingV:'],
         )
     list_ctrl.show()
     sys.exit(app.exec_())
