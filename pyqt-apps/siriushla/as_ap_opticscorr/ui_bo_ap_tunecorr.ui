@@ -1257,7 +1257,7 @@ Correction</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}BO-04D:DI-TuneP:TuneY-Mon</string>
+         <string>ca://${PREFIX}BO-04D:DI-TunePkup:TuneY-Mon</string>
         </property>
        </widget>
       </item>
@@ -1351,7 +1351,7 @@ Correction</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}BO-04D:DI-TuneP:TuneX-Mon</string>
+         <string>ca://${PREFIX}BO-04D:DI-TunePkup:TuneX-Mon</string>
         </property>
        </widget>
       </item>

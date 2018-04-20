@@ -1613,7 +1613,7 @@
           <height>26</height>
           <macros>
             <include_parent_macros>true</include_parent_macros>
-            <trig_name>TB-04:TI-InjS:</trig_name>
+            <trig_name>TB-04:TI-InjSept:</trig_name>
           </macros>
           <name>LC_$(trig_name)</name>
           <opi_file>templates_timing.opi</opi_file>
@@ -1654,7 +1654,7 @@
           <height>26</height>
           <macros>
             <include_parent_macros>true</include_parent_macros>
-            <trig_name>BO-01D:TI-InjK:</trig_name>
+            <trig_name>BO-01D:TI-InjKckr:</trig_name>
           </macros>
           <name>LC_$(trig_name)</name>
           <opi_file>templates_timing.opi</opi_file>
@@ -1777,7 +1777,7 @@
           <height>26</height>
           <macros>
             <include_parent_macros>true</include_parent_macros>
-            <trig_name>TS-01:TI-EjeSF:</trig_name>
+            <trig_name>TS-01:TI-EjeSeptF:</trig_name>
           </macros>
           <name>LC_$(trig_name)</name>
           <opi_file>templates_timing.opi</opi_file>
@@ -1818,7 +1818,7 @@
           <height>26</height>
           <macros>
             <include_parent_macros>true</include_parent_macros>
-            <trig_name>TS-01:TI-EjeSG:</trig_name>
+            <trig_name>TS-01:TI-EjeSeptG:</trig_name>
           </macros>
           <name>LC_$(trig_name)</name>
           <opi_file>templates_timing.opi</opi_file>
@@ -1859,7 +1859,7 @@
           <height>26</height>
           <macros>
             <include_parent_macros>true</include_parent_macros>
-            <trig_name>TS-Fam:TI-InjSG:</trig_name>
+            <trig_name>TS-Fam:TI-InjSeptG:</trig_name>
           </macros>
           <name>LC_$(trig_name)</name>
           <opi_file>templates_timing.opi</opi_file>
@@ -1900,7 +1900,7 @@
           <height>26</height>
           <macros>
             <include_parent_macros>true</include_parent_macros>
-            <trig_name>TS-04:TI-InjSF:</trig_name>
+            <trig_name>TS-04:TI-InjSeptF:</trig_name>
           </macros>
           <name>LC_$(trig_name)</name>
           <opi_file>templates_timing.opi</opi_file>
@@ -1941,7 +1941,7 @@
           <height>26</height>
           <macros>
             <include_parent_macros>true</include_parent_macros>
-            <trig_name>SI-01SA:TI-InjK:</trig_name>
+            <trig_name>SI-01SA:TI-InjKckr:</trig_name>
           </macros>
           <name>LC_$(trig_name)</name>
           <opi_file>templates_timing.opi</opi_file>
@@ -1982,7 +1982,7 @@
           <height>26</height>
           <macros>
             <include_parent_macros>true</include_parent_macros>
-            <trig_name>BO-48D:TI-EjeK:</trig_name>
+            <trig_name>BO-48D:TI-EjeKckr:</trig_name>
           </macros>
           <name>LC_$(trig_name)</name>
           <opi_file>templates_timing.opi</opi_file>
@@ -2802,7 +2802,7 @@
           <height>26</height>
           <macros>
             <include_parent_macros>true</include_parent_macros>
-            <trig_name>BO-02D:TI-TuneS:</trig_name>
+            <trig_name>BO-02D:TI-TuneShkr:</trig_name>
           </macros>
           <name>LC_$(trig_name)</name>
           <opi_file>templates_timing.opi</opi_file>
@@ -2843,7 +2843,7 @@
           <height>26</height>
           <macros>
             <include_parent_macros>true</include_parent_macros>
-            <trig_name>BO-04D:TI-TuneP:</trig_name>
+            <trig_name>BO-04D:TI-TunePkup:</trig_name>
           </macros>
           <name>LC_$(trig_name)</name>
           <opi_file>templates_timing.opi</opi_file>
@@ -3417,7 +3417,7 @@
           <height>26</height>
           <macros>
             <include_parent_macros>true</include_parent_macros>
-            <trig_name>SI-01SA:TI-HTuneS:</trig_name>
+            <trig_name>SI-01SA:TI-TuneShkrH:</trig_name>
           </macros>
           <name>LC_$(trig_name)</name>
           <opi_file>templates_timing.opi</opi_file>
@@ -3458,7 +3458,7 @@
           <height>26</height>
           <macros>
             <include_parent_macros>true</include_parent_macros>
-            <trig_name>SI-17SA:TI-HTuneP:</trig_name>
+            <trig_name>SI-17SA:TI-TunePkupH:</trig_name>
           </macros>
           <name>LC_$(trig_name)</name>
           <opi_file>templates_timing.opi</opi_file>
@@ -3499,7 +3499,7 @@
           <height>26</height>
           <macros>
             <include_parent_macros>true</include_parent_macros>
-            <trig_name>SI-18C4:TI-VTuneS:</trig_name>
+            <trig_name>SI-18C4:TI-TuneShkrV:</trig_name>
           </macros>
           <name>LC_$(trig_name)</name>
           <opi_file>templates_timing.opi</opi_file>
@@ -3540,7 +3540,7 @@
           <height>26</height>
           <macros>
             <include_parent_macros>true</include_parent_macros>
-            <trig_name>SI-17C4:TI-VTuneP:</trig_name>
+            <trig_name>SI-17C4:TI-TunePkupV:</trig_name>
           </macros>
           <name>LC_$(trig_name)</name>
           <opi_file>templates_timing.opi</opi_file>
@@ -3581,7 +3581,7 @@
           <height>26</height>
           <macros>
             <include_parent_macros>true</include_parent_macros>
-            <trig_name>SI-19C4:TI-VPing:</trig_name>
+            <trig_name>SI-19C4:TI-PingV:</trig_name>
           </macros>
           <name>LC_$(trig_name)</name>
           <opi_file>templates_timing.opi</opi_file>
@@ -3622,7 +3622,7 @@
           <height>26</height>
           <macros>
             <include_parent_macros>true</include_parent_macros>
-            <trig_name>SI-01SA:TI-HPing:</trig_name>
+            <trig_name>SI-01SA:TI-PingH:</trig_name>
           </macros>
           <name>LC_$(trig_name)</name>
           <opi_file>templates_timing.opi</opi_file>
@@ -4602,7 +4602,7 @@
           <height>56</height>
           <macros>
             <include_parent_macros>true</include_parent_macros>
-            <trig_name>TB-01:TI-InjS:</trig_name>
+            <trig_name>TB-01:TI-InjSept:</trig_name>
           </macros>
           <name>LC_$(trig_name)</name>
           <opi_file>templates_timing.opi</opi_file>
@@ -4643,7 +4643,7 @@
           <height>56</height>
           <macros>
             <include_parent_macros>true</include_parent_macros>
-            <trig_name>BO-48D:TI-InjK:</trig_name>
+            <trig_name>BO-48D:TI-InjKckr:</trig_name>
           </macros>
           <name>LC_$(trig_name)_1</name>
           <opi_file>templates_timing.opi</opi_file>
@@ -5090,7 +5090,7 @@
           <height>56</height>
           <macros>
             <include_parent_macros>true</include_parent_macros>
-            <trig_name>TS-01:TI-EjeSF:</trig_name>
+            <trig_name>TS-01:TI-EjeSeptF:</trig_name>
           </macros>
           <name>LC_$(trig_name)</name>
           <opi_file>templates_timing.opi</opi_file>
@@ -5131,7 +5131,7 @@
           <height>56</height>
           <macros>
             <include_parent_macros>true</include_parent_macros>
-            <trig_name>TS-01:TI-EjeSG:</trig_name>
+            <trig_name>TS-01:TI-EjeSeptG:</trig_name>
           </macros>
           <name>LC_$(trig_name)_1</name>
           <opi_file>templates_timing.opi</opi_file>
@@ -5172,7 +5172,7 @@
           <height>56</height>
           <macros>
             <include_parent_macros>true</include_parent_macros>
-            <trig_name>TS-04:TI-InjSG:</trig_name>
+            <trig_name>TS-04:TI-InjSeptG:</trig_name>
           </macros>
           <name>LC_$(trig_name)_2</name>
           <opi_file>templates_timing.opi</opi_file>
@@ -5213,7 +5213,7 @@
           <height>56</height>
           <macros>
             <include_parent_macros>true</include_parent_macros>
-            <trig_name>TS-04:TI-InjSF:</trig_name>
+            <trig_name>TS-04:TI-InjSeptF:</trig_name>
           </macros>
           <name>LC_$(trig_name)_3</name>
           <opi_file>templates_timing.opi</opi_file>
@@ -5254,7 +5254,7 @@
           <height>56</height>
           <macros>
             <include_parent_macros>true</include_parent_macros>
-            <trig_name>SI-01SA:TI-InjK:</trig_name>
+            <trig_name>SI-01SA:TI-InjKckr:</trig_name>
           </macros>
           <name>LC_$(trig_name)_4</name>
           <opi_file>templates_timing.opi</opi_file>
@@ -5295,7 +5295,7 @@
           <height>56</height>
           <macros>
             <include_parent_macros>true</include_parent_macros>
-            <trig_name>BO-48D:TI-EjeK:</trig_name>
+            <trig_name>BO-48D:TI-EjeKckr:</trig_name>
           </macros>
           <name>LC_$(trig_name)_5</name>
           <opi_file>templates_timing.opi</opi_file>
