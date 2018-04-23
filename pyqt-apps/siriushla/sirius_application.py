@@ -8,9 +8,11 @@ from pydm.PyQt.QtCore import Qt
 class SiriusApplication(PyDMApplication):
     """Derivation of PyDMApplication used in Sirius HLA."""
 
-    def __init__(self, ui_file=None, command_line_args=[], **kwargs):
+    def __init__(self, ui_file=None, command_line_args=[],
+                 use_main_window=False, **kwargs):
         """Create an attribute to hold open windows."""
-        super().__init__(ui_file, command_line_args, kwargs)
+        super().__init__(ui_file=ui_file, command_line_args=command_line_args,
+                         use_main_window=use_main_window, **kwargs)
         self._windows = dict()
 
     def establish_widget_connections(self, widget, propagate=True):
