@@ -6,13 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>3100</width>
+    <width>3300</width>
     <height>2020</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>3100</width>
+    <width>3300</width>
     <height>2020</height>
    </size>
   </property>
@@ -62,7 +62,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
          <enum>Qt::Horizontal</enum>
         </property>
         <property name="sizeType">
-         <enum>QSizePolicy::Expanding</enum>
+         <enum>QSizePolicy::Fixed</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
@@ -109,55 +109,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
           <string>ICTs</string>
          </attribute>
          <layout class="QGridLayout" name="gridLayout">
-          <item row="8" column="5">
-           <widget class="QFrame" name="frame_ICT2">
-            <property name="frameShape">
-             <enum>QFrame::Box</enum>
-            </property>
-            <property name="frameShadow">
-             <enum>QFrame::Raised</enum>
-            </property>
-            <layout class="QVBoxLayout" name="verticalLayout_14">
-             <property name="spacing">
-              <number>4</number>
-             </property>
-             <property name="leftMargin">
-              <number>4</number>
-             </property>
-             <property name="topMargin">
-              <number>4</number>
-             </property>
-             <property name="rightMargin">
-              <number>4</number>
-             </property>
-             <property name="bottomMargin">
-              <number>4</number>
-             </property>
-             <item>
-              <widget class="PyDMLabel" name="PyDMLabel_ICT2">
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-               <property name="toolTip">
-                <string/>
-               </property>
-               <property name="whatsThis">
-                <string/>
-               </property>
-               <property name="text">
-                <string>PyDMLabel</string>
-               </property>
-               <property name="channel" stdset="0">
-                <string>ca://${PREFIX}TB-04:DI-ICT:Charge-Mon</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
           <item row="8" column="3">
            <spacer name="horizontalSpacer_3">
             <property name="orientation">
@@ -188,55 +139,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             <property name="alignment">
              <set>Qt::AlignCenter</set>
             </property>
-           </widget>
-          </item>
-          <item row="8" column="2">
-           <widget class="QFrame" name="frame_ICT1">
-            <property name="frameShape">
-             <enum>QFrame::Box</enum>
-            </property>
-            <property name="frameShadow">
-             <enum>QFrame::Raised</enum>
-            </property>
-            <layout class="QVBoxLayout" name="verticalLayout_13">
-             <property name="spacing">
-              <number>4</number>
-             </property>
-             <property name="leftMargin">
-              <number>4</number>
-             </property>
-             <property name="topMargin">
-              <number>4</number>
-             </property>
-             <property name="rightMargin">
-              <number>4</number>
-             </property>
-             <property name="bottomMargin">
-              <number>4</number>
-             </property>
-             <item>
-              <widget class="PyDMLabel" name="PyDMLabel_ICT1">
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-               <property name="toolTip">
-                <string/>
-               </property>
-               <property name="whatsThis">
-                <string/>
-               </property>
-               <property name="text">
-                <string>PyDMLabel</string>
-               </property>
-               <property name="channel" stdset="0">
-                <string>ca://${PREFIX}TB-02:DI-ICT:Charge-Mon</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
            </widget>
           </item>
           <item row="8" column="6">
@@ -396,6 +298,130 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </size>
             </property>
            </spacer>
+          </item>
+          <item row="7" column="1">
+           <widget class="SiriusLedAlert" name="SiriusLedAlert">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="whatsThis">
+             <string>PyDMLed specialization to represent 2 states in red/light green.</string>
+            </property>
+            <property name="channel" stdset="0">
+             <string>ca://${PREFIX}TB-02:DI-ICT:ReliableMeas-Mon</string>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="1" colspan="2">
+           <widget class="QFrame" name="frame_ICT1">
+            <property name="frameShape">
+             <enum>QFrame::Box</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_13">
+             <property name="spacing">
+              <number>4</number>
+             </property>
+             <property name="leftMargin">
+              <number>4</number>
+             </property>
+             <property name="topMargin">
+              <number>4</number>
+             </property>
+             <property name="rightMargin">
+              <number>4</number>
+             </property>
+             <property name="bottomMargin">
+              <number>4</number>
+             </property>
+             <item>
+              <widget class="PyDMLabel" name="PyDMLabel_ICT1">
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="whatsThis">
+                <string/>
+               </property>
+               <property name="text">
+                <string>PyDMLabel</string>
+               </property>
+               <property name="channel" stdset="0">
+                <string>ca://${PREFIX}TB-02:DI-ICT:Charge-Mon</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="7" column="4">
+           <widget class="SiriusLedAlert" name="SiriusLedAlert_2">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="whatsThis">
+             <string>PyDMLed specialization to represent 2 states in red/light green.</string>
+            </property>
+            <property name="channel" stdset="0">
+             <string>ca://${PREFIX}TB-04:DI-ICT:ReliableMeas-Mon</string>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="4" colspan="2">
+           <widget class="QFrame" name="frame_ICT2">
+            <property name="frameShape">
+             <enum>QFrame::Box</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_14">
+             <property name="spacing">
+              <number>4</number>
+             </property>
+             <property name="leftMargin">
+              <number>4</number>
+             </property>
+             <property name="topMargin">
+              <number>4</number>
+             </property>
+             <property name="rightMargin">
+              <number>4</number>
+             </property>
+             <property name="bottomMargin">
+              <number>4</number>
+             </property>
+             <item>
+              <widget class="PyDMLabel" name="PyDMLabel_ICT2">
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="whatsThis">
+                <string/>
+               </property>
+               <property name="text">
+                <string>PyDMLabel</string>
+               </property>
+               <property name="channel" stdset="0">
+                <string>ca://${PREFIX}TB-04:DI-ICT:Charge-Mon</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -803,7 +829,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             </property>
             <property name="text">
              <string>Center 
- (um)</string>
+ (mm)</string>
             </property>
            </widget>
           </item>
@@ -814,7 +840,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             </property>
             <property name="text">
              <string>Width 
- (um)</string>
+ (mm)</string>
             </property>
            </widget>
           </item>
@@ -1262,7 +1288,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             </property>
             <property name="text">
              <string>Center 
- (um)</string>
+ (mm)</string>
             </property>
            </widget>
           </item>
@@ -1273,7 +1299,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             </property>
             <property name="text">
              <string>Width 
- (um)</string>
+ (mm)</string>
             </property>
            </widget>
           </item>
@@ -1287,7 +1313,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
          <enum>Qt::Horizontal</enum>
         </property>
         <property name="sizeType">
-         <enum>QSizePolicy::Expanding</enum>
+         <enum>QSizePolicy::Fixed</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
@@ -1300,7 +1326,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
       <item>
        <widget class="QWidget" name="widget_lattice" native="true">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -1313,7 +1339,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
         </property>
         <property name="maximumSize">
          <size>
-          <width>2250</width>
+          <width>16777215</width>
           <height>16777215</height>
          </size>
         </property>
@@ -1413,11 +1439,11 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             <property name="readingOrder" stdset="0">
              <enum>SiriusImageView::Clike</enum>
             </property>
-            <property name="widthChannel" stdset="0">
-             <string>ca://${PREFIX}TB-01:DI-Scrn-1:ImgWidth-Cte</string>
-            </property>
             <property name="imageChannel" stdset="0">
              <string>ca://${PREFIX}TB-01:DI-Scrn-1:ImgData-Mon</string>
+            </property>
+            <property name="widthChannel" stdset="0">
+             <string>ca://${PREFIX}TB-01:DI-Scrn-1:ImgWidth-Cte</string>
             </property>
            </widget>
           </item>
@@ -2001,11 +2027,11 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             <property name="readingOrder" stdset="0">
              <enum>SiriusImageView::Clike</enum>
             </property>
-            <property name="widthChannel" stdset="0">
-             <string>ca://${PREFIX}TB-01:DI-Scrn-2:ImgWidth-Cte</string>
-            </property>
             <property name="imageChannel" stdset="0">
              <string>ca://${PREFIX}TB-01:DI-Scrn-2:ImgData-Mon</string>
+            </property>
+            <property name="widthChannel" stdset="0">
+             <string>ca://${PREFIX}TB-01:DI-Scrn-2:ImgWidth-Cte</string>
             </property>
            </widget>
           </item>
@@ -2551,11 +2577,11 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             <property name="readingOrder" stdset="0">
              <enum>SiriusImageView::Clike</enum>
             </property>
-            <property name="widthChannel" stdset="0">
-             <string>ca://${PREFIX}TB-02:DI-Scrn-1:ImgWidth-Cte</string>
-            </property>
             <property name="imageChannel" stdset="0">
              <string>ca://${PREFIX}TB-02:DI-Scrn-1:ImgData-Mon</string>
+            </property>
+            <property name="widthChannel" stdset="0">
+             <string>ca://${PREFIX}TB-02:DI-Scrn-1:ImgWidth-Cte</string>
             </property>
            </widget>
           </item>
@@ -3101,11 +3127,11 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             <property name="readingOrder" stdset="0">
              <enum>SiriusImageView::Clike</enum>
             </property>
-            <property name="widthChannel" stdset="0">
-             <string>ca://${PREFIX}TB-02:DI-Scrn-2:ImgWidth-Cte</string>
-            </property>
             <property name="imageChannel" stdset="0">
              <string>ca://${PREFIX}TB-02:DI-Scrn-2:ImgData-Mon</string>
+            </property>
+            <property name="widthChannel" stdset="0">
+             <string>ca://${PREFIX}TB-02:DI-Scrn-2:ImgWidth-Cte</string>
             </property>
            </widget>
           </item>
@@ -3651,11 +3677,11 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             <property name="readingOrder" stdset="0">
              <enum>SiriusImageView::Clike</enum>
             </property>
-            <property name="widthChannel" stdset="0">
-             <string>ca://${PREFIX}TB-03:DI-Scrn:ImgWidth-Cte</string>
-            </property>
             <property name="imageChannel" stdset="0">
              <string>ca://${PREFIX}TB-03:DI-Scrn:ImgData-Mon</string>
+            </property>
+            <property name="widthChannel" stdset="0">
+             <string>ca://${PREFIX}TB-03:DI-Scrn:ImgWidth-Cte</string>
             </property>
            </widget>
           </item>
@@ -4201,11 +4227,11 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             <property name="readingOrder" stdset="0">
              <enum>SiriusImageView::Clike</enum>
             </property>
-            <property name="widthChannel" stdset="0">
-             <string>ca://${PREFIX}TB-04:DI-Scrn:ImgWidth-Cte</string>
-            </property>
             <property name="imageChannel" stdset="0">
              <string>ca://${PREFIX}TB-04:DI-Scrn:ImgData-Mon</string>
+            </property>
+            <property name="widthChannel" stdset="0">
+             <string>ca://${PREFIX}TB-04:DI-Scrn:ImgWidth-Cte</string>
             </property>
            </widget>
           </item>
@@ -4785,6 +4811,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
    <header>pydm.widgets.line_edit</header>
   </customwidget>
   <customwidget>
+   <class>PyDMLed</class>
+   <extends>QLed</extends>
+   <header>siriushla.widgets.led</header>
+  </customwidget>
+  <customwidget>
+   <class>SiriusLedAlert</class>
+   <extends>PyDMLed</extends>
+   <header>siriushla.widgets.led</header>
+  </customwidget>
+  <customwidget>
    <class>SiriusImageView</class>
    <extends>QWidget</extends>
    <header>siriushla.widgets.image</header>
@@ -4798,6 +4834,11 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
    <class>QDoubleScrollBar</class>
    <extends>QScrollBar</extends>
    <header>siriushla.widgets.QDoubleScrollBar</header>
+  </customwidget>
+  <customwidget>
+   <class>QLed</class>
+   <extends>QFrame</extends>
+   <header>siriushla.widgets.QLed</header>
   </customwidget>
  </customwidgets>
  <resources/>
