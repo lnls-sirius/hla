@@ -9,7 +9,7 @@ from PyQt5.QtWidgets import QSpacerItem as _QSpIt
 from siriuspy.envars import vaca_prefix as PREFIX
 from siriuspy.csdevice import timesys as _cstime
 from siriuspy.namesys import SiriusPVName as _PVName
-from siriuspy.timesys.time_data.connections import Connections as _Connections
+from siriuspy.search import LLTimeSearch as _LLTimeSearch
 from siriushla.sirius_application import SiriusApplication
 from siriushla import util as _util
 from evg import EventList as _EventList
@@ -152,25 +152,25 @@ def _setupMenus(prefix, HLTiming):
         action, _EVG, HLTiming, prefix=prefix + 'AS-Glob:TI-EVG:')
 
     menu_evr = menu.addMenu('EVRs')
-    for evr in sorted(_Connections.get_devices('EVR')):
+    for evr in sorted(_LLTimeSearch.get_devices_by_type('EVR')):
         name = _PVName(evr)
         action = menu_evr.addAction(name.dev + '-' + name.idx)
         _util.connect_window(action, _EVR, HLTiming, prefix=prefix+name+':')
 
     menu_eve = menu.addMenu('EVEs')
-    for eve in sorted(_Connections.get_devices('EVE')):
+    for eve in sorted(_LLTimeSearch.get_devices_by_type('EVE')):
         name = _PVName(eve)
         action = menu_eve.addAction(name.dev + '-' + name.idx)
         _util.connect_window(action, _EVE, HLTiming, prefix=prefix+name+':')
 
     menu_afc = menu.addMenu('AFCs')
-    for afc in sorted(_Connections.get_devices('AFC')):
+    for afc in sorted(_LLTimeSearch.get_devices_by_type('AFC')):
         name = _PVName(afc)
         action = menu_afc.addAction(name.sub + ':' + name.dev + '-' + name.idx)
         _util.connect_window(action, _AFC, HLTiming, prefix=prefix+name+':')
 
     menu_fout = menu.addMenu('FOUTs')
-    for fout in sorted(_Connections.get_devices('FOUT')):
+    for fout in sorted(_LLTimeSearch.get_devices_by_type('FOUT')):
         name = _PVName(fout)
         action = menu_fout.addAction(name.dev + '-' + name.idx)
         _util.connect_window(action, _FOUT, HLTiming, prefix=prefix+name+':')
