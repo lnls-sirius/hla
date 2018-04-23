@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import (QWidget, QHBoxLayout, QVBoxLayout, QRadioButton,
                              QGridLayout, QTabWidget, QStackedWidget, QLabel,
-                             QGroupBox, QFormLayout, QPushButton)
+                             QGroupBox, QFormLayout, QPushButton, QAction)
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 from pydm.widgets import (PyDMWaveformPlot, PyDMTimePlot, PyDMSpinbox,
@@ -66,21 +66,17 @@ class BPMsInterface(SiriusMainWindow, _WidgetsCreator):
         cb.setVisible(False)
 
         if self.isSingleBPM():
-            menubar.addAction('&Calibration').triggered.connect(
-                                                self.open_calibration_window)
+            openCalibrationWindow = QAction('&Calibration', self)
+            util.connect_window(openCalibrationWindow, CalibrationWindow,
+                                parent=self, prefix=self.prefix,
+                                bpm_list=self.bpm_list)
+            menubar.addAction(openCalibrationWindow)
         else:
-            menubar.addAction('&Open Individual BPMs').triggered.connect(
-                                                self.open_single_bpm_window)
-
-    def open_calibration_window(self):
-        app = SiriusApplication.instance()
-        app.open_window(CalibrationWindow, parent=self,
-                        prefix=self.prefix, bpm_list=self.bpm_list)
-
-    def open_single_bpm_window(self):
-        app = SiriusApplication.instance()
-        app.open_window(SingleBPMSelectionWindow, parent=self,
-                        prefix=self.prefix, bpm_list=self.bpm_list)
+            openSingleBPMWindow =  QAction('&Open Individual BPMs', self)
+            util.connect_window(openSingleBPMWindow, SingleBPMSelectionWindow,
+                                parent=self, prefix=self.prefix,
+                                bpm_list=self.bpm_list)
+            menubar.addAction(openSingleBPMWindow)
 
 
 class BPMsInterfaceTL(BPMsInterface):
@@ -133,14 +129,9 @@ class SingleBPMSelectionWindow(SiriusDialog, _WidgetsCreator):
             pv_pref = kwargs['prefix'] + bpm
             led = SiriusLedAlert(self, init_channel=pv_pref+'asyn.CNCT')
             pb = QPushButton(bpm[:-1], self)
-            pb.clicked.connect(self.open_bpm_window(bpm))
-            fl.addRow(led, pb)
-
-    def open_bpm_window(self, bpm):
-        def open(bool):
-            self.app.open_window(BPMsInterface, parent=self.parent(),
+            util.connect_window(pb, BPMsInterface, parent=self.parent(),
                                  prefix=self.prefix, bpm_list=(bpm,))
-        return open
+            fl.addRow(led, pb)
 
 
 class CalibrationWindow(SiriusDialog, _WidgetsCreator):
@@ -415,20 +406,13 @@ class MultiPassDataSingleBPM(QWidget, _WidgetsCreator):
                   PyDMLabel(gb, init_channel=pv_prefix+'_STATSSigma_RBV'))
         vl.addWidget(gb)
         pb = QPushButton('Open FFT Config', wid)
-        pb.clicked.connect(self.open_fft_config_window(wid, prop))
+        util.connect_window(
+            pb, FFTConfigs, parent=wid, prefix=self.prefix,
+            bpm_list=self.bpm_list, data_prefix=self.data_prefix+prop)
         vl.addWidget(pb)
         gl.addItem(vl, 1, 0)
 
         return wid
-
-    def open_fft_config_window(self, wid, prop):
-        app = SiriusApplication.instance()
-
-        def open_window():
-            app.open_window(
-                    FFTConfigs, parent=wid, prefix=self.prefix,
-                    bpm_list=self.bpm_list, data_prefix=self.data_prefix+prop)
-        return open_window
 
 
 class MultiPassDataMultiBPM(MultiPassDataSingleBPM):
