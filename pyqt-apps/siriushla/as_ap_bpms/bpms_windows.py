@@ -87,16 +87,16 @@ class BPMsInterfaceTL(BPMsInterface):
     """BPMs interface for Sirius Transport Lines."""
 
     BPM_DICT = {
-        'TB': [
-            'TB-01:DI-BPM-1', 'TB-01:DI-BPM-2',
-            'TB-02:DI-BPM-1', 'TB-02:DI-BPM-1',
-            'TB-03:DI-BPM',
-            'TB-04:DI-BPM',
-            ],
-        'TS': [
-            'TS-01:DI-BPM', 'TS-02:DI-BPM', 'TS-03:DI-BPM',
-            'TS-04:DI-BPM-1', 'TS-04:DI-BPM-2',
-            ],
+        'TB': (
+            'TB-01:DI-BPM-1:', 'TB-01:DI-BPM-2:',
+            'TB-02:DI-BPM-1:', 'TB-02:DI-BPM-1:',
+            'TB-03:DI-BPM:',
+            'TB-04:DI-BPM:',
+            ),
+        'TS': (
+            'TS-01:DI-BPM:', 'TS-02:DI-BPM:', 'TS-03:DI-BPM:',
+            'TS-04:DI-BPM-1:', 'TS-04:DI-BPM-2:',
+            ),
         }
 
     def __init__(self, parent=None, prefix='', TL=''):
