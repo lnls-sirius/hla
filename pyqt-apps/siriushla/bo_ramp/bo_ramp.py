@@ -2,7 +2,9 @@ import sys
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QGroupBox, QLabel, QWidget, QScrollArea
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QGridLayout, QPushButton
+from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
 from PyQt5.QtWidgets import QSizePolicy as QSzPol
+from pydm.widgets.waveformplot import PyDMWaveformPlot
 from pydm.widgets.label import PyDMLabel
 from pydm.widgets.line_edit import PyDMLineEdit
 from pydm.widgets.spinbox import PyDMSpinbox
@@ -15,7 +17,6 @@ from siriushla.widgets.state_button import PyDMStateButton
 from siriushla.widgets.windows import SiriusMainWindow
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriushla import util as _util
-from base_list import BaseList
 
 
 class RampMain(SiriusMainWindow):
@@ -135,16 +136,70 @@ class RampParameters(QGroupBox):
         self._setupUi()
 
     def _setupUi(self):
-        self.bt_load = QPushButton('Load', self)
-        self.bt_save = QPushButton('Save', self)
-        self.bt_load.clicked.connect(self._load)
-        self.bt_save.clicked.connect(self._save)
+        my_lay = QHBoxLayout(self)
+        self.dip_ramp = DipoleRamp(self, self.prefix)
+        self.mult_ramp = MultipolesRamp(self, self.prefix)
+        self.rf_ramp = RFRamp(self, self.prefix)
+        my_lay.addWidget(self.dip_ramp)
+        my_lay.addWidget(self.mult_ramp)
+        my_lay.addWidget(self.rf_ramp)
 
-    def _load(self):
-        print('Do stuff')
 
-    def _save(self):
-        print('Do stuff')
+class DipoleRamp(QWidget):
+
+    def __init__(self, parent=None, prefix=''):
+        super().__init__(parent)
+        self.prefix = _PVName(prefix)
+        self._setupUi()
+
+    def _setupUi(self):
+        vlay = QVBoxLayout(self)
+        self.graph = PyDMWaveformPlot(self)
+        self.table = QTableWidget(self)
+        vlay.addWidget(
+            QLabel('<h5>Dipole Ramp</h5>', self),
+            alignment=Qt.AlignCenter)
+        vlay.setAlignment(Qt.AlignCenter)
+        vlay.addWidget(self.graph)
+        vlay.addWidget(self.table)
+
+
+class MultipolesRamp(QWidget):
+
+    def __init__(self, parent=None, prefix=''):
+        super().__init__(parent)
+        self.prefix = _PVName(prefix)
+        self._setupUi()
+
+    def _setupUi(self):
+        vlay = QVBoxLayout(self)
+        self.graph = PyDMWaveformPlot(self)
+        self.table = QTableWidget(self)
+        vlay.addWidget(
+            QLabel('<h5>Multipoles Ramp</h5>', self),
+            alignment=Qt.AlignCenter)
+        vlay.setAlignment(Qt.AlignCenter)
+        vlay.addWidget(self.graph)
+        vlay.addWidget(self.table)
+
+
+class RFRamp(QWidget):
+
+    def __init__(self, parent=None, prefix=''):
+        super().__init__(parent)
+        self.prefix = _PVName(prefix)
+        self._setupUi()
+
+    def _setupUi(self):
+        vlay = QVBoxLayout(self)
+        self.graph = PyDMWaveformPlot(self)
+        self.table = QTableWidget(self)
+        vlay.addWidget(
+            QLabel('<h5>RF Ramp</h5>', self),
+            alignment=Qt.AlignCenter)
+        vlay.setAlignment(Qt.AlignCenter)
+        vlay.addWidget(self.graph)
+        vlay.addWidget(self.table)
 
 
 class OpticsAdjust(QGroupBox):
