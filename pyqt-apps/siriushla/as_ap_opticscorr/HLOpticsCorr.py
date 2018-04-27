@@ -36,13 +36,13 @@ class OpticsCorrWindow(SiriusMainWindow):
         if opticsparam == 'tune':
             text = 'Tune'
             self.statusLabel_pv = _epics.PV(
-                prefix+acc.upper()+'-Glob:AP-TuneCorr:Status-Cte')
+                prefix+acc.upper()+'-Glob:AP-TuneCorr:StatusLabels-Cte')
             self.statusLabel_pv.add_callback(self._setStatusLabels)
 
         elif opticsparam == 'chrom':
             text = 'Chromaticity'
             self.statusLabel_pv = _epics.PV(
-                prefix+acc.upper()+'-Glob:AP-ChromCorr:Status-Cte')
+                prefix+acc.upper()+'-Glob:AP-ChromCorr:StatusLabels-Cte')
             self.statusLabel_pv.add_callback(self._setStatusLabels)
 
         self.opticsparam = opticsparam
