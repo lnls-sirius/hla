@@ -20,7 +20,7 @@ from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla import util as _hlautil
 from siriushla.widgets import (SiriusLedAlert, SiriusLedState,
                                PyDMScrollBar, PyDMStateButton,
-                               SiriusMainWindow)
+                               SiriusMainWindow, SiriusCameraView)
 from siriushla.as_ap_bpms.bpms_windows import BPMsInterfaceTL
 from siriushla.as_ap_posang.HLPosAng import ASAPPosAngCorr
 from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
@@ -30,47 +30,6 @@ from siriushla.as_pm_control.PulsedMagnetDetailWindow import (
                                 PulsedMagnetDetailWindow)
 from siriushla.as_pm_control.PulsedMagnetControlWindow import (
                                 PulsedMagnetControlWindow)
-
-
-CALC_LABELS_INITIALIZE = """
-self.centralwidget.comboBox_CalcMethod_Scrn{0}.currentIndexChanged.connect(self._visibility_handle)
-"""
-
-CALC_LABELS_VISIBILITY = """
-self.centralwidget.PyDMLabel_CenterXDimfei_Scrn{0}.setVisible({1})
-self.centralwidget.PyDMLabel_CenterXNDStats_Scrn{0}.setVisible(not {1})
-self.centralwidget.PyDMLabel_CenterYDimfei_Scrn{0}.setVisible({1})
-self.centralwidget.PyDMLabel_CenterYNDStats_Scrn{0}.setVisible(not {1})
-self.centralwidget.PyDMLabel_ThetaDimfei_Scrn{0}.setVisible({1})
-self.centralwidget.PyDMLabel_ThetaNDStats_Scrn{0}.setVisible(not {1})
-self.centralwidget.PyDMLabel_SigmaXDimfei_Scrn{0}.setVisible({1})
-self.centralwidget.PyDMLabel_SigmaXNDStats_Scrn{0}.setVisible(not {1})
-self.centralwidget.PyDMLabel_SigmaYDimfei_Scrn{0}.setVisible({1})
-self.centralwidget.PyDMLabel_SigmaYNDStats_Scrn{0}.setVisible(not {1})
-"""
-
-CALC_LABELS_CHANNELS = """
-self.centralwidget.PyDMLabel_CenterXDimfei_Scrn{0}.channel = ('ca://'
-    + self.prefix + '{1}' + ':CenterXDimfei-Mon')
-self.centralwidget.PyDMLabel_CenterXNDStats_Scrn{0}.channel = ('ca://'
-    + self.prefix + '{1}' + ':CenterXNDStats-Mon')
-self.centralwidget.PyDMLabel_CenterYDimfei_Scrn{0}.channel = ('ca://'
-    + self.prefix + '{1}' + ':CenterYDimfei-Mon')
-self.centralwidget.PyDMLabel_CenterYNDStats_Scrn{0}.channel = ('ca://'
-    + self.prefix + '{1}' + ':CenterYNDStats-Mon')
-self.centralwidget.PyDMLabel_ThetaDimfei_Scrn{0}.channel = ('ca://'
-    + self.prefix + '{1}' + ':ThetaDimfei-Mon')
-self.centralwidget.PyDMLabel_ThetaNDStats_Scrn{0}.channel = ('ca://'
-    + self.prefix + '{1}' + ':ThetaNDStats-Mon')
-self.centralwidget.PyDMLabel_SigmaXDimfei_Scrn{0}.channel = ('ca://'
-    + self.prefix + '{1}' + ':SigmaXDimfei-Mon')
-self.centralwidget.PyDMLabel_SigmaXNDStats_Scrn{0}.channel = ('ca://'
-    + self.prefix + '{1}' + ':SigmaXNDStats-Mon')
-self.centralwidget.PyDMLabel_SigmaYDimfei_Scrn{0}.channel = ('ca://'
-    + self.prefix + '{1}' + ':SigmaYDimfei-Mon')
-self.centralwidget.PyDMLabel_SigmaYNDStats_Scrn{0}.channel = ('ca://'
-    + self.prefix + '{1}' + ':SigmaYNDStats-Mon')
-"""
 
 
 class TLAPControlWindow(SiriusMainWindow):
@@ -98,6 +57,13 @@ class TLAPControlWindow(SiriusMainWindow):
             '/tl_ap_control/' + UI_FILE, {'PREFIX': self.prefix})
         self.centralwidget = loadUi(tmp_file)
         self.setCentralWidget(self.centralwidget)
+
+        self.scrn_dict = {'0': self.centralwidget.widget_Scrn0,
+                          '1': self.centralwidget.widget_Scrn1,
+                          '2': self.centralwidget.widget_Scrn2,
+                          '3': self.centralwidget.widget_Scrn3,
+                          '4': self.centralwidget.widget_Scrn4,
+                          '5': self.centralwidget.widget_Scrn5}
 
         # Fill TL Lattice Widget
         lattice = QSvgWidget('/home/fac_files/lnls-sirius/hla/pyqt-apps/'
@@ -136,6 +102,32 @@ class TLAPControlWindow(SiriusMainWindow):
             appsMenu.addAction(openICTsApp)
         self.setMenuBar(menubar)
 
+        # Fill Screen widgets
+        widget_camview = SiriusCameraView(
+            parent=self, prefix=self.prefix, device=scrn_list[0])
+        widget_camview.setObjectName('widget_camview_Scrn0')
+        self.centralwidget.widget_Scrn0.layout().addWidget(widget_camview)
+        widget_camview = SiriusCameraView(
+            parent=self, prefix=self.prefix, device=scrn_list[1])
+        widget_camview.setObjectName('widget_camview_Scrn1')
+        self.centralwidget.widget_Scrn1.layout().addWidget(widget_camview)
+        widget_camview = SiriusCameraView(
+            parent=self, prefix=self.prefix, device=scrn_list[2])
+        widget_camview.setObjectName('widget_camview_Scrn2')
+        self.centralwidget.widget_Scrn2.layout().addWidget(widget_camview)
+        widget_camview = SiriusCameraView(
+            parent=self, prefix=self.prefix, device=scrn_list[3])
+        widget_camview.setObjectName('widget_camview_Scrn3')
+        self.centralwidget.widget_Scrn3.layout().addWidget(widget_camview)
+        widget_camview = SiriusCameraView(
+            parent=self, prefix=self.prefix, device=scrn_list[4])
+        widget_camview.setObjectName('widget_camview_Scrn4')
+        self.centralwidget.widget_Scrn4.layout().addWidget(widget_camview)
+        widget_camview = SiriusCameraView(
+            parent=self, prefix=self.prefix, device=scrn_list[5])
+        widget_camview.setObjectName('widget_camview_Scrn5')
+        self.centralwidget.widget_Scrn5.layout().addWidget(widget_camview)
+
         # Connect and initialize reference widget
         self.centralwidget.tabWidget_Scrns.setCurrentIndex(0)
         self._currScrn = 0
@@ -165,13 +157,6 @@ class TLAPControlWindow(SiriusMainWindow):
             self._vslitwidthpv = _epics.PV(
                 self.prefix + 'TB-01:DI-SlitV:Width-RB',
                 callback=self._setSlitVPos)
-
-        # Set Visibility of Scrn Calculations Labels
-        for i, device in scrn_list:
-            exec(CALC_LABELS_INITIALIZE.format(i))
-            visible = True
-            exec(CALC_LABELS_VISIBILITY.format(i, visible))
-            exec(CALC_LABELS_CHANNELS.format(i, device))
 
         # Create Scrn+Correctors Panel
         headerline = QWidget()
@@ -242,61 +227,33 @@ class TLAPControlWindow(SiriusMainWindow):
             UI_FILE = ('ui_tb_ap_control.ui')
             SVG_FILE = ('TB.svg')
             correctors_list = [
-                [['LI-01:MA-CH-7'], 'LI-01:MA-CV-7', 11, 'TB-01:DI-Scrn-1'],
-                [['TB-01:MA-CH-1'], 'TB-01:MA-CV-1', 12, 'TB-01:DI-Scrn-2'],
-                [['TB-01:MA-CH-2'], 'TB-01:MA-CV-2', 21, 'TB-02:DI-Scrn-1'],
-                [['TB-02:MA-CH-1'], 'TB-02:MA-CV-1', 22, 'TB-02:DI-Scrn-2'],
-                [['TB-02:MA-CH-2'], 'TB-02:MA-CV-2', 3, 'TB-03:DI-Scrn'],
-                [['TB-03:MA-CH'], 'TB-04:MA-CV-1', 4, 'TB-04:DI-Scrn']]
-            scrn_list = [
-                [11, 'TB-01:DI-Scrn-1'], [12, 'TB-01:DI-Scrn-2'],
-                [21, 'TB-02:DI-Scrn-1'], [22, 'TB-02:DI-Scrn-2'],
-                [3, 'TB-03:DI-Scrn'], [4, 'TB-04:DI-Scrn']]
+                [['LI-01:MA-CH-7'], 'LI-01:MA-CV-7', 0, 'TB-01:DI-Scrn-1'],
+                [['TB-01:MA-CH-1'], 'TB-01:MA-CV-1', 1, 'TB-01:DI-Scrn-2'],
+                [['TB-01:MA-CH-2'], 'TB-01:MA-CV-2', 2, 'TB-02:DI-Scrn-1'],
+                [['TB-02:MA-CH-1'], 'TB-02:MA-CV-1', 3, 'TB-02:DI-Scrn-2'],
+                [['TB-02:MA-CH-2'], 'TB-02:MA-CV-2', 4, 'TB-03:DI-Scrn'],
+                [['TB-03:MA-CH'], 'TB-04:MA-CV-1', 5, 'TB-04:DI-Scrn']]
+            scrn_list = ['TB-01:DI-Scrn-1', 'TB-01:DI-Scrn-2',
+                         'TB-02:DI-Scrn-1', 'TB-02:DI-Scrn-2',
+                         'TB-03:DI-Scrn', 'TB-04:DI-Scrn']
         elif tl.lower() == 'ts':
             UI_FILE = ('ui_ts_ap_control.ui')
             SVG_FILE = ('TS.svg')
             correctors_list = [
                 [['TS-01:PM-EjeSeptF', 'TS-01:PM-EjeSeptG'],
-                 'TS-01:MA-CV-1', 1, 'TS-01:DI-Scrn'],
-                [['TS-01:MA-CH'], 'TS-01:MA-CV-2', 2, 'TS-02:DI-Scrn'],
-                [['TS-02:MA-CH'], 'TS-02:MA-CV', 3, 'TS-03:DI-Scrn'],
-                [['TS-03:MA-CH'], 'TS-03:MA-CV', 41, 'TS-04:DI-Scrn-1'],
-                [['TS-04:MA-CH'], 'TS-04:MA-CV-1', 42, 'TS-04:DI-Scrn-2'],
+                 'TS-01:MA-CV-1', 0, 'TS-01:DI-Scrn'],
+                [['TS-01:MA-CH'], 'TS-01:MA-CV-2', 1, 'TS-02:DI-Scrn'],
+                [['TS-02:MA-CH'], 'TS-02:MA-CV', 2, 'TS-03:DI-Scrn'],
+                [['TS-03:MA-CH'], 'TS-03:MA-CV', 3, 'TS-04:DI-Scrn-1'],
+                [['TS-04:MA-CH'], 'TS-04:MA-CV-1', 4, 'TS-04:DI-Scrn-2'],
                 [['TS-04:PM-InjSeptG-1', 'TS-04:PM-InjSeptG-2',
-                  'TS-04:PM-InjSeptF'], 'TS-04:MA-CV-2', 43,
+                  'TS-04:PM-InjSeptF'], 'TS-04:MA-CV-2', 5,
                  'TS-04:DI-Scrn-3']]
-            scrn_list = [
-                [1, 'TS-01:DI-Scrn'], [2, 'TS-02:DI-Scrn'],
-                [3, 'TS-03:DI-Scrn'], [41, 'TS-04:DI-Scrn-1'],
-                [42, 'TS-04:DI-Scrn-2'], [43, 'TS-04:DI-Scrn-3']]
+            scrn_list = ['TS-01:DI-Scrn', 'TS-02:DI-Scrn',
+                         'TS-03:DI-Scrn', 'TS-04:DI-Scrn-1',
+                         'TS-04:DI-Scrn-2', 'TS-04:DI-Scrn-3']
 
         return [UI_FILE, SVG_FILE, correctors_list, scrn_list]
-
-    @pyqtSlot(int)
-    def _visibility_handle(self, index):
-        if index == 0:
-            visible = True
-        else:
-            visible = False
-
-        if self._tl.lower() == 'tb':
-            scrn_dict = {'tb0': 11,
-                         'tb1': 12,
-                         'tb2': 21,
-                         'tb3': 22,
-                         'tb4': 3,
-                         'tb5': 4,
-                         }
-        elif self._tl.lower() == 'ts':
-            scrn_dict = {'ts0': 1,
-                         'ts1': 2,
-                         'ts2': 3,
-                         'ts3': 41,
-                         'ts4': 42,
-                         'ts5': 43,
-                         }
-        scrn = scrn_dict[self._tl.lower()+str(self._currScrn)]
-        exec(CALC_LABELS_VISIBILITY.format(scrn, visible))
 
     @pyqtSlot(int)
     def _setCurrentScrn(self, currScrn):
@@ -319,28 +276,11 @@ class TLAPControlWindow(SiriusMainWindow):
                                 'Images (*.png *.xpm *.jpg);;All Files (*)')
         if not fn:
             return False
-
         lfn = fn.lower()
         if not lfn.endswith(('.png', '.jpg', '.xpm')):
             fn += '.png'
 
-        if self._tl.lower() == 'tb':
-            scrn_dict = {'tb0': self.centralwidget.widget_Scrn11,
-                         'tb1': self.centralwidget.widget_Scrn12,
-                         'tb2': self.centralwidget.widget_Scrn21,
-                         'tb3': self.centralwidget.widget_Scrn22,
-                         'tb4': self.centralwidget.widget_Scrn3,
-                         'tb5': self.centralwidget.widget_Scrn4,
-                         }
-        elif self._tl.lower() == 'ts':
-            scrn_dict = {'ts0': self.centralwidget.widget_Scrn1,
-                         'ts1': self.centralwidget.widget_Scrn2,
-                         'ts2': self.centralwidget.widget_Scrn3,
-                         'ts3': self.centralwidget.widget_Scrn41,
-                         'ts4': self.centralwidget.widget_Scrn42,
-                         'ts5': self.centralwidget.widget_Scrn43,
-                         }
-        scrn_widget = scrn_dict[self._tl.lower() + str(self._currScrn)]
+        scrn_widget = self.scrn_dict[str(self._currScrn)]
         reference = scrn_widget.grab()
         reference.save(fn)
 
@@ -411,7 +351,7 @@ class TLAPControlWindow(SiriusMainWindow):
     def _create_scrndetailwidget(self, scrnprefix, scrn):
         """Create and return a screen detail widget."""
         scrn_details = QWidget()
-        scrn_details.setObjectName('widget_Scrn' + str(scrn))
+        scrn_details.setObjectName('widget_Scrn' + str(scrn) + 'Control')
         scrn_details.setLayout(QHBoxLayout())
         scrn_details.layout().setContentsMargins(3, 3, 3, 3)
 
@@ -432,7 +372,11 @@ class TLAPControlWindow(SiriusMainWindow):
         pydmcombobox_scrntype = PyDMEnumComboBox(
             self, 'ca://' + self.prefix + scrnprefix + ':ScrnType-Sel')
         pydmcombobox_scrntype.setObjectName(
-            'PyDMEnumComboBox_ScrnType_Sel_Scrn'+str(scrn))
+            'PyDMEnumComboBox_ScrnType_Sel_Scrn' + str(scrn))
+        widget_camview = self.scrn_dict[str(scrn)].findChild(
+            SiriusCameraView, 'widget_camview_Scrn' + str(scrn))
+        pydmcombobox_scrntype.currentIndexChanged.connect(
+            widget_camview.updateCalibrationGridFlag)
         widget_scrntype_sp.layout().addWidget(pydmcombobox_scrntype)
 
         led_scrntype = SiriusLedAlert(
