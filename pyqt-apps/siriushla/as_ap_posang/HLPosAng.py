@@ -94,7 +94,7 @@ class ASAPPosAngCorr(SiriusMainWindow):
         self._setCorrectorsLabels(correctors, prefix)
 
         self.statusLabel_pv = _epics.PV(
-            prefix + tl.upper() + '-Glob:AP-PosAng:Status-Cte')
+            prefix + tl.upper() + '-Glob:AP-PosAng:StatusLabels-Cte')
         self.statusLabel_pv.add_callback(self._setStatusLabels)
 
     def set_widgets_channel(self, widget2pv_list, prefix):

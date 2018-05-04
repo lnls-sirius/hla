@@ -7,13 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>2500</width>
-    <height>1001</height>
+    <height>1100</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>2500</width>
-    <height>1000</height>
+    <height>1100</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -25,10 +25,16 @@
   <layout class="QGridLayout" name="gridLayout_4">
    <item row="0" column="0" colspan="9">
     <widget class="QLabel" name="label_4">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="minimumSize">
       <size>
        <width>0</width>
-       <height>0</height>
+       <height>40</height>
       </size>
      </property>
      <property name="styleSheet">
@@ -513,6 +519,9 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
         <property name="orientation">
          <enum>Qt::Vertical</enum>
         </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::MinimumExpanding</enum>
+        </property>
         <property name="sizeHint" stdset="0">
          <size>
           <width>20</width>
@@ -525,6 +534,9 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
        <spacer name="verticalSpacer_7">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::MinimumExpanding</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
@@ -616,6 +628,9 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
        <spacer name="verticalSpacer">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::MinimumExpanding</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
@@ -924,12 +939,12 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
          <enum>Qt::Vertical</enum>
         </property>
         <property name="sizeType">
-         <enum>QSizePolicy::Maximum</enum>
+         <enum>QSizePolicy::MinimumExpanding</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
           <width>20</width>
-          <height>120</height>
+          <height>40</height>
          </size>
         </property>
        </spacer>
@@ -940,12 +955,12 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
          <enum>Qt::Vertical</enum>
         </property>
         <property name="sizeType">
-         <enum>QSizePolicy::Maximum</enum>
+         <enum>QSizePolicy::MinimumExpanding</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
           <width>20</width>
-          <height>120</height>
+          <height>40</height>
          </size>
         </property>
        </spacer>
@@ -992,11 +1007,88 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
      </layout>
     </widget>
    </item>
+   <item row="1" column="8">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Current Status</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="2" column="1">
+       <widget class="SiriusLedState" name="SiriusLedState_2">
+        <property name="minimumSize">
+         <size>
+          <width>40</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
+        </property>
+        <property name="channel" stdset="0">
+         <string>ca://${PREFIX}BO-Glob:AP-CurrInfo:StoredEBeam-Mon</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string>Stored EBeam?</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" colspan="2">
+       <spacer name="verticalSpacer_9">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::MinimumExpanding</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="1" column="0" colspan="2">
+       <spacer name="verticalSpacer_13">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::MinimumExpanding</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
   </layout>
   <zorder>label_4</zorder>
   <zorder>groupBox_3</zorder>
   <zorder>groupBox_2</zorder>
   <zorder>frame</zorder>
+  <zorder>groupBox</zorder>
  </widget>
  <customwidgets>
   <customwidget>
@@ -1023,6 +1115,21 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
    <class>PyDMSpinbox</class>
    <extends>QDoubleSpinBox</extends>
    <header>pydm.widgets.spinbox</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMLed</class>
+   <extends>QLed</extends>
+   <header>siriushla.widgets.led</header>
+  </customwidget>
+  <customwidget>
+   <class>SiriusLedState</class>
+   <extends>PyDMLed</extends>
+   <header>siriushla.widgets.led</header>
+  </customwidget>
+  <customwidget>
+   <class>QLed</class>
+   <extends>QFrame</extends>
+   <header>siriushla.widgets.QLed</header>
   </customwidget>
  </customwidgets>
  <resources/>
