@@ -1,296 +1,50 @@
+"""Sirius ImageView and CameraView classes."""
+
 import numpy as np
-import pyqtgraph
-from pyqtgraph import ImageView, ColorMap
-from pyqtgraph.graphicsItems.ViewBox.ViewBoxMenu import ViewBoxMenu
-from pydm.PyQt.QtGui import QActionGroup
-from pydm.PyQt.QtCore import pyqtSlot, pyqtProperty, Q_ENUMS, QTimer
-from pydm.widgets.channel import PyDMChannel
-from pydm.widgets.colormaps import cmaps, cmap_names, PyDMColorMap
-from pydm.widgets.base import PyDMWidget
-pyqtgraph.setConfigOption('imageAxisOrder', 'row-major')
+from pydm.PyQt.QtGui import (QWidget, QLabel, QGridLayout,
+                             QSpacerItem, QGroupBox, QComboBox, QPushButton,
+                             QCheckBox)
+from pydm.PyQt.QtGui import QSizePolicy as QSzPlcy
+from pydm.PyQt.QtCore import Qt, pyqtSlot
+from pydm.widgets import PyDMImageView, PyDMLabel, PyDMLineEdit
+from siriuspy.envars import vaca_prefix as _vaca_prefix
 
 
-class ReadingOrder(object):
-    """Class to build ReadingOrder ENUM property."""
-
-    Fortranlike = 0
-    Clike = 1
-
-
-class SiriusImageView(ImageView, PyDMWidget, PyDMColorMap, ReadingOrder):
-    """
-    A PyQtGraph ImageView with support for Channels and more from PyDM.
-
-    If there is no :attr:`channelWidth` it is possible to define the width of
-    the image with the :attr:`width` property.
-
-    The :attr:`normalizeData` property defines if the colors of the images are
-    relative to the :attr:`colorMapMin` and :attr:`colorMapMax` property or to
-    the minimum and maximum values of the image.
-
-    Parameters
-    ----------
-    parent : QWidget
-        The parent widget for the Label
-    image_channel : str, optional
-        The channel to be used by the widget for the image data.
-    width_channel : str, optional
-        The channel to be used by the widget to receive the image width
-        information
-    """
-
-    Q_ENUMS(ReadingOrder)
-    Q_ENUMS(PyDMColorMap)
-
-    reading_orders = {ReadingOrder.Fortranlike: 'F',
-                      ReadingOrder.Clike: 'C'}
-    color_maps = cmaps
+class SiriusImageView(PyDMImageView):
+    """A PyDMImageView with methods to handle screens calibration grids."""
 
     def __init__(self, parent=None, image_channel=None, width_channel=None):
         """Initialize the object."""
-        ImageView.__init__(self, parent)
-        PyDMWidget.__init__(self)
-        self.axes = dict({"t": None, "x": 0, "y": 1, "c": None})
-        self._imagechannel = image_channel
-        self._widthchannel = width_channel
-        self.image_waveform = np.zeros(0)
-        self._image_width = 0
-        self._normalize_data = False
+        PyDMImageView.__init__(self, parent=parent,
+                               image_channel=image_channel,
+                               width_channel=width_channel)
+        self._calibration_grid_image = None
+        self._show_calibration_grid = False
 
-        # Hide some itens of the widget
-        self.ui.histogram.hide()
-        self.getImageItem().sigImageChanged.disconnect(
-                                        self.ui.histogram.imageChanged)
-        self.ui.roiBtn.hide()
-        self.ui.menuBtn.hide()
-
-        # Set color map limits
-        self.cm_min = 0.0
-        self.cm_max = 255.0
-
-        # Set default reading order of numpy array data to Fortranlike
-        self._reading_order = ReadingOrder.Fortranlike
-
-        # Make a right-click menu for changing the color map.
-        self.cm_group = QActionGroup(self)
-        self.cmap_for_action = {}
-        for cm in self.color_maps:
-            action = self.cm_group.addAction(cmap_names[cm])
-            action.setCheckable(True)
-            self.cmap_for_action[action] = cm
-
-        # Set the default colormap.
-        self._colormap = PyDMColorMap.Inferno
-        self._cm_colors = None
-        self.colorMap = self._colormap
-
-        # Setup the redraw timer.
-        self.needs_redraw = False
-        self.redraw_timer = QTimer(self)
-        self.redraw_timer.timeout.connect(self.redrawImage)
-        self._redraw_rate = 30
-        self.maxRedrawRate = self._redraw_rate
-
-    def widget_ctx_menu(self):
-        """
-        Fetch the Widget specific context menu.
-
-        It will be populated with additional tools by `assemble_tools_menu`.
-
-        Returns
-        -------
-        QMenu or None
-            If the return of this method is None a new QMenu will be created by
-            `assemble_tools_menu`.
-        """
-        self.menu = ViewBoxMenu(self.getView())
-        cm_menu = self.menu.addMenu("Color Map")
-        for act in self.cmap_for_action.keys():
-            cm_menu.addAction(act)
-        cm_menu.triggered.connect(self._changeColorMap)
-        return self.menu
-
-    def _changeColorMap(self, action):
-        """
-        Change the colormap via action from ContextMenu.
-
-        Method invoked by the colormap Action Menu that changes the
-        current colormap used to render the image.
-
-        Parameters
-        ----------
-        action : QAction
-        """
-        self.colorMap = self.cmap_for_action[action]
-
-    @pyqtProperty(int)
-    def colorMapMin(self):
-        """Minimum value to be considered for color scale definition.
-
-        Returns
-        -------
-        float
-            minimum value of the color scale.
-        """
-        return self.cm_min
-
-    @colorMapMin.setter
-    @pyqtSlot(int)
-    def colorMapMin(self, new_min):
-        """Set the minimum value to be considered for color scale definition.
-
-        Parameters
-        -------
-        new_min: float
-        """
-        if self.cm_min == new_min or new_min > self.cm_max:
-            return
-        self.cm_min = float(new_min)
-        self.setColorMap()
-
-    @pyqtProperty(int)
-    def colorMapMax(self):
-        """Maximum value to be considered for color scale definition.
-
-        Returns
-        -------
-        float
-            maximum value of the color scale.
-        """
-        return self.cm_max
-
-    @colorMapMax.setter
-    @pyqtSlot(int)
-    def colorMapMax(self, new_max):
-        """Set the maximum value to be considered for color scale definition.
-
-        Parameters
-        -------
-        new_max: float
-        """
-        if self.cm_max == new_max or new_max < self.cm_min:
-            return
-        self.cm_max = float(new_max)
-        self.setColorMap()
-
-    def setColorMapLimits(self, mn, mx):
-        """Set the limit values for the colormap.
-
-        Parameters
-        ----------
-        mn : int
-            The lower limit
-        mx : int
-            The upper limit
-        """
-        if mn >= mx:
-            return
-        self.cm_max = float(mx)
-        self.cm_min = float(mn)
-        self.setColorMap()
-
-    @pyqtProperty(PyDMColorMap)
-    def colorMap(self):
-        """
-        Return the color map used by the ImageView.
-
-        Returns
-        -------
-        PyDMColorMap
-        """
-        return self._colormap
-
-    @colorMap.setter
-    def colorMap(self, new_cmap):
-        """
-        Set the color map used by the ImageView.
-
-        Parameters
-        ----------
-        new_cmap: PyDMColorMap
-        """
-        self._colormap = new_cmap
-        self._cm_colors = self.color_maps[new_cmap]
-        self.setColorMap()
-        for action in self.cm_group.actions():
-            if self.cmap_for_action[action] == self._colormap:
-                action.setChecked(True)
-            else:
-                action.setChecked(False)
-
-    def setColorMap(self, cmap=None):
-        """
-        Update the image colormap.
-
-        Parameters
-        ----------
-        cmap : ColorMap
-        """
-        if not cmap:
-            if not self._cm_colors.any():
-                return
-            pos = np.linspace(0.0, 1.0, num=len(self._cm_colors))
-            cmap = ColorMap(pos, self._cm_colors)
-        self.getView().setBackgroundColor(cmap.map(0))
-        lut = cmap.getLookupTable(0.0, 1.0, alpha=False)
-        self.getImageItem().setLookupTable(lut)
+    @pyqtSlot()
+    def saveCalibrationGrid(self):
+        """Save current image as calibration_grid_image."""
+        img = self.image_waveform
+        grid = np.where(img < 0.5, True, False)
+        self._calibration_grid_image = grid
 
     @pyqtSlot(bool)
-    def image_connection_state_changed(self, conn):
-        """
-        Callback invoked when the Image Channel connection state is changed.
-
-        Parameters
-        ----------
-        conn : bool
-            The new connection state.
-        """
-        if conn:
-            self.redraw_timer.start()
-        else:
-            self.redraw_timer.stop()
-
-    @pyqtSlot(np.ndarray)
-    def image_value_changed(self, new_image):
-        """
-        Callback invoked when the Image Channel value is changed.
-
-        Reshape and display the new image.
-
-        Parameters
-        ----------
-        new_image : np.ndarray
-            The new image data.  This can be a flat 1D array, or a 2D array.
-        """
-        if new_image is None or not new_image.size:
-            return
-        self.image_waveform = new_image
-        self.needs_redraw = True
-
-    @pyqtSlot(int)
-    def image_width_changed(self, new_width):
-        """
-        Callback invoked when the Image Width Channel value is changed.
-
-        Reshape the image data and triggers a ```redrawImage```
-
-        Parameters
-        ----------
-        new_width : int
-            The new image width
-        """
-        if new_width is None:
-            return
-        self._image_width = int(new_width)
+    def showCalibrationGrid(self, show):
+        """Show calibration_grid_image over the current image_waveform."""
+        self._show_calibration_grid = show
 
     def redrawImage(self):
-        """Set the image data into the ImageItem."""
+        """
+        Set the image data into the ImageItem, if needed.
+
+        If necessary, reshape the image to 2D first.
+        """
         if not self.needs_redraw:
             return
         image_dimensions = len(self.image_waveform.shape)
         if image_dimensions == 1:
             if self.imageWidth < 1:
-                # There is no width for this image yet, so we can't draw it.
+                # We don't have a width for this image yet, so we can't draw it
                 return
             img = self.image_waveform.reshape(
                 self.imageWidth, -1,
@@ -300,6 +54,12 @@ class SiriusImageView(ImageView, PyDMWidget, PyDMColorMap, ReadingOrder):
 
         if len(img) <= 0:
             return
+        if (self._show_calibration_grid and
+                self._calibration_grid_image is not None):
+            grid = self._calibration_grid_image.reshape(
+                self.imageWidth, -1,
+                order=self.reading_orders[self._reading_order])
+            img[grid] = img.max()
         if self._normalize_data:
             mini = self.image_waveform.min()
             maxi = self.image_waveform.max()
@@ -313,177 +73,278 @@ class SiriusImageView(ImageView, PyDMWidget, PyDMColorMap, ReadingOrder):
             autoDownsample=True)
         self.needs_redraw = False
 
-    @pyqtProperty(int)
-    def imageWidth(self):
-        """Return the width of the image.
 
-        Return
-        ------
-        int
-        """
-        return self._image_width
+class SiriusCameraView(QWidget):
+    """Class to read Sirius cameras image data."""
 
-    @imageWidth.setter
-    def imageWidth(self, new_width):
-        """Set the width of the image.
+    def __init__(self, parent=None, prefix='', device=None):
+        """Initialize object."""
+        QWidget.__init__(self, parent=parent)
+        if prefix == '':
+            self.prefix = _vaca_prefix
+        else:
+            self.prefix = prefix
+        self.device = device
+        self._calibrationgrid_flag = 0
+        self.setLayout(QGridLayout())
+        self.setStyleSheet("""font-size:20pt;""")
+        self._setupUi()
 
-        Can be overridden by :attr:`widthChannel`.
+    @property
+    def calibrationgrid_flag(self):
+        """Indicate if the screen device is in calibration grid position."""
+        return self._calibrationgrid_flag
 
-        Parameters
-        ----------
-        new_width: int
-        """
-        if self._image_width != int(new_width) and self._widthchannel is None:
-            self._image_width = int(new_width)
+    @pyqtSlot(int)
+    def updateCalibrationGridFlag(self, new_state):
+        """Update calibrationgrid_flag property."""
+        if new_state != self._calibrationgrid_flag:
+            self._calibrationgrid_flag = new_state
 
-    @pyqtProperty(bool)
-    def normalizeData(self):
-        """Return True if the colors are relative to data maximum and minimum.
+            if new_state == 2:
+                self.pushbutton_savegrid.setEnabled(True)
+            else:
+                self.pushbutton_savegrid.setEnabled(False)
 
-        Returns
-        ----------
-        bool
-        """
-        return self._normalize_data
+    def _setupUi(self):
+        # Camera View Widget
+        self.cameraview_widget = QWidget()
+        self.cameraview_layout = QGridLayout()
+        self.cameraview_layout.setContentsMargins(0, 0, 0, 0)
+        self.cameraview_layout.addItem(
+            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum), 1, 1)
+        self.device_label = QLabel(self.device)
+        self.device_label.setVisible(False)
+        self.cameraview_layout.addWidget(self.device_label, 2, 1)
+        self.image_view = SiriusImageView(
+            parent=self,
+            image_channel='ca://'+self.prefix+self.device+':ImgData-Mon',
+            width_channel='ca://'+self.prefix+self.device+':ImgWidth-Cte')
+        self.image_view.normalizeData = True
+        self.image_view.setMinimumSize(800, 640)
+        self.cameraview_layout.addWidget(self.image_view, 3, 1)
+        self.cameraview_layout.addItem(
+            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum), 4, 1)
+        self.cameraview_widget.setLayout(self.cameraview_layout)
+        self.layout().addWidget(self.cameraview_widget, 1, 1, 1, 3)
 
-    @normalizeData.setter
-    @pyqtSlot(bool)
-    def normalizeData(self, new_norm):
-        """Define if the colors are relative to maximum and minimum of data.
+        # Camera Settings
+        self.camerasettings_groupox = QGroupBox('Camera Settings', self)
+        self.camerasettings_layout = QGridLayout()
+        self.camerasettings_layout.addItem(
+            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum), 2, 1)
+        self.label = QLabel('CamGain', self)
+        self.label.setAlignment(Qt.AlignHCenter)
+        self.camerasettings_layout.addWidget(self.label, 3, 1, 1, 2)
+        self.PyDMLineEdit_CamGain = PyDMLineEdit(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device+':CamGain-SP')
+        self.PyDMLineEdit_CamGain.setMaximumSize(140, 40)
+        self.camerasettings_layout.addWidget(self.PyDMLineEdit_CamGain, 4, 1)
+        self.PyDMLabel_CamGain = PyDMLabel(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device+':CamGain-RB')
+        self.PyDMLabel_CamGain.setMaximumSize(140, 40)
+        self.camerasettings_layout.addWidget(self.PyDMLabel_CamGain, 4, 2)
+        self.label = QLabel('ROI Heigth', self)
+        self.label.setAlignment(Qt.AlignHCenter)
+        self.camerasettings_layout.addWidget(self.label, 5, 1, 1, 2)
+        self.PyDMLineEdit_ROIHeight = PyDMLineEdit(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device+':ImgROIHeight-SP')
+        self.PyDMLineEdit_ROIHeight.setMaximumSize(140, 40)
+        self.camerasettings_layout.addWidget(self.PyDMLineEdit_ROIHeight, 6, 1)
+        self.PyDMLabel_ROIHeight = PyDMLabel(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device+':ImgROIHeight-RB')
+        self.PyDMLabel_ROIHeight.setMaximumSize(140, 40)
+        self.camerasettings_layout.addWidget(self.PyDMLabel_ROIHeight, 6, 2)
+        self.label = QLabel('ROI Width', self)
+        self.label.setAlignment(Qt.AlignHCenter)
+        self.camerasettings_layout.addWidget(self.label, 7, 1, 1, 2)
+        self.PyDMLineEdit_ROIWidth = PyDMLineEdit(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device+':ImgROIWidth-SP')
+        self.PyDMLineEdit_ROIWidth.setMaximumSize(140, 40)
+        self.camerasettings_layout.addWidget(self.PyDMLineEdit_ROIWidth, 8, 1)
+        self.PyDMLabel_ROIWidth = PyDMLabel(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device+':ImgROIWidth-RB')
+        self.PyDMLabel_ROIWidth.setMaximumSize(140, 40)
+        self.camerasettings_layout.addWidget(self.PyDMLabel_ROIWidth, 8, 2)
+        self.camerasettings_layout.addItem(
+            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum), 9, 1)
+        self.camerasettings_groupox.setLayout(self.camerasettings_layout)
+        self.layout().addWidget(self.camerasettings_groupox, 2, 1)
 
-        Parameters
-        ----------
-        new_norm: bool
-        """
-        if self._normalize_data == new_norm:
-            return
-        self._normalize_data = new_norm
+        self.layout().addItem(
+            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum), 3, 1)
 
-    @pyqtProperty(ReadingOrder)
-    def readingOrder(self):
-        """Reading order of the :attr:`imageChannel` array.
+        # Calibration Grid Widget
+        self.calibrationgrid_groupox = QGroupBox('Screen Calibration', self)
+        self.calibrationgrid_layout = QGridLayout()
+        self.calibrationgrid_layout.addItem(
+            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum), 1, 1)
+        self.checkBox_showgrid = QCheckBox('Show grid', self)
+        self.checkBox_showgrid.toggled.connect(
+            self.image_view.showCalibrationGrid)
+        self.calibrationgrid_layout.addWidget(self.checkBox_showgrid, 2, 1)
+        self.pushbutton_savegrid = QPushButton(
+            'Save current \n calibration grid', self)
+        self.calibrationgrid_layout.addItem(
+            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum), 3, 1)
+        self.pushbutton_savegrid.clicked.connect(
+            self.image_view.saveCalibrationGrid)
+        self.pushbutton_savegrid.setEnabled(False)
+        self.calibrationgrid_layout.addWidget(self.pushbutton_savegrid, 4, 1)
+        self.calibrationgrid_layout.addItem(
+            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum), 5, 1)
+        self.calibrationgrid_groupox.setLayout(self.calibrationgrid_layout)
+        self.calibrationgrid_layout.setAlignment(Qt.AlignHCenter)
+        self.layout().addWidget(self.calibrationgrid_groupox, 4, 1)
 
-        Returns
-        -------
-        ReadingOrder
-        """
-        return int(self._reading_order)
+        # Statistics Widget
+        self.statistics_groupox = QGroupBox('Statistics', self)
+        self.statistics_layout = QGridLayout()
+        self.statistics_layout.addItem(
+            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum), 1, 1)
 
-    @readingOrder.setter
-    def readingOrder(self, new_order):
-        """Set reading order of the :attr:`imageChannel` array.
+        # - Method
+        self.label_Method = QLabel('CalcMethod', self)
+        self.label_Method.setMaximumHeight(40)
+        self.statistics_layout.addWidget(self.label_Method, 2, 1, 1, 5)
 
-        Parameters
-        ----------
-        new_order: ReadingOrder
-        """
-        if self._reading_order != new_order:
-            self._reading_order = new_order
+        self.comboBox_Method = QComboBox(self)
+        self.comboBox_Method.addItem('Dimfei', 0)
+        self.comboBox_Method.addItem('NDStats', 1)
+        self.comboBox_Method.setCurrentIndex(0)
+        self.comboBox_Method.currentIndexChanged.connect(
+            self._handleShowStatistics)
+        self.statistics_layout.addWidget(self.comboBox_Method, 3, 1, 1, 5)
 
-    def keyPressEvent(self, ev):
-        """Handle keypress events."""
-        return
+        # - Centroid
+        self.label_Centroid = QLabel('Centroid', self)
+        self.label_Centroid.setMaximumHeight(40)
+        self.statistics_layout.addWidget(self.label_Centroid, 4, 1, 1, 5)
+        self.label = QLabel('(', self)
+        self.label.setMaximumSize(10, 40)
+        self.statistics_layout.addWidget(self.label, 5, 1)
 
-    @pyqtProperty(str)
-    def imageChannel(self):
-        """
-        The channel address in use for the image data .
+        self.PyDMLabel_CenterXDimfei = PyDMLabel(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device+':CenterXDimfei-Mon')
+        self.PyDMLabel_CenterXDimfei.setAlignment(Qt.AlignHCenter)
+        self.statistics_layout.addWidget(self.PyDMLabel_CenterXDimfei, 5, 2)
 
-        Returns
-        -------
-        str
-            Channel address
-        """
-        return str(self._imagechannel)
+        self.PyDMLabel_CenterXNDStats = PyDMLabel(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device+':CenterXNDStats-Mon')
+        self.PyDMLabel_CenterXNDStats.setAlignment(Qt.AlignHCenter)
+        self.PyDMLabel_CenterXNDStats.setVisible(False)
+        self.statistics_layout.addWidget(self.PyDMLabel_CenterXNDStats, 5, 2)
 
-    @imageChannel.setter
-    def imageChannel(self, value):
-        """
-        The channel address in use for the image data .
+        self.label = QLabel(',', self)
+        self.label.setMaximumSize(10, 40)
+        self.statistics_layout.addWidget(self.label, 5, 3)
 
-        Parameters
-        ----------
-        value : str
-            Channel address
-        """
-        if self._imagechannel != value:
-            self._imagechannel = str(value)
+        self.PyDMLabel_CenterYDimfei = PyDMLabel(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device+':CenterYDimfei-Mon')
+        self.PyDMLabel_CenterYDimfei.setAlignment(Qt.AlignHCenter)
+        self.statistics_layout.addWidget(self.PyDMLabel_CenterYDimfei, 5, 4)
 
-    @pyqtProperty(str)
-    def widthChannel(self):
-        """
-        The channel address in use for the image width .
+        self.PyDMLabel_CenterYNDStats = PyDMLabel(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device+':CenterYNDStats-Mon')
+        self.PyDMLabel_CenterYNDStats.setAlignment(Qt.AlignHCenter)
+        self.PyDMLabel_CenterYNDStats.setVisible(False)
+        self.statistics_layout.addWidget(self.PyDMLabel_CenterYNDStats, 5, 4)
 
-        Returns
-        -------
-        str
-            Channel address
-        """
-        return str(self._widthchannel)
+        self.label = QLabel(')', self)
+        self.label.setMaximumSize(10, 40)
+        self.statistics_layout.addWidget(self.label, 5, 5)
 
-    @widthChannel.setter
-    def widthChannel(self, value):
-        """
-        The channel address in use for the image width .
+        # - Sigma
+        self.label_Sigma = QLabel('Sigma', self)
+        self.label_Sigma.setMaximumHeight(40)
+        self.statistics_layout.addWidget(self.label_Sigma, 6, 1, 1, 5)
+        self.label = QLabel('(', self)
+        self.label.setMaximumSize(10, 40)
+        self.statistics_layout.addWidget(self.label, 7, 1)
 
-        Parameters
-        ----------
-        value : str
-            Channel address
-        """
-        if self._widthchannel != value:
-            self._widthchannel = str(value)
+        self.PyDMLabel_SigmaXDimfei = PyDMLabel(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device+':SigmaXDimfei-Mon')
+        self.PyDMLabel_SigmaXDimfei.setAlignment(Qt.AlignHCenter)
+        self.statistics_layout.addWidget(self.PyDMLabel_SigmaXDimfei, 7, 2)
 
-    def channels(self):
-        """
-        Return the channels being used for this Widget.
+        self.PyDMLabel_SigmaXNDStats = PyDMLabel(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device+':SigmaXNDStats-Mon')
+        self.PyDMLabel_SigmaXNDStats.setAlignment(Qt.AlignHCenter)
+        self.PyDMLabel_SigmaXNDStats.setVisible(False)
+        self.statistics_layout.addWidget(self.PyDMLabel_SigmaXNDStats, 7, 2)
 
-        Returns
-        -------
-        channels : list
-            List of PyDMChannel objects
-        """
-        if self._channels is None:
-            self._channels = [
-                PyDMChannel(
-                    address=self.imageChannel,
-                    connection_slot=self.image_connection_state_changed,
-                    value_slot=self.image_value_changed,
-                    severity_slot=self.alarmSeverityChanged),
-                PyDMChannel(
-                    address=self.widthChannel,
-                    connection_slot=self.connectionStateChanged,
-                    value_slot=self.image_width_changed,
-                    severity_slot=self.alarmSeverityChanged)]
-        return self._channels
+        self.label = QLabel(',', self)
+        self.label.setMaximumSize(10, 40)
+        self.statistics_layout.addWidget(self.label, 7, 3)
+        self.PyDMLabel_SigmaYDimfei = PyDMLabel(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device+':SigmaYDimfei-Mon')
+        self.PyDMLabel_SigmaYDimfei.setAlignment(Qt.AlignHCenter)
 
-    def channels_for_tools(self):
-        """Return channels for tools."""
-        return [c for c in self.channels() if c.address == self.imageChannel]
+        self.statistics_layout.addWidget(self.PyDMLabel_SigmaYDimfei, 7, 4)
+        self.PyDMLabel_SigmaYNDStats = PyDMLabel(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device+':SigmaYNDStats-Mon')
+        self.PyDMLabel_SigmaYNDStats.setAlignment(Qt.AlignHCenter)
+        self.PyDMLabel_SigmaYNDStats.setVisible(False)
+        self.statistics_layout.addWidget(self.PyDMLabel_SigmaYNDStats, 7, 4)
 
-    @pyqtProperty(int)
-    def maxRedrawRate(self):
-        """
-        The maximum rate (in Hz) at which the plot will be redrawn.
+        self.label = QLabel(')', self)
+        self.label.setMaximumSize(10, 40)
+        self.statistics_layout.addWidget(self.label, 7, 5)
 
-        The plot will not be redrawn if there is not new data to draw.
+        # - Theta
+        self.label_Theta = QLabel('Theta', self)
+        self.label_Theta.setMaximumHeight(40)
+        self.statistics_layout.addWidget(self.label_Theta, 8, 1, 1, 5)
+        self.label = QLabel('(', self)
+        self.label.setMaximumSize(10, 40)
+        self.statistics_layout.addWidget(self.label, 9, 1)
+        self.PyDMLabel_ThetaDimfei = PyDMLabel(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device+':ThetaDimfei-Mon')
+        self.PyDMLabel_ThetaDimfei.setAlignment(Qt.AlignHCenter)
+        self.statistics_layout.addWidget(self.PyDMLabel_ThetaDimfei,
+                                         9, 2, 1, 3)
+        self.PyDMLabel_ThetaNDStats = PyDMLabel(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device+':ThetaNDStats-Mon')
+        self.PyDMLabel_ThetaNDStats.setAlignment(Qt.AlignHCenter)
+        self.PyDMLabel_ThetaNDStats.setVisible(False)
+        self.statistics_layout.addWidget(self.PyDMLabel_ThetaNDStats,
+                                         9, 2, 1, 3)
+        self.label = QLabel(')', self)
+        self.label.setMaximumSize(10, 40)
+        self.statistics_layout.addWidget(self.label, 9, 5)
 
-        Returns
-        -------
-        int
-        """
-        return self._redraw_rate
+        self.statistics_layout.addItem(
+            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum), 10, 1)
 
-    @maxRedrawRate.setter
-    def maxRedrawRate(self, redraw_rate):
-        """
-        The maximum rate (in Hz) at which the plot will be redrawn.
+        self.statistics_groupox.setLayout(self.statistics_layout)
+        self.layout().addItem(
+            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum), 2, 2)
+        self.layout().addWidget(self.statistics_groupox, 2, 3, 3, 1)
 
-        The plot will not be redrawn if there is not new data to draw.
-
-        Parameters
-        -------
-        redraw_rate : int
-        """
-        self._redraw_rate = float(redraw_rate)
-        self.redraw_timer.setInterval(int((1.0/self._redraw_rate)*1000))
+    def _handleShowStatistics(self, visible):
+        self.PyDMLabel_CenterXDimfei.setVisible(not visible)
+        self.PyDMLabel_CenterXNDStats.setVisible(visible)
+        self.PyDMLabel_CenterYDimfei.setVisible(not visible)
+        self.PyDMLabel_CenterYNDStats.setVisible(visible)
+        self.PyDMLabel_ThetaDimfei.setVisible(not visible)
+        self.PyDMLabel_ThetaNDStats.setVisible(visible)
+        self.PyDMLabel_SigmaXDimfei.setVisible(not visible)
+        self.PyDMLabel_SigmaXNDStats.setVisible(visible)
+        self.PyDMLabel_SigmaYDimfei.setVisible(not visible)
+        self.PyDMLabel_SigmaYNDStats.setVisible(visible)
