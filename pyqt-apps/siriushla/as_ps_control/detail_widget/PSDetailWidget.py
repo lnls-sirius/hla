@@ -99,6 +99,8 @@ class PSDetailWidget(QWidget):
         self.wfm_box.setObjectName("wfm_box")
         self.cycle_box = QGroupBox('Cycle')
         self.cycle_box.setObjectName('cycle_box')
+        self.pru_box = QGroupBox('PRU')
+        self.pru_box.setObjectName('pru_box')
 
         # Set group boxes layouts
         self.version_box.setLayout(self._versionLayout())
@@ -111,6 +113,7 @@ class PSDetailWidget(QWidget):
         self.command_box.setLayout(self._commandLayout())
         self.wfm_box.setLayout(self._waveformLayout())
         self.cycle_box.setLayout(self._cycleLayout())
+        self.pru_box.setLayout(self._pruLayout())
 
         # Add group boxes to laytout
         self.layout = self._setWidgetLayout()
@@ -140,6 +143,7 @@ class PSDetailWidget(QWidget):
         if self._is_magnet:
             analogs.addWidget(self.metric_box)
         analogs.addWidget(self.cycle_box)
+        analogs.addWidget(self.pru_box)
 
         return layout
 
@@ -161,6 +165,7 @@ class PSDetailWidget(QWidget):
         layout = QGridLayout()
         soft_intlk_button = QPushButton('Soft Interlock', self)
         hard_intlk_button = QPushButton('Hard Interlock', self)
+        openloop_label = QLabel('OpenLoop', self)
         # _util.connect_window(soft_intlk_button, )
         layout.addWidget(soft_intlk_button, 0, 0)
         layout.addWidget(SiriusLedAlert(
@@ -168,6 +173,9 @@ class PSDetailWidget(QWidget):
         layout.addWidget(hard_intlk_button, 1, 0)
         layout.addWidget(SiriusLedAlert(
             self, "ca://" + self._prefixed_psname + ":IntlkHard-Mon"), 1, 1)
+        layout.addWidget(openloop_label, 2, 0, Qt.AlignCenter)
+        layout.addWidget(SiriusLedAlert(
+            self, "ca://" + self._prefixed_psname + ":OpenLoop-Mon"), 2, 1)
 
         _util.connect_window(soft_intlk_button, MagnetInterlockWindow, self,
                              **{'magnet': self._psname,
@@ -175,7 +183,6 @@ class PSDetailWidget(QWidget):
         _util.connect_window(hard_intlk_button, MagnetInterlockWindow, self,
                              **{'magnet': self._psname,
                                 'interlock': 1})
-
         return layout
 
     def _opModeLayout(self):
@@ -324,9 +331,6 @@ class PSDetailWidget(QWidget):
 
     def _cycleLayout(self):
         layout = QGridLayout()
-        # 15 cycle pvs
-        enbl_sp_ca = 'ca://' + self._prefixed_psname + ':CycleEnbl-Cmd'
-        dsbl_sp_ca = 'ca://' + self._prefixed_psname + ':CycleDsbl-Cmd'
         enbl_mon_ca = 'ca://' + self._prefixed_psname + ':CycleEnbl-Mon'
         type_sp_ca = 'ca://' + self._prefixed_psname + ':CycleType-Sel'
         type_rb_ca = 'ca://' + self._prefixed_psname + ':CycleType-Sts'
@@ -350,15 +354,7 @@ class PSDetailWidget(QWidget):
         self.cycle_ampl_label = QLabel('Amplitude', self)
         self.cycle_offset_label = QLabel('Offset', self)
         self.cycle_auxparam_label = QLabel('AuxParams', self)
-        # 15 widgets
-        # self.cycle_enbl_sp_button = PyDMStateButton(self, enbl_sp_ca)
-        self.cycle_enbl_sp_button = PyDMPushButton(
-            parent=self, label="Enable", pressValue=1,
-            init_channel=enbl_sp_ca)
-        self.cycle_dsbl_sp_button = PyDMPushButton(
-            parent=self, label="Disable", pressValue=1,
-            init_channel=dsbl_sp_ca)
-
+        # Widgets
         self.cycle_enbl_mon_led = SiriusLedState(self, enbl_mon_ca)
         self.cycle_type_sp_cb = PyDMEnumComboBox(self, type_sp_ca)
         self.cycle_type_rb_label = PyDMLabel(self, type_rb_ca)
@@ -373,11 +369,11 @@ class PSDetailWidget(QWidget):
         self.cycle_offset_rb_label = PyDMLabel(self, offset_rb_ca)
         self.cycle_auxparam_sp_le = PyDMLineEdit(self, auxparam_sp_ca)
         self.cycle_auxparam_rb_label = PyDMLabel(self, auxparam_rb_ca)
-
+        # Layout
         layout.addWidget(self.cycle_enbl_label, 0, 0, Qt.AlignRight)
-        layout.addWidget(self.cycle_enbl_sp_button, 0, 1)
-        layout.addWidget(self.cycle_dsbl_sp_button, 0, 2)
-        layout.addWidget(self.cycle_enbl_mon_led, 0, 3)
+        # layout.addWidget(self.cycle_enbl_sp_button, 0, 1)
+        # layout.addWidget(self.cycle_dsbl_sp_button, 0, 2)
+        layout.addWidget(self.cycle_enbl_mon_led, 0, 1, Qt.AlignCenter)
         layout.addWidget(self.cycle_type_label, 1, 0, Qt.AlignRight)
         layout.addWidget(self.cycle_type_sp_cb, 1, 1)
         layout.addWidget(self.cycle_type_rb_label, 1, 2)
@@ -398,6 +394,39 @@ class PSDetailWidget(QWidget):
         layout.addWidget(self.cycle_auxparam_label, 7, 0, Qt.AlignRight)
         layout.addWidget(self.cycle_auxparam_sp_le, 7, 1)
         layout.addWidget(self.cycle_auxparam_rb_label, 7, 2)
+
+        return layout
+
+    def _pruLayout(self):
+        layout = QGridLayout()
+
+        sync_mode_ca = 'ca://' + self._prefixed_psname + ':PRUSyncMode-Mon'
+        block_index_ca = 'ca://' + self._prefixed_psname + ':PRUBlockIndex-Mon'
+        sync_count_ca = \
+            'ca://' + self._prefixed_psname + ':PRUSyncPulseCount-Mon'
+        queue_size_ca = \
+            'ca://' + self._prefixed_psname + ':PRUCtrlQueueSize-Mon'
+
+        sync_mode_label = QLabel('Sync Mode', self)
+        block_index_label = QLabel('Block Index', self)
+        sync_count_label = QLabel('Pulse Count', self)
+        queue_size_label = QLabel('Queue Size', self)
+
+        sync_mode_rb_label = PyDMLabel(self, sync_mode_ca)
+        block_index_rb_label = PyDMLabel(self, block_index_ca)
+        sync_count_rb_label = PyDMLabel(self, sync_count_ca)
+        queue_size_rb_label = PyDMLabel(self, queue_size_ca)
+
+        layout.addWidget(sync_mode_label, 0, 0, Qt.AlignRight)
+        layout.addWidget(sync_mode_rb_label, 0, 1)
+        layout.addWidget(block_index_label, 1, 0, Qt.AlignRight)
+        layout.addWidget(block_index_rb_label, 1, 1)
+        layout.addWidget(sync_count_label, 2, 0, Qt.AlignRight)
+        layout.addWidget(sync_count_rb_label, 2, 1)
+        layout.addWidget(queue_size_label, 3, 0, Qt.AlignRight)
+        layout.addWidget(queue_size_rb_label, 3, 1)
+
+        layout.setColumnStretch(2, 1)
 
         return layout
 
