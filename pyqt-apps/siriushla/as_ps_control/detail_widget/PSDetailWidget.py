@@ -165,6 +165,7 @@ class PSDetailWidget(QWidget):
         layout = QGridLayout()
         soft_intlk_button = QPushButton('Soft Interlock', self)
         hard_intlk_button = QPushButton('Hard Interlock', self)
+        openloop_label = QLabel('OpenLoop', self)
         # _util.connect_window(soft_intlk_button, )
         layout.addWidget(soft_intlk_button, 0, 0)
         layout.addWidget(SiriusLedAlert(
@@ -172,6 +173,9 @@ class PSDetailWidget(QWidget):
         layout.addWidget(hard_intlk_button, 1, 0)
         layout.addWidget(SiriusLedAlert(
             self, "ca://" + self._prefixed_psname + ":IntlkHard-Mon"), 1, 1)
+        layout.addWidget(openloop_label, 2, 0, Qt.AlignCenter)
+        layout.addWidget(SiriusLedAlert(
+            self, "ca://" + self._prefixed_psname + ":OpenLoop-Mon"), 2, 1)
 
         _util.connect_window(soft_intlk_button, MagnetInterlockWindow, self,
                              **{'magnet': self._psname,
@@ -179,7 +183,6 @@ class PSDetailWidget(QWidget):
         _util.connect_window(hard_intlk_button, MagnetInterlockWindow, self,
                              **{'magnet': self._psname,
                                 'interlock': 1})
-
         return layout
 
     def _opModeLayout(self):
