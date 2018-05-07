@@ -1,4 +1,4 @@
-"""Sirius ImageView and CameraView classes."""
+"""SiriusScrnView widget."""
 
 import numpy as np
 from pydm.PyQt.QtGui import (QWidget, QLabel, QGridLayout,
@@ -10,7 +10,7 @@ from pydm.widgets import PyDMImageView, PyDMLabel, PyDMLineEdit
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 
 
-class SiriusImageView(PyDMImageView):
+class _SiriusImageView(PyDMImageView):
     """A PyDMImageView with methods to handle screens calibration grids."""
 
     def __init__(self, parent=None, image_channel=None, width_channel=None):
@@ -25,8 +25,7 @@ class SiriusImageView(PyDMImageView):
     def saveCalibrationGrid(self):
         """Save current image as calibration_grid_image."""
         img = self.image_waveform
-        grid = np.where(img < 0.5, True, False)
-        self._calibration_grid_image = grid
+        self._calibration_grid_image = np.where(img < 0.5, True, False)
 
     @pyqtSlot(bool)
     def showCalibrationGrid(self, show):
@@ -44,11 +43,15 @@ class SiriusImageView(PyDMImageView):
         image_dimensions = len(self.image_waveform.shape)
         if image_dimensions == 1:
             if self.imageWidth < 1:
-                # We don't have a width for this image yet, so we can't draw it
+                # We don't have a width for this image yet,
+                # so we can't draw it
                 return
-            img = self.image_waveform.reshape(
-                self.imageWidth, -1,
-                order=self.reading_orders[self._reading_order])
+            try:
+                img = self.image_waveform.reshape(
+                    self.imageWidth, -1,
+                    order=self.reading_orders[self._reading_order])
+            except Exception:
+                print('Width does not match the image_waveform shape.')
         else:
             img = self.image_waveform
 
@@ -56,10 +59,13 @@ class SiriusImageView(PyDMImageView):
             return
         if (self._show_calibration_grid and
                 self._calibration_grid_image is not None):
-            grid = self._calibration_grid_image.reshape(
-                self.imageWidth, -1,
-                order=self.reading_orders[self._reading_order])
-            img[grid] = img.max()
+            try:
+                grid = self._calibration_grid_image.reshape(
+                    self.imageWidth, -1,
+                    order=self.reading_orders[self._reading_order])
+                img[grid] = img.max()
+            except Exception:
+                print('Image dimensions does not match grid dimensions.')
         if self._normalize_data:
             mini = self.image_waveform.min()
             maxi = self.image_waveform.max()
@@ -74,8 +80,14 @@ class SiriusImageView(PyDMImageView):
         self.needs_redraw = False
 
 
-class SiriusCameraView(QWidget):
-    """Class to read Sirius cameras image data."""
+class SiriusScrnView(QWidget):
+    """
+    Class to read Sirius screen cameras image data.
+
+    To allow saving a grid correctly, control calibrationgrid_flag, which
+    indicates if the screen is in calibration grid position.
+    You can control it by using the method/pyqtSlot updateCalibrationGridFlag.
+    """
 
     def __init__(self, parent=None, prefix='', device=None):
         """Initialize object."""
@@ -85,7 +97,7 @@ class SiriusCameraView(QWidget):
         else:
             self.prefix = prefix
         self.device = device
-        self._calibrationgrid_flag = 0
+        self._calibrationgrid_flag = False
         self.setLayout(QGridLayout())
         self.setStyleSheet("""font-size:20pt;""")
         self._setupUi()
@@ -116,11 +128,12 @@ class SiriusCameraView(QWidget):
         self.device_label = QLabel(self.device)
         self.device_label.setVisible(False)
         self.cameraview_layout.addWidget(self.device_label, 2, 1)
-        self.image_view = SiriusImageView(
+        self.image_view = _SiriusImageView(
             parent=self,
             image_channel='ca://'+self.prefix+self.device+':ImgData-Mon',
-            width_channel='ca://'+self.prefix+self.device+':ImgWidth-Cte')
+            width_channel='ca://'+self.prefix+self.device+':ImgROIWidth-RB')
         self.image_view.normalizeData = True
+        self.image_view.readingOrder = self.image_view.Clike
         self.image_view.setMinimumSize(800, 640)
         self.cameraview_layout.addWidget(self.image_view, 3, 1)
         self.cameraview_layout.addItem(

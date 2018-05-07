@@ -20,7 +20,7 @@ from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla import util as _hlautil
 from siriushla.widgets import (SiriusLedAlert, SiriusLedState,
                                PyDMScrollBar, PyDMStateButton,
-                               SiriusMainWindow, SiriusCameraView)
+                               SiriusMainWindow, SiriusScrnView)
 from siriushla.as_ap_bpms.bpms_windows import BPMsInterfaceTL
 from siriushla.as_ap_posang.HLPosAng import ASAPPosAngCorr
 from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
@@ -103,27 +103,27 @@ class TLAPControlWindow(SiriusMainWindow):
         self.setMenuBar(menubar)
 
         # Fill Screen widgets
-        widget_camview = SiriusCameraView(
+        widget_camview = SiriusScrnView(
             parent=self, prefix=self.prefix, device=scrn_list[0])
         widget_camview.setObjectName('widget_camview_Scrn0')
         self.centralwidget.widget_Scrn0.layout().addWidget(widget_camview)
-        widget_camview = SiriusCameraView(
+        widget_camview = SiriusScrnView(
             parent=self, prefix=self.prefix, device=scrn_list[1])
         widget_camview.setObjectName('widget_camview_Scrn1')
         self.centralwidget.widget_Scrn1.layout().addWidget(widget_camview)
-        widget_camview = SiriusCameraView(
+        widget_camview = SiriusScrnView(
             parent=self, prefix=self.prefix, device=scrn_list[2])
         widget_camview.setObjectName('widget_camview_Scrn2')
         self.centralwidget.widget_Scrn2.layout().addWidget(widget_camview)
-        widget_camview = SiriusCameraView(
+        widget_camview = SiriusScrnView(
             parent=self, prefix=self.prefix, device=scrn_list[3])
         widget_camview.setObjectName('widget_camview_Scrn3')
         self.centralwidget.widget_Scrn3.layout().addWidget(widget_camview)
-        widget_camview = SiriusCameraView(
+        widget_camview = SiriusScrnView(
             parent=self, prefix=self.prefix, device=scrn_list[4])
         widget_camview.setObjectName('widget_camview_Scrn4')
         self.centralwidget.widget_Scrn4.layout().addWidget(widget_camview)
-        widget_camview = SiriusCameraView(
+        widget_camview = SiriusScrnView(
             parent=self, prefix=self.prefix, device=scrn_list[5])
         widget_camview.setObjectName('widget_camview_Scrn5')
         self.centralwidget.widget_Scrn5.layout().addWidget(widget_camview)
@@ -374,7 +374,7 @@ class TLAPControlWindow(SiriusMainWindow):
         pydmcombobox_scrntype.setObjectName(
             'PyDMEnumComboBox_ScrnType_Sel_Scrn' + str(scrn))
         widget_camview = self.scrn_dict[str(scrn)].findChild(
-            SiriusCameraView, 'widget_camview_Scrn' + str(scrn))
+            SiriusScrnView, 'widget_camview_Scrn' + str(scrn))
         pydmcombobox_scrntype.currentIndexChanged.connect(
             widget_camview.updateCalibrationGridFlag)
         widget_scrntype_sp.layout().addWidget(pydmcombobox_scrntype)
