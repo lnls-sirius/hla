@@ -1429,8 +1429,10 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
         self.renderer = QSvgRenderer()
 
     def mousePressEvent(self, ev):
-        """Deal with mouse click."""
-        self.clicked.emit()
+        """Deal with mouse clicks. Only accept clicks within the figure."""
+        if (ev.x() < self.width()/2+self.height() and
+                ev.x() > self.width()/2-self.height()):
+            self.clicked.emit()
 
     def value_changed(self, new_val):
         """
