@@ -23,6 +23,12 @@ class BasePSControlWidget(QWidget):
         QScrollArea {
             min-width: 1450px;
         }
+        QLed {
+            min-width: 40px;
+            max-width: 40px;
+            min-height: 40px;
+            max-height: 40px;
+        }
     """
 
     def __init__(self, dev_type, orientation=0, parent=None):
