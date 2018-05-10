@@ -43,6 +43,12 @@ class PSDetailWidget(QWidget):
             max-width: 7em;
             qproperty-alignment: AlignCenter;
         }
+        QLed {
+            min-width: 40px;
+            max-width: 40px;
+            min-height: 40px;
+            max-height: 40px;
+        }
     """
 
     def __init__(self, psname, parent=None):
