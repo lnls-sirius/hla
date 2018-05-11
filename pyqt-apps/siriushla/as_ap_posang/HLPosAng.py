@@ -6,6 +6,7 @@ import epics as _epics
 from pydm.PyQt.uic import loadUi as _loadUi
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 from siriuspy.envars import vaca_prefix as _vaca_prefix
+from siriuspy.csdevice.posang import Const
 from siriushla import util as _hlautil
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
@@ -82,16 +83,16 @@ class ASAPPosAngCorr(SiriusMainWindow):
 
         correctors = ['', '', '', '']
         if tl == 'ts':
-            correctors[0] = 'TS-04:MA-CH'
-            correctors[1] = 'TS-04:PM-InjSeptF'
-            correctors[2] = 'TS-04:MA-CV-1'
-            correctors[3] = 'TS-04:MA-CV-2'
+            correctors[0] = Const.TS_CORRH_POSANG[0]
+            correctors[1] = Const.TS_CORRH_POSANG[1]
+            correctors[2] = Const.TS_CORRV_POSANG[0]
+            correctors[3] = Const.TS_CORRV_POSANG[1]
         elif tl == 'tb':
-            correctors[0] = 'TB-03:MA-CH'
-            correctors[1] = 'TB-04:PM-InjSept'
-            correctors[2] = 'TB-04:MA-CV-1'
-            correctors[3] = 'TB-04:MA-CV-2'
-        self._setCorrectorsLabels(correctors, prefix)
+            correctors[0] = Const.TB_CORRH_POSANG[0]
+            correctors[1] = Const.TB_CORRH_POSANG[1]
+            correctors[2] = Const.TB_CORRV_POSANG[0]
+            correctors[3] = Const.TB_CORRV_POSANG[1]
+        self._setCorrectorsChannels(correctors, prefix)
 
         self.statusLabel_pv = _epics.PV(
             prefix + tl.upper() + '-Glob:AP-PosAng:StatusLabels-Cte')
@@ -107,14 +108,14 @@ class ASAPPosAngCorr(SiriusMainWindow):
         for widget, pv in widget2pv_list:
             widget.channel = 'ca://' + prefix + pv
 
-    def _setCorrectorsLabels(self, correctors, prefix):
+    def _setCorrectorsChannels(self, correctors, prefix):
         if prefix is None:
             prefix = _vaca_prefix
 
         self.centralwidget.pushButton_CH1.setText(correctors[0])
         _hlautil.connect_window(self.centralwidget.pushButton_CH1,
                                 PSDetailWindow, self,
-                                maname=correctors[0])
+                                psname=correctors[0])
         self.centralwidget.SiriusLedState_CH1.channel = (
             'ca://' + prefix + correctors[0] + ':PwrState-Sts')
         self.centralwidget.PyDMLabel_OpModeCH1.channel = (
@@ -124,7 +125,7 @@ class ASAPPosAngCorr(SiriusMainWindow):
         self.centralwidget.pushButton_CH2.setText(correctors[1])
         _hlautil.connect_window(self.centralwidget.pushButton_CH2,
                                 PulsedMagnetDetailWindow, self,
-                                maname=correctors[1])
+                                psname=correctors[1])
         self.centralwidget.SiriusLedState_CH2.channel = (
             'ca://' + prefix + correctors[1] + ':PwrState-Sts')
         self.centralwidget.PyDMLabel_KickRBCH2.channel = (
@@ -132,7 +133,7 @@ class ASAPPosAngCorr(SiriusMainWindow):
         self.centralwidget.pushButton_CV1.setText(correctors[2])
         _hlautil.connect_window(self.centralwidget.pushButton_CV1,
                                 PSDetailWindow, self,
-                                maname=correctors[2])
+                                psname=correctors[2])
         self.centralwidget.SiriusLedState_CV1.channel = (
             'ca://' + prefix + correctors[2] + ':PwrState-Sts')
         self.centralwidget.PyDMLabel_OpModeCV1.channel = (
@@ -142,7 +143,7 @@ class ASAPPosAngCorr(SiriusMainWindow):
         self.centralwidget.pushButton_CV2.setText(correctors[3])
         _hlautil.connect_window(self.centralwidget.pushButton_CV2,
                                 PSDetailWindow, self,
-                                maname=correctors[3])
+                                psname=correctors[3])
         self.centralwidget.SiriusLedState_CV2.channel = (
             'ca://' + prefix + correctors[3] + ':PwrState-Sts')
         self.centralwidget.PyDMLabel_OpModeCV2.channel = (
