@@ -324,9 +324,6 @@ class SiriusScrnView(QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addItem(
             QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum), 1, 1)
-        self.device_label = QLabel(self.device)
-        self.device_label.setVisible(False)
-        layout.addWidget(self.device_label, 2, 1)
         self.image_view = _SiriusImageView(
             parent=self,
             image_channel='ca://'+self.prefix+self.device+':ImgData-Mon',
@@ -339,7 +336,7 @@ class SiriusScrnView(QWidget):
         self.image_view.readingOrder = self.image_view.Clike
         self.image_view.maxRedrawRate = 20
         self.image_view.setMinimumSize(920, 736)
-        layout.addWidget(self.image_view, 3, 1)
+        layout.addWidget(self.image_view, 2, 1)
         return layout
 
     def _calibrationgridLayout(self):
