@@ -147,7 +147,7 @@ class EmittanceMeasure(QWidget):
     def _trans_matrix_method(self, K1, sigma, energy):
         Rx, Ry = self._get_resp_mat(K1, energy)
         a, b, c = np.linalg.lstsq(self.Rx, sigma*sigma)[0]
-        emit = np.sqrt(abs(a*c-b**2/4.0))
+        emit = np.sqrt(abs(a*c - b*b/4.0))
         beta = a/emit
         alpha = -b/2.0/emit
         nemit = emit * energy / electron_rest_en * 1e6  # in mm.mrad
@@ -240,15 +240,15 @@ class EmittanceMeasure(QWidget):
         self.spbox_samples.setValue(10)
         fl.addRow(QLabel('Nr Samples per step', gb), self.spbox_samples)
         self.spbox_I_ini = QDoubleSpinBox(gb)
-        self.spbox_I_ini.setMinimum(-20)
-        self.spbox_I_ini.setMaximum(20)
-        self.spbox_I_ini.setValue(0)
+        self.spbox_I_ini.setMinimum(-4)
+        self.spbox_I_ini.setMaximum(4)
+        self.spbox_I_ini.setValue(-0.7)
         self.spbox_I_ini.setDecimals(3)
         fl.addRow(QLabel('Initial Current [A]', gb), self.spbox_I_ini)
         self.spbox_I_end = QDoubleSpinBox(gb)
-        self.spbox_I_end.setMinimum(-20)
-        self.spbox_I_end.setMaximum(20)
-        self.spbox_I_end.setValue(0)
+        self.spbox_I_end.setMinimum(-4)
+        self.spbox_I_end.setMaximum(4)
+        self.spbox_I_end.setValue(0.7)
         self.spbox_I_end.setDecimals(3)
         fl.addRow(QLabel('Final Current [A]', gb), self.spbox_I_end)
         self.spbox_threshold = QDoubleSpinBox(gb)
@@ -321,6 +321,8 @@ class EmittanceMeasure(QWidget):
         Slot documentation goes here.
         """
         self._measuring = False
+        self.pb_stop.setEnabled(False)
+        self.pb_start.setEnabled(True)
 
     # def closeEvent(self, event):
     #     reply = QMessageBox.question(
