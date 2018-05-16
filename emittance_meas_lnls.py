@@ -69,11 +69,12 @@ class EmittanceMeasure(QWidget):
         sigmay = []
         I_meas = []
         for I in curr_list:
+            print('setting Quadrupole to ', I)
             self.quad_I_sp.put(I, wait=True)
             time.sleep(5)
             j = 0
             while j < samples:
-                print('measuring ', j)
+                print('measuring sample', j)
                 if not self._measuring:
                     return
                 I_now = self.quad_I_rb.value
@@ -88,15 +89,15 @@ class EmittanceMeasure(QWidget):
                 all = sigmax + sigmay
                 self.line_sigmax.set_xdata(I_meas)
                 self.line_sigmax.set_ydata(np.array(sigmax)*1e3)
-                self.line_sigmax.set_xdata(I_meas)
-                self.line_sigmax.set_ydata(np.array(sigmay)*1e3)
-                self.plt_sigma.axes.set_xlim([0, len(I_meas)+0.1])
-                self.plt_nemit.axes.set_ylim(
+                self.line_sigmay.set_xdata(I_meas)
+                self.line_sigmay.set_ydata(np.array(sigmay)*1e3)
+                self.plt_sigma.axes.set_xlim(
+                        [min(I_meas)*(1-DT), max(I_meas)*(1+DT)])
+                self.plt_sigma.axes.set_ylim(
                         [min(all)*(1-DT), max(all)*(1+DT)])
-                self.plt_nemit.figure.canvas.draw()
+                self.plt_sigma.figure.canvas.draw()
                 time.sleep(0.5)
                 j += 1
-                print('ok')
 
         kin_en = np.sqrt(energy*energy - electron_rest_en*electron_rest_en)
         K1 = np.polyval(self.I2K1, I_meas)*light_speed/kin_en/1e6
@@ -122,20 +123,6 @@ class EmittanceMeasure(QWidget):
         self.alphax_parf.append(alphax)
         self.alphay_parf.append(alphay)
 
-        all = []
-        for type in ('nemitx_tm', 'nemity_tm', 'nemitx_parf', 'nemity_parf'):
-            all.extend(getattr(self, type))
-            yd = np.array(getattr(self, type))
-            line = getattr(self, 'line_'+type)
-            line.set_xdata(np.arange(yd.shape[0]))
-            line.set_ydata(yd)
-            lb = getattr(self, 'lb_'+type)
-            lb.setText('{0:.3f}'.format(yd.mean()))
-        all = np.array(all)
-        self.plt_nemit.axes.set_xlim([0, all.shape[0]+0.1])
-        self.plt_nemit.axes.set_ylim([all.min()*(1-DT), all.max()*(1+DT)])
-        self.plt_nemit.figure.canvas.draw()
-
         for pref in ('nemit', 'beta', 'alpha'):
             all = []
             for var in ('x_tm', 'y_tm', 'x_parf', 'y_parf'):
@@ -159,7 +146,7 @@ class EmittanceMeasure(QWidget):
 
     def _trans_matrix_method(self, K1, sigma, energy):
         Rx, Ry = self._get_resp_mat(K1, energy)
-        a, b, c = np.linalg.lstsq(self.Rx[1:], sigma*sigma)[0]
+        a, b, c = np.linalg.lstsq(self.Rx, sigma*sigma)[0]
         emit = np.sqrt(abs(a*c-b**2/4.0))
         beta = a/emit
         alpha = -b/2.0/emit
