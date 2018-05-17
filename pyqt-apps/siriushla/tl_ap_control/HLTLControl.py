@@ -1,7 +1,8 @@
 #!/usr/bin/env python-sirius
 """HLA TB and TS AP Control Window."""
 
-from datetime import datetime
+import os as _os
+from datetime import datetime as _datetime
 from matplotlib.backends.backend_qt5agg import (
     FigureCanvasQTAgg as FigureCanvas)
 import epics as _epics
@@ -292,9 +293,10 @@ class TLAPControlWindow(SiriusMainWindow):
 
     def _openReference(self):
         """Load and show reference image."""
+        home = _os.path.expanduser('~')
+        path = _os.path.join(home, 'sirius-hlas', self._tl + '_ap_control')
         fn, _ = QFileDialog.getOpenFileName(
-            self, 'Open Reference...',
-            '/home/ana/sirius-hlas/' + self._tl + '_ap_control/',
+            self, 'Open Reference...', path,
             'Images (*.png *.xpm *.jpg);;All Files (*)')
         if fn:
             self.reference_window.load_image(fn)
@@ -302,12 +304,14 @@ class TLAPControlWindow(SiriusMainWindow):
 
     def _saveReference(self):
         """Save reference image."""
-        datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        home = _os.path.expanduser('~')
+        path = _os.path.join(home, 'sirius-hlas', self._tl + '_ap_control')
+        if not _os.path.exists(path):
+            _os.makedirs(path)
         fn, _ = QFileDialog.getSaveFileName(
             self, 'Save Reference As...',
-            '/home/ana/sirius-hlas/' + self._tl + '_ap_control/' +
-            self._scrn_list[self._currScrn] +
-            datetime.now().strftime('_%Y-%m-%d_%Hh%Mmin'),
+            path + '/' + self._scrn_list[self._currScrn] +
+            _datetime.now().strftime('_%Y-%m-%d_%Hh%Mmin'),
             'Images (*.png *.xpm *.jpg);;All Files (*)')
         if not fn:
             return False
