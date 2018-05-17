@@ -6,13 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>3300</width>
+    <width>3500</width>
     <height>2020</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>3300</width>
+    <width>3500</width>
     <height>2020</height>
    </size>
   </property>
@@ -27,7 +27,7 @@
     <widget class="QLabel" name="label">
      <property name="minimumSize">
       <size>
-       <width>1830</width>
+       <width>0</width>
        <height>0</height>
       </size>
      </property>
@@ -105,7 +105,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
      </property>
      <property name="minimumSize">
       <size>
-       <width>810</width>
+       <width>950</width>
        <height>0</height>
       </size>
      </property>
@@ -463,7 +463,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
      </property>
      <property name="minimumSize">
       <size>
-       <width>2250</width>
+       <width>2500</width>
        <height>1600</height>
       </size>
      </property>
@@ -499,7 +499,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
          <enum>Qt::Horizontal</enum>
         </property>
         <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
+         <enum>QSizePolicy::Expanding</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
@@ -515,7 +515,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
          <enum>Qt::Horizontal</enum>
         </property>
         <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
+         <enum>QSizePolicy::Expanding</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
@@ -864,7 +864,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
         </property>
         <property name="minimumSize">
          <size>
-          <width>2250</width>
+          <width>2500</width>
           <height>350</height>
          </size>
         </property>
