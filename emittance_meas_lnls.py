@@ -36,7 +36,7 @@ class EmittanceMeasure(QWidget):
     I2K1 = [-0.0089, 2.1891, 0.0493]
     QUAD = 'H1FQPS-3'
     DIST = 2.8775
-    QUAD_L = 0.05
+    QUAD_L = 0.112
 
     def __init__(self, parent=None):
         super().__init__(parent=parent)
@@ -64,69 +64,79 @@ class EmittanceMeasure(QWidget):
         I_ini = self.spbox_I_ini.value()
         I_end = self.spbox_I_end.value()
 
+        pl = 'y' if self.cbbox_plane.currentIndex() else 'x'
         curr_list = np.linspace(I_ini, I_end, nsteps)
-        sigmax = []
-        sigmay = []
+        sigma = []
         I_meas = []
-        for I in curr_list:
+        for i, I in enumerate(curr_list):
             print('setting Quadrupole to ', I)
             self.quad_I_sp.put(I, wait=True)
-            time.sleep(5)
+            time.sleep(5 if i else 15)
             j = 0
+            I_tmp = []
+            sig_tmp = []
             while j < samples:
                 print('measuring sample', j)
                 if not self._measuring:
                     return
                 I_now = self.quad_I_rb.value
                 cen_x, sigma_x, cen_y, sigma_y = self.plt_image.get_params()
+                mu, sig = (cen_x, sigma_x) if pl == 'x' else (cen_y, sigma_y)
                 max_size = self.spbox_threshold.value()*1e-3
-                if sigma_x > max_size or sigma_y > max_size:
+                if sig > max_size:
                     time.sleep(1)
                     continue
-                I_meas.append(I_now)
-                sigmax.append(sigma_x)
-                sigmay.append(sigma_y)
-                all = sigmax + sigmay
-                self.line_sigmax.set_xdata(I_meas)
-                self.line_sigmax.set_ydata(np.array(sigmax)*1e3)
-                self.line_sigmay.set_xdata(I_meas)
-                self.line_sigmay.set_ydata(np.array(sigmay)*1e3)
-                self.plt_sigma.axes.set_xlim(
-                        [min(I_meas)*(1-DT), max(I_meas)*(1+DT)])
-                self.plt_sigma.axes.set_ylim(
-                        [min(all)*(1-DT), max(all)*(1+DT)])
-                self.plt_sigma.figure.canvas.draw()
+                I_tmp.append(I_now)
+                sig_tmp.append(abs(sig))
                 time.sleep(0.5)
                 j += 1
+            I_meas.extend(sorted(I_tmp)[3:samples//2-2])
+            sigma.extend(sorted(sig_tmp)[3:samples//2-2])
+            if pl=='x':
+                self.line_sigmax.set_xdata(I_meas)
+                self.line_sigmax.set_ydata(np.array(sigma)*1e3)
+            else:
+                self.line_sigmay.set_xdata(I_meas)
+                self.line_sigmay.set_ydata(np.array(sigma)*1e3)
+            self.plt_sigma.axes.set_xlim(
+                    [min(I_meas)*(1-DT), max(I_meas)*(1+DT)])
+            self.plt_sigma.axes.set_ylim(
+                    [min(sigma)*(1-DT), max(sigma)*(1+DT)])
+            self.plt_sigma.figure.canvas.draw()
 
         kin_en = np.sqrt(energy*energy - electron_rest_en*electron_rest_en)
         K1 = np.polyval(self.I2K1, I_meas)*light_speed/kin_en/1e6
-        sigmax = np.array(sigmax)
-        sigmay = np.array(sigmay)
+        sigma = np.array(sigma)
+        I_meas = np.array(I_meas)
 
-        # Method 1: Transfer Matrix
-        nemitx, betax, alphax = self._trans_matrix_method(K1, sigmax, energy)
-        nemity, betay, alphay = self._trans_matrix_method(K1, sigmay, energy)
-        self.nemitx_tm.append(nemitx)
-        self.nemity_tm.append(nemity)
-        self.betax_tm.append(betax)
-        self.betay_tm.append(betay)
-        self.alphax_tm.append(alphax)
-        self.alphay_tm.append(alphay)
-        # Method 2: Parabola Fitting
-        nemitx, betax, alphax = self._thin_lens_method(K1, sigmax, energy)
-        nemity, betay, alphay = self._thin_lens_method(K1, sigmay, energy)
-        self.nemitx_parf.append(nemitx)
-        self.nemity_parf.append(nemity)
-        self.betax_parf.append(betax)
-        self.betay_parf.append(betay)
-        self.alphax_parf.append(alphax)
-        self.alphay_parf.append(alphay)
+        if pl=='x':
+            # Method 1: Transfer Matrix
+            nemitx, betax, alphax = self._trans_matrix_method(K1, sigmax, energy, plane='x')
+            self.nemitx_tm.append(nemitx)
+            self.betax_tm.append(betax)
+            self.alphax_tm.append(alphax)
+            # Method 2: Parabola Fitting
+            nemitx, betax, alphax = self._thin_lens_method(K1, sigmax, energy)
+            self.nemitx_parf.append(nemitx)
+            self.betax_parf.append(betax)
+            self.alphax_parf.append(alphax)
+        else:
+            # Method 1: Transfer Matrix
+            nemity, betay, alphay = self._trans_matrix_method(K1, sigmay, energy, plane='y')
+            self.nemity_tm.append(nemity)
+            self.betay_tm.append(betay)
+            self.alphay_tm.append(alphay)
+            # Method 2: Parabola Fitting
+            nemity, betay, alphay = self._thin_lens_method(-K1, sigmay, energy)
+            self.nemity_parf.append(nemity)
+            self.betay_parf.append(betay)
+            self.alphay_parf.append(alphay)
+
 
         for pref in ('nemit', 'beta', 'alpha'):
             all = []
-            for var in ('x_tm', 'y_tm', 'x_parf', 'y_parf'):
-                tp = pref + var
+            for var in ('_tm', '_tm'):
+                tp = pref + pl + var
                 all.extend(getattr(self, tp))
                 yd = np.array(getattr(self, tp))
                 line = getattr(self, 'line_'+tp)
@@ -141,12 +151,14 @@ class EmittanceMeasure(QWidget):
             plt.figure.canvas.draw()
 
         self._measuring = False
-        self.pb_stop.setEnabled(False)
-        self.pb_start.setEnabled(True)
+        # self.pb_stop.setEnabled(False)
+        # self.pb_start.setEnabled(True)
+        time.sleep(50)
 
-    def _trans_matrix_method(self, K1, sigma, energy):
+    def _trans_matrix_method(self, K1, sigma, energy, plane='x'):
         Rx, Ry = self._get_resp_mat(K1, energy)
-        a, b, c = np.linalg.lstsq(self.Rx, sigma*sigma)[0]
+        R = Rx if plane.lower().startswith(('x', 'h')) else Ry
+        a, b, c = np.linalg.lstsq(R, sigma*sigma)[0]
         emit = np.sqrt(abs(a*c - b*b/4.0))
         beta = a/emit
         alpha = -b/2.0/emit
@@ -161,7 +173,7 @@ class EmittanceMeasure(QWidget):
         ld = self.DIST + self.QUAD_L/2
         emit = np.sqrt(abs(a*c))/ld**2
         beta = np.sqrt(abs(a/c))
-        alpha = (1/ld-b)*np.sqrt(abs(a/c))
+        alpha = (1/ld + b)*beta
         nemit = emit * energy / electron_rest_en * 1e6  # in mm.mrad
         return nemit, beta, alpha
 
@@ -227,6 +239,10 @@ class EmittanceMeasure(QWidget):
         self.pb_stop = QPushButton('Stop', gb)
         self.pb_stop.clicked.connect(self.pb_stop_clicked)
         fl.addRow(self.pb_start, self.pb_stop)
+        self.cbbox_plane = QComboBox(gb)
+        self.cbbox_plane.addItem('Horizontal')
+        self.cbbox_plane.addItem('Vertical')
+        fl.addRow(QLabel('Plane', gb), self.cbbox_plane)
         self.spbox_energy = QDoubleSpinBox(gb)
         self.spbox_energy.setMinimum(0.511)
         self.spbox_energy.setMaximum(200)
@@ -234,10 +250,10 @@ class EmittanceMeasure(QWidget):
         self.spbox_energy.setDecimals(2)
         fl.addRow(QLabel('Energy [MeV]', gb), self.spbox_energy)
         self.spbox_steps = QSpinBox(gb)
-        self.spbox_steps.setValue(7)
+        self.spbox_steps.setValue(11)
         fl.addRow(QLabel('Nr Steps', gb), self.spbox_steps)
         self.spbox_samples = QSpinBox(gb)
-        self.spbox_samples.setValue(10)
+        self.spbox_samples.setValue(16)
         fl.addRow(QLabel('Nr Samples per step', gb), self.spbox_samples)
         self.spbox_I_ini = QDoubleSpinBox(gb)
         self.spbox_I_ini.setMinimum(-4)
@@ -310,8 +326,10 @@ class EmittanceMeasure(QWidget):
         """
         Slot documentation goes here.
         """
+        print('here')
         self.pb_stop.setEnabled(True)
         self.pb_start.setEnabled(False)
+        print('here2')
         self._measuring = True
         self.measurement = Thread(target=self.meas_emittance, daemon=True)
         self.measurement.start()
@@ -320,6 +338,7 @@ class EmittanceMeasure(QWidget):
         """
         Slot documentation goes here.
         """
+        print('Stopping...')
         self._measuring = False
         self.pb_stop.setEnabled(False)
         self.pb_start.setEnabled(True)

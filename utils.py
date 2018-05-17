@@ -49,9 +49,18 @@ def set_environ():
 def gettransmat(type, L, gamma, K1=None, B=None):
     R = np.eye(6)
 
+    if K1 is not None and K1 == 0:
+        type = 'drift'
     if type.lower().startswith('dr'):
-        type, K1 = 'quadrupole', 0
-    if type.lower().startswith('qu') and K1 is not None:
+        R = np.array([
+            [1, L, 0, 0, 0, 0],
+            [0, 1, 0, 0, 0, 0],
+            [0, 0, 1, L, 0, 0],
+            [0, 0, 0, 1, 0, 0],
+            [0, 0, 0, 0, 1, L/gamma**2],
+            [0, 0, 0, 0, 0, 1],
+            ])
+    elif type.lower().startswith('qu') and K1 is not None:
         kq = np.sqrt(abs(K1))
         c = np.cos(kq*L)
         s = np.sin(kq*L)
@@ -111,7 +120,7 @@ def _fit_gaussian(x, y, amp=None, mu=None, sigma=None, y0=None):
     try:
         p_opt, p_cov = curve_fit(_gaussian, x, y, (amp, mu, sigma, y0))
     except Exception:
-        p_opt = (amp, mu, 100, y0)
+        p_opt = (amp, mu, sigma, y0)
         print('Fitting Problem')
     return p_opt
 
@@ -247,8 +256,8 @@ class ProcessImage(QWidget):
         self.spbox_roi_size_y.setMaximum(2050)
         self.spbox_roi_center_x.setMaximum(2448)
         self.spbox_roi_center_y.setMaximum(2050)
-        self.spbox_roi_size_x.setValue(500)
-        self.spbox_roi_size_y.setValue(500)
+        self.spbox_roi_size_x.setValue(300)
+        self.spbox_roi_size_y.setValue(400)
         self.spbox_roi_center_x.setValue(500)
         self.spbox_roi_center_y.setValue(500)
         fl.addRow(QLabel('ROI Size X', gb_pos), self.spbox_roi_size_x)
@@ -372,8 +381,12 @@ class ProcessImage(QWidget):
         else:
             _, cen_x, std_x, _ = _fit_gaussian(axis_x, proj_x)
             _, cen_y, std_y, _ = _fit_gaussian(axis_y, proj_y)
+        std_x = abs(std_x)
+        std_y = abs(std_y)
         yd = _gaussian(axis_x, -400, cen_x, std_x, 0)
         self.plt_fit_x.setData(axis_x, yd + 1000)
+        yd = _gaussian(axis_y, 400, cen_y, std_y, 0)
+        self.plt_fit_y.setData(yd + 500, axis_y)
 
         offset_x = image.shape[1]/2
         offset_y = image.shape[0]/2
