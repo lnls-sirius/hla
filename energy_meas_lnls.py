@@ -88,18 +88,20 @@ class EnergyMeasure(QWidget):
         fl_sp.addRow('Average', self.lb_ave_sp)
         fl_sp.addRow('Deviation', self.lb_std_sp)
 
-        vl = QHBoxLayout()
-        gl.addItem(vl, 0, 2)
+        vl = QVBoxLayout()
+        gl.addItem(vl, 0, 2, 3, 1)
+        hl = QHBoxLayout()
         self.spbox_npoints = QSpinBox(self)
         self.spbox_npoints.setKeyboardTracking(False)
         self.spbox_npoints.setMinimum(10)
         self.spbox_npoints.setMaximum(200000)
         self.spbox_npoints.setValue(100)
-        vl.addWidget(QLabel('Number of Points:', self))
-        vl.addWidget(self.spbox_npoints)
+        hl.addWidget(QLabel('Number of Points:', self))
+        hl.addWidget(self.spbox_npoints)
+        vl.addItem(hl)
 
         self.plt_image = ProcessImage(self)
-        gl.addWidget(self.plt_image, 1, 2, 2, 1)
+        vl.addWidget(self.plt_image)
 
     def meas_energy(self):
         cen_x, sigma_x, cen_y, sigma_y = self.plt_image.get_params()

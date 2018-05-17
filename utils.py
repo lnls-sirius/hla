@@ -49,7 +49,7 @@ def set_environ():
 def gettransmat(type, L, gamma, K1=None, B=None):
     R = np.eye(6)
 
-    if K1 is not None and K1 == 0:
+    if type.lower().startswith('qu') and K1 is not None and K1 == 0:
         type = 'drift'
     if type.lower().startswith('dr'):
         R = np.array([
@@ -66,7 +66,7 @@ def gettransmat(type, L, gamma, K1=None, B=None):
         s = np.sin(kq*L)
         ch = np.cosh(kq*L)
         sh = np.sinh(kq*L)
-        if K1 >= 0:
+        if K1 > 0:
             x11, x12, x21 = c,  1/kq*s, -kq*s
             y11, y12, y21 = ch, 1/kq*sh, kq*sh
         else:
@@ -231,8 +231,16 @@ class ProcessImage(QWidget):
         self.image_view.addItem(self.plt_roi)
         self.plt_fit_x = PlotCurveItem([0, 0], [0, 400])
         self.plt_fit_y = PlotCurveItem([0, 0], [0, 400])
+        self.plt_his_x = PlotCurveItem([0, 0], [0, 400])
+        self.plt_his_y = PlotCurveItem([0, 0], [0, 400])
+        pen = mkPen()
+        pen.setColor(QColor('yellow'))
+        self.plt_his_x.setPen(pen)
+        self.plt_his_y.setPen(pen)
         self.image_view.addItem(self.plt_fit_x)
         self.image_view.addItem(self.plt_fit_y)
+        self.image_view.addItem(self.plt_his_x)
+        self.image_view.addItem(self.plt_his_y)
         vl.addWidget(self.image_view)
 
         gb_pos = QGroupBox('Position [mm]', self)
@@ -282,10 +290,10 @@ class ProcessImage(QWidget):
         fl.addRow(self.pb_reset_bg)
         fl = QFormLayout()
         hl.addItem(fl)
-        self.lb_xave = QLabel('0.000', gb_pos)
-        self.lb_yave = QLabel('0.000', gb_pos)
-        self.lb_xstd = QLabel('0.000', gb_pos)
-        self.lb_ystd = QLabel('0.000', gb_pos)
+        self.lb_xave = QLabel('0', gb_pos)
+        self.lb_yave = QLabel('0', gb_pos)
+        self.lb_xstd = QLabel('0', gb_pos)
+        self.lb_ystd = QLabel('0', gb_pos)
         fl.addRow(QLabel('Average Position', gb_pos))
         fl.addRow(QLabel('x = ', gb_pos), self.lb_xave)
         fl.addRow(QLabel('y = ', gb_pos), self.lb_yave)
@@ -313,6 +321,10 @@ class ProcessImage(QWidget):
     def calc_roi(self, image):
         proj_x = image.sum(axis=0)
         proj_y = image.sum(axis=1)
+        # proj_x -= image.shape[0]//2  # backgroung removal
+        # proj_y -+ image.shape[1]//2  # backgroung removal
+        # proj_x[np.where(proj_x<0)] = 0
+        # proj_y[np.where(proj_y<0)] = 0
         axis_x = np.arange(image.shape[1])
         axis_y = np.arange(image.shape[0])
 
@@ -369,34 +381,42 @@ class ProcessImage(QWidget):
             image[b] = maxi
 
         proj_x, proj_y, axis_x, axis_y = self.calc_roi(image)
+        x_max = max(proj_x)
+        y_max = max(proj_y)
+        if self.cbox_method.currentIndex():
+            cen_x, std_x = _calc_moments(axis_x, proj_x)
+            cen_y, std_y = _calc_moments(axis_y, proj_y)
+            amp_x = x_max
+            amp_y = y_max
+            off_x = 0
+            off_y = 0
+        else:
+            amp_x, cen_x, std_x, off_x = _fit_gaussian(axis_x, proj_x)
+            amp_y, cen_y, std_y, off_y = _fit_gaussian(axis_y, proj_y)
+        std_x = abs(std_x)
+        std_y = abs(std_y)
+        yd = _gaussian(axis_x, amp_x, cen_x, std_x, off_x)/x_max*400
+        self.plt_fit_x.setData(axis_x, yd + axis_y[0])
+        self.plt_his_x.setData(axis_x, proj_x/x_max*400 + axis_y[0])
+
+        yd = _gaussian(axis_y, amp_y, cen_y, std_y, off_y)/y_max*400
+        self.plt_fit_y.setData(yd + axis_x[0], axis_y)
+        self.plt_his_y.setData(proj_y/y_max*400 + axis_x[0], axis_y)
+
+        offset_x = image.shape[1]/2
+        offset_y = image.shape[0]/2
+        self.lb_xave.setText('{0:4d}'.format(int(cen_x or 0)))
+        self.lb_yave.setText('{0:4d}'.format(int(cen_y or 0)))
+        self.lb_xstd.setText('{0:4d}'.format(int(std_x or 0)))
+        self.lb_ystd.setText('{0:4d}'.format(int(std_y or 0)))
 
         coefx = self.gauss_coefx.value
         coefy = self.gauss_coefy.value
         if coefx is None or coefy is None:
             return
 
-        if self.cbox_method.currentIndex():
-            cen_x, std_x = _calc_moments(axis_x, proj_x)
-            cen_y, std_y = _calc_moments(axis_y, proj_y)
-        else:
-            _, cen_x, std_x, _ = _fit_gaussian(axis_x, proj_x)
-            _, cen_y, std_y, _ = _fit_gaussian(axis_y, proj_y)
-        std_x = abs(std_x)
-        std_y = abs(std_y)
-        yd = _gaussian(axis_x, -400, cen_x, std_x, 0)
-        self.plt_fit_x.setData(axis_x, yd + 1000)
-        yd = _gaussian(axis_y, 400, cen_y, std_y, 0)
-        self.plt_fit_y.setData(yd + 500, axis_y)
-
-        offset_x = image.shape[1]/2
-        offset_y = image.shape[0]/2
         cen_x -= offset_x
         cen_y -= offset_y
-        self.lb_xave.setText('{0:.3f}'.format(cen_x * coefx))
-        self.lb_yave.setText('{0:.3f}'.format(cen_y * coefx))
-        self.lb_xstd.setText('{0:.3f}'.format(std_x * coefx))
-        self.lb_ystd.setText('{0:.3f}'.format(std_y * coefx))
-
         self.cen_x = cen_x * coefx*1e-3  # transform to meter
         self.cen_y = cen_y * coefy*1e-3
         self.sigma_x = std_x * coefx*1e-3

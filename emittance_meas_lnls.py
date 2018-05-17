@@ -4,12 +4,12 @@ import os
 import sys
 import numpy as np
 import time
-from threading import Thread
+from threading import Thread, Event
 from epics import PV
 from PyQt5.QtWidgets import (QPushButton, QLabel, QGridLayout, QGroupBox,
                              QFormLayout, QMessageBox, QApplication,
                              QSizePolicy, QWidget, QComboBox, QSpinBox,
-                             QVBoxLayout, QHBoxLayout, QDoubleSpinBox)
+                             QVBoxLayout, QHBoxLayout, QDoubleSpinBox, QFileDialog)
 from PyQt5.QtGui import QColor
 from PyQt5.QtCore import QTimer, QSize, Qt
 from pydm.application import PyDMApplication
@@ -30,7 +30,7 @@ rcParams['font.size'] = 9
 light_speed = 299792458
 electron_rest_en = 0.5109989461  # in MeV
 DT = 0.001
-
+SIMUL = False
 
 class EmittanceMeasure(QWidget):
     I2K1 = [-0.0089, 2.1891, 0.0493]
@@ -54,15 +54,30 @@ class EmittanceMeasure(QWidget):
         self.alphay_tm = []
         self.alphax_parf = []
         self.alphay_parf = []
+        self.measurement = None
+        self.I_meas = None
+        self.sigma = None
+        self.plane_meas = None
 
         self._setupUi()
 
     def meas_emittance(self):
-        energy = self.spbox_energy.value()
+        self._acquire_data()
+        self._perform_analysis()
+
+    def _acquire_data(self):
         samples = self.spbox_samples.value()
         nsteps = self.spbox_steps.value()
         I_ini = self.spbox_I_ini.value()
         I_end = self.spbox_I_end.value()
+
+        self.line_sigmax.set_xdata([])
+        self.line_sigmax.set_ydata([])
+        self.line_sigmay.set_xdata([])
+        self.line_sigmay.set_ydata([])
+        self.line_fit.set_xdata([])
+        self.line_fit.set_ydata([])
+        self.plt_sigma.figure.canvas.draw()
 
         pl = 'y' if self.cbbox_plane.currentIndex() else 'x'
         curr_list = np.linspace(I_ini, I_end, nsteps)
@@ -70,28 +85,35 @@ class EmittanceMeasure(QWidget):
         I_meas = []
         for i, I in enumerate(curr_list):
             print('setting Quadrupole to ', I)
-            self.quad_I_sp.put(I, wait=True)
-            time.sleep(5 if i else 15)
+            if not SIMUL:
+                self.quad_I_sp.put(I, wait=True)
+            self._measuring.wait(5 if i else 15)
             j = 0
             I_tmp = []
             sig_tmp = []
             while j < samples:
-                print('measuring sample', j)
-                if not self._measuring:
+                if self._measuring.is_set():
+                    self.pb_stop.setEnabled(False)
+                    self.pb_start.setEnabled(True)
+                    print('Stopped')
                     return
+                print('measuring sample', j)
                 I_now = self.quad_I_rb.value
                 cen_x, sigma_x, cen_y, sigma_y = self.plt_image.get_params()
                 mu, sig = (cen_x, sigma_x) if pl == 'x' else (cen_y, sigma_y)
                 max_size = self.spbox_threshold.value()*1e-3
                 if sig > max_size:
-                    time.sleep(1)
+                    self._measuring.wait(1)
                     continue
                 I_tmp.append(I_now)
                 sig_tmp.append(abs(sig))
-                time.sleep(0.5)
+                self._measuring.wait(0.5)
                 j += 1
-            I_meas.extend(sorted(I_tmp)[3:samples//2-2])
-            sigma.extend(sorted(sig_tmp)[3:samples//2-2])
+            ind = np.argsort(sig_tmp)
+            I_tmp = np.array(I_tmp)[ind]
+            sig_tmp = np.array(sig_tmp)[ind]
+            I_meas.extend(I_tmp[3:samples//2-2])
+            sigma.extend(sig_tmp[3:samples//2-2])
             if pl=='x':
                 self.line_sigmax.set_xdata(I_meas)
                 self.line_sigmax.set_ydata(np.array(sigma)*1e3)
@@ -99,81 +121,104 @@ class EmittanceMeasure(QWidget):
                 self.line_sigmay.set_xdata(I_meas)
                 self.line_sigmay.set_ydata(np.array(sigma)*1e3)
             self.plt_sigma.axes.set_xlim(
-                    [min(I_meas)*(1-DT), max(I_meas)*(1+DT)])
+                    [min(I_meas)*(1-DT*10), max(I_meas)*(1+DT*10)])
             self.plt_sigma.axes.set_ylim(
-                    [min(sigma)*(1-DT), max(sigma)*(1+DT)])
+                    [min(sigma)*(1-DT)*1e3, max(sigma)*(1+DT)*1e3])
             self.plt_sigma.figure.canvas.draw()
+        self._measuring.set()
+        self.pb_stop.setEnabled(False)
+        self.pb_start.setEnabled(True)
+        print('Finished!')
+        self.I_meas = I_meas
+        self.sigma = sigma
+        self.plane_meas = pl
 
-        kin_en = np.sqrt(energy*energy - electron_rest_en*electron_rest_en)
-        K1 = np.polyval(self.I2K1, I_meas)*light_speed/kin_en/1e6
-        sigma = np.array(sigma)
-        I_meas = np.array(I_meas)
+    def _perform_analysis(self):
+        sigma = np.array(self.sigma)
+        I_meas = np.array(self.I_meas)
+        pl = self.plane_meas
 
         if pl=='x':
             # Method 1: Transfer Matrix
-            nemitx, betax, alphax = self._trans_matrix_method(K1, sigmax, energy, plane='x')
+            nemitx, betax, alphax = self._trans_matrix_method(
+                                            I_meas, sigma, pl='x')
             self.nemitx_tm.append(nemitx)
             self.betax_tm.append(betax)
             self.alphax_tm.append(alphax)
             # Method 2: Parabola Fitting
-            nemitx, betax, alphax = self._thin_lens_method(K1, sigmax, energy)
+            nemitx, betax, alphax = self._thin_lens_method(
+                                            I_meas, sigma, pl='x')
             self.nemitx_parf.append(nemitx)
             self.betax_parf.append(betax)
             self.alphax_parf.append(alphax)
         else:
             # Method 1: Transfer Matrix
-            nemity, betay, alphay = self._trans_matrix_method(K1, sigmay, energy, plane='y')
+            nemity, betay, alphay = self._trans_matrix_method(
+                                            I_meas, sigma, pl='y')
             self.nemity_tm.append(nemity)
             self.betay_tm.append(betay)
             self.alphay_tm.append(alphay)
             # Method 2: Parabola Fitting
-            nemity, betay, alphay = self._thin_lens_method(-K1, sigmay, energy)
+            nemity, betay, alphay = self._thin_lens_method(
+                                            I_meas, sigma, pl='y')
             self.nemity_parf.append(nemity)
             self.betay_parf.append(betay)
             self.alphay_parf.append(alphay)
 
-
         for pref in ('nemit', 'beta', 'alpha'):
-            all = []
-            for var in ('_tm', '_tm'):
+            for var in ('_tm', '_parf'):
                 tp = pref + pl + var
-                all.extend(getattr(self, tp))
                 yd = np.array(getattr(self, tp))
                 line = getattr(self, 'line_'+tp)
                 line.set_xdata(np.arange(yd.shape[0]))
                 line.set_ydata(yd)
                 lb = getattr(self, 'lb_'+tp)
                 lb.setText('{0:.3f}'.format(yd.mean()))
+            all = []
+            for var in ('x_tm', 'y_tm', 'x_parf', 'y_parf'):
+                all.extend(getattr(self, pref + var))
             all = np.array(all)
             plt = getattr(self, 'plt_' + pref)
-            plt.axes.set_xlim([0, all.shape[0]+0.1])
+            plt.axes.set_xlim([-0.1, all.shape[0]+0.1])
             plt.axes.set_ylim([all.min()*(1-DT), all.max()*(1+DT)])
             plt.figure.canvas.draw()
 
-        self._measuring = False
-        # self.pb_stop.setEnabled(False)
-        # self.pb_start.setEnabled(True)
-        time.sleep(50)
+    def _get_K1_from_I(self, I_meas):
+        energy = self.spbox_energy.value()
+        kin_en = np.sqrt(energy*energy - electron_rest_en*electron_rest_en)
+        return np.polyval(self.I2K1, I_meas)*light_speed/kin_en/1e6
 
-    def _trans_matrix_method(self, K1, sigma, energy, plane='x'):
+    def _trans_matrix_method(self, I_meas, sigma, pl='x'):
+        K1 = self._get_K1_from_I(I_meas)
+        energy = self.spbox_energy.value()
+
         Rx, Ry = self._get_resp_mat(K1, energy)
-        R = Rx if plane.lower().startswith(('x', 'h')) else Ry
-        a, b, c = np.linalg.lstsq(R, sigma*sigma)[0]
+        R = Rx if pl=='x' else Ry
+        a, b, c = np.linalg.lstsq(R, sigma*sigma, rcond=None)[0]
         emit = np.sqrt(abs(a*c - b*b/4.0))
         beta = a/emit
         alpha = -b/2.0/emit
         nemit = emit * energy / electron_rest_en * 1e6  # in mm.mrad
         return nemit, beta, alpha
 
-    def _thin_lens_method(self, K1, sigma, energy):
+    def _thin_lens_method(self, I_meas, sigma, pl='x'):
+        I_meas2 = I_meas if pl=='x' else -I_meas
+
+        K1 = self._get_K1_from_I(I_meas2)
+        energy = self.spbox_energy.value()
+
         al, bl, cl = np.polyfit(K1*self.QUAD_L, sigma*sigma, 2)
+        yd = np.sqrt(np.polyval([al, bl, cl], K1*self.QUAD_L))
+        self.line_fit.set_xdata(I_meas)
+        self.line_fit.set_ydata(yd*1e3)
+        self.plt_sigma.figure.canvas.draw()
         a = al
         b = -bl/2/al
         c = cl - bl**2/4/al
         ld = self.DIST + self.QUAD_L/2
         emit = np.sqrt(abs(a*c))/ld**2
         beta = np.sqrt(abs(a/c))
-        alpha = (1/ld + b)*beta
+        alpha = (1/ld - b)*beta
         nemit = emit * energy / electron_rest_en * 1e6  # in mm.mrad
         return nemit, beta, alpha
 
@@ -231,28 +276,26 @@ class EmittanceMeasure(QWidget):
             self.alphay_parf, '--rd', lw=1, label='Vert. Parab. Fit')[0]
         self.plt_alpha = wid
 
-        gb = QGroupBox('Configurations', self)
+        vl = QVBoxLayout()
+        gl.addItem(vl, 0, 1, 3, 1)
+        gb = QGroupBox('Data Acquisition Configs.', self)
         fl = QFormLayout(gb)
-        gl.addWidget(gb, 0, 1)
+        vl.addWidget(gb)
         self.pb_start = QPushButton('Start', gb)
         self.pb_start.clicked.connect(self.pb_start_clicked)
         self.pb_stop = QPushButton('Stop', gb)
         self.pb_stop.clicked.connect(self.pb_stop_clicked)
+        self.pb_stop.setEnabled(False)
         fl.addRow(self.pb_start, self.pb_stop)
         self.cbbox_plane = QComboBox(gb)
         self.cbbox_plane.addItem('Horizontal')
         self.cbbox_plane.addItem('Vertical')
         fl.addRow(QLabel('Plane', gb), self.cbbox_plane)
-        self.spbox_energy = QDoubleSpinBox(gb)
-        self.spbox_energy.setMinimum(0.511)
-        self.spbox_energy.setMaximum(200)
-        self.spbox_energy.setValue(150)
-        self.spbox_energy.setDecimals(2)
-        fl.addRow(QLabel('Energy [MeV]', gb), self.spbox_energy)
         self.spbox_steps = QSpinBox(gb)
         self.spbox_steps.setValue(11)
         fl.addRow(QLabel('Nr Steps', gb), self.spbox_steps)
         self.spbox_samples = QSpinBox(gb)
+        self.spbox_samples.setMinimum(12)
         self.spbox_samples.setValue(16)
         fl.addRow(QLabel('Nr Samples per step', gb), self.spbox_samples)
         self.spbox_I_ini = QDoubleSpinBox(gb)
@@ -274,8 +317,26 @@ class EmittanceMeasure(QWidget):
         self.spbox_threshold.setDecimals(2)
         fl.addRow(QLabel('Max. Size Accpbl. [mm]', gb), self.spbox_threshold)
 
+        gb = QGroupBox('Analysis Configs.', self)
+        fl = QFormLayout(gb)
+        vl.addWidget(gb)
+        self.spbox_energy = QDoubleSpinBox(gb)
+        self.spbox_energy.setMinimum(0.511)
+        self.spbox_energy.setMaximum(200)
+        self.spbox_energy.setValue(150)
+        self.spbox_energy.setDecimals(2)
+        fl.addRow(QLabel('Energy [MeV]', gb), self.spbox_energy)
+        self.pb_save_data = QPushButton('Save Raw', gb)
+        self.pb_save_data.clicked.connect(self.pb_save_data_clicked)
+        self.pb_load_data = QPushButton('Load Raw', gb)
+        self.pb_load_data.clicked.connect(self.pb_load_data_clicked)
+        fl.addRow(self.pb_save_data, self.pb_load_data)
+        self.pb_analyse_data = QPushButton('Analyse', gb)
+        self.pb_analyse_data.clicked.connect(self.pb_analyse_data_clicked)
+        fl.addRow(self.pb_analyse_data)
+
         gb = QGroupBox('Results', self)
-        gl.addWidget(gb, 1, 1, 2, 1)
+        vl.addWidget(gb)
         gl2 = QGridLayout(gb)
         gl2.addWidget(QLabel('Trans. Matrix', gb), 0, 1, 1, 2)
         gl2.addWidget(QLabel('Parabola Fit', gb), 0, 3, 1, 2)
@@ -283,7 +344,7 @@ class EmittanceMeasure(QWidget):
         gl2.addWidget(QLabel('Vert.', gb), 1, 2)
         gl2.addWidget(QLabel('Hor.', gb), 1, 3)
         gl2.addWidget(QLabel('Vert.', gb), 1, 4)
-        gl2.addWidget(QLabel('Norm. emitt. [mm.rad]', gb), 2, 0)
+        gl2.addWidget(QLabel('Norm. emitt. [mm.mrad]', gb), 2, 0)
         gl2.addWidget(QLabel('beta [m]', gb), 3, 0)
         gl2.addWidget(QLabel('alpha', gb), 4, 0)
         for i, pref in enumerate(('nemit', 'beta', 'alpha')):
@@ -302,6 +363,7 @@ class EmittanceMeasure(QWidget):
         wid.figure.set_tight_layout(True)
         self.line_sigmax = wid.axes.plot([], 'bo', lw=1, label='Horizontal')[0]
         self.line_sigmay = wid.axes.plot([], 'ro', lw=1, label='Vertical')[0]
+        self.line_fit = wid.axes.plot([], '-k', lw=1)[0]
         self.plt_sigma = wid
 
         self.plt_image = ProcessImage(self, prof='PRF5')
@@ -322,15 +384,88 @@ class EmittanceMeasure(QWidget):
         Ry = np.column_stack((R33*R33, R33*R34, R34*R34))
         return Rx, Ry
 
+    def pb_save_data_clicked(self):
+        if self.I_meas is None or self.sigma is None:
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Warning)
+            msg.setText("Could not Save")
+            msg.setInformativeText(
+                "There are no data saved in Memory. Make a measurement First.")
+            msg.setWindowTitle("Warning")
+            msg.resize(900, 300)
+            msg.exec_()
+            return
+        fname = QFileDialog.getSaveFileName(
+                    self, 'Save file',
+                    '/home/fac_files/lnls-sirius/linac-opi/meas_codes',
+                    "Text Files (*.txt *.dat)")
+        if fname[0]:
+            self.save_to_file(fname[0])
+
+    def save_to_file(self, fname):
+        header = 'Plane = {0:s}\n'.format(self.plane_meas)
+        header += '{0:15s} {0:15s}'.format('Current [A]', 'Beam Size [m]')
+        np.savetxt(fname, np.column_stack(
+            (self.I_meas, self.sigma)), header=header, fmt='%-15.3f %-15.3f')
+
+    def pb_load_data_clicked(self):
+        fname = QFileDialog.getOpenFileName(
+                    self, 'Open file',
+                    '/home/fac_files/lnls-sirius/linac-opi/meas_codes', '')
+        if fname[0]:
+            self.load_from_file(fname[0])
+
+    def load_from_file(self, fname):
+        try:
+            self.I_meas, self.sigma = np.loadtxt(fname, skiprows=2, unpack=True)
+        except (ValueError, TypeError):
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Warning)
+            msg.setText("Could not Load File")
+            msg.setInformativeText(
+                "The chosen file does not match the formatting.")
+            msg.setWindowTitle("Warning")
+            msg.resize(900, 300)
+            msg.exec_()
+            return
+        with open(fname, 'r') as f:
+            self.plane_meas = f.readline().split()[-1]
+
+        if self.plane_meas=='x':
+            self.line_sigmax.set_xdata(self.I_meas)
+            self.line_sigmax.set_ydata(np.array(self.sigma)*1e3)
+        else:
+            self.line_sigmay.set_xdata(self.I_meas)
+            self.line_sigmay.set_ydata(np.array(self.sigma)*1e3)
+        self.plt_sigma.axes.set_xlim(
+                [min(self.I_meas)*(1-DT*10), max(self.I_meas)*(1+DT*10)])
+        self.plt_sigma.axes.set_ylim(
+                [min(self.sigma)*(1-DT)*1e3, max(self.sigma)*(1+DT)*1e3])
+        self.plt_sigma.figure.canvas.draw()
+
+    def pb_analyse_data_clicked(self):
+        if self.I_meas is None or self.sigma is None:
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Warning)
+            msg.setText("Could Perform Analysis")
+            msg.setInformativeText(
+                "No data in memory. Please make a measurement or load the data.")
+            msg.setWindowTitle("Warning")
+            msg.resize(900, 300)
+            msg.exec_()
+            return
+        self._perform_analysis()
+
     def pb_start_clicked(self):
         """
         Slot documentation goes here.
         """
-        print('here')
+        print('Starting...')
+        if self.measurement is not None and self.measurement.isAlive():
+            return
         self.pb_stop.setEnabled(True)
         self.pb_start.setEnabled(False)
-        print('here2')
-        self._measuring = True
+        self._measuring = Event()
         self.measurement = Thread(target=self.meas_emittance, daemon=True)
         self.measurement.start()
 
@@ -339,9 +474,7 @@ class EmittanceMeasure(QWidget):
         Slot documentation goes here.
         """
         print('Stopping...')
-        self._measuring = False
-        self.pb_stop.setEnabled(False)
-        self.pb_start.setEnabled(True)
+        self._measuring.set()
 
     # def closeEvent(self, event):
     #     reply = QMessageBox.question(
