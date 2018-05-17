@@ -7,4 +7,4 @@ from siriushla.widgets.state_button import PyDMStateButton
 from siriushla.widgets.windows import SiriusMainWindow, SiriusDialog
 from siriushla.widgets.ledit_scrollbar import PyDMLinEditScrollbar
 from siriushla.widgets.loading_dialog import LoadingDialog
-from siriushla.widgets.image import SiriusScrnView
+from siriushla.widgets.scrn_view import SiriusScrnView
