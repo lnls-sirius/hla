@@ -347,9 +347,10 @@ class ProcessImage(QWidget):
             np.array([strt_x, strt_x, end_x, end_x, strt_x]),
             np.array([strt_y, end_y, end_y, strt_y, strt_y]))
 
-        proj_x = proj_x[strt_x:end_x]
+        image = image[strt_y:end_y, strt_x:end_x]
+        proj_x = image.sum(axis=0)
+        proj_y = image.sum(axis=1)
         axis_x = axis_x[strt_x:end_x]
-        proj_y = proj_y[strt_y:end_y]
         axis_y = axis_y[strt_y:end_y]
         return proj_x, proj_y, axis_x, axis_y
 

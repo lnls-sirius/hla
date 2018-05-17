@@ -112,8 +112,8 @@ class EmittanceMeasure(QWidget):
             ind = np.argsort(sig_tmp)
             I_tmp = np.array(I_tmp)[ind]
             sig_tmp = np.array(sig_tmp)[ind]
-            I_meas.extend(I_tmp[3:samples//2-2])
-            sigma.extend(sig_tmp[3:samples//2-2])
+            I_meas.extend(I_tmp[6:-6])
+            sigma.extend(sig_tmp[6:-6])
             if pl=='x':
                 self.line_sigmax.set_xdata(I_meas)
                 self.line_sigmax.set_ydata(np.array(sigma)*1e3)
@@ -404,9 +404,9 @@ class EmittanceMeasure(QWidget):
 
     def save_to_file(self, fname):
         header = 'Plane = {0:s}\n'.format(self.plane_meas)
-        header += '{0:15s} {0:15s}'.format('Current [A]', 'Beam Size [m]')
+        header += '{0:15s} {1:15s}'.format('Current [A]', 'Beam Size [m]')
         np.savetxt(fname, np.column_stack(
-            (self.I_meas, self.sigma)), header=header, fmt='%-15.3f %-15.3f')
+            (self.I_meas, self.sigma)), header=header, fmt='%-15.9f %-15.10f')
 
     def pb_load_data_clicked(self):
         fname = QFileDialog.getOpenFileName(
