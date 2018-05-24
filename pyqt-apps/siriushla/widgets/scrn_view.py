@@ -2,14 +2,13 @@
 
 import numpy as np
 import time
-import epics
-# from pyqtgraph import PlotWidget
+from threading import Thread
 from pydm.PyQt.QtGui import (QGridLayout, QHBoxLayout, QSpacerItem,
                              QWidget, QGroupBox, QLabel,
                              QComboBox, QPushButton, QCheckBox)
 from pydm.PyQt.QtGui import QSizePolicy as QSzPlcy
 from pydm.PyQt.QtCore import Qt, pyqtSlot, pyqtProperty
-from pydm.widgets import PyDMImageView, PyDMLabel, PyDMLineEdit
+from pydm.widgets import PyDMImageView, PyDMLabel, PyDMSpinbox
 from pydm.widgets.channel import PyDMChannel
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla.widgets import PyDMStateButton, SiriusLedState
@@ -23,7 +22,8 @@ class _SiriusImageView(PyDMImageView):
 
     def __init__(self, parent=None,
                  image_channel=None, width_channel=None,
-                 offsetx_channel=None, offsety_channel=None):
+                 offsetx_channel=None, offsety_channel=None,
+                 maxwidth_channel=None, maxheight_channel=None):
         """Initialize the object."""
         PyDMImageView.__init__(self, parent=parent,
                                image_channel=image_channel,
@@ -35,12 +35,17 @@ class _SiriusImageView(PyDMImageView):
         self._offsetxchannel = offsetx_channel
         self._image_roi_offsety = 0
         self._offsetychannel = offsety_channel
+        self._image_maxwidth = 0
+        self._maxwidthchannel = maxwidth_channel
+        self._image_maxheight = 0
+        self._maxheightchannel = maxheight_channel
         self._show_calibration_grid = False
 
     @pyqtSlot()
-    def saveCalibrationGrid(self, img, w):
+    def saveCalibrationGrid(self):
         """Save current image as calibration_grid_image."""
-        self._calibration_grid_width = w
+        img = self.image_waveform.copy()
+        self._calibration_grid_width = self.imageWidth
         self._calibration_grid_maxdata = img.max()
         grid = np.where(img < 0.5*self._calibration_grid_maxdata, True, False)
         if self.readingOrder == self.ReadingOrder.Clike:
@@ -161,6 +166,40 @@ class _SiriusImageView(PyDMImageView):
             return
         self._image_roi_offsety = new_offset
 
+    @property
+    def image_maxwidth(self):
+        return self._image_maxwidth
+
+    def image_maxwidth_changed(self, new_max):
+        """
+        Callback invoked when the maxWidth Channel value changes.
+
+        Parameters
+        ----------
+        new_max : int
+            The new image max width
+        """
+        if new_max is None:
+            return
+        self._image_maxwidth = new_max
+
+    @property
+    def image_maxheight(self):
+        return self._image_maxheight
+
+    def image_maxheight_changed(self, new_max):
+        """
+        Callback invoked when the maxHeight Channel value changes.
+
+        Parameters
+        ----------
+        new_max : int
+            The new image max height
+        """
+        if new_max is None:
+            return
+        self._image_maxheight = new_max
+
     @pyqtProperty(str)
     def ROIOffsetXChannel(self):
         """
@@ -211,6 +250,56 @@ class _SiriusImageView(PyDMImageView):
         if self._offsetychannel != value:
             self._offsetychannel = str(value)
 
+    @pyqtProperty(str)
+    def maxWidthChannel(self):
+        """
+        The channel address in use for the image ROI horizontal offset.
+
+        Returns
+        -------
+        str
+            Channel address
+        """
+        return str(self._maxwidthchannel)
+
+    @maxWidthChannel.setter
+    def maxWidthChannel(self, value):
+        """
+        The channel address in use for the image ROI horizontal offset.
+
+        Parameters
+        ----------
+        value : str
+            Channel address
+        """
+        if self._maxwidthchannel != value:
+            self._maxwidthchannel = str(value)
+
+    @pyqtProperty(str)
+    def maxHeightChannel(self):
+        """
+        The channel address in use for the image ROI vertical offset.
+
+        Returns
+        -------
+        str
+            Channel address
+        """
+        return str(self._maxheightchannel)
+
+    @maxHeightChannel.setter
+    def maxHeightChannel(self, value):
+        """
+        The channel address in use for the image ROI vertical offset.
+
+        Parameters
+        ----------
+        value : str
+            Channel address
+        """
+        if self._maxheightchannel != value:
+            self._maxheightchannel = str(value)
+
     def channels(self):
         """
         Return the channels being used for this Widget.
@@ -241,6 +330,14 @@ class _SiriusImageView(PyDMImageView):
                     address=self.ROIOffsetYChannel,
                     connection_slot=self.roioffsety_connection_state_changed,
                     value_slot=self.image_roioffsety_changed,
+                    severity_slot=self.alarmSeverityChanged),
+                PyDMChannel(
+                    address=self.maxWidthChannel,
+                    value_slot=self.image_maxwidth_changed,
+                    severity_slot=self.alarmSeverityChanged),
+                PyDMChannel(
+                    address=self.maxHeightChannel,
+                    value_slot=self.image_maxheight_changed,
                     severity_slot=self.alarmSeverityChanged)]
         return self._channels
 
@@ -331,10 +428,14 @@ class SiriusScrnView(QWidget):
             offsetx_channel='ca://'+self.prefix+self.device +
                             ':ImgROIOffsetX-RB',
             offsety_channel='ca://'+self.prefix+self.device +
-                            ':ImgROIOffsetY-RB',)
+                            ':ImgROIOffsetY-RB',
+            maxwidth_channel='ca://'+self.prefix+self.device +
+                            ':ImgMaxWidth-Mon',
+            maxheight_channel='ca://'+self.prefix+self.device +
+                            ':ImgMaxHeight-Mon')
         self.image_view.normalizeData = True
         self.image_view.readingOrder = self.image_view.Clike
-        self.image_view.maxRedrawRate = 20
+        self.image_view.maxRedrawRate = 15
         self.image_view.setMinimumSize(920, 736)
         layout.addWidget(self.image_view, 2, 1)
         return layout
@@ -409,97 +510,109 @@ class SiriusScrnView(QWidget):
         self.label = QLabel('Gain', self)
         self.label.setAlignment(Qt.AlignHCenter)
         layout.addWidget(self.label, 3, 1, 1, 2)
-        self.PyDMLineEdit_CamGain = PyDMLineEdit(
+        self.PyDMSpinbox_CamGain = PyDMSpinbox(
             parent=self,
             init_channel='ca://'+self.prefix+self.device+':CamGain-SP')
-        self.PyDMLineEdit_CamGain.setMaximumSize(220, 40)
-        self.PyDMLineEdit_CamGain.setAlignment(Qt.AlignCenter)
-        layout.addWidget(self.PyDMLineEdit_CamGain, 4, 1)
+        self.PyDMSpinbox_CamGain.setMaximumSize(220, 40)
+        self.PyDMSpinbox_CamGain.setAlignment(Qt.AlignCenter)
+        self.PyDMSpinbox_CamGain.showStepExponent = False
+        layout.addWidget(self.PyDMSpinbox_CamGain, 4, 1)
         self.PyDMLabel_CamGain = PyDMLabel(
             parent=self,
             init_channel='ca://'+self.prefix+self.device+':CamGain-RB')
         self.PyDMLabel_CamGain.setMaximumSize(220, 40)
         self.PyDMLabel_CamGain.setAlignment(Qt.AlignCenter)
+        self.PyDMLabel_CamGain.showStepExponent = False
         layout.addWidget(self.PyDMLabel_CamGain, 4, 2)
 
         self.label = QLabel('Exposure Time', self)
         self.label.setAlignment(Qt.AlignHCenter)
         layout.addWidget(self.label, 5, 1, 1, 2)
-        self.PyDMLineEdit_CamExposureTime = PyDMLineEdit(
+        self.PyDMSpinbox_CamExposureTime = PyDMSpinbox(
             parent=self,
             init_channel='ca://'+self.prefix+self.device+':CamExposureTime-SP')
-        self.PyDMLineEdit_CamExposureTime.setMaximumSize(220, 40)
-        self.PyDMLineEdit_CamExposureTime.setAlignment(Qt.AlignCenter)
-        layout.addWidget(self.PyDMLineEdit_CamExposureTime, 6, 1)
+        self.PyDMSpinbox_CamExposureTime.setMaximumSize(220, 40)
+        self.PyDMSpinbox_CamExposureTime.setAlignment(Qt.AlignCenter)
+        self.PyDMSpinbox_CamExposureTime.showStepExponent = False
+        layout.addWidget(self.PyDMSpinbox_CamExposureTime, 6, 1)
         self.PyDMLabel_CamExposureTime = PyDMLabel(
             parent=self,
             init_channel='ca://'+self.prefix+self.device+':CamExposureTime-RB')
         self.PyDMLabel_CamExposureTime.setMaximumSize(220, 40)
         self.PyDMLabel_CamExposureTime.setAlignment(Qt.AlignCenter)
+        self.PyDMLabel_CamExposureTime.showStepExponent = False
         layout.addWidget(self.PyDMLabel_CamExposureTime, 6, 2)
 
         self.label = QLabel('ROI Offset X', self)
         self.label.setAlignment(Qt.AlignHCenter)
         layout.addWidget(self.label, 7, 1, 1, 2)
-        self.PyDMLineEdit_ROIOffsetX = PyDMLineEdit(
+        self.PyDMSpinbox_ROIOffsetX = PyDMSpinbox(
             parent=self,
             init_channel='ca://'+self.prefix+self.device+':ImgROIOffsetX-SP')
-        self.PyDMLineEdit_ROIOffsetX.setMaximumSize(220, 40)
-        self.PyDMLineEdit_ROIOffsetX.setAlignment(Qt.AlignCenter)
-        layout.addWidget(self.PyDMLineEdit_ROIOffsetX, 8, 1)
+        self.PyDMSpinbox_ROIOffsetX.setMaximumSize(220, 40)
+        self.PyDMSpinbox_ROIOffsetX.setAlignment(Qt.AlignCenter)
+        self.PyDMSpinbox_ROIOffsetX.showStepExponent = False
+        layout.addWidget(self.PyDMSpinbox_ROIOffsetX, 8, 1)
         self.PyDMLabel_ROIOffsetX = PyDMLabel(
             parent=self,
             init_channel='ca://'+self.prefix+self.device+':ImgROIOffsetX-RB')
         self.PyDMLabel_ROIOffsetX.setMaximumSize(220, 40)
         self.PyDMLabel_ROIOffsetX.setAlignment(Qt.AlignCenter)
+        self.PyDMLabel_ROIOffsetX.showStepExponent = False
         layout.addWidget(self.PyDMLabel_ROIOffsetX, 8, 2)
 
         self.label = QLabel('ROI Offset Y', self)
         self.label.setAlignment(Qt.AlignHCenter)
         layout.addWidget(self.label, 9, 1, 1, 2)
-        self.PyDMLineEdit_ROIOffsetY = PyDMLineEdit(
+        self.PyDMSpinbox_ROIOffsetY = PyDMSpinbox(
             parent=self,
             init_channel='ca://'+self.prefix+self.device+':ImgROIOffsetY-SP')
-        self.PyDMLineEdit_ROIOffsetY.setMaximumSize(220, 40)
-        self.PyDMLineEdit_ROIOffsetY.setAlignment(Qt.AlignCenter)
-        layout.addWidget(self.PyDMLineEdit_ROIOffsetY, 10, 1)
+        self.PyDMSpinbox_ROIOffsetY.setMaximumSize(220, 40)
+        self.PyDMSpinbox_ROIOffsetY.setAlignment(Qt.AlignCenter)
+        self.PyDMSpinbox_ROIOffsetY.showStepExponent = False
+        layout.addWidget(self.PyDMSpinbox_ROIOffsetY, 10, 1)
         self.PyDMLabel_ROIOffsetY = PyDMLabel(
             parent=self,
             init_channel='ca://'+self.prefix+self.device+':ImgROIOffsetY-RB')
         self.PyDMLabel_ROIOffsetY.setMaximumSize(220, 40)
         self.PyDMLabel_ROIOffsetY.setAlignment(Qt.AlignCenter)
+        self.PyDMLabel_ROIOffsetY.showStepExponent = False
         layout.addWidget(self.PyDMLabel_ROIOffsetY, 10, 2)
 
         self.label = QLabel('ROI Width', self)
         self.label.setAlignment(Qt.AlignHCenter)
         layout.addWidget(self.label, 11, 1, 1, 2)
-        self.PyDMLineEdit_ROIWidth = PyDMLineEdit(
+        self.PyDMSpinbox_ROIWidth = PyDMSpinbox(
             parent=self,
             init_channel='ca://'+self.prefix+self.device+':ImgROIWidth-SP')
-        self.PyDMLineEdit_ROIWidth.setMaximumSize(220, 40)
-        self.PyDMLineEdit_ROIWidth.setAlignment(Qt.AlignCenter)
-        layout.addWidget(self.PyDMLineEdit_ROIWidth, 12, 1)
+        self.PyDMSpinbox_ROIWidth.setMaximumSize(220, 40)
+        self.PyDMSpinbox_ROIWidth.setAlignment(Qt.AlignCenter)
+        self.PyDMSpinbox_ROIWidth.showStepExponent = False
+        layout.addWidget(self.PyDMSpinbox_ROIWidth, 12, 1)
         self.PyDMLabel_ROIWidth = PyDMLabel(
             parent=self,
             init_channel='ca://'+self.prefix+self.device+':ImgROIWidth-RB')
         self.PyDMLabel_ROIWidth.setMaximumSize(220, 40)
         self.PyDMLabel_ROIWidth.setAlignment(Qt.AlignCenter)
+        self.PyDMLabel_ROIWidth.showStepExponent = False
         layout.addWidget(self.PyDMLabel_ROIWidth, 12, 2)
 
         self.label = QLabel('ROI Heigth', self)
         self.label.setAlignment(Qt.AlignHCenter)
         layout.addWidget(self.label, 13, 1, 1, 2)
-        self.PyDMLineEdit_ROIHeight = PyDMLineEdit(
+        self.PyDMSpinbox_ROIHeight = PyDMSpinbox(
             parent=self,
             init_channel='ca://'+self.prefix+self.device+':ImgROIHeight-SP')
-        self.PyDMLineEdit_ROIHeight.setMaximumSize(220, 40)
-        self.PyDMLineEdit_ROIHeight.setAlignment(Qt.AlignCenter)
-        layout.addWidget(self.PyDMLineEdit_ROIHeight, 14, 1)
+        self.PyDMSpinbox_ROIHeight.setMaximumSize(220, 40)
+        self.PyDMSpinbox_ROIHeight.setAlignment(Qt.AlignCenter)
+        self.PyDMSpinbox_ROIHeight.showStepExponent = False
+        layout.addWidget(self.PyDMSpinbox_ROIHeight, 14, 1)
         self.PyDMLabel_ROIHeight = PyDMLabel(
             parent=self,
             init_channel='ca://'+self.prefix+self.device+':ImgROIHeight-RB')
         self.PyDMLabel_ROIHeight.setMaximumSize(220, 40)
         self.PyDMLabel_ROIHeight.setAlignment(Qt.AlignCenter)
+        self.PyDMLabel_ROIHeight.showStepExponent = False
         layout.addWidget(self.PyDMLabel_ROIHeight, 14, 2)
 
         layout.addItem(
@@ -660,25 +773,35 @@ class SiriusScrnView(QWidget):
         self.PyDMLabel_SigmaYNDStats.setVisible(visible)
 
     def _saveCalibrationGrid(self):
-        roi_h = epics.caget(self.prefix+self.device+':ImgROIHeight-RB')
-        roi_w = epics.caget(self.prefix+self.device+':ImgROIWidth-RB')
-        roi_offsetx = epics.caget(self.prefix+self.device+':ImgROIOffsetX-RB')
-        roi_offsety = epics.caget(self.prefix+self.device+':ImgROIOffsetY-RB')
+        Thread(target=self._saveCalibrationGrid_thread, daemon=True).start()
 
-        epics.caput(self.prefix+self.device+':ImgROIOffsetX-SP', 0)
-        epics.caput(self.prefix+self.device+':ImgROIOffsetY-SP', 0)
-        epics.caput(self.prefix+self.device+':ImgROIHeight-SP',
-                    IMAGE_MAX_HEIGHT)
-        epics.caput(self.prefix+self.device+':ImgROIWidth-SP',
-                    IMAGE_MAX_WIDTH)
-        time.sleep(0.6)
-        img = epics.caget(self.prefix+self.device+':ImgData-Mon')
-        self.image_view.saveCalibrationGrid(img, IMAGE_MAX_WIDTH)
-        time.sleep(0.6)
-        epics.caput(self.prefix+self.device+':ImgROIHeight-SP', roi_h)
-        epics.caput(self.prefix+self.device+':ImgROIWidth-SP', roi_w)
-        epics.caput(self.prefix+self.device+':ImgROIOffsetX-SP', roi_offsetx)
-        epics.caput(self.prefix+self.device+':ImgROIOffsetY-SP', roi_offsety)
+    def _saveCalibrationGrid_thread(self):
+        roi_h = self.PyDMLabel_ROIHeight.text()
+        roi_w = self.PyDMLabel_ROIWidth.text()
+        roi_offsetx = self.PyDMLabel_ROIOffsetX.text()
+        roi_offsety = self.PyDMLabel_ROIOffsetY.text()
+        self.PyDMSpinbox_ROIHeight.value_changed(
+                self.image_view.image_maxheight)
+        self.PyDMSpinbox_ROIHeight.send_value()
+        self.PyDMSpinbox_ROIWidth.value_changed(
+                self.image_view.image_maxwidth)
+        self.PyDMSpinbox_ROIWidth.send_value()
+        self.PyDMSpinbox_ROIOffsetX.value_changed(0)
+        self.PyDMSpinbox_ROIOffsetX.send_value()
+        self.PyDMSpinbox_ROIOffsetY.value_changed(0)
+        self.PyDMSpinbox_ROIOffsetY.send_value()
+        time.sleep(0.3)
+        self.image_view.saveCalibrationGrid()
+        time.sleep(0.3)
+        self.PyDMSpinbox_ROIHeight.value_changed(int(roi_h))
+        self.PyDMSpinbox_ROIHeight.send_value()
+        self.PyDMSpinbox_ROIWidth.value_changed(int(roi_w))
+        self.PyDMSpinbox_ROIWidth.send_value()
+        self.PyDMSpinbox_ROIOffsetX.value_changed(int(roi_offsetx))
+        self.PyDMSpinbox_ROIOffsetX.send_value()
+        self.PyDMSpinbox_ROIOffsetY.value_changed(int(roi_offsety))
+        self.PyDMSpinbox_ROIOffsetY.send_value()
+        time.sleep(0.2)
 
     @pyqtSlot()
     def _zoomIn(self):
