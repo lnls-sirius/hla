@@ -7,7 +7,7 @@ from matplotlib.backends.backend_qt5agg import (
     FigureCanvasQTAgg as FigureCanvas)
 import epics as _epics
 from pydm.PyQt.uic import loadUi
-from pydm.PyQt.QtCore import pyqtSlot, Qt, QPoint
+from pydm.PyQt.QtCore import pyqtSlot, pyqtSignal, Qt, QPoint
 from pydm.PyQt.QtGui import (
     QVBoxLayout, QHBoxLayout, QGridLayout, QSpacerItem, QFileDialog, QAction,
     QMenuBar, QWidget, QLabel, QPixmap, QPushButton)
@@ -59,12 +59,12 @@ class TLAPControlWindow(SiriusMainWindow):
         self.centralwidget = loadUi(tmp_file)
         self.setCentralWidget(self.centralwidget)
 
-        self.scrn_dict = {'0': self.centralwidget.widget_Scrn0,
-                          '1': self.centralwidget.widget_Scrn1,
-                          '2': self.centralwidget.widget_Scrn2,
-                          '3': self.centralwidget.widget_Scrn3,
-                          '4': self.centralwidget.widget_Scrn4,
-                          '5': self.centralwidget.widget_Scrn5}
+        self.scrn_widget_dict = {'0': self.centralwidget.widget_Scrn0,
+                                 '1': self.centralwidget.widget_Scrn1,
+                                 '2': self.centralwidget.widget_Scrn2,
+                                 '3': self.centralwidget.widget_Scrn3,
+                                 '4': self.centralwidget.widget_Scrn4,
+                                 '5': self.centralwidget.widget_Scrn5}
 
         # Fill TL Lattice Widget
         lattice = QSvgWidget('/home/fac_files/lnls-sirius/hla/pyqt-apps/'
@@ -133,7 +133,7 @@ class TLAPControlWindow(SiriusMainWindow):
         self.centralwidget.tabWidget_Scrns.setCurrentIndex(0)
         self._currScrn = 0
         self.centralwidget.tabWidget_Scrns.currentChanged.connect(
-                                self._setCurrentScrn)
+                                self._getCurrentScrn)
         self.centralwidget.pushButton_SaveRef.clicked.connect(
                                 self._saveReference)
         self.reference_window = ShowImage(parent=self)
@@ -252,133 +252,6 @@ class TLAPControlWindow(SiriusMainWindow):
         self.centralwidget.groupBox_allcorrPanel.layout().setContentsMargins(
             2, 2, 2, 2)
 
-    def _getTLData(self, tl):
-        """Return transport line data based on input 'tl'."""
-        if tl.lower() == 'tb':
-            UI_FILE = ('ui_tb_ap_control.ui')
-            SVG_FILE = ('TB.svg')
-            correctors_list = [
-                [['LI-01:MA-CH-7'], 'LI-01:MA-CV-7', 0, 'TB-01:DI-Scrn-1'],
-                [['TB-01:MA-CH-1'], 'TB-01:MA-CV-1', 1, 'TB-01:DI-Scrn-2'],
-                [['TB-01:MA-CH-2'], 'TB-01:MA-CV-2', 2, 'TB-02:DI-Scrn-1'],
-                [['TB-02:MA-CH-1'], 'TB-02:MA-CV-1', 3, 'TB-02:DI-Scrn-2'],
-                [['TB-02:MA-CH-2'], 'TB-02:MA-CV-2', 4, 'TB-03:DI-Scrn'],
-                [['TB-03:MA-CH'], 'TB-04:MA-CV-1', 5, 'TB-04:DI-Scrn']]
-            scrn_list = ['TB-01:DI-Scrn-1', 'TB-01:DI-Scrn-2',
-                         'TB-02:DI-Scrn-1', 'TB-02:DI-Scrn-2',
-                         'TB-03:DI-Scrn', 'TB-04:DI-Scrn']
-        elif tl.lower() == 'ts':
-            UI_FILE = ('ui_ts_ap_control.ui')
-            SVG_FILE = ('TS.svg')
-            correctors_list = [
-                [['TS-01:PM-EjeSeptF', 'TS-01:PM-EjeSeptG'],
-                 'TS-01:MA-CV-1', 0, 'TS-01:DI-Scrn'],
-                [['TS-01:MA-CH'], 'TS-01:MA-CV-2', 1, 'TS-02:DI-Scrn'],
-                [['TS-02:MA-CH'], 'TS-02:MA-CV', 2, 'TS-03:DI-Scrn'],
-                [['TS-03:MA-CH'], 'TS-03:MA-CV', 3, 'TS-04:DI-Scrn-1'],
-                [['TS-04:MA-CH'], 'TS-04:MA-CV-1', 4, 'TS-04:DI-Scrn-2'],
-                [['TS-04:PM-InjSeptG-1', 'TS-04:PM-InjSeptG-2',
-                  'TS-04:PM-InjSeptF'], 'TS-04:MA-CV-2', 5,
-                 'TS-04:DI-Scrn-3']]
-            scrn_list = ['TS-01:DI-Scrn', 'TS-02:DI-Scrn',
-                         'TS-03:DI-Scrn', 'TS-04:DI-Scrn-1',
-                         'TS-04:DI-Scrn-2', 'TS-04:DI-Scrn-3']
-
-        return [UI_FILE, SVG_FILE, correctors_list, scrn_list]
-
-    @pyqtSlot(int)
-    def _setCurrentScrn(self, currScrn):
-        """Return current index of tabWidget_Scrns."""
-        self._currScrn = currScrn
-
-    def _openReference(self):
-        """Load and show reference image."""
-        home = _os.path.expanduser('~')
-        path = _os.path.join(home, 'sirius-hlas', self._tl + '_ap_control')
-        fn, _ = QFileDialog.getOpenFileName(
-            self, 'Open Reference...', path,
-            'Images (*.png *.xpm *.jpg);;All Files (*)')
-        if fn:
-            self.reference_window.load_image(fn)
-            self.reference_window.show()
-
-    def _saveReference(self):
-        """Save reference image."""
-        home = _os.path.expanduser('~')
-        path = _os.path.join(home, 'sirius-hlas', self._tl + '_ap_control')
-        if not _os.path.exists(path):
-            _os.makedirs(path)
-        fn, _ = QFileDialog.getSaveFileName(
-            self, 'Save Reference As...',
-            path + '/' + self._scrn_list[self._currScrn] +
-            _datetime.now().strftime('_%Y-%m-%d_%Hh%Mmin'),
-            'Images (*.png *.xpm *.jpg);;All Files (*)')
-        if not fn:
-            return False
-        lfn = fn.lower()
-        if not lfn.endswith(('.png', '.jpg', '.xpm')):
-            fn += '.png'
-
-        scrn_widget = self.scrn_dict[str(self._currScrn)]
-        reference = scrn_widget.grab()
-        reference.save(fn)
-
-    def _setSlitHPos(self, pvname, value, **kws):
-        """Callback to set SlitHs Widget positions."""
-        if 'Center' in pvname:
-            self._SlitH_Center = value  # considering mm
-        elif 'Width' in pvname:
-            self._SlitH_Width = value
-
-        rect_width = 110
-        circle_diameter = 140
-        widget_width = 300
-        vacuum_chamber_diameter = 36  # mm
-
-        xc = (circle_diameter*self._SlitH_Center/vacuum_chamber_diameter
-              + widget_width/2)
-        xw = circle_diameter*self._SlitH_Width/vacuum_chamber_diameter
-
-        left = round(xc - rect_width - xw/2)
-        right = round(xc + xw/2)
-
-        self.centralwidget.PyDMDrawingRectangle_SlitHLeft.move(
-            QPoint(left, (widget_width/2 - rect_width)))
-        self.centralwidget.PyDMDrawingRectangle_SlitHRight.move(
-            QPoint(right, (widget_width/2 - rect_width)))
-
-    def _setSlitVPos(self, pvname, value, **kws):
-        """Callback to set SlitVs Widget positions."""
-        if 'Center' in pvname:
-            self._SlitV_Center = value  # considering mm
-        elif 'Width' in pvname:
-            self._SlitV_Width = value
-
-        rect_width = 110
-        circle_diameter = 140
-        widget_width = 300
-        vacuum_chamber_diameter = 36  # mm
-
-        xc = (circle_diameter*self._SlitV_Center/vacuum_chamber_diameter
-              + widget_width/2)
-        xw = circle_diameter*self._SlitV_Width/vacuum_chamber_diameter
-
-        up = round(xc - rect_width - xw/2)
-        down = round(xc + xw/2)
-
-        self.centralwidget.PyDMDrawingRectangle_SlitVUp.move(
-            QPoint((widget_width/2 - rect_width), up))
-        self.centralwidget.PyDMDrawingRectangle_SlitVDown.move(
-            QPoint((widget_width/2 - rect_width), down))
-
-    def _allScrnsDoHoming(self):
-        for scrn in self._scrn_list:
-            pv = _epics.PV(self.prefix+scrn+':ScrnType-Sel')
-            if pv.connected:
-                pv.put(0)
-                pv.disconnect()
-                pv = None
-
     def _allCHsTurnOn(self):
         for ch_group, _, _, _ in self._correctors_list:
             for ch in ch_group:
@@ -393,6 +266,14 @@ class TLAPControlWindow(SiriusMainWindow):
             pv = _epics.PV(self.prefix+cv+':PwrState-Sel')
             if pv.connected:
                 pv.put(1)
+                pv.disconnect()
+                pv = None
+
+    def _allScrnsDoHoming(self):
+        for scrn in self._scrn_list:
+            pv = _epics.PV(self.prefix+scrn+':ScrnType-Sel')
+            if pv.connected:
+                pv.put(0)
                 pv.disconnect()
                 pv = None
 
@@ -412,52 +293,13 @@ class TLAPControlWindow(SiriusMainWindow):
             hl.layout().addWidget(label)
         return hl
 
-    def _create_scrndetailwidget(self, scrnprefix, scrn):
+    def _create_scrndetailwidget(self, scrn_device, scrn_idx):
         """Create and return a screen detail widget."""
-        scrn_details = QWidget()
-        scrn_details.setObjectName('widget_Scrn' + str(scrn) + 'TypeSel')
-        scrn_details.setLayout(QGridLayout())
-        scrn_details.layout().setContentsMargins(3, 3, 3, 3)
-        scrn_details.layout().setAlignment(Qt.AlignHCenter)
-
-        scrn_label = QLabel(scrnprefix)
-        scrn_label.setMinimumWidth(250)
-        scrn_label.setMaximumWidth(250)
-        scrn_label.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Fixed)
-        scrn_label.setStyleSheet("""font-weight:bold;""")
-        scrn_details.layout().addWidget(scrn_label, 1, 1, 2, 1)
-
-        pydmcombobox_scrntype = PyDMEnumComboBox(
-            parent=self,
-            init_channel='ca://'+self.prefix+scrnprefix+':ScrnType-Sel')
-        pydmcombobox_scrntype.setObjectName(
-            'PyDMEnumComboBox_ScrnType_Sel_Scrn' + str(scrn))
-        pydmcombobox_scrntype.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Fixed)
-        pydmcombobox_scrntype.setMinimumSize(200, 60)
-        pydmcombobox_scrntype.setMaximumSize(200, 60)
-        widget_camview = self.scrn_dict[str(scrn)].findChild(
-            SiriusScrnView, 'widget_camview_Scrn' + str(scrn))
-        pydmcombobox_scrntype.currentIndexChanged.connect(
-            widget_camview.updateCalibrationGridFlag)
-        scrn_details.layout().addWidget(pydmcombobox_scrntype, 1, 2, 2, 1)
-
-        pydmlabel_scrntype = PyDMLabel(
-            parent=self,
-            init_channel='ca://'+self.prefix+scrnprefix+':ScrnType-Sts')
-        pydmlabel_scrntype.setMinimumSize(200, 60)
-        pydmlabel_scrntype.setMaximumSize(200, 60)
-        pydmlabel_scrntype.setAlignment(Qt.AlignCenter)
-        scrn_details.layout().addWidget(pydmlabel_scrntype, 1, 3)
-
-        led_scrntype = SiriusLedAlert(
-            parent=self,
-            init_channel='ca://'+self.prefix+scrnprefix+':ScrnType-Sts')
-        led_scrntype.shape = 2
-        led_scrntype.setObjectName(
-            'Led_ScrnType_Sts_Scrn' + str(scrn))
-        led_scrntype.setMaximumHeight(40)
-        led_scrntype.setMinimumHeight(40)
-        scrn_details.layout().addWidget(led_scrntype, 2, 3)
+        scrn_details = ScreenDetailWidget(
+            scrn_widget_dict=self.scrn_widget_dict,
+            scrn_device=scrn_device, scrn_idx=scrn_idx,
+            parent=self, prefix=self.prefix)
+        scrn_details.clicked.connect(self._setCurrentScrn)
         return scrn_details
 
     def _create_correctordetailwidget(self, scrn, corr):
@@ -541,6 +383,202 @@ class TLAPControlWindow(SiriusMainWindow):
         self._vslitwidthpv.disconnect()
         self._vslitwidthpv = None
         super().closeEvent(ev)
+
+    def _getTLData(self, tl):
+        """Return transport line data based on input 'tl'."""
+        if tl.lower() == 'tb':
+            UI_FILE = ('ui_tb_ap_control.ui')
+            SVG_FILE = ('TB.svg')
+            correctors_list = [
+                [['LI-01:MA-CH-7'], 'LI-01:MA-CV-7', 0, 'TB-01:DI-Scrn-1'],
+                [['TB-01:MA-CH-1'], 'TB-01:MA-CV-1', 1, 'TB-01:DI-Scrn-2'],
+                [['TB-01:MA-CH-2'], 'TB-01:MA-CV-2', 2, 'TB-02:DI-Scrn-1'],
+                [['TB-02:MA-CH-1'], 'TB-02:MA-CV-1', 3, 'TB-02:DI-Scrn-2'],
+                [['TB-02:MA-CH-2'], 'TB-02:MA-CV-2', 4, 'TB-03:DI-Scrn'],
+                [['TB-03:MA-CH'], 'TB-04:MA-CV-1', 5, 'TB-04:DI-Scrn']]
+            scrn_list = ['TB-01:DI-Scrn-1', 'TB-01:DI-Scrn-2',
+                         'TB-02:DI-Scrn-1', 'TB-02:DI-Scrn-2',
+                         'TB-03:DI-Scrn', 'TB-04:DI-Scrn']
+        elif tl.lower() == 'ts':
+            UI_FILE = ('ui_ts_ap_control.ui')
+            SVG_FILE = ('TS.svg')
+            correctors_list = [
+                [['TS-01:PM-EjeSeptF', 'TS-01:PM-EjeSeptG'],
+                 'TS-01:MA-CV-1', 0, 'TS-01:DI-Scrn'],
+                [['TS-01:MA-CH'], 'TS-01:MA-CV-2', 1, 'TS-02:DI-Scrn'],
+                [['TS-02:MA-CH'], 'TS-02:MA-CV', 2, 'TS-03:DI-Scrn'],
+                [['TS-03:MA-CH'], 'TS-03:MA-CV', 3, 'TS-04:DI-Scrn-1'],
+                [['TS-04:MA-CH'], 'TS-04:MA-CV-1', 4, 'TS-04:DI-Scrn-2'],
+                [['TS-04:PM-InjSeptG-1', 'TS-04:PM-InjSeptG-2',
+                  'TS-04:PM-InjSeptF'], 'TS-04:MA-CV-2', 5,
+                 'TS-04:DI-Scrn-3']]
+            scrn_list = ['TS-01:DI-Scrn', 'TS-02:DI-Scrn',
+                         'TS-03:DI-Scrn', 'TS-04:DI-Scrn-1',
+                         'TS-04:DI-Scrn-2', 'TS-04:DI-Scrn-3']
+
+        return [UI_FILE, SVG_FILE, correctors_list, scrn_list]
+
+    def _openReference(self):
+        """Load and show reference image."""
+        home = _os.path.expanduser('~')
+        path = _os.path.join(home, 'sirius-hlas', self._tl + '_ap_control')
+        fn, _ = QFileDialog.getOpenFileName(
+            self, 'Open Reference...', path,
+            'Images (*.png *.xpm *.jpg);;All Files (*)')
+        if fn:
+            self.reference_window.load_image(fn)
+            self.reference_window.show()
+
+    def _saveReference(self):
+        """Save reference image."""
+        home = _os.path.expanduser('~')
+        path = _os.path.join(home, 'sirius-hlas', self._tl + '_ap_control')
+        if not _os.path.exists(path):
+            _os.makedirs(path)
+        fn, _ = QFileDialog.getSaveFileName(
+            self, 'Save Reference As...',
+            path + '/' + self._scrn_list[self._currScrn] +
+            _datetime.now().strftime('_%Y-%m-%d_%Hh%Mmin'),
+            'Images (*.png *.xpm *.jpg);;All Files (*)')
+        if not fn:
+            return False
+        lfn = fn.lower()
+        if not lfn.endswith(('.png', '.jpg', '.xpm')):
+            fn += '.png'
+
+        scrn_widget = self.scrn_widget_dict[str(self._currScrn)]
+        reference = scrn_widget.grab()
+        reference.save(fn)
+
+    @pyqtSlot(int)
+    def _getCurrentScrn(self, currScrn):
+        """Return current index of tabWidget_Scrns."""
+        self._currScrn = currScrn
+
+    @pyqtSlot(int)
+    def _setCurrentScrn(self, currScrn):
+        """Return current index of tabWidget_Scrns."""
+        self.centralwidget.tabWidget_Scrns.setCurrentIndex(currScrn)
+
+    def _setSlitHPos(self, pvname, value, **kws):
+        """Callback to set SlitHs Widget positions."""
+        if 'Center' in pvname:
+            self._SlitH_Center = value  # considering mm
+        elif 'Width' in pvname:
+            self._SlitH_Width = value
+
+        rect_width = 110
+        circle_diameter = 140
+        widget_width = 300
+        vacuum_chamber_diameter = 36  # mm
+
+        xc = (circle_diameter*self._SlitH_Center/vacuum_chamber_diameter
+              + widget_width/2)
+        xw = circle_diameter*self._SlitH_Width/vacuum_chamber_diameter
+
+        left = round(xc - rect_width - xw/2)
+        right = round(xc + xw/2)
+
+        self.centralwidget.PyDMDrawingRectangle_SlitHLeft.move(
+            QPoint(left, (widget_width/2 - rect_width)))
+        self.centralwidget.PyDMDrawingRectangle_SlitHRight.move(
+            QPoint(right, (widget_width/2 - rect_width)))
+
+    def _setSlitVPos(self, pvname, value, **kws):
+        """Callback to set SlitVs Widget positions."""
+        if 'Center' in pvname:
+            self._SlitV_Center = value  # considering mm
+        elif 'Width' in pvname:
+            self._SlitV_Width = value
+
+        rect_width = 110
+        circle_diameter = 140
+        widget_width = 300
+        vacuum_chamber_diameter = 36  # mm
+
+        xc = (circle_diameter*self._SlitV_Center/vacuum_chamber_diameter
+              + widget_width/2)
+        xw = circle_diameter*self._SlitV_Width/vacuum_chamber_diameter
+
+        up = round(xc - rect_width - xw/2)
+        down = round(xc + xw/2)
+
+        self.centralwidget.PyDMDrawingRectangle_SlitVUp.move(
+            QPoint((widget_width/2 - rect_width), up))
+        self.centralwidget.PyDMDrawingRectangle_SlitVDown.move(
+            QPoint((widget_width/2 - rect_width), down))
+
+
+class ScreenDetailWidget(QWidget):
+    """Class to create screen detail control widget."""
+
+    clicked = pyqtSignal(int)
+
+    def __init__(self, scrn_widget_dict, scrn_device, scrn_idx,
+                 parent=None, prefix=None):
+        """Initialize and setup widget."""
+        super(ScreenDetailWidget, self).__init__(parent)
+        self.scrn = scrn_idx
+        self.setObjectName('widget_Scrn' + str(scrn_idx) + 'TypeSel')
+        self.setLayout(QGridLayout())
+        self.layout().setContentsMargins(3, 3, 3, 3)
+        self.layout().setAlignment(Qt.AlignHCenter)
+
+        scrn_label = QLabel(scrn_device)
+        scrn_label.setMinimumWidth(250)
+        scrn_label.setMaximumWidth(250)
+        scrn_label.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Fixed)
+        scrn_label.setStyleSheet("""font-weight:bold;""")
+        self.layout().addWidget(scrn_label, 1, 1, 2, 1)
+
+        pydmcombobox_scrntype = PyDMEnumComboBox(
+            parent=self,
+            init_channel='ca://'+prefix+scrn_device+':ScrnType-Sel')
+        pydmcombobox_scrntype.setObjectName(
+            'PyDMEnumComboBox_ScrnType_Sel_Scrn' + str(scrn_idx))
+        pydmcombobox_scrntype.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Fixed)
+        pydmcombobox_scrntype.currentIndexChanged.connect(
+            self._changeComboBoxBackgroundColor)
+        pydmcombobox_scrntype.setMinimumSize(200, 40)
+        pydmcombobox_scrntype.setMaximumSize(200, 40)
+        widget_camview = scrn_widget_dict[str(scrn_idx)].findChild(
+            SiriusScrnView, 'widget_camview_Scrn' + str(scrn_idx))
+        pydmcombobox_scrntype.currentIndexChanged.connect(
+            widget_camview.updateCalibrationGridFlag)
+        self.layout().addWidget(pydmcombobox_scrntype, 1, 2, 2, 1)
+
+        pydmlabel_scrntype = PyDMLabel(
+            parent=self,
+            init_channel='ca://'+prefix+scrn_device+':ScrnType-Sts')
+        pydmlabel_scrntype.setMinimumSize(200, 40)
+        pydmlabel_scrntype.setMaximumSize(200, 40)
+        pydmlabel_scrntype.setAlignment(Qt.AlignCenter)
+        self.layout().addWidget(pydmlabel_scrntype, 1, 3)
+
+        led_scrntype = SiriusLedAlert(
+            parent=self,
+            init_channel='ca://'+prefix+scrn_device+':ScrnType-Sts')
+        led_scrntype.shape = 2
+        led_scrntype.setObjectName(
+            'Led_ScrnType_Sts_Scrn' + str(scrn_idx))
+        led_scrntype.setMaximumHeight(40)
+        led_scrntype.setMinimumHeight(40)
+        self.layout().addWidget(led_scrntype, 2, 3)
+
+    @pyqtSlot(int)
+    def _changeComboBoxBackgroundColor(self, index):
+        sender = self.sender()
+        if index == 0:
+            sender.setStyleSheet("""
+                background-color: rgb(0, 140, 0); """)
+        else:
+            sender.setStyleSheet("""
+                background-color: rgb(207, 0, 0);
+                color: black;""")
+
+    def mousePressEvent(self, ev):
+        """Reimplement mouse press event."""
+        self.clicked.emit(self.scrn)
 
 
 class ShowLatticeAndTwiss(SiriusMainWindow):
