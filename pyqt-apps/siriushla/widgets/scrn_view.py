@@ -419,6 +419,10 @@ class SiriusScrnView(QWidget):
     def _cameraviewLayout(self):
         layout = QGridLayout()
         layout.setContentsMargins(0, 0, 0, 0)
+        label = QLabel(self.device, self)
+        label.setStyleSheet("""font-weight: bold;""")
+        label.setAlignment(Qt.AlignCenter)
+        layout.addWidget(label, 0, 1)
         layout.addItem(
             QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum), 1, 1)
         self.image_view = _SiriusImageView(
