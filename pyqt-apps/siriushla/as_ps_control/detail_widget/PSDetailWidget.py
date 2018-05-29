@@ -3,7 +3,7 @@ import re
 
 from pydm.PyQt.QtCore import Qt
 from pydm.PyQt.QtGui import QWidget, QGroupBox, QGridLayout, \
-    QLabel, QSizePolicy, QPushButton, QVBoxLayout, QHBoxLayout
+    QLabel, QSizePolicy, QPushButton, QVBoxLayout, QHBoxLayout, QApplication
 # from epics import get_pv
 
 from siriuspy.envars import vaca_prefix
@@ -44,10 +44,14 @@ class PSDetailWidget(QWidget):
             qproperty-alignment: AlignCenter;
         }
         QLed {
-            min-width: 40px;
-            max-width: 40px;
-            min-height: 40px;
-            max-height: 40px;
+            min-width: 1em;
+            max-width: 1em;
+            min-height: 1em;
+            max-height: 1em;
+        }
+        PyDMStateButton {
+            min-width: 2em;
+            max-width: 2em;
         }
     """
 
@@ -81,8 +85,16 @@ class PSDetailWidget(QWidget):
                 self._metric_text = "Kick [{}]".format(unit)
 
         self._setup_ui()
-        self.setStyleSheet(self.StyleSheet)
         self.setFocus(True)
+        # Get screen height
+        screen_height = QApplication.desktop().screenGeometry().height()
+        layout_height = self.layout.sizeHint().height()
+        if layout_height > screen_height:
+            # Decrease font size
+            self.setStyleSheet(self.StyleSheet + '* {font-size: 14px;}')
+        else:
+            self.setStyleSheet(self.StyleSheet)
+        self.layout.setSizeConstraint(QGridLayout.SetFixedSize)
 
     def _setup_ui(self):
         # Group boxes that compose the widget
