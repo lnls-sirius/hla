@@ -193,7 +193,7 @@ class PSDetailWidget(QWidget):
             self, "ca://" + self._prefixed_psname + ":IntlkHard-Mon"), 1, 1)
         layout.addWidget(openloop_label, 2, 0, Qt.AlignCenter)
         layout.addWidget(SiriusLedAlert(
-            self, "ca://" + self._prefixed_psname + ":OpenLoop-Mon"), 2, 1)
+            self, "ca://" + self._prefixed_psname + ":CtrlLoop-RB"), 2, 1)
 
         _util.connect_window(soft_intlk_button, MagnetInterlockWindow, self,
                              **{'magnet': self._psname,
