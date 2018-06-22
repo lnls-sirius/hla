@@ -4,7 +4,7 @@ from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QGroupBox, QVBoxLayout, QLineEdit, QPushButton
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.ramp import ramp
-from auxiliar_classes import _MessageBox
+from auxiliar_classes import MessageBox as _MessageBox
 
 
 class RampSettings(QGroupBox):

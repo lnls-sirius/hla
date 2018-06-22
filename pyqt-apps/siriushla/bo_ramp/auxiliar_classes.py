@@ -291,10 +291,12 @@ class CustomTableWidgetItem(QTableWidgetItem):
     """Auxiliar class to make a table column sortble by numeric data."""
 
     def __init__(self, value):
+        """Initialize object."""
         super().__init__('{}'.format(value))
 
     def __lt__(self, other):
-        if isinstance(other, _CustomTableWidgetItem):
+        """Change default sort method to sort by numeric data."""
+        if isinstance(other, CustomTableWidgetItem):
             selfDataValue = float(self.data(Qt.EditRole))
             otherDataValue = float(other.data(Qt.EditRole))
             return selfDataValue < otherDataValue
