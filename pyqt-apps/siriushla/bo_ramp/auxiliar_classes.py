@@ -11,7 +11,8 @@ from siriushla.widgets.windows import SiriusMainWindow, SiriusDialog
 from siriuspy.ramp import ramp
 
 
-class _InsertNormalizedConfig(SiriusMainWindow):
+class InsertNormalizedConfig(SiriusMainWindow):
+    """Auxiliar window to insert a new normalized config."""
 
     insertConfig = pyqtSignal(list)
 
@@ -151,7 +152,8 @@ class _InsertNormalizedConfig(SiriusMainWindow):
         self.close()
 
 
-class _DeleteNormalizedConfig(SiriusMainWindow):
+class DeleteNormalizedConfig(SiriusMainWindow):
+    """Auxiliar window to delete a normalized config."""
 
     deleteConfig = pyqtSignal(str)
 
@@ -216,9 +218,11 @@ class _DeleteNormalizedConfig(SiriusMainWindow):
         self.close()
 
 
-class _SpinBoxDelegate(QStyledItemDelegate):
+class SpinBoxDelegate(QStyledItemDelegate):
+    """Auxiliar class to draw a SpinBox in table items on editing."""
 
     def createEditor(self, parent, option, index):
+        """Create editor."""
         editor = QDoubleSpinBox(parent)
         editor.setMinimum(0)
         editor.setMaximum(500)
@@ -226,19 +230,23 @@ class _SpinBoxDelegate(QStyledItemDelegate):
         return editor
 
     def setEditorData(self, spinBox, index):
+        """Set editor data."""
         value = index.model().data(index, Qt.EditRole)
         spinBox.setValue(float(value))
 
     def setModelData(self, spinBox, model, index):
+        """Set model data."""
         spinBox.interpretText()
         value = spinBox.value()
         model.setData(index, value, Qt.EditRole)
 
     def updateEditorGeometry(self, spinBox, option, index):
+        """Update editor geometry."""
         spinBox.setGeometry(option.rect)
 
 
-class _MessageBox(SiriusDialog):
+class MessageBox(SiriusDialog):
+    """Auxiliar dialog to inform user about errors and pendencies."""
 
     acceptedSignal = pyqtSignal()
     regectedSignal = pyqtSignal()
@@ -279,7 +287,8 @@ class _MessageBox(SiriusDialog):
         self.close()
 
 
-class _CustomTableWidgetItem(QTableWidgetItem):
+class CustomTableWidgetItem(QTableWidgetItem):
+    """Auxiliar class to make a table column sortble by numeric data."""
 
     def __init__(self, value):
         super().__init__('{}'.format(value))
