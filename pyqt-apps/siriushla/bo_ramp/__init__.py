@@ -1,3 +1,4 @@
-from siriushla.as_ti_control.bo_ramp import *
+from siriushla.bo_ramp import *
 
-__all__ = ('bo_ramp',)
+__all__ = ('ramp_main, ramp_settings, ramp_commands, ramp_params',
+           'optics_adjust, ramp_statistics')

@@ -1,228 +1,28 @@
-"""Booster Ramp Control HLA."""
+"""Booster Ramp Control HLA: Ramp Parameters Module."""
 
-import sys
 from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot, QSize
 from PyQt5.QtGui import QBrush, QColor
-from PyQt5.QtWidgets import QGroupBox, QLabel, QWidget, QScrollArea, \
-                            QVBoxLayout, QHBoxLayout, QGridLayout, QLineEdit, \
+from PyQt5.QtWidgets import QGroupBox, QLabel, QWidget, QSpacerItem, \
+                            QVBoxLayout, QHBoxLayout, QGridLayout, \
                             QPushButton, QTableWidget, QTableWidgetItem, \
-                            QRadioButton, QFormLayout, QDoubleSpinBox, \
-                            QComboBox, QSpinBox, QStyledItemDelegate, \
-                            QSpacerItem, QSizePolicy as QSzPlcy
+                            QComboBox, QSpinBox, QSizePolicy as QSzPlcy
 from matplotlib.backends.backend_qt5agg import (
     FigureCanvasQTAgg as FigureCanvas)
 from matplotlib.figure import Figure
 import numpy as np
-from siriushla.sirius_application import SiriusApplication
-from siriushla.widgets.windows import SiriusMainWindow, SiriusDialog
 from siriuspy.namesys import SiriusPVName as _PVName
-from siriushla import util as _util
 from siriuspy.ramp import ramp, exceptions
 from siriuspy.csdevice.pwrsupply import MIN_WFMSIZE, MAX_WFMSIZE
-
-
-class RampMain(SiriusMainWindow):
-    """Main window of Booster Ramp Control HLA."""
-
-    def __init__(self, parent=None, prefix=''):
-        """Initialize object."""
-        super().__init__(parent)
-        self.prefix = _PVName(prefix)
-        self.ramp_config = None
-        self._setupUi()
-        self._connSignals()
-
-    def _setupUi(self):
-        # self.resize(2000, 2000)
-        cw = QWidget(self)
-        self.setCentralWidget(cw)
-        self.my_layout = QGridLayout(cw)
-        self.my_layout.setHorizontalSpacing(20)
-        self.my_layout.setVerticalSpacing(20)
-        lab = QLabel('<h1>Booster Energy Ramping</h1>', cw)
-        self.my_layout.addWidget(lab, 0, 0, 1, 3)
-        self.my_layout.setAlignment(lab, Qt.AlignCenter)
-
-        self.ramp_settings = RampSettings(self, self.prefix, self.ramp_config)
-        self.my_layout.addWidget(self.ramp_settings, 1, 0)
-
-        self.commands = RampCommands(self, self.prefix, self.ramp_config)
-        self.my_layout.addWidget(self.commands, 2, 0, 2, 1)
-
-        self.ramp_parameters = RampParameters(self, self.prefix,
-                                              self.ramp_config)
-        self.my_layout.addWidget(self.ramp_parameters, 1, 1, 2, 1)
-
-        self.optics_adjust = OpticsAdjust(self, self.prefix, self.ramp_config)
-        self.my_layout.addWidget(self.optics_adjust, 3, 1)
-
-        self.statistics = RampStatistics(self, self.prefix, self.ramp_config)
-        self.my_layout.addWidget(self.statistics, 1, 2, 3, 1)
-
-    def _connSignals(self):
-        self.ramp_settings.configSignal.connect(self._receiveNewConfigName)
-
-        self.ramp_settings.loadSignal.connect(
-            self.ramp_parameters.dip_ramp.handleLoadRampConfig)
-        self.ramp_settings.loadSignal.connect(
-            self.ramp_parameters.mult_ramp.handleLoadRampConfig)
-
-        self.ramp_parameters.dip_ramp.updateDipoleRampSignal.connect(
-            self.ramp_settings.verifySync)
-        self.ramp_parameters.dip_ramp.updateDipoleRampSignal.connect(
-            self.ramp_parameters.mult_ramp.updateTable)
-        self.ramp_parameters.dip_ramp.updateDipoleRampSignal.connect(
-            self.ramp_parameters.mult_ramp.updateGraph)
-        self.ramp_parameters.mult_ramp.updateMultipoleRampSignal.connect(
-            self.ramp_settings.verifySync)
-
-    @pyqtSlot(str)
-    def _receiveNewConfigName(self, new_config_name):
-        self.ramp_config = ramp.BoosterRamp(new_config_name)
-        if self.ramp_config.configsrv_check():
-            self.ramp_config.configsrv_load()
-            self.ramp_config.configsrv_load_normalized_configs()
-        self._setupUi()
-        self._connSignals()
-        self.ramp_settings.loadSignal.emit()
-        self.ramp_settings.verifySync()
-
-
-class RampSettings(QGroupBox):
-
-    configSignal = pyqtSignal(str)
-    loadSignal = pyqtSignal()
-
-    def __init__(self, parent=None, prefix='', ramp_config=None):
-        super().__init__('Ramp Settings', parent)
-        self.prefix = _PVName(prefix)
-        self.ramp_config = ramp_config
-        self._setupUi()
-
-    def _setupUi(self):
-        if self.ramp_config is not None:
-            le_text = self.ramp_config.name
-        else:
-            le_text = ''
-        self.le_config = QLineEdit(le_text, self)
-        self.bt_load = QPushButton('Load', self)
-        self.bt_save = QPushButton('Save', self)
-        self.le_config.editingFinished.connect(self._le_config_textChanged)
-        self.bt_load.clicked.connect(self._load)
-        self.bt_save.clicked.connect(self._save)
-        lay = QVBoxLayout(self)
-        lay.addWidget(self.le_config)
-        lay.addWidget(self.bt_load)
-        lay.addWidget(self.bt_save)
-
-    def _le_config_textChanged(self):
-        name = self.le_config.text()
-        if ramp.BoosterRamp(name).configsrv_check():
-            if ((self.ramp_config is None) or
-                    (self.ramp_config is not None and
-                     name != self.ramp_config.name)):
-                self.bt_load.setStyleSheet("""background-color:#1F64FF;""")
-        elif name != '':
-            create_config = _MessageBox(
-                self, 'Create a new configuration?',
-                'There is no configuration with name \"{}\". \n'
-                'Create a new one?'.format(name), 'Yes', 'Cancel')
-            create_config.acceptedSignal.connect(self._emitConfigSignal)
-            create_config.show()
-
-    def _emitConfigSignal(self):
-        self.configSignal.emit(self.le_config.text())
-
-    def _load(self):
-        name = self.le_config.text()
-        if ramp.BoosterRamp(name).configsrv_check():
-            if self.ramp_config is not None:
-                if not self.ramp_config.configsrv_synchronized:
-                    save_changes = _MessageBox(
-                        self, 'Save changes?',
-                        'There are unsaved changes. \n'
-                        'Do you want to save?'.format(name),
-                        'Yes', 'Cancel')
-                    save_changes.acceptedSignal.connect(self._save)
-                    save_changes.exec_()
-
-                if name != self.ramp_config.name:
-                    self.configSignal.emit(name)
-                else:
-                    self.ramp_config.configsrv_load()
-                    self.ramp_config.configsrv_load_normalized_configs()
-                    self.loadSignal.emit()
-            else:
-                self.configSignal.emit(name)
-            self.verifySync()
-
-    def _save(self):
-        config_exists = self.ramp_config.configsrv_check()
-        if config_exists:
-            self.ramp_config.configsrv_update()
-        else:
-            self.ramp_config.configsrv_save()
-        self.verifySync()
-
-    def verifySync(self):
-        if self.ramp_config is not None:
-            if not self.ramp_config.configsrv_synchronized:
-                self.bt_save.setStyleSheet("""background-color: #1F64FF;""")
-            else:
-                self.bt_save.setStyleSheet("")
-
-
-class RampCommands(QGroupBox):
-
-    def __init__(self, parent=None, prefix='', ramp_config=None):
-        super().__init__('Commands', parent)
-        self.prefix = _PVName(prefix)
-        self.ramp_config = ramp_config
-        self._setupUi()
-
-    def _setupUi(self):
-        self.bt_upload = QPushButton('Upload to PS', self)
-        self.bt_cycle = QPushButton('Cycle', self)
-        self.bt_start = QPushButton('Start', self)
-        self.bt_stop = QPushButton('Stop', self)
-        self.bt_abort = QPushButton('Abort', self)
-        self.bt_abort.setStyleSheet('background-color: red;')
-
-        self.bt_upload.clicked.connect(self._upload)
-        self.bt_cycle.clicked.connect(self._cycle)
-        self.bt_start.clicked.connect(self._start)
-        self.bt_stop.clicked.connect(self._stop)
-        self.bt_abort.clicked.connect(self._abort)
-
-        lay = QVBoxLayout(self)
-        lay.addWidget(self.bt_upload)
-        lay.addWidget(self.bt_cycle)
-        lay.addWidget(self.bt_start)
-        lay.addWidget(self.bt_stop)
-        lay.addWidget(self.bt_abort)
-
-    def _calculate(self):
-        print('Do stuff')
-
-    def _upload(self):
-        print('Do stuff')
-
-    def _cycle(self):
-        print('Do stuff')
-
-    def _start(self):
-        print('Do stuff')
-
-    def _stop(self):
-        print('Do stuff')
-
-    def _abort(self):
-        print('Do stuff')
+from auxiliar_classes import _InsertNormalizedConfig, _DeleteNormalizedConfig,\
+                             _SpinBoxDelegate, _CustomTableWidgetItem,\
+                             _MessageBox
 
 
 class RampParameters(QGroupBox):
+    """Widget to set and monitor ramp parametes."""
 
     def __init__(self, parent=None, prefix='', ramp_config=None):
+        """Initialize object."""
         super().__init__('Ramping Parameters', parent)
         self.prefix = _PVName(prefix)
         self.ramp_config = ramp_config
@@ -239,10 +39,12 @@ class RampParameters(QGroupBox):
 
 
 class DipoleRamp(QWidget):
+    """Widget to set and monitor dipole ramp."""
 
     updateDipoleRampSignal = pyqtSignal()
 
     def __init__(self, parent=None, prefix='', ramp_config=None):
+        """Initialize object."""
         super().__init__(parent)
         self.prefix = _PVName(prefix)
         self.ramp_config = ramp_config
@@ -441,6 +243,7 @@ class DipoleRamp(QWidget):
             self.updateDipoleRampSignal.emit()
 
     def updateGraph(self):
+        """Update and redraw graph."""
         if self.ramp_config is not None:
             xdata = self.ramp_config.waveform_get_times()
             ydata = self.ramp_config.waveform_get('BO-Fam:MA-B')
@@ -467,10 +270,12 @@ class DipoleRamp(QWidget):
 
     @pyqtSlot()
     def updateWfmNrPoints(self):
+        """Update waveform number of points."""
         self.ramp_config.ramp_dipole_wfm_nrpoints = self.sb_nrpoints.value()
         self.updateDipoleRampSignal.emit()
 
     def updateTable(self):
+        """Update and rebuild table."""
         self.table.cellChanged.disconnect(self._handleCellChanged)
         for label, row in self.table_map['rows'].items():
             t_item = self.table.item(row, 1)
@@ -541,16 +346,19 @@ class DipoleRamp(QWidget):
 
     @pyqtSlot()
     def handleLoadRampConfig(self):
+        """Update all widgets in loading BoosterRamp config."""
         self.updateTable()
         self.updateWfmNrPoints()
         self.updateGraph()
 
 
 class MultipolesRamp(QWidget):
+    """Widget to set and monitor multipoles ramp."""
 
     updateMultipoleRampSignal = pyqtSignal()
 
     def __init__(self, parent=None, prefix='', ramp_config=None):
+        """Initialize object."""
         super().__init__(parent)
         self.prefix = _PVName(prefix)
         self.ramp_config = ramp_config
@@ -750,6 +558,7 @@ class MultipolesRamp(QWidget):
         self.updateMultipoleRampSignal.emit()
 
     def updateGraph(self):
+        """Update and redraw graph."""
         if self.ramp_config is not None:
             maname = [self.cb_maname.currentText()]
             xdata = self.ramp_config.waveform_get_times()
@@ -819,6 +628,7 @@ class MultipolesRamp(QWidget):
             self.graph.figure.canvas.flush_events()
 
     def updateTable(self):
+        """Update and rebuild table."""
         self.table.cellChanged.disconnect(self._handleCellChanged)
         for label, row in self.table_map['rows'].items():
             label_item = self.table.item(row, 0)
@@ -896,6 +706,7 @@ class MultipolesRamp(QWidget):
 
     @pyqtSlot()
     def handleLoadRampConfig(self):
+        """Update all widgets in loading BoosterRamp config."""
         self._getNormalizedConfigs()
         self.table.cellChanged.disconnect(self._handleCellChanged)
         self._setupTable()
@@ -904,8 +715,10 @@ class MultipolesRamp(QWidget):
 
 
 class RFRamp(QWidget):
+    """Widget to set and monitor RF ramp."""
 
     def __init__(self, parent=None, prefix='', ramp_config=None):
+        """Initialize object."""
         super().__init__(parent)
         self.prefix = _PVName(prefix)
         self.ramp_config = ramp_config
@@ -1024,346 +837,21 @@ class RFRamp(QWidget):
         pass
 
     def updateGraph(self):
+        """Update and redraw graph."""
         pass
 
     def updateWfmNrPoints(self):
         pass
 
     def updateTable(self):
+        """Update and rebuild table."""
         pass
 
     @pyqtSlot()
     def handleLoadRampConfig(self):
+        """Update all widgets in loading BoosterRamp config."""
         self.table.cellChanged.disconnect(self._handleCellChanged)
         self._setupTable()
         self.updateTable()
         self.updateWfmNrPoints()
         self.updateGraph()
-
-
-class OpticsAdjust(QGroupBox):
-
-    def __init__(self, parent=None, prefix='', ramp_config=None):
-        super().__init__('Optics Configuration Adjustment', parent)
-        self.prefix = _PVName(prefix)
-        self.ramp_config = ramp_config
-        self._setupUi()
-
-    def _setupUi(self):
-        glay = QGridLayout(self)
-        self.bt_load = QPushButton('Load', self)
-        self.bt_save = QPushButton('Save', self)
-        self.bt_load.clicked.connect(self._load)
-        self.bt_save.clicked.connect(self._save)
-        glay.addWidget(self.bt_load, 0, 0)
-        glay.addWidget(self.bt_save, 0, 1)
-
-    def _load(self):
-        print('Do stuff')
-
-    def _save(self):
-        print('Do stuff')
-
-
-class RampStatistics(QGroupBox):
-
-    def __init__(self, parent=None, prefix='', ramp_config=None):
-        super().__init__('Statistics', parent)
-        self.prefix = _PVName(prefix)
-        self.ramp_config = ramp_config
-        self._setupUi()
-
-    def _setupUi(self):
-        pass
-
-
-class _InsertNormalizedConfig(SiriusMainWindow):
-
-    insertConfig = pyqtSignal(list)
-
-    def __init__(self, parent):
-        """Initialize object."""
-        super().__init__(parent)
-        self.normalized_config = ramp.BoosterNormalized()
-        self.setWindowTitle('Insert Normalized Configuration')
-        self._setupUi()
-
-    def _setupUi(self):
-        vlay = QVBoxLayout()
-        vlay.addWidget(
-            QLabel('<h4>Insert a Normalized Configuration</h4>', self),
-            alignment=Qt.AlignCenter)
-
-        self.rb_interp = QRadioButton('By interpolation')
-        self.rb_confsrv = QRadioButton(
-            'By taking an existing one from Config Server')
-        self.rb_create = QRadioButton('By creating a new configuration')
-        self.config_data = QWidget()
-        self._setupConfigDataWidget()
-
-        self.rb_interp.toggled.connect(self.interp_settings.setVisible)
-        self.rb_interp.setChecked(True)
-        self.rb_confsrv.toggled.connect(self.confsrv_settings.setVisible)
-        self.rb_create.toggled.connect(self.create_settings.setVisible)
-
-        vlay.addSpacerItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
-        vlay.addWidget(self.rb_interp)
-        vlay.addWidget(self.rb_confsrv)
-        vlay.addWidget(self.rb_create)
-        vlay.addSpacerItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
-        vlay.addWidget(self.config_data)
-
-        self.cw = QWidget()
-        self.cw.setLayout(vlay)
-        self.setCentralWidget(self.cw)
-
-    def _setupConfigDataWidget(self):
-        vlay = QVBoxLayout()
-        self.interp_settings = QWidget()
-        self.confsrv_settings = QWidget()
-        self.create_settings = QWidget()
-        self.confsrv_settings.setVisible(False)
-        self.create_settings.setVisible(False)
-        vlay.addWidget(self.interp_settings)
-        vlay.addWidget(self.confsrv_settings)
-        vlay.addWidget(self.create_settings)
-        self.config_data.setLayout(vlay)
-        self.interp_settings.setFixedSize(600, 750)
-        self.confsrv_settings.setFixedSize(600, 750)
-        self.create_settings.setFixedSize(600, 750)
-
-        flay_interp = QFormLayout()
-        flay_interp.setLabelAlignment(Qt.AlignRight)
-        self.le_interp_name = QLineEdit(self)
-        self.sb_interp_time = QDoubleSpinBox(self)
-        self.sb_interp_time.setMaximum(490)
-        self.bt_interp = QPushButton('Insert', self)
-        self.bt_interp.clicked.connect(self._emitInsertConfigData)
-        flay_interp.addRow(QLabel('Name: ', self), self.le_interp_name)
-        flay_interp.addRow(QLabel('Time: ', self), self.sb_interp_time)
-        flay_interp.addRow(self.bt_interp)
-
-        flay_confsrv = QFormLayout()
-        flay_confsrv.setLabelAlignment(Qt.AlignRight)
-        self.cb_confsrv_name = QComboBox(self)
-        self.cb_confsrv_name.setStyleSheet(
-            """ QComboBox::item {
-                    height: 30px;}
-            """)
-        metadata = self.normalized_config.configsrv_find()
-        for data in metadata:
-            self.cb_confsrv_name.addItem(data['name'])
-        self.sb_confsrv_time = QDoubleSpinBox(self)
-        self.sb_confsrv_time.setMaximum(490)
-        self.bt_confsrv = QPushButton('Insert', self)
-        self.bt_confsrv.clicked.connect(self._emitInsertConfigData)
-        flay_confsrv.addRow(QLabel('Name: ', self), self.cb_confsrv_name)
-        flay_confsrv.addRow(QLabel('Time: ', self), self.sb_confsrv_time)
-        flay_confsrv.addRow(self.bt_confsrv)
-
-        flay_create = QFormLayout()
-        self.le_create_name = QLineEdit(self)
-        scrollarea = QScrollArea()
-        scrollarea.setMinimumWidth(590)
-        self.data = QWidget()
-        flay_configdata = QFormLayout()
-        flay_configdata.setLabelAlignment(Qt.AlignRight)
-        config_template = self.normalized_config.get_config_type_template()
-        for ma in config_template.keys():
-            ma_value = QDoubleSpinBox(self.data)
-            ma_value.setObjectName(ma)
-            flay_configdata.addRow(QLabel(ma + ': ', self), ma_value)
-        self.data.setLayout(flay_configdata)
-        scrollarea.setWidget(self.data)
-        self.sb_create_time = QDoubleSpinBox(self)
-        self.sb_create_time.setMaximum(490)
-        self.bt_create = QPushButton('Insert', self)
-        self.bt_create.clicked.connect(self._emitInsertConfigData)
-        flay_create.addRow(QLabel('Name: ', self), self.le_create_name)
-        flay_create.addRow(scrollarea)
-        flay_create.addRow(QLabel('Time: ', self), self.sb_create_time)
-        flay_create.addRow(self.bt_create)
-
-        self.interp_settings.setLayout(flay_interp)
-        self.confsrv_settings.setLayout(flay_confsrv)
-        self.create_settings.setLayout(flay_create)
-
-    def _emitInsertConfigData(self):
-        sender = self.sender()
-        data = list()
-        if sender is self.bt_interp:
-            time = self.sb_interp_time.value()
-            name = self.le_interp_name.text()
-            nconfig = None
-            option = 0
-        elif sender is self.bt_confsrv:
-            time = self.sb_confsrv_time.value()
-            name = self.cb_confsrv_name.currentText()
-            nconfig = None
-            option = 1
-        elif sender is self.bt_create:
-            time = self.sb_create_time.value()
-            name = self.le_create_name.text()
-            config_template = self.normalized_config.get_config_type_template()
-            nconfig = dict()
-            for ma in config_template.keys():
-                w = self.data.findChild(QDoubleSpinBox, name=ma)
-                nconfig[ma] = w.value()
-            option = 2
-        data = [time, name, nconfig, option]
-        self.insertConfig.emit(data)
-        self.close()
-
-
-class _DeleteNormalizedConfig(SiriusMainWindow):
-
-    deleteConfig = pyqtSignal(str)
-
-    def __init__(self, parent, table_map):
-        """Initialize object."""
-        super().__init__(parent)
-        self.normalized_config = ramp.BoosterNormalized()
-        self.setWindowTitle('Delete Normalized Configuration')
-        self.table_map = table_map
-        self._setupUi()
-
-    def _setupUi(self):
-        glay = QGridLayout()
-        label = QLabel('<h4>Delete a Normalized Configuration</h4>', self)
-        label.setAlignment(Qt.AlignCenter)
-        glay.addWidget(label, 0, 0, 1, 2)
-
-        self.sb_confignumber = QSpinBox(self)
-        self.sb_confignumber.setMinimum(1)
-        self.sb_confignumber.setMaximum(max(self.table_map['rows'].values())+1)
-        self.sb_confignumber.setMaximumWidth(150)
-        self.sb_confignumber.valueChanged.connect(self._searchConfigByIndex)
-        self.bt_delete = QPushButton('Delete', self)
-        self.bt_delete.clicked.connect(self._emitDeleteConfigData)
-        for key, value in self.table_map['rows'].items():
-            if value == 0:
-                label = key
-                self.l_configname = QLabel(label, self)
-                self.l_configname.setSizePolicy(QSzPlcy.MinimumExpanding,
-                                                QSzPlcy.Preferred)
-                if label in ['Injection', 'Ejection']:
-                    self.bt_delete.setEnabled(False)
-                else:
-                    self.bt_delete.setEnabled(True)
-                break
-
-        glay.addItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum), 1, 0)
-        glay.addWidget(self.sb_confignumber, 2, 0)
-        glay.addWidget(self.l_configname, 2, 1)
-        glay.addItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum), 3, 0)
-        glay.addWidget(self.bt_delete, 4, 0, 1, 2)
-
-        self.cw = QWidget()
-        self.cw.setLayout(glay)
-        self.setCentralWidget(self.cw)
-
-    @pyqtSlot(int)
-    def _searchConfigByIndex(self, config_idx):
-        for label, value in self.table_map['rows'].items():
-            if config_idx == (value + 1):
-                self.l_configname.setText(label)
-                if label in ['Injection', 'Ejection']:
-                    self.bt_delete.setEnabled(False)
-                else:
-                    self.bt_delete.setEnabled(True)
-                break
-
-    def _emitDeleteConfigData(self):
-        self.deleteConfig.emit(self.l_configname.text())
-        self.close()
-
-
-class _SpinBoxDelegate(QStyledItemDelegate):
-
-    def createEditor(self, parent, option, index):
-        editor = QDoubleSpinBox(parent)
-        editor.setMinimum(0)
-        editor.setMaximum(500)
-        editor.setDecimals(4)
-        return editor
-
-    def setEditorData(self, spinBox, index):
-        value = index.model().data(index, Qt.EditRole)
-        spinBox.setValue(float(value))
-
-    def setModelData(self, spinBox, model, index):
-        spinBox.interpretText()
-        value = spinBox.value()
-        model.setData(index, value, Qt.EditRole)
-
-    def updateEditorGeometry(self, spinBox, option, index):
-        spinBox.setGeometry(option.rect)
-
-
-class _MessageBox(SiriusDialog):
-
-    acceptedSignal = pyqtSignal()
-    regectedSignal = pyqtSignal()
-
-    def __init__(self, parent=None, title='', message='',
-                 accept_button_text='', regect_button_text=''):
-        """Initialize object."""
-        super().__init__(parent)
-        self.setWindowTitle(title)
-        self.message = message
-        self.accept_button_text = accept_button_text
-        self.regect_button_text = regect_button_text
-        self._setupUi()
-
-    def _setupUi(self):
-        glay = QGridLayout()
-
-        self.label = QLabel(self.message, self)
-        glay.addWidget(self.label, 0, 0, 1, 3)
-
-        self.accept_button = QPushButton(self.accept_button_text, self)
-        self.accept_button.clicked.connect(self._emitAccepted)
-        glay.addWidget(self.accept_button, 1, 1)
-
-        if self.regect_button_text != '':
-            self.regect_button = QPushButton(self.regect_button_text, self)
-            self.regect_button.clicked.connect(self._emitRegected)
-            glay.addWidget(self.regect_button, 1, 2)
-
-        self.setLayout(glay)
-
-    def _emitAccepted(self):
-        self.acceptedSignal.emit()
-        self.close()
-
-    def _emitRegected(self):
-        self.regectedSignal.emit()
-        self.close()
-
-
-class _CustomTableWidgetItem(QTableWidgetItem):
-
-    def __init__(self, value):
-        super().__init__('{}'.format(value))
-
-    def __lt__(self, other):
-        if isinstance(other, _CustomTableWidgetItem):
-            selfDataValue = float(self.data(Qt.EditRole))
-            otherDataValue = float(other.data(Qt.EditRole))
-            return selfDataValue < otherDataValue
-        else:
-            return QTableWidgetItem.__lt__(self, other)
-
-
-if __name__ == '__main__':
-    """Run Example."""
-    app = SiriusApplication()
-    _util.set_style(app)
-    w = RampMain(
-        prefix='ca://fernando-lnls452-linux-AS-Glob:TI-EVG:')
-    w.show()
-    sys.exit(app.exec_())
