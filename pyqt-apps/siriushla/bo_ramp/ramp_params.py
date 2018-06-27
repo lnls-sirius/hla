@@ -13,7 +13,7 @@ import numpy as np
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.ramp import ramp, exceptions
 from siriuspy.csdevice.pwrsupply import MAX_WFMSIZE
-from auxiliar_classes import MessageBox as _MessageBox, \
+from siriushla.bo_ramp.auxiliar_classes import MessageBox as _MessageBox, \
     InsertNormalizedConfig as _InsertNormalizedConfig, \
     DeleteNormalizedConfig as _DeleteNormalizedConfig, \
     SpinBoxDelegate as _SpinBoxDelegate, \
