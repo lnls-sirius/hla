@@ -1,3 +1,5 @@
+#!/usr/bin/env python-sirius
+
 """Booster Ramp Control HLA."""
 
 import sys
@@ -8,11 +10,11 @@ from siriushla.widgets.windows import SiriusMainWindow
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriushla import util as _util
 from siriuspy.ramp import ramp
-from ramp_settings import RampSettings
-from ramp_commands import RampCommands
-from ramp_params import RampParameters
-from optics_adjust import OpticsAdjust
-from ramp_statistics import RampStatistics
+from siriushla.bo_ramp.ramp_settings import RampSettings
+from siriushla.bo_ramp.ramp_commands import RampCommands
+from siriushla.bo_ramp.ramp_params import RampParameters
+from siriushla.bo_ramp.optics_adjust import OpticsAdjust
+from siriushla.bo_ramp.ramp_statistics import RampStatistics
 
 
 class RampMain(SiriusMainWindow):
@@ -73,7 +75,7 @@ class RampMain(SiriusMainWindow):
     @pyqtSlot(str)
     def _receiveNewConfigName(self, new_config_name):
         self.ramp_config = ramp.BoosterRamp(new_config_name)
-        if self.ramp_config.configsrv_check():
+        if self.ramp_config.configsrv_exist():
             self.ramp_config.configsrv_load()
             self.ramp_config.configsrv_load_normalized_configs()
         self._setupUi()

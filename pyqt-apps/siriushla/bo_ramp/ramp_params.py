@@ -12,7 +12,7 @@ from matplotlib.figure import Figure
 import numpy as np
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.ramp import ramp, exceptions
-from siriuspy.csdevice.pwrsupply import MIN_WFMSIZE, MAX_WFMSIZE
+from siriuspy.csdevice.pwrsupply import MAX_WFMSIZE
 from auxiliar_classes import MessageBox as _MessageBox, \
     InsertNormalizedConfig as _InsertNormalizedConfig, \
     DeleteNormalizedConfig as _DeleteNormalizedConfig, \
@@ -91,7 +91,7 @@ class DipoleRamp(QWidget):
         self.m_ej, = self.ax.plot([0], [0], 'or')
 
     def _setupWfmNrPoints(self):
-        self.sb_nrpoints.setMinimum(MIN_WFMSIZE)
+        self.sb_nrpoints.setMinimum(1)
         self.sb_nrpoints.setMaximum(MAX_WFMSIZE)
         if self.ramp_config is not None:
             self.sb_nrpoints.setValue(
@@ -177,7 +177,7 @@ class DipoleRamp(QWidget):
                 energy = float(self.table.item(
                     row, self.table_map['columns']['E [GeV]']).data(
                         Qt.DisplayRole))
-                self.ramp_config.ramp_start_value = energy
+                self.ramp_config.start_energy = energy
 
             elif row == self.table_map['rows']['RampUp-Start']:
                 if column == self.table_map['columns']['T [ms]']:
@@ -187,7 +187,7 @@ class DipoleRamp(QWidget):
                 elif column == self.table_map['columns']['E [GeV]']:
                     energy = float(self.table.item(row, column).data(
                         Qt.DisplayRole))
-                    self.ramp_config.rampup_start_value = energy
+                    self.ramp_config.rampup_start_energy = energy
 
             elif row == self.table_map['rows']['Injection']:
                 if column == self.table_map['columns']['T [ms]']:
@@ -215,7 +215,7 @@ class DipoleRamp(QWidget):
                 elif column == self.table_map['columns']['E [GeV]']:
                     energy = float(self.table.item(row, column).data(
                         Qt.DisplayRole))
-                    self.ramp_config.rampup_stop_value = energy
+                    self.ramp_config.rampup_stop_energy = energy
 
             elif row == self.table_map['rows']['RampDown-Start']:
                 if column == self.table_map['columns']['T [ms]']:
@@ -225,7 +225,7 @@ class DipoleRamp(QWidget):
                 elif column == self.table_map['columns']['E [GeV]']:
                     energy = float(self.table.item(row, column).data(
                         Qt.DisplayRole))
-                    self.ramp_config.rampdown_start_value = energy
+                    self.ramp_config.rampdown_start_energy = energy
 
             elif row == self.table_map['rows']['RampDown-Stop']:
                 if column == self.table_map['columns']['T [ms]']:
@@ -235,7 +235,7 @@ class DipoleRamp(QWidget):
                 elif column == self.table_map['columns']['E [GeV]']:
                     energy = float(self.table.item(row, column).data(
                         Qt.DisplayRole))
-                    self.ramp_config.rampdown_stop_value = energy
+                    self.ramp_config.rampdown_stop_energy = energy
         except exceptions.RampInvalidDipoleWfmParms as e:
             err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
             err_msg.show()
@@ -254,8 +254,8 @@ class DipoleRamp(QWidget):
             self.ax.set_xlim(min(xdata)-0.2, max(xdata)+0.2)
             self.ax.set_ylim(min(ydata)-0.2, max(ydata)+0.2)
 
-            self.markers.set_xdata(self.ramp_config.ramp_dipole_time)
-            self.markers.set_ydata(self.ramp_config.ramp_dipole_energy)
+            self.markers.set_xdata(self.ramp_config.ramp_dipole_times)
+            self.markers.set_ydata(self.ramp_config.ramp_dipole_energies)
 
             inj_marker_time = self.ramp_config.injection_time
             self.m_inj.set_xdata(inj_marker_time)
@@ -283,11 +283,11 @@ class DipoleRamp(QWidget):
             t_item = self.table.item(row, 1)
             e_item = self.table.item(row, 3)
             if label == 'Start':
-                time = str(self.ramp_config.ramp_dipole_time[0])
-                energy = str(self.ramp_config.ramp_start_value)
+                time = str(0.0)
+                energy = str(self.ramp_config.start_energy)
             elif label == 'RampUp-Start':
                 time = str(self.ramp_config.rampup_start_time)
-                energy = str(self.ramp_config.rampup_start_value)
+                energy = str(self.ramp_config.rampup_start_energy)
             elif label == 'Injection':
                 time = self.ramp_config.injection_time
                 energy = str(self.ramp_config.waveform_interp_energy(time))
@@ -296,19 +296,19 @@ class DipoleRamp(QWidget):
                 energy = str(self.ramp_config.waveform_interp_energy(time))
             elif label == 'RampUp-Stop':
                 time = str(self.ramp_config.rampup_stop_time)
-                energy = str(self.ramp_config.rampup_stop_value)
+                energy = str(self.ramp_config.rampup_stop_energy)
             elif label == 'Plateau-Start':
-                time = str(self.ramp_config.ramp_dipole_time[4])
-                energy = str(self.ramp_config.ramp_plateau_value)
+                time = str(self.ramp_config.plateau_start_time)
+                energy = str(self.ramp_config.plateau_energy)
             elif label == 'RampDown-Start':
                 time = str(self.ramp_config.rampdown_start_time)
-                energy = str(self.ramp_config.rampdown_start_value)
+                energy = str(self.ramp_config.rampdown_start_energy)
             elif label == 'RampDown-Stop':
                 time = str(self.ramp_config.rampdown_stop_time)
-                energy = str(self.ramp_config.rampdown_stop_value)
+                energy = str(self.ramp_config.rampdown_stop_energy)
             elif label == 'Stop':
-                time = str(self.ramp_config.ramp_dipole_time[-1])
-                energy = str(self.ramp_config.ramp_dipole_energy[-1])
+                time = str(self.ramp_config.ramp_dipole_duration)
+                energy = str(self.ramp_config.start_energy)
             t_item.setData(Qt.DisplayRole, str(time))
             e_item.setData(Qt.DisplayRole, str(energy))
 
@@ -600,7 +600,8 @@ class MultipolesRamp(QWidget):
             else:
                 self.ax.set_ylabel('Kick [rad]')
 
-            markers_time = self.ramp_config.ramp_dipole_time
+            # markers_time = self.ramp_config.ramp_dipole_times
+            markers_time = self.ramp_config.ramp_dipole_times
             self.markers.set_xdata(markers_time)
             if len(maname) > 1:
                 self.markers.set_xdata([markers_time, markers_time])
