@@ -701,6 +701,7 @@ class MultipolesRamp(QWidget):
                         value = dE*1000/dT
                     item = self.table.item(row, column)
                     item.setData(Qt.DisplayRole, str(value))
+        self._sortTable()
         for row in self.table_map['rows'].values():
             if row == 0:
                 value = '-'
@@ -714,7 +715,6 @@ class MultipolesRamp(QWidget):
                 value = int(idx1 - idx2)
             item = self.table.item(row, self.table_map['columns']['ΔIndex'])
             item.setData(Qt.DisplayRole, str(value))
-        self._sortTable()
         self.table.cellChanged.connect(self._handleCellChanged)
 
     @pyqtSlot(ramp.BoosterRamp)

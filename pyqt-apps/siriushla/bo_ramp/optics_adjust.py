@@ -79,7 +79,6 @@ class OpticsAdjust(QGroupBox):
         label_tune.setFixedHeight(48)
 
         label_deltaTuneX = QLabel('Δν<sub>x</sub>: ')
-        label_deltaTuneX.setAlignment(Qt.AlignBottom)
         label_deltaTuneX.setFixedWidth(48)
         self.sb_deltaTuneX = QDoubleSpinBox(self)
         self.sb_deltaTuneX.setDecimals(6)
@@ -88,7 +87,6 @@ class OpticsAdjust(QGroupBox):
         self.sb_deltaTuneX.editingFinished.connect(self._calculate_deltaKL)
 
         label_deltaTuneY = QLabel('Δν<sub>y</sub>: ')
-        label_deltaTuneY.setAlignment(Qt.AlignBottom)
         label_deltaTuneY.setFixedWidth(48)
         self.sb_deltaTuneY = QDoubleSpinBox(self)
         self.sb_deltaTuneY.setDecimals(6)
@@ -108,18 +106,27 @@ class OpticsAdjust(QGroupBox):
         label_deltaKLQD.setFixedWidth(48)
         self.l_deltaKLQD = QLabel('', self)
 
+        hlay_bt_apply = QHBoxLayout()
         self.bt_apply_deltaKL = QPushButton('Apply', self)
         self.bt_apply_deltaKL.clicked.connect(self._apply_deltaKL)
+        self.bt_apply_deltaKL.setFixedWidth(150)
+        hlay_bt_apply.addSpacerItem(
+            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
+        hlay_bt_apply.addWidget(self.bt_apply_deltaKL)
+        hlay_bt_apply.addSpacerItem(
+            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
 
-        self.tune_variation.addWidget(label_tune, 0, 0, 1, 5)
         self.tune_variation.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 1, 2)
-        self.tune_variation.addWidget(label_deltaTuneX, 2, 0)
-        self.tune_variation.addWidget(self.sb_deltaTuneX, 2, 1, 2, 1)
+            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 0, 2)
+        self.tune_variation.addWidget(label_tune, 1, 0, 1, 5)
         self.tune_variation.addItem(
             QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 2, 2)
-        self.tune_variation.addWidget(label_deltaTuneY, 2, 3)
-        self.tune_variation.addWidget(self.sb_deltaTuneY, 2, 4, 2, 1)
+        self.tune_variation.addWidget(label_deltaTuneX, 3, 0)
+        self.tune_variation.addWidget(self.sb_deltaTuneX, 3, 1)
+        self.tune_variation.addItem(
+            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 3, 2)
+        self.tune_variation.addWidget(label_deltaTuneY, 3, 3)
+        self.tune_variation.addWidget(self.sb_deltaTuneY, 3, 4)
         self.tune_variation.addItem(
             QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 4, 2)
         self.tune_variation.addWidget(label_KL, 5, 0, 1, 5)
@@ -129,9 +136,9 @@ class OpticsAdjust(QGroupBox):
             QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 6, 2)
         self.tune_variation.addWidget(label_deltaKLQD, 6, 3)
         self.tune_variation.addWidget(self.l_deltaKLQD, 6, 4)
-        self.tune_variation.addWidget(self.bt_apply_deltaKL, 7, 0, 1, 5)
+        self.tune_variation.addLayout(hlay_bt_apply, 7, 0, 1, 5)
         self.tune_variation.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 7, 2)
+            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 8, 2)
 
     def _setupChromVariation(self):
         label_chrom = QLabel('<h4>Chromaticity Variation</h4>', self)
@@ -139,7 +146,6 @@ class OpticsAdjust(QGroupBox):
         label_chrom.setFixedHeight(48)
 
         label_deltaChromX = QLabel('Δξ<sub>x</sub>: ')
-        label_deltaChromX.setAlignment(Qt.AlignBottom)
         label_deltaChromX.setFixedWidth(48)
         self.sb_deltaChromX = QDoubleSpinBox(self)
         self.sb_deltaChromX.setDecimals(6)
@@ -148,7 +154,6 @@ class OpticsAdjust(QGroupBox):
         self.sb_deltaChromX.editingFinished.connect(self._calculate_deltaSL)
 
         label_deltaChromY = QLabel('Δξ<sub>y</sub>: ')
-        label_deltaChromY.setAlignment(Qt.AlignBottom)
         label_deltaChromY.setFixedWidth(48)
         self.sb_deltaChromY = QDoubleSpinBox(self)
         self.sb_deltaChromY.setDecimals(6)
@@ -168,18 +173,27 @@ class OpticsAdjust(QGroupBox):
         label_deltaSLSD.setFixedWidth(48)
         self.l_deltaSLSD = QLabel('', self)
 
+        hlay_bt_apply = QHBoxLayout()
         self.bt_apply_deltaSL = QPushButton('Apply', self)
         self.bt_apply_deltaSL.clicked.connect(self._apply_deltaSL)
+        self.bt_apply_deltaSL.setFixedWidth(150)
+        hlay_bt_apply.addSpacerItem(
+            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
+        hlay_bt_apply.addWidget(self.bt_apply_deltaSL)
+        hlay_bt_apply.addSpacerItem(
+            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
 
-        self.chrom_variation.addWidget(label_chrom, 0, 0, 1, 5)
         self.chrom_variation.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 1, 2)
-        self.chrom_variation.addWidget(label_deltaChromX, 2, 0)
-        self.chrom_variation.addWidget(self.sb_deltaChromX, 2, 1, 2, 1)
+            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 0, 2)
+        self.chrom_variation.addWidget(label_chrom, 1, 0, 1, 5)
         self.chrom_variation.addItem(
             QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 2, 2)
-        self.chrom_variation.addWidget(label_deltaChromY, 2, 3)
-        self.chrom_variation.addWidget(self.sb_deltaChromY, 2, 4, 2, 1)
+        self.chrom_variation.addWidget(label_deltaChromX, 3, 0)
+        self.chrom_variation.addWidget(self.sb_deltaChromX, 3, 1)
+        self.chrom_variation.addItem(
+            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 3, 2)
+        self.chrom_variation.addWidget(label_deltaChromY, 3, 3)
+        self.chrom_variation.addWidget(self.sb_deltaChromY, 3, 4)
         self.chrom_variation.addItem(
             QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 4, 2)
         self.chrom_variation.addWidget(label_SL, 5, 0, 1, 5)
@@ -189,9 +203,9 @@ class OpticsAdjust(QGroupBox):
             QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 6, 2)
         self.chrom_variation.addWidget(label_deltaSLSD, 6, 3)
         self.chrom_variation.addWidget(self.l_deltaSLSD, 6, 4)
-        self.chrom_variation.addWidget(self.bt_apply_deltaSL, 7, 0, 1, 5)
+        self.chrom_variation.addLayout(hlay_bt_apply, 7, 0, 1, 5)
         self.chrom_variation.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 7, 2)
+            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 8, 2)
 
     def _setupOrbitCorrection(self):
         label = QLabel('<h4>Orbit Correction</h4>', self)
@@ -216,23 +230,33 @@ class OpticsAdjust(QGroupBox):
         labelV = QLabel('%', self)
         labelV.setFixedWidth(24)
 
+        hlay_bt_apply = QHBoxLayout()
         self.bt_apply_orbitcorrection = QPushButton('Apply', self)
         self.bt_apply_orbitcorrection.clicked.connect(
             self._apply_orbitcorrection)
+        self.bt_apply_orbitcorrection.setFixedWidth(150)
+        hlay_bt_apply.addSpacerItem(
+            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
+        hlay_bt_apply.addWidget(self.bt_apply_orbitcorrection)
+        hlay_bt_apply.addSpacerItem(
+            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
 
-        self.orbit_correction.addWidget(label, 0, 0, 1, 3)
         self.orbit_correction.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 1, 0)
+            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 0, 0)
+        self.orbit_correction.addWidget(label, 1, 0, 1, 3)
+        self.orbit_correction.addItem(
+            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 2, 0)
         self.orbit_correction.addWidget(self.bt_load_measured_orbit,
-                                        2, 0, 1, 3)
-        self.orbit_correction.addWidget(self.bt_correctH, 3, 0)
-        self.orbit_correction.addWidget(self.pydmledit_correctH, 3, 1)
-        self.orbit_correction.addWidget(labelH, 3, 2)
-        self.orbit_correction.addWidget(self.bt_correctV, 4, 0)
-        self.orbit_correction.addWidget(self.pydmledit_correctV, 4, 1)
-        self.orbit_correction.addWidget(labelV, 4, 2)
-        self.orbit_correction.addWidget(self.bt_apply_orbitcorrection,
-                                        5, 0, 1, 3)
+                                        3, 0, 1, 3)
+        self.orbit_correction.addWidget(self.bt_correctH, 4, 0)
+        self.orbit_correction.addWidget(self.pydmledit_correctH, 4, 1)
+        self.orbit_correction.addWidget(labelH, 4, 2)
+        self.orbit_correction.addWidget(self.bt_correctV, 5, 0)
+        self.orbit_correction.addWidget(self.pydmledit_correctV, 5, 1)
+        self.orbit_correction.addWidget(labelV, 5, 2)
+        self.orbit_correction.addLayout(hlay_bt_apply, 6, 0, 1, 3)
+        self.orbit_correction.addItem(
+            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 7, 0)
 
     def _handleConfigIndexChanged(self):
         if not self.table_map:
