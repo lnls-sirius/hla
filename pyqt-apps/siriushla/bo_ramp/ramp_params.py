@@ -81,6 +81,7 @@ class DipoleRamp(QWidget):
         vlay.addWidget(self.table)
 
     def _setupGraph(self):
+        self.graph.setFixedHeight(500)
         self.ax = self.graph.figure.subplots()
         self.ax.grid()
         self.ax.set_xlabel('t [ms]')
@@ -93,10 +94,8 @@ class DipoleRamp(QWidget):
     def _setupWfmNrPoints(self):
         self.sb_nrpoints.setMinimum(MIN_WFMSIZE)
         self.sb_nrpoints.setMaximum(MAX_WFMSIZE)
-        if self.ramp_config is not None:
-            self.sb_nrpoints.setValue(
-                self.ramp_config.ramp_dipole_wfm_nrpoints)
-            self.sb_nrpoints.editingFinished.connect(self.updateWfmNrPoints)
+        self.sb_nrpoints.editingFinished.connect(
+            self._handleChangeNrPoints)
 
     def _setupTable(self):
         self.table_map = {
@@ -238,14 +237,20 @@ class DipoleRamp(QWidget):
                     self.ramp_config.rampdown_stop_value = energy
         except exceptions.RampInvalidDipoleWfmParms as e:
             err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
-            err_msg.show()
+            err_msg.exec_()
         finally:
             self.updateTable()
             self.updateGraph()
             self.updateDipoleRampSignal.emit()
 
+    @pyqtSlot()
+    def _handleChangeNrPoints(self):
+        """Handle change waveform number of points."""
+        self.ramp_config.ramp_dipole_wfm_nrpoints = self.sb_nrpoints.value()
+        self.updateDipoleRampSignal.emit()
+
     def updateGraph(self):
-        """Update and redraw graph."""
+        """Update and redraw graph when ramp_config is loaded."""
         if self.ramp_config is not None:
             xdata = self.ramp_config.waveform_get_times()
             ydata = self.ramp_config.waveform_get('BO-Fam:MA-B')
@@ -270,14 +275,13 @@ class DipoleRamp(QWidget):
             self.graph.figure.canvas.draw()
             self.graph.figure.canvas.flush_events()
 
-    @pyqtSlot()
     def updateWfmNrPoints(self):
-        """Update waveform number of points."""
-        self.ramp_config.ramp_dipole_wfm_nrpoints = self.sb_nrpoints.value()
-        self.updateDipoleRampSignal.emit()
+        """Update waveform number of points when ramp_config is loaded."""
+        self.sb_nrpoints.setValue(
+            self.ramp_config.ramp_dipole_wfm_nrpoints)
 
     def updateTable(self):
-        """Update and rebuild table."""
+        """Update and rebuild table when ramp_config is loaded."""
         self.table.cellChanged.disconnect(self._handleCellChanged)
         for label, row in self.table_map['rows'].items():
             t_item = self.table.item(row, 1)
@@ -346,9 +350,10 @@ class DipoleRamp(QWidget):
                     item.setData(Qt.DisplayRole, str(value))
         self.table.cellChanged.connect(self._handleCellChanged)
 
-    @pyqtSlot()
-    def handleLoadRampConfig(self):
-        """Update all widgets in loading BoosterRamp config."""
+    @pyqtSlot(ramp.BoosterRamp)
+    def handleLoadRampConfig(self, ramp_config):
+        """Update all widgets when ramp_config is loaded."""
+        self.ramp_config = ramp_config
         self.updateTable()
         self.updateWfmNrPoints()
         self.updateGraph()
@@ -358,6 +363,7 @@ class MultipolesRamp(QWidget):
     """Widget to set and monitor multipoles ramp."""
 
     updateMultipoleRampSignal = pyqtSignal()
+    configsIndexChangedSignal = pyqtSignal(dict)
 
     def __init__(self, parent=None, prefix='', ramp_config=None):
         """Initialize object."""
@@ -415,6 +421,7 @@ class MultipolesRamp(QWidget):
         glay.addWidget(self.bt_delete, 4, 1)
 
     def _setupGraph(self):
+        self.graph.setFixedHeight(500)
         self.ax = self.graph.figure.subplots()
         self.ax.grid()
         self.ax.set_xlabel('t [ms]')
@@ -508,6 +515,7 @@ class MultipolesRamp(QWidget):
         self.table.sortByColumn(1, Qt.AscendingOrder)
         for row in range(self.table.rowCount()):
             self.table_map['rows'][self.table.item(row, 0).text()] = row
+        self.configsIndexChangedSignal.emit(self.table_map)
 
     def _handleCellChanged(self, row, column):
         try:
@@ -518,7 +526,7 @@ class MultipolesRamp(QWidget):
                 float(self.table.item(row, column).data(Qt.DisplayRole)))
         except exceptions.RampInvalidNormConfig as e:
             err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
-            err_msg.show()
+            err_msg.exec_()
         finally:
             self.updateTable()
             self.updateGraph()
@@ -529,7 +537,7 @@ class MultipolesRamp(QWidget):
             self._insertConfigPopup = _InsertNormalizedConfig(self)
             self._insertConfigPopup.insertConfig.connect(
                 self._handleInsertNormConfig)
-            self._insertConfigPopup.show()
+            self._insertConfigPopup.exec_()
 
     @pyqtSlot(list)
     def _handleInsertNormConfig(self, config):
@@ -541,8 +549,8 @@ class MultipolesRamp(QWidget):
                 self.ramp_config.configsrv_load_normalized_configs()
         except exceptions.RampInvalidNormConfig as e:
             err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
-            err_msg.show()
-        self.handleLoadRampConfig()
+            err_msg.exec_()
+        self.handleLoadRampConfig(self.ramp_config)
         self.updateMultipoleRampSignal.emit()
 
     def _showDeleteNormConfigPopup(self):
@@ -551,12 +559,12 @@ class MultipolesRamp(QWidget):
                                                               self.table_map)
             self._deleteConfigPopup.deleteConfig.connect(
                 self._handleDeleteNormConfig)
-            self._deleteConfigPopup.show()
+            self._deleteConfigPopup.exec_()
 
     @pyqtSlot(str)
     def _handleDeleteNormConfig(self, config):
         self.ramp_config.normalized_configs_delete(config)
-        self.handleLoadRampConfig()
+        self.handleLoadRampConfig(self.ramp_config)
         self.updateMultipoleRampSignal.emit()
 
     def updateGraph(self):
@@ -631,6 +639,8 @@ class MultipolesRamp(QWidget):
 
     def updateTable(self):
         """Update and rebuild table."""
+        if self.ramp_config is None:
+            return
         self.table.cellChanged.disconnect(self._handleCellChanged)
         for label, row in self.table_map['rows'].items():
             label_item = self.table.item(row, 0)
@@ -706,9 +716,10 @@ class MultipolesRamp(QWidget):
         self._sortTable()
         self.table.cellChanged.connect(self._handleCellChanged)
 
-    @pyqtSlot()
-    def handleLoadRampConfig(self):
+    @pyqtSlot(ramp.BoosterRamp)
+    def handleLoadRampConfig(self, ramp_config):
         """Update all widgets in loading BoosterRamp config."""
+        self.ramp_config = ramp_config
         self._getNormalizedConfigs()
         self.table.cellChanged.disconnect(self._handleCellChanged)
         self._setupTable()
@@ -752,8 +763,11 @@ class RFRamp(QWidget):
         vlay.addWidget(self.graph)
         vlay.addLayout(self.set_nrpoints)
         vlay.addWidget(self.table)
+        vlay.addSpacerItem(
+            QSpacerItem(40, 20, QSzPlcy.Minimum, QSzPlcy.Expanding))
 
     def _setupGraph(self):
+        self.graph.setFixedHeight(500)
         self.ax = self.graph.figure.subplots()
         self.ax.grid()
         self.ax.set_xlabel('t [ms]')
@@ -838,20 +852,27 @@ class RFRamp(QWidget):
     def _handleCellChanged(self, row, column):
         pass
 
+    @pyqtSlot()
+    def _handleChangeNrPoints(self):
+        """Handle change waveform number of points."""
+        pass
+
     def updateGraph(self):
         """Update and redraw graph."""
         pass
 
     def updateWfmNrPoints(self):
+        """Update waveform number of points when ramp_config is loaded."""
         pass
 
     def updateTable(self):
         """Update and rebuild table."""
         pass
 
-    @pyqtSlot()
-    def handleLoadRampConfig(self):
+    @pyqtSlot(ramp.BoosterRamp)
+    def handleLoadRampConfig(self, ramp_config):
         """Update all widgets in loading BoosterRamp config."""
+        self.ramp_config = ramp_config
         self.table.cellChanged.disconnect(self._handleCellChanged)
         self._setupTable()
         self.updateTable()
