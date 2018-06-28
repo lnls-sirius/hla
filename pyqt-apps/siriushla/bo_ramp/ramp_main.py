@@ -27,7 +27,6 @@ class RampMain(SiriusMainWindow):
         self._connSignals()
 
     def _setupUi(self):
-        # self.resize(2000, 2000)
         cw = QWidget(self)
         self.setCentralWidget(cw)
         self.my_layout = QGridLayout(cw)
@@ -47,10 +46,11 @@ class RampMain(SiriusMainWindow):
                                               self.ramp_config)
         self.my_layout.addWidget(self.ramp_parameters, 1, 1, 2, 1)
 
-        self.optics_adjust = OpticsAdjust(self, self.prefix, self.ramp_config)
+        self.optics_adjust = OpticsAdjust(self, self.prefix)
         self.my_layout.addWidget(self.optics_adjust, 3, 1)
 
-        self.statistics = RampStatistics(self, self.prefix, self.ramp_config)
+        self.statistics = RampStatistics(self, self.prefix,
+                                         self.ramp_config)
         self.my_layout.addWidget(self.statistics, 1, 2, 3, 1)
 
     def _connSignals(self):
@@ -60,6 +60,8 @@ class RampMain(SiriusMainWindow):
             self.ramp_parameters.dip_ramp.handleLoadRampConfig)
         self.ramp_settings.loadSignal.connect(
             self.ramp_parameters.mult_ramp.handleLoadRampConfig)
+        self.ramp_settings.loadSignal.connect(
+            self.ramp_parameters.rf_ramp.handleLoadRampConfig)
 
         self.ramp_parameters.dip_ramp.updateDipoleRampSignal.connect(
             self.ramp_settings.verifySync)
@@ -70,15 +72,16 @@ class RampMain(SiriusMainWindow):
         self.ramp_parameters.mult_ramp.updateMultipoleRampSignal.connect(
             self.ramp_settings.verifySync)
 
+        self.ramp_parameters.mult_ramp.configsIndexChangedSignal.connect(
+            self.optics_adjust.getConfigIndices)
+
     @pyqtSlot(str)
     def _receiveNewConfigName(self, new_config_name):
         self.ramp_config = ramp.BoosterRamp(new_config_name)
         if self.ramp_config.configsrv_check():
             self.ramp_config.configsrv_load()
             self.ramp_config.configsrv_load_normalized_configs()
-        self._setupUi()
-        self._connSignals()
-        self.ramp_settings.loadSignal.emit()
+        self.ramp_settings.loadSignal.emit(self.ramp_config)
         self.ramp_settings.verifySync()
 
 
