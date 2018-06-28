@@ -7,11 +7,11 @@ from PyQt5.QtWidgets import QLabel, QWidget, QScrollArea, \
                             QRadioButton, QFormLayout, QDoubleSpinBox, \
                             QComboBox, QSpinBox, QStyledItemDelegate, \
                             QSpacerItem, QSizePolicy as QSzPlcy
-from siriushla.widgets.windows import SiriusMainWindow, SiriusDialog
+from siriushla.widgets.windows import SiriusDialog
 from siriuspy.ramp import ramp
 
 
-class InsertNormalizedConfig(SiriusMainWindow):
+class InsertNormalizedConfig(SiriusDialog):
     """Auxiliar window to insert a new normalized config."""
 
     insertConfig = pyqtSignal(list)
@@ -50,9 +50,7 @@ class InsertNormalizedConfig(SiriusMainWindow):
             QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
         vlay.addWidget(self.config_data)
 
-        self.cw = QWidget()
-        self.cw.setLayout(vlay)
-        self.setCentralWidget(self.cw)
+        self.setLayout(vlay)
 
     def _setupConfigDataWidget(self):
         vlay = QVBoxLayout()
@@ -152,7 +150,7 @@ class InsertNormalizedConfig(SiriusMainWindow):
         self.close()
 
 
-class DeleteNormalizedConfig(SiriusMainWindow):
+class DeleteNormalizedConfig(SiriusDialog):
     """Auxiliar window to delete a normalized config."""
 
     deleteConfig = pyqtSignal(str)
@@ -198,9 +196,7 @@ class DeleteNormalizedConfig(SiriusMainWindow):
             QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum), 3, 0)
         glay.addWidget(self.bt_delete, 4, 0, 1, 2)
 
-        self.cw = QWidget()
-        self.cw.setLayout(glay)
-        self.setCentralWidget(self.cw)
+        self.setLayout(glay)
 
     @pyqtSlot(int)
     def _searchConfigByIndex(self, config_idx):
@@ -215,6 +211,62 @@ class DeleteNormalizedConfig(SiriusMainWindow):
 
     def _emitDeleteConfigData(self):
         self.deleteConfig.emit(self.l_configname.text())
+        self.close()
+
+
+class EditNormalizedConfig(SiriusDialog):
+    """Auxiliar window to edit an existing normalized config."""
+
+    editConfig = pyqtSignal(dict)
+
+    def __init__(self, parent, norm_config):
+        """Initialize object."""
+        super().__init__(parent)
+        self.norm_config = norm_config
+        self.setWindowTitle('Edit Normalized Configuration')
+        self._setupUi()
+
+    def _setupUi(self):
+        glay = QGridLayout()
+        label = QLabel(self.norm_config.name, self)
+        label.setAlignment(Qt.AlignCenter)
+        label.setStyleSheet("""font-weight: bold;""")
+
+        scrollarea = QScrollArea()
+        scrollarea.setMinimumWidth(500)
+        self.data = QWidget()
+        flay_configdata = QFormLayout()
+        flay_configdata.setLabelAlignment(Qt.AlignRight)
+        config_template = self.norm_config.get_config_type_template()
+        self.norm_config.configsrv_load()
+        for ma in config_template.keys():
+            ma_value = QDoubleSpinBox(self.data)
+            ma_value.setDecimals(6)
+            ma_value.setValue(self.norm_config[ma])
+            ma_value.setObjectName(ma)
+            flay_configdata.addRow(QLabel(ma + ': ', self), ma_value)
+        self.data.setLayout(flay_configdata)
+        scrollarea.setWidget(self.data)
+
+        self.bt_apply = QPushButton('Apply Changes', self)
+        self.bt_apply.clicked.connect(self._emitConfigChanges)
+        self.bt_cancel = QPushButton('Cancel', self)
+        self.bt_cancel.clicked.connect(self.close)
+
+        glay.addWidget(label, 0, 0, 1, 2)
+        glay.addWidget(scrollarea, 1, 0, 1, 2)
+        glay.addWidget(self.bt_apply, 2, 0)
+        glay.addWidget(self.bt_cancel, 2, 1)
+
+        self.setLayout(glay)
+
+    def _emitConfigChanges(self):
+        config_template = self.norm_config.get_config_type_template()
+        nconfig = dict()
+        for ma in config_template.keys():
+            w = self.data.findChild(QDoubleSpinBox, name=ma)
+            nconfig[ma] = w.value()
+        self.editConfig.emit(nconfig)
         self.close()
 
 
@@ -288,7 +340,7 @@ class MessageBox(SiriusDialog):
 
 
 class CustomTableWidgetItem(QTableWidgetItem):
-    """Auxiliar class to make a table column sortble by numeric data."""
+    """Auxiliar class to make a table column sortable by numeric data."""
 
     def __init__(self, value):
         """Initialize object."""
