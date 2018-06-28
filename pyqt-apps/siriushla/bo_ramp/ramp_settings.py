@@ -11,7 +11,7 @@ class RampSettings(QGroupBox):
     """Widget to choose and to control a BoosterRamp configuration status."""
 
     configSignal = pyqtSignal(str)
-    loadSignal = pyqtSignal()
+    loadSignal = pyqtSignal(ramp.BoosterRamp)
 
     def __init__(self, parent=None, prefix='', ramp_config=None):
         """Initialize object."""
@@ -19,6 +19,7 @@ class RampSettings(QGroupBox):
         self.prefix = _PVName(prefix)
         self.ramp_config = ramp_config
         self._setupUi()
+        self.loadSignal.connect(self._getRampConfig)
 
     def _setupUi(self):
         if self.ramp_config is not None:
@@ -72,7 +73,7 @@ class RampSettings(QGroupBox):
                 else:
                     self.ramp_config.configsrv_load()
                     self.ramp_config.configsrv_load_normalized_configs()
-                    self.loadSignal.emit()
+                    self.loadSignal.emit(self.ramp_config)
             else:
                 self.configSignal.emit(name)
             self.verifySync()
@@ -84,6 +85,11 @@ class RampSettings(QGroupBox):
         else:
             self.ramp_config.configsrv_save()
         self.verifySync()
+
+    def _getRampConfig(self, ramp_config):
+        """Get new BoosterRamp object."""
+        self.ramp_config = ramp_config
+        self.bt_load.setStyleSheet("")
 
     def verifySync(self):
         """Verify sync status related to ConfServer."""
