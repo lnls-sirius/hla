@@ -4,7 +4,7 @@ from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QGroupBox, QVBoxLayout, QLineEdit, QPushButton
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.ramp import ramp
-from auxiliar_classes import MessageBox as _MessageBox
+from siriushla.bo_ramp.auxiliar_classes import MessageBox as _MessageBox
 
 
 class RampSettings(QGroupBox):
@@ -39,7 +39,7 @@ class RampSettings(QGroupBox):
 
     def _le_config_textChanged(self):
         name = self.le_config.text()
-        if ramp.BoosterRamp(name).configsrv_check():
+        if ramp.BoosterRamp(name).configsrv_exist():
             if ((self.ramp_config is None) or
                     (self.ramp_config is not None and
                      name != self.ramp_config.name)):
@@ -57,7 +57,7 @@ class RampSettings(QGroupBox):
 
     def _load(self):
         name = self.le_config.text()
-        if ramp.BoosterRamp(name).configsrv_check():
+        if ramp.BoosterRamp(name).configsrv_exist():
             if self.ramp_config is not None:
                 if not self.ramp_config.configsrv_synchronized:
                     save_changes = _MessageBox(
@@ -79,7 +79,7 @@ class RampSettings(QGroupBox):
             self.verifySync()
 
     def _save(self):
-        config_exists = self.ramp_config.configsrv_check()
+        config_exists = self.ramp_config.configsrv_exist()
         if config_exists:
             self.ramp_config.configsrv_update()
         else:

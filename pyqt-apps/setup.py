@@ -1,5 +1,7 @@
 #!/usr/bin/env python-sirius
 
+"""HLA Setup."""
+
 from setuptools import setup
 
 with open('VERSION', 'r') as _f:
@@ -42,6 +44,7 @@ setup(
         'scripts/sirius-hla-ts-ap-control.py',
         'scripts/sirius-hla-ts-ap-posang.py',
         'scripts/sirius-hla-ts-ma-control.py',
+        'scripts/sirius-hla-bo-ramp.py',
         ],
     zip_safe=False
     )
