@@ -1,6 +1,6 @@
 """Booster Ramp Control HLA: Optics Adjust Module."""
 
-from PyQt5.QtCore import Qt, pyqtSlot
+from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal
 from PyQt5.QtWidgets import QGroupBox, QPushButton, QSpinBox, QLabel, \
                             QHBoxLayout, QGridLayout, QSpacerItem, \
                             QSizePolicy as QSzPlcy, QDoubleSpinBox
@@ -14,6 +14,8 @@ from auxiliar_classes import EditNormalizedConfig
 
 class OpticsAdjust(QGroupBox):
     """Widget to perform optics adjust in normalized configurations."""
+
+    normConfigChanged = pyqtSignal()
 
     def __init__(self, parent=None, prefix=''):
         """Initialize object."""
@@ -358,6 +360,7 @@ class OpticsAdjust(QGroupBox):
         if self.norm_config is not None:
             self.norm_config.configsrv_save()
             self.verifySync()
+            self.normConfigChanged.emit()
 
     def _load_measured_orbit(self):
         # TODO: include orbit correction
@@ -375,7 +378,7 @@ class OpticsAdjust(QGroupBox):
     def getConfigIndices(self, table_map):
         """Update table_map and settings widget."""
         self.table_map = table_map
-        self.sb_config.setMaximum(max(self.table_map['rows'].values()))
+        self.sb_config.setMaximum(max(self.table_map['rows'].values())+1)
         normconfigname = self.l_configname.text()
         if normconfigname == '':
             return

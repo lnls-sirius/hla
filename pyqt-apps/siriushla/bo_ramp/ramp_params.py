@@ -79,6 +79,8 @@ class DipoleRamp(QWidget):
         vlay.addWidget(self.graph)
         vlay.addLayout(self.set_nrpoints)
         vlay.addWidget(self.table)
+        vlay.addSpacerItem(
+            QSpacerItem(40, 20, QSzPlcy.Minimum, QSzPlcy.Expanding))
 
     def _setupGraph(self):
         self.graph.setFixedHeight(500)
@@ -323,7 +325,7 @@ class DipoleRamp(QWidget):
                     N = self.ramp_config.ramp_dipole_wfm_nrpoints
                     T = float(self.table.item(
                         row, self.table_map['columns']['T [ms]']).data(
-                            Qt.DisplayRole))
+                        Qt.DisplayRole))
                     value = round(T*N/D)
                     item = self.table.item(row, column)
                     item.setData(Qt.DisplayRole, str(value))
@@ -331,21 +333,21 @@ class DipoleRamp(QWidget):
                     if row == 0:
                         value = '-'
                     else:
-                        T1 = float(self.table.item(
-                            row, self.table_map['columns']['T [ms]']).data(
-                                Qt.DisplayRole))
-                        T2 = float(self.table.item(
-                            row-1, self.table_map['columns']['T [ms]']).data(
-                                Qt.DisplayRole))
-                        dT = T1 - T2
+                        idx1 = float(self.table.item(
+                            row, self.table_map['columns']['Index']).data(
+                            Qt.DisplayRole))
+                        idx2 = float(self.table.item(
+                            row-1, self.table_map['columns']['Index']).data(
+                            Qt.DisplayRole))
+                        dIdx = idx1 - idx2
                         E1 = float(self.table.item(
                             row, self.table_map['columns']['E [GeV]']).data(
-                                Qt.DisplayRole))
+                            Qt.DisplayRole))
                         E2 = float(self.table.item(
                             row-1, self.table_map['columns']['E [GeV]']).data(
-                                Qt.DisplayRole))
+                            Qt.DisplayRole))
                         dE = E1 - E2
-                        value = dE*1000/dT
+                        value = dE*1000/dIdx
                     item = self.table.item(row, column)
                     item.setData(Qt.DisplayRole, str(value))
         self.table.cellChanged.connect(self._handleCellChanged)
@@ -670,37 +672,14 @@ class MultipolesRamp(QWidget):
             e_item.setData(Qt.DisplayRole, str(energy))
 
         for row in self.table_map['rows'].values():
-            for label, column in self.table_map['columns'].items():
-                if label == 'Index':
-                    D = self.ramp_config.ramp_dipole_duration
-                    N = self.ramp_config.ramp_dipole_wfm_nrpoints
-                    T = float(self.table.item(
-                        row, self.table_map['columns']['T [ms]']).data(
-                            Qt.DisplayRole))
-                    value = round(T*N/D)
-                    item = self.table.item(row, column)
-                    item.setData(Qt.DisplayRole, str(value))
-                elif label == 'v [MeV/pt]':
-                    if row == 0:
-                        value = '-'
-                    else:
-                        T1 = float(self.table.item(
-                            row, self.table_map['columns']['T [ms]']).data(
-                                Qt.DisplayRole))
-                        T2 = float(self.table.item(
-                            row-1, self.table_map['columns']['T [ms]']).data(
-                                Qt.DisplayRole))
-                        dT = T1 - T2
-                        E1 = float(self.table.item(
-                            row, self.table_map['columns']['E [GeV]']).data(
-                                Qt.DisplayRole))
-                        E2 = float(self.table.item(
-                            row-1, self.table_map['columns']['E [GeV]']).data(
-                                Qt.DisplayRole))
-                        dE = E1 - E2
-                        value = dE*1000/dT
-                    item = self.table.item(row, column)
-                    item.setData(Qt.DisplayRole, str(value))
+            D = self.ramp_config.ramp_dipole_duration
+            N = self.ramp_config.ramp_dipole_wfm_nrpoints
+            T = float(self.table.item(
+                row, self.table_map['columns']['T [ms]']).data(
+                Qt.DisplayRole))
+            value = round(T*N/D)
+            item = self.table.item(row, self.table_map['columns']['Index'])
+            item.setData(Qt.DisplayRole, str(value))
         self._sortTable()
         for row in self.table_map['rows'].values():
             if row == 0:
@@ -708,12 +687,30 @@ class MultipolesRamp(QWidget):
             else:
                 idx1 = float(self.table.item(
                     row, self.table_map['columns']['Index']).data(
-                        Qt.DisplayRole))
+                    Qt.DisplayRole))
                 idx2 = float(self.table.item(
                     row-1, self.table_map['columns']['Index']).data(
-                        Qt.DisplayRole))
+                    Qt.DisplayRole))
                 value = int(idx1 - idx2)
             item = self.table.item(row, self.table_map['columns']['ΔIndex'])
+            item.setData(Qt.DisplayRole, str(value))
+        for row in self.table_map['rows'].values():
+            if row == 0:
+                value = '-'
+            else:
+                dIdx = float(self.table.item(
+                    row, self.table_map['columns']['ΔIndex']).data(
+                    Qt.DisplayRole))
+                E1 = float(self.table.item(
+                    row, self.table_map['columns']['E [GeV]']).data(
+                    Qt.DisplayRole))
+                E2 = float(self.table.item(
+                    row-1, self.table_map['columns']['E [GeV]']).data(
+                    Qt.DisplayRole))
+                dE = E1 - E2
+                value = dE*1000/dIdx
+            item = self.table.item(row,
+                                   self.table_map['columns']['v [MeV/pt]'])
             item.setData(Qt.DisplayRole, str(value))
         self.table.cellChanged.connect(self._handleCellChanged)
 
@@ -725,6 +722,12 @@ class MultipolesRamp(QWidget):
         self.table.cellChanged.disconnect(self._handleCellChanged)
         self._setupTable()
         self.updateTable()
+        self.updateGraph()
+
+    @pyqtSlot()
+    def handleNormConfigsChanges(self):
+        """Reload normalized configs on change and update graph."""
+        self.ramp_config.configsrv_load_normalized_configs()
         self.updateGraph()
 
 

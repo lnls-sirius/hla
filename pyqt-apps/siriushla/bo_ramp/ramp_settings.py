@@ -8,7 +8,7 @@ from siriushla.bo_ramp.auxiliar_classes import MessageBox as _MessageBox
 
 
 class RampSettings(QGroupBox):
-    """Widget to choose and to control a BoosterRamp configuration status."""
+    """Widget to choose and to control a BoosterRamp configuration."""
 
     configSignal = pyqtSignal(str)
     loadSignal = pyqtSignal(ramp.BoosterRamp)
