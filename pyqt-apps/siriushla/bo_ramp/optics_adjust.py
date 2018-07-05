@@ -9,7 +9,8 @@ from siriuspy.ramp import ramp
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriuspy.optics.opticscorr import BOTuneCorr, BOChromCorr
 from pydm.widgets import PyDMLineEdit
-from auxiliar_classes import EditNormalizedConfig
+from auxiliar_classes import EditNormalizedConfig as _EditNormalizedConfig, \
+                             OpticsAdjustSettings as _OpticsAdjustSettings
 
 
 class OpticsAdjust(QGroupBox):
@@ -19,7 +20,8 @@ class OpticsAdjust(QGroupBox):
 
     def __init__(self, parent=None, prefix=''):
         """Initialize object."""
-        super().__init__('Optics Configuration Adjustment', parent)
+        super().__init__('Normalized Configurations Optics Adjustments',
+                         parent)
         self.prefix = _PVName(prefix)
         self.norm_config = None
         self.table_map = dict()
@@ -61,6 +63,7 @@ class OpticsAdjust(QGroupBox):
         self.bt_edit = QPushButton('Edit', self)
         self.bt_load = QPushButton('Load', self)
         self.bt_save = QPushButton('Save', self)
+        self.bt_settings = QPushButton('Settings', self)
 
         self.sb_config.setMinimum(1)
         self.sb_config.editingFinished.connect(self._handleConfigIndexChanged)
@@ -68,12 +71,14 @@ class OpticsAdjust(QGroupBox):
         self.bt_edit.clicked.connect(self._showEditPopup)
         self.bt_load.clicked.connect(self._load)
         self.bt_save.clicked.connect(self._save)
+        self.bt_settings.clicked.connect(self._showSettingsPopup)
 
         self.settings.addWidget(self.sb_config, 0, 0)
         self.settings.addWidget(self.l_configname, 0, 1)
         self.settings.addWidget(self.bt_edit, 1, 0, 1, 2)
         self.settings.addWidget(self.bt_load, 2, 0, 1, 2)
         self.settings.addWidget(self.bt_save, 3, 0, 1, 2)
+        self.settings.addWidget(self.bt_settings, 4, 0, 1, 2)
 
     def _setupTuneVariation(self):
         label_tune = QLabel('<h4>Tune Variation</h4>', self)
@@ -119,7 +124,7 @@ class OpticsAdjust(QGroupBox):
             QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
 
         self.tune_variation.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 0, 2)
+            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 0, 2)
         self.tune_variation.addWidget(label_tune, 1, 0, 1, 5)
         self.tune_variation.addItem(
             QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 2, 2)
@@ -130,7 +135,7 @@ class OpticsAdjust(QGroupBox):
         self.tune_variation.addWidget(label_deltaTuneY, 3, 3)
         self.tune_variation.addWidget(self.sb_deltaTuneY, 3, 4)
         self.tune_variation.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 4, 2)
+            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 4, 2)
         self.tune_variation.addWidget(label_KL, 5, 0, 1, 5)
         self.tune_variation.addWidget(label_deltaKLQF, 6, 0)
         self.tune_variation.addWidget(self.l_deltaKLQF, 6, 1)
@@ -138,9 +143,11 @@ class OpticsAdjust(QGroupBox):
             QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 6, 2)
         self.tune_variation.addWidget(label_deltaKLQD, 6, 3)
         self.tune_variation.addWidget(self.l_deltaKLQD, 6, 4)
-        self.tune_variation.addLayout(hlay_bt_apply, 7, 0, 1, 5)
         self.tune_variation.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 8, 2)
+            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 7, 2)
+        self.tune_variation.addLayout(hlay_bt_apply, 8, 0, 1, 5)
+        self.tune_variation.addItem(
+            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 9, 2)
 
     def _setupChromVariation(self):
         label_chrom = QLabel('<h4>Chromaticity Variation</h4>', self)
@@ -186,7 +193,7 @@ class OpticsAdjust(QGroupBox):
             QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
 
         self.chrom_variation.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 0, 2)
+            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 0, 2)
         self.chrom_variation.addWidget(label_chrom, 1, 0, 1, 5)
         self.chrom_variation.addItem(
             QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 2, 2)
@@ -197,7 +204,7 @@ class OpticsAdjust(QGroupBox):
         self.chrom_variation.addWidget(label_deltaChromY, 3, 3)
         self.chrom_variation.addWidget(self.sb_deltaChromY, 3, 4)
         self.chrom_variation.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 4, 2)
+            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 4, 2)
         self.chrom_variation.addWidget(label_SL, 5, 0, 1, 5)
         self.chrom_variation.addWidget(label_deltaSLSF, 6, 0)
         self.chrom_variation.addWidget(self.l_deltaSLSF, 6, 1)
@@ -205,9 +212,11 @@ class OpticsAdjust(QGroupBox):
             QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 6, 2)
         self.chrom_variation.addWidget(label_deltaSLSD, 6, 3)
         self.chrom_variation.addWidget(self.l_deltaSLSD, 6, 4)
-        self.chrom_variation.addLayout(hlay_bt_apply, 7, 0, 1, 5)
         self.chrom_variation.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 8, 2)
+            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 7, 2)
+        self.chrom_variation.addLayout(hlay_bt_apply, 8, 0, 1, 5)
+        self.chrom_variation.addItem(
+            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 9, 2)
 
     def _setupOrbitCorrection(self):
         label = QLabel('<h4>Orbit Correction</h4>', self)
@@ -287,15 +296,29 @@ class OpticsAdjust(QGroupBox):
 
     def _showEditPopup(self):
         if self.norm_config is not None:
-            self.editPopup = EditNormalizedConfig(self, self.norm_config)
-            self.editPopup.editConfig.connect(self._handleEdit)
-            self.editPopup.show()
+            self._editPopup = _EditNormalizedConfig(self, self.norm_config)
+            self._editPopup.editConfig.connect(self._handleEdit)
+            self._editPopup.open()
 
     @pyqtSlot(dict)
     def _handleEdit(self, nconfig):
         for maname, value in nconfig.items():
             self.norm_config[maname] = value
         self.verifySync()
+
+    def _showSettingsPopup(self):
+        if self.norm_config is not None:
+            self._settingsPopup = _OpticsAdjustSettings(
+                self, self._tunecorr.name, self._chromcorr.name)
+            self._settingsPopup.updateSettings.connect(
+                self._handleUpdateSettings)
+            self._settingsPopup.open()
+
+    @pyqtSlot(list)
+    def _handleUpdateSettings(self, settings):
+        self._tunecorr = BOTuneCorr(settings[0])
+        self._chromcorr = BOChromCorr(settings[1])
+        # TODO: handle orbir correction settings
 
     def _calculate_deltaKL(self):
         if self.norm_config is None:
