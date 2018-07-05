@@ -1,13 +1,14 @@
 """Booster Ramp Control HLA: Auxiliar Classes Module."""
 
 from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import QLabel, QWidget, QScrollArea, \
+from PyQt5.QtWidgets import QLabel, QWidget, QScrollArea, QAbstractItemView, \
                             QVBoxLayout, QGridLayout, QLineEdit, \
-                            QPushButton, QTableWidgetItem, \
+                            QPushButton, QTableWidget, QTableWidgetItem, \
                             QRadioButton, QFormLayout, QDoubleSpinBox, \
                             QComboBox, QSpinBox, QStyledItemDelegate, \
                             QSpacerItem, QSizePolicy as QSzPlcy
 from siriushla.widgets.windows import SiriusDialog
+from siriuspy.servconf.conf_service import ConfigService as _ConfigService
 from siriuspy.ramp import ramp
 
 
@@ -271,6 +272,186 @@ class EditNormalizedConfig(SiriusDialog):
             w = self.data.findChild(QDoubleSpinBox, name=ma)
             nconfig[ma] = w.value()
         self.editConfig.emit(nconfig)
+        self.close()
+
+
+class OpticsAdjustSettings(SiriusDialog):
+    """Auxiliar window to optics adjust settings."""
+
+    updateSettings = pyqtSignal(list)
+
+    def __init__(self, parent, tuneconfig_currname, chromconfig_currname):
+        """Initialize object."""
+        super().__init__(parent)
+        self.setWindowTitle('Optics Adjust Settings')
+        self.tuneconfig_currname = tuneconfig_currname
+        self.chromconfig_currname = chromconfig_currname
+        self.cs = _ConfigService()
+        self._setupUi()
+
+    def _setupUi(self):
+        self.setFixedWidth(708)
+        lay = QVBoxLayout()
+
+        self._setupTuneSettings()
+        self._setupChromSettings()
+        # TODO: insert orbit correction settings
+        self.bt_apply = QPushButton('Apply Settings', self)
+        self.bt_apply.clicked.connect(self._emitSettings)
+
+        lay.addItem(QSpacerItem(20, 60, QSzPlcy.Fixed, QSzPlcy.Fixed))
+        lay.addLayout(self.lay_tune_settings)
+        lay.addItem(QSpacerItem(20, 60, QSzPlcy.Fixed, QSzPlcy.Fixed))
+        lay.addLayout(self.lay_chrom_settings)
+        lay.addItem(QSpacerItem(20, 60, QSzPlcy.Fixed, QSzPlcy.Fixed))
+        lay.addWidget(self.bt_apply)
+
+        self.setLayout(lay)
+
+    def _setupTuneSettings(self):
+        lay = QVBoxLayout()
+
+        l_tuneconfig = QLabel('<h3>Tune Variation Config</h3>', self)
+        l_tuneconfig.setAlignment(Qt.AlignCenter)
+        self.cb_tuneconfig = QComboBox(self)
+        self.cb_tuneconfig.currentTextChanged.connect(self._showTuneConfigData)
+
+        label_tunemat = QLabel('<h4>Matrix</h4>', self)
+        label_tunemat.setAlignment(Qt.AlignCenter)
+        self.table_tunemat = QTableWidget(self)
+        self.table_tunemat.setFixedHeight(135)
+        self.table_tunemat.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.table_tunemat.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.table_tunemat.setRowCount(2)
+        self.table_tunemat.setColumnCount(2)
+        self.table_tunemat.setVerticalHeaderLabels(['  X', '  Y'])
+        self.table_tunemat.setHorizontalHeaderLabels(['QF', 'QD'])
+        self.table_tunemat.horizontalHeader().setDefaultSectionSize(320)
+        self.table_tunemat.verticalHeader().setDefaultSectionSize(48)
+
+        label_nomKL = QLabel('<h4>Nominal KL</h4>')
+        label_nomKL.setAlignment(Qt.AlignCenter)
+        self.table_nomKL = QTableWidget(self)
+        self.table_nomKL.setFixedHeight(85)
+        self.table_nomKL.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.table_nomKL.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.table_nomKL.setRowCount(1)
+        self.table_nomKL.setColumnCount(2)
+        self.table_nomKL.setVerticalHeaderLabels(['KL'])
+        self.table_nomKL.setHorizontalHeaderLabels(['QF', 'QD'])
+        self.table_nomKL.horizontalHeader().setDefaultSectionSize(320)
+        self.table_nomKL.verticalHeader().setDefaultSectionSize(48)
+
+        querry = self.cs.find_configs(config_type='bo_tunecorr_params')
+        for c in querry['result']:
+            self.cb_tuneconfig.addItem(c['name'])
+        self.cb_tuneconfig.setCurrentText(self.tuneconfig_currname)
+        self._showTuneConfigData(self.tuneconfig_currname)
+
+        lay.addWidget(l_tuneconfig)
+        lay.addWidget(self.cb_tuneconfig)
+        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Fixed))
+        lay.addWidget(label_tunemat)
+        lay.addWidget(self.table_tunemat)
+        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Fixed))
+        lay.addWidget(label_nomKL)
+        lay.addWidget(self.table_nomKL)
+        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Fixed))
+
+        self.lay_tune_settings = lay
+
+    def _setupChromSettings(self):
+        lay = QVBoxLayout()
+
+        l_chromconfig = QLabel('<h3>Chromaticity Variation Config</h3>', self)
+        l_chromconfig.setAlignment(Qt.AlignCenter)
+        self.cb_chromconfig = QComboBox(self)
+        self.cb_chromconfig.currentTextChanged.connect(
+            self._showChromConfigData)
+
+        l_chrommat = QLabel('<h4>Matrix</h4>', self)
+        l_chrommat.setAlignment(Qt.AlignCenter)
+        self.table_chrommat = QTableWidget(self)
+        self.table_chrommat.setFixedHeight(135)
+        self.table_chrommat.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.table_chrommat.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.table_chrommat.setRowCount(2)
+        self.table_chrommat.setColumnCount(2)
+        self.table_chrommat.setVerticalHeaderLabels(['  X', '  Y'])
+        self.table_chrommat.setHorizontalHeaderLabels(['SF', 'SD'])
+        self.table_chrommat.horizontalHeader().setDefaultSectionSize(320)
+        self.table_chrommat.verticalHeader().setDefaultSectionSize(48)
+
+        l_nomSL = QLabel('<h4>Nominal SL</h4>')
+        l_nomSL.setAlignment(Qt.AlignCenter)
+        self.table_nomSL = QTableWidget(self)
+        self.table_nomSL.setFixedHeight(85)
+        self.table_nomSL.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.table_nomSL.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.table_nomSL.setRowCount(1)
+        self.table_nomSL.setColumnCount(2)
+        self.table_nomSL.setVerticalHeaderLabels(['SL'])
+        self.table_nomSL.setHorizontalHeaderLabels(['SF', 'SD'])
+        self.table_nomSL.horizontalHeader().setDefaultSectionSize(320)
+        self.table_nomSL.verticalHeader().setDefaultSectionSize(48)
+
+        l_nomchrom = QLabel('<h4>Nominal Chrom</h4>')
+        l_nomchrom.setAlignment(Qt.AlignCenter)
+        self.label_nomchrom = QLabel()
+        self.label_nomchrom.setMinimumHeight(48)
+        self.label_nomchrom.setAlignment(Qt.AlignCenter)
+
+        querry = self.cs.find_configs(config_type='bo_chromcorr_params')
+        for c in querry['result']:
+            self.cb_chromconfig.addItem(c['name'])
+        self.cb_chromconfig.setCurrentText(self.chromconfig_currname)
+        self._showChromConfigData(self.chromconfig_currname)
+
+        lay.addWidget(l_chromconfig)
+        lay.addWidget(self.cb_chromconfig)
+        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Fixed))
+        lay.addWidget(l_chrommat)
+        lay.addWidget(self.table_chrommat)
+        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Fixed))
+        lay.addWidget(l_nomSL)
+        lay.addWidget(self.table_nomSL)
+        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Fixed))
+        lay.addWidget(l_nomchrom)
+        lay.addWidget(self.label_nomchrom)
+        self.lay_chrom_settings = lay
+
+    @pyqtSlot(str)
+    def _showTuneConfigData(self, tuneconfig_currname):
+        querry = self.cs.get_config(config_type='bo_tunecorr_params',
+                                    name=tuneconfig_currname)
+        mat = querry['result']['value']['matrix']
+        self.table_tunemat.setItem(0, 0, QTableWidgetItem(str(mat[0][0])))
+        self.table_tunemat.setItem(0, 1, QTableWidgetItem(str(mat[0][1])))
+        self.table_tunemat.setItem(1, 0, QTableWidgetItem(str(mat[1][0])))
+        self.table_tunemat.setItem(1, 1, QTableWidgetItem(str(mat[1][1])))
+        nomKL = querry['result']['value']['nominal KLs']
+        self.table_nomKL.setItem(0, 0, QTableWidgetItem(str(nomKL[0])))
+        self.table_nomKL.setItem(0, 1, QTableWidgetItem(str(nomKL[1])))
+
+    @pyqtSlot(str)
+    def _showChromConfigData(self, chromconfig_currname):
+        querry = self.cs.get_config(config_type='bo_chromcorr_params',
+                                    name=chromconfig_currname)
+        mat = querry['result']['value']['matrix']
+        self.table_chrommat.setItem(0, 0, QTableWidgetItem(str(mat[0][0])))
+        self.table_chrommat.setItem(0, 1, QTableWidgetItem(str(mat[0][1])))
+        self.table_chrommat.setItem(1, 0, QTableWidgetItem(str(mat[1][0])))
+        self.table_chrommat.setItem(1, 1, QTableWidgetItem(str(mat[1][1])))
+        nomSL = querry['result']['value']['nominal SLs']
+        self.table_nomSL.setItem(0, 0, QTableWidgetItem(str(nomSL[0])))
+        self.table_nomSL.setItem(0, 1, QTableWidgetItem(str(nomSL[1])))
+        self.label_nomchrom.setText(
+            str(querry['result']['value']['nominal chrom']))
+
+    def _emitSettings(self):
+        tuneconfig_name = self.cb_tuneconfig.currentText()
+        chromconfig_name = self.cb_chromconfig.currentText()
+        self.updateSettings.emit([tuneconfig_name, chromconfig_name])
         self.close()
 
 
