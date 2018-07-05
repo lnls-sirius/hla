@@ -1,13 +1,15 @@
 """Booster Ramp Control HLA: Ramp Settings Module."""
 
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QGroupBox, QVBoxLayout, QLineEdit, QPushButton
+from PyQt5.QtCore import Qt, pyqtSignal
+from PyQt5.QtWidgets import QGroupBox, QVBoxLayout, QSpacerItem, \
+                            QPushButton, QLabel, QLineEdit, \
+                            QSizePolicy as QSzPlcy
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.ramp import ramp
 from siriushla.bo_ramp.auxiliar_classes import MessageBox as _MessageBox
 
 
-class RampSettings(QGroupBox):
+class RampConfigSettings(QGroupBox):
     """Widget to choose and to control a BoosterRamp configuration."""
 
     configSignal = pyqtSignal(str)
@@ -15,7 +17,7 @@ class RampSettings(QGroupBox):
 
     def __init__(self, parent=None, prefix='', ramp_config=None):
         """Initialize object."""
-        super().__init__('Ramp Settings', parent)
+        super().__init__('Ramp Configuration', parent)
         self.prefix = _PVName(prefix)
         self.ramp_config = ramp_config
         self._setupUi()
@@ -26,6 +28,9 @@ class RampSettings(QGroupBox):
             le_text = self.ramp_config.name
         else:
             le_text = ''
+        label_name = QLabel('Name', self)
+        label_name.setAlignment(Qt.AlignCenter)
+        label_name.setFixedHeight(40)
         self.le_config = QLineEdit(le_text, self)
         self.bt_load = QPushButton('Load', self)
         self.bt_save = QPushButton('Save', self)
@@ -33,9 +38,14 @@ class RampSettings(QGroupBox):
         self.bt_load.clicked.connect(self._load)
         self.bt_save.clicked.connect(self._save)
         lay = QVBoxLayout(self)
+        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
+        lay.addWidget(label_name)
         lay.addWidget(self.le_config)
+        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
         lay.addWidget(self.bt_load)
+        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
         lay.addWidget(self.bt_save)
+        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
 
     def _le_config_textChanged(self):
         name = self.le_config.text()

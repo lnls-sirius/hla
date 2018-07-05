@@ -11,7 +11,7 @@ from siriuspy.ramp import ramp
 from siriuspy.ramp.conn import ConnMagnets as _ConnMagnets, \
                                ConnTiming as _ConnTiming
 from siriushla.bo_ramp.general_status import GeneralStatus
-from siriushla.bo_ramp.ramp_settings import RampSettings
+from siriushla.bo_ramp.ramp_settings import RampConfigSettings
 from siriushla.bo_ramp.ramp_commands import RampCommands
 from siriushla.bo_ramp.ramp_params import RampParameters
 from siriushla.bo_ramp.optics_adjust import OpticsAdjust
@@ -46,7 +46,8 @@ class RampMain(SiriusMainWindow):
         self.general_status = GeneralStatus(self, self.prefix)
         self.my_layout.addWidget(self.general_status, 1, 0)
 
-        self.ramp_settings = RampSettings(self, self.prefix, self.ramp_config)
+        self.ramp_settings = RampConfigSettings(self, self.prefix,
+                                                self.ramp_config)
         self.my_layout.addWidget(self.ramp_settings, 2, 0)
 
         self.commands = RampCommands(self, self.prefix)
