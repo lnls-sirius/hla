@@ -1,13 +1,14 @@
 """Booster Ramp Control HLA: Ramp Parameters Module."""
 
-from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot, QSize
+from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot
 from PyQt5.QtGui import QBrush, QColor
 from PyQt5.QtWidgets import QGroupBox, QLabel, QWidget, QSpacerItem, \
                             QVBoxLayout, QHBoxLayout, QGridLayout, \
                             QPushButton, QTableWidget, QTableWidgetItem, \
-                            QComboBox, QSpinBox, QSizePolicy as QSzPlcy
+                            QSpinBox, QSizePolicy as QSzPlcy, QAbstractItemView
 from matplotlib.backends.backend_qt5agg import (
-    FigureCanvasQTAgg as FigureCanvas)
+    FigureCanvasQTAgg as FigureCanvas,
+    NavigationToolbar2QT as NavigationToolbar)
 from matplotlib.figure import Figure
 import numpy as np
 from siriuspy.namesys import SiriusPVName as _PVName
@@ -17,7 +18,8 @@ from siriushla.bo_ramp.auxiliar_classes import MessageBox as _MessageBox, \
     InsertNormalizedConfig as _InsertNormalizedConfig, \
     DeleteNormalizedConfig as _DeleteNormalizedConfig, \
     SpinBoxDelegate as _SpinBoxDelegate, \
-    CustomTableWidgetItem as _CustomTableWidgetItem
+    CustomTableWidgetItem as _CustomTableWidgetItem, \
+    ChooseMagnetsToPlot as _ChooseMagnetsToPlot
 
 
 class RampParameters(QGroupBox):
@@ -55,7 +57,7 @@ class DipoleRamp(QWidget):
 
     def _setupUi(self):
         vlay = QVBoxLayout(self)
-        self.graph = FigureCanvas(Figure())
+        self.graphview = QWidget()
         self.set_nrpoints = QHBoxLayout()
         self.table = QTableWidget(self)
 
@@ -71,18 +73,29 @@ class DipoleRamp(QWidget):
             QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
         self._setupWfmNrPoints()
         self._setupTable()
+        hlay_caution = QHBoxLayout()
+        self.label_caution = QLabel('', self)
+        self.label_caution.setFixedSize(794, 40)
+        self.pb_caution = QPushButton('?', self)
+        self.pb_caution.setFixedWidth(48)
+        self.pb_caution.setVisible(False)
+        self.pb_caution.setStyleSheet('background-color: red;')
+        self.pb_caution.clicked.connect(self._showAnomaliesPopup)
+        hlay_caution.addWidget(self.label_caution)
+        hlay_caution.addWidget(self.pb_caution)
 
         label = QLabel('<h4>Dipole Ramp</h4>', self)
         label.setAlignment(Qt.AlignCenter)
         label.setFixedHeight(48)
         vlay.addWidget(label)
-        vlay.addWidget(self.graph)
+        vlay.addWidget(self.graphview)
         vlay.addLayout(self.set_nrpoints)
         vlay.addWidget(self.table)
-        vlay.addSpacerItem(
-            QSpacerItem(40, 20, QSzPlcy.Minimum, QSzPlcy.Expanding))
+        vlay.addLayout(hlay_caution)
+        vlay.addItem(QSpacerItem(40, 20, QSzPlcy.Minimum, QSzPlcy.Expanding))
 
     def _setupGraph(self):
+        self.graph = FigureCanvas(Figure())
         self.graph.setFixedHeight(500)
         self.ax = self.graph.figure.subplots()
         self.ax.grid()
@@ -92,6 +105,13 @@ class DipoleRamp(QWidget):
         self.markers, = self.ax.plot([0], [0], '+r')
         self.m_inj, = self.ax.plot([0], [0], 'or')
         self.m_ej, = self.ax.plot([0], [0], 'or')
+
+        self.toolbar = NavigationToolbar(self.graph, self)
+
+        lay = QVBoxLayout()
+        lay.addWidget(self.graph)
+        lay.addWidget(self.toolbar)
+        self.graphview.setLayout(lay)
 
     def _setupWfmNrPoints(self):
         self.sb_nrpoints.setMinimum(1)
@@ -237,19 +257,42 @@ class DipoleRamp(QWidget):
                     energy = float(self.table.item(row, column).data(
                         Qt.DisplayRole))
                     self.ramp_config.rampdown_stop_energy = energy
+
+            # TODO: the new behavior of the BoosterRamp class lets the user
+            # change ramp parameters and only when _update_waveform_dipole is
+            # called the errors are detected. Is this a desirable behavior?
+            # I had to call _update_waveform_dipole here to force detecting
+            # errors before updating all the window, but this lets user change
+            # parameters anyway, even in errors.
+            self.ramp_config._update_waveform_dipole()
+
         except exceptions.RampInvalidDipoleWfmParms as e:
             err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
-            err_msg.exec_()
-        finally:
+            err_msg.open()
+        else:
             self.updateTable()
             self.updateGraph()
             self.updateDipoleRampSignal.emit()
+            if len(self.ramp_config.waveform_anomalies) > 0:
+                self.label_caution.setText('<h6>Caution: there are anomalies '
+                                           'in the waveforms.</h6>')
+                self.pb_caution.setVisible(True)
+            else:
+                self.label_caution.setText('')
+                self.pb_caution.setVisible(False)
 
     @pyqtSlot()
     def _handleChangeNrPoints(self):
         """Handle change waveform number of points."""
         self.ramp_config.ramp_dipole_wfm_nrpoints = self.sb_nrpoints.value()
         self.updateDipoleRampSignal.emit()
+
+    def _showAnomaliesPopup(self):
+        text = 'Caution to the following anomalies: \n'
+        for anom in self.ramp_config.waveform_anomalies:
+            text += anom + '\n'
+        anomaliesPopup = _MessageBox(self, 'Caution', text, 'Ok')
+        anomaliesPopup.open()
 
     def updateGraph(self):
         """Update and redraw graph when ramp_config is loaded."""
@@ -334,17 +377,21 @@ class DipoleRamp(QWidget):
                         value = '-'
                     else:
                         idx1 = float(self.table.item(
-                            row, self.table_map['columns']['Index']).data(
+                            row,
+                            self.table_map['columns']['Index']).data(
                             Qt.DisplayRole))
                         idx2 = float(self.table.item(
-                            row-1, self.table_map['columns']['Index']).data(
+                            row-1,
+                            self.table_map['columns']['Index']).data(
                             Qt.DisplayRole))
                         dIdx = idx1 - idx2
                         E1 = float(self.table.item(
-                            row, self.table_map['columns']['E [GeV]']).data(
+                            row,
+                            self.table_map['columns']['E [GeV]']).data(
                             Qt.DisplayRole))
                         E2 = float(self.table.item(
-                            row-1, self.table_map['columns']['E [GeV]']).data(
+                            row-1,
+                            self.table_map['columns']['E [GeV]']).data(
                             Qt.DisplayRole))
                         dE = E1 - E2
                         value = dE*1000/dIdx
@@ -359,6 +406,13 @@ class DipoleRamp(QWidget):
         self.updateTable()
         self.updateWfmNrPoints()
         self.updateGraph()
+        if len(self.ramp_config.waveform_anomalies) > 0:
+            self.label_caution.setText('<h6>Caution: there are anomalies '
+                                       'in the waveforms.</h6>')
+            self.pb_caution.setVisible(True)
+        else:
+            self.label_caution.setText('')
+            self.pb_caution.setVisible(False)
 
 
 class MultipolesRamp(QWidget):
@@ -373,41 +427,17 @@ class MultipolesRamp(QWidget):
         self.prefix = _PVName(prefix)
         self.ramp_config = ramp_config
         self._getNormalizedConfigs()
+        self._magnets_to_plot = []
         self._setupUi()
 
     def _setupUi(self):
         glay = QGridLayout(self)
-        self.graph = FigureCanvas(Figure())
-        self.choose_plot = QHBoxLayout()
+        self.graphview = QWidget()
         self.table = QTableWidget(self)
         self.bt_insert = QPushButton('Insert Normalized Configuration', self)
         self.bt_delete = QPushButton('Delete Normalized Configuration', self)
 
         self._setupGraph()
-        label_maname = QLabel('Plot magnet: ', self)
-        label_maname.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        self.cb_maname = QComboBox(self)
-        self.cb_maname.setStyleSheet(
-            """
-            QComboBox {
-                combobox-popup: 0;
-            }
-            QComboBox QAbstractItemView {
-                background-color: lightgray;
-            }""")
-        self.cb_maname.addItem('Quadrupoles')
-        self.cb_maname.addItem('Sextupoles')
-        for maname in ramp.BoosterNormalized().get_config_type_template():
-            if maname != 'BO-Fam:MA-B':
-                self.cb_maname.addItem(maname)
-        self.cb_maname.currentTextChanged.connect(self.updateGraph)
-        self.cb_maname.setMaximumWidth(250)
-        self.choose_plot.addSpacerItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
-        self.choose_plot.addWidget(label_maname)
-        self.choose_plot.addWidget(self.cb_maname)
-        self.choose_plot.addSpacerItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
         self._setupTable()
         self.bt_insert.clicked.connect(self._showInsertNormConfigPopup)
         self.bt_delete.clicked.connect(self._showDeleteNormConfigPopup)
@@ -416,22 +446,35 @@ class MultipolesRamp(QWidget):
         label.setAlignment(Qt.AlignCenter)
         label.setFixedHeight(48)
         glay.addWidget(label, 0, 0, 1, 2)
-        glay.addWidget(self.graph, 1, 0, 1, 2)
-        glay.addLayout(self.choose_plot, 2, 0, 1, 2)
-        glay.addWidget(self.table, 3, 0, 1, 2)
-        glay.addWidget(self.bt_insert, 4, 0)
-        glay.addWidget(self.bt_delete, 4, 1)
+        glay.addWidget(self.graphview, 1, 0, 1, 2)
+        glay.addWidget(self.table, 2, 0, 1, 2)
+        glay.addWidget(self.bt_insert, 3, 0)
+        glay.addWidget(self.bt_delete, 3, 1)
 
     def _setupGraph(self):
+        self.graph = FigureCanvas(Figure())
         self.graph.setFixedHeight(500)
         self.ax = self.graph.figure.subplots()
         self.ax.grid()
         self.ax.set_xlabel('t [ms]')
-        self.line1, = self.ax.plot([0], [0], '-b')
-        self.line2, = self.ax.plot([0], [0], '-g')
+        self.lines = dict()
+        for maname in ramp.BoosterNormalized().get_config_type_template():
+            if maname != 'BO-Fam:MA-B':
+                self.lines[maname], = self.ax.plot([0], [0], '-b')
         self.markers, = self.ax.plot([0], [0], '+r')
         self.m_inj, = self.ax.plot([0], [0], 'or')
         self.m_ej, = self.ax.plot([0], [0], 'or')
+
+        self.toolbar = NavigationToolbar(self.graph, self)
+
+        self.pb_maname = QPushButton('Choose magnets to plot... ', self)
+        self.pb_maname.clicked.connect(self._showChooseMagnetToPlot)
+
+        lay = QGridLayout()
+        lay.addWidget(self.graph, 0, 0, 1, 2)
+        lay.addWidget(self.toolbar, 1, 0)
+        lay.addWidget(self.pb_maname, 1, 1)
+        self.graphview.setLayout(lay)
 
     def _setupTable(self):
         self.table_map = {
@@ -464,9 +507,8 @@ class MultipolesRamp(QWidget):
             }
             """)
         self.table.setMinimumSize(
-            1050, (self.normalized_configs_count+1)*48+85)
-        self.table.verticalHeader().setFixedSize(
-            QSize(48, (self.normalized_configs_count+1)*48+85))
+            1064, min((self.normalized_configs_count+1)*48+37, 426))
+        self.table.verticalHeader().setFixedWidth(48)
         self.table.setRowCount(2+self.normalized_configs_count)
         self.table.setColumnCount(6)
         self.table.setColumnWidth(0, 250)
@@ -503,6 +545,8 @@ class MultipolesRamp(QWidget):
             self.table.setRowHeight(row, 48)
 
         self.table.setItemDelegate(_SpinBoxDelegate())
+        self.table.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        self.table.setVerticalScrollMode(QAbstractItemView.ScrollPerItem)
         self.table.cellChanged.connect(self._handleCellChanged)
 
     def _getNormalizedConfigs(self):
@@ -528,7 +572,7 @@ class MultipolesRamp(QWidget):
                 float(self.table.item(row, column).data(Qt.DisplayRole)))
         except exceptions.RampInvalidNormConfig as e:
             err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
-            err_msg.exec_()
+            err_msg.open()
         finally:
             self.updateTable()
             self.updateGraph()
@@ -539,7 +583,7 @@ class MultipolesRamp(QWidget):
             self._insertConfigPopup = _InsertNormalizedConfig(self)
             self._insertConfigPopup.insertConfig.connect(
                 self._handleInsertNormConfig)
-            self._insertConfigPopup.exec_()
+            self._insertConfigPopup.open()
 
     @pyqtSlot(list)
     def _handleInsertNormConfig(self, config):
@@ -551,7 +595,7 @@ class MultipolesRamp(QWidget):
                 self.ramp_config.configsrv_load_normalized_configs()
         except exceptions.RampInvalidNormConfig as e:
             err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
-            err_msg.exec_()
+            err_msg.open()
         self.handleLoadRampConfig(self.ramp_config)
         self.updateMultipoleRampSignal.emit()
 
@@ -561,7 +605,7 @@ class MultipolesRamp(QWidget):
                                                               self.table_map)
             self._deleteConfigPopup.deleteConfig.connect(
                 self._handleDeleteNormConfig)
-            self._deleteConfigPopup.exec_()
+            self._deleteConfigPopup.open()
 
     @pyqtSlot(str)
     def _handleDeleteNormConfig(self, config):
@@ -569,70 +613,88 @@ class MultipolesRamp(QWidget):
         self.handleLoadRampConfig(self.ramp_config)
         self.updateMultipoleRampSignal.emit()
 
+    def _showChooseMagnetToPlot(self):
+        manames = list(
+            ramp.BoosterNormalized().get_config_type_template().keys())
+        idx = manames.index('BO-Fam:MA-B')
+        del manames[idx]
+        self._chooseMagnetsPopup = _ChooseMagnetsToPlot(
+            self, manames, self._magnets_to_plot)
+        self._chooseMagnetsPopup.choosePlotSignal.connect(
+            self._handleChooseMagnetToPlot)
+        self._chooseMagnetsPopup.open()
+
+    @pyqtSlot(list)
+    def _handleChooseMagnetToPlot(self, maname_list):
+        self._magnets_to_plot = maname_list
+        self.updateGraph()
+
     def updateGraph(self):
         """Update and redraw graph."""
-        if self.ramp_config is not None:
-            maname = [self.cb_maname.currentText()]
+        if self.ramp_config is not None and len(self._magnets_to_plot) > 0:
             xdata = self.ramp_config.waveform_get_times()
-            if maname[0] == 'Quadrupoles':
-                maname = ['BO-Fam:MA-QF', 'BO-Fam:MA-QD']
-                self.line2.set_linewidth(2)
-                y1 = self.ramp_config.waveform_get_strengths(maname[0])
-                y2 = self.ramp_config.waveform_get_strengths(maname[1])
-                self.line1.set_xdata(xdata)
-                self.line2.set_xdata(xdata)
-                self.line1.set_ydata(y1)
-                self.line2.set_ydata(y2)
-                ydata = np.array([y1, y2])
-            elif maname[0] == 'Sextupoles':
-                maname = ['BO-Fam:MA-SF', 'BO-Fam:MA-SD']
-                self.line2.set_linewidth(2)
-                y1 = self.ramp_config.waveform_get_strengths(maname[0])
-                y2 = self.ramp_config.waveform_get_strengths(maname[1])
-                self.line1.set_xdata(xdata)
-                self.line2.set_xdata(xdata)
-                self.line1.set_ydata(y1)
-                self.line2.set_ydata(y2)
-                ydata = np.array([y1, y2])
-            else:
-                self.line2.set_linewidth(0)
-                ydata = self.ramp_config.waveform_get(maname[0])
-                self.line1.set_xdata(xdata)
-                self.line1.set_ydata(ydata)
-                ydata = np.array(ydata)
+            for maname in self._magnets_to_plot:
+                ydata = self.ramp_config.waveform_get_strengths(maname)
+                self.lines[maname].set_xdata(xdata)
+                self.lines[maname].set_ydata(ydata)
+
+            ydata = list()
+            template = ramp.BoosterNormalized().get_config_type_template()
+            for maname in template:
+                if maname in self._magnets_to_plot:
+                    self.lines[maname].set_linewidth(1.5)
+                    ydata.append(self.lines[maname].get_ydata())
+                elif maname != 'BO-Fam:MA-B':
+                    self.lines[maname].set_linewidth(0)
+
+            ydata = np.array(ydata)
             self.ax.set_xlim(min(xdata)-0.2, max(xdata)+0.2)
             self.ax.set_ylim(ydata.min()-0.2, ydata.max()+0.2)
 
-            if 'MA-Q' in maname[0]:
-                self.ax.set_ylabel('KL [1/m]')
-            elif 'MA-S' in maname[0]:
-                self.ax.set_ylabel('SL [1/m$^2$]')
+            ylabel = None
+            for maname in self._magnets_to_plot:
+                if 'MA-Q' not in maname:
+                    break
             else:
-                self.ax.set_ylabel('Kick [rad]')
+                ylabel = 'KL [1/m]'
+            for maname in self._magnets_to_plot:
+                if 'MA-S' not in maname:
+                    break
+            else:
+                ylabel = 'SL [1/m$^2$]'
+            for maname in self._magnets_to_plot:
+                if 'MA-C' not in maname:
+                    break
+            else:
+                ylabel = 'Kick [rad]'
 
-            # markers_time = self.ramp_config.ramp_dipole_times
-            markers_time = self.ramp_config.ramp_dipole_times
-            self.markers.set_xdata(markers_time)
-            if len(maname) > 1:
-                self.markers.set_xdata([markers_time, markers_time])
+            if ylabel:
+                self.ax.set_ylabel(ylabel)
+            else:
+                self.ax.set_ylabel('Int. Strengths')
+
             inj_marker_time = self.ramp_config.injection_time
             self.m_inj.set_xdata(inj_marker_time)
             ej_marker_time = self.ramp_config.ejection_time
             self.m_ej.set_xdata(ej_marker_time)
 
+            markers_base_time = self.ramp_config.ramp_dipole_times
+            markers_time = list()
             markers_value = list()
             inj_marker_value = list()
             ej_marker_value = list()
-            for name in maname:
+            for maname in self._magnets_to_plot:
+                markers_time.append(markers_base_time)
                 markers_value.append(
                     self.ramp_config.waveform_interp_strengths(
-                        name, markers_time))
+                        maname, markers_base_time))
                 inj_marker_value.append(
                     self.ramp_config.waveform_interp_strengths(
-                        name, inj_marker_time))
+                        maname, inj_marker_time))
                 ej_marker_value.append(
                     self.ramp_config.waveform_interp_strengths(
-                        name, ej_marker_time))
+                        maname, ej_marker_time))
+            self.markers.set_xdata(markers_time)
             self.markers.set_ydata(markers_value)
             self.m_inj.set_ydata(inj_marker_value)
             self.m_ej.set_ydata(ej_marker_value)
@@ -743,7 +805,7 @@ class RFRamp(QWidget):
 
     def _setupUi(self):
         vlay = QVBoxLayout(self)
-        self.graph = FigureCanvas(Figure())
+        self.graphview = QWidget()
         self.set_nrpoints = QHBoxLayout()
         self.table = QTableWidget(self)
 
@@ -764,19 +826,27 @@ class RFRamp(QWidget):
         label.setFixedHeight(48)
         label.setAlignment(Qt.AlignCenter)
         vlay.addWidget(label)
-        vlay.addWidget(self.graph)
+        vlay.addWidget(self.graphview)
         vlay.addLayout(self.set_nrpoints)
         vlay.addWidget(self.table)
         vlay.addSpacerItem(
             QSpacerItem(40, 20, QSzPlcy.Minimum, QSzPlcy.Expanding))
 
     def _setupGraph(self):
+        self.graph = FigureCanvas(Figure())
         self.graph.setFixedHeight(500)
         self.ax = self.graph.figure.subplots()
         self.ax.grid()
         self.ax.set_xlabel('t [ms]')
         self.line1, = self.ax.plot([0], [0], '-b')
         self.markers, = self.ax.plot([0], [0], '+r')
+
+        self.toolbar = NavigationToolbar(self.graph, self)
+
+        lay = QVBoxLayout()
+        lay.addWidget(self.graph)
+        lay.addWidget(self.toolbar)
+        self.graphview.setLayout(lay)
 
     def _setupWfmNrPoints(self):
         pass

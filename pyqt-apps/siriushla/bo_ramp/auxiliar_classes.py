@@ -2,11 +2,11 @@
 
 from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QLabel, QWidget, QScrollArea, QAbstractItemView, \
-                            QVBoxLayout, QGridLayout, QLineEdit, \
+                            QHBoxLayout, QVBoxLayout, QGridLayout, QLineEdit, \
                             QPushButton, QTableWidget, QTableWidgetItem, \
                             QRadioButton, QFormLayout, QDoubleSpinBox, \
                             QComboBox, QSpinBox, QStyledItemDelegate, \
-                            QSpacerItem, QSizePolicy as QSzPlcy
+                            QSpacerItem, QSizePolicy as QSzPlcy, QCheckBox
 from siriushla.widgets.windows import SiriusDialog
 from siriuspy.servconf.conf_service import ConfigService as _ConfigService
 from siriuspy.ramp import ramp
@@ -452,6 +452,103 @@ class OpticsAdjustSettings(SiriusDialog):
         tuneconfig_name = self.cb_tuneconfig.currentText()
         chromconfig_name = self.cb_chromconfig.currentText()
         self.updateSettings.emit([tuneconfig_name, chromconfig_name])
+        self.close()
+
+
+class ChooseMagnetsToPlot(SiriusDialog):
+    """Auxiliar window to select which magnets will to be shown in plot."""
+
+    choosePlotSignal = pyqtSignal(list)
+
+    def __init__(self, parent, manames, current_plots):
+        """Initialize object."""
+        super().__init__(parent)
+        self.setWindowTitle('Choose Magnets To Plot')
+        self.manames = manames
+        self.current_plots = current_plots
+        self._setupUi()
+
+    def _setupUi(self):
+        self.quads = QWidget(self)
+        vlay_quad = QVBoxLayout()
+        vlay_quad.setAlignment(Qt.AlignTop)
+        self.quads.setLayout(vlay_quad)
+
+        self.sexts = QWidget(self)
+        vlay_sext = QVBoxLayout()
+        vlay_sext.setAlignment(Qt.AlignTop)
+        self.sexts.setLayout(vlay_sext)
+
+        self.chs = QWidget(self)
+        vlay_ch = QVBoxLayout()
+        vlay_ch.setAlignment(Qt.AlignTop)
+        self.chs.setLayout(vlay_ch)
+
+        self.cvs = QWidget(self)
+        vlay_cv = QVBoxLayout()
+        vlay_cv.setAlignment(Qt.AlignTop)
+        self.cvs.setLayout(vlay_cv)
+
+        self.all_quad_sel = QCheckBox('All quadrupoles', self.quads)
+        self.all_quad_sel.clicked.connect(self._handleSelectGroups)
+        vlay_quad.addWidget(self.all_quad_sel)
+        self.all_sext_sel = QCheckBox('All sextupoles', self.sexts)
+        self.all_sext_sel.clicked.connect(self._handleSelectGroups)
+        vlay_sext.addWidget(self.all_sext_sel)
+        self.all_ch_sel = QCheckBox('All CHs', self.chs)
+        self.all_ch_sel.clicked.connect(self._handleSelectGroups)
+        vlay_ch.addWidget(self.all_ch_sel)
+        self.all_cv_sel = QCheckBox('All CVs', self.cvs)
+        self.all_cv_sel.clicked.connect(self._handleSelectGroups)
+        vlay_cv.addWidget(self.all_cv_sel)
+
+        for maname in self.manames:
+            if 'Q' in maname:
+                cb_maname = QCheckBox(maname, self.quads)
+                vlay_quad.addWidget(cb_maname)
+            elif 'S' in maname:
+                cb_maname = QCheckBox(maname, self.sexts)
+                vlay_sext.addWidget(cb_maname)
+            elif 'CH' in maname:
+                cb_maname = QCheckBox(maname, self.chs)
+                vlay_ch.addWidget(cb_maname)
+            elif 'CV' in maname:
+                cb_maname = QCheckBox(maname, self.cvs)
+                vlay_cv.addWidget(cb_maname)
+            if maname in self.current_plots:
+                cb_maname.setChecked(True)
+            cb_maname.setObjectName(maname)
+
+        self.pb_choose = QPushButton('Choose', self)
+        self.pb_choose.clicked.connect(self._emitChoosePlot)
+
+        glay = QGridLayout()
+        glay.addWidget(self.quads, 0, 0)
+        glay.addWidget(self.sexts, 0, 1)
+        glay.addWidget(self.chs, 0, 2)
+        glay.addWidget(self.cvs, 0, 3)
+        glay.addWidget(self.pb_choose, 1, 1, 1, 2)
+        self.setLayout(glay)
+
+    def _handleSelectGroups(self):
+        sender = self.sender()
+        sender_parent = sender.parent()
+        for child in sender_parent.children():
+            if isinstance(child, QCheckBox):
+                child.setChecked(sender.isChecked())
+
+    def _emitChoosePlot(self):
+        maname_list = list()
+        children = list()
+        for w in [self.quads, self.sexts, self.chs, self.cvs]:
+            for child in w.children():
+                children.append(child)
+        for child in children:
+            if (isinstance(child, QCheckBox) and child.isChecked() and
+                    'BO' in child.objectName()):
+                maname_list.append(child.objectName())
+
+        self.choosePlotSignal.emit(maname_list)
         self.close()
 
 
