@@ -2,7 +2,7 @@
 
 from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QLabel, QWidget, QScrollArea, QAbstractItemView, \
-                            QHBoxLayout, QVBoxLayout, QGridLayout, QLineEdit, \
+                            QVBoxLayout, QGridLayout, QLineEdit, \
                             QPushButton, QTableWidget, QTableWidgetItem, \
                             QRadioButton, QFormLayout, QDoubleSpinBox, \
                             QComboBox, QSpinBox, QStyledItemDelegate, \
@@ -524,10 +524,10 @@ class ChooseMagnetsToPlot(SiriusDialog):
 
         glay = QGridLayout()
         glay.addWidget(self.quads, 0, 0)
-        glay.addWidget(self.sexts, 0, 1)
-        glay.addWidget(self.chs, 0, 2)
-        glay.addWidget(self.cvs, 0, 3)
-        glay.addWidget(self.pb_choose, 1, 1, 1, 2)
+        glay.addWidget(self.sexts, 1, 0)
+        glay.addWidget(self.chs, 0, 1, 2, 1)
+        glay.addWidget(self.cvs, 0, 2, 2, 1)
+        glay.addWidget(self.pb_choose, 2, 1)
         self.setLayout(glay)
 
     def _handleSelectGroups(self):

@@ -467,13 +467,17 @@ class MultipolesRamp(QWidget):
 
         self.toolbar = NavigationToolbar(self.graph, self)
 
+        hlay_pb = QHBoxLayout()
         self.pb_maname = QPushButton('Choose magnets to plot... ', self)
         self.pb_maname.clicked.connect(self._showChooseMagnetToPlot)
+        hlay_pb.addItem(QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Fixed))
+        hlay_pb.addWidget(self.pb_maname)
+        hlay_pb.addItem(QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Fixed))
 
         lay = QGridLayout()
         lay.addWidget(self.graph, 0, 0, 1, 2)
         lay.addWidget(self.toolbar, 1, 0)
-        lay.addWidget(self.pb_maname, 1, 1)
+        lay.addLayout(hlay_pb, 2, 0, 1, 2)
         self.graphview.setLayout(lay)
 
     def _setupTable(self):
@@ -631,7 +635,7 @@ class MultipolesRamp(QWidget):
 
     def updateGraph(self):
         """Update and redraw graph."""
-        if self.ramp_config is not None and len(self._magnets_to_plot) > 0:
+        if self.ramp_config is not None:
             xdata = self.ramp_config.waveform_get_times()
             for maname in self._magnets_to_plot:
                 ydata = self.ramp_config.waveform_get_strengths(maname)
@@ -647,9 +651,10 @@ class MultipolesRamp(QWidget):
                 elif maname != 'BO-Fam:MA-B':
                     self.lines[maname].set_linewidth(0)
 
-            ydata = np.array(ydata)
             self.ax.set_xlim(min(xdata)-0.2, max(xdata)+0.2)
-            self.ax.set_ylim(ydata.min()-0.2, ydata.max()+0.2)
+            ydata = np.array(ydata)
+            if len(ydata) > 0:
+                self.ax.set_ylim(ydata.min()-0.2, ydata.max()+0.2)
 
             ylabel = None
             for maname in self._magnets_to_plot:
