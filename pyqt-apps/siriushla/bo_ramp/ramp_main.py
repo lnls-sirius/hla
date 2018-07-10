@@ -93,7 +93,7 @@ class RampMain(SiriusMainWindow):
 
     @pyqtSlot(str)
     def _receiveNewConfigName(self, new_config_name):
-        self.ramp_config = ramp.BoosterRamp(new_config_name)
+        self.ramp_config = ramp.BoosterRamp(new_config_name, auto_update=True)
         if self.ramp_config.configsrv_exist():
             self.ramp_config.configsrv_load()
             self.ramp_config.configsrv_load_normalized_configs()

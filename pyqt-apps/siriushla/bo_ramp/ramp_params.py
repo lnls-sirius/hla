@@ -258,19 +258,10 @@ class DipoleRamp(QWidget):
                         Qt.DisplayRole))
                     self.ramp_config.rampdown_stop_energy = energy
 
-            # TODO: the new behavior of the BoosterRamp class lets the user
-            # change ramp parameters and only when _update_waveform_dipole is
-            # called the errors are detected. Is this a desirable behavior?
-            # I had to call _update_waveform_dipole here to force detecting
-            # errors before updating all the window, but this lets user change
-            # parameters anyway, even in errors.
-            self.ramp_config._update_waveform_dipole()
-
         except exceptions.RampInvalidDipoleWfmParms as e:
             err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
             err_msg.open()
         else:
-            self.updateTable()
             self.updateGraph()
             self.updateDipoleRampSignal.emit()
             if len(self.ramp_config.waveform_anomalies) > 0:
@@ -280,6 +271,8 @@ class DipoleRamp(QWidget):
             else:
                 self.label_caution.setText('')
                 self.pb_caution.setVisible(False)
+        finally:
+            self.updateTable()
 
     @pyqtSlot()
     def _handleChangeNrPoints(self):
@@ -577,10 +570,11 @@ class MultipolesRamp(QWidget):
         except exceptions.RampInvalidNormConfig as e:
             err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
             err_msg.open()
+        else:
+            self.updateGraph()
+            self.updateMultipoleRampSignal.emit()
         finally:
             self.updateTable()
-            self.updateGraph()
-        self.updateMultipoleRampSignal.emit()
 
     def _showInsertNormConfigPopup(self):
         if self.ramp_config is not None:
@@ -600,8 +594,9 @@ class MultipolesRamp(QWidget):
         except exceptions.RampInvalidNormConfig as e:
             err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
             err_msg.open()
-        self.handleLoadRampConfig(self.ramp_config)
-        self.updateMultipoleRampSignal.emit()
+        else:
+            self.handleLoadRampConfig(self.ramp_config)
+            self.updateMultipoleRampSignal.emit()
 
     def _showDeleteNormConfigPopup(self):
         if self.ramp_config is not None:
