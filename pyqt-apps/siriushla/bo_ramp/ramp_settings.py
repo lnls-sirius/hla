@@ -65,6 +65,9 @@ class RampConfigSettings(QGroupBox):
         lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
 
     def _le_config_textChanged(self):
+        self.le_config.blockSignals(True)
+        # the previous line fix a qt bug that triggered lineedit.editFinished
+        # to be called twice when enter key is pressed
         name = self.le_config.text()
         if ramp.BoosterRamp(name).configsrv_exist():
             if ((self.ramp_config is None) or
@@ -77,7 +80,8 @@ class RampConfigSettings(QGroupBox):
                 'There is no configuration with name \"{}\". \n'
                 'Create a new one?'.format(name), 'Yes', 'Cancel')
             create_config.acceptedSignal.connect(self._emitConfigSignal)
-            create_config.show()
+            create_config.exec_()
+        self.le_config.blockSignals(False)
 
     def _emitConfigSignal(self):
         self.configSignal.emit(self.le_config.text())
