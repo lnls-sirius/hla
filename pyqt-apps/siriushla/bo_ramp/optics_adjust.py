@@ -13,9 +13,10 @@ from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriuspy.optics.opticscorr import BOTuneCorr, BOChromCorr
 from siriuspy.servconf.conf_service import ConfigService as _ConfigService
 from pydm.widgets import PyDMLineEdit
-from auxiliar_classes import EditNormalizedConfig as _EditNormalizedConfig, \
-                             OpticsAdjustSettings as _OpticsAdjustSettings, \
-                             MessageBox as _MessageBox
+from siriushla.bo_ramp.auxiliar_classes import \
+    EditNormalizedConfig as _EditNormalizedConfig, \
+    OpticsAdjustSettings as _OpticsAdjustSettings, \
+    MessageBox as _MessageBox
 
 
 class OpticsAdjust(QGroupBox):
