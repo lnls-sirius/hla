@@ -53,7 +53,6 @@ class DipoleRamp(QWidget):
         self.prefix = _PVName(prefix)
         self.ramp_config = ramp_config
         self._setupUi()
-        self._loadedFlag = False
 
     def _setupUi(self):
         vlay = QVBoxLayout(self)
@@ -387,7 +386,10 @@ class DipoleRamp(QWidget):
                             self.table_map['columns']['E [GeV]']).data(
                             Qt.DisplayRole))
                         dE = E1 - E2
-                        value = dE*1000/dIdx
+                        if dIdx != 0:
+                            value = dE*1000/dIdx
+                        else:
+                            value = '-'
                     item = self.table.item(row, column)
                     item.setData(Qt.DisplayRole, str(value))
         self.table.cellChanged.connect(self._handleCellChanged)
@@ -589,8 +591,6 @@ class MultipolesRamp(QWidget):
             self.ramp_config.normalized_configs_insert(time=config[0],
                                                        name=config[1],
                                                        nconfig=config[2])
-            if config[3] == 1:  # got an existing one
-                self.ramp_config.configsrv_load_normalized_configs()
         except exceptions.RampInvalidNormConfig as e:
             err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
             err_msg.open()
@@ -770,7 +770,10 @@ class MultipolesRamp(QWidget):
                     row-1, self.table_map['columns']['E [GeV]']).data(
                     Qt.DisplayRole))
                 dE = E1 - E2
-                value = dE*1000/dIdx
+                if dIdx != 0:
+                    value = dE*1000/dIdx
+                else:
+                    '-'
             item = self.table.item(row,
                                    self.table_map['columns']['v [MeV/pt]'])
             item.setData(Qt.DisplayRole, str(value))
@@ -786,10 +789,10 @@ class MultipolesRamp(QWidget):
         self.updateTable()
         self.updateGraph()
 
-    @pyqtSlot()
-    def handleNormConfigsChanges(self):
+    @pyqtSlot(ramp.BoosterNormalized)
+    def handleNormConfigsChanges(self, norm_config):
         """Reload normalized configs on change and update graph."""
-        self.ramp_config.configsrv_load_normalized_configs()
+        self.ramp_config[norm_config.name] = norm_config
         self.updateGraph()
 
 

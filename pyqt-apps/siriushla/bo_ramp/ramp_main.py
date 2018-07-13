@@ -30,6 +30,7 @@ class RampMain(SiriusMainWindow):
         self.ramp_config = None
         self._conn_magnets = None
         self._conn_timing = None
+        self.setWindowTitle('Booster Energy Ramping')
         self._setupUi()
         self._connSignals()
 
@@ -57,7 +58,7 @@ class RampMain(SiriusMainWindow):
                                               self.ramp_config)
         self.my_layout.addWidget(self.ramp_parameters, 1, 1, 2, 1)
 
-        self.optics_adjust = OpticsAdjust(self, self.prefix)
+        self.optics_adjust = OpticsAdjust(self, self.prefix, self.ramp_config)
         self.my_layout.addWidget(self.optics_adjust, 3, 1)
 
         self.statistics = RampStatistics(self, self.prefix,
@@ -73,6 +74,8 @@ class RampMain(SiriusMainWindow):
             self.ramp_parameters.mult_ramp.handleLoadRampConfig)
         self.ramp_settings.loadSignal.connect(
             self.ramp_parameters.rf_ramp.handleLoadRampConfig)
+        self.ramp_settings.loadSignal.connect(
+            self.optics_adjust.handleLoadRampConfig)
 
         self.ramp_parameters.dip_ramp.updateDipoleRampSignal.connect(
             self.ramp_settings.verifySync)
