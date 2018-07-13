@@ -41,6 +41,14 @@ class RampCommands(QGroupBox):
     def _uploadToPS(self):
         if not self._conn_magnets:
             return
+
+        if not self._conn_magnets.connected:
+            warn_msg = _MessageBox(
+                self, 'Not Connected',
+                'There are not connected PVs!', 'Ok')
+            warn_msg.exec_()
+            return
+
         timeout = 0.5
         uploaded = self._conn_magnets.cmd_wfmdata(timeout)
         if not uploaded:
@@ -54,6 +62,14 @@ class RampCommands(QGroupBox):
     def _cycle(self):
         if not self._conn_magnets or not self._conn_timing:
             return
+
+        if not self._conn_magnets.connected or not self._conn_timing.connected:
+            warn_msg = _MessageBox(
+                self, 'Not Connected',
+                'There are not connected PVs!', 'Ok')
+            warn_msg.exec_()
+            return
+
         configured_MA = self._conn_magnets.cmd_opmode_cycle()
         if not configured_MA:
             warn_msg = _MessageBox(
@@ -84,6 +100,14 @@ class RampCommands(QGroupBox):
     def _start(self):
         if not self._conn_magnets or not self._conn_timing:
             return
+
+        if not self._conn_magnets.connected or not self._conn_timing.connected:
+            warn_msg = _MessageBox(
+                self, 'Not Connected',
+                'There are not connected PVs!', 'Ok')
+            warn_msg.exec_()
+            return
+
         configured_MA = self._conn_magnets.cmd_opmode_rmpwfm()
         if not configured_MA:
             warn_msg = _MessageBox(
@@ -105,6 +129,14 @@ class RampCommands(QGroupBox):
     def _stop(self):
         if not self._conn_magnets or not self._conn_timing:
             return
+
+        if not self._conn_magnets.connected or not self._conn_timing.connected:
+            warn_msg = _MessageBox(
+                self, 'Not Connected',
+                'There are not connected PVs!', 'Ok')
+            warn_msg.exec_()
+            return
+
         configured_MA = self._conn_magnets.cmd_opmode_slowref()
         if not configured_MA:
             warn_msg = _MessageBox(
