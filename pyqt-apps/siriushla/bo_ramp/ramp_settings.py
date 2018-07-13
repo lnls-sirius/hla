@@ -1,11 +1,13 @@
 """Booster Ramp Control HLA: Ramp Settings Module."""
 
-from PyQt5.QtCore import Qt, pyqtSignal
+from copy import deepcopy as _dcopy
+from PyQt5.QtCore import Qt, pyqtSignal, QStringListModel
 from PyQt5.QtWidgets import QGroupBox, QVBoxLayout, QSpacerItem, \
-                            QPushButton, QLabel, QLineEdit, \
-                            QSizePolicy as QSzPlcy
+                            QPushButton, QLabel, QLineEdit, QCompleter, \
+                            QSizePolicy as QSzPlcy, QInputDialog
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.ramp import ramp
+from siriuspy.servconf.conf_service import ConfigService as _ConfigService
 from siriushla.bo_ramp.auxiliar_classes import MessageBox as _MessageBox
 
 
@@ -34,9 +36,22 @@ class RampConfigSettings(QGroupBox):
         self.le_config = QLineEdit(le_text, self)
         self.bt_load = QPushButton('Load', self)
         self.bt_save = QPushButton('Save', self)
+        self.bt_save_as = QPushButton('Save As...', self)
+
+        completer = QCompleter()
+        self._completer_model = QStringListModel()
+        completer.setModel(self._completer_model)
+        allconfigs = _ConfigService().find_configs(config_type='bo_ramp')
+        string_list = list()
+        for c in allconfigs['result']:
+            string_list.append(c['name'])
+        self._completer_model.setStringList(string_list)
+        self.le_config.setCompleter(completer)
         self.le_config.editingFinished.connect(self._le_config_textChanged)
         self.bt_load.clicked.connect(self._load)
         self.bt_save.clicked.connect(self._save)
+        self.bt_save_as.clicked.connect(self._showSaveAsPopup)
+
         lay = QVBoxLayout(self)
         lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
         lay.addWidget(label_name)
@@ -45,6 +60,8 @@ class RampConfigSettings(QGroupBox):
         lay.addWidget(self.bt_load)
         lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
         lay.addWidget(self.bt_save)
+        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
+        lay.addWidget(self.bt_save_as)
         lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
 
     def _le_config_textChanged(self):
@@ -95,6 +112,40 @@ class RampConfigSettings(QGroupBox):
         else:
             self.ramp_config.configsrv_save()
         self.verifySync()
+
+    def _showSaveAsPopup(self):
+        if self.ramp_config is not None:
+            text, ok = QInputDialog.getText(self, 'Save As...',
+                                            'Ramp config. name:',
+                                            echo=QLineEdit.Normal, text='')
+            if not ok:
+                return
+            self._name_to_saveas = text
+            allconfigs = _ConfigService().find_configs(config_type='bo_ramp')
+            for c in allconfigs['result']:
+                if text == c['name']:
+                    save_changes = _MessageBox(
+                        self, 'Overwrite configuration?',
+                        'There is a configuration with name {}. \n'
+                        'Do you want to replace it?'.format(text),
+                        'Yes', 'Cancel')
+                    save_changes.acceptedSignal.connect(self._save_as)
+                    save_changes.exec_()
+                    break
+            else:
+                self._save_as()
+
+    def _save_as(self):
+        config_tosave = _dcopy(self.ramp_config)
+        config_tosave.name = self._name_to_saveas
+        config_tosave.configsrv_save()
+
+        # update completion
+        allconfigs = _ConfigService().find_configs(config_type='bo_ramp')
+        string_list = list()
+        for c in allconfigs['result']:
+            string_list.append(c['name'])
+        self._completer_model.setStringList(string_list)
 
     def _getRampConfig(self, ramp_config):
         """Get new BoosterRamp object."""
