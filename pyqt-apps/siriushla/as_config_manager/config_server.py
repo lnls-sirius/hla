@@ -1,20 +1,14 @@
 """Window to manage configurations."""
 import logging
 import time
-# import json
 
-from pydm.PyQt.QtGui import QWidget, QLabel, QGridLayout, QComboBox, \
-    QTableView, QTableWidgetItem, QTreeView, QTreeWidgetItem, QHBoxLayout, \
-    QFrame, QVBoxLayout, QHeaderView, QPushButton, QItemDelegate, \
-    QMessageBox, QColor, QTabWidget
-from pydm.PyQt.QtCore import Qt, pyqtSlot, QAbstractItemModel, QModelIndex, \
-    QAbstractTableModel, QRect, pyqtSignal
+from pydm.PyQt.QtGui import QGridLayout, QHBoxLayout, QVBoxLayout, \
+    QWidget, QFrame, QLabel, QComboBox, QPushButton, QMessageBox, QTabWidget, \
+    QTableView, QTreeView, QHeaderView
+from pydm.PyQt.QtCore import Qt, pyqtSlot, pyqtSignal, QModelIndex, \
+    QAbstractItemModel, QAbstractTableModel
 
-from siriuspy.servconf.conf_service import ConfigService
 from siriushla.widgets.windows import SiriusMainWindow
-
-
-c = ConfigService('http://127.0.0.1').get_config('bo_normalized', 'config_a')
 
 
 class TreeItem:
@@ -188,20 +182,6 @@ class JsonTreeModel(QAbstractItemModel):
                     item.appendChild(new_item)
                 else:
                     item.appendChild(TreeItem([str(idx), str(value)], item))
-
-
-# class DeleteDelegate(QItemDelegate):
-#
-#     def paint(self, painter, option, index):
-#         option.palette.setColor(option.palette.Text, QColor(255, 0, 0))
-#         QItemDelegate.paint(self, painter, option, index)
-#
-#     def createEditor(self, parent, option, index):
-#         """."""
-#         editor = QPushButton('delete', parent)
-#         editor.pressed.connect(lambda: (index.model().removeRow.emit(index)))
-#         editor.click()
-#         return editor
 
 
 class ConfigDbTableModel(QAbstractTableModel):
@@ -725,13 +705,3 @@ class ConfigurationManager(SiriusMainWindow):
         # Return config_type and name given a row and a table model
         return (model.createIndex(row, self.CONFIG_TYPE_COL).data(),
                 model.createIndex(row, self.NAME_COL).data())
-
-
-if __name__ == '__main__':
-    import sys
-    from siriushla.sirius_application import SiriusApplication
-    app = SiriusApplication()
-    model = ConfigService('http://127.0.0.1')
-    widget = ConfigurationManager(model)
-    widget.show()
-    sys.exit(app.exec_())
