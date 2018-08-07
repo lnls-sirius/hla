@@ -1,113 +1,90 @@
 """Booster Ramp Control HLA: Ramp Settings Module."""
 
 from copy import deepcopy as _dcopy
-from PyQt5.QtCore import Qt, pyqtSignal, QStringListModel
-from PyQt5.QtWidgets import QGroupBox, QVBoxLayout, QSpacerItem, \
-                            QPushButton, QLabel, QLineEdit, QCompleter, \
-                            QSizePolicy as QSzPlcy, QInputDialog
+from PyQt5.QtCore import Qt, pyqtSignal
+from PyQt5.QtGui import QKeySequence
+from PyQt5.QtWidgets import QMenuBar, QInputDialog, QAction, QLineEdit
 from siriuspy.namesys import SiriusPVName as _PVName
-from siriuspy.ramp import ramp
 from siriuspy.servconf.conf_service import ConfigService as _ConfigService
-from siriushla.bo_ramp.auxiliar_classes import MessageBox as _MessageBox
+from siriushla.bo_ramp.auxiliar_classes import \
+    LoadRampConfig as _LoadRampConfig, \
+    NewRampConfigGetName as _NewRampConfigGetName, \
+    OpticsAdjustSettings as _OpticsAdjustSettings, \
+    MessageBox as _MessageBox
 
 
-class RampConfigSettings(QGroupBox):
+class RampConfigSettings(QMenuBar):
     """Widget to choose and to control a BoosterRamp configuration."""
 
-    configSignal = pyqtSignal(str)
-    loadSignal = pyqtSignal(ramp.BoosterRamp)
+    configNameSignal = pyqtSignal(str)
+    loadSignal = pyqtSignal()
+    saveSignal = pyqtSignal()
+    opticsSettingsSignal = pyqtSignal(list)
 
     def __init__(self, parent=None, prefix='', ramp_config=None):
         """Initialize object."""
-        super().__init__('Ramp Configuration', parent)
+        super().__init__(parent)
         self.prefix = _PVName(prefix)
         self.ramp_config = ramp_config
+        self._tunecorr_name = 'Default_1'
+        self._chromcorr_name = 'Default'
         self._setupUi()
-        self.loadSignal.connect(self._getRampConfig)
 
     def _setupUi(self):
-        if self.ramp_config is not None:
-            le_text = self.ramp_config.name
-        else:
-            le_text = ''
-        label_name = QLabel('Name', self)
-        label_name.setAlignment(Qt.AlignCenter)
-        label_name.setFixedHeight(40)
-        self.le_config = QLineEdit(le_text, self)
-        self.bt_load = QPushButton('Load', self)
-        self.bt_save = QPushButton('Save', self)
-        self.bt_save_as = QPushButton('Save As...', self)
+        self.config_menu = self.addMenu('Booster Ramp Configuration')
+        self.act_new = QAction('New from template', self)
+        self.act_new.setShortcut(QKeySequence.New)
+        self.act_new.triggered.connect(self._showGetNewConfigName)
+        self.act_load = QAction('Load existing config...', self)
+        self.act_load.setShortcut(QKeySequence.Open)
+        self.act_load.triggered.connect(self._showLoadExistingConfig)
+        self.act_save = QAction('Save', self)
+        self.act_save.setShortcut(QKeySequence.Save)
+        self.act_save.triggered.connect(self._save)
+        self.act_save_as = QAction('Save As...', self)
+        self.act_save_as.setShortcut(QKeySequence(Qt.CTRL+Qt.SHIFT+Qt.Key_S))
+        self.act_save_as.triggered.connect(self._showSaveAsPopup)
+        self.config_menu.addAction(self.act_new)
+        self.config_menu.addAction(self.act_load)
+        self.config_menu.addAction(self.act_save)
+        self.config_menu.addAction(self.act_save_as)
 
-        completer = QCompleter()
-        self._completer_model = QStringListModel()
-        completer.setModel(self._completer_model)
-        allconfigs = _ConfigService().find_configs(config_type='bo_ramp')
-        string_list = list()
-        for c in allconfigs['result']:
-            string_list.append(c['name'])
-        self._completer_model.setStringList(string_list)
-        self.le_config.setCompleter(completer)
-        self.le_config.editingFinished.connect(self._le_config_textChanged)
-        self.bt_load.clicked.connect(self._load)
-        self.bt_save.clicked.connect(self._save)
-        self.bt_save_as.clicked.connect(self._showSaveAsPopup)
+        self.optics_menu = self.addMenu('Optics Adjustments')
+        self.act_settings = QAction('Settings', self)
+        self.act_settings.triggered.connect(self._showSettingsPopup)
+        self.optics_menu.addAction(self.act_settings)
 
-        lay = QVBoxLayout(self)
-        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
-        lay.addWidget(label_name)
-        lay.addWidget(self.le_config)
-        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
-        lay.addWidget(self.bt_load)
-        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
-        lay.addWidget(self.bt_save)
-        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
-        lay.addWidget(self.bt_save_as)
-        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
+    def _showGetNewConfigName(self):
+        self._newConfigPopup = _NewRampConfigGetName(self, self.ramp_config)
+        self._newConfigPopup.configNameSignal.connect(
+            self._emitConfigNameSignal)
+        self._newConfigPopup.saveSignal.connect(self._save)
+        self._newConfigPopup.open()
 
-    def _le_config_textChanged(self):
-        self.le_config.blockSignals(True)
-        # the previous line fix a qt bug that triggered lineedit.editFinished
-        # to be called twice when enter key is pressed
-        name = self.le_config.text()
-        if ramp.BoosterRamp(name).configsrv_exist():
-            if ((self.ramp_config is None) or
-                    (self.ramp_config is not None and
-                     name != self.ramp_config.name)):
-                self.bt_load.setStyleSheet("""background-color:#1F64FF;""")
-        elif name != '':
-            create_config = _MessageBox(
-                self, 'Create a new configuration?',
-                'There is no configuration with name \"{}\". \n'
-                'Create a new one?'.format(name), 'Yes', 'Cancel')
-            create_config.acceptedSignal.connect(self._emitConfigSignal)
-            create_config.exec_()
-        self.le_config.blockSignals(False)
+    def _showLoadExistingConfig(self):
+        self._loadPopup = _LoadRampConfig(self, self.ramp_config)
+        self._loadPopup.configNameSignal.connect(self._emitConfigNameSignal)
+        self._loadPopup.loadSignal.connect(self._emitLoadSignal)
+        self._loadPopup.saveSignal.connect(self._save)
+        self._loadPopup.open()
 
-    def _emitConfigSignal(self):
-        self.configSignal.emit(self.le_config.text())
+    def _showSettingsPopup(self):
+        self._settingsPopup = _OpticsAdjustSettings(
+            self, self._tunecorr_name, self._chromcorr_name)
+        self._settingsPopup.updateSettings.connect(
+            self._emitOpticsSettings)
+        self._settingsPopup.open()
 
-    def _load(self):
-        name = self.le_config.text()
-        if ramp.BoosterRamp(name).configsrv_exist():
-            if self.ramp_config is not None:
-                if not self.ramp_config.configsrv_synchronized:
-                    save_changes = _MessageBox(
-                        self, 'Save changes?',
-                        'There are unsaved changes. \n'
-                        'Do you want to save?'.format(name),
-                        'Yes', 'Cancel')
-                    save_changes.acceptedSignal.connect(self._save)
-                    save_changes.exec_()
+    def _emitConfigNameSignal(self, config_name):
+        self.configNameSignal.emit(config_name)
 
-                if name != self.ramp_config.name:
-                    self.configSignal.emit(name)
-                else:
-                    self.ramp_config.configsrv_load()
-                    self.ramp_config.configsrv_load_normalized_configs()
-                    self.loadSignal.emit(self.ramp_config)
-            else:
-                self.configSignal.emit(name)
-            self.verifySync()
+    def _emitLoadSignal(self):
+        self.loadSignal.emit()
+
+    def _emitOpticsSettings(self, settings):
+        self._tunecorr_name = settings[0]
+        self._chromcorr_name = settings[1]
+        self.opticsSettingsSignal.emit(settings)
 
     def _save(self):
         config_exists = self.ramp_config.configsrv_exist()
@@ -115,7 +92,7 @@ class RampConfigSettings(QGroupBox):
             self.ramp_config.configsrv_update()
         else:
             self.ramp_config.configsrv_save()
-        self.verifySync()
+        self.saveSignal.emit()
 
     def _showSaveAsPopup(self):
         if self.ramp_config is not None:
@@ -151,15 +128,6 @@ class RampConfigSettings(QGroupBox):
             string_list.append(c['name'])
         self._completer_model.setStringList(string_list)
 
-    def _getRampConfig(self, ramp_config):
+    def getRampConfig(self, ramp_config):
         """Get new BoosterRamp object."""
         self.ramp_config = ramp_config
-        self.bt_load.setStyleSheet("")
-
-    def verifySync(self):
-        """Verify sync status related to ConfServer."""
-        if self.ramp_config is not None:
-            if not self.ramp_config.configsrv_synchronized:
-                self.bt_save.setStyleSheet("""background-color: #1F64FF;""")
-            else:
-                self.bt_save.setStyleSheet("")

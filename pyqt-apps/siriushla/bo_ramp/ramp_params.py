@@ -5,7 +5,8 @@ from PyQt5.QtGui import QBrush, QColor
 from PyQt5.QtWidgets import QGroupBox, QLabel, QWidget, QSpacerItem, \
                             QVBoxLayout, QHBoxLayout, QGridLayout, \
                             QPushButton, QTableWidget, QTableWidgetItem, \
-                            QSpinBox, QSizePolicy as QSzPlcy, QAbstractItemView
+                            QSpinBox, QSizePolicy as QSzPlcy, \
+                            QAbstractItemView, QUndoCommand
 from matplotlib.backends.backend_qt5agg import (
     FigureCanvasQTAgg as FigureCanvas,
     NavigationToolbar2QT as NavigationToolbar)
@@ -22,24 +23,39 @@ from siriushla.bo_ramp.auxiliar_classes import MessageBox as _MessageBox, \
     ChooseMagnetsToPlot as _ChooseMagnetsToPlot
 
 
+_flag_stack_next_command = True
+_flag_stacking = False
+
+
 class RampParameters(QGroupBox):
     """Widget to set and monitor ramp parametes."""
 
-    def __init__(self, parent=None, prefix='', ramp_config=None):
+    def __init__(self, parent=None, prefix='', ramp_config=None,
+                 undo_stack=None):
         """Initialize object."""
-        super().__init__('Ramping Parameters', parent)
+        super().__init__('Ramping Parameters: ', parent)
         self.prefix = _PVName(prefix)
         self.ramp_config = ramp_config
+        self._undo_stack = undo_stack
         self._setupUi()
 
     def _setupUi(self):
         my_lay = QHBoxLayout(self)
-        self.dip_ramp = DipoleRamp(self, self.prefix, self.ramp_config)
-        self.mult_ramp = MultipolesRamp(self, self.prefix, self.ramp_config)
-        self.rf_ramp = RFRamp(self, self.prefix, self.ramp_config)
+        self.dip_ramp = DipoleRamp(
+            self, self.prefix, self.ramp_config, self._undo_stack)
+        self.mult_ramp = MultipolesRamp(
+            self, self.prefix, self.ramp_config, self._undo_stack)
+        self.rf_ramp = RFRamp(
+            self, self.prefix, self.ramp_config, self._undo_stack)
         my_lay.addWidget(self.dip_ramp)
         my_lay.addWidget(self.mult_ramp)
         my_lay.addWidget(self.rf_ramp)
+
+    @pyqtSlot(ramp.BoosterRamp)
+    def handleLoadRampConfig(self, ramp_config):
+        """Update all widgets when ramp_config is loaded."""
+        self.ramp_config = ramp_config
+        self.setTitle('Ramping Parameters: ' + self.ramp_config.name)
 
 
 class DipoleRamp(QWidget):
@@ -47,11 +63,13 @@ class DipoleRamp(QWidget):
 
     updateDipoleRampSignal = pyqtSignal()
 
-    def __init__(self, parent=None, prefix='', ramp_config=None):
+    def __init__(self, parent=None, prefix='', ramp_config=None,
+                 undo_stack=None):
         """Initialize object."""
         super().__init__(parent)
         self.prefix = _PVName(prefix)
         self.ramp_config = ramp_config
+        self._undo_stack = undo_stack
         self._setupUi()
 
     def _setupUi(self):
@@ -61,17 +79,9 @@ class DipoleRamp(QWidget):
         self.table = QTableWidget(self)
 
         self._setupGraph()
-        label_nrpoints = QLabel('# of points', self)
-        label_nrpoints.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        self.sb_nrpoints = QSpinBox(self)
-        self.set_nrpoints.addSpacerItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
-        self.set_nrpoints.addWidget(label_nrpoints)
-        self.set_nrpoints.addWidget(self.sb_nrpoints)
-        self.set_nrpoints.addSpacerItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
         self._setupWfmNrPoints()
         self._setupTable()
+
         hlay_caution = QHBoxLayout()
         self.label_caution = QLabel('', self)
         self.label_caution.setFixedSize(794, 40)
@@ -113,10 +123,19 @@ class DipoleRamp(QWidget):
         self.graphview.setLayout(lay)
 
     def _setupWfmNrPoints(self):
+        label_nrpoints = QLabel('# of points', self)
+        label_nrpoints.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.sb_nrpoints = QSpinBox(self)
         self.sb_nrpoints.setMinimum(1)
         self.sb_nrpoints.setMaximum(MAX_WFMSIZE)
-        self.sb_nrpoints.editingFinished.connect(
-            self._handleChangeNrPoints)
+        self.sb_nrpoints.editingFinished.connect(self._handleChangeNrPoints)
+
+        self.set_nrpoints.addSpacerItem(
+            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
+        self.set_nrpoints.addWidget(label_nrpoints)
+        self.set_nrpoints.addWidget(self.sb_nrpoints)
+        self.set_nrpoints.addSpacerItem(
+            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
 
     def _setupTable(self):
         self.table_map = {
@@ -193,69 +212,53 @@ class DipoleRamp(QWidget):
     @pyqtSlot(int, int)
     def _handleCellChanged(self, row, column):
         try:
+            new_value = float(self.table.item(row, column).data(
+                Qt.DisplayRole))
             if row == self.table_map['rows']['Start']:
-                energy = float(self.table.item(
-                    row, self.table_map['columns']['E [GeV]']).data(
-                        Qt.DisplayRole))
-                self.ramp_config.start_energy = energy
+                old_value = self.ramp_config.start_energy
+                self.ramp_config.start_energy = new_value
 
             elif row == self.table_map['rows']['RampUp-Start']:
                 if column == self.table_map['columns']['T [ms]']:
-                    time = float(self.table.item(row, column).data(
-                        Qt.DisplayRole))
-                    self.ramp_config.rampup_start_time = time
+                    old_value = self.ramp_config.rampup_start_time
+                    self.ramp_config.rampup_start_time = new_value
                 elif column == self.table_map['columns']['E [GeV]']:
-                    energy = float(self.table.item(row, column).data(
-                        Qt.DisplayRole))
-                    self.ramp_config.rampup_start_energy = energy
+                    old_value = self.ramp_config.rampup_start_energy
+                    self.ramp_config.rampup_start_energy = new_value
 
             elif row == self.table_map['rows']['Injection']:
                 if column == self.table_map['columns']['T [ms]']:
-                    time = float(self.table.item(row, column).data(
-                        Qt.DisplayRole))
-                    self.ramp_config.injection_time = time
-                # elif column == self.table_map['columns']['E [GeV]']:
-                #     energy = float(self.table.item(row, column).data(
-                #         Qt.DisplayRole))
+                    old_value = self.ramp_config.injection_time
+                    self.ramp_config.injection_time = new_value
 
             elif row == self.table_map['rows']['Ejection']:
                 if column == self.table_map['columns']['T [ms]']:
-                    time = float(self.table.item(row, column).data(
-                        Qt.DisplayRole))
-                    self.ramp_config.ejection_time = time
-                # elif column == self.table_map['columns']['E [GeV]']:
-                #     energy = float(self.table.item(row, column).data(
-                #         Qt.DisplayRole))
+                    old_value = self.ramp_config.ejection_time
+                    self.ramp_config.ejection_time = new_value
 
             elif row == self.table_map['rows']['RampUp-Stop']:
                 if column == self.table_map['columns']['T [ms]']:
-                    time = float(self.table.item(row, column).data(
-                        Qt.DisplayRole))
-                    self.ramp_config.rampup_stop_time = time
+                    old_value = self.ramp_config.rampup_stop_time
+                    self.ramp_config.rampup_stop_time = new_value
                 elif column == self.table_map['columns']['E [GeV]']:
-                    energy = float(self.table.item(row, column).data(
-                        Qt.DisplayRole))
-                    self.ramp_config.rampup_stop_energy = energy
+                    old_value = self.ramp_config.rampup_stop_energy
+                    self.ramp_config.rampup_stop_energy = new_value
 
             elif row == self.table_map['rows']['RampDown-Start']:
                 if column == self.table_map['columns']['T [ms]']:
-                    time = float(self.table.item(row, column).data(
-                        Qt.DisplayRole))
-                    self.ramp_config.rampdown_start_time = time
+                    old_value = self.ramp_config.rampdown_start_time
+                    self.ramp_config.rampdown_start_time = new_value
                 elif column == self.table_map['columns']['E [GeV]']:
-                    energy = float(self.table.item(row, column).data(
-                        Qt.DisplayRole))
-                    self.ramp_config.rampdown_start_energy = energy
+                    old_value = self.ramp_config.rampdown_start_energy
+                    self.ramp_config.rampdown_start_energy = new_value
 
             elif row == self.table_map['rows']['RampDown-Stop']:
                 if column == self.table_map['columns']['T [ms]']:
-                    time = float(self.table.item(row, column).data(
-                        Qt.DisplayRole))
-                    self.ramp_config.rampdown_stop_time = time
+                    old_value = self.ramp_config.rampdown_stop_time
+                    self.ramp_config.rampdown_stop_time = new_value
                 elif column == self.table_map['columns']['E [GeV]']:
-                    energy = float(self.table.item(row, column).data(
-                        Qt.DisplayRole))
-                    self.ramp_config.rampdown_stop_energy = energy
+                    old_value = self.ramp_config.rampdown_stop_energy
+                    self.ramp_config.rampdown_stop_energy = new_value
 
         except exceptions.RampInvalidDipoleWfmParms as e:
             err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
@@ -270,6 +273,17 @@ class DipoleRamp(QWidget):
             else:
                 self.label_caution.setText('')
                 self.pb_caution.setVisible(False)
+
+            global _flag_stack_next_command, _flag_stacking
+            if _flag_stack_next_command:
+                _flag_stacking = True
+                command = _CommandChangeTableCell(
+                    self.table, row, column, old_value, new_value,
+                    'set dipole table item at row {0}, column {1}'.format(
+                        row, column))
+                self._undo_stack.push(command)
+            else:
+                _flag_stack_next_command = True
         finally:
             self.updateTable()
 
@@ -324,32 +338,32 @@ class DipoleRamp(QWidget):
             t_item = self.table.item(row, 1)
             e_item = self.table.item(row, 3)
             if label == 'Start':
-                time = str(0.0)
-                energy = str(self.ramp_config.start_energy)
+                time = 0.0
+                energy = self.ramp_config.start_energy
             elif label == 'RampUp-Start':
-                time = str(self.ramp_config.rampup_start_time)
-                energy = str(self.ramp_config.rampup_start_energy)
+                time = self.ramp_config.rampup_start_time
+                energy = self.ramp_config.rampup_start_energy
             elif label == 'Injection':
                 time = self.ramp_config.injection_time
-                energy = str(self.ramp_config.waveform_interp_energy(time))
+                energy = self.ramp_config.waveform_interp_energy(time)
             elif label == 'Ejection':
                 time = self.ramp_config.ejection_time
-                energy = str(self.ramp_config.waveform_interp_energy(time))
+                energy = self.ramp_config.waveform_interp_energy(time)
             elif label == 'RampUp-Stop':
-                time = str(self.ramp_config.rampup_stop_time)
-                energy = str(self.ramp_config.rampup_stop_energy)
+                time = self.ramp_config.rampup_stop_time
+                energy = self.ramp_config.rampup_stop_energy
             elif label == 'Plateau-Start':
-                time = str(self.ramp_config.plateau_start_time)
-                energy = str(self.ramp_config.plateau_energy)
+                time = self.ramp_config.plateau_start_time
+                energy = self.ramp_config.plateau_energy
             elif label == 'RampDown-Start':
-                time = str(self.ramp_config.rampdown_start_time)
-                energy = str(self.ramp_config.rampdown_start_energy)
+                time = self.ramp_config.rampdown_start_time
+                energy = self.ramp_config.rampdown_start_energy
             elif label == 'RampDown-Stop':
-                time = str(self.ramp_config.rampdown_stop_time)
-                energy = str(self.ramp_config.rampdown_stop_energy)
+                time = self.ramp_config.rampdown_stop_time
+                energy = self.ramp_config.rampdown_stop_energy
             elif label == 'Stop':
-                time = str(self.ramp_config.ramp_dipole_duration)
-                energy = str(self.ramp_config.start_energy)
+                time = self.ramp_config.ramp_dipole_duration
+                energy = self.ramp_config.start_energy
             t_item.setData(Qt.DisplayRole, str(time))
             e_item.setData(Qt.DisplayRole, str(energy))
 
@@ -416,11 +430,13 @@ class MultipolesRamp(QWidget):
     updateMultipoleRampSignal = pyqtSignal()
     configsIndexChangedSignal = pyqtSignal(dict)
 
-    def __init__(self, parent=None, prefix='', ramp_config=None):
+    def __init__(self, parent=None, prefix='', ramp_config=None,
+                 undo_stack=None):
         """Initialize object."""
         super().__init__(parent)
         self.prefix = _PVName(prefix)
         self.ramp_config = ramp_config
+        self._undo_stack = undo_stack
         self._getNormalizedConfigs()
         self._magnets_to_plot = []
         self._setupUi()
@@ -566,15 +582,31 @@ class MultipolesRamp(QWidget):
         try:
             config_changed_name = self.table.item(row, 0).data(
                 Qt.DisplayRole)
+            for t, n in self.ramp_config.normalized_configs:
+                if n == config_changed_name:
+                    old_value = t
+                    break
+            new_value = float(self.table.item(row, column).data(
+                Qt.DisplayRole))
             self.ramp_config.normalized_configs_change_time(
-                config_changed_name,
-                float(self.table.item(row, column).data(Qt.DisplayRole)))
+                config_changed_name, new_value)
         except exceptions.RampInvalidNormConfig as e:
             err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
             err_msg.open()
         else:
             self.updateGraph()
             self.updateMultipoleRampSignal.emit()
+
+            global _flag_stack_next_command, _flag_stacking
+            if _flag_stack_next_command:
+                _flag_stacking = True
+                command = _CommandChangeTableCell(
+                    self.table, row, column, old_value, new_value,
+                    'set multipole table item at row {0}, column {1}'.format(
+                        row, column))
+                self._undo_stack.push(command)
+            else:
+                _flag_stack_next_command = True
         finally:
             self.updateTable()
 
@@ -799,11 +831,15 @@ class MultipolesRamp(QWidget):
 class RFRamp(QWidget):
     """Widget to set and monitor RF ramp."""
 
-    def __init__(self, parent=None, prefix='', ramp_config=None):
+    updateRFRampSignal = pyqtSignal()
+
+    def __init__(self, parent=None, prefix='', ramp_config=None,
+                 undo_stack=None):
         """Initialize object."""
         super().__init__(parent)
         self.prefix = _PVName(prefix)
         self.ramp_config = ramp_config
+        self._undo_stack = undo_stack
         self._setupUi()
 
     def _setupUi(self):
@@ -927,7 +963,30 @@ class RFRamp(QWidget):
 
     @pyqtSlot(int, int)
     def _handleCellChanged(self, row, column):
-        pass
+        try:
+            # TODO
+            old_value = 0
+            new_value = float(self.table.item(row, column).data(
+                Qt.DisplayRole))
+        except exceptions.RampInvalidNormConfig as e:  # TODO
+            err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
+            err_msg.open()
+        else:
+            self.updateGraph()
+            self.updateRFRampSignal.emit()
+
+            global _flag_stack_next_command, _flag_stacking
+            if _flag_stack_next_command:
+                _flag_stacking = True
+                command = _CommandChangeTableCell(
+                    self.table, row, column, old_value, new_value,
+                    'set RF table item at row {0}, column {1}'.format(
+                        row, column))
+                self._undo_stack.push(command)
+            else:
+                _flag_stack_next_command = True
+        finally:
+            self.updateTable()
 
     @pyqtSlot()
     def _handleChangeNrPoints(self):
@@ -955,3 +1014,30 @@ class RFRamp(QWidget):
         self.updateTable()
         self.updateWfmNrPoints()
         self.updateGraph()
+
+
+class _CommandChangeTableCell(QUndoCommand):
+    """Class to define undo command change table cell."""
+
+    def __init__(self, table, row, column, old_data, new_data, description):
+        super().__init__(description)
+        self.table = table
+        self.row = row
+        self.column = column
+        self.old_data = old_data
+        self.new_data = new_data
+
+    def undo(self):
+        global _flag_stack_next_command
+        _flag_stack_next_command = False
+        self.table.item(self.row, self.column).setData(
+            Qt.DisplayRole, str(self.old_data))
+
+    def redo(self):
+        global _flag_stack_next_command, _flag_stacking
+        if not _flag_stacking:
+            _flag_stack_next_command = False
+            self.table.item(self.row, self.column).setData(
+                Qt.DisplayRole, str(self.new_data))
+        else:
+            _flag_stacking = False

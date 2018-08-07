@@ -1,15 +1,196 @@
 """Booster Ramp Control HLA: Auxiliar Classes Module."""
 
-from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot
+from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot, QStringListModel, QLocale
 from PyQt5.QtWidgets import QLabel, QWidget, QScrollArea, QAbstractItemView, \
                             QHBoxLayout, QVBoxLayout, QGridLayout, QLineEdit, \
                             QPushButton, QTableWidget, QTableWidgetItem, \
                             QRadioButton, QFormLayout, QDoubleSpinBox, \
                             QComboBox, QSpinBox, QStyledItemDelegate, \
-                            QSpacerItem, QSizePolicy as QSzPlcy, QCheckBox
+                            QSpacerItem, QSizePolicy as QSzPlcy, QCheckBox, \
+                            QTabWidget, QCompleter
 from siriushla.widgets.windows import SiriusDialog
 from siriuspy.servconf.conf_service import ConfigService as _ConfigService
 from siriuspy.ramp import ramp
+
+
+class LoadRampConfig(SiriusDialog):
+    """Auxiliar window to get a ramp config name to load."""
+
+    configNameSignal = pyqtSignal(str)
+    loadSignal = pyqtSignal()
+    saveSignal = pyqtSignal()
+
+    def __init__(self, parent, ramp_config):
+        """Initialize object."""
+        super().__init__(parent)
+        self.setWindowTitle('Load ramp configuration from server')
+        self.ramp_config = ramp_config
+        self._setupUi()
+
+    def _setupUi(self):
+        l_insert = QLabel('Insert a configuration name: ', self,
+                          alignment=Qt.AlignCenter)
+        l_insert.setFixedHeight(40)
+
+        completer = QCompleter()
+        self._completer_model = QStringListModel()
+        completer.setModel(self._completer_model)
+        allconfigs = _ConfigService().find_configs(config_type='bo_ramp')
+        string_list = list()
+        for c in allconfigs['result']:
+            string_list.append(c['name'])
+        self._completer_model.setStringList(string_list)
+
+        if self.ramp_config is not None:
+            le_text = self.ramp_config.name
+        else:
+            le_text = ''
+        self.le_config = QLineEdit(le_text, self)
+        self.le_config.setCompleter(completer)
+        self.le_config.editingFinished.connect(self._configNameChanged)
+
+        self.bt_load = QPushButton('Load', self)
+        self.bt_load.setFixedWidth(140)
+        self.bt_load.setEnabled(False)
+        self.bt_load.setAutoDefault(False)
+        self.bt_load.setDefault(False)
+        self.bt_load.clicked.connect(self._load)
+
+        self.bt_cancel = QPushButton('Cancel', self)
+        self.bt_cancel.setFixedWidth(140)
+        self.bt_cancel.setAutoDefault(False)
+        self.bt_cancel.setDefault(False)
+        self.bt_cancel.clicked.connect(self.close)
+
+        self.l_warn = QLabel('', self)
+        self.l_warn.setStyleSheet('color: red;')
+        self.l_warn.setFixedWidth(750)
+
+        lay = QGridLayout(self)
+        lay.addWidget(l_insert, 0, 0)
+        lay.addWidget(self.le_config, 1, 0)
+        lay.addWidget(self.bt_load, 1, 1)
+        lay.addWidget(self.l_warn, 2, 0)
+        lay.addWidget(self.bt_cancel, 2, 1)
+
+    def _configNameChanged(self):
+        self.le_config.blockSignals(True)
+        # the previous line fix a qt bug that triggered lineedit.editFinished
+        # to be called twice when enter key is pressed
+        name = self.le_config.text()
+        if name != '' and ramp.BoosterRamp(name).configsrv_exist():
+            self.l_warn.setText('')
+            self.bt_load.setEnabled(True)
+        else:
+            if name == '':
+                self.l_warn.setText('Insert a config name!')
+            elif not ramp.BoosterRamp(name).configsrv_exist():
+                self.l_warn.setText('There is no config with this name!')
+            self.bt_load.setEnabled(False)
+        self.le_config.blockSignals(False)
+
+    def _load(self):
+        name = self.le_config.text()
+        if self.ramp_config is not None:
+            if not self.ramp_config.configsrv_synchronized:
+                save_changes = MessageBox(
+                    self, 'Save changes?',
+                    'There are unsaved changes. \n'
+                    'Do you want to save?'.format(name),
+                    'Yes', 'Cancel')
+                save_changes.acceptedSignal.connect(self._saveChanges)
+                save_changes.exec_()
+
+            if name != self.ramp_config.name:
+                self.configNameSignal.emit(name)
+            else:
+                self.ramp_config.configsrv_load()
+                self.loadSignal.emit()
+        else:
+            self.configNameSignal.emit(name)
+        self.close()
+
+    def _saveChanges(self):
+        self.saveSignal.emit()
+
+
+class NewRampConfigGetName(SiriusDialog):
+    """Auxiliar window to get a ramp config name to create a new one."""
+
+    configNameSignal = pyqtSignal(str)
+    saveSignal = pyqtSignal()
+
+    def __init__(self, parent, ramp_config):
+        """Initialize object."""
+        super().__init__(parent)
+        self.setWindowTitle('New config from template')
+        self.ramp_config = ramp_config
+        self._setupUi()
+
+    def _setupUi(self):
+        l_insert = QLabel('Insert a new configuration name: ', self,
+                          alignment=Qt.AlignCenter)
+        l_insert.setFixedHeight(40)
+
+        self.le_config = QLineEdit('', self)
+        self.le_config.editingFinished.connect(self._configNameChanged)
+
+        self.bt_create = QPushButton('Create', self)
+        self.bt_create.setFixedWidth(140)
+        self.bt_create.setEnabled(False)
+        self.bt_create.setAutoDefault(False)
+        self.bt_create.setDefault(False)
+        self.bt_create.clicked.connect(self._create)
+
+        self.l_warn = QLabel('', self)
+        self.l_warn.setStyleSheet('color: red;')
+        self.l_warn.setFixedWidth(750)
+
+        self.bt_cancel = QPushButton('Cancel', self)
+        self.bt_cancel.setFixedWidth(140)
+        self.bt_cancel.setAutoDefault(False)
+        self.bt_cancel.setDefault(False)
+        self.bt_cancel.clicked.connect(self.close)
+
+        lay = QGridLayout(self)
+        lay.addWidget(l_insert, 0, 0)
+        lay.addWidget(self.le_config, 1, 0)
+        lay.addWidget(self.bt_create, 1, 1)
+        lay.addWidget(self.l_warn, 2, 0)
+        lay.addWidget(self.bt_cancel, 2, 1)
+
+    def _configNameChanged(self):
+        self.le_config.blockSignals(True)
+        # the previous line fix a qt bug that triggered lineedit.editFinished
+        # to be called twice when enter key is pressed
+        name = self.le_config.text()
+        if name != '' and not ramp.BoosterRamp(name).configsrv_exist():
+            self.bt_create.setEnabled(True)
+        else:
+            if name == '':
+                self.l_warn.setText('Insert a config name!')
+            elif ramp.BoosterRamp(name).configsrv_exist():
+                self.l_warn.setText('A configuration with this '
+                                    'name already exists!')
+            self.bt_create.setEnabled(False)
+        self.le_config.blockSignals(False)
+
+    def _create(self):
+        name = self.le_config.text()
+        if self.ramp_config is not None:
+            if not self.ramp_config.configsrv_synchronized:
+                save_changes = MessageBox(
+                    self, 'Save changes?',
+                    'There are unsaved changes. \n'
+                    'Do you want to save?'.format(name),
+                    'Yes', 'Cancel')
+                save_changes.acceptedSignal.connect(self._saveChanges)
+                save_changes.exec_()
+        self.configNameSignal.emit(name)
+        self.close()
+
+    def _saveChanges(self):
+        self.saveSignal.emit()
 
 
 class InsertNormalizedConfig(SiriusDialog):
@@ -311,9 +492,12 @@ class OpticsAdjustSettings(SiriusDialog):
         self._setupUi()
 
     def _setupUi(self):
-        self._setupTuneSettings()
-        self._setupChromSettings()
-        # TODO: insert orbit correction settings
+        self.tune_settings = QWidget(self)
+        self.tune_settings.setLayout(self._setupTuneSettings())
+        self.chrom_settings = QWidget(self)
+        self.chrom_settings.setLayout(self._setupChromSettings())
+        self.orbit_settings = QWidget(self)
+        self.orbit_settings.setLayout(self._setupOrbitSettings())
         self.bt_apply = QPushButton('Apply Settings', self)
         self.bt_apply.setFixedWidth(250)
         self.bt_apply.clicked.connect(self._emitSettings)
@@ -322,17 +506,27 @@ class OpticsAdjustSettings(SiriusDialog):
             QSpacerItem(20, 60, QSzPlcy.Expanding, QSzPlcy.Fixed))
         hlay_apply.addWidget(self.bt_apply)
 
-        lay = QGridLayout()
-        lay.addLayout(self.lay_tune_settings, 0, 0)
-        lay.addItem(
-            QSpacerItem(20, 10, QSzPlcy.Expanding, QSzPlcy.Fixed), 0, 1)
-        lay.addLayout(self.lay_chrom_settings, 0, 2)
-        lay.addItem(
-            QSpacerItem(20, 10, QSzPlcy.Expanding, QSzPlcy.Fixed), 0, 3)
-        # insert orbit correction settings
-        lay.addLayout(hlay_apply, 1, 0, 1, 3)
+        tabs = QTabWidget(self)
+        tabs.addTab(self.orbit_settings, 'Orbit')
+        tabs.addTab(self.tune_settings, 'Tune')
+        tabs.addTab(self.chrom_settings, 'Chromaticity')
+
+        lay = QVBoxLayout()
+        lay.addWidget(tabs)
+        lay.addLayout(hlay_apply)
 
         self.setLayout(lay)
+
+    def _setupOrbitSettings(self):
+        l_orbitsettings = QLabel('<h3>Orbit Correction Settings</h3>', self)
+        l_orbitsettings.setAlignment(Qt.AlignCenter)
+
+        # TODO: insert orbit correction settings
+
+        lay = QVBoxLayout()
+        lay.addWidget(l_orbitsettings)
+
+        return lay
 
     def _setupTuneSettings(self):
         l_tuneconfig = QLabel('<h3>Tune Variation Config</h3>', self)
@@ -385,7 +579,8 @@ class OpticsAdjustSettings(SiriusDialog):
         lay.addWidget(self.table_nomKL)
         lay.addItem(
             QSpacerItem(20, 101, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding))
-        self.lay_tune_settings = lay
+
+        return lay
 
     def _setupChromSettings(self):
         l_chromconfig = QLabel('<h3>Chromaticity Variation Config</h3>', self)
@@ -446,7 +641,8 @@ class OpticsAdjustSettings(SiriusDialog):
         lay.addItem(QSpacerItem(20, 10, QSzPlcy.Fixed, QSzPlcy.Expanding))
         lay.addWidget(l_nomchrom)
         lay.addWidget(self.label_nomchrom)
-        self.lay_chrom_settings = lay
+
+        return lay
 
     @pyqtSlot(str)
     def _showTuneConfigData(self, tuneconfig_currname):
@@ -457,9 +653,15 @@ class OpticsAdjustSettings(SiriusDialog):
         self.table_tunemat.setItem(0, 1, QTableWidgetItem(str(mat[0][1])))
         self.table_tunemat.setItem(1, 0, QTableWidgetItem(str(mat[1][0])))
         self.table_tunemat.setItem(1, 1, QTableWidgetItem(str(mat[1][1])))
+        self.table_tunemat.item(0, 0).setFlags(Qt.ItemIsEnabled)
+        self.table_tunemat.item(0, 1).setFlags(Qt.ItemIsEnabled)
+        self.table_tunemat.item(1, 0).setFlags(Qt.ItemIsEnabled)
+        self.table_tunemat.item(1, 1).setFlags(Qt.ItemIsEnabled)
         nomKL = querry['result']['value']['nominal KLs']
         self.table_nomKL.setItem(0, 0, QTableWidgetItem(str(nomKL[0])))
         self.table_nomKL.setItem(0, 1, QTableWidgetItem(str(nomKL[1])))
+        self.table_nomKL.item(0, 0).setFlags(Qt.ItemIsEnabled)
+        self.table_nomKL.item(0, 1).setFlags(Qt.ItemIsEnabled)
 
     @pyqtSlot(str)
     def _showChromConfigData(self, chromconfig_currname):
@@ -470,9 +672,15 @@ class OpticsAdjustSettings(SiriusDialog):
         self.table_chrommat.setItem(0, 1, QTableWidgetItem(str(mat[0][1])))
         self.table_chrommat.setItem(1, 0, QTableWidgetItem(str(mat[1][0])))
         self.table_chrommat.setItem(1, 1, QTableWidgetItem(str(mat[1][1])))
+        self.table_chrommat.item(0, 0).setFlags(Qt.ItemIsEnabled)
+        self.table_chrommat.item(0, 1).setFlags(Qt.ItemIsEnabled)
+        self.table_chrommat.item(1, 0).setFlags(Qt.ItemIsEnabled)
+        self.table_chrommat.item(1, 1).setFlags(Qt.ItemIsEnabled)
         nomSL = querry['result']['value']['nominal SLs']
         self.table_nomSL.setItem(0, 0, QTableWidgetItem(str(nomSL[0])))
         self.table_nomSL.setItem(0, 1, QTableWidgetItem(str(nomSL[1])))
+        self.table_nomSL.item(0, 0).setFlags(Qt.ItemIsEnabled)
+        self.table_nomSL.item(0, 1).setFlags(Qt.ItemIsEnabled)
         self.label_nomchrom.setText(
             str(querry['result']['value']['nominal chrom']))
 
@@ -589,6 +797,9 @@ class SpinBoxDelegate(QStyledItemDelegate):
         editor.setMinimum(0)
         editor.setMaximum(500)
         editor.setDecimals(4)
+        locale = QLocale(QLocale.English, country=QLocale.UnitedStates)
+        locale.setNumberOptions(locale.RejectGroupSeparator)
+        editor.setLocale(locale)
         return editor
 
     def setEditorData(self, spinBox, index):
@@ -668,6 +879,12 @@ class CustomTableWidgetItem(QTableWidgetItem):
 
 class _MyDoubleSpinBox(QDoubleSpinBox):
     """Subclass QDoubleSpinBox to reimplement whellEvent."""
+
+    def __init__(self, parent):
+        super().__init__(parent)
+        locale = QLocale(QLocale.English, country=QLocale.UnitedStates)
+        locale.setNumberOptions(locale.RejectGroupSeparator)
+        self.setLocale(locale)
 
     def wheelEvent(self, event):
         if not self.hasFocus():
