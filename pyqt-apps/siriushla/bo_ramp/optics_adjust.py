@@ -1,11 +1,11 @@
 """Booster Ramp Control HLA: Optics Adjust Module."""
 
 from copy import deepcopy as _dcopy
-from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal
+from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal, QLocale
 from PyQt5.QtWidgets import QGroupBox, QPushButton, QSpinBox, QLabel, \
                             QHBoxLayout, QVBoxLayout, QGridLayout, \
-                            QSizePolicy as QSzPlcy, QDoubleSpinBox, \
-                            QSpacerItem, QInputDialog, QLineEdit
+                            QSizePolicy as QSzPlcy, QDoubleSpinBox, QAction, \
+                            QSpacerItem, QInputDialog, QLineEdit, QMenu
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.ramp import ramp
 from siriuspy.ramp.magnet import Magnet as _Magnet
@@ -15,7 +15,6 @@ from siriuspy.servconf.conf_service import ConfigService as _ConfigService
 from pydm.widgets import PyDMLineEdit
 from siriushla.bo_ramp.auxiliar_classes import \
     EditNormalizedConfig as _EditNormalizedConfig, \
-    OpticsAdjustSettings as _OpticsAdjustSettings, \
     MessageBox as _MessageBox
 
 
@@ -35,80 +34,71 @@ class OpticsAdjust(QGroupBox):
         self._aux_magnets = dict()
         for ma in ramp.BoosterNormalized().manames:
             self._aux_magnets[ma] = _Magnet(ma)
+        self._locale = QLocale(QLocale.English, country=QLocale.UnitedStates)
+        self._locale.setNumberOptions(self._locale.RejectGroupSeparator)
         self._setupUi()
         self._tunecorr = BOTuneCorr('Default_1')
         self._chromcorr = BOChromCorr('Default')
 
     def _setupUi(self):
-        hlay = QHBoxLayout()
-        self.settings = QVBoxLayout()
-        self.tune_variation = QGridLayout()
-        self.chrom_variation = QGridLayout()
-        self.orbit_correction = QGridLayout()
+        self.settings = self._setupChooseConfig()
+        self.tune_variation = self._setupTuneVariation()
+        self.chrom_variation = self._setupChromVariation()
+        self.orbit_correction = self._setupOrbitCorrection()
 
-        self._setupChooseConfig()
-        self._setupTuneVariation()
-        self._setupChromVariation()
-        self._setupOrbitCorrection()
-
-        hlay.addSpacerItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Preferred))
-        hlay.addLayout(self.settings)
-        hlay.addSpacerItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Preferred))
-        hlay.addLayout(self.tune_variation)
-        hlay.addSpacerItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Preferred))
-        hlay.addLayout(self.chrom_variation)
-        hlay.addSpacerItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Preferred))
-        hlay.addLayout(self.orbit_correction)
-        hlay.addSpacerItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Preferred))
-        self.setLayout(hlay)
+        lay = QHBoxLayout()
+        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Preferred))
+        lay.addLayout(self.settings)
+        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Preferred))
+        lay.addLayout(self.orbit_correction)
+        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Preferred))
+        lay.addLayout(self.tune_variation)
+        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Preferred))
+        lay.addLayout(self.chrom_variation)
+        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Preferred))
+        self.setLayout(lay)
 
     def _setupChooseConfig(self):
-        hlay_config = QHBoxLayout()
+        l_confignr = QLabel('Config. number: ')
         self.sb_config = QSpinBox(self)
-        self.l_configname = QLabel('', self)
-        hlay_config.addWidget(self.sb_config)
-        hlay_config.addWidget(self.l_configname)
-        self.bt_edit = QPushButton('Edit strengths', self)
-        self.bt_update = QPushButton('Update in ramp config.')
-        self.bt_settings = QPushButton('Settings', self)
-        l_server = QLabel('<h4>Server</h4>')
-        l_server.setAlignment(Qt.AlignCenter)
-        self.bt_load = QPushButton('Load', self)
-        self.bt_save = QPushButton('Save', self)
-        self.bt_save_as = QPushButton('Save As...', self)
-
         self.sb_config.setMinimum(1)
         self.sb_config.setFixedWidth(80)
         self.sb_config.editingFinished.connect(self._handleConfigIndexChanged)
-        self.l_configname.setFixedWidth(250)
-        self.bt_edit.clicked.connect(self._showEditPopup)
-        self.bt_update.clicked.connect(self._updateRampConfig)
-        self.bt_settings.clicked.connect(self._showSettingsPopup)
-        self.bt_load.clicked.connect(self._load)
-        self.bt_save.clicked.connect(self._save)
-        self.bt_save_as.clicked.connect(self._showSaveAsPopup)
+        hlay_config = QHBoxLayout()
+        hlay_config.addWidget(l_confignr)
+        hlay_config.addWidget(self.sb_config)
 
-        self.settings.addItem(
-            QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
-        self.settings.addLayout(hlay_config)
-        self.settings.addItem(
-            QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
-        self.settings.addWidget(self.bt_edit)
-        self.settings.addWidget(self.bt_update)
-        self.settings.addWidget(self.bt_settings)
-        self.settings.addItem(
-            QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
-        self.settings.addWidget(l_server)
-        self.settings.addWidget(self.bt_load)
-        self.settings.addWidget(self.bt_save)
-        self.settings.addWidget(self.bt_save_as)
-        self.settings.addItem(
-            QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
+        self.bt_edit = QPushButton('', self)
+        self.bt_edit.setToolTip('Click to edit strengths')
+        self.bt_edit.clicked.connect(self._showEditPopup)
+
+        self.bt_save = QPushButton('Save in ramp config.')
+        self.bt_save.clicked.connect(self._updateRampConfig)
+
+        self.bt_server = QPushButton('Server', self)
+        self.act_load = QAction('Load', self)
+        self.act_load.triggered.connect(self._load)
+        self.act_save = QAction('Save', self)
+        self.act_save.triggered.connect(self._save)
+        self.act_save_as = QAction('Save As...', self)
+        self.act_save_as.triggered.connect(self._showSaveAsPopup)
+        server_menu = QMenu(self)
+        server_menu.addAction(self.act_load)
+        server_menu.addAction(self.act_save)
+        server_menu.addAction(self.act_save_as)
+        self.bt_server.setMenu(server_menu)
+
+        lay = QVBoxLayout()
+        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
+        lay.addLayout(hlay_config)
+        lay.addWidget(self.bt_edit)
+        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
+        lay.addWidget(self.bt_save)
+        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
+        lay.addWidget(self.bt_server)
+        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
+
+        return lay
 
     def _setupTuneVariation(self):
         label_tune = QLabel('<h4>Tune Variation</h4>', self)
@@ -123,6 +113,7 @@ class OpticsAdjust(QGroupBox):
         self.sb_deltaTuneX.setMaximum(1)
         self.sb_deltaTuneX.setSingleStep(0.0001)
         self.sb_deltaTuneX.setFixedWidth(200)
+        self.sb_deltaTuneX.setLocale(self._locale)
         self.sb_deltaTuneX.editingFinished.connect(self._calculate_deltaKL)
 
         label_deltaTuneY = QLabel('Δν<sub>y</sub>: ')
@@ -133,6 +124,7 @@ class OpticsAdjust(QGroupBox):
         self.sb_deltaTuneY.setMaximum(1)
         self.sb_deltaTuneY.setSingleStep(0.0001)
         self.sb_deltaTuneY.setFixedWidth(200)
+        self.sb_deltaTuneY.setLocale(self._locale)
         self.sb_deltaTuneY.editingFinished.connect(self._calculate_deltaKL)
 
         label_KL = QLabel('<h4>ΔKL</h4>', self)
@@ -157,31 +149,30 @@ class OpticsAdjust(QGroupBox):
         hlay_bt_apply.addSpacerItem(
             QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
 
-        self.tune_variation.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 0, 2)
-        self.tune_variation.addWidget(label_tune, 1, 0, 1, 5)
-        self.tune_variation.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 2, 2)
-        self.tune_variation.addWidget(label_deltaTuneX, 3, 0)
-        self.tune_variation.addWidget(self.sb_deltaTuneX, 3, 1)
-        self.tune_variation.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 3, 2)
-        self.tune_variation.addWidget(label_deltaTuneY, 3, 3)
-        self.tune_variation.addWidget(self.sb_deltaTuneY, 3, 4)
-        self.tune_variation.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 4, 2)
-        self.tune_variation.addWidget(label_KL, 5, 0, 1, 5)
-        self.tune_variation.addWidget(label_deltaKLQF, 6, 0)
-        self.tune_variation.addWidget(self.l_deltaKLQF, 6, 1)
-        self.tune_variation.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 6, 2)
-        self.tune_variation.addWidget(label_deltaKLQD, 6, 3)
-        self.tune_variation.addWidget(self.l_deltaKLQD, 6, 4)
-        self.tune_variation.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 7, 2)
-        self.tune_variation.addLayout(hlay_bt_apply, 8, 0, 1, 5)
-        self.tune_variation.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 9, 2)
+        lay = QGridLayout()
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding),
+                    0, 2)
+        lay.addWidget(label_tune, 1, 0, 1, 5)
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 2, 2)
+        lay.addWidget(label_deltaTuneX, 3, 0)
+        lay.addWidget(self.sb_deltaTuneX, 3, 1)
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 3, 2)
+        lay.addWidget(label_deltaTuneY, 3, 3)
+        lay.addWidget(self.sb_deltaTuneY, 3, 4)
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding),
+                    4, 2)
+        lay.addWidget(label_KL, 5, 0, 1, 5)
+        lay.addWidget(label_deltaKLQF, 6, 0)
+        lay.addWidget(self.l_deltaKLQF, 6, 1)
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 6, 2)
+        lay.addWidget(label_deltaKLQD, 6, 3)
+        lay.addWidget(self.l_deltaKLQD, 6, 4)
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding),
+                    7, 2)
+        lay.addLayout(hlay_bt_apply, 8, 0, 1, 5)
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding),
+                    9, 2)
+        return lay
 
     def _setupChromVariation(self):
         label_chrom = QLabel('<h4>Chromaticity Variation</h4>', self)
@@ -196,6 +187,7 @@ class OpticsAdjust(QGroupBox):
         self.sb_deltaChromX.setMaximum(10)
         self.sb_deltaChromX.setSingleStep(0.0001)
         self.sb_deltaChromX.setFixedWidth(200)
+        self.sb_deltaChromX.setLocale(self._locale)
         self.sb_deltaChromX.editingFinished.connect(self._calculate_deltaSL)
 
         label_deltaChromY = QLabel('Δξ<sub>y</sub>: ')
@@ -206,6 +198,7 @@ class OpticsAdjust(QGroupBox):
         self.sb_deltaChromY.setMaximum(10)
         self.sb_deltaChromY.setSingleStep(0.0001)
         self.sb_deltaChromY.setFixedWidth(200)
+        self.sb_deltaChromY.setLocale(self._locale)
         self.sb_deltaChromY.editingFinished.connect(self._calculate_deltaSL)
 
         label_SL = QLabel('<h4>ΔSL</h4>', self)
@@ -230,31 +223,30 @@ class OpticsAdjust(QGroupBox):
         hlay_bt_apply.addSpacerItem(
             QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
 
-        self.chrom_variation.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 0, 2)
-        self.chrom_variation.addWidget(label_chrom, 1, 0, 1, 5)
-        self.chrom_variation.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 2, 2)
-        self.chrom_variation.addWidget(label_deltaChromX, 3, 0)
-        self.chrom_variation.addWidget(self.sb_deltaChromX, 3, 1)
-        self.chrom_variation.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 3, 2)
-        self.chrom_variation.addWidget(label_deltaChromY, 3, 3)
-        self.chrom_variation.addWidget(self.sb_deltaChromY, 3, 4)
-        self.chrom_variation.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 4, 2)
-        self.chrom_variation.addWidget(label_SL, 5, 0, 1, 5)
-        self.chrom_variation.addWidget(label_deltaSLSF, 6, 0)
-        self.chrom_variation.addWidget(self.l_deltaSLSF, 6, 1)
-        self.chrom_variation.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 6, 2)
-        self.chrom_variation.addWidget(label_deltaSLSD, 6, 3)
-        self.chrom_variation.addWidget(self.l_deltaSLSD, 6, 4)
-        self.chrom_variation.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 7, 2)
-        self.chrom_variation.addLayout(hlay_bt_apply, 8, 0, 1, 5)
-        self.chrom_variation.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 9, 2)
+        lay = QGridLayout()
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding),
+                    0, 2)
+        lay.addWidget(label_chrom, 1, 0, 1, 5)
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 2, 2)
+        lay.addWidget(label_deltaChromX, 3, 0)
+        lay.addWidget(self.sb_deltaChromX, 3, 1)
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 3, 2)
+        lay.addWidget(label_deltaChromY, 3, 3)
+        lay.addWidget(self.sb_deltaChromY, 3, 4)
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding),
+                    4, 2)
+        lay.addWidget(label_SL, 5, 0, 1, 5)
+        lay.addWidget(label_deltaSLSF, 6, 0)
+        lay.addWidget(self.l_deltaSLSF, 6, 1)
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 6, 2)
+        lay.addWidget(label_deltaSLSD, 6, 3)
+        lay.addWidget(self.l_deltaSLSD, 6, 4)
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding),
+                    7, 2)
+        lay.addLayout(hlay_bt_apply, 8, 0, 1, 5)
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding),
+                    9, 2)
+        return lay
 
     def _setupOrbitCorrection(self):
         label = QLabel('<h4>Orbit Correction</h4>', self)
@@ -290,22 +282,21 @@ class OpticsAdjust(QGroupBox):
         hlay_bt_apply.addSpacerItem(
             QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
 
-        self.orbit_correction.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 0, 0)
-        self.orbit_correction.addWidget(label, 1, 0, 1, 3)
-        self.orbit_correction.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 2, 0)
-        self.orbit_correction.addWidget(self.bt_load_measured_orbit,
-                                        3, 0, 1, 3)
-        self.orbit_correction.addWidget(self.bt_correctH, 4, 0)
-        self.orbit_correction.addWidget(self.pydmledit_correctH, 4, 1)
-        self.orbit_correction.addWidget(labelH, 4, 2)
-        self.orbit_correction.addWidget(self.bt_correctV, 5, 0)
-        self.orbit_correction.addWidget(self.pydmledit_correctV, 5, 1)
-        self.orbit_correction.addWidget(labelV, 5, 2)
-        self.orbit_correction.addLayout(hlay_bt_apply, 6, 0, 1, 3)
-        self.orbit_correction.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 7, 0)
+        lay = QGridLayout()
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 0, 0)
+        lay.addWidget(label, 1, 0, 1, 3)
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 2, 0)
+        lay.addWidget(self.bt_load_measured_orbit, 3, 0, 1, 3)
+        lay.addWidget(self.bt_correctH, 4, 0)
+        lay.addWidget(self.pydmledit_correctH, 4, 1)
+        lay.addWidget(labelH, 4, 2)
+        lay.addWidget(self.bt_correctV, 5, 0)
+        lay.addWidget(self.pydmledit_correctV, 5, 1)
+        lay.addWidget(labelV, 5, 2)
+        lay.addLayout(hlay_bt_apply, 6, 0, 1, 3)
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 7, 0)
+
+        return lay
 
     def _handleConfigIndexChanged(self):
         if not self._table_map:
@@ -313,24 +304,24 @@ class OpticsAdjust(QGroupBox):
         config_idx = self.sb_config.value()
         for label, value in self._table_map['rows'].items():
             if config_idx == (value + 1):
-                self.l_configname.setText(label)
+                self.bt_edit.setText(label)
                 if label in ['Injection', 'Ejection']:
                     self.bt_edit.setEnabled(False)
-                    self.bt_update.setEnabled(False)
-                    self.bt_load.setEnabled(False)
                     self.bt_save.setEnabled(False)
-                    self.bt_save_as.setEnabled(False)
+                    self.act_load.setEnabled(False)
+                    self.act_save.setEnabled(False)
+                    self.act_save_as.setEnabled(False)
                     self.norm_config = None
                 else:
                     self.bt_edit.setEnabled(True)
-                    self.bt_update.setEnabled(True)
                     self.bt_save.setEnabled(True)
-                    self.bt_save_as.setEnabled(True)
+                    self.act_save.setEnabled(True)
+                    self.act_save_as.setEnabled(True)
                     self.norm_config = self.ramp_config[label]
                     if self.norm_config.configsrv_exist():
-                        self.bt_load.setEnabled(True)
+                        self.act_load.setEnabled(True)
                     else:
-                        self.bt_load.setEnabled(False)
+                        self.act_load.setEnabled(False)
                         self.verifySync()
                 break
         self._resetTuneChanges()
@@ -359,21 +350,8 @@ class OpticsAdjust(QGroupBox):
         self.verifySync()
 
     def _updateRampConfig(self):
-        self.normConfigChanged.emit(self.norm_config)
-
-    def _showSettingsPopup(self):
         if self.norm_config is not None:
-            self._settingsPopup = _OpticsAdjustSettings(
-                self, self._tunecorr.name, self._chromcorr.name)
-            self._settingsPopup.updateSettings.connect(
-                self._handleUpdateSettings)
-            self._settingsPopup.open()
-
-    @pyqtSlot(list)
-    def _handleUpdateSettings(self, settings):
-        self._tunecorr = BOTuneCorr(settings[0])
-        self._chromcorr = BOChromCorr(settings[1])
-        # TODO: handle orbir correction settings
+            self.normConfigChanged.emit(self.norm_config)
 
     def _load(self):
         if self.norm_config is not None:
@@ -393,22 +371,22 @@ class OpticsAdjust(QGroupBox):
             text, ok = QInputDialog.getText(self, 'Save As...',
                                             'Normalized config. name:',
                                             echo=QLineEdit.Normal, text='')
-        if not ok:
-            return
-        self._name_to_saveas = text
-        allconfigs = _ConfigService().find_configs(config_type='bo_ramp')
-        for c in allconfigs['result']:
-            if text == c['name']:
-                save_changes = _MessageBox(
-                    self, 'Overwrite configuration?',
-                    'There is a configuration with name {}. \n'
-                    'Do you want to replace it?'.format(text),
-                    'Yes', 'Cancel')
-                save_changes.acceptedSignal.connect(self._save_as)
-                save_changes.exec_()
-                break
-        else:
-            self._save_as()
+            if not ok:
+                return
+            self._name_to_saveas = text
+            allconfigs = _ConfigService().find_configs(config_type='bo_ramp')
+            for c in allconfigs['result']:
+                if text == c['name']:
+                    save_changes = _MessageBox(
+                        self, 'Overwrite configuration?',
+                        'There is a configuration with name {}. \n'
+                        'Do you want to replace it?'.format(text),
+                        'Yes', 'Cancel')
+                    save_changes.acceptedSignal.connect(self._save_as)
+                    save_changes.exec_()
+                    break
+            else:
+                self._save_as()
 
     def _save_as(self):
         config_tosave = _dcopy(self.norm_config)
@@ -490,14 +468,14 @@ class OpticsAdjust(QGroupBox):
         """Update table_map and settings widget."""
         self._table_map = table_map
         self.sb_config.setMaximum(max(self._table_map['rows'].values())+1)
-        normconfigname = self.l_configname.text()
+        normconfigname = self.bt_edit.text()
         if normconfigname == '':
             return
         if normconfigname in self._table_map['rows'].keys():
             self.sb_config.setValue(self._table_map['rows'][normconfigname]+1)
         else:
             self.sb_config.setValue(self._table_map['rows']['Injection']+1)
-            self.l_configname.setText('Injection')
+            self.bt_edit.setText('Injection')
         self._handleConfigIndexChanged()
 
     @pyqtSlot(ramp.BoosterRamp)
@@ -508,10 +486,17 @@ class OpticsAdjust(QGroupBox):
                 self.norm_config.name in ramp_config.normalized_configs_names):
             self.norm_config = self.ramp_config[self.norm_config.name]
 
+    @pyqtSlot(list)
+    def handleUpdateSettings(self, settings):
+        """Update settings."""
+        self._tunecorr = BOTuneCorr(settings[0])
+        self._chromcorr = BOChromCorr(settings[1])
+        # TODO: handle orbir correction settings
+
     def verifySync(self):
         """Verify sync status related to ConfServer."""
         if self.norm_config is not None:
             if not self.norm_config.configsrv_synchronized:
-                self.bt_save.setEnabled(True)
+                self.act_save.setEnabled(True)
             else:
-                self.bt_save.setEnabled(False)
+                self.act_save.setEnabled(False)
