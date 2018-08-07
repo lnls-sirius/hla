@@ -1,7 +1,8 @@
 """Booster Ramp Control HLA: Ramp Commands Module."""
 
 from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QGroupBox, QVBoxLayout, QPushButton
+from PyQt5.QtWidgets import QGroupBox, QGridLayout, QPushButton, \
+                            QSpacerItem, QSizePolicy as QSzPlcy
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.ramp.conn import ConnMagnets as _ConnMagnets, \
                                ConnTiming as _ConnTiming
@@ -22,7 +23,7 @@ class RampCommands(QGroupBox):
     def _setupUi(self):
         self.setFixedHeight(500)
 
-        self.bt_upload = QPushButton('Upload to PS', self)
+        self.bt_upload = QPushButton('Send waveforms to PS', self)
         self.bt_cycle = QPushButton('Cycle', self)
         self.bt_start = QPushButton('Start Ramp', self)
         self.bt_stop = QPushButton('Stop Ramp', self)
@@ -32,11 +33,13 @@ class RampCommands(QGroupBox):
         self.bt_start.clicked.connect(self._start)
         self.bt_stop.clicked.connect(self._stop)
 
-        lay = QVBoxLayout(self)
-        lay.addWidget(self.bt_upload)
-        lay.addWidget(self.bt_cycle)
-        lay.addWidget(self.bt_start)
-        lay.addWidget(self.bt_stop)
+        lay = QGridLayout(self)
+        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 0, 0)
+        lay.addWidget(self.bt_upload, 1, 1)
+        lay.addWidget(self.bt_cycle, 2, 1)
+        lay.addWidget(self.bt_start, 3, 1)
+        lay.addWidget(self.bt_stop, 4, 1)
+        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 5, 2)
 
     def _uploadToPS(self):
         if not self._conn_magnets:

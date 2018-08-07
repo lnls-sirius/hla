@@ -88,6 +88,7 @@ class GeneralStatus(QGroupBox):
             QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 10, 0)
 
         self.setLayout(lay)
+        self.setMaximumHeight(450)
 
     def updateMagnetsConnState(self):
         """Update magnets connection state led."""
