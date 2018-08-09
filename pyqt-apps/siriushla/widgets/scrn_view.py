@@ -70,53 +70,16 @@ class _SiriusImageView(PyDMImageView):
         """Show calibration_grid_image over the current image_waveform."""
         self._show_calibration_grid = show
 
-    def redrawImage(self):
-        """
-        Set the image data into the ImageItem, if needed.
-
-        If necessary, reshape the image to 2D first.
-        """
-        if not self.needs_redraw:
-            return
-        image_dimensions = len(self.image_waveform.shape)
-        img = np.array([])
-        if image_dimensions == 1:
-            if self.imageWidth < 1:
-                # We don't have a width for this image yet, so we can't draw it
-                return
-            try:
-                if self.readingOrder == self.ReadingOrder.Clike:
-                    img = self.image_waveform.reshape((-1, self.imageWidth),
-                                                      order='C')
-                else:
-                    img = self.image_waveform.reshape((self.imageWidth, -1),
-                                                      order='F')
-            except Exception:
-                print('ImageWidth property does not match image dimentions!')
-        else:
-            img = self.image_waveform
-
-        if len(img) <= 0:
-            return
+    def process_image(self, image):
+        """Reimplement process_image method to add grid to image."""
         if ((self._show_calibration_grid) and
                 (self._calibration_grid_image is not None)):
             try:
-                grid = self._adjust_calibration_grid(img)
-                img[grid] = self._calibration_grid_maxdata
+                grid = self._adjust_calibration_grid(image)
+                image[grid] = self._calibration_grid_maxdata
             except Exception:
                 print('Grid dimentions do not match image dimentions!')
-        if self._normalize_data:
-            mini = self.image_waveform.min()
-            maxi = self.image_waveform.max()
-        else:
-            mini = self.cm_min
-            maxi = self.cm_max
-        self.getImageItem().setLevels([mini, maxi])
-        self.getImageItem().setImage(
-            img,
-            autoLevels=False,
-            autoDownsample=True)
-        self.needs_redraw = False
+        return image
 
     def _adjust_calibration_grid(self, img):
         height = np.size(img, 0)
@@ -373,9 +336,6 @@ class SiriusScrnView(QWidget):
         self.setLayout(QGridLayout())
         self.setStyleSheet("""font-size:20pt;""")
         self._setupUi()
-        util.connect_window(self.pushbutton_openCameraSettingsDetails,
-                            _CameraSettingsDetails, parent=self,
-                            prefix=self.prefix, device=self.device)
 
     @property
     def calibrationgrid_flag(self):
@@ -413,7 +373,7 @@ class SiriusScrnView(QWidget):
         self.layout().addWidget(container, 2, 1, 1, 3)
 
         self.layout().addItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum), 3, 1)
+            QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 3, 1)
 
         self.camerasettings_groupBox = QGroupBox('Camera Settings', self)
         self.camerasettings_groupBox.setLayout(self._camerasettingsLayout())
@@ -427,7 +387,21 @@ class SiriusScrnView(QWidget):
         self.layout().addWidget(self.statistics_groupBox, 4, 3)
 
         self.layout().addItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum), 5, 1)
+            QSpacerItem(60, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 5, 2)
+
+        self.pb_openDetails = QPushButton('Open details...', self)
+        self.pb_openDetails.setMaximumWidth(220)
+        hlay_openDetails = QHBoxLayout()
+        hlay_openDetails.addItem(
+            QSpacerItem(60, 20, QSzPlcy.Expanding, QSzPlcy.Fixed))
+        hlay_openDetails.addWidget(self.pb_openDetails)
+        self.layout().addLayout(hlay_openDetails, 6, 3)
+        util.connect_window(self.pb_openDetails, _ScrnSettingsDetails,
+                            parent=self, prefix=self.prefix,
+                            device=self.device)
+
+        self.layout().addItem(
+            QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 7, 2)
 
     def _cameraviewLayout(self):
         layout = QGridLayout()
@@ -447,9 +421,9 @@ class SiriusScrnView(QWidget):
             offsety_channel='ca://'+self.prefix+self.device +
                             ':ImgROIOffsetY-RB',
             maxwidth_channel='ca://'+self.prefix+self.device +
-                            ':ImgMaxWidth-Mon',
+                            ':ImgMaxWidth-Cte',
             maxheight_channel='ca://'+self.prefix+self.device +
-                            ':ImgMaxHeight-Mon')
+                            ':ImgMaxHeight-Cte')
         self.image_view.normalizeData = True
         self.image_view.readingOrder = self.image_view.Clike
         self.image_view.maxRedrawRate = 15
@@ -473,25 +447,23 @@ class SiriusScrnView(QWidget):
         layout.addWidget(self.pushbutton_savegrid)
         layout.addItem(
             QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
-        self.label = QLabel('Led: ', self)
-        self.label.setAlignment(Qt.AlignRight)
-        layout.addWidget(self.label)
-        self.PyDMStateButton_LedEnbl = PyDMStateButton(
+        label = QLabel('LED: ', self, alignment=Qt.AlignRight)
+        layout.addWidget(label)
+        self.PyDMStateButton_EnblLED = PyDMStateButton(
             parent=self,
-            init_channel='ca://'+self.prefix+self.device+':LedEnbl-Sel')
-        self.PyDMStateButton_LedEnbl.shape = 1
-        self.PyDMStateButton_LedEnbl.setMaximumHeight(40)
-        self.PyDMStateButton_LedEnbl.setSizePolicy(
+            init_channel='ca://'+self.prefix+self.device+':EnblLED-Sel')
+        self.PyDMStateButton_EnblLED.shape = 1
+        self.PyDMStateButton_EnblLED.setMaximumHeight(40)
+        self.PyDMStateButton_EnblLED.setSizePolicy(
             QSzPlcy.Fixed, QSzPlcy.Maximum)
-        layout.addWidget(self.PyDMStateButton_LedEnbl)
-        self.SiriusLedState_LedEnbl = SiriusLedState(
+        layout.addWidget(self.PyDMStateButton_EnblLED)
+        self.SiriusLedState_EnblLED = SiriusLedState(
             parent=self,
-            init_channel='ca://'+self.prefix+self.device+':LedEnbl-Sts')
-        self.SiriusLedState_LedEnbl.setMinimumSize(40, 40)
-        self.SiriusLedState_LedEnbl.setMaximumHeight(40)
-        self.SiriusLedState_LedEnbl.setSizePolicy(
+            init_channel='ca://'+self.prefix+self.device+':EnblLED-Sts')
+        self.SiriusLedState_EnblLED.setFixedSize(40, 40)
+        self.SiriusLedState_EnblLED.setSizePolicy(
             QSzPlcy.Minimum, QSzPlcy.Maximum)
-        layout.addWidget(self.SiriusLedState_LedEnbl)
+        layout.addWidget(self.SiriusLedState_EnblLED)
         layout.addItem(
             QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
         layout.setAlignment(Qt.AlignVCenter)
@@ -499,24 +471,20 @@ class SiriusScrnView(QWidget):
 
     def _imagesettingsLayout(self):
         layout = QGridLayout()
-        self.label = QLabel('Zoom: ', self)
-        self.label.setAlignment(Qt.AlignRight)
-        layout.addWidget(self.label, 1, 1)
+        label = QLabel('Zoom: ', self, alignment=Qt.AlignRight)
+        layout.addWidget(label, 1, 1)
         self.pushButton_zoomOut = QPushButton('-', parent=self)
         self.pushButton_zoomOut.clicked.connect(self._zoomOut)
-        self.pushButton_zoomOut.setMinimumSize(40, 40)
-        self.pushButton_zoomOut.setMaximumSize(40, 40)
+        self.pushButton_zoomOut.setFixedSize(40, 40)
         layout.addWidget(self.pushButton_zoomOut, 1, 2)
         self.pushButton_zoomActualSize = QPushButton('100%', parent=self)
         self.pushButton_zoomActualSize.clicked.connect(
             self._zoomToActualSize)
-        self.pushButton_zoomActualSize.setMinimumSize(80, 40)
-        self.pushButton_zoomActualSize.setMaximumSize(80, 40)
+        self.pushButton_zoomActualSize.setFixedSize(80, 40)
         layout.addWidget(self.pushButton_zoomActualSize, 1, 3)
         self.pushButton_zoomIn = QPushButton('+', parent=self)
         self.pushButton_zoomIn.clicked.connect(self._zoomIn)
-        self.pushButton_zoomIn.setMinimumSize(40, 40)
-        self.pushButton_zoomIn.setMaximumSize(40, 40)
+        self.pushButton_zoomIn.setFixedSize(40, 40)
         layout.addWidget(self.pushButton_zoomIn, 1, 4)
         return layout
 
@@ -525,9 +493,8 @@ class SiriusScrnView(QWidget):
         layout.addItem(
             QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum), 2, 1)
 
-        self.label = QLabel('Gain', self)
-        self.label.setAlignment(Qt.AlignHCenter)
-        layout.addWidget(self.label, 3, 1, 1, 2)
+        label = QLabel('Gain', self, alignment=Qt.AlignHCenter)
+        layout.addWidget(label, 3, 1, 1, 2)
         self.PyDMSpinbox_CamGain = PyDMSpinbox(
             parent=self,
             init_channel='ca://'+self.prefix+self.device+':CamGain-SP')
@@ -542,9 +509,8 @@ class SiriusScrnView(QWidget):
         self.PyDMLabel_CamGain.setAlignment(Qt.AlignCenter)
         layout.addWidget(self.PyDMLabel_CamGain, 4, 2)
 
-        self.label = QLabel('Exposure Time', self)
-        self.label.setAlignment(Qt.AlignHCenter)
-        layout.addWidget(self.label, 5, 1, 1, 2)
+        label = QLabel('Exposure Time', self, alignment=Qt.AlignHCenter)
+        layout.addWidget(label, 5, 1, 1, 2)
         self.PyDMSpinbox_CamExposureTime = PyDMSpinbox(
             parent=self,
             init_channel='ca://'+self.prefix+self.device+':CamExposureTime-SP')
@@ -559,9 +525,8 @@ class SiriusScrnView(QWidget):
         self.PyDMLabel_CamExposureTime.setAlignment(Qt.AlignCenter)
         layout.addWidget(self.PyDMLabel_CamExposureTime, 6, 2)
 
-        self.label = QLabel('ROI Offset X', self)
-        self.label.setAlignment(Qt.AlignHCenter)
-        layout.addWidget(self.label, 7, 1, 1, 2)
+        label = QLabel('ROI Offset X', self, alignment=Qt.AlignHCenter)
+        layout.addWidget(label, 7, 1, 1, 2)
         self.PyDMSpinbox_ROIOffsetX = PyDMSpinbox(
             parent=self,
             init_channel='ca://'+self.prefix+self.device+':ImgROIOffsetX-SP')
@@ -576,9 +541,8 @@ class SiriusScrnView(QWidget):
         self.PyDMLabel_ROIOffsetX.setAlignment(Qt.AlignCenter)
         layout.addWidget(self.PyDMLabel_ROIOffsetX, 8, 2)
 
-        self.label = QLabel('ROI Offset Y', self)
-        self.label.setAlignment(Qt.AlignHCenter)
-        layout.addWidget(self.label, 9, 1, 1, 2)
+        label = QLabel('ROI Offset Y', self, alignment=Qt.AlignHCenter)
+        layout.addWidget(label, 9, 1, 1, 2)
         self.PyDMSpinbox_ROIOffsetY = PyDMSpinbox(
             parent=self,
             init_channel='ca://'+self.prefix+self.device+':ImgROIOffsetY-SP')
@@ -593,9 +557,8 @@ class SiriusScrnView(QWidget):
         self.PyDMLabel_ROIOffsetY.setAlignment(Qt.AlignCenter)
         layout.addWidget(self.PyDMLabel_ROIOffsetY, 10, 2)
 
-        self.label = QLabel('ROI Width', self)
-        self.label.setAlignment(Qt.AlignHCenter)
-        layout.addWidget(self.label, 11, 1, 1, 2)
+        label = QLabel('ROI Width', self, alignment=Qt.AlignHCenter)
+        layout.addWidget(label, 11, 1, 1, 2)
         self.PyDMSpinbox_ROIWidth = PyDMSpinbox(
             parent=self,
             init_channel='ca://'+self.prefix+self.device+':ImgROIWidth-SP')
@@ -610,9 +573,8 @@ class SiriusScrnView(QWidget):
         self.PyDMLabel_ROIWidth.setAlignment(Qt.AlignCenter)
         layout.addWidget(self.PyDMLabel_ROIWidth, 12, 2)
 
-        self.label = QLabel('ROI Heigth', self)
-        self.label.setAlignment(Qt.AlignHCenter)
-        layout.addWidget(self.label, 13, 1, 1, 2)
+        label = QLabel('ROI Heigth', self, alignment=Qt.AlignHCenter)
+        layout.addWidget(label, 13, 1, 1, 2)
         self.PyDMSpinbox_ROIHeight = PyDMSpinbox(
             parent=self,
             init_channel='ca://'+self.prefix+self.device+':ImgROIHeight-SP')
@@ -630,9 +592,6 @@ class SiriusScrnView(QWidget):
         layout.addItem(
             QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum), 15, 1)
 
-        self.pushbutton_openCameraSettingsDetails = QPushButton(
-            'Open details...', self)
-        layout.addWidget(self.pushbutton_openCameraSettingsDetails, 16, 2)
         return layout
 
     def _statisticsLayout(self):
@@ -641,9 +600,9 @@ class SiriusScrnView(QWidget):
             QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum), 1, 2)
 
         # - Method
-        self.label_Method = QLabel('CalcMethod: ', self)
-        self.label_Method.setMaximumHeight(40)
-        layout.addWidget(self.label_Method, 2, 2)
+        label_Method = QLabel('CalcMethod: ', self)
+        label_Method.setMaximumHeight(40)
+        layout.addWidget(label_Method, 2, 2)
 
         self.comboBox_Method = QComboBox(self)
         self.comboBox_Method.addItem('DimFei', 0)
@@ -657,13 +616,12 @@ class SiriusScrnView(QWidget):
             QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum), 3, 2)
 
         # - Centroid
-        self.label_Centroid = QLabel('Centroid', self)
-        self.label_Centroid.setAlignment(Qt.AlignCenter)
-        self.label_Centroid.setMaximumHeight(40)
-        layout.addWidget(self.label_Centroid, 4, 1, 1, 5)
-        self.label = QLabel('(', self)
-        self.label.setMaximumSize(10, 40)
-        layout.addWidget(self.label, 5, 1)
+        label_Centroid = QLabel('Centroid', self, alignment=Qt.AlignHCenter)
+        label_Centroid.setMaximumHeight(40)
+        layout.addWidget(label_Centroid, 4, 1, 1, 5)
+        label = QLabel('(', self)
+        label.setMaximumSize(10, 40)
+        layout.addWidget(label, 5, 1)
 
         self.PyDMLabel_CenterXDimFei = PyDMLabel(
             parent=self,
@@ -680,9 +638,9 @@ class SiriusScrnView(QWidget):
         self.PyDMLabel_CenterXNDStats.setVisible(False)
         layout.addWidget(self.PyDMLabel_CenterXNDStats, 5, 2)
 
-        self.label = QLabel(',', self)
-        self.label.setMaximumSize(10, 40)
-        layout.addWidget(self.label, 5, 3)
+        label = QLabel(',', self)
+        label.setMaximumSize(10, 40)
+        layout.addWidget(label, 5, 3)
 
         self.PyDMLabel_CenterYDimFei = PyDMLabel(
             parent=self,
@@ -699,18 +657,17 @@ class SiriusScrnView(QWidget):
         self.PyDMLabel_CenterYNDStats.setVisible(False)
         layout.addWidget(self.PyDMLabel_CenterYNDStats, 5, 4)
 
-        self.label = QLabel(')', self)
-        self.label.setMaximumSize(10, 40)
-        layout.addWidget(self.label, 5, 5)
+        label = QLabel(')', self)
+        label.setMaximumSize(10, 40)
+        layout.addWidget(label, 5, 5)
 
         # - Sigma
-        self.label_Sigma = QLabel('Sigma', self)
-        self.label_Sigma.setAlignment(Qt.AlignCenter)
-        self.label_Sigma.setMaximumHeight(40)
-        layout.addWidget(self.label_Sigma, 6, 1, 1, 5)
-        self.label = QLabel('(', self)
-        self.label.setMaximumSize(10, 40)
-        layout.addWidget(self.label, 7, 1)
+        label_Sigma = QLabel('Sigma', self, alignment=Qt.AlignHCenter)
+        label_Sigma.setMaximumHeight(40)
+        layout.addWidget(label_Sigma, 6, 1, 1, 5)
+        label = QLabel('(', self)
+        label.setMaximumSize(10, 40)
+        layout.addWidget(label, 7, 1)
 
         self.PyDMLabel_SigmaXDimFei = PyDMLabel(
             parent=self,
@@ -727,9 +684,9 @@ class SiriusScrnView(QWidget):
         self.PyDMLabel_SigmaXNDStats.setVisible(False)
         layout.addWidget(self.PyDMLabel_SigmaXNDStats, 7, 2)
 
-        self.label = QLabel(',', self)
-        self.label.setMaximumSize(10, 40)
-        layout.addWidget(self.label, 7, 3)
+        label = QLabel(',', self)
+        label.setMaximumSize(10, 40)
+        layout.addWidget(label, 7, 3)
         self.PyDMLabel_SigmaYDimFei = PyDMLabel(
             parent=self,
             init_channel='ca://'+self.prefix+self.device+':SigmaYDimFei-Mon')
@@ -745,18 +702,17 @@ class SiriusScrnView(QWidget):
         self.PyDMLabel_SigmaYNDStats.setVisible(False)
         layout.addWidget(self.PyDMLabel_SigmaYNDStats, 7, 4)
 
-        self.label = QLabel(')', self)
-        self.label.setMaximumSize(10, 40)
-        layout.addWidget(self.label, 7, 5)
+        label = QLabel(')', self)
+        label.setMaximumSize(10, 40)
+        layout.addWidget(label, 7, 5)
 
         # - Theta
-        self.label_Theta = QLabel('Theta', self)
-        self.label_Theta.setAlignment(Qt.AlignCenter)
-        self.label_Theta.setMaximumHeight(40)
-        layout.addWidget(self.label_Theta, 8, 1, 1, 5)
-        self.label = QLabel('(', self)
-        self.label.setMaximumSize(10, 40)
-        layout.addWidget(self.label, 9, 1)
+        label_Theta = QLabel('Theta', self, alignment=Qt.AlignHCenter)
+        label_Theta.setMaximumHeight(40)
+        layout.addWidget(label_Theta, 8, 1, 1, 5)
+        label = QLabel('(', self)
+        label.setMaximumSize(10, 40)
+        layout.addWidget(label, 9, 1)
         self.PyDMLabel_ThetaDimFei = PyDMLabel(
             parent=self,
             init_channel='ca://'+self.prefix+self.device+':ThetaDimFei-Mon')
@@ -768,9 +724,9 @@ class SiriusScrnView(QWidget):
         self.PyDMLabel_ThetaNDStats.setAlignment(Qt.AlignHCenter)
         self.PyDMLabel_ThetaNDStats.setVisible(False)
         layout.addWidget(self.PyDMLabel_ThetaNDStats, 9, 2, 1, 3)
-        self.label = QLabel(')', self)
-        self.label.setMaximumSize(10, 40)
-        layout.addWidget(self.label, 9, 5)
+        label = QLabel(')', self)
+        label.setMaximumSize(10, 40)
+        layout.addWidget(label, 9, 5)
 
         layout.addItem(
             QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum), 10, 2)
@@ -844,7 +800,7 @@ class SiriusScrnView(QWidget):
                     self.image_view.imageWidth))
 
 
-class _CameraSettingsDetails(SiriusMainWindow):
+class _ScrnSettingsDetails(SiriusMainWindow):
 
     def __init__(self, parent=None, device=None, prefix=None):
         super(SiriusMainWindow, self).__init__(parent=parent)
@@ -858,6 +814,52 @@ class _CameraSettingsDetails(SiriusMainWindow):
         self.setCentralWidget(self.centralwidget)
 
     def _setupUi(self):
+        label = QLabel('Screen General Info')
+        label.setStyleSheet("""font-weight: bold;""")
+        self.centralwidget.layout().addRow(label)
+
+        self.centralwidget.layout().addItem(
+            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
+
+        label_MtrPrefix = QLabel('Motor Prefix', self)
+        self.PyDMLabel_MtrPrefix = PyDMLabel(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device+':MtrCtrlPrefix-Cte')
+        self.PyDMLabel_MtrPrefix.setMaximumSize(220, 40)
+        self.PyDMLabel_MtrPrefix.setAlignment(Qt.AlignCenter)
+        self.centralwidget.layout().addRow(label_MtrPrefix,
+                                           self.PyDMLabel_MtrPrefix)
+
+        label_CamPrefix = QLabel('Camera Prefix', self)
+        self.PyDMLabel_CamPrefix = PyDMLabel(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device+':CamPrefix-Cte')
+        self.PyDMLabel_CamPrefix.setMaximumSize(220, 40)
+        self.PyDMLabel_CamPrefix.setAlignment(Qt.AlignCenter)
+        self.centralwidget.layout().addRow(label_CamPrefix,
+                                           self.PyDMLabel_CamPrefix)
+
+        label_ImgMaxWidth = QLabel('Image Maximum Width', self)
+        self.PyDMLabel_ImgMaxWidth = PyDMLabel(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device+':ImgMaxWidth-Cte')
+        self.PyDMLabel_ImgMaxWidth.setMaximumSize(220, 40)
+        self.PyDMLabel_ImgMaxWidth.setAlignment(Qt.AlignCenter)
+        self.centralwidget.layout().addRow(label_ImgMaxWidth,
+                                           self.PyDMLabel_ImgMaxWidth)
+
+        label_ImgMaxHeight = QLabel('Image Maximum Height', self)
+        self.PyDMLabel_ImgMaxHeight = PyDMLabel(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device+':ImgMaxHeight-Cte')
+        self.PyDMLabel_ImgMaxHeight.setMaximumSize(220, 40)
+        self.PyDMLabel_ImgMaxHeight.setAlignment(Qt.AlignCenter)
+        self.centralwidget.layout().addRow(label_ImgMaxHeight,
+                                           self.PyDMLabel_ImgMaxHeight)
+
+        self.centralwidget.layout().addItem(
+            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
+
         label = QLabel('Camera Acquire Settings')
         label.setStyleSheet("""font-weight: bold;""")
         self.centralwidget.layout().addRow(label)
@@ -865,23 +867,22 @@ class _CameraSettingsDetails(SiriusMainWindow):
         self.centralwidget.layout().addItem(
             QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
 
-        hbox = QHBoxLayout()
-        self.label_AcqEnbl = QLabel('Acquire Enable Status', self)
-        self.PyDMStateButton_AcqEnbl = PyDMStateButton(
+        label_CamEnbl = QLabel('Acquire Enable Status', self)
+        self.PyDMStateButton_CamEnbl = PyDMStateButton(
             parent=self,
             init_channel='ca://'+self.prefix+self.device+':CamEnbl-Sel')
-        self.PyDMStateButton_AcqEnbl.setMaximumSize(220, 40)
-        self.PyDMLabel_AcqEnbl = PyDMLabel(
+        self.PyDMStateButton_CamEnbl.setMaximumSize(220, 40)
+        self.PyDMLabel_CamEnbl = PyDMLabel(
             parent=self,
             init_channel='ca://'+self.prefix+self.device+':CamEnbl-Sts')
-        self.PyDMLabel_AcqEnbl.setMaximumSize(220, 40)
-        self.PyDMLabel_AcqEnbl.setAlignment(Qt.AlignCenter)
-        hbox.addWidget(self.PyDMStateButton_AcqEnbl)
-        hbox.addWidget(self.PyDMLabel_AcqEnbl)
-        self.centralwidget.layout().addRow(self.label_AcqEnbl, hbox)
-
+        self.PyDMLabel_CamEnbl.setMaximumSize(220, 40)
+        self.PyDMLabel_CamEnbl.setAlignment(Qt.AlignCenter)
         hbox = QHBoxLayout()
-        self.label_AcqMode = QLabel('Acquire Mode', self)
+        hbox.addWidget(self.PyDMStateButton_CamEnbl)
+        hbox.addWidget(self.PyDMLabel_CamEnbl)
+        self.centralwidget.layout().addRow(label_CamEnbl, hbox)
+
+        label_AcqMode = QLabel('Acquire Mode', self)
         self.PyDMEnumComboBox_AcqMode = PyDMEnumComboBox(
             parent=self,
             init_channel='ca://'+self.prefix+self.device+':CamAcqMode-SP')
@@ -891,12 +892,12 @@ class _CameraSettingsDetails(SiriusMainWindow):
             init_channel='ca://'+self.prefix+self.device+':CamAcqMode-RB')
         self.PyDMLabel_AcqMode.setMaximumSize(220, 40)
         self.PyDMLabel_AcqMode.setAlignment(Qt.AlignCenter)
+        hbox = QHBoxLayout()
         hbox.addWidget(self.PyDMEnumComboBox_AcqMode)
         hbox.addWidget(self.PyDMLabel_AcqMode)
-        self.centralwidget.layout().addRow(self.label_AcqMode, hbox)
+        self.centralwidget.layout().addRow(label_AcqMode, hbox)
 
-        hbox = QHBoxLayout()
-        self.label_AcqPeriod = QLabel('Acquire Period', self)
+        label_AcqPeriod = QLabel('Acquire Period', self)
         self.PyDMSpinbox_AcqPeriod = PyDMSpinbox(
             parent=self,
             init_channel='ca://'+self.prefix+self.device+':CamAcqPeriod-SP')
@@ -908,74 +909,12 @@ class _CameraSettingsDetails(SiriusMainWindow):
             init_channel='ca://'+self.prefix+self.device+':CamAcqPeriod-RB')
         self.PyDMLabel_AcqPeriod.setMaximumSize(220, 40)
         self.PyDMLabel_AcqPeriod.setAlignment(Qt.AlignCenter)
+        hbox = QHBoxLayout()
         hbox.addWidget(self.PyDMSpinbox_AcqPeriod)
         hbox.addWidget(self.PyDMLabel_AcqPeriod)
-        self.centralwidget.layout().addRow(self.label_AcqPeriod, hbox)
+        self.centralwidget.layout().addRow(label_AcqPeriod, hbox)
 
-        hbox = QHBoxLayout()
-        self.label_Gain = QLabel('Gain', self)
-        self.PyDMSpinbox_Gain = PyDMSpinbox(
-            parent=self,
-            init_channel='ca://'+self.prefix+self.device+':CamGain-SP')
-        self.PyDMSpinbox_Gain.setMinimumSize(220, 40)
-        self.PyDMSpinbox_Gain.setMaximumSize(220, 40)
-        self.PyDMSpinbox_Gain.setAlignment(Qt.AlignCenter)
-        self.PyDMSpinbox_Gain.showStepExponent = False
-        self.PyDMLabel_Gain = PyDMLabel(
-            parent=self,
-            init_channel='ca://'+self.prefix+self.device+':CamGain-RB')
-        self.PyDMLabel_Gain.setMinimumSize(220, 40)
-        self.PyDMLabel_Gain.setMaximumSize(220, 40)
-        self.PyDMLabel_Gain.setAlignment(Qt.AlignCenter)
-        self.PyDMPushButton_AutoGain = PyDMPushButton(
-            parent=self,
-            label='Auto Gain',
-            pressValue=1,
-            init_channel='ca://'+self.prefix+self.device+':CamAutoGain-Cmg')
-        self.PyDMPushButton_AutoGain.setMaximumSize(220, 40)
-        hbox.addWidget(self.PyDMSpinbox_Gain)
-        hbox.addWidget(self.PyDMLabel_Gain)
-        hbox.addWidget(self.PyDMPushButton_AutoGain)
-        self.centralwidget.layout().addRow(self.label_Gain, hbox)
-
-        hbox = QHBoxLayout()
-        self.label_BlackLevel = QLabel('Black Level', self)
-        self.PyDMSpinbox_BlackLevel = PyDMSpinbox(
-            parent=self,
-            init_channel='ca://'+self.prefix+self.device+':CamBlackLevel-SP')
-        self.PyDMSpinbox_BlackLevel.setMaximumSize(220, 40)
-        self.PyDMSpinbox_BlackLevel.setAlignment(Qt.AlignCenter)
-        self.PyDMSpinbox_BlackLevel.showStepExponent = False
-        self.PyDMLabel_BlackLevel = PyDMLabel(
-            parent=self,
-            init_channel='ca://'+self.prefix+self.device+':CamBlackLevel-RB')
-        self.PyDMLabel_BlackLevel.setMaximumSize(220, 40)
-        self.PyDMLabel_BlackLevel.setAlignment(Qt.AlignCenter)
-        hbox.addWidget(self.PyDMSpinbox_BlackLevel)
-        hbox.addWidget(self.PyDMLabel_BlackLevel)
-        self.centralwidget.layout().addRow(self.label_BlackLevel, hbox)
-
-        hbox = QHBoxLayout()
-        self.label_DebPeriod = QLabel('Trigger Debouncer Period', self)
-        self.PyDMSpinbox_DebPeriod = PyDMSpinbox(
-            parent=self,
-            init_channel='ca://'+self.prefix+self.device +
-                         ':CamDebouncerPeriod-SP')
-        self.PyDMSpinbox_DebPeriod.setMaximumSize(220, 40)
-        self.PyDMSpinbox_DebPeriod.setAlignment(Qt.AlignCenter)
-        self.PyDMSpinbox_DebPeriod.showStepExponent = False
-        self.PyDMLabel_DebPeriod = PyDMLabel(
-            parent=self,
-            init_channel='ca://'+self.prefix+self.device +
-                         ':CamDebouncerPeriod-RB')
-        self.PyDMLabel_DebPeriod.setMaximumSize(220, 40)
-        self.PyDMLabel_DebPeriod.setAlignment(Qt.AlignCenter)
-        hbox.addWidget(self.PyDMSpinbox_DebPeriod)
-        hbox.addWidget(self.PyDMLabel_DebPeriod)
-        self.centralwidget.layout().addRow(self.label_DebPeriod, hbox)
-
-        hbox = QHBoxLayout()
-        self.label_ExpMode = QLabel('Exposure Mode', self)
+        label_ExpMode = QLabel('Exposure Mode', self)
         self.PyDMEnumComboBox_ExpMode = PyDMEnumComboBox(
             parent=self,
             init_channel='ca://'+self.prefix+self.device+':CamExposureMode-SP')
@@ -985,12 +924,12 @@ class _CameraSettingsDetails(SiriusMainWindow):
             init_channel='ca://'+self.prefix+self.device+':CamExposureMode-RB')
         self.PyDMLabel_ExpMode.setMaximumSize(220, 40)
         self.PyDMLabel_ExpMode.setAlignment(Qt.AlignCenter)
+        hbox = QHBoxLayout()
         hbox.addWidget(self.PyDMEnumComboBox_ExpMode)
         hbox.addWidget(self.PyDMLabel_ExpMode)
-        self.centralwidget.layout().addRow(self.label_ExpMode, hbox)
+        self.centralwidget.layout().addRow(label_ExpMode, hbox)
 
-        hbox = QHBoxLayout()
-        self.label_ExpTime = QLabel('Exposure Time', self)
+        label_ExpTime = QLabel('Exposure Time', self)
         self.PyDMSpinbox_ExpTime = PyDMSpinbox(
             parent=self,
             init_channel='ca://'+self.prefix+self.device+':CamExposureTime-SP')
@@ -1002,9 +941,51 @@ class _CameraSettingsDetails(SiriusMainWindow):
             init_channel='ca://'+self.prefix+self.device+':CamExposureTime-RB')
         self.PyDMLabel_ExpTime.setMaximumSize(220, 40)
         self.PyDMLabel_ExpTime.setAlignment(Qt.AlignCenter)
+        hbox = QHBoxLayout()
         hbox.addWidget(self.PyDMSpinbox_ExpTime)
         hbox.addWidget(self.PyDMLabel_ExpTime)
-        self.centralwidget.layout().addRow(self.label_ExpTime, hbox)
+        self.centralwidget.layout().addRow(label_ExpTime, hbox)
+
+        label_Gain = QLabel('Gain', self)
+        self.PyDMSpinbox_Gain = PyDMSpinbox(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device+':CamGain-SP')
+        self.PyDMSpinbox_Gain.setFixedSize(220, 40)
+        self.PyDMSpinbox_Gain.setAlignment(Qt.AlignCenter)
+        self.PyDMSpinbox_Gain.showStepExponent = False
+        self.PyDMLabel_Gain = PyDMLabel(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device+':CamGain-RB')
+        self.PyDMLabel_Gain.setFixedSize(220, 40)
+        self.PyDMLabel_Gain.setAlignment(Qt.AlignCenter)
+        self.PyDMPushButton_AutoGain = PyDMPushButton(
+            parent=self,
+            label='Auto Gain',
+            pressValue=1,
+            init_channel='ca://'+self.prefix+self.device+':CamAutoGain-Cmg')
+        self.PyDMPushButton_AutoGain.setMaximumSize(220, 40)
+        hbox = QHBoxLayout()
+        hbox.addWidget(self.PyDMSpinbox_Gain)
+        hbox.addWidget(self.PyDMLabel_Gain)
+        hbox.addWidget(self.PyDMPushButton_AutoGain)
+        self.centralwidget.layout().addRow(label_Gain, hbox)
+
+        label_BlackLevel = QLabel('Black Level', self)
+        self.PyDMSpinbox_BlackLevel = PyDMSpinbox(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device+':CamBlackLevel-SP')
+        self.PyDMSpinbox_BlackLevel.setMaximumSize(220, 40)
+        self.PyDMSpinbox_BlackLevel.setAlignment(Qt.AlignCenter)
+        self.PyDMSpinbox_BlackLevel.showStepExponent = False
+        self.PyDMLabel_BlackLevel = PyDMLabel(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device+':CamBlackLevel-RB')
+        self.PyDMLabel_BlackLevel.setMaximumSize(220, 40)
+        self.PyDMLabel_BlackLevel.setAlignment(Qt.AlignCenter)
+        hbox = QHBoxLayout()
+        hbox.addWidget(self.PyDMSpinbox_BlackLevel)
+        hbox.addWidget(self.PyDMLabel_BlackLevel)
+        self.centralwidget.layout().addRow(label_BlackLevel, hbox)
 
         self.centralwidget.layout().addItem(
             QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
@@ -1016,8 +997,7 @@ class _CameraSettingsDetails(SiriusMainWindow):
         self.centralwidget.layout().addItem(
             QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
 
-        hbox = QHBoxLayout()
-        self.label_ROIOffsetX = QLabel('Offset X', self)
+        label_ROIOffsetX = QLabel('Offset X', self)
         self.PyDMSpinbox_ROIOffsetX = PyDMSpinbox(
             parent=self,
             init_channel='ca://'+self.prefix+self.device+':ImgROIOffsetX-SP')
@@ -1029,12 +1009,12 @@ class _CameraSettingsDetails(SiriusMainWindow):
             init_channel='ca://'+self.prefix+self.device+':ImgROIOffsetX-RB')
         self.PyDMLabel_ROIOffsetX.setMaximumSize(220, 40)
         self.PyDMLabel_ROIOffsetX.setAlignment(Qt.AlignCenter)
+        hbox = QHBoxLayout()
         hbox.addWidget(self.PyDMSpinbox_ROIOffsetX)
         hbox.addWidget(self.PyDMLabel_ROIOffsetX)
-        self.centralwidget.layout().addRow(self.label_ROIOffsetX, hbox)
+        self.centralwidget.layout().addRow(label_ROIOffsetX, hbox)
 
-        hbox = QHBoxLayout()
-        self.label_ROIOffsetY = QLabel('Offset Y', self)
+        label_ROIOffsetY = QLabel('Offset Y', self)
         self.PyDMSpinbox_ROIOffsetY = PyDMSpinbox(
             parent=self,
             init_channel='ca://'+self.prefix+self.device+':ImgROIOffsetY-SP')
@@ -1046,12 +1026,12 @@ class _CameraSettingsDetails(SiriusMainWindow):
             init_channel='ca://'+self.prefix+self.device+':ImgROIOffsetY-RB')
         self.PyDMLabel_ROIOffsetY.setMaximumSize(220, 40)
         self.PyDMLabel_ROIOffsetY.setAlignment(Qt.AlignCenter)
+        hbox = QHBoxLayout()
         hbox.addWidget(self.PyDMSpinbox_ROIOffsetY)
         hbox.addWidget(self.PyDMLabel_ROIOffsetY)
-        self.centralwidget.layout().addRow(self.label_ROIOffsetY, hbox)
+        self.centralwidget.layout().addRow(label_ROIOffsetY, hbox)
 
-        hbox = QHBoxLayout()
-        self.label_ROIWidth = QLabel('Width', self)
+        label_ROIWidth = QLabel('Width', self)
         self.PyDMSpinbox_ROIWidth = PyDMSpinbox(
             parent=self,
             init_channel='ca://'+self.prefix+self.device+':ImgROIWidth-SP')
@@ -1063,12 +1043,12 @@ class _CameraSettingsDetails(SiriusMainWindow):
             init_channel='ca://'+self.prefix+self.device+':ImgROIWidth-RB')
         self.PyDMLabel_ROIWidth.setMaximumSize(220, 40)
         self.PyDMLabel_ROIWidth.setAlignment(Qt.AlignCenter)
+        hbox = QHBoxLayout()
         hbox.addWidget(self.PyDMSpinbox_ROIWidth)
         hbox.addWidget(self.PyDMLabel_ROIWidth)
-        self.centralwidget.layout().addRow(self.label_ROIWidth, hbox)
+        self.centralwidget.layout().addRow(label_ROIWidth, hbox)
 
-        hbox = QHBoxLayout()
-        self.label_ROIHeight = QLabel('Heigth', self)
+        label_ROIHeight = QLabel('Heigth', self)
         self.PyDMSpinbox_ROIHeight = PyDMSpinbox(
             parent=self,
             init_channel='ca://'+self.prefix+self.device+':ImgROIHeight-SP')
@@ -1080,9 +1060,44 @@ class _CameraSettingsDetails(SiriusMainWindow):
             init_channel='ca://'+self.prefix+self.device+':ImgROIHeight-RB')
         self.PyDMLabel_ROIHeight.setMaximumSize(220, 40)
         self.PyDMLabel_ROIHeight.setAlignment(Qt.AlignCenter)
+        hbox = QHBoxLayout()
         hbox.addWidget(self.PyDMSpinbox_ROIHeight)
         hbox.addWidget(self.PyDMLabel_ROIHeight)
-        self.centralwidget.layout().addRow(self.label_ROIHeight, hbox)
+        self.centralwidget.layout().addRow(label_ROIHeight, hbox)
+
+        label_AutoCenterX = QLabel('Auto Center X', self)
+        self.PyDMStateButton_AutoCenterX = PyDMStateButton(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device +
+                         ':ImgROIAutoCenterX-Sel')
+        self.PyDMStateButton_AutoCenterX.setMaximumSize(220, 40)
+        self.PyDMLabel_AutoCenterX = PyDMLabel(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device +
+                         ':ImgROIAutoCenterX-Sts')
+        self.PyDMLabel_AutoCenterX.setMaximumSize(220, 40)
+        self.PyDMLabel_AutoCenterX.setAlignment(Qt.AlignCenter)
+        hbox = QHBoxLayout()
+        hbox.addWidget(self.PyDMStateButton_AutoCenterX)
+        hbox.addWidget(self.PyDMLabel_AutoCenterX)
+        self.centralwidget.layout().addRow(label_AutoCenterX, hbox)
+
+        label_AutoCenterY = QLabel('Auto Center Y', self)
+        self.PyDMStateButton_AutoCenterY = PyDMStateButton(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device +
+                         ':ImgROIAutoCenterY-Sel')
+        self.PyDMStateButton_AutoCenterY.setMaximumSize(220, 40)
+        self.PyDMLabel_AutoCenterY = PyDMLabel(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device +
+                         ':ImgROIAutoCenterY-Sts')
+        self.PyDMLabel_AutoCenterY.setMaximumSize(220, 40)
+        self.PyDMLabel_AutoCenterY.setAlignment(Qt.AlignCenter)
+        hbox = QHBoxLayout()
+        hbox.addWidget(self.PyDMStateButton_AutoCenterY)
+        hbox.addWidget(self.PyDMLabel_AutoCenterY)
+        self.centralwidget.layout().addRow(label_AutoCenterY, hbox)
 
         self.centralwidget.layout().addItem(
             QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
@@ -1094,8 +1109,40 @@ class _CameraSettingsDetails(SiriusMainWindow):
         self.centralwidget.layout().addItem(
             QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
 
+        label_AcceptedErr = QLabel('Positioning Error Tolerance', self)
+        self.PyDMSpinbox_AcceptedErr = PyDMSpinbox(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device+':AcceptedErr-SP')
+        self.PyDMSpinbox_AcceptedErr.setMaximumSize(220, 40)
+        self.PyDMSpinbox_AcceptedErr.setAlignment(Qt.AlignCenter)
+        self.PyDMSpinbox_AcceptedErr.showStepExponent = False
+        self.PyDMLabel_AcceptedErr = PyDMLabel(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device+':AcceptedErr-RB')
+        self.PyDMLabel_AcceptedErr.setMaximumSize(220, 40)
+        self.PyDMLabel_AcceptedErr.setAlignment(Qt.AlignCenter)
         hbox = QHBoxLayout()
-        self.label_LastErr = QLabel('Last Error', self)
+        hbox.addWidget(self.PyDMSpinbox_AcceptedErr)
+        hbox.addWidget(self.PyDMLabel_AcceptedErr)
+        self.centralwidget.layout().addRow(label_AcceptedErr, hbox)
+
+        label_CamTemp = QLabel('Temperature', self)
+        self.PyDMLabel_CamTemp = PyDMLabel(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device+':CamTemp-Mon')
+        self.PyDMLabel_CamTemp.setAlignment(Qt.AlignCenter)
+        self.PyDMLabel_CamTemp.setMaximumSize(220, 40)
+        self.PyDMLabel_CamTempState = PyDMLabel(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device+':CamTempState-Mon')
+        self.PyDMLabel_CamTempState.setMaximumSize(220, 40)
+        self.PyDMLabel_CamTempState.setAlignment(Qt.AlignCenter)
+        hbox = QHBoxLayout()
+        hbox.addWidget(self.PyDMLabel_CamTemp)
+        hbox.addWidget(self.PyDMLabel_CamTempState)
+        self.centralwidget.layout().addRow(label_CamTemp, hbox)
+
+        label_LastErr = QLabel('Last Error', self)
         self.PyDMLabel_LastErr = PyDMLabel(
             parent=self,
             init_channel='ca://'+self.prefix+self.device+':LastErr-Mon')
@@ -1107,6 +1154,107 @@ class _CameraSettingsDetails(SiriusMainWindow):
             pressValue=1,
             init_channel='ca://'+self.prefix+self.device+':ClearLastErr-Cmd')
         self.PyDMPushButton_LastErr.setMaximumSize(220, 40)
+        hbox = QHBoxLayout()
         hbox.addWidget(self.PyDMLabel_LastErr)
         hbox.addWidget(self.PyDMPushButton_LastErr)
-        self.centralwidget.layout().addRow(self.label_LastErr, hbox)
+        self.centralwidget.layout().addRow(label_LastErr, hbox)
+
+        self.centralwidget.layout().addItem(
+            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
+
+        label = QLabel('Detailed Screen Control')
+        label.setStyleSheet("""font-weight: bold;""")
+        self.centralwidget.layout().addRow(label)
+
+        self.centralwidget.layout().addItem(
+            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
+
+        label_FluorScrnPos = QLabel('Fluorescent Screen Position', self)
+        self.PyDMSpinbox_FluorScrnPos = PyDMSpinbox(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device+':FluorScrnPos-SP')
+        self.PyDMSpinbox_FluorScrnPos.setMaximumSize(220, 40)
+        self.PyDMSpinbox_FluorScrnPos.setAlignment(Qt.AlignCenter)
+        self.PyDMSpinbox_FluorScrnPos.showStepExponent = False
+        self.PyDMLabel_FluorScrnPos = PyDMLabel(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device+':FluorScrnPos-RB')
+        self.PyDMLabel_FluorScrnPos.setMaximumSize(220, 40)
+        self.PyDMLabel_FluorScrnPos.setAlignment(Qt.AlignCenter)
+        self.PyDMPushButton_FluorScrnPos = PyDMPushButton(
+            parent=self,
+            label='Get Position',
+            pressValue=1,
+            init_channel='ca://'+self.prefix+self.device +
+                         ':GetFluorScrnPos-Cmd')
+        self.PyDMPushButton_FluorScrnPos.setMaximumSize(220, 40)
+        hbox = QHBoxLayout()
+        hbox.addWidget(self.PyDMSpinbox_FluorScrnPos)
+        hbox.addWidget(self.PyDMLabel_FluorScrnPos)
+        hbox.addWidget(self.PyDMPushButton_FluorScrnPos)
+        self.centralwidget.layout().addRow(label_FluorScrnPos, hbox)
+
+        label_CalScrnPos = QLabel('Calibration Screen Position', self)
+        self.PyDMSpinbox_CalScrnPos = PyDMSpinbox(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device+':CalScrnPos-SP')
+        self.PyDMSpinbox_CalScrnPos.setMaximumSize(220, 40)
+        self.PyDMSpinbox_CalScrnPos.setAlignment(Qt.AlignCenter)
+        self.PyDMSpinbox_CalScrnPos.showStepExponent = False
+        self.PyDMLabel_CalScrnPos = PyDMLabel(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device+':CalScrnPos-RB')
+        self.PyDMLabel_CalScrnPos.setMaximumSize(220, 40)
+        self.PyDMLabel_CalScrnPos.setAlignment(Qt.AlignCenter)
+        self.PyDMPushButton_CalScrnPos = PyDMPushButton(
+            parent=self,
+            label='Get Position',
+            pressValue=1,
+            init_channel='ca://'+self.prefix+self.device+':GetCalScrnPos-Cmd')
+        self.PyDMPushButton_CalScrnPos.setMaximumSize(220, 40)
+        hbox = QHBoxLayout()
+        hbox.addWidget(self.PyDMSpinbox_CalScrnPos)
+        hbox.addWidget(self.PyDMLabel_CalScrnPos)
+        hbox.addWidget(self.PyDMPushButton_CalScrnPos)
+        self.centralwidget.layout().addRow(label_CalScrnPos, hbox)
+
+        label_NoneScrnPos = QLabel('Receded Screen Position', self)
+        self.PyDMSpinbox_NoneScrnPos = PyDMSpinbox(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device+':NoneScrnPos-SP')
+        self.PyDMSpinbox_NoneScrnPos.setMaximumSize(220, 40)
+        self.PyDMSpinbox_NoneScrnPos.setAlignment(Qt.AlignCenter)
+        self.PyDMSpinbox_NoneScrnPos.showStepExponent = False
+        self.PyDMLabel_NoneScrnPos = PyDMLabel(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device+':NoneScrnPos-RB')
+        self.PyDMLabel_NoneScrnPos.setMaximumSize(220, 40)
+        self.PyDMLabel_NoneScrnPos.setAlignment(Qt.AlignCenter)
+        self.PyDMPushButton_NoneScrnPos = PyDMPushButton(
+            parent=self,
+            label='Get Position',
+            pressValue=1,
+            init_channel='ca://'+self.prefix+self.device+':GetNoneScrnPos-Cmd')
+        self.PyDMPushButton_NoneScrnPos.setMaximumSize(220, 40)
+        hbox = QHBoxLayout()
+        hbox.addWidget(self.PyDMSpinbox_NoneScrnPos)
+        hbox.addWidget(self.PyDMLabel_NoneScrnPos)
+        hbox.addWidget(self.PyDMPushButton_NoneScrnPos)
+        self.centralwidget.layout().addRow(label_NoneScrnPos, hbox)
+
+        label_LedPwrLvl = QLabel('LED Brightness Intensity', self)
+        self.PyDMSpinbox_LedPwrLvl = PyDMSpinbox(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device+':LEDPwrLvl-SP')
+        self.PyDMSpinbox_LedPwrLvl.setMaximumSize(220, 40)
+        self.PyDMSpinbox_LedPwrLvl.setAlignment(Qt.AlignCenter)
+        self.PyDMSpinbox_LedPwrLvl.showStepExponent = False
+        self.PyDMLabel_LedPwrLvl = PyDMLabel(
+            parent=self,
+            init_channel='ca://'+self.prefix+self.device+':LEDPwrLvl-RB')
+        self.PyDMLabel_LedPwrLvl.setMaximumSize(220, 40)
+        self.PyDMLabel_LedPwrLvl.setAlignment(Qt.AlignCenter)
+        hbox = QHBoxLayout()
+        hbox.addWidget(self.PyDMSpinbox_LedPwrLvl)
+        hbox.addWidget(self.PyDMLabel_LedPwrLvl)
+        self.centralwidget.layout().addRow(label_LedPwrLvl, hbox)
