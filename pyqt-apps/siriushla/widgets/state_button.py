@@ -1532,8 +1532,11 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
         ----------
         value : int
         """
-        self._shape = new_shape
-        self.update()
+        if new_shape in [PyDMStateButton.Rounded, PyDMStateButton.Squared]:
+            self._shape = new_shape
+            self.update()
+        else:
+            raise ValueError('Button shape not defined!')
 
     @pyqtProperty(int)
     def pvbit(self):
