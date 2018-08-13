@@ -3,8 +3,10 @@
 """Mock application launcher."""
 
 import sys
-from siriushla.sirius_application import SiriusApplication
+
 from pydm.PyQt.QtGui import QAction, QMenuBar
+
+from siriushla.sirius_application import SiriusApplication
 from siriushla.as_ps_control.PSControlWindow import PSControlWindow
 from siriushla.as_ps_control.PSTabControlWindow \
     import PSTabControlWindow
@@ -12,6 +14,7 @@ from siriushla.as_pm_control.PulsedMagnetControlWindow \
     import PulsedMagnetControlWindow
 from siriushla.as_ap_injection.InjectionWindow import InjectionWindow
 from siriushla.as_config_manager.ConfigManagerWindow import ConfigManagerWindow
+from siriushla.as_ps_cycle.cycle_window import CycleWindow
 from siriushla import util as _util
 from siriushla.widgets import SiriusMainWindow
 
@@ -78,6 +81,9 @@ class ControlApplication(SiriusMainWindow):
                              section="SI", discipline=1,
                              device="quadrupole-skew")
 
+        openCyclingWindow = QAction('Cycle Window', self)
+        _util.connect_window(openCyclingWindow, CycleWindow, self)
+
         openPulsedMagnetsControlPanel = QAction("Pulsed Magnets", self)
         _util.connect_window(openPulsedMagnetsControlPanel,
                              PulsedMagnetControlWindow, self)
@@ -115,6 +121,9 @@ class ControlApplication(SiriusMainWindow):
 
         pulsedMagnetsMenu = menubar.addMenu("&Pulsed Magnets")
         pulsedMagnetsMenu.addAction(openPulsedMagnetsControlPanel)
+
+        cyclingMenu = menubar.addMenu("&Cycling")
+        cyclingMenu.addAction(openCyclingWindow)
 
         injectionMenu = menubar.addMenu("&Injection")
         injectionMenu.addAction(openInjectionWindow)
