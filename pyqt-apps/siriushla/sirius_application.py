@@ -94,14 +94,17 @@ class SiriusApplication(PyDMApplication):
         """
         # One top level widget as the parent?
         id = get_window_id(w_class, **kwargs)
-        if id in self._windows:  # Show existing window
+        # if id in self._windows:  # Show existing window
+        try:
             if self._windows[id].isHidden():
                 self.establish_widget_connections(self._windows[id], False)
                 self._windows[id].show()
             elif self._windows[id].isMinimized():
                 self._windows[id].showNormal()
             self._windows[id].activateWindow()
-        else:  # Create new window
+        except (KeyError, RuntimeError):
+            # KeyError - Window does not exist
+            # RuntimeError: wrapped C/C++ object of type x has been deleted
             wid = w_class(parent=parent, **kwargs)
             self._windows[id] = wid
             self.establish_widget_connections(wid, False)
