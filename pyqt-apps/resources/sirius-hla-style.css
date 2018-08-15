@@ -127,6 +127,15 @@ QCheckBox::indicator {
     width: 25px;
     height: 25px;
 }
+#OkTextEdit {
+    background-color: #eafaea;
+}
+#NokTextEdit {
+    background-color: #ffebe6;
+}
+PSTestWindow > QLabel {
+    font-weight: bold;
+}
 /*
 PulsedMagnetControlWindow {
   min-width: 1568px;
