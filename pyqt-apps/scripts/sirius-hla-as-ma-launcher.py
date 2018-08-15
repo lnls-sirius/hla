@@ -15,6 +15,7 @@ from siriushla.as_pm_control.PulsedMagnetControlWindow \
 from siriushla.as_ap_injection.InjectionWindow import InjectionWindow
 from siriushla.as_config_manager.ConfigManagerWindow import ConfigManagerWindow
 from siriushla.as_ps_cycle.cycle_window import CycleWindow
+from siriushla.as_ps_test.ps_test_window import PSTestWindow
 from siriushla import util as _util
 from siriushla.widgets import SiriusMainWindow
 
@@ -81,8 +82,11 @@ class ControlApplication(SiriusMainWindow):
                              section="SI", discipline=1,
                              device="quadrupole-skew")
 
-        openCyclingWindow = QAction('Cycle Window', self)
+        # Tools
+        openCyclingWindow = QAction('PS Cycle', self)
         _util.connect_window(openCyclingWindow, CycleWindow, self)
+        openPSTestWindow = QAction('PS Test', self)
+        _util.connect_window(openPSTestWindow, PSTestWindow, self)
 
         openPulsedMagnetsControlPanel = QAction("Pulsed Magnets", self)
         _util.connect_window(openPulsedMagnetsControlPanel,
@@ -122,8 +126,9 @@ class ControlApplication(SiriusMainWindow):
         pulsedMagnetsMenu = menubar.addMenu("&Pulsed Magnets")
         pulsedMagnetsMenu.addAction(openPulsedMagnetsControlPanel)
 
-        cyclingMenu = menubar.addMenu("&Cycling")
+        cyclingMenu = menubar.addMenu("&Tools")
         cyclingMenu.addAction(openCyclingWindow)
+        cyclingMenu.addAction(openPSTestWindow)
 
         injectionMenu = menubar.addMenu("&Injection")
         injectionMenu.addAction(openInjectionWindow)
