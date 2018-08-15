@@ -1,7 +1,7 @@
 """Magnet selection tree view."""
 import re
 
-from pydm.PyQt.QtCore import Qt
+from pydm.PyQt.QtCore import Qt, QSize
 from pydm.PyQt.QtGui import QTreeWidget, QTreeWidgetItem
 
 from siriuspy.search.ma_search import MASearch
@@ -114,3 +114,6 @@ class MagnetTree(QTreeWidget):
     def checked_items(self):
         return [item.data(0, Qt.DisplayRole) for item in self.ma_items
                 if item.checkState(0) == Qt.Checked]
+
+    def sizeHint(self):
+        return QSize(600, 600)
