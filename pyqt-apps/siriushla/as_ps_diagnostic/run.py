@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import sys
-from pydm import PyDMApplication
+from siriushla.sirius_application import SiriusApplication
 
-app = PyDMApplication(ui_file='main_window.py')
+app = SiriusApplication(ui_file='main_window.py')
 sys.exit(app.exec_())

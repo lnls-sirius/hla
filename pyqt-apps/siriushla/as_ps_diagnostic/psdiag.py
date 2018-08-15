@@ -6,7 +6,8 @@
 from epics import PV
 import time
 from pvnaming import PVNaming as _pvnaming
-from siriuspy.magnet import magdata as _magdata
+# from siriuspy.magnet import magdata as _magdata
+from siriuspy.magnet.data import MAData as _MAData
 from PyQt5.QtCore import QThread, pyqtSignal
 
 
@@ -34,7 +35,8 @@ class Test(QThread):
         for item in magps_list:
             # pv_name_mon = _pvnaming.get_mon_pv_name(item)
             pv_name_mon = _pvnaming.get_mon_pv_name(item.replace('MA','PS')) # Use vaca PVs for now
-            test_value_dict = _magdata.get_magps_setpoint_limits(item)
+            # test_value_dict = _magdata.get_magps_setpoint_limits(item)
+            test_value_dict = _MAData(item).splims
             pv_mon = PV(pv_name_mon)
             value_mon = pv_mon.value
             test_setpoint = test_value_dict['TSTV']
