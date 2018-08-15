@@ -61,6 +61,9 @@ class MagnetTree(QTreeWidget):
         for sec_item in sections_items.values():
             self.addTopLevelItem(sec_item)
 
+        self.expanded.connect(
+            lambda idx: self.resizeColumnToContents(idx.column()))
+
     def _get_device_type(self, maname):
         if re.match('^B\w*(-[0-9])?$', maname.dev):
             return 'Dipole'
