@@ -136,10 +136,19 @@ QCheckBox::indicator {
 PSTestWindow > QLabel {
     font-weight: bold;
 }
+PSTestWindow #TestButton,
+CycleWindow #PrepareButton {
+    color: white;
+    background-color: blue;
+}
+#ExitButton {
+    color: white;
+    background-color: red;
+}
 /*
 PulsedMagnetControlWindow {
   min-width: 1568px;
-  max-width: 1568px;
+  max-width: 1568px;-i
   min-height: 600px;
   max-height: 600px;
 }

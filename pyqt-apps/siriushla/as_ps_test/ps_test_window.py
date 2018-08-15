@@ -9,7 +9,7 @@ from pydm.PyQt.QtGui import QFrame, QHBoxLayout, QVBoxLayout, QMainWindow, \
     QPushButton, QListWidget, QLabel
 
 from siriushla.as_ps_cycle.magnets_tree import MagnetTree
-from siriushla.as_ps_cycle.cycle_window import ProgressDialog
+from siriushla.as_ps_cycle.progress_dialog import ProgressDialog
 from siriushla.sirius_application import SiriusApplication
 from siriuspy.magnet.data import MAData
 from siriuspy.envars import vaca_prefix as VACA_PREFIX
@@ -28,23 +28,23 @@ class PSTestWindow(QMainWindow):
         # Magnet tree selection widgets
         magnets_layout = QVBoxLayout()
         self.tree = MagnetTree(self)
-        self.test_button = QPushButton("Test", self)
-        # self.on_button = QPushButton("Turn On", self)
+        self.test_button = QPushButton('Test', self)
+        self.test_button.setObjectName('TestButton')
+        self.exit_button = QPushButton("Close", self)
+        self.exit_button.setObjectName('ExitButton')
         magnets_layout.addWidget(self.tree)
-        # magnets_layout.addWidget(self.on_button)
         magnets_layout.addWidget(self.test_button)
+        magnets_layout.addWidget(self.exit_button)
         # Text edits
         ok_layout = QVBoxLayout()
         nok_layout = QVBoxLayout()
         self.ok_ps = QListWidget(self)
         self.ok_ps.setObjectName('OkTextEdit')
-        # self.ok_ps.setReadOnly(True)
         ok_layout.addWidget(
             QLabel('Ok Power Supplies', self), alignment=Qt.AlignCenter)
         ok_layout.addWidget(self.ok_ps)
         self.nok_ps = QListWidget(self)
         self.nok_ps.setObjectName('NokTextEdit')
-        # self.nok_ps.setReadOnly(True)
         nok_layout.addWidget(
             QLabel('Failed Power Supplies', self), alignment=Qt.AlignCenter)
         nok_layout.addWidget(self.nok_ps)
@@ -52,14 +52,14 @@ class PSTestWindow(QMainWindow):
         self.central_widget = QFrame()
         self.central_widget.layout = QHBoxLayout()
         self.central_widget.layout.addLayout(magnets_layout, stretch=1)
-        self.central_widget.layout.addLayout(ok_layout, stretch=2)
-        self.central_widget.layout.addLayout(nok_layout, stretch=2)
+        self.central_widget.layout.addLayout(ok_layout, stretch=1)
+        self.central_widget.layout.addLayout(nok_layout, stretch=1)
         self.central_widget.setLayout(self.central_widget.layout)
         self.setCentralWidget(self.central_widget)
 
         # Signals
-        # self.on_button.pressed.connect(self._check_power_status)
         self.test_button.pressed.connect(self._check_power_status)
+        self.exit_button.pressed.connect(self.close)
 
     def _check_power_status(self):
         self.ok_ps.clear()
@@ -293,6 +293,14 @@ if __name__ == '__main__':
         }
         #NokTextEdit {
             background-color: #ffebe6;
+        }
+        PSTestWindow #TestButton {
+            color: white;
+            background-color: blue;
+        }
+        PSTestWindow #ExitButton {
+            color: white;
+            background-color: red;
         }
         QLabel {
             font-weight: bold;

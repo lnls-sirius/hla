@@ -34,14 +34,19 @@ class CycleWindow(QMainWindow):
         central_widget.setLayout(central_widget.layout)
 
         self.prepare_button = QPushButton("Prepare to cycle", self)
+        self.prepare_button.setObjectName('PrepareButton')
+        self.exit_button = QPushButton("Close", self)
+        self.exit_button.setObjectName('ExitButton')
         self.magnets_tree = MagnetTree(self)
 
         central_widget.layout.addWidget(self.magnets_tree)
         central_widget.layout.addWidget(self.prepare_button)
+        central_widget.layout.addWidget(self.exit_button)
 
         self.setCentralWidget(central_widget)
 
         self.prepare_button.pressed.connect(self._prepare_to_cycle)
+        self.exit_button.pressed.connect(self.close)
 
     def _prepare_to_cycle(self):
         self._magnets = self.magnets_tree.checked_items()
