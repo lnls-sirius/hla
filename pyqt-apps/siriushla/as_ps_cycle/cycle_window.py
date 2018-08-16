@@ -351,9 +351,10 @@ class WaitCycle(QThread):
 
         field = ':CycleEnbl-Mon'
         self.pvs = \
-            {cycler.maname: epics.get_pv(cycler.maname + field)
+            {cycler.maname: epics.get_pv(VACA_PREFIX + cycler.maname + field)
              for cycler in cyclers}
-        self.pvs_state = {maname + field: 0 for maname in self.pvs}
+        self.pvs_state = \
+            {VACA_PREFIX + maname + field: 0 for maname in self.pvs}
 
         self.ps_count = len(self.pvs)
         self.ps_cycled = 0
