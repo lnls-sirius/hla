@@ -2,15 +2,15 @@
 import time
 import sys
 
-
 import epics
 from pydm.PyQt.QtCore import Qt, pyqtSignal, QThread
 from pydm.PyQt.QtGui import QFrame, QHBoxLayout, QVBoxLayout, QMainWindow, \
-    QPushButton, QListWidget, QLabel
+    QPushButton, QListWidget, QLabel, QApplication
 
 from siriushla.as_ps_cycle.magnets_tree import MagnetTree
 from siriushla.as_ps_cycle.progress_dialog import ProgressDialog
 from siriushla.sirius_application import SiriusApplication
+from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
 from siriuspy.magnet.data import MAData
 from siriuspy.envars import vaca_prefix as VACA_PREFIX
 
@@ -60,6 +60,7 @@ class PSTestWindow(QMainWindow):
         # Signals
         self.test_button.pressed.connect(self._check_power_status)
         self.exit_button.pressed.connect(self.close)
+        self.nok_ps.doubleClicked.connect(self._open_detail)
 
     def _check_power_status(self):
         self.ok_ps.clear()
@@ -81,7 +82,6 @@ class PSTestWindow(QMainWindow):
         self._test_power_supply()
 
     def _test_power_supply(self):
-        # self.nok_ps.clear()]
         devices = [self.ok_ps.item(row).data(0)
                    for row in range(self.ok_ps.count())]
         task = TestPS(devices, self)
@@ -96,6 +96,11 @@ class PSTestWindow(QMainWindow):
             self.ok_ps.addItem(name)
         else:
             self.nok_ps.addItem(name)
+
+    def _open_detail(self, index):
+        app = QApplication.instance()
+        maname = index.data()
+        app.open_window(PSDetailWindow, parent=self, **{'psname': maname})
 
 
 class ResetPS(QThread):
@@ -283,8 +288,8 @@ class TestPS(QThread):
 
 
 if __name__ == '__main__':
-    app = SiriusApplication()
-    app.setStyleSheet("""
+    application = SiriusApplication()
+    application.setStyleSheet("""
         * {
             font: 20pt;
         }
@@ -310,4 +315,4 @@ if __name__ == '__main__':
     w = PSTestWindow()
     w.show()
 
-    sys.exit(app.exec_())
+    sys.exit(application.exec_())
