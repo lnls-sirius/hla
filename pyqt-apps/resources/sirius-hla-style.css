@@ -145,6 +145,12 @@ CycleWindow #PrepareButton {
     color: white;
     background-color: red;
 }
+ProgressDialog {
+    min-width: 400px;
+    max-width: 400px;
+    min-height: 150px;
+    max-height: 150px;
+}
 /*
 PulsedMagnetControlWindow {
   min-width: 1568px;
