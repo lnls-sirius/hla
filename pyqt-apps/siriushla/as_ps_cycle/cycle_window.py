@@ -66,13 +66,6 @@ class CycleWindow(QMainWindow):
         ret = dlg.exec_()
         if ret == dlg.Rejected:
             return
-        # Check magnet are in proper cycling state
-        # task = VerifyCycle(self._cyclers, self)
-        # task.itemChecked.connect(self._check_cycling_status)
-        # dlg = ProgressDialog('Checking magnets...', task, self)
-        # ret = dlg.exec_()
-        # if ret == dlg.Rejected:
-        #     return
         # Show failed magnets or ask to cycle
         dlg = CyclingDlg(self._magnets_failed, self)
         ret = dlg.exec_()
@@ -400,10 +393,10 @@ if __name__ == '__main__':
     import sys
     from siriushla.sirius_application import SiriusApplication
 
-    app = SiriusApplication()
+    application = SiriusApplication()
 
     w = CycleWindow()
     # w.setStyleSheet("font-size: 16pt;")
     w.show()
 
-    sys.exit(app.exec_())
+    sys.exit(application.exec_())
