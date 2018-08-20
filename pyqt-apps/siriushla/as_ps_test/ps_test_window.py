@@ -130,6 +130,7 @@ class ResetPS(QThread):
             for pv in self._pvs:
                 if pv.connected:
                     pv.put(1)
+                    time.sleep(5e-3)
                 self.itemDone.emit()
         self.finished.emit()
 
@@ -163,10 +164,11 @@ class TurnPSOn(QThread):
             for pv in self._pvs:
                 if pv.connected:
                     pv.put(1)
+                    time.sleep(5e-3)
                 self.itemDone.emit()
                 if self._quit_task:
                     break
-            time.sleep(0.1*self.size())
+            time.sleep(5e-3*self.size())
             self.finished.emit()
 
 
@@ -194,6 +196,7 @@ class CheckPSOn(QThread):
 
     def run(self):
         """Set PS on."""
+        time.sleep(1)
         if self._quit_task:
             self.finished.emit()
         else:
@@ -201,12 +204,15 @@ class CheckPSOn(QThread):
                 t = time.time()
                 is_on = False
                 if pv.connected:
-                    while time.time() - t < 2:
+                    while time.time() - t < 10:
                         if pv.get() == 1:
                             is_on = True
                             break
+                        if self._quit_task:
+                            break
                 self.itemDone.emit()
                 self.isOn.emit(device, is_on)
+                time.sleep(5e-3)
                 if self._quit_task:
                     break
             self.finished.emit()
@@ -221,12 +227,12 @@ class TestPS(QThread):
     def __init__(self, devices, parent=None):
         """Constructor."""
         super().__init__(parent)
-        self._error = 1e-3
+        self._error = 1e-6
         self._quit_task = False
         self._devices = devices
-        self._sp_pvs = [epics.get_pv(device + ':Current-SP')
+        self._sp_pvs = [epics.get_pv(VACA_PREFIX + device + ':Current-SP')
                         for device in devices]
-        self._rb_pvs = [epics.get_pv(device + ':Current-RB')
+        self._rb_pvs = [epics.get_pv(VACA_PREFIX + device + ':Current-RB')
                         for device in devices]
 
     def size(self):
@@ -239,6 +245,7 @@ class TestPS(QThread):
 
     def run(self):
         """Set PS Current."""
+        time.sleep(0.1)
         if self._quit_task:
             self.finished.emit()
         for i in range(len(self._devices)):
@@ -251,25 +258,32 @@ class TestPS(QThread):
             else:
                 success = False
                 splims = MAData(dev_name).splims
-                sp.put(splims['HIGH'] - 2.0)
+                # sp.put(splims['HIGH'] - 2.0)
+                # # time.sleep(0.01)
 
-                init = time.time()
-                while time.time() - init < 2:
-                    if self._cmp(rb.get(), splims['HIGH'] - 2.0):
-                        success = True
-                        break
+                # init = time.time()
+                # while time.time() - init < 5:
+                #     if self._cmp(rb.get(), splims['HIGH'] - 2.0):
+                #         success = True
+                #         break
+                #     if self._quit_task:
+                #         break
 
-                if not success:
-                    self.itemTested.emit(dev_name, False)
-                    continue
+                # if not success:
+                #     self.itemTested.emit(dev_name, False)
+                #     self.itemDone.emit()
+                #     continue
 
-                success = False
+                # success = False
                 sp.put(splims['HIGH'] - 1.0)
+                # time.sleep(0.01)
 
                 init = time.time()
-                while time.time() - init < 2:
+                while time.time() - init < 10:
                     if self._cmp(rb.get(), splims['HIGH'] - 1.0):
                         success = True
+                        break
+                    if self._quit_task:
                         break
 
                 self.itemTested.emit(dev_name, success)
