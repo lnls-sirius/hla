@@ -290,7 +290,20 @@ class DipoleRamp(QWidget):
     @pyqtSlot()
     def _handleChangeNrPoints(self):
         """Handle change waveform number of points."""
-        self.ramp_config.ramp_dipole_wfm_nrpoints = self.sb_nrpoints.value()
+        old_value = self.ramp_config.ramp_dipole_wfm_nrpoints
+        new_value = self.sb_nrpoints.value()
+        self.ramp_config.ramp_dipole_wfm_nrpoints = new_value
+
+        global _flag_stack_next_command, _flag_stacking
+        if _flag_stack_next_command:
+            _flag_stacking = True
+            command = _CommandChangeNrPoints(
+                self.sb_nrpoints, old_value, new_value,
+                'set number of dipole ramp points to {0}'.format(new_value))
+            self._undo_stack.push(command)
+        else:
+            _flag_stack_next_command = True
+        self.updateTable()
         self.updateDipoleRampSignal.emit()
 
     def _showAnomaliesPopup(self):
@@ -304,7 +317,7 @@ class DipoleRamp(QWidget):
         """Update and redraw graph when ramp_config is loaded."""
         if self.ramp_config is not None:
             xdata = self.ramp_config.waveform_get_times()
-            ydata = self.ramp_config.waveform_get('BO-Fam:MA-B')
+            ydata = self.ramp_config.waveform_get_strengths('BO-Fam:MA-B')
             self.line.set_xdata(xdata)
             self.line.set_ydata(ydata)
             self.ax.set_xlim(min(xdata)-0.2, max(xdata)+0.2)
@@ -849,15 +862,6 @@ class RFRamp(QWidget):
         self.table = QTableWidget(self)
 
         self._setupGraph()
-        label_nrpoints = QLabel('# of points', self)
-        label_nrpoints.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        self.sb_nrpoints = QSpinBox(self)
-        self.set_nrpoints.addSpacerItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
-        self.set_nrpoints.addWidget(label_nrpoints)
-        self.set_nrpoints.addWidget(self.sb_nrpoints)
-        self.set_nrpoints.addSpacerItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
         self._setupWfmNrPoints()
         self._setupTable()
 
@@ -888,7 +892,15 @@ class RFRamp(QWidget):
         self.graphview.setLayout(lay)
 
     def _setupWfmNrPoints(self):
-        pass
+        label_nrpoints = QLabel('# of points', self)
+        label_nrpoints.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.sb_nrpoints = QSpinBox(self)
+        self.set_nrpoints.addSpacerItem(
+            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
+        self.set_nrpoints.addWidget(label_nrpoints)
+        self.set_nrpoints.addWidget(self.sb_nrpoints)
+        self.set_nrpoints.addSpacerItem(
+            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
 
     def _setupTable(self):
         self.table_map = {
@@ -991,7 +1003,21 @@ class RFRamp(QWidget):
     @pyqtSlot()
     def _handleChangeNrPoints(self):
         """Handle change waveform number of points."""
-        pass
+        old_value = 0
+        new_value = self.sb_nrpoints.value()
+        # TODO: set new_value on ramp_config
+
+        global _flag_stack_next_command, _flag_stacking
+        if _flag_stack_next_command:
+            _flag_stacking = True
+            command = _CommandChangeNrPoints(
+                self.sb_nrpoints, old_value, new_value,
+                'set number of RF ramp points to {0}'.format(new_value))
+            self._undo_stack.push(command)
+        else:
+            _flag_stack_next_command = True
+        self.updateTable()
+        self.updateRFRampSignal.emit()
 
     def updateGraph(self):
         """Update and redraw graph."""
@@ -1003,14 +1029,16 @@ class RFRamp(QWidget):
 
     def updateTable(self):
         """Update and rebuild table."""
-        pass
+        if self.ramp_config is None:
+            return
+        self.table.cellChanged.disconnect(self._handleCellChanged)
+        # TODO
+        self.table.cellChanged.connect(self._handleCellChanged)
 
     @pyqtSlot(ramp.BoosterRamp)
     def handleLoadRampConfig(self, ramp_config):
         """Update all widgets in loading BoosterRamp config."""
         self.ramp_config = ramp_config
-        self.table.cellChanged.disconnect(self._handleCellChanged)
-        self._setupTable()
         self.updateTable()
         self.updateWfmNrPoints()
         self.updateGraph()
@@ -1039,5 +1067,28 @@ class _CommandChangeTableCell(QUndoCommand):
             _flag_stack_next_command = False
             self.table.item(self.row, self.column).setData(
                 Qt.DisplayRole, str(self.new_data))
+        else:
+            _flag_stacking = False
+
+
+class _CommandChangeNrPoints(QUndoCommand):
+    """Class to define undo command change ramp number of points."""
+
+    def __init__(self, spinbox, old_data, new_data, description):
+        super().__init__(description)
+        self.spinbox = spinbox
+        self.old_data = old_data
+        self.new_data = new_data
+
+    def undo(self):
+        global _flag_stack_next_command
+        _flag_stack_next_command = False
+        self.spinbox.setValue(self.old_data)
+
+    def redo(self):
+        global _flag_stack_next_command, _flag_stacking
+        if not _flag_stacking:
+            _flag_stack_next_command = False
+            self.spinbox.setValue(self.new_data)
         else:
             _flag_stacking = False
