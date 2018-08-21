@@ -41,6 +41,7 @@ class OpticsAdjust(QGroupBox):
         self._chromcorr = BOChromCorr('Default')
 
     def _setupUi(self):
+        self.setMinimumHeight(500)
         self.settings = self._setupChooseConfig()
         self.tune_variation = self._setupTuneVariation()
         self.chrom_variation = self._setupChromVariation()

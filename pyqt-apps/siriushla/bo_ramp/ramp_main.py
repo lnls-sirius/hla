@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import QLabel, QWidget, QGridLayout, QUndoStack
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets.windows import SiriusMainWindow
 from siriuspy.namesys import SiriusPVName as _PVName
+from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla import util as _util
 from siriuspy.ramp import ramp
 from siriuspy.ramp.conn import ConnMagnets as _ConnMagnets, \
@@ -42,8 +43,8 @@ class RampMain(SiriusMainWindow):
         cw = QWidget(self)
         self.setCentralWidget(cw)
         self.my_layout = QGridLayout(cw)
-        self.my_layout.setHorizontalSpacing(40)
-        self.my_layout.setVerticalSpacing(40)
+        self.my_layout.setHorizontalSpacing(20)
+        self.my_layout.setVerticalSpacing(20)
         lab = QLabel('<h3>Booster Energy Ramping</h3>', cw)
         lab.setStyleSheet('background-color: qlineargradient('
                           'spread:pad, x1:0, y1:0.0227273, x2:1, y2:0,'
@@ -57,20 +58,20 @@ class RampMain(SiriusMainWindow):
 
         self.ramp_parameters = RampParameters(
             self, self.prefix, self.ramp_config, self._undo_stack)
-        self.my_layout.addWidget(self.ramp_parameters, 1, 0, 2, 1)
+        self.my_layout.addWidget(self.ramp_parameters, 1, 0, 5, 1)
 
         self.optics_adjust = OpticsAdjust(self, self.prefix, self.ramp_config)
-        self.my_layout.addWidget(self.optics_adjust, 3, 0)
+        self.my_layout.addWidget(self.optics_adjust, 6, 0, 2, 1)
 
         self.general_status = GeneralStatus(self, self.prefix)
-        self.my_layout.addWidget(self.general_status, 1, 1)
+        self.my_layout.addWidget(self.general_status, 1, 1, 1, 1)
 
         self.statistics = RampStatistics(self, self.prefix,
                                          self.ramp_config)
-        self.my_layout.addWidget(self.statistics, 2, 1)
+        self.my_layout.addWidget(self.statistics, 2, 1, 5, 1)
 
         self.commands = RampCommands(self, self.prefix)
-        self.my_layout.addWidget(self.commands, 3, 1)
+        self.my_layout.addWidget(self.commands, 7, 1, 1, 1)
 
     def _connSignals(self):
         self.ramp_settings.configNameSignal.connect(self._receiveNewConfigName)
@@ -78,6 +79,8 @@ class RampMain(SiriusMainWindow):
         self.ramp_settings.saveSignal.connect(self._verifySync)
         self.ramp_settings.opticsSettingsSignal.connect(
             self.optics_adjust.handleUpdateSettings)
+        self.ramp_settings.statsSettingsSignal.connect(
+            self.statistics.handleUpdateSettings)
 
         self.ramp_parameters.dip_ramp.updateDipoleRampSignal.connect(
             self._verifySync)
@@ -154,7 +157,6 @@ if __name__ == '__main__':
     """Run Example."""
     app = SiriusApplication()
     _util.set_style(app)
-    w = RampMain(
-        prefix='ca://fernando-lnls452-linux-AS-Glob:TI-EVG:')
+    w = RampMain(prefix=_vaca_prefix+'AS-Glob:TI-EVG:')
     w.show()
     sys.exit(app.exec_())

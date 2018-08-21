@@ -1,6 +1,6 @@
 """Booster Ramp Control HLA: General Status Module."""
 
-from PyQt5.QtWidgets import QGroupBox, QGridLayout, QLabel, \
+from PyQt5.QtWidgets import QGroupBox, QGridLayout, QHBoxLayout, QLabel, \
                             QSizePolicy as QSzPlcy, QSpacerItem
 from PyQt5.QtGui import QColor
 from PyQt5.QtCore import Qt, pyqtSlot
@@ -65,30 +65,38 @@ class GeneralStatus(QGroupBox):
         self.led_ma_ramping.state = False
         self.led_ma_ramping.setFixedSize(40, 40)
 
-        lay = QGridLayout()
-        lay.addItem(
-            QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 0, 0)
-        lay.addWidget(label_timing, 1, 0, 1, 2)
-        lay.addWidget(label_conntiming, 2, 0)
-        lay.addWidget(self.led_conntiming, 2, 1)
-        lay.addWidget(label_ti_cycling, 3, 0)
-        lay.addWidget(self.led_ti_cycling, 3, 1)
-        lay.addWidget(label_ti_ramping, 4, 0)
-        lay.addWidget(self.led_ti_ramping, 4, 1)
-        lay.addItem(
-            QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 5, 0)
-        lay.addWidget(label_magnets, 6, 0, 1, 2)
-        lay.addWidget(label_conntmagnets, 7, 0)
-        lay.addWidget(self.led_connmagnets, 7, 1)
-        lay.addWidget(label_ma_cycling, 8, 0)
-        lay.addWidget(self.led_ma_cycling, 8, 1)
-        lay.addWidget(label_ma_ramping, 9, 0)
-        lay.addWidget(self.led_ma_ramping, 9, 1)
-        lay.addItem(
-            QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 10, 0)
+        lay_ti = QGridLayout()
+        lay_ti.addItem(
+            QSpacerItem(40, 40, QSzPlcy.Fixed, QSzPlcy.Fixed), 0, 0)
+        lay_ti.addWidget(label_timing, 1, 0, 1, 2)
+        lay_ti.addWidget(self.led_conntiming, 2, 0)
+        lay_ti.addWidget(label_conntiming, 2, 1)
+        lay_ti.addWidget(self.led_ti_cycling, 3, 0)
+        lay_ti.addWidget(label_ti_cycling, 3, 1)
+        lay_ti.addWidget(self.led_ti_ramping, 4, 0)
+        lay_ti.addWidget(label_ti_ramping, 4, 1)
+        lay_ti.addItem(
+            QSpacerItem(40, 40, QSzPlcy.Fixed, QSzPlcy.Fixed), 5, 0)
 
-        self.setLayout(lay)
-        self.setMaximumHeight(450)
+        lay_ma = QGridLayout()
+        lay_ma.addItem(
+            QSpacerItem(40, 40, QSzPlcy.Fixed, QSzPlcy.Fixed), 0, 0)
+        lay_ma.addWidget(label_magnets, 1, 0, 1, 2)
+        lay_ma.addWidget(self.led_connmagnets, 2, 0)
+        lay_ma.addWidget(label_conntmagnets, 2, 1)
+        lay_ma.addWidget(self.led_ma_cycling, 3, 0)
+        lay_ma.addWidget(label_ma_cycling, 3, 1)
+        lay_ma.addWidget(self.led_ma_ramping, 4, 0)
+        lay_ma.addWidget(label_ma_ramping, 4, 1)
+        lay_ma.addItem(
+            QSpacerItem(40, 40, QSzPlcy.Fixed, QSzPlcy.Fixed), 5, 0)
+
+        self.setLayout(QHBoxLayout())
+        self.layout().addItem(QSpacerItem(40, 2, QSzPlcy.Fixed, QSzPlcy.Fixed))
+        self.layout().addLayout(lay_ti)
+        self.layout().addItem(QSpacerItem(40, 2, QSzPlcy.Fixed, QSzPlcy.Fixed))
+        self.layout().addLayout(lay_ma)
+        self.layout().addItem(QSpacerItem(40, 2, QSzPlcy.Fixed, QSzPlcy.Fixed))
 
     def updateMagnetsConnState(self):
         """Update magnets connection state led."""

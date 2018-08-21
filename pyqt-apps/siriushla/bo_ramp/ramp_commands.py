@@ -21,8 +21,6 @@ class RampCommands(QGroupBox):
         self._setupUi()
 
     def _setupUi(self):
-        self.setFixedHeight(500)
-
         self.bt_upload = QPushButton('Send waveforms to PS', self)
         self.bt_cycle = QPushButton('Cycle', self)
         self.bt_start = QPushButton('Start Ramp', self)
@@ -36,10 +34,11 @@ class RampCommands(QGroupBox):
         lay = QGridLayout(self)
         lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 0, 0)
         lay.addWidget(self.bt_upload, 1, 1)
-        lay.addWidget(self.bt_cycle, 2, 1)
+        lay.addWidget(self.bt_cycle, 1, 3)
+        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 2, 2)
         lay.addWidget(self.bt_start, 3, 1)
-        lay.addWidget(self.bt_stop, 4, 1)
-        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 5, 2)
+        lay.addWidget(self.bt_stop, 3, 3)
+        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 4, 4)
 
     def _uploadToPS(self):
         if not self._conn_magnets:
