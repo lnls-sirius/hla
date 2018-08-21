@@ -10,6 +10,7 @@ from siriushla.bo_ramp.auxiliar_classes import \
     LoadRampConfig as _LoadRampConfig, \
     NewRampConfigGetName as _NewRampConfigGetName, \
     OpticsAdjustSettings as _OpticsAdjustSettings, \
+    StatisticSettings as _StatisticSettings, \
     MessageBox as _MessageBox
 
 
@@ -20,6 +21,7 @@ class RampConfigSettings(QMenuBar):
     loadSignal = pyqtSignal()
     saveSignal = pyqtSignal()
     opticsSettingsSignal = pyqtSignal(list)
+    statsSettingsSignal = pyqtSignal(list)
 
     def __init__(self, parent=None, prefix='', ramp_config=None):
         """Initialize object."""
@@ -28,6 +30,8 @@ class RampConfigSettings(QMenuBar):
         self.ramp_config = ramp_config
         self._tunecorr_name = 'Default_1'
         self._chromcorr_name = 'Default'
+        self._injcurr_idx = 0
+        self._ejecurr_idx = -1
         self._setupUi()
 
     def _setupUi(self):
@@ -50,9 +54,16 @@ class RampConfigSettings(QMenuBar):
         self.config_menu.addAction(self.act_save_as)
 
         self.optics_menu = self.addMenu('Optics Adjustments')
-        self.act_settings = QAction('Settings', self)
-        self.act_settings.triggered.connect(self._showSettingsPopup)
-        self.optics_menu.addAction(self.act_settings)
+        self.act_optics_settings = QAction('Settings', self)
+        self.act_optics_settings.triggered.connect(
+            self._showOpticsSettingsPopup)
+        self.optics_menu.addAction(self.act_optics_settings)
+
+        self.stats_menu = self.addMenu('Statistics')
+        self.act_stats_settings = QAction('Settings', self)
+        self.act_stats_settings.triggered.connect(
+            self._showStatsSettingsPopup)
+        self.stats_menu.addAction(self.act_stats_settings)
 
     def _showGetNewConfigName(self):
         self._newConfigPopup = _NewRampConfigGetName(self, self.ramp_config)
@@ -68,12 +79,19 @@ class RampConfigSettings(QMenuBar):
         self._loadPopup.saveSignal.connect(self._save)
         self._loadPopup.open()
 
-    def _showSettingsPopup(self):
-        self._settingsPopup = _OpticsAdjustSettings(
+    def _showOpticsSettingsPopup(self):
+        self._opticsSettingsPopup = _OpticsAdjustSettings(
             self, self._tunecorr_name, self._chromcorr_name)
-        self._settingsPopup.updateSettings.connect(
+        self._opticsSettingsPopup.updateSettings.connect(
             self._emitOpticsSettings)
-        self._settingsPopup.open()
+        self._opticsSettingsPopup.open()
+
+    def _showStatsSettingsPopup(self):
+        self._statsSettingsPopup = _StatisticSettings(
+            self, self.prefix, self._injcurr_idx, self._ejecurr_idx)
+        self._statsSettingsPopup.updateSettings.connect(
+            self._emitStatsSettings)
+        self._statsSettingsPopup.open()
 
     def _emitConfigNameSignal(self, config_name):
         self.configNameSignal.emit(config_name)
@@ -85,6 +103,11 @@ class RampConfigSettings(QMenuBar):
         self._tunecorr_name = settings[0]
         self._chromcorr_name = settings[1]
         self.opticsSettingsSignal.emit(settings)
+
+    def _emitStatsSettings(self, settings):
+        self._injcurr_idx = settings[0]
+        self._ejecurr_idx = settings[1]
+        self.statsSettingsSignal.emit(settings)
 
     def _save(self):
         config_exists = self.ramp_config.configsrv_exist()

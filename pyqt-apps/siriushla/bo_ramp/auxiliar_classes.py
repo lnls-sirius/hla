@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QLabel, QWidget, QScrollArea, QAbstractItemView, \
                             QComboBox, QSpinBox, QStyledItemDelegate, \
                             QSpacerItem, QSizePolicy as QSzPlcy, QCheckBox, \
                             QTabWidget, QCompleter
+from pydm.widgets import PyDMLabel, PyDMSpinbox
 from siriushla.widgets.windows import SiriusDialog
 from siriuspy.servconf.conf_service import ConfigService as _ConfigService
 from siriuspy.ramp import ramp
@@ -688,6 +689,81 @@ class OpticsAdjustSettings(SiriusDialog):
         tuneconfig_name = self.cb_tuneconfig.currentText()
         chromconfig_name = self.cb_chromconfig.currentText()
         self.updateSettings.emit([tuneconfig_name, chromconfig_name])
+        self.close()
+
+
+class StatisticSettings(SiriusDialog):
+    """Auxiliar window to statistics settings."""
+
+    updateSettings = pyqtSignal(list)
+
+    def __init__(self, parent, prefix, injcurr_idx, ejecurr_idx):
+        """Initialize object."""
+        super().__init__(parent)
+        self.setWindowTitle('Statistics Settings')
+        self.prefix = prefix
+        self.injcurr_idx = injcurr_idx
+        self.ejecurr_idx = ejecurr_idx
+        self._setupUi()
+
+    def _setupUi(self):
+        l_dcctacq = QLabel('<h4>DCCT Acquisitions Settings</h4>', self,
+                           alignment=Qt.AlignCenter)
+
+        l_nracq = QLabel('# of Acquisitions: ', self, alignment=Qt.AlignRight)
+        self.pydmspinbox_NrAcq = PyDMSpinbox(
+            parent=self,
+            init_channel='ca://'+self.prefix+'BO-35D:DI-DCCT:??????-SP')
+        self.pydmspinbox_NrAcq.setFixedSize(220, 40)
+        self.pydmspinbox_NrAcq.setAlignment(Qt.AlignCenter)
+        self.pydmspinbox_NrAcq.showStepExponent = False
+        self.pydmlabel_NrAcq = PyDMLabel(
+            parent=self,
+            init_channel='ca://'+self.prefix+'BO-35D:DI-DCCT:??????-RB')
+        hlay_nracq = QHBoxLayout()
+        hlay_nracq.addWidget(self.pydmspinbox_NrAcq)
+        hlay_nracq.addWidget(self.pydmlabel_NrAcq)
+
+        # TODO: add DCCT PVs control
+
+        l_injcurr_idx = QLabel('Injected current index: ', self,
+                               alignment=Qt.AlignRight)
+        self.sb_injcurr_idx = QSpinBox(self)
+        self.sb_injcurr_idx.setValue(self.injcurr_idx)
+        self.sb_injcurr_idx.setMinimum(1)
+        self.sb_injcurr_idx.setMaximum(4000)  # TODO: max=len(CurrentHstr PV)
+        self.sb_injcurr_idx.setFixedSize(220, 40)
+
+        l_ejecurr_idx = QLabel('Ejected current index: ', self,
+                               alignment=Qt.AlignRight)
+        self.sb_ejecurr_idx = QSpinBox(self)
+        self.sb_ejecurr_idx.setValue(self.ejecurr_idx)
+        self.sb_ejecurr_idx.setMinimum(1)
+        self.sb_ejecurr_idx.setMaximum(4000)  # TODO: max=len(CurrentHstr PV)
+        self.sb_ejecurr_idx.setFixedSize(220, 40)
+
+        flay_settings = QFormLayout()
+        flay_settings.addRow(l_dcctacq)
+        flay_settings.addRow(l_nracq, hlay_nracq)
+        flay_settings.addRow(l_injcurr_idx, self.sb_injcurr_idx)
+        flay_settings.addRow(l_ejecurr_idx, self.sb_ejecurr_idx)
+
+        self.bt_apply = QPushButton('Apply settings', self)
+        self.bt_apply.clicked.connect(self._emitSettings)
+        self.bt_apply.setAutoDefault(False)
+        self.bt_apply.setDefault(False)
+        hlay_apply = QHBoxLayout()
+        hlay_apply.addItem(
+            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Fixed))
+        hlay_apply.addWidget(self.bt_apply)
+
+        self.setLayout(QVBoxLayout())
+        self.layout().addLayout(flay_settings)
+        self.layout().addLayout(hlay_apply)
+
+    def _emitSettings(self):
+        self.updateSettings.emit([self.sb_injcurr_idx.value(),
+                                  self.sb_ejecurr_idx.value()])
         self.close()
 
 
