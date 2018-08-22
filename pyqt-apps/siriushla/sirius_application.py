@@ -19,7 +19,7 @@ class SiriusApplication(PyDMApplication):
     def establish_widget_connections(self, widget, propagate=True):
         """Establish widgets connections.
 
-        The `propagate` property defines how widgets are searchedself.
+        The `propagate` property defines how widgets are searched.
         When True, super will handle connections. It will try to connect
         all children widgets.
         When False, widgets will be searched recursevely in a breadth first
@@ -43,8 +43,8 @@ class SiriusApplication(PyDMApplication):
     def close_widget_connections(self, widget, propagate=True):
         """Close widgets connections.
 
-        The `propagate` property defines how widgets are searchedself.
-        When True, super will handle connections. It will try to connect
+        The `propagate` property defines how widgets are searched.
+        When True, super will handle connections. It will try to disconnect
         all children widgets.
         When False, widgets will be searched recursevely. The recursion will be
         cut if the widget is a Window or Dialog.
