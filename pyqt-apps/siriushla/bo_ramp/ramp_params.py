@@ -75,11 +75,11 @@ class DipoleRamp(QWidget):
     def _setupUi(self):
         vlay = QVBoxLayout(self)
         self.graphview = QWidget()
-        self.set_nrpoints = QHBoxLayout()
+        self.nrpoints_and_duration = QHBoxLayout()
         self.table = QTableWidget(self)
 
         self._setupGraph()
-        self._setupWfmNrPoints()
+        self._setupWfmNrPointsAndDuration()
         self._setupTable()
 
         hlay_caution = QHBoxLayout()
@@ -98,7 +98,7 @@ class DipoleRamp(QWidget):
         label.setFixedHeight(48)
         vlay.addWidget(label)
         vlay.addWidget(self.graphview)
-        vlay.addLayout(self.set_nrpoints)
+        vlay.addLayout(self.nrpoints_and_duration)
         vlay.addWidget(self.table)
         vlay.addLayout(hlay_caution)
         vlay.addItem(QSpacerItem(40, 20, QSzPlcy.Minimum, QSzPlcy.Expanding))
@@ -122,19 +122,30 @@ class DipoleRamp(QWidget):
         lay.addWidget(self.toolbar)
         self.graphview.setLayout(lay)
 
-    def _setupWfmNrPoints(self):
-        label_nrpoints = QLabel('# of points', self)
-        label_nrpoints.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+    def _setupWfmNrPointsAndDuration(self):
+        label_nrpoints = QLabel('# of points: ', self,
+                                alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.sb_nrpoints = QSpinBox(self)
         self.sb_nrpoints.setMinimum(1)
         self.sb_nrpoints.setMaximum(MAX_WFMSIZE)
         self.sb_nrpoints.editingFinished.connect(self._handleChangeNrPoints)
 
-        self.set_nrpoints.addSpacerItem(
+        label_duration = QLabel('Duration (ms): ', self,
+                                alignment=Qt.AlignRight | Qt.AlignVCenter)
+        self.sb_duration = QSpinBox(self)
+        self.sb_duration.setMinimum(1)
+        self.sb_duration.setMaximum(490)
+        self.sb_duration.editingFinished.connect(self._handleChangeDuration)
+
+        self.nrpoints_and_duration.addSpacerItem(
             QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
-        self.set_nrpoints.addWidget(label_nrpoints)
-        self.set_nrpoints.addWidget(self.sb_nrpoints)
-        self.set_nrpoints.addSpacerItem(
+        self.nrpoints_and_duration.addWidget(label_nrpoints)
+        self.nrpoints_and_duration.addWidget(self.sb_nrpoints)
+        self.nrpoints_and_duration.addSpacerItem(
+            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
+        self.nrpoints_and_duration.addWidget(label_duration)
+        self.nrpoints_and_duration.addWidget(self.sb_duration)
+        self.nrpoints_and_duration.addSpacerItem(
             QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
 
     def _setupTable(self):
@@ -297,9 +308,28 @@ class DipoleRamp(QWidget):
         global _flag_stack_next_command, _flag_stacking
         if _flag_stack_next_command:
             _flag_stacking = True
-            command = _CommandChangeNrPoints(
+            command = _CommandChangeSpinbox(
                 self.sb_nrpoints, old_value, new_value,
                 'set number of dipole ramp points to {0}'.format(new_value))
+            self._undo_stack.push(command)
+        else:
+            _flag_stack_next_command = True
+        self.updateTable()
+        self.updateDipoleRampSignal.emit()
+
+    @pyqtSlot()
+    def _handleChangeDuration(self):
+        """Handle change waveform duration."""
+        old_value = self.ramp_config.ramp_dipole_duration
+        new_value = self.sb_duration.value()
+        self.ramp_config.ramp_dipole_duration = new_value
+
+        global _flag_stack_next_command, _flag_stacking
+        if _flag_stack_next_command:
+            _flag_stacking = True
+            command = _CommandChangeSpinbox(
+                self.sb_duration, old_value, new_value,
+                'set dipole ramp duration to {0}'.format(new_value))
             self._undo_stack.push(command)
         else:
             _flag_stack_next_command = True
@@ -341,8 +371,11 @@ class DipoleRamp(QWidget):
 
     def updateWfmNrPoints(self):
         """Update waveform number of points when ramp_config is loaded."""
-        self.sb_nrpoints.setValue(
-            self.ramp_config.ramp_dipole_wfm_nrpoints)
+        self.sb_nrpoints.setValue(self.ramp_config.ramp_dipole_wfm_nrpoints)
+
+    def updateDuration(self):
+        """Update waveform duration when ramp_config is loaded."""
+        self.sb_duration.setValue(self.ramp_config.ramp_dipole_duration)
 
     def updateTable(self):
         """Update and rebuild table when ramp_config is loaded."""
@@ -427,6 +460,7 @@ class DipoleRamp(QWidget):
         self.ramp_config = ramp_config
         self.updateTable()
         self.updateWfmNrPoints()
+        self.updateDuration()
         self.updateGraph()
         if len(self.ramp_config.waveform_anomalies) > 0:
             self.label_caution.setText('<h6>Caution: there are anomalies '
@@ -1010,7 +1044,7 @@ class RFRamp(QWidget):
         global _flag_stack_next_command, _flag_stacking
         if _flag_stack_next_command:
             _flag_stacking = True
-            command = _CommandChangeNrPoints(
+            command = _CommandChangeSpinbox(
                 self.sb_nrpoints, old_value, new_value,
                 'set number of RF ramp points to {0}'.format(new_value))
             self._undo_stack.push(command)
@@ -1045,7 +1079,7 @@ class RFRamp(QWidget):
 
 
 class _CommandChangeTableCell(QUndoCommand):
-    """Class to define undo command change table cell."""
+    """Class to define command change table cell."""
 
     def __init__(self, table, row, column, old_data, new_data, description):
         super().__init__(description)
@@ -1071,8 +1105,8 @@ class _CommandChangeTableCell(QUndoCommand):
             _flag_stacking = False
 
 
-class _CommandChangeNrPoints(QUndoCommand):
-    """Class to define undo command change ramp number of points."""
+class _CommandChangeSpinbox(QUndoCommand):
+    """Class to define command change ramp number of points or duration."""
 
     def __init__(self, spinbox, old_data, new_data, description):
         super().__init__(description)
