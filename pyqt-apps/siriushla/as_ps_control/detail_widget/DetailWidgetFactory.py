@@ -2,7 +2,7 @@
 import re
 
 from siriushla.as_ps_control.detail_widget.PSDetailWidget \
-    import PSDetailWidget
+    import PSDetailWidget, DCLinkDetailWidget
 from siriushla.as_ps_control.detail_widget.DipoleDetailWidget \
     import DipoleDetailWidget
 from siriushla.as_pm_control.PulsedMagnetDetailWidget \
@@ -22,5 +22,7 @@ class DetailWidgetFactory:
             return PulsedMagnetDetailWidget(psname, parent)
         elif DetailWidgetFactory.FamDipole.match(psname):
             return DipoleDetailWidget(psname, parent)
+        elif psname == 'AS-Glob:PS-DCLinkFBP-2':
+            return DCLinkDetailWidget(psname, parent)
         else:
             return PSDetailWidget(psname, parent)

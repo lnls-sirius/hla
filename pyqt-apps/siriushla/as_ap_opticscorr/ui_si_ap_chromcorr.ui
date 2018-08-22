@@ -1536,7 +1536,7 @@ Correction</string>
          <string notr="true">font-weight:bold;</string>
         </property>
         <property name="text">
-         <string>SL-Mon</string>
+         <string>CalcSL-Mon</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>

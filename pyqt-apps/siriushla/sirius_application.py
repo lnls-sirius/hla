@@ -1,8 +1,9 @@
 """Definition of the Sirius Application class."""
 from pydm import PyDMApplication
-from .util import get_window_id
-from pydm.PyQt.QtGui import QWidget, QDialog, QMainWindow
+from pydm.PyQt.QtGui import QWidget, QDialog, QMainWindow, QMessageBox
 from pydm.PyQt.QtCore import Qt
+
+from .util import get_window_id
 
 
 class SiriusApplication(PyDMApplication):
@@ -93,16 +94,32 @@ class SiriusApplication(PyDMApplication):
         existing window is brought to focus.
         """
         # One top level widget as the parent?
-        id = get_window_id(w_class, **kwargs)
-        if id in self._windows:  # Show existing window
-            if self._windows[id].isHidden():
-                self.establish_widget_connections(self._windows[id], False)
-                self._windows[id].show()
-            elif self._windows[id].isMinimized():
-                self._windows[id].showNormal()
-            self._windows[id].activateWindow()
-        else:  # Create new window
-            wid = w_class(parent=parent, **kwargs)
-            self._windows[id] = wid
-            self.establish_widget_connections(wid, False)
-            self._windows[id].show()
+        wid = get_window_id(w_class, **kwargs)
+        # if id in self._windows:  # Show existing window
+        try:
+            self._show(wid)
+            self._windows[wid].activateWindow()
+        except (KeyError, RuntimeError):
+            # KeyError - Window does not exist
+            # RuntimeError: wrapped C/C++ object of type x has been deleted
+            self._create_and_show(wid, w_class, parent, **kwargs)
+
+    def _show(self, wid):
+        if self._windows[wid].isHidden():
+            self.establish_widget_connections(self._windows[wid], False)
+            self._windows[wid].show()
+        elif self._windows[wid].isMinimized():
+            self._windows[wid].showNormal()
+
+    def _create_and_show(self, wid, w_class, parent, **kwargs):
+        try:
+            window = w_class(parent=parent, **kwargs)
+        except ValueError as e:
+            QMessageBox.critical(
+                self.activeWindow(),
+                'Could not open window',
+                'Failed to open window: {}'.format(e))
+        else:
+            self._windows[wid] = window
+            self.establish_widget_connections(window, False)
+            self._windows[wid].show()

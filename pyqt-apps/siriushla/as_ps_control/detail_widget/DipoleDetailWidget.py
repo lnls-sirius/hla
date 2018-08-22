@@ -244,9 +244,8 @@ class DipoleDetailWidget(PSDetailWidget):
     def _cycleLayout(self):
         layout = QGridLayout()
         # 15 cycle pvs
-        enbl_sp_ca = 'ca://' + self._prefixed_magnet + ':CycleEnbl-SP'
-        enbl_rb_ca1 = 'ca://' + self._ps_list[0] + ':CycleEnbl-RB'
-        enbl_rb_ca2 = 'ca://' + self._ps_list[1] + ':CycleEnbl-RB'
+        enbl_rb_ca1 = 'ca://' + self._ps_list[0] + ':CycleEnbl-Mon'
+        enbl_rb_ca2 = 'ca://' + self._ps_list[1] + ':CycleEnbl-Mon'
         type_sp_ca = 'ca://' + self._prefixed_magnet + ':CycleType-Sel'
         type_rb_ca1 = 'ca://' + self._ps_list[0] + ':CycleType-Sts'
         type_rb_ca2 = 'ca://' + self._ps_list[1] + ':CycleType-Sts'
@@ -277,10 +276,9 @@ class DipoleDetailWidget(PSDetailWidget):
         self.cycle_offset_label = QLabel('Offset', self)
         self.cycle_auxparam_label = QLabel('AuxParams', self)
         # 15 widgets
-        self.cycle_enbl_sp_button = PyDMStateButton(self, enbl_sp_ca)
         self.cycle_enbl_rb_led1 = SiriusLedState(self, enbl_rb_ca1)
         self.cycle_enbl_rb_led2 = SiriusLedState(self, enbl_rb_ca2)
-        enbl_rb_layout = QVBoxLayout()
+        enbl_rb_layout = QHBoxLayout()
         enbl_rb_layout.addWidget(self.cycle_enbl_rb_led1)
         enbl_rb_layout.addWidget(self.cycle_enbl_rb_led2)
         self.cycle_type_sp_cb = PyDMEnumComboBox(self, type_sp_ca)
@@ -326,8 +324,8 @@ class DipoleDetailWidget(PSDetailWidget):
         auxparam_rb_layout.addWidget(self.cycle_auxparam_rb_label2)
 
         layout.addWidget(self.cycle_enbl_label, 0, 0, Qt.AlignRight)
-        layout.addWidget(self.cycle_enbl_sp_button, 0, 1)
-        layout.addLayout(enbl_rb_layout, 0, 2)
+        # layout.addWidget(self.cycle_enbl_sp_button, 0, 1)
+        layout.addLayout(enbl_rb_layout, 0, 1)
         layout.addWidget(self.cycle_type_label, 1, 0, Qt.AlignRight)
         layout.addWidget(self.cycle_type_sp_cb, 1, 1)
         layout.addLayout(type_rb_layout, 1, 2)

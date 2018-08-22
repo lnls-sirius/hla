@@ -1,8 +1,10 @@
 """Define a window with detailed controls for a given magnet."""
 from pydm import PyDMApplication
+from pydm.PyQt.QtGui import QPushButton
 from siriushla.widgets import SiriusMainWindow
 from siriushla.as_ps_control.detail_widget.DetailWidgetFactory \
     import DetailWidgetFactory
+from ..util import connect_window
 
 
 class PSDetailWindow(SiriusMainWindow):
@@ -26,4 +28,12 @@ class PSDetailWindow(SiriusMainWindow):
         # Set window layout
         self.setWindowTitle(self._ma)
         self.widget = DetailWidgetFactory.factory(self._ma, self)
+        self._connect_buttons(self.widget)
         self.setCentralWidget(self.widget)
+
+    def _connect_buttons(self, widget):
+        w = widget.findChild(QPushButton, 'dclink_button')
+        if w:
+            # TODO: dclink name is hardcoded
+            connect_window(
+                w, PSDetailWindow, self, psname='AS-Glob:PS-DCLinkFBP-2')

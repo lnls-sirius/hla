@@ -50,14 +50,8 @@ def get_kick_unit(channel):
 
 
 def get_window_id(w_class, **kwargs):
-    """Return an id for window class and its parameters."""
-    id = hash(w_class)
-    for value in kwargs.values():
-        try:
-            id += hash(value)
-        except Exception as e:
-            raise e
-    return id
+    """Serialize parameters."""
+    return ''.join([w_class.__name__, str(kwargs)])
 
 
 def connect_window(widget, w_class, parent, **kwargs):

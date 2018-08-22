@@ -2,8 +2,9 @@
 import re
 
 from pydm.PyQt.QtCore import Qt
-from pydm.PyQt.QtGui import QWidget, QGroupBox, QGridLayout, \
-    QLabel, QSizePolicy, QPushButton, QVBoxLayout, QHBoxLayout, QColor
+from pydm.PyQt.QtGui import QWidget, QGroupBox, QGridLayout, QLabel, \
+    QSizePolicy, QPushButton, QVBoxLayout, QHBoxLayout, QColor, QApplication, \
+    QFormLayout
 # from epics import get_pv
 
 from siriuspy.envars import vaca_prefix
@@ -44,10 +45,14 @@ class PSDetailWidget(QWidget):
             qproperty-alignment: AlignCenter;
         }
         QLed {
-            min-width: 40px;
-            max-width: 40px;
-            min-height: 40px;
-            max-height: 40px;
+            min-width: 1em;
+            max-width: 1em;
+            min-height: 1em;
+            max-height: 1em;
+        }
+        PyDMStateButton {
+            min-width: 2em;
+            max-width: 2em;
         }
     """
 
@@ -81,8 +86,16 @@ class PSDetailWidget(QWidget):
                 self._metric_text = "Kick [{}]".format(unit)
 
         self._setup_ui()
-        self.setStyleSheet(self.StyleSheet)
         self.setFocus(True)
+        # Get screen height
+        screen_height = QApplication.desktop().screenGeometry().height()
+        layout_height = self.layout.sizeHint().height()
+        if layout_height > screen_height:
+            # Decrease font size
+            self.setStyleSheet(self.StyleSheet + '* {font-size: 14px;}')
+        else:
+            self.setStyleSheet(self.StyleSheet)
+        self.layout.setSizeConstraint(QGridLayout.SetFixedSize)
 
     def _setup_ui(self):
         # Group boxes that compose the widget
@@ -137,6 +150,9 @@ class PSDetailWidget(QWidget):
 
         layout.addWidget(QLabel("<h1>" + self._psname + "</h1>"))
         layout.addLayout(boxes_layout)
+        dclink_button = QPushButton('DCLink', self)
+        dclink_button.setObjectName('dclink_button')
+        layout.addWidget(dclink_button)
 
         controls.addWidget(self.version_box)
         controls.addWidget(self.interlock_box)
@@ -171,7 +187,7 @@ class PSDetailWidget(QWidget):
         layout = QGridLayout()
         soft_intlk_button = QPushButton('Soft Interlock', self)
         hard_intlk_button = QPushButton('Hard Interlock', self)
-        openloop_label = QLabel('OpenLoop', self)
+        openloop_label = QLabel('ControlLoop', self)
         # _util.connect_window(soft_intlk_button, )
         layout.addWidget(soft_intlk_button, 0, 0)
         layout.addWidget(SiriusLedAlert(
@@ -181,7 +197,7 @@ class PSDetailWidget(QWidget):
             self, "ca://" + self._prefixed_psname + ":IntlkHard-Mon"), 1, 1)
         layout.addWidget(openloop_label, 2, 0, Qt.AlignCenter)
         layout.addWidget(SiriusLedAlert(
-            self, "ca://" + self._prefixed_psname + ":OpenLoop-Mon"), 2, 1)
+            self, "ca://" + self._prefixed_psname + ":CtrlLoop-Sts"), 2, 1)
 
         _util.connect_window(soft_intlk_button, MagnetInterlockWindow, self,
                              **{'magnet': self._psname,
@@ -495,3 +511,124 @@ class PSDetailWidget(QWidget):
             return "fc"
         else:
             raise ValueError("Element not defined")
+
+
+class DCLinkDetailWidget(PSDetailWidget):
+
+    def _setup_ui(self):
+        # Group boxes that compose the widget
+        self.version_box = QGroupBox("Version")
+        self.version_box.setObjectName("version")
+        self.interlock_box = QGroupBox("Interlock")
+        self.interlock_box.setObjectName("interlock")
+        self.pwrstate_box = QGroupBox("PwrState")
+        self.pwrstate_box.setObjectName("power_state")
+        self.analog_box = QGroupBox("Current [A]")
+        self.analog_box.setObjectName("current")
+        self.command_box = QGroupBox("Commands")
+        self.command_box.setObjectName("command_box")
+        self.aux_box = QGroupBox("Other Params")
+        self.aux_box.setObjectName("aux_box")
+
+        # Set group boxes layouts
+        self.version_box.setLayout(self._versionLayout())
+        self.interlock_box.setLayout(self._interlockLayout())
+        self.pwrstate_box.setLayout(self._powerStateLayout())
+        self.analog_box.setLayout(self._analogLayout())
+        self.command_box.setLayout(self._commandLayout())
+        self.aux_box.setLayout(self._auxLayout())
+
+        # Add group boxes to laytout
+        self.layout = self._setWidgetLayout()
+
+        # Set widget layout
+        self.setLayout(self.layout)
+
+    def _setWidgetLayout(self):
+        layout = QVBoxLayout()
+        boxes_layout = QHBoxLayout()
+        controls = QVBoxLayout()
+        analogs = QVBoxLayout()
+        boxes_layout.addLayout(controls)
+        boxes_layout.addLayout(analogs)
+
+        layout.addWidget(QLabel("<h1>" + self._psname + "</h1>"))
+        layout.addLayout(boxes_layout)
+
+        controls.addWidget(self.version_box)
+        controls.addWidget(self.interlock_box)
+        controls.addWidget(self.pwrstate_box)
+        controls.addWidget(self.command_box)
+
+        analogs.addWidget(self.analog_box)
+        analogs.addWidget(self.aux_box)
+
+        return layout
+
+    def _analogLayout(self):
+        layout = QGridLayout()
+
+        self.current_sp_label = QLabel("Setpoint")
+        self.current_rb_label = QLabel("Readback")
+        self.current_ref_label = QLabel("Ref Mon")
+        self.current_mon_label = QLabel("Mon")
+
+        self.current_sp_widget = PyDMLinEditScrollbar(
+            parent=self,
+            channel="ca://" + self._prefixed_psname + ":Voltage-SP")
+        # self.current_sp_widget.set_limits_from_pv(True)
+        # if self._magnet_type == "b":
+        self.current_sp_widget.sp_lineedit.showUnits = False
+        self.current_sp_widget.sp_scrollbar.setTracking(False)
+        self.current_rb_val = PyDMLabel(
+            self, "ca://" + self._prefixed_psname + ":Voltage-RB")
+        self.current_rb_val.precFromPV = True
+        self.current_ref_val = PyDMLabel(
+            self, "ca://" + self._prefixed_psname + ":VoltageRef-Mon")
+        self.current_ref_val.precFromPV = True
+        self.current_mon_val = PyDMLabel(
+            self, "ca://" + self._prefixed_psname + ":Voltage-Mon")
+        self.current_mon_val.precFromPV = True
+
+        layout.addWidget(self.current_sp_label, 0, 0, Qt.AlignRight)
+        layout.addWidget(self.current_sp_widget, 0, 1)
+        layout.addWidget(self.current_rb_label, 1, 0, Qt.AlignRight)
+        layout.addWidget(self.current_rb_val, 1, 1)
+        layout.addWidget(self.current_ref_label, 2, 0, Qt.AlignRight)
+        layout.addWidget(self.current_ref_val, 2, 1)
+        layout.addWidget(self.current_mon_label, 3, 0, Qt.AlignRight)
+        layout.addWidget(self.current_mon_val, 3, 1)
+        # layout.addWidget(self.current_sp_slider, 2, 1)
+        # layout.setRowStretch(4, 1)
+        layout.setColumnStretch(2, 1)
+        # layout.setRowStretch(2, 1)
+
+        return layout
+
+    def _auxLayout(self):
+        layout = QFormLayout()
+
+        # self._out_1_label = QLabel('Voltage 1')
+        # self._out_2_label = QLabel('Voltage 2')
+        # self._out_3_label = QLabel('Voltage 3')
+        # self._out_dig_label = QLabel('Voltage dig')
+        # self._mod_status_label = QLabel('Module Status')
+
+        self._out_1_mon = PyDMLabel(
+            self, 'ca://' + self._prefixed_psname + ':Voltage1-Mon')
+        self._out_2_mon = PyDMLabel(
+            self, 'ca://' + self._prefixed_psname + ':Voltage2-Mon')
+        self._out_3_mon = PyDMLabel(
+            self, 'ca://' + self._prefixed_psname + ':Voltage3-Mon')
+        self._out_dig_mon = PyDMLabel(
+            self, 'ca://' + self._prefixed_psname + ':VoltageDig-Mon')
+        self._mod_status_mon = PyDMLabel(
+            self, 'ca://' + self._prefixed_psname + ':ModulesStatus-Mon')
+
+        layout.addRow('Voltage 1', self._out_1_mon)
+        layout.addRow('Voltage 2', self._out_2_mon)
+        layout.addRow('Voltage 3', self._out_3_mon)
+        layout.addRow('Voltage dig', self._out_dig_mon)
+        layout.addRow('Module Status', self._mod_status_mon)
+
+        return layout

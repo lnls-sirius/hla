@@ -4,7 +4,9 @@ from PyQt5.QtWidgets import QApplication
 from epics import PV
 from os import path
 from psdiag import Test
-from siriuspy.magnet import magdata as _magdata
+# from siriuspy.magnet import magdata as _magdata
+from siriuspy.magnet.data import MAData as _MAData
+from siriuspy.search.ma_search import MASearch as _MASearch
 import datetime
 
 class DiagnosticsMainWindow(Display):
@@ -20,7 +22,8 @@ class DiagnosticsMainWindow(Display):
         self.ui.lb_msg_inicio.setText("<p style='color:red;'>Por favor, aguarde o início...</p>")
 
         self._time_between_readings = self.ui.sb_time_interval.value()
-        self._magps_list = _magdata.get_ps_names()
+        # self._magps_list = _magdata.get_ps_names()
+        self._magps_list = _MASearch.get_manames({'dis': 'MA'})
 
         self._timer = QTimer(self)
         self._timer.setInterval(1000 * self._time_between_readings)

@@ -3,6 +3,7 @@ import re
 from pydm.PyQt.QtCore import Qt, QAbstractTableModel, QModelIndex, QVariant
 from pydm.PyQt.QtGui import QItemDelegate, QColor, QDoubleSpinBox
 from siriuspy.servconf.conf_service import ConfigService
+from siriuspy.servconf.conf_types import get_config_type_template
 
 
 CONFIG_SERVICE_HOSTNAME = "http://lnls350-linux"
@@ -338,13 +339,13 @@ class ConfigModel(QAbstractTableModel):
                 return 20
 
         self._vertical_header = list()
-        if self._config_type == "bo_strength_pvs":
-            from siriuspy.servconf.types.bo_strength_pvs import get_dict
-        elif self._config_type == "si_strength_pvs":
-            from siriuspy.servconf.types.si_strength_pvs import get_dict
+        if self._config_type == 'bo_normalized':
+            pvs = get_config_type_template('bo_normalized')
+        elif self._config_type == 'si_normalized':
+            pvs = get_config_type_template('si_normalized')
         else:
             raise Exception("Module {} not found".format(self._config_type))
-        pvs = get_dict()["value"]
+        # pvs = get_dict()["value"]
         # pvs = getattr(ConfigurationPvs, self._config_type)().pvs()
         for name, value in pvs.items():
             self._vertical_header.append({'name': name, 'type': type(value)})
