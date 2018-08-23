@@ -303,38 +303,54 @@ class DipoleRamp(QWidget):
         """Handle change waveform number of points."""
         old_value = self.ramp_config.ramp_dipole_wfm_nrpoints
         new_value = self.sb_nrpoints.value()
-        self.ramp_config.ramp_dipole_wfm_nrpoints = new_value
 
-        global _flag_stack_next_command, _flag_stacking
-        if _flag_stack_next_command:
-            _flag_stacking = True
-            command = _CommandChangeSpinbox(
-                self.sb_nrpoints, old_value, new_value,
-                'set number of dipole ramp points to {0}'.format(new_value))
-            self._undo_stack.push(command)
+        try:
+            self.ramp_config.ramp_dipole_wfm_nrpoints = new_value
+        except exceptions.RampInvalidDipoleWfmParms as e:
+            self.updateWfmNrPoints()
+            err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
+            err_msg.open()
         else:
-            _flag_stack_next_command = True
-        self.updateTable()
-        self.updateDipoleRampSignal.emit()
+            self.updateGraph()
+            self.updateDipoleRampSignal.emit()
+            global _flag_stack_next_command, _flag_stacking
+            if _flag_stack_next_command and (old_value != new_value):
+                _flag_stacking = True
+                command = _CommandChangeSpinbox(
+                    self.sb_nrpoints, old_value, new_value,
+                    'set dipole ramp number of points to {}'.format(new_value))
+                self._undo_stack.push(command)
+            else:
+                _flag_stack_next_command = True
+        finally:
+            self.updateTable()
 
     @pyqtSlot()
     def _handleChangeDuration(self):
         """Handle change waveform duration."""
         old_value = self.ramp_config.ramp_dipole_duration
         new_value = self.sb_duration.value()
-        self.ramp_config.ramp_dipole_duration = new_value
 
-        global _flag_stack_next_command, _flag_stacking
-        if _flag_stack_next_command:
-            _flag_stacking = True
-            command = _CommandChangeSpinbox(
-                self.sb_duration, old_value, new_value,
-                'set dipole ramp duration to {0}'.format(new_value))
-            self._undo_stack.push(command)
+        try:
+            self.ramp_config.ramp_dipole_duration = new_value
+        except exceptions.RampInvalidDipoleWfmParms as e:
+            self.updateDuration()
+            err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
+            err_msg.open()
         else:
-            _flag_stack_next_command = True
-        self.updateTable()
-        self.updateDipoleRampSignal.emit()
+            self.updateGraph()
+            self.updateDipoleRampSignal.emit()
+            global _flag_stack_next_command, _flag_stacking
+            if _flag_stack_next_command and (old_value != new_value):
+                _flag_stacking = True
+                command = _CommandChangeSpinbox(
+                    self.sb_duration, old_value, new_value,
+                    'set dipole ramp duration to {}'.format(new_value))
+                self._undo_stack.push(command)
+            else:
+                _flag_stack_next_command = True
+        finally:
+            self.updateTable()
 
     def _showAnomaliesPopup(self):
         text = 'Caution to the following anomalies: \n'
@@ -1039,19 +1055,27 @@ class RFRamp(QWidget):
         """Handle change waveform number of points."""
         old_value = 0
         new_value = self.sb_nrpoints.value()
-        # TODO: set new_value on ramp_config
 
-        global _flag_stack_next_command, _flag_stacking
-        if _flag_stack_next_command:
-            _flag_stacking = True
-            command = _CommandChangeSpinbox(
-                self.sb_nrpoints, old_value, new_value,
-                'set number of RF ramp points to {0}'.format(new_value))
-            self._undo_stack.push(command)
+        try:
+            # TODO: set new_value on ramp_config
+            pass
+        except exceptions.RampInvalidDipoleWfmParms as e:
+            err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
+            err_msg.open()
         else:
-            _flag_stack_next_command = True
-        self.updateTable()
-        self.updateRFRampSignal.emit()
+            self.updateGraph()
+            self.updateRFRampSignal.emit()
+            global _flag_stack_next_command, _flag_stacking
+            if _flag_stack_next_command:
+                _flag_stacking = True
+                command = _CommandChangeSpinbox(
+                    self.sb_nrpoints, old_value, new_value,
+                    'set number of RF ramp points to {0}'.format(new_value))
+                self._undo_stack.push(command)
+            else:
+                _flag_stack_next_command = True
+        finally:
+            self.updateTable()
 
     def updateGraph(self):
         """Update and redraw graph."""
@@ -1118,11 +1142,13 @@ class _CommandChangeSpinbox(QUndoCommand):
         global _flag_stack_next_command
         _flag_stack_next_command = False
         self.spinbox.setValue(self.old_data)
+        self.spinbox.editingFinished.emit()
 
     def redo(self):
         global _flag_stack_next_command, _flag_stacking
         if not _flag_stacking:
             _flag_stack_next_command = False
             self.spinbox.setValue(self.new_data)
+            self.spinbox.editingFinished.emit()
         else:
             _flag_stacking = False
