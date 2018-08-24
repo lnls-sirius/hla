@@ -75,11 +75,11 @@ class DipoleRamp(QWidget):
     def _setupUi(self):
         vlay = QVBoxLayout(self)
         self.graphview = QWidget()
-        self.nrpoints_and_duration = QHBoxLayout()
+        self.set_nrpoints = QHBoxLayout()
         self.table = QTableWidget(self)
 
         self._setupGraph()
-        self._setupWfmNrPointsAndDuration()
+        self._setupWfmNrPoints()
         self._setupTable()
 
         hlay_caution = QHBoxLayout()
@@ -98,7 +98,7 @@ class DipoleRamp(QWidget):
         label.setFixedHeight(48)
         vlay.addWidget(label)
         vlay.addWidget(self.graphview)
-        vlay.addLayout(self.nrpoints_and_duration)
+        vlay.addLayout(self.set_nrpoints)
         vlay.addWidget(self.table)
         vlay.addLayout(hlay_caution)
         vlay.addItem(QSpacerItem(40, 20, QSzPlcy.Minimum, QSzPlcy.Expanding))
@@ -122,7 +122,7 @@ class DipoleRamp(QWidget):
         lay.addWidget(self.toolbar)
         self.graphview.setLayout(lay)
 
-    def _setupWfmNrPointsAndDuration(self):
+    def _setupWfmNrPoints(self):
         label_nrpoints = QLabel('# of points: ', self,
                                 alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.sb_nrpoints = QSpinBox(self)
@@ -130,22 +130,11 @@ class DipoleRamp(QWidget):
         self.sb_nrpoints.setMaximum(MAX_WFMSIZE)
         self.sb_nrpoints.editingFinished.connect(self._handleChangeNrPoints)
 
-        label_duration = QLabel('Duration (ms): ', self,
-                                alignment=Qt.AlignRight | Qt.AlignVCenter)
-        self.sb_duration = QSpinBox(self)
-        self.sb_duration.setMinimum(1)
-        self.sb_duration.setMaximum(490)
-        self.sb_duration.editingFinished.connect(self._handleChangeDuration)
-
-        self.nrpoints_and_duration.addSpacerItem(
+        self.set_nrpoints.addSpacerItem(
             QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
-        self.nrpoints_and_duration.addWidget(label_nrpoints)
-        self.nrpoints_and_duration.addWidget(self.sb_nrpoints)
-        self.nrpoints_and_duration.addSpacerItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
-        self.nrpoints_and_duration.addWidget(label_duration)
-        self.nrpoints_and_duration.addWidget(self.sb_duration)
-        self.nrpoints_and_duration.addSpacerItem(
+        self.set_nrpoints.addWidget(label_nrpoints)
+        self.set_nrpoints.addWidget(self.sb_nrpoints)
+        self.set_nrpoints.addSpacerItem(
             QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
 
     def _setupTable(self):
@@ -196,13 +185,10 @@ class DipoleRamp(QWidget):
             label_item.setFlags(Qt.ItemIsEnabled)
             np_item.setFlags(Qt.ItemIsEnabled)
             v_item.setFlags(Qt.ItemIsEnabled)
-            if vlabel == 'Start':
+            if vlabel in ['Start', 'Plateau-Start']:
                 t_item.setFlags(Qt.ItemIsEnabled)
                 e_item.setBackground(QBrush(QColor("white")))
-            elif vlabel in ['Plateau-Start', 'Stop']:
-                t_item.setFlags(Qt.ItemIsEnabled)
-                e_item.setFlags(Qt.ItemIsEnabled)
-            elif vlabel in ['Injection', 'Ejection']:
+            elif vlabel in ['Injection', 'Ejection', 'Stop']:
                 t_item.setBackground(QBrush(QColor("white")))
                 e_item.setFlags(Qt.ItemIsEnabled)
             else:
@@ -255,6 +241,10 @@ class DipoleRamp(QWidget):
                     old_value = self.ramp_config.rampup_stop_energy
                     self.ramp_config.rampup_stop_energy = new_value
 
+            elif row == self.table_map['rows']['Plateau-Start']:
+                old_value = self.ramp_config.plateau_energy
+                self.ramp_config.plateau_energy = new_value
+
             elif row == self.table_map['rows']['RampDown-Start']:
                 if column == self.table_map['columns']['T [ms]']:
                     old_value = self.ramp_config.rampdown_start_time
@@ -270,6 +260,10 @@ class DipoleRamp(QWidget):
                 elif column == self.table_map['columns']['E [GeV]']:
                     old_value = self.ramp_config.rampdown_stop_energy
                     self.ramp_config.rampdown_stop_energy = new_value
+
+            elif row == self.table_map['rows']['Stop']:
+                old_value = self.ramp_config.ramp_dipole_duration
+                self.ramp_config.ramp_dipole_duration = new_value
 
         except exceptions.RampInvalidDipoleWfmParms as e:
             err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
@@ -325,33 +319,6 @@ class DipoleRamp(QWidget):
         finally:
             self.updateTable()
 
-    @pyqtSlot()
-    def _handleChangeDuration(self):
-        """Handle change waveform duration."""
-        old_value = self.ramp_config.ramp_dipole_duration
-        new_value = self.sb_duration.value()
-
-        try:
-            self.ramp_config.ramp_dipole_duration = new_value
-        except exceptions.RampInvalidDipoleWfmParms as e:
-            self.updateDuration()
-            err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
-            err_msg.open()
-        else:
-            self.updateGraph()
-            self.updateDipoleRampSignal.emit()
-            global _flag_stack_next_command, _flag_stacking
-            if _flag_stack_next_command and (old_value != new_value):
-                _flag_stacking = True
-                command = _CommandChangeSpinbox(
-                    self.sb_duration, old_value, new_value,
-                    'set dipole ramp duration to {}'.format(new_value))
-                self._undo_stack.push(command)
-            else:
-                _flag_stack_next_command = True
-        finally:
-            self.updateTable()
-
     def _showAnomaliesPopup(self):
         text = 'Caution to the following anomalies: \n'
         for anom in self.ramp_config.waveform_anomalies:
@@ -388,10 +355,6 @@ class DipoleRamp(QWidget):
     def updateWfmNrPoints(self):
         """Update waveform number of points when ramp_config is loaded."""
         self.sb_nrpoints.setValue(self.ramp_config.ramp_dipole_wfm_nrpoints)
-
-    def updateDuration(self):
-        """Update waveform duration when ramp_config is loaded."""
-        self.sb_duration.setValue(self.ramp_config.ramp_dipole_duration)
 
     def updateTable(self):
         """Update and rebuild table when ramp_config is loaded."""
@@ -476,7 +439,6 @@ class DipoleRamp(QWidget):
         self.ramp_config = ramp_config
         self.updateTable()
         self.updateWfmNrPoints()
-        self.updateDuration()
         self.updateGraph()
         if len(self.ramp_config.waveform_anomalies) > 0:
             self.label_caution.setText('<h6>Caution: there are anomalies '
@@ -1130,7 +1092,7 @@ class _CommandChangeTableCell(QUndoCommand):
 
 
 class _CommandChangeSpinbox(QUndoCommand):
-    """Class to define command change ramp number of points or duration."""
+    """Class to define command change ramp number of points."""
 
     def __init__(self, spinbox, old_data, new_data, description):
         super().__init__(description)
