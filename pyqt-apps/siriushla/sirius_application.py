@@ -106,7 +106,6 @@ class SiriusApplication(PyDMApplication):
 
     def _show(self, wid):
         if self._windows[wid].isHidden():
-            self.establish_widget_connections(self._windows[wid], False)
             self._windows[wid].show()
         elif self._windows[wid].isMinimized():
             self._windows[wid].showNormal()
@@ -121,5 +120,4 @@ class SiriusApplication(PyDMApplication):
                 'Failed to open window: {}'.format(e))
         else:
             self._windows[wid] = window
-            self.establish_widget_connections(window, False)
             self._windows[wid].show()
