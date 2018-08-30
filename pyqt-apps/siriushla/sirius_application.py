@@ -74,13 +74,13 @@ class SiriusApplication(PyDMApplication):
     def _establish_connections(self, widget):
         if self._has_channel(widget):
             for channel in widget.channels():
-                return self.add_connection(channel)
+                self.add_connection(channel)
 
     def _remove_connections(self, widget):
         try:
             if self._has_channel(widget):
                 for channel in widget.channels():
-                    return self.remove_connection(channel)
+                    self.remove_connection(channel)
         except NameError:
             pass
         # This imitates the solution adopted by pydm to handle protocol errors.
