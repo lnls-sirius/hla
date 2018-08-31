@@ -150,9 +150,10 @@ class PSDetailWidget(QWidget):
 
         layout.addWidget(QLabel("<h1>" + self._psname + "</h1>"))
         layout.addLayout(boxes_layout)
-        dclink_button = QPushButton('DCLink', self)
-        dclink_button.setObjectName('dclink_button')
-        layout.addWidget(dclink_button)
+        if not self._is_magnet:
+            dclink_button = QPushButton('DCLink', self)
+            dclink_button.setObjectName('dclink_button')
+            layout.addWidget(dclink_button)
 
         controls.addWidget(self.version_box)
         controls.addWidget(self.interlock_box)
