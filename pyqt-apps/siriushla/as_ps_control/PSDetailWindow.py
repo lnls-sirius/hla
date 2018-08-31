@@ -4,6 +4,7 @@ from pydm.PyQt.QtGui import QPushButton
 from siriushla.widgets import SiriusMainWindow
 from siriushla.as_ps_control.detail_widget.DetailWidgetFactory \
     import DetailWidgetFactory
+from siriuspy.search.ps_search import PSSearch
 from ..util import connect_window
 
 
@@ -26,7 +27,7 @@ class PSDetailWindow(SiriusMainWindow):
 
     def _setup_ui(self):
         # Set window layout
-        self.setWindowTitle(self._ma)
+        self.setWindowTitle("PS Detail Window")
         self.widget = DetailWidgetFactory.factory(self._ma, self)
         self._connect_buttons(self.widget)
         self.setCentralWidget(self.widget)
@@ -34,6 +35,6 @@ class PSDetailWindow(SiriusMainWindow):
     def _connect_buttons(self, widget):
         w = widget.findChild(QPushButton, 'dclink_button')
         if w:
-            # TODO: dclink name is hardcoded
-            connect_window(
-                w, PSDetailWindow, self, psname='AS-Glob:PS-DCLinkFBP-2')
+            dclinks = PSSearch.conv_psname_2_dclink(self._ma)
+            if dclinks:
+                connect_window(w, PSDetailWindow, self, psname=dclinks)

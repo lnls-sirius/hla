@@ -8,10 +8,10 @@ from matplotlib.backends.backend_qt5agg import (
 import epics as _epics
 from pydm.PyQt.uic import loadUi
 from pydm.PyQt.QtCore import pyqtSlot, Qt, QPoint
-from pydm.PyQt.QtGui import (
-    QVBoxLayout, QHBoxLayout, QGridLayout, QSpacerItem, QFileDialog, QAction,
-    QMenuBar, QWidget, QLabel, QPixmap, QPushButton, QButtonGroup, QCheckBox)
-from pydm.PyQt.QtGui import QSizePolicy as QSzPlcy
+from pydm.PyQt.QtGui import QVBoxLayout, QHBoxLayout, QGridLayout, \
+                            QSpacerItem, QFileDialog, QAction, QMenuBar, \
+                            QWidget, QLabel, QPixmap, QPushButton, \
+                            QButtonGroup, QCheckBox, QSizePolicy as QSzPlcy
 from pydm.PyQt.QtSvg import QSvgWidget
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
@@ -19,14 +19,14 @@ import pyaccel as _pyaccel
 import pymodels as _pymodels
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla import util as _hlautil
-from siriushla.widgets import (
-    PyDMLed, SiriusLedAlert, SiriusLedState, SiriusMainWindow,
-    SiriusScrnView, PyDMLinEditScrollbar)
+from siriushla.sirius_application import SiriusApplication
+from siriushla.widgets import PyDMLed, SiriusLedAlert, SiriusLedState, \
+                              SiriusMainWindow, SiriusScrnView, \
+                              PyDMLinEditScrollbar
 from siriushla.as_ap_bpms.bpms_windows import BPMsInterfaceTL
 from siriushla.as_ap_posang.HLPosAng import ASAPPosAngCorr
 from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
-from siriushla.as_ps_control.PSTabControlWindow import (
-    PSTabControlWindow)
+from siriushla.as_ps_control.PSTabControlWindow import PSTabControlWindow
 from siriushla.as_pm_control.PulsedMagnetDetailWindow import (
     PulsedMagnetDetailWindow)
 from siriushla.as_pm_control.PulsedMagnetControlWindow import (
@@ -49,8 +49,8 @@ class TLAPControlWindow(SiriusMainWindow):
     def _setupUi(self):
         self.setWindowTitle(self._tl.upper() + ' Control Window')
 
-        [UI_FILE, SVG_FILE, self._correctors_list, self._scrn_list] = (
-            self._getTLData(self._tl))
+        [UI_FILE, SVG_FILE, self._corr_devicenames_list,
+            self._scrn_devicenames_list] = self._getTLData(self._tl)
 
         # Set central widget
         tmp_file = _substitute_in_file(
@@ -96,48 +96,11 @@ class TLAPControlWindow(SiriusMainWindow):
             appsMenu.addAction(openICTsApp)
         self.setMenuBar(menubar)
 
-        # Fill Screen widgets
+        # Create ButtonGroup to handle ScrnViews
         self._scrn_selection_widget = QButtonGroup(
             parent=self.centralwidget.groupBox_allcorrPanel)
         self._scrn_selection_widget.setExclusive(True)
         self._currScrn = 0
-        self.widget_Scrn0 = SiriusScrnView(
-            parent=self, prefix=self.prefix, device=self._scrn_list[0])
-        self.centralwidget.widget_Scrn.layout().addWidget(
-            self.widget_Scrn0, 2, 0)
-        self.widget_Scrn0.setVisible(True)
-        self.widget_Scrn1 = SiriusScrnView(
-            parent=self, prefix=self.prefix, device=self._scrn_list[1])
-        self.centralwidget.widget_Scrn.layout().addWidget(
-            self.widget_Scrn1, 2, 0)
-        self.widget_Scrn1.setVisible(False)
-        self.widget_Scrn2 = SiriusScrnView(
-            parent=self, prefix=self.prefix, device=self._scrn_list[2])
-        self.centralwidget.widget_Scrn.layout().addWidget(
-            self.widget_Scrn2, 2, 0)
-        self.widget_Scrn2.setVisible(False)
-        self.widget_Scrn3 = SiriusScrnView(
-            parent=self, prefix=self.prefix, device=self._scrn_list[3])
-        self.centralwidget.widget_Scrn.layout().addWidget(
-            self.widget_Scrn3, 2, 0)
-        self.widget_Scrn3.setVisible(False)
-        self.widget_Scrn4 = SiriusScrnView(
-            parent=self, prefix=self.prefix, device=self._scrn_list[4])
-        self.centralwidget.widget_Scrn.layout().addWidget(
-            self.widget_Scrn4, 2, 0)
-        self.widget_Scrn4.setVisible(False)
-        self.widget_Scrn5 = SiriusScrnView(
-            parent=self, prefix=self.prefix, device=self._scrn_list[5])
-        self.centralwidget.widget_Scrn.layout().addWidget(
-            self.widget_Scrn5, 2, 0)
-        self.widget_Scrn5.setVisible(False)
-
-        self.scrn_widget_dict = {'0': self.widget_Scrn0,
-                                 '1': self.widget_Scrn1,
-                                 '2': self.widget_Scrn2,
-                                 '3': self.widget_Scrn3,
-                                 '4': self.widget_Scrn4,
-                                 '5': self.widget_Scrn5}
 
         # Connect and initialize reference widget
         self.centralwidget.pushButton_SaveRef.clicked.connect(
@@ -189,7 +152,7 @@ class TLAPControlWindow(SiriusMainWindow):
         headerline = QWidget()
         headerline.setObjectName('headerline')
         headerline.setMaximumHeight(60)
-        headerline.setStyleSheet("""* { font-weight:bold; }""")
+        headerline.setStyleSheet('* { font-weight:bold; }')
         headerline.setLayout(hlay_headerline)
         headerline.layout().setContentsMargins(0, 9, 0, 9)
 
@@ -197,7 +160,7 @@ class TLAPControlWindow(SiriusMainWindow):
         correctors_gridlayout.addWidget(headerline, 1, 1)
 
         line = 2
-        for ch_group, cv, scrn, scrnprefix in self._correctors_list:
+        for ch_group, cv, scrn, scrnprefix in self._corr_devicenames_list:
             hlay_scrncorr = QHBoxLayout()
             hlay_scrncorr.addItem(
                 QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
@@ -225,7 +188,7 @@ class TLAPControlWindow(SiriusMainWindow):
             widget_scrncorr.layout().setContentsMargins(0, 9, 0, 9)
 
             widget_scrncorr.setStyleSheet(
-                """#widget_correctors_scrn {border-top: 2px solid gray;}""")
+                '#widget_correctors_scrn {border-top: 2px solid gray;}')
             correctors_gridlayout.addWidget(widget_scrncorr, line, 1)
             line += 1
 
@@ -255,8 +218,7 @@ class TLAPControlWindow(SiriusMainWindow):
         buttonsline.setLayout(hlay_buttonsline)
         buttonsline.setMaximumHeight(98)
         buttonsline.layout().setContentsMargins(0, 9, 0, 9)
-        buttonsline.setStyleSheet(
-            """#buttonsline {border-top: 2px solid gray;}""")
+        buttonsline.setStyleSheet('#buttonsline {border-top: 2px solid gray;}')
         correctors_gridlayout.addWidget(buttonsline, 8, 1)
 
         self.centralwidget.groupBox_allcorrPanel.setLayout(
@@ -265,8 +227,23 @@ class TLAPControlWindow(SiriusMainWindow):
         self.centralwidget.groupBox_allcorrPanel.layout().setContentsMargins(
             0, 0, 0, 0)
 
+        # Create only one ScrnView, and the rest on selecting other screens
+        self.scrnview_widgets_dict = dict()
+        wid_scrn = SiriusScrnView(
+            parent=self, prefix=self.prefix,
+            device=self._scrn_devicenames_list[self._currScrn])
+        self.centralwidget.widget_Scrn.layout().addWidget(wid_scrn, 2, 0)
+        wid_scrn.setVisible(True)
+        self.scrnview_widgets_dict[self._currScrn] = wid_scrn
+        pydmcombobox_scrntype = self.findChild(
+            PyDMEnumComboBox,
+            name='PyDMEnumComboBox_ScrnType_Sel_Scrn'+str(self._currScrn))
+        pydmcombobox_scrntype.currentIndexChanged.connect(
+            self.scrnview_widgets_dict[self._currScrn].
+            updateCalibrationGridFlag)
+
     def _allCHsTurnOn(self):
-        for ch_group, _, _, _ in self._correctors_list:
+        for ch_group, _, _, _ in self._corr_devicenames_list:
             for ch in ch_group:
                 pv = _epics.PV(self.prefix+ch+':PwrState-Sel')
                 if pv.connected:
@@ -275,7 +252,7 @@ class TLAPControlWindow(SiriusMainWindow):
                     pv = None
 
     def _allCVsTurnOn(self):
-        for _, cv, _, _ in self._correctors_list:
+        for _, cv, _, _ in self._corr_devicenames_list:
             pv = _epics.PV(self.prefix+cv+':PwrState-Sel')
             if pv.connected:
                 pv.put(1)
@@ -283,7 +260,7 @@ class TLAPControlWindow(SiriusMainWindow):
                 pv = None
 
     def _allScrnsDoHoming(self):
-        for scrn in self._scrn_list:
+        for scrn in self._scrn_devicenames_list:
             pv = _epics.PV(self.prefix+scrn+':ScrnType-Sel')
             if pv.connected:
                 pv.put(0)
@@ -317,11 +294,11 @@ class TLAPControlWindow(SiriusMainWindow):
         scrn_checkbox = QCheckBox(scrn_device)
         self._scrn_selection_widget.addButton(scrn_checkbox)
         self._scrn_selection_widget.setId(scrn_checkbox, scrn_idx)
-        if scrn_idx == 0:
+        if scrn_idx == self._currScrn:
             scrn_checkbox.setChecked(True)
         scrn_checkbox.clicked.connect(self._setScrnWidget)
         scrn_checkbox.setFixedWidth(300)
-        scrn_checkbox.setStyleSheet("""font-weight:bold;""")
+        scrn_checkbox.setStyleSheet('font-weight:bold;')
         scrn_details.layout().addWidget(scrn_checkbox, 1, 1)
 
         pydmcombobox_scrntype = PyDMEnumComboBox(
@@ -331,8 +308,6 @@ class TLAPControlWindow(SiriusMainWindow):
             'PyDMEnumComboBox_ScrnType_Sel_Scrn' + str(scrn_idx))
         pydmcombobox_scrntype.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Fixed)
         pydmcombobox_scrntype.setFixedSize(180, 40)
-        pydmcombobox_scrntype.currentIndexChanged.connect(
-            self.scrn_widget_dict[str(scrn_idx)].updateCalibrationGridFlag)
         scrn_details.layout().addWidget(pydmcombobox_scrntype, 1, 2)
 
         pydmlabel_scrntype = PyDMLabel(
@@ -481,7 +456,7 @@ class TLAPControlWindow(SiriusMainWindow):
             _os.makedirs(path)
         fn, _ = QFileDialog.getSaveFileName(
             self, 'Save Reference As...',
-            path + '/' + self._scrn_list[self._currScrn] +
+            path + '/' + self._scrn_devicenames_list[self._currScrn] +
             _datetime.now().strftime('_%Y-%m-%d_%Hh%Mmin'),
             'Images (*.png *.xpm *.jpg);;All Files (*)')
         if not fn:
@@ -495,11 +470,37 @@ class TLAPControlWindow(SiriusMainWindow):
 
     @pyqtSlot()
     def _setScrnWidget(self):
+        app = SiriusApplication.instance()
         sender = self.sender()
         self._currScrn = self._scrn_selection_widget.id(sender)
-        for i in range(6):
-            self.scrn_widget_dict[str(i)].setVisible(False)
-        self.scrn_widget_dict[str(self._currScrn)].setVisible(True)
+
+        for i in self.scrnview_widgets_dict.keys():
+            if i != self._currScrn:
+                self.scrnview_widgets_dict[i].setVisible(False)
+                app.close_widget_connections(
+                    widget=self.scrnview_widgets_dict[i],
+                    propagate=False)
+
+        if self._currScrn not in self.scrnview_widgets_dict.keys():
+            wid_scrn = SiriusScrnView(
+                parent=self, prefix=self.prefix,
+                device=self._scrn_devicenames_list[self._currScrn])
+            self.centralwidget.widget_Scrn.layout().addWidget(wid_scrn, 2, 0)
+            wid_scrn.setVisible(True)
+            self.scrnview_widgets_dict[self._currScrn] = wid_scrn
+
+            pydmcombobox_scrntype = self.findChild(
+                PyDMEnumComboBox,
+                name='PyDMEnumComboBox_ScrnType_Sel_Scrn'+str(self._currScrn))
+            pydmcombobox_scrntype.currentIndexChanged.connect(
+                self.scrnview_widgets_dict[self._currScrn].
+                updateCalibrationGridFlag)
+        else:
+            self.scrnview_widgets_dict[self._currScrn].setVisible(True)
+
+        app.establish_widget_connections(
+            widget=self.scrnview_widgets_dict[self._currScrn],
+            propagate=False)
 
     def _setSlitHPos(self, pvname, value, **kws):
         """Callback to set SlitHs Widget positions."""

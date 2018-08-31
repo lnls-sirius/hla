@@ -7,6 +7,7 @@ from siriushla.as_ps_control.detail_widget.DipoleDetailWidget \
     import DipoleDetailWidget
 from siriushla.as_pm_control.PulsedMagnetDetailWidget \
     import PulsedMagnetDetailWidget
+from pydm.PyQt.QtGui import QWidget, QGridLayout
 
 
 class DetailWidgetFactory:
@@ -17,12 +18,29 @@ class DetailWidgetFactory:
 
     @staticmethod
     def factory(psname, parent=None):
-        """Return a DetailWindow."""
+        """Return a DetailWidget."""
+        if isinstance(psname, (list, tuple)):
+            if len(psname) > 1:
+                widget = QWidget(parent)
+                widget.layout = QGridLayout(widget)
+                n_lines = int(len(psname)/2)
+                for idx, name in enumerate(psname):
+                    widget.layout.addWidget(
+                        DetailWidgetFactory._item(name, widget),
+                        idx % n_lines,
+                        int(idx / n_lines))
+                return widget
+            else:
+                psname = psname[0]
+        return DetailWidgetFactory._item(psname, parent)
+
+    @staticmethod
+    def _item(psname, parent=None):
         if DetailWidgetFactory.PulsedMagnet.match(psname):
             return PulsedMagnetDetailWidget(psname, parent)
         elif DetailWidgetFactory.FamDipole.match(psname):
             return DipoleDetailWidget(psname, parent)
-        elif psname == 'AS-Glob:PS-DCLinkFBP-2':
+        elif 'DCLink' in psname:
             return DCLinkDetailWidget(psname, parent)
         else:
             return PSDetailWidget(psname, parent)

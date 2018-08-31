@@ -803,7 +803,7 @@ class SiriusScrnView(QWidget):
 class _ScrnSettingsDetails(SiriusMainWindow):
 
     def __init__(self, parent=None, device=None, prefix=None):
-        super(SiriusMainWindow, self).__init__(parent=parent)
+        super().__init__(parent=parent)
         self.prefix = prefix
         self.device = device
         self.setWindowTitle('Camera Settings Details')
