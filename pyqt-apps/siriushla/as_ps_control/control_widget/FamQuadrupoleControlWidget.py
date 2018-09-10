@@ -4,6 +4,34 @@ from siriushla.as_ps_control.control_widget.BasePSControlWidget import \
     BasePSControlWidget
 
 
+class TBQuadrupoleControlWidget(BasePSControlWidget):
+    """Class to control a quads from the TB transport line."""
+
+    def _getFilter(self):
+        return {"sec": "TB", "dev": "Q.*"}
+
+    def _hasScrollArea(self):
+        return False
+
+    def _getGroups(self):
+        return [('Focusing Quadrupoles', "-QF"),
+                ('Defocusing Quadrupoles', '-QD')]
+
+
+class TSQuadrupoleControlWidget(BasePSControlWidget):
+    """Class to control a quads from the TB transport line."""
+
+    def _getFilter(self):
+        return {"sec": "TS", "dev": "Q.*"}
+
+    def _hasScrollArea(self):
+        return False
+
+    def _getGroups(self):
+        return [('Focusing Quadrupoles', "-QF"),
+                ('Defocusing Quadrupoles', '-QD')]
+
+
 class SIFamQuadrupoleControlWidget(BasePSControlWidget):
     """Class to control a Fam Quad from the Sirius section."""
 
