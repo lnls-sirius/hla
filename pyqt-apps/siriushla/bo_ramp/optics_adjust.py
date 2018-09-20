@@ -331,12 +331,12 @@ class OpticsAdjust(QGroupBox):
 
     def _showEditPopup(self):
         if self.norm_config is not None:
-            norm_list = self.ramp_config.normalized_configs
+            norm_list = self.ramp_config.ps_normalized_configs
             for norm in norm_list:
                 if norm[1] == self.norm_config.name:
                     time = norm[0]
                     break
-            energy = self.ramp_config.waveform_interp_energy(time)
+            energy = self.ramp_config.ps_waveform_interp_energy(time)
             self._editPopup = _EditNormalizedConfig(
                 self, self.norm_config, energyGeV=energy,
                 aux_magnets=self._aux_magnets)
@@ -483,8 +483,8 @@ class OpticsAdjust(QGroupBox):
     def handleLoadRampConfig(self, ramp_config):
         """Update all widgets in loading BoosterRamp config."""
         self.ramp_config = ramp_config
-        if (self.norm_config is not None and
-                self.norm_config.name in ramp_config.normalized_configs_names):
+        if self.norm_config is not None and self.norm_config.name in \
+                ramp_config.ps_normalized_configs_names:
             self.norm_config = self.ramp_config[self.norm_config.name]
 
     @pyqtSlot(list)

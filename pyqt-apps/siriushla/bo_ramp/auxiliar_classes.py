@@ -167,6 +167,7 @@ class NewRampConfigGetName(SiriusDialog):
         name = self.le_config.text()
         if name != '' and not ramp.BoosterRamp(name).configsrv_exist():
             self.bt_create.setEnabled(True)
+            self.l_warn.setText('')
         else:
             if name == '':
                 self.l_warn.setText('Insert a config name!')
@@ -413,7 +414,7 @@ class EditNormalizedConfig(SiriusDialog):
         flay_configdata = QFormLayout()
         manames = self.norm_config.get_config_type_template().keys()
         for ma in manames:
-            ma_value = _MyDoubleSpinBox(self.data)
+            ma_value = MyDoubleSpinBox(self.data)
             ma_value.setDecimals(6)
             ma_value.setValue(self.norm_config[ma])
             ma_value.setObjectName(ma)
@@ -953,16 +954,18 @@ class CustomTableWidgetItem(QTableWidgetItem):
             return QTableWidgetItem.__lt__(self, other)
 
 
-class _MyDoubleSpinBox(QDoubleSpinBox):
+class MyDoubleSpinBox(QDoubleSpinBox):
     """Subclass QDoubleSpinBox to reimplement whellEvent."""
 
     def __init__(self, parent):
+        """Initialize object."""
         super().__init__(parent)
         locale = QLocale(QLocale.English, country=QLocale.UnitedStates)
         locale.setNumberOptions(locale.RejectGroupSeparator)
         self.setLocale(locale)
 
     def wheelEvent(self, event):
+        """Reimplement wheel event to ignore event when out of focus."""
         if not self.hasFocus():
             event.ignore()
         else:
