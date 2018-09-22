@@ -1,8 +1,8 @@
 """Magnet selection tree view."""
 import re
 
-from pydm.PyQt.QtCore import Qt, QSize
-from pydm.PyQt.QtGui import QTreeWidget, QTreeWidgetItem
+from qtpy.QtCore import Qt, QSize
+from qtpy.QtWidgets import QTreeWidget, QTreeWidgetItem
 
 from siriuspy.search.ma_search import MASearch
 

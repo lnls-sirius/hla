@@ -1,7 +1,7 @@
 """GUI for injection."""
 from pydm import PyDMApplication
-from pydm.PyQt.QtCore import pyqtSlot, QTimer, Qt
-from pydm.PyQt.QtGui import QWidget, QVBoxLayout, QHBoxLayout, \
+from qtpy.QtCore import pyqtSlot, QTimer, Qt
+from qtpy.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, \
     QRadioButton, QPushButton, QSpinBox, QGridLayout, QMessageBox, QDialog, \
     QLabel, QDockWidget
 from pydm.widgets.label import PyDMLabel

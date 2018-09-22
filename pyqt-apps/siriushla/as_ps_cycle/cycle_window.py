@@ -3,8 +3,8 @@ from math import isclose
 import time
 import epics
 
-from pydm.PyQt.QtCore import pyqtSignal, QThread
-from pydm.PyQt.QtGui import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, \
+from qtpy.QtCore import pyqtSignal, QThread
+from qtpy.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, \
     QPushButton, QDialog, QLabel, QMessageBox
 
 from siriuspy.envars import vaca_prefix as VACA_PREFIX

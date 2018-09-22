@@ -6,13 +6,14 @@ from datetime import datetime as _datetime
 from matplotlib.backends.backend_qt5agg import (
     FigureCanvasQTAgg as FigureCanvas)
 import epics as _epics
-from pydm.PyQt.uic import loadUi
-from pydm.PyQt.QtCore import pyqtSlot, Qt, QPoint
-from pydm.PyQt.QtGui import QVBoxLayout, QHBoxLayout, QGridLayout, \
+from qtpy.uic import loadUi
+from qtpy.QtCore import pyqtSlot, Qt, QPoint
+from qtpy.QtWidgets import QVBoxLayout, QHBoxLayout, QGridLayout, \
                             QSpacerItem, QFileDialog, QAction, QMenuBar, \
-                            QWidget, QLabel, QPixmap, QPushButton, \
+                            QWidget, QLabel, QPushButton, \
                             QButtonGroup, QCheckBox, QSizePolicy as QSzPlcy
-from pydm.PyQt.QtSvg import QSvgWidget
+from qtpy.QtGui import QPixmap
+from qtpy.QtSvg import QSvgWidget
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 import pyaccel as _pyaccel

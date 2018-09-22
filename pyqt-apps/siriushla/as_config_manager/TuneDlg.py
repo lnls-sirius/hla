@@ -1,5 +1,6 @@
-from pydm.PyQt.QtGui import QDialog, QDoubleSpinBox, QDialogButtonBox, \
+from qtpy.QtWidgets import QDialog, QDoubleSpinBox, QDialogButtonBox, \
     QGridLayout, QLabel
+
 
 class TuneDlg(QDialog):
     def __init__(self, parent=None):

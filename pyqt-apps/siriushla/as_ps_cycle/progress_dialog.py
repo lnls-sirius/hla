@@ -7,8 +7,8 @@ Task QThread Interface:
 """
 import time
 
-from pydm.PyQt.QtCore import pyqtSignal, QThread
-from pydm.PyQt.QtGui import QDialog, QVBoxLayout, QLabel, QPushButton, \
+from qtpy.QtCore import pyqtSignal, QThread
+from qtpy.QtWidgets import QDialog, QVBoxLayout, QLabel, QPushButton, \
     QProgressBar
 
 

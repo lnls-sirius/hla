@@ -3,13 +3,13 @@
 import numpy as np
 import time
 from threading import Thread
-from pydm.PyQt.QtGui import (QGridLayout, QHBoxLayout, QFormLayout,
-                             QSpacerItem, QWidget, QGroupBox, QLabel,
-                             QComboBox, QPushButton, QCheckBox, QMessageBox)
-from pydm.PyQt.QtGui import QSizePolicy as QSzPlcy
-from pydm.PyQt.QtCore import Qt, pyqtSlot, pyqtSignal, pyqtProperty
-from pydm.widgets import (PyDMImageView, PyDMLabel, PyDMSpinbox,
-                          PyDMPushButton, PyDMEnumComboBox)
+from qtpy.QtWidgets import QGridLayout, QHBoxLayout, QFormLayout, \
+                            QSpacerItem, QWidget, QGroupBox, QLabel, \
+                            QComboBox, QPushButton, QCheckBox, QMessageBox, \
+                            QSizePolicy as QSzPlcy
+from qtpy.QtCore import Qt, pyqtSlot, pyqtSignal, pyqtProperty
+from pydm.widgets import PyDMImageView, PyDMLabel, PyDMSpinbox, \
+                            PyDMPushButton, PyDMEnumComboBox
 from pydm.widgets.channel import PyDMChannel
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla.widgets import PyDMStateButton, SiriusLedState

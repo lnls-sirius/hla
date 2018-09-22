@@ -1,4 +1,4 @@
-from pydm.PyQt.QtCore import Qt, pyqtSignal
+from qtpy.QtCore import Qt, pyqtSignal
 from .QDoubleScrollBar import QDoubleScrollBar
 from pydm.widgets.base import PyDMWritableWidget
 

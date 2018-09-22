@@ -3,8 +3,8 @@ import re
 
 from siriuspy.search import PSSearch, MASearch
 from siriushla.as_ps_control.PSWidget import BasePSWidget, PSWidget, MAWidget
-from pydm.PyQt.QtCore import Qt, QPoint, pyqtSlot, QLocale
-from pydm.PyQt.QtGui import QWidget, QVBoxLayout, QGroupBox, \
+from qtpy.QtCore import Qt, QPoint, pyqtSlot, QLocale
+from qtpy.QtWidgets import QWidget, QVBoxLayout, QGroupBox, \
     QGridLayout, QLabel, QHBoxLayout, QScrollArea, QLineEdit, QAction, \
     QMenu, QInputDialog
 

@@ -1,5 +1,5 @@
-from pydm.PyQt.QtGui import QColor
-from pydm.PyQt.QtCore import pyqtProperty
+from qtpy.QtGui import QColor
+from qtpy.QtCore import pyqtProperty
 from pydm.widgets.base import PyDMWidget
 from .QLed import QLed
 

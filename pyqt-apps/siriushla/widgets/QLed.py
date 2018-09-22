@@ -6,11 +6,12 @@ https://pypi.python.org/pypi/QLed or https://github.com/jazzycamel/QLed.
 
 
 from colorsys import rgb_to_hls, hls_to_rgb
-from pydm.PyQt.QtGui import (QApplication, QWidget, QPainter, QGridLayout,
-                             QStyleOption, QColor, QFrame)
-from pydm.PyQt.QtCore import (pyqtSignal, Qt, QSize, QTimer, QByteArray,
-                              QRectF, pyqtProperty, Q_ENUMS)
-from pydm.PyQt.QtSvg import QSvgRenderer
+from qtpy.QtWidgets import QApplication, QWidget, QGridLayout, \
+                            QStyleOption, QFrame
+from qtpy.QtGui import QPainter, QColor
+from qtpy.QtCore import pyqtSignal, Qt, QSize, QTimer, QByteArray, \
+                        QRectF, pyqtProperty, Q_ENUMS
+from qtpy.QtSvg import QSvgRenderer
 
 SHAPE = {'Circle': 1, 'Round': 2, 'Square': 3, 'Triangle': 4}
 
