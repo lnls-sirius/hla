@@ -1,13 +1,13 @@
 """Dialog that handle thread that implement a task interface.
 
 Task QThread Interface:
-- itemDone: pyqtSignal
+- itemDone: Signal
 - size: method that return task size
 - exit_task: set quit_thread flag True
 """
 import time
 
-from qtpy.QtCore import pyqtSignal, QThread
+from qtpy.QtCore import Signal, QThread
 from qtpy.QtWidgets import QDialog, QVBoxLayout, QLabel, QPushButton, \
     QProgressBar
 
@@ -22,7 +22,7 @@ class ProgressDialog(QDialog):
     parent - QObject
     """
 
-    canceled = pyqtSignal()
+    canceled = Signal()
 
     def __init__(self, label, task, parent=None):
         """Constructor."""

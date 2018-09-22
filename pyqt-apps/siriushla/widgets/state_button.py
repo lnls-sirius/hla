@@ -1,8 +1,8 @@
 """PyDM State Button Class."""
 
 from qtpy.QtWidgets import QPainter, QStyleOption, QFrame
-from qtpy.QtCore import (pyqtProperty, Q_ENUMS, QByteArray, QRectF,
-                              QSize, pyqtSignal)
+from qtpy.QtCore import (Property, Q_ENUMS, QByteArray, QRectF,
+                              QSize, Signal)
 from qtpy.QtSvg import QSvgRenderer
 from pydm.widgets.base import PyDMWritableWidget
 
@@ -1415,7 +1415,7 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
                                     """
                                }
 
-    clicked = pyqtSignal()
+    clicked = Signal()
 
     def __init__(self, parent=None, init_channel=None):
         """Initialize all internal states and properties."""
@@ -1514,7 +1514,7 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
         self.renderer.load(QByteArray(buttonstate_bytearray))
         self.renderer.render(painter, bounds)
 
-    @pyqtProperty(buttonShapeMap)
+    @Property(buttonShapeMap)
     def shape(self):
         """
         Property to define the shape of the button.
@@ -1540,7 +1540,7 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
         else:
             raise ValueError('Button shape not defined!')
 
-    @pyqtProperty(int)
+    @Property(int)
     def pvbit(self):
         """
         Property to define which PV bit to control.

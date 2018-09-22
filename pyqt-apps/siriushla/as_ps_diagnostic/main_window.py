@@ -1,5 +1,5 @@
 from pydm import Display
-from PyQt5.QtCore import pyqtSlot, QTimer
+from PyQt5.QtCore import Slot, QTimer
 from PyQt5.QtWidgets import QApplication
 from epics import PV
 from os import path
@@ -45,18 +45,18 @@ class DiagnosticsMainWindow(Display):
         super(Display, self).showEvent(event)
         self._timer.start()
 
-    @pyqtSlot()
+    @Slot()
     def _update_time_interval(self):
 
         self._time_between_readings = self.ui.sb_time_interval.value()
 
-    @pyqtSlot()
+    @Slot()
     def _start_sequence(self):
 
         self._timer.setInterval(1000 * self._time_between_readings)
         self.test_thread.start()
 
-    @pyqtSlot(list, list)
+    @Slot(list, list)
     def update_interface(self, magps_ok, magps_pane):
 
         self.ui.lb_msg_inicio.clear()

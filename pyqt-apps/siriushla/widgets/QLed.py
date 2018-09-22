@@ -9,8 +9,8 @@ from colorsys import rgb_to_hls, hls_to_rgb
 from qtpy.QtWidgets import QApplication, QWidget, QGridLayout, \
                             QStyleOption, QFrame
 from qtpy.QtGui import QPainter, QColor
-from qtpy.QtCore import pyqtSignal, Qt, QSize, QTimer, QByteArray, \
-                        QRectF, pyqtProperty, Q_ENUMS
+from qtpy.QtCore import Signal, Qt, QSize, QTimer, QByteArray, \
+                        QRectF, Property, Q_ENUMS
 from qtpy.QtSvg import QSvgRenderer
 
 SHAPE = {'Circle': 1, 'Round': 2, 'Square': 3, 'Triangle': 4}
@@ -270,7 +270,7 @@ class QLed(QFrame):
     Red = QColor(207, 0, 0)
     Gray = QColor(90, 90, 90)
 
-    clicked = pyqtSignal()
+    clicked = Signal()
 
     def __init__(self, parent=None, **kwargs):
         """Class constructor."""
@@ -292,7 +292,7 @@ class QLed(QFrame):
         self.m_state = value
         self.update()
 
-    state = pyqtProperty(bool, getState, setState)
+    state = Property(bool, getState, setState)
 
     def getOnColor(self):
         """On color property getter."""
@@ -303,7 +303,7 @@ class QLed(QFrame):
         self.m_stateColors[1] = newColor
         self.update()
 
-    onColor = pyqtProperty(QColor, getOnColor, setOnColor)
+    onColor = Property(QColor, getOnColor, setOnColor)
 
     def getOffColor(self):
         """Off color property getter."""
@@ -314,7 +314,7 @@ class QLed(QFrame):
         self.m_stateColors[0] = newColor
         self.update()
 
-    offColor = pyqtProperty(QColor, getOffColor, setOffColor)
+    offColor = Property(QColor, getOffColor, setOffColor)
 
     @property
     def stateColors(self):
@@ -338,7 +338,7 @@ class QLed(QFrame):
         self.m_dsblColor = newColor
         self.update()
 
-    dsblColor = pyqtProperty(QColor, getDsblColor, setDsblColor)
+    dsblColor = Property(QColor, getDsblColor, setDsblColor)
 
     def getShape(self):
         """Shape property getter."""
@@ -349,7 +349,7 @@ class QLed(QFrame):
         self.m_shape = newShape
         self.update()
 
-    shape = pyqtProperty(shapeMap, getShape, setShape)
+    shape = Property(shapeMap, getShape, setShape)
 
     def sizeHint(self):
         """Return the base size of the widget according to shape."""

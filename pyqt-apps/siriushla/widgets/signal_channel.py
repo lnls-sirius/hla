@@ -2,22 +2,22 @@
 
 import numpy as _np
 from pydm.widgets.channel import PyDMChannel
-from PyQt5.QtCore import pyqtSignal, pyqtSlot, QObject
+from PyQt5.QtCore import Signal, Slot, QObject
 
 
 class SiriusConnectionSignal(QObject, PyDMChannel):
-    send_value_signal = pyqtSignal(
+    send_value_signal = Signal(
         [int], [float], [str], [bool], [_np.ndarray], [list])
-    new_value_signal = pyqtSignal(
+    new_value_signal = Signal(
         [int], [float], [str], [bool], [_np.ndarray], [list])
-    connection_state_signal = pyqtSignal(bool)
-    write_access_signal = pyqtSignal(bool)
-    enum_strings_signal = pyqtSignal(tuple)
-    unit_signal = pyqtSignal(str)
-    prec_signal = pyqtSignal(int)
-    new_severity_signal = pyqtSignal(int)
-    upper_ctrl_limit_signal = pyqtSignal([float], [int])
-    lower_ctrl_limit_signal = pyqtSignal([float], [int])
+    connection_state_signal = Signal(bool)
+    write_access_signal = Signal(bool)
+    enum_strings_signal = Signal(tuple)
+    unit_signal = Signal(str)
+    prec_signal = Signal(int)
+    new_severity_signal = Signal(int)
+    upper_ctrl_limit_signal = Signal([float], [int])
+    lower_ctrl_limit_signal = Signal([float], [int])
 
     def __init__(self, address):
         QObject.__init__(self)
@@ -44,47 +44,47 @@ class SiriusConnectionSignal(QObject, PyDMChannel):
 
     value = property(fget=getvalue)
 
-    @pyqtSlot(bool)
+    @Slot(bool)
     def _connection_slot(self, connection):
         self.connected = connection
         self.connection_state_signal.emit(connection)
 
-    @pyqtSlot(int)
-    @pyqtSlot(str)
-    @pyqtSlot(float)
-    @pyqtSlot(list)
-    @pyqtSlot(_np.ndarray)
+    @Slot(int)
+    @Slot(str)
+    @Slot(float)
+    @Slot(list)
+    @Slot(_np.ndarray)
     def _value_slot(self, value):
         self.channeltype = type(value)
         self._value = value
         self.new_value_signal[self.channeltype].emit(value)
 
-    @pyqtSlot(int)
+    @Slot(int)
     def _severity_slot(self, severity):
         self.new_severity_signal.emit(severity)
 
-    @pyqtSlot(bool)
+    @Slot(bool)
     def _write_access_slot(self, write_access):
         self.write_access_signal.emit(write_access)
 
-    @pyqtSlot(tuple)
+    @Slot(tuple)
     def _enum_strings_slot(self, enum_strings):
         self.enum_strings_signal.emit(enum_strings)
 
-    @pyqtSlot(str)
+    @Slot(str)
     def _unit_slot(self, unit):
         self.unit_signal.emit(unit)
 
-    @pyqtSlot(int)
+    @Slot(int)
     def _prec_slot(self, prec):
         self.prec_signal.emit(prec)
 
-    @pyqtSlot(int)
-    @pyqtSlot(float)
+    @Slot(int)
+    @Slot(float)
     def _upper_ctrl_limit_slot(self, upper_ctrl_limit):
         self.upper_ctrl_limit_signal.emit(upper_ctrl_limit)
 
-    @pyqtSlot(int)
-    @pyqtSlot(float)
+    @Slot(int)
+    @Slot(float)
     def _lower_ctrl_limit_slot(self, lower_ctrl_limit):
         self.lower_ctrl_limit_signal.emit(lower_ctrl_limit)

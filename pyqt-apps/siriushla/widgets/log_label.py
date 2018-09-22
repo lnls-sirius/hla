@@ -1,6 +1,6 @@
 import datetime as _datetime
 from qtpy.QtWidgets import QListWidget
-from qtpy.QtCore import pyqtProperty
+from qtpy.QtCore import Property
 from pydm.widgets.base import PyDMWidget
 from pydm.widgets.display_format import DisplayFormat, parse_value_for_display
 
@@ -75,7 +75,7 @@ class PyDMLogLabel(QListWidget, PyDMWidget):
         # is into a string and display it.
         self.addItem(prefix + str(new_value))
 
-    @pyqtProperty(DisplayFormat)
+    @Property(DisplayFormat)
     def displayFormat(self):
         """
         The format to display data.
@@ -102,7 +102,7 @@ class PyDMLogLabel(QListWidget, PyDMWidget):
             # Trigger the update of display format
             self.value_changed(self.value)
 
-    @pyqtProperty(int)
+    @Property(int)
     def bufferSize(self):
         """
         The maximum number of entries to show.
@@ -128,7 +128,7 @@ class PyDMLogLabel(QListWidget, PyDMWidget):
         """
         self._buffer_size = int(value)
 
-    @pyqtProperty(bool)
+    @Property(bool)
     def prependDateTime(self):
         """
         Define if the date and time information will be prepended to the text.
@@ -150,7 +150,7 @@ class PyDMLogLabel(QListWidget, PyDMWidget):
         """
         self._prepend_date_time = bool(value)
 
-    @pyqtProperty(str)
+    @Property(str)
     def dateTimeFmt(self):
         """
         Define the format of the datetime information to be prepended.
