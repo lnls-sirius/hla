@@ -1,7 +1,8 @@
 import datetime as _datetime
-from pydm.PyQt.QtGui import QListWidget
-from pydm.PyQt.QtCore import pyqtProperty
+from qtpy.QtWidgets import QListWidget
+from qtpy.QtCore import pyqtProperty
 from pydm.widgets.base import PyDMWidget
+from pydm.widgets.display_format import DisplayFormat, parse_value_for_display
 
 
 class PyDMLogLabel(QListWidget, PyDMWidget):
@@ -21,6 +22,8 @@ class PyDMLogLabel(QListWidget, PyDMWidget):
         PyDMWidget.__init__(self, init_channel=init_channel)
         self._buffer_size = 1000
         self._prepend_date_time = True
+        self._display_format_type = DisplayFormat.String
+        self._string_encoding = "utf_8"
         self._date_time_fmt = '%Y/%M/%d-%H:%M:%S'
 
     def value_changed(self, new_value):
@@ -35,6 +38,13 @@ class PyDMLogLabel(QListWidget, PyDMWidget):
             The new value from the channel. The type depends on the channel.
         """
         super(PyDMLogLabel, self).value_changed(new_value)
+
+        new_value = parse_value_for_display(
+            value=new_value,
+            precision=self._prec,
+            display_format_type=self._display_format_type,
+            string_encoding=self._string_encoding,
+            widget=self)
 
         if self.count() > self._buffer_size:
             self.clear()
@@ -64,6 +74,33 @@ class PyDMLogLabel(QListWidget, PyDMWidget):
         # If you made it this far, just turn whatever the heck the value
         # is into a string and display it.
         self.addItem(prefix + str(new_value))
+
+    @pyqtProperty(DisplayFormat)
+    def displayFormat(self):
+        """
+        The format to display data.
+
+        Returns
+        -------
+        int
+        """
+        return self._display_format_type
+
+    @displayFormat.setter
+    def displayFormat(self, new_type):
+        """
+        The maximum number of entries to show.
+
+        When maximum is exceeded the widget is cleared.
+
+        Returns
+        -------
+        int
+        """
+        if self._display_format_type != new_type:
+            self._display_format_type = new_type
+            # Trigger the update of display format
+            self.value_changed(self.value)
 
     @pyqtProperty(int)
     def bufferSize(self):
