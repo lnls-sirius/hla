@@ -2,7 +2,7 @@
 
 import numpy as _np
 from pydm.widgets.channel import PyDMChannel
-from PyQt5.QtCore import Signal, Slot, QObject
+from qtpy.QtCore import Signal, Slot, QObject
 
 
 class SiriusConnectionSignal(QObject, PyDMChannel):

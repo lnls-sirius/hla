@@ -1,6 +1,6 @@
 """Sirius Windows module."""
-from PyQt5.QtCore import Property
-from PyQt5.QtWidgets import QMainWindow, QDialog
+from qtpy.QtCore import Property
+from qtpy.QtWidgets import QMainWindow, QDialog
 from siriushla.sirius_application import SiriusApplication
 
 
