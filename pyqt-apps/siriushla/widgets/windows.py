@@ -25,7 +25,11 @@ def _create_siriuswindow(qt_type):
             super().__init__(parent, **kwargs)
             self._app = SiriusApplication.instance()
             self._is_connected = False
+            self._channels = None
             self._disconnect_when_hidden = disconnect_when_hidden
+
+        def channels(self):
+            return self._channels if self._channels is not None else []
 
         def showEvent(self, ev):
             """Reimplement showEvent to establish widget connections."""
