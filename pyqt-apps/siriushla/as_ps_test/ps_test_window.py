@@ -3,8 +3,8 @@ import time
 import sys
 
 import epics
-from pydm.PyQt.QtCore import Qt, pyqtSignal, QThread
-from pydm.PyQt.QtGui import QFrame, QHBoxLayout, QVBoxLayout, QMainWindow, \
+from qtpy.QtCore import Qt, pyqtSignal, QThread
+from qtpy.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QMainWindow, \
     QPushButton, QListWidget, QLabel, QApplication
 
 from siriushla.as_ps_cycle.magnets_tree import MagnetTree

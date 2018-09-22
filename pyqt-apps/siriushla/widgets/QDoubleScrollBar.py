@@ -1,6 +1,5 @@
-from pydm.PyQt.QtGui import QInputDialog
-from pydm.PyQt.QtGui import QScrollBar, QAction, QMenu
-from pydm.PyQt.QtCore import Qt, pyqtSignal, pyqtSlot, pyqtProperty
+from qtpy.QtWidgets import QInputDialog, QScrollBar, QMenu
+from qtpy.QtCore import Qt, pyqtSignal, pyqtSlot, pyqtProperty
 
 
 class QDoubleScrollBar(QScrollBar):

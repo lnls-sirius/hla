@@ -1,5 +1,5 @@
 """Detailed widget for controlling a pulsed mangnet."""
-from pydm.PyQt.QtGui import QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, \
+from qtpy.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, \
     QLabel, QGroupBox
 from pydm.widgets.label import PyDMLabel
 

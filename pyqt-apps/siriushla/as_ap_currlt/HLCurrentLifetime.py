@@ -3,8 +3,8 @@
 
 import epics as _epics
 import numpy as _np
-from pydm.PyQt.uic import loadUi
-from pydm.PyQt.QtCore import pyqtSlot
+from qtpy.uic import loadUi
+from qtpy.QtCore import pyqtSlot
 from siriushla.widgets import SiriusMainWindow
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 from siriuspy.envars import vaca_prefix as _vaca_prefix

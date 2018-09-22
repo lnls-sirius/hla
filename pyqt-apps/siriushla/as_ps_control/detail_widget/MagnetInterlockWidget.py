@@ -3,8 +3,7 @@ from epics import get_pv
 
 from siriushla.widgets import SiriusMainWindow
 from siriushla.widgets import SiriusLedAlert
-from pydm.PyQt.QtGui import QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, \
-    QLabel
+from qtpy.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel
 from siriuspy.envars import vaca_prefix as _VACA_PREFIX
 
 

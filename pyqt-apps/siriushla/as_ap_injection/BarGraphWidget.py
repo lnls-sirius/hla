@@ -6,7 +6,7 @@ import numpy as np
 import pyqtgraph as pg
 
 from pydm.widgets.channel import PyDMChannel
-from pydm.PyQt.QtCore import QTimer, QSize
+from qtpy.QtCore import QTimer, QSize
 
 logging.basicConfig(level=logging.DEBUG)
 

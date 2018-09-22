@@ -3,7 +3,7 @@
 """HLA as_ap_posang module."""
 
 import epics as _epics
-from pydm.PyQt.uic import loadUi as _loadUi
+from qtpy.uic import loadUi as _loadUi
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriuspy.csdevice.posang import Const

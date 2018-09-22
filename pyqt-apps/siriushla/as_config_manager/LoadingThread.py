@@ -1,7 +1,7 @@
 import os
 from epics import caget
-from pydm.PyQt.QtCore import pyqtSignal, QThread
-from pydm.PyQt.QtGui import QDialog
+from qtpy.QtCore import pyqtSignal, QThread
+from qtpy.QtWidgets import QDialog
 
 class LoadingThread(QThread):
     VACA_PREFIX = os.environ.get('VACA_PREFIX', default='')

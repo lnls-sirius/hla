@@ -1,7 +1,7 @@
 """Definition of the Sirius Application class."""
 from pydm import PyDMApplication
-from pydm.PyQt.QtGui import QWidget, QDialog, QMainWindow, QMessageBox
-from pydm.PyQt.QtCore import Qt
+from qtpy.QtWidgets import QWidget, QDialog, QMainWindow, QMessageBox
+from qtpy.QtCore import Qt
 
 from .util import get_window_id
 

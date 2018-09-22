@@ -2,10 +2,10 @@
 import logging
 import time
 
-from pydm.PyQt.QtGui import QGridLayout, QHBoxLayout, QVBoxLayout, \
+from qtpy.QtWidgets import QGridLayout, QHBoxLayout, QVBoxLayout, \
     QWidget, QFrame, QLabel, QComboBox, QPushButton, QMessageBox, QTabWidget, \
     QTableView, QTreeView, QHeaderView
-from pydm.PyQt.QtCore import Qt, pyqtSlot, pyqtSignal, QModelIndex, \
+from qtpy.QtCore import Qt, pyqtSlot, pyqtSignal, QModelIndex, \
     QAbstractItemModel, QAbstractTableModel
 
 from siriushla.widgets.windows import SiriusMainWindow

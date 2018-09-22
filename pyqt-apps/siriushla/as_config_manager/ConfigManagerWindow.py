@@ -1,9 +1,10 @@
 """Define a window to manage offline configurations."""
 # from pymysql.err import IntegrityError, InternalError, OperationalError
-from pydm.PyQt.QtCore import Qt, QPoint, pyqtSlot
-from pydm.PyQt.QtGui import QVBoxLayout, QPushButton, \
+from qtpy.QtCore import Qt, QPoint, pyqtSlot
+from qtpy.QtWidgets import QVBoxLayout, QPushButton, \
         QTableView, QWidget, QHBoxLayout, QInputDialog, QMenu, QAction, \
-        QMessageBox, QKeySequence
+        QMessageBox
+from qtpy.QtGui import QKeySequence
 from siriushla.widgets import SiriusMainWindow
 from siriushla.widgets import LoadingDialog
 from .ConfigModel import ConfigModel

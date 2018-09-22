@@ -1,6 +1,6 @@
 """Define a window with detailed controls for a given magnet."""
 from pydm import PyDMApplication
-from pydm.PyQt.QtGui import QPushButton
+from qtpy.QtWidgets import QPushButton
 from siriushla.widgets import SiriusMainWindow
 from siriushla.as_ps_control.detail_widget.DetailWidgetFactory \
     import DetailWidgetFactory

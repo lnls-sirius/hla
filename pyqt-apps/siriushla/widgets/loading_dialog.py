@@ -1,5 +1,5 @@
-from pydm.PyQt.QtCore import pyqtSlot
-from pydm.PyQt.QtGui import QDialog, QLabel, QVBoxLayout, QProgressBar
+from qtpy.QtCore import pyqtSlot
+from qtpy.QtWidgets import QDialog, QLabel, QVBoxLayout, QProgressBar
 
 
 class LoadingDialog(QDialog):

@@ -1,8 +1,8 @@
 """Widget for controlling a dipole."""
 import re
 
-from pydm.PyQt.QtCore import Qt
-from pydm.PyQt.QtGui import QGridLayout, QLabel, QSizePolicy, \
+from qtpy.QtCore import Qt
+from qtpy.QtWidgets import QGridLayout, QLabel, QSizePolicy, \
     QFrame, QHBoxLayout, QPushButton, QVBoxLayout
 
 from siriuspy.envars import vaca_prefix
