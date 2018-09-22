@@ -9,10 +9,10 @@ class PSTabControlWindow(PSControlWindow):
     """Base window to show devices of a section in tabs."""
 
     Devices = {
-        "TB": ["dipole", "corrector-slow"],
+        "TB": ["dipole", "quadrupole", "corrector-slow"],
         "BO": ["dipole", "quadrupole", "sextupole", "corrector-slow",
                "quadrupole-skew"],
-        "TS": ["dipole", "corrector-slow"],
+        "TS": ["dipole", "quadrupole", "corrector-slow"],
         "SI": ["dipole", "quadrupole", "sextupole", "corrector-slow",
                "corrector-fast", "quadrupole-skew"]}
 

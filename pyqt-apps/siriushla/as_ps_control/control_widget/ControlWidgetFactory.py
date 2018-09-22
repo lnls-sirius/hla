@@ -28,6 +28,9 @@ class ControlWidgetFactory:
                 else:
                     return TBDipoleControlWidget(
                         dev_type=discipline, orientation=orientation)
+            elif device == "quadrupole":
+                return TBQuadrupoleControlWidget(
+                        dev_type=discipline, orientation=orientation)
             elif device == "corrector-slow":
                 return TBSlowCorrectorControlWidget(
                     dev_type=discipline, orientation=orientation)
@@ -60,6 +63,9 @@ class ControlWidgetFactory:
                     return DetailWidgetFactory.factory("TS-Fam:MA-B")
                 else:
                     return TSDipoleControlWidget(
+                        dev_type=discipline, orientation=orientation)
+            elif device == "quadrupole":
+                return TSQuadrupoleControlWidget(
                         dev_type=discipline, orientation=orientation)
             elif device == "corrector-slow":
                 return TSSlowCorrectorControlWidget(
