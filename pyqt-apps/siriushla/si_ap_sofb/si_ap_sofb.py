@@ -2,41 +2,21 @@
 
 import sys as _sys
 import os as _os
-import numpy as np
 from PyQt5 import uic as _uic
-from PyQt5.QtCore import Qt, pyqtSignal
-from PyQt5.QtWidgets import QWidget
-from pydm import PyDMApplication as _PyDMApplication
+from PyQt5.QtCore import Qt, pyqtSignal, QSize
+from PyQt5.QtWidgets import (
+    QWidget, QDockWidget, QSizePolicy, QVBoxLayout, QPushButton)
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
-from pydm.widgets.base import PyDMWritableWidget
 from siriuspy.envars import vaca_prefix as LL_PREF
-from siriushla.si_ap_sofb.selection_matrix import SelectionMatrix
-from siriushla.si_ap_sofb.register_menu import RegisterMenu
-from siriushla.si_ap_sofb.graphic_controller import GraphicOrbitControllers
-from siriushla.si_ap_sofb.orbit_controllers import ReferenceController
-from siriushla.si_ap_sofb.orbit_controllers import CorrectionOrbitController
+from siriushla.widgets import SiriusConnectionSignal, PyDMLogLabel
+from siriushla.sirius_application import SiriusApplication
+from siriushla.si_ap_sofb.orbit_register import OrbitRegisters
+from siriushla.si_ap_sofb.graphic_controller import OrbitWidget
+from siriushla.si_ap_sofb.orbit_controllers import ControlOrbit
+from siriushla.si_ap_sofb.sofb_controllers import ControlSOFB
 
 _dir = _os.path.dirname(_os.path.abspath(__file__))
 UI_FILE = _os.path.sep.join([_dir, 'SOFBMain.ui'])
-
-
-class _PyDMWidget(PyDMWritableWidget, QWidget):
-
-    receive_value_signal = pyqtSignal([int], [float], [str], [bool],
-                                      [np.ndarray])
-
-    def __init__(self, parent=None, init_channel=None, visible=False):
-        QWidget.__init__(self, parent=parent)
-        PyDMWritableWidget.__init__(self, init_channel=init_channel)
-        self.setVisible(visible)
-
-    def value_changed(self, new_val):
-        super(_PyDMWidget, self).value_changed(new_val)
-        if new_val is not None:
-            self.receive_value_signal[self.channeltype].emit(new_val)
-
-    def send_value(self, new_val):
-        self.send_value_signal[self.channeltype].emit(new_val)
 
 
 def main(prefix=None):
@@ -46,115 +26,125 @@ def main(prefix=None):
     tmp_file = _substitute_in_file(UI_FILE,
                                    {'PREFIX': prefix, 'LL_PREF': ll_pref})
     main_win = _uic.loadUi(tmp_file)
-    _create_additional_PVs(main_win, prefix)
-    _create_additional_widgets(main_win, prefix)
-    _create_context_menus(main_win)
 
-    # Define Behaviour of Orbit Visualization buttons
-    for i in range(1, 4):
-        GraphicOrbitControllers(main_win, i)
-
-    # Define controllers for the IOC orbit and reference selection:
-    ReferenceController(main_win)
-    CorrectionOrbitController(main_win)
-
+    _create_orbit_registers(main_win, prefix)
+    _create_log_docwidget(main_win, prefix)
+    _create_orbit_widget(main_win, prefix)
+    _create_ioc_controllers(main_win, prefix)
     return main_win
 
 
-def _create_additional_PVs(MWin, prefix):
-    opts = dict(parent=MWin, visible=False)
-    MWin.PV_SOFBCorrectionModeSP = _PyDMWidget(
-        init_channel=prefix + 'CorrectionMode-Sel', **opts)
-    MWin.PV_SOFBCorrectionModeRB = _PyDMWidget(
-        init_channel=prefix + 'CorrectionMode-Sts', **opts)
-
-    MWin.PV_SOFBOfflineOrbitXSP = _PyDMWidget(
-        init_channel=prefix + 'OfflineOrbitX-SP', **opts)
-    MWin.PV_SOFBOfflineOrbitXRB = _PyDMWidget(
-        init_channel=prefix + 'OfflineOrbitX-RB', **opts)
-    MWin.PV_SOFBOfflineOrbitYSP = _PyDMWidget(
-        init_channel=prefix + 'OfflineOrbitY-SP', **opts)
-    MWin.PV_SOFBOfflineOrbitYRB = _PyDMWidget(
-        init_channel=prefix + 'OfflineOrbitY-RB', **opts)
-
-    MWin.PV_SOFBOrbitRefXSP = _PyDMWidget(
-        init_channel=prefix + 'OrbitRefX-SP', **opts)
-    MWin.PV_SOFBOrbitRefXRB = _PyDMWidget(
-        init_channel=prefix + 'OrbitRefX-RB', **opts)
-    MWin.PV_SOFBOrbitRefYSP = _PyDMWidget(
-        init_channel=prefix + 'OrbitRefY-SP', **opts)
-    MWin.PV_SOFBOrbitRefYRB = _PyDMWidget(
-        init_channel=prefix + 'OrbitRefY-RB', **opts)
-
-    MWin.PV_SOFBGoldenOrbitXSP = _PyDMWidget(
-        init_channel=prefix + 'GoldenOrbitX-SP', **opts)
-    MWin.PV_SOFBGoldenOrbitXRB = _PyDMWidget(
-        init_channel=prefix + 'GoldenOrbitX-RB', **opts)
-    MWin.PV_SOFBGoldenOrbitYSP = _PyDMWidget(
-        init_channel=prefix + 'GoldenOrbitY-SP', **opts)
-    MWin.PV_SOFBGoldenOrbitYRB = _PyDMWidget(
-        init_channel=prefix + 'GoldenOrbitY-RB', **opts)
-
-    MWin.PV_SOFBCorrOrbitXMon = _PyDMWidget(
-        init_channel=prefix + 'CorrOrbitX-Mon', **opts)
-    MWin.PV_SOFBCorrOrbitYMon = _PyDMWidget(
-        init_channel=prefix + 'CorrOrbitY-Mon', **opts)
-
-    MWin.PV_SOFBOnlineOrbitXMon = _PyDMWidget(
-        init_channel=prefix + 'OnlineOrbitX-Mon', **opts)
-    MWin.PV_SOFBOnlineOrbitYMon = _PyDMWidget(
-        init_channel=prefix + 'OnlineOrbitY-Mon', **opts)
-
-    MWin.PV_SOFBBPMXEnblListRB = _PyDMWidget(
-        init_channel=prefix + 'BPMXEnblList-RB', **opts)
-    MWin.PV_SOFBBPMYEnblListRB = _PyDMWidget(
-        init_channel=prefix + 'BPMYEnblList-RB', **opts)
-
-
-def _create_additional_widgets(MWin, prefix):
-    def send_value(but, dev):
-        def send():
-            but.send_value_signal[np.ndarray].emit(
-                np.ones(SelectionMatrix.INDICES_LENGTH[dev], dtype=bool))
-        return send
-    # Create Matrix with Selection List of BPMs and Correctors:
-    for dev in ('BPMX', 'BPMY', 'CH', 'CV'):
-        wid = getattr(MWin, 'Widget_' + dev + 'List')
-        SelectionMatrix(wid, dev, prefix)
-        but = getattr(MWin, 'PyDMPB_' + dev + 'List')
-        but.clicked.disconnect(but.sendValue)
-        but.clicked.connect(send_value(but, dev))
-
-
-def _create_context_menus(MWin):
+def _create_orbit_registers(mwin, prefix):
     # Create Context Menus for Registers and
     # assign them to the clicked signal
-    for i in range(1, 10):
-        cm = RegisterMenu(MWin, i)
-        setattr(MWin, 'CM_Register' + str(i), cm)
-        pb = getattr(MWin, 'PB_Register' + str(i))
-        pb.setContextMenuPolicy(Qt.CustomContextMenu)
-        pb.setMenu(cm)
-        pb.clicked.connect(pb.showMenu)
+    wid = QDockWidget(mwin)
+    wid.setWindowTitle("Orbit Registers")
+    sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+    sz_pol.setHorizontalStretch(0)
+    sz_pol.setVerticalStretch(1)
+    sz_pol.setHeightForWidth(wid.sizePolicy().hasHeightForWidth())
+    wid.setSizePolicy(sz_pol)
+    wid.setFloating(False)
+    wid.setFeatures(QDockWidget.AllDockWidgetFeatures)
+    wid.setAllowedAreas(Qt.AllDockWidgetAreas)
+    mwin.addDockWidget(Qt.DockWidgetArea(8), wid)
+
+    wid_cont = OrbitRegisters(mwin, prefix, 9)
+    wid.setWidget(wid_cont)
+    mwin.orb_regtr = wid_cont
 
 
-class _Signal2Slots:
-    def __init__(self, MWin):
-        self.MWin = MWin
-        self.MWin.PyDMCB_OrbitMode.valueChanged.connect(
-                self.PyDMCB_OrbitMode_2_OfflineOrbit)
+def _create_orbit_widget(main_win, prefix):
+    # Define Behaviour of Orbit Visualization buttons
+    ctrls = main_win.orb_regtr.get_registers_control()
+    pvs = [
+        'OrbitSmoothX-Mon', 'OrbitSmoothY-Mon',
+        'OrbitOfflineX-RB', 'OrbitOfflineY-RB',
+        'OrbitRefX-RB', 'OrbitRefY-RB']
+    chans = []
+    for pv in pvs:
+        sig = SiriusConnectionSignal(prefix+pv)
+        chans.append(sig)
+    main_win._channels = chans
+    ctrls.update({
+        'Online Orbit': {
+            'x': {
+                'signal': chans[0].new_value_signal,
+                'getvalue': chans[0].getvalue},
+            'y': {
+                'signal': chans[1].new_value_signal,
+                'getvalue': chans[1].getvalue}},
+        'Offline Orbit': {
+            'x': {
+                'signal': chans[2].new_value_signal,
+                'getvalue': chans[2].getvalue},
+            'y': {
+                'signal': chans[3].new_value_signal,
+                'getvalue': chans[3].getvalue}},
+        'Reference Orbit': {
+            'x': {
+                'signal': chans[4].new_value_signal,
+                'getvalue': chans[4].getvalue},
+            'y': {
+                'signal': chans[5].new_value_signal,
+                'getvalue': chans[5].getvalue}}})
+    orb_wid = OrbitWidget(main_win, prefix, ctrls, 3)
+    main_win.tabWidget.addTab(orb_wid, 'Orbit')
 
-    def PyDMCB_OrbitMode_2_OfflineOrbit(self, int_):
-        if int_:
-            self.MWin.LB_OfflineOrbit.setDisabled()
-            self.MWin.CB_OfflineOrbit.setDisabled()
-        else:
-            self.MWin.LB_OfflineOrbit.setEnabled()
-            self.MWin.CB_OfflineOrbit.setEnabled()
+
+def _create_ioc_controllers(main_win, prefix):
+    wid = QDockWidget(main_win)
+    wid.setWindowTitle("SOFB Control")
+    sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+    sz_pol.setHorizontalStretch(0)
+    sz_pol.setVerticalStretch(1)
+    sz_pol.setHeightForWidth(wid.sizePolicy().hasHeightForWidth())
+    wid.setSizePolicy(sz_pol)
+    wid.setMinimumSize(QSize(350, 788))
+    wid.setFloating(False)
+    wid.setFeatures(QDockWidget.AllDockWidgetFeatures)
+    main_win.addDockWidget(Qt.DockWidgetArea(2), wid)
+    wid2 = QWidget(wid)
+    wid.setWidget(wid2)
+
+    vbl = QVBoxLayout(wid2)
+    ctrls = main_win.orb_regtr.get_registers_control()
+    wid = ControlOrbit(wid2, prefix, ctrls)
+    vbl.addWidget(wid)
+
+    wid = ControlSOFB(wid2, prefix)
+    vbl.addWidget(wid)
 
 
-if __name__ == '__main__':
-    app = _PyDMApplication()
+def _create_log_docwidget(main_win, prefix):
+    wid = QDockWidget(main_win)
+    main_win.addDockWidget(Qt.DockWidgetArea(8), wid)
+    wid.setWindowTitle('IOC Log')
+    sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+    sz_pol.setHorizontalStretch(0)
+    sz_pol.setVerticalStretch(0)
+    sz_pol.setHeightForWidth(wid.sizePolicy().hasHeightForWidth())
+    wid.setSizePolicy(sz_pol)
+    wid.setFloating(False)
+    wid_cont = QWidget()
+    wid.setWidget(wid_cont)
+    vbl = QVBoxLayout(wid_cont)
+    vbl.setContentsMargins(0, 0, 0, 0)
+    pdm_log = PyDMLogLabel(wid_cont, init_channel=prefix+'Log-Mon')
+    pdm_log.setAlternatingRowColors(True)
+    pdm_log.maxCount = 2000
+    vbl.addWidget(pdm_log)
+    pbtn = QPushButton('Clear', wid_cont)
+    pbtn.clicked.connect(pdm_log.clear)
+    vbl.addWidget(pbtn)
+
+
+def _main():
+    app = SiriusApplication()
     main_win = main()
     main_win.show()
     _sys.exit(app.exec_())
+
+
+if __name__ == '__main__':
+    _main()
