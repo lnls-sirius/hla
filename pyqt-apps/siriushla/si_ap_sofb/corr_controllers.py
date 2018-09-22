@@ -2,15 +2,13 @@
 
 from functools import partial as _part
 import numpy as _np
-from PyQt5.QtWidgets import (
-    QWidget, QLabel, QComboBox, QGroupBox, QPushButton, QVBoxLayout,
-    QHBoxLayout, QSpacerItem, QSizePolicy, QFormLayout)
-from PyQt5.QtCore import QSize, Qt, pyqtSignal
-from pydm.widgets import (
-    PyDMSpinbox, PyDMLabel, PyDMEnumComboBox, PyDMCheckbox, PyDMPushButton)
-from siriushla.widgets import (
-    SiriusConnectionSignal, PyDMLed, PyDMStateButton, SiriusLedAlert,
-    SiriusDialog)
+from qtpy.QtWidgets import QWidget, QLabel, QComboBox, QGroupBox, \
+                            QPushButton, QVBoxLayout, QHBoxLayout, \
+                            QSpacerItem, QSizePolicy, QFormLayout
+from pydm.widgets import PyDMPushButton
+from siriushla.widgets import SiriusConnectionSignal, PyDMLed, \
+                                PyDMStateButton, SiriusLedAlert, \
+                                SiriusDialog
 import siriushla.util as _util
 import siriuspy.csdevice.orbitcorr as _csorb
 

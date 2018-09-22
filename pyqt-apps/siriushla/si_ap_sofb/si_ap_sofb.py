@@ -2,9 +2,9 @@
 
 import sys as _sys
 import os as _os
-from PyQt5 import uic as _uic
-from PyQt5.QtCore import Qt, pyqtSignal, QSize
-from PyQt5.QtWidgets import (
+from qtpy import uic as _uic
+from qtpy.QtCore import Qt, QSize
+from qtpy.QtWidgets import (
     QWidget, QDockWidget, QSizePolicy, QVBoxLayout, QPushButton)
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 from siriuspy.envars import vaca_prefix as LL_PREF

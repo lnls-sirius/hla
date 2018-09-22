@@ -2,10 +2,10 @@
 
 from functools import partial as _part
 import numpy as np
-from PyQt5.QtWidgets import (
+from qtpy.QtWidgets import (
     QGridLayout, QHBoxLayout, QVBoxLayout, QSizePolicy, QSpacerItem,
     QScrollArea, QWidget, QLabel, QCheckBox, QPushButton)
-from PyQt5.QtCore import Qt, QRect
+from qtpy.QtCore import Qt, QRect
 from siriushla.widgets import SiriusDialog, SiriusLedState
 from pydm.widgets.base import PyDMWidget, PyDMWritableWidget
 

@@ -2,10 +2,10 @@
 
 from functools import partial as _part
 import numpy as _np
-from PyQt5.QtWidgets import (
+from qtpy.QtWidgets import (
     QWidget, QLabel, QComboBox, QGroupBox,
     QHBoxLayout, QSpacerItem, QSizePolicy, QFormLayout)
-from PyQt5.QtCore import QSize, Qt
+from qtpy.QtCore import QSize, Qt
 from pydm.widgets import PyDMSpinbox, PyDMLabel
 from pydm.widgets.base import PyDMPrimitiveWidget
 from siriushla.widgets import SiriusConnectionSignal

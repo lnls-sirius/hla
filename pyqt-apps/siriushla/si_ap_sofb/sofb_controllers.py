@@ -1,15 +1,14 @@
 """Define Controllers for the orbits displayed in the graphic."""
 
 from functools import partial as _part
-from PyQt5.QtWidgets import (
-    QWidget, QLabel, QGroupBox, QPushButton, QGridLayout,
-    QVBoxLayout, QHBoxLayout, QSpacerItem, QSizePolicy, QFormLayout)
-from PyQt5.QtCore import Qt, QSize
-from pydm.widgets import (
-    PyDMCheckbox, PyDMSpinbox, PyDMLabel, PyDMPushButton, PyDMEnumComboBox)
-from siriushla.widgets import (
-    SiriusConnectionSignal, PyDMStateButton, SiriusDialog, SiriusLedAlert,
-    SiriusLedState)
+from qtpy.QtWidgets import QWidget, QLabel, QGroupBox, QPushButton, \
+                            QGridLayout, QVBoxLayout, QHBoxLayout, \
+                            QSpacerItem, QSizePolicy, QFormLayout
+from qtpy.QtCore import Qt, QSize
+from pydm.widgets import PyDMCheckbox, PyDMSpinbox, PyDMLabel, \
+                            PyDMPushButton, PyDMEnumComboBox
+from siriushla.widgets import SiriusConnectionSignal, PyDMStateButton, \
+            SiriusDialog, SiriusLedAlert, SiriusLedState
 import siriuspy.csdevice.orbitcorr as _csorb
 import siriushla.util as _util
 from siriushla.si_ap_sofb.selection_matrix import SelectionMatrix

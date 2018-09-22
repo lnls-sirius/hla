@@ -4,12 +4,12 @@ from datetime import datetime as _datetime
 from functools import partial as _part
 import numpy as _np
 from pyqtgraph import mkBrush, mkPen
-from PyQt5.QtWidgets import (
+from qtpy.QtWidgets import (
     QWidget, QFileDialog, QLabel, QCheckBox, QVBoxLayout,
     QHBoxLayout, QSpacerItem, QSizePolicy, QGroupBox, QFormLayout, QPushButton,
     QComboBox)
-from PyQt5.QtCore import QSize, Qt, QTimer
-from PyQt5.QtGui import QColor
+from qtpy.QtCore import QSize, Qt, QTimer
+from qtpy.QtGui import QColor
 from pydm.widgets import PyDMWaveformPlot
 from siriushla.widgets import SiriusConnectionSignal
 from siriuspy.csdevice.orbitcorr import get_consts

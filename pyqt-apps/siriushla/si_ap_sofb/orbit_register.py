@@ -4,10 +4,10 @@ import numpy as _np
 from functools import partial as _part
 from datetime import datetime as _datetime
 from epics import PV as _PV
-from PyQt5.QtWidgets import (
+from qtpy.QtWidgets import (
     QMenu, QFileDialog, QWidget, QScrollArea, QLabel, QPushButton,
     QSizePolicy, QGridLayout, QVBoxLayout, QHBoxLayout)
-from PyQt5.QtCore import pyqtSignal, QRect, Qt
+from qtpy.QtCore import Signal, QRect, Qt
 from siriushla.si_ap_sofb.selection_matrix import NR_BPMs
 
 
@@ -64,9 +64,9 @@ class OrbitRegister(QWidget):
     EXT = '.siorb'
     EXT_FLT = 'Sirius Orbit Files (*.siorb)'
 
-    new_orbx_signal = pyqtSignal(_np.ndarray)
-    new_orby_signal = pyqtSignal(_np.ndarray)
-    new_string_signal = pyqtSignal(str)
+    new_orbx_signal = Signal(_np.ndarray)
+    new_orby_signal = Signal(_np.ndarray)
+    new_string_signal = Signal(str)
 
     def __init__(self, parent, prefix, idx):
         """Initialize the Context Menu."""
