@@ -1,8 +1,9 @@
 """PyDM State Button Class."""
 
-from qtpy.QtWidgets import QPainter, QStyleOption, QFrame
-from qtpy.QtCore import (Property, Q_ENUMS, QByteArray, QRectF,
-                              QSize, Signal)
+from qtpy.QtWidgets import QStyleOption, QFrame
+from qtpy.QtGui import QPainter
+from qtpy.QtCore import Property, Q_ENUMS, QByteArray, QRectF, \
+                        QSize, Signal
 from qtpy.QtSvg import QSvgRenderer
 from pydm.widgets.base import PyDMWritableWidget
 
