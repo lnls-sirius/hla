@@ -8,3 +8,4 @@ from siriushla.widgets.windows import SiriusMainWindow, SiriusDialog
 from siriushla.widgets.ledit_scrollbar import PyDMLinEditScrollbar
 from siriushla.widgets.loading_dialog import LoadingDialog
 from siriushla.widgets.scrn_view import SiriusScrnView
+from siriushla.widgets.signal_channel import SiriusConnectionSignal
