@@ -3,7 +3,7 @@ from math import isclose
 import time
 import epics
 
-from qtpy.QtCore import pyqtSignal, QThread
+from qtpy.QtCore import Signal, QThread
 from qtpy.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, \
     QPushButton, QDialog, QLabel, QMessageBox
 
@@ -265,7 +265,7 @@ class CyclingDlg(QDialog):
 class SetToCycle(QThread):
     """Set magnet to cycle."""
 
-    itemDone = pyqtSignal()
+    itemDone = Signal()
 
     def __init__(self, cyclers, parent=None):
         """Constructor."""
@@ -297,9 +297,9 @@ class SetToCycle(QThread):
 class VerifyCycle(QThread):
     """Verify cycle."""
 
-    currentItem = pyqtSignal(MagnetCycler)
-    itemDone = pyqtSignal()
-    itemChecked = pyqtSignal(MagnetCycler, bool)
+    currentItem = Signal(MagnetCycler)
+    itemDone = Signal()
+    itemChecked = Signal(MagnetCycler, bool)
 
     def __init__(self, cyclers, parent=None):
         """Constructor."""
@@ -334,7 +334,7 @@ class VerifyCycle(QThread):
 class WaitCycle(QThread):
     """Cycle."""
 
-    itemDone = pyqtSignal()
+    itemDone = Signal()
 
     def __init__(self, cyclers, parent=None):
         """Build PVs."""

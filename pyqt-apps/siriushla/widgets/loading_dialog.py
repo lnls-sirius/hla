@@ -1,4 +1,4 @@
-from qtpy.QtCore import pyqtSlot
+from qtpy.QtCore import Slot
 from qtpy.QtWidgets import QDialog, QLabel, QVBoxLayout, QProgressBar
 
 
@@ -19,11 +19,11 @@ class LoadingDialog(QDialog):
         self.setWindowTitle(title)
         self.setLayout(layout)
 
-    @pyqtSlot(int)
+    @Slot(int)
     def update(self, value):
         self.progress.setValue(value)
 
-    @pyqtSlot(int)
+    @Slot(int)
     def done(self, r):
         self._may_close = True
         super(LoadingDialog, self).done(r)

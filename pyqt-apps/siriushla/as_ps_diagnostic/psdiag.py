@@ -8,12 +8,12 @@ import time
 from pvnaming import PVNaming as _pvnaming
 # from siriuspy.magnet import magdata as _magdata
 from siriuspy.magnet.data import MAData as _MAData
-from PyQt5.QtCore import QThread, pyqtSignal
+from PyQt5.QtCore import QThread, Signal
 
 
 class Test(QThread):
 
-    job_done = pyqtSignal(list, list)
+    job_done = Signal(list, list)
 
     def __init__(self, magps_list):
         QThread.__init__(self)

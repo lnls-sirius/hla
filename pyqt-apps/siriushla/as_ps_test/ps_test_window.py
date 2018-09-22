@@ -3,7 +3,7 @@ import time
 import sys
 
 import epics
-from qtpy.QtCore import Qt, pyqtSignal, QThread
+from qtpy.QtCore import Qt, Signal, QThread
 from qtpy.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QMainWindow, \
     QPushButton, QListWidget, QLabel, QApplication
 
@@ -106,7 +106,7 @@ class PSTestWindow(QMainWindow):
 class ResetPS(QThread):
     """Reset."""
 
-    itemDone = pyqtSignal()
+    itemDone = Signal()
 
     def __init__(self, devices, parent=None):
         """Constructor."""
@@ -138,7 +138,7 @@ class ResetPS(QThread):
 class TurnPSOn(QThread):
     """Turn PS on."""
 
-    itemDone = pyqtSignal()
+    itemDone = Signal()
 
     def __init__(self, devices, parent=None):
         """Constructor."""
@@ -175,8 +175,8 @@ class TurnPSOn(QThread):
 class CheckPSOn(QThread):
     """Check if PS is on."""
 
-    itemDone = pyqtSignal()
-    isOn = pyqtSignal(str, bool)
+    itemDone = Signal()
+    isOn = Signal(str, bool)
 
     def __init__(self, devices, parent=None):
         """Constructor."""
@@ -221,8 +221,8 @@ class CheckPSOn(QThread):
 class TestPS(QThread):
     """Set value and check if it rb is achieved."""
 
-    itemDone = pyqtSignal()
-    itemTested = pyqtSignal(str, bool)
+    itemDone = Signal()
+    itemTested = Signal(str, bool)
 
     def __init__(self, devices, parent=None):
         """Constructor."""

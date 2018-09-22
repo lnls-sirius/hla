@@ -4,7 +4,7 @@
 import epics as _epics
 import numpy as _np
 from qtpy.uic import loadUi
-from qtpy.QtCore import pyqtSlot
+from qtpy.QtCore import Slot
 from siriushla.widgets import SiriusMainWindow
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 from siriuspy.envars import vaca_prefix as _vaca_prefix
@@ -51,13 +51,13 @@ class CurrLTWindow(SiriusMainWindow):
             lt_str = H + ':' + m + ':' + s
             self.centralwidget.CurrLT.setText(lt_str)
 
-    @pyqtSlot(int)
+    @Slot(int)
     def setGraphBufferSize(self, value):
         """Set graph buffer size."""
         self.centralwidget.PyDMTimePlot_Current.setBufferSize(value)
         self.centralwidget.PyDMTimePlot_Lifetime.setBufferSize(value)
 
-    @pyqtSlot(int)
+    @Slot(int)
     def setGraphTimeSpan(self, value):
         """Set graph time span."""
         self.centralwidget.PyDMTimePlot_Current.setTimeSpan(float(value))

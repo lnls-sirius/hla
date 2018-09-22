@@ -1,5 +1,5 @@
 """Sirius Windows module."""
-from PyQt5.QtCore import pyqtProperty
+from PyQt5.QtCore import Property
 from PyQt5.QtWidgets import QMainWindow, QDialog
 from siriushla.sirius_application import SiriusApplication
 
@@ -52,7 +52,7 @@ def _create_siriuswindow(qt_type):
                 self._is_connected = False
             super().closeEvent(ev)
 
-        @pyqtProperty(bool)
+        @Property(bool)
         def disconnectWhenHidden(self):
             """Disconnect widgets when hidden.
 

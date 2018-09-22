@@ -2,7 +2,7 @@
 
 import numpy as _np
 from datetime import datetime as _datetime
-from PyQt5.QtCore import pyqtSignal, QObject, QTimer
+from PyQt5.QtCore import Signal, QObject, QTimer
 from pyqtgraph import mkBrush, mkPen
 from PyQt5.QtWidgets import QFileDialog
 from siriushla.si_ap_sofb.selection_matrix import NR_BPMs
@@ -16,10 +16,10 @@ class GraphicOrbitControllers(QObject):
     EXT_FLT = 'Text Files (*.txt)'
     FMT = '{0:8.3g}'
 
-    averagex_str_signal = pyqtSignal(str)
-    stdx_str_signal = pyqtSignal(str)
-    averagey_str_signal = pyqtSignal(str)
-    stdy_str_signal = pyqtSignal(str)
+    averagex_str_signal = Signal(str)
+    stdx_str_signal = Signal(str)
+    averagey_str_signal = Signal(str)
+    stdy_str_signal = Signal(str)
 
     def __init__(self, mWin, index):
         """Initialize the instance."""

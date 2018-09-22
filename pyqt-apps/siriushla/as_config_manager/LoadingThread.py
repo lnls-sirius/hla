@@ -1,13 +1,13 @@
 import os
 from epics import caget
-from qtpy.QtCore import pyqtSignal, QThread
+from qtpy.QtCore import Signal, QThread
 from qtpy.QtWidgets import QDialog
 
 class LoadingThread(QThread):
     VACA_PREFIX = os.environ.get('VACA_PREFIX', default='')
 
-    taskUpdated = pyqtSignal(int)
-    taskFinished = pyqtSignal(int)
+    taskUpdated = Signal(int)
+    taskFinished = Signal(int)
 
     def __init__(self, name, pv_list, parent=None):
         super(LoadingThread, self).__init__(parent)

@@ -7,7 +7,7 @@ from matplotlib.backends.backend_qt5agg import (
     FigureCanvasQTAgg as FigureCanvas)
 import epics as _epics
 from qtpy.uic import loadUi
-from qtpy.QtCore import pyqtSlot, Qt, QPoint
+from qtpy.QtCore import Slot, Qt, QPoint
 from qtpy.QtWidgets import QVBoxLayout, QHBoxLayout, QGridLayout, \
                             QSpacerItem, QFileDialog, QAction, QMenuBar, \
                             QWidget, QLabel, QPushButton, \
@@ -469,7 +469,7 @@ class TLAPControlWindow(SiriusMainWindow):
         reference = self.centralwidget.widget_Scrn.grab()
         reference.save(fn)
 
-    @pyqtSlot()
+    @Slot()
     def _setScrnWidget(self):
         app = SiriusApplication.instance()
         sender = self.sender()
@@ -623,14 +623,14 @@ class ShowICTHstr(SiriusMainWindow):
         self.centralwidget.checkBox_2.stateChanged.connect(
             self._setICT2CurveVisibility)
 
-    @pyqtSlot(int)
+    @Slot(int)
     def _setICT1CurveVisibility(self, value):
         """Set curves visibility."""
         self.centralwidget.PyDMTimePlot_Charge._curves[0].setVisible(value)
         self.centralwidget.PyDMWaveformPlot_ChargeHstr._curves[0].setVisible(
             value)
 
-    @pyqtSlot(int)
+    @Slot(int)
     def _setICT2CurveVisibility(self, value):
         """Set curves visibility."""
         self.centralwidget.PyDMTimePlot_Charge._curves[1].setVisible(value)

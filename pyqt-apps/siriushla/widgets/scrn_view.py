@@ -7,7 +7,7 @@ from qtpy.QtWidgets import QGridLayout, QHBoxLayout, QFormLayout, \
                             QSpacerItem, QWidget, QGroupBox, QLabel, \
                             QComboBox, QPushButton, QCheckBox, QMessageBox, \
                             QSizePolicy as QSzPlcy
-from qtpy.QtCore import Qt, pyqtSlot, pyqtSignal, pyqtProperty
+from qtpy.QtCore import Qt, Slot, Signal, Property
 from pydm.widgets import PyDMImageView, PyDMLabel, PyDMSpinbox, \
                             PyDMPushButton, PyDMEnumComboBox
 from pydm.widgets.channel import PyDMChannel
@@ -20,7 +20,7 @@ from siriushla import util
 class _SiriusImageView(PyDMImageView):
     """A PyDMImageView with methods to handle screens calibration grids."""
 
-    failToSaveGrid = pyqtSignal()
+    failToSaveGrid = Signal()
 
     def __init__(self, parent=None,
                  image_channel=None, width_channel=None,
@@ -43,7 +43,7 @@ class _SiriusImageView(PyDMImageView):
         self._maxheightchannel = maxheight_channel
         self._show_calibration_grid = False
 
-    @pyqtSlot()
+    @Slot()
     def saveCalibrationGrid(self):
         """Save current image as calibration_grid_image."""
         for i in range(40):
@@ -65,7 +65,7 @@ class _SiriusImageView(PyDMImageView):
         else:
             self.failToSaveGrid.emit()
 
-    @pyqtSlot(bool)
+    @Slot(bool)
     def showCalibrationGrid(self, show):
         """Show calibration_grid_image over the current image_waveform."""
         self._show_calibration_grid = show
@@ -173,7 +173,7 @@ class _SiriusImageView(PyDMImageView):
             return
         self._image_maxheight = new_max
 
-    @pyqtProperty(str)
+    @Property(str)
     def ROIOffsetXChannel(self):
         """
         The channel address in use for the image ROI horizontal offset.
@@ -198,7 +198,7 @@ class _SiriusImageView(PyDMImageView):
         if self._offsetxchannel != value:
             self._offsetxchannel = str(value)
 
-    @pyqtProperty(str)
+    @Property(str)
     def ROIOffsetYChannel(self):
         """
         The channel address in use for the image ROI vertical offset.
@@ -223,7 +223,7 @@ class _SiriusImageView(PyDMImageView):
         if self._offsetychannel != value:
             self._offsetychannel = str(value)
 
-    @pyqtProperty(str)
+    @Property(str)
     def maxWidthChannel(self):
         """
         The channel address in use for the image ROI horizontal offset.
@@ -248,7 +248,7 @@ class _SiriusImageView(PyDMImageView):
         if self._maxwidthchannel != value:
             self._maxwidthchannel = str(value)
 
-    @pyqtProperty(str)
+    @Property(str)
     def maxHeightChannel(self):
         """
         The channel address in use for the image ROI vertical offset.
@@ -321,7 +321,7 @@ class SiriusScrnView(QWidget):
 
     To allow saving a grid correctly, control calibrationgrid_flag, which
     indicates if the screen is in calibration grid position.
-    You can control it by using the method/pyqtSlot updateCalibrationGridFlag.
+    You can control it by using the method/Slot updateCalibrationGridFlag.
     """
 
     def __init__(self, parent=None, prefix='', device=None):
@@ -342,7 +342,7 @@ class SiriusScrnView(QWidget):
         """Indicate if the screen device is in calibration grid position."""
         return self._calibrationgrid_flag
 
-    @pyqtSlot(int)
+    @Slot(int)
     def updateCalibrationGridFlag(self, new_state):
         """Update calibrationgrid_flag property."""
         if new_state != self._calibrationgrid_flag:
@@ -773,23 +773,23 @@ class SiriusScrnView(QWidget):
         self.PyDMSpinbox_ROIOffsetY.send_value()
         time.sleep(0.1)
 
-    @pyqtSlot()
+    @Slot()
     def _showFailToSaveGridMsg(self):
         QMessageBox.warning(self, 'Warning',
                             'Could not save calibration grid!',
                             QMessageBox.Ok)
 
-    @pyqtSlot()
+    @Slot()
     def _zoomIn(self):
         """Zoom ImageView to 0.5x current image scale."""
         self.image_view.getView().scaleBy((0.5, 0.5))
 
-    @pyqtSlot()
+    @Slot()
     def _zoomOut(self):
         """Zoom ImageView to 2x current image scale."""
         self.image_view.getView().scaleBy((2.0, 2.0))
 
-    @pyqtSlot()
+    @Slot()
     def _zoomToActualSize(self):
         """Zoom ImqgeView to actual image size."""
         if len(self.image_view.image_waveform) == 0:

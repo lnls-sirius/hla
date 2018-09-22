@@ -177,7 +177,7 @@ class PyDMBarGraphModel:
         """Return connection status."""
         return self._connected
 
-    # @pyqtSlot(bool)
+    # @Slot(bool)
     def connectionChanged(self, conn):
         """Slot called when connection state changes."""
         logging.debug("Connection changed to {}".format(conn))
@@ -188,12 +188,12 @@ class PyDMBarGraphModel:
         self.waveform = value
         self.size = len(value)
 
-    # @pyqtSlot(list)
+    # @Slot(list)
     # def waveformChanged(self, waveform):
     #     """Slot called when value changes (PV of type array)."""
     #     self.waveform = waveform
 
-    # @pyqtSlot(int)
+    # @Slot(int)
     # def countChanged(self, count):
     #     """Slot called when count changes."""
     #     self.size = count
