@@ -1,6 +1,6 @@
 from pydm import Display
-from PyQt5.QtCore import Slot, QTimer
-from PyQt5.QtWidgets import QApplication
+from qtpy.QtCore import Slot, QTimer
+from qtpy.QtWidgets import QApplication
 from epics import PV
 from os import path
 from siriuspy.magnet import magdata

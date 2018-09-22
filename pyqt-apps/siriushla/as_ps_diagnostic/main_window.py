@@ -1,13 +1,12 @@
 from pydm import Display
-from PyQt5.QtCore import Slot, QTimer
-from PyQt5.QtWidgets import QApplication
-from epics import PV
+from qtpy.QtCore import Slot, QTimer
+from qtpy.QtWidgets import QApplication
 from os import path
 from psdiag import Test
 # from siriuspy.magnet import magdata as _magdata
-from siriuspy.magnet.data import MAData as _MAData
 from siriuspy.search.ma_search import MASearch as _MASearch
 import datetime
+
 
 class DiagnosticsMainWindow(Display):
 
