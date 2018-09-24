@@ -1,5 +1,5 @@
-from pydm.PyQt.QtGui import QColor
-from pydm.PyQt.QtCore import pyqtProperty
+from qtpy.QtGui import QColor
+from qtpy.QtCore import Property
 from pydm.widgets.base import PyDMWidget
 from .QLed import QLed
 
@@ -32,7 +32,7 @@ class PyDMLed(QLed, PyDMWidget):
         self.pvbit = bit
         self.stateColors = color_list or self.default_colorlist
 
-    @pyqtProperty(int)
+    @Property(int)
     def pvbit(self):
         """
         PV bit to be handled by the led.

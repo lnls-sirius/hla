@@ -3,7 +3,7 @@
 import numpy as _np
 from datetime import datetime as _datetime
 from PyQt5.QtWidgets import QMenu, QFileDialog
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import Signal
 from siriushla.si_ap_sofb.selection_matrix import NR_BPMs
 
 
@@ -14,9 +14,9 @@ class RegisterMenu(QMenu):
     EXT = '.siorb'
     EXT_FLT = 'Sirius Orbit Files (*.siorb)'
 
-    new_orbitx_signal = pyqtSignal(_np.ndarray)
-    new_orbity_signal = pyqtSignal(_np.ndarray)
-    new_string_signal = pyqtSignal(str)
+    new_orbitx_signal = Signal(_np.ndarray)
+    new_orbity_signal = Signal(_np.ndarray)
+    new_string_signal = Signal(str)
 
     def __init__(self, main_win, register, parent=None):
         """Initialize the Context Menu."""

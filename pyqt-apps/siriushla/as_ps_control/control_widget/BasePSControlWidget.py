@@ -3,8 +3,8 @@ import re
 
 from siriuspy.search import PSSearch, MASearch
 from siriushla.as_ps_control.PSWidget import BasePSWidget, PSWidget, MAWidget
-from pydm.PyQt.QtCore import Qt, QPoint, pyqtSlot, QLocale
-from pydm.PyQt.QtGui import QWidget, QVBoxLayout, QGroupBox, \
+from qtpy.QtCore import Qt, QPoint, Slot, QLocale
+from qtpy.QtWidgets import QWidget, QVBoxLayout, QGroupBox, \
     QGridLayout, QLabel, QHBoxLayout, QScrollArea, QLineEdit, QAction, \
     QMenu, QInputDialog
 
@@ -62,7 +62,7 @@ class BasePSControlWidget(QWidget):
         self.setContextMenuPolicy(Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self.show_context_menu)
 
-    @pyqtSlot(str)
+    @Slot(str)
     def filter_pwrsupplies(self, text):
         """Filter power supply widgets based on text inserted at line edit."""
         try:
@@ -90,7 +90,7 @@ class BasePSControlWidget(QWidget):
             else:
                 widget.setVisible(False)
 
-    @pyqtSlot(bool)
+    @Slot(bool)
     def pwrstate_action(self, state):
         """Execute actions from context menu."""
         for key, widget in self.widgets_list.items():
@@ -100,7 +100,7 @@ class BasePSControlWidget(QWidget):
                 else:
                     widget.turn_off()
 
-    @pyqtSlot()
+    @Slot()
     def set_current_sp_action(self):
         """Set current setpoint for every visible widget."""
         dlg = QInputDialog(self)
@@ -113,7 +113,7 @@ class BasePSControlWidget(QWidget):
                     widget.analog_widget.sp_lineedit.setText(str(new_value))
                     widget.analog_widget.sp_lineedit.send_value()
 
-    @pyqtSlot(QPoint)
+    @Slot(QPoint)
     def show_context_menu(self, point):
         """Show a custom context menu."""
         menu = QMenu("Actions", self)

@@ -1,5 +1,5 @@
 """Defines a class to control elements from a given class."""
-from pydm.PyQt.QtGui import QTabWidget, QWidget, QGridLayout
+from qtpy.QtWidgets import QTabWidget, QWidget, QGridLayout
 
 from siriushla.as_ps_control.PSControlWindow import PSControlWindow
 from .control_widget.ControlWidgetFactory import ControlWidgetFactory
@@ -9,10 +9,10 @@ class PSTabControlWindow(PSControlWindow):
     """Base window to show devices of a section in tabs."""
 
     Devices = {
-        "TB": ["dipole", "corrector-slow"],
+        "TB": ["dipole", "quadrupole", "corrector-slow"],
         "BO": ["dipole", "quadrupole", "sextupole", "corrector-slow",
                "quadrupole-skew"],
-        "TS": ["dipole", "corrector-slow"],
+        "TS": ["dipole", "quadrupole", "corrector-slow"],
         "SI": ["dipole", "quadrupole", "sextupole", "corrector-slow",
                "corrector-fast", "quadrupole-skew"]}
 

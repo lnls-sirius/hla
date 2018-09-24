@@ -1,7 +1,8 @@
 """Configuration window model definition."""
 import re
-from pydm.PyQt.QtCore import Qt, QAbstractTableModel, QModelIndex, QVariant
-from pydm.PyQt.QtGui import QItemDelegate, QColor, QDoubleSpinBox
+from qtpy.QtCore import Qt, QAbstractTableModel, QModelIndex, QVariant
+from qtpy.QtWidgets import QItemDelegate, QDoubleSpinBox
+from qtpy.QtGui import QColor
 from siriuspy.servconf.conf_service import ConfigService
 from siriuspy.servconf.conf_types import get_config_type_template
 

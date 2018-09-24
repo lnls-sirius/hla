@@ -4,7 +4,7 @@
 
 import sys
 from siriushla.sirius_application import SiriusApplication
-from pydm.PyQt.QtGui import QAction, QMenuBar
+from qtpy.QtWidgets import QAction, QMenuBar
 from siriushla.as_ps_control.PSControlWindow import PSControlWindow
 from siriushla.as_ps_control.PSTabControlWindow \
     import PSTabControlWindow

@@ -4,7 +4,7 @@ import sys as _sys
 import os as _os
 import numpy as np
 from PyQt5 import uic as _uic
-from PyQt5.QtCore import Qt, pyqtSignal
+from PyQt5.QtCore import Qt, Signal
 from PyQt5.QtWidgets import QWidget
 from pydm import PyDMApplication as _PyDMApplication
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
@@ -22,7 +22,7 @@ UI_FILE = _os.path.sep.join([_dir, 'SOFBMain.ui'])
 
 class _PyDMWidget(PyDMWritableWidget, QWidget):
 
-    receive_value_signal = pyqtSignal([int], [float], [str], [bool],
+    receive_value_signal = Signal([int], [float], [str], [bool],
                                       [np.ndarray])
 
     def __init__(self, parent=None, init_channel=None, visible=False):

@@ -1,10 +1,11 @@
 """MagnetDetailWidget definition."""
 import re
 
-from pydm.PyQt.QtCore import Qt
-from pydm.PyQt.QtGui import QWidget, QGroupBox, QGridLayout, QLabel, \
-    QSizePolicy, QPushButton, QVBoxLayout, QHBoxLayout, QColor, QApplication, \
+from qtpy.QtCore import Qt
+from qtpy.QtWidgets import QWidget, QGroupBox, QGridLayout, QLabel, \
+    QSizePolicy, QPushButton, QVBoxLayout, QHBoxLayout, QApplication, \
     QFormLayout
+from qtpy.QtGui import QColor
 # from epics import get_pv
 
 from siriuspy.envars import vaca_prefix

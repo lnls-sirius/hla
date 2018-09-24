@@ -1,7 +1,7 @@
 """Defines PyDM widget with a line edit and a double scrollbar."""
-from pydm.PyQt.QtCore import QLocale
-from pydm.PyQt.QtGui import QWidget, QVBoxLayout, QStyle, QStyleOption, \
-    QPainter, QDoubleValidator
+from qtpy.QtCore import QLocale
+from qtpy.QtWidgets import QWidget, QVBoxLayout, QStyle, QStyleOption
+from qtpy.QtGui import QPainter, QDoubleValidator
 from pydm.widgets.line_edit import PyDMLineEdit
 from siriushla.widgets.scrollbar import PyDMScrollBar
 

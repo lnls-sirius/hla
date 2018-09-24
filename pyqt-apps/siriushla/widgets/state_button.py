@@ -1,9 +1,10 @@
 """PyDM State Button Class."""
 
-from pydm.PyQt.QtGui import QPainter, QStyleOption, QFrame
-from pydm.PyQt.QtCore import (pyqtProperty, Q_ENUMS, QByteArray, QRectF,
-                              QSize, pyqtSignal)
-from pydm.PyQt.QtSvg import QSvgRenderer
+from qtpy.QtWidgets import QStyleOption, QFrame
+from qtpy.QtGui import QPainter
+from qtpy.QtCore import Property, Q_ENUMS, QByteArray, QRectF, \
+                        QSize, Signal
+from qtpy.QtSvg import QSvgRenderer
 from pydm.widgets.base import PyDMWritableWidget
 
 
@@ -1415,7 +1416,7 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
                                     """
                                }
 
-    clicked = pyqtSignal()
+    clicked = Signal()
 
     def __init__(self, parent=None, init_channel=None):
         """Initialize all internal states and properties."""
@@ -1461,6 +1462,8 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
         If :attr:'pvBit' is n>=0 or positive the button toggles the state of
         the n-th digit of the channel. Otherwise it toggles the whole value.
         """
+        if not self._connected:
+            return
         checked = not self._bit_val
         val = checked
         if self._bit >= 0:
@@ -1476,7 +1479,7 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
 
     def paintEvent(self, event):
         """Treat appearence changes based on connection state and value."""
-        if self._connected is False:
+        if not self.isEnabled():
             state = 'Disconnected'
         elif self._bit_val == 1:
             state = 'On'
@@ -1512,7 +1515,7 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
         self.renderer.load(QByteArray(buttonstate_bytearray))
         self.renderer.render(painter, bounds)
 
-    @pyqtProperty(buttonShapeMap)
+    @Property(buttonShapeMap)
     def shape(self):
         """
         Property to define the shape of the button.
@@ -1538,7 +1541,7 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
         else:
             raise ValueError('Button shape not defined!')
 
-    @pyqtProperty(int)
+    @Property(int)
     def pvbit(self):
         """
         Property to define which PV bit to control.
