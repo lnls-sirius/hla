@@ -11,7 +11,8 @@ from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla import util as _util
 from siriuspy.ramp import ramp
 from siriuspy.ramp.conn import ConnMagnets as _ConnMagnets, \
-                               ConnTiming as _ConnTiming
+                               ConnTiming as _ConnTiming, \
+                               ConnRF as _ConnRF
 from siriushla.bo_ramp.general_status import GeneralStatus
 from siriushla.bo_ramp.ramp_settings import RampConfigSettings
 from siriushla.bo_ramp.ramp_commands import RampCommands
@@ -23,7 +24,7 @@ from siriushla.bo_ramp.ramp_statistics import RampStatistics
 class RampMain(SiriusMainWindow):
     """Main window of Booster Ramp Control HLA."""
 
-    connUpdateSignal = pyqtSignal(_ConnMagnets, _ConnTiming)
+    connUpdateSignal = pyqtSignal(_ConnMagnets, _ConnTiming, _ConnRF)
     loadSignal = pyqtSignal(ramp.BoosterRamp)
 
     def __init__(self, parent=None, prefix=''):
@@ -135,7 +136,14 @@ class RampMain(SiriusMainWindow):
             prefix=self.prefix,
             connection_callback=self.general_status.updateTimingConnState,
             callback=self.general_status.updateTimingOpModeState)
-        self.connUpdateSignal.emit(self._conn_magnets, self._conn_timing)
+        self._conn_rf = _ConnRF(
+            ramp_config=self.ramp_config,
+            prefix=self.prefix,
+            connection_callback=self.general_status.updateRFConnState,
+            callback=self.general_status.updateRFOpModeState)
+        self.connUpdateSignal.emit(self._conn_magnets,
+                                   self._conn_timing,
+                                   self._conn_rf)
 
     def _emitLoadSignal(self):
         self.loadSignal.emit(self.ramp_config)
