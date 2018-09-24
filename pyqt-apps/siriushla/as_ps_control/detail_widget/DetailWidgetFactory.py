@@ -7,7 +7,7 @@ from siriushla.as_ps_control.detail_widget.DipoleDetailWidget \
     import DipoleDetailWidget
 from siriushla.as_pm_control.PulsedMagnetDetailWidget \
     import PulsedMagnetDetailWidget
-from pydm.PyQt.QtGui import QWidget, QGridLayout
+from qtpy.QtWidgets import QWidget, QGridLayout
 
 
 class DetailWidgetFactory:

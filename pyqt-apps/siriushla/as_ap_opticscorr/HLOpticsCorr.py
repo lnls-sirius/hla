@@ -2,13 +2,13 @@
 """Booster Optics Correction HLA Module."""
 
 import epics as _epics
-from pydm.PyQt.uic import loadUi
-from pydm.PyQt.QtCore import Qt
-from pydm.PyQt.QtGui import (QPushButton, QGridLayout, QLabel, QFrame,
-                             QSpacerItem, QAbstractItemView, QGroupBox,
-                             QSizePolicy as QSzPlcy)
-from pydm.widgets import (PyDMEnumComboBox, PyDMLabel, PyDMLineEdit,
-                          PyDMWaveformTable)
+from qtpy.uic import loadUi
+from qtpy.QtCore import Qt
+from qtpy.QtWidgets import QPushButton, QGridLayout, QLabel, QFrame, \
+                            QSpacerItem, QAbstractItemView, QGroupBox, \
+                            QSizePolicy as QSzPlcy
+from pydm.widgets import PyDMEnumComboBox, PyDMLabel, PyDMLineEdit, \
+                            PyDMWaveformTable
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla.widgets.state_button import PyDMStateButton

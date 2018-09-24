@@ -3,8 +3,8 @@ import os as _os
 import re as _re
 import pathlib as _pathlib
 
-from pydm.PyQt.QtCore import QFile as _QFile
-from pydm.PyQt.QtGui import QPushButton, QAction, QApplication
+from qtpy.QtCore import QFile as _QFile
+from qtpy.QtWidgets import QPushButton, QAction, QApplication
 import siriushla.resources as _resources
 
 

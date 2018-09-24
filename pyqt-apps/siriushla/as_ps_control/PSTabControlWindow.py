@@ -1,5 +1,5 @@
 """Defines a class to control elements from a given class."""
-from pydm.PyQt.QtGui import QTabWidget, QWidget, QGridLayout
+from qtpy.QtWidgets import QTabWidget, QWidget, QGridLayout
 
 from siriushla.as_ps_control.PSControlWindow import PSControlWindow
 from .control_widget.ControlWidgetFactory import ControlWidgetFactory

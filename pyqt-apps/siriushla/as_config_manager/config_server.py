@@ -2,10 +2,10 @@
 import logging
 import time
 
-from pydm.PyQt.QtGui import QGridLayout, QHBoxLayout, QVBoxLayout, \
+from qtpy.QtWidgets import QGridLayout, QHBoxLayout, QVBoxLayout, \
     QWidget, QFrame, QLabel, QComboBox, QPushButton, QMessageBox, QTabWidget, \
     QTableView, QTreeView, QHeaderView
-from pydm.PyQt.QtCore import Qt, pyqtSlot, pyqtSignal, QModelIndex, \
+from qtpy.QtCore import Qt, Slot, Signal, QModelIndex, \
     QAbstractItemModel, QAbstractTableModel
 
 from siriushla.widgets.windows import SiriusMainWindow
@@ -187,8 +187,8 @@ class JsonTreeModel(QAbstractItemModel):
 class ConfigDbTableModel(QAbstractTableModel):
     """Model for configuration database."""
 
-    removeRow = pyqtSignal(QModelIndex)
-    connectionError = pyqtSignal(int, str, str)
+    removeRow = Signal(QModelIndex)
+    connectionError = Signal(int, str, str)
 
     def __init__(self, config_type, connection, discarded=False, parent=None):
         """Constructor."""
@@ -573,7 +573,7 @@ class ConfigurationManager(SiriusMainWindow):
         self.editor.resizeColumnsToContents()
         self.d_editor.resizeColumnsToContents()
 
-    @pyqtSlot(str)
+    @Slot(str)
     def _fill_table(self, config_type):
         """Fill table with configuration of `config_type`."""
         request = self._model.find_nr_configs(
@@ -590,7 +590,7 @@ class ConfigurationManager(SiriusMainWindow):
         self.editor.resizeColumnsToContents()
         self.d_editor.resizeColumnsToContents()
 
-    @pyqtSlot()
+    @Slot()
     def _fill_tree(self):
         if self.editor_tab.currentIndex() == 0:
             configs = list()
@@ -626,7 +626,7 @@ class ConfigurationManager(SiriusMainWindow):
                 self.retrieve_button.style().polish(self.retrieve_button)
         # self.tree.resizeColumnsToContents()
 
-    @pyqtSlot()
+    @Slot()
     def _remove_configuration(self):
         type = QMessageBox.Question
         title = 'Remove configuration?'
@@ -649,7 +649,7 @@ class ConfigurationManager(SiriusMainWindow):
         self.editor.selectionModel().clearSelection()
         self._fill_table(self.config_type.currentText())
 
-    @pyqtSlot()
+    @Slot()
     def _retrieve_configuration(self):
         type = QMessageBox.Question
         title = 'Retrieve configuration?'
@@ -677,7 +677,7 @@ class ConfigurationManager(SiriusMainWindow):
         self.editor.selectionModel().clearSelection()
         self._fill_table(self.config_type.currentText())
 
-    @pyqtSlot(int)
+    @Slot(int)
     def _tab_changed(self, index):
         if index == 0:
             self.editor.selectionModel().clearSelection()
@@ -690,7 +690,7 @@ class ConfigurationManager(SiriusMainWindow):
             self.retrieve_button.style().polish(self.retrieve_button)
         self.tree_model.setupModelData([])
 
-    @pyqtSlot(int, str, str)
+    @Slot(int, str, str)
     def _database_error(self, code, message, operation):
         type = QMessageBox.Warning
         title = 'Something went wrong'

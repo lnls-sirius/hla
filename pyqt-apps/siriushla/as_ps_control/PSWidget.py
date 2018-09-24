@@ -7,9 +7,10 @@ Exposes basic controls like:
 """
 import re
 
-from pydm.PyQt.QtGui import QWidget, QHBoxLayout, QVBoxLayout, QLabel, \
-    QPushButton, QStyleOption, QStyle, QPainter
-from pydm.PyQt.QtCore import QSize
+from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, \
+    QPushButton, QStyleOption, QStyle
+from qtpy.QtGui import QPainter
+from qtpy.QtCore import QSize
 from pydm.widgets.label import PyDMLabel
 
 from siriuspy.envars import vaca_prefix as _VACA_PREFIX

@@ -1,9 +1,10 @@
 """Define a window to manage offline configurations."""
 # from pymysql.err import IntegrityError, InternalError, OperationalError
-from pydm.PyQt.QtCore import Qt, QPoint, pyqtSlot
-from pydm.PyQt.QtGui import QVBoxLayout, QPushButton, \
+from qtpy.QtCore import Qt, QPoint, Slot
+from qtpy.QtWidgets import QVBoxLayout, QPushButton, \
         QTableView, QWidget, QHBoxLayout, QInputDialog, QMenu, QAction, \
-        QMessageBox, QKeySequence
+        QMessageBox
+from qtpy.QtGui import QKeySequence
 from siriushla.widgets import SiriusMainWindow
 from siriushla.widgets import LoadingDialog
 from .ConfigModel import ConfigModel
@@ -113,7 +114,7 @@ class ConfigManagerWindow(SiriusMainWindow):
                 self._model._redo.pop()[1]()
             return
 
-    @pyqtSlot(QPoint)
+    @Slot(QPoint)
     def _showHeaderMenu(self, point):
         column = self.headers.logicalIndexAt(point.x())
         if column == -1:
@@ -164,7 +165,7 @@ class ConfigManagerWindow(SiriusMainWindow):
         menu.popup(self.mapToGlobal(point))
 
     # ContextMenu Actions
-    @pyqtSlot(int)
+    @Slot(int)
     def _saveConfiguration(self, column):
         try:
             self._model.saveConfiguration(column)
@@ -174,17 +175,17 @@ class ConfigManagerWindow(SiriusMainWindow):
                         "{}, {}".format(e, type(e))).exec_()
         return False
 
-    @pyqtSlot(int)
+    @Slot(int)
     def _renameConfiguration(self, column):
         new_name, ok = QInputDialog.getText(self, "New name", "Rename to:")
         if ok and new_name:
             return self._model.renameConfiguration(column, new_name)
 
-    @pyqtSlot(int)
+    @Slot(int)
     def _closeConfiguration(self, column):
         self._closeConfigurations([column])
 
-    @pyqtSlot(int)
+    @Slot(int)
     def _closeConfigurationsToTheRight(self, column):
         columns = list()
         i = len(self._model.configurations) - 1
@@ -194,7 +195,7 @@ class ConfigManagerWindow(SiriusMainWindow):
 
         self._closeConfigurations(columns)
 
-    @pyqtSlot(int)
+    @Slot(int)
     def _closeOtherConfigurations(self, column):
         columns = list()
         i = len(self._model.configurations) - 1
@@ -207,7 +208,7 @@ class ConfigManagerWindow(SiriusMainWindow):
 
         self._closeConfigurations(columns)
 
-    @pyqtSlot()
+    @Slot()
     def _closeAllConfigurations(self):
         columns = list()
         i = len(self._model.configurations) - 1
@@ -236,7 +237,7 @@ class ConfigManagerWindow(SiriusMainWindow):
         else:
             return False
 
-    @pyqtSlot(int)
+    @Slot(int)
     def _tuneConfiguration(self, column):
         dlg = TuneDlg(self)
         ok1 = dlg.exec_()
@@ -267,7 +268,7 @@ class ConfigManagerWindow(SiriusMainWindow):
                                                     ConfigModel.TUNE,
                                                     [delta_d, delta_f])
 
-    @pyqtSlot(int)
+    @Slot(int)
     def _barConfiguration(self, cols):
         if len(cols) != 2:
             raise SystemError("Must interpolate 2 columns")
@@ -280,7 +281,7 @@ class ConfigManagerWindow(SiriusMainWindow):
                 new_name, cols[0].column(), cols[1].column())
 
     # Window menu slots
-    @pyqtSlot()
+    @Slot()
     def _addConfiguration(self):
         try:
             configs = self._model.getConfigurations()
@@ -308,7 +309,7 @@ class ConfigManagerWindow(SiriusMainWindow):
                 self._showMessageBox("No configuration found")
         return
 
-    @pyqtSlot()
+    @Slot()
     def _removeConfiguration(self):
         try:
             configs = self._model.getConfigurations()
@@ -346,7 +347,7 @@ class ConfigManagerWindow(SiriusMainWindow):
                 self._showMessageBox("No configuration found")
         return
 
-    @pyqtSlot()
+    @Slot()
     def _loadCurrentConfiguration(self):
         try:
             t = LoadingThread(

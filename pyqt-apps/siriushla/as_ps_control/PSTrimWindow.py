@@ -1,6 +1,6 @@
 """Defines window class to show trims of a magnet."""
 from pydm import PyDMApplication
-from pydm.PyQt.QtGui import QWidget, QVBoxLayout
+from qtpy.QtWidgets import QWidget, QVBoxLayout
 
 from siriushla.widgets import SiriusMainWindow
 from siriushla.as_ps_control.PSWidget import PSWidgetFactory

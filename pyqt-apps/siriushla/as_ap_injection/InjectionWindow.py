@@ -1,7 +1,7 @@
 """GUI for injection."""
 from pydm import PyDMApplication
-from pydm.PyQt.QtCore import pyqtSlot, QTimer, Qt
-from pydm.PyQt.QtGui import QWidget, QVBoxLayout, QHBoxLayout, \
+from qtpy.QtCore import Slot, QTimer, Qt
+from qtpy.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, \
     QRadioButton, QPushButton, QSpinBox, QGridLayout, QMessageBox, QDialog, \
     QLabel, QDockWidget
 from pydm.widgets.label import PyDMLabel
@@ -45,7 +45,7 @@ class WaitingDlg(QDialog):
         self.setLayout(self.layout)
         self.setWindowTitle(self.title)
 
-    @pyqtSlot(int)
+    @Slot(int)
     def done(self, r):
         """Override done method."""
         self.may_close = True
@@ -135,7 +135,7 @@ class InjectionWindow(SiriusMainWindow):
         # self.show()
 
     # Public
-    @pyqtSlot()
+    @Slot()
     def startInjection(self):
         """Start injection."""
         if self.controller.injecting:
@@ -157,7 +157,7 @@ class InjectionWindow(SiriusMainWindow):
 
         # self._dialog = None
 
-    @pyqtSlot()
+    @Slot()
     def stopInjection(self):
         """Stop injection."""
         if not self.controller.injecting:
@@ -174,25 +174,25 @@ class InjectionWindow(SiriusMainWindow):
 
         # self._dialog = None
 
-    @pyqtSlot(int)
+    @Slot(int)
     def setInitialBucket(self, value):
         """Set controller initial bucket and update bucket profile."""
         self.controller.initial_bucket = value
         self._setBucketProfile()
 
-    @pyqtSlot(int)
+    @Slot(int)
     def setFinalBucket(self, value):
         """Set controller final graph and update bucket profile."""
         self.controller.final_bucket = value
         self._setBucketProfile()
 
-    @pyqtSlot(int)
+    @Slot(int)
     def setStep(self, value):
         """Set controller step and update bucket profile."""
         self.controller.step = value
         self._setBucketProfile()
 
-    @pyqtSlot(int)
+    @Slot(int)
     def setCycle(self, value):
         """Set controller cycles."""
         self.controller.cycles = value
@@ -270,16 +270,16 @@ class InjectionWindow(SiriusMainWindow):
         self.startInjectionBtn.setEnabled(value)
         self.stopInjectionBtn.setEnabled(value)
 
-    @pyqtSlot(str)
+    @Slot(str)
     def _showErrorMsg(self, msg):
         self._showMsgBox("Error", msg, QMessageBox.Warning)
 
-    @pyqtSlot()
+    @Slot()
     def _showStartedMsg(self):
         self._showMsgBox("[InjectionControlWindow]",
                          "Injection started", QMessageBox.Information)
 
-    @pyqtSlot()
+    @Slot()
     def _showStoppedMsg(self):
         self._showMsgBox("[InjectionControlWindow]",
                          "Injection stopped", QMessageBox.Information)

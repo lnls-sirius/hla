@@ -1,4 +1,4 @@
-from pydm.PyQt.QtCore import Qt, pyqtSignal
+from qtpy.QtCore import Qt, Signal
 from .QDoubleScrollBar import QDoubleScrollBar
 from pydm.widgets.base import PyDMWritableWidget
 
@@ -19,9 +19,9 @@ class PyDMScrollBar(QDoubleScrollBar, PyDMWritableWidget):
         Precision to be use. Used to calculate size of the scroll bar step
     """
 
-    value_changed_signal = pyqtSignal([int], [float], [str])
-    connected_signal = pyqtSignal()
-    disconnected_signal = pyqtSignal()
+    value_changed_signal = Signal([int], [float], [str])
+    connected_signal = Signal()
+    disconnected_signal = Signal()
 
     def __init__(self, parent=None, orientation=Qt.Horizontal,
                  init_channel=None, precision=2):
