@@ -5,7 +5,7 @@
 import sys
 import argparse as _argparse
 from siriushla.sirius_application import SiriusApplication
-from siriushla.bo_ramp.ramp_main import RampMain
+from siriushla.bo_ap_ramp.ramp_main import RampMain
 from siriushla import util
 
 parser = _argparse.ArgumentParser(
