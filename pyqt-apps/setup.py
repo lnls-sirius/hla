@@ -45,7 +45,7 @@ setup(
         'scripts/sirius-hla-ts-ap-control.py',
         'scripts/sirius-hla-ts-ap-posang.py',
         'scripts/sirius-hla-ts-ma-control.py',
-        'scripts/sirius-hla-bo-ramp.py',
+        'scripts/sirius-hla-bo-ap-ramp.py',
         ],
     zip_safe=False
     )
