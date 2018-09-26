@@ -46,10 +46,6 @@ setup(
         'scripts/sirius-hla-ts-ap-control.py',
         'scripts/sirius-hla-ts-ap-posang.py',
         'scripts/sirius-hla-ts-ma-control.py',
-<<<<<<< HEAD
-=======
-        'scripts/sirius-hla-bo-ap-ramp.py',
->>>>>>> 992d201d6a4e019137d91abcb71277493f6d99e3
         ],
     zip_safe=False
     )
