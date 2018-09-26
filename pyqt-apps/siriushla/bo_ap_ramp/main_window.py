@@ -1,9 +1,9 @@
 """Booster Ramp Main Window."""
 
 import sys
-from PyQt5.QtCore import pyqtSlot, pyqtSignal
-from PyQt5.QtGui import QKeySequence
-from PyQt5.QtWidgets import QLabel, QWidget, QGridLayout, QUndoStack
+from qtpy.QtCore import Slot, Signal
+from qtpy.QtGui import QKeySequence
+from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QUndoStack
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets.windows import SiriusMainWindow
 from siriuspy.envars import vaca_prefix as _vaca_prefix
@@ -22,8 +22,8 @@ from siriushla.bo_ap_ramp.statistics import Statistics
 class RampMain(SiriusMainWindow):
     """Main window of Booster Ramp Control HLA."""
 
-    connUpdateSignal = pyqtSignal(_ConnMagnets, _ConnTiming, _ConnRF)
-    loadSignal = pyqtSignal(ramp.BoosterRamp)
+    connUpdateSignal = Signal(_ConnMagnets, _ConnTiming, _ConnRF)
+    loadSignal = Signal(ramp.BoosterRamp)
 
     def __init__(self, parent=None, prefix=''):
         """Initialize object."""
@@ -111,7 +111,7 @@ class RampMain(SiriusMainWindow):
         self.act_redo.setShortcut(QKeySequence.Redo)
         self.settings.config_menu.addAction(self.act_redo)
 
-    @pyqtSlot(str)
+    @Slot(str)
     def _receiveNewConfigName(self, new_config_name):
         self.ramp_config = ramp.BoosterRamp(new_config_name, auto_update=True)
         if self.ramp_config.configsrv_exist():

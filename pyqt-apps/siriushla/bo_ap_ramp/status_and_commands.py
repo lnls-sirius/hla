@@ -1,10 +1,10 @@
 """Booster Ramp Control HLA: General Status Module."""
 
-from PyQt5.QtWidgets import QGroupBox, QLabel, QPushButton, \
-                            QSizePolicy as QSzPlcy, QSpacerItem, \
-                            QFormLayout, QHBoxLayout, QGridLayout
-from PyQt5.QtGui import QColor
-from PyQt5.QtCore import Qt, pyqtSlot
+from qtpy.QtWidgets import QGroupBox, QLabel, QPushButton, \
+                           QSizePolicy as QSzPlcy, QSpacerItem, \
+                           QFormLayout, QHBoxLayout, QGridLayout
+from qtpy.QtGui import QColor
+from qtpy.QtCore import Qt, Slot
 from siriushla.widgets import QLed
 from siriuspy.ramp.conn import ConnMagnets as _ConnMagnets, \
                                ConnTiming as _ConnTiming, \
@@ -364,7 +364,7 @@ class StatusAndCommands(QGroupBox):
         """Update RF operational mode state led."""
         self.label_rf_ramping.state = self._conn_rf.check_ramp()
 
-    @pyqtSlot(_ConnMagnets, _ConnTiming, _ConnRF)
+    @Slot(_ConnMagnets, _ConnTiming, _ConnRF)
     def getConnectors(self, conn_magnet, conn_timing, conn_rf):
         """Receive connectors."""
         self._conn_magnets = conn_magnet

@@ -1,10 +1,10 @@
 """Booster Ramp Control HLA: Ramp Statistics Module."""
 
 import numpy as np
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QColor
-from PyQt5.QtWidgets import QGroupBox, QLabel, QPushButton,\
-                            QGridLayout, QSpacerItem, QSizePolicy as QSzPlcy
+from qtpy.QtCore import Qt
+from qtpy.QtGui import QColor
+from qtpy.QtWidgets import QGroupBox, QLabel, QPushButton,\
+                           QGridLayout, QSpacerItem, QSizePolicy as QSzPlcy
 from pydm.widgets import PyDMWaveformPlot
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 

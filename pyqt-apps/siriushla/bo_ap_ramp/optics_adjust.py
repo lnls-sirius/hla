@@ -1,11 +1,11 @@
 """Booster Ramp Control HLA: Optics Adjust Module."""
 
 from copy import deepcopy as _dcopy
-from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal, QLocale
-from PyQt5.QtWidgets import QGroupBox, QPushButton, QSpinBox, QLabel, \
-                            QHBoxLayout, QVBoxLayout, QGridLayout, \
-                            QSizePolicy as QSzPlcy, QDoubleSpinBox, QAction, \
-                            QSpacerItem, QInputDialog, QLineEdit, QMenu
+from qtpy.QtCore import Qt, Slot, Signal, QLocale
+from qtpy.QtWidgets import QGroupBox, QPushButton, QSpinBox, QLabel, \
+                           QHBoxLayout, QVBoxLayout, QGridLayout, \
+                           QSizePolicy as QSzPlcy, QDoubleSpinBox, QAction, \
+                           QSpacerItem, QInputDialog, QLineEdit, QMenu
 from siriuspy.ramp import ramp
 from siriuspy.ramp.magnet import Magnet as _Magnet
 from siriuspy.envars import vaca_prefix as _vaca_prefix
@@ -20,7 +20,7 @@ from siriushla.bo_ap_ramp.auxiliar_classes import \
 class OpticsAdjust(QGroupBox):
     """Widget to perform optics adjust in normalized configurations."""
 
-    normConfigChanged = pyqtSignal(ramp.BoosterNormalized)
+    normConfigChanged = Signal(ramp.BoosterNormalized)
 
     def __init__(self, parent=None, prefix='', ramp_config=None):
         """Initialize object."""
@@ -343,7 +343,7 @@ class OpticsAdjust(QGroupBox):
             self._editPopup.cb_checklims.setFocus()
             self._editPopup.open()
 
-    @pyqtSlot(dict)
+    @Slot(dict)
     def _handleEdit(self, nconfig):
         for maname, value in nconfig.items():
             self.norm_config[maname] = value
@@ -467,7 +467,7 @@ class OpticsAdjust(QGroupBox):
         pass
         # TODO: include orbit correction
 
-    @pyqtSlot(dict)
+    @Slot(dict)
     def getConfigIndices(self, table_map):
         """Update table_map and settings widget."""
         self._table_map = table_map
@@ -482,7 +482,7 @@ class OpticsAdjust(QGroupBox):
             self.bt_edit.setText('Injection')
         self._handleConfigIndexChanged()
 
-    @pyqtSlot(ramp.BoosterRamp)
+    @Slot(ramp.BoosterRamp)
     def handleLoadRampConfig(self, ramp_config):
         """Update all widgets in loading BoosterRamp config."""
         self.ramp_config = ramp_config
@@ -490,7 +490,7 @@ class OpticsAdjust(QGroupBox):
                 ramp_config.ps_normalized_configs_names:
             self.norm_config = self.ramp_config[self.norm_config.name]
 
-    @pyqtSlot(list)
+    @Slot(list)
     def handleUpdateSettings(self, settings):
         """Update settings."""
         self._tunecorr = BOTuneCorr(settings[0])

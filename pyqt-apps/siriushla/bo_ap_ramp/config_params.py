@@ -1,12 +1,12 @@
 """Booster Ramp Control HLA: Ramp Parameters Module."""
 
-from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot
-from PyQt5.QtGui import QBrush, QColor
-from PyQt5.QtWidgets import QGroupBox, QLabel, QWidget, QSpacerItem, \
-                            QVBoxLayout, QHBoxLayout, QGridLayout, \
-                            QPushButton, QTableWidget, QTableWidgetItem, \
-                            QSpinBox, QSizePolicy as QSzPlcy, \
-                            QAbstractItemView, QUndoCommand, QFormLayout
+from qtpy.QtCore import Qt, Signal, Slot
+from qtpy.QtGui import QBrush, QColor
+from qtpy.QtWidgets import QGroupBox, QLabel, QWidget, QSpacerItem, \
+                           QVBoxLayout, QHBoxLayout, QGridLayout, \
+                           QPushButton, QTableWidget, QTableWidgetItem, \
+                           QSpinBox, QSizePolicy as QSzPlcy, \
+                           QAbstractItemView, QUndoCommand, QFormLayout
 from matplotlib.backends.backend_qt5agg import (
     FigureCanvasQTAgg as FigureCanvas,
     NavigationToolbar2QT as NavigationToolbar)
@@ -51,7 +51,7 @@ class ConfigParameters(QGroupBox):
         my_lay.addWidget(self.mult_ramp)
         my_lay.addWidget(self.rf_ramp)
 
-    @pyqtSlot(ramp.BoosterRamp)
+    @Slot(ramp.BoosterRamp)
     def handleLoadRampConfig(self, ramp_config):
         """Update all widgets when ramp_config is loaded."""
         self.ramp_config = ramp_config
@@ -61,7 +61,7 @@ class ConfigParameters(QGroupBox):
 class DipoleRamp(QWidget):
     """Widget to set and monitor dipole ramp."""
 
-    updateDipoleRampSignal = pyqtSignal()
+    updateDipoleRampSignal = Signal()
 
     def __init__(self, parent=None, prefix='', ramp_config=None,
                  undo_stack=None):
@@ -222,7 +222,7 @@ class DipoleRamp(QWidget):
         self.table.setItemDelegate(_SpinBoxDelegate())
         self.table.cellChanged.connect(self._handleCellChanged)
 
-    @pyqtSlot(int, int)
+    @Slot(int, int)
     def _handleCellChanged(self, row, column):
         if self.ramp_config is None:
             return
@@ -311,7 +311,7 @@ class DipoleRamp(QWidget):
         finally:
             self.updateTable()
 
-    @pyqtSlot()
+    @Slot()
     def _handleChangePSDelay(self):
         """Handle change ps delay."""
         if self.ramp_config is None:
@@ -340,7 +340,7 @@ class DipoleRamp(QWidget):
         finally:
             self.updateTable()
 
-    @pyqtSlot()
+    @Slot()
     def _handleChangeNrPoints(self):
         """Handle change waveform number of points."""
         if self.ramp_config is None:
@@ -474,7 +474,7 @@ class DipoleRamp(QWidget):
 
         self.table.cellChanged.connect(self._handleCellChanged)
 
-    @pyqtSlot(ramp.BoosterRamp)
+    @Slot(ramp.BoosterRamp)
     def handleLoadRampConfig(self, ramp_config):
         """Update all widgets when ramp_config is loaded."""
         self.ramp_config = ramp_config
@@ -494,8 +494,8 @@ class DipoleRamp(QWidget):
 class MultipolesRamp(QWidget):
     """Widget to set and monitor multipoles ramp."""
 
-    updateMultipoleRampSignal = pyqtSignal()
-    configsIndexChangedSignal = pyqtSignal(dict)
+    updateMultipoleRampSignal = Signal()
+    configsIndexChangedSignal = Signal(dict)
 
     def __init__(self, parent=None, prefix='', ramp_config=None,
                  undo_stack=None):
@@ -686,7 +686,7 @@ class MultipolesRamp(QWidget):
                 self._handleInsertNormConfig)
             self._insertConfigPopup.open()
 
-    @pyqtSlot(list)
+    @Slot(list)
     def _handleInsertNormConfig(self, config):
         try:
             self.ramp_config.ps_normalized_configs_insert(time=config[0],
@@ -707,7 +707,7 @@ class MultipolesRamp(QWidget):
                 self._handleDeleteNormConfig)
             self._deleteConfigPopup.open()
 
-    @pyqtSlot(str)
+    @Slot(str)
     def _handleDeleteNormConfig(self, config):
         self.ramp_config.ps_normalized_configs_delete(config)
         self.handleLoadRampConfig(self.ramp_config)
@@ -724,7 +724,7 @@ class MultipolesRamp(QWidget):
             self._handleChooseMagnetToPlot)
         self._chooseMagnetsPopup.open()
 
-    @pyqtSlot(list)
+    @Slot(list)
     def _handleChooseMagnetToPlot(self, maname_list):
         self._magnets_to_plot = maname_list
         self.updateGraph()
@@ -846,7 +846,7 @@ class MultipolesRamp(QWidget):
         self._sortTable()
         self.table.cellChanged.connect(self._handleCellChanged)
 
-    @pyqtSlot(ramp.BoosterRamp)
+    @Slot(ramp.BoosterRamp)
     def handleLoadRampConfig(self, ramp_config):
         """Update all widgets in loading BoosterRamp config."""
         self.ramp_config = ramp_config
@@ -856,7 +856,7 @@ class MultipolesRamp(QWidget):
         self.updateTable()
         self.updateGraph()
 
-    @pyqtSlot(ramp.BoosterNormalized)
+    @Slot(ramp.BoosterNormalized)
     def handleNormConfigsChanges(self, norm_config):
         """Reload normalized configs on change and update graph."""
         self.ramp_config[norm_config.name] = norm_config
@@ -866,7 +866,7 @@ class MultipolesRamp(QWidget):
 class RFRamp(QWidget):
     """Widget to set and monitor RF ramp."""
 
-    updateRFRampSignal = pyqtSignal()
+    updateRFRampSignal = Signal()
 
     def __init__(self, parent=None, prefix='', ramp_config=None,
                  undo_stack=None):
@@ -1027,7 +1027,7 @@ class RFRamp(QWidget):
         self.table.setItemDelegate(_SpinBoxDelegate())
         self.table.cellChanged.connect(self._handleCellChanged)
 
-    @pyqtSlot(int, int)
+    @Slot(int, int)
     def _handleCellChanged(self, row, column):
         if self.ramp_config is None:
             return
@@ -1086,7 +1086,7 @@ class RFRamp(QWidget):
         finally:
             self.updateTable()
 
-    @pyqtSlot()
+    @Slot()
     def _handleChangeRFDelay(self):
         """Handle change rf delay."""
         if self.ramp_config is None:
@@ -1115,7 +1115,7 @@ class RFRamp(QWidget):
         finally:
             self.updateTable()
 
-    @pyqtSlot()
+    @Slot()
     def _handleChangeRmpIncIntvl(self):
         """Handle change RF ramping increase duration."""
         if self.ramp_config is None:
@@ -1249,7 +1249,7 @@ class RFRamp(QWidget):
 
         self.table.cellChanged.connect(self._handleCellChanged)
 
-    @pyqtSlot(ramp.BoosterRamp)
+    @Slot(ramp.BoosterRamp)
     def handleLoadRampConfig(self, ramp_config):
         """Update all widgets in loading BoosterRamp config."""
         self.ramp_config = ramp_config

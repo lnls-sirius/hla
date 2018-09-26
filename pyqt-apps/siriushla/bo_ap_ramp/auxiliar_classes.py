@@ -1,13 +1,13 @@
 """Booster Ramp Control HLA: Auxiliar Classes Module."""
 
-from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot, QStringListModel, QLocale
-from PyQt5.QtWidgets import QLabel, QWidget, QScrollArea, QAbstractItemView, \
-                            QHBoxLayout, QVBoxLayout, QGridLayout, QLineEdit, \
-                            QPushButton, QTableWidget, QTableWidgetItem, \
-                            QRadioButton, QFormLayout, QDoubleSpinBox, \
-                            QComboBox, QSpinBox, QStyledItemDelegate, \
-                            QSpacerItem, QSizePolicy as QSzPlcy, QCheckBox, \
-                            QTabWidget, QCompleter
+from qtpy.QtCore import Qt, Signal, Slot, QStringListModel, QLocale
+from qtpy.QtWidgets import QLabel, QWidget, QScrollArea, QAbstractItemView, \
+                           QHBoxLayout, QVBoxLayout, QGridLayout, QLineEdit, \
+                           QPushButton, QTableWidget, QTableWidgetItem, \
+                           QRadioButton, QFormLayout, QDoubleSpinBox, \
+                           QComboBox, QSpinBox, QStyledItemDelegate, \
+                           QSpacerItem, QSizePolicy as QSzPlcy, QCheckBox, \
+                           QTabWidget, QCompleter
 from pydm.widgets import PyDMLabel, PyDMSpinbox
 from siriushla.widgets.windows import SiriusDialog
 from siriuspy.servconf.conf_service import ConfigService as _ConfigService
@@ -17,9 +17,9 @@ from siriuspy.ramp import ramp
 class LoadRampConfig(SiriusDialog):
     """Auxiliar window to get a ramp config name to load."""
 
-    configNameSignal = pyqtSignal(str)
-    loadSignal = pyqtSignal()
-    saveSignal = pyqtSignal()
+    configNameSignal = Signal(str)
+    loadSignal = Signal()
+    saveSignal = Signal()
 
     def __init__(self, parent, ramp_config):
         """Initialize object."""
@@ -118,8 +118,8 @@ class LoadRampConfig(SiriusDialog):
 class NewRampConfigGetName(SiriusDialog):
     """Auxiliar window to get a ramp config name to create a new one."""
 
-    configNameSignal = pyqtSignal(str)
-    saveSignal = pyqtSignal()
+    configNameSignal = Signal(str)
+    saveSignal = Signal()
 
     def __init__(self, parent, ramp_config):
         """Initialize object."""
@@ -198,7 +198,7 @@ class NewRampConfigGetName(SiriusDialog):
 class InsertNormalizedConfig(SiriusDialog):
     """Auxiliar window to insert a new normalized config."""
 
-    insertConfig = pyqtSignal(list)
+    insertConfig = Signal(list)
 
     def __init__(self, parent):
         """Initialize object."""
@@ -325,7 +325,7 @@ class InsertNormalizedConfig(SiriusDialog):
 class DeleteNormalizedConfig(SiriusDialog):
     """Auxiliar window to delete a normalized config."""
 
-    deleteConfig = pyqtSignal(str)
+    deleteConfig = Signal(str)
 
     def __init__(self, parent, table_map):
         """Initialize object."""
@@ -372,7 +372,7 @@ class DeleteNormalizedConfig(SiriusDialog):
 
         self.setLayout(glay)
 
-    @pyqtSlot(int)
+    @Slot(int)
     def _searchConfigByIndex(self, config_idx):
         for label, value in self.table_map['rows'].items():
             if config_idx == (value + 1):
@@ -391,7 +391,7 @@ class DeleteNormalizedConfig(SiriusDialog):
 class EditNormalizedConfig(SiriusDialog):
     """Auxiliar window to edit an existing normalized config."""
 
-    editConfig = pyqtSignal(dict)
+    editConfig = Signal(dict)
 
     def __init__(self, parent, norm_config, energyGeV, aux_magnets):
         """Initialize object."""
@@ -482,7 +482,7 @@ class EditNormalizedConfig(SiriusDialog):
 class OpticsAdjustSettings(SiriusDialog):
     """Auxiliar window to optics adjust settings."""
 
-    updateSettings = pyqtSignal(list)
+    updateSettings = Signal(list)
 
     def __init__(self, parent, tuneconfig_currname, chromconfig_currname):
         """Initialize object."""
@@ -646,7 +646,7 @@ class OpticsAdjustSettings(SiriusDialog):
 
         return lay
 
-    @pyqtSlot(str)
+    @Slot(str)
     def _showTuneConfigData(self, tuneconfig_currname):
         querry = self.cs.get_config(config_type='bo_tunecorr_params',
                                     name=tuneconfig_currname)
@@ -665,7 +665,7 @@ class OpticsAdjustSettings(SiriusDialog):
         self.table_nomKL.item(0, 0).setFlags(Qt.ItemIsEnabled)
         self.table_nomKL.item(0, 1).setFlags(Qt.ItemIsEnabled)
 
-    @pyqtSlot(str)
+    @Slot(str)
     def _showChromConfigData(self, chromconfig_currname):
         querry = self.cs.get_config(config_type='bo_chromcorr_params',
                                     name=chromconfig_currname)
@@ -696,7 +696,7 @@ class OpticsAdjustSettings(SiriusDialog):
 class StatisticSettings(SiriusDialog):
     """Auxiliar window to statistics settings."""
 
-    updateSettings = pyqtSignal(list)
+    updateSettings = Signal(list)
 
     def __init__(self, parent, prefix, injcurr_idx, ejecurr_idx):
         """Initialize object."""
@@ -771,7 +771,7 @@ class StatisticSettings(SiriusDialog):
 class ChooseMagnetsToPlot(SiriusDialog):
     """Auxiliar window to select which magnets will to be shown in plot."""
 
-    choosePlotSignal = pyqtSignal(list)
+    choosePlotSignal = Signal(list)
 
     def __init__(self, parent, manames, current_plots):
         """Initialize object."""
@@ -898,8 +898,8 @@ class SpinBoxDelegate(QStyledItemDelegate):
 class MessageBox(SiriusDialog):
     """Auxiliar dialog to inform user about errors and pendencies."""
 
-    acceptedSignal = pyqtSignal()
-    regectedSignal = pyqtSignal()
+    acceptedSignal = Signal()
+    regectedSignal = Signal()
 
     def __init__(self, parent=None, title='', message='',
                  accept_button_text='', regect_button_text=''):

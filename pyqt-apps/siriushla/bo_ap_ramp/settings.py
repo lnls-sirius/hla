@@ -1,9 +1,9 @@
 """Booster Ramp Control HLA: Ramp Settings Module."""
 
 from copy import deepcopy as _dcopy
-from PyQt5.QtCore import Qt, pyqtSignal
-from PyQt5.QtGui import QKeySequence
-from PyQt5.QtWidgets import QMenuBar, QInputDialog, QAction, QLineEdit
+from qtpy.QtCore import Qt, Signal
+from qtpy.QtGui import QKeySequence
+from qtpy.QtWidgets import QMenuBar, QInputDialog, QAction, QLineEdit
 from siriuspy.servconf.conf_service import ConfigService as _ConfigService
 from siriushla.bo_ap_ramp.auxiliar_classes import \
     LoadRampConfig as _LoadRampConfig, \
@@ -16,11 +16,11 @@ from siriushla.bo_ap_ramp.auxiliar_classes import \
 class Settings(QMenuBar):
     """Widget to choose and to control a BoosterRamp configuration."""
 
-    configNameSignal = pyqtSignal(str)
-    loadSignal = pyqtSignal()
-    saveSignal = pyqtSignal()
-    opticsSettingsSignal = pyqtSignal(list)
-    statsSettingsSignal = pyqtSignal(list)
+    configNameSignal = Signal(str)
+    loadSignal = Signal()
+    saveSignal = Signal()
+    opticsSettingsSignal = Signal(list)
+    statsSettingsSignal = Signal(list)
 
     def __init__(self, parent=None, prefix='', ramp_config=None):
         """Initialize object."""
