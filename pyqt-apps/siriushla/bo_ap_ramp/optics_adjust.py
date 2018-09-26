@@ -6,14 +6,13 @@ from PyQt5.QtWidgets import QGroupBox, QPushButton, QSpinBox, QLabel, \
                             QHBoxLayout, QVBoxLayout, QGridLayout, \
                             QSizePolicy as QSzPlcy, QDoubleSpinBox, QAction, \
                             QSpacerItem, QInputDialog, QLineEdit, QMenu
-from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.ramp import ramp
 from siriuspy.ramp.magnet import Magnet as _Magnet
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriuspy.optics.opticscorr import BOTuneCorr, BOChromCorr
 from siriuspy.servconf.conf_service import ConfigService as _ConfigService
 from pydm.widgets import PyDMLineEdit
-from siriushla.bo_ramp.auxiliar_classes import \
+from siriushla.bo_ap_ramp.auxiliar_classes import \
     EditNormalizedConfig as _EditNormalizedConfig, \
     MessageBox as _MessageBox
 
@@ -27,7 +26,7 @@ class OpticsAdjust(QGroupBox):
         """Initialize object."""
         super().__init__('Normalized Configurations Optics Adjustments',
                          parent)
-        self.prefix = _PVName(prefix)
+        self.prefix = prefix
         self.ramp_config = ramp_config
         self.norm_config = None
         self._table_map = dict()
@@ -406,6 +405,8 @@ class OpticsAdjust(QGroupBox):
         self.l_deltaKLQD.setText('{:6f}'.format(self._deltaKL[1]))
 
     def _apply_deltaKL(self):
+        if self.norm_config is None:
+            return
         self.norm_config['BO-Fam:MA-QF'] += self._deltaKL[0]
         self.norm_config['BO-Fam:MA-QD'] += self._deltaKL[1]
         self._resetTuneChanges()
@@ -424,6 +425,8 @@ class OpticsAdjust(QGroupBox):
         self.l_deltaSLSD.setText('{:6f}'.format(self._deltaSL[1]))
 
     def _apply_deltaSL(self):
+        if self.norm_config is None:
+            return
         self.norm_config['BO-Fam:MA-SF'] += self._deltaSL[0]
         self.norm_config['BO-Fam:MA-SD'] += self._deltaSL[1]
         self._resetChromChanges()

@@ -4,9 +4,8 @@ from copy import deepcopy as _dcopy
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QKeySequence
 from PyQt5.QtWidgets import QMenuBar, QInputDialog, QAction, QLineEdit
-from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.servconf.conf_service import ConfigService as _ConfigService
-from siriushla.bo_ramp.auxiliar_classes import \
+from siriushla.bo_ap_ramp.auxiliar_classes import \
     LoadRampConfig as _LoadRampConfig, \
     NewRampConfigGetName as _NewRampConfigGetName, \
     OpticsAdjustSettings as _OpticsAdjustSettings, \
@@ -26,7 +25,7 @@ class Settings(QMenuBar):
     def __init__(self, parent=None, prefix='', ramp_config=None):
         """Initialize object."""
         super().__init__(parent)
-        self.prefix = _PVName(prefix)
+        self.prefix = prefix
         self.ramp_config = ramp_config
         self._tunecorr_name = 'Default_1'
         self._chromcorr_name = 'Default'

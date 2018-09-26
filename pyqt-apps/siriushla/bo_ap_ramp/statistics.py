@@ -7,7 +7,6 @@ from PyQt5.QtWidgets import QGroupBox, QLabel, QPushButton,\
                             QGridLayout, QSpacerItem, QSizePolicy as QSzPlcy
 from pydm.widgets import PyDMWaveformPlot
 from siriuspy.envars import vaca_prefix as _vaca_prefix
-from siriuspy.namesys import SiriusPVName as _PVName
 
 
 class Statistics(QGroupBox):
@@ -16,7 +15,7 @@ class Statistics(QGroupBox):
     def __init__(self, parent=None, prefix='', ramp_config=None):
         """Initialize object."""
         super().__init__('Statistics', parent)
-        self.prefix = _PVName(prefix)
+        self.prefix = prefix
         self.ramp_config = ramp_config
         self._wavEff = []
         self._wavXStack = []

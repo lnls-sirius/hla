@@ -12,10 +12,9 @@ from matplotlib.backends.backend_qt5agg import (
     NavigationToolbar2QT as NavigationToolbar)
 from matplotlib.figure import Figure
 import numpy as np
-from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.ramp import ramp, exceptions
 from siriuspy.csdevice.pwrsupply import MAX_WFMSIZE
-from siriushla.bo_ramp.auxiliar_classes import MessageBox as _MessageBox, \
+from siriushla.bo_ap_ramp.auxiliar_classes import MessageBox as _MessageBox, \
     InsertNormalizedConfig as _InsertNormalizedConfig, \
     DeleteNormalizedConfig as _DeleteNormalizedConfig, \
     SpinBoxDelegate as _SpinBoxDelegate, \
@@ -35,7 +34,7 @@ class ConfigParameters(QGroupBox):
                  undo_stack=None):
         """Initialize object."""
         super().__init__('Ramping Parameters: ', parent)
-        self.prefix = _PVName(prefix)
+        self.prefix = prefix
         self.ramp_config = ramp_config
         self._undo_stack = undo_stack
         self._setupUi()
@@ -68,7 +67,7 @@ class DipoleRamp(QWidget):
                  undo_stack=None):
         """Initialize object."""
         super().__init__(parent)
-        self.prefix = _PVName(prefix)
+        self.prefix = prefix
         self.ramp_config = ramp_config
         self._undo_stack = undo_stack
         self._setupUi()
@@ -502,7 +501,7 @@ class MultipolesRamp(QWidget):
                  undo_stack=None):
         """Initialize object."""
         super().__init__(parent)
-        self.prefix = _PVName(prefix)
+        self.prefix = prefix
         self.ramp_config = ramp_config
         self._undo_stack = undo_stack
         self._getNormalizedConfigs()
@@ -873,7 +872,7 @@ class RFRamp(QWidget):
                  undo_stack=None):
         """Initialize object."""
         super().__init__(parent)
-        self.prefix = _PVName(prefix)
+        self.prefix = prefix
         self.ramp_config = ramp_config
         self._undo_stack = undo_stack
         self._setupUi()

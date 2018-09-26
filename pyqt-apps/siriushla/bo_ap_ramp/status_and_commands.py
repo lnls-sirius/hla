@@ -6,11 +6,10 @@ from PyQt5.QtWidgets import QGroupBox, QLabel, QPushButton, \
 from PyQt5.QtGui import QColor
 from PyQt5.QtCore import Qt, pyqtSlot
 from siriushla.widgets import QLed
-from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.ramp.conn import ConnMagnets as _ConnMagnets, \
                                ConnTiming as _ConnTiming, \
                                ConnRF as _ConnRF
-from siriushla.bo_ramp.auxiliar_classes import MessageBox as _MessageBox
+from siriushla.bo_ap_ramp.auxiliar_classes import MessageBox as _MessageBox
 
 DarkGreen = QColor(20, 80, 10)
 
@@ -21,7 +20,7 @@ class StatusAndCommands(QGroupBox):
     def __init__(self, parent=None, prefix=''):
         """Initialize object."""
         super().__init__('General Status and Commands', parent)
-        self.prefix = _PVName(prefix)
+        self.prefix = prefix
         self._conn_magnets = None
         self._conn_timing = None
         self._conn_rf = None

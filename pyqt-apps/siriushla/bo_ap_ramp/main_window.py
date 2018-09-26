@@ -6,18 +6,17 @@ from PyQt5.QtGui import QKeySequence
 from PyQt5.QtWidgets import QLabel, QWidget, QGridLayout, QUndoStack
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets.windows import SiriusMainWindow
-from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla import util as _util
 from siriuspy.ramp import ramp
 from siriuspy.ramp.conn import ConnMagnets as _ConnMagnets, \
                                ConnTiming as _ConnTiming, \
                                ConnRF as _ConnRF
-from siriushla.bo_ramp.status_and_commands import StatusAndCommands
-from siriushla.bo_ramp.settings import Settings
-from siriushla.bo_ramp.config_params import ConfigParameters
-from siriushla.bo_ramp.optics_adjust import OpticsAdjust
-from siriushla.bo_ramp.statistics import Statistics
+from siriushla.bo_ap_ramp.status_and_commands import StatusAndCommands
+from siriushla.bo_ap_ramp.settings import Settings
+from siriushla.bo_ap_ramp.config_params import ConfigParameters
+from siriushla.bo_ap_ramp.optics_adjust import OpticsAdjust
+from siriushla.bo_ap_ramp.statistics import Statistics
 
 
 class RampMain(SiriusMainWindow):
@@ -30,7 +29,7 @@ class RampMain(SiriusMainWindow):
         """Initialize object."""
         super().__init__(parent)
         self.setWindowTitle('Booster Energy Ramping')
-        self.prefix = _PVName(prefix)
+        self.prefix = prefix
         self.ramp_config = None
         self._conn_magnets = None
         self._conn_timing = None
@@ -159,6 +158,6 @@ if __name__ == '__main__':
     """Run Example."""
     app = SiriusApplication()
     _util.set_style(app)
-    w = RampMain(prefix=_vaca_prefix+'AS-Glob:TI-EVG:')
+    w = RampMain(prefix=_vaca_prefix)
     w.show()
     sys.exit(app.exec_())
