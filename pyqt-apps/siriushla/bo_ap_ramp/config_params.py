@@ -806,6 +806,7 @@ class MultipolesRamp(QWidget):
         self.table.cellChanged.disconnect(self._handleCellChanged)
 
         config_dict = dict()
+        self._getNormalizedConfigs()
         for config in self.normalized_configs:
             config_dict[config[0]] = config[1]
 
