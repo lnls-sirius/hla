@@ -14,7 +14,7 @@ from siriushla.bo_ramp.auxiliar_classes import \
     MessageBox as _MessageBox
 
 
-class RampConfigSettings(QMenuBar):
+class Settings(QMenuBar):
     """Widget to choose and to control a BoosterRamp configuration."""
 
     configNameSignal = pyqtSignal(str)

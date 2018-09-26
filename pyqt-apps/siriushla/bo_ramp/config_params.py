@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QGroupBox, QLabel, QWidget, QSpacerItem, \
                             QVBoxLayout, QHBoxLayout, QGridLayout, \
                             QPushButton, QTableWidget, QTableWidgetItem, \
                             QSpinBox, QSizePolicy as QSzPlcy, \
-                            QAbstractItemView, QUndoCommand
+                            QAbstractItemView, QUndoCommand, QFormLayout
 from matplotlib.backends.backend_qt5agg import (
     FigureCanvasQTAgg as FigureCanvas,
     NavigationToolbar2QT as NavigationToolbar)
@@ -28,7 +28,7 @@ _flag_stack_next_command = True
 _flag_stacking = False
 
 
-class RampParameters(QGroupBox):
+class ConfigParameters(QGroupBox):
     """Widget to set and monitor ramp parametes."""
 
     def __init__(self, parent=None, prefix='', ramp_config=None,
@@ -74,20 +74,24 @@ class DipoleRamp(QWidget):
         self._setupUi()
 
     def _setupUi(self):
-        vlay = QVBoxLayout(self)
+        glay = QGridLayout(self)
         self.graphview = QWidget()
-        self.set_psdelay_and_nrpoints = QHBoxLayout()
+        self.set_psdelay_and_nrpoints = QFormLayout()
         self.table = QTableWidget(self)
 
         self._setupGraph()
         self._setupPSDelayAndWfmNrPoints()
         self._setupTable()
-        hlay_table = QHBoxLayout()
-        hlay_table.addItem(
-            QSpacerItem(1, 20, QSzPlcy.Minimum, QSzPlcy.Expanding))
-        hlay_table.addWidget(self.table)
-        hlay_table.addItem(
-            QSpacerItem(1, 20, QSzPlcy.Minimum, QSzPlcy.Expanding))
+
+        vlay_v = QVBoxLayout()
+        self.l_rampupv = QLabel('RmpU 0 [GeV/s]', self,
+                                alignment=Qt.AlignRight)
+        self.l_rampupv.setFixedWidth(320)
+        self.l_rampdownv = QLabel('RmpD 0 [GeV/s]', self,
+                                  alignment=Qt.AlignRight)
+        self.l_rampdownv.setFixedWidth(320)
+        vlay_v.addWidget(self.l_rampupv)
+        vlay_v.addWidget(self.l_rampdownv)
 
         hlay_caution = QHBoxLayout()
         self.label_caution = QLabel('', self)
@@ -100,15 +104,17 @@ class DipoleRamp(QWidget):
         hlay_caution.addWidget(self.label_caution)
         hlay_caution.addWidget(self.pb_caution)
 
-        label = QLabel('<h4>Dipole Ramp</h4>', self)
-        label.setAlignment(Qt.AlignCenter)
+        label = QLabel('<h4>Dipole Ramp</h4>', self, alignment=Qt.AlignCenter)
         label.setFixedHeight(48)
-        vlay.addWidget(label)
-        vlay.addWidget(self.graphview)
-        vlay.addLayout(self.set_psdelay_and_nrpoints)
-        vlay.addLayout(hlay_table)
-        vlay.addLayout(hlay_caution)
-        vlay.addItem(QSpacerItem(40, 20, QSzPlcy.Minimum, QSzPlcy.Expanding))
+        glay.addWidget(label, 0, 0, 1, 2)
+        glay.addWidget(self.graphview, 1, 0, 1, 2, alignment=Qt.AlignCenter)
+        glay.addLayout(self.set_psdelay_and_nrpoints, 2, 0,
+                       alignment=Qt.AlignLeft)
+        glay.addLayout(vlay_v, 2, 1, alignment=Qt.AlignRight)
+        glay.addWidget(self.table, 3, 0, 1, 2, alignment=Qt.AlignCenter)
+        glay.addLayout(hlay_caution, 4, 0, 1, 2, alignment=Qt.AlignCenter)
+        glay.addItem(
+            QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 5, 1)
 
     def _setupGraph(self):
         self.graph = FigureCanvas(Figure())
@@ -137,6 +143,7 @@ class DipoleRamp(QWidget):
         self.sb_psdelay.setMaximum(490)
         self.sb_psdelay.setDecimals(6)
         self.sb_psdelay.setSingleStep(0.000008)
+        self.sb_psdelay.setMaximumWidth(200)
         self.sb_psdelay.editingFinished.connect(self._handleChangePSDelay)
 
         label_nrpoints = QLabel('# of points:', self,
@@ -144,18 +151,11 @@ class DipoleRamp(QWidget):
         self.sb_nrpoints = QSpinBox(self)
         self.sb_nrpoints.setMinimum(1)
         self.sb_nrpoints.setMaximum(MAX_WFMSIZE)
+        self.sb_nrpoints.setMaximumWidth(200)
         self.sb_nrpoints.editingFinished.connect(self._handleChangeNrPoints)
 
-        self.set_psdelay_and_nrpoints.addSpacerItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
-        self.set_psdelay_and_nrpoints.addWidget(label_psdelay)
-        self.set_psdelay_and_nrpoints.addWidget(self.sb_psdelay)
-        self.set_psdelay_and_nrpoints.addSpacerItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
-        self.set_psdelay_and_nrpoints.addWidget(label_nrpoints)
-        self.set_psdelay_and_nrpoints.addWidget(self.sb_nrpoints)
-        self.set_psdelay_and_nrpoints.addSpacerItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
+        self.set_psdelay_and_nrpoints.addRow(label_psdelay, self.sb_psdelay)
+        self.set_psdelay_and_nrpoints.addRow(label_nrpoints, self.sb_nrpoints)
 
     def _setupTable(self):
         self.table_map = {
@@ -460,6 +460,19 @@ class DipoleRamp(QWidget):
                     value = round(T*N/D)
                     item = self.table.item(row, column)
                     item.setData(Qt.DisplayRole, str(value))
+
+        rampupv = ((self.ramp_config.ps_ramp_rampup_stop_energy -
+                   self.ramp_config.ps_ramp_rampup_start_energy) /
+                   (self.ramp_config.ps_ramp_rampup_stop_time -
+                   self.ramp_config.ps_ramp_rampup_start_time))
+        self.l_rampupv.setText('RmpU {: .3f} [GeV/s]'.format(1000*rampupv))
+
+        rampdownv = ((self.ramp_config.ps_ramp_rampdown_stop_energy -
+                      self.ramp_config.ps_ramp_rampdown_start_energy) /
+                     (self.ramp_config.ps_ramp_rampdown_stop_time -
+                     self.ramp_config.ps_ramp_rampdown_start_time))
+        self.l_rampdownv.setText('RmpD {: .3f} [GeV/s]'.format(1000*rampdownv))
+
         self.table.cellChanged.connect(self._handleCellChanged)
 
     @pyqtSlot(ramp.BoosterRamp)
@@ -866,24 +879,35 @@ class RFRamp(QWidget):
         self._setupUi()
 
     def _setupUi(self):
-        vlay = QVBoxLayout(self)
+        glay = QGridLayout(self)
         self.graphview = QWidget()
-        self.set_rfdelay_and_rmpincintvl = QHBoxLayout()
+        self.set_rfdelay_and_rmpincintvl = QFormLayout()
         self.table = QTableWidget(self)
 
         self._setupGraph()
         self._setupRFDelayAndRmpIncIntvl()
         self._setupTable()
 
+        vlay_v = QVBoxLayout()
+        self.l_rampupv = QLabel('RmpU 0 [kV/s]', self,
+                                alignment=Qt.AlignRight)
+        self.l_rampupv.setFixedWidth(320)
+        self.l_rampdownv = QLabel('RmpD 0 [kV/s]', self,
+                                  alignment=Qt.AlignRight)
+        self.l_rampdownv.setFixedWidth(320)
+        vlay_v.addWidget(self.l_rampupv)
+        vlay_v.addWidget(self.l_rampdownv)
+
         label = QLabel('<h4>RF Ramp</h4>', self)
         label.setFixedHeight(48)
         label.setAlignment(Qt.AlignCenter)
-        vlay.addWidget(label)
-        vlay.addWidget(self.graphview)
-        vlay.addLayout(self.set_rfdelay_and_rmpincintvl)
-        vlay.addWidget(self.table)
-        vlay.addSpacerItem(
-            QSpacerItem(40, 20, QSzPlcy.Minimum, QSzPlcy.Expanding))
+        glay.addWidget(label, 0, 0, 1, 2)
+        glay.addWidget(self.graphview, 1, 0, 1, 2)
+        glay.addLayout(self.set_rfdelay_and_rmpincintvl, 2, 0)
+        glay.addLayout(vlay_v, 2, 1)
+        glay.addWidget(self.table, 3, 0, 1, 2)
+        glay.addItem(
+            QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 5, 1)
 
     def _setupGraph(self):
         self.graph = FigureCanvas(Figure())
@@ -891,6 +915,7 @@ class RFRamp(QWidget):
         self.ax = self.graph.figure.subplots()
         self.ax.grid()
         self.ax.set_xlabel('t [ms]')
+        self.ax.set_ylabel('Vgap [kV]')
         self.line1, = self.ax.plot([0], [0], '-b')
         self.line2, = self.ax.plot([0], [0], '-g')
         self.markers, = self.ax.plot([0], [0], '+r')
@@ -912,6 +937,7 @@ class RFRamp(QWidget):
         self.sb_rfdelay.setMaximum(410)
         self.sb_rfdelay.setDecimals(6)
         self.sb_rfdelay.setSingleStep(0.000008)
+        self.sb_rfdelay.setMaximumWidth(200)
         self.sb_rfdelay.editingFinished.connect(
             self._handleChangeRFDelay)
 
@@ -922,19 +948,13 @@ class RFRamp(QWidget):
         self.sb_rmpincintvl.setMaximum(28)
         self.sb_rmpincintvl.setDecimals(2)
         self.sb_rmpincintvl.setSingleStep(0.1)
+        self.sb_rmpincintvl.setMaximumWidth(200)
         self.sb_rmpincintvl.editingFinished.connect(
             self._handleChangeRmpIncIntvl)
 
-        self.set_rfdelay_and_rmpincintvl.addSpacerItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
-        self.set_rfdelay_and_rmpincintvl.addWidget(label_rfdelay)
-        self.set_rfdelay_and_rmpincintvl.addWidget(self.sb_rfdelay)
-        self.set_rfdelay_and_rmpincintvl.addSpacerItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
-        self.set_rfdelay_and_rmpincintvl.addWidget(label_rmpincintvl)
-        self.set_rfdelay_and_rmpincintvl.addWidget(self.sb_rmpincintvl)
-        self.set_rfdelay_and_rmpincintvl.addSpacerItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
+        self.set_rfdelay_and_rmpincintvl.addRow(label_rfdelay, self.sb_rfdelay)
+        self.set_rfdelay_and_rmpincintvl.addRow(label_rmpincintvl,
+                                                self.sb_rmpincintvl)
 
     def _setupTable(self):
         self.table_map = {
@@ -1217,6 +1237,17 @@ class RFRamp(QWidget):
                     value = 0  # TODO
                     item = self.table.item(row, column)
                     item.setData(Qt.DisplayRole, str(value))
+
+        rampupv = ((self.ramp_config.rf_ramp_top_voltage -
+                   self.ramp_config.rf_ramp_bottom_voltage) /
+                   self.ramp_config.rf_ramp_rampup_duration)
+        self.l_rampupv.setText('RmpU {: .3f} [kV/s]'.format(1000*rampupv))
+
+        rampdownv = ((self.ramp_config.rf_ramp_bottom_voltage -
+                      self.ramp_config.rf_ramp_top_voltage) /
+                     self.ramp_config.rf_ramp_rampdown_duration)
+        self.l_rampdownv.setText('RmpD {: .3f} [kV/s]'.format(1000*rampdownv))
+
         self.table.cellChanged.connect(self._handleCellChanged)
 
     @pyqtSlot(ramp.BoosterRamp)

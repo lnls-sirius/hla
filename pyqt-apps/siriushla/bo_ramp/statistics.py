@@ -10,7 +10,7 @@ from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
 
 
-class RampStatistics(QGroupBox):
+class Statistics(QGroupBox):
     """Widget to ramp status monitoring."""
 
     def __init__(self, parent=None, prefix='', ramp_config=None):
@@ -85,23 +85,20 @@ class RampStatistics(QGroupBox):
 
         glay = QGridLayout()
         glay.setAlignment(Qt.AlignHCenter)
-        glay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding),
-                     0, 0, 1, 2)
-        glay.addWidget(l_boocurr, 1, 0, 1, 2)
-        glay.addWidget(l_injcurr, 2, 0)
-        glay.addWidget(self.label_injcurr, 2, 1)
-        glay.addWidget(l_ejecurr, 3, 0)
-        glay.addWidget(self.label_ejecurr, 3, 1)
-        glay.addWidget(self.graph_boocurr, 4, 0, 1, 2)
-        glay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding),
-                     5, 0, 1, 2)
-        glay.addWidget(l_rampeff, 6, 0)
-        glay.addWidget(self.label_rampeff, 6, 1)
-        glay.addWidget(self.graph_rampeff, 7, 0, 1, 2)
-        glay.addWidget(self.pb_addStack, 8, 0)
-        glay.addWidget(self.pb_resetGraph, 8, 1)
-        glay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding),
-                     9, 0, 1, 2)
+        glay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 0, 0)
+        glay.addWidget(l_boocurr, 1, 1, 1, 2)
+        glay.addWidget(l_injcurr, 2, 1)
+        glay.addWidget(self.label_injcurr, 2, 2)
+        glay.addWidget(l_ejecurr, 3, 1)
+        glay.addWidget(self.label_ejecurr, 3, 2)
+        glay.addWidget(self.graph_boocurr, 4, 1, 1, 2)
+        glay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 5, 0)
+        glay.addWidget(l_rampeff, 6, 1)
+        glay.addWidget(self.label_rampeff, 6, 2)
+        glay.addWidget(self.graph_rampeff, 7, 1, 1, 2)
+        glay.addWidget(self.pb_addStack, 8, 1)
+        glay.addWidget(self.pb_resetGraph, 8, 2)
+        glay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 9, 3)
         self.setLayout(glay)
 
     def _updateRampEffGraph(self):
