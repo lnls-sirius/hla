@@ -343,24 +343,21 @@ class DeleteNormalizedConfig(SiriusDialog):
 
         self.sb_confignumber = QSpinBox(self)
         self.sb_confignumber.setMinimum(1)
-        self.sb_confignumber.setMaximum(max(self.table_map['rows'].values())+1)
+        self.sb_confignumber.setMaximum(max(self.table_map['rows'].keys())+1)
         self.sb_confignumber.setMaximumWidth(150)
         self.sb_confignumber.valueChanged.connect(self._searchConfigByIndex)
         self.bt_delete = QPushButton('Delete', self)
         self.bt_delete.setAutoDefault(False)
         self.bt_delete.setDefault(False)
         self.bt_delete.clicked.connect(self._emitDeleteConfigData)
-        for key, value in self.table_map['rows'].items():
-            if value == 0:
-                label = key
-                self.l_configname = QLabel(label, self)
-                self.l_configname.setSizePolicy(QSzPlcy.MinimumExpanding,
-                                                QSzPlcy.Preferred)
-                if label in ['Injection', 'Ejection']:
-                    self.bt_delete.setEnabled(False)
-                else:
-                    self.bt_delete.setEnabled(True)
-                break
+        label = self.table_map['rows'][0]
+        self.l_configname = QLabel(label, self)
+        self.l_configname.setSizePolicy(QSzPlcy.MinimumExpanding,
+                                        QSzPlcy.Preferred)
+        if label in ['Injection', 'Ejection']:
+            self.bt_delete.setEnabled(False)
+        else:
+            self.bt_delete.setEnabled(True)
 
         glay.addItem(
             QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum), 1, 0)
@@ -374,14 +371,12 @@ class DeleteNormalizedConfig(SiriusDialog):
 
     @Slot(int)
     def _searchConfigByIndex(self, config_idx):
-        for label, value in self.table_map['rows'].items():
-            if config_idx == (value + 1):
-                self.l_configname.setText(label)
-                if label in ['Injection', 'Ejection']:
-                    self.bt_delete.setEnabled(False)
-                else:
-                    self.bt_delete.setEnabled(True)
-                break
+        label = self.table_map['rows'][config_idx - 1]
+        self.l_configname.setText(label)
+        if label in ['Injection', 'Ejection']:
+            self.bt_delete.setEnabled(False)
+        else:
+            self.bt_delete.setEnabled(True)
 
     def _emitDeleteConfigData(self):
         self.deleteConfig.emit(self.l_configname.text())

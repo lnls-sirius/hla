@@ -302,7 +302,7 @@ class OpticsAdjust(QGroupBox):
         if not self._table_map:
             return
         config_idx = self.sb_config.value()
-        for label, value in self._table_map['rows'].items():
+        for value, label in self._table_map['rows'].items():
             if config_idx == (value + 1):
                 self.bt_edit.setText(label)
                 if label in ['Injection', 'Ejection']:
@@ -471,15 +471,18 @@ class OpticsAdjust(QGroupBox):
     def getConfigIndices(self, table_map):
         """Update table_map and settings widget."""
         self._table_map = table_map
-        self.sb_config.setMaximum(max(self._table_map['rows'].values())+1)
+        self.sb_config.setMaximum(max(self._table_map['rows'].keys())+1)
         normconfigname = self.bt_edit.text()
         if normconfigname == '':
             return
-        if normconfigname in self._table_map['rows'].keys():
-            self.sb_config.setValue(self._table_map['rows'][normconfigname]+1)
+        if normconfigname in self._table_map['rows'].values():
+            name = normconfigname
         else:
-            self.sb_config.setValue(self._table_map['rows']['Injection']+1)
-            self.bt_edit.setText('Injection')
+            name = 'Injection'
+        value = [row for row, lb in self._table_map['rows'].items()
+                 if lb == name]
+        self.sb_config.setValue(value[0]+1)
+        self.bt_edit.setText(name)
         self._handleConfigIndexChanged()
 
     @Slot(ramp.BoosterRamp)

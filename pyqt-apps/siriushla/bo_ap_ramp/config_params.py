@@ -158,19 +158,19 @@ class DipoleRamp(QWidget):
 
     def _setupTable(self):
         self.table_map = {
-            'rows': {'Start': 0,
-                     'RampUp-Start': 1,
-                     'Injection': 2,
-                     'Ejection': 3,
-                     'RampUp-Stop': 4,
-                     'Plateau-Start': 5,
-                     'RampDown-Start': 6,
-                     'RampDown-Stop': 7,
-                     'Stop': 8},
-            'columns': {'': 0,
-                        'T [ms]': 1,
-                        'Index': 2,
-                        'E [GeV]': 3}}
+            'rows': {0: 'Start',
+                     1: 'RampUp-Start',
+                     2: 'Injection',
+                     3: 'Ejection',
+                     4: 'RampUp-Stop',
+                     5: 'Plateau-Start',
+                     6: 'RampDown-Start',
+                     7: 'RampDown-Stop',
+                     8: 'Stop'},
+            'columns': {0: '',
+                        1: 'T [ms]',
+                        2: 'Index',
+                        3: 'E [GeV]'}}
         self.table.setStyleSheet(
             """
             QHeaderView::section {
@@ -184,7 +184,8 @@ class DipoleRamp(QWidget):
                 background-color: #1F64FF;
             }
             """)
-        self.table.setFixedSize(717, (self.table_map['rows']['Stop']+2)*48+2)
+        self.table.setFixedSize(
+            717, (max(self.table_map['rows'].keys())+2)*48+2)
         self.table.setRowCount(9)
         self.table.setColumnCount(4)
         self.table.setColumnWidth(0, 250)
@@ -192,9 +193,10 @@ class DipoleRamp(QWidget):
             self.table.setColumnWidth(i, 155)
         self.table.verticalHeader().hide()
         self.table.horizontalHeader().setFixedHeight(48)
-        self.table.setHorizontalHeaderLabels(self.table_map['columns'].keys())
+        self.table.setHorizontalHeaderLabels(
+            self.table_map['columns'].values())
 
-        for vlabel, row in self.table_map['rows'].items():
+        for row, vlabel in self.table_map['rows'].items():
             label_item = QTableWidgetItem(vlabel)
             t_item = QTableWidgetItem('0')
             np_item = QTableWidgetItem('0')
@@ -230,57 +232,55 @@ class DipoleRamp(QWidget):
         try:
             new_value = float(self.table.item(row, column).data(
                 Qt.DisplayRole))
-            if row == self.table_map['rows']['Start']:
+            if self.table_map['rows'][row] == 'Start':
                 old_value = self.ramp_config.ps_ramp_start_energy
                 self.ramp_config.ps_ramp_start_energy = new_value
 
-            elif row == self.table_map['rows']['RampUp-Start']:
-                if column == self.table_map['columns']['T [ms]']:
+            elif self.table_map['rows'][row] == 'RampUp-Start':
+                if self.table_map['columns'][column] == 'T [ms]':
                     old_value = self.ramp_config.ps_ramp_rampup_start_time
                     self.ramp_config.ps_ramp_rampup_start_time = new_value
-                elif column == self.table_map['columns']['E [GeV]']:
+                elif self.table_map['columns'][column] == 'E [GeV]':
                     old_value = self.ramp_config.ps_ramp_rampup_start_energy
                     self.ramp_config.ps_ramp_rampup_start_energy = new_value
 
-            elif row == self.table_map['rows']['Injection']:
-                if column == self.table_map['columns']['T [ms]']:
-                    old_value = self.ramp_config.ti_params_injection_time
-                    self.ramp_config.ti_params_injection_time = new_value
+            elif self.table_map['rows'][row] == 'Injection':
+                old_value = self.ramp_config.ti_params_injection_time
+                self.ramp_config.ti_params_injection_time = new_value
 
-            elif row == self.table_map['rows']['Ejection']:
-                if column == self.table_map['columns']['T [ms]']:
-                    old_value = self.ramp_config.ti_params_ejection_time
-                    self.ramp_config.ti_params_ejection_time = new_value
+            elif self.table_map['rows'][row] == 'Ejection':
+                old_value = self.ramp_config.ti_params_ejection_time
+                self.ramp_config.ti_params_ejection_time = new_value
 
-            elif row == self.table_map['rows']['RampUp-Stop']:
-                if column == self.table_map['columns']['T [ms]']:
+            elif self.table_map['rows'][row] == 'RampUp-Stop':
+                if self.table_map['columns'][column] == 'T [ms]':
                     old_value = self.ramp_config.ps_ramp_rampup_stop_time
                     self.ramp_config.ps_ramp_rampup_stop_time = new_value
-                elif column == self.table_map['columns']['E [GeV]']:
+                elif self.table_map['columns'][column] == 'E [GeV]':
                     old_value = self.ramp_config.ps_ramp_rampup_stop_energy
                     self.ramp_config.ps_ramp_rampup_stop_energy = new_value
 
-            elif row == self.table_map['rows']['Plateau-Start']:
+            elif self.table_map['rows'][row] == 'Plateau-Start':
                 old_value = self.ramp_config.ps_ramp_plateau_energy
                 self.ramp_config.ps_ramp_plateau_energy = new_value
 
-            elif row == self.table_map['rows']['RampDown-Start']:
-                if column == self.table_map['columns']['T [ms]']:
+            elif self.table_map['rows'][row] == 'RampDown-Start':
+                if self.table_map['columns'][column] == 'T [ms]':
                     old_value = self.ramp_config.ps_ramp_rampdown_start_time
                     self.ramp_config.ps_ramp_rampdown_start_time = new_value
-                elif column == self.table_map['columns']['E [GeV]']:
+                elif self.table_map['columns'][column] == 'E [GeV]':
                     old_value = self.ramp_config.ps_ramp_rampdown_start_energy
                     self.ramp_config.ps_ramp_rampdown_start_energy = new_value
 
-            elif row == self.table_map['rows']['RampDown-Stop']:
-                if column == self.table_map['columns']['T [ms]']:
+            elif self.table_map['rows'][row] == 'RampDown-Stop':
+                if self.table_map['columns'][column] == 'T [ms]':
                     old_value = self.ramp_config.ps_ramp_rampdown_stop_time
                     self.ramp_config.ps_ramp_rampdown_stop_time = new_value
-                elif column == self.table_map['columns']['E [GeV]']:
+                elif self.table_map['columns'][column] == 'E [GeV]':
                     old_value = self.ramp_config.ps_ramp_rampdown_stop_energy
                     self.ramp_config.ps_ramp_rampdown_stop_energy = new_value
 
-            elif row == self.table_map['rows']['Stop']:
+            elif self.table_map['rows'][row] == 'Stop':
                 old_value = self.ramp_config.ps_ramp_duration
                 self.ramp_config.ps_ramp_duration = new_value
 
@@ -415,9 +415,9 @@ class DipoleRamp(QWidget):
     def updateTable(self):
         """Update and rebuild table when ramp_config is loaded."""
         self.table.cellChanged.disconnect(self._handleCellChanged)
-        for label, row in self.table_map['rows'].items():
-            t_item = self.table.item(row, self.table_map['columns']['T [ms]'])
-            e_item = self.table.item(row, self.table_map['columns']['E [GeV]'])
+        for row, label in self.table_map['rows'].items():
+            t_item = self.table.item(row, 1)  # time column
+            e_item = self.table.item(row, 3)  # energy column
             if label == 'Start':
                 time = 0.0
                 energy = self.ramp_config.ps_ramp_start_energy
@@ -448,17 +448,13 @@ class DipoleRamp(QWidget):
             t_item.setData(Qt.DisplayRole, str(time))
             e_item.setData(Qt.DisplayRole, str(energy))
 
-        for row in self.table_map['rows'].values():
-            for label, column in self.table_map['columns'].items():
-                if label == 'Index':
-                    D = self.ramp_config.ps_ramp_duration
-                    N = self.ramp_config.ps_ramp_wfm_nrpoints
-                    T = float(self.table.item(
-                        row, self.table_map['columns']['T [ms]']).data(
-                        Qt.DisplayRole))
-                    value = round(T*N/D)
-                    item = self.table.item(row, column)
-                    item.setData(Qt.DisplayRole, str(value))
+        for row in self.table_map['rows'].keys():
+            D = self.ramp_config.ps_ramp_duration
+            N = self.ramp_config.ps_ramp_wfm_nrpoints
+            T = float(self.table.item(row, 1).data(Qt.DisplayRole))
+            value = round(T*N/D)
+            item = self.table.item(row, 2)  # index column
+            item.setData(Qt.DisplayRole, str(value))
 
         rampupv = ((self.ramp_config.ps_ramp_rampup_stop_energy -
                    self.ramp_config.ps_ramp_rampup_start_energy) /
@@ -568,16 +564,16 @@ class MultipolesRamp(QWidget):
 
     def _setupTable(self):
         self.table_map = {
-            'rows': {'Injection': 0,
-                     'Ejection': self.normalized_configs_count+1},
-            'columns': {'': 0,
-                        'T [ms]': 1,
-                        'Index': 2,
-                        'E [GeV]': 3}}
+            'rows': {0: 'Injection',
+                     self.normalized_configs_count+1: 'Ejection'},
+            'columns': {0: '',
+                        1: 'T [ms]',
+                        2: 'Index',
+                        3: 'E [GeV]'}}
         idx = 1
         normalized_config_rows = list()
         for config in self.normalized_configs:
-            self.table_map['rows'][config[1]] = idx
+            self.table_map['rows'][idx] = config[1]
             normalized_config_rows.append(idx)
             idx += 1
 
@@ -602,11 +598,12 @@ class MultipolesRamp(QWidget):
         self.table.setRowCount(2+self.normalized_configs_count)
         self.table.setColumnCount(4)
         self.table.setColumnWidth(0, 250)
-        for i in range(1, len(self.table_map['columns'].keys())):
+        for i in range(1, len(self.table_map['columns'].values())):
             self.table.setColumnWidth(i, 155)
-        self.table.setHorizontalHeaderLabels(self.table_map['columns'].keys())
+        self.table.setHorizontalHeaderLabels(
+            self.table_map['columns'].values())
 
-        for vlabel, row in self.table_map['rows'].items():
+        for row, vlabel in self.table_map['rows'].items():
             label_item = QTableWidgetItem(vlabel)
             t_item = _CustomTableWidgetItem('0')
             np_item = QTableWidgetItem('0')
@@ -644,17 +641,15 @@ class MultipolesRamp(QWidget):
     def _sortTable(self):
         self.table.sortByColumn(1, Qt.AscendingOrder)
         for row in range(self.table.rowCount()):
-            self.table_map['rows'][self.table.item(row, 0).text()] = row
+            self.table_map['rows'][row] = self.table.item(row, 0).text()
         self.configsIndexChangedSignal.emit(self.table_map)
 
     def _handleCellChanged(self, row, column):
         try:
             config_changed_name = self.table.item(row, 0).data(
                 Qt.DisplayRole)
-            for t, n in self.ramp_config.ps_normalized_configs:
-                if n == config_changed_name:
-                    old_value = t
-                    break
+            old_value = [t for t, n in self.normalized_configs
+                         if n == config_changed_name]
             new_value = float(self.table.item(row, column).data(
                 Qt.DisplayRole))
             self.ramp_config.ps_normalized_configs_change_time(
@@ -670,7 +665,7 @@ class MultipolesRamp(QWidget):
             if _flag_stack_next_command:
                 _flag_stacking = True
                 command = _CommandChangeTableCell(
-                    self.table, row, column, old_value, new_value,
+                    self.table, row, column, old_value[0], new_value,
                     'set multipole table item at row {0}, column {1}'.format(
                         row, column))
                 self._undo_stack.push(command)
@@ -807,17 +802,17 @@ class MultipolesRamp(QWidget):
         """Update and rebuild table."""
         if self.ramp_config is None:
             return
-        self.table.cellChanged.disconnect(self._handleCellChanged)
-        for label, row in self.table_map['rows'].items():
-            label_item = self.table.item(row, self.table_map['columns'][''])
-            t_item = self.table.item(row, self.table_map['columns']['T [ms]'])
-            e_item = self.table.item(row, self.table_map['columns']['E [GeV]'])
 
-            config_labels = list()
-            config_times = list()
-            for config in self.ramp_config.ps_normalized_configs:
-                config_labels.append(config[1])
-                config_times.append(config[0])
+        self.table.cellChanged.disconnect(self._handleCellChanged)
+
+        config_dict = dict()
+        for config in self.normalized_configs:
+            config_dict[config[0]] = config[1]
+
+        for row, label in self.table_map['rows'].items():
+            label_item = self.table.item(row, 0)  # name column
+            t_item = self.table.item(row, 1)  # time column
+            e_item = self.table.item(row, 3)  # energy column
 
             if label == 'Injection':
                 time = self.ramp_config.ti_params_injection_time
@@ -825,25 +820,24 @@ class MultipolesRamp(QWidget):
             elif label == 'Ejection':
                 time = self.ramp_config.ti_params_ejection_time
                 energy = str(self.ramp_config.ps_waveform_interp_energy(time))
-            elif label in config_labels:
-                idx = config_labels.index(label)
+            elif label in config_dict.values():
                 label_item.setData(Qt.DisplayRole, str(label))
-                time = str(config_times[idx])
-                energy = str(self.ramp_config.ps_waveform_interp_energy(
-                    config_times[idx]))
+                time = [t for t, n in config_dict.items() if n == label]
+                time = time[0]
+                energy = self.ramp_config.ps_waveform_interp_energy(time)
+                del config_dict[time]
             t_item.setData(Qt.DisplayRole, str(time))
             e_item.setData(Qt.DisplayRole, str(energy))
 
-        for row in self.table_map['rows'].values():
+        for row in self.table_map['rows'].keys():
             D = self.ramp_config.ps_ramp_duration
             N = self.ramp_config.ps_ramp_wfm_nrpoints
-            T = float(self.table.item(
-                row, self.table_map['columns']['T [ms]']).data(
-                Qt.DisplayRole))
+            T = float(self.table.item(row, 1).data(Qt.DisplayRole))
             value = round(T*N/D)
-            item = self.table.item(row, self.table_map['columns']['Index'])
+            item = self.table.item(row, 2)  # index column
             item.setData(Qt.DisplayRole, str(value))
         self._sortTable()
+
         self.table.cellChanged.connect(self._handleCellChanged)
 
     @Slot(ramp.BoosterRamp)
@@ -851,6 +845,7 @@ class MultipolesRamp(QWidget):
         """Update all widgets in loading BoosterRamp config."""
         self.ramp_config = ramp_config
         self._getNormalizedConfigs()
+        print(self.normalized_configs)
         self.table.cellChanged.disconnect(self._handleCellChanged)
         self._setupTable()
         self.updateTable()
@@ -957,17 +952,17 @@ class RFRamp(QWidget):
 
     def _setupTable(self):
         self.table_map = {
-            'rows': {'Start': 0,
-                     'RampUp-Start': 1,
-                     'RampUp-Stop': 2,
-                     'RampDown-Start': 3,
-                     'RampDown-Stop': 4},
-            'columns': {'': 0,
-                        'T [ms]': 1,
-                        '|Vgap| [kV]': 2,
-                        'ㄥVgap [°]': 3,
-                        'E [GeV]': 4,
-                        'Φs [°]': 5}}
+            'rows': {0: 'Start',
+                     1: 'RampUp-Start',
+                     2: 'RampUp-Stop',
+                     3: 'RampDown-Start',
+                     4: 'RampDown-Stop'},
+            'columns': {0: '',
+                        1: 'T [ms]',
+                        2: '|Vgap| [kV]',
+                        3: 'ㄥVgap [°]',
+                        4: 'E [GeV]',
+                        5: 'Φs [°]'}}
         self.table.setStyleSheet(
             """
             QHeaderView::section {
@@ -982,17 +977,18 @@ class RFRamp(QWidget):
             }
             """)
         self.table.setFixedSize(
-            1027, (self.table_map['rows']['RampDown-Stop']+2)*48+2)
+            1027, (max(self.table_map['rows'].keys())+2)*48+2)
         self.table.setRowCount(5)
         self.table.setColumnCount(6)
         self.table.setColumnWidth(0, 250)
-        for i in range(1, len(self.table_map['columns'].keys())):
+        for i in range(1, len(self.table_map['columns'].values())):
             self.table.setColumnWidth(i, 155)
         self.table.verticalHeader().hide()
         self.table.horizontalHeader().setFixedHeight(48)
-        self.table.setHorizontalHeaderLabels(self.table_map['columns'].keys())
+        self.table.setHorizontalHeaderLabels(
+            self.table_map['columns'].values())
 
-        for vlabel, row in self.table_map['rows'].items():
+        for row, vlabel in self.table_map['rows'].items():
             label_item = QTableWidgetItem(vlabel)
             t_item = QTableWidgetItem('0')
             Ph_item = QTableWidgetItem('0')
@@ -1035,34 +1031,34 @@ class RFRamp(QWidget):
         try:
             new_value = float(self.table.item(row, column).data(
                 Qt.DisplayRole))
-            if row == self.table_map['rows']['Start']:
-                if column == self.table_map['columns']['|Vgap| [kV]']:
+            if self.table_map['rows'][row] == 'Start':
+                if self.table_map['columns'][column] == '|Vgap| [kV]':
                     old_value = self.ramp_config.rf_ramp_bottom_voltage
                     self.ramp_config.rf_ramp_bottom_voltage = new_value
-                elif column == self.table_map['columns']['ㄥVgap [°]']:
+                elif self.table_map['columns'][column] == 'ㄥVgap [°]':
                     old_value = self.ramp_config.rf_ramp_bottom_phase
                     self.ramp_config.rf_ramp_bottom_phase = new_value
 
-            elif row == self.table_map['rows']['RampUp-Start']:
+            elif self.table_map['rows'][row] == 'RampUp-Start':
                 old_value = self.ramp_config.rf_ramp_rampup_start_time
                 self.ramp_config.rf_ramp_rampup_start_time = new_value
 
-            elif row == self.table_map['rows']['RampUp-Stop']:
-                if column == self.table_map['columns']['T [ms]']:
+            elif self.table_map['rows'][row] == 'RampUp-Stop':
+                if self.table_map['columns'][column] == 'T [ms]':
                     old_value = self.ramp_config.rf_ramp_rampup_stop_time
                     self.ramp_config.rf_ramp_rampup_stop_time = new_value
-                elif column == self.table_map['columns']['|Vgap| [kV]']:
+                elif self.table_map['columns'][column] == '|Vgap| [kV]':
                     old_value = self.ramp_config.rf_ramp_top_voltage
                     self.ramp_config.rf_ramp_top_voltage = new_value
-                elif column == self.table_map['columns']['ㄥVgap [°]']:
+                elif self.table_map['columns'][column] == 'ㄥVgap [°]':
                     old_value = self.ramp_config.rf_ramp_top_phase
                     self.ramp_config.rf_ramp_top_phase = new_value
 
-            elif row == self.table_map['rows']['RampDown-Start']:
+            elif self.table_map['rows'][row] == 'RampDown-Start':
                 old_value = self.ramp_config.rf_ramp_rampdown_start_time
                 self.ramp_config.rf_ramp_rampdown_start_time = new_value
 
-            elif row == self.table_map['rows']['RampDown-Stop']:
+            elif self.table_map['rows'][row] == 'RampDown-Stop':
                 old_value = self.ramp_config.rf_ramp_rampdown_stop_time
                 self.ramp_config.rf_ramp_rampdown_stop_time = new_value
 
@@ -1193,12 +1189,10 @@ class RFRamp(QWidget):
     def updateTable(self):
         """Update and rebuild table."""
         self.table.cellChanged.disconnect(self._handleCellChanged)
-        for label, row in self.table_map['rows'].items():
-            t_item = self.table.item(row, self.table_map['columns']['T [ms]'])
-            Vgap_item = self.table.item(
-                row, self.table_map['columns']['|Vgap| [kV]'])
-            Ph_item = self.table.item(
-                row, self.table_map['columns']['ㄥVgap [°]'])
+        for row, label in self.table_map['rows'].items():
+            t_item = self.table.item(row, 1)  # time column
+            Vgap_item = self.table.item(row, 2)  # voltage amp column
+            Ph_item = self.table.item(row, 3)  # voltage phase column
             if label == 'Start':
                 time = self.ramp_config.ti_params_rf_ramp_delay
                 vgap = self.ramp_config.rf_ramp_bottom_voltage
@@ -1223,11 +1217,10 @@ class RFRamp(QWidget):
             Vgap_item.setData(Qt.DisplayRole, str(vgap))
             Ph_item.setData(Qt.DisplayRole, str(ph))
 
-        for label, column in self.table_map['columns'].items():
-            for row in self.table_map['rows'].values():
+        for column, label in self.table_map['columns'].items():
+            for row in self.table_map['rows'].keys():
                 if label == 'E [GeV]':
-                    t_item = self.table.item(
-                        row, self.table_map['columns']['T [ms]'])
+                    t_item = self.table.item(row, 1)
                     time = float(t_item.data(Qt.DisplayRole))
                     energy = self.ramp_config.ps_waveform_interp_energy(time)
                     e_item = self.table.item(row, column)
