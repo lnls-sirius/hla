@@ -8,7 +8,7 @@ from pydm.PyQt.QtGui import QComboBox, QLabel
 
 from siriushla.sirius_application import SiriusApplication
 from siriushla.as_ap_configuration import ConfigurationWindow
-from siriushla.as_ps_cycle.magnets_tree import PVNameTree
+from siriushla.as_ps_cycle.pvnames_tree import PVNameTree
 
 fake_url = 'FakeURL'
 
