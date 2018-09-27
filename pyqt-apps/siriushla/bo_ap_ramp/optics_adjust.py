@@ -127,7 +127,7 @@ class OpticsAdjust(QGroupBox):
         self.sb_deltaTuneY.setLocale(self._locale)
         self.sb_deltaTuneY.editingFinished.connect(self._calculate_deltaKL)
 
-        label_KL = QLabel('<h4>ΔKL</h4>', self)
+        label_KL = QLabel('<h4>ΔKL [1/m]</h4>', self)
         label_KL.setAlignment(Qt.AlignCenter)
         label_KL.setFixedHeight(48)
 
@@ -201,7 +201,7 @@ class OpticsAdjust(QGroupBox):
         self.sb_deltaChromY.setLocale(self._locale)
         self.sb_deltaChromY.editingFinished.connect(self._calculate_deltaSL)
 
-        label_SL = QLabel('<h4>ΔSL</h4>', self)
+        label_SL = QLabel('<h4>ΔSL [1/m<sup>2</sup>]</h4>', self)
         label_SL.setAlignment(Qt.AlignCenter)
         label_SL.setFixedHeight(48)
 
@@ -401,8 +401,8 @@ class OpticsAdjust(QGroupBox):
 
         self._deltaKL = self._tunecorr.calculate_deltaKL([dtunex, dtuney])
 
-        self.l_deltaKLQF.setText('{:6f}'.format(self._deltaKL[0]))
-        self.l_deltaKLQD.setText('{:6f}'.format(self._deltaKL[1]))
+        self.l_deltaKLQF.setText('{: 6f}'.format(self._deltaKL[0]))
+        self.l_deltaKLQD.setText('{: 6f}'.format(self._deltaKL[1]))
 
     def _apply_deltaKL(self):
         if self.norm_config is None:
@@ -421,8 +421,8 @@ class OpticsAdjust(QGroupBox):
 
         self._deltaSL = self._chromcorr.calculate_deltaSL([dchromx, dchromy])
 
-        self.l_deltaSLSF.setText('{:6f}'.format(self._deltaSL[0]))
-        self.l_deltaSLSD.setText('{:6f}'.format(self._deltaSL[1]))
+        self.l_deltaSLSF.setText('{: 6f}'.format(self._deltaSL[0]))
+        self.l_deltaSLSD.setText('{: 6f}'.format(self._deltaSL[1]))
 
     def _apply_deltaSL(self):
         if self.norm_config is None:
@@ -434,15 +434,15 @@ class OpticsAdjust(QGroupBox):
 
     def _load_measured_orbit(self):
         # TODO: include orbit correction
-        print('Load Measured Orbit')
+        pass
 
     def _correctH(self):
         # TODO: include orbit correction
-        print('Correct Horizontal Orbit')
+        pass
 
     def _correctV(self):
         # TODO: include orbit correction
-        print('Correct Vertical Orbit')
+        pass
 
     def _apply_orbitcorrection(self):
         # TODO: include orbit correction
@@ -453,15 +453,15 @@ class OpticsAdjust(QGroupBox):
         self.sb_deltaTuneX.setValue(0)
         self.sb_deltaTuneY.setValue(0)
         self._deltaKL = [0.0, 0.0]
-        self.l_deltaKLQF.setText('{:6f}'.format(self._deltaKL[0]))
-        self.l_deltaKLQD.setText('{:6f}'.format(self._deltaKL[1]))
+        self.l_deltaKLQF.setText('{: 6f}'.format(self._deltaKL[0]))
+        self.l_deltaKLQD.setText('{: 6f}'.format(self._deltaKL[1]))
 
     def _resetChromChanges(self):
         self.sb_deltaChromX.setValue(0)
         self.sb_deltaChromY.setValue(0)
         self._deltaSL = [0.0, 0.0]
-        self.l_deltaSLSF.setText('{:6f}'.format(self._deltaSL[0]))
-        self.l_deltaSLSD.setText('{:6f}'.format(self._deltaSL[1]))
+        self.l_deltaSLSF.setText('{: 6f}'.format(self._deltaSL[0]))
+        self.l_deltaSLSD.setText('{: 6f}'.format(self._deltaSL[1]))
 
     def _resetOrbitChanges(self):
         pass

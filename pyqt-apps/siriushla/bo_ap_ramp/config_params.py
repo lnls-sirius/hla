@@ -695,12 +695,14 @@ class MultipolesRamp(QWidget):
             self.updateMultipoleRampSignal.emit()
 
     def _showDeleteNormConfigPopup(self):
-        if self.ramp_config is not None:
-            self._deleteConfigPopup = _DeleteNormalizedConfig(self,
-                                                              self.table_map)
-            self._deleteConfigPopup.deleteConfig.connect(
-                self._handleDeleteNormConfig)
-            self._deleteConfigPopup.open()
+        if self.ramp_config is None:
+            return
+        selected_item = self.table.selectedItems()
+        self._deleteConfigPopup = _DeleteNormalizedConfig(
+            self, self.table_map, selected_item)
+        self._deleteConfigPopup.deleteConfig.connect(
+            self._handleDeleteNormConfig)
+        self._deleteConfigPopup.open()
 
     @Slot(str)
     def _handleDeleteNormConfig(self, config):
@@ -846,7 +848,6 @@ class MultipolesRamp(QWidget):
         """Update all widgets in loading BoosterRamp config."""
         self.ramp_config = ramp_config
         self._getNormalizedConfigs()
-        print(self.normalized_configs)
         self.table.cellChanged.disconnect(self._handleCellChanged)
         self._setupTable()
         self.updateTable()

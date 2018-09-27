@@ -327,12 +327,13 @@ class DeleteNormalizedConfig(SiriusDialog):
 
     deleteConfig = Signal(str)
 
-    def __init__(self, parent, table_map):
+    def __init__(self, parent, table_map, selected_item):
         """Initialize object."""
         super().__init__(parent)
         self.normalized_config = ramp.BoosterNormalized()
         self.setWindowTitle('Delete Normalized Configuration')
         self.table_map = table_map
+        self.selected_item = selected_item
         self._setupUi()
 
     def _setupUi(self):
@@ -350,14 +351,15 @@ class DeleteNormalizedConfig(SiriusDialog):
         self.bt_delete.setAutoDefault(False)
         self.bt_delete.setDefault(False)
         self.bt_delete.clicked.connect(self._emitDeleteConfigData)
-        label = self.table_map['rows'][0]
-        self.l_configname = QLabel(label, self)
+        self.l_configname = QLabel('', self)
         self.l_configname.setSizePolicy(QSzPlcy.MinimumExpanding,
                                         QSzPlcy.Preferred)
-        if label in ['Injection', 'Ejection']:
-            self.bt_delete.setEnabled(False)
+        if self.selected_item:
+            row = self.selected_item[0].row()
         else:
-            self.bt_delete.setEnabled(True)
+            row = 0
+        self.sb_confignumber.setValue(row+1)
+        self._searchConfigByIndex(row+1)
 
         glay.addItem(
             QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum), 1, 0)
