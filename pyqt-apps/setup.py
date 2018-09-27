@@ -1,5 +1,7 @@
 #!/usr/bin/env python-sirius
 
+"""HLA Setup."""
+
 from setuptools import setup
 
 with open('VERSION', 'r') as _f:
@@ -23,11 +25,12 @@ setup(
     scripts=[
         'scripts/sirius-hla-as-ap-config-manager.py',
         'scripts/sirius-hla-as-ma-launcher.py',
+        'scripts/sirius-hla-as-ps-cycle.py',
         'scripts/sirius-hla-as-ps-launcher.py',
         'scripts/sirius-hla-as-ti-control.py',
-        'scripts/sirius-hla-as-ps-cycle.py',
         'scripts/sirius-hla-bo-ap-currlt.py',
         'scripts/sirius-hla-bo-ap-chromcorr.py',
+        'scripts/sirius-hla-bo-ap-ramp.py',
         'scripts/sirius-hla-bo-ap-tunecorr.py',
         'scripts/sirius-hla-bo-config-manager.py',
         'scripts/sirius-hla-bo-ma-control.py',
