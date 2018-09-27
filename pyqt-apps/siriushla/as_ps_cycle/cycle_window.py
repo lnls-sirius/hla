@@ -9,8 +9,9 @@ from qtpy.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, \
 
 from siriuspy.envars import vaca_prefix as VACA_PREFIX
 from siriushla.as_ps_cycle.cycle_status_list import CycleStatusList
-from siriushla.as_ps_cycle.magnets_tree import MagnetTree
+from siriushla.as_ps_cycle.pvnames_tree import PVNameTree
 from siriushla.as_ps_cycle.progress_dialog import ProgressDialog
+from siriuspy.search.ma_search import MASearch
 
 
 class CycleWindow(QMainWindow):
@@ -37,7 +38,9 @@ class CycleWindow(QMainWindow):
         self.prepare_button.setObjectName('PrepareButton')
         self.exit_button = QPushButton("Close", self)
         self.exit_button.setObjectName('ExitButton')
-        self.magnets_tree = MagnetTree(self)
+        self.magnets_tree = PVNameTree(MASearch.get_manames({'dis': 'MA'}),
+                                       ('sec', '_device_type'),
+                                       self)
 
         central_widget.layout.addWidget(self.magnets_tree)
         central_widget.layout.addWidget(self.prepare_button)

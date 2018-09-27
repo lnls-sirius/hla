@@ -7,12 +7,13 @@ from qtpy.QtCore import Qt, Signal, QThread
 from qtpy.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QMainWindow, \
     QPushButton, QListWidget, QLabel, QApplication
 
-from siriushla.as_ps_cycle.magnets_tree import MagnetTree
+from siriushla.as_ps_cycle.pvnames_tree import PVNameTree
 from siriushla.as_ps_cycle.progress_dialog import ProgressDialog
 from siriushla.sirius_application import SiriusApplication
 from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
 from siriuspy.magnet.data import MAData
 from siriuspy.envars import vaca_prefix as VACA_PREFIX
+from siriuspy.search.ma_search import MASearch
 
 
 class PSTestWindow(QMainWindow):
@@ -27,7 +28,9 @@ class PSTestWindow(QMainWindow):
     def _setup_ui(self):
         # Magnet tree selection widgets
         magnets_layout = QVBoxLayout()
-        self.tree = MagnetTree(self)
+        self.tree = PVNameTree(MASearch.get_manames({'dis': 'MA'}),
+                               ('sec', '_device_type'),
+                               self)
         self.test_button = QPushButton('Test', self)
         self.test_button.setObjectName('TestButton')
         self.exit_button = QPushButton("Close", self)
