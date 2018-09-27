@@ -3,8 +3,8 @@ import re
 from collections import namedtuple
 import threading
 
-from pydm.PyQt.QtCore import Qt, QSize, pyqtSignal, QThread
-from pydm.PyQt.QtGui import QTreeWidget, QTreeWidgetItem, QProgressDialog
+from qtpy.QtCore import Qt, QSize, Signal, QThread
+from qtpy.QtWidgets import QTreeWidget, QTreeWidgetItem, QProgressDialog
 
 from siriuspy.search.ma_search import MASearch
 from siriuspy.namesys import SiriusPVName
@@ -15,7 +15,7 @@ class PVNameTree(QTreeWidget):
 
     class BuildTree(QThread):
 
-        itemInserted = pyqtSignal()
+        itemInserted = Signal()
 
         def __init__(self, obj):
             super().__init__(obj)
