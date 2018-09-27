@@ -128,7 +128,7 @@ class PVNameTree(QTreeWidget):
         # self.itemInserted.emit()
 
     def _setup_ui(self):
-        # self._add_items()
+        self._add_items()
         self.expanded.connect(
             lambda idx: self.resizeColumnToContents(idx.column()))
 
