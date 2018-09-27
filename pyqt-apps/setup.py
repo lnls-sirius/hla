@@ -47,5 +47,6 @@ setup(
         'scripts/sirius-hla-ts-ap-posang.py',
         'scripts/sirius-hla-ts-ma-control.py',
         ],
+    test_suite='tests',
     zip_safe=False
     )
