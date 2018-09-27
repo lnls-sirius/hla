@@ -4,9 +4,9 @@ import logging
 from math import isclose
 
 import epics
-from pydm.PyQt.QtCore import QThread, pyqtSignal, pyqtSlot
-from pydm.PyQt.QtGui import (QComboBox, QDialog, QLabel, QListWidget,
-                             QPushButton, QVBoxLayout, QWidget)
+from qtpy.QtCore import QThread, Signal, Slot
+from qtpy.QtWidgets import (QComboBox, QDialog, QLabel, QListWidget,
+                            QPushButton, QVBoxLayout, QWidget)
 
 from siriushla.as_ps_cycle.pvnames_tree import PVNameTree
 from siriushla.as_ps_cycle.progress_dialog import ProgressDialog
@@ -55,8 +55,8 @@ class EpicsWrapper:
 
 class EpicsTask(QThread):
 
-    currentItem = pyqtSignal(str)
-    itemDone = pyqtSignal()
+    currentItem = Signal(str)
+    itemDone = Signal()
 
     def __init__(self, pv_val_list, cls_epics, parent=None):
         super().__init__(parent)
@@ -95,7 +95,7 @@ class EpicsSetter(EpicsTask):
 
 class EpicsChecker(EpicsTask):
 
-    itemChecked = pyqtSignal(str, bool)
+    itemChecked = Signal(str, bool)
 
     def run(self):
         if self._quit_task:
@@ -199,7 +199,7 @@ class ConfigurationWindow(SiriusMainWindow):
         self._config_cb.currentIndexChanged.connect(self._fill_config)
         self._set_btn.clicked.connect(self._set)
 
-    @pyqtSlot(str)
+    @Slot(str)
     def _fill_config_names(self, config_type):
         ret = self._db.get_names_by_type(config_type)
         self._config_cb.clear()
@@ -214,7 +214,7 @@ class ConfigurationWindow(SiriusMainWindow):
             self._config_cb.setEnabled(True)
             self._config_cb.addItem(self._conn_fail_msg)
 
-    @pyqtSlot(int)
+    @Slot(int)
     def _fill_config(self, config_idx):
         if config_idx <= 0:
             return
@@ -238,7 +238,7 @@ class ConfigurationWindow(SiriusMainWindow):
             self._tree_msg.setText(
                 'Failed to retrieve configuration: error {}'.format(code))
 
-    @pyqtSlot()
+    @Slot()
     def _set(self):
         # Get selected PVs
         sel_pvs = self._tree.checked_items()

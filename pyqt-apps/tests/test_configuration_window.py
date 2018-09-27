@@ -4,7 +4,7 @@ from unittest import mock
 import time
 from random import random
 
-from pydm.PyQt.QtGui import QComboBox, QLabel
+from qtpy.QtWidgets import QComboBox, QLabel
 
 from siriushla.sirius_application import SiriusApplication
 from siriushla.as_ap_configuration import ConfigurationWindow
