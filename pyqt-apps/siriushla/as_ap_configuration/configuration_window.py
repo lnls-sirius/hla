@@ -88,7 +88,7 @@ class EpicsTask(QThread):
 
     def exit_task(self):
         """Set flag to exit thread."""
-        return self._quit_task
+        self._quit_task = True
 
 
 class EpicsSetter(EpicsTask):
@@ -280,6 +280,8 @@ class ConfigurationWindow(SiriusMainWindow):
         self.logger.info(
             'Setting {} configuration'.format(self._current_config['name']))
         dlg = ProgressDialog(labels, tasks, self)
+        dlg.rejected.connect(set_task.exit_task)
+        dlg.rejected.connect(check_task.exit_task)
         ret = dlg.exec_()
         if ret == dlg.Rejected:
             return
