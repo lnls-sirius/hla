@@ -29,7 +29,7 @@ class PSTestWindow(QMainWindow):
         # Magnet tree selection widgets
         magnets_layout = QVBoxLayout()
         self.tree = PVNameTree(MASearch.get_manames({'dis': 'MA'}),
-                               ('sec', '_device_type'),
+                               ('sec', 'mag_group'),
                                self)
         self.test_button = QPushButton('Test', self)
         self.test_button.setObjectName('TestButton')

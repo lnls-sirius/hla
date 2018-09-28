@@ -39,7 +39,7 @@ class CycleWindow(QMainWindow):
         self.exit_button = QPushButton("Close", self)
         self.exit_button.setObjectName('ExitButton')
         self.magnets_tree = PVNameTree(MASearch.get_manames({'dis': 'MA'}),
-                                       ('sec', '_device_type'),
+                                       ('sec', 'mag_group'),
                                        self)
 
         central_widget.layout.addWidget(self.magnets_tree)

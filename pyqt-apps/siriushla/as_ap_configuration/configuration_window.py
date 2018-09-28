@@ -193,7 +193,7 @@ class ConfigurationWindow(SiriusMainWindow):
         self._tree_msg = QLabel(self)
         self._tree_msg.setObjectName('tree_msg')
         self._tree = PVNameTree(
-            tree_levels=('sec', '_device_type', 'device_name'))
+            tree_levels=('sec', 'mag_group', 'device_name'))
         self._tree.setColumnCount(2)
         self._tree.setObjectName('tree')
 
