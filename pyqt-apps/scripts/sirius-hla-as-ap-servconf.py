@@ -1,3 +1,5 @@
+#!/usr/bin/env python-sirius
+
 """Lauch configuration database manager."""
 import sys
 
