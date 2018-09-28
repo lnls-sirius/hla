@@ -6,7 +6,7 @@ import sys
 from siriuspy.servconf.conf_service import ConfigService
 from siriushla import util
 from siriushla.sirius_application import SiriusApplication
-from siriushla.as_config_manager.config_server import \
+from siriushla.as_ap_servconf.config_server import \
     ConfigurationManager
 
 app = SiriusApplication()

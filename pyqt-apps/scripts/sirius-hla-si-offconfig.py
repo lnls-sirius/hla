@@ -4,7 +4,7 @@
 
 import sys
 from pydm import PyDMApplication
-from siriushla.as_config_manager import ConfigManagerWindow
+from siriushla.as_ap_servconf import ConfigManagerWindow
 from siriushla import util
 
 
