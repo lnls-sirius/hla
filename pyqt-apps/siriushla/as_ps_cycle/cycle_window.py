@@ -9,7 +9,7 @@ from qtpy.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, \
 
 from siriuspy.envars import vaca_prefix as VACA_PREFIX
 from siriushla.as_ps_cycle.cycle_status_list import CycleStatusList
-from siriushla.as_ps_cycle.pvnames_tree import PVNameTree
+from siriushla.widgets.pvnames_tree import PVNameTree
 from siriushla.as_ps_cycle.progress_dialog import ProgressDialog
 from siriuspy.search.ma_search import MASearch
 

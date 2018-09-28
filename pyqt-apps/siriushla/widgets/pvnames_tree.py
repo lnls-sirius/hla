@@ -1,7 +1,6 @@
-"""Magnet selection tree view."""
+"""PVName selection tree view."""
 import re
 from collections import namedtuple
-import threading
 
 from qtpy.QtCore import Qt, QSize, Signal, QThread
 from qtpy.QtWidgets import QTreeWidget, QTreeWidgetItem, QProgressDialog
@@ -98,7 +97,7 @@ class PVNameTree(QTreeWidget):
             try:
                 val = getattr(key, p)
             except AttributeError:
-                val = getattr(self, p)(key)
+                val = getattr(PVNameTree, p)(key)
             if val:
                 pvals.append(val)
         pvals.append(key)
@@ -193,7 +192,9 @@ class PVNameTree(QTreeWidget):
         """Override sizehint."""
         return QSize(600, 600)
 
-    def _device_type(self, name):
+    @staticmethod
+    def mag_group(name):
+        """Return magnet group."""
         if re.match('^B\w*(-[0-9])?$', name.dev):
             return 'Dipole'
         elif re.match('^Q[A-RT-Z0-9]\w*(-[0-9])?$', name.dev):
@@ -218,7 +219,7 @@ if __name__ == "__main__":
 
     app = SiriusApplication()
 
-    w = PVNameTree(tree_levels=('sec', '_device_type'))
+    w = PVNameTree(tree_levels=('sec', 'mag_group'))
     w.show()
     items = []
     for i in range(10000):

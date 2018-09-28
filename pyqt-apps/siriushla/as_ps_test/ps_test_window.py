@@ -7,7 +7,7 @@ from qtpy.QtCore import Qt, Signal, QThread
 from qtpy.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QMainWindow, \
     QPushButton, QListWidget, QLabel, QApplication
 
-from siriushla.as_ps_cycle.pvnames_tree import PVNameTree
+from siriushla.widgets.pvnames_tree import PVNameTree
 from siriushla.as_ps_cycle.progress_dialog import ProgressDialog
 from siriushla.sirius_application import SiriusApplication
 from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow

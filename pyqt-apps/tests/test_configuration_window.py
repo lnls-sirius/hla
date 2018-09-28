@@ -1,14 +1,12 @@
 """Configuration window tests."""
 import unittest
 from unittest import mock
-import time
-from random import random
 
 from qtpy.QtWidgets import QComboBox, QLabel
 
 from siriushla.sirius_application import SiriusApplication
 from siriushla.as_ap_configuration import ConfigurationWindow
-from siriushla.as_ps_cycle.pvnames_tree import PVNameTree
+from siriushla.widgets.pvnames_tree import PVNameTree
 
 fake_url = 'FakeURL'
 

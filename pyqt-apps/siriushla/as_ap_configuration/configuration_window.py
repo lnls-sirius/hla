@@ -8,7 +8,7 @@ from qtpy.QtCore import QThread, Signal, Slot
 from qtpy.QtWidgets import (QComboBox, QDialog, QLabel, QListWidget,
                             QPushButton, QVBoxLayout, QWidget)
 
-from siriushla.as_ps_cycle.pvnames_tree import PVNameTree
+from siriushla.widgets.pvnames_tree import PVNameTree
 from siriushla.as_ps_cycle.progress_dialog import ProgressDialog
 from siriushla.widgets.windows import SiriusMainWindow
 from siriuspy.envars import vaca_prefix as _VACA_PREFIX
