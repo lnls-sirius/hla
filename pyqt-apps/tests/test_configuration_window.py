@@ -5,7 +5,7 @@ from unittest import mock
 from qtpy.QtWidgets import QComboBox, QLabel
 
 from siriushla.sirius_application import SiriusApplication
-from siriushla.as_ap_configuration import ConfigurationWindow
+from siriushla.as_ap_pvsconfmgr import ConfigurationWindow
 from siriushla.widgets.pvnames_tree import PVNameTree
 
 fake_url = 'FakeURL'
