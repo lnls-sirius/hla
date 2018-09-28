@@ -26,30 +26,44 @@ class EpicsWrapper:
         """PV Name."""
         return self._pv.pvname
 
+    def connected(self, pv, wait=50e-3):
+        """Wait pv connection."""
+        t = 0
+        init = time.time()
+        while not pv.connected:
+            t = time.time() - init
+            if t > wait:
+                return False
+            time.sleep(5e-3)
+        return True
+
     def put(self, value):
         """Put if connected."""
-        if not self._pv.connected:
+        if not self.connected(self._pv):
             return False
+
         if self._pv.put(value):
-            time.sleep(5e-3)
+            # time.sleep(5e-3)
             return True
         return False
 
-    def check(self, value, wait=2):
+    def check(self, value, wait=5):
         """Do timed get."""
-        if not self._pv.connected:
+        if not self.connected(self._pv):
             return False
+
         t = 0
         init = time.time()
         while t < wait:
             if isinstance(value, float):
-                if isclose(self._pv.get(), value, rel_tol=1e-06, abs_tol=0.0):
+                if isclose(self._pv.get(use_monitor=False), value, rel_tol=1e-06, abs_tol=0.0):
                     return True
             else:
                 if self._pv.get() == value:
                     return True
             t = time.time() - init
             time.sleep(5e-3)
+
         return False
 
 
