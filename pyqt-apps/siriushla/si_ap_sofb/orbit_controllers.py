@@ -2,89 +2,12 @@
 
 from functools import partial as _part
 import numpy as _np
-from qtpy.QtWidgets import (
-    QWidget, QLabel, QComboBox, QGroupBox,
-    QHBoxLayout, QSpacerItem, QSizePolicy, QFormLayout)
-from qtpy.QtCore import QSize, Qt
-from pydm.widgets import PyDMSpinbox, PyDMLabel
+from qtpy.QtWidgets import QComboBox, QHBoxLayout, QSizePolicy
 from pydm.widgets.base import PyDMPrimitiveWidget
 from siriushla.widgets import SiriusConnectionSignal
 import siriuspy.csdevice.orbitcorr as _csorb
 
 CONST = _csorb.get_consts('SI')
-
-
-class ControlOrbit(QWidget):
-
-    def __init__(self, parent, prefix, ctrls):
-        super(ControlOrbit, self).__init__(parent)
-        self.prefix = prefix
-        self.ctrls = ctrls
-        self.setup_ui()
-
-    def setup_ui(self):
-        hbl = QHBoxLayout(self)
-        grp_bx = QGroupBox(self)
-        grp_bx.setTitle('Orbit')
-        hbl.addWidget(grp_bx)
-        sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
-        sz_pol.setHorizontalStretch(1)
-        sz_pol.setVerticalStretch(0)
-        sz_pol.setHeightForWidth(grp_bx.sizePolicy().hasHeightForWidth())
-        grp_bx.setSizePolicy(sz_pol)
-        grp_bx.setFlat(False)
-        grp_bx.setCheckable(False)
-
-        fbl = QFormLayout(grp_bx)
-
-        lbl = QLabel('Correct:', grp_bx)
-        lbl.setMinimumSize(QSize(50, 0))
-        lbl.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
-        combo = CorrectionOrbitController(self, self.prefix, self.ctrls)
-        combo.rules = (
-            '[{"name": "EnblRule", "property": "Enable", ' +
-            '"expression": "not ch[0]", "channels": [{"channel": "' +
-            self.prefix+'CorrMode-Sts'+'", "trigger": true}]}]')
-        fbl.addRow(lbl, combo)
-
-        lbl = QLabel('as diff to:', grp_bx)
-        lbl.setMinimumSize(QSize(50, 0))
-        lbl.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
-        combo = ReferenceController(self, self.prefix, self.ctrls)
-        fbl.addRow(lbl, combo)
-
-        fbl.addItem(QSpacerItem(
-            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding))
-
-        lbl = QLabel('# pts for smooth:', grp_bx)
-        lbl.setAlignment(Qt.AlignCenter)
-        wid = self.create_pair(grp_bx, 'OrbitSmoothNPnts')
-        fbl.addRow(lbl, wid)
-
-        lbl = QLabel('Orbit Acq. Rate [Hz]')
-        lbl.setAlignment(Qt.AlignCenter)
-        wid = self.create_pair(grp_bx, 'OrbitAcqRate')
-        fbl.addRow(lbl, wid)
-
-        lbl = QLabel('Kicks Acq. Rate [Hz]')
-        lbl.setAlignment(Qt.AlignCenter)
-        wid = self.create_pair(grp_bx, 'KickAcqRate')
-        fbl.addRow(lbl, wid)
-
-    def create_pair(self, parent, pvname):
-        wid = QWidget(parent)
-        hbl = QHBoxLayout(wid)
-        hbl.setContentsMargins(0, 0, 0, 0)
-        pdm_spbx = PyDMSpinbox(
-            wid, init_channel=self.prefix+pvname+'-SP')
-        pdm_spbx.showStepExponent = False
-        pdm_spbx.setAlignment(Qt.AlignCenter)
-        pdm_lbl = PyDMLabel(
-            wid, init_channel=self.prefix+pvname+'-RB')
-        pdm_lbl.setAlignment(Qt.AlignCenter)
-        hbl.addWidget(pdm_spbx)
-        hbl.addWidget(pdm_lbl)
-        return wid
 
 
 class _BaseController(QComboBox, PyDMPrimitiveWidget):

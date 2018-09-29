@@ -5,7 +5,8 @@ import numpy as np
 from qtpy.QtWidgets import (
     QGridLayout, QHBoxLayout, QVBoxLayout, QSizePolicy, QSpacerItem,
     QScrollArea, QWidget, QLabel, QCheckBox, QPushButton)
-from qtpy.QtCore import Qt, QRect
+from qtpy.QtCore import Qt, QRect, QPoint
+from qtpy.QtGui import QBrush, QColor, QPainter
 from siriushla.widgets import SiriusDialog, SiriusLedState
 from pydm.widgets.base import PyDMWidget, PyDMWritableWidget
 
@@ -90,6 +91,8 @@ class SelectionMatrix(QWidget):
         super().__init__(parent)
         self.prefix = prefix
         self.dev = dev
+        self.begin = QPoint()
+        self.end = QPoint()
         self.pv_sp = _PyDMCheckBoxList(
             parent=self,
             init_channel=self.prefix + self.dev + 'EnblList-SP',
@@ -190,7 +193,7 @@ class SelectionMatrix(QWidget):
         hbl.setObjectName('HL_'+label)
         cbx = self.pv_sp.cb_list[index]
         cbx.setParent(parent)
-        cbx.setToolTip(label)
+        cbx.setToolTip('{0:d}'.format(index))
         hbl.addWidget(cbx)
 
         led = self.pv_rb.led_list[index]
@@ -198,6 +201,42 @@ class SelectionMatrix(QWidget):
         led.setToolTip(label)
         hbl.addWidget(led)
         return hbl
+
+    def _paint(self):
+        if self.begin == self.end:
+            return
+        qp = QPainter(self)
+        br = QBrush(QColor(100, 10, 10, 40))
+        qp.setBrush(br)
+        qp.drawRect(QRect(self.begin, self.end))
+
+    def paintEvent(self, _):
+        self._paint()
+
+    def mousePressEvent(self, event):
+        self.begin = event.pos()
+        self.end = event.pos()
+        self.update()
+
+    def mouseMoveEvent(self, event):
+        self.end = event.pos()
+        self.update()
+
+    def mouseReleaseEvent(self, event):
+        self.end = event.pos()
+        self.selectitems()
+        self.begin = event.pos()
+        self.update()
+
+    def selectitems(self):
+        for cb in self.pv_sp.cb_list:
+            pos = cb.mapTo(self, cb.pos())
+            x1 = pos.x() > 2*self.begin.x()  # Mistery: factor of 2
+            x2 = pos.x() > 2*self.end.x()
+            y1 = pos.y() > self.begin.y()
+            y2 = pos.y() > self.end.y()
+            if x1 != x2 and y1 != y2:
+                cb.toggle()
 
 
 def _main():

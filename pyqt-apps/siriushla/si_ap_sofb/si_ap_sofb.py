@@ -2,141 +2,192 @@
 
 import sys as _sys
 import os as _os
-from qtpy import uic as _uic
-from qtpy.QtCore import Qt, QSize
-from qtpy.QtWidgets import (
-    QWidget, QDockWidget, QSizePolicy, QVBoxLayout, QPushButton)
-from pydm.utilities.macro import substitute_in_file as _substitute_in_file
+from qtpy.QtCore import Qt, QSize, QRect
+from qtpy.QtGui import QCursor
+from qtpy.QtWidgets import QWidget, QDockWidget, QSizePolicy, QVBoxLayout, \
+    QPushButton, QTabWidget, QHBoxLayout, QMenu, QMenuBar, \
+    QAction, QStatusBar
+from siriushla.widgets import SiriusMainWindow
 from siriuspy.envars import vaca_prefix as LL_PREF
-from siriushla.widgets import SiriusConnectionSignal, PyDMLogLabel
+from siriushla.widgets import PyDMLogLabel
 from siriushla.sirius_application import SiriusApplication
 from siriushla.si_ap_sofb.orbit_register import OrbitRegisters
-from siriushla.si_ap_sofb.graphic_controller import OrbitWidget
-from siriushla.si_ap_sofb.orbit_controllers import ControlOrbit
+from siriushla.si_ap_sofb.graphic_controllers import OrbitWidget, \
+                                                    CorrectorsWidget
 from siriushla.si_ap_sofb.sofb_controllers import ControlSOFB
 
 _dir = _os.path.dirname(_os.path.abspath(__file__))
 UI_FILE = _os.path.sep.join([_dir, 'SOFBMain.ui'])
 
 
+class MainWindow(SiriusMainWindow):
+    def __init__(self, prefix, acc='SI'):
+        super().__init__()
+        self.prefix = prefix
+        self.acc = acc
+        self.setupui()
+
+    def setupui(self):
+        self.setWindowModality(Qt.WindowModal)
+        self.setWindowTitle("Slow Orbit Feedback System")
+        self.resize(2290, 1856)
+        self.setDocumentMode(False)
+        self.setDockNestingEnabled(True)
+
+        logwid = self._create_log_docwidget()
+        orbreg = self._create_orbit_registers()
+        wid = self._create_ioc_controllers()
+
+        self.addDockWidget(Qt.DockWidgetArea(1), logwid)
+        self.addDockWidget(Qt.DockWidgetArea(2), orbreg)
+        self.addDockWidget(Qt.DockWidgetArea(2), wid)
+
+        mwid = self._create_central_widget()
+        self.setCentralWidget(mwid)
+
+        self._create_menus()
+
+    def _create_central_widget(self):
+        mwid = QWidget(self)
+        hbl = QHBoxLayout(mwid)
+        hbl.setContentsMargins(0, 0, 0, 0)
+
+        tabwidget = QTabWidget(mwid)
+        tabwidget.setMinimumSize(QSize(120, 0))
+        tabwidget.setCursor(QCursor(Qt.ArrowCursor))
+        tabwidget.setTabShape(QTabWidget.Triangular)
+        tabwidget.setElideMode(Qt.ElideNone)
+        tabwidget.setTabBarAutoHide(False)
+        hbl.addWidget(tabwidget)
+
+        ctrls = self.orb_regtr.get_registers_control()
+        chans, ctr = OrbitWidget.get_default_ctrls(self.prefix)
+        self._channels = chans
+        ctrls.update(ctr)
+        orb_wid = OrbitWidget(self, self.prefix, ctrls)
+        tabwidget.addTab(orb_wid, 'Orbit')
+
+        corr_wid = CorrectorsWidget(self, self.prefix)
+        tabwidget.addTab(corr_wid, "Correctors")
+        tabwidget.setCurrentIndex(0)
+        return mwid
+
+    def _create_orbit_registers(self):
+        # Create Context Menus for Registers and
+        # assign them to the clicked signal
+        wid = QDockWidget(self)
+        wid.setWindowTitle("Orbit Registers")
+        sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sz_pol.setHorizontalStretch(0)
+        sz_pol.setVerticalStretch(1)
+        sz_pol.setHeightForWidth(wid.sizePolicy().hasHeightForWidth())
+        wid.setSizePolicy(sz_pol)
+        wid.setFloating(False)
+        wid.setFeatures(QDockWidget.AllDockWidgetFeatures)
+        wid.setAllowedAreas(Qt.AllDockWidgetAreas)
+
+        wid_cont = OrbitRegisters(self, self.prefix, 9)
+        wid.setWidget(wid_cont)
+        self.orb_regtr = wid_cont
+        return wid
+
+    def _create_ioc_controllers(self):
+        docwid = QDockWidget(self)
+        docwid.setWindowTitle("SOFB Control")
+        sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sz_pol.setHorizontalStretch(0)
+        sz_pol.setVerticalStretch(1)
+        sz_pol.setHeightForWidth(docwid.sizePolicy().hasHeightForWidth())
+        docwid.setSizePolicy(sz_pol)
+        docwid.setMinimumSize(QSize(350, 788))
+        docwid.setFloating(False)
+        docwid.setFeatures(QDockWidget.AllDockWidgetFeatures)
+        wid2 = QWidget(docwid)
+        docwid.setWidget(wid2)
+
+        vbl = QVBoxLayout(wid2)
+        ctrls = self.orb_regtr.get_registers_control()
+        wid = ControlSOFB(wid2, self.prefix, ctrls)
+        vbl.addWidget(wid)
+        return docwid
+
+    def _create_log_docwidget(self):
+        docwid = QDockWidget(self)
+        docwid.setWindowTitle('IOC Log')
+        sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sz_pol.setHorizontalStretch(0)
+        sz_pol.setVerticalStretch(0)
+        sz_pol.setHeightForWidth(docwid.sizePolicy().hasHeightForWidth())
+        docwid.setSizePolicy(sz_pol)
+        docwid.setFloating(False)
+        wid_cont = QWidget()
+        docwid.setWidget(wid_cont)
+        vbl = QVBoxLayout(wid_cont)
+        vbl.setContentsMargins(0, 0, 0, 0)
+        pdm_log = PyDMLogLabel(wid_cont, init_channel=self.prefix+'Log-Mon')
+        pdm_log.setAlternatingRowColors(True)
+        pdm_log.maxCount = 2000
+        vbl.addWidget(pdm_log)
+        pbtn = QPushButton('Clear', wid_cont)
+        pbtn.clicked.connect(pdm_log.clear)
+        vbl.addWidget(pbtn)
+        return docwid
+
+    def _create_menus(self):
+        menubar = QMenuBar(self)
+        menubar.setGeometry(QRect(0, 0, 2290, 19))
+        menuopen = QMenu('Open', menubar)
+
+        self.setMenuBar(menubar)
+        action = QAction("Correction &Parameters", self)
+        action.setCheckable(True)
+        action.setChecked(True)
+        action.setEnabled(True)
+        action.setVisible(True)
+        menuopen.addAction(action)
+
+        action = QAction("IOC &Log", self)
+        action.setToolTip("IOC Log")
+        action.setCheckable(True)
+        action.setChecked(True)
+        action.setEnabled(True)
+        action.setVisible(True)
+        menuopen.addAction(action)
+
+        action = QAction("Orbit &Registers", self)
+        action.setCheckable(True)
+        action.setChecked(True)
+        action.setEnabled(True)
+        action.setVisible(True)
+        menuopen.addAction(action)
+
+        action = QAction("&Open All", self)
+        action.setToolTip("Open all dockable windows")
+        action.setShortcut("Alt+O")
+        action.setChecked(False)
+        action.setEnabled(True)
+        action.setVisible(True)
+        menuopen.addAction(action)
+
+        action = QAction("&Close All", self)
+        action.setShortcut("Alt+C")
+        action.setEnabled(True)
+        action.setVisible(True)
+        menuopen.addAction(action)
+
+        menubar.addAction(menuopen.menuAction())
+
+        statusbar = QStatusBar(self)
+        statusbar.setEnabled(True)
+        self.setStatusBar(statusbar)
+
+
 def main(prefix=None):
     """Return Main window of the interface."""
     ll_pref = 'ca://' + (prefix or LL_PREF)
     prefix = ll_pref + 'SI-Glob:AP-SOFB:'
-    tmp_file = _substitute_in_file(UI_FILE,
-                                   {'PREFIX': prefix, 'LL_PREF': ll_pref})
-    main_win = _uic.loadUi(tmp_file)
-
-    _create_orbit_registers(main_win, prefix)
-    _create_log_docwidget(main_win, prefix)
-    _create_orbit_widget(main_win, prefix)
-    _create_ioc_controllers(main_win, prefix)
+    main_win = MainWindow(prefix)
     return main_win
-
-
-def _create_orbit_registers(mwin, prefix):
-    # Create Context Menus for Registers and
-    # assign them to the clicked signal
-    wid = QDockWidget(mwin)
-    wid.setWindowTitle("Orbit Registers")
-    sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
-    sz_pol.setHorizontalStretch(0)
-    sz_pol.setVerticalStretch(1)
-    sz_pol.setHeightForWidth(wid.sizePolicy().hasHeightForWidth())
-    wid.setSizePolicy(sz_pol)
-    wid.setFloating(False)
-    wid.setFeatures(QDockWidget.AllDockWidgetFeatures)
-    wid.setAllowedAreas(Qt.AllDockWidgetAreas)
-    mwin.addDockWidget(Qt.DockWidgetArea(8), wid)
-
-    wid_cont = OrbitRegisters(mwin, prefix, 9)
-    wid.setWidget(wid_cont)
-    mwin.orb_regtr = wid_cont
-
-
-def _create_orbit_widget(main_win, prefix):
-    # Define Behaviour of Orbit Visualization buttons
-    ctrls = main_win.orb_regtr.get_registers_control()
-    pvs = [
-        'OrbitSmoothX-Mon', 'OrbitSmoothY-Mon',
-        'OrbitOfflineX-RB', 'OrbitOfflineY-RB',
-        'OrbitRefX-RB', 'OrbitRefY-RB']
-    chans = []
-    for pv in pvs:
-        sig = SiriusConnectionSignal(prefix+pv)
-        chans.append(sig)
-    main_win._channels = chans
-    ctrls.update({
-        'Online Orbit': {
-            'x': {
-                'signal': chans[0].new_value_signal,
-                'getvalue': chans[0].getvalue},
-            'y': {
-                'signal': chans[1].new_value_signal,
-                'getvalue': chans[1].getvalue}},
-        'Offline Orbit': {
-            'x': {
-                'signal': chans[2].new_value_signal,
-                'getvalue': chans[2].getvalue},
-            'y': {
-                'signal': chans[3].new_value_signal,
-                'getvalue': chans[3].getvalue}},
-        'Reference Orbit': {
-            'x': {
-                'signal': chans[4].new_value_signal,
-                'getvalue': chans[4].getvalue},
-            'y': {
-                'signal': chans[5].new_value_signal,
-                'getvalue': chans[5].getvalue}}})
-    orb_wid = OrbitWidget(main_win, prefix, ctrls, 3)
-    main_win.tabWidget.addTab(orb_wid, 'Orbit')
-
-
-def _create_ioc_controllers(main_win, prefix):
-    wid = QDockWidget(main_win)
-    wid.setWindowTitle("SOFB Control")
-    sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
-    sz_pol.setHorizontalStretch(0)
-    sz_pol.setVerticalStretch(1)
-    sz_pol.setHeightForWidth(wid.sizePolicy().hasHeightForWidth())
-    wid.setSizePolicy(sz_pol)
-    wid.setMinimumSize(QSize(350, 788))
-    wid.setFloating(False)
-    wid.setFeatures(QDockWidget.AllDockWidgetFeatures)
-    main_win.addDockWidget(Qt.DockWidgetArea(2), wid)
-    wid2 = QWidget(wid)
-    wid.setWidget(wid2)
-
-    vbl = QVBoxLayout(wid2)
-    ctrls = main_win.orb_regtr.get_registers_control()
-    wid = ControlOrbit(wid2, prefix, ctrls)
-    vbl.addWidget(wid)
-
-    wid = ControlSOFB(wid2, prefix)
-    vbl.addWidget(wid)
-
-
-def _create_log_docwidget(main_win, prefix):
-    wid = QDockWidget(main_win)
-    main_win.addDockWidget(Qt.DockWidgetArea(8), wid)
-    wid.setWindowTitle('IOC Log')
-    sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
-    sz_pol.setHorizontalStretch(0)
-    sz_pol.setVerticalStretch(0)
-    sz_pol.setHeightForWidth(wid.sizePolicy().hasHeightForWidth())
-    wid.setSizePolicy(sz_pol)
-    wid.setFloating(False)
-    wid_cont = QWidget()
-    wid.setWidget(wid_cont)
-    vbl = QVBoxLayout(wid_cont)
-    vbl.setContentsMargins(0, 0, 0, 0)
-    pdm_log = PyDMLogLabel(wid_cont, init_channel=prefix+'Log-Mon')
-    pdm_log.setAlternatingRowColors(True)
-    pdm_log.maxCount = 2000
-    vbl.addWidget(pdm_log)
-    pbtn = QPushButton('Clear', wid_cont)
-    pbtn.clicked.connect(pdm_log.clear)
-    vbl.addWidget(pbtn)
 
 
 def _main():
