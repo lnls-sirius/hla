@@ -45,10 +45,12 @@ class ProgressDialog(QDialog):
         self.layout = QVBoxLayout()
 
         self.dlg_label = QLabel(self)
+        self.cur_item_label = QLabel(self)
         self.progress_bar = QProgressBar(self)
         self.cancel = QPushButton('Cancel', self)
 
         self.layout.addWidget(self.dlg_label)
+        self.layout.addWidget(self.cur_item_label)
         self.layout.addWidget(self.progress_bar)
         self.layout.addWidget(self.cancel)
 
@@ -63,9 +65,11 @@ class ProgressDialog(QDialog):
 
         if hasattr(self._task, '__iter__'):
             self.dlg_label.setText(self._label[0])
+            self._task[0].currentItem.connect(self.cur_item_label.setText)
             self._task[0].itemDone.connect(self.inc_value)
             self.progress_bar.setMaximum(self._task[0].size())
             for i in range(1, len(self._task)):
+                self._task[i].currentItem.connect(self.cur_item_label.setText)
                 self._task[i].itemDone.connect(self.inc_value)
                 self._task[i - 1].finished.connect(self._update_label)
                 self._task[i - 1].finished.connect(self._task[i].start)
