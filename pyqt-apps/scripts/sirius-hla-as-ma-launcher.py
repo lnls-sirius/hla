@@ -13,7 +13,7 @@ from siriushla.as_ps_control.PSTabControlWindow \
 from siriushla.as_pm_control.PulsedMagnetControlWindow \
     import PulsedMagnetControlWindow
 from siriushla.as_ap_injection.InjectionWindow import InjectionWindow
-from siriushla.as_config_manager.ConfigManagerWindow import ConfigManagerWindow
+from siriushla.as_ap_servconf.ConfigManagerWindow import ConfigManagerWindow
 from siriushla.as_ps_cycle.cycle_window import CycleWindow
 from siriushla.as_ps_test.ps_test_window import PSTestWindow
 from siriushla import util as _util
