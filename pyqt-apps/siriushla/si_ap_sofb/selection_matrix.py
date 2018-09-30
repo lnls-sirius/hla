@@ -9,10 +9,7 @@ from qtpy.QtCore import Qt, QRect, QPoint
 from qtpy.QtGui import QBrush, QColor, QPainter
 from siriushla.widgets import SiriusDialog, SiriusLedState
 from pydm.widgets.base import PyDMWidget, PyDMWritableWidget
-
-NR_BPMs = 160
-NR_CHs = 120
-NR_CVs = 160
+# import siriuspy.csdevice.orbitcorr as _csorb
 
 
 class _PyDMCheckBoxList(PyDMWritableWidget, QWidget):
@@ -78,17 +75,11 @@ class _PyDMLedList(PyDMWidget, QWidget):
 class SelectionMatrix(QWidget):
     """Create the Selection Matrices for BPMs and Correctors."""
 
-    SUBSECTIONS = {
-        'BPMX': ('M1', 'M2', 'C1-1', 'C1-2', 'C2', 'C3-1', 'C3-2', 'C4'),
-        'BPMY': ('M1', 'M2', 'C1-1', 'C1-2', 'C2', 'C3-1', 'C3-2', 'C4'),
-        'CV':   ('M1', 'M2', 'C1', 'C2-1', 'C2-2', 'C3-1', 'C3-2', 'C4'),
-        'CH':   ('M1', 'M2', 'C1', 'C2', 'C3', 'C4')}
-    INDICES_LENGTH = {
-        'BPMX': NR_BPMs, 'BPMY': NR_BPMs, 'CH': NR_CHs, 'CV': NR_CVs}
-
-    def __init__(self, parent, dev, prefix):
+    def __init__(self, parent, dev, prefix, acc='SI'):
         """Initialize the matrix of the specified dev."""
         super().__init__(parent)
+        self.acc = acc
+        self._select_ring(acc)
         self.prefix = prefix
         self.dev = dev
         self.begin = QPoint()
@@ -102,6 +93,41 @@ class SelectionMatrix(QWidget):
             init_channel=self.prefix + self.dev + 'EnblList-RB',
             size=self.INDICES_LENGTH[self.dev])
         self._setup_ui()
+
+    def _select_ring(self, acc):
+        if acc.lower()=='si':
+            NR_BPMs = 160
+            NR_CHs = 120
+            NR_CVs = 160
+            self.SUBSECTIONS = {
+                'BPMX': (
+                    'M1', 'M2', 'C1-1', 'C1-2', 'C2', 'C3-1', 'C3-2', 'C4'),
+                'BPMY': (
+                    'M1', 'M2', 'C1-1', 'C1-2', 'C2', 'C3-1', 'C3-2', 'C4'),
+                'CV':   (
+                    'M1', 'M2', 'C1', 'C2-1', 'C2-2', 'C3-1', 'C3-2', 'C4'),
+                'CH':   (
+                    'M1', 'M2', 'C1', 'C2', 'C3', 'C4')}
+            self.SECTIONS = ['{0:02d}'.format(i+1) for i in range(20)]
+        else:
+            NR_BPMs = 50
+            NR_CHs = 25
+            NR_CVs = 25
+            self.SUBSECTIONS = {
+                'BPMX': ('', '', '', '', ''),
+                'BPMY': ('', '', '', '', ''),
+                'CV':   ('', '', '', '', ''),
+                'CH':   ('', '', '', '', '')}
+            self.SECTIONS = [
+                '01-05', '06-10',
+                '11-15', '16-20',
+                '21-25', '26-30',
+                '31-35', '36-40',
+                '41-45', '46-50']
+        self.INDICES_LENGTH = {
+            'BPMX': NR_BPMs, 'BPMY': NR_BPMs, 'CH': NR_CHs, 'CV': NR_CVs}
+
+
 
     def _setup_ui(self):
         name = self.dev + "List"
@@ -137,14 +163,13 @@ class SelectionMatrix(QWidget):
         wid.setStyleSheet("font: 16pt \"Sans Serif\";\nfont-weight: bold;")
         vbl = QVBoxLayout(wid)
 
-        subsecs, indices = self._get_matrix_params()
-        secs = ['{0:02d}'.format(i+1) for i in range(20)]
+        secs, subsecs, indices = self._get_matrix_params()
         len_ = len(subsecs)
 
-        wid2 = self._make_line('00', subsecs, list(range(len_)), True)
+        wid2 = self._make_line(0, '00', subsecs, list(range(len_)), True)
         vbl.addWidget(wid2)
         for i, sec in enumerate(secs):
-            wid2 = self._make_line(sec, subsecs,
+            wid2 = self._make_line(i+1, sec, subsecs,
                                    indices[i*len_:(i+1)*len_], False)
             vbl.addWidget(wid2)
         return wid
@@ -153,12 +178,12 @@ class SelectionMatrix(QWidget):
         max_idx = self.INDICES_LENGTH[self.dev] - 1
         indices = list(range(max_idx))
         indices = [max_idx, ] + indices
-        return self.SUBSECTIONS[self.dev], indices
+        return self.SECTIONS, self.SUBSECTIONS[self.dev], indices
 
-    def _make_line(self, section, subsections, indices, header):
+    def _make_line(self, idx, section, subsections, indices, header):
         label = section+self.dev
         wid = QWidget()
-        if int(section) % 2:
+        if idx % 2:
             wid.setStyleSheet('background-color: rgb(220, 220, 220);')
         wid.setObjectName('Wid_'+label)
         hbl = QHBoxLayout(wid)
@@ -188,7 +213,9 @@ class SelectionMatrix(QWidget):
         return wid
 
     def _make_unit(self, parent, section, subsection, index):
-        label = self.dev+section+subsection
+        label = ''
+        if self.acc.lower()=='si':
+            label = section+subsection
         hbl = QHBoxLayout()
         hbl.setObjectName('HL_'+label)
         cbx = self.pv_sp.cb_list[index]
@@ -243,7 +270,7 @@ def _main():
     app = SiriusApplication()
     win = SiriusDialog()
     hbl = QHBoxLayout(win)
-    wid = SelectionMatrix(win, 'BPMX', 'ca://' + pref+'SI-Glob:AP-SOFB:')
+    wid = SelectionMatrix(win, 'BPMX', 'ca://' + pref+'SI-Glob:AP-SOFB:', 'BO')
     hbl.addWidget(wid)
     win.show()
     sys.exit(app.exec_())

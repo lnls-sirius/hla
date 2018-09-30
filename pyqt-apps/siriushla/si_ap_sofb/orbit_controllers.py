@@ -5,9 +5,6 @@ import numpy as _np
 from qtpy.QtWidgets import QComboBox, QHBoxLayout, QSizePolicy
 from pydm.widgets.base import PyDMPrimitiveWidget
 from siriushla.widgets import SiriusConnectionSignal
-import siriuspy.csdevice.orbitcorr as _csorb
-
-CONST = _csorb.get_consts('SI')
 
 
 class _BaseController(QComboBox, PyDMPrimitiveWidget):
@@ -17,9 +14,7 @@ class _BaseController(QComboBox, PyDMPrimitiveWidget):
         self.setpoint = setpoint
         self.readback = readback
         self.ctrls = ctrls
-        self.orbits = {
-            'x': _np.zeros(CONST.NR_BPMS, dtype=float),
-            'y': _np.zeros(CONST.NR_BPMS, dtype=float)}
+        self.orbits = {'x': None, 'y': None}
         self.signals_to_watch = tuple()
         self.slots = {
             'x': _part(self._watch_if_changed, 'x'),
@@ -64,6 +59,8 @@ class _BaseController(QComboBox, PyDMPrimitiveWidget):
         for sig in self.signals_to_watch:
             sig.disconnect(self.slots[pln])
         for pln in ('x', 'y'):
+            if self.orbits[pln] is None:
+                continue
             self.setpoint[pln].send_value_signal[_np.ndarray].emit(
                 self.orbits[pln])
         self.signals_to_watch = sigs
@@ -80,7 +77,7 @@ class _BaseController(QComboBox, PyDMPrimitiveWidget):
 
     def _orbit_changed(self, pln, orb):
         myorb = self.orbits[pln]
-        if _np.allclose(orb, myorb, rtol=1e-7):
+        if myorb is not None and _np.allclose(orb, myorb, rtol=1e-7):
             return
         self.setCurrentIndex(self.count()-1)
 
@@ -99,7 +96,8 @@ class ReferenceController(_BaseController):
         sigs = list()
         if text.lower().startswith('zero'):
             for pln in ('x', 'y'):
-                self.orbits[pln] = _np.zeros(CONST.NR_BPMS, dtype=float)
+                if self.orbits[pln] is not None:
+                    self.orbits[pln] *= 0
         super()._selection_changed(text, sigs)
 
     def setup_ui(self):

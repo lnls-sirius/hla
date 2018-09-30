@@ -21,10 +21,11 @@ CONST = _csorb.get_consts('SI')
 
 class ControlSOFB(QWidget):
 
-    def __init__(self, parent, prefix, ctrls):
+    def __init__(self, parent, prefix, ctrls, acc='SI'):
         super(ControlSOFB, self).__init__(parent)
         self.prefix = prefix
         self.ctrls = ctrls
+        self.acc = acc
         self.setup_ui()
 
     def setup_ui(self):
@@ -110,7 +111,7 @@ class ControlSOFB(QWidget):
             btns[dev] = QPushButton(dev, grp_bx)
             _util.connect_window(
                 btns[dev], Window, self,
-                dev=dev, prefix=self.prefix)
+                dev=dev, prefix=self.prefix, acc=self.acc)
         gbl = QGridLayout()
         gbl.setSpacing(9)
         gbl.addWidget(lbl, 0, 0, 1, 2)

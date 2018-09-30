@@ -86,7 +86,7 @@ class MainWindow(SiriusMainWindow):
         wid.setFeatures(QDockWidget.AllDockWidgetFeatures)
         wid.setAllowedAreas(Qt.AllDockWidgetAreas)
 
-        wid_cont = OrbitRegisters(self, self.prefix, 9)
+        wid_cont = OrbitRegisters(self, self.prefix, self.acc, 9)
         wid.setWidget(wid_cont)
         self.orb_regtr = wid_cont
         return wid
@@ -107,7 +107,7 @@ class MainWindow(SiriusMainWindow):
 
         vbl = QVBoxLayout(wid2)
         ctrls = self.orb_regtr.get_registers_control()
-        wid = ControlSOFB(wid2, self.prefix, ctrls)
+        wid = ControlSOFB(wid2, self.prefix, ctrls, self.acc)
         vbl.addWidget(wid)
         return docwid
 
@@ -186,7 +186,7 @@ def main(prefix=None):
     """Return Main window of the interface."""
     ll_pref = 'ca://' + (prefix or LL_PREF)
     prefix = ll_pref + 'SI-Glob:AP-SOFB:'
-    main_win = MainWindow(prefix)
+    main_win = MainWindow(prefix, 'SI')
     return main_win
 
 

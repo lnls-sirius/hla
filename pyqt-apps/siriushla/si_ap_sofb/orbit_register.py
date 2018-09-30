@@ -4,19 +4,20 @@ import numpy as _np
 from functools import partial as _part
 from datetime import datetime as _datetime
 from epics import PV as _PV
-from qtpy.QtWidgets import (
-    QMenu, QFileDialog, QWidget, QScrollArea, QLabel, QPushButton,
-    QSizePolicy, QGridLayout, QVBoxLayout, QHBoxLayout)
-from qtpy.QtCore import Signal, QRect, Qt
-from siriushla.si_ap_sofb.selection_matrix import NR_BPMs
+from qtpy.QtWidgets import QMenu, QFileDialog, QWidget, \
+    QScrollArea, QLabel, QPushButton, QSizePolicy, \
+    QGridLayout, QVBoxLayout, QHBoxLayout
+from qtpy.QtCore import Signal, Qt
+import siriuspy.csdevice.orbitcorr as _csorb
 
 
 class OrbitRegisters(QWidget):
 
-    def __init__(self, parent, prefix, nr_registers):
+    def __init__(self, parent, prefix, acc=None, nr_registers=9):
         super(OrbitRegisters, self).__init__(parent)
         self._nr_registers = nr_registers
         self.prefix = prefix
+        self.consts = _csorb.get_consts(acc or 'SI')
         self._setup_ui()
 
     def _setup_ui(self):
@@ -91,8 +92,8 @@ class OrbitRegister(QWidget):
             }
         self.last_dir = self.DEFAULT_DIR
         self.filename = ''
-        self._orbx = _np.zeros(NR_BPMs)
-        self._orby = _np.zeros(NR_BPMs)
+        self._orbx = _np.zeros(self.consts.NR_BPMs)
+        self._orby = _np.zeros(self.consts.NR_BPMs)
 
         self.new_string_signal.emit(self.string_status)
 

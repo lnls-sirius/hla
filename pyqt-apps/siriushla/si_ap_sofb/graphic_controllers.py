@@ -12,9 +12,6 @@ from qtpy.QtCore import QSize, Qt, QTimer, QThread, Signal
 from qtpy.QtGui import QColor
 from pydm.widgets import PyDMWaveformPlot
 from siriushla.widgets import SiriusConnectionSignal
-from siriuspy.csdevice.orbitcorr import get_consts
-
-Consts = get_consts('SI')
 
 
 class BaseWidget(QWidget):
@@ -259,15 +256,18 @@ class GraphicController(QWidget):
         self.updater.set_enbl_list(pln, enbl_list)
 
     def _save_difference(self):
-        diffx = (self.updater.vectors['val']['x'] -
-                 self.updater.vectors['ref']['x'])
-        diffy = (self.updater.vectors['val']['y'] -
-                 self.updater.vectors['ref']['y'])
+        valx = self.updater.vectors['val']['x']
+        refx = self.updater.vectors['ref']['x']
+        valy = self.updater.vectors['val']['y']
+        refy = self.updater.vectors['ref']['y']
+        if None in (valx, refx, valy, refy):
+            return
+        diffx = valx - refx
+        diffy = valy - refy
         header = '# ' + _datetime.now().strftime('%Y/%M/%d-%H:%M:%S') + '\n'
         filename = QFileDialog.getSaveFileName(
-                            caption='Define a File Name to Save the Orbit',
-                            directory=self.last_dir,
-                            filter=self.EXT_FLT)
+            caption='Define a File Name to Save the Orbit',
+            directory=self.last_dir, filter=self.EXT_FLT)
         fname = filename[0]
         fname += '' if fname.endswith(self.EXT) else self.EXT
         _np.savetxt(fname, _np.vstack([diffx, diffy]).T, header=header)
@@ -307,8 +307,6 @@ class UpdateGraphThread(QThread):
         self.ave_pstd = {'x': self.ave_pstdx, 'y': self.ave_pstdy}
         self.ave_mstd = {'x': self.ave_mstdx, 'y': self.ave_mstdy}
         self.data_sig = {'x': self.data_sigx, 'y': self.data_sigy}
-        szx = Consts.NR_BPMS if is_orb else Consts.NR_CH
-        szy = Consts.NR_BPMS if is_orb else Consts.NR_CV
         self.slots = {
             'val': {
                 'x': _part(self._update_vectors, 'val', 'x'),
@@ -317,16 +315,9 @@ class UpdateGraphThread(QThread):
                 'x': _part(self._update_vectors, 'ref', 'x'),
                 'y': _part(self._update_vectors, 'ref', 'y')}}
         self.vectors = {
-            'val': {
-                'x': _np.zeros(szx, dtype=float),
-                'y': _np.zeros(szy, dtype=float)},
-            'ref': {
-                'x': _np.zeros(szx, dtype=float),
-                'y': _np.zeros(szy, dtype=float)},
-            }
-        self.enbl_list = {
-            'x': _np.ones(szx, dtype=bool),
-            'y': _np.ones(szy, dtype=bool)}
+            'val': {'x': None, 'y': None},
+            'ref': {'x': None, 'y': None}}
+        self.enbl_list = {'x': None, 'y': None}
         sig_x = self.ctrls[self.current_text['ref']]['x']['signal']
         sig_y = self.ctrls[self.current_text['ref']]['y']['signal']
         sig_x[_np.ndarray].connect(self.slots['ref']['x'])
@@ -355,8 +346,10 @@ class UpdateGraphThread(QThread):
             slot_y(self.ctrls[text]['y']['getvalue']())
             slot_x(self.ctrls[text]['x']['getvalue']())
         else:
-            slot_x(self.vectors[orb_tp]['x']*0)
-            slot_y(self.vectors[orb_tp]['y']*0)
+            if self.vectors[orb_tp]['x'] is not None:
+                slot_x(self.vectors[orb_tp]['x']*0)
+            if self.vectors[orb_tp][''] is not None:
+                slot_y(self.vectors[orb_tp]['y']*0)
 
     def set_visible(self, boo):
         self._isvisible = boo
@@ -378,8 +371,10 @@ class UpdateGraphThread(QThread):
             if orb is None or ref is None:
                 return
             diff = unit * (orb - ref)
-            enbl_list = self.enbl_list[pln]
-            mask = diff[enbl_list]
+            if self.enbl_list[pln] is not None:
+                mask = diff[self.enbl_list[pln]]
+            else:
+                mask = diff
             ave = float(mask.mean())
             std = float(mask.std(ddof=1))
 
