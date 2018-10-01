@@ -5,8 +5,9 @@ Based on ImageView from pydm and GradientLegend from pyqtgraph.
 
 import numpy as np
 import logging
-from PyQt5.QtGui import QActionGroup, QColor, QLinearGradient, QBrush, QPen
-from PyQt5.QtCore import pyqtSignal, pyqtSlot, pyqtProperty, QTimer, Q_ENUMS, \
+from qtpy.QtWidgets import QActionGroup
+from qtpy.QtGui import QColor, QLinearGradient, QBrush, QPen
+from qtpy.QtCore import Signal, Slot, Property, QTimer, Q_ENUMS, \
                          QThread, Qt, QRectF, QPointF
 from pyqtgraph import ViewBox, ImageItem, AxisItem, GraphicsLayoutWidget, \
                       ColorMap, GraphicsWidget
@@ -145,7 +146,7 @@ class _GradientLegend(GraphicsWidget):
 class SpectrogramUpdateThread(QThread):
     """Thread to update image."""
 
-    updateSignal = pyqtSignal(list)
+    updateSignal = Signal(list)
 
     def __init__(self, spectrogram_view):
         """Initialize Thread."""
@@ -323,7 +324,7 @@ class SiriusSpectrogramView(GraphicsLayoutWidget, PyDMWidget, PyDMColorMap):
         """
         self.colorMap = self.cmap_for_action[action]
 
-    @pyqtProperty(float)
+    @Property(float)
     def colorMapMin(self):
         """
         Minimum value for the colormap.
@@ -335,7 +336,7 @@ class SiriusSpectrogramView(GraphicsLayoutWidget, PyDMWidget, PyDMColorMap):
         return self.cm_min
 
     @colorMapMin.setter
-    @pyqtSlot(float)
+    @Slot(float)
     def colorMapMin(self, new_min):
         """
         Set the minimum value for the colormap.
@@ -349,7 +350,7 @@ class SiriusSpectrogramView(GraphicsLayoutWidget, PyDMWidget, PyDMColorMap):
             if self.cm_min > self.cm_max:
                 self.cm_max = self.cm_min
 
-    @pyqtProperty(float)
+    @Property(float)
     def colorMapMax(self):
         """
         Maximum value for the colormap.
@@ -361,7 +362,7 @@ class SiriusSpectrogramView(GraphicsLayoutWidget, PyDMWidget, PyDMColorMap):
         return self.cm_max
 
     @colorMapMax.setter
-    @pyqtSlot(float)
+    @Slot(float)
     def colorMapMax(self, new_max):
         """
         Set the maximum value for the colormap.
@@ -391,7 +392,7 @@ class SiriusSpectrogramView(GraphicsLayoutWidget, PyDMWidget, PyDMColorMap):
         self.cm_max = mx
         self.cm_min = mn
 
-    @pyqtProperty(PyDMColorMap)
+    @Property(PyDMColorMap)
     def colorMap(self):
         """
         Return the color map used by the SpectrogramView.
@@ -439,7 +440,7 @@ class SiriusSpectrogramView(GraphicsLayoutWidget, PyDMWidget, PyDMColorMap):
         self._gradient.setIntColorScale(colors=lut)
         self._image_item.setLookupTable(lut)
 
-    @pyqtSlot(bool)
+    @Slot(bool)
     def image_connection_state_changed(self, conn):
         """
         Callback invoked when the Image Channel connection state is changed.
@@ -454,7 +455,7 @@ class SiriusSpectrogramView(GraphicsLayoutWidget, PyDMWidget, PyDMColorMap):
         else:
             self.redraw_timer.stop()
 
-    @pyqtSlot(bool)
+    @Slot(bool)
     def timeaxis_connection_state_changed(self, connected):
         """
         Callback invoked when the TimeAxis Channel connection state is changed.
@@ -466,7 +467,7 @@ class SiriusSpectrogramView(GraphicsLayoutWidget, PyDMWidget, PyDMColorMap):
         """
         self._timeaxis_connected = connected
 
-    @pyqtSlot(np.ndarray)
+    @Slot(np.ndarray)
     def image_value_changed(self, new_image):
         """
         Callback invoked when the Image Channel value is changed.
@@ -487,7 +488,7 @@ class SiriusSpectrogramView(GraphicsLayoutWidget, PyDMWidget, PyDMColorMap):
         self.image_waveform = new_image
         self.needs_redraw = True
 
-    @pyqtSlot(np.ndarray)
+    @Slot(np.ndarray)
     def image_width_changed(self, new_freq_array):
         """
         Callback invoked when the Image Width Channel value is changed.
@@ -502,7 +503,7 @@ class SiriusSpectrogramView(GraphicsLayoutWidget, PyDMWidget, PyDMColorMap):
         self._image_width = len(new_freq_array)
         self._last_freqaxis_data = new_freq_array
 
-    @pyqtSlot(np.ndarray)
+    @Slot(np.ndarray)
     def image_timeaxis_changed(self, new_time_array):
         """
         Callback invoked when the TimeAxis Channel value is changed.
@@ -554,7 +555,7 @@ class SiriusSpectrogramView(GraphicsLayoutWidget, PyDMWidget, PyDMColorMap):
         logging.debug("SpectrogramView RedrawImage Thread Launched")
         self.thread.start()
 
-    @pyqtSlot(list)
+    @Slot(list)
     def _updateDisplay(self, data):
         logging.debug("SpectrogramView Update Display with new image")
 
@@ -582,7 +583,7 @@ class SiriusSpectrogramView(GraphicsLayoutWidget, PyDMWidget, PyDMColorMap):
             autoLevels=False,
             autoDownsample=self.autoDownsample)
 
-    @pyqtProperty(bool)
+    @Property(bool)
     def autoDownsample(self):
         """
         Return if we should or not apply the autoDownsample option.
@@ -605,7 +606,7 @@ class SiriusSpectrogramView(GraphicsLayoutWidget, PyDMWidget, PyDMColorMap):
         if new_value != self._auto_downsample:
             self._auto_downsample = new_value
 
-    @pyqtProperty(int)
+    @Property(int)
     def imageWidth(self):
         """
         Return the width of the image.
@@ -631,7 +632,7 @@ class SiriusSpectrogramView(GraphicsLayoutWidget, PyDMWidget, PyDMColorMap):
                 (self._widthchannel is None or self._widthchannel == '')):
             self._image_width = int(new_width)
 
-    @pyqtProperty(bool)
+    @Property(bool)
     def normalizeData(self):
         """
         Return True if the colors are relative to data maximum and minimum.
@@ -643,7 +644,7 @@ class SiriusSpectrogramView(GraphicsLayoutWidget, PyDMWidget, PyDMColorMap):
         return self._normalize_data
 
     @normalizeData.setter
-    @pyqtSlot(bool)
+    @Slot(bool)
     def normalizeData(self, new_norm):
         """
         Define if the colors are relative to minimum and maximum of the data.
@@ -659,7 +660,7 @@ class SiriusSpectrogramView(GraphicsLayoutWidget, PyDMWidget, PyDMColorMap):
         """Handle keypress events."""
         return
 
-    @pyqtProperty(str)
+    @Property(str)
     def imageChannel(self):
         """
         The channel address in use for the image data .
@@ -684,7 +685,7 @@ class SiriusSpectrogramView(GraphicsLayoutWidget, PyDMWidget, PyDMColorMap):
         if self._imagechannel != value:
             self._imagechannel = str(value)
 
-    @pyqtProperty(str)
+    @Property(str)
     def widthChannel(self):
         """
         The channel address in use for the image width .
@@ -709,7 +710,7 @@ class SiriusSpectrogramView(GraphicsLayoutWidget, PyDMWidget, PyDMColorMap):
         if self._widthchannel != value:
             self._widthchannel = str(value)
 
-    @pyqtProperty(str)
+    @Property(str)
     def timeAxisChannel(self):
         """
         The channel address in use for the time axis.
@@ -766,7 +767,7 @@ class SiriusSpectrogramView(GraphicsLayoutWidget, PyDMWidget, PyDMColorMap):
         """Return channels for tools."""
         return [c for c in self.channels() if c.address == self.imageChannel]
 
-    @pyqtProperty(int)
+    @Property(int)
     def maxRedrawRate(self):
         """
         The maximum rate (in Hz) at which the plot will be redrawn.
