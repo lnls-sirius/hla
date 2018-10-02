@@ -1,6 +1,5 @@
 """Control the Orbit Graphic Displnay."""
 
-import time as _time
 from datetime import datetime as _datetime
 from functools import partial as _part
 import numpy as _np
@@ -12,14 +11,16 @@ from qtpy.QtCore import QSize, Qt, QTimer, QThread, Signal
 from qtpy.QtGui import QColor
 from pydm.widgets import PyDMWaveformPlot
 from siriushla.widgets import SiriusConnectionSignal
+import siriuspy.csdevice.orbitcorr as _csorb
 
 
 class BaseWidget(QWidget):
 
-    def __init__(self, parent, prefix, ctrls, names, is_orb):
+    def __init__(self, parent, prefix, ctrls, names, is_orb, acc='SI'):
         super(BaseWidget, self).__init__(parent)
         self.line_names = names
         self.controls = ctrls
+        self.acc = acc
         self.update_rate = 2.1  # Hz
         self.timer = QTimer()
         self.prefix = prefix
@@ -41,7 +42,7 @@ class BaseWidget(QWidget):
         for i, _ in enumerate(self.line_names):
             cont = GraphicController(
                 self, graphs, self.controls, self.prefix, i,
-                self.line_names, self.is_orb)
+                self.line_names, self.is_orb, self.acc)
             self.hbl.addWidget(cont)
             self.hbl.addStretch(1)
             self.controllers.append(cont)
@@ -74,15 +75,17 @@ class GraphicController(QWidget):
     EXT_FLT = 'Text Files (*.txt)'
 
     def __init__(
-            self, parent, graphs, ctrls, prefix, index, names, is_orb):
+            self, parent, graphs, ctrls, prefix, index, names, is_orb,
+            acc='SI'):
         """Initialize the instance."""
         super().__init__(parent)
         self.last_dir = self.DEFAULT_DIR
         self.prefix = prefix
+        self.acc = acc
         self.idx = index
         self.line_names = names
         self.is_orb = is_orb
-        self.updater = UpdateGraphThread(ctrls, is_orb)
+        self.updater = UpdateGraphThread(ctrls, is_orb, acc)
 
         self.graphs = graphs
 
@@ -293,11 +296,13 @@ class UpdateGraphThread(QThread):
     ave_mstdy = Signal([float])
     data_sigy = Signal([_np.ndarray])
 
-    def __init__(self, ctrls, is_orb):
+    def __init__(self, ctrls, is_orb, acc='SI'):
         """Initialize object."""
         super().__init__()
         self.moveToThread(self)
         self.ctrls = ctrls
+        self.acc = acc
+        self.consts = _csorb.get_consts(acc)
         self.is_orb = is_orb
         self._isvisible = True
         text = sorted(ctrls)[0]
@@ -314,10 +319,18 @@ class UpdateGraphThread(QThread):
             'ref': {
                 'x': _part(self._update_vectors, 'ref', 'x'),
                 'y': _part(self._update_vectors, 'ref', 'y')}}
+        szx = self.consts.NR_BPMS if self.is_orb else self.consts.NR_CH
+        szy = self.consts.NR_BPMS if self.is_orb else self.consts.NR_CV
         self.vectors = {
-            'val': {'x': None, 'y': None},
-            'ref': {'x': None, 'y': None}}
-        self.enbl_list = {'x': None, 'y': None}
+            'val': {
+                'x': _np.zeros(szx, dtype=float),
+                'y': _np.zeros(szy, dtype=float)},
+            'ref': {
+                'x': _np.zeros(szx, dtype=float),
+                'y': _np.zeros(szy, dtype=float)}}
+        self.enbl_list = {
+            'x': _np.ones(szx, dtype=bool),
+            'y': _np.ones(szy, dtype=bool)}
         sig_x = self.ctrls[self.current_text['ref']]['x']['signal']
         sig_y = self.ctrls[self.current_text['ref']]['y']['signal']
         sig_x[_np.ndarray].connect(self.slots['ref']['x'])
@@ -348,7 +361,7 @@ class UpdateGraphThread(QThread):
         else:
             if self.vectors[orb_tp]['x'] is not None:
                 slot_x(self.vectors[orb_tp]['x']*0)
-            if self.vectors[orb_tp][''] is not None:
+            if self.vectors[orb_tp]['y'] is not None:
                 slot_y(self.vectors[orb_tp]['y']*0)
 
     def set_visible(self, boo):
@@ -387,18 +400,18 @@ class UpdateGraphThread(QThread):
 
 class OrbitWidget(BaseWidget):
 
-    def __init__(self, parent, prefix, ctrls=dict()):
+    def __init__(self, parent, prefix, ctrls=dict(), acc='SI'):
         self._chans = []
         if not ctrls:
             self._chans, ctrls = self.get_default_ctrls(prefix)
 
         names = ['Line {0:d}'.format(i+1) for i in range(2)]
-        super().__init__(parent, prefix, ctrls, names, True)
+        super().__init__(parent, prefix, ctrls, names, True, acc)
 
         self.controllers[0].updater.some_changed('val', 'Online Orbit')
         self.controllers[0].updater.some_changed('ref', 'Reference Orbit')
-        self.controllers[0].combo['val'].setCurrentIndex(1)
-        self.controllers[0].combo['ref'].setCurrentIndex(2)
+        self.controllers[0].combo['val'].setCurrentIndex(3)
+        self.controllers[0].combo['ref'].setCurrentIndex(4)
 
     def channels(self):
         return self._chans
@@ -407,43 +420,39 @@ class OrbitWidget(BaseWidget):
     def get_default_ctrls(prefix):
         pvs = [
             'OrbitSmoothX-Mon', 'OrbitSmoothY-Mon',
+            'OrbitSmoothSinglePassX-Mon', 'OrbitSmoothSinglePassY-Mon',
+            'OrbitMultiTurnX-Mon', 'OrbitMultiTurnY-Mon',
             'OrbitOfflineX-RB', 'OrbitOfflineY-RB',
-            'OrbitRefX-RB', 'OrbitRefY-RB']
+            'OrbitRefX-RB', 'OrbitRefY-RB',
+            'BPMOffsetsX-Mon', 'BPMOffsetsY-Mon']
         chans = [SiriusConnectionSignal(prefix+pv) for pv in pvs]
-        ctrls = {
-            'Online Orbit': {
+        ctrls = dict()
+        orbs = [
+            'Online Orbit', 'SinglePass', 'MultiTurn Orbit',
+            'Offline Orbit', 'Reference Orbit', 'BPMs Offset']
+        pvs = iter(chans)
+        for orb in orbs:
+            pvi = next(pvs)
+            pvj = next(pvs)
+            ctrls[orb] = {
                 'x': {
-                    'signal': chans[0].new_value_signal,
-                    'getvalue': chans[0].getvalue},
+                    'signal': pvi.new_value_signal,
+                    'getvalue': pvi.getvalue},
                 'y': {
-                    'signal': chans[1].new_value_signal,
-                    'getvalue': chans[1].getvalue}},
-            'Offline Orbit': {
-                'x': {
-                    'signal': chans[2].new_value_signal,
-                    'getvalue': chans[2].getvalue},
-                'y': {
-                    'signal': chans[3].new_value_signal,
-                    'getvalue': chans[3].getvalue}},
-            'Reference Orbit': {
-                'x': {
-                    'signal': chans[4].new_value_signal,
-                    'getvalue': chans[4].getvalue},
-                'y': {
-                    'signal': chans[5].new_value_signal,
-                    'getvalue': chans[5].getvalue}}}
+                    'signal': pvj.new_value_signal,
+                    'getvalue': pvj.getvalue}}
         return chans, ctrls
 
 
 class CorrectorsWidget(BaseWidget):
 
-    def __init__(self, parent, prefix, ctrls=dict()):
+    def __init__(self, parent, prefix, ctrls=dict(), acc='SI'):
         self._chans = []
         if not ctrls:
             self._chans, ctrls = self.get_default_ctrls(prefix)
 
         names = ('DeltaKicks', 'Kicks')
-        super().__init__(parent, prefix, ctrls, names, False)
+        super().__init__(parent, prefix, ctrls, names, False, acc)
 
         self.controllers[0].updater.some_changed('val', 'Delta Kicks')
         self.controllers[0].updater.some_changed('ref', 'Zero')

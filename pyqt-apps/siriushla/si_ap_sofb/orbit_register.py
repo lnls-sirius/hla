@@ -7,7 +7,7 @@ from epics import PV as _PV
 from qtpy.QtWidgets import QMenu, QFileDialog, QWidget, \
     QScrollArea, QLabel, QPushButton, QSizePolicy, \
     QGridLayout, QVBoxLayout, QHBoxLayout
-from qtpy.QtCore import Signal, Qt
+from qtpy.QtCore import Signal, Qt, QRect
 import siriuspy.csdevice.orbitcorr as _csorb
 
 
@@ -17,7 +17,7 @@ class OrbitRegisters(QWidget):
         super(OrbitRegisters, self).__init__(parent)
         self._nr_registers = nr_registers
         self.prefix = prefix
-        self.consts = _csorb.get_consts(acc or 'SI')
+        self.acc = acc
         self._setup_ui()
 
     def _setup_ui(self):
@@ -41,7 +41,7 @@ class OrbitRegisters(QWidget):
 
         self.registers = []
         for i in range(self._nr_registers):
-            reg = OrbitRegister(self, self.prefix, i+1)
+            reg = OrbitRegister(self, self.prefix, i+1, acc=self.acc)
             vbl.addWidget(reg)
             self.registers.append(reg)
 
@@ -69,11 +69,12 @@ class OrbitRegister(QWidget):
     new_orby_signal = Signal(_np.ndarray)
     new_string_signal = Signal(str)
 
-    def __init__(self, parent, prefix, idx):
+    def __init__(self, parent, prefix, idx, acc='SI'):
         """Initialize the Context Menu."""
         super(OrbitRegister, self).__init__(parent)
         self.idx = idx
         self.prefix = prefix
+        self.consts = _csorb.get_consts(acc or 'SI')
         self.string_status = 'Empty'
         self.name = 'Register {0:d}'.format(self.idx)
         self.setup_ui()
@@ -83,17 +84,23 @@ class OrbitRegister(QWidget):
             'ref': [
                 _PV(pre + 'OrbitRefX-RB'),
                 _PV(pre + 'OrbitRefY-RB')],
+            'mti': [
+                _PV(pre + 'OrbitMultiTurnX-Mon'),
+                _PV(pre + 'OrbitMultiTurnY-Mon')],
+            'sp': [
+                _PV(pre + 'OrbitSmoothSinglePassX-Mon'),
+                _PV(pre + 'OrbitSmoothSinglePassY-Mon')],
             'orb': [
                 _PV(pre + 'OrbitSmoothX-Mon'),
-                _PV(pre + 'OrbitSmoothX-Mon')],
+                _PV(pre + 'OrbitSmoothY-Mon')],
             'off': [
                 _PV(pre + 'OrbitOfflineX-SP'),
                 _PV(pre + 'OrbitOfflineY-SP')],
             }
         self.last_dir = self.DEFAULT_DIR
         self.filename = ''
-        self._orbx = _np.zeros(self.consts.NR_BPMs)
-        self._orby = _np.zeros(self.consts.NR_BPMs)
+        self._orbx = _np.zeros(self.consts.NR_BPMS)
+        self._orby = _np.zeros(self.consts.NR_BPMS)
 
         self.new_string_signal.emit(self.string_status)
 
@@ -111,6 +118,7 @@ class OrbitRegister(QWidget):
 
     def setup_ui(self):
         """Setup Ui of Context Menu."""
+        self.setMinimumWidth(350)
         hbl = QHBoxLayout(self)
 
         btn = QPushButton(self.name, self)
@@ -140,6 +148,10 @@ class OrbitRegister(QWidget):
         menu2 = menu.addMenu('Register &Orbit')
         act = menu2.addAction('Last &Measured Orbit')
         act.triggered.connect(_part(self._register_orbit, 'orb'))
+        act = menu2.addAction('Multi&Turn Orbit')
+        act.triggered.connect(_part(self._register_orbit, 'mti'))
+        act = menu2.addAction('&SinglePass Orbit')
+        act.triggered.connect(_part(self._register_orbit, 'sp'))
         act = menu2.addAction('Re&ference Orbit')
         act.triggered.connect(_part(self._register_orbit, 'ref'))
         act = menu2.addAction('&Offline Orbit')
@@ -153,7 +165,7 @@ class OrbitRegister(QWidget):
         zer = _np.zeros(self._orbx.shape)
         self._update_and_emit('Empty', zer, zer.copy(), '')
 
-    def _register_orbit(self, flag, trig):
+    def _register_orbit(self, flag, _):
         pvx, pvy = self._orbits.get(flag, (None, None))
         if not pvx or not pvy:
             self._update_and_emit('Error: wrong specification.')
@@ -164,7 +176,7 @@ class OrbitRegister(QWidget):
             return
         self._update_and_emit('Orbit Registered.', pvx.value, pvy.value)
 
-    def _save_orbit(self, trig):
+    def _save_orbit(self, _):
         header = '# ' + _datetime.now().strftime('%Y/%M/%d-%H:%M:%S') + '\n'
         filename = QFileDialog.getSaveFileName(
             caption='Define a File Name to Save the Orbit',

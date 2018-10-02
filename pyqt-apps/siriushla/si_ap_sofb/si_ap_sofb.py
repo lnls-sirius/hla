@@ -30,7 +30,7 @@ class MainWindow(SiriusMainWindow):
     def setupui(self):
         self.setWindowModality(Qt.WindowModal)
         self.setWindowTitle("Slow Orbit Feedback System")
-        self.resize(2290, 1856)
+        self.resize(2590, 1856)
         self.setDocumentMode(False)
         self.setDockNestingEnabled(True)
 
@@ -64,10 +64,10 @@ class MainWindow(SiriusMainWindow):
         chans, ctr = OrbitWidget.get_default_ctrls(self.prefix)
         self._channels = chans
         ctrls.update(ctr)
-        orb_wid = OrbitWidget(self, self.prefix, ctrls)
+        orb_wid = OrbitWidget(self, self.prefix, ctrls, self.acc)
         tabwidget.addTab(orb_wid, 'Orbit')
 
-        corr_wid = CorrectorsWidget(self, self.prefix)
+        corr_wid = CorrectorsWidget(self, self.prefix, acc=self.acc)
         tabwidget.addTab(corr_wid, "Correctors")
         tabwidget.setCurrentIndex(0)
         return mwid
@@ -120,6 +120,7 @@ class MainWindow(SiriusMainWindow):
         sz_pol.setHeightForWidth(docwid.sizePolicy().hasHeightForWidth())
         docwid.setSizePolicy(sz_pol)
         docwid.setFloating(False)
+        docwid.setMinimumWidth(400)
         wid_cont = QWidget()
         docwid.setWidget(wid_cont)
         vbl = QVBoxLayout(wid_cont)

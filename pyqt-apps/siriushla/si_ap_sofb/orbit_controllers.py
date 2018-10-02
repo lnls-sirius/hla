@@ -5,17 +5,22 @@ import numpy as _np
 from qtpy.QtWidgets import QComboBox, QHBoxLayout, QSizePolicy
 from pydm.widgets.base import PyDMPrimitiveWidget
 from siriushla.widgets import SiriusConnectionSignal
+import siriuspy.csdevice.orbitcorr as _csorb
 
 
 class _BaseController(QComboBox, PyDMPrimitiveWidget):
-    def __init__(self, parent, ctrls, setpoint, readback):
+    def __init__(self, parent, ctrls, setpoint, readback, acc='SI'):
         QComboBox.__init__(self, parent)
         PyDMPrimitiveWidget.__init__(self)
         self.setpoint = setpoint
         self.readback = readback
         self.ctrls = ctrls
-        self.orbits = {'x': None, 'y': None}
-        self.signals_to_watch = tuple()
+        self.acc = acc
+        self.consts = _csorb.get_consts(acc)
+        self.orbits = {
+            'x': _np.zeros(self.consts.NR_BPMS, dtype=float),
+            'y': _np.zeros(self.consts.NR_BPMS, dtype=float)}
+        self.signals_to_watch = dict()
         self.slots = {
             'x': _part(self._watch_if_changed, 'x'),
             'y': _part(self._watch_if_changed, 'y')}
@@ -47,32 +52,27 @@ class _BaseController(QComboBox, PyDMPrimitiveWidget):
         self.setCurrentIndex(self.count()-1)
         self.currentTextChanged.connect(self._selection_changed)
 
-    def _selection_changed(self, text, sigs=tuple()):
+    def _selection_changed(self, text, sigs=dict()):
         if text in self.ctrls:
-            sigs = list()
             for pln in ('x', 'y'):
                 orb = self.ctrls[text][pln]['getvalue']()
                 if orb is None:
-                    print('error')
+                    return
                 self.orbits[pln] = orb
-                sigs.append(self.ctrls[text][pln]['signal'])
-        for sig in self.signals_to_watch:
-            sig.disconnect(self.slots[pln])
+                sigs[pln] = self.ctrls[text][pln]['signal']
+                self.setpoint[pln].send_value_signal[_np.ndarray].emit(
+                    self.orbits[pln])
         for pln in ('x', 'y'):
-            if self.orbits[pln] is None:
-                continue
-            self.setpoint[pln].send_value_signal[_np.ndarray].emit(
-                self.orbits[pln])
+            if self.signals_to_watch:
+                self.signals_to_watch[pln].disconnect(self.slots[pln])
+            if sigs:
+                sigs[pln].connect(self.slots[pln])
         self.signals_to_watch = sigs
-        for sig in self.signals_to_watch:
-            sig.connect(self.slots[pln])
 
     def ioc_orbit_changed(self, pln, orb):
-        print('ioc orbit')
         self._orbit_changed(pln, orb)
 
     def _watch_if_changed(self, pln, orb):
-        print('ctrl orbit')
         self._orbit_changed(pln, orb)
 
     def _orbit_changed(self, pln, orb):
@@ -83,21 +83,23 @@ class _BaseController(QComboBox, PyDMPrimitiveWidget):
 
 
 class ReferenceController(_BaseController):
-    def __init__(self, parent, prefix, ctrls):
+    def __init__(self, parent, prefix, ctrls, acc='SI'):
         setpoint = dict()
         readback = dict()
         setpoint['x'] = SiriusConnectionSignal(prefix+'OrbitRefX-SP')
         setpoint['y'] = SiriusConnectionSignal(prefix+'OrbitRefY-SP')
         readback['x'] = SiriusConnectionSignal(prefix+'OrbitRefX-RB')
         readback['y'] = SiriusConnectionSignal(prefix+'OrbitRefY-RB')
-        super().__init__(parent, ctrls, setpoint, readback)
+        super().__init__(parent, ctrls, setpoint, readback, acc)
 
     def _selection_changed(self, text):
-        sigs = list()
+        sigs = dict()
         if text.lower().startswith('zero'):
             for pln in ('x', 'y'):
                 if self.orbits[pln] is not None:
                     self.orbits[pln] *= 0
+                    self.setpoint[pln].send_value_signal[_np.ndarray].emit(
+                        self.orbits[pln])
         super()._selection_changed(text, sigs)
 
     def setup_ui(self):
@@ -105,14 +107,14 @@ class ReferenceController(_BaseController):
 
 
 class CorrectionOrbitController(_BaseController):
-    def __init__(self, parent, prefix, ctrls):
+    def __init__(self, parent, prefix, ctrls, acc='SI'):
         setpoint = dict()
         readback = dict()
         setpoint['x'] = SiriusConnectionSignal(prefix+'OrbitOfflineX-SP')
         setpoint['y'] = SiriusConnectionSignal(prefix+'OrbitOfflineY-SP')
         readback['x'] = SiriusConnectionSignal(prefix+'OrbitOfflineX-RB')
         readback['y'] = SiriusConnectionSignal(prefix+'OrbitOfflineY-RB')
-        super().__init__(parent, ctrls, setpoint, readback)
+        super().__init__(parent, ctrls, setpoint, readback, acc)
 
 
 def _main():
@@ -150,7 +152,7 @@ def _main():
             'y': {
                 'signal': chans[5].new_value_signal,
                 'getvalue': chans[5].getvalue}}}
-    wid = ControlOrbit(win, prefix, ctrls)
+    wid = CorrectionOrbitController(win, prefix, ctrls)
     hbl.addWidget(wid)
     win.show()
     sys.exit(app.exec_())
