@@ -93,7 +93,7 @@ class _GradientLegend(GraphicsWidget):
         self.maxVal = maxVal
         labels = dict()
         for v in self.labels.values():
-            newv = minVal + v*(maxVal - minVal)
+            newv = minVal + (1-v)*(maxVal - minVal)
             newk = self.label_format.format(newv)
             labels[newk] = v
         self.setLabels(labels)
@@ -158,6 +158,8 @@ class _GradientLegend(GraphicsWidget):
             p.drawText(QRectF(tx, y - lh/2.0, lw, lh),
                        Qt.AlignLeft | Qt.AlignVCenter, str(k))
 
+        self.setMinimumWidth(labelWidth + 2*textPadding + 20)
+
 
 class SpectrogramUpdateThread(QThread):
     """Thread to update image."""
@@ -175,7 +177,7 @@ class SpectrogramUpdateThread(QThread):
         needs_redraw = self.spectrogram_view.needs_redraw
         image_dimensions = len(img.shape)
         width = self.spectrogram_view.imageWidth
-        reading_order = self.image_view.readingOrder
+        reading_order = self.spectrogram_view.readingOrder
         normalize_data = self.spectrogram_view._normalize_data
         cm_min = self.spectrogram_view.cm_min
         cm_max = self.spectrogram_view.cm_max
