@@ -535,7 +535,7 @@ class MultipolesRamp(QWidget):
 
     def _setupGraph(self):
         self.graph = FigureCanvas(Figure())
-        self.graph.setFixedSize(779, 500)
+        self.graph.setFixedHeight(500)
         self.ax = self.graph.figure.subplots()
         self.ax.grid()
         self.ax.set_xlabel('t [ms]')
@@ -590,14 +590,14 @@ class MultipolesRamp(QWidget):
                 background-color: #FF7C52;
             }
             """)
-        self.table.setFixedWidth(779)
+        self.table.setFixedWidth(1027)
         self.table.setMinimumHeight(
             min((self.normalized_configs_count+3)*48+2, 482))
         self.table.verticalHeader().setFixedWidth(48)
         self.table.horizontalHeader().setFixedHeight(48)
         self.table.setRowCount(2+self.normalized_configs_count)
         self.table.setColumnCount(4)
-        self.table.setColumnWidth(0, 250)
+        self.table.setColumnWidth(0, 498)
         for i in range(1, len(self.table_map['columns'].values())):
             self.table.setColumnWidth(i, 155)
         self.table.setHorizontalHeaderLabels(
@@ -854,9 +854,10 @@ class MultipolesRamp(QWidget):
         self.updateGraph()
 
     @Slot(ramp.BoosterNormalized)
-    def handleNormConfigsChanges(self, norm_config):
+    def handleNormConfigsChanged(self, norm_config):
         """Reload normalized configs on change and update graph."""
         self.ramp_config[norm_config.name] = norm_config
+        self.updateMultipoleRampSignal.emit()
         self.updateGraph()
 
 

@@ -69,9 +69,8 @@ class RampMain(SiriusMainWindow):
         self.my_layout.addWidget(self.statistics, 3, 1, 5, 1)
 
     def _connSignals(self):
-        self.settings.configNameSignal.connect(self._receiveNewConfigName)
+        self.settings.newConfigNameSignal.connect(self._receiveNewConfigName)
         self.settings.loadSignal.connect(self._emitLoadSignal)
-        self.settings.saveSignal.connect(self._verifySync)
         self.settings.opticsSettingsSignal.connect(
             self.optics_adjust.handleUpdateSettings)
         self.settings.statsSettingsSignal.connect(
@@ -87,9 +86,11 @@ class RampMain(SiriusMainWindow):
             self._verifySync)
         self.config_parameters.mult_ramp.configsIndexChangedSignal.connect(
             self.optics_adjust.getConfigIndices)
+        self.config_parameters.rf_ramp.updateRFRampSignal.connect(
+            self._verifySync)
 
         self.optics_adjust.normConfigChanged.connect(
-            self.config_parameters.mult_ramp.handleNormConfigsChanges)
+            self.config_parameters.mult_ramp.handleNormConfigsChanged)
 
         self.connUpdateSignal.connect(self.status_and_commands.getConnectors)
 

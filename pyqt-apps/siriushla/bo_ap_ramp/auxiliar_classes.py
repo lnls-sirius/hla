@@ -11,13 +11,15 @@ from qtpy.QtWidgets import QLabel, QWidget, QScrollArea, QAbstractItemView, \
 from pydm.widgets import PyDMLabel, PyDMSpinbox
 from siriushla.widgets.windows import SiriusDialog
 from siriuspy.servconf.conf_service import ConfigService as _ConfigService
+from siriuspy.servconf.util import \
+    generate_config_name as _generate_config_name
 from siriuspy.ramp import ramp
 
 
 class LoadRampConfig(SiriusDialog):
     """Auxiliar window to get a ramp config name to load."""
 
-    configNameSignal = Signal(str)
+    newConfigNameSignal = Signal(str)
     loadSignal = Signal()
     saveSignal = Signal()
 
@@ -103,12 +105,12 @@ class LoadRampConfig(SiriusDialog):
                 save_changes.exec_()
 
             if name != self.ramp_config.name:
-                self.configNameSignal.emit(name)
+                self.newConfigNameSignal.emit(name)
             else:
                 self.ramp_config.configsrv_load()
                 self.loadSignal.emit()
         else:
-            self.configNameSignal.emit(name)
+            self.newConfigNameSignal.emit(name)
         self.close()
 
     def _saveChanges(self):
@@ -116,16 +118,21 @@ class LoadRampConfig(SiriusDialog):
 
 
 class NewRampConfigGetName(SiriusDialog):
-    """Auxiliar window to get a ramp config name to create a new one."""
+    """Auxiliar window to get a configuration name to create a new one."""
 
-    configNameSignal = Signal(str)
+    newConfigNameSignal = Signal(str)
     saveSignal = Signal()
 
-    def __init__(self, parent, ramp_config):
+    def __init__(self, parent, config, config_type, new_from_template=True):
         """Initialize object."""
         super().__init__(parent)
-        self.setWindowTitle('New config from template')
-        self.ramp_config = ramp_config
+        self.config = config
+        self.config_type = config_type
+        self._new_from_template = new_from_template
+        if new_from_template:
+            self.setWindowTitle('New config from template')
+        else:
+            self.setWindowTitle('Save current config as...')
         self._setupUi()
 
     def _setupUi(self):
@@ -134,6 +141,7 @@ class NewRampConfigGetName(SiriusDialog):
         l_insert.setFixedHeight(40)
 
         self.le_config = QLineEdit('', self)
+        self.le_config.setText(_generate_config_name())
         self.le_config.editingFinished.connect(self._configNameChanged)
 
         self.bt_create = QPushButton('Create', self)
@@ -164,14 +172,15 @@ class NewRampConfigGetName(SiriusDialog):
         self.le_config.blockSignals(True)
         # the previous line fix a qt bug that triggered lineedit.editFinished
         # to be called twice when enter key is pressed
+
         name = self.le_config.text()
-        if name != '' and not ramp.BoosterRamp(name).configsrv_exist():
+        if name != '' and not self.config_type(name).configsrv_exist():
             self.bt_create.setEnabled(True)
             self.l_warn.setText('')
         else:
             if name == '':
                 self.l_warn.setText('Insert a config name!')
-            elif ramp.BoosterRamp(name).configsrv_exist():
+            elif self.config_type(name).configsrv_exist():
                 self.l_warn.setText('A configuration with this '
                                     'name already exists!')
             self.bt_create.setEnabled(False)
@@ -179,8 +188,8 @@ class NewRampConfigGetName(SiriusDialog):
 
     def _create(self):
         name = self.le_config.text()
-        if self.ramp_config is not None:
-            if not self.ramp_config.configsrv_synchronized:
+        if (self._new_from_template and (self.config is not None)):
+            if not self.config.configsrv_synchronized:
                 save_changes = MessageBox(
                     self, 'Save changes?',
                     'There are unsaved changes. \n'
@@ -188,8 +197,12 @@ class NewRampConfigGetName(SiriusDialog):
                     'Yes', 'Cancel')
                 save_changes.acceptedSignal.connect(self._saveChanges)
                 save_changes.exec_()
-        self.configNameSignal.emit(name)
-        self.close()
+            else:
+                self.newConfigNameSignal.emit(name)
+                self.close()
+        else:
+            self.newConfigNameSignal.emit(name)
+            self.close()
 
     def _saveChanges(self):
         self.saveSignal.emit()
@@ -250,8 +263,10 @@ class InsertNormalizedConfig(SiriusDialog):
         self.confsrv_settings.setFixedSize(600, 160)
         self.create_settings.setFixedSize(600, 160)
 
+        # to insert interpolating existing norm configs
         flay_interp = QFormLayout()
         self.le_interp_name = QLineEdit(self)
+        self.le_interp_name.setText(_generate_config_name())
         self.sb_interp_time = QDoubleSpinBox(self)
         self.sb_interp_time.setMaximum(490)
         self.sb_interp_time.setDecimals(6)
@@ -263,6 +278,7 @@ class InsertNormalizedConfig(SiriusDialog):
         flay_interp.addRow(QLabel('Time: ', self), self.sb_interp_time)
         flay_interp.addRow(self.bt_interp)
 
+        # to insert a new norm config from an existing one
         flay_confsrv = QFormLayout()
         self.cb_confsrv_name = QComboBox(self)
         self.cb_confsrv_name.setStyleSheet(
@@ -283,8 +299,10 @@ class InsertNormalizedConfig(SiriusDialog):
         flay_confsrv.addRow(QLabel('Time: ', self), self.sb_confsrv_time)
         flay_confsrv.addRow(self.bt_confsrv)
 
+        # to insert a new norm config equal to template
         flay_create = QFormLayout()
         self.le_create_name = QLineEdit(self)
+        self.le_create_name.setText(_generate_config_name())
         self.sb_create_time = QDoubleSpinBox(self)
         self.sb_create_time.setDecimals(6)
         self.sb_create_time.setMaximum(490)

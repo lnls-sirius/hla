@@ -1,24 +1,23 @@
 """Booster Ramp Control HLA: Ramp Settings Module."""
 
-from copy import deepcopy as _dcopy
-from qtpy.QtCore import Qt, Signal
+from qtpy.QtCore import Qt, Signal, Slot
 from qtpy.QtGui import QKeySequence
-from qtpy.QtWidgets import QMenuBar, QInputDialog, QAction, QLineEdit
-from siriuspy.servconf.conf_service import ConfigService as _ConfigService
+from qtpy.QtWidgets import QMenuBar, QAction
+from siriuspy.servconf.util import \
+    generate_config_name as _generate_config_name
+from siriuspy.ramp import ramp
 from siriushla.bo_ap_ramp.auxiliar_classes import \
     LoadRampConfig as _LoadRampConfig, \
     NewRampConfigGetName as _NewRampConfigGetName, \
     OpticsAdjustSettings as _OpticsAdjustSettings, \
-    StatisticSettings as _StatisticSettings, \
-    MessageBox as _MessageBox
+    StatisticSettings as _StatisticSettings
 
 
 class Settings(QMenuBar):
     """Widget to choose and to control a BoosterRamp configuration."""
 
-    configNameSignal = Signal(str)
+    newConfigNameSignal = Signal(str)
     loadSignal = Signal()
-    saveSignal = Signal()
     opticsSettingsSignal = Signal(list)
     statsSettingsSignal = Signal(list)
 
@@ -37,13 +36,13 @@ class Settings(QMenuBar):
         self.config_menu = self.addMenu('Booster Ramp Configuration')
         self.act_new = QAction('New from template', self)
         self.act_new.setShortcut(QKeySequence.New)
-        self.act_new.triggered.connect(self._showGetNewConfigName)
+        self.act_new.triggered.connect(self._showGetNewConfigNamePopup)
         self.act_load = QAction('Load existing config...', self)
         self.act_load.setShortcut(QKeySequence.Open)
-        self.act_load.triggered.connect(self._showLoadExistingConfig)
+        self.act_load.triggered.connect(self._showLoadExistingConfigPopup)
         self.act_save = QAction('Save', self)
         self.act_save.setShortcut(QKeySequence.Save)
-        self.act_save.triggered.connect(self._save)
+        self.act_save.triggered.connect(self._saveAndEmitConfigName)
         self.act_save_as = QAction('Save As...', self)
         self.act_save_as.setShortcut(QKeySequence(Qt.CTRL+Qt.SHIFT+Qt.Key_S))
         self.act_save_as.triggered.connect(self._showSaveAsPopup)
@@ -64,18 +63,20 @@ class Settings(QMenuBar):
             self._showStatsSettingsPopup)
         self.stats_menu.addAction(self.act_stats_settings)
 
-    def _showGetNewConfigName(self):
-        self._newConfigPopup = _NewRampConfigGetName(self, self.ramp_config)
-        self._newConfigPopup.configNameSignal.connect(
-            self._emitConfigNameSignal)
-        self._newConfigPopup.saveSignal.connect(self._save)
-        self._newConfigPopup.open()
+    def _showGetNewConfigNamePopup(self):
+        self._newConfigFromTemplateGetNamePopup = _NewRampConfigGetName(
+            self, self.ramp_config, ramp.BoosterRamp, new_from_template=True)
+        self._newConfigFromTemplateGetNamePopup.newConfigNameSignal.connect(
+            self._emitConfigName)
+        self._newConfigFromTemplateGetNamePopup.saveSignal.connect(
+            self._showSaveAsPopup)
+        self._newConfigFromTemplateGetNamePopup.open()
 
-    def _showLoadExistingConfig(self):
+    def _showLoadExistingConfigPopup(self):
         self._loadPopup = _LoadRampConfig(self, self.ramp_config)
-        self._loadPopup.configNameSignal.connect(self._emitConfigNameSignal)
+        self._loadPopup.newConfigNameSignal.connect(self._emitConfigName)
         self._loadPopup.loadSignal.connect(self._emitLoadSignal)
-        self._loadPopup.saveSignal.connect(self._save)
+        self._loadPopup.saveSignal.connect(self._showSaveAsPopup)
         self._loadPopup.open()
 
     def _showOpticsSettingsPopup(self):
@@ -92,8 +93,27 @@ class Settings(QMenuBar):
             self._emitStatsSettings)
         self._statsSettingsPopup.open()
 
-    def _emitConfigNameSignal(self, config_name):
-        self.configNameSignal.emit(config_name)
+    def _showSaveAsPopup(self):
+        if self.ramp_config is None:
+            return
+        self._saveAsPopup = _NewRampConfigGetName(
+            self, self.ramp_config, ramp.BoosterRamp, new_from_template=False)
+        self._saveAsPopup.newConfigNameSignal.connect(
+            self._saveAndEmitConfigName)
+        self._saveAsPopup.open()
+
+    def _saveAndEmitConfigName(self, new_name=None):
+        if self.ramp_config.configsrv_exist():
+            old_name = self.ramp_config.name
+            if not new_name:
+                new_name = _generate_config_name(old_name)
+            self.ramp_config.configsrv_save(new_name)
+        else:
+            self.ramp_config.configsrv_save()
+        self._emitConfigName(self.ramp_config.name)
+
+    def _emitConfigName(self, config_name):
+        self.newConfigNameSignal.emit(config_name)
 
     def _emitLoadSignal(self):
         self.loadSignal.emit()
@@ -108,48 +128,7 @@ class Settings(QMenuBar):
         self._ejecurr_idx = settings[1]
         self.statsSettingsSignal.emit(settings)
 
-    def _save(self):
-        config_exists = self.ramp_config.configsrv_exist()
-        if config_exists:
-            self.ramp_config.configsrv_update()
-        else:
-            self.ramp_config.configsrv_save()
-        self.saveSignal.emit()
-
-    def _showSaveAsPopup(self):
-        if self.ramp_config is not None:
-            text, ok = QInputDialog.getText(self, 'Save As...',
-                                            'Ramp config. name:',
-                                            echo=QLineEdit.Normal, text='')
-            if not ok:
-                return
-            self._name_to_saveas = text
-            allconfigs = _ConfigService().find_configs(config_type='bo_ramp')
-            for c in allconfigs['result']:
-                if text == c['name']:
-                    save_changes = _MessageBox(
-                        self, 'Overwrite configuration?',
-                        'There is a configuration with name {}. \n'
-                        'Do you want to replace it?'.format(text),
-                        'Yes', 'Cancel')
-                    save_changes.acceptedSignal.connect(self._save_as)
-                    save_changes.exec_()
-                    break
-            else:
-                self._save_as()
-
-    def _save_as(self):
-        config_tosave = _dcopy(self.ramp_config)
-        config_tosave.name = self._name_to_saveas
-        config_tosave.configsrv_save()
-
-        # update completion
-        allconfigs = _ConfigService().find_configs(config_type='bo_ramp')
-        string_list = list()
-        for c in allconfigs['result']:
-            string_list.append(c['name'])
-        self._completer_model.setStringList(string_list)
-
+    @Slot(ramp.BoosterRamp)
     def getRampConfig(self, ramp_config):
         """Get new BoosterRamp object."""
         self.ramp_config = ramp_config

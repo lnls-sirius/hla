@@ -1,20 +1,20 @@
 """Booster Ramp Control HLA: Optics Adjust Module."""
 
-from copy import deepcopy as _dcopy
 from qtpy.QtCore import Qt, Slot, Signal, QLocale
 from qtpy.QtWidgets import QGroupBox, QPushButton, QSpinBox, QLabel, \
                            QHBoxLayout, QVBoxLayout, QGridLayout, \
                            QSizePolicy as QSzPlcy, QDoubleSpinBox, QAction, \
-                           QSpacerItem, QInputDialog, QLineEdit, QMenu
+                           QSpacerItem, QMenu
 from siriuspy.ramp import ramp
 from siriuspy.ramp.magnet import Magnet as _Magnet
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriuspy.optics.opticscorr import BOTuneCorr, BOChromCorr
-from siriuspy.servconf.conf_service import ConfigService as _ConfigService
+from siriuspy.servconf.util import \
+    generate_config_name as _generate_config_name
 from pydm.widgets import PyDMLineEdit
 from siriushla.bo_ap_ramp.auxiliar_classes import \
     EditNormalizedConfig as _EditNormalizedConfig, \
-    MessageBox as _MessageBox
+    NewRampConfigGetName as _NewRampConfigGetName
 
 
 class OpticsAdjust(QGroupBox):
@@ -72,7 +72,7 @@ class OpticsAdjust(QGroupBox):
         self.bt_edit.setToolTip('Click to edit strengths')
         self.bt_edit.clicked.connect(self._showEditPopup)
 
-        self.bt_save = QPushButton('Save in ramp config.')
+        self.bt_save = QPushButton('Update in ramp config.')
         self.bt_save.clicked.connect(self._updateRampConfig)
 
         self.bt_server = QPushButton('Server', self)
@@ -361,37 +361,27 @@ class OpticsAdjust(QGroupBox):
             self._resetOrbitChanges()
             self.verifySync()
 
-    def _save(self):
-        if self.norm_config is not None:
+    def _save(self, new_name=None):
+        if self.norm_config is None:
+            return
+        if self.norm_config.configsrv_exist():
+            old_name = self.norm_config.name
+            if new_name is None:
+                new_name = _generate_config_name(old_name)
+            self.norm_config.configsrv_save(new_name)
+        else:
             self.norm_config.configsrv_save()
-            self.verifySync()
+        self.verifySync()
 
     def _showSaveAsPopup(self):
-        if self.norm_config is not None:
-            text, ok = QInputDialog.getText(self, 'Save As...',
-                                            'Normalized config. name:',
-                                            echo=QLineEdit.Normal, text='')
-            if not ok:
-                return
-            self._name_to_saveas = text
-            allconfigs = _ConfigService().find_configs(config_type='bo_ramp')
-            for c in allconfigs['result']:
-                if text == c['name']:
-                    save_changes = _MessageBox(
-                        self, 'Overwrite configuration?',
-                        'There is a configuration with name {}. \n'
-                        'Do you want to replace it?'.format(text),
-                        'Yes', 'Cancel')
-                    save_changes.acceptedSignal.connect(self._save_as)
-                    save_changes.exec_()
-                    break
-            else:
-                self._save_as()
-
-    def _save_as(self):
-        config_tosave = _dcopy(self.norm_config)
-        config_tosave.name = self._name_to_saveas
-        config_tosave.configsrv_save()
+        if self.norm_config is None:
+            return
+        self._saveAsPopup = _NewRampConfigGetName(
+            self, self.norm_config, ramp.BoosterNormalized,
+            new_from_template=False)
+        self._saveAsPopup.newConfigNameSignal.connect(
+            self._save)
+        self._saveAsPopup.open()
 
     def _calculate_deltaKL(self):
         if self.norm_config is None:
