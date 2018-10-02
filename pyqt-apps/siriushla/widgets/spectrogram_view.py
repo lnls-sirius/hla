@@ -15,6 +15,7 @@ from pyqtgraph.graphicsItems.ViewBox.ViewBoxMenu import ViewBoxMenu
 from pydm.widgets.channel import PyDMChannel
 from pydm.widgets.colormaps import cmaps, cmap_names, PyDMColorMap
 from pydm.widgets.base import PyDMWidget
+from pydm.widgets.image import ReadingOrder
 
 logger = logging.getLogger(__name__)
 
@@ -52,6 +53,7 @@ class _GradientLegend(GraphicsWidget):
         self.minVal = 0 if minVal is None else minVal
         self.maxVal = 1 if maxVal is None else maxVal
         self.labels = {'min': 1, 'max': 0} if labels is None else labels
+        self.label_format = '{: .3f}'
 
         self.gradient = QLinearGradient()
         if colors is None:
@@ -72,17 +74,31 @@ class _GradientLegend(GraphicsWidget):
 
         # add labels
         if labels is None and (minVal is None or maxVal is None):
-            self._setLabels(self.labels)
+            self.setLabels(self.labels)
         elif labels is None:
-            self._setLabels({str(minVal): 0, str(maxVal): 1})
+            self.setLabels({str(minVal): 0, str(maxVal): 1})
         else:
-            self._setLabels(labels)
+            self.setLabels(labels)
 
     def _setGradient(self, g):
         self.gradient = g
         self.update()
 
-    def _setLabels(self, l):
+    def setLimits(self, data):
+        minVal = data[0]
+        maxVal = data[1]
+        if minVal == self.minVal and maxVal == self.maxVal:
+            return
+        self.minVal = minVal
+        self.maxVal = maxVal
+        labels = dict()
+        for v in self.labels.values():
+            newv = minVal + v*(maxVal - minVal)
+            newk = self.label_format.format(newv)
+            labels[newk] = v
+        self.setLabels(labels)
+
+    def setLabels(self, l):
         """
         Define labels to appear next to the color scale.
 
@@ -159,6 +175,7 @@ class SpectrogramUpdateThread(QThread):
         needs_redraw = self.spectrogram_view.needs_redraw
         image_dimensions = len(img.shape)
         width = self.spectrogram_view.imageWidth
+        reading_order = self.image_view.readingOrder
         normalize_data = self.spectrogram_view._normalize_data
         cm_min = self.spectrogram_view.cm_min
         cm_max = self.spectrogram_view.cm_max
@@ -174,7 +191,10 @@ class SpectrogramUpdateThread(QThread):
                     "ImageUpdateThread - no width available. Aborting.")
                 return
             try:
-                img = img.reshape((-1, width), order='C')
+                if reading_order == ReadingOrder.Clike:
+                    img = img.reshape((-1, width), order='C')
+                else:
+                    img = img.reshape((width, -1), order='F')
             except ValueError:
                 logger.error("Invalid width for image during reshape: %d",
                              width)
@@ -195,7 +215,8 @@ class SpectrogramUpdateThread(QThread):
         self.spectrogram_view.needs_redraw = False
 
 
-class SiriusSpectrogramView(GraphicsLayoutWidget, PyDMWidget, PyDMColorMap):
+class SiriusSpectrogramView(
+        GraphicsLayoutWidget, PyDMWidget, PyDMColorMap, ReadingOrder):
     """
     A SpectrogramView with support for Channels and more from PyDM.
 
@@ -226,24 +247,25 @@ class SiriusSpectrogramView(GraphicsLayoutWidget, PyDMWidget, PyDMColorMap):
     """
 
     Q_ENUMS(PyDMColorMap)
+    Q_ENUMS(ReadingOrder)
 
     color_maps = cmaps
 
-    def __init__(self, parent=None, image_channel=None, width_channel=None,
-                 time_channel=None, background='default'):
+    def __init__(self, parent=None, image_channel=None, xaxis_channel=None,
+                 yaxis_channel=None, background='default'):
         """Initialize widget."""
         GraphicsLayoutWidget.__init__(self, parent)
         PyDMWidget.__init__(self)
         self.thread = None
         self._imagechannel = image_channel
-        self._widthchannel = width_channel
-        self._timeaxischannel = time_channel
+        self._xaxischannel = xaxis_channel
+        self._yaxischannel = yaxis_channel
         self.image_waveform = np.zeros(0)
         self._image_width = 0
         self._normalize_data = False
         self._auto_downsample = True
-        self._last_timeaxis_data = None
-        self._last_freqaxis_data = None
+        self._last_yaxis_data = None
+        self._last_xaxis_data = None
 
         self.setBackground(background)
 
@@ -256,22 +278,23 @@ class SiriusSpectrogramView(GraphicsLayoutWidget, PyDMWidget, PyDMColorMap):
         self.ci.layout.setRowSpacing(0, 0)
 
         # Add axis.
-        self._bottom_axis = AxisItem('bottom')
-        self._bottom_axis.setPen(QColor(0, 0, 0))
-        self._bottom_axis.setLabel('<h3>Frequency</h3>')
-        self._left_axis = AxisItem('left')
-        self._left_axis.setPen(QColor(0, 0, 0))
-        self._left_axis.setLabel('<h3>Time</h3>')
-        self.addItem(self._left_axis, 0, 0)
-        self.addItem(self._bottom_axis, 1, 1)
+        self.xaxis = AxisItem('bottom')
+        self.xaxis.setPen(QColor(0, 0, 0))
+        self.yaxis = AxisItem('left')
+        self.yaxis.setPen(QColor(0, 0, 0))
+        self.addItem(self.yaxis, 0, 0)
+        self.addItem(self.xaxis, 1, 1)
 
         # Add colorbar legend.
-        self._gradient = _GradientLegend()
-        self.addItem(self._gradient, 0, 2)
+        self.colorbar = _GradientLegend()
+        self.addItem(self.colorbar, 0, 2)
 
         # Set color map limits.
         self.cm_min = 0.0
         self.cm_max = 255.0
+
+        # Set default reading order of numpy array data to Fortranlike.
+        self._reading_order = ReadingOrder.Clike
 
         # Make a right-click menu for changing the color map.
         self.cm_group = QActionGroup(self)
@@ -437,7 +460,7 @@ class SiriusSpectrogramView(GraphicsLayoutWidget, PyDMWidget, PyDMColorMap):
             cmap = ColorMap(pos, self._cm_colors)
         self._view.setBackgroundColor(cmap.map(0))
         lut = cmap.getLookupTable(0.0, 1.0, alpha=False)
-        self._gradient.setIntColorScale(colors=lut)
+        self.colorbar.setIntColorScale(colors=lut)
         self._image_item.setLookupTable(lut)
 
     @Slot(bool)
@@ -456,7 +479,7 @@ class SiriusSpectrogramView(GraphicsLayoutWidget, PyDMWidget, PyDMColorMap):
             self.redraw_timer.stop()
 
     @Slot(bool)
-    def timeaxis_connection_state_changed(self, connected):
+    def yaxis_connection_state_changed(self, connected):
         """
         Callback invoked when the TimeAxis Channel connection state is changed.
 
@@ -489,33 +512,36 @@ class SiriusSpectrogramView(GraphicsLayoutWidget, PyDMWidget, PyDMColorMap):
         self.needs_redraw = True
 
     @Slot(np.ndarray)
-    def image_width_changed(self, new_freq_array):
+    def image_xaxis_changed(self, new_array):
         """
         Callback invoked when the Image Width Channel value is changed.
 
         Parameters
         ----------
-        new_freq_array : np.ndarray
+        new_array : np.ndarray
             The new frequency array
         """
-        if new_freq_array is None:
+        if new_array is None:
             return
-        self._image_width = len(new_freq_array)
-        self._last_freqaxis_data = new_freq_array
+        self._last_xaxis_data = new_array
+        if self._reading_order == self.Clike:
+            self._image_width = new_array.size
 
     @Slot(np.ndarray)
-    def image_timeaxis_changed(self, new_time_array):
+    def image_yaxis_changed(self, new_array):
         """
         Callback invoked when the TimeAxis Channel value is changed.
 
         Parameters
         ----------
-        new_time_array : np.array
+        new_array : np.array
             The new time array
         """
-        if new_time_array is None:
+        if new_array is None:
             return
-        self._last_timeaxis_data = new_time_array
+        self._last_yaxis_data = new_array
+        if self._reading_order == self.Fortranlike:
+            self._image_width = new_array.size
 
     def process_image(self, image):
         """
@@ -560,21 +586,22 @@ class SiriusSpectrogramView(GraphicsLayoutWidget, PyDMWidget, PyDMColorMap):
         logging.debug("SpectrogramView Update Display with new image")
 
         # Update axis
-        if self._last_timeaxis_data is None or \
-                self._last_freqaxis_data is None:
+        if self._last_yaxis_data is None or \
+                self._last_xaxis_data is None:
             return
-        xMin = min(self._last_freqaxis_data)
-        xMax = max(self._last_freqaxis_data)
+        xMin = min(self._last_xaxis_data)
+        xMax = max(self._last_xaxis_data)
         yMin = 0
-        yMax = max(self._last_timeaxis_data)-min(self._last_timeaxis_data)
-        self._bottom_axis.setRange(xMin, xMax)
-        self._left_axis.setRange(yMin, yMax)
+        yMax = max(self._last_yaxis_data)-min(self._last_yaxis_data)
+        self.xaxis.setRange(xMin, xMax)
+        self.yaxis.setRange(yMin, yMax)
         self._view.setLimits(
             xMin=0, xMax=xMax-xMin, yMin=0, yMax=yMax-yMin,
             minXRange=xMax-xMin, maxXRange=xMax-xMin,
             minYRange=yMax-yMin, maxYRange=yMax-yMin)
 
         # Update image
+        self.colorbar.setLimits(data)
         mini, maxi = data[0], data[1]
         img = data[2]
         self._image_item.setLevels([mini, maxi])
@@ -622,14 +649,16 @@ class SiriusSpectrogramView(GraphicsLayoutWidget, PyDMWidget, PyDMColorMap):
         """
         Set the width of the image.
 
-        Can be overridden by :attr:`widthChannel`.
+        Can be overridden by :attr:`xAxisChannel` and :attr:`yAxisChannel`.
 
         Parameters
         ----------
         new_width: int
         """
-        if (self._image_width != int(new_width) and
-                (self._widthchannel is None or self._widthchannel == '')):
+        boo = self._image_width != int(new_width)
+        boo &= not self._xaxischannel
+        boo &= not self._yaxischannel
+        if boo:
             self._image_width = int(new_width)
 
     @Property(bool)
@@ -655,6 +684,34 @@ class SiriusSpectrogramView(GraphicsLayoutWidget, PyDMWidget, PyDMColorMap):
         """
         if self._normalize_data != new_norm:
             self._normalize_data = new_norm
+
+    @Property(ReadingOrder)
+    def readingOrder(self):
+        """
+        Return the reading order of the :attr:`imageChannel` array.
+
+        Returns
+        -------
+        ReadingOrder
+        """
+        return self._reading_order
+
+    @readingOrder.setter
+    def readingOrder(self, order):
+        """
+        Set reading order of the :attr:`imageChannel` array.
+
+        Parameters
+        ----------
+        order: ReadingOrder
+        """
+        if self._reading_order != order:
+            self._reading_order = order
+
+        if order == self.Clike and self._last_xaxis_data is not None:
+            self._image_width = self._last_xaxis_data.size
+        elif order == self.Fortranlike and self._last_yaxis_data is not None:
+            self._image_width = self._last_yaxis_data.size
 
     def keyPressEvent(self, ev):
         """Handle keypress events."""
@@ -686,32 +743,32 @@ class SiriusSpectrogramView(GraphicsLayoutWidget, PyDMWidget, PyDMColorMap):
             self._imagechannel = str(value)
 
     @Property(str)
-    def widthChannel(self):
+    def xAxisChannel(self):
         """
-        The channel address in use for the image width .
+        The channel address in use for the x-axis of image.
 
         Returns
         -------
         str
             Channel address
         """
-        return str(self._widthchannel)
+        return str(self._xaxischannel)
 
-    @widthChannel.setter
-    def widthChannel(self, value):
+    @xAxisChannel.setter
+    def xAxisChannel(self, value):
         """
-        The channel address in use for the image width .
+        The channel address in use for the x-axis of image.
 
         Parameters
         ----------
         value : str
             Channel address
         """
-        if self._widthchannel != value:
-            self._widthchannel = str(value)
+        if self._xaxischannel != value:
+            self._xaxischannel = str(value)
 
     @Property(str)
-    def timeAxisChannel(self):
+    def yAxisChannel(self):
         """
         The channel address in use for the time axis.
 
@@ -720,10 +777,10 @@ class SiriusSpectrogramView(GraphicsLayoutWidget, PyDMWidget, PyDMColorMap):
         str
             Channel address
         """
-        return str(self._timeaxischannel)
+        return str(self._yaxischannel)
 
-    @timeAxisChannel.setter
-    def timeAxisChannel(self, value):
+    @yAxisChannel.setter
+    def yAxisChannel(self, value):
         """
         The channel address in use for the time axis.
 
@@ -732,8 +789,8 @@ class SiriusSpectrogramView(GraphicsLayoutWidget, PyDMWidget, PyDMColorMap):
         value : str
             Channel address
         """
-        if self._timeaxischannel != value:
-            self._timeaxischannel = str(value)
+        if self._yaxischannel != value:
+            self._yaxischannel = str(value)
 
     def channels(self):
         """
@@ -752,14 +809,14 @@ class SiriusSpectrogramView(GraphicsLayoutWidget, PyDMWidget, PyDMColorMap):
                     value_slot=self.image_value_changed,
                     severity_slot=self.alarmSeverityChanged),
                 PyDMChannel(
-                    address=self.widthChannel,
+                    address=self.xAxisChannel,
                     connection_slot=self.connectionStateChanged,
-                    value_slot=self.image_width_changed,
+                    value_slot=self.image_xaxis_changed,
                     severity_slot=self.alarmSeverityChanged),
                 PyDMChannel(
-                    address=self.timeAxisChannel,
-                    connection_slot=self.timeaxis_connection_state_changed,
-                    value_slot=self.image_timeaxis_changed,
+                    address=self.yAxisChannel,
+                    connection_slot=self.yaxis_connection_state_changed,
+                    value_slot=self.image_yaxis_changed,
                     severity_slot=self.alarmSeverityChanged)]
         return self._channels
 
