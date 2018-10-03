@@ -98,7 +98,7 @@ class LoadRampConfig(SiriusDialog):
             if not self.ramp_config.configsrv_synchronized:
                 save_changes = MessageBox(
                     self, 'Save changes?',
-                    'There are unsaved changes. \n'
+                    'There are unsaved changes in {}. \n'
                     'Do you want to save?'.format(name),
                     'Yes', 'Cancel')
                 save_changes.acceptedSignal.connect(self._saveChanges)
@@ -192,7 +192,7 @@ class NewRampConfigGetName(SiriusDialog):
             if not self.config.configsrv_synchronized:
                 save_changes = MessageBox(
                     self, 'Save changes?',
-                    'There are unsaved changes. \n'
+                    'There are unsaved changes in {}. \n'
                     'Do you want to save?'.format(name),
                     'Yes', 'Cancel')
                 save_changes.acceptedSignal.connect(self._saveChanges)
@@ -914,7 +914,7 @@ class MessageBox(SiriusDialog):
     """Auxiliar dialog to inform user about errors and pendencies."""
 
     acceptedSignal = Signal()
-    regectedSignal = Signal()
+    rejectedSignal = Signal()
 
     def __init__(self, parent=None, title='', message='',
                  accept_button_text='', regect_button_text=''):
@@ -948,7 +948,7 @@ class MessageBox(SiriusDialog):
         self.close()
 
     def _emitRegected(self):
-        self.regectedSignal.emit()
+        self.rejectedSignal.emit()
         self.close()
 
 

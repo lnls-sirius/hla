@@ -17,6 +17,7 @@ from siriushla.bo_ap_ramp.settings import Settings
 from siriushla.bo_ap_ramp.config_params import ConfigParameters
 from siriushla.bo_ap_ramp.optics_adjust import OpticsAdjust
 from siriushla.bo_ap_ramp.statistics import Statistics
+from siriushla.bo_ap_ramp.auxiliar_classes import MessageBox as _MessageBox
 
 
 class RampMain(SiriusMainWindow):
@@ -153,6 +154,27 @@ class RampMain(SiriusMainWindow):
             else:
                 self.config_parameters.setStyleSheet('')
                 self.config_parameters.setToolTip('')
+
+    def closeEvent(self, ev):
+        """Reimplement closeEvent to avoid forgeting saving changes."""
+        self.close_ev = ev
+        if not self.ramp_config.configsrv_synchronized:
+            save_changes = _MessageBox(
+                self, 'Save changes?',
+                'There are unsaved changes in {}. \n'
+                'Do you want to save?'.format(self.ramp_config.name),
+                'Yes', 'Cancel')
+            save_changes.acceptedSignal.connect(self._ignoreCloseAndSave)
+            save_changes.rejectedSignal.connect(self._acceptClose)
+            save_changes.exec_()
+
+    def _ignoreCloseAndSave(self):
+        self.close_ev.ignore()
+        self.settings.showSaveAsPopup()
+
+    def _acceptClose(self):
+        self.close_ev.accept()
+        super().closeEvent(self.close_ev)
 
 
 if __name__ == '__main__':

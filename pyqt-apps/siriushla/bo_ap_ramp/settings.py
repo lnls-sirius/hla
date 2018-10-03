@@ -45,7 +45,7 @@ class Settings(QMenuBar):
         self.act_save.triggered.connect(self._saveAndEmitConfigName)
         self.act_save_as = QAction('Save As...', self)
         self.act_save_as.setShortcut(QKeySequence(Qt.CTRL+Qt.SHIFT+Qt.Key_S))
-        self.act_save_as.triggered.connect(self._showSaveAsPopup)
+        self.act_save_as.triggered.connect(self.showSaveAsPopup)
         self.config_menu.addAction(self.act_new)
         self.config_menu.addAction(self.act_load)
         self.config_menu.addAction(self.act_save)
@@ -69,14 +69,14 @@ class Settings(QMenuBar):
         self._newConfigFromTemplateGetNamePopup.newConfigNameSignal.connect(
             self._emitConfigName)
         self._newConfigFromTemplateGetNamePopup.saveSignal.connect(
-            self._showSaveAsPopup)
+            self.showSaveAsPopup)
         self._newConfigFromTemplateGetNamePopup.open()
 
     def _showLoadExistingConfigPopup(self):
         self._loadPopup = _LoadRampConfig(self, self.ramp_config)
         self._loadPopup.newConfigNameSignal.connect(self._emitConfigName)
         self._loadPopup.loadSignal.connect(self._emitLoadSignal)
-        self._loadPopup.saveSignal.connect(self._showSaveAsPopup)
+        self._loadPopup.saveSignal.connect(self.showSaveAsPopup)
         self._loadPopup.open()
 
     def _showOpticsSettingsPopup(self):
@@ -93,7 +93,8 @@ class Settings(QMenuBar):
             self._emitStatsSettings)
         self._statsSettingsPopup.open()
 
-    def _showSaveAsPopup(self):
+    def showSaveAsPopup(self):
+        """Show a popup to get a new name to save config."""
         if self.ramp_config is None:
             return
         self._saveAsPopup = _NewRampConfigGetName(
