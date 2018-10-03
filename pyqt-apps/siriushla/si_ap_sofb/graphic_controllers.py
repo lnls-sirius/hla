@@ -93,9 +93,9 @@ class BaseWidget(QWidget):
         pref = 'BPM' if self.is_orb else 'CH' if pln == 'x' else 'CV'
         for i, lname in enumerate(self.line_names):
             cor = i * 255
-        cor //= len(self.line_names)
-        rcor = QColor(255, cor, cor)
-        bcor = QColor(cor, cor, 255)
+            cor //= len(self.line_names)
+            rcor = QColor(255, cor, cor)
+            bcor = QColor(cor, cor, 255)
             opts = dict(
                 y_channel='ca://A',
                 x_channel=self.prefix + pref + 'PosS-Cte',
@@ -438,6 +438,43 @@ class OrbitWidget(BaseWidget):
                     'signal': pvj.new_value_signal,
                     'getvalue': pvj.getvalue}}
         return chans, ctrls
+
+
+class MultiTurnWidget(QWidget):
+
+    def __init__(self, parent, prefix, acc='SI'):
+        super().__init__(parent)
+        self.prefix = prefix
+        self.acc = acc
+        self.setupui()
+
+    def setupui(self):
+        vbl = QVBoxLayout(self)
+        self.spectx = Spectrogram(
+            image_channel=self.prefix+'OrbitsMultiTurnX-Mon',
+            xaxis_channel=self.prefix+'BPMPosS-Cte',
+            yaxis_channel=self.prefix+'OrbitsMultiTurnIdxTime-Mon')
+        self.specty = Spectrogram(
+            image_channel=self.prefix+'OrbitsMultiTurnY-Mon',
+            xaxis_channel=self.prefix+'BPMPosS-Cte',
+            yaxis_channel=self.prefix+'OrbitsMultiTurnIdxTime-Mon')
+        vbl.addWidget(self.spectx)
+        vbl.addWidget(self.specty)
+
+    def setreforbits(self, pln, orb):
+        if pln.lower() == 'x':
+            self.spectx.setreforbit(orb)
+        else:
+            self.specty.setreforbit(orb)
+
+
+class Spectrogram(SiriusSpectrogramView):
+
+    def setreforbit(self, orb):
+        self._ref_orbit = orb
+
+    def process_image(self, img):
+        return img - self._ref_orbit[:, None]
 
 
 class CorrectorsWidget(BaseWidget):
