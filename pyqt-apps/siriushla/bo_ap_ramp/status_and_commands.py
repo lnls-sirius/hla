@@ -97,8 +97,6 @@ class StatusAndCommands(QGroupBox):
         self.bt_start_inj = QPushButton('Start', self)
         self.bt_stop_inj = QPushButton('Stop', self)
 
-        self.bt_cycle_ps = QPushButton('Cycling PS window', self)
-
         self.bt_setup.clicked.connect(self._setup_ramp)
         self.bt_apply_ps.clicked.connect(self._apply_ps)
         self.bt_apply_rf.clicked.connect(self._apply_rf)
@@ -107,11 +105,10 @@ class StatusAndCommands(QGroupBox):
         self.bt_stop_ramp.clicked.connect(self._stop_ramp)
         self.bt_start_inj.clicked.connect(self._start_inj)
         self.bt_stop_inj.clicked.connect(self._stop_inj)
-        self.bt_cycle_ps.clicked.connect(self._openCyclePSWindow)
 
         for bt in ['bt_setup', 'bt_apply_ps', 'bt_apply_rf',
                    'bt_apply_all', 'bt_start_ramp', 'bt_stop_ramp',
-                   'bt_start_inj', 'bt_stop_inj', 'bt_cycle_ps']:
+                   'bt_start_inj', 'bt_stop_inj']:
             w = getattr(self, bt)
             w.setFixedHeight(48)
             if 'apply' in bt:
@@ -142,12 +139,7 @@ class StatusAndCommands(QGroupBox):
         hbox.addWidget(self.bt_stop_inj)
         flay.addRow(label_injection, hbox)
         flay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
-        flay.addRow(self.bt_cycle_ps)
         return flay
-
-    def _openCyclePSWindow(self):
-        # TODO: call cycle window
-        pass
 
     def _setup_ramp(self):
         if not self._conn_magnets or not self._conn_timing \

@@ -6,6 +6,12 @@ from qtpy.QtWidgets import QMenuBar, QAction
 from siriuspy.servconf.util import \
     generate_config_name as _generate_config_name
 from siriuspy.ramp import ramp
+from siriushla import util as _hlautil
+from siriushla.as_ps_control.PSTabControlWindow import \
+    PSTabControlWindow as _MAControlWindow
+from siriushla.as_pm_control.PulsedMagnetControlWindow import \
+    PulsedMagnetControlWindow as _PMControlWindow
+from siriushla.as_ps_cycle.cycle_window import CycleWindow as _CycleWindow
 from siriushla.bo_ap_ramp.auxiliar_classes import \
     LoadRampConfig as _LoadRampConfig, \
     NewRampConfigGetName as _NewRampConfigGetName, \
@@ -33,6 +39,10 @@ class Settings(QMenuBar):
         self._setupUi()
 
     def _setupUi(self):
+        self.setStyleSheet(
+            """QMenuBar::item {
+                padding: 0 30px 0 5px;
+            }""")
         self.config_menu = self.addMenu('Booster Ramp Configuration')
         self.act_new = QAction('New from template', self)
         self.act_new.setShortcut(QKeySequence.New)
@@ -62,6 +72,19 @@ class Settings(QMenuBar):
         self.act_stats_settings.triggered.connect(
             self._showStatsSettingsPopup)
         self.stats_menu.addAction(self.act_stats_settings)
+
+        self.open_menu = self.addMenu('Open...')
+        self.act_cycle = QAction('PS Cycle')
+        _hlautil.connect_window(self.act_cycle, _CycleWindow, parent=self)
+        self.act_ma = QAction('Booster MA')
+        _hlautil.connect_window(self.act_ma, _MAControlWindow, parent=self,
+                                section='BO', discipline=1)  # MA
+        self.act_pm = QAction('PM')
+        _hlautil.connect_window(self.act_pm, _PMControlWindow, parent=self)
+        self.open_menu.addAction(self.act_cycle)
+        self.open_menu.addAction(self.act_ma)
+        self.open_menu.addAction(self.act_pm)
+        # TODO: include RF and TI windows??
 
     def _showGetNewConfigNamePopup(self):
         self._newConfigFromTemplateGetNamePopup = _NewRampConfigGetName(

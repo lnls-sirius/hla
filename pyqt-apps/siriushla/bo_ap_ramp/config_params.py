@@ -912,7 +912,7 @@ class RFRamp(QWidget):
         self.ax = self.graph.figure.subplots()
         self.ax.grid()
         self.ax.set_xlabel('t [ms]')
-        self.ax.set_ylabel('Vgap [kV]')
+        self.ax.set_ylabel('|Vgap| [kV]')
         self.line1, = self.ax.plot([0], [0], '-b')
         self.line2, = self.ax.plot([0], [0], '-g')
         self.markers, = self.ax.plot([0], [0], '+r')
@@ -963,7 +963,7 @@ class RFRamp(QWidget):
             'columns': {0: '',
                         1: 'T [ms]',
                         2: '|Vgap| [kV]',
-                        3: 'ㄥVgap [°]',
+                        3: '∠Vgap [°]',
                         4: 'E [GeV]',
                         5: 'Φs [°]'}}
         self.table.setStyleSheet(
@@ -1038,7 +1038,7 @@ class RFRamp(QWidget):
                 if self.table_map['columns'][column] == '|Vgap| [kV]':
                     old_value = self.ramp_config.rf_ramp_bottom_voltage
                     self.ramp_config.rf_ramp_bottom_voltage = new_value
-                elif self.table_map['columns'][column] == 'ㄥVgap [°]':
+                elif self.table_map['columns'][column] == '∠Vgap [°]':
                     old_value = self.ramp_config.rf_ramp_bottom_phase
                     self.ramp_config.rf_ramp_bottom_phase = new_value
 
@@ -1053,7 +1053,7 @@ class RFRamp(QWidget):
                 elif self.table_map['columns'][column] == '|Vgap| [kV]':
                     old_value = self.ramp_config.rf_ramp_top_voltage
                     self.ramp_config.rf_ramp_top_voltage = new_value
-                elif self.table_map['columns'][column] == 'ㄥVgap [°]':
+                elif self.table_map['columns'][column] == '∠Vgap [°]':
                     old_value = self.ramp_config.rf_ramp_top_phase
                     self.ramp_config.rf_ramp_top_phase = new_value
 
