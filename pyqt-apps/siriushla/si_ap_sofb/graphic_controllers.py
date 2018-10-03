@@ -7,14 +7,19 @@ from pyqtgraph import mkBrush, mkPen, InfiniteLine
 from qtpy.QtWidgets import QWidget, QFileDialog, QLabel, QCheckBox, \
     QVBoxLayout, QHBoxLayout, QSizePolicy, QGroupBox, \
     QFormLayout, QPushButton, QComboBox
-from qtpy.QtCore import QSize, Qt, QTimer, QThread, Signal
+from qtpy.QtCore import QSize, Qt, QTimer, QThread, Signal, QObject
 from qtpy.QtGui import QColor
 from pydm.widgets import PyDMWaveformPlot
-from siriushla.widgets import SiriusConnectionSignal
+import siriushla.util as _util
+from siriushla.widgets.windows import create_window_from_widget
+from siriushla.widgets import SiriusSpectrogramView, SiriusConnectionSignal
 import siriuspy.csdevice.orbitcorr as _csorb
 
 
 class BaseWidget(QWidget):
+    DEFAULT_DIR = '/home/fac/sirius-iocs/si-ap-sofb'
+    EXT = '.txt'
+    EXT_FLT = 'Text Files (*.txt)'
 
     def __init__(self, parent, prefix, ctrls, names, is_orb, acc='SI'):
         super(BaseWidget, self).__init__(parent)
@@ -22,37 +27,56 @@ class BaseWidget(QWidget):
         self.controls = ctrls
         self.acc = acc
         self.update_rate = 2.1  # Hz
-        self.timer = QTimer()
+        self.last_dir = self.DEFAULT_DIR
         self.prefix = prefix
         self.is_orb = is_orb
-        self.setup_ui()
+        self.timer = QTimer()
+        self.thread = QThread()
+        self.updater = []
+        for _ in range(2):
+            upd = UpdateGraph(ctrls, is_orb, acc)
+            upd.moveToThread(self.thread)
+            self.timer.timeout.connect(upd.update_graphic)
+            self.updater.append(upd)
+
+        self.setupui()
+        self.connect_signals()
+
+        prefx, prefy = ('BPMX', 'BPMY') if self.is_orb else ('CH', 'CV')
+        self.enbl_pvs = {
+            'x': SiriusConnectionSignal(self.prefix+prefx+'EnblList-RB'),
+            'y': SiriusConnectionSignal(self.prefix+prefy+'EnblList-RB')}
+        for pln, signal in self.enbl_pvs.items():
+            sig = signal.new_value_signal[_np.ndarray]
+            sig.connect(_part(self._update_enable_list, pln))
+            for upd in self.updater:
+                sig.connect(_part(upd.set_enbl_list, pln))
+
+        self.thread.start()
         self.timer.start(1000/self.update_rate)
 
-    def setup_ui(self):
+    def channels(self):
+        return list(self.enbl_pvs.values())
+
+    def setupui(self):
         vbl = QVBoxLayout(self)
 
-        graphs = {'x': self._get_graph(), 'y': self._get_graph()}
-        vbl.addWidget(graphs['x'])
-        vbl.addWidget(graphs['y'])
+        graphx = self.uigetgraph('x')
+        graphy = self.uigetgraph('y')
+        vbl.addWidget(graphx)
+        vbl.addWidget(graphy)
+        self.graph = {'x': graphx, 'y': graphy}
 
-        self.controllers = []
         self.hbl = QHBoxLayout()
         vbl.addItem(self.hbl)
         self.hbl.addStretch(1)
         for i, _ in enumerate(self.line_names):
-            cont = GraphicController(
-                self, graphs, self.controls, self.prefix, i,
-                self.line_names, self.is_orb, self.acc)
-            self.hbl.addWidget(cont)
+            grpbx = self.uicreate_groupbox(i)
+            grpbx.setObjectName('GroupBox'+str(i))
+            self.hbl.addWidget(grpbx)
             self.hbl.addStretch(1)
-            self.controllers.append(cont)
-            self.timer.timeout.connect(cont.updater.update_graphic)
 
-        for gr in graphs.values():
-            for cur in gr.plotItem.curves[4:]:
-                cur.setVisible(False)
-
-    def _get_graph(self):
+    def uigetgraph(self, pln):
         graph = PyDMWaveformPlot(self)
         graph.maxRedrawRate = 2
         graph.mouseEnabledX = True
@@ -65,93 +89,96 @@ class BaseWidget(QWidget):
         graph.setMinXRange(0.0)
         graph.setMaxXRange(1.0)
         graph.plotItem.showButtons()
-        return graph
 
-
-class GraphicController(QWidget):
-    """Control the Orbit Graphic Displnay."""
-    DEFAULT_DIR = '/home/fac/sirius-iocs/si-ap-sofb'
-    EXT = '.txt'
-    EXT_FLT = 'Text Files (*.txt)'
-
-    def __init__(
-            self, parent, graphs, ctrls, prefix, index, names, is_orb,
-            acc='SI'):
-        """Initialize the instance."""
-        super().__init__(parent)
-        self.last_dir = self.DEFAULT_DIR
-        self.prefix = prefix
-        self.acc = acc
-        self.idx = index
-        self.line_names = names
-        self.is_orb = is_orb
-        self.updater = UpdateGraphThread(ctrls, is_orb, acc)
-
-        self.graphs = graphs
-
-        self.offbrush = mkBrush(100, 100, 100)
-        self.offpen = mkPen(100, 100, 100)
-        cor = self.idx * 255
+        pref = 'BPM' if self.is_orb else 'CH' if pln == 'x' else 'CV'
+        for i, lname in enumerate(self.line_names):
+            cor = i * 255
         cor //= len(self.line_names)
         rcor = QColor(255, cor, cor)
         bcor = QColor(cor, cor, 255)
-        self.brush = {'x': mkBrush(bcor), 'y': mkBrush(rcor)}
-        self.pen = {'x': mkPen(bcor), 'y': mkPen(rcor)}
+            opts = dict(
+                y_channel='ca://A',
+                x_channel=self.prefix + pref + 'PosS-Cte',
+                name=lname,
+                color=bcor if pln == 'x' else rcor,
+                redraw_mode=2,
+                lineStyle=1,
+                lineWidth=2 if i else 3,
+                symbol='o',
+                symbolSize=10)
+            graph.addChannel(**opts)
+            pen = mkPen(opts['color'], width=opts['lineWidth'])
+            pen.setStyle(4)
+            cpstd = InfiniteLine(pos=0.0, pen=pen, angle=0)
+            self.updater[i].ave_pstd[pln].connect(cpstd.setValue)
+            graph.addItem(cpstd)
+            cmstd = InfiniteLine(pos=0.0, pen=pen, angle=0)
+            self.updater[i].ave_mstd[pln].connect(cmstd.setValue)
+            graph.addItem(cmstd)
+            pen.setStyle(2)
+            cave = InfiniteLine(pos=0.0, pen=pen, angle=0)
+            self.updater[i].ave[pln].connect(cave.setValue)
+            graph.addItem(cave)
+            cdta = graph.curveAtIndex(-1)
+            self.updater[i].data_sig[pln].connect(cdta.receiveYWaveform)
+            cdta.setVisible(not i)
+            cdta.curve.setZValue(-4*i)
+            cdta.scatter.setZValue(-4*i)
+            for j, cur in enumerate((cpstd, cmstd, cave), 1):
+                cur.setZValue(-4*i - j)
+                cur.setVisible(not i)
 
-        self.curve_data = dict()
+            graph.plotItem.legend.removeItem('')
+        return graph
 
-        self.setup_ui()
-
-        prefx, prefy = ('BPMX', 'BPMY') if self.is_orb else ('CH', 'CV')
-        self.enbl_pvs = {
-            'x': SiriusConnectionSignal(self.prefix+prefx+'EnblList-RB'),
-            'y': SiriusConnectionSignal(self.prefix+prefy+'EnblList-RB')}
-        for pln, sig in self.enbl_pvs.items():
-            sig.new_value_signal[_np.ndarray].connect(
-                _part(self._update_enable_list, pln))
-
-        self.updater.start()
-
-        self.cbx_show.setChecked(not self.idx)
-
-    def channels(self):
-        return list(self.enbl_pvs.values())
-
-    def setup_ui(self):
-        hbl = QHBoxLayout(self)
-        cbx = QCheckBox(self)
-        hbl.addWidget(cbx)
-        cbx.setChecked(True)
-        self.cbx_show = cbx
-        self.cbx_show.toggled.connect(self.updater.set_visible)
-
-        grpbx = QGroupBox(self.line_names[self.idx], self)
-        hbl.addWidget(grpbx)
+    def uicreate_groupbox(self, idx):
+        grpbx = QGroupBox(self.line_names[idx], self)
+        grpbx.setCheckable(True)
+        grpbx.setChecked(not idx)
+        grpbx.toggled.connect(self.updater[idx].set_visible)
         fbl = QFormLayout(grpbx)
 
         if self.is_orb:
-            lbl_orb = self._create_label('Show', grpbx)
-            lbl_ref = self._create_label('as diff to:', grpbx)
-            cbx_ref = self._create_combo_box(grpbx, 'ref')
-            cbx_orb = self._create_combo_box(grpbx, 'val')
+            lbl_orb = self.uicreate_label('Show', grpbx)
+            lbl_ref = self.uicreate_label('as diff to:', grpbx)
+            cbx_ref = self.uicreate_combobox(grpbx, 'ref', idx)
+            cbx_orb = self.uicreate_combobox(grpbx, 'val', idx)
             fbl.addRow(lbl_orb, cbx_orb)
             fbl.addRow(lbl_ref, cbx_ref)
-            self.combo = {'ref': cbx_ref, 'val': cbx_orb}
 
             pb_save = QPushButton('Save diff to file', grpbx)
-            pb_save.clicked.connect(self._save_difference)
-            self.cbx_show.toggled.connect(pb_save.setEnabled)
+            pb_save.clicked.connect(_part(self._save_difference, idx))
             fbl.addRow(QLabel(grpbx), pb_save)
 
         lab = QLabel('Statistics', grpbx)
         lab.setAlignment(Qt.AlignCenter)
         fbl.addRow(lab)
         for pln in ('x', 'y'):
-            wid = self._create_curves(pln)
+            wid = QWidget(grpbx)
             fbl.addRow(wid)
+            hbl = QHBoxLayout(wid)
+            cbx = QCheckBox('{0:s}:'.format(pln.upper()), wid)
+            cbx.setObjectName(pln + 'checkbox')
+            cbx.setChecked(True)
+            hbl.addWidget(cbx)
 
-    def _create_combo_box(self, parent, orb_tp):
+            lab_avg = Label('0.000', wid)
+            self.updater[idx].ave[pln].connect(lab_avg.setFloat)
+            lab_avg.setAlignment(Qt.AlignCenter)
+            lab_avg.setMinimumSize(QSize(120, 0))
+            hbl.addWidget(lab_avg)
+            hbl.addWidget(QLabel(
+                "<html><head/><body><p>&#177;</p></body></html>", wid))
+            lab_std = Label('0.000', wid)
+            self.updater[idx].std[pln].connect(lab_std.setFloat)
+            lab_std.setMinimumSize(QSize(120, 0))
+            lab_std.setAlignment(Qt.AlignCenter)
+            hbl.addWidget(lab_std)
+        return grpbx
+
+    def uicreate_combobox(self, parent, orb_tp, idx):
         combo = QComboBox(parent)
+        combo.setObjectName('ComboBox_' + orb_tp + str(idx))
         sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sz_pol.setHorizontalStretch(0)
         sz_pol.setVerticalStretch(0)
@@ -160,16 +187,15 @@ class GraphicController(QWidget):
         combo.setMinimumSize(QSize(0, 0))
         combo.setEditable(True)
         combo.setMaxVisibleItems(10)
-        for name in sorted(self.updater.ctrls.keys()):
+        for name in sorted(self.controls.keys()):
             combo.addItem(name)
         combo.addItem('Zero')
-        combo.currentTextChanged.connect(
-            _part(self.updater.some_changed, orb_tp))
+        combo.currentTextChanged.connect(_part(
+            self.updater[idx].some_changed, orb_tp))
         combo.setCurrentIndex(0)
-        self.cbx_show.toggled.connect(combo.setEnabled)
         return combo
 
-    def _create_label(self, lab, parent):
+    def uicreate_label(self, lab, parent):
         label = QLabel(lab, parent)
         sz_pol = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Preferred)
         sz_pol.setHorizontalStretch(0)
@@ -180,90 +206,40 @@ class GraphicController(QWidget):
         label.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
         return label
 
-    def _create_curves(self, pln):
-        wid = QWidget(self)
-        hbl = QHBoxLayout(wid)
-        cbx = QCheckBox('{0:s}:'.format(pln.upper()), wid)
-        cbx.setChecked(True)
-        self.cbx_show.toggled.connect(cbx.setChecked)
-        self.cbx_show.toggled.connect(cbx.setEnabled)
-
-        hbl.addWidget(cbx)
-
-        lab_avg = Label('0.000', wid)
-        self.updater.ave[pln].connect(lab_avg.setFloat)
-        lab_avg.setAlignment(Qt.AlignCenter)
-        lab_avg.setMinimumSize(QSize(120, 0))
-        hbl.addWidget(lab_avg)
-
-        hbl.addWidget(QLabel(
-            "<html><head/><body><p>&#177;</p></body></html>", wid))
-
-        lab_std = Label('0.000', wid)
-        self.updater.std[pln].connect(lab_std.setFloat)
-        lab_std.setMinimumSize(QSize(120, 0))
-        lab_std.setAlignment(Qt.AlignCenter)
-        hbl.addWidget(lab_std)
-
-        opts = self._get_curve_opts(pln)
-        self.graphs[pln].addChannel(**opts)
-        pen = mkPen(opts['color'], width=opts['lineWidth'])
-        pen.setStyle(4)
-        cpstd = InfiniteLine(pos=0.0, pen=pen, angle=0)
-        cmstd = InfiniteLine(pos=0.0, pen=pen, angle=0)
-        pen.setStyle(2)
-        cave = InfiniteLine(pos=0.0, pen=pen, angle=0)
-        self.graphs[pln].addItem(cpstd)
-        self.graphs[pln].addItem(cmstd)
-        self.graphs[pln].addItem(cave)
-        self.graphs[pln].plotItem.legend.removeItem('')
-
-        cdta = self.graphs[pln].curveAtIndex(slice(-1, None, None))[0]
-        self.cbx_show.toggled.connect(cdta.setVisible)
-        cdta.curve.setZValue(-4*self.idx)
-        cdta.scatter.setZValue(-4*self.idx)
-        for i, cur in enumerate((cpstd, cmstd, cave), 1):
-            cbx.toggled.connect(cur.setVisible)
-            cur.setZValue(-4*self.idx - i)
-
-        self.curve_data[pln] = cdta
-        self.updater.data_sig[pln].connect(cdta.receiveYWaveform)
-        self.updater.ave[pln].connect(cave.setValue)
-        self.updater.ave_pstd[pln].connect(cpstd.setValue)
-        self.updater.ave_mstd[pln].connect(cmstd.setValue)
-        return wid
-
-    def _get_curve_opts(self, pln):
-        pref = 'BPM' if self.is_orb else 'CH' if pln == 'x' else 'CV'
-        opts = dict(
-            y_channel='ca://A',
-            x_channel=self.prefix + pref + 'PosS-Cte',
-            name=self.line_names[self.idx],
-            color=self.pen[pln].color(),
-            redraw_mode=2,
-            lineStyle=1,
-            lineWidth=2 if self.idx else 3,
-            symbol='o',
-            symbolSize=10)
-        return opts
+    def connect_signals(self):
+        for i in range(len(self.line_names)):
+            grpbx = self.findChild(QGroupBox, 'GroupBox' + str(i))
+            for pln in ('x', 'y'):
+                curve = self.graph[pln].curveAtIndex(i)
+                lines = self.graph[pln].plotItem.items
+                lines = [x for x in lines if isinstance(x, InfiniteLine)]
+                cbx = grpbx.findChild(QCheckBox, pln + 'checkbox')
+                grpbx.toggled.connect(curve.setVisible)
+                grpbx.toggled.connect(cbx.setChecked)
+                for j in range(3):
+                    cbx.toggled.connect(lines[3*i + j].setVisible)
 
     def _update_enable_list(self, pln, array):
-        enbl_list = _np.array(array, dtype=bool)
-        brush = self.brush[pln]
-        pen = self.pen[pln]
-        trace = self.curve_data[pln]
-        mask_brush = [(brush if v else self.offbrush) for v in enbl_list]
-        mask_pen = [(pen if v else self.offpen) for v in enbl_list]
-        trace.opts['symbolBrush'] = mask_brush
-        trace.opts['symbolPen'] = mask_pen
-        self.updater.set_enbl_list(pln, enbl_list)
+        offbrs = mkBrush(100, 100, 100)
+        offpen = mkPen(100, 100, 100)
+        for i in range(len(self.line_names)):
+            trc = self.graph[pln].curveAtIndex(i)
+            cor = i * 255
+            cor //= len(self.line_names)
+            cor = (cor, cor, 255) if pln == 'x' else (255, cor, cor)
+            cor = QColor(*cor)
+            brs = mkBrush(cor)
+            pen = mkPen(cor)
+            trc.opts['symbolBrush'] = [(brs if v else offbrs) for v in array]
+            trc.opts['symbolPen'] = [(pen if v else offpen) for v in array]
 
-    def _save_difference(self):
-        valx = self.updater.vectors['val']['x']
-        refx = self.updater.vectors['ref']['x']
-        valy = self.updater.vectors['val']['y']
-        refy = self.updater.vectors['ref']['y']
-        if None in (valx, refx, valy, refy):
+    def _save_difference(self, idx):
+        updater = self.updater[idx]
+        valx = updater.vectors['val']['x']
+        refx = updater.vectors['ref']['x']
+        valy = updater.vectors['val']['y']
+        refy = updater.vectors['ref']['y']
+        if valx is None or refx is None or valy is None or refy is None:
             return
         diffx = valx - refx
         diffy = valy - refy
@@ -283,23 +259,24 @@ class Label(QLabel):
         super().setText(self.FMT.format(text))
 
 
-class UpdateGraphThread(QThread):
-    """Thread to update graphics."""
+class UpdateGraph(QObject):
+    """Worker to update graphics."""
     avex = Signal([float])
     stdx = Signal([float])
     ave_pstdx = Signal([float])
     ave_mstdx = Signal([float])
     data_sigx = Signal([_np.ndarray])
+    ref_sigx = Signal([_np.ndarray])
     avey = Signal([float])
     stdy = Signal([float])
     ave_pstdy = Signal([float])
     ave_mstdy = Signal([float])
     data_sigy = Signal([_np.ndarray])
+    ref_sigy = Signal([_np.ndarray])
 
     def __init__(self, ctrls, is_orb, acc='SI'):
         """Initialize object."""
         super().__init__()
-        self.moveToThread(self)
         self.ctrls = ctrls
         self.acc = acc
         self.consts = _csorb.get_consts(acc)
@@ -312,6 +289,7 @@ class UpdateGraphThread(QThread):
         self.ave_pstd = {'x': self.ave_pstdx, 'y': self.ave_pstdy}
         self.ave_mstd = {'x': self.ave_mstdx, 'y': self.ave_mstdy}
         self.data_sig = {'x': self.data_sigx, 'y': self.data_sigy}
+        self.raw_ref_sig = {'x': self.ref_sigx, 'y': self.ref_sigy}
         self.slots = {
             'val': {
                 'x': _part(self._update_vectors, 'val', 'x'),
@@ -368,17 +346,19 @@ class UpdateGraphThread(QThread):
         self._isvisible = boo
 
     def set_enbl_list(self, pln, enbls):
-        self.enbl_list[pln] = enbls
+        self.enbl_list[pln] = _np.array(enbls, dtype=bool)
 
     def _update_vectors(self, orb_tp, pln, orb):
         self.vectors[orb_tp][pln] = orb
+        if orb_tp == 'ref' and orb is not None:
+            self.raw_ref_sig[pln].emit(orb)
 
     def update_graphic(self, pln=None):
         if not self._isvisible:
             return
         unit = 1/1000 if self.is_orb else 1  # um, urad
-        pln = ('x', 'y') if pln is None else (pln, )
-        for pln in pln:
+        plns = ('x', 'y') if pln is None else (pln, )
+        for pln in plns:
             orb = self.vectors['val'][pln]
             ref = self.vectors['ref'][pln]
             if orb is None or ref is None:
@@ -408,13 +388,29 @@ class OrbitWidget(BaseWidget):
         names = ['Line {0:d}'.format(i+1) for i in range(2)]
         super().__init__(parent, prefix, ctrls, names, True, acc)
 
-        self.controllers[0].updater.some_changed('val', 'Online Orbit')
-        self.controllers[0].updater.some_changed('ref', 'Reference Orbit')
-        self.controllers[0].combo['val'].setCurrentIndex(3)
-        self.controllers[0].combo['ref'].setCurrentIndex(4)
+        self.updater[0].some_changed('val', 'Online Orbit')
+        self.updater[0].some_changed('ref', 'Reference Orbit')
+        self.findChild(QComboBox, 'ComboBox_val0').setCurrentIndex(3)
+        self.findChild(QComboBox, 'ComboBox_ref0').setCurrentIndex(4)
+
+        self.add_buttons_for_images()
+
+    def add_buttons_for_images(self):
+        grpbx = QGroupBox('Other Graphics', self)
+        vbl = QVBoxLayout(grpbx)
+        self.hbl.addWidget(grpbx)
+        self.hbl.addStretch(1)
+        btn = QPushButton('MultiTurn Graphics', grpbx)
+        vbl.addWidget(btn)
+        Window = create_window_from_widget(
+            MultiTurnWidget, name='MultiTurnWindow')
+        _util.connect_window(
+            btn, Window, self, prefix=self.prefix, acc=self.acc)
 
     def channels(self):
-        return self._chans
+        chans = super().channels()
+        chans.extend(self._chans)
+        return chans
 
     @staticmethod
     def get_default_ctrls(prefix):
@@ -454,10 +450,10 @@ class CorrectorsWidget(BaseWidget):
         names = ('DeltaKicks', 'Kicks')
         super().__init__(parent, prefix, ctrls, names, False, acc)
 
-        self.controllers[0].updater.some_changed('val', 'Delta Kicks')
-        self.controllers[0].updater.some_changed('ref', 'Zero')
-        self.controllers[1].updater.some_changed('val', 'Kicks')
-        self.controllers[1].updater.some_changed('ref', 'Zero')
+        self.updater[0].some_changed('val', 'Delta Kicks')
+        self.updater[0].some_changed('ref', 'Zero')
+        self.updater[1].some_changed('val', 'Kicks')
+        self.updater[1].some_changed('ref', 'Zero')
 
         self.add_kicklimits_curves()
 
@@ -485,11 +481,10 @@ class CorrectorsWidget(BaseWidget):
             pen.setStyle(sty)
             pen.setWidth(wid)
             for pln, corr in zip(plns, corrs):
-                maxkick = InfiniteLine(
-                    pos=0.0, pen=pen, angle=0, name=name)
+                maxkick = InfiniteLine(pos=0.0, pen=pen, angle=0, name=name)
                 minkick = NegativeLine(pos=0.0, pen=pen, angle=0)
-                self.controllers[0].graphs[pln].addItem(maxkick)
-                self.controllers[0].graphs[pln].addItem(minkick)
+                self.graph[pln].addItem(maxkick)
+                self.graph[pln].addItem(minkick)
                 chan = SiriusConnectionSignal(self.prefix + pvi + corr + '-RB')
                 self._chans.append(chan)
                 chan.new_value_signal[float].connect(maxkick.setValue)
@@ -498,7 +493,9 @@ class CorrectorsWidget(BaseWidget):
                 chb.toggled.connect(minkick.setVisible)
 
     def channels(self):
-        return self._chans
+        chans = super().channels()
+        chans.extend(self._chans)
+        return chans
 
     @staticmethod
     def get_default_ctrls(prefix):
