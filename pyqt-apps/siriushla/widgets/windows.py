@@ -1,6 +1,6 @@
 """Sirius Windows module."""
 from qtpy.QtCore import Property
-from qtpy.QtWidgets import QMainWindow, QDialog
+from qtpy.QtWidgets import QMainWindow, QDialog, QHBoxLayout
 from siriushla.sirius_application import SiriusApplication
 
 
@@ -77,3 +77,16 @@ def _create_siriuswindow(qt_type):
 
 SiriusMainWindow = _create_siriuswindow(QMainWindow)
 SiriusDialog = _create_siriuswindow(QDialog)
+
+
+def create_window_from_widget(WidgetClass, name=None):
+    class MyWindow(SiriusDialog):
+
+        def __init__(self, parent, *args, **kwargs):
+            super().__init__(parent)
+            hbl = QHBoxLayout(self)
+            wid = WidgetClass(self, *args, **kwargs)
+            hbl.addWidget(wid)
+    if name:
+        MyWindow.__name__ = name
+    return MyWindow

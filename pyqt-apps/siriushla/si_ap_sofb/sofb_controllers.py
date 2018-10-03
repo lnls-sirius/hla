@@ -9,6 +9,7 @@ from pydm.widgets import PyDMCheckbox, PyDMSpinbox, PyDMLabel, \
 from siriushla.widgets import SiriusConnectionSignal, PyDMStateButton, \
             SiriusDialog, SiriusLedAlert, SiriusLedState
 import siriuspy.csdevice.orbitcorr as _csorb
+from siriushla.widgets.windows import create_window_from_widget
 import siriushla.util as _util
 
 from siriushla.si_ap_sofb.selection_matrix import SelectionMatrix
@@ -73,7 +74,8 @@ class ControlSOFB(_BaseWidget):
         # ########################### STATUS #################################
         # ####################################################################
         btn = QPushButton('Open Status', grp_bx)
-        Window = create_window_from_widget(StatusWidget, name='StatusWindow')
+        Window = create_window_from_widget(
+            StatusWidget, name='StatusWindow')
         _util.connect_window(
             btn, Window, self, prefix=self.prefix)
         pdm_led = SiriusLedAlert(grp_bx, init_channel=self.prefix+'Status-Mon')
@@ -649,19 +651,6 @@ class RespMatWidget(_BaseWidget):
         # pdm_wplt.setBackgroundColor(QColor(255, 255, 255))
         # pdm_wplt.setCurves([
         #   '{"y_channel": "${PREFIX}SingValues-Mon", "x_channel": null, "name": "", "color": "black", "lineStyle": 0, "lineWidth": 1, "symbol": "o", "symbolSize": 10, "redraw_mode": 2}'])
-
-
-def create_window_from_widget(WidgetClass, name=None):
-    class MyWindow(SiriusDialog):
-
-        def __init__(self, parent, *args, **kwargs):
-            super().__init__(parent)
-            hbl = QHBoxLayout(self)
-            wid = WidgetClass(self, *args, **kwargs)
-            hbl.addWidget(wid)
-    if name:
-        MyWindow.__name__ = name
-    return MyWindow
 
 
 def _main():
