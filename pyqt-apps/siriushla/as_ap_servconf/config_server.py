@@ -266,44 +266,7 @@ class ConfigDbTableModel(QAbstractTableModel):
         """Override to make cells editable."""
         if not index.isValid():
             return Qt.ItemIsEnabled
-        if index.column() == self.horizontalHeader.index('name'):
-            return Qt.ItemFlags(
-                QAbstractTableModel.flags(self, index) | Qt.ItemIsEditable)
-        else:
-            return QAbstractItemModel.flags(self, index)
-
-    def setData(self, index, value, role=Qt.EditRole):
-        """Set cell data."""
-        if not index.isValid():
-            return False
-
-        if not value:
-            return False
-
-        if index.column() == self.horizontalHeader.index('name'):
-            config = self._configs[index.row()]
-            full_config = self._getFullConfig(
-                config['config_type'], config['name'])
-            full_config['name'] = value
-            try:
-                request = self._connection.update_config(full_config)
-            except Exception as e:
-                self.connectionError.emit(
-                    'Exception', '{}'.format(e),
-                    'update configuration')
-                return False
-            if request['code'] != 200:
-                self.connectionError.emit(
-                    request['code'], request['message'],
-                    'update configuration')
-                return False
-
-            full_config = self._getFullConfig(
-                config['config_type'], config['name'])
-            config = full_config
-            # config['name'] = value
-            self.dataChanged.emit(index, index)
-        return True
+        return QAbstractItemModel.flags(self, index)
 
     def removeRows(self, row, count=1, index=QModelIndex()):
         """Updated table."""
