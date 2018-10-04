@@ -10,9 +10,7 @@ from qtpy.QtWidgets import QWidget, QFileDialog, QLabel, QCheckBox, \
 from qtpy.QtCore import QSize, Qt, QTimer, QThread, Signal, QObject
 from qtpy.QtGui import QColor
 from pydm.widgets import PyDMWaveformPlot
-import siriushla.util as _util
-from siriushla.widgets.windows import create_window_from_widget
-from siriushla.widgets import SiriusSpectrogramView, SiriusConnectionSignal
+from siriushla.widgets import SiriusConnectionSignal
 import siriuspy.csdevice.orbitcorr as _csorb
 
 
@@ -63,7 +61,17 @@ class BaseWidget(QWidget):
 
         graphx = self.uigetgraph('x')
         graphy = self.uigetgraph('y')
+        suf = 'Orbit' if self.is_orb else 'Correctors'
+        lab = QLabel('Horizontal ' + suf, self)
+        lab.setStyleSheet("font: 20pt \"Sans Serif\";\nfont-weight: bold;")
+        lab.setAlignment(Qt.AlignCenter)
+        vbl.addWidget(lab)
         vbl.addWidget(graphx)
+        vbl.addSpacing(30)
+        lab = QLabel('Vertical ' + suf, self)
+        lab.setStyleSheet("font: 20pt \"Sans Serif\";\nfont-weight: bold;")
+        lab.setAlignment(Qt.AlignCenter)
+        vbl.addWidget(lab)
         vbl.addWidget(graphy)
         self.graph = {'x': graphx, 'y': graphy}
 
@@ -89,6 +97,10 @@ class BaseWidget(QWidget):
         graph.setMinXRange(0.0)
         graph.setMaxXRange(1.0)
         graph.plotItem.showButtons()
+        graph.setLabel('bottom', text='BPM position', units='m')
+        lab = 'Orbit' if self.is_orb else 'Kick Angle'
+        unit = 'um' if self.is_orb else 'urad'
+        graph.setLabel('left', text=lab, units=unit)
 
         pref = 'BPM' if self.is_orb else 'CH' if pln == 'x' else 'CV'
         for i, lname in enumerate(self.line_names):
@@ -252,13 +264,6 @@ class BaseWidget(QWidget):
         _np.savetxt(fname, _np.vstack([diffx, diffy]).T, header=header)
 
 
-class Label(QLabel):
-    FMT = '{0:8.3g}'
-
-    def setFloat(self, text):
-        super().setText(self.FMT.format(text))
-
-
 class UpdateGraph(QObject):
     """Worker to update graphics."""
     avex = Signal([float])
@@ -356,14 +361,13 @@ class UpdateGraph(QObject):
     def update_graphic(self, pln=None):
         if not self._isvisible:
             return
-        unit = 1/1000 if self.is_orb else 1  # um, urad
         plns = ('x', 'y') if pln is None else (pln, )
         for pln in plns:
             orb = self.vectors['val'][pln]
             ref = self.vectors['ref'][pln]
             if orb is None or ref is None:
                 return
-            diff = unit * (orb - ref)
+            diff = orb - ref
             if self.enbl_list[pln] is not None:
                 mask = diff[self.enbl_list[pln]]
             else:
@@ -378,212 +382,8 @@ class UpdateGraph(QObject):
             self.ave_mstd[pln].emit(ave+std)
 
 
-class OrbitWidget(BaseWidget):
+class Label(QLabel):
+    FMT = '{0:8.3g}'
 
-    def __init__(self, parent, prefix, ctrls=dict(), acc='SI'):
-        self._chans = []
-        if not ctrls:
-            self._chans, ctrls = self.get_default_ctrls(prefix)
-
-        names = ['Line {0:d}'.format(i+1) for i in range(2)]
-        super().__init__(parent, prefix, ctrls, names, True, acc)
-
-        self.updater[0].some_changed('val', 'Online Orbit')
-        self.updater[0].some_changed('ref', 'Reference Orbit')
-        self.findChild(QComboBox, 'ComboBox_val0').setCurrentIndex(3)
-        self.findChild(QComboBox, 'ComboBox_ref0').setCurrentIndex(4)
-
-        self.add_buttons_for_images()
-
-    def add_buttons_for_images(self):
-        grpbx = QGroupBox('Other Graphics', self)
-        vbl = QVBoxLayout(grpbx)
-        self.hbl.addWidget(grpbx)
-        self.hbl.addStretch(1)
-        btn = QPushButton('MultiTurn Graphics', grpbx)
-        vbl.addWidget(btn)
-        Window = create_window_from_widget(
-            MultiTurnWidget, name='MultiTurnWindow')
-        _util.connect_window(
-            btn, Window, self, prefix=self.prefix, acc=self.acc)
-
-    def channels(self):
-        chans = super().channels()
-        chans.extend(self._chans)
-        return chans
-
-    @staticmethod
-    def get_default_ctrls(prefix):
-        pvs = [
-            'OrbitSmoothX-Mon', 'OrbitSmoothY-Mon',
-            'OrbitSmoothSinglePassX-Mon', 'OrbitSmoothSinglePassY-Mon',
-            'OrbitMultiTurnX-Mon', 'OrbitMultiTurnY-Mon',
-            'OrbitOfflineX-RB', 'OrbitOfflineY-RB',
-            'OrbitRefX-RB', 'OrbitRefY-RB',
-            'BPMOffsetsX-Mon', 'BPMOffsetsY-Mon']
-        chans = [SiriusConnectionSignal(prefix+pv) for pv in pvs]
-        ctrls = dict()
-        orbs = [
-            'Online Orbit', 'SinglePass', 'MultiTurn Orbit',
-            'Offline Orbit', 'Reference Orbit', 'BPMs Offset']
-        pvs = iter(chans)
-        for orb in orbs:
-            pvi = next(pvs)
-            pvj = next(pvs)
-            ctrls[orb] = {
-                'x': {
-                    'signal': pvi.new_value_signal,
-                    'getvalue': pvi.getvalue},
-                'y': {
-                    'signal': pvj.new_value_signal,
-                    'getvalue': pvj.getvalue}}
-        return chans, ctrls
-
-
-class MultiTurnWidget(QWidget):
-
-    def __init__(self, parent, prefix, acc='SI'):
-        super().__init__(parent)
-        self.prefix = prefix
-        self.acc = acc
-        self.setupui()
-
-    def setupui(self):
-        vbl = QVBoxLayout(self)
-        self.spectx = Spectrogram(
-            image_channel=self.prefix+'OrbitsMultiTurnX-Mon',
-            xaxis_channel=self.prefix+'BPMPosS-Cte',
-            yaxis_channel=self.prefix+'OrbitsMultiTurnIdxTime-Mon')
-        self.specty = Spectrogram(
-            image_channel=self.prefix+'OrbitsMultiTurnY-Mon',
-            xaxis_channel=self.prefix+'BPMPosS-Cte',
-            yaxis_channel=self.prefix+'OrbitsMultiTurnIdxTime-Mon')
-        vbl.addWidget(self.spectx)
-        vbl.addWidget(self.specty)
-
-    def setreforbits(self, pln, orb):
-        if pln.lower() == 'x':
-            self.spectx.setreforbit(orb)
-        else:
-            self.specty.setreforbit(orb)
-
-
-class Spectrogram(SiriusSpectrogramView):
-
-    def setreforbit(self, orb):
-        self._ref_orbit = orb
-
-    def process_image(self, img):
-        return img - self._ref_orbit[:, None]
-
-
-class CorrectorsWidget(BaseWidget):
-
-    def __init__(self, parent, prefix, ctrls=dict(), acc='SI'):
-        self._chans = []
-        if not ctrls:
-            self._chans, ctrls = self.get_default_ctrls(prefix)
-
-        names = ('DeltaKicks', 'Kicks')
-        super().__init__(parent, prefix, ctrls, names, False, acc)
-
-        self.updater[0].some_changed('val', 'Delta Kicks')
-        self.updater[0].some_changed('ref', 'Zero')
-        self.updater[1].some_changed('val', 'Kicks')
-        self.updater[1].some_changed('ref', 'Zero')
-
-        self.add_kicklimits_curves()
-
-    def add_kicklimits_curves(self):
-        grpbx = QGroupBox('Show Kick Limits', self)
-        vbl = QVBoxLayout(grpbx)
-        self.hbl.addWidget(grpbx)
-        self.hbl.addStretch(1)
-        chcbox1 = QCheckBox('Kicks', grpbx)
-        chcbox2 = QCheckBox('Delta Kicks', grpbx)
-        chcbox1.setChecked(True)
-        chcbox2.setChecked(True)
-        vbl.addWidget(chcbox1)
-        vbl.addWidget(chcbox2)
-
-        chcboxs = (chcbox1, chcbox2)
-        names = ('Max Kicks', 'Max dKickx')
-        pvs = ('MaxKick', 'MaxDeltaKick')
-        stys = (4, 2)
-        wids = (3, 2)
-        plns = ('x', 'y')
-        corrs = ('CH', 'CV')
-        for chb, name, pvi, sty, wid in zip(chcboxs, names, pvs, stys, wids):
-            pen = mkPen(QColor(0, 0, 0))
-            pen.setStyle(sty)
-            pen.setWidth(wid)
-            for pln, corr in zip(plns, corrs):
-                maxkick = InfiniteLine(pos=0.0, pen=pen, angle=0, name=name)
-                minkick = NegativeLine(pos=0.0, pen=pen, angle=0)
-                self.graph[pln].addItem(maxkick)
-                self.graph[pln].addItem(minkick)
-                chan = SiriusConnectionSignal(self.prefix + pvi + corr + '-RB')
-                self._chans.append(chan)
-                chan.new_value_signal[float].connect(maxkick.setValue)
-                chan.new_value_signal[float].connect(minkick.setValue)
-                chb.toggled.connect(maxkick.setVisible)
-                chb.toggled.connect(minkick.setVisible)
-
-    def channels(self):
-        chans = super().channels()
-        chans.extend(self._chans)
-        return chans
-
-    @staticmethod
-    def get_default_ctrls(prefix):
-        chans = [
-            SiriusConnectionSignal(prefix+'DeltaKicksCH-Mon'),
-            SiriusConnectionSignal(prefix+'DeltaKicksCV-Mon'),
-            SiriusConnectionSignal(prefix+'KicksCH-Mon'),
-            SiriusConnectionSignal(prefix+'KicksCV-Mon')]
-        ctrls = {
-            'Delta Kicks': {
-                'x': {
-                    'signal': chans[0].new_value_signal,
-                    'getvalue': chans[0].getvalue},
-                'y': {
-                    'signal': chans[1].new_value_signal,
-                    'getvalue': chans[1].getvalue}},
-            'Kicks': {
-                'x': {
-                    'signal': chans[2].new_value_signal,
-                    'getvalue': chans[2].getvalue},
-                'y': {
-                    'signal': chans[3].new_value_signal,
-                    'getvalue': chans[3].getvalue}},
-            }
-        return chans, ctrls
-
-
-class NegativeLine(InfiniteLine):
-    def __init__(self, pos=None, **kwargs):
-        if pos is not None:
-            pos *= -1
-        super().__init__(pos=pos, **kwargs)
-
-    def setValue(self, value):
-        super().setValue(-value)
-
-
-def _main(prefix):
-    app = SiriusApplication()
-    win = SiriusDialog()
-    hbl = QHBoxLayout(win)
-    prefix = 'ca://' + prefix + 'SI-Glob:AP-SOFB:'
-    wid = OrbitWidget(win, prefix)
-    hbl.addWidget(wid)
-    win.show()
-    sys.exit(app.exec_())
-
-
-if __name__ == '__main__':
-    from siriushla.sirius_application import SiriusApplication
-    from siriushla.widgets import SiriusDialog
-    from siriuspy.envars import vaca_prefix
-    import sys
-    _main(vaca_prefix)
+    def setFloat(self, text):
+        super().setText(self.FMT.format(text))
