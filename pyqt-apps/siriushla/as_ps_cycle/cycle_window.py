@@ -268,6 +268,7 @@ class CyclingDlg(QDialog):
 class SetToCycle(QThread):
     """Set magnet to cycle."""
 
+    currentItem = Signal(str)
     itemDone = Signal()
 
     def __init__(self, cyclers, parent=None):
@@ -290,6 +291,7 @@ class SetToCycle(QThread):
             self.finished.emit()
         else:
             for cycler in self._cyclers:
+                self.currentItem.emit(cycler.maname)
                 cycler.set_cycle()
                 self.itemDone.emit()
                 if self._quit_task:
@@ -300,7 +302,7 @@ class SetToCycle(QThread):
 class VerifyCycle(QThread):
     """Verify cycle."""
 
-    currentItem = Signal(MagnetCycler)
+    currentItem = Signal(str)
     itemDone = Signal()
     itemChecked = Signal(MagnetCycler, bool)
 
@@ -325,7 +327,7 @@ class VerifyCycle(QThread):
         else:
             time.sleep(2)
             for cycler in self._cyclers:
-                self.currentItem.emit(cycler)
+                self.currentItem.emit(cycler.maname)
                 status = cycler.is_ready()
                 if self.quit_task:
                     break
@@ -337,6 +339,7 @@ class VerifyCycle(QThread):
 class WaitCycle(QThread):
     """Cycle."""
 
+    currentItem = Signal(str)
     itemDone = Signal()
 
     def __init__(self, cyclers, parent=None):

@@ -13,10 +13,12 @@ class PVNameTree(QTreeWidget):
     """Build a tree with SiriusPVNames."""
 
     class BuildTree(QThread):
+        """QThread to build tree."""
 
         itemInserted = Signal()
 
         def __init__(self, obj):
+            """Init."""
             super().__init__(obj)
             self.obj = obj
             self._quit_task = False
@@ -88,8 +90,8 @@ class PVNameTree(QTreeWidget):
             row = [item[0], ]
             row.extend([str(i) for i in item[1:]])
 
-        key = \
-            row[0] if isinstance(row[0], SiriusPVName) else SiriusPVName(row[0])
+        key = row[0] if isinstance(row[0], SiriusPVName) \
+            else SiriusPVName(row[0])
         pvals = []
 
         # Get device properties value
@@ -223,7 +225,8 @@ if __name__ == "__main__":
     w.show()
     items = []
     for i in range(10000):
-        items.extend([('SI-Fam:MA-B1B1{}:PwrState-Sel'.format(i), 1), ('BO-Fam:MA-B-{}:PwrState-Sel'.format(i), 1)])
+        items.extend([('SI-Fam:MA-B1B1{}:PwrState-Sel'.format(i), 1),
+                      ('BO-Fam:MA-B-{}:PwrState-Sel'.format(i), 1)])
     w.items = items
 
     sys.exit(app.exec_())
