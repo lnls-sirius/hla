@@ -9,6 +9,7 @@ from qtpy.QtCore import Qt, Slot, Signal, QModelIndex, \
     QAbstractItemModel, QAbstractTableModel
 
 from siriushla.widgets.windows import SiriusMainWindow
+from siriushla.as_ap_pvsconfmgr import ConfigTypeModel
 
 
 class TreeItem:
@@ -436,6 +437,8 @@ class ConfigurationManager(SiriusMainWindow):
         self.retrieve_button.setObjectName('RetrieveButton')
         self.tree = QTreeView(self)
         self.config_type = QComboBox(parent=self)
+        self.config_type.setModel(
+                ConfigTypeModel(self._model, self.config_type))
 
         # Tab widgets
         self.tab1 = QWidget()
@@ -533,16 +536,6 @@ class ConfigurationManager(SiriusMainWindow):
         # Delete button
         self.delete_button.setEnabled(False)
         self.retrieve_button.setEnabled(False)
-
-        # Get configuration types
-        request = self._model.get_types()
-        if request['code'] == 200:
-            types = request['result']
-            self.config_type.addItem('Select a configuration type...')
-            self.config_type.addItems(types)
-        else:
-            self._logger.warning('No configuration found')
-            self.config_type.addItem('No configuration found...')
 
         # Signals and slots
 
