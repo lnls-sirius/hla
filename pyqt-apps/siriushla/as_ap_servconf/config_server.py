@@ -266,44 +266,7 @@ class ConfigDbTableModel(QAbstractTableModel):
         """Override to make cells editable."""
         if not index.isValid():
             return Qt.ItemIsEnabled
-        if index.column() == self.horizontalHeader.index('name'):
-            return Qt.ItemFlags(
-                QAbstractTableModel.flags(self, index) | Qt.ItemIsEditable)
-        else:
-            return QAbstractItemModel.flags(self, index)
-
-    def setData(self, index, value, role=Qt.EditRole):
-        """Set cell data."""
-        if not index.isValid():
-            return False
-
-        if not value:
-            return False
-
-        if index.column() == self.horizontalHeader.index('name'):
-            config = self._configs[index.row()]
-            full_config = self._getFullConfig(
-                config['config_type'], config['name'])
-            full_config['name'] = value
-            try:
-                request = self._connection.update_config(full_config)
-            except Exception as e:
-                self.connectionError.emit(
-                    'Exception', '{}'.format(e),
-                    'update configuration')
-                return False
-            if request['code'] != 200:
-                self.connectionError.emit(
-                    request['code'], request['message'],
-                    'update configuration')
-                return False
-
-            full_config = self._getFullConfig(
-                config['config_type'], config['name'])
-            config = full_config
-            # config['name'] = value
-            self.dataChanged.emit(index, index)
-        return True
+        return QAbstractItemModel.flags(self, index)
 
     def removeRows(self, row, count=1, index=QModelIndex()):
         """Updated table."""
@@ -319,9 +282,7 @@ class ConfigDbTableModel(QAbstractTableModel):
             config = self._configs[row]
             full_config = self._getFullConfig(
                 config['config_type'], config['name'])
-            full_config['name'] = full_config['name'][:-37]
-            full_config['discarded'] = False
-            request = self._connection.update_config(full_config)
+            request = self._connection.retrieve_config(full_config)
             if request['code'] != 200:
                 self.connectionError.emit(
                     request['code'], request['message'],
@@ -345,69 +306,6 @@ class ConfigurationManager(SiriusMainWindow):
 
     NAME_COL = None
     CONFIG_TYPE_COL = None
-    Stylesheet = """
-        * {
-            font-size: 14px;
-        }
-        #MainWidget{
-            padding: 0 20px 10px 20px;
-        }
-        #Header {
-            margin: 0 0 0 0;
-            padding: 20px 20px 20px 20px;
-            color: white;
-            border: 1px solid gray;
-            border-left: 0;
-            border-right: 0;
-            border-top: 0;
-        }
-        #Header QWidget {
-            font-weight: bold;
-            font-size: 25px;
-        }
-        #SubHeader {
-            padding: 10px 0 10px 0;
-            border: 1px solid gray;
-            border-left: 0;
-            border-right: 0;
-            border-top: 0;
-            margin: 0 0 10px 0;
-        }
-        #SubHeader QWidget {
-            margin-bottom: 5px;
-        }
-        QComboBox {
-            height: 25px;
-            margin: 0 0 10px 0;
-            padding: 2px 10px 2px 10px;
-            border: 1px solid black;
-            font-weight: bold;
-            font-size: 18px;
-        }
-        QComboBox::drop-down {
-            width: 25px;
-            height: 2.1em;
-        }
-        QComboBox::down-arrow {
-            color: blue;
-        }
-        #DeleteButton[enabled=true] {
-            color: white;
-            background-color: #cc2900;
-        }
-        #DeleteButton[enabled=false] {
-            color: white;
-            background-color: #ff8566;
-        }
-        #RetrieveButton[enabled=true] {
-            color: white;
-            background-color: #007acc;
-        }
-        #RetrieveButton[enabled=false] {
-            color: white;
-            background-color: #99d6ff;
-        }
-    """
 
     def __init__(self, model, parent=None):
         """Constructor."""
@@ -417,12 +315,11 @@ class ConfigurationManager(SiriusMainWindow):
         self._logger.setLevel(logging.DEBUG)
         self._setup_ui()
         self.setWindowTitle("Configuration Manager")
-        self.setStyleSheet(ConfigurationManager.Stylesheet)
 
     def _setup_ui(self):
-        self.setGeometry(0, 0, 1280, 800)
+        self.setGeometry(0, 0, 1600, 900)
         self.main_widget = QFrame()
-        self.main_widget.setObjectName('MainWidget')
+        self.main_widget.setObjectName('ServConf')
         self.setCentralWidget(self.main_widget)
         self.layout = QGridLayout()
         self.main_widget.setLayout(self.layout)

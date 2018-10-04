@@ -10,7 +10,7 @@ from siriushla.as_ap_servconf.config_server import \
     ConfigurationManager
 
 app = SiriusApplication()
-# util.set_style(app)
+util.set_style(app)
 model = ConfigService()
 widget = ConfigurationManager(model)
 widget.show()
