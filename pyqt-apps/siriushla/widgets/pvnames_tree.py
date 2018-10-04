@@ -5,7 +5,6 @@ from collections import namedtuple
 from qtpy.QtCore import Qt, QSize, Signal, QThread
 from qtpy.QtWidgets import QTreeWidget, QTreeWidgetItem, QProgressDialog
 
-from siriuspy.search.ma_search import MASearch
 from siriuspy.namesys import SiriusPVName
 
 
@@ -46,7 +45,8 @@ class PVNameTree(QTreeWidget):
 
     _node = namedtuple('_node', 'item, children')
 
-    def __init__(self, items=tuple(), tree_levels=tuple(), parent=None):
+    def __init__(self, items=tuple(), tree_levels=tuple(), parent=None,
+                 checked_levels=tuple()):
         """Constructor."""
         super().__init__(parent)
 
@@ -63,6 +63,8 @@ class PVNameTree(QTreeWidget):
 
         self.check_children = True
         self.check_parent = True
+
+        self._check_requested_levels(checked_levels)
 
     def clear(self):
         """Clear tree."""
@@ -213,6 +215,12 @@ class PVNameTree(QTreeWidget):
             return 'Pulsed'
         else:
             return 'Other'
+
+    def _check_requested_levels(self, levels):
+        """Set requested levels checked."""
+        for node in self._ptree.children.values():
+            if node.item.text(0) in levels:
+                node.item.setCheckState(0, Qt.Checked)
 
 
 if __name__ == "__main__":

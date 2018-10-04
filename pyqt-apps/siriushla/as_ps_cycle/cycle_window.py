@@ -3,7 +3,7 @@ from math import isclose
 import time
 import epics
 
-from qtpy.QtCore import Signal, QThread
+from qtpy.QtCore import Signal, QThread, Qt
 from qtpy.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, \
     QPushButton, QDialog, QLabel, QMessageBox
 
@@ -17,7 +17,7 @@ from siriuspy.search.ma_search import MASearch
 class CycleWindow(QMainWindow):
     """Magnet cycle window."""
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, checked_accs=()):
         """Constructor."""
         super().__init__(parent)
         # Data structs
@@ -25,6 +25,7 @@ class CycleWindow(QMainWindow):
         self._magnets_ready = list()
         self._magnets_failed = list()
         self._cyclers = list()
+        self._checked_accs = checked_accs
         # Setup UI
         self._setup_ui()
         self.setWindowTitle('Magnet Cycling')
@@ -36,20 +37,20 @@ class CycleWindow(QMainWindow):
 
         self.prepare_button = QPushButton("Prepare to cycle", self)
         self.prepare_button.setObjectName('PrepareButton')
-        self.exit_button = QPushButton("Close", self)
-        self.exit_button.setObjectName('ExitButton')
         self.magnets_tree = PVNameTree(MASearch.get_manames({'dis': 'MA'}),
                                        ('sec', 'mag_group'),
-                                       self)
+                                       self, self._checked_accs)
 
+        central_widget.layout.addWidget(
+            QLabel('<h3>Magnet Cycling</h3>', self, alignment=Qt.AlignCenter))
+        central_widget.layout.addWidget(
+            QLabel('Select magnets to cycle:', self))
         central_widget.layout.addWidget(self.magnets_tree)
         central_widget.layout.addWidget(self.prepare_button)
-        central_widget.layout.addWidget(self.exit_button)
 
         self.setCentralWidget(central_widget)
 
         self.prepare_button.pressed.connect(self._prepare_to_cycle)
-        self.exit_button.pressed.connect(self.close)
 
     def _prepare_to_cycle(self):
         self._magnets = self.magnets_tree.checked_items()
