@@ -151,6 +151,65 @@ ProgressDialog {
     min-height: 150px;
     max-height: 150px;
 }
+/* Servconf */
+#ServConf {
+    padding: 0 20px 10px 20px;
+}
+#ServConf #Header {
+    margin: 0 0 0 0;
+    padding: 20px 20px 20px 20px;
+    color: white;
+    border: 1px solid gray;
+    border-left: 0;
+    border-right: 0;
+    border-top: 0;
+}
+#ServConf #Header QWidget {
+    font-weight: bold;
+    font-size: 25px;
+}
+#ServConf #SubHeader {
+    padding: 10px 0 10px 0;
+    border: 1px solid gray;
+    border-left: 0;
+    border-right: 0;
+    border-top: 0;
+    margin: 0 0 10px 0;
+}
+#ServConf #SubHeader QWidget {
+    margin-bottom: 5px;
+}
+#ServConf QComboBox {
+    height: 25px;
+    margin: 0 0 10px 0;
+    padding: 2px 10px 2px 10px;
+    border: 1px solid black;
+    font-weight: bold;
+    font-size: 18px;
+}
+#ServConf QComboBox::drop-down {
+    width: 25px;
+    height: 2.1em;
+}
+#ServConf QComboBox::down-arrow {
+        color: blue;
+}
+#ServConf #DeleteButton[enabled=true] {
+    color: white;
+    background-color: #cc2900;
+}
+#ServConf #DeleteButton[enabled=false] {
+    color: white;
+    background-color: #ff8566;
+}
+#ServConf #RetrieveButton[enabled=true] {
+    color: white;
+    background-color: #007acc;
+}
+#ServConf #RetrieveButton[enabled=false] {
+    color: white;
+    background-color: #99d6ff;
+}
 /*
 PulsedMagnetControlWindow {
   min-width: 1568px;
