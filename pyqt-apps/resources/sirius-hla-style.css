@@ -127,6 +127,16 @@ QCheckBox::indicator {
     width: 25px;
     height: 25px;
 }
+
+QTreeWidget::indicator {
+    width: 25px;
+    height: 25px;
+}
+
+QTreeWidget::text {
+    spacing: 25px;
+}
+
 #OkTextEdit {
     background-color: #eafaea;
 }
@@ -136,7 +146,7 @@ QCheckBox::indicator {
 PSTestWindow > QLabel {
     font-weight: bold;
 }
-PSTestWindow #TestButton,
+/*PSTestWindow #TestButton,
 CycleWindow #PrepareButton {
     color: white;
     background-color: blue;
@@ -144,7 +154,7 @@ CycleWindow #PrepareButton {
 #ExitButton {
     color: white;
     background-color: red;
-}
+}*/
 ProgressDialog {
     min-width: 400px;
     max-width: 400px;

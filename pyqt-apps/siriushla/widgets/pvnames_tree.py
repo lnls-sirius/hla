@@ -5,7 +5,6 @@ from collections import namedtuple
 from qtpy.QtCore import Qt, QSize, Signal, QThread
 from qtpy.QtWidgets import QTreeWidget, QTreeWidgetItem, QProgressDialog
 
-from siriuspy.search.ma_search import MASearch
 from siriuspy.namesys import SiriusPVName
 
 
@@ -13,10 +12,12 @@ class PVNameTree(QTreeWidget):
     """Build a tree with SiriusPVNames."""
 
     class BuildTree(QThread):
+        """QThread to build tree."""
 
         itemInserted = Signal()
 
         def __init__(self, obj):
+            """Init."""
             super().__init__(obj)
             self.obj = obj
             self._quit_task = False
@@ -44,7 +45,8 @@ class PVNameTree(QTreeWidget):
 
     _node = namedtuple('_node', 'item, children')
 
-    def __init__(self, items=tuple(), tree_levels=tuple(), parent=None):
+    def __init__(self, items=tuple(), tree_levels=tuple(), parent=None,
+                 checked_levels=tuple()):
         """Constructor."""
         super().__init__(parent)
 
@@ -61,6 +63,8 @@ class PVNameTree(QTreeWidget):
 
         self.check_children = True
         self.check_parent = True
+
+        self._check_requested_levels(checked_levels)
 
     def clear(self):
         """Clear tree."""
@@ -88,8 +92,8 @@ class PVNameTree(QTreeWidget):
             row = [item[0], ]
             row.extend([str(i) for i in item[1:]])
 
-        key = \
-            row[0] if isinstance(row[0], SiriusPVName) else SiriusPVName(row[0])
+        key = row[0] if isinstance(row[0], SiriusPVName) \
+            else SiriusPVName(row[0])
         pvals = []
 
         # Get device properties value
@@ -212,6 +216,12 @@ class PVNameTree(QTreeWidget):
         else:
             return 'Other'
 
+    def _check_requested_levels(self, levels):
+        """Set requested levels checked."""
+        for node in self._ptree.children.values():
+            if node.item.text(0) in levels:
+                node.item.setCheckState(0, Qt.Checked)
+
 
 if __name__ == "__main__":
     import sys
@@ -223,7 +233,8 @@ if __name__ == "__main__":
     w.show()
     items = []
     for i in range(10000):
-        items.extend([('SI-Fam:MA-B1B1{}:PwrState-Sel'.format(i), 1), ('BO-Fam:MA-B-{}:PwrState-Sel'.format(i), 1)])
+        items.extend([('SI-Fam:MA-B1B1{}:PwrState-Sel'.format(i), 1),
+                      ('BO-Fam:MA-B-{}:PwrState-Sel'.format(i), 1)])
     w.items = items
 
     sys.exit(app.exec_())
