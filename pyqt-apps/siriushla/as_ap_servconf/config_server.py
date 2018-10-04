@@ -282,9 +282,7 @@ class ConfigDbTableModel(QAbstractTableModel):
             config = self._configs[row]
             full_config = self._getFullConfig(
                 config['config_type'], config['name'])
-            full_config['name'] = full_config['name'][:-37]
-            full_config['discarded'] = False
-            request = self._connection.update_config(full_config)
+            request = self._connection.retrieve_config(full_config)
             if request['code'] != 200:
                 self.connectionError.emit(
                     request['code'], request['message'],
