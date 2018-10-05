@@ -52,9 +52,8 @@ class _GradientLegend(GraphicsWidget):
         # if min and max values are None, assume normalized data
         self.minVal = 0 if minVal is None else minVal
         self.maxVal = 1 if maxVal is None else maxVal
-        self.labels = {'min': 1, 'max': 0} if labels is None else labels
+        self.labels = {1: 'min', 0: 'max'} if labels is None else labels
         self.label_format = '{: .3f}'
-
         self.gradient = QLinearGradient()
         if colors is None:
             self.colors = [[0, 0, 0], [255, 0, 0]]
@@ -76,7 +75,7 @@ class _GradientLegend(GraphicsWidget):
         if labels is None and (minVal is None or maxVal is None):
             self.setLabels(self.labels)
         elif labels is None:
-            self.setLabels({str(minVal): 0, str(maxVal): 1})
+            self.setLabels({1: str(minVal), 0: str(maxVal)})
         else:
             self.setLabels(labels)
 
@@ -91,12 +90,11 @@ class _GradientLegend(GraphicsWidget):
             return
         self.minVal = minVal
         self.maxVal = maxVal
-        labels = dict()
-        for v in self.labels.values():
-            newv = minVal + (1-v)*(maxVal - minVal)
-            newk = self.label_format.format(newv)
-            labels[newk] = v
-        self.setLabels(labels)
+        for k in self.labels.keys():
+            newv = minVal + (1-k)*(maxVal - minVal)
+            newv = self.label_format.format(newv)
+            self.labels[k] = newv
+        self.setLabels(self.labels)
 
     def setLabels(self, l):
         """
@@ -117,9 +115,9 @@ class _GradientLegend(GraphicsWidget):
         textPadding = 2  # in px
         labelWidth = 0
         labelHeight = 0
-        for k in self.labels:
+        for val in self.labels.values():
             b = p.boundingRect(QRectF(0, 0, 0, 0),
-                               Qt.AlignLeft | Qt.AlignVCenter, str(k))
+                               Qt.AlignLeft | Qt.AlignVCenter, str(val))
             labelWidth = max(labelWidth, b.width())
             labelHeight = max(labelHeight, b.height())
 
@@ -153,10 +151,10 @@ class _GradientLegend(GraphicsWidget):
         tx = x2_grad + textPadding*2
         lw = labelWidth
         lh = labelHeight
-        for k in self.labels:
-            y = y1_grad + self.labels[k] * (y2_grad-y1_grad)
+        for key, val in self.labels.items():
+            y = y1_grad + key * (y2_grad-y1_grad)
             p.drawText(QRectF(tx, y - lh/2.0, lw, lh),
-                       Qt.AlignLeft | Qt.AlignVCenter, str(k))
+                       Qt.AlignLeft | Qt.AlignVCenter, str(val))
 
         self.setMinimumWidth(labelWidth + 2*textPadding + 20)
 
@@ -181,7 +179,6 @@ class SpectrogramUpdateThread(QThread):
         normalize_data = self.spectrogram_view._normalize_data
         cm_min = self.spectrogram_view.cm_min
         cm_max = self.spectrogram_view.cm_max
-
         if not needs_redraw:
             logging.debug(
                 "ImageUpdateThread - needs redraw is False. Aborting.")
@@ -200,7 +197,6 @@ class SpectrogramUpdateThread(QThread):
             except ValueError:
                 logger.error("Invalid width for image during reshape: %d",
                              width)
-
         if len(img) <= 0:
             return
         logging.debug("ImageUpdateThread - Will Process Image")
@@ -254,7 +250,7 @@ class SiriusSpectrogramView(
     color_maps = cmaps
 
     def __init__(self, parent=None, image_channel=None, xaxis_channel=None,
-                 yaxis_channel=None, background='default'):
+                 yaxis_channel=None, background='w'):
         """Initialize widget."""
         GraphicsLayoutWidget.__init__(self, parent)
         PyDMWidget.__init__(self)
@@ -591,16 +587,17 @@ class SiriusSpectrogramView(
         if self._last_yaxis_data is None or \
                 self._last_xaxis_data is None:
             return
-        xMin = min(self._last_xaxis_data)
-        xMax = max(self._last_xaxis_data)
-        yMin = 0
-        yMax = max(self._last_yaxis_data)-min(self._last_yaxis_data)
+        szx = self._last_xaxis_data.size
+        szy = self._last_yaxis_data.size
+        xMin = self._last_xaxis_data.min()
+        xMax = self._last_xaxis_data.max()
+        yMin = self._last_yaxis_data.min()
+        yMax = self._last_yaxis_data.max()
         self.xaxis.setRange(xMin, xMax)
         self.yaxis.setRange(yMin, yMax)
         self._view.setLimits(
-            xMin=0, xMax=xMax-xMin, yMin=0, yMax=yMax-yMin,
-            minXRange=xMax-xMin, maxXRange=xMax-xMin,
-            minYRange=yMax-yMin, maxYRange=yMax-yMin)
+            xMin=0, xMax=szx, yMin=0, yMax=szy,
+            minXRange=szx, maxXRange=szx, minYRange=szy, maxYRange=szy)
 
         # Update image
         self.colorbar.setLimits(data)

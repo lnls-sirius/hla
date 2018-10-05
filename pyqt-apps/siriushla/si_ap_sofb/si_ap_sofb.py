@@ -12,7 +12,7 @@ from siriuspy.envars import vaca_prefix as LL_PREF
 from siriushla.widgets import PyDMLogLabel
 from siriushla.sirius_application import SiriusApplication
 from siriushla.si_ap_sofb.orbit_register import OrbitRegisters
-from siriushla.si_ap_sofb.graphic_controllers import OrbitWidget, \
+from siriushla.si_ap_sofb.graphics import OrbitWidget, \
                                                     CorrectorsWidget
 from siriushla.si_ap_sofb.sofb_controllers import ControlSOFB
 
@@ -193,10 +193,12 @@ def main(prefix=None):
 
 def _main():
     app = SiriusApplication()
+    _util.set_style(app)
     main_win = main()
     main_win.show()
     _sys.exit(app.exec_())
 
 
 if __name__ == '__main__':
+    import siriushla.util as _util
     _main()

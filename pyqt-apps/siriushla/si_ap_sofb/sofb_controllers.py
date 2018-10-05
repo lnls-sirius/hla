@@ -340,17 +340,6 @@ class AcqControlWidget(_BaseWidget):
         wid = self.create_pair_sel(grp_bx, 'OrbitMode')
         fbl.addRow(wid)
 
-        grp_bx = QGroupBox('Number of Orbits for Smoothing', self)
-        lbl.setAlignment(Qt.AlignCenter)
-        vbl.addWidget(grp_bx)
-        vbl.addSpacing(20)
-        fbl = QFormLayout(grp_bx)
-        wid = self.create_pair(grp_bx, 'OrbitSmoothNPnts')
-        fbl.addWidget(wid)
-
-        vbl = QVBoxLayout()
-        gdl.addItem(vbl, 1, 1)
-
         grp_bx = QGroupBox('Acquisition Rates', self)
         lbl.setAlignment(Qt.AlignCenter)
         vbl.addWidget(grp_bx)
@@ -365,13 +354,35 @@ class AcqControlWidget(_BaseWidget):
         wid = self.create_pair(grp_bx, 'KickAcqRate')
         fbl.addRow(lbl, wid)
 
-        grp_bx = QGroupBox('MultiTurn Acquisition Index', self)
+        vbl = QVBoxLayout()
+        gdl.addItem(vbl, 1, 1)
+
+        grp_bx = QGroupBox('Number of Orbits for Smoothing', self)
         lbl.setAlignment(Qt.AlignCenter)
         vbl.addWidget(grp_bx)
         vbl.addSpacing(20)
         fbl = QFormLayout(grp_bx)
+        wid = self.create_pair(grp_bx, 'OrbitSmoothNPnts')
+        fbl.addWidget(wid)
+        pdm_btn = PyDMPushButton(
+            init_channel=self.prefix+'OrbitSmoothReset-Cmd',
+            pressValue=1,
+            label='Reset Buffer')
+        fbl.addWidget(pdm_btn)
+
+        grp_bx = QGroupBox('MultiTurn Acquisition', self)
+        lbl.setAlignment(Qt.AlignCenter)
+        vbl.addWidget(grp_bx)
+        vbl.addSpacing(20)
+        fbl = QFormLayout(grp_bx)
+        lbl = QLabel('Index', grp_bx)
         wid = self.create_pair(grp_bx, 'OrbitMultiTurnIdx')
-        fbl.addRow(wid)
+        fbl.addRow(lbl, wid)
+        lbl = QLabel('Time [ms]', grp_bx)
+        pdm_lbl = PyDMLabel(
+            grp_bx, init_channel=self.prefix+'OrbitMultiTurnIdxTime-Mon')
+        pdm_lbl.setAlignment(Qt.AlignCenter)
+        fbl.addRow(lbl, pdm_lbl)
 
         lbl = QLabel('Triggered Acquisition Configurations', self)
         lbl.setAlignment(Qt.AlignCenter)
@@ -469,7 +480,7 @@ class AcqControlWidget(_BaseWidget):
         fbl.addRow(lbl, wid)
         lbl = QLabel('Initial Delay [us]', grp_bx)
         lbl.setAlignment(Qt.AlignCenter)
-        wid = self.create_pair(grp_bx, 'OrbitTrigExtDuration')
+        wid = self.create_pair(grp_bx, 'OrbitTrigExtDelay')
         fbl.addRow(lbl, wid)
         lbl = QLabel('Event Source', grp_bx)
         lbl.setAlignment(Qt.AlignCenter)
