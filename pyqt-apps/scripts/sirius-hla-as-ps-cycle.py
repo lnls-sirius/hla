@@ -3,13 +3,13 @@
 """Power Supply Cycling Application."""
 
 import sys
-from pydm import PyDMApplication
-from siriushla.as_ps_cycle import PsCycleWindow
+from siriushla.sirius_application import SiriusApplication
+from siriushla.as_ps_cycle.cycle_window import CycleWindow
 from siriushla import util
 
 
-app = PyDMApplication(None, sys.argv)
+app = SiriusApplication(None, sys.argv)
 util.set_style(app)
-window = PsCycleWindow()
+window = CycleWindow()
 window.show()
 sys.exit(app.exec_())
