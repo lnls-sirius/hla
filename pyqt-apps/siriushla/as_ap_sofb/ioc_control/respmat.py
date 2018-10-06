@@ -18,8 +18,7 @@ from siriushla.as_ap_sofb.ioc_control.base import BaseWidget
 class RespMatWidget(BaseWidget):
 
     def __init__(self, parent, prefix, acc='SI'):
-        super().__init__(parent, prefix)
-        self.acc = acc
+        super().__init__(parent, prefix, acc=acc)
         self.setupui()
 
     def setupui(self):

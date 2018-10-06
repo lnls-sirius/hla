@@ -11,7 +11,7 @@ from siriushla.as_ap_sofb.ioc_control.base import BaseWidget
 
 class KicksConfigWidget(BaseWidget):
 
-    def __init__(self, parent, prefix, show_details):
+    def __init__(self, parent, prefix, show_details=False):
         super().__init__(parent, prefix)
         self.show_details = show_details
         self.setupui()

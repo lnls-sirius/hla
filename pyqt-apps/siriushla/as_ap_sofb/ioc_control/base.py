@@ -11,9 +11,10 @@ import siriuspy.csdevice.orbitcorr as _csorb
 
 class BaseWidget(QWidget):
 
-    def __init__(self, parent, prefix):
+    def __init__(self, parent, prefix, acc='SI'):
         super().__init__(parent)
         self.prefix = prefix
+        self.acc = acc
 
     def create_pair(self, parent, pvname):
         wid = QWidget(parent)

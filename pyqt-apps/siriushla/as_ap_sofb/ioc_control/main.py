@@ -2,10 +2,10 @@
 
 from qtpy.QtWidgets import QLabel, QGroupBox, QPushButton, QFormLayout, \
     QVBoxLayout, QHBoxLayout
-from qtpy.QtCore import Qt, QSize
+from qtpy.QtCore import QSize
 from pydm.widgets import PyDMPushButton
 from siriushla.widgets import SiriusConnectionSignal, PyDMStateButton, \
-            SiriusDialog, SiriusLedAlert
+        SiriusLedAlert
 import siriuspy.csdevice.orbitcorr as _csorb
 from siriushla.widgets.windows import create_window_from_widget
 import siriushla.util as _util
@@ -20,9 +20,8 @@ from siriushla.as_ap_sofb.ioc_control.base import BaseWidget, BaseCombo
 class SOFBControl(BaseWidget):
 
     def __init__(self, parent, prefix, ctrls, acc='SI'):
-        super().__init__(parent, prefix)
+        super().__init__(parent, prefix, acc=acc)
         self.ctrls = ctrls
-        self.acc = acc
         self.setup_ui()
 
     def setup_ui(self):
@@ -178,7 +177,7 @@ class SOFBControl(BaseWidget):
         vbl2.setSpacing(9)
         Window = create_window_from_widget(
             RespMatWidget, name='RespMatWindow')
-        btn = QPushButton('Respnse Matrix', grpbx)
+        btn = QPushButton('Response Matrix', grpbx)
         vbl2.addWidget(btn)
         _util.connect_window(
             btn, Window, grpbx, prefix=self.prefix, acc=self.acc)
@@ -187,13 +186,11 @@ class SOFBControl(BaseWidget):
         btn = QPushButton('Correctors', grpbx)
         vbl2.addWidget(btn)
         _util.connect_window(
-            btn, Window, grpbx, prefix=self.prefix, acc=self.acc,
-            show_details=True)
+            btn, Window, grpbx, prefix=self.prefix, show_details=True)
         Window = create_window_from_widget(
             AcqControlWidget, name='AcqControlWindow')
         btn = QPushButton('Orbit Acquisition', grpbx)
-        _util.connect_window(
-            btn, Window, grpbx, prefix=self.prefix, acc=self.acc)
+        _util.connect_window(btn, Window, grpbx, prefix=self.prefix)
         vbl2.addWidget(btn)
 
 
