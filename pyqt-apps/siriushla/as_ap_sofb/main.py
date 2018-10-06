@@ -23,7 +23,9 @@ UI_FILE = _os.path.sep.join([_dir, 'SOFBMain.ui'])
 class MainWindow(SiriusMainWindow):
     def __init__(self, prefix, acc='SI'):
         super().__init__()
-        self.prefix = prefix
+        if not prefix.startswith('ca://'):
+            prefix = 'ca://' + prefix
+        self.prefix = prefix + acc + '-Glob:AP-SOFB:'
         self.acc = acc
         self.setupui()
 
@@ -185,9 +187,8 @@ class MainWindow(SiriusMainWindow):
 
 def main(prefix=None):
     """Return Main window of the interface."""
-    ll_pref = 'ca://' + (prefix or LL_PREF)
-    prefix = ll_pref + 'SI-Glob:AP-SOFB:'
-    main_win = MainWindow(prefix, 'SI')
+    ll_pref = prefix or LL_PREF
+    main_win = MainWindow(ll_pref, 'SI')
     return main_win
 
 
