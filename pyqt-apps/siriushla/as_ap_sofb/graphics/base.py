@@ -233,8 +233,8 @@ class BaseWidget(QWidget):
         self.enbl_pvs_set[pln].send_value_signal[_np.ndarray].emit(val)
 
     def _update_enable_list(self, pln, array):
-        offbrs = mkBrush(0, 0, 0)
-        offpen = mkPen(0, 0, 0)
+        offbrs = mkBrush(255, 255, 255)
+        offpen = mkPen(255, 255, 255)
         offsimb = 's'
         simb = 'o'
         offsz = 15
@@ -261,7 +261,7 @@ class BaseWidget(QWidget):
                     sizes.append(offsz)
             trc.opts['symbolBrush'] = brss
             trc.opts['symbolPen'] = pens
-            # trc.opts['symbol'] = simbs
+            # trc.opts['symbol'] = simbs  # pyqtgraph bug does not allow this
             trc.opts['symbolSize'] = sizes
 
     def _save_difference(self, idx):
@@ -427,7 +427,7 @@ class Graph(PyDMWaveformPlot):
         self.mouseEnabledX = True
         self.setShowXGrid(True)
         self.setShowYGrid(True)
-        self.setBackgroundColor(QColor(255, 255, 255))
+        # self.setBackgroundColor(QColor(255, 255, 255))
         self.setShowLegend(True)
         self.setAutoRangeX(True)
         self.setAutoRangeY(True)
