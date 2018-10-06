@@ -3,7 +3,7 @@
 from qtpy.QtWidgets import QStyleOption, QFrame
 from qtpy.QtGui import QPainter
 from qtpy.QtCore import Property, Q_ENUMS, QByteArray, QRectF, \
-                        QSize, Signal
+                        QSize, Signal, Qt
 from qtpy.QtSvg import QSvgRenderer
 from pydm.widgets.base import PyDMWritableWidget
 
@@ -1431,9 +1431,13 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
 
     def mousePressEvent(self, ev):
         """Deal with mouse clicks. Only accept clicks within the figure."""
-        if (ev.x() < self.width()/2+self.height() and
-                ev.x() > self.width()/2-self.height()):
+        cond = ev.button() == Qt.LeftButton
+        cond &= ev.x() < self.width()/2+self.height()
+        cond &= ev.x() > self.width()/2-self.height()
+        if cond:
             self.clicked.emit()
+        else:
+            super().mousePressEvent(ev)
 
     def value_changed(self, new_val):
         """
