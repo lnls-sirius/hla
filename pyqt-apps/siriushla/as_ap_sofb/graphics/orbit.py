@@ -7,12 +7,11 @@ from qtpy.QtWidgets import QWidget, QLabel, QCheckBox, \
     QVBoxLayout, QHBoxLayout, QGroupBox, QPushButton, QComboBox
 from qtpy.QtCore import Qt, Signal
 from qtpy.QtGui import QColor
-from pydm.widgets import PyDMWaveformPlot
 import siriushla.util as _util
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets import SiriusSpectrogramView, SiriusConnectionSignal
 
-from siriushla.as_ap_sofb.graphics.base import BaseWidget
+from siriushla.as_ap_sofb.graphics.base import BaseWidget, Graph
 
 
 class OrbitWidget(BaseWidget):
@@ -182,18 +181,8 @@ class MultiTurnSumWidget(QWidget):
         lab.setStyleSheet("font: 20pt \"Sans Serif\";\nfont-weight: bold;")
         lab.setAlignment(Qt.AlignCenter)
         vbl.addWidget(lab)
-        graph = PyDMWaveformPlot(self)
+        graph = Graph(self)
         vbl.addWidget(graph)
-        graph.mouseEnabledX = True
-        graph.setShowXGrid(True)
-        graph.setShowYGrid(True)
-        graph.setBackgroundColor(QColor(255, 255, 255))
-        graph.setShowLegend(True)
-        graph.setAutoRangeX(True)
-        graph.setAutoRangeY(True)
-        graph.setMinXRange(0.0)
-        graph.setMaxXRange(1.0)
-        graph.plotItem.showButtons()
         graph.setLabel('bottom', text='time', units='ms')
         graph.setLabel('left', text='Sum', units='count')
         opts = dict(
@@ -260,18 +249,8 @@ class SinglePassSumWidget(QWidget):
         lab.setAlignment(Qt.AlignCenter)
         vbl.addWidget(lab)
 
-        graph = PyDMWaveformPlot(self)
+        graph = Graph(self)
         vbl.addWidget(graph)
-        graph.mouseEnabledX = True
-        graph.setShowXGrid(True)
-        graph.setShowYGrid(True)
-        graph.setBackgroundColor(QColor(255, 255, 255))
-        graph.setShowLegend(True)
-        graph.setAutoRangeX(True)
-        graph.setAutoRangeY(True)
-        graph.setMinXRange(0.0)
-        graph.setMaxXRange(1.0)
-        graph.plotItem.showButtons()
         graph.setLabel('bottom', text='time', units='ms')
         graph.setLabel('left', text='Sum', units='count')
         opts = dict(
