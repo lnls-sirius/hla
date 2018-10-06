@@ -86,7 +86,7 @@ class MainWindow(SiriusMainWindow):
         wid.setFeatures(QDockWidget.AllDockWidgetFeatures)
         wid.setAllowedAreas(Qt.AllDockWidgetAreas)
 
-        wid_cont = OrbitRegisters(self, self.prefix, self.acc, 9)
+        wid_cont = OrbitRegisters(self, self.prefix, self.acc, 5)
         wid.setWidget(wid_cont)
         self.orb_regtr = wid_cont
         return wid
