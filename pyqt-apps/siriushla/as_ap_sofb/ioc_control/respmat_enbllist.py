@@ -2,12 +2,11 @@
 
 from functools import partial as _part
 import numpy as np
-from qtpy.QtWidgets import (
-    QGridLayout, QHBoxLayout, QVBoxLayout, QSizePolicy, QSpacerItem,
-    QScrollArea, QWidget, QLabel, QCheckBox, QPushButton)
+from qtpy.QtWidgets import QGridLayout, QHBoxLayout, QVBoxLayout, \
+    QSizePolicy, QScrollArea, QWidget, QLabel, QCheckBox, QPushButton
 from qtpy.QtCore import Qt, QRect, QPoint
 from qtpy.QtGui import QBrush, QColor, QPainter
-from siriushla.widgets import SiriusDialog, SiriusLedState
+from siriushla.widgets import SiriusLedAlert
 from pydm.widgets.base import PyDMWidget, PyDMWritableWidget
 # import siriuspy.csdevice.orbitcorr as _csorb
 
@@ -48,6 +47,69 @@ class _PyDMCheckBoxList(PyDMWritableWidget, QWidget):
             cbx.setEnabled(new_val)
 
 
+class Wid(QWidget):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.iamchecked = True
+        self.setEnabled(False)
+        self.bg_cors = ['red', 'green']
+
+    def toggle(self):
+        self.iamchecked = not self.iamchecked
+        self.setcolor()
+
+    def setChecked(self, val):
+        self.iamchecked = bool(val)
+        self.setcolor()
+
+    def isChecked(self):
+        return self.iamchecked
+
+    def setcolor(self):
+        cor = self.bg_cors[self.iamchecked] if self.isEnabled() else 'gray'
+        self.setStyleSheet('background-color:' + cor + ';')
+
+    def mouseReleaseEvent(self, _):
+        self.toggle()
+
+
+class _PyDMWidgetList(PyDMWritableWidget, QWidget):
+
+    def __init__(self, parent=None, init_channel=None, size=0):
+        QWidget.__init__(self, parent=parent)
+        PyDMWritableWidget.__init__(self, init_channel=init_channel)
+        self.setVisible(False)
+        self.wid_list = [Wid() for _ in range(size)]
+        self.btn_send = QPushButton('Apply Changes')
+        self.btn_send.clicked.connect(self.send_value)
+        self.btn_enbl_all = QPushButton('Enable All')
+        self.btn_enbl_all.clicked.connect(_part(self.toogle_all, True))
+        self.btn_dsbl_all = QPushButton('Disable All')
+        self.btn_dsbl_all.clicked.connect(_part(self.toogle_all, False))
+
+    def toogle_all(self, value):
+        for wid in self.wid_list:
+            wid.setChecked(bool(value))
+
+    def send_value(self):
+        if self.value is None:
+            return
+        value = np.array(
+            [wid.isChecked() for wid in self.wid_list], dtype=bool)
+        self.send_value_signal[np.ndarray].emit(value)
+
+    def value_changed(self, new_val):
+        super().value_changed(new_val)
+        for i, checked in enumerate(self.value):
+            self.wid_list[i].setChecked(checked)
+
+    def connection_changed(self, new_val):
+        super().connection_changed(new_val)
+        for wid in self.wid_list:
+            wid.setEnabled(new_val)
+
+
 class _PyDMLedList(PyDMWidget, QWidget):
 
     def __init__(self, parent=None, init_channel=None, size=0):
@@ -57,14 +119,15 @@ class _PyDMLedList(PyDMWidget, QWidget):
         self.led_list = []
         sz_polc = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         for _ in range(size):
-            led = SiriusLedState()
+            # led = SiriusLedState()
+            led = SiriusLedAlert()
             led.setSizePolicy(sz_polc)
             self.led_list.append(led)
 
     def value_changed(self, new_val):
         super(_PyDMLedList, self).value_changed(new_val)
         for i, checked in enumerate(self.value):
-            self.led_list[i].setState(checked)
+            self.led_list[i].setState(not checked)
 
     def connection_changed(self, new_val):
         super(_PyDMLedList, self).connection_changed(new_val)
@@ -82,9 +145,7 @@ class SelectionMatrix(QWidget):
         self._select_ring(acc)
         self.prefix = prefix
         self.dev = dev
-        self.begin = QPoint()
-        self.end = QPoint()
-        self.pv_sp = _PyDMCheckBoxList(
+        self.pv_sp = _PyDMWidgetList(
             parent=self,
             init_channel=self.prefix + self.dev + 'EnblList-SP',
             size=self.INDICES_LENGTH[self.dev])
@@ -127,8 +188,6 @@ class SelectionMatrix(QWidget):
         self.INDICES_LENGTH = {
             'BPMX': NR_BPMs, 'BPMY': NR_BPMs, 'CH': NR_CHs, 'CV': NR_CVs}
 
-
-
     def _setup_ui(self):
         name = self.dev + "List"
         self.setObjectName(name)
@@ -159,7 +218,7 @@ class SelectionMatrix(QWidget):
         grid_l.setSizeConstraint(grid_l.SetMinimumSize)
 
     def _create_matrix(self, parent):
-        wid = QWidget(parent)
+        wid = MyWidget(self.pv_sp, parent)
         wid.setStyleSheet("font: 16pt \"Sans Serif\";\nfont-weight: bold;")
         vbl = QVBoxLayout(wid)
 
@@ -169,8 +228,8 @@ class SelectionMatrix(QWidget):
         wid2 = self._make_line(0, '00', subsecs, list(range(len_)), True)
         vbl.addWidget(wid2)
         for i, sec in enumerate(secs):
-            wid2 = self._make_line(i+1, sec, subsecs,
-                                   indices[i*len_:(i+1)*len_], False)
+            wid2 = self._make_line(
+                i+1, sec, subsecs, indices[i*len_:(i+1)*len_], False)
             vbl.addWidget(wid2)
         return wid
 
@@ -183,21 +242,17 @@ class SelectionMatrix(QWidget):
     def _make_line(self, idx, section, subsections, indices, header):
         label = section+self.dev
         wid = QWidget()
-        if idx % 2:
-            wid.setStyleSheet('background-color: rgb(220, 220, 220);')
+        # if idx % 2:
+        #     wid.setStyleSheet('background-color: rgb(220, 220, 220);')
         wid.setObjectName('Wid_'+label)
         hbl = QHBoxLayout(wid)
         hbl.setObjectName('HL_'+label)
-        hspace = QSpacerItem(40, 20,
-                             QSizePolicy.Expanding, QSizePolicy.Minimum)
-        hbl.addItem(hspace)
+        hbl.addSpacing(20)
         lab = QLabel(wid)
         lab.setObjectName('LB_'+label)
         lab.setText('  ' if header else section)
         hbl.addWidget(lab)
-        hspace = QSpacerItem(40, 20,
-                             QSizePolicy.Expanding, QSizePolicy.Minimum)
-        hbl.addItem(hspace)
+        hbl.addSpacing(20)
         for subsection, index in zip(subsections, indices):
             if header:
                 lab = QLabel(wid)
@@ -206,15 +261,13 @@ class SelectionMatrix(QWidget):
                 hbl.addWidget(lab)
             else:
                 subhl = self._make_unit(wid, section, subsection, index)
-                hbl.addLayout(subhl)
-            hspace = QSpacerItem(40, 20,
-                                 QSizePolicy.Expanding, QSizePolicy.Minimum)
-            hbl.addItem(hspace)
+                hbl.addWidget(subhl)
+            hbl.addSpacing(20)
         return wid
 
-    def _make_unit(self, parent, section, subsection, index):
+    def _make_unit_old(self, parent, section, subsection, index):
         label = ''
-        if self.acc.lower()=='si':
+        if self.acc.lower() == 'si':
             label = section+subsection
         hbl = QHBoxLayout()
         hbl.setObjectName('HL_'+label)
@@ -228,6 +281,29 @@ class SelectionMatrix(QWidget):
         led.setToolTip(label)
         hbl.addWidget(led)
         return hbl
+
+    def _make_unit(self, parent, section, subsection, index):
+        label = ''
+        if self.acc.lower() == 'si':
+            label = section+subsection
+        wid = self.pv_sp.wid_list[index]
+        wid.setParent(parent)
+        wid.setToolTip('{0:d}'.format(index))
+        hbl = QHBoxLayout(wid)
+
+        led = self.pv_rb.led_list[index]
+        hbl.addWidget(led)
+        led.setParent(wid)
+        led.setToolTip(label)
+        return wid
+
+
+class MyWidget(QWidget):
+    def __init__(self, wid_list, parent=None):
+        super().__init__(parent)
+        self.pv_sp = wid_list
+        self.begin = QPoint()
+        self.end = QPoint()
 
     def _paint(self):
         if self.begin == self.end:
@@ -256,12 +332,13 @@ class SelectionMatrix(QWidget):
         self.update()
 
     def selectitems(self):
-        for cb in self.pv_sp.cb_list:
+        for cb in self.pv_sp.wid_list:
             pos = cb.mapTo(self, cb.pos())
-            x1 = pos.x() > 2*self.begin.x()  # Mistery: factor of 2
-            x2 = pos.x() > 2*self.end.x()
-            y1 = pos.y() > self.begin.y()
-            y2 = pos.y() > self.end.y()
+            sz = cb.size()
+            x1 = pos.x()+sz.width()/2 > 2*self.begin.x()  # Mistery:factor of 2
+            x2 = pos.x()+sz.width()/2 > 2*self.end.x()
+            y1 = pos.y()+sz.height()/2 > self.begin.y()
+            y2 = pos.y()+sz.height()/2 > self.end.y()
             if x1 != x2 and y1 != y2:
                 cb.toggle()
 
@@ -278,6 +355,7 @@ def _main():
 
 if __name__ == '__main__':
     from siriushla.sirius_application import SiriusApplication
+    from siriushla.widgets import SiriusDialog
     from siriuspy.envars import vaca_prefix as pref
     import sys
 

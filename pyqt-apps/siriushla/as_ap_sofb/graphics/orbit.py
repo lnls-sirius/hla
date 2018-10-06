@@ -1,15 +1,18 @@
 """Control the Orbit Graphic Displnay."""
 
 from functools import partial as _part
+import numpy as np
 from pyqtgraph import mkPen, InfiniteLine
 from qtpy.QtWidgets import QWidget, QLabel, QCheckBox, \
     QVBoxLayout, QHBoxLayout, QGroupBox, QPushButton, QComboBox
-from qtpy.QtCore import Qt
+from qtpy.QtCore import Qt, Signal
 from qtpy.QtGui import QColor
+from pydm.widgets import PyDMWaveformPlot
 import siriushla.util as _util
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets import SiriusSpectrogramView, SiriusConnectionSignal
-from siriushla.si_ap_sofb.graphics.base import BaseWidget
+
+from siriushla.as_ap_sofb.graphics.base import BaseWidget
 
 
 class OrbitWidget(BaseWidget):
@@ -34,14 +37,26 @@ class OrbitWidget(BaseWidget):
         vbl = QVBoxLayout(grpbx)
         self.hbl.addWidget(grpbx)
         self.hbl.addStretch(1)
-        btn = QPushButton('MultiTurn Graphics', grpbx)
+
+        btn = QPushButton('MultiTurn Orbit', grpbx)
         vbl.addWidget(btn)
         Window = create_window_from_widget(
             MultiTurnWidget, name='MultiTurnWindow', size=(1000, 1800))
         _util.connect_window(
             btn, Window, self,
-            sigs=self.updater[0].raw_ref_sig,
-            prefix=self.prefix, acc=self.acc)
+            sigs=self.updater[0].raw_ref_sig, prefix=self.prefix)
+
+        btn = QPushButton('MultiTurn Sum', grpbx)
+        vbl.addWidget(btn)
+        Window = create_window_from_widget(
+            MultiTurnSumWidget, name='MultiTurnSumWindow', size=(1000, 1600))
+        _util.connect_window(btn, Window, self, prefix=self.prefix)
+
+        btn = QPushButton('SinglePass Sum', grpbx)
+        vbl.addWidget(btn)
+        Window = create_window_from_widget(
+            SinglePassSumWidget, name='SinglePassSumWindow', size=(1000, 700))
+        _util.connect_window(btn, Window, self, prefix=self.prefix)
 
     def channels(self):
         chans = super().channels()
@@ -78,10 +93,9 @@ class OrbitWidget(BaseWidget):
 
 class MultiTurnWidget(QWidget):
 
-    def __init__(self, parent, sigs, prefix, acc='SI'):
+    def __init__(self, parent, sigs, prefix):
         super().__init__(parent)
         self.prefix = prefix
-        self.acc = acc
         self.setupui()
         self.sigs = sigs
         self.fun2setref = {
@@ -137,7 +151,70 @@ class MultiTurnWidget(QWidget):
             self.specty.setreforbit(orb)
 
 
+class MultiTurnSumWidget(QWidget):
+
+    def __init__(self, parent, prefix):
+        super().__init__(parent)
+        self.prefix = prefix
+        self.setupui()
+
+    def setupui(self):
+        vbl = QVBoxLayout(self)
+        self.spect = Spectrogram(
+            parent=self,
+            prefix=self.prefix,
+            image_channel=self.prefix+'OrbitsMultiTurnSum-Mon',
+            xaxis_channel=self.prefix+'BPMPosS-Cte',
+            yaxis_channel=self.prefix+'OrbitMultiTurnTime-Mon')
+        self.spect.new_data_sig.connect(self.update_graph)
+        self.spect.normalizeData = True
+        self.spect.yaxis.setLabel('time', units='ms')
+        self.spect.xaxis.setLabel('BPM position', units='m')
+        self.spect.colorbar.label_format = '{:<8.1f}'
+        lab = QLabel('Sum Orbit', self)
+        lab.setStyleSheet("font: 20pt \"Sans Serif\";\nfont-weight: bold;")
+        lab.setAlignment(Qt.AlignCenter)
+        vbl.addWidget(lab)
+        vbl.addWidget(self.spect)
+        vbl.addSpacing(50)
+
+        lab = QLabel('Sum Accross BPMs', self)
+        lab.setStyleSheet("font: 20pt \"Sans Serif\";\nfont-weight: bold;")
+        lab.setAlignment(Qt.AlignCenter)
+        vbl.addWidget(lab)
+        graph = PyDMWaveformPlot(self)
+        vbl.addWidget(graph)
+        graph.mouseEnabledX = True
+        graph.setShowXGrid(True)
+        graph.setShowYGrid(True)
+        graph.setBackgroundColor(QColor(255, 255, 255))
+        graph.setShowLegend(True)
+        graph.setAutoRangeX(True)
+        graph.setAutoRangeY(True)
+        graph.setMinXRange(0.0)
+        graph.setMaxXRange(1.0)
+        graph.plotItem.showButtons()
+        graph.setLabel('bottom', text='time', units='ms')
+        graph.setLabel('left', text='Sum', units='count')
+        opts = dict(
+            y_channel='ca://A',
+            x_channel=self.prefix+'OrbitMultiTurnTime-Mon',
+            name='',
+            color=QColor(0, 0, 0),
+            redraw_mode=2,
+            lineStyle=1,
+            lineWidth=3,
+            symbol='o',
+            symbolSize=10)
+        graph.addChannel(**opts)
+        self.curve = graph.curveAtIndex(0)
+
+    def update_graph(self, data):
+        self.curve.receiveYWaveform(data.mean(axis=1))
+
+
 class Spectrogram(SiriusSpectrogramView):
+    new_data_sig = Signal(np.ndarray)
 
     def __init__(self, prefix='', **kwargs):
         super().__init__(**kwargs)
@@ -155,9 +232,9 @@ class Spectrogram(SiriusSpectrogramView):
         self.needs_redraw = True
 
     def process_image(self, img):
-        print(img.shape)
         if hasattr(self, '_ref_orbit'):
             return img - self._ref_orbit[None, :]
+        self.new_data_sig.emit(img)
         return img
 
     def mouseDoubleClickEvent(self, ev):
@@ -165,7 +242,49 @@ class Spectrogram(SiriusSpectrogramView):
             pos = self._image_item.mapFromDevice(ev.pos())
             if pos.y() > 0 and pos.y() <= self._image_item.height():
                 self.multiturnidx.send_value_signal[int].emit(int(pos.y()))
-        super().mousePressEvent(ev)
+        super().mouseDoubleClickEvent(ev)
+
+
+class SinglePassSumWidget(QWidget):
+
+    def __init__(self, parent, prefix):
+        super().__init__(parent)
+        self.prefix = prefix
+        self.setupui()
+
+    def setupui(self):
+        vbl = QVBoxLayout(self)
+
+        lab = QLabel('Single Pass Sum BPMs', self)
+        lab.setStyleSheet("font: 20pt \"Sans Serif\";\nfont-weight: bold;")
+        lab.setAlignment(Qt.AlignCenter)
+        vbl.addWidget(lab)
+
+        graph = PyDMWaveformPlot(self)
+        vbl.addWidget(graph)
+        graph.mouseEnabledX = True
+        graph.setShowXGrid(True)
+        graph.setShowYGrid(True)
+        graph.setBackgroundColor(QColor(255, 255, 255))
+        graph.setShowLegend(True)
+        graph.setAutoRangeX(True)
+        graph.setAutoRangeY(True)
+        graph.setMinXRange(0.0)
+        graph.setMaxXRange(1.0)
+        graph.plotItem.showButtons()
+        graph.setLabel('bottom', text='time', units='ms')
+        graph.setLabel('left', text='Sum', units='count')
+        opts = dict(
+            y_channel=self.prefix+'OrbitSmoothSinglePassSum-Mon',
+            x_channel=self.prefix+'BPMPosS-Cte',
+            name='',
+            color=QColor(0, 0, 0),
+            redraw_mode=2,
+            lineStyle=1,
+            lineWidth=3,
+            symbol='o',
+            symbolSize=10)
+        graph.addChannel(**opts)
 
 
 def _main(prefix):

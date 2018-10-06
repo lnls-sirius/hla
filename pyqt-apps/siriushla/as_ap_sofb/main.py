@@ -11,10 +11,10 @@ from siriushla.widgets import SiriusMainWindow
 from siriuspy.envars import vaca_prefix as LL_PREF
 from siriushla.widgets import PyDMLogLabel
 from siriushla.sirius_application import SiriusApplication
-from siriushla.si_ap_sofb.orbit_register import OrbitRegisters
-from siriushla.si_ap_sofb.graphics import OrbitWidget, \
-                                                    CorrectorsWidget
-from siriushla.si_ap_sofb.sofb_controllers import ControlSOFB
+
+from siriushla.as_ap_sofb.orbit_register import OrbitRegisters
+from siriushla.as_ap_sofb.graphics import OrbitWidget, CorrectorsWidget
+from siriushla.as_ap_sofb.ioc_control import SOFBControl
 
 _dir = _os.path.dirname(_os.path.abspath(__file__))
 UI_FILE = _os.path.sep.join([_dir, 'SOFBMain.ui'])
@@ -107,7 +107,7 @@ class MainWindow(SiriusMainWindow):
 
         vbl = QVBoxLayout(wid2)
         ctrls = self.orb_regtr.get_registers_control()
-        wid = ControlSOFB(wid2, self.prefix, ctrls, self.acc)
+        wid = SOFBControl(wid2, self.prefix, ctrls, self.acc)
         vbl.addWidget(wid)
         return docwid
 

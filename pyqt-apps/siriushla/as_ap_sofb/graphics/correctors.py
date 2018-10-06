@@ -5,7 +5,7 @@ from qtpy.QtWidgets import QCheckBox, \
     QVBoxLayout, QHBoxLayout, QGroupBox
 from qtpy.QtGui import QColor
 from siriushla.widgets import SiriusConnectionSignal
-from siriushla.si_ap_sofb.graphics.base import BaseWidget
+from siriushla.as_ap_sofb.graphics.base import BaseWidget
 
 
 class CorrectorsWidget(BaseWidget):
@@ -49,8 +49,9 @@ class CorrectorsWidget(BaseWidget):
             pen.setStyle(sty)
             pen.setWidth(wid)
             for pln, corr in zip(plns, corrs):
-                maxkick = InfiniteLine(pos=0.0, pen=pen, angle=0, name=name)
-                minkick = NegativeLine(pos=0.0, pen=pen, angle=0)
+                maxkick = InfLine(
+                    conv=1e-6, pos=0.0, pen=pen, angle=0, name=name)
+                minkick = InfLine(conv=-1e-6, pos=0.0, pen=pen, angle=0)
                 self.graph[pln].addItem(maxkick)
                 self.graph[pln].addItem(minkick)
                 chan = SiriusConnectionSignal(self.prefix + pvi + corr + '-RB')
@@ -91,14 +92,16 @@ class CorrectorsWidget(BaseWidget):
         return chans, ctrls
 
 
-class NegativeLine(InfiniteLine):
-    def __init__(self, pos=None, **kwargs):
+class InfLine(InfiniteLine):
+
+    def __init__(self, conv=1, pos=None, **kwargs):
         if pos is not None:
-            pos *= -1
-        super().__init__(pos=pos, **kwargs)
+            pos *= conv
+        super().__init__(**kwargs)
+        self.conv = conv
 
     def setValue(self, value):
-        super().setValue(-value)
+        super().setValue(value*self.conv)
 
 
 def _main(prefix):

@@ -3,7 +3,7 @@
 from datetime import datetime as _datetime
 from functools import partial as _part
 import numpy as _np
-from pyqtgraph import mkBrush, mkPen, InfiniteLine
+from pyqtgraph import mkBrush, mkPen, InfiniteLine, functions
 from qtpy.QtWidgets import QWidget, QFileDialog, QLabel, QCheckBox, \
     QVBoxLayout, QHBoxLayout, QSizePolicy, QGroupBox, \
     QFormLayout, QPushButton, QComboBox
@@ -50,11 +50,17 @@ class BaseWidget(QWidget):
             for upd in self.updater:
                 sig.connect(_part(upd.set_enbl_list, pln))
 
+        self.enbl_pvs_set = {
+            'x': SiriusConnectionSignal(self.prefix+prefx+'EnblList-SP'),
+            'y': SiriusConnectionSignal(self.prefix+prefy+'EnblList-SP')}
+
         self.thread.start()
         self.timer.start(1000/self.update_rate)
 
     def channels(self):
-        return list(self.enbl_pvs.values())
+        chans = list(self.enbl_pvs.values())
+        chans.extend(self.enbl_pvs_set.values())
+        return chans
 
     def setupui(self):
         vbl = QVBoxLayout(self)
@@ -85,21 +91,11 @@ class BaseWidget(QWidget):
             self.hbl.addStretch(1)
 
     def uigetgraph(self, pln):
-        graph = PyDMWaveformPlot(self)
-        graph.maxRedrawRate = 2
-        graph.mouseEnabledX = True
-        graph.setShowXGrid(True)
-        graph.setShowYGrid(True)
-        graph.setBackgroundColor(QColor(255, 255, 255))
-        graph.setShowLegend(True)
-        graph.setAutoRangeX(True)
-        graph.setAutoRangeY(True)
-        graph.setMinXRange(0.0)
-        graph.setMaxXRange(1.0)
-        graph.plotItem.showButtons()
+        graph = Graph(self)
+        graph.doubleclick.connect(_part(self._set_enable_list, pln))
         graph.setLabel('bottom', text='BPM position', units='m')
         lab = 'Orbit' if self.is_orb else 'Kick Angle'
-        unit = 'um' if self.is_orb else 'urad'
+        unit = 'm' if self.is_orb else 'rad'
         graph.setLabel('left', text=lab, units=unit)
 
         pref = 'BPM' if self.is_orb else 'CH' if pln == 'x' else 'CV'
@@ -139,7 +135,6 @@ class BaseWidget(QWidget):
             for j, cur in enumerate((cpstd, cmstd, cave), 1):
                 cur.setZValue(-4*i - j)
                 cur.setVisible(not i)
-
             graph.plotItem.legend.removeItem('')
         return graph
 
@@ -165,6 +160,7 @@ class BaseWidget(QWidget):
         lab = QLabel('Statistics', grpbx)
         lab.setAlignment(Qt.AlignCenter)
         fbl.addRow(lab)
+        unit = 'm' if self.is_orb else 'rad'
         for pln in ('x', 'y'):
             wid = QWidget(grpbx)
             fbl.addRow(wid)
@@ -174,14 +170,14 @@ class BaseWidget(QWidget):
             cbx.setChecked(True)
             hbl.addWidget(cbx)
 
-            lab_avg = Label('0.000', wid)
+            lab_avg = Label(unit, '0.000', wid)
             self.updater[idx].ave[pln].connect(lab_avg.setFloat)
             lab_avg.setAlignment(Qt.AlignCenter)
             lab_avg.setMinimumSize(QSize(120, 0))
             hbl.addWidget(lab_avg)
             hbl.addWidget(QLabel(
                 "<html><head/><body><p>&#177;</p></body></html>", wid))
-            lab_std = Label('0.000', wid)
+            lab_std = Label(unit, '0.000', wid)
             self.updater[idx].std[pln].connect(lab_std.setFloat)
             lab_std.setMinimumSize(QSize(120, 0))
             lab_std.setAlignment(Qt.AlignCenter)
@@ -231,9 +227,18 @@ class BaseWidget(QWidget):
                 for j in range(3):
                     cbx.toggled.connect(lines[3*i + j].setVisible)
 
+    def _set_enable_list(self, pln, idx):
+        val = self.enbl_pvs_set[pln].getvalue()
+        val[idx] = not val[idx]
+        self.enbl_pvs_set[pln].send_value_signal[_np.ndarray].emit(val)
+
     def _update_enable_list(self, pln, array):
-        offbrs = mkBrush(100, 100, 100)
-        offpen = mkPen(100, 100, 100)
+        offbrs = mkBrush(0, 0, 0)
+        offpen = mkPen(0, 0, 0)
+        offsimb = 's'
+        simb = 'o'
+        offsz = 15
+        size = 10
         for i in range(len(self.line_names)):
             trc = self.graph[pln].curveAtIndex(i)
             cor = i * 255
@@ -242,8 +247,22 @@ class BaseWidget(QWidget):
             cor = QColor(*cor)
             brs = mkBrush(cor)
             pen = mkPen(cor)
-            trc.opts['symbolBrush'] = [(brs if v else offbrs) for v in array]
-            trc.opts['symbolPen'] = [(pen if v else offpen) for v in array]
+            brss, pens, simbs, sizes = [], [], [], []
+            for v in array:
+                if v:
+                    brss.append(brs)
+                    pens.append(pen)
+                    simbs.append(simb)
+                    sizes.append(size)
+                else:
+                    brss.append(offbrs)
+                    pens.append(offpen)
+                    simbs.append(offsimb)
+                    sizes.append(offsz)
+            trc.opts['symbolBrush'] = brss
+            trc.opts['symbolPen'] = pens
+            # trc.opts['symbol'] = simbs
+            trc.opts['symbolSize'] = sizes
 
     def _save_difference(self, idx):
         updater = self.updater[idx]
@@ -278,6 +297,8 @@ class UpdateGraph(QObject):
     ave_mstdy = Signal([float])
     data_sigy = Signal([_np.ndarray])
     ref_sigy = Signal([_np.ndarray])
+
+    UNIT = 1e-6  # orbit is in um and strength in urad
 
     def __init__(self, ctrls, is_orb, acc='SI'):
         """Initialize object."""
@@ -367,7 +388,7 @@ class UpdateGraph(QObject):
             ref = self.vectors['ref'][pln]
             if orb is None or ref is None:
                 return
-            diff = orb - ref
+            diff = (orb - ref) * self.UNIT
             if self.enbl_list[pln] is not None:
                 mask = diff[self.enbl_list[pln]]
             else:
@@ -383,7 +404,42 @@ class UpdateGraph(QObject):
 
 
 class Label(QLabel):
-    FMT = '{0:8.3g}'
+    FMT = '{0:.2f}'
 
-    def setFloat(self, text):
-        super().setText(self.FMT.format(text))
+    def __init__(self, unit, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.unit = unit
+
+    def setFloat(self, val):
+        sc, prf = functions.siScale(val)
+        val *= sc
+        text = self.FMT.format(val)
+        text += ' ' + prf + self.unit
+        super().setText(text)
+
+
+class Graph(PyDMWaveformPlot):
+    doubleclick = Signal(int)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.maxRedrawRate = 2
+        self.mouseEnabledX = True
+        self.setShowXGrid(True)
+        self.setShowYGrid(True)
+        self.setBackgroundColor(QColor(255, 255, 255))
+        self.setShowLegend(True)
+        self.setAutoRangeX(True)
+        self.setAutoRangeY(True)
+        self.setMinXRange(0.0)
+        self.setMaxXRange(1.0)
+        self.plotItem.showButtons()
+
+    def mouseDoubleClickEvent(self, ev):
+        if ev.button() == Qt.LeftButton:
+            posx = self.curveAtIndex(0).xData
+            vb = self.plotItem.getViewBox()
+            pos = vb.mapSceneToView(ev.pos())
+            i = _np.argmin(_np.abs(posx-pos.x()))
+            self.doubleclick.emit(i)
+        super().mouseDoubleClickEvent(ev)
