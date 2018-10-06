@@ -178,19 +178,22 @@ class SOFBControl(BaseWidget):
         vbl2.setSpacing(9)
         Window = create_window_from_widget(
             RespMatWidget, name='RespMatWindow')
-        btn = QPushButton('RespMat Configurations', grpbx)
-        vbl2.addWidget(btn)
-        _util.connect_window(btn, Window, grpbx, prefix=self.prefix)
-        Window = create_window_from_widget(
-            KicksConfigWidget, name='KicksConfigWindow')
-        btn = QPushButton('Correctors configurations', grpbx)
+        btn = QPushButton('Respnse Matrix', grpbx)
         vbl2.addWidget(btn)
         _util.connect_window(
-            btn, Window, grpbx, prefix=self.prefix, show_details=True)
+            btn, Window, grpbx, prefix=self.prefix, acc=self.acc)
+        Window = create_window_from_widget(
+            KicksConfigWidget, name='KicksConfigWindow')
+        btn = QPushButton('Correctors', grpbx)
+        vbl2.addWidget(btn)
+        _util.connect_window(
+            btn, Window, grpbx, prefix=self.prefix, acc=self.acc,
+            show_details=True)
         Window = create_window_from_widget(
             AcqControlWidget, name='AcqControlWindow')
-        btn = QPushButton('Acquisition Configuration Details', grpbx)
-        _util.connect_window(btn, Window, grpbx, prefix=self.prefix)
+        btn = QPushButton('Orbit Acquisition', grpbx)
+        _util.connect_window(
+            btn, Window, grpbx, prefix=self.prefix, acc=self.acc)
         vbl2.addWidget(btn)
 
 
