@@ -238,7 +238,7 @@ class QLed(QFrame):
     def setSelected(self, sel):
         self._isselected = bool(sel)
         self.selected.emit(self._isselected)
-
+        self.update()
 
 if __name__ == "__main__":
     from sys import argv, exit
