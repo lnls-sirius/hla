@@ -1436,8 +1436,6 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
         cond &= ev.x() > self.width()/2-self.height()
         if cond:
             self.clicked.emit()
-        else:
-            super().mouseReleaseEvent(ev)
 
     def value_changed(self, new_val):
         """
