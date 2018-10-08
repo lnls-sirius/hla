@@ -97,7 +97,7 @@ class InfLine(InfiniteLine):
     def __init__(self, conv=1, pos=None, **kwargs):
         if pos is not None:
             pos *= conv
-        super().__init__(**kwargs)
+        super().__init__(pos=pos, **kwargs)
         self.conv = conv
 
     def setValue(self, value):
