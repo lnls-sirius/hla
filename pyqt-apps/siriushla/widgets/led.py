@@ -91,13 +91,7 @@ class SiriusLedAlert(PyDMLed):
 
     def value_changed(self, new_val):
         """If no bit is set, treat new_val as 2 states, zero and non-zero."""
-        if self._bit < 0:
-            if new_val == 0:
-                super().value_changed(0)
-            else:
-                super().value_changed(1)
-        else:
-            super().value_changed(new_val)
+        super().value_changed(int(new_val != 0) if self._bit < 0 else new_val)
 
 
 class PyDMLedMultiChannel(QLed, PyDMWidget):
@@ -122,8 +116,15 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         QLed.__init__(self, parent)
         PyDMWidget.__init__(self)
         self.channels2values = channels2values
-        self.channels2ids = dict()
         self.stateColors = color_list or self.default_colorlist
+
+        self.channels2ids = dict()
+        for _id, channel in enumerate(sorted(self.channels2values.keys())):
+            stid = str(_id)
+            setattr(self, 'channel' + stid, channel)
+            setattr(self, 'channel' + stid + '_value', None)
+            setattr(self, 'channel' + stid + '_connected', False)
+            self.channels2ids[channel] = stid
 
     def value_changed(self, new_val):
         """Receive new value and set led color accordingly."""
@@ -142,11 +143,8 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         channel = 'ca://' + self.sender().address
         setattr(self, 'channel'+self.channels2ids[channel]+'_connected', conn)
         allconn = True
-        for channel, _id in self.channels2ids.items():
-            conn = getattr(self, 'channel'+_id+'_connected')
-            allconn &= (conn is True)
-            if allconn is False:
-                break
+        for _id in self.channels2ids.values():
+            allconn &= getattr(self, 'channel'+_id+'_connected')
         self.setEnabled(allconn)
 
     def channels(self):
@@ -160,16 +158,10 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         """
         if self._channels is None:
             self._channels = []
-            _id = 0
-            for channel in self.channels2values.keys():
-                setattr(self, 'channel' + str(_id), channel)
-                setattr(self, 'channel' + str(_id) + '_value', None)
-                setattr(self, 'channel' + str(_id) + '_connected', False)
-                self.channels2ids[channel] = str(_id)
+            for channel, _id in self.channels2ids.items():
                 self._channels.append(
                     PyDMChannel(
-                        address=getattr(self, 'channel' + str(_id)),
+                        address=channel,
                         connection_slot=self.connectionStateChanged,
                         value_slot=self.value_changed))
-                _id += 1
         return self._channels
