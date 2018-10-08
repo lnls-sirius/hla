@@ -3,6 +3,13 @@
 """HLA Setup."""
 
 from setuptools import setup
+import unittest
+
+def my_test_suite():
+    test_loader = unittest.TestLoader()
+    test_suite = test_loader.discover('tests', pattern='test_*.py')
+    return test_suite
+
 
 with open('VERSION', 'r') as _f:
     __version__ = _f.read().strip()
@@ -48,6 +55,7 @@ setup(
         'scripts/sirius-hla-ts-ap-posang.py',
         'scripts/sirius-hla-ts-ma-control.py',
         ],
-    test_suite='tests',
+    #test_suite='setup.my_test_suite',
+    test_suite='setup.my_test_suite',
     zip_safe=False
     )
