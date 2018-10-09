@@ -8,7 +8,7 @@ from qtpy.QtWidgets import QWidget, QFileDialog, QLabel, QCheckBox, \
     QVBoxLayout, QHBoxLayout, QSizePolicy, QGroupBox, \
     QFormLayout, QPushButton, QComboBox
 from qtpy.QtCore import QSize, Qt, QTimer, QThread, Signal, QObject
-from qtpy.QtGui import QColor
+from qtpy.QtGui import QColor, QFont
 from pydm.widgets import PyDMWaveformPlot
 from siriushla.widgets import SiriusConnectionSignal
 import siriuspy.csdevice.orbitcorr as _csorb
@@ -93,22 +93,20 @@ class BaseWidget(QWidget):
     def uigetgraph(self, pln):
         graph = Graph(self)
         graph.doubleclick.connect(_part(self._set_enable_list, pln))
-        graph.setLabel('bottom', text='BPM position', units='m')
+
+        labSty = {'font-size': '20pt'}
+        graph.setLabel('bottom', text='BPM position', units='m', **labSty)
         lab = 'Orbit' if self.is_orb else 'Kick Angle'
         unit = 'm' if self.is_orb else 'rad'
-        graph.setLabel('left', text=lab, units=unit)
+        graph.setLabel('left', text=lab, units=unit, **labSty)
 
         pref = 'BPM' if self.is_orb else 'CH' if pln == 'x' else 'CV'
         for i, lname in enumerate(self.line_names):
-            cor = i * 255
-            cor //= len(self.line_names)
-            rcor = QColor(255, cor, cor)
-            bcor = QColor(cor, cor, 255)
             opts = dict(
                 y_channel='ca://A',
                 x_channel=self.prefix + pref + 'PosS-Cte',
                 name=lname,
-                color=bcor if pln == 'x' else rcor,
+                color=self._get_color(pln, i),
                 redraw_mode=2,
                 lineStyle=1,
                 lineWidth=2 if i else 3,
@@ -227,24 +225,30 @@ class BaseWidget(QWidget):
                 for j in range(3):
                     cbx.toggled.connect(lines[3*i + j].setVisible)
 
+    def _get_color(self, pln, idx):
+        cor = idx * 255
+        cor //= len(self.line_names)
+        cor += 0
+        return QColor(255, cor, 0) if pln == 'y' else QColor(0, cor, 255)
+
     def _set_enable_list(self, pln, idx):
         val = self.enbl_pvs_set[pln].getvalue()
         val[idx] = not val[idx]
         self.enbl_pvs_set[pln].send_value_signal[_np.ndarray].emit(val)
 
     def _update_enable_list(self, pln, array):
-        offbrs = mkBrush(255, 255, 255)
-        offpen = mkPen(255, 255, 255)
+        # cor = (255, 255, 255)
+        # cor = (0, 200, 0)
+        cor = (0, 0, 0)
+        offbrs = mkBrush(*cor)
+        offpen = mkPen(*cor)
         offsimb = 's'
         simb = 'o'
         offsz = 15
         size = 10
         for i in range(len(self.line_names)):
             trc = self.graph[pln].curveAtIndex(i)
-            cor = i * 255
-            cor //= len(self.line_names)
-            cor = (cor, cor, 255) if pln == 'x' else (255, cor, cor)
-            cor = QColor(*cor)
+            cor = self._get_color(pln, i)
             brs = mkBrush(cor)
             pen = mkPen(cor)
             brss, pens, simbs, sizes = [], [], [], []
@@ -427,13 +431,24 @@ class Graph(PyDMWaveformPlot):
         self.mouseEnabledX = True
         self.setShowXGrid(True)
         self.setShowYGrid(True)
-        # self.setBackgroundColor(QColor(255, 255, 255))
+        self.setBackgroundColor(QColor(255, 255, 255))
+        # self.setBackgroundColor(QColor(239, 235, 231))
         self.setShowLegend(True)
         self.setAutoRangeX(True)
         self.setAutoRangeY(True)
         self.setMinXRange(0.0)
         self.setMaxXRange(1.0)
         self.plotItem.showButtons()
+        font = QFont()
+        font.setPixelSize(26)
+        self.plotItem.getAxis('bottom').tickFont = font
+        self.plotItem.getAxis('bottom').setPen(QColor(0, 0, 0))
+        self.plotItem.getAxis('bottom').setStyle(tickTextOffset=15)
+        self.plotItem.getAxis('bottom').setHeight(80)
+        self.plotItem.getAxis('left').tickFont = font
+        self.plotItem.getAxis('left').setPen(QColor(0, 0, 0))
+        self.plotItem.getAxis('left').setStyle(tickTextOffset=5)
+        self.plotItem.getAxis('left').setWidth(100)
 
     def mouseDoubleClickEvent(self, ev):
         if ev.button() == Qt.LeftButton:
