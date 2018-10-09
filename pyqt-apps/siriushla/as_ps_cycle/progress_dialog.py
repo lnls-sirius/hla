@@ -78,6 +78,7 @@ class ProgressDialog(QDialog):
             self._task[-1].finished.connect(lambda: self._exit_dlg(1))
         else:
             self.dlg_label.setText(self._label)
+            self._task.currentItem.connect(self.cur_item_label.setText)
             self._task.itemDone.connect(self.inc_value)
             self._task.finished.connect(lambda: self._exit_dlg(1))
             self.progress_bar.setMaximum(self._task.size())
