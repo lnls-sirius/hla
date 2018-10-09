@@ -18,6 +18,7 @@ __path__ = _os.path.dirname(__file__)
 
 class ShapeMap:
     """Shape enum mapping class."""
+
     Circle = 1
     Round = 2
     Square = 3
@@ -235,9 +236,11 @@ class QLed(QFrame, ShapeMap):
         self.update()
 
     def isSelected(self):
+        """Return selected state of object."""
         return self._isselected
 
     def setSelected(self, sel):
+        """Configure selected state of object."""
         self._isselected = bool(sel)
         self.selected.emit(self._isselected)
         self.update()
