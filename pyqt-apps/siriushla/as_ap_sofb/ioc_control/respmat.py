@@ -30,7 +30,7 @@ class RespMatWidget(BaseWidget):
         grpbx = QGroupBox('Corrs and BPMs selection', self)
         vbl.addWidget(grpbx)
         Window = create_window_from_widget(
-            SelectionMatrix, name='SelectionWindow', size=(1000, 1800))
+            SelectionMatrix, name='SelectionWindow', size=(700, 1700))
         for dev in ('BPMX', 'BPMY', 'CH', 'CV'):
             btns[dev] = QPushButton(dev, grpbx)
             connect_window(
