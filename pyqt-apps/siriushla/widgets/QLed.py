@@ -13,35 +13,37 @@ from qtpy.QtCore import Signal, Qt, QSize, QTimer, QByteArray, \
                         QRectF, Property, Q_ENUMS
 from qtpy.QtSvg import QSvgRenderer
 
-SHAPE = {'Circle': 1, 'Round': 2, 'Square': 3, 'Triangle': 4}
-
 __path__ = _os.path.dirname(__file__)
 
 
-class QLed(QFrame):
+class ShapeMap:
+    """Shape enum mapping class."""
+    Circle = 1
+    Round = 2
+    Square = 3
+    Triangle = 4
+
+
+Q_ENUMS(ShapeMap)
+
+
+class QLed(QFrame, ShapeMap):
     """QLed class."""
 
-    locals().update(**SHAPE)
-
-    class shapeMap:
-        """Shape enum mapping class."""
-
-        locals().update(**SHAPE)
-
-    Q_ENUMS(shapeMap)
+    shapeMap = ShapeMap
 
     shapesdict = dict()
     with open(__path__ + '/led_shapes/circle.svg', 'r') as f:
-        shapesdict[Circle] = f.read()
+        shapesdict[shapeMap.Circle] = f.read()
 
     with open(__path__ + '/led_shapes/round.svg', 'r') as f:
-        shapesdict[Round] = f.read()
+        shapesdict[shapeMap.Round] = f.read()
 
     with open(__path__ + '/led_shapes/square.svg', 'r') as f:
-        shapesdict[Square] = f.read()
+        shapesdict[shapeMap.Square] = f.read()
 
     with open(__path__ + '/led_shapes/triangle.svg', 'r') as f:
-        shapesdict[Triangle] = f.read()
+        shapesdict[shapeMap.Triangle] = f.read()
 
     Green = QColor(15, 105, 0)
     Red = QColor(207, 0, 0)
@@ -239,6 +241,7 @@ class QLed(QFrame):
         self._isselected = bool(sel)
         self.selected.emit(self._isselected)
         self.update()
+
 
 if __name__ == "__main__":
     from sys import argv, exit
