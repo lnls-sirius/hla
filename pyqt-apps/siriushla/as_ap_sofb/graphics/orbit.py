@@ -12,6 +12,7 @@ from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets import SiriusSpectrogramView, SiriusConnectionSignal
 
 from siriushla.as_ap_sofb.graphics.base import BaseWidget, Graph
+from siriushla.as_ap_sofb.graphics.correctors import CorrectorsWidget
 
 
 class OrbitWidget(BaseWidget):
@@ -36,6 +37,13 @@ class OrbitWidget(BaseWidget):
         vbl = QVBoxLayout(grpbx)
         self.hbl.addWidget(grpbx)
         self.hbl.addStretch(1)
+
+        btn = QPushButton('Correctors', grpbx)
+        vbl.addWidget(btn)
+        Window = create_window_from_widget(
+            CorrectorsWidget, name='CorrectorsWindow', size=(2300, 1600))
+        _util.connect_window(
+            btn, Window, self, prefix=self.prefix, acc=self.acc)
 
         btn = QPushButton('MultiTurn Orbit', grpbx)
         vbl.addWidget(btn)

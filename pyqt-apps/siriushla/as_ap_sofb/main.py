@@ -32,7 +32,7 @@ class MainWindow(SiriusMainWindow):
     def setupui(self):
         self.setWindowModality(Qt.WindowModal)
         self.setWindowTitle("Slow Orbit Feedback System")
-        self.resize(2590, 1856)
+        self.resize(2890, 1856)
         self.setDocumentMode(False)
         self.setDockNestingEnabled(True)
 
@@ -50,29 +50,11 @@ class MainWindow(SiriusMainWindow):
         self._create_menus()
 
     def _create_central_widget(self):
-        mwid = QWidget(self)
-        hbl = QHBoxLayout(mwid)
-        hbl.setContentsMargins(0, 0, 0, 0)
-
-        tabwidget = QTabWidget(mwid)
-        tabwidget.setMinimumSize(QSize(120, 0))
-        tabwidget.setCursor(QCursor(Qt.ArrowCursor))
-        tabwidget.setTabShape(QTabWidget.Triangular)
-        tabwidget.setElideMode(Qt.ElideNone)
-        tabwidget.setTabBarAutoHide(False)
-        hbl.addWidget(tabwidget)
-
         ctrls = self.orb_regtr.get_registers_control()
         chans, ctr = OrbitWidget.get_default_ctrls(self.prefix)
         self._channels = chans
         ctrls.update(ctr)
-        orb_wid = OrbitWidget(self, self.prefix, ctrls, self.acc)
-        tabwidget.addTab(orb_wid, 'Orbit')
-
-        corr_wid = CorrectorsWidget(self, self.prefix, acc=self.acc)
-        tabwidget.addTab(corr_wid, "Correctors")
-        tabwidget.setCurrentIndex(0)
-        return mwid
+        return OrbitWidget(self, self.prefix, ctrls, self.acc)
 
     def _create_orbit_registers(self):
         # Create Context Menus for Registers and
@@ -122,7 +104,7 @@ class MainWindow(SiriusMainWindow):
         sz_pol.setHeightForWidth(docwid.sizePolicy().hasHeightForWidth())
         docwid.setSizePolicy(sz_pol)
         docwid.setFloating(False)
-        docwid.setMinimumWidth(400)
+        docwid.setMinimumWidth(600)
         wid_cont = QWidget()
         docwid.setWidget(wid_cont)
         vbl = QVBoxLayout(wid_cont)
