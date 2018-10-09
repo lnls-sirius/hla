@@ -13,7 +13,7 @@ from siriushla.widgets import PyDMLogLabel
 from siriushla.sirius_application import SiriusApplication
 
 from siriushla.as_ap_sofb.orbit_register import OrbitRegisters
-from siriushla.as_ap_sofb.graphics import OrbitWidget, CorrectorsWidget
+from siriushla.as_ap_sofb.graphics import OrbitWidget
 from siriushla.as_ap_sofb.ioc_control import SOFBControl
 
 _dir = _os.path.dirname(_os.path.abspath(__file__))
