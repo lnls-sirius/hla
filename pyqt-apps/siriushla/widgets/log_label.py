@@ -1,6 +1,7 @@
 import datetime as _datetime
-from qtpy.QtWidgets import QListWidget
+from qtpy.QtWidgets import QListWidget, QListWidgetItem
 from qtpy.QtCore import Property
+from qtpy.QtGui import QColor
 from pydm.widgets.base import PyDMWidget
 from pydm.widgets.display_format import DisplayFormat, parse_value_for_display
 
@@ -16,6 +17,9 @@ class PyDMLogLabel(QListWidget, PyDMWidget):
     init_channel : str, optional
         The channel to be used by the widget.
     """
+
+    errorcolor = QColor(255, 0, 0)
+    warncolor = QColor(200, 200, 0)
 
     def __init__(self, parent=None, init_channel=None):
         QListWidget.__init__(self, parent)
@@ -55,25 +59,31 @@ class PyDMLogLabel(QListWidget, PyDMWidget):
             prefix += ' '
         # If the value is a string, just display it as-is, no formatting
         # needed.
+        item = None
         if isinstance(new_value, str):
-            self.addItem(prefix + new_value)
-            return
+            item = QListWidgetItem(prefix + new_value)
+            if new_value.lower().startswith(('err', 'fatal')):
+                item.setForeground(self.errorcolor)
+            elif new_value.lower().startswith('warn'):
+                item.setForeground(self.warncolor)
         # If the value is an enum, display the appropriate enum string for
         # the value.
-        if self.enum_strings is not None and isinstance(new_value, int):
+        elif self.enum_strings is not None and isinstance(new_value, int):
             try:
-                self.addItem(prefix + self.enum_strings[new_value])
+                item = QListWidgetItem(prefix + self.enum_strings[new_value])
             except IndexError:
-                self.addItem("**INVALID**")
-            return
+                item = QListWidgetItem("**INVALID**")
         # If the value is a number (float or int), display it using a
         # format string if necessary.
-        if isinstance(new_value, (int, float)):
-            self.addItem(prefix + self.format_string.format(new_value))
-            return
+        elif isinstance(new_value, (int, float)):
+            item = QListWidgetItem(prefix+self.format_string.format(new_value))
         # If you made it this far, just turn whatever the heck the value
         # is into a string and display it.
-        self.addItem(prefix + str(new_value))
+        else:
+            item = QListWidgetItem(prefix + str(new_value))
+
+        if item is not None:
+            self.addItem(item)
 
     @Property(DisplayFormat)
     def displayFormat(self):
