@@ -235,9 +235,11 @@ class QLed(QFrame, ShapeMap):
         self.update()
 
     def isSelected(self):
+        """Return selected state of object."""
         return self._isselected
 
     def setSelected(self, sel):
+        """Configure selected state of object."""
         self._isselected = bool(sel)
         self.selected.emit(self._isselected)
         self.update()
