@@ -3,12 +3,14 @@
 import numpy as _np
 from functools import partial as _part
 from datetime import datetime as _datetime
-from epics import PV as _PV
 from qtpy.QtWidgets import QMenu, QFileDialog, QWidget, \
     QScrollArea, QLabel, QPushButton, QSizePolicy, \
     QGridLayout, QVBoxLayout, QHBoxLayout
 from qtpy.QtCore import Signal, Qt, QRect
 import siriuspy.csdevice.orbitcorr as _csorb
+from siriuspy.servconf.srvconfig import ConnConfigService
+from siriushla.as_ap_servconf import LoadConfiguration
+from siriushla.widgets import SiriusConnectionSignal
 
 
 class OrbitRegisters(QWidget):
@@ -74,28 +76,30 @@ class OrbitRegister(QWidget):
         super(OrbitRegister, self).__init__(parent)
         self.idx = idx
         self.prefix = prefix
+        self._config_type = acc.lower() + '_orbit'
+        self._model = ConnConfigService(self._config_type)
         self.consts = _csorb.get_consts(acc or 'SI')
         self.string_status = 'Empty'
         self.name = 'Register {0:d}'.format(self.idx)
         self.setup_ui()
 
-        pre = prefix[5:]  # remove ca://
+        pre = prefix
         self._orbits = {
             'ref': [
-                _PV(pre + 'OrbitRefX-RB'),
-                _PV(pre + 'OrbitRefY-RB')],
+                SiriusConnectionSignal(pre + 'OrbitRefX-RB'),
+                SiriusConnectionSignal(pre + 'OrbitRefY-RB')],
             'mti': [
-                _PV(pre + 'OrbitMultiTurnX-Mon'),
-                _PV(pre + 'OrbitMultiTurnY-Mon')],
+                SiriusConnectionSignal(pre + 'OrbitMultiTurnX-Mon'),
+                SiriusConnectionSignal(pre + 'OrbitMultiTurnY-Mon')],
             'sp': [
-                _PV(pre + 'OrbitSmoothSinglePassX-Mon'),
-                _PV(pre + 'OrbitSmoothSinglePassY-Mon')],
+                SiriusConnectionSignal(pre + 'OrbitSmoothSinglePassX-Mon'),
+                SiriusConnectionSignal(pre + 'OrbitSmoothSinglePassY-Mon')],
             'orb': [
-                _PV(pre + 'OrbitSmoothX-Mon'),
-                _PV(pre + 'OrbitSmoothY-Mon')],
+                SiriusConnectionSignal(pre + 'OrbitSmoothX-Mon'),
+                SiriusConnectionSignal(pre + 'OrbitSmoothY-Mon')],
             'off': [
-                _PV(pre + 'OrbitOfflineX-SP'),
-                _PV(pre + 'OrbitOfflineY-SP')],
+                SiriusConnectionSignal(pre + 'OrbitOfflineX-SP'),
+                SiriusConnectionSignal(pre + 'OrbitOfflineY-SP')],
             }
         self.last_dir = self.DEFAULT_DIR
         self.filename = ''
@@ -103,6 +107,12 @@ class OrbitRegister(QWidget):
         self._orby = _np.zeros(self.consts.NR_BPMS)
 
         self.new_string_signal.emit(self.string_status)
+
+    def channels(self):
+        chans = []
+        for v in self._orbits.values():
+            chans.extend(v)
+        return chans
 
     def getorbx(self):
         """Return the horizontal orbit."""
@@ -143,23 +153,25 @@ class OrbitRegister(QWidget):
         btn.setMenu(menu)
         btn.clicked.connect(btn.showMenu)
 
-        act = menu.addAction('&Load Orbit')
-        act.triggered.connect(self._load_orbit)
-        menu2 = menu.addMenu('Register &Orbit')
-        act = menu2.addAction('Last &Measured Orbit')
+        act = menu.addAction('Load From &File')
+        act.triggered.connect(self._load_orbit_from_file)
+        act = menu.addAction('Load From &ServConf')
+        act.triggered.connect(self._load_orbit_from_servconf)
+        menu2 = menu.addMenu('Load from &PV')
+        act = menu2.addAction('&Smooth Orbit')
         act.triggered.connect(_part(self._register_orbit, 'orb'))
-        act = menu2.addAction('Multi&Turn Orbit')
+        act = menu2.addAction('&MultiTurn Orbit')
         act.triggered.connect(_part(self._register_orbit, 'mti'))
         act = menu2.addAction('&SinglePass Orbit')
         act.triggered.connect(_part(self._register_orbit, 'sp'))
-        act = menu2.addAction('Re&ference Orbit')
+        act = menu2.addAction('&Reference Orbit')
         act.triggered.connect(_part(self._register_orbit, 'ref'))
         act = menu2.addAction('&Offline Orbit')
         act.triggered.connect(_part(self._register_orbit, 'off'))
-        act = menu.addAction('&Reset Orbit')
+        act = menu.addAction('&Clear Register')
         act.triggered.connect(self._reset_orbit)
-        act = menu.addAction('&Save Registered Orbit')
-        act.triggered.connect(self._save_orbit)
+        act = menu.addAction('&Save Orbit To File')
+        act.triggered.connect(self._save_orbit_to_file)
 
     def _reset_orbit(self):
         zer = _np.zeros(self._orbx.shape)
@@ -174,9 +186,10 @@ class OrbitRegister(QWidget):
             self._update_and_emit(
                 'Error: PV {0:s} not connected.'.format(pvx.pvname))
             return
-        self._update_and_emit('Orbit Registered.', pvx.value, pvy.value)
+        self._update_and_emit(
+            'Orbit Registered.', pvx.getvalue(), pvy.getvalue())
 
-    def _save_orbit(self, _):
+    def _save_orbit_to_file(self, _):
         header = '# ' + _datetime.now().strftime('%Y/%M/%d-%H:%M:%S') + '\n'
         filename = QFileDialog.getSaveFileName(
             caption='Define a File Name to Save the Orbit',
@@ -189,7 +202,7 @@ class OrbitRegister(QWidget):
         _np.savetxt(fname, _np.vstack([self.orbx, self.orby]).T, header=header)
         self._update_and_emit('Orbit Saved: ', self.orbx, self.orby, fname)
 
-    def _load_orbit(self):
+    def _load_orbit_from_file(self):
         filename = QFileDialog.getOpenFileName(caption='Select an Orbit File.',
                                                directory=self.last_dir,
                                                filter=self.EXT_FLT)
@@ -197,6 +210,17 @@ class OrbitRegister(QWidget):
             return
         orbx, orby = _np.loadtxt(filename[0], unpack=True)
         self._update_and_emit('Orbit Loaded: ', orbx, orby, filename[0])
+
+    def _load_orbit_from_servconf(self):
+        win = LoadConfiguration(self._config_type, self)
+        win.data.connect(self._set_orbit)
+        win.show()
+
+    def _set_orbit(self, confname):
+        data, _ = self._servconf.config_get(confname)
+        self._update_and_emit(
+            'Orbit Loaded: '+confname,
+            _np.array(data['x']), _np.array(data['y']))
 
     def _update_and_emit(self, string, orbx=None, orby=None, fname=''):
         if orbx is None or orby is None:
