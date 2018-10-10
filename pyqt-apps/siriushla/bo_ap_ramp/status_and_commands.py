@@ -184,15 +184,6 @@ class StatusAndCommands(QGroupBox):
             warn_msg.exec_()
             return
 
-        configured_RF = self._conn_rf.cmd_ramping_enable()
-        if not configured_RF:
-            warn_msg = _MessageBox(
-                self, 'Failed to Configure RF',
-                'Command failed to configure RF\n'
-                'to ramp!', 'Ok')
-            warn_msg.exec_()
-            return
-
     def _apply_ps(self):
         if not self._conn_magnets or not self._conn_timing:
             return
@@ -251,42 +242,53 @@ class StatusAndCommands(QGroupBox):
         self._apply_rf()
 
     def _start_ramp(self):
-        if not self._conn_magnets or not self._conn_timing:
+        """Start ramp.
+
+        This action starts only timing pulses and RF ramp increase.
+        Power supplies and RF need to be configured to ramp.
+        """
+        if not self._conn_rf or not self._conn_timing:
             return
 
-        if not self._conn_magnets.connected or not self._conn_timing.connected:
+        if not self._conn_rf.connected or not self._conn_timing.connected:
             warn_msg = _MessageBox(
                 self, 'Not Connected',
                 'There are not connected PVs!', 'Ok')
             warn_msg.exec_()
             return
 
+        # TODO: verify timing control of this button
         configured_TI = self._conn_timing.cmd_select_ramp()
         if not configured_TI:
             warn_msg = _MessageBox(
                 self, 'Failed to Configure Timing',
-                'Command failed to configure PS and RF\n'
-                'timing parameters!', 'Ok')
+                'Command failed to configure timing\n'
+                'to initialize pulses to ramp!', 'Ok')
+            warn_msg.exec_()
+            return
+
+        configured_RF = self._conn_rf.cmd_ramping_enable()
+        if not configured_RF:
+            warn_msg = _MessageBox(
+                self, 'Failed to enable RF ramping',
+                'Command failed to configure RF\n'
+                'to start ramp increase to ramp!', 'Ok')
             warn_msg.exec_()
             return
 
     def _stop_ramp(self):
-        if not self._conn_magnets or not self._conn_timing:
+        """Stop ramp.
+
+        This action stops only timing pulses.
+        Power supplies and RF devices continue configured to ramp.
+        """
+        if not self._conn_timing:
             return
 
-        if not self._conn_magnets.connected or not self._conn_timing.connected:
+        if not self._conn_timing.connected:
             warn_msg = _MessageBox(
                 self, 'Not Connected',
                 'There are not connected PVs!', 'Ok')
-            warn_msg.exec_()
-            return
-
-        configured_MA = self._conn_magnets.cmd_opmode_slowref()
-        if not configured_MA:
-            warn_msg = _MessageBox(
-                self, 'Failed to set OpMode',
-                'Command failed to set all PS\n'
-                'OpMode to SlowRef!', 'Ok')
             warn_msg.exec_()
             return
 
