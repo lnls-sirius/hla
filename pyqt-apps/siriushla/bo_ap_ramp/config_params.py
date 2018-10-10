@@ -5,7 +5,7 @@ from qtpy.QtGui import QBrush, QColor
 from qtpy.QtWidgets import QGroupBox, QLabel, QWidget, QSpacerItem, \
                            QVBoxLayout, QHBoxLayout, QGridLayout, \
                            QPushButton, QTableWidget, QTableWidgetItem, \
-                           QSpinBox, QSizePolicy as QSzPlcy, \
+                           QSizePolicy as QSzPlcy, \
                            QAbstractItemView, QUndoCommand, QFormLayout
 from matplotlib.backends.backend_qt5agg import (
     FigureCanvasQTAgg as FigureCanvas,
@@ -147,10 +147,12 @@ class DipoleRamp(QWidget):
 
         label_nrpoints = QLabel('# of points:', self,
                                 alignment=Qt.AlignRight | Qt.AlignVCenter)
-        self.sb_nrpoints = QSpinBox(self)
+        self.sb_nrpoints = _MyDoubleSpinBox(self)
         self.sb_nrpoints.setMinimum(1)
         self.sb_nrpoints.setMaximum(MAX_WFMSIZE)
         self.sb_nrpoints.setMaximumWidth(200)
+        self.sb_nrpoints.setSingleStep(1)
+        self.sb_nrpoints.setDecimals(0)
         self.sb_nrpoints.editingFinished.connect(self._handleChangeNrPoints)
 
         self.set_psdelay_and_nrpoints.addRow(label_psdelay, self.sb_psdelay)
@@ -347,7 +349,7 @@ class DipoleRamp(QWidget):
             return
 
         old_value = self.ramp_config.ps_ramp_wfm_nrpoints
-        new_value = self.sb_nrpoints.value()
+        new_value = int(self.sb_nrpoints.value())
         try:
             self.ramp_config.ps_ramp_wfm_nrpoints = new_value
         except exceptions.RampInvalidDipoleWfmParms as e:

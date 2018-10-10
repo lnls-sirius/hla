@@ -64,9 +64,11 @@ class OpticsAdjust(QGroupBox):
 
     def _setupChooseConfig(self):
         l_confignr = QLabel('Config. number: ')
-        self.sb_config = QSpinBox(self)
+        self.sb_config = _MyDoubleSpinBox(self)
         self.sb_config.setMinimum(1)
         self.sb_config.setFixedWidth(80)
+        self.sb_config.setSingleStep(1)
+        self.sb_config.setDecimals(0)
         self.sb_config.editingFinished.connect(self._handleConfigIndexChanged)
         hlay_config = QHBoxLayout()
         hlay_config.addWidget(l_confignr)
@@ -101,7 +103,6 @@ class OpticsAdjust(QGroupBox):
         lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
         lay.addWidget(self.bt_server)
         lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
-
         return lay
 
     def _setupTuneVariation(self):
@@ -111,24 +112,22 @@ class OpticsAdjust(QGroupBox):
 
         label_deltaTuneX = QLabel('Δν<sub>x</sub>: ')
         label_deltaTuneX.setFixedWidth(48)
-        self.sb_deltaTuneX = QDoubleSpinBox(self)
+        self.sb_deltaTuneX = _MyDoubleSpinBox(self)
         self.sb_deltaTuneX.setDecimals(6)
         self.sb_deltaTuneX.setMinimum(-1)
         self.sb_deltaTuneX.setMaximum(1)
         self.sb_deltaTuneX.setSingleStep(0.0001)
         self.sb_deltaTuneX.setFixedWidth(200)
-        self.sb_deltaTuneX.setLocale(self._locale)
         self.sb_deltaTuneX.editingFinished.connect(self._calculate_deltaKL)
 
         label_deltaTuneY = QLabel('Δν<sub>y</sub>: ')
         label_deltaTuneY.setFixedWidth(48)
-        self.sb_deltaTuneY = QDoubleSpinBox(self)
+        self.sb_deltaTuneY = _MyDoubleSpinBox(self)
         self.sb_deltaTuneY.setDecimals(6)
         self.sb_deltaTuneY.setMinimum(-1)
         self.sb_deltaTuneY.setMaximum(1)
         self.sb_deltaTuneY.setSingleStep(0.0001)
         self.sb_deltaTuneY.setFixedWidth(200)
-        self.sb_deltaTuneY.setLocale(self._locale)
         self.sb_deltaTuneY.editingFinished.connect(self._calculate_deltaKL)
 
         label_KL = QLabel('<h4>ΔKL [1/m]</h4>', self)
@@ -185,24 +184,22 @@ class OpticsAdjust(QGroupBox):
 
         label_deltaChromX = QLabel('Δξ<sub>x</sub>: ')
         label_deltaChromX.setFixedWidth(48)
-        self.sb_deltaChromX = QDoubleSpinBox(self)
+        self.sb_deltaChromX = _MyDoubleSpinBox(self)
         self.sb_deltaChromX.setDecimals(6)
         self.sb_deltaChromX.setMinimum(-10)
         self.sb_deltaChromX.setMaximum(10)
         self.sb_deltaChromX.setSingleStep(0.0001)
         self.sb_deltaChromX.setFixedWidth(200)
-        self.sb_deltaChromX.setLocale(self._locale)
         self.sb_deltaChromX.editingFinished.connect(self._calculate_deltaSL)
 
         label_deltaChromY = QLabel('Δξ<sub>y</sub>: ')
         label_deltaChromY.setFixedWidth(48)
-        self.sb_deltaChromY = QDoubleSpinBox(self)
+        self.sb_deltaChromY = _MyDoubleSpinBox(self)
         self.sb_deltaChromY.setDecimals(6)
         self.sb_deltaChromY.setMinimum(-10)
         self.sb_deltaChromY.setMaximum(10)
         self.sb_deltaChromY.setSingleStep(0.0001)
         self.sb_deltaChromY.setFixedWidth(200)
-        self.sb_deltaChromY.setLocale(self._locale)
         self.sb_deltaChromY.editingFinished.connect(self._calculate_deltaSL)
 
         label_SL = QLabel('<h4>ΔSL [1/m<sup>2</sup>]</h4>', self)
