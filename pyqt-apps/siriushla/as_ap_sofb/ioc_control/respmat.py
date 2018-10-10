@@ -1,14 +1,17 @@
 """Define Controllers for the orbits displayed in the graphic."""
 
+import numpy as _np
 from qtpy.QtWidgets import QLabel, QGroupBox, QPushButton, QFormLayout, \
     QGridLayout, QVBoxLayout, QHBoxLayout, QSpacerItem, QSizePolicy, QWidget
 from qtpy.QtCore import Qt
 from pydm.widgets import PyDMLabel, PyDMPushButton, \
                     PyDMWaveformPlot, PyDMCheckbox
 import siriuspy.csdevice.orbitcorr as _csorb
+from siriuspy.servconf.srvconfig import ConnConfigService
 from siriushla.widgets.windows import create_window_from_widget
-from siriushla.widgets import SiriusLedState
+from siriushla.widgets import SiriusLedState, SiriusConnectionSignal
 from siriushla.util import connect_window
+from siriushla.as_ap_servconf import LoadConfiguration
 # from siriushla.si_ap_sofb.graphics.base import Graph
 
 from siriushla.as_ap_sofb.ioc_control.respmat_enbllist import SelectionMatrix
@@ -20,6 +23,12 @@ class RespMatWidget(BaseWidget):
     def __init__(self, parent, prefix, acc='SI'):
         super().__init__(parent, prefix, acc=acc)
         self.setupui()
+        self._config_type = acc.lower() + '_orbcorr_respm'
+        self._servconf = ConnConfigService(self._config_type)
+        self._respmat = SiriusConnectionSignal(prefix+'RespMat-SP')
+
+    def channels(self):
+        return [self._respmat]
 
     def setupui(self):
         vbl = QVBoxLayout(self)
@@ -131,11 +140,22 @@ class RespMatWidget(BaseWidget):
         vbl.addWidget(lbl)
         pbtn = QPushButton('from File', self)
         pbtn2 = QPushButton('from ServConf', self)
+        pbtn2.clicked.connect(self._open_load_config)
         hbl = QHBoxLayout()
         hbl.setSpacing(9)
         hbl.addWidget(pbtn)
         hbl.addWidget(pbtn2)
         vbl.addItem(hbl)
+
+    def _open_load_config(self):
+        win = LoadConfiguration(self._config_type, self)
+        win.data.connect(self._set_respm)
+        win.show()
+
+    def _set_respm(self, confname):
+        data, _ = self._servconf.config_get(confname)
+        self._respmat.send_value_signal[_np.ndarray].emit(
+            _np.array(data).flatten())
 
 
 class SingularValues(QWidget):
