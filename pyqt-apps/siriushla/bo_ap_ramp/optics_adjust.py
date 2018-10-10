@@ -1,20 +1,22 @@
 """Booster Ramp Control HLA: Optics Adjust Module."""
 
-from qtpy.QtCore import Qt, Slot, Signal, QLocale
-from qtpy.QtWidgets import QGroupBox, QPushButton, QSpinBox, QLabel, \
+from qtpy.QtCore import Qt, Slot, Signal
+from qtpy.QtWidgets import QGroupBox, QPushButton, QLabel, \
                            QHBoxLayout, QVBoxLayout, QGridLayout, \
-                           QSizePolicy as QSzPlcy, QDoubleSpinBox, QAction, \
+                           QSizePolicy as QSzPlcy, QAction, \
                            QSpacerItem, QMenu
 from siriuspy.ramp import ramp
 from siriuspy.ramp.magnet import Magnet as _Magnet
-from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriuspy.optics.opticscorr import BOTuneCorr, BOChromCorr
 from siriuspy.servconf.util import \
     generate_config_name as _generate_config_name
-from pydm.widgets import PyDMLineEdit
+from siriuspy.ramp.conn import ConnMagnets as _ConnMagnets, ConnRF as _ConnRF,\
+                               ConnTiming as _ConnTiming, ConnSOFB as _ConnSOFB
 from siriushla.bo_ap_ramp.auxiliar_classes import \
     EditNormalizedConfig as _EditNormalizedConfig, \
-    NewRampConfigGetName as _NewRampConfigGetName
+    NewRampConfigGetName as _NewRampConfigGetName, \
+    MyDoubleSpinBox as _MyDoubleSpinBox, \
+    MessageBox as _MessageBox
 
 
 class OpticsAdjust(QGroupBox):
@@ -33,11 +35,13 @@ class OpticsAdjust(QGroupBox):
         self._aux_magnets = dict()
         for ma in ramp.BoosterNormalized().manames:
             self._aux_magnets[ma] = _Magnet(ma)
-        self._locale = QLocale(QLocale.English, country=QLocale.UnitedStates)
-        self._locale.setNumberOptions(self._locale.RejectGroupSeparator)
+        self._kicks = dict()
+        self._corrfactorH = 100.0
+        self._corrfactorV = 100.0
         self._setupUi()
         self._tunecorr = BOTuneCorr('Default_1')
         self._chromcorr = BOChromCorr('Default')
+        self._conn_sofb = None
 
     def _setupUi(self):
         self.setMinimumHeight(500)
@@ -253,21 +257,26 @@ class OpticsAdjust(QGroupBox):
         label.setAlignment(Qt.AlignCenter)
         label.setFixedHeight(48)
 
-        self.bt_load_measured_orbit = QPushButton(
-            'Load Measured Orbit', self)
-        self.bt_load_measured_orbit.clicked.connect(self._load_measured_orbit)
-        self.bt_correctH = QPushButton('Correct H', self)
-        self.bt_correctH.clicked.connect(self._correctH)
-        self.pydmledit_correctH = PyDMLineEdit(
-            parent=self,
-            init_channel='ca://'+_vaca_prefix)
+        self.bt_load_sofb_kicks = QPushButton('Load Kicks from SOFB', self)
+        self.bt_load_sofb_kicks.clicked.connect(self._load_sofb_kicks)
+        label_correctH = QLabel('Correct H', self)
+        self.sb_correctH = _MyDoubleSpinBox(self)
+        self.sb_correctH.setValue(self._corrfactorH)
+        self.sb_correctH.setDecimals(1)
+        self.sb_correctH.setMinimum(-10000)
+        self.sb_correctH.setMaximum(10000)
+        self.sb_correctH.setSingleStep(0.1)
+        self.sb_correctH.setFixedWidth(200)
         labelH = QLabel('%', self)
         labelH.setFixedWidth(24)
-        self.bt_correctV = QPushButton('Correct V', self)
-        self.bt_correctV.clicked.connect(self._correctV)
-        self.pydmledit_correctV = PyDMLineEdit(
-            parent=self,
-            init_channel='ca://'+_vaca_prefix)
+        label_correctV = QLabel('Correct V', self)
+        self.sb_correctV = _MyDoubleSpinBox(self)
+        self.sb_correctV.setValue(self._corrfactorV)
+        self.sb_correctV.setDecimals(1)
+        self.sb_correctV.setMinimum(-10000)
+        self.sb_correctV.setMaximum(10000)
+        self.sb_correctV.setSingleStep(0.1)
+        self.sb_correctV.setFixedWidth(200)
         labelV = QLabel('%', self)
         labelV.setFixedWidth(24)
 
@@ -286,22 +295,21 @@ class OpticsAdjust(QGroupBox):
         lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 0, 0)
         lay.addWidget(label, 1, 0, 1, 3)
         lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 2, 0)
-        lay.addWidget(self.bt_load_measured_orbit, 3, 0, 1, 3)
-        lay.addWidget(self.bt_correctH, 4, 0)
-        lay.addWidget(self.pydmledit_correctH, 4, 1)
+        lay.addWidget(self.bt_load_sofb_kicks, 3, 0, 1, 3)
+        lay.addWidget(label_correctH, 4, 0)
+        lay.addWidget(self.sb_correctH, 4, 1)
         lay.addWidget(labelH, 4, 2)
-        lay.addWidget(self.bt_correctV, 5, 0)
-        lay.addWidget(self.pydmledit_correctV, 5, 1)
+        lay.addWidget(label_correctV, 5, 0)
+        lay.addWidget(self.sb_correctV, 5, 1)
         lay.addWidget(labelV, 5, 2)
         lay.addLayout(hlay_bt_apply, 6, 0, 1, 3)
         lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 7, 0)
-
         return lay
 
     def _handleConfigIndexChanged(self):
         if not self._table_map:
             return
-        config_idx = self.sb_config.value()
+        config_idx = int(self.sb_config.value())
         for value, label in self._table_map['rows'].items():
             if config_idx == (value + 1):
                 self.bt_edit.setText(label)
@@ -422,20 +430,26 @@ class OpticsAdjust(QGroupBox):
         self._resetChromChanges()
         self.verifySync()
 
-    def _load_measured_orbit(self):
-        # TODO: include orbit correction
-        pass
-
-    def _correctH(self):
-        # TODO: include orbit correction
-        pass
-
-    def _correctV(self):
-        # TODO: include orbit correction
-        pass
+    def _load_sofb_kicks(self):
+        if not self._conn_sofb:
+            return
+        if not self._conn_sofb.connected:
+            warn_msg = _MessageBox(
+                self, 'Not Connected',
+                'There are not connected PVs!', 'Ok')
+            warn_msg.exec_()
+            return
+        self._kicks = self._conn_sofb.get_kicks()
 
     def _apply_orbitcorrection(self):
-        # TODO: include orbit correction
+        if not self._kicks or self.norm_config is None:
+            return
+        self._corrfactorH = self.sb_correctH.value()
+        self._corrfactorV = self.sb_correctV.value()
+        for maname, kick in self._kicks:
+            corr_factor = self._corrfactorV if 'CV' in maname \
+                          else self._corrfactorH
+            self.norm_config[maname] = kick*corr_factor
         self._resetOrbitChanges()
         self.verifySync()
 
@@ -454,8 +468,11 @@ class OpticsAdjust(QGroupBox):
         self.l_deltaSLSD.setText('{: 6f}'.format(self._deltaSL[1]))
 
     def _resetOrbitChanges(self):
-        pass
-        # TODO: include orbit correction
+        self._kicks = dict()
+        self._corrfactorH = 100.0
+        self._corrfactorV = 100.0
+        self.sb_correctH.setValue(100.0)
+        self.sb_correctV.setValue(100.0)
 
     @Slot(dict)
     def getConfigIndices(self, table_map):
@@ -488,7 +505,11 @@ class OpticsAdjust(QGroupBox):
         """Update settings."""
         self._tunecorr = BOTuneCorr(settings[0])
         self._chromcorr = BOChromCorr(settings[1])
-        # TODO: handle orbir correction settings
+
+    @Slot(_ConnMagnets, _ConnTiming, _ConnRF, _ConnSOFB)
+    def getConnectors(self, conn_magnet, conn_timing, conn_rf, conn_sofb):
+        """Receive connectors."""
+        self._conn_sofb = conn_sofb
 
     def verifySync(self):
         """Verify sync status related to ConfServer."""

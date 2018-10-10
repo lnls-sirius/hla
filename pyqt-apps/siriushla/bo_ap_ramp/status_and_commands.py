@@ -3,15 +3,11 @@
 from qtpy.QtWidgets import QGroupBox, QLabel, QPushButton, \
                            QSizePolicy as QSzPlcy, QSpacerItem, \
                            QFormLayout, QHBoxLayout, QGridLayout
-from qtpy.QtGui import QColor
 from qtpy.QtCore import Qt, Slot
 from siriushla.widgets import QLed
-from siriuspy.ramp.conn import ConnMagnets as _ConnMagnets, \
-                               ConnTiming as _ConnTiming, \
-                               ConnRF as _ConnRF
+from siriuspy.ramp.conn import ConnMagnets as _ConnMagnets, ConnRF as _ConnRF,\
+                               ConnTiming as _ConnTiming, ConnSOFB as _ConnSOFB
 from siriushla.bo_ap_ramp.auxiliar_classes import MessageBox as _MessageBox
-
-DarkGreen = QColor(20, 80, 10)
 
 
 class StatusAndCommands(QGroupBox):
@@ -24,60 +20,76 @@ class StatusAndCommands(QGroupBox):
         self._conn_magnets = None
         self._conn_timing = None
         self._conn_rf = None
+        self._conn_sofb = None
         self._setupUi()
 
     def _setupUi(self):
         status_layout = self._setupStatusLayout()
         commands_layout = self._setupCommandsLayout()
 
-        self.setLayout(QGridLayout())
-        self.layout().addItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 0, 0)
-        self.layout().addLayout(status_layout, 1, 1, 1, 3)
-        self.layout().addItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding), 2, 1)
-        self.layout().addLayout(commands_layout, 3, 2)
-        self.layout().addItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 4, 4)
+        glay = QGridLayout()
+        glay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 0, 0)
+        glay.addLayout(status_layout, 1, 1, 1, 3)
+        glay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 2, 1)
+        glay.addLayout(commands_layout, 3, 2)
+        glay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 4, 4)
+        self.setLayout(glay)
 
     def _setupStatusLayout(self):
         label_timing = QLabel('<h4>TI</h4>', self, alignment=Qt.AlignCenter)
-        label_timing.setFixedSize(60, 40)
+        label_timing.setFixedSize(80, 40)
         label_magnets = QLabel('<h4>MA</h4>', self, alignment=Qt.AlignCenter)
-        label_magnets.setFixedSize(60, 40)
+        label_magnets.setFixedSize(80, 40)
         label_rf = QLabel('<h4>RF</h4>', self, alignment=Qt.AlignCenter)
-        label_rf.setFixedSize(60, 40)
+        label_rf.setFixedSize(80, 40)
+        label_sofb = QLabel('<h4>SOFB</h4>', self, alignment=Qt.AlignCenter)
+        label_sofb.setFixedSize(80, 40)
         label_conn = QLabel('Connection', self)
         label_ramping = QLabel('Configured to Ramp', self)
+        label_intlks = QLabel('Interlocks', self)
+        label_rmprdy = QLabel('Ramp Ready', self)
 
-        for led_name in ['led_conntiming', 'led_ti_ramping',
-                         'led_connmagnets', 'led_ma_ramping',
-                         'led_connrf', 'led_rf_ramping']:
+        for led_name in [
+                 'led_ti_conn', 'led_ma_conn', 'led_rf_conn', 'led_sofb_conn',
+                 'led_ti_ramping', 'led_ma_ramping', 'led_rf_ramping',
+                 'led_ma_intlk', 'led_rf_intlk',
+                 'led_ma_rmprdy', 'led_rf_rmprdy']:
             setattr(self, led_name, QLed(self))
             led = getattr(self, led_name)
-            led.setOffColor(DarkGreen)
+            led.setOffColor(QLed.Red)
+            led.setOnColor(QLed.Green)
             led.state = False
-            led.setFixedSize(60, 40)
+            led.setFixedSize(80, 40)
 
         flay = QFormLayout()
         flay.setLabelAlignment(Qt.AlignLeft)
         flay.setFormAlignment(Qt.AlignCenter)
         flay.setHorizontalSpacing(10)
         hlay = QHBoxLayout()
-        hlay.addWidget(label_timing)
         hlay.addWidget(label_magnets)
         hlay.addWidget(label_rf)
+        hlay.addWidget(label_timing)
+        hlay.addWidget(label_sofb)
         flay.addRow(QLabel(''), hlay)
         hlay = QHBoxLayout()
-        hlay.addWidget(self.led_conntiming)
-        hlay.addWidget(self.led_connmagnets)
-        hlay.addWidget(self.led_connrf)
+        hlay.addWidget(self.led_ma_conn)
+        hlay.addWidget(self.led_rf_conn)
+        hlay.addWidget(self.led_ti_conn)
+        hlay.addWidget(self.led_sofb_conn)
         flay.addRow(label_conn, hlay)
         hlay = QHBoxLayout()
-        hlay.addWidget(self.led_ti_ramping)
         hlay.addWidget(self.led_ma_ramping)
         hlay.addWidget(self.led_rf_ramping)
+        hlay.addWidget(self.led_ti_ramping)
         flay.addRow(label_ramping, hlay)
+        hlay = QHBoxLayout()
+        hlay.addWidget(self.led_ma_intlk)
+        hlay.addWidget(self.led_rf_intlk)
+        flay.addRow(label_intlks, hlay)
+        hlay = QHBoxLayout()
+        hlay.addWidget(self.led_ma_rmprdy)
+        hlay.addWidget(self.led_rf_rmprdy)
+        flay.addRow(label_rmprdy, hlay)
         return flay
 
     def _setupCommandsLayout(self):
@@ -138,7 +150,6 @@ class StatusAndCommands(QGroupBox):
         hbox.addWidget(self.bt_start_inj)
         hbox.addWidget(self.bt_stop_inj)
         flay.addRow(label_injection, hbox)
-        flay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
         return flay
 
     def _setup_ramp(self):
@@ -332,33 +343,45 @@ class StatusAndCommands(QGroupBox):
             warn_msg.exec_()
             return
 
-    def updateMAConnState(self):
-        """Update magnets connection state led."""
-        self.led_connmagnets.state = self._conn_magnets.connected
+    def updateMAConn(self, **kwargs):
+        """Update MA connection state led."""
+        self.led_ma_conn.state = self._conn_magnets.connected
 
-    def updateTIConnState(self):
-        """Update timing connection state led."""
-        self.led_conntiming.state = self._conn_timing.connected
+    def updateTIConn(self, **kwargs):
+        """Update TI connection state led."""
+        self.led_ti_conn.state = self._conn_timing.connected
 
-    def updateRFConnState(self):
+    def updateRFConn(self, **kwargs):
         """Update RF connection state led."""
-        self.led_connrf.state = self._conn_rf.connected
+        self.led_rf_conn.state = self._conn_rf.connected
 
-    def updateMAOpModeState(self):
-        """Update magnets operational mode state led."""
+    def updateSOFBConn(self, **kwargs):
+        """Update SOFB connection state led."""
+        self.led_sofb_conn.state = self._conn_sofb.connected
+
+    def updateMAStatus(self, **kwargs):
+        """Update MA operational mode state led."""
         self.led_ma_ramping.state = self._conn_magnets.check_opmode_rmpwfm()
+        self.led_ma_intlk.state = \
+            self._conn_magnets.check_intlksoft() & \
+            self._conn_magnets.check_intlkhard() & \
+            self._conn_magnets.check_pwrstate_on()
+        self.led_ma_rmprdy.state = self._conn_magnets.check_rmpready()
 
-    def updateTIOpModeState(self):
-        """Update timing operational mode state led."""
+    def updateTIStatus(self, **kwargs):
+        """Update TI operational mode state led."""
         self.label_ti_ramping.state = self._conn_timing.check_ramp()
 
-    def updateRFOpModeState(self):
+    def updateRFStatus(self, **kwargs):
         """Update RF operational mode state led."""
-        self.label_rf_ramping.state = self._conn_rf.check_ramp()
+        self.label_rf_ramping.state = self._conn_rf.check_config_ramp()
+        self.led_rf_intlk.state = self._conn_rf.check_intlk()
+        self.led_rf_rmprdy.state = self._conn_rf.check_rmpready()
 
-    @Slot(_ConnMagnets, _ConnTiming, _ConnRF)
-    def getConnectors(self, conn_magnet, conn_timing, conn_rf):
+    @Slot(_ConnMagnets, _ConnTiming, _ConnRF, _ConnSOFB)
+    def getConnectors(self, conn_magnet, conn_timing, conn_rf, conn_sofb):
         """Receive connectors."""
         self._conn_magnets = conn_magnet
         self._conn_timing = conn_timing
         self._conn_rf = conn_rf
+        self._conn_sofb = conn_sofb

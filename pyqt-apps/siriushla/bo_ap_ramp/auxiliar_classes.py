@@ -434,7 +434,6 @@ class EditNormalizedConfig(SiriusDialog):
             ma_value.setValue(self.norm_config[ma])
             ma_value.setObjectName(ma)
             ma_value.setFixedWidth(200)
-            ma_value.setFocusPolicy(Qt.StrongFocus)
 
             aux = self._aux_magnets[ma]
             currs = (aux.current_min, aux.current_max)
@@ -499,7 +498,7 @@ class OpticsAdjustSettings(SiriusDialog):
 
     updateSettings = Signal(list)
 
-    def __init__(self, parent, tuneconfig_currname, chromconfig_currname):
+    def __init__(self, tuneconfig_currname, chromconfig_currname, parent=None):
         """Initialize object."""
         super().__init__(parent)
         self.setWindowTitle('Optics Adjust Settings')
@@ -513,8 +512,6 @@ class OpticsAdjustSettings(SiriusDialog):
         self.tune_settings.setLayout(self._setupTuneSettings())
         self.chrom_settings = QWidget(self)
         self.chrom_settings.setLayout(self._setupChromSettings())
-        self.orbit_settings = QWidget(self)
-        self.orbit_settings.setLayout(self._setupOrbitSettings())
         self.bt_apply = QPushButton('Apply Settings', self)
         self.bt_apply.setFixedWidth(250)
         self.bt_apply.clicked.connect(self._emitSettings)
@@ -524,7 +521,6 @@ class OpticsAdjustSettings(SiriusDialog):
         hlay_apply.addWidget(self.bt_apply)
 
         tabs = QTabWidget(self)
-        tabs.addTab(self.orbit_settings, 'Orbit')
         tabs.addTab(self.tune_settings, 'Tune')
         tabs.addTab(self.chrom_settings, 'Chromaticity')
 
@@ -533,17 +529,6 @@ class OpticsAdjustSettings(SiriusDialog):
         lay.addLayout(hlay_apply)
 
         self.setLayout(lay)
-
-    def _setupOrbitSettings(self):
-        l_orbitsettings = QLabel('<h3>Orbit Correction Settings</h3>', self)
-        l_orbitsettings.setAlignment(Qt.AlignCenter)
-
-        # TODO: insert orbit correction settings
-
-        lay = QVBoxLayout()
-        lay.addWidget(l_orbitsettings)
-
-        return lay
 
     def _setupTuneSettings(self):
         l_tuneconfig = QLabel('<h3>Tune Variation Config</h3>', self)
@@ -978,6 +963,7 @@ class MyDoubleSpinBox(QDoubleSpinBox):
         locale = QLocale(QLocale.English, country=QLocale.UnitedStates)
         locale.setNumberOptions(locale.RejectGroupSeparator)
         self.setLocale(locale)
+        self.setFocusPolicy(Qt.StrongFocus)
 
     def wheelEvent(self, event):
         """Reimplement wheel event to ignore event when out of focus."""

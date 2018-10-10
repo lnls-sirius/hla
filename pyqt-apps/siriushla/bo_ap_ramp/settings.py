@@ -104,7 +104,7 @@ class Settings(QMenuBar):
 
     def _showOpticsSettingsPopup(self):
         self._opticsSettingsPopup = _OpticsAdjustSettings(
-            self, self._tunecorr_name, self._chromcorr_name)
+            self._tunecorr_name, self._chromcorr_name, self)
         self._opticsSettingsPopup.updateSettings.connect(
             self._emitOpticsSettings)
         self._opticsSettingsPopup.open()

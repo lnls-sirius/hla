@@ -9,9 +9,8 @@ from siriushla.widgets.windows import SiriusMainWindow
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla import util as _util
 from siriuspy.ramp import ramp
-from siriuspy.ramp.conn import ConnMagnets as _ConnMagnets, \
-                               ConnTiming as _ConnTiming, \
-                               ConnRF as _ConnRF
+from siriuspy.ramp.conn import ConnMagnets as _ConnMagnets, ConnRF as _ConnRF,\
+                               ConnTiming as _ConnTiming, ConnSOFB as _ConnSOFB
 from siriushla.bo_ap_ramp.status_and_commands import StatusAndCommands
 from siriushla.bo_ap_ramp.settings import Settings
 from siriushla.bo_ap_ramp.config_params import ConfigParameters
@@ -23,7 +22,7 @@ from siriushla.bo_ap_ramp.auxiliar_classes import MessageBox as _MessageBox
 class RampMain(SiriusMainWindow):
     """Main window of Booster Ramp Control HLA."""
 
-    connUpdateSignal = Signal(_ConnMagnets, _ConnTiming, _ConnRF)
+    connUpdateSignal = Signal(_ConnMagnets, _ConnTiming, _ConnRF, _ConnSOFB)
     loadSignal = Signal(ramp.BoosterRamp)
 
     def __init__(self, parent=None, prefix=''):
@@ -122,23 +121,22 @@ class RampMain(SiriusMainWindow):
 
     def _emitConnectors(self):
         self._conn_magnets = _ConnMagnets(
-            ramp_config=self.ramp_config,
-            prefix=self.prefix,
-            connection_callback=self.status_and_commands.updateMAConnState,
-            callback=self.status_and_commands.updateMAOpModeState)
+            ramp_config=self.ramp_config, prefix=self.prefix,
+            connection_callback=self.status_and_commands.updateMAConn,
+            callback=self.status_and_commands.updateMAStatus)
         self._conn_timing = _ConnTiming(
-            ramp_config=self.ramp_config,
-            prefix=self.prefix,
-            connection_callback=self.status_and_commands.updateTIConnState,
-            callback=self.status_and_commands.updateTIOpModeState)
+            ramp_config=self.ramp_config, prefix=self.prefix,
+            connection_callback=self.status_and_commands.updateTIConn,
+            callback=self.status_and_commands.updateTIStatus)
         self._conn_rf = _ConnRF(
-            ramp_config=self.ramp_config,
-            prefix=self.prefix,
-            connection_callback=self.status_and_commands.updateRFConnState,
-            callback=self.status_and_commands.updateRFOpModeState)
-        self.connUpdateSignal.emit(self._conn_magnets,
-                                   self._conn_timing,
-                                   self._conn_rf)
+            ramp_config=self.ramp_config, prefix=self.prefix,
+            connection_callback=self.status_and_commands.updateRFConn,
+            callback=self.status_and_commands.updateRFStatus)
+        self._conn_sofb = _ConnSOFB(
+            ramp_config=self.ramp_config, prefix=self.prefix,
+            connection_callback=self.status_and_commands.updateSOFBConn)
+        self.connUpdateSignal.emit(self._conn_magnets, self._conn_timing,
+                                   self._conn_rf, self._conn_sofb)
 
     def _emitLoadSignal(self):
         self.loadSignal.emit(self.ramp_config)
