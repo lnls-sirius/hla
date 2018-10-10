@@ -1,1 +1,2 @@
 from .ConfigManagerWindow import ConfigManagerWindow
+from .load_configuration import LoadConfiguration
