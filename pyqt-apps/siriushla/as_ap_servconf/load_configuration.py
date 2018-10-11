@@ -11,7 +11,7 @@ from siriushla.as_ap_servconf.config_server import ConfigDbTableModel
 
 class LoadConfiguration(QDialog):
     """."""
-    data = Signal(str)
+    configname = Signal(str)
 
     NAME_COL = None
     CONFIG_TYPE_COL = None
@@ -33,7 +33,7 @@ class LoadConfiguration(QDialog):
         # Basic widgets
         self.editor = QTableView()
         self.cancel_button = QPushButton('Cancel', self)
-        self.cancel_button.pressed.connect(self.close)
+        self.cancel_button.pressed.connect(self.reject)
         self.load_button = QPushButton('Load', self)
         self.load_button.setEnabled(False)
         self.load_button.pressed.connect(self._load_configuration)
@@ -127,22 +127,18 @@ class LoadConfiguration(QDialog):
 
     @Slot()
     def _update_selection(self, *args):
-        rows = self._get_selected_rows(self.editor)
-        # Set tree data
-        if rows:
-            config = self._type_name(rows.pop(), self.editor_model)
+        config = self._get_config_name()
+        if config:
             self.load_button.setEnabled(True)
-            self.load_button.setText('Load {}'.format(config[1]))
+            self.load_button.setText('Load {}'.format(config))
         else:
             self.load_button.setEnabled(False)
         self.load_button.style().polish(self.load_button)
 
     @Slot()
     def _load_configuration(self):
-        # self.editor.selectRow(index.row())
-        rows = list(self._get_selected_rows(self.editor))
-        config = self._type_name(rows.pop(), self.editor_model)
-        self.data.emit(config[1])
+        config = self._get_config_name()
+        self.configname.emit(config)
         self.accept()
 
     @Slot(int, str, str)
@@ -152,14 +148,11 @@ class LoadConfiguration(QDialog):
         msg = '{}: {}, while trying to {}'.format(code, message, operation)
         QMessageBox(tpe, title, msg).exec_()
 
-    def _get_selected_rows(self, table):
-        index_list = table.selectionModel().selectedIndexes()
-        return {idx.row() for idx in index_list}
-
-    def _type_name(self, row, model):
-        # Return config_type and name given a row and a table model
-        return (model.createIndex(row, self.CONFIG_TYPE_COL).data(),
-                model.createIndex(row, self.NAME_COL).data())
+    def _get_config_name(self):
+        index_list = self.editor.selectionModel().selectedIndexes()
+        if index_list:
+            row = index_list[0].row()
+            return self.editor_model.createIndex(row, self.NAME_COL).data()
 
     @Slot(str)
     def _filter_rows(self, text):
@@ -190,6 +183,6 @@ if __name__ == '__main__':
         print(a)
     app = SiriusApplication()
     win = LoadConfiguration('bo_normalized')
-    win.data.connect(test)
+    win.configname.connect(test)
     win.show()
     sys.exit(app.exec_())
