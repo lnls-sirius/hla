@@ -91,7 +91,8 @@ class Settings(QMenuBar):
 
         self.open_menu = self.addMenu('Open...')
         self.act_cycle = QAction('PS Cycle')
-        _hlautil.connect_window(self.act_cycle, _CycleWindow, parent=self)
+        _hlautil.connect_window(self.act_cycle, _CycleWindow, parent=self,
+                                checked_accs=('BO,'))
         self.act_ma = QAction('Booster MA')
         _hlautil.connect_window(self.act_ma, _MAControlWindow, parent=self,
                                 section='BO', discipline=1)  # MA
