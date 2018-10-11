@@ -1,17 +1,19 @@
 """Define Controllers for the orbits displayed in the graphic."""
 
+from datetime import datetime as _datetime
 import numpy as _np
 from qtpy.QtWidgets import QLabel, QGroupBox, QPushButton, QFormLayout, \
-    QGridLayout, QVBoxLayout, QHBoxLayout, QSpacerItem, QSizePolicy, QWidget
+    QGridLayout, QVBoxLayout, QHBoxLayout, QSpacerItem, QSizePolicy, QWidget, \
+    QMessageBox, QFileDialog
 from qtpy.QtCore import Qt
-from pydm.widgets import PyDMLabel, PyDMPushButton, \
-                    PyDMWaveformPlot, PyDMCheckbox
+from pydm.widgets import PyDMLabel, PyDMPushButton, PyDMWaveformPlot, \
+                        PyDMCheckbox
 import siriuspy.csdevice.orbitcorr as _csorb
 from siriuspy.servconf.srvconfig import ConnConfigService
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets import SiriusLedState, SiriusConnectionSignal
 from siriushla.util import connect_window
-from siriushla.as_ap_servconf import LoadConfiguration
+from siriushla.as_ap_servconf import LoadConfiguration, SaveConfiguration
 # from siriushla.si_ap_sofb.graphics.base import Graph
 
 from siriushla.as_ap_sofb.ioc_control.respmat_enbllist import SelectionMatrix
@@ -20,15 +22,24 @@ from siriushla.as_ap_sofb.ioc_control.base import BaseWidget
 
 class RespMatWidget(BaseWidget):
 
+    DEFAULT_DIR = '/home/fac/sirius-iocs/si-ap-sofb'
+
     def __init__(self, parent, prefix, acc='SI'):
         super().__init__(parent, prefix, acc=acc)
         self.setupui()
         self._config_type = acc.lower() + '_orbcorr_respm'
         self._servconf = ConnConfigService(self._config_type)
-        self._respmat = SiriusConnectionSignal(prefix+'RespMat-SP')
+
+        text = acc.lower() + 'respmat'
+        self.EXT = '.' + text
+        self.EXT_FLT = 'Sirius RespMat Files (*.{})'.format(text)
+        self.last_dir = self.DEFAULT_DIR
+
+        self._respmat_sp = SiriusConnectionSignal(prefix+'RespMat-SP')
+        self._respmat_rb = SiriusConnectionSignal(prefix+'RespMat-RB')
 
     def channels(self):
-        return [self._respmat]
+        return [self._respmat_sp, self._respmat_rb]
 
     def setupui(self):
         vbl = QVBoxLayout(self)
@@ -135,27 +146,73 @@ class RespMatWidget(BaseWidget):
         # ####################################################################
         # ######################## Load/Save/Set #############################
         # ####################################################################
-        lbl = QLabel('Load RespMat', self)
-        lbl.setAlignment(Qt.AlignCenter)
-        vbl.addWidget(lbl)
-        pbtn = QPushButton('from File', self)
-        pbtn2 = QPushButton('from ServConf', self)
-        pbtn2.clicked.connect(self._open_load_config)
-        hbl = QHBoxLayout()
-        hbl.setSpacing(9)
-        hbl.addWidget(pbtn)
-        hbl.addWidget(pbtn2)
-        vbl.addItem(hbl)
+        grpbx = QGroupBox('Load and Save', self)
+        vbl.addWidget(grpbx)
+        gdl = QGridLayout(grpbx)
+        gdl.setVerticalSpacing(15)
+        lbl = QLabel('Load from:', grpbx)
+        gdl.addWidget(lbl, 0, 0)
+        pbtn = QPushButton('File', grpbx)
+        gdl.addWidget(pbtn, 0, 1)
+        pbtn = QPushButton('ServConf', grpbx)
+        pbtn.clicked.connect(self._open_load_config_servconf)
+        gdl.addWidget(pbtn, 0, 2)
 
-    def _open_load_config(self):
+        lbl = QLabel('Save to:', grpbx)
+        gdl.addWidget(lbl, 1, 0)
+        pbtn = QPushButton('File', grpbx)
+        gdl.addWidget(pbtn, 1, 1)
+        pbtn = QPushButton('ServConf', grpbx)
+        pbtn.clicked.connect(self._open_save_config_servconf)
+        gdl.addWidget(pbtn, 1, 2)
+
+    def _save_respmat_to_file(self, _):
+        header = '# ' + _datetime.now().strftime('%Y/%M/%d-%H:%M:%S') + '\n'
+        header += '# ' + '(BPMX, BPMY) [um] x (CH, CV, RF) [urad, Hz]' + '\n'
+        filename = QFileDialog.getSaveFileName(
+            caption='Define a File Name to Save the Response Matrix',
+            directory=self.last_dir,
+            filter=self.EXT_FLT)
+        fname = filename[0]
+        if not fname:
+            return
+        fname += '' if fname.endswith(self.EXT) else self.EXT
+        respm = self._respmat_rb.getvalue()
+        respm = respm.reshape(2*self._const.NR_BPMS, -1)
+        _np.savetxt(fname, respm, header=header)
+
+    def _load_respmat_from_file(self):
+        filename = QFileDialog.getOpenFileName(
+            caption='Select a Response Matrix File.',
+            directory=self.last_dir,
+            filter=self.EXT_FLT)
+        if not filename[0]:
+            return
+        respm = _np.loadtxt(filename[0])
+        self._respmat_sp.send_value_signal[_np.array].emit(respm.flatten())
+
+    def _open_load_config_servconf(self):
         win = LoadConfiguration(self._config_type, self)
-        win.data.connect(self._set_respm)
+        win.configname.connect(self._set_respm)
         win.show()
 
     def _set_respm(self, confname):
         data, _ = self._servconf.config_get(confname)
-        self._respmat.send_value_signal[_np.ndarray].emit(
+        self._respmat_sp.send_value_signal[_np.ndarray].emit(
             _np.array(data).flatten())
+
+    def _open_save_config_servconf(self):
+        win = SaveConfiguration(self._config_type, self)
+        win.configname.connect(self._save_respm)
+        win.show()
+
+    def _save_respm(self, confname):
+        val = self._respmat_rb.getvalue()
+        val = val.reshape(2*self._const.NR_BPMS, -1)
+        try:
+            self._servconf.config_insert(confname, val.tolist())
+        except TypeError as e:
+            QMessageBox.warning(self, 'Warning', str(e), QMessageBox.Ok)
 
 
 class SingularValues(QWidget):
