@@ -3,7 +3,7 @@ import logging
 from qtpy.QtWidgets import QHBoxLayout, QVBoxLayout, QDialog, \
     QWidget, QFrame, QLabel, QPushButton, QMessageBox, QHeaderView, \
     QTableView
-from qtpy.QtCore import Slot, Signal
+from qtpy.QtCore import Slot, Signal, Qt
 
 from siriuspy.servconf.conf_service import ConfigService
 from siriushla.as_ap_servconf.config_server import ConfigDbTableModel
@@ -24,7 +24,7 @@ class LoadConfiguration(QDialog):
         self._logger = logging.getLogger(__name__)
         self._logger.setLevel(logging.DEBUG)
         self.setupui()
-        self.setWindowTitle("Configuration Manager")
+        self.setWindowTitle("Configuration Database Manager")
 
     def setupui(self):
         self.setGeometry(500, 500, 800, 400)
@@ -50,24 +50,17 @@ class LoadConfiguration(QDialog):
         hbl.addStretch()
         self.config_viewer.layout.addLayout(hbl)
 
-        # Header widget
-        self.header = QFrame(self)
-        self.header.setObjectName('Header')
-        self.header.layout = QHBoxLayout(self.header)
-        self.header.layout.addStretch()
-        self.header.layout.addWidget(
-            QLabel('Configuration Database Manager', self.header))
-        self.header.layout.addStretch()
-
         # Sub header with database genral information
         self.sub_header = QFrame(self)
-        self.sub_header.layout = QVBoxLayout(self.sub_header)
+        self.sub_header.layout = QHBoxLayout(self.sub_header)
+        vbl = QVBoxLayout()
+        self.sub_header.layout.addLayout(vbl)
 
         hbl = QHBoxLayout()
         hbl.addWidget(QLabel('<b>Server:</b>', self.sub_header))
         hbl.addWidget(QLabel(self._model.url, self.sub_header))
         hbl.addStretch()
-        self.sub_header.layout.addLayout(hbl)
+        vbl.addLayout(hbl)
 
         hbl = QHBoxLayout()
         hbl.addWidget(QLabel('<b>DB Size:</b>', self.sub_header))
@@ -78,27 +71,29 @@ class LoadConfiguration(QDialog):
             dbsize = 'Failed to retrieve information'
         hbl.addWidget(QLabel(dbsize, self.sub_header))
         hbl.addStretch()
-        self.sub_header.layout.addLayout(hbl)
+        vbl.addLayout(hbl)
 
+        vbl = QVBoxLayout()
+        self.sub_header.layout.addLayout(vbl)
         hbl = QHBoxLayout()
         hbl.addWidget(QLabel(
             '<b>Configuration Type:</b>', self.sub_header))
         hbl.addWidget(QLabel(self._config_type, self.sub_header))
         hbl.addStretch()
-        self.sub_header.layout.addLayout(hbl)
+        vbl.addLayout(hbl)
 
         hbl = QHBoxLayout()
         hbl.addWidget(QLabel(
             '<b>Number of Configurations:</b>', self.sub_header))
-        nr_configs = QLabel(self)
+        nr_configs = QLabel(self.sub_header)
+        hbl.addWidget(nr_configs)
         request = self._model.find_nr_configs(config_type=self._config_type)
         if request['code'] == 200:
             nr_configs.setText(str(request['result']))
         hbl.addStretch()
-        self.sub_header.layout.addLayout(hbl)
+        vbl.addLayout(hbl)
 
         # Main widget layout setup
-        self.layoutv.addWidget(self.header)
         self.layoutv.addWidget(self.sub_header)
         self.layoutv.addWidget(self.config_viewer)
 
@@ -106,8 +101,11 @@ class LoadConfiguration(QDialog):
         self.editor_model = ConfigDbTableModel(self._config_type, self._model)
         self.editor.setModel(self.editor_model)
         self.editor.setSelectionBehavior(self.editor.SelectRows)
+        self.editor.setSelectionMode(self.editor.SingleSelection)
         self.editor.setSortingEnabled(True)
         self.editor.horizontalHeader().setResizeMode(QHeaderView.Stretch)
+        self.editor.hideColumn(0)
+        self.editor.sortByColumn(2, Qt.DescendingOrder)
 
         # Fill tree when a configuration is selected
         self.editor.selectionModel().selectionChanged.connect(self._fill_tree)
