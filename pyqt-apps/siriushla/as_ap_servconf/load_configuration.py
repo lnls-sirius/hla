@@ -1,8 +1,8 @@
 import logging
-
+import re
 from qtpy.QtWidgets import QHBoxLayout, QVBoxLayout, QDialog, \
     QWidget, QFrame, QLabel, QPushButton, QMessageBox, QHeaderView, \
-    QTableView
+    QTableView, QLineEdit
 from qtpy.QtCore import Slot, Signal, Qt
 
 from siriuspy.servconf.conf_service import ConfigService
@@ -27,7 +27,7 @@ class LoadConfiguration(QDialog):
         self.setWindowTitle("Configuration Database Manager")
 
     def setupui(self):
-        self.setGeometry(500, 500, 800, 400)
+        self.resize(800, 400)
         self.layoutv = QVBoxLayout(self)
 
         # Basic widgets
@@ -85,16 +85,21 @@ class LoadConfiguration(QDialog):
         hbl = QHBoxLayout()
         hbl.addWidget(QLabel(
             '<b>Number of Configurations:</b>', self.sub_header))
-        nr_configs = QLabel(self.sub_header)
-        hbl.addWidget(nr_configs)
+        self.nr_configs = QLabel(self.sub_header)
+        hbl.addWidget(self.nr_configs)
         request = self._model.find_nr_configs(config_type=self._config_type)
         if request['code'] == 200:
-            nr_configs.setText(str(request['result']))
+            self.nr_configs.setText(str(request['result']))
         hbl.addStretch()
         vbl.addLayout(hbl)
 
+        self.search_lineedit = QLineEdit(parent=self)
+        self.search_lineedit.setPlaceholderText("Search for configurations...")
+        self.search_lineedit.textEdited.connect(self._filter_rows)
+
         # Main widget layout setup
         self.layoutv.addWidget(self.sub_header)
+        self.layoutv.addWidget(self.search_lineedit)
         self.layoutv.addWidget(self.config_viewer)
 
         # Set table models and options
@@ -107,8 +112,9 @@ class LoadConfiguration(QDialog):
         self.editor.hideColumn(0)
         self.editor.sortByColumn(2, Qt.DescendingOrder)
 
-        # Fill tree when a configuration is selected
-        self.editor.selectionModel().selectionChanged.connect(self._fill_tree)
+        # Update Selection when a configuration is selected
+        self.editor.selectionModel().selectionChanged.connect(
+            self._update_selection)
         # Connect database error to slot that show messages
         self.editor_model.connectionError.connect(self._database_error)
         # Set constants
@@ -120,7 +126,7 @@ class LoadConfiguration(QDialog):
         self.editor.resizeColumnsToContents()
 
     @Slot()
-    def _fill_tree(self, *args):
+    def _update_selection(self, *args):
         rows = self._get_selected_rows(self.editor)
         # Set tree data
         if rows:
@@ -154,6 +160,27 @@ class LoadConfiguration(QDialog):
         # Return config_type and name given a row and a table model
         return (model.createIndex(row, self.CONFIG_TYPE_COL).data(),
                 model.createIndex(row, self.NAME_COL).data())
+
+    @Slot(str)
+    def _filter_rows(self, text):
+        """Filter power supply widgets based on text inserted at line edit."""
+        try:
+            pattern = re.compile(text, re.I)
+        except Exception as e:  # Ignore malformed patterns?
+            pattern = re.compile("malformed")
+
+        i = 0
+        for idx in range(self.editor_model.rowCount(1)):
+            name = self.editor_model.createIndex(idx, self.NAME_COL).data()
+            if not pattern.search(name):
+                self.editor.hideRow(idx)
+            else:
+                self.editor.showRow(idx)
+                i += 1
+        self.nr_configs.setText(str(i))
+        # Sroll to top
+        # for scroll_area in self.findChildren(QScrollArea):
+        #     scroll_area.verticalScrollBar().setValue(0)
 
 
 if __name__ == '__main__':
