@@ -75,6 +75,8 @@ class RampMain(SiriusMainWindow):
             self.optics_adjust.handleUpdateSettings)
         self.settings.statsSettingsSignal.connect(
             self.statistics.handleUpdateSettings)
+        self.settings.plotUnitSignal.connect(
+            self.config_parameters.getPlotUnits)
 
         self.config_parameters.dip_ramp.updateDipoleRampSignal.connect(
             self._verifySync)

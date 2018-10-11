@@ -57,6 +57,14 @@ class ConfigParameters(QGroupBox):
         self.ramp_config = ramp_config
         self.setTitle('Ramping Parameters: ' + self.ramp_config.name)
 
+    @Slot(str)
+    def getPlotUnits(self, units):
+        """Change units used in plot."""
+        self.dip_ramp.plot_unit = units
+        self.dip_ramp.updateGraph()
+        self.mult_ramp.plot_unit = units
+        self.mult_ramp.updateGraph()
+
 
 class DipoleRamp(QWidget):
     """Widget to set and monitor dipole ramp."""
@@ -70,6 +78,7 @@ class DipoleRamp(QWidget):
         self.prefix = prefix
         self.ramp_config = ramp_config
         self._undo_stack = undo_stack
+        self.plot_unit = 'Strengths'
         self._setupUi()
 
     def _setupUi(self):
@@ -121,7 +130,6 @@ class DipoleRamp(QWidget):
         self.ax = self.graph.figure.subplots()
         self.ax.grid()
         self.ax.set_xlabel('t [ms]')
-        self.ax.set_ylabel('E [GeV]')
         self.line, = self.ax.plot([0], [0], '-b')
         self.markers, = self.ax.plot([0], [0], '+r')
         self.m_inj, = self.ax.plot([0], [0], 'or')
@@ -384,24 +392,33 @@ class DipoleRamp(QWidget):
             return
 
         xdata = self.ramp_config.ps_waveform_get_times()
-        ydata = self.ramp_config.ps_waveform_get_strengths('BO-Fam:MA-B')
+        if self.plot_unit == 'Strengths':
+            self.ax.set_ylabel('E [GeV]')
+            ydata = self.ramp_config.ps_waveform_get_strengths('BO-Fam:MA-B')
+        elif self.plot_unit == 'Currents':
+            self.ax.set_ylabel('Current [A]')
+            ydata = self.ramp_config.ps_waveform_get_currents('BO-Fam:MA-B')
         self.line.set_xdata(xdata)
         self.line.set_ydata(ydata)
-        self.ax.set_xlim(min(xdata)-0.2, max(xdata)+0.2)
-        self.ax.set_ylim(min(ydata)-0.2, max(ydata)+0.2)
+        self.ax.set_xlim(min(xdata), max(xdata))
+        self.ax.set_ylim(min(ydata)*0.95, max(ydata)*1.05)
 
-        self.markers.set_xdata(self.ramp_config.ps_ramp_times)
-        self.markers.set_ydata(self.ramp_config.ps_ramp_energies)
+        if self.plot_unit == 'Strengths':
+            func = self.ramp_config.ps_waveform_interp_strengths
+        else:
+            func = self.ramp_config.ps_waveform_interp_currents
+
+        markers_time = self.ramp_config.ps_ramp_times
+        self.markers.set_xdata(markers_time)
+        self.markers.set_ydata(func('BO-Fam:MA-B', markers_time))
 
         inj_marker_time = self.ramp_config.ti_params_injection_time
         self.m_inj.set_xdata(inj_marker_time)
-        self.m_inj.set_ydata(self.ramp_config.ps_waveform_interp_energy(
-            inj_marker_time))
+        self.m_inj.set_ydata(func('BO-Fam:MA-B', inj_marker_time))
 
         ej_marker_time = self.ramp_config.ti_params_ejection_time
         self.m_ej.set_xdata(ej_marker_time)
-        self.m_ej.set_ydata(self.ramp_config.ps_waveform_interp_energy(
-            ej_marker_time))
+        self.m_ej.set_ydata(func('BO-Fam:MA-B', ej_marker_time))
 
         self.graph.figure.canvas.draw()
         self.graph.figure.canvas.flush_events()
@@ -504,6 +521,7 @@ class MultipolesRamp(QWidget):
         self._undo_stack = undo_stack
         self._getNormalizedConfigs()
         self._magnets_to_plot = []
+        self.plot_unit = 'Strengths'
         self._setupUi()
 
     def _setupUi(self):
@@ -733,7 +751,10 @@ class MultipolesRamp(QWidget):
         if self.ramp_config is not None:
             xdata = self.ramp_config.ps_waveform_get_times()
             for maname in self._magnets_to_plot:
-                ydata = self.ramp_config.ps_waveform_get_strengths(maname)
+                if self.plot_unit == 'Strengths':
+                    ydata = self.ramp_config.ps_waveform_get_strengths(maname)
+                elif self.plot_unit == 'Currents':
+                    ydata = self.ramp_config.ps_waveform_get_currents(maname)
                 self.lines[maname].set_xdata(xdata)
                 self.lines[maname].set_ydata(ydata)
 
@@ -746,32 +767,38 @@ class MultipolesRamp(QWidget):
                 elif maname != 'BO-Fam:MA-B':
                     self.lines[maname].set_linewidth(0)
 
-            self.ax.set_xlim(min(xdata)-0.2, max(xdata)+0.2)
+            self.ax.set_xlim(min(xdata), max(xdata))
             ydata = np.array(ydata)
             if len(ydata) > 0:
-                self.ax.set_ylim(ydata.min()-0.2, ydata.max()+0.2)
+                if ydata.min() < 0:
+                    self.ax.set_ylim(ydata.min()*1.05, ydata.max()*1.05)
+                else:
+                    self.ax.set_ylim(ydata.min()*0.95, ydata.max()*1.05)
 
-            ylabel = None
-            for maname in self._magnets_to_plot:
-                if 'MA-Q' not in maname:
-                    break
-            else:
-                ylabel = 'KL [1/m]'
-            for maname in self._magnets_to_plot:
-                if 'MA-S' not in maname:
-                    break
-            else:
-                ylabel = 'SL [1/m$^2$]'
-            for maname in self._magnets_to_plot:
-                if 'MA-C' not in maname:
-                    break
-            else:
-                ylabel = 'Kick [rad]'
+            if self.plot_unit == 'Strengths':
+                ylabel = None
+                for maname in self._magnets_to_plot:
+                    if 'MA-Q' not in maname:
+                        break
+                else:
+                    ylabel = 'KL [1/m]'
+                for maname in self._magnets_to_plot:
+                    if 'MA-S' not in maname:
+                        break
+                else:
+                    ylabel = 'SL [1/m$^2$]'
+                for maname in self._magnets_to_plot:
+                    if 'MA-C' not in maname:
+                        break
+                else:
+                    ylabel = 'Kick [rad]'
 
-            if ylabel:
-                self.ax.set_ylabel(ylabel)
+                if ylabel:
+                    self.ax.set_ylabel(ylabel)
+                else:
+                    self.ax.set_ylabel('Int. Strengths')
             else:
-                self.ax.set_ylabel('Int. Strengths')
+                self.ax.set_ylabel('Currents [A]')
 
             inj_marker_time = self.ramp_config.ti_params_injection_time
             self.m_inj.set_xdata(inj_marker_time)
@@ -783,17 +810,15 @@ class MultipolesRamp(QWidget):
             markers_value = list()
             inj_marker_value = list()
             ej_marker_value = list()
+            if self.plot_unit == 'Strengths':
+                func = self.ramp_config.ps_waveform_interp_strengths
+            else:
+                func = self.ramp_config.ps_waveform_interp_currents
             for maname in self._magnets_to_plot:
                 markers_time.append(markers_base_time)
-                markers_value.append(
-                    self.ramp_config.ps_waveform_interp_strengths(
-                        maname, markers_base_time))
-                inj_marker_value.append(
-                    self.ramp_config.ps_waveform_interp_strengths(
-                        maname, inj_marker_time))
-                ej_marker_value.append(
-                    self.ramp_config.ps_waveform_interp_strengths(
-                        maname, ej_marker_time))
+                markers_value.append(func(maname, markers_base_time))
+                inj_marker_value.append(func(maname, inj_marker_time))
+                ej_marker_value.append(func(maname, ej_marker_time))
             self.markers.set_xdata(markers_time)
             self.markers.set_ydata(markers_value)
             self.m_inj.set_ydata(inj_marker_value)
@@ -1156,7 +1181,7 @@ class RFRamp(QWidget):
             xdata.append(i)
         xdata.append(490)
         self.line1.set_xdata(xdata)
-        self.ax.set_xlim(min(xdata)-0.2, max(xdata)+0.2)
+        self.ax.set_xlim(min(xdata), max(xdata))
 
         ydata = list()
         ydata.append(self.ramp_config.rf_ramp_voltages[0])
@@ -1164,7 +1189,7 @@ class RFRamp(QWidget):
             ydata.append(i)
         ydata.append(self.ramp_config.rf_ramp_voltages[0])
         self.line1.set_ydata(ydata)
-        self.ax.set_ylim(min(ydata)-10, max(ydata)+10)
+        self.ax.set_ylim(min(ydata)*0.95, max(ydata)*1.05)
 
         times = self.ramp_config.ps_ramp_times
         self.markers.set_xdata(times)

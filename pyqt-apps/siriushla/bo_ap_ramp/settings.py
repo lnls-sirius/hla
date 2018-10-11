@@ -26,6 +26,7 @@ class Settings(QMenuBar):
     loadSignal = Signal()
     opticsSettingsSignal = Signal(list)
     statsSettingsSignal = Signal(list)
+    plotUnitSignal = Signal(str)
 
     def __init__(self, parent=None, prefix='', ramp_config=None):
         """Initialize object."""
@@ -60,6 +61,21 @@ class Settings(QMenuBar):
         self.config_menu.addAction(self.act_load)
         self.config_menu.addAction(self.act_save)
         self.config_menu.addAction(self.act_save_as)
+        self.config_menu.addSeparator()
+
+        self.ramp_params_menu = self.addMenu('Ramping Parameters')
+        self.menu_plotunits = self.ramp_params_menu.addMenu(
+            'Plot magnet waveforms in...')
+        self.act_plotcurrents = QAction('Currents', self)
+        self.act_plotcurrents.triggered.connect(self._emitPlotUnits)
+        self.act_plotstrengths = QAction('Strengths', self)
+        self.act_plotstrengths.triggered.connect(self._emitPlotUnits)
+        self.menu_plotunits.addAction(self.act_plotcurrents)
+        self.menu_plotunits.addAction(self.act_plotstrengths)
+        self.ramp_params_menu.addSeparator()
+        self.act_tidelays = QAction('Configure TI delays', self)
+        self.act_tidelays.triggered.connect(self._showTIDelaysPopup)
+        self.ramp_params_menu.addAction(self.act_tidelays)
 
         self.optics_menu = self.addMenu('Optics Adjustments')
         self.act_optics_settings = QAction('Settings', self)
@@ -126,6 +142,10 @@ class Settings(QMenuBar):
             self._saveAndEmitConfigName)
         self._saveAsPopup.open()
 
+    def _showTIDelaysPopup(self):
+        # TODO: create dialog to config timing delays
+        pass
+
     def _saveAndEmitConfigName(self, new_name=None):
         if self.ramp_config.configsrv_exist():
             old_name = self.ramp_config.name
@@ -151,6 +171,10 @@ class Settings(QMenuBar):
         self._injcurr_idx = settings[0]
         self._ejecurr_idx = settings[1]
         self.statsSettingsSignal.emit(settings)
+
+    def _emitPlotUnits(self):
+        sender_text = self.sender().text()
+        self.plotUnitSignal.emit(sender_text)
 
     @Slot(ramp.BoosterRamp)
     def getRampConfig(self, ramp_config):
