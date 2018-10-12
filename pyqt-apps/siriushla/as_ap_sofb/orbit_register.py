@@ -3,13 +3,13 @@
 import numpy as _np
 from functools import partial as _part
 from datetime import datetime as _datetime
-from qtpy.QtWidgets import QMenu, QFileDialog, QWidget, \
+from qtpy.QtWidgets import QMenu, QFileDialog, QWidget, QMessageBox, \
     QScrollArea, QLabel, QPushButton, QSizePolicy, \
     QGridLayout, QVBoxLayout, QHBoxLayout
 from qtpy.QtCore import Signal, Qt, QRect
 import siriuspy.csdevice.orbitcorr as _csorb
 from siriuspy.servconf.srvconfig import ConnConfigService
-from siriushla.as_ap_servconf import LoadConfiguration
+from siriushla.as_ap_servconf import LoadConfiguration, SaveConfiguration
 from siriushla.widgets import SiriusConnectionSignal
 
 
@@ -102,7 +102,7 @@ class OrbitRegister(QWidget):
         self.EXT = '.' + text
         self.EXT_FLT = 'Sirius Orbit Files (*.{})'.format(text)
         self._config_type = acc.lower() + '_orbit'
-        self._model = ConnConfigService(self._config_type)
+        self._servconf = ConnConfigService(self._config_type)
         self.consts = _csorb.get_consts(acc or 'SI')
         self.string_status = 'Empty'
         self.name = 'Register {0:d}'.format(self.idx)
@@ -174,6 +174,8 @@ class OrbitRegister(QWidget):
         act.triggered.connect(self._reset_orbit)
         act = menu.addAction('Save To File')
         act.triggered.connect(self._save_orbit_to_file)
+        act = menu.addAction('Save To ServConf')
+        act.triggered.connect(self._save_orbit_to_servconf)
 
     def _reset_orbit(self):
         zer = _np.zeros(self._orbx.shape)
@@ -216,7 +218,7 @@ class OrbitRegister(QWidget):
 
     def _load_orbit_from_servconf(self):
         win = LoadConfiguration(self._config_type, self)
-        win.data.connect(self._set_orbit)
+        win.configname.connect(self._set_orbit)
         win.show()
 
     def _set_orbit(self, confname):
@@ -224,6 +226,18 @@ class OrbitRegister(QWidget):
         self._update_and_emit(
             'Orbit Loaded: '+confname,
             _np.array(data['x']), _np.array(data['y']))
+
+    def _save_orbit_to_servconf(self):
+        win = SaveConfiguration(self._config_type, self)
+        win.configname.connect(self._save_orbit)
+        win.show()
+
+    def _save_orbit(self, confname):
+        data = {'x': self._orbx.tolist(), 'y': self.orby.tolist()}
+        try:
+            self._servconf.config_insert(confname, data)
+        except TypeError as e:
+            QMessageBox.warning(self, 'Warning', str(e), QMessageBox.Ok)
 
     def _update_and_emit(self, string, orbx=None, orby=None, fname=''):
         if orbx is None or orby is None:
