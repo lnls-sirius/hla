@@ -164,7 +164,7 @@ class OrbitRegister(QWidget):
         act.triggered.connect(_part(self._register_orbit, 'orb'))
         act = menu2.addAction('&MultiTurn Orbit')
         act.triggered.connect(_part(self._register_orbit, 'mti'))
-        act = menu2.addAction('&SinglePass Orbit')
+        act = menu2.addAction('Single&Pass Orbit')
         act.triggered.connect(_part(self._register_orbit, 'sp'))
         act = menu2.addAction('&Reference Orbit')
         act.triggered.connect(_part(self._register_orbit, 'ref'))
@@ -172,7 +172,7 @@ class OrbitRegister(QWidget):
         act.triggered.connect(_part(self._register_orbit, 'off'))
         act = menu.addAction('&Clear Register')
         act.triggered.connect(self._reset_orbit)
-        act = menu.addAction('&Save Orbit To File')
+        act = menu.addAction('Save To File')
         act.triggered.connect(self._save_orbit_to_file)
 
     def _reset_orbit(self):
@@ -193,6 +193,7 @@ class OrbitRegister(QWidget):
 
     def _save_orbit_to_file(self, _):
         header = '# ' + _datetime.now().strftime('%Y/%M/%d-%H:%M:%S') + '\n'
+        header += '# ' + 'BPMX [um]       BPMY [um]' + '\n'
         filename = QFileDialog.getSaveFileName(
             caption='Define a File Name to Save the Orbit',
             directory=self.last_dir,
