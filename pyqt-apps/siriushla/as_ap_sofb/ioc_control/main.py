@@ -1,5 +1,6 @@
 """Define Controllers for the orbits displayed in the graphic."""
 
+import numpy as _np
 from qtpy.QtWidgets import QLabel, QGroupBox, QPushButton, QFormLayout, \
     QVBoxLayout, QHBoxLayout
 from qtpy.QtCore import QSize
@@ -130,7 +131,7 @@ class SOFBControl(BaseWidget):
         pdm_pbtn.rules = rules
         rules = (
             '[{"name": "EnblRule", "property": "Enable", ' +
-            '"expression": "(ch[1] in (1, 3)) and not ch[0]", ' +
+            '"expression": "ch[1] and not ch[0]", ' +
             '"channels": [' +
             '{"channel": "'+self.prefix+'AutoCorr-Sts'+'", "trigger": true},' +
             '{"channel": "'+self.prefix+'OrbitMode-Sel'+'", "trigger": true}' +
@@ -169,7 +170,7 @@ class SOFBControl(BaseWidget):
 
         vbl.addSpacing(40)
         # ####################################################################
-        # ################## Response Matrix Configurations ##################
+        # ###################### Detailed Configurations #####################
         # ####################################################################
         grpbx = QGroupBox('Detailed Configurations', self)
         vbl.addWidget(grpbx)
