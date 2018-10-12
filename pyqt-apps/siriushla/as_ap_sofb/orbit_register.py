@@ -88,18 +88,19 @@ class OrbitRegister(QWidget):
     """Create the Context Menu for the Registers."""
 
     DEFAULT_DIR = '/home/fac/sirius-iocs/si-ap-sofb'
-    EXT = '.siorb'
-    EXT_FLT = 'Sirius Orbit Files (*.siorb)'
 
     new_orbx_signal = Signal(_np.ndarray)
     new_orby_signal = Signal(_np.ndarray)
     new_string_signal = Signal(str)
 
-    def __init__(self, parent, prefix, idx, acc='SI'):
+    def __init__(self, parent, prefix, orbits, idx, acc='SI'):
         """Initialize the Context Menu."""
         super(OrbitRegister, self).__init__(parent)
         self.idx = idx
         self.prefix = prefix
+        text = acc.lower() + 'orb'
+        self.EXT = '.' + text
+        self.EXT_FLT = 'Sirius Orbit Files (*.{})'.format(text)
         self._config_type = acc.lower() + '_orbit'
         self._model = ConnConfigService(self._config_type)
         self.consts = _csorb.get_consts(acc or 'SI')
