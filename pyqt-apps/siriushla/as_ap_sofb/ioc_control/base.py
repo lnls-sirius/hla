@@ -15,6 +15,7 @@ class BaseWidget(QWidget):
         super().__init__(parent)
         self.prefix = prefix
         self.acc = acc
+        self._const = _csorb.get_consts(acc)
 
     def create_pair(self, parent, pvname):
         wid = QWidget(parent)
