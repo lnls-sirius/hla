@@ -3,10 +3,8 @@
 import sys as _sys
 import os as _os
 from qtpy.QtCore import Qt, QSize, QRect
-from qtpy.QtGui import QCursor
 from qtpy.QtWidgets import QWidget, QDockWidget, QSizePolicy, QVBoxLayout, \
-    QPushButton, QTabWidget, QHBoxLayout, QMenu, QMenuBar, \
-    QAction, QStatusBar
+    QPushButton, QHBoxLayout, QMenu, QMenuBar, QAction, QStatusBar
 from siriushla.widgets import SiriusMainWindow
 from siriuspy.envars import vaca_prefix as LL_PREF
 from siriushla.widgets import PyDMLogLabel
@@ -40,8 +38,8 @@ class MainWindow(SiriusMainWindow):
         orbreg = self._create_orbit_registers()
         wid = self._create_ioc_controllers()
 
-        self.addDockWidget(Qt.DockWidgetArea(1), logwid)
-        self.addDockWidget(Qt.DockWidgetArea(2), orbreg)
+        self.addDockWidget(Qt.DockWidgetArea(8), logwid)
+        self.addDockWidget(Qt.DockWidgetArea(8), orbreg)
         self.addDockWidget(Qt.DockWidgetArea(2), wid)
 
         mwid = self._create_central_widget()
@@ -113,9 +111,13 @@ class MainWindow(SiriusMainWindow):
         pdm_log.setAlternatingRowColors(True)
         pdm_log.maxCount = 2000
         vbl.addWidget(pdm_log)
-        pbtn = QPushButton('Clear', wid_cont)
+        hbl = QHBoxLayout()
+        vbl.addLayout(hbl)
+        hbl.addStretch()
+        pbtn = QPushButton('Clear Log', wid_cont)
         pbtn.clicked.connect(pdm_log.clear)
-        vbl.addWidget(pbtn)
+        hbl.addWidget(pbtn)
+        hbl.addStretch()
         return docwid
 
     def _create_menus(self):
