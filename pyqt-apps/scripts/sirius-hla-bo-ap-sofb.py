@@ -16,6 +16,6 @@ args = parser.parse_args()
 
 app = SiriusApplication()
 util.set_style(app)
-window = MainWindow(args.prefix)
+window = MainWindow(args.prefix, acc='BO')
 window.show()
 sys.exit(app.exec_())
