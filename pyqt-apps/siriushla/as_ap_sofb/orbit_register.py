@@ -20,9 +20,33 @@ class OrbitRegisters(QWidget):
         self._nr_registers = nr_registers
         self.prefix = prefix
         self.acc = acc
-        self._setup_ui()
+        pre = self.prefix
+        self._orbits = {
+            'ref': [
+                SiriusConnectionSignal(pre + 'OrbitRefX-RB'),
+                SiriusConnectionSignal(pre + 'OrbitRefY-RB')],
+            'mti': [
+                SiriusConnectionSignal(pre + 'OrbitMultiTurnX-Mon'),
+                SiriusConnectionSignal(pre + 'OrbitMultiTurnY-Mon')],
+            'sp': [
+                SiriusConnectionSignal(pre + 'OrbitSmoothSinglePassX-Mon'),
+                SiriusConnectionSignal(pre + 'OrbitSmoothSinglePassY-Mon')],
+            'orb': [
+                SiriusConnectionSignal(pre + 'OrbitSmoothX-Mon'),
+                SiriusConnectionSignal(pre + 'OrbitSmoothY-Mon')],
+            'off': [
+                SiriusConnectionSignal(pre + 'OrbitOfflineX-SP'),
+                SiriusConnectionSignal(pre + 'OrbitOfflineY-SP')],
+            }
+        self.setupui()
 
-    def _setup_ui(self):
+    def channels(self):
+        chans = []
+        for v in self._orbits.values():
+            chans.extend(v)
+        return chans
+
+    def setupui(self):
         gdl = QGridLayout(self)
         gdl.setContentsMargins(0, 0, 0, 0)
 
@@ -38,12 +62,12 @@ class OrbitRegisters(QWidget):
         hbl.setContentsMargins(0, 0, 0, 0)
 
         vbl = QVBoxLayout()
-
         hbl.addLayout(vbl)
 
         self.registers = []
         for i in range(self._nr_registers):
-            reg = OrbitRegister(self, self.prefix, i+1, acc=self.acc)
+            reg = OrbitRegister(
+                self, self.prefix, self._orbits, i+1, acc=self.acc)
             vbl.addWidget(reg)
             self.registers.append(reg)
 
@@ -83,36 +107,13 @@ class OrbitRegister(QWidget):
         self.name = 'Register {0:d}'.format(self.idx)
         self.setup_ui()
 
-        pre = prefix
-        self._orbits = {
-            'ref': [
-                SiriusConnectionSignal(pre + 'OrbitRefX-RB'),
-                SiriusConnectionSignal(pre + 'OrbitRefY-RB')],
-            'mti': [
-                SiriusConnectionSignal(pre + 'OrbitMultiTurnX-Mon'),
-                SiriusConnectionSignal(pre + 'OrbitMultiTurnY-Mon')],
-            'sp': [
-                SiriusConnectionSignal(pre + 'OrbitSmoothSinglePassX-Mon'),
-                SiriusConnectionSignal(pre + 'OrbitSmoothSinglePassY-Mon')],
-            'orb': [
-                SiriusConnectionSignal(pre + 'OrbitSmoothX-Mon'),
-                SiriusConnectionSignal(pre + 'OrbitSmoothY-Mon')],
-            'off': [
-                SiriusConnectionSignal(pre + 'OrbitOfflineX-SP'),
-                SiriusConnectionSignal(pre + 'OrbitOfflineY-SP')],
-            }
+        self._orbits = orbits
         self.last_dir = self.DEFAULT_DIR
         self.filename = ''
         self._orbx = _np.zeros(self.consts.NR_BPMS)
         self._orby = _np.zeros(self.consts.NR_BPMS)
 
         self.new_string_signal.emit(self.string_status)
-
-    def channels(self):
-        chans = []
-        for v in self._orbits.values():
-            chans.extend(v)
-        return chans
 
     def getorbx(self):
         """Return the horizontal orbit."""
