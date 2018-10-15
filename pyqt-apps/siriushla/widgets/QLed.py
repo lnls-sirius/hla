@@ -18,7 +18,6 @@ __path__ = _os.path.dirname(__file__)
 
 class ShapeMap:
     """Shape enum mapping class."""
-
     Circle = 1
     Round = 2
     Square = 3
