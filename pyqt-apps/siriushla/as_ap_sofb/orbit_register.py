@@ -7,7 +7,7 @@ from qtpy.QtWidgets import QMenu, QFileDialog, QWidget, QMessageBox, \
     QScrollArea, QLabel, QPushButton, QSizePolicy, \
     QGridLayout, QVBoxLayout, QHBoxLayout
 from qtpy.QtCore import Signal, Qt, QRect
-import siriuspy.csdevice.orbitcorr as _csorb
+from siriuspy.csdevice.orbitcorr import OrbitCorrDev
 from siriuspy.servconf.srvconfig import ConnConfigService
 from siriushla.as_ap_servconf import LoadConfiguration, SaveConfiguration
 from siriushla.widgets import SiriusConnectionSignal
@@ -103,7 +103,7 @@ class OrbitRegister(QWidget):
         self.EXT_FLT = 'Sirius Orbit Files (*.{})'.format(text)
         self._config_type = acc.lower() + '_orbit'
         self._servconf = ConnConfigService(self._config_type)
-        self.consts = _csorb.get_consts(acc or 'SI')
+        self._csorb = OrbitCorrDev(acc.upper())
         self.string_status = 'Empty'
         self.name = 'Register {0:d}'.format(self.idx)
         self.setup_ui()
@@ -111,8 +111,8 @@ class OrbitRegister(QWidget):
         self._orbits = orbits
         self.last_dir = self.DEFAULT_DIR
         self.filename = ''
-        self._orbx = _np.zeros(self.consts.NR_BPMS)
-        self._orby = _np.zeros(self.consts.NR_BPMS)
+        self._orbx = _np.zeros(self._csorb.NR_BPMS)
+        self._orby = _np.zeros(self._csorb.NR_BPMS)
 
         self.new_string_signal.emit(self.string_status)
 

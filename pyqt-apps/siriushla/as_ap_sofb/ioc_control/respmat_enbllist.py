@@ -8,7 +8,6 @@ from qtpy.QtCore import Qt, QRect, QPoint
 from qtpy.QtGui import QBrush, QColor, QPainter
 from siriushla.widgets import SiriusLedAlert, SiriusConnectionSignal
 from pydm.widgets.base import PyDMWidget
-# import siriuspy.csdevice.orbitcorr as _csorb
 
 
 class Led(SiriusLedAlert):

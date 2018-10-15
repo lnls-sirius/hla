@@ -8,7 +8,7 @@ from qtpy.QtWidgets import QLabel, QGroupBox, QPushButton, QFormLayout, \
 from qtpy.QtCore import Qt
 from pydm.widgets import PyDMLabel, PyDMPushButton, PyDMWaveformPlot, \
                         PyDMCheckbox
-import siriuspy.csdevice.orbitcorr as _csorb
+from siriuspy.csdevice.orbitcorr import OrbitCorrDev
 from siriuspy.servconf.srvconfig import ConnConfigService
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets import SiriusLedState, SiriusConnectionSignal
@@ -83,17 +83,17 @@ class RespMatWidget(BaseWidget):
         pdm_pbtn = PyDMPushButton(
             grpbx, label="Start",
             init_channel=self.prefix+"MeasRespMat-Cmd",
-            pressValue=_csorb.MeasRespMatCmd.Start)
+            pressValue=OrbitCorrDev.MeasRespMatCmd.Start)
         pdm_pbtn.setEnabled(True)
         pdm_pbtn2 = PyDMPushButton(
             grpbx, label="Stop",
             init_channel=self.prefix+"MeasRespMat-Cmd",
-            pressValue=_csorb.MeasRespMatCmd.Stop)
+            pressValue=OrbitCorrDev.MeasRespMatCmd.Stop)
         pdm_pbtn2.setEnabled(True)
         pdm_pbtn3 = PyDMPushButton(
             grpbx, label="Reset",
             init_channel=self.prefix+"MeasRespMat-Cmd",
-            pressValue=_csorb.MeasRespMatCmd.Reset)
+            pressValue=OrbitCorrDev.MeasRespMatCmd.Reset)
         pdm_pbtn3.setEnabled(True)
         pdm_lbl = PyDMLabel(grpbx, init_channel=self.prefix+'MeasRespMat-Mon')
         pdm_lbl.setAlignment(Qt.AlignCenter)
@@ -178,7 +178,7 @@ class RespMatWidget(BaseWidget):
             return
         fname += '' if fname.endswith(self.EXT) else self.EXT
         respm = self._respmat_rb.getvalue()
-        respm = respm.reshape(2*self._const.NR_BPMS, -1)
+        respm = respm.reshape(2*self._csorb.NR_BPMS, -1)
         _np.savetxt(fname, respm, header=header)
 
     def _load_respmat_from_file(self):
@@ -208,7 +208,7 @@ class RespMatWidget(BaseWidget):
 
     def _save_respm(self, confname):
         val = self._respmat_rb.getvalue()
-        val = val.reshape(2*self._const.NR_BPMS, -1)
+        val = val.reshape(2*self._csorb.NR_BPMS, -1)
         try:
             self._servconf.config_insert(confname, val.tolist())
         except TypeError as e:

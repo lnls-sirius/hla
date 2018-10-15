@@ -6,7 +6,7 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QSizePolicy, QComboBox
 from pydm.widgets import PyDMSpinbox, PyDMLabel, PyDMEnumComboBox
 from pydm.widgets.base import PyDMPrimitiveWidget
-import siriuspy.csdevice.orbitcorr as _csorb
+from siriuspy.csdevice.orbitcorr import OrbitCorrDev
 
 
 class BaseWidget(QWidget):
@@ -15,7 +15,12 @@ class BaseWidget(QWidget):
         super().__init__(parent)
         self.prefix = prefix
         self.acc = acc
-        self._const = _csorb.get_consts(acc)
+        self._csorb = OrbitCorrDev(acc)
+        self._isring = self._csorb.acc_idx in self._csorb.Rings
+
+    @property
+    def isring(self):
+        return self._isring
 
     def create_pair(self, parent, pvname):
         wid = QWidget(parent)
@@ -55,10 +60,10 @@ class BaseCombo(QComboBox, PyDMPrimitiveWidget):
         self.readback = readback
         self.ctrls = ctrls
         self.acc = acc
-        self.consts = _csorb.get_consts(acc)
+        self._csorb = OrbitCorrDev(acc)
         self.orbits = {
-            'x': _np.zeros(self.consts.NR_BPMS, dtype=float),
-            'y': _np.zeros(self.consts.NR_BPMS, dtype=float)}
+            'x': _np.zeros(self._csorb.NR_BPMS, dtype=float),
+            'y': _np.zeros(self._csorb.NR_BPMS, dtype=float)}
         self.signals_to_watch = dict()
         self.slots = {
             'x': _part(self._watch_if_changed, 'x'),

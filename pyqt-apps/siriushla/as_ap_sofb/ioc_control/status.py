@@ -3,26 +3,18 @@
 from qtpy.QtWidgets import QLabel, QGroupBox, QVBoxLayout, QFormLayout
 from pydm.widgets import PyDMPushButton
 from siriushla.widgets import SiriusLedAlert
-import siriuspy.csdevice.orbitcorr as _csorb
-
 from siriushla.as_ap_sofb.ioc_control.base import BaseWidget
 
 
 class StatusWidget(BaseWidget):
 
-    def __init__(self, parent, prefix, is_orb=False):
-        super().__init__(parent, prefix)
+    def __init__(self, parent, prefix, acc='SI', is_orb=False):
+        super().__init__(parent, prefix, acc)
         self.is_orb = is_orb
         self.setupui()
 
     def setupui(self):
         vbl = QVBoxLayout(self)
-        # lab = QLabel('General Status', self)
-        # led = SiriusLedAlert(self, init_channel=self.prefix+'Status-Mon')
-        # led.setMinimumHeight(20)
-        # led.setMaximumHeight(40)
-        # fml.addRow(lab, led)
-
         lab = 'Config. Acquisition' if self.is_orb else 'Config. Correctors'
         pv = 'OrbitTrigAcqConfig-Cmd' if self.is_orb else 'ConfigCorrs-Cmd'
         pdm_btn = PyDMPushButton(
@@ -35,10 +27,10 @@ class StatusWidget(BaseWidget):
 
     def creategroupbox(self, name):
         if name == 'Corr':
-            labels = _csorb.StatusLabels.Corrs
+            labels = self._csorb.StatusLabels.Corrs
             title = 'Correctors'
         else:
-            labels = _csorb.StatusLabels.Orbit
+            labels = self._csorb.StatusLabels.Orbit
             title = 'Orbit'
         wid = QGroupBox(title + ' Status', self)
 
@@ -60,10 +52,10 @@ def _main():
     win = SiriusDialog()
     vbl = QVBoxLayout(win)
     prefix = 'ca://' + pref+'SI-Glob:AP-SOFB:'
-    wid = StatusWidget(win, prefix, True)
+    wid = StatusWidget(win, prefix, 'SI', True)
     vbl.addWidget(wid)
     vbl.addSpacing(40)
-    wid = StatusWidget(win, prefix, False)
+    wid = StatusWidget(win, prefix, 'SI', False)
     vbl.addWidget(wid)
     win.show()
     sys.exit(app.exec_())

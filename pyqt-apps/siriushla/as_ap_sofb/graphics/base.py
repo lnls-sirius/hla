@@ -11,7 +11,7 @@ from qtpy.QtCore import QSize, Qt, QTimer, QThread, Signal, QObject
 from qtpy.QtGui import QColor, QFont
 from pydm.widgets import PyDMWaveformPlot
 from siriushla.widgets import SiriusConnectionSignal
-import siriuspy.csdevice.orbitcorr as _csorb
+from siriuspy.csdevice.orbitcorr import OrbitCorrDev
 
 
 class BaseWidget(QWidget):
@@ -309,7 +309,7 @@ class UpdateGraph(QObject):
         super().__init__()
         self.ctrls = ctrls
         self.acc = acc
-        self.consts = _csorb.get_consts(acc)
+        self._csorb = OrbitCorrDev(acc)
         self.is_orb = is_orb
         self._isvisible = True
         text = sorted(ctrls)[0]
@@ -327,8 +327,8 @@ class UpdateGraph(QObject):
             'ref': {
                 'x': _part(self._update_vectors, 'ref', 'x'),
                 'y': _part(self._update_vectors, 'ref', 'y')}}
-        szx = self.consts.NR_BPMS if self.is_orb else self.consts.NR_CH
-        szy = self.consts.NR_BPMS if self.is_orb else self.consts.NR_CV
+        szx = self._csorb.NR_BPMS if self.is_orb else self._csorb.NR_CH
+        szy = self._csorb.NR_BPMS if self.is_orb else self._csorb.NR_CV
         self.vectors = {
             'val': {
                 'x': _np.zeros(szx, dtype=float),

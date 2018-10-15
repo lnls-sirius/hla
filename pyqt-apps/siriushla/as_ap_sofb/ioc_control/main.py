@@ -7,7 +7,7 @@ from qtpy.QtCore import QSize
 from pydm.widgets import PyDMPushButton
 from siriushla.widgets import SiriusConnectionSignal, PyDMStateButton, \
         SiriusLedAlert
-import siriuspy.csdevice.orbitcorr as _csorb
+from siriuspy.csdevice.orbitcorr import OrbitCorrDev
 from siriushla.widgets.windows import create_window_from_widget
 import siriushla.util as _util
 
@@ -41,7 +41,7 @@ class SOFBControl(BaseWidget):
         Window = create_window_from_widget(
             StatusWidget, name='StatusWindow')
         _util.connect_window(
-            btn, Window, self, prefix=self.prefix, is_orb=False)
+            btn, Window, self, prefix=self.prefix, acc=self.acc, is_orb=False)
         pdm_led = SiriusLedAlert(
             grp_bx, init_channel=self.prefix+'CorrStatus-Mon')
         pdm_led.setMinimumHeight(20)
@@ -138,7 +138,7 @@ class SOFBControl(BaseWidget):
             ']}]')
         pdm_pbtn2 = PyDMPushButton(
             grpbx, 'Apply All',
-            pressValue=_csorb.ApplyCorr.All,
+            pressValue=OrbitCorrDev.ApplyCorr.All,
             init_channel=self.prefix+'ApplyCorr-Cmd')
         pdm_pbtn2.rules = rules
         vbl2 = QVBoxLayout()
@@ -147,17 +147,17 @@ class SOFBControl(BaseWidget):
 
         pdm_pbtn = PyDMPushButton(
             grpbx, 'Apply CH',
-            pressValue=_csorb.ApplyCorr.CH,
+            pressValue=OrbitCorrDev.ApplyCorr.CH,
             init_channel=self.prefix+'ApplyCorr-Cmd')
         pdm_pbtn.rules = rules
         pdm_pbtn2 = PyDMPushButton(
             grpbx, 'Apply CV',
-            pressValue=_csorb.ApplyCorr.CV,
+            pressValue=OrbitCorrDev.ApplyCorr.CV,
             init_channel=self.prefix+'ApplyCorr-Cmd')
         pdm_pbtn2.rules = rules
         pdm_pbtn3 = PyDMPushButton(
             grpbx, 'Apply RF',
-            pressValue=_csorb.ApplyCorr.RF,
+            pressValue=OrbitCorrDev.ApplyCorr.RF,
             init_channel=self.prefix+'ApplyCorr-Cmd')
         pdm_pbtn3.rules = rules
         vbl3 = QVBoxLayout()
@@ -191,7 +191,8 @@ class SOFBControl(BaseWidget):
         Window = create_window_from_widget(
             AcqControlWidget, name='AcqControlWindow')
         btn = QPushButton('Orbit Acquisition', grpbx)
-        _util.connect_window(btn, Window, grpbx, prefix=self.prefix)
+        _util.connect_window(
+            btn, Window, grpbx, prefix=self.prefix, acc=self.acc)
         vbl2.addWidget(btn)
 
 
