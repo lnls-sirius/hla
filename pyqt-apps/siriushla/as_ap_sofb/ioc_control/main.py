@@ -7,7 +7,6 @@ from qtpy.QtCore import QSize
 from pydm.widgets import PyDMPushButton
 from siriushla.widgets import SiriusConnectionSignal, PyDMStateButton, \
         SiriusLedAlert
-from siriuspy.csdevice.orbitcorr import OrbitCorrDev
 from siriushla.widgets.windows import create_window_from_widget
 import siriushla.util as _util
 
@@ -23,9 +22,9 @@ class SOFBControl(BaseWidget):
     def __init__(self, parent, prefix, ctrls, acc='SI'):
         super().__init__(parent, prefix, acc=acc)
         self.ctrls = ctrls
-        self.setup_ui()
+        self.setupui()
 
-    def setup_ui(self):
+    def setupui(self):
         hbl = QHBoxLayout(self)
         grp_bx = QGroupBox(self)
         hbl.addWidget(grp_bx)
@@ -56,29 +55,30 @@ class SOFBControl(BaseWidget):
         # ####################################################################
         # ####################### Auto Correction ############################
         # ####################################################################
-        rules = (
-            '[{"name": "EnblRule", "property": "Enable", ' +
-            '"expression": "ch[0] in (1, 3)", "channels": [{"channel": "' +
-            self.prefix+'OrbitMode-Sts'+'", "trigger": true}]}]')
-        lbl = QLabel('Enable Auto Correction', grp_bx)
-        pdm_btn = PyDMStateButton(
-            grp_bx, init_channel=self.prefix+'AutoCorr-Sel')
-        pdm_btn.rules = rules
-        pdm_btn.setMinimumHeight(20)
-        pdm_btn.setMaximumHeight(40)
-        hbl = QHBoxLayout()
-        hbl.addWidget(lbl)
-        hbl.addWidget(pdm_btn)
-        vbl.addItem(hbl)
+        if self.isring:
+            rules = (
+                '[{"name": "EnblRule", "property": "Enable", ' +
+                '"expression": "ch[0] in (1, 3)", "channels": [{"channel": "' +
+                self.prefix+'OrbitMode-Sts'+'", "trigger": true}]}]')
+            lbl = QLabel('Enable Auto Correction', grp_bx)
+            pdm_btn = PyDMStateButton(
+                grp_bx, init_channel=self.prefix+'AutoCorr-Sel')
+            pdm_btn.rules = rules
+            pdm_btn.setMinimumHeight(20)
+            pdm_btn.setMaximumHeight(40)
+            hbl = QHBoxLayout()
+            hbl.addWidget(lbl)
+            hbl.addWidget(pdm_btn)
+            vbl.addItem(hbl)
 
-        lbl = QLabel('Frequency [Hz]', grp_bx)
-        wid = self.create_pair(grp_bx, 'AutoCorrFreq')
-        fbl = QFormLayout()
-        fbl.setHorizontalSpacing(9)
-        fbl.addRow(lbl, wid)
-        vbl.addItem(fbl)
+            lbl = QLabel('Frequency [Hz]', grp_bx)
+            wid = self.create_pair(grp_bx, 'AutoCorrFreq')
+            fbl = QFormLayout()
+            fbl.setHorizontalSpacing(9)
+            fbl.addRow(lbl, wid)
+            vbl.addItem(fbl)
 
-        vbl.addSpacing(40)
+            vbl.addSpacing(40)
         # ####################################################################
         # ########################## Orbit PVs ###############################
         # ####################################################################
@@ -110,7 +110,7 @@ class SOFBControl(BaseWidget):
         # ####################################################################
         # ######################## Kicks Configs. ############################
         # ####################################################################
-        wid = KicksConfigWidget(grp_bx, self.prefix, False)
+        wid = KicksConfigWidget(grp_bx, self.prefix, self.acc, False)
         vbl.addWidget(wid)
         vbl.addSpacing(40)
         # ####################################################################
@@ -121,6 +121,8 @@ class SOFBControl(BaseWidget):
         hbl.setSpacing(9)
         vbl.addWidget(grpbx)
 
+        vbl2 = QVBoxLayout()
+        hbl.addItem(vbl2)
         rules = (
             '[{"name": "EnblRule", "property": "Enable", ' +
             '"expression": "not ch[0]", "channels": [{"channel": "' +
@@ -129,6 +131,7 @@ class SOFBControl(BaseWidget):
             grpbx, 'Calculate Kicks', pressValue=1,
             init_channel=self.prefix+'CalcCorr-Cmd')
         pdm_pbtn.rules = rules
+        vbl2.addWidget(pdm_pbtn)
         rules = (
             '[{"name": "EnblRule", "property": "Enable", ' +
             '"expression": "ch[1] and not ch[0]", ' +
@@ -136,37 +139,35 @@ class SOFBControl(BaseWidget):
             '{"channel": "'+self.prefix+'AutoCorr-Sts'+'", "trigger": true},' +
             '{"channel": "'+self.prefix+'OrbitMode-Sel'+'", "trigger": true}' +
             ']}]')
-        pdm_pbtn2 = PyDMPushButton(
-            grpbx, 'Apply All',
-            pressValue=OrbitCorrDev.ApplyCorr.All,
-            init_channel=self.prefix+'ApplyCorr-Cmd')
-        pdm_pbtn2.rules = rules
-        vbl2 = QVBoxLayout()
-        vbl2.addWidget(pdm_pbtn)
-        vbl2.addWidget(pdm_pbtn2)
-
         pdm_pbtn = PyDMPushButton(
-            grpbx, 'Apply CH',
-            pressValue=OrbitCorrDev.ApplyCorr.CH,
+            grpbx, 'Apply All',
+            pressValue=self._csorb.ApplyCorr.All,
             init_channel=self.prefix+'ApplyCorr-Cmd')
         pdm_pbtn.rules = rules
-        pdm_pbtn2 = PyDMPushButton(
-            grpbx, 'Apply CV',
-            pressValue=OrbitCorrDev.ApplyCorr.CV,
-            init_channel=self.prefix+'ApplyCorr-Cmd')
-        pdm_pbtn2.rules = rules
-        pdm_pbtn3 = PyDMPushButton(
-            grpbx, 'Apply RF',
-            pressValue=OrbitCorrDev.ApplyCorr.RF,
-            init_channel=self.prefix+'ApplyCorr-Cmd')
-        pdm_pbtn3.rules = rules
+        vbl2.addWidget(pdm_pbtn)
+
         vbl3 = QVBoxLayout()
-        vbl3.setSpacing(9)
-        vbl3.addWidget(pdm_pbtn)
-        vbl3.addWidget(pdm_pbtn2)
-        vbl3.addWidget(pdm_pbtn3)
-        hbl.addItem(vbl2)
         hbl.addItem(vbl3)
+        vbl3.setSpacing(9)
+        pdm_pbtn = PyDMPushButton(
+            grpbx, 'Apply CH',
+            pressValue=self._csorb.ApplyCorr.CH,
+            init_channel=self.prefix+'ApplyCorr-Cmd')
+        pdm_pbtn.rules = rules
+        vbl3.addWidget(pdm_pbtn)
+        pdm_pbtn = PyDMPushButton(
+            grpbx, 'Apply CV',
+            pressValue=self._csorb.ApplyCorr.CV,
+            init_channel=self.prefix+'ApplyCorr-Cmd')
+        pdm_pbtn.rules = rules
+        vbl3.addWidget(pdm_pbtn)
+        if self.isring:
+            pdm_pbtn = PyDMPushButton(
+                grpbx, 'Apply RF',
+                pressValue=self._csorb.ApplyCorr.RF,
+                init_channel=self.prefix+'ApplyCorr-Cmd')
+            pdm_pbtn.rules = rules
+            vbl3.addWidget(pdm_pbtn)
 
         vbl.addSpacing(40)
         # ####################################################################
@@ -187,7 +188,8 @@ class SOFBControl(BaseWidget):
         btn = QPushButton('Correctors', grpbx)
         vbl2.addWidget(btn)
         _util.connect_window(
-            btn, Window, grpbx, prefix=self.prefix, show_details=True)
+            btn, Window, grpbx, prefix=self.prefix, acc=self.acc,
+            show_details=True)
         Window = create_window_from_widget(
             AcqControlWidget, name='AcqControlWindow')
         btn = QPushButton('Orbit Acquisition', grpbx)

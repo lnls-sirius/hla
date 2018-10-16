@@ -4,7 +4,6 @@ from qtpy.QtWidgets import QLabel, QGroupBox, QSpacerItem, QFormLayout, \
                 QGridLayout, QVBoxLayout, QHBoxLayout, QPushButton
 from qtpy.QtCore import Qt
 from pydm.widgets import PyDMLabel, PyDMPushButton
-from siriuspy.csdevice.orbitcorr import OrbitCorrDev
 from siriushla.util import connect_window
 from siriushla.widgets import SiriusLedAlert
 from siriushla.widgets.windows import create_window_from_widget
@@ -34,13 +33,12 @@ class AcqControlWidget(BaseWidget):
         vbl = QVBoxLayout()
         gdl.addItem(vbl, 1, 0)
 
-        if self.isring:
-            grp_bx = QGroupBox('Orbit Mode', self)
-            vbl.addWidget(grp_bx)
-            vbl.addSpacing(20)
-            fbl = QFormLayout(grp_bx)
-            wid = self.create_pair_sel(grp_bx, 'OrbitMode')
-            fbl.addRow(wid)
+        grp_bx = QGroupBox('Orbit Mode', self)
+        vbl.addWidget(grp_bx)
+        vbl.addSpacing(20)
+        fbl = QFormLayout(grp_bx)
+        wid = self.create_pair_sel(grp_bx, 'OrbitMode')
+        fbl.addRow(wid)
 
         grp_bx = QGroupBox('Acquisition Rates', self)
         lbl.setAlignment(Qt.AlignCenter)
@@ -51,11 +49,10 @@ class AcqControlWidget(BaseWidget):
         lbl.setAlignment(Qt.AlignCenter)
         wid = self.create_pair(grp_bx, 'OrbitAcqRate')
         fbl.addRow(lbl, wid)
-        if self.isring:
-            lbl = QLabel('Kicks [Hz]', grp_bx)
-            lbl.setAlignment(Qt.AlignCenter)
-            wid = self.create_pair(grp_bx, 'KickAcqRate')
-            fbl.addRow(lbl, wid)
+        lbl = QLabel('Kicks [Hz]', grp_bx)
+        lbl.setAlignment(Qt.AlignCenter)
+        wid = self.create_pair(grp_bx, 'KickAcqRate')
+        fbl.addRow(lbl, wid)
 
         vbl = QVBoxLayout()
         if self.isring:
@@ -117,10 +114,11 @@ class AcqControlWidget(BaseWidget):
         lbl.setAlignment(Qt.AlignCenter)
         wid = self.create_pair_sel(grp_bx, 'OrbitTrigAcqTrigger')
         fbl.addRow(lbl, wid)
-        lbl = QLabel('Number of Shots', grp_bx)
-        lbl.setAlignment(Qt.AlignCenter)
-        wid = self.create_pair(grp_bx, 'OrbitTrigNrShots')
-        fbl.addRow(lbl, wid)
+        if self.isring:
+            lbl = QLabel('Number of Shots', grp_bx)
+            lbl.setAlignment(Qt.AlignCenter)
+            wid = self.create_pair(grp_bx, 'OrbitTrigNrShots')
+            fbl.addRow(lbl, wid)
         lbl = QLabel('Number of SamplesPre', grp_bx)
         lbl.setAlignment(Qt.AlignCenter)
         wid = self.create_pair(grp_bx, 'OrbitTrigNrSamplesPre')
@@ -144,15 +142,15 @@ class AcqControlWidget(BaseWidget):
         pdm_btn1 = PyDMPushButton(
             grp_bx, label='Start',
             init_channel=self.prefix+'OrbitTrigAcqCtrl-Sel',
-            pressValue=OrbitCorrDev.OrbitAcqCtrl.Start)
+            pressValue=self._csorb.OrbitAcqCtrl.Start)
         pdm_btn2 = PyDMPushButton(
             grp_bx, label='Stop',
             init_channel=self.prefix+'OrbitTrigAcqCtrl-Sel',
-            pressValue=OrbitCorrDev.OrbitAcqCtrl.Stop)
+            pressValue=self._csorb.OrbitAcqCtrl.Stop)
         pdm_btn3 = PyDMPushButton(
             grp_bx, label='Abort',
             init_channel=self.prefix+'OrbitTrigAcqCtrl-Sel',
-            pressValue=OrbitCorrDev.OrbitAcqCtrl.Abort)
+            pressValue=self._csorb.OrbitAcqCtrl.Abort)
         pdmlbl = PyDMLabel(
             grp_bx, init_channel=self.prefix+'OrbitTrigAcqCtrl-Sts')
         pdmlbl.setAlignment(Qt.AlignCenter)

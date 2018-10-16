@@ -1,11 +1,11 @@
 """Control the Correctors Graphic Displnay."""
 
-from pyqtgraph import mkPen, InfiniteLine
+from pyqtgraph import mkPen
 from qtpy.QtWidgets import QCheckBox, \
     QVBoxLayout, QHBoxLayout, QGroupBox
 from qtpy.QtGui import QColor
 from siriushla.widgets import SiriusConnectionSignal
-from siriushla.as_ap_sofb.graphics.base import BaseWidget
+from siriushla.as_ap_sofb.graphics.base import BaseWidget, InfLine
 
 
 class CorrectorsWidget(BaseWidget):
@@ -90,18 +90,6 @@ class CorrectorsWidget(BaseWidget):
                     'getvalue': chans[3].getvalue}},
             }
         return chans, ctrls
-
-
-class InfLine(InfiniteLine):
-
-    def __init__(self, conv=1, pos=None, **kwargs):
-        if pos is not None:
-            pos *= conv
-        super().__init__(pos=pos, **kwargs)
-        self.conv = conv
-
-    def setValue(self, value):
-        super().setValue(value*self.conv)
 
 
 def _main(prefix):

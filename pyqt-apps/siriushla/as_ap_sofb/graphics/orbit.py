@@ -24,9 +24,9 @@ class OrbitWidget(BaseWidget):
         names = ['Line {0:d}'.format(i+1) for i in range(2)]
         super().__init__(parent, prefix, ctrls, names, True, acc)
 
-        txt1, txt2 = 'SinglePass', 'Zero'
-        if acc in ('SI', 'BO'):
-            txt1, txt2 = 'Online Orbit', 'Reference Orbit'
+        txt1, txt2 = 'SinglePass', 'Reference Orbit'
+        if self.isring:
+            txt1 = 'Online Orbit'
 
         self.updater[0].some_changed('val', txt1)
         self.updater[0].some_changed('ref', txt2)
@@ -45,7 +45,7 @@ class OrbitWidget(BaseWidget):
         self.hbl.addWidget(grpbx)
         self.hbl.addStretch(1)
 
-        if self.acc in ('SI', 'BO'):
+        if self.isring:
             btn = QPushButton('Correctors', grpbx)
             vbl.addWidget(btn)
             Window = create_window_from_widget(
@@ -80,19 +80,22 @@ class OrbitWidget(BaseWidget):
         return chans
 
     @staticmethod
-    def get_default_ctrls(prefix):
+    def get_default_ctrls(prefix, isring=True):
         pvs = [
-            'OrbitSmoothX-Mon', 'OrbitSmoothY-Mon',
             'OrbitSmoothSinglePassX-Mon', 'OrbitSmoothSinglePassY-Mon',
-            'OrbitMultiTurnX-Mon', 'OrbitMultiTurnY-Mon',
             'OrbitOfflineX-RB', 'OrbitOfflineY-RB',
             'OrbitRefX-RB', 'OrbitRefY-RB',
             'BPMOffsetsX-Mon', 'BPMOffsetsY-Mon']
+        orbs = [
+            'SinglePass', 'Offline Orbit', 'Reference Orbit', 'BPMs Offset']
+        if isring:
+            pvs.extend([
+                'OrbitSmoothX-Mon', 'OrbitSmoothY-Mon',
+                'OrbitMultiTurnX-Mon', 'OrbitMultiTurnY-Mon'])
+            orbs.extend(['Online Orbit', 'MultiTurn Orbit'])
+
         chans = [SiriusConnectionSignal(prefix+pv) for pv in pvs]
         ctrls = dict()
-        orbs = [
-            'Online Orbit', 'SinglePass', 'MultiTurn Orbit',
-            'Offline Orbit', 'Reference Orbit', 'BPMs Offset']
         pvs = iter(chans)
         for orb in orbs:
             pvi = next(pvs)
