@@ -10,7 +10,7 @@ from qtpy.uic import loadUi
 from qtpy.QtCore import Slot, Qt, QPoint
 from qtpy.QtWidgets import QVBoxLayout, QHBoxLayout, QGridLayout, \
                             QSpacerItem, QFileDialog, QAction, QMenuBar, \
-                            QWidget, QLabel, QPushButton, \
+                            QWidget, QLabel, QPushButton, QMenu, \
                             QButtonGroup, QCheckBox, QSizePolicy as QSzPlcy
 from qtpy.QtGui import QPixmap
 from qtpy.QtSvg import QSvgWidget
@@ -32,6 +32,8 @@ from siriushla.as_pm_control.PulsedMagnetDetailWindow import (
     PulsedMagnetDetailWindow)
 from siriushla.as_pm_control.PulsedMagnetControlWindow import (
     PulsedMagnetControlWindow)
+from siriushla.tl_ap_control.ICT_monitor import ICTMonitoring
+from siriushla.tl_ap_control.Slit_monitor import SlitMonitoring
 
 
 class TLAPControlWindow(SiriusMainWindow):
@@ -92,7 +94,7 @@ class TLAPControlWindow(SiriusMainWindow):
         appsMenu.addAction(openBPMApp)
         if self._tl == 'tb':
             openICTsApp = QAction("ICTs", self)
-            _hlautil.connect_window(openICTsApp, ShowICTHstr, parent=self,
+            _hlautil.connect_window(openICTsApp, ICTMonitoring, parent=self,
                                     tl=self._tl, prefix=self.prefix)
             appsMenu.addAction(openICTsApp)
         self.setMenuBar(menubar)
@@ -112,22 +114,10 @@ class TLAPControlWindow(SiriusMainWindow):
 
         # Connect Slits View widget
         if self._tl == 'tb':
-            self._SlitH_Center = 0
-            self._SlitH_Width = 0
-            self._hslitcenterpv = _epics.PV(
-                self.prefix + 'TB-01:DI-SlitH:Center-RB',
-                callback=self._setSlitHPos)
-            self._hslitwidthpv = _epics.PV(
-                self.prefix + 'TB-01:DI-SlitH:Width-RB',
-                callback=self._setSlitHPos)
-            self._SlitV_Center = 0
-            self._SlitV_Width = 0
-            self._vslitcenterpv = _epics.PV(
-                self.prefix + 'TB-01:DI-SlitV:Center-RB',
-                callback=self._setSlitVPos)
-            self._vslitwidthpv = _epics.PV(
-                self.prefix + 'TB-01:DI-SlitV:Width-RB',
-                callback=self._setSlitVPos)
+            self.centralwidget.widget_SlitH.layout().addWidget(
+                SlitMonitoring('H', self, self.prefix))
+            self.centralwidget.widget_SlitV.layout().addWidget(
+                SlitMonitoring('V', self, self.prefix))
 
         # Create Scrn+Correctors Panel
         hlay_headerline = QHBoxLayout()
@@ -503,53 +493,6 @@ class TLAPControlWindow(SiriusMainWindow):
             widget=self.scrnview_widgets_dict[self._currScrn],
             propagate=False)
 
-    def _setSlitHPos(self, pvname, value, **kws):
-        """Callback to set SlitHs Widget positions."""
-        if 'Center' in pvname:
-            self._SlitH_Center = value  # considering mm
-        elif 'Width' in pvname:
-            self._SlitH_Width = value
-
-        rect_width = 110
-        circle_diameter = 140
-        widget_width = 300
-        vacuum_chamber_diameter = 36  # mm
-
-        xc = (circle_diameter*self._SlitH_Center/vacuum_chamber_diameter
-              + widget_width/2)
-        xw = circle_diameter*self._SlitH_Width/vacuum_chamber_diameter
-
-        left = round(xc - rect_width - xw/2)
-        right = round(xc + xw/2)
-
-        self.centralwidget.PyDMDrawingRectangle_SlitHLeft.move(
-            QPoint(left, (widget_width/2 - rect_width)))
-        self.centralwidget.PyDMDrawingRectangle_SlitHRight.move(
-            QPoint(right, (widget_width/2 - rect_width)))
-
-    def _setSlitVPos(self, pvname, value, **kws):
-        """Callback to set SlitVs Widget positions."""
-        if 'Center' in pvname:
-            self._SlitV_Center = value  # considering mm
-        elif 'Width' in pvname:
-            self._SlitV_Width = value
-
-        rect_width = 110
-        circle_diameter = 140
-        widget_width = 300
-        vacuum_chamber_diameter = 36  # mm
-
-        xc = (circle_diameter*self._SlitV_Center/vacuum_chamber_diameter
-              + widget_width/2)
-        xw = circle_diameter*self._SlitV_Width/vacuum_chamber_diameter
-
-        up = round(xc - rect_width - xw/2)
-        down = round(xc + xw/2)
-
-        self.centralwidget.PyDMDrawingRectangle_SlitVUp.move(
-            QPoint((widget_width/2 - rect_width), up))
-        self.centralwidget.PyDMDrawingRectangle_SlitVDown.move(
-            QPoint((widget_width/2 - rect_width), down))
 
 
 class ShowLatticeAndTwiss(SiriusMainWindow):
@@ -586,56 +529,6 @@ class ShowLatticeAndTwiss(SiriusMainWindow):
         self.centralwidget.layout().setContentsMargins(0, 0, 0, 0)
         self.setCentralWidget(self.centralwidget)
         self.setGeometry(10, 10, 2000, 500)
-
-
-class ShowICTHstr(SiriusMainWindow):
-    """Class to create ICTs History Monitor Window."""
-
-    def __init__(self, parent=None, tl=None, prefix=None):
-        """Create graphs."""
-        super(ShowICTHstr, self).__init__(parent)
-        tmp_file = _substitute_in_file(
-            '/home/fac_files/lnls-sirius/hla/pyqt-apps/siriushla'
-            '/tl_ap_control/ui_tl_ap_ictmon.ui', {'TL': tl.upper()})
-        self.centralwidget = loadUi(tmp_file)
-        self.setCentralWidget(self.centralwidget)
-        if tl == 'tb':
-            ICT1_channel = 'ca://' + prefix + 'TB-02:DI-ICT'
-            ICT2_channel = 'ca://' + prefix + 'TB-04:DI-ICT'
-        elif tl == 'ts':
-            ICT1_channel = 'ca://' + prefix + 'TS-01:DI-ICT'
-            ICT2_channel = 'ca://' + prefix + 'TS-04:DI-ICT'
-        self.centralwidget.PyDMTimePlot_Charge.addYChannel(
-            y_channel=ICT1_channel + ':Charge-Mon',
-            name='Charge ICT1', color='red', lineWidth=2)
-        self.centralwidget.PyDMTimePlot_Charge.addYChannel(
-            y_channel=ICT2_channel + ':Charge-Mon',
-            name='Charge ICT2', color='blue', lineWidth=2)
-        self.centralwidget.PyDMWaveformPlot_ChargeHstr.addChannel(
-            y_channel=ICT1_channel + ':ChargeHstr-Mon',
-            name='Charge History ICT1', color='red', lineWidth=2)
-        self.centralwidget.PyDMWaveformPlot_ChargeHstr.addChannel(
-            y_channel=ICT2_channel + ':ChargeHstr-Mon',
-            name='Charge History ICT2', color='blue', lineWidth=2)
-
-        self.centralwidget.checkBox.stateChanged.connect(
-            self._setICT1CurveVisibility)
-        self.centralwidget.checkBox_2.stateChanged.connect(
-            self._setICT2CurveVisibility)
-
-    @Slot(int)
-    def _setICT1CurveVisibility(self, value):
-        """Set curves visibility."""
-        self.centralwidget.PyDMTimePlot_Charge._curves[0].setVisible(value)
-        self.centralwidget.PyDMWaveformPlot_ChargeHstr._curves[0].setVisible(
-            value)
-
-    @Slot(int)
-    def _setICT2CurveVisibility(self, value):
-        """Set curves visibility."""
-        self.centralwidget.PyDMTimePlot_Charge._curves[1].setVisible(value)
-        self.centralwidget.PyDMWaveformPlot_ChargeHstr._curves[1].setVisible(
-            value)
 
 
 class ShowImage(SiriusMainWindow):
