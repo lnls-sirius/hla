@@ -1,5 +1,6 @@
 """SiriusScrnView widget."""
 
+import sys
 import time
 from threading import Thread
 import numpy as np
@@ -12,9 +13,10 @@ from pydm.widgets import PyDMImageView, PyDMLabel, PyDMSpinbox, \
                             PyDMPushButton, PyDMEnumComboBox
 from pydm.widgets.channel import PyDMChannel
 from siriuspy.envars import vaca_prefix as _vaca_prefix
+from siriushla import util
+from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import PyDMStateButton, SiriusLedState
 from siriushla.widgets.windows import SiriusMainWindow
-from siriushla import util
 
 
 class _SiriusImageView(PyDMImageView):
@@ -1125,3 +1127,33 @@ class _ScrnSettingsDetails(SiriusMainWindow):
         self.centralwidget.setLayout(flay)
         flay.setLabelAlignment(Qt.AlignRight)
 
+
+if __name__ == '__main__':
+    """Run test."""
+    app = SiriusApplication()
+    util.set_style(app)
+
+    centralwidget = QWidget()
+    scrn_view = SiriusScrnView(prefix=_vaca_prefix, device='TB-01:DI-Scrn-1')
+    cb_scrntype = PyDMEnumComboBox(
+        parent=centralwidget,
+        init_channel='ca://'+_vaca_prefix+'TB-01:DI-Scrn-1:ScrnType-Sel')
+    cb_scrntype.currentIndexChanged.connect(
+        scrn_view.updateCalibrationGridFlag)
+
+    lay = QGridLayout()
+    lay.addWidget(QLabel('<h3>SiriusScrnView Test</h3>', centralwidget,
+                         alignment=Qt.AlignCenter), 0, 0, 1, 2)
+    lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 1, 0)
+    lay.addWidget(QLabel('Select Screen Type: ', centralwidget,
+                         alignment=Qt.AlignRight), 2, 0)
+    lay.addWidget(cb_scrntype, 2, 1)
+    lay.addItem(QSpacerItem(20, 40, QSzPlcy.Fixed, QSzPlcy.Fixed), 3, 0)
+    lay.addWidget(scrn_view, 4, 0, 1, 2)
+    centralwidget.setLayout(lay)
+
+    window = SiriusMainWindow()
+    window.setWindowTitle('SiriusScrnView Test')
+    window.setCentralWidget(centralwidget)
+    window.show()
+    sys.exit(app.exec_())
