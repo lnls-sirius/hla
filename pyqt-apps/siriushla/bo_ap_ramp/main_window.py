@@ -1,7 +1,7 @@
 """Booster Ramp Main Window."""
 
 import sys
-from qtpy.QtCore import Slot, Signal
+from qtpy.QtCore import Slot, Signal, Qt
 from qtpy.QtGui import QKeySequence
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QUndoStack
 from siriushla.sirius_application import SiriusApplication
@@ -15,7 +15,7 @@ from siriushla.bo_ap_ramp.status_and_commands import StatusAndCommands
 from siriushla.bo_ap_ramp.settings import Settings
 from siriushla.bo_ap_ramp.config_params import ConfigParameters
 from siriushla.bo_ap_ramp.optics_adjust import OpticsAdjust
-from siriushla.bo_ap_ramp.statistics import Statistics
+from siriushla.bo_ap_ramp.statistics import Diagnosis
 from siriushla.bo_ap_ramp.auxiliar_classes import MessageBox as _MessageBox
 
 
@@ -44,9 +44,10 @@ class RampMain(SiriusMainWindow):
         self.my_layout = QGridLayout(cw)
         self.my_layout.setHorizontalSpacing(20)
         self.my_layout.setVerticalSpacing(20)
-        lab = QLabel('<h3>Booster Energy Ramping</h3>', cw)
+        lab = QLabel('<h3>Booster Energy Ramping</h3>', cw,
+                     alignment=Qt.AlignRight)
         lab.setStyleSheet('background-color: qlineargradient('
-                          'spread:pad, x1:0, y1:0.0227273, x2:1, y2:0,'
+                          'spread:pad, x1:1, y1:0.0227273, x2:0, y2:0,'
                           'stop:0 rgba(173, 190, 207, 255),'
                           'stop:1 rgba(213, 213, 213, 255))')
         self.my_layout.addWidget(lab, 0, 0, 1, 2)
@@ -65,16 +66,16 @@ class RampMain(SiriusMainWindow):
         self.status_and_commands = StatusAndCommands(self, self.prefix)
         self.my_layout.addWidget(self.status_and_commands, 1, 1, 2, 1)
 
-        self.statistics = Statistics(self, self.prefix, self.ramp_config)
-        self.my_layout.addWidget(self.statistics, 3, 1, 5, 1)
+        self.diagnosis = Diagnosis(self, self.prefix, self.ramp_config)
+        self.my_layout.addWidget(self.diagnosis, 3, 1, 5, 1)
 
     def _connSignals(self):
         self.settings.newConfigNameSignal.connect(self._receiveNewConfigName)
         self.settings.loadSignal.connect(self._emitLoadSignal)
         self.settings.opticsSettingsSignal.connect(
             self.optics_adjust.handleUpdateSettings)
-        self.settings.statsSettingsSignal.connect(
-            self.statistics.handleUpdateSettings)
+        self.settings.diagSettingsSignal.connect(
+            self.diagnosis.handleUpdateSettings)
         self.settings.plotUnitSignal.connect(
             self.config_parameters.getPlotUnits)
 

@@ -1,4 +1,4 @@
-"""Booster Ramp Control HLA: Ramp Statistics Module."""
+"""Booster Ramp Control HLA: Ramp Diagnosis Module."""
 
 import numpy as np
 from qtpy.QtCore import Qt
@@ -9,12 +9,12 @@ from pydm.widgets import PyDMWaveformPlot
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 
 
-class Statistics(QGroupBox):
+class Diagnosis(QGroupBox):
     """Widget to ramp status monitoring."""
 
     def __init__(self, parent=None, prefix='', ramp_config=None):
         """Initialize object."""
-        super().__init__('Statistics', parent)
+        super().__init__('Ramp Diagnosis', parent)
         self.prefix = prefix
         self.ramp_config = ramp_config
         self._wavEff = []
@@ -25,16 +25,16 @@ class Statistics(QGroupBox):
         self._setupUi()
 
     def _setupUi(self):
-        l_boocurr = QLabel('<h4>Booster Current (mA)</h4>', self,
+        l_boocurr = QLabel('<h4>Booster Current [mA]</h4>', self,
                            alignment=Qt.AlignCenter)
-        l_injcurr = QLabel('Injected:', self, alignment=Qt.AlignRight)
+        l_injcurr = QLabel('Injected: ', self, alignment=Qt.AlignRight)
         self.label_injcurr = QLabel(self)
-        l_ejecurr = QLabel('Ejected:', self, alignment=Qt.AlignRight)
+        l_ejecurr = QLabel('Ejected: ', self, alignment=Qt.AlignRight)
         self.label_ejecurr = QLabel(self)
 
         self.graph_boocurr = PyDMWaveformPlot(
             parent=self, init_y_channels=[
-                'ca://'+_vaca_prefix+'BO-35D:DI-DCCT:CurrHstr-Mon'])
+                'ca://'+_vaca_prefix+'BO-35D:DI-DCCT:RawReadings-Mon'])
         self.graph_boocurr.autoRangeX = True
         self.graph_boocurr.autoRangeY = True
         self.graph_boocurr.backgroundColor = QColor(255, 255, 255)
@@ -49,7 +49,7 @@ class Statistics(QGroupBox):
         self.curveCurrHstr = self.graph_boocurr.curveAtIndex(0)
         self.curveCurrHstr.data_changed.connect(self._updateRampEffGraph)
 
-        l_rampeff = QLabel('<h4>Ramp Efficiency (%):</h4>', self,
+        l_rampeff = QLabel('<h4>Ramp Efficiency [%]: </h4>', self,
                            alignment=Qt.AlignRight)
         self.label_rampeff = QLabel(self)
 
@@ -103,7 +103,6 @@ class Statistics(QGroupBox):
     def _updateRampEffGraph(self):
         if self.curveCurrHstr.yData is not None:
             curr_hstr = self.curveCurrHstr.yData
-            # TODO: on settings: choose current waveform indices to calc eff
             inj_curr = curr_hstr[self._injcurr_idx]
             eje_curr = curr_hstr[self._ejecurr_idx]
             self._wavEff.append(eje_curr/inj_curr)

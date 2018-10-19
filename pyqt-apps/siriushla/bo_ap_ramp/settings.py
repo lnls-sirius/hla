@@ -16,7 +16,7 @@ from siriushla.bo_ap_ramp.auxiliar_classes import \
     LoadRampConfig as _LoadRampConfig, \
     NewRampConfigGetName as _NewRampConfigGetName, \
     OpticsAdjustSettings as _OpticsAdjustSettings, \
-    StatisticSettings as _StatisticSettings
+    DiagnosisSettings as _DiagnosisSettings
 
 
 class Settings(QMenuBar):
@@ -25,7 +25,7 @@ class Settings(QMenuBar):
     newConfigNameSignal = Signal(str)
     loadSignal = Signal()
     opticsSettingsSignal = Signal(list)
-    statsSettingsSignal = Signal(list)
+    diagSettingsSignal = Signal(list)
     plotUnitSignal = Signal(str)
 
     def __init__(self, parent=None, prefix='', ramp_config=None):
@@ -83,11 +83,11 @@ class Settings(QMenuBar):
             self._showOpticsSettingsPopup)
         self.optics_menu.addAction(self.act_optics_settings)
 
-        self.stats_menu = self.addMenu('Statistics')
-        self.act_stats_settings = QAction('Settings', self)
-        self.act_stats_settings.triggered.connect(
-            self._showStatsSettingsPopup)
-        self.stats_menu.addAction(self.act_stats_settings)
+        self.diag_menu = self.addMenu('Ramp Diagnosis')
+        self.act_diag_settings = QAction('Settings', self)
+        self.act_diag_settings.triggered.connect(
+            self._showDiagSettingsPopup)
+        self.diag_menu.addAction(self.act_diag_settings)
 
         self.open_menu = self.addMenu('Open...')
         self.act_cycle = QAction('PS Cycle')
@@ -126,12 +126,12 @@ class Settings(QMenuBar):
             self._emitOpticsSettings)
         self._opticsSettingsPopup.open()
 
-    def _showStatsSettingsPopup(self):
-        self._statsSettingsPopup = _StatisticSettings(
+    def _showDiagSettingsPopup(self):
+        self._diagSettingsPopup = _DiagnosisSettings(
             self, self.prefix, self._injcurr_idx, self._ejecurr_idx)
-        self._statsSettingsPopup.updateSettings.connect(
-            self._emitStatsSettings)
-        self._statsSettingsPopup.open()
+        self._diagSettingsPopup.updateSettings.connect(
+            self._emitDiagSettings)
+        self._diagSettingsPopup.open()
 
     def showSaveAsPopup(self):
         """Show a popup to get a new name to save config."""
@@ -168,10 +168,10 @@ class Settings(QMenuBar):
         self._chromcorr_name = settings[1]
         self.opticsSettingsSignal.emit(settings)
 
-    def _emitStatsSettings(self, settings):
+    def _emitDiagSettings(self, settings):
         self._injcurr_idx = settings[0]
         self._ejecurr_idx = settings[1]
-        self.statsSettingsSignal.emit(settings)
+        self.diagSettingsSignal.emit(settings)
 
     def _emitPlotUnits(self):
         sender_text = self.sender().text()
