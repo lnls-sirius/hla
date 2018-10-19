@@ -318,54 +318,88 @@ class TLAPControlWindow(SiriusMainWindow):
         corr_details.setLayout(QGridLayout())
         corr_details.layout().setContentsMargins(0, 0, 0, 0)
 
-        led = SiriusLedState(
-            self, 'ca://' + self.prefix + corr + ':PwrState-Sts')
-        led.setObjectName(
-            'SiriusLed_' + name + '_PwrState_Scrn' + str(scrn))
-        led.setFixedSize(40, 40)
-        corr_details.layout().addWidget(led, 1, 1)
+        if corr.split('-')[0] == 'LA':  # Linac PVs
+            led = SiriusLedState(
+                parent=self,
+                init_channel='ca://'+self.prefix+corr+':setpwm')
+            led.setObjectName(
+                'SiriusLed_Linac'+corr.split('-')[-1]+'_setpwm_Scrn'+str(scrn))
+            led.setFixedSize(40, 40)
+            corr_details.layout().addWidget(led, 1, 1)
 
-        pushbutton = QPushButton(corr, self)
-        pushbutton.setObjectName(
-            'pushButton_' + name + 'App_Scrn' + str(scrn))
-        if corr.split('-')[0] == 'LI':
-            pass
-            # TODO
-        elif corr.split('-')[1].split(':')[1] == 'PM':
-            _hlautil.connect_window(pushbutton,
-                                    PulsedMagnetDetailWindow,
-                                    parent=self, maname=corr)
+            label_corr = QLabel(corr, self, alignment=Qt.AlignCenter)
+            label_corr.setObjectName('label_'+name+'App_Scrn'+str(scrn))
+            label_corr.setFixedSize(300, 40)
+            corr_details.layout().addWidget(label_corr, 1, 2)
+
+            pydm_sp_current = PyDMLinEditScrollbar(
+                parent=self, channel='ca://'+self.prefix+corr+':seti')
+            pydm_sp_current.setObjectName(
+                'LeditScroll_Linac'+corr.split('-')[-1]+'_seti_Scrn'+str(scrn))
+            pydm_sp_current.setMaximumWidth(220)
+            pydm_sp_current.layout.setContentsMargins(0, 0, 0, 0)
+            pydm_sp_current.sp_lineedit.setFixedSize(220, 40)
+            pydm_sp_current.sp_lineedit.setAlignment(Qt.AlignCenter)
+            pydm_sp_current.sp_lineedit.setSizePolicy(
+                QSzPlcy.Minimum, QSzPlcy.Minimum)
+            pydm_sp_current.sp_scrollbar.limitsFromPV = True
+            pydm_sp_current.sp_scrollbar.setSizePolicy(
+                QSzPlcy.Minimum, QSzPlcy.Maximum)
+            corr_details.layout().addWidget(pydm_sp_current, 1, 3, 2, 1)
+
+            pydmlabel_current = PyDMLabel(
+                parent=self, init_channel='ca://'+self.prefix+corr+':rdi')
+            pydmlabel_current.unit_changed('A')
+            pydmlabel_current.showUnits = True
+            pydmlabel_current.setObjectName(
+                'PyDMLabel_Linac'+corr.split('-')[-1]+'_rdi_Scrn'+str(scrn))
+            pydmlabel_current.setFixedSize(180, 40)
+            pydmlabel_current.precFromPV = True
+            pydmlabel_current.setAlignment(Qt.AlignCenter)
+            corr_details.layout().addWidget(pydmlabel_current, 1, 4)
+
         else:
-            _hlautil.connect_window(pushbutton,
-                                    PSDetailWindow,
-                                    parent=self, psname=corr)
-        pushbutton.setFixedSize(300, 40)
-        corr_details.layout().addWidget(pushbutton, 1, 2)
+            led = SiriusLedState(
+                parent=self,
+                init_channel='ca://'+self.prefix+corr+':PwrState-Sts')
+            led.setObjectName('SiriusLed_'+name+'_PwrState_Scrn'+str(scrn))
+            led.setFixedSize(40, 40)
+            corr_details.layout().addWidget(led, 1, 1)
 
-        pydm_sp_kick = PyDMLinEditScrollbar(
-            parent=self,
-            channel='ca://' + self.prefix + corr + ':Kick-SP')
-        pydm_sp_kick.setObjectName(
-            'PyDMLineEdit' + name + '_Kick_SP_Scrn' + str(scrn))
-        pydm_sp_kick.setMaximumWidth(220)
-        pydm_sp_kick.layout.setContentsMargins(0, 0, 0, 0)
-        pydm_sp_kick.sp_lineedit.setFixedSize(220, 40)
-        pydm_sp_kick.sp_lineedit.setAlignment(Qt.AlignCenter)
-        pydm_sp_kick.sp_lineedit.setSizePolicy(
-            QSzPlcy.Minimum, QSzPlcy.Minimum)
-        pydm_sp_kick.sp_scrollbar.limitsFromPV = True
-        pydm_sp_kick.sp_scrollbar.setSizePolicy(
-            QSzPlcy.Minimum, QSzPlcy.Maximum)
-        corr_details.layout().addWidget(pydm_sp_kick, 1, 3, 2, 1)
+            pushbutton = QPushButton(corr, self)
+            pushbutton.setObjectName('pushButton_'+name+'App_Scrn'+str(scrn))
+            if corr.split('-')[1].split(':')[1] == 'PM':
+                _hlautil.connect_window(pushbutton, PulsedMagnetDetailWindow,
+                                        parent=self, maname=corr)
+            else:
+                _hlautil.connect_window(pushbutton, PSDetailWindow,
+                                        parent=self, psname=corr)
+            pushbutton.setFixedSize(300, 40)
+            corr_details.layout().addWidget(pushbutton, 1, 2)
 
-        pydmlabel_kick = PyDMLabel(
-            self, 'ca://' + self.prefix + corr + ':Kick-Mon')
-        pydmlabel_kick.setObjectName(
-            'PyDMLabel_' + name + '_Kick_Mon_Scrn' + str(scrn))
-        pydmlabel_kick.setFixedSize(180, 40)
-        pydmlabel_kick.precFromPV = True
-        pydmlabel_kick.setAlignment(Qt.AlignCenter)
-        corr_details.layout().addWidget(pydmlabel_kick, 1, 4)
+            pydm_sp_kick = PyDMLinEditScrollbar(
+                parent=self, channel='ca://'+self.prefix+corr+':Kick-SP')
+            pydm_sp_kick.setObjectName(
+                'PyDMLineEdit' + name + '_Kick_SP_Scrn' + str(scrn))
+            pydm_sp_kick.setMaximumWidth(220)
+            pydm_sp_kick.layout.setContentsMargins(0, 0, 0, 0)
+            pydm_sp_kick.sp_lineedit.setFixedSize(220, 40)
+            pydm_sp_kick.sp_lineedit.setAlignment(Qt.AlignCenter)
+            pydm_sp_kick.sp_lineedit.setSizePolicy(
+                QSzPlcy.Minimum, QSzPlcy.Minimum)
+            pydm_sp_kick.sp_scrollbar.limitsFromPV = True
+            pydm_sp_kick.sp_scrollbar.setSizePolicy(
+                QSzPlcy.Minimum, QSzPlcy.Maximum)
+            corr_details.layout().addWidget(pydm_sp_kick, 1, 3, 2, 1)
+
+            pydmlabel_kick = PyDMLabel(
+                parent=self, init_channel='ca://'+self.prefix+corr+':Kick-Mon')
+            pydmlabel_kick.setObjectName(
+                'PyDMLabel_' + name + '_Kick_Mon_Scrn' + str(scrn))
+            pydmlabel_kick.setFixedSize(180, 40)
+            pydmlabel_kick.precFromPV = True
+            pydmlabel_kick.setAlignment(Qt.AlignCenter)
+            corr_details.layout().addWidget(pydmlabel_kick, 1, 4)
         corr_details.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Fixed)
         return corr_details
 
@@ -375,7 +409,7 @@ class TLAPControlWindow(SiriusMainWindow):
             UI_FILE = ('ui_tb_ap_control.ui')
             SVG_FILE = ('TB.svg')
             correctors_list = [
-                [['LI-01:MA-CH-7'], 'LI-01:MA-CV-7', 0, 'TB-01:DI-Scrn-1'],
+                [['LA-CN:H1LCPS-10'], 'LA-CN:H1LCPS-9', 0, 'TB-01:DI-Scrn-1'],
                 [['TB-01:MA-CH-1'], 'TB-01:MA-CV-1', 1, 'TB-01:DI-Scrn-2'],
                 [['TB-01:MA-CH-2'], 'TB-01:MA-CV-2', 2, 'TB-02:DI-Scrn-1'],
                 [['TB-02:MA-CH-1'], 'TB-02:MA-CV-1', 3, 'TB-02:DI-Scrn-2'],
