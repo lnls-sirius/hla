@@ -183,35 +183,6 @@ class TLAPControlWindow(SiriusMainWindow):
             correctors_gridlayout.addWidget(widget_scrncorr, line, 1)
             line += 1
 
-        hlay_buttonsline = QHBoxLayout()
-        hlay_buttonsline.addItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
-        pushbutton_scrnsdohoming = QPushButton('All Screens Do Homing', self)
-        pushbutton_scrnsdohoming.clicked.connect(self._allScrnsDoHoming)
-        pushbutton_scrnsdohoming.setMinimumSize(780, 80)
-        hlay_buttonsline.addWidget(pushbutton_scrnsdohoming)
-        hlay_buttonsline.addItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
-        pushbutton_chsturnon = QPushButton('All CHs Turn On', self)
-        pushbutton_chsturnon.clicked.connect(self._allCHsTurnOn)
-        pushbutton_chsturnon.setMinimumSize(740, 80)
-        hlay_buttonsline.addWidget(pushbutton_chsturnon)
-        hlay_buttonsline.addItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
-        pushbutton_cvsturnon = QPushButton('All CVs Turn On', self)
-        pushbutton_cvsturnon.clicked.connect(self._allCVsTurnOn)
-        pushbutton_cvsturnon.setMinimumSize(740, 80)
-        hlay_buttonsline.addWidget(pushbutton_cvsturnon)
-        hlay_buttonsline.addItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
-        buttonsline = QWidget()
-        buttonsline.setObjectName('buttonsline')
-        buttonsline.setLayout(hlay_buttonsline)
-        buttonsline.setMaximumHeight(98)
-        buttonsline.layout().setContentsMargins(0, 9, 0, 9)
-        buttonsline.setStyleSheet('#buttonsline {border-top: 2px solid gray;}')
-        correctors_gridlayout.addWidget(buttonsline, 8, 1)
-
         self.centralwidget.groupBox_allcorrPanel.setLayout(
             correctors_gridlayout)
         self.centralwidget.groupBox_allcorrPanel.setContentsMargins(0, 0, 0, 0)
@@ -232,6 +203,10 @@ class TLAPControlWindow(SiriusMainWindow):
         pydmcombobox_scrntype.currentIndexChanged.connect(
             self.scrnview_widgets_dict[self._currScrn].
             updateCalibrationGridFlag)
+
+        # Create an action menu
+        self.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.customContextMenuRequested.connect(self._show_context_menu)
 
     def _allCHsTurnOn(self):
         for ch_group, _, _, _ in self._corr_devicenames_list:
@@ -493,6 +468,20 @@ class TLAPControlWindow(SiriusMainWindow):
             widget=self.scrnview_widgets_dict[self._currScrn],
             propagate=False)
 
+    @Slot(QPoint)
+    def _show_context_menu(self, point):
+        """Show a custom context menu."""
+        turn_CHs_on = QAction("Turn CHs On", self)
+        turn_CHs_on.triggered.connect(self._allCHsTurnOn)
+        turn_CVs_on = QAction("Turn CVs On", self)
+        turn_CVs_on.triggered.connect(self._allCVsTurnOn)
+        do_scrn_homing = QAction("Screens do Homing", self)
+        do_scrn_homing.triggered.connect(self._allScrnsDoHoming)
+        menu = QMenu("Actions", self)
+        menu.addAction(turn_CHs_on)
+        menu.addAction(turn_CVs_on)
+        menu.addAction(do_scrn_homing)
+        menu.popup(self.mapToGlobal(point))
 
 
 class ShowLatticeAndTwiss(SiriusMainWindow):
