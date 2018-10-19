@@ -105,16 +105,16 @@ class Settings(QMenuBar):
 
     def _showGetNewConfigNamePopup(self):
         self._newConfigFromTemplateGetNamePopup = _NewRampConfigGetName(
-            self, self.ramp_config, ramp.BoosterRamp, new_from_template=True)
-        self._newConfigFromTemplateGetNamePopup.newConfigNameSignal.connect(
+            self.ramp_config, 'bo_ramp', self, new_from_template=True)
+        self._newConfigFromTemplateGetNamePopup.configname.connect(
             self._emitConfigName)
         self._newConfigFromTemplateGetNamePopup.saveSignal.connect(
             self.showSaveAsPopup)
         self._newConfigFromTemplateGetNamePopup.open()
 
     def _showLoadExistingConfigPopup(self):
-        self._loadPopup = _LoadRampConfig(self, self.ramp_config)
-        self._loadPopup.newConfigNameSignal.connect(self._emitConfigName)
+        self._loadPopup = _LoadRampConfig(self.ramp_config, self)
+        self._loadPopup.configname.connect(self._emitConfigName)
         self._loadPopup.loadSignal.connect(self._emitLoadSignal)
         self._loadPopup.saveSignal.connect(self.showSaveAsPopup)
         self._loadPopup.open()
@@ -138,8 +138,8 @@ class Settings(QMenuBar):
         if self.ramp_config is None:
             return
         self._saveAsPopup = _NewRampConfigGetName(
-            self, self.ramp_config, ramp.BoosterRamp, new_from_template=False)
-        self._saveAsPopup.newConfigNameSignal.connect(
+            self.ramp_config, 'bo_ramp', self, new_from_template=False)
+        self._saveAsPopup.configname.connect(
             self._saveAndEmitConfigName)
         self._saveAsPopup.open()
 

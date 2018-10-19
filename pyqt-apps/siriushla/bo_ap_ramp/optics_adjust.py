@@ -289,18 +289,24 @@ class OpticsAdjust(QGroupBox):
             QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
 
         lay = QGridLayout()
-        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 0, 0)
+        lay.addItem(
+            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 0, 0)
         lay.addWidget(label, 1, 0, 1, 3)
         lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 2, 0)
         lay.addWidget(self.bt_load_sofb_kicks, 3, 0, 1, 3)
-        lay.addWidget(label_correctH, 4, 0)
-        lay.addWidget(self.sb_correctH, 4, 1)
-        lay.addWidget(labelH, 4, 2)
-        lay.addWidget(label_correctV, 5, 0)
-        lay.addWidget(self.sb_correctV, 5, 1)
-        lay.addWidget(labelV, 5, 2)
-        lay.addLayout(hlay_bt_apply, 6, 0, 1, 3)
-        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 7, 0)
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 4, 0)
+        lay.addWidget(label_correctH, 5, 0)
+        lay.addWidget(self.sb_correctH, 5, 1)
+        lay.addWidget(labelH, 5, 2)
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 6, 0)
+        lay.addWidget(label_correctV, 7, 0)
+        lay.addWidget(self.sb_correctV, 7, 1)
+        lay.addWidget(labelV, 7, 2)
+        lay.addItem(
+            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 8, 0)
+        lay.addLayout(hlay_bt_apply, 9, 0, 1, 3)
+        lay.addItem(
+            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 10, 0)
         return lay
 
     def _handleConfigIndexChanged(self):
@@ -382,10 +388,8 @@ class OpticsAdjust(QGroupBox):
         if self.norm_config is None:
             return
         self._saveAsPopup = _NewRampConfigGetName(
-            self, self.norm_config, ramp.BoosterNormalized,
-            new_from_template=False)
-        self._saveAsPopup.newConfigNameSignal.connect(
-            self._save)
+            self.norm_config, 'bo_normalized', self, new_from_template=False)
+        self._saveAsPopup.newConfigNameSignal.connect(self._save)
         self._saveAsPopup.open()
 
     def _calculate_deltaKL(self):
