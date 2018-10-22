@@ -414,7 +414,8 @@ class TLAPControlWindow(SiriusMainWindow):
                 [['TB-01:MA-CH-2'], 'TB-01:MA-CV-2', 2, 'TB-02:DI-Scrn-1'],
                 [['TB-02:MA-CH-1'], 'TB-02:MA-CV-1', 3, 'TB-02:DI-Scrn-2'],
                 [['TB-02:MA-CH-2'], 'TB-02:MA-CV-2', 4, 'TB-03:DI-Scrn'],
-                [['TB-03:MA-CH'], 'TB-04:MA-CV-1', 5, 'TB-04:DI-Scrn']]
+                [['TB-03:MA-CH', 'TB-04:PM-InjSept'],
+                 'TB-04:MA-CV-1', 5, 'TB-04:DI-Scrn']]
             scrn_list = ['TB-01:DI-Scrn-1', 'TB-01:DI-Scrn-2',
                          'TB-02:DI-Scrn-1', 'TB-02:DI-Scrn-2',
                          'TB-03:DI-Scrn', 'TB-04:DI-Scrn']
