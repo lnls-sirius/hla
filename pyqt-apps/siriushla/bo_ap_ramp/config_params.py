@@ -1,5 +1,6 @@
 """Booster Ramp Control HLA: Ramp Parameters Module."""
 
+import math as _math
 from qtpy.QtCore import Qt, Signal, Slot
 from qtpy.QtGui import QBrush, QColor
 from qtpy.QtWidgets import QGroupBox, QLabel, QWidget, QSpacerItem, \
@@ -936,15 +937,19 @@ class RFRamp(QWidget):
     def _setupGraph(self):
         self.graph = FigureCanvas(Figure())
         self.graph.setFixedHeight(500)
-        self.ax = self.graph.figure.subplots()
-        self.ax.grid()
-        self.ax.set_xlabel('t [ms]')
-        self.ax.set_ylabel('|Vgap| [kV]')
-        self.line1, = self.ax.plot([0], [0], '-b')
-        self.line2, = self.ax.plot([0], [0], '-g')
-        self.markers, = self.ax.plot([0], [0], '+r')
-        self.m_inj, = self.ax.plot([0], [0], 'or')
-        self.m_ej, = self.ax.plot([0], [0], 'or')
+        self.ax1 = self.graph.figure.subplots()
+        self.ax1.grid()
+        self.ax1.set_xlabel('t [ms]')
+        self.ax1.set_ylabel('|Vgap| [kV]')
+        self.line1, = self.ax1.plot([0], [0], '-b')
+        self.markers, = self.ax1.plot([0], [0], '+r')
+        self.m_inj, = self.ax1.plot([0], [0], 'or')
+        self.m_ej, = self.ax1.plot([0], [0], 'or')
+
+        self.ax2 = self.ax1.twinx()
+        self.ax2.grid()
+        self.ax2.set_ylabel('Φs [°]')
+        self.line2, = self.ax2.plot([0], [0], '-g')
 
         self.toolbar = NavigationToolbar(self.graph, self)
 
@@ -1170,6 +1175,18 @@ class RFRamp(QWidget):
         finally:
             self.updateTable()
 
+    def _calc_syncphase(self, t):
+        times = [t] if isinstance(t, (int, float)) else t
+        energies = self.ramp_config.ps_waveform_interp_energy(times)
+        U0_nom = 0.00452e3  # eV
+        E_nom = 0.150  # GeV
+        U0 = [U0_nom*(E/E_nom)**4 for E in energies]
+        V = 1e3 * self.ramp_config.rf_ramp_interp_voltages(times)  # V
+        ph = [_math.asin(U0[i]/(V[i])) for i in range(len(times))]
+        ph = [_math.degrees(phase) for phase in ph]
+        ph = ph[0] if isinstance(t, (int, float)) else ph
+        return ph
+
     def updateGraph(self):
         """Update and redraw graph."""
         if self.ramp_config is None:
@@ -1181,7 +1198,7 @@ class RFRamp(QWidget):
             xdata.append(i)
         xdata.append(490)
         self.line1.set_xdata(xdata)
-        self.ax.set_xlim(min(xdata), max(xdata))
+        self.ax1.set_xlim(min(xdata), max(xdata))
 
         ydata = list()
         ydata.append(self.ramp_config.rf_ramp_voltages[0])
@@ -1189,7 +1206,7 @@ class RFRamp(QWidget):
             ydata.append(i)
         ydata.append(self.ramp_config.rf_ramp_voltages[0])
         self.line1.set_ydata(ydata)
-        self.ax.set_ylim(min(ydata)*0.95, max(ydata)*1.05)
+        self.ax1.set_ylim(min(ydata)*0.95, max(ydata)*1.05)
 
         times = self.ramp_config.ps_ramp_times
         self.markers.set_xdata(times)
@@ -1204,6 +1221,12 @@ class RFRamp(QWidget):
         self.m_ej.set_xdata(ej_marker_time)
         self.m_ej.set_ydata(self.ramp_config.rf_ramp_interp_voltages(
             ej_marker_time))
+
+        ph_times = self.ramp_config.ps_waveform_get_times()
+        ph = self._calc_syncphase(ph_times)
+        self.line2.set_xdata(ph_times)
+        self.line2.set_ydata(ph)
+        self.ax2.set_ylim(min(ph)*0.95, max(ph)*1.05)
 
         self.graph.figure.canvas.draw()
         self.graph.figure.canvas.flush_events()
@@ -1256,7 +1279,9 @@ class RFRamp(QWidget):
                     e_item = self.table.item(row, column)
                     e_item.setData(Qt.DisplayRole, str(energy))
                 elif label == 'Φs [°]':
-                    value = 0  # TODO
+                    t_item = self.table.item(row, 1)
+                    time = float(t_item.data(Qt.DisplayRole))
+                    value = self._calc_syncphase(time)
                     item = self.table.item(row, column)
                     item.setData(Qt.DisplayRole, str(value))
 
