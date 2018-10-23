@@ -15,7 +15,7 @@ from siriushla.bo_ap_ramp.status_and_commands import StatusAndCommands
 from siriushla.bo_ap_ramp.settings import Settings
 from siriushla.bo_ap_ramp.config_params import ConfigParameters
 from siriushla.bo_ap_ramp.optics_adjust import OpticsAdjust
-from siriushla.bo_ap_ramp.statistics import Diagnosis
+from siriushla.bo_ap_ramp.diagnosis import Diagnosis
 from siriushla.bo_ap_ramp.auxiliar_classes import MessageBox as _MessageBox
 
 
