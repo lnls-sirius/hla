@@ -629,6 +629,17 @@ class DiagnosisSettings(SiriusDialog):
         hlay_measperiod.addWidget(self.pydmspinbox_MeasPeriod)
         hlay_measperiod.addWidget(self.pydmlabel_MeasPeriod)
 
+        l_measmode = QLabel('Measurement Mode: ', self,
+                            alignment=Qt.AlignRight)
+        self.pydmspinbox_MeasMode = PyDMEnumComboBox(
+            parent=self, init_channel=dcct_prefix+'MeasMode-Sel')
+        self.pydmspinbox_MeasMode.setFixedSize(220, 40)
+        self.pydmlabel_MeasMode = PyDMLabel(
+            parent=self, init_channel=dcct_prefix+'MeasMode-Sts')
+        hlay_measmode = QHBoxLayout()
+        hlay_measmode.addWidget(self.pydmspinbox_MeasMode)
+        hlay_measmode.addWidget(self.pydmlabel_MeasMode)
+
         l_meastrig = QLabel('Measurement Trigger: ', self,
                             alignment=Qt.AlignRight)
         self.pydmspinbox_MeasTrg = PyDMEnumComboBox(
@@ -688,6 +699,7 @@ class DiagnosisSettings(SiriusDialog):
             QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
         flay_settings.addRow(l_smpcnt, hlay_smpcnt)
         flay_settings.addRow(l_measperiod, hlay_measperiod)
+        flay_settings.addRow(l_measmode, hlay_measmode)
         flay_settings.addRow(l_meastrig, hlay_meastrig)
         flay_settings.addRow(l_trgdelay, hlay_trgdelay)
         flay_settings.addItem(
