@@ -3,15 +3,26 @@
 """HLA as_ap_posang module."""
 
 import epics as _epics
+
 from qtpy.uic import loadUi as _loadUi
-from pydm.utilities.macro import substitute_in_file as _substitute_in_file
+from qtpy.QtWidgets import QGridLayout, QLabel, QGroupBox, QAbstractItemView, \
+                           QSizePolicy as QSzPlcy, QSpacerItem, QPushButton
+from qtpy.QtCore import Qt
+
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriuspy.csdevice.posang import Const
+
+from pydm.utilities.macro import substitute_in_file as _substitute_in_file
+from pydm.widgets import PyDMWaveformTable, PyDMLabel, PyDMLineEdit
+
 from siriushla import util as _hlautil
 from siriushla.widgets.windows import SiriusMainWindow
-from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
-from siriushla.as_pm_control.PulsedMagnetDetailWindow import (
-                                PulsedMagnetDetailWindow)
+from siriushla.as_ps_control.PSDetailWindow import \
+    PSDetailWindow as _PSDetailWindow
+from siriushla.as_pm_control.PulsedMagnetDetailWindow import \
+    PulsedMagnetDetailWindow as _PulsedMagnetDetailWindow
+from siriushla.as_ap_servconf import \
+    LoadConfiguration as _LoadConfiguration
 
 UI_FILE = ('/home/fac_files/lnls-sirius/hla/pyqt-apps/siriushla/'
            'as_ap_posang/ui_as_ap_posang.ui')
@@ -23,63 +34,47 @@ class ASAPPosAngCorr(SiriusMainWindow):
     def __init__(self, parent=None, prefix='', tl=None):
         """Class construc."""
         super(ASAPPosAngCorr, self).__init__(parent)
-        if prefix == '':
-            prefix = _vaca_prefix
+        if not prefix:
+            self._prefix = _vaca_prefix
+        else:
+            self._prefix = prefix
 
-        tmp_file = _substitute_in_file(UI_FILE, {'TRANSPORTLINE': tl.upper(),
-                                                 'PREFIX': prefix})
+        self._tl = tl.upper()
+        tmp_file = _substitute_in_file(UI_FILE, {'TRANSPORTLINE': self._tl,
+                                                 'PREFIX': self._prefix})
         self.centralwidget = _loadUi(tmp_file)
         self.setCentralWidget(self.centralwidget)
+        self.setWindowTitle(self._tl + ' Position and Angle Correction Window')
 
-        self._tl = tl
-        self.setWindowTitle(self._tl.upper() +
-                            ' Position and Angle Correction Window')
-
-        widget2pv_list = [[self.centralwidget.PyDMLineEdit_OrbXDeltaPos_SP,
-                           tl.upper()+'-Glob:AP-PosAng:DeltaPosX-SP'],
-                          [self.centralwidget.PyDMScrollBar_OrbXDeltaPos_SP,
-                           tl.upper()+'-Glob:AP-PosAng:DeltaPosX-SP'],
+        widget2pv_list = [[self.centralwidget.PyDMSpinbox_OrbXDeltaPos_SP,
+                           self._tl + '-Glob:AP-PosAng:DeltaPosX-SP'],
                           [self.centralwidget.PyDMLabel_OrbXDeltaPos_RB,
-                           tl.upper()+'-Glob:AP-PosAng:DeltaPosX-RB'],
-                          [self.centralwidget.PyDMLineEdit_OrbXDeltaAng_SP,
-                           tl.upper()+'-Glob:AP-PosAng:DeltaAngX-SP'],
-                          [self.centralwidget.PyDMScrollBar_OrbXDeltaAng_SP,
-                           tl.upper()+'-Glob:AP-PosAng:DeltaAngX-SP'],
+                           self._tl + '-Glob:AP-PosAng:DeltaPosX-RB'],
+                          [self.centralwidget.PyDMSpinbox_OrbXDeltaAng_SP,
+                           self._tl + '-Glob:AP-PosAng:DeltaAngX-SP'],
                           [self.centralwidget.PyDMLabel_OrbXDeltaAng_RB,
-                           tl.upper()+'-Glob:AP-PosAng:DeltaAngX-RB'],
-                          [self.centralwidget.PyDMLineEdit_OrbYDeltaPos_SP,
-                           tl.upper()+'-Glob:AP-PosAng:DeltaPosY-SP'],
-                          [self.centralwidget.PyDMScrollBar_OrbYDeltaPos_SP,
-                           tl.upper()+'-Glob:AP-PosAng:DeltaPosY-SP'],
+                           self._tl + '-Glob:AP-PosAng:DeltaAngX-RB'],
+                          [self.centralwidget.PyDMSpinbox_OrbYDeltaPos_SP,
+                           self._tl + '-Glob:AP-PosAng:DeltaPosY-SP'],
                           [self.centralwidget.PyDMLabel_OrbYDeltaPos_RB,
-                           tl.upper()+'-Glob:AP-PosAng:DeltaPosY-RB'],
-                          [self.centralwidget.PyDMLineEdit_OrbYDeltaAng_SP,
-                           tl.upper()+'-Glob:AP-PosAng:DeltaAngY-SP'],
-                          [self.centralwidget.PyDMScrollBar_OrbYDeltaAng_SP,
-                           tl.upper()+'-Glob:AP-PosAng:DeltaAngY-SP'],
+                           self._tl + '-Glob:AP-PosAng:DeltaPosY-RB'],
+                          [self.centralwidget.PyDMSpinbox_OrbYDeltaAng_SP,
+                           self._tl + '-Glob:AP-PosAng:DeltaAngY-SP'],
                           [self.centralwidget.PyDMLabel_OrbYDeltaAng_RB,
-                           tl.upper()+'-Glob:AP-PosAng:DeltaAngY-RB'],
+                           self._tl + '-Glob:AP-PosAng:DeltaAngY-RB'],
                           [self.centralwidget.PyDMPushButton_SetNewRefKick,
-                           tl.upper()+'-Glob:AP-PosAng:SetNewRefKick-Cmd'],
+                           self._tl + '-Glob:AP-PosAng:SetNewRefKick-Cmd'],
                           [self.centralwidget.PyDMPushButton_ConfigMA,
-                           tl.upper()+'-Glob:AP-PosAng:ConfigMA-Cmd'],
+                           self._tl + '-Glob:AP-PosAng:ConfigMA-Cmd'],
                           [self.centralwidget.PyDMLabel_RefKickCH1Mon,
-                           tl.upper()+'-Glob:AP-PosAng:RefKickCH1-Mon'],
+                           self._tl + '-Glob:AP-PosAng:RefKickCH1-Mon'],
                           [self.centralwidget.PyDMLabel_RefKickCH2Mon,
-                           tl.upper()+'-Glob:AP-PosAng:RefKickCH2-Mon'],
+                           self._tl + '-Glob:AP-PosAng:RefKickCH2-Mon'],
                           [self.centralwidget.PyDMLabel_RefKickCV1Mon,
-                           tl.upper()+'-Glob:AP-PosAng:RefKickCV1-Mon'],
+                           self._tl + '-Glob:AP-PosAng:RefKickCV1-Mon'],
                           [self.centralwidget.PyDMLabel_RefKickCV2Mon,
-                           tl.upper()+'-Glob:AP-PosAng:RefKickCV2-Mon'],
-                          [self.centralwidget.PyDMLineEdit_ConfigName,
-                           tl.upper()+'-Glob:AP-PosAng:ConfigName-SP'],
-                          [self.centralwidget.PyDMLabel_ConfigName,
-                           tl.upper()+'-Glob:AP-PosAng:ConfigName-RB'],
-                          [self.centralwidget.PyDMLabel_RespMatX,
-                           tl.upper()+'-Glob:AP-PosAng:RespMatX-Mon'],
-                          [self.centralwidget.PyDMLabel_RespMatY,
-                           tl.upper()+'-Glob:AP-PosAng:RespMatY-Mon']]
-        self.set_widgets_channel(widget2pv_list, prefix)
+                           self._tl + '-Glob:AP-PosAng:RefKickCV2-Mon']]
+        self.set_widgets_channel(widget2pv_list)
 
         correctors = ['', '', '', '']
         if tl == 'ts':
@@ -92,13 +87,17 @@ class ASAPPosAngCorr(SiriusMainWindow):
             correctors[1] = Const.TB_CORRH_POSANG[1]
             correctors[2] = Const.TB_CORRV_POSANG[0]
             correctors[3] = Const.TB_CORRV_POSANG[1]
-        self._setCorrectorsChannels(correctors, prefix)
+        self._setCorrectorsChannels(correctors)
 
         self.statusLabel_pv = _epics.PV(
-            prefix + tl.upper() + '-Glob:AP-PosAng:StatusLabels-Cte')
-        self.statusLabel_pv.add_callback(self._setStatusLabels)
+            self._prefix + self._tl + '-Glob:AP-PosAng:StatusLabels-Cte',
+            callback=self._setStatusLabels)
 
-    def set_widgets_channel(self, widget2pv_list, prefix):
+        act_settings = self.menuBar().addAction('Settings')
+        _hlautil.connect_window(act_settings, _CorrParamsDetailWindow,
+                                parent=self, tl=self._tl, prefix=self._prefix)
+
+    def set_widgets_channel(self, widget2pv_list):
         """Set the PyDMWidgets channels.
 
         Receive:
@@ -106,52 +105,140 @@ class ASAPPosAngCorr(SiriusMainWindow):
         pv_list     --list of correspondent pvs
         """
         for widget, pv in widget2pv_list:
-            widget.channel = 'ca://' + prefix + pv
+            widget.channel = 'ca://' + self._prefix + pv
 
-    def _setCorrectorsChannels(self, correctors, prefix):
-        if prefix is None:
-            prefix = _vaca_prefix
-
+    def _setCorrectorsChannels(self, correctors):
         self.centralwidget.pushButton_CH1.setText(correctors[0])
         _hlautil.connect_window(self.centralwidget.pushButton_CH1,
-                                PSDetailWindow, self,
-                                psname=correctors[0])
+                                _PSDetailWindow, self, psname=correctors[0])
         self.centralwidget.SiriusLedState_CH1.channel = (
-            'ca://' + prefix + correctors[0] + ':PwrState-Sts')
+            'ca://' + self._prefix + correctors[0] + ':PwrState-Sts')
         self.centralwidget.PyDMLabel_OpModeCH1.channel = (
-            'ca://' + prefix + correctors[0] + ':OpMode-Sts')
+            'ca://' + self._prefix + correctors[0] + ':OpMode-Sts')
         self.centralwidget.PyDMLabel_KickRBCH1.channel = (
-            'ca://' + prefix + correctors[0] + ':Kick-RB')
+            'ca://' + self._prefix + correctors[0] + ':Kick-RB')
+
         self.centralwidget.pushButton_CH2.setText(correctors[1])
         _hlautil.connect_window(self.centralwidget.pushButton_CH2,
-                                PulsedMagnetDetailWindow, self,
-                                psname=correctors[1])
+                                _PulsedMagnetDetailWindow, self,
+                                maname=correctors[1])
         self.centralwidget.SiriusLedState_CH2.channel = (
-            'ca://' + prefix + correctors[1] + ':PwrState-Sts')
+            'ca://' + self._prefix + correctors[1] + ':PwrState-Sts')
         self.centralwidget.PyDMLabel_KickRBCH2.channel = (
-            'ca://' + prefix + correctors[1] + ':Kick-RB')
+            'ca://' + self._prefix + correctors[1] + ':Kick-RB')
+
         self.centralwidget.pushButton_CV1.setText(correctors[2])
         _hlautil.connect_window(self.centralwidget.pushButton_CV1,
-                                PSDetailWindow, self,
-                                psname=correctors[2])
+                                _PSDetailWindow, self, psname=correctors[2])
         self.centralwidget.SiriusLedState_CV1.channel = (
-            'ca://' + prefix + correctors[2] + ':PwrState-Sts')
+            'ca://' + self._prefix + correctors[2] + ':PwrState-Sts')
         self.centralwidget.PyDMLabel_OpModeCV1.channel = (
-            'ca://' + prefix + correctors[2] + ':OpMode-Sts')
+            'ca://' + self._prefix + correctors[2] + ':OpMode-Sts')
         self.centralwidget.PyDMLabel_KickRBCV1.channel = (
-            'ca://' + prefix + correctors[2] + ':Kick-RB')
+            'ca://' + self._prefix + correctors[2] + ':Kick-RB')
+
         self.centralwidget.pushButton_CV2.setText(correctors[3])
         _hlautil.connect_window(self.centralwidget.pushButton_CV2,
-                                PSDetailWindow, self,
-                                psname=correctors[3])
+                                _PSDetailWindow, self, psname=correctors[3])
         self.centralwidget.SiriusLedState_CV2.channel = (
-            'ca://' + prefix + correctors[3] + ':PwrState-Sts')
+            'ca://' + self._prefix + correctors[3] + ':PwrState-Sts')
         self.centralwidget.PyDMLabel_OpModeCV2.channel = (
-            'ca://' + prefix + correctors[3] + ':OpMode-Sts')
+            'ca://' + self._prefix + correctors[3] + ':OpMode-Sts')
         self.centralwidget.PyDMLabel_KickRBCV2.channel = (
-            'ca://' + prefix + correctors[3] + ':Kick-RB')
+            'ca://' + self._prefix + correctors[3] + ':Kick-RB')
 
     def _setStatusLabels(self, value, **kws):
         for i in range(4):
-            exec('self.centralwidget.label_status{0}.setText'
-                 '(value[{0}])'.format(i))
+            exec('self.centralwidget.label_status{0}.setText('
+                 'value[{0}])'.format(i))
+
+
+class _CorrParamsDetailWindow(SiriusMainWindow):
+    """Correction parameters detail window."""
+
+    def __init__(self, tl, parent=None, prefix=None):
+        """Class constructor."""
+        super(_CorrParamsDetailWindow, self).__init__(parent)
+        self._tl = tl
+        self._prefix = prefix
+        self.setWindowTitle(self._tl +
+                            ' Position and Angle Correction Parameters')
+        self._setupUi()
+
+    def _setupUi(self):
+        label_configname = QLabel('<h4>Configuration Name</h4>', self,
+                                  alignment=Qt.AlignCenter)
+        self.pydmlinedit_configname = _ConfigLineEdit(
+            parent=self, init_channel='ca://'+self._prefix+self._tl +
+                                      '-Glob:AP-PosAng:ConfigName-SP')
+        self.pydmlabel_configname = PyDMLabel(
+            parent=self, init_channel='ca://'+self._prefix+self._tl +
+                                      '-Glob:AP-PosAng:ConfigName-RB')
+        self.pydmlabel_configname.setFixedWidth(320)
+
+        label_matrix_X = QLabel('<h4>Matrix X</h4>', self,
+                                alignment=Qt.AlignCenter)
+        self.table_matrix_X = PyDMWaveformTable(
+            parent=self, init_channel='ca://'+self._prefix+self._tl +
+                                      '-Glob:AP-PosAng:RespMatX-Mon')
+        self.table_matrix_X.setFixedSize(642, 96)
+        self.table_matrix_X.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.table_matrix_X.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.table_matrix_X.setRowCount(2)
+        self.table_matrix_X.setColumnCount(2)
+        self.table_matrix_X.horizontalHeader().setDefaultSectionSize(320)
+        self.table_matrix_X.horizontalHeader().setVisible(False)
+        self.table_matrix_X.verticalHeader().setDefaultSectionSize(48)
+        self.table_matrix_X.verticalHeader().setVisible(False)
+
+        label_matrix_Y = QLabel('<h4>Matrix Y</h4>', self,
+                                alignment=Qt.AlignCenter)
+        self.table_matrix_Y = PyDMWaveformTable(
+            parent=self, init_channel='ca://'+self._prefix+self._tl +
+                                      '-Glob:AP-PosAng:RespMatY-Mon')
+        self.table_matrix_Y.setFixedSize(642, 96)
+        self.table_matrix_Y.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.table_matrix_Y.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.table_matrix_Y.setRowCount(2)
+        self.table_matrix_Y.setColumnCount(2)
+        self.table_matrix_Y.horizontalHeader().setDefaultSectionSize(320)
+        self.table_matrix_Y.horizontalHeader().setVisible(False)
+        self.table_matrix_Y.verticalHeader().setDefaultSectionSize(48)
+        self.table_matrix_Y.verticalHeader().setVisible(False)
+
+        self.bt_apply = QPushButton('Apply', self)
+        self.bt_apply.clicked.connect(self.close)
+
+        lay = QGridLayout()
+        lay.addItem(
+            QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Expanding), 0, 1)
+        lay.addWidget(label_configname, 1, 1, 1, 2)
+        lay.addWidget(self.pydmlinedit_configname, 2, 1)
+        lay.addWidget(self.pydmlabel_configname, 2, 2)
+        lay.addItem(
+            QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Expanding), 3, 1)
+        lay.addWidget(label_matrix_X, 4, 1, 1, 2)
+        lay.addWidget(self.table_matrix_X, 5, 1, 1, 2)
+        lay.addItem(
+            QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Expanding), 6, 1)
+        lay.addWidget(label_matrix_Y, 7, 1, 1, 2)
+        lay.addWidget(self.table_matrix_Y, 8, 1, 1, 2)
+        lay.addItem(
+            QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Expanding), 9, 1)
+        lay.addWidget(self.bt_apply, 10, 2)
+        self.centralwidget = QGroupBox('Correction Parameters')
+        self.centralwidget.setLayout(lay)
+        self.setCentralWidget(self.centralwidget)
+        self.setMinimumSize(662, 530)
+
+
+class _ConfigLineEdit(PyDMLineEdit):
+
+    def mouseReleaseEvent(self, ev):
+        if 'TB' in self.channel:
+            config_type = 'tb_posang_respm'
+        elif 'TS' in self.channel:
+            config_type = 'ts_posang_respm'
+        popup = _LoadConfiguration(config_type)
+        popup.configname.connect(self.value_changed)
+        popup.exec_()

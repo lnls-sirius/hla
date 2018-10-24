@@ -4,17 +4,21 @@
 import epics as _epics
 from qtpy.uic import loadUi
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QPushButton, QGridLayout, QLabel, QFrame, \
+from qtpy.QtWidgets import QPushButton, QGridLayout, QLabel, \
                             QSpacerItem, QAbstractItemView, QGroupBox, \
                             QSizePolicy as QSzPlcy
 from pydm.widgets import PyDMEnumComboBox, PyDMLabel, PyDMLineEdit, \
-                            PyDMWaveformTable
+                            PyDMWaveformTable, PyDMSpinbox
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 from siriuspy.envars import vaca_prefix as _vaca_prefix
+from siriuspy.csdevice.opticscorr import Const as _Const
 from siriushla.widgets.state_button import PyDMStateButton
 from siriushla import util as _hlautil
 from siriushla.widgets.windows import SiriusMainWindow
-from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
+from siriushla.as_ps_control.PSDetailWindow import \
+    PSDetailWindow as _PSDetailWindow
+from siriushla.as_ap_servconf import \
+    LoadConfiguration as _LoadConfiguration
 
 
 class OpticsCorrWindow(SiriusMainWindow):
@@ -23,265 +27,204 @@ class OpticsCorrWindow(SiriusMainWindow):
     def __init__(self, acc, opticsparam, parent=None, prefix=''):
         """Initialize some widgets."""
         super(OpticsCorrWindow, self).__init__(parent)
-        if prefix == '':
+        self.opticsparam = opticsparam
+        self._acc = acc.upper()
+        if not prefix:
             prefix = _vaca_prefix
-        self._acc = acc
 
         UI_FILE = ('/home/fac_files/lnls-sirius/hla/pyqt-apps/siriushla/'
                    'as_ap_opticscorr/ui_'+acc+'_ap_'+opticsparam+'corr.ui')
-
         tmp_file = _substitute_in_file(UI_FILE, {'PREFIX': prefix})
         self.centralwidget = loadUi(tmp_file)
         self.setCentralWidget(self.centralwidget)
 
-        if opticsparam == 'tune':
-            text = 'Tune'
-            self.statusLabel_pv = _epics.PV(
-                prefix+acc.upper()+'-Glob:AP-TuneCorr:StatusLabels-Cte')
-            self.statusLabel_pv.add_callback(self._setStatusLabels)
-
-        elif opticsparam == 'chrom':
-            text = 'Chromaticity'
-            self.statusLabel_pv = _epics.PV(
-                prefix+acc.upper()+'-Glob:AP-ChromCorr:StatusLabels-Cte')
-            self.statusLabel_pv.add_callback(self._setStatusLabels)
-
-        self.opticsparam = opticsparam
-        self.setWindowTitle(acc.upper() + ' ' + text + ' Correction')
+        self.statusLabel_pv = _epics.PV(
+            prefix+self._acc+'-Glob:AP-'+opticsparam.title() +
+            'Corr:StatusLabels-Cte', callback=self._setStatusLabels)
+        text = 'Tune' if opticsparam == 'tune' else 'Chromaticity'
+        self.setWindowTitle(self._acc + ' ' + text + ' Correction')
 
         for button in self.centralwidget.findChildren(QPushButton):
             if 'MADetail' in button.objectName():
                 ma = button.text()
-                _hlautil.connect_window(button, PSDetailWindow, self,
+                _hlautil.connect_window(button, _PSDetailWindow, self,
                                         psname=ma)
-            if 'CorrParams' in button.objectName():
-                _hlautil.connect_window(button, CorrParamsDetailWindow,
-                                        parent=self, acc=acc.upper(),
-                                        opticsparam=opticsparam, prefix=prefix)
+
+        act_settings = self.menuBar().addAction('Settings')
+        _hlautil.connect_window(act_settings, _CorrParamsDetailWindow,
+                                parent=self, acc=self._acc,
+                                opticsparam=opticsparam, prefix=prefix)
 
     def _setStatusLabels(self, value, **kws):
-        if self._acc == 'si':
-            status_bits = 5
-        elif self._acc == 'bo':
-            status_bits = 4
+        status_bits = 5 if self._acc == 'SI' else 4
         for i in range(status_bits):
             exec('self.centralwidget.label_status{0}.setText'
                  '(value[{0}])'.format(i))
 
 
-class CorrParamsDetailWindow(SiriusMainWindow):
+class _CorrParamsDetailWindow(SiriusMainWindow):
     """Correction parameters detail window."""
 
     def __init__(self, acc, opticsparam, parent=None, prefix=None):
         """Class constructor."""
-        super(CorrParamsDetailWindow, self).__init__(parent)
+        super(_CorrParamsDetailWindow, self).__init__(parent)
+        self._acc = acc
+        self._opticsparam = opticsparam.title()
+        self.setWindowTitle(acc+' '+self._opticsparam+' Correction Parameters')
+        self._prefix = prefix
 
         if opticsparam == 'tune':
-            intstrength = 'KL'
-            opticsparam = 'Tune'
-            if acc == 'SI':
-                fams = ['QFA', 'QFB', 'QFP',
-                        'QDA', 'QDB1', 'QDB2', 'QDP1', 'QDP2']
-            else:
-                fams = ['QF', 'QD']
+            self._intstrength = 'KL'
+            self._fams = list(_Const.SI_QFAMS_TUNECORR) if acc == 'SI' \
+                else list(_Const.BO_QFAMS_TUNECORR)
         elif opticsparam == 'chrom':
-            intstrength = 'SL'
-            opticsparam = 'Chrom'
-            if acc == 'SI':
-                fams = ['SFA1', 'SFA2', 'SDA1', 'SDA2', 'SDA3',
-                        'SFB1', 'SFB2', 'SDB1', 'SDB2', 'SDB3',
-                        'SFP1', 'SFP2', 'SDP1', 'SDP2', 'SDP3']
-            else:
-                fams = ['SF', 'SD']
-        nfam = len(fams)
+            self._intstrength = 'SL'
+            self._fams = list(_Const.SI_SFAMS_CHROMCORR) if acc == 'SI' \
+                else list(_Const.BO_SFAMS_CHROMCORR)
+        self._nfam = len(self._fams)
 
-        self.setStyleSheet("""
-                           QGroupBox {
-                                font-weight: bold;
-                           }
-                           * {
-                                font-size:20pt;
-                           }""")
-        self.setWindowTitle(acc+' '+opticsparam+' Correction Parameters')
-        self.layout = QGridLayout()
+        self._setupUi()
 
-        if acc == 'SI':
-            self.label_method = QLabel('<h4>Method</h4>', self,
-                                       alignment=Qt.AlignCenter)
-            self.layout.addWidget(self.label_method, 1, 1, 1, nfam)
+    def _setupUi(self):
+        ioc_prefix = 'ca://'+self._prefix+self._acc+'-Glob:AP-' + \
+                          self._opticsparam+'Corr:'
+        lay = QGridLayout()
 
+        if self._acc == 'SI':
+            label_method = QLabel('<h4>Method</h4>', self,
+                                  alignment=Qt.AlignCenter)
             self.combobox_method = PyDMEnumComboBox(
-                parent=self,
-                init_channel='ca://'+prefix+acc+'-Glob:AP-'+opticsparam +
-                             'Corr:CorrMeth-Sel')
-            self.layout.addWidget(self.combobox_method, 2, nfam//2)
+                parent=self, init_channel=ioc_prefix+'CorrMeth-Sel')
 
             self.pydmlabel_method = PyDMLabel(
-                parent=self,
-                init_channel='ca://'+prefix+acc+'-Glob:AP-'+opticsparam +
-                             'Corr:CorrMeth-Sts')
-            self.pydmlabel_method.setSizePolicy(
-                QSzPlcy.Fixed, QSzPlcy.Preferred)
-            self.pydmlabel_method.setFixedWidth(180)
-            self.pydmlabel_method.setFrameShape(QFrame.Box)
-            self.pydmlabel_method.setFrameShadow(QFrame.Raised)
-            self.layout.addWidget(self.pydmlabel_method, 2, nfam//2+1)
+                parent=self, init_channel=ioc_prefix+'CorrMeth-Sts')
 
-            self.layout.addItem(
-                QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Fixed), 3, 1)
-
-            self.label_sync = QLabel('<h4>Syncronization</h4>',
-                                     alignment=Qt.AlignCenter)
-            self.layout.addWidget(self.label_sync, 4, 1, 1, nfam)
-
+            label_sync = QLabel('<h4>Syncronization</h4>',
+                                alignment=Qt.AlignCenter)
             self.button_sync = PyDMStateButton(
-                parent=self,
-                init_channel='ca://'+prefix+acc+'-Glob:AP-'+opticsparam +
-                             'Corr:SyncCorr-Sel')
+                parent=self, init_channel=ioc_prefix+'SyncCorr-Sel')
             self.button_sync.shape = 1
             self.button_sync.setFixedHeight(36)
-            self.layout.addWidget(self.button_sync, 5, nfam//2)
-
             self.pydmlabel_sync = PyDMLabel(
-                parent=self,
-                init_channel='ca://'+prefix+acc+'-Glob:AP-'+opticsparam +
-                             'Corr:SyncCorr-Sts')
-            self.pydmlabel_sync.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Preferred)
-            self.pydmlabel_sync.setFixedWidth(180)
-            self.pydmlabel_sync.setFrameShape(QFrame.Box)
-            self.pydmlabel_sync.setFrameShadow(QFrame.Raised)
-            self.pydmlabel_sync.setAlignment(Qt.AlignLeft)
-            self.layout.addWidget(self.pydmlabel_sync, 5, nfam//2+1)
+                parent=self, init_channel=ioc_prefix+'SyncCorr-Sts')
 
-            self.layout.addItem(QSpacerItem(
-                20, 10, QSzPlcy.Minimum, QSzPlcy.Fixed), 6, 1)
+            lay.addWidget(label_method, 1, 1, 1, self._nfam)
+            lay.addWidget(self.combobox_method, 2, self._nfam//2)
+            lay.addWidget(self.pydmlabel_method, 2, self._nfam//2+1)
+            lay.addItem(
+                QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Fixed), 3, 1)
+            lay.addWidget(label_sync, 4, 1, 1, self._nfam)
+            lay.addWidget(self.button_sync, 5, self._nfam//2)
+            lay.addWidget(self.pydmlabel_sync, 5, self._nfam//2+1)
+            lay.addItem(
+                QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Fixed), 6, 1)
 
-        if opticsparam == 'Tune':
-            self.label_corrfactor = QLabel('<h4>Correction Factor (%)</h4>',
-                                           self, alignment=Qt.AlignCenter)
-            self.layout.addWidget(self.label_corrfactor, 7, 1, 1, nfam)
-
-            self.pydmlinedit_corrfactor = PyDMLineEdit(
-                parent=self,
-                init_channel='ca://'+prefix+acc+'-Glob:AP-'+opticsparam +
-                             'Corr:CorrFactor-SP')
-            self.pydmlinedit_corrfactor.setSizePolicy(
-                QSzPlcy.Fixed, QSzPlcy.Fixed)
-            self.pydmlinedit_corrfactor.setAlignment(Qt.AlignCenter)
-            self.pydmlinedit_corrfactor.setMinimumSize(200, 0)
-            self.layout.addWidget(self.pydmlinedit_corrfactor, 8, nfam//2)
-
+        if self._opticsparam == 'Tune':
+            label_corrfactor = QLabel('<h4>Correction Factor [%]</h4>', self,
+                                      alignment=Qt.AlignCenter)
+            self.pydmspinbox_corrfactor = PyDMSpinbox(
+                parent=self, init_channel=ioc_prefix+'CorrFactor-SP')
+            self.pydmspinbox_corrfactor.setMinimumSize(250, 0)
+            self.pydmspinbox_corrfactor.showStepExponent = False
             self.pydmlabel_corrfactor = PyDMLabel(
-                parent=self,
-                init_channel='ca://'+prefix+acc+'-Glob:AP-'+opticsparam +
-                             'Corr:CorrFactor-RB')
-            self.pydmlabel_corrfactor.setSizePolicy(
-                QSzPlcy.Fixed, QSzPlcy.Preferred)
-            self.pydmlabel_corrfactor.setFixedWidth(180)
-            self.pydmlabel_corrfactor.setFrameShape(QFrame.Box)
-            self.pydmlabel_corrfactor.setFrameShadow(QFrame.Raised)
-            self.pydmlabel_corrfactor.setAlignment(Qt.AlignLeft)
-            self.layout.addWidget(self.pydmlabel_corrfactor, 8, nfam//2+1)
+                parent=self, init_channel=ioc_prefix+'CorrFactor-RB')
 
-            self.layout.addItem(
+            lay.addWidget(label_corrfactor, 7, 1, 1, self._nfam)
+            lay.addWidget(self.pydmspinbox_corrfactor, 8, self._nfam//2)
+            lay.addWidget(self.pydmlabel_corrfactor, 8, self._nfam//2+1)
+            lay.addItem(
                 QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Fixed), 9, 1)
 
-        self.label_configname = QLabel('<h4>Configuration Name</h4>', self,
-                                       alignment=Qt.AlignCenter)
-        self.layout.addWidget(self.label_configname, 10, 1, 1, nfam)
-
-        self.pydmlinedit_configname = PyDMLineEdit(
-            parent=self,
-            init_channel='ca://'+prefix+acc+'-Glob:AP-'+opticsparam +
-                         'Corr:ConfigName-SP')
-        self.pydmlinedit_configname.setSizePolicy(
-            QSzPlcy.Fixed, QSzPlcy.Fixed)
-        self.pydmlinedit_configname.setAlignment(Qt.AlignCenter)
-        self.pydmlinedit_configname.setMinimumSize(200, 0)
-        self.layout.addWidget(self.pydmlinedit_configname, 11, nfam//2)
-
+        label_configname = QLabel('<h4>Configuration Name</h4>', self,
+                                  alignment=Qt.AlignCenter)
+        self.pydmlinedit_configname = _ConfigLineEdit(
+            parent=self, init_channel=ioc_prefix+'ConfigName-SP')
+        self.pydmlinedit_configname.setFixedWidth(320)
         self.pydmlabel_configname = PyDMLabel(
-            parent=self,
-            init_channel='ca://'+prefix+acc+'-Glob:AP-'+opticsparam +
-                         'Corr:ConfigName-RB')
-        self.pydmlabel_configname.setSizePolicy(
-            QSzPlcy.Fixed, QSzPlcy.Preferred)
-        self.pydmlabel_configname.setFixedWidth(180)
-        self.pydmlabel_configname.setFrameShape(QFrame.Box)
-        self.pydmlabel_configname.setFrameShadow(QFrame.Raised)
-        self.pydmlabel_configname.setAlignment(Qt.AlignLeft)
-        self.layout.addWidget(self.pydmlabel_configname, 11, nfam//2+1)
+            parent=self, init_channel=ioc_prefix+'ConfigName-RB')
 
-        self.layout.addItem(
+        lay.addWidget(label_configname, 10, 1, 1, self._nfam)
+        lay.addWidget(self.pydmlinedit_configname, 11, self._nfam//2)
+        lay.addWidget(self.pydmlabel_configname, 11, self._nfam//2+1)
+        lay.addItem(
             QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Fixed), 12, 1)
 
-        self.label_matrix = QLabel('<h4>Matrix</h4>', self,
-                                   alignment=Qt.AlignCenter)
-        self.layout.addWidget(self.label_matrix, 13, 1, 1, nfam)
-
+        label_matrix = QLabel('<h4>Matrix</h4>', self,
+                              alignment=Qt.AlignCenter)
         self.table_matrix = PyDMWaveformTable(
-            parent=self,
-            init_channel='ca://'+prefix+acc+'-Glob:AP-'+opticsparam +
-                         'Corr:RespMat-Mon')
+            parent=self, init_channel=ioc_prefix+'RespMat-Mon')
         self.table_matrix.setEnabled(False)
-        self.table_matrix.setFixedHeight(135)
-        self.table_matrix.setVerticalScrollBarPolicy(
-            Qt.ScrollBarAlwaysOff)
+        self.table_matrix.setFixedSize(self._nfam*160+46, 133)
+        self.table_matrix.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.table_matrix.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table_matrix.setRowCount(2)
-        self.table_matrix.setColumnCount(nfam)
+        self.table_matrix.setColumnCount(self._nfam)
         self.table_matrix.rowHeaderLabels = ['  X', '  Y']
-        self.table_matrix.columnHeaderLabels = fams
+        self.table_matrix.columnHeaderLabels = self._fams
         self.table_matrix.horizontalHeader().setDefaultSectionSize(160)
         self.table_matrix.verticalHeader().setDefaultSectionSize(48)
-        self.layout.addWidget(self.table_matrix, 14, 1, 1, nfam)
 
-        self.layout.addItem(
+        lay.addWidget(label_matrix, 13, 1, 1, self._nfam)
+        lay.addWidget(self.table_matrix, 14, 1, 1, self._nfam)
+        lay.addItem(
             QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Fixed), 15, 1)
 
-        self.label_nomintstrength = QLabel('<h4>Nominal '+intstrength+'s</h4>',
-                                           self, alignment=Qt.AlignCenter)
-        self.layout.addWidget(self.label_nomintstrength, 16, 1, 1, nfam)
-
+        label_nomintstrength = QLabel(
+            '<h4>Nominal '+self._intstrength+'s</h4>', self,
+            alignment=Qt.AlignCenter)
         self.table_nomintstrength = PyDMWaveformTable(
             parent=self,
-            init_channel='ca://'+prefix+acc+'-Glob:AP-'+opticsparam +
-                         'Corr:Nominal'+intstrength+'-Mon')
+            init_channel=ioc_prefix+'Nominal'+self._intstrength+'-Mon')
         self.table_nomintstrength.setEnabled(False)
-        self.table_nomintstrength.setFixedHeight(85)
+        self.table_nomintstrength.setFixedSize(self._nfam*160+45, 83)
         self.table_nomintstrength.setVerticalScrollBarPolicy(
             Qt.ScrollBarAlwaysOff)
         self.table_nomintstrength.setEditTriggers(
             QAbstractItemView.NoEditTriggers)
-        self.table_nomintstrength.setSelectionMode(
-            QAbstractItemView.ContiguousSelection)
         self.table_nomintstrength.setRowCount(1)
-        self.table_nomintstrength.setColumnCount(nfam)
-        self.table_nomintstrength.rowHeaderLabels = [intstrength]
-        self.table_nomintstrength.columnHeaderLabels = fams
+        self.table_nomintstrength.setColumnCount(self._nfam)
+        self.table_nomintstrength.rowHeaderLabels = [self._intstrength]
+        self.table_nomintstrength.columnHeaderLabels = self._fams
         self.table_nomintstrength.horizontalHeader().setDefaultSectionSize(160)
         self.table_nomintstrength.verticalHeader().setDefaultSectionSize(48)
-        self.layout.addWidget(self.table_nomintstrength, 17, 1, 1, nfam)
 
-        self.layout.addItem(
+        lay.addWidget(label_nomintstrength, 16, 1, 1, self._nfam)
+        lay.addWidget(self.table_nomintstrength, 17, 1, 1, self._nfam)
+        lay.addItem(
             QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Fixed), 18, 1)
 
-        if opticsparam == 'Chrom':
-            self.label_nomchrom = QLabel('<h4>Nominal Chrom</h4>', self,
-                                         alignment=Qt.AlignCenter)
-            self.layout.addWidget(self.label_nomchrom, 19, 1, 1, nfam)
-
+        if self._opticsparam == 'Chrom':
+            label_nomchrom = QLabel('<h4>Nominal Chrom</h4>', self,
+                                    alignment=Qt.AlignCenter)
             self.pydmlabel_nomchrom = PyDMLabel(
-                parent=self,
-                init_channel='ca://'+prefix+acc+'-Glob:AP-'+opticsparam +
-                             'Corr:NominalChrom-Mon')
-            self.pydmlabel_nomchrom.setMinimumSize(0, 48)
-            self.pydmlabel_nomchrom.setFrameShape(QFrame.Box)
-            self.pydmlabel_nomchrom.setFrameShadow(QFrame.Raised)
+                parent=self, init_channel=ioc_prefix+'NominalChrom-Mon')
+            self.pydmlabel_nomchrom.setMinimumHeight(48)
             self.pydmlabel_nomchrom.setAlignment(Qt.AlignCenter)
-            self.layout.addWidget(self.pydmlabel_nomchrom, 20, 1, 1, nfam)
+
+            lay.addWidget(label_nomchrom, 19, 1, 1, self._nfam)
+            lay.addWidget(self.pydmlabel_nomchrom, 20, 1, 1, self._nfam)
+
+        self.bt_apply = QPushButton('Apply', self)
+        self.bt_apply.clicked.connect(self.close)
+        lay.addWidget(self.bt_apply, 21, self._nfam)
 
         self.centralwidget = QGroupBox('Correction Parameters')
-        self.centralwidget.setLayout(self.layout)
-        self.resize(nfam*160+70, 700)
+        self.centralwidget.setLayout(lay)
         self.setCentralWidget(self.centralwidget)
+        self.resize(self._nfam*160+70, 700)
+
+
+class _ConfigLineEdit(PyDMLineEdit):
+
+    def mouseReleaseEvent(self, ev):
+        if 'SI' in self.channel and 'Tune' in self.channel:
+            config_type = 'si_tunecorr_params'
+        elif 'BO' in self.channel and 'Tune' in self.channel:
+            config_type = 'bo_tunecorr_params'
+        elif 'SI' in self.channel and 'Chrom' in self.channel:
+            config_type = 'si_chromcorr_params'
+        elif 'BO' in self.channel and 'Chrom' in self.channel:
+            config_type = 'bo_chromcorr_params'
+        popup = _LoadConfiguration(config_type)
+        popup.configname.connect(self.value_changed)
+        popup.exec_()

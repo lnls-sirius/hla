@@ -10,7 +10,7 @@ from qtpy.uic import loadUi
 from qtpy.QtCore import Slot, Qt, QPoint
 from qtpy.QtWidgets import QVBoxLayout, QHBoxLayout, QGridLayout, \
                             QSpacerItem, QFileDialog, QAction, QMenuBar, \
-                            QWidget, QLabel, QPushButton, \
+                            QWidget, QLabel, QPushButton, QMenu, \
                             QButtonGroup, QCheckBox, QSizePolicy as QSzPlcy
 from qtpy.QtGui import QPixmap
 from qtpy.QtSvg import QSvgWidget
@@ -32,6 +32,8 @@ from siriushla.as_pm_control.PulsedMagnetDetailWindow import (
     PulsedMagnetDetailWindow)
 from siriushla.as_pm_control.PulsedMagnetControlWindow import (
     PulsedMagnetControlWindow)
+from siriushla.tl_ap_control.ICT_monitor import ICTMonitoring
+from siriushla.tl_ap_control.Slit_monitor import SlitMonitoring
 
 
 class TLAPControlWindow(SiriusMainWindow):
@@ -92,7 +94,7 @@ class TLAPControlWindow(SiriusMainWindow):
         appsMenu.addAction(openBPMApp)
         if self._tl == 'tb':
             openICTsApp = QAction("ICTs", self)
-            _hlautil.connect_window(openICTsApp, ShowICTHstr, parent=self,
+            _hlautil.connect_window(openICTsApp, ICTMonitoring, parent=self,
                                     tl=self._tl, prefix=self.prefix)
             appsMenu.addAction(openICTsApp)
         self.setMenuBar(menubar)
@@ -112,22 +114,10 @@ class TLAPControlWindow(SiriusMainWindow):
 
         # Connect Slits View widget
         if self._tl == 'tb':
-            self._SlitH_Center = 0
-            self._SlitH_Width = 0
-            self._hslitcenterpv = _epics.PV(
-                self.prefix + 'TB-01:DI-SlitH:Center-RB',
-                callback=self._setSlitHPos)
-            self._hslitwidthpv = _epics.PV(
-                self.prefix + 'TB-01:DI-SlitH:Width-RB',
-                callback=self._setSlitHPos)
-            self._SlitV_Center = 0
-            self._SlitV_Width = 0
-            self._vslitcenterpv = _epics.PV(
-                self.prefix + 'TB-01:DI-SlitV:Center-RB',
-                callback=self._setSlitVPos)
-            self._vslitwidthpv = _epics.PV(
-                self.prefix + 'TB-01:DI-SlitV:Width-RB',
-                callback=self._setSlitVPos)
+            self.centralwidget.widget_SlitH.layout().addWidget(
+                SlitMonitoring('H', self, self.prefix))
+            self.centralwidget.widget_SlitV.layout().addWidget(
+                SlitMonitoring('V', self, self.prefix))
 
         # Create Scrn+Correctors Panel
         hlay_headerline = QHBoxLayout()
@@ -193,35 +183,6 @@ class TLAPControlWindow(SiriusMainWindow):
             correctors_gridlayout.addWidget(widget_scrncorr, line, 1)
             line += 1
 
-        hlay_buttonsline = QHBoxLayout()
-        hlay_buttonsline.addItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
-        pushbutton_scrnsdohoming = QPushButton('All Screens Do Homing', self)
-        pushbutton_scrnsdohoming.clicked.connect(self._allScrnsDoHoming)
-        pushbutton_scrnsdohoming.setMinimumSize(780, 80)
-        hlay_buttonsline.addWidget(pushbutton_scrnsdohoming)
-        hlay_buttonsline.addItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
-        pushbutton_chsturnon = QPushButton('All CHs Turn On', self)
-        pushbutton_chsturnon.clicked.connect(self._allCHsTurnOn)
-        pushbutton_chsturnon.setMinimumSize(740, 80)
-        hlay_buttonsline.addWidget(pushbutton_chsturnon)
-        hlay_buttonsline.addItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
-        pushbutton_cvsturnon = QPushButton('All CVs Turn On', self)
-        pushbutton_cvsturnon.clicked.connect(self._allCVsTurnOn)
-        pushbutton_cvsturnon.setMinimumSize(740, 80)
-        hlay_buttonsline.addWidget(pushbutton_cvsturnon)
-        hlay_buttonsline.addItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
-        buttonsline = QWidget()
-        buttonsline.setObjectName('buttonsline')
-        buttonsline.setLayout(hlay_buttonsline)
-        buttonsline.setMaximumHeight(98)
-        buttonsline.layout().setContentsMargins(0, 9, 0, 9)
-        buttonsline.setStyleSheet('#buttonsline {border-top: 2px solid gray;}')
-        correctors_gridlayout.addWidget(buttonsline, 8, 1)
-
         self.centralwidget.groupBox_allcorrPanel.setLayout(
             correctors_gridlayout)
         self.centralwidget.groupBox_allcorrPanel.setContentsMargins(0, 0, 0, 0)
@@ -242,6 +203,10 @@ class TLAPControlWindow(SiriusMainWindow):
         pydmcombobox_scrntype.currentIndexChanged.connect(
             self.scrnview_widgets_dict[self._currScrn].
             updateCalibrationGridFlag)
+
+        # Create an action menu
+        self.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.customContextMenuRequested.connect(self._show_context_menu)
 
     def _allCHsTurnOn(self):
         for ch_group, _, _, _ in self._corr_devicenames_list:
@@ -353,54 +318,88 @@ class TLAPControlWindow(SiriusMainWindow):
         corr_details.setLayout(QGridLayout())
         corr_details.layout().setContentsMargins(0, 0, 0, 0)
 
-        led = SiriusLedState(
-            self, 'ca://' + self.prefix + corr + ':PwrState-Sts')
-        led.setObjectName(
-            'SiriusLed_' + name + '_PwrState_Scrn' + str(scrn))
-        led.setFixedSize(40, 40)
-        corr_details.layout().addWidget(led, 1, 1)
+        if corr.split('-')[0] == 'LA':  # Linac PVs
+            led = SiriusLedState(
+                parent=self,
+                init_channel='ca://'+self.prefix+corr+':setpwm')
+            led.setObjectName(
+                'SiriusLed_Linac'+corr.split('-')[-1]+'_setpwm_Scrn'+str(scrn))
+            led.setFixedSize(40, 40)
+            corr_details.layout().addWidget(led, 1, 1)
 
-        pushbutton = QPushButton(corr, self)
-        pushbutton.setObjectName(
-            'pushButton_' + name + 'App_Scrn' + str(scrn))
-        if corr.split('-')[0] == 'LI':
-            pass
-            # TODO
-        elif corr.split('-')[1].split(':')[1] == 'PM':
-            _hlautil.connect_window(pushbutton,
-                                    PulsedMagnetDetailWindow,
-                                    parent=self, maname=corr)
+            label_corr = QLabel(corr, self, alignment=Qt.AlignCenter)
+            label_corr.setObjectName('label_'+name+'App_Scrn'+str(scrn))
+            label_corr.setFixedSize(300, 40)
+            corr_details.layout().addWidget(label_corr, 1, 2)
+
+            pydm_sp_current = PyDMLinEditScrollbar(
+                parent=self, channel='ca://'+self.prefix+corr+':seti')
+            pydm_sp_current.setObjectName(
+                'LeditScroll_Linac'+corr.split('-')[-1]+'_seti_Scrn'+str(scrn))
+            pydm_sp_current.setMaximumWidth(220)
+            pydm_sp_current.layout.setContentsMargins(0, 0, 0, 0)
+            pydm_sp_current.sp_lineedit.setFixedSize(220, 40)
+            pydm_sp_current.sp_lineedit.setAlignment(Qt.AlignCenter)
+            pydm_sp_current.sp_lineedit.setSizePolicy(
+                QSzPlcy.Minimum, QSzPlcy.Minimum)
+            pydm_sp_current.sp_scrollbar.limitsFromPV = True
+            pydm_sp_current.sp_scrollbar.setSizePolicy(
+                QSzPlcy.Minimum, QSzPlcy.Maximum)
+            corr_details.layout().addWidget(pydm_sp_current, 1, 3, 2, 1)
+
+            pydmlabel_current = PyDMLabel(
+                parent=self, init_channel='ca://'+self.prefix+corr+':rdi')
+            pydmlabel_current.unit_changed('A')
+            pydmlabel_current.showUnits = True
+            pydmlabel_current.setObjectName(
+                'PyDMLabel_Linac'+corr.split('-')[-1]+'_rdi_Scrn'+str(scrn))
+            pydmlabel_current.setFixedSize(180, 40)
+            pydmlabel_current.precFromPV = True
+            pydmlabel_current.setAlignment(Qt.AlignCenter)
+            corr_details.layout().addWidget(pydmlabel_current, 1, 4)
+
         else:
-            _hlautil.connect_window(pushbutton,
-                                    PSDetailWindow,
-                                    parent=self, psname=corr)
-        pushbutton.setFixedSize(300, 40)
-        corr_details.layout().addWidget(pushbutton, 1, 2)
+            led = SiriusLedState(
+                parent=self,
+                init_channel='ca://'+self.prefix+corr+':PwrState-Sts')
+            led.setObjectName('SiriusLed_'+name+'_PwrState_Scrn'+str(scrn))
+            led.setFixedSize(40, 40)
+            corr_details.layout().addWidget(led, 1, 1)
 
-        pydm_sp_kick = PyDMLinEditScrollbar(
-            parent=self,
-            channel='ca://' + self.prefix + corr + ':Kick-SP')
-        pydm_sp_kick.setObjectName(
-            'PyDMLineEdit' + name + '_Kick_SP_Scrn' + str(scrn))
-        pydm_sp_kick.setMaximumWidth(220)
-        pydm_sp_kick.layout.setContentsMargins(0, 0, 0, 0)
-        pydm_sp_kick.sp_lineedit.setFixedSize(220, 40)
-        pydm_sp_kick.sp_lineedit.setAlignment(Qt.AlignCenter)
-        pydm_sp_kick.sp_lineedit.setSizePolicy(
-            QSzPlcy.Minimum, QSzPlcy.Minimum)
-        pydm_sp_kick.sp_scrollbar.limitsFromPV = True
-        pydm_sp_kick.sp_scrollbar.setSizePolicy(
-            QSzPlcy.Minimum, QSzPlcy.Maximum)
-        corr_details.layout().addWidget(pydm_sp_kick, 1, 3, 2, 1)
+            pushbutton = QPushButton(corr, self)
+            pushbutton.setObjectName('pushButton_'+name+'App_Scrn'+str(scrn))
+            if corr.split('-')[1].split(':')[1] == 'PM':
+                _hlautil.connect_window(pushbutton, PulsedMagnetDetailWindow,
+                                        parent=self, maname=corr)
+            else:
+                _hlautil.connect_window(pushbutton, PSDetailWindow,
+                                        parent=self, psname=corr)
+            pushbutton.setFixedSize(300, 40)
+            corr_details.layout().addWidget(pushbutton, 1, 2)
 
-        pydmlabel_kick = PyDMLabel(
-            self, 'ca://' + self.prefix + corr + ':Kick-Mon')
-        pydmlabel_kick.setObjectName(
-            'PyDMLabel_' + name + '_Kick_Mon_Scrn' + str(scrn))
-        pydmlabel_kick.setFixedSize(180, 40)
-        pydmlabel_kick.precFromPV = True
-        pydmlabel_kick.setAlignment(Qt.AlignCenter)
-        corr_details.layout().addWidget(pydmlabel_kick, 1, 4)
+            pydm_sp_kick = PyDMLinEditScrollbar(
+                parent=self, channel='ca://'+self.prefix+corr+':Kick-SP')
+            pydm_sp_kick.setObjectName(
+                'PyDMLineEdit' + name + '_Kick_SP_Scrn' + str(scrn))
+            pydm_sp_kick.setMaximumWidth(220)
+            pydm_sp_kick.layout.setContentsMargins(0, 0, 0, 0)
+            pydm_sp_kick.sp_lineedit.setFixedSize(220, 40)
+            pydm_sp_kick.sp_lineedit.setAlignment(Qt.AlignCenter)
+            pydm_sp_kick.sp_lineedit.setSizePolicy(
+                QSzPlcy.Minimum, QSzPlcy.Minimum)
+            pydm_sp_kick.sp_scrollbar.limitsFromPV = True
+            pydm_sp_kick.sp_scrollbar.setSizePolicy(
+                QSzPlcy.Minimum, QSzPlcy.Maximum)
+            corr_details.layout().addWidget(pydm_sp_kick, 1, 3, 2, 1)
+
+            pydmlabel_kick = PyDMLabel(
+                parent=self, init_channel='ca://'+self.prefix+corr+':Kick-Mon')
+            pydmlabel_kick.setObjectName(
+                'PyDMLabel_' + name + '_Kick_Mon_Scrn' + str(scrn))
+            pydmlabel_kick.setFixedSize(180, 40)
+            pydmlabel_kick.precFromPV = True
+            pydmlabel_kick.setAlignment(Qt.AlignCenter)
+            corr_details.layout().addWidget(pydmlabel_kick, 1, 4)
         corr_details.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Fixed)
         return corr_details
 
@@ -410,12 +409,13 @@ class TLAPControlWindow(SiriusMainWindow):
             UI_FILE = ('ui_tb_ap_control.ui')
             SVG_FILE = ('TB.svg')
             correctors_list = [
-                [['LI-01:MA-CH-7'], 'LI-01:MA-CV-7', 0, 'TB-01:DI-Scrn-1'],
+                [['LA-CN:H1LCPS-10'], 'LA-CN:H1LCPS-9', 0, 'TB-01:DI-Scrn-1'],
                 [['TB-01:MA-CH-1'], 'TB-01:MA-CV-1', 1, 'TB-01:DI-Scrn-2'],
                 [['TB-01:MA-CH-2'], 'TB-01:MA-CV-2', 2, 'TB-02:DI-Scrn-1'],
                 [['TB-02:MA-CH-1'], 'TB-02:MA-CV-1', 3, 'TB-02:DI-Scrn-2'],
                 [['TB-02:MA-CH-2'], 'TB-02:MA-CV-2', 4, 'TB-03:DI-Scrn'],
-                [['TB-03:MA-CH'], 'TB-04:MA-CV-1', 5, 'TB-04:DI-Scrn']]
+                [['TB-03:MA-CH', 'TB-04:PM-InjSept'],
+                 'TB-04:MA-CV-1', 5, 'TB-04:DI-Scrn']]
             scrn_list = ['TB-01:DI-Scrn-1', 'TB-01:DI-Scrn-2',
                          'TB-02:DI-Scrn-1', 'TB-02:DI-Scrn-2',
                          'TB-03:DI-Scrn', 'TB-04:DI-Scrn']
@@ -503,53 +503,20 @@ class TLAPControlWindow(SiriusMainWindow):
             widget=self.scrnview_widgets_dict[self._currScrn],
             propagate=False)
 
-    def _setSlitHPos(self, pvname, value, **kws):
-        """Callback to set SlitHs Widget positions."""
-        if 'Center' in pvname:
-            self._SlitH_Center = value  # considering mm
-        elif 'Width' in pvname:
-            self._SlitH_Width = value
-
-        rect_width = 110
-        circle_diameter = 140
-        widget_width = 300
-        vacuum_chamber_diameter = 36  # mm
-
-        xc = (circle_diameter*self._SlitH_Center/vacuum_chamber_diameter
-              + widget_width/2)
-        xw = circle_diameter*self._SlitH_Width/vacuum_chamber_diameter
-
-        left = round(xc - rect_width - xw/2)
-        right = round(xc + xw/2)
-
-        self.centralwidget.PyDMDrawingRectangle_SlitHLeft.move(
-            QPoint(left, (widget_width/2 - rect_width)))
-        self.centralwidget.PyDMDrawingRectangle_SlitHRight.move(
-            QPoint(right, (widget_width/2 - rect_width)))
-
-    def _setSlitVPos(self, pvname, value, **kws):
-        """Callback to set SlitVs Widget positions."""
-        if 'Center' in pvname:
-            self._SlitV_Center = value  # considering mm
-        elif 'Width' in pvname:
-            self._SlitV_Width = value
-
-        rect_width = 110
-        circle_diameter = 140
-        widget_width = 300
-        vacuum_chamber_diameter = 36  # mm
-
-        xc = (circle_diameter*self._SlitV_Center/vacuum_chamber_diameter
-              + widget_width/2)
-        xw = circle_diameter*self._SlitV_Width/vacuum_chamber_diameter
-
-        up = round(xc - rect_width - xw/2)
-        down = round(xc + xw/2)
-
-        self.centralwidget.PyDMDrawingRectangle_SlitVUp.move(
-            QPoint((widget_width/2 - rect_width), up))
-        self.centralwidget.PyDMDrawingRectangle_SlitVDown.move(
-            QPoint((widget_width/2 - rect_width), down))
+    @Slot(QPoint)
+    def _show_context_menu(self, point):
+        """Show a custom context menu."""
+        turn_CHs_on = QAction("Turn CHs On", self)
+        turn_CHs_on.triggered.connect(self._allCHsTurnOn)
+        turn_CVs_on = QAction("Turn CVs On", self)
+        turn_CVs_on.triggered.connect(self._allCVsTurnOn)
+        do_scrn_homing = QAction("Screens do Homing", self)
+        do_scrn_homing.triggered.connect(self._allScrnsDoHoming)
+        menu = QMenu("Actions", self)
+        menu.addAction(turn_CHs_on)
+        menu.addAction(turn_CVs_on)
+        menu.addAction(do_scrn_homing)
+        menu.popup(self.mapToGlobal(point))
 
 
 class ShowLatticeAndTwiss(SiriusMainWindow):
@@ -586,56 +553,6 @@ class ShowLatticeAndTwiss(SiriusMainWindow):
         self.centralwidget.layout().setContentsMargins(0, 0, 0, 0)
         self.setCentralWidget(self.centralwidget)
         self.setGeometry(10, 10, 2000, 500)
-
-
-class ShowICTHstr(SiriusMainWindow):
-    """Class to create ICTs History Monitor Window."""
-
-    def __init__(self, parent=None, tl=None, prefix=None):
-        """Create graphs."""
-        super(ShowICTHstr, self).__init__(parent)
-        tmp_file = _substitute_in_file(
-            '/home/fac_files/lnls-sirius/hla/pyqt-apps/siriushla'
-            '/tl_ap_control/ui_tl_ap_ictmon.ui', {'TL': tl.upper()})
-        self.centralwidget = loadUi(tmp_file)
-        self.setCentralWidget(self.centralwidget)
-        if tl == 'tb':
-            ICT1_channel = 'ca://' + prefix + 'TB-02:DI-ICT'
-            ICT2_channel = 'ca://' + prefix + 'TB-04:DI-ICT'
-        elif tl == 'ts':
-            ICT1_channel = 'ca://' + prefix + 'TS-01:DI-ICT'
-            ICT2_channel = 'ca://' + prefix + 'TS-04:DI-ICT'
-        self.centralwidget.PyDMTimePlot_Charge.addYChannel(
-            y_channel=ICT1_channel + ':Charge-Mon',
-            name='Charge ICT1', color='red', lineWidth=2)
-        self.centralwidget.PyDMTimePlot_Charge.addYChannel(
-            y_channel=ICT2_channel + ':Charge-Mon',
-            name='Charge ICT2', color='blue', lineWidth=2)
-        self.centralwidget.PyDMWaveformPlot_ChargeHstr.addChannel(
-            y_channel=ICT1_channel + ':ChargeHstr-Mon',
-            name='Charge History ICT1', color='red', lineWidth=2)
-        self.centralwidget.PyDMWaveformPlot_ChargeHstr.addChannel(
-            y_channel=ICT2_channel + ':ChargeHstr-Mon',
-            name='Charge History ICT2', color='blue', lineWidth=2)
-
-        self.centralwidget.checkBox.stateChanged.connect(
-            self._setICT1CurveVisibility)
-        self.centralwidget.checkBox_2.stateChanged.connect(
-            self._setICT2CurveVisibility)
-
-    @Slot(int)
-    def _setICT1CurveVisibility(self, value):
-        """Set curves visibility."""
-        self.centralwidget.PyDMTimePlot_Charge._curves[0].setVisible(value)
-        self.centralwidget.PyDMWaveformPlot_ChargeHstr._curves[0].setVisible(
-            value)
-
-    @Slot(int)
-    def _setICT2CurveVisibility(self, value):
-        """Set curves visibility."""
-        self.centralwidget.PyDMTimePlot_Charge._curves[1].setVisible(value)
-        self.centralwidget.PyDMWaveformPlot_ChargeHstr._curves[1].setVisible(
-            value)
 
 
 class ShowImage(SiriusMainWindow):

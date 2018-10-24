@@ -34,10 +34,13 @@
      <property name="styleSheet">
       <string notr="true">font-size:24pt;
 font-weight:bold;
-background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, stop:0 rgba(173, 190, 207, 255), stop:1 rgba(213, 213, 213, 255));</string>
+background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, stop:0 rgba(173, 190, 207, 255), stop:1 rgba(213, 213, 213, 255));</string>
      </property>
      <property name="text">
       <string>${TL} ICTs Monitor</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>

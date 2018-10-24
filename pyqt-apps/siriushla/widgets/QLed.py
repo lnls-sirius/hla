@@ -18,32 +18,31 @@ __path__ = _os.path.dirname(__file__)
 
 class ShapeMap:
     """Shape enum mapping class."""
+
     Circle = 1
     Round = 2
     Square = 3
     Triangle = 4
 
 
-Q_ENUMS(ShapeMap)
-
-
 class QLed(QFrame, ShapeMap):
     """QLed class."""
 
-    shapeMap = ShapeMap
+    ShapeMap = ShapeMap
+    Q_ENUMS(ShapeMap)
 
     shapesdict = dict()
     with open(__path__ + '/led_shapes/circle.svg', 'r') as f:
-        shapesdict[shapeMap.Circle] = f.read()
+        shapesdict[ShapeMap.Circle] = f.read()
 
     with open(__path__ + '/led_shapes/round.svg', 'r') as f:
-        shapesdict[shapeMap.Round] = f.read()
+        shapesdict[ShapeMap.Round] = f.read()
 
     with open(__path__ + '/led_shapes/square.svg', 'r') as f:
-        shapesdict[shapeMap.Square] = f.read()
+        shapesdict[ShapeMap.Square] = f.read()
 
     with open(__path__ + '/led_shapes/triangle.svg', 'r') as f:
-        shapesdict[shapeMap.Triangle] = f.read()
+        shapesdict[ShapeMap.Triangle] = f.read()
 
     Green = QColor(15, 105, 0)
     Red = QColor(207, 0, 0)
@@ -62,7 +61,7 @@ class QLed(QFrame, ShapeMap):
         self.m_stateColors = [self.Red, self.Green]
 
         self.m_dsblColor = self.Gray
-        self.m_shape = self.shapeMap.Circle
+        self.m_shape = self.ShapeMap.Circle
 
         self._pressed = False
         self._isselected = False
@@ -134,13 +133,13 @@ class QLed(QFrame, ShapeMap):
         self.m_shape = newShape
         self.update()
 
-    shape = Property(shapeMap, getShape, setShape)
+    shape = Property(ShapeMap, getShape, setShape)
 
     def sizeHint(self):
         """Return the base size of the widget according to shape."""
-        if self.m_shape == self.shapeMap.Triangle:
+        if self.m_shape == self.ShapeMap.Triangle:
             return QSize(48, 36)
-        elif self.m_shape == self.shapeMap.Round:
+        elif self.m_shape == self.ShapeMap.Round:
             return QSize(72, 36)
         return QSize(36, 36)
 
@@ -174,8 +173,8 @@ class QLed(QFrame, ShapeMap):
 
         h = option.rect.height()
         w = option.rect.width()
-        if self.m_shape in (self.shapeMap.Triangle, self.shapeMap.Round):
-            aspect = (4/3.0) if self.m_shape == self.shapeMap.Triangle else 2.0
+        if self.m_shape in (self.ShapeMap.Triangle, self.ShapeMap.Round):
+            aspect = (4/3.0) if self.m_shape == self.ShapeMap.Triangle else 2.0
             ah = w/aspect
             aw = w
             if ah > h:

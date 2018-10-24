@@ -3,14 +3,12 @@
 import sys as _sys
 import os as _os
 from qtpy.QtCore import Qt, QSize, QRect
-from qtpy.QtGui import QCursor
 from qtpy.QtWidgets import QWidget, QDockWidget, QSizePolicy, QVBoxLayout, \
-    QPushButton, QTabWidget, QHBoxLayout, QMenu, QMenuBar, \
-    QAction, QStatusBar
-from siriushla.widgets import SiriusMainWindow
+    QPushButton, QHBoxLayout, QMenu, QMenuBar, QAction, QStatusBar
 from siriuspy.envars import vaca_prefix as LL_PREF
+from siriuspy.csdevice.orbitcorr import OrbitCorrDev
+from siriushla.widgets import SiriusMainWindow
 from siriushla.widgets import PyDMLogLabel
-from siriushla.sirius_application import SiriusApplication
 
 from siriushla.as_ap_sofb.orbit_register import OrbitRegisters
 from siriushla.as_ap_sofb.graphics import OrbitWidget
@@ -26,8 +24,21 @@ class MainWindow(SiriusMainWindow):
         if not prefix.startswith('ca://'):
             prefix = 'ca://' + prefix
         self.prefix = prefix + acc + '-Glob:AP-SOFB:'
-        self.acc = acc
+        self._csorb = OrbitCorrDev(acc)
+        self._isring = self._csorb.acc_idx in self._csorb.Rings
         self.setupui()
+
+    @property
+    def acc(self):
+        return self._csorb.acc
+
+    @property
+    def acc_idx(self):
+        return self._csorb.acc_idx
+
+    @property
+    def isring(self):
+        return self._isring
 
     def setupui(self):
         self.setWindowModality(Qt.WindowModal)
@@ -40,8 +51,8 @@ class MainWindow(SiriusMainWindow):
         orbreg = self._create_orbit_registers()
         wid = self._create_ioc_controllers()
 
-        self.addDockWidget(Qt.DockWidgetArea(1), logwid)
-        self.addDockWidget(Qt.DockWidgetArea(2), orbreg)
+        self.addDockWidget(Qt.DockWidgetArea(8), logwid)
+        self.addDockWidget(Qt.DockWidgetArea(8), orbreg)
         self.addDockWidget(Qt.DockWidgetArea(2), wid)
 
         mwid = self._create_central_widget()
@@ -51,7 +62,7 @@ class MainWindow(SiriusMainWindow):
 
     def _create_central_widget(self):
         ctrls = self.orb_regtr.get_registers_control()
-        chans, ctr = OrbitWidget.get_default_ctrls(self.prefix)
+        chans, ctr = OrbitWidget.get_default_ctrls(self.prefix, self.isring)
         self._channels = chans
         ctrls.update(ctr)
         return OrbitWidget(self, self.prefix, ctrls, self.acc)
@@ -113,9 +124,13 @@ class MainWindow(SiriusMainWindow):
         pdm_log.setAlternatingRowColors(True)
         pdm_log.maxCount = 2000
         vbl.addWidget(pdm_log)
-        pbtn = QPushButton('Clear', wid_cont)
+        hbl = QHBoxLayout()
+        vbl.addLayout(hbl)
+        hbl.addStretch()
+        pbtn = QPushButton('Clear Log', wid_cont)
         pbtn.clicked.connect(pdm_log.clear)
-        vbl.addWidget(pbtn)
+        hbl.addWidget(pbtn)
+        hbl.addStretch()
         return docwid
 
     def _create_menus(self):
@@ -167,21 +182,12 @@ class MainWindow(SiriusMainWindow):
         self.setStatusBar(statusbar)
 
 
-def main(prefix=None):
-    """Return Main window of the interface."""
-    ll_pref = prefix or LL_PREF
-    main_win = MainWindow(ll_pref, 'SI')
-    return main_win
-
-
-def _main():
-    app = SiriusApplication()
-    _util.set_style(app)
-    main_win = main()
-    main_win.show()
-    _sys.exit(app.exec_())
-
-
 if __name__ == '__main__':
     import siriushla.util as _util
-    _main()
+    from siriushla.sirius_application import SiriusApplication
+
+    app = SiriusApplication()
+    _util.set_style(app)
+    main_win = MainWindow(LL_PREF, 'TB')
+    main_win.show()
+    _sys.exit(app.exec_())
