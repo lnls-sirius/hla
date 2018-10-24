@@ -4,7 +4,6 @@
 
 import sys
 import argparse as _argparse
-from pydm import PyDMApplication
 from siriushla.sirius_application import SiriusApplication
 from siriushla.as_ti_control import main
 from siriushla import util

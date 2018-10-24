@@ -3,20 +3,21 @@ from math import isclose
 import time
 import epics
 
-from qtpy.QtCore import Signal, QThread
+from qtpy.QtCore import Signal, QThread, Qt
 from qtpy.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, \
     QPushButton, QDialog, QLabel, QMessageBox
 
 from siriuspy.envars import vaca_prefix as VACA_PREFIX
 from siriushla.as_ps_cycle.cycle_status_list import CycleStatusList
-from siriushla.as_ps_cycle.magnets_tree import MagnetTree
+from siriushla.widgets.pvnames_tree import PVNameTree
 from siriushla.as_ps_cycle.progress_dialog import ProgressDialog
+from siriuspy.search.ma_search import MASearch
 
 
 class CycleWindow(QMainWindow):
     """Magnet cycle window."""
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, checked_accs=()):
         """Constructor."""
         super().__init__(parent)
         # Data structs
@@ -24,6 +25,7 @@ class CycleWindow(QMainWindow):
         self._magnets_ready = list()
         self._magnets_failed = list()
         self._cyclers = list()
+        self._checked_accs = checked_accs
         # Setup UI
         self._setup_ui()
         self.setWindowTitle('Magnet Cycling')
@@ -35,18 +37,20 @@ class CycleWindow(QMainWindow):
 
         self.prepare_button = QPushButton("Prepare to cycle", self)
         self.prepare_button.setObjectName('PrepareButton')
-        self.exit_button = QPushButton("Close", self)
-        self.exit_button.setObjectName('ExitButton')
-        self.magnets_tree = MagnetTree(self)
+        self.magnets_tree = PVNameTree(MASearch.get_manames({'dis': 'MA'}),
+                                       ('sec', 'mag_group'),
+                                       self, self._checked_accs)
 
+        central_widget.layout.addWidget(
+            QLabel('<h3>Magnet Cycling</h3>', self, alignment=Qt.AlignCenter))
+        central_widget.layout.addWidget(
+            QLabel('Select magnets to cycle:', self))
         central_widget.layout.addWidget(self.magnets_tree)
         central_widget.layout.addWidget(self.prepare_button)
-        central_widget.layout.addWidget(self.exit_button)
 
         self.setCentralWidget(central_widget)
 
         self.prepare_button.pressed.connect(self._prepare_to_cycle)
-        self.exit_button.pressed.connect(self.close)
 
     def _prepare_to_cycle(self):
         self._magnets = self.magnets_tree.checked_items()
@@ -265,6 +269,7 @@ class CyclingDlg(QDialog):
 class SetToCycle(QThread):
     """Set magnet to cycle."""
 
+    currentItem = Signal(str)
     itemDone = Signal()
 
     def __init__(self, cyclers, parent=None):
@@ -287,6 +292,7 @@ class SetToCycle(QThread):
             self.finished.emit()
         else:
             for cycler in self._cyclers:
+                self.currentItem.emit(cycler.maname)
                 cycler.set_cycle()
                 self.itemDone.emit()
                 if self._quit_task:
@@ -297,7 +303,7 @@ class SetToCycle(QThread):
 class VerifyCycle(QThread):
     """Verify cycle."""
 
-    currentItem = Signal(MagnetCycler)
+    currentItem = Signal(str)
     itemDone = Signal()
     itemChecked = Signal(MagnetCycler, bool)
 
@@ -322,7 +328,7 @@ class VerifyCycle(QThread):
         else:
             time.sleep(2)
             for cycler in self._cyclers:
-                self.currentItem.emit(cycler)
+                self.currentItem.emit(cycler.maname)
                 status = cycler.is_ready()
                 if self.quit_task:
                     break
@@ -334,6 +340,7 @@ class VerifyCycle(QThread):
 class WaitCycle(QThread):
     """Cycle."""
 
+    currentItem = Signal(str)
     itemDone = Signal()
 
     def __init__(self, cyclers, parent=None):

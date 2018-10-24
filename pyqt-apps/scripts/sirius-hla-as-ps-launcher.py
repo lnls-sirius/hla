@@ -11,7 +11,7 @@ from siriushla.as_ps_control.PSTabControlWindow \
 from siriushla.as_pm_control.PulsedMagnetControlWindow \
     import PulsedMagnetControlWindow
 from siriushla.as_ap_injection.InjectionWindow import InjectionWindow
-from siriushla.as_config_manager.ConfigManagerWindow import ConfigManagerWindow
+from siriushla.as_ap_servconf.ConfigManagerWindow import ConfigManagerWindow
 from siriushla import util as _util
 from siriushla.widgets import SiriusMainWindow
 
