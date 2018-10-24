@@ -1,5 +1,6 @@
 """Control the Orbit Graphic Displnay."""
 
+import pathlib as _pathlib
 from datetime import datetime as _datetime
 from functools import partial as _part
 import numpy as _np
@@ -11,11 +12,11 @@ from qtpy.QtCore import QSize, Qt, QTimer, QThread, Signal, QObject
 from qtpy.QtGui import QColor, QFont
 from pydm.widgets import PyDMWaveformPlot
 from siriushla.widgets import SiriusConnectionSignal
-import siriuspy.csdevice.orbitcorr as _csorb
+from siriuspy.csdevice.orbitcorr import OrbitCorrDev
 
 
 class BaseWidget(QWidget):
-    DEFAULT_DIR = '/home/fac/sirius-iocs/si-ap-sofb'
+    DEFAULT_DIR = _pathlib.Path.home().as_posix()
     EXT = '.txt'
     EXT_FLT = 'Text Files (*.txt)'
 
@@ -23,7 +24,8 @@ class BaseWidget(QWidget):
         super(BaseWidget, self).__init__(parent)
         self.line_names = names
         self.controls = ctrls
-        self.acc = acc
+        self._csorb = OrbitCorrDev(acc)
+        self._isring = self._csorb.acc_idx in self._csorb.Rings
         self.update_rate = 2.1  # Hz
         self.last_dir = self.DEFAULT_DIR
         self.prefix = prefix
@@ -56,6 +58,18 @@ class BaseWidget(QWidget):
 
         self.thread.start()
         self.timer.start(1000/self.update_rate)
+
+    @property
+    def acc(self):
+        return self._csorb.acc
+
+    @property
+    def acc_idx(self):
+        return self._csorb.acc_idx
+
+    @property
+    def isring(self):
+        return self._isring
 
     def channels(self):
         chans = list(self.enbl_pvs.values())
@@ -94,11 +108,11 @@ class BaseWidget(QWidget):
         graph = Graph(self)
         graph.doubleclick.connect(_part(self._set_enable_list, pln))
 
-        labSty = {'font-size': '20pt'}
-        graph.setLabel('bottom', text='BPM position', units='m', **labSty)
+        labsty = {'font-size': '20pt'}
+        graph.setLabel('bottom', text='BPM position', units='m', **labsty)
         lab = 'Orbit' if self.is_orb else 'Kick Angle'
         unit = 'm' if self.is_orb else 'rad'
-        graph.setLabel('left', text=lab, units=unit, **labSty)
+        graph.setLabel('left', text=lab, units=unit, **labsty)
 
         pref = 'BPM' if self.is_orb else 'CH' if pln == 'x' else 'CV'
         for i, lname in enumerate(self.line_names):
@@ -309,7 +323,7 @@ class UpdateGraph(QObject):
         super().__init__()
         self.ctrls = ctrls
         self.acc = acc
-        self.consts = _csorb.get_consts(acc)
+        self._csorb = OrbitCorrDev(acc)
         self.is_orb = is_orb
         self._isvisible = True
         text = sorted(ctrls)[0]
@@ -327,8 +341,8 @@ class UpdateGraph(QObject):
             'ref': {
                 'x': _part(self._update_vectors, 'ref', 'x'),
                 'y': _part(self._update_vectors, 'ref', 'y')}}
-        szx = self.consts.NR_BPMS if self.is_orb else self.consts.NR_CH
-        szy = self.consts.NR_BPMS if self.is_orb else self.consts.NR_CV
+        szx = self._csorb.NR_BPMS if self.is_orb else self._csorb.NR_CH
+        szy = self._csorb.NR_BPMS if self.is_orb else self._csorb.NR_CV
         self.vectors = {
             'val': {
                 'x': _np.zeros(szx, dtype=float),
@@ -458,3 +472,15 @@ class Graph(PyDMWaveformPlot):
             i = _np.argmin(_np.abs(posx-pos.x()))
             self.doubleclick.emit(i)
         super().mouseDoubleClickEvent(ev)
+
+
+class InfLine(InfiniteLine):
+
+    def __init__(self, conv=1, pos=None, **kwargs):
+        if pos is not None:
+            pos *= conv
+        super().__init__(pos=pos, **kwargs)
+        self.conv = conv
+
+    def setValue(self, value):
+        super().setValue(value*self.conv)

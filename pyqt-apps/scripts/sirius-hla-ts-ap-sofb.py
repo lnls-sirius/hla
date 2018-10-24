@@ -1,6 +1,6 @@
 #!/usr/bin/env python-sirius
 
-"""BO SOFB Application."""
+"""TS SOFB Application."""
 
 import sys
 import argparse as _argparse
@@ -16,6 +16,6 @@ args = parser.parse_args()
 
 app = SiriusApplication()
 util.set_style(app)
-window = MainWindow(args.prefix, acc='BO')
+window = MainWindow(args.prefix, acc='TS')
 window.show()
 sys.exit(app.exec_())

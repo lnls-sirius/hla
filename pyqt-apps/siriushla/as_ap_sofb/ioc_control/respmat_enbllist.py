@@ -2,13 +2,13 @@
 
 from functools import partial as _part
 import numpy as np
-from qtpy.QtWidgets import QGridLayout, QHBoxLayout, QVBoxLayout, \
-    QSizePolicy, QScrollArea, QWidget, QLabel, QCheckBox, QPushButton
+from qtpy.QtWidgets import QGridLayout, QHBoxLayout, QVBoxLayout, QLabel, \
+    QSizePolicy, QScrollArea, QWidget, QPushButton
 from qtpy.QtCore import Qt, QRect, QPoint
 from qtpy.QtGui import QBrush, QColor, QPainter
 from siriushla.widgets import SiriusLedAlert, SiriusConnectionSignal
 from pydm.widgets.base import PyDMWidget
-# import siriuspy.csdevice.orbitcorr as _csorb
+from siriushla.as_ap_sofb.ioc_control.base import BaseWidget
 
 
 class Led(SiriusLedAlert):
@@ -78,54 +78,51 @@ class _PyDMLedList(PyDMWidget, QWidget):
             led.setEnabled(new_val)
 
 
-class SelectionMatrix(QWidget):
+class SelectionMatrix(BaseWidget):
     """Create the Selection Matrices for BPMs and Correctors."""
 
     def __init__(self, parent, dev, prefix, acc='SI'):
         """Initialize the matrix of the specified dev."""
-        super().__init__(parent)
-        self.acc = acc
-        self._select_ring(acc)
-        self.prefix = prefix
+        super().__init__(parent, prefix, acc)
         self.dev = dev
+        self.devpos = {
+            'BPMX': self._csorb.BPM_POS,
+            'BPMY': self._csorb.BPM_POS,
+            'CH': self._csorb.CH_POS,
+            'CV': self._csorb.CV_POS}
+        self.devnames = {
+            'BPMX': (self._csorb.BPM_NAMES, self._csorb.BPM_NICKNAMES),
+            'BPMY': (self._csorb.BPM_NAMES, self._csorb.BPM_NICKNAMES),
+            'CH': (self._csorb.CH_NAMES, self._csorb.CH_NICKNAMES),
+            'CV': (self._csorb.CV_NAMES, self._csorb.CV_NICKNAMES)}
+        self._get_headers()
+        self.prefix = prefix
         self.pvs = _PyDMLedList(
             parent=self,
             init_channel=self.prefix + self.dev + 'EnblList-RB',
-            size=self.INDICES_LENGTH[self.dev])
+            size=len(self.devnames[self.dev][0]))
         self._setup_ui()
 
-    def _select_ring(self, acc):
-        if acc.lower() == 'si':
-            NR_BPMs = 160
-            NR_CHs = 120
-            NR_CVs = 160
-            self.SUBSECTIONS = {
-                'BPMX': (
-                    'M1', 'M2', 'C1-1', 'C1-2', 'C2', 'C3-1', 'C3-2', 'C4'),
-                'BPMY': (
-                    'M1', 'M2', 'C1-1', 'C1-2', 'C2', 'C3-1', 'C3-2', 'C4'),
-                'CV':   (
-                    'M1', 'M2', 'C1', 'C2-1', 'C2-2', 'C3-1', 'C3-2', 'C4'),
-                'CH':   (
-                    'M1', 'M2', 'C1', 'C2', 'C3', 'C4')}
-            self.SECTIONS = ['{0:02d}'.format(i+1) for i in range(20)]
+    def _get_headers(self):
+        _, nicks = self.devnames[self.dev]
+        if self.acc == 'BO':
+            top_headers = ['{0:02d}'.format(i) for i in range(1, 11)]
+            if self.dev.startswith('C'):
+                top_headers = top_headers[::2]
+            side_headers = [
+                '01-10', '11-20', '21-30', '31-40', '41-50', '01-10']
+            if nicks[-1][:2] != '01':
+                side_headers = side_headers[:-1]
+        elif self.acc == 'SI':
+            top_headers = sorted({nick[2:] for nick in nicks})
+            top_headers = top_headers[-2:] + top_headers[:-2]
+            side_headers = sorted({nick[:2] for nick in nicks})
+            side_headers.append(side_headers[0])
         else:
-            NR_BPMs = 50
-            NR_CHs = 25
-            NR_CVs = 25
-            self.SUBSECTIONS = {
-                'BPMX': ('', '', '', '', ''),
-                'BPMY': ('', '', '', '', ''),
-                'CV':   ('', '', '', '', ''),
-                'CH':   ('', '', '', '', '')}
-            self.SECTIONS = [
-                '01-05', '06-10',
-                '11-15', '16-20',
-                '21-25', '26-30',
-                '31-35', '36-40',
-                '41-45', '46-50']
-        self.INDICES_LENGTH = {
-            'BPMX': NR_BPMs, 'BPMY': NR_BPMs, 'CH': NR_CHs, 'CV': NR_CVs}
+            top_headers = nicks
+            side_headers = []
+        self.side_headers = side_headers
+        self.top_headers = top_headers
 
     def _setup_ui(self):
         name = self.dev + "List"
@@ -160,55 +157,52 @@ class SelectionMatrix(QWidget):
         wid = MyWidget(self.pvs.led_list, parent)
         wid.setStyleSheet("font: 16pt \"Sans Serif\";\nfont-weight: bold;")
         gdl = QGridLayout(wid)
-        gdl.setSpacing(20)
-        # gdl.setColumnMinimumWidth(30)
 
-        secs, subsecs, indices = self._get_matrix_params()
-        len_ = len(subsecs)
-
-        self._make_line(gdl, 0, '00', subsecs, list(range(len_)), True)
-        for i, sec in enumerate(secs):
-            self._make_line(
-                gdl, i+1, sec, subsecs, indices[i*len_:(i+1)*len_], False)
+        for i, head in enumerate(self.top_headers):
+            lab = QLabel(wid)
+            lab.setText(head)
+            lab.setAlignment(Qt.AlignCenter)
+            gdl.addWidget(lab, 0, i+1)
+        for i, head in enumerate(self.side_headers):
+            lab = QLabel(wid)
+            lab.setText(head)
+            lab.setAlignment(Qt.AlignCenter)
+            gdl.addWidget(lab, i+1, 0)
+        for dev in self.devnames[self.dev][0]:
+            wid2, idx = self._make_unit(wid, dev)
+            i, j = self._get_position(idx)
+            gdl.addWidget(wid2, i+1, j+1)
         return wid
 
-    def _get_matrix_params(self):
-        max_idx = self.INDICES_LENGTH[self.dev] - 1
-        indices = list(range(max_idx))
-        indices = [max_idx, ] + indices
-        return self.SECTIONS, self.SUBSECTIONS[self.dev], indices
+    def _get_position(self, idx):
+        _, nicks = self.devnames[self.dev]
+        if self.acc == 'BO':
+            sec = int(nicks[idx][:2])
+            j = ((sec-1) % 10) + 1
+            j = self.top_headers.index('{0:02d}'.format(j))
+            i = (sec-1) // 10
+            if idx == len(nicks)-1 and sec == 1:
+                i = len(self.side_headers) - 1
+        elif self.acc == 'SI':
+            j = self.top_headers.index(nicks[idx][2:])
+            i = (idx+1) // len(self.top_headers)
+            if idx == len(nicks)-1:
+                i = len(self.side_headers)-1
+        else:
+            i, j = 0, idx
+        return i, j
 
-    def _make_line(self, gdl, idx, section, subsections, indices, header):
-        label = section+self.dev
-        lab = QLabel(self)
-        lab.setText('  ' if header else section)
-        lab.setAlignment(Qt.AlignCenter)
-        j = 0
-        gdl.addWidget(lab, idx, 0)
-        j += 1
-        for subsection, index in zip(subsections, indices):
-            if header:
-                lab = QLabel(self)
-                lab.setText(subsection)
-                lab.setAlignment(Qt.AlignCenter)
-                gdl.addWidget(lab, idx, j)
-            else:
-                wid = self._make_unit(self, section, subsection, index)
-                gdl.addWidget(wid, idx, j)
-            j += 1
-
-    def _make_unit(self, parent, section, subsection, index):
-        label = ''
-        if self.acc.lower() == 'si':
-            label = section+subsection
+    def _make_unit(self, parent, dev):
+        index = self.devnames[self.dev][0].index(dev)
+        label = self.devnames[self.dev][1][index]
+        label += '; Pos = {0:5.1f} m'.format(self.devpos[self.dev][index])
         wid = QWidget(parent)
         hbl = QHBoxLayout(wid)
         led = self.pvs.led_list[index]
         led.setParent(wid)
-        led.setToolTip('{0:d}'.format(index))
         led.setToolTip(label)
         hbl.addWidget(led)
-        return wid
+        return wid, index
 
 
 class MyWidget(QWidget):
@@ -248,7 +242,7 @@ class MyWidget(QWidget):
         for led in self.led_list:
             pos = led.mapTo(self, led.pos())
             sz = led.size()
-            x1 = pos.x()+sz.width()/2 > self.begin.x()  # Mistery:factor of 2
+            x1 = pos.x()+sz.width()/2 > self.begin.x()
             x2 = pos.x()+sz.width()/2 > self.end.x()
             y1 = pos.y()+sz.height()/2 > self.begin.y()
             y2 = pos.y()+sz.height()/2 > self.end.y()
@@ -260,7 +254,8 @@ def _main():
     app = SiriusApplication()
     win = SiriusDialog()
     hbl = QHBoxLayout(win)
-    wid = SelectionMatrix(win, 'BPMX', 'ca://' + pref+'SI-Glob:AP-SOFB:', 'BO')
+    acc = 'TB'
+    wid = SelectionMatrix(win, 'CV', 'ca://'+pref+acc+'-Glob:AP-SOFB:', acc)
     hbl.addWidget(wid)
     win.show()
     sys.exit(app.exec_())

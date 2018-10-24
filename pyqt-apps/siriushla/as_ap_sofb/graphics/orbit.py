@@ -2,9 +2,8 @@
 
 from functools import partial as _part
 import numpy as np
-from pyqtgraph import mkPen, InfiniteLine
-from qtpy.QtWidgets import QWidget, QLabel, QCheckBox, \
-    QVBoxLayout, QHBoxLayout, QGroupBox, QPushButton, QComboBox
+from qtpy.QtWidgets import QWidget, QLabel, QVBoxLayout, QPushButton, \
+    QHBoxLayout, QGroupBox, QComboBox
 from qtpy.QtCore import Qt, Signal
 from qtpy.QtGui import QColor
 import siriushla.util as _util
@@ -25,10 +24,18 @@ class OrbitWidget(BaseWidget):
         names = ['Line {0:d}'.format(i+1) for i in range(2)]
         super().__init__(parent, prefix, ctrls, names, True, acc)
 
-        self.updater[0].some_changed('val', 'Online Orbit')
-        self.updater[0].some_changed('ref', 'Reference Orbit')
-        self.findChild(QComboBox, 'ComboBox_val0').setCurrentIndex(3)
-        self.findChild(QComboBox, 'ComboBox_ref0').setCurrentIndex(4)
+        txt1, txt2 = 'SinglePass', 'Reference Orbit'
+        if self.isring:
+            txt1 = 'Online Orbit'
+
+        self.updater[0].some_changed('val', txt1)
+        self.updater[0].some_changed('ref', txt2)
+        cb1 = self.findChild(QComboBox, 'ComboBox_val0')
+        cb2 = self.findChild(QComboBox, 'ComboBox_ref0')
+        it1 = cb1.findText(txt1)
+        it2 = cb2.findText(txt2)
+        cb1.setCurrentIndex(it1)
+        cb2.setCurrentIndex(it2)
 
         self.add_buttons_for_images()
 
@@ -38,26 +45,28 @@ class OrbitWidget(BaseWidget):
         self.hbl.addWidget(grpbx)
         self.hbl.addStretch(1)
 
-        btn = QPushButton('Correctors', grpbx)
-        vbl.addWidget(btn)
-        Window = create_window_from_widget(
-            CorrectorsWidget, name='CorrectorsWindow', size=(2300, 1600))
-        _util.connect_window(
-            btn, Window, self, prefix=self.prefix, acc=self.acc)
+        if self.isring:
+            btn = QPushButton('Correctors', grpbx)
+            vbl.addWidget(btn)
+            Window = create_window_from_widget(
+                CorrectorsWidget, name='CorrectorsWindow', size=(2300, 1600))
+            _util.connect_window(
+                btn, Window, self, prefix=self.prefix, acc=self.acc)
 
-        btn = QPushButton('MultiTurn Orbit', grpbx)
-        vbl.addWidget(btn)
-        Window = create_window_from_widget(
-            MultiTurnWidget, name='MultiTurnWindow', size=(1000, 1800))
-        _util.connect_window(
-            btn, Window, self,
-            sigs=self.updater[0].raw_ref_sig, prefix=self.prefix)
+            btn = QPushButton('MultiTurn Orbit', grpbx)
+            vbl.addWidget(btn)
+            Window = create_window_from_widget(
+                MultiTurnWidget, name='MultiTurnWindow', size=(1000, 1800))
+            _util.connect_window(
+                btn, Window, self,
+                sigs=self.updater[0].raw_ref_sig, prefix=self.prefix)
 
-        btn = QPushButton('MultiTurn Sum', grpbx)
-        vbl.addWidget(btn)
-        Window = create_window_from_widget(
-            MultiTurnSumWidget, name='MultiTurnSumWindow', size=(1000, 1600))
-        _util.connect_window(btn, Window, self, prefix=self.prefix)
+            btn = QPushButton('MultiTurn Sum', grpbx)
+            vbl.addWidget(btn)
+            Window = create_window_from_widget(
+                MultiTurnSumWidget, name='MultiTurnSumWindow',
+                size=(1000, 1600))
+            _util.connect_window(btn, Window, self, prefix=self.prefix)
 
         btn = QPushButton('SinglePass Sum', grpbx)
         vbl.addWidget(btn)
@@ -71,19 +80,22 @@ class OrbitWidget(BaseWidget):
         return chans
 
     @staticmethod
-    def get_default_ctrls(prefix):
+    def get_default_ctrls(prefix, isring=True):
         pvs = [
-            'OrbitSmoothX-Mon', 'OrbitSmoothY-Mon',
             'OrbitSmoothSinglePassX-Mon', 'OrbitSmoothSinglePassY-Mon',
-            'OrbitMultiTurnX-Mon', 'OrbitMultiTurnY-Mon',
             'OrbitOfflineX-RB', 'OrbitOfflineY-RB',
             'OrbitRefX-RB', 'OrbitRefY-RB',
             'BPMOffsetsX-Mon', 'BPMOffsetsY-Mon']
+        orbs = [
+            'SinglePass', 'Offline Orbit', 'Reference Orbit', 'BPMs Offset']
+        if isring:
+            pvs.extend([
+                'OrbitSmoothX-Mon', 'OrbitSmoothY-Mon',
+                'OrbitMultiTurnX-Mon', 'OrbitMultiTurnY-Mon'])
+            orbs.extend(['Online Orbit', 'MultiTurn Orbit'])
+
         chans = [SiriusConnectionSignal(prefix+pv) for pv in pvs]
         ctrls = dict()
-        orbs = [
-            'Online Orbit', 'SinglePass', 'MultiTurn Orbit',
-            'Offline Orbit', 'Reference Orbit', 'BPMs Offset']
         pvs = iter(chans)
         for orb in orbs:
             pvi = next(pvs)
