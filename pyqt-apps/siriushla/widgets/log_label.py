@@ -1,12 +1,12 @@
 import datetime as _datetime
 from qtpy.QtWidgets import QListWidget, QListWidgetItem
-from qtpy.QtCore import Property
+from qtpy.QtCore import Property, Q_ENUMS
 from qtpy.QtGui import QColor
 from pydm.widgets.base import PyDMWidget
 from pydm.widgets.display_format import DisplayFormat, parse_value_for_display
 
 
-class PyDMLogLabel(QListWidget, PyDMWidget):
+class PyDMLogLabel(QListWidget, PyDMWidget, DisplayFormat):
     """
     A QListWidget with support for Channels and more from PyDM.
 
@@ -17,6 +17,9 @@ class PyDMLogLabel(QListWidget, PyDMWidget):
     init_channel : str, optional
         The channel to be used by the widget.
     """
+
+    DisplayFormat = DisplayFormat
+    Q_ENUMS(DisplayFormat)
 
     errorcolor = QColor(255, 0, 0)
     warncolor = QColor(200, 200, 0)
