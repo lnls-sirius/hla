@@ -11,6 +11,7 @@ from siriushla import util as _util
 from siriuspy.ramp import ramp
 from siriuspy.ramp.conn import ConnMagnets as _ConnMagnets, ConnRF as _ConnRF,\
                                ConnTiming as _ConnTiming, ConnSOFB as _ConnSOFB
+from siriuspy.servconf import exceptions as _srvexceptions
 from siriushla.bo_ap_ramp.status_and_commands import StatusAndCommands
 from siriushla.bo_ap_ramp.settings import Settings
 from siriushla.bo_ap_ramp.config_params import ConfigParameters
@@ -118,8 +119,6 @@ class RampMain(SiriusMainWindow):
     @Slot(str)
     def _receiveNewConfigName(self, new_config_name):
         self.ramp_config = ramp.BoosterRamp(new_config_name, auto_update=True)
-        if self.ramp_config.configsrv_exist():
-            self.ramp_config.configsrv_load()
         self._emitLoadSignal()
 
     def _emitConnectors(self):
@@ -142,9 +141,17 @@ class RampMain(SiriusMainWindow):
                                    self._conn_rf, self._conn_sofb)
 
     def _emitLoadSignal(self):
-        self.loadSignal.emit(self.ramp_config)
-        self._emitConnectors()
-        self._verifySync()
+        try:
+            if self.ramp_config.configsrv_exist():
+                self.ramp_config.configsrv_load()
+        except _srvexceptions.SrvError as e:
+            err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
+            err_msg.open()
+        else:
+            self.loadSignal.emit(self.ramp_config)
+            self._emitConnectors()
+        finally:
+            self._verifySync()
 
     def _verifySync(self):
         """Verify sync status related to ConfServer."""

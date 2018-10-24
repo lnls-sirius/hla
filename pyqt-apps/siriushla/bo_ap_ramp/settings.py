@@ -5,6 +5,7 @@ from qtpy.QtGui import QKeySequence
 from qtpy.QtWidgets import QMenuBar, QAction
 from siriuspy.servconf.util import \
     generate_config_name as _generate_config_name
+from siriuspy.servconf import exceptions as _srvexceptions
 from siriuspy.ramp import ramp
 from siriushla import util as _hlautil
 from siriushla.as_ps_control.PSTabControlWindow import \
@@ -16,7 +17,8 @@ from siriushla.bo_ap_ramp.auxiliar_classes import \
     LoadRampConfig as _LoadRampConfig, \
     NewRampConfigGetName as _NewRampConfigGetName, \
     OpticsAdjustSettings as _OpticsAdjustSettings, \
-    DiagnosisSettings as _DiagnosisSettings
+    DiagnosisSettings as _DiagnosisSettings, \
+    MessageBox as _MessageBox
 
 
 class Settings(QMenuBar):
@@ -104,13 +106,11 @@ class Settings(QMenuBar):
         # TODO: include RF and TI windows??
 
     def _showGetNewConfigNamePopup(self):
-        self._newConfigFromTemplateGetNamePopup = _NewRampConfigGetName(
+        self._newConfigNamePopup = _NewRampConfigGetName(
             self.ramp_config, 'bo_ramp', self, new_from_template=True)
-        self._newConfigFromTemplateGetNamePopup.configname.connect(
-            self._emitConfigName)
-        self._newConfigFromTemplateGetNamePopup.saveSignal.connect(
-            self.showSaveAsPopup)
-        self._newConfigFromTemplateGetNamePopup.open()
+        self._newConfigNamePopup.configname.connect(self._emitConfigName)
+        self._newConfigNamePopup.saveSignal.connect(self.showSaveAsPopup)
+        self._newConfigNamePopup.open()
 
     def _showLoadExistingConfigPopup(self):
         self._loadPopup = _LoadRampConfig(self.ramp_config, self)
@@ -129,8 +129,7 @@ class Settings(QMenuBar):
     def _showDiagSettingsPopup(self):
         self._diagSettingsPopup = _DiagnosisSettings(
             self, self.prefix, self._injcurr_idx, self._ejecurr_idx)
-        self._diagSettingsPopup.updateSettings.connect(
-            self._emitDiagSettings)
+        self._diagSettingsPopup.updateSettings.connect(self._emitDiagSettings)
         self._diagSettingsPopup.open()
 
     def showSaveAsPopup(self):
@@ -139,8 +138,7 @@ class Settings(QMenuBar):
             return
         self._saveAsPopup = _NewRampConfigGetName(
             self.ramp_config, 'bo_ramp', self, new_from_template=False)
-        self._saveAsPopup.configname.connect(
-            self._saveAndEmitConfigName)
+        self._saveAsPopup.configname.connect(self._saveAndEmitConfigName)
         self._saveAsPopup.open()
 
     def _showTIDelaysPopup(self):
@@ -148,14 +146,19 @@ class Settings(QMenuBar):
         pass
 
     def _saveAndEmitConfigName(self, new_name=None):
-        if self.ramp_config.configsrv_exist():
-            old_name = self.ramp_config.name
-            if not new_name:
-                new_name = _generate_config_name(old_name)
-            self.ramp_config.configsrv_save(new_name)
+        try:
+            if self.ramp_config.configsrv_exist():
+                old_name = self.ramp_config.name
+                if not new_name:
+                    new_name = _generate_config_name(old_name)
+                self.ramp_config.configsrv_save(new_name)
+            else:
+                self.ramp_config.configsrv_save()
+        except _srvexceptions.SrvError as e:
+            err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
+            err_msg.open()
         else:
-            self.ramp_config.configsrv_save()
-        self._emitConfigName(self.ramp_config.name)
+            self._emitConfigName(self.ramp_config.name)
 
     def _emitConfigName(self, config_name):
         self.newConfigNameSignal.emit(config_name)

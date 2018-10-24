@@ -10,6 +10,7 @@ from siriuspy.ramp.magnet import Magnet as _Magnet
 from siriuspy.optics.opticscorr import BOTuneCorr, BOChromCorr
 from siriuspy.servconf.util import \
     generate_config_name as _generate_config_name
+from siriuspy.servconf import exceptions as _srvexceptions
 from siriuspy.ramp.conn import ConnMagnets as _ConnMagnets, ConnRF as _ConnRF,\
                                ConnTiming as _ConnTiming, ConnSOFB as _ConnSOFB
 from siriushla.bo_ap_ramp.auxiliar_classes import \
@@ -78,8 +79,8 @@ class OpticsAdjust(QGroupBox):
         self.bt_edit.setToolTip('Click to edit strengths')
         self.bt_edit.clicked.connect(self._showEditPopup)
 
-        self.bt_save = QPushButton('Update in ramp config.')
-        self.bt_save.clicked.connect(self._updateRampConfig)
+        self.bt_update = QPushButton('Update in ramp config.')
+        self.bt_update.clicked.connect(self._updateRampConfig)
 
         self.bt_server = QPushButton('Server', self)
         self.act_load = QAction('Load', self)
@@ -99,7 +100,7 @@ class OpticsAdjust(QGroupBox):
         lay.addLayout(hlay_config)
         lay.addWidget(self.bt_edit)
         lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
-        lay.addWidget(self.bt_save)
+        lay.addWidget(self.bt_update)
         lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
         lay.addWidget(self.bt_server)
         lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
@@ -318,22 +319,26 @@ class OpticsAdjust(QGroupBox):
                 self.bt_edit.setText(label)
                 if label in ['Injection', 'Ejection']:
                     self.bt_edit.setEnabled(False)
-                    self.bt_save.setEnabled(False)
+                    self.bt_update.setEnabled(False)
                     self.act_load.setEnabled(False)
                     self.act_save.setEnabled(False)
                     self.act_save_as.setEnabled(False)
                     self.norm_config = None
                 else:
                     self.bt_edit.setEnabled(True)
-                    self.bt_save.setEnabled(True)
+                    self.bt_update.setEnabled(True)
                     self.act_save.setEnabled(True)
                     self.act_save_as.setEnabled(True)
                     self.norm_config = self.ramp_config[label]
-                    if self.norm_config.configsrv_exist():
-                        self.act_load.setEnabled(True)
-                    else:
-                        self.act_load.setEnabled(False)
-                        self.verifySync()
+                    try:
+                        if self.norm_config.configsrv_exist():
+                            self.act_load.setEnabled(True)
+                        else:
+                            self.act_load.setEnabled(False)
+                            self.verifySync()
+                    except _srvexceptions.SrvError as e:
+                        err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
+                        err_msg.open()
                 break
         self._resetTuneChanges()
         self._resetChromChanges()
@@ -366,23 +371,34 @@ class OpticsAdjust(QGroupBox):
 
     def _load(self):
         if self.norm_config is not None:
-            self.norm_config.configsrv_load()
-            self._resetTuneChanges()
-            self._resetChromChanges()
-            self._resetOrbitChanges()
-            self.verifySync()
+            try:
+                self.norm_config.configsrv_load()
+            except _srvexceptions.SrvError as e:
+                err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
+                err_msg.open()
+            else:
+                self._resetTuneChanges()
+                self._resetChromChanges()
+                self._resetOrbitChanges()
+                self.verifySync()
 
     def _save(self, new_name=None):
         if self.norm_config is None:
             return
-        if self.norm_config.configsrv_exist():
-            old_name = self.norm_config.name
-            if new_name is None:
-                new_name = _generate_config_name(old_name)
-            self.norm_config.configsrv_save(new_name)
-        else:
-            self.norm_config.configsrv_save()
-        self.verifySync()
+        try:
+            if self.norm_config.configsrv_exist():
+                old_name = self.norm_config.name
+                if not new_name:
+                    new_name = _generate_config_name(old_name)
+                self.norm_config.configsrv_save(new_name)
+            else:
+                self.norm_config.configsrv_save()
+        except _srvexceptions.SrvError as e:
+            err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
+            err_msg.open()
+        finally:
+            self.bt_edit.setText(self.norm_config.name)
+            self.verifySync()
 
     def _showSaveAsPopup(self):
         if self.norm_config is None:

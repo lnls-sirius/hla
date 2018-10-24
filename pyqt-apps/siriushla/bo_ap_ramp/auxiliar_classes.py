@@ -12,9 +12,10 @@ from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox
 from siriushla.widgets.windows import SiriusDialog
 from siriushla.as_ap_servconf import LoadConfiguration as _LoadConfiguration, \
                                      SaveConfiguration as _SaveConfiguration
-from siriuspy.servconf.conf_service import ConfigService as _ConfigService
+from siriuspy.servconf.srvconfig import ConnConfigService as _ConnConfigService
 from siriuspy.servconf.util import \
     generate_config_name as _generate_config_name
+from siriuspy.servconf import exceptions as _srvexceptions
 from siriuspy.ramp import ramp
 
 
@@ -46,7 +47,6 @@ class LoadRampConfig(_LoadConfiguration):
             if name != self.ramp_config.name:
                 self.configname.emit(name)
             else:
-                self.ramp_config.configsrv_load()
                 self.loadSignal.emit()
         else:
             self.configname.emit(name)
@@ -217,9 +217,14 @@ class InsertNormalizedConfig(SiriusDialog):
         elif sender is self.bt_confsrv:
             time = self.sb_confsrv_time.value()
             name = self.cb_confsrv_name.currentText()
-            n = ramp.BoosterNormalized(name)
-            n.configsrv_load()
-            nconfig = n.configuration
+            nconfig = None
+            try:
+                n = ramp.BoosterNormalized(name)
+                n.configsrv_load()
+                nconfig = n.configuration
+            except _srvexceptions.SrvError as e:
+                err_msg = MessageBox(self, 'Error', str(e), 'Ok')
+                err_msg.open()
         elif sender is self.bt_create:
             time = self.sb_create_time.value()
             name = self.le_create_name.text()
@@ -393,8 +398,26 @@ class OpticsAdjustSettings(SiriusDialog):
         self.setWindowTitle('Optics Adjust Settings')
         self.tuneconfig_currname = tuneconfig_currname
         self.chromconfig_currname = chromconfig_currname
-        self.cs = _ConfigService()
+        self.conn_tuneparams = _ConnConfigService('bo_tunecorr_params')
+        self.conn_chromparams = _ConnConfigService('bo_chromcorr_params')
         self._setupUi()
+
+        try:
+            _, metadata = self.conn_tuneparams.config_find()
+            for m in metadata:
+                self.cb_tuneconfig.addItem(m['name'])
+
+            _, metadata = self.conn_chromparams.config_find()
+            for m in metadata:
+                self.cb_chromconfig.addItem(m['name'])
+        except _srvexceptions.SrvError as e:
+            err_msg = MessageBox(self, 'Error', str(e), 'Ok')
+            err_msg.open()
+        finally:
+            self.cb_tuneconfig.setCurrentText(self.tuneconfig_currname)
+            self._showTuneConfigData()
+            self.cb_chromconfig.setCurrentText(self.chromconfig_currname)
+            self._showChromConfigData()
 
     def _setupUi(self):
         self.tune_settings = QWidget(self)
@@ -454,12 +477,6 @@ class OpticsAdjustSettings(SiriusDialog):
         self.table_nomKL.verticalHeader().setDefaultSectionSize(48)
         self.table_nomKL.setStyleSheet("background-color: #efebe7;")
 
-        querry = self.cs.find_configs(config_type='bo_tunecorr_params')
-        for c in querry['result']:
-            self.cb_tuneconfig.addItem(c['name'])
-        self.cb_tuneconfig.setCurrentText(self.tuneconfig_currname)
-        self._showTuneConfigData(self.tuneconfig_currname)
-
         lay = QVBoxLayout()
         lay.addWidget(l_tuneconfig)
         lay.addWidget(self.cb_tuneconfig)
@@ -516,12 +533,6 @@ class OpticsAdjustSettings(SiriusDialog):
         self.label_nomchrom.setMinimumHeight(48)
         self.label_nomchrom.setAlignment(Qt.AlignCenter)
 
-        querry = self.cs.find_configs(config_type='bo_chromcorr_params')
-        for c in querry['result']:
-            self.cb_chromconfig.addItem(c['name'])
-        self.cb_chromconfig.setCurrentText(self.chromconfig_currname)
-        self._showChromConfigData(self.chromconfig_currname)
-
         lay = QVBoxLayout()
         lay.addWidget(l_chromconfig)
         lay.addWidget(self.cb_chromconfig)
@@ -538,44 +549,54 @@ class OpticsAdjustSettings(SiriusDialog):
         return lay
 
     @Slot(str)
-    def _showTuneConfigData(self, tuneconfig_currname):
-        querry = self.cs.get_config(config_type='bo_tunecorr_params',
-                                    name=tuneconfig_currname)
-        mat = querry['result']['value']['matrix']
-        self.table_tunemat.setItem(0, 0, QTableWidgetItem(str(mat[0][0])))
-        self.table_tunemat.setItem(0, 1, QTableWidgetItem(str(mat[0][1])))
-        self.table_tunemat.setItem(1, 0, QTableWidgetItem(str(mat[1][0])))
-        self.table_tunemat.setItem(1, 1, QTableWidgetItem(str(mat[1][1])))
-        self.table_tunemat.item(0, 0).setFlags(Qt.ItemIsEnabled)
-        self.table_tunemat.item(0, 1).setFlags(Qt.ItemIsEnabled)
-        self.table_tunemat.item(1, 0).setFlags(Qt.ItemIsEnabled)
-        self.table_tunemat.item(1, 1).setFlags(Qt.ItemIsEnabled)
-        nomKL = querry['result']['value']['nominal KLs']
-        self.table_nomKL.setItem(0, 0, QTableWidgetItem(str(nomKL[0])))
-        self.table_nomKL.setItem(0, 1, QTableWidgetItem(str(nomKL[1])))
-        self.table_nomKL.item(0, 0).setFlags(Qt.ItemIsEnabled)
-        self.table_nomKL.item(0, 1).setFlags(Qt.ItemIsEnabled)
+    def _showTuneConfigData(self):
+        try:
+            config, _ = self.conn_tuneparams.config_get(
+                name=self.tuneconfig_currname)
+            mat = config['matrix']
+            nomKL = config['nominal KLs']
+        except _srvexceptions.SrvError as e:
+            err_msg = MessageBox(self, 'Error', str(e), 'Ok')
+            err_msg.open()
+        else:
+            self.table_tunemat.setItem(0, 0, QTableWidgetItem(str(mat[0][0])))
+            self.table_tunemat.setItem(0, 1, QTableWidgetItem(str(mat[0][1])))
+            self.table_tunemat.setItem(1, 0, QTableWidgetItem(str(mat[1][0])))
+            self.table_tunemat.setItem(1, 1, QTableWidgetItem(str(mat[1][1])))
+            self.table_tunemat.item(0, 0).setFlags(Qt.ItemIsEnabled)
+            self.table_tunemat.item(0, 1).setFlags(Qt.ItemIsEnabled)
+            self.table_tunemat.item(1, 0).setFlags(Qt.ItemIsEnabled)
+            self.table_tunemat.item(1, 1).setFlags(Qt.ItemIsEnabled)
+            self.table_nomKL.setItem(0, 0, QTableWidgetItem(str(nomKL[0])))
+            self.table_nomKL.setItem(0, 1, QTableWidgetItem(str(nomKL[1])))
+            self.table_nomKL.item(0, 0).setFlags(Qt.ItemIsEnabled)
+            self.table_nomKL.item(0, 1).setFlags(Qt.ItemIsEnabled)
 
     @Slot(str)
-    def _showChromConfigData(self, chromconfig_currname):
-        querry = self.cs.get_config(config_type='bo_chromcorr_params',
-                                    name=chromconfig_currname)
-        mat = querry['result']['value']['matrix']
-        self.table_chrommat.setItem(0, 0, QTableWidgetItem(str(mat[0][0])))
-        self.table_chrommat.setItem(0, 1, QTableWidgetItem(str(mat[0][1])))
-        self.table_chrommat.setItem(1, 0, QTableWidgetItem(str(mat[1][0])))
-        self.table_chrommat.setItem(1, 1, QTableWidgetItem(str(mat[1][1])))
-        self.table_chrommat.item(0, 0).setFlags(Qt.ItemIsEnabled)
-        self.table_chrommat.item(0, 1).setFlags(Qt.ItemIsEnabled)
-        self.table_chrommat.item(1, 0).setFlags(Qt.ItemIsEnabled)
-        self.table_chrommat.item(1, 1).setFlags(Qt.ItemIsEnabled)
-        nomSL = querry['result']['value']['nominal SLs']
-        self.table_nomSL.setItem(0, 0, QTableWidgetItem(str(nomSL[0])))
-        self.table_nomSL.setItem(0, 1, QTableWidgetItem(str(nomSL[1])))
-        self.table_nomSL.item(0, 0).setFlags(Qt.ItemIsEnabled)
-        self.table_nomSL.item(0, 1).setFlags(Qt.ItemIsEnabled)
-        self.label_nomchrom.setText(
-            str(querry['result']['value']['nominal chrom']))
+    def _showChromConfigData(self):
+        try:
+            config, _ = self.conn_chromparams.config_get(
+                name=self.chromconfig_currname)
+            mat = config['matrix']
+            nomSL = config['nominal SLs']
+            nomChrom = config['nominal chrom']
+        except _srvexceptions.SrvError as e:
+            err_msg = MessageBox(self, 'Error', str(e), 'Ok')
+            err_msg.open()
+        else:
+            self.table_chrommat.setItem(0, 0, QTableWidgetItem(str(mat[0][0])))
+            self.table_chrommat.setItem(0, 1, QTableWidgetItem(str(mat[0][1])))
+            self.table_chrommat.setItem(1, 0, QTableWidgetItem(str(mat[1][0])))
+            self.table_chrommat.setItem(1, 1, QTableWidgetItem(str(mat[1][1])))
+            self.table_chrommat.item(0, 0).setFlags(Qt.ItemIsEnabled)
+            self.table_chrommat.item(0, 1).setFlags(Qt.ItemIsEnabled)
+            self.table_chrommat.item(1, 0).setFlags(Qt.ItemIsEnabled)
+            self.table_chrommat.item(1, 1).setFlags(Qt.ItemIsEnabled)
+            self.table_nomSL.setItem(0, 0, QTableWidgetItem(str(nomSL[0])))
+            self.table_nomSL.setItem(0, 1, QTableWidgetItem(str(nomSL[1])))
+            self.table_nomSL.item(0, 0).setFlags(Qt.ItemIsEnabled)
+            self.table_nomSL.item(0, 1).setFlags(Qt.ItemIsEnabled)
+            self.label_nomchrom.setText(str(nomChrom))
 
     def _emitSettings(self):
         tuneconfig_name = self.cb_tuneconfig.currentText()
