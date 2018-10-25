@@ -149,7 +149,7 @@ class PSDetailWidget(QWidget):
         boxes_layout.addLayout(controls)
         boxes_layout.addLayout(analogs)
 
-        layout.addWidget(QLabel("<h1>" + self._psname + "</h1>"))
+        layout.addWidget(QLabel("<h2>" + self._psname + "</h2>"))
         layout.addLayout(boxes_layout)
         if not self._is_magnet:
             dclink_button = QPushButton('DCLink', self)
@@ -554,7 +554,7 @@ class DCLinkDetailWidget(PSDetailWidget):
         boxes_layout.addLayout(controls)
         boxes_layout.addLayout(analogs)
 
-        layout.addWidget(QLabel("<h1>" + self._psname + "</h1>"))
+        layout.addWidget(QLabel("<h2>" + self._psname + "</h2>"))
         layout.addLayout(boxes_layout)
 
         controls.addWidget(self.version_box)
