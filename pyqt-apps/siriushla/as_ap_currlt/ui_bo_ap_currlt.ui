@@ -40,10 +40,13 @@
      <property name="styleSheet">
       <string notr="true">font-size:24pt;
 font-weight:bold;
-background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, stop:0 rgba(173, 190, 207, 255), stop:1 rgba(213, 213, 213, 255));</string>
+background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, stop:0 rgba(173, 190, 207, 255), stop:1 rgba(213, 213, 213, 255));</string>
      </property>
      <property name="text">
       <string>BO Current and Lifetime</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
@@ -128,10 +131,10 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
          <bool>false</bool>
         </property>
         <property name="frameShape">
-         <enum>QFrame::Box</enum>
+         <enum>QFrame::NoFrame</enum>
         </property>
         <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
+         <enum>QFrame::Plain</enum>
         </property>
         <property name="text">
          <string/>
@@ -172,7 +175,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
          <string notr="true">font-weight:bold;</string>
         </property>
         <property name="text">
-         <string>Lifetime (H:m:s)</string>
+         <string>Lifetime [H:m:s]: </string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -203,10 +206,10 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
          <bool>false</bool>
         </property>
         <property name="frameShape">
-         <enum>QFrame::Box</enum>
+         <enum>QFrame::NoFrame</enum>
         </property>
         <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
+         <enum>QFrame::Plain</enum>
         </property>
         <property name="text">
          <string/>
@@ -246,7 +249,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
          <string notr="true">font-weight:bold;</string>
         </property>
         <property name="text">
-         <string>Current (mA)</string>
+         <string>Current [mA]: </string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -425,6 +428,9 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
      <layout class="QGridLayout" name="gridLayout_2">
       <item row="8" column="2" colspan="5">
        <widget class="QLabel" name="label_7">
+        <property name="styleSheet">
+         <string notr="true">font-weight: bold;</string>
+        </property>
         <property name="text">
          <string>Buffer</string>
         </property>
@@ -482,7 +488,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
          <bool>false</bool>
         </property>
         <property name="text">
-         <string>Size</string>
+         <string>Size: </string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -505,6 +511,9 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
         </property>
         <property name="autoFillBackground">
          <bool>false</bool>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">font-weight: bold;</string>
         </property>
         <property name="text">
          <string>Sampling Time [s]</string>
@@ -643,7 +652,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
       <item row="16" column="3">
        <widget class="QLabel" name="label_6">
         <property name="text">
-         <string>Auto Reset</string>
+         <string>Auto Reset: </string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -671,10 +680,10 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
          <string/>
         </property>
         <property name="frameShape">
-         <enum>QFrame::Box</enum>
+         <enum>QFrame::NoFrame</enum>
         </property>
         <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
+         <enum>QFrame::Plain</enum>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -711,10 +720,10 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
          <set>Qt::ImhNone</set>
         </property>
         <property name="frameShape">
-         <enum>QFrame::Box</enum>
+         <enum>QFrame::NoFrame</enum>
         </property>
         <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
+         <enum>QFrame::Plain</enum>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -748,10 +757,10 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
          <string/>
         </property>
         <property name="frameShape">
-         <enum>QFrame::Box</enum>
+         <enum>QFrame::NoFrame</enum>
         </property>
         <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
+         <enum>QFrame::Plain</enum>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -779,7 +788,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
          <bool>false</bool>
         </property>
         <property name="text">
-         <string>Max Size</string>
+         <string>Max Size: </string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -856,10 +865,10 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             <string/>
            </property>
            <property name="frameShape">
-            <enum>QFrame::Box</enum>
+            <enum>QFrame::NoFrame</enum>
            </property>
            <property name="frameShadow">
-            <enum>QFrame::Raised</enum>
+            <enum>QFrame::Plain</enum>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -906,14 +915,17 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
       <string>Graphs Settings</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_5">
-      <item row="2" column="1">
+      <item row="3" column="1">
        <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>Time Span [s]</string>
+         <string>Time Span [s]: </string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
-      <item row="2" column="2">
+      <item row="3" column="2">
        <widget class="QSpinBox" name="spinBox_2">
         <property name="minimum">
          <number>1</number>
@@ -929,11 +941,14 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
       <item row="1" column="1">
        <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>Buffer Size</string>
+         <string>Buffer Size: </string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
-      <item row="3" column="1" colspan="2">
+      <item row="4" column="1" colspan="2">
        <spacer name="verticalSpacer_6">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -1004,17 +1019,55 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
         </property>
        </spacer>
       </item>
+      <item row="2" column="1" colspan="2">
+       <spacer name="verticalSpacer_8">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
      </layout>
     </widget>
    </item>
    <item row="1" column="8">
     <widget class="QGroupBox" name="groupBox">
+     <property name="maximumSize">
+      <size>
+       <width>560</width>
+       <height>16777215</height>
+      </size>
+     </property>
      <property name="title">
       <string>Current Status</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
-      <item row="2" column="1">
+      <item row="2" column="3">
+       <spacer name="horizontalSpacer_6">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="2" column="2">
        <widget class="SiriusLedState" name="SiriusLedState_2">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="minimumSize">
          <size>
           <width>40</width>
@@ -1038,17 +1091,75 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
+      <item row="2" column="1">
        <widget class="QLabel" name="label_8">
         <property name="text">
          <string>Stored EBeam?</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignCenter</set>
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
-      <item row="3" column="0" colspan="2">
+      <item row="1" column="1" colspan="2">
+       <spacer name="verticalSpacer_13">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::MinimumExpanding</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="2" column="0">
+       <spacer name="horizontalSpacer_5">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="4" column="1">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>DCCT Measure </string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="2">
+       <widget class="SiriusLedAlert" name="SiriusLedAlert">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>PyDMLed specialization to represent 2 states in red/light green.</string>
+        </property>
+        <property name="channel" stdset="0">
+         <string>ca://${PREFIX}BO-35D:DI-DCCT:ReliableMeas-Mon</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1" colspan="2">
        <spacer name="verticalSpacer_9">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -1064,13 +1175,10 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
         </property>
        </spacer>
       </item>
-      <item row="1" column="0" colspan="2">
-       <spacer name="verticalSpacer_13">
+      <item row="3" column="1" colspan="2">
+       <spacer name="horizontalSpacer_7">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::MinimumExpanding</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
@@ -1092,19 +1200,19 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
  </widget>
  <customwidgets>
   <customwidget>
+   <class>PyDMLabel</class>
+   <extends>QLabel</extends>
+   <header>pydm.widgets.label</header>
+  </customwidget>
+  <customwidget>
    <class>PyDMTimePlot</class>
    <extends>QGraphicsView</extends>
    <header>pydm.widgets.timeplot</header>
   </customwidget>
   <customwidget>
    <class>PyDMEnumComboBox</class>
-   <extends>QFrame</extends>
+   <extends>QComboBox</extends>
    <header>pydm.widgets.enum_combo_box</header>
-  </customwidget>
-  <customwidget>
-   <class>PyDMLabel</class>
-   <extends>QLabel</extends>
-   <header>pydm.widgets.label</header>
   </customwidget>
   <customwidget>
    <class>PyDMPushButton</class>
@@ -1123,6 +1231,11 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
   </customwidget>
   <customwidget>
    <class>SiriusLedState</class>
+   <extends>PyDMLed</extends>
+   <header>siriushla.widgets.led</header>
+  </customwidget>
+  <customwidget>
+   <class>SiriusLedAlert</class>
    <extends>PyDMLed</extends>
    <header>siriushla.widgets.led</header>
   </customwidget>

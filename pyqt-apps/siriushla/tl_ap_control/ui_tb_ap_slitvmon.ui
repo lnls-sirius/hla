@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>815</width>
+    <height>318</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">font-size:20pt;</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <spacer name="verticalSpacer_10">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Maximum</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="0" column="3" rowspan="7">
+    <widget class="QWidget" name="widget_3" native="true">
+     <property name="minimumSize">
+      <size>
+       <width>300</width>
+       <height>300</height>
+      </size>
+     </property>
+     <widget class="PyDMDrawingCircle" name="PyDMDrawingCircle_2">
+      <property name="geometry">
+       <rect>
+        <x>100</x>
+        <y>0</y>
+        <width>100</width>
+        <height>300</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="toolTip">
+       <string/>
+      </property>
+      <property name="whatsThis">
+       <string>
+    A widget with a circle drawn in it.
+    This class inherits from PyDMDrawing.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
+      </property>
+     </widget>
+     <widget class="PyDMDrawingRectangle" name="PyDMDrawingRectangle_SlitVDown">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>150</y>
+        <width>220</width>
+        <height>110</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="toolTip">
+       <string/>
+      </property>
+      <property name="whatsThis">
+       <string>
+    A widget with a rectangle drawn in it.
+    This class inherits from PyDMDrawing.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
+      </property>
+      <property name="brush" stdset="0">
+       <brush brushstyle="Dense3Pattern">
+        <color alpha="255">
+         <red>119</red>
+         <green>153</green>
+         <blue>116</blue>
+        </color>
+       </brush>
+      </property>
+     </widget>
+     <widget class="PyDMDrawingRectangle" name="PyDMDrawingRectangle_SlitVUp">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>40</y>
+        <width>220</width>
+        <height>110</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="toolTip">
+       <string/>
+      </property>
+      <property name="whatsThis">
+       <string>
+    A widget with a rectangle drawn in it.
+    This class inherits from PyDMDrawing.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
+      </property>
+      <property name="brush" stdset="0">
+       <brush brushstyle="Dense3Pattern">
+        <color alpha="255">
+         <red>119</red>
+         <green>153</green>
+         <blue>116</blue>
+        </color>
+       </brush>
+      </property>
+     </widget>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="styleSheet">
+      <string notr="true">font-weight:bold;</string>
+     </property>
+     <property name="text">
+      <string>Status</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="SiriusLedAlert" name="SiriusLedAlert_4">
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>40</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="whatsThis">
+      <string>PyDMLed specialization to represent 2 states in red/light green.</string>
+     </property>
+     <property name="shape">
+      <enum>QLed::Round</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="PyDMPushButton" name="PyDMPushButton_2">
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="whatsThis">
+      <string>
+    Basic PushButton to send a fixed value.
+
+    The PyDMPushButton is meant to hold a specific value, and send that value
+    to a channel when it is clicked, much like the MessageButton does in EDM.
+    The PyDMPushButton works in two different modes of operation, first, a
+    fixed value can be given to the :attr:`.pressValue` attribute, whenever the
+    button is clicked a signal containing this value will be sent to the
+    connected channel. This is the default behavior of the button. However, if
+    the :attr:`.relativeChange` is set to True, the fixed value will be added
+    to the current value of the channel. This means that the button will
+    increment a channel by a fixed amount with every click, a consistent
+    relative move
+
+    Parameters
+    ----------
+    parent : QObject, optional
+        Parent of PyDMPushButton
+
+    label : str, optional
+        String to place on button
+
+    icon : QIcon, optional
+        An Icon to display on the PyDMPushButton
+
+    pressValue : int, float, str
+        Value to be sent when the button is clicked
+
+    relative : bool, optional
+        Choice to have the button perform a relative put, instead of always
+        setting to an absolute value
+
+    init_channel : str, optional
+        ID of channel to manipulate
+
+    </string>
+     </property>
+     <property name="text">
+      <string>Do Homing</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Maximum</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_SlitV_Center">
+     <property name="minimumSize">
+      <size>
+       <width>120</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font-weight:bold;</string>
+     </property>
+     <property name="text">
+      <string>Center 
+ [mm]</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="PyDMSpinbox" name="PyDMSpinbox_3">
+     <property name="minimumSize">
+      <size>
+       <width>200</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="whatsThis">
+      <string>
+    A QDoubleSpinBox with support for Channels and more from PyDM.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
+     </property>
+     <property name="precision" stdset="0">
+      <number>0</number>
+     </property>
+     <property name="channel" stdset="0">
+      <string>ca://${PREFIX}TB-01:DI-SlitV:Center-SP</string>
+     </property>
+     <property name="showStepExponent" stdset="0">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="2">
+    <widget class="PyDMLabel" name="PyDMLabel_SlitV_Center_RB">
+     <property name="maximumSize">
+      <size>
+       <width>150</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="whatsThis">
+      <string/>
+     </property>
+     <property name="text">
+      <string>PyDMLabel</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
+     <property name="channel" stdset="0">
+      <string>ca://${PREFIX}TB-01:DI-SlitV:Center-RB</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <spacer name="verticalSpacer_4">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Maximum</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="label_SlitV_Width">
+     <property name="minimumSize">
+      <size>
+       <width>120</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font-weight:bold;</string>
+     </property>
+     <property name="text">
+      <string>Width 
+ [mm]</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
+    <widget class="PyDMSpinbox" name="PyDMSpinbox_4">
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="whatsThis">
+      <string>
+    A QDoubleSpinBox with support for Channels and more from PyDM.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
+     </property>
+     <property name="channel" stdset="0">
+      <string>ca://${PREFIX}TB-01:DI-SlitV:Width-SP</string>
+     </property>
+     <property name="showStepExponent" stdset="0">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="2">
+    <widget class="PyDMLabel" name="PyDMLabel_SlitV_Width_RB">
+     <property name="maximumSize">
+      <size>
+       <width>150</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="whatsThis">
+      <string/>
+     </property>
+     <property name="text">
+      <string>PyDMLabel</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
+     <property name="channel" stdset="0">
+      <string>ca://${PREFIX}TB-01:DI-SlitV:Width-RB</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0">
+    <spacer name="verticalSpacer_5">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Maximum</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PyDMLabel</class>
+   <extends>QLabel</extends>
+   <header>pydm.widgets.label</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMDrawingCircle</class>
+   <extends>QWidget</extends>
+   <header>pydm.widgets.drawing</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMDrawingRectangle</class>
+   <extends>QWidget</extends>
+   <header>pydm.widgets.drawing</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMPushButton</class>
+   <extends>QPushButton</extends>
+   <header>pydm.widgets.pushbutton</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMSpinbox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>pydm.widgets.spinbox</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMLed</class>
+   <extends>QLed</extends>
+   <header>siriushla.widgets.led</header>
+  </customwidget>
+  <customwidget>
+   <class>SiriusLedAlert</class>
+   <extends>PyDMLed</extends>
+   <header>siriushla.widgets.led</header>
+  </customwidget>
+  <customwidget>
+   <class>QLed</class>
+   <extends>QFrame</extends>
+   <header>siriushla.widgets.QLed</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
