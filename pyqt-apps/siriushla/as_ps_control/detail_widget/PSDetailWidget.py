@@ -175,7 +175,7 @@ class PSDetailWidget(QWidget):
         layout = QGridLayout()
 
         self.version_cte = PyDMLabel(
-            self, "ca://" + self._prefixed_psname + ":Version-Cte")
+            self, self._prefixed_psname + ":Version-Cte")
         self.version_cte.setObjectName("version_cte_label")
 
         self.version_cte.setSizePolicy(QSizePolicy.Minimum,
@@ -193,13 +193,13 @@ class PSDetailWidget(QWidget):
         # _util.connect_window(soft_intlk_button, )
         layout.addWidget(soft_intlk_button, 0, 0)
         layout.addWidget(SiriusLedAlert(
-            self, "ca://" + self._prefixed_psname + ":IntlkSoft-Mon"), 0, 1)
+            self, self._prefixed_psname + ":IntlkSoft-Mon"), 0, 1)
         layout.addWidget(hard_intlk_button, 1, 0)
         layout.addWidget(SiriusLedAlert(
-            self, "ca://" + self._prefixed_psname + ":IntlkHard-Mon"), 1, 1)
+            self, self._prefixed_psname + ":IntlkHard-Mon"), 1, 1)
         layout.addWidget(openloop_label, 2, 0, Qt.AlignCenter)
         layout.addWidget(SiriusLedAlert(
-            self, "ca://" + self._prefixed_psname + ":CtrlLoop-Sts"), 2, 1)
+            self, self._prefixed_psname + ":CtrlLoop-Sts"), 2, 1)
 
         _util.connect_window(soft_intlk_button, MagnetInterlockWindow, self,
                              **{'magnet': self._psname,
@@ -213,14 +213,14 @@ class PSDetailWidget(QWidget):
         layout = QGridLayout()
 
         self.opmode_sp = PyDMEnumComboBox(
-            self, "ca://" + self._prefixed_psname + ":OpMode-Sel")
+            self, self._prefixed_psname + ":OpMode-Sel")
         self.opmode_rb = PyDMLabel(
-            self, "ca://" + self._prefixed_psname + ":OpMode-Sts")
+            self, self._prefixed_psname + ":OpMode-Sts")
         self.opmode_rb.setObjectName("opmode1_rb_label")
         self.ctrlmode_led = SiriusLedAlert(
-            self, "ca://" + self._prefixed_psname + ":CtrlMode-Mon")
+            self, self._prefixed_psname + ":CtrlMode-Mon")
         self.ctrlmode_label = PyDMLabel(
-            self, "ca://" + self._prefixed_psname + ":CtrlMode-Mon")
+            self, self._prefixed_psname + ":CtrlMode-Mon")
         self.ctrlmode_label.setObjectName("ctrlmode1_label")
 
         self.ctrlmode_led.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
@@ -242,18 +242,18 @@ class PSDetailWidget(QWidget):
 
         # self.on_btn = PyDMPushButton(
         #     self, label="On", pressValue=1,
-        #     init_channel="ca://" + self._prefixed_magnet + ":PwrState-Sel")
+        #     init_channel=self._prefixed_magnet + ":PwrState-Sel")
         # self.off_btn = PyDMPushButton(
         #     self, label="Off", pressValue=0,
-        #     init_channel="ca://" + self._prefixed_magnet + ":PwrState-Sel")
+        #     init_channel=self._prefixed_magnet + ":PwrState-Sel")
         self.state_button = PyDMStateButton(
             parent=self,
-            init_channel="ca://" + self._prefixed_psname + ":PwrState-Sel")
+            init_channel=self._prefixed_psname + ":PwrState-Sel")
         self.pwrstate_led = SiriusLedState(
-            self, "ca://" + self._prefixed_psname + ":PwrState-Sts")
+            self, self._prefixed_psname + ":PwrState-Sts")
         # enum_map={'On': PyDMLed.Green, 'Off': PyDMLed.Red})
         self.pwrstate_label = PyDMLabel(
-            self, "ca://" + self._prefixed_psname + ":PwrState-Sts")
+            self, self._prefixed_psname + ":PwrState-Sts")
         self.pwrstate_label.setObjectName("pwrstate_label")
 
         self.pwrstate_led.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
@@ -284,18 +284,18 @@ class PSDetailWidget(QWidget):
 
         self.current_sp_widget = PyDMLinEditScrollbar(
             parent=self,
-            channel="ca://" + self._prefixed_psname + ":Current-SP")
+            channel=self._prefixed_psname + ":Current-SP")
         # self.current_sp_widget.set_limits_from_pv(True)
         # if self._magnet_type == "b":
         self.current_sp_widget.sp_scrollbar.setTracking(False)
         self.current_rb_val = PyDMLabel(
-            self, "ca://" + self._prefixed_psname + ":Current-RB")
+            self, self._prefixed_psname + ":Current-RB")
         self.current_rb_val.precFromPV = True
         self.current_ref_val = PyDMLabel(
-            self, "ca://" + self._prefixed_psname + ":CurrentRef-Mon")
+            self, self._prefixed_psname + ":CurrentRef-Mon")
         self.current_ref_val.precFromPV = True
         self.current_mon_val = PyDMLabel(
-            self, "ca://" + self._prefixed_psname + ":Current-Mon")
+            self, self._prefixed_psname + ":Current-Mon")
         self.current_mon_val.precFromPV = True
 
         layout.addWidget(self.current_sp_label, 0, 0, Qt.AlignRight)
@@ -322,21 +322,21 @@ class PSDetailWidget(QWidget):
         self.metric_mon_label = QLabel("Mon")
 
         self.metric_sp_widget = PyDMLinEditScrollbar(
-            "ca://" + self._prefixed_psname + ":" + self._metric + "-SP",
+            self._prefixed_psname + ":" + self._metric + "-SP",
             self)
         # self.metric_sp_widget.set_limits_from_pv(True)
         # if self._magnet_type == "b":
         self.metric_sp_widget.sp_scrollbar.setTracking(False)
         self.metric_rb_val = PyDMLabel(
-            self, "ca://" + self._prefixed_psname + ":" + self._metric + "-RB")
+            self, self._prefixed_psname + ":" + self._metric + "-RB")
         self.metric_rb_val.precFromPV = True
         self.metric_ref_val = PyDMLabel(
             self,
-            "ca://" + self._prefixed_psname + ":" + self._metric + "Ref-Mon")
+            self._prefixed_psname + ":" + self._metric + "Ref-Mon")
         self.metric_ref_val.precFromPV = True
         self.metric_mon_val = PyDMLabel(
             self,
-            "ca://" + self._prefixed_psname + ":" + self._metric + "-Mon")
+            self._prefixed_psname + ":" + self._metric + "-Mon")
         self.metric_mon_val.precFromPV = True
 
         layout.addWidget(self.metric_sp_label, 0, 0, Qt.AlignRight)
@@ -355,20 +355,20 @@ class PSDetailWidget(QWidget):
 
     def _cycleLayout(self):
         layout = QGridLayout()
-        enbl_mon_ca = 'ca://' + self._prefixed_psname + ':CycleEnbl-Mon'
-        type_sp_ca = 'ca://' + self._prefixed_psname + ':CycleType-Sel'
-        type_rb_ca = 'ca://' + self._prefixed_psname + ':CycleType-Sts'
-        nrcycles_sp_ca = 'ca://' + self._prefixed_psname + ':CycleNrCycles-SP'
-        nrcycles_rb_ca = 'ca://' + self._prefixed_psname + ':CycleNrCycles-RB'
-        index_ca = 'ca://' + self._prefixed_psname + ':CycleIndex-Mon'
-        freq_sp_ca = 'ca://' + self._prefixed_psname + ':CycleFreq-SP'
-        freq_rb_ca = 'ca://' + self._prefixed_psname + ':CycleFreq-RB'
-        ampl_sp_ca = 'ca://' + self._prefixed_psname + ':CycleAmpl-SP'
-        ampl_rb_ca = 'ca://' + self._prefixed_psname + ':CycleAmpl-RB'
-        offset_sp_ca = 'ca://' + self._prefixed_psname + ':CycleOffset-SP'
-        offset_rb_ca = 'ca://' + self._prefixed_psname + ':CycleOffset-RB'
-        auxparam_sp_ca = 'ca://' + self._prefixed_psname + ':CycleAuxParam-SP'
-        auxparam_rb_ca = 'ca://' + self._prefixed_psname + ':CycleAuxParam-RB'
+        enbl_mon_ca = self._prefixed_psname + ':CycleEnbl-Mon'
+        type_sp_ca = self._prefixed_psname + ':CycleType-Sel'
+        type_rb_ca = self._prefixed_psname + ':CycleType-Sts'
+        nrcycles_sp_ca = self._prefixed_psname + ':CycleNrCycles-SP'
+        nrcycles_rb_ca = self._prefixed_psname + ':CycleNrCycles-RB'
+        index_ca = self._prefixed_psname + ':CycleIndex-Mon'
+        freq_sp_ca = self._prefixed_psname + ':CycleFreq-SP'
+        freq_rb_ca = self._prefixed_psname + ':CycleFreq-RB'
+        ampl_sp_ca = self._prefixed_psname + ':CycleAmpl-SP'
+        ampl_rb_ca = self._prefixed_psname + ':CycleAmpl-RB'
+        offset_sp_ca = self._prefixed_psname + ':CycleOffset-SP'
+        offset_rb_ca = self._prefixed_psname + ':CycleOffset-RB'
+        auxparam_sp_ca = self._prefixed_psname + ':CycleAuxParam-SP'
+        auxparam_rb_ca = self._prefixed_psname + ':CycleAuxParam-RB'
         # 8 labels
         self.cycle_enbl_label = QLabel('Enabled', self)
         self.cycle_type_label = QLabel('Type', self)
@@ -424,12 +424,12 @@ class PSDetailWidget(QWidget):
     def _pruLayout(self):
         layout = QGridLayout()
 
-        sync_mode_ca = 'ca://' + self._prefixed_psname + ':PRUSyncMode-Mon'
-        block_index_ca = 'ca://' + self._prefixed_psname + ':PRUBlockIndex-Mon'
+        sync_mode_ca = self._prefixed_psname + ':PRUSyncMode-Mon'
+        block_index_ca = self._prefixed_psname + ':PRUBlockIndex-Mon'
         sync_count_ca = \
-            'ca://' + self._prefixed_psname + ':PRUSyncPulseCount-Mon'
+            self._prefixed_psname + ':PRUSyncPulseCount-Mon'
         queue_size_ca = \
-            'ca://' + self._prefixed_psname + ':PRUCtrlQueueSize-Mon'
+            self._prefixed_psname + ':PRUCtrlQueueSize-Mon'
 
         sync_mode_label = QLabel('Sync Mode', self)
         block_index_label = QLabel('Block Index', self)
@@ -457,8 +457,8 @@ class PSDetailWidget(QWidget):
     def _commandLayout(self):
         layout = QHBoxLayout()
 
-        reset_pv = "ca://" + self._prefixed_psname + ":Reset-Cmd"
-        abort_pv = "ca://" + self._prefixed_psname + ":Abort-Cmd"
+        reset_pv = self._prefixed_psname + ":Reset-Cmd"
+        abort_pv = self._prefixed_psname + ":Abort-Cmd"
 
         self.abort_btn = PyDMPushButton(
             parent=self, label="Abort", pressValue=1, init_channel=abort_pv)
@@ -473,8 +473,8 @@ class PSDetailWidget(QWidget):
     def _waveformLayout(self):
         layout = QVBoxLayout()
 
-        wfm_data_sp_ch = "ca://" + self._prefixed_psname + ":WfmData-SP"
-        wfm_data_rb_ch = "ca://" + self._prefixed_psname + ":WfmData-RB"
+        wfm_data_sp_ch = self._prefixed_psname + ":WfmData-SP"
+        wfm_data_rb_ch = self._prefixed_psname + ":WfmData-RB"
 
         self.wfmdata = PyDMWaveformPlot()
         self.wfmdata.setMaximumSize(400, 300)
@@ -577,19 +577,19 @@ class DCLinkDetailWidget(PSDetailWidget):
 
         self.current_sp_widget = PyDMLinEditScrollbar(
             parent=self,
-            channel="ca://" + self._prefixed_psname + ":Voltage-SP")
+            channel=self._prefixed_psname + ":Voltage-SP")
         # self.current_sp_widget.set_limits_from_pv(True)
         # if self._magnet_type == "b":
         self.current_sp_widget.sp_lineedit.showUnits = False
         self.current_sp_widget.sp_scrollbar.setTracking(False)
         self.current_rb_val = PyDMLabel(
-            self, "ca://" + self._prefixed_psname + ":Voltage-RB")
+            self, self._prefixed_psname + ":Voltage-RB")
         self.current_rb_val.precFromPV = True
         self.current_ref_val = PyDMLabel(
-            self, "ca://" + self._prefixed_psname + ":VoltageRef-Mon")
+            self, self._prefixed_psname + ":VoltageRef-Mon")
         self.current_ref_val.precFromPV = True
         self.current_mon_val = PyDMLabel(
-            self, "ca://" + self._prefixed_psname + ":Voltage-Mon")
+            self, self._prefixed_psname + ":Voltage-Mon")
         self.current_mon_val.precFromPV = True
 
         layout.addWidget(self.current_sp_label, 0, 0, Qt.AlignRight)
@@ -617,15 +617,15 @@ class DCLinkDetailWidget(PSDetailWidget):
         # self._mod_status_label = QLabel('Module Status')
 
         self._out_1_mon = PyDMLabel(
-            self, 'ca://' + self._prefixed_psname + ':Voltage1-Mon')
+            self, self._prefixed_psname + ':Voltage1-Mon')
         self._out_2_mon = PyDMLabel(
-            self, 'ca://' + self._prefixed_psname + ':Voltage2-Mon')
+            self, self._prefixed_psname + ':Voltage2-Mon')
         self._out_3_mon = PyDMLabel(
-            self, 'ca://' + self._prefixed_psname + ':Voltage3-Mon')
+            self, self._prefixed_psname + ':Voltage3-Mon')
         self._out_dig_mon = PyDMLabel(
-            self, 'ca://' + self._prefixed_psname + ':VoltageDig-Mon')
+            self, self._prefixed_psname + ':VoltageDig-Mon')
         self._mod_status_mon = PyDMLabel(
-            self, 'ca://' + self._prefixed_psname + ':ModulesStatus-Mon')
+            self, self._prefixed_psname + ':ModulesStatus-Mon')
 
         layout.addRow('Voltage 1', self._out_1_mon)
         layout.addRow('Voltage 2', self._out_2_mon)

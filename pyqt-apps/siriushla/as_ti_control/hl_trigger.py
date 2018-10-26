@@ -1,16 +1,13 @@
 import sys
 from epics import PV as _PV
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QGroupBox, QLabel
-from PyQt5.QtWidgets import QFormLayout, QVBoxLayout, QGridLayout
-from PyQt5.QtWidgets import QSizePolicy as QSzPol
-from PyQt5.QtWidgets import QPushButton
+from qtpy.QtCore import Qt
+from qtpy.QtWidgets import QGroupBox, QLabel, QPushButton, QFormLayout, \
+    QVBoxLayout, QGridLayout, QSizePolicy as QSzPol
 from pydm.widgets.checkbox import PyDMCheckbox as PyDMCb
 from pydm.widgets.enum_combo_box import PyDMEnumComboBox as PyDMECB
 from pydm.widgets.label import PyDMLabel
 from pydm.widgets.spinbox import PyDMSpinbox
 from siriuspy.namesys import SiriusPVName as _PVName
-from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets.led import PyDMLed, SiriusLedAlert
 from siriushla.widgets.state_button import PyDMStateButton
 from siriushla.widgets.windows import SiriusDialog
@@ -208,16 +205,14 @@ class HLTriggerList(BaseList):
 
 if __name__ == '__main__':
     """Run Example."""
+    from siriushla.sirius_application import SiriusApplication
+    from siriuspy.envars import vaca_prefix
     app = SiriusApplication()
-    detail_ctrl = HLTriggerDetailed(
-        prefix='ca://fernando-lnls452-linux-SI-01SA:TI-PingH:')
+    detail_ctrl = HLTriggerDetailed(prefix=vaca_prefix+'SI-01SA:TI-PingH:')
     detail_ctrl.show()
     props = {'detailed', 'state', 'pulses', 'duration'}
     list_ctrl = HLTriggerList(
-        name="Triggers",
-        prefix='ca://fernando-lnls452-linux-',
-        props=props,
-        obj_names=['SI-01SA:TI-PingH:', 'SI-01SA:TI-PingV:'],
-        )
+        name="Triggers", props=props, prefix=vaca_prefix,
+        obj_names=['SI-01SA:TI-PingH:', 'SI-01SA:TI-PingV:'])
     list_ctrl.show()
     sys.exit(app.exec_())

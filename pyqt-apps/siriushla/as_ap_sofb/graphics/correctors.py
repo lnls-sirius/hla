@@ -96,7 +96,7 @@ def _main(prefix):
     app = SiriusApplication()
     win = SiriusDialog()
     hbl = QHBoxLayout(win)
-    prefix = 'ca://' + prefix + 'SI-Glob:AP-SOFB:'
+    prefix = prefix + 'SI-Glob:AP-SOFB:'
     wid = CorrectorsWidget(win, prefix)
     hbl.addWidget(wid)
     win.show()

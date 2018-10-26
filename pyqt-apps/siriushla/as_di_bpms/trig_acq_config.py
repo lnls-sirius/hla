@@ -89,7 +89,7 @@ if __name__ == '__main__':
     # wind.resize(1400, 1400)
     hbl = QHBoxLayout(wind)
     bpm_name = 'SI-07SP:DI-BPM-1'
-    widm = ACQTrigConfigs(prefix='ca://', bpm=bpm_name)
+    widm = ACQTrigConfigs(bpm=bpm_name)
     hbl.addWidget(widm)
     wind.show()
     sys.exit(app.exec_())

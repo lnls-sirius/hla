@@ -18,8 +18,6 @@ from siriushla.as_di_bpms import SelectBPMs
 class MainWindow(SiriusMainWindow):
     def __init__(self, prefix, acc='SI'):
         super().__init__()
-        if not prefix.startswith('ca://'):
-            prefix = 'ca://' + prefix
         self.prefix = prefix + acc + '-Glob:AP-SOFB:'
         self._csorb = OrbitCorrDev(acc)
         self._isring = self._csorb.acc_idx in self._csorb.Rings
@@ -155,8 +153,7 @@ class MainWindow(SiriusMainWindow):
         actbpm = QAction('Show BPM List', menubar)
         Window = create_window_from_widget(SelectBPMs, 'SelectBPMs')
         util.connect_window(
-            actbpm, Window, self, prefix='ca://',
-            bpm_list=self._csorb.BPM_NAMES)
+            actbpm, Window, self, bpm_list=self._csorb.BPM_NAMES)
         menubar.addAction(actbpm)
 
         statusbar = QStatusBar(self)

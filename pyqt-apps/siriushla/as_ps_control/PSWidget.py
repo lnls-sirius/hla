@@ -161,9 +161,9 @@ class BasePSWidget(QWidget):
         self.psname_label.setObjectName("psname_button")
         # PwrState widgets
         self.pwrstate_button = PyDMStateButton(
-            parent=self, init_channel="ca://" + self._pwrstate_sp_pv)
+            parent=self, init_channel=self._pwrstate_sp_pv)
         self.pwrstate_button.setObjectName("pwrstate_button")
-        self.state_led = PyDMLed(self, "ca://" + self._pwrstate_rb_pv)
+        self.state_led = PyDMLed(self, self._pwrstate_rb_pv)
         self.state_led.setObjectName("state_led")
         self.state_widget = QWidget(self)
         self.state_widget.setObjectName("state_widget")
@@ -173,9 +173,9 @@ class BasePSWidget(QWidget):
         self.state_widget.layout.addWidget(self.state_led)
         # Interlock leds
         self.intlksoft_led = \
-            SiriusLedAlert(self, "ca://" + self._intlksoft_mon_pv)
+            SiriusLedAlert(self, self._intlksoft_mon_pv)
         self.intlkhard_led = \
-            SiriusLedAlert(self, "ca://" + self._intlkhard_mon_pv)
+            SiriusLedAlert(self, self._intlkhard_mon_pv)
         self.intlk_widget = QWidget(self)
         self.intlk_widget.setObjectName("intlk_widget")
         self.intlk_widget.layout = QHBoxLayout()
@@ -184,12 +184,12 @@ class BasePSWidget(QWidget):
         self.intlk_widget.layout.addWidget(self.intlkhard_led)
         # Analog setpoint widget
         self.analog_widget = PyDMLinEditScrollbar(
-            parent=self, channel="ca://" + self._analog_sp_pv,)
+            parent=self, channel=self._analog_sp_pv,)
         self.analog_widget.sp_scrollbar.setTracking(False)
         self.analog_widget.setObjectName("analog_widget")
         # Analog mon widget
         self.analog_mon_label = PyDMLabel(
-            parent=self, init_channel="ca://" + self._analog_mon_pv)
+            parent=self, init_channel=self._analog_mon_pv)
         self.analog_mon_label.setObjectName("analog_label")
 
         self.layout.addWidget(self.psname_label)
@@ -200,11 +200,11 @@ class BasePSWidget(QWidget):
         # Add strength related widgets
         if self._is_magnet:
             self.strength_widget = PyDMLinEditScrollbar(
-                parent=self, channel="ca://" + self._strength_sp_pv)
+                parent=self, channel=self._strength_sp_pv)
             self.strength_widget.setObjectName("strength_widget")
             self.strength_widget.sp_scrollbar.setTracking(False)
             self.strength_mon_label = PyDMLabel(
-                parent=self, init_channel="ca://" + self._strength_mon_pv)
+                parent=self, init_channel=self._strength_mon_pv)
             self.strength_mon_label.setObjectName("strength_label")
 
             self.layout.addWidget(self.strength_widget)

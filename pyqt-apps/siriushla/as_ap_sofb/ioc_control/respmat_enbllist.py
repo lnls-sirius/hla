@@ -255,7 +255,7 @@ def _main():
     win = SiriusDialog()
     hbl = QHBoxLayout(win)
     acc = 'TB'
-    wid = SelectionMatrix(win, 'CV', 'ca://'+pref+acc+'-Glob:AP-SOFB:', acc)
+    wid = SelectionMatrix(win, 'CV', pref+acc+'-Glob:AP-SOFB:', acc)
     hbl.addWidget(wid)
     win.show()
     sys.exit(app.exec_())

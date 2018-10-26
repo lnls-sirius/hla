@@ -121,7 +121,7 @@
          <string/>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-TuneCorr:Log-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:Log-Mon</string>
         </property>
         <property name="dateTimeFmt" stdset="0">
          <string>%Y/%m/%d-%H:%M:%S</string>
@@ -151,7 +151,7 @@
          <string>PyDMLed specialization to represent 2 states in red/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-TuneCorr:Status-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:Status-Mon</string>
         </property>
         <property name="pvbit" stdset="0">
          <number>0</number>
@@ -167,7 +167,7 @@
          <string>PyDMLed specialization to represent 2 states in red/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-TuneCorr:Status-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:Status-Mon</string>
         </property>
         <property name="pvbit" stdset="0">
          <number>1</number>
@@ -183,7 +183,7 @@
          <string>PyDMLed specialization to represent 2 states in red/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-TuneCorr:Status-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:Status-Mon</string>
         </property>
         <property name="pvbit" stdset="0">
          <number>2</number>
@@ -199,7 +199,7 @@
          <string>PyDMLed specialization to represent 2 states in red/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-TuneCorr:Status-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:Status-Mon</string>
         </property>
         <property name="pvbit" stdset="0">
          <number>3</number>
@@ -215,7 +215,7 @@
          <string>PyDMLed specialization to represent 2 states in red/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-TuneCorr:Status-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:Status-Mon</string>
         </property>
         <property name="pvbit" stdset="0">
          <number>4</number>
@@ -311,7 +311,7 @@
     </string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-TuneCorr:CorrMeth-Sel</string>
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:CorrMeth-Sel</string>
         </property>
        </widget>
       </item>
@@ -375,7 +375,7 @@
          <string>Configure Timing</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-TuneCorr:ConfigTiming-Cmd</string>
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:ConfigTiming-Cmd</string>
         </property>
         <property name="pressValue" stdset="0">
          <string>0</string>
@@ -427,7 +427,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-TuneCorr:CorrMeth-Sts</string>
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:CorrMeth-Sts</string>
         </property>
        </widget>
       </item>
@@ -490,7 +490,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-TuneCorr:CorrFactor-RB</string>
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:CorrFactor-RB</string>
         </property>
        </widget>
       </item>
@@ -526,7 +526,7 @@
     </string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-TuneCorr:SyncCorr-Sel</string>
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:SyncCorr-Sel</string>
         </property>
         <property name="shape" stdset="0">
          <enum>PyDMStateButton::Rounded</enum>
@@ -615,7 +615,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-TuneCorr:SyncCorr-Sts</string>
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:SyncCorr-Sts</string>
         </property>
        </widget>
       </item>
@@ -659,7 +659,7 @@
     </string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-TuneCorr:CorrFactor-SP</string>
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:CorrFactor-SP</string>
         </property>
         <property name="showStepExponent" stdset="0">
          <bool>false</bool>
@@ -744,7 +744,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-TuneCorr:DeltaTuneY-RB</string>
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:DeltaTuneY-RB</string>
         </property>
        </widget>
       </item>
@@ -826,7 +826,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-17C4:DI-TunePkupV:TuneY-Mon</string>
+         <string>${PREFIX}SI-17C4:DI-TunePkupV:TuneY-Mon</string>
         </property>
        </widget>
       </item>
@@ -951,7 +951,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-18SB:DI-TunePkupH:TuneX-Mon</string>
+         <string>${PREFIX}SI-18SB:DI-TunePkupH:TuneX-Mon</string>
         </property>
        </widget>
       </item>
@@ -1030,7 +1030,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-TuneCorr:DeltaTuneX-RB</string>
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:DeltaTuneX-RB</string>
         </property>
        </widget>
       </item>
@@ -1091,7 +1091,7 @@
     </string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-TuneCorr:DeltaTuneX-SP</string>
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:DeltaTuneX-SP</string>
         </property>
         <property name="showStepExponent" stdset="0">
          <bool>false</bool>
@@ -1116,7 +1116,7 @@
     </string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-TuneCorr:DeltaTuneY-SP</string>
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:DeltaTuneY-SP</string>
         </property>
         <property name="showStepExponent" stdset="0">
          <bool>false</bool>
@@ -1182,7 +1182,7 @@
 Quadrupoles</string>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${PREFIX}SI-Glob:AP-TuneCorr:ConfigMA-Cmd</string>
+        <string>${PREFIX}SI-Glob:AP-TuneCorr:ConfigMA-Cmd</string>
        </property>
        <property name="pressValue" stdset="0">
         <string>0</string>
@@ -1256,7 +1256,7 @@ Quadrupoles</string>
 as New Reference</string>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${PREFIX}SI-Glob:AP-TuneCorr:SetNewRefKL-Cmd</string>
+        <string>${PREFIX}SI-Glob:AP-TuneCorr:SetNewRefKL-Cmd</string>
        </property>
        <property name="pressValue" stdset="0">
         <string>0</string>
@@ -1339,7 +1339,7 @@ as New Reference</string>
 Correction</string>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${PREFIX}SI-Glob:AP-TuneCorr:ApplyCorr-Cmd</string>
+        <string>${PREFIX}SI-Glob:AP-TuneCorr:ApplyCorr-Cmd</string>
        </property>
        <property name="pressValue" stdset="0">
         <string>0</string>
@@ -1369,7 +1369,7 @@ Correction</string>
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-QFA:PwrState-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-QFA:PwrState-Sts</string>
         </property>
        </widget>
       </item>
@@ -1413,7 +1413,7 @@ Correction</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-QFA:OpMode-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-QFA:OpMode-Sts</string>
         </property>
        </widget>
       </item>
@@ -1508,7 +1508,7 @@ Correction</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-QFB:OpMode-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-QFB:OpMode-Sts</string>
         </property>
        </widget>
       </item>
@@ -1540,7 +1540,7 @@ Correction</string>
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-QFB:PwrState-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-QFB:PwrState-Sts</string>
         </property>
        </widget>
       </item>
@@ -1559,7 +1559,7 @@ Correction</string>
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-QFP:PwrState-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-QFP:PwrState-Sts</string>
         </property>
        </widget>
       </item>
@@ -1603,7 +1603,7 @@ Correction</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-QFP:OpMode-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-QFP:OpMode-Sts</string>
         </property>
        </widget>
       </item>
@@ -1622,7 +1622,7 @@ Correction</string>
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-QDA:PwrState-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-QDA:PwrState-Sts</string>
         </property>
        </widget>
       </item>
@@ -1641,7 +1641,7 @@ Correction</string>
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-QDB1:PwrState-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-QDB1:PwrState-Sts</string>
         </property>
        </widget>
       </item>
@@ -1685,7 +1685,7 @@ Correction</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-QDA:OpMode-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-QDA:OpMode-Sts</string>
         </property>
        </widget>
       </item>
@@ -1729,7 +1729,7 @@ Correction</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-QDB1:OpMode-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-QDB1:OpMode-Sts</string>
         </property>
        </widget>
       </item>
@@ -1748,7 +1748,7 @@ Correction</string>
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-QDB2:PwrState-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-QDB2:PwrState-Sts</string>
         </property>
        </widget>
       </item>
@@ -1792,7 +1792,7 @@ Correction</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-QDB2:OpMode-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-QDB2:OpMode-Sts</string>
         </property>
        </widget>
       </item>
@@ -1811,7 +1811,7 @@ Correction</string>
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-QDP1:PwrState-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-QDP1:PwrState-Sts</string>
         </property>
        </widget>
       </item>
@@ -1842,7 +1842,7 @@ Correction</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-QDP1:OpMode-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-QDP1:OpMode-Sts</string>
         </property>
        </widget>
       </item>
@@ -1861,7 +1861,7 @@ Correction</string>
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-QDP2:PwrState-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-QDP2:PwrState-Sts</string>
         </property>
        </widget>
       </item>
@@ -1918,7 +1918,7 @@ Correction</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-QFB:KL-RB</string>
+         <string>${PREFIX}SI-Fam:MA-QFB:KL-RB</string>
         </property>
        </widget>
       </item>
@@ -1949,7 +1949,7 @@ Correction</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-QDP2:OpMode-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-QDP2:OpMode-Sts</string>
         </property>
        </widget>
       </item>
@@ -1980,7 +1980,7 @@ Correction</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-QFA:KL-RB</string>
+         <string>${PREFIX}SI-Fam:MA-QFA:KL-RB</string>
         </property>
        </widget>
       </item>
@@ -2011,7 +2011,7 @@ Correction</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-QDA:KL-RB</string>
+         <string>${PREFIX}SI-Fam:MA-QDA:KL-RB</string>
         </property>
        </widget>
       </item>
@@ -2042,7 +2042,7 @@ Correction</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-QFP:KL-RB</string>
+         <string>${PREFIX}SI-Fam:MA-QFP:KL-RB</string>
         </property>
        </widget>
       </item>
@@ -2073,7 +2073,7 @@ Correction</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-QDB1:KL-RB</string>
+         <string>${PREFIX}SI-Fam:MA-QDB1:KL-RB</string>
         </property>
        </widget>
       </item>
@@ -2104,7 +2104,7 @@ Correction</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-QDB2:KL-RB</string>
+         <string>${PREFIX}SI-Fam:MA-QDB2:KL-RB</string>
         </property>
        </widget>
       </item>
@@ -2135,7 +2135,7 @@ Correction</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-QDP1:KL-RB</string>
+         <string>${PREFIX}SI-Fam:MA-QDP1:KL-RB</string>
         </property>
        </widget>
       </item>
@@ -2166,7 +2166,7 @@ Correction</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-QDP2:KL-RB</string>
+         <string>${PREFIX}SI-Fam:MA-QDP2:KL-RB</string>
         </property>
        </widget>
       </item>
@@ -2197,7 +2197,7 @@ Correction</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-TuneCorr:RefKLQDP2-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:RefKLQDP2-Mon</string>
         </property>
        </widget>
       </item>
@@ -2228,7 +2228,7 @@ Correction</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-TuneCorr:DeltaKLQDP2-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:DeltaKLQDP2-Mon</string>
         </property>
        </widget>
       </item>
@@ -2259,7 +2259,7 @@ Correction</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-TuneCorr:RefKLQDP1-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:RefKLQDP1-Mon</string>
         </property>
        </widget>
       </item>
@@ -2290,7 +2290,7 @@ Correction</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-TuneCorr:DeltaKLQDP1-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:DeltaKLQDP1-Mon</string>
         </property>
        </widget>
       </item>
@@ -2321,7 +2321,7 @@ Correction</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-TuneCorr:DeltaKLQDB2-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:DeltaKLQDB2-Mon</string>
         </property>
        </widget>
       </item>
@@ -2352,7 +2352,7 @@ Correction</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-TuneCorr:RefKLQDB2-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:RefKLQDB2-Mon</string>
         </property>
        </widget>
       </item>
@@ -2383,7 +2383,7 @@ Correction</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-TuneCorr:RefKLQDB1-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:RefKLQDB1-Mon</string>
         </property>
        </widget>
       </item>
@@ -2414,7 +2414,7 @@ Correction</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-TuneCorr:DeltaKLQDB1-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:DeltaKLQDB1-Mon</string>
         </property>
        </widget>
       </item>
@@ -2445,7 +2445,7 @@ Correction</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-TuneCorr:RefKLQDA-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:RefKLQDA-Mon</string>
         </property>
        </widget>
       </item>
@@ -2476,7 +2476,7 @@ Correction</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-TuneCorr:DeltaKLQDA-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:DeltaKLQDA-Mon</string>
         </property>
        </widget>
       </item>
@@ -2507,7 +2507,7 @@ Correction</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-TuneCorr:RefKLQFP-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:RefKLQFP-Mon</string>
         </property>
        </widget>
       </item>
@@ -2538,7 +2538,7 @@ Correction</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-TuneCorr:DeltaKLQFP-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:DeltaKLQFP-Mon</string>
         </property>
        </widget>
       </item>
@@ -2569,7 +2569,7 @@ Correction</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-TuneCorr:RefKLQFB-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:RefKLQFB-Mon</string>
         </property>
        </widget>
       </item>
@@ -2600,7 +2600,7 @@ Correction</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-TuneCorr:DeltaKLQFB-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:DeltaKLQFB-Mon</string>
         </property>
        </widget>
       </item>
@@ -2631,7 +2631,7 @@ Correction</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-TuneCorr:DeltaKLQFA-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:DeltaKLQFA-Mon</string>
         </property>
        </widget>
       </item>
@@ -2662,7 +2662,7 @@ Correction</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-TuneCorr:RefKLQFA-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:RefKLQFA-Mon</string>
         </property>
        </widget>
       </item>

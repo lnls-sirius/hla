@@ -105,47 +105,47 @@ class ASAPPosAngCorr(SiriusMainWindow):
         pv_list     --list of correspondent pvs
         """
         for widget, pv in widget2pv_list:
-            widget.channel = 'ca://' + self._prefix + pv
+            widget.channel = self._prefix + pv
 
     def _setCorrectorsChannels(self, correctors):
         self.centralwidget.pushButton_CH1.setText(correctors[0])
         _hlautil.connect_window(self.centralwidget.pushButton_CH1,
                                 _PSDetailWindow, self, psname=correctors[0])
         self.centralwidget.SiriusLedState_CH1.channel = (
-            'ca://' + self._prefix + correctors[0] + ':PwrState-Sts')
+            self._prefix + correctors[0] + ':PwrState-Sts')
         self.centralwidget.PyDMLabel_OpModeCH1.channel = (
-            'ca://' + self._prefix + correctors[0] + ':OpMode-Sts')
+            self._prefix + correctors[0] + ':OpMode-Sts')
         self.centralwidget.PyDMLabel_KickRBCH1.channel = (
-            'ca://' + self._prefix + correctors[0] + ':Kick-RB')
+            self._prefix + correctors[0] + ':Kick-RB')
 
         self.centralwidget.pushButton_CH2.setText(correctors[1])
         _hlautil.connect_window(self.centralwidget.pushButton_CH2,
                                 _PulsedMagnetDetailWindow, self,
                                 maname=correctors[1])
         self.centralwidget.SiriusLedState_CH2.channel = (
-            'ca://' + self._prefix + correctors[1] + ':PwrState-Sts')
+            self._prefix + correctors[1] + ':PwrState-Sts')
         self.centralwidget.PyDMLabel_KickRBCH2.channel = (
-            'ca://' + self._prefix + correctors[1] + ':Kick-RB')
+            self._prefix + correctors[1] + ':Kick-RB')
 
         self.centralwidget.pushButton_CV1.setText(correctors[2])
         _hlautil.connect_window(self.centralwidget.pushButton_CV1,
                                 _PSDetailWindow, self, psname=correctors[2])
         self.centralwidget.SiriusLedState_CV1.channel = (
-            'ca://' + self._prefix + correctors[2] + ':PwrState-Sts')
+            self._prefix + correctors[2] + ':PwrState-Sts')
         self.centralwidget.PyDMLabel_OpModeCV1.channel = (
-            'ca://' + self._prefix + correctors[2] + ':OpMode-Sts')
+            self._prefix + correctors[2] + ':OpMode-Sts')
         self.centralwidget.PyDMLabel_KickRBCV1.channel = (
-            'ca://' + self._prefix + correctors[2] + ':Kick-RB')
+            self._prefix + correctors[2] + ':Kick-RB')
 
         self.centralwidget.pushButton_CV2.setText(correctors[3])
         _hlautil.connect_window(self.centralwidget.pushButton_CV2,
                                 _PSDetailWindow, self, psname=correctors[3])
         self.centralwidget.SiriusLedState_CV2.channel = (
-            'ca://' + self._prefix + correctors[3] + ':PwrState-Sts')
+            self._prefix + correctors[3] + ':PwrState-Sts')
         self.centralwidget.PyDMLabel_OpModeCV2.channel = (
-            'ca://' + self._prefix + correctors[3] + ':OpMode-Sts')
+            self._prefix + correctors[3] + ':OpMode-Sts')
         self.centralwidget.PyDMLabel_KickRBCV2.channel = (
-            'ca://' + self._prefix + correctors[3] + ':Kick-RB')
+            self._prefix + correctors[3] + ':Kick-RB')
 
     def _setStatusLabels(self, value, **kws):
         for i in range(4):
@@ -169,17 +169,17 @@ class _CorrParamsDetailWindow(SiriusMainWindow):
         label_configname = QLabel('<h4>Configuration Name</h4>', self,
                                   alignment=Qt.AlignCenter)
         self.pydmlinedit_configname = _ConfigLineEdit(
-            parent=self, init_channel='ca://'+self._prefix+self._tl +
+            parent=self, init_channel=self._prefix+self._tl +
                                       '-Glob:AP-PosAng:ConfigName-SP')
         self.pydmlabel_configname = PyDMLabel(
-            parent=self, init_channel='ca://'+self._prefix+self._tl +
+            parent=self, init_channel=self._prefix+self._tl +
                                       '-Glob:AP-PosAng:ConfigName-RB')
         self.pydmlabel_configname.setFixedWidth(320)
 
         label_matrix_X = QLabel('<h4>Matrix X</h4>', self,
                                 alignment=Qt.AlignCenter)
         self.table_matrix_X = PyDMWaveformTable(
-            parent=self, init_channel='ca://'+self._prefix+self._tl +
+            parent=self, init_channel=self._prefix+self._tl +
                                       '-Glob:AP-PosAng:RespMatX-Mon')
         self.table_matrix_X.setFixedSize(642, 96)
         self.table_matrix_X.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -194,7 +194,7 @@ class _CorrParamsDetailWindow(SiriusMainWindow):
         label_matrix_Y = QLabel('<h4>Matrix Y</h4>', self,
                                 alignment=Qt.AlignCenter)
         self.table_matrix_Y = PyDMWaveformTable(
-            parent=self, init_channel='ca://'+self._prefix+self._tl +
+            parent=self, init_channel=self._prefix+self._tl +
                                       '-Glob:AP-PosAng:RespMatY-Mon')
         self.table_matrix_Y.setFixedSize(642, 96)
         self.table_matrix_Y.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
