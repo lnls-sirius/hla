@@ -12,10 +12,10 @@ from qtpy.QtCore import Qt, Slot, Signal, Property
 from pydm.widgets import PyDMImageView, PyDMLabel, PyDMSpinbox, \
                             PyDMPushButton, PyDMEnumComboBox
 from pydm.widgets.channel import PyDMChannel
-from siriuspy.envars import vaca_prefix as _vaca_prefix
+# from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla import util
 from siriushla.sirius_application import SiriusApplication
-from siriushla.widgets import PyDMStateButton, SiriusLedState
+from siriushla.widgets import PyDMStateButton, SiriusLedState, PyDMLed
 from siriushla.widgets.windows import SiriusMainWindow
 
 
@@ -329,10 +329,7 @@ class SiriusScrnView(QWidget):
     def __init__(self, parent=None, prefix='', device=None):
         """Initialize object."""
         QWidget.__init__(self, parent=parent)
-        if prefix == '':
-            self.prefix = _vaca_prefix
-        else:
-            self.prefix = prefix
+        self.prefix = prefix
         self.device = device
         self.scrn_prefix = 'ca://'+self.prefix+self.device
         self._calibrationgrid_flag = False
@@ -758,29 +755,23 @@ class _ScrnSettingsDetails(SiriusMainWindow):
     def _setupUi(self):
         label_general = QLabel('<h4>Screen General Info</h4>')
 
-        label_MtrPrefix = QLabel('Motor Prefix', self)
+        label_MtrPrefix = QLabel('Motor Prefix: ', self)
         self.PyDMLabel_MtrPrefix = PyDMLabel(
             parent=self, init_channel=self.scrn_prefix+':MtrCtrlPrefix-Cte')
-        self.PyDMLabel_MtrPrefix.setMaximumSize(220, 40)
-        self.PyDMLabel_MtrPrefix.setAlignment(Qt.AlignCenter)
 
-        label_CamPrefix = QLabel('Camera Prefix', self)
+        label_CamPrefix = QLabel('Camera Prefix: ', self)
         self.PyDMLabel_CamPrefix = PyDMLabel(
             parent=self, init_channel=self.scrn_prefix+':CamPrefix-Cte')
-        self.PyDMLabel_CamPrefix.setMaximumSize(220, 40)
-        self.PyDMLabel_CamPrefix.setAlignment(Qt.AlignCenter)
 
-        label_ImgMaxWidth = QLabel('Image Maximum Width', self)
+        label_ImgMaxWidth = QLabel('Image Maximum Width: ', self)
         self.PyDMLabel_ImgMaxWidth = PyDMLabel(
             parent=self, init_channel=self.scrn_prefix+':ImgMaxWidth-Cte')
         self.PyDMLabel_ImgMaxWidth.setMaximumSize(220, 40)
-        self.PyDMLabel_ImgMaxWidth.setAlignment(Qt.AlignCenter)
 
-        label_ImgMaxHeight = QLabel('Image Maximum Height', self)
+        label_ImgMaxHeight = QLabel('Image Maximum Height: ', self)
         self.PyDMLabel_ImgMaxHeight = PyDMLabel(
             parent=self, init_channel=self.scrn_prefix+':ImgMaxHeight-Cte')
         self.PyDMLabel_ImgMaxHeight.setMaximumSize(220, 40)
-        self.PyDMLabel_ImgMaxHeight.setAlignment(Qt.AlignCenter)
 
         label_acq = QLabel('<h4>Camera Acquire Settings</h4>')
 
@@ -799,10 +790,10 @@ class _ScrnSettingsDetails(SiriusMainWindow):
 
         label_AcqMode = QLabel('Acquire Mode', self)
         self.PyDMEnumComboBox_AcqMode = PyDMEnumComboBox(
-            parent=self, init_channel=self.scrn_prefix+':CamAcqMode-SP')
+            parent=self, init_channel=self.scrn_prefix+':CamAcqMode-Sel')
         self.PyDMEnumComboBox_AcqMode.setMaximumSize(220, 40)
         self.PyDMLabel_AcqMode = PyDMLabel(
-            parent=self, init_channel=self.scrn_prefix+':CamAcqMode-RB')
+            parent=self, init_channel=self.scrn_prefix+':CamAcqMode-Sts')
         self.PyDMLabel_AcqMode.setMaximumSize(220, 40)
         self.PyDMLabel_AcqMode.setAlignment(Qt.AlignCenter)
         hbox_AcqMode = QHBoxLayout()
@@ -825,10 +816,10 @@ class _ScrnSettingsDetails(SiriusMainWindow):
 
         label_ExpMode = QLabel('Exposure Mode', self)
         self.PyDMEnumComboBox_ExpMode = PyDMEnumComboBox(
-            parent=self, init_channel=self.scrn_prefix+':CamExposureMode-SP')
+            parent=self, init_channel=self.scrn_prefix+':CamExposureMode-Sel')
         self.PyDMEnumComboBox_ExpMode.setMaximumSize(220, 40)
         self.PyDMLabel_ExpMode = PyDMLabel(
-            parent=self, init_channel=self.scrn_prefix+':CamExposureMode-RB')
+            parent=self, init_channel=self.scrn_prefix+':CamExposureMode-Sts')
         self.PyDMLabel_ExpMode.setMaximumSize(220, 40)
         self.PyDMLabel_ExpMode.setAlignment(Qt.AlignCenter)
         hbox_ExpMode = QHBoxLayout()
@@ -861,7 +852,7 @@ class _ScrnSettingsDetails(SiriusMainWindow):
         self.PyDMLabel_Gain.setAlignment(Qt.AlignCenter)
         self.PyDMPushButton_AutoGain = PyDMPushButton(
             parent=self, label='Auto Gain', pressValue=1,
-            init_channel=self.scrn_prefix+':CamAutoGain-Cmg')
+            init_channel=self.scrn_prefix+':CamAutoGain-Cmd')
         self.PyDMPushButton_AutoGain.setMaximumSize(220, 40)
         hbox_Gain = QHBoxLayout()
         hbox_Gain.addWidget(self.PyDMSpinbox_Gain)
@@ -1001,12 +992,12 @@ class _ScrnSettingsDetails(SiriusMainWindow):
 
         label_LastErr = QLabel('Last Error', self)
         self.PyDMLabel_LastErr = PyDMLabel(
-            parent=self, init_channel=self.scrn_prefix+':LastErr-Mon')
+            parent=self, init_channel=self.scrn_prefix+':CamLastErr-Mon')
         self.PyDMLabel_LastErr.setAlignment(Qt.AlignCenter)
         self.PyDMLabel_LastErr.setMinimumSize(440, 40)
         self.PyDMPushButton_LastErr = PyDMPushButton(
             parent=self, label='Clear Last Error', pressValue=1,
-            init_channel=self.scrn_prefix+':ClearLastErr-Cmd')
+            init_channel=self.scrn_prefix+':CamClearLastErr-Cmd')
         self.PyDMPushButton_LastErr.setMaximumSize(220, 40)
         hbox_LastErr = QHBoxLayout()
         hbox_LastErr.addWidget(self.PyDMLabel_LastErr)
@@ -1134,26 +1125,44 @@ if __name__ == '__main__':
     util.set_style(app)
 
     centralwidget = QWidget()
-    scrn_view = SiriusScrnView(prefix=_vaca_prefix, device='TB-01:DI-Scrn-1')
+    prefix = ''
+    scrn_device = 'TB-01:DI-Scrn-1'
+    scrn_view = SiriusScrnView(prefix=prefix, device=scrn_device)
     cb_scrntype = PyDMEnumComboBox(
         parent=centralwidget,
-        init_channel='ca://'+_vaca_prefix+'TB-01:DI-Scrn-1:ScrnType-Sel')
+        init_channel=prefix+scrn_device+':ScrnType-Sel')
+    cw = QWidget()
+    scrn_view = SiriusScrnView(prefix='', device=scrn_device)
+    cb_scrntype = PyDMEnumComboBox(
+        parent=cw, init_channel=prefix+scrn_device+':ScrnType-Sel')
     cb_scrntype.currentIndexChanged.connect(
         scrn_view.updateCalibrationGridFlag)
+    l_scrntype = PyDMLabel(
+        parent=cw, init_channel=prefix+scrn_device+':ScrnType-Sts')
+    led_movests = PyDMLed(
+        parent=cw, init_channel=prefix+scrn_device+':DoneMov-Mon',
+        color_list=[PyDMLed.LightGreen, PyDMLed.DarkGreen])
+    led_movests.shape = 2
+    led_movests.setFixedHeight(40)
 
     lay = QGridLayout()
-    lay.addWidget(QLabel('<h3>SiriusScrnView Test</h3>', centralwidget,
-                         alignment=Qt.AlignCenter), 0, 0, 1, 2)
+    lay.addWidget(QLabel('<h3>SiriusScrnView '+scrn_device+'</h3>',
+                         cw, alignment=Qt.AlignCenter), 0, 0, 1, 2)
     lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 1, 0)
-    lay.addWidget(QLabel('Select Screen Type: ', centralwidget,
+    lay.addWidget(QLabel('Select Screen Type: ', cw,
                          alignment=Qt.AlignRight), 2, 0)
     lay.addWidget(cb_scrntype, 2, 1)
-    lay.addItem(QSpacerItem(20, 40, QSzPlcy.Fixed, QSzPlcy.Fixed), 3, 0)
-    lay.addWidget(scrn_view, 4, 0, 1, 2)
-    centralwidget.setLayout(lay)
+    lay.addWidget(l_scrntype, 2, 2)
+    lay.addWidget(QLabel('Motor movement status: ', cw,
+                         alignment=Qt.AlignRight), 3, 0)
+    lay.addWidget(led_movests, 3, 1)
+
+    lay.addItem(QSpacerItem(20, 40, QSzPlcy.Fixed, QSzPlcy.Fixed), 4, 0)
+    lay.addWidget(scrn_view, 5, 0, 1, 3)
+    cw.setLayout(lay)
 
     window = SiriusMainWindow()
-    window.setWindowTitle('SiriusScrnView Test')
-    window.setCentralWidget(centralwidget)
+    window.setWindowTitle('SiriusScrnView '+scrn_device)
+    window.setCentralWidget(cw)
     window.show()
     sys.exit(app.exec_())
