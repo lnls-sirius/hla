@@ -12,14 +12,14 @@ from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.search import LLTimeSearch as _LLTimeSearch
 from siriushla.sirius_application import SiriusApplication
 from siriushla import util as _util
-from evg import EventList as _EventList
-from evg import ClockList as _ClockList
-from evg import EVG as _EVG
-from evr_eve import EVR as _EVR
-from evr_eve import EVE as _EVE
-from afc import AFC as _AFC
-from fout import FOUT as _FOUT
-from hl_trigger import HLTriggerList as _HLTriggerList
+from siriushla.as_ti_control.evg import EventList as _EventList
+from siriushla.as_ti_control.evg import ClockList as _ClockList
+from siriushla.as_ti_control.evg import EVG as _EVG
+from siriushla.as_ti_control.evr_eve import EVR as _EVR
+from siriushla.as_ti_control.evr_eve import EVE as _EVE
+from siriushla.as_ti_control.afc import AFC as _AFC
+from siriushla.as_ti_control.fout import FOUT as _FOUT
+from siriushla.as_ti_control.hl_trigger import HLTriggerList as _HLTriggerList
 
 _dir = _os.path.dirname(_os.path.abspath(__file__))
 UI_FILE = _os.path.sep.join([_dir, 'TimingMain.ui'])
@@ -91,8 +91,8 @@ def main(prefix=None):
         'Storage Ring Studies': (
             'SI-01SA:TI-PingH:', 'SI-01SA:TI-TuneShkrH:', 'SI-13C4:TI-DCCT:',
             'SI-14C4:TI-DCCT:', 'SI-16C4:TI-GBPM:', 'SI-17C4:TI-TunePkupV:',
-            'SI-17SA:TI-TunePkupH:', 'SI-18C4:TI-TuneShkrV:', 'SI-19C4:TI-PingV:',
-            'SI-19SP:TI-GSL15:', 'SI-20SB:TI-GSL07:'),
+            'SI-17SA:TI-TunePkupH:', 'SI-18C4:TI-TuneShkrV:',
+            'SI-19C4:TI-PingV:', 'SI-19SP:TI-GSL15:', 'SI-20SB:TI-GSL07:'),
         'Storage Ring Magnets': (
             'SI-Glob:TI-Corrs:', 'SI-Glob:TI-Dips:', 'SI-Glob:TI-Quads:',
             'SI-Glob:TI-Sexts:', 'SI-Glob:TI-Skews:',
@@ -152,25 +152,26 @@ def _setupMenus(prefix, HLTiming):
         action, _EVG, HLTiming, prefix=prefix + 'AS-Glob:TI-EVG:')
 
     menu_evr = menu.addMenu('EVRs')
-    for evr in sorted(_LLTimeSearch.get_devices_by_type('EVR')):
+    for evr in sorted(_LLTimeSearch.get_device_names(filters={'dev': 'EVR'})):
         name = _PVName(evr)
         action = menu_evr.addAction(name.dev + '-' + name.idx)
         _util.connect_window(action, _EVR, HLTiming, prefix=prefix+name+':')
 
     menu_eve = menu.addMenu('EVEs')
-    for eve in sorted(_LLTimeSearch.get_devices_by_type('EVE')):
+    for eve in sorted(_LLTimeSearch.get_device_names(filters={'dev': 'EVE'})):
         name = _PVName(eve)
         action = menu_eve.addAction(name.dev + '-' + name.idx)
         _util.connect_window(action, _EVE, HLTiming, prefix=prefix+name+':')
 
     menu_afc = menu.addMenu('AFCs')
-    for afc in sorted(_LLTimeSearch.get_devices_by_type('AFC')):
+    for afc in sorted(_LLTimeSearch.get_device_names(filters={'dev': 'AFC'})):
         name = _PVName(afc)
         action = menu_afc.addAction(name.sub + ':' + name.dev + '-' + name.idx)
         _util.connect_window(action, _AFC, HLTiming, prefix=prefix+name+':')
 
     menu_fout = menu.addMenu('FOUTs')
-    for fout in sorted(_LLTimeSearch.get_devices_by_type('FOUT')):
+    for fout in sorted(_LLTimeSearch.get_device_names(
+            filters={'dev': 'FOUT'})):
         name = _PVName(fout)
         action = menu_fout.addAction(name.dev + '-' + name.idx)
         _util.connect_window(action, _FOUT, HLTiming, prefix=prefix+name+':')

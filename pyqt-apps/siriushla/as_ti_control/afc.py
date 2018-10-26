@@ -13,7 +13,7 @@ from siriushla.widgets.led import PyDMLed, SiriusLedAlert
 from siriushla.widgets.state_button import PyDMStateButton
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla import util as _util
-from base_list import BaseList
+from siriushla.as_ti_control.base_list import BaseList
 
 
 class AFC(SiriusMainWindow):
