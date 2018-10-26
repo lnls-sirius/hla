@@ -12,3 +12,4 @@ from siriushla.widgets.scrn_view import SiriusScrnView
 from siriushla.widgets.signal_channel import SiriusConnectionSignal
 from siriushla.widgets.widget_factory import pydmwidget_factory
 from siriushla.widgets.spectrogram_view import SiriusSpectrogramView
+from siriushla.widgets.label import SiriusLabel

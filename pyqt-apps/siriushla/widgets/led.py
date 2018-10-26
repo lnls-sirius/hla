@@ -1,5 +1,5 @@
 from qtpy.QtGui import QColor
-from qtpy.QtCore import Property
+from qtpy.QtCore import Property, Slot
 from pydm.widgets.base import PyDMWidget
 from pydm.widgets.channel import PyDMChannel
 from .QLed import QLed
@@ -138,6 +138,7 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
             state &= (val == desired_value)
         self.setState(state)
 
+    @Slot(bool)
     def connectionStateChanged(self, conn):
         """Reimplement connectionStateChanged to handle all channels."""
         channel = 'ca://' + self.sender().address
@@ -145,7 +146,7 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         allconn = True
         for _id in self.channels2ids.values():
             allconn &= getattr(self, 'channel'+_id+'_connected')
-        self.setEnabled(allconn)
+        self.connection_changed(allconn)
 
     def channels(self):
         """
