@@ -7,16 +7,25 @@ from qtpy.QtWidgets import QLabel, QWidget, QScrollArea, QAbstractItemView, \
                            QRadioButton, QFormLayout, QDoubleSpinBox, \
                            QComboBox, QSpinBox, QStyledItemDelegate, \
                            QSpacerItem, QSizePolicy as QSzPlcy, QCheckBox, \
-                           QTabWidget
-from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox
+                           QTabWidget, QGroupBox
+from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox, \
+                         PyDMPushButton
 from siriushla.widgets.windows import SiriusDialog
+from siriushla.widgets import PyDMStateButton, SiriusConnectionSignal, \
+                              SiriusLedAlert, PyDMLedMultiChannel
 from siriushla.as_ap_servconf import LoadConfiguration as _LoadConfiguration, \
                                      SaveConfiguration as _SaveConfiguration
+from siriushla import util as _hlautil
+from siriushla.as_ti_control.hl_trigger import HLTriggerDetailed
 from siriuspy.servconf.srvconfig import ConnConfigService as _ConnConfigService
 from siriuspy.servconf.util import \
     generate_config_name as _generate_config_name
 from siriuspy.servconf import exceptions as _srvexceptions
 from siriuspy.ramp import ramp
+
+
+DCCT_MEASMODE_NORMAL = 1
+DCCT_MEASMODE_FAST = 2
 
 
 class LoadRampConfig(_LoadConfiguration):
@@ -619,118 +628,24 @@ class DiagnosisSettings(SiriusDialog):
         self._setupUi()
 
     def _setupUi(self):
-        dcct_prefix = 'ca://'+self.prefix+'BO-35D:DI-DCCT:'
+        self.dcct_prefix = 'ca://'+self.prefix+'BO-35D:DI-DCCT:'
 
-        l_dcctacq = QLabel('<h4>DCCT Acquisitions Settings</h4>', self,
+        l_dcctacq = QLabel('<h3>Ramp Diagnosis Settings</h3>', self,
                            alignment=Qt.AlignCenter)
 
-        l_smpcnt = QLabel('Sample Count: ', self, alignment=Qt.AlignRight)
-        self.pydmspinbox_SampleCnt = PyDMSpinbox(
-            parent=self, init_channel=dcct_prefix+'SampleCnt-SP')
-        self.pydmspinbox_SampleCnt.setFixedSize(220, 40)
-        self.pydmspinbox_SampleCnt.setAlignment(Qt.AlignCenter)
-        self.pydmspinbox_SampleCnt.showStepExponent = False
-        self.pydmlabel_SampleCnt = PyDMLabel(
-            parent=self, init_channel=dcct_prefix+'SampleCnt-RB')
-        hlay_smpcnt = QHBoxLayout()
-        hlay_smpcnt.addWidget(self.pydmspinbox_SampleCnt)
-        hlay_smpcnt.addWidget(self.pydmlabel_SampleCnt)
+        self.gbox_reliablemeas = self._setupReliableMeasWidget()
+        self.gbox_generalsettings = self._setupDCCTGeneralSettingsWidget()
 
-        l_measperiod = QLabel('Measurement Period: ', self,
-                              alignment=Qt.AlignRight)
-        self.pydmspinbox_MeasPeriod = PyDMSpinbox(
-            parent=self, init_channel=dcct_prefix+'MeasPeriod-SP')
-        self.pydmspinbox_MeasPeriod.setFixedSize(220, 40)
-        self.pydmspinbox_MeasPeriod.setAlignment(Qt.AlignCenter)
-        self.pydmspinbox_MeasPeriod.showStepExponent = False
-        self.pydmlabel_MeasPeriod = PyDMLabel(
-            parent=self, init_channel=dcct_prefix+'MeasPeriod-RB')
-        hlay_measperiod = QHBoxLayout()
-        hlay_measperiod.addWidget(self.pydmspinbox_MeasPeriod)
-        hlay_measperiod.addWidget(self.pydmlabel_MeasPeriod)
+        self.mode_channel = SiriusConnectionSignal(
+            self.dcct_prefix+'MeasMode-Sts')
+        self.mode_channel.new_value_signal.connect(self._showMeasModeSettings)
+        self.gbox_normalmode = self._setupDCCTNormalMeasSettingsWidget()
+        self.gbox_fastmode = self._setupDCCTFastMeasSettingsWidget()
+        lay_mode = QGridLayout()
+        lay_mode.addWidget(self.gbox_normalmode, 0, 0)
+        lay_mode.addWidget(self.gbox_fastmode, 0, 0)
 
-        l_measmode = QLabel('Measurement Mode: ', self,
-                            alignment=Qt.AlignRight)
-        self.pydmspinbox_MeasMode = PyDMEnumComboBox(
-            parent=self, init_channel=dcct_prefix+'MeasMode-Sel')
-        self.pydmspinbox_MeasMode.setFixedSize(220, 40)
-        self.pydmlabel_MeasMode = PyDMLabel(
-            parent=self, init_channel=dcct_prefix+'MeasMode-Sts')
-        hlay_measmode = QHBoxLayout()
-        hlay_measmode.addWidget(self.pydmspinbox_MeasMode)
-        hlay_measmode.addWidget(self.pydmlabel_MeasMode)
-
-        l_meastrig = QLabel('Measurement Trigger: ', self,
-                            alignment=Qt.AlignRight)
-        self.pydmspinbox_MeasTrg = PyDMEnumComboBox(
-            parent=self, init_channel=dcct_prefix+'MeasTrg-Sel')
-        self.pydmspinbox_MeasTrg.setFixedSize(220, 40)
-        self.pydmlabel_MeasTrg = PyDMLabel(
-            parent=self, init_channel=dcct_prefix+'MeasTrg-Sts')
-        hlay_meastrig = QHBoxLayout()
-        hlay_meastrig.addWidget(self.pydmspinbox_MeasTrg)
-        hlay_meastrig.addWidget(self.pydmlabel_MeasTrg)
-
-        l_trgdelay = QLabel('Trigger Delay: ', self,
-                            alignment=Qt.AlignRight)
-        self.pydmspinbox_TrgDelay = PyDMSpinbox(
-            parent=self, init_channel=dcct_prefix+'TrgDelay-SP')
-        self.pydmspinbox_TrgDelay.setFixedSize(220, 40)
-        self.pydmspinbox_TrgDelay.setAlignment(Qt.AlignCenter)
-        self.pydmspinbox_TrgDelay.showStepExponent = False
-        self.pydmlabel_TrgDelay = PyDMLabel(
-            parent=self, init_channel=dcct_prefix+'TrgDelay-RB')
-        hlay_trgdelay = QHBoxLayout()
-        hlay_trgdelay.addWidget(self.pydmspinbox_TrgDelay)
-        hlay_trgdelay.addWidget(self.pydmlabel_TrgDelay)
-
-        l_effparams = QLabel('<h4>Ramp Efficiency Calculation Settings</h4>',
-                             self, alignment=Qt.AlignCenter)
-
-        l_injcurr_idx = QLabel('Injected current index: ', self,
-                               alignment=Qt.AlignRight)
-        self.sb_injcurr_idx = QSpinBox(self)
-        self.sb_injcurr_idx.setValue(self.injcurr_idx)
-        self.sb_injcurr_idx.setMinimum(0)
-        if self.pydmlabel_SampleCnt._connected:
-            self.sb_injcurr_idx.setMaximum(
-                int(self.pydmlabel_SampleCnt.text())-1)
-        else:
-            self.sb_injcurr_idx.setMaximum(1)
-        self.sb_injcurr_idx.setFixedSize(220, 40)
-
-        l_ejecurr_idx = QLabel('Ejected current index: ', self,
-                               alignment=Qt.AlignRight)
-        self.sb_ejecurr_idx = QSpinBox(self)
-        self.sb_ejecurr_idx.setValue(self.ejecurr_idx)
-        self.sb_ejecurr_idx.setMinimum(0)
-        if self.pydmlabel_SampleCnt._connected:
-            self.sb_ejecurr_idx.setMaximum(
-                int(self.pydmlabel_SampleCnt.text())-1)
-        else:
-            self.sb_ejecurr_idx.setMaximum(1)
-        self.sb_ejecurr_idx.setFixedSize(220, 40)
-
-        flay_settings = QFormLayout()
-        flay_settings.addItem(
-            QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
-        flay_settings.addRow(l_dcctacq)
-        flay_settings.addItem(
-            QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
-        flay_settings.addRow(l_smpcnt, hlay_smpcnt)
-        flay_settings.addRow(l_measperiod, hlay_measperiod)
-        flay_settings.addRow(l_measmode, hlay_measmode)
-        flay_settings.addRow(l_meastrig, hlay_meastrig)
-        flay_settings.addRow(l_trgdelay, hlay_trgdelay)
-        flay_settings.addItem(
-            QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
-        flay_settings.addRow(l_effparams)
-        flay_settings.addItem(
-            QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
-        flay_settings.addRow(l_injcurr_idx, self.sb_injcurr_idx)
-        flay_settings.addRow(l_ejecurr_idx, self.sb_ejecurr_idx)
-        flay_settings.addItem(
-            QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
+        self.gbox_effparams = self._setupRampEffIndicesWidget()
 
         self.bt_apply = QPushButton('Apply settings', self)
         self.bt_apply.clicked.connect(self._emitSettings)
@@ -740,14 +655,343 @@ class DiagnosisSettings(SiriusDialog):
         hlay_apply.addItem(QSpacerItem(4, 2, QSzPlcy.Expanding, QSzPlcy.Fixed))
         hlay_apply.addWidget(self.bt_apply)
 
-        self.setLayout(QVBoxLayout())
-        self.layout().addLayout(flay_settings)
-        self.layout().addLayout(hlay_apply)
+        lay = QVBoxLayout()
+        lay.addWidget(l_dcctacq)
+        lay.addWidget(self.gbox_reliablemeas)
+        lay.addWidget(self.gbox_generalsettings)
+        lay.addLayout(lay_mode)
+        lay.addWidget(self.gbox_effparams)
+        lay.addLayout(hlay_apply)
+        lay.setSpacing(20)
+        self.setLayout(lay)
+
+    def _setupReliableMeasWidget(self):
+        reliablemeas_channel = SiriusConnectionSignal(
+            self.dcct_prefix+'ReliableMeasLabels-Mon')
+        reliablemeas_channel.new_value_signal.connect(
+            self._updateReliableMeasLabels)
+
+        gbox_reliablemeas = _GroupBoxWithChannel(
+            'DCCT Measure Reliability Status', self, [reliablemeas_channel])
+        gbox_reliablemeas.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Fixed)
+
+        self.label_reliablemeas0 = QLabel('', self)
+        self.led_ReliableMeas0 = SiriusLedAlert(
+            parent=self, init_channel=self.dcct_prefix+'ReliableMeas-Mon',
+            bit=0)
+        self.led_ReliableMeas0.setFixedWidth(48)
+        self.label_reliablemeas1 = QLabel('', self)
+        self.led_ReliableMeas1 = SiriusLedAlert(
+            parent=self, init_channel=self.dcct_prefix+'ReliableMeas-Mon',
+            bit=1)
+        self.led_ReliableMeas1.setFixedWidth(48)
+        self.label_reliablemeas2 = QLabel('', self)
+        self.led_ReliableMeas2 = SiriusLedAlert(
+            parent=self, init_channel=self.dcct_prefix+'ReliableMeas-Mon',
+            bit=2)
+        self.led_ReliableMeas2.setFixedWidth(48)
+        lay_reliablemeas = QGridLayout()
+        lay_reliablemeas.addWidget(self.led_ReliableMeas0, 0, 0)
+        lay_reliablemeas.addWidget(self.label_reliablemeas0, 0, 1)
+        lay_reliablemeas.addWidget(self.led_ReliableMeas1, 1, 0)
+        lay_reliablemeas.addWidget(self.label_reliablemeas1, 1, 1)
+        lay_reliablemeas.addWidget(self.led_ReliableMeas2, 2, 0)
+        lay_reliablemeas.addWidget(self.label_reliablemeas2, 2, 1)
+        gbox_reliablemeas.setLayout(lay_reliablemeas)
+        return gbox_reliablemeas
+
+    def _setupDCCTGeneralSettingsWidget(self):
+        gbox_generalsettings = QGroupBox(
+            'DCCT General Measurement Settings', self)
+
+        l_measmode = QLabel('Measurement Mode: ', self)
+        self.pydmenumcombobox_MeasMode = PyDMEnumComboBox(
+            parent=self, init_channel=self.dcct_prefix+'MeasMode-Sel')
+        self.pydmenumcombobox_MeasMode.setFixedSize(220, 40)
+        self.pydmlabel_MeasMode = PyDMLabel(
+            parent=self, init_channel=self.dcct_prefix+'MeasMode-Sts')
+        hlay_measmode = QHBoxLayout()
+        hlay_measmode.addWidget(self.pydmenumcombobox_MeasMode)
+        hlay_measmode.addWidget(self.pydmlabel_MeasMode)
+
+        l_currthold = QLabel('Current Threshold [mA]: ', self)
+        self.pydmspinbox_CurrThold = PyDMSpinbox(
+            parent=self, init_channel=self.dcct_prefix+'CurrThold-SP')
+        self.pydmspinbox_CurrThold.setFixedSize(220, 40)
+        self.pydmspinbox_CurrThold.setAlignment(Qt.AlignCenter)
+        self.pydmspinbox_CurrThold.showStepExponent = False
+        self.pydmlabel_CurrThold = PyDMLabel(
+            parent=self, init_channel=self.dcct_prefix+'CurrThold-RB')
+        hlay_currthold = QHBoxLayout()
+        hlay_currthold.addWidget(self.pydmspinbox_CurrThold)
+        hlay_currthold.addWidget(self.pydmlabel_CurrThold)
+
+        l_hfreject = QLabel('High Frequency Rejection: ', self)
+        self.pydmstatebutton_HFReject = PyDMStateButton(
+            parent=self, init_channel=self.dcct_prefix+'HFReject-Sel')
+        self.pydmstatebutton_HFReject.shape = 1
+        self.pydmstatebutton_HFReject.setFixedSize(220, 40)
+        self.pydmlabel_HFReject = PyDMLabel(
+            parent=self, init_channel=self.dcct_prefix+'HFReject-Sts')
+        hlay_hfreject = QHBoxLayout()
+        hlay_hfreject.addWidget(self.pydmstatebutton_HFReject)
+        hlay_hfreject.addWidget(self.pydmlabel_HFReject)
+
+        l_meastrig = QLabel('Measurement Trigger Source: ', self)
+        self.pydmenumcombobox_MeasTrg = PyDMEnumComboBox(
+            parent=self, init_channel=self.dcct_prefix+'MeasTrg-Sel')
+        self.pydmenumcombobox_MeasTrg.setFixedSize(220, 40)
+        self.pydmlabel_MeasTrg = PyDMLabel(
+            parent=self, init_channel=self.dcct_prefix+'MeasTrg-Sts')
+        hlay_meastrig = QHBoxLayout()
+        hlay_meastrig.addWidget(self.pydmenumcombobox_MeasTrg)
+        hlay_meastrig.addWidget(self.pydmlabel_MeasTrg)
+
+        l_TIstatus = QLabel('Timing Trigger Status: ', self)
+        self.ledmulti_TIStatus = PyDMLedMultiChannel(
+            parent=self,
+            channels2values={
+                'ca://'+self.prefix+'BO-35D:TI-DCCT:State-SP': 1,
+                'ca://'+self.prefix+'BO-35D:TI-DCCT:Status-SP': 0})
+        self.ledmulti_TIStatus.setFixedSize(220, 40)
+        self.pb_trgdetails = QPushButton('Open details', self)
+        _hlautil.connect_window(
+            self.pb_trgdetails, HLTriggerDetailed, parent=self,
+            prefix=self.prefix+'BO-35D:TI-DCCT:')
+        hlay_TIstatus = QHBoxLayout()
+        hlay_TIstatus.addWidget(self.ledmulti_TIStatus)
+        hlay_TIstatus.addWidget(self.pb_trgdetails)
+
+        l_TIdelay = QLabel('Timing Trigger Delay: ', self)
+        self.pydmspinbox_TIDelay = PyDMSpinbox(
+            parent=self,
+            init_channel='ca://'+self.prefix+'BO-35D:TI-DCCT:Delay-SP')
+        self.pydmspinbox_TIDelay.setFixedSize(220, 40)
+        self.pydmspinbox_TIDelay.setAlignment(Qt.AlignCenter)
+        self.pydmspinbox_TIDelay.showStepExponent = False
+        self.pydmlabel_TIDelay = PyDMLabel(
+            parent=self,
+            init_channel='ca://'+self.prefix+'BO-35D:TI-DCCT:Delay-RB')
+        hlay_TIdelay = QHBoxLayout()
+        hlay_TIdelay.addWidget(self.pydmspinbox_TIDelay)
+        hlay_TIdelay.addWidget(self.pydmlabel_TIDelay)
+
+        l_trgdelay = QLabel('Measurement Delay After Trigger [s]: ', self)
+        self.pydmspinbox_TrgDelay = PyDMSpinbox(
+            parent=self, init_channel=self.dcct_prefix+'TrgDelay-SP')
+        self.pydmspinbox_TrgDelay.setFixedSize(220, 40)
+        self.pydmspinbox_TrgDelay.setAlignment(Qt.AlignCenter)
+        self.pydmspinbox_TrgDelay.showStepExponent = False
+        self.pydmlabel_TrgDelay = PyDMLabel(
+            parent=self, init_channel=self.dcct_prefix+'TrgDelay-RB')
+        hlay_trgdelay = QHBoxLayout()
+        hlay_trgdelay.addWidget(self.pydmspinbox_TrgDelay)
+        hlay_trgdelay.addWidget(self.pydmlabel_TrgDelay)
+
+        flay_generalsettings = QFormLayout()
+        flay_generalsettings.setFormAlignment(Qt.AlignCenter)
+        flay_generalsettings.addRow(l_measmode, hlay_measmode)
+        flay_generalsettings.addRow(l_currthold, hlay_currthold)
+        flay_generalsettings.addRow(l_hfreject, hlay_hfreject)
+        flay_generalsettings.addRow(l_meastrig, hlay_meastrig)
+        flay_generalsettings.addRow(l_TIstatus, hlay_TIstatus)
+        flay_generalsettings.addRow(l_TIdelay, hlay_TIdelay)
+        flay_generalsettings.addRow(l_trgdelay, hlay_trgdelay)
+        gbox_generalsettings.setLayout(flay_generalsettings)
+        return gbox_generalsettings
+
+    def _setupDCCTNormalMeasSettingsWidget(self):
+        gbox_normalmode = _GroupBoxWithChannel(
+            'DCCT Normal Measurement Mode Settings', self, [self.mode_channel])
+
+        l_smpcnt = QLabel('Sample Count: ', self)
+        self.pydmspinbox_SampleCnt = PyDMSpinbox(
+            parent=self, init_channel=self.dcct_prefix+'SampleCnt-SP')
+        self.pydmspinbox_SampleCnt.setFixedSize(220, 40)
+        self.pydmspinbox_SampleCnt.setAlignment(Qt.AlignCenter)
+        self.pydmspinbox_SampleCnt.showStepExponent = False
+        self.pydmlabel_SampleCnt = PyDMLabel(
+            parent=self, init_channel=self.dcct_prefix+'SampleCnt-RB')
+        hlay_smpcnt = QHBoxLayout()
+        hlay_smpcnt.addWidget(self.pydmspinbox_SampleCnt)
+        hlay_smpcnt.addWidget(self.pydmlabel_SampleCnt)
+
+        l_measperiod = QLabel('Measurement Period [s]: ', self)
+        self.pydmspinbox_MeasPeriod = PyDMSpinbox(
+            parent=self, init_channel=self.dcct_prefix+'MeasPeriod-SP')
+        self.pydmspinbox_MeasPeriod.setFixedSize(220, 40)
+        self.pydmspinbox_MeasPeriod.setAlignment(Qt.AlignCenter)
+        self.pydmspinbox_MeasPeriod.showStepExponent = False
+        self.pydmlabel_MeasPeriod = PyDMLabel(
+            parent=self, init_channel=self.dcct_prefix+'MeasPeriod-RB')
+        hlay_measperiod = QHBoxLayout()
+        hlay_measperiod.addWidget(self.pydmspinbox_MeasPeriod)
+        hlay_measperiod.addWidget(self.pydmlabel_MeasPeriod)
+
+        l_offset = QLabel('Relative Offset Enable: ', self)
+        self.pydmstatebutton_RelEnbl = PyDMStateButton(
+            parent=self, init_channel=self.dcct_prefix+'RelEnbl-Sel')
+        self.pydmstatebutton_RelEnbl.shape = 1
+        self.pydmstatebutton_RelEnbl.setFixedSize(220, 40)
+        self.pydmlabel_RelEnbl = PyDMLabel(
+            parent=self, init_channel=self.dcct_prefix+'RelEnbl-Sts')
+        self.pydmpushbutton_RelEnbl = PyDMPushButton(
+            parent=self, label='Acquire Offset', pressValue=1,
+            init_channel=self.dcct_prefix+'RelAcq-Cmd')
+        self.pydmpushbutton_RelEnbl.setFixedSize(220, 40)
+        hlay_offset = QHBoxLayout()
+        hlay_offset.addWidget(self.pydmstatebutton_RelEnbl)
+        hlay_offset.addWidget(self.pydmlabel_RelEnbl)
+        hlay_offset.addWidget(self.pydmpushbutton_RelEnbl)
+
+        l_rellvl = QLabel('Relative Offset Level [V]: ', self)
+        self.pydmspinbox_RelLvl = PyDMSpinbox(
+            parent=self, init_channel=self.dcct_prefix+'RelLvl-SP')
+        self.pydmspinbox_RelLvl.setFixedSize(220, 40)
+        self.pydmspinbox_RelLvl.setAlignment(Qt.AlignCenter)
+        self.pydmspinbox_RelLvl.showStepExponent = False
+        self.pydmlabel_RelLvl = PyDMLabel(
+            parent=self, init_channel=self.dcct_prefix+'RelLvl-RB')
+        hlay_rellvl = QHBoxLayout()
+        hlay_rellvl.addWidget(self.pydmspinbox_RelLvl)
+        hlay_rellvl.addWidget(self.pydmlabel_RelLvl)
+
+        flay_normalmode = QFormLayout()
+        flay_normalmode.setFormAlignment(Qt.AlignCenter)
+        flay_normalmode.addRow(l_smpcnt, hlay_smpcnt)
+        flay_normalmode.addRow(l_measperiod, hlay_measperiod)
+        flay_normalmode.addRow(l_offset, hlay_offset)
+        flay_normalmode.addRow(l_rellvl, hlay_rellvl)
+        gbox_normalmode.setLayout(flay_normalmode)
+        gbox_normalmode.setVisible(True)
+        return gbox_normalmode
+
+    def _setupDCCTFastMeasSettingsWidget(self):
+        gbox_fastmode = _GroupBoxWithChannel(
+            'DCCT Fast Measurement Mode Settings', self, [self.mode_channel])
+
+        l_fastsmpcnt = QLabel('Sample Count: ', self)
+        self.pydmspinbox_FastSampleCnt = PyDMSpinbox(
+            parent=self, init_channel=self.dcct_prefix+'FastSampleCnt-SP')
+        self.pydmspinbox_FastSampleCnt.setFixedSize(220, 40)
+        self.pydmspinbox_FastSampleCnt.setAlignment(Qt.AlignCenter)
+        self.pydmspinbox_FastSampleCnt.showStepExponent = False
+        self.pydmlabel_FastSampleCnt = PyDMLabel(
+            parent=self, init_channel=self.dcct_prefix+'FastSampleCnt-RB')
+        hlay_fastsmpcnt = QHBoxLayout()
+        hlay_fastsmpcnt.addWidget(self.pydmspinbox_FastSampleCnt)
+        hlay_fastsmpcnt.addWidget(self.pydmlabel_FastSampleCnt)
+
+        l_fastmeasperiod = QLabel('Measurement Period [s]: ', self)
+        self.pydmspinbox_FastMeasPeriod = PyDMSpinbox(
+            parent=self, init_channel=self.dcct_prefix+'FastMeasPeriod-SP')
+        self.pydmspinbox_FastMeasPeriod.setFixedSize(220, 40)
+        self.pydmspinbox_FastMeasPeriod.setAlignment(Qt.AlignCenter)
+        self.pydmspinbox_FastMeasPeriod.showStepExponent = False
+        self.pydmlabel_FastMeasPeriod = PyDMLabel(
+            parent=self, init_channel=self.dcct_prefix+'FastMeasPeriod-RB')
+        hlay_fastmeasperiod = QHBoxLayout()
+        hlay_fastmeasperiod.addWidget(self.pydmspinbox_FastMeasPeriod)
+        hlay_fastmeasperiod.addWidget(self.pydmlabel_FastMeasPeriod)
+
+        l_fastoffset = QLabel('Relative Offset Enable: ', self)
+        self.pydmstatebutton_FastRelEnbl = PyDMStateButton(
+            parent=self, init_channel=self.dcct_prefix+'FastRelEnbl-Sel')
+        self.pydmstatebutton_FastRelEnbl.shape = 1
+        self.pydmstatebutton_FastRelEnbl.setFixedSize(220, 40)
+        self.pydmlabel_FastRelEnbl = PyDMLabel(
+            parent=self, init_channel=self.dcct_prefix+'FastRelEnbl-Sts')
+        self.pydmpushbutton_FastRelEnbl = PyDMPushButton(
+            parent=self, label='Acquire Offset', pressValue=1,
+            init_channel=self.dcct_prefix+'FastRelAcq-Cmd')
+        self.pydmpushbutton_FastRelEnbl.setFixedSize(220, 40)
+        hlay_fastoffset = QHBoxLayout()
+        hlay_fastoffset.addWidget(self.pydmstatebutton_FastRelEnbl)
+        hlay_fastoffset.addWidget(self.pydmlabel_FastRelEnbl)
+        hlay_fastoffset.addWidget(self.pydmpushbutton_FastRelEnbl)
+
+        l_fastrellvl = QLabel('Relative Offset Level [V]: ', self)
+        self.pydmspinbox_FastRelLvl = PyDMSpinbox(
+            parent=self, init_channel=self.dcct_prefix+'FastRelLvl-SP')
+        self.pydmspinbox_FastRelLvl.setFixedSize(220, 40)
+        self.pydmspinbox_FastRelLvl.setAlignment(Qt.AlignCenter)
+        self.pydmspinbox_FastRelLvl.showStepExponent = False
+        self.pydmlabel_FastRelLvl = PyDMLabel(
+            parent=self, init_channel=self.dcct_prefix+'FastRelLvl-RB')
+        hlay_fastrellvl = QHBoxLayout()
+        hlay_fastrellvl.addWidget(self.pydmspinbox_FastRelLvl)
+        hlay_fastrellvl.addWidget(self.pydmlabel_FastRelLvl)
+
+        flay_fastmode = QFormLayout()
+        flay_fastmode.setFormAlignment(Qt.AlignCenter)
+        flay_fastmode.addRow(l_fastsmpcnt, hlay_fastsmpcnt)
+        flay_fastmode.addRow(l_fastmeasperiod, hlay_fastmeasperiod)
+        flay_fastmode.addRow(l_fastoffset, hlay_fastoffset)
+        flay_fastmode.addRow(l_fastrellvl, hlay_fastrellvl)
+        gbox_fastmode.setLayout(flay_fastmode)
+        gbox_fastmode.setVisible(False)
+        return gbox_fastmode
+
+    def _setupRampEffIndicesWidget(self):
+        gbox_effparams = QGroupBox(
+            'Ramp Efficiency Calculation Indices', self)
+
+        l_injcurr = QLabel('Injected Current: ', self)
+        self.sb_injcurr = QSpinBox(self)
+        self.sb_injcurr.setValue(self.injcurr_idx)
+        self.sb_injcurr.setMinimum(0)
+        self.sb_injcurr.setFixedSize(220, 40)
+        if self.pydmlabel_SampleCnt._connected:
+            self.sb_injcurr.setMaximum(int(self.pydmlabel_SampleCnt.text())-1)
+        else:
+            self.sb_injcurr.setMaximum(1)
+
+        l_ejecurr = QLabel('Ejected Current: ', self)
+        self.sb_ejecurr = QSpinBox(self)
+        self.sb_ejecurr.setValue(self.ejecurr_idx)
+        self.sb_ejecurr.setMinimum(0)
+        self.sb_ejecurr.setFixedSize(220, 40)
+        if self.pydmlabel_SampleCnt._connected:
+            self.sb_ejecurr.setMaximum(int(self.pydmlabel_SampleCnt.text())-1)
+        else:
+            self.sb_ejecurr.setMaximum(1)
+
+        flay_effparams = QFormLayout()
+        flay_effparams.setFormAlignment(Qt.AlignCenter)
+        flay_effparams.addRow(l_injcurr, self.sb_injcurr)
+        flay_effparams.addRow(l_ejecurr, self.sb_ejecurr)
+        gbox_effparams.setLayout(flay_effparams)
+        return gbox_effparams
+
+    def _updateReliableMeasLabels(self, labels):
+        if labels:
+            self.label_reliablemeas0.setText(labels[0])
+            self.label_reliablemeas1.setText(labels[1])
+            self.label_reliablemeas2.setText(labels[2])
+
+    def _showMeasModeSettings(self, value):
+        if value == DCCT_MEASMODE_NORMAL:
+            self.gbox_normalmode.setVisible(True)
+            self.gbox_fastmode.setVisible(False)
+        if value == DCCT_MEASMODE_FAST:
+            self.gbox_normalmode.setVisible(False)
+            self.gbox_fastmode.setVisible(True)
 
     def _emitSettings(self):
-        self.updateSettings.emit([self.sb_injcurr_idx.value(),
-                                  self.sb_ejecurr_idx.value()])
+        self.updateSettings.emit([self.sb_injcurr.value(),
+                                  self.sb_ejecurr.value()])
         self.close()
+
+
+class _GroupBoxWithChannel(QGroupBox):
+
+    def __init__(self, title='', parent=None, channels=None):
+        self._channels = channels
+        super().__init__(title, parent)
+
+    def channels(self):
+        """Return channels."""
+        return self._channels
 
 
 class ChooseMagnetsToPlot(SiriusDialog):
