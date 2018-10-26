@@ -405,7 +405,7 @@ class OpticsAdjust(QGroupBox):
             return
         self._saveAsPopup = _NewRampConfigGetName(
             self.norm_config, 'bo_normalized', self, new_from_template=False)
-        self._saveAsPopup.newConfigNameSignal.connect(self._save)
+        self._saveAsPopup.configname.connect(self._save)
         self._saveAsPopup.open()
 
     def _calculate_deltaKL(self):
