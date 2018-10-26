@@ -24,7 +24,7 @@ from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import PyDMLed, SiriusLedAlert, SiriusLedState, \
                               SiriusMainWindow, SiriusScrnView, \
                               PyDMLinEditScrollbar
-from siriushla.as_ap_bpms.bpms_windows import BPMsInterfaceTL
+from siriushla.as_di_bpms import BPMsInterfaceTL  # TODO: remove this import
 from siriushla.as_ap_posang.HLPosAng import ASAPPosAngCorr
 from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
 from siriushla.as_ps_control.PSTabControlWindow import PSTabControlWindow

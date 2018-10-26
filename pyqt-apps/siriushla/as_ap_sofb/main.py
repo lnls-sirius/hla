@@ -1,21 +1,18 @@
 """Main module of the Application Interface."""
 
-import sys as _sys
-import os as _os
 from qtpy.QtCore import Qt, QSize, QRect
 from qtpy.QtWidgets import QWidget, QDockWidget, QSizePolicy, QVBoxLayout, \
     QPushButton, QHBoxLayout, QMenu, QMenuBar, QAction, QStatusBar
 from siriuspy.envars import vaca_prefix as LL_PREF
 from siriuspy.csdevice.orbitcorr import OrbitCorrDev
+from siriushla import util
 from siriushla.widgets import SiriusMainWindow
 from siriushla.widgets import PyDMLogLabel
-
+from siriushla.widgets.windows import create_window_from_widget
 from siriushla.as_ap_sofb.orbit_register import OrbitRegisters
 from siriushla.as_ap_sofb.graphics import OrbitWidget
 from siriushla.as_ap_sofb.ioc_control import SOFBControl
-
-_dir = _os.path.dirname(_os.path.abspath(__file__))
-UI_FILE = _os.path.sep.join([_dir, 'SOFBMain.ui'])
+from siriushla.as_di_bpms import SelectBPMs
 
 
 class MainWindow(SiriusMainWindow):
@@ -47,13 +44,13 @@ class MainWindow(SiriusMainWindow):
         self.setDocumentMode(False)
         self.setDockNestingEnabled(True)
 
-        logwid = self._create_log_docwidget()
-        orbreg = self._create_orbit_registers()
-        wid = self._create_ioc_controllers()
+        self.ioc_log = self._create_log_docwidget()
+        self.orbit_regist = self._create_orbit_registers()
+        self.sofb_control = self._create_ioc_controllers()
 
-        self.addDockWidget(Qt.DockWidgetArea(8), logwid)
-        self.addDockWidget(Qt.DockWidgetArea(8), orbreg)
-        self.addDockWidget(Qt.DockWidgetArea(2), wid)
+        self.addDockWidget(Qt.DockWidgetArea(8), self.ioc_log)
+        self.addDockWidget(Qt.DockWidgetArea(8), self.orbit_regist)
+        self.addDockWidget(Qt.DockWidgetArea(2), self.sofb_control)
 
         mwid = self._create_central_widget()
         self.setCentralWidget(mwid)
@@ -136,58 +133,53 @@ class MainWindow(SiriusMainWindow):
     def _create_menus(self):
         menubar = QMenuBar(self)
         menubar.setGeometry(QRect(0, 0, 2290, 19))
+
         menuopen = QMenu('Open', menubar)
-
+        actions = (
+            ("&SOFB Control", "SOFB Control", '', True),
+            ("IOC &Log", "IOC Log", '', True),
+            ("Orbit &Registers", "Orbit Registers", '', True))
         self.setMenuBar(menubar)
-        action = QAction("Correction &Parameters", self)
-        action.setCheckable(True)
-        action.setChecked(True)
-        action.setEnabled(True)
-        action.setVisible(True)
-        menuopen.addAction(action)
-
-        action = QAction("IOC &Log", self)
-        action.setToolTip("IOC Log")
-        action.setCheckable(True)
-        action.setChecked(True)
-        action.setEnabled(True)
-        action.setVisible(True)
-        menuopen.addAction(action)
-
-        action = QAction("Orbit &Registers", self)
-        action.setCheckable(True)
-        action.setChecked(True)
-        action.setEnabled(True)
-        action.setVisible(True)
-        menuopen.addAction(action)
-
-        action = QAction("&Open All", self)
-        action.setToolTip("Open all dockable windows")
-        action.setShortcut("Alt+O")
-        action.setChecked(False)
-        action.setEnabled(True)
-        action.setVisible(True)
-        menuopen.addAction(action)
-
-        action = QAction("&Close All", self)
-        action.setShortcut("Alt+C")
-        action.setEnabled(True)
-        action.setVisible(True)
-        menuopen.addAction(action)
-
+        for name, tool, short, check in actions:
+            action = QAction(name, self)
+            action.setToolTip(tool)
+            action.setShortcut(short)
+            action.setCheckable(check)
+            action.setChecked(check)
+            action.setEnabled(True)
+            action.setVisible(True)
+            action.toggled.connect(self.deal_with_action)
+            menuopen.addAction(action)
         menubar.addAction(menuopen.menuAction())
+
+        actbpm = QAction('Show BPM List', menubar)
+        Window = create_window_from_widget(SelectBPMs, 'SelectBPMs')
+        util.connect_window(
+            actbpm, Window, self, prefix='ca://',
+            bpm_list=self._csorb.BPM_NAMES)
+        menubar.addAction(actbpm)
 
         statusbar = QStatusBar(self)
         statusbar.setEnabled(True)
         self.setStatusBar(statusbar)
 
+    def deal_with_action(self, boo):
+        action = self.sender()
+        if 'SOFB' in action.text():
+            self.sofb_control.setVisible(boo)
+        if 'IOC' in action.text():
+            self.ioc_log.setVisible(boo)
+        if 'Orbit' in action.text():
+            self.orbit_regist.setVisible(boo)
+
 
 if __name__ == '__main__':
+    import sys as _sys
     import siriushla.util as _util
     from siriushla.sirius_application import SiriusApplication
 
     app = SiriusApplication()
     _util.set_style(app)
-    main_win = MainWindow(LL_PREF, 'TB')
+    main_win = MainWindow(LL_PREF, 'SI')
     main_win.show()
     _sys.exit(app.exec_())
