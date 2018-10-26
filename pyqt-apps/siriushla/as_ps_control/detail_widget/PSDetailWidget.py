@@ -149,7 +149,7 @@ class PSDetailWidget(QWidget):
         boxes_layout.addLayout(controls)
         boxes_layout.addLayout(analogs)
 
-        layout.addWidget(QLabel("<h1>" + self._psname + "</h1>"))
+        layout.addWidget(QLabel("<h2>" + self._psname + "</h2>"))
         layout.addLayout(boxes_layout)
         if not self._is_magnet:
             dclink_button = QPushButton('DCLink', self)
@@ -554,7 +554,7 @@ class DCLinkDetailWidget(PSDetailWidget):
         boxes_layout.addLayout(controls)
         boxes_layout.addLayout(analogs)
 
-        layout.addWidget(QLabel("<h1>" + self._psname + "</h1>"))
+        layout.addWidget(QLabel("<h2>" + self._psname + "</h2>"))
         layout.addLayout(boxes_layout)
 
         controls.addWidget(self.version_box)
@@ -566,6 +566,15 @@ class DCLinkDetailWidget(PSDetailWidget):
         analogs.addWidget(self.aux_box)
 
         return layout
+
+    def _analogLayout(self):
+        raise NotImplementedError
+
+    def _auxLayout(self):
+        raise NotImplementedError
+
+
+class FBPDCLinkDetailWidget(DCLinkDetailWidget):
 
     def _analogLayout(self):
         layout = QGridLayout()
@@ -610,12 +619,6 @@ class DCLinkDetailWidget(PSDetailWidget):
     def _auxLayout(self):
         layout = QFormLayout()
 
-        # self._out_1_label = QLabel('Voltage 1')
-        # self._out_2_label = QLabel('Voltage 2')
-        # self._out_3_label = QLabel('Voltage 3')
-        # self._out_dig_label = QLabel('Voltage dig')
-        # self._mod_status_label = QLabel('Module Status')
-
         self._out_1_mon = PyDMLabel(
             self, 'ca://' + self._prefixed_psname + ':Voltage1-Mon')
         self._out_2_mon = PyDMLabel(
@@ -632,5 +635,69 @@ class DCLinkDetailWidget(PSDetailWidget):
         layout.addRow('Voltage 3', self._out_3_mon)
         layout.addRow('Voltage dig', self._out_dig_mon)
         layout.addRow('Module Status', self._mod_status_mon)
+
+        return layout
+
+
+class FACDCLinkDetailWidget(DCLinkDetailWidget):
+
+    def _analogLayout(self):
+        layout = QGridLayout()
+
+        self.cap_bank_sp_label = QLabel("Setpoint")
+        self.cap_bank_rb_label = QLabel("Readback")
+        self.cap_bank_ref_label = QLabel("Ref Mon")
+        self.cap_bank_mon_label = QLabel("Mon")
+
+        self.cap_bank_sp_widget = PyDMLinEditScrollbar(
+            "ca://" + self._prefixed_psname + ":CapacitorBankVoltage-SP", self)
+        self.cap_bank_sp_widget.sp_lineedit.showUnits = False
+        self.cap_bank_sp_widget.sp_scrollbar.setTracking(False)
+        self.cap_bank_rb_val = PyDMLabel(
+            self,
+            "ca://" + self._prefixed_psname + ":CapacitorBankVoltage-RB")
+        self.cap_bank_rb_val.precFromPV = True
+        self.cap_bank_ref_val = PyDMLabel(
+            self,
+            "ca://" + self._prefixed_psname + ":CapacitorBankVoltageRef-Mon")
+        self.cap_bank_ref_val.precFromPV = True
+        self.cap_bank_mon_val = PyDMLabel(
+            self,
+            "ca://" + self._prefixed_psname + ":CapacitorBankVoltage-Mon")
+        self.cap_bank_mon_val.precFromPV = True
+
+        layout.addWidget(self.cap_bank_sp_label, 0, 0, Qt.AlignRight)
+        layout.addWidget(self.cap_bank_sp_widget, 0, 1)
+        layout.addWidget(self.cap_bank_rb_label, 1, 0, Qt.AlignRight)
+        layout.addWidget(self.cap_bank_rb_val, 1, 1)
+        layout.addWidget(self.cap_bank_ref_label, 2, 0, Qt.AlignRight)
+        layout.addWidget(self.cap_bank_ref_val, 2, 1)
+        layout.addWidget(self.cap_bank_mon_label, 3, 0, Qt.AlignRight)
+        layout.addWidget(self.cap_bank_mon_val, 3, 1)
+
+        layout.setColumnStretch(2, 1)
+
+        return layout
+
+    def _auxLayout(self):
+        layout = QFormLayout()
+
+        self.rectifier_voltage_mon = PyDMLabel(
+            self, 'ca://' + self._prefixed_psname + ':RectifierVoltage-Mon')
+        self.rectifier_current_mon = PyDMLabel(
+            self, 'ca://' + self._prefixed_psname + ':RectifierCurrent-Mon')
+        self.heatsink_temperature = PyDMLabel(
+            self, 'ca://' + self._prefixed_psname + ':HeatSinkTemperature-Mon')
+        self.inductors_temperature = PyDMLabel(
+            self,
+            'ca://' + self._prefixed_psname + ':InductorsTemperature-Mon')
+        self.duty_cycle = PyDMLabel(
+            self, 'ca://' + self._prefixed_psname + ':PWMDutyCycle-Mon')
+
+        layout.addRow('Rectifier Voltage', self.rectifier_voltage_mon)
+        layout.addRow('Rectifier Current', self.rectifier_current_mon)
+        layout.addRow('Heatsink Temperatue', self.heatsink_temperature)
+        layout.addRow('Inductors Temperature', self.inductors_temperature)
+        layout.addRow('PWM Duty Cycle', self.duty_cycle)
 
         return layout

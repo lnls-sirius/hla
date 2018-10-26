@@ -1,8 +1,9 @@
 """This module defines a factory to get a detailed window."""
 import re
 
+from siriuspy.pwrsupply.data import PSData
 from siriushla.as_ps_control.detail_widget.PSDetailWidget \
-    import PSDetailWidget, DCLinkDetailWidget
+    import PSDetailWidget, FBPDCLinkDetailWidget, FACDCLinkDetailWidget
 from siriushla.as_ps_control.detail_widget.DipoleDetailWidget \
     import DipoleDetailWidget
 from siriushla.as_pm_control.PulsedMagnetDetailWidget \
@@ -23,7 +24,7 @@ class DetailWidgetFactory:
             if len(psname) > 1:
                 widget = QWidget(parent)
                 widget.layout = QGridLayout(widget)
-                n_lines = int(len(psname)/2)
+                n_lines = int(len(psname)/4)
                 for idx, name in enumerate(psname):
                     widget.layout.addWidget(
                         DetailWidgetFactory._item(name, widget),
@@ -36,11 +37,17 @@ class DetailWidgetFactory:
 
     @staticmethod
     def _item(psname, parent=None):
+        model = PSData(psname).psmodel
         if DetailWidgetFactory.PulsedMagnet.match(psname):
             return PulsedMagnetDetailWidget(psname, parent)
         elif DetailWidgetFactory.FamDipole.match(psname):
             return DipoleDetailWidget(psname, parent)
         elif 'DCLink' in psname:
-            return DCLinkDetailWidget(psname, parent)
+            if model == 'FBP_DCLink':
+                return FBPDClinkDetailWidget(psname, parent)
+            elif model in ('FAC_ACDC', 'FAC_2P4S_ACDC'):
+                return FACDCLinkDetailWidget(psname, parent)
+            else:
+                raise ValueError('Undefined PS model: {}'.format(model))
         else:
             return PSDetailWidget(psname, parent)
