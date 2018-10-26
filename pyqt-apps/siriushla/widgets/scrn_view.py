@@ -25,25 +25,35 @@ class _SiriusImageView(PyDMImageView):
     failToSaveGrid = Signal()
 
     def __init__(self, parent=None,
-                 image_channel=None, width_channel=None,
-                 offsetx_channel=None, offsety_channel=None,
-                 maxwidth_channel=None, maxheight_channel=None):
+            image_channel=None, width_channel=None,
+            offsetx_channel=None, offsety_channel=None,
+            maxwidth_channel=None, maxheight_channel=None):
         """Initialize the object."""
-        PyDMImageView.__init__(self, parent=parent,
-                               image_channel=image_channel,
-                               width_channel=width_channel)
+        PyDMImageView.__init__(
+            self, parent=parent, image_channel=image_channel,
+            width_channel=width_channel)
+        self._channels.extend(4*[None, ])
         self._calibration_grid_image = None
         self._calibration_grid_maxdata = None
         self._calibration_grid_width = None
         self._image_roi_offsetx = 0
-        self._offsetxchannel = offsetx_channel
+        self._offsetxchannel = None
         self._image_roi_offsety = 0
-        self._offsetychannel = offsety_channel
+        self._offsetychannel = None
         self._image_maxwidth = 0
-        self._maxwidthchannel = maxwidth_channel
+        self._maxwidthchannel = None
         self._image_maxheight = 0
-        self._maxheightchannel = maxheight_channel
+        self._maxheightchannel = None
         self._show_calibration_grid = False
+        # Set live channels if requested on initialization
+        if offsetx_channel:
+            self.ROIOffsetXChannel = offsetx_channel
+        if offsety_channel:
+            self.ROIOffsetYChannel = offsety_channel
+        if maxwidth_channel:
+            self.maxWidthChannel = maxwidth_channel
+        if maxheight_channel:
+            self.maxHeightChannel = maxheight_channel
 
     @Slot()
     def saveCalibrationGrid(self):
@@ -185,7 +195,10 @@ class _SiriusImageView(PyDMImageView):
         str
             Channel address
         """
-        return str(self._offsetxchannel)
+        if self._offsetxchannel:
+            return str(self._offsetxchannel.address)
+        else:
+            return ''
 
     @ROIOffsetXChannel.setter
     def ROIOffsetXChannel(self, value):
@@ -198,7 +211,17 @@ class _SiriusImageView(PyDMImageView):
             Channel address
         """
         if self._offsetxchannel != value:
-            self._offsetxchannel = str(value)
+            # Disconnect old channel
+            if self._offsetxchannel:
+                self._offsetxchannel.disconnect()
+            # Create and connect new channel
+            self._offsetxchannel = PyDMChannel(
+                address=self.ROIOffsetXChannel,
+                connection_slot=self.roioffsetx_connection_state_changed,
+                value_slot=self.image_roioffsetx_changed,
+                severity_slot=self.alarmSeverityChanged)
+            self._channels[2] = self._offsetxchannel
+            self._offsetxchannel.connect()
 
     @Property(str)
     def ROIOffsetYChannel(self):
@@ -210,7 +233,10 @@ class _SiriusImageView(PyDMImageView):
         str
             Channel address
         """
-        return str(self._offsetychannel)
+        if self._offsetychannel:
+            return str(self._offsetychannel.address)
+        else:
+            return ''
 
     @ROIOffsetYChannel.setter
     def ROIOffsetYChannel(self, value):
@@ -223,7 +249,17 @@ class _SiriusImageView(PyDMImageView):
             Channel address
         """
         if self._offsetychannel != value:
-            self._offsetychannel = str(value)
+            # Disconnect old channel
+            if self._offsetychannel:
+                self._offsetychannel.disconnect()
+            # Create and connect new channel
+            self._offsetychannel = PyDMChannel(
+                address=self.ROIOffsetYChannel,
+                connection_slot=self.roioffsety_connection_state_changed,
+                value_slot=self.image_roioffsety_changed,
+                severity_slot=self.alarmSeverityChanged)
+            self._channels[3] = self._offsetychannel
+            self._offsetychannel.connect()
 
     @Property(str)
     def maxWidthChannel(self):
@@ -235,7 +271,10 @@ class _SiriusImageView(PyDMImageView):
         str
             Channel address
         """
-        return str(self._maxwidthchannel)
+        if self._maxwidthchannel:
+            return str(self._maxwidthchannel.address)
+        else:
+            return ''
 
     @maxWidthChannel.setter
     def maxWidthChannel(self, value):
@@ -248,7 +287,16 @@ class _SiriusImageView(PyDMImageView):
             Channel address
         """
         if self._maxwidthchannel != value:
-            self._maxwidthchannel = str(value)
+            # Disconnect old channel
+            if self._maxwidthchannel:
+                self._maxwidthchannel.disconnect()
+            # Create and connect new channel
+            self._maxwidthchannel = PyDMChannel(
+                address=self.maxWidthChannel,
+                value_slot=self.image_maxwidth_changed,
+                severity_slot=self.alarmSeverityChanged)
+            self._channels[4] = self._maxwidthchannel
+            self._maxwidthchannel.connect()
 
     @Property(str)
     def maxHeightChannel(self):
@@ -260,7 +308,10 @@ class _SiriusImageView(PyDMImageView):
         str
             Channel address
         """
-        return str(self._maxheightchannel)
+        if self._maxheightchannel:
+            return str(self._maxheightchannel.address)
+        else:
+            return ''
 
     @maxHeightChannel.setter
     def maxHeightChannel(self, value):
@@ -273,48 +324,16 @@ class _SiriusImageView(PyDMImageView):
             Channel address
         """
         if self._maxheightchannel != value:
-            self._maxheightchannel = str(value)
-
-    def channels(self):
-        """
-        Return the channels being used for this Widget.
-
-        Returns
-        -------
-        channels : list
-            List of PyDMChannel objects
-        """
-        if self._channels is None:
-            self._channels = [
-                PyDMChannel(
-                    address=self.imageChannel,
-                    connection_slot=self.image_connection_state_changed,
-                    value_slot=self.image_value_changed,
-                    severity_slot=self.alarmSeverityChanged),
-                PyDMChannel(
-                    address=self.widthChannel,
-                    connection_slot=self.connectionStateChanged,
-                    value_slot=self.image_width_changed,
-                    severity_slot=self.alarmSeverityChanged),
-                PyDMChannel(
-                    address=self.ROIOffsetXChannel,
-                    connection_slot=self.roioffsetx_connection_state_changed,
-                    value_slot=self.image_roioffsetx_changed,
-                    severity_slot=self.alarmSeverityChanged),
-                PyDMChannel(
-                    address=self.ROIOffsetYChannel,
-                    connection_slot=self.roioffsety_connection_state_changed,
-                    value_slot=self.image_roioffsety_changed,
-                    severity_slot=self.alarmSeverityChanged),
-                PyDMChannel(
-                    address=self.maxWidthChannel,
-                    value_slot=self.image_maxwidth_changed,
-                    severity_slot=self.alarmSeverityChanged),
-                PyDMChannel(
-                    address=self.maxHeightChannel,
-                    value_slot=self.image_maxheight_changed,
-                    severity_slot=self.alarmSeverityChanged)]
-        return self._channels
+            # Disconnect old channel
+            if self._maxheightchannel:
+                self._maxheightchannel.disconnect()
+            # Create and connect new channel
+            self._maxheightchannel = PyDMChannel(
+                address=self.maxHeightChannel,
+                value_slot=self.image_maxheight_changed,
+                severity_slot=self.alarmSeverityChanged)
+            self._channels[5] = self._maxheightchannel
+            self._maxheightchannel.connect()
 
 
 class SiriusScrnView(QWidget):
@@ -334,7 +353,7 @@ class SiriusScrnView(QWidget):
         else:
             self.prefix = prefix
         self.device = device
-        self.scrn_prefix = 'ca://'+self.prefix+self.device
+        self.scrn_prefix = self.prefix+self.device
         self._calibrationgrid_flag = False
         self._setupUi()
 
@@ -749,7 +768,7 @@ class _ScrnSettingsDetails(SiriusMainWindow):
         super().__init__(parent=parent)
         self.prefix = prefix
         self.device = device
-        self.scrn_prefix = 'ca://'+self.prefix+self.device
+        self.scrn_prefix = self.prefix+self.device
         self.setWindowTitle('Screen Settings Details')
         self.centralwidget = QWidget(self)
         self._setupUi()
@@ -1137,7 +1156,7 @@ if __name__ == '__main__':
     scrn_view = SiriusScrnView(prefix=_vaca_prefix, device='TB-01:DI-Scrn-1')
     cb_scrntype = PyDMEnumComboBox(
         parent=centralwidget,
-        init_channel='ca://'+_vaca_prefix+'TB-01:DI-Scrn-1:ScrnType-Sel')
+        init_channel=_vaca_prefix+'TB-01:DI-Scrn-1:ScrnType-Sel')
     cb_scrntype.currentIndexChanged.connect(
         scrn_view.updateCalibrationGridFlag)
 
