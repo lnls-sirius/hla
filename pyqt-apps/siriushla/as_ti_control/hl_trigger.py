@@ -15,7 +15,7 @@ from siriushla.widgets.led import PyDMLed, SiriusLedAlert
 from siriushla.widgets.state_button import PyDMStateButton
 from siriushla.widgets.windows import SiriusDialog
 from siriushla import util as _util
-from base_list import BaseList
+from siriushla.as_ti_control.base_list import BaseList
 
 
 class HLTriggerDetailed(SiriusDialog):
@@ -166,7 +166,7 @@ class HLTriggerList(BaseList):
                 but[0], HLTriggerDetailed, self, prefix=prefix)
         elif 'status' == prop:
             rb = SiriusLedAlert(self, init_channel=prefix + "Status-Mon")
-            rb.setShape(rb.shapeMap.Square)
+            rb.setShape(rb.ShapeMap.Square)
             but = (rb, )
         elif 'state' == prop:
             sp = PyDMStateButton(self, init_channel=prefix + "State-Sel")
