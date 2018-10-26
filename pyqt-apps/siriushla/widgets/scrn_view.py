@@ -1130,17 +1130,17 @@ if __name__ == '__main__':
     scrn_view = SiriusScrnView(prefix=prefix, device=scrn_device)
     cb_scrntype = PyDMEnumComboBox(
         parent=centralwidget,
-        init_channel='ca://'+prefix+scrn_device+':ScrnType-Sel')
+        init_channel=prefix+scrn_device+':ScrnType-Sel')
     cw = QWidget()
     scrn_view = SiriusScrnView(prefix='', device=scrn_device)
     cb_scrntype = PyDMEnumComboBox(
-        parent=cw, init_channel='ca://'+prefix+scrn_device+':ScrnType-Sel')
+        parent=cw, init_channel=prefix+scrn_device+':ScrnType-Sel')
     cb_scrntype.currentIndexChanged.connect(
         scrn_view.updateCalibrationGridFlag)
     l_scrntype = PyDMLabel(
-        parent=cw, init_channel='ca://'+prefix+scrn_device+':ScrnType-Sts')
+        parent=cw, init_channel=prefix+scrn_device+':ScrnType-Sts')
     led_movests = PyDMLed(
-        parent=cw, init_channel='ca://'+prefix+scrn_device+':DoneMov-Mon',
+        parent=cw, init_channel=prefix+scrn_device+':DoneMov-Mon',
         color_list=[PyDMLed.LightGreen, PyDMLed.DarkGreen])
     led_movests.shape = 2
     led_movests.setFixedHeight(40)
