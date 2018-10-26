@@ -168,7 +168,7 @@ class RampMain(SiriusMainWindow):
         self.close_ev = ev
 
         if self.ramp_config is None:
-            self._acceptClose()
+            return self._acceptClose()
 
         if not self.ramp_config.configsrv_synchronized:
             save_changes = _MessageBox(
