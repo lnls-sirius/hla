@@ -92,26 +92,29 @@ class DipoleRamp(QWidget):
         self._setupPSDelayAndWfmNrPoints()
         self._setupTable()
 
-        vlay_v = QVBoxLayout()
+        lay_v = QVBoxLayout()
         self.l_rampupv = QLabel('RmpU 0 [GeV/s]', self,
                                 alignment=Qt.AlignRight)
         self.l_rampupv.setFixedWidth(320)
         self.l_rampdownv = QLabel('RmpD 0 [GeV/s]', self,
                                   alignment=Qt.AlignRight)
         self.l_rampdownv.setFixedWidth(320)
-        vlay_v.addWidget(self.l_rampupv)
-        vlay_v.addWidget(self.l_rampdownv)
+        lay_v.addWidget(self.l_rampupv)
+        lay_v.addWidget(self.l_rampdownv)
 
-        hlay_caution = QHBoxLayout()
-        self.label_caution = QLabel('', self)
-        self.label_caution.setFixedSize(644, 40)
-        self.pb_caution = QPushButton('?', self)
-        self.pb_caution.setFixedWidth(48)
-        self.pb_caution.setVisible(False)
-        self.pb_caution.setStyleSheet('background-color: red;')
-        self.pb_caution.clicked.connect(self._showAnomaliesPopup)
-        hlay_caution.addWidget(self.label_caution)
-        hlay_caution.addWidget(self.pb_caution)
+        lay_warn = QGridLayout()
+        self.label_anom = QLabel('', self)
+        self.label_anom.setFixedSize(644, 40)
+        self.pb_anom = QPushButton('?', self)
+        self.pb_anom.setFixedWidth(48)
+        self.pb_anom.setVisible(False)
+        self.pb_anom.setStyleSheet('background-color: red;')
+        self.pb_anom.clicked.connect(self._showAnomaliesPopup)
+        self.label_exclim = QLabel('', self)
+        self.label_exclim.setFixedSize(644+57, 40)
+        lay_warn.addWidget(self.label_anom, 0, 0)
+        lay_warn.addWidget(self.pb_anom, 0, 1)
+        lay_warn.addWidget(self.label_exclim, 1, 0, 1, 2)
 
         label = QLabel('<h4>Dipole Ramp</h4>', self, alignment=Qt.AlignCenter)
         label.setFixedHeight(48)
@@ -119,9 +122,9 @@ class DipoleRamp(QWidget):
         glay.addWidget(self.graphview, 1, 0, 1, 2, alignment=Qt.AlignCenter)
         glay.addLayout(self.set_psdelay_and_nrpoints, 2, 0,
                        alignment=Qt.AlignLeft)
-        glay.addLayout(vlay_v, 2, 1, alignment=Qt.AlignRight)
+        glay.addLayout(lay_v, 2, 1, alignment=Qt.AlignRight)
         glay.addWidget(self.table, 3, 0, 1, 2, alignment=Qt.AlignCenter)
-        glay.addLayout(hlay_caution, 4, 0, 1, 2, alignment=Qt.AlignCenter)
+        glay.addLayout(lay_warn, 4, 0, 1, 2, alignment=Qt.AlignCenter)
         glay.addItem(
             QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 5, 1)
 
@@ -301,13 +304,7 @@ class DipoleRamp(QWidget):
         else:
             self.updateGraph()
             self.updateDipoleRampSignal.emit()
-            if len(self.ramp_config.ps_waveform_anomalies) > 0:
-                self.label_caution.setText('<h6>Caution: there are anomalies '
-                                           'in the waveforms.</h6>')
-                self.pb_caution.setVisible(True)
-            else:
-                self.label_caution.setText('')
-                self.pb_caution.setVisible(False)
+            self._verifyWarnings()
 
             global _flag_stack_next_command, _flag_stacking
             if _flag_stack_next_command:
@@ -379,6 +376,21 @@ class DipoleRamp(QWidget):
                 _flag_stack_next_command = True
         finally:
             self.updateTable()
+
+    def _verifyWarnings(self):
+        if len(self.ramp_config.ps_waveform_anomalies) > 0:
+            self.label_anom.setText('<h6>Caution: there are anomalies '
+                                    'in the waveforms.</h6>')
+            self.pb_anom.setVisible(True)
+        else:
+            self.label_anom.setText('')
+            self.pb_anom.setVisible(False)
+
+        if 'BO-Fam:MA-B' in self.ramp_config.ps_waveform_manames_exclimits:
+            self.label_exclim.setText('<h6>Waveform is exceeding current '
+                                      'limits.</h6>')
+        else:
+            self.label_exclim.setText('')
 
     def _showAnomaliesPopup(self):
         text = 'Caution to the following anomalies: \n'
@@ -498,13 +510,7 @@ class DipoleRamp(QWidget):
         self.updatePSDelay()
         self.updateWfmNrPoints()
         self.updateTable()
-        if len(self.ramp_config.ps_waveform_anomalies) > 0:
-            self.label_caution.setText('<h6>Caution: there are anomalies '
-                                       'in the waveforms.</h6>')
-            self.pb_caution.setVisible(True)
-        else:
-            self.label_caution.setText('')
-            self.pb_caution.setVisible(False)
+        self._verifyWarnings()
 
 
 class MultipolesRamp(QWidget):
@@ -538,6 +544,16 @@ class MultipolesRamp(QWidget):
         self.bt_insert.clicked.connect(self._showInsertNormConfigPopup)
         self.bt_delete.clicked.connect(self._showDeleteNormConfigPopup)
 
+        lay_exclim = QHBoxLayout()
+        self.label_exclim = QLabel('', self)
+        self.pb_exclim = QPushButton('?', self)
+        self.pb_exclim.setFixedWidth(48)
+        self.pb_exclim.setVisible(False)
+        self.pb_exclim.setStyleSheet('background-color: red;')
+        self.pb_exclim.clicked.connect(self._showExcLimPopup)
+        lay_exclim.addWidget(self.label_exclim)
+        lay_exclim.addWidget(self.pb_exclim)
+
         hlay_table = QHBoxLayout()
         hlay_table.addItem(
             QSpacerItem(1, 20, QSzPlcy.Minimum, QSzPlcy.Expanding))
@@ -553,6 +569,7 @@ class MultipolesRamp(QWidget):
         glay.addLayout(hlay_table, 2, 0, 1, 2)
         glay.addWidget(self.bt_insert, 3, 0)
         glay.addWidget(self.bt_delete, 3, 1)
+        glay.addLayout(lay_exclim, 4, 0, 1, 2)
 
     def _setupGraph(self):
         self.graph = FigureCanvas(Figure())
@@ -630,7 +647,7 @@ class MultipolesRamp(QWidget):
             np_item = QTableWidgetItem('0')
             e_item = QTableWidgetItem('0')
 
-            label_item.setFlags(Qt.ItemIsEnabled)
+            label_item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsSelectable)
             np_item.setFlags(Qt.ItemIsEnabled)
             e_item.setFlags(Qt.ItemIsEnabled)
             if row in normalized_config_rows:
@@ -681,6 +698,7 @@ class MultipolesRamp(QWidget):
         else:
             self.updateGraph()
             self.updateMultipoleRampSignal.emit()
+            self._verifyWarnings()
 
             global _flag_stack_next_command, _flag_stacking
             if _flag_stack_next_command:
@@ -746,6 +764,26 @@ class MultipolesRamp(QWidget):
     def _handleChooseMagnetToPlot(self, maname_list):
         self._magnets_to_plot = maname_list
         self.updateGraph()
+
+    def _verifyWarnings(self):
+        if len(self.ramp_config.ps_waveform_manames_exclimits) > 0:
+            self.label_exclim.setText('<h6>There are waveforms exceeding '
+                                      'current limits.</h6>')
+            self.pb_exclim.setVisible(True)
+        else:
+            self.label_exclim.setText('')
+            self.pb_exclim.setVisible(False)
+
+    def _showExcLimPopup(self):
+        manames_exclimits = self.ramp_config.ps_waveform_manames_exclimits
+        if 'BO-Fam:MA-B' in manames_exclimits:
+            manames_exclimits.remove('BO-Fam:MA-B')
+        text = 'The waveform of the following magnets are exceeding ' \
+               'current limits: \n'
+        for maname in manames_exclimits:
+            text += '- ' + maname + '\n'
+        anomaliesPopup = _MessageBox(self, 'Warning', text, 'Ok')
+        anomaliesPopup.open()
 
     def updateGraph(self):
         """Update and redraw graph."""
@@ -880,13 +918,16 @@ class MultipolesRamp(QWidget):
         self._setupTable()
         self.updateTable()
         self.updateGraph()
+        self._verifyWarnings()
 
     @Slot(ramp.BoosterNormalized)
     def handleNormConfigsChanged(self, norm_config):
         """Reload normalized configs on change and update graph."""
         self.ramp_config[norm_config.name] = norm_config
         self.updateMultipoleRampSignal.emit()
+        # self.updateTable()
         self.updateGraph()
+        self._verifyWarnings()
 
 
 class RFRamp(QWidget):
