@@ -91,9 +91,8 @@ class FFTData(BaseWidget):
                 name=text[:3]+name,
                 color=cor,
                 lineStyle=1,
-                lineWidth=3)
+                lineWidth=1)  # NOTE: If > 1: very low performance
             graph.addChannel(**opts)
-            print(self.get_pvname(name+'FFTData-RB.AMP'))
         vbl.addWidget(graph)
 
         graph = GraphWave(
@@ -109,7 +108,7 @@ class FFTData(BaseWidget):
                 name=text[:3]+name,
                 color=cor,
                 lineStyle=1,
-                lineWidth=3)
+                lineWidth=1)  # NOTE: If > 1: very low performance
             graph.addChannel(**opts)
         vbl.addWidget(graph)
 
