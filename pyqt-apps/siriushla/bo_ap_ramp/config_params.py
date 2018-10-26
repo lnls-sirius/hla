@@ -102,19 +102,27 @@ class DipoleRamp(QWidget):
         lay_v.addWidget(self.l_rampupv)
         lay_v.addWidget(self.l_rampdownv)
 
-        lay_warn = QGridLayout()
         self.label_anom = QLabel('', self)
-        self.label_anom.setFixedSize(644, 40)
+        self.label_anom.setFixedHeight(48)
         self.pb_anom = QPushButton('?', self)
         self.pb_anom.setFixedWidth(48)
         self.pb_anom.setVisible(False)
         self.pb_anom.setStyleSheet('background-color: red;')
         self.pb_anom.clicked.connect(self._showAnomaliesPopup)
+        lay_anom = QHBoxLayout()
+        lay_anom.addWidget(self.label_anom)
+        lay_anom.addWidget(self.pb_anom)
+
         self.label_exclim = QLabel('', self)
-        self.label_exclim.setFixedSize(644+57, 40)
-        lay_warn.addWidget(self.label_anom, 0, 0)
-        lay_warn.addWidget(self.pb_anom, 0, 1)
-        lay_warn.addWidget(self.label_exclim, 1, 0, 1, 2)
+        self.label_exclim.setFixedHeight(48)
+        self.pb_exclim = QPushButton('?', self)
+        self.pb_exclim.setFixedWidth(48)
+        self.pb_exclim.setVisible(False)
+        self.pb_exclim.setStyleSheet('background-color: red;')
+        self.pb_exclim.clicked.connect(self._showExcLimPopup)
+        lay_exclim = QHBoxLayout()
+        lay_exclim.addWidget(self.label_exclim)
+        lay_exclim.addWidget(self.pb_exclim)
 
         label = QLabel('<h4>Dipole Ramp</h4>', self, alignment=Qt.AlignCenter)
         label.setFixedHeight(48)
@@ -124,9 +132,10 @@ class DipoleRamp(QWidget):
                        alignment=Qt.AlignLeft)
         glay.addLayout(lay_v, 2, 1, alignment=Qt.AlignRight)
         glay.addWidget(self.table, 3, 0, 1, 2, alignment=Qt.AlignCenter)
-        glay.addLayout(lay_warn, 4, 0, 1, 2, alignment=Qt.AlignCenter)
+        glay.addLayout(lay_anom, 4, 0, 1, 2, alignment=Qt.AlignCenter)
+        glay.addLayout(lay_exclim, 5, 0, 1, 2, alignment=Qt.AlignCenter)
         glay.addItem(
-            QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 5, 1)
+            QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 6, 1)
 
     def _setupGraph(self):
         self.graph = FigureCanvas(Figure())
@@ -389,14 +398,25 @@ class DipoleRamp(QWidget):
         if 'BO-Fam:MA-B' in self.ramp_config.ps_waveform_manames_exclimits:
             self.label_exclim.setText('<h6>Waveform is exceeding current '
                                       'limits.</h6>')
+            self.pb_exclim.setVisible(True)
         else:
             self.label_exclim.setText('')
+            self.pb_exclim.setVisible(False)
 
     def _showAnomaliesPopup(self):
         text = 'Caution to the following anomalies: \n'
         for anom in self.ramp_config.ps_waveform_anomalies:
             text += anom + '\n'
         anomaliesPopup = _MessageBox(self, 'Caution', text, 'Ok')
+        anomaliesPopup.open()
+
+    def _showExcLimPopup(self):
+        manames_exclimits = self.ramp_config.ps_waveform_manames_exclimits
+        if 'BO-Fam:MA-B' in manames_exclimits:
+            text = 'The waveform of the following magnets\n' \
+                   'are exceeding current limits:\n' \
+                   '    - BO-Fam:MA-B'
+        anomaliesPopup = _MessageBox(self, 'Warning', text, 'Ok')
         anomaliesPopup.open()
 
     def updateGraph(self):
@@ -544,22 +564,22 @@ class MultipolesRamp(QWidget):
         self.bt_insert.clicked.connect(self._showInsertNormConfigPopup)
         self.bt_delete.clicked.connect(self._showDeleteNormConfigPopup)
 
-        lay_exclim = QHBoxLayout()
         self.label_exclim = QLabel('', self)
         self.pb_exclim = QPushButton('?', self)
         self.pb_exclim.setFixedWidth(48)
         self.pb_exclim.setVisible(False)
         self.pb_exclim.setStyleSheet('background-color: red;')
         self.pb_exclim.clicked.connect(self._showExcLimPopup)
+        lay_exclim = QHBoxLayout()
+        lay_exclim.addItem(QSpacerItem(2, 2, QSzPlcy.Expanding, QSzPlcy.Fixed))
         lay_exclim.addWidget(self.label_exclim)
         lay_exclim.addWidget(self.pb_exclim)
+        lay_exclim.addItem(QSpacerItem(2, 2, QSzPlcy.Expanding, QSzPlcy.Fixed))
 
         hlay_table = QHBoxLayout()
-        hlay_table.addItem(
-            QSpacerItem(1, 20, QSzPlcy.Minimum, QSzPlcy.Expanding))
+        hlay_table.addItem(QSpacerItem(2, 2, QSzPlcy.Expanding, QSzPlcy.Fixed))
         hlay_table.addWidget(self.table)
-        hlay_table.addItem(
-            QSpacerItem(1, 20, QSzPlcy.Minimum, QSzPlcy.Expanding))
+        hlay_table.addItem(QSpacerItem(2, 2, QSzPlcy.Expanding, QSzPlcy.Fixed))
 
         label = QLabel('<h4>Multipoles Ramp</h4>', self)
         label.setAlignment(Qt.AlignCenter)
@@ -766,7 +786,10 @@ class MultipolesRamp(QWidget):
         self.updateGraph()
 
     def _verifyWarnings(self):
-        if len(self.ramp_config.ps_waveform_manames_exclimits) > 0:
+        manames_exclimits = self.ramp_config.ps_waveform_manames_exclimits
+        if 'BO-Fam:MA-B' in manames_exclimits:
+            manames_exclimits.remove('BO-Fam:MA-B')
+        if len(manames_exclimits) > 0:
             self.label_exclim.setText('<h6>There are waveforms exceeding '
                                       'current limits.</h6>')
             self.pb_exclim.setVisible(True)
@@ -778,10 +801,10 @@ class MultipolesRamp(QWidget):
         manames_exclimits = self.ramp_config.ps_waveform_manames_exclimits
         if 'BO-Fam:MA-B' in manames_exclimits:
             manames_exclimits.remove('BO-Fam:MA-B')
-        text = 'The waveform of the following magnets are exceeding ' \
-               'current limits: \n'
+        text = 'The waveform of the following magnets\n' \
+               'are exceeding current limits:\n'
         for maname in manames_exclimits:
-            text += '- ' + maname + '\n'
+            text += '    - ' + maname + '\n'
         anomaliesPopup = _MessageBox(self, 'Warning', text, 'Ok')
         anomaliesPopup.open()
 
