@@ -170,8 +170,7 @@ class InsertNormalizedConfig(SiriusDialog):
 
         # to insert a new norm config from an existing one
         flay_confsrv = QFormLayout()
-        self.bt_confsrv_name = QPushButton('Select a config...', self)
-        self.bt_confsrv_name.clicked.connect(self._showLoadConfigPopup)
+        self.le_confsrv_name = _ConfigLineEdit(self)
         self.sb_confsrv_time = QDoubleSpinBox(self)
         self.sb_confsrv_time.setMaximum(490)
         self.sb_confsrv_time.setDecimals(6)
@@ -179,7 +178,7 @@ class InsertNormalizedConfig(SiriusDialog):
         self.bt_confsrv.setAutoDefault(False)
         self.bt_confsrv.setDefault(False)
         self.bt_confsrv.clicked.connect(self._emitInsertConfigData)
-        flay_confsrv.addRow(QLabel('Name: ', self), self.bt_confsrv_name)
+        flay_confsrv.addRow(QLabel('Name: ', self), self.le_confsrv_name)
         flay_confsrv.addRow(QLabel('Time: ', self), self.sb_confsrv_time)
         flay_confsrv.addRow(self.bt_confsrv)
 
@@ -204,7 +203,7 @@ class InsertNormalizedConfig(SiriusDialog):
 
     def _showLoadConfigPopup(self):
         popup = _LoadConfiguration('bo_normalized')
-        popup.configname.connect(self.bt_confsrv_name.setText)
+        popup.configname.connect(self.le_confsrv_name.setText)
         popup.exec_()
 
     def _emitInsertConfigData(self):
@@ -216,7 +215,7 @@ class InsertNormalizedConfig(SiriusDialog):
             nconfig = None
         elif sender is self.bt_confsrv:
             time = self.sb_confsrv_time.value()
-            name = self.cb_confsrv_name.currentText()
+            name = self.le_confsrv_name.text()
             nconfig = None
             try:
                 n = ramp.BoosterNormalized(name)
@@ -954,3 +953,11 @@ class MyDoubleSpinBox(QDoubleSpinBox):
             event.ignore()
         else:
             super().wheelEvent(event)
+
+
+class _ConfigLineEdit(QLineEdit):
+
+    def mouseReleaseEvent(self, ev):
+        popup = _LoadConfiguration('bo_normalized')
+        popup.configname.connect(self.setText)
+        popup.exec_()
