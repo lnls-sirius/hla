@@ -83,9 +83,9 @@ class TLAPControlWindow(SiriusMainWindow):
         openPMApp = QAction("PM", self)
         _hlautil.connect_window(openPMApp, PulsedMagnetControlWindow, self)
         openBPMApp = QAction("BPMs", self)
-        _hlautil.connect_window(openBPMApp, BPMsInterfaceTL,
-                                parent=self, prefix='ca://'+self.prefix,
-                                TL=self._tl.upper())
+        _hlautil.connect_window(
+            openBPMApp, BPMsInterfaceTL,
+            parent=self, prefix=self.prefix, TL=self._tl.upper())
         appsMenu = menubar.addMenu("Open...")
         appsMenu.addAction(openLatticeAndTwiss)
         appsMenu.addAction(openPosAngCorrApp)
@@ -269,7 +269,7 @@ class TLAPControlWindow(SiriusMainWindow):
 
         pydmcombobox_scrntype = PyDMEnumComboBox(
             parent=self,
-            init_channel='ca://'+self.prefix+scrn_device+':ScrnType-Sel')
+            init_channel=self.prefix+scrn_device+':ScrnType-Sel')
         pydmcombobox_scrntype.setObjectName(
             'PyDMEnumComboBox_ScrnType_Sel_Scrn' + str(scrn_idx))
         pydmcombobox_scrntype.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Fixed)
@@ -278,14 +278,14 @@ class TLAPControlWindow(SiriusMainWindow):
 
         pydmlabel_scrntype = PyDMLabel(
             parent=self,
-            init_channel='ca://'+self.prefix+scrn_device+':ScrnType-Sts')
+            init_channel=self.prefix+scrn_device+':ScrnType-Sts')
         pydmlabel_scrntype.setFixedSize(180, 40)
         pydmlabel_scrntype.setAlignment(Qt.AlignCenter)
         scrn_details.layout().addWidget(pydmlabel_scrntype, 1, 3)
 
         led_scrntype = SiriusLedAlert(
             parent=self,
-            init_channel='ca://'+self.prefix+scrn_device+':ScrnType-Sts')
+            init_channel=self.prefix+scrn_device+':ScrnType-Sts')
         led_scrntype.shape = 2
         led_scrntype.setObjectName(
             'Led_ScrnType_Sts_Scrn' + str(scrn_idx))
@@ -294,7 +294,7 @@ class TLAPControlWindow(SiriusMainWindow):
 
         led_movests = PyDMLed(
             parent=self,
-            init_channel='ca://'+self.prefix+scrn_device+':DoneMov-Mon',
+            init_channel=self.prefix+scrn_device+':DoneMov-Mon',
             color_list=[PyDMLed.LightGreen, PyDMLed.DarkGreen])
         led_movests.shape = 2
         led_movests.setObjectName(
@@ -321,7 +321,7 @@ class TLAPControlWindow(SiriusMainWindow):
         if corr.split('-')[0] == 'LA':  # Linac PVs
             led = SiriusLedState(
                 parent=self,
-                init_channel='ca://'+self.prefix+corr+':setpwm')
+                init_channel=self.prefix+corr+':setpwm')
             led.setObjectName(
                 'SiriusLed_Linac'+corr.split('-')[-1]+'_setpwm_Scrn'+str(scrn))
             led.setFixedSize(40, 40)
@@ -333,7 +333,7 @@ class TLAPControlWindow(SiriusMainWindow):
             corr_details.layout().addWidget(label_corr, 1, 2)
 
             pydm_sp_current = PyDMLinEditScrollbar(
-                parent=self, channel='ca://'+self.prefix+corr+':seti')
+                parent=self, channel=self.prefix+corr+':seti')
             pydm_sp_current.setObjectName(
                 'LeditScroll_Linac'+corr.split('-')[-1]+'_seti_Scrn'+str(scrn))
             pydm_sp_current.setMaximumWidth(220)
@@ -348,7 +348,7 @@ class TLAPControlWindow(SiriusMainWindow):
             corr_details.layout().addWidget(pydm_sp_current, 1, 3, 2, 1)
 
             pydmlabel_current = PyDMLabel(
-                parent=self, init_channel='ca://'+self.prefix+corr+':rdi')
+                parent=self, init_channel=self.prefix+corr+':rdi')
             pydmlabel_current.unit_changed('A')
             pydmlabel_current.showUnits = True
             pydmlabel_current.setObjectName(
@@ -361,7 +361,7 @@ class TLAPControlWindow(SiriusMainWindow):
         else:
             led = SiriusLedState(
                 parent=self,
-                init_channel='ca://'+self.prefix+corr+':PwrState-Sts')
+                init_channel=self.prefix+corr+':PwrState-Sts')
             led.setObjectName('SiriusLed_'+name+'_PwrState_Scrn'+str(scrn))
             led.setFixedSize(40, 40)
             corr_details.layout().addWidget(led, 1, 1)
@@ -378,7 +378,7 @@ class TLAPControlWindow(SiriusMainWindow):
             corr_details.layout().addWidget(pushbutton, 1, 2)
 
             pydm_sp_kick = PyDMLinEditScrollbar(
-                parent=self, channel='ca://'+self.prefix+corr+':Kick-SP')
+                parent=self, channel=self.prefix+corr+':Kick-SP')
             pydm_sp_kick.setObjectName(
                 'PyDMLineEdit' + name + '_Kick_SP_Scrn' + str(scrn))
             pydm_sp_kick.setMaximumWidth(220)
@@ -393,7 +393,7 @@ class TLAPControlWindow(SiriusMainWindow):
             corr_details.layout().addWidget(pydm_sp_kick, 1, 3, 2, 1)
 
             pydmlabel_kick = PyDMLabel(
-                parent=self, init_channel='ca://'+self.prefix+corr+':Kick-Mon')
+                parent=self, init_channel=self.prefix+corr+':Kick-Mon')
             pydmlabel_kick.setObjectName(
                 'PyDMLabel_' + name + '_Kick_Mon_Scrn' + str(scrn))
             pydmlabel_kick.setFixedSize(180, 40)

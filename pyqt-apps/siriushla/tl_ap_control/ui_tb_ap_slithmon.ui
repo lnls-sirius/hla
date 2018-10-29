@@ -271,7 +271,7 @@
       <string notr="true">font-weight:bold;</string>
      </property>
      <property name="text">
-      <string>Center 
+      <string>Center
  [mm]</string>
      </property>
      <property name="alignment">
@@ -303,7 +303,7 @@
     </string>
      </property>
      <property name="channel" stdset="0">
-      <string>ca://${PREFIX}TB-01:DI-SlitH:Center-SP</string>
+      <string>${PREFIX}TB-01:DI-SlitH:Center-SP</string>
      </property>
      <property name="showStepExponent" stdset="0">
       <bool>false</bool>
@@ -331,7 +331,7 @@
       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
      </property>
      <property name="channel" stdset="0">
-      <string>ca://${PREFIX}TB-01:DI-SlitH:Center-RB</string>
+      <string>${PREFIX}TB-01:DI-SlitH:Center-RB</string>
      </property>
     </widget>
    </item>
@@ -363,7 +363,7 @@
       <string notr="true">font-weight:bold;</string>
      </property>
      <property name="text">
-      <string>Width 
+      <string>Width
  [mm]</string>
      </property>
      <property name="alignment">
@@ -389,7 +389,7 @@
     </string>
      </property>
      <property name="channel" stdset="0">
-      <string>ca://${PREFIX}TB-01:DI-SlitH:Width-SP</string>
+      <string>${PREFIX}TB-01:DI-SlitH:Width-SP</string>
      </property>
      <property name="showStepExponent" stdset="0">
       <bool>false</bool>
@@ -417,7 +417,7 @@
       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
      </property>
      <property name="channel" stdset="0">
-      <string>ca://${PREFIX}TB-01:DI-SlitH:Width-RB</string>
+      <string>${PREFIX}TB-01:DI-SlitH:Width-RB</string>
      </property>
     </widget>
    </item>

@@ -62,7 +62,7 @@ if __name__ == '__main__':
     wind.resize(1000, 1500)
     hbl = QHBoxLayout(wind)
     bpm_name = 'SI-07SP:DI-BPM-1'
-    wid = MonitData(prefix='ca://', bpm=bpm_name)
+    wid = MonitData(bpm=bpm_name)
     hbl.addWidget(wid)
     wind.show()
     sys.exit(app.exec_())

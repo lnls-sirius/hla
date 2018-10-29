@@ -63,7 +63,7 @@ class MagnetInterlockWidget(QWidget):
         else:
             for bit, label in enumerate(labels):
                 # Add led and label to layout
-                channel = 'ca://' + _VACA_PREFIX + self._magnet_name + ':' + \
+                channel = _VACA_PREFIX + self._magnet_name + ':' + \
                     self._intlk_mon
                 self.layout.addWidget(Interlock(self, channel, bit, label))
 

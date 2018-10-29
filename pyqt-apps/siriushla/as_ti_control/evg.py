@@ -10,7 +10,6 @@ from pydm.widgets.pushbutton import PyDMPushButton
 from pydm.widgets.enum_combo_box import PyDMEnumComboBox as PyDMECB
 from pydm.widgets.checkbox import PyDMCheckbox as PyDMCb
 from siriuspy.csdevice import timesys as _cstime
-from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets.led import PyDMLed, SiriusLedAlert
 from siriushla.widgets.state_button import PyDMStateButton
 from siriushla.widgets.windows import SiriusMainWindow
@@ -266,9 +265,10 @@ class ClockList(BaseList):
 
 if __name__ == '__main__':
     """Run Example."""
+    from siriushla.sirius_application import SiriusApplication
+    from siriuspy.envars import vaca_prefix
     app = SiriusApplication()
     _util.set_style(app)
-    evg_ctrl = EVG(
-        prefix='ca://fernando-lnls452-linux-AS-Glob:TI-EVG:')
+    evg_ctrl = EVG(prefix=vaca_prefix+'AS-Glob:TI-EVG:')
     evg_ctrl.show()
     sys.exit(app.exec_())

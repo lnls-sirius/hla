@@ -52,7 +52,7 @@ def _main():
     win = SiriusDialog()
     vbl = QVBoxLayout(win)
     acc = 'BO'
-    prefix = 'ca://' + pref+acc+'-Glob:AP-SOFB:'
+    prefix = pref+acc+'-Glob:AP-SOFB:'
     wid = StatusWidget(win, prefix, acc, True)
     vbl.addWidget(wid)
     vbl.addSpacing(40)

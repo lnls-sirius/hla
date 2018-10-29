@@ -41,14 +41,14 @@ class DipoleDetailWidget(PSDetailWidget):
         hard_intlk_button = QPushButton('Hard Interlock', self)
         layout.addWidget(soft_intlk_button, 0, 0, 1, 2)
         layout.addWidget(SiriusLedAlert(
-            self, "ca://" + self._ps_list[0] + ":IntlkSoft-Mon"), 1, 0)
+            self, self._ps_list[0] + ":IntlkSoft-Mon"), 1, 0)
         layout.addWidget(SiriusLedAlert(
-            self, "ca://" + self._ps_list[1] + ":IntlkSoft-Mon"), 1, 1)
+            self, self._ps_list[1] + ":IntlkSoft-Mon"), 1, 1)
         layout.addWidget(hard_intlk_button, 2, 0, 1, 2)
         layout.addWidget(SiriusLedAlert(
-            self, "ca://" + self._ps_list[0] + ":IntlkHard-Mon"), 3, 0)
+            self, self._ps_list[0] + ":IntlkHard-Mon"), 3, 0)
         layout.addWidget(SiriusLedAlert(
-            self, "ca://" + self._ps_list[1] + ":IntlkHard-Mon"), 3, 1)
+            self, self._ps_list[1] + ":IntlkHard-Mon"), 3, 1)
         # Connect buttons to open magnet interlock windows
         _util.connect_window(soft_intlk_button, MagnetInterlockWindow, self,
                              **{'magnet': self._magnet_name,
@@ -62,22 +62,22 @@ class DipoleDetailWidget(PSDetailWidget):
         layout = QGridLayout()
 
         self.opmode_sp = PyDMEnumComboBox(
-            self, init_channel="ca://" + self._prefixed_magnet + ":OpMode-Sel")
+            self, init_channel=self._prefixed_magnet + ":OpMode-Sel")
         self.opmode1_rb = PyDMLabel(
-            self, "ca://" + self._ps_list[0] + ":OpMode-Sts")
+            self, self._ps_list[0] + ":OpMode-Sts")
         self.opmode1_rb.setObjectName("opmode1_rb_label")
         self.ctrlmode1_led = SiriusLedAlert(
-            self, "ca://" + self._ps_list[0] + ":CtrlMode-Mon")
+            self, self._ps_list[0] + ":CtrlMode-Mon")
         self.ctrlmode1_label = PyDMLabel(
-            self, "ca://" + self._ps_list[0] + ":CtrlMode-Mon")
+            self, self._ps_list[0] + ":CtrlMode-Mon")
         self.ctrlmode1_label.setObjectName("ctrlmode1_label")
         self.opmode2_rb = PyDMLabel(
-            self, "ca://" + self._ps_list[1] + ":OpMode-Sts")
+            self, self._ps_list[1] + ":OpMode-Sts")
         self.opmode2_rb.setObjectName("opmode2_rb_label")
         self.ctrlmode2_led = SiriusLedAlert(
-            self, "ca://" + self._ps_list[1] + ":CtrlMode-Mon")
+            self, self._ps_list[1] + ":CtrlMode-Mon")
         self.ctrlmode2_label = PyDMLabel(
-            self, "ca://" + self._ps_list[1] + ":CtrlMode-Mon")
+            self, self._ps_list[1] + ":CtrlMode-Mon")
         self.ctrlmode2_label.setObjectName("ctrlmode2_label")
 
         self.ctrlmode1_led.setSizePolicy(
@@ -111,24 +111,24 @@ class DipoleDetailWidget(PSDetailWidget):
 
         # self.on_btn = PyDMPushButton(
         #     self, label="On", pressValue=1,
-        #     init_channel="ca://" + self._prefixed_magnet + ":PwrState-Sel")
+        #     init_channel=self._prefixed_magnet + ":PwrState-Sel")
         # self.off_btn = PyDMPushButton(
         #     self, label="Off", pressValue=0,
-        #     init_channel="ca://" + self._prefixed_magnet + ":PwrState-Sel")
+        #     init_channel=self._prefixed_magnet + ":PwrState-Sel")
 
         self.state_button = PyDMStateButton(
             parent=self,
-            init_channel="ca://" + self._prefixed_magnet + ":PwrState-Sel")
+            init_channel=self._prefixed_magnet + ":PwrState-Sel")
 
         self.pwrstate1_led = SiriusLedState(
-            self, "ca://" + self._ps_list[0] + ":PwrState-Sts")
+            self, self._ps_list[0] + ":PwrState-Sts")
         self.pwrstate1_label = PyDMLabel(
-            self, "ca://" + self._ps_list[0] + ":PwrState-Sts")
+            self, self._ps_list[0] + ":PwrState-Sts")
         self.pwrstate1_label.setObjectName("pwrstate1_label")
         self.pwrstate2_led = SiriusLedState(
-            self, "ca://" + self._ps_list[1] + ":PwrState-Sts")
+            self, self._ps_list[1] + ":PwrState-Sts")
         self.pwrstate2_label = PyDMLabel(
-            self, "ca://" + self._ps_list[1] + ":PwrState-Sts")
+            self, self._ps_list[1] + ":PwrState-Sts")
         self.pwrstate2_label.setObjectName("pwrstate2_label")
 
         self.state_button.setSizePolicy(
@@ -167,38 +167,38 @@ class DipoleDetailWidget(PSDetailWidget):
 
         self.current_sp_widget = PyDMLinEditScrollbar(
             parent=self,
-            channel="ca://" + self._prefixed_magnet + ":Current-SP")
+            channel=self._prefixed_magnet + ":Current-SP")
         # self.current_sp_widget.set_limits_from_pv(True)
         self.current_sp_widget.sp_scrollbar.setTracking(False)
         # Current RB
         self.current_rb_val = PyDMLabel(
-            self, "ca://" + self._prefixed_magnet + ":Current-RB")
+            self, self._prefixed_magnet + ":Current-RB")
         self.current_rb_val.precFromPV = True
         self.ps1_current_rb = PyDMLabel(
-            self, "ca://" + self._ps_list[0] + ":Current-RB")
+            self, self._ps_list[0] + ":Current-RB")
         self.ps1_current_rb.precFromPV = True
         self.ps2_current_rb = PyDMLabel(
-            self, "ca://" + self._ps_list[1] + ":Current-RB")
+            self, self._ps_list[1] + ":Current-RB")
         self.ps2_current_rb.precFromPV = True
         # Current Ref
         self.current_ref_val = PyDMLabel(
-            self, "ca://" + self._prefixed_magnet + ":CurrentRef-Mon")
+            self, self._prefixed_magnet + ":CurrentRef-Mon")
         self.current_ref_val.precFromPV = True
         self.ps1_current_ref = PyDMLabel(
-            self, "ca://" + self._ps_list[0] + ":CurrentRef-Mon")
+            self, self._ps_list[0] + ":CurrentRef-Mon")
         self.ps1_current_ref.precFromPV = True
         self.ps2_current_ref = PyDMLabel(
-            self, "ca://" + self._ps_list[1] + ":CurrentRef-Mon")
+            self, self._ps_list[1] + ":CurrentRef-Mon")
         self.ps2_current_ref.precFromPV = True
         # Current Mon
         self.current_mon_val = PyDMLabel(
-            self, "ca://" + self._prefixed_magnet + ":Current-Mon")
+            self, self._prefixed_magnet + ":Current-Mon")
         self.current_mon_val.precFromPV = True
         self.ps1_current_mon = PyDMLabel(
-            self, "ca://" + self._ps_list[0] + ":Current-Mon")
+            self, self._ps_list[0] + ":Current-Mon")
         self.ps1_current_mon.precFromPV = True
         self.ps2_current_mon = PyDMLabel(
-            self, "ca://" + self._ps_list[1] + ":Current-Mon")
+            self, self._ps_list[1] + ":Current-Mon")
         self.ps2_current_mon.precFromPV = True
 
         # Horizontal rulers
@@ -244,28 +244,28 @@ class DipoleDetailWidget(PSDetailWidget):
     def _cycleLayout(self):
         layout = QGridLayout()
         # 15 cycle pvs
-        enbl_rb_ca1 = 'ca://' + self._ps_list[0] + ':CycleEnbl-Mon'
-        enbl_rb_ca2 = 'ca://' + self._ps_list[1] + ':CycleEnbl-Mon'
-        type_sp_ca = 'ca://' + self._prefixed_magnet + ':CycleType-Sel'
-        type_rb_ca1 = 'ca://' + self._ps_list[0] + ':CycleType-Sts'
-        type_rb_ca2 = 'ca://' + self._ps_list[1] + ':CycleType-Sts'
-        nrcycles_sp_ca = 'ca://' + self._prefixed_magnet + ':CycleNrCycles-SP'
-        nrcycles_rb_ca1 = 'ca://' + self._ps_list[0] + ':CycleNrCycles-RB'
-        nrcycles_rb_ca2 = 'ca://' + self._ps_list[1] + ':CycleNrCycles-RB'
-        index_ca1 = 'ca://' + self._ps_list[0] + ':CycleIndex-Mon'
-        index_ca2 = 'ca://' + self._ps_list[1] + ':CycleIndex-Mon'
-        freq_sp_ca = 'ca://' + self._prefixed_magnet + ':CycleFreq-SP'
-        freq_rb_ca1 = 'ca://' + self._ps_list[0] + ':CycleFreq-RB'
-        freq_rb_ca2 = 'ca://' + self._ps_list[1] + ':CycleFreq-RB'
-        ampl_sp_ca = 'ca://' + self._prefixed_magnet + ':CycleAmpl-SP'
-        ampl_rb_ca1 = 'ca://' + self._ps_list[0] + ':CycleAmpl-RB'
-        ampl_rb_ca2 = 'ca://' + self._ps_list[1] + ':CycleAmpl-RB'
-        offset_sp_ca = 'ca://' + self._prefixed_magnet + ':CycleOffset-SP'
-        offset_rb_ca1 = 'ca://' + self._ps_list[0] + ':CycleOffset-RB'
-        offset_rb_ca2 = 'ca://' + self._ps_list[1] + ':CycleOffset-RB'
-        auxparam_sp_ca = 'ca://' + self._prefixed_magnet + ':CycleAuxParam-SP'
-        auxparam_rb_ca1 = 'ca://' + self._ps_list[0] + ':CycleAuxParam-RB'
-        auxparam_rb_ca2 = 'ca://' + self._ps_list[1] + ':CycleAuxParam-RB'
+        enbl_rb_ca1 = self._ps_list[0] + ':CycleEnbl-Mon'
+        enbl_rb_ca2 = self._ps_list[1] + ':CycleEnbl-Mon'
+        type_sp_ca = self._prefixed_magnet + ':CycleType-Sel'
+        type_rb_ca1 = self._ps_list[0] + ':CycleType-Sts'
+        type_rb_ca2 = self._ps_list[1] + ':CycleType-Sts'
+        nrcycles_sp_ca = self._prefixed_magnet + ':CycleNrCycles-SP'
+        nrcycles_rb_ca1 = self._ps_list[0] + ':CycleNrCycles-RB'
+        nrcycles_rb_ca2 = self._ps_list[1] + ':CycleNrCycles-RB'
+        index_ca1 = self._ps_list[0] + ':CycleIndex-Mon'
+        index_ca2 = self._ps_list[1] + ':CycleIndex-Mon'
+        freq_sp_ca = self._prefixed_magnet + ':CycleFreq-SP'
+        freq_rb_ca1 = self._ps_list[0] + ':CycleFreq-RB'
+        freq_rb_ca2 = self._ps_list[1] + ':CycleFreq-RB'
+        ampl_sp_ca = self._prefixed_magnet + ':CycleAmpl-SP'
+        ampl_rb_ca1 = self._ps_list[0] + ':CycleAmpl-RB'
+        ampl_rb_ca2 = self._ps_list[1] + ':CycleAmpl-RB'
+        offset_sp_ca = self._prefixed_magnet + ':CycleOffset-SP'
+        offset_rb_ca1 = self._ps_list[0] + ':CycleOffset-RB'
+        offset_rb_ca2 = self._ps_list[1] + ':CycleOffset-RB'
+        auxparam_sp_ca = self._prefixed_magnet + ':CycleAuxParam-SP'
+        auxparam_rb_ca1 = self._ps_list[0] + ':CycleAuxParam-RB'
+        auxparam_rb_ca2 = self._ps_list[1] + ':CycleAuxParam-RB'
         # 8 labels
         self.cycle_enbl_label = QLabel('Enabled', self)
         self.cycle_type_label = QLabel('Type', self)

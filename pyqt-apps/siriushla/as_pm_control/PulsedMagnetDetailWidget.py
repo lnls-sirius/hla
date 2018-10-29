@@ -87,7 +87,7 @@ class PulsedMagnetDetailWidget(QWidget):
         for i in range(8):
             label_widget = QLabel(interlock_labels[i])
             led = SiriusLedAlert(
-                self, "ca://" + self._intlk_mon_pv, i)
+                self, self._intlk_mon_pv, i)
             interlock_layout.addWidget(led, i, 0)
             interlock_layout.addWidget(label_widget, i, 1)
 
@@ -99,8 +99,8 @@ class PulsedMagnetDetailWidget(QWidget):
         pwrstate_layout = QHBoxLayout()
 
         self.state_button = PyDMStateButton(
-            parent=self, init_channel="ca://" + self._pwrstate_sel_pv)
-        self.state_led = SiriusLedState(self, "ca://" + self._pwrstate_sts_pv)
+            parent=self, init_channel=self._pwrstate_sel_pv)
+        self.state_led = SiriusLedState(self, self._pwrstate_sts_pv)
 
         pwrstate_layout.addStretch()
         pwrstate_layout.addWidget(self.state_button)
@@ -113,9 +113,9 @@ class PulsedMagnetDetailWidget(QWidget):
         pulses_layout = QHBoxLayout()
 
         self.pulses_state_button = PyDMStateButton(
-            parent=self, init_channel="ca://" + self._enablepulses_sel_pv)
+            parent=self, init_channel=self._enablepulses_sel_pv)
         self.pulses_state_led = SiriusLedState(
-            parent=self, init_channel="ca://" + self._enablepulses_sts_pv)
+            parent=self, init_channel=self._enablepulses_sts_pv)
 
         pulses_layout.addStretch()
         pulses_layout.addWidget(self.pulses_state_button)
@@ -128,9 +128,9 @@ class PulsedMagnetDetailWidget(QWidget):
         voltage_layout = QVBoxLayout()
 
         self.voltage_sp_widget = PyDMLinEditScrollbar(
-            parent=self, channel="ca://" + self._voltage_sp_pv)
+            parent=self, channel=self._voltage_sp_pv)
         self.voltage_rb_label = PyDMLabel(
-            parent=self, init_channel="ca://" + self._voltage_mon_pv)
+            parent=self, init_channel=self._voltage_mon_pv)
 
         # self.voltage_sp_widget.set_limits_from_pv(True)
         # self.voltage_rb_label.precFromPV = True
@@ -144,9 +144,9 @@ class PulsedMagnetDetailWidget(QWidget):
         kick_layout = QVBoxLayout()
 
         self.kick_sp_widget = PyDMLinEditScrollbar(
-            parent=self, channel="ca://" + self._kick_sp_pv)
+            parent=self, channel=self._kick_sp_pv)
         self.kick_rb_label = PyDMLabel(
-            parent=self, init_channel="ca://" + self._kick_mon_pv)
+            parent=self, init_channel=self._kick_mon_pv)
 
         # self.kick_sp_widget.set_limits_from_pv(True)
         # self.kick_rb_label.precFromPV = True
@@ -160,9 +160,9 @@ class PulsedMagnetDetailWidget(QWidget):
         ctrlmode_layout = QHBoxLayout()
 
         self.ctrlmode_led = SiriusLedAlert(
-            parent=self, init_channel="ca://" + self._ctrlmode_pv)
+            parent=self, init_channel=self._ctrlmode_pv)
         self.ctrlmode_label = PyDMLabel(
-            parent=self, init_channel="ca://" + self._ctrlmode_pv)
+            parent=self, init_channel=self._ctrlmode_pv)
 
         ctrlmode_layout.addStretch()
         ctrlmode_layout.addWidget(self.ctrlmode_led)

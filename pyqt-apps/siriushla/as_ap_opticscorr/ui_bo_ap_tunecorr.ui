@@ -123,7 +123,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}BO-Glob:AP-TuneCorr:DeltaTuneX-RB</string>
+         <string>${PREFIX}BO-Glob:AP-TuneCorr:DeltaTuneX-RB</string>
         </property>
         <property name="precFromPV" stdset="0">
          <bool>true</bool>
@@ -174,7 +174,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}BO-04D:DI-TunePkup:TuneY-Mon</string>
+         <string>${PREFIX}BO-04D:DI-TunePkup:TuneY-Mon</string>
         </property>
        </widget>
       </item>
@@ -242,7 +242,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}BO-04D:DI-TunePkup:TuneX-Mon</string>
+         <string>${PREFIX}BO-04D:DI-TunePkup:TuneX-Mon</string>
         </property>
        </widget>
       </item>
@@ -329,7 +329,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}BO-Glob:AP-TuneCorr:DeltaTuneY-RB</string>
+         <string>${PREFIX}BO-Glob:AP-TuneCorr:DeltaTuneY-RB</string>
         </property>
         <property name="precFromPV" stdset="0">
          <bool>true</bool>
@@ -387,7 +387,7 @@
     </string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}BO-Glob:AP-TuneCorr:DeltaTuneX-SP</string>
+         <string>${PREFIX}BO-Glob:AP-TuneCorr:DeltaTuneX-SP</string>
         </property>
         <property name="showStepExponent" stdset="0">
          <bool>false</bool>
@@ -412,7 +412,7 @@
     </string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}BO-Glob:AP-TuneCorr:DeltaTuneY-SP</string>
+         <string>${PREFIX}BO-Glob:AP-TuneCorr:DeltaTuneY-SP</string>
         </property>
         <property name="showStepExponent" stdset="0">
          <bool>false</bool>
@@ -486,7 +486,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}BO-Glob:AP-TuneCorr:CorrFactor-RB</string>
+         <string>${PREFIX}BO-Glob:AP-TuneCorr:CorrFactor-RB</string>
         </property>
         <property name="precFromPV" stdset="0">
          <bool>true</bool>
@@ -556,7 +556,7 @@
     </string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}BO-Glob:AP-TuneCorr:CorrFactor-SP</string>
+         <string>${PREFIX}BO-Glob:AP-TuneCorr:CorrFactor-SP</string>
         </property>
         <property name="showStepExponent" stdset="0">
          <bool>false</bool>
@@ -633,7 +633,7 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}BO-Glob:AP-TuneCorr:DeltaKLQF-Mon</string>
+         <string>${PREFIX}BO-Glob:AP-TuneCorr:DeltaKLQF-Mon</string>
         </property>
         <property name="precFromPV" stdset="0">
          <bool>false</bool>
@@ -706,7 +706,7 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}BO-Fam:MA-QF:PwrState-Sts</string>
+         <string>${PREFIX}BO-Fam:MA-QF:PwrState-Sts</string>
         </property>
        </widget>
       </item>
@@ -740,7 +740,7 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}BO-Glob:AP-TuneCorr:RefKLQF-Mon</string>
+         <string>${PREFIX}BO-Glob:AP-TuneCorr:RefKLQF-Mon</string>
         </property>
         <property name="precFromPV" stdset="0">
          <bool>true</bool>
@@ -787,7 +787,7 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}BO-Fam:MA-QF:OpMode-Sts</string>
+         <string>${PREFIX}BO-Fam:MA-QF:OpMode-Sts</string>
         </property>
        </widget>
       </item>
@@ -821,7 +821,7 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}BO-Fam:MA-QF:KL-RB</string>
+         <string>${PREFIX}BO-Fam:MA-QF:KL-RB</string>
         </property>
         <property name="precFromPV" stdset="0">
          <bool>true</bool>
@@ -855,7 +855,7 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}BO-Fam:MA-QD:OpMode-Sts</string>
+         <string>${PREFIX}BO-Fam:MA-QD:OpMode-Sts</string>
         </property>
        </widget>
       </item>
@@ -889,7 +889,7 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}BO-Fam:MA-QD:KL-RB</string>
+         <string>${PREFIX}BO-Fam:MA-QD:KL-RB</string>
         </property>
         <property name="precFromPV" stdset="0">
          <bool>true</bool>
@@ -952,7 +952,7 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}BO-Glob:AP-TuneCorr:RefKLQD-Mon</string>
+         <string>${PREFIX}BO-Glob:AP-TuneCorr:RefKLQD-Mon</string>
         </property>
         <property name="precFromPV" stdset="0">
          <bool>true</bool>
@@ -977,7 +977,7 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}BO-Glob:AP-TuneCorr:DeltaKLQD-Mon</string>
+         <string>${PREFIX}BO-Glob:AP-TuneCorr:DeltaKLQD-Mon</string>
         </property>
         <property name="precFromPV" stdset="0">
          <bool>false</bool>
@@ -999,7 +999,7 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}BO-Fam:MA-QD:PwrState-Sts</string>
+         <string>${PREFIX}BO-Fam:MA-QD:PwrState-Sts</string>
         </property>
        </widget>
       </item>
@@ -1084,7 +1084,7 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
 Quadrupoles</string>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${PREFIX}BO-Glob:AP-TuneCorr:ConfigMA-Cmd</string>
+        <string>${PREFIX}BO-Glob:AP-TuneCorr:ConfigMA-Cmd</string>
        </property>
        <property name="pressValue" stdset="0">
         <string>0</string>
@@ -1176,7 +1176,7 @@ Quadrupoles</string>
 as New Reference</string>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${PREFIX}BO-Glob:AP-TuneCorr:SetNewRefKL-Cmd</string>
+        <string>${PREFIX}BO-Glob:AP-TuneCorr:SetNewRefKL-Cmd</string>
        </property>
        <property name="pressValue" stdset="0">
         <string>0</string>
@@ -1268,7 +1268,7 @@ as New Reference</string>
 Correction</string>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${PREFIX}BO-Glob:AP-TuneCorr:ApplyCorr-Cmd</string>
+        <string>${PREFIX}BO-Glob:AP-TuneCorr:ApplyCorr-Cmd</string>
        </property>
        <property name="pressValue" stdset="0">
         <string>0</string>
@@ -1304,7 +1304,7 @@ Correction</string>
          <string/>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}BO-Glob:AP-TuneCorr:Log-Mon</string>
+         <string>${PREFIX}BO-Glob:AP-TuneCorr:Log-Mon</string>
         </property>
         <property name="dateTimeFmt" stdset="0">
          <string>%Y/%m/%d-%H:%M:%S</string>
@@ -1320,7 +1320,7 @@ Correction</string>
          <string>PyDMLed specialization to represent 2 states in red/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}BO-Glob:AP-TuneCorr:Status-Mon</string>
+         <string>${PREFIX}BO-Glob:AP-TuneCorr:Status-Mon</string>
         </property>
         <property name="pvbit" stdset="0">
          <number>0</number>
@@ -1343,7 +1343,7 @@ Correction</string>
          <string>PyDMLed specialization to represent 2 states in red/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}BO-Glob:AP-TuneCorr:Status-Mon</string>
+         <string>${PREFIX}BO-Glob:AP-TuneCorr:Status-Mon</string>
         </property>
         <property name="pvbit" stdset="0">
          <number>1</number>
@@ -1382,7 +1382,7 @@ Correction</string>
          <string>PyDMLed specialization to represent 2 states in red/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}BO-Glob:AP-TuneCorr:Status-Mon</string>
+         <string>${PREFIX}BO-Glob:AP-TuneCorr:Status-Mon</string>
         </property>
         <property name="pvbit" stdset="0">
          <number>2</number>
@@ -1421,7 +1421,7 @@ Correction</string>
          <string>PyDMLed specialization to represent 2 states in red/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}BO-Glob:AP-TuneCorr:Status-Mon</string>
+         <string>${PREFIX}BO-Glob:AP-TuneCorr:Status-Mon</string>
         </property>
         <property name="pvbit" stdset="0">
          <number>3</number>

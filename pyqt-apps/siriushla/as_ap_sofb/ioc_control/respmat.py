@@ -280,7 +280,7 @@ def _main():
     win = SiriusDialog()
     hbl = QHBoxLayout(win)
     acc = 'BO'
-    prefix = 'ca://'+pref+acc+'-Glob:AP-SOFB:'
+    prefix = pref+acc+'-Glob:AP-SOFB:'
     wid = RespMatWidget(win, prefix, acc)
     hbl.addWidget(wid)
     win.show()

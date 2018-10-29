@@ -229,8 +229,8 @@ if __name__ == '__main__':
     # wind.resize(1400, 1400)
     hbl = QHBoxLayout(wind)
     bpm_name = 'SI-07SP:DI-BPM-1'
-    # widm = ParamsSettings(prefix='ca://', bpm=bpm_name)
-    widm = LogicalTriggers(prefix='ca://', bpm=bpm_name, trig_tp='')
+    # widm = ParamsSettings(bpm=bpm_name)
+    widm = LogicalTriggers(bpm=bpm_name, trig_tp='')
     hbl.addWidget(widm)
     wind.show()
     sys.exit(app.exec_())

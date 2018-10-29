@@ -1,11 +1,9 @@
 import sys
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QGroupBox, QLabel, QWidget
-from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QGridLayout
-from PyQt5.QtWidgets import QSizePolicy as QSzPol
+from qtpy.QtCore import Qt
+from qtpy.QtWidgets import QGroupBox, QLabel, QWidget, QVBoxLayout, \
+    QHBoxLayout, QGridLayout, QSizePolicy as QSzPol
 from pydm.widgets.label import PyDMLabel
 from siriuspy.namesys import SiriusPVName as _PVName
-from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets.led import PyDMLed, SiriusLedAlert
 from siriushla.widgets.state_button import PyDMStateButton
 from siriushla.widgets.windows import SiriusMainWindow
@@ -102,9 +100,10 @@ class FOUT(SiriusMainWindow):
 
 if __name__ == '__main__':
     """Run Example."""
+    from siriushla.sirius_application import SiriusApplication
+    from siriuspy.envars import vaca_prefix
     app = SiriusApplication()
     _util.set_style(app)
-    fout_ctrl = FOUT(
-        prefix='ca://fernando-lnls452-linux-AS-Glob:TI-FOUT-1:')
+    fout_ctrl = FOUT(prefix=vaca_prefix+'AS-Glob:TI-FOUT-1:')
     fout_ctrl.show()
     sys.exit(app.exec_())

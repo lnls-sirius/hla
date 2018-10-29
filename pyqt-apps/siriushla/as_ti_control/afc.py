@@ -9,7 +9,6 @@ from pydm.widgets.checkbox import PyDMCheckbox as PyDMCb
 from pydm.widgets.spinbox import PyDMSpinbox
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.search import LLTimeSearch as _LLTimeSearch
-from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets.led import PyDMLed, SiriusLedAlert
 from siriushla.widgets.state_button import PyDMStateButton
 from siriushla.widgets.windows import SiriusMainWindow
@@ -188,9 +187,10 @@ class AFCOUTList(BaseList):
 
 if __name__ == '__main__':
     """Run Example."""
+    from siriushla.sirius_application import SiriusApplication
+    from siriuspy.envars import vaca_prefix
     app = SiriusApplication()
     _util.set_style(app)
-    afc_ctrl = AFC(
-        prefix='ca://fernando-lnls452-linux-AS-02:TI-AFC:')
+    afc_ctrl = AFC(prefix=vaca_prefix+'AS-02:TI-AFC:')
     afc_ctrl.show()
     sys.exit(app.exec_())

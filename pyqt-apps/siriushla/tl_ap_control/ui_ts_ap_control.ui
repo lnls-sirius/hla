@@ -174,7 +174,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             <set>Qt::AlignCenter</set>
            </property>
            <property name="channel" stdset="0">
-            <string>ca://${PREFIX}TS-Glob:AP-TranspEff:Eff-Mon</string>
+            <string>${PREFIX}TS-Glob:AP-TranspEff:Eff-Mon</string>
            </property>
           </widget>
          </item>
@@ -187,7 +187,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             <string>PyDMLed specialization to represent 2 states in red/light green.</string>
            </property>
            <property name="channel" stdset="0">
-            <string>ca://${PREFIX}TS-04:DI-ICT:ReliableMeas-Mon</string>
+            <string>${PREFIX}TS-04:DI-ICT:ReliableMeas-Mon</string>
            </property>
           </widget>
          </item>
@@ -213,7 +213,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             <string>PyDMLed specialization to represent 2 states in red/light green.</string>
            </property>
            <property name="channel" stdset="0">
-            <string>ca://${PREFIX}TS-01:DI-ICT:ReliableMeas-Mon</string>
+            <string>${PREFIX}TS-01:DI-ICT:ReliableMeas-Mon</string>
            </property>
           </widget>
          </item>
@@ -287,7 +287,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             <set>Qt::AlignCenter</set>
            </property>
            <property name="channel" stdset="0">
-            <string>ca://${PREFIX}TS-04:DI-ICT:Charge-Mon</string>
+            <string>${PREFIX}TS-04:DI-ICT:Charge-Mon</string>
            </property>
           </widget>
          </item>
@@ -309,7 +309,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             <set>Qt::AlignCenter</set>
            </property>
            <property name="channel" stdset="0">
-            <string>ca://${PREFIX}TS-01:DI-ICT:Charge-Mon</string>
+            <string>${PREFIX}TS-01:DI-ICT:Charge-Mon</string>
            </property>
           </widget>
          </item>

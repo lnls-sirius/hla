@@ -206,7 +206,7 @@ class MultiTurnSumWidget(QWidget):
         graph.setLabel('bottom', text='time', units='ms')
         graph.setLabel('left', text='Sum', units='count')
         opts = dict(
-            y_channel='ca://A',
+            y_channel='A',
             x_channel=self.prefix+'OrbitMultiTurnTime-Mon',
             name='',
             color=QColor(255, 255, 255),
@@ -290,7 +290,7 @@ def _main(prefix):
     app = SiriusApplication()
     win = SiriusDialog()
     hbl = QHBoxLayout(win)
-    prefix = 'ca://' + prefix + 'SI-Glob:AP-SOFB:'
+    prefix = prefix + 'SI-Glob:AP-SOFB:'
     wid = OrbitWidget(win, prefix)
     hbl.addWidget(wid)
     win.show()

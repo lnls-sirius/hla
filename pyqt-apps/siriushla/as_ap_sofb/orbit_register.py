@@ -262,7 +262,7 @@ def _main():
     app = SiriusApplication()
     win = SiriusDialog()
     hbl = QHBoxLayout(win)
-    wid = OrbitRegisters(win, 'ca://' + pref+'SI-Glob:AP-SOFB:', 9)
+    wid = OrbitRegisters(win, pref + 'SI-Glob:AP-SOFB:', 9)
     hbl.addWidget(wid)
     win.show()
     sys.exit(app.exec_())

@@ -33,7 +33,7 @@ class SlitMonitoring(QWidget):
         self.layout().setContentsMargins(0, 0, 0, 0)
         self.layout().addWidget(self.centralwidget)
 
-        slit_prefix = 'ca://'+prefix+'TB-01:DI-Slit'+slit_orientation.upper()
+        slit_prefix = prefix+'TB-01:DI-Slit'+slit_orientation.upper()
         self.conn_slitcenter = SiriusConnectionSignal(
             slit_prefix+':Center-RB')
         self.conn_slitcenter.new_value_signal[float].connect(self._setSlitPos)

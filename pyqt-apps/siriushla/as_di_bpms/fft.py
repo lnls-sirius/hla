@@ -91,9 +91,8 @@ class FFTData(BaseWidget):
                 name=text[:3]+name,
                 color=cor,
                 lineStyle=1,
-                lineWidth=3)
+                lineWidth=1)  # NOTE: If > 1: very low performance
             graph.addChannel(**opts)
-            print(self.get_pvname(name+'FFTData-RB.AMP'))
         vbl.addWidget(graph)
 
         graph = GraphWave(
@@ -109,7 +108,7 @@ class FFTData(BaseWidget):
                 name=text[:3]+name,
                 color=cor,
                 lineStyle=1,
-                lineWidth=3)
+                lineWidth=1)  # NOTE: If > 1: very low performance
             graph.addChannel(**opts)
         vbl.addWidget(graph)
 
@@ -137,8 +136,7 @@ if __name__ == '__main__':
     wind.resize(1400, 1400)
     hbl = QHBoxLayout(wind)
     bpm_name = 'SI-07SP:DI-BPM-1'
-    widm = FFTData(
-        prefix='ca://', bpm=bpm_name, data_prefix='GEN_', position=False)
+    widm = FFTData(bpm=bpm_name, data_prefix='GEN_', position=False)
     hbl.addWidget(widm)
     wind.show()
     sys.exit(app.exec_())

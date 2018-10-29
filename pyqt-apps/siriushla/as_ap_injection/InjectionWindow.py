@@ -314,12 +314,11 @@ class InjectionWindow(SiriusMainWindow):
         # self.cycleSpinBox = QSpinBox(self.central_widget)
         # self.cycleSpinBox.setObjectName("cycleSpinBox")
         pv = _VACA_PREFIX + "AS-Glob:TI-EVG:InjectionCyc-Sel"
-        self.cycleCheckBox = PyDMCheckbox(parent=self,
-                                          init_channel="ca://" + pv)
+        self.cycleCheckBox = PyDMCheckbox(parent=self, init_channel=pv)
         self.cycleCheckBox.setObjectName("cycleCheckBox")
         self.cycleCheckBox.setText("Cyclic mode")
         pv = _VACA_PREFIX + "AS-Glob:TI-EVG:InjectionCyc-Sts"
-        self.cycleLed = SiriusLedState(parent=self, init_channel="ca://" + pv)
+        self.cycleLed = SiriusLedState(parent=self, init_channel=pv)
         self.cycleLed.setObjectName("cycleLed")
         cycle_layout.addWidget(self.cycleCheckBox)
         cycle_layout.addWidget(self.cycleLed)
@@ -367,11 +366,10 @@ class InjectionWindow(SiriusMainWindow):
         self.ledLabel.setObjectName("ledLabel")
         pv = InjectionController.TimingPrefix + ':' + \
             InjectionController.InjectionToggle
-        self.injectingLed = SiriusLedState(self, init_channel="ca://" + pv)
+        self.injectingLed = SiriusLedState(self, init_channel=pv)
         self.injectingLed.setObjectName("injectingLed")
         pv = _VACA_PREFIX + "SI-Glob:AP-CurrInfo:Current-Mon"
-        self.beamCurrentLabel = PyDMLabel(parent=self,
-                                          init_channel="ca://" + pv)
+        self.beamCurrentLabel = PyDMLabel(parent=self, init_channel=pv)
         led_layout.addStretch()
         led_layout.addWidget(self.ledLabel)
         led_layout.addWidget(self.injectingLed)
@@ -380,7 +378,7 @@ class InjectionWindow(SiriusMainWindow):
         self.profile_bar_graph = PyDMBarGraph()
         self.profile_bar_graph.setTitle("Bunch by bunch charge")
         pv = _VACA_PREFIX + "SI-13C4:DI-DCCT:BbBCurrent-Mon"
-        self.profile_bar_graph.model.channel = "ca://" + pv
+        self.profile_bar_graph.model.channel = pv
         # self.profile_bar_graph.set_scale (100)
         self.profile_bar_graph.set_brush("b")
 

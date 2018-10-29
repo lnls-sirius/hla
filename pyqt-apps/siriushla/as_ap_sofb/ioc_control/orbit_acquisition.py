@@ -229,7 +229,7 @@ def _main():
     app = SiriusApplication()
     win = SiriusDialog()
     hbl = QHBoxLayout(win)
-    prefix = 'ca://' + pref+'SI-Glob:AP-SOFB:'
+    prefix = pref+'SI-Glob:AP-SOFB:'
     wid = AcqControlWidget(win, prefix)
     hbl.addWidget(wid)
     win.show()

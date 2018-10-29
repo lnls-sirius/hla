@@ -27,7 +27,7 @@ UI_FILE = _os.path.sep.join([_dir, 'TimingMain.ui'])
 
 def main(prefix=None):
     """Setup the main window."""
-    prefix = 'ca://' + (prefix or PREFIX)
+    prefix = prefix or PREFIX
     HLTiming = _uic.loadUi(UI_FILE)
     _setupEVGParams(prefix, HLTiming)
     _setupMenus(prefix, HLTiming)
