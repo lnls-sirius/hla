@@ -119,50 +119,37 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         self.stateColors = color_list or self.default_colorlist
 
         self.channels2ids = dict()
-        for _id, channel in enumerate(sorted(self.channels2values.keys())):
+        for _id, address in enumerate(sorted(self.channels2values.keys())):
             stid = str(_id)
-            setattr(self, 'channel' + stid, channel)
+            setattr(self, 'channel' + stid, address)
             setattr(self, 'channel' + stid + '_value', None)
             setattr(self, 'channel' + stid + '_connected', False)
-            self.channels2ids[channel] = stid
+            self.channels2ids[address] = stid
+            channel = PyDMChannel(
+                address=address,
+                connection_slot=self.connectionStateChanged,
+                value_slot=self.value_changed)
+            channel.connect()
+            self._channels.append(channel)
 
     def value_changed(self, new_val):
         """Receive new value and set led color accordingly."""
         if new_val is None:
             return
-        channel = 'ca://' + self.sender().address
-        setattr(self, 'channel'+self.channels2ids[channel]+'_value', new_val)
+        address = self.sender().address
+        setattr(self, 'channel'+self.channels2ids[address]+'_value', new_val)
         state = 1
-        for channel, desired_value in self.channels2values.items():
-            val = getattr(self, 'channel'+self.channels2ids[channel]+'_value')
+        for address, desired_value in self.channels2values.items():
+            val = getattr(self, 'channel'+self.channels2ids[address]+'_value')
             state &= (val == desired_value)
         self.setState(state)
 
     @Slot(bool)
     def connectionStateChanged(self, conn):
         """Reimplement connectionStateChanged to handle all channels."""
-        channel = 'ca://' + self.sender().address
-        setattr(self, 'channel'+self.channels2ids[channel]+'_connected', conn)
+        address = self.sender().address
+        setattr(self, 'channel'+self.channels2ids[address]+'_connected', conn)
         allconn = True
         for _id in self.channels2ids.values():
             allconn &= getattr(self, 'channel'+_id+'_connected')
         self.connection_changed(allconn)
-
-    def channels(self):
-        """
-        Return the channels being used for this Widget.
-
-        Returns
-        -------
-        channels : list
-            List of PyDMChannel objects
-        """
-        if self._channels is None:
-            self._channels = []
-            for channel, _id in self.channels2ids.items():
-                self._channels.append(
-                    PyDMChannel(
-                        address=channel,
-                        connection_slot=self.connectionStateChanged,
-                        value_slot=self.value_changed))
-        return self._channels
