@@ -41,9 +41,9 @@ class PulsedMagnetDetailWidget(QWidget):
         self._pwrstate_sts_pv = \
             self._prefixed_maname + ":PwrState-Sts"
         self._enablepulses_sel_pv = \
-            self._prefixed_maname + ":Pulsed-Sel"
+            self._prefixed_maname + ":Pulse-Sel"
         self._enablepulses_sts_pv = \
-            self._prefixed_maname + ":Pulsed-Sts"
+            self._prefixed_maname + ":Pulse-Sts"
         self._intlk_mon_pv = \
             self._prefixed_maname + ":Intlk-Mon"
         self._ctrlmode_pv = self._prefixed_maname + ":CtrlMode-Mon"
@@ -63,7 +63,7 @@ class PulsedMagnetDetailWidget(QWidget):
         pulses_box = QGroupBox(parent=self, title="Pulses")
         pulses_box.setObjectName("pulses_box")
         pulses_box.setLayout(self._pulses_layout())
-        voltage_box = QGroupBox(parent=self, title="Tension")
+        voltage_box = QGroupBox(parent=self, title="Voltage")
         voltage_box.setObjectName("voltage_box")
         voltage_box.setLayout(self._voltage_layout())
         kick_box = QGroupBox(parent=self, title="Kick")
