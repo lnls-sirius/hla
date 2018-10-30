@@ -23,7 +23,7 @@ from siriushla.bo_ap_ramp.auxiliar_classes import \
 class OpticsAdjust(QGroupBox):
     """Widget to perform optics adjust in normalized configurations."""
 
-    normConfigChanged = Signal(ramp.BoosterNormalized)
+    normConfigChanged = Signal(list)
 
     def __init__(self, parent=None, prefix='', ramp_config=None):
         """Initialize object."""
@@ -43,6 +43,7 @@ class OpticsAdjust(QGroupBox):
         self._tunecorr = BOTuneCorr('Default_1')
         self._chromcorr = BOChromCorr('Default')
         self._conn_sofb = None
+        self._norm_config_oldname = ''
 
     def _setupUi(self):
         self.setMinimumHeight(500)
@@ -367,7 +368,9 @@ class OpticsAdjust(QGroupBox):
 
     def _updateRampConfig(self):
         if self.norm_config is not None:
-            self.normConfigChanged.emit(self.norm_config)
+            self.normConfigChanged.emit([self.norm_config,
+                                        self._norm_config_oldname,
+                                        int(self.sb_config.value())-1])
 
     def _load(self):
         if self.norm_config is not None:
@@ -387,9 +390,9 @@ class OpticsAdjust(QGroupBox):
             return
         try:
             if self.norm_config.configsrv_exist():
-                old_name = self.norm_config.name
+                self._norm_config_oldname = self.norm_config.name
                 if not new_name:
-                    new_name = _generate_config_name(old_name)
+                    new_name = _generate_config_name(self._norm_config_oldname)
                 self.norm_config.configsrv_save(new_name)
             else:
                 self.norm_config.configsrv_save()

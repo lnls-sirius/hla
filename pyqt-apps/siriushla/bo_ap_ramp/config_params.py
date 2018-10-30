@@ -623,7 +623,7 @@ class MultipolesRamp(QWidget):
     def _setupTable(self):
         self.table_map = {
             'rows': {0: 'Injection',
-                     self.normalized_configs_count+1: 'Ejection'},
+                     len(self.normalized_configs)+1: 'Ejection'},
             'columns': {0: '',
                         1: 'T [ms]',
                         2: 'Index',
@@ -650,10 +650,10 @@ class MultipolesRamp(QWidget):
             """)
         self.table.setFixedWidth(1027)
         self.table.setMinimumHeight(
-            min((self.normalized_configs_count+3)*48+2, 482))
+            min((len(self.normalized_configs)+3)*48+2, 482))
         self.table.verticalHeader().setFixedWidth(48)
         self.table.horizontalHeader().setFixedHeight(48)
-        self.table.setRowCount(2+self.normalized_configs_count)
+        self.table.setRowCount(2+len(self.normalized_configs))
         self.table.setColumnCount(4)
         self.table.setColumnWidth(0, 498)
         for i in range(1, len(self.table_map['columns'].values())):
@@ -691,10 +691,8 @@ class MultipolesRamp(QWidget):
     def _getNormalizedConfigs(self):
         if self.ramp_config is not None:
             self.normalized_configs = self.ramp_config.ps_normalized_configs
-            self.normalized_configs_count = len(self.normalized_configs)
         else:
             self.normalized_configs = list()
-            self.normalized_configs_count = 0
 
     def _sortTable(self):
         self.table.sortByColumn(1, Qt.AscendingOrder)
@@ -750,7 +748,7 @@ class MultipolesRamp(QWidget):
             err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
             err_msg.open()
         else:
-            self.handleLoadRampConfig(self.ramp_config)
+            self.handleLoadRampConfig()
             self.updateMultipoleRampSignal.emit()
 
     def _showDeleteNormConfigPopup(self):
@@ -766,7 +764,7 @@ class MultipolesRamp(QWidget):
     @Slot(str)
     def _handleDeleteNormConfig(self, config):
         self.ramp_config.ps_normalized_configs_delete(config)
-        self.handleLoadRampConfig(self.ramp_config)
+        self.handleLoadRampConfig()
         self.updateMultipoleRampSignal.emit()
 
     def _showChooseMagnetToPlot(self):
@@ -832,7 +830,9 @@ class MultipolesRamp(QWidget):
             self.ax.set_xlim(min(xdata), max(xdata))
             ydata = np.array(ydata)
             if len(ydata) > 0:
-                if ydata.min() < 0:
+                if ydata.min() == ydata.max():
+                    self.ax.set_ylim(ydata.min()-0.2, ydata.max()+0.2)
+                elif ydata.min() < 0:
                     self.ax.set_ylim(ydata.min()*1.05, ydata.max()*1.05)
                 else:
                     self.ax.set_ylim(ydata.min()*0.95, ydata.max()*1.05)
@@ -933,9 +933,10 @@ class MultipolesRamp(QWidget):
         self.table.cellChanged.connect(self._handleCellChanged)
 
     @Slot(ramp.BoosterRamp)
-    def handleLoadRampConfig(self, ramp_config):
+    def handleLoadRampConfig(self, ramp_config=None):
         """Update all widgets in loading BoosterRamp config."""
-        self.ramp_config = ramp_config
+        if ramp_config:
+            self.ramp_config = ramp_config
         self._getNormalizedConfigs()
         self.table.cellChanged.disconnect(self._handleCellChanged)
         self._setupTable()
@@ -943,14 +944,23 @@ class MultipolesRamp(QWidget):
         self.updateGraph()
         self._verifyWarnings()
 
-    @Slot(ramp.BoosterNormalized)
-    def handleNormConfigsChanged(self, norm_config):
+    @Slot(list)
+    def handleNormConfigsChanged(self, data):
         """Reload normalized configs on change and update graph."""
+        norm_config = data[0]
+        old_nconfig_name = data[1]
+        old_nconfig_idx = data[2]
+        if old_nconfig_name:
+            # delete norm_config from _ps_nconfigs dict
+            del(self.ramp_config._ps_nconfigs[old_nconfig_name])
+            # replace old name in _configuration list
+            nconfig_list = self.ramp_config.ps_normalized_configs
+            nconfig_list[old_nconfig_idx][1] = norm_config.name
+            self.ramp_config._configuration['ps_normalized_configs*'] = \
+                nconfig_list
         self.ramp_config[norm_config.name] = norm_config
+        self.handleLoadRampConfig()
         self.updateMultipoleRampSignal.emit()
-        # self.updateTable()
-        self.updateGraph()
-        self._verifyWarnings()
 
 
 class RFRamp(QWidget):
