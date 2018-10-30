@@ -751,8 +751,8 @@ class DiagnosisSettings(SiriusDialog):
         self.ledmulti_TIStatus = PyDMLedMultiChannel(
             parent=self,
             channels2values={
-                'ca://'+self.prefix+'BO-35D:TI-DCCT:State-SP': 1,
-                'ca://'+self.prefix+'BO-35D:TI-DCCT:Status-SP': 0})
+                'ca://'+self.prefix+'BO-35D:TI-DCCT:State-Sts': 1,
+                'ca://'+self.prefix+'BO-35D:TI-DCCT:Status-Mon': 0})
         self.ledmulti_TIStatus.setFixedSize(220, 40)
         self.pb_trgdetails = QPushButton('Open details', self)
         _hlautil.connect_window(
