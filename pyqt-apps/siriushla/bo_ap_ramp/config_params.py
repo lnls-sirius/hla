@@ -853,7 +853,7 @@ class MultipolesRamp(QWidget):
                     if 'MA-C' not in maname:
                         break
                 else:
-                    ylabel = 'Kick [rad]'
+                    ylabel = 'Kick [urad]'
 
                 if ylabel:
                     self.ax.set_ylabel(ylabel)

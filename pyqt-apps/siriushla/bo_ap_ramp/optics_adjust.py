@@ -36,7 +36,7 @@ class OpticsAdjust(QGroupBox):
         self._aux_magnets = dict()
         for ma in ramp.BoosterNormalized().manames:
             self._aux_magnets[ma] = _Magnet(ma)
-        self._kicks = dict()
+        self._dkicks = dict()
         self._corrfactorH = 100.0
         self._corrfactorV = 100.0
         self._setupUi()
@@ -456,17 +456,18 @@ class OpticsAdjust(QGroupBox):
                 'There are not connected PVs!', 'Ok')
             warn_msg.exec_()
             return
-        self._kicks = self._conn_sofb.get_kicks()
+        self._dkicks = self._conn_sofb.get_deltakicks()
 
     def _apply_orbitcorrection(self):
-        if not self._kicks or self.norm_config is None:
+        if not self._dkicks or self.norm_config is None:
             return
         self._corrfactorH = self.sb_correctH.value()
         self._corrfactorV = self.sb_correctV.value()
-        for maname, kick in self._kicks:
+        for maname, dkick in self._dkicks:
             corr_factor = self._corrfactorV if 'CV' in maname \
                           else self._corrfactorH
-            self.norm_config[maname] = kick*corr_factor
+            current_kick = self.norm_config[maname]
+            self.norm_config[maname] = current_kick + dkick*corr_factor
         self._resetOrbitChanges()
         self.verifySync()
 
@@ -485,7 +486,7 @@ class OpticsAdjust(QGroupBox):
         self.l_deltaSLSD.setText('{: 6f}'.format(self._deltaSL[1]))
 
     def _resetOrbitChanges(self):
-        self._kicks = dict()
+        self._dkicks = dict()
         self._corrfactorH = 100.0
         self._corrfactorV = 100.0
         self.sb_correctH.setValue(100.0)
