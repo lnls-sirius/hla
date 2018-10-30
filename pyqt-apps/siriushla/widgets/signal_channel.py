@@ -37,6 +37,7 @@ class SiriusConnectionSignal(QObject, PyDMChannel):
         self.channeltype = None
         self._value = None
         self.connected = None
+        self.connect()
 
     def getvalue(self):
         if self.connected and self._value is not None:

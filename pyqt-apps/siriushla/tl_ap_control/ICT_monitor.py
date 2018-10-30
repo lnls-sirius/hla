@@ -23,11 +23,11 @@ class ICTMonitoring(SiriusMainWindow):
         self.centralwidget = loadUi(tmp_file)
         self.setCentralWidget(self.centralwidget)
         if tl.upper() == 'TB':
-            ICT1_channel = 'ca://' + prefix + 'TB-02:DI-ICT'
-            ICT2_channel = 'ca://' + prefix + 'TB-04:DI-ICT'
+            ICT1_channel = prefix + 'TB-02:DI-ICT'
+            ICT2_channel = prefix + 'TB-04:DI-ICT'
         elif tl.upper() == 'TS':
-            ICT1_channel = 'ca://' + prefix + 'TS-01:DI-ICT'
-            ICT2_channel = 'ca://' + prefix + 'TS-04:DI-ICT'
+            ICT1_channel = prefix + 'TS-01:DI-ICT'
+            ICT2_channel = prefix + 'TS-04:DI-ICT'
         self.centralwidget.PyDMTimePlot_Charge.addYChannel(
             y_channel=ICT1_channel + ':Charge-Mon',
             name='Charge ICT1', color='red', lineWidth=2)

@@ -86,7 +86,7 @@ class _CorrParamsDetailWindow(SiriusMainWindow):
         self._setupUi()
 
     def _setupUi(self):
-        ioc_prefix = 'ca://'+self._prefix+self._acc+'-Glob:AP-' + \
+        ioc_prefix = self._prefix+self._acc+'-Glob:AP-' + \
                           self._opticsparam+'Corr:'
         lay = QGridLayout()
 

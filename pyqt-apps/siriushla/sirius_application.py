@@ -1,7 +1,6 @@
 """Definition of the Sirius Application class."""
 from pydm import PyDMApplication
-from qtpy.QtWidgets import QWidget, QDialog, QMainWindow, QMessageBox
-from qtpy.QtCore import Qt
+from qtpy.QtWidgets import QMessageBox
 
 from .util import get_window_id
 
@@ -16,77 +15,6 @@ class SiriusApplication(PyDMApplication):
                          use_main_window=use_main_window, **kwargs)
         self._windows = dict()
 
-    def establish_widget_connections(self, widget, propagate=True):
-        """Establish widgets connections.
-
-        The `propagate` property defines how widgets are searched.
-        When True, super will handle connections. It will try to connect
-        all children widgets.
-        When False, widgets will be searched recursevely in a breadth first
-        manner. The recursion will be cut if the widget is a Window or Dialog.
-        """
-        if propagate:
-            super().establish_widget_connections(widget)
-        else:
-            # Establish connections of input widget
-            self._establish_connections(widget)
-
-            # Look into all its children widgets and then
-            # establish its connections
-            direct_children = widget.findChildren(
-                QWidget, options=Qt.FindDirectChildrenOnly)
-            for wid in direct_children:
-                if isinstance(wid, (QDialog, QMainWindow)):
-                    continue
-                self.establish_widget_connections(wid, False)
-
-    def close_widget_connections(self, widget, propagate=True):
-        """Close widgets connections.
-
-        The `propagate` property defines how widgets are searched.
-        When True, super will handle connections. It will try to disconnect
-        all children widgets.
-        When False, widgets will be searched recursevely. The recursion will be
-        cut if the widget is a Window or Dialog.
-        """
-        if propagate:
-            super().close_widget_connections(widget)
-        else:
-            # Close connection of input widget
-            self._remove_connections(widget)
-
-            # Look into all its children widgets and then
-            # close their connections
-            direct_children = widget.findChildren(
-                QWidget, options=Qt.FindDirectChildrenOnly)
-            for wid in direct_children:
-                if isinstance(wid, (QDialog, QMainWindow)):
-                    continue
-                self.close_widget_connections(wid, False)
-
-    def _has_channel(self, widget):
-        try:
-            if hasattr(widget, 'channels'):
-                return True
-        except NameError:
-            return False
-
-    def _establish_connections(self, widget):
-        if self._has_channel(widget):
-            for channel in widget.channels():
-                self.add_connection(channel)
-
-    def _remove_connections(self, widget):
-        try:
-            if self._has_channel(widget):
-                for channel in widget.channels():
-                    self.remove_connection(channel)
-        except NameError:
-            pass
-        # This imitates the solution adopted by pydm to handle protocol errors.
-        # Errors like a channel address equal 'None'(type str) are also catched
-        # TODO: It would be better if these errors were reported or raised.
-
     def open_window(self, w_class, parent=None, **kwargs):
         """Open new window.
 
@@ -95,7 +23,6 @@ class SiriusApplication(PyDMApplication):
         """
         # One top level widget as the parent?
         wid = get_window_id(w_class, **kwargs)
-        # if id in self._windows:  # Show existing window
         try:
             self._show(wid)
             self._windows[wid].activateWindow()

@@ -79,7 +79,7 @@ if __name__ == '__main__':
         'SI-05M1:DI-BPM', 'SI-05M2:DI-BPM',
         'SI-06M1:DI-BPM', 'SI-06M2:DI-BPM',
         ]
-    widm = SelectBPMs(prefix='ca://', bpm_list=bpm_names)
+    widm = SelectBPMs(bpm_list=bpm_names)
     hbl.addWidget(widm)
     wind.show()
     sys.exit(app.exec_())

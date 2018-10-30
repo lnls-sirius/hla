@@ -347,6 +347,6 @@ if __name__ == "__main__":
     w.set_scale(100)
     w.set_brush("b")
     pv = "fac-lnls455-linux-SI-13C4:DI-DCCT:BbBCurrent-Mon"
-    w.model.channel = "ca://" + pv
+    w.model.channel = pv
     w.show()
     sys.exit(app.exec_())

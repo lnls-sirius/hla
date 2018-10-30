@@ -553,7 +553,7 @@
          <string>PyDMLed specialization to represent 2 states in red/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}${TRANSPORTLINE}-Glob:AP-PosAng:Status-Mon</string>
+         <string>${PREFIX}${TRANSPORTLINE}-Glob:AP-PosAng:Status-Mon</string>
         </property>
         <property name="pvbit" stdset="0">
          <number>0</number>
@@ -579,7 +579,7 @@
          <string>PyDMLed specialization to represent 2 states in red/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}${TRANSPORTLINE}-Glob:AP-PosAng:Status-Mon</string>
+         <string>${PREFIX}${TRANSPORTLINE}-Glob:AP-PosAng:Status-Mon</string>
         </property>
         <property name="pvbit" stdset="0">
          <number>1</number>
@@ -621,7 +621,7 @@
          <string>PyDMLed specialization to represent 2 states in red/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}${TRANSPORTLINE}-Glob:AP-PosAng:Status-Mon</string>
+         <string>${PREFIX}${TRANSPORTLINE}-Glob:AP-PosAng:Status-Mon</string>
         </property>
         <property name="pvbit" stdset="0">
          <number>2</number>
@@ -663,7 +663,7 @@
          <string>PyDMLed specialization to represent 2 states in red/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}${TRANSPORTLINE}-Glob:AP-PosAng:Status-Mon</string>
+         <string>${PREFIX}${TRANSPORTLINE}-Glob:AP-PosAng:Status-Mon</string>
         </property>
         <property name="pvbit" stdset="0">
          <number>3</number>
@@ -701,7 +701,7 @@
          <string/>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}${TRANSPORTLINE}-Glob:AP-PosAng:Log-Mon</string>
+         <string>${PREFIX}${TRANSPORTLINE}-Glob:AP-PosAng:Log-Mon</string>
         </property>
         <property name="dateTimeFmt" stdset="0">
          <string>%Y/%m/%d-%H:%M:%S</string>

@@ -94,7 +94,7 @@
          <string/>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-ChromCorr:Log-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-ChromCorr:Log-Mon</string>
         </property>
         <property name="dateTimeFmt" stdset="0">
          <string>%Y/%m/%d-%H:%M:%S</string>
@@ -140,7 +140,7 @@
          <string>PyDMLed specialization to represent 2 states in red/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-ChromCorr:Status-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-ChromCorr:Status-Mon</string>
         </property>
         <property name="pvbit" stdset="0">
          <number>0</number>
@@ -156,7 +156,7 @@
          <string>PyDMLed specialization to represent 2 states in red/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-ChromCorr:Status-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-ChromCorr:Status-Mon</string>
         </property>
         <property name="pvbit" stdset="0">
          <number>1</number>
@@ -172,7 +172,7 @@
          <string>PyDMLed specialization to represent 2 states in red/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-ChromCorr:Status-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-ChromCorr:Status-Mon</string>
         </property>
         <property name="pvbit" stdset="0">
          <number>2</number>
@@ -188,7 +188,7 @@
          <string>PyDMLed specialization to represent 2 states in red/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-ChromCorr:Status-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-ChromCorr:Status-Mon</string>
         </property>
         <property name="pvbit" stdset="0">
          <number>3</number>
@@ -204,7 +204,7 @@
          <string>PyDMLed specialization to represent 2 states in red/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-ChromCorr:Status-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-ChromCorr:Status-Mon</string>
         </property>
         <property name="pvbit" stdset="0">
          <number>4</number>
@@ -241,7 +241,7 @@
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SDP3:PwrState-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-SDP3:PwrState-Sts</string>
         </property>
        </widget>
       </item>
@@ -266,7 +266,7 @@
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SFP2:PwrState-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-SFP2:PwrState-Sts</string>
         </property>
        </widget>
       </item>
@@ -303,7 +303,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SFP2:SL-RB</string>
+         <string>${PREFIX}SI-Fam:MA-SFP2:SL-RB</string>
         </property>
        </widget>
       </item>
@@ -392,7 +392,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-ChromCorr:SLSDA3-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-ChromCorr:SLSDA3-Mon</string>
         </property>
        </widget>
       </item>
@@ -442,7 +442,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-ChromCorr:SLSDB3-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-ChromCorr:SLSDB3-Mon</string>
         </property>
        </widget>
       </item>
@@ -479,7 +479,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-ChromCorr:SLSDP3-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-ChromCorr:SLSDP3-Mon</string>
         </property>
        </widget>
       </item>
@@ -516,7 +516,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SDA1:SL-RB</string>
+         <string>${PREFIX}SI-Fam:MA-SDA1:SL-RB</string>
         </property>
        </widget>
       </item>
@@ -553,7 +553,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SFA2:SL-RB</string>
+         <string>${PREFIX}SI-Fam:MA-SFA2:SL-RB</string>
         </property>
        </widget>
       </item>
@@ -590,7 +590,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SDP1:SL-RB</string>
+         <string>${PREFIX}SI-Fam:MA-SDP1:SL-RB</string>
         </property>
        </widget>
       </item>
@@ -627,7 +627,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-ChromCorr:SLSFB2-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-ChromCorr:SLSFB2-Mon</string>
         </property>
        </widget>
       </item>
@@ -664,7 +664,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SFA1:SL-RB</string>
+         <string>${PREFIX}SI-Fam:MA-SFA1:SL-RB</string>
         </property>
        </widget>
       </item>
@@ -793,7 +793,7 @@
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SDA2:PwrState-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-SDA2:PwrState-Sts</string>
         </property>
        </widget>
       </item>
@@ -869,7 +869,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SDA3:SL-RB</string>
+         <string>${PREFIX}SI-Fam:MA-SDA3:SL-RB</string>
         </property>
        </widget>
       </item>
@@ -925,7 +925,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-ChromCorr:SLSFA1-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-ChromCorr:SLSFA1-Mon</string>
         </property>
        </widget>
       </item>
@@ -975,7 +975,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SDA2:SL-RB</string>
+         <string>${PREFIX}SI-Fam:MA-SDA2:SL-RB</string>
         </property>
        </widget>
       </item>
@@ -1012,7 +1012,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-ChromCorr:SLSDA2-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-ChromCorr:SLSDA2-Mon</string>
         </property>
        </widget>
       </item>
@@ -1049,7 +1049,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-ChromCorr:SLSDB2-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-ChromCorr:SLSDB2-Mon</string>
         </property>
        </widget>
       </item>
@@ -1086,7 +1086,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-ChromCorr:SLSFP2-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-ChromCorr:SLSFP2-Mon</string>
         </property>
        </widget>
       </item>
@@ -1123,7 +1123,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-ChromCorr:SLSDA1-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-ChromCorr:SLSDA1-Mon</string>
         </property>
        </widget>
       </item>
@@ -1160,7 +1160,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SDB1:SL-RB</string>
+         <string>${PREFIX}SI-Fam:MA-SDB1:SL-RB</string>
         </property>
        </widget>
       </item>
@@ -1197,7 +1197,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-ChromCorr:SLSFA2-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-ChromCorr:SLSFA2-Mon</string>
         </property>
        </widget>
       </item>
@@ -1234,7 +1234,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SDP2:SL-RB</string>
+         <string>${PREFIX}SI-Fam:MA-SDP2:SL-RB</string>
         </property>
        </widget>
       </item>
@@ -1271,7 +1271,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SDB2:SL-RB</string>
+         <string>${PREFIX}SI-Fam:MA-SDB2:SL-RB</string>
         </property>
        </widget>
       </item>
@@ -1308,7 +1308,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-ChromCorr:SLSFB1-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-ChromCorr:SLSFB1-Mon</string>
         </property>
        </widget>
       </item>
@@ -1345,7 +1345,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SDB3:SL-RB</string>
+         <string>${PREFIX}SI-Fam:MA-SDB3:SL-RB</string>
         </property>
        </widget>
       </item>
@@ -1382,7 +1382,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SDP3:SL-RB</string>
+         <string>${PREFIX}SI-Fam:MA-SDP3:SL-RB</string>
         </property>
        </widget>
       </item>
@@ -1419,7 +1419,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-ChromCorr:SLSDP1-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-ChromCorr:SLSDP1-Mon</string>
         </property>
        </widget>
       </item>
@@ -1456,7 +1456,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SFP1:SL-RB</string>
+         <string>${PREFIX}SI-Fam:MA-SFP1:SL-RB</string>
         </property>
        </widget>
       </item>
@@ -1493,7 +1493,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-ChromCorr:SLSFP1-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-ChromCorr:SLSFP1-Mon</string>
         </property>
        </widget>
       </item>
@@ -1530,7 +1530,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-ChromCorr:SLSDB1-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-ChromCorr:SLSDB1-Mon</string>
         </property>
        </widget>
       </item>
@@ -1567,7 +1567,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-ChromCorr:SLSDP2-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-ChromCorr:SLSDP2-Mon</string>
         </property>
        </widget>
       </item>
@@ -1604,7 +1604,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SFP2:OpMode-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-SFP2:OpMode-Sts</string>
         </property>
        </widget>
       </item>
@@ -1641,7 +1641,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SFB1:SL-RB</string>
+         <string>${PREFIX}SI-Fam:MA-SFB1:SL-RB</string>
         </property>
        </widget>
       </item>
@@ -1678,7 +1678,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SFB2:SL-RB</string>
+         <string>${PREFIX}SI-Fam:MA-SFB2:SL-RB</string>
         </property>
        </widget>
       </item>
@@ -1715,7 +1715,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SFB1:OpMode-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-SFB1:OpMode-Sts</string>
         </property>
        </widget>
       </item>
@@ -1752,7 +1752,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SFA2:OpMode-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-SFA2:OpMode-Sts</string>
         </property>
        </widget>
       </item>
@@ -1789,7 +1789,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SFP1:OpMode-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-SFP1:OpMode-Sts</string>
         </property>
        </widget>
       </item>
@@ -1826,7 +1826,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SFB2:OpMode-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-SFB2:OpMode-Sts</string>
         </property>
        </widget>
       </item>
@@ -1863,7 +1863,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SDP3:OpMode-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-SDP3:OpMode-Sts</string>
         </property>
        </widget>
       </item>
@@ -1900,7 +1900,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SDB2:OpMode-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-SDB2:OpMode-Sts</string>
         </property>
        </widget>
       </item>
@@ -1937,7 +1937,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SFA1:OpMode-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-SFA1:OpMode-Sts</string>
         </property>
        </widget>
       </item>
@@ -1974,7 +1974,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SDA2:OpMode-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-SDA2:OpMode-Sts</string>
         </property>
        </widget>
       </item>
@@ -2011,7 +2011,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SDP1:OpMode-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-SDP1:OpMode-Sts</string>
         </property>
        </widget>
       </item>
@@ -2048,7 +2048,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SDA1:OpMode-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-SDA1:OpMode-Sts</string>
         </property>
        </widget>
       </item>
@@ -2085,7 +2085,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SDB3:OpMode-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-SDB3:OpMode-Sts</string>
         </property>
        </widget>
       </item>
@@ -2122,7 +2122,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SDB1:OpMode-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-SDB1:OpMode-Sts</string>
         </property>
        </widget>
       </item>
@@ -2159,7 +2159,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SDA3:OpMode-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-SDA3:OpMode-Sts</string>
         </property>
        </widget>
       </item>
@@ -2196,7 +2196,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SDP2:OpMode-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-SDP2:OpMode-Sts</string>
         </property>
        </widget>
       </item>
@@ -2234,7 +2234,7 @@
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SDA1:PwrState-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-SDA1:PwrState-Sts</string>
         </property>
        </widget>
       </item>
@@ -2265,7 +2265,7 @@
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SFA1:PwrState-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-SFA1:PwrState-Sts</string>
         </property>
        </widget>
       </item>
@@ -2290,7 +2290,7 @@
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SDB1:PwrState-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-SDB1:PwrState-Sts</string>
         </property>
        </widget>
       </item>
@@ -2315,7 +2315,7 @@
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SFA2:PwrState-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-SFA2:PwrState-Sts</string>
         </property>
        </widget>
       </item>
@@ -2340,7 +2340,7 @@
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SFB1:PwrState-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-SFB1:PwrState-Sts</string>
         </property>
        </widget>
       </item>
@@ -2365,7 +2365,7 @@
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SFB2:PwrState-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-SFB2:PwrState-Sts</string>
         </property>
        </widget>
       </item>
@@ -2390,7 +2390,7 @@
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SDA3:PwrState-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-SDA3:PwrState-Sts</string>
         </property>
        </widget>
       </item>
@@ -2415,7 +2415,7 @@
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SDB2:PwrState-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-SDB2:PwrState-Sts</string>
         </property>
        </widget>
       </item>
@@ -2440,7 +2440,7 @@
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SDB3:PwrState-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-SDB3:PwrState-Sts</string>
         </property>
        </widget>
       </item>
@@ -2465,7 +2465,7 @@
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SFP1:PwrState-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-SFP1:PwrState-Sts</string>
         </property>
        </widget>
       </item>
@@ -2490,7 +2490,7 @@
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SDP1:PwrState-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-SDP1:PwrState-Sts</string>
         </property>
        </widget>
       </item>
@@ -2515,7 +2515,7 @@
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Fam:MA-SDP2:PwrState-Sts</string>
+         <string>${PREFIX}SI-Fam:MA-SDP2:PwrState-Sts</string>
         </property>
        </widget>
       </item>
@@ -2553,7 +2553,7 @@
          <string/>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-ChromCorr:CorrMeth-Sel</string>
+         <string>${PREFIX}SI-Glob:AP-ChromCorr:CorrMeth-Sel</string>
         </property>
        </widget>
       </item>
@@ -2615,7 +2615,7 @@
     </string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-ChromCorr:SyncCorr-Sel</string>
+         <string>${PREFIX}SI-Glob:AP-ChromCorr:SyncCorr-Sel</string>
         </property>
         <property name="shape" stdset="0">
          <enum>PyDMStateButton::Rounded</enum>
@@ -2669,7 +2669,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-ChromCorr:SyncCorr-Sts</string>
+         <string>${PREFIX}SI-Glob:AP-ChromCorr:SyncCorr-Sts</string>
         </property>
        </widget>
       </item>
@@ -2706,7 +2706,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-ChromCorr:CorrMeth-Sts</string>
+         <string>${PREFIX}SI-Glob:AP-ChromCorr:CorrMeth-Sts</string>
         </property>
        </widget>
       </item>
@@ -2787,7 +2787,7 @@
          <string>Configure Timing</string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-ChromCorr:ConfigTiming-Cmd</string>
+         <string>${PREFIX}SI-Glob:AP-ChromCorr:ConfigTiming-Cmd</string>
         </property>
         <property name="pressValue" stdset="0">
          <string>0</string>
@@ -2843,7 +2843,7 @@
     </string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-ChromCorr:ChromX-SP</string>
+         <string>${PREFIX}SI-Glob:AP-ChromCorr:ChromX-SP</string>
         </property>
         <property name="showStepExponent" stdset="0">
          <bool>false</bool>
@@ -2929,7 +2929,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-ChromCorr:ChromY-RB</string>
+         <string>${PREFIX}SI-Glob:AP-ChromCorr:ChromY-RB</string>
         </property>
        </widget>
       </item>
@@ -2979,7 +2979,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-ChromCorr:ChromX-RB</string>
+         <string>${PREFIX}SI-Glob:AP-ChromCorr:ChromX-RB</string>
         </property>
        </widget>
       </item>
@@ -3066,7 +3066,7 @@
     </string>
         </property>
         <property name="channel" stdset="0">
-         <string>ca://${PREFIX}SI-Glob:AP-ChromCorr:ChromY-SP</string>
+         <string>${PREFIX}SI-Glob:AP-ChromCorr:ChromY-SP</string>
         </property>
         <property name="showStepExponent" stdset="0">
          <bool>false</bool>
@@ -3197,7 +3197,7 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
 Sextupoles</string>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${PREFIX}SI-Glob:AP-ChromCorr:ConfigMA-Cmd</string>
+        <string>${PREFIX}SI-Glob:AP-ChromCorr:ConfigMA-Cmd</string>
        </property>
        <property name="pressValue" stdset="0">
         <string>0</string>
@@ -3277,7 +3277,7 @@ Sextupoles</string>
 Correction</string>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${PREFIX}SI-Glob:AP-ChromCorr:ApplyCorr-Cmd</string>
+        <string>${PREFIX}SI-Glob:AP-ChromCorr:ApplyCorr-Cmd</string>
        </property>
        <property name="pressValue" stdset="0">
         <string>0</string>

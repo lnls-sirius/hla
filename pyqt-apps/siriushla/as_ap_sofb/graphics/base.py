@@ -117,7 +117,7 @@ class BaseWidget(QWidget):
         pref = 'BPM' if self.is_orb else 'CH' if pln == 'x' else 'CV'
         for i, lname in enumerate(self.line_names):
             opts = dict(
-                y_channel='ca://A',
+                y_channel='A',
                 x_channel=self.prefix + pref + 'PosS-Cte',
                 name=lname,
                 color=self._get_color(pln, i),

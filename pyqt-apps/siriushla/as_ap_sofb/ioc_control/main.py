@@ -237,7 +237,7 @@ def _main():
     app = SiriusApplication()
     win = SiriusDialog()
     hbl = QHBoxLayout(win)
-    prefix = 'ca://' + pref+'SI-Glob:AP-SOFB:'
+    prefix = pref+'SI-Glob:AP-SOFB:'
     pvs = [
         'OrbitSmoothX-Mon', 'OrbitSmoothY-Mon',
         'OrbitOfflineX-RB', 'OrbitOfflineY-RB',
