@@ -958,6 +958,8 @@ class MultipolesRamp(QWidget):
             nconfig_list[old_nconfig_idx][1] = norm_config.name
             self.ramp_config._configuration['ps_normalized_configs*'] = \
                 nconfig_list
+            # invalidate waveforms
+            self.ramp_config._invalidate_ps_waveforms()
         self.ramp_config[norm_config.name] = norm_config
         self.handleLoadRampConfig()
         self.updateMultipoleRampSignal.emit()
