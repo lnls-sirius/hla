@@ -44,7 +44,7 @@ class DetailWidgetFactory:
         elif 'DCLink' in psname:
             model = PSData(psname).psmodel
             if model == 'FBP_DCLink':
-                return FBPDClinkDetailWidget(psname, parent)
+                return FBPDCLinkDetailWidget(psname, parent)
             elif model in ('FAC_ACDC', 'FAC_2P4S_ACDC'):
                 return FACDCLinkDetailWidget(psname, parent)
             else:
