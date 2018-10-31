@@ -628,7 +628,7 @@ class DiagnosisSettings(SiriusDialog):
         self._setupUi()
 
     def _setupUi(self):
-        self.dcct_prefix = 'ca://'+self.prefix+'BO-35D:DI-DCCT:'
+        self.dcct_prefix = self.prefix+'BO-35D:DI-DCCT:'
 
         l_dcctacq = QLabel('<h3>Ramp Diagnosis Settings</h3>', self,
                            alignment=Qt.AlignCenter)
@@ -751,8 +751,8 @@ class DiagnosisSettings(SiriusDialog):
         self.ledmulti_TIStatus = PyDMLedMultiChannel(
             parent=self,
             channels2values={
-                'ca://'+self.prefix+'BO-35D:TI-DCCT:State-Sts': 1,
-                'ca://'+self.prefix+'BO-35D:TI-DCCT:Status-Mon': 0})
+                self.prefix+'BO-35D:TI-DCCT:State-Sts': 1,
+                self.prefix+'BO-35D:TI-DCCT:Status-Mon': 0})
         self.ledmulti_TIStatus.setFixedSize(220, 40)
         self.pb_trgdetails = QPushButton('Open details', self)
         _hlautil.connect_window(
@@ -765,13 +765,13 @@ class DiagnosisSettings(SiriusDialog):
         l_TIdelay = QLabel('Timing Trigger Delay: ', self)
         self.pydmspinbox_TIDelay = PyDMSpinbox(
             parent=self,
-            init_channel='ca://'+self.prefix+'BO-35D:TI-DCCT:Delay-SP')
+            init_channel=self.prefix+'BO-35D:TI-DCCT:Delay-SP')
         self.pydmspinbox_TIDelay.setFixedSize(220, 40)
         self.pydmspinbox_TIDelay.setAlignment(Qt.AlignCenter)
         self.pydmspinbox_TIDelay.showStepExponent = False
         self.pydmlabel_TIDelay = PyDMLabel(
             parent=self,
-            init_channel='ca://'+self.prefix+'BO-35D:TI-DCCT:Delay-RB')
+            init_channel=self.prefix+'BO-35D:TI-DCCT:Delay-RB')
         hlay_TIdelay = QHBoxLayout()
         hlay_TIdelay.addWidget(self.pydmspinbox_TIDelay)
         hlay_TIdelay.addWidget(self.pydmlabel_TIDelay)

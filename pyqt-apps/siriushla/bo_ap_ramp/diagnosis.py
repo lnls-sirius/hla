@@ -32,9 +32,7 @@ class Diagnosis(QGroupBox):
         l_ejecurr = QLabel('Ejected: ', self, alignment=Qt.AlignRight)
         self.label_ejecurr = QLabel(self)
 
-        self.graph_boocurr = PyDMWaveformPlot(
-            parent=self, init_y_channels=[
-                'ca://'+_vaca_prefix+'BO-35D:DI-DCCT:RawReadings-Mon'])
+        self.graph_boocurr = PyDMWaveformPlot(self)
         self.graph_boocurr.autoRangeX = True
         self.graph_boocurr.autoRangeY = True
         self.graph_boocurr.backgroundColor = QColor(255, 255, 255)
@@ -44,6 +42,9 @@ class Diagnosis(QGroupBox):
         self.graph_boocurr.setLabels(left='<h3>Current</h3>',
                                      bottom='<h3>Ramp Index</h3>')
         self.graph_boocurr.setMinimumSize(600, 400)
+        self.graph_boocurr.addChannel(
+            y_channel=_vaca_prefix+'BO-35D:DI-DCCT:RawReadings-Mon',
+            color='blue', lineWidth=2, lineStyle=Qt.SolidLine)
         leftAxis = self.graph_boocurr.getAxis('left')
         leftAxis.setStyle(autoExpandTextSpace=False, tickTextWidth=25)
         self.curveCurrHstr = self.graph_boocurr.curveAtIndex(0)
@@ -64,10 +65,10 @@ class Diagnosis(QGroupBox):
                                      bottom='<h3>Number of cycles</h3>')
         self.graph_rampeff.setMinimumSize(600, 400)
         self.graph_rampeff.addChannel(
-            y_channel='ca://FAKE:RampEff-Mon', name='Efficiency',
+            y_channel='FAKE:RampEff-Mon', name='Efficiency',
             color='blue', lineWidth=2, lineStyle=Qt.SolidLine)
         self.graph_rampeff.addChannel(
-            y_channel='ca://FAKE:Stacks-Mon', name='Stacks',
+            y_channel='FAKE:Stacks-Mon', name='Stacks',
             color='red', lineStyle=Qt.NoPen, symbol='o', symbolSize=10)
         leftAxis = self.graph_rampeff.getAxis('left')
         leftAxis.setStyle(autoExpandTextSpace=False, tickTextWidth=25)
@@ -105,10 +106,11 @@ class Diagnosis(QGroupBox):
             curr_hstr = self.curveCurrHstr.yData
             inj_curr = curr_hstr[self._injcurr_idx]
             eje_curr = curr_hstr[self._ejecurr_idx]
-            self._wavEff.append(eje_curr/inj_curr)
-            self.label_injcurr.setText(inj_curr)
-            self.label_ejecurr.setText(eje_curr)
-            self.label_rampeff.setText(eje_curr/inj_curr)
+            self._wavEff.append(100*eje_curr/inj_curr)
+            self.label_injcurr.setText(str('{: .8f}'.format(inj_curr)))
+            self.label_ejecurr.setText(str('{: .8f}'.format(eje_curr)))
+            self.label_rampeff.setText(
+                str('{: .8f}'.format(100*eje_curr/inj_curr)))
             self.curveEff.receiveYWaveform(np.array(self._wavEff))
             self.curveEff.redrawCurve()
 

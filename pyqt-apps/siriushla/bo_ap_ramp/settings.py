@@ -146,6 +146,8 @@ class Settings(QMenuBar):
         pass
 
     def _saveAndEmitConfigName(self, new_name=None):
+        if not self.ramp_config:
+            return
         try:
             if self.ramp_config.configsrv_exist():
                 old_name = self.ramp_config.name
