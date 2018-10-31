@@ -659,20 +659,20 @@ class FACDCLinkDetailWidget(DCLinkDetailWidget):
         self.cap_bank_mon_label = QLabel("Mon")
 
         self.cap_bank_sp_widget = PyDMLinEditScrollbar(
-            "ca://" + self._prefixed_psname + ":CapacitorBankVoltage-SP", self)
+            self._prefixed_psname + ":CapacitorBankVoltage-SP", self)
         self.cap_bank_sp_widget.sp_lineedit.showUnits = False
         self.cap_bank_sp_widget.sp_scrollbar.setTracking(False)
         self.cap_bank_rb_val = PyDMLabel(
             self,
-            "ca://" + self._prefixed_psname + ":CapacitorBankVoltage-RB")
+            self._prefixed_psname + ":CapacitorBankVoltage-RB")
         self.cap_bank_rb_val.precFromPV = True
         self.cap_bank_ref_val = PyDMLabel(
             self,
-            "ca://" + self._prefixed_psname + ":CapacitorBankVoltageRef-Mon")
+            self._prefixed_psname + ":CapacitorBankVoltageRef-Mon")
         self.cap_bank_ref_val.precFromPV = True
         self.cap_bank_mon_val = PyDMLabel(
             self,
-            "ca://" + self._prefixed_psname + ":CapacitorBankVoltage-Mon")
+            self._prefixed_psname + ":CapacitorBankVoltage-Mon")
         self.cap_bank_mon_val.precFromPV = True
 
         layout.addWidget(self.cap_bank_sp_label, 0, 0, Qt.AlignRight)
@@ -692,16 +692,16 @@ class FACDCLinkDetailWidget(DCLinkDetailWidget):
         layout = QFormLayout()
 
         self.rectifier_voltage_mon = PyDMLabel(
-            self, 'ca://' + self._prefixed_psname + ':RectifierVoltage-Mon')
+            self, self._prefixed_psname + ':RectifierVoltage-Mon')
         self.rectifier_current_mon = PyDMLabel(
-            self, 'ca://' + self._prefixed_psname + ':RectifierCurrent-Mon')
+            self, self._prefixed_psname + ':RectifierCurrent-Mon')
         self.heatsink_temperature = PyDMLabel(
-            self, 'ca://' + self._prefixed_psname + ':HeatSinkTemperature-Mon')
+            self, self._prefixed_psname + ':HeatSinkTemperature-Mon')
         self.inductors_temperature = PyDMLabel(
             self,
-            'ca://' + self._prefixed_psname + ':InductorsTemperature-Mon')
+            self._prefixed_psname + ':InductorsTemperature-Mon')
         self.duty_cycle = PyDMLabel(
-            self, 'ca://' + self._prefixed_psname + ':PWMDutyCycle-Mon')
+            self, self._prefixed_psname + ':PWMDutyCycle-Mon')
 
         layout.addRow('Rectifier Voltage', self.rectifier_voltage_mon)
         layout.addRow('Rectifier Current', self.rectifier_current_mon)
