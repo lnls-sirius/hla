@@ -96,6 +96,7 @@ class RampMain(SiriusMainWindow):
         self.optics_adjust.normConfigChanged.connect(
             self.config_parameters.mult_ramp.handleNormConfigsChanged)
 
+        self.connUpdateSignal.connect(self.optics_adjust.getConnectors)
         self.connUpdateSignal.connect(self.status_and_commands.getConnectors)
 
         self.loadSignal.connect(self.settings.getRampConfig)

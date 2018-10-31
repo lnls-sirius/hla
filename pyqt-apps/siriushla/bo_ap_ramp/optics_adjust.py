@@ -82,6 +82,7 @@ class OpticsAdjust(QGroupBox):
 
         self.bt_update = QPushButton('Update in ramp config.')
         self.bt_update.clicked.connect(self._updateRampConfig)
+        self.bt_update.setEnabled(False)
 
         self.bt_server = QPushButton('Server', self)
         self.act_load = QAction('Load', self)
@@ -148,6 +149,7 @@ class OpticsAdjust(QGroupBox):
         self.bt_apply_deltaKL = QPushButton('Apply', self)
         self.bt_apply_deltaKL.clicked.connect(self._apply_deltaKL)
         self.bt_apply_deltaKL.setFixedWidth(150)
+        self.bt_apply_deltaKL.setEnabled(False)
         hlay_bt_apply.addSpacerItem(
             QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
         hlay_bt_apply.addWidget(self.bt_apply_deltaKL)
@@ -220,6 +222,7 @@ class OpticsAdjust(QGroupBox):
         self.bt_apply_deltaSL = QPushButton('Apply', self)
         self.bt_apply_deltaSL.clicked.connect(self._apply_deltaSL)
         self.bt_apply_deltaSL.setFixedWidth(150)
+        self.bt_apply_deltaSL.setEnabled(False)
         hlay_bt_apply.addSpacerItem(
             QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
         hlay_bt_apply.addWidget(self.bt_apply_deltaSL)
@@ -284,6 +287,7 @@ class OpticsAdjust(QGroupBox):
         self.bt_apply_orbitcorrection.clicked.connect(
             self._apply_orbitcorrection)
         self.bt_apply_orbitcorrection.setFixedWidth(150)
+        self.bt_apply_orbitcorrection.setEnabled(False)
         hlay_bt_apply.addSpacerItem(
             QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
         hlay_bt_apply.addWidget(self.bt_apply_orbitcorrection)
@@ -318,16 +322,15 @@ class OpticsAdjust(QGroupBox):
         for value, label in self._table_map['rows'].items():
             if config_idx == (value + 1):
                 self.bt_edit.setText(label)
+                self.bt_update.setEnabled(False)
                 if label in ['Injection', 'Ejection']:
                     self.bt_edit.setEnabled(False)
-                    self.bt_update.setEnabled(False)
                     self.act_load.setEnabled(False)
                     self.act_save.setEnabled(False)
                     self.act_save_as.setEnabled(False)
                     self.norm_config = None
                 else:
                     self.bt_edit.setEnabled(True)
-                    self.bt_update.setEnabled(True)
                     self.act_save.setEnabled(True)
                     self.act_save_as.setEnabled(True)
                     self.norm_config = self.ramp_config[label]
@@ -336,7 +339,7 @@ class OpticsAdjust(QGroupBox):
                             self.act_load.setEnabled(True)
                         else:
                             self.act_load.setEnabled(False)
-                            self.verifySync()
+                        self.verifySync()
                     except _srvexceptions.SrvError as e:
                         err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
                         err_msg.open()
@@ -364,6 +367,7 @@ class OpticsAdjust(QGroupBox):
     def _handleEdit(self, nconfig):
         for maname, value in nconfig.items():
             self.norm_config[maname] = value
+        self.bt_update.setEnabled(True)
         self.verifySync()
 
     def _updateRampConfig(self):
@@ -422,12 +426,15 @@ class OpticsAdjust(QGroupBox):
         self.l_deltaKLQF.setText('{: 6f}'.format(self._deltaKL[0]))
         self.l_deltaKLQD.setText('{: 6f}'.format(self._deltaKL[1]))
 
+        self.bt_apply_deltaKL.setEnabled(True)
+
     def _apply_deltaKL(self):
         if self.norm_config is None:
             return
         self.norm_config['BO-Fam:MA-QF'] += self._deltaKL[0]
         self.norm_config['BO-Fam:MA-QD'] += self._deltaKL[1]
         self._resetTuneChanges()
+        self.bt_update.setEnabled(True)
         self.verifySync()
 
     def _calculate_deltaSL(self):
@@ -442,12 +449,15 @@ class OpticsAdjust(QGroupBox):
         self.l_deltaSLSF.setText('{: 6f}'.format(self._deltaSL[0]))
         self.l_deltaSLSD.setText('{: 6f}'.format(self._deltaSL[1]))
 
+        self.bt_apply_deltaSL.setEnabled(True)
+
     def _apply_deltaSL(self):
         if self.norm_config is None:
             return
         self.norm_config['BO-Fam:MA-SF'] += self._deltaSL[0]
         self.norm_config['BO-Fam:MA-SD'] += self._deltaSL[1]
         self._resetChromChanges()
+        self.bt_update.setEnabled(True)
         self.verifySync()
 
     def _load_sofb_kicks(self):
@@ -460,6 +470,7 @@ class OpticsAdjust(QGroupBox):
             warn_msg.exec_()
             return
         self._dkicks = self._conn_sofb.get_deltakicks()
+        self.bt_apply_orbitcorrection.setEnabled(True)
 
     def _apply_orbitcorrection(self):
         if not self._dkicks or self.norm_config is None:
@@ -472,6 +483,7 @@ class OpticsAdjust(QGroupBox):
             current_kick = self.norm_config[maname]
             self.norm_config[maname] = current_kick + dkick*corr_factor
         self._resetOrbitChanges()
+        self.bt_update.setEnabled(True)
         self.verifySync()
 
     def _resetTuneChanges(self):
@@ -480,6 +492,7 @@ class OpticsAdjust(QGroupBox):
         self._deltaKL = [0.0, 0.0]
         self.l_deltaKLQF.setText('{: 6f}'.format(self._deltaKL[0]))
         self.l_deltaKLQD.setText('{: 6f}'.format(self._deltaKL[1]))
+        self.bt_apply_deltaKL.setEnabled(False)
 
     def _resetChromChanges(self):
         self.sb_deltaChromX.setValue(0)
@@ -487,6 +500,7 @@ class OpticsAdjust(QGroupBox):
         self._deltaSL = [0.0, 0.0]
         self.l_deltaSLSF.setText('{: 6f}'.format(self._deltaSL[0]))
         self.l_deltaSLSD.setText('{: 6f}'.format(self._deltaSL[1]))
+        self.bt_apply_deltaSL.setEnabled(False)
 
     def _resetOrbitChanges(self):
         self._dkicks = dict()
@@ -494,6 +508,7 @@ class OpticsAdjust(QGroupBox):
         self._corrfactorV = 100.0
         self.sb_correctH.setValue(100.0)
         self.sb_correctV.setValue(100.0)
+        self.bt_apply_orbitcorrection.setEnabled(False)
 
     @Slot(dict)
     def getConfigIndices(self, table_map):
