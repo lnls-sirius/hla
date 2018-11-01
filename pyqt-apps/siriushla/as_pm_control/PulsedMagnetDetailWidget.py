@@ -1,13 +1,14 @@
 """Detailed widget for controlling a pulsed mangnet."""
 from qtpy.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, \
-    QLabel, QGroupBox
-from pydm.widgets.label import PyDMLabel
+    QLabel, QGroupBox, QPushButton
+from pydm.widgets import PyDMLabel, PyDMSpinbox
 
 from siriuspy.envars import vaca_prefix as _VACA_PREFIX
+from siriushla import util
 from siriushla.widgets.led import SiriusLedState, SiriusLedAlert
 from siriushla.widgets.state_button import PyDMStateButton
-from siriushla.widgets import PyDMLinEditScrollbar
-
+from siriushla.widgets import PyDMLinEditScrollbar, PyDMLedMultiChannel
+from siriushla.as_ti_control.hl_trigger import HLTriggerDetailed
 
 class PulsedMagnetDetailWidget(QWidget):
     """Detailed widget for controlling a pulsed magnet."""
@@ -41,12 +42,18 @@ class PulsedMagnetDetailWidget(QWidget):
         self._pwrstate_sts_pv = \
             self._prefixed_maname + ":PwrState-Sts"
         self._enablepulses_sel_pv = \
-            self._prefixed_maname + ":Pulsed-Sel"
+            self._prefixed_maname + ":Pulse-Sel"
         self._enablepulses_sts_pv = \
-            self._prefixed_maname + ":Pulsed-Sts"
+            self._prefixed_maname + ":Pulse-Sts"
         self._intlk_mon_pv = \
             self._prefixed_maname + ":Intlk-Mon"
         self._ctrlmode_pv = self._prefixed_maname + ":CtrlMode-Mon"
+        self._prefixed_trigger_name = \
+            self._prefixed_maname.replace('PM-', 'TI-')
+        self._timing_delay_sp = self._prefixed_trigger_name + "Delay-SP"
+        self._timing_delay_rb = self._prefixed_trigger_name + "Delay-RB"
+        self._timing_status_pv = self._prefixed_trigger_name + ":Status-Mon"
+        self._timing_state_pv = self._prefixed_trigger_name + ":State-Sts"
 
     def _setup_ui(self):
         self.layout = QGridLayout()
@@ -63,12 +70,15 @@ class PulsedMagnetDetailWidget(QWidget):
         pulses_box = QGroupBox(parent=self, title="Pulses")
         pulses_box.setObjectName("pulses_box")
         pulses_box.setLayout(self._pulses_layout())
-        voltage_box = QGroupBox(parent=self, title="Tension")
+        voltage_box = QGroupBox(parent=self, title="Voltage")
         voltage_box.setObjectName("voltage_box")
         voltage_box.setLayout(self._voltage_layout())
         kick_box = QGroupBox(parent=self, title="Kick")
         kick_box.setObjectName("kick_box")
         kick_box.setLayout(self._kick_layout())
+        timing_box = QGroupBox(parent=self, title='Timing')
+        timing_box.setObjectName('timing_box')
+        timing_box.setLayout(self._timing_layout())
 
         self.layout.addWidget(self.header_label, 0, 0, 1, 3)
         self.layout.addWidget(interlock_box, 1, 0, 2, 1)
@@ -76,7 +86,8 @@ class PulsedMagnetDetailWidget(QWidget):
         self.layout.addWidget(pulses_box, 2, 1)
         self.layout.addWidget(voltage_box, 1, 2)
         self.layout.addWidget(kick_box, 2, 2)
-        self.layout.addLayout(self._ctrlmode_layout(), 3, 1, 1, 3)
+        self.layout.addWidget(timing_box, 3, 0, 1, 3)
+        self.layout.addLayout(self._ctrlmode_layout(), 4, 1, 1, 3)
 
         self.setLayout(self.layout)
 
@@ -170,12 +181,43 @@ class PulsedMagnetDetailWidget(QWidget):
 
         return ctrlmode_layout
 
+    def _timing_layout(self):
+        timing_layout = QGridLayout()
+
+        # Led, Timing-SP/RB, trigger window
+        self._trigger_delay_label = QLabel('Timing Trigger Delay', self)
+        self._trigger_delay_sp = PyDMSpinbox(
+            parent=self, init_channel=self._timing_delay_sp)
+        self._trigger_delay_rb = PyDMLabel(
+            parent=self, init_channel=self._timing_delay_rb)
+        self._trigger_status_label = QLabel('Timing Trigger Status')
+        self._trigger_status_led = PyDMLedMultiChannel(
+            parent=self,
+            channels2values={
+                self._timing_status_pv: 1,
+                self._timing_state_pv: 0})
+        self._trigger_detail_btn = QPushButton('Open details', self)
+
+        # Connect trigger window
+        util.connect_window(
+            self._trigger_detail_btn, HLTriggerDetailed,
+            parent=self, prefix=self._prefixed_maname.replace('PM-', 'TI-'))
+
+        timing_layout.addWidget(self._trigger_delay_label, 0, 0)
+        timing_layout.addWidget(self._trigger_delay_sp, 0, 1)
+        timing_layout.addWidget(self._trigger_delay_rb, 0, 2)
+        timing_layout.addWidget(self._trigger_status_label, 1, 0)
+        timing_layout.addWidget(self._trigger_status_led, 1, 1)
+        timing_layout.addWidget(self._trigger_detail_btn, 1, 2)
+
+        return timing_layout
+
 
 if __name__ == "__main__":
     import sys
-    from pydm import PyDMApplication
+    from siriushla.sirius_application import SiriusApplication
 
-    app = PyDMApplication(None, sys.argv)
+    app = SiriusApplication(None, sys.argv)
     w = PulsedMagnetDetailWidget(maname="SI-01SA:PM-InjDpKckr")
     w.show()
     sys.exit(app.exec_())
