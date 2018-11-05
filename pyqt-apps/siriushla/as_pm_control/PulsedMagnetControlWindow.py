@@ -64,7 +64,7 @@ class PulsedMagnetControlWindow(SiriusMainWindow):
         """Return buttons in the PulsedMAWidgets."""
         widgets = self.main_widget.findChildren(PulsedMAWidget)
         for widget in widgets:
-            maname = widget.maname
+            maname = widget.psname
             button = widget.get_detail_button()
             connect_window(button, PulsedMagnetDetailWindow,
                            parent=self, maname=maname)

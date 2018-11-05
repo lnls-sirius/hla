@@ -26,6 +26,7 @@ Sextupole = re.compile("^.*:MA-S.*$")
 Corrector = re.compile("^.*:MA-(CH|CV|FCH|FCV).*$")
 
 HasTrim = re.compile("^.*SI-Fam:(PS|MA)-Q.*$")
+HasSoftHardIntlk = re.compile("^.*:(PS|MA)-.*$")
 
 
 class BasePSWidget(QWidget):
@@ -123,16 +124,20 @@ class BasePSWidget(QWidget):
         self.psname_header.setObjectName("psname_header")
         self.state_header = QLabel("State", self)
         self.state_header.setObjectName("state_header")
-        self.intlk_header = QLabel("Interlocks", self)
-        self.intlk_header.setObjectName("intlk_header")
+
+        self.header_layout.addWidget(self.psname_header)
+        self.header_layout.addWidget(self.state_header)
+
+        if HasSoftHardIntlk.match(self._psname):
+            self.intlk_header = QLabel("Interlocks", self)
+            self.intlk_header.setObjectName("intlk_header")
+            self.header_layout.addWidget(self.intlk_header)
+
         self.analog_sp_header = QLabel(self._analog_name + "-SP", self)
         self.analog_sp_header.setObjectName("analog_sp_header")
         self.analog_mon_header = QLabel(self._analog_name + "-Mon", self)
         self.analog_mon_header.setObjectName("analog_mon_header")
 
-        self.header_layout.addWidget(self.psname_header)
-        self.header_layout.addWidget(self.state_header)
-        self.header_layout.addWidget(self.intlk_header)
         self.header_layout.addWidget(self.analog_sp_header)
         self.header_layout.addWidget(self.analog_mon_header)
         # Add magnet strength related widgets
@@ -171,17 +176,23 @@ class BasePSWidget(QWidget):
         self.state_widget.setLayout(self.state_widget.layout)
         self.state_widget.layout.addWidget(self.pwrstate_button)
         self.state_widget.layout.addWidget(self.state_led)
+
+        self.layout.addWidget(self.psname_label)
+        self.layout.addWidget(self.state_widget)
         # Interlock leds
-        self.intlksoft_led = \
-            SiriusLedAlert(self, self._intlksoft_mon_pv)
-        self.intlkhard_led = \
-            SiriusLedAlert(self, self._intlkhard_mon_pv)
-        self.intlk_widget = QWidget(self)
-        self.intlk_widget.setObjectName("intlk_widget")
-        self.intlk_widget.layout = QHBoxLayout()
-        self.intlk_widget.setLayout(self.intlk_widget.layout)
-        self.intlk_widget.layout.addWidget(self.intlksoft_led)
-        self.intlk_widget.layout.addWidget(self.intlkhard_led)
+        if HasSoftHardIntlk.match(self._psname):
+            self.intlksoft_led = \
+                SiriusLedAlert(self, self._intlksoft_mon_pv)
+            self.intlkhard_led = \
+                SiriusLedAlert(self, self._intlkhard_mon_pv)
+            self.intlk_widget = QWidget(self)
+            self.intlk_widget.setObjectName("intlk_widget")
+            self.intlk_widget.layout = QHBoxLayout()
+            self.intlk_widget.setLayout(self.intlk_widget.layout)
+            self.intlk_widget.layout.addWidget(self.intlksoft_led)
+            self.intlk_widget.layout.addWidget(self.intlkhard_led)
+
+            self.layout.addWidget(self.intlk_widget)
         # Analog setpoint widget
         self.analog_widget = PyDMLinEditScrollbar(
             parent=self, channel=self._analog_sp_pv,)
@@ -192,9 +203,6 @@ class BasePSWidget(QWidget):
             parent=self, init_channel=self._analog_mon_pv)
         self.analog_mon_label.setObjectName("analog_label")
 
-        self.layout.addWidget(self.psname_label)
-        self.layout.addWidget(self.state_widget)
-        self.layout.addWidget(self.intlk_widget)
         self.layout.addWidget(self.analog_widget)
         self.layout.addWidget(self.analog_mon_label)
         # Add strength related widgets

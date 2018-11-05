@@ -37,14 +37,14 @@ class DetailWidgetFactory:
 
     @staticmethod
     def _item(psname, parent=None):
-        model = PSData(psname).psmodel
         if DetailWidgetFactory.PulsedMagnet.match(psname):
             return PulsedMagnetDetailWidget(psname, parent)
         elif DetailWidgetFactory.FamDipole.match(psname):
             return DipoleDetailWidget(psname, parent)
         elif 'DCLink' in psname:
+            model = PSData(psname).psmodel
             if model == 'FBP_DCLink':
-                return FBPDClinkDetailWidget(psname, parent)
+                return FBPDCLinkDetailWidget(psname, parent)
             elif model in ('FAC_ACDC', 'FAC_2P4S_ACDC'):
                 return FACDCLinkDetailWidget(psname, parent)
             else:

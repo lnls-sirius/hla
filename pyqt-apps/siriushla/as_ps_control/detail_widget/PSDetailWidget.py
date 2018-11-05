@@ -74,17 +74,18 @@ class PSDetailWidget(QWidget):
             self._magnet_type = self._getElementType()
             if self._magnet_type == "b":
                 self._metric = "Energy"
-                self._metric_text = "Energy [GeV]"
+                self._metric_text = "Energy"
             elif self._magnet_type == "q":
                 self._metric = "KL"
-                self._metric_text = "KL [1/m]"
+                self._metric_text = "KL"
             elif self._magnet_type == "s":
                 self._metric = "SL"
-                self._metric_text = "SL [1/m^2]"
+                self._metric_text = "SL"
             elif self._magnet_type in ["sc", "fc"]:
                 self._metric = "Kick"
-                unit = _util.get_kick_unit(self._psname)
-                self._metric_text = "Kick [{}]".format(unit)
+                self._metric_text = "Kick"
+                # unit = _util.get_kick_unit(self._psname)
+                # self._metric_text = "Kick [{}]".format(unit)
 
         self._setup_ui()
         self.setFocus(True)
@@ -108,7 +109,7 @@ class PSDetailWidget(QWidget):
         self.opmode_box.setObjectName("operation_mode")
         self.pwrstate_box = QGroupBox("PwrState")
         self.pwrstate_box.setObjectName("power_state")
-        self.current_box = QGroupBox("Current [A]")
+        self.current_box = QGroupBox("Current")
         self.current_box.setObjectName("current")
         if self._is_magnet:
             self.metric_box = QGroupBox(self._metric_text)
@@ -525,7 +526,7 @@ class DCLinkDetailWidget(PSDetailWidget):
         self.interlock_box.setObjectName("interlock")
         self.pwrstate_box = QGroupBox("PwrState")
         self.pwrstate_box.setObjectName("power_state")
-        self.analog_box = QGroupBox("Current [A]")
+        self.analog_box = QGroupBox(self._analog_varname)
         self.analog_box.setObjectName("current")
         self.command_box = QGroupBox("Commands")
         self.command_box.setObjectName("command_box")
@@ -575,6 +576,10 @@ class DCLinkDetailWidget(PSDetailWidget):
 
 
 class FBPDCLinkDetailWidget(DCLinkDetailWidget):
+
+    def __init__(self, psname, parent=None):
+        self._analog_varname = 'Current'
+        super().__init__(psname, parent)
 
     def _analogLayout(self):
         layout = QGridLayout()
@@ -641,6 +646,10 @@ class FBPDCLinkDetailWidget(DCLinkDetailWidget):
 
 class FACDCLinkDetailWidget(DCLinkDetailWidget):
 
+    def __init__(self, psname, parent=None):
+        self._analog_varname = 'Capacitor Bank Voltage'
+        super().__init__(psname, parent)
+
     def _analogLayout(self):
         layout = QGridLayout()
 
@@ -650,20 +659,20 @@ class FACDCLinkDetailWidget(DCLinkDetailWidget):
         self.cap_bank_mon_label = QLabel("Mon")
 
         self.cap_bank_sp_widget = PyDMLinEditScrollbar(
-            "ca://" + self._prefixed_psname + ":CapacitorBankVoltage-SP", self)
+            self._prefixed_psname + ":CapacitorBankVoltage-SP", self)
         self.cap_bank_sp_widget.sp_lineedit.showUnits = False
         self.cap_bank_sp_widget.sp_scrollbar.setTracking(False)
         self.cap_bank_rb_val = PyDMLabel(
             self,
-            "ca://" + self._prefixed_psname + ":CapacitorBankVoltage-RB")
+            self._prefixed_psname + ":CapacitorBankVoltage-RB")
         self.cap_bank_rb_val.precFromPV = True
         self.cap_bank_ref_val = PyDMLabel(
             self,
-            "ca://" + self._prefixed_psname + ":CapacitorBankVoltageRef-Mon")
+            self._prefixed_psname + ":CapacitorBankVoltageRef-Mon")
         self.cap_bank_ref_val.precFromPV = True
         self.cap_bank_mon_val = PyDMLabel(
             self,
-            "ca://" + self._prefixed_psname + ":CapacitorBankVoltage-Mon")
+            self._prefixed_psname + ":CapacitorBankVoltage-Mon")
         self.cap_bank_mon_val.precFromPV = True
 
         layout.addWidget(self.cap_bank_sp_label, 0, 0, Qt.AlignRight)
@@ -683,16 +692,16 @@ class FACDCLinkDetailWidget(DCLinkDetailWidget):
         layout = QFormLayout()
 
         self.rectifier_voltage_mon = PyDMLabel(
-            self, 'ca://' + self._prefixed_psname + ':RectifierVoltage-Mon')
+            self, self._prefixed_psname + ':RectifierVoltage-Mon')
         self.rectifier_current_mon = PyDMLabel(
-            self, 'ca://' + self._prefixed_psname + ':RectifierCurrent-Mon')
+            self, self._prefixed_psname + ':RectifierCurrent-Mon')
         self.heatsink_temperature = PyDMLabel(
-            self, 'ca://' + self._prefixed_psname + ':HeatSinkTemperature-Mon')
+            self, self._prefixed_psname + ':HeatSinkTemperature-Mon')
         self.inductors_temperature = PyDMLabel(
             self,
-            'ca://' + self._prefixed_psname + ':InductorsTemperature-Mon')
+            self._prefixed_psname + ':InductorsTemperature-Mon')
         self.duty_cycle = PyDMLabel(
-            self, 'ca://' + self._prefixed_psname + ':PWMDutyCycle-Mon')
+            self, self._prefixed_psname + ':PWMDutyCycle-Mon')
 
         layout.addRow('Rectifier Voltage', self.rectifier_voltage_mon)
         layout.addRow('Rectifier Current', self.rectifier_current_mon)
