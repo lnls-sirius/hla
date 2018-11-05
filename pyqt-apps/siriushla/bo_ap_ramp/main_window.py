@@ -9,8 +9,6 @@ from siriushla.widgets.windows import SiriusMainWindow
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla import util as _util
 from siriuspy.ramp import ramp
-from siriuspy.ramp.conn import ConnMagnets as _ConnMagnets, ConnRF as _ConnRF,\
-                               ConnTiming as _ConnTiming, ConnSOFB as _ConnSOFB
 from siriuspy.servconf import exceptions as _srvexceptions
 from siriushla.bo_ap_ramp.status_and_commands import StatusAndCommands
 from siriushla.bo_ap_ramp.settings import Settings
@@ -23,7 +21,6 @@ from siriushla.bo_ap_ramp.auxiliar_classes import MessageBox as _MessageBox
 class RampMain(SiriusMainWindow):
     """Main window of Booster Ramp Control HLA."""
 
-    connUpdateSignal = Signal(_ConnMagnets, _ConnTiming, _ConnRF, _ConnSOFB)
     loadSignal = Signal(ramp.BoosterRamp)
 
     def __init__(self, parent=None, prefix=''):
@@ -32,8 +29,6 @@ class RampMain(SiriusMainWindow):
         self.setWindowTitle('Booster Energy Ramping')
         self.prefix = prefix
         self.ramp_config = None
-        self._conn_magnets = None
-        self._conn_timing = None
         self._undo_stack = QUndoStack(self)
         self._setupUi()
         self._connSignals()
@@ -53,8 +48,7 @@ class RampMain(SiriusMainWindow):
                           'stop:1 rgba(213, 213, 213, 255))')
         self.my_layout.addWidget(lab, 0, 0, 1, 2)
 
-        self.settings = Settings(
-            self, self.prefix, self.ramp_config)
+        self.settings = Settings(self, self.prefix, self.ramp_config)
         self.setMenuBar(self.settings)
 
         self.config_parameters = ConfigParameters(
@@ -64,7 +58,8 @@ class RampMain(SiriusMainWindow):
         self.optics_adjust = OpticsAdjust(self, self.prefix, self.ramp_config)
         self.my_layout.addWidget(self.optics_adjust, 6, 0, 2, 1)
 
-        self.status_and_commands = StatusAndCommands(self, self.prefix)
+        self.status_and_commands = StatusAndCommands(
+            self, self.prefix, self.ramp_config)
         self.my_layout.addWidget(self.status_and_commands, 1, 1, 2, 1)
 
         self.diagnosis = Diagnosis(self, self.prefix, self.ramp_config)
@@ -86,18 +81,19 @@ class RampMain(SiriusMainWindow):
             self.config_parameters.mult_ramp.updateTable)
         self.config_parameters.dip_ramp.updateDipoleRampSignal.connect(
             self.config_parameters.mult_ramp.updateGraph)
+        self.config_parameters.dip_ramp.updateDipoleRampSignal.connect(
+            self.status_and_commands.update_wfmnrpoints)
         self.config_parameters.mult_ramp.updateMultipoleRampSignal.connect(
             self._verifySync)
         self.config_parameters.mult_ramp.configsIndexChangedSignal.connect(
             self.optics_adjust.getConfigIndices)
         self.config_parameters.rf_ramp.updateRFRampSignal.connect(
             self._verifySync)
+        self.config_parameters.rf_ramp.updateRFRampSignal.connect(
+            self.status_and_commands.update_rfparams)
 
         self.optics_adjust.normConfigChanged.connect(
             self.config_parameters.mult_ramp.handleNormConfigsChanged)
-
-        self.connUpdateSignal.connect(self.optics_adjust.getConnectors)
-        self.connUpdateSignal.connect(self.status_and_commands.getConnectors)
 
         self.loadSignal.connect(self.settings.getRampConfig)
         self.loadSignal.connect(self.config_parameters.handleLoadRampConfig)
@@ -108,6 +104,7 @@ class RampMain(SiriusMainWindow):
         self.loadSignal.connect(
             self.config_parameters.rf_ramp.handleLoadRampConfig)
         self.loadSignal.connect(self.optics_adjust.handleLoadRampConfig)
+        self.loadSignal.connect(self.status_and_commands.handleLoadRampConfig)
 
     def _addActions(self):
         self.act_undo = self._undo_stack.createUndoAction(self, 'Undo')
@@ -122,25 +119,6 @@ class RampMain(SiriusMainWindow):
         self.ramp_config = ramp.BoosterRamp(new_config_name, auto_update=True)
         self._emitLoadSignal()
 
-    def _emitConnectors(self):
-        self._conn_magnets = _ConnMagnets(
-            ramp_config=self.ramp_config, prefix=self.prefix,
-            connection_callback=self.status_and_commands.updateMAConn,
-            callback=self.status_and_commands.updateMAStatus)
-        self._conn_timing = _ConnTiming(
-            ramp_config=self.ramp_config, prefix=self.prefix,
-            connection_callback=self.status_and_commands.updateTIConn,
-            callback=self.status_and_commands.updateTIStatus)
-        self._conn_rf = _ConnRF(
-            ramp_config=self.ramp_config, prefix=self.prefix,
-            connection_callback=self.status_and_commands.updateRFConn,
-            callback=self.status_and_commands.updateRFStatus)
-        self._conn_sofb = _ConnSOFB(
-            ramp_config=self.ramp_config, prefix=self.prefix,
-            connection_callback=self.status_and_commands.updateSOFBConn)
-        self.connUpdateSignal.emit(self._conn_magnets, self._conn_timing,
-                                   self._conn_rf, self._conn_sofb)
-
     def _emitLoadSignal(self):
         try:
             if self.ramp_config.configsrv_exist():
@@ -150,7 +128,6 @@ class RampMain(SiriusMainWindow):
             err_msg.open()
         else:
             self.loadSignal.emit(self.ramp_config)
-            self._emitConnectors()
         finally:
             self._verifySync()
 

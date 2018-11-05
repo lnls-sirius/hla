@@ -11,8 +11,7 @@ from siriuspy.optics.opticscorr import BOTuneCorr, BOChromCorr
 from siriuspy.servconf.util import \
     generate_config_name as _generate_config_name
 from siriuspy.servconf import exceptions as _srvexceptions
-from siriuspy.ramp.conn import ConnMagnets as _ConnMagnets, ConnRF as _ConnRF,\
-                               ConnTiming as _ConnTiming, ConnSOFB as _ConnSOFB
+from siriuspy.ramp.conn import ConnSOFB as _ConnSOFB
 from siriushla.bo_ap_ramp.auxiliar_classes import \
     EditNormalizedConfig as _EditNormalizedConfig, \
     NewRampConfigGetName as _NewRampConfigGetName, \
@@ -42,7 +41,7 @@ class OpticsAdjust(QGroupBox):
         self._setupUi()
         self._tunecorr = BOTuneCorr('Default_1')
         self._chromcorr = BOChromCorr('Default')
-        self._conn_sofb = None
+        self._conn_sofb = _ConnSOFB(prefix=self.prefix)
         self._norm_config_oldname = ''
 
     def _setupUi(self):
@@ -533,7 +532,7 @@ class OpticsAdjust(QGroupBox):
         """Update all widgets in loading BoosterRamp config."""
         self.ramp_config = ramp_config
         if self.norm_config is not None and self.norm_config.name in \
-                ramp_config.ps_normalized_configs_names:
+                self.ramp_config.ps_normalized_configs_names:
             self.norm_config = self.ramp_config[self.norm_config.name]
 
     @Slot(list)
@@ -541,11 +540,6 @@ class OpticsAdjust(QGroupBox):
         """Update settings."""
         self._tunecorr = BOTuneCorr(settings[0])
         self._chromcorr = BOChromCorr(settings[1])
-
-    @Slot(_ConnMagnets, _ConnTiming, _ConnRF, _ConnSOFB)
-    def getConnectors(self, conn_magnet, conn_timing, conn_rf, conn_sofb):
-        """Receive connectors."""
-        self._conn_sofb = conn_sofb
 
     def verifySync(self):
         """Verify sync status related to ConfServer."""
