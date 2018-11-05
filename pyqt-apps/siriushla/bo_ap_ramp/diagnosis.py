@@ -16,7 +16,6 @@ class Diagnosis(QGroupBox):
         """Initialize object."""
         super().__init__('Ramp Diagnosis', parent)
         self.prefix = prefix
-        self.ramp_config = ramp_config
         self._wavEff = []
         self._wavXStack = []
         self._wavYStack = []
@@ -79,9 +78,9 @@ class Diagnosis(QGroupBox):
         self.pb_addStack.clicked.connect(self._addStack)
         self.pb_addStack.setFixedWidth(300)
         self.pb_addStack.setVisible(False)  # temporary, TODO
-        self.pb_resetGraph = QPushButton('Reset graph', self)
-        self.pb_resetGraph.clicked.connect(self._resetGraph)
-        self.pb_resetGraph.setFixedWidth(300)
+        self.pb_clearGraph = QPushButton('Clear graph', self)
+        self.pb_clearGraph.clicked.connect(self._clearGraph)
+        self.pb_clearGraph.setFixedWidth(300)
 
         glay = QGridLayout()
         glay.setAlignment(Qt.AlignHCenter)
@@ -97,7 +96,7 @@ class Diagnosis(QGroupBox):
         glay.addWidget(self.label_rampeff, 6, 2)
         glay.addWidget(self.graph_rampeff, 7, 1, 1, 2)
         glay.addWidget(self.pb_addStack, 8, 1)
-        glay.addWidget(self.pb_resetGraph, 8, 2)
+        glay.addWidget(self.pb_clearGraph, 8, 2)
         glay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 9, 3)
         self.setLayout(glay)
 
@@ -107,6 +106,8 @@ class Diagnosis(QGroupBox):
             inj_curr = curr_hstr[self._injcurr_idx]
             eje_curr = curr_hstr[self._ejecurr_idx]
             self._wavEff.append(100*eje_curr/inj_curr)
+            if len(self._wavEff) > 1000:
+                self._wavEff.pop(0)
             self.label_injcurr.setText(str('{: .8f}'.format(inj_curr)))
             self.label_ejecurr.setText(str('{: .8f}'.format(eje_curr)))
             self.label_rampeff.setText(
@@ -123,7 +124,7 @@ class Diagnosis(QGroupBox):
             self.curveStacks.redrawCurve()
         # TODO: generate signal to save current BoosterRamp config in a stack
 
-    def _resetGraph(self):
+    def _clearGraph(self):
         self._wavXStack.clear()
         self._wavYStack.clear()
         self._wavEff.clear()
