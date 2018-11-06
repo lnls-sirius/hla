@@ -599,6 +599,8 @@ class SiriusScrnView(QWidget):
         self.comboBox_Method.addItem('DimFei', 0)
         self.comboBox_Method.addItem('NDStats', 1)
         self.comboBox_Method.setCurrentIndex(0)
+        self.comboBox_Method.setStyleSheet(
+            """QComboBox::item {\nheight: 30px;}""")
         self.comboBox_Method.currentIndexChanged.connect(
             self._handleShowStatistics)
 
