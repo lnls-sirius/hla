@@ -20,11 +20,9 @@ import pyaccel as _pyaccel
 import pymodels as _pymodels
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla import util as _hlautil
-from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import PyDMLed, SiriusLedAlert, SiriusLedState, \
                               SiriusMainWindow, SiriusScrnView, \
                               PyDMLinEditScrollbar
-from siriushla.as_di_bpms import BPMsInterfaceTL  # TODO: remove this import
 from siriushla.as_ap_posang.HLPosAng import ASAPPosAngCorr
 from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
 from siriushla.as_ps_control.PSTabControlWindow import PSTabControlWindow
@@ -82,16 +80,14 @@ class TLAPControlWindow(SiriusMainWindow):
                                 section=self._tl.upper(), discipline=1)  # MA
         openPMApp = QAction("PM", self)
         _hlautil.connect_window(openPMApp, PulsedMagnetControlWindow, self)
-        openBPMApp = QAction("BPMs", self)
-        _hlautil.connect_window(
-            openBPMApp, BPMsInterfaceTL,
-            parent=self, prefix=self.prefix, TL=self._tl.upper())
+        openSOFB = QAction("SOFB", self)
+        _hlautil.connect_newprocess(openSOFB, 'sirius-hla-tb-ap-sofb.py')
         appsMenu = menubar.addMenu("Open...")
         appsMenu.addAction(openLatticeAndTwiss)
         appsMenu.addAction(openPosAngCorrApp)
         appsMenu.addAction(openMAApp)
         appsMenu.addAction(openPMApp)
-        appsMenu.addAction(openBPMApp)
+        appsMenu.addAction(openSOFB)
         if self._tl == 'tb':
             openICTsApp = QAction("ICTs", self)
             _hlautil.connect_window(openICTsApp, ICTMonitoring, parent=self,
@@ -114,8 +110,12 @@ class TLAPControlWindow(SiriusMainWindow):
 
         # Connect Slits View widget
         if self._tl == 'tb':
+            self.centralwidget.widget_SlitH.layout().setAlignment(
+                Qt.AlignHCenter | Qt.AlignVCenter)
             self.centralwidget.widget_SlitH.layout().addWidget(
                 SlitMonitoring('H', self, self.prefix))
+            self.centralwidget.widget_SlitV.layout().setAlignment(
+                Qt.AlignHCenter | Qt.AlignVCenter)
             self.centralwidget.widget_SlitV.layout().addWidget(
                 SlitMonitoring('V', self, self.prefix))
 
@@ -471,16 +471,12 @@ class TLAPControlWindow(SiriusMainWindow):
 
     @Slot()
     def _setScrnWidget(self):
-        app = SiriusApplication.instance()
         sender = self.sender()
         self._currScrn = self._scrn_selection_widget.id(sender)
 
         for i in self.scrnview_widgets_dict.keys():
             if i != self._currScrn:
                 self.scrnview_widgets_dict[i].setVisible(False)
-                app.close_widget_connections(
-                    widget=self.scrnview_widgets_dict[i],
-                    propagate=False)
 
         if self._currScrn not in self.scrnview_widgets_dict.keys():
             wid_scrn = SiriusScrnView(
@@ -498,10 +494,6 @@ class TLAPControlWindow(SiriusMainWindow):
                 updateCalibrationGridFlag)
         else:
             self.scrnview_widgets_dict[self._currScrn].setVisible(True)
-
-        app.establish_widget_connections(
-            widget=self.scrnview_widgets_dict[self._currScrn],
-            propagate=False)
 
     @Slot(QPoint)
     def _show_context_menu(self, point):
@@ -575,3 +567,18 @@ class ShowImage(SiriusMainWindow):
         self.setGeometry(300, 300,
                          self.pixmap.width(),
                          self.pixmap.height())
+
+
+if __name__ == '__main__':
+    """Run Example."""
+    import os
+    import sys
+    from siriushla.sirius_application import SiriusApplication
+
+    app = SiriusApplication()
+    os.environ['EPICS_CA_MAX_ARRAY_BYTES'] = '200000000'
+    app = SiriusApplication()
+    _hlautil.set_style(app)
+    window = TLAPControlWindow(prefix=_vaca_prefix, tl='tb')
+    window.show()
+    sys.exit(app.exec_())
