@@ -14,7 +14,6 @@ from pydm.widgets import PyDMImageView, PyDMLabel, PyDMSpinbox, \
 from pydm.widgets.channel import PyDMChannel
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla import util
-from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import PyDMStateButton, SiriusLedState, PyDMLed
 from siriushla.widgets.windows import SiriusMainWindow, SiriusDialog
 
@@ -459,7 +458,7 @@ class SiriusScrnView(QWidget):
         self.PyDMStateButton_EnblLED = PyDMStateButton(
             parent=self, init_channel=self.scrn_prefix+':EnblLED-Sel')
         self.PyDMStateButton_EnblLED.shape = 1
-        self.PyDMStateButton_EnblLED.setMaximumHeight(40)
+        self.PyDMStateButton_EnblLED.setFixedHeight(40)
         self.PyDMStateButton_EnblLED.setSizePolicy(
             QSzPlcy.Fixed, QSzPlcy.Maximum)
         self.SiriusLedState_EnblLED = SiriusLedState(
@@ -487,9 +486,13 @@ class SiriusScrnView(QWidget):
             parent=self, init_channel=self.scrn_prefix+':CamEnbl-Sel')
         self.PyDMStateButton_CamEnbl.shape = 1
         self.PyDMStateButton_CamEnbl.setFixedHeight(40)
+        self.PyDMStateButton_CamEnbl.setSizePolicy(
+            QSzPlcy.Fixed, QSzPlcy.Maximum)
         self.SiriusLedState_CamEnbl = SiriusLedState(
             parent=self, init_channel=self.scrn_prefix+':CamEnbl-Sts')
-        self.SiriusLedState_CamEnbl.setFixedHeight(40)
+        self.SiriusLedState_CamEnbl.setSizePolicy(
+            QSzPlcy.Fixed, QSzPlcy.Maximum)
+        self.SiriusLedState_CamEnbl.setFixedSize(40, 40)
 
         lay = QHBoxLayout()
         lay.addWidget(label)
@@ -1250,6 +1253,10 @@ class _ScrnCalibrationSettings(SiriusDialog):
 
 if __name__ == '__main__':
     """Run test."""
+    import os
+    from siriushla.sirius_application import SiriusApplication
+
+    os.environ['EPICS_CA_MAX_ARRAY_BYTES'] = '200000000'
     app = SiriusApplication()
     util.set_style(app)
 
