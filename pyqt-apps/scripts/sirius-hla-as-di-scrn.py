@@ -2,6 +2,7 @@
 
 """Open Window of Specified Screen."""
 
+import os
 import sys
 import argparse as _argparse
 from siriuspy.envars import vaca_prefix
@@ -26,6 +27,7 @@ args = parser.parse_args()
 scrn_device = args.scrn
 prefix = args.prefix
 
+os.environ['EPICS_CA_MAX_ARRAY_BYTES'] = '200000000'
 app = SiriusApplication()
 util.set_style(app)
 
