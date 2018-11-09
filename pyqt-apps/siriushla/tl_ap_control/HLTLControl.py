@@ -15,16 +15,15 @@ from qtpy.QtWidgets import QVBoxLayout, QHBoxLayout, QGridLayout, \
 from qtpy.QtGui import QPixmap
 from qtpy.QtSvg import QSvgWidget
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox
+from pydm.widgets.base import PyDMWidget
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 import pyaccel as _pyaccel
 import pymodels as _pymodels
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla import util as _hlautil
-from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import PyDMLed, SiriusLedAlert, SiriusLedState, \
                               SiriusMainWindow, SiriusScrnView, \
                               PyDMLinEditScrollbar
-from siriushla.as_di_bpms import BPMsInterfaceTL  # TODO: remove this import
 from siriushla.as_ap_posang.HLPosAng import ASAPPosAngCorr
 from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
 from siriushla.as_ps_control.PSTabControlWindow import PSTabControlWindow
@@ -42,23 +41,28 @@ class TLAPControlWindow(SiriusMainWindow):
     def __init__(self, parent=None, prefix='', tl=None):
         """Initialize widgets in main window."""
         super(TLAPControlWindow, self).__init__(parent)
-        if prefix == '':
-            self.prefix = _vaca_prefix
-        else:
-            self.prefix = prefix
+        self.prefix = prefix
         self._tl = tl
+        self.setWindowTitle(self._tl.upper() + ' Control Window')
         self._setupUi()
 
     def _setupUi(self):
-        self.setWindowTitle(self._tl.upper() + ' Control Window')
-
         [UI_FILE, SVG_FILE, self._corr_devicenames_list,
             self._scrn_devicenames_list] = self._getTLData(self._tl)
+
+        # Define prefixes to substitute in file
+        if self._tl == 'tb':
+            ICT1 = 'TB-02:DI-ICT'
+            ICT2 = 'TB-04:DI-ICT'
+        elif self._tlt == 'ts':
+            ICT1 = 'TS-01:DI-ICT'
+            ICT2 = 'TS-04:DI-ICT'
 
         # Set central widget
         tmp_file = _substitute_in_file(
             '/home/fac_files/lnls-sirius/hla/pyqt-apps/siriushla'
-            '/tl_ap_control/' + UI_FILE, {'PREFIX': self.prefix})
+            '/tl_ap_control/' + UI_FILE,
+            {'PREFIX': self.prefix, 'ICT1': ICT1, 'ICT2': ICT2})
         self.centralwidget = loadUi(tmp_file)
         self.setCentralWidget(self.centralwidget)
 
@@ -82,16 +86,14 @@ class TLAPControlWindow(SiriusMainWindow):
                                 section=self._tl.upper(), discipline=1)  # MA
         openPMApp = QAction("PM", self)
         _hlautil.connect_window(openPMApp, PulsedMagnetControlWindow, self)
-        openBPMApp = QAction("BPMs", self)
-        _hlautil.connect_window(
-            openBPMApp, BPMsInterfaceTL,
-            parent=self, prefix=self.prefix, TL=self._tl.upper())
+        openSOFB = QAction("SOFB", self)
+        _hlautil.connect_newprocess(openSOFB, 'sirius-hla-tb-ap-sofb.py')
         appsMenu = menubar.addMenu("Open...")
         appsMenu.addAction(openLatticeAndTwiss)
         appsMenu.addAction(openPosAngCorrApp)
         appsMenu.addAction(openMAApp)
         appsMenu.addAction(openPMApp)
-        appsMenu.addAction(openBPMApp)
+        appsMenu.addAction(openSOFB)
         if self._tl == 'tb':
             openICTsApp = QAction("ICTs", self)
             _hlautil.connect_window(openICTsApp, ICTMonitoring, parent=self,
@@ -114,8 +116,12 @@ class TLAPControlWindow(SiriusMainWindow):
 
         # Connect Slits View widget
         if self._tl == 'tb':
+            self.centralwidget.widget_SlitH.layout().setAlignment(
+                Qt.AlignHCenter | Qt.AlignVCenter)
             self.centralwidget.widget_SlitH.layout().addWidget(
                 SlitMonitoring('H', self, self.prefix))
+            self.centralwidget.widget_SlitV.layout().setAlignment(
+                Qt.AlignHCenter | Qt.AlignVCenter)
             self.centralwidget.widget_SlitV.layout().addWidget(
                 SlitMonitoring('V', self, self.prefix))
 
@@ -471,16 +477,16 @@ class TLAPControlWindow(SiriusMainWindow):
 
     @Slot()
     def _setScrnWidget(self):
-        app = SiriusApplication.instance()
         sender = self.sender()
         self._currScrn = self._scrn_selection_widget.id(sender)
 
         for i in self.scrnview_widgets_dict.keys():
             if i != self._currScrn:
-                self.scrnview_widgets_dict[i].setVisible(False)
-                app.close_widget_connections(
-                    widget=self.scrnview_widgets_dict[i],
-                    propagate=False)
+                scrn_obj = self.scrnview_widgets_dict[i]
+                scrn_obj.setVisible(False)
+                for child in scrn_obj.findChildren(PyDMWidget):
+                    for ch in child.channels():
+                        ch.disconnect()
 
         if self._currScrn not in self.scrnview_widgets_dict.keys():
             wid_scrn = SiriusScrnView(
@@ -497,11 +503,12 @@ class TLAPControlWindow(SiriusMainWindow):
                 self.scrnview_widgets_dict[self._currScrn].
                 updateCalibrationGridFlag)
         else:
-            self.scrnview_widgets_dict[self._currScrn].setVisible(True)
+            scrn_obj = self.scrnview_widgets_dict[self._currScrn]
+            for child in scrn_obj.findChildren(PyDMWidget):
+                for ch in child.channels():
+                    ch.connect()
 
-        app.establish_widget_connections(
-            widget=self.scrnview_widgets_dict[self._currScrn],
-            propagate=False)
+        self.scrnview_widgets_dict[self._currScrn].setVisible(True)
 
     @Slot(QPoint)
     def _show_context_menu(self, point):
@@ -575,3 +582,18 @@ class ShowImage(SiriusMainWindow):
         self.setGeometry(300, 300,
                          self.pixmap.width(),
                          self.pixmap.height())
+
+
+if __name__ == '__main__':
+    """Run Example."""
+    import os
+    import sys
+    from siriushla.sirius_application import SiriusApplication
+
+    app = SiriusApplication()
+    os.environ['EPICS_CA_MAX_ARRAY_BYTES'] = '200000000'
+    app = SiriusApplication()
+    _hlautil.set_style(app)
+    window = TLAPControlWindow(prefix=_vaca_prefix, tl='tb')
+    window.show()
+    sys.exit(app.exec_())

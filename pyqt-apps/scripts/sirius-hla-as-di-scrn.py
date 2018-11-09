@@ -2,6 +2,7 @@
 
 """Open Window of Specified Screen."""
 
+import os
 import sys
 import argparse as _argparse
 from siriuspy.envars import vaca_prefix
@@ -26,6 +27,7 @@ args = parser.parse_args()
 scrn_device = args.scrn
 prefix = args.prefix
 
+os.environ['EPICS_CA_MAX_ARRAY_BYTES'] = '200000000'
 app = SiriusApplication()
 util.set_style(app)
 
@@ -43,7 +45,7 @@ led_movests.shape = 2
 led_movests.setFixedHeight(40)
 
 lay = QGridLayout()
-lay.addWidget(QLabel('<h3>SiriusScrnView '+scrn_device+'</h3>',
+lay.addWidget(QLabel('<h3>Screen View</h3>',
                      cw, alignment=Qt.AlignCenter), 0, 0, 1, 3)
 lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 1, 0)
 lay.addWidget(QLabel('Select Screen Type: ', cw,
@@ -59,7 +61,7 @@ lay.addWidget(scrn_view, 5, 0, 1, 3)
 cw.setLayout(lay)
 
 window = SiriusMainWindow()
-window.setWindowTitle('SiriusScrnView '+scrn_device)
+window.setWindowTitle('Screen View: '+scrn_device)
 window.setCentralWidget(cw)
 window.show()
 sys.exit(app.exec_())

@@ -27,7 +27,8 @@ class PyDMLed(QLed, PyDMWidget):
     Red = QColor(207, 0, 0)
     default_colorlist = [DarkGreen, LightGreen, Yellow, Red]
 
-    def __init__(self, parent=None, init_channel='', bit=-1, color_list=None):
+    def __init__(self, parent=None, init_channel=None, bit=-1,
+                 color_list=None):
         """Init."""
         QLed.__init__(self, parent)
         PyDMWidget.__init__(self, init_channel=init_channel)
@@ -73,7 +74,7 @@ class PyDMLed(QLed, PyDMWidget):
 class SiriusLedState(PyDMLed):
     """PyDMLed specialization to represent 2 states in dark/light green."""
 
-    def __init__(self, parent=None, init_channel='', bit=-1):
+    def __init__(self, parent=None, init_channel=None, bit=-1):
         """Call super and set on/off colors."""
         super().__init__(parent, init_channel, bit)
         self.setOffColor(PyDMLed.DarkGreen)
@@ -83,7 +84,7 @@ class SiriusLedState(PyDMLed):
 class SiriusLedAlert(PyDMLed):
     """PyDMLed specialization to represent 2 states in red/light green."""
 
-    def __init__(self, parent=None, init_channel='', bit=-1):
+    def __init__(self, parent=None, init_channel=None, bit=-1):
         """Call super and set on/off colors."""
         super().__init__(parent, init_channel, bit)
         self.setOnColor(PyDMLed.Red)
