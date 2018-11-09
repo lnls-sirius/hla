@@ -15,6 +15,7 @@ from qtpy.QtWidgets import QVBoxLayout, QHBoxLayout, QGridLayout, \
 from qtpy.QtGui import QPixmap
 from qtpy.QtSvg import QSvgWidget
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox
+from pydm.widgets.base import PyDMWidget
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 import pyaccel as _pyaccel
 import pymodels as _pymodels
@@ -37,13 +38,10 @@ from siriushla.tl_ap_control.Slit_monitor import SlitMonitoring
 class TLAPControlWindow(SiriusMainWindow):
     """Class to create the main window for TB and TS HLA."""
 
-    def __init__(self, parent=None, prefix=None, tl=None):
+    def __init__(self, parent=None, prefix='', tl=None):
         """Initialize widgets in main window."""
         super(TLAPControlWindow, self).__init__(parent)
-        if prefix is None:
-            self.prefix = _vaca_prefix
-        else:
-            self.prefix = prefix
+        self.prefix = prefix
         self._tl = tl
         self.setWindowTitle(self._tl.upper() + ' Control Window')
         self._setupUi()
@@ -484,7 +482,11 @@ class TLAPControlWindow(SiriusMainWindow):
 
         for i in self.scrnview_widgets_dict.keys():
             if i != self._currScrn:
-                self.scrnview_widgets_dict[i].setVisible(False)
+                scrn_obj = self.scrnview_widgets_dict[i]
+                scrn_obj.setVisible(False)
+                for child in scrn_obj.findChildren(PyDMWidget):
+                    for ch in child.channels():
+                        ch.disconnect()
 
         if self._currScrn not in self.scrnview_widgets_dict.keys():
             wid_scrn = SiriusScrnView(
@@ -501,7 +503,12 @@ class TLAPControlWindow(SiriusMainWindow):
                 self.scrnview_widgets_dict[self._currScrn].
                 updateCalibrationGridFlag)
         else:
-            self.scrnview_widgets_dict[self._currScrn].setVisible(True)
+            scrn_obj = self.scrnview_widgets_dict[self._currScrn]
+            for child in scrn_obj.findChildren(PyDMWidget):
+                for ch in child.channels():
+                    ch.connect()
+
+        self.scrnview_widgets_dict[self._currScrn].setVisible(True)
 
     @Slot(QPoint)
     def _show_context_menu(self, point):
