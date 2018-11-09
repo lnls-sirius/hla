@@ -115,58 +115,127 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
           <string>ICTs</string>
          </attribute>
          <layout class="QGridLayout" name="gridLayout">
-          <item row="10" column="4" colspan="2">
-           <widget class="PyDMLabel" name="PyDMLabel_ICT2">
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="toolTip">
-             <string/>
-            </property>
-            <property name="whatsThis">
-             <string/>
-            </property>
-            <property name="text">
-             <string>PyDMLabel</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-            <property name="channel" stdset="0">
-             <string>${PREFIX}TB-04:DI-ICT:Charge-Mon</string>
-            </property>
-           </widget>
-          </item>
           <item row="9" column="1">
-           <widget class="SiriusLedAlert" name="SiriusLedAlert">
-            <property name="toolTip">
-             <string/>
-            </property>
-            <property name="whatsThis">
-             <string>PyDMLed specialization to represent 2 states in red/light green.</string>
-            </property>
-            <property name="channel" stdset="0">
-             <string>${PREFIX}TB-02:DI-ICT:ReliableMeas-Mon</string>
-            </property>
-           </widget>
+           <layout class="QFormLayout" name="formLayout">
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_4">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>150</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Status: </string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="SiriusLedAlert" name="SiriusLedAlert">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="toolTip">
+               <string/>
+              </property>
+              <property name="whatsThis">
+               <string>PyDMLed specialization to represent 2 states in red/light green.</string>
+              </property>
+              <property name="channel" stdset="0">
+               <string>${PREFIX}${ICT1}:ReliableMeas-Mon</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_5">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>150</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Charge: </string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="PyDMLabel" name="PyDMLabel">
+              <property name="toolTip">
+               <string/>
+              </property>
+              <property name="whatsThis">
+               <string/>
+              </property>
+              <property name="showUnits" stdset="0">
+               <bool>true</bool>
+              </property>
+              <property name="channel" stdset="0">
+               <string>${PREFIX}${ICT1}:Charge-Mon</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0" colspan="2">
+             <layout class="QHBoxLayout" name="horizontalLayout_4">
+              <item>
+               <spacer name="horizontalSpacer_6">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_3">
+                <property name="text">
+                 <string>${ICT1}</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_7">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+           </layout>
           </item>
-          <item row="9" column="4">
-           <widget class="SiriusLedAlert" name="SiriusLedAlert_2">
-            <property name="toolTip">
-             <string/>
-            </property>
-            <property name="whatsThis">
-             <string>PyDMLed specialization to represent 2 states in red/light green.</string>
-            </property>
-            <property name="channel" stdset="0">
-             <string>${PREFIX}TB-04:DI-ICT:ReliableMeas-Mon</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="1" colspan="5">
+          <item row="4" column="1" colspan="3">
            <widget class="PyDMLabel" name="PyDMLabel_TransportEfficiency">
             <property name="maximumSize">
              <size>
@@ -191,33 +260,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             </property>
            </widget>
           </item>
-          <item row="9" column="5">
-           <widget class="QLabel" name="label_ICT2">
-            <property name="maximumSize">
-             <size>
-              <width>200</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Charge ICT2</string>
-            </property>
-           </widget>
-          </item>
-          <item row="9" column="2">
-           <widget class="QLabel" name="label_ICT1">
-            <property name="maximumSize">
-             <size>
-              <width>200</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Charge ICT1</string>
-            </property>
-           </widget>
-          </item>
-          <item row="10" column="0">
+          <item row="9" column="0">
            <spacer name="horizontalSpacer_22">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -230,7 +273,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             </property>
            </spacer>
           </item>
-          <item row="10" column="6">
+          <item row="9" column="4">
            <spacer name="horizontalSpacer_23">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -243,7 +286,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             </property>
            </spacer>
           </item>
-          <item row="10" column="3">
+          <item row="9" column="2">
            <spacer name="horizontalSpacer_3">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -256,32 +299,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             </property>
            </spacer>
           </item>
-          <item row="10" column="1" colspan="2">
-           <widget class="PyDMLabel" name="PyDMLabel_ICT1">
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="toolTip">
-             <string/>
-            </property>
-            <property name="whatsThis">
-             <string/>
-            </property>
-            <property name="text">
-             <string>PyDMLabel</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-            <property name="channel" stdset="0">
-             <string>${PREFIX}TB-02:DI-ICT:Charge-Mon</string>
-            </property>
-           </widget>
-          </item>
-          <item row="8" column="3">
+          <item row="8" column="2">
            <spacer name="verticalSpacer_21">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -297,7 +315,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             </property>
            </spacer>
           </item>
-          <item row="3" column="1" colspan="5">
+          <item row="3" column="1" colspan="3">
            <widget class="QLabel" name="label_Efficiency">
             <property name="maximumSize">
              <size>
@@ -316,7 +334,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             </property>
            </widget>
           </item>
-          <item row="0" column="3">
+          <item row="0" column="2">
            <spacer name="verticalSpacer_23">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -332,7 +350,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
             </property>
            </spacer>
           </item>
-          <item row="11" column="3">
+          <item row="10" column="2">
            <spacer name="verticalSpacer_22">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -347,6 +365,126 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, st
              </size>
             </property>
            </spacer>
+          </item>
+          <item row="9" column="3">
+           <layout class="QFormLayout" name="formLayout_2">
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_6">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>150</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Status: </string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="SiriusLedAlert" name="SiriusLedAlert_2">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="toolTip">
+               <string/>
+              </property>
+              <property name="whatsThis">
+               <string>PyDMLed specialization to represent 2 states in red/light green.</string>
+              </property>
+              <property name="channel" stdset="0">
+               <string>${PREFIX}${ICT2}:ReliableMeas-Mon</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="label_7">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>150</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Charge: </string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="PyDMLabel" name="PyDMLabel_2">
+              <property name="toolTip">
+               <string/>
+              </property>
+              <property name="whatsThis">
+               <string/>
+              </property>
+              <property name="showUnits" stdset="0">
+               <bool>true</bool>
+              </property>
+              <property name="channel" stdset="0">
+               <string>${PREFIX}${ICT2}:Charge-Mon</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0" colspan="2">
+             <layout class="QHBoxLayout" name="horizontalLayout_3">
+              <item>
+               <spacer name="horizontalSpacer_4">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_2">
+                <property name="text">
+                 <string>${ICT2}</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_5">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+           </layout>
           </item>
          </layout>
         </widget>

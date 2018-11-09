@@ -37,26 +37,34 @@ from siriushla.tl_ap_control.Slit_monitor import SlitMonitoring
 class TLAPControlWindow(SiriusMainWindow):
     """Class to create the main window for TB and TS HLA."""
 
-    def __init__(self, parent=None, prefix='', tl=None):
+    def __init__(self, parent=None, prefix=None, tl=None):
         """Initialize widgets in main window."""
         super(TLAPControlWindow, self).__init__(parent)
-        if prefix == '':
+        if prefix is None:
             self.prefix = _vaca_prefix
         else:
             self.prefix = prefix
         self._tl = tl
+        self.setWindowTitle(self._tl.upper() + ' Control Window')
         self._setupUi()
 
     def _setupUi(self):
-        self.setWindowTitle(self._tl.upper() + ' Control Window')
-
         [UI_FILE, SVG_FILE, self._corr_devicenames_list,
             self._scrn_devicenames_list] = self._getTLData(self._tl)
+
+        # Define prefixes to substitute in file
+        if self._tl == 'tb':
+            ICT1 = 'TB-02:DI-ICT'
+            ICT2 = 'TB-04:DI-ICT'
+        elif self._tlt == 'ts':
+            ICT1 = 'TS-01:DI-ICT'
+            ICT2 = 'TS-04:DI-ICT'
 
         # Set central widget
         tmp_file = _substitute_in_file(
             '/home/fac_files/lnls-sirius/hla/pyqt-apps/siriushla'
-            '/tl_ap_control/' + UI_FILE, {'PREFIX': self.prefix})
+            '/tl_ap_control/' + UI_FILE,
+            {'PREFIX': self.prefix, 'ICT1': ICT1, 'ICT2': ICT2})
         self.centralwidget = loadUi(tmp_file)
         self.setCentralWidget(self.centralwidget)
 
