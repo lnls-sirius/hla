@@ -407,7 +407,7 @@ class SiriusScrnView(QWidget):
         self.layout().addItem(
             QSpacerItem(60, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 5, 2)
 
-        self.pb_openDetails = QPushButton('Open details...', self)
+        self.pb_openDetails = QPushButton('More settings...', self)
         self.pb_openDetails.setMaximumWidth(220)
         hlay_openDetails = QHBoxLayout()
         hlay_openDetails.addItem(
@@ -777,7 +777,7 @@ class _ScrnSettingsDetails(SiriusMainWindow):
         self.setCentralWidget(self.centralwidget)
 
     def _setupUi(self):
-        label = QLabel('<h3>Screen Settings Details</h3>', self,
+        label = QLabel('<h3>'+self.scrn_prefix+' Settings</h3>', self,
                        alignment=Qt.AlignCenter)
 
         gbox_general = QGroupBox('Low Level Devices Prefixes', self)
@@ -792,7 +792,7 @@ class _ScrnSettingsDetails(SiriusMainWindow):
         gbox_err = QGroupBox('Camera Errors Monitoring', self)
         gbox_err.setLayout(self._setupErrorMonLayout())
 
-        bt_cal = QPushButton('Calibration Settings', self)
+        bt_cal = QPushButton('Screen Calibration', self)
         util.connect_window(bt_cal, _ScrnCalibrationSettings,
                             parent=self, prefix=self.prefix,
                             device=self.device)
@@ -1092,11 +1092,11 @@ class _ScrnCalibrationSettings(SiriusDialog):
         self.prefix = prefix
         self.device = device
         self.scrn_prefix = self.prefix+self.device
-        self.setWindowTitle('Screen Calibration Settings')
+        self.setWindowTitle('Screen Calibration')
         self._setupUi()
 
     def _setupUi(self):
-        label = QLabel('<h3>Screen Calibration Settings</h3>', self,
+        label = QLabel('<h3>'+self.scrn_prefix+' Calibration</h3>', self,
                        alignment=Qt.AlignCenter)
 
         positioning = QWidget(self)
@@ -1230,7 +1230,7 @@ class _ScrnCalibrationSettings(SiriusDialog):
         flay_pos.setLabelAlignment(Qt.AlignRight)
         flay_pos.setFormAlignment(Qt.AlignCenter)
         positioning.setLayout(flay_pos)
-        tabs.addTab(positioning, 'Screens Positioning')
+        tabs.addTab(positioning, 'Positioning')
 
         flay_LED = QFormLayout()
         flay_LED.addItem(
@@ -1278,7 +1278,7 @@ if __name__ == '__main__':
     led_movests.setFixedHeight(40)
 
     lay = QGridLayout()
-    lay.addWidget(QLabel('<h3>SiriusScrnView '+scrn_device+'</h3>',
+    lay.addWidget(QLabel('<h3>Screen View</h3>',
                          cw, alignment=Qt.AlignCenter), 0, 0, 1, 2)
     lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 1, 0)
     lay.addWidget(QLabel('Select Screen Type: ', cw,
@@ -1294,7 +1294,7 @@ if __name__ == '__main__':
     cw.setLayout(lay)
 
     window = SiriusMainWindow()
-    window.setWindowTitle('SiriusScrnView '+scrn_device)
+    window.setWindowTitle('Screen View: '+scrn_device)
     window.setCentralWidget(cw)
     window.show()
     sys.exit(app.exec_())
