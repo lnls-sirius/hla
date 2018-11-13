@@ -43,9 +43,7 @@ class Settings(QMenuBar):
 
     def _setupUi(self):
         self.setStyleSheet(
-            """QMenuBar::item {
-                padding: 0 30px 0 5px;
-            }""")
+            """QMenuBar::item {\npadding: 0 30px 0 5px;\n}""")
         self.config_menu = self.addMenu('Booster Ramp Configuration')
         self.act_new = QAction('New from template', self)
         self.act_new.setShortcut(QKeySequence.New)
@@ -95,14 +93,17 @@ class Settings(QMenuBar):
         self.act_cycle = QAction('PS Cycle')
         _hlautil.connect_window(self.act_cycle, _CycleWindow, parent=self,
                                 checked_accs=('BO,'))
-        self.act_ma = QAction('Booster MA')
+        self.act_ma = QAction('Booster Magnets')
         _hlautil.connect_window(self.act_ma, _MAControlWindow, parent=self,
                                 section='BO', discipline=1)  # MA
-        self.act_pm = QAction('PM')
+        self.act_pm = QAction('Pulsed Magnets')
+        self.act_sofb = QAction('Booster SOFB')
+        _hlautil.connect_newprocess(self.act_sofb, 'sirius-hla-bo-ap-sofb.py')
         _hlautil.connect_window(self.act_pm, _PMControlWindow, parent=self)
         self.open_menu.addAction(self.act_cycle)
         self.open_menu.addAction(self.act_ma)
         self.open_menu.addAction(self.act_pm)
+        self.open_menu.addAction(self.act_sofb)
         # TODO: include RF and TI windows??
 
     def _showGetNewConfigNamePopup(self):
