@@ -32,7 +32,7 @@ app = SiriusApplication()
 util.set_style(app)
 
 cw = QWidget()
-scrn_view = SiriusScrnView(prefix='', device=scrn_device)
+scrn_view = SiriusScrnView(prefix=prefix, device=scrn_device)
 cb_scrntype = PyDMEnumComboBox(
     parent=cw, init_channel=prefix+scrn_device+':ScrnType-Sel')
 cb_scrntype.currentIndexChanged.connect(scrn_view.updateCalibrationGridFlag)
