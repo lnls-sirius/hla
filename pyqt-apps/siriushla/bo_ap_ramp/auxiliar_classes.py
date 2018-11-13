@@ -755,6 +755,8 @@ class DiagnosisSettings(SiriusDialog):
                 self.prefix+'BO-35D:TI-DCCT:Status-Mon': 0})
         self.ledmulti_TIStatus.setFixedSize(220, 40)
         self.pb_trgdetails = QPushButton('Open details', self)
+        self.pb_trgdetails.setAutoDefault(False)
+        self.pb_trgdetails.setDefault(False)
         _hlautil.connect_window(
             self.pb_trgdetails, HLTriggerDetailed, parent=self,
             prefix=self.prefix+'BO-35D:TI-DCCT:')
