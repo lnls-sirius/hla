@@ -35,7 +35,6 @@ cw = QWidget()
 scrn_view = SiriusScrnView(prefix=prefix, device=scrn_device)
 cb_scrntype = PyDMEnumComboBox(
     parent=cw, init_channel=prefix+scrn_device+':ScrnType-Sel')
-cb_scrntype.currentIndexChanged.connect(scrn_view.updateCalibrationGridFlag)
 l_scrntype = PyDMLabel(
     parent=cw, init_channel=prefix+scrn_device+':ScrnType-Sts')
 led_movests = PyDMLed(

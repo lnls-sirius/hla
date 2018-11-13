@@ -477,31 +477,21 @@ class TLAPControlWindow(SiriusMainWindow):
 
     @Slot()
     def _setScrnWidget(self):
+        scrn_obj = self.scrnview_widgets_dict[self._currScrn]
+        scrn_obj.setVisible(False)
+        for child in scrn_obj.findChildren(PyDMWidget):
+            for ch in child.channels():
+                ch.disconnect()
+
         sender = self.sender()
         self._currScrn = self._scrn_selection_widget.id(sender)
 
-        for i in self.scrnview_widgets_dict.keys():
-            if i != self._currScrn:
-                scrn_obj = self.scrnview_widgets_dict[i]
-                scrn_obj.setVisible(False)
-                for child in scrn_obj.findChildren(PyDMWidget):
-                    for ch in child.channels():
-                        ch.disconnect()
-
         if self._currScrn not in self.scrnview_widgets_dict.keys():
-            wid_scrn = SiriusScrnView(
+            scrn_obj = SiriusScrnView(
                 parent=self, prefix=self.prefix,
                 device=self._scrn_devicenames_list[self._currScrn])
-            self.centralwidget.widget_Scrn.layout().addWidget(wid_scrn, 2, 0)
-            wid_scrn.setVisible(True)
-            self.scrnview_widgets_dict[self._currScrn] = wid_scrn
-
-            pydmcombobox_scrntype = self.findChild(
-                PyDMEnumComboBox,
-                name='PyDMEnumComboBox_ScrnType_Sel_Scrn'+str(self._currScrn))
-            pydmcombobox_scrntype.currentIndexChanged.connect(
-                self.scrnview_widgets_dict[self._currScrn].
-                updateCalibrationGridFlag)
+            self.centralwidget.widget_Scrn.layout().addWidget(scrn_obj, 2, 0)
+            self.scrnview_widgets_dict[self._currScrn] = scrn_obj
         else:
             scrn_obj = self.scrnview_widgets_dict[self._currScrn]
             for child in scrn_obj.findChildren(PyDMWidget):
