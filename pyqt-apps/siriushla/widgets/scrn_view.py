@@ -7,7 +7,7 @@ import numpy as np
 from qtpy.QtWidgets import QGridLayout, QHBoxLayout, QFormLayout, \
                            QSpacerItem, QWidget, QGroupBox, QLabel, \
                            QComboBox, QPushButton, QCheckBox, QMessageBox, \
-                           QSizePolicy as QSzPlcy, QVBoxLayout, QTabWidget
+                           QSizePolicy as QSzPlcy, QVBoxLayout
 from qtpy.QtCore import Qt, Slot, Signal, Property
 from pydm.widgets import PyDMImageView, PyDMLabel, PyDMSpinbox, \
                          PyDMPushButton, PyDMEnumComboBox
