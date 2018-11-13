@@ -166,7 +166,7 @@ class _SiriusImageView(PyDMImageView):
         """
         if new_max is None:
             return
-        self._image_maxwidth = new_max
+        self._image_maxwidth = int(new_max)
 
     @property
     def image_maxheight(self):
@@ -183,7 +183,7 @@ class _SiriusImageView(PyDMImageView):
         """
         if new_max is None:
             return
-        self._image_maxheight = new_max
+        self._image_maxheight = int(new_max)
 
     @Property(str)
     def ROIOffsetXChannel(self):
@@ -606,14 +606,16 @@ class SiriusScrnView(QWidget):
         lay = QFormLayout()
         lay.setFormAlignment(Qt.AlignCenter)
         lay.setContentsMargins(20, 20, 20, 20)
-        lay.addRow(QLabel('Camera Acquisition', alignment=Qt.AlignCenter))
+        lay.addRow(QLabel('<h4>Camera Acquisition</h4>',
+                          alignment=Qt.AlignCenter))
         lay.addRow(label_CamEnbl, hbox_CamEnbl)
         lay.addRow(label_CamGain, hbox_CamGain)
         lay.addRow('', hbox_AutoCamGain)
         lay.addRow(label_CamAcqPeriod, hbox_CamAcqPeriod)
         lay.addRow(label_CamExposureTime, hbox_CamExposureTime)
         lay.addItem(QSpacerItem(4, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
-        lay.addRow(QLabel('Camera ROI', alignment=Qt.AlignCenter))
+        lay.addRow(QLabel('<h4>Camera ROI Settings [pixels]</h4>',
+                          alignment=Qt.AlignCenter))
         lay.addRow(label_ROIWidth, hbox_ROIWidth)
         lay.addRow(label_ROIHeight, hbox_ROIHeight)
         lay.addRow(label_ROIOffsetX, hbox_ROIOffsetX)
