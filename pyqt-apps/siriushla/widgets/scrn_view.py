@@ -14,9 +14,11 @@ from pydm.widgets import PyDMImageView, PyDMLabel, PyDMSpinbox, \
 from pydm.widgets.channel import PyDMChannel
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla import util
-from siriushla.widgets import PyDMStateButton, SiriusLedState, PyDMLed
+from siriushla.widgets import PyDMStateButton, SiriusLedState, PyDMLed, \
+                              PyDMLedMultiChannel
 from siriushla.widgets.signal_channel import SiriusConnectionSignal
 from siriushla.widgets.windows import SiriusMainWindow, SiriusDialog
+from siriushla.as_ti_control.hl_trigger import HLTriggerDetailed
 
 
 class _SiriusImageView(PyDMImageView):
@@ -822,6 +824,9 @@ class _ScrnSettingsDetails(SiriusMainWindow):
         gbox_acq = QGroupBox('Camera Acquire Settings', self)
         gbox_acq.setLayout(self._setupCamAcqSettingsLayout())
 
+        gbox_trg = QGroupBox('Screen Trigger', self)
+        gbox_trg.setLayout(self._setupScrnTriggerLayout())
+
         gbox_ROI = QGroupBox('Camera Region of Interest (ROI) Settings', self)
         gbox_ROI.setLayout(self._setupROISettingsLayout())
 
@@ -843,15 +848,18 @@ class _ScrnSettingsDetails(SiriusMainWindow):
         lay.addWidget(gbox_acq, 4, 0, 1, 2)
         lay.addItem(QSpacerItem(
             40, 20, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding), 5, 0)
-        lay.addWidget(gbox_ROI, 6, 0, 1, 2)
+        lay.addWidget(gbox_trg, 6, 0, 1, 2)
         lay.addItem(QSpacerItem(
             40, 20, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding), 7, 0)
-        lay.addWidget(gbox_err, 8, 0, 1, 2)
+        lay.addWidget(gbox_ROI, 8, 0, 1, 2)
         lay.addItem(QSpacerItem(
             40, 20, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding), 9, 0)
-        lay.addWidget(bt_cal, 10, 1)
+        lay.addWidget(gbox_err, 10, 0, 1, 2)
         lay.addItem(QSpacerItem(
             40, 20, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding), 11, 0)
+        lay.addWidget(bt_cal, 12, 1)
+        lay.addItem(QSpacerItem(
+            40, 20, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding), 13, 0)
         self.centralwidget.setLayout(lay)
 
     def _setupGeneralInfoLayout(self):
@@ -981,6 +989,47 @@ class _ScrnSettingsDetails(SiriusMainWindow):
         flay.addRow(label_BlackLevel, hbox_BlackLevel)
         flay.setLabelAlignment(Qt.AlignRight)
         flay.setFormAlignment(Qt.AlignCenter)
+        return flay
+
+    def _setupScrnTriggerLayout(self):
+        if 'TB' in self.device:
+            trg_prefix = self.prefix+'TB-Fam:TI-Scrn:'
+        elif 'BO' in self.device:
+            trg_prefix = self.prefix+'BO-Fam:TI-Scrn:'
+        elif 'TS' in self.device:
+            trg_prefix = self.prefix+'TS-Fam:TI-Scrn:'
+
+        l_TIstatus = QLabel('Status: ', self)
+        self.ledmulti_TIStatus = PyDMLedMultiChannel(
+            parent=self, channels2values={trg_prefix+'State-Sts': 1,
+                                          trg_prefix+'Status-Mon': 0})
+        self.ledmulti_TIStatus.setFixedSize(220, 40)
+        self.pb_trgdetails = QPushButton('Open details', self)
+        self.pb_trgdetails.setFixedSize(220, 40)
+        util.connect_window(self.pb_trgdetails, HLTriggerDetailed, parent=self,
+                            prefix=trg_prefix)
+        hlay_TIstatus = QHBoxLayout()
+        hlay_TIstatus.addWidget(self.ledmulti_TIStatus)
+        hlay_TIstatus.addWidget(self.pb_trgdetails)
+
+        l_TIdelay = QLabel('Delay: ', self)
+        self.pydmspinbox_TIDelay = PyDMSpinbox(
+            parent=self, init_channel=trg_prefix+'Delay-SP')
+        self.pydmspinbox_TIDelay.setFixedSize(220, 40)
+        self.pydmspinbox_TIDelay.setAlignment(Qt.AlignCenter)
+        self.pydmspinbox_TIDelay.showStepExponent = False
+        self.pydmlabel_TIDelay = PyDMLabel(
+            parent=self, init_channel=trg_prefix+'Delay-RB')
+        self.pydmlabel_TIDelay.setFixedSize(220, 40)
+        hlay_TIdelay = QHBoxLayout()
+        hlay_TIdelay.addWidget(self.pydmspinbox_TIDelay)
+        hlay_TIdelay.addWidget(self.pydmlabel_TIDelay)
+
+        flay = QFormLayout()
+        flay.addRow(l_TIstatus, hlay_TIstatus)
+        flay.addRow(l_TIdelay, hlay_TIdelay)
+        flay.setLabelAlignment(Qt.AlignRight)
+        flay.setFormAlignment(Qt.AlignHCenter)
         return flay
 
     def _setupROISettingsLayout(self):
