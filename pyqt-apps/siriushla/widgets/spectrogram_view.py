@@ -234,12 +234,12 @@ class SiriusSpectrogramView(
         The parent widget for the Label
     image_channel : str, optional
         The channel to be used by the widget for the image data.
-    width_channel : str, optional
+    xaxis_channel : str, optional
         The channel to be used by the widget to receive the image width
-        information,
-    time_channel : str, optional
+        (if ReadingOrder == Clike), and to set the xaxis values
+    yaxis_channel : str, optional
         The channel to be used by the widget to receive the image width
-        information
+        (if ReadingOrder == Fortranlike), and to set the yaxis values
     background : QColor, optional
         QColor to set the background color of the GraphicsView
     """
@@ -752,7 +752,7 @@ class SiriusSpectrogramView(
                 self._imagechannel.disconnect()
             # Create and connect new channel
             self._imagechannel = PyDMChannel(
-                address=self.imageChannel,
+                address=value,
                 connection_slot=self.image_connection_state_changed,
                 value_slot=self.image_value_changed,
                 severity_slot=self.alarmSeverityChanged)
@@ -790,7 +790,7 @@ class SiriusSpectrogramView(
                 self._xaxischannel.disconnect()
             # Create and connect new channel
             self._xaxischannel = PyDMChannel(
-                address=self.xAxisChannel,
+                address=value,
                 connection_slot=self.connectionStateChanged,
                 value_slot=self.image_xaxis_changed,
                 severity_slot=self.alarmSeverityChanged)
@@ -828,7 +828,7 @@ class SiriusSpectrogramView(
                 self._yaxischannel.disconnect()
             # Create and connect new channel
             self._yaxischannel = PyDMChannel(
-                address=self.yAxisChannel,
+                address=value,
                 connection_slot=self.yaxis_connection_state_changed,
                 value_slot=self.image_yaxis_changed,
                 severity_slot=self.alarmSeverityChanged)
