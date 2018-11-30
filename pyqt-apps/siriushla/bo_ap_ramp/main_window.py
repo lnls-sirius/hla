@@ -1,12 +1,10 @@
 """Booster Ramp Main Window."""
 
-import sys
 from qtpy.QtCore import Slot, Signal, Qt
 from qtpy.QtGui import QKeySequence
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QUndoStack
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets.windows import SiriusMainWindow
-from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla import util as _util
 from siriuspy.ramp import ramp
 from siriuspy.servconf import exceptions as _srvexceptions
@@ -169,6 +167,9 @@ class RampMain(SiriusMainWindow):
 
 if __name__ == '__main__':
     """Run Example."""
+    import sys
+    from siriuspy.envars import vaca_prefix as _vaca_prefix
+
     app = SiriusApplication()
     _util.set_style(app)
     w = RampMain(prefix=_vaca_prefix)

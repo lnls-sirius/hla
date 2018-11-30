@@ -6,7 +6,6 @@ from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QGroupBox, QLabel, QPushButton,\
                            QGridLayout, QSpacerItem, QSizePolicy as QSzPlcy
 from pydm.widgets import PyDMWaveformPlot
-from siriuspy.envars import vaca_prefix as _vaca_prefix
 
 
 class Diagnosis(QGroupBox):
@@ -42,7 +41,7 @@ class Diagnosis(QGroupBox):
                                      bottom='<h3>Ramp Index</h3>')
         self.graph_boocurr.setMinimumSize(600, 400)
         self.graph_boocurr.addChannel(
-            y_channel=_vaca_prefix+'BO-35D:DI-DCCT:RawReadings-Mon',
+            y_channel=self.prefix+'BO-35D:DI-DCCT:RawReadings-Mon',
             color='blue', lineWidth=2, lineStyle=Qt.SolidLine)
         leftAxis = self.graph_boocurr.getAxis('left')
         leftAxis.setStyle(autoExpandTextSpace=False, tickTextWidth=25)
