@@ -391,7 +391,7 @@ class SiriusScrnView(QWidget):
         self.layout().addWidget(self.settings_groupBox, 2, 0, 3, 1)
 
         self.layout().addItem(
-            QSpacerItem(30, 20, QSzPlcy.Fixed, QSzPlcy.Minimum), 2, 1)
+            QSpacerItem(10, 20, QSzPlcy.Fixed, QSzPlcy.Minimum), 2, 1)
 
         self.statistics_groupBox = QGroupBox('Statistics', self)
         self.statistics_groupBox.setLayout(self._statisticsLayout())
