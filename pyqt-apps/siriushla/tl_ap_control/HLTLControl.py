@@ -522,6 +522,7 @@ class ShowLatticeAndTwiss(SiriusMainWindow):
     def __init__(self, parent=None, tl=None):
         """Create Lattice and Twiss Graph."""
         super(ShowLatticeAndTwiss, self).__init__(parent)
+        self.setWindowTitle('Nominal Lattice and Twiss')
         if tl == 'tb':
             self._tl, self._twiss_in = _pymodels.tb.create_accelerator()
             fam_data = _pymodels.tb.families.get_family_data(self._tl)
