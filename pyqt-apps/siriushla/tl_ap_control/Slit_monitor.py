@@ -150,13 +150,13 @@ class _SlitDetails(SiriusDialog):
         return flay
 
     def _setupDetailedStatusLayout(self):
-        label_NegDoneMov = QLabel('Negative Motor Finished Move? ', self)
+        label_NegDoneMov = QLabel('Negative Edge Motor Finished Move? ', self)
         self.PyDMLed_NegDoneMov = PyDMLed(
             parent=self, init_channel=self.slit_prefix+':NegativeDoneMov-Mon',
             color_list=[PyDMLed.Red, PyDMLed.LightGreen])
         self.PyDMLed_NegDoneMov.setMaximumSize(220, 40)
 
-        label_PosDoneMov = QLabel('Positive Motor Finished Move? ', self)
+        label_PosDoneMov = QLabel('Positive Edge Motor Finished Move? ', self)
         self.PyDMLed_PosDoneMov = PyDMLed(
             parent=self, init_channel=self.slit_prefix+':PositiveDoneMov-Mon',
             color_list=[PyDMLed.Red, PyDMLed.LightGreen])
