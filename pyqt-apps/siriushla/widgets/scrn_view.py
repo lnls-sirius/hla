@@ -472,7 +472,7 @@ class SiriusScrnView(QWidget):
 
     def _settingsLayout(self):
         label_CamEnbl = QLabel('Enable: ', self, alignment=Qt.AlignRight)
-        label_CamEnbl.setFixedSize(120, 40)
+        label_CamEnbl.setFixedSize(135, 40)
         self.PyDMStateButton_CamEnbl = PyDMStateButton(
             parent=self, init_channel=self.scrn_prefix+':CamEnbl-Sel')
         self.PyDMStateButton_CamEnbl.setFixedSize(150, 40)
@@ -485,8 +485,42 @@ class SiriusScrnView(QWidget):
         hbox_CamEnbl.addWidget(self.PyDMStateButton_CamEnbl)
         hbox_CamEnbl.addWidget(self.PyDMLabel_CamEnbl)
 
-        label_CamGain = QLabel('Gain: ', self, alignment=Qt.AlignRight)
-        label_CamGain.setFixedSize(125, 40)
+        label_CamAcqPeriod = QLabel('Acquire\nPeriod [s]:', self,
+                                    alignment=Qt.AlignCenter)
+        label_CamAcqPeriod.setFixedSize(135, 75)
+        self.PyDMSpinbox_CamAcqPeriod = PyDMSpinbox(
+            parent=self, init_channel=self.scrn_prefix+':CamAcqPeriod-SP')
+        self.PyDMSpinbox_CamAcqPeriod.setFixedSize(150, 40)
+        self.PyDMSpinbox_CamAcqPeriod.setAlignment(Qt.AlignCenter)
+        self.PyDMSpinbox_CamAcqPeriod.showStepExponent = False
+        self.PyDMLabel_CamAcqPeriod = PyDMLabel(
+            parent=self, init_channel=self.scrn_prefix+':CamAcqPeriod-RB')
+        self.PyDMLabel_CamAcqPeriod.setFixedSize(120, 40)
+        self.PyDMLabel_CamAcqPeriod.setAlignment(Qt.AlignCenter)
+        hbox_CamAcqPeriod = QHBoxLayout()
+        hbox_CamAcqPeriod.addWidget(self.PyDMSpinbox_CamAcqPeriod)
+        hbox_CamAcqPeriod.addWidget(self.PyDMLabel_CamAcqPeriod)
+        hbox_CamAcqPeriod.setAlignment(Qt.AlignVCenter)
+
+        label_CamExposureTime = QLabel('Exposure\nTime [us]:', self,
+                                       alignment=Qt.AlignCenter)
+        label_CamExposureTime.setFixedSize(135, 75)
+        self.PyDMSpinbox_CamExposureTime = PyDMSpinbox(
+            parent=self, init_channel=self.scrn_prefix+':CamExposureTime-SP')
+        self.PyDMSpinbox_CamExposureTime.setFixedSize(150, 40)
+        self.PyDMSpinbox_CamExposureTime.setAlignment(Qt.AlignCenter)
+        self.PyDMSpinbox_CamExposureTime.showStepExponent = False
+        self.PyDMLabel_CamExposureTime = PyDMLabel(
+            parent=self, init_channel=self.scrn_prefix+':CamExposureTime-RB')
+        self.PyDMLabel_CamExposureTime.setFixedSize(120, 40)
+        self.PyDMLabel_CamExposureTime.setAlignment(Qt.AlignCenter)
+        hbox_CamExposureTime = QHBoxLayout()
+        hbox_CamExposureTime.addWidget(self.PyDMSpinbox_CamExposureTime)
+        hbox_CamExposureTime.addWidget(self.PyDMLabel_CamExposureTime)
+        hbox_CamExposureTime.setAlignment(Qt.AlignVCenter)
+
+        label_CamGain = QLabel('Gain[dB]: ', self, alignment=Qt.AlignRight)
+        label_CamGain.setFixedSize(135, 40)
         self.PyDMSpinbox_CamGain = PyDMSpinbox(
             parent=self, init_channel=self.scrn_prefix+':CamGain-SP')
         self.PyDMSpinbox_CamGain.setFixedSize(150, 40)
@@ -506,42 +540,8 @@ class SiriusScrnView(QWidget):
         hbox_AutoCamGain = QHBoxLayout()
         hbox_AutoCamGain.addWidget(self.PyDMPushButton_AutoGain)
 
-        label_CamAcqPeriod = QLabel('Acquire\nPeriod:', self,
-                                    alignment=Qt.AlignCenter)
-        label_CamAcqPeriod.setFixedSize(125, 75)
-        self.PyDMSpinbox_CamAcqPeriod = PyDMSpinbox(
-            parent=self, init_channel=self.scrn_prefix+':CamAcqPeriod-SP')
-        self.PyDMSpinbox_CamAcqPeriod.setFixedSize(150, 40)
-        self.PyDMSpinbox_CamAcqPeriod.setAlignment(Qt.AlignCenter)
-        self.PyDMSpinbox_CamAcqPeriod.showStepExponent = False
-        self.PyDMLabel_CamAcqPeriod = PyDMLabel(
-            parent=self, init_channel=self.scrn_prefix+':CamAcqPeriod-RB')
-        self.PyDMLabel_CamAcqPeriod.setFixedSize(120, 40)
-        self.PyDMLabel_CamAcqPeriod.setAlignment(Qt.AlignCenter)
-        hbox_CamAcqPeriod = QHBoxLayout()
-        hbox_CamAcqPeriod.addWidget(self.PyDMSpinbox_CamAcqPeriod)
-        hbox_CamAcqPeriod.addWidget(self.PyDMLabel_CamAcqPeriod)
-        hbox_CamAcqPeriod.setAlignment(Qt.AlignVCenter)
-
-        label_CamExposureTime = QLabel('Exposure\nTime:', self,
-                                       alignment=Qt.AlignCenter)
-        label_CamExposureTime.setFixedSize(125, 75)
-        self.PyDMSpinbox_CamExposureTime = PyDMSpinbox(
-            parent=self, init_channel=self.scrn_prefix+':CamExposureTime-SP')
-        self.PyDMSpinbox_CamExposureTime.setFixedSize(150, 40)
-        self.PyDMSpinbox_CamExposureTime.setAlignment(Qt.AlignCenter)
-        self.PyDMSpinbox_CamExposureTime.showStepExponent = False
-        self.PyDMLabel_CamExposureTime = PyDMLabel(
-            parent=self, init_channel=self.scrn_prefix+':CamExposureTime-RB')
-        self.PyDMLabel_CamExposureTime.setFixedSize(120, 40)
-        self.PyDMLabel_CamExposureTime.setAlignment(Qt.AlignCenter)
-        hbox_CamExposureTime = QHBoxLayout()
-        hbox_CamExposureTime.addWidget(self.PyDMSpinbox_CamExposureTime)
-        hbox_CamExposureTime.addWidget(self.PyDMLabel_CamExposureTime)
-        hbox_CamExposureTime.setAlignment(Qt.AlignVCenter)
-
         label_ROIOffsetX = QLabel('Offset X: ', self, alignment=Qt.AlignRight)
-        label_ROIOffsetX.setFixedSize(125, 40)
+        label_ROIOffsetX.setFixedSize(135, 40)
         self.PyDMSpinbox_ROIOffsetX = PyDMSpinbox(
             parent=self, init_channel=self.scrn_prefix+':ImgROIOffsetX-SP')
         self.PyDMSpinbox_ROIOffsetX.setFixedSize(150, 40)
@@ -556,7 +556,7 @@ class SiriusScrnView(QWidget):
         hbox_ROIOffsetX.addWidget(self.PyDMLabel_ROIOffsetX)
 
         label_ROIOffsetY = QLabel('Offset Y: ', self, alignment=Qt.AlignRight)
-        label_ROIOffsetY.setFixedSize(125, 40)
+        label_ROIOffsetY.setFixedSize(135, 40)
         self.PyDMSpinbox_ROIOffsetY = PyDMSpinbox(
             parent=self, init_channel=self.scrn_prefix+':ImgROIOffsetY-SP')
         self.PyDMSpinbox_ROIOffsetY.setFixedSize(150, 40)
@@ -571,7 +571,7 @@ class SiriusScrnView(QWidget):
         hbox_ROIOffsetY.addWidget(self.PyDMLabel_ROIOffsetY)
 
         label_ROIWidth = QLabel('Width: ', self, alignment=Qt.AlignRight)
-        label_ROIWidth.setFixedSize(125, 40)
+        label_ROIWidth.setFixedSize(135, 40)
         self.PyDMSpinbox_ROIWidth = PyDMSpinbox(
             parent=self, init_channel=self.scrn_prefix+':ImgROIWidth-SP')
         self.PyDMSpinbox_ROIWidth.setFixedSize(150, 40)
@@ -586,7 +586,7 @@ class SiriusScrnView(QWidget):
         hbox_ROIWidth.addWidget(self.PyDMLabel_ROIWidth)
 
         label_ROIHeight = QLabel('Heigth: ', self, alignment=Qt.AlignRight)
-        label_ROIHeight.setFixedSize(125, 40)
+        label_ROIHeight.setFixedSize(135, 40)
         self.PyDMSpinbox_ROIHeight = PyDMSpinbox(
             parent=self, init_channel=self.scrn_prefix+':ImgROIHeight-SP')
         self.PyDMSpinbox_ROIHeight.setFixedSize(150, 40)
@@ -611,10 +611,10 @@ class SiriusScrnView(QWidget):
         lay.addRow(QLabel('<h4>Camera Acquisition</h4>',
                           alignment=Qt.AlignCenter))
         lay.addRow(label_CamEnbl, hbox_CamEnbl)
-        lay.addRow(label_CamGain, hbox_CamGain)
-        lay.addRow('', hbox_AutoCamGain)
         lay.addRow(label_CamAcqPeriod, hbox_CamAcqPeriod)
         lay.addRow(label_CamExposureTime, hbox_CamExposureTime)
+        lay.addRow(label_CamGain, hbox_CamGain)
+        lay.addRow('', hbox_AutoCamGain)
         lay.addItem(QSpacerItem(4, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
         lay.addRow(QLabel('<h4>Camera ROI Settings [pixels]</h4>',
                           alignment=Qt.AlignCenter))
