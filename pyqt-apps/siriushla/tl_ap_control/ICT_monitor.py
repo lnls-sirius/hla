@@ -267,7 +267,7 @@ class _ICTCalibration(QWidget):
         self.setLayout(glay)
 
     def _setupMeasSettingsLayout(self):
-        l_thold = QLabel('Charge Threshold [mA]: ', self)
+        l_thold = QLabel('Charge Threshold [nC]: ', self)
         self.pydmspinbox_Threshold = PyDMSpinbox(
             parent=self, init_channel=self.ict_prefix+':Threshold-SP')
         self.pydmspinbox_Threshold.setFixedSize(220, 40)
@@ -326,7 +326,7 @@ class _ICTCalibration(QWidget):
         hlay_aperture.addWidget(self.pydmspinbox_Aperture)
         hlay_aperture.addWidget(self.pydmlabel_Aperture)
 
-        l_samplerate = QLabel('Sample Rate [readings/s]: ', self)
+        l_samplerate = QLabel('Sample Rate [rdgs/s]: ', self)
         self.pydmspinbox_SampleRate = PyDMSpinbox(
             parent=self, init_channel=self.ict_prefix+':SampleRate-SP')
         self.pydmspinbox_SampleRate.setFixedSize(220, 40)
