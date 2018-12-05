@@ -2,12 +2,13 @@
 
 import sys
 import time
+from copy import deepcopy as _dcopy
 from threading import Thread
 import numpy as np
 from qtpy.QtWidgets import QGridLayout, QHBoxLayout, QFormLayout, \
                            QSpacerItem, QWidget, QGroupBox, QLabel, \
                            QComboBox, QPushButton, QCheckBox, QMessageBox, \
-                           QSizePolicy as QSzPlcy, QVBoxLayout
+                           QSizePolicy as QSzPlcy, QVBoxLayout, QSpinBox
 from qtpy.QtCore import Qt, Slot, Signal, Property
 from pydm.widgets import PyDMImageView, PyDMLabel, PyDMSpinbox, \
                          PyDMPushButton, PyDMEnumComboBox
@@ -38,6 +39,7 @@ class _SiriusImageView(PyDMImageView):
         self._calibration_grid_image = None
         self._calibration_grid_maxdata = None
         self._calibration_grid_width = None
+        self._calibration_grid_filterfactor = 0.5
         self._image_roi_offsetx = 0
         self._offsetxchannel = None
         self._image_roi_offsety = 0
@@ -64,36 +66,74 @@ class _SiriusImageView(PyDMImageView):
             if self.image_waveform.size == (
                     self.image_maxwidth*self.image_maxheight):
                 img = self.image_waveform.copy()
+                self._calibration_grid_orig = img
                 self._calibration_grid_width = self.imageWidth
                 self._calibration_grid_maxdata = img.max()
-                grid = np.where(img < 0.5*self._calibration_grid_maxdata,
-                                True, False)
-                if self.readingOrder == self.ReadingOrder.Clike:
-                    self._calibration_grid_image = grid.reshape(
-                        (-1, self._calibration_grid_width), order='C')
-                else:
-                    self._calibration_grid_image = grid.reshape(
-                        (self._calibration_grid_width, -1), order='F')
+                self._update_calibration_grid_image()
                 break
             time.sleep(0.05)
         else:
             self.failToSaveGrid.emit()
 
+    def _update_calibration_grid_image(self):
+        img = self._calibration_grid_orig
+        grid = np.where(img < self._calibration_grid_filterfactor *
+                        self._calibration_grid_maxdata, True, False)
+        if self.readingOrder == self.ReadingOrder.Clike:
+            self._calibration_grid_image = grid.reshape(
+                (-1, self._calibration_grid_width), order='C')
+        else:
+            self._calibration_grid_image = grid.reshape(
+                (self._calibration_grid_width, -1), order='F')
+
     @Slot(bool)
     def showCalibrationGrid(self, show):
         """Show calibration_grid_image over the current image_waveform."""
         self._show_calibration_grid = show
+        self.needs_redraw = True
+
+    @property
+    def calibration_grid_filterfactor(self):
+        """Factor used to filter calibration grid.
+
+        Pixels with values smaller than filterfactor*img_maxdata
+        are set to zero.
+
+        Returns
+        -------
+        float
+            Calibration Grid Filter Factor
+        """
+        return self._calibration_grid_filterfactor*100
+
+    def set_calibration_grid_filterfactor(self, value):
+        """Set factor used to filter calibration grid.
+
+        Pixels with values smaller than filterfactor*img_maxdata
+        are set to zero.
+
+        Parameters
+        ----------
+        value: int
+            Calibration Grid Filter Factor
+        """
+        value /= 100
+        if value >= 0 and self._calibration_grid_filterfactor != value:
+            self._calibration_grid_filterfactor = value
+            if self._calibration_grid_image is not None:
+                self._update_calibration_grid_image()
 
     def process_image(self, image):
         """Reimplement process_image method to add grid to image."""
+        image2process = _dcopy(image)
         if ((self._show_calibration_grid) and
                 (self._calibration_grid_image is not None)):
             try:
-                grid = self._adjust_calibration_grid(image)
-                image[grid] = self._calibration_grid_maxdata
+                grid = self._adjust_calibration_grid(image2process)
+                image2process[grid] = self._calibration_grid_maxdata
             except Exception:
                 print('Grid dimentions do not match image dimentions!')
-        return image
+        return image2process
 
     def _adjust_calibration_grid(self, img):
         height = np.size(img, 0)
@@ -436,16 +476,30 @@ class SiriusScrnView(QWidget):
     def _calibrationgridLayout(self):
         self.checkBox_showgrid = QCheckBox('Show', self)
         self.checkBox_showgrid.setEnabled(False)
-        self.checkBox_showgrid.setFixedSize(120, 40)
+        self.checkBox_showgrid.setFixedSize(135, 40)
         self.checkBox_showgrid.toggled.connect(
             self.image_view.showCalibrationGrid)
         self.pushbutton_savegrid = QPushButton('Save', self)
         self.pushbutton_savegrid.setEnabled(False)
-        self.pushbutton_savegrid.setFixedSize(120, 40)
+        self.pushbutton_savegrid.setFixedSize(135, 40)
         self.pushbutton_savegrid.clicked.connect(self._saveCalibrationGrid)
         hbox_grid = QHBoxLayout()
         hbox_grid.addWidget(self.checkBox_showgrid)
         hbox_grid.addWidget(self.pushbutton_savegrid)
+
+        self.spinbox_gridfilterfactor = QSpinBox()
+        self.spinbox_gridfilterfactor.setMaximum(100)
+        self.spinbox_gridfilterfactor.setMinimum(0)
+        self.spinbox_gridfilterfactor.setValue(
+            self.image_view.calibration_grid_filterfactor)
+        self.spinbox_gridfilterfactor.editingFinished.connect(
+            self._setCalibrationGridFilterFactor)
+        self.spinbox_gridfilterfactor.setFixedWidth(90)
+        hbox_filter = QHBoxLayout()
+        hbox_filter.setSpacing(0)
+        hbox_filter.addWidget(QLabel('Save levels <'))
+        hbox_filter.addWidget(self.spinbox_gridfilterfactor)
+        hbox_filter.addWidget(QLabel('%'))
 
         self.PyDMStateButton_EnblLED = PyDMStateButton(
             parent=self, init_channel=self.scrn_prefix+':EnblLED-Sel')
@@ -463,11 +517,15 @@ class SiriusScrnView(QWidget):
         hbox_EnblLED.addWidget(self.SiriusLedState_EnblLED)
 
         lay = QFormLayout()
+        lay.addItem(QSpacerItem(40, 10, QSzPlcy.Fixed, QSzPlcy.Fixed))
         lay.addRow('Grid: ', hbox_grid)
+        lay.addItem(QSpacerItem(40, 10, QSzPlcy.Fixed, QSzPlcy.Fixed))
+        lay.addRow('', hbox_filter)
+        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
         lay.addRow('LED: ', hbox_EnblLED)
+        lay.addItem(QSpacerItem(40, 10, QSzPlcy.Fixed, QSzPlcy.Fixed))
         lay.setLabelAlignment(Qt.AlignRight)
         lay.setFormAlignment(Qt.AlignCenter)
-        lay.setSpacing(20)
         return lay
 
     def _settingsLayout(self):
@@ -477,13 +535,14 @@ class SiriusScrnView(QWidget):
             parent=self, init_channel=self.scrn_prefix+':CamEnbl-Sel')
         self.PyDMStateButton_CamEnbl.setFixedSize(150, 40)
         self.PyDMStateButton_CamEnbl.shape = 1
-        self.PyDMLabel_CamEnbl = PyDMLabel(
+        self.SiriusLedState_CamEnbl = SiriusLedState(
             parent=self, init_channel=self.scrn_prefix+':CamEnbl-Sts')
-        self.PyDMLabel_CamEnbl.setFixedSize(120, 40)
-        self.PyDMLabel_CamEnbl.setAlignment(Qt.AlignCenter)
+        self.SiriusLedState_CamEnbl.setFixedSize(40, 40)
+        self.SiriusLedState_CamEnbl.setSizePolicy(
+            QSzPlcy.Minimum, QSzPlcy.Maximum)
         hbox_CamEnbl = QHBoxLayout()
         hbox_CamEnbl.addWidget(self.PyDMStateButton_CamEnbl)
-        hbox_CamEnbl.addWidget(self.PyDMLabel_CamEnbl)
+        hbox_CamEnbl.addWidget(self.SiriusLedState_CamEnbl)
 
         label_CamAcqPeriod = QLabel('Acquire\nPeriod [s]:', self,
                                     alignment=Qt.AlignCenter)
@@ -495,7 +554,7 @@ class SiriusScrnView(QWidget):
         self.PyDMSpinbox_CamAcqPeriod.showStepExponent = False
         self.PyDMLabel_CamAcqPeriod = PyDMLabel(
             parent=self, init_channel=self.scrn_prefix+':CamAcqPeriod-RB')
-        self.PyDMLabel_CamAcqPeriod.setFixedSize(120, 40)
+        self.PyDMLabel_CamAcqPeriod.setFixedSize(140, 40)
         self.PyDMLabel_CamAcqPeriod.setAlignment(Qt.AlignCenter)
         hbox_CamAcqPeriod = QHBoxLayout()
         hbox_CamAcqPeriod.addWidget(self.PyDMSpinbox_CamAcqPeriod)
@@ -512,7 +571,7 @@ class SiriusScrnView(QWidget):
         self.PyDMSpinbox_CamExposureTime.showStepExponent = False
         self.PyDMLabel_CamExposureTime = PyDMLabel(
             parent=self, init_channel=self.scrn_prefix+':CamExposureTime-RB')
-        self.PyDMLabel_CamExposureTime.setFixedSize(120, 40)
+        self.PyDMLabel_CamExposureTime.setFixedSize(140, 40)
         self.PyDMLabel_CamExposureTime.setAlignment(Qt.AlignCenter)
         hbox_CamExposureTime = QHBoxLayout()
         hbox_CamExposureTime.addWidget(self.PyDMSpinbox_CamExposureTime)
@@ -528,7 +587,7 @@ class SiriusScrnView(QWidget):
         self.PyDMSpinbox_CamGain.showStepExponent = False
         self.PyDMLabel_CamGain = PyDMLabel(
             parent=self, init_channel=self.scrn_prefix+':CamGain-RB')
-        self.PyDMLabel_CamGain.setFixedSize(120, 40)
+        self.PyDMLabel_CamGain.setFixedSize(140, 40)
         self.PyDMLabel_CamGain.setAlignment(Qt.AlignCenter)
         self.PyDMPushButton_AutoGain = PyDMPushButton(
             parent=self, label='Auto Gain', pressValue=1,
@@ -549,7 +608,7 @@ class SiriusScrnView(QWidget):
         self.PyDMSpinbox_ROIOffsetX.showStepExponent = False
         self.PyDMLabel_ROIOffsetX = PyDMLabel(
             parent=self, init_channel=self.scrn_prefix+':ImgROIOffsetX-RB')
-        self.PyDMLabel_ROIOffsetX.setFixedSize(120, 40)
+        self.PyDMLabel_ROIOffsetX.setFixedSize(140, 40)
         self.PyDMLabel_ROIOffsetX.setAlignment(Qt.AlignCenter)
         hbox_ROIOffsetX = QHBoxLayout()
         hbox_ROIOffsetX.addWidget(self.PyDMSpinbox_ROIOffsetX)
@@ -564,7 +623,7 @@ class SiriusScrnView(QWidget):
         self.PyDMSpinbox_ROIOffsetY.showStepExponent = False
         self.PyDMLabel_ROIOffsetY = PyDMLabel(
             parent=self, init_channel=self.scrn_prefix+':ImgROIOffsetY-RB')
-        self.PyDMLabel_ROIOffsetY.setFixedSize(120, 40)
+        self.PyDMLabel_ROIOffsetY.setFixedSize(140, 40)
         self.PyDMLabel_ROIOffsetY.setAlignment(Qt.AlignCenter)
         hbox_ROIOffsetY = QHBoxLayout()
         hbox_ROIOffsetY.addWidget(self.PyDMSpinbox_ROIOffsetY)
@@ -579,7 +638,7 @@ class SiriusScrnView(QWidget):
         self.PyDMSpinbox_ROIWidth.showStepExponent = False
         self.PyDMLabel_ROIWidth = PyDMLabel(
             parent=self, init_channel=self.scrn_prefix+':ImgROIWidth-RB')
-        self.PyDMLabel_ROIWidth.setFixedSize(120, 40)
+        self.PyDMLabel_ROIWidth.setFixedSize(140, 40)
         self.PyDMLabel_ROIWidth.setAlignment(Qt.AlignCenter)
         hbox_ROIWidth = QHBoxLayout()
         hbox_ROIWidth.addWidget(self.PyDMSpinbox_ROIWidth)
@@ -594,7 +653,7 @@ class SiriusScrnView(QWidget):
         self.PyDMSpinbox_ROIHeight.showStepExponent = False
         self.PyDMLabel_ROIHeight = PyDMLabel(
             parent=self, init_channel=self.scrn_prefix+':ImgROIHeight-RB')
-        self.PyDMLabel_ROIHeight.setFixedSize(120, 40)
+        self.PyDMLabel_ROIHeight.setFixedSize(140, 40)
         self.PyDMLabel_ROIHeight.setAlignment(Qt.AlignCenter)
         hbox_ROIHeight = QHBoxLayout()
         hbox_ROIHeight.addWidget(self.PyDMSpinbox_ROIHeight)
@@ -769,31 +828,39 @@ class SiriusScrnView(QWidget):
         Thread(target=self._saveCalibrationGrid_thread, daemon=True).start()
 
     def _saveCalibrationGrid_thread(self):
-        roi_h = self.PyDMLabel_ROIHeight.text()
-        roi_w = self.PyDMLabel_ROIWidth.text()
-        roi_offsetx = self.PyDMLabel_ROIOffsetX.text()
-        roi_offsety = self.PyDMLabel_ROIOffsetY.text()
-        self.PyDMSpinbox_ROIHeight.value_changed(
-                self.image_view.image_maxheight)
-        self.PyDMSpinbox_ROIHeight.send_value()
-        self.PyDMSpinbox_ROIWidth.value_changed(
-                self.image_view.image_maxwidth)
-        self.PyDMSpinbox_ROIWidth.send_value()
-        self.PyDMSpinbox_ROIOffsetX.value_changed(0)
-        self.PyDMSpinbox_ROIOffsetX.send_value()
-        self.PyDMSpinbox_ROIOffsetY.value_changed(0)
-        self.PyDMSpinbox_ROIOffsetY.send_value()
+        roi_h = float(self.PyDMLabel_ROIHeight.text())
+        roi_w = float(self.PyDMLabel_ROIWidth.text())
+        roi_offsetx = float(self.PyDMLabel_ROIOffsetX.text())
+        roi_offsety = float(self.PyDMLabel_ROIOffsetY.text())
+
+        # Change ROI to get entire image
+        self.PyDMStateButton_CamEnbl.send_value_signal[int].emit(0)
+        self.PyDMSpinbox_ROIHeight.send_value_signal[float].emit(
+            float(self.image_view.image_maxheight))
+        self.PyDMSpinbox_ROIWidth.send_value_signal[float].emit(
+            float(self.image_view.image_maxwidth))
+        self.PyDMSpinbox_ROIOffsetX.send_value_signal[float].emit(0)
+        self.PyDMSpinbox_ROIOffsetY.send_value_signal[float].emit(0)
+        self.PyDMStateButton_CamEnbl.send_value_signal[int].emit(1)
+
+        # Save grid
         self.image_view.saveCalibrationGrid()
-        self.PyDMSpinbox_ROIHeight.value_changed(int(roi_h))
-        self.PyDMSpinbox_ROIHeight.send_value()
-        self.PyDMSpinbox_ROIWidth.value_changed(int(roi_w))
-        self.PyDMSpinbox_ROIWidth.send_value()
-        self.PyDMSpinbox_ROIOffsetX.value_changed(int(roi_offsetx))
-        self.PyDMSpinbox_ROIOffsetX.send_value()
-        self.PyDMSpinbox_ROIOffsetY.value_changed(int(roi_offsety))
-        self.PyDMSpinbox_ROIOffsetY.send_value()
+
+        # Change ROI to original size
+        self.PyDMStateButton_CamEnbl.send_value_signal[int].emit(0)
+        self.PyDMSpinbox_ROIHeight.send_value_signal[float].emit(roi_h)
+        self.PyDMSpinbox_ROIWidth.send_value_signal[float].emit(roi_w)
+        self.PyDMSpinbox_ROIOffsetX.send_value_signal[float].emit(roi_offsetx)
+        self.PyDMSpinbox_ROIOffsetY.send_value_signal[float].emit(roi_offsety)
+        self.PyDMStateButton_CamEnbl.send_value_signal[int].emit(1)
+
+        # Enable showing saved grid
         time.sleep(0.1)
         self.checkBox_showgrid.setEnabled(True)
+
+    def _setCalibrationGridFilterFactor(self):
+        self.image_view.set_calibration_grid_filterfactor(
+            self.spinbox_gridfilterfactor.value())
 
     @Slot()
     def _showFailToSaveGridMsg(self):
