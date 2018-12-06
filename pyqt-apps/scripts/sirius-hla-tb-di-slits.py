@@ -1,6 +1,6 @@
 #!/usr/bin/env python-sirius
 
-"""Open Window of Specified Screen."""
+"""Open Window to control TB Slits widgets."""
 
 import sys
 import argparse as _argparse
@@ -15,7 +15,7 @@ from siriushla.widgets.windows import SiriusMainWindow
 
 
 parser = _argparse.ArgumentParser(
-    description="Run Interface of Specified Screen.")
+    description="Run Interface to control TB Slits widgets.")
 parser.add_argument('-p', "--prefix", type=str, default=vaca_prefix,
                     help="Define the prefix for the PVs in the window.")
 args = parser.parse_args()
