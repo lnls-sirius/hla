@@ -6,9 +6,9 @@
 */
 
 
-* {
+/* * {
   font-size: 20pt;
-}
+} */
 
 QMenuBar {
   border-bottom: 2px solid black;
@@ -36,47 +36,47 @@ QTabWidget::tab-bar {
 QTabBar::tab {
     color: black;
     /*background-color: white;*/
-    padding: 0 8px 0 8px;
-    margin: 0 1px 0 1px;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    border: 1px solid black;
-    margin-top: 15px;
+    padding: 0 1em 0 1em;
+    margin: 0 0.1em 0 0.1em;
+    border-top-left-radius: 1em;
+    border-top-right-radius: 1em;
+    border: 0.1em solid black;
+    margin-top: 2em;
 }
 
 QTabBar::tab:selected, QTabBar::tab:hover {
     /*font-weight: 900;*/
-    border: 2px solid black;
+    border: 0.1em solid black;
 }
 
 #TBTab QTabBar::tab:selected, #TBTab QTabBar::tab:hover {
   background-color: purple;
   color: white;
-  border: 1px solid white;
+  border: 0.1em solid white;
 }
 #BOTab QTabBar::tab:selected, #BOTab QTabBar::tab:hover {
   background-color: green;
   color: white;
-  border: 1px solid white;
+  border: 0.1em solid white;
 }
 #TSTab QTabBar::tab:selected, #TSTab QTabBar::tab:hover {
   background-color: red;
   color: white;
-  border: 1px solid white;
+  border: 0.1em solid white;
 }
 #SITab QTabBar::tab:selected, #SITab QTabBar::tab:hover {
   background-color: blue;
   color: white;
-  border: 1px solid white;
+  border: 0.1em solid white;
 }
 
 QTabBar::tab:!selected {
-    margin-top: 20px; /* make non-selected tabs look smaller */
+    margin-top: 2.2em; /* make non-selected tabs look smaller */
     font-weight: 200;
 }
 
 /* Scroll Bar */
-QScrollBar:horizontal {
+/* QScrollBar:horizontal {
     border: 2px solid grey;
     min-width: 150px;
     margin: 0 20px 0 20px;
@@ -110,7 +110,7 @@ QAbstractSpinBox::down-button {
 QLineEdit {
     border: 2px solid grey;
     min-width: 150px;
-}
+} */
 
 /* Group Box*/
 QGroupBox {
