@@ -45,15 +45,19 @@ class PSDetailWidget(QWidget):
             max-width: 7em;
             qproperty-alignment: AlignCenter;
         }
-        QLed {
-            min-width: 1em;
-            max-width: 1em;
-            min-height: 1em;
-            max-height: 1em;
+        QLed,
+        SiriusLedAlert,
+        SiriusLedState {
+            min-width: 1.5em;
+            max-width: 1.5em;
+            min-height: 1.5em;
+            max-height: 1.5em;
         }
         PyDMStateButton {
-            min-width: 2em;
-            max-width: 2em;
+            min-width: 2.5em;
+            max-width: 2.5em;
+            min-height: 1.5em;
+            max-height: 1.5em;
         }
     """
 
@@ -89,15 +93,17 @@ class PSDetailWidget(QWidget):
 
         self._setup_ui()
         self.setFocus(True)
+        self.setFocusPolicy(Qt.StrongFocus)
         # Get screen height
-        screen_height = QApplication.desktop().screenGeometry().height()
-        layout_height = self.layout.sizeHint().height()
-        if layout_height > screen_height:
-            # Decrease font size
-            self.setStyleSheet(self.StyleSheet + '* {font-size: 14px;}')
-        else:
-            self.setStyleSheet(self.StyleSheet)
-        self.layout.setSizeConstraint(QGridLayout.SetFixedSize)
+        # screen_height = QApplication.desktop().screenGeometry().height()
+        # layout_height = self.layout.sizeHint().height()
+        # if layout_height > screen_height:
+        #     # Decrease font size
+        #     self.setStyleSheet(self.StyleSheet + '* {font-size: 14px;}')
+        # else:
+        #     self.setStyleSheet(self.StyleSheet)
+        # self.layout.setSizeConstraint(QGridLayout.SetFixedSize)
+        self.setStyleSheet(self.StyleSheet)
 
     def _setup_ui(self):
         # Group boxes that compose the widget
@@ -179,8 +185,8 @@ class PSDetailWidget(QWidget):
             self, self._prefixed_psname + ":Version-Cte")
         self.version_cte.setObjectName("version_cte_label")
 
-        self.version_cte.setSizePolicy(QSizePolicy.Minimum,
-                                       QSizePolicy.Maximum)
+        # self.version_cte.setSizePolicy(QSizePolicy.Minimum,
+        #                                QSizePolicy.Maximum)
         layout.addWidget(self.version_cte, 0, 0, Qt.AlignHCenter)
 
         return layout
@@ -224,7 +230,7 @@ class PSDetailWidget(QWidget):
             self, self._prefixed_psname + ":CtrlMode-Mon")
         self.ctrlmode_label.setObjectName("ctrlmode1_label")
 
-        self.ctrlmode_led.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
+        # self.ctrlmode_led.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
 
         ctrlmode_layout = QHBoxLayout()
         ctrlmode_layout.addWidget(self.ctrlmode_led)
@@ -257,7 +263,7 @@ class PSDetailWidget(QWidget):
             self, self._prefixed_psname + ":PwrState-Sts")
         self.pwrstate_label.setObjectName("pwrstate_label")
 
-        self.pwrstate_led.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
+        # self.pwrstate_led.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
 
         # buttons_layout = QHBoxLayout()
         # buttons_layout.addWidget(self.on_btn)
@@ -395,7 +401,7 @@ class PSDetailWidget(QWidget):
         self.cycle_auxparam_sp_le = PyDMLineEdit(self, auxparam_sp_ca)
         self.cycle_auxparam_rb_label = PyDMLabel(self, auxparam_rb_ca)
         # Layout
-        layout.addWidget(self.cycle_enbl_label, 0, 0, Qt.AlignRight)
+        layout.addWidget(self.cycle_enbl_label, 0, 0)
         # layout.addWidget(self.cycle_enbl_sp_button, 0, 1)
         # layout.addWidget(self.cycle_dsbl_sp_button, 0, 2)
         layout.addWidget(self.cycle_enbl_mon_led, 0, 1, Qt.AlignCenter)
