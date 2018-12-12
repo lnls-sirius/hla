@@ -59,7 +59,7 @@ class EpicsWrapper:
             return False
 
         if self._pv.put(value):
-            # time.sleep(5e-3)
+            time.sleep(50e-3)
             return True
         return False
 
@@ -72,7 +72,8 @@ class EpicsWrapper:
         init = time.time()
         while t < wait:
             if isinstance(value, float):
-                if isclose(self._pv.get(use_monitor=False), value, rel_tol=1e-06, abs_tol=0.0):
+                pv_value = self._pv.get(use_monitor=False)
+                if pv_value is not None and isclose(pv_value, value, rel_tol=1e-06, abs_tol=0.0):
                     return True
             else:
                 if self._pv.get() == value:
@@ -208,6 +209,7 @@ class SetConfigurationWindow(SiriusMainWindow):
                 self._tree.items = pvs
                 self._tree_msg.setText(
                     'Configuration has {} items'.format(len(pvs)))
+                self._tree.expandAll()
             except KeyError:
                 self._tree_msg.setText('Configuration has no field pvs')
         else:
