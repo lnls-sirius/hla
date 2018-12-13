@@ -179,18 +179,6 @@ class _ICTSettings(SiriusDialog):
         hlay_sampletrg.addWidget(self.pydmenumcombobox_SampleTrg)
         hlay_sampletrg.addWidget(self.pydmlabel_SampleTrg)
 
-        l_thold = QLabel('Charge Threshold [mA]: ', self)
-        self.pydmspinbox_Threshold = PyDMSpinbox(
-            parent=self, init_channel=self.ict_prefix+':Threshold-SP')
-        self.pydmspinbox_Threshold.setFixedSize(220, 40)
-        self.pydmspinbox_Threshold.setAlignment(Qt.AlignCenter)
-        self.pydmspinbox_Threshold.showStepExponent = False
-        self.pydmlabel_Threshold = PyDMLabel(
-            parent=self, init_channel=self.ict_prefix+':Threshold-RB')
-        hlay_thold = QHBoxLayout()
-        hlay_thold.addWidget(self.pydmspinbox_Threshold)
-        hlay_thold.addWidget(self.pydmlabel_Threshold)
-
         l_TIstatus = QLabel('Timing Trigger Status: ', self)
         self.ledmulti_TIStatus = PyDMLedMultiChannel(
             parent=self,
@@ -219,12 +207,26 @@ class _ICTSettings(SiriusDialog):
         hlay_TIdelay.addWidget(self.pydmspinbox_TIDelay)
         hlay_TIdelay.addWidget(self.pydmlabel_TIDelay)
 
+        l_thold = QLabel('Charge Threshold [mA]: ', self)
+        self.pydmspinbox_Threshold = PyDMSpinbox(
+            parent=self, init_channel=self.ict_prefix+':Threshold-SP')
+        self.pydmspinbox_Threshold.setFixedSize(220, 40)
+        self.pydmspinbox_Threshold.setAlignment(Qt.AlignCenter)
+        self.pydmspinbox_Threshold.showStepExponent = False
+        self.pydmlabel_Threshold = PyDMLabel(
+            parent=self, init_channel=self.ict_prefix+':Threshold-RB')
+        hlay_thold = QHBoxLayout()
+        hlay_thold.addWidget(self.pydmspinbox_Threshold)
+        hlay_thold.addWidget(self.pydmlabel_Threshold)
+
         flay_generalsettings = QFormLayout()
         flay_generalsettings.setFormAlignment(Qt.AlignCenter)
         flay_generalsettings.addRow(l_sampletrg, hlay_sampletrg)
-        flay_generalsettings.addRow(l_thold, hlay_thold)
         flay_generalsettings.addRow(l_TIstatus, hlay_TIstatus)
         flay_generalsettings.addRow(l_TIdelay, hlay_TIdelay)
+        flay_generalsettings.addItem(
+            QSpacerItem(1, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
+        flay_generalsettings.addRow(l_thold, hlay_thold)
         flay_generalsettings.setFormAlignment(Qt.AlignCenter)
         flay_generalsettings.setLabelAlignment(Qt.AlignRight)
         gbox_generalsettings.setLayout(flay_generalsettings)
@@ -265,28 +267,17 @@ class _ICTCalibration(QWidget):
         self.setLayout(glay)
 
     def _setupMeasSettingsLayout(self):
-        l_range = QLabel('Range: ', self)
-        self.pydmstatebutton_Range = PyDMEnumComboBox(
-            parent=self, init_channel=self.ict_prefix+':Range-Sel')
-        self.pydmstatebutton_Range.shape = 1
-        self.pydmstatebutton_Range.setFixedSize(220, 40)
-        self.pydmlabel_Range = PyDMLabel(
-            parent=self, init_channel=self.ict_prefix+':Range-Sts')
-        hlay_range = QHBoxLayout()
-        hlay_range.addWidget(self.pydmstatebutton_Range)
-        hlay_range.addWidget(self.pydmlabel_Range)
-
-        l_2ndreaddy = QLabel('Second Read Delay [s]: ', self)
-        self.pydmspinbox_2ndReadDly = PyDMSpinbox(
-            parent=self, init_channel=self.ict_prefix+':2ndReadDly-SP')
-        self.pydmspinbox_2ndReadDly.setFixedSize(220, 40)
-        self.pydmspinbox_2ndReadDly.setAlignment(Qt.AlignCenter)
-        self.pydmspinbox_2ndReadDly.showStepExponent = False
-        self.pydmlabel_2ndReadDly = PyDMLabel(
-            parent=self, init_channel=self.ict_prefix+':2ndReadDly-RB')
-        hlay_2ndreaddy = QHBoxLayout()
-        hlay_2ndreaddy.addWidget(self.pydmspinbox_2ndReadDly)
-        hlay_2ndreaddy.addWidget(self.pydmlabel_2ndReadDly)
+        l_thold = QLabel('Charge Threshold [nC]: ', self)
+        self.pydmspinbox_Threshold = PyDMSpinbox(
+            parent=self, init_channel=self.ict_prefix+':Threshold-SP')
+        self.pydmspinbox_Threshold.setFixedSize(220, 40)
+        self.pydmspinbox_Threshold.setAlignment(Qt.AlignCenter)
+        self.pydmspinbox_Threshold.showStepExponent = False
+        self.pydmlabel_Threshold = PyDMLabel(
+            parent=self, init_channel=self.ict_prefix+':Threshold-RB')
+        hlay_thold = QHBoxLayout()
+        hlay_thold.addWidget(self.pydmspinbox_Threshold)
+        hlay_thold.addWidget(self.pydmlabel_Threshold)
 
         l_hfreject = QLabel('High Frequency Rejection: ', self)
         self.pydmstatebutton_HFReject = PyDMStateButton(
@@ -299,12 +290,17 @@ class _ICTCalibration(QWidget):
         hlay_hfreject.addWidget(self.pydmstatebutton_HFReject)
         hlay_hfreject.addWidget(self.pydmlabel_HFReject)
 
-        l_bcmrange = QLabel('BCM Range: ', self)
-        self.pydmspinbox_BCMRange = PyDMSpinbox(
-            parent=self, init_channel=self.ict_prefix+':BCMRange-SP')
-        self.pydmspinbox_BCMRange.setFixedSize(220, 40)
-        self.pydmspinbox_BCMRange.setAlignment(Qt.AlignCenter)
-        self.pydmspinbox_BCMRange.showStepExponent = False
+        l_2ndreaddy = QLabel('2nd Read Delay [s]: ', self)
+        self.pydmspinbox_2ndReadDly = PyDMSpinbox(
+            parent=self, init_channel=self.ict_prefix+':2ndReadDly-SP')
+        self.pydmspinbox_2ndReadDly.setFixedSize(220, 40)
+        self.pydmspinbox_2ndReadDly.setAlignment(Qt.AlignCenter)
+        self.pydmspinbox_2ndReadDly.showStepExponent = False
+        self.pydmlabel_2ndReadDly = PyDMLabel(
+            parent=self, init_channel=self.ict_prefix+':2ndReadDly-RB')
+        hlay_2ndreaddy = QHBoxLayout()
+        hlay_2ndreaddy.addWidget(self.pydmspinbox_2ndReadDly)
+        hlay_2ndreaddy.addWidget(self.pydmlabel_2ndReadDly)
 
         l_samplecnt = QLabel('Sample Count: ', self)
         self.pydmspinbox_SampleCnt = PyDMSpinbox(
@@ -318,7 +314,7 @@ class _ICTCalibration(QWidget):
         hlay_samplecnt.addWidget(self.pydmspinbox_SampleCnt)
         hlay_samplecnt.addWidget(self.pydmlabel_SampleCnt)
 
-        l_aperture = QLabel('Aperture: ', self)
+        l_aperture = QLabel('Aperture [us]: ', self)
         self.pydmspinbox_Aperture = PyDMSpinbox(
             parent=self, init_channel=self.ict_prefix+':Aperture-SP')
         self.pydmspinbox_Aperture.setFixedSize(220, 40)
@@ -330,7 +326,7 @@ class _ICTCalibration(QWidget):
         hlay_aperture.addWidget(self.pydmspinbox_Aperture)
         hlay_aperture.addWidget(self.pydmlabel_Aperture)
 
-        l_samplerate = QLabel('Sample Rate: ', self)
+        l_samplerate = QLabel('Sample Rate [rdgs/s]: ', self)
         self.pydmspinbox_SampleRate = PyDMSpinbox(
             parent=self, init_channel=self.ict_prefix+':SampleRate-SP')
         self.pydmspinbox_SampleRate.setFixedSize(220, 40)
@@ -353,6 +349,23 @@ class _ICTCalibration(QWidget):
         hlay_imped.addWidget(self.pydmstatebutton_Imped)
         hlay_imped.addWidget(self.pydmlabel_Imped)
 
+        l_bcmrange = QLabel('BCM Range [V]: ', self)
+        self.pydmspinbox_BCMRange = PyDMSpinbox(
+            parent=self, init_channel=self.ict_prefix+':BCMRange-SP')
+        self.pydmspinbox_BCMRange.setFixedSize(220, 40)
+        self.pydmspinbox_BCMRange.setAlignment(Qt.AlignCenter)
+        self.pydmspinbox_BCMRange.showStepExponent = False
+
+        l_range = QLabel('Range: ', self)
+        self.pydmenumcombobox_Range = PyDMEnumComboBox(
+            parent=self, init_channel=self.ict_prefix+':Range-Sel')
+        self.pydmenumcombobox_Range.setFixedSize(220, 40)
+        self.pydmlabel_Range = PyDMLabel(
+            parent=self, init_channel=self.ict_prefix+':Range-Sts')
+        hlay_range = QHBoxLayout()
+        hlay_range.addWidget(self.pydmenumcombobox_Range)
+        hlay_range.addWidget(self.pydmlabel_Range)
+
         l_calenbl = QLabel('Calibration Enable: ', self)
         self.pydmstatebutton_CalEnbl = PyDMStateButton(
             parent=self, init_channel=self.ict_prefix+':CalEnbl-Sel')
@@ -365,14 +378,13 @@ class _ICTCalibration(QWidget):
         hlay_calenbl.addWidget(self.pydmlabel_CalEnbl)
 
         l_calcharge = QLabel('Calibration Charge: ', self)
-        self.pydmstatebutton_CalCharge = PyDMStateButton(
+        self.pydmenumcombobox_CalCharge = PyDMEnumComboBox(
             parent=self, init_channel=self.ict_prefix+':CalCharge-Sel')
-        self.pydmstatebutton_CalCharge.shape = 1
-        self.pydmstatebutton_CalCharge.setFixedSize(220, 40)
+        self.pydmenumcombobox_CalCharge.setFixedSize(220, 40)
         self.pydmlabel_CalCharge = PyDMLabel(
             parent=self, init_channel=self.ict_prefix+':CalCharge-Sts')
         hlay_calcharge = QHBoxLayout()
-        hlay_calcharge.addWidget(self.pydmstatebutton_CalCharge)
+        hlay_calcharge.addWidget(self.pydmenumcombobox_CalCharge)
         hlay_calcharge.addWidget(self.pydmlabel_CalCharge)
 
         l_download = QLabel('Download to hardware? ', self)
@@ -381,19 +393,18 @@ class _ICTCalibration(QWidget):
             label='Download', pressValue=1)
 
         flay = QFormLayout()
-        flay.addRow(l_range, hlay_range)
-        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
-        flay.addRow(l_2ndreaddy, hlay_2ndreaddy)
-        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
+        flay.addRow(l_thold, hlay_thold)
         flay.addRow(l_hfreject, hlay_hfreject)
         flay.addItem(QSpacerItem(1, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
-        flay.addRow(l_bcmrange, self.pydmspinbox_BCMRange)
+        flay.addRow(l_2ndreaddy, hlay_2ndreaddy)
         flay.addItem(QSpacerItem(1, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
         flay.addRow(l_samplecnt, hlay_samplecnt)
         flay.addRow(l_aperture, hlay_aperture)
         flay.addRow(l_samplerate, hlay_samplerate)
-        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
         flay.addRow(l_imped, hlay_imped)
+        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
+        flay.addRow(l_bcmrange, self.pydmspinbox_BCMRange)
+        flay.addRow(l_range, hlay_range)
         flay.addItem(QSpacerItem(1, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
         flay.addRow(l_calenbl, hlay_calenbl)
         flay.addRow(l_calcharge, hlay_calcharge)

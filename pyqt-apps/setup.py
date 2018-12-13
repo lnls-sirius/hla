@@ -56,6 +56,7 @@ setup(
         'scripts/sirius-hla-tb-ap-posang.py',
         'scripts/sirius-hla-tb-ap-sofb.py',
         'scripts/sirius-hla-tb-di-icts.py',
+        'scripts/sirius-hla-tb-di-slits.py',
         'scripts/sirius-hla-tb-ma-control.py',
         'scripts/sirius-hla-ts-ap-control.py',
         'scripts/sirius-hla-ts-ap-posang.py',
