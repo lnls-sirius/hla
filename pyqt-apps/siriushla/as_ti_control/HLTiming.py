@@ -164,7 +164,8 @@ def _setupMenus(prefix, HLTiming):
         _util.connect_window(action, _EVE, HLTiming, prefix=prefix+name+':')
 
     menu_afc = menu.addMenu('AFCs')
-    for afc in sorted(_LLTimeSearch.get_device_names(filters={'dev': 'AFC'})):
+    for afc in sorted(_LLTimeSearch.get_device_names(
+                                filters={'dev': 'AMCFPGAEVR'})):
         name = _PVName(afc)
         action = menu_afc.addAction(name.sub + ':' + name.dev + '-' + name.idx)
         _util.connect_window(action, _AFC, HLTiming, prefix=prefix+name+':')

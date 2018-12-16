@@ -12,16 +12,15 @@ from siriushla.widgets.led import PyDMLed, SiriusLedAlert
 from siriushla.widgets.state_button import PyDMStateButton
 from siriushla.widgets.windows import SiriusDialog
 from siriushla import util as _util
-from siriushla.as_ti_control.base_list import BaseList
+from siriushla.as_ti_control.base import BaseList, BaseWidget
 
 
-class HLTriggerDetailed(SiriusDialog):
+class HLTriggerDetailed(BaseWidget):
     """Template for control of High Level Triggers."""
 
     def __init__(self, parent=None, prefix=''):
         """Initialize object."""
-        super().__init__(parent)
-        self.prefix = _PVName(prefix)
+        super().__init__(parent, prefix)
         self._setupUi()
 
     def _setupUi(self):
@@ -206,13 +205,12 @@ class HLTriggerList(BaseList):
 if __name__ == '__main__':
     """Run Example."""
     from siriushla.sirius_application import SiriusApplication
-    from siriuspy.envars import vaca_prefix
     app = SiriusApplication()
-    detail_ctrl = HLTriggerDetailed(prefix=vaca_prefix+'SI-01SA:TI-PingH:')
+    detail_ctrl = HLTriggerDetailed(prefix='SI-01SA:TI-PingH:')
     detail_ctrl.show()
     props = {'detailed', 'state', 'pulses', 'duration'}
     list_ctrl = HLTriggerList(
-        name="Triggers", props=props, prefix=vaca_prefix,
+        name="Triggers", props=props,
         obj_names=['SI-01SA:TI-PingH:', 'SI-01SA:TI-PingV:'])
     list_ctrl.show()
     sys.exit(app.exec_())

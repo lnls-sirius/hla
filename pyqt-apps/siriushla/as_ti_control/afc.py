@@ -13,7 +13,7 @@ from siriushla.widgets.led import PyDMLed, SiriusLedAlert
 from siriushla.widgets.state_button import PyDMStateButton
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla import util as _util
-from siriushla.as_ti_control.base_list import BaseList
+from siriushla.as_ti_control.base import BaseList
 
 
 class AFC(SiriusMainWindow):
@@ -188,9 +188,8 @@ class AFCOUTList(BaseList):
 if __name__ == '__main__':
     """Run Example."""
     from siriushla.sirius_application import SiriusApplication
-    from siriuspy.envars import vaca_prefix
     app = SiriusApplication()
     _util.set_style(app)
-    afc_ctrl = AFC(prefix=vaca_prefix+'AS-02:TI-AFC:')
+    afc_ctrl = AFC(prefix='TEST-FAC:TI-AMCFPGAEVR:')
     afc_ctrl.show()
     sys.exit(app.exec_())

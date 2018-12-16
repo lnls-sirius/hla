@@ -8,24 +8,22 @@ from siriushla.widgets.led import PyDMLed, SiriusLedAlert
 from siriushla.widgets.state_button import PyDMStateButton
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla import util as _util
+from siriushla.as_ti_control.base import BaseWidget
 
 
-class FOUT(SiriusMainWindow):
+class FOUT(BaseWidget):
     """Template for control of High Level Triggers."""
 
     def __init__(self, parent=None, prefix=''):
         """Initialize object."""
-        super().__init__(parent)
-        self.prefix = _PVName(prefix)
+        super().__init__(parent, prefix)
         self._setupUi()
 
     def _setupUi(self):
-        cw = QWidget(self)
-        self.setCentralWidget(cw)
-        self.my_layout = QGridLayout(cw)
+        self.my_layout = QGridLayout(self)
         self.my_layout.setHorizontalSpacing(70)
         self.my_layout.setVerticalSpacing(40)
-        lab = QLabel('<h1>' + self.prefix.device_name + '</h1>', cw)
+        lab = QLabel('<h1>' + self.prefix.device_name + '</h1>', self)
         self.my_layout.addWidget(lab, 0, 0)
         self.my_layout.setAlignment(lab, Qt.AlignCenter)
 
@@ -101,9 +99,8 @@ class FOUT(SiriusMainWindow):
 if __name__ == '__main__':
     """Run Example."""
     from siriushla.sirius_application import SiriusApplication
-    from siriuspy.envars import vaca_prefix
     app = SiriusApplication()
     _util.set_style(app)
-    fout_ctrl = FOUT(prefix=vaca_prefix+'AS-Glob:TI-FOUT-1:')
+    fout_ctrl = FOUT(prefix='TEST-FAC:TI-FOUT-1:')
     fout_ctrl.show()
     sys.exit(app.exec_())
