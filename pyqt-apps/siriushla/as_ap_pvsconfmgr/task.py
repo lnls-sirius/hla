@@ -1,5 +1,5 @@
 """Definition of a task interface."""
-
+import time
 from qtpy.QtCore import QThread, Signal, QVariant
 
 
@@ -68,6 +68,7 @@ class EpicsChecker(EpicsTask):
         if self._quit_task:
             self.finished.emit()
         else:
+            time.sleep(3)
             for i in range(len(self._pvs)):
                 pv, val = self._pvs[i], self._values[i]
                 self.currentItem.emit(pv.pvname)
