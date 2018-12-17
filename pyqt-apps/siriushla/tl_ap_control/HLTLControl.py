@@ -54,7 +54,7 @@ class TLAPControlWindow(SiriusMainWindow):
         if self._tl == 'tb':
             ICT1 = 'TB-02:DI-ICT'
             ICT2 = 'TB-04:DI-ICT'
-        elif self._tlt == 'ts':
+        elif self._tl == 'ts':
             ICT1 = 'TS-01:DI-ICT'
             ICT2 = 'TS-04:DI-ICT'
 
@@ -88,17 +88,16 @@ class TLAPControlWindow(SiriusMainWindow):
         _hlautil.connect_window(openPMApp, PulsedMagnetControlWindow, self)
         openSOFB = QAction("SOFB", self)
         _hlautil.connect_newprocess(openSOFB, 'sirius-hla-tb-ap-sofb.py')
+        openICTsApp = QAction("ICTs", self)
+        _hlautil.connect_window(openICTsApp, ICTMonitoring, parent=self,
+                                tl=self._tl, prefix=self.prefix)
         appsMenu = menubar.addMenu("Open...")
         appsMenu.addAction(openLatticeAndTwiss)
         appsMenu.addAction(openPosAngCorrApp)
         appsMenu.addAction(openMAApp)
         appsMenu.addAction(openPMApp)
         appsMenu.addAction(openSOFB)
-        if self._tl == 'tb':
-            openICTsApp = QAction("ICTs", self)
-            _hlautil.connect_window(openICTsApp, ICTMonitoring, parent=self,
-                                    tl=self._tl, prefix=self.prefix)
-            appsMenu.addAction(openICTsApp)
+        appsMenu.addAction(openICTsApp)
         self.setMenuBar(menubar)
 
         # Create ButtonGroup to handle ScrnViews
