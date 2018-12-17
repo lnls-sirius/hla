@@ -105,14 +105,13 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
     ----------
     parent : QWidget
         The parent widget for the led.
-    channels_values_dict: dict
+    channels2values: dict
         A dict with channels as keys and desired PVs values as values.
     """
 
     default_colorlist = [PyDMLed.Red, PyDMLed.LightGreen]
 
-    def __init__(self, parent=None, channels2values=dict(),
-                 color_list=None):
+    def __init__(self, parent=None, channels2values=dict(), color_list=None):
         """Init."""
         QLed.__init__(self, parent)
         PyDMWidget.__init__(self)
@@ -128,7 +127,7 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
             self.channels2ids[address] = stid
             channel = PyDMChannel(
                 address=address,
-                connection_slot=self.connectionStateChanged,
+                connection_slot=self.connection_changed,
                 value_slot=self.value_changed)
             channel.connect()
             self._channels.append(channel)
@@ -146,11 +145,57 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         self.setState(state)
 
     @Slot(bool)
-    def connectionStateChanged(self, conn):
-        """Reimplement connectionStateChanged to handle all channels."""
+    def connection_changed(self, conn):
+        """Reimplement connection_changed to handle all channels."""
         address = self.sender().address
         setattr(self, 'channel'+self.channels2ids[address]+'_connected', conn)
         allconn = True
         for _id in self.channels2ids.values():
             allconn &= getattr(self, 'channel'+_id+'_connected')
-        self.connection_changed(allconn)
+        PyDMWidget.connection_changed(self, allconn)
+
+
+class PyDMLedMultiConnection(QLed, PyDMWidget):
+    """
+    A QLed with support for checking connection of several Channels.
+
+    The led state notify if a set of PVs is connected.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the led.
+    channels: list
+        A list of channels.
+    """
+
+    default_colorlist = [PyDMLed.Red, PyDMLed.LightGreen]
+
+    def __init__(self, parent=None, channels=list(), color_list=None):
+        """Init."""
+        QLed.__init__(self, parent)
+        PyDMWidget.__init__(self)
+        self.channels = channels
+        self.stateColors = color_list or self.default_colorlist
+
+        self.channels2ids = dict()
+        for _id, address in enumerate(sorted(self.channels)):
+            stid = str(_id)
+            setattr(self, 'channel' + stid, address)
+            setattr(self, 'channel' + stid + '_connected', False)
+            self.channels2ids[address] = stid
+            channel = PyDMChannel(
+                address=address, connection_slot=self.connection_changed)
+            channel.connect()
+            self._channels.append(channel)
+
+    @Slot(bool)
+    def connection_changed(self, conn):
+        """Reimplement connection_changed to handle all channels."""
+        address = self.sender().address
+        setattr(self, 'channel'+self.channels2ids[address]+'_connected', conn)
+        allconn = True
+        for _id in self.channels2ids.values():
+            allconn &= getattr(self, 'channel'+_id+'_connected')
+        self.setState(allconn)
+        self._connected = allconn

@@ -1,26 +1,28 @@
 """Booster Ramp Control HLA: Optics Adjust Module."""
 
-from copy import deepcopy as _dcopy
-from qtpy.QtCore import Qt, Slot, Signal, QLocale
-from qtpy.QtWidgets import QGroupBox, QPushButton, QSpinBox, QLabel, \
+from qtpy.QtCore import Qt, Slot, Signal
+from qtpy.QtWidgets import QGroupBox, QPushButton, QLabel, \
                            QHBoxLayout, QVBoxLayout, QGridLayout, \
-                           QSizePolicy as QSzPlcy, QDoubleSpinBox, QAction, \
-                           QSpacerItem, QInputDialog, QLineEdit, QMenu
+                           QSizePolicy as QSzPlcy, QAction, \
+                           QSpacerItem, QMenu
 from siriuspy.ramp import ramp
 from siriuspy.ramp.magnet import Magnet as _Magnet
-from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriuspy.optics.opticscorr import BOTuneCorr, BOChromCorr
-from siriuspy.servconf.conf_service import ConfigService as _ConfigService
-from pydm.widgets import PyDMLineEdit
+from siriuspy.servconf.util import \
+    generate_config_name as _generate_config_name
+from siriuspy.servconf import exceptions as _srvexceptions
+from siriuspy.ramp.conn import ConnSOFB as _ConnSOFB
 from siriushla.bo_ap_ramp.auxiliar_classes import \
     EditNormalizedConfig as _EditNormalizedConfig, \
+    NewRampConfigGetName as _NewRampConfigGetName, \
+    MyDoubleSpinBox as _MyDoubleSpinBox, \
     MessageBox as _MessageBox
 
 
 class OpticsAdjust(QGroupBox):
     """Widget to perform optics adjust in normalized configurations."""
 
-    normConfigChanged = Signal(ramp.BoosterNormalized)
+    normConfigChanged = Signal(list)
 
     def __init__(self, parent=None, prefix='', ramp_config=None):
         """Initialize object."""
@@ -33,11 +35,14 @@ class OpticsAdjust(QGroupBox):
         self._aux_magnets = dict()
         for ma in ramp.BoosterNormalized().manames:
             self._aux_magnets[ma] = _Magnet(ma)
-        self._locale = QLocale(QLocale.English, country=QLocale.UnitedStates)
-        self._locale.setNumberOptions(self._locale.RejectGroupSeparator)
+        self._dkicks = dict()
+        self._corrfactorH = 100.0
+        self._corrfactorV = 100.0
         self._setupUi()
         self._tunecorr = BOTuneCorr('Default_1')
         self._chromcorr = BOChromCorr('Default')
+        self._conn_sofb = _ConnSOFB(prefix=self.prefix)
+        self._norm_config_oldname = ''
 
     def _setupUi(self):
         self.setMinimumHeight(500)
@@ -60,9 +65,11 @@ class OpticsAdjust(QGroupBox):
 
     def _setupChooseConfig(self):
         l_confignr = QLabel('Config. number: ')
-        self.sb_config = QSpinBox(self)
+        self.sb_config = _MyDoubleSpinBox(self)
         self.sb_config.setMinimum(1)
         self.sb_config.setFixedWidth(80)
+        self.sb_config.setSingleStep(1)
+        self.sb_config.setDecimals(0)
         self.sb_config.editingFinished.connect(self._handleConfigIndexChanged)
         hlay_config = QHBoxLayout()
         hlay_config.addWidget(l_confignr)
@@ -72,8 +79,9 @@ class OpticsAdjust(QGroupBox):
         self.bt_edit.setToolTip('Click to edit strengths')
         self.bt_edit.clicked.connect(self._showEditPopup)
 
-        self.bt_save = QPushButton('Save in ramp config.')
-        self.bt_save.clicked.connect(self._updateRampConfig)
+        self.bt_update = QPushButton('Update in ramp config.')
+        self.bt_update.clicked.connect(self._updateRampConfig)
+        self.bt_update.setEnabled(False)
 
         self.bt_server = QPushButton('Server', self)
         self.act_load = QAction('Load', self)
@@ -93,11 +101,10 @@ class OpticsAdjust(QGroupBox):
         lay.addLayout(hlay_config)
         lay.addWidget(self.bt_edit)
         lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
-        lay.addWidget(self.bt_save)
+        lay.addWidget(self.bt_update)
         lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
         lay.addWidget(self.bt_server)
         lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
-
         return lay
 
     def _setupTuneVariation(self):
@@ -107,27 +114,25 @@ class OpticsAdjust(QGroupBox):
 
         label_deltaTuneX = QLabel('Δν<sub>x</sub>: ')
         label_deltaTuneX.setFixedWidth(48)
-        self.sb_deltaTuneX = QDoubleSpinBox(self)
+        self.sb_deltaTuneX = _MyDoubleSpinBox(self)
         self.sb_deltaTuneX.setDecimals(6)
         self.sb_deltaTuneX.setMinimum(-1)
         self.sb_deltaTuneX.setMaximum(1)
         self.sb_deltaTuneX.setSingleStep(0.0001)
         self.sb_deltaTuneX.setFixedWidth(200)
-        self.sb_deltaTuneX.setLocale(self._locale)
         self.sb_deltaTuneX.editingFinished.connect(self._calculate_deltaKL)
 
         label_deltaTuneY = QLabel('Δν<sub>y</sub>: ')
         label_deltaTuneY.setFixedWidth(48)
-        self.sb_deltaTuneY = QDoubleSpinBox(self)
+        self.sb_deltaTuneY = _MyDoubleSpinBox(self)
         self.sb_deltaTuneY.setDecimals(6)
         self.sb_deltaTuneY.setMinimum(-1)
         self.sb_deltaTuneY.setMaximum(1)
         self.sb_deltaTuneY.setSingleStep(0.0001)
         self.sb_deltaTuneY.setFixedWidth(200)
-        self.sb_deltaTuneY.setLocale(self._locale)
         self.sb_deltaTuneY.editingFinished.connect(self._calculate_deltaKL)
 
-        label_KL = QLabel('<h4>ΔKL</h4>', self)
+        label_KL = QLabel('<h4>ΔKL [1/m]</h4>', self)
         label_KL.setAlignment(Qt.AlignCenter)
         label_KL.setFixedHeight(48)
 
@@ -143,6 +148,7 @@ class OpticsAdjust(QGroupBox):
         self.bt_apply_deltaKL = QPushButton('Apply', self)
         self.bt_apply_deltaKL.clicked.connect(self._apply_deltaKL)
         self.bt_apply_deltaKL.setFixedWidth(150)
+        self.bt_apply_deltaKL.setEnabled(False)
         hlay_bt_apply.addSpacerItem(
             QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
         hlay_bt_apply.addWidget(self.bt_apply_deltaKL)
@@ -181,27 +187,25 @@ class OpticsAdjust(QGroupBox):
 
         label_deltaChromX = QLabel('Δξ<sub>x</sub>: ')
         label_deltaChromX.setFixedWidth(48)
-        self.sb_deltaChromX = QDoubleSpinBox(self)
+        self.sb_deltaChromX = _MyDoubleSpinBox(self)
         self.sb_deltaChromX.setDecimals(6)
         self.sb_deltaChromX.setMinimum(-10)
         self.sb_deltaChromX.setMaximum(10)
         self.sb_deltaChromX.setSingleStep(0.0001)
         self.sb_deltaChromX.setFixedWidth(200)
-        self.sb_deltaChromX.setLocale(self._locale)
         self.sb_deltaChromX.editingFinished.connect(self._calculate_deltaSL)
 
         label_deltaChromY = QLabel('Δξ<sub>y</sub>: ')
         label_deltaChromY.setFixedWidth(48)
-        self.sb_deltaChromY = QDoubleSpinBox(self)
+        self.sb_deltaChromY = _MyDoubleSpinBox(self)
         self.sb_deltaChromY.setDecimals(6)
         self.sb_deltaChromY.setMinimum(-10)
         self.sb_deltaChromY.setMaximum(10)
         self.sb_deltaChromY.setSingleStep(0.0001)
         self.sb_deltaChromY.setFixedWidth(200)
-        self.sb_deltaChromY.setLocale(self._locale)
         self.sb_deltaChromY.editingFinished.connect(self._calculate_deltaSL)
 
-        label_SL = QLabel('<h4>ΔSL</h4>', self)
+        label_SL = QLabel('<h4>ΔSL [1/m<sup>2</sup>]</h4>', self)
         label_SL.setAlignment(Qt.AlignCenter)
         label_SL.setFixedHeight(48)
 
@@ -217,6 +221,7 @@ class OpticsAdjust(QGroupBox):
         self.bt_apply_deltaSL = QPushButton('Apply', self)
         self.bt_apply_deltaSL.clicked.connect(self._apply_deltaSL)
         self.bt_apply_deltaSL.setFixedWidth(150)
+        self.bt_apply_deltaSL.setEnabled(False)
         hlay_bt_apply.addSpacerItem(
             QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
         hlay_bt_apply.addWidget(self.bt_apply_deltaSL)
@@ -253,21 +258,26 @@ class OpticsAdjust(QGroupBox):
         label.setAlignment(Qt.AlignCenter)
         label.setFixedHeight(48)
 
-        self.bt_load_measured_orbit = QPushButton(
-            'Load Measured Orbit', self)
-        self.bt_load_measured_orbit.clicked.connect(self._load_measured_orbit)
-        self.bt_correctH = QPushButton('Correct H', self)
-        self.bt_correctH.clicked.connect(self._correctH)
-        self.pydmledit_correctH = PyDMLineEdit(
-            parent=self,
-            init_channel='ca://'+_vaca_prefix)
+        self.bt_load_sofb_kicks = QPushButton('Load Kicks from SOFB', self)
+        self.bt_load_sofb_kicks.clicked.connect(self._load_sofb_kicks)
+        label_correctH = QLabel('Correct H', self)
+        self.sb_correctH = _MyDoubleSpinBox(self)
+        self.sb_correctH.setValue(self._corrfactorH)
+        self.sb_correctH.setDecimals(1)
+        self.sb_correctH.setMinimum(-10000)
+        self.sb_correctH.setMaximum(10000)
+        self.sb_correctH.setSingleStep(0.1)
+        self.sb_correctH.setFixedWidth(200)
         labelH = QLabel('%', self)
         labelH.setFixedWidth(24)
-        self.bt_correctV = QPushButton('Correct V', self)
-        self.bt_correctV.clicked.connect(self._correctV)
-        self.pydmledit_correctV = PyDMLineEdit(
-            parent=self,
-            init_channel='ca://'+_vaca_prefix)
+        label_correctV = QLabel('Correct V', self)
+        self.sb_correctV = _MyDoubleSpinBox(self)
+        self.sb_correctV.setValue(self._corrfactorV)
+        self.sb_correctV.setDecimals(1)
+        self.sb_correctV.setMinimum(-10000)
+        self.sb_correctV.setMaximum(10000)
+        self.sb_correctV.setSingleStep(0.1)
+        self.sb_correctV.setFixedWidth(200)
         labelV = QLabel('%', self)
         labelV.setFixedWidth(24)
 
@@ -276,6 +286,7 @@ class OpticsAdjust(QGroupBox):
         self.bt_apply_orbitcorrection.clicked.connect(
             self._apply_orbitcorrection)
         self.bt_apply_orbitcorrection.setFixedWidth(150)
+        self.bt_apply_orbitcorrection.setEnabled(False)
         hlay_bt_apply.addSpacerItem(
             QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
         hlay_bt_apply.addWidget(self.bt_apply_orbitcorrection)
@@ -283,46 +294,54 @@ class OpticsAdjust(QGroupBox):
             QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
 
         lay = QGridLayout()
-        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 0, 0)
+        lay.addItem(
+            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 0, 0)
         lay.addWidget(label, 1, 0, 1, 3)
         lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 2, 0)
-        lay.addWidget(self.bt_load_measured_orbit, 3, 0, 1, 3)
-        lay.addWidget(self.bt_correctH, 4, 0)
-        lay.addWidget(self.pydmledit_correctH, 4, 1)
-        lay.addWidget(labelH, 4, 2)
-        lay.addWidget(self.bt_correctV, 5, 0)
-        lay.addWidget(self.pydmledit_correctV, 5, 1)
-        lay.addWidget(labelV, 5, 2)
-        lay.addLayout(hlay_bt_apply, 6, 0, 1, 3)
-        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 7, 0)
-
+        lay.addWidget(self.bt_load_sofb_kicks, 3, 0, 1, 3)
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 4, 0)
+        lay.addWidget(label_correctH, 5, 0)
+        lay.addWidget(self.sb_correctH, 5, 1)
+        lay.addWidget(labelH, 5, 2)
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 6, 0)
+        lay.addWidget(label_correctV, 7, 0)
+        lay.addWidget(self.sb_correctV, 7, 1)
+        lay.addWidget(labelV, 7, 2)
+        lay.addItem(
+            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 8, 0)
+        lay.addLayout(hlay_bt_apply, 9, 0, 1, 3)
+        lay.addItem(
+            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 10, 0)
         return lay
 
     def _handleConfigIndexChanged(self):
         if not self._table_map:
             return
-        config_idx = self.sb_config.value()
+        config_idx = int(self.sb_config.value())
         for value, label in self._table_map['rows'].items():
             if config_idx == (value + 1):
                 self.bt_edit.setText(label)
+                self.bt_update.setEnabled(False)
                 if label in ['Injection', 'Ejection']:
                     self.bt_edit.setEnabled(False)
-                    self.bt_save.setEnabled(False)
                     self.act_load.setEnabled(False)
                     self.act_save.setEnabled(False)
                     self.act_save_as.setEnabled(False)
                     self.norm_config = None
                 else:
                     self.bt_edit.setEnabled(True)
-                    self.bt_save.setEnabled(True)
                     self.act_save.setEnabled(True)
                     self.act_save_as.setEnabled(True)
                     self.norm_config = self.ramp_config[label]
-                    if self.norm_config.configsrv_exist():
-                        self.act_load.setEnabled(True)
-                    else:
-                        self.act_load.setEnabled(False)
+                    try:
+                        if self.norm_config.configsrv_exist():
+                            self.act_load.setEnabled(True)
+                        else:
+                            self.act_load.setEnabled(False)
                         self.verifySync()
+                    except _srvexceptions.SrvError as e:
+                        err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
+                        err_msg.open()
                 break
         self._resetTuneChanges()
         self._resetChromChanges()
@@ -347,51 +366,53 @@ class OpticsAdjust(QGroupBox):
     def _handleEdit(self, nconfig):
         for maname, value in nconfig.items():
             self.norm_config[maname] = value
+        self.bt_update.setEnabled(True)
         self.verifySync()
 
     def _updateRampConfig(self):
         if self.norm_config is not None:
-            self.normConfigChanged.emit(self.norm_config)
+            self.normConfigChanged.emit([self.norm_config,
+                                        self._norm_config_oldname,
+                                        int(self.sb_config.value())-1])
 
     def _load(self):
         if self.norm_config is not None:
-            self.norm_config.configsrv_load()
-            self._resetTuneChanges()
-            self._resetChromChanges()
-            self._resetOrbitChanges()
-            self.verifySync()
+            try:
+                self.norm_config.configsrv_load()
+            except _srvexceptions.SrvError as e:
+                err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
+                err_msg.open()
+            else:
+                self._resetTuneChanges()
+                self._resetChromChanges()
+                self._resetOrbitChanges()
+                self.verifySync()
 
-    def _save(self):
-        if self.norm_config is not None:
-            self.norm_config.configsrv_save()
+    def _save(self, new_name=None):
+        if self.norm_config is None:
+            return
+        try:
+            if self.norm_config.configsrv_exist():
+                self._norm_config_oldname = self.norm_config.name
+                if not new_name:
+                    new_name = _generate_config_name(self._norm_config_oldname)
+                self.norm_config.configsrv_save(new_name)
+            else:
+                self.norm_config.configsrv_save()
+        except _srvexceptions.SrvError as e:
+            err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
+            err_msg.open()
+        finally:
+            self.bt_edit.setText(self.norm_config.name)
             self.verifySync()
 
     def _showSaveAsPopup(self):
-        if self.norm_config is not None:
-            text, ok = QInputDialog.getText(self, 'Save As...',
-                                            'Normalized config. name:',
-                                            echo=QLineEdit.Normal, text='')
-            if not ok:
-                return
-            self._name_to_saveas = text
-            allconfigs = _ConfigService().find_configs(config_type='bo_ramp')
-            for c in allconfigs['result']:
-                if text == c['name']:
-                    save_changes = _MessageBox(
-                        self, 'Overwrite configuration?',
-                        'There is a configuration with name {}. \n'
-                        'Do you want to replace it?'.format(text),
-                        'Yes', 'Cancel')
-                    save_changes.acceptedSignal.connect(self._save_as)
-                    save_changes.exec_()
-                    break
-            else:
-                self._save_as()
-
-    def _save_as(self):
-        config_tosave = _dcopy(self.norm_config)
-        config_tosave.name = self._name_to_saveas
-        config_tosave.configsrv_save()
+        if self.norm_config is None:
+            return
+        self._saveAsPopup = _NewRampConfigGetName(
+            self.norm_config, 'bo_normalized', self, new_from_template=False)
+        self._saveAsPopup.configname.connect(self._save)
+        self._saveAsPopup.open()
 
     def _calculate_deltaKL(self):
         if self.norm_config is None:
@@ -401,8 +422,10 @@ class OpticsAdjust(QGroupBox):
 
         self._deltaKL = self._tunecorr.calculate_deltaKL([dtunex, dtuney])
 
-        self.l_deltaKLQF.setText('{:6f}'.format(self._deltaKL[0]))
-        self.l_deltaKLQD.setText('{:6f}'.format(self._deltaKL[1]))
+        self.l_deltaKLQF.setText('{: 6f}'.format(self._deltaKL[0]))
+        self.l_deltaKLQD.setText('{: 6f}'.format(self._deltaKL[1]))
+
+        self.bt_apply_deltaKL.setEnabled(True)
 
     def _apply_deltaKL(self):
         if self.norm_config is None:
@@ -410,6 +433,7 @@ class OpticsAdjust(QGroupBox):
         self.norm_config['BO-Fam:MA-QF'] += self._deltaKL[0]
         self.norm_config['BO-Fam:MA-QD'] += self._deltaKL[1]
         self._resetTuneChanges()
+        self.bt_update.setEnabled(True)
         self.verifySync()
 
     def _calculate_deltaSL(self):
@@ -421,8 +445,10 @@ class OpticsAdjust(QGroupBox):
 
         self._deltaSL = self._chromcorr.calculate_deltaSL([dchromx, dchromy])
 
-        self.l_deltaSLSF.setText('{:6f}'.format(self._deltaSL[0]))
-        self.l_deltaSLSD.setText('{:6f}'.format(self._deltaSL[1]))
+        self.l_deltaSLSF.setText('{: 6f}'.format(self._deltaSL[0]))
+        self.l_deltaSLSD.setText('{: 6f}'.format(self._deltaSL[1]))
+
+        self.bt_apply_deltaSL.setEnabled(True)
 
     def _apply_deltaSL(self):
         if self.norm_config is None:
@@ -430,42 +456,58 @@ class OpticsAdjust(QGroupBox):
         self.norm_config['BO-Fam:MA-SF'] += self._deltaSL[0]
         self.norm_config['BO-Fam:MA-SD'] += self._deltaSL[1]
         self._resetChromChanges()
+        self.bt_update.setEnabled(True)
         self.verifySync()
 
-    def _load_measured_orbit(self):
-        # TODO: include orbit correction
-        print('Load Measured Orbit')
-
-    def _correctH(self):
-        # TODO: include orbit correction
-        print('Correct Horizontal Orbit')
-
-    def _correctV(self):
-        # TODO: include orbit correction
-        print('Correct Vertical Orbit')
+    def _load_sofb_kicks(self):
+        if not self._conn_sofb:
+            return
+        if not self._conn_sofb.connected:
+            warn_msg = _MessageBox(
+                self, 'Not Connected',
+                'There are not connected PVs!', 'Ok')
+            warn_msg.exec_()
+            return
+        self._dkicks = self._conn_sofb.get_deltakicks()
+        self.bt_apply_orbitcorrection.setEnabled(True)
 
     def _apply_orbitcorrection(self):
-        # TODO: include orbit correction
+        if not self._dkicks or self.norm_config is None:
+            return
+        self._corrfactorH = self.sb_correctH.value()
+        self._corrfactorV = self.sb_correctV.value()
+        for maname, dkick in self._dkicks:
+            corr_factor = self._corrfactorV if 'CV' in maname \
+                          else self._corrfactorH
+            current_kick = self.norm_config[maname]
+            self.norm_config[maname] = current_kick + dkick*corr_factor
         self._resetOrbitChanges()
+        self.bt_update.setEnabled(True)
         self.verifySync()
 
     def _resetTuneChanges(self):
         self.sb_deltaTuneX.setValue(0)
         self.sb_deltaTuneY.setValue(0)
         self._deltaKL = [0.0, 0.0]
-        self.l_deltaKLQF.setText('{:6f}'.format(self._deltaKL[0]))
-        self.l_deltaKLQD.setText('{:6f}'.format(self._deltaKL[1]))
+        self.l_deltaKLQF.setText('{: 6f}'.format(self._deltaKL[0]))
+        self.l_deltaKLQD.setText('{: 6f}'.format(self._deltaKL[1]))
+        self.bt_apply_deltaKL.setEnabled(False)
 
     def _resetChromChanges(self):
         self.sb_deltaChromX.setValue(0)
         self.sb_deltaChromY.setValue(0)
         self._deltaSL = [0.0, 0.0]
-        self.l_deltaSLSF.setText('{:6f}'.format(self._deltaSL[0]))
-        self.l_deltaSLSD.setText('{:6f}'.format(self._deltaSL[1]))
+        self.l_deltaSLSF.setText('{: 6f}'.format(self._deltaSL[0]))
+        self.l_deltaSLSD.setText('{: 6f}'.format(self._deltaSL[1]))
+        self.bt_apply_deltaSL.setEnabled(False)
 
     def _resetOrbitChanges(self):
-        pass
-        # TODO: include orbit correction
+        self._dkicks = dict()
+        self._corrfactorH = 100.0
+        self._corrfactorV = 100.0
+        self.sb_correctH.setValue(100.0)
+        self.sb_correctV.setValue(100.0)
+        self.bt_apply_orbitcorrection.setEnabled(False)
 
     @Slot(dict)
     def getConfigIndices(self, table_map):
@@ -490,7 +532,7 @@ class OpticsAdjust(QGroupBox):
         """Update all widgets in loading BoosterRamp config."""
         self.ramp_config = ramp_config
         if self.norm_config is not None and self.norm_config.name in \
-                ramp_config.ps_normalized_configs_names:
+                self.ramp_config.ps_normalized_configs_names:
             self.norm_config = self.ramp_config[self.norm_config.name]
 
     @Slot(list)
@@ -498,7 +540,6 @@ class OpticsAdjust(QGroupBox):
         """Update settings."""
         self._tunecorr = BOTuneCorr(settings[0])
         self._chromcorr = BOChromCorr(settings[1])
-        # TODO: handle orbir correction settings
 
     def verifySync(self):
         """Verify sync status related to ConfServer."""
