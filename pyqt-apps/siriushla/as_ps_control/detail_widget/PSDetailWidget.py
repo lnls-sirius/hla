@@ -59,6 +59,12 @@ class PSDetailWidget(QWidget):
             min-height: 1.5em;
             max-height: 1.5em;
         }
+        PyDMWaveformPlot {
+            min-width: 20em;
+            max-width: 20em;
+            min-height: 16em;
+            max-height: 16em;
+        }
     """
 
     def __init__(self, psname, parent=None):
