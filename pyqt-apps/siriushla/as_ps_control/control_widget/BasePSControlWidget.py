@@ -106,7 +106,10 @@ class BasePSControlWidget(QWidget):
             for key, widget in self.widgets_list.items():
                 if key in self.filtered_widgets:
                     widget.analog_widget.sp_lineedit.setText(str(new_value))
-                    widget.analog_widget.sp_lineedit.send_value()
+                    try:
+                        widget.analog_widget.sp_lineedit.send_value()
+                    except TypeError:
+                        pass
 
     @Slot(QPoint)
     def show_context_menu(self, point):
