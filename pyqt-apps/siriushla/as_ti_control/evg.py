@@ -257,41 +257,44 @@ class EVG(BaseWidget):
         return pwid
 
 
-
 class EventList(BaseList):
     """Template for control of Events."""
 
     _MIN_WIDs = {
         'ext_trig': 150, 'mode': 205, 'delay_type': 130, 'delay': 150,
-        'description': 300,
+        'description': 300, 'code': 100,
         }
     _LABELS = {
         'ext_trig': 'Ext. Trig.', 'mode': 'Mode', 'description': 'Description',
-        'delay_type': 'Type', 'delay': 'Delay [us]'
+        'delay_type': 'Type', 'delay': 'Delay [us]', 'code': 'Code',
         }
-    _ALL_PROPS = ('ext_trig', 'mode', 'delay_type', 'delay', 'description')
+    _ALL_PROPS = (
+        'ext_trig', 'mode', 'delay_type', 'delay', 'description', 'code')
 
     def _createObjs(self, prefix, prop):
-        if 'ext_trig' == prop:
-            sp = PyDMPushButton(self, init_channel=prefix+'ExtTrig-Cmd',
-                                pressValue=1)
+        sp = rb = None
+        if prop == 'ext_trig':
+            sp = PyDMPushButton(
+                self, init_channel=prefix+'ExtTrig-Cmd', pressValue=1)
             sp.setText(prefix.propty)
-            return (sp, )
-        elif 'mode' == prop:
+        elif prop == 'mode':
             sp = PyDMECB(self, init_channel=prefix + "Mode-Sel")
-            # rb = PyDMLabel(self, init_channel=prefix + "Mode-Sts")
-            return (sp, )
-        elif 'delay_type' == prop:
+            rb = PyDMLabel(self, init_channel=prefix + "Mode-Sts")
+        elif prop == 'delay_type':
             sp = PyDMECB(self, init_channel=prefix+"DelayType-Sel")
-            # rb = PyDMLabel(self, init_channel=prefix+"DelayType-Sts")
-            return (sp, )
-        elif 'delay' == prop:
+            rb = PyDMLabel(self, init_channel=prefix+"DelayType-Sts")
+        elif prop == 'delay':
             sp = PyDMSpinbox(self, init_channel=prefix + "Delay-SP")
             sp.showStepExponent = False
             rb = PyDMLabel(self, init_channel=prefix + "Delay-RB")
-        elif 'description' == prop:
+        elif prop == 'description':
             sp = PyDMLineEdit(self, init_channel=prefix + 'Desc-SP')
             rb = PyDMLabel(self, init_channel=prefix + 'Desc-RB')
+        elif prop == 'code':
+            sp = PyDMLabel(self, init_channel=prefix+'Code-Mon')
+            sp.setAlignment(Qt.AlignCenter)
+        if rb is None:
+            return (sp, )
         return (sp, rb)
 
 
@@ -313,21 +316,19 @@ class ClockList(BaseList):
     _ALL_PROPS = ('state', 'frequency', 'mux_div', 'mux_enbl')
 
     def _createObjs(self, prefix, prop):
-        if 'state' == prop:
+        if prop == 'state':
             sp = PyDMCb(self, init_channel=prefix + "State-Sel")
             sp.setText(prefix.propty)
-            # rb = PyDMLed(self, init_channel=prefix + "State-Sts")
-            return (sp, )
-        elif 'frequency' == prop:
+            rb = PyDMLed(self, init_channel=prefix + "State-Sts")
+        elif prop == 'frequency':
             sp = PyDMSpinbox(self, init_channel=prefix + "Freq-SP")
             sp.showStepExponent = False
             rb = PyDMLabel(self, init_channel=prefix + "Freq-RB")
-        if 'mux_enbl' == prop:
+        if prop == 'mux_enbl':
             sp = PyDMCb(self, init_channel=prefix + "MuxEnbl-Sel")
             sp.setText(prefix.propty)
             rb = PyDMLed(self, init_channel=prefix + "MuxEnbl-Sts")
-            return (sp, rb)
-        elif 'mux_div' == prop:
+        elif prop == 'mux_div':
             sp = PyDMSpinbox(self, init_channel=prefix + "MuxDiv-SP")
             sp.showStepExponent = False
             rb = PyDMLabel(self, init_channel=prefix + "MuxDiv-RB")

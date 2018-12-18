@@ -1,7 +1,7 @@
 import sys
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGroupBox, QLabel, QWidget, QScrollArea, \
-    QVBoxLayout, QHBoxLayout, QGridLayout, QSizePolicy as QSzPol
+    QVBoxLayout, QHBoxLayout, QGridLayout, QSpacerItem, QSizePolicy as QSzPol
 from pydm.widgets.label import PyDMLabel
 from pydm.widgets.enum_combo_box import PyDMEnumComboBox as PyDMECB
 from pydm.widgets.checkbox import PyDMCheckbox as PyDMCb
@@ -11,6 +11,7 @@ from siriushla.widgets.state_button import PyDMStateButton
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriushla import util as _util
 from siriushla.as_ti_control.base import BaseList, BaseWidget
+from siriushla.as_ti_control.ll_trigger import OTPList, OUTList
 
 
 class _EVR_EVE(BaseWidget):
@@ -38,15 +39,17 @@ class _EVR_EVE(BaseWidget):
             obj_names=['OTP{0:02d}'.format(i) for i in range(24)]
             )
         scr_ar.setWidget(self.otps_wid)
-        scr_ar.setMinimumWidth(1440)
+        scr_ar.setMinimumWidth(1570)
         scr_ar.setSizePolicy(QSzPol.Minimum, QSzPol.Expanding)
-        self.my_layout.addWidget(scr_ar, 2, 0)
+        self.my_layout.addWidget(scr_ar, 2, 0, 2, 1)
 
         self.outs_wid = OUTList(
             name='OUT', parent=self, prefix=self.prefix,
             obj_names=['OUT{0:d}'.format(i) for i in range(8)]
             )
         self.my_layout.addWidget(self.outs_wid, 2, 1)
+        self.my_layout.addItem(QSpacerItem(
+                0, 0, QSzPol.Minimum, QSzPol.Expanding))
 
         self.status_wid = QGroupBox('Status', self)
         self.my_layout.addWidget(self.status_wid, 1, 0, 1, 2)
@@ -140,108 +143,6 @@ class EVE(_EVR_EVE):
 
     def __init__(self, parent=None, prefix=''):
         super().__init__(parent, prefix, device='EVE')
-
-
-class OTPList(BaseList):
-    """Template for control of Timing devices Internal Triggers."""
-
-    _MIN_WIDs = {
-        'state': 200,
-        'event': 100,
-        'width': 150,
-        'polarity': 70,
-        'pulses': 150,
-        'delay': 150,
-        'interlock': 200,
-        }
-    _LABELS = {
-        'state': 'State',
-        'event': 'Event',
-        'width': 'Width',
-        'polarity': 'Polarity',
-        'pulses': 'Nr Pulses',
-        'delay': 'Delay',
-        'interlock': 'ByPass Intlk',
-        }
-    _ALL_PROPS = (
-        'state', 'event', 'width', 'polarity', 'pulses', 'delay', 'interlock',
-        )
-
-    def _createObjs(self, prefix, prop):
-        sp = rb = None
-        if 'state' == prop:
-            sp = PyDMStateButton(self, init_channel=prefix + "State-Sel")
-            rb = PyDMLed(self, init_channel=prefix + "State-Sts")
-        elif 'event' == prop:
-            sp = PyDMSpinbox(self, init_channel=prefix + 'Evt-SP')
-            sp.showStepExponent = False
-            rb = PyDMLabel(self, init_channel=prefix + 'Evt-RB')
-            rb.setAlignment(Qt.AlignCenter)
-        elif 'width' == prop:
-            sp = PyDMSpinbox(self, init_channel=prefix+"Width-SP")
-            sp.showStepExponent = False
-            rb = PyDMLabel(self, init_channel=prefix+"Width-RB")
-            rb.setAlignment(Qt.AlignCenter)
-        elif 'polarity' == prop:
-            sp = PyDMECB(self, init_channel=prefix + "Polarity-Sel")
-            rb = PyDMLabel(self, init_channel=prefix+"Polarity-Sts")
-            rb.setAlignment(Qt.AlignCenter)
-        elif 'pulses' == prop:
-            sp = PyDMSpinbox(self, init_channel=prefix + "NrPulses-SP")
-            sp.showStepExponent = False
-            rb = PyDMLabel(self, init_channel=prefix + "NrPulses-RB")
-            rb.setAlignment(Qt.AlignCenter)
-        elif 'delay' == prop:
-            sp = PyDMSpinbox(self, init_channel=prefix + "Delay-SP")
-            sp.showStepExponent = False
-            rb = PyDMLabel(self, init_channel=prefix + "Delay-RB")
-            rb.setAlignment(Qt.AlignCenter)
-        elif 'interlock' == prop:
-            sp = PyDMStateButton(self, init_channel=prefix + "ByPassIntlk-Sel")
-            rb = PyDMLed(self, init_channel=prefix + "ByPassIntlk-Sts")
-        if rb is not None:
-            return sp, rb
-        return (sp, )
-
-
-class OUTList(BaseList):
-    """Template for control of Timing Devices Output Channels."""
-
-    _MIN_WIDs = {
-        'source': 200,
-        'trigger': 100,
-        'rf_delay': 150,
-        'fine_delay': 150,
-        }
-    _LABELS = {
-        'source': 'Source',
-        'trigger': 'Trigger',
-        'rf_delay': 'RF Delay',
-        'fine_delay': 'Fine Delay',
-        }
-    _ALL_PROPS = ('source', 'trigger', 'rf_delay', 'fine_delay')
-
-    def _createObjs(self, prefix, prop):
-        if 'source' == prop:
-            sp = PyDMECB(self, init_channel=prefix+"Src-Sel")
-            rb = PyDMLabel(self, init_channel=prefix + "Src-Sts")
-            rb.setAlignment(Qt.AlignCenter)
-        elif 'trigger' == prop:
-            sp = PyDMSpinbox(self, init_channel=prefix + "SrcTrig-SP")
-            sp.showStepExponent = False
-            rb = PyDMLabel(self, init_channel=prefix + "SrcTrig-RB")
-            rb.setAlignment(Qt.AlignCenter)
-        elif 'rf_delay' == prop:
-            sp = PyDMSpinbox(self, init_channel=prefix + "RFDelay-SP")
-            sp.showStepExponent = False
-            rb = PyDMLabel(self, init_channel=prefix + "RFDelay-RB")
-            rb.setAlignment(Qt.AlignCenter)
-        elif 'fine_delay' == prop:
-            sp = PyDMSpinbox(self, init_channel=prefix + "FineDelay-SP")
-            sp.showStepExponent = False
-            rb = PyDMLabel(self, init_channel=prefix + "FineDelay-RB")
-            rb.setAlignment(Qt.AlignCenter)
-        return sp, rb
 
 
 if __name__ == '__main__':

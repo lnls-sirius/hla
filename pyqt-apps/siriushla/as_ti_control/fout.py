@@ -101,6 +101,6 @@ if __name__ == '__main__':
     from siriushla.sirius_application import SiriusApplication
     app = SiriusApplication()
     _util.set_style(app)
-    fout_ctrl = FOUT(prefix='TEST-FAC:TI-FOUT-1:')
+    fout_ctrl = FOUT(prefix='TEST-FAC:TI-Fout:')
     fout_ctrl.show()
     sys.exit(app.exec_())

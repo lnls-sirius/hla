@@ -4,16 +4,13 @@ from PyQt5.QtWidgets import QGroupBox, QLabel, QWidget, QScrollArea
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QGridLayout
 from PyQt5.QtWidgets import QSizePolicy as QSzPol
 from pydm.widgets.label import PyDMLabel
-from pydm.widgets.enum_combo_box import PyDMEnumComboBox as PyDMECB
-from pydm.widgets.checkbox import PyDMCheckbox as PyDMCb
-from pydm.widgets.spinbox import PyDMSpinbox
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.search import LLTimeSearch as _LLTimeSearch
 from siriushla.widgets.led import PyDMLed, SiriusLedAlert
 from siriushla.widgets.state_button import PyDMStateButton
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla import util as _util
-from siriushla.as_ti_control.base import BaseList
+from siriushla.as_ti_control.ll_trigger import AFCOUTList
 
 
 class AFC(SiriusMainWindow):
@@ -36,7 +33,7 @@ class AFC(SiriusMainWindow):
         self.my_layout.setAlignment(lab, Qt.AlignCenter)
 
         scr_ar = QScrollArea(cw)
-        set_ = _LLTimeSearch.i2o_map['AFC']['SFP']
+        set_ = _LLTimeSearch.In2OutMap['AMCFPGAEVR']['SFP8']
         obj_names = sorted([out for out in set_ if out.startswith('FMC')])
         self.fmcs_wid = AFCOUTList(
             name='FMC Outputs', parent=scr_ar,
@@ -129,60 +126,6 @@ class AFC(SiriusMainWindow):
             lv.addWidget(wid)
             lv.setAlignment(wid, Qt.AlignCenter)
         return gb
-
-
-class AFCOUTList(BaseList):
-    """Template for control of Timing devices Internal Triggers."""
-
-    _MIN_WIDs = {
-        'state': 200,
-        'event': 100,
-        'source': 150,
-        'width': 150,
-        'polarity': 170,
-        'pulses': 120,
-        'delay': 150,
-        }
-    _LABELS = {
-        'state': 'State',
-        'event': 'Event',
-        'source': 'Source',
-        'width': 'Width',
-        'polarity': 'Polarity',
-        'pulses': 'Nr Pulses',
-        'delay': 'Delay',
-        }
-    _ALL_PROPS = (
-        'state', 'event', 'source', 'width', 'polarity', 'pulses', 'delay',
-        )
-
-    def _createObjs(self, prefix, prop):
-        if 'state' == prop:
-            sp = PyDMCb(self, init_channel=prefix + "State-Sel")
-            rb = PyDMLed(self, init_channel=prefix + "State-Sts")
-        elif 'event' == prop:
-            sp = PyDMSpinbox(self, init_channel=prefix + 'Evt-SP')
-            sp.showStepExponent = False
-            rb = PyDMLabel(self, init_channel=prefix + 'Evt-RB')
-        elif 'source' == prop:
-            sp = PyDMECB(self, init_channel=prefix + 'Src-Sel')
-            rb = PyDMLabel(self, init_channel=prefix + 'Src-Sts')
-        elif 'width' == prop:
-            sp = PyDMSpinbox(self, init_channel=prefix+"Width-SP")
-            sp.showStepExponent = False
-            rb = PyDMLabel(self, init_channel=prefix+"Width-RB")
-        elif 'polarity' == prop:
-            sp = PyDMECB(self, init_channel=prefix + "Polarity-Sel")
-            rb = PyDMLabel(self, init_channel=prefix+"Polarity-Sts")
-        elif 'pulses' == prop:
-            sp = PyDMSpinbox(self, init_channel=prefix + "Pulses-SP")
-            sp.showStepExponent = False
-            rb = PyDMLabel(self, init_channel=prefix + "Pulses-RB")
-        elif 'delay' == prop:
-            sp = PyDMSpinbox(self, init_channel=prefix + "Delay-SP")
-            sp.showStepExponent = False
-            rb = PyDMLabel(self, init_channel=prefix + "Delay-RB")
-        return sp, rb
 
 
 if __name__ == '__main__':
