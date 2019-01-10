@@ -136,11 +136,18 @@ class SetConfigurationWindow(SiriusMainWindow):
         self.logger.setLevel(logging.DEBUG)
 
         self._setup_ui()
+        self._central_widget.setStyleSheet("""
+            #CentralWidget {
+                min-width: 40em;
+                min-height: 40em;
+            }
+        """)
         self.setWindowTitle('Set saved configuration')
 
     def _setup_ui(self):
         # Set central widget
         self._central_widget = QWidget()
+        self._central_widget.setObjectName('CentralWidget')
         self._central_widget.layout = QHBoxLayout()
         self._central_widget.setLayout(self._central_widget.layout)
         self.setCentralWidget(self._central_widget)
@@ -275,11 +282,18 @@ class ReadConfigurationWindow(SiriusMainWindow):
         self.logger.setLevel(logging.DEBUG)
 
         self._setup_ui()
+        self._central_widget.setStyleSheet("""
+            #CentralWidget {
+                min-width: 40em;
+                min-height: 40em;
+            }
+        """)
         self.setWindowTitle('Create new configuration')
 
     def _setup_ui(self):
         # Set central widget
         self._central_widget = QWidget()
+        self._central_widget.setObjectName('CentralWidget')
         self._central_widget.layout = QVBoxLayout()
         self._central_widget.setLayout(self._central_widget.layout)
         self.setCentralWidget(self._central_widget)
