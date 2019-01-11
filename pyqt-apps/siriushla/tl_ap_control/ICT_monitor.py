@@ -122,6 +122,18 @@ class _ICTSettings(SiriusDialog):
         hlay_cal.addItem(QSpacerItem(4, 2, QSzPlcy.Expanding, QSzPlcy.Fixed))
         hlay_cal.addWidget(self.bt_cal)
 
+        self.gbox_generalsettings.setStyleSheet("""
+            PyDMSpinbox{
+                min-width:7.10em;\nmax-width:7.10em;
+                min-height:1.29em;\nmax-height:1.29em;
+                qproperty-alignment: AlignCenter;\n}
+            PyDMEnumComboBox{
+                min-width:7.10em;\nmax-width:7.10em;
+                min-height:1.29em;\nmax-height:1.29em;\n}
+            PyDMLedMultiChannel{
+                min-width:7.10em;\nmax-width:7.10em;
+                min-height:1.29em;\nmax-height:1.29em;\n}""")
+
         lay = QVBoxLayout()
         lay.addWidget(l_ictacq)
         lay.addWidget(self.gbox_reliablemeas)
@@ -144,17 +156,14 @@ class _ICTSettings(SiriusDialog):
         self.led_ReliableMeas0 = SiriusLedAlert(
             parent=self, init_channel=self.ict_prefix+':ReliableMeas-Mon',
             bit=0)
-        self.led_ReliableMeas0.setFixedWidth(48)
         self.label_reliablemeas1 = QLabel('', self)
         self.led_ReliableMeas1 = SiriusLedAlert(
             parent=self, init_channel=self.ict_prefix+':ReliableMeas-Mon',
             bit=1)
-        self.led_ReliableMeas1.setFixedWidth(48)
         self.label_reliablemeas2 = QLabel('', self)
         self.led_ReliableMeas2 = SiriusLedAlert(
             parent=self, init_channel=self.ict_prefix+':ReliableMeas-Mon',
             bit=2)
-        self.led_ReliableMeas2.setFixedWidth(48)
         lay_reliablemeas = QGridLayout()
         lay_reliablemeas.addWidget(self.led_ReliableMeas0, 0, 0)
         lay_reliablemeas.addWidget(self.label_reliablemeas0, 0, 1)
@@ -172,7 +181,6 @@ class _ICTSettings(SiriusDialog):
         l_sampletrg = QLabel('Measurement Trigger Source: ', self)
         self.pydmenumcombobox_SampleTrg = PyDMEnumComboBox(
             parent=self, init_channel=self.ict_prefix+':SampleTrg-Sel')
-        self.pydmenumcombobox_SampleTrg.setFixedSize(220, 40)
         self.pydmlabel_SampleTrg = PyDMLabel(
             parent=self, init_channel=self.ict_prefix+':SampleTrg-Sts')
         hlay_sampletrg = QHBoxLayout()
@@ -184,7 +192,6 @@ class _ICTSettings(SiriusDialog):
             parent=self,
             channels2values={self.ict_trig_prefix+':State-Sts': 1,
                              self.ict_trig_prefix+':Status-Mon': 0})
-        self.ledmulti_TIStatus.setFixedSize(220, 40)
         self.pb_trgdetails = QPushButton('Open details', self)
         self.pb_trgdetails.setAutoDefault(False)
         self.pb_trgdetails.setDefault(False)
@@ -198,8 +205,6 @@ class _ICTSettings(SiriusDialog):
         l_TIdelay = QLabel('Timing Trigger Delay: ', self)
         self.pydmspinbox_TIDelay = PyDMSpinbox(
             parent=self, init_channel=self.ict_trig_prefix+':Delay-SP')
-        self.pydmspinbox_TIDelay.setFixedSize(220, 40)
-        self.pydmspinbox_TIDelay.setAlignment(Qt.AlignCenter)
         self.pydmspinbox_TIDelay.showStepExponent = False
         self.pydmlabel_TIDelay = PyDMLabel(
             parent=self, init_channel=self.ict_trig_prefix+':Delay-RB')
@@ -210,8 +215,6 @@ class _ICTSettings(SiriusDialog):
         l_thold = QLabel('Charge Threshold [mA]: ', self)
         self.pydmspinbox_Threshold = PyDMSpinbox(
             parent=self, init_channel=self.ict_prefix+':Threshold-SP')
-        self.pydmspinbox_Threshold.setFixedSize(220, 40)
-        self.pydmspinbox_Threshold.setAlignment(Qt.AlignCenter)
         self.pydmspinbox_Threshold.showStepExponent = False
         self.pydmlabel_Threshold = PyDMLabel(
             parent=self, init_channel=self.ict_prefix+':Threshold-RB')
@@ -245,6 +248,7 @@ class _ICTCalibration(QWidget):
         """Initialize object."""
         super().__init__(parent)
         self.ict_prefix = ict_prefix
+        self.setObjectName('ICTCalibration')
         self._setupUi()
 
     def _setupUi(self):
@@ -255,23 +259,45 @@ class _ICTCalibration(QWidget):
 
         glay = QGridLayout()
         glay.addWidget(label_cal, 0, 0, 1, 3)
-        glay.addItem(QSpacerItem(20, 40, QSzPlcy.Fixed, QSzPlcy.Fixed), 1, 0)
+        glay.addItem(
+            QSpacerItem(20, 40, QSzPlcy.Preferred, QSzPlcy.Preferred), 1, 0)
         glay.addWidget(QLabel('<h4>Measurement Settings</h4>', self,
                               alignment=Qt.AlignCenter), 2, 0)
         glay.addLayout(lay_meassettings, 3, 0)
-        glay.addLayout(lay_graphsettings, 4, 0)
-        glay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 2, 1)
+        glay.addItem(
+            QSpacerItem(20, 40, QSzPlcy.Preferred, QSzPlcy.Preferred), 4, 0)
+        glay.addLayout(lay_graphsettings, 5, 0)
+        glay.addItem(
+            QSpacerItem(40, 20, QSzPlcy.Preferred, QSzPlcy.Preferred), 2, 1)
         glay.addWidget(QLabel('<h4>RawReadings Monitor</h4>', self,
                               alignment=Qt.AlignCenter), 2, 2)
-        glay.addWidget(self.graph_rawread, 3, 2, 2, 1)
+        glay.addWidget(self.graph_rawread, 3, 2, 3, 1)
         self.setLayout(glay)
+        self.setStyleSheet("""
+            #ICTCalibration{
+                min-width:65em;\nmax-width:65em;
+                min-height:34em;\nmax-height:34em;\n}
+            PyDMSpinbox{
+                min-width:7.10em;\nmax-width:7.10em;
+                min-height:1.29em;\nmax-height:1.29em;
+                qproperty-alignment: AlignCenter;\n}
+            PyDMStateButton{
+                min-width:7.10em;\nmax-width:7.10em;
+                min-height:1.29em;\nmax-height:1.29em;\n}
+            PyDMEnumComboBox{
+                min-width:7.10em;\nmax-width:7.10em;
+                min-height:1.29em;\nmax-height:1.29em;\n}
+            PyDMLabel{
+                min-width:7.10em;\nmax-width:7.10em;
+                min-height:1.29em;\nmax-height:1.29em;
+                qproperty-alignment: AlignCenter;\n}
+            QPushButton{
+                min-width:14.2em;\nmax-width:14.2em;\n}""")
 
     def _setupMeasSettingsLayout(self):
         l_thold = QLabel('Charge Threshold [nC]: ', self)
         self.pydmspinbox_Threshold = PyDMSpinbox(
             parent=self, init_channel=self.ict_prefix+':Threshold-SP')
-        self.pydmspinbox_Threshold.setFixedSize(220, 40)
-        self.pydmspinbox_Threshold.setAlignment(Qt.AlignCenter)
         self.pydmspinbox_Threshold.showStepExponent = False
         self.pydmlabel_Threshold = PyDMLabel(
             parent=self, init_channel=self.ict_prefix+':Threshold-RB')
@@ -283,7 +309,6 @@ class _ICTCalibration(QWidget):
         self.pydmstatebutton_HFReject = PyDMStateButton(
             parent=self, init_channel=self.ict_prefix+':HFReject-Sel')
         self.pydmstatebutton_HFReject.shape = 1
-        self.pydmstatebutton_HFReject.setFixedSize(220, 40)
         self.pydmlabel_HFReject = PyDMLabel(
             parent=self, init_channel=self.ict_prefix+':HFReject-Sts')
         hlay_hfreject = QHBoxLayout()
@@ -293,8 +318,6 @@ class _ICTCalibration(QWidget):
         l_2ndreaddy = QLabel('2nd Read Delay [s]: ', self)
         self.pydmspinbox_2ndReadDly = PyDMSpinbox(
             parent=self, init_channel=self.ict_prefix+':2ndReadDly-SP')
-        self.pydmspinbox_2ndReadDly.setFixedSize(220, 40)
-        self.pydmspinbox_2ndReadDly.setAlignment(Qt.AlignCenter)
         self.pydmspinbox_2ndReadDly.showStepExponent = False
         self.pydmlabel_2ndReadDly = PyDMLabel(
             parent=self, init_channel=self.ict_prefix+':2ndReadDly-RB')
@@ -305,8 +328,6 @@ class _ICTCalibration(QWidget):
         l_samplecnt = QLabel('Sample Count: ', self)
         self.pydmspinbox_SampleCnt = PyDMSpinbox(
             parent=self, init_channel=self.ict_prefix+':SampleCnt-SP')
-        self.pydmspinbox_SampleCnt.setFixedSize(220, 40)
-        self.pydmspinbox_SampleCnt.setAlignment(Qt.AlignCenter)
         self.pydmspinbox_SampleCnt.showStepExponent = False
         self.pydmlabel_SampleCnt = PyDMLabel(
             parent=self, init_channel=self.ict_prefix+':SampleCnt-RB')
@@ -317,8 +338,6 @@ class _ICTCalibration(QWidget):
         l_aperture = QLabel('Aperture [us]: ', self)
         self.pydmspinbox_Aperture = PyDMSpinbox(
             parent=self, init_channel=self.ict_prefix+':Aperture-SP')
-        self.pydmspinbox_Aperture.setFixedSize(220, 40)
-        self.pydmspinbox_Aperture.setAlignment(Qt.AlignCenter)
         self.pydmspinbox_Aperture.showStepExponent = False
         self.pydmlabel_Aperture = PyDMLabel(
             parent=self, init_channel=self.ict_prefix+':Aperture-RB')
@@ -329,8 +348,6 @@ class _ICTCalibration(QWidget):
         l_samplerate = QLabel('Sample Rate [rdgs/s]: ', self)
         self.pydmspinbox_SampleRate = PyDMSpinbox(
             parent=self, init_channel=self.ict_prefix+':SampleRate-SP')
-        self.pydmspinbox_SampleRate.setFixedSize(220, 40)
-        self.pydmspinbox_SampleRate.setAlignment(Qt.AlignCenter)
         self.pydmspinbox_SampleRate.showStepExponent = False
         self.pydmlabel_SampleRate = PyDMLabel(
             parent=self, init_channel=self.ict_prefix+':SampleRate-RB')
@@ -342,7 +359,6 @@ class _ICTCalibration(QWidget):
         self.pydmstatebutton_Imped = PyDMEnumComboBox(
             parent=self, init_channel=self.ict_prefix+':Imped-Sel')
         self.pydmstatebutton_Imped.shape = 1
-        self.pydmstatebutton_Imped.setFixedSize(220, 40)
         self.pydmlabel_Imped = PyDMLabel(
             parent=self, init_channel=self.ict_prefix+':Imped-Sts')
         hlay_imped = QHBoxLayout()
@@ -352,14 +368,11 @@ class _ICTCalibration(QWidget):
         l_bcmrange = QLabel('BCM Range [V]: ', self)
         self.pydmspinbox_BCMRange = PyDMSpinbox(
             parent=self, init_channel=self.ict_prefix+':BCMRange-SP')
-        self.pydmspinbox_BCMRange.setFixedSize(220, 40)
-        self.pydmspinbox_BCMRange.setAlignment(Qt.AlignCenter)
         self.pydmspinbox_BCMRange.showStepExponent = False
 
         l_range = QLabel('Range: ', self)
         self.pydmenumcombobox_Range = PyDMEnumComboBox(
             parent=self, init_channel=self.ict_prefix+':Range-Sel')
-        self.pydmenumcombobox_Range.setFixedSize(220, 40)
         self.pydmlabel_Range = PyDMLabel(
             parent=self, init_channel=self.ict_prefix+':Range-Sts')
         hlay_range = QHBoxLayout()
@@ -370,7 +383,6 @@ class _ICTCalibration(QWidget):
         self.pydmstatebutton_CalEnbl = PyDMStateButton(
             parent=self, init_channel=self.ict_prefix+':CalEnbl-Sel')
         self.pydmstatebutton_CalEnbl.shape = 1
-        self.pydmstatebutton_CalEnbl.setFixedSize(220, 40)
         self.pydmlabel_CalEnbl = PyDMLabel(
             parent=self, init_channel=self.ict_prefix+':CalEnbl-Sts')
         hlay_calenbl = QHBoxLayout()
@@ -380,7 +392,6 @@ class _ICTCalibration(QWidget):
         l_calcharge = QLabel('Calibration Charge: ', self)
         self.pydmenumcombobox_CalCharge = PyDMEnumComboBox(
             parent=self, init_channel=self.ict_prefix+':CalCharge-Sel')
-        self.pydmenumcombobox_CalCharge.setFixedSize(220, 40)
         self.pydmlabel_CalCharge = PyDMLabel(
             parent=self, init_channel=self.ict_prefix+':CalCharge-Sts')
         hlay_calcharge = QHBoxLayout()
@@ -395,35 +406,39 @@ class _ICTCalibration(QWidget):
         flay = QFormLayout()
         flay.addRow(l_thold, hlay_thold)
         flay.addRow(l_hfreject, hlay_hfreject)
-        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
+        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Preferred, QSzPlcy.Preferred))
         flay.addRow(l_2ndreaddy, hlay_2ndreaddy)
-        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
+        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Preferred, QSzPlcy.Preferred))
         flay.addRow(l_samplecnt, hlay_samplecnt)
         flay.addRow(l_aperture, hlay_aperture)
         flay.addRow(l_samplerate, hlay_samplerate)
         flay.addRow(l_imped, hlay_imped)
-        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
+        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Preferred, QSzPlcy.Preferred))
         flay.addRow(l_bcmrange, self.pydmspinbox_BCMRange)
         flay.addRow(l_range, hlay_range)
-        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
+        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Preferred, QSzPlcy.Preferred))
         flay.addRow(l_calenbl, hlay_calenbl)
         flay.addRow(l_calcharge, hlay_calcharge)
-        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
+        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Preferred, QSzPlcy.Preferred))
         flay.addRow(l_download, self.pydmpushbutton_Download)
-        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
+        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Preferred, QSzPlcy.Preferred))
         flay.setFormAlignment(Qt.AlignHCenter | Qt.AlignTop)
         flay.setLabelAlignment(Qt.AlignRight)
         return flay
 
     def _setupGraph(self):
         graph_rawread = _MyWaveformPlot(self)
+        graph_rawread.setObjectName('graph_rawread')
         graph_rawread.autoRangeX = True
         graph_rawread.autoRangeY = True
         graph_rawread.backgroundColor = QColor(255, 255, 255)
         graph_rawread.showLegend = True
         graph_rawread.showXGrid = True
         graph_rawread.showYGrid = True
-        graph_rawread.setMinimumSize(1000, 800)
+        graph_rawread.setStyleSheet("""
+            #graph_rawread{
+                min-width:36em;\nmin-height:28em;
+                max-width:36em;\nmax-height:28em;\n}""")
         graph_rawread.setLabels(
             left='<h3>Raw Readings</h3>', bottom='<h3>Index</h3>')
         graph_rawread.addChannel(
@@ -445,7 +460,9 @@ class _ICTCalibration(QWidget):
         self.sb_nrpoints.setMinimum(0)
         self.sb_nrpoints.setMaximum(1000)
         self.sb_nrpoints.setValue(POINTS_TO_PLOT)
-        self.sb_nrpoints.setFixedSize(220, 40)
+        self.sb_nrpoints.setStyleSheet("""
+            min-width:7.10em;\nmax-width:7.10em;\n
+            min-height:1.29em;\nmax-height:1.29em;\n""")
         self.sb_nrpoints.editingFinished.connect(self._set_nrpoints)
         glay_graphpoints = QGridLayout()
         glay_graphpoints.addWidget(label_graphsettings, 0, 0, 1, 3)
