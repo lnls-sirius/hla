@@ -9,7 +9,7 @@ import epics as _epics
 from qtpy.uic import loadUi
 from qtpy.QtCore import Slot, Qt, QPoint
 from qtpy.QtWidgets import QVBoxLayout, QHBoxLayout, QGridLayout, \
-                            QSpacerItem, QFileDialog, QAction, QMenuBar, \
+                            QFileDialog, QAction, QMenuBar, \
                             QWidget, QLabel, QPushButton, QMenu, \
                             QButtonGroup, QCheckBox, QSizePolicy as QSzPlcy
 from qtpy.QtGui import QPixmap
@@ -115,69 +115,57 @@ class TLAPControlWindow(SiriusMainWindow):
 
         # Connect Slits View widget
         if self._tl == 'tb':
+            self.slith = SlitMonitoring('H', self, self.prefix)
+            self.centralwidget.widget_SlitH.setLayout(QHBoxLayout())
+            self.centralwidget.widget_SlitH.layout().addWidget(self.slith)
             self.centralwidget.widget_SlitH.layout().setAlignment(
-                Qt.AlignHCenter | Qt.AlignVCenter)
-            self.centralwidget.widget_SlitH.layout().addWidget(
-                SlitMonitoring('H', self, self.prefix))
+                Qt.AlignCenter)
+            self.slitv = SlitMonitoring('V', self, self.prefix)
+            self.centralwidget.widget_SlitV.setLayout(QHBoxLayout())
+            self.centralwidget.widget_SlitV.layout().addWidget(self.slitv)
             self.centralwidget.widget_SlitV.layout().setAlignment(
-                Qt.AlignHCenter | Qt.AlignVCenter)
-            self.centralwidget.widget_SlitV.layout().addWidget(
-                SlitMonitoring('V', self, self.prefix))
+                Qt.AlignCenter)
 
         # Create Scrn+Correctors Panel
-        hlay_headerline = QHBoxLayout()
-        hlay_headerline.addItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
         scrn_headerline = self._create_headerline(
-            [['Screen', 300], ['Type-Sel', 180], ['Type-Sts', 180],
-             ['Moving', 120]])
-        hlay_headerline.addWidget(scrn_headerline)
-        hlay_headerline.addItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
+            [['', 1.29], ['Screen', 11], ['Type-Sel', 6],
+             ['Type-Sts', 5.81], ['Moving', 3.87]])
         ch_headerline = self._create_headerline(
-            [['', 40], ['CH', 300], ['Kick-SP', 220], ['Kick-Mon', 180]])
-        hlay_headerline.addWidget(ch_headerline)
-        hlay_headerline.addItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
+            [['', 1.29], ['', 1.29], ['CH', 10], ['Kick-SP', 7.10],
+             ['Kick-Mon', 5.81]])
         cv_headerline = self._create_headerline(
-            [['', 40], ['CV', 300], ['Kick-SP', 220], ['Kick-Mon', 180]])
+            [['', 1.29], ['', 1.29], ['CV', 10], ['Kick-SP', 7.10],
+             ['Kick-Mon', 5.81], ['', 1.29]])
+        hlay_headerline = QHBoxLayout()
+        hlay_headerline.setAlignment(Qt.AlignCenter)
+        hlay_headerline.addWidget(scrn_headerline)
+        hlay_headerline.addWidget(ch_headerline)
         hlay_headerline.addWidget(cv_headerline)
-        hlay_headerline.setAlignment(Qt.AlignVCenter)
-        hlay_headerline.addItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
         headerline = QWidget()
         headerline.setObjectName('headerline')
-        headerline.setMaximumHeight(60)
-        headerline.setStyleSheet('* { font-weight:bold; }')
         headerline.setLayout(hlay_headerline)
-        headerline.layout().setContentsMargins(0, 9, 0, 9)
+        headerline.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Maximum)
 
-        correctors_gridlayout = QGridLayout()
-        correctors_gridlayout.addWidget(headerline, 1, 1)
+        correctors_vlayout = QVBoxLayout()
+        correctors_vlayout.addWidget(headerline)
 
-        line = 2
         for ch_group, cv, scrn, scrnprefix in self._corr_devicenames_list:
             hlay_scrncorr = QHBoxLayout()
-            hlay_scrncorr.addItem(
-                QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
             scrn_details = self._create_scrndetailwidget(scrnprefix, scrn)
+            hlay_scrncorr.addWidget(self._create_headerline([['', 1.29]]))
             hlay_scrncorr.addWidget(scrn_details)
-            hlay_scrncorr.addItem(
-                QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
             ch_widget = QWidget()
             ch_widget.setObjectName('widget_CHs_Scrn' + str(scrn))
             ch_widget.setLayout(QVBoxLayout())
-            ch_widget.layout().setContentsMargins(0, 0, 0, 0)
             for ch in ch_group:
                 ch_details = self._create_correctordetailwidget(scrn, ch)
                 ch_widget.layout().addWidget(ch_details)
+            hlay_scrncorr.addWidget(self._create_headerline([['', 1.29]]))
             hlay_scrncorr.addWidget(ch_widget)
-            hlay_scrncorr.addItem(
-                QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
             cv_details = self._create_correctordetailwidget(scrn, cv)
+            hlay_scrncorr.addWidget(self._create_headerline([['', 1.29]]))
             hlay_scrncorr.addWidget(cv_details)
-            hlay_scrncorr.addItem(
-                QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum))
+            hlay_scrncorr.addWidget(self._create_headerline([['', 1.29]]))
             widget_scrncorr = QWidget()
             widget_scrncorr.setObjectName('widget_correctors_scrn')
             widget_scrncorr.setLayout(hlay_scrncorr)
@@ -185,11 +173,10 @@ class TLAPControlWindow(SiriusMainWindow):
 
             widget_scrncorr.setStyleSheet(
                 '#widget_correctors_scrn {border-top: 2px solid gray;}')
-            correctors_gridlayout.addWidget(widget_scrncorr, line, 1)
-            line += 1
+            correctors_vlayout.addWidget(widget_scrncorr)
 
         self.centralwidget.groupBox_allcorrPanel.setLayout(
-            correctors_gridlayout)
+            correctors_vlayout)
         self.centralwidget.groupBox_allcorrPanel.setContentsMargins(0, 0, 0, 0)
         self.centralwidget.groupBox_allcorrPanel.layout().setContentsMargins(
             0, 0, 0, 0)
@@ -212,6 +199,25 @@ class TLAPControlWindow(SiriusMainWindow):
         # Create an action menu
         self.setContextMenuPolicy(Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self._show_context_menu)
+
+        # Set central widget StyleSheets
+        self.centralwidget.setStyleSheet("""
+            #widget_{0}{{
+                min-width:136em;\nmax-width: 136em;\n}}
+            #widget_ICTs{{
+                min-width:42em;\nmax-width:42em;\n}}
+            #tabWidget{{
+                min-width:42em;\nmax-width:42em;\n}}
+            #widget_Scrn{{
+                min-width:42em;\nmax-width:42em;\n}}
+            #widget_Ref{{
+                min-width:42em;\nmax-width:42em;
+                min-height:2.58em;\nmax-height:2.58em;\n}}
+            #widget_lattice{{
+                min-width:88em;
+                min-height:16em;\nmax-height:16em;\n}}
+            #groupBox_allcorrPanel{{
+                min-width:90em;\n}}""".format(self._tl.upper()))
 
     def _allCHsTurnOn(self):
         for ch_group, _, _, _ in self._corr_devicenames_list:
@@ -242,12 +248,15 @@ class TLAPControlWindow(SiriusMainWindow):
         """Create and return a headerline."""
         hl = QWidget()
         hl.setLayout(QHBoxLayout())
-        hl.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Minimum)
+        hl.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Fixed)
         hl.layout().setContentsMargins(0, 0, 0, 0)
 
         for text, width in labels:
             label = QLabel(text, self, alignment=Qt.AlignHCenter)
-            label.setFixedWidth(width)
+            label.setStyleSheet("""
+                min-width:valueem;
+                max-width:valueem;
+                font-weight:bold;""".replace('value', str(width)))
             hl.layout().addWidget(label)
         return hl
 
@@ -259,17 +268,15 @@ class TLAPControlWindow(SiriusMainWindow):
         scrn_details.layout().setContentsMargins(0, 0, 0, 0)
         scrn_details.layout().setAlignment(Qt.AlignHCenter)
 
-        scrn_details.layout().addItem(
-            QSpacerItem(2, 15, QSzPlcy.Fixed, QSzPlcy.Fixed), 0, 1)
-
         scrn_checkbox = QCheckBox(scrn_device)
         self._scrn_selection_widget.addButton(scrn_checkbox)
         self._scrn_selection_widget.setId(scrn_checkbox, scrn_idx)
         if scrn_idx == self._currScrn:
             scrn_checkbox.setChecked(True)
         scrn_checkbox.clicked.connect(self._setScrnWidget)
-        scrn_checkbox.setFixedWidth(300)
-        scrn_checkbox.setStyleSheet('font-weight:bold;')
+        scrn_checkbox.setStyleSheet("""
+            min-width:11em; max-width:11em;
+            height:1.29em; font-weight:bold;""")
         scrn_details.layout().addWidget(scrn_checkbox, 1, 1)
 
         pydmcombobox_scrntype = PyDMEnumComboBox(
@@ -278,13 +285,15 @@ class TLAPControlWindow(SiriusMainWindow):
         pydmcombobox_scrntype.setObjectName(
             'PyDMEnumComboBox_ScrnType_Sel_Scrn' + str(scrn_idx))
         pydmcombobox_scrntype.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Fixed)
-        pydmcombobox_scrntype.setFixedSize(180, 40)
+        pydmcombobox_scrntype.setStyleSheet(
+            """min-width:5.81em;\nmax-width:5.81em;\nheight:1.29em;\n""")
         scrn_details.layout().addWidget(pydmcombobox_scrntype, 1, 2)
 
         pydmlabel_scrntype = PyDMLabel(
             parent=self,
             init_channel=self.prefix+scrn_device+':ScrnType-Sts')
-        pydmlabel_scrntype.setFixedSize(180, 40)
+        pydmlabel_scrntype.setStyleSheet(
+            """min-width:5.81em;\nmax-width:5.81em;\nheight:1.29em;\n""")
         pydmlabel_scrntype.setAlignment(Qt.AlignCenter)
         scrn_details.layout().addWidget(pydmlabel_scrntype, 1, 3)
 
@@ -292,9 +301,9 @@ class TLAPControlWindow(SiriusMainWindow):
             parent=self,
             init_channel=self.prefix+scrn_device+':ScrnType-Sts')
         led_scrntype.shape = 2
-        led_scrntype.setObjectName(
-            'Led_ScrnType_Sts_Scrn' + str(scrn_idx))
-        led_scrntype.setFixedHeight(40)
+        led_scrntype.setObjectName('Led_ScrnType_Sts_Scrn' + str(scrn_idx))
+        led_scrntype.setStyleSheet("""
+            min-height:1.29em; max-height:1.29em; max-width:5.81em;""")
         scrn_details.layout().addWidget(led_scrntype, 2, 3)
 
         led_movests = PyDMLed(
@@ -302,9 +311,9 @@ class TLAPControlWindow(SiriusMainWindow):
             init_channel=self.prefix+scrn_device+':DoneMov-Mon',
             color_list=[PyDMLed.LightGreen, PyDMLed.DarkGreen])
         led_movests.shape = 2
-        led_movests.setObjectName(
-            'Led_DoneMov_Mon_Scrn' + str(scrn_idx))
-        led_movests.setFixedSize(120, 40)
+        led_movests.setObjectName('Led_DoneMov_Mon_Scrn' + str(scrn_idx))
+        led_movests.setStyleSheet(
+            """min-width:3.87em;\nmax-width:3.87em;\nmax-height:1.29em;\n""")
         scrn_details.layout().addWidget(led_movests, 1, 4)
 
         return scrn_details
@@ -329,27 +338,31 @@ class TLAPControlWindow(SiriusMainWindow):
                 init_channel=self.prefix+corr+':setpwm')
             led.setObjectName(
                 'SiriusLed_Linac'+corr.split('-')[-1]+'_setpwm_Scrn'+str(scrn))
-            led.setFixedSize(40, 40)
+            led.setStyleSheet("""min-width:1.29em;\nmin-height:1.29em;
+                                 max-width:1.29em;\nmax-height:1.29em;\n""")
             corr_details.layout().addWidget(led, 1, 1)
 
             label_corr = QLabel(corr, self, alignment=Qt.AlignCenter)
             label_corr.setObjectName('label_'+name+'App_Scrn'+str(scrn))
-            label_corr.setFixedSize(300, 40)
+            label_corr.setStyleSheet("""
+                max-width:9.68em;\nmin-width:9.68em;\n
+                max-height:1.16em;\nmin-height:1.16em;\n""")
             corr_details.layout().addWidget(label_corr, 1, 2)
 
             pydm_sp_current = PyDMLinEditScrollbar(
                 parent=self, channel=self.prefix+corr+':seti')
             pydm_sp_current.setObjectName(
                 'LeditScroll_Linac'+corr.split('-')[-1]+'_seti_Scrn'+str(scrn))
-            pydm_sp_current.setMaximumWidth(220)
             pydm_sp_current.layout.setContentsMargins(0, 0, 0, 0)
-            pydm_sp_current.sp_lineedit.setFixedSize(220, 40)
+            pydm_sp_current.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+            pydm_sp_current.sp_lineedit.setStyleSheet("""
+                min-width:7.10em;\nmax-width:7.10em;\n
+                min-height:1.16em;\nmax-height:1.16em;\n""")
             pydm_sp_current.sp_lineedit.setAlignment(Qt.AlignCenter)
             pydm_sp_current.sp_lineedit.setSizePolicy(
                 QSzPlcy.Minimum, QSzPlcy.Minimum)
+            pydm_sp_current.sp_scrollbar.setStyleSheet("""max-width:7.10em;""")
             pydm_sp_current.sp_scrollbar.limitsFromPV = True
-            pydm_sp_current.sp_scrollbar.setSizePolicy(
-                QSzPlcy.Minimum, QSzPlcy.Maximum)
             corr_details.layout().addWidget(pydm_sp_current, 1, 3, 2, 1)
 
             pydmlabel_current = PyDMLabel(
@@ -358,7 +371,8 @@ class TLAPControlWindow(SiriusMainWindow):
             pydmlabel_current.showUnits = True
             pydmlabel_current.setObjectName(
                 'PyDMLabel_Linac'+corr.split('-')[-1]+'_rdi_Scrn'+str(scrn))
-            pydmlabel_current.setFixedSize(180, 40)
+            pydmlabel_current.setStyleSheet(
+                """min-width:5.81em;\nmax-width:5.81em;\nheight:1.29em;\n""")
             pydmlabel_current.precFromPV = True
             pydmlabel_current.setAlignment(Qt.AlignCenter)
             corr_details.layout().addWidget(pydmlabel_current, 1, 4)
@@ -368,7 +382,8 @@ class TLAPControlWindow(SiriusMainWindow):
                 parent=self,
                 init_channel=self.prefix+corr+':PwrState-Sts')
             led.setObjectName('SiriusLed_'+name+'_PwrState_Scrn'+str(scrn))
-            led.setFixedSize(40, 40)
+            led.setStyleSheet("""min-width:1.29em;\nmin-height:1.29em;
+                                 max-width:1.29em;\nmax-height:1.29em;\n""")
             corr_details.layout().addWidget(led, 1, 1)
 
             pushbutton = QPushButton(corr, self)
@@ -379,29 +394,32 @@ class TLAPControlWindow(SiriusMainWindow):
             else:
                 _hlautil.connect_window(pushbutton, PSDetailWindow,
                                         parent=self, psname=corr)
-            pushbutton.setFixedSize(300, 40)
+            pushbutton.setStyleSheet("""
+                max-width:9.68em;\nmin-width:9.68em;\n
+                max-height:1.16em;\nmin-height:1.16em;\n""")
             corr_details.layout().addWidget(pushbutton, 1, 2)
 
             pydm_sp_kick = PyDMLinEditScrollbar(
                 parent=self, channel=self.prefix+corr+':Kick-SP')
             pydm_sp_kick.setObjectName(
                 'PyDMLineEdit' + name + '_Kick_SP_Scrn' + str(scrn))
-            pydm_sp_kick.setMaximumWidth(220)
             pydm_sp_kick.layout.setContentsMargins(0, 0, 0, 0)
-            pydm_sp_kick.sp_lineedit.setFixedSize(220, 40)
+            pydm_sp_kick.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Maximum)
+            pydm_sp_kick.sp_lineedit.setStyleSheet("""
+                width:7.10em; min-height:1.16em; max-height:1.16em; """)
             pydm_sp_kick.sp_lineedit.setAlignment(Qt.AlignCenter)
             pydm_sp_kick.sp_lineedit.setSizePolicy(
                 QSzPlcy.Minimum, QSzPlcy.Minimum)
+            pydm_sp_kick.sp_scrollbar.setStyleSheet("""max-width:7.10em; """)
             pydm_sp_kick.sp_scrollbar.limitsFromPV = True
-            pydm_sp_kick.sp_scrollbar.setSizePolicy(
-                QSzPlcy.Minimum, QSzPlcy.Maximum)
             corr_details.layout().addWidget(pydm_sp_kick, 1, 3, 2, 1)
 
             pydmlabel_kick = PyDMLabel(
                 parent=self, init_channel=self.prefix+corr+':Kick-Mon')
             pydmlabel_kick.setObjectName(
                 'PyDMLabel_' + name + '_Kick_Mon_Scrn' + str(scrn))
-            pydmlabel_kick.setFixedSize(180, 40)
+            pydmlabel_kick.setStyleSheet(
+                """min-width:5.81em;\nmax-width:5.81em;\nheight:1.29em;""")
             pydmlabel_kick.precFromPV = True
             pydmlabel_kick.setAlignment(Qt.AlignCenter)
             corr_details.layout().addWidget(pydmlabel_kick, 1, 4)
@@ -514,6 +532,13 @@ class TLAPControlWindow(SiriusMainWindow):
         menu.addAction(do_scrn_homing)
         menu.popup(self.mapToGlobal(point))
 
+    def keyPressEvent(self, event):
+        """Override keyPressEvent."""
+        super().keyPressEvent(event)
+        if self._tl == 'tb':
+            self.slith.updateSlitWidget()
+            self.slitv.updateSlitWidget()
+
 
 class ShowLatticeAndTwiss(SiriusMainWindow):
     """Class to create Lattice and Twiss Widget."""
@@ -521,7 +546,7 @@ class ShowLatticeAndTwiss(SiriusMainWindow):
     def __init__(self, parent=None, tl=None):
         """Create Lattice and Twiss Graph."""
         super(ShowLatticeAndTwiss, self).__init__(parent)
-        self.setWindowTitle('Nominal Lattice and Twiss')
+        self.setWindowTitle(tl.upper() + ' Nominal Lattice and Twiss')
         if tl == 'tb':
             self._tl, self._twiss_in = _pymodels.tb.create_accelerator()
             fam_data = _pymodels.tb.families.get_family_data(self._tl)
@@ -549,7 +574,7 @@ class ShowLatticeAndTwiss(SiriusMainWindow):
         self.centralwidget.layout().addWidget(self.canvas)
         self.centralwidget.layout().setContentsMargins(0, 0, 0, 0)
         self.setCentralWidget(self.centralwidget)
-        self.setGeometry(10, 10, 2000, 500)
+        self.centralwidget.setStyleSheet("""min-width:90em;max-width:90em;""")
 
 
 class ShowImage(SiriusMainWindow):
@@ -558,20 +583,15 @@ class ShowImage(SiriusMainWindow):
     def __init__(self, parent=None):
         """Create label widget to handle image pixmap."""
         super(ShowImage, self).__init__(parent)
-        self.centralwidget = QWidget()
-        self.centralwidget.setLayout(QVBoxLayout())
         self.label = QLabel()
-        self.centralwidget.layout().addWidget(self.label)
-        self.setCentralWidget(self.centralwidget)
+        self.setCentralWidget(self.label)
 
     def load_image(self, filename):
         """Load pixmap from filename."""
         self.setWindowTitle(filename)
         self.pixmap = QPixmap(filename)
         self.label.setPixmap(self.pixmap)
-        self.setGeometry(300, 300,
-                         self.pixmap.width(),
-                         self.pixmap.height())
+        self.resize(self.sizeHint())
 
 
 if __name__ == '__main__':
