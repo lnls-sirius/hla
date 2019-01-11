@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>526</width>
-    <height>1027</height>
+    <height>925</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -80,7 +80,7 @@ height:62em;
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>172</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -90,7 +90,12 @@ height:62em;
          <string/>
         </property>
         <property name="styleSheet">
-         <string notr="true">min-height:12em;</string>
+         <string notr="true">QListWidget{
+min-height:12em;
+}</string>
+        </property>
+        <property name="sizeAdjustPolicy">
+         <enum>QAbstractScrollArea::AdjustIgnored</enum>
         </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}SI-Glob:AP-ChromCorr:Log-Mon</string>
@@ -239,6 +244,10 @@ height:62em;
         <property name="whatsThis">
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
         </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
+        </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}SI-Fam:MA-SDP3:PwrState-Sts</string>
         </property>
@@ -263,6 +272,10 @@ height:62em;
         </property>
         <property name="whatsThis">
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
         </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}SI-Fam:MA-SFP2:PwrState-Sts</string>
@@ -314,6 +327,16 @@ height:62em;
           <height>0</height>
          </size>
         </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
+        </property>
         <property name="text">
          <string>SI-Fam:MA-SFA1</string>
         </property>
@@ -326,6 +349,16 @@ height:62em;
           <width>0</width>
           <height>0</height>
          </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>SI-Fam:MA-SFA2</string>
@@ -340,6 +373,16 @@ height:62em;
           <height>0</height>
          </size>
         </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
+        </property>
         <property name="text">
          <string>SI-Fam:MA-SDP2</string>
         </property>
@@ -352,6 +395,16 @@ height:62em;
           <width>0</width>
           <height>0</height>
          </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>SI-Fam:MA-SDP3</string>
@@ -402,6 +455,16 @@ height:62em;
           <width>0</width>
           <height>0</height>
          </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>SI-Fam:MA-SDP1</string>
@@ -678,6 +741,16 @@ height:62em;
           <height>0</height>
          </size>
         </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
+        </property>
         <property name="text">
          <string>SI-Fam:MA-SDA3</string>
         </property>
@@ -690,6 +763,16 @@ height:62em;
           <width>0</width>
           <height>0</height>
          </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>SI-Fam:MA-SFB1</string>
@@ -704,6 +787,16 @@ height:62em;
           <height>0</height>
          </size>
         </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
+        </property>
         <property name="text">
          <string>SI-Fam:MA-SFB2</string>
         </property>
@@ -716,6 +809,16 @@ height:62em;
           <width>0</width>
           <height>0</height>
          </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>SI-Fam:MA-SDB1</string>
@@ -730,6 +833,16 @@ height:62em;
           <height>0</height>
          </size>
         </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
+        </property>
         <property name="text">
          <string>SI-Fam:MA-SFP2</string>
         </property>
@@ -742,6 +855,16 @@ height:62em;
           <width>0</width>
           <height>0</height>
          </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>SI-Fam:MA-SDA2</string>
@@ -756,6 +879,16 @@ height:62em;
           <height>0</height>
          </size>
         </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
+        </property>
         <property name="text">
          <string>SI-Fam:MA-SDA1</string>
         </property>
@@ -768,6 +901,16 @@ height:62em;
           <width>0</width>
           <height>0</height>
          </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>SI-Fam:MA-SDB3</string>
@@ -794,6 +937,10 @@ height:62em;
         <property name="whatsThis">
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
         </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
+        </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}SI-Fam:MA-SDA2:PwrState-Sts</string>
         </property>
@@ -807,6 +954,16 @@ height:62em;
           <height>0</height>
          </size>
         </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
+        </property>
         <property name="text">
          <string>SI-Fam:MA-SFP1</string>
         </property>
@@ -819,6 +976,16 @@ height:62em;
           <width>0</width>
           <height>0</height>
          </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>SI-Fam:MA-SDB2</string>
@@ -2235,6 +2402,10 @@ height:62em;
         <property name="whatsThis">
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
         </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
+        </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}SI-Fam:MA-SDA1:PwrState-Sts</string>
         </property>
@@ -2266,6 +2437,10 @@ height:62em;
         <property name="whatsThis">
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
         </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
+        </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}SI-Fam:MA-SFA1:PwrState-Sts</string>
         </property>
@@ -2290,6 +2465,10 @@ height:62em;
         </property>
         <property name="whatsThis">
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
         </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}SI-Fam:MA-SDB1:PwrState-Sts</string>
@@ -2316,6 +2495,10 @@ height:62em;
         <property name="whatsThis">
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
         </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
+        </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}SI-Fam:MA-SFA2:PwrState-Sts</string>
         </property>
@@ -2340,6 +2523,10 @@ height:62em;
         </property>
         <property name="whatsThis">
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
         </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}SI-Fam:MA-SFB1:PwrState-Sts</string>
@@ -2366,6 +2553,10 @@ height:62em;
         <property name="whatsThis">
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
         </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
+        </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}SI-Fam:MA-SFB2:PwrState-Sts</string>
         </property>
@@ -2390,6 +2581,10 @@ height:62em;
         </property>
         <property name="whatsThis">
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
         </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}SI-Fam:MA-SDA3:PwrState-Sts</string>
@@ -2416,6 +2611,10 @@ height:62em;
         <property name="whatsThis">
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
         </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
+        </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}SI-Fam:MA-SDB2:PwrState-Sts</string>
         </property>
@@ -2440,6 +2639,10 @@ height:62em;
         </property>
         <property name="whatsThis">
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
         </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}SI-Fam:MA-SDB3:PwrState-Sts</string>
@@ -2466,6 +2669,10 @@ height:62em;
         <property name="whatsThis">
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
         </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
+        </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}SI-Fam:MA-SFP1:PwrState-Sts</string>
         </property>
@@ -2491,6 +2698,10 @@ height:62em;
         <property name="whatsThis">
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
         </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
+        </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}SI-Fam:MA-SDP1:PwrState-Sts</string>
         </property>
@@ -2515,6 +2726,10 @@ height:62em;
         </property>
         <property name="whatsThis">
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
         </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}SI-Fam:MA-SDP2:PwrState-Sts</string>
@@ -2565,7 +2780,7 @@ height:62em;
          <enum>Qt::Vertical</enum>
         </property>
         <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
+         <enum>QSizePolicy::Expanding</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
@@ -2581,7 +2796,7 @@ height:62em;
          <enum>Qt::Vertical</enum>
         </property>
         <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
+         <enum>QSizePolicy::Expanding</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
@@ -2732,7 +2947,7 @@ height:62em;
          <enum>Qt::Vertical</enum>
         </property>
         <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
+         <enum>QSizePolicy::Expanding</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
@@ -3161,7 +3376,7 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
       <widget class="PyDMPushButton" name="PyDMPushButton">
        <property name="minimumSize">
         <size>
-         <width>156</width>
+         <width>0</width>
          <height>0</height>
         </size>
        </property>
@@ -3213,7 +3428,8 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
     </string>
        </property>
        <property name="styleSheet">
-        <string notr="true">min-width:11em;</string>
+        <string notr="true">min-width:10em;
+max-width:10em;</string>
        </property>
        <property name="text">
         <string>Configure

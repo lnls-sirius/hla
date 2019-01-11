@@ -41,7 +41,7 @@ led_movests = PyDMLed(
     parent=cw, init_channel=prefix+scrn_device+':DoneMov-Mon',
     color_list=[PyDMLed.LightGreen, PyDMLed.DarkGreen])
 led_movests.shape = 2
-led_movests.setFixedHeight(40)
+led_movests.setStyleSheet("""min-height:1.29em; max-height:1.29em;""")
 
 lay = QGridLayout()
 lay.addWidget(QLabel('<h3>Screen View</h3>',
@@ -63,4 +63,5 @@ window = SiriusMainWindow()
 window.setWindowTitle('Screen View: '+scrn_device)
 window.setCentralWidget(cw)
 window.show()
+window.setFocus(True)
 sys.exit(app.exec_())

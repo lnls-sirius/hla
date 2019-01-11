@@ -3,43 +3,55 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QMainWindow, QDialog, QHBoxLayout
 
 
-class SiriusMainWindow(QMainWindow):
-    
-    Stylesheet = ""
-    FontSizeSS = "* {{font-size: {}px;}}"
+def _create_siriuswindow(qt_type):
+    """Create a _SiriusWindow that inherits from qt_type."""
+    class _SiriusWindow(qt_type):
+        """Auxiliar _SiriusWindow class.
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self._font_size = 10
-        self._window_size = list()
-        self.setStyleSheet(self.Stylesheet + self._font_size_ss())
+        Parameters
+        ----------
+        parent : QWidget
+            The parent widget for the SiriusMainWindow
+        """
 
-    def _font_size_ss(self):
-        return self.FontSizeSS.format(self._font_size)
+        Stylesheet = ""
+        FontSizeSS = "* {{font-size: {}px;}}"
 
-    def _increase_font_size(self):
-        self._window_size.append(self.centralWidget().size())
-        self._font_size += 1
-        self.setStyleSheet(self.Stylesheet + self._font_size_ss())
+        def __init__(self, *args, **kwargs):
+            """Init."""
+            super().__init__(*args, **kwargs)
+            self._font_size = 10
+            self._window_size = list()
+            self.setStyleSheet(self.Stylesheet + self._font_size_ss())
 
-    def _decrease_font_size(self):
-        if self._font_size == 10:
-            return
-        self._font_size -= 1
-        self.setStyleSheet(self.Stylesheet + self._font_size_ss())
-        self.resize(self._window_size.pop())
+        def _font_size_ss(self):
+            return self.FontSizeSS.format(self._font_size)
 
-    def keyPressEvent(self, event):
-        """Override keyPressEvent."""
-        if event.key() == Qt.Key_Plus:
-            return self._increase_font_size()
-        elif event.key() == Qt.Key_Minus:
-            return self._decrease_font_size()
-        super().keyPressEvent(event)
+        def _increase_font_size(self):
+            self._font_size += 1
+            self.setStyleSheet(self.Stylesheet + self._font_size_ss())
+            self.setFixedSize(self.sizeHint())
+
+        def _decrease_font_size(self):
+            if self._font_size == 10:
+                return
+            self._font_size -= 1
+            self.setStyleSheet(self.Stylesheet + self._font_size_ss())
+            self.setFixedSize(self.sizeHint())
+
+        def keyPressEvent(self, event):
+            """Override keyPressEvent."""
+            if event.key() == Qt.Key_Plus:
+                return self._increase_font_size()
+            elif event.key() == Qt.Key_Minus:
+                return self._decrease_font_size()
+            super().keyPressEvent(event)
+
+    return _SiriusWindow
 
 
-class SiriusDialog(QDialog):
-    pass
+SiriusMainWindow = _create_siriuswindow(QMainWindow)
+SiriusDialog = _create_siriuswindow(QDialog)
 
 
 def create_window_from_widget(

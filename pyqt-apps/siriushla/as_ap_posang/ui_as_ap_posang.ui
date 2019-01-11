@@ -318,7 +318,7 @@ max-width:1.29em;
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>0</height>
+          <height>172</height>
          </size>
         </property>
         <property name="toolTip">
@@ -328,7 +328,9 @@ max-width:1.29em;
          <string/>
         </property>
         <property name="styleSheet">
-         <string notr="true">min-height:11.29em;</string>
+         <string notr="true">QListWidget{
+min-height:12em;
+}</string>
         </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}${TRANSPORTLINE}-Glob:AP-PosAng:Log-Mon</string>

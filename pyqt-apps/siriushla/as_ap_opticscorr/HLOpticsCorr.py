@@ -6,7 +6,7 @@ from qtpy.uic import loadUi
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QPushButton, QGridLayout, QLabel, \
                             QSpacerItem, QAbstractItemView, QGroupBox, \
-                            QSizePolicy as QSzPlcy
+                            QSizePolicy as QSzPlcy, QHeaderView
 from pydm.widgets import PyDMEnumComboBox, PyDMLabel, PyDMLineEdit, \
                             PyDMWaveformTable, PyDMSpinbox
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
@@ -95,6 +95,8 @@ class _CorrParamsDetailWindow(SiriusMainWindow):
                                   alignment=Qt.AlignCenter)
             self.combobox_method = PyDMEnumComboBox(
                 parent=self, init_channel=ioc_prefix+'CorrMeth-Sel')
+            self.combobox_method.setStyleSheet(
+                """min-width:10em; max-width:10em;""")
 
             self.pydmlabel_method = PyDMLabel(
                 parent=self, init_channel=ioc_prefix+'CorrMeth-Sts')
@@ -104,7 +106,6 @@ class _CorrParamsDetailWindow(SiriusMainWindow):
             self.button_sync = PyDMStateButton(
                 parent=self, init_channel=ioc_prefix+'SyncCorr-Sel')
             self.button_sync.shape = 1
-            self.button_sync.setFixedHeight(36)
             self.pydmlabel_sync = PyDMLabel(
                 parent=self, init_channel=ioc_prefix+'SyncCorr-Sts')
 
@@ -124,8 +125,10 @@ class _CorrParamsDetailWindow(SiriusMainWindow):
                                       alignment=Qt.AlignCenter)
             self.pydmspinbox_corrfactor = PyDMSpinbox(
                 parent=self, init_channel=ioc_prefix+'CorrFactor-SP')
-            self.pydmspinbox_corrfactor.setMinimumSize(250, 0)
             self.pydmspinbox_corrfactor.showStepExponent = False
+            self.pydmspinbox_corrfactor.setStyleSheet(
+                """min-width:10em; max-width:10em;""")
+
             self.pydmlabel_corrfactor = PyDMLabel(
                 parent=self, init_channel=ioc_prefix+'CorrFactor-RB')
 
@@ -139,7 +142,9 @@ class _CorrParamsDetailWindow(SiriusMainWindow):
                                   alignment=Qt.AlignCenter)
         self.pydmlinedit_configname = _ConfigLineEdit(
             parent=self, init_channel=ioc_prefix+'ConfigName-SP')
-        self.pydmlinedit_configname.setFixedWidth(320)
+        self.pydmlinedit_configname.setStyleSheet(
+            """min-width:10em; max-width:10em;""")
+
         self.pydmlabel_configname = PyDMLabel(
             parent=self, init_channel=ioc_prefix+'ConfigName-RB')
 
@@ -154,15 +159,26 @@ class _CorrParamsDetailWindow(SiriusMainWindow):
         self.table_matrix = PyDMWaveformTable(
             parent=self, init_channel=ioc_prefix+'RespMat-Mon')
         self.table_matrix.setEnabled(False)
-        self.table_matrix.setFixedSize(self._nfam*160+46, 133)
+        self.table_matrix.horizontalHeader().setSectionResizeMode(
+            QHeaderView.Stretch)
+        self.table_matrix.verticalHeader().setSectionResizeMode(
+            QHeaderView.Stretch)
         self.table_matrix.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.table_matrix.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.table_matrix.verticalHeader().setStyleSheet(
+            """min-width:1.5em; max-width:1.5em;""")
+        self.table_matrix.horizontalHeader().setStyleSheet(
+            """min-height:1.5em; max-height:1.5em;""")
+        self.table_matrix.setStyleSheet("""
+            QTableWidget{
+                min-width:valueem;\nmax-width:valueem;
+                min-height:5.84em;\nmax-height:5.84em;
+            }""".replace('value', str(1.5+8*self._nfam)))
         self.table_matrix.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table_matrix.setRowCount(2)
         self.table_matrix.setColumnCount(self._nfam)
         self.table_matrix.rowHeaderLabels = ['  X', '  Y']
         self.table_matrix.columnHeaderLabels = self._fams
-        self.table_matrix.horizontalHeader().setDefaultSectionSize(160)
-        self.table_matrix.verticalHeader().setDefaultSectionSize(48)
 
         lay.addWidget(label_matrix, 13, 1, 1, self._nfam)
         lay.addWidget(self.table_matrix, 14, 1, 1, self._nfam)
@@ -176,17 +192,29 @@ class _CorrParamsDetailWindow(SiriusMainWindow):
             parent=self,
             init_channel=ioc_prefix+'Nominal'+self._intstrength+'-Mon')
         self.table_nomintstrength.setEnabled(False)
-        self.table_nomintstrength.setFixedSize(self._nfam*160+45, 83)
+        self.table_nomintstrength.horizontalHeader().setSectionResizeMode(
+            QHeaderView.Stretch)
+        self.table_nomintstrength.verticalHeader().setSectionResizeMode(
+            QHeaderView.Stretch)
         self.table_nomintstrength.setVerticalScrollBarPolicy(
             Qt.ScrollBarAlwaysOff)
+        self.table_nomintstrength.setHorizontalScrollBarPolicy(
+            Qt.ScrollBarAlwaysOff)
+        self.table_nomintstrength.verticalHeader().setStyleSheet(
+            """min-width:1.5em; max-width:1.5em;""")
+        self.table_nomintstrength.horizontalHeader().setStyleSheet(
+            """min-height:1.5em; max-height:1.5em;""")
+        self.table_nomintstrength.setStyleSheet("""
+            QTableWidget{
+                min-width:valueem;\nmax-width:valueem;
+                min-height:3.67em;\nmax-height:3.67em;
+            }""".replace('value', str(1.5+8*self._nfam)))
         self.table_nomintstrength.setEditTriggers(
             QAbstractItemView.NoEditTriggers)
         self.table_nomintstrength.setRowCount(1)
         self.table_nomintstrength.setColumnCount(self._nfam)
         self.table_nomintstrength.rowHeaderLabels = [self._intstrength]
         self.table_nomintstrength.columnHeaderLabels = self._fams
-        self.table_nomintstrength.horizontalHeader().setDefaultSectionSize(160)
-        self.table_nomintstrength.verticalHeader().setDefaultSectionSize(48)
 
         lay.addWidget(label_nomintstrength, 16, 1, 1, self._nfam)
         lay.addWidget(self.table_nomintstrength, 17, 1, 1, self._nfam)
@@ -198,7 +226,6 @@ class _CorrParamsDetailWindow(SiriusMainWindow):
                                     alignment=Qt.AlignCenter)
             self.pydmlabel_nomchrom = PyDMLabel(
                 parent=self, init_channel=ioc_prefix+'NominalChrom-Mon')
-            self.pydmlabel_nomchrom.setMinimumHeight(48)
             self.pydmlabel_nomchrom.setAlignment(Qt.AlignCenter)
 
             lay.addWidget(label_nomchrom, 19, 1, 1, self._nfam)
@@ -211,7 +238,6 @@ class _CorrParamsDetailWindow(SiriusMainWindow):
         self.centralwidget = QGroupBox('Correction Parameters')
         self.centralwidget.setLayout(lay)
         self.setCentralWidget(self.centralwidget)
-        self.resize(self._nfam*160+70, 700)
 
 
 class _ConfigLineEdit(PyDMLineEdit):

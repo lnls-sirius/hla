@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1400</width>
-    <height>1622</height>
+    <width>708</width>
+    <height>783</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -18,13 +18,13 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>1350</width>
+    <width>0</width>
     <height>0</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>1400</width>
+    <width>16777215</width>
     <height>16777215</height>
    </size>
   </property>
@@ -32,199 +32,9 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QGroupBox {
-	font-weight: bold;
-}
-
-* {
-	font-size:20pt;
-}</string>
+   <string notr="true"/>
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
-   <item row="13" column="1" colspan="2">
-    <widget class="QGroupBox" name="groupBox_3">
-     <property name="title">
-      <string>Correction Status</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_4">
-      <item row="3" column="5">
-       <spacer name="horizontalSpacer_8">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Maximum</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="2" column="4">
-       <widget class="QLabel" name="label_status1">
-        <property name="text">
-         <string>TextLabel</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="4">
-       <widget class="QLabel" name="label_status0">
-        <property name="text">
-         <string>TextLabel</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="4">
-       <widget class="QLabel" name="label_status2">
-        <property name="text">
-         <string>TextLabel</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="2">
-       <spacer name="horizontalSpacer_7">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Maximum</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="1" column="1" rowspan="5">
-       <widget class="PyDMLogLabel" name="PyDMLogLabel">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>400</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string/>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Glob:AP-TuneCorr:Log-Mon</string>
-        </property>
-        <property name="dateTimeFmt" stdset="0">
-         <string>%Y/%m/%d-%H:%M:%S</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="4">
-       <widget class="QLabel" name="label_status3">
-        <property name="text">
-         <string>TextLabel</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="4">
-       <widget class="QLabel" name="label_status4">
-        <property name="text">
-         <string>TextLabel</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="3">
-       <widget class="SiriusLedAlert" name="SiriusLedAlert">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>PyDMLed specialization to represent 2 states in red/light green.</string>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Glob:AP-TuneCorr:Status-Mon</string>
-        </property>
-        <property name="pvbit" stdset="0">
-         <number>0</number>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="3">
-       <widget class="SiriusLedAlert" name="SiriusLedAlert_2">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>PyDMLed specialization to represent 2 states in red/light green.</string>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Glob:AP-TuneCorr:Status-Mon</string>
-        </property>
-        <property name="pvbit" stdset="0">
-         <number>1</number>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="3">
-       <widget class="SiriusLedAlert" name="SiriusLedAlert_3">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>PyDMLed specialization to represent 2 states in red/light green.</string>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Glob:AP-TuneCorr:Status-Mon</string>
-        </property>
-        <property name="pvbit" stdset="0">
-         <number>2</number>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="3">
-       <widget class="SiriusLedAlert" name="SiriusLedAlert_4">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>PyDMLed specialization to represent 2 states in red/light green.</string>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Glob:AP-TuneCorr:Status-Mon</string>
-        </property>
-        <property name="pvbit" stdset="0">
-         <number>3</number>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="3">
-       <widget class="SiriusLedAlert" name="SiriusLedAlert_5">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>PyDMLed specialization to represent 2 states in red/light green.</string>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Glob:AP-TuneCorr:Status-Mon</string>
-        </property>
-        <property name="pvbit" stdset="0">
-         <number>4</number>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
    <item row="14" column="1" colspan="2">
     <spacer name="verticalSpacer_5">
      <property name="orientation">
@@ -251,7 +61,7 @@
      </property>
      <property name="maximumSize">
       <size>
-       <width>436</width>
+       <width>16777215</width>
        <height>16777215</height>
       </size>
      </property>
@@ -265,7 +75,7 @@
          <enum>Qt::Vertical</enum>
         </property>
         <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
+         <enum>QSizePolicy::Expanding</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
@@ -392,13 +202,13 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>180</width>
+          <width>0</width>
           <height>0</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>180</width>
+          <width>16777215</width>
           <height>16777215</height>
          </size>
         </property>
@@ -455,13 +265,13 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>180</width>
+          <width>0</width>
           <height>0</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>180</width>
+          <width>16777215</width>
           <height>16777215</height>
          </size>
         </property>
@@ -499,13 +309,13 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>36</height>
+          <height>0</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
           <width>16777215</width>
-          <height>36</height>
+          <height>16777215</height>
          </size>
         </property>
         <property name="toolTip">
@@ -539,7 +349,7 @@
          <enum>Qt::Vertical</enum>
         </property>
         <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
+         <enum>QSizePolicy::Expanding</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
@@ -555,7 +365,7 @@
          <enum>Qt::Vertical</enum>
         </property>
         <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
+         <enum>QSizePolicy::Expanding</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
@@ -589,13 +399,13 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>180</width>
+          <width>0</width>
           <height>0</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>180</width>
+          <width>16777215</width>
           <height>16777215</height>
          </size>
         </property>
@@ -625,7 +435,7 @@
          <enum>Qt::Vertical</enum>
         </property>
         <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
+         <enum>QSizePolicy::Expanding</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
@@ -639,7 +449,7 @@
        <widget class="PyDMSpinbox" name="PyDMSpinbox">
         <property name="minimumSize">
          <size>
-          <width>200</width>
+          <width>0</width>
           <height>0</height>
          </size>
         </property>
@@ -716,7 +526,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -798,13 +608,13 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
           <width>16777215</width>
-          <height>48</height>
+          <height>16777215</height>
          </size>
         </property>
         <property name="toolTip">
@@ -834,19 +644,20 @@
        <widget class="QLabel" name="label_9">
         <property name="minimumSize">
          <size>
-          <width>250</width>
-          <height>48</height>
+          <width>112</width>
+          <height>0</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>16777215</width>
-          <height>48</height>
+          <width>112</width>
+          <height>16777215</height>
          </size>
         </property>
         <property name="styleSheet">
          <string notr="true">font-weight:bold;
-</string>
+min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>Tune-Mon</string>
@@ -860,19 +671,20 @@
        <widget class="QLabel" name="label_3">
         <property name="minimumSize">
          <size>
-          <width>250</width>
-          <height>48</height>
+          <width>112</width>
+          <height>0</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>16777215</width>
-          <height>48</height>
+          <width>112</width>
+          <height>16777215</height>
          </size>
         </property>
         <property name="styleSheet">
          <string notr="true">font-weight:bold;
-</string>
+min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>ΔTune-SP</string>
@@ -922,14 +734,14 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>0</width>
-          <height>48</height>
+          <width>116</width>
+          <height>0</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>16777215</width>
-          <height>48</height>
+          <width>116</width>
+          <height>16777215</height>
          </size>
         </property>
         <property name="toolTip">
@@ -937,6 +749,10 @@
         </property>
         <property name="whatsThis">
          <string/>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="frameShape">
          <enum>QFrame::NoFrame</enum>
@@ -975,19 +791,20 @@
        <widget class="QLabel" name="label_6">
         <property name="minimumSize">
          <size>
-          <width>250</width>
-          <height>48</height>
+          <width>112</width>
+          <height>0</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>16777215</width>
-          <height>48</height>
+          <width>112</width>
+          <height>16777215</height>
          </size>
         </property>
         <property name="styleSheet">
          <string notr="true">font-weight:bold;
-</string>
+min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>ΔTune-RB</string>
@@ -1001,8 +818,14 @@
        <widget class="PyDMLabel" name="PyDMLabel_38">
         <property name="minimumSize">
          <size>
-          <width>0</width>
-          <height>48</height>
+          <width>116</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>116</width>
+          <height>16777215</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1019,6 +842,10 @@
     init_channel : str, optional
         The channel to be used by the widget.
     </string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="frameShape">
          <enum>QFrame::NoFrame</enum>
@@ -1075,6 +902,18 @@
       </item>
       <item row="3" column="4">
        <widget class="PyDMSpinbox" name="PyDMSpinbox_2">
+        <property name="minimumSize">
+         <size>
+          <width>118</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>118</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="toolTip">
          <string/>
         </property>
@@ -1089,6 +928,10 @@
     init_channel : str, optional
         The channel to be used by the widget.
     </string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}SI-Glob:AP-TuneCorr:DeltaTuneX-SP</string>
@@ -1128,12 +971,24 @@
    </item>
    <item row="11" column="1" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="leftMargin">
+      <number>9</number>
+     </property>
+     <property name="rightMargin">
+      <number>9</number>
+     </property>
      <item>
       <widget class="PyDMPushButton" name="PyDMPushButton">
        <property name="minimumSize">
         <size>
-         <width>300</width>
+         <width>142</width>
          <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>142</width>
+         <height>16777215</height>
         </size>
        </property>
        <property name="toolTip">
@@ -1176,6 +1031,10 @@
         Choice to have the button peform a relative put, instead of always
         setting to an absolute value
     </string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">min-width:10em;
+max-width:10em;</string>
        </property>
        <property name="text">
         <string>Configure
@@ -1194,6 +1053,9 @@ Quadrupoles</string>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Expanding</enum>
+       </property>
        <property name="sizeHint" stdset="0">
         <size>
          <width>40</width>
@@ -1206,8 +1068,14 @@ Quadrupoles</string>
       <widget class="PyDMPushButton" name="PyDMPushButton_SetNewRef">
        <property name="minimumSize">
         <size>
-         <width>260</width>
-         <height>35</height>
+         <width>114</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>114</width>
+         <height>16777215</height>
         </size>
        </property>
        <property name="toolTip">
@@ -1250,6 +1118,10 @@ Quadrupoles</string>
         Choice to have the button peform a relative put, instead of always
         setting to an absolute value
     </string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">min-width:8em;
+max-width:8em;</string>
        </property>
        <property name="text">
         <string>Set Current KLs
@@ -1265,17 +1137,8 @@ as New Reference</string>
      </item>
      <item>
       <spacer name="horizontalSpacer_5">
-       <property name="minimumSize">
-        <size>
-         <width>250</width>
-         <height>0</height>
-        </size>
-       </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Expanding</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -1289,8 +1152,14 @@ as New Reference</string>
       <widget class="PyDMPushButton" name="PyDMPushButton_SetNewRef_3">
        <property name="minimumSize">
         <size>
-         <width>260</width>
-         <height>70</height>
+         <width>114</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>114</width>
+         <height>16777215</height>
         </size>
        </property>
        <property name="toolTip">
@@ -1333,6 +1202,10 @@ as New Reference</string>
         Choice to have the button peform a relative put, instead of always
         setting to an absolute value
     </string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">min-width:8em;
+max-width:8em;</string>
        </property>
        <property name="text">
         <string>Apply
@@ -1354,514 +1227,26 @@ Correction</string>
       <string>Quadrupoles</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_6">
-      <item row="4" column="0">
-       <widget class="SiriusLedState" name="SiriusLedState">
-        <property name="maximumSize">
-         <size>
-          <width>36</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Fam:MA-QFA:PwrState-Sts</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="1">
-       <widget class="QPushButton" name="pushButton_QFAMADetail">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>48</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>SI-Fam:MA-QFA</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="2">
-       <widget class="PyDMLabel" name="PyDMLabel_8">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>
-    A QLabel with support for Channels and more from PyDM
-
-    Parameters
-    ----------
-    parent : QWidget
-        The parent widget for the Label
-    init_channel : str, optional
-        The channel to be used by the widget.
-    </string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Fam:MA-QFA:OpMode-Sts</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="QLabel" name="label_12">
-        <property name="styleSheet">
-         <string notr="true">font-weight:bold;</string>
-        </property>
-        <property name="text">
-         <string>OpMode-Sts</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="4">
-       <widget class="QLabel" name="label_13">
-        <property name="minimumSize">
-         <size>
-          <width>250</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">font-weight:bold;</string>
-        </property>
-        <property name="text">
-         <string>RefKL-Mon</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="3">
-       <widget class="QLabel" name="label_14">
-        <property name="minimumSize">
-         <size>
-          <width>250</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">font-weight:bold;</string>
-        </property>
-        <property name="text">
-         <string>KL-RB</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="5">
-       <widget class="QLabel" name="label_15">
-        <property name="styleSheet">
-         <string notr="true">font-weight:bold;</string>
-        </property>
-        <property name="text">
-         <string>DeltaKL-Mon</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="2">
-       <widget class="PyDMLabel" name="PyDMLabel_9">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>
-    A QLabel with support for Channels and more from PyDM
-
-    Parameters
-    ----------
-    parent : QWidget
-        The parent widget for the Label
-    init_channel : str, optional
-        The channel to be used by the widget.
-    </string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Fam:MA-QFB:OpMode-Sts</string>
-        </property>
-       </widget>
-      </item>
       <item row="5" column="1">
        <widget class="QPushButton" name="pushButton_QFBMADetail">
         <property name="minimumSize">
          <size>
-          <width>0</width>
-          <height>48</height>
+          <width>114</width>
+          <height>0</height>
          </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>114</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>SI-Fam:MA-QFB</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="0">
-       <widget class="SiriusLedState" name="SiriusLedState_2">
-        <property name="maximumSize">
-         <size>
-          <width>36</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Fam:MA-QFB:PwrState-Sts</string>
-        </property>
-       </widget>
-      </item>
-      <item row="7" column="0">
-       <widget class="SiriusLedState" name="SiriusLedState_3">
-        <property name="maximumSize">
-         <size>
-          <width>36</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Fam:MA-QFP:PwrState-Sts</string>
-        </property>
-       </widget>
-      </item>
-      <item row="7" column="1">
-       <widget class="QPushButton" name="pushButton_QFPMADetail">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>48</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>SI-Fam:MA-QFP</string>
-        </property>
-       </widget>
-      </item>
-      <item row="7" column="2">
-       <widget class="PyDMLabel" name="PyDMLabel_17">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>
-    A QLabel with support for Channels and more from PyDM
-
-    Parameters
-    ----------
-    parent : QWidget
-        The parent widget for the Label
-    init_channel : str, optional
-        The channel to be used by the widget.
-    </string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Fam:MA-QFP:OpMode-Sts</string>
-        </property>
-       </widget>
-      </item>
-      <item row="8" column="0">
-       <widget class="SiriusLedState" name="SiriusLedState_4">
-        <property name="maximumSize">
-         <size>
-          <width>36</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Fam:MA-QDA:PwrState-Sts</string>
-        </property>
-       </widget>
-      </item>
-      <item row="10" column="0">
-       <widget class="SiriusLedState" name="SiriusLedState_5">
-        <property name="maximumSize">
-         <size>
-          <width>36</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Fam:MA-QDB1:PwrState-Sts</string>
-        </property>
-       </widget>
-      </item>
-      <item row="8" column="1">
-       <widget class="QPushButton" name="pushButton_QDAMADetail">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>48</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>SI-Fam:MA-QDA</string>
-        </property>
-       </widget>
-      </item>
-      <item row="8" column="2">
-       <widget class="PyDMLabel" name="PyDMLabel_13">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>
-    A QLabel with support for Channels and more from PyDM
-
-    Parameters
-    ----------
-    parent : QWidget
-        The parent widget for the Label
-    init_channel : str, optional
-        The channel to be used by the widget.
-    </string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Fam:MA-QDA:OpMode-Sts</string>
-        </property>
-       </widget>
-      </item>
-      <item row="10" column="1">
-       <widget class="QPushButton" name="pushButton_QDB1MADetail">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>48</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>SI-Fam:MA-QDB1</string>
-        </property>
-       </widget>
-      </item>
-      <item row="10" column="2">
-       <widget class="PyDMLabel" name="PyDMLabel_25">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>
-    A QLabel with support for Channels and more from PyDM
-
-    Parameters
-    ----------
-    parent : QWidget
-        The parent widget for the Label
-    init_channel : str, optional
-        The channel to be used by the widget.
-    </string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Fam:MA-QDB1:OpMode-Sts</string>
-        </property>
-       </widget>
-      </item>
-      <item row="13" column="0">
-       <widget class="SiriusLedState" name="SiriusLedState_6">
-        <property name="maximumSize">
-         <size>
-          <width>36</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Fam:MA-QDB2:PwrState-Sts</string>
-        </property>
-       </widget>
-      </item>
-      <item row="13" column="1">
-       <widget class="QPushButton" name="pushButton_QDB2MADetail">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>48</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>SI-Fam:MA-QDB2</string>
-        </property>
-       </widget>
-      </item>
-      <item row="13" column="2">
-       <widget class="PyDMLabel" name="PyDMLabel_21">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>
-    A QLabel with support for Channels and more from PyDM
-
-    Parameters
-    ----------
-    parent : QWidget
-        The parent widget for the Label
-    init_channel : str, optional
-        The channel to be used by the widget.
-    </string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Fam:MA-QDB2:OpMode-Sts</string>
-        </property>
-       </widget>
-      </item>
-      <item row="15" column="0">
-       <widget class="SiriusLedState" name="SiriusLedState_7">
-        <property name="maximumSize">
-         <size>
-          <width>36</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Fam:MA-QDP1:PwrState-Sts</string>
-        </property>
-       </widget>
-      </item>
-      <item row="15" column="2">
-       <widget class="PyDMLabel" name="PyDMLabel_33">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>
-    A QLabel with support for Channels and more from PyDM
-
-    Parameters
-    ----------
-    parent : QWidget
-        The parent widget for the Label
-    init_channel : str, optional
-        The channel to be used by the widget.
-    </string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Fam:MA-QDP1:OpMode-Sts</string>
-        </property>
-       </widget>
-      </item>
-      <item row="17" column="0">
-       <widget class="SiriusLedState" name="SiriusLedState_8">
-        <property name="maximumSize">
-         <size>
-          <width>36</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Fam:MA-QDP2:PwrState-Sts</string>
         </property>
        </widget>
       </item>
@@ -1869,583 +1254,57 @@ Correction</string>
        <widget class="QPushButton" name="pushButton_QDP1MADetail">
         <property name="minimumSize">
          <size>
-          <width>0</width>
-          <height>48</height>
+          <width>114</width>
+          <height>0</height>
          </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>114</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>SI-Fam:MA-QDP1</string>
         </property>
        </widget>
       </item>
-      <item row="17" column="1">
-       <widget class="QPushButton" name="pushButton_QDP2MADetail">
+      <item row="4" column="0">
+       <widget class="SiriusLedState" name="SiriusLedState">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="minimumSize">
          <size>
-          <width>0</width>
-          <height>48</height>
+          <width>22</width>
+          <height>0</height>
          </size>
         </property>
-        <property name="text">
-         <string>SI-Fam:MA-QDP2</string>
+        <property name="maximumSize">
+         <size>
+          <width>22</width>
+          <height>16777215</height>
+         </size>
         </property>
-       </widget>
-      </item>
-      <item row="5" column="3">
-       <widget class="PyDMLabel" name="PyDMLabel_18">
         <property name="toolTip">
          <string/>
         </property>
         <property name="whatsThis">
-         <string>
-    A QLabel with support for Channels and more from PyDM
-
-    Parameters
-    ----------
-    parent : QWidget
-        The parent widget for the Label
-    init_channel : str, optional
-        The channel to be used by the widget.
-    </string>
+         <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
         </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
         </property>
         <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Fam:MA-QFB:KL-RB</string>
-        </property>
-       </widget>
-      </item>
-      <item row="17" column="2">
-       <widget class="PyDMLabel" name="PyDMLabel_29">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>
-    A QLabel with support for Channels and more from PyDM
-
-    Parameters
-    ----------
-    parent : QWidget
-        The parent widget for the Label
-    init_channel : str, optional
-        The channel to be used by the widget.
-    </string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Fam:MA-QDP2:OpMode-Sts</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="3">
-       <widget class="PyDMLabel" name="PyDMLabel_7">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>
-    A QLabel with support for Channels and more from PyDM
-
-    Parameters
-    ----------
-    parent : QWidget
-        The parent widget for the Label
-    init_channel : str, optional
-        The channel to be used by the widget.
-    </string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Fam:MA-QFA:KL-RB</string>
-        </property>
-       </widget>
-      </item>
-      <item row="8" column="3">
-       <widget class="PyDMLabel" name="PyDMLabel_10">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>
-    A QLabel with support for Channels and more from PyDM
-
-    Parameters
-    ----------
-    parent : QWidget
-        The parent widget for the Label
-    init_channel : str, optional
-        The channel to be used by the widget.
-    </string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Fam:MA-QDA:KL-RB</string>
-        </property>
-       </widget>
-      </item>
-      <item row="7" column="3">
-       <widget class="PyDMLabel" name="PyDMLabel_14">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>
-    A QLabel with support for Channels and more from PyDM
-
-    Parameters
-    ----------
-    parent : QWidget
-        The parent widget for the Label
-    init_channel : str, optional
-        The channel to be used by the widget.
-    </string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Fam:MA-QFP:KL-RB</string>
-        </property>
-       </widget>
-      </item>
-      <item row="10" column="3">
-       <widget class="PyDMLabel" name="PyDMLabel_34">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>
-    A QLabel with support for Channels and more from PyDM
-
-    Parameters
-    ----------
-    parent : QWidget
-        The parent widget for the Label
-    init_channel : str, optional
-        The channel to be used by the widget.
-    </string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Fam:MA-QDB1:KL-RB</string>
-        </property>
-       </widget>
-      </item>
-      <item row="13" column="3">
-       <widget class="PyDMLabel" name="PyDMLabel_22">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>
-    A QLabel with support for Channels and more from PyDM
-
-    Parameters
-    ----------
-    parent : QWidget
-        The parent widget for the Label
-    init_channel : str, optional
-        The channel to be used by the widget.
-    </string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Fam:MA-QDB2:KL-RB</string>
-        </property>
-       </widget>
-      </item>
-      <item row="15" column="3">
-       <widget class="PyDMLabel" name="PyDMLabel_26">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>
-    A QLabel with support for Channels and more from PyDM
-
-    Parameters
-    ----------
-    parent : QWidget
-        The parent widget for the Label
-    init_channel : str, optional
-        The channel to be used by the widget.
-    </string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Fam:MA-QDP1:KL-RB</string>
-        </property>
-       </widget>
-      </item>
-      <item row="17" column="3">
-       <widget class="PyDMLabel" name="PyDMLabel_30">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>
-    A QLabel with support for Channels and more from PyDM
-
-    Parameters
-    ----------
-    parent : QWidget
-        The parent widget for the Label
-    init_channel : str, optional
-        The channel to be used by the widget.
-    </string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Fam:MA-QDP2:KL-RB</string>
-        </property>
-       </widget>
-      </item>
-      <item row="17" column="4">
-       <widget class="PyDMLabel" name="PyDMLabel_31">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>
-    A QLabel with support for Channels and more from PyDM
-
-    Parameters
-    ----------
-    parent : QWidget
-        The parent widget for the Label
-    init_channel : str, optional
-        The channel to be used by the widget.
-    </string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Glob:AP-TuneCorr:RefKLQDP2-Mon</string>
-        </property>
-       </widget>
-      </item>
-      <item row="17" column="5">
-       <widget class="PyDMLabel" name="PyDMLabel_36">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>
-    A QLabel with support for Channels and more from PyDM
-
-    Parameters
-    ----------
-    parent : QWidget
-        The parent widget for the Label
-    init_channel : str, optional
-        The channel to be used by the widget.
-    </string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Glob:AP-TuneCorr:DeltaKLQDP2-Mon</string>
-        </property>
-       </widget>
-      </item>
-      <item row="15" column="4">
-       <widget class="PyDMLabel" name="PyDMLabel_32">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>
-    A QLabel with support for Channels and more from PyDM
-
-    Parameters
-    ----------
-    parent : QWidget
-        The parent widget for the Label
-    init_channel : str, optional
-        The channel to be used by the widget.
-    </string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Glob:AP-TuneCorr:RefKLQDP1-Mon</string>
-        </property>
-       </widget>
-      </item>
-      <item row="15" column="5">
-       <widget class="PyDMLabel" name="PyDMLabel_35">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>
-    A QLabel with support for Channels and more from PyDM
-
-    Parameters
-    ----------
-    parent : QWidget
-        The parent widget for the Label
-    init_channel : str, optional
-        The channel to be used by the widget.
-    </string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Glob:AP-TuneCorr:DeltaKLQDP1-Mon</string>
-        </property>
-       </widget>
-      </item>
-      <item row="13" column="5">
-       <widget class="PyDMLabel" name="PyDMLabel_28">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>
-    A QLabel with support for Channels and more from PyDM
-
-    Parameters
-    ----------
-    parent : QWidget
-        The parent widget for the Label
-    init_channel : str, optional
-        The channel to be used by the widget.
-    </string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Glob:AP-TuneCorr:DeltaKLQDB2-Mon</string>
-        </property>
-       </widget>
-      </item>
-      <item row="13" column="4">
-       <widget class="PyDMLabel" name="PyDMLabel_23">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>
-    A QLabel with support for Channels and more from PyDM
-
-    Parameters
-    ----------
-    parent : QWidget
-        The parent widget for the Label
-    init_channel : str, optional
-        The channel to be used by the widget.
-    </string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Glob:AP-TuneCorr:RefKLQDB2-Mon</string>
-        </property>
-       </widget>
-      </item>
-      <item row="10" column="4">
-       <widget class="PyDMLabel" name="PyDMLabel_24">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>
-    A QLabel with support for Channels and more from PyDM
-
-    Parameters
-    ----------
-    parent : QWidget
-        The parent widget for the Label
-    init_channel : str, optional
-        The channel to be used by the widget.
-    </string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Glob:AP-TuneCorr:RefKLQDB1-Mon</string>
-        </property>
-       </widget>
-      </item>
-      <item row="10" column="5">
-       <widget class="PyDMLabel" name="PyDMLabel_27">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>
-    A QLabel with support for Channels and more from PyDM
-
-    Parameters
-    ----------
-    parent : QWidget
-        The parent widget for the Label
-    init_channel : str, optional
-        The channel to be used by the widget.
-    </string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Glob:AP-TuneCorr:DeltaKLQDB1-Mon</string>
-        </property>
-       </widget>
-      </item>
-      <item row="8" column="4">
-       <widget class="PyDMLabel" name="PyDMLabel_15">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>
-    A QLabel with support for Channels and more from PyDM
-
-    Parameters
-    ----------
-    parent : QWidget
-        The parent widget for the Label
-    init_channel : str, optional
-        The channel to be used by the widget.
-    </string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Glob:AP-TuneCorr:RefKLQDA-Mon</string>
+         <string>${PREFIX}SI-Fam:MA-QFA:PwrState-Sts</string>
         </property>
        </widget>
       </item>
@@ -2480,8 +1339,8 @@ Correction</string>
         </property>
        </widget>
       </item>
-      <item row="7" column="4">
-       <widget class="PyDMLabel" name="PyDMLabel_16">
+      <item row="10" column="4">
+       <widget class="PyDMLabel" name="PyDMLabel_24">
         <property name="toolTip">
          <string/>
         </property>
@@ -2507,7 +1366,7 @@ Correction</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Glob:AP-TuneCorr:RefKLQFP-Mon</string>
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:RefKLQDB1-Mon</string>
         </property>
        </widget>
       </item>
@@ -2542,70 +1401,66 @@ Correction</string>
         </property>
        </widget>
       </item>
-      <item row="5" column="4">
-       <widget class="PyDMLabel" name="PyDMLabel_6">
-        <property name="toolTip">
-         <string/>
+      <item row="4" column="1">
+       <widget class="QPushButton" name="pushButton_QFAMADetail">
+        <property name="minimumSize">
+         <size>
+          <width>114</width>
+          <height>0</height>
+         </size>
         </property>
-        <property name="whatsThis">
-         <string>
-    A QLabel with support for Channels and more from PyDM
-
-    Parameters
-    ----------
-    parent : QWidget
-        The parent widget for the Label
-    init_channel : str, optional
-        The channel to be used by the widget.
-    </string>
+        <property name="maximumSize">
+         <size>
+          <width>114</width>
+          <height>16777215</height>
+         </size>
         </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
         </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Glob:AP-TuneCorr:RefKLQFB-Mon</string>
+        <property name="text">
+         <string>SI-Fam:MA-QFA</string>
         </property>
        </widget>
       </item>
-      <item row="5" column="5">
-       <widget class="PyDMLabel" name="PyDMLabel_11">
+      <item row="7" column="0">
+       <widget class="SiriusLedState" name="SiriusLedState_3">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>22</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>22</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="toolTip">
          <string/>
         </property>
         <property name="whatsThis">
-         <string>
-    A QLabel with support for Channels and more from PyDM
-
-    Parameters
-    ----------
-    parent : QWidget
-        The parent widget for the Label
-    init_channel : str, optional
-        The channel to be used by the widget.
-    </string>
+         <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
         </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
         </property>
         <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Glob:AP-TuneCorr:DeltaKLQFB-Mon</string>
+         <string>${PREFIX}SI-Fam:MA-QFP:PwrState-Sts</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="5">
-       <widget class="PyDMLabel" name="PyDMLabel_5">
+      <item row="15" column="3">
+       <widget class="PyDMLabel" name="PyDMLabel_26">
         <property name="toolTip">
          <string/>
         </property>
@@ -2631,7 +1486,73 @@ Correction</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Glob:AP-TuneCorr:DeltaKLQFA-Mon</string>
+         <string>${PREFIX}SI-Fam:MA-QDP1:KL-RB</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="2">
+       <widget class="PyDMLabel" name="PyDMLabel_13">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>
+    A QLabel with support for Channels and more from PyDM
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Fam:MA-QDA:OpMode-Sts</string>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="0">
+       <widget class="SiriusLedState" name="SiriusLedState_5">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>22</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>22</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Fam:MA-QDB1:PwrState-Sts</string>
         </property>
        </widget>
       </item>
@@ -2666,6 +1587,1210 @@ Correction</string>
         </property>
        </widget>
       </item>
+      <item row="13" column="4">
+       <widget class="PyDMLabel" name="PyDMLabel_23">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>
+    A QLabel with support for Channels and more from PyDM
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:RefKLQDB2-Mon</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="4">
+       <widget class="PyDMLabel" name="PyDMLabel_15">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>
+    A QLabel with support for Channels and more from PyDM
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:RefKLQDA-Mon</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="2">
+       <widget class="PyDMLabel" name="PyDMLabel_8">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>
+    A QLabel with support for Channels and more from PyDM
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Fam:MA-QFA:OpMode-Sts</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="4">
+       <widget class="PyDMLabel" name="PyDMLabel_6">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>
+    A QLabel with support for Channels and more from PyDM
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:RefKLQFB-Mon</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="2">
+       <widget class="PyDMLabel" name="PyDMLabel_9">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>
+    A QLabel with support for Channels and more from PyDM
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Fam:MA-QFB:OpMode-Sts</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="1">
+       <widget class="QPushButton" name="pushButton_QFPMADetail">
+        <property name="minimumSize">
+         <size>
+          <width>114</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>114</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
+        </property>
+        <property name="text">
+         <string>SI-Fam:MA-QFP</string>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="3">
+       <widget class="PyDMLabel" name="PyDMLabel_34">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>
+    A QLabel with support for Channels and more from PyDM
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Fam:MA-QDB1:KL-RB</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="5">
+       <widget class="PyDMLabel" name="PyDMLabel_5">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>
+    A QLabel with support for Channels and more from PyDM
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:DeltaKLQFA-Mon</string>
+        </property>
+       </widget>
+      </item>
+      <item row="17" column="5">
+       <widget class="PyDMLabel" name="PyDMLabel_36">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>
+    A QLabel with support for Channels and more from PyDM
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:DeltaKLQDP2-Mon</string>
+        </property>
+       </widget>
+      </item>
+      <item row="17" column="2">
+       <widget class="PyDMLabel" name="PyDMLabel_29">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>
+    A QLabel with support for Channels and more from PyDM
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Fam:MA-QDP2:OpMode-Sts</string>
+        </property>
+       </widget>
+      </item>
+      <item row="13" column="1">
+       <widget class="QPushButton" name="pushButton_QDB2MADetail">
+        <property name="minimumSize">
+         <size>
+          <width>114</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>114</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
+        </property>
+        <property name="text">
+         <string>SI-Fam:MA-QDB2</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="4">
+       <widget class="QLabel" name="label_13">
+        <property name="minimumSize">
+         <size>
+          <width>112</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>112</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">font-weight:bold;
+min-width:8em;
+max-width:8em;</string>
+        </property>
+        <property name="text">
+         <string>RefKL-Mon</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="17" column="0">
+       <widget class="SiriusLedState" name="SiriusLedState_8">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>22</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>22</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Fam:MA-QDP2:PwrState-Sts</string>
+        </property>
+       </widget>
+      </item>
+      <item row="13" column="3">
+       <widget class="PyDMLabel" name="PyDMLabel_22">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>
+    A QLabel with support for Channels and more from PyDM
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Fam:MA-QDB2:KL-RB</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="3">
+       <widget class="PyDMLabel" name="PyDMLabel_14">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>
+    A QLabel with support for Channels and more from PyDM
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Fam:MA-QFP:KL-RB</string>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="5">
+       <widget class="PyDMLabel" name="PyDMLabel_27">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>
+    A QLabel with support for Channels and more from PyDM
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:DeltaKLQDB1-Mon</string>
+        </property>
+       </widget>
+      </item>
+      <item row="17" column="1">
+       <widget class="QPushButton" name="pushButton_QDP2MADetail">
+        <property name="minimumSize">
+         <size>
+          <width>97</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>114</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:6.78em;
+max-width:8em;</string>
+        </property>
+        <property name="text">
+         <string>SI-Fam:MA-QDP2</string>
+        </property>
+       </widget>
+      </item>
+      <item row="13" column="5">
+       <widget class="PyDMLabel" name="PyDMLabel_28">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>
+    A QLabel with support for Channels and more from PyDM
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:DeltaKLQDB2-Mon</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="5">
+       <widget class="QLabel" name="label_15">
+        <property name="minimumSize">
+         <size>
+          <width>112</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>112</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">font-weight:bold;
+min-width:8em;
+max-width:8em;</string>
+        </property>
+        <property name="text">
+         <string>DeltaKL-Mon</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="15" column="5">
+       <widget class="PyDMLabel" name="PyDMLabel_35">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>
+    A QLabel with support for Channels and more from PyDM
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:DeltaKLQDP1-Mon</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="3">
+       <widget class="PyDMLabel" name="PyDMLabel_7">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>
+    A QLabel with support for Channels and more from PyDM
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Fam:MA-QFA:KL-RB</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="3">
+       <widget class="PyDMLabel" name="PyDMLabel_18">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>
+    A QLabel with support for Channels and more from PyDM
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Fam:MA-QFB:KL-RB</string>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="2">
+       <widget class="PyDMLabel" name="PyDMLabel_25">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>
+    A QLabel with support for Channels and more from PyDM
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Fam:MA-QDB1:OpMode-Sts</string>
+        </property>
+       </widget>
+      </item>
+      <item row="15" column="2">
+       <widget class="PyDMLabel" name="PyDMLabel_33">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>
+    A QLabel with support for Channels and more from PyDM
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Fam:MA-QDP1:OpMode-Sts</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="SiriusLedState" name="SiriusLedState_2">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>22</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>22</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Fam:MA-QFB:PwrState-Sts</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="4">
+       <widget class="PyDMLabel" name="PyDMLabel_16">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>
+    A QLabel with support for Channels and more from PyDM
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:RefKLQFP-Mon</string>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="1">
+       <widget class="QPushButton" name="pushButton_QDB1MADetail">
+        <property name="minimumSize">
+         <size>
+          <width>114</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>114</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
+        </property>
+        <property name="text">
+         <string>SI-Fam:MA-QDB1</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QLabel" name="label_14">
+        <property name="minimumSize">
+         <size>
+          <width>112</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>112</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">font-weight:bold;
+min-width:8em;
+max-width:8em;</string>
+        </property>
+        <property name="text">
+         <string>KL-RB</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QLabel" name="label_12">
+        <property name="minimumSize">
+         <size>
+          <width>112</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>112</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">font-weight:bold;
+min-width:8em;
+max-width:8em;</string>
+        </property>
+        <property name="text">
+         <string>OpMode-Sts</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="15" column="4">
+       <widget class="PyDMLabel" name="PyDMLabel_32">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>
+    A QLabel with support for Channels and more from PyDM
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:RefKLQDP1-Mon</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="5">
+       <widget class="PyDMLabel" name="PyDMLabel_11">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>
+    A QLabel with support for Channels and more from PyDM
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:DeltaKLQFB-Mon</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="1">
+       <widget class="QPushButton" name="pushButton_QDAMADetail">
+        <property name="minimumSize">
+         <size>
+          <width>114</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>114</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
+        </property>
+        <property name="text">
+         <string>SI-Fam:MA-QDA</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="3">
+       <widget class="PyDMLabel" name="PyDMLabel_10">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>
+    A QLabel with support for Channels and more from PyDM
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Fam:MA-QDA:KL-RB</string>
+        </property>
+       </widget>
+      </item>
+      <item row="17" column="4">
+       <widget class="PyDMLabel" name="PyDMLabel_31">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>
+    A QLabel with support for Channels and more from PyDM
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:RefKLQDP2-Mon</string>
+        </property>
+       </widget>
+      </item>
+      <item row="13" column="0">
+       <widget class="SiriusLedState" name="SiriusLedState_6">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>22</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>22</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Fam:MA-QDB2:PwrState-Sts</string>
+        </property>
+       </widget>
+      </item>
+      <item row="17" column="3">
+       <widget class="PyDMLabel" name="PyDMLabel_30">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>
+    A QLabel with support for Channels and more from PyDM
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Fam:MA-QDP2:KL-RB</string>
+        </property>
+       </widget>
+      </item>
+      <item row="13" column="2">
+       <widget class="PyDMLabel" name="PyDMLabel_21">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>
+    A QLabel with support for Channels and more from PyDM
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Fam:MA-QDB2:OpMode-Sts</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="2">
+       <widget class="PyDMLabel" name="PyDMLabel_17">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>
+    A QLabel with support for Channels and more from PyDM
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the Label
+    init_channel : str, optional
+        The channel to be used by the widget.
+    </string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Fam:MA-QFP:OpMode-Sts</string>
+        </property>
+       </widget>
+      </item>
+      <item row="15" column="0">
+       <widget class="SiriusLedState" name="SiriusLedState_7">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>22</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>22</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Fam:MA-QDP1:PwrState-Sts</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="0">
+       <widget class="SiriusLedState" name="SiriusLedState_4">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>22</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>22</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Fam:MA-QDA:PwrState-Sts</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
@@ -2696,11 +2821,11 @@ Correction</string>
      <property name="maximumSize">
       <size>
        <width>16777215</width>
-       <height>40</height>
+       <height>16777215</height>
       </size>
      </property>
      <property name="styleSheet">
-      <string notr="true">font-size:24pt;
+      <string notr="true">font-size:1.2em;
 font-weight:bold;
 background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, stop:0 rgba(173, 190, 207, 255), stop:1 rgba(213, 213, 213, 255));</string>
      </property>
@@ -2753,6 +2878,275 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
       </size>
      </property>
     </spacer>
+   </item>
+   <item row="13" column="1" colspan="2">
+    <widget class="QGroupBox" name="groupBox_3">
+     <property name="title">
+      <string>Correction Status</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_4">
+      <item row="2" column="3">
+       <widget class="SiriusLedAlert" name="SiriusLedAlert_2">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>PyDMLed specialization to represent 2 states in red/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:Status-Mon</string>
+        </property>
+        <property name="pvbit" stdset="0">
+         <number>1</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="SiriusLedAlert" name="SiriusLedAlert">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>PyDMLed specialization to represent 2 states in red/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:Status-Mon</string>
+        </property>
+        <property name="pvbit" stdset="0">
+         <number>0</number>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="3">
+       <widget class="SiriusLedAlert" name="SiriusLedAlert_3">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>PyDMLed specialization to represent 2 states in red/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:Status-Mon</string>
+        </property>
+        <property name="pvbit" stdset="0">
+         <number>2</number>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="4">
+       <widget class="QLabel" name="label_status4">
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="4">
+       <widget class="QLabel" name="label_status1">
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="4">
+       <widget class="QLabel" name="label_status3">
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="5">
+       <spacer name="horizontalSpacer_8">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Maximum</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="3" column="4">
+       <widget class="QLabel" name="label_status2">
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="3">
+       <widget class="SiriusLedAlert" name="SiriusLedAlert_5">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>PyDMLed specialization to represent 2 states in red/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:Status-Mon</string>
+        </property>
+        <property name="pvbit" stdset="0">
+         <number>4</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="4">
+       <widget class="QLabel" name="label_status0">
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <spacer name="horizontalSpacer_7">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Maximum</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="1" column="1" rowspan="5">
+       <widget class="PyDMLogLabel" name="PyDMLogLabel">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string/>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QListWidget{
+min-height:12em;
+}</string>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:Log-Mon</string>
+        </property>
+        <property name="dateTimeFmt" stdset="0">
+         <string>%Y/%m/%d-%H:%M:%S</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="3">
+       <widget class="SiriusLedAlert" name="SiriusLedAlert_4">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>PyDMLed specialization to represent 2 states in red/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:Status-Mon</string>
+        </property>
+        <property name="pvbit" stdset="0">
+         <number>3</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </item>
   </layout>
  </widget>

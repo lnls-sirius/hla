@@ -184,7 +184,6 @@ class _CorrParamsDetailWindow(SiriusMainWindow):
         self.table_matrix_X.setStyleSheet("""
             min-width:20.72em; max-width:20.72em;
             min-height:4.65em; max-height:4.65em;""")
-        self.table_matrix_X.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.table_matrix_X.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table_matrix_X.setRowCount(2)
         self.table_matrix_X.setColumnCount(2)
@@ -203,7 +202,6 @@ class _CorrParamsDetailWindow(SiriusMainWindow):
         self.table_matrix_Y.setStyleSheet("""
             min-width:20.72em; max-width:20.72em;
             min-height:4.65em; max-height:4.65em;""")
-        self.table_matrix_Y.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.table_matrix_Y.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table_matrix_Y.setRowCount(2)
         self.table_matrix_Y.setColumnCount(2)
