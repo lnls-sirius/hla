@@ -139,7 +139,9 @@ class SetConfigurationWindow(SiriusMainWindow):
         self._central_widget.setStyleSheet("""
             #CentralWidget {
                 min-width: 40em;
+                max-width: 40em;
                 min-height: 40em;
+                max-height: 40em;
             }
         """)
         self.setWindowTitle('Set saved configuration')
@@ -285,7 +287,9 @@ class ReadConfigurationWindow(SiriusMainWindow):
         self._central_widget.setStyleSheet("""
             #CentralWidget {
                 min-width: 40em;
+                max-width: 40em;
                 min-height: 40em;
+                max-height: 40em;
             }
         """)
         self.setWindowTitle('Create new configuration')
