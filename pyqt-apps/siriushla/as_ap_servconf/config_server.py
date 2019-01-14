@@ -318,7 +318,7 @@ class ConfigurationManager(SiriusMainWindow):
         self.setWindowTitle("Configuration Manager")
 
     def _setup_ui(self):
-        self.setGeometry(0, 0, 1600, 900)
+        # self.setGeometry(0, 0, 1600, 900)
         self.main_widget = QFrame()
         self.main_widget.setObjectName('ServConf')
         self.setCentralWidget(self.main_widget)
