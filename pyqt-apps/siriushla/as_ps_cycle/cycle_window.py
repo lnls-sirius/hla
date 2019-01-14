@@ -8,13 +8,14 @@ from qtpy.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, \
     QPushButton, QDialog, QLabel, QMessageBox
 
 from siriuspy.envars import vaca_prefix as VACA_PREFIX
+from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.as_ps_cycle.cycle_status_list import CycleStatusList
 from siriushla.widgets.pvnames_tree import PVNameTree
 from siriushla.as_ps_cycle.progress_dialog import ProgressDialog
 from siriuspy.search.ma_search import MASearch
 
 
-class CycleWindow(QMainWindow):
+class CycleWindow(SiriusMainWindow):
     """Magnet cycle window."""
 
     def __init__(self, parent=None, checked_accs=()):
@@ -28,12 +29,21 @@ class CycleWindow(QMainWindow):
         self._checked_accs = checked_accs
         # Setup UI
         self._setup_ui()
+        self.central_widget.setStyleSheet("""
+            #CentralWidget {
+                min-width: 30em;
+                max-width: 30em;
+                min-height: 40em;
+                max-height: 40em;
+            }
+        """)
         self.setWindowTitle('Magnet Cycling')
 
     def _setup_ui(self):
-        central_widget = QWidget()
-        central_widget.layout = QVBoxLayout()
-        central_widget.setLayout(central_widget.layout)
+        self.central_widget = QWidget()
+        self.central_widget.setObjectName('CentralWidget')
+        self.central_widget.layout = QVBoxLayout()
+        self.central_widget.setLayout(self.central_widget.layout)
 
         self.prepare_button = QPushButton("Prepare to cycle", self)
         self.prepare_button.setObjectName('PrepareButton')
@@ -41,14 +51,14 @@ class CycleWindow(QMainWindow):
                                        ('sec', 'mag_group'),
                                        self, self._checked_accs)
 
-        central_widget.layout.addWidget(
+        self.central_widget.layout.addWidget(
             QLabel('<h3>Magnet Cycling</h3>', self, alignment=Qt.AlignCenter))
-        central_widget.layout.addWidget(
+        self.central_widget.layout.addWidget(
             QLabel('Select magnets to cycle:', self))
-        central_widget.layout.addWidget(self.magnets_tree)
-        central_widget.layout.addWidget(self.prepare_button)
+        self.central_widget.layout.addWidget(self.magnets_tree)
+        self.central_widget.layout.addWidget(self.prepare_button)
 
-        self.setCentralWidget(central_widget)
+        self.setCentralWidget(self.central_widget)
 
         self.prepare_button.pressed.connect(self._prepare_to_cycle)
 
