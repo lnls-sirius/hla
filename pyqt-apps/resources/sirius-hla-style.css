@@ -10,6 +10,16 @@
   font-size: 20pt;
 } */
 
+QLed {
+  min-height: 1.29em;
+  max-height: 1.29em;
+}
+
+PyDMStateButton {
+  min-height: 1.29em;
+  max-height: 1.29em;
+}
+
 QMenuBar {
   border-bottom: 2px solid black;
 }
@@ -137,15 +147,6 @@ QTreeWidget::text {
     spacing: 1em;
 }
 
-#OkTextEdit {
-    background-color: #eafaea;
-}
-#NokTextEdit {
-    background-color: #ffebe6;
-}
-PSTestWindow > QLabel {
-    font-weight: bold;
-}
 /*PSTestWindow #TestButton,
 CycleWindow #PrepareButton {
     color: white;
