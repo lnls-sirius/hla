@@ -1,5 +1,5 @@
 """Sirius Windows module."""
-from qtpy.QtCore import Qt
+from qtpy.QtGui import QKeySequence
 from qtpy.QtWidgets import QMainWindow, QDialog, QHBoxLayout
 
 
@@ -20,6 +20,7 @@ def _create_siriuswindow(qt_type):
         def __init__(self, *args, **kwargs):
             """Init."""
             super().__init__(*args, **kwargs)
+            self.setFocus(True)
             self._font_size = 10
             self._window_size = list()
             self.setStyleSheet(self.Stylesheet + self._font_size_ss())
@@ -41,9 +42,9 @@ def _create_siriuswindow(qt_type):
 
         def keyPressEvent(self, event):
             """Override keyPressEvent."""
-            if event.key() == Qt.Key_Plus:
+            if event.matches(QKeySequence.ZoomIn):
                 return self._increase_font_size()
-            elif event.key() == Qt.Key_Minus:
+            elif event.matches(QKeySequence.ZoomOut):
                 return self._decrease_font_size()
             super().keyPressEvent(event)
 
