@@ -7,7 +7,7 @@ from qtpy.QtWidgets import QLabel, QWidget, QScrollArea, QAbstractItemView, \
                            QRadioButton, QFormLayout, QDoubleSpinBox, \
                            QComboBox, QSpinBox, QStyledItemDelegate, \
                            QSpacerItem, QSizePolicy as QSzPlcy, QCheckBox, \
-                           QTabWidget, QGroupBox
+                           QTabWidget, QGroupBox, QHeaderView
 from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox, \
                          PyDMPushButton
 from siriushla.widgets.windows import SiriusDialog
@@ -134,33 +134,43 @@ class InsertNormalizedConfig(SiriusDialog):
         self.rb_create.toggled.connect(self.create_settings.setVisible)
 
         vlay = QVBoxLayout()
-        vlay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
+        vlay.addItem(QSpacerItem(40, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
         vlay.addWidget(
             QLabel('<h4>Insert a Normalized Configuration</h4>', self),
             alignment=Qt.AlignCenter)
-        vlay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
+        vlay.addItem(QSpacerItem(40, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
         vlay.addWidget(self.rb_interp)
         vlay.addWidget(self.rb_confsrv)
         vlay.addWidget(self.rb_create)
-        vlay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
+        vlay.addItem(QSpacerItem(40, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
         vlay.addWidget(self.config_data)
 
         self.setLayout(vlay)
+        self.setStyleSheet("""
+            #interp_settings{
+                min-width:20em;max-width:20em;
+                min-height:6em;max-height:6em;}
+            #confsrv_settings{
+                min-width:20em;max-width:20em;
+                min-height:6em;max-height:6em;}
+            #create_settings{
+                min-width:20em;max-width:20em;
+                min-height:6em;max-height:6em;}""")
 
     def _setupConfigDataWidget(self):
         vlay = QVBoxLayout()
         self.interp_settings = QWidget()
+        self.interp_settings.setObjectName('interp_settings')
         self.confsrv_settings = QWidget()
+        self.confsrv_settings.setObjectName('confsrv_settings')
         self.create_settings = QWidget()
+        self.create_settings.setObjectName('create_settings')
         self.confsrv_settings.setVisible(False)
         self.create_settings.setVisible(False)
         vlay.addWidget(self.interp_settings)
         vlay.addWidget(self.confsrv_settings)
         vlay.addWidget(self.create_settings)
         self.config_data.setLayout(vlay)
-        self.interp_settings.setFixedSize(600, 160)
-        self.confsrv_settings.setFixedSize(600, 160)
-        self.create_settings.setFixedSize(600, 160)
 
         # to insert interpolating existing norm configs
         flay_interp = QFormLayout()
@@ -265,7 +275,7 @@ class DeleteNormalizedConfig(SiriusDialog):
         self.sb_confignumber = QSpinBox(self)
         self.sb_confignumber.setMinimum(1)
         self.sb_confignumber.setMaximum(max(self.table_map['rows'].keys())+1)
-        self.sb_confignumber.setMaximumWidth(150)
+        self.sb_confignumber.setStyleSheet("""max-width:5em;""")
         self.sb_confignumber.valueChanged.connect(self._searchConfigByIndex)
         self.bt_delete = QPushButton('Delete', self)
         self.bt_delete.setAutoDefault(False)
@@ -273,7 +283,7 @@ class DeleteNormalizedConfig(SiriusDialog):
         self.bt_delete.clicked.connect(self._emitDeleteConfigData)
         self.l_configname = QLabel('', self)
         self.l_configname.setSizePolicy(QSzPlcy.MinimumExpanding,
-                                        QSzPlcy.Preferred)
+                                        QSzPlcy.Expanding)
         if self.selected_item:
             row = self.selected_item[0].row()
         else:
@@ -326,8 +336,8 @@ class EditNormalizedConfig(SiriusDialog):
         label.setStyleSheet("""font-weight: bold;""")
 
         scrollarea = QScrollArea()
-        scrollarea.setFixedWidth(500)
         self.data = QWidget()
+        self.data.setObjectName('data')
         flay_configdata = QFormLayout()
         manames = self.norm_config.get_config_type_template().keys()
         for ma in manames:
@@ -335,7 +345,9 @@ class EditNormalizedConfig(SiriusDialog):
             ma_value.setDecimals(6)
             ma_value.setValue(self.norm_config[ma])
             ma_value.setObjectName(ma)
-            ma_value.setFixedWidth(200)
+            ma_value.setStyleSheet("""
+                min-width:8em; max-width:8em;
+                min-height:1.29em; max-height:1.29em;""")
 
             aux = self._aux_magnets[ma]
             currs = (aux.current_min, aux.current_max)
@@ -346,11 +358,16 @@ class EditNormalizedConfig(SiriusDialog):
 
             flay_configdata.addRow(QLabel(ma + ': ', self), ma_value)
         self.data.setLayout(flay_configdata)
+        self.data.setStyleSheet("""
+            #data{
+                min-width:18em; max-width:18em;
+                min-height:100em; max-height:100em;}""")
         scrollarea.setWidget(self.data)
 
         self.cb_checklims = QCheckBox('Set limits according to energy', self)
         self.cb_checklims.setChecked(True)
         self.cb_checklims.stateChanged.connect(self._handleStrengtsLimits)
+        self.cb_checklims.setStyleSheet("""min-width:20em; max-width:20em;""")
         self.bt_apply = QPushButton('Apply Changes', self)
         self.bt_apply.setAutoDefault(False)
         self.bt_apply.setDefault(False)
@@ -433,11 +450,13 @@ class OpticsAdjustSettings(SiriusDialog):
         self.chrom_settings = QWidget(self)
         self.chrom_settings.setLayout(self._setupChromSettings())
         self.bt_apply = QPushButton('Apply Settings', self)
-        self.bt_apply.setFixedWidth(250)
+        self.bt_apply.setStyleSheet("""min-width:8em; max-width:8em;""")
         self.bt_apply.clicked.connect(self._emitSettings)
+        self.bt_apply.setAutoDefault(False)
+        self.bt_apply.setDefault(False)
         hlay_apply = QHBoxLayout()
         hlay_apply.addItem(
-            QSpacerItem(20, 60, QSzPlcy.Expanding, QSzPlcy.Fixed))
+            QSpacerItem(20, 60, QSzPlcy.Expanding, QSzPlcy.Ignored))
         hlay_apply.addWidget(self.bt_apply)
 
         tabs = QTabWidget(self)
@@ -460,42 +479,62 @@ class OpticsAdjustSettings(SiriusDialog):
         label_tunemat = QLabel('<h4>Matrix</h4>', self)
         label_tunemat.setAlignment(Qt.AlignCenter)
         self.table_tunemat = QTableWidget(self)
-        self.table_tunemat.setFixedSize(686, 130)
+        self.table_tunemat.setObjectName('tunemat')
+        self.table_tunemat.setStyleSheet("""
+            #tunemat{
+                background-color: #efebe7;
+                min-width: 22.14em; max-width: 22.14em;
+                min-height: 6em;  max-height: 6em;}""")
         self.table_tunemat.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.table_tunemat.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table_tunemat.setRowCount(2)
         self.table_tunemat.setColumnCount(2)
         self.table_tunemat.setVerticalHeaderLabels(['  X', '  Y'])
         self.table_tunemat.setHorizontalHeaderLabels(['QF', 'QD'])
-        self.table_tunemat.horizontalHeader().setDefaultSectionSize(320)
-        self.table_tunemat.verticalHeader().setDefaultSectionSize(48)
-        self.table_tunemat.setStyleSheet("background-color: #efebe7;")
+        self.table_tunemat.horizontalHeader().setStyleSheet("""
+            min-height:1.55em; max-height:1.55em;""")
+        self.table_tunemat.verticalHeader().setStyleSheet("""
+            min-width:1.55em; max-width:1.55em;""")
+        self.table_tunemat.horizontalHeader().setSectionResizeMode(
+            QHeaderView.Stretch)
+        self.table_tunemat.verticalHeader().setSectionResizeMode(
+            QHeaderView.Stretch)
 
         label_nomKL = QLabel('<h4>Nominal KL</h4>')
         label_nomKL.setAlignment(Qt.AlignCenter)
         self.table_nomKL = QTableWidget(self)
-        self.table_nomKL.setFixedSize(685, 85)
+        self.table_nomKL.setObjectName('nomKL')
+        self.table_nomKL.setStyleSheet("""
+            #nomKL{
+                background-color: #efebe7;
+                min-width: 22.14em; max-width: 22.14em;
+                min-height: 4em;  max-height: 4em;}""")
         self.table_nomKL.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.table_nomKL.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table_nomKL.setRowCount(1)
         self.table_nomKL.setColumnCount(2)
         self.table_nomKL.setVerticalHeaderLabels(['KL'])
         self.table_nomKL.setHorizontalHeaderLabels(['QF', 'QD'])
-        self.table_nomKL.horizontalHeader().setDefaultSectionSize(320)
-        self.table_nomKL.verticalHeader().setDefaultSectionSize(48)
-        self.table_nomKL.setStyleSheet("background-color: #efebe7;")
+        self.table_nomKL.horizontalHeader().setStyleSheet("""
+            min-height:1.55em; max-height:1.55em;""")
+        self.table_nomKL.verticalHeader().setStyleSheet("""
+            min-width:1.55em; max-width:1.55em;""")
+        self.table_nomKL.horizontalHeader().setSectionResizeMode(
+            QHeaderView.Stretch)
+        self.table_nomKL.verticalHeader().setSectionResizeMode(
+            QHeaderView.Stretch)
 
         lay = QVBoxLayout()
         lay.addWidget(l_tuneconfig)
         lay.addWidget(self.cb_tuneconfig)
-        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Fixed, QSzPlcy.Expanding))
+        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Expanding, QSzPlcy.Expanding))
         lay.addWidget(label_tunemat)
         lay.addWidget(self.table_tunemat)
-        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Fixed, QSzPlcy.Expanding))
+        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Expanding, QSzPlcy.Expanding))
         lay.addWidget(label_nomKL)
         lay.addWidget(self.table_nomKL)
         lay.addItem(
-            QSpacerItem(20, 101, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding))
+            QSpacerItem(20, 10, QSzPlcy.Expanding, QSzPlcy.Expanding))
 
         return lay
 
@@ -510,47 +549,66 @@ class OpticsAdjustSettings(SiriusDialog):
         l_chrommat = QLabel('<h4>Matrix</h4>', self)
         l_chrommat.setAlignment(Qt.AlignCenter)
         self.table_chrommat = QTableWidget(self)
-        self.table_chrommat.setFixedSize(686, 130)
+        self.table_chrommat.setObjectName('chrommat')
+        self.table_chrommat.setStyleSheet("""
+            #chrommat{
+                background-color: #efebe7;
+                min-width: 22.14em; max-width: 22.14em;
+                min-height: 6em;  max-height: 6em;}""")
         self.table_chrommat.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.table_chrommat.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table_chrommat.setRowCount(2)
         self.table_chrommat.setColumnCount(2)
         self.table_chrommat.setVerticalHeaderLabels(['  X', '  Y'])
         self.table_chrommat.setHorizontalHeaderLabels(['SF', 'SD'])
-        self.table_chrommat.horizontalHeader().setDefaultSectionSize(320)
-        self.table_chrommat.verticalHeader().setDefaultSectionSize(48)
-        self.table_chrommat.setStyleSheet("background-color: #efebe7;")
+        self.table_chrommat.horizontalHeader().setStyleSheet("""
+            min-height:1.55em; max-height:1.55em;""")
+        self.table_chrommat.verticalHeader().setStyleSheet("""
+            min-width:1.55em; max-width:1.55em;""")
+        self.table_chrommat.horizontalHeader().setSectionResizeMode(
+            QHeaderView.Stretch)
+        self.table_chrommat.verticalHeader().setSectionResizeMode(
+            QHeaderView.Stretch)
 
         l_nomSL = QLabel('<h4>Nominal SL</h4>')
         l_nomSL.setAlignment(Qt.AlignCenter)
         self.table_nomSL = QTableWidget(self)
-        self.table_nomSL.setFixedSize(683, 85)
+        self.table_nomSL.setObjectName('nomSL')
+        self.table_nomSL.setStyleSheet("""
+            #nomSL{
+                background-color: #efebe7;
+                min-width: 22.14em; max-width: 22.14em;
+                min-height: 4em;  max-height: 4em;}""")
         self.table_nomSL.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.table_nomSL.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table_nomSL.setRowCount(1)
         self.table_nomSL.setColumnCount(2)
         self.table_nomSL.setVerticalHeaderLabels(['SL'])
         self.table_nomSL.setHorizontalHeaderLabels(['SF', 'SD'])
-        self.table_nomSL.horizontalHeader().setDefaultSectionSize(320)
-        self.table_nomSL.verticalHeader().setDefaultSectionSize(48)
-        self.table_nomSL.setStyleSheet("background-color: #efebe7;")
+        self.table_nomSL.horizontalHeader().setStyleSheet("""
+            min-height:1.55em; max-height:1.55em;""")
+        self.table_nomSL.verticalHeader().setStyleSheet("""
+            min-width:1.55em; max-width:1.55em;""")
+        self.table_nomSL.horizontalHeader().setSectionResizeMode(
+            QHeaderView.Stretch)
+        self.table_nomSL.verticalHeader().setSectionResizeMode(
+            QHeaderView.Stretch)
 
         l_nomchrom = QLabel('<h4>Nominal Chrom</h4>')
         l_nomchrom.setAlignment(Qt.AlignCenter)
         self.label_nomchrom = QLabel()
-        self.label_nomchrom.setMinimumHeight(48)
         self.label_nomchrom.setAlignment(Qt.AlignCenter)
 
         lay = QVBoxLayout()
         lay.addWidget(l_chromconfig)
         lay.addWidget(self.cb_chromconfig)
-        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Fixed, QSzPlcy.Expanding))
+        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Expanding, QSzPlcy.Expanding))
         lay.addWidget(l_chrommat)
         lay.addWidget(self.table_chrommat)
-        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Fixed, QSzPlcy.Expanding))
+        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Expanding, QSzPlcy.Expanding))
         lay.addWidget(l_nomSL)
         lay.addWidget(self.table_nomSL)
-        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Fixed, QSzPlcy.Expanding))
+        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Expanding, QSzPlcy.Expanding))
         lay.addWidget(l_nomchrom)
         lay.addWidget(self.label_nomchrom)
 
@@ -652,7 +710,8 @@ class DiagnosisSettings(SiriusDialog):
         self.bt_apply.setAutoDefault(False)
         self.bt_apply.setDefault(False)
         hlay_apply = QHBoxLayout()
-        hlay_apply.addItem(QSpacerItem(4, 2, QSzPlcy.Expanding, QSzPlcy.Fixed))
+        hlay_apply.addItem(
+            QSpacerItem(4, 2, QSzPlcy.Expanding, QSzPlcy.Ignored))
         hlay_apply.addWidget(self.bt_apply)
 
         lay = QVBoxLayout()
@@ -665,6 +724,53 @@ class DiagnosisSettings(SiriusDialog):
         lay.setSpacing(20)
         self.setLayout(lay)
 
+        self.gbox_generalsettings.setStyleSheet("""
+            PyDMEnumComboBox{
+                min-width:7em; max-width:7em;
+                min-height:1.29em; max-height:1.29em;}
+            PyDMSpinbox{
+                min-width:6.5em; max-width:6.5em;
+                min-height:1.29em; max-height:1.29em;
+                qproperty-alignment: AlignCenter;}
+            PyDMLabel{
+                min-width:7em; max-width:7em;
+                min-height:1.29em; max-height:1.29em;
+                qproperty-alignment: AlignCenter;}
+            PyDMLedMultiChannel{
+                min-width:7.3em; max-width:7.3em;
+                min-height:1.29em; max-height:1.29em;}
+            PyDMStateButton{
+                min-width:7.2em; max-width:7.2em;
+                min-height:1.29em; max-height:1.29em;}""")
+        self.gbox_normalmode.setStyleSheet("""
+            PyDMSpinbox{
+                min-width:6.5em; max-width:6.5em;
+                min-height:1.29em; max-height:1.29em;
+                qproperty-alignment: AlignCenter;}
+            PyDMLabel{
+                min-width:7em; max-width:7em;
+                min-height:1.29em; max-height:1.29em;
+                qproperty-alignment: AlignCenter;}
+            PyDMStateButton{
+                min-width:7.2em; max-width:7.2em;
+                min-height:1.29em; max-height:1.29em;}""")
+        self.gbox_fastmode.setStyleSheet("""
+            PyDMSpinbox{
+                min-width:6.5em; max-width:6.5em;
+                min-height:1.29em; max-height:1.29em;
+                qproperty-alignment: AlignCenter;}
+            PyDMLabel{
+                min-width:7em; max-width:7em;
+                min-height:1.29em; max-height:1.29em;
+                qproperty-alignment: AlignCenter;}
+            PyDMStateButton{
+                min-width:7.2em; max-width:7.2em;
+                min-height:1.29em; max-height:1.29em;}""")
+        self.gbox_effparams.setStyleSheet("""
+            QSpinBox{
+                min-width:7em; max-width:7em;
+                min-height:1.29em; max-height:1.29em;}""")
+
     def _setupReliableMeasWidget(self):
         reliablemeas_channel = SiriusConnectionSignal(
             self.dcct_prefix+'ReliableMeasLabels-Mon')
@@ -673,23 +779,20 @@ class DiagnosisSettings(SiriusDialog):
 
         gbox_reliablemeas = _GroupBoxWithChannel(
             'DCCT Measure Reliability Status', self, [reliablemeas_channel])
-        gbox_reliablemeas.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Fixed)
+        gbox_reliablemeas.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Expanding)
 
         self.label_reliablemeas0 = QLabel('', self)
         self.led_ReliableMeas0 = SiriusLedAlert(
             parent=self, init_channel=self.dcct_prefix+'ReliableMeas-Mon',
             bit=0)
-        self.led_ReliableMeas0.setFixedWidth(48)
         self.label_reliablemeas1 = QLabel('', self)
         self.led_ReliableMeas1 = SiriusLedAlert(
             parent=self, init_channel=self.dcct_prefix+'ReliableMeas-Mon',
             bit=1)
-        self.led_ReliableMeas1.setFixedWidth(48)
         self.label_reliablemeas2 = QLabel('', self)
         self.led_ReliableMeas2 = SiriusLedAlert(
             parent=self, init_channel=self.dcct_prefix+'ReliableMeas-Mon',
             bit=2)
-        self.led_ReliableMeas2.setFixedWidth(48)
         lay_reliablemeas = QGridLayout()
         lay_reliablemeas.addWidget(self.led_ReliableMeas0, 0, 0)
         lay_reliablemeas.addWidget(self.label_reliablemeas0, 0, 1)
@@ -707,7 +810,6 @@ class DiagnosisSettings(SiriusDialog):
         l_measmode = QLabel('Measurement Mode: ', self)
         self.pydmenumcombobox_MeasMode = PyDMEnumComboBox(
             parent=self, init_channel=self.dcct_prefix+'MeasMode-Sel')
-        self.pydmenumcombobox_MeasMode.setFixedSize(220, 40)
         self.pydmlabel_MeasMode = PyDMLabel(
             parent=self, init_channel=self.dcct_prefix+'MeasMode-Sts')
         hlay_measmode = QHBoxLayout()
@@ -717,8 +819,6 @@ class DiagnosisSettings(SiriusDialog):
         l_currthold = QLabel('Current Threshold [mA]: ', self)
         self.pydmspinbox_CurrThold = PyDMSpinbox(
             parent=self, init_channel=self.dcct_prefix+'CurrThold-SP')
-        self.pydmspinbox_CurrThold.setFixedSize(220, 40)
-        self.pydmspinbox_CurrThold.setAlignment(Qt.AlignCenter)
         self.pydmspinbox_CurrThold.showStepExponent = False
         self.pydmlabel_CurrThold = PyDMLabel(
             parent=self, init_channel=self.dcct_prefix+'CurrThold-RB')
@@ -730,7 +830,6 @@ class DiagnosisSettings(SiriusDialog):
         self.pydmstatebutton_HFReject = PyDMStateButton(
             parent=self, init_channel=self.dcct_prefix+'HFReject-Sel')
         self.pydmstatebutton_HFReject.shape = 1
-        self.pydmstatebutton_HFReject.setFixedSize(220, 40)
         self.pydmlabel_HFReject = PyDMLabel(
             parent=self, init_channel=self.dcct_prefix+'HFReject-Sts')
         hlay_hfreject = QHBoxLayout()
@@ -740,7 +839,6 @@ class DiagnosisSettings(SiriusDialog):
         l_meastrig = QLabel('Measurement Trigger Source: ', self)
         self.pydmenumcombobox_MeasTrg = PyDMEnumComboBox(
             parent=self, init_channel=self.dcct_prefix+'MeasTrg-Sel')
-        self.pydmenumcombobox_MeasTrg.setFixedSize(220, 40)
         self.pydmlabel_MeasTrg = PyDMLabel(
             parent=self, init_channel=self.dcct_prefix+'MeasTrg-Sts')
         hlay_meastrig = QHBoxLayout()
@@ -753,7 +851,6 @@ class DiagnosisSettings(SiriusDialog):
             channels2values={
                 self.prefix+'BO-35D:TI-DCCT:State-Sts': 1,
                 self.prefix+'BO-35D:TI-DCCT:Status-Mon': 0})
-        self.ledmulti_TIStatus.setFixedSize(220, 40)
         self.pb_trgdetails = QPushButton('Open details', self)
         self.pb_trgdetails.setAutoDefault(False)
         self.pb_trgdetails.setDefault(False)
@@ -768,8 +865,6 @@ class DiagnosisSettings(SiriusDialog):
         self.pydmspinbox_TIDelay = PyDMSpinbox(
             parent=self,
             init_channel=self.prefix+'BO-35D:TI-DCCT:Delay-SP')
-        self.pydmspinbox_TIDelay.setFixedSize(220, 40)
-        self.pydmspinbox_TIDelay.setAlignment(Qt.AlignCenter)
         self.pydmspinbox_TIDelay.showStepExponent = False
         self.pydmlabel_TIDelay = PyDMLabel(
             parent=self,
@@ -781,8 +876,6 @@ class DiagnosisSettings(SiriusDialog):
         l_trgdelay = QLabel('Measurement Delay After Trigger [s]: ', self)
         self.pydmspinbox_TrgDelay = PyDMSpinbox(
             parent=self, init_channel=self.dcct_prefix+'TrgDelay-SP')
-        self.pydmspinbox_TrgDelay.setFixedSize(220, 40)
-        self.pydmspinbox_TrgDelay.setAlignment(Qt.AlignCenter)
         self.pydmspinbox_TrgDelay.showStepExponent = False
         self.pydmlabel_TrgDelay = PyDMLabel(
             parent=self, init_channel=self.dcct_prefix+'TrgDelay-RB')
@@ -791,6 +884,7 @@ class DiagnosisSettings(SiriusDialog):
         hlay_trgdelay.addWidget(self.pydmlabel_TrgDelay)
 
         flay_generalsettings = QFormLayout()
+        flay_generalsettings.setLabelAlignment(Qt.AlignRight)
         flay_generalsettings.setFormAlignment(Qt.AlignCenter)
         flay_generalsettings.addRow(l_measmode, hlay_measmode)
         flay_generalsettings.addRow(l_currthold, hlay_currthold)
@@ -809,8 +903,6 @@ class DiagnosisSettings(SiriusDialog):
         l_smpcnt = QLabel('Sample Count: ', self)
         self.pydmspinbox_SampleCnt = PyDMSpinbox(
             parent=self, init_channel=self.dcct_prefix+'SampleCnt-SP')
-        self.pydmspinbox_SampleCnt.setFixedSize(220, 40)
-        self.pydmspinbox_SampleCnt.setAlignment(Qt.AlignCenter)
         self.pydmspinbox_SampleCnt.showStepExponent = False
         self.pydmlabel_SampleCnt = PyDMLabel(
             parent=self, init_channel=self.dcct_prefix+'SampleCnt-RB')
@@ -821,8 +913,6 @@ class DiagnosisSettings(SiriusDialog):
         l_measperiod = QLabel('Measurement Period [s]: ', self)
         self.pydmspinbox_MeasPeriod = PyDMSpinbox(
             parent=self, init_channel=self.dcct_prefix+'MeasPeriod-SP')
-        self.pydmspinbox_MeasPeriod.setFixedSize(220, 40)
-        self.pydmspinbox_MeasPeriod.setAlignment(Qt.AlignCenter)
         self.pydmspinbox_MeasPeriod.showStepExponent = False
         self.pydmlabel_MeasPeriod = PyDMLabel(
             parent=self, init_channel=self.dcct_prefix+'MeasPeriod-RB')
@@ -834,13 +924,11 @@ class DiagnosisSettings(SiriusDialog):
         self.pydmstatebutton_RelEnbl = PyDMStateButton(
             parent=self, init_channel=self.dcct_prefix+'RelEnbl-Sel')
         self.pydmstatebutton_RelEnbl.shape = 1
-        self.pydmstatebutton_RelEnbl.setFixedSize(220, 40)
         self.pydmlabel_RelEnbl = PyDMLabel(
             parent=self, init_channel=self.dcct_prefix+'RelEnbl-Sts')
         self.pydmpushbutton_RelEnbl = PyDMPushButton(
             parent=self, label='Acquire Offset', pressValue=1,
             init_channel=self.dcct_prefix+'RelAcq-Cmd')
-        self.pydmpushbutton_RelEnbl.setFixedSize(220, 40)
         hlay_offset = QHBoxLayout()
         hlay_offset.addWidget(self.pydmstatebutton_RelEnbl)
         hlay_offset.addWidget(self.pydmlabel_RelEnbl)
@@ -849,8 +937,6 @@ class DiagnosisSettings(SiriusDialog):
         l_rellvl = QLabel('Relative Offset Level [V]: ', self)
         self.pydmspinbox_RelLvl = PyDMSpinbox(
             parent=self, init_channel=self.dcct_prefix+'RelLvl-SP')
-        self.pydmspinbox_RelLvl.setFixedSize(220, 40)
-        self.pydmspinbox_RelLvl.setAlignment(Qt.AlignCenter)
         self.pydmspinbox_RelLvl.showStepExponent = False
         self.pydmlabel_RelLvl = PyDMLabel(
             parent=self, init_channel=self.dcct_prefix+'RelLvl-RB')
@@ -859,6 +945,7 @@ class DiagnosisSettings(SiriusDialog):
         hlay_rellvl.addWidget(self.pydmlabel_RelLvl)
 
         flay_normalmode = QFormLayout()
+        flay_normalmode.setLabelAlignment(Qt.AlignRight)
         flay_normalmode.setFormAlignment(Qt.AlignCenter)
         flay_normalmode.addRow(l_smpcnt, hlay_smpcnt)
         flay_normalmode.addRow(l_measperiod, hlay_measperiod)
@@ -875,8 +962,6 @@ class DiagnosisSettings(SiriusDialog):
         l_fastsmpcnt = QLabel('Sample Count: ', self)
         self.pydmspinbox_FastSampleCnt = PyDMSpinbox(
             parent=self, init_channel=self.dcct_prefix+'FastSampleCnt-SP')
-        self.pydmspinbox_FastSampleCnt.setFixedSize(220, 40)
-        self.pydmspinbox_FastSampleCnt.setAlignment(Qt.AlignCenter)
         self.pydmspinbox_FastSampleCnt.showStepExponent = False
         self.pydmlabel_FastSampleCnt = PyDMLabel(
             parent=self, init_channel=self.dcct_prefix+'FastSampleCnt-RB')
@@ -887,8 +972,6 @@ class DiagnosisSettings(SiriusDialog):
         l_fastmeasperiod = QLabel('Measurement Period [s]: ', self)
         self.pydmspinbox_FastMeasPeriod = PyDMSpinbox(
             parent=self, init_channel=self.dcct_prefix+'FastMeasPeriod-SP')
-        self.pydmspinbox_FastMeasPeriod.setFixedSize(220, 40)
-        self.pydmspinbox_FastMeasPeriod.setAlignment(Qt.AlignCenter)
         self.pydmspinbox_FastMeasPeriod.showStepExponent = False
         self.pydmlabel_FastMeasPeriod = PyDMLabel(
             parent=self, init_channel=self.dcct_prefix+'FastMeasPeriod-RB')
@@ -900,13 +983,11 @@ class DiagnosisSettings(SiriusDialog):
         self.pydmstatebutton_FastRelEnbl = PyDMStateButton(
             parent=self, init_channel=self.dcct_prefix+'FastRelEnbl-Sel')
         self.pydmstatebutton_FastRelEnbl.shape = 1
-        self.pydmstatebutton_FastRelEnbl.setFixedSize(220, 40)
         self.pydmlabel_FastRelEnbl = PyDMLabel(
             parent=self, init_channel=self.dcct_prefix+'FastRelEnbl-Sts')
         self.pydmpushbutton_FastRelEnbl = PyDMPushButton(
             parent=self, label='Acquire Offset', pressValue=1,
             init_channel=self.dcct_prefix+'FastRelAcq-Cmd')
-        self.pydmpushbutton_FastRelEnbl.setFixedSize(220, 40)
         hlay_fastoffset = QHBoxLayout()
         hlay_fastoffset.addWidget(self.pydmstatebutton_FastRelEnbl)
         hlay_fastoffset.addWidget(self.pydmlabel_FastRelEnbl)
@@ -915,8 +996,6 @@ class DiagnosisSettings(SiriusDialog):
         l_fastrellvl = QLabel('Relative Offset Level [V]: ', self)
         self.pydmspinbox_FastRelLvl = PyDMSpinbox(
             parent=self, init_channel=self.dcct_prefix+'FastRelLvl-SP')
-        self.pydmspinbox_FastRelLvl.setFixedSize(220, 40)
-        self.pydmspinbox_FastRelLvl.setAlignment(Qt.AlignCenter)
         self.pydmspinbox_FastRelLvl.showStepExponent = False
         self.pydmlabel_FastRelLvl = PyDMLabel(
             parent=self, init_channel=self.dcct_prefix+'FastRelLvl-RB')
@@ -925,6 +1004,7 @@ class DiagnosisSettings(SiriusDialog):
         hlay_fastrellvl.addWidget(self.pydmlabel_FastRelLvl)
 
         flay_fastmode = QFormLayout()
+        flay_fastmode.setLabelAlignment(Qt.AlignRight)
         flay_fastmode.setFormAlignment(Qt.AlignCenter)
         flay_fastmode.addRow(l_fastsmpcnt, hlay_fastsmpcnt)
         flay_fastmode.addRow(l_fastmeasperiod, hlay_fastmeasperiod)
@@ -942,7 +1022,6 @@ class DiagnosisSettings(SiriusDialog):
         self.sb_injcurr = QSpinBox(self)
         self.sb_injcurr.setValue(self.injcurr_idx)
         self.sb_injcurr.setMinimum(0)
-        self.sb_injcurr.setFixedSize(220, 40)
         if self.pydmlabel_SampleCnt._connected:
             self.sb_injcurr.setMaximum(int(self.pydmlabel_SampleCnt.text())-1)
         else:
@@ -952,7 +1031,6 @@ class DiagnosisSettings(SiriusDialog):
         self.sb_ejecurr = QSpinBox(self)
         self.sb_ejecurr.setValue(self.ejecurr_idx)
         self.sb_ejecurr.setMinimum(0)
-        self.sb_ejecurr.setFixedSize(220, 40)
         if self.pydmlabel_SampleCnt._connected:
             self.sb_ejecurr.setMaximum(int(self.pydmlabel_SampleCnt.text())-1)
         else:

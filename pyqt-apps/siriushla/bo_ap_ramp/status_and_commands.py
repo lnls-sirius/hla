@@ -34,22 +34,35 @@ class StatusAndCommands(QGroupBox):
         commands_layout = self._setupCommandsLayout()
 
         glay = QGridLayout()
-        glay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 0, 0)
+        glay.addItem(
+            QSpacerItem(20, 20, QSzPlcy.Expanding, QSzPlcy.Expanding), 0, 0)
         glay.addLayout(status_layout, 1, 1, 1, 3)
-        glay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 2, 1)
+        glay.addItem(
+            QSpacerItem(20, 20, QSzPlcy.Expanding, QSzPlcy.Expanding), 3, 1)
         glay.addLayout(commands_layout, 3, 2)
-        glay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 4, 4)
+        glay.addItem(
+            QSpacerItem(20, 20, QSzPlcy.Expanding, QSzPlcy.Expanding), 3, 3)
+        glay.addItem(
+            QSpacerItem(20, 20, QSzPlcy.Expanding, QSzPlcy.Expanding), 4, 4)
         self.setLayout(glay)
 
     def _setupStatusLayout(self):
         label_timing = QLabel('<h4>TI</h4>', self, alignment=Qt.AlignCenter)
-        label_timing.setFixedSize(80, 40)
+        label_timing.setStyleSheet("""
+            min-width:2.58em; max-width: 2.58em;
+            min-height:1.29em; max-height:1.29em;""")
         label_magnets = QLabel('<h4>MA</h4>', self, alignment=Qt.AlignCenter)
-        label_magnets.setFixedSize(80, 40)
+        label_magnets.setStyleSheet("""
+            min-width:2.58em; max-width: 2.58em;
+            min-height:1.29em; max-height:1.29em;""")
         label_rf = QLabel('<h4>RF</h4>', self, alignment=Qt.AlignCenter)
-        label_rf.setFixedSize(80, 40)
+        label_rf.setStyleSheet("""
+            min-width:2.58em; max-width: 2.58em;
+            min-height:1.29em; max-height:1.29em;""")
         label_sofb = QLabel('<h4>SOFB</h4>', self, alignment=Qt.AlignCenter)
-        label_sofb.setFixedSize(80, 40)
+        label_sofb.setStyleSheet("""
+            min-width:2.58em; max-width: 2.58em;
+            min-height:1.29em; max-height:1.29em;""")
         label_conn = QLabel('Connection', self)
         label_ramping = QLabel('Configured to Ramp', self)
         label_intlks = QLabel('Interlocks', self)
@@ -68,7 +81,9 @@ class StatusAndCommands(QGroupBox):
                     channels.append(self.prefix + conn[prpty].pvname_rb)
             setattr(self, led_name, PyDMLedMultiConnection(self, channels))
             led = getattr(self, led_name)
-            led.setFixedSize(80, 40)
+            led.setStyleSheet("""
+                min-width:2.58em; max-width: 2.58em;
+                min-height:1.29em; max-height:1.29em;""")
 
         for led_name in ['led_ti_ramping', 'led_ma_ramping', 'led_rf_ramping',
                          'led_ma_intlk', 'led_rf_intlk',
@@ -88,7 +103,7 @@ class StatusAndCommands(QGroupBox):
                             value = _PSConst.OpMode.RmpWfm
                     elif 'intlk' in led_name:
                         if 'PwrState' in conn[prpty].name:
-                            value = _PSConst.PwrState.On
+                            value = _PSConst.PwrStateSel.On
                         elif 'IntlkSoft' in conn[prpty].name:
                             value = 0
                         elif 'IntlkHard' in conn[prpty].name:
@@ -110,7 +125,9 @@ class StatusAndCommands(QGroupBox):
 
             setattr(self, led_name, PyDMLedMultiChannel(self, channels2values))
             led = getattr(self, led_name)
-            led.setFixedSize(80, 40)
+            led.setStyleSheet("""
+                min-width:2.58em; max-width: 2.58em;
+                min-height:1.29em; max-height:1.29em;""")
 
         flay = QFormLayout()
         flay.setLabelAlignment(Qt.AlignLeft)
@@ -173,30 +190,34 @@ class StatusAndCommands(QGroupBox):
                    'bt_apply_all', 'bt_start_ramp', 'bt_stop_ramp',
                    'bt_start_inj', 'bt_stop_inj']:
             w = getattr(self, bt)
-            w.setFixedHeight(48)
             if 'apply' in bt:
-                w.setMaximumWidth(100)
+                w.setStyleSheet("""
+                    min-width:3.23em; max-width:3.23em;
+                    min-height:1.55em; max-height: 1.55em;""")
             elif 'ramp' in bt or 'inj' in bt:
-                w.setMaximumWidth(155)
+                w.setStyleSheet("""
+                    min-width:5em; max-width:5em;
+                    min-height:1.55em; max-height: 1.55em;""")
             else:
-                w.setMaximumWidth(440)
+                w.setStyleSheet("""
+                    min-height:1.55em; max-height: 1.55em;""")
 
         flay = QFormLayout()
         flay.setLabelAlignment(Qt.AlignRight)
-        flay.setFormAlignment(Qt.AlignCenter)
+        flay.addItem(QSpacerItem(40, 20, QSzPlcy.Ignored, QSzPlcy.Expanding))
         flay.addRow(self.bt_setup)
-        flay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
+        flay.addItem(QSpacerItem(40, 20, QSzPlcy.Ignored, QSzPlcy.Expanding))
         hbox = QHBoxLayout()
         hbox.addWidget(self.bt_apply_ps)
         hbox.addWidget(self.bt_apply_rf)
         hbox.addWidget(self.bt_apply_all)
         flay.addRow(label_apply, hbox)
-        flay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
+        flay.addItem(QSpacerItem(40, 20, QSzPlcy.Ignored, QSzPlcy.Expanding))
         hbox = QHBoxLayout()
         hbox.addWidget(self.bt_start_ramp)
         hbox.addWidget(self.bt_stop_ramp)
         flay.addRow(label_ramping, hbox)
-        flay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
+        flay.addItem(QSpacerItem(40, 20, QSzPlcy.Ignored, QSzPlcy.Expanding))
         hbox = QHBoxLayout()
         hbox.addWidget(self.bt_start_inj)
         hbox.addWidget(self.bt_stop_inj)

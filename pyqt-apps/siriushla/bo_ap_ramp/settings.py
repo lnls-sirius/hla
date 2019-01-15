@@ -43,7 +43,7 @@ class Settings(QMenuBar):
 
     def _setupUi(self):
         self.setStyleSheet(
-            """QMenuBar::item {\npadding: 0 30px 0 5px;\n}""")
+            """QMenuBar::item {\npadding: 0 1em 0 0.17em;\n}""")
         self.config_menu = self.addMenu('Booster Ramp Configuration')
         self.act_new = QAction('New from template', self)
         self.act_new.setShortcut(QKeySequence.New)

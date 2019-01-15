@@ -1,6 +1,6 @@
 """Booster Ramp Control HLA: Optics Adjust Module."""
 
-from qtpy.QtCore import Qt, Slot, Signal
+from qtpy.QtCore import Slot, Signal
 from qtpy.QtWidgets import QGroupBox, QPushButton, QLabel, \
                            QHBoxLayout, QVBoxLayout, QGridLayout, \
                            QSizePolicy as QSzPlcy, QAction, \
@@ -45,31 +45,31 @@ class OpticsAdjust(QGroupBox):
         self._norm_config_oldname = ''
 
     def _setupUi(self):
-        self.setMinimumHeight(500)
         self.settings = self._setupChooseConfig()
         self.tune_variation = self._setupTuneVariation()
         self.chrom_variation = self._setupChromVariation()
         self.orbit_correction = self._setupOrbitCorrection()
 
         lay = QHBoxLayout()
-        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Preferred))
+        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Ignored))
         lay.addLayout(self.settings)
-        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Preferred))
+        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Ignored))
         lay.addLayout(self.orbit_correction)
-        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Preferred))
+        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Ignored))
         lay.addLayout(self.tune_variation)
-        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Preferred))
+        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Ignored))
         lay.addLayout(self.chrom_variation)
-        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Preferred))
+        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Ignored))
         self.setLayout(lay)
 
     def _setupChooseConfig(self):
         l_confignr = QLabel('Config. number: ')
         self.sb_config = _MyDoubleSpinBox(self)
         self.sb_config.setMinimum(1)
-        self.sb_config.setFixedWidth(80)
-        self.sb_config.setSingleStep(1)
         self.sb_config.setDecimals(0)
+        self.sb_config.setSingleStep(1)
+        self.sb_config.setStyleSheet("""
+            min-width:2.58em; max-width:2.58em;""")
         self.sb_config.editingFinished.connect(self._handleConfigIndexChanged)
         hlay_config = QHBoxLayout()
         hlay_config.addWidget(l_confignr)
@@ -97,166 +97,191 @@ class OpticsAdjust(QGroupBox):
         self.bt_server.setMenu(server_menu)
 
         lay = QVBoxLayout()
-        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
         lay.addLayout(hlay_config)
         lay.addWidget(self.bt_edit)
-        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
         lay.addWidget(self.bt_update)
-        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
         lay.addWidget(self.bt_server)
-        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding))
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
         return lay
 
     def _setupTuneVariation(self):
         label_tune = QLabel('<h4>Tune Variation</h4>', self)
-        label_tune.setAlignment(Qt.AlignCenter)
-        label_tune.setFixedHeight(48)
+        label_tune.setStyleSheet("""
+            min-height:1.55em; max-height:1.55em;
+            qproperty-alignment: AlignCenter;""")
 
         label_deltaTuneX = QLabel('Δν<sub>x</sub>: ')
-        label_deltaTuneX.setFixedWidth(48)
+        label_deltaTuneX.setStyleSheet("""
+            min-width:1.55em; max-width:1.55em;""")
         self.sb_deltaTuneX = _MyDoubleSpinBox(self)
         self.sb_deltaTuneX.setDecimals(6)
         self.sb_deltaTuneX.setMinimum(-1)
         self.sb_deltaTuneX.setMaximum(1)
         self.sb_deltaTuneX.setSingleStep(0.0001)
-        self.sb_deltaTuneX.setFixedWidth(200)
+        self.sb_deltaTuneX.setStyleSheet("""
+            min-width:6.45em; max-width:6.45em;""")
         self.sb_deltaTuneX.editingFinished.connect(self._calculate_deltaKL)
 
         label_deltaTuneY = QLabel('Δν<sub>y</sub>: ')
-        label_deltaTuneY.setFixedWidth(48)
+        label_deltaTuneY.setStyleSheet("""
+            min-width:1.55em; max-width:1.55em;""")
         self.sb_deltaTuneY = _MyDoubleSpinBox(self)
         self.sb_deltaTuneY.setDecimals(6)
         self.sb_deltaTuneY.setMinimum(-1)
         self.sb_deltaTuneY.setMaximum(1)
         self.sb_deltaTuneY.setSingleStep(0.0001)
-        self.sb_deltaTuneY.setFixedWidth(200)
+        self.sb_deltaTuneY.setStyleSheet("""
+            min-width:6.45em; max-width:6.45em;""")
         self.sb_deltaTuneY.editingFinished.connect(self._calculate_deltaKL)
 
         label_KL = QLabel('<h4>ΔKL [1/m]</h4>', self)
-        label_KL.setAlignment(Qt.AlignCenter)
-        label_KL.setFixedHeight(48)
+        label_KL.setStyleSheet("""
+            min-height:1.55em; max-height:1.55em;
+            qproperty-alignment: AlignCenter;""")
 
         label_deltaKLQF = QLabel('QF: ', self)
-        label_deltaKLQF.setFixedWidth(48)
+        label_deltaKLQF.setStyleSheet("""
+            min-width:1.55em; max-width:1.55em;""")
         self.l_deltaKLQF = QLabel('', self)
 
         label_deltaKLQD = QLabel('QD: ', self)
-        label_deltaKLQD.setFixedWidth(48)
+        label_deltaKLQD.setStyleSheet("""
+            min-width:1.55em; max-width:1.55em;""")
         self.l_deltaKLQD = QLabel('', self)
 
         hlay_bt_apply = QHBoxLayout()
         self.bt_apply_deltaKL = QPushButton('Apply', self)
         self.bt_apply_deltaKL.clicked.connect(self._apply_deltaKL)
-        self.bt_apply_deltaKL.setFixedWidth(150)
+        self.bt_apply_deltaKL.setStyleSheet("""
+            min-width:4.84em; max-width:4.84em;""")
         self.bt_apply_deltaKL.setEnabled(False)
         hlay_bt_apply.addSpacerItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
+            QSpacerItem(20, 20, QSzPlcy.Preferred, QSzPlcy.Ignored))
         hlay_bt_apply.addWidget(self.bt_apply_deltaKL)
         hlay_bt_apply.addSpacerItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
+            QSpacerItem(20, 20, QSzPlcy.Preferred, QSzPlcy.Ignored))
 
         lay = QGridLayout()
-        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding),
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred),
                     0, 2)
         lay.addWidget(label_tune, 1, 0, 1, 5)
-        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 2, 2)
+        lay.addItem(
+            QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred), 2, 2)
         lay.addWidget(label_deltaTuneX, 3, 0)
         lay.addWidget(self.sb_deltaTuneX, 3, 1)
-        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 3, 2)
+        lay.addItem(
+            QSpacerItem(20, 20, QSzPlcy.Preferred, QSzPlcy.Ignored), 3, 2)
         lay.addWidget(label_deltaTuneY, 3, 3)
         lay.addWidget(self.sb_deltaTuneY, 3, 4)
-        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding),
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred),
                     4, 2)
         lay.addWidget(label_KL, 5, 0, 1, 5)
         lay.addWidget(label_deltaKLQF, 6, 0)
         lay.addWidget(self.l_deltaKLQF, 6, 1)
-        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 6, 2)
+        lay.addItem(
+            QSpacerItem(20, 20, QSzPlcy.Preferred, QSzPlcy.Ignored), 6, 2)
         lay.addWidget(label_deltaKLQD, 6, 3)
         lay.addWidget(self.l_deltaKLQD, 6, 4)
-        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding),
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred),
                     7, 2)
         lay.addLayout(hlay_bt_apply, 8, 0, 1, 5)
-        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding),
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred),
                     9, 2)
         return lay
 
     def _setupChromVariation(self):
         label_chrom = QLabel('<h4>Chromaticity Variation</h4>', self)
-        label_chrom.setAlignment(Qt.AlignCenter)
-        label_chrom.setFixedHeight(48)
+        label_chrom.setStyleSheet("""
+            min-height:1.55em; max-height:1.55em;
+            qproperty-alignment: AlignCenter;""")
 
         label_deltaChromX = QLabel('Δξ<sub>x</sub>: ')
-        label_deltaChromX.setFixedWidth(48)
+        label_deltaChromX.setStyleSheet("""
+            min-width:1.55em; max-width:1.55em;""")
         self.sb_deltaChromX = _MyDoubleSpinBox(self)
         self.sb_deltaChromX.setDecimals(6)
         self.sb_deltaChromX.setMinimum(-10)
         self.sb_deltaChromX.setMaximum(10)
         self.sb_deltaChromX.setSingleStep(0.0001)
-        self.sb_deltaChromX.setFixedWidth(200)
+        self.sb_deltaChromX.setStyleSheet("""
+            min-width:6.45em; max-width:6.45em;""")
         self.sb_deltaChromX.editingFinished.connect(self._calculate_deltaSL)
 
         label_deltaChromY = QLabel('Δξ<sub>y</sub>: ')
-        label_deltaChromY.setFixedWidth(48)
+        label_deltaChromY.setStyleSheet("""
+            min-width:1.55em; max-width:1.55em;""")
         self.sb_deltaChromY = _MyDoubleSpinBox(self)
         self.sb_deltaChromY.setDecimals(6)
         self.sb_deltaChromY.setMinimum(-10)
         self.sb_deltaChromY.setMaximum(10)
         self.sb_deltaChromY.setSingleStep(0.0001)
-        self.sb_deltaChromY.setFixedWidth(200)
+        self.sb_deltaChromY.setStyleSheet("""
+            min-width:6.45em; max-width:6.45em;""")
         self.sb_deltaChromY.editingFinished.connect(self._calculate_deltaSL)
 
         label_SL = QLabel('<h4>ΔSL [1/m<sup>2</sup>]</h4>', self)
-        label_SL.setAlignment(Qt.AlignCenter)
-        label_SL.setFixedHeight(48)
+        label_SL.setStyleSheet("""
+            min-height:1.55em; max-height:1.55em;
+            qproperty-alignment: AlignCenter;""")
 
         label_deltaSLSF = QLabel('SF: ', self)
-        label_deltaSLSF.setFixedWidth(48)
+        label_deltaSLSF.setStyleSheet("""
+            min-width:1.55em; max-width:1.55em;""")
         self.l_deltaSLSF = QLabel('', self)
 
         label_deltaSLSD = QLabel('SD: ', self)
-        label_deltaSLSD.setFixedWidth(48)
+        label_deltaSLSD.setStyleSheet("""
+            min-width:1.55em; max-width:1.55em;""")
         self.l_deltaSLSD = QLabel('', self)
 
         hlay_bt_apply = QHBoxLayout()
         self.bt_apply_deltaSL = QPushButton('Apply', self)
         self.bt_apply_deltaSL.clicked.connect(self._apply_deltaSL)
-        self.bt_apply_deltaSL.setFixedWidth(150)
+        self.bt_apply_deltaSL.setStyleSheet("""
+            min-width:4.84em; max-width:4.84em;""")
         self.bt_apply_deltaSL.setEnabled(False)
         hlay_bt_apply.addSpacerItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
+            QSpacerItem(20, 20, QSzPlcy.Preferred, QSzPlcy.Ignored))
         hlay_bt_apply.addWidget(self.bt_apply_deltaSL)
         hlay_bt_apply.addSpacerItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
+            QSpacerItem(20, 20, QSzPlcy.Preferred, QSzPlcy.Ignored))
 
         lay = QGridLayout()
-        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding),
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred),
                     0, 2)
         lay.addWidget(label_chrom, 1, 0, 1, 5)
-        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 2, 2)
+        lay.addItem(
+            QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred), 2, 2)
         lay.addWidget(label_deltaChromX, 3, 0)
         lay.addWidget(self.sb_deltaChromX, 3, 1)
-        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 3, 2)
+        lay.addItem(
+            QSpacerItem(20, 20, QSzPlcy.Preferred, QSzPlcy.Ignored), 3, 2)
         lay.addWidget(label_deltaChromY, 3, 3)
         lay.addWidget(self.sb_deltaChromY, 3, 4)
-        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding),
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred),
                     4, 2)
         lay.addWidget(label_SL, 5, 0, 1, 5)
         lay.addWidget(label_deltaSLSF, 6, 0)
         lay.addWidget(self.l_deltaSLSF, 6, 1)
-        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 6, 2)
+        lay.addItem(
+            QSpacerItem(20, 20, QSzPlcy.Preferred, QSzPlcy.Ignored), 6, 2)
         lay.addWidget(label_deltaSLSD, 6, 3)
         lay.addWidget(self.l_deltaSLSD, 6, 4)
-        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding),
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred),
                     7, 2)
         lay.addLayout(hlay_bt_apply, 8, 0, 1, 5)
-        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding),
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred),
                     9, 2)
         return lay
 
     def _setupOrbitCorrection(self):
         label = QLabel('<h4>Orbit Correction</h4>', self)
-        label.setAlignment(Qt.AlignCenter)
-        label.setFixedHeight(48)
+        label.setStyleSheet("""
+            min-height:1.55em; max-height:1.55em;
+            qproperty-alignment: AlignCenter;""")
 
         self.bt_load_sofb_kicks = QPushButton('Load Kicks from SOFB', self)
         self.bt_load_sofb_kicks.clicked.connect(self._load_sofb_kicks)
@@ -267,9 +292,11 @@ class OpticsAdjust(QGroupBox):
         self.sb_correctH.setMinimum(-10000)
         self.sb_correctH.setMaximum(10000)
         self.sb_correctH.setSingleStep(0.1)
-        self.sb_correctH.setFixedWidth(200)
+        self.sb_correctH.setStyleSheet("""
+            min-width:6.45em; max-width:6.45em;""")
         labelH = QLabel('%', self)
-        labelH.setFixedWidth(24)
+        labelH.setStyleSheet("""
+            min-width:0.77em; max-width:0.77em;""")
         label_correctV = QLabel('Correct V', self)
         self.sb_correctV = _MyDoubleSpinBox(self)
         self.sb_correctV.setValue(self._corrfactorV)
@@ -277,41 +304,46 @@ class OpticsAdjust(QGroupBox):
         self.sb_correctV.setMinimum(-10000)
         self.sb_correctV.setMaximum(10000)
         self.sb_correctV.setSingleStep(0.1)
-        self.sb_correctV.setFixedWidth(200)
+        self.sb_correctV.setStyleSheet("""
+            min-width:6.45em; max-width:6.45em;""")
         labelV = QLabel('%', self)
-        labelV.setFixedWidth(24)
+        labelV.setStyleSheet("""min-width:0.77em; max-width:0.77em;""")
 
         hlay_bt_apply = QHBoxLayout()
         self.bt_apply_orbitcorrection = QPushButton('Apply', self)
         self.bt_apply_orbitcorrection.clicked.connect(
             self._apply_orbitcorrection)
-        self.bt_apply_orbitcorrection.setFixedWidth(150)
+        self.bt_apply_orbitcorrection.setStyleSheet("""
+            min-width:4.84em; max-width:4.84em;""")
         self.bt_apply_orbitcorrection.setEnabled(False)
         hlay_bt_apply.addSpacerItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
+            QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
         hlay_bt_apply.addWidget(self.bt_apply_orbitcorrection)
         hlay_bt_apply.addSpacerItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
+            QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
 
         lay = QGridLayout()
         lay.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 0, 0)
+            QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred), 0, 0)
         lay.addWidget(label, 1, 0, 1, 3)
-        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 2, 0)
+        lay.addItem(
+            QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred), 2, 0)
         lay.addWidget(self.bt_load_sofb_kicks, 3, 0, 1, 3)
-        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 4, 0)
+        lay.addItem(
+            QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred), 4, 0)
         lay.addWidget(label_correctH, 5, 0)
         lay.addWidget(self.sb_correctH, 5, 1)
         lay.addWidget(labelH, 5, 2)
-        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 6, 0)
+        lay.addItem(
+            QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred), 6, 0)
         lay.addWidget(label_correctV, 7, 0)
         lay.addWidget(self.sb_correctV, 7, 1)
         lay.addWidget(labelV, 7, 2)
         lay.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 8, 0)
+            QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred), 8, 0)
         lay.addLayout(hlay_bt_apply, 9, 0, 1, 3)
         lay.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 10, 0)
+            QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred), 10, 0)
         return lay
 
     def _handleConfigIndexChanged(self):
