@@ -1,16 +1,19 @@
+"""Define a window to load configurations."""
+
 import logging
 import re
-from qtpy.QtWidgets import QHBoxLayout, QVBoxLayout, QDialog, \
-    QWidget, QFrame, QLabel, QPushButton, QMessageBox, QHeaderView, \
-    QTableView, QLineEdit
+from qtpy.QtWidgets import QHBoxLayout, QVBoxLayout, QTableView, QLineEdit, \
+    QWidget, QFrame, QLabel, QPushButton, QMessageBox, QHeaderView
 from qtpy.QtCore import Slot, Signal, Qt
 
 from siriuspy.servconf.conf_service import ConfigService
 from siriushla.as_ap_servconf.config_server import ConfigDbTableModel
+from siriushla.widgets.windows import SiriusDialog
 
 
-class LoadConfiguration(QDialog):
-    """."""
+class LoadConfiguration(SiriusDialog):
+    """Load configurations."""
+
     configname = Signal(str)
 
     NAME_COL = None
@@ -23,11 +26,10 @@ class LoadConfiguration(QDialog):
         self._config_type = config_type
         self._logger = logging.getLogger(__name__)
         self._logger.setLevel(logging.DEBUG)
-        self.setupui()
+        self._setupui()
         self.setWindowTitle("Configuration Database Manager")
 
-    def setupui(self):
-        self.resize(800, 400)
+    def _setupui(self):
         self.layoutv = QVBoxLayout(self)
 
         # Basic widgets
@@ -50,7 +52,7 @@ class LoadConfiguration(QDialog):
         hbl.addStretch()
         self.config_viewer.layout.addLayout(hbl)
 
-        # Sub header with database genral information
+        # Sub header with database general information
         self.sub_header = QFrame(self)
         self.sub_header.layout = QHBoxLayout(self.sub_header)
         vbl = QVBoxLayout()
@@ -159,7 +161,7 @@ class LoadConfiguration(QDialog):
         """Filter power supply widgets based on text inserted at line edit."""
         try:
             pattern = re.compile(text, re.I)
-        except Exception as e:  # Ignore malformed patterns?
+        except Exception:  # Ignore malformed patterns?
             pattern = re.compile("malformed")
 
         i = 0
@@ -179,7 +181,9 @@ class LoadConfiguration(QDialog):
 if __name__ == '__main__':
     import sys
     from siriushla.sirius_application import SiriusApplication
+
     def test(a):
+        """Test."""
         print(a)
     app = SiriusApplication()
     win = LoadConfiguration('bo_normalized')
