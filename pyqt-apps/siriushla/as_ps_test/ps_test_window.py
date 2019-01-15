@@ -4,8 +4,8 @@ import sys
 
 import epics
 from qtpy.QtCore import Qt, Signal, QThread
-from qtpy.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QMainWindow, \
-    QPushButton, QListWidget, QLabel, QApplication, QSizePolicy
+from qtpy.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, \
+    QPushButton, QListWidget, QLabel, QApplication
 
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.widgets.pvnames_tree import PVNameTree
