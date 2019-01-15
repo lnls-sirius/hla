@@ -13,6 +13,7 @@
 QLed {
   min-height: 1.29em;
   max-height: 1.29em;
+  min-width: 1.29em;
 }
 
 PyDMStateButton {
