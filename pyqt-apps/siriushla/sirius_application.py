@@ -13,6 +13,9 @@ class SiriusApplication(PyDMApplication):
         """Create an attribute to hold open windows."""
         super().__init__(ui_file=ui_file, command_line_args=command_line_args,
                          use_main_window=use_main_window, **kwargs)
+        font = self.font()
+        font.setPointSize(12)
+        self.setFont(font)
         self._windows = dict()
 
     def open_window(self, w_class, parent=None, **kwargs):
