@@ -76,20 +76,20 @@ class RampMain(SiriusMainWindow):
 
         cw.setStyleSheet("""
             #CentralWidget{
-                min-width: 158em; max-width: 158em;
-                min-height: 82em; max-height: 82em;}
+                min-width: 134em; max-width: 134em;
+                min-height: 78em; max-height: 78em;}
             #ConfigParameters{
-                min-width: 132em; max-width: 132em;
-                min-height: 60em; max-height: 60em;}
+                min-width: 108em; max-width: 108em;
+                min-height: 56em; max-height: 56em;}
             #OpticsAdjust{
-                min-width: 132em; max-width: 132em;
+                min-width: 108em; max-width: 108em;
                 min-height: 16em; max-height: 16em;}
             #StatusAndCommands{
                 min-width: 24em; max-width: 24m;
-                min-height: 24em; max-height: 24em;}
+                min-height: 22em; max-height: 22em;}
             #Diagnosis{
                 min-width: 24em; max-width: 24em;
-                min-height: 52em; max-height: 52em;}""")
+                min-height: 50em; max-height: 50em;}""")
         self.setCentralWidget(cw)
 
     def _connSignals(self):

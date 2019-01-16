@@ -8,7 +8,6 @@ from qtpy.QtWidgets import QGroupBox, QLabel, QWidget, QSpacerItem, \
                            QPushButton, QTableWidget, QTableWidgetItem, \
                            QSizePolicy as QSzPlcy, QHeaderView, QUndoCommand, \
                            QAbstractItemView
-from matplotlib.font_manager import FontProperties
 from matplotlib.backends.backend_qt5agg import (
     FigureCanvasQTAgg as FigureCanvas,
     NavigationToolbar2QT as NavigationToolbar)
@@ -54,6 +53,9 @@ class ConfigParameters(QGroupBox):
         my_lay.addWidget(self.dip_ramp)
         my_lay.addWidget(self.mult_ramp)
         my_lay.addWidget(self.rf_ramp)
+        my_lay.setStretch(0, 30)
+        my_lay.setStretch(1, 30)
+        my_lay.setStretch(2, 42)
 
     @Slot(ramp.BoosterRamp)
     def handleLoadRampConfig(self, ramp_config):
@@ -135,7 +137,7 @@ class DipoleRamp(QWidget):
         label = QLabel('<h4>Dipole Ramp</h4>', self, alignment=Qt.AlignCenter)
         label.setStyleSheet("""
             min-height:1.55em; max-height:1.55em;
-            min-width:36em; max-width:36em;""")
+            min-width:30em; max-width:30em;""")
         glay.addWidget(label, 0, 0, 1, 2)
         glay.addWidget(self.graphview, 1, 0, 1, 2, alignment=Qt.AlignCenter)
         glay.addLayout(self.set_psdelay_and_nrpoints, 2, 0,
@@ -148,8 +150,8 @@ class DipoleRamp(QWidget):
     def _setupGraph(self):
         self.graph = FigureCanvas(Figure())
         self.graph.setStyleSheet("""
-            min-width:36em;max-width:36em;
-            min-height:22em;max-height:22em;""")
+            min-width:30em;max-width:30em;
+            min-height:18em;max-height:18em;""")
         self.graph.figure.set_tight_layout({'pad': .0})
         self.ax = self.graph.figure.subplots()
         self.ax.grid()
@@ -209,7 +211,7 @@ class DipoleRamp(QWidget):
         self.table.setObjectName('DipoleTable')
         self.table.setStyleSheet("""
             #DipoleTable{
-                min-width: 36em; max-width: 36em;
+                min-width: 30em; max-width: 30em;
                 min-height: 18em;  max-height: 18em;
             }
             QHeaderView::section {
@@ -228,6 +230,8 @@ class DipoleRamp(QWidget):
             min-height:1.55em; max-height:1.55em;""")
         self.table.horizontalHeader().setSectionResizeMode(
             QHeaderView.Stretch)
+        self.table.horizontalHeader().setSectionResizeMode(
+            0, QHeaderView.ResizeToContents)
         self.table.verticalHeader().setSectionResizeMode(
             QHeaderView.Stretch)
         self.table.verticalHeader().hide()
@@ -605,8 +609,8 @@ class MultipolesRamp(QWidget):
     def _setupGraph(self):
         self.graph = FigureCanvas(Figure())
         self.graph.setStyleSheet("""
-            min-width: 36em; max-width: 36em;
-            min-height: 22em; max-height: 22em;""")
+            min-width: 30em; max-width: 30em;
+            min-height: 18em; max-height: 18em;""")
         self.graph.figure.set_tight_layout({'pad': .0})
         self.ax = self.graph.figure.subplots()
         self.ax.grid()
@@ -657,7 +661,7 @@ class MultipolesRamp(QWidget):
         self.table.setObjectName('MultipoleTable')
         self.table.setStyleSheet("""
             #MultipoleTable{
-                min-width: 36em; max-width: 36em;
+                min-width: 30em; max-width: 30em;
                 min-height: 22.5em; max-height: 40em;
             }
             QHeaderView::section {
@@ -678,8 +682,11 @@ class MultipolesRamp(QWidget):
         self.table.setRowCount(2+len(self.normalized_configs))
         self.table.setColumnCount(4)
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.table.horizontalHeader().setSectionResizeMode(
+            0, QHeaderView.ResizeToContents)
+        self.table.horizontalHeader().setMaximumSectionSize(320)
         self.table.verticalHeader().setSectionResizeMode(
-            QHeaderView.ResizeToContents)
+            QHeaderView.Interactive)
         self.table.setHorizontalHeaderLabels(
             self.table_map['columns'].values())
 
@@ -1037,8 +1044,8 @@ class RFRamp(QWidget):
     def _setupGraph(self):
         self.graph = FigureCanvas(Figure())
         self.graph.setStyleSheet("""
-            min-width: 51em; max-width: 51em;
-            min-height: 22em; max-height: 22em;""")
+            min-width: 42em; max-width: 42em;
+            min-height: 18em; max-height: 18em;""")
         self.graph.figure.set_tight_layout({'pad': .0})
         self.ax1 = self.graph.figure.subplots()
         self.ax1.grid()
@@ -1106,8 +1113,8 @@ class RFRamp(QWidget):
         self.table.setStyleSheet(
             """
             #RFTable{
-                min-width: 51em; max-width: 51em;
-                min-height: 10em;  max-height: 10em;
+                min-width: 42em; max-width: 42em;
+                min-height: 10.69em;  max-height: 10.69em;
             }
             QHeaderView::section {
                 background-color: #4A5E28;
@@ -1125,6 +1132,8 @@ class RFRamp(QWidget):
         self.table.horizontalHeader().setStyleSheet("""
             min-height:1.55em; max-height:1.55em;""")
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.table.horizontalHeader().setSectionResizeMode(
+            0, QHeaderView.ResizeToContents)
         self.table.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.table.verticalHeader().hide()
         self.table.setHorizontalHeaderLabels(

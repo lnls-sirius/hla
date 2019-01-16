@@ -726,50 +726,38 @@ class DiagnosisSettings(SiriusDialog):
 
         self.gbox_generalsettings.setStyleSheet("""
             PyDMEnumComboBox{
-                min-width:7em; max-width:7em;
-                min-height:1.29em; max-height:1.29em;}
+                min-width:7em; max-width:7em;}
             PyDMSpinbox{
-                min-width:6.5em; max-width:6.5em;
-                min-height:1.29em; max-height:1.29em;
+                min-width:7em; max-width:7em;
                 qproperty-alignment: AlignCenter;}
             PyDMLabel{
                 min-width:7em; max-width:7em;
-                min-height:1.29em; max-height:1.29em;
                 qproperty-alignment: AlignCenter;}
             PyDMLedMultiChannel{
-                min-width:7.3em; max-width:7.3em;
-                min-height:1.29em; max-height:1.29em;}
+                min-width:7em; max-width:7em;}
             PyDMStateButton{
-                min-width:7.2em; max-width:7.2em;
-                min-height:1.29em; max-height:1.29em;}""")
+                min-width:7em; max-width:7em;}""")
         self.gbox_normalmode.setStyleSheet("""
             PyDMSpinbox{
-                min-width:6.5em; max-width:6.5em;
-                min-height:1.29em; max-height:1.29em;
+                min-width:7em; max-width:7em;
                 qproperty-alignment: AlignCenter;}
             PyDMLabel{
                 min-width:7em; max-width:7em;
-                min-height:1.29em; max-height:1.29em;
                 qproperty-alignment: AlignCenter;}
             PyDMStateButton{
-                min-width:7.2em; max-width:7.2em;
-                min-height:1.29em; max-height:1.29em;}""")
+                min-width:7em; max-width:7em;}""")
         self.gbox_fastmode.setStyleSheet("""
             PyDMSpinbox{
-                min-width:6.5em; max-width:6.5em;
-                min-height:1.29em; max-height:1.29em;
+                min-width:7em; max-width:7em;
                 qproperty-alignment: AlignCenter;}
             PyDMLabel{
                 min-width:7em; max-width:7em;
-                min-height:1.29em; max-height:1.29em;
                 qproperty-alignment: AlignCenter;}
             PyDMStateButton{
-                min-width:7.2em; max-width:7.2em;
-                min-height:1.29em; max-height:1.29em;}""")
+                min-width:7em; max-width:7em;}""")
         self.gbox_effparams.setStyleSheet("""
             QSpinBox{
-                min-width:7em; max-width:7em;
-                min-height:1.29em; max-height:1.29em;}""")
+                min-width:7em; max-width:7em;}""")
 
     def _setupReliableMeasWidget(self):
         reliablemeas_channel = SiriusConnectionSignal(

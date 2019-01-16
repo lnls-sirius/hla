@@ -165,18 +165,18 @@ class OpticsAdjust(QGroupBox):
             QSpacerItem(20, 20, QSzPlcy.Preferred, QSzPlcy.Ignored))
 
         lay = QGridLayout()
-        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred),
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Expanding),
                     0, 2)
         lay.addWidget(label_tune, 1, 0, 1, 5)
         lay.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred), 2, 2)
+            QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Expanding), 2, 2)
         lay.addWidget(label_deltaTuneX, 3, 0)
         lay.addWidget(self.sb_deltaTuneX, 3, 1)
         lay.addItem(
             QSpacerItem(20, 20, QSzPlcy.Preferred, QSzPlcy.Ignored), 3, 2)
         lay.addWidget(label_deltaTuneY, 3, 3)
         lay.addWidget(self.sb_deltaTuneY, 3, 4)
-        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred),
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Expanding),
                     4, 2)
         lay.addWidget(label_KL, 5, 0, 1, 5)
         lay.addWidget(label_deltaKLQF, 6, 0)
@@ -185,10 +185,10 @@ class OpticsAdjust(QGroupBox):
             QSpacerItem(20, 20, QSzPlcy.Preferred, QSzPlcy.Ignored), 6, 2)
         lay.addWidget(label_deltaKLQD, 6, 3)
         lay.addWidget(self.l_deltaKLQD, 6, 4)
-        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred),
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Expanding),
                     7, 2)
         lay.addLayout(hlay_bt_apply, 8, 0, 1, 5)
-        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred),
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Expanding),
                     9, 2)
         return lay
 
@@ -250,18 +250,18 @@ class OpticsAdjust(QGroupBox):
             QSpacerItem(20, 20, QSzPlcy.Preferred, QSzPlcy.Ignored))
 
         lay = QGridLayout()
-        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred),
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Expanding),
                     0, 2)
         lay.addWidget(label_chrom, 1, 0, 1, 5)
         lay.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred), 2, 2)
+            QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Expanding), 2, 2)
         lay.addWidget(label_deltaChromX, 3, 0)
         lay.addWidget(self.sb_deltaChromX, 3, 1)
         lay.addItem(
             QSpacerItem(20, 20, QSzPlcy.Preferred, QSzPlcy.Ignored), 3, 2)
         lay.addWidget(label_deltaChromY, 3, 3)
         lay.addWidget(self.sb_deltaChromY, 3, 4)
-        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred),
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Expanding),
                     4, 2)
         lay.addWidget(label_SL, 5, 0, 1, 5)
         lay.addWidget(label_deltaSLSF, 6, 0)
@@ -270,10 +270,10 @@ class OpticsAdjust(QGroupBox):
             QSpacerItem(20, 20, QSzPlcy.Preferred, QSzPlcy.Ignored), 6, 2)
         lay.addWidget(label_deltaSLSD, 6, 3)
         lay.addWidget(self.l_deltaSLSD, 6, 4)
-        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred),
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Expanding),
                     7, 2)
         lay.addLayout(hlay_bt_apply, 8, 0, 1, 5)
-        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred),
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Expanding),
                     9, 2)
         return lay
 
@@ -317,33 +317,33 @@ class OpticsAdjust(QGroupBox):
             min-width:4.84em; max-width:4.84em;""")
         self.bt_apply_orbitcorrection.setEnabled(False)
         hlay_bt_apply.addSpacerItem(
-            QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
+            QSpacerItem(20, 20, QSzPlcy.Preferred, QSzPlcy.Ignored))
         hlay_bt_apply.addWidget(self.bt_apply_orbitcorrection)
         hlay_bt_apply.addSpacerItem(
-            QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
+            QSpacerItem(20, 20, QSzPlcy.Preferred, QSzPlcy.Ignored))
 
         lay = QGridLayout()
         lay.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred), 0, 0)
+            QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Expanding), 0, 0)
         lay.addWidget(label, 1, 0, 1, 3)
         lay.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred), 2, 0)
+            QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Expanding), 2, 0)
         lay.addWidget(self.bt_load_sofb_kicks, 3, 0, 1, 3)
         lay.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred), 4, 0)
+            QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Expanding), 4, 0)
         lay.addWidget(label_correctH, 5, 0)
         lay.addWidget(self.sb_correctH, 5, 1)
         lay.addWidget(labelH, 5, 2)
         lay.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred), 6, 0)
+            QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Expanding), 6, 0)
         lay.addWidget(label_correctV, 7, 0)
         lay.addWidget(self.sb_correctV, 7, 1)
         lay.addWidget(labelV, 7, 2)
         lay.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred), 8, 0)
+            QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Expanding), 8, 0)
         lay.addLayout(hlay_bt_apply, 9, 0, 1, 3)
         lay.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Preferred), 10, 0)
+            QSpacerItem(20, 20, QSzPlcy.Ignored, QSzPlcy.Expanding), 10, 0)
         return lay
 
     def _handleConfigIndexChanged(self):
