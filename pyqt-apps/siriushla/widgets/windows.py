@@ -1,6 +1,7 @@
 """Sirius Windows module."""
 from qtpy.QtGui import QKeySequence
-from qtpy.QtWidgets import QMainWindow, QDialog, QHBoxLayout
+from qtpy.QtCore import QEvent
+from qtpy.QtWidgets import QMainWindow, QDialog, QHBoxLayout, QApplication
 
 
 def _create_siriuswindow(qt_type):
@@ -15,38 +16,35 @@ def _create_siriuswindow(qt_type):
         """
 
         Stylesheet = ""
-        FontSizeSS = "* {{font-size: {}px;}}"
+        FontSizeSS = "* {{font-size: {}pt;}}"
 
         def __init__(self, *args, **kwargs):
             """Init."""
             super().__init__(*args, **kwargs)
             self.setFocus(True)
-            self._font_size = 10
-            self._window_size = list()
-            self.setStyleSheet(self.Stylesheet + self._font_size_ss())
+            self.app = QApplication.instance()
+            self.installEventFilter(self)
 
         def _font_size_ss(self):
-            return self.FontSizeSS.format(self._font_size)
-
-        def _increase_font_size(self):
-            self._font_size += 1
-            self.setStyleSheet(self.Stylesheet + self._font_size_ss())
-            self.setFixedSize(self.sizeHint())
-
-        def _decrease_font_size(self):
-            if self._font_size == 10:
-                return
-            self._font_size -= 1
-            self.setStyleSheet(self.Stylesheet + self._font_size_ss())
-            self.setFixedSize(self.sizeHint())
+            return self.FontSizeSS.format(self.app.font().pointSize())
 
         def keyPressEvent(self, event):
             """Override keyPressEvent."""
+            font = self.app.font()
             if event.matches(QKeySequence.ZoomIn):
-                return self._increase_font_size()
-            elif event.matches(QKeySequence.ZoomOut):
-                return self._decrease_font_size()
+                font.setPointSize(font.pointSize() + 1)
+                self.app.setFont(font)
+            elif event.matches(QKeySequence.ZoomOut) and font.pointSize() > 9:
+                font.setPointSize(font.pointSize() - 1)
+                self.app.setFont(font)
             super().keyPressEvent(event)
+
+        def eventFilter(self, obj, event):
+            if event.type() == QEvent.ApplicationFontChange:
+                self.ensurePolished()
+                self.setStyleSheet(self.Stylesheet + self._font_size_ss())
+                self.setFixedSize(self.sizeHint())
+            return False
 
     return _SiriusWindow
 
