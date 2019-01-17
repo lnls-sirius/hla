@@ -1,11 +1,12 @@
 """Booster Ramp Control HLA: Ramp Parameters Module."""
 
+import math as _math
 from qtpy.QtCore import Qt, Signal, Slot
 from qtpy.QtGui import QBrush, QColor
 from qtpy.QtWidgets import QGroupBox, QLabel, QWidget, QSpacerItem, \
                            QVBoxLayout, QHBoxLayout, QGridLayout, \
                            QPushButton, QTableWidget, QTableWidgetItem, \
-                           QSpinBox, QSizePolicy as QSzPlcy, \
+                           QSizePolicy as QSzPlcy, \
                            QAbstractItemView, QUndoCommand, QFormLayout
 from matplotlib.backends.backend_qt5agg import (
     FigureCanvasQTAgg as FigureCanvas,
@@ -57,6 +58,14 @@ class ConfigParameters(QGroupBox):
         self.ramp_config = ramp_config
         self.setTitle('Ramping Parameters: ' + self.ramp_config.name)
 
+    @Slot(str)
+    def getPlotUnits(self, units):
+        """Change units used in plot."""
+        self.dip_ramp.plot_unit = units
+        self.dip_ramp.updateGraph()
+        self.mult_ramp.plot_unit = units
+        self.mult_ramp.updateGraph()
+
 
 class DipoleRamp(QWidget):
     """Widget to set and monitor dipole ramp."""
@@ -70,6 +79,7 @@ class DipoleRamp(QWidget):
         self.prefix = prefix
         self.ramp_config = ramp_config
         self._undo_stack = undo_stack
+        self.plot_unit = 'Strengths'
         self._setupUi()
 
     def _setupUi(self):
@@ -82,26 +92,37 @@ class DipoleRamp(QWidget):
         self._setupPSDelayAndWfmNrPoints()
         self._setupTable()
 
-        vlay_v = QVBoxLayout()
+        lay_v = QVBoxLayout()
         self.l_rampupv = QLabel('RmpU 0 [GeV/s]', self,
                                 alignment=Qt.AlignRight)
         self.l_rampupv.setFixedWidth(320)
         self.l_rampdownv = QLabel('RmpD 0 [GeV/s]', self,
                                   alignment=Qt.AlignRight)
         self.l_rampdownv.setFixedWidth(320)
-        vlay_v.addWidget(self.l_rampupv)
-        vlay_v.addWidget(self.l_rampdownv)
+        lay_v.addWidget(self.l_rampupv)
+        lay_v.addWidget(self.l_rampdownv)
 
-        hlay_caution = QHBoxLayout()
-        self.label_caution = QLabel('', self)
-        self.label_caution.setFixedSize(644, 40)
-        self.pb_caution = QPushButton('?', self)
-        self.pb_caution.setFixedWidth(48)
-        self.pb_caution.setVisible(False)
-        self.pb_caution.setStyleSheet('background-color: red;')
-        self.pb_caution.clicked.connect(self._showAnomaliesPopup)
-        hlay_caution.addWidget(self.label_caution)
-        hlay_caution.addWidget(self.pb_caution)
+        self.label_anom = QLabel('', self)
+        self.label_anom.setFixedHeight(48)
+        self.pb_anom = QPushButton('?', self)
+        self.pb_anom.setFixedWidth(48)
+        self.pb_anom.setVisible(False)
+        self.pb_anom.setStyleSheet('background-color: red;')
+        self.pb_anom.clicked.connect(self._showAnomaliesPopup)
+        lay_anom = QHBoxLayout()
+        lay_anom.addWidget(self.label_anom)
+        lay_anom.addWidget(self.pb_anom)
+
+        self.label_exclim = QLabel('', self)
+        self.label_exclim.setFixedHeight(48)
+        self.pb_exclim = QPushButton('?', self)
+        self.pb_exclim.setFixedWidth(48)
+        self.pb_exclim.setVisible(False)
+        self.pb_exclim.setStyleSheet('background-color: red;')
+        self.pb_exclim.clicked.connect(self._showExcLimPopup)
+        lay_exclim = QHBoxLayout()
+        lay_exclim.addWidget(self.label_exclim)
+        lay_exclim.addWidget(self.pb_exclim)
 
         label = QLabel('<h4>Dipole Ramp</h4>', self, alignment=Qt.AlignCenter)
         label.setFixedHeight(48)
@@ -109,11 +130,12 @@ class DipoleRamp(QWidget):
         glay.addWidget(self.graphview, 1, 0, 1, 2, alignment=Qt.AlignCenter)
         glay.addLayout(self.set_psdelay_and_nrpoints, 2, 0,
                        alignment=Qt.AlignLeft)
-        glay.addLayout(vlay_v, 2, 1, alignment=Qt.AlignRight)
+        glay.addLayout(lay_v, 2, 1, alignment=Qt.AlignRight)
         glay.addWidget(self.table, 3, 0, 1, 2, alignment=Qt.AlignCenter)
-        glay.addLayout(hlay_caution, 4, 0, 1, 2, alignment=Qt.AlignCenter)
+        glay.addLayout(lay_anom, 4, 0, 1, 2, alignment=Qt.AlignCenter)
+        glay.addLayout(lay_exclim, 5, 0, 1, 2, alignment=Qt.AlignCenter)
         glay.addItem(
-            QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 5, 1)
+            QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 6, 1)
 
     def _setupGraph(self):
         self.graph = FigureCanvas(Figure())
@@ -121,7 +143,6 @@ class DipoleRamp(QWidget):
         self.ax = self.graph.figure.subplots()
         self.ax.grid()
         self.ax.set_xlabel('t [ms]')
-        self.ax.set_ylabel('E [GeV]')
         self.line, = self.ax.plot([0], [0], '-b')
         self.markers, = self.ax.plot([0], [0], '+r')
         self.m_inj, = self.ax.plot([0], [0], 'or')
@@ -147,10 +168,12 @@ class DipoleRamp(QWidget):
 
         label_nrpoints = QLabel('# of points:', self,
                                 alignment=Qt.AlignRight | Qt.AlignVCenter)
-        self.sb_nrpoints = QSpinBox(self)
+        self.sb_nrpoints = _MyDoubleSpinBox(self)
         self.sb_nrpoints.setMinimum(1)
         self.sb_nrpoints.setMaximum(MAX_WFMSIZE)
         self.sb_nrpoints.setMaximumWidth(200)
+        self.sb_nrpoints.setSingleStep(1)
+        self.sb_nrpoints.setDecimals(0)
         self.sb_nrpoints.editingFinished.connect(self._handleChangeNrPoints)
 
         self.set_psdelay_and_nrpoints.addRow(label_psdelay, self.sb_psdelay)
@@ -290,13 +313,7 @@ class DipoleRamp(QWidget):
         else:
             self.updateGraph()
             self.updateDipoleRampSignal.emit()
-            if len(self.ramp_config.ps_waveform_anomalies) > 0:
-                self.label_caution.setText('<h6>Caution: there are anomalies '
-                                           'in the waveforms.</h6>')
-                self.pb_caution.setVisible(True)
-            else:
-                self.label_caution.setText('')
-                self.pb_caution.setVisible(False)
+            self._verifyWarnings()
 
             global _flag_stack_next_command, _flag_stacking
             if _flag_stack_next_command:
@@ -347,7 +364,7 @@ class DipoleRamp(QWidget):
             return
 
         old_value = self.ramp_config.ps_ramp_wfm_nrpoints
-        new_value = self.sb_nrpoints.value()
+        new_value = int(self.sb_nrpoints.value())
         try:
             self.ramp_config.ps_ramp_wfm_nrpoints = new_value
         except exceptions.RampInvalidDipoleWfmParms as e:
@@ -369,11 +386,37 @@ class DipoleRamp(QWidget):
         finally:
             self.updateTable()
 
+    def _verifyWarnings(self):
+        if len(self.ramp_config.ps_waveform_anomalies) > 0:
+            self.label_anom.setText('<h6>Caution: there are anomalies '
+                                    'in the waveforms.</h6>')
+            self.pb_anom.setVisible(True)
+        else:
+            self.label_anom.setText('')
+            self.pb_anom.setVisible(False)
+
+        if 'BO-Fam:MA-B' in self.ramp_config.ps_waveform_manames_exclimits:
+            self.label_exclim.setText('<h6>Waveform is exceeding current '
+                                      'limits.</h6>')
+            self.pb_exclim.setVisible(True)
+        else:
+            self.label_exclim.setText('')
+            self.pb_exclim.setVisible(False)
+
     def _showAnomaliesPopup(self):
         text = 'Caution to the following anomalies: \n'
         for anom in self.ramp_config.ps_waveform_anomalies:
             text += anom + '\n'
         anomaliesPopup = _MessageBox(self, 'Caution', text, 'Ok')
+        anomaliesPopup.open()
+
+    def _showExcLimPopup(self):
+        manames_exclimits = self.ramp_config.ps_waveform_manames_exclimits
+        if 'BO-Fam:MA-B' in manames_exclimits:
+            text = 'The waveform of the following magnets\n' \
+                   'are exceeding current limits:\n' \
+                   '    - BO-Fam:MA-B'
+        anomaliesPopup = _MessageBox(self, 'Warning', text, 'Ok')
         anomaliesPopup.open()
 
     def updateGraph(self):
@@ -382,24 +425,33 @@ class DipoleRamp(QWidget):
             return
 
         xdata = self.ramp_config.ps_waveform_get_times()
-        ydata = self.ramp_config.ps_waveform_get_strengths('BO-Fam:MA-B')
+        if self.plot_unit == 'Strengths':
+            self.ax.set_ylabel('E [GeV]')
+            ydata = self.ramp_config.ps_waveform_get_strengths('BO-Fam:MA-B')
+        elif self.plot_unit == 'Currents':
+            self.ax.set_ylabel('Current [A]')
+            ydata = self.ramp_config.ps_waveform_get_currents('BO-Fam:MA-B')
         self.line.set_xdata(xdata)
         self.line.set_ydata(ydata)
-        self.ax.set_xlim(min(xdata)-0.2, max(xdata)+0.2)
-        self.ax.set_ylim(min(ydata)-0.2, max(ydata)+0.2)
+        self.ax.set_xlim(min(xdata), max(xdata))
+        self.ax.set_ylim(min(ydata)*0.95, max(ydata)*1.05)
 
-        self.markers.set_xdata(self.ramp_config.ps_ramp_times)
-        self.markers.set_ydata(self.ramp_config.ps_ramp_energies)
+        if self.plot_unit == 'Strengths':
+            func = self.ramp_config.ps_waveform_interp_strengths
+        else:
+            func = self.ramp_config.ps_waveform_interp_currents
+
+        markers_time = self.ramp_config.ps_ramp_times
+        self.markers.set_xdata(markers_time)
+        self.markers.set_ydata(func('BO-Fam:MA-B', markers_time))
 
         inj_marker_time = self.ramp_config.ti_params_injection_time
         self.m_inj.set_xdata(inj_marker_time)
-        self.m_inj.set_ydata(self.ramp_config.ps_waveform_interp_energy(
-            inj_marker_time))
+        self.m_inj.set_ydata(func('BO-Fam:MA-B', inj_marker_time))
 
         ej_marker_time = self.ramp_config.ti_params_ejection_time
         self.m_ej.set_xdata(ej_marker_time)
-        self.m_ej.set_ydata(self.ramp_config.ps_waveform_interp_energy(
-            ej_marker_time))
+        self.m_ej.set_ydata(func('BO-Fam:MA-B', ej_marker_time))
 
         self.graph.figure.canvas.draw()
         self.graph.figure.canvas.flush_events()
@@ -478,13 +530,7 @@ class DipoleRamp(QWidget):
         self.updatePSDelay()
         self.updateWfmNrPoints()
         self.updateTable()
-        if len(self.ramp_config.ps_waveform_anomalies) > 0:
-            self.label_caution.setText('<h6>Caution: there are anomalies '
-                                       'in the waveforms.</h6>')
-            self.pb_caution.setVisible(True)
-        else:
-            self.label_caution.setText('')
-            self.pb_caution.setVisible(False)
+        self._verifyWarnings()
 
 
 class MultipolesRamp(QWidget):
@@ -502,6 +548,7 @@ class MultipolesRamp(QWidget):
         self._undo_stack = undo_stack
         self._getNormalizedConfigs()
         self._magnets_to_plot = []
+        self.plot_unit = 'Strengths'
         self._setupUi()
 
     def _setupUi(self):
@@ -517,12 +564,22 @@ class MultipolesRamp(QWidget):
         self.bt_insert.clicked.connect(self._showInsertNormConfigPopup)
         self.bt_delete.clicked.connect(self._showDeleteNormConfigPopup)
 
+        self.label_exclim = QLabel('', self)
+        self.pb_exclim = QPushButton('?', self)
+        self.pb_exclim.setFixedWidth(48)
+        self.pb_exclim.setVisible(False)
+        self.pb_exclim.setStyleSheet('background-color: red;')
+        self.pb_exclim.clicked.connect(self._showExcLimPopup)
+        lay_exclim = QHBoxLayout()
+        lay_exclim.addItem(QSpacerItem(2, 2, QSzPlcy.Expanding, QSzPlcy.Fixed))
+        lay_exclim.addWidget(self.label_exclim)
+        lay_exclim.addWidget(self.pb_exclim)
+        lay_exclim.addItem(QSpacerItem(2, 2, QSzPlcy.Expanding, QSzPlcy.Fixed))
+
         hlay_table = QHBoxLayout()
-        hlay_table.addItem(
-            QSpacerItem(1, 20, QSzPlcy.Minimum, QSzPlcy.Expanding))
+        hlay_table.addItem(QSpacerItem(2, 2, QSzPlcy.Expanding, QSzPlcy.Fixed))
         hlay_table.addWidget(self.table)
-        hlay_table.addItem(
-            QSpacerItem(1, 20, QSzPlcy.Minimum, QSzPlcy.Expanding))
+        hlay_table.addItem(QSpacerItem(2, 2, QSzPlcy.Expanding, QSzPlcy.Fixed))
 
         label = QLabel('<h4>Multipoles Ramp</h4>', self)
         label.setAlignment(Qt.AlignCenter)
@@ -532,10 +589,11 @@ class MultipolesRamp(QWidget):
         glay.addLayout(hlay_table, 2, 0, 1, 2)
         glay.addWidget(self.bt_insert, 3, 0)
         glay.addWidget(self.bt_delete, 3, 1)
+        glay.addLayout(lay_exclim, 4, 0, 1, 2)
 
     def _setupGraph(self):
         self.graph = FigureCanvas(Figure())
-        self.graph.setFixedSize(779, 500)
+        self.graph.setFixedHeight(500)
         self.ax = self.graph.figure.subplots()
         self.ax.grid()
         self.ax.set_xlabel('t [ms]')
@@ -565,7 +623,7 @@ class MultipolesRamp(QWidget):
     def _setupTable(self):
         self.table_map = {
             'rows': {0: 'Injection',
-                     self.normalized_configs_count+1: 'Ejection'},
+                     len(self.normalized_configs)+1: 'Ejection'},
             'columns': {0: '',
                         1: 'T [ms]',
                         2: 'Index',
@@ -590,14 +648,14 @@ class MultipolesRamp(QWidget):
                 background-color: #FF7C52;
             }
             """)
-        self.table.setFixedWidth(779)
+        self.table.setFixedWidth(1027)
         self.table.setMinimumHeight(
-            min((self.normalized_configs_count+3)*48+2, 482))
+            min((len(self.normalized_configs)+3)*48+2, 482))
         self.table.verticalHeader().setFixedWidth(48)
         self.table.horizontalHeader().setFixedHeight(48)
-        self.table.setRowCount(2+self.normalized_configs_count)
+        self.table.setRowCount(2+len(self.normalized_configs))
         self.table.setColumnCount(4)
-        self.table.setColumnWidth(0, 250)
+        self.table.setColumnWidth(0, 498)
         for i in range(1, len(self.table_map['columns'].values())):
             self.table.setColumnWidth(i, 155)
         self.table.setHorizontalHeaderLabels(
@@ -609,7 +667,7 @@ class MultipolesRamp(QWidget):
             np_item = QTableWidgetItem('0')
             e_item = QTableWidgetItem('0')
 
-            label_item.setFlags(Qt.ItemIsEnabled)
+            label_item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsSelectable)
             np_item.setFlags(Qt.ItemIsEnabled)
             e_item.setFlags(Qt.ItemIsEnabled)
             if row in normalized_config_rows:
@@ -633,10 +691,8 @@ class MultipolesRamp(QWidget):
     def _getNormalizedConfigs(self):
         if self.ramp_config is not None:
             self.normalized_configs = self.ramp_config.ps_normalized_configs
-            self.normalized_configs_count = len(self.normalized_configs)
         else:
             self.normalized_configs = list()
-            self.normalized_configs_count = 0
 
     def _sortTable(self):
         self.table.sortByColumn(1, Qt.AscendingOrder)
@@ -660,6 +716,7 @@ class MultipolesRamp(QWidget):
         else:
             self.updateGraph()
             self.updateMultipoleRampSignal.emit()
+            self._verifyWarnings()
 
             global _flag_stack_next_command, _flag_stacking
             if _flag_stack_next_command:
@@ -691,21 +748,23 @@ class MultipolesRamp(QWidget):
             err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
             err_msg.open()
         else:
-            self.handleLoadRampConfig(self.ramp_config)
+            self.handleLoadRampConfig()
             self.updateMultipoleRampSignal.emit()
 
     def _showDeleteNormConfigPopup(self):
-        if self.ramp_config is not None:
-            self._deleteConfigPopup = _DeleteNormalizedConfig(self,
-                                                              self.table_map)
-            self._deleteConfigPopup.deleteConfig.connect(
-                self._handleDeleteNormConfig)
-            self._deleteConfigPopup.open()
+        if self.ramp_config is None:
+            return
+        selected_item = self.table.selectedItems()
+        self._deleteConfigPopup = _DeleteNormalizedConfig(
+            self, self.table_map, selected_item)
+        self._deleteConfigPopup.deleteConfig.connect(
+            self._handleDeleteNormConfig)
+        self._deleteConfigPopup.open()
 
     @Slot(str)
     def _handleDeleteNormConfig(self, config):
         self.ramp_config.ps_normalized_configs_delete(config)
-        self.handleLoadRampConfig(self.ramp_config)
+        self.handleLoadRampConfig()
         self.updateMultipoleRampSignal.emit()
 
     def _showChooseMagnetToPlot(self):
@@ -724,12 +783,38 @@ class MultipolesRamp(QWidget):
         self._magnets_to_plot = maname_list
         self.updateGraph()
 
+    def _verifyWarnings(self):
+        manames_exclimits = self.ramp_config.ps_waveform_manames_exclimits
+        if 'BO-Fam:MA-B' in manames_exclimits:
+            manames_exclimits.remove('BO-Fam:MA-B')
+        if len(manames_exclimits) > 0:
+            self.label_exclim.setText('<h6>There are waveforms exceeding '
+                                      'current limits.</h6>')
+            self.pb_exclim.setVisible(True)
+        else:
+            self.label_exclim.setText('')
+            self.pb_exclim.setVisible(False)
+
+    def _showExcLimPopup(self):
+        manames_exclimits = self.ramp_config.ps_waveform_manames_exclimits
+        if 'BO-Fam:MA-B' in manames_exclimits:
+            manames_exclimits.remove('BO-Fam:MA-B')
+        text = 'The waveform of the following magnets\n' \
+               'are exceeding current limits:\n'
+        for maname in manames_exclimits:
+            text += '    - ' + maname + '\n'
+        anomaliesPopup = _MessageBox(self, 'Warning', text, 'Ok')
+        anomaliesPopup.open()
+
     def updateGraph(self):
         """Update and redraw graph."""
         if self.ramp_config is not None:
             xdata = self.ramp_config.ps_waveform_get_times()
             for maname in self._magnets_to_plot:
-                ydata = self.ramp_config.ps_waveform_get_strengths(maname)
+                if self.plot_unit == 'Strengths':
+                    ydata = self.ramp_config.ps_waveform_get_strengths(maname)
+                elif self.plot_unit == 'Currents':
+                    ydata = self.ramp_config.ps_waveform_get_currents(maname)
                 self.lines[maname].set_xdata(xdata)
                 self.lines[maname].set_ydata(ydata)
 
@@ -742,32 +827,40 @@ class MultipolesRamp(QWidget):
                 elif maname != 'BO-Fam:MA-B':
                     self.lines[maname].set_linewidth(0)
 
-            self.ax.set_xlim(min(xdata)-0.2, max(xdata)+0.2)
+            self.ax.set_xlim(min(xdata), max(xdata))
             ydata = np.array(ydata)
             if len(ydata) > 0:
-                self.ax.set_ylim(ydata.min()-0.2, ydata.max()+0.2)
+                if ydata.min() == ydata.max():
+                    self.ax.set_ylim(ydata.min()-0.2, ydata.max()+0.2)
+                elif ydata.min() < 0:
+                    self.ax.set_ylim(ydata.min()*1.05, ydata.max()*1.05)
+                else:
+                    self.ax.set_ylim(ydata.min()*0.95, ydata.max()*1.05)
 
-            ylabel = None
-            for maname in self._magnets_to_plot:
-                if 'MA-Q' not in maname:
-                    break
-            else:
-                ylabel = 'KL [1/m]'
-            for maname in self._magnets_to_plot:
-                if 'MA-S' not in maname:
-                    break
-            else:
-                ylabel = 'SL [1/m$^2$]'
-            for maname in self._magnets_to_plot:
-                if 'MA-C' not in maname:
-                    break
-            else:
-                ylabel = 'Kick [rad]'
+            if self.plot_unit == 'Strengths':
+                ylabel = None
+                for maname in self._magnets_to_plot:
+                    if 'MA-Q' not in maname:
+                        break
+                else:
+                    ylabel = 'KL [1/m]'
+                for maname in self._magnets_to_plot:
+                    if 'MA-S' not in maname:
+                        break
+                else:
+                    ylabel = 'SL [1/m$^2$]'
+                for maname in self._magnets_to_plot:
+                    if 'MA-C' not in maname:
+                        break
+                else:
+                    ylabel = 'Kick [urad]'
 
-            if ylabel:
-                self.ax.set_ylabel(ylabel)
+                if ylabel:
+                    self.ax.set_ylabel(ylabel)
+                else:
+                    self.ax.set_ylabel('Int. Strengths')
             else:
-                self.ax.set_ylabel('Int. Strengths')
+                self.ax.set_ylabel('Currents [A]')
 
             inj_marker_time = self.ramp_config.ti_params_injection_time
             self.m_inj.set_xdata(inj_marker_time)
@@ -779,17 +872,15 @@ class MultipolesRamp(QWidget):
             markers_value = list()
             inj_marker_value = list()
             ej_marker_value = list()
+            if self.plot_unit == 'Strengths':
+                func = self.ramp_config.ps_waveform_interp_strengths
+            else:
+                func = self.ramp_config.ps_waveform_interp_currents
             for maname in self._magnets_to_plot:
                 markers_time.append(markers_base_time)
-                markers_value.append(
-                    self.ramp_config.ps_waveform_interp_strengths(
-                        maname, markers_base_time))
-                inj_marker_value.append(
-                    self.ramp_config.ps_waveform_interp_strengths(
-                        maname, inj_marker_time))
-                ej_marker_value.append(
-                    self.ramp_config.ps_waveform_interp_strengths(
-                        maname, ej_marker_time))
+                markers_value.append(func(maname, markers_base_time))
+                inj_marker_value.append(func(maname, inj_marker_time))
+                ej_marker_value.append(func(maname, ej_marker_time))
             self.markers.set_xdata(markers_time)
             self.markers.set_ydata(markers_value)
             self.m_inj.set_ydata(inj_marker_value)
@@ -842,21 +933,36 @@ class MultipolesRamp(QWidget):
         self.table.cellChanged.connect(self._handleCellChanged)
 
     @Slot(ramp.BoosterRamp)
-    def handleLoadRampConfig(self, ramp_config):
+    def handleLoadRampConfig(self, ramp_config=None):
         """Update all widgets in loading BoosterRamp config."""
-        self.ramp_config = ramp_config
+        if ramp_config:
+            self.ramp_config = ramp_config
         self._getNormalizedConfigs()
-        print(self.normalized_configs)
         self.table.cellChanged.disconnect(self._handleCellChanged)
         self._setupTable()
         self.updateTable()
         self.updateGraph()
+        self._verifyWarnings()
 
-    @Slot(ramp.BoosterNormalized)
-    def handleNormConfigsChanges(self, norm_config):
+    @Slot(list)
+    def handleNormConfigsChanged(self, data):
         """Reload normalized configs on change and update graph."""
+        norm_config = data[0]
+        old_nconfig_name = data[1]
+        old_nconfig_idx = data[2]
+        if old_nconfig_name:
+            # delete norm_config from _ps_nconfigs dict
+            del(self.ramp_config._ps_nconfigs[old_nconfig_name])
+            # replace old name in _configuration list
+            nconfig_list = self.ramp_config.ps_normalized_configs
+            nconfig_list[old_nconfig_idx][1] = norm_config.name
+            self.ramp_config._configuration['ps_normalized_configs*'] = \
+                nconfig_list
+            # invalidate waveforms
+            self.ramp_config._invalidate_ps_waveforms()
         self.ramp_config[norm_config.name] = norm_config
-        self.updateGraph()
+        self.handleLoadRampConfig()
+        self.updateMultipoleRampSignal.emit()
 
 
 class RFRamp(QWidget):
@@ -907,15 +1013,19 @@ class RFRamp(QWidget):
     def _setupGraph(self):
         self.graph = FigureCanvas(Figure())
         self.graph.setFixedHeight(500)
-        self.ax = self.graph.figure.subplots()
-        self.ax.grid()
-        self.ax.set_xlabel('t [ms]')
-        self.ax.set_ylabel('Vgap [kV]')
-        self.line1, = self.ax.plot([0], [0], '-b')
-        self.line2, = self.ax.plot([0], [0], '-g')
-        self.markers, = self.ax.plot([0], [0], '+r')
-        self.m_inj, = self.ax.plot([0], [0], 'or')
-        self.m_ej, = self.ax.plot([0], [0], 'or')
+        self.ax1 = self.graph.figure.subplots()
+        self.ax1.grid()
+        self.ax1.set_xlabel('t [ms]')
+        self.ax1.set_ylabel('|Vgap| [kV]')
+        self.line1, = self.ax1.plot([0], [0], '-b')
+        self.markers, = self.ax1.plot([0], [0], '+r')
+        self.m_inj, = self.ax1.plot([0], [0], 'or')
+        self.m_ej, = self.ax1.plot([0], [0], 'or')
+
+        self.ax2 = self.ax1.twinx()
+        self.ax2.grid()
+        self.ax2.set_ylabel('Φs [°]')
+        self.line2, = self.ax2.plot([0], [0], '-g')
 
         self.toolbar = NavigationToolbar(self.graph, self)
 
@@ -961,7 +1071,7 @@ class RFRamp(QWidget):
             'columns': {0: '',
                         1: 'T [ms]',
                         2: '|Vgap| [kV]',
-                        3: 'ㄥVgap [°]',
+                        3: '∠Vgap [°]',
                         4: 'E [GeV]',
                         5: 'Φs [°]'}}
         self.table.setStyleSheet(
@@ -1036,7 +1146,7 @@ class RFRamp(QWidget):
                 if self.table_map['columns'][column] == '|Vgap| [kV]':
                     old_value = self.ramp_config.rf_ramp_bottom_voltage
                     self.ramp_config.rf_ramp_bottom_voltage = new_value
-                elif self.table_map['columns'][column] == 'ㄥVgap [°]':
+                elif self.table_map['columns'][column] == '∠Vgap [°]':
                     old_value = self.ramp_config.rf_ramp_bottom_phase
                     self.ramp_config.rf_ramp_bottom_phase = new_value
 
@@ -1051,7 +1161,7 @@ class RFRamp(QWidget):
                 elif self.table_map['columns'][column] == '|Vgap| [kV]':
                     old_value = self.ramp_config.rf_ramp_top_voltage
                     self.ramp_config.rf_ramp_top_voltage = new_value
-                elif self.table_map['columns'][column] == 'ㄥVgap [°]':
+                elif self.table_map['columns'][column] == '∠Vgap [°]':
                     old_value = self.ramp_config.rf_ramp_top_phase
                     self.ramp_config.rf_ramp_top_phase = new_value
 
@@ -1141,6 +1251,18 @@ class RFRamp(QWidget):
         finally:
             self.updateTable()
 
+    def _calc_syncphase(self, t):
+        times = [t] if isinstance(t, (int, float)) else t
+        energies = self.ramp_config.ps_waveform_interp_energy(times)
+        U0_nom = 0.00452e3  # eV
+        E_nom = 0.150  # GeV
+        U0 = [U0_nom*(E/E_nom)**4 for E in energies]
+        V = 1e3 * self.ramp_config.rf_ramp_interp_voltages(times)  # V
+        ph = [_math.asin(U0[i]/(V[i])) for i in range(len(times))]
+        ph = [_math.degrees(phase) for phase in ph]
+        ph = ph[0] if isinstance(t, (int, float)) else ph
+        return ph
+
     def updateGraph(self):
         """Update and redraw graph."""
         if self.ramp_config is None:
@@ -1152,7 +1274,7 @@ class RFRamp(QWidget):
             xdata.append(i)
         xdata.append(490)
         self.line1.set_xdata(xdata)
-        self.ax.set_xlim(min(xdata)-0.2, max(xdata)+0.2)
+        self.ax1.set_xlim(min(xdata), max(xdata))
 
         ydata = list()
         ydata.append(self.ramp_config.rf_ramp_voltages[0])
@@ -1160,7 +1282,7 @@ class RFRamp(QWidget):
             ydata.append(i)
         ydata.append(self.ramp_config.rf_ramp_voltages[0])
         self.line1.set_ydata(ydata)
-        self.ax.set_ylim(min(ydata)-10, max(ydata)+10)
+        self.ax1.set_ylim(min(ydata)*0.95, max(ydata)*1.05)
 
         times = self.ramp_config.ps_ramp_times
         self.markers.set_xdata(times)
@@ -1175,6 +1297,12 @@ class RFRamp(QWidget):
         self.m_ej.set_xdata(ej_marker_time)
         self.m_ej.set_ydata(self.ramp_config.rf_ramp_interp_voltages(
             ej_marker_time))
+
+        ph_times = self.ramp_config.ps_waveform_get_times()
+        ph = self._calc_syncphase(ph_times)
+        self.line2.set_xdata(ph_times)
+        self.line2.set_ydata(ph)
+        self.ax2.set_ylim(min(ph)*0.95, max(ph)*1.05)
 
         self.graph.figure.canvas.draw()
         self.graph.figure.canvas.flush_events()
@@ -1227,7 +1355,9 @@ class RFRamp(QWidget):
                     e_item = self.table.item(row, column)
                     e_item.setData(Qt.DisplayRole, str(energy))
                 elif label == 'Φs [°]':
-                    value = 0  # TODO
+                    t_item = self.table.item(row, 1)
+                    time = float(t_item.data(Qt.DisplayRole))
+                    value = self._calc_syncphase(time)
                     item = self.table.item(row, column)
                     item.setData(Qt.DisplayRole, str(value))
 

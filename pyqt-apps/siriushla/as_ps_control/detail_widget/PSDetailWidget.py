@@ -10,7 +10,7 @@ from qtpy.QtGui import QColor
 
 from siriuspy.envars import vaca_prefix
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox, PyDMPushButton, \
-    PyDMLineEdit, PyDMWaveformPlot
+    PyDMLineEdit, PyDMWaveformPlot, PyDMSpinbox
 from siriushla.widgets.state_button import PyDMStateButton
 from siriushla.widgets import PyDMLinEditScrollbar
 from siriushla.widgets.led import SiriusLedState, SiriusLedAlert
@@ -431,16 +431,21 @@ class PSDetailWidget(QWidget):
             self._prefixed_psname + ':PRUSyncPulseCount-Mon'
         queue_size_ca = \
             self._prefixed_psname + ':PRUCtrlQueueSize-Mon'
+        bsmp_comm_ca = self._prefixed_psname + ':BSMPComm-Sts'
 
         sync_mode_label = QLabel('Sync Mode', self)
         block_index_label = QLabel('Block Index', self)
         sync_count_label = QLabel('Pulse Count', self)
         queue_size_label = QLabel('Queue Size', self)
+        bsmp_comm_label = QLabel('BSMP Comm.', self)
 
         sync_mode_rb_label = PyDMLabel(self, sync_mode_ca)
         block_index_rb_label = PyDMLabel(self, block_index_ca)
         sync_count_rb_label = PyDMLabel(self, sync_count_ca)
         queue_size_rb_label = PyDMLabel(self, queue_size_ca)
+        bsmp_comm_sts_led = SiriusLedAlert(self, bsmp_comm_ca)
+        bsmp_comm_sts_led.setOnColor(SiriusLedAlert.LightGreen)
+        bsmp_comm_sts_led.setOffColor(SiriusLedAlert.Red)
 
         layout.addWidget(sync_mode_label, 0, 0, Qt.AlignRight)
         layout.addWidget(sync_mode_rb_label, 0, 1)
@@ -450,6 +455,8 @@ class PSDetailWidget(QWidget):
         layout.addWidget(sync_count_rb_label, 2, 1)
         layout.addWidget(queue_size_label, 3, 0, Qt.AlignRight)
         layout.addWidget(queue_size_rb_label, 3, 1)
+        layout.addWidget(bsmp_comm_label, 4, 0, Qt.AlignRight)
+        layout.addWidget(bsmp_comm_sts_led, 4, 1)
 
         layout.setColumnStretch(2, 1)
 
@@ -472,10 +479,14 @@ class PSDetailWidget(QWidget):
         return layout
 
     def _waveformLayout(self):
-        layout = QVBoxLayout()
+        layout = QGridLayout()
 
         wfm_data_sp_ch = self._prefixed_psname + ":WfmData-SP"
         wfm_data_rb_ch = self._prefixed_psname + ":WfmData-RB"
+        rmp_n_cycles_sp = self._prefixed_psname + ':RmpIncNrCycles-SP'
+        rmp_n_cycles_rb = self._prefixed_psname + ':RmpIncNrCycles-RB'
+        rmp_n_cycles_mon = self._prefixed_psname + ':RmpIncNrCycles-Mon'
+        rmp_ready = self._prefixed_psname + ':RmpReady-Mon'
 
         self.wfmdata = PyDMWaveformPlot()
         self.wfmdata.setMaximumSize(400, 300)
@@ -487,7 +498,31 @@ class PSDetailWidget(QWidget):
                                 color='red', lineWidth=2)
         self.wfmdata.addChannel(y_channel=wfm_data_rb_ch, name='WfmData-RB',
                                 color='blue', lineWidth=2)
-        layout.addWidget(self.wfmdata)
+
+        # Labels
+        self.rmp_n_cycles_label = QLabel('Ramp cycles', self)
+        self.rmp_curr_cycle_label = QLabel('Current cycle', self)
+        self.rmp_ready = QLabel('Ramp ready', self)
+
+        self.rmp_n_cycles_sp_sb = PyDMSpinbox(self, rmp_n_cycles_sp)
+        self.rmp_n_cycles_rb_label = PyDMLabel(self, rmp_n_cycles_rb)
+        # rmp_n_cycles_layout = QHBoxLayout()
+        # rmp_n_cycles_layout.addWidget(self.rmp_n_cycles_sp_sb)
+        # rmp_n_cycles_layout.addWidget(self.rmp_n_cycles_rb_label)
+        self.rmp_n_cycles_mon_label = PyDMLabel(self, rmp_n_cycles_mon)
+        self.rmp_ready_mon_led = SiriusLedAlert(self, rmp_ready)
+        self.rmp_ready_mon_led.setOnColor(SiriusLedAlert.LightGreen)
+        self.rmp_ready_mon_led.setOffColor(SiriusLedAlert.Red)
+        # Add widgets
+        layout.addWidget(self.wfmdata, 0, 0, 1, 3)
+        # layout.addLayout(rmp_n_cycles_layout)
+        layout.addWidget(self.rmp_n_cycles_label, 1, 0)
+        layout.addWidget(self.rmp_n_cycles_sp_sb, 1, 1)
+        layout.addWidget(self.rmp_n_cycles_rb_label, 1, 2)
+        layout.addWidget(self.rmp_curr_cycle_label, 2, 0)
+        layout.addWidget(self.rmp_n_cycles_mon_label, 2, 1)
+        layout.addWidget(self.rmp_ready, 3, 0)
+        layout.addWidget(self.rmp_ready_mon_led, 3, 1)
 
         return layout
 
