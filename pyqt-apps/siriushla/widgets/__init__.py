@@ -1,3 +1,4 @@
+from siriushla.widgets.figure_canvas import SiriusFigureCanvas
 from siriushla.widgets.QLed import QLed
 from siriushla.widgets.led import PyDMLed, SiriusLedAlert, SiriusLedState
 from siriushla.widgets.led import PyDMLedMultiChannel
