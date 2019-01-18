@@ -2,6 +2,7 @@
 from qtpy.QtGui import QKeySequence
 from qtpy.QtCore import QEvent
 from qtpy.QtWidgets import QMainWindow, QDialog, QHBoxLayout, QApplication
+import pyqtgraph as pg
 
 
 def _create_siriuswindow(qt_type):
@@ -23,10 +24,6 @@ def _create_siriuswindow(qt_type):
             super().__init__(*args, **kwargs)
             self.setFocus(True)
             self.app = QApplication.instance()
-            self.installEventFilter(self)
-
-        def _font_size_ss(self):
-            return self.FontSizeSS.format(self.app.font().pointSize())
 
         def keyPressEvent(self, event):
             """Override keyPressEvent."""
@@ -39,12 +36,35 @@ def _create_siriuswindow(qt_type):
                 self.app.setFont(font)
             super().keyPressEvent(event)
 
-        def eventFilter(self, obj, event):
-            if event.type() == QEvent.ApplicationFontChange:
+        def changeEvent(self, event):
+            if event.type() == QEvent.FontChange:
+                fontsize = self.app.font().pointSize()
                 self.ensurePolished()
-                self.setStyleSheet(self.Stylesheet + self._font_size_ss())
+                self.setStyleSheet(
+                    self.Stylesheet + self.FontSizeSS.format(fontsize))
                 self.setFixedSize(self.sizeHint())
-            return False
+
+                # handle resizing of pyqtgraph plots labels
+                fontsize_str = str(fontsize)+'pt'
+                for w in self.findChildren(pg.PlotWidget):
+                    # axes labels
+                    for ax in w.getPlotItem().axes.values():
+                        sty = ax['item'].labelStyle
+                        sty['font-size'] = fontsize_str
+                        ax['item'].setLabel(text=None, **sty)
+                    # legend
+                    if w.plotItem.legend:
+                        legw = 0
+                        for item in w.plotItem.legend.items:
+                            item[1].opts['size'] = fontsize_str
+                            item[1].setText(text=item[1].text, **item[1].opts)
+                            legw = max(legw, 20+item[1].width())
+                        w.plotItem.legend.updateSize()
+                        w.plotItem.legend.setFixedWidth(legw)
+                    # title
+                    wtitle = w.plotItem.titleLabel
+                    wtitle.opts['size'] = fontsize_str
+                    wtitle.setText(text=wtitle.text, **wtitle.opts)
 
     return _SiriusWindow
 
