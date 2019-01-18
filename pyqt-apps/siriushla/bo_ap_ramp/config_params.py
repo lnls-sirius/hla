@@ -9,12 +9,12 @@ from qtpy.QtWidgets import QGroupBox, QLabel, QWidget, QSpacerItem, \
                            QSizePolicy as QSzPlcy, QHeaderView, QUndoCommand, \
                            QAbstractItemView
 from matplotlib.backends.backend_qt5agg import (
-    FigureCanvasQTAgg as FigureCanvas,
     NavigationToolbar2QT as NavigationToolbar)
 from matplotlib.figure import Figure
 import numpy as np
 from siriuspy.ramp import ramp, exceptions
 from siriuspy.csdevice.pwrsupply import MAX_WFMSIZE
+from siriushla.widgets import SiriusFigureCanvas
 from siriushla.bo_ap_ramp.auxiliar_classes import MessageBox as _MessageBox, \
     InsertNormalizedConfig as _InsertNormalizedConfig, \
     DeleteNormalizedConfig as _DeleteNormalizedConfig, \
@@ -148,7 +148,7 @@ class DipoleRamp(QWidget):
         glay.addLayout(lay_exclim, 5, 0, 1, 2, alignment=Qt.AlignCenter)
 
     def _setupGraph(self):
-        self.graph = FigureCanvas(Figure())
+        self.graph = SiriusFigureCanvas(Figure())
         self.graph.setStyleSheet("""
             min-width:30em;max-width:30em;
             min-height:18em;max-height:18em;""")
@@ -607,7 +607,7 @@ class MultipolesRamp(QWidget):
         glay.addLayout(lay_exclim, 4, 0, 1, 2)
 
     def _setupGraph(self):
-        self.graph = FigureCanvas(Figure())
+        self.graph = SiriusFigureCanvas(Figure())
         self.graph.setStyleSheet("""
             min-width: 30em; max-width: 30em;
             min-height: 18em; max-height: 18em;""")
@@ -1042,7 +1042,7 @@ class RFRamp(QWidget):
         glay.addWidget(self.table, 3, 0, 1, 3, alignment=Qt.AlignCenter)
 
     def _setupGraph(self):
-        self.graph = FigureCanvas(Figure())
+        self.graph = SiriusFigureCanvas(Figure())
         self.graph.setStyleSheet("""
             min-width: 42em; max-width: 42em;
             min-height: 18em; max-height: 18em;""")

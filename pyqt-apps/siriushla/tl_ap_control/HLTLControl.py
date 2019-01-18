@@ -3,8 +3,6 @@
 
 import os as _os
 from datetime import datetime as _datetime
-from matplotlib.backends.backend_qt5agg import (
-    FigureCanvasQTAgg as FigureCanvas)
 import epics as _epics
 from qtpy.uic import loadUi
 from qtpy.QtCore import Slot, Qt, QPoint
@@ -23,7 +21,7 @@ from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla import util as _hlautil
 from siriushla.widgets import PyDMLed, SiriusLedAlert, SiriusLedState, \
                               SiriusMainWindow, SiriusScrnView, \
-                              PyDMLinEditScrollbar
+                              PyDMLinEditScrollbar, SiriusFigureCanvas
 from siriushla.as_ap_posang.HLPosAng import ASAPPosAngCorr
 from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
 from siriushla.as_ps_control.PSTabControlWindow import PSTabControlWindow
@@ -569,7 +567,7 @@ class ShowLatticeAndTwiss(SiriusMainWindow):
                                                     show_label=True)
         self.centralwidget = QWidget()
         self.centralwidget.setLayout(QVBoxLayout())
-        self.canvas = FigureCanvas(self._fig)
+        self.canvas = SiriusFigureCanvas(self._fig)
         self.canvas.setParent(self.centralwidget)
         self.centralwidget.layout().addWidget(self.canvas)
         self.centralwidget.layout().setContentsMargins(0, 0, 0, 0)
