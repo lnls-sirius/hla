@@ -76,6 +76,20 @@ class ICTMonitoring(SiriusMainWindow):
         util.connect_window(act_ICT2settings, _ICTSettings,
                             parent=self, prefix=prefix, device=ICT2)
 
+        self.centralwidget.setStyleSheet("""
+            #tabWidget{
+                min-width:40em; max-width:40em;
+                min-height:28em; max-height:28em;}
+            #label_window{
+                font-size:1.1em;
+                font-weight:bold;
+                background-color: qlineargradient(spread:pad,
+                    x1:1, y1:0.0227273, x2:0, y2:0,
+                    stop:0 rgba(173, 190, 207, 255),
+                    stop:1 rgba(213, 213, 213, 255));
+                min-height:1.29em; max-height:1.29em;
+            }""")
+
     @Slot(int)
     def _setICT1CurveVisibility(self, value):
         """Set curves visibility."""
@@ -439,8 +453,7 @@ class _ICTCalibration(QWidget):
             #graph_rawread{
                 min-width:36em;\nmin-height:28em;
                 max-width:36em;\nmax-height:28em;\n}""")
-        graph_rawread.setLabels(
-            left='<h3>Raw Readings</h3>', bottom='<h3>Index</h3>')
+        graph_rawread.setLabels(left='Raw Readings', bottom='Index')
         graph_rawread.addChannel(
             y_channel=self.ict_prefix+':RawPulse-Mon', name='RawPulse',
             color='blue', lineWidth=2, lineStyle=Qt.SolidLine)

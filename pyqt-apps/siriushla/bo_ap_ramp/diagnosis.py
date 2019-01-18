@@ -34,11 +34,11 @@ class Diagnosis(QGroupBox):
         self.graph_boocurr.autoRangeX = True
         self.graph_boocurr.autoRangeY = True
         self.graph_boocurr.backgroundColor = QColor(255, 255, 255)
+        self.graph_boocurr.axisColor = QColor(0, 0, 0)
         self.graph_boocurr.showLegend = False
         self.graph_boocurr.showXGrid = True
         self.graph_boocurr.showYGrid = True
-        self.graph_boocurr.setLabels(left='<h3>Current</h3>',
-                                     bottom='<h3>Ramp Index</h3>')
+        self.graph_boocurr.setLabels(left='Current', bottom='Ramp Index')
         self.graph_boocurr.setStyleSheet("""
             PyDMWaveformPlot{
                 min-width:22em; max-width:22em;
@@ -59,11 +59,12 @@ class Diagnosis(QGroupBox):
         self.graph_rampeff.autoRangeX = True
         self.graph_rampeff.autoRangeY = True
         self.graph_rampeff.backgroundColor = QColor(255, 255, 255)
+        self.graph_rampeff.axisColor = QColor(0, 0, 0)
         self.graph_rampeff.showLegend = False
         self.graph_rampeff.showXGrid = True
         self.graph_rampeff.showYGrid = True
-        self.graph_rampeff.setLabels(left='<h3>Ramp Efficiency</h3>',
-                                     bottom='<h3>Number of cycles</h3>')
+        self.graph_rampeff.setLabels(
+            left='Ramp Efficiency', bottom='Number of cycles')
         self.graph_rampeff.setStyleSheet("""
             PyDMWaveformPlot{
                 min-width:22em; max-width:22em;
