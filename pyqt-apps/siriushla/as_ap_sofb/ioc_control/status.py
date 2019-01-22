@@ -27,10 +27,10 @@ class StatusWidget(BaseWidget):
 
     def creategroupbox(self, name):
         if name == 'Corr':
-            labels = self._csorb.StatusLabels.Corrs
+            labels = self._csorb.StatusLabelsCorrs
             title = 'Correctors'
         else:
-            labels = self._csorb.StatusLabels.Orbit
+            labels = self._csorb.StatusLabelsOrb
             title = 'Orbit'
         wid = QGroupBox(title + ' Status', self)
 
@@ -38,7 +38,7 @@ class StatusWidget(BaseWidget):
         fbl.setHorizontalSpacing(20)
         fbl.setVerticalSpacing(20)
         channel = self.prefix + name + 'Status-Mon'
-        for bit, label in enumerate(labels):
+        for bit, label in enumerate(labels._fields):
             led = SiriusLedAlert(self, channel, bit)
             led.setMinimumHeight(20)
             led.setMaximumHeight(40)

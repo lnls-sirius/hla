@@ -7,7 +7,7 @@ from qtpy.QtWidgets import QMenu, QFileDialog, QWidget, QMessageBox, \
     QScrollArea, QLabel, QPushButton, QSizePolicy, \
     QGridLayout, QVBoxLayout, QHBoxLayout
 from qtpy.QtCore import Signal, Qt, QRect
-from siriuspy.csdevice.orbitcorr import OrbitCorrDev
+from siriuspy.csdevice.orbitcorr import OrbitCorrDevFactory
 from siriuspy.servconf.srvconfig import ConnConfigService
 from siriushla.as_ap_servconf import LoadConfiguration, SaveConfiguration
 from siriushla.widgets import SiriusConnectionSignal
@@ -103,7 +103,7 @@ class OrbitRegister(QWidget):
         self.EXT_FLT = 'Sirius Orbit Files (*.{})'.format(text)
         self._config_type = acc.lower() + '_orbit'
         self._servconf = ConnConfigService(self._config_type)
-        self._csorb = OrbitCorrDev(acc.upper())
+        self._csorb = OrbitCorrDevFactory.create(acc.upper())
         self.string_status = 'Empty'
         self.name = 'Register {0:d}'.format(self.idx)
         self.setup_ui()
@@ -262,7 +262,7 @@ def _main():
     app = SiriusApplication()
     win = SiriusDialog()
     hbl = QHBoxLayout(win)
-    wid = OrbitRegisters(win, pref + 'SI-Glob:AP-SOFB:', 9)
+    wid = OrbitRegisters(win, pref + 'SI-Glob:AP-SOFB:', 'SI')
     hbl.addWidget(wid)
     win.show()
     sys.exit(app.exec_())

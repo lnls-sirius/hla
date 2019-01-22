@@ -10,7 +10,7 @@ from qtpy.QtGui import QColor
 from qtpy.QtCore import Qt
 from pyqtgraph import mkPen
 from pydm.widgets import PyDMLabel, PyDMPushButton, PyDMCheckbox
-from siriuspy.csdevice.orbitcorr import OrbitCorrDev
+from siriuspy.csdevice.orbitcorr import ConstTLines
 from siriuspy.servconf.srvconfig import ConnConfigService
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets import SiriusLedState, SiriusConnectionSignal
@@ -92,17 +92,17 @@ class RespMatWidget(BaseWidget):
         pdm_pbtn = PyDMPushButton(
             grpbx, label="Start",
             init_channel=self.prefix+"MeasRespMat-Cmd",
-            pressValue=OrbitCorrDev.MeasRespMatCmd.Start)
+            pressValue=ConstTLines.MeasRespMatCmd.Start)
         pdm_pbtn.setEnabled(True)
         pdm_pbtn2 = PyDMPushButton(
             grpbx, label="Stop",
             init_channel=self.prefix+"MeasRespMat-Cmd",
-            pressValue=OrbitCorrDev.MeasRespMatCmd.Stop)
+            pressValue=ConstTLines.MeasRespMatCmd.Stop)
         pdm_pbtn2.setEnabled(True)
         pdm_pbtn3 = PyDMPushButton(
             grpbx, label="Reset",
             init_channel=self.prefix+"MeasRespMat-Cmd",
-            pressValue=OrbitCorrDev.MeasRespMatCmd.Reset)
+            pressValue=ConstTLines.MeasRespMatCmd.Reset)
         pdm_pbtn3.setEnabled(True)
         pdm_lbl = PyDMLabel(grpbx, init_channel=self.prefix+'MeasRespMat-Mon')
         pdm_lbl.setAlignment(Qt.AlignCenter)

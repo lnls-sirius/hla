@@ -12,7 +12,7 @@ from qtpy.QtCore import QSize, Qt, QTimer, QThread, Signal, QObject
 from qtpy.QtGui import QColor, QFont
 from pydm.widgets import PyDMWaveformPlot
 from siriushla.widgets import SiriusConnectionSignal
-from siriuspy.csdevice.orbitcorr import OrbitCorrDev
+from siriuspy.csdevice.orbitcorr import OrbitCorrDevFactory
 
 
 class BaseWidget(QWidget):
@@ -24,7 +24,7 @@ class BaseWidget(QWidget):
         super(BaseWidget, self).__init__(parent)
         self.line_names = names
         self.controls = ctrls
-        self._csorb = OrbitCorrDev(acc)
+        self._csorb = OrbitCorrDevFactory.create(acc)
         self._isring = self._csorb.acc_idx in self._csorb.Rings
         self.update_rate = 2.1  # Hz
         self.last_dir = self.DEFAULT_DIR
@@ -323,7 +323,7 @@ class UpdateGraph(QObject):
         super().__init__()
         self.ctrls = ctrls
         self.acc = acc
-        self._csorb = OrbitCorrDev(acc)
+        self._csorb = OrbitCorrDevFactory.create(acc)
         self.is_orb = is_orb
         self._isvisible = True
         text = sorted(ctrls)[0]
