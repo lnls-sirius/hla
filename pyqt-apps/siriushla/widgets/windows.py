@@ -84,7 +84,12 @@ def create_window_from_widget(
                 wid = WidgetClass(self, *args, **kwargs)
                 self.setCentralWidget(wid)
                 if size:
-                    self.resize(*size)
+                    wid.setObjectName('celtralwidget')
+                    wid.setStyleSheet("""
+                        #celtralwidget{{
+                            min-width:{0}em; max-width:{0}em;
+                            min-height:{1}em; max-height:{1}em;
+                        }}""".format(size[0], size[1]))
     else:
         class MyWindow(SiriusDialog):
 
@@ -94,7 +99,12 @@ def create_window_from_widget(
                 wid = WidgetClass(self, *args, **kwargs)
                 hbl.addWidget(wid)
                 if size:
-                    self.resize(*size)
+                    wid.setObjectName('celtralwidget')
+                    wid.setStyleSheet("""
+                        #celtralwidget{{
+                            min-width:{0}em; max-width:{0}em;
+                            min-height:{1}em; max-height:{1}em;
+                        }}""".format(size[0], size[1]))
 
     if name:
         MyWindow.__name__ = name
