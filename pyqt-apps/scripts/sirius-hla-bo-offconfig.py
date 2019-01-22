@@ -3,11 +3,11 @@
 """BO Configuration Application."""
 
 import sys
-from pydm import PyDMApplication
+from siriushla.sirius_application import SiriusApplication
 from siriushla.as_ap_servconf import ConfigManagerWindow
 
 
-app = PyDMApplication(None, sys.argv)
+app = SiriusApplication(None, sys.argv)
 window = ConfigManagerWindow('bo_normalized')
 window.show()
 sys.exit(app.exec_())
