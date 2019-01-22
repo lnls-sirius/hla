@@ -65,6 +65,13 @@ def _create_siriuswindow(qt_type):
                     wtitle = w.plotItem.titleLabel
                     wtitle.opts['size'] = fontsize_str
                     wtitle.setText(text=wtitle.text, **wtitle.opts)
+                for w in self.findChildren(pg.GraphicsLayoutWidget):
+                    sty = w.xaxis.labelStyle
+                    sty['font-size'] = fontsize_str
+                    w.xaxis.setLabel(text=None, **sty)
+                    sty = w.yaxis.labelStyle
+                    sty['font-size'] = fontsize_str
+                    w.yaxis.setLabel(text=None, **sty)
 
     return _SiriusWindow
 
