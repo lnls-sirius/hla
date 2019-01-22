@@ -72,6 +72,7 @@ def _create_siriuswindow(qt_type):
                     sty = w.yaxis.labelStyle
                     sty['font-size'] = fontsize_str
                     w.yaxis.setLabel(text=None, **sty)
+            super().changeEvent(event)
 
     return _SiriusWindow
 
