@@ -129,16 +129,14 @@ class SelectionMatrix(BaseWidget):
         self.setObjectName(name)
         grid_l = QGridLayout(self)
 
-        lab = QLabel(name, self)
-        lab.setStyleSheet("font: 20pt \"Sans Serif\";\nfont-weight: bold;")
-        lab.setAlignment(Qt.AlignCenter)
+        lab = QLabel(name, self, alignment=Qt.AlignCenter)
+        lab.setStyleSheet("font-weight: bold;")
         grid_l.addWidget(lab, 0, 0, 1, 1)
 
         scr_ar = QScrollArea(self)
         grid_l.addWidget(scr_ar, 1, 0, 1, 1)
         scr_ar.setWidgetResizable(True)
         scr_ar_wid = QWidget()
-        scr_ar_wid.setGeometry(QRect(0, 0, 1892, 1355))
         scr_ar.setWidget(scr_ar_wid)
         vbl = QVBoxLayout(scr_ar_wid)
         vbl.setContentsMargins(0, 0, 0, 0)
@@ -155,19 +153,13 @@ class SelectionMatrix(BaseWidget):
 
     def _create_matrix(self, parent):
         wid = MyWidget(self.pvs.led_list, parent)
-        wid.setStyleSheet("font: 16pt \"Sans Serif\";\nfont-weight: bold;")
+        wid.setStyleSheet("font-weight: bold;")
         gdl = QGridLayout(wid)
 
         for i, head in enumerate(self.top_headers):
-            lab = QLabel(wid)
-            lab.setText(head)
-            lab.setAlignment(Qt.AlignCenter)
-            gdl.addWidget(lab, 0, i+1)
+            gdl.addWidget(QLabel(head, wid, alignment=Qt.AlignCenter), 0, i+1)
         for i, head in enumerate(self.side_headers):
-            lab = QLabel(wid)
-            lab.setText(head)
-            lab.setAlignment(Qt.AlignCenter)
-            gdl.addWidget(lab, i+1, 0)
+            gdl.addWidget(QLabel(head, wid, alignment=Qt.AlignCenter), i+1, 0)
         for dev in self.devnames[self.dev][0]:
             wid2, idx = self._make_unit(wid, dev)
             i, j = self._get_position(idx)

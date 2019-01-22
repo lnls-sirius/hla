@@ -47,8 +47,6 @@ class KicksConfigWidget(BaseWidget):
             lbl = QLabel('Synchronize Kicks', self)
             pdm_btn = PyDMStateButton(
                 self, init_channel=self.prefix+'SyncKicks-Sel')
-            pdm_btn.setMinimumHeight(20)
-            pdm_btn.setMaximumHeight(40)
             hbl = QHBoxLayout()
             hbl.addWidget(lbl)
             hbl.addWidget(pdm_btn)

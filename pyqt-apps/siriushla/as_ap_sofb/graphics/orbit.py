@@ -49,14 +49,14 @@ class OrbitWidget(BaseWidget):
             btn = QPushButton('Correctors', grpbx)
             vbl.addWidget(btn)
             Window = create_window_from_widget(
-                CorrectorsWidget, name='CorrectorsWindow', size=(2300, 1600))
+                CorrectorsWidget, name='CorrectorsWindow', size=(67, 60))
             _util.connect_window(
                 btn, Window, self, prefix=self.prefix, acc=self.acc)
 
             btn = QPushButton('MultiTurn Orbit', grpbx)
             vbl.addWidget(btn)
             Window = create_window_from_widget(
-                MultiTurnWidget, name='MultiTurnWindow', size=(1000, 1800))
+                MultiTurnWidget, name='MultiTurnWindow', size=(35, 65))
             _util.connect_window(
                 btn, Window, self,
                 sigs=self.updater[0].raw_ref_sig, prefix=self.prefix)
@@ -64,14 +64,13 @@ class OrbitWidget(BaseWidget):
             btn = QPushButton('MultiTurn Sum', grpbx)
             vbl.addWidget(btn)
             Window = create_window_from_widget(
-                MultiTurnSumWidget, name='MultiTurnSumWindow',
-                size=(1000, 1600))
+                MultiTurnSumWidget, name='MultiTurnSumWindow', size=(35, 65))
             _util.connect_window(btn, Window, self, prefix=self.prefix)
 
         btn = QPushButton('SinglePass Sum', grpbx)
         vbl.addWidget(btn)
         Window = create_window_from_widget(
-            SinglePassSumWidget, name='SinglePassSumWindow', size=(1000, 700))
+            SinglePassSumWidget, name='SinglePassSumWindow', size=(32, 23))
         _util.connect_window(btn, Window, self, prefix=self.prefix)
 
     def channels(self):
@@ -151,15 +150,13 @@ class MultiTurnWidget(QWidget):
         self.specty.xaxis.setLabel('BPM position', units='m')
         self.spectx.colorbar.label_format = '{:<8.1f}'
         self.specty.colorbar.label_format = '{:<8.1f}'
-        lab = QLabel('Horizontal Orbit', self)
-        lab.setStyleSheet("font: 20pt \"Sans Serif\";\nfont-weight: bold;")
-        lab.setAlignment(Qt.AlignCenter)
+        lab = QLabel('Horizontal Orbit', self, alignment=Qt.AlignCenter)
+        lab.setStyleSheet("font-weight: bold;")
         vbl.addWidget(lab)
         vbl.addWidget(self.spectx)
         vbl.addSpacing(50)
-        lab = QLabel('Vertical Orbit', self)
-        lab.setStyleSheet("font: 20pt \"Sans Serif\";\nfont-weight: bold;")
-        lab.setAlignment(Qt.AlignCenter)
+        lab = QLabel('Vertical Orbit', self, alignment=Qt.AlignCenter)
+        lab.setStyleSheet("font-weight: bold;")
         vbl.addWidget(lab)
         vbl.addWidget(self.specty)
 
@@ -190,16 +187,14 @@ class MultiTurnSumWidget(QWidget):
         self.spect.yaxis.setLabel('time', units='ms')
         self.spect.xaxis.setLabel('BPM position', units='m')
         self.spect.colorbar.label_format = '{:<8.1f}'
-        lab = QLabel('Sum Orbit', self)
-        lab.setStyleSheet("font: 20pt \"Sans Serif\";\nfont-weight: bold;")
-        lab.setAlignment(Qt.AlignCenter)
+        lab = QLabel('Sum Orbit', self, alignment=Qt.AlignCenter)
+        lab.setStyleSheet("font-weight: bold;")
         vbl.addWidget(lab)
         vbl.addWidget(self.spect)
         vbl.addSpacing(50)
 
-        lab = QLabel('Sum Accross BPMs', self)
-        lab.setStyleSheet("font: 20pt \"Sans Serif\";\nfont-weight: bold;")
-        lab.setAlignment(Qt.AlignCenter)
+        lab = QLabel('Sum Accross BPMs', self, alignment=Qt.AlignCenter)
+        lab.setStyleSheet("font-weight: bold;")
         vbl.addWidget(lab)
         graph = Graph(self)
         vbl.addWidget(graph)
@@ -264,9 +259,8 @@ class SinglePassSumWidget(QWidget):
     def setupui(self):
         vbl = QVBoxLayout(self)
 
-        lab = QLabel('Single Pass Sum BPMs', self)
-        lab.setStyleSheet("font: 20pt \"Sans Serif\";\nfont-weight: bold;")
-        lab.setAlignment(Qt.AlignCenter)
+        lab = QLabel('Single Pass Sum BPMs', self, alignment=Qt.AlignCenter)
+        lab.setStyleSheet("font-weight: bold;")
         vbl.addWidget(lab)
 
         graph = Graph(self)

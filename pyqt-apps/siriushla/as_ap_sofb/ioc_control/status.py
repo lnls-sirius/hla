@@ -40,8 +40,6 @@ class StatusWidget(BaseWidget):
         channel = self.prefix + name + 'Status-Mon'
         for bit, label in enumerate(labels._fields):
             led = SiriusLedAlert(self, channel, bit)
-            led.setMinimumHeight(20)
-            led.setMaximumHeight(40)
             lab = QLabel(label, self)
             fbl.addRow(led, lab)
         return wid

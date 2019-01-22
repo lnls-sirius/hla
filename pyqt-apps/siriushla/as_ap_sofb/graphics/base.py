@@ -8,8 +8,8 @@ from pyqtgraph import mkBrush, mkPen, InfiniteLine, functions
 from qtpy.QtWidgets import QWidget, QFileDialog, QLabel, QCheckBox, \
     QVBoxLayout, QHBoxLayout, QSizePolicy, QGroupBox, \
     QFormLayout, QPushButton, QComboBox
-from qtpy.QtCore import QSize, Qt, QTimer, QThread, Signal, QObject
-from qtpy.QtGui import QColor, QFont
+from qtpy.QtCore import Qt, QTimer, QThread, Signal, QObject
+from qtpy.QtGui import QColor
 from pydm.widgets import PyDMWaveformPlot
 from siriushla.widgets import SiriusConnectionSignal
 from siriuspy.csdevice.orbitcorr import OrbitCorrDevFactory
@@ -78,19 +78,20 @@ class BaseWidget(QWidget):
 
     def setupui(self):
         vbl = QVBoxLayout(self)
+        vbl.setAlignment(Qt.AlignCenter)
 
-        graphx = self.uigetgraph('x')
-        graphy = self.uigetgraph('y')
+        graphx = self.uigetgraph('x', (65, 20))
+        graphy = self.uigetgraph('y', (65, 20))
         suf = 'Orbit' if self.is_orb else 'Correctors'
-        lab = QLabel('Horizontal ' + suf, self)
-        lab.setStyleSheet("font: 20pt \"Sans Serif\";\nfont-weight: bold;")
-        lab.setAlignment(Qt.AlignCenter)
+        lab = QLabel('<h2>Horizontal ' + suf + '</h2>', self,
+                     alignment=Qt.AlignCenter)
+        lab.setStyleSheet("""min-height:2em; max-height:2em;""")
         vbl.addWidget(lab)
         vbl.addWidget(graphx)
         vbl.addSpacing(30)
-        lab = QLabel('Vertical ' + suf, self)
-        lab.setStyleSheet("font: 20pt \"Sans Serif\";\nfont-weight: bold;")
-        lab.setAlignment(Qt.AlignCenter)
+        lab = QLabel('<h2>Vertical ' + suf + '</h2>', self,
+                     alignment=Qt.AlignCenter)
+        lab.setStyleSheet("""min-height:2em; max-height:2em;""")
         vbl.addWidget(lab)
         vbl.addWidget(graphy)
         self.graph = {'x': graphx, 'y': graphy}
@@ -104,15 +105,15 @@ class BaseWidget(QWidget):
             self.hbl.addWidget(grpbx)
             self.hbl.addStretch(1)
 
-    def uigetgraph(self, pln):
+    def uigetgraph(self, pln, size):
         graph = Graph(self)
         graph.doubleclick.connect(_part(self._set_enable_list, pln))
 
-        labsty = {'font-size': '20pt'}
-        graph.setLabel('bottom', text='BPM position', units='m', **labsty)
+        graph.setLabel('bottom', text='BPM position', units='m')
         lab = 'Orbit' if self.is_orb else 'Kick Angle'
         unit = 'm' if self.is_orb else 'rad'
-        graph.setLabel('left', text=lab, units=unit, **labsty)
+        graph.setLabel('left', text=lab, units=unit)
+        graph.setObjectName(lab.replace(' ', '')+pln)
 
         pref = 'BPM' if self.is_orb else 'CH' if pln == 'x' else 'CV'
         for i, lname in enumerate(self.line_names):
@@ -148,6 +149,11 @@ class BaseWidget(QWidget):
                 cur.setZValue(-4*i - j)
                 cur.setVisible(not i)
             graph.plotItem.legend.removeItem('')
+        graph.setStyleSheet("""
+            #{0}{{
+                min-width:{1}em; max-width:{1}em;
+                min-height:{2}em; max-height:{2}em;
+            }}""".format(lab.replace(' ', '')+pln, size[0], size[1]))
         return graph
 
     def uicreate_groupbox(self, idx):
@@ -184,14 +190,14 @@ class BaseWidget(QWidget):
 
             lab_avg = Label(unit, '0.000', wid)
             self.updater[idx].ave[pln].connect(lab_avg.setFloat)
+            lab_avg.setStyleSheet("""min-width:3.87em;""")
             lab_avg.setAlignment(Qt.AlignCenter)
-            lab_avg.setMinimumSize(QSize(120, 0))
             hbl.addWidget(lab_avg)
             hbl.addWidget(QLabel(
                 "<html><head/><body><p>&#177;</p></body></html>", wid))
             lab_std = Label(unit, '0.000', wid)
             self.updater[idx].std[pln].connect(lab_std.setFloat)
-            lab_std.setMinimumSize(QSize(120, 0))
+            lab_std.setStyleSheet("""min-width:3.87em;""")
             lab_std.setAlignment(Qt.AlignCenter)
             hbl.addWidget(lab_std)
         return grpbx
@@ -200,11 +206,7 @@ class BaseWidget(QWidget):
         combo = QComboBox(parent)
         combo.setObjectName('ComboBox_' + orb_tp + str(idx))
         sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
-        sz_pol.setHorizontalStretch(0)
-        sz_pol.setVerticalStretch(0)
-        sz_pol.setHeightForWidth(combo.sizePolicy().hasHeightForWidth())
         combo.setSizePolicy(sz_pol)
-        combo.setMinimumSize(QSize(0, 0))
         combo.setEditable(True)
         combo.setMaxVisibleItems(10)
         for name in sorted(self.controls.keys()):
@@ -218,11 +220,8 @@ class BaseWidget(QWidget):
     def uicreate_label(self, lab, parent):
         label = QLabel(lab, parent)
         sz_pol = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Preferred)
-        sz_pol.setHorizontalStretch(0)
-        sz_pol.setVerticalStretch(0)
-        sz_pol.setHeightForWidth(label.sizePolicy().hasHeightForWidth())
         label.setSizePolicy(sz_pol)
-        label.setMinimumSize(QSize(60, 0))
+        label.setStyleSheet("""min-width:1.94em;""")
         label.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
         return label
 
@@ -446,23 +445,15 @@ class Graph(PyDMWaveformPlot):
         self.setShowXGrid(True)
         self.setShowYGrid(True)
         self.setBackgroundColor(QColor(255, 255, 255))
-        # self.setBackgroundColor(QColor(239, 235, 231))
         self.setShowLegend(True)
         self.setAutoRangeX(True)
         self.setAutoRangeY(True)
         self.setMinXRange(0.0)
         self.setMaxXRange(1.0)
         self.plotItem.showButtons()
-        font = QFont()
-        font.setPixelSize(26)
-        self.plotItem.getAxis('bottom').tickFont = font
-        self.plotItem.getAxis('bottom').setPen(QColor(0, 0, 0))
+        self.setAxisColor(QColor(0, 0, 0))
         self.plotItem.getAxis('bottom').setStyle(tickTextOffset=15)
-        self.plotItem.getAxis('bottom').setHeight(80)
-        self.plotItem.getAxis('left').tickFont = font
-        self.plotItem.getAxis('left').setPen(QColor(0, 0, 0))
         self.plotItem.getAxis('left').setStyle(tickTextOffset=5)
-        self.plotItem.getAxis('left').setWidth(100)
 
     def mouseDoubleClickEvent(self, ev):
         if ev.button() == Qt.LeftButton:

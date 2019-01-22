@@ -6,7 +6,7 @@ from datetime import datetime as _datetime
 from qtpy.QtWidgets import QMenu, QFileDialog, QWidget, QMessageBox, \
     QScrollArea, QLabel, QPushButton, QSizePolicy, \
     QGridLayout, QVBoxLayout, QHBoxLayout
-from qtpy.QtCore import Signal, Qt, QRect
+from qtpy.QtCore import Signal, Qt
 from siriuspy.csdevice.orbitcorr import OrbitCorrDevFactory
 from siriuspy.servconf.srvconfig import ConnConfigService
 from siriushla.as_ap_servconf import LoadConfiguration, SaveConfiguration
@@ -57,7 +57,11 @@ class OrbitRegisters(QWidget):
 
         scr_ar_wid = QWidget()
         scr_ar.setWidget(scr_ar_wid)
-        scr_ar_wid.setGeometry(QRect(0, 0, 730, 284))
+        scr_ar_wid.setObjectName('scr_ar_wid')
+        scr_ar_wid.setStyleSheet("""
+            #scr_ar_wid{
+                min-width:40em; min-height:10em;
+            }""")
         hbl = QHBoxLayout(scr_ar_wid)
         hbl.setContentsMargins(0, 0, 0, 0)
 
@@ -99,6 +103,7 @@ class OrbitRegister(QWidget):
         self.idx = idx
         self.prefix = prefix
         text = acc.lower() + 'orb'
+        self.setObjectName(text+str(idx))
         self.EXT = '.' + text
         self.EXT_FLT = 'Sirius Orbit Files (*.{})'.format(text)
         self._config_type = acc.lower() + '_orbit'
@@ -130,7 +135,10 @@ class OrbitRegister(QWidget):
 
     def setup_ui(self):
         """Setup Ui of Context Menu."""
-        self.setMinimumWidth(350)
+        self.setStyleSheet("""
+            #{}{{
+                min-width:11.29em;
+            }}""".format(self.objectName()))
         hbl = QHBoxLayout(self)
 
         btn = QPushButton(self.name, self)
@@ -142,8 +150,6 @@ class OrbitRegister(QWidget):
         hbl.addWidget(lbl)
         sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sz_pol.setHorizontalStretch(1)
-        sz_pol.setVerticalStretch(0)
-        sz_pol.setHeightForWidth(lbl.sizePolicy().hasHeightForWidth())
         lbl.setSizePolicy(sz_pol)
         lbl.setMouseTracking(True)
         lbl.setAcceptDrops(True)

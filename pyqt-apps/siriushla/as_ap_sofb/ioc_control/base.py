@@ -102,9 +102,6 @@ class BaseCombo(QComboBox, PyDMPrimitiveWidget):
 
     def setup_ui(self, add_items=[]):
         sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
-        sz_pol.setHorizontalStretch(1)
-        sz_pol.setVerticalStretch(0)
-        sz_pol.setHeightForWidth(self.sizePolicy().hasHeightForWidth())
         self.setSizePolicy(sz_pol)
         self.setEditable(True)
         for item in add_items:

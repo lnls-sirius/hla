@@ -16,7 +16,6 @@ from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets import SiriusLedState, SiriusConnectionSignal
 from siriushla.util import connect_window
 from siriushla.as_ap_servconf import LoadConfiguration, SaveConfiguration
-# from siriushla.si_ap_sofb.graphics.base import Graph
 
 from siriushla.as_ap_sofb.ioc_control.respmat_enbllist import SelectionMatrix
 from siriushla.as_ap_sofb.ioc_control.base import BaseWidget
@@ -50,13 +49,13 @@ class RespMatWidget(BaseWidget):
         btns = dict()
         grpbx = QGroupBox('Corrs and BPMs selection', self)
         vbl.addWidget(grpbx)
-        szy = 1700
+        szy = 55
         if self.acc == 'BO':
-            szy = 1000
+            szy = 32
         elif not self.isring:
-            szy = 300
+            szy = 10
         Window = create_window_from_widget(
-            SelectionMatrix, name='SelectionWindow', size=(730, szy))
+            SelectionMatrix, name='SelectionWindow', size=(24, szy))
         for dev in ('BPMX', 'BPMY', 'CH', 'CV'):
             btns[dev] = QPushButton(dev, grpbx)
             connect_window(
@@ -75,8 +74,6 @@ class RespMatWidget(BaseWidget):
             pdm_chbx.setText('Enable RF')
             pdm_led = SiriusLedState(
                 grpbx, init_channel=self.prefix+'RFEnbl-Sts')
-            pdm_led.setMinimumHeight(20)
-            pdm_led.setMaximumHeight(40)
             hbl = QHBoxLayout()
             hbl.setContentsMargins(0, 0, 0, 0)
             hbl.addWidget(pdm_chbx)
@@ -149,7 +146,7 @@ class RespMatWidget(BaseWidget):
         btn = QPushButton('Check Singular Values', grpbx)
         fml.addWidget(btn)
         Window = create_window_from_widget(
-            SingularValues, name='SingularValues', size=(1000, 700))
+            SingularValues, name='SingularValues', size=(32, 25))
         connect_window(btn, Window, grpbx, prefix=self.prefix)
 
         vbl.addSpacing(40)
@@ -243,15 +240,14 @@ class SingularValues(QWidget):
 
     def setupui(self):
         vbl = QVBoxLayout(self)
-        lab = QLabel('Singular Values')
-        lab.setStyleSheet("font: 20pt \"Sans Serif\";\nfont-weight: bold;")
-        lab.setAlignment(Qt.AlignCenter)
+        vbl.setAlignment(Qt.AlignCenter)
+        lab = QLabel('Singular Values', self, alignment=Qt.AlignCenter)
+        lab.setStyleSheet("font-weight: bold;")
         vbl.addWidget(lab)
         graph = Graph()
         graph.setShowLegend(False)
-        labsty = {'font-size': '20pt'}
-        graph.setLabel('left', text='Singular Values', units='m/rad', **labsty)
-        graph.setLabel('bottom', text='Index', **labsty)
+        graph.setLabel('left', text='Singular Values', units='m/rad')
+        graph.setLabel('bottom', text='Index')
         vbl.addWidget(graph)
         opts = dict(
             y_channel=self.prefix+'SingValues-Mon',
@@ -273,6 +269,13 @@ class SingularValues(QWidget):
         chan = SiriusConnectionSignal(self.prefix+'NumSingValues-RB')
         chan.new_value_signal[int].connect(line.setValue)
         self._chans.append(chan)
+
+        graph.setObjectName('graph_singvalues')
+        graph.setStyleSheet("""
+            #graph_singvalues{
+                min-width:30em; max-width:30em;
+                min-height:22m; max-height:22em;
+            }""")
 
 
 def _main():
