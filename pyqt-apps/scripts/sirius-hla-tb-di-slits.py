@@ -5,7 +5,7 @@
 import sys
 import argparse as _argparse
 from siriuspy.envars import vaca_prefix
-from qtpy.QtCore import Qt
+from qtpy.QtCore import Qt, QEvent
 from qtpy.QtWidgets import QWidget, QLabel, QGroupBox, QSpacerItem, \
                            QSizePolicy as QSzPlcy, QVBoxLayout
 from siriushla.sirius_application import SiriusApplication
@@ -49,11 +49,12 @@ class _cw(QWidget):
         lay.addItem(QSpacerItem(40, 40, QSzPlcy.Fixed, QSzPlcy.Fixed))
         self.setLayout(lay)
 
-    def keyPressEvent(self, event):
+    def changeEvent(self, event):
         """Override keyPressEvent."""
-        super().keyPressEvent(event)
-        self.slith.updateSlitWidget()
-        self.slitv.updateSlitWidget()
+        if event.type() == QEvent.FontChange:
+            self.slith.updateSlitWidget()
+            self.slitv.updateSlitWidget()
+        super().changeEvent(event)
 
 
 window = SiriusMainWindow()
