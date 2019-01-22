@@ -224,7 +224,6 @@ class _SlitDetails(SiriusDialog):
 if __name__ == '__main__':
     """Run Example."""
     app = SiriusApplication()
-    util.set_style(app)
     w = SlitMonitoring(slit_orientation='H', prefix=_vaca_prefix)
     window = SiriusMainWindow()
     window.setCentralWidget(w)

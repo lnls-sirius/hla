@@ -7,7 +7,6 @@ import argparse as _argparse
 from siriuspy.envars import vaca_prefix
 from siriushla.sirius_application import SiriusApplication
 from siriushla.as_ap_sofb import MainWindow
-from siriushla import util
 
 
 parser = _argparse.ArgumentParser(description="Run SOFB HLA Interface.")
@@ -16,7 +15,6 @@ parser.add_argument('-p', "--prefix", type=str, default=vaca_prefix,
 args = parser.parse_args()
 
 app = SiriusApplication()
-util.set_style(app)
 window = MainWindow(args.prefix, acc='BO')
 window.show()
 sys.exit(app.exec_())

@@ -147,8 +147,5 @@ if __name__ == "__main__":
 
     app = SiriusApplication()
 
-    # Implement sirius-style.css as default Qt resource file for Sirius!
-    _util.set_style(app)
-
     window = ControlApplication()
     sys.exit(app.exec_())

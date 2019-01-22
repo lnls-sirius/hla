@@ -6,7 +6,6 @@ from qtpy.QtWidgets import QLabel, QWidget, QVBoxLayout, QGridLayout, \
                            QUndoStack
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets.windows import SiriusMainWindow
-from siriushla import util as _util
 from siriuspy.ramp import ramp
 from siriuspy.servconf import exceptions as _srvexceptions
 from siriushla.bo_ap_ramp.status_and_commands import StatusAndCommands
@@ -200,7 +199,6 @@ if __name__ == '__main__':
     from siriuspy.envars import vaca_prefix as _vaca_prefix
 
     app = SiriusApplication()
-    _util.set_style(app)
     w = RampMain(prefix=_vaca_prefix)
     w.show()
     sys.exit(app.exec_())

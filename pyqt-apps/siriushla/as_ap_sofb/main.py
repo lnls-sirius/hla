@@ -175,7 +175,6 @@ if __name__ == '__main__':
     from siriushla.sirius_application import SiriusApplication
 
     app = SiriusApplication()
-    _util.set_style(app)
     main_win = MainWindow(LL_PREF, 'SI')
     main_win.show()
     _sys.exit(app.exec_())

@@ -5,7 +5,6 @@ import sys
 
 from qtpy.QtWidgets import QWidget, QPushButton, QHBoxLayout
 
-from siriushla import util as _util
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.as_ap_pvsconfmgr import \
@@ -54,7 +53,6 @@ class PVConfiguration(SiriusMainWindow):
 
 if __name__ == '__main__':
     app = SiriusApplication()
-    _util.set_style(app)
     w = PVConfiguration()
 
     w.setStyleSheet("""

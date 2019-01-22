@@ -53,11 +53,9 @@ class MonitData(BaseWidget):
 if __name__ == '__main__':
     from siriushla.sirius_application import SiriusApplication
     from siriushla.widgets import SiriusDialog
-    from siriushla.util import set_style
     import sys
 
     app = SiriusApplication()
-    set_style(app)
     wind = SiriusDialog()
     wind.resize(1000, 1500)
     hbl = QHBoxLayout(wind)

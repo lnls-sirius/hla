@@ -187,7 +187,6 @@ if __name__ == '__main__':
     import sys
 
     app = SiriusApplication()
-    util.set_style(app)
     wind = SiriusDialog()
     # wind.resize(1400, 1400)
     hbl = QHBoxLayout(wind)

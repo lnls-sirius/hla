@@ -12,7 +12,6 @@ from qtpy.QtWidgets import QWidget, QLabel, QSpacerItem, \
 from pydm.widgets import PyDMEnumComboBox, PyDMLabel
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusScrnView, PyDMLed
-from siriushla import util
 from siriushla.widgets.windows import SiriusMainWindow
 
 
@@ -29,7 +28,6 @@ prefix = args.prefix
 
 os.environ['EPICS_CA_MAX_ARRAY_BYTES'] = '200000000'
 app = SiriusApplication()
-util.set_style(app)
 
 cw = QWidget()
 scrn_view = SiriusScrnView(prefix=prefix, device=scrn_device)

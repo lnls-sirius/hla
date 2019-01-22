@@ -1290,7 +1290,6 @@ if __name__ == '__main__':
 
     os.environ['EPICS_CA_MAX_ARRAY_BYTES'] = '200000000'
     app = SiriusApplication()
-    util.set_style(app)
 
     centralwidget = QWidget()
     prefix = _vaca_prefix

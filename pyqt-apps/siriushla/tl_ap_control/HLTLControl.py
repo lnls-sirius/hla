@@ -601,7 +601,6 @@ if __name__ == '__main__':
     app = SiriusApplication()
     os.environ['EPICS_CA_MAX_ARRAY_BYTES'] = '200000000'
     app = SiriusApplication()
-    _hlautil.set_style(app)
     window = TLAPControlWindow(prefix=_vaca_prefix, tl='tb')
     window.show()
     sys.exit(app.exec_())

@@ -385,11 +385,9 @@ def run_test(psname=None):
     """Run test application."""
     import sys
     from siriushla.sirius_application import SiriusApplication
-    from siriushla import util
 
     psname = 'SI-Fam:PS-B1B2-1' if psname is None else psname
     app = SiriusApplication()
-    util.set_style(app)
     window = PSWidget(psname=psname)
     window.show()
     sys.exit(app.exec_())

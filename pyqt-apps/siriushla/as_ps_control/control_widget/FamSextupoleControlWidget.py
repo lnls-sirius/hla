@@ -38,10 +38,8 @@ def run_test(psname_list=None):
     """Run test application."""
     import sys
     from siriushla.sirius_application import SiriusApplication
-    from siriushla import util
 
     app = SiriusApplication()
-    util.set_style(app)
     window = SIFamSextupoleControlWidget(psname_list=psname_list)
     window.show()
     sys.exit(app.exec_())

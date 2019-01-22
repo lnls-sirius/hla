@@ -10,7 +10,6 @@ from qtpy.QtWidgets import QWidget, QLabel, QGroupBox, QSpacerItem, \
                            QSizePolicy as QSzPlcy, QVBoxLayout
 from siriushla.sirius_application import SiriusApplication
 from siriushla.tl_ap_control import SlitMonitoring
-from siriushla import util
 from siriushla.widgets.windows import SiriusMainWindow
 
 
@@ -22,7 +21,6 @@ args = parser.parse_args()
 prefix = args.prefix
 
 app = SiriusApplication()
-util.set_style(app)
 
 
 class _cw(QWidget):

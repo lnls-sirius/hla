@@ -545,7 +545,6 @@ class _MyWaveformPlot(PyDMWaveformPlot):
 if __name__ == '__main__':
     """Run Example."""
     app = SiriusApplication()
-    util.set_style(app)
     w = ICTMonitoring(tl='TB', prefix=_vaca_prefix)
     w.show()
     sys.exit(app.exec_())
