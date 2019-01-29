@@ -188,7 +188,7 @@ class RespMatWidget(BaseWidget):
         fname = filename[0]
         if not fname:
             return
-        fname += '' if fname.endswith(self.EXT) else self.EXT
+        fname += '' if fname.endswith(self.EXT) else ('.' + self.EXT)
         respm = self._respmat_rb.getvalue()
         respm = respm.reshape(2*self._csorb.NR_BPMS, -1)
         _np.savetxt(fname, respm, header=header)
@@ -201,7 +201,7 @@ class RespMatWidget(BaseWidget):
         if not filename[0]:
             return
         respm = _np.loadtxt(filename[0])
-        self._respmat_sp.send_value_signal[_np.array].emit(respm.flatten())
+        self._respmat_sp.send_value_signal[_np.ndarray].emit(respm.flatten())
 
     def _open_load_config_servconf(self):
         win = LoadConfiguration(self._config_type, self)
