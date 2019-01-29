@@ -25,7 +25,6 @@ class BaseWidget(QWidget):
         self.line_names = names
         self.controls = ctrls
         self._csorb = OrbitCorrDevFactory.create(acc)
-        self._isring = self._csorb.acc_idx in self._csorb.Rings
         self.update_rate = 2.1  # Hz
         self.last_dir = self.DEFAULT_DIR
         self.prefix = prefix
@@ -69,7 +68,7 @@ class BaseWidget(QWidget):
 
     @property
     def isring(self):
-        return self._isring
+        return self._csorb.isring()
 
     def channels(self):
         chans = list(self.enbl_pvs.values())

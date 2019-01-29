@@ -20,7 +20,6 @@ class MainWindow(SiriusMainWindow):
         super().__init__()
         self.prefix = prefix + acc + '-Glob:AP-SOFB:'
         self._csorb = OrbitCorrDevFactory.create(acc)
-        self._isring = self._csorb.acc_idx in self._csorb.Rings
         self.setupui()
 
     @property
@@ -33,7 +32,7 @@ class MainWindow(SiriusMainWindow):
 
     @property
     def isring(self):
-        return self._isring
+        return self._csorb.isring()
 
     def setupui(self):
         self.setWindowModality(Qt.WindowModal)
