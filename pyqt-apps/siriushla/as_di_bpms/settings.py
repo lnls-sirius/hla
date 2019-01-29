@@ -1,5 +1,5 @@
-from qtpy.QtWidgets import QHBoxLayout, QVBoxLayout, QAction, QCheckBox, \
-    QGridLayout, QLabel, QPushButton, QFormLayout
+from qtpy.QtWidgets import QHBoxLayout, QVBoxLayout, QGridLayout, \
+    QLabel, QPushButton
 from qtpy.QtCore import Qt
 from siriushla.widgets import SiriusLedState
 from siriushla import util
@@ -16,9 +16,8 @@ class ParamsSettings(BaseWidget):
 
     def setupui(self):
         vbl = QVBoxLayout(self)
-        lab = QLabel(self.bpm + ' Settings')
+        lab = QLabel('<h2>' + self.bpm + ' Settings</h2>')
         lab.setAlignment(Qt.AlignCenter)
-        lab.setStyleSheet("font: 30pt \"Sans Serif\";\nfont-weight: bold;")
         vbl.addWidget(lab)
         vbl.addSpacing(10)
 
@@ -94,9 +93,8 @@ class AdvancedSettings(BaseWidget):
 
     def setupui(self):
         gdl = QGridLayout(self)
-        lab = QLabel(self.bpm + ' Advanced Settings')
+        lab = QLabel('<h2>' + self.bpm + ' Advanced Settings</h2>')
         lab.setAlignment(Qt.AlignCenter)
-        lab.setStyleSheet("font: 30pt \"Sans Serif\";\nfont-weight: bold;")
         gdl.addWidget(lab, 0, 0, 1, 2)
 
         grpbx = self._create_formlayout_groupbox('Monit', (
@@ -162,9 +160,8 @@ class HardwareSettings(BaseWidget):
 
     def setupui(self):
         hbl = QHBoxLayout(self)
-        lab = QLabel('Not Implemented Yet. Open CsStudio Interfaces')
+        lab = QLabel('<h2>Not Implemented Yet. Open CsStudio Interfaces</h2>')
         lab.setAlignment(Qt.AlignCenter)
-        lab.setStyleSheet("font: 30pt \"Sans Serif\";\nfont-weight: bold;")
         hbl.addWidget(lab)
 
 
@@ -175,11 +172,9 @@ if __name__ == '__main__':
 
     app = SiriusApplication()
     wind = SiriusDialog()
-    # wind.resize(1400, 1400)
     hbl = QHBoxLayout(wind)
     bpm_name = 'SI-07SP:DI-BPM-1'
     widm = ParamsSettings(bpm=bpm_name)
-    # widm = AdvancedSettings(bpm=bpm_name)
     hbl.addWidget(widm)
     wind.show()
     sys.exit(app.exec_())
