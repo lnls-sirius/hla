@@ -126,23 +126,24 @@ class TLAPControlWindow(SiriusMainWindow):
 
         # Create Scrn+Correctors Panel
         scrn_headerline = self._create_headerline(
-            [['', 1.29], ['Screen', 11], ['Type-Sel', 6],
-             ['Type-Sts', 5.81], ['Moving', 3.87]])
+            [['Screen', 11], ['Type-Sel', 6], ['Type-Sts', 5.81],
+             ['Moving', 3.87]])
         ch_headerline = self._create_headerline(
-            [['', 1.29], ['', 1.29], ['CH', 10], ['Kick-SP', 7.10],
-             ['Kick-Mon', 5.81]])
+            [['', 1.29], ['CH', 10], ['Kick-SP', 7.10], ['Kick-Mon', 5.81]])
         cv_headerline = self._create_headerline(
-            [['', 1.29], ['', 1.29], ['CV', 10], ['Kick-SP', 7.10],
-             ['Kick-Mon', 5.81], ['', 1.29]])
+            [['', 1.29], ['CV', 10], ['Kick-SP', 7.10], ['Kick-Mon', 5.81]])
         hlay_headerline = QHBoxLayout()
-        hlay_headerline.setAlignment(Qt.AlignCenter)
+        hlay_headerline.addWidget(self._create_headerline([['', 1.29]]))
         hlay_headerline.addWidget(scrn_headerline)
+        hlay_headerline.addWidget(self._create_headerline([['', 1.29]]))
         hlay_headerline.addWidget(ch_headerline)
+        hlay_headerline.addWidget(self._create_headerline([['', 1.29]]))
         hlay_headerline.addWidget(cv_headerline)
+        hlay_headerline.addWidget(self._create_headerline([['', 1.29]]))
         headerline = QWidget()
         headerline.setObjectName('headerline')
         headerline.setLayout(hlay_headerline)
-        headerline.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Maximum)
+        headerline.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
 
         correctors_vlayout = QVBoxLayout()
         correctors_vlayout.addWidget(headerline)
@@ -201,21 +202,27 @@ class TLAPControlWindow(SiriusMainWindow):
         # Set central widget StyleSheets
         self.centralwidget.setStyleSheet("""
             #widget_{0}{{
-                min-width:136em;\nmax-width: 136em;\n}}
+                min-width:136em;}}
             #widget_ICTs{{
-                min-width:42em;\nmax-width:42em;\n}}
+                min-width:42em;}}
             #tabWidget{{
-                min-width:42em;\nmax-width:42em;\n}}
+                min-width:42em;}}
             #widget_Scrn{{
-                min-width:42em;\nmax-width:42em;\n}}
+                min-width:42em;}}
             #widget_Ref{{
-                min-width:42em;\nmax-width:42em;
-                min-height:2.58em;\nmax-height:2.58em;\n}}
+                min-width:42em;
+                min-height:2.58em;}}
             #widget_lattice{{
                 min-width:88em;
-                min-height:16em;\nmax-height:16em;\n}}
+                min-height:16em;}}
             #groupBox_allcorrPanel{{
                 min-width:90em;\n}}""".format(self._tl.upper()))
+        self.centralwidget.layout().setRowStretch(0, 2)
+        self.centralwidget.layout().setRowStretch(1, 16)
+        self.centralwidget.layout().setRowStretch(2, 48)
+        self.centralwidget.layout().setRowStretch(3, 3)
+        self.centralwidget.layout().setColumnStretch(0, 42)
+        self.centralwidget.layout().setColumnStretch(1, 90)
 
     def _allCHsTurnOn(self):
         for ch_group, _, _, _ in self._corr_devicenames_list:
@@ -246,15 +253,16 @@ class TLAPControlWindow(SiriusMainWindow):
         """Create and return a headerline."""
         hl = QWidget()
         hl.setLayout(QHBoxLayout())
-        hl.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Fixed)
         hl.layout().setContentsMargins(0, 0, 0, 0)
 
         for text, width in labels:
-            label = QLabel(text, self, alignment=Qt.AlignHCenter)
+            label = QLabel(text, self)
             label.setStyleSheet("""
-                min-width:valueem;
-                max-width:valueem;
-                font-weight:bold;""".replace('value', str(width)))
+                min-width:valueem; max-width:valueem;
+                font-weight:bold;
+                qproperty-alignment: AlignCenter;
+                """.replace('value', str(width)))
+            label.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Fixed)
             hl.layout().addWidget(label)
         return hl
 
@@ -336,8 +344,6 @@ class TLAPControlWindow(SiriusMainWindow):
                 init_channel=self.prefix+corr+':setpwm')
             led.setObjectName(
                 'SiriusLed_Linac'+corr.split('-')[-1]+'_setpwm_Scrn'+str(scrn))
-            led.setStyleSheet("""min-width:1.29em;\nmin-height:1.29em;
-                                 max-width:1.29em;\nmax-height:1.29em;\n""")
             corr_details.layout().addWidget(led, 1, 1)
 
             label_corr = QLabel(corr, self, alignment=Qt.AlignCenter)
@@ -380,8 +386,6 @@ class TLAPControlWindow(SiriusMainWindow):
                 parent=self,
                 init_channel=self.prefix+corr+':PwrState-Sts')
             led.setObjectName('SiriusLed_'+name+'_PwrState_Scrn'+str(scrn))
-            led.setStyleSheet("""min-width:1.29em;\nmin-height:1.29em;
-                                 max-width:1.29em;\nmax-height:1.29em;\n""")
             corr_details.layout().addWidget(led, 1, 1)
 
             pushbutton = QPushButton(corr, self)

@@ -78,8 +78,8 @@ class ICTMonitoring(SiriusMainWindow):
 
         self.centralwidget.setStyleSheet("""
             #tabWidget{
-                min-width:40em; max-width:40em;
-                min-height:28em; max-height:28em;}
+                min-width:40em;
+                min-height:28em;}
             #label_window{
                 font-size:1.1em;
                 font-weight:bold;
@@ -149,10 +149,15 @@ class _ICTSettings(SiriusDialog):
                 min-height:1.29em;\nmax-height:1.29em;\n}""")
 
         lay = QVBoxLayout()
+        lay.addStretch()
         lay.addWidget(l_ictacq)
+        lay.addStretch()
         lay.addWidget(self.gbox_reliablemeas)
+        lay.addStretch()
         lay.addWidget(self.gbox_generalsettings)
+        lay.addStretch()
         lay.addLayout(hlay_cal)
+        lay.addStretch()
         lay.setSpacing(20)
         self.setLayout(lay)
 
@@ -272,25 +277,19 @@ class _ICTCalibration(QWidget):
         [self.graph_rawread, lay_graphsettings] = self._setupGraph()
 
         glay = QGridLayout()
-        glay.addWidget(label_cal, 0, 0, 1, 3)
-        glay.addItem(
-            QSpacerItem(20, 40, QSzPlcy.Preferred, QSzPlcy.Preferred), 1, 0)
+        glay.addWidget(label_cal, 0, 0, 1, 2)
         glay.addWidget(QLabel('<h4>Measurement Settings</h4>', self,
-                              alignment=Qt.AlignCenter), 2, 0)
-        glay.addLayout(lay_meassettings, 3, 0)
-        glay.addItem(
-            QSpacerItem(20, 40, QSzPlcy.Preferred, QSzPlcy.Preferred), 4, 0)
-        glay.addLayout(lay_graphsettings, 5, 0)
-        glay.addItem(
-            QSpacerItem(40, 20, QSzPlcy.Preferred, QSzPlcy.Preferred), 2, 1)
+                              alignment=Qt.AlignCenter), 1, 0)
+        glay.addLayout(lay_meassettings, 2, 0, alignment=Qt.AlignCenter)
+        glay.addLayout(lay_graphsettings, 3, 0)
         glay.addWidget(QLabel('<h4>RawReadings Monitor</h4>', self,
-                              alignment=Qt.AlignCenter), 2, 2)
-        glay.addWidget(self.graph_rawread, 3, 2, 3, 1)
+                              alignment=Qt.AlignCenter), 1, 1)
+        glay.addWidget(self.graph_rawread, 2, 1, 2, 1)
         self.setLayout(glay)
         self.setStyleSheet("""
             #ICTCalibration{
-                min-width:65em;\nmax-width:65em;
-                min-height:34em;\nmax-height:34em;\n}
+                min-width:65em;
+                min-height:34em;}
             PyDMSpinbox{
                 min-width:7.10em;\nmax-width:7.10em;
                 min-height:1.29em;\nmax-height:1.29em;
@@ -307,6 +306,10 @@ class _ICTCalibration(QWidget):
                 qproperty-alignment: AlignCenter;\n}
             QPushButton{
                 min-width:14.2em;\nmax-width:14.2em;\n}""")
+        glay.setRowStretch(0, 4)
+        glay.setRowStretch(1, 2)
+        glay.setRowStretch(2, 24)
+        glay.setRowStretch(3, 4)
 
     def _setupMeasSettingsLayout(self):
         l_thold = QLabel('Charge Threshold [nC]: ', self)
@@ -420,23 +423,22 @@ class _ICTCalibration(QWidget):
         flay = QFormLayout()
         flay.addRow(l_thold, hlay_thold)
         flay.addRow(l_hfreject, hlay_hfreject)
-        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Preferred, QSzPlcy.Preferred))
+        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
         flay.addRow(l_2ndreaddy, hlay_2ndreaddy)
-        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Preferred, QSzPlcy.Preferred))
+        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
         flay.addRow(l_samplecnt, hlay_samplecnt)
         flay.addRow(l_aperture, hlay_aperture)
         flay.addRow(l_samplerate, hlay_samplerate)
         flay.addRow(l_imped, hlay_imped)
-        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Preferred, QSzPlcy.Preferred))
+        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
         flay.addRow(l_bcmrange, self.pydmspinbox_BCMRange)
         flay.addRow(l_range, hlay_range)
-        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Preferred, QSzPlcy.Preferred))
+        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
         flay.addRow(l_calenbl, hlay_calenbl)
         flay.addRow(l_calcharge, hlay_calcharge)
-        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Preferred, QSzPlcy.Preferred))
+        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
         flay.addRow(l_download, self.pydmpushbutton_Download)
-        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Preferred, QSzPlcy.Preferred))
-        flay.setFormAlignment(Qt.AlignHCenter | Qt.AlignTop)
+        flay.addItem(QSpacerItem(1, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
         flay.setLabelAlignment(Qt.AlignRight)
         return flay
 
@@ -450,9 +452,7 @@ class _ICTCalibration(QWidget):
         graph_rawread.showXGrid = True
         graph_rawread.showYGrid = True
         graph_rawread.setStyleSheet("""
-            #graph_rawread{
-                min-width:36em;\nmin-height:28em;
-                max-width:36em;\nmax-height:28em;\n}""")
+            #graph_rawread{min-width:36em;\nmin-height:28em;}""")
         graph_rawread.setLabels(left='Raw Readings', bottom='Index')
         graph_rawread.addChannel(
             y_channel=self.ict_prefix+':RawPulse-Mon', name='RawPulse',

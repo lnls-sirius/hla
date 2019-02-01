@@ -462,10 +462,16 @@ class SiriusScrnView(QWidget):
             QSpacerItem(4, 20, QSzPlcy.Preferred, QSzPlcy.Preferred), 5, 4)
 
         self.layout().setColumnStretch(0, 1)
-        self.layout().setColumnStretch(1, 5)
+        self.layout().setColumnStretch(1, 10)
         self.layout().setColumnStretch(2, 1)
-        self.layout().setColumnStretch(3, 5)
+        self.layout().setColumnStretch(3, 10)
         self.layout().setColumnStretch(4, 1)
+        self.layout().setRowStretch(0, 34)
+        self.layout().setRowStretch(1, 1)
+        self.layout().setRowStretch(2, 13)
+        self.layout().setRowStretch(3, 1)
+        self.layout().setRowStretch(4, 13)
+        self.layout().setRowStretch(5, 1)
 
     def _cameraviewLayout(self):
         label = QLabel(self.device, self)
@@ -484,9 +490,7 @@ class SiriusScrnView(QWidget):
         self.image_view.readingOrder = self.image_view.Clike
         self.image_view.maxRedrawRate = 15
         self.image_view.setStyleSheet("""
-            #ScrnView{
-                min-width:42em;\nmax-width:42m;
-                min-height:32em;\nmax-height:32em;\n}""")
+            #ScrnView{min-width:42em; min-height:32em;}""")
         self.image_view.failToSaveGrid.connect(self._showFailToSaveGridMsg)
 
         lay = QGridLayout()
