@@ -6,7 +6,6 @@ from pydm.widgets import PyDMLabel, PyDMLineEdit, PyDMSpinbox, \
     PyDMPushButton, PyDMEnumComboBox as PyDMECB, PyDMCheckbox as PyDMCb
 from siriuspy.csdevice import timesys as _cstime
 from siriushla.widgets import PyDMLed, SiriusLedAlert, PyDMStateButton
-from siriushla import util as _util
 from siriushla.as_ti_control.base import BaseList, BaseWidget
 
 
@@ -335,7 +334,6 @@ if __name__ == '__main__':
     from siriushla.widgets.windows import SiriusMainWindow
     app = SiriusApplication()
     win = SiriusMainWindow()
-    _util.set_style(app)
     evg_ctrl = EVG(prefix='TEST-FAC:TI-EVG:')
     win.setCentralWidget(evg_ctrl)
     win.show()

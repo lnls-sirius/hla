@@ -5,7 +5,6 @@ from qtpy.QtWidgets import QGroupBox, QLabel, QVBoxLayout, \
 from pydm.widgets.label import PyDMLabel
 from siriushla.widgets.led import PyDMLed, SiriusLedAlert
 from siriushla.widgets.state_button import PyDMStateButton
-from siriushla import util as _util
 from siriushla.as_ti_control.base import BaseWidget
 
 
@@ -97,8 +96,10 @@ class FOUT(BaseWidget):
 if __name__ == '__main__':
     """Run Example."""
     from siriushla.sirius_application import SiriusApplication
+    from siriushla.widgets.windows import SiriusMainWindow
     app = SiriusApplication()
-    _util.set_style(app)
+    win = SiriusMainWindow()
     fout_ctrl = FOUT(prefix='TEST-FAC:TI-Fout:')
-    fout_ctrl.show()
+    win.setCentralWidget(fout_ctrl)
+    win.show()
     sys.exit(app.exec_())

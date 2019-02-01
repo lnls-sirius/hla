@@ -1,21 +1,17 @@
 """Control of EVG Timing Device."""
 
 import sys as _sys
-import os as _os
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QVBoxLayout, QHBoxLayout, QSpacerItem, \
-    QSizePolicy as QSzPol, QWidget, QGridLayout, QGroupBox, QLabel
-from pydm.widgets import PyDMLabel, PyDMLineEdit, PyDMSpinbox, \
-    PyDMPushButton, PyDMEnumComboBox as PyDMECB, PyDMCheckbox as PyDMCb
+from qtpy.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, \
+    QGridLayout, QGroupBox, QLabel
+from pydm.widgets import PyDMPushButton
 from siriuspy.csdevice import timesys as _cstime
 from siriuspy.search import LLTimeSearch, HLTimeSearch
-from siriushla import util as _util
-from siriushla.widgets import SiriusMainWindow, PyDMLed, SiriusLedAlert, \
-    PyDMStateButton
-from siriushla.as_ti_control.evg import EventList as _EventList
-from siriushla.as_ti_control.evg import EVG as _EVG
-from siriushla.as_ti_control.evr_eve import EVR as _EVR
-from siriushla.as_ti_control.evr_eve import EVE as _EVE
+from siriushla.util import connect_window
+from siriushla.widgets.windows import create_window_from_widget
+from siriushla.widgets import SiriusMainWindow, PyDMLed, PyDMStateButton
+from siriushla.as_ti_control.evg import EventList as _EventList, EVG as _EVG
+from siriushla.as_ti_control.evr_eve import EVR as _EVR, EVE as _EVE
 from siriushla.as_ti_control.afc import AFC as _AFC
 from siriushla.as_ti_control.fout import FOUT as _FOUT
 from siriushla.as_ti_control.hl_trigger import HLTriggerList as _HLTriggerList
@@ -101,28 +97,33 @@ class TimingMain(SiriusMainWindow):
         menu = main_menu.addMenu('&Devices')
         action = menu.addAction('EVG')
         evg = LLTimeSearch.get_device_names(filters={'dev': 'EVG'})[0]
-        _util.connect_window(action, _EVG, self, prefix=prefix + evg + ':')
+        Window = create_window_from_widget(_EVG, name='EVG')
+        connect_window(action, Window, self, prefix=prefix + evg + ':')
 
         menu_evr = menu.addMenu('EVRs')
         for evr in LLTimeSearch.get_device_names(filters={'dev': 'EVR'}):
             action = menu_evr.addAction(evr)
-            _util.connect_window(action, _EVR, self, prefix=prefix+evr+':')
+            Window = create_window_from_widget(_EVR, name='EVR')
+            connect_window(action, Window, self, prefix=prefix+evr+':')
 
         menu_eve = menu.addMenu('EVEs')
         for eve in LLTimeSearch.get_device_names(filters={'dev': 'EVE'}):
             action = menu_eve.addAction(eve)
-            _util.connect_window(action, _EVE, self, prefix=prefix + eve + ':')
+            Window = create_window_from_widget(_EVE, name='EVE')
+            connect_window(action, Window, self, prefix=prefix + eve + ':')
 
         menu_afc = menu.addMenu('AFCs')
         for afc in LLTimeSearch.get_device_names(
                                     filters={'dev': 'AMCFPGAEVR'}):
             action = menu_afc.addAction(afc)
-            _util.connect_window(action, _AFC, self, prefix=prefix+afc+':')
+            Window = create_window_from_widget(_AFC, name='AFC')
+            connect_window(action, Window, self, prefix=prefix+afc+':')
 
         menu_fout = menu.addMenu('FOUTs')
         for fout in LLTimeSearch.get_device_names(filters={'dev': 'FOUT'}):
             action = menu_fout.addAction(fout)
-            _util.connect_window(action, _FOUT, self, prefix=prefix+fout+':')
+            Window = create_window_from_widget(_FOUT, name='Fout')
+            connect_window(action, Window, self, prefix=prefix+fout+':')
 
     def _create_prop_widget(self, name, parent, wids, align_ver=True):
         pwid = QWidget(parent)

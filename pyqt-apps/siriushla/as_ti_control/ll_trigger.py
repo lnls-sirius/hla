@@ -1,12 +1,9 @@
 import sys
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QLabel
-from pydm.widgets.enum_combo_box import PyDMEnumComboBox as PyDMECB
-from pydm.widgets.label import PyDMLabel
-from pydm.widgets.spinbox import PyDMSpinbox
+from pydm.widgets import PyDMEnumComboBox as PyDMECB, PyDMLabel, PyDMSpinbox
 from siriuspy.search import LLTimeSearch
-from siriushla.widgets.led import PyDMLed
-from siriushla.widgets.state_button import PyDMStateButton
+from siriushla.widgets import PyDMLed, PyDMStateButton
 from siriushla.as_ti_control.base import BaseList
 
 
@@ -175,10 +172,14 @@ class AFCOUTList(LLTriggerList):
 if __name__ == '__main__':
     """Run Example."""
     from siriushla.sirius_application import SiriusApplication
-    app = SiriusApplication()
+    from siriushla.widgets.windows import SiriusMainWindow
+
     props = {'device', 'name', 'state', 'pulses', 'width'}
+    app = SiriusApplication()
+    win = SiriusMainWindow()
     list_ctrl = LLTriggerList(
         name="Triggers", props=props,
         obj_names=['TEST-FAC:TI-EVR:OTP00', 'TEST-FAC:TI-EVE:OTP00'])
-    list_ctrl.show()
+    win.setCentralWidget(list_ctrl)
+    win.show()
     sys.exit(app.exec_())

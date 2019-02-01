@@ -1,16 +1,12 @@
 import sys
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QGroupBox, QLabel, QWidget, QScrollArea, \
-    QVBoxLayout, QHBoxLayout, QGridLayout, QSpacerItem, QSizePolicy as QSzPol
+from qtpy.QtWidgets import QGroupBox, QLabel, QScrollArea, QVBoxLayout, \
+    QHBoxLayout, QGridLayout, QSpacerItem, QSizePolicy as QSzPol
 from pydm.widgets.label import PyDMLabel
 from pydm.widgets.enum_combo_box import PyDMEnumComboBox as PyDMECB
-from pydm.widgets.checkbox import PyDMCheckbox as PyDMCb
-from pydm.widgets.spinbox import PyDMSpinbox
 from siriushla.widgets.led import PyDMLed, SiriusLedAlert
 from siriushla.widgets.state_button import PyDMStateButton
-from siriuspy.namesys import SiriusPVName as _PVName
-from siriushla import util as _util
-from siriushla.as_ti_control.base import BaseList, BaseWidget
+from siriushla.as_ti_control.base import BaseWidget
 from siriushla.as_ti_control.ll_trigger import OTPList, OUTList
 
 
@@ -148,10 +144,12 @@ class EVE(_EVR_EVE):
 if __name__ == '__main__':
     """Run Example."""
     from siriushla.sirius_application import SiriusApplication
+    from siriushla.widgets.windows import SiriusMainWindow
     app = SiriusApplication()
-    _util.set_style(app)
+    win = SiriusMainWindow()
     evr_ctrl = EVR(prefix='TEST-FAC:TI-EVR:')
-    evr_ctrl.show()
     # eve_ctrl = EVE(prefix='TEST-FAC:TI-EVE:')
-    # eve_ctrl.show()
+    win.setCentralWidget(evr_ctrl)
+    # win.setCentralWidget(eve_ctrl)
+    win.show()
     sys.exit(app.exec_())

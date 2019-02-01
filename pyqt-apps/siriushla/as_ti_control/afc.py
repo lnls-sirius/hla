@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QGroupBox, QLabel, QWidget, QScrollArea
+from PyQt5.QtWidgets import QGroupBox, QLabel, QScrollArea
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QGridLayout
 from PyQt5.QtWidgets import QSizePolicy as QSzPol
 from pydm.widgets.label import PyDMLabel
@@ -8,31 +8,28 @@ from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.search import LLTimeSearch as _LLTimeSearch
 from siriushla.widgets.led import PyDMLed, SiriusLedAlert
 from siriushla.widgets.state_button import PyDMStateButton
-from siriushla.widgets.windows import SiriusMainWindow
-from siriushla import util as _util
 from siriushla.as_ti_control.ll_trigger import AFCOUTList
+from siriushla.as_ti_control.base import BaseWidget
 
 
-class AFC(SiriusMainWindow):
+class AFC(BaseWidget):
     """Template for control of High Level Triggers."""
 
     def __init__(self, parent=None, prefix=''):
         """Initialize object."""
-        super().__init__(parent)
+        super().__init__(parent, prefix=prefix)
         self.prefix = _PVName(prefix)
         self._setupUi()
 
     def _setupUi(self):
-        cw = QWidget(self)
-        self.setCentralWidget(cw)
-        self.my_layout = QGridLayout(cw)
+        self.my_layout = QGridLayout(self)
         self.my_layout.setHorizontalSpacing(70)
         self.my_layout.setVerticalSpacing(40)
-        lab = QLabel('<h1>' + self.prefix.device_name + '</h1>', cw)
+        lab = QLabel('<h1>' + self.prefix.device_name + '</h1>', self)
         self.my_layout.addWidget(lab, 0, 0, 1, 2)
         self.my_layout.setAlignment(lab, Qt.AlignCenter)
 
-        scr_ar = QScrollArea(cw)
+        scr_ar = QScrollArea(self)
         set_ = _LLTimeSearch.In2OutMap['AMCFPGAEVR']['SFP8']
         obj_names = sorted([out for out in set_ if out.startswith('FMC')])
         self.fmcs_wid = AFCOUTList(
@@ -131,8 +128,10 @@ class AFC(SiriusMainWindow):
 if __name__ == '__main__':
     """Run Example."""
     from siriushla.sirius_application import SiriusApplication
+    from siriushla.widgets.windows import SiriusMainWindow
     app = SiriusApplication()
-    _util.set_style(app)
+    win = SiriusMainWindow()
     afc_ctrl = AFC(prefix='TEST-FAC:TI-AMCFPGAEVR:')
-    afc_ctrl.show()
+    win.setCentralWidget(afc_ctrl)
+    win.show()
     sys.exit(app.exec_())

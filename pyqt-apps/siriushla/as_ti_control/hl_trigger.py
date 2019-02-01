@@ -2,14 +2,11 @@ import sys
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGroupBox, QLabel, QPushButton, QFormLayout, \
     QVBoxLayout, QGridLayout, QSizePolicy as QSzPol, QWidget
-from pydm.widgets.enum_combo_box import PyDMEnumComboBox as PyDMECB
-from pydm.widgets.label import PyDMLabel
-from pydm.widgets.spinbox import PyDMSpinbox
+from pydm.widgets import PyDMEnumComboBox as PyDMECB, PyDMLabel, PyDMSpinbox
 from siriuspy.search import HLTimeSearch
 from siriuspy.csdevice import timesys
-from siriushla.widgets.led import PyDMLed, SiriusLedAlert
-from siriushla.widgets.state_button import PyDMStateButton
-from siriushla import util as _util
+from siriushla.widgets import PyDMLed, SiriusLedAlert, PyDMStateButton
+from siriushla.util import connect_window
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.as_ti_control.base import BaseList, BaseWidget
 from siriushla.as_ti_control.ll_trigger import LLTriggerList
@@ -56,9 +53,9 @@ class HLTriggerDetailed(BaseWidget):
         but = QPushButton('Open LL Triggers', self)
         obj_names = HLTimeSearch.get_ll_trigger_names(self.prefix.device_name)
         Window = create_window_from_widget(LLTriggers, name='LLTriggers')
-        _util.connect_window(
+        connect_window(
             but, Window, self, name='Low Level Triggers',
-            prefix=self.prefix.prefix, obj_names=obj_names)
+            prefix=self.prefix.prefix + '-', obj_names=obj_names)
         ll_list_layout.addWidget(but, 0, 0, 1, 2)
 
         init_channel = prefix.substitute(propty="State-Sel")
@@ -186,8 +183,7 @@ class HLTriggerList(BaseList):
             sp = QPushButton(prefix.device_name, self)
             Window = create_window_from_widget(
                 HLTriggerDetailed, name='HLTriggerDetailed')
-            _util.connect_window(
-                sp, Window, self, prefix=prefix)
+            connect_window(sp, Window, self, prefix=prefix)
         elif prop == 'status':
             init_channel = prefix.substitute(propty="Status-Mon")
             sp = SiriusLedAlert(self, init_channel=init_channel)
@@ -249,11 +245,14 @@ class HLTriggerList(BaseList):
 if __name__ == '__main__':
     """Run Example."""
     from siriushla.sirius_application import SiriusApplication
-    app = SiriusApplication()
-    _util.set_style(app)
+    from siriushla.widgets.windows import SiriusMainWindow
+
     props = {'detailed', 'state', 'pulses', 'duration'}
+    app = SiriusApplication()
+    win = SiriusMainWindow()
     list_ctrl = HLTriggerList(
         name="Triggers", props=props,
         obj_names=['BO-Fam:TI-Corrs-1', 'BO-Fam:TI-Corrs-2'])
-    list_ctrl.show()
+    win.setCentralWidget(list_ctrl)
+    win.show()
     sys.exit(app.exec_())
