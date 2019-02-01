@@ -129,6 +129,7 @@ class MainWindow(SiriusMainWindow):
 
     def _create_menus(self):
         menubar = QMenuBar(self)
+        menubar.setNativeMenuBar(False)
 
         menuopen = QMenu('Open', menubar)
         actions = (
