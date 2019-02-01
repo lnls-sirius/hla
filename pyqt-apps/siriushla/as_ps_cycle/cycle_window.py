@@ -32,9 +32,7 @@ class CycleWindow(SiriusMainWindow):
         self.central_widget.setStyleSheet("""
             #CentralWidget {
                 min-width: 30em;
-                max-width: 30em;
                 min-height: 40em;
-                max-height: 40em;
             }
         """)
         self.setWindowTitle('Magnet Cycling')

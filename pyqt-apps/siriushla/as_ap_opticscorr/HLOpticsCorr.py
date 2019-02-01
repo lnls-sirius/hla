@@ -158,11 +158,8 @@ class _CorrParamsDetailWindow(SiriusMainWindow):
                               alignment=Qt.AlignCenter)
         self.table_matrix = PyDMWaveformTable(
             parent=self, init_channel=ioc_prefix+'RespMat-Mon')
+        self.table_matrix.setObjectName('matrix')
         self.table_matrix.setEnabled(False)
-        self.table_matrix.horizontalHeader().setSectionResizeMode(
-            QHeaderView.Stretch)
-        self.table_matrix.verticalHeader().setSectionResizeMode(
-            QHeaderView.Stretch)
         self.table_matrix.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.table_matrix.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.table_matrix.verticalHeader().setStyleSheet(
@@ -170,8 +167,8 @@ class _CorrParamsDetailWindow(SiriusMainWindow):
         self.table_matrix.horizontalHeader().setStyleSheet(
             """min-height:1.5em; max-height:1.5em;""")
         self.table_matrix.setStyleSheet("""
-            QTableWidget{
-                min-width:valueem;\nmax-width:valueem;
+            #matrix{
+                min-width:valueem;
                 min-height:5.84em;\nmax-height:5.84em;
             }""".replace('value', str(1.5+8*self._nfam)))
         self.table_matrix.setEditTriggers(QAbstractItemView.NoEditTriggers)
@@ -179,11 +176,16 @@ class _CorrParamsDetailWindow(SiriusMainWindow):
         self.table_matrix.setColumnCount(self._nfam)
         self.table_matrix.rowHeaderLabels = ['  X', '  Y']
         self.table_matrix.columnHeaderLabels = self._fams
+        self.table_matrix.horizontalHeader().setSectionResizeMode(
+            QHeaderView.Stretch)
+        self.table_matrix.verticalHeader().setSectionResizeMode(
+            QHeaderView.Stretch)
+        self.table_matrix.setSizePolicy(QSzPlcy.MinimumExpanding,
+                                        QSzPlcy.Preferred)
 
         lay.addWidget(label_matrix, 13, 1, 1, self._nfam)
         lay.addWidget(self.table_matrix, 14, 1, 1, self._nfam)
-        lay.addItem(
-            QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Fixed), 15, 1)
+        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Fixed), 15, 1)
 
         label_nomintstrength = QLabel(
             '<h4>Nominal '+self._intstrength+'s</h4>', self,
@@ -191,6 +193,7 @@ class _CorrParamsDetailWindow(SiriusMainWindow):
         self.table_nomintstrength = PyDMWaveformTable(
             parent=self,
             init_channel=ioc_prefix+'Nominal'+self._intstrength+'-Mon')
+        self.table_nomintstrength.setObjectName('nom_strength')
         self.table_nomintstrength.setEnabled(False)
         self.table_nomintstrength.horizontalHeader().setSectionResizeMode(
             QHeaderView.Stretch)
@@ -205,8 +208,8 @@ class _CorrParamsDetailWindow(SiriusMainWindow):
         self.table_nomintstrength.horizontalHeader().setStyleSheet(
             """min-height:1.5em; max-height:1.5em;""")
         self.table_nomintstrength.setStyleSheet("""
-            QTableWidget{
-                min-width:valueem;\nmax-width:valueem;
+            #nom_strength{
+                min-width:valueem;
                 min-height:3.67em;\nmax-height:3.67em;
             }""".replace('value', str(1.5+8*self._nfam)))
         self.table_nomintstrength.setEditTriggers(
@@ -215,11 +218,12 @@ class _CorrParamsDetailWindow(SiriusMainWindow):
         self.table_nomintstrength.setColumnCount(self._nfam)
         self.table_nomintstrength.rowHeaderLabels = [self._intstrength]
         self.table_nomintstrength.columnHeaderLabels = self._fams
+        self.table_nomintstrength.setSizePolicy(QSzPlcy.MinimumExpanding,
+                                                QSzPlcy.Preferred)
 
         lay.addWidget(label_nomintstrength, 16, 1, 1, self._nfam)
         lay.addWidget(self.table_nomintstrength, 17, 1, 1, self._nfam)
-        lay.addItem(
-            QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Fixed), 18, 1)
+        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Fixed), 18, 1)
 
         if self._opticsparam == 'Chrom':
             label_nomchrom = QLabel('<h4>Nominal Chrom</h4>', self,

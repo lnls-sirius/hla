@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1573</width>
+    <width>1576</width>
     <height>727</height>
    </rect>
   </property>
@@ -61,12 +61,16 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
      <property name="styleSheet">
       <string notr="true">#frame_graphs{
 min-width:90em;
-max-width:90em;
 min-height:48em;
-max-height:48em;
 }</string>
      </property>
      <property name="frameShape">
