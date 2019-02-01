@@ -94,6 +94,7 @@ class TimingMain(SiriusMainWindow):
     def setupmenus(self):
         prefix = self.prefix
         main_menu = self.menuBar()
+        main_menu.setNativeMenuBar(False)
         menu = main_menu.addMenu('&Devices')
         action = menu.addAction('EVG')
         evg = LLTimeSearch.get_device_names(filters={'dev': 'EVG'})[0]
