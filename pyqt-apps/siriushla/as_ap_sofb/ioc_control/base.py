@@ -15,7 +15,6 @@ class BaseWidget(QWidget):
         super().__init__(parent)
         self.prefix = prefix
         self._csorb = OrbitCorrDevFactory.create(acc)
-        self._isring = self._csorb.acc_idx in self._csorb.Rings
 
     @property
     def acc(self):
@@ -27,7 +26,7 @@ class BaseWidget(QWidget):
 
     @property
     def isring(self):
-        return self._isring
+        return self._csorb.isring()
 
     def create_pair(self, parent, pvname):
         wid = QWidget(parent)
@@ -67,7 +66,6 @@ class BaseCombo(QComboBox, PyDMPrimitiveWidget):
         self.readback = readback
         self.ctrls = ctrls
         self._csorb = OrbitCorrDevFactory.create(acc)
-        self._isring = self._csorb.acc_idx in self._csorb.Rings
         self.orbits = {
             'x': _np.zeros(self._csorb.NR_BPMS, dtype=float),
             'y': _np.zeros(self._csorb.NR_BPMS, dtype=float)}
@@ -88,7 +86,7 @@ class BaseCombo(QComboBox, PyDMPrimitiveWidget):
 
     @property
     def isring(self):
-        return self._isring
+        return self._csorb.isring()
 
     def channels(self):
         chans = list(self.readback.values())
