@@ -1,11 +1,8 @@
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QCheckBox, \
+from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, \
     QFormLayout, QGroupBox, QLabel, QGridLayout, QSizePolicy as QSzPol
-from qtpy.QtGui import QFont, QColor
-from pydm.widgets import PyDMWaveformPlot, PyDMTimePlot, PyDMEnumComboBox, \
-    PyDMSpinbox
+from pydm.widgets import PyDMEnumComboBox, PyDMSpinbox
 from pydm.widgets.base import PyDMPrimitiveWidget
-from siriuspy.csdevice.bpms import get_bpm_database
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriushla.widgets.label import SiriusLabel
 
@@ -14,7 +11,10 @@ class BaseWidget(QWidget):
 
     def __init__(self, parent=None, prefix=''):
         super().__init__(parent)
-        self.prefix = _PVName(prefix)
+        try:
+            self.prefix = _PVName(prefix)
+        except Exception:
+            self.prefix = prefix
 
     def channels(self):
         return self._chans
@@ -74,7 +74,10 @@ class BaseList(CustomGroupBox):
                  props=set(), obj_names=list()):
         """Initialize object."""
         super().__init__(name, parent)
-        self.prefix = _PVName(prefix)
+        try:
+            self.prefix = _PVName(prefix)
+        except Exception:
+            self.prefix = prefix
         self.props = props or set(self._ALL_PROPS)
         self.obj_names = obj_names
         self.setupUi()

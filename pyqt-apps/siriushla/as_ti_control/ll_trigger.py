@@ -1,6 +1,6 @@
 import sys
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QLabel, QPushButton
+from qtpy.QtWidgets import QLabel
 from pydm.widgets.enum_combo_box import PyDMEnumComboBox as PyDMECB
 from pydm.widgets.label import PyDMLabel
 from pydm.widgets.spinbox import PyDMSpinbox

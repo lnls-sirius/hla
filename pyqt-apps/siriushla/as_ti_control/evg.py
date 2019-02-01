@@ -1,17 +1,11 @@
 import sys
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QGroupBox, QLabel, QWidget, QScrollArea
-from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QGridLayout
-from PyQt5.QtWidgets import QSizePolicy as QSzPol
-from pydm.widgets.label import PyDMLabel
-from pydm.widgets.line_edit import PyDMLineEdit
-from pydm.widgets.spinbox import PyDMSpinbox
-from pydm.widgets.pushbutton import PyDMPushButton
-from pydm.widgets.enum_combo_box import PyDMEnumComboBox as PyDMECB
-from pydm.widgets.checkbox import PyDMCheckbox as PyDMCb
+from qtpy.QtCore import Qt
+from qtpy.QtWidgets import QGroupBox, QLabel, QWidget, QScrollArea, \
+    QVBoxLayout, QHBoxLayout, QGridLayout, QSizePolicy as QSzPol
+from pydm.widgets import PyDMLabel, PyDMLineEdit, PyDMSpinbox, \
+    PyDMPushButton, PyDMEnumComboBox as PyDMECB, PyDMCheckbox as PyDMCb
 from siriuspy.csdevice import timesys as _cstime
-from siriushla.widgets.led import PyDMLed, SiriusLedAlert
-from siriushla.widgets.state_button import PyDMStateButton
+from siriushla.widgets import PyDMLed, SiriusLedAlert, PyDMStateButton
 from siriushla import util as _util
 from siriushla.as_ti_control.base import BaseList, BaseWidget
 

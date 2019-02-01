@@ -1,9 +1,7 @@
 import sys
-from epics import PV as _PV
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGroupBox, QLabel, QPushButton, QFormLayout, \
     QVBoxLayout, QGridLayout, QSizePolicy as QSzPol, QWidget
-from pydm.widgets.checkbox import PyDMCheckbox as PyDMCb
 from pydm.widgets.enum_combo_box import PyDMEnumComboBox as PyDMECB
 from pydm.widgets.label import PyDMLabel
 from pydm.widgets.spinbox import PyDMSpinbox

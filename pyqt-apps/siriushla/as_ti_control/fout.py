@@ -1,12 +1,10 @@
 import sys
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QGroupBox, QLabel, QWidget, QVBoxLayout, \
+from qtpy.QtWidgets import QGroupBox, QLabel, QVBoxLayout, \
     QHBoxLayout, QGridLayout, QSizePolicy as QSzPol
 from pydm.widgets.label import PyDMLabel
-from siriuspy.namesys import SiriusPVName as _PVName
 from siriushla.widgets.led import PyDMLed, SiriusLedAlert
 from siriushla.widgets.state_button import PyDMStateButton
-from siriushla.widgets.windows import SiriusMainWindow
 from siriushla import util as _util
 from siriushla.as_ti_control.base import BaseWidget
 
