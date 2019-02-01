@@ -5,7 +5,6 @@ import numpy as np
 from qtpy.QtWidgets import QWidget, QLabel, QVBoxLayout, QPushButton, \
     QHBoxLayout, QGroupBox, QComboBox
 from qtpy.QtCore import Qt, Signal
-from qtpy.QtGui import QColor
 import siriushla.util as _util
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets import SiriusSpectrogramView, SiriusConnectionSignal
@@ -204,7 +203,7 @@ class MultiTurnSumWidget(QWidget):
             y_channel='A',
             x_channel=self.prefix+'OrbitMultiTurnTime-Mon',
             name='',
-            color=QColor(255, 255, 255),
+            color='black',
             redraw_mode=2,
             lineStyle=1,
             lineWidth=3,
@@ -271,7 +270,7 @@ class SinglePassSumWidget(QWidget):
             y_channel=self.prefix+'OrbitSmoothSinglePassSum-Mon',
             x_channel=self.prefix+'BPMPosS-Cte',
             name='',
-            color=QColor(255, 255, 255),
+            color='black',
             redraw_mode=2,
             lineStyle=1,
             lineWidth=3,
