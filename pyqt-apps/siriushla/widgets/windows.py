@@ -42,7 +42,7 @@ def _create_siriuswindow(qt_type):
                 self.ensurePolished()
                 self.setStyleSheet(
                     self.Stylesheet + self.FontSizeSS.format(fontsize))
-                self.setFixedSize(self.sizeHint())
+                self.adjustSize()
 
                 # handle resizing of pyqtgraph plots labels
                 fontsize_str = str(fontsize)+'pt'
@@ -95,8 +95,8 @@ def create_window_from_widget(
                     wid.setObjectName('celtralwidget')
                     wid.setStyleSheet("""
                         #celtralwidget{{
-                            min-width:{0}em; max-width:{0}em;
-                            min-height:{1}em; max-height:{1}em;
+                            min-width:{0}em;
+                            min-height:{1}em;
                         }}""".format(size[0], size[1]))
     else:
         class MyWindow(SiriusDialog):
@@ -110,8 +110,8 @@ def create_window_from_widget(
                     wid.setObjectName('celtralwidget')
                     wid.setStyleSheet("""
                         #celtralwidget{{
-                            min-width:{0}em; max-width:{0}em;
-                            min-height:{1}em; max-height:{1}em;
+                            min-width:{0}em;
+                            min-height:{1}em;
                         }}""".format(size[0], size[1]))
 
     if name:
