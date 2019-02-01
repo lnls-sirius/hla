@@ -36,7 +36,8 @@ class RampMain(SiriusMainWindow):
         cw = QWidget(self)
         cw.setObjectName('CentralWidget')
         glay = QGridLayout(cw)
-        glay.setContentsMargins(0, 0, 0, 0)
+        glay.setHorizontalSpacing(10)
+        glay.setVerticalSpacing(10)
         lab = QLabel('<h3>Booster Energy Ramping</h3>', cw)
         lab.setStyleSheet("""
             min-height:1.55em; max-height: 1.55em;
@@ -59,6 +60,8 @@ class RampMain(SiriusMainWindow):
         vlay1 = QVBoxLayout()
         vlay1.addWidget(self.config_parameters)
         vlay1.addWidget(self.optics_adjust)
+        vlay1.setStretch(0, 35)
+        vlay1.setStretch(1, 10)
         glay.addLayout(vlay1, 1, 0)
 
         self.status_and_commands = StatusAndCommands(
@@ -71,24 +74,28 @@ class RampMain(SiriusMainWindow):
         vlay2 = QVBoxLayout()
         vlay2.addWidget(self.status_and_commands)
         vlay2.addWidget(self.diagnosis)
+        vlay2.setStretch(0, 10)
+        vlay2.setStretch(1, 23)
         glay.addLayout(vlay2, 1, 1)
 
         cw.setStyleSheet("""
             #CentralWidget{
-                min-width: 134em; max-width: 134em;
-                min-height: 78em; max-height: 78em;}
+                min-width: 134em;
+                min-height: 78em;}
             #ConfigParameters{
-                min-width: 108em; max-width: 108em;
-                min-height: 56em; max-height: 56em;}
+                min-width: 108em;
+                min-height: 56em;}
             #OpticsAdjust{
-                min-width: 108em; max-width: 108em;
-                min-height: 16em; max-height: 16em;}
+                min-width: 108em;
+                min-height: 16em;}
             #StatusAndCommands{
-                min-width: 24em; max-width: 24m;
-                min-height: 22em; max-height: 22em;}
+                min-width: 24em;
+                min-height: 22em;}
             #Diagnosis{
-                min-width: 24em; max-width: 24em;
-                min-height: 50em; max-height: 50em;}""")
+                min-width: 24em;
+                min-height: 50em;}""")
+        glay.setColumnStretch(0, 45)
+        glay.setColumnStretch(1, 10)
         self.setCentralWidget(cw)
 
     def _connSignals(self):

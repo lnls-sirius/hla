@@ -41,8 +41,8 @@ class Diagnosis(QGroupBox):
         self.graph_boocurr.setLabels(left='Current', bottom='Ramp Index')
         self.graph_boocurr.setStyleSheet("""
             PyDMWaveformPlot{
-                min-width:22em; max-width:22em;
-                min-height:20em; max-height:20em;}""")
+                min-width:22em;
+                min-height:20em;}""")
         self.graph_boocurr.addChannel(
             y_channel=self.prefix+'BO-35D:DI-DCCT:RawReadings-Mon',
             color='blue', lineWidth=2, lineStyle=Qt.SolidLine)
@@ -67,8 +67,8 @@ class Diagnosis(QGroupBox):
             left='Ramp Efficiency', bottom='Number of cycles')
         self.graph_rampeff.setStyleSheet("""
             PyDMWaveformPlot{
-                min-width:22em; max-width:22em;
-                min-height:20em; max-height:20em;}""")
+                min-width:22em;
+                min-height:20em;}""")
         self.graph_rampeff.addChannel(
             y_channel='FAKE:RampEff-Mon', name='Efficiency',
             color='blue', lineWidth=2, lineStyle=Qt.SolidLine)
@@ -91,9 +91,8 @@ class Diagnosis(QGroupBox):
             min-width:9.68em; max-width:9.68em;""")
 
         glay = QGridLayout()
-        glay.setAlignment(Qt.AlignHCenter)
         glay.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Expanding, QSzPlcy.Expanding), 0, 0)
+            QSpacerItem(20, 20, QSzPlcy.Preferred, QSzPlcy.Preferred), 0, 0)
         glay.addWidget(l_boocurr, 1, 1, 1, 2)
         glay.addWidget(l_injcurr, 2, 1)
         glay.addWidget(self.label_injcurr, 2, 2)
@@ -101,14 +100,14 @@ class Diagnosis(QGroupBox):
         glay.addWidget(self.label_ejecurr, 3, 2)
         glay.addWidget(self.graph_boocurr, 4, 1, 1, 2)
         glay.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Expanding, QSzPlcy.Expanding), 5, 0)
+            QSpacerItem(20, 20, QSzPlcy.Preferred, QSzPlcy.Preferred), 5, 0)
         glay.addWidget(l_rampeff, 6, 1)
         glay.addWidget(self.label_rampeff, 6, 2)
         glay.addWidget(self.graph_rampeff, 7, 1, 1, 2)
         glay.addWidget(self.pb_addStack, 8, 1)
         glay.addWidget(self.pb_clearGraph, 8, 2)
         glay.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Expanding, QSzPlcy.Expanding), 9, 3)
+            QSpacerItem(20, 20, QSzPlcy.Preferred, QSzPlcy.Preferred), 9, 3)
         self.setLayout(glay)
 
     def _updateRampEffGraph(self):

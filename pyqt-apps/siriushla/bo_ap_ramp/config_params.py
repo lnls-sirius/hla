@@ -139,19 +139,20 @@ class DipoleRamp(QWidget):
             min-height:1.55em; max-height:1.55em;
             min-width:30em; max-width:30em;""")
         glay.addWidget(label, 0, 0, 1, 2)
-        glay.addWidget(self.graphview, 1, 0, 1, 2, alignment=Qt.AlignCenter)
+        glay.addWidget(self.graphview, 1, 0, 1, 2)
         glay.addLayout(self.set_psdelay_and_nrpoints, 2, 0,
                        alignment=Qt.AlignLeft)
         glay.addLayout(lay_v, 2, 1, alignment=Qt.AlignRight)
-        glay.addWidget(self.table, 3, 0, 1, 2, alignment=Qt.AlignCenter)
+        glay.addWidget(self.table, 3, 0, 1, 2)
         glay.addLayout(lay_anom, 4, 0, 1, 2, alignment=Qt.AlignCenter)
         glay.addLayout(lay_exclim, 5, 0, 1, 2, alignment=Qt.AlignCenter)
 
     def _setupGraph(self):
         self.graph = SiriusFigureCanvas(Figure())
+        self.graph.setObjectName('DipoleGraph')
         self.graph.setStyleSheet("""
-            min-width:30em;max-width:30em;
-            min-height:18em;max-height:18em;""")
+            #DipoleGraph{min-width:30em;min-height:18em;max-height:18em;}""")
+        self.graph.setSizePolicy(QSzPlcy.Expanding, QSzPlcy.Preferred)
         self.graph.figure.set_tight_layout({'pad': .0})
         self.ax = self.graph.figure.subplots()
         self.ax.grid()
@@ -211,8 +212,8 @@ class DipoleRamp(QWidget):
         self.table.setObjectName('DipoleTable')
         self.table.setStyleSheet("""
             #DipoleTable{
-                min-width: 30em; max-width: 30em;
-                min-height: 18em;  max-height: 18em;
+                min-width: 30em;
+                min-height: 18em;
             }
             QHeaderView::section {
                 background-color: #1F64FF;
@@ -237,6 +238,7 @@ class DipoleRamp(QWidget):
         self.table.verticalHeader().hide()
         self.table.setHorizontalHeaderLabels(
             self.table_map['columns'].values())
+        self.table.setSizePolicy(QSzPlcy.MinimumExpanding, QSzPlcy.Preferred)
 
         for row, vlabel in self.table_map['rows'].items():
             label_item = QTableWidgetItem(vlabel)
@@ -600,17 +602,21 @@ class MultipolesRamp(QWidget):
         label.setStyleSheet("""
             min-height: 1.55em; max-height: 1.55em;""")
         glay.addWidget(label, 0, 0, 1, 2, alignment=Qt.AlignCenter)
-        glay.addWidget(self.graphview, 1, 0, 1, 2, alignment=Qt.AlignCenter)
-        glay.addWidget(self.table, 2, 0, 1, 2, alignment=Qt.AlignCenter)
+        glay.addWidget(self.graphview, 1, 0, 1, 2)
+        glay.addWidget(self.table, 2, 0, 1, 2)
         glay.addWidget(self.bt_insert, 3, 0)
         glay.addWidget(self.bt_delete, 3, 1)
         glay.addLayout(lay_exclim, 4, 0, 1, 2)
 
     def _setupGraph(self):
         self.graph = SiriusFigureCanvas(Figure())
+        self.graph.setObjectName('MultipolesGraph')
         self.graph.setStyleSheet("""
-            min-width: 30em; max-width: 30em;
-            min-height: 18em; max-height: 18em;""")
+            #MultipolesGraph{
+                min-width:30em;
+                min-height:18em;max-height:18em;
+            }""")
+        self.graph.setSizePolicy(QSzPlcy.MinimumExpanding, QSzPlcy.Preferred)
         self.graph.figure.set_tight_layout({'pad': .0})
         self.ax = self.graph.figure.subplots()
         self.ax.grid()
@@ -661,8 +667,8 @@ class MultipolesRamp(QWidget):
         self.table.setObjectName('MultipoleTable')
         self.table.setStyleSheet("""
             #MultipoleTable{
-                min-width: 30em; max-width: 30em;
-                min-height: 22.5em; max-height: 40em;
+                min-width: 30em;
+                min-height: 22.5em;
             }
             QHeaderView::section {
                 background-color: #FF7C52;
@@ -674,7 +680,8 @@ class MultipolesRamp(QWidget):
             QTableWidget QTableCornerButton::section {
                 background-color: #FF7C52;
             }""")
-        self.table.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.MinimumExpanding)
+        self.table.setSizePolicy(QSzPlcy.MinimumExpanding,
+                                 QSzPlcy.MinimumExpanding)
         self.table.verticalHeader().setStyleSheet("""
             min-width:1.55em; max-width:1.55em;""")
         self.table.horizontalHeader().setStyleSheet("""
@@ -1036,16 +1043,17 @@ class RFRamp(QWidget):
             min-height:1.55em; max-height: 1.55em;
             qproperty-alignment: AlignCenter;""")
         glay.addWidget(label, 0, 0, 1, 3, alignment=Qt.AlignCenter)
-        glay.addWidget(self.graphview, 1, 0, 1, 3, alignment=Qt.AlignCenter)
+        glay.addWidget(self.graphview, 1, 0, 1, 3)
         glay.addLayout(self.set_rfdelay_and_rmpincintvl, 2, 0)
         glay.addLayout(vlay_v, 2, 2)
-        glay.addWidget(self.table, 3, 0, 1, 3, alignment=Qt.AlignCenter)
+        glay.addWidget(self.table, 3, 0, 1, 3)
 
     def _setupGraph(self):
         self.graph = SiriusFigureCanvas(Figure())
+        self.graph.setObjectName('RFGraph')
         self.graph.setStyleSheet("""
-            min-width: 42em; max-width: 42em;
-            min-height: 18em; max-height: 18em;""")
+            #RFGraph{min-width:42em;min-height:18em;max-height:18em;}""")
+        self.graph.setSizePolicy(QSzPlcy.MinimumExpanding, QSzPlcy.Preferred)
         self.graph.figure.set_tight_layout({'pad': .0})
         self.ax1 = self.graph.figure.subplots()
         self.ax1.grid()
@@ -1113,8 +1121,8 @@ class RFRamp(QWidget):
         self.table.setStyleSheet(
             """
             #RFTable{
-                min-width: 42em; max-width: 42em;
-                min-height: 10.69em;  max-height: 10.69em;
+                min-width: 42em;
+                min-height: 10.69em;
             }
             QHeaderView::section {
                 background-color: #4A5E28;
@@ -1138,6 +1146,7 @@ class RFRamp(QWidget):
         self.table.verticalHeader().hide()
         self.table.setHorizontalHeaderLabels(
             self.table_map['columns'].values())
+        self.table.setSizePolicy(QSzPlcy.MinimumExpanding, QSzPlcy.Preferred)
 
         for row, vlabel in self.table_map['rows'].items():
             label_item = QTableWidgetItem(vlabel)

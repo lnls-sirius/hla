@@ -483,8 +483,8 @@ class OpticsAdjustSettings(SiriusDialog):
         self.table_tunemat.setStyleSheet("""
             #tunemat{
                 background-color: #efebe7;
-                min-width: 22.14em; max-width: 22.14em;
-                min-height: 6em;  max-height: 6em;}""")
+                min-width: 22.14em;
+                min-height: 6em; max-height: 6em;}""")
         self.table_tunemat.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.table_tunemat.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table_tunemat.setRowCount(2)
@@ -499,6 +499,8 @@ class OpticsAdjustSettings(SiriusDialog):
             QHeaderView.Stretch)
         self.table_tunemat.verticalHeader().setSectionResizeMode(
             QHeaderView.Stretch)
+        self.table_tunemat.setSizePolicy(QSzPlcy.MinimumExpanding,
+                                         QSzPlcy.Preferred)
 
         label_nomKL = QLabel('<h4>Nominal KL</h4>')
         label_nomKL.setAlignment(Qt.AlignCenter)
@@ -507,8 +509,8 @@ class OpticsAdjustSettings(SiriusDialog):
         self.table_nomKL.setStyleSheet("""
             #nomKL{
                 background-color: #efebe7;
-                min-width: 22.14em; max-width: 22.14em;
-                min-height: 4em;  max-height: 4em;}""")
+                min-width: 22.14em;
+                min-height: 4em; max-height: 4em;}""")
         self.table_nomKL.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.table_nomKL.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table_nomKL.setRowCount(1)
@@ -523,18 +525,19 @@ class OpticsAdjustSettings(SiriusDialog):
             QHeaderView.Stretch)
         self.table_nomKL.verticalHeader().setSectionResizeMode(
             QHeaderView.Stretch)
+        self.table_nomKL.setSizePolicy(QSzPlcy.MinimumExpanding,
+                                       QSzPlcy.Preferred)
 
         lay = QVBoxLayout()
         lay.addWidget(l_tuneconfig)
         lay.addWidget(self.cb_tuneconfig)
-        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Expanding, QSzPlcy.Expanding))
+        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Ignored, QSzPlcy.Expanding))
         lay.addWidget(label_tunemat)
         lay.addWidget(self.table_tunemat)
-        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Expanding, QSzPlcy.Expanding))
+        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Ignored, QSzPlcy.Expanding))
         lay.addWidget(label_nomKL)
         lay.addWidget(self.table_nomKL)
-        lay.addItem(
-            QSpacerItem(20, 10, QSzPlcy.Expanding, QSzPlcy.Expanding))
+        lay.addItem(QSpacerItem(20, 10, QSzPlcy.Ignored, QSzPlcy.Expanding))
 
         return lay
 
@@ -553,8 +556,8 @@ class OpticsAdjustSettings(SiriusDialog):
         self.table_chrommat.setStyleSheet("""
             #chrommat{
                 background-color: #efebe7;
-                min-width: 22.14em; max-width: 22.14em;
-                min-height: 6em;  max-height: 6em;}""")
+                min-width: 22.14em;
+                min-height: 6em; max-height: 6em;}""")
         self.table_chrommat.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.table_chrommat.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table_chrommat.setRowCount(2)
@@ -569,6 +572,8 @@ class OpticsAdjustSettings(SiriusDialog):
             QHeaderView.Stretch)
         self.table_chrommat.verticalHeader().setSectionResizeMode(
             QHeaderView.Stretch)
+        self.table_chrommat.setSizePolicy(QSzPlcy.MinimumExpanding,
+                                          QSzPlcy.Preferred)
 
         l_nomSL = QLabel('<h4>Nominal SL</h4>')
         l_nomSL.setAlignment(Qt.AlignCenter)
@@ -577,8 +582,8 @@ class OpticsAdjustSettings(SiriusDialog):
         self.table_nomSL.setStyleSheet("""
             #nomSL{
                 background-color: #efebe7;
-                min-width: 22.14em; max-width: 22.14em;
-                min-height: 4em;  max-height: 4em;}""")
+                min-width: 22.14em;
+                min-height: 4em; max-height: 4em;}""")
         self.table_nomSL.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.table_nomSL.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table_nomSL.setRowCount(1)
@@ -593,6 +598,8 @@ class OpticsAdjustSettings(SiriusDialog):
             QHeaderView.Stretch)
         self.table_nomSL.verticalHeader().setSectionResizeMode(
             QHeaderView.Stretch)
+        self.table_nomSL.setSizePolicy(QSzPlcy.MinimumExpanding,
+                                       QSzPlcy.Preferred)
 
         l_nomchrom = QLabel('<h4>Nominal Chrom</h4>')
         l_nomchrom.setAlignment(Qt.AlignCenter)
@@ -715,12 +722,19 @@ class DiagnosisSettings(SiriusDialog):
         hlay_apply.addWidget(self.bt_apply)
 
         lay = QVBoxLayout()
+        lay.addStretch()
         lay.addWidget(l_dcctacq)
+        lay.addStretch()
         lay.addWidget(self.gbox_reliablemeas)
+        lay.addStretch()
         lay.addWidget(self.gbox_generalsettings)
+        lay.addStretch()
         lay.addLayout(lay_mode)
+        lay.addStretch()
         lay.addWidget(self.gbox_effparams)
+        lay.addStretch()
         lay.addLayout(hlay_apply)
+        lay.addStretch()
         lay.setSpacing(20)
         self.setLayout(lay)
 
@@ -767,7 +781,6 @@ class DiagnosisSettings(SiriusDialog):
 
         gbox_reliablemeas = _GroupBoxWithChannel(
             'DCCT Measure Reliability Status', self, [reliablemeas_channel])
-        gbox_reliablemeas.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Expanding)
 
         self.label_reliablemeas0 = QLabel('', self)
         self.led_ReliableMeas0 = SiriusLedAlert(
