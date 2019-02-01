@@ -41,16 +41,16 @@ class KicksConfigWidget(BaseWidget):
                 lbl = QLabel(pln+' '+unit+'  ', grpbx)
                 fbl.addRow(lbl, self.create_pair(grpbx, pvname+pln))
             vbl.addWidget(grpbx)
-            if self.show_details:
-                vbl.addSpacing(40)
         if self.show_details:
-            lbl = QLabel('Synchronize Kicks', self)
-            pdm_btn = PyDMStateButton(
-                self, init_channel=self.prefix+'SyncKicks-Sel')
-            hbl = QHBoxLayout()
-            hbl.addWidget(lbl)
-            hbl.addWidget(pdm_btn)
-            vbl.addItem(hbl)
+            vbl.addSpacing(40)
+            if self.isring:
+                lbl = QLabel('Synchronize Kicks', self)
+                pdm_btn = PyDMStateButton(
+                    self, init_channel=self.prefix+'SyncKicks-Sel')
+                hbl = QHBoxLayout()
+                hbl.addWidget(lbl)
+                hbl.addWidget(pdm_btn)
+                vbl.addItem(hbl)
             pdm_btn = PyDMPushButton(
                 self, label='Configure Correctors',
                 init_channel=self.prefix+'ConfigCorrs-Cmd', pressValue=1)

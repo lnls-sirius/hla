@@ -25,7 +25,7 @@ class SOFBControl(BaseWidget):
         self.setObjectName('SOFBControl')
         self.setStyleSheet("""
             #SOFBControl{
-                min-width:18em; max-width:18em;
+                min-width:18em;
                 min-height:48em;
             }""")
 
@@ -61,7 +61,7 @@ class SOFBControl(BaseWidget):
         if self.isring:
             rules = (
                 '[{"name": "EnblRule", "property": "Enable", ' +
-                '"expression": "ch[0] in (1, 3)", "channels": [{"channel": "' +
+                '"expression": "ch[0] in (1, )", "channels": [{"channel": "' +
                 self.prefix+'OrbitMode-Sts'+'", "trigger": true}]}]')
             lbl = QLabel('Enable Auto Correction', grp_bx)
             pdm_btn = PyDMStateButton(
@@ -121,22 +121,28 @@ class SOFBControl(BaseWidget):
 
         vbl2 = QVBoxLayout()
         hbl.addItem(vbl2)
-        rules = (
-            '[{"name": "EnblRule", "property": "Enable", ' +
-            '"expression": "not ch[0]", "channels": [{"channel": "' +
-            self.prefix+'AutoCorr-Sts'+'", "trigger": true}]}]')
+        vbl2.setSpacing(9)
         pdm_pbtn = PyDMPushButton(
             grpbx, 'Calculate Kicks', pressValue=1,
             init_channel=self.prefix+'CalcCorr-Cmd')
-        pdm_pbtn.rules = rules
+        if self.isring:
+            rules = (
+                '[{"name": "EnblRule", "property": "Enable", ' +
+                '"expression": "not ch[0]", "channels": [{"channel": "' +
+                self.prefix+'AutoCorr-Sts'+'", "trigger": true}]}]')
+            pdm_pbtn.rules = rules
         vbl2.addWidget(pdm_pbtn)
+
+        exp = 'ch[0] in (1, 3)'
+        ch = ''
+        if self.isring:
+            exp = 'ch[1] in (1, 3) and not ch[0]'
+            ch = '{"channel": "'+self.prefix+'AutoCorr-Sts", "trigger": true},'
         rules = (
             '[{"name": "EnblRule", "property": "Enable", ' +
-            '"expression": "ch[1] and not ch[0]", ' +
-            '"channels": [' +
-            '{"channel": "'+self.prefix+'AutoCorr-Sts'+'", "trigger": true},' +
-            '{"channel": "'+self.prefix+'OrbitMode-Sel'+'", "trigger": true}' +
-            ']}]')
+            '"expression": "'+exp+'", "channels": ['+ch +
+            '{"channel": "'+self.prefix+'OrbitMode-Sel", "trigger": true}]}]')
+
         pdm_pbtn = PyDMPushButton(
             grpbx, 'Apply All',
             pressValue=self._csorb.ApplyCorr.All,
