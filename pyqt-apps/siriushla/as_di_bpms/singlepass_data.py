@@ -57,12 +57,12 @@ class SinglePassData(BaseWidget):
         self.setObjectName('SinglePassData')
         self.setStyleSheet("""
             #SinglePassData{
-                min-width:48em; max-width:48em;
-                min-height:32em; max-height:32em;
+                min-width:48em;
+                min-height:32em;
             }
             #SinglePassDataGraph{
-                min-width:48em; max-width:48em;
-                min-height:24em; max-height:24em;
+                min-width:48em;
+                min-height:24em;
             }
             QLabel{
                 min-width:6em; max-width:6em;

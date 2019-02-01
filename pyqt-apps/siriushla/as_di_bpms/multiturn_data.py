@@ -108,12 +108,12 @@ class MultiTurnData(BaseWidget):
         self.setObjectName('MultiTurnData')
         self.setStyleSheet("""
             #MultiTurnData{
-                min-width:48em; max-width:48em;
-                min-height:32em; max-height:32em;
+                min-width:48em;
+                min-height:32em;
             }
             #MultiTurnDataGraph{
-                min-width:48em; max-width:48em;
-                min-height:24em; max-height:24em;
+                min-width:48em;
+                min-height:24em;
             }
             QLabel{
                 min-width:6em; max-width:6em;

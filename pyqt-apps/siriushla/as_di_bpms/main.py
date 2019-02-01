@@ -132,6 +132,7 @@ class TriggeredAcquisition(BaseWidget):
         lab = QLabel('<h2>' + self.bpm + ' Triggered Acquisitions</h2>')
         lab.setAlignment(Qt.AlignCenter)
         vbl.addWidget(lab)
+        vbl.setStretch(0, 3)
         vbl.addSpacing(10)
         self.stack = QStackedLayout()
         multi_pass = MultiTurnData(
@@ -144,11 +145,13 @@ class TriggeredAcquisition(BaseWidget):
         self.stack.addWidget(multi_pass)
         self.stack.addWidget(single_pass)
         vbl.addLayout(self.stack)
+        vbl.setStretch(1, 48)
         vbl.addSpacing(30)
         config = ACQTrigConfigs(
             parent=self, prefix=self.prefix, bpm=self.bpm, data_prefix='ACQ')
         config.setObjectName('config')
         vbl.addWidget(config)
+        vbl.setStretch(2, 21)
         vbl.addSpacing(10)
 
         self.setObjectName('TriggeredAcquisition')
@@ -157,13 +160,13 @@ class TriggeredAcquisition(BaseWidget):
                 min-width:52em;
                 min-height:72em;}
             #multi_pass{
-                min-width:50em; max-width:50em;
-                min-height:48em; max-height:48em;}
+                min-width:50em;
+                min-height:48em;}
             #single_pass{
-                min-width:50em; max-width:50em;
-                min-height:48em; max-height:48em;}
+                min-width:50em;
+                min-height:48em;}
             #config{
-                min-height:21em; max-height:21em;}""")
+                min-height:21em;}""")
 
     def toggle_multi_single(self, modeidx):
         self.stack.setCurrentIndex(modeidx)
@@ -180,17 +183,20 @@ class PostMortemAcquisition(BaseWidget):
         lab = QLabel('<h2>' + self.bpm + ' Post Mortem</h2>')
         lab.setAlignment(Qt.AlignCenter)
         vbl.addWidget(lab)
+        vbl.setStretch(0, 3)
         vbl.addSpacing(10)
         multi_pass = MultiTurnData(
             parent=self, acq_type='ACQ_PM', prefix=self.prefix, bpm=self.bpm)
         multi_pass.setObjectName('multi_pass')
         vbl.addWidget(multi_pass)
+        vbl.setStretch(1, 48)
         vbl.addSpacing(30)
         config = ACQTrigConfigs(
             parent=self, prefix=self.prefix, bpm=self.bpm,
             data_prefix='ACQ_PM')
         config.setObjectName('config')
         vbl.addWidget(config)
+        vbl.setStretch(2, 21)
         vbl.addSpacing(10)
 
         self.setObjectName('PostMortemAcquisition')
@@ -199,9 +205,9 @@ class PostMortemAcquisition(BaseWidget):
                 min-width:52em;
                 min-height:72em;}
             #multi_pass{
-                min-height:48em; max-height:48em;}
+                min-height:48em;}
             #config{
-                min-height:21em; max-height:21em;}""")
+                min-height:21em;}""")
 
 
 if __name__ == '__main__':
