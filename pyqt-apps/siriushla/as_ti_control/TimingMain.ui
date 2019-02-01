@@ -54,88 +54,7 @@
              <x>0</x>
              <y>0</y>
              <width>2644</width>
-             <height>997</height>
-            </rect>
-           </property>
-          </widget>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="WDTrigsInjBOSI_">
-       <attribute name="title">
-        <string>Injection: RmpBO and InjSI</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_7">
-        <item>
-         <widget class="QScrollArea" name="scrollArea_6">
-          <property name="frameShadow">
-           <enum>QFrame::Sunken</enum>
-          </property>
-          <property name="sizeAdjustPolicy">
-           <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
-          </property>
-          <property name="widgetResizable">
-           <bool>true</bool>
-          </property>
-          <widget class="QWidget" name="WDTrigsInjBOSI">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>2644</width>
-             <height>997</height>
-            </rect>
-           </property>
-          </widget>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="WDTrigsInjDig_">
-       <attribute name="title">
-        <string>Injection Diagnostics</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_5">
-        <item>
-         <widget class="QScrollArea" name="scrollArea_4">
-          <property name="widgetResizable">
-           <bool>true</bool>
-          </property>
-          <widget class="QWidget" name="WDTrigsInjDig">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>2644</width>
-             <height>997</height>
-            </rect>
-           </property>
-          </widget>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="WDTrigsSI_">
-       <attribute name="title">
-        <string>Storage Ring Operation</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_8">
-        <item>
-         <widget class="QScrollArea" name="scrollArea_7">
-          <property name="lineWidth">
-           <number>1</number>
-          </property>
-          <property name="widgetResizable">
-           <bool>true</bool>
-          </property>
-          <widget class="QWidget" name="WDTrigsSI">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>2644</width>
-             <height>997</height>
+             <height>993</height>
             </rect>
            </property>
           </widget>
@@ -456,80 +375,6 @@
       </widget>
      </item>
      <item>
-      <widget class="QGroupBox" name="GBRepetitionRate">
-       <property name="title">
-        <string>Rep Rate [Hz]</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_9" stretch="0,1">
-        <property name="spacing">
-         <number>4</number>
-        </property>
-        <property name="sizeConstraint">
-         <enum>QLayout::SetMinimumSize</enum>
-        </property>
-        <property name="leftMargin">
-         <number>2</number>
-        </property>
-        <property name="topMargin">
-         <number>5</number>
-        </property>
-        <property name="rightMargin">
-         <number>2</number>
-        </property>
-        <property name="bottomMargin">
-         <number>2</number>
-        </property>
-        <item>
-         <widget class="PyDMSpinbox" name="PyDMSBRepetitionRate">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::ClickFocus</enum>
-          </property>
-          <property name="toolTip">
-           <string/>
-          </property>
-          <property name="whatsThis">
-           <string/>
-          </property>
-          <property name="inputMethodHints">
-           <set>Qt::ImhFormattedNumbersOnly</set>
-          </property>
-          <property name="showGroupSeparator" stdset="0">
-           <bool>false</bool>
-          </property>
-          <property name="singleStep">
-           <double>0.200000000000000</double>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="PyDMLabel" name="PyDMLbRepetitionRate">
-          <property name="toolTip">
-           <string/>
-          </property>
-          <property name="whatsThis">
-           <string/>
-          </property>
-          <property name="frameShape">
-           <enum>QFrame::Box</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Raised</enum>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item>
       <widget class="QGroupBox" name="GBBucketList">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -596,8 +441,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>2230</width>
-             <height>164</height>
+             <width>2373</width>
+             <height>168</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_2">
