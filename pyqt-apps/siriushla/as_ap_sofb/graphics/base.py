@@ -150,8 +150,8 @@ class BaseWidget(QWidget):
             graph.plotItem.legend.removeItem('')
         graph.setStyleSheet("""
             #{0}{{
-                min-width:{1}em; max-width:{1}em;
-                min-height:{2}em; max-height:{2}em;
+                min-width:{1}em;
+                min-height:{2}em;
             }}""".format(lab.replace(' ', '')+pln, size[0], size[1]))
         return graph
 

@@ -273,8 +273,8 @@ class SingularValues(QWidget):
         graph.setObjectName('graph_singvalues')
         graph.setStyleSheet("""
             #graph_singvalues{
-                min-width:30em; max-width:30em;
-                min-height:22m; max-height:22em;
+                min-width:30em;
+                min-height:22m;
             }""")
 
 

@@ -74,8 +74,8 @@ class MainWindow(SiriusMainWindow):
         wid.setObjectName('doc_OrgReg')
         wid.setStyleSheet("""
             #doc_OrgReg{
-                min-width:42em; max-width:42em;
-                min-height:14em; max-height:14em;}""")
+                min-width:42em;
+                min-height:14em;}""")
 
         wid_cont = OrbitRegisters(self, self.prefix, self.acc, 5)
         wid.setWidget(wid_cont)
@@ -108,8 +108,8 @@ class MainWindow(SiriusMainWindow):
         docwid.setObjectName('doc_IOCLog')
         docwid.setStyleSheet("""
             #doc_IOCLog{
-                min-width:42em; max-width:42em;
-                min-height:14em; max-height:14em;}""")
+                min-width:42em;
+                min-height:14em;}""")
         wid_cont = QWidget()
         docwid.setWidget(wid_cont)
         vbl = QVBoxLayout(wid_cont)
