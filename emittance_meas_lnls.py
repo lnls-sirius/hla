@@ -32,8 +32,9 @@ electron_rest_en = 0.5109989461  # in MeV
 DT = 0.001
 SIMUL = False
 
+
 class EmittanceMeasure(QWidget):
-    I2K1 = [-0.0089, 2.1891, 0.0493]
+    I2K1 = [+0.0089, -2.1891, -0.0493]  # NOTE: Signal inverted
     QUAD = 'H1FQPS-3'
     DIST = 2.8775
     QUAD_L = 0.112
