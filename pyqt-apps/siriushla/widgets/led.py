@@ -175,11 +175,10 @@ class PyDMLedMultiConnection(QLed, PyDMWidget):
         """Init."""
         QLed.__init__(self, parent)
         PyDMWidget.__init__(self)
-        self.channels = channels
         self.stateColors = color_list or self.default_colorlist
 
         self.channels2ids = dict()
-        for _id, address in enumerate(sorted(self.channels)):
+        for _id, address in enumerate(sorted(channels)):
             stid = str(_id)
             setattr(self, 'channel' + stid, address)
             setattr(self, 'channel' + stid + '_connected', False)
