@@ -196,9 +196,9 @@ class EmittanceMeasure(QWidget):
         Rx, Ry = self._get_resp_mat(K1, energy)
         R = Rx if pl=='x' else Ry
         a, b, c = np.linalg.lstsq(R, sigma*sigma, rcond=None)[0]
-        emit = np.sqrt(abs(a*c - b*b/4.0))
+        emit = np.sqrt(abs(a*c - b*b))
         beta = a/emit
-        alpha = -b/2.0/emit
+        alpha = -b/emit
         nemit = emit * energy / electron_rest_en * 1e6  # in mm.mrad
         return nemit, beta, alpha
 
@@ -381,8 +381,8 @@ class EmittanceMeasure(QWidget):
         R12 = R[:, 0, 1].reshape(-1, 1)
         R33 = R[:, 2, 2].reshape(-1, 1)
         R34 = R[:, 2, 3].reshape(-1, 1)
-        Rx = np.column_stack((R11*R11, R11*R12, R12*R12))
-        Ry = np.column_stack((R33*R33, R33*R34, R34*R34))
+        Rx = np.column_stack((R11*R11, 2*R11*R12, R12*R12))
+        Ry = np.column_stack((R33*R33, 2*R33*R34, R34*R34))
         return Rx, Ry
 
     def pb_save_data_clicked(self):
