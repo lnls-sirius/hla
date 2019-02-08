@@ -80,22 +80,22 @@ class RampMain(SiriusMainWindow):
 
         cw.setStyleSheet("""
             #CentralWidget{
-                min-width: 134em;
-                min-height: 78em;}
+                min-width: 138em;
+                min-height: 81em;}
             #ConfigParameters{
                 min-width: 108em;
-                min-height: 56em;}
+                min-height: 59em;}
             #OpticsAdjust{
                 min-width: 108em;
                 min-height: 16em;}
             #StatusAndCommands{
-                min-width: 24em;
-                min-height: 22em;}
+                min-width: 28em;
+                min-height: 25em;}
             #Diagnosis{
-                min-width: 24em;
+                min-width: 28em;
                 min-height: 50em;}""")
-        glay.setColumnStretch(0, 45)
-        glay.setColumnStretch(1, 10)
+        glay.setColumnStretch(0, 4)
+        glay.setColumnStretch(1, 1)
         self.setCentralWidget(cw)
 
     def _connSignals(self):
