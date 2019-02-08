@@ -1,3 +1,4 @@
+import numpy as _np
 from qtpy.QtGui import QColor
 from qtpy.QtCore import Property, Slot
 from pydm.widgets.base import PyDMWidget
@@ -141,7 +142,10 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         state = 1
         for address, desired_value in self.channels2values.items():
             val = getattr(self, 'channel'+self.channels2ids[address]+'_value')
-            state &= (val == desired_value)
+            if isinstance(val, _np.ndarray):
+                state &= _np.all(val == desired_value)
+            else:
+                state &= (val == desired_value)
         self.setState(state)
 
     @Slot(bool)
