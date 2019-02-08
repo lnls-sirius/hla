@@ -72,10 +72,6 @@ class Settings(QMenuBar):
         self.act_plotstrengths.triggered.connect(self._emitPlotUnits)
         self.menu_plotunits.addAction(self.act_plotcurrents)
         self.menu_plotunits.addAction(self.act_plotstrengths)
-        self.ramp_params_menu.addSeparator()
-        self.act_tidelays = QAction('Configure TI delays', self)
-        self.act_tidelays.triggered.connect(self._showTIDelaysPopup)
-        self.ramp_params_menu.addAction(self.act_tidelays)
 
         self.optics_menu = self.addMenu('Optics Adjustments')
         self.act_optics_settings = QAction('Settings', self)
@@ -97,14 +93,16 @@ class Settings(QMenuBar):
         _hlautil.connect_window(self.act_ma, _MAControlWindow, parent=self,
                                 section='BO', discipline=1)  # MA
         self.act_pm = QAction('Pulsed Magnets')
+        _hlautil.connect_window(self.act_pm, _PMControlWindow, parent=self)
         self.act_sofb = QAction('Booster SOFB')
         _hlautil.connect_newprocess(self.act_sofb, 'sirius-hla-bo-ap-sofb.py')
-        _hlautil.connect_window(self.act_pm, _PMControlWindow, parent=self)
+        self.act_ti = QAction('Timing')
+        _hlautil.connect_newprocess(self.act_ti, 'sirius-hla-as-ti-control.py')
         self.open_menu.addAction(self.act_cycle)
         self.open_menu.addAction(self.act_ma)
         self.open_menu.addAction(self.act_pm)
         self.open_menu.addAction(self.act_sofb)
-        # TODO: include RF and TI windows??
+        self.open_menu.addAction(self.act_ti)
 
     def _showGetNewConfigNamePopup(self):
         self._newConfigNamePopup = _NewRampConfigGetName(
@@ -141,10 +139,6 @@ class Settings(QMenuBar):
             self.ramp_config, 'bo_ramp', self, new_from_template=False)
         self._saveAsPopup.configname.connect(self._saveAndEmitConfigName)
         self._saveAsPopup.open()
-
-    def _showTIDelaysPopup(self):
-        # TODO: create dialog to config timing delays
-        pass
 
     def _saveAndEmitConfigName(self, new_name=None):
         if not self.ramp_config:
