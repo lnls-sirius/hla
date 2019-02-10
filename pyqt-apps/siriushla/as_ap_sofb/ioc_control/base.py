@@ -4,9 +4,10 @@ from functools import partial as _part
 import numpy as _np
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QSizePolicy, QComboBox
-from pydm.widgets import PyDMSpinbox, PyDMLabel, PyDMEnumComboBox
+from pydm.widgets import PyDMLabel, PyDMEnumComboBox
 from pydm.widgets.base import PyDMPrimitiveWidget
 from siriuspy.csdevice.orbitcorr import OrbitCorrDev
+from siriushla.widgets import SiriusSpinbox
 
 
 class BaseWidget(QWidget):
@@ -33,7 +34,7 @@ class BaseWidget(QWidget):
         wid = QWidget(parent)
         hbl = QHBoxLayout(wid)
         hbl.setContentsMargins(9, 0, 0, 0)
-        pdm_spbx = PyDMSpinbox(
+        pdm_spbx = SiriusSpinbox(
             wid, init_channel=self.prefix+pvname+'-SP')
         pdm_spbx.showStepExponent = False
         pdm_lbl = PyDMLabel(

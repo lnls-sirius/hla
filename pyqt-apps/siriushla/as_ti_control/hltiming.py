@@ -5,7 +5,7 @@ import os as _os
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QVBoxLayout, QHBoxLayout, QSpacerItem, \
     QSizePolicy as QSzPol, QWidget, QGridLayout, QGroupBox, QLabel
-from pydm.widgets import PyDMLabel, PyDMLineEdit, PyDMSpinbox, \
+from pydm.widgets import PyDMLabel, PyDMLineEdit, \
     PyDMPushButton, PyDMEnumComboBox as PyDMECB, PyDMCheckbox as PyDMCb
 from siriuspy.csdevice import timesys as _cstime
 from siriuspy.search import LLTimeSearch, HLTimeSearch
