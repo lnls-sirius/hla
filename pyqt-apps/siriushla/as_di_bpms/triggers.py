@@ -1,8 +1,8 @@
 from qtpy.QtWidgets import QHBoxLayout, QGridLayout, QLabel, QFormLayout
 from qtpy.QtCore import Qt
-from pydm.widgets import PyDMPushButton, PyDMSpinbox, PyDMEnumComboBox
+from pydm.widgets import PyDMPushButton, PyDMEnumComboBox
 from siriuspy.csdevice import bpms as csbpms
-from siriushla.widgets import SiriusLabel
+from siriushla.widgets import SiriusLabel, SiriusSpinbox
 from siriushla.as_di_bpms.base import BaseWidget, CustomGroupBox
 
 
@@ -89,7 +89,7 @@ class PhysicalTriggers(BaseWidget):
         hbl = QHBoxLayout()
         fbl.addRow(lab, hbl)
         chan = self.get_pvname(trig+'RcvLen-SP')
-        spbx = PyDMSpinbox(
+        spbx = SiriusSpinbox(
             grpbx, init_channel=chan)
         spbx.showStepExponent = False
         spbx.limitsFromChannel = False
@@ -103,7 +103,7 @@ class PhysicalTriggers(BaseWidget):
         hbl.addWidget(lab)
         hbl.addSpacing(20)
         chan = self.get_pvname(trig+'TrnLen-SP')
-        spbx = PyDMSpinbox(
+        spbx = SiriusSpinbox(
             grpbx, init_channel=chan)
         spbx.showStepExponent = False
         spbx.limitsFromChannel = False
@@ -185,7 +185,7 @@ class LogicalTriggers(BaseWidget):
         hbl = QHBoxLayout()
         fbl.addRow(lab, hbl)
         chan = self.get_pvname(trig+'RcvInSel-SP')
-        spbx = PyDMSpinbox(
+        spbx = SiriusSpinbox(
             grpbx, init_channel=chan)
         spbx.showStepExponent = False
         spbx.limitsFromChannel = False
@@ -199,7 +199,7 @@ class LogicalTriggers(BaseWidget):
         hbl.addWidget(lab)
         hbl.addSpacing(20)
         chan = self.get_pvname(trig+'TrnOutSel-SP')
-        spbx = PyDMSpinbox(
+        spbx = SiriusSpinbox(
             grpbx, init_channel=chan)
         spbx.showStepExponent = False
         spbx.limitsFromChannel = False

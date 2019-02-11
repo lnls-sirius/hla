@@ -4,9 +4,10 @@ from functools import partial as _part
 import numpy as _np
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QSizePolicy, QComboBox
-from pydm.widgets import PyDMSpinbox, PyDMLabel, PyDMEnumComboBox
+from pydm.widgets import PyDMLabel, PyDMEnumComboBox
 from pydm.widgets.base import PyDMPrimitiveWidget
 from siriuspy.csdevice.orbitcorr import OrbitCorrDevFactory
+from siriushla.widgets import SiriusSpinbox
 
 
 class BaseWidget(QWidget):
@@ -32,11 +33,9 @@ class BaseWidget(QWidget):
         wid = QWidget(parent)
         hbl = QHBoxLayout(wid)
         hbl.setContentsMargins(9, 0, 0, 0)
-        pdm_spbx = PyDMSpinbox(
-            wid, init_channel=self.prefix+pvname+'-SP')
+        pdm_spbx = SiriusSpinbox(wid, init_channel=self.prefix+pvname+'-SP')
         pdm_spbx.showStepExponent = False
-        pdm_lbl = PyDMLabel(
-            wid, init_channel=self.prefix+pvname+'-RB')
+        pdm_lbl = PyDMLabel(wid, init_channel=self.prefix+pvname+'-RB')
         pdm_lbl.setAlignment(Qt.AlignCenter)
         hbl.addWidget(pdm_spbx)
         hbl.addWidget(pdm_lbl)
@@ -48,8 +47,7 @@ class BaseWidget(QWidget):
         hbl.setContentsMargins(9, 0, 0, 9)
         pdm_cbbx = PyDMEnumComboBox(
             wid, init_channel=self.prefix+pvname+'-Sel')
-        pdm_lbl = PyDMLabel(
-            wid, init_channel=self.prefix+pvname+'-Sts')
+        pdm_lbl = PyDMLabel(wid, init_channel=self.prefix+pvname+'-Sts')
         pdm_lbl.setAlignment(Qt.AlignCenter)
         hbl.addWidget(pdm_cbbx)
         hbl.addWidget(pdm_lbl)

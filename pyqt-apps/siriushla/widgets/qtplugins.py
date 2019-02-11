@@ -6,6 +6,7 @@ from .led import PyDMLed, SiriusLedState, SiriusLedAlert, PyDMLedMultiChannel
 from .QLed import QLed
 from .QDoubleScrollBar import QDoubleScrollBar
 from .scrollbar import PyDMScrollBar
+from .spinbox import SiriusSpinbox
 from .state_button import PyDMStateButton
 from .windows import SiriusDialog, SiriusMainWindow
 
@@ -40,6 +41,9 @@ PyDMStateButtonPlugin = qtplugin_factory(
 # Scrollbar plugin
 QDoubleScrollBarPlugin = qtplugin_factory(
                     QDoubleScrollBar, group=SIRIUS_CATEGORY)
+
+# Spinbox plugin
+SiriusSpinboxPlugin = qtplugin_factory(SiriusSpinbox, group=SIRIUS_CATEGORY)
 
 # Led plugin
 QLedPlugin = qtplugin_factory(QLed, group=SIRIUS_CATEGORY)

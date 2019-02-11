@@ -4,11 +4,11 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QCheckBox, \
     QFormLayout, QGroupBox, QLabel
 from qtpy.QtGui import QColor
-from pydm.widgets import PyDMWaveformPlot, PyDMTimePlot, PyDMEnumComboBox, \
-    PyDMSpinbox
+from pydm.widgets import PyDMWaveformPlot, PyDMTimePlot, PyDMEnumComboBox
 from pydm.widgets.base import PyDMPrimitiveWidget
 from siriuspy.csdevice.bpms import get_bpm_database
-from siriushla.widgets import SiriusConnectionSignal, SiriusLabel
+from siriushla.widgets import SiriusConnectionSignal, SiriusLabel, \
+    SiriusSpinbox
 
 
 class BaseWidget(QWidget):
@@ -43,7 +43,7 @@ class BaseWidget(QWidget):
             if pv2 != pv1:
                 if not_enum:
                     chan1 = self.get_pvname(pv1)
-                    wid = PyDMSpinbox(self, init_channel=chan1)
+                    wid = SiriusSpinbox(self, init_channel=chan1)
                     wid.setStyleSheet("""min-width:5em;""")
                     wid.showStepExponent = False
                     wid.limitsFromChannel = False

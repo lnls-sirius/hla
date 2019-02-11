@@ -2,10 +2,8 @@ import sys
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGroupBox, QLabel, QScrollArea, QVBoxLayout, \
     QHBoxLayout, QGridLayout, QSpacerItem, QSizePolicy as QSzPol
-from pydm.widgets.label import PyDMLabel
-from pydm.widgets.enum_combo_box import PyDMEnumComboBox as PyDMECB
-from siriushla.widgets.led import PyDMLed, SiriusLedAlert
-from siriushla.widgets.state_button import PyDMStateButton
+from pydm.widgets import PyDMLabel,  PyDMEnumComboBox as PyDMECB
+from siriushla.widgets import PyDMLed, SiriusLedAlert, PyDMStateButton
 from siriushla.as_ti_control.base import BaseWidget
 from siriushla.as_ti_control.ll_trigger import OTPList, OUTList
 
