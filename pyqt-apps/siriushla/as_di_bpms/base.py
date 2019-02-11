@@ -47,9 +47,8 @@ class BaseWidget(QWidget):
                     wid.setStyleSheet("""min-width:5em;""")
                     wid.showStepExponent = False
                     wid.limitsFromChannel = False
-                    low = self.bpmdb[chan1].get('low', -1e10)
-                    high = self.bpmdb[chan1].get('high', 1e10)
-                    wid.setRange(low, high)
+                    wid.setMinimum(self.bpmdb[chan1].get('low', -1e10))
+                    wid.setMaximum(self.bpmdb[chan1].get('high', 1e10))
                 else:
                     wid = PyDMEnumComboBox(
                         self, init_channel=self.get_pvname(pv1))
