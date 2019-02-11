@@ -18,7 +18,8 @@ from siriushla import util
 from siriushla.widgets import PyDMStateButton, SiriusLedState, PyDMLed, \
                               PyDMLedMultiChannel
 from siriushla.widgets.signal_channel import SiriusConnectionSignal
-from siriushla.widgets.windows import SiriusMainWindow, SiriusDialog
+from siriushla.widgets.windows import SiriusMainWindow, SiriusDialog, \
+                                      create_window_from_widget
 from siriushla.as_ti_control.hl_trigger import HLTriggerDetailed
 
 
@@ -934,8 +935,9 @@ class _ScrnSettingsDetails(SiriusMainWindow):
         self.pb_trgdetails.setStyleSheet("""
             min-width:7.10em;\nmax-width:7.10em;\n
             min-height:1.29em;\nmax-height:1.29em;\n""")
-        util.connect_window(self.pb_trgdetails, HLTriggerDetailed, parent=self,
-                            prefix=trg_prefix+':')
+        trg_w = create_window_from_widget(HLTriggerDetailed, is_main=True)
+        util.connect_window(self.pb_trgdetails, trg_w, parent=self,
+                            prefix=trg_prefix)
         hlay_TIstatus = QHBoxLayout()
         hlay_TIstatus.addWidget(self.ledmulti_TIStatus)
         hlay_TIstatus.addWidget(self.pb_trgdetails)

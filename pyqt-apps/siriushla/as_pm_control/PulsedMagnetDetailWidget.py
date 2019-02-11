@@ -8,7 +8,9 @@ from siriushla import util
 from siriushla.widgets.led import SiriusLedState, SiriusLedAlert
 from siriushla.widgets.state_button import PyDMStateButton
 from siriushla.widgets import PyDMLinEditScrollbar, PyDMLedMultiChannel
+from siriushla.widgets.windows import create_window_from_widget
 from siriushla.as_ti_control.hl_trigger import HLTriggerDetailed
+
 
 class PulsedMagnetDetailWidget(QWidget):
     """Detailed widget for controlling a pulsed magnet."""
@@ -199,8 +201,9 @@ class PulsedMagnetDetailWidget(QWidget):
         self._trigger_detail_btn = QPushButton('Open details', self)
 
         # Connect trigger window
+        trg_w = create_window_from_widget(HLTriggerDetailed, is_main=True)
         util.connect_window(
-            self._trigger_detail_btn, HLTriggerDetailed,
+            self._trigger_detail_btn, trg_w,
             parent=self, prefix=self._prefixed_maname.replace('PM-', 'TI-'))
 
         timing_layout.addWidget(self._trigger_delay_label, 0, 0)

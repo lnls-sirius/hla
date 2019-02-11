@@ -10,7 +10,7 @@ from qtpy.QtWidgets import QLabel, QWidget, QScrollArea, QAbstractItemView, \
                            QTabWidget, QGroupBox, QHeaderView
 from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox, \
                          PyDMPushButton
-from siriushla.widgets.windows import SiriusDialog
+from siriushla.widgets.windows import SiriusDialog, create_window_from_widget
 from siriushla.widgets import PyDMStateButton, SiriusConnectionSignal, \
                               SiriusLedAlert, PyDMLedMultiChannel
 from siriushla.as_ap_servconf import LoadConfiguration as _LoadConfiguration, \
@@ -855,8 +855,9 @@ class DiagnosisSettings(SiriusDialog):
         self.pb_trgdetails = QPushButton('Open details', self)
         self.pb_trgdetails.setAutoDefault(False)
         self.pb_trgdetails.setDefault(False)
+        trg_w = create_window_from_widget(HLTriggerDetailed, is_main=True)
         _hlautil.connect_window(
-            self.pb_trgdetails, HLTriggerDetailed, parent=self,
+            self.pb_trgdetails, trg_w, parent=self,
             prefix=self.prefix+'BO-35D:TI-DCCT:')
         hlay_TIstatus = QHBoxLayout()
         hlay_TIstatus.addWidget(self.ledmulti_TIStatus)
