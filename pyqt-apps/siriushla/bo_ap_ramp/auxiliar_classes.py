@@ -858,7 +858,7 @@ class DiagnosisSettings(SiriusDialog):
         trg_w = create_window_from_widget(HLTriggerDetailed, is_main=True)
         _hlautil.connect_window(
             self.pb_trgdetails, trg_w, parent=self,
-            prefix=self.prefix+'BO-35D:TI-DCCT:')
+            prefix=self.prefix+'BO-35D:TI-DCCT')
         hlay_TIstatus = QHBoxLayout()
         hlay_TIstatus.addWidget(self.ledmulti_TIStatus)
         hlay_TIstatus.addWidget(self.pb_trgdetails)
