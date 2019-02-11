@@ -14,7 +14,7 @@ class SiriusSpinbox(PyDMSpinbox):
         The channel to be used by the widget.
     """
     def __init__(self, parent=None, init_channel=None):
-        PyDMSpinbox.__init__(parent, init_channel)
+        super(SiriusSpinbox, self).__init__(parent, init_channel)
         self._limits_from_channel = True
         self._user_lower_limit = self.minimum()
         self._user_upper_limit = self.maximum()
