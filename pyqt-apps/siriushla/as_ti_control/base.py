@@ -1,10 +1,10 @@
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, \
     QFormLayout, QGroupBox, QLabel, QGridLayout, QSizePolicy as QSzPol
-from pydm.widgets import PyDMEnumComboBox, PyDMSpinbox
+from pydm.widgets import PyDMEnumComboBox
 from pydm.widgets.base import PyDMPrimitiveWidget
 from siriuspy.namesys import SiriusPVName as _PVName
-from siriushla.widgets.label import SiriusLabel
+from siriushla.widgets import SiriusLabel, SiriusSpinbox
 
 
 class BaseWidget(QWidget):
@@ -34,7 +34,7 @@ class BaseWidget(QWidget):
             if pv2 != pv1:
                 if not_enum:
                     chan1 = self.get_pvname(pv1)
-                    wid = PyDMSpinbox(self, init_channel=chan1)
+                    wid = SiriusSpinbox(self, init_channel=chan1)
                     wid.showStepExponent = False
                     wid.limitsFromChannel = False
                 else:

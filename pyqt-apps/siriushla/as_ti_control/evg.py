@@ -2,10 +2,11 @@ import sys
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGroupBox, QLabel, QWidget, QScrollArea, \
     QVBoxLayout, QHBoxLayout, QGridLayout, QSizePolicy as QSzPol
-from pydm.widgets import PyDMLabel, PyDMLineEdit, PyDMSpinbox, \
+from pydm.widgets import PyDMLabel, PyDMLineEdit, \
     PyDMPushButton, PyDMEnumComboBox as PyDMECB, PyDMCheckbox as PyDMCb
 from siriuspy.csdevice import timesys as _cstime
-from siriushla.widgets import PyDMLed, SiriusLedAlert, PyDMStateButton
+from siriushla.widgets import PyDMLed, SiriusLedAlert, PyDMStateButton, \
+    SiriusSpinbox
 from siriushla import util as _util
 from siriushla.as_ti_control.base import BaseList, BaseWidget
 
@@ -77,7 +78,7 @@ class EVG(BaseWidget):
         layrow.addWidget(self._create_prop_widget(
                         'Dev Enable', self.configs_wid, (sp, rb)))
 
-        sp = PyDMSpinbox(self, init_channel=prefix + "RFDiv-SP")
+        sp = SiriusSpinbox(self, init_channel=prefix + "RFDiv-SP")
         sp.showStepExponent = False
         rb = PyDMLabel(self, init_channel=prefix + "RFDiv-RB")
         layrow.addWidget(self._create_prop_widget(
@@ -125,7 +126,7 @@ class EVG(BaseWidget):
         configlayout.addLayout(layrow)
         configlayout.addStretch()
 
-        sp = PyDMSpinbox(self, init_channel=prefix + "ACDiv-SP")
+        sp = SiriusSpinbox(self, init_channel=prefix + "ACDiv-SP")
         sp.showStepExponent = False
         rb = PyDMLabel(self, init_channel=prefix + "ACDiv-RB")
         layrow.addWidget(self._create_prop_widget(
@@ -141,7 +142,7 @@ class EVG(BaseWidget):
         configlayout.addLayout(layrow)
         configlayout.addStretch()
 
-        sp = PyDMSpinbox(self, init_channel=prefix + "RepeatBucketList-SP")
+        sp = SiriusSpinbox(self, init_channel=prefix + "RepeatBucketList-SP")
         sp.showStepExponent = False
         rb = PyDMLabel(self, init_channel=prefix + "RepeatBucketList-RB")
         layrow.addWidget(self._create_prop_widget(
@@ -278,7 +279,7 @@ class EventList(BaseList):
             sp = PyDMECB(self, init_channel=prefix+"DelayType-Sel")
             rb = PyDMLabel(self, init_channel=prefix+"DelayType-Sts")
         elif prop == 'delay':
-            sp = PyDMSpinbox(self, init_channel=prefix + "Delay-SP")
+            sp = SiriusSpinbox(self, init_channel=prefix + "Delay-SP")
             sp.showStepExponent = False
             rb = PyDMLabel(self, init_channel=prefix + "Delay-RB")
         elif prop == 'description':
@@ -315,7 +316,7 @@ class ClockList(BaseList):
             sp.setText(prefix.propty)
             rb = PyDMLed(self, init_channel=prefix + "State-Sts")
         elif prop == 'frequency':
-            sp = PyDMSpinbox(self, init_channel=prefix + "Freq-SP")
+            sp = SiriusSpinbox(self, init_channel=prefix + "Freq-SP")
             sp.showStepExponent = False
             rb = PyDMLabel(self, init_channel=prefix + "Freq-RB")
         if prop == 'mux_enbl':
@@ -323,7 +324,7 @@ class ClockList(BaseList):
             sp.setText(prefix.propty)
             rb = PyDMLed(self, init_channel=prefix + "MuxEnbl-Sts")
         elif prop == 'mux_div':
-            sp = PyDMSpinbox(self, init_channel=prefix + "MuxDiv-SP")
+            sp = SiriusSpinbox(self, init_channel=prefix + "MuxDiv-SP")
             sp.showStepExponent = False
             rb = PyDMLabel(self, init_channel=prefix + "MuxDiv-RB")
         return sp, rb

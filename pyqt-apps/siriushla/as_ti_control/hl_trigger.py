@@ -2,13 +2,11 @@ import sys
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGroupBox, QLabel, QPushButton, QFormLayout, \
     QVBoxLayout, QGridLayout, QSizePolicy as QSzPol, QWidget
-from pydm.widgets.enum_combo_box import PyDMEnumComboBox as PyDMECB
-from pydm.widgets.label import PyDMLabel
-from pydm.widgets.spinbox import PyDMSpinbox
+from pydm.widgets import PyDMEnumComboBox as PyDMECB, PyDMLabel
 from siriuspy.search import HLTimeSearch
 from siriuspy.csdevice import timesys
-from siriushla.widgets.led import PyDMLed, SiriusLedAlert
-from siriushla.widgets.state_button import PyDMStateButton
+from siriushla.widgets import PyDMLed, SiriusLedAlert, PyDMStateButton, \
+    SiriusSpinbox
 from siriushla import util as _util
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.as_ti_control.base import BaseList, BaseWidget
@@ -83,7 +81,7 @@ class HLTriggerDetailed(BaseWidget):
         ll_list_layout.addWidget(gb, 2, 0)
 
         init_channel = prefix.substitute(propty="NrPulses-SP")
-        sp = PyDMSpinbox(self, init_channel=init_channel)
+        sp = SiriusSpinbox(self, init_channel=init_channel)
         sp.showStepExponent = False
         init_channel = prefix.substitute(propty="NrPulses-RB")
         rb = PyDMLabel(self, init_channel=init_channel)
@@ -91,7 +89,7 @@ class HLTriggerDetailed(BaseWidget):
         ll_list_layout.addWidget(gb, 2, 1)
 
         init_channel = prefix.substitute(propty="Duration-SP")
-        sp = PyDMSpinbox(self, init_channel=init_channel)
+        sp = SiriusSpinbox(self, init_channel=init_channel)
         sp.showStepExponent = False
         init_channel = prefix.substitute(propty="Duration-RB")
         rb = PyDMLabel(self, init_channel=init_channel)
@@ -99,7 +97,7 @@ class HLTriggerDetailed(BaseWidget):
         ll_list_layout.addWidget(gb, 3, 0, 1, 2)
 
         init_channel = prefix.substitute(propty="Delay-SP")
-        sp = PyDMSpinbox(self, init_channel=init_channel)
+        sp = SiriusSpinbox(self, init_channel=init_channel)
         sp.showStepExponent = False
         init_channel = prefix.substitute(propty="Delay-RB")
         rb = PyDMLabel(self, init_channel=init_channel)
@@ -213,13 +211,13 @@ class HLTriggerList(BaseList):
             rb = PyDMLabel(self, init_channel=init_channel)
         elif prop == 'pulses':
             init_channel = prefix.substitute(propty="NrPulses-SP")
-            sp = PyDMSpinbox(self, init_channel=init_channel)
+            sp = SiriusSpinbox(self, init_channel=init_channel)
             sp.showStepExponent = False
             init_channel = prefix.substitute(propty="NrPulses-RB")
             rb = PyDMLabel(self, init_channel=init_channel)
         elif prop == 'duration':
             init_channel = prefix.substitute(propty="Duration-SP")
-            sp = PyDMSpinbox(self, init_channel=init_channel)
+            sp = SiriusSpinbox(self, init_channel=init_channel)
             sp.showStepExponent = False
             init_channel = prefix.substitute(propty="Duration-RB")
             rb = PyDMLabel(self, init_channel=init_channel)
@@ -235,7 +233,7 @@ class HLTriggerList(BaseList):
             rb = PyDMLabel(self, init_channel=init_channel)
         elif prop == 'delay':
             init_channel = prefix.substitute(propty="Delay-SP")
-            sp = PyDMSpinbox(self, init_channel=init_channel)
+            sp = SiriusSpinbox(self, init_channel=init_channel)
             sp.showStepExponent = False
             init_channel = prefix.substitute(propty="Delay-RB")
             rb = PyDMLabel(self, init_channel=init_channel)

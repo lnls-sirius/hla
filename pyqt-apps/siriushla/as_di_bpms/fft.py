@@ -1,9 +1,9 @@
 from qtpy.QtWidgets import QHBoxLayout, QVBoxLayout, QFormLayout, QLabel, \
     QPushButton
 from qtpy.QtCore import Qt
-from pydm.widgets import PyDMSpinbox, PyDMEnumComboBox, PyDMPushButton
+from pydm.widgets import PyDMEnumComboBox, PyDMPushButton
 from siriushla.widgets.windows import create_window_from_widget
-from siriushla.widgets import SiriusConnectionSignal
+from siriushla.widgets import SiriusConnectionSignal, SiriusSpinbox
 from siriushla.as_di_bpms.base import BaseWidget, GraphWave
 from siriushla import util
 
@@ -32,7 +32,7 @@ class FFTConfig(BaseWidget):
         self.fl.addRow(pb)
 
     def _add_row(self, pv, label, enum=False):
-        CLASS = PyDMEnumComboBox if enum else PyDMSpinbox
+        CLASS = PyDMEnumComboBox if enum else SiriusSpinbox
         wid = CLASS(self)
         self._make_connections(wid, pv)
         if not enum:
