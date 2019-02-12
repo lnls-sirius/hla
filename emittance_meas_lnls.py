@@ -202,6 +202,14 @@ class EmittanceMeasure(QWidget):
         nemit = emit * energy / electron_rest_en * 1e6  # in mm.mrad
         return nemit, beta, alpha
 
+def _twiss(self, s_11 , s_12, s_22, energy):
+        emit = np.sqrt(abs(s_11 * s_22 - s_12 * s_12))
+        beta = s_11 / emit
+        alpha = -s_12 / emit
+        gamma = s_22 / emit
+        nemit = emit * energy / electron_rest_en * 1e6  # in mm.mrad
+        return nemit, beta, alpha, gamma
+
     def _thin_lens_method(self, I_meas, sigma, pl='x'):
         I_meas2 = I_meas if pl=='x' else -I_meas
 
