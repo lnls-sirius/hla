@@ -116,8 +116,8 @@ class TimingMain(SiriusMainWindow):
             Window = create_window_from_widget(_AFC, name='AFC')
             connect_window(action, Window, self, prefix=prefix+afc+':')
 
-        menu_fout = menu.addMenu('FOUTs')
-        for fout in LLTimeSearch.get_device_names(filters={'dev': 'FOUT'}):
+        menu_fout = menu.addMenu('Fouts')
+        for fout in LLTimeSearch.get_device_names(filters={'dev': 'Fout'}):
             action = menu_fout.addAction(fout)
             Window = create_window_from_widget(_FOUT, name='Fout')
             connect_window(action, Window, self, prefix=prefix+fout+':')
