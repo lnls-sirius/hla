@@ -1,5 +1,6 @@
 from qtpy.QtCore import Property
 from pydm.widgets import PyDMSpinbox
+from pydm.widgets.base import PyDMWritableWidget
 
 
 class SiriusSpinbox(PyDMSpinbox):
@@ -31,7 +32,7 @@ class SiriusSpinbox(PyDMSpinbox):
         new_limit : float
             New value for the control limit
         """
-        super(SiriusSpinbox, self).ctrl_limit_changed(which, new_limit)
+        PyDMWritableWidget.ctrl_limit_changed(self, which, new_limit)
         self.update_limits()
 
     def update_limits(self):
