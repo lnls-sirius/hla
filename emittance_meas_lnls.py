@@ -195,11 +195,10 @@ class EmittanceMeasure(QWidget):
 
         Rx, Ry = self._get_resp_mat(K1, energy)
         R = Rx if pl == 'x' else Ry
-        a, b, c = np.linalg.lstsq(R, sigma*sigma, rcond=None)[0]
-        emit = np.sqrt(abs(a*c - b*b))
-        beta = a/emit
-        alpha = -b/emit
-        nemit = emit * energy / electron_rest_en * 1e6  # in mm.mrad
+        # pseudo_inv = (np.linalg.inv(np.transpose(R) @ R) @ np.transpose(R))
+        # [s_11, s_12, s_22] = pseudo_inv @ (sigma*sigma)
+        s_11, s_12, s_22 = np.linalg.lstsq(R, sigma * sigma, rcond=None)[0]
+        nemit, beta, alpha, gamma = self._twiss(s_11, s_12, s_22, energy)
         return nemit, beta, alpha
 
 def _twiss(self, s_11 , s_12, s_22, energy):
