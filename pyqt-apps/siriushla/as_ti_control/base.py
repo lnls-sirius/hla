@@ -1,6 +1,9 @@
+
+import re
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QFormLayout, \
-    QScrollArea, QGroupBox, QLabel, QGridLayout, QSizePolicy as QSzPol, QFrame
+    QScrollArea, QGroupBox, QLabel, QGridLayout, QSizePolicy as QSzPol, \
+    QFrame, QLineEdit
 from pydm.widgets import PyDMEnumComboBox
 from pydm.widgets.base import PyDMPrimitiveWidget
 from siriuspy.namesys import SiriusPVName as _PVName
@@ -87,23 +90,37 @@ class BaseList(CustomGroupBox):
         glay = QGridLayout()
         glay.setVerticalSpacing(30)
         glay.setHorizontalSpacing(30)
+        glay.setAlignment(Qt.AlignTop)
         wid.setLayout(glay)
 
         objs = self.getLine(header=True)
         for j, obj in enumerate(objs):
-            glay.addLayout(obj, 0, j)
-        for i, obj_name in enumerate(self.obj_names, 1):
+            glay.addLayout(obj, 1, j)
+
+        self.lines = dict()
+        self.filtered_lines = set()
+        for i, obj_name in enumerate(self.obj_names, 2):
             pref = _PVName(self.prefix + obj_name)
             objs = self.getLine(pref)
+            self.lines[pref] = objs
+            self.filtered_lines.add(pref)
             for j, obj in enumerate(objs):
                 glay.addLayout(obj, i, j)
 
+        # Create scrollarea
         sc_area = QScrollArea()
         sc_area.setWidgetResizable(True)
         sc_area.setFrameShape(QFrame.NoFrame)
         sc_area.setWidget(wid)
-        self.my_layout = QHBoxLayout(self)
-        self.my_layout.setContentsMargins(0, 6, 0, 0)
+        # Create search bar
+        search_lineedit = QLineEdit(parent=self)
+        search_lineedit.setPlaceholderText("Search...")
+        search_lineedit.textEdited.connect(self.filter_lines)
+
+        self.my_layout = QVBoxLayout(self)
+        self.my_layout.setContentsMargins(6, 6, 6, 0)
+        self.my_layout.setSpacing(3)
+        self.my_layout.addWidget(search_lineedit)
         self.my_layout.addWidget(sc_area)
 
     def getLine(self, prefix=None, header=False):
@@ -118,7 +135,7 @@ class BaseList(CustomGroupBox):
         if prop not in self.props:
             return
         lv = QVBoxLayout()
-        lv.setSpacing(9)
+        lv.setSpacing(6)
         lv.setAlignment(Qt.AlignHCenter)
         fun = self._createObjs if not header else self._headerLabel
         objs = fun(prefix, prop)
@@ -127,6 +144,31 @@ class BaseList(CustomGroupBox):
             ob.setStyleSheet("min-width:{}em;".format(self._MIN_WIDs[prop]))
             ob.setSizePolicy(QSzPol.Minimum, QSzPol.Maximum)
         return lv
+
+    def filter_lines(self, text):
+        """Filter lines according to the regexp filter."""
+        try:
+            pattern = re.compile(text, re.I)
+        except Exception:  # Ignore malformed patterns
+            pattern = re.compile("malformed")
+
+        self.filtered_lines.clear()
+        for line in self.lines.keys():
+            if pattern.search(line):
+                self.filtered_lines.add(line)
+
+        self._set_lines_visibility()
+
+    def _set_lines_visibility(self):
+        for key, line in self.lines.items():
+            if key in self.filtered_lines:
+                for layout in line:
+                    for idx in range(layout.count()):
+                        layout.itemAt(idx).widget().setVisible(True)
+            else:
+                for layout in line:
+                    for idx in range(layout.count()):
+                        layout.itemAt(idx).widget().setVisible(False)
 
     def _headerLabel(self, prefix, prop):
         lb = QLabel('<h4>' + self._LABELS[prop] + '</h4>', self)
