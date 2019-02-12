@@ -108,7 +108,8 @@ class BaseCombo(QComboBox, PyDMPrimitiveWidget):
         self.setCurrentIndex(self.count()-1)
         self.currentTextChanged.connect(self._selection_changed)
 
-    def _selection_changed(self, text, sigs=dict()):
+    def _selection_changed(self, text, sigs=None):
+        sigs = sigs or dict()
         if text in self.ctrls:
             for pln in ('x', 'y'):
                 orb = self.ctrls[text][pln]['getvalue']()

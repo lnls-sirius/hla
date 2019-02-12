@@ -255,8 +255,8 @@ class EventList(BaseList):
     """Template for control of Events."""
 
     _MIN_WIDs = {
-        'ext_trig': 150, 'mode': 205, 'delay_type': 130, 'delay': 150,
-        'description': 300, 'code': 100,
+        'ext_trig': 4.8, 'mode': 6.6, 'delay_type': 4.2, 'delay': 4.8,
+        'description': 9.7, 'code': 3.2,
         }
     _LABELS = {
         'ext_trig': 'Ext. Trig.', 'mode': 'Mode', 'description': 'Description',
@@ -296,10 +296,10 @@ class ClockList(BaseList):
     """Template for control of High and Low Level Clocks."""
 
     _MIN_WIDs = {
-        'state': 150,
-        'frequency': 150,
-        'mux_div': 150,
-        'mux_enbl': 150,
+        'state': 4.8,
+        'frequency': 4.8,
+        'mux_div': 4.8,
+        'mux_enbl': 4.8,
         }
     _LABELS = {
         'state': 'Enabled',
