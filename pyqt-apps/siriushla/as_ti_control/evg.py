@@ -26,14 +26,11 @@ class EVG(BaseWidget):
         mylayout.addWidget(lab, 0, 0, 1, 2)
         mylayout.setAlignment(lab, Qt.AlignCenter)
 
-        scr_ar = QScrollArea(self)
         self.events_wid = EventList(
-            name='Events', parent=scr_ar, prefix=self.prefix,
+            name='Events', parent=self, prefix=self.prefix,
             obj_names=sorted(_cstime.Const.EvtLL._fields[1:]))
-        scr_ar.setWidget(self.events_wid)
-        scr_ar.setMinimumWidth(1150)
-        scr_ar.setSizePolicy(QSzPol.Minimum, QSzPol.Preferred)
-        mylayout.addWidget(scr_ar, 2, 0)
+        self.events_wid.setMinimumWidth(1150)
+        mylayout.addWidget(self.events_wid, 2, 0)
 
         self.clocks_wid = ClockList(
             name='Clocks', parent=self, prefix=self.prefix,
