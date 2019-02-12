@@ -1,4 +1,3 @@
-
 import re
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QFormLayout, \
@@ -37,12 +36,11 @@ class BaseWidget(QWidget):
             if pv2 != pv1:
                 if not_enum:
                     chan1 = self.get_pvname(pv1)
-                    wid = SiriusSpinbox(self, init_channel=chan1)
+                    wid = MySpinBox(self, init_channel=chan1)
                     wid.showStepExponent = False
                     wid.limitsFromChannel = False
                 else:
-                    wid = PyDMEnumComboBox(
-                        self, init_channel=self.get_pvname(pv1))
+                    wid = MyComboBox(self, init_channel=self.get_pvname(pv1))
                     wid.setStyleSheet("""min-width:4.8em;""")
                 wid.setObjectName(pv1.replace('-', ''))
                 hbl.addWidget(wid)
@@ -74,7 +72,7 @@ class BaseList(CustomGroupBox):
     _ALL_PROPS = tuple()
 
     def __init__(self, name=None, parent=None, prefix='',
-                 props=set(), obj_names=list()):
+                 props=set(), obj_names=list(), has_search=True):
         """Initialize object."""
         super().__init__(name, parent)
         try:
@@ -82,6 +80,7 @@ class BaseList(CustomGroupBox):
         except Exception:
             self.prefix = prefix
         self.props = props or set(self._ALL_PROPS)
+        self.has_search = has_search
         self.obj_names = obj_names
         self.setupUi()
 
@@ -107,20 +106,22 @@ class BaseList(CustomGroupBox):
             for j, obj in enumerate(objs):
                 glay.addLayout(obj, i, j)
 
+        self.my_layout = QVBoxLayout(self)
+        self.my_layout.setContentsMargins(6, 6, 6, 0)
+        self.my_layout.setSpacing(3)
+
+        if self.has_search:
+            # Create search bar
+            search_lineedit = QLineEdit(parent=self)
+            search_lineedit.setPlaceholderText("Search...")
+            search_lineedit.textEdited.connect(self.filter_lines)
+            self.my_layout.addWidget(search_lineedit)
+
         # Create scrollarea
         sc_area = QScrollArea()
         sc_area.setWidgetResizable(True)
         sc_area.setFrameShape(QFrame.NoFrame)
         sc_area.setWidget(wid)
-        # Create search bar
-        search_lineedit = QLineEdit(parent=self)
-        search_lineedit.setPlaceholderText("Search...")
-        search_lineedit.textEdited.connect(self.filter_lines)
-
-        self.my_layout = QVBoxLayout(self)
-        self.my_layout.setContentsMargins(6, 6, 6, 0)
-        self.my_layout.setSpacing(3)
-        self.my_layout.addWidget(search_lineedit)
         self.my_layout.addWidget(sc_area)
 
     def getLine(self, prefix=None, header=False):
@@ -178,3 +179,35 @@ class BaseList(CustomGroupBox):
 
     def _createObjs(self, prefix, prop):
         return tuple()  # return tuple of widgets
+
+
+class MySpinBox(SiriusSpinbox):
+    """Subclass QDoubleSpinBox to reimplement whellEvent."""
+
+    def __init__(self, parent, init_channel=None):
+        """Initialize object."""
+        super().__init__(parent=parent, init_channel=init_channel)
+        self.setFocusPolicy(Qt.StrongFocus)
+
+    def wheelEvent(self, event):
+        """Reimplement wheel event to ignore event when out of focus."""
+        if not self.hasFocus():
+            event.ignore()
+        else:
+            super().wheelEvent(event)
+
+
+class MyComboBox(PyDMEnumComboBox):
+    """Subclass PyDMEnumComboBox to reimplement whellEvent."""
+
+    def __init__(self, parent, init_channel=None):
+        """Initialize object."""
+        super().__init__(parent=parent, init_channel=init_channel)
+        self.setFocusPolicy(Qt.StrongFocus)
+
+    def wheelEvent(self, event):
+        """Reimplement wheel event to ignore event when out of focus."""
+        if not self.hasFocus():
+            event.ignore()
+        else:
+            super().wheelEvent(event)

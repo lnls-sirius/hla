@@ -1,10 +1,10 @@
 import sys
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QGroupBox, QLabel, QScrollArea, QVBoxLayout, \
+from qtpy.QtWidgets import QGroupBox, QLabel, QVBoxLayout, \
     QHBoxLayout, QGridLayout, QSpacerItem, QSizePolicy as QSzPol
-from pydm.widgets import PyDMLabel,  PyDMEnumComboBox as PyDMECB
+from pydm.widgets import PyDMLabel
 from siriushla.widgets import PyDMLed, SiriusLedAlert, PyDMStateButton
-from siriushla.as_ti_control.base import BaseWidget
+from siriushla.as_ti_control.base import BaseWidget, MyComboBox as _MyComboBox
 from siriushla.as_ti_control.ll_trigger import OTPList, OUTList
 
 
@@ -18,7 +18,6 @@ class _EVR_EVE(BaseWidget):
         self.setupui()
 
     def setupui(self):
-        # self.resize(2000, 2000)
         self.my_layout = QGridLayout(self)
         self.my_layout.setHorizontalSpacing(20)
         self.my_layout.setVerticalSpacing(20)
@@ -26,16 +25,12 @@ class _EVR_EVE(BaseWidget):
         self.my_layout.addWidget(lab, 0, 0, 1, 2)
         self.my_layout.setAlignment(lab, Qt.AlignCenter)
 
-        scr_ar = QScrollArea(self)
-        # scr_ar.setSizePolicy(QSzPol.)
         self.otps_wid = OTPList(
-            name='Internal Trigger (OTP)', parent=scr_ar, prefix=self.prefix,
-            obj_names=['OTP{0:02d}'.format(i) for i in range(24)]
-            )
-        scr_ar.setWidget(self.otps_wid)
-        scr_ar.setMinimumWidth(1570)
-        scr_ar.setSizePolicy(QSzPol.Minimum, QSzPol.Expanding)
-        self.my_layout.addWidget(scr_ar, 2, 0, 2, 1)
+            name='Internal Trigger (OTP)', parent=self, prefix=self.prefix,
+            obj_names=['OTP{0:02d}'.format(i) for i in range(24)])
+        self.otps_wid.setObjectName('otps_wid')
+        self.otps_wid.setStyleSheet("""#otps_wid{min-width:50em;}""")
+        self.my_layout.addWidget(self.otps_wid, 2, 0)
 
         self.outs_wid = OUTList(
             name='OUT', parent=self, prefix=self.prefix,
@@ -57,8 +52,6 @@ class _EVR_EVE(BaseWidget):
 
         sp = PyDMStateButton(self, init_channel=prefix + "DevEnbl-Sel")
         rb = PyDMLed(self, init_channel=prefix + "DevEnbl-Sts")
-        rb.setMinimumHeight(40)
-        rb.setSizePolicy(QSzPol.Preferred, QSzPol.Minimum)
         gb = self._create_small_GB(
             'Enabled', self.status_wid, (sp, rb), align_ver=False
             )
@@ -75,8 +68,6 @@ class _EVR_EVE(BaseWidget):
         on_c, off_c = rb.onColor, rb.offColor
         rb.offColor = on_c
         rb.onColor = off_c
-        rb.setMaximumSize(40, 40)
-        rb.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
         gb = self._create_small_GB('', self.status_wid, (lb, rb))
         gb.setStyleSheet('border: 2px solid transparent;')
         status_layout.addWidget(gb, 0, 2)
@@ -86,16 +77,12 @@ class _EVR_EVE(BaseWidget):
         on_c, off_c = rb.onColor, rb.offColor
         rb.offColor = on_c
         rb.onColor = off_c
-        rb.setMaximumSize(40, 40)
-        rb.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
         gb = self._create_small_GB('', self.status_wid, (lb, rb))
         gb.setStyleSheet('border: 2px solid transparent;')
         status_layout.addWidget(gb, 0, 3)
 
         lb = QLabel("<b>Interlock</b>")
         rb = SiriusLedAlert(self, init_channel=prefix + "Intlk-Mon")
-        rb.setMaximumSize(40, 40)
-        rb.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
         gb = self._create_small_GB('', self.status_wid, (lb, rb))
         gb.setStyleSheet('border: 2px solid transparent;')
         status_layout.addWidget(gb, 0, 4)
@@ -104,16 +91,12 @@ class _EVR_EVE(BaseWidget):
             wids = list()
             for i in range(8):
                 rb = SiriusLedAlert(
-                    self, init_channel=prefix + "Los-Mon", bit=i
-                    )
-                rb.setMaximumSize(40, 40)
-                rb.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
+                    parent=self, init_channel=prefix + "Los-Mon", bit=i)
                 wids.append(rb)
             gb = self._create_small_GB(
-                    'Down Connection', self.status_wid, wids, align_ver=False
-                    )
+                    'Down Connection', self.status_wid, wids, align_ver=False)
         else:
-            sp = PyDMECB(self, init_channel=prefix + "RFOut-Sel")
+            sp = _MyComboBox(self, init_channel=prefix + "RFOut-Sel")
             rb = PyDMLabel(self, init_channel=prefix + "RFOut-Sts")
             gb = self._create_small_GB('RF Output', self.status_wid, (sp, rb))
         status_layout.addWidget(gb, 0, 5)

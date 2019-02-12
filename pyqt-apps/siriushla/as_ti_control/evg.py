@@ -1,13 +1,13 @@
 import sys
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QGroupBox, QLabel, QWidget, QScrollArea, \
+from qtpy.QtWidgets import QGroupBox, QLabel, QWidget, \
     QVBoxLayout, QHBoxLayout, QGridLayout, QSizePolicy as QSzPol
 from pydm.widgets import PyDMLabel, PyDMLineEdit, PyDMPushButton, \
-    PyDMEnumComboBox as PyDMECB, PyDMCheckbox as PyDMCb
+    PyDMCheckbox as PyDMCb
 from siriuspy.csdevice import timesys as _cstime
-from siriushla.widgets import PyDMLed, SiriusLedAlert, PyDMStateButton, \
-    SiriusSpinbox
-from siriushla.as_ti_control.base import BaseList, BaseWidget
+from siriushla.widgets import PyDMLed, SiriusLedAlert, PyDMStateButton
+from siriushla.as_ti_control.base import BaseList, BaseWidget, \
+    MySpinBox as _MySpinBox, MyComboBox as _MyComboBox
 
 
 class EVG(BaseWidget):
@@ -29,7 +29,8 @@ class EVG(BaseWidget):
         self.events_wid = EventList(
             name='Events', parent=self, prefix=self.prefix,
             obj_names=sorted(_cstime.Const.EvtLL._fields[1:]))
-        self.events_wid.setMinimumWidth(1150)
+        self.events_wid.setObjectName('events_wid')
+        self.events_wid.setStyleSheet("""#events_wid{min-width:40em;}""")
         mylayout.addWidget(self.events_wid, 2, 0)
 
         self.clocks_wid = ClockList(
@@ -69,12 +70,10 @@ class EVG(BaseWidget):
 
         sp = PyDMStateButton(self, init_channel=prefix + "DevEnbl-Sel")
         rb = PyDMLed(self, init_channel=prefix + "DevEnbl-Sts")
-        rb.setMinimumHeight(40)
-        rb.setSizePolicy(QSzPol.Preferred, QSzPol.Minimum)
         layrow.addWidget(self._create_prop_widget(
                         'Dev Enable', self.configs_wid, (sp, rb)))
 
-        sp = SiriusSpinbox(self, init_channel=prefix + "RFDiv-SP")
+        sp = _MySpinBox(self, init_channel=prefix + "RFDiv-SP")
         sp.showStepExponent = False
         rb = PyDMLabel(self, init_channel=prefix + "RFDiv-RB")
         layrow.addWidget(self._create_prop_widget(
@@ -89,7 +88,6 @@ class EVG(BaseWidget):
             self, init_channel=prefix+"RFReset-Cmd", pressValue=1,
             label='Reset')
         rb = PyDMLed(self, init_channel=prefix + "RFStatus-Mon")
-        rb.setMinimumHeight(40)
         layrow.addWidget(self._create_prop_widget(
                         'RF Status', self.configs_wid, (sp, rb)))
 
@@ -97,7 +95,6 @@ class EVG(BaseWidget):
             self, init_channel=prefix+"UpdateEvt-Cmd", pressValue=1,
             label='Update')
         rb = PyDMLed(self, init_channel=prefix + "EvtSyncStatus-Mon")
-        rb.setMinimumHeight(40)
         layrow.addWidget(self._create_prop_widget(
                         'Update Evts', self.configs_wid, (sp, rb)))
 
@@ -108,12 +105,10 @@ class EVG(BaseWidget):
 
         sp = PyDMStateButton(self, init_channel=prefix + "ACEnbl-Sel")
         rb = PyDMLed(self, init_channel=prefix + "ACEnbl-Sts")
-        rb.setMinimumHeight(40)
         layrow.addWidget(self._create_prop_widget(
                         'AC Enable', self.configs_wid, (sp, rb)))
 
         mon = PyDMLed(self, init_channel=prefix + "ACStatus-Mon")
-        mon.setMinimumHeight(40)
         layrow.addWidget(self._create_prop_widget(
                         'AC Status', self.configs_wid, (mon,)))
 
@@ -122,13 +117,13 @@ class EVG(BaseWidget):
         configlayout.addLayout(layrow)
         configlayout.addStretch()
 
-        sp = SiriusSpinbox(self, init_channel=prefix + "ACDiv-SP")
+        sp = _MySpinBox(self, init_channel=prefix + "ACDiv-SP")
         sp.showStepExponent = False
         rb = PyDMLabel(self, init_channel=prefix + "ACDiv-RB")
         layrow.addWidget(self._create_prop_widget(
                         'AC Divisor', self.configs_wid, (sp, rb)))
 
-        sp = PyDMECB(self, init_channel=prefix + "ACSrc-Sel")
+        sp = _MyComboBox(self, init_channel=prefix + "ACSrc-Sel")
         rb = PyDMLabel(self, init_channel=prefix + "ACSrc-Sts")
         layrow.addWidget(self._create_prop_widget(
                         'AC Source', self.configs_wid, (sp, rb)))
@@ -138,7 +133,7 @@ class EVG(BaseWidget):
         configlayout.addLayout(layrow)
         configlayout.addStretch()
 
-        sp = SiriusSpinbox(self, init_channel=prefix + "RepeatBucketList-SP")
+        sp = _MySpinBox(self, init_channel=prefix + "RepeatBucketList-SP")
         sp.showStepExponent = False
         rb = PyDMLabel(self, init_channel=prefix + "RepeatBucketList-RB")
         layrow.addWidget(self._create_prop_widget(
@@ -155,23 +150,20 @@ class EVG(BaseWidget):
 
         sp = PyDMStateButton(self, init_channel=prefix + "ContinuousEvt-Sel")
         rb = PyDMLed(self, init_channel=prefix + "ContinuousEvt-Sts")
-        rb.setMinimumHeight(40)
         layrow.addWidget(self._create_prop_widget(
                         'Continuous', self.configs_wid, (sp, rb)))
 
         sp = PyDMStateButton(self, init_channel=prefix + "InjectionEvt-Sel")
         rb = PyDMLed(self, init_channel=prefix + "InjectionEvt-Sts")
-        rb.setMinimumHeight(40)
         layrow.addWidget(self._create_prop_widget(
                         'Injection', self.configs_wid, (sp, rb)))
 
         # sp = PyDMLineEdit(self, init_channel=prefix + "BucketList-SP")
-        # sp.setMaximumHeight(35)
-        # # sp.setMinimumWidth(300)
+        # sp.setStyleSheet("""min-width:9.7em; max-height:1.15em;""")
         # sp.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
         # rb = PyDMLabel(self, init_channel=prefix + "BucketList-RB")
-        # rb.setMaximumSize(500, 35)
-        # # rb.setMinimumWidth(300)
+        # rb.setStyleSheet(
+        #    """min-width:9.7em; max-width:16em; max-height:1.15em;""")
         # rb.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
         # # gb = self._create_small_GB('Bucket List', self.configs_wid, (sp, rb))
         # # configs_layout.addWidget(gb, 2, 0, 1, 2)
@@ -197,8 +189,6 @@ class EVG(BaseWidget):
         on_c, off_c = rb.onColor, rb.offColor
         rb.offColor = on_c
         rb.onColor = off_c
-        rb.setMaximumSize(40, 40)
-        rb.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
         gb = self._create_small_GB('', self.status_wid, (lb, rb))
         gb.setStyleSheet('border: 2px solid transparent;')
         status_layout.addWidget(gb, 1, 1)
@@ -208,8 +198,6 @@ class EVG(BaseWidget):
         on_c, off_c = rb.onColor, rb.offColor
         rb.offColor = on_c
         rb.onColor = off_c
-        rb.setMaximumSize(40, 40)
-        rb.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
         gb = self._create_small_GB('', self.status_wid, (lb, rb))
         gb.setStyleSheet('border: 2px solid transparent;')
         status_layout.addWidget(gb, 1, 2)
@@ -217,12 +205,9 @@ class EVG(BaseWidget):
         wids = list()
         for i in range(8):
             rb = SiriusLedAlert(self, init_channel=prefix + "Los-Mon", bit=i)
-            rb.setMaximumSize(40, 40)
-            rb.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
             wids.append(rb)
         gb = self._create_small_GB(
-                'Down Connection', self.status_wid, wids, align_ver=False
-                )
+                'Down Connection', self.status_wid, wids, align_ver=False)
         status_layout.addWidget(gb, 2, 0, 1, 3)
 
     def _create_small_GB(self, name, parent, wids, align_ver=True):
@@ -269,13 +254,13 @@ class EventList(BaseList):
                 self, init_channel=prefix+'ExtTrig-Cmd', pressValue=1)
             sp.setText(prefix.propty)
         elif prop == 'mode':
-            sp = PyDMECB(self, init_channel=prefix + "Mode-Sel")
+            sp = _MyComboBox(self, init_channel=prefix + "Mode-Sel")
             rb = PyDMLabel(self, init_channel=prefix + "Mode-Sts")
         elif prop == 'delay_type':
-            sp = PyDMECB(self, init_channel=prefix+"DelayType-Sel")
+            sp = _MyComboBox(self, init_channel=prefix+"DelayType-Sel")
             rb = PyDMLabel(self, init_channel=prefix+"DelayType-Sts")
         elif prop == 'delay':
-            sp = SiriusSpinbox(self, init_channel=prefix + "Delay-SP")
+            sp = _MySpinBox(self, init_channel=prefix + "Delay-SP")
             sp.showStepExponent = False
             rb = PyDMLabel(self, init_channel=prefix + "Delay-RB")
         elif prop == 'description':
@@ -306,13 +291,19 @@ class ClockList(BaseList):
         }
     _ALL_PROPS = ('state', 'frequency', 'mux_div', 'mux_enbl')
 
+    def __init__(self, name=None, parent=None, prefix='',
+                 props=set(), obj_names=list(), has_search=False):
+        """Initialize object."""
+        super().__init__(name=name, parent=parent, prefix=prefix, props=props,
+                         obj_names=obj_names, has_search=has_search)
+
     def _createObjs(self, prefix, prop):
         if prop == 'state':
             sp = PyDMCb(self, init_channel=prefix + "State-Sel")
             sp.setText(prefix.propty)
             rb = PyDMLed(self, init_channel=prefix + "State-Sts")
         elif prop == 'frequency':
-            sp = SiriusSpinbox(self, init_channel=prefix + "Freq-SP")
+            sp = _MySpinBox(self, init_channel=prefix + "Freq-SP")
             sp.showStepExponent = False
             rb = PyDMLabel(self, init_channel=prefix + "Freq-RB")
         if prop == 'mux_enbl':
@@ -320,7 +311,7 @@ class ClockList(BaseList):
             sp.setText(prefix.propty)
             rb = PyDMLed(self, init_channel=prefix + "MuxEnbl-Sts")
         elif prop == 'mux_div':
-            sp = SiriusSpinbox(self, init_channel=prefix + "MuxDiv-SP")
+            sp = _MySpinBox(self, init_channel=prefix + "MuxDiv-SP")
             sp.showStepExponent = False
             rb = PyDMLabel(self, init_channel=prefix + "MuxDiv-RB")
         return sp, rb

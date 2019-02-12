@@ -30,15 +30,21 @@ class TimingMain(SiriusMainWindow):
         mainwid = QWidget(self)
         self.setCentralWidget(mainwid)
         gridlayout = QGridLayout(mainwid)
+        gridlayout.setHorizontalSpacing(20)
+        gridlayout.setVerticalSpacing(20)
 
         globpars = self.setglobalparameters()
         gridlayout.addWidget(globpars, 0, 0, 1, 2)
 
         events = self.setevents()
+        events.setObjectName('events')
+        events.setStyleSheet("""#events{min-width:30em;}""")
         gridlayout.addWidget(events, 1, 0)
         gridlayout.setColumnStretch(0, 3)
 
         triggers = self.settriggers()
+        triggers.setObjectName('triggers')
+        triggers.setStyleSheet("""#triggers{min-width:50em;}""")
         gridlayout.addWidget(triggers, 1, 1)
         gridlayout.setColumnStretch(1, 5)
 
@@ -72,6 +78,7 @@ class TimingMain(SiriusMainWindow):
         names = list(map(
             lambda x: evg_pref + x[1],
             sorted(_cstime.Const.EvtLL2HLMap.items())))
+        names = [x for x in names if not x.endswith(('Dsbl', 'PsMtn'))]
         evts = _EventList(
             name='High Level Events', parent=self, prefix=self.prefix,
             props=props, obj_names=names)
@@ -109,7 +116,7 @@ class TimingMain(SiriusMainWindow):
             Window = create_window_from_widget(_EVE, name='EVE')
             connect_window(action, Window, self, prefix=prefix + eve + ':')
 
-        menu_afc = menu.addMenu('AFCs')
+        menu_afc = menu.addMenu('AMCs')
         for afc in LLTimeSearch.get_device_names(
                                     filters={'dev': 'AMCFPGAEVR'}):
             action = menu_afc.addAction(afc)
@@ -129,11 +136,11 @@ class TimingMain(SiriusMainWindow):
         lab.setAlignment(Qt.AlignCenter)
         vbl.addWidget(lab)
         hbl = QHBoxLayout()
+        hbl.setAlignment(Qt.AlignCenter)
         vbl.addItem(hbl)
         for wid in wids:
             wid.setParent(pwid)
             hbl.addWidget(wid)
-            hbl.setAlignment(wid, Qt.AlignCenter)
         return pwid
 
 

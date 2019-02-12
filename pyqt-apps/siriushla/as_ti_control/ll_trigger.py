@@ -1,10 +1,11 @@
 import sys
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QLabel
-from pydm.widgets import PyDMEnumComboBox as PyDMECB, PyDMLabel
+from pydm.widgets import PyDMLabel
 from siriuspy.search import LLTimeSearch
-from siriushla.widgets import PyDMLed, PyDMStateButton, SiriusSpinbox
-from siriushla.as_ti_control.base import BaseList
+from siriushla.widgets import PyDMLed, PyDMStateButton
+from siriushla.as_ti_control.base import BaseList, \
+    MySpinBox as _MySpinBox, MyComboBox as _MyComboBox
 
 
 class LLTriggerList(BaseList):
@@ -66,34 +67,34 @@ class LLTriggerList(BaseList):
             rb = PyDMLed(self, init_channel=pvname)
         elif prop == 'event':
             pvname = intlb.substitute(propty=intlb.propty+'Evt-SP')
-            sp = SiriusSpinbox(self, init_channel=pvname)
+            sp = _MySpinBox(self, init_channel=pvname)
             sp.showStepExponent = False
             pvname = intlb.substitute(propty=intlb.propty+'Evt-RB')
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'width':
             pvname = intlb.substitute(propty=intlb.propty+"Width-SP")
-            sp = SiriusSpinbox(self, init_channel=pvname)
+            sp = _MySpinBox(self, init_channel=pvname)
             sp.showStepExponent = False
             pvname = intlb.substitute(propty=intlb.propty+"Width-RB")
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'polarity':
             pvname = intlb.substitute(propty=intlb.propty+"Polarity-Sel")
-            sp = PyDMECB(self, init_channel=pvname)
+            sp = _MyComboBox(self, init_channel=pvname)
             pvname = intlb.substitute(propty=intlb.propty+"Polarity-Sts")
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'pulses':
             pvname = intlb.substitute(propty=intlb.propty+"NrPulses-SP")
-            sp = SiriusSpinbox(self, init_channel=pvname)
+            sp = _MySpinBox(self, init_channel=pvname)
             sp.showStepExponent = False
             pvname = intlb.substitute(propty=intlb.propty+"NrPulses-RB")
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'delay':
             pvname = intlb.substitute(propty=intlb.propty+"Delay-SP")
-            sp = SiriusSpinbox(self, init_channel=pvname)
+            sp = _MySpinBox(self, init_channel=pvname)
             sp.showStepExponent = False
             pvname = intlb.substitute(propty=intlb.propty+"Delay-RB")
             rb = PyDMLabel(self, init_channel=pvname)
@@ -110,33 +111,33 @@ class LLTriggerList(BaseList):
             rb = PyDMLed(self, init_channel=pvname)
         if prop == 'source':
             pvname = outlb.substitute(propty=outlb.propty+"Src-Sel")
-            sp = PyDMECB(self, init_channel=pvname)
+            sp = _MyComboBox(self, init_channel=pvname)
             pvname = outlb.substitute(propty=outlb.propty+"Src-Sts")
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'trigger':
             pvname = outlb.substitute(propty=outlb.propty+"SrcTrig-SP")
-            sp = SiriusSpinbox(self, init_channel=pvname)
+            sp = _MySpinBox(self, init_channel=pvname)
             sp.showStepExponent = False
             pvname = outlb.substitute(propty=outlb.propty+"SrcTrig-RB")
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'rf_delay':
             pvname = outlb.substitute(propty=outlb.propty+"RFDelay-SP")
-            sp = SiriusSpinbox(self, init_channel=pvname)
+            sp = _MySpinBox(self, init_channel=pvname)
             sp.showStepExponent = False
             pvname = outlb.substitute(propty=outlb.propty+"RFDelay-RB")
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'rf_delay_type':
             pvname = outlb.substitute(propty=outlb.propty+"RFDelayType-Sel")
-            sp = PyDMECB(self, init_channel=pvname)
+            sp = _MyComboBox(self, init_channel=pvname)
             pvname = outlb.substitute(propty=outlb.propty+"RFDelayType-Sts")
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'fine_delay':
             pvname = outlb.substitute(propty=outlb.propty+"FineDelay-SP")
-            sp = SiriusSpinbox(self, init_channel=pvname)
+            sp = _MySpinBox(self, init_channel=pvname)
             sp.showStepExponent = False
             pvname = outlb.substitute(propty=outlb.propty+"FineDelay-RB")
             rb = PyDMLabel(self, init_channel=pvname)
@@ -166,7 +167,7 @@ class AFCOUTList(LLTriggerList):
 
     _ALL_PROPS = (
         'name', 'state', 'event', 'source', 'width', 'polarity', 'pulses',
-        'delay')
+        'delay', 'timestamp')
 
 
 if __name__ == '__main__':
