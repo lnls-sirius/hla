@@ -150,16 +150,16 @@ class HLTriggerList(BaseList):
     """Template for control of High Level Triggers."""
 
     _MIN_WIDs = {
-        'detailed': 280,
-        'status': 150,
-        'state': 120,
-        'interlock': 200,
-        'source': 150,
-        'pulses': 100,
-        'duration': 190,
-        'polarity': 150,
-        'delay_type': 130,
-        'delay': 170,
+        'detailed': 9,
+        'status': 4.8,
+        'state': 3.8,
+        'interlock': 6.5,
+        'source': 4.8,
+        'pulses': 3.2,
+        'duration': 6.1,
+        'polarity': 4.8,
+        'delay_type': 4.2,
+        'delay': 5.5,
         }
     _LABELS = {
         'detailed': 'Detailed View',

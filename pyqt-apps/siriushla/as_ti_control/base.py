@@ -1,6 +1,6 @@
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, \
-    QFormLayout, QGroupBox, QLabel, QGridLayout, QSizePolicy as QSzPol
+from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QFormLayout, \
+    QScrollArea, QGroupBox, QLabel, QGridLayout, QSizePolicy as QSzPol, QFrame
 from pydm.widgets import PyDMEnumComboBox
 from pydm.widgets.base import PyDMPrimitiveWidget
 from siriuspy.namesys import SiriusPVName as _PVName
@@ -40,18 +40,18 @@ class BaseWidget(QWidget):
                 else:
                     wid = PyDMEnumComboBox(
                         self, init_channel=self.get_pvname(pv1))
-                    wid.setMinimumWidth(150)
+                    wid.setStyleSheet("""min-width:4.8em;""")
                 wid.setObjectName(pv1.replace('-', ''))
                 hbl.addWidget(wid)
 
             lab = SiriusLabel(self, init_channel=self.get_pvname(pv2))
             lab.setObjectName(pv2.replace('-', ''))
             lab.showUnits = True
-            lab.setMinimumWidth(170)
+            lab.setStyleSheet("""min-width:5.5em;""")
             hbl.addWidget(lab)
             lab = QLabel(txt)
             lab.setObjectName(pv1.split('-')[0])
-            lab.setMinimumWidth(220)
+            lab.setStyleSheet("""min-width:7em;""")
             fbl.addRow(lab, hbl)
         return grpbx
 
@@ -83,18 +83,28 @@ class BaseList(CustomGroupBox):
         self.setupUi()
 
     def setupUi(self):
-        self.my_layout = QGridLayout(self)
-        self.my_layout.setVerticalSpacing(30)
-        self.my_layout.setHorizontalSpacing(30)
+        wid = QWidget()
+        glay = QGridLayout()
+        glay.setVerticalSpacing(30)
+        glay.setHorizontalSpacing(30)
+        wid.setLayout(glay)
 
         objs = self.getLine(header=True)
         for j, obj in enumerate(objs):
-            self.my_layout.addItem(obj, 0, j)
+            glay.addLayout(obj, 0, j)
         for i, obj_name in enumerate(self.obj_names, 1):
             pref = _PVName(self.prefix + obj_name)
             objs = self.getLine(pref)
             for j, obj in enumerate(objs):
-                self.my_layout.addItem(obj, i, j)
+                glay.addLayout(obj, i, j)
+
+        sc_area = QScrollArea()
+        sc_area.setWidgetResizable(True)
+        sc_area.setFrameShape(QFrame.NoFrame)
+        sc_area.setWidget(wid)
+        self.my_layout = QHBoxLayout(self)
+        self.my_layout.setContentsMargins(0, 6, 0, 0)
+        self.my_layout.addWidget(sc_area)
 
     def getLine(self, prefix=None, header=False):
         objects = list()
@@ -108,17 +118,19 @@ class BaseList(CustomGroupBox):
         if prop not in self.props:
             return
         lv = QVBoxLayout()
+        lv.setSpacing(9)
         lv.setAlignment(Qt.AlignHCenter)
         fun = self._createObjs if not header else self._headerLabel
         objs = fun(prefix, prop)
         for ob in objs:
             lv.addWidget(ob)
-            ob.setMinimumWidth(self._MIN_WIDs[prop])
+            ob.setStyleSheet("min-width:{}em;".format(self._MIN_WIDs[prop]))
             ob.setSizePolicy(QSzPol.Minimum, QSzPol.Maximum)
         return lv
 
     def _headerLabel(self, prefix, prop):
-        lb = QLabel(self._LABELS[prop], self)
+        lb = QLabel('<h4>' + self._LABELS[prop] + '</h4>', self)
+        lb.setStyleSheet("min-height:1.55em; max-height:1.55em;")
         lb.setAlignment(Qt.AlignHCenter)
         return (lb, )
 

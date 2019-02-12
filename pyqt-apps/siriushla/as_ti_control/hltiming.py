@@ -36,9 +36,11 @@ class TimingMain(SiriusMainWindow):
 
         events = self.setevents()
         gridlayout.addWidget(events, 1, 0)
+        gridlayout.setColumnStretch(0, 3)
 
         triggers = self.settriggers()
         gridlayout.addWidget(triggers, 1, 1)
+        gridlayout.setColumnStretch(1, 5)
 
     def setglobalparameters(self):
         wid = QGroupBox(self.centralWidget())
@@ -50,46 +52,40 @@ class TimingMain(SiriusMainWindow):
             self, init_channel=evg_pref+"UpdateEvt-Cmd", pressValue=1,
             label='Update')
         rb = PyDMLed(self, init_channel=evg_pref + "EvtSyncStatus-Mon")
-        rb.setMinimumHeight(40)
-        hbl.addWidget(self._create_prop_widget('Update Evts', wid, (sp, rb)))
+        hbl.addWidget(self._create_prop_widget(
+            '<h4>Update Evts</h4>', wid, (sp, rb)))
 
         sp = PyDMStateButton(self, init_channel=evg_pref + "ContinuousEvt-Sel")
         rb = PyDMLed(self, init_channel=evg_pref + "ContinuousEvt-Sts")
-        rb.setMinimumHeight(40)
-        hbl.addWidget(self._create_prop_widget('Continuous', wid, (sp, rb)))
+        hbl.addWidget(self._create_prop_widget(
+            '<h4>Continuous</h4>', wid, (sp, rb)))
 
         sp = PyDMStateButton(self, init_channel=evg_pref + "InjectionEvt-Sel")
         rb = PyDMLed(self, init_channel=evg_pref + "InjectionEvt-Sts")
-        rb.setMinimumHeight(40)
-        hbl.addWidget(self._create_prop_widget('Injection', wid, (sp, rb)))
+        hbl.addWidget(self._create_prop_widget(
+            '<h4>Injection</h4>', wid, (sp, rb)))
         return wid
 
     def setevents(self):
-        wid = QGroupBox(self.centralWidget())
-        hbl = QHBoxLayout(wid)
         props = {'ext_trig', 'mode', 'delay_type', 'delay'}
         evg_pref = LLTimeSearch.get_device_names({'dev': 'EVG'})[0] + ':'
         names = list(map(
             lambda x: evg_pref + x[1],
             sorted(_cstime.Const.EvtLL2HLMap.items())))
         evts = _EventList(
-            name='High Level Events', parent=wid, prefix=self.prefix,
+            name='High Level Events', parent=self, prefix=self.prefix,
             props=props, obj_names=names)
-        hbl.addWidget(evts)
-        return wid
+        return evts
 
     def settriggers(self):
-        wid = QGroupBox(self.centralWidget())
-        hbl = QHBoxLayout(wid)
         props = {
             'detailed', 'status', 'state', 'source',
             'pulses', 'duration', 'delay'}
         names = HLTimeSearch.get_hl_triggers()
         trigs = _HLTriggerList(
-            name='High Level Triggers', parent=wid, prefix=self.prefix,
+            name='High Level Triggers', parent=self, prefix=self.prefix,
             props=props, obj_names=names)
-        hbl.addWidget(trigs)
-        return wid
+        return trigs
 
     def setupmenus(self):
         prefix = self.prefix
