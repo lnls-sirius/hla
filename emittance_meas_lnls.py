@@ -189,6 +189,14 @@ class EmittanceMeasure(QWidget):
         kin_en = np.sqrt(energy*energy - electron_rest_en*electron_rest_en)
         return np.polyval(self.I2K1, I_meas)*light_speed/kin_en/1e6
 
+    def _twiss(self, s_11 , s_12, s_22, energy):
+        emit = np.sqrt(abs(s_11 * s_22 - s_12 * s_12))
+        beta = s_11 / emit
+        alpha = -s_12 / emit
+        gamma = s_22 / emit
+        nemit = emit * energy / electron_rest_en * 1e6  # in mm.mrad
+        return nemit, beta, alpha, gamma
+
     def _trans_matrix_method(self, I_meas, sigma, pl='x'):
         K1 = self._get_K1_from_I(I_meas)
         energy = self.spbox_energy.value()
@@ -200,14 +208,6 @@ class EmittanceMeasure(QWidget):
         s_11, s_12, s_22 = np.linalg.lstsq(R, sigma * sigma, rcond=None)[0]
         nemit, beta, alpha, gamma = self._twiss(s_11, s_12, s_22, energy)
         return nemit, beta, alpha
-
-def _twiss(self, s_11 , s_12, s_22, energy):
-        emit = np.sqrt(abs(s_11 * s_22 - s_12 * s_12))
-        beta = s_11 / emit
-        alpha = -s_12 / emit
-        gamma = s_22 / emit
-        nemit = emit * energy / electron_rest_en * 1e6  # in mm.mrad
-        return nemit, beta, alpha, gamma
 
     def _thin_lens_method(self, I_meas, sigma, pl='x'):
         I_meas2 = I_meas if pl=='x' else -I_meas
