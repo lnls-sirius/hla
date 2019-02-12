@@ -210,24 +210,22 @@ class EmittanceMeasure(QWidget):
         return nemit, beta, alpha
 
     def _thin_lens_method(self, I_meas, sigma, pl='x'):
-        I_meas2 = I_meas if pl=='x' else -I_meas
-
+        I_meas2 = I_meas if pl == 'x' else -I_meas
         K1 = self._get_K1_from_I(I_meas2)
         energy = self.spbox_energy.value()
 
-        al, bl, cl = np.polyfit(K1*self.QUAD_L, sigma*sigma, 2)
-        yd = np.sqrt(np.polyval([al, bl, cl], K1*self.QUAD_L))
+        a, b, c = np.polyfit(K1, sigma*sigma, 2)
+        yd = np.sqrt(np.polyval([a, b, c], K1))
         self.line_fit.set_xdata(I_meas)
         self.line_fit.set_ydata(yd*1e3)
         self.plt_sigma.figure.canvas.draw()
-        a = al
-        b = -bl/2/al
-        c = cl - bl**2/4/al
-        ld = self.DIST + self.QUAD_L/2
-        emit = np.sqrt(abs(a*c))/ld**2
-        beta = np.sqrt(abs(a/c))
-        alpha = (1/ld - b)*beta
-        nemit = emit * energy / electron_rest_en * 1e6  # in mm.mrad
+
+        d = self.DIST + self.QUAD_L/2
+        l = self.QUAD_L
+        s_11 = a/(d*l)**2
+        s_12 = (-b-2*d*l*s_11)/(2*l*d*d)
+        s_22 = (c-s_11-2*d*s_12)/d**2
+        nemit, beta, alpha, gamma = self._twiss(s_11, s_12, s_22, energy)
         return nemit, beta, alpha
 
     def _setupUi(self):
