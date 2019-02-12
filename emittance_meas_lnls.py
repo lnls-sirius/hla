@@ -194,7 +194,7 @@ class EmittanceMeasure(QWidget):
         energy = self.spbox_energy.value()
 
         Rx, Ry = self._get_resp_mat(K1, energy)
-        R = Rx if pl=='x' else Ry
+        R = Rx if pl == 'x' else Ry
         a, b, c = np.linalg.lstsq(R, sigma*sigma, rcond=None)[0]
         emit = np.sqrt(abs(a*c - b*b))
         beta = a/emit
@@ -277,7 +277,7 @@ class EmittanceMeasure(QWidget):
             self.alphay_parf, '--rd', lw=1, label='Vert. Parab. Fit')[0]
         self.plt_alpha = wid
 
-        vl = QVBoxLayout()
+        vl = QVBoxLayout()###archivo vinculado
         gl.addItem(vl, 0, 1, 3, 1)
         gb = QGroupBox('Data Acquisition Configs.', self)
         fl = QFormLayout(gb)
