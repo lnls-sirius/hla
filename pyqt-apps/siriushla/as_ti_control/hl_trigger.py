@@ -94,7 +94,7 @@ class HLTriggerDetailed(BaseWidget):
         sp.showStepExponent = False
         init_channel = prefix.substitute(propty="Duration-RB")
         rb = PyDMLabel(self, init_channel=init_channel)
-        gb = self._create_small_GB('Duration [ms]', self.ll_list_wid, (sp, rb))
+        gb = self._create_small_GB('Duration [us]', self.ll_list_wid, (sp, rb))
         ll_list_layout.addWidget(gb, 3, 0, 1, 2)
 
         init_channel = prefix.substitute(propty="Delay-SP")
@@ -202,7 +202,7 @@ class HLTriggerList(BaseList):
         'interlock': 'ByPass Intlk',
         'source': 'Source',
         'pulses': 'Nr Pulses',
-        'duration': 'Duration [ms]',
+        'duration': 'Duration [us]',
         'polarity': 'Polarity',
         'delay_type': 'Type',
         'delay': 'Delay [us]',
