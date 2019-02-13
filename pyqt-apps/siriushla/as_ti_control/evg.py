@@ -2,8 +2,7 @@ import sys
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGroupBox, QLabel, QWidget, \
     QVBoxLayout, QHBoxLayout, QGridLayout, QSizePolicy as QSzPol
-from pydm.widgets import PyDMLabel, PyDMLineEdit, PyDMPushButton, \
-    PyDMCheckbox as PyDMCb
+from pydm.widgets import PyDMLabel, PyDMLineEdit, PyDMPushButton
 from siriuspy.csdevice import timesys as _cstime
 from siriushla.widgets import PyDMLed, SiriusLedAlert, PyDMStateButton
 from siriushla.as_ti_control.base import BaseList, BaseWidget, \
@@ -35,7 +34,7 @@ class EVG(BaseWidget):
 
         self.clocks_wid = ClockList(
             name='Clocks', parent=self, prefix=self.prefix,
-            props={'mux_div', 'mux_enbl'},
+            props={'name', 'mux_enbl', 'frequency'},
             obj_names=sorted(_cstime.Const.ClkLL._fields)
             )
         mylayout.addWidget(self.clocks_wid, 2, 1)
@@ -117,11 +116,11 @@ class EVG(BaseWidget):
         configlayout.addLayout(layrow)
         configlayout.addStretch()
 
-        sp = _MySpinBox(self, init_channel=prefix + "ACDiv-SP")
+        sp = _MySpinBox(self, init_channel=prefix + "InjRate-SP")
         sp.showStepExponent = False
-        rb = PyDMLabel(self, init_channel=prefix + "ACDiv-RB")
+        rb = PyDMLabel(self, init_channel=prefix + "InjRate-RB")
         layrow.addWidget(self._create_prop_widget(
-                        'AC Divisor', self.configs_wid, (sp, rb)))
+                        'Pulse Rate [Hz]', self.configs_wid, (sp, rb)))
 
         sp = _MyComboBox(self, init_channel=prefix + "ACSrc-Sel")
         rb = PyDMLabel(self, init_channel=prefix + "ACSrc-Sts")
