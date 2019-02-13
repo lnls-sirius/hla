@@ -161,7 +161,7 @@ class LLTriggers(QWidget):
             amc_wid.setStyleSheet("""#amc_wid{min-width:90em;}""")
             vl.addWidget(amc_wid)
         if otp_list:
-            props = set(OUTList()._ALL_PROPS)
+            props = set(OTPList()._ALL_PROPS)
             props.add('device')
             otp_wid = LLTriggerList(name='OTP', parent=self, props=props,
                                     prefix=prefix, obj_names=otp_list)
