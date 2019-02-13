@@ -38,7 +38,7 @@ class LLTriggerList(BaseList):
         'pulses': 'Nr Pulses',
         'delay': 'Delay',
         'timestamp': 'Log',
-        'interlock': 'ByPassIntlk',
+        'interlock': 'Intlk Active',
         'source': 'Source',
         'trigger': 'Trigger',
         'rf_delay': 'RF Delay',

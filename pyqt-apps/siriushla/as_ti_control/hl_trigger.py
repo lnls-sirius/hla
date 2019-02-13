@@ -114,7 +114,7 @@ class HLTriggerDetailed(BaseWidget):
             rb = PyDMLed(self, init_channel=init_channel)
             rb.setSizePolicy(QSzPol.Minimum, QSzPol.Maximum)
             gb = self._create_small_GB(
-                        'ByPass Intlk', self.ll_list_wid, (sp, rb))
+                        'Intlk Active', self.ll_list_wid, (sp, rb))
             ll_list_layout.addWidget(gb, 5, 0)
 
         if HLTimeSearch.has_delay_type(self.prefix.device_name):
@@ -199,7 +199,7 @@ class HLTriggerList(BaseList):
         'detailed': 'Detailed View',
         'status': 'Status',
         'state': 'Enabled',
-        'interlock': 'ByPass Intlk',
+        'interlock': 'Intlk Active',
         'source': 'Source',
         'pulses': 'Nr Pulses',
         'duration': 'Duration [us]',
