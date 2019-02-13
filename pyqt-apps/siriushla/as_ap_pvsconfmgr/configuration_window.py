@@ -5,13 +5,10 @@ import time
 from math import isclose
 
 import epics
-from numpy import ndarray
 from qtpy.QtCore import Slot, QSize
 from qtpy.QtWidgets import (QComboBox, QDialog, QHBoxLayout, QInputDialog,
-                            QLabel, QLineEdit, QListWidget, QMessageBox,
-                            QPushButton, QSizePolicy, QTableView, QVBoxLayout,
-                            QWidget)
-
+                            QLabel, QListWidget, QMessageBox, QPushButton,
+                            QTableView, QVBoxLayout, QWidget)
 from siriushla.as_ap_pvsconfmgr import (ConfigNamesModel, ConfigTypeModel,
                                         EpicsChecker, EpicsGetter, EpicsSetter,
                                         PVConfigurationTableModel)
@@ -19,7 +16,6 @@ from siriushla.as_ps_cycle.progress_dialog import ProgressDialog
 from siriushla.widgets.pvnames_tree import PVNameTree
 from siriushla.widgets.windows import SiriusMainWindow
 from siriuspy.envars import vaca_prefix as _VACA_PREFIX
-from siriuspy.namesys import SiriusPVName
 
 
 class EpicsWrapper:
@@ -73,7 +69,8 @@ class EpicsWrapper:
         while t < wait:
             if isinstance(value, float):
                 pv_value = self._pv.get(use_monitor=False)
-                if pv_value is not None and isclose(pv_value, value, rel_tol=1e-06, abs_tol=0.0):
+                if (pv_value is not None and
+                        isclose(pv_value, value, rel_tol=1e-06, abs_tol=0.0)):
                     return True
             else:
                 if self._pv.get() == value:
@@ -139,9 +136,7 @@ class SetConfigurationWindow(SiriusMainWindow):
         self._central_widget.setStyleSheet("""
             #CentralWidget {
                 min-width: 40em;
-                max-width: 40em;
                 min-height: 40em;
-                max-height: 40em;
             }
         """)
         self.setWindowTitle('Set saved configuration')
@@ -230,7 +225,7 @@ class SetConfigurationWindow(SiriusMainWindow):
         # Get selected PVs
         sel_pvs = self._tree.checked_items()
         # Get PVs values
-        pvs_val = {pv_val[0]: pv_val[1] 
+        pvs_val = {pv_val[0]: pv_val[1]
                    for pv_val in self._current_config['value']['pvs']
                    if pv_val[0] in sel_pvs}
         # Get PVs RB
@@ -287,9 +282,7 @@ class ReadConfigurationWindow(SiriusMainWindow):
         self._central_widget.setStyleSheet("""
             #CentralWidget {
                 min-width: 40em;
-                max-width: 40em;
                 min-height: 40em;
-                max-height: 40em;
             }
         """)
         self.setWindowTitle('Create new configuration')
