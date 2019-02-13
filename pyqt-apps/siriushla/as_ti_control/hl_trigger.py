@@ -155,34 +155,43 @@ class LLTriggers(QWidget):
         if amc_list:
             props = set(AFCOUTList()._ALL_PROPS)
             props.add('device')
-            vl.addWidget(LLTriggerList(name='AMC', parent=self, props=props,
-                                       prefix=prefix, obj_names=amc_list))
+            amc_wid = LLTriggerList(name='AMC', parent=self, props=props,
+                                    prefix=prefix, obj_names=amc_list)
+            amc_wid.setObjectName('amc_wid')
+            amc_wid.setStyleSheet("""#amc_wid{min-width:90em;}""")
+            vl.addWidget(amc_wid)
         if otp_list:
             props = set(OUTList()._ALL_PROPS)
             props.add('device')
-            vl.addWidget(LLTriggerList(name='OTP', parent=self, props=props,
-                                       prefix=prefix, obj_names=otp_list))
+            otp_wid = LLTriggerList(name='OTP', parent=self, props=props,
+                                    prefix=prefix, obj_names=otp_list)
+            otp_wid.setObjectName('otp_wid')
+            otp_wid.setStyleSheet("""#otp_wid{min-width:56em;}""")
+            vl.addWidget(otp_wid)
         if out_list:
             props = set(OTPList()._ALL_PROPS)
             for prop in OUTList()._ALL_PROPS:
                 props.add(prop)
             props.add('device')
-            vl.addWidget(LLTriggerList(name='OUT', parent=self, props=props,
-                                       prefix=prefix, obj_names=out_list))
+            out_wid = LLTriggerList(name='OUT', parent=self, props=props,
+                                    prefix=prefix, obj_names=out_list)
+            out_wid.setObjectName('out_wid')
+            out_wid.setStyleSheet("""#out_wid{min-width:110em;}""")
+            vl.addWidget(out_wid)
 
 
 class HLTriggerList(BaseList):
     """Template for control of High Level Triggers."""
 
     _MIN_WIDs = {
-        'detailed': 9,
+        'detailed': 12,
         'status': 4.8,
         'state': 3.8,
-        'interlock': 6.5,
+        'interlock': 8,
         'source': 4.8,
-        'pulses': 3.2,
-        'duration': 6.1,
-        'polarity': 4.8,
+        'pulses': 4.8,
+        'duration': 8,
+        'polarity': 6,
         'delay_type': 4.2,
         'delay': 5.5,
         }

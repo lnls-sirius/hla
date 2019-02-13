@@ -40,7 +40,7 @@ class AFC(BaseWidget):
         self.crts_wid = AFCOUTList(name='CRT Outputs', parent=self,
                                    prefix=self.prefix, obj_names=obj_names)
         self.crts_wid.setObjectName('crts_wid')
-        self.crts_wid.setStyleSheet("""#crts_wid{min-width:54em;}""")
+        self.crts_wid.setStyleSheet("""#crts_wid{min-width:60em;}""")
         self.my_layout.addWidget(self.crts_wid, 2, 1)
 
         self.status_wid = QGroupBox('Status', self)
@@ -82,21 +82,6 @@ class AFC(BaseWidget):
         gb = self._create_small_GB('', self.status_wid, (lb, rb))
         gb.setStyleSheet('border: 2px solid transparent;')
         status_layout.addWidget(gb, 0, 3)
-
-        lb = QLabel("<b>Interlock</b>")
-        rb = SiriusLedAlert(self, init_channel=prefix + "Intlk-Mon")
-        gb = self._create_small_GB('', self.status_wid, (lb, rb))
-        gb.setStyleSheet('border: 2px solid transparent;')
-        status_layout.addWidget(gb, 0, 4)
-
-        wids = list()
-        for i in range(8):
-            rb = SiriusLedAlert(
-                parent=self, init_channel=prefix + "Los-Mon", bit=i)
-            wids.append(rb)
-        gb = self._create_small_GB(
-                'Down Connection', self.status_wid, wids, align_ver=False)
-        status_layout.addWidget(gb, 0, 5)
 
     def _create_small_GB(self, name, parent, wids, align_ver=True):
         gb = QGroupBox(name, parent)

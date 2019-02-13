@@ -29,13 +29,14 @@ class _EVR_EVE(BaseWidget):
             name='Internal Trigger (OTP)', parent=self, prefix=self.prefix,
             obj_names=['OTP{0:02d}'.format(i) for i in range(24)])
         self.otps_wid.setObjectName('otps_wid')
-        self.otps_wid.setStyleSheet("""#otps_wid{min-width:50em;}""")
+        self.otps_wid.setStyleSheet("""#otps_wid{min-width:60em;}""")
         self.my_layout.addWidget(self.otps_wid, 2, 0)
 
         self.outs_wid = OUTList(
             name='OUT', parent=self, prefix=self.prefix,
-            obj_names=['OUT{0:d}'.format(i) for i in range(8)]
-            )
+            obj_names=['OUT{0:d}'.format(i) for i in range(8)])
+        self.outs_wid.setObjectName('outs_wid')
+        self.outs_wid.setStyleSheet("""#outs_wid{min-width:44em;}""")
         self.my_layout.addWidget(self.outs_wid, 2, 1)
         self.my_layout.addItem(QSpacerItem(
                 0, 0, QSzPol.Minimum, QSzPol.Expanding))
@@ -53,8 +54,7 @@ class _EVR_EVE(BaseWidget):
         sp = PyDMStateButton(self, init_channel=prefix + "DevEnbl-Sel")
         rb = PyDMLed(self, init_channel=prefix + "DevEnbl-Sts")
         gb = self._create_small_GB(
-            'Enabled', self.status_wid, (sp, rb), align_ver=False
-            )
+            'Enabled', self.status_wid, (sp, rb), align_ver=False)
         status_layout.addWidget(gb, 0, 0)
 
         lb = QLabel("<b>Alive</b>")
