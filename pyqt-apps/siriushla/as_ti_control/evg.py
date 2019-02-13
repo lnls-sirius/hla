@@ -275,21 +275,21 @@ class EventList(BaseList):
 
 
 class ClockList(BaseList):
-    """Template for control of High and Low Level Clocks."""
+    """Template for control of Low Level Clocks."""
 
     _MIN_WIDs = {
-        'state': 4.8,
+        'name': 3.8,
         'frequency': 4.8,
         'mux_div': 4.8,
         'mux_enbl': 4.8,
         }
     _LABELS = {
-        'state': 'Enabled',
-        'frequency': 'Freq. [kHz]',
+        'name': 'Clock Name',
+        'frequency': 'Freq. [Hz]',
         'mux_div': 'Mux Divisor',
-        'mux_enbl': 'Mux Enabled',
+        'mux_enbl': 'Enabled',
         }
-    _ALL_PROPS = ('state', 'frequency', 'mux_div', 'mux_enbl')
+    _ALL_PROPS = ('name', 'mux_enbl', 'frequency', 'mux_div')
 
     def __init__(self, name=None, parent=None, prefix='',
                  props=set(), obj_names=list(), has_search=False):
@@ -298,17 +298,16 @@ class ClockList(BaseList):
                          obj_names=obj_names, has_search=has_search)
 
     def _createObjs(self, prefix, prop):
-        if prop == 'state':
-            sp = PyDMCb(self, init_channel=prefix + "State-Sel")
-            sp.setText(prefix.propty)
-            rb = PyDMLed(self, init_channel=prefix + "State-Sts")
-        elif prop == 'frequency':
+        if prop == 'frequency':
             sp = _MySpinBox(self, init_channel=prefix + "Freq-SP")
             sp.showStepExponent = False
             rb = PyDMLabel(self, init_channel=prefix + "Freq-RB")
-        if prop == 'mux_enbl':
-            sp = PyDMCb(self, init_channel=prefix + "MuxEnbl-Sel")
-            sp.setText(prefix.propty)
+        elif prop == 'name':
+            rb = QLabel(prefix.propty, self)
+            rb.setAlignment(Qt.AlignCenter)
+            return (rb, )
+        elif prop == 'mux_enbl':
+            sp = PyDMStateButton(self, init_channel=prefix + "MuxEnbl-Sel")
             rb = PyDMLed(self, init_channel=prefix + "MuxEnbl-Sts")
         elif prop == 'mux_div':
             sp = _MySpinBox(self, init_channel=prefix + "MuxDiv-SP")
