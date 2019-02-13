@@ -89,26 +89,24 @@ class BaseList(CustomGroupBox):
         glay = QGridLayout()
         glay.setVerticalSpacing(30)
         glay.setHorizontalSpacing(30)
+        glay.setContentsMargins(0, 0, 0, 0)
         glay.setAlignment(Qt.AlignTop)
         wid.setLayout(glay)
 
-        objs = self.getLine(header=True)
-        for j, obj in enumerate(objs):
-            glay.addLayout(obj, 1, j)
-
         self.lines = dict()
         self.filtered_lines = set()
-        for i, obj_name in enumerate(self.obj_names, 2):
+        for i, obj_name in enumerate(self.obj_names, 1):
             pref = _PVName(self.prefix + obj_name)
             objs = self.getLine(pref)
-            self.lines[pref] = objs
+            self.lines[pref] = [obj[1] for obj in objs]
             self.filtered_lines.add(pref)
             for j, obj in enumerate(objs):
-                glay.addLayout(obj, i, j)
+                glay.setColumnStretch(j, 10*self._MIN_WIDs[obj[0]])
+                glay.addLayout(obj[1], i, j)
 
         self.my_layout = QVBoxLayout(self)
-        self.my_layout.setContentsMargins(6, 6, 6, 0)
-        self.my_layout.setSpacing(3)
+        self.my_layout.setContentsMargins(6, 10, 6, 0)
+        self.my_layout.setSpacing(15)
 
         if self.has_search:
             # Create search bar
@@ -116,6 +114,17 @@ class BaseList(CustomGroupBox):
             search_lineedit.setPlaceholderText("Search...")
             search_lineedit.textEdited.connect(self.filter_lines)
             self.my_layout.addWidget(search_lineedit)
+
+        # Create header
+        headerlay = QGridLayout()
+        headerlay.setVerticalSpacing(30)
+        headerlay.setHorizontalSpacing(30)
+        headerlay.setContentsMargins(0, 0, 0, 0)
+        objs = self.getLine(header=True)
+        for j, obj in enumerate(objs):
+            headerlay.setColumnStretch(j, 10*self._MIN_WIDs[obj[0]])
+            headerlay.addLayout(obj[1], 0, j)
+        self.my_layout.addLayout(headerlay)
 
         # Create scrollarea
         sc_area = QScrollArea()
@@ -129,7 +138,7 @@ class BaseList(CustomGroupBox):
         for prop in self._ALL_PROPS:
             item = self.getColumn(prefix, prop, header)
             if item is not None:
-                objects.append(item)
+                objects.append([prop, item])
         return objects
 
     def getColumn(self, prefix, prop, header):
@@ -137,13 +146,12 @@ class BaseList(CustomGroupBox):
             return
         lv = QVBoxLayout()
         lv.setSpacing(6)
-        lv.setAlignment(Qt.AlignHCenter)
+        lv.setAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
         fun = self._createObjs if not header else self._headerLabel
         objs = fun(prefix, prop)
         for ob in objs:
             lv.addWidget(ob)
-            ob.setStyleSheet("min-width:{}em;".format(self._MIN_WIDs[prop]))
-            ob.setSizePolicy(QSzPol.Minimum, QSzPol.Maximum)
+            ob.setSizePolicy(QSzPol.MinimumExpanding, QSzPol.Maximum)
         return lv
 
     def filter_lines(self, text):
@@ -173,7 +181,7 @@ class BaseList(CustomGroupBox):
 
     def _headerLabel(self, prefix, prop):
         lb = QLabel('<h4>' + self._LABELS[prop] + '</h4>', self)
-        lb.setStyleSheet("min-height:1.55em; max-height:1.55em;")
+        lb.setStyleSheet("""min-height:1.55em; max-height:1.55em;""")
         lb.setAlignment(Qt.AlignHCenter)
         return (lb, )
 

@@ -184,7 +184,7 @@ class HLTriggerList(BaseList):
     """Template for control of High Level Triggers."""
 
     _MIN_WIDs = {
-        'detailed': 12,
+        'detailed': 10,
         'status': 4.8,
         'state': 3.8,
         'interlock': 8,

@@ -21,7 +21,7 @@ class LLTriggerList(BaseList):
         'pulses': 4.8,
         'delay': 4.8,
         'timestamp': 3.2,
-        'interlock': 6.5,
+        'interlock': 6,
         'source': 6.5,
         'trigger': 4,
         'rf_delay': 4.8,
