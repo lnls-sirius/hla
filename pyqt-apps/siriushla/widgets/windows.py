@@ -1,4 +1,5 @@
 """Sirius Windows module."""
+from pydm.utilities.stylesheet import apply_stylesheet as pydm_apply_stylesheet
 from qtpy.QtGui import QKeySequence
 from qtpy.QtCore import QEvent
 from qtpy.QtWidgets import QMainWindow, QDialog, QHBoxLayout, QApplication
@@ -24,6 +25,7 @@ def _create_siriuswindow(qt_type):
             super().__init__(*args, **kwargs)
             self.setFocus(True)
             self.app = QApplication.instance()
+            pydm_apply_stylesheet(widget=self)
 
         def keyPressEvent(self, event):
             """Override keyPressEvent."""
