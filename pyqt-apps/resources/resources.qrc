@@ -2,4 +2,16 @@
 <qresource>
     <file>sirius-hla-style.css</file>
 </qresource>
+<qresource>
+    <file>led_shapes/circle.svg</file>
+</qresource>
+<qresource>
+    <file>led_shapes/round.svg</file>
+</qresource>
+<qresource>
+    <file>led_shapes/square.svg</file>
+</qresource>
+<qresource>
+    <file>led_shapes/triangle.svg</file>
+</qresource>
 </RCC>

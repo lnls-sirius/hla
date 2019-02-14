@@ -6,7 +6,6 @@ import sys
 import argparse as _argparse
 from siriushla.sirius_application import SiriusApplication
 from siriushla.as_ap_sofb import MainWindow
-from siriushla import util
 from siriuspy.envars import vaca_prefix
 
 
@@ -16,7 +15,6 @@ parser.add_argument('-p', "--prefix", type=str, default=vaca_prefix,
 args = parser.parse_args()
 
 app = SiriusApplication()
-util.set_style(app)
 window = MainWindow(args.prefix)
 window.show()
 sys.exit(app.exec_())

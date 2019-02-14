@@ -5,9 +5,20 @@
    when python packages are imported.
 */
 
-
-* {
+    
+/* * {
   font-size: 20pt;
+} */
+
+QLed {
+  min-height: 1.29em;
+  max-height: 1.29em;
+  min-width: 1.29em;
+}
+
+PyDMStateButton {
+  min-height: 1.29em;
+  max-height: 1.29em;
 }
 
 QMenuBar {
@@ -36,47 +47,47 @@ QTabWidget::tab-bar {
 QTabBar::tab {
     color: black;
     /*background-color: white;*/
-    padding: 0 8px 0 8px;
-    margin: 0 1px 0 1px;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    border: 1px solid black;
-    margin-top: 15px;
+    padding: 0 1em 0 1em;
+    margin: 0 0.1em 0 0.1em;
+    border-top-left-radius: 1em;
+    border-top-right-radius: 1em;
+    border: 0.1em solid black;
+    margin-top: 2em;
 }
 
 QTabBar::tab:selected, QTabBar::tab:hover {
     /*font-weight: 900;*/
-    border: 2px solid black;
+    border: 0.1em solid black;
 }
 
 #TBTab QTabBar::tab:selected, #TBTab QTabBar::tab:hover {
   background-color: purple;
   color: white;
-  border: 1px solid white;
+  border: 0.1em solid white;
 }
 #BOTab QTabBar::tab:selected, #BOTab QTabBar::tab:hover {
   background-color: green;
   color: white;
-  border: 1px solid white;
+  border: 0.1em solid white;
 }
 #TSTab QTabBar::tab:selected, #TSTab QTabBar::tab:hover {
   background-color: red;
   color: white;
-  border: 1px solid white;
+  border: 0.1em solid white;
 }
 #SITab QTabBar::tab:selected, #SITab QTabBar::tab:hover {
   background-color: blue;
   color: white;
-  border: 1px solid white;
+  border: 0.1em solid white;
 }
 
 QTabBar::tab:!selected {
-    margin-top: 20px; /* make non-selected tabs look smaller */
+    margin-top: 2.2em; /* make non-selected tabs look smaller */
     font-weight: 200;
 }
 
 /* Scroll Bar */
-QScrollBar:horizontal {
+/* QScrollBar:horizontal {
     border: 2px solid grey;
     min-width: 150px;
     margin: 0 20px 0 20px;
@@ -110,7 +121,7 @@ QAbstractSpinBox::down-button {
 QLineEdit {
     border: 2px solid grey;
     min-width: 150px;
-}
+} */
 
 /* Group Box*/
 QGroupBox {
@@ -124,28 +135,19 @@ QGroupBox::title {
 }
 
 QCheckBox::indicator {
-    width: 25px;
-    height: 25px;
+    width: 1em;
+    height: 1em;
 }
 
 QTreeWidget::indicator {
-    width: 25px;
-    height: 25px;
+    width: 1em;
+    height: 1em;
 }
 
 QTreeWidget::text {
-    spacing: 25px;
+    spacing: 1em;
 }
 
-#OkTextEdit {
-    background-color: #eafaea;
-}
-#NokTextEdit {
-    background-color: #ffebe6;
-}
-PSTestWindow > QLabel {
-    font-weight: bold;
-}
 /*PSTestWindow #TestButton,
 CycleWindow #PrepareButton {
     color: white;
@@ -164,6 +166,8 @@ ProgressDialog {
 /* Servconf */
 #ServConf {
     padding: 0 20px 10px 20px;
+    min-width: 100em;
+    min-height: 60em;
 }
 #ServConf #Header {
     margin: 0 0 0 0;
@@ -189,8 +193,8 @@ ProgressDialog {
 #ServConf #SubHeader QWidget {
     margin-bottom: 5px;
 }
-#ServConf QComboBox {
-    height: 25px;
+/* #ServConf QComboBox {
+    height: 2em;
     margin: 0 0 10px 0;
     padding: 2px 10px 2px 10px;
     border: 1px solid black;
@@ -199,11 +203,11 @@ ProgressDialog {
 }
 #ServConf QComboBox::drop-down {
     width: 25px;
-    height: 2.1em;
+    height: 21em;
 }
 #ServConf QComboBox::down-arrow {
-        color: blue;
-}
+    color: blue;
+} */
 #ServConf #DeleteButton[enabled=true] {
     color: white;
     background-color: #cc2900;

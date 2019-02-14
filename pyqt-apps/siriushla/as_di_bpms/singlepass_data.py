@@ -54,6 +54,21 @@ class SinglePassData(BaseWidget):
         graph = self.create_graph(stack2, 'amp')
         vbl.addWidget(graph)
 
+        self.setObjectName('SinglePassData')
+        self.setStyleSheet("""
+            #SinglePassData{
+                min-width:48em;
+                min-height:32em;
+            }
+            #SinglePassDataGraph{
+                min-width:48em;
+                min-height:24em;
+            }
+            QLabel{
+                min-width:6em; max-width:6em;
+                min-height:1.5em; max-height:1.5em;
+            }""")
+
     def create_statistics(self, wid, typ='pos'):
         text, unit, names, _ = self._get_properties(typ)
 
@@ -65,14 +80,13 @@ class SinglePassData(BaseWidget):
         hbl.addStretch()
 
         gdl = QGridLayout(grpbx)
-        gdl.setHorizontalSpacing(30)
-        gdl.setVerticalSpacing(30)
+        gdl.setHorizontalSpacing(20)
+        gdl.setVerticalSpacing(20)
 
         stats = ('MeanValue', 'Sigma', 'MinValue', 'MaxValue')
         for j, stat in enumerate(('Average', 'Sigma', 'Minimum', 'Maximum')):
             lab = QLabel(stat, wid)
             lab.setAlignment(Qt.AlignCenter)
-            lab.setMinimumWidth(200)
             gdl.addWidget(lab, 0, j+1)
         for i, name in enumerate(names):
             lab = QLabel(text[:3] + name, wid)
@@ -105,8 +119,7 @@ class SinglePassData(BaseWidget):
         graph = CLASS(
             wid, prefix=self.prefix, bpm=self.bpm,
             data_prefix=self.data_prefix)
-        labsty = {'font-size': '20pt'}
-        graph.setLabel('left', text=text, units=unit, **labsty)
+        graph.setLabel('left', text=text, units=unit)
         for name, cor in zip(names, colors):
             opts = dict(
                 y_channel=name+suff,
@@ -115,7 +128,7 @@ class SinglePassData(BaseWidget):
                 lineStyle=1,
                 lineWidth=1)  # NOTE: If > 1: very low performance
             if typ == 'pos':
-                graph.addYChannel(**opts, add_scale=1e-9)
+                graph.addYChannel(add_scale=1e-9, **opts)
             elif typ == 'amp':
                 opts['y_channel'] = self.get_pvname(
                     opts['y_channel'], is_data=False)
@@ -152,13 +165,10 @@ class SinglePassData(BaseWidget):
 if __name__ == '__main__':
     from siriushla.sirius_application import SiriusApplication
     from siriushla.widgets import SiriusDialog
-    from siriushla.util import set_style
     import sys
 
     app = SiriusApplication()
-    set_style(app)
     wind = SiriusDialog()
-    wind.resize(1400, 1400)
     hbl = QHBoxLayout(wind)
     bpm_name = 'SI-07SP:DI-BPM-1'
     widm = SinglePassData(bpm=bpm_name)

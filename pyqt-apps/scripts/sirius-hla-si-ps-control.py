@@ -4,13 +4,10 @@
 
 import sys
 from siriushla.sirius_application import SiriusApplication
-from siriushla.as_ps_control.PSTabControlWindow \
-    import PSTabControlWindow
-from siriushla import util
+from siriushla.as_ps_control.PSTabControlWindow import PSTabControlWindow
 
 
 app = SiriusApplication()
-util.set_style(app)
-window = PSTabControlWindow(section="SI")
+window = PSTabControlWindow(section="SI", discipline=0)  # PS
 window.show()
 sys.exit(app.exec_())

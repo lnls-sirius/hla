@@ -2,8 +2,9 @@
 
 """HLA Setup."""
 
-from setuptools import setup
+from setuptools import setup, find_packages
 import unittest
+
 
 def my_test_suite():
     test_loader = unittest.TestLoader()
@@ -27,7 +28,7 @@ setup(
         'Programming Language :: Python',
         'Topic :: Scientific/Engineering'
         ],
-    packages=['siriushla'],
+    packages=find_packages(),
     package_data={'siriushla': ['VERSION', '*/*.py']},
     scripts=[
         'scripts/sirius-hla-as-ap-pvsconfmgr.py',

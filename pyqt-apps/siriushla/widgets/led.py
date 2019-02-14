@@ -1,3 +1,4 @@
+import numpy as _np
 from qtpy.QtGui import QColor
 from qtpy.QtCore import Property, Slot
 from pydm.widgets.base import PyDMWidget
@@ -141,7 +142,10 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         state = 1
         for address, desired_value in self.channels2values.items():
             val = getattr(self, 'channel'+self.channels2ids[address]+'_value')
-            state &= (val == desired_value)
+            if isinstance(val, _np.ndarray):
+                state &= _np.all(val == desired_value)
+            else:
+                state &= (val == desired_value)
         self.setState(state)
 
     @Slot(bool)
@@ -175,25 +179,32 @@ class PyDMLedMultiConnection(QLed, PyDMWidget):
         """Init."""
         QLed.__init__(self, parent)
         PyDMWidget.__init__(self)
-        self.channels = channels
         self.stateColors = color_list or self.default_colorlist
 
         self.channels2ids = dict()
-        for _id, address in enumerate(sorted(self.channels)):
+        self._channels2conn = dict()
+        for _id, address in enumerate(sorted(channels)):
             stid = str(_id)
             setattr(self, 'channel' + stid, address)
             setattr(self, 'channel' + stid + '_connected', False)
             self.channels2ids[address] = stid
+            self._channels2conn[address] = False
             channel = PyDMChannel(
                 address=address, connection_slot=self.connection_changed)
             channel.connect()
             self._channels.append(channel)
+
+    @property
+    def channels2conn(self):
+        """Return dict with connection state of each channel."""
+        return self._channels2conn
 
     @Slot(bool)
     def connection_changed(self, conn):
         """Reimplement connection_changed to handle all channels."""
         address = self.sender().address
         setattr(self, 'channel'+self.channels2ids[address]+'_connected', conn)
+        self._channels2conn[address] = conn
         allconn = True
         for _id in self.channels2ids.values():
             allconn &= getattr(self, 'channel'+_id+'_connected')

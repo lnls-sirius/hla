@@ -6,28 +6,24 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1125</width>
-    <height>1940</height>
+    <width>526</width>
+    <height>925</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>1125</width>
-    <height>1940</height>
+    <width>0</width>
+    <height>0</height>
    </size>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QGroupBox {
-	font-weight: bold;
-}
-
-* {
-	font-size:20pt;
-}
-</string>
+   <string notr="true">.QWidget{
+width:36em;
+height:62em;
+}</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
    <item row="25" column="1" colspan="2">
@@ -84,7 +80,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>400</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -92,6 +88,14 @@
         </property>
         <property name="whatsThis">
          <string/>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QListWidget{
+min-height:12em;
+}</string>
+        </property>
+        <property name="sizeAdjustPolicy">
+         <enum>QAbstractScrollArea::AdjustIgnored</enum>
         </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}SI-Glob:AP-ChromCorr:Log-Mon</string>
@@ -230,7 +234,7 @@
         </property>
         <property name="maximumSize">
          <size>
-          <width>36</width>
+          <width>16777215</width>
           <height>16777215</height>
          </size>
         </property>
@@ -239,6 +243,10 @@
         </property>
         <property name="whatsThis">
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
         </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}SI-Fam:MA-SDP3:PwrState-Sts</string>
@@ -255,7 +263,7 @@
         </property>
         <property name="maximumSize">
          <size>
-          <width>36</width>
+          <width>16777215</width>
           <height>16777215</height>
          </size>
         </property>
@@ -264,6 +272,10 @@
         </property>
         <property name="whatsThis">
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
         </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}SI-Fam:MA-SFP2:PwrState-Sts</string>
@@ -275,7 +287,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -312,8 +324,18 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>SI-Fam:MA-SFA1</string>
@@ -325,8 +347,18 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>SI-Fam:MA-SFA2</string>
@@ -338,8 +370,18 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>SI-Fam:MA-SDP2</string>
@@ -351,8 +393,18 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>SI-Fam:MA-SDP3</string>
@@ -364,7 +416,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -401,8 +453,18 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>SI-Fam:MA-SDP1</string>
@@ -414,7 +476,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -450,8 +512,8 @@
        <widget class="PyDMLabel" name="PyDMLabel_30">
         <property name="minimumSize">
          <size>
-          <width>0</width>
-          <height>48</height>
+          <width>103</width>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -468,6 +530,9 @@
     init_channel : str, optional
         The channel to be used by the widget.
     </string>
+        </property>
+        <property name="styleSheet">
+         <string>min-width:7.05em;</string>
         </property>
         <property name="frameShape">
          <enum>QFrame::NoFrame</enum>
@@ -488,7 +553,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -525,7 +590,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -562,7 +627,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -599,7 +664,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -636,7 +701,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -673,8 +738,18 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>SI-Fam:MA-SDA3</string>
@@ -686,8 +761,18 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>SI-Fam:MA-SFB1</string>
@@ -699,8 +784,18 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>SI-Fam:MA-SFB2</string>
@@ -712,8 +807,18 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>SI-Fam:MA-SDB1</string>
@@ -725,8 +830,18 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>SI-Fam:MA-SFP2</string>
@@ -738,8 +853,18 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>SI-Fam:MA-SDA2</string>
@@ -751,8 +876,18 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>SI-Fam:MA-SDA1</string>
@@ -764,8 +899,18 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>SI-Fam:MA-SDB3</string>
@@ -782,7 +927,7 @@
         </property>
         <property name="maximumSize">
          <size>
-          <width>36</width>
+          <width>16777215</width>
           <height>16777215</height>
          </size>
         </property>
@@ -791,6 +936,10 @@
         </property>
         <property name="whatsThis">
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
         </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}SI-Fam:MA-SDA2:PwrState-Sts</string>
@@ -802,8 +951,18 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>SI-Fam:MA-SFP1</string>
@@ -815,8 +974,18 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>SI-Fam:MA-SDB2</string>
@@ -841,7 +1010,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -877,7 +1046,7 @@
        <widget class="QLabel" name="label_14">
         <property name="minimumSize">
          <size>
-          <width>250</width>
+          <width>0</width>
           <height>0</height>
          </size>
         </property>
@@ -897,7 +1066,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -947,7 +1116,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -984,7 +1153,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1021,7 +1190,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1058,7 +1227,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1095,7 +1264,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1132,7 +1301,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1169,7 +1338,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1206,7 +1375,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1243,7 +1412,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1280,7 +1449,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1317,7 +1486,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1354,7 +1523,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1391,7 +1560,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1428,7 +1597,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1465,7 +1634,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1502,7 +1671,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1539,7 +1708,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1576,7 +1745,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1613,7 +1782,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1650,7 +1819,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1687,7 +1856,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1724,7 +1893,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1761,7 +1930,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1798,7 +1967,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1835,7 +2004,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1872,7 +2041,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1909,7 +2078,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1946,7 +2115,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1983,7 +2152,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -2020,7 +2189,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -2057,7 +2226,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -2094,7 +2263,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -2131,7 +2300,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -2168,7 +2337,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -2223,7 +2392,7 @@
         </property>
         <property name="maximumSize">
          <size>
-          <width>36</width>
+          <width>16777215</width>
           <height>16777215</height>
          </size>
         </property>
@@ -2232,6 +2401,10 @@
         </property>
         <property name="whatsThis">
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
         </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}SI-Fam:MA-SDA1:PwrState-Sts</string>
@@ -2254,7 +2427,7 @@
         </property>
         <property name="maximumSize">
          <size>
-          <width>36</width>
+          <width>16777215</width>
           <height>16777215</height>
          </size>
         </property>
@@ -2263,6 +2436,10 @@
         </property>
         <property name="whatsThis">
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
         </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}SI-Fam:MA-SFA1:PwrState-Sts</string>
@@ -2279,7 +2456,7 @@
         </property>
         <property name="maximumSize">
          <size>
-          <width>36</width>
+          <width>16777215</width>
           <height>16777215</height>
          </size>
         </property>
@@ -2288,6 +2465,10 @@
         </property>
         <property name="whatsThis">
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
         </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}SI-Fam:MA-SDB1:PwrState-Sts</string>
@@ -2304,7 +2485,7 @@
         </property>
         <property name="maximumSize">
          <size>
-          <width>36</width>
+          <width>16777215</width>
           <height>16777215</height>
          </size>
         </property>
@@ -2313,6 +2494,10 @@
         </property>
         <property name="whatsThis">
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
         </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}SI-Fam:MA-SFA2:PwrState-Sts</string>
@@ -2329,7 +2514,7 @@
         </property>
         <property name="maximumSize">
          <size>
-          <width>36</width>
+          <width>16777215</width>
           <height>16777215</height>
          </size>
         </property>
@@ -2338,6 +2523,10 @@
         </property>
         <property name="whatsThis">
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
         </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}SI-Fam:MA-SFB1:PwrState-Sts</string>
@@ -2354,7 +2543,7 @@
         </property>
         <property name="maximumSize">
          <size>
-          <width>36</width>
+          <width>16777215</width>
           <height>16777215</height>
          </size>
         </property>
@@ -2363,6 +2552,10 @@
         </property>
         <property name="whatsThis">
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
         </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}SI-Fam:MA-SFB2:PwrState-Sts</string>
@@ -2379,7 +2572,7 @@
         </property>
         <property name="maximumSize">
          <size>
-          <width>36</width>
+          <width>16777215</width>
           <height>16777215</height>
          </size>
         </property>
@@ -2388,6 +2581,10 @@
         </property>
         <property name="whatsThis">
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
         </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}SI-Fam:MA-SDA3:PwrState-Sts</string>
@@ -2404,7 +2601,7 @@
         </property>
         <property name="maximumSize">
          <size>
-          <width>36</width>
+          <width>16777215</width>
           <height>16777215</height>
          </size>
         </property>
@@ -2413,6 +2610,10 @@
         </property>
         <property name="whatsThis">
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
         </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}SI-Fam:MA-SDB2:PwrState-Sts</string>
@@ -2429,7 +2630,7 @@
         </property>
         <property name="maximumSize">
          <size>
-          <width>36</width>
+          <width>16777215</width>
           <height>16777215</height>
          </size>
         </property>
@@ -2438,6 +2639,10 @@
         </property>
         <property name="whatsThis">
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
         </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}SI-Fam:MA-SDB3:PwrState-Sts</string>
@@ -2454,7 +2659,7 @@
         </property>
         <property name="maximumSize">
          <size>
-          <width>36</width>
+          <width>16777215</width>
           <height>16777215</height>
          </size>
         </property>
@@ -2463,6 +2668,10 @@
         </property>
         <property name="whatsThis">
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
         </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}SI-Fam:MA-SFP1:PwrState-Sts</string>
@@ -2479,7 +2688,7 @@
         </property>
         <property name="maximumSize">
          <size>
-          <width>36</width>
+          <width>16777215</width>
           <height>16777215</height>
          </size>
         </property>
@@ -2488,6 +2697,10 @@
         </property>
         <property name="whatsThis">
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
         </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}SI-Fam:MA-SDP1:PwrState-Sts</string>
@@ -2504,7 +2717,7 @@
         </property>
         <property name="maximumSize">
          <size>
-          <width>36</width>
+          <width>16777215</width>
           <height>16777215</height>
          </size>
         </property>
@@ -2513,6 +2726,10 @@
         </property>
         <property name="whatsThis">
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
         </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}SI-Fam:MA-SDP2:PwrState-Sts</string>
@@ -2563,7 +2780,7 @@
          <enum>Qt::Vertical</enum>
         </property>
         <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
+         <enum>QSizePolicy::Expanding</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
@@ -2579,7 +2796,7 @@
          <enum>Qt::Vertical</enum>
         </property>
         <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
+         <enum>QSizePolicy::Expanding</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
@@ -2594,7 +2811,7 @@
         <property name="maximumSize">
          <size>
           <width>16777215</width>
-          <height>36</height>
+          <height>16777215</height>
          </size>
         </property>
         <property name="toolTip">
@@ -2641,7 +2858,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -2678,7 +2895,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>48</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -2730,7 +2947,7 @@
          <enum>Qt::Vertical</enum>
         </property>
         <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
+         <enum>QSizePolicy::Expanding</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
@@ -2823,7 +3040,7 @@
        <widget class="PyDMSpinbox" name="PyDMSpinbox">
         <property name="minimumSize">
          <size>
-          <width>250</width>
+          <width>96</width>
           <height>0</height>
          </size>
         </property>
@@ -2841,6 +3058,9 @@
     init_channel : str, optional
         The channel to be used by the widget.
     </string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:6.45em;</string>
         </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}SI-Glob:AP-ChromCorr:ChromX-SP</string>
@@ -2900,8 +3120,8 @@
        <widget class="PyDMLabel" name="PyDMLabel_33">
         <property name="minimumSize">
          <size>
-          <width>200</width>
-          <height>48</height>
+          <width>94</width>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -2918,6 +3138,9 @@
     init_channel : str, optional
         The channel to be used by the widget.
     </string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:6.45em;</string>
         </property>
         <property name="frameShape">
          <enum>QFrame::NoFrame</enum>
@@ -2950,8 +3173,8 @@
        <widget class="PyDMLabel" name="PyDMLabel_2">
         <property name="minimumSize">
          <size>
-          <width>200</width>
-          <height>48</height>
+          <width>94</width>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -2968,6 +3191,9 @@
     init_channel : str, optional
         The channel to be used by the widget.
     </string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:6.45em;</string>
         </property>
         <property name="frameShape">
          <enum>QFrame::NoFrame</enum>
@@ -3046,7 +3272,7 @@
        <widget class="PyDMSpinbox" name="PyDMSpinbox1">
         <property name="minimumSize">
          <size>
-          <width>250</width>
+          <width>96</width>
           <height>0</height>
          </size>
         </property>
@@ -3064,6 +3290,9 @@
     init_channel : str, optional
         The channel to be used by the widget.
     </string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:6.45em;</string>
         </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}SI-Glob:AP-ChromCorr:ChromY-SP</string>
@@ -3123,7 +3352,7 @@
       </size>
      </property>
      <property name="styleSheet">
-      <string notr="true">font-size:24pt;
+      <string notr="true">font-size:1.2em;
 font-weight:bold;
 background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, stop:0 rgba(173, 190, 207, 255), stop:1 rgba(213, 213, 213, 255));</string>
      </property>
@@ -3137,17 +3366,23 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
    </item>
    <item row="23" column="1" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="leftMargin">
+      <number>9</number>
+     </property>
+     <property name="rightMargin">
+      <number>9</number>
+     </property>
      <item>
       <widget class="PyDMPushButton" name="PyDMPushButton">
        <property name="minimumSize">
         <size>
-         <width>300</width>
+         <width>0</width>
          <height>0</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>250</width>
+         <width>16777215</width>
          <height>16777215</height>
         </size>
        </property>
@@ -3192,6 +3427,10 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
 
     </string>
        </property>
+       <property name="styleSheet">
+        <string notr="true">min-width:10em;
+max-width:10em;</string>
+       </property>
        <property name="text">
         <string>Configure
 Sextupoles</string>
@@ -3221,13 +3460,13 @@ Sextupoles</string>
       <widget class="PyDMPushButton" name="PyDMPushButton_SetNewRef_3">
        <property name="minimumSize">
         <size>
-         <width>260</width>
-         <height>70</height>
+         <width>101</width>
+         <height>0</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>250</width>
+         <width>16777215</width>
          <height>16777215</height>
         </size>
        </property>
@@ -3271,6 +3510,9 @@ Sextupoles</string>
         Choice to have the button peform a relative put, instead of always
         setting to an absolute value
     </string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">min-width:7.05em;</string>
        </property>
        <property name="text">
         <string>Apply

@@ -91,7 +91,7 @@ class PVConfigurationTableModel(QAbstractTableModel):
 
         column = index.column()
         row = index.row()
-        
+
         if column == 0:
             return False
 

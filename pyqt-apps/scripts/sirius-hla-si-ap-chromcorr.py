@@ -4,7 +4,6 @@
 import sys as _sys
 import argparse as _argparse
 from siriushla.sirius_application import SiriusApplication
-from siriushla import util as _util
 from siriushla.as_ap_opticscorr.HLOpticsCorr import OpticsCorrWindow
 
 
@@ -16,7 +15,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     app = SiriusApplication()
-    _util.set_style(app)
 
     window = OpticsCorrWindow(acc='si', opticsparam='chrom',
                               prefix=args.prefix)

@@ -6,7 +6,8 @@ import epics as _epics
 
 from qtpy.uic import loadUi as _loadUi
 from qtpy.QtWidgets import QGridLayout, QLabel, QGroupBox, QAbstractItemView, \
-                           QSizePolicy as QSzPlcy, QSpacerItem, QPushButton
+                           QSizePolicy as QSzPlcy, QSpacerItem, QPushButton, \
+                           QHeaderView
 from qtpy.QtCore import Qt
 
 from siriuspy.envars import vaca_prefix as _vaca_prefix
@@ -169,42 +170,55 @@ class _CorrParamsDetailWindow(SiriusMainWindow):
         label_configname = QLabel('<h4>Configuration Name</h4>', self,
                                   alignment=Qt.AlignCenter)
         self.pydmlinedit_configname = _ConfigLineEdit(
-            parent=self, init_channel=self._prefix+self._tl +
-                                      '-Glob:AP-PosAng:ConfigName-SP')
+            parent=self,
+            init_channel=self._prefix+self._tl+'-Glob:AP-PosAng:ConfigName-SP')
         self.pydmlabel_configname = PyDMLabel(
-            parent=self, init_channel=self._prefix+self._tl +
-                                      '-Glob:AP-PosAng:ConfigName-RB')
-        self.pydmlabel_configname.setFixedWidth(320)
+            parent=self,
+            init_channel=self._prefix+self._tl+'-Glob:AP-PosAng:ConfigName-RB')
 
         label_matrix_X = QLabel('<h4>Matrix X</h4>', self,
                                 alignment=Qt.AlignCenter)
         self.table_matrix_X = PyDMWaveformTable(
-            parent=self, init_channel=self._prefix+self._tl +
-                                      '-Glob:AP-PosAng:RespMatX-Mon')
-        self.table_matrix_X.setFixedSize(642, 96)
-        self.table_matrix_X.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+            parent=self,
+            init_channel=self._prefix+self._tl+'-Glob:AP-PosAng:RespMatX-Mon')
+        self.table_matrix_X.setObjectName('table_matrix_X')
+        self.table_matrix_X.setStyleSheet("""
+            #table_matrix_X{
+                min-width:20.72em;
+                min-height:4.65em; max-height:4.65em;}""")
         self.table_matrix_X.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table_matrix_X.setRowCount(2)
         self.table_matrix_X.setColumnCount(2)
-        self.table_matrix_X.horizontalHeader().setDefaultSectionSize(320)
+        self.table_matrix_X.horizontalHeader().setSectionResizeMode(
+            QHeaderView.Stretch)
         self.table_matrix_X.horizontalHeader().setVisible(False)
-        self.table_matrix_X.verticalHeader().setDefaultSectionSize(48)
+        self.table_matrix_X.verticalHeader().setSectionResizeMode(
+            QHeaderView.Stretch)
         self.table_matrix_X.verticalHeader().setVisible(False)
+        self.table_matrix_X.setSizePolicy(QSzPlcy.MinimumExpanding,
+                                          QSzPlcy.Preferred)
 
         label_matrix_Y = QLabel('<h4>Matrix Y</h4>', self,
                                 alignment=Qt.AlignCenter)
         self.table_matrix_Y = PyDMWaveformTable(
-            parent=self, init_channel=self._prefix+self._tl +
-                                      '-Glob:AP-PosAng:RespMatY-Mon')
-        self.table_matrix_Y.setFixedSize(642, 96)
-        self.table_matrix_Y.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+            parent=self,
+            init_channel=self._prefix+self._tl+'-Glob:AP-PosAng:RespMatY-Mon')
+        self.table_matrix_Y.setObjectName('table_matrix_Y')
+        self.table_matrix_Y.setStyleSheet("""
+            #table_matrix_Y{
+                min-width:20.72em;
+                min-height:4.65em; max-height:4.65em;}""")
         self.table_matrix_Y.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table_matrix_Y.setRowCount(2)
         self.table_matrix_Y.setColumnCount(2)
-        self.table_matrix_Y.horizontalHeader().setDefaultSectionSize(320)
+        self.table_matrix_Y.horizontalHeader().setSectionResizeMode(
+            QHeaderView.Stretch)
         self.table_matrix_Y.horizontalHeader().setVisible(False)
-        self.table_matrix_Y.verticalHeader().setDefaultSectionSize(48)
+        self.table_matrix_Y.verticalHeader().setSectionResizeMode(
+            QHeaderView.Stretch)
         self.table_matrix_Y.verticalHeader().setVisible(False)
+        self.table_matrix_Y.setSizePolicy(QSzPlcy.MinimumExpanding,
+                                          QSzPlcy.Preferred)
 
         self.bt_apply = QPushButton('Apply', self)
         self.bt_apply.clicked.connect(self.close)
@@ -229,7 +243,6 @@ class _CorrParamsDetailWindow(SiriusMainWindow):
         self.centralwidget = QGroupBox('Correction Parameters')
         self.centralwidget.setLayout(lay)
         self.setCentralWidget(self.centralwidget)
-        self.setMinimumSize(662, 530)
 
 
 class _ConfigLineEdit(PyDMLineEdit):

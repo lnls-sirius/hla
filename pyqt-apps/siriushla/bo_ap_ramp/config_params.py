@@ -4,17 +4,17 @@ import math as _math
 from qtpy.QtCore import Qt, Signal, Slot
 from qtpy.QtGui import QBrush, QColor
 from qtpy.QtWidgets import QGroupBox, QLabel, QWidget, QSpacerItem, \
-                           QVBoxLayout, QHBoxLayout, QGridLayout, \
+                           QVBoxLayout, QHBoxLayout, QGridLayout, QFormLayout,\
                            QPushButton, QTableWidget, QTableWidgetItem, \
-                           QSizePolicy as QSzPlcy, \
-                           QAbstractItemView, QUndoCommand, QFormLayout
+                           QSizePolicy as QSzPlcy, QHeaderView, QUndoCommand, \
+                           QAbstractItemView
 from matplotlib.backends.backend_qt5agg import (
-    FigureCanvasQTAgg as FigureCanvas,
     NavigationToolbar2QT as NavigationToolbar)
 from matplotlib.figure import Figure
 import numpy as np
 from siriuspy.ramp import ramp, exceptions
 from siriuspy.csdevice.pwrsupply import MAX_WFMSIZE
+from siriushla.widgets import SiriusFigureCanvas
 from siriushla.bo_ap_ramp.auxiliar_classes import MessageBox as _MessageBox, \
     InsertNormalizedConfig as _InsertNormalizedConfig, \
     DeleteNormalizedConfig as _DeleteNormalizedConfig, \
@@ -42,6 +42,8 @@ class ConfigParameters(QGroupBox):
 
     def _setupUi(self):
         my_lay = QHBoxLayout(self)
+        my_lay.setContentsMargins(0, 0, 0, 0)
+        my_lay.setSpacing(0)
         self.dip_ramp = DipoleRamp(
             self, self.prefix, self.ramp_config, self._undo_stack)
         self.mult_ramp = MultipolesRamp(
@@ -51,6 +53,9 @@ class ConfigParameters(QGroupBox):
         my_lay.addWidget(self.dip_ramp)
         my_lay.addWidget(self.mult_ramp)
         my_lay.addWidget(self.rf_ramp)
+        my_lay.setStretch(0, 30)
+        my_lay.setStretch(1, 30)
+        my_lay.setStretch(2, 42)
 
     @Slot(ramp.BoosterRamp)
     def handleLoadRampConfig(self, ramp_config):
@@ -84,6 +89,7 @@ class DipoleRamp(QWidget):
 
     def _setupUi(self):
         glay = QGridLayout(self)
+        glay.setAlignment(Qt.AlignTop)
         self.graphview = QWidget()
         self.set_psdelay_and_nrpoints = QFormLayout()
         self.table = QTableWidget(self)
@@ -93,53 +99,61 @@ class DipoleRamp(QWidget):
         self._setupTable()
 
         lay_v = QVBoxLayout()
-        self.l_rampupv = QLabel('RmpU 0 [GeV/s]', self,
-                                alignment=Qt.AlignRight)
-        self.l_rampupv.setFixedWidth(320)
-        self.l_rampdownv = QLabel('RmpD 0 [GeV/s]', self,
-                                  alignment=Qt.AlignRight)
-        self.l_rampdownv.setFixedWidth(320)
+        self.l_rampupv = QLabel('RmpU 0 [GeV/s]', self)
+        self.l_rampupv.setStyleSheet("""
+            min-width:10.5em;max-width:10.5em;
+            qproperty-alignment: AlignRight;""")
+        self.l_rampdownv = QLabel('RmpD 0 [GeV/s]', self)
+        self.l_rampdownv.setStyleSheet("""
+            min-width:10.5em;max-width:10.5em;
+            qproperty-alignment: AlignRight;""")
         lay_v.addWidget(self.l_rampupv)
         lay_v.addWidget(self.l_rampdownv)
 
         self.label_anom = QLabel('', self)
-        self.label_anom.setFixedHeight(48)
+        self.label_anom.setStyleSheet("""
+            min-height:1.55em;max-height:1.55em;""")
         self.pb_anom = QPushButton('?', self)
-        self.pb_anom.setFixedWidth(48)
         self.pb_anom.setVisible(False)
-        self.pb_anom.setStyleSheet('background-color: red;')
+        self.pb_anom.setStyleSheet("""
+            background-color:red;min-width:1.55em;max-width:1.55em;""")
         self.pb_anom.clicked.connect(self._showAnomaliesPopup)
         lay_anom = QHBoxLayout()
         lay_anom.addWidget(self.label_anom)
         lay_anom.addWidget(self.pb_anom)
 
         self.label_exclim = QLabel('', self)
-        self.label_exclim.setFixedHeight(48)
+        self.label_exclim.setStyleSheet("""
+            min-height:1.55em;max-height:1.55em;""")
         self.pb_exclim = QPushButton('?', self)
-        self.pb_exclim.setFixedWidth(48)
         self.pb_exclim.setVisible(False)
-        self.pb_exclim.setStyleSheet('background-color: red;')
+        self.pb_exclim.setStyleSheet("""
+            background-color:red;min-width:1.55em;max-width:1.55em;""")
         self.pb_exclim.clicked.connect(self._showExcLimPopup)
         lay_exclim = QHBoxLayout()
         lay_exclim.addWidget(self.label_exclim)
         lay_exclim.addWidget(self.pb_exclim)
 
         label = QLabel('<h4>Dipole Ramp</h4>', self, alignment=Qt.AlignCenter)
-        label.setFixedHeight(48)
+        label.setStyleSheet("""
+            min-height:1.55em; max-height:1.55em;
+            min-width:30em; max-width:30em;""")
         glay.addWidget(label, 0, 0, 1, 2)
-        glay.addWidget(self.graphview, 1, 0, 1, 2, alignment=Qt.AlignCenter)
+        glay.addWidget(self.graphview, 1, 0, 1, 2)
         glay.addLayout(self.set_psdelay_and_nrpoints, 2, 0,
                        alignment=Qt.AlignLeft)
         glay.addLayout(lay_v, 2, 1, alignment=Qt.AlignRight)
-        glay.addWidget(self.table, 3, 0, 1, 2, alignment=Qt.AlignCenter)
+        glay.addWidget(self.table, 3, 0, 1, 2)
         glay.addLayout(lay_anom, 4, 0, 1, 2, alignment=Qt.AlignCenter)
         glay.addLayout(lay_exclim, 5, 0, 1, 2, alignment=Qt.AlignCenter)
-        glay.addItem(
-            QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 6, 1)
 
     def _setupGraph(self):
-        self.graph = FigureCanvas(Figure())
-        self.graph.setFixedSize(779, 500)
+        self.graph = SiriusFigureCanvas(Figure())
+        self.graph.setObjectName('DipoleGraph')
+        self.graph.setStyleSheet("""
+            #DipoleGraph{min-width:30em;min-height:18em;max-height:18em;}""")
+        self.graph.setSizePolicy(QSzPlcy.Expanding, QSzPlcy.Preferred)
+        self.graph.figure.set_tight_layout({'pad': .0})
         self.ax = self.graph.figure.subplots()
         self.ax.grid()
         self.ax.set_xlabel('t [ms]')
@@ -149,6 +163,9 @@ class DipoleRamp(QWidget):
         self.m_ej, = self.ax.plot([0], [0], 'or')
 
         self.toolbar = NavigationToolbar(self.graph, self)
+        self.toolbar.setObjectName('toolbar')
+        self.toolbar.setStyleSheet("""
+            #toolbar{min-height:2em; max-height:2em;}""")
 
         lay = QVBoxLayout()
         lay.addWidget(self.graph)
@@ -157,23 +174,21 @@ class DipoleRamp(QWidget):
 
     def _setupPSDelayAndWfmNrPoints(self):
         label_psdelay = QLabel('PS Delay [ms]:', self,
-                               alignment=Qt.AlignRight | Qt.AlignVCenter)
+                               alignment=Qt.AlignVCenter)
         self.sb_psdelay = _MyDoubleSpinBox(self)
         self.sb_psdelay.setMinimum(0)
         self.sb_psdelay.setMaximum(490)
         self.sb_psdelay.setDecimals(6)
         self.sb_psdelay.setSingleStep(0.000008)
-        self.sb_psdelay.setMaximumWidth(200)
         self.sb_psdelay.editingFinished.connect(self._handleChangePSDelay)
 
         label_nrpoints = QLabel('# of points:', self,
-                                alignment=Qt.AlignRight | Qt.AlignVCenter)
+                                alignment=Qt.AlignVCenter)
         self.sb_nrpoints = _MyDoubleSpinBox(self)
         self.sb_nrpoints.setMinimum(1)
         self.sb_nrpoints.setMaximum(MAX_WFMSIZE)
-        self.sb_nrpoints.setMaximumWidth(200)
-        self.sb_nrpoints.setSingleStep(1)
         self.sb_nrpoints.setDecimals(0)
+        self.sb_nrpoints.setSingleStep(1)
         self.sb_nrpoints.editingFinished.connect(self._handleChangeNrPoints)
 
         self.set_psdelay_and_nrpoints.addRow(label_psdelay, self.sb_psdelay)
@@ -194,30 +209,36 @@ class DipoleRamp(QWidget):
                         1: 'T [ms]',
                         2: 'Index',
                         3: 'E [GeV]'}}
-        self.table.setStyleSheet(
-            """
+        self.table.setObjectName('DipoleTable')
+        self.table.setStyleSheet("""
+            #DipoleTable{
+                min-width: 30em;
+                min-height: 18em;
+            }
             QHeaderView::section {
                 background-color: #1F64FF;
-                }
+            }
             QTableWidget {
                 background-color: #D3E1FF;
                 gridline-color: #003065;
             }
             QTableWidget QTableCornerButton::section {
                 background-color: #1F64FF;
-            }
-            """)
-        self.table.setFixedSize(
-            717, (max(self.table_map['rows'].keys())+2)*48+2)
+            }""")
         self.table.setRowCount(9)
         self.table.setColumnCount(4)
-        self.table.setColumnWidth(0, 250)
-        for i in range(1, len(self.table_map['columns'].keys())):
-            self.table.setColumnWidth(i, 155)
+        self.table.horizontalHeader().setStyleSheet("""
+            min-height:1.55em; max-height:1.55em;""")
+        self.table.horizontalHeader().setSectionResizeMode(
+            QHeaderView.Stretch)
+        self.table.horizontalHeader().setSectionResizeMode(
+            0, QHeaderView.ResizeToContents)
+        self.table.verticalHeader().setSectionResizeMode(
+            QHeaderView.Stretch)
         self.table.verticalHeader().hide()
-        self.table.horizontalHeader().setFixedHeight(48)
         self.table.setHorizontalHeaderLabels(
             self.table_map['columns'].values())
+        self.table.setSizePolicy(QSzPlcy.MinimumExpanding, QSzPlcy.Preferred)
 
         for row, vlabel in self.table_map['rows'].items():
             label_item = QTableWidgetItem(vlabel)
@@ -241,8 +262,6 @@ class DipoleRamp(QWidget):
             self.table.setItem(row, 1, t_item)
             self.table.setItem(row, 2, np_item)
             self.table.setItem(row, 3, e_item)
-
-            self.table.setRowHeight(row, 48)
 
         self.table.setItemDelegate(_SpinBoxDelegate())
         self.table.cellChanged.connect(self._handleCellChanged)
@@ -553,7 +572,7 @@ class MultipolesRamp(QWidget):
 
     def _setupUi(self):
         glay = QGridLayout(self)
-        glay.setAlignment(Qt.AlignCenter)
+        glay.setAlignment(Qt.AlignTop)
         self.graphview = QWidget()
         self.table = QTableWidget(self)
         self.bt_insert = QPushButton('Insert Normalized Config', self)
@@ -566,34 +585,39 @@ class MultipolesRamp(QWidget):
 
         self.label_exclim = QLabel('', self)
         self.pb_exclim = QPushButton('?', self)
-        self.pb_exclim.setFixedWidth(48)
         self.pb_exclim.setVisible(False)
-        self.pb_exclim.setStyleSheet('background-color: red;')
+        self.pb_exclim.setStyleSheet("""
+            background-color: red;
+            min-width:1.55em; max-width:1.55em;""")
         self.pb_exclim.clicked.connect(self._showExcLimPopup)
         lay_exclim = QHBoxLayout()
-        lay_exclim.addItem(QSpacerItem(2, 2, QSzPlcy.Expanding, QSzPlcy.Fixed))
+        lay_exclim.addItem(
+            QSpacerItem(2, 2, QSzPlcy.Expanding, QSzPlcy.Ignored))
         lay_exclim.addWidget(self.label_exclim)
         lay_exclim.addWidget(self.pb_exclim)
-        lay_exclim.addItem(QSpacerItem(2, 2, QSzPlcy.Expanding, QSzPlcy.Fixed))
-
-        hlay_table = QHBoxLayout()
-        hlay_table.addItem(QSpacerItem(2, 2, QSzPlcy.Expanding, QSzPlcy.Fixed))
-        hlay_table.addWidget(self.table)
-        hlay_table.addItem(QSpacerItem(2, 2, QSzPlcy.Expanding, QSzPlcy.Fixed))
+        lay_exclim.addItem(
+            QSpacerItem(2, 2, QSzPlcy.Expanding, QSzPlcy.Ignored))
 
         label = QLabel('<h4>Multipoles Ramp</h4>', self)
-        label.setAlignment(Qt.AlignCenter)
-        label.setFixedHeight(48)
-        glay.addWidget(label, 0, 0, 1, 2)
+        label.setStyleSheet("""
+            min-height: 1.55em; max-height: 1.55em;""")
+        glay.addWidget(label, 0, 0, 1, 2, alignment=Qt.AlignCenter)
         glay.addWidget(self.graphview, 1, 0, 1, 2)
-        glay.addLayout(hlay_table, 2, 0, 1, 2)
+        glay.addWidget(self.table, 2, 0, 1, 2)
         glay.addWidget(self.bt_insert, 3, 0)
         glay.addWidget(self.bt_delete, 3, 1)
         glay.addLayout(lay_exclim, 4, 0, 1, 2)
 
     def _setupGraph(self):
-        self.graph = FigureCanvas(Figure())
-        self.graph.setFixedHeight(500)
+        self.graph = SiriusFigureCanvas(Figure())
+        self.graph.setObjectName('MultipolesGraph')
+        self.graph.setStyleSheet("""
+            #MultipolesGraph{
+                min-width:30em;
+                min-height:18em;max-height:18em;
+            }""")
+        self.graph.setSizePolicy(QSzPlcy.MinimumExpanding, QSzPlcy.Preferred)
+        self.graph.figure.set_tight_layout({'pad': .0})
         self.ax = self.graph.figure.subplots()
         self.ax.grid()
         self.ax.set_xlabel('t [ms]')
@@ -606,13 +630,18 @@ class MultipolesRamp(QWidget):
         self.m_ej, = self.ax.plot([0], [0], 'or')
 
         self.toolbar = NavigationToolbar(self.graph, self)
+        self.toolbar.setObjectName('toolbar')
+        self.toolbar.setStyleSheet("""
+            #toolbar{min-height:2em; max-height:2em;}""")
 
         hlay_pb = QHBoxLayout()
         self.pb_maname = QPushButton('Choose magnets to plot... ', self)
         self.pb_maname.clicked.connect(self._showChooseMagnetToPlot)
-        hlay_pb.addItem(QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Fixed))
+        hlay_pb.addItem(
+            QSpacerItem(20, 20, QSzPlcy.Expanding, QSzPlcy.Ignored))
         hlay_pb.addWidget(self.pb_maname)
-        hlay_pb.addItem(QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Fixed))
+        hlay_pb.addItem(
+            QSpacerItem(20, 20, QSzPlcy.Expanding, QSzPlcy.Ignored))
 
         lay = QGridLayout()
         lay.addWidget(self.graph, 0, 0, 1, 2)
@@ -635,8 +664,12 @@ class MultipolesRamp(QWidget):
             normalized_config_rows.append(idx)
             idx += 1
 
-        self.table.setStyleSheet(
-            """
+        self.table.setObjectName('MultipoleTable')
+        self.table.setStyleSheet("""
+            #MultipoleTable{
+                min-width: 30em;
+                min-height: 22.5em;
+            }
             QHeaderView::section {
                 background-color: #FF7C52;
             }
@@ -646,18 +679,21 @@ class MultipolesRamp(QWidget):
             }
             QTableWidget QTableCornerButton::section {
                 background-color: #FF7C52;
-            }
-            """)
-        self.table.setFixedWidth(1027)
-        self.table.setMinimumHeight(
-            min((len(self.normalized_configs)+3)*48+2, 482))
-        self.table.verticalHeader().setFixedWidth(48)
-        self.table.horizontalHeader().setFixedHeight(48)
+            }""")
+        self.table.setSizePolicy(QSzPlcy.MinimumExpanding,
+                                 QSzPlcy.MinimumExpanding)
+        self.table.verticalHeader().setStyleSheet("""
+            min-width:1.55em; max-width:1.55em;""")
+        self.table.horizontalHeader().setStyleSheet("""
+            min-height:1.55em; max-height:1.55em;""")
         self.table.setRowCount(2+len(self.normalized_configs))
         self.table.setColumnCount(4)
-        self.table.setColumnWidth(0, 498)
-        for i in range(1, len(self.table_map['columns'].values())):
-            self.table.setColumnWidth(i, 155)
+        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.table.horizontalHeader().setSectionResizeMode(
+            0, QHeaderView.ResizeToContents)
+        self.table.horizontalHeader().setMaximumSectionSize(320)
+        self.table.verticalHeader().setSectionResizeMode(
+            QHeaderView.Interactive)
         self.table.setHorizontalHeaderLabels(
             self.table_map['columns'].values())
 
@@ -680,8 +716,6 @@ class MultipolesRamp(QWidget):
             self.table.setItem(row, 1, t_item)
             self.table.setItem(row, 2, np_item)
             self.table.setItem(row, 3, e_item)
-
-            self.table.setRowHeight(row, 48)
 
         self.table.setItemDelegate(_SpinBoxDelegate())
         self.table.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
@@ -981,6 +1015,7 @@ class RFRamp(QWidget):
 
     def _setupUi(self):
         glay = QGridLayout(self)
+        glay.setAlignment(Qt.AlignTop)
         self.graphview = QWidget()
         self.set_rfdelay_and_rmpincintvl = QFormLayout()
         self.table = QTableWidget(self)
@@ -990,29 +1025,36 @@ class RFRamp(QWidget):
         self._setupTable()
 
         vlay_v = QVBoxLayout()
-        self.l_rampupv = QLabel('RmpU 0 [kV/s]', self,
-                                alignment=Qt.AlignRight)
-        self.l_rampupv.setFixedWidth(320)
-        self.l_rampdownv = QLabel('RmpD 0 [kV/s]', self,
-                                  alignment=Qt.AlignRight)
-        self.l_rampdownv.setFixedWidth(320)
+        self.l_rampupv = QLabel('RmpU 0 [kV/s]')
+        self.l_rampupv.setStyleSheet("""
+            min-width:10.5em;max-width:10.5em;
+            min-height:1.29em;max-height:1.29em;
+            qproperty-alignment: AlignRight;""")
+        self.l_rampdownv = QLabel('RmpD 0 [kV/s]')
+        self.l_rampdownv.setStyleSheet("""
+            min-width:10.5em;max-width:10.5em;
+            min-height:1.29em;max-height:1.29em;
+            qproperty-alignment: AlignRight;""")
         vlay_v.addWidget(self.l_rampupv)
         vlay_v.addWidget(self.l_rampdownv)
 
         label = QLabel('<h4>RF Ramp</h4>', self)
-        label.setFixedHeight(48)
-        label.setAlignment(Qt.AlignCenter)
-        glay.addWidget(label, 0, 0, 1, 2)
-        glay.addWidget(self.graphview, 1, 0, 1, 2)
+        label.setStyleSheet("""
+            min-height:1.55em; max-height: 1.55em;
+            qproperty-alignment: AlignCenter;""")
+        glay.addWidget(label, 0, 0, 1, 3, alignment=Qt.AlignCenter)
+        glay.addWidget(self.graphview, 1, 0, 1, 3)
         glay.addLayout(self.set_rfdelay_and_rmpincintvl, 2, 0)
-        glay.addLayout(vlay_v, 2, 1)
-        glay.addWidget(self.table, 3, 0, 1, 2)
-        glay.addItem(
-            QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Expanding), 5, 1)
+        glay.addLayout(vlay_v, 2, 2)
+        glay.addWidget(self.table, 3, 0, 1, 3)
 
     def _setupGraph(self):
-        self.graph = FigureCanvas(Figure())
-        self.graph.setFixedHeight(500)
+        self.graph = SiriusFigureCanvas(Figure())
+        self.graph.setObjectName('RFGraph')
+        self.graph.setStyleSheet("""
+            #RFGraph{min-width:42em;min-height:18em;max-height:18em;}""")
+        self.graph.setSizePolicy(QSzPlcy.MinimumExpanding, QSzPlcy.Preferred)
+        self.graph.figure.set_tight_layout({'pad': .0})
         self.ax1 = self.graph.figure.subplots()
         self.ax1.grid()
         self.ax1.set_xlabel('t [ms]')
@@ -1028,6 +1070,9 @@ class RFRamp(QWidget):
         self.line2, = self.ax2.plot([0], [0], '-g')
 
         self.toolbar = NavigationToolbar(self.graph, self)
+        self.toolbar.setObjectName('toolbar')
+        self.toolbar.setStyleSheet("""
+            #toolbar{min-height:2em; max-height:2em;}""")
 
         lay = QVBoxLayout()
         lay.addWidget(self.graph)
@@ -1035,25 +1080,23 @@ class RFRamp(QWidget):
         self.graphview.setLayout(lay)
 
     def _setupRFDelayAndRmpIncIntvl(self):
-        label_rfdelay = QLabel('RF delay [ms]:', self)
-        label_rfdelay.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        label_rfdelay = QLabel('RF delay [ms]:', self,
+                               alignment=Qt.AlignVCenter)
         self.sb_rfdelay = _MyDoubleSpinBox(self)
         self.sb_rfdelay.setMinimum(0)
         self.sb_rfdelay.setMaximum(410)
         self.sb_rfdelay.setDecimals(6)
         self.sb_rfdelay.setSingleStep(0.000008)
-        self.sb_rfdelay.setMaximumWidth(200)
         self.sb_rfdelay.editingFinished.connect(
             self._handleChangeRFDelay)
 
-        label_rmpincintvl = QLabel('Ramp Increase Duration [min]:', self)
-        label_rmpincintvl.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        label_rmpincintvl = QLabel('Ramp Increase Duration [min]:', self,
+                                   alignment=Qt.AlignVCenter)
         self.sb_rmpincintvl = _MyDoubleSpinBox(self)
         self.sb_rmpincintvl.setMinimum(0)
         self.sb_rmpincintvl.setMaximum(28)
         self.sb_rmpincintvl.setDecimals(2)
         self.sb_rmpincintvl.setSingleStep(0.1)
-        self.sb_rmpincintvl.setMaximumWidth(200)
         self.sb_rmpincintvl.editingFinished.connect(
             self._handleChangeRmpIncIntvl)
 
@@ -1074,8 +1117,13 @@ class RFRamp(QWidget):
                         3: '∠Vgap [°]',
                         4: 'E [GeV]',
                         5: 'Φs [°]'}}
+        self.table.setObjectName('RFTable')
         self.table.setStyleSheet(
             """
+            #RFTable{
+                min-width: 42em;
+                min-height: 10.69em;
+            }
             QHeaderView::section {
                 background-color: #4A5E28;
             }
@@ -1087,17 +1135,18 @@ class RFRamp(QWidget):
                 background-color: #4A5E28;
             }
             """)
-        self.table.setFixedSize(
-            1027, (max(self.table_map['rows'].keys())+2)*48+2)
         self.table.setRowCount(5)
         self.table.setColumnCount(6)
-        self.table.setColumnWidth(0, 250)
-        for i in range(1, len(self.table_map['columns'].values())):
-            self.table.setColumnWidth(i, 155)
+        self.table.horizontalHeader().setStyleSheet("""
+            min-height:1.55em; max-height:1.55em;""")
+        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.table.horizontalHeader().setSectionResizeMode(
+            0, QHeaderView.ResizeToContents)
+        self.table.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.table.verticalHeader().hide()
-        self.table.horizontalHeader().setFixedHeight(48)
         self.table.setHorizontalHeaderLabels(
             self.table_map['columns'].values())
+        self.table.setSizePolicy(QSzPlcy.MinimumExpanding, QSzPlcy.Preferred)
 
         for row, vlabel in self.table_map['rows'].items():
             label_item = QTableWidgetItem(vlabel)
@@ -1128,8 +1177,6 @@ class RFRamp(QWidget):
             self.table.setItem(row, 3, Ph_item)
             self.table.setItem(row, 4, e_item)
             self.table.setItem(row, 5, phsinc_item)
-
-            self.table.setRowHeight(row, 48)
 
         self.table.setItemDelegate(_SpinBoxDelegate())
         self.table.cellChanged.connect(self._handleCellChanged)

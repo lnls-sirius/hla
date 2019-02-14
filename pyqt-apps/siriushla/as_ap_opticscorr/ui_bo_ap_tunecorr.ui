@@ -6,39 +6,30 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1388</width>
-    <height>1229</height>
+    <width>741</width>
+    <height>641</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
   <property name="minimumSize">
    <size>
-    <width>1388</width>
+    <width>0</width>
     <height>0</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>1393</width>
+    <width>16777215</width>
     <height>16777215</height>
    </size>
   </property>
   <property name="windowTitle">
    <string>Form</string>
-  </property>
-  <property name="styleSheet">
-   <string notr="true">QGroupBox {
-	font-weight: bold;
-}
-
-* {
-	font-size:20pt;
-}</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_6">
    <item row="2" column="1">
@@ -72,9 +63,12 @@
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Expanding</enum>
+        </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>40</width>
+          <width>10</width>
           <height>20</height>
          </size>
         </property>
@@ -88,7 +82,7 @@
         <property name="sizeHint" stdset="0">
          <size>
           <width>20</width>
-          <height>40</height>
+          <height>20</height>
          </size>
         </property>
        </spacer>
@@ -97,13 +91,13 @@
        <widget class="PyDMLabel" name="PyDMLabel_OrbXDeltaPos_RB">
         <property name="minimumSize">
          <size>
-          <width>200</width>
-          <height>48</height>
+          <width>116</width>
+          <height>0</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>16777215</width>
+          <width>116</width>
           <height>16777215</height>
          </size>
         </property>
@@ -112,6 +106,10 @@
         </property>
         <property name="whatsThis">
          <string/>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="frameShape">
          <enum>QFrame::NoFrame</enum>
@@ -138,7 +136,7 @@
         <property name="sizeHint" stdset="0">
          <size>
           <width>20</width>
-          <height>40</height>
+          <height>20</height>
          </size>
         </property>
        </spacer>
@@ -148,9 +146,12 @@
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Expanding</enum>
+        </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>40</width>
+          <width>10</width>
           <height>20</height>
          </size>
         </property>
@@ -158,6 +159,12 @@
       </item>
       <item row="6" column="11">
        <widget class="PyDMLabel" name="PyDMLabel_3">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="toolTip">
          <string/>
         </property>
@@ -186,7 +193,7 @@
         <property name="sizeHint" stdset="0">
          <size>
           <width>20</width>
-          <height>40</height>
+          <height>20</height>
          </size>
         </property>
        </spacer>
@@ -195,13 +202,20 @@
        <widget class="QLabel" name="label_6">
         <property name="minimumSize">
          <size>
-          <width>250</width>
+          <width>112</width>
           <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>112</width>
+          <height>16777215</height>
          </size>
         </property>
         <property name="styleSheet">
          <string notr="true">font-weight:bold;
-</string>
+min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>ΔTune-RB</string>
@@ -216,9 +230,12 @@
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Expanding</enum>
+        </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>40</width>
+          <width>10</width>
           <height>20</height>
          </size>
         </property>
@@ -226,11 +243,27 @@
       </item>
       <item row="3" column="11">
        <widget class="PyDMLabel" name="PyDMLabel_4">
+        <property name="minimumSize">
+         <size>
+          <width>116</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>116</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="toolTip">
          <string/>
         </property>
         <property name="whatsThis">
          <string/>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="frameShape">
          <enum>QFrame::NoFrame</enum>
@@ -270,13 +303,20 @@
        <widget class="QLabel" name="label_3">
         <property name="minimumSize">
          <size>
-          <width>250</width>
+          <width>112</width>
           <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>112</width>
+          <height>16777215</height>
          </size>
         </property>
         <property name="styleSheet">
          <string notr="true">font-weight:bold;
-</string>
+min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>ΔTune-SP</string>
@@ -291,62 +331,35 @@
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Expanding</enum>
+        </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>40</width>
+          <width>10</width>
           <height>20</height>
          </size>
         </property>
        </spacer>
       </item>
-      <item row="6" column="9">
-       <widget class="PyDMLabel" name="PyDMLabel_OrbYDeltaPos_RB">
-        <property name="minimumSize">
-         <size>
-          <width>200</width>
-          <height>48</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string/>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}BO-Glob:AP-TuneCorr:DeltaTuneY-RB</string>
-        </property>
-        <property name="precFromPV" stdset="0">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="11">
        <widget class="QLabel" name="label_9">
         <property name="minimumSize">
          <size>
-          <width>250</width>
+          <width>112</width>
           <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>112</width>
+          <height>16777215</height>
          </size>
         </property>
         <property name="styleSheet">
          <string notr="true">font-weight:bold;
-</string>
+min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>Tune-Mon</string>
@@ -361,9 +374,12 @@
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Expanding</enum>
+        </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>40</width>
+          <width>10</width>
           <height>20</height>
          </size>
         </property>
@@ -371,6 +387,18 @@
       </item>
       <item row="3" column="5">
        <widget class="PyDMSpinbox" name="PyDMSpinbox_2">
+        <property name="minimumSize">
+         <size>
+          <width>118</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>118</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="toolTip">
          <string/>
         </property>
@@ -385,6 +413,10 @@
     init_channel : str, optional
         The channel to be used by the widget.
     </string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}BO-Glob:AP-TuneCorr:DeltaTuneX-SP</string>
@@ -419,6 +451,43 @@
         </property>
        </widget>
       </item>
+      <item row="6" column="9">
+       <widget class="PyDMLabel" name="PyDMLabel_OrbYDeltaPos_RB">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string/>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}BO-Glob:AP-TuneCorr:DeltaTuneY-RB</string>
+        </property>
+        <property name="precFromPV" stdset="0">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
@@ -448,7 +517,7 @@
      </property>
      <property name="minimumSize">
       <size>
-       <width>436</width>
+       <width>0</width>
        <height>0</height>
       </size>
      </property>
@@ -460,13 +529,13 @@
        <widget class="PyDMLabel" name="PyDMLabel_2">
         <property name="minimumSize">
          <size>
-          <width>180</width>
+          <width>0</width>
           <height>0</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>180</width>
+          <width>16777215</width>
           <height>16777215</height>
          </size>
         </property>
@@ -593,11 +662,11 @@
      <property name="maximumSize">
       <size>
        <width>16777215</width>
-       <height>40</height>
+       <height>16777215</height>
       </size>
      </property>
      <property name="styleSheet">
-      <string notr="true">font-size:24pt;
+      <string notr="true">font-size:1.2em;
 font-weight:bold;
 background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, stop:0 rgba(173, 190, 207, 255), stop:1 rgba(213, 213, 213, 255));</string>
      </property>
@@ -644,12 +713,20 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
        <widget class="QLabel" name="label_14">
         <property name="minimumSize">
          <size>
-          <width>250</width>
+          <width>112</width>
           <height>0</height>
          </size>
         </property>
+        <property name="maximumSize">
+         <size>
+          <width>112</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="styleSheet">
-         <string notr="true">font-weight:bold;</string>
+         <string notr="true">font-weight:bold;
+min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>KL-RB</string>
@@ -663,12 +740,20 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
        <widget class="QLabel" name="label_13">
         <property name="minimumSize">
          <size>
-          <width>250</width>
+          <width>112</width>
           <height>0</height>
          </size>
         </property>
+        <property name="maximumSize">
+         <size>
+          <width>112</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="styleSheet">
-         <string notr="true">font-weight:bold;</string>
+         <string notr="true">font-weight:bold;
+min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>RefKL-Mon</string>
@@ -680,8 +765,22 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
       </item>
       <item row="1" column="5">
        <widget class="QLabel" name="label_15">
+        <property name="minimumSize">
+         <size>
+          <width>112</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>112</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="styleSheet">
-         <string notr="true">font-weight:bold;</string>
+         <string notr="true">font-weight:bold;
+min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>DeltaKL-Mon</string>
@@ -693,9 +792,15 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
       </item>
       <item row="3" column="0">
        <widget class="SiriusLedState" name="SiriusLedState">
+        <property name="minimumSize">
+         <size>
+          <width>22</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
-          <width>36</width>
+          <width>22</width>
           <height>16777215</height>
          </size>
         </property>
@@ -704,6 +809,10 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
         </property>
         <property name="whatsThis">
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
         </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}BO-Fam:MA-QF:PwrState-Sts</string>
@@ -749,8 +858,22 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
       </item>
       <item row="1" column="2">
        <widget class="QLabel" name="label_12">
+        <property name="minimumSize">
+         <size>
+          <width>112</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>112</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="styleSheet">
-         <string notr="true">font-weight:bold;</string>
+         <string notr="true">font-weight:bold;
+min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>OpMode-Sts</string>
@@ -795,8 +918,8 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
        <widget class="PyDMLabel" name="PyDMLabel_7">
         <property name="minimumSize">
          <size>
-          <width>200</width>
-          <height>48</height>
+          <width>0</width>
+          <height>0</height>
          </size>
         </property>
         <property name="maximumSize">
@@ -863,8 +986,8 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
        <widget class="PyDMLabel" name="PyDMLabel_10">
         <property name="minimumSize">
          <size>
-          <width>200</width>
-          <height>48</height>
+          <width>0</width>
+          <height>0</height>
          </size>
         </property>
         <property name="maximumSize">
@@ -900,9 +1023,19 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
        <widget class="QPushButton" name="pushButton_QFMADetail">
         <property name="minimumSize">
          <size>
-          <width>0</width>
-          <height>48</height>
+          <width>114</width>
+          <height>0</height>
          </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>114</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>BO-Fam:MA-QF</string>
@@ -913,9 +1046,19 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
        <widget class="QPushButton" name="pushButton_QDMADetail">
         <property name="minimumSize">
          <size>
-          <width>0</width>
-          <height>48</height>
+          <width>114</width>
+          <height>0</height>
          </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>114</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:8em;
+max-width:8em;</string>
         </property>
         <property name="text">
          <string>BO-Fam:MA-QD</string>
@@ -986,9 +1129,15 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
       </item>
       <item row="5" column="0">
        <widget class="SiriusLedState" name="SiriusLedState_2">
+        <property name="minimumSize">
+         <size>
+          <width>22</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
-          <width>36</width>
+          <width>22</width>
           <height>16777215</height>
          </size>
         </property>
@@ -997,6 +1146,10 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
         </property>
         <property name="whatsThis">
          <string>PyDMLed specialization to represent 2 states in dark/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
         </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}BO-Fam:MA-QD:PwrState-Sts</string>
@@ -1008,22 +1161,12 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
    </item>
    <item row="6" column="1" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <spacer name="horizontalSpacer_11">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>36</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
+     <property name="leftMargin">
+      <number>9</number>
+     </property>
+     <property name="rightMargin">
+      <number>9</number>
+     </property>
      <item>
       <widget class="PyDMPushButton" name="PyDMPushButton">
        <property name="sizePolicy">
@@ -1034,8 +1177,14 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
        </property>
        <property name="minimumSize">
         <size>
-         <width>250</width>
+         <width>142</width>
          <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>142</width>
+         <height>16777215</height>
         </size>
        </property>
        <property name="toolTip">
@@ -1079,6 +1228,10 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
         setting to an absolute value
     </string>
        </property>
+       <property name="styleSheet">
+        <string notr="true">min-width:10em;
+max-width:10em;</string>
+       </property>
        <property name="text">
         <string>Configure
 Quadrupoles</string>
@@ -1093,20 +1246,11 @@ Quadrupoles</string>
      </item>
      <item>
       <spacer name="horizontalSpacer_5">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>250</width>
-         <height>0</height>
-        </size>
-       </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Expanding</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -1126,8 +1270,14 @@ Quadrupoles</string>
        </property>
        <property name="minimumSize">
         <size>
-         <width>250</width>
-         <height>35</height>
+         <width>114</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>114</width>
+         <height>16777215</height>
         </size>
        </property>
        <property name="toolTip">
@@ -1171,6 +1321,10 @@ Quadrupoles</string>
         setting to an absolute value
     </string>
        </property>
+       <property name="styleSheet">
+        <string notr="true">min-width:8em;
+max-width:8em;</string>
+       </property>
        <property name="text">
         <string>Set Current KLs
 as New Reference</string>
@@ -1185,20 +1339,11 @@ as New Reference</string>
      </item>
      <item>
       <spacer name="horizontalSpacer_10">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>250</width>
-         <height>0</height>
-        </size>
-       </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Expanding</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -1218,8 +1363,14 @@ as New Reference</string>
        </property>
        <property name="minimumSize">
         <size>
-         <width>250</width>
-         <height>70</height>
+         <width>114</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>114</width>
+         <height>16777215</height>
         </size>
        </property>
        <property name="toolTip">
@@ -1262,6 +1413,10 @@ as New Reference</string>
         Choice to have the button peform a relative put, instead of always
         setting to an absolute value
     </string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">min-width:8em;
+max-width:8em;</string>
        </property>
        <property name="text">
         <string>Apply
@@ -1294,7 +1449,7 @@ Correction</string>
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>400</height>
+          <height>172</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1302,6 +1457,11 @@ Correction</string>
         </property>
         <property name="whatsThis">
          <string/>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QListWidget{
+min-height:12em;
+}</string>
         </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}BO-Glob:AP-TuneCorr:Log-Mon</string>
@@ -1313,11 +1473,27 @@ Correction</string>
       </item>
       <item row="0" column="2">
        <widget class="SiriusLedAlert" name="SiriusLedAlert">
+        <property name="minimumSize">
+         <size>
+          <width>22</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>22</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="toolTip">
          <string/>
         </property>
         <property name="whatsThis">
          <string>PyDMLed specialization to represent 2 states in red/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
         </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}BO-Glob:AP-TuneCorr:Status-Mon</string>
@@ -1336,11 +1512,27 @@ Correction</string>
       </item>
       <item row="1" column="2">
        <widget class="SiriusLedAlert" name="SiriusLedAlert_2">
+        <property name="minimumSize">
+         <size>
+          <width>22</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>22</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="toolTip">
          <string/>
         </property>
         <property name="whatsThis">
          <string>PyDMLed specialization to represent 2 states in red/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
         </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}BO-Glob:AP-TuneCorr:Status-Mon</string>
@@ -1375,11 +1567,27 @@ Correction</string>
       </item>
       <item row="2" column="2">
        <widget class="SiriusLedAlert" name="SiriusLedAlert_3">
+        <property name="minimumSize">
+         <size>
+          <width>22</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>22</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="toolTip">
          <string/>
         </property>
         <property name="whatsThis">
          <string>PyDMLed specialization to represent 2 states in red/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
         </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}BO-Glob:AP-TuneCorr:Status-Mon</string>
@@ -1414,11 +1622,27 @@ Correction</string>
       </item>
       <item row="3" column="2">
        <widget class="SiriusLedAlert" name="SiriusLedAlert_4">
+        <property name="minimumSize">
+         <size>
+          <width>22</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>22</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="toolTip">
          <string/>
         </property>
         <property name="whatsThis">
          <string>PyDMLed specialization to represent 2 states in red/light green.</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">min-width:1.29em;
+max-width:1.29em;</string>
         </property>
         <property name="channel" stdset="0">
          <string>${PREFIX}BO-Glob:AP-TuneCorr:Status-Mon</string>

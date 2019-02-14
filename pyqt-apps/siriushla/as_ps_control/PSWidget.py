@@ -8,7 +8,7 @@ Exposes basic controls like:
 import re
 
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, \
-    QPushButton, QStyleOption, QStyle
+    QPushButton, QStyleOption, QStyle, QSizePolicy
 from qtpy.QtGui import QPainter
 from qtpy.QtCore import QSize
 from pydm.widgets.label import PyDMLabel
@@ -47,39 +47,51 @@ class BasePSWidget(QWidget):
         }
         #state_header,
         #state_widget {
-            min-width: 150px;
-            max-width: 150px;
+            min-width: 8em;
+            max-width: 8em;
         }
         #psname_header,
         #psname_button {
-            min-width: 300px;
-            max-width: 300px;
-            margin-right: 20px;
+            min-width: 10em;
+            max-width: 10em;
+            margin-right: 0.5em;
         }
         #intlk_header,
         #intlk_widget {
-            min-width: 200px;
-            max-width: 200px;
+            min-width: 5em;
+            max-width: 5em;
         }
         #analog_sp_header,
         #strength_sp_header,
         #analog_widget,
         #strength_widget {
-            min-width: 250px;
-            max-width: 250px;
+            min-width: 10em;
+            max-width: 10em;
         }
         #analog_mon_header,
         #strength_mon_header,
         #analog_label,
         #strength_label {
-            min-width: 200px;
-            max-width: 200px;
+            min-width: 10em;
+            max-width: 10em;
             qproperty-alignment: AlignCenter;
         }
         #trim_header,
         #trim_button {
-            min-width: 85px;
-            max-width: 85px;
+            min-width: 5em;
+            max-width: 5em;
+        }
+        PyDMStateButton {
+            min-width: 2.5em;
+            max-width: 2.5em;
+            min-height: 1.5em;
+            max-height: 1.5em;
+        }
+        PyDMLed {
+            min-width: 1.5em;
+            max-width: 1.5em;
+            min-height: 1.5em;
+            max-height: 1.5em;
         }
     """
 
@@ -266,10 +278,13 @@ class BasePSWidget(QWidget):
         """Turn power supply off."""
         if self.pwrstate_button._bit_val:
             self.pwrstate_button.send_value()
+    
+    # def sizePolicy(self):
+    #     return QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
 
-    def sizeHint(self):
-        """Return sizeHint."""
-        return QSize(1600, 60)
+    # def sizeHint(self):
+    #     """Return sizeHint."""
+    #     return QSize(1600, 100)
 
 
 class PulsedPSWidget(BasePSWidget):
@@ -370,11 +385,9 @@ def run_test(psname=None):
     """Run test application."""
     import sys
     from siriushla.sirius_application import SiriusApplication
-    from siriushla import util
 
     psname = 'SI-Fam:PS-B1B2-1' if psname is None else psname
     app = SiriusApplication()
-    util.set_style(app)
     window = PSWidget(psname=psname)
     window.show()
     sys.exit(app.exec_())

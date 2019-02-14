@@ -11,9 +11,6 @@ from ..util import connect_window
 class PSDetailWindow(SiriusMainWindow):
     """Window to control a detailed widget."""
 
-    STYLESHEET = """
-    """
-
     def __init__(self, psname, parent=None):
         """Init UI."""
         super(PSDetailWindow, self).__init__(parent)
@@ -22,7 +19,7 @@ class PSDetailWindow(SiriusMainWindow):
         self._ma = psname
 
         self._setup_ui()
-        self.setStyleSheet(self.STYLESHEET)
+        # self.setStyleSheet(self.STYLESHEET)
         # self.app.establish_widget_connections(self)
 
     def _setup_ui(self):

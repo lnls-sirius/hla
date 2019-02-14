@@ -8,7 +8,6 @@ from siriuspy.envars import vaca_prefix
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.as_di_bpms import BPMMain
-from siriushla import util
 
 
 parser = _argparse.ArgumentParser(
@@ -19,7 +18,6 @@ parser.add_argument('-p', "--prefix", type=str, default=vaca_prefix,
 args = parser.parse_args()
 
 app = SiriusApplication()
-util.set_style(app)
 BPM = create_window_from_widget(BPMMain, 'BPMMainWindow', is_main=True)
 window = BPM(None, prefix=args.prefix, bpm=args.bpm)
 window.show()

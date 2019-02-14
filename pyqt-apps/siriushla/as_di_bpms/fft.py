@@ -38,6 +38,7 @@ class FFTConfig(BaseWidget):
         if not enum:
             wid.showStepExponent = False
         lab = QLabel(label)
+        lab.setStyleSheet("""min-width:8em;""")
         self.fl.addRow(lab, wid)
 
     def _make_connections(self, wid, pv):
@@ -81,9 +82,8 @@ class FFTData(BaseWidget):
         graph = GraphWave(
             self, prefix=self.prefix, bpm=self.bpm,
             data_prefix=self.data_prefix)
-        labsty = {'font-size': '20pt'}
-        graph.setLabel('left', text='Amplitude', units='a.u.', **labsty)
-        graph.setLabel('bottom', text='Frequency', units='Hz', **labsty)
+        graph.setLabel('left', text='Amplitude', units='a.u.')
+        graph.setLabel('bottom', text='Frequency', units='Hz')
         for name, cor in zip(names, colors):
             opts = dict(
                 y_channel=self.get_pvname(name+'FFTData-RB.AMP'),
@@ -98,9 +98,8 @@ class FFTData(BaseWidget):
         graph = GraphWave(
             self, prefix=self.prefix, bpm=self.bpm,
             data_prefix=self.data_prefix)
-        labsty = {'font-size': '20pt'}
-        graph.setLabel('left', text='Phase', units='rad', **labsty)
-        graph.setLabel('bottom', text='Frequency', units='Hz', **labsty)
+        graph.setLabel('left', text='Phase', units='rad')
+        graph.setLabel('bottom', text='Frequency', units='Hz')
         for name, cor in zip(names, colors):
             opts = dict(
                 y_channel=self.get_pvname(name+'FFTData-RB.PHA'),
@@ -127,13 +126,10 @@ class FFTData(BaseWidget):
 if __name__ == '__main__':
     from siriushla.sirius_application import SiriusApplication
     from siriushla.widgets import SiriusDialog
-    from siriushla.util import set_style
     import sys
 
     app = SiriusApplication()
-    set_style(app)
     wind = SiriusDialog()
-    wind.resize(1400, 1400)
     hbl = QHBoxLayout(wind)
     bpm_name = 'SI-07SP:DI-BPM-1'
     widm = FFTData(bpm=bpm_name, data_prefix='GEN_', position=False)

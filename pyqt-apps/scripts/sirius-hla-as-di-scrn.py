@@ -11,8 +11,8 @@ from qtpy.QtWidgets import QWidget, QLabel, QSpacerItem, \
                            QSizePolicy as QSzPlcy, QGridLayout
 from pydm.widgets import PyDMEnumComboBox, PyDMLabel
 from siriushla.sirius_application import SiriusApplication
-from siriushla.widgets import SiriusScrnView, PyDMLed
-from siriushla import util
+from siriushla.widgets import PyDMLed
+from siriushla.widgets.scrn_view import SiriusScrnView
 from siriushla.widgets.windows import SiriusMainWindow
 
 
@@ -29,7 +29,6 @@ prefix = args.prefix
 
 os.environ['EPICS_CA_MAX_ARRAY_BYTES'] = '200000000'
 app = SiriusApplication()
-util.set_style(app)
 
 cw = QWidget()
 scrn_view = SiriusScrnView(prefix=prefix, device=scrn_device)
@@ -41,7 +40,7 @@ led_movests = PyDMLed(
     parent=cw, init_channel=prefix+scrn_device+':DoneMov-Mon',
     color_list=[PyDMLed.LightGreen, PyDMLed.DarkGreen])
 led_movests.shape = 2
-led_movests.setFixedHeight(40)
+led_movests.setStyleSheet("""min-height:1.29em; max-height:1.29em;""")
 
 lay = QGridLayout()
 lay.addWidget(QLabel('<h3>Screen View</h3>',
@@ -63,4 +62,5 @@ window = SiriusMainWindow()
 window.setWindowTitle('Screen View: '+scrn_device)
 window.setCentralWidget(cw)
 window.show()
+window.setFocus(True)
 sys.exit(app.exec_())

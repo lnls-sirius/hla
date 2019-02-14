@@ -77,7 +77,7 @@ class MultiTurnData(BaseWidget):
             hbl2.addWidget(pb)
             hbl2.addStretch()
             Window = create_window_from_widget(
-                FFTData, 'FFTData', size=(1400, 1600))
+                FFTData, 'FFTData', size=(45, 52))
             util.connect_window(
                 pb, Window, parent=stack1, prefix=self.prefix,
                 bpm=self.bpm, data_prefix=self.data_prefix, position=False)
@@ -100,10 +100,25 @@ class MultiTurnData(BaseWidget):
             hbl2.addWidget(pb)
             hbl2.addStretch()
             Window = create_window_from_widget(
-                FFTData, 'FFTData', size=(1400, 1600))
+                FFTData, 'FFTData', size=(45, 52))
             util.connect_window(
                 pb, Window, parent=stack1, prefix=self.prefix,
                 bpm=self.bpm, data_prefix=self.data_prefix, position=True)
+
+        self.setObjectName('MultiTurnData')
+        self.setStyleSheet("""
+            #MultiTurnData{
+                min-width:48em;
+                min-height:32em;
+            }
+            #MultiTurnDataGraph{
+                min-width:48em;
+                min-height:24em;
+            }
+            QLabel{
+                min-width:6em; max-width:6em;
+                min-height:1.5em; max-height:1.5em;
+            }""")
 
     def create_statistics(self, wid, position=True):
         text, unit, names, _ = self._get_properties(position)
@@ -116,14 +131,13 @@ class MultiTurnData(BaseWidget):
         hbl.addStretch()
 
         gdl = QGridLayout(grpbx)
-        gdl.setHorizontalSpacing(30)
-        gdl.setVerticalSpacing(30)
+        gdl.setHorizontalSpacing(20)
+        gdl.setVerticalSpacing(20)
 
         stats = ('MeanValue', 'Sigma', 'MinValue', 'MaxValue')
         for j, stat in enumerate(('Average', 'Sigma', 'Minimum', 'Maximum')):
             lab = QLabel(stat, wid)
             lab.setAlignment(Qt.AlignCenter)
-            lab.setMinimumWidth(200)
             gdl.addWidget(lab, 0, j+1)
         for i, name in enumerate(names):
             lab = QLabel(text[:3] + name, wid)
@@ -148,8 +162,8 @@ class MultiTurnData(BaseWidget):
         graph = GraphWave(
             wid, prefix=self.prefix, bpm=self.bpm,
             data_prefix=self.data_prefix)
-        labsty = {'font-size': '20pt'}
-        graph.setLabel('left', text=text, units=unit, **labsty)
+        graph.setObjectName('MultiTurnDataGraph')
+        graph.setLabel('left', text=text, units=unit)
         for name, cor in zip(names, colors):
             opts = dict(
                 y_channel=name+'ArrayData',
@@ -158,7 +172,7 @@ class MultiTurnData(BaseWidget):
                 lineStyle=1,
                 lineWidth=1)  # NOTE: If > 1: very low performance
             if position:
-                graph.addChannel(**opts, add_scale=1e-9)
+                graph.addChannel(add_scale=1e-9, **opts)
             else:
                 opts['y_channel'] = self.get_pvname(opts['y_channel'])
                 graph.addChannel(**opts)
@@ -190,13 +204,10 @@ class MultiTurnData(BaseWidget):
 if __name__ == '__main__':
     from siriushla.sirius_application import SiriusApplication
     from siriushla.widgets import SiriusDialog
-    from siriushla.util import set_style
     import sys
 
     app = SiriusApplication()
-    set_style(app)
     wind = SiriusDialog()
-    wind.resize(1400, 1400)
     hbl = QHBoxLayout(wind)
     bpm_name = 'SI-07SP:DI-BPM-1'
     widm = MultiTurnData(bpm=bpm_name)

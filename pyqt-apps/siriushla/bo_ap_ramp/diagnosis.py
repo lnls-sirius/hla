@@ -34,12 +34,15 @@ class Diagnosis(QGroupBox):
         self.graph_boocurr.autoRangeX = True
         self.graph_boocurr.autoRangeY = True
         self.graph_boocurr.backgroundColor = QColor(255, 255, 255)
+        self.graph_boocurr.axisColor = QColor(0, 0, 0)
         self.graph_boocurr.showLegend = False
         self.graph_boocurr.showXGrid = True
         self.graph_boocurr.showYGrid = True
-        self.graph_boocurr.setLabels(left='<h3>Current</h3>',
-                                     bottom='<h3>Ramp Index</h3>')
-        self.graph_boocurr.setMinimumSize(600, 400)
+        self.graph_boocurr.setLabels(left='Current', bottom='Ramp Index')
+        self.graph_boocurr.setStyleSheet("""
+            PyDMWaveformPlot{
+                min-width:22em;
+                min-height:20em;}""")
         self.graph_boocurr.addChannel(
             y_channel=self.prefix+'BO-35D:DI-DCCT:RawReadings-Mon',
             color='blue', lineWidth=2, lineStyle=Qt.SolidLine)
@@ -56,12 +59,16 @@ class Diagnosis(QGroupBox):
         self.graph_rampeff.autoRangeX = True
         self.graph_rampeff.autoRangeY = True
         self.graph_rampeff.backgroundColor = QColor(255, 255, 255)
+        self.graph_rampeff.axisColor = QColor(0, 0, 0)
         self.graph_rampeff.showLegend = False
         self.graph_rampeff.showXGrid = True
         self.graph_rampeff.showYGrid = True
-        self.graph_rampeff.setLabels(left='<h3>Ramp Efficiency</h3>',
-                                     bottom='<h3>Number of cycles</h3>')
-        self.graph_rampeff.setMinimumSize(600, 400)
+        self.graph_rampeff.setLabels(
+            left='Ramp Efficiency', bottom='Number of cycles')
+        self.graph_rampeff.setStyleSheet("""
+            PyDMWaveformPlot{
+                min-width:22em;
+                min-height:20em;}""")
         self.graph_rampeff.addChannel(
             y_channel='FAKE:RampEff-Mon', name='Efficiency',
             color='blue', lineWidth=2, lineStyle=Qt.SolidLine)
@@ -75,28 +82,32 @@ class Diagnosis(QGroupBox):
 
         self.pb_addStack = QPushButton('Add to stack', self)
         self.pb_addStack.clicked.connect(self._addStack)
-        self.pb_addStack.setFixedWidth(300)
+        self.pb_addStack.setStyleSheet("""
+            min-width:9.68em; max-width:9.68em;""")
         self.pb_addStack.setVisible(False)  # temporary, TODO
         self.pb_clearGraph = QPushButton('Clear graph', self)
         self.pb_clearGraph.clicked.connect(self._clearGraph)
-        self.pb_clearGraph.setFixedWidth(300)
+        self.pb_clearGraph.setStyleSheet("""
+            min-width:9.68em; max-width:9.68em;""")
 
         glay = QGridLayout()
-        glay.setAlignment(Qt.AlignHCenter)
-        glay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 0, 0)
+        glay.addItem(
+            QSpacerItem(20, 20, QSzPlcy.Preferred, QSzPlcy.Preferred), 0, 0)
         glay.addWidget(l_boocurr, 1, 1, 1, 2)
         glay.addWidget(l_injcurr, 2, 1)
         glay.addWidget(self.label_injcurr, 2, 2)
         glay.addWidget(l_ejecurr, 3, 1)
         glay.addWidget(self.label_ejecurr, 3, 2)
         glay.addWidget(self.graph_boocurr, 4, 1, 1, 2)
-        glay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 5, 0)
+        glay.addItem(
+            QSpacerItem(20, 20, QSzPlcy.Preferred, QSzPlcy.Preferred), 5, 0)
         glay.addWidget(l_rampeff, 6, 1)
         glay.addWidget(self.label_rampeff, 6, 2)
         glay.addWidget(self.graph_rampeff, 7, 1, 1, 2)
         glay.addWidget(self.pb_addStack, 8, 1)
         glay.addWidget(self.pb_clearGraph, 8, 2)
-        glay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 9, 3)
+        glay.addItem(
+            QSpacerItem(20, 20, QSzPlcy.Preferred, QSzPlcy.Preferred), 9, 3)
         self.setLayout(glay)
 
     def _updateRampEffGraph(self):

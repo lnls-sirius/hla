@@ -10,13 +10,12 @@ from qtpy.QtGui import QColor
 from qtpy.QtCore import Qt
 from pyqtgraph import mkPen
 from pydm.widgets import PyDMLabel, PyDMPushButton, PyDMCheckbox
-from siriuspy.csdevice.orbitcorr import OrbitCorrDev
+from siriuspy.csdevice.orbitcorr import ConstTLines
 from siriuspy.servconf.srvconfig import ConnConfigService
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets import SiriusLedState, SiriusConnectionSignal
 from siriushla.util import connect_window
 from siriushla.as_ap_servconf import LoadConfiguration, SaveConfiguration
-# from siriushla.si_ap_sofb.graphics.base import Graph
 
 from siriushla.as_ap_sofb.ioc_control.respmat_enbllist import SelectionMatrix
 from siriushla.as_ap_sofb.ioc_control.base import BaseWidget
@@ -50,13 +49,13 @@ class RespMatWidget(BaseWidget):
         btns = dict()
         grpbx = QGroupBox('Corrs and BPMs selection', self)
         vbl.addWidget(grpbx)
-        szy = 1700
+        szy = 55
         if self.acc == 'BO':
-            szy = 1000
+            szy = 32
         elif not self.isring:
-            szy = 300
+            szy = 10
         Window = create_window_from_widget(
-            SelectionMatrix, name='SelectionWindow', size=(730, szy))
+            SelectionMatrix, name='SelectionWindow', size=(24, szy))
         for dev in ('BPMX', 'BPMY', 'CH', 'CV'):
             btns[dev] = QPushButton(dev, grpbx)
             connect_window(
@@ -75,8 +74,6 @@ class RespMatWidget(BaseWidget):
             pdm_chbx.setText('Enable RF')
             pdm_led = SiriusLedState(
                 grpbx, init_channel=self.prefix+'RFEnbl-Sts')
-            pdm_led.setMinimumHeight(20)
-            pdm_led.setMaximumHeight(40)
             hbl = QHBoxLayout()
             hbl.setContentsMargins(0, 0, 0, 0)
             hbl.addWidget(pdm_chbx)
@@ -92,17 +89,17 @@ class RespMatWidget(BaseWidget):
         pdm_pbtn = PyDMPushButton(
             grpbx, label="Start",
             init_channel=self.prefix+"MeasRespMat-Cmd",
-            pressValue=OrbitCorrDev.MeasRespMatCmd.Start)
+            pressValue=ConstTLines.MeasRespMatCmd.Start)
         pdm_pbtn.setEnabled(True)
         pdm_pbtn2 = PyDMPushButton(
             grpbx, label="Stop",
             init_channel=self.prefix+"MeasRespMat-Cmd",
-            pressValue=OrbitCorrDev.MeasRespMatCmd.Stop)
+            pressValue=ConstTLines.MeasRespMatCmd.Stop)
         pdm_pbtn2.setEnabled(True)
         pdm_pbtn3 = PyDMPushButton(
             grpbx, label="Reset",
             init_channel=self.prefix+"MeasRespMat-Cmd",
-            pressValue=OrbitCorrDev.MeasRespMatCmd.Reset)
+            pressValue=ConstTLines.MeasRespMatCmd.Reset)
         pdm_pbtn3.setEnabled(True)
         pdm_lbl = PyDMLabel(grpbx, init_channel=self.prefix+'MeasRespMat-Mon')
         pdm_lbl.setAlignment(Qt.AlignCenter)
@@ -149,7 +146,7 @@ class RespMatWidget(BaseWidget):
         btn = QPushButton('Check Singular Values', grpbx)
         fml.addWidget(btn)
         Window = create_window_from_widget(
-            SingularValues, name='SingularValues', size=(1000, 700))
+            SingularValues, name='SingularValues', size=(32, 25))
         connect_window(btn, Window, grpbx, prefix=self.prefix)
 
         vbl.addSpacing(40)
@@ -191,7 +188,7 @@ class RespMatWidget(BaseWidget):
         fname = filename[0]
         if not fname:
             return
-        fname += '' if fname.endswith(self.EXT) else self.EXT
+        fname += '' if fname.endswith(self.EXT) else ('.' + self.EXT)
         respm = self._respmat_rb.getvalue()
         respm = respm.reshape(2*self._csorb.NR_BPMS, -1)
         _np.savetxt(fname, respm, header=header)
@@ -204,7 +201,7 @@ class RespMatWidget(BaseWidget):
         if not filename[0]:
             return
         respm = _np.loadtxt(filename[0])
-        self._respmat_sp.send_value_signal[_np.array].emit(respm.flatten())
+        self._respmat_sp.send_value_signal[_np.ndarray].emit(respm.flatten())
 
     def _open_load_config_servconf(self):
         win = LoadConfiguration(self._config_type, self)
@@ -243,15 +240,14 @@ class SingularValues(QWidget):
 
     def setupui(self):
         vbl = QVBoxLayout(self)
-        lab = QLabel('Singular Values')
-        lab.setStyleSheet("font: 20pt \"Sans Serif\";\nfont-weight: bold;")
-        lab.setAlignment(Qt.AlignCenter)
+        vbl.setAlignment(Qt.AlignCenter)
+        lab = QLabel('Singular Values', self, alignment=Qt.AlignCenter)
+        lab.setStyleSheet("font-weight: bold;")
         vbl.addWidget(lab)
         graph = Graph()
         graph.setShowLegend(False)
-        labsty = {'font-size': '20pt'}
-        graph.setLabel('left', text='Singular Values', units='m/rad', **labsty)
-        graph.setLabel('bottom', text='Index', **labsty)
+        graph.setLabel('left', text='Singular Values', units='m/rad')
+        graph.setLabel('bottom', text='Index')
         vbl.addWidget(graph)
         opts = dict(
             y_channel=self.prefix+'SingValues-Mon',
@@ -273,6 +269,13 @@ class SingularValues(QWidget):
         chan = SiriusConnectionSignal(self.prefix+'NumSingValues-RB')
         chan.new_value_signal[int].connect(line.setValue)
         self._chans.append(chan)
+
+        graph.setObjectName('graph_singvalues')
+        graph.setStyleSheet("""
+            #graph_singvalues{
+                min-width:30em;
+                min-height:22m;
+            }""")
 
 
 def _main():

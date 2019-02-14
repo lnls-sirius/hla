@@ -1,10 +1,9 @@
-
 from functools import partial as _part
 import numpy as np
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QCheckBox, \
     QFormLayout, QGroupBox, QLabel
-from qtpy.QtGui import QFont, QColor
+from qtpy.QtGui import QColor
 from pydm.widgets import PyDMWaveformPlot, PyDMTimePlot, PyDMEnumComboBox
 from pydm.widgets.base import PyDMPrimitiveWidget
 from siriuspy.csdevice.bpms import get_bpm_database
@@ -45,26 +44,26 @@ class BaseWidget(QWidget):
                 if not_enum:
                     chan1 = self.get_pvname(pv1)
                     wid = SiriusSpinbox(self, init_channel=chan1)
+                    wid.setStyleSheet("""min-width:5em;""")
                     wid.showStepExponent = False
                     wid.limitsFromChannel = False
-                    low = self.bpmdb[chan1].get('low', -1e10)
-                    high = self.bpmdb[chan1].get('high', 1e10)
-                    wid.setRange(low, high)
+                    wid.setMinimum(self.bpmdb[chan1].get('low', -1e10))
+                    wid.setMaximum(self.bpmdb[chan1].get('high', 1e10))
                 else:
                     wid = PyDMEnumComboBox(
                         self, init_channel=self.get_pvname(pv1))
-                    wid.setMinimumWidth(150)
+                    wid.setStyleSheet("""min-width:5em;""")
                 wid.setObjectName(pv1.replace('-', ''))
                 hbl.addWidget(wid)
 
             lab = SiriusLabel(self, init_channel=self.get_pvname(pv2))
             lab.setObjectName(pv2.replace('-', ''))
             lab.showUnits = True
-            lab.setMinimumWidth(170)
+            lab.setStyleSheet("""min-width:5em;""")
             hbl.addWidget(lab)
             lab = QLabel(txt)
             lab.setObjectName(pv1.split('-')[0])
-            lab.setMinimumWidth(220)
+            lab.setStyleSheet("""min-width:8em;""")
             fbl.addRow(lab, hbl)
         return grpbx
 
@@ -96,16 +95,10 @@ class BaseGraph(BaseWidget):
         graph.setAutoRangeY(True)
         graph.setMinXRange(0.0)
         graph.setMaxXRange(1.0)
-        font = QFont()
-        font.setPixelSize(26)
-        graph.plotItem.getAxis('bottom').tickFont = font
-        graph.plotItem.getAxis('bottom').setPen(QColor(0, 0, 0))
+        graph.setAxisColor(QColor(0, 0, 0))
         graph.plotItem.getAxis('bottom').setStyle(tickTextOffset=15)
-        graph.plotItem.getAxis('bottom').setHeight(80)
-        graph.plotItem.getAxis('left').tickFont = font
-        graph.plotItem.getAxis('left').setPen(QColor(0, 0, 0))
         graph.plotItem.getAxis('left').setStyle(
-            tickTextOffset=0, autoExpandTextSpace=False, tickTextWidth=100)
+            tickTextOffset=5, autoExpandTextSpace=False, tickTextWidth=80)
 
     def setupui(self):
         hbl = QHBoxLayout(self)

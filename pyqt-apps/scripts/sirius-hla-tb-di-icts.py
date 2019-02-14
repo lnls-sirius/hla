@@ -7,7 +7,6 @@ import argparse as _argparse
 from siriuspy.envars import vaca_prefix
 from siriushla.sirius_application import SiriusApplication
 from siriushla.tl_ap_control import ICTMonitoring
-from siriushla import util
 
 
 parser = _argparse.ArgumentParser(
@@ -17,7 +16,6 @@ parser.add_argument('-p', "--prefix", type=str, default=vaca_prefix,
 args = parser.parse_args()
 
 app = SiriusApplication()
-util.set_style(app)
 w = ICTMonitoring(tl='TB', prefix=args.prefix)
 w.show()
 sys.exit(app.exec_())

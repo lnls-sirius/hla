@@ -1,8 +1,7 @@
 import re
 from qtpy.QtWidgets import QWidget, QVBoxLayout, QScrollArea, QLineEdit, \
     QLabel, QHBoxLayout
-from qtpy.QtCore import Qt, Slot, QRect
-from siriushla import util
+from qtpy.QtCore import Qt, Slot
 from siriushla.as_di_bpms.base import BaseWidget
 from siriushla.as_di_bpms.main import BPMSummary
 
@@ -16,9 +15,7 @@ class SelectBPMs(BaseWidget):
 
     def setupui(self):
         vbl = QVBoxLayout(self)
-        lab = QLabel('BPMs List')
-        lab.setStyleSheet("font: 30pt \"Sans Serif\";\nfont-weight: bold;")
-        lab.setAlignment(Qt.AlignCenter)
+        lab = QLabel('<h2>BPMs List</h2>', alignment=Qt.AlignCenter)
         vbl.addWidget(lab)
         vbl.addSpacing(20)
 
@@ -32,17 +29,18 @@ class SelectBPMs(BaseWidget):
         scarea.setWidgetResizable(True)
 
         wid = QWidget()
-        wid.setGeometry(QRect(0, 0, 521, 372))
+        wid.setObjectName('BPMsList')
+        wid.setStyleSheet("""#BPMsList{min-width:16em; min-height:12em;}""")
         vbl2 = QVBoxLayout(wid)
         vbl2.setSpacing(15)
         for bpm in sorted(self.bpm_dict.keys()):
             widb = BPMSummary(wid, prefix=self.prefix, bpm=bpm)
-            widb.setMinimumHeight(60)
+            widb.setObjectName(bpm)
+            widb.setStyleSheet("""#{0}{{min-height:1.94em;}}""".format(bpm))
             vbl2.addWidget(widb)
             self.bpm_dict[bpm] = widb
 
         vbl.addWidget(scarea)
-        scarea.setMinimumWidth(400)
         scarea.setWidget(wid)
         self.scarea = scarea
 
@@ -66,9 +64,7 @@ if __name__ == '__main__':
     import sys
 
     app = SiriusApplication()
-    util.set_style(app)
     wind = SiriusDialog()
-    # wind.resize(1400, 1400)
     hbl = QHBoxLayout(wind)
     bpm_names = [
         'SI-07SP:DI-BPM-1', 'SI-07SP:DI-BPM-2',

@@ -5,7 +5,6 @@ import sys
 
 from qtpy.QtWidgets import QWidget, QPushButton, QHBoxLayout
 
-from siriushla import util as _util
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.as_ap_pvsconfmgr import \
@@ -54,19 +53,19 @@ class PVConfiguration(SiriusMainWindow):
 
 if __name__ == '__main__':
     app = SiriusApplication()
-    _util.set_style(app)
     w = PVConfiguration()
 
-    w.setStyleSheet("""
+    w.centralWidget().setStyleSheet("""
         #SaveBtn, #LoadBtn {
-            background: qlineargradient( x1:0 y1:0, x2:0 y2:1, stop:0 white, stop:1 lightgrey);
+            background: qlineargradient(x1:0 y1:0, x2:0 y2:1,
+                                        stop:0 white, stop:1 lightgrey);
             height: 100%;
-            font: 20pt;
             border: 1px solid grey;
             padding: 0 5px 0 5px;
         }
         #SaveBtn:hover, #LoadBtn:hover {
-            background: qlineargradient( x1:0 y1:0, x2:0 y2:1, stop:0 lightgrey, stop:1 white);
+            background: qlineargradient(x1:0 y1:0, x2:0 y2:1,
+                                        stop:0 lightgrey, stop:1 white);
         }
     """)
 

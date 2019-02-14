@@ -3,10 +3,11 @@ import re
 
 from siriuspy.search import PSSearch, MASearch
 from siriushla.as_ps_control.PSWidget import BasePSWidget, PSWidget, MAWidget
+from qtpy.QtGui import QPainter
 from qtpy.QtCore import Qt, QPoint, Slot, QLocale
 from qtpy.QtWidgets import QWidget, QVBoxLayout, QGroupBox, \
     QGridLayout, QLabel, QHBoxLayout, QScrollArea, QLineEdit, QAction, \
-    QMenu, QInputDialog
+    QMenu, QInputDialog, QStyleOption, QStyle
 
 
 class BasePSControlWidget(QWidget):
@@ -21,13 +22,7 @@ class BasePSControlWidget(QWidget):
 
     StyleSheet = """
         QScrollArea {
-            min-width: 1450px;
-        }
-        QLed {
-            min-width: 40px;
-            max-width: 40px;
-            min-height: 40px;
-            max-height: 40px;
+            min-width: 75em;
         }
     """
 
@@ -111,7 +106,10 @@ class BasePSControlWidget(QWidget):
             for key, widget in self.widgets_list.items():
                 if key in self.filtered_widgets:
                     widget.analog_widget.sp_lineedit.setText(str(new_value))
-                    widget.analog_widget.sp_lineedit.send_value()
+                    try:
+                        widget.analog_widget.sp_lineedit.send_value()
+                    except TypeError:
+                        pass
 
     @Slot(QPoint)
     def show_context_menu(self, point):
@@ -177,13 +175,18 @@ class BasePSControlWidget(QWidget):
 
             # Create group and scroll area
             main_widget = self._createGroupBox(group[0], group_widgets)
+            # main_widget.setAutoFillBackground(False)
             # if self._hasScrollArea():
             widget = QScrollArea(self)
+            # widget.viewport().setAutoFillBackground(False)
+            widget.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+            widget.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+            widget.setWidgetResizable(True)
             widget.setWidget(main_widget)
             # else:
             #     widget = main_widget
 
-            group_box = QGroupBox(group[0])
+            group_box = QGroupBox(group[0], parent=self)
             group_box.layout = QVBoxLayout()
             group_box.setLayout(group_box.layout)
             group_box.layout.addWidget(widget)
@@ -203,7 +206,7 @@ class BasePSControlWidget(QWidget):
         self.setLayout(self.layout)
 
     def _createGroupBox(self, title, widget_group):
-        w = QWidget()
+        w = QWidget(self)
         w.layout = QVBoxLayout()
         w.setLayout(w.layout)
         for line, widget in enumerate(widget_group):

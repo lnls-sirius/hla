@@ -6,7 +6,7 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QSizePolicy, QComboBox
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox
 from pydm.widgets.base import PyDMPrimitiveWidget
-from siriuspy.csdevice.orbitcorr import OrbitCorrDev
+from siriuspy.csdevice.orbitcorr import OrbitCorrDevFactory
 from siriushla.widgets import SiriusSpinbox
 
 
@@ -15,8 +15,7 @@ class BaseWidget(QWidget):
     def __init__(self, parent, prefix, acc='SI'):
         super().__init__(parent)
         self.prefix = prefix
-        self._csorb = OrbitCorrDev(acc)
-        self._isring = self._csorb.acc_idx in self._csorb.Rings
+        self._csorb = OrbitCorrDevFactory.create(acc)
 
     @property
     def acc(self):
@@ -28,17 +27,15 @@ class BaseWidget(QWidget):
 
     @property
     def isring(self):
-        return self._isring
+        return self._csorb.isring()
 
     def create_pair(self, parent, pvname):
         wid = QWidget(parent)
         hbl = QHBoxLayout(wid)
         hbl.setContentsMargins(9, 0, 0, 0)
-        pdm_spbx = SiriusSpinbox(
-            wid, init_channel=self.prefix+pvname+'-SP')
+        pdm_spbx = SiriusSpinbox(wid, init_channel=self.prefix+pvname+'-SP')
         pdm_spbx.showStepExponent = False
-        pdm_lbl = PyDMLabel(
-            wid, init_channel=self.prefix+pvname+'-RB')
+        pdm_lbl = PyDMLabel(wid, init_channel=self.prefix+pvname+'-RB')
         pdm_lbl.setAlignment(Qt.AlignCenter)
         hbl.addWidget(pdm_spbx)
         hbl.addWidget(pdm_lbl)
@@ -50,8 +47,7 @@ class BaseWidget(QWidget):
         hbl.setContentsMargins(9, 0, 0, 9)
         pdm_cbbx = PyDMEnumComboBox(
             wid, init_channel=self.prefix+pvname+'-Sel')
-        pdm_lbl = PyDMLabel(
-            wid, init_channel=self.prefix+pvname+'-Sts')
+        pdm_lbl = PyDMLabel(wid, init_channel=self.prefix+pvname+'-Sts')
         pdm_lbl.setAlignment(Qt.AlignCenter)
         hbl.addWidget(pdm_cbbx)
         hbl.addWidget(pdm_lbl)
@@ -67,8 +63,7 @@ class BaseCombo(QComboBox, PyDMPrimitiveWidget):
         self.setpoint = setpoint
         self.readback = readback
         self.ctrls = ctrls
-        self._csorb = OrbitCorrDev(acc)
-        self._isring = self._csorb.acc_idx in self._csorb.Rings
+        self._csorb = OrbitCorrDevFactory.create(acc)
         self.orbits = {
             'x': _np.zeros(self._csorb.NR_BPMS, dtype=float),
             'y': _np.zeros(self._csorb.NR_BPMS, dtype=float)}
@@ -89,7 +84,7 @@ class BaseCombo(QComboBox, PyDMPrimitiveWidget):
 
     @property
     def isring(self):
-        return self._isring
+        return self._csorb.isring()
 
     def channels(self):
         chans = list(self.readback.values())
@@ -103,9 +98,6 @@ class BaseCombo(QComboBox, PyDMPrimitiveWidget):
 
     def setup_ui(self, add_items=[]):
         sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
-        sz_pol.setHorizontalStretch(1)
-        sz_pol.setVerticalStretch(0)
-        sz_pol.setHeightForWidth(self.sizePolicy().hasHeightForWidth())
         self.setSizePolicy(sz_pol)
         self.setEditable(True)
         for item in add_items:
@@ -116,7 +108,8 @@ class BaseCombo(QComboBox, PyDMPrimitiveWidget):
         self.setCurrentIndex(self.count()-1)
         self.currentTextChanged.connect(self._selection_changed)
 
-    def _selection_changed(self, text, sigs=dict()):
+    def _selection_changed(self, text, sigs=None):
+        sigs = sigs or dict()
         if text in self.ctrls:
             for pln in ('x', 'y'):
                 orb = self.ctrls[text][pln]['getvalue']()

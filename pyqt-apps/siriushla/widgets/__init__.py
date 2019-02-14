@@ -1,10 +1,10 @@
 from .QLed import QLed
-from .led import PyDMLed, SiriusLedAlert, SiriusLedState
-from .led import PyDMLedMultiChannel
-from .led import PyDMLedMultiConnection
+from .led import PyDMLed, SiriusLedAlert, SiriusLedState, \
+    PyDMLedMultiChannel, PyDMLedMultiConnection
 from .log_label import PyDMLogLabel
 from .QDoubleScrollBar import QDoubleScrollBar
 from .scrollbar import PyDMScrollBar
+from .figure_canvas import SiriusFigureCanvas
 from .state_button import PyDMStateButton
 from .windows import SiriusMainWindow, SiriusDialog
 from .ledit_scrollbar import PyDMLinEditScrollbar

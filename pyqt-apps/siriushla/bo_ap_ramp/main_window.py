@@ -1,11 +1,11 @@
 """Booster Ramp Main Window."""
 
-from qtpy.QtCore import Slot, Signal, Qt
+from qtpy.QtCore import Slot, Signal
 from qtpy.QtGui import QKeySequence
-from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QUndoStack
+from qtpy.QtWidgets import QLabel, QWidget, QVBoxLayout, QGridLayout, \
+                           QUndoStack
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets.windows import SiriusMainWindow
-from siriushla import util as _util
 from siriuspy.ramp import ramp
 from siriuspy.servconf import exceptions as _srvexceptions
 from siriushla.bo_ap_ramp.status_and_commands import StatusAndCommands
@@ -34,34 +34,69 @@ class RampMain(SiriusMainWindow):
 
     def _setupUi(self):
         cw = QWidget(self)
-        self.setCentralWidget(cw)
-        self.my_layout = QGridLayout(cw)
-        self.my_layout.setHorizontalSpacing(20)
-        self.my_layout.setVerticalSpacing(20)
-        lab = QLabel('<h3>Booster Energy Ramping</h3>', cw,
-                     alignment=Qt.AlignRight)
-        lab.setStyleSheet('background-color: qlineargradient('
-                          'spread:pad, x1:1, y1:0.0227273, x2:0, y2:0,'
-                          'stop:0 rgba(173, 190, 207, 255),'
-                          'stop:1 rgba(213, 213, 213, 255))')
-        self.my_layout.addWidget(lab, 0, 0, 1, 2)
+        cw.setObjectName('CentralWidget')
+        glay = QGridLayout(cw)
+        glay.setHorizontalSpacing(10)
+        glay.setVerticalSpacing(10)
+        lab = QLabel('<h3>Booster Energy Ramping</h3>', cw)
+        lab.setStyleSheet("""
+            min-height:1.55em; max-height: 1.55em;
+            qproperty-alignment: AlignRight;
+            background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273,
+                              x2:0, y2:0, stop:0 rgba(173, 190, 207, 255),
+                              stop:1 rgba(213, 213, 213, 255));""")
+        glay.addWidget(lab, 0, 0, 1, 2)
 
         self.settings = Settings(self, self.prefix, self.ramp_config)
         self.setMenuBar(self.settings)
 
         self.config_parameters = ConfigParameters(
             self, self.prefix, self.ramp_config, self._undo_stack)
-        self.my_layout.addWidget(self.config_parameters, 1, 0, 5, 1)
+        self.config_parameters.setObjectName('ConfigParameters')
 
         self.optics_adjust = OpticsAdjust(self, self.prefix, self.ramp_config)
-        self.my_layout.addWidget(self.optics_adjust, 6, 0, 2, 1)
+        self.optics_adjust.setObjectName('OpticsAdjust')
+
+        vlay1 = QVBoxLayout()
+        vlay1.addWidget(self.config_parameters)
+        vlay1.addWidget(self.optics_adjust)
+        vlay1.setStretch(0, 35)
+        vlay1.setStretch(1, 10)
+        glay.addLayout(vlay1, 1, 0)
 
         self.status_and_commands = StatusAndCommands(
             self, self.prefix, self.ramp_config)
-        self.my_layout.addWidget(self.status_and_commands, 1, 1, 2, 1)
+        self.status_and_commands.setObjectName('StatusAndCommands')
 
         self.diagnosis = Diagnosis(self, self.prefix, self.ramp_config)
-        self.my_layout.addWidget(self.diagnosis, 3, 1, 5, 1)
+        self.diagnosis.setObjectName('Diagnosis')
+
+        vlay2 = QVBoxLayout()
+        vlay2.addWidget(self.status_and_commands)
+        vlay2.addWidget(self.diagnosis)
+        vlay2.setStretch(0, 10)
+        vlay2.setStretch(1, 23)
+        glay.addLayout(vlay2, 1, 1)
+
+        cw.setStyleSheet("""
+            #CentralWidget{
+                min-width: 138em;
+                min-height: 81em;}
+            #ConfigParameters{
+                min-width: 108em;
+                min-height: 59em;}
+            #OpticsAdjust{
+                min-width: 108em;
+                min-height: 16em;}
+            #StatusAndCommands{
+                min-width: 28em;
+                min-height: 25em;}
+            #Diagnosis{
+                min-width: 28em;
+                min-height: 50em;}""")
+        glay.setColumnStretch(0, 4)
+        glay.setColumnStretch(1, 1)
+        self.setCentralWidget(cw)
 
     def _connSignals(self):
         self.settings.newConfigNameSignal.connect(self._receiveNewConfigName)
@@ -171,7 +206,6 @@ if __name__ == '__main__':
     from siriuspy.envars import vaca_prefix as _vaca_prefix
 
     app = SiriusApplication()
-    _util.set_style(app)
     w = RampMain(prefix=_vaca_prefix)
     w.show()
     sys.exit(app.exec_())

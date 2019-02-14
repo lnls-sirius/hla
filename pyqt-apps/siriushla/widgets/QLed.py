@@ -10,7 +10,7 @@ from qtpy.QtWidgets import QApplication, QWidget, QGridLayout, \
                             QStyleOption, QFrame
 from qtpy.QtGui import QPainter, QColor
 from qtpy.QtCore import Signal, Qt, QSize, QTimer, QByteArray, \
-                        QRectF, Property, Q_ENUMS
+                        QRectF, Property, Q_ENUMS, QFile
 from qtpy.QtSvg import QSvgRenderer
 
 __path__ = _os.path.dirname(__file__)
@@ -32,17 +32,22 @@ class QLed(QFrame, ShapeMap):
     Q_ENUMS(ShapeMap)
 
     shapesdict = dict()
-    with open(__path__ + '/led_shapes/circle.svg', 'r') as f:
-        shapesdict[ShapeMap.Circle] = f.read()
-
-    with open(__path__ + '/led_shapes/round.svg', 'r') as f:
-        shapesdict[ShapeMap.Round] = f.read()
-
-    with open(__path__ + '/led_shapes/square.svg', 'r') as f:
-        shapesdict[ShapeMap.Square] = f.read()
-
-    with open(__path__ + '/led_shapes/triangle.svg', 'r') as f:
-        shapesdict[ShapeMap.Triangle] = f.read()
+    f = QFile(':/led_shapes/circle.svg')
+    if f.open(QFile.ReadOnly):
+        shapesdict[ShapeMap.Circle] = str(f.readAll(), 'utf-8')  # str(stream.readAll(), 'utf-8')
+    f.close()
+    f = QFile(':/led_shapes/round.svg')
+    if f.open(QFile.ReadOnly):
+        shapesdict[ShapeMap.Round] = str(f.readAll(), 'utf-8')  # str(stream.readAll(), 'utf-8')
+    f.close()
+    f = QFile(':/led_shapes/square.svg')
+    if f.open(QFile.ReadOnly):
+        shapesdict[ShapeMap.Square] = str(f.readAll(), 'utf-8')  # str(stream.readAll(), 'utf-8')
+    f.close()
+    f = QFile(':/led_shapes/triangle.svg')
+    if f.open(QFile.ReadOnly):
+        shapesdict[ShapeMap.Triangle] = str(f.readAll(), 'utf-8')  # str(stream.readAll(), 'utf-8')
+    f.close()
 
     Green = QColor(15, 105, 0)
     Red = QColor(207, 0, 0)

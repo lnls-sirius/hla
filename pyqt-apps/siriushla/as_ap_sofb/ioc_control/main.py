@@ -3,7 +3,6 @@
 import numpy as _np
 from qtpy.QtWidgets import QLabel, QGroupBox, QPushButton, QFormLayout, \
     QVBoxLayout, QHBoxLayout
-from qtpy.QtCore import QSize
 from pydm.widgets import PyDMPushButton
 from siriushla.widgets import SiriusConnectionSignal, PyDMStateButton, \
         SiriusLedAlert
@@ -23,6 +22,12 @@ class SOFBControl(BaseWidget):
         super().__init__(parent, prefix, acc=acc)
         self.ctrls = ctrls
         self.setupui()
+        self.setObjectName('SOFBControl')
+        self.setStyleSheet("""
+            #SOFBControl{
+                min-width:18em;
+                min-height:48em;
+            }""")
 
     def setupui(self):
         hbl = QHBoxLayout(self)
@@ -43,8 +48,6 @@ class SOFBControl(BaseWidget):
             btn, Window, self, prefix=self.prefix, acc=self.acc, is_orb=False)
         pdm_led = SiriusLedAlert(
             grp_bx, init_channel=self.prefix+'CorrStatus-Mon')
-        pdm_led.setMinimumHeight(20)
-        pdm_led.setMaximumHeight(40)
         hbl = QHBoxLayout()
         hbl.setSpacing(9)
         hbl.addWidget(btn)
@@ -58,14 +61,12 @@ class SOFBControl(BaseWidget):
         if self.isring:
             rules = (
                 '[{"name": "EnblRule", "property": "Enable", ' +
-                '"expression": "ch[0] in (1, 3)", "channels": [{"channel": "' +
+                '"expression": "ch[0] in (1, )", "channels": [{"channel": "' +
                 self.prefix+'OrbitMode-Sts'+'", "trigger": true}]}]')
             lbl = QLabel('Enable Auto Correction', grp_bx)
             pdm_btn = PyDMStateButton(
                 grp_bx, init_channel=self.prefix+'AutoCorr-Sel')
             pdm_btn.rules = rules
-            pdm_btn.setMinimumHeight(20)
-            pdm_btn.setMaximumHeight(40)
             hbl = QHBoxLayout()
             hbl.addWidget(lbl)
             hbl.addWidget(pdm_btn)
@@ -87,12 +88,10 @@ class SOFBControl(BaseWidget):
         vbl.addItem(fbl)
 
         lbl = QLabel('Orbit Mode', grp_bx)
-        lbl.setMinimumSize(QSize(50, 0))
         wid = self.create_pair_sel(grp_bx, 'OrbitMode')
         fbl.addRow(lbl, wid)
 
         lbl = QLabel('Correct:', grp_bx)
-        lbl.setMinimumSize(QSize(50, 0))
         combo = OfflineOrbControl(
             self, self.prefix, self.ctrls, self.acc)
         combo.rules = (
@@ -102,7 +101,6 @@ class SOFBControl(BaseWidget):
         fbl.addRow(lbl, combo)
 
         lbl = QLabel('as diff to:', grp_bx)
-        lbl.setMinimumSize(QSize(50, 0))
         combo = RefControl(self, self.prefix, self.ctrls, self.acc)
         fbl.addRow(lbl, combo)
 
@@ -123,22 +121,28 @@ class SOFBControl(BaseWidget):
 
         vbl2 = QVBoxLayout()
         hbl.addItem(vbl2)
-        rules = (
-            '[{"name": "EnblRule", "property": "Enable", ' +
-            '"expression": "not ch[0]", "channels": [{"channel": "' +
-            self.prefix+'AutoCorr-Sts'+'", "trigger": true}]}]')
+        vbl2.setSpacing(9)
         pdm_pbtn = PyDMPushButton(
             grpbx, 'Calculate Kicks', pressValue=1,
             init_channel=self.prefix+'CalcCorr-Cmd')
-        pdm_pbtn.rules = rules
+        if self.isring:
+            rules = (
+                '[{"name": "EnblRule", "property": "Enable", ' +
+                '"expression": "not ch[0]", "channels": [{"channel": "' +
+                self.prefix+'AutoCorr-Sts'+'", "trigger": true}]}]')
+            pdm_pbtn.rules = rules
         vbl2.addWidget(pdm_pbtn)
+
+        exp = 'ch[0] in (1, 3)'
+        ch = ''
+        if self.isring:
+            exp = 'ch[1] in (1, 3) and not ch[0]'
+            ch = '{"channel": "'+self.prefix+'AutoCorr-Sts", "trigger": true},'
         rules = (
             '[{"name": "EnblRule", "property": "Enable", ' +
-            '"expression": "ch[1] and not ch[0]", ' +
-            '"channels": [' +
-            '{"channel": "'+self.prefix+'AutoCorr-Sts'+'", "trigger": true},' +
-            '{"channel": "'+self.prefix+'OrbitMode-Sel'+'", "trigger": true}' +
-            ']}]')
+            '"expression": "'+exp+'", "channels": ['+ch +
+            '{"channel": "'+self.prefix+'OrbitMode-Sel", "trigger": true}]}]')
+
         pdm_pbtn = PyDMPushButton(
             grpbx, 'Apply All',
             pressValue=self._csorb.ApplyCorr.All,
@@ -270,7 +274,6 @@ def _main():
                 'getvalue': chans[5].getvalue}}}
     wid = SOFBControl(win, prefix, ctrls)
     hbl.addWidget(wid)
-    win.resize(QSize(200, 1200))
     win.show()
     sys.exit(app.exec_())
 

@@ -13,8 +13,7 @@ class MonitData(BaseWidget):
 
         graph = GraphTime(parent=self, prefix=self.prefix, bpm=self.bpm)
         vbl.addWidget(graph)
-        labsty = {'font-size': '20pt'}
-        graph.setLabel('left', text='Positions', units='m', **labsty)
+        graph.setLabel('left', text='Positions', units='m')
 
         dt = (
             ('PosX-Mon', 'blue'),
@@ -28,12 +27,11 @@ class MonitData(BaseWidget):
                 color=cor,
                 lineStyle=1,
                 lineWidth=1)  # NOTE: If > 1: very low performance
-            graph.addYChannel(**opts, add_scale=1e-9)
+            graph.addYChannel(add_scale=1e-9, **opts)
 
         graph = GraphTime(parent=self, prefix=self.prefix, bpm=self.bpm)
         vbl.addWidget(graph)
-        labsty = {'font-size': '20pt'}
-        graph.setLabel('left', text='Antennas', units='au', **labsty)
+        graph.setLabel('left', text='Antennas', units='au')
 
         dt = (
             ('AmplA-Mon', 'blue'),
@@ -53,13 +51,10 @@ class MonitData(BaseWidget):
 if __name__ == '__main__':
     from siriushla.sirius_application import SiriusApplication
     from siriushla.widgets import SiriusDialog
-    from siriushla.util import set_style
     import sys
 
     app = SiriusApplication()
-    set_style(app)
     wind = SiriusDialog()
-    wind.resize(1000, 1500)
     hbl = QHBoxLayout(wind)
     bpm_name = 'SI-07SP:DI-BPM-1'
     wid = MonitData(bpm=bpm_name)

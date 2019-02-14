@@ -1,10 +1,10 @@
 """Main module of the Application Interface."""
 
-from qtpy.QtCore import Qt, QSize, QRect
+from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QDockWidget, QSizePolicy, QVBoxLayout, \
     QPushButton, QHBoxLayout, QMenu, QMenuBar, QAction, QStatusBar
 from siriuspy.envars import vaca_prefix as LL_PREF
-from siriuspy.csdevice.orbitcorr import OrbitCorrDev
+from siriuspy.csdevice.orbitcorr import OrbitCorrDevFactory
 from siriushla import util
 from siriushla.widgets import SiriusMainWindow
 from siriushla.widgets import PyDMLogLabel
@@ -19,8 +19,7 @@ class MainWindow(SiriusMainWindow):
     def __init__(self, prefix, acc='SI'):
         super().__init__()
         self.prefix = prefix + acc + '-Glob:AP-SOFB:'
-        self._csorb = OrbitCorrDev(acc)
-        self._isring = self._csorb.acc_idx in self._csorb.Rings
+        self._csorb = OrbitCorrDevFactory.create(acc)
         self.setupui()
 
     @property
@@ -33,12 +32,11 @@ class MainWindow(SiriusMainWindow):
 
     @property
     def isring(self):
-        return self._isring
+        return self._csorb.isring()
 
     def setupui(self):
         self.setWindowModality(Qt.WindowModal)
         self.setWindowTitle("Slow Orbit Feedback System")
-        self.resize(2890, 1856)
         self.setDocumentMode(False)
         self.setDockNestingEnabled(True)
 
@@ -46,9 +44,9 @@ class MainWindow(SiriusMainWindow):
         self.orbit_regist = self._create_orbit_registers()
         self.sofb_control = self._create_ioc_controllers()
 
-        self.addDockWidget(Qt.DockWidgetArea(8), self.ioc_log)
-        self.addDockWidget(Qt.DockWidgetArea(8), self.orbit_regist)
-        self.addDockWidget(Qt.DockWidgetArea(2), self.sofb_control)
+        self.addDockWidget(Qt.BottomDockWidgetArea, self.ioc_log)
+        self.addDockWidget(Qt.BottomDockWidgetArea, self.orbit_regist)
+        self.addDockWidget(Qt.RightDockWidgetArea, self.sofb_control)
 
         mwid = self._create_central_widget()
         self.setCentralWidget(mwid)
@@ -68,13 +66,16 @@ class MainWindow(SiriusMainWindow):
         wid = QDockWidget(self)
         wid.setWindowTitle("Orbit Registers")
         sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
-        sz_pol.setHorizontalStretch(0)
         sz_pol.setVerticalStretch(1)
-        sz_pol.setHeightForWidth(wid.sizePolicy().hasHeightForWidth())
         wid.setSizePolicy(sz_pol)
         wid.setFloating(False)
         wid.setFeatures(QDockWidget.AllDockWidgetFeatures)
         wid.setAllowedAreas(Qt.AllDockWidgetAreas)
+        wid.setObjectName('doc_OrgReg')
+        wid.setStyleSheet("""
+            #doc_OrgReg{
+                min-width:42em;
+                min-height:14em;}""")
 
         wid_cont = OrbitRegisters(self, self.prefix, self.acc, 5)
         wid.setWidget(wid_cont)
@@ -85,11 +86,8 @@ class MainWindow(SiriusMainWindow):
         docwid = QDockWidget(self)
         docwid.setWindowTitle("SOFB Control")
         sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
-        sz_pol.setHorizontalStretch(0)
         sz_pol.setVerticalStretch(1)
-        sz_pol.setHeightForWidth(docwid.sizePolicy().hasHeightForWidth())
         docwid.setSizePolicy(sz_pol)
-        docwid.setMinimumSize(QSize(350, 788))
         docwid.setFloating(False)
         docwid.setFeatures(QDockWidget.AllDockWidgetFeatures)
         wid2 = QWidget(docwid)
@@ -105,12 +103,13 @@ class MainWindow(SiriusMainWindow):
         docwid = QDockWidget(self)
         docwid.setWindowTitle('IOC Log')
         sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
-        sz_pol.setHorizontalStretch(0)
-        sz_pol.setVerticalStretch(0)
-        sz_pol.setHeightForWidth(docwid.sizePolicy().hasHeightForWidth())
         docwid.setSizePolicy(sz_pol)
         docwid.setFloating(False)
-        docwid.setMinimumWidth(600)
+        docwid.setObjectName('doc_IOCLog')
+        docwid.setStyleSheet("""
+            #doc_IOCLog{
+                min-width:42em;
+                min-height:14em;}""")
         wid_cont = QWidget()
         docwid.setWidget(wid_cont)
         vbl = QVBoxLayout(wid_cont)
@@ -130,7 +129,7 @@ class MainWindow(SiriusMainWindow):
 
     def _create_menus(self):
         menubar = QMenuBar(self)
-        menubar.setGeometry(QRect(0, 0, 2290, 19))
+        menubar.setNativeMenuBar(False)
 
         menuopen = QMenu('Open', menubar)
         actions = (
@@ -176,7 +175,6 @@ if __name__ == '__main__':
     from siriushla.sirius_application import SiriusApplication
 
     app = SiriusApplication()
-    _util.set_style(app)
     main_win = MainWindow(LL_PREF, 'SI')
     main_win.show()
     _sys.exit(app.exec_())

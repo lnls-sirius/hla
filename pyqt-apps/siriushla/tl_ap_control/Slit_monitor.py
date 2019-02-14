@@ -39,12 +39,12 @@ class SlitMonitoring(QWidget):
         self.layout().setContentsMargins(0, 0, 0, 0)
         self.layout().addWidget(self.centralwidget)
 
+        self.updateSlitWidget()
+
         slit_prefix = prefix+'TB-01:DI-Slit'+self.slit_orientation
-        self.conn_slitcenter = SiriusConnectionSignal(
-            slit_prefix+':Center-RB')
+        self.conn_slitcenter = SiriusConnectionSignal(slit_prefix+':Center-RB')
         self.conn_slitcenter.new_value_signal[float].connect(self._setSlitPos)
-        self.conn_slitwidth = SiriusConnectionSignal(
-            slit_prefix+':Width-RB')
+        self.conn_slitwidth = SiriusConnectionSignal(slit_prefix+':Width-RB')
         self.conn_slitwidth.new_value_signal[float].connect(self._setSlitPos)
 
         channels2values = {slit_prefix+':ForceComplete-Mon': 1,
@@ -63,30 +63,53 @@ class SlitMonitoring(QWidget):
             self._slit_center = new_value  # considering mm
         elif 'Width' in self.sender().address:
             self._slit_width = new_value
+        self.updateSlitWidget()
 
-        rect_width = 110
-        circle_diameter = 100
-        widget_width = 350
-        vacuum_chamber_diameter = 36  # mm
-
-        xc = (circle_diameter*self._slit_center/vacuum_chamber_diameter
-              + widget_width/2)
-        xw = circle_diameter*self._slit_width/vacuum_chamber_diameter
+    def updateSlitWidget(self):
+        """Update slit illustration."""
+        widget_w = self.centralwidget.widget_draw.width()
+        widget_h = self.centralwidget.widget_draw.height()
+        vacuum_chamber_d = 36  # mm
 
         if self.slit_orientation == 'H':
-            left = round(xc - rect_width - xw/2)
+            rect_h = widget_h*3/5
+            rect_w = rect_h/2
+            circle_d = rect_w
+            xc = (circle_d*self._slit_center/vacuum_chamber_d + widget_w/2)
+            xw = circle_d*self._slit_width/vacuum_chamber_d
+
+            self.centralwidget.PyDMDrawingRectangle_SlitHLeft.resize(
+                rect_w, rect_h)
+            self.centralwidget.PyDMDrawingRectangle_SlitHRight.resize(
+                rect_w, rect_h)
+            left = round(xc - rect_w - xw/2)
             right = round(xc + xw/2)
             self.centralwidget.PyDMDrawingRectangle_SlitHLeft.move(
-                QPoint(left, (widget_width/2 - rect_width)))
+                QPoint(left, (widget_h-rect_h)/2))
             self.centralwidget.PyDMDrawingRectangle_SlitHRight.move(
-                QPoint(right, (widget_width/2 - rect_width)))
+                QPoint(right, (widget_h-rect_h)/2))
+
         elif self.slit_orientation == 'V':
-            up = round(xc - rect_width - xw/2)
+            rect_w = widget_h*3/5
+            rect_h = rect_w/2
+            circle_d = rect_h
+            xc = (circle_d*self._slit_center/vacuum_chamber_d + widget_h/2)
+            xw = circle_d*self._slit_width/vacuum_chamber_d
+
+            self.centralwidget.PyDMDrawingRectangle_SlitVUp.resize(
+                rect_w, rect_h)
+            self.centralwidget.PyDMDrawingRectangle_SlitVDown.resize(
+                rect_w, rect_h)
+            up = round(xc - rect_h - xw/2)
             down = round(xc + xw/2)
             self.centralwidget.PyDMDrawingRectangle_SlitVUp.move(
-                QPoint((widget_width/2 - rect_width), up))
+                QPoint((widget_w-rect_w)/2, up))
             self.centralwidget.PyDMDrawingRectangle_SlitVDown.move(
-                QPoint((widget_width/2 - rect_width), down))
+                QPoint((widget_w-rect_w)/2, down))
+
+        self.centralwidget.PyDMDrawingCircle.resize(circle_d, circle_d)
+        self.centralwidget.PyDMDrawingCircle.move(QPoint(
+            (widget_w-circle_d)/2, (widget_h-circle_d)/2))
 
     def channels(self):
         """Return channels."""
@@ -134,13 +157,15 @@ class _SlitDetails(SiriusDialog):
         self.PyDMLabel_NegMtrCtrlPrefix = PyDMLabel(
             parent=self,
             init_channel=self.slit_prefix+':NegativeMotionCtrl-Cte')
-        self.PyDMLabel_NegMtrCtrlPrefix.setMaximumSize(440, 40)
+        self.PyDMLabel_NegMtrCtrlPrefix.setStyleSheet("""
+            max-width:14.20em; max-height:1.29em;""")
 
         label_PosMtrCtrlPrefix = QLabel('Positive Motion Control: ', self)
         self.PyDMLabel_PosMtrCtrlPrefix = PyDMLabel(
             parent=self,
             init_channel=self.slit_prefix+':PositiveMotionCtrl-Cte')
-        self.PyDMLabel_PosMtrCtrlPrefix.setMaximumSize(440, 40)
+        self.PyDMLabel_PosMtrCtrlPrefix.setStyleSheet("""
+            max-width:14.20em; max-height:1.29em;""")
 
         flay = QFormLayout()
         flay.addRow(label_NegMtrCtrlPrefix, self.PyDMLabel_NegMtrCtrlPrefix)
@@ -154,13 +179,15 @@ class _SlitDetails(SiriusDialog):
         self.PyDMLed_NegDoneMov = PyDMLed(
             parent=self, init_channel=self.slit_prefix+':NegativeDoneMov-Mon',
             color_list=[PyDMLed.Red, PyDMLed.LightGreen])
-        self.PyDMLed_NegDoneMov.setMaximumSize(220, 40)
+        self.PyDMLed_NegDoneMov.setStyleSheet("""
+            max-width:7.10em; max-height:1.29em;""")
 
         label_PosDoneMov = QLabel('Positive Edge Motor Finished Move? ', self)
         self.PyDMLed_PosDoneMov = PyDMLed(
             parent=self, init_channel=self.slit_prefix+':PositiveDoneMov-Mon',
             color_list=[PyDMLed.Red, PyDMLed.LightGreen])
-        self.PyDMLed_PosDoneMov.setMaximumSize(220, 40)
+        self.PyDMLed_PosDoneMov.setStyleSheet("""
+            max-width:7.10em; max-height:1.29em;""")
 
         flay = QFormLayout()
         flay.addRow(label_NegDoneMov, self.PyDMLed_NegDoneMov)
@@ -182,7 +209,8 @@ class _SlitDetails(SiriusDialog):
         self.PyDMLed_ForceComplete = PyDMLed(
             parent=self, init_channel=self.slit_prefix+':ForceComplete-Mon',
             color_list=[PyDMLed.Red, PyDMLed.LightGreen])
-        self.PyDMLed_ForceComplete.setMaximumSize(220, 40)
+        self.PyDMLed_ForceComplete.setStyleSheet("""
+            max-width:7.10em; max-height:1.29em;""")
 
         flay = QFormLayout()
         flay.addRow(self.PyDMPushButton_NegDoneMov)
@@ -196,7 +224,6 @@ class _SlitDetails(SiriusDialog):
 if __name__ == '__main__':
     """Run Example."""
     app = SiriusApplication()
-    util.set_style(app)
     w = SlitMonitoring(slit_orientation='H', prefix=_vaca_prefix)
     window = SiriusMainWindow()
     window.setCentralWidget(w)

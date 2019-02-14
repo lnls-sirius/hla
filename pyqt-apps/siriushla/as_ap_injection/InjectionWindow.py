@@ -131,7 +131,7 @@ class InjectionWindow(SiriusMainWindow):
         # self.cycleSpinBox.setRange(1, 20)
         # self.cycleSpinBox.setValue(1)
 
-        self.app.establish_widget_connections(self)
+        # self.app.establish_widget_connections(self)
         # self.show()
 
     # Public

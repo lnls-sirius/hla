@@ -4,9 +4,10 @@ import sys
 
 import epics
 from qtpy.QtCore import Qt, Signal, QThread
-from qtpy.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QMainWindow, \
+from qtpy.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, \
     QPushButton, QListWidget, QLabel, QApplication
 
+from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.widgets.pvnames_tree import PVNameTree
 from siriushla.as_ps_cycle.progress_dialog import ProgressDialog
 from siriushla.sirius_application import SiriusApplication
@@ -16,7 +17,7 @@ from siriuspy.envars import vaca_prefix as VACA_PREFIX
 from siriuspy.search.ma_search import MASearch
 
 
-class PSTestWindow(QMainWindow):
+class PSTestWindow(SiriusMainWindow):
     """PS test window."""
 
     def __init__(self, parent=None):
@@ -24,6 +25,19 @@ class PSTestWindow(QMainWindow):
         super().__init__(parent)
         self._setup_ui()
         self.setWindowTitle('Power Supply Test')
+        self.central_widget.setStyleSheet("""
+            #CentralWidget {
+                min-width: 70em;
+            }
+            #OkTextEdit {
+                background-color: #eafaea;
+            }
+            #NokTextEdit {
+                background-color: #ffebe6;
+            }
+            QLabel {
+                font-weight: bold;
+            }""")
 
     def _setup_ui(self):
         # Magnet tree selection widgets
@@ -53,6 +67,7 @@ class PSTestWindow(QMainWindow):
         nok_layout.addWidget(self.nok_ps)
         # Set central widget
         self.central_widget = QFrame()
+        self.central_widget.setObjectName("CentralWidget")
         self.central_widget.layout = QHBoxLayout()
         self.central_widget.layout.addLayout(magnets_layout, stretch=1)
         self.central_widget.layout.addLayout(ok_layout, stretch=1)
@@ -109,6 +124,7 @@ class PSTestWindow(QMainWindow):
 class ResetPS(QThread):
     """Reset."""
 
+    currentItem = Signal(str)
     itemDone = Signal()
 
     def __init__(self, devices, parent=None):
@@ -141,6 +157,7 @@ class ResetPS(QThread):
 class TurnPSOn(QThread):
     """Turn PS on."""
 
+    currentItem = Signal(str)
     itemDone = Signal()
 
     def __init__(self, devices, parent=None):
@@ -178,6 +195,7 @@ class TurnPSOn(QThread):
 class CheckPSOn(QThread):
     """Check if PS is on."""
 
+    currentItem = Signal(str)
     itemDone = Signal()
     isOn = Signal(str, bool)
 
@@ -224,6 +242,7 @@ class CheckPSOn(QThread):
 class TestPS(QThread):
     """Set value and check if it rb is achieved."""
 
+    currentItem = Signal(str)
     itemDone = Signal()
     itemTested = Signal(str, bool)
 
@@ -306,28 +325,28 @@ class TestPS(QThread):
 
 if __name__ == '__main__':
     application = SiriusApplication()
-    application.setStyleSheet("""
-        * {
-            font: 20pt;
-        }
-        #OkTextEdit {
-            background-color: #eafaea;
-        }
-        #NokTextEdit {
-            background-color: #ffebe6;
-        }
-        PSTestWindow #TestButton {
-            color: white;
-            background-color: blue;
-        }
-        PSTestWindow #ExitButton {
-            color: white;
-            background-color: red;
-        }
-        QLabel {
-            font-weight: bold;
-        }
-    """)
+    # application.setStyleSheet("""
+    #     * {
+    #         font: 20pt;
+    #     }
+    #     #OkTextEdit {
+    #         background-color: #eafaea;
+    #     }
+    #     #NokTextEdit {
+    #         background-color: #ffebe6;
+    #     }
+    #     PSTestWindow #TestButton {
+    #         color: white;
+    #         background-color: blue;
+    #     }
+    #     PSTestWindow #ExitButton {
+    #         color: white;
+    #         background-color: red;
+    #     }
+    #     QLabel {
+    #         font-weight: bold;
+    #     }
+    # """)
 
     w = PSTestWindow()
     w.show()

@@ -1,9 +1,8 @@
-from qtpy.QtWidgets import QHBoxLayout, QVBoxLayout, QAction, QCheckBox, \
-    QGridLayout, QLabel, QPushButton, QFormLayout
+from qtpy.QtWidgets import QHBoxLayout, QGridLayout, QLabel, QFormLayout
 from qtpy.QtCore import Qt
 from pydm.widgets import PyDMPushButton, PyDMEnumComboBox
 from siriuspy.csdevice import bpms as csbpms
-from siriushla.widgets import SiriusLedState, SiriusLabel, SiriusSpinbox
+from siriushla.widgets import SiriusLabel, SiriusSpinbox
 from siriushla.as_di_bpms.base import BaseWidget, CustomGroupBox
 
 
@@ -18,9 +17,8 @@ class PhysicalTriggers(BaseWidget):
         gdl = QGridLayout(self)
         gdl.setHorizontalSpacing(40)
         gdl.setVerticalSpacing(40)
-        lab = QLabel(self.bpm + ' Physical Triggers')
+        lab = QLabel('<h2>' + self.bpm + ' Physical Triggers</h2>')
         lab.setAlignment(Qt.AlignCenter)
-        lab.setStyleSheet("font: 30pt \"Sans Serif\";\nfont-weight: bold;")
         gdl.addWidget(lab, 0, 0, 1, 2)
         for i in range(8):
             grpbx = self.get_trigger_groupbox(i)
@@ -135,9 +133,8 @@ class LogicalTriggers(BaseWidget):
         name = self.bpm
         if self.trig_tp:
             name += ' ' + self.trig_tp[1:]
-        lab = QLabel(name + ' Logical Triggers')
+        lab = QLabel('<h2>' + name + ' Logical Triggers</h2>')
         lab.setAlignment(Qt.AlignCenter)
-        lab.setStyleSheet("font: 30pt \"Sans Serif\";\nfont-weight: bold;")
         gdl.addWidget(lab, 0, 0, 1, 3)
         for i in range(24):
             grpbx = self.get_trigger_groupbox(i)
@@ -220,16 +217,12 @@ class LogicalTriggers(BaseWidget):
 if __name__ == '__main__':
     from siriushla.sirius_application import SiriusApplication
     from siriushla.widgets import SiriusDialog
-    from siriushla.util import set_style
     import sys
 
     app = SiriusApplication()
-    set_style(app)
     wind = SiriusDialog()
-    # wind.resize(1400, 1400)
     hbl = QHBoxLayout(wind)
     bpm_name = 'SI-07SP:DI-BPM-1'
-    # widm = ParamsSettings(bpm=bpm_name)
     widm = LogicalTriggers(bpm=bpm_name, trig_tp='')
     hbl.addWidget(widm)
     wind.show()
