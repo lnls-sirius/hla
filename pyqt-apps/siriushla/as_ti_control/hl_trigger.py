@@ -57,7 +57,7 @@ class HLTriggerDetailed(BaseWidget):
         Window = create_window_from_widget(LLTriggers, name='LLTriggers')
         connect_window(
             but, Window, self, prefix=self.prefix.prefix + '-',
-            obj_names=obj_names)
+            hltrigger=self.prefix.device_name, obj_names=obj_names)
         ll_list_layout.addWidget(but, 0, 0, 1, 2)
 
         init_channel = prefix.substitute(propty="State-Sel")
@@ -136,11 +136,13 @@ class HLTriggerDetailed(BaseWidget):
 
 class LLTriggers(QWidget):
 
-    def __init__(self, parent=None, prefix=None, obj_names=list()):
+    def __init__(
+            self, parent=None, prefix=None, hltrigger='', obj_names=list()):
         super().__init__(parent)
         vl = QVBoxLayout(self)
-        vl.addWidget(QLabel('<h1>Low Level Triggers</h1>', self,
-                            alignment=Qt.AlignCenter))
+        vl.addWidget(QLabel(
+            '<h1>Low Level Triggers of '+hltrigger+'</h1>',
+            self, alignment=Qt.AlignCenter))
 
         amc_list = set()
         otp_list = set()
@@ -155,7 +157,7 @@ class LLTriggers(QWidget):
         if amc_list:
             props = set(AFCOUTList()._ALL_PROPS)
             props.add('device')
-            amc_wid = LLTriggerList(name='AMC', parent=self, props=props,
+            amc_wid = LLTriggerList(name='AMCs', parent=self, props=props,
                                     prefix=prefix, obj_names=amc_list)
             amc_wid.setObjectName('amc_wid')
             amc_wid.setStyleSheet("""#amc_wid{min-width:90em;}""")
@@ -163,7 +165,7 @@ class LLTriggers(QWidget):
         if otp_list:
             props = set(OTPList()._ALL_PROPS)
             props.add('device')
-            otp_wid = LLTriggerList(name='OTP', parent=self, props=props,
+            otp_wid = LLTriggerList(name='OTPs', parent=self, props=props,
                                     prefix=prefix, obj_names=otp_list)
             otp_wid.setObjectName('otp_wid')
             otp_wid.setStyleSheet("""#otp_wid{min-width:56em;}""")
@@ -173,7 +175,7 @@ class LLTriggers(QWidget):
             for prop in OUTList()._ALL_PROPS:
                 props.add(prop)
             props.add('device')
-            out_wid = LLTriggerList(name='OUT', parent=self, props=props,
+            out_wid = LLTriggerList(name='OUTs', parent=self, props=props,
                                     prefix=prefix, obj_names=out_list)
             out_wid.setObjectName('out_wid')
             out_wid.setStyleSheet("""#out_wid{min-width:110em;}""")
