@@ -5,6 +5,7 @@ import subprocess as _subprocess
 
 from qtpy.QtCore import QFile as _QFile
 from qtpy.QtWidgets import QPushButton, QAction, QApplication
+from pydm.utilities.stylesheet import _get_style_data as pydm_get_style_data
 import siriushla.resources as _resources
 
 
@@ -22,7 +23,8 @@ def set_style(app, force_default=False):
     if stream.open(_QFile.ReadOnly):
         style = str(stream.readAll(), 'utf-8')
         stream.close()
-        app.setStyleSheet(style)
+        pydm_style = pydm_get_style_data()
+        app.setStyleSheet(style + '\n' + pydm_style)
     else:
         print('set_style: "{0}": {1}'.format(fname, stream.errorString()))
     _resources.qCleanupResources()
