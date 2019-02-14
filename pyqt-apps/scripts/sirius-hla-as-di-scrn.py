@@ -11,7 +11,8 @@ from qtpy.QtWidgets import QWidget, QLabel, QSpacerItem, \
                            QSizePolicy as QSzPlcy, QGridLayout
 from pydm.widgets import PyDMEnumComboBox, PyDMLabel
 from siriushla.sirius_application import SiriusApplication
-from siriushla.widgets import SiriusScrnView, PyDMLed
+from siriushla.widgets import PyDMLed
+from siriushla.widgets.scrn_view import SiriusScrnView
 from siriushla.widgets.windows import SiriusMainWindow
 
 

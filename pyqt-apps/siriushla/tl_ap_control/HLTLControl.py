@@ -20,8 +20,8 @@ import pymodels as _pymodels
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla import util as _hlautil
 from siriushla.widgets import PyDMLed, SiriusLedAlert, SiriusLedState, \
-                              SiriusMainWindow, SiriusScrnView, \
-                              PyDMLinEditScrollbar, SiriusFigureCanvas
+    SiriusMainWindow, PyDMLinEditScrollbar, SiriusFigureCanvas
+from siriushla.widgets.scrn_view import SiriusScrnView
 from siriushla.as_ap_posang.HLPosAng import ASAPPosAngCorr
 from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
 from siriushla.as_ps_control.PSTabControlWindow import PSTabControlWindow
