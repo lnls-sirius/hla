@@ -65,8 +65,8 @@ class BasePSWidget(QWidget):
         #strength_sp_header,
         #analog_widget,
         #strength_widget {
-            min-width: 10em;
-            max-width: 10em;
+            min-width: 14em;
+            max-width: 14em;
         }
         #analog_mon_header,
         #strength_mon_header,
