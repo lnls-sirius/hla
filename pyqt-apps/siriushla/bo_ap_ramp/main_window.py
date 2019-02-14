@@ -115,15 +115,19 @@ class RampMain(SiriusMainWindow):
         self.config_parameters.dip_ramp.updateDipoleRampSignal.connect(
             self.config_parameters.mult_ramp.updateGraph)
         self.config_parameters.dip_ramp.updateDipoleRampSignal.connect(
-            self.status_and_commands.update_wfmnrpoints)
+            self.status_and_commands.update_ma_params)
+        self.config_parameters.dip_ramp.updateDipoleRampSignal.connect(
+            self.status_and_commands.update_ti_params)
         self.config_parameters.mult_ramp.updateMultipoleRampSignal.connect(
             self._verifySync)
+        self.config_parameters.mult_ramp.updateMultipoleRampSignal.connect(
+            self.status_and_commands.update_ma_params)
         self.config_parameters.mult_ramp.configsIndexChangedSignal.connect(
             self.optics_adjust.getConfigIndices)
         self.config_parameters.rf_ramp.updateRFRampSignal.connect(
             self._verifySync)
         self.config_parameters.rf_ramp.updateRFRampSignal.connect(
-            self.status_and_commands.update_rfparams)
+            self.status_and_commands.update_rf_params)
 
         self.optics_adjust.normConfigChanged.connect(
             self.config_parameters.mult_ramp.handleNormConfigsChanged)
