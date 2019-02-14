@@ -182,21 +182,29 @@ class PyDMLedMultiConnection(QLed, PyDMWidget):
         self.stateColors = color_list or self.default_colorlist
 
         self.channels2ids = dict()
+        self._channels2conn = dict()
         for _id, address in enumerate(sorted(channels)):
             stid = str(_id)
             setattr(self, 'channel' + stid, address)
             setattr(self, 'channel' + stid + '_connected', False)
             self.channels2ids[address] = stid
+            self._channels2conn[address] = False
             channel = PyDMChannel(
                 address=address, connection_slot=self.connection_changed)
             channel.connect()
             self._channels.append(channel)
+
+    @property
+    def channels2conn(self):
+        """Return dict with connection state of each channel."""
+        return self._channels2conn
 
     @Slot(bool)
     def connection_changed(self, conn):
         """Reimplement connection_changed to handle all channels."""
         address = self.sender().address
         setattr(self, 'channel'+self.channels2ids[address]+'_connected', conn)
+        self._channels2conn[address] = conn
         allconn = True
         for _id in self.channels2ids.values():
             allconn &= getattr(self, 'channel'+_id+'_connected')
