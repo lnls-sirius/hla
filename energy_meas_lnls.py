@@ -32,7 +32,7 @@ DT = 0.001
 
 class EnergyMeasure(QWidget):
     DISP = 1.087
-    I2BL = [-0.0001, 0.0294, 0.0016]
+    I2BL = [-0.00015394, 0.02964633, -0.00354184]
     B_ANG = np.pi/4
     MAX_SPREAD = 2
 
