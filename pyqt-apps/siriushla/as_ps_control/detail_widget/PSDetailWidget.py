@@ -407,7 +407,7 @@ class PSDetailWidget(QWidget):
         self.cycle_auxparam_sp_le = PyDMLineEdit(self, auxparam_sp_ca)
         self.cycle_auxparam_rb_label = PyDMLabel(self, auxparam_rb_ca)
         # Layout
-        layout.addWidget(self.cycle_enbl_label, 0, 0)
+        layout.addWidget(self.cycle_enbl_label, 0, 0, Qt.AlignRight)
         # layout.addWidget(self.cycle_enbl_sp_button, 0, 1)
         # layout.addWidget(self.cycle_dsbl_sp_button, 0, 2)
         layout.addWidget(self.cycle_enbl_mon_led, 0, 1, Qt.AlignCenter)
