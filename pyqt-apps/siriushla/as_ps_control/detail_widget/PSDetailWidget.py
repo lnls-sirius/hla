@@ -444,20 +444,24 @@ class PSDetailWidget(QWidget):
         queue_size_ca = \
             self._prefixed_psname + ':PRUCtrlQueueSize-Mon'
         bsmp_comm_ca = self._prefixed_psname + ':BSMPComm-Sts'
+        bsmp_comm_sel = self._prefixed_psname + ':BSMPComm-Sel'
 
         sync_mode_label = QLabel('Sync Mode', self)
-        block_index_label = QLabel('Block Index', self)
-        sync_count_label = QLabel('Pulse Count', self)
-        queue_size_label = QLabel('Queue Size', self)
-        bsmp_comm_label = QLabel('BSMP Comm.', self)
-
         sync_mode_rb_label = PyDMLabel(self, sync_mode_ca)
+
+        block_index_label = QLabel('Block Index', self)
         block_index_rb_label = PyDMLabel(self, block_index_ca)
+        sync_count_label = QLabel('Pulse Count', self)
         sync_count_rb_label = PyDMLabel(self, sync_count_ca)
+
+        queue_size_label = QLabel('Queue Size', self)
         queue_size_rb_label = PyDMLabel(self, queue_size_ca)
+
+        bsmp_comm_label = QLabel('BSMP Comm.', self)
         bsmp_comm_sts_led = SiriusLedAlert(self, bsmp_comm_ca)
         bsmp_comm_sts_led.setOnColor(SiriusLedAlert.LightGreen)
         bsmp_comm_sts_led.setOffColor(SiriusLedAlert.Red)
+        bsmp_comm_btn = PyDMStateButton(self, bsmp_comm_sel)
 
         layout.addWidget(sync_mode_label, 0, 0, Qt.AlignRight)
         layout.addWidget(sync_mode_rb_label, 0, 1)
@@ -468,9 +472,10 @@ class PSDetailWidget(QWidget):
         layout.addWidget(queue_size_label, 3, 0, Qt.AlignRight)
         layout.addWidget(queue_size_rb_label, 3, 1)
         layout.addWidget(bsmp_comm_label, 4, 0, Qt.AlignRight)
-        layout.addWidget(bsmp_comm_sts_led, 4, 1)
+        layout.addWidget(bsmp_comm_btn, 4, 1)
+        layout.addWidget(bsmp_comm_sts_led, 4, 2)
 
-        layout.setColumnStretch(2, 1)
+        layout.setColumnStretch(3, 1)
 
         return layout
 
