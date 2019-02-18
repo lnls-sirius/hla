@@ -198,22 +198,30 @@ class PSDetailWidget(QWidget):
         return layout
 
     def _interlockLayout(self):
-        # layout = QVBoxLayout()
-        layout = QGridLayout()
+        # Widgets
         soft_intlk_button = QPushButton('Soft Interlock', self)
+        soft_intlk_led = \
+            SiriusLedAlert(self, self._prefixed_psname + ":IntlkSoft-Mon")
         hard_intlk_button = QPushButton('Hard Interlock', self)
+        hard_intlk_led = \
+            SiriusLedAlert(self, self._prefixed_psname + ":IntlkHard-Mon")
         openloop_label = QLabel('ControlLoop', self)
-        # _util.connect_window(soft_intlk_button, )
-        layout.addWidget(soft_intlk_button, 0, 0)
-        layout.addWidget(SiriusLedAlert(
-            self, self._prefixed_psname + ":IntlkSoft-Mon"), 0, 1)
-        layout.addWidget(hard_intlk_button, 1, 0)
-        layout.addWidget(SiriusLedAlert(
-            self, self._prefixed_psname + ":IntlkHard-Mon"), 1, 1)
+        open_loop_led = \
+            SiriusLedAlert(self, self._prefixed_psname + ":CtrlLoop-Sts")
+        open_loop_btn = \
+            PyDMStateButton(self, self._prefixed_psname + ':CtrlLoop-Sel')
+        
+        # Build layout
+        layout = QGridLayout()
+        layout.addWidget(soft_intlk_button, 0, 0, 1, 2)
+        layout.addWidget(soft_intlk_led, 0, 2)
+        layout.addWidget(hard_intlk_button, 1, 0, 1, 2)
+        layout.addWidget(hard_intlk_led, 1, 2)
         layout.addWidget(openloop_label, 2, 0, Qt.AlignCenter)
-        layout.addWidget(SiriusLedAlert(
-            self, self._prefixed_psname + ":CtrlLoop-Sts"), 2, 1)
+        layout.addWidget(open_loop_btn, 2, 1, Qt.AlignCenter)
+        layout.addWidget(open_loop_led, 2, 2)
 
+        # Connect windows
         _util.connect_window(soft_intlk_button, MagnetInterlockWindow, self,
                              **{'magnet': self._psname,
                                 'interlock': 0})
