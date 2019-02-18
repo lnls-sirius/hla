@@ -88,8 +88,7 @@ class StatusAndCommands(QGroupBox):
 
         # RF Leds
         conn = self._conn_rf
-        self.led_rf_intlk = PyDMLedMultiChannel(
-            self, {pfx + conn.Const.Rmp_Intlk: 0})
+        c2v_intlk = {pfx + conn.Const.Rmp_Intlk: 0}
         c2v_apply = dict()
         c2v_apply[pfx + conn.Const.Rmp_Ts1.replace('SP', 'RB')] = 0
         c2v_apply[pfx + conn.Const.Rmp_Ts2.replace('SP', 'RB')] = 0
@@ -100,19 +99,24 @@ class StatusAndCommands(QGroupBox):
         c2v_apply[pfx + conn.Const.Rmp_VoltTop.replace('SP', 'RB')] = 0
         c2v_apply[pfx + conn.Const.Rmp_PhsBot.replace('SP', 'RB')] = 0
         c2v_apply[pfx + conn.Const.Rmp_PhsTop.replace('SP', 'RB')] = 0
-        self.led_rf_apply = PyDMLedMultiChannel(self, c2v_apply)
-        self.led_rf_rmprdy = PyDMLedMultiChannel(
-            self, {pfx + conn.Const.Rmp_RmpReady: 1})
+        c2v_rmprdy = {pfx + conn.Const.Rmp_RmpReady: 1}
 
-        # TI Led
+        self.led_rf_intlk = PyDMLedMultiChannel(self, c2v_intlk)
+        self.led_rf_apply = PyDMLedMultiChannel(self, c2v_apply)
+        self.led_rf_rmprdy = PyDMLedMultiChannel(self, c2v_rmprdy)
+
+        # TI Leds
         conn = self._conn_ti
+        c2v_intlk = {pfx + conn.Const.Intlk: 0}
         c2v_basicsetup = dict()
         for prpty, value in conn.ramp_basicsetup.items():
             c2v_basicsetup[pfx + prpty] = value
-        self.led_ti_setup = PyDMLedMultiChannel(self, c2v_basicsetup)
         c2v_configsetup = dict()
         for prpty, value in conn.ramp_configsetup.items():
             c2v_configsetup[pfx + prpty] = value
+
+        self.led_ti_intlk = PyDMLedMultiChannel(self, c2v_intlk)
+        self.led_ti_setup = PyDMLedMultiChannel(self, c2v_basicsetup)
         self.led_ti_apply = PyDMLedMultiChannel(self, c2v_configsetup)
 
         self.setStyleSheet("""
@@ -135,6 +139,7 @@ class StatusAndCommands(QGroupBox):
         glay.addWidget(QLabel('Interlocks', self), 2, 0)
         glay.addWidget(self.led_ma_intlk, 2, 1)
         glay.addWidget(self.led_rf_intlk, 2, 2)
+        glay.addWidget(self.led_ti_intlk, 2, 3)
         glay.addWidget(QLabel('Basic setup to ramp', self), 3, 0)
         glay.addWidget(self.led_ma_setup, 3, 1)
         glay.addWidget(self.led_ti_setup, 3, 3)
