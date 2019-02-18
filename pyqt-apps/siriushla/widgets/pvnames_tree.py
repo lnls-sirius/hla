@@ -87,24 +87,53 @@ class PVNameTree(QTreeWidget):
     def _add_item(self, item):
 
         if isinstance(item, str):
-            row = (SiriusPVName(item), )
+            pvname = item
+            row = [item, ]
         else:
+            if not isinstance(item[0], str):
+                raise ValueError
+            pvname = item[0]
             row = [item[0], ]
             row.extend([str(i) for i in item[1:]])
 
-        key = row[0] if isinstance(row[0], SiriusPVName) \
-            else SiriusPVName(row[0])
         pvals = []
+        if re.match('^.*-.*:.*-.*:.*-.*$', pvname):
+        # if pvname.count(':') == 2 and pvname.count('-') == 3:
+            # Parse it with SiriusPVName
+            pvname = SiriusPVName(pvname)
+            for p in self._pnames:
+                try:
+                    val = getattr(pvname, p)
+                except AttributeError:
+                    val = getattr(PVNameTree, p)(pvname)
+                if val:
+                    pvals.append(val)
+        else:
+            pvname = pvname
+        pvals.append(pvname)
+
+        # Build the row for the item
+        # pvname = ''
+        # if isinstance(item, str):
+        #     row = (SiriusPVName(item), )
+        # else:
+        #     row = [item[0], ]
+        #     row.extend([str(i) for i in item[1:]])
+
+        # pvals = []
+        # key = row[0] if isinstance(row[0], SiriusPVName) \
+        #     else SiriusPVName(row[0])
+
 
         # Get device properties value
-        for p in self._pnames:
-            try:
-                val = getattr(key, p)
-            except AttributeError:
-                val = getattr(PVNameTree, p)(key)
-            if val:
-                pvals.append(val)
-        pvals.append(key)
+        # for p in self._pnames:
+        #     try:
+        #         val = getattr(pvname, p)
+        #     except AttributeError:
+        #         val = getattr(PVNameTree, p)(pvname)
+        #     if val:
+        #         pvals.append(val)
+        # pvals.append(key)
 
         # Create TreeItems and add to property maps
         parent = self._ptree
