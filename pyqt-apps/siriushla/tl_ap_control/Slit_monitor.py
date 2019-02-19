@@ -31,7 +31,7 @@ class SlitMonitoring(QWidget):
         self._slit_width = 0
 
         tmp_file = _substitute_in_file(
-            '/home/fac_files/lnls-sirius/hla/pyqt-apps/siriushla/tl_ap_control'
+            '/home/sirius/repos/hla/pyqt-apps/siriushla/tl_ap_control'
             '/ui_tb_ap_slit'+slit_orientation.lower()+'mon.ui',
             {'PREFIX': prefix})
         self.centralwidget = loadUi(tmp_file)

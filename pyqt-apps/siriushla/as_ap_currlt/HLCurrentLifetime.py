@@ -17,7 +17,7 @@ class CurrLTWindow(SiriusMainWindow):
         """Initialize some widgets."""
         super(CurrLTWindow, self).__init__(parent)
 
-        UI_FILE = ('/home/fac_files/lnls-sirius/hla/pyqt-apps/siriushla/'
+        UI_FILE = ('/home/sirius/repos/hla/pyqt-apps/siriushla/'
                    'as_ap_currlt/ui_'+acc.lower()+'_ap_currlt.ui')
         tmp_file = _substitute_in_file(UI_FILE, {'PREFIX': prefix})
 

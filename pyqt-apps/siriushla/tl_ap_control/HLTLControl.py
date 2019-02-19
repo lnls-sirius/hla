@@ -58,14 +58,14 @@ class TLAPControlWindow(SiriusMainWindow):
 
         # Set central widget
         tmp_file = _substitute_in_file(
-            '/home/fac_files/lnls-sirius/hla/pyqt-apps/siriushla'
+            '/home/sirius/repos/hla/pyqt-apps/siriushla'
             '/tl_ap_control/' + UI_FILE,
             {'PREFIX': self.prefix, 'ICT1': ICT1, 'ICT2': ICT2})
         self.centralwidget = loadUi(tmp_file)
         self.setCentralWidget(self.centralwidget)
 
         # Fill TL Lattice Widget
-        lattice = QSvgWidget('/home/fac_files/lnls-sirius/hla/pyqt-apps/'
+        lattice = QSvgWidget('/home/sirius/repos/hla/pyqt-apps/'
                              'siriushla/tl_ap_control/' + SVG_FILE)
         self.centralwidget.widget_lattice.setLayout(QVBoxLayout())
         self.centralwidget.widget_lattice.layout().addWidget(lattice)

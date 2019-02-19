@@ -40,7 +40,7 @@ class ICTMonitoring(SiriusMainWindow):
             ICT2 = 'TS-04:DI-ICT'
 
         tmp_file = _substitute_in_file(
-            '/home/fac_files/lnls-sirius/hla/pyqt-apps/siriushla'
+            '/home/sirius/repos/hla/pyqt-apps/siriushla'
             '/tl_ap_control/ui_tl_ap_ictmon.ui',
             {'TL': tl.upper(), 'ICT1': ICT1, 'ICT2': ICT2, 'PREFIX': prefix})
         self.setWindowTitle(tl.upper()+' ICTs Monitor')

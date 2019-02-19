@@ -25,7 +25,7 @@ from siriushla.as_pm_control.PulsedMagnetDetailWindow import \
 from siriushla.as_ap_servconf import \
     LoadConfiguration as _LoadConfiguration
 
-UI_FILE = ('/home/fac_files/lnls-sirius/hla/pyqt-apps/siriushla/'
+UI_FILE = ('/home/sirius/repos/hla/pyqt-apps/siriushla/'
            'as_ap_posang/ui_as_ap_posang.ui')
 
 
