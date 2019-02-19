@@ -188,21 +188,30 @@ class PSDetailWidget(QWidget):
         return layout
 
     def _interlockLayout(self):
-        layout = QGridLayout()
+        # Widgets
         soft_intlk_button = QPushButton('Soft Interlock', self)
+        soft_intlk_led = \
+            SiriusLedAlert(self, self._prefixed_psname + ":IntlkSoft-Mon")
         hard_intlk_button = QPushButton('Hard Interlock', self)
+        hard_intlk_led = \
+            SiriusLedAlert(self, self._prefixed_psname + ":IntlkHard-Mon")
         openloop_label = QLabel('ControlLoop', self)
-        # _util.connect_window(soft_intlk_button, )
-        layout.addWidget(soft_intlk_button, 0, 0)
-        layout.addWidget(SiriusLedAlert(
-            self, self._prefixed_psname + ":IntlkSoft-Mon"), 0, 1)
-        layout.addWidget(hard_intlk_button, 1, 0)
-        layout.addWidget(SiriusLedAlert(
-            self, self._prefixed_psname + ":IntlkHard-Mon"), 1, 1)
-        layout.addWidget(openloop_label, 2, 0, Qt.AlignCenter)
-        layout.addWidget(SiriusLedAlert(
-            self, self._prefixed_psname + ":CtrlLoop-Sts"), 2, 1)
+        open_loop_led = \
+            SiriusLedAlert(self, self._prefixed_psname + ":CtrlLoop-Sts")
+        open_loop_btn = \
+            PyDMStateButton(self, self._prefixed_psname + ':CtrlLoop-Sel')
 
+        # Build layout
+        layout = QGridLayout()
+        layout.addWidget(soft_intlk_button, 0, 0, 1, 2)
+        layout.addWidget(soft_intlk_led, 0, 2)
+        layout.addWidget(hard_intlk_button, 1, 0, 1, 2)
+        layout.addWidget(hard_intlk_led, 1, 2)
+        layout.addWidget(openloop_label, 2, 0, Qt.AlignCenter)
+        layout.addWidget(open_loop_btn, 2, 1, Qt.AlignCenter)
+        layout.addWidget(open_loop_led, 2, 2)
+
+        # Connect windows
         _util.connect_window(soft_intlk_button, MagnetInterlockWindow, self,
                              **{'magnet': self._psname,
                                 'interlock': 0})
@@ -392,7 +401,7 @@ class PSDetailWidget(QWidget):
         self.cycle_auxparam_sp_le = PyDMLineEdit(self, auxparam_sp_ca)
         self.cycle_auxparam_rb_label = PyDMLabel(self, auxparam_rb_ca)
         # Layout
-        layout.addWidget(self.cycle_enbl_label, 0, 0)
+        layout.addWidget(self.cycle_enbl_label, 0, 0, Qt.AlignRight)
         # layout.addWidget(self.cycle_enbl_sp_button, 0, 1)
         # layout.addWidget(self.cycle_dsbl_sp_button, 0, 2)
         layout.addWidget(self.cycle_enbl_mon_led, 0, 1, Qt.AlignCenter)
@@ -429,20 +438,24 @@ class PSDetailWidget(QWidget):
         queue_size_ca = \
             self._prefixed_psname + ':PRUCtrlQueueSize-Mon'
         bsmp_comm_ca = self._prefixed_psname + ':BSMPComm-Sts'
+        bsmp_comm_sel = self._prefixed_psname + ':BSMPComm-Sel'
 
         sync_mode_label = QLabel('Sync Mode', self)
-        block_index_label = QLabel('Block Index', self)
-        sync_count_label = QLabel('Pulse Count', self)
-        queue_size_label = QLabel('Queue Size', self)
-        bsmp_comm_label = QLabel('BSMP Comm.', self)
-
         sync_mode_rb_label = PyDMLabel(self, sync_mode_ca)
+
+        block_index_label = QLabel('Block Index', self)
         block_index_rb_label = PyDMLabel(self, block_index_ca)
+        sync_count_label = QLabel('Pulse Count', self)
         sync_count_rb_label = PyDMLabel(self, sync_count_ca)
+
+        queue_size_label = QLabel('Queue Size', self)
         queue_size_rb_label = PyDMLabel(self, queue_size_ca)
+
+        bsmp_comm_label = QLabel('BSMP Comm.', self)
         bsmp_comm_sts_led = SiriusLedAlert(self, bsmp_comm_ca)
         bsmp_comm_sts_led.setOnColor(SiriusLedAlert.LightGreen)
         bsmp_comm_sts_led.setOffColor(SiriusLedAlert.Red)
+        bsmp_comm_btn = PyDMStateButton(self, bsmp_comm_sel)
 
         layout.addWidget(sync_mode_label, 0, 0, Qt.AlignRight)
         layout.addWidget(sync_mode_rb_label, 0, 1)
@@ -453,9 +466,10 @@ class PSDetailWidget(QWidget):
         layout.addWidget(queue_size_label, 3, 0, Qt.AlignRight)
         layout.addWidget(queue_size_rb_label, 3, 1)
         layout.addWidget(bsmp_comm_label, 4, 0, Qt.AlignRight)
-        layout.addWidget(bsmp_comm_sts_led, 4, 1)
+        layout.addWidget(bsmp_comm_btn, 4, 1)
+        layout.addWidget(bsmp_comm_sts_led, 4, 2)
 
-        layout.setColumnStretch(2, 1)
+        layout.setColumnStretch(3, 1)
 
         return layout
 
