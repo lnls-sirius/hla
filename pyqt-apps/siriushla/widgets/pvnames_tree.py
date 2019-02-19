@@ -186,6 +186,7 @@ class PVNameTree(QTreeWidget):
         t.finished.connect(t.deleteLater)
         # Start
         t.start()
+        if len(self._items) > 0:
         dlg.exec_()
 
     def _item_checked(self, item, column):
