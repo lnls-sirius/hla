@@ -214,6 +214,7 @@ class SetConfigurationWindow(SiriusMainWindow):
                 self._tree_msg.setText(
                     'Configuration has {} items'.format(len(pvs)))
                 self._tree.expandAll()
+                self._tree.check_all()
             except KeyError:
                 self._tree_msg.setText('Configuration has no field pvs')
         else:
