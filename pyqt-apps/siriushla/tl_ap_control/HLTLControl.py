@@ -45,16 +45,8 @@ class TLAPControlWindow(SiriusMainWindow):
         self._setupUi()
 
     def _setupUi(self):
-        [UI_FILE, SVG_FILE, self._corr_devicenames_list,
+        [UI_FILE, SVG_FILE, ICT1, ICT2, self._corr_devicenames_list,
             self._scrn_devicenames_list] = self._getTLData(self._tl)
-
-        # Define prefixes to substitute in file
-        if self._tl == 'tb':
-            ICT1 = 'TB-02:DI-ICT'
-            ICT2 = 'TB-04:DI-ICT'
-        elif self._tl == 'ts':
-            ICT1 = 'TS-01:DI-ICT'
-            ICT2 = 'TS-04:DI-ICT'
 
         # Set central widget
         tmp_file = _substitute_in_file(
@@ -433,6 +425,10 @@ class TLAPControlWindow(SiriusMainWindow):
         if tl.lower() == 'tb':
             UI_FILE = ('ui_tb_ap_control.ui')
             SVG_FILE = ('TB.svg')
+
+            ICT1 = 'TB-02:DI-ICT'
+            ICT2 = 'TB-04:DI-ICT'
+
             correctors_list = [
                 [['LA-CN:H1LCPS-10'], 'LA-CN:H1LCPS-9', 0, 'TB-01:DI-Scrn-1'],
                 [['TB-01:MA-CH-1'], 'TB-01:MA-CV-1', 1, 'TB-01:DI-Scrn-2'],
@@ -447,6 +443,10 @@ class TLAPControlWindow(SiriusMainWindow):
         elif tl.lower() == 'ts':
             UI_FILE = ('ui_ts_ap_control.ui')
             SVG_FILE = ('TS.svg')
+
+            ICT1 = 'TS-01:DI-ICT'
+            ICT2 = 'TS-04:DI-ICT'
+
             correctors_list = [
                 [['TS-01:PM-EjeSeptF', 'TS-01:PM-EjeSeptG'],
                  'TS-01:MA-CV-1', 0, 'TS-01:DI-Scrn'],
@@ -461,7 +461,7 @@ class TLAPControlWindow(SiriusMainWindow):
                          'TS-03:DI-Scrn', 'TS-04:DI-Scrn-1',
                          'TS-04:DI-Scrn-2', 'TS-04:DI-Scrn-3']
 
-        return [UI_FILE, SVG_FILE, correctors_list, scrn_list]
+        return [UI_FILE, SVG_FILE, ICT1, ICT2, correctors_list, scrn_list]
 
     def _openReference(self):
         """Load and show reference image."""
