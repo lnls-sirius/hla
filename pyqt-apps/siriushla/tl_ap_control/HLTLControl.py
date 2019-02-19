@@ -81,7 +81,7 @@ class TLAPControlWindow(SiriusMainWindow):
                                 prefix=self.prefix, tl=self._tl)
         openMAApp = QAction("MA", self)
         _hlautil.connect_window(openMAApp, PSTabControlWindow, parent=self,
-                                section=self._tl.upper(), discipline=1)  # MA
+                                section=self._tl.upper(), discipline='MA')
         openPMApp = QAction("PM", self)
         _hlautil.connect_window(openPMApp, PulsedMagnetControlWindow, self)
         openSOFB = QAction("SOFB", self)

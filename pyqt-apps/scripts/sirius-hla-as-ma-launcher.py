@@ -46,40 +46,40 @@ class ControlApplication(SiriusMainWindow):
         openTBMagnetControlPanel = QAction("TB Magnets", self)
         _util.connect_window(openTBMagnetControlPanel,
                              PSTabControlWindow, self, section="TB",
-                             discipline=1)
+                             discipline='MA')
         openBOMagnetControlPanel = QAction("BO Magnets", self)
         _util.connect_window(openBOMagnetControlPanel,
                              PSTabControlWindow, self, section="BO",
-                             discipline=1)
+                             discipline='MA')
         openTSMagnetControlPanel = QAction("TS Magnets", self)
         _util.connect_window(openTSMagnetControlPanel,
                              PSTabControlWindow, self, section="TS",
-                             discipline=1)
+                             discipline='MA')
         openSIMagnetControlPanel = QAction("All", self)
         _util.connect_window(openSIMagnetControlPanel,
                              PSTabControlWindow, self, section="SI",
-                             discipline=1)
+                             discipline='MA')
         openSIDipoleWindow = QAction("Dipole", self)
         _util.connect_window(openSIDipoleWindow, PSControlWindow, self,
-                             section="SI", discipline=1, device="dipole")
+                             section="SI", discipline='MA', device="dipole")
         openSIQuadrupolesWindow = QAction("Quadrupoles", self)
         _util.connect_window(openSIQuadrupolesWindow, PSControlWindow,
-                             self, section="SI", discipline=1,
+                             self, section="SI", discipline='MA',
                              device="quadrupole")
         openSISextupolesWindow = QAction("Sextupoles", self)
         _util.connect_window(openSISextupolesWindow, PSControlWindow, self,
-                             section="SI", discipline=1, device="sextupole")
+                             section="SI", discipline='MA', device="sextupole")
         openSISlowCorrectorsWindow = QAction("Slow Correctors", self)
         _util.connect_window(openSISlowCorrectorsWindow, PSControlWindow,
-                             self, section="SI", discipline=1,
+                             self, section="SI", discipline='MA',
                              device="corrector-slow")
         openSIFastCorrectorsWindow = QAction("Fast Correctors", self)
         _util.connect_window(openSIFastCorrectorsWindow, PSControlWindow,
-                             self, section="SI", discipline=1,
+                             self, section="SI", discipline='MA',
                              device="corrector-fast")
         openSISkewQuadsWindow = QAction("Skew Quadrupoles", self)
         _util.connect_window(openSISkewQuadsWindow, PSControlWindow, self,
-                             section="SI", discipline=1,
+                             section="SI", discipline='MA',
                              device="quadrupole-skew")
 
         # Tools

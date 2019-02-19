@@ -40,7 +40,7 @@ class PSTrimWindow(SiriusMainWindow):
         # Create TrimWidget
         device = self._psname.split("-")[-1]
         self.trim_widget = TrimControlWidget(
-            dev_type=0, trim=device, parent=self,
+            dev_type='PS', trim=device, parent=self,
             orientation=TrimControlWidget.VERTICAL)
         # Connect Trim detail buttons
         self._connect_buttons(self.trim_widget)

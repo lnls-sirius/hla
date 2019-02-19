@@ -28,7 +28,7 @@ class PSControlWindow(SiriusMainWindow):
         # Set Widget
         self.widget = ControlWidgetFactory.factory(
             self._section, self._discipline, self._device)
-        if self._device != "dipole" or self._discipline == 0:
+        if self._device != "dipole" or self._discipline == 'PS':
             self._connect_buttons(self.widget)
         self.setCentralWidget(self.widget)
 

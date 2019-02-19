@@ -42,9 +42,9 @@ class PSTabControlWindow(PSControlWindow):
         for device in self.Devices[self._section]:
             widget = ControlWidgetFactory.factory(
                 self, self._section, self._discipline, device)
-            if device == "dipole" and self._discipline == 1:
+            if device == "dipole" and self._discipline == 'MA':
                 widget = self._dipoleWidgetWrapper(widget)
-            if device != "dipole" or self._discipline == 0:
+            if device != "dipole" or self._discipline == 'PS':
                 self._connect_buttons(widget)
             self.tabs.addTab(widget, self.TabName[device])
 

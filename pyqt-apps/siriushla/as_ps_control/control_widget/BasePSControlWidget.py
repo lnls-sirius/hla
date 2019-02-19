@@ -17,9 +17,6 @@ class BasePSControlWidget(QWidget):
     HORIZONTAL = 1
     VERTICAL = 2
 
-    PS = 0
-    MA = 1
-
     StyleSheet = """
         QScrollArea {
             min-width: 75em;
@@ -38,10 +35,10 @@ class BasePSControlWidget(QWidget):
         super(BasePSControlWidget, self).__init__(parent)
         self._dev_type = dev_type
         self._orientation = orientation
-        if dev_type == self.PS:
+        if dev_type == 'PS':
             self._dev_list = PSSearch.get_psnames(self._getFilter())
             self._widget_class = PSWidget
-        elif dev_type == self.MA:
+        elif dev_type == 'MA':
             self._dev_list = MASearch.get_manames(self._getFilter())
             self._widget_class = MAWidget
         else:

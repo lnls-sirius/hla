@@ -81,7 +81,7 @@ def run_test(psname_list=None):
     from siriushla.sirius_application import SiriusApplication
 
     app = SiriusApplication()
-    window = SIFamQuadrupoleControlWidget(dev_type=0)
+    window = SIFamQuadrupoleControlWidget(dev_type='PS')
     window.show()
     sys.exit(app.exec_())
 
