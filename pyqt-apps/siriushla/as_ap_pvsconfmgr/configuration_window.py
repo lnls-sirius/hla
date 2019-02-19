@@ -214,6 +214,7 @@ class SetConfigurationWindow(SiriusMainWindow):
                 self._tree_msg.setText(
                     'Configuration has {} items'.format(len(pvs)))
                 self._tree.expandAll()
+                self._tree.check_all()
             except KeyError:
                 self._tree_msg.setText('Configuration has no field pvs')
         else:
@@ -223,26 +224,42 @@ class SetConfigurationWindow(SiriusMainWindow):
     @Slot()
     def _set(self):
         # Get selected PVs
-        sel_pvs = self._tree.checked_items()
+        selected_pvs = self._tree.checked_items()
         # Get PVs values
-        pvs_val = {pv_val[0]: pv_val[1]
-                   for pv_val in self._current_config['value']['pvs']
-                   if pv_val[0] in sel_pvs}
+        # pvs_val = {pv: val
+        #            for pv, val, delay in self._current_config['value']['pvs']
+        #            if pv in sel_pvs}
+
+        set_pvs_tuple = list()
+        check_pvs_tuple = list()
+        
+        for t in self._current_config['value']['pvs']:
+            try: 
+                pv, value, delay = t
+            except ValueError:
+                pv, value = t
+                delay = 1e-2
+            if pv in selected_pvs:
+                set_pvs_tuple.append((pv, value, delay))
+                if pv.endswith('-Cmd'):
+                    self.logger.warning('{} being checked'.format(pv))
+                check_pvs_tuple.append((pv, value, delay))
+
         # Get PVs RB
-        pvs_rb_val = dict()
-        for pv, val in pvs_val.items():
-            # pv_rb_val = list(pv_val)
-            if pv.endswith('-Cmd'):
-                continue
-            pv_rb = \
-                pv.replace('-Sel', '-Sts').replace('-SP', '-RB')
-            pvs_rb_val[pv_rb] = val
+        # pvs_rb_val = dict()
+        # for pv, val in pvs_val.items():
+        #     # pv_rb_val = list(pv_val)
+        #     if pv.endswith('-Cmd'):
+        #         continue
+        #     pv_rb = \
+        #         pv.replace('-Sel', '-Sts').replace('-SP', '-RB')
+        #     pvs_rb_val[pv_rb] = val
         # Create thread
         failed_items = []
-        set_task = EpicsSetter(list(pvs_val), self._wrapper,
-                               list(pvs_val.values()), self)
-        check_task = EpicsChecker(list(pvs_rb_val), self._wrapper,
-                                  list(pvs_rb_val.values()), self)
+        pvs, values, delays = zip(*set_pvs_tuple)
+        set_task = EpicsSetter(pvs, values, delays, self._wrapper, self)
+        pvs, values, delays = zip(*check_pvs_tuple)
+        check_task = EpicsChecker(pvs, values, delays, self._wrapper, self)
         check_task.itemChecked.connect(
             lambda pv, status: failed_items.append(pv) if not status else None)
         # Set/Check PVs values and show wait dialog informing user
