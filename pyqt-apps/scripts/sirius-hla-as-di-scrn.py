@@ -12,7 +12,7 @@ from qtpy.QtWidgets import QWidget, QLabel, QSpacerItem, \
 from pydm.widgets import PyDMEnumComboBox, PyDMLabel
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import PyDMLed
-from siriushla.widgets.scrn_view import SiriusScrnView
+from siriushla.as_di_scrns import SiriusScrnView
 from siriushla.widgets.windows import SiriusMainWindow
 
 
