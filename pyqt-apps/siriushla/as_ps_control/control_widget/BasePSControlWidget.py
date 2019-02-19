@@ -3,11 +3,10 @@ import re
 
 from siriuspy.search import PSSearch, MASearch
 from siriushla.as_ps_control.PSWidget import BasePSWidget, PSWidget, MAWidget
-from qtpy.QtGui import QPainter
 from qtpy.QtCore import Qt, QPoint, Slot, QLocale
 from qtpy.QtWidgets import QWidget, QVBoxLayout, QGroupBox, \
     QGridLayout, QLabel, QHBoxLayout, QScrollArea, QLineEdit, QAction, \
-    QMenu, QInputDialog, QStyleOption, QStyle
+    QMenu, QInputDialog, QFrame
 
 
 class BasePSControlWidget(QWidget):
@@ -172,6 +171,7 @@ class BasePSControlWidget(QWidget):
 
             # Create group and scroll area
             main_widget = self._createGroupBox(group[0], group_widgets)
+            main_widget.layout.setContentsMargins(0, 0, 0, 0)
             # main_widget.setAutoFillBackground(False)
             # if self._hasScrollArea():
             widget = QScrollArea(self)
@@ -179,6 +179,7 @@ class BasePSControlWidget(QWidget):
             widget.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
             widget.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
             widget.setWidgetResizable(True)
+            widget.setFrameShape(QFrame.NoFrame)
             widget.setWidget(main_widget)
             # else:
             #     widget = main_widget
