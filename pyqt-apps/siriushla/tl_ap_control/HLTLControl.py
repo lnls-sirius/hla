@@ -15,12 +15,13 @@ from qtpy.QtSvg import QSvgWidget
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox
 from pydm.widgets.base import PyDMWidget
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
-import pyaccel as _pyaccel
-import pymodels as _pymodels
+# import pyaccel as _pyaccel
+# import pymodels as _pymodels
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla import util as _hlautil
 from siriushla.widgets import PyDMLed, SiriusLedAlert, SiriusLedState, \
-    SiriusMainWindow, PyDMLinEditScrollbar, SiriusFigureCanvas
+    SiriusMainWindow, PyDMLinEditScrollbar
+# from siriushla.widgets import SiriusFigureCanvas
 from siriushla.as_di_scrns import SiriusScrnView
 from siriushla.as_ap_posang.HLPosAng import ASAPPosAngCorr
 from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
@@ -65,9 +66,9 @@ class TLAPControlWindow(SiriusMainWindow):
         # Create MenuBar and connect TL apps
         menubar = QMenuBar(self)
         menubar.setNativeMenuBar(False)
-        openLatticeAndTwiss = QAction("Show Lattice and Twiss", self)
-        _hlautil.connect_window(openLatticeAndTwiss, ShowLatticeAndTwiss,
-                                parent=self, tl=self._tl)
+        # openLatticeAndTwiss = QAction("Show Lattice and Twiss", self)
+        # _hlautil.connect_window(openLatticeAndTwiss, ShowLatticeAndTwiss,
+        #                         parent=self, tl=self._tl)
         openPosAngCorrApp = QAction("Position and Angle Correction", self)
         _hlautil.connect_window(openPosAngCorrApp, ASAPPosAngCorr, parent=self,
                                 prefix=self.prefix, tl=self._tl)
@@ -82,7 +83,7 @@ class TLAPControlWindow(SiriusMainWindow):
         _hlautil.connect_window(openICTsApp, ICTMonitoring, parent=self,
                                 tl=self._tl, prefix=self.prefix)
         appsMenu = menubar.addMenu("Open...")
-        appsMenu.addAction(openLatticeAndTwiss)
+        # appsMenu.addAction(openLatticeAndTwiss)
         appsMenu.addAction(openPosAngCorrApp)
         appsMenu.addAction(openMAApp)
         appsMenu.addAction(openPMApp)
@@ -542,41 +543,41 @@ class TLAPControlWindow(SiriusMainWindow):
             self.slitv.updateSlitWidget()
 
 
-class ShowLatticeAndTwiss(SiriusMainWindow):
-    """Class to create Lattice and Twiss Widget."""
-
-    def __init__(self, parent=None, tl=None):
-        """Create Lattice and Twiss Graph."""
-        super(ShowLatticeAndTwiss, self).__init__(parent)
-        self.setWindowTitle(tl.upper() + ' Nominal Lattice and Twiss')
-        if tl == 'tb':
-            self._tl, self._twiss_in = _pymodels.tb.create_accelerator()
-            fam_data = _pymodels.tb.families.get_family_data(self._tl)
-            fam_mapping = _pymodels.tb.family_mapping
-        elif tl == 'ts':
-            self._tl, self._twiss_in = _pymodels.ts.create_accelerator()
-            fam_data = _pymodels.ts.families.get_family_data(self._tl)
-            fam_mapping = _pymodels.ts.family_mapping
-
-        self._tl_twiss, _ = _pyaccel.optics.calc_twiss(
-                                                    accelerator=self._tl,
-                                                    init_twiss=self._twiss_in)
-        self._fig, self._ax = _pyaccel.graphics.plot_twiss(
-                                                    accelerator=self._tl,
-                                                    twiss=self._tl_twiss,
-                                                    family_data=fam_data,
-                                                    family_mapping=fam_mapping,
-                                                    draw_edges=True,
-                                                    height=4,
-                                                    show_label=True)
-        self.centralwidget = QWidget()
-        self.centralwidget.setLayout(QVBoxLayout())
-        self.canvas = SiriusFigureCanvas(self._fig)
-        self.canvas.setParent(self.centralwidget)
-        self.centralwidget.layout().addWidget(self.canvas)
-        self.centralwidget.layout().setContentsMargins(0, 0, 0, 0)
-        self.setCentralWidget(self.centralwidget)
-        self.centralwidget.setStyleSheet("""min-width:90em;max-width:90em;""")
+# class ShowLatticeAndTwiss(SiriusMainWindow):
+#     """Class to create Lattice and Twiss Widget."""
+#
+#     def __init__(self, parent=None, tl=None):
+#         """Create Lattice and Twiss Graph."""
+#         super(ShowLatticeAndTwiss, self).__init__(parent)
+#         self.setWindowTitle(tl.upper() + ' Nominal Lattice and Twiss')
+#         if tl == 'tb':
+#             self._tl, self._twiss_in = _pymodels.tb.create_accelerator()
+#             fam_data = _pymodels.tb.families.get_family_data(self._tl)
+#             fam_mapping = _pymodels.tb.family_mapping
+#         elif tl == 'ts':
+#             self._tl, self._twiss_in = _pymodels.ts.create_accelerator()
+#             fam_data = _pymodels.ts.families.get_family_data(self._tl)
+#             fam_mapping = _pymodels.ts.family_mapping
+#
+#         self._tl_twiss, _ = _pyaccel.optics.calc_twiss(
+#                                                     accelerator=self._tl,
+#                                                     init_twiss=self._twiss_in)
+#         self._fig, self._ax = _pyaccel.graphics.plot_twiss(
+#                                                     accelerator=self._tl,
+#                                                     twiss=self._tl_twiss,
+#                                                     family_data=fam_data,
+#                                                     family_mapping=fam_mapping,
+#                                                     draw_edges=True,
+#                                                     height=4,
+#                                                     show_label=True)
+#         self.centralwidget = QWidget()
+#         self.centralwidget.setLayout(QVBoxLayout())
+#         self.canvas = SiriusFigureCanvas(self._fig)
+#         self.canvas.setParent(self.centralwidget)
+#         self.centralwidget.layout().addWidget(self.canvas)
+#         self.centralwidget.layout().setContentsMargins(0, 0, 0, 0)
+#         self.setCentralWidget(self.centralwidget)
+#         self.centralwidget.setStyleSheet("""min-width:90em;max-width:90em;""")
 
 
 class ShowImage(SiriusMainWindow):
