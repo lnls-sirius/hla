@@ -65,11 +65,6 @@ class PulsedMagnetControlWindow(SiriusMainWindow):
             button = widget.get_detail_button()
             connect_window(button, PulsedMagnetDetailWindow,
                            parent=self, maname=maname)
-            # self._window_manager.register_window(
-            #     maname + "_detail", PulsedMagnetDetailWindow,
-            #     maname=maname, parent=self)
-            # button.clicked.connect(lambda: self._window_manager.open_window(
-            #     self.sender().text() + "_detail"))
 
 
 if __name__ == "__main__":

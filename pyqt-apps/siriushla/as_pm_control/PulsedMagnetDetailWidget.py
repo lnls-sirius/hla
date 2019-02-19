@@ -145,9 +145,6 @@ class PulsedMagnetDetailWidget(QWidget):
         self.voltage_rb_label = PyDMLabel(
             parent=self, init_channel=self._voltage_mon_pv)
 
-        # self.voltage_sp_widget.set_limits_from_pv(True)
-        # self.voltage_rb_label.precFromPV = True
-
         voltage_layout.addWidget(self.voltage_sp_widget)
         voltage_layout.addWidget(self.voltage_rb_label)
 
@@ -160,9 +157,6 @@ class PulsedMagnetDetailWidget(QWidget):
             parent=self, channel=self._kick_sp_pv)
         self.kick_rb_label = PyDMLabel(
             parent=self, init_channel=self._kick_mon_pv)
-
-        # self.kick_sp_widget.set_limits_from_pv(True)
-        # self.kick_rb_label.precFromPV = True
 
         kick_layout.addWidget(self.kick_sp_widget)
         kick_layout.addWidget(self.kick_rb_label)
