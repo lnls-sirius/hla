@@ -409,7 +409,6 @@ class InjectionWindow(SiriusMainWindow):
 
     def closeEvent(self, event):
         """Clear open instance."""
-        # self.app.close_widget_connections(self)
         self.profile_bar_graph.stop()
         super().closeEvent(event)
 

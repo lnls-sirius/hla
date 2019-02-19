@@ -20,7 +20,6 @@ class PSDetailWindow(SiriusMainWindow):
 
         self._setup_ui()
         # self.setStyleSheet(self.STYLESHEET)
-        # self.app.establish_widget_connections(self)
 
     def _setup_ui(self):
         # Set window layout

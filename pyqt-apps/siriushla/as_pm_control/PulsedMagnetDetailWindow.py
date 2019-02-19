@@ -13,7 +13,6 @@ class PulsedMagnetDetailWindow(SiriusMainWindow):
         self._maname = maname
         self.app = PyDMApplication.instance()
         self._setup_ui()
-        # app.establish_widget_connections(self)
 
     def _setup_ui(self):
         self.central_widget = PulsedMagnetDetailWidget(self._maname, self)

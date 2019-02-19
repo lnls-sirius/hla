@@ -22,8 +22,6 @@ class PSControlWindow(SiriusMainWindow):
 
         self._setup_ui()
 
-        # self.app.establish_widget_connections(self)
-
     def _setup_ui(self):
         # Set Widget
         self.widget = ControlWidgetFactory.factory(

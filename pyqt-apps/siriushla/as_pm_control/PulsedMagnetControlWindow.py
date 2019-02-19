@@ -24,9 +24,6 @@ class PulsedMagnetControlWindow(SiriusMainWindow):
         self._setup_ui()
         self.setStyleSheet(PulsedMagnetControlWindow.StyleSheet)
 
-        # self.setAttribute(Qt.WA_DeleteOnClose)
-        # self.app.establish_widget_connections(self)
-
     def _setup_ui(self):
         self.main_widget = QTabWidget(self)
         self.main_widget.layout = QVBoxLayout()
