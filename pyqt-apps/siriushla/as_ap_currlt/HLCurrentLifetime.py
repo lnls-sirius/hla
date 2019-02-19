@@ -13,11 +13,9 @@ from siriuspy.envars import vaca_prefix as _vaca_prefix
 class CurrLTWindow(SiriusMainWindow):
     """Class to include some intelligence in the .ui file."""
 
-    def __init__(self, parent=None, prefix=None, acc=None):
+    def __init__(self, parent=None, prefix=_vaca_prefix, acc=None):
         """Initialize some widgets."""
         super(CurrLTWindow, self).__init__(parent)
-        if prefix == '':
-            prefix = _vaca_prefix
 
         UI_FILE = ('/home/fac_files/lnls-sirius/hla/pyqt-apps/siriushla/'
                    'as_ap_currlt/ui_'+acc.lower()+'_ap_currlt.ui')

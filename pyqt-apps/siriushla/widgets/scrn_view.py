@@ -388,7 +388,7 @@ class SiriusScrnView(QWidget):
     You can control it by using the method/Slot updateCalibrationGridFlag.
     """
 
-    def __init__(self, parent=None, prefix='', device=None):
+    def __init__(self, parent=None, prefix=_vaca_prefix, device=None):
         """Initialize object."""
         QWidget.__init__(self, parent=parent)
         self.prefix = prefix

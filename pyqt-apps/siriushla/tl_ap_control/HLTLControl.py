@@ -36,7 +36,7 @@ from siriushla.tl_ap_control.Slit_monitor import SlitMonitoring
 class TLAPControlWindow(SiriusMainWindow):
     """Class to create the main window for TB and TS HLA."""
 
-    def __init__(self, parent=None, prefix='', tl=None):
+    def __init__(self, parent=None, prefix=_vaca_prefix, tl=None):
         """Initialize widgets in main window."""
         super(TLAPControlWindow, self).__init__(parent)
         self.prefix = prefix
