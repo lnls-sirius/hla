@@ -214,8 +214,9 @@ class _ICTSettings(SiriusDialog):
         self.pb_trgdetails = QPushButton('Open details', self)
         self.pb_trgdetails.setAutoDefault(False)
         self.pb_trgdetails.setDefault(False)
+        trg_w = create_window_from_widget(HLTriggerDetailed, is_main=True)
         util.connect_window(
-            self.pb_trgdetails, HLTriggerDetailed, parent=self,
+            self.pb_trgdetails, trg_w, parent=self,
             prefix=self.ict_trig_prefix+':')
         hlay_TIstatus = QHBoxLayout()
         hlay_TIstatus.addWidget(self.ledmulti_TIStatus)
