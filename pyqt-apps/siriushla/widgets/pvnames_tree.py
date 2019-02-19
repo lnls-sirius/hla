@@ -84,6 +84,16 @@ class PVNameTree(QTreeWidget):
         self._items = value
         self._add_items()
 
+    def check_all(self):
+        """Check all items."""
+        for i in range(self.topLevelItemCount()):
+            self.topLevelItem(i).setCheckState(0, Qt.Checked)
+
+    def uncheck_all(self):
+        """Uncheck all items."""
+        for i in range(self.topLevelItemCount()):
+            self.topLevelItem(i).setCheckState(0, Qt.Unchecked)
+
     def _add_item(self, item):
 
         if isinstance(item, str):
