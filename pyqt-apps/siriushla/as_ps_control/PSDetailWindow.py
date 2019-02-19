@@ -21,8 +21,11 @@ class PSDetailWindow(SiriusMainWindow):
         self._setup_ui()
 
     def _setup_ui(self):
+        if isinstance(self._ma, list):
+            self.setWindowTitle('DCLinks Window')
+        else:
+            self.setWindowTitle(self._ma)
         # Set window layout
-        self.setWindowTitle("PS Detail Window")
         self.widget = DetailWidgetFactory.factory(self._ma, self)
         self._connect_buttons(self.widget)
         self.setCentralWidget(self.widget)

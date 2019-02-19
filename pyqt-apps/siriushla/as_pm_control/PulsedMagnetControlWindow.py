@@ -29,7 +29,7 @@ class PulsedMagnetControlWindow(SiriusMainWindow):
         self.main_widget.layout = QVBoxLayout()
         self.main_widget.setLayout(self.main_widget.layout)
         self.setCentralWidget(self.main_widget)
-        self.setWindowTitle("Pulsed magnets control window")
+        self.setWindowTitle("Pulsed Magnets Control Window")
         self.setFocus()
 
         self.main_widget.addTab(self._make_tab_widget("TB"), "TB")

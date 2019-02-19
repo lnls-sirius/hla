@@ -31,6 +31,7 @@ class PSTabControlWindow(PSControlWindow):
                          parent=parent)
 
     def _setup_ui(self):
+        self.setWindowTitle(self._section+' '+self._discipline+' Control')
         # Create Tabs
         self.tabs = QTabWidget()
         self.tabs.setObjectName(self._section + "Tab")

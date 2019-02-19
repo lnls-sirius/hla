@@ -15,5 +15,6 @@ class PulsedMagnetDetailWindow(SiriusMainWindow):
         self._setup_ui()
 
     def _setup_ui(self):
+        self.setWindowTitle(self._maname)
         self.central_widget = PulsedMagnetDetailWidget(self._maname, self)
         self.setCentralWidget(self.central_widget)
