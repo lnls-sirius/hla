@@ -3,8 +3,7 @@ import re
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGroupBox, QGridLayout, QLabel, \
-    QSizePolicy, QPushButton, QVBoxLayout, QHBoxLayout, QApplication, \
-    QFormLayout
+    QPushButton, QVBoxLayout, QHBoxLayout, QFormLayout
 from qtpy.QtGui import QColor
 # from epics import get_pv
 
