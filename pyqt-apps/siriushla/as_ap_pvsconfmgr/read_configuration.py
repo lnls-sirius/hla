@@ -154,8 +154,8 @@ class ReadConfigurationWindow(SiriusMainWindow):
         self._report = ReportDialog(failed_items, self)
         self._report.show()
         self._table.resizeColumnsToContents()
-        if not failed_items:
-            self._save_btn.setEnabled(True)
+        # if not failed_items:
+        self._save_btn.setEnabled(True)
 
     @Slot()
     def _fill_value(self, row, value):
