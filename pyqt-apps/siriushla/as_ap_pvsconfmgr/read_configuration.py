@@ -14,9 +14,10 @@ from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.misc.epics.wrapper import PyEpicsWrapper
 from siriushla.misc.epics.task import EpicsGetter
 from siriushla.widgets.dialog import ReportDialog, ProgressDialog
-from siriushla.as_ap_pvsconfmgr.model import \
+from siriushla.model import \
     ConfigTypeModel, PVConfigurationTableModel
 from siriushla.as_ap_pvsconfmgr.delegate import PVConfigurationDelegate
+from siriushla.as_ap_servconf import SaveConfiguration
 from siriuspy.envars import vaca_prefix as _VACA_PREFIX
 
 
@@ -171,36 +172,40 @@ class ReadConfigurationWindow(SiriusMainWindow):
         label = 'Please select a name'
         # Ask for a name until it is either canceled or succesfully inserted
         while not success:
-            config_name, status = QInputDialog.getText(
-                self, 'Configuration Name', error + label)
+            # config_name, status = QInputDialog.getText(
+            #     self, 'Configuration Name', error + label)
+
+            config_name, status = SaveConfiguration(config_type, self).exec()
+            print(config_name, status)
+
             # Check status and configuration name
-            if not status:
-                success = True
-                continue
             if not re.match('^((\w|[()])+([-_/](\w+|[()])])?)+$', config_name):
                 self.logger.warning('Name not allowed')
                 error = 'Name not allowed<br>'
                 continue
-            # Get config_type, config_name, data and insert new configuration
-            data = self._table.model().model_data
-            try:
-                ret = self._db.insert_config(
-                    config_type, config_name, {'pvs': data})
-            except TypeError as e:
-                QMessageBox.warning(self, 'Save', '{}'.format(e))
-                success = True
             else:
-                if ret['code'] == 200:  # Worked
-                    success = True
-                    self._save_btn.setEnabled(False)
-                    QMessageBox.information(self, 'Save', 'Saved successfully')
-                else:  # Smth went wrong
-                    code, message = ret['code'], ret['message']
-                    self.logger.warning('Error {}: {}'.format(code, message))
-                    if code == 409:
-                        error = 'Name already taken'
-                    else:
-                        error = message
+                success = True
+
+        # Get config_type, config_name, data and insert new configuration
+        data = self._table.model().model_data
+        try:
+            ret = self._db.insert_config(
+                config_type, config_name, {'pvs': data})
+        except TypeError as e:
+            QMessageBox.warning(self, 'Save', '{}'.format(e))
+            success = True
+        else:
+            if ret['code'] == 200:  # Worked
+                success = True
+                self._save_btn.setEnabled(False)
+                QMessageBox.information(self, 'Save', 'Saved successfully')
+            else:  # Smth went wrong
+                code, message = ret['code'], ret['message']
+                self.logger.warning('Error {}: {}'.format(code, message))
+                if code == 409:
+                    error = 'Name already taken'
+                else:
+                    error = message
                     error += '<br/><br/>'
 
     def _is_configuration_valid(self):
