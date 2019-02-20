@@ -75,13 +75,14 @@ class PVConfigurationTableModel(QAbstractTableModel):
         config = get_config_type_template(self._config_type)
         if 'pvs' in config:
             self._data = config['pvs']
+            # self._data.sort(key=lambda x: x[0])
         self.endResetModel()
 
     def flags(self, index):
         """Override to make cells editable."""
         if not index.isValid():
             return Qt.ItemIsEnabled
-        if index.column() in (1, 2):
+        if index.column() in (2, ):
             return Qt.ItemFlags(
                 QAbstractTableModel.flags(self, index) | Qt.ItemIsEditable)
         return QAbstractTableModel.flags(self, index)
@@ -97,8 +98,13 @@ class PVConfigurationTableModel(QAbstractTableModel):
         if column == 0:
             return False
 
-        if column in (1, 2):
-            self._data[row][column] = value
+        if column == 1:
+            # self._data[row][column] = value
+            # self.dataChanged.emit(index, index)
+            return False
+
+        if column == 2:
+            self._data[row][column] = float(value)
             self.dataChanged.emit(index, index)
 
         return True
