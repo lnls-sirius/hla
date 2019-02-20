@@ -153,24 +153,24 @@ class ReadConfigurationWindow(SiriusMainWindow):
             # Get config_type, config_name, data and insert new configuration
             data = self._table.model().model_data
             try:
-            ret = self._db.insert_config(
-                config_type, config_name, {'pvs': data})
+                ret = self._db.insert_config(
+                    config_type, config_name, {'pvs': data})
             except TypeError as e:
                 QMessageBox.warning(self, 'Save', '{}'.format(e))
                 success = True
             else:
-            if ret['code'] == 200:  # Worked
-                success = True
-                self._save_btn.setEnabled(False)
-                QMessageBox.information(self, 'Save', 'Saved successfully')
-            else:  # Smth went wrong
-                code, message = ret['code'], ret['message']
-                self.logger.warning('Error {}: {}'.format(code, message))
-                if code == 409:
-                    error = 'Name already taken'
-                else:
-                    error = message
-                error += '<br/><br/>'
+                if ret['code'] == 200:  # Worked
+                    success = True
+                    self._save_btn.setEnabled(False)
+                    QMessageBox.information(self, 'Save', 'Saved successfully')
+                else:  # Smth went wrong
+                    code, message = ret['code'], ret['message']
+                    self.logger.warning('Error {}: {}'.format(code, message))
+                    if code == 409:
+                        error = 'Name already taken'
+                    else:
+                        error = message
+                    error += '<br/><br/>'
 
     def _is_configuration_valid(self):
         if self._table.model().model_data:

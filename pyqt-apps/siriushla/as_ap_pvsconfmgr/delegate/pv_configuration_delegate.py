@@ -15,7 +15,7 @@ class PVConfigurationDelegate(QItemDelegate):
         if index.column() == 2:
             editor = QDoubleSpinBox(parent)
             editor.setDecimals(3)
-            editor.setMaximum(1)
+            editor.setMaximum(10)
             editor.setMinimum(0)
             editor.setSingleStep(0.001)
         return editor
