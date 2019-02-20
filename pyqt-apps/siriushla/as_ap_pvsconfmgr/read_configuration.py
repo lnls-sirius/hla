@@ -128,7 +128,6 @@ class ReadConfigurationWindow(SiriusMainWindow):
     @Slot()
     def _fill_value(self, row, value):
         self.logger.info('Setting value {} in row {}'.format(value, row))
-        print(row, value)
         index = self._table.model().createIndex(row, 1)
         self._table.model().setData(index, value)
 
