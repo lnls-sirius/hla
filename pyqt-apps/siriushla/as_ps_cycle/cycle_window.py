@@ -11,7 +11,7 @@ from siriuspy.envars import vaca_prefix as VACA_PREFIX
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.as_ps_cycle.cycle_status_list import CycleStatusList
 from siriushla.widgets.pvnames_tree import PVNameTree
-from siriushla.as_ps_cycle.progress_dialog import ProgressDialog
+from siriushla.widgets.dialog import ProgressDialog
 from siriuspy.search.ma_search import MASearch
 
 

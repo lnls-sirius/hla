@@ -9,7 +9,7 @@ from qtpy.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, \
 
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.widgets.pvnames_tree import PVNameTree
-from siriushla.as_ps_cycle.progress_dialog import ProgressDialog
+from siriushla.widgets.dialog import ProgressDialog
 from siriushla.sirius_application import SiriusApplication
 from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
 from siriuspy.magnet.data import MAData
