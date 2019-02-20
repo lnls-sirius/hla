@@ -6,7 +6,6 @@ Task QThread Interface:
 - exit_task: set quit_thread flag True
 """
 import time
-
 from qtpy.QtCore import Signal, QThread
 from qtpy.QtWidgets import QDialog, QVBoxLayout, QLabel, QPushButton, \
     QProgressBar
