@@ -1,14 +1,16 @@
 """Booster Ramp Control HLA: General Status Module."""
 
-from qtpy.QtWidgets import QGroupBox, QLabel, QPushButton, \
-                           QSizePolicy as QSzPlcy, QSpacerItem, \
-                           QFormLayout, QHBoxLayout, QGridLayout
-from qtpy.QtCore import Qt, Slot
+from qtpy.QtWidgets import QGroupBox, QLabel, QPushButton, QVBoxLayout, \
+                            QGridLayout
+from qtpy.QtCore import Qt, Slot, Signal, QThread
 from siriuspy.ramp import ramp
 from siriuspy.ramp.conn import ConnMagnets as _ConnMagnets, ConnRF as _ConnRF,\
                                ConnTiming as _ConnTiming, ConnSOFB as _ConnSOFB
-from siriuspy.csdevice.pwrsupply import Const as _PSConst
-from siriushla.widgets import PyDMLedMultiChannel, PyDMLedMultiConnection
+from siriuspy.csdevice.pwrsupply import Const as _PSc
+from siriuspy.csdevice.timesys import Const as _TIc
+from pydm.widgets import PyDMPushButton
+from siriushla.widgets import PyDMLedMultiChannel, PyDMLedMultiConnection, \
+                              SiriusLedState
 from siriushla.bo_ap_ramp.auxiliar_classes import MessageBox as _MessageBox
 
 COMMANDS_TIMEOUT = 1
@@ -33,345 +35,310 @@ class StatusAndCommands(QGroupBox):
         status_layout = self._setupStatusLayout()
         commands_layout = self._setupCommandsLayout()
 
-        glay = QGridLayout()
-        glay.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Expanding, QSzPlcy.Expanding), 0, 0)
-        glay.addLayout(status_layout, 1, 1, 1, 3)
-        glay.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Expanding, QSzPlcy.Expanding), 3, 1)
-        glay.addLayout(commands_layout, 3, 2)
-        glay.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Expanding, QSzPlcy.Expanding), 3, 3)
-        glay.addItem(
-            QSpacerItem(20, 20, QSzPlcy.Expanding, QSzPlcy.Expanding), 4, 4)
-        self.setLayout(glay)
+        vlay = QVBoxLayout()
+        vlay.setAlignment(Qt.AlignCenter)
+        vlay.addStretch()
+        vlay.addLayout(status_layout)
+        vlay.addStretch()
+        vlay.addLayout(commands_layout)
+        vlay.addStretch()
+        vlay.setStretch(1, 1)
+        vlay.setStretch(3, 1)
+        self.setLayout(vlay)
 
     def _setupStatusLayout(self):
-        label_timing = QLabel('<h4>TI</h4>', self, alignment=Qt.AlignCenter)
-        label_timing.setStyleSheet("""
-            min-width:2.58em; max-width: 2.58em;
-            min-height:1.29em; max-height:1.29em;""")
-        label_magnets = QLabel('<h4>MA</h4>', self, alignment=Qt.AlignCenter)
-        label_magnets.setStyleSheet("""
-            min-width:2.58em; max-width: 2.58em;
-            min-height:1.29em; max-height:1.29em;""")
-        label_rf = QLabel('<h4>RF</h4>', self, alignment=Qt.AlignCenter)
-        label_rf.setStyleSheet("""
-            min-width:2.58em; max-width: 2.58em;
-            min-height:1.29em; max-height:1.29em;""")
-        label_sofb = QLabel('<h4>SOFB</h4>', self, alignment=Qt.AlignCenter)
-        label_sofb.setStyleSheet("""
-            min-width:2.58em; max-width: 2.58em;
-            min-height:1.29em; max-height:1.29em;""")
-        label_conn = QLabel('Connection', self)
-        label_ramping = QLabel('Configured to Ramp', self)
-        label_intlks = QLabel('Interlocks', self)
-        label_rmprdy = QLabel('Ramp Ready', self)
+        pfx = self.prefix
 
-        for led_name in ['led_ti_conn', 'led_ma_conn', 'led_rf_conn',
+        # Connection Leds
+        for led_name in ['led_ma_conn', 'led_rf_conn', 'led_ti_conn',
                          'led_sofb_conn']:
             channels = list()
             conn = getattr(
                 self, led_name.replace('_conn', '').replace('led', '_conn'))
-            for prpty in conn.properties:
+            for p in conn.properties:
                 if 'ma' in led_name:
-                    if 'PwrState' in conn[prpty].name:
-                        channels.append(self.prefix + conn[prpty].pvname_rb)
+                    if 'PwrState' in conn[p].name:
+                        channels.append(pfx + conn[p].pvname_rb)
                 else:
-                    channels.append(self.prefix + conn[prpty].pvname_rb)
+                    channels.append(pfx + conn[p].pvname_rb)
             setattr(self, led_name, PyDMLedMultiConnection(self, channels))
-            led = getattr(self, led_name)
-            led.setStyleSheet("""
-                min-width:2.58em; max-width: 2.58em;
-                min-height:1.29em; max-height:1.29em;""")
 
-        for led_name in ['led_ti_ramping', 'led_ma_ramping', 'led_rf_ramping',
-                         'led_ma_intlk', 'led_rf_intlk',
-                         'led_ma_rmprdy', 'led_rf_rmprdy']:
-            channels2values = dict()
-            conn = getattr(self, led_name[0:6].replace('led', '_conn'))
-            if 'ti' in led_name:
-                c = self._conn_ti.Const
-                channels2values[c.EVG_Evt01Mode + '-Sts'] = c.MODE_CONTINUOUS
-                channels2values[c.EVG_ContinuousEvt + '-Sts'] = c.STATE_ENBL
-                self.update_wfmnrpoints()
-            elif 'ma' in led_name:
-                for prpty in conn.properties:
-                    value = None
-                    if 'ramping' in led_name:
-                        if 'OpMode' in conn[prpty].name:
-                            value = _PSConst.OpMode.RmpWfm
-                    elif 'intlk' in led_name:
-                        if 'PwrState' in conn[prpty].name:
-                            value = _PSConst.PwrStateSel.On
-                        elif 'IntlkSoft' in conn[prpty].name:
-                            value = 0
-                        elif 'IntlkHard' in conn[prpty].name:
-                            value = 0
-                    elif 'rmprdy' in led_name:
-                        if 'RmpReady' in conn[prpty].name:
-                            value = 1
-                    if value is None:
-                        continue
-                    channels2values[self.prefix+conn[prpty].pvname_rb] = value
-            else:
-                c = self._conn_rf.Const
-                if 'ramping' in led_name:
-                    self.update_rfparams()
-                elif 'intlk' in led_name:
-                    channels2values[self.prefix + c.Rmp_Intlk + '-Mon'] = 0
-                elif 'rmprdy' in led_name:
-                    channels2values[self.prefix + c.Rmp_RmpReady + '-Mon'] = 1
+        # MA Leds
+        conn = self._conn_ma
+        c2v_intlk = dict()
+        c2v_setup = dict()
+        c2v_apply = dict()
+        c2v_rmprdy = dict()
+        for p in conn.properties:
+            if 'IntlkSoft' in conn[p].name or 'IntlkHard' in conn[p].name:
+                c2v_intlk[pfx + conn[p].pvname_rb] = 0
+            elif 'OpMode' in conn[p].name:
+                c2v_setup[pfx + conn[p].pvname_rb] = _PSc.OpMode.RmpWfm
+            elif 'PwrState' in conn[p].name:
+                c2v_setup[pfx + conn[p].pvname_rb] = _PSc.PwrStateSel.On
+            elif 'WfmData' in conn[p].name:
+                c2v_apply[pfx + conn[p].pvname_rb] = None
+            elif 'RmpReady' in conn[p].name:
+                c2v_rmprdy[pfx + conn[p].pvname_rb] = 1
 
-            setattr(self, led_name, PyDMLedMultiChannel(self, channels2values))
-            led = getattr(self, led_name)
-            led.setStyleSheet("""
-                min-width:2.58em; max-width: 2.58em;
-                min-height:1.29em; max-height:1.29em;""")
+        self.led_ma_intlk = PyDMLedMultiChannel(self, c2v_intlk)
+        self.led_ma_setup = PyDMLedMultiChannel(self, c2v_setup)
+        self.led_ma_apply = PyDMLedMultiChannel(self, c2v_apply)
+        self.led_ma_rmprdy = PyDMLedMultiChannel(self, c2v_rmprdy)
 
-        flay = QFormLayout()
-        flay.setLabelAlignment(Qt.AlignLeft)
-        flay.setFormAlignment(Qt.AlignCenter)
-        flay.setHorizontalSpacing(10)
-        hlay = QHBoxLayout()
-        hlay.addWidget(label_magnets)
-        hlay.addWidget(label_rf)
-        hlay.addWidget(label_timing)
-        hlay.addWidget(label_sofb)
-        flay.addRow(QLabel(''), hlay)
-        hlay = QHBoxLayout()
-        hlay.addWidget(self.led_ma_conn)
-        hlay.addWidget(self.led_rf_conn)
-        hlay.addWidget(self.led_ti_conn)
-        hlay.addWidget(self.led_sofb_conn)
-        flay.addRow(label_conn, hlay)
-        hlay = QHBoxLayout()
-        hlay.addWidget(self.led_ma_ramping)
-        hlay.addWidget(self.led_rf_ramping)
-        hlay.addWidget(self.led_ti_ramping)
-        flay.addRow(label_ramping, hlay)
-        hlay = QHBoxLayout()
-        hlay.addWidget(self.led_ma_intlk)
-        hlay.addWidget(self.led_rf_intlk)
-        flay.addRow(label_intlks, hlay)
-        hlay = QHBoxLayout()
-        hlay.addWidget(self.led_ma_rmprdy)
-        hlay.addWidget(self.led_rf_rmprdy)
-        flay.addRow(label_rmprdy, hlay)
-        return flay
+        # RF Leds
+        conn = self._conn_rf
+        c2v_intlk = {pfx + conn.Const.Rmp_Intlk: 0}
+        c2v_apply = dict()
+        c2v_apply[pfx + conn.Const.Rmp_Ts1.replace('SP', 'RB')] = 0
+        c2v_apply[pfx + conn.Const.Rmp_Ts2.replace('SP', 'RB')] = 0
+        c2v_apply[pfx + conn.Const.Rmp_Ts3.replace('SP', 'RB')] = 0
+        c2v_apply[pfx + conn.Const.Rmp_Ts4.replace('SP', 'RB')] = 0
+        c2v_apply[pfx + conn.Const.Rmp_IncTs.replace('SP', 'RB')] = 0
+        c2v_apply[pfx + conn.Const.Rmp_VoltBot.replace('SP', 'RB')] = 0
+        c2v_apply[pfx + conn.Const.Rmp_VoltTop.replace('SP', 'RB')] = 0
+        c2v_apply[pfx + conn.Const.Rmp_PhsBot.replace('SP', 'RB')] = 0
+        c2v_apply[pfx + conn.Const.Rmp_PhsTop.replace('SP', 'RB')] = 0
+        c2v_rmprdy = {pfx + conn.Const.Rmp_RmpReady: 1}
+
+        self.led_rf_intlk = PyDMLedMultiChannel(self, c2v_intlk)
+        self.led_rf_apply = PyDMLedMultiChannel(self, c2v_apply)
+        self.led_rf_rmprdy = PyDMLedMultiChannel(self, c2v_rmprdy)
+
+        # TI Leds
+        conn = self._conn_ti
+        c2v_intlk = {pfx + conn.Const.Intlk: 0}
+        c2v_basicsetup = dict()
+        for prpty, value in conn.ramp_basicsetup.items():
+            c2v_basicsetup[pfx + prpty] = value
+        c2v_configsetup = dict()
+        for prpty, value in conn.ramp_configsetup.items():
+            c2v_configsetup[pfx + prpty] = value
+
+        self.led_ti_intlk = PyDMLedMultiChannel(self, c2v_intlk)
+        self.led_ti_setup = PyDMLedMultiChannel(self, c2v_basicsetup)
+        self.led_ti_apply = PyDMLedMultiChannel(self, c2v_configsetup)
+
+        self.setStyleSheet("""
+            QLabel{
+                qproperty-alignment: AlignCenter;
+                min-height:1.55em; max-height:1.55em;}""")
+
+        glay = QGridLayout()
+        glay.setHorizontalSpacing(10)
+        glay.addWidget(QLabel(''), 0, 0)
+        glay.addWidget(QLabel('<h4>MA</h4>', self), 0, 1)
+        glay.addWidget(QLabel('<h4>RF</h4>', self), 0, 2)
+        glay.addWidget(QLabel('<h4>TI</h4>', self), 0, 3)
+        glay.addWidget(QLabel('<h4>SOFB</h4>', self), 0, 4)
+        glay.addWidget(QLabel('Connection', self), 1, 0)
+        glay.addWidget(self.led_ma_conn, 1, 1)
+        glay.addWidget(self.led_rf_conn, 1, 2)
+        glay.addWidget(self.led_ti_conn, 1, 3)
+        glay.addWidget(self.led_sofb_conn, 1, 4)
+        glay.addWidget(QLabel('Interlocks', self), 2, 0)
+        glay.addWidget(self.led_ma_intlk, 2, 1)
+        glay.addWidget(self.led_rf_intlk, 2, 2)
+        glay.addWidget(self.led_ti_intlk, 2, 3)
+        glay.addWidget(QLabel('Basic setup to ramp', self), 3, 0)
+        glay.addWidget(self.led_ma_setup, 3, 1)
+        glay.addWidget(self.led_ti_setup, 3, 3)
+        glay.addWidget(QLabel('Current config applied', self), 4, 0)
+        glay.addWidget(self.led_ma_apply, 4, 1)
+        glay.addWidget(self.led_rf_apply, 4, 2)
+        glay.addWidget(self.led_ti_apply, 4, 3)
+        glay.addWidget(QLabel('Ramp Ready', self), 5, 0)
+        glay.addWidget(self.led_ma_rmprdy, 5, 1)
+        glay.addWidget(self.led_rf_rmprdy, 5, 2)
+        return glay
 
     def _setupCommandsLayout(self):
-        self.bt_setup = QPushButton('Setup subsystems to ramp', self)
+        self.bt_setup_ma = QPushButton('MA', self)
+        self.bt_setup_ma.clicked.connect(self._setup_ramp_ma)
+        self.bt_setup_ti = QPushButton('TI', self)
+        self.bt_setup_ti.clicked.connect(self._setup_ramp_ti)
+        self.bt_setup_all = QPushButton('All', self)
+        self.bt_setup_all.clicked.connect(self._setup_ramp_all)
 
-        label_apply = QLabel('Apply to: ', self,
-                             alignment=Qt.AlignCenter)
-        self.bt_apply_ps = QPushButton('PS', self)
+        self.bt_apply_ma = QPushButton('MA', self)
+        self.bt_apply_ma.clicked.connect(self._apply_ma)
         self.bt_apply_rf = QPushButton('RF', self)
-        self.bt_apply_all = QPushButton('All', self)
-
-        label_ramping = QLabel('Ramping: ', self, alignment=Qt.AlignCenter)
-        self.bt_start_ramp = QPushButton('Start', self)
-        self.bt_stop_ramp = QPushButton('Stop', self)
-
-        label_injection = QLabel('Injection: ', self, alignment=Qt.AlignCenter)
-        self.bt_start_inj = QPushButton('Start', self)
-        self.bt_stop_inj = QPushButton('Stop', self)
-
-        self.bt_setup.clicked.connect(self._setup_ramp)
-        self.bt_apply_ps.clicked.connect(self._apply_ps)
         self.bt_apply_rf.clicked.connect(self._apply_rf)
+        self.bt_apply_ti = QPushButton('TI', self)
+        self.bt_apply_ti.clicked.connect(self._apply_ti)
+        self.bt_apply_all = QPushButton('All', self)
         self.bt_apply_all.clicked.connect(self._apply_all)
-        self.bt_start_ramp.clicked.connect(self._start_ramp)
-        self.bt_stop_ramp.clicked.connect(self._stop_ramp)
-        self.bt_start_inj.clicked.connect(self._start_inj)
-        self.bt_stop_inj.clicked.connect(self._stop_inj)
 
-        for bt in ['bt_setup', 'bt_apply_ps', 'bt_apply_rf',
-                   'bt_apply_all', 'bt_start_ramp', 'bt_stop_ramp',
+        c = self._conn_ti.Const
+        self.bt_start_ramp = QPushButton('Start', self)
+        self.bt_start_ramp.clicked.connect(self._start_ramp)
+        self.bt_stop_ramp = QPushButton('Stop', self)
+        self.bt_stop_ramp.clicked.connect(self._stop_ramp)
+        self.led_ramping = SiriusLedState(
+            parent=self,
+            init_channel=self.prefix+c.EVG_ContinuousEvt.replace('Sel', 'Sts'))
+
+        # Build rules to control injection commands enabling
+        rule_channels = ''
+        for ch in list(self.led_ma_rmprdy.channels2values.keys()):
+            rule_channels += '{"channel": "' + ch + '", "trigger": true}, '
+        rule_channels += '{"channel": "' + \
+            self.prefix+self._conn_rf.Const.Rmp_RmpReady+'", "trigger": true}'
+        rules = (
+            '[{"name": "EnblRule", "property": "Enable",' +
+            '  "expression": "all([v == 1 for v in ch])",' +
+            '  "channels": [' + rule_channels + ']}]')
+
+        self.bt_start_inj = PyDMPushButton(
+            parent=self, label='Start', pressValue=_TIc.DsblEnbl.Enbl,
+            init_channel=self.prefix + c.EVG_InjectionEvt)
+        self.bt_start_inj.rules = rules
+        self.bt_stop_inj = PyDMPushButton(
+            parent=self, label='Stop', pressValue=_TIc.DsblEnbl.Dsbl,
+            init_channel=self.prefix + c.EVG_InjectionEvt)
+        self.bt_stop_inj.rules = rules
+        self.led_injecting = SiriusLedState(
+            parent=self,
+            init_channel=self.prefix+c.EVG_InjectionEvt.replace('Sel', 'Sts'))
+
+        for bt in ['bt_setup_ma', 'bt_setup_ti', 'bt_setup_all',
+                   'bt_apply_ma', 'bt_apply_rf', 'bt_apply_ti', 'bt_apply_all',
+                   'bt_start_ramp', 'bt_stop_ramp',
                    'bt_start_inj', 'bt_stop_inj']:
             w = getattr(self, bt)
-            if 'apply' in bt:
-                w.setStyleSheet("""
-                    min-width:3.23em; max-width:3.23em;
-                    min-height:1.55em; max-height: 1.55em;""")
-            elif 'ramp' in bt or 'inj' in bt:
-                w.setStyleSheet("""
-                    min-width:5em; max-width:5em;
-                    min-height:1.55em; max-height: 1.55em;""")
+            if 'apply' in bt or 'setup' in bt:
+                w.setStyleSheet("""min-width:3em; max-width:3em;
+                                   min-height:1.55em; max-height: 1.55em;""")
             else:
-                w.setStyleSheet("""
-                    min-height:1.55em; max-height: 1.55em;""")
+                w.setStyleSheet("""min-height:1.55em; max-height: 1.55em;""")
 
-        flay = QFormLayout()
-        flay.setLabelAlignment(Qt.AlignRight)
-        flay.addItem(QSpacerItem(40, 20, QSzPlcy.Ignored, QSzPlcy.Expanding))
-        flay.addRow(self.bt_setup)
-        flay.addItem(QSpacerItem(40, 20, QSzPlcy.Ignored, QSzPlcy.Expanding))
-        hbox = QHBoxLayout()
-        hbox.addWidget(self.bt_apply_ps)
-        hbox.addWidget(self.bt_apply_rf)
-        hbox.addWidget(self.bt_apply_all)
-        flay.addRow(label_apply, hbox)
-        flay.addItem(QSpacerItem(40, 20, QSzPlcy.Ignored, QSzPlcy.Expanding))
-        hbox = QHBoxLayout()
-        hbox.addWidget(self.bt_start_ramp)
-        hbox.addWidget(self.bt_stop_ramp)
-        flay.addRow(label_ramping, hbox)
-        flay.addItem(QSpacerItem(40, 20, QSzPlcy.Ignored, QSzPlcy.Expanding))
-        hbox = QHBoxLayout()
-        hbox.addWidget(self.bt_start_inj)
-        hbox.addWidget(self.bt_stop_inj)
-        flay.addRow(label_injection, hbox)
-        return flay
+        glay = QGridLayout()
+        glay.setVerticalSpacing(15)
+        glay.setHorizontalSpacing(10)
+        glay.addWidget(QLabel('Basic setup to ramp: ', self), 0, 0)
+        glay.addWidget(self.bt_setup_ma, 0, 1)
+        glay.addWidget(self.bt_setup_ti, 0, 3)
+        glay.addWidget(self.bt_setup_all, 0, 4)
+        glay.addWidget(QLabel('Apply current config: ', self), 1, 0)
+        glay.addWidget(self.bt_apply_ma, 1, 1)
+        glay.addWidget(self.bt_apply_rf, 1, 2)
+        glay.addWidget(self.bt_apply_ti, 1, 3)
+        glay.addWidget(self.bt_apply_all, 1, 4)
+        glay.addWidget(QLabel('Ramping: ', self), 2, 0)
+        glay.addWidget(self.bt_start_ramp, 2, 1, 1, 2)
+        glay.addWidget(self.bt_stop_ramp, 2, 3, 1, 2)
+        glay.addWidget(self.led_ramping, 2, 5)
+        glay.addWidget(QLabel('Injection: ', self), 3, 0)
+        glay.addWidget(self.bt_start_inj, 3, 1, 1, 2)
+        glay.addWidget(self.bt_stop_inj, 3, 3, 1, 2)
+        glay.addWidget(self.led_injecting, 3, 5)
+        return glay
 
-    def _setup_ramp(self):
-        if not self._verify_connector(self._conn_ma):
-            return
-        if not self._verify_connector(self._conn_ti):
-            return
+    def _setup_ramp_ma(self):
+        thread = _CommandThread(
+            conn=self._conn_ma,
+            cmds=[self._conn_ma.cmd_pwrstate_on,
+                  self._conn_ma.cmd_opmode_rmpwfm],
+            warn_title='Failed to configure MA',
+            warn_msgs=['Command failed to set all MA PwrState to On!',
+                       'Command failed to set all MA OpMode to RmpWfm!'],
+            parent=self)
+        thread.start()
 
-        configured_MA = self._conn_ma.cmd_opmode_rmpwfm(COMMANDS_TIMEOUT)
-        if not configured_MA:
-            warn_msg = _MessageBox(
-                self, 'Failed to set OpMode',
-                'Command failed to set all PS\nOpMode to RmpWfm!', 'Ok')
-            warn_msg.exec_()
-            return
+    def _setup_ramp_ti(self):
+        thread = _CommandThread(
+            conn=self._conn_ti,
+            cmds=self._conn_ti.cmd_setup,
+            warn_title='Failed to configure TI',
+            warn_msgs='Command failed to configure TI to ramp!',
+            parent=self)
+        thread.start()
 
-        configured_TI = self._conn_ti.cmd_init()
-        if not configured_TI:
-            warn_msg = _MessageBox(
-                self, 'Failed to Configure Timing',
-                'Command failed to configure timing\nto ramp!', 'Ok')
-            warn_msg.exec_()
-            return
+    def _setup_ramp_all(self):
+        self._setup_ramp_ma()
+        self._setup_ramp_ti()
 
-    def _apply_ps(self):
-        if not self._verify_connector(self._conn_ma):
-            return
-        if not self._verify_connector(self._conn_ti):
-            return
-
-        uploaded = self._conn_ma.cmd_wfmdata(COMMANDS_TIMEOUT)
-        if not uploaded:
-            warn_msg = _MessageBox(
-                self, 'Failed to Upload',
-                'Command failed to set all PS\nwaveforms!', 'Ok')
-            warn_msg.exec_()
-            return
-
-        # TODO: change to config only wfm_nrpoints+duration dependences
-        uploaded = self._conn_ti.cmd_select_ramp(COMMANDS_TIMEOUT)
-        if not uploaded:
-            warn_msg = _MessageBox(
-                self, 'Failed to Upload',
-                'Command failed to configure timing\nto ramp!', 'Ok')
-            warn_msg.exec_()
-            return
+    def _apply_ma(self):
+        thread = _CommandThread(
+            conn=self._conn_ma,
+            cmds=self._conn_ma.cmd_wfmdata,
+            warn_title='Failed to apply current RampConfig to MA',
+            warn_msgs='Command failed to set all MA waveforms!',
+            parent=self)
+        thread.start()
 
     def _apply_rf(self):
-        if not self._verify_connector(self._conn_rf):
-            return
+        thread = _CommandThread(
+            conn=self._conn_rf,
+            cmds=self._conn_rf.cmd_config_ramp,
+            warn_title='Failed to apply current RampConfig to RF',
+            warn_msgs='Command failed to set RF parameters!',
+            parent=self)
+        thread.start()
 
-        uploaded = self._conn_rf.cmd_config_ramp(COMMANDS_TIMEOUT)
-        if not uploaded:
-            warn_msg = _MessageBox(
-                self, 'Failed to Upload',
-                'Command failed to set RF\nparameters!', 'Ok')
-            warn_msg.exec_()
-            return
+    def _apply_ti(self):
+        thread = _CommandThread(
+            conn=self._conn_ti,
+            cmds=self._conn_ti.cmd_config_ramp,
+            warn_title='Failed to apply current RampConfig to TI',
+            warn_msgs='Command failed to set TI parameters!',
+            parent=self)
+        thread.start()
 
     def _apply_all(self):
-        self._apply_ps()
+        self._apply_ma()
         self._apply_rf()
+        self._apply_ti()
 
     def _start_ramp(self):
         """Start ramp.
 
-        This action starts only timing pulses and RF ramp increase.
+        This action starts timing pulses and enable RF ramp.
         Power supplies and RF need to be configured to ramp.
         """
-        if not self._verify_connector(self._conn_ti):
-            return
-        if not self._verify_connector(self._conn_rf):
-            return
+        thread_TI = _CommandThread(
+            conn=self._conn_ti,
+            cmds=self._conn_ti.cmd_start_ramp,
+            warn_title='Failed to start ramping',
+            warn_msgs='Command failed to enable TI continuous events!',
+            parent=self)
+        thread_RF = _CommandThread(
+            conn=self._conn_rf,
+            cmds=self._conn_rf.cmd_ramping_enable,
+            warn_title='Failed to start ramping',
+            warn_msgs='Command failed to enable RF ramp!',
+            parent=self)
 
-        # TODO: verify timing control of this button
-        configured_TI = self._conn_ti.cmd_select_ramp(COMMANDS_TIMEOUT)
-        if not configured_TI:
-            warn_msg = _MessageBox(
-                self, 'Failed to Configure Timing',
-                'Command failed to configure timing\n'
-                'to initialize pulses to ramp!', 'Ok')
-            warn_msg.exec_()
-            return
-
-        configured_RF = self._conn_rf.cmd_ramping_enable(COMMANDS_TIMEOUT)
-        if not configured_RF:
-            warn_msg = _MessageBox(
-                self, 'Failed to enable RF ramping',
-                'Command failed to configure RF\n'
-                'to start ramp increase to ramp!', 'Ok')
-            warn_msg.exec_()
-            return
+        thread_TI.start()
+        thread_RF.start()
 
     def _stop_ramp(self):
         """Stop ramp.
 
-        This action stops only timing pulses.
+        This action stops timing pulses and disable RF ramp.
         Power supplies and RF devices continue configured to ramp.
         """
-        if not self._verify_connector(self._conn_ti):
-            return
+        thread_TI = _CommandThread(
+            conn=self._conn_ti,
+            cmds=self._conn_ti.cmd_stop_ramp,
+            warn_title='Failed to stop ramping',
+            warn_msgs='Command failed to disable TI continuous events!',
+            parent=self)
+        thread_RF = _CommandThread(
+            conn=self._conn_rf,
+            cmds=self._conn_rf.cmd_ramping_disable,
+            warn_title='Failed to stop ramping',
+            warn_msgs='Command failed to disable RF ramp!',
+            parent=self)
 
-        configured_TI = self._conn_ti.cmd_select_stop(COMMANDS_TIMEOUT)
-        if not configured_TI:
-            warn_msg = _MessageBox(
-                self, 'Failed to Configure Timing',
-                'Command failed to configure PS and RF\n'
-                'timing parameters!', 'Ok')
-            warn_msg.exec_()
-            return
+        thread_TI.start()
+        thread_RF.start()
 
-        self._conn_ti.wait_EVRs()
-
-    def _start_inj(self):
-        if not self._verify_connector(self._conn_ti):
-            return
-
-        # TODO: change to control injection, not ramp
-        configured_TI = self._conn_ti.cmd_select_ramp(COMMANDS_TIMEOUT)
-        if not configured_TI:
-            warn_msg = _MessageBox(
-                self, 'Failed to Configure Timing',
-                'Command failed to configure timing\n'
-                'to ramp!', 'Ok')
-            warn_msg.exec_()
-            return
-
-    def _stop_inj(self):
-        if not self._verify_connector(self._conn_ti):
-            return
-
-        # TODO: change to control injection, not ramp
-        configured_TI = self._conn_ti.cmd_select_stop(COMMANDS_TIMEOUT)
-        if not configured_TI:
-            warn_msg = _MessageBox(
-                self, 'Failed to Configure Timing',
-                'Command failed to configure timing\n'
-                'to stop pulsing!', 'Ok')
-            warn_msg.exec_()
-            return
-
-    def _verify_connector(self, connector):
-        if not connector:
-            return False
-        if not connector.connected:
-            warn_msg = _MessageBox(
-                self, 'Not Connected', 'There are not connected PVs!', 'Ok')
-            warn_msg.exec_()
-            return False
-        return True
+    @Slot(list)
+    def show_warning_message(self, args):
+        """Show warning message."""
+        warn_msg = _MessageBox(self, args[0], args[1], 'Ok')
+        warn_msg.exec_()
 
     @Slot(ramp.BoosterRamp)
     def handleLoadRampConfig(self, ramp_config):
@@ -380,44 +347,114 @@ class StatusAndCommands(QGroupBox):
         self._conn_ma.get_ramp_config(self.ramp_config)
         self._conn_ti.get_ramp_config(self.ramp_config)
         self._conn_rf.get_ramp_config(self.ramp_config)
-        self.update_wfmnrpoints()
-        self.update_rfparams()
+        self.update_ma_params()
+        self.update_rf_params()
+        self.update_ti_params()
 
-    def update_wfmnrpoints(self):
-        """Update waveform number of points in connector check values."""
+    def update_ma_params(self):
+        """Update MA parameters leds channels2values dict."""
         if self.ramp_config:
-            c = self._conn_ti.Const
-            self.led_ti_ramping.channels2values[c.EVR1_OTP08Pulses+'-RB'] = \
-                self.ramp_config.ps_ramp_wfm_nrpoints
+            r = self.ramp_config
+            p = self.prefix
+            c2v = dict()
+            for maname in self._conn_ma.manames:
+                wf = r.ps_waveform_get(maname)
+                c2v[p + maname + ':WfmData-RB'] = wf.currents
+            self.led_ma_apply.channels2values.update(c2v)
 
-    def update_rfparams(self):
-        """Update rf parameters in connector check values."""
+    def update_rf_params(self):
+        """Update RF parameters leds channels2values dict."""
         if self.ramp_config:
             c = self._conn_rf.Const
-            self.led_rf_ramping.channels2values[
-                self.prefix + c.Rmp_Ts1 + '-RB'] = \
-                self.ramp_config.rf_ramp_bottom_duration
-            self.led_rf_ramping.channels2values[
-                self.prefix + c.Rmp_Ts2 + '-RB'] = \
-                self.ramp_config.rf_ramp_rampup_duration
-            self.led_rf_ramping.channels2values[
-                self.prefix + c.Rmp_Ts3 + '-RB'] = \
-                self.ramp_config.rf_ramp_top_duration
-            self.led_rf_ramping.channels2values[
-                self.prefix + c.Rmp_Ts4 + '-RB'] = \
-                self.ramp_config.rf_ramp_rampdown_duration
-            self.led_rf_ramping.channels2values[
-                self.prefix + c.Rmp_IncTs + '-RB'] = \
-                self.ramp_config.rf_ramp_rampinc_duration
-            self.led_rf_ramping.channels2values[
-                self.prefix + c.Rmp_VoltBot + '-RB'] = \
-                self.ramp_config.rf_ramp_bottom_voltage
-            self.led_rf_ramping.channels2values[
-                self.prefix + c.Rmp_VoltTop + '-RB'] = \
-                self.ramp_config.rf_ramp_top_voltage
-            self.led_rf_ramping.channels2values[
-                self.prefix + c.Rmp_PhsBot + '-RB'] = \
-                self.ramp_config.rf_ramp_bottom_phase
-            self.led_rf_ramping.channels2values[
-                self.prefix + c.Rmp_PhsTop + '-RB'] = \
-                self.ramp_config.rf_ramp_top_phase
+            r = self.ramp_config
+            p = self.prefix
+            c2v = dict()
+            c2v[p+c.Rmp_Ts1.replace('SP', 'RB')] = r.rf_ramp_bottom_duration
+            c2v[p+c.Rmp_Ts2.replace('SP', 'RB')] = r.rf_ramp_rampup_duration
+            c2v[p+c.Rmp_Ts3.replace('SP', 'RB')] = r.rf_ramp_top_duration
+            c2v[p+c.Rmp_Ts4.replace('SP', 'RB')] = r.rf_ramp_rampdown_duration
+            c2v[p+c.Rmp_IncTs.replace('SP', 'RB')] = r.rf_ramp_rampinc_duration
+            c2v[p+c.Rmp_VoltBot.replace('SP', 'RB')] = r.rf_ramp_bottom_voltage
+            c2v[p+c.Rmp_VoltTop.replace('SP', 'RB')] = r.rf_ramp_top_voltage
+            c2v[p+c.Rmp_PhsBot.replace('SP', 'RB')] = r.rf_ramp_bottom_phase
+            c2v[p+c.Rmp_PhsTop.replace('SP', 'RB')] = r.rf_ramp_top_phase
+            self.led_rf_apply.channels2values.update(c2v)
+
+    def update_ti_params(self):
+        """Update TI parameters leds channels2values dict."""
+        if self.ramp_config:
+            conn = self._conn_ti
+            c = conn.Const
+            r = self.ramp_config
+            p = self.prefix
+            c2v = dict()
+            c2v[p+c.TrgMags_Duration.replace('SP', 'RB')] = r.ps_ramp_duration
+            c2v[p+c.TrgCorrs_Duration.replace('SP', 'RB')] = r.ps_ramp_duration
+            c2v[p+c.TrgMags_NrPulses.replace('SP', 'RB')] = \
+                r.ps_ramp_wfm_nrpoints
+            c2v[p+c.TrgCorrs_NrPulses.replace('SP', 'RB')] = \
+                r.ps_ramp_wfm_nrpoints
+            c2v[p+c.TrgMags_Delay.replace('SP', 'RB')] = \
+                r.ti_params_ps_ramp_delay
+            c2v[p+c.TrgCorrs_Delay.replace('SP', 'RB')] = \
+                r.ti_params_ps_ramp_delay
+            c2v[p+c.TrgLLRFRmp_Delay.replace('SP', 'RB')] = \
+                r.ti_params_rf_ramp_delay
+            c2v[p+c.EvtRmpBO_Delay.replace('SP', 'RB')] = 0
+            [linac_dly, injbo_dly, injsi_dly] = conn.calc_evts_delay()
+            c2v[p+c.EvtLinac_Delay.replace('SP', 'RB')] = linac_dly
+            c2v[p+c.EvtInjBO_Delay.replace('SP', 'RB')] = injbo_dly
+            c2v[p+c.EvtInjSI_Delay.replace('SP', 'RB')] = injsi_dly
+            self.led_ti_apply.channels2values.update(c2v)
+
+
+class _CommandThread(QThread):
+    """Thread to perform commands."""
+
+    sentWarning = Signal(list)
+
+    def __init__(self, conn, cmds, warn_title='', warn_msgs=list(),
+                 timeout=COMMANDS_TIMEOUT, parent=None):
+        """Initialize."""
+        super().__init__(parent)
+        self._conn = conn
+        self._subsystem = self._get_subsystem()
+        self._cmds = cmds
+        self._warn_title = warn_title
+        self._warn_msgs = warn_msgs
+        self._timeout = timeout
+        self.sentWarning.connect(parent.show_warning_message)
+
+    def _get_subsystem(self):
+        conn_name = self._conn.__class__.__name__
+        if conn_name == 'ConnMagnets':
+            return 'MA'
+        elif conn_name == 'ConnTiming':
+            return 'TI'
+        elif conn_name == 'ConnRF':
+            return 'RF'
+        elif conn_name == 'ConnSOFB':
+            return 'SOFB'
+
+    def _verify_connector(self):
+        if not self._conn:
+            return False
+        if not self._conn.connected:
+            self.sentWarning.emit(
+                ['Not Connected',
+                 'There are not connected PVs in {}!'.format(self._subsystem)])
+            return False
+        return True
+
+    def run(self):
+        """Run."""
+        if not self._verify_connector():
+            return
+        if not isinstance(self._cmds, list):
+            self._cmds = [self._cmds, ]
+        if not isinstance(self._warn_msgs, list):
+            self._warn_msgs = [self._warn_msgs, ]
+        for cmd, msg in zip(self._cmds, self._warn_msgs):
+            cmd_success = cmd(self._timeout)
+            if not cmd_success:
+                self.sentWarning.emit([self._warn_title, msg])
