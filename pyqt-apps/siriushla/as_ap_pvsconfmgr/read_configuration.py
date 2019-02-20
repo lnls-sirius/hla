@@ -61,6 +61,7 @@ class ReadConfigurationWindow(SiriusMainWindow):
         self._table = QTableView(self)
         self._table.setObjectName('config_tbl')
         self._table.setModel(PVConfigurationTableModel())
+        self._table.setItemDelegate(PVConfigurationDelegate())
 
         # Add Read Button
         self._read_btn = QPushButton('Read', self)
