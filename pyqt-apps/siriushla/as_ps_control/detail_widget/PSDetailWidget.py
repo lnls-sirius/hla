@@ -3,8 +3,7 @@ import re
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGroupBox, QGridLayout, QLabel, \
-    QSizePolicy, QPushButton, QVBoxLayout, QHBoxLayout, QApplication, \
-    QFormLayout
+    QPushButton, QVBoxLayout, QHBoxLayout, QFormLayout
 from qtpy.QtGui import QColor
 # from epics import get_pv
 
@@ -200,7 +199,7 @@ class PSDetailWidget(QWidget):
             SiriusLedAlert(self, self._prefixed_psname + ":CtrlLoop-Sts")
         open_loop_btn = \
             PyDMStateButton(self, self._prefixed_psname + ':CtrlLoop-Sel')
-        
+
         # Build layout
         layout = QGridLayout()
         layout.addWidget(soft_intlk_button, 0, 0, 1, 2)

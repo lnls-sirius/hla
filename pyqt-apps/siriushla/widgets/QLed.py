@@ -34,19 +34,19 @@ class QLed(QFrame, ShapeMap):
     shapesdict = dict()
     f = QFile(':/led_shapes/circle.svg')
     if f.open(QFile.ReadOnly):
-        shapesdict[ShapeMap.Circle] = str(f.readAll(), 'utf-8')  # str(stream.readAll(), 'utf-8')
+        shapesdict[ShapeMap.Circle] = str(f.readAll(), 'utf-8')
     f.close()
     f = QFile(':/led_shapes/round.svg')
     if f.open(QFile.ReadOnly):
-        shapesdict[ShapeMap.Round] = str(f.readAll(), 'utf-8')  # str(stream.readAll(), 'utf-8')
+        shapesdict[ShapeMap.Round] = str(f.readAll(), 'utf-8')
     f.close()
     f = QFile(':/led_shapes/square.svg')
     if f.open(QFile.ReadOnly):
-        shapesdict[ShapeMap.Square] = str(f.readAll(), 'utf-8')  # str(stream.readAll(), 'utf-8')
+        shapesdict[ShapeMap.Square] = str(f.readAll(), 'utf-8')
     f.close()
     f = QFile(':/led_shapes/triangle.svg')
     if f.open(QFile.ReadOnly):
-        shapesdict[ShapeMap.Triangle] = str(f.readAll(), 'utf-8')  # str(stream.readAll(), 'utf-8')
+        shapesdict[ShapeMap.Triangle] = str(f.readAll(), 'utf-8')
     f.close()
 
     Green = QColor(15, 105, 0)
