@@ -63,5 +63,5 @@ class PyEpicsWrapper:
 
     def get(self):
         """Return PV value."""
-        if self.connected(self._pv, wait=10e-3):
-            return self._pv.get(timeout=10e-3)
+        if self.connected(self._pv):
+            return self._pv.get(timeout=50e-3)

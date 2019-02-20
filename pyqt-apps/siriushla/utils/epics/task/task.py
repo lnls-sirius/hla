@@ -16,7 +16,7 @@ class EpicsTask(QThread):
     currentItem = Signal(str)
     itemDone = Signal()
 
-    def __init__(self, pv_list, cls_epics, values=None, parent=None):
+    def __init__(self, pvs, values, delays, cls_epics, parent=None):
         """Constructor.
 
         Parameters
@@ -27,8 +27,9 @@ class EpicsTask(QThread):
         parent - parent QObject [optional]
         """
         super().__init__(parent)
-        self._pvs = [cls_epics(pv) for pv in pv_list]
-        self._values = values or list()
+        self._pvs = [cls_epics(pv) for pv in pvs]
+        self._values = values
+        self._delays = delays
         self._quit_task = False
 
     def size(self):

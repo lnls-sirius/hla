@@ -8,6 +8,9 @@ class EpicsGetter(EpicsTask):
     itemRead = Signal(str, QVariant)
     itemNotRead = Signal(str)
 
+    def __init__(self, values, cls_epics, parent=None):
+        super().__init__(values, None, None, cls_epics, parent)
+
     def run(self):
         """Thread execution."""
         if self._quit_task:
@@ -22,7 +25,6 @@ class EpicsGetter(EpicsTask):
                     self.itemRead.emit(pv.pvname, QVariant(value))
                 else:
                     self.itemNotRead.emit(pv.pvname)
-                # self.itemRead(pv.pvname)
                 if self._quit_task:
                     break
             self.finished.emit()
