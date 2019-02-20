@@ -1,10 +1,12 @@
 """Read configuration window."""
 import logging
 import re
+import time
 
 from qtpy.QtCore import Slot
 from qtpy.QtWidgets import QWidget, QComboBox, QLabel, QPushButton, \
-    QHBoxLayout, QVBoxLayout, QTableView, QInputDialog, QMessageBox
+    QHBoxLayout, QVBoxLayout, QTableView, QInputDialog, QMessageBox, \
+    QAbstractItemView
 
 from siriushla.widgets.windows import SiriusMainWindow
 
@@ -13,6 +15,7 @@ from siriushla.utils.epics.task import EpicsGetter
 from siriushla.widgets.dialog import ReportDialog, ProgressDialog
 from siriushla.as_ap_pvsconfmgr.model import \
     ConfigTypeModel, PVConfigurationTableModel
+from siriushla.as_ap_pvsconfmgr.delegate import PVConfigurationDelegate
 from siriuspy.envars import vaca_prefix as _VACA_PREFIX
 
 
@@ -108,6 +111,7 @@ class ReadConfigurationWindow(SiriusMainWindow):
             lambda pv, value: self._fill_value(pvs[pv.replace(vp, '')], value))
         task.itemNotRead.connect(failed_items.append)
         # Show progress dialog
+        time.sleep(1)
         dlg = ProgressDialog('Reading PVs...', task, self)
         ret = dlg.exec_()
         if ret == dlg.Rejected:
@@ -148,8 +152,13 @@ class ReadConfigurationWindow(SiriusMainWindow):
                 continue
             # Get config_type, config_name, data and insert new configuration
             data = self._table.model().model_data
+            try:
             ret = self._db.insert_config(
                 config_type, config_name, {'pvs': data})
+            except TypeError as e:
+                QMessageBox.warning(self, 'Save', '{}'.format(e))
+                success = True
+            else:
             if ret['code'] == 200:  # Worked
                 success = True
                 self._save_btn.setEnabled(False)
