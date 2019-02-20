@@ -10,7 +10,7 @@ from siriushla.misc.epics.task import EpicsChecker, EpicsSetter
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.widgets.pvnames_tree import PVNameTree
 from siriushla.widgets.dialog import ReportDialog, ProgressDialog
-from siriushla.as_ap_pvsconfmgr.model import \
+from siriushla.model import \
     ConfigNamesModel, ConfigTypeModel
 
 class SetConfigurationWindow(SiriusMainWindow):
@@ -67,7 +67,7 @@ class SetConfigurationWindow(SiriusMainWindow):
         self._tree_msg.setObjectName('tree_msg')
         self._tree = PVNameTree(
             tree_levels=('sec', 'mag_group', 'device_name'))
-        self._tree.setColumnCount(2)
+        self._tree.setColumnCount(3)
         self._tree.setObjectName('tree')
 
         # Add Send Button
@@ -110,7 +110,8 @@ class SetConfigurationWindow(SiriusMainWindow):
                 self._tree.items = pvs
                 self._tree_msg.setText(
                     'Configuration has {} items'.format(len(pvs)))
-                self._tree.expandAll()
+                # self._tree.expandAll()
+                self._tree.check_all()
             except KeyError:
                 self._tree_msg.setText('Configuration has no field pvs')
         else:

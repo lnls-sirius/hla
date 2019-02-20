@@ -9,7 +9,7 @@ from qtpy.QtCore import Qt, Slot, Signal, QModelIndex, \
     QAbstractItemModel, QAbstractTableModel
 
 from siriushla.widgets.windows import SiriusMainWindow
-from siriushla.as_ap_pvsconfmgr.model import ConfigTypeModel
+from siriushla.model import ConfigTypeModel
 
 
 class TreeItem:
