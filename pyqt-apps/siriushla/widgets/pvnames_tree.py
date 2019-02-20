@@ -60,7 +60,7 @@ class PVNameTree(QTreeWidget):
         self.setHeaderHidden(False)
         self.setHeaderLabels(['PVName', 'Value', 'Delay'])
         self.itemChanged.connect(self._item_checked)
-        self.setGeometry(100, 100, 600, 1024)
+        # self.setGeometry(100, 100, 600, 1024)
 
         self.check_children = True
         self.check_parent = True
