@@ -5,8 +5,8 @@ from qtpy.QtCore import Slot
 from qtpy.QtWidgets import QWidget, QComboBox, QLabel, QPushButton, \
     QHBoxLayout, QVBoxLayout
 
-from siriushla.utils.epics.wrapper import PyEpicsWrapper
-from siriushla.utils.epics.task import EpicsChecker, EpicsSetter
+from siriushla.misc.epics.wrapper import PyEpicsWrapper
+from siriushla.misc.epics.task import EpicsChecker, EpicsSetter
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.widgets.pvnames_tree import PVNameTree
 from siriushla.widgets.dialog import ReportDialog, ProgressDialog

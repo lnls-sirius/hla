@@ -4,19 +4,51 @@ import re
 import time
 
 from qtpy.QtCore import Slot
+from qtpy.QtGui import QKeySequence, QKeyEvent
 from qtpy.QtWidgets import QWidget, QComboBox, QLabel, QPushButton, \
     QHBoxLayout, QVBoxLayout, QTableView, QInputDialog, QMessageBox, \
-    QAbstractItemView
+    QAbstractItemView, QApplication
 
 from siriushla.widgets.windows import SiriusMainWindow
 
-from siriushla.utils.epics.wrapper import PyEpicsWrapper
-from siriushla.utils.epics.task import EpicsGetter
+from siriushla.misc.epics.wrapper import PyEpicsWrapper
+from siriushla.misc.epics.task import EpicsGetter
 from siriushla.widgets.dialog import ReportDialog, ProgressDialog
 from siriushla.as_ap_pvsconfmgr.model import \
     ConfigTypeModel, PVConfigurationTableModel
 from siriushla.as_ap_pvsconfmgr.delegate import PVConfigurationDelegate
 from siriuspy.envars import vaca_prefix as _VACA_PREFIX
+
+
+class CustomTable(QTableView):
+
+    def keyPressEvent(self, event):
+        if event.type() == QKeyEvent.KeyPress:
+            if event.matches(QKeySequence.Copy):
+                indexes = self.selectionModel().selectedIndexes()
+                if len(indexes) == 1:
+                    index = indexes[0]
+                    if index.column() == 2:
+                        value = self.model().data(index)
+                        QApplication.instance().clipboard().setText(str(value))
+                else:
+                    QMessageBox.information(
+                        self, 'Copy', 'No support for multi-cell copying')
+            elif event.matches(QKeySequence.Paste):
+                value = QApplication.instance().clipboard().text()
+                indexes = self.selectionModel().selectedIndexes()
+                for index in indexes:
+                    self.pasteDelay(index, value)
+
+    def pasteDelay(self, index, value):
+        if index.column() != 2:
+            return
+        try:
+            value = float(value)
+        except ValueError:
+            return
+        
+        self.model().setData(index, value)
 
 
 class ReadConfigurationWindow(SiriusMainWindow):
@@ -61,7 +93,7 @@ class ReadConfigurationWindow(SiriusMainWindow):
         # self._name_le.setObjectName('name_le')
 
         # Add configuration table
-        self._table = QTableView(self)
+        self._table = CustomTable(self)
         self._table.setObjectName('config_tbl')
         self._table.setModel(PVConfigurationTableModel())
         self._table.setItemDelegate(PVConfigurationDelegate())
