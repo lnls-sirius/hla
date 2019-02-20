@@ -27,6 +27,8 @@ class SaveConfiguration(SiriusDialog):
         self._logger = logging.getLogger(__name__)
         self._logger.setLevel(logging.DEBUG)
         self._setupui()
+        self._config = None
+        self._status = False
         self.setWindowTitle("Configuration Database Manager")
 
     def _setupui(self):
@@ -141,6 +143,7 @@ class SaveConfiguration(SiriusDialog):
     def _load_configuration(self):
         config = self.search_lineedit.text()
         self.configname.emit(config)
+        self._config = config
         self.accept()
 
     @Slot(int, str, str)
@@ -180,6 +183,15 @@ class SaveConfiguration(SiriusDialog):
             text = '<b>Name not valid. It already exists...</b.'
         self.label_exist.setText(text)
 
+    def accept(self):
+        """Override accept."""
+        self._status = True
+        super().accept()
+
+    def exec(self):
+        """Override exec."""
+        super().exec()
+        return self._config, self._status
 
 if __name__ == '__main__':
     import sys
