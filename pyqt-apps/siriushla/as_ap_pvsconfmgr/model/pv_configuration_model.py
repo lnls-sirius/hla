@@ -99,9 +99,8 @@ class PVConfigurationTableModel(QAbstractTableModel):
             return False
 
         if column == 1:
-            # self._data[row][column] = value
-            # self.dataChanged.emit(index, index)
-            return False
+            self._data[row][column] = value
+            self.dataChanged.emit(index, index)
 
         if column == 2:
             self._data[row][column] = float(value)
