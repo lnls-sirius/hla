@@ -65,6 +65,7 @@ setup(
         'scripts/sirius-hla-ts-ap-sofb.py',
         'scripts/sirius-hla-ts-di-icts.py',
         'scripts/sirius-hla-ts-ma-control.py',
+        'scripts/sirius-hla-li-launcher.sh',
         ],
     # test_suite='setup.my_test_suite',
     test_suite='setup.my_test_suite',
