@@ -14,3 +14,4 @@ from .spinbox import SiriusSpinbox
 from .widget_factory import pydmwidget_factory
 from .spectrogram_view import SiriusSpectrogramView
 from .label import SiriusLabel
+from .pvnames_tree import PVNameTree

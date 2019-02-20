@@ -40,7 +40,7 @@ class ICTMonitoring(SiriusMainWindow):
             ICT2 = 'TS-04:DI-ICT'
 
         tmp_file = _substitute_in_file(
-            '/home/fac_files/lnls-sirius/hla/pyqt-apps/siriushla'
+            '/home/sirius/repos/hla/pyqt-apps/siriushla'
             '/tl_ap_control/ui_tl_ap_ictmon.ui',
             {'TL': tl.upper(), 'ICT1': ICT1, 'ICT2': ICT2, 'PREFIX': prefix})
         self.setWindowTitle(tl.upper()+' ICTs Monitor')
@@ -214,8 +214,9 @@ class _ICTSettings(SiriusDialog):
         self.pb_trgdetails = QPushButton('Open details', self)
         self.pb_trgdetails.setAutoDefault(False)
         self.pb_trgdetails.setDefault(False)
+        trg_w = create_window_from_widget(HLTriggerDetailed, is_main=True)
         util.connect_window(
-            self.pb_trgdetails, HLTriggerDetailed, parent=self,
+            self.pb_trgdetails, trg_w, parent=self,
             prefix=self.ict_trig_prefix+':')
         hlay_TIstatus = QHBoxLayout()
         hlay_TIstatus.addWidget(self.ledmulti_TIStatus)

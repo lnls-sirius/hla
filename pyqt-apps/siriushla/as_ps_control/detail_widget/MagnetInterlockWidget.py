@@ -77,6 +77,8 @@ class MagnetInterlockWindow(SiriusMainWindow):
         self._setup_ui()
 
     def _setup_ui(self):
+        self.setWindowTitle(self._magnet_name + (' Soft Interlock'
+                            if not self._interlock else ' Hard Interlock'))
         self._central_widget = QWidget(parent=self)
         self._central_widget.layout = QVBoxLayout()
         self._central_widget.setLayout(self._central_widget.layout)

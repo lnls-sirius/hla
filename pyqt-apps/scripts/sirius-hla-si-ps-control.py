@@ -8,6 +8,6 @@ from siriushla.as_ps_control.PSTabControlWindow import PSTabControlWindow
 
 
 app = SiriusApplication()
-window = PSTabControlWindow(section="SI", discipline=0)  # PS
+window = PSTabControlWindow(section="SI", discipline='PS')
 window.show()
 sys.exit(app.exec_())

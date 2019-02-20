@@ -23,7 +23,7 @@ class ControlWidgetFactory:
     def factory(parent, section, discipline, device, orientation=2):
         if section == "TB":
             if device == "dipole":
-                if discipline == 1:
+                if discipline == 'MA':
                     return DetailWidgetFactory.factory(
                         "TB-Fam:MA-B", parent=parent)
                 else:
@@ -39,7 +39,7 @@ class ControlWidgetFactory:
                 ControlWidgetFactory._device_not_found(section, device)
         elif section == "BO":
             if device == "dipole":
-                if discipline == 1:
+                if discipline == 'MA':
                     return DetailWidgetFactory.factory("BO-Fam:MA-B")
                 else:
                     return BODipoleControlWidget(
@@ -60,7 +60,7 @@ class ControlWidgetFactory:
                 ControlWidgetFactory._device_not_found(section, device)
         elif section == "TS":
             if device == "dipole":
-                if discipline == 1:
+                if discipline == 'MA':
                     return DetailWidgetFactory.factory("TS-Fam:MA-B")
                 else:
                     return TSDipoleControlWidget(
@@ -75,7 +75,7 @@ class ControlWidgetFactory:
                 ControlWidgetFactory._device_not_found(section, device)
         elif section == "SI":
             if device == "dipole":
-                if discipline == 1:
+                if discipline == 'MA':
                     return DetailWidgetFactory.factory("SI-Fam:MA-B1B2")
                 else:
                     return SIDipoleControlWidget(

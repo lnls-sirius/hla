@@ -237,6 +237,7 @@ class BasePSWidget(QWidget):
         self.layout.addStretch()
 
     def _setup_ui(self):
+        self.setWindowTitle(self._psname)
         # Widget layout
         self.layout = QHBoxLayout()
         # Optional header layout
@@ -278,7 +279,7 @@ class BasePSWidget(QWidget):
         """Turn power supply off."""
         if self.pwrstate_button._bit_val:
             self.pwrstate_button.send_value()
-    
+
     # def sizePolicy(self):
     #     return QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
 

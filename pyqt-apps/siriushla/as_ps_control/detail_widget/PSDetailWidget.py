@@ -3,8 +3,7 @@ import re
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGroupBox, QGridLayout, QLabel, \
-    QSizePolicy, QPushButton, QVBoxLayout, QHBoxLayout, QApplication, \
-    QFormLayout
+    QPushButton, QVBoxLayout, QHBoxLayout, QFormLayout
 from qtpy.QtGui import QColor
 # from epics import get_pv
 
@@ -73,7 +72,6 @@ class PSDetailWidget(QWidget):
         self._vaca_prefix = vaca_prefix
         self._psname = psname
         self._prefixed_psname = self._vaca_prefix + self._psname
-        # self._ps_name = re.sub(":MA-", ":PS-", self._magnet_name)
 
         if ':MA-' in self._psname:
             self._is_magnet = True
@@ -100,15 +98,6 @@ class PSDetailWidget(QWidget):
         self._setup_ui()
         self.setFocus(True)
         self.setFocusPolicy(Qt.StrongFocus)
-        # Get screen height
-        # screen_height = QApplication.desktop().screenGeometry().height()
-        # layout_height = self.layout.sizeHint().height()
-        # if layout_height > screen_height:
-        #     # Decrease font size
-        #     self.setStyleSheet(self.StyleSheet + '* {font-size: 14px;}')
-        # else:
-        #     self.setStyleSheet(self.StyleSheet)
-        # self.layout.setSizeConstraint(QGridLayout.SetFixedSize)
         self.setStyleSheet(self.StyleSheet)
 
     def _setup_ui(self):
@@ -210,7 +199,7 @@ class PSDetailWidget(QWidget):
             SiriusLedAlert(self, self._prefixed_psname + ":CtrlLoop-Sts")
         open_loop_btn = \
             PyDMStateButton(self, self._prefixed_psname + ':CtrlLoop-Sel')
-        
+
         # Build layout
         layout = QGridLayout()
         layout.addWidget(soft_intlk_button, 0, 0, 1, 2)
@@ -244,8 +233,6 @@ class PSDetailWidget(QWidget):
             self, self._prefixed_psname + ":CtrlMode-Mon")
         self.ctrlmode_label.setObjectName("ctrlmode1_label")
 
-        # self.ctrlmode_led.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
-
         ctrlmode_layout = QHBoxLayout()
         ctrlmode_layout.addWidget(self.ctrlmode_led)
         ctrlmode_layout.addWidget(self.ctrlmode_label)
@@ -276,8 +263,6 @@ class PSDetailWidget(QWidget):
         self.pwrstate_label = PyDMLabel(
             self, self._prefixed_psname + ":PwrState-Sts")
         self.pwrstate_label.setObjectName("pwrstate_label")
-
-        # self.pwrstate_led.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
 
         # buttons_layout = QHBoxLayout()
         # buttons_layout.addWidget(self.on_btn)

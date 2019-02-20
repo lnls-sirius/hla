@@ -22,13 +22,11 @@ class PSControlWindow(SiriusMainWindow):
 
         self._setup_ui()
 
-        # self.app.establish_widget_connections(self)
-
     def _setup_ui(self):
         # Set Widget
         self.widget = ControlWidgetFactory.factory(
             self._section, self._discipline, self._device)
-        if self._device != "dipole" or self._discipline == 0:
+        if self._device != "dipole" or self._discipline == 'PS':
             self._connect_buttons(self.widget)
         self.setCentralWidget(self.widget)
 

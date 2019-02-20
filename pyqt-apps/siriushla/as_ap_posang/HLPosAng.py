@@ -2,8 +2,6 @@
 
 """HLA as_ap_posang module."""
 
-import epics as _epics
-
 from qtpy.uic import loadUi as _loadUi
 from qtpy.QtWidgets import QGridLayout, QLabel, QGroupBox, QAbstractItemView, \
                            QSizePolicy as QSzPlcy, QSpacerItem, QPushButton, \
@@ -25,7 +23,7 @@ from siriushla.as_pm_control.PulsedMagnetDetailWindow import \
 from siriushla.as_ap_servconf import \
     LoadConfiguration as _LoadConfiguration
 
-UI_FILE = ('/home/fac_files/lnls-sirius/hla/pyqt-apps/siriushla/'
+UI_FILE = ('/home/sirius/repos/hla/pyqt-apps/siriushla/'
            'as_ap_posang/ui_as_ap_posang.ui')
 
 
@@ -90,13 +88,11 @@ class ASAPPosAngCorr(SiriusMainWindow):
             correctors[3] = Const.TB_CORRV_POSANG[1]
         self._setCorrectorsChannels(correctors)
 
-        self.statusLabel_pv = _epics.PV(
-            self._prefix + self._tl + '-Glob:AP-PosAng:StatusLabels-Cte',
-            callback=self._setStatusLabels)
-
         act_settings = self.menuBar().addAction('Settings')
         _hlautil.connect_window(act_settings, _CorrParamsDetailWindow,
                                 parent=self, tl=self._tl, prefix=self._prefix)
+
+        self._setStatusLabels()
 
     def set_widgets_channel(self, widget2pv_list):
         """Set the PyDMWidgets channels.
@@ -148,10 +144,10 @@ class ASAPPosAngCorr(SiriusMainWindow):
         self.centralwidget.PyDMLabel_KickRBCV2.channel = (
             self._prefix + correctors[3] + ':Kick-RB')
 
-    def _setStatusLabels(self, value, **kws):
+    def _setStatusLabels(self):
         for i in range(4):
             exec('self.centralwidget.label_status{0}.setText('
-                 'value[{0}])'.format(i))
+                 'Const.STATUSLABELS[{0}])'.format(i))
 
 
 class _CorrParamsDetailWindow(SiriusMainWindow):

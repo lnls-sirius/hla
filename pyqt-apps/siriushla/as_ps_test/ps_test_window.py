@@ -325,30 +325,6 @@ class TestPS(QThread):
 
 if __name__ == '__main__':
     application = SiriusApplication()
-    # application.setStyleSheet("""
-    #     * {
-    #         font: 20pt;
-    #     }
-    #     #OkTextEdit {
-    #         background-color: #eafaea;
-    #     }
-    #     #NokTextEdit {
-    #         background-color: #ffebe6;
-    #     }
-    #     PSTestWindow #TestButton {
-    #         color: white;
-    #         background-color: blue;
-    #     }
-    #     PSTestWindow #ExitButton {
-    #         color: white;
-    #         background-color: red;
-    #     }
-    #     QLabel {
-    #         font-weight: bold;
-    #     }
-    # """)
-
     w = PSTestWindow()
     w.show()
-
     sys.exit(application.exec_())

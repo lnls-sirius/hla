@@ -91,7 +91,7 @@ class Settings(QMenuBar):
                                 checked_accs=('BO,'))
         self.act_ma = QAction('Booster Magnets')
         _hlautil.connect_window(self.act_ma, _MAControlWindow, parent=self,
-                                section='BO', discipline=1)  # MA
+                                section='BO', discipline='MA')
         self.act_pm = QAction('Pulsed Magnets')
         _hlautil.connect_window(self.act_pm, _PMControlWindow, parent=self)
         self.act_sofb = QAction('Booster SOFB')

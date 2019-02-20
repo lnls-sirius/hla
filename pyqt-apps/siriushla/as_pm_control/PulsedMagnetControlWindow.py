@@ -24,15 +24,12 @@ class PulsedMagnetControlWindow(SiriusMainWindow):
         self._setup_ui()
         self.setStyleSheet(PulsedMagnetControlWindow.StyleSheet)
 
-        # self.setAttribute(Qt.WA_DeleteOnClose)
-        # self.app.establish_widget_connections(self)
-
     def _setup_ui(self):
         self.main_widget = QTabWidget(self)
         self.main_widget.layout = QVBoxLayout()
         self.main_widget.setLayout(self.main_widget.layout)
         self.setCentralWidget(self.main_widget)
-        self.setWindowTitle("Pulsed magnets control window")
+        self.setWindowTitle("Pulsed Magnets Control Window")
         self.setFocus()
 
         self.main_widget.addTab(self._make_tab_widget("TB"), "TB")
@@ -68,11 +65,6 @@ class PulsedMagnetControlWindow(SiriusMainWindow):
             button = widget.get_detail_button()
             connect_window(button, PulsedMagnetDetailWindow,
                            parent=self, maname=maname)
-            # self._window_manager.register_window(
-            #     maname + "_detail", PulsedMagnetDetailWindow,
-            #     maname=maname, parent=self)
-            # button.clicked.connect(lambda: self._window_manager.open_window(
-            #     self.sender().text() + "_detail"))
 
 
 if __name__ == "__main__":

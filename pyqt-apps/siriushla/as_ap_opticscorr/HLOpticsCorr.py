@@ -1,24 +1,20 @@
 #!/usr/bin/env python-sirius
 """Booster Optics Correction HLA Module."""
 
-import epics as _epics
 from qtpy.uic import loadUi
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QPushButton, QGridLayout, QLabel, \
-                            QSpacerItem, QAbstractItemView, QGroupBox, \
-                            QSizePolicy as QSzPlcy, QHeaderView
+from qtpy.QtWidgets import QPushButton, QGridLayout, QLabel, QSpacerItem, \
+    QAbstractItemView, QGroupBox, QSizePolicy as QSzPlcy, QHeaderView
 from pydm.widgets import PyDMEnumComboBox, PyDMLabel, PyDMLineEdit, \
-                            PyDMWaveformTable, PyDMSpinbox
+    PyDMWaveformTable, PyDMSpinbox
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriuspy.csdevice.opticscorr import Const as _Const
-from siriushla.widgets.state_button import PyDMStateButton
 from siriushla import util as _hlautil
+from siriushla.widgets import PyDMStateButton
 from siriushla.widgets.windows import SiriusMainWindow
-from siriushla.as_ps_control.PSDetailWindow import \
-    PSDetailWindow as _PSDetailWindow
-from siriushla.as_ap_servconf import \
-    LoadConfiguration as _LoadConfiguration
+from siriushla.as_ps_control import PSDetailWindow as _PSDetailWindow
+from siriushla.as_ap_servconf import LoadConfiguration as _LoadConfiguration
 
 
 class OpticsCorrWindow(SiriusMainWindow):
@@ -32,17 +28,14 @@ class OpticsCorrWindow(SiriusMainWindow):
         if not prefix:
             prefix = _vaca_prefix
 
-        UI_FILE = ('/home/fac_files/lnls-sirius/hla/pyqt-apps/siriushla/'
+        UI_FILE = ('/home/sirius/repos/hla/pyqt-apps/siriushla/'
                    'as_ap_opticscorr/ui_'+acc+'_ap_'+opticsparam+'corr.ui')
         tmp_file = _substitute_in_file(UI_FILE, {'PREFIX': prefix})
         self.centralwidget = loadUi(tmp_file)
         self.setCentralWidget(self.centralwidget)
-
-        self.statusLabel_pv = _epics.PV(
-            prefix+self._acc+'-Glob:AP-'+opticsparam.title() +
-            'Corr:StatusLabels-Cte', callback=self._setStatusLabels)
-        text = 'Tune' if opticsparam == 'tune' else 'Chromaticity'
-        self.setWindowTitle(self._acc + ' ' + text + ' Correction')
+        self.setWindowTitle(
+            self._acc + ' Tune' if opticsparam == 'tune' else ' Chromaticity' +
+            ' Correction')
 
         for button in self.centralwidget.findChildren(QPushButton):
             if 'MADetail' in button.objectName():
@@ -55,11 +48,13 @@ class OpticsCorrWindow(SiriusMainWindow):
                                 parent=self, acc=self._acc,
                                 opticsparam=opticsparam, prefix=prefix)
 
-    def _setStatusLabels(self, value, **kws):
+        self._setStatusLabels()
+
+    def _setStatusLabels(self):
         status_bits = 5 if self._acc == 'SI' else 4
         for i in range(status_bits):
             exec('self.centralwidget.label_status{0}.setText'
-                 '(value[{0}])'.format(i))
+                 '(_Const.STATUS_LABELS[{0}])'.format(i))
 
 
 class _CorrParamsDetailWindow(SiriusMainWindow):
