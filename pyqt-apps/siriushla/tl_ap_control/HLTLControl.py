@@ -407,6 +407,8 @@ class TLAPControlWindow(SiriusMainWindow):
             pydm_sp_kick.sp_lineedit.setAlignment(Qt.AlignCenter)
             pydm_sp_kick.sp_lineedit.setSizePolicy(
                 QSzPlcy.Minimum, QSzPlcy.Minimum)
+            pydm_sp_kick.sp_lineedit.precisionFromPV = False
+            pydm_sp_kick.sp_lineedit.precision = 1
             pydm_sp_kick.sp_scrollbar.setStyleSheet("""max-width:7.10em; """)
             pydm_sp_kick.sp_scrollbar.limitsFromPV = True
             corr_details.layout().addWidget(pydm_sp_kick, 1, 3, 2, 1)
@@ -417,8 +419,9 @@ class TLAPControlWindow(SiriusMainWindow):
                 'PyDMLabel_' + name + '_Kick_Mon_Scrn' + str(scrn))
             pydmlabel_kick.setStyleSheet(
                 """min-width:5.81em;\nmax-width:5.81em;\nheight:1.29em;""")
-            pydmlabel_kick.precFromPV = True
             pydmlabel_kick.showUnits = True
+            pydmlabel_kick.precisionFromPV = False
+            pydmlabel_kick.precision = 1
             pydmlabel_kick.setAlignment(Qt.AlignCenter)
             corr_details.layout().addWidget(pydmlabel_kick, 1, 4)
         corr_details.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Fixed)
