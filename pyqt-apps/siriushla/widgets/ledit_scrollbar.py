@@ -19,7 +19,6 @@ class PyDMLinEditScrollbar(QWidget):
         self.layout = QVBoxLayout()
         self.sp_lineedit = SiriusLineEdit(
             parent=self, init_channel=self._channel)
-        self.sp_lineedit.showUnits = True
         self.sp_scrollbar = PyDMScrollBar(
             parent=self, init_channel=self._channel)
         self.sp_scrollbar.wheelEvent = lambda event: event.ignore()

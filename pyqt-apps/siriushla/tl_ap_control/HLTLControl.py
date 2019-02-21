@@ -416,6 +416,7 @@ class TLAPControlWindow(SiriusMainWindow):
             pydmlabel_kick.setStyleSheet(
                 """min-width:5.81em;\nmax-width:5.81em;\nheight:1.29em;""")
             pydmlabel_kick.precFromPV = True
+            pydmlabel_kick.showUnits = True
             pydmlabel_kick.setAlignment(Qt.AlignCenter)
             corr_details.layout().addWidget(pydmlabel_kick, 1, 4)
         corr_details.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Fixed)
