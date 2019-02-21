@@ -332,9 +332,11 @@ class TLAPControlWindow(SiriusMainWindow):
         corr_details.layout().setContentsMargins(0, 0, 0, 0)
 
         if corr.split('-')[0] == 'LA':  # Linac PVs
-            led = SiriusLedState(
-                parent=self,
-                init_channel=self.prefix+corr+':setpwm')
+            led = SiriusLedAlert(
+                parent=self, init_channel=self.prefix+corr+':setpwm')
+            led.onColor = SiriusLedAlert.LightGreen
+            led.offColor = SiriusLedAlert.DarkGreen
+            led.alarmSensitiveBorder = False
             led.setObjectName(
                 'SiriusLed_Linac'+corr.split('-')[-1]+'_setpwm_Scrn'+str(scrn))
             corr_details.layout().addWidget(led, 1, 1)
