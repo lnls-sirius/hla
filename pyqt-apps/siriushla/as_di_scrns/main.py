@@ -178,22 +178,22 @@ class SiriusScrnView(QWidget):
         hbox_filter.addWidget(self.spinbox_gridfilterfactor)
         hbox_filter.addWidget(QLabel('%'))
 
-        lb = QLabel('Remove')
+        lb = QLabel('Remove ')
         lb.setStyleSheet("""min-width:6em;max-width:6em;""")
-        self.spinbox_removerowscolumns = QSpinBox()
-        self.spinbox_removerowscolumns.setMaximum(1024)
-        self.spinbox_removerowscolumns.setMinimum(0)
-        self.spinbox_removerowscolumns.setValue(
-            self.image_view.calibration_grid_removecolumnsrows)
-        self.spinbox_removerowscolumns.editingFinished.connect(
-            self._setCalibrationGridNrRowsColumns2Remove)
-        self.spinbox_removerowscolumns.setStyleSheet("""
+        self.spinbox_removeborder = QSpinBox()
+        self.spinbox_removeborder.setMaximum(1024)
+        self.spinbox_removeborder.setMinimum(0)
+        self.spinbox_removeborder.setValue(
+            self.image_view.calibration_grid_removeborder)
+        self.spinbox_removeborder.editingFinished.connect(
+            self._setCalibrationGridBorder2Remove)
+        self.spinbox_removeborder.setStyleSheet("""
             min-width:4em;\nmax-width:4em;""")
         hbox_remove = QHBoxLayout()
         hbox_remove.setSpacing(0)
         hbox_remove.addWidget(lb)
-        hbox_remove.addWidget(self.spinbox_removerowscolumns)
-        hbox_remove.addWidget(QLabel(' rows/columns'))
+        hbox_remove.addWidget(self.spinbox_removeborder)
+        hbox_remove.addWidget(QLabel(' px border'))
 
         hbox_EnblLED = _create_propty_layout(
             parent=self, prefix=self.scrn_prefix, propty='EnblLED',
@@ -463,9 +463,9 @@ class SiriusScrnView(QWidget):
         self.image_view.set_calibration_grid_filterfactor(
             self.spinbox_gridfilterfactor.value())
 
-    def _setCalibrationGridNrRowsColumns2Remove(self):
-        self.image_view.set_calibration_grid_nrrowscolumns2remove(
-            self.spinbox_removerowscolumns.value())
+    def _setCalibrationGridBorder2Remove(self):
+        self.image_view.set_calibration_grid_border2remove(
+            self.spinbox_removeborder.value())
 
     @Slot()
     def _showFailToSaveGridMsg(self):
