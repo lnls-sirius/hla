@@ -136,10 +136,11 @@ class QDoubleScrollBar(QScrollBar):
     def keyPressEvent(self, event):
         singlestep = self.getSingleStep()
         pagestep = self.getPageStep()
-        if (event.key() == Qt.Key_Plus):
+        ctrl_hold = self.app.queryKeyboardModifiers() == Qt.ControlModifier
+        if ctrl_hold and (event.key() == Qt.Key_Right):
             self.setSingleStep(10*singlestep)
             self.setPageStep(10*pagestep)
-        elif (event.key() == Qt.Key_Minus):
+        elif ctrl_hold and (event.key() == Qt.Key_Left):
             self.setSingleStep(0.1*singlestep)
             self.setPageStep(0.1*pagestep)
         else:
