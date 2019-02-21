@@ -37,6 +37,10 @@ class PyDMScrollBar(QDoubleScrollBar, PyDMWritableWidget):
         self.setTracking(True)
         self.actionTriggered.connect(self.send_value)
 
+    def widget_ctx_menu(self):
+        """Return context menu."""
+        return self.contextMenu
+
     def send_value(self):
         """
         Emit a :attr:`send_value_signal` to update channel value.

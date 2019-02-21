@@ -296,12 +296,15 @@ class PSDetailWidget(QWidget):
         self.current_sp_widget.sp_scrollbar.setTracking(False)
         self.current_rb_val = PyDMLabel(
             self, self._prefixed_psname + ":Current-RB")
+        self.current_rb_val.showUnits = True
         self.current_rb_val.precFromPV = True
         self.current_ref_val = PyDMLabel(
             self, self._prefixed_psname + ":CurrentRef-Mon")
+        self.current_ref_val.showUnits = True
         self.current_ref_val.precFromPV = True
         self.current_mon_val = PyDMLabel(
             self, self._prefixed_psname + ":Current-Mon")
+        self.current_mon_val.showUnits = True
         self.current_mon_val.precFromPV = True
 
         layout.addWidget(self.current_sp_label, 0, 0, Qt.AlignRight)
@@ -335,14 +338,17 @@ class PSDetailWidget(QWidget):
         self.metric_sp_widget.sp_scrollbar.setTracking(False)
         self.metric_rb_val = PyDMLabel(
             self, self._prefixed_psname + ":" + self._metric + "-RB")
+        self.metric_rb_val.showUnits = True
         self.metric_rb_val.precFromPV = True
         self.metric_ref_val = PyDMLabel(
             self,
             self._prefixed_psname + ":" + self._metric + "Ref-Mon")
+        self.metric_ref_val.showUnits = True
         self.metric_ref_val.precFromPV = True
         self.metric_mon_val = PyDMLabel(
             self,
             self._prefixed_psname + ":" + self._metric + "-Mon")
+        self.metric_mon_val.showUnits = True
         self.metric_mon_val.precFromPV = True
 
         layout.addWidget(self.metric_sp_label, 0, 0, Qt.AlignRight)
