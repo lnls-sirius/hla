@@ -40,7 +40,7 @@ class PyEpicsWrapper:
             return False
         return self._pv.put(value)
 
-    def check(self, value, wait=5):
+    def check(self, value, wait=10):
         """Do timed get."""
         if not self.connected(self._pv):
             return False
@@ -54,7 +54,7 @@ class PyEpicsWrapper:
                         isclose(pv_value, value, rel_tol=1e-06, abs_tol=0.0)):
                     return True
             else:
-                if self._pv.get() == value:
+                if self._pv.get(use_monitor=False) == value:
                     return True
             t = time.time() - init
             time.sleep(5e-3)
