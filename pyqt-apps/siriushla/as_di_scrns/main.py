@@ -37,6 +37,7 @@ class SiriusScrnView(QWidget):
         self.device = device
         self.scrn_prefix = self.prefix+self.device
         self._calibrationgrid_flag = False
+        self._receivedData = False
         screen_type_conn = SiriusConnectionSignal(
             self.scrn_prefix+':ScrnType-Sts')
         screen_type_conn.new_value_signal.connect(
@@ -135,6 +136,7 @@ class SiriusScrnView(QWidget):
         self.image_view.setStyleSheet("""
             #ScrnView{min-width:42em; min-height:32em;}""")
         self.image_view.failToSaveGrid.connect(self._showFailToSaveGridMsg)
+        self.image_view.receivedData.connect(self._setReceivedDataFlag)
 
         lay = QGridLayout()
         lay.setContentsMargins(0, 0, 0, 0)
@@ -390,32 +392,54 @@ class SiriusScrnView(QWidget):
         roi_offsetx = float(self.PyDMLabel_ImgROIOffsetX.text())
         roi_offsety = float(self.PyDMLabel_ImgROIOffsetY.text())
 
-        # Change ROI to get entire image
+        # Disable camera acquisition and wait for disabling
         self.PyDMStateButton_CamEnbl.send_value_signal[int].emit(0)
+        state = self.SiriusLedState_CamEnbl.state
+        while state == 1:
+            time.sleep(0.1)
+            state = self.SiriusLedState_CamEnbl.state
+
+        # Change ROI to get entire image
         self.PyDMSpinbox_ImgROIHeight.send_value_signal[float].emit(
             float(self.image_view.image_maxheight))
         self.PyDMSpinbox_ImgROIWidth.send_value_signal[float].emit(
             float(self.image_view.image_maxwidth))
         self.PyDMSpinbox_ImgROIOffsetX.send_value_signal[float].emit(0)
         self.PyDMSpinbox_ImgROIOffsetY.send_value_signal[float].emit(0)
+
+        # Enable camera acquisition and wait for receiveing first frame
+        self._receivedData = False
         self.PyDMStateButton_CamEnbl.send_value_signal[int].emit(1)
+        while not self._receivedData:
+            time.sleep(0.1)
 
         # Save grid
         self.image_view.saveCalibrationGrid()
 
-        # Change ROI to original size
+        # Disable camera acquisition and wait for disabling
         self.PyDMStateButton_CamEnbl.send_value_signal[int].emit(0)
+        state = self.SiriusLedState_CamEnbl.state
+        while state == 1:
+            time.sleep(0.1)
+            state = self.SiriusLedState_CamEnbl.state
+
+        # Change ROI to original size
         self.PyDMSpinbox_ImgROIHeight.send_value_signal[float].emit(roi_h)
         self.PyDMSpinbox_ImgROIWidth.send_value_signal[float].emit(roi_w)
         self.PyDMSpinbox_ImgROIOffsetX.send_value_signal[float].emit(
             roi_offsetx)
         self.PyDMSpinbox_ImgROIOffsetY.send_value_signal[float].emit(
             roi_offsety)
+
+        # Enable camera acquisition
         self.PyDMStateButton_CamEnbl.send_value_signal[int].emit(1)
 
         # Enable showing saved grid
         time.sleep(0.1)
         self.checkBox_showgrid.setEnabled(True)
+
+    def _setReceivedDataFlag(self):
+        self._receivedData = True
 
     def _setCalibrationGridFilterFactor(self):
         self.image_view.set_calibration_grid_filterfactor(

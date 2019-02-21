@@ -14,6 +14,7 @@ from siriushla.widgets import PyDMStateButton, SiriusLedState
 class SiriusImageView(PyDMImageView):
     """A PyDMImageView with methods to handle screens calibration grids."""
 
+    receivedData = Signal()
     failToSaveGrid = Signal()
 
     def __init__(self, parent=None,
@@ -116,6 +117,7 @@ class SiriusImageView(PyDMImageView):
 
     def process_image(self, image):
         """Reimplement process_image method to add grid to image."""
+        self.receivedData.emit()
         image2process = _dcopy(image)
         if ((self._show_calibration_grid) and
                 (self._calibration_grid_image is not None)):
