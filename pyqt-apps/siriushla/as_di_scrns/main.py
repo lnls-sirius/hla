@@ -36,12 +36,12 @@ class SiriusScrnView(QWidget):
         self.prefix = prefix
         self.device = device
         self.scrn_prefix = self.prefix+self.device
-        self._calibrationgrid_flag = False
         self._receivedData = False
         screen_type_conn = SiriusConnectionSignal(
             self.scrn_prefix+':ScrnType-Sts')
         screen_type_conn.new_value_signal.connect(
             self.updateCalibrationGridFlag)
+        self._calibrationgrid_flag = screen_type_conn.getvalue()
         self._setupUi()
 
     @property
@@ -52,13 +52,11 @@ class SiriusScrnView(QWidget):
     @Slot(int)
     def updateCalibrationGridFlag(self, new_state):
         """Update calibrationgrid_flag property."""
-        if new_state != self._calibrationgrid_flag:
-            self._calibrationgrid_flag = new_state
-
-            if new_state == 1:
-                self.pushbutton_savegrid.setEnabled(True)
-            else:
-                self.pushbutton_savegrid.setEnabled(False)
+        self._calibrationgrid_flag = new_state
+        if new_state == 1:
+            self.pushbutton_savegrid.setEnabled(True)
+        else:
+            self.pushbutton_savegrid.setEnabled(False)
 
     def _setupUi(self):
         self.setLayout(QGridLayout())
@@ -163,6 +161,8 @@ class SiriusScrnView(QWidget):
         hbox_grid.addWidget(self.checkBox_showgrid)
         hbox_grid.addWidget(self.pushbutton_savegrid)
 
+        lb = QLabel('Show levels <')
+        lb.setStyleSheet("""min-width:6em;max-width:6em;""")
         self.spinbox_gridfilterfactor = QSpinBox()
         self.spinbox_gridfilterfactor.setMaximum(100)
         self.spinbox_gridfilterfactor.setMinimum(0)
@@ -171,12 +171,29 @@ class SiriusScrnView(QWidget):
         self.spinbox_gridfilterfactor.editingFinished.connect(
             self._setCalibrationGridFilterFactor)
         self.spinbox_gridfilterfactor.setStyleSheet("""
-            min-width:2.90em;\nmax-width:2.90em;""")
+            min-width:4em;\nmax-width:4em;""")
         hbox_filter = QHBoxLayout()
         hbox_filter.setSpacing(0)
-        hbox_filter.addWidget(QLabel('Show levels <'))
+        hbox_filter.addWidget(lb)
         hbox_filter.addWidget(self.spinbox_gridfilterfactor)
         hbox_filter.addWidget(QLabel('%'))
+
+        lb = QLabel('Remove')
+        lb.setStyleSheet("""min-width:6em;max-width:6em;""")
+        self.spinbox_removerowscolumns = QSpinBox()
+        self.spinbox_removerowscolumns.setMaximum(1024)
+        self.spinbox_removerowscolumns.setMinimum(0)
+        self.spinbox_removerowscolumns.setValue(
+            self.image_view.calibration_grid_removecolumnsrows)
+        self.spinbox_removerowscolumns.editingFinished.connect(
+            self._setCalibrationGridNrRowsColumns2Remove)
+        self.spinbox_removerowscolumns.setStyleSheet("""
+            min-width:4em;\nmax-width:4em;""")
+        hbox_remove = QHBoxLayout()
+        hbox_remove.setSpacing(0)
+        hbox_remove.addWidget(lb)
+        hbox_remove.addWidget(self.spinbox_removerowscolumns)
+        hbox_remove.addWidget(QLabel(' rows/columns'))
 
         hbox_EnblLED = _create_propty_layout(
             parent=self, prefix=self.scrn_prefix, propty='EnblLED',
@@ -187,6 +204,7 @@ class SiriusScrnView(QWidget):
         lay.addRow('     Grid: ', hbox_grid)
         lay.addItem(QSpacerItem(40, 10, QSzPlcy.Fixed, QSzPlcy.Fixed))
         lay.addRow('     ', hbox_filter)
+        lay.addRow('     ', hbox_remove)
         lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
         lay.addRow('     LED: ', hbox_EnblLED)
         lay.addItem(QSpacerItem(40, 10, QSzPlcy.Fixed, QSzPlcy.Fixed))
@@ -444,6 +462,10 @@ class SiriusScrnView(QWidget):
     def _setCalibrationGridFilterFactor(self):
         self.image_view.set_calibration_grid_filterfactor(
             self.spinbox_gridfilterfactor.value())
+
+    def _setCalibrationGridNrRowsColumns2Remove(self):
+        self.image_view.set_calibration_grid_nrrowscolumns2remove(
+            self.spinbox_removerowscolumns.value())
 
     @Slot()
     def _showFailToSaveGridMsg(self):

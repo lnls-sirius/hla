@@ -30,6 +30,7 @@ class SiriusImageView(PyDMImageView):
         self._calibration_grid_maxdata = None
         self._calibration_grid_width = None
         self._calibration_grid_filterfactor = 0.5
+        self._calibration_grid_removecolumnsrows = 1
         self._image_roi_offsetx = 0
         self._offsetxchannel = None
         self._image_roi_offsety = 0
@@ -66,15 +67,19 @@ class SiriusImageView(PyDMImageView):
             self.failToSaveGrid.emit()
 
     def _update_calibration_grid_image(self):
-        img = self._calibration_grid_orig
-        grid = np.where(img < self._calibration_grid_filterfactor *
-                        self._calibration_grid_maxdata, True, False)
+        img = _dcopy(self._calibration_grid_orig)
+        maxdata = self._calibration_grid_maxdata
+        remove = self._calibration_grid_removecolumnsrows
         if self.readingOrder == self.ReadingOrder.Clike:
-            self._calibration_grid_image = grid.reshape(
-                (-1, self._calibration_grid_width), order='C')
+            roi = img.reshape((-1, self._calibration_grid_width), order='C')
         else:
-            self._calibration_grid_image = grid.reshape(
-                (self._calibration_grid_width, -1), order='F')
+            roi = img.reshape((self._calibration_grid_width, -1), order='F')
+        roi[:, 0:remove] = np.full((roi.shape[0], remove), maxdata)
+        roi[:, -remove:] = np.full((roi.shape[0], remove), maxdata)
+        roi[0:remove, :] = np.full((remove, roi.shape[1]), maxdata)
+        roi[-remove:, :] = np.full((remove, roi.shape[1]), maxdata)
+        self._calibration_grid_image = np.where(
+            roi < self._calibration_grid_filterfactor*maxdata, True, False)
 
     @Slot(bool)
     def showCalibrationGrid(self, show):
@@ -97,6 +102,18 @@ class SiriusImageView(PyDMImageView):
         """
         return self._calibration_grid_filterfactor*100
 
+    @property
+    def calibration_grid_removecolumnsrows(self):
+        """Factor used to remove columns and rows of the calibration grid.
+
+        Returns
+        -------
+        float
+            Number of Rows/Columns to be removed
+
+        """
+        return self._calibration_grid_removecolumnsrows
+
     def set_calibration_grid_filterfactor(self, value):
         """Set factor used to filter calibration grid.
 
@@ -113,6 +130,19 @@ class SiriusImageView(PyDMImageView):
         if value >= 0 and self._calibration_grid_filterfactor != value:
             self._calibration_grid_filterfactor = value
             if self._calibration_grid_image is not None:
+                self._update_calibration_grid_image()
+
+    def set_calibration_grid_nrrowscolumns2remove(self, value):
+        """Set factor used to remove columns and rows of the calibration grid.
+
+        Parameters
+        ----------
+        value: int
+            Number of Rows/Columns to be removed
+
+        """
+        self._calibration_grid_removecolumnsrows = value
+        if self._calibration_grid_image is not None:
                 self._update_calibration_grid_image()
 
     def process_image(self, image):
