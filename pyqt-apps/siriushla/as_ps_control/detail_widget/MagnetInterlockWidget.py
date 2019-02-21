@@ -3,7 +3,8 @@ from epics import get_pv
 
 from siriushla.widgets import SiriusMainWindow
 from siriushla.widgets import SiriusLedAlert
-from qtpy.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel
+from qtpy.QtWidgets import \
+    QWidget, QHBoxLayout, QVBoxLayout, QGridLayout, QLabel
 from siriuspy.envars import vaca_prefix as _VACA_PREFIX
 
 
@@ -46,7 +47,7 @@ class MagnetInterlockWidget(QWidget):
         self._setup_ui()
 
     def _setup_ui(self):
-        self.layout = QVBoxLayout()
+        self.layout = QGridLayout()
         # interlock_grid = QGridLayout()
         self.setLayout(self.layout)
 
@@ -65,7 +66,9 @@ class MagnetInterlockWidget(QWidget):
                 # Add led and label to layout
                 channel = _VACA_PREFIX + self._magnet_name + ':' + \
                     self._intlk_mon
-                self.layout.addWidget(Interlock(self, channel, bit, label))
+                line = bit % 8
+                column = int(bit / 8)
+                self.layout.addWidget(Interlock(self, channel, bit, label), line, column)
 
 
 class MagnetInterlockWindow(SiriusMainWindow):
