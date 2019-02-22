@@ -181,12 +181,6 @@ class TLAPControlWindow(SiriusMainWindow):
         self.centralwidget.widget_Scrn.layout().addWidget(wid_scrn, 2, 0)
         wid_scrn.setVisible(True)
         self.scrnview_widgets_dict[self._currScrn] = wid_scrn
-        pydmcombobox_scrntype = self.findChild(
-            PyDMEnumComboBox,
-            name='PyDMEnumComboBox_ScrnType_Sel_Scrn'+str(self._currScrn))
-        pydmcombobox_scrntype.currentIndexChanged.connect(
-            self.scrnview_widgets_dict[self._currScrn].
-            updateCalibrationGridFlag)
 
         # Create an action menu
         self.setContextMenuPolicy(Qt.CustomContextMenu)

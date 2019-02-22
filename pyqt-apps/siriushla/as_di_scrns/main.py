@@ -37,11 +37,11 @@ class SiriusScrnView(QWidget):
         self.device = device
         self.scrn_prefix = self.prefix+self.device
         self._receivedData = False
-        screen_type_conn = SiriusConnectionSignal(
+        self.screen_type_conn = SiriusConnectionSignal(
             self.scrn_prefix+':ScrnType-Sts')
-        screen_type_conn.new_value_signal.connect(
+        self.screen_type_conn.new_value_signal.connect(
             self.updateCalibrationGridFlag)
-        self._calibrationgrid_flag = screen_type_conn.getvalue()
+        self._calibrationgrid_flag = self.screen_type_conn.getvalue()
         self._setupUi()
 
     @property
