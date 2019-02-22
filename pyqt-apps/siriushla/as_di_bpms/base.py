@@ -164,6 +164,5 @@ class GraphTime(BaseGraph):
         name = opts.get('name', '')
         self._add_channel(name)
         if scale:
-            print(scale)
             channel = opts.get('y_channel', '')
             self._add_scale(channel, scale)
