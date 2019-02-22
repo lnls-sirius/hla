@@ -14,6 +14,7 @@ from siriushla.widgets import PyDMStateButton, SiriusLedState
 class SiriusImageView(PyDMImageView):
     """A PyDMImageView with methods to handle screens calibration grids."""
 
+    receivedData = Signal()
     failToSaveGrid = Signal()
 
     def __init__(self, parent=None,
@@ -29,6 +30,7 @@ class SiriusImageView(PyDMImageView):
         self._calibration_grid_maxdata = None
         self._calibration_grid_width = None
         self._calibration_grid_filterfactor = 0.5
+        self._calibration_grid_removeborder = 0
         self._image_roi_offsetx = 0
         self._offsetxchannel = None
         self._image_roi_offsety = 0
@@ -65,15 +67,20 @@ class SiriusImageView(PyDMImageView):
             self.failToSaveGrid.emit()
 
     def _update_calibration_grid_image(self):
-        img = self._calibration_grid_orig
-        grid = np.where(img < self._calibration_grid_filterfactor *
-                        self._calibration_grid_maxdata, True, False)
+        img = _dcopy(self._calibration_grid_orig)
+        maxdata = self._calibration_grid_maxdata
+        border = self._calibration_grid_removeborder
         if self.readingOrder == self.ReadingOrder.Clike:
-            self._calibration_grid_image = grid.reshape(
-                (-1, self._calibration_grid_width), order='C')
+            roi = img.reshape((-1, self._calibration_grid_width), order='C')
         else:
-            self._calibration_grid_image = grid.reshape(
-                (self._calibration_grid_width, -1), order='F')
+            roi = img.reshape((self._calibration_grid_width, -1), order='F')
+        if border > 0:
+            roi[:, 0:border] = np.full((roi.shape[0], border), maxdata)
+            roi[:, -border:] = np.full((roi.shape[0], border), maxdata)
+            roi[0:border, :] = np.full((border, roi.shape[1]), maxdata)
+            roi[-border:, :] = np.full((border, roi.shape[1]), maxdata)
+        self._calibration_grid_image = np.where(
+            roi < self._calibration_grid_filterfactor*maxdata, True, False)
 
     @Slot(bool)
     def showCalibrationGrid(self, show):
@@ -96,6 +103,18 @@ class SiriusImageView(PyDMImageView):
         """
         return self._calibration_grid_filterfactor*100
 
+    @property
+    def calibration_grid_removeborder(self):
+        """Factor used to remove border of the calibration grid.
+
+        Returns
+        -------
+        float
+            Number of Rows/Columns to be removed
+
+        """
+        return self._calibration_grid_removeborder
+
     def set_calibration_grid_filterfactor(self, value):
         """Set factor used to filter calibration grid.
 
@@ -114,8 +133,22 @@ class SiriusImageView(PyDMImageView):
             if self._calibration_grid_image is not None:
                 self._update_calibration_grid_image()
 
+    def set_calibration_grid_border2remove(self, value):
+        """Set factor used to remove border of the calibration grid.
+
+        Parameters
+        ----------
+        value: int
+            Number of Rows/Columns to be removed
+
+        """
+        self._calibration_grid_removeborder = value
+        if self._calibration_grid_image is not None:
+                self._update_calibration_grid_image()
+
     def process_image(self, image):
         """Reimplement process_image method to add grid to image."""
+        self.receivedData.emit()
         image2process = _dcopy(image)
         if ((self._show_calibration_grid) and
                 (self._calibration_grid_image is not None)):
