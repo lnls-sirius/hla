@@ -222,11 +222,11 @@ class Spectrogram(SiriusSpectrogramView):
     def __init__(self, prefix='', **kwargs):
         super().__init__(**kwargs)
         self.prefix = prefix
+        self.multiturnidx = SiriusConnectionSignal(
+                                self.prefix + 'OrbitMultiTurnIdx-SP')
 
     def channels(self):
         chans = super().channels()
-        self.multiturnidx = SiriusConnectionSignal(
-            self.prefix + 'OrbitMultiTurnIdx-SP')
         chans.append(self.multiturnidx)
         return chans
 
