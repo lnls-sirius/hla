@@ -1418,16 +1418,24 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
 
     clicked = Signal()
 
-    def __init__(self, parent=None, init_channel=None):
+
+
+    def __init__(self, parent=None, init_channel=None, invert=False):
         """Initialize all internal states and properties."""
         QFrame.__init__(self, parent)
         PyDMWritableWidget.__init__(self, init_channel=init_channel)
+
+        self._off = 0
+        self._on = 1
+        self.invert = invert
+
         self._bit = -1
         self._bit_val = 0
         self.value = 0
         self.clicked.connect(self.send_value)
         self.shape = 0
         self.renderer = QSvgRenderer()
+
 
     def mouseReleaseEvent(self, ev):
         """Deal with mouse clicks. Only accept clicks within the figure."""
@@ -1483,9 +1491,9 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
         """Treat appearence changes based on connection state and value."""
         if not self.isEnabled():
             state = 'Disconnected'
-        elif self._bit_val == 1:
+        elif self._bit_val == self._on:
             state = 'On'
-        elif self._bit_val == 0:
+        elif self._bit_val == self._off:
             state = 'Off'
         else:
             state = 'Disconnected'
@@ -1565,3 +1573,33 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
         """
         if bit >= 0:
             self._bit = int(bit)
+
+    @Property(bool)
+    def invert(self):
+       """
+       Property that indicates whether to invert button on/off representation.
+
+       Return
+       ------
+       bool
+       """
+       return self._invert
+   
+    @invert.setter
+    def invert(self, value):
+       """
+       Property that indicates whether to invert button on/off representation.
+
+       Parameters
+       ----------
+       value: bool
+       """
+       self._invert = value
+       if self._invert:
+         self._on = 0
+         self._off = 1
+       else:
+         self._on = 1
+         self._off = 0
+       # Trigger paintEvent somehow
+      
