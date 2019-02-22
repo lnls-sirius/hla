@@ -171,10 +171,10 @@ class MultiTurnData(BaseWidget):
                 color=cor,
                 lineStyle=1,
                 lineWidth=1)  # NOTE: If > 1: very low performance
+            opts['y_channel'] = self.get_pvname(opts['y_channel'])
             if position:
                 graph.addChannel(add_scale=1e-9, **opts)
             else:
-                opts['y_channel'] = self.get_pvname(opts['y_channel'])
                 graph.addChannel(**opts)
         return graph
 
