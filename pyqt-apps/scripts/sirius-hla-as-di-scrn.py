@@ -11,7 +11,7 @@ from qtpy.QtWidgets import QWidget, QLabel, QSpacerItem, \
                            QSizePolicy as QSzPlcy, QGridLayout
 from pydm.widgets import PyDMEnumComboBox, PyDMLabel
 from siriushla.sirius_application import SiriusApplication
-from siriushla.widgets import PyDMLed, SiriusLedAlert
+from siriushla.widgets import SiriusLedAlert
 from siriushla.as_di_scrns import SiriusScrnView
 from siriushla.widgets.windows import SiriusMainWindow
 
@@ -39,25 +39,16 @@ l_scrntype = PyDMLabel(
 led_scrntype = SiriusLedAlert(
     parent=cw, init_channel=prefix+scrn_device+':ScrnType-Sts')
 led_scrntype.shape = 2
-led_scrntype.setStyleSheet("""min-height:1.29em; max-height:1.29em;""")
-led_movests = PyDMLed(
-    parent=cw, init_channel=prefix+scrn_device+':DoneMov-Mon',
-    color_list=[PyDMLed.LightGreen, PyDMLed.DarkGreen])
-led_movests.shape = 2
-led_movests.setStyleSheet("""min-height:1.29em; max-height:1.29em;""")
 
 lay = QGridLayout()
 lay.addWidget(QLabel('<h3>Screen View</h3>',
-                     cw, alignment=Qt.AlignCenter), 0, 0, 1, 3)
+                     cw, alignment=Qt.AlignCenter), 0, 0, 1, 4)
 lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 1, 0)
 lay.addWidget(QLabel('Select Screen Type: ', cw,
                      alignment=Qt.AlignRight), 2, 0)
 lay.addWidget(cb_scrntype, 2, 1)
 lay.addWidget(l_scrntype, 2, 2)
 lay.addWidget(led_scrntype, 2, 3)
-lay.addWidget(QLabel('Motor movement status: ', cw,
-                     alignment=Qt.AlignRight), 3, 0)
-lay.addWidget(led_movests, 3, 1)
 
 lay.addItem(QSpacerItem(20, 40, QSzPlcy.Fixed, QSzPlcy.Fixed), 4, 0)
 lay.addWidget(scrn_view, 5, 0, 1, 4)
