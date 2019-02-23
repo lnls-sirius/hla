@@ -3,6 +3,7 @@
 from qtpy.QtWidgets import QFormLayout, QSizePolicy as QSzPlcy, QVBoxLayout, \
                            QSpacerItem, QGroupBox, QLabel
 from qtpy.QtCore import Qt
+from siriuspy.namesys.implementation import SiriusPVName
 from siriushla.widgets.windows import SiriusDialog
 from siriushla.as_di_scrns.base import \
     create_propty_layout as _create_propty_layout
@@ -71,19 +72,21 @@ class ScrnCalibrationSettings(SiriusDialog):
 
         Img = QGroupBox('Statistics Unit Conversion (Pixels→mm)', self)
 
+        cam_prefix = SiriusPVName(self.scrn_prefix).substitute(dev='ScrnCam')
+
         label_ImgScaleFactor = QLabel('Scale Factor: ', self)
         hbox_ImgScaleFactor = _create_propty_layout(
-            parent=self, prefix=self.scrn_prefix, propty='ImgScaleFactor',
+            parent=self, prefix=cam_prefix, propty='ImgScaleFactor',
             propty_type='sprb')
 
         label_ImgCenterOffsetX = QLabel('Center Offset X: ', self)
         hbox_ImgCenterOffsetX = _create_propty_layout(
-            parent=self, prefix=self.scrn_prefix, propty='ImgCenterOffsetX',
+            parent=self, prefix=cam_prefix, propty='ImgCenterOffsetX',
             propty_type='sprb')
 
         label_ImgCenterOffsetY = QLabel('Center Offset Y: ', self)
         hbox_ImgCenterOffsetY = _create_propty_layout(
-            parent=self, prefix=self.scrn_prefix, propty='ImgCenterOffsetY',
+            parent=self, prefix=cam_prefix, propty='ImgCenterOffsetY',
             propty_type='sprb')
 
         positioning.setStyleSheet("""

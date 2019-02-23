@@ -149,10 +149,8 @@ class ScrnSettingsDetails(SiriusMainWindow):
         return flay
 
     def _setupScrnTriggerLayout(self):
-        if 'TB' in self.device:
-            trg_prefix = self.prefix+'TB-Fam:TI-Scrn'
-        elif 'BO' in self.device:
-            trg_prefix = self.prefix+'BO-Fam:TI-Scrn'
+        if 'TB' in self.device or 'BO' in self.device:
+            trg_prefix = self.prefix+'AS-Fam:TI-Scrn-TBBO'
         elif 'TS' in self.device:
             trg_prefix = self.prefix+'TS-Fam:TI-Scrn'
 

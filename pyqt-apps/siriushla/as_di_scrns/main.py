@@ -11,7 +11,7 @@ from qtpy.QtCore import Qt, Slot
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla import util
-from siriushla.widgets import PyDMLed, SiriusLedAlert
+from siriushla.widgets import SiriusLedAlert
 from siriushla.widgets.signal_channel import SiriusConnectionSignal
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.as_di_scrns.base import \
@@ -36,11 +36,12 @@ class SiriusScrnView(QWidget):
         self.prefix = prefix
         self.device = device
         self.scrn_prefix = self.prefix+self.device
-        self._calibrationgrid_flag = False
-        screen_type_conn = SiriusConnectionSignal(
+        self._receivedData = False
+        self.screen_type_conn = SiriusConnectionSignal(
             self.scrn_prefix+':ScrnType-Sts')
-        screen_type_conn.new_value_signal.connect(
+        self.screen_type_conn.new_value_signal.connect(
             self.updateCalibrationGridFlag)
+        self._calibrationgrid_flag = self.screen_type_conn.getvalue()
         self._setupUi()
 
     @property
@@ -51,13 +52,11 @@ class SiriusScrnView(QWidget):
     @Slot(int)
     def updateCalibrationGridFlag(self, new_state):
         """Update calibrationgrid_flag property."""
-        if new_state != self._calibrationgrid_flag:
-            self._calibrationgrid_flag = new_state
-
-            if new_state == 1:
-                self.pushbutton_savegrid.setEnabled(True)
-            else:
-                self.pushbutton_savegrid.setEnabled(False)
+        self._calibrationgrid_flag = new_state
+        if new_state == 1:
+            self.pushbutton_savegrid.setEnabled(True)
+        else:
+            self.pushbutton_savegrid.setEnabled(False)
 
     def _setupUi(self):
         self.setLayout(QGridLayout())
@@ -105,15 +104,15 @@ class SiriusScrnView(QWidget):
             QSpacerItem(4, 20, QSzPlcy.Preferred, QSzPlcy.Preferred), 5, 4)
 
         self.layout().setColumnStretch(0, 1)
-        self.layout().setColumnStretch(1, 10)
+        self.layout().setColumnStretch(1, 20)
         self.layout().setColumnStretch(2, 1)
-        self.layout().setColumnStretch(3, 10)
+        self.layout().setColumnStretch(3, 20)
         self.layout().setColumnStretch(4, 1)
-        self.layout().setRowStretch(0, 34)
+        self.layout().setRowStretch(0, 60)
         self.layout().setRowStretch(1, 1)
-        self.layout().setRowStretch(2, 13)
+        self.layout().setRowStretch(2, 24)
         self.layout().setRowStretch(3, 1)
-        self.layout().setRowStretch(4, 13)
+        self.layout().setRowStretch(4, 16)
         self.layout().setRowStretch(5, 1)
 
     def _cameraviewLayout(self):
@@ -135,6 +134,7 @@ class SiriusScrnView(QWidget):
         self.image_view.setStyleSheet("""
             #ScrnView{min-width:42em; min-height:32em;}""")
         self.image_view.failToSaveGrid.connect(self._showFailToSaveGridMsg)
+        self.image_view.receivedData.connect(self._setReceivedDataFlag)
 
         lay = QGridLayout()
         lay.setContentsMargins(0, 0, 0, 0)
@@ -161,6 +161,8 @@ class SiriusScrnView(QWidget):
         hbox_grid.addWidget(self.checkBox_showgrid)
         hbox_grid.addWidget(self.pushbutton_savegrid)
 
+        lb = QLabel('Show levels <')
+        lb.setStyleSheet("""min-width:6em;max-width:6em;""")
         self.spinbox_gridfilterfactor = QSpinBox()
         self.spinbox_gridfilterfactor.setMaximum(100)
         self.spinbox_gridfilterfactor.setMinimum(0)
@@ -169,25 +171,43 @@ class SiriusScrnView(QWidget):
         self.spinbox_gridfilterfactor.editingFinished.connect(
             self._setCalibrationGridFilterFactor)
         self.spinbox_gridfilterfactor.setStyleSheet("""
-            min-width:2.90em;\nmax-width:2.90em;""")
+            min-width:4em;\nmax-width:4em;""")
         hbox_filter = QHBoxLayout()
         hbox_filter.setSpacing(0)
-        hbox_filter.addWidget(QLabel('Show levels <'))
+        hbox_filter.addWidget(lb)
         hbox_filter.addWidget(self.spinbox_gridfilterfactor)
-        hbox_filter.addWidget(QLabel('%'))
+        hbox_filter.addWidget(QLabel(' %'))
+
+        lb = QLabel('Remove ')
+        lb.setStyleSheet("""min-width:6em;max-width:6em;""")
+        self.spinbox_removeborder = QSpinBox()
+        self.spinbox_removeborder.setMaximum(512)
+        self.spinbox_removeborder.setMinimum(0)
+        self.spinbox_removeborder.setValue(
+            self.image_view.calibration_grid_removeborder)
+        self.spinbox_removeborder.editingFinished.connect(
+            self._setCalibrationGridBorder2Remove)
+        self.spinbox_removeborder.setStyleSheet("""
+            min-width:4em; max-width:4em;""")
+        hbox_remove = QHBoxLayout()
+        hbox_remove.setSpacing(0)
+        hbox_remove.addWidget(lb)
+        hbox_remove.addWidget(self.spinbox_removeborder)
+        hbox_remove.addWidget(QLabel(' px border'))
 
         hbox_EnblLED = _create_propty_layout(
             parent=self, prefix=self.scrn_prefix, propty='EnblLED',
             propty_type='enbldisabl', width=4.68)
 
         lay = QFormLayout()
-        lay.addItem(QSpacerItem(40, 10, QSzPlcy.Fixed, QSzPlcy.Fixed))
+        lay.addItem(QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Preferred))
         lay.addRow('     Grid: ', hbox_grid)
-        lay.addItem(QSpacerItem(40, 10, QSzPlcy.Fixed, QSzPlcy.Fixed))
+        lay.addItem(QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Preferred))
         lay.addRow('     ', hbox_filter)
-        lay.addItem(QSpacerItem(40, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
+        lay.addRow('     ', hbox_remove)
+        lay.addItem(QSpacerItem(1, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
         lay.addRow('     LED: ', hbox_EnblLED)
-        lay.addItem(QSpacerItem(40, 10, QSzPlcy.Fixed, QSzPlcy.Fixed))
+        lay.addItem(QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Preferred))
         lay.setLabelAlignment(Qt.AlignRight)
         lay.setFormAlignment(Qt.AlignCenter)
         return lay
@@ -247,7 +267,6 @@ class SiriusScrnView(QWidget):
 
         lay = QFormLayout()
         lay.setFormAlignment(Qt.AlignCenter)
-        lay.setContentsMargins(20, 20, 20, 20)
         lay.addRow(QLabel('<h4>Camera Acquisition</h4>',
                           alignment=Qt.AlignCenter))
         lay.addRow(label_CamEnbl, hbox_CamEnbl)
@@ -255,14 +274,14 @@ class SiriusScrnView(QWidget):
         lay.addRow(label_CamExposureTime, hbox_CamExposureTime)
         lay.addRow(label_CamGain, hbox_CamGain)
         lay.addRow('', hbox_AutoCamGain)
-        lay.addItem(QSpacerItem(4, 20, QSzPlcy.Fixed, QSzPlcy.Preferred))
+        lay.addItem(QSpacerItem(4, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
         lay.addRow(QLabel('<h4>Camera ROI Settings [pixels]</h4>',
                           alignment=Qt.AlignCenter))
         lay.addRow(label_ROIWidth, hbox_ROIWidth)
         lay.addRow(label_ROIHeight, hbox_ROIHeight)
         lay.addRow(label_ROIOffsetX, hbox_ROIOffsetX)
         lay.addRow(label_ROIOffsetY, hbox_ROIOffsetY)
-        lay.addItem(QSpacerItem(4, 20, QSzPlcy.Fixed, QSzPlcy.Preferred))
+        lay.addItem(QSpacerItem(4, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
         lay.addRow('', self.pb_moreSettings)
         return lay
 
@@ -276,15 +295,14 @@ class SiriusScrnView(QWidget):
         self.comboBox_Method.addItem('NDStats', 1)
         self.comboBox_Method.setCurrentIndex(0)
         self.comboBox_Method.setStyleSheet("""
-            QComboBox::item {\nheight: 1em;}
-            QComboBox{\nmin-width: 6em;}
-            """)
+            QComboBox::item {height: 1em;}
+            QComboBox{min-width:6em;}""")
         self.comboBox_Method.currentIndexChanged.connect(
             self._handleShowStatistics)
 
         # - Centroid
         label_Centroid = QLabel('Centroid [mm]', self)
-        label_Centroid.setStyleSheet("""min-width:15em;max-width:25em;""")
+        label_Centroid.setStyleSheet("""min-width:15em;""")
         label_i_Center = QLabel('(', self)
 
         self.PyDMLabel_CenterXDimFei = PyDMLabel(
@@ -305,7 +323,7 @@ class SiriusScrnView(QWidget):
 
         # - Sigma
         label_Sigma = QLabel('Sigma [mm]', self)
-        label_Sigma.setStyleSheet("""min-width:15em;max-width:25em;""")
+        label_Sigma.setStyleSheet("""min-width:15em;""")
         label_i_Sigma = QLabel('(', self)
 
         self.PyDMLabel_SigmaXDimFei = PyDMLabel(
@@ -326,7 +344,7 @@ class SiriusScrnView(QWidget):
 
         # - Theta
         label_Theta = QLabel('Theta [rad]')
-        label_Theta.setStyleSheet("""min-width:15em;max-width:25em;""")
+        label_Theta.setStyleSheet("""min-width:15em;""")
         label_i_Theta = QLabel('(', self)
 
         self.PyDMLabel_ThetaDimFei = PyDMLabel(
@@ -338,11 +356,11 @@ class SiriusScrnView(QWidget):
         label_f_Theta = QLabel(')', self)
 
         lay = QGridLayout()
-        lay.addItem(QSpacerItem(20, 2, QSzPlcy.Fixed, QSzPlcy.Expanding), 0, 0)
         lay.addWidget(label_Method, 1, 1, 1, 2)
         lay.addWidget(self.comboBox_Method, 1, 4)
-        lay.addItem(QSpacerItem(4, 2, QSzPlcy.Fixed, QSzPlcy.Preferred), 2, 2)
-        lay.addWidget(label_Centroid, 3, 1, 1, 5)
+        lay.addItem(
+            QSpacerItem(4, 2, QSzPlcy.Ignored, QSzPlcy.Preferred), 2, 2)
+        lay.addWidget(label_Centroid, 3, 1, 1, 5, alignment=Qt.AlignCenter)
         lay.addWidget(label_i_Center, 4, 1)
         lay.addWidget(self.PyDMLabel_CenterXDimFei, 4, 2)
         lay.addWidget(self.PyDMLabel_CenterXNDStats, 4, 2)
@@ -350,8 +368,9 @@ class SiriusScrnView(QWidget):
         lay.addWidget(self.PyDMLabel_CenterYDimFei, 4, 4)
         lay.addWidget(self.PyDMLabel_CenterYNDStats, 4, 4)
         lay.addWidget(label_f_Center, 4, 5)
-        lay.addItem(QSpacerItem(4, 2, QSzPlcy.Fixed, QSzPlcy.Preferred), 5, 2)
-        lay.addWidget(label_Sigma, 6, 1, 1, 5)
+        lay.addItem(
+            QSpacerItem(4, 2, QSzPlcy.Ignored, QSzPlcy.Preferred), 5, 2)
+        lay.addWidget(label_Sigma, 6, 1, 1, 5, alignment=Qt.AlignCenter)
         lay.addWidget(label_i_Sigma, 7, 1)
         lay.addWidget(self.PyDMLabel_SigmaXDimFei, 7, 2)
         lay.addWidget(self.PyDMLabel_SigmaXNDStats, 7, 2)
@@ -359,14 +378,13 @@ class SiriusScrnView(QWidget):
         lay.addWidget(self.PyDMLabel_SigmaYDimFei, 7, 4)
         lay.addWidget(self.PyDMLabel_SigmaYNDStats, 7, 4)
         lay.addWidget(label_f_Sigma, 7, 5)
-        lay.addItem(QSpacerItem(4, 2, QSzPlcy.Fixed, QSzPlcy.Preferred), 8, 2)
-        lay.addWidget(label_Theta, 9, 1, 1, 5)
+        lay.addItem(
+            QSpacerItem(4, 2, QSzPlcy.Ignored, QSzPlcy.Preferred), 8, 2)
+        lay.addWidget(label_Theta, 9, 1, 1, 5, alignment=Qt.AlignCenter)
         lay.addWidget(label_i_Theta, 10, 1)
         lay.addWidget(self.PyDMLabel_ThetaDimFei, 10, 2, 1, 3)
         lay.addWidget(self.PyDMLabel_ThetaNDStats, 10, 2, 1, 3)
         lay.addWidget(label_f_Theta, 10, 5)
-        lay.addItem(
-            QSpacerItem(20, 2, QSzPlcy.Fixed, QSzPlcy.Expanding), 11, 6)
         return lay
 
     def _handleShowStatistics(self, visible):
@@ -390,36 +408,62 @@ class SiriusScrnView(QWidget):
         roi_offsetx = float(self.PyDMLabel_ImgROIOffsetX.text())
         roi_offsety = float(self.PyDMLabel_ImgROIOffsetY.text())
 
-        # Change ROI to get entire image
+        # Disable camera acquisition and wait for disabling
         self.PyDMStateButton_CamEnbl.send_value_signal[int].emit(0)
+        state = self.SiriusLedState_CamEnbl.state
+        while state == 1:
+            time.sleep(0.1)
+            state = self.SiriusLedState_CamEnbl.state
+
+        # Change ROI to get entire image
         self.PyDMSpinbox_ImgROIHeight.send_value_signal[float].emit(
             float(self.image_view.image_maxheight))
         self.PyDMSpinbox_ImgROIWidth.send_value_signal[float].emit(
             float(self.image_view.image_maxwidth))
         self.PyDMSpinbox_ImgROIOffsetX.send_value_signal[float].emit(0)
         self.PyDMSpinbox_ImgROIOffsetY.send_value_signal[float].emit(0)
+
+        # Enable camera acquisition and wait for receiveing first frame
+        self._receivedData = False
         self.PyDMStateButton_CamEnbl.send_value_signal[int].emit(1)
+        while not self._receivedData:
+            time.sleep(0.1)
 
         # Save grid
         self.image_view.saveCalibrationGrid()
 
-        # Change ROI to original size
+        # Disable camera acquisition and wait for disabling
         self.PyDMStateButton_CamEnbl.send_value_signal[int].emit(0)
+        state = self.SiriusLedState_CamEnbl.state
+        while state == 1:
+            time.sleep(0.1)
+            state = self.SiriusLedState_CamEnbl.state
+
+        # Change ROI to original size
         self.PyDMSpinbox_ImgROIHeight.send_value_signal[float].emit(roi_h)
         self.PyDMSpinbox_ImgROIWidth.send_value_signal[float].emit(roi_w)
         self.PyDMSpinbox_ImgROIOffsetX.send_value_signal[float].emit(
             roi_offsetx)
         self.PyDMSpinbox_ImgROIOffsetY.send_value_signal[float].emit(
             roi_offsety)
+
+        # Enable camera acquisition
         self.PyDMStateButton_CamEnbl.send_value_signal[int].emit(1)
 
         # Enable showing saved grid
         time.sleep(0.1)
         self.checkBox_showgrid.setEnabled(True)
 
+    def _setReceivedDataFlag(self):
+        self._receivedData = True
+
     def _setCalibrationGridFilterFactor(self):
         self.image_view.set_calibration_grid_filterfactor(
             self.spinbox_gridfilterfactor.value())
+
+    def _setCalibrationGridBorder2Remove(self):
+        self.image_view.set_calibration_grid_border2remove(
+            self.spinbox_removeborder.value())
 
     @Slot()
     def _showFailToSaveGridMsg(self):
@@ -448,12 +492,6 @@ if __name__ == '__main__':
     led_scrntype = SiriusLedAlert(
         parent=cw, init_channel=prefix+scrn_device+':ScrnType-Sts')
     led_scrntype.shape = 2
-    led_scrntype.setStyleSheet("""min-height:1.29em; max-height:1.29em;""")
-    led_movests = PyDMLed(
-        parent=cw, init_channel=prefix+scrn_device+':DoneMov-Mon',
-        color_list=[PyDMLed.LightGreen, PyDMLed.DarkGreen])
-    led_movests.shape = 2
-    led_movests.setStyleSheet("""min-height:1.29em; max-height:1.29em;""")
 
     lay = QGridLayout()
     lay.addWidget(QLabel('<h3>Screen View</h3>',
@@ -464,9 +502,6 @@ if __name__ == '__main__':
     lay.addWidget(cb_scrntype, 2, 1)
     lay.addWidget(l_scrntype, 2, 2)
     lay.addWidget(led_scrntype, 2, 3)
-    lay.addWidget(QLabel('Motor movement status: ', cw,
-                         alignment=Qt.AlignRight), 3, 0)
-    lay.addWidget(led_movests, 3, 1)
 
     lay.addItem(QSpacerItem(20, 40, QSzPlcy.Fixed, QSzPlcy.Fixed), 4, 0)
     lay.addWidget(scrn_view, 5, 0, 1, 4)
