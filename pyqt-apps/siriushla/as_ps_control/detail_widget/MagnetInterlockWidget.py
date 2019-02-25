@@ -4,7 +4,7 @@ from epics import get_pv
 from siriushla.widgets import SiriusMainWindow
 from siriushla.widgets import SiriusLedAlert
 from qtpy.QtWidgets import \
-    QWidget, QHBoxLayout, QVBoxLayout, QGridLayout, QLabel
+    QWidget, QHBoxLayout, QVBoxLayout, QGridLayout, QLabel, QTabWidget
 from siriuspy.envars import vaca_prefix as _VACA_PREFIX
 
 
@@ -96,17 +96,21 @@ class MagnetInterlockWindow(SiriusMainWindow):
                     else 'Hard Interlock') +
                    "</h3>"))
         self._interlock_layout = QHBoxLayout()
+        self._tab_widget = QTabWidget(self)
         for ps in self._get_ps_list(self._magnet_name):
             ma = MagnetInterlockWidget(parent=self,
                                        magnet=ps,
                                        interlock=self._interlock)
-            self._interlock_layout.addWidget(ma)
-        self._central_widget.layout.addLayout(self._interlock_layout)
+            # self._interlock_layout.addWidget(ma)
+            self._tab_widget.addTab(ma, ps)
+        # self._central_widget.layout.addLayout(self._interlock_layout)
+        self._central_widget.layout.addWidget(self._tab_widget)
+
 
     def _get_ps_list(self, magnet):
         if 'SI-Fam:MA-B1B2' in magnet:
             return ['SI-Fam:PS-B1B2-1', 'SI-Fam:PS-B1B2-2']
         elif 'BO-Fam:MA-B' in magnet:
-            return ['BO-Fam:PS-B', 'BO-Fam:PS-B']
+            return ['BO-Fam:PS-B-1', 'BO-Fam:PS-B-2']
         else:
             return [magnet.replace('MA', 'PS'), ]
