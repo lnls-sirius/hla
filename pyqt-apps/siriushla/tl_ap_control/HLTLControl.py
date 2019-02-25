@@ -50,16 +50,15 @@ class TLAPControlWindow(SiriusMainWindow):
             self._scrn_devicenames_list] = self._getTLData(self._tl)
 
         # Set central widget
+        curr_dir = _os.path.abspath(_os.path.dirname(__file__)) + '/'
         tmp_file = _substitute_in_file(
-            '/home/sirius/repos/hla/pyqt-apps/siriushla'
-            '/tl_ap_control/' + UI_FILE,
+            curr_dir + UI_FILE,
             {'PREFIX': self.prefix, 'ICT1': ICT1, 'ICT2': ICT2})
         self.centralwidget = loadUi(tmp_file)
         self.setCentralWidget(self.centralwidget)
 
         # Fill TL Lattice Widget
-        lattice = QSvgWidget('/home/sirius/repos/hla/pyqt-apps/'
-                             'siriushla/tl_ap_control/' + SVG_FILE)
+        lattice = QSvgWidget(curr_dir + SVG_FILE)
         self.centralwidget.widget_lattice.setLayout(QVBoxLayout())
         self.centralwidget.widget_lattice.layout().addWidget(lattice)
 

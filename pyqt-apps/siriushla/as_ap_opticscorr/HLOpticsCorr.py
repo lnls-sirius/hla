@@ -1,6 +1,7 @@
 #!/usr/bin/env python-sirius
 """Booster Optics Correction HLA Module."""
 
+import os as _os
 from qtpy.uic import loadUi
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QPushButton, QGridLayout, QLabel, QSpacerItem, \
@@ -28,8 +29,8 @@ class OpticsCorrWindow(SiriusMainWindow):
         if not prefix:
             prefix = _vaca_prefix
 
-        UI_FILE = ('/home/sirius/repos/hla/pyqt-apps/siriushla/'
-                   'as_ap_opticscorr/ui_'+acc+'_ap_'+opticsparam+'corr.ui')
+        UI_FILE = (_os.path.abspath(_os.path.dirname(__file__)) + '/ui_' +
+                   acc + '_ap_' + opticsparam + 'corr.ui')
         tmp_file = _substitute_in_file(UI_FILE, {'PREFIX': prefix})
         self.centralwidget = loadUi(tmp_file)
         self.setCentralWidget(self.centralwidget)
