@@ -213,6 +213,7 @@ class BasePSWidget(QWidget):
         # Analog mon widget
         self.analog_mon_label = PyDMLabel(
             parent=self, init_channel=self._analog_mon_pv)
+        self.analog_mon_label.showUnits = True
         self.analog_mon_label.setObjectName("analog_label")
 
         self.layout.addWidget(self.analog_widget)
@@ -225,6 +226,7 @@ class BasePSWidget(QWidget):
             self.strength_widget.sp_scrollbar.setTracking(False)
             self.strength_mon_label = PyDMLabel(
                 parent=self, init_channel=self._strength_mon_pv)
+            self.strength_mon_label.showUnits = True
             self.strength_mon_label.setObjectName("strength_label")
 
             self.layout.addWidget(self.strength_widget)
