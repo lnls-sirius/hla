@@ -15,7 +15,6 @@ class PSDetailWindow(SiriusMainWindow):
 
     def __init__(self, psname, parent=None):
         """Init UI."""
-        print("########################################### PSDETAILWINDOW ##################################################################################")
         super(PSDetailWindow, self).__init__(parent)
         self.app = PyDMApplication.instance()
 
