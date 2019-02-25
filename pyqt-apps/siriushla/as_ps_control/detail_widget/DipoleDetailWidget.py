@@ -34,21 +34,70 @@ class DipoleDetailWidget(PSDetailWidget):
                          ps_name + "-2"]
 
         super(DipoleDetailWidget, self).__init__(self._magnet_name, parent)
+    
+    def _setWidgetLayout(self):
+        layout = QVBoxLayout()
+        boxes_layout = QHBoxLayout()
+        controls = QVBoxLayout()
+        analogs = QVBoxLayout()
+        cycle = QVBoxLayout()
+        waveform = QVBoxLayout()
+        boxes_layout.addLayout(controls)
+        boxes_layout.addLayout(analogs)
+        boxes_layout.addLayout(cycle)
+        boxes_layout.addLayout(waveform)
+
+        layout.addWidget(QLabel("<h2>" + self._psname + "</h2>"))
+        layout.addLayout(boxes_layout)
+        # if not self._is_magnet:
+        dclink_layout = QHBoxLayout()
+        dclink1_button = QPushButton(
+            '{}\'s DCLinks'.format(self._ps_list[0]), self)
+        dclink1_button.setObjectName('dclink1_button')
+        dclink2_button = QPushButton(
+            '{}\'s DCLinks'.format(self._ps_list[1]), self)
+        dclink2_button.setObjectName('dclink2_button')
+        dclink_layout.addWidget(dclink1_button)
+        dclink_layout.addWidget(dclink2_button)
+        layout.addLayout(dclink_layout)
+
+        controls.addWidget(self.version_box)
+        controls.addWidget(self.interlock_box)
+        controls.addWidget(self.opmode_box)
+        controls.addWidget(self.pwrstate_box)
+        # controls.addWidget(self.wfm_box)
+        controls.addWidget(self.command_box)
+
+        analogs.addWidget(self.current_box)
+        if self._is_magnet:
+            analogs.addWidget(self.metric_box)
+        # analogs.addWidget(self.cycle_box)
+        analogs.addWidget(self.pru_box)
+
+        cycle.addWidget(self.cycle_box)
+
+        waveform.addWidget(self.wfm_box)
+
+        return layout
 
     def _interlockLayout(self):
         layout = QGridLayout()
         soft_intlk_button = QPushButton('Soft Interlock', self)
         hard_intlk_button = QPushButton('Hard Interlock', self)
-        layout.addWidget(soft_intlk_button, 0, 0, 1, 2)
+        layout.addWidget(soft_intlk_button, 0, 0)
         layout.addWidget(SiriusLedAlert(
-            self, self._ps_list[0] + ":IntlkSoft-Mon"), 1, 0)
+            self, self._magnet_name + ':IntlkSoft-Mon'), 0, 1)
         layout.addWidget(SiriusLedAlert(
-            self, self._ps_list[1] + ":IntlkSoft-Mon"), 1, 1)
-        layout.addWidget(hard_intlk_button, 2, 0, 1, 2)
+            self, self._ps_list[0] + ":IntlkSoft-Mon"), 0, 2)
         layout.addWidget(SiriusLedAlert(
-            self, self._ps_list[0] + ":IntlkHard-Mon"), 3, 0)
+            self, self._ps_list[1] + ":IntlkSoft-Mon"), 0, 3)
+        layout.addWidget(hard_intlk_button, 1, 0)
         layout.addWidget(SiriusLedAlert(
-            self, self._ps_list[1] + ":IntlkHard-Mon"), 3, 1)
+            self, self._magnet_name + ':IntlkHard-Mon'), 1, 1)
+        layout.addWidget(SiriusLedAlert(
+            self, self._ps_list[0] + ":IntlkHard-Mon"), 1, 2)
+        layout.addWidget(SiriusLedAlert(
+            self, self._ps_list[1] + ":IntlkHard-Mon"), 1, 3)
         # Connect buttons to open magnet interlock windows
         _util.connect_window(soft_intlk_button, MagnetInterlockWindow, self,
                              **{'magnet': self._magnet_name,
@@ -63,17 +112,21 @@ class DipoleDetailWidget(PSDetailWidget):
 
         self.opmode_sp = PyDMEnumComboBox(
             self, init_channel=self._prefixed_magnet + ":OpMode-Sel")
+        self.opmode_rb = PyDMLabel(
+            self, self._magnet_name + ':OpMode-Sts')
+        self.opmode_rb.setObjectName('opmode_rb_label')
         self.opmode1_rb = PyDMLabel(
             self, self._ps_list[0] + ":OpMode-Sts")
         self.opmode1_rb.setObjectName("opmode1_rb_label")
+        self.opmode2_rb = PyDMLabel(
+            self, self._ps_list[1] + ":OpMode-Sts")
+        self.opmode2_rb.setObjectName("opmode2_rb_label")
+        
         self.ctrlmode1_led = SiriusLedAlert(
             self, self._ps_list[0] + ":CtrlMode-Mon")
         self.ctrlmode1_label = PyDMLabel(
             self, self._ps_list[0] + ":CtrlMode-Mon")
         self.ctrlmode1_label.setObjectName("ctrlmode1_label")
-        self.opmode2_rb = PyDMLabel(
-            self, self._ps_list[1] + ":OpMode-Sts")
-        self.opmode2_rb.setObjectName("opmode2_rb_label")
         self.ctrlmode2_led = SiriusLedAlert(
             self, self._ps_list[1] + ":CtrlMode-Mon")
         self.ctrlmode2_label = PyDMLabel(
@@ -97,12 +150,12 @@ class DipoleDetailWidget(PSDetailWidget):
         ps2_layout.addWidget(self.ctrlmode2_led, 1, 0)
         ps2_layout.addWidget(self.ctrlmode2_label, 1, 1)
 
-        layout.addWidget(self.opmode_sp, 0, 0, 1, 2, Qt.AlignCenter)
-        layout.addWidget(self.opmode1_rb, 1, 0)
-        layout.addWidget(self.opmode2_rb, 1, 1)
-        layout.addLayout(ps1_layout, 2, 0)
-        layout.addLayout(ps2_layout, 2, 1)
-        # layout.setColumnStretch(2, 1)
+        layout.addWidget(self.opmode_sp, 0, 0)
+        layout.addWidget(self.opmode_rb, 1, 0, Qt.AlignCenter)
+        layout.addWidget(self.opmode1_rb, 2, 0, Qt.AlignCenter)
+        layout.addWidget(self.opmode2_rb, 3, 0, Qt.AlignCenter)
+        layout.addLayout(ps1_layout, 0, 1, 2, 1, Qt.AlignCenter)
+        layout.addLayout(ps2_layout, 2, 1, 2, 1, Qt.AlignCenter)
 
         return layout
 
@@ -120,6 +173,10 @@ class DipoleDetailWidget(PSDetailWidget):
             parent=self,
             init_channel=self._prefixed_magnet + ":PwrState-Sel")
 
+        self.pwrstate_led = SiriusLedState(
+            self, self._magnet_name + ":PwrState-Sts")
+        self.pwrstate_label = PyDMLabel(
+            self, self._magnet_name + ":PwrState-Sts")
         self.pwrstate1_led = SiriusLedState(
             self, self._ps_list[0] + ":PwrState-Sts")
         self.pwrstate1_label = PyDMLabel(
@@ -141,17 +198,21 @@ class DipoleDetailWidget(PSDetailWidget):
         # buttons_layout = QHBoxLayout()
         # buttons_layout.addWidget(self.on_btn)
         # buttons_layout.addWidget(self.off_btn)
+        pwrstatus_layout = QHBoxLayout()
         pwrstatus_layout1 = QHBoxLayout()
         pwrstatus_layout2 = QHBoxLayout()
         # pwrstatus_layout.addWidget(QLabel("PS1"), 0, 0, 1, 2)
         # pwrstatus_layout.addWidget(QLabel("PS2"), 0, 2, 1, 2)
+        pwrstatus_layout.addWidget(self.pwrstate_led)
+        pwrstatus_layout.addWidget(self.pwrstate_label)
         pwrstatus_layout1.addWidget(self.pwrstate1_led)
         pwrstatus_layout1.addWidget(self.pwrstate1_label)
         pwrstatus_layout2.addWidget(self.pwrstate2_led)
         pwrstatus_layout2.addWidget(self.pwrstate2_label)
 
-        layout.addWidget(self.state_button, 0, 0, 1, 2)
-        layout.addLayout(pwrstatus_layout1, 1, 0, Qt.AlignCenter)
+        layout.addWidget(self.state_button, 0, 0, Qt.AlignCenter)
+        layout.addLayout(pwrstatus_layout, 1, 0, Qt.AlignCenter)
+        layout.addLayout(pwrstatus_layout1, 0, 1, Qt.AlignCenter)
         layout.addLayout(pwrstatus_layout2, 1, 1, Qt.AlignCenter)
         # layout.addStretch(1)
 
@@ -345,6 +406,7 @@ class DipoleDetailWidget(PSDetailWidget):
         layout.addWidget(self.cycle_auxparam_label, 7, 0, Qt.AlignRight)
         layout.addWidget(self.cycle_auxparam_sp_le, 7, 1)
         layout.addLayout(auxparam_rb_layout, 7, 2)
+        layout.setRowStretch(8, 1)
 
         return layout
 
