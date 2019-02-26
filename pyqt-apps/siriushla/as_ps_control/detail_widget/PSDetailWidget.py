@@ -153,10 +153,9 @@ class PSDetailWidget(QWidget):
 
         layout.addWidget(QLabel("<h2>" + self._psname + "</h2>"))
         layout.addLayout(boxes_layout)
-        if not self._is_magnet:
-            dclink_button = QPushButton('DCLink', self)
-            dclink_button.setObjectName('dclink_button')
-            layout.addWidget(dclink_button)
+        dclink_button = QPushButton('DCLink', self)
+        dclink_button.setObjectName('dclink_button')
+        layout.addWidget(dclink_button)
 
         controls.addWidget(self.version_box)
         controls.addWidget(self.interlock_box)
@@ -543,6 +542,7 @@ class PSDetailWidget(QWidget):
         layout.addWidget(self.rmp_n_cycles_mon_label, 2, 1)
         layout.addWidget(self.rmp_ready, 3, 0)
         layout.addWidget(self.rmp_ready_mon_led, 3, 1)
+        layout.setRowStretch(4, 1)
 
         return layout
 
@@ -575,22 +575,31 @@ class DCLinkDetailWidget(PSDetailWidget):
 
     def _setup_ui(self):
         # Group boxes that compose the widget
-        self.version_box = QGroupBox("Version")
+        self.version_box = QGroupBox('Version')
         self.version_box.setObjectName("version")
-        self.interlock_box = QGroupBox("Interlock")
-        self.interlock_box.setObjectName("interlock")
-        self.pwrstate_box = QGroupBox("PwrState")
-        self.pwrstate_box.setObjectName("power_state")
+        
+        self.interlock_box = QGroupBox('Interlock')
+        self.interlock_box.setObjectName('interlock')
+        
+        self.opmode_box = QGroupBox('Operation Mode')
+        self.opmode_box.setObjectName('operation_mode')
+
+        self.pwrstate_box = QGroupBox('PwrState')
+        self.pwrstate_box.setObjectName('power_state')
+        
         self.analog_box = QGroupBox(self._analog_varname)
-        self.analog_box.setObjectName("current")
-        self.command_box = QGroupBox("Commands")
-        self.command_box.setObjectName("command_box")
-        self.aux_box = QGroupBox("Other Params")
-        self.aux_box.setObjectName("aux_box")
+        self.analog_box.setObjectName('current')
+        
+        self.command_box = QGroupBox('Commands')
+        self.command_box.setObjectName('command_box')
+        
+        self.aux_box = QGroupBox('Other Params')
+        self.aux_box.setObjectName('aux_box')
 
         # Set group boxes layouts
         self.version_box.setLayout(self._versionLayout())
         self.interlock_box.setLayout(self._interlockLayout())
+        self.opmode_box.setLayout(self._opModeLayout())
         self.pwrstate_box.setLayout(self._powerStateLayout())
         self.analog_box.setLayout(self._analogLayout())
         self.command_box.setLayout(self._commandLayout())
@@ -615,6 +624,7 @@ class DCLinkDetailWidget(PSDetailWidget):
 
         controls.addWidget(self.version_box)
         controls.addWidget(self.interlock_box)
+        controls.addWidget(self.opmode_box)
         controls.addWidget(self.pwrstate_box)
         controls.addWidget(self.command_box)
 
@@ -629,6 +639,31 @@ class DCLinkDetailWidget(PSDetailWidget):
     def _auxLayout(self):
         raise NotImplementedError
 
+    def _opModeLayout(self):
+        layout = QGridLayout()
+
+        # self.opmode_sp = PyDMEnumComboBox(
+        #     self, self._prefixed_psname + ":OpMode-Sel")
+        self.opmode_rb = PyDMLabel(
+            self, self._prefixed_psname + ":OpMode-Sts")
+        self.opmode_rb.setObjectName("opmode1_rb_label")
+        self.ctrlmode_led = SiriusLedAlert(
+            self, self._prefixed_psname + ":CtrlMode-Mon")
+        self.ctrlmode_label = PyDMLabel(
+            self, self._prefixed_psname + ":CtrlMode-Mon")
+        self.ctrlmode_label.setObjectName("ctrlmode1_label")
+
+        ctrlmode_layout = QHBoxLayout()
+        ctrlmode_layout.addWidget(self.ctrlmode_led)
+        ctrlmode_layout.addWidget(self.ctrlmode_label)
+
+        # layout.addWidget(self.opmode_sp, 0, 0, Qt.AlignHCenter)
+        layout.addWidget(self.opmode_rb, 0, 0, Qt.AlignHCenter)
+        layout.addLayout(ctrlmode_layout, 1, 0, Qt.AlignHCenter)
+        # layout.setRowStretch(3, 1)
+        # layout.setColumnStretch(1, 1)
+
+        return layout
 
 class FBPDCLinkDetailWidget(DCLinkDetailWidget):
 
