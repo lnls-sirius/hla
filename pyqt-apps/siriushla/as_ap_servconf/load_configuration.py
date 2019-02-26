@@ -7,7 +7,7 @@ from qtpy.QtWidgets import QHBoxLayout, QVBoxLayout, QTableView, QLineEdit, \
 from qtpy.QtCore import Slot, Signal, Qt
 
 from siriuspy.servconf.conf_service import ConfigService
-from siriushla.as_ap_servconf.config_server import ConfigDbTableModel
+from siriushla.model import ConfigDbTableModel
 from siriushla.widgets.windows import SiriusDialog
 
 
