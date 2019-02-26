@@ -41,13 +41,26 @@ class SOFBControl(BaseWidget):
         # ####################################################################
         # ########################### STATUS #################################
         # ####################################################################
-        btn = QPushButton('Open Status', grp_bx)
+        btn = QPushButton('Correctors Status', grp_bx)
         Window = create_window_from_widget(
             StatusWidget, name='StatusWindow')
         _util.connect_window(
             btn, Window, self, prefix=self.prefix, acc=self.acc, is_orb=False)
         pdm_led = SiriusLedAlert(
             grp_bx, init_channel=self.prefix+'CorrStatus-Mon')
+        hbl = QHBoxLayout()
+        hbl.setSpacing(9)
+        hbl.addWidget(btn)
+        hbl.addWidget(pdm_led)
+        vbl.addItem(hbl)
+
+        btn = QPushButton('Orbit Status', grp_bx)
+        Window = create_window_from_widget(
+            StatusWidget, name='StatusWindow')
+        _util.connect_window(
+            btn, Window, self, prefix=self.prefix, acc=self.acc, is_orb=True)
+        pdm_led = SiriusLedAlert(
+            grp_bx, init_channel=self.prefix+'OrbitStatus-Mon')
         hbl = QHBoxLayout()
         hbl.setSpacing(9)
         hbl.addWidget(btn)
