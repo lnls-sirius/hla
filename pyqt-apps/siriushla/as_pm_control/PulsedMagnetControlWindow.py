@@ -16,35 +16,47 @@ class PulsedMagnetControlWindow(SiriusMainWindow):
     StyleSheet = """
     """
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, is_main=True, section=None):
         """Constructor."""
-        self.app = PyDMApplication.instance()
-
         super().__init__(parent)
+        self._is_main = is_main
+        self._section = section
         self._setup_ui()
         self.setStyleSheet(PulsedMagnetControlWindow.StyleSheet)
-
-    def _setup_ui(self):
-        self.main_widget = QTabWidget(self)
-        self.main_widget.layout = QVBoxLayout()
-        self.main_widget.setLayout(self.main_widget.layout)
         self.setCentralWidget(self.main_widget)
-        self.setWindowTitle("Pulsed Magnets Control Window")
+        self.setWindowTitle(section.upper() + ' Pulsed Magnets Control Window')
         self.setFocus()
 
-        self.main_widget.addTab(self._make_tab_widget("TB"), "TB")
-        self.main_widget.addTab(self._make_tab_widget("BO"), "Booster")
-        self.main_widget.addTab(self._make_tab_widget("TS"), "TS")
-        self.main_widget.addTab(self._make_tab_widget("SI"), "Storage Ring")
+    def _setup_ui(self):
+        if self._is_main:
+            self.main_widget = QTabWidget(self)
+            self.main_widget.layout = QVBoxLayout()
+            self.main_widget.setLayout(self.main_widget.layout)
 
-        self._connect_buttons()
+            self.main_widget.addTab(self._make_tab_widget('TB'), 'TB')
+            self.main_widget.addTab(self._make_tab_widget('BO'), 'Booster')
+            self.main_widget.addTab(self._make_tab_widget('TS'), 'TS')
+            self.main_widget.addTab(self._make_tab_widget('SI'),
+                                    'Storage Ring')
+            self._connect_buttons()
+        elif self._section is not None:
+            if self._section == 'TB':
+                self.main_widget = self._make_tab_widget('TB')
+            elif self._section == 'BO':
+                self.main_widget = self._make_tab_widget('BO')
+            elif self._section == 'TS':
+                self.main_widget = self._make_tab_widget('TS')
+            elif self._section == 'SI':
+                self.main_widget = self._make_tab_widget('SI')
+            self._connect_buttons()
+        else:
+            raise ValueError('Invalid \'section\' argument!')
 
     def _make_tab_widget(self, section):
         widget = QWidget(self)
         widget.layout = QVBoxLayout()
 
-        magnets = MASearch.get_manames(
-            {"sec": section, "dis": "PM"})
+        magnets = MASearch.get_manames({'sec': section, 'dis': 'PM'})
 
         header = True
         for magnet in magnets:
