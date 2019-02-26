@@ -205,7 +205,7 @@ class AcqControlWidget(BaseWidget):
         vbl.addWidget(grp_bx)
         vbl.addSpacing(20)
         fbl = QFormLayout(grp_bx)
-        lbl = QLabel('Duration [ms]', grp_bx, alignment=Qt.AlignCenter)
+        lbl = QLabel('Duration [us]', grp_bx, alignment=Qt.AlignCenter)
         lbl.setStyleSheet("""min-width:7em; max-width:7em;""")
         wid = self.create_pair(grp_bx, 'OrbitTrigExtDuration')
         fbl.addRow(lbl, wid)
