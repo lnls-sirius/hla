@@ -472,6 +472,45 @@ class SiriusScrnView(QWidget):
                             QMessageBox.Ok)
 
 
+class IndividualScrn(SiriusMainWindow):
+    """Individual Screen."""
+
+    def __init__(self, parent=None, prefix=_vaca_prefix, scrn=''):
+        """Init."""
+        super().__init__(parent=parent)
+        self._prefix = prefix
+        self._scrn = scrn
+        self._setupUi()
+
+    def _setupUi(self):
+        cw = QWidget()
+        self.scrn_view = SiriusScrnView(prefix=self._prefix, device=self._scrn)
+        self.cb_scrntype = PyDMEnumComboBox(
+            parent=cw, init_channel=self._prefix+self._scrn+':ScrnType-Sel')
+        self.l_scrntype = PyDMLabel(
+            parent=cw, init_channel=self._prefix+self._scrn+':ScrnType-Sts')
+        self.led_scrntype = SiriusLedAlert(
+            parent=cw, init_channel=self._prefix+self._scrn+':ScrnType-Sts')
+        self.led_scrntype.shape = 2
+
+        lay = QGridLayout()
+        lay.addWidget(QLabel('<h3>Screen View</h3>',
+                             cw, alignment=Qt.AlignCenter), 0, 0, 1, 4)
+        lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 1, 0)
+        lay.addWidget(QLabel('Select Screen Type: ', cw,
+                             alignment=Qt.AlignRight), 2, 0)
+        lay.addWidget(self.cb_scrntype, 2, 1)
+        lay.addWidget(self.l_scrntype, 2, 2)
+        lay.addWidget(self.led_scrntype, 2, 3)
+
+        lay.addItem(QSpacerItem(20, 40, QSzPlcy.Fixed, QSzPlcy.Fixed), 4, 0)
+        lay.addWidget(self.scrn_view, 5, 0, 1, 4)
+        cw.setLayout(lay)
+
+        self.setWindowTitle('Screen View: '+self._scrn)
+        self.setCentralWidget(cw)
+
+
 if __name__ == '__main__':
     """Run test."""
     import os
@@ -480,35 +519,8 @@ if __name__ == '__main__':
     os.environ['EPICS_CA_MAX_ARRAY_BYTES'] = '200000000'
     app = SiriusApplication()
 
-    centralwidget = QWidget()
-    prefix = _vaca_prefix
-    scrn_device = 'TB-01:DI-Scrn-1'
-    cw = QWidget()
-    scrn_view = SiriusScrnView(prefix=prefix, device=scrn_device)
-    cb_scrntype = PyDMEnumComboBox(
-        parent=cw, init_channel=prefix+scrn_device+':ScrnType-Sel')
-    l_scrntype = PyDMLabel(
-        parent=cw, init_channel=prefix+scrn_device+':ScrnType-Sts')
-    led_scrntype = SiriusLedAlert(
-        parent=cw, init_channel=prefix+scrn_device+':ScrnType-Sts')
-    led_scrntype.shape = 2
-
-    lay = QGridLayout()
-    lay.addWidget(QLabel('<h3>Screen View</h3>',
-                         cw, alignment=Qt.AlignCenter), 0, 0, 1, 2)
-    lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 1, 0)
-    lay.addWidget(QLabel('Select Screen Type: ', cw,
-                         alignment=Qt.AlignRight), 2, 0)
-    lay.addWidget(cb_scrntype, 2, 1)
-    lay.addWidget(l_scrntype, 2, 2)
-    lay.addWidget(led_scrntype, 2, 3)
-
-    lay.addItem(QSpacerItem(20, 40, QSzPlcy.Fixed, QSzPlcy.Fixed), 4, 0)
-    lay.addWidget(scrn_view, 5, 0, 1, 4)
-    cw.setLayout(lay)
-
-    window = SiriusMainWindow()
-    window.setWindowTitle('Screen View: '+scrn_device)
-    window.setCentralWidget(cw)
+    scrn = 'TB-01:DI-Scrn-1'
+    window = IndividualScrn(None, prefix=_vaca_prefix, scrn=scrn)
+    window.setWindowTitle('Screen View: '+scrn)
     window.show()
     sys.exit(app.exec_())
