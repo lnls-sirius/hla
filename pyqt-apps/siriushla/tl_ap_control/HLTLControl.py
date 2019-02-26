@@ -119,6 +119,7 @@ class TLAPControlWindow(SiriusMainWindow):
 
         # Create Scrn+Correctors Panel
         correctors_vlayout = QVBoxLayout()
+        correctors_vlayout.setContentsMargins(0, 0, 0, 0)
 
         headerline = self._create_headerline(
             [['', 0],
@@ -134,13 +135,15 @@ class TLAPControlWindow(SiriusMainWindow):
 
         for ch_group, cv, scrn, scrnprefix in self._corr_devicenames_list:
             scrn_details = self._create_scrndetailwidget(scrnprefix, scrn)
+            scrn_details.layout().setContentsMargins(0, 9, 0, 9)
             ch_widget = QWidget()
             ch_widget.setLayout(QVBoxLayout())
-            ch_widget.layout().setContentsMargins(0, 0, 0, 0)
+            ch_widget.layout().setContentsMargins(0, 9, 0, 9)
             for ch in ch_group:
                 ch_details = self._create_correctordetailwidget(scrn, ch)
                 ch_widget.layout().addWidget(ch_details)
             cv_details = self._create_correctordetailwidget(scrn, cv)
+            cv_details.layout().setContentsMargins(0, 9, 0, 9)
 
             hlay_scrncorr = QHBoxLayout()
             hlay_scrncorr.setContentsMargins(0, 0, 0, 0)
@@ -159,8 +162,6 @@ class TLAPControlWindow(SiriusMainWindow):
             correctors_vlayout.addWidget(widget_scrncorr)
 
         self.centralwidget.groupBox_allcorrPanel.setLayout(correctors_vlayout)
-        self.centralwidget.groupBox_allcorrPanel.layout().setContentsMargins(
-            0, 0, 0, 0)
 
         # Create only one ScrnView, and the rest on selecting other screens
         self.scrnview_widgets_dict = dict()
@@ -256,7 +257,6 @@ class TLAPControlWindow(SiriusMainWindow):
         scrn_details = QWidget()
         scrn_details.setObjectName('widget_Scrn' + str(scrn_idx) + 'TypeSel')
         scrn_details.setLayout(QGridLayout())
-        scrn_details.layout().setContentsMargins(0, 0, 0, 0)
         scrn_details.layout().setAlignment(Qt.AlignCenter)
 
         scrn_checkbox = QCheckBox(scrn_device)
@@ -307,6 +307,7 @@ class TLAPControlWindow(SiriusMainWindow):
 
         corr_details = QWidget()
         corr_details.setObjectName('widget_details_'+name+'_Scrn'+str(scrn))
+        corr_details.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
         corr_details.setLayout(QGridLayout())
         corr_details.layout().setContentsMargins(0, 0, 0, 0)
         corr_details.layout().setAlignment(Qt.AlignCenter)
@@ -324,7 +325,8 @@ class TLAPControlWindow(SiriusMainWindow):
 
             label_corr = QLabel(corr, self, alignment=Qt.AlignCenter)
             label_corr.setObjectName('label_'+name+'App_Scrn'+str(scrn))
-            label_corr.setStyleSheet("""max-width:10em; min-width:10em;""")
+            label_corr.setStyleSheet("""
+                max-width:10em; min-width:10em; min-height:1.29em;""")
             corr_details.layout().addWidget(label_corr, 1, 2)
 
             pydm_sp_current = PyDMLinEditScrollbar(
@@ -332,12 +334,13 @@ class TLAPControlWindow(SiriusMainWindow):
             pydm_sp_current.setObjectName(
                 'LeditScroll_Linac'+corr.split('-')[-1]+'_seti_Scrn'+str(scrn))
             pydm_sp_current.layout.setContentsMargins(0, 0, 0, 0)
+            pydm_sp_current.layout.setSpacing(3)
             pydm_sp_current.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
             pydm_sp_current.sp_lineedit.setStyleSheet("""
-                min-width:7.5em; max-width:7.5em;""")
+                min-width:7.5em; max-width:7.5em; min-height:1.29em;""")
             pydm_sp_current.sp_lineedit.setAlignment(Qt.AlignCenter)
             pydm_sp_current.sp_lineedit.setSizePolicy(
-                QSzPlcy.Minimum, QSzPlcy.Minimum)
+                QSzPlcy.Ignored, QSzPlcy.Fixed)
             pydm_sp_current.sp_scrollbar.setStyleSheet("""max-width:7.5em;""")
             pydm_sp_current.sp_scrollbar.limitsFromPV = True
             corr_details.layout().addWidget(pydm_sp_current, 1, 3, 2, 1)
@@ -349,7 +352,7 @@ class TLAPControlWindow(SiriusMainWindow):
             pydmlabel_current.setObjectName(
                 'PyDMLabel_Linac'+corr.split('-')[-1]+'_rdi_Scrn'+str(scrn))
             pydmlabel_current.setStyleSheet("""
-                min-width:5.8em; max-width:5.8em;""")
+                min-width:5.8em; max-width:5.8em; min-height: 1.29em;""")
             pydmlabel_current.precFromPV = True
             pydmlabel_current.setAlignment(Qt.AlignCenter)
             corr_details.layout().addWidget(pydmlabel_current, 1, 4)
@@ -369,7 +372,8 @@ class TLAPControlWindow(SiriusMainWindow):
             else:
                 _hlautil.connect_window(pushbutton, PSDetailWindow,
                                         parent=self, psname=corr)
-            pushbutton.setStyleSheet("""max-width:10em; min-width:10em;""")
+            pushbutton.setStyleSheet("""
+                min-width:10em; max-width:10em; min-height:1.29em;""")
             corr_details.layout().addWidget(pushbutton, 1, 2)
 
             pydm_sp_kick = PyDMLinEditScrollbar(
@@ -377,9 +381,10 @@ class TLAPControlWindow(SiriusMainWindow):
             pydm_sp_kick.setObjectName(
                 'PyDMLineEdit' + name + '_Kick_SP_Scrn' + str(scrn))
             pydm_sp_kick.layout.setContentsMargins(0, 0, 0, 0)
+            pydm_sp_kick.layout.setSpacing(3)
             pydm_sp_kick.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Maximum)
             pydm_sp_kick.sp_lineedit.setStyleSheet("""
-                min-width:7.5em; max-width:7.5em;""")
+                min-width:7.5em; max-width:7.5em; min-height:1.29em;""")
             pydm_sp_kick.sp_lineedit.setAlignment(Qt.AlignCenter)
             pydm_sp_kick.sp_lineedit.setSizePolicy(
                 QSzPlcy.Minimum, QSzPlcy.Minimum)
@@ -393,7 +398,8 @@ class TLAPControlWindow(SiriusMainWindow):
                 parent=self, init_channel=self.prefix+corr+':Kick-Mon')
             pydmlabel_kick.setObjectName(
                 'PyDMLabel_' + name + '_Kick_Mon_Scrn' + str(scrn))
-            pydmlabel_kick.setStyleSheet("min-width:5.8em; max-width:5.8em;")
+            pydmlabel_kick.setStyleSheet("""
+                min-width:5.8em; max-width:5.8em; min-height:1.29em;""")
             pydmlabel_kick.showUnits = True
             pydmlabel_kick.precisionFromPV = False
             pydmlabel_kick.precision = 1
