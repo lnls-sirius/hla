@@ -2,6 +2,7 @@
 """HLA TB and TS ICT monitoring Window."""
 
 import sys
+import os as _os
 import numpy as np
 from qtpy.uic import loadUi
 from qtpy.QtCore import Slot, Qt
@@ -40,8 +41,7 @@ class ICTMonitoring(SiriusMainWindow):
             ICT2 = 'TS-04:DI-ICT'
 
         tmp_file = _substitute_in_file(
-            '/home/sirius/repos/hla/pyqt-apps/siriushla'
-            '/tl_ap_control/ui_tl_ap_ictmon.ui',
+            _os.path.abspath(_os.path.dirname(__file__))+'/ui_tl_ap_ictmon.ui',
             {'TL': tl.upper(), 'ICT1': ICT1, 'ICT2': ICT2, 'PREFIX': prefix})
         self.setWindowTitle(tl.upper()+' ICTs Monitor')
         self.centralwidget = loadUi(tmp_file)

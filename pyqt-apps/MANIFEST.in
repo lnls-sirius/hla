@@ -1,0 +1,14 @@
+include siriushla/as_ap_currlt/ui_bo_ap_currlt.ui
+include siriushla/as_ap_currlt/ui_si_ap_currlt.ui
+include siriushla/as_ap_opticscorr/ui_bo_ap_chromcorr.ui
+include siriushla/as_ap_opticscorr/ui_si_ap_chromcorr.ui
+include siriushla/as_ap_opticscorr/ui_bo_ap_tunecorr.ui
+include siriushla/as_ap_opticscorr/ui_si_ap_tunecorr.ui
+include siriushla/as_ap_posang/ui_as_ap_posang.ui
+include siriushla/tl_ap_control/TB.svg
+include siriushla/tl_ap_control/TS.svg
+include siriushla/tl_ap_control/ui_tb_ap_control.ui
+include siriushla/tl_ap_control/ui_ts_ap_control.ui
+include siriushla/tl_ap_control/ui_tb_ap_slithmon.ui
+include siriushla/tl_ap_control/ui_tb_ap_slitvmon.ui
+include siriushla/tl_ap_control/ui_tl_ap_ictmon.ui
