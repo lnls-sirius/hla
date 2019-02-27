@@ -121,11 +121,13 @@ class SetConfigurationWindow(SiriusMainWindow):
                     'Configuration has {} items'.format(len(pvs)))
                 # self._tree.expandAll()
                 self._tree.check_all()
+                self._tree.expand_all()
             except KeyError:
                 self._tree_msg.setText('Configuration has no field pvs')
         else:
             self._tree_msg.setText(
                 'Failed to retrieve configuration: error {}'.format(code))
+        self._filter_pvs(self._filter_le.text())
 
     @Slot(str)
     def _filter_pvs(self, text):
