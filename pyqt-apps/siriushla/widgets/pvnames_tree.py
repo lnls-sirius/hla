@@ -192,6 +192,7 @@ class PVNameTree(QTreeWidget):
         self._items = tuple()
         # self._ptree = PVNameTree._node(None, dict())
         self._leafs = list()
+        self._item_map = dict()
         super().clear()
 
     @property
