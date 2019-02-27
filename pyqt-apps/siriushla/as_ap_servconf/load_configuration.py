@@ -1,14 +1,13 @@
 """Define a window to load configurations."""
 
 import logging
-import re
-from qtpy.QtWidgets import QHBoxLayout, QVBoxLayout, QTableView, QLineEdit, \
-    QWidget, QFrame, QLabel, QPushButton, QMessageBox, QHeaderView
-from qtpy.QtCore import Slot, Signal, Qt
+from qtpy.QtWidgets import QHBoxLayout, QVBoxLayout, \
+    QWidget, QFrame, QLabel, QPushButton, QMessageBox
+from qtpy.QtCore import Slot, Signal
 
 from siriuspy.servconf.conf_service import ConfigService
-from siriushla.as_ap_servconf.config_server import ConfigDbTableModel
 from siriushla.widgets.windows import SiriusDialog
+from siriushla.widgets.load_configuration import LoadConfigurationWidget
 
 
 class LoadConfiguration(SiriusDialog):
@@ -33,7 +32,8 @@ class LoadConfiguration(SiriusDialog):
         self.layoutv = QVBoxLayout(self)
 
         # Basic widgets
-        self.editor = QTableView()
+        self.editor = LoadConfigurationWidget(self._model, self)
+        self.editor.config_type = self._config_type
         self.cancel_button = QPushButton('Cancel', self)
         self.cancel_button.pressed.connect(self.reject)
         self.load_button = QPushButton('Load', self)
@@ -95,41 +95,18 @@ class LoadConfiguration(SiriusDialog):
         hbl.addStretch()
         vbl.addLayout(hbl)
 
-        self.search_lineedit = QLineEdit(parent=self)
-        self.search_lineedit.setPlaceholderText("Search for configurations...")
-        self.search_lineedit.textEdited.connect(self._filter_rows)
-
         # Main widget layout setup
         self.layoutv.addWidget(self.sub_header)
-        self.layoutv.addWidget(self.search_lineedit)
         self.layoutv.addWidget(self.config_viewer)
 
-        # Set table models and options
-        self.editor_model = ConfigDbTableModel(self._config_type, self._model)
-        self.editor.setModel(self.editor_model)
-        self.editor.setSelectionBehavior(self.editor.SelectRows)
-        self.editor.setSelectionMode(self.editor.SingleSelection)
-        self.editor.setSortingEnabled(True)
-        self.editor.horizontalHeader().setResizeMode(QHeaderView.Stretch)
-        self.editor.hideColumn(0)
-        self.editor.sortByColumn(2, Qt.DescendingOrder)
-
         # Update Selection when a configuration is selected
-        self.editor.selectionModel().selectionChanged.connect(
-            self._update_selection)
+        self.editor.configChanged.connect(self._update_selection)
         # Connect database error to slot that show messages
-        self.editor_model.connectionError.connect(self._database_error)
-        # Set constants
-        LoadConfiguration.NAME_COL = \
-            self.editor_model.horizontalHeader.index('name')
-        LoadConfiguration.CONFIG_TYPE_COL = \
-            self.editor_model.horizontalHeader.index('config_type')
+        self.editor.connectionError.connect(self._database_error)
 
-        self.editor.resizeColumnsToContents()
-
-    @Slot()
-    def _update_selection(self, *args):
-        config = self._get_config_name()
+    @Slot(str, str)
+    def _update_selection(self, selected, deselected):
+        config = selected
         if config:
             self.load_button.setEnabled(True)
             self.load_button.setText('Load {}'.format(config))
@@ -139,8 +116,9 @@ class LoadConfiguration(SiriusDialog):
 
     @Slot()
     def _load_configuration(self):
-        config = self._get_config_name()
-        self.configname.emit(config)
+        config = self.editor.config_name
+        if config:
+            self.configname.emit(config)
         self.accept()
 
     @Slot(int, str, str)
@@ -149,33 +127,6 @@ class LoadConfiguration(SiriusDialog):
         title = 'Something went wrong'
         msg = '{}: {}, while trying to {}'.format(code, message, operation)
         QMessageBox(tpe, title, msg).exec_()
-
-    def _get_config_name(self):
-        index_list = self.editor.selectionModel().selectedIndexes()
-        if index_list:
-            row = index_list[0].row()
-            return self.editor_model.createIndex(row, self.NAME_COL).data()
-
-    @Slot(str)
-    def _filter_rows(self, text):
-        """Filter power supply widgets based on text inserted at line edit."""
-        try:
-            pattern = re.compile(text, re.I)
-        except Exception:  # Ignore malformed patterns?
-            pattern = re.compile("malformed")
-
-        i = 0
-        for idx in range(self.editor_model.rowCount(1)):
-            name = self.editor_model.createIndex(idx, self.NAME_COL).data()
-            if not pattern.search(name):
-                self.editor.hideRow(idx)
-            else:
-                self.editor.showRow(idx)
-                i += 1
-        self.nr_configs.setText(str(i))
-        # Sroll to top
-        # for scroll_area in self.findChildren(QScrollArea):
-        #     scroll_area.verticalScrollBar().setValue(0)
 
 
 if __name__ == '__main__':

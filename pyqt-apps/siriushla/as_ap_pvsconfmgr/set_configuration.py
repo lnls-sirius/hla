@@ -1,17 +1,20 @@
 """Set configuration window."""
 import logging
+import re
 
-from qtpy.QtCore import Slot
+from qtpy.QtCore import Qt, Slot
 from qtpy.QtWidgets import QWidget, QComboBox, QLabel, QPushButton, \
-    QHBoxLayout, QVBoxLayout
+    QHBoxLayout, QVBoxLayout, QLineEdit
 
 from siriushla.misc.epics.wrapper import PyEpicsWrapper
 from siriushla.misc.epics.task import EpicsChecker, EpicsSetter
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.widgets.pvnames_tree import PVNameTree
 from siriushla.widgets.dialog import ReportDialog, ProgressDialog
-from siriushla.model import \
-    ConfigNamesModel, ConfigTypeModel
+from siriushla.widgets.load_configuration import LoadConfigurationWidget
+from siriushla.widgets.horizontal_ruler import HorizontalRuler
+from siriushla.model import ConfigTypeModel
+
 
 class SetConfigurationWindow(SiriusMainWindow):
     """Configuration Window to set configration via epics."""
@@ -57,10 +60,14 @@ class SetConfigurationWindow(SiriusMainWindow):
         self._type_cb.setObjectName('type_cb')
         self._type_cb.setModel(ConfigTypeModel(self._db, self._type_cb))
 
-        # Add combo box for the configuration name
-        self._config_cb = QComboBox(self)
-        self._config_cb.setObjectName('name_cb')
-        self._config_cb.setModel(ConfigNamesModel(self._db, self._config_cb))
+        # Add table for the configuration name
+        self._config_table = LoadConfigurationWidget(self._db)
+        self._config_table.setFixedHeight(200)
+
+        # Add filter for tree
+        self._filter_le = QLineEdit(self)
+        self._filter_le.setPlaceholderText("Filter PVs...")
+        self._filter_le.textChanged.connect(self._filter_pvs)
 
         # Add Selection Tree
         self._tree_msg = QLabel(self)
@@ -75,31 +82,33 @@ class SetConfigurationWindow(SiriusMainWindow):
         self._set_btn.setObjectName('set_btn')
 
         # Add widgets
+        self._set_widget.layout.addWidget(
+            QLabel('<h3>Configuration Type</h3>'))
         self._set_widget.layout.addWidget(self._type_cb)
-        self._set_widget.layout.addWidget(self._config_cb)
+        self._set_widget.layout.addWidget(HorizontalRuler(self))
+        self._set_widget.layout.addWidget(
+            QLabel('<h3>Configuration Name</h3>'))
+        self._set_widget.layout.addWidget(self._config_table)
+        self._set_widget.layout.addWidget(HorizontalRuler(self))
+        self._set_widget.layout.addWidget(QLabel('<h3>Configuration</h3>'))
+        self._set_widget.layout.addWidget(self._filter_le)
         self._set_widget.layout.addWidget(self._tree_msg)
         self._set_widget.layout.addWidget(self._tree)
         self._set_widget.layout.addWidget(self._set_btn)
 
         # Add signals
         self._type_cb.currentTextChanged.connect(self._fill_config_names)
-        self._config_cb.currentIndexChanged.connect(self._fill_config)
+        self._config_table.configChanged.connect(self._fill_config)
         self._set_btn.clicked.connect(self._set)
 
     @Slot(str)
     def _fill_config_names(self, config_type):
-        self._config_cb.model().config_type = config_type
-        self._config_cb.setCurrentIndex(0)
-        self._tree.items = ()
-        self._tree_msg.setText('Select a configuration')
+        self._config_table.config_type = config_type
 
-    @Slot(int)
-    def _fill_config(self, config_idx):
-        if config_idx <= 0:
-            self._tree_msg.setText('Select a configuration')
-            return
+    @Slot(str, str)
+    def _fill_config(self, selected, deselected):
         config_type = self._type_cb.currentText()
-        config_name = self._config_cb.currentText()
+        config_name = selected
         ret = self._db.get_config(config_type, config_name)
         self._tree.clear()
         code = ret['code']
@@ -112,11 +121,32 @@ class SetConfigurationWindow(SiriusMainWindow):
                     'Configuration has {} items'.format(len(pvs)))
                 # self._tree.expandAll()
                 self._tree.check_all()
+                self._tree.expand_all()
             except KeyError:
                 self._tree_msg.setText('Configuration has no field pvs')
         else:
             self._tree_msg.setText(
                 'Failed to retrieve configuration: error {}'.format(code))
+        self._filter_pvs(self._filter_le.text())
+
+    @Slot(str)
+    def _filter_pvs(self, text):
+        """Filter pvnames based on text inserted at line edit."""
+        selected_pvs = 0
+        try:
+            pattern = re.compile(text, re.I)
+        except Exception:  # Ignore malformed patterns?
+            pattern = re.compile("malformed")
+
+        for node in self._tree._leafs:
+            if pattern.search(node.data(0, 0)):
+                node.setHidden(False)
+                selected_pvs += 1
+            else:
+                node.setCheckState(0, Qt.Unchecked)
+                node.setHidden(True)
+
+        self._tree_msg.setText('Showing {} PVs.'.format(selected_pvs))
 
     @Slot()
     def _set(self):
@@ -127,7 +157,7 @@ class SetConfigurationWindow(SiriusMainWindow):
         check_pvs_tuple = list()
 
         for t in self._current_config['value']['pvs']:
-            try: 
+            try:
                 pv, value, delay = t
             except ValueError:
                 pv, value = t
