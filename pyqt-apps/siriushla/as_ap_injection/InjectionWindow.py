@@ -1,19 +1,17 @@
 """GUI for injection."""
-from pydm import PyDMApplication
 from qtpy.QtCore import Slot, QTimer, Qt
 from qtpy.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, \
     QRadioButton, QPushButton, QSpinBox, QGridLayout, QMessageBox, QDialog, \
     QLabel, QDockWidget
-from pydm.widgets.label import PyDMLabel
-from pydm.widgets.checkbox import PyDMCheckbox
+from pydm.widgets import PyDMLabel, PyDMCheckbox
 
-from siriushla.widgets.led import SiriusLedState
-from siriushla.widgets import SiriusMainWindow
+from siriuspy.envars import vaca_prefix as _VACA_PREFIX
+from siriushla.sirius_application import SiriusApplication
+from siriushla.widgets import SiriusMainWindow, SiriusLedState
 from siriushla.as_ap_injection.CustomExceptions import PVConnectionError
 from siriushla.as_ap_injection.InjectionController import InjectionController
 from siriushla.as_ap_injection.BarGraphWidget \
     import BarGraphWidget, PyDMBarGraph
-from siriuspy.envars import vaca_prefix as _VACA_PREFIX
 
 
 class WaitingDlg(QDialog):
@@ -77,8 +75,6 @@ class InjectionWindow(SiriusMainWindow):
     def __init__(self, controller=None, parent=None):
         """Init window."""
         super(InjectionWindow, self).__init__(parent)
-
-        self.app = PyDMApplication.instance()
         InjectionWindow.Instance = self
 
         if controller is None:
@@ -130,9 +126,6 @@ class InjectionWindow(SiriusMainWindow):
         self.beamCurrentLabel.precFromPV = True
         # self.cycleSpinBox.setRange(1, 20)
         # self.cycleSpinBox.setValue(1)
-
-        # self.app.establish_widget_connections(self)
-        # self.show()
 
     # Public
     @Slot()
@@ -207,7 +200,7 @@ class InjectionWindow(SiriusMainWindow):
             self.controller.put_bucket_list()
 
             self._dialog.main_label.setText("Starting injection")
-            PyDMApplication.processEvents()
+            SiriusApplication.processEvents()
 
             self.controller.start_injection()
         except PVConnectionError as e:
@@ -416,7 +409,8 @@ class InjectionWindow(SiriusMainWindow):
 if __name__ == "__main__":
     import sys
 
-    app = PyDMApplication(None, sys.argv)
+    app = SiriusApplication(None, sys.argv)
     controller = InjectionController()
     window = InjectionWindow(controller)
+    window.show()
     sys.exit(app.exec_())

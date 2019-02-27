@@ -83,6 +83,7 @@ class ICTMonitoring(SiriusMainWindow):
             #label_window{
                 font-size:1.1em;
                 font-weight:bold;
+                qproperty-alignment: 'AlignVCenter | AlignRight';
                 background-color: qlineargradient(spread:pad,
                     x1:1, y1:0.0227273, x2:0, y2:0,
                     stop:0 rgba(173, 190, 207, 255),

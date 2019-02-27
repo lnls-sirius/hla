@@ -41,7 +41,7 @@ class RampMain(SiriusMainWindow):
         lab = QLabel('<h3>Booster Energy Ramping</h3>', cw)
         lab.setStyleSheet("""
             min-height:1.55em; max-height: 1.55em;
-            qproperty-alignment: AlignRight;
+            qproperty-alignment: 'AlignVCenter | AlignRight';
             background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273,
                               x2:0, y2:0, stop:0 rgba(173, 190, 207, 255),
                               stop:1 rgba(213, 213, 213, 255));""")
