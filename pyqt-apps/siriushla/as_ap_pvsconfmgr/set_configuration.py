@@ -13,8 +13,7 @@ from siriushla.widgets.pvnames_tree import PVNameTree
 from siriushla.widgets.dialog import ReportDialog, ProgressDialog
 from siriushla.widgets.load_configuration import LoadConfigurationWidget
 from siriushla.widgets.horizontal_ruler import HorizontalRuler
-from siriushla.model import \
-    ConfigNamesModel, ConfigTypeModel
+from siriushla.model import ConfigTypeModel
 
 
 class SetConfigurationWindow(SiriusMainWindow):
@@ -83,10 +82,12 @@ class SetConfigurationWindow(SiriusMainWindow):
         self._set_btn.setObjectName('set_btn')
 
         # Add widgets
-        self._set_widget.layout.addWidget(QLabel('<h3>Configuration Type</h3>'))
+        self._set_widget.layout.addWidget(
+            QLabel('<h3>Configuration Type</h3>'))
         self._set_widget.layout.addWidget(self._type_cb)
         self._set_widget.layout.addWidget(HorizontalRuler(self))
-        self._set_widget.layout.addWidget(QLabel('<h3>Configuration Name</h3>'))
+        self._set_widget.layout.addWidget(
+            QLabel('<h3>Configuration Name</h3>'))
         self._set_widget.layout.addWidget(self._config_table)
         self._set_widget.layout.addWidget(HorizontalRuler(self))
         self._set_widget.layout.addWidget(QLabel('<h3>Configuration</h3>'))
@@ -142,10 +143,9 @@ class SetConfigurationWindow(SiriusMainWindow):
             else:
                 node.setCheckState(0, Qt.Unchecked)
                 node.setHidden(True)
-            
+
         self._tree_msg.setText('Showing {} PVs.'.format(selected_pvs))
 
-    
     @Slot()
     def _set(self):
         # Get selected PVs
@@ -155,7 +155,7 @@ class SetConfigurationWindow(SiriusMainWindow):
         check_pvs_tuple = list()
 
         for t in self._current_config['value']['pvs']:
-            try: 
+            try:
                 pv, value, delay = t
             except ValueError:
                 pv, value = t

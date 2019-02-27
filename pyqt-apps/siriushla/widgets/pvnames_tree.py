@@ -1,8 +1,7 @@
 """PVName selection tree view."""
 import re
-from collections import namedtuple
 
-from qtpy.QtCore import Qt, QSize, Signal, Slot, QThread
+from qtpy.QtCore import Qt, QSize, Signal, QThread
 from qtpy.QtWidgets import QTreeWidget, QTreeWidgetItem, QProgressDialog, \
     QAction, QMenu
 
@@ -10,13 +9,16 @@ from siriuspy.namesys import SiriusPVName
 
 
 class QTreeItem(QTreeWidgetItem):
+    """Tree Item."""
 
     def __init__(self, string_list, parent=None):
+        """Init."""
         super().__init__(parent, string_list)
         self._hidden_status = {}
         self._check_status = {}
 
     def isLeaf(self):
+        """Return if is Leaf."""
         if self.childCount() > 0:
             return False
         return True
@@ -28,9 +30,10 @@ class QTreeItem(QTreeWidgetItem):
             self.parent().childHidden(self, status)
 
     def childHidden(self, child, status):
+        """Set child hidden."""
         self._hidden_status[self.indexOfChild(child)] = status
         for s in self._hidden_status.values():
-            if s == False:
+            if s is False:
                 parent_status = False
                 super().setHidden(False)
                 break
@@ -39,7 +42,6 @@ class QTreeItem(QTreeWidgetItem):
             super().setHidden(True)
         if isinstance(self.parent(), QTreeItem):
             self.parent().childHidden(self, parent_status)
-
 
     # def setCheckState(self, column, status):
     #     print("SEt check!!!!")
@@ -54,6 +56,7 @@ class QTreeItem(QTreeWidgetItem):
     #             self.child(i).superCheck(column, status)
 
     def setData(self, column, role, value):
+        """Set data."""
         if column == 0:
             # super().setCheckState(column, status)
             # Trigger parent check
@@ -95,8 +98,6 @@ class QTreeItem(QTreeWidgetItem):
         else:
             status = Qt.PartiallyChecked
             super().setData(column, Qt.CheckStateRole, Qt.PartiallyChecked)
-
-
 
         # if self._children_checked == self.childCount():
         #     super().setCheckState(column, Qt.Checked)
@@ -217,6 +218,7 @@ class PVNameTree(QTreeWidget):
                 item.setCheckState(0, Qt.Unchecked)
 
     def expand_all(self):
+        """Expand all items."""
         for item in self._item_map.values():
             if item.childCount() > 0:
                 item.setExpanded(True)
@@ -262,8 +264,8 @@ class PVNameTree(QTreeWidget):
         # pvals = []
         parent = self.invisibleRootItem()
         parent_key = ''
-        if re.match('^.*-.*:.*-.*:.*-.*$', pvname):
         # if pvname.count(':') == 2 and pvname.count('-') == 3:
+        if re.match('^.*-.*:.*-.*:.*-.*$', pvname):
             # Parse it with SiriusPVName
             pvname = SiriusPVName(pvname)
             # Parse PVName
@@ -276,7 +278,7 @@ class PVNameTree(QTreeWidget):
                     item_key = parent_key + key
                     # item = self._item_map.symbol(item_key)
                     item = self._item_map[item_key] \
-                                if item_key in self._item_map else None
+                        if item_key in self._item_map else None
                     if item is not None:
                         parent = item
                     else:
@@ -297,7 +299,7 @@ class PVNameTree(QTreeWidget):
             item_key = parent_key + key
             # item = self._item_map.symbol(item_key)
             item = self._item_map[item_key] \
-                        if item_key in self._item_map else None
+                if item_key in self._item_map else None
             if item is None:
                 new_item = QTreeItem([key], parent)
                 new_item.setCheckState(0, Qt.Unchecked)
@@ -343,17 +345,18 @@ class PVNameTree(QTreeWidget):
         super().resizeEvent(event)
 
     def contextMenuEvent(self, event):
+        """Show context menu."""
         menu = QMenu(self)
         menu.addAction(self._act_check_all)
         menu.addAction(self._act_uncheck_all)
         menu.addSeparator()
         menu.addAction(self._act_expand_all)
         menu.addAction(self._act_collapse_all)
-        menu.exec(event.globalPos())
+        menu.popup(event.globalPos())
 
 
 if __name__ == "__main__":
-    import sys
+    # import sys
     from siriushla.sirius_application import SiriusApplication
 
     app = SiriusApplication()

@@ -1,13 +1,11 @@
 """Define a window to load configurations."""
 
 import logging
-import re
-from qtpy.QtWidgets import QHBoxLayout, QVBoxLayout, QTableView, QLineEdit, \
-    QWidget, QFrame, QLabel, QPushButton, QMessageBox, QHeaderView
-from qtpy.QtCore import Slot, Signal, Qt
+from qtpy.QtWidgets import QHBoxLayout, QVBoxLayout, \
+    QWidget, QFrame, QLabel, QPushButton, QMessageBox
+from qtpy.QtCore import Slot, Signal
 
 from siriuspy.servconf.conf_service import ConfigService
-from siriushla.model import ConfigDbTableModel
 from siriushla.widgets.windows import SiriusDialog
 from siriushla.widgets.load_configuration import LoadConfigurationWidget
 
@@ -97,8 +95,7 @@ class LoadConfiguration(SiriusDialog):
         hbl.addStretch()
         vbl.addLayout(hbl)
 
-
-        # # Main widget layout setup
+        # Main widget layout setup
         self.layoutv.addWidget(self.sub_header)
         self.layoutv.addWidget(self.config_viewer)
 
@@ -124,7 +121,7 @@ class LoadConfiguration(SiriusDialog):
             self.configname.emit(config)
         self.accept()
 
-    @Slot(int, str, str)    
+    @Slot(int, str, str)
     def _database_error(self, code, message, operation):
         tpe = QMessageBox.Warning
         title = 'Something went wrong'

@@ -7,7 +7,7 @@ from qtpy.QtWidgets import QWidget, QLineEdit, QTableView, QVBoxLayout
 from siriushla.model import ConfigDbTableModel
 
 
-class LoadConfigurationWidget(QWidget): 
+class LoadConfigurationWidget(QWidget):
     """Widget that loads a configuration."""
 
     NAME_COL = None
@@ -28,7 +28,7 @@ class LoadConfigurationWidget(QWidget):
         self._filter_le = QLineEdit(self)
         self._filter_le.setPlaceholderText("Search for configurations...")
         self._filter_le.textChanged.connect(self._filter_rows)
-        
+
         self._table = QTableView(self)
         self._table.setModel(
             ConfigDbTableModel('',  self._connection))
@@ -53,7 +53,7 @@ class LoadConfigurationWidget(QWidget):
             self._table.model().horizontalHeader.index('name')
         LoadConfigurationWidget.CONFIG_TYPE_COL = \
             self._table.model().horizontalHeader.index('config_type')
-    
+
     @property
     def config_type(self):
         """selected_configConfiguration type name."""
@@ -67,7 +67,7 @@ class LoadConfigurationWidget(QWidget):
 
     @property
     def config_name(self):
-        """Selected configuration name."""
+        """Return selected configuration name."""
         indexes = self._table.selectionModel().selectedIndexes()
         if indexes:
             return indexes[1].data()
@@ -102,6 +102,7 @@ class LoadConfigurationWidget(QWidget):
         self.configChanged.emit(selected_config, deselected_config)
 
     def resizeEvent(self, event):
+        """Reimplement resize event."""
         self._table.setColumnWidth(1, self._table.width()*3/6)
         self._table.setColumnWidth(2, self._table.width()*2/6)
         self._table.setColumnWidth(3, self._table.width()*1/6)
