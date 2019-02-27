@@ -1,5 +1,5 @@
-from qtpy.QtWidgets import QInputDialog, QScrollBar, QMenu
-from qtpy.QtCore import Qt, Signal, Slot, Property
+from qtpy.QtWidgets import QInputDialog, QScrollBar, QMenu, QToolTip
+from qtpy.QtCore import Qt, Signal, Slot, Property, QPoint
 
 
 class QDoubleScrollBar(QScrollBar):
@@ -140,11 +140,21 @@ class QDoubleScrollBar(QScrollBar):
         if ctrl_hold and (event.key() == Qt.Key_Right):
             self.setSingleStep(10*singlestep)
             self.setPageStep(10*pagestep)
+            self._show_step_tooltip()
         elif ctrl_hold and (event.key() == Qt.Key_Left):
             self.setSingleStep(0.1*singlestep)
             self.setPageStep(0.1*pagestep)
+            self._show_step_tooltip()
         else:
             super().keyPressEvent(event)
+
+    def _show_step_tooltip(self):
+        QToolTip.showText(
+            self.mapToGlobal(
+                QPoint(self.x()+self.width()/2, self.y()-2*self.height())),
+            'Single step: '+str(self.singleStep) +
+            '\nPage step: '+str(self.pageStep),
+            self, self.rect(), 1000)
 
     @Slot(float, float)
     def setRange(self, mini, maxi):
