@@ -1,9 +1,9 @@
 from qtpy.QtCore import Qt, Signal
 from .QDoubleScrollBar import QDoubleScrollBar
-from pydm.widgets.base import PyDMWritableWidget
+from pydm.widgets.base import PyDMWritableWidget, TextFormatter
 
 
-class PyDMScrollBar(QDoubleScrollBar, PyDMWritableWidget):
+class PyDMScrollBar(QDoubleScrollBar, TextFormatter, PyDMWritableWidget):
     """
     A QDoubleScrollBar with support for Channels and more from PyDM.
 
@@ -24,15 +24,12 @@ class PyDMScrollBar(QDoubleScrollBar, PyDMWritableWidget):
     disconnected_signal = Signal()
 
     def __init__(self, parent=None, orientation=Qt.Horizontal,
-                 init_channel=None, precision=2):
+                 init_channel=None):
         QDoubleScrollBar.__init__(self, orientation, parent)
         PyDMWritableWidget.__init__(self, init_channel)
 
         self.setFocusPolicy(Qt.StrongFocus)
         self.setInvertedControls(False)
-        self._prec = precision
-        self.setSingleStep(1/10**self._prec)
-        self.setPageStep(10/10**self._prec)
 
         self.setTracking(True)
         self.actionTriggered.connect(self.send_value)
@@ -65,7 +62,7 @@ class PyDMScrollBar(QDoubleScrollBar, PyDMWritableWidget):
         """
         Set the step size based on the new precision value received.
         """
-        PyDMWritableWidget.precision_changed(self, new_precision)
+        TextFormatter.precision_changed(self, new_precision)
         self.setDecimals(round(self._prec))
         self.setSingleStep(1/10**self._prec)
         self.setPageStep(10/10**self._prec)
