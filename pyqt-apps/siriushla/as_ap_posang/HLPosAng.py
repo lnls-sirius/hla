@@ -2,6 +2,7 @@
 
 """HLA as_ap_posang module."""
 
+import os as _os
 from qtpy.uic import loadUi as _loadUi
 from qtpy.QtWidgets import QGridLayout, QLabel, QGroupBox, QAbstractItemView, \
                            QSizePolicy as QSzPlcy, QSpacerItem, QPushButton, \
@@ -23,8 +24,8 @@ from siriushla.as_pm_control.PulsedMagnetDetailWindow import \
 from siriushla.as_ap_servconf import \
     LoadConfiguration as _LoadConfiguration
 
-UI_FILE = ('/home/sirius/repos/hla/pyqt-apps/siriushla/'
-           'as_ap_posang/ui_as_ap_posang.ui')
+
+UI_FILE = (_os.path.abspath(_os.path.dirname(__file__))+'/ui_as_ap_posang.ui')
 
 
 class ASAPPosAngCorr(SiriusMainWindow):

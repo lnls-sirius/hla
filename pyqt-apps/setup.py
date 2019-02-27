@@ -30,6 +30,7 @@ setup(
         ],
     packages=find_packages(),
     package_data={'siriushla': ['VERSION', '*/*.py']},
+    include_package_data=True,
     scripts=[
         'scripts/sirius-hla-as-ap-injection.py',
         'scripts/sirius-hla-as-ap-pvsconfmgr.py',
