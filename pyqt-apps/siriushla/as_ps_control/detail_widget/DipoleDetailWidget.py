@@ -86,14 +86,14 @@ class DipoleDetailWidget(PSDetailWidget):
         hard_intlk_button = QPushButton('Hard Interlock', self)
         layout.addWidget(soft_intlk_button, 0, 0)
         layout.addWidget(SiriusLedAlert(
-            self, self._magnet_name + ':IntlkSoft-Mon'), 0, 1)
+            self, self._prefixed_magnet + ':IntlkSoft-Mon'), 0, 1)
         layout.addWidget(SiriusLedAlert(
             self, self._ps_list[0] + ":IntlkSoft-Mon"), 0, 2)
         layout.addWidget(SiriusLedAlert(
             self, self._ps_list[1] + ":IntlkSoft-Mon"), 0, 3)
         layout.addWidget(hard_intlk_button, 1, 0)
         layout.addWidget(SiriusLedAlert(
-            self, self._magnet_name + ':IntlkHard-Mon'), 1, 1)
+            self, self._prefixed_magnet + ':IntlkHard-Mon'), 1, 1)
         layout.addWidget(SiriusLedAlert(
             self, self._ps_list[0] + ":IntlkHard-Mon"), 1, 2)
         layout.addWidget(SiriusLedAlert(
@@ -113,7 +113,7 @@ class DipoleDetailWidget(PSDetailWidget):
         self.opmode_sp = PyDMEnumComboBox(
             self, init_channel=self._prefixed_magnet + ":OpMode-Sel")
         self.opmode_rb = PyDMLabel(
-            self, self._magnet_name + ':OpMode-Sts')
+            self, self._prefixed_magnet + ':OpMode-Sts')
         self.opmode_rb.setObjectName('opmode_rb_label')
         self.opmode1_rb = PyDMLabel(
             self, self._ps_list[0] + ":OpMode-Sts")
@@ -174,9 +174,9 @@ class DipoleDetailWidget(PSDetailWidget):
             init_channel=self._prefixed_magnet + ":PwrState-Sel")
 
         self.pwrstate_led = SiriusLedState(
-            self, self._magnet_name + ":PwrState-Sts")
+            self, self._prefixed_magnet + ":PwrState-Sts")
         self.pwrstate_label = PyDMLabel(
-            self, self._magnet_name + ":PwrState-Sts")
+            self, self._prefixed_magnet + ":PwrState-Sts")
         self.pwrstate1_led = SiriusLedState(
             self, self._ps_list[0] + ":PwrState-Sts")
         self.pwrstate1_label = PyDMLabel(
