@@ -35,6 +35,16 @@ class ConfigTypeModel(QAbstractListModel):
         """Setup model data."""
         self.beginResetModel()
         self._configs = ['Select a configuration type...', ]
+        self._configs.extend(self._connection.get_config_types())
+        self.endResetModel()
+
+
+class ConfigPVsTypeModel(ConfigTypeModel):
+
+    def setupModelData(self):
+        """Setup model data."""
+        self.beginResetModel()
+        self._configs = ['Select a configuration type...', ]
         configs = [c for c in self._connection.get_config_types()
                    if 'pvs' in get_config_type_template(c)]
         self._configs.extend(sorted(configs))

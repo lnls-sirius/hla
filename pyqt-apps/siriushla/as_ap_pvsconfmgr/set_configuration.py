@@ -13,7 +13,7 @@ from siriushla.widgets.pvnames_tree import PVNameTree
 from siriushla.widgets.dialog import ReportDialog, ProgressDialog
 from siriushla.widgets.load_configuration import LoadConfigurationWidget
 from siriushla.widgets.horizontal_ruler import HorizontalRuler
-from siriushla.model import ConfigTypeModel
+from siriushla.model import ConfigPVsTypeModel
 
 
 class SetConfigurationWindow(SiriusMainWindow):
@@ -62,7 +62,7 @@ class SetConfigurationWindow(SiriusMainWindow):
         # Add combo box with types
         self._type_cb = QComboBox(self)
         self._type_cb.setObjectName('type_cb')
-        self._type_cb.setModel(ConfigTypeModel(self._db, self._type_cb))
+        self._type_cb.setModel(ConfigPVsTypeModel(self._db, self._type_cb))
 
         # Add table for the configuration name
         self._config_table = LoadConfigurationWidget(self._db)
