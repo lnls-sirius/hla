@@ -10,7 +10,7 @@ from siriuspy.namesys import SiriusPVName
 
 class QTreeItem(QTreeWidgetItem):
     """Tree Item."""
-
+    
     def __init__(self, string_list, parent=None):
         """Init."""
         super().__init__(parent, string_list)
@@ -57,8 +57,7 @@ class QTreeItem(QTreeWidgetItem):
 
     def setData(self, column, role, value):
         """Set data."""
-        if column == 0:
-            # super().setCheckState(column, status)
+        if column == 0 and role == Qt.CheckStateRole:
             # Trigger parent check
             if isinstance(self.parent(), QTreeItem):
                 self.parent().childChecked(self, column, value)
@@ -66,6 +65,8 @@ class QTreeItem(QTreeWidgetItem):
             if value in (Qt.Checked, Qt.Unchecked):
                 for i in range(self.childCount()):
                     self.child(i).superCheck(column, value)
+            if self.checkState(column) != value:
+                self.treeWidget().itemChecked.emit(self, column, value)
         super().setData(column, role, value)
 
     def superCheck(self, column, status):
@@ -74,19 +75,10 @@ class QTreeItem(QTreeWidgetItem):
 
     def childChecked(self, child, column, status):
         """Child was checked."""
+        # if len(self._check_status) != self.childCount():
+        #     for c in range(self.childCount()):
+        #         self._check_status[c] = self.child(c).checkState(column)
         self._check_status[self.indexOfChild(child)] = status
-        # if status == Qt.Checked:
-        #     self._children_checked += 1
-        #     self._children_unchecked -= 1
-        # elif status == Qt.Unchecked:
-        #     self._children_checked -= 1
-        #     self._children_unchecked += 1
-
-        # print(self._children_checked)
-        # print(self._children_unchecked)
-
-        # if self._children_checked < 0:
-        #     self._children_checked = 0
 
         s = sum([v for v in self._check_status.values()])
         if s == 2*self.childCount():
@@ -99,19 +91,14 @@ class QTreeItem(QTreeWidgetItem):
             status = Qt.PartiallyChecked
             super().setData(column, Qt.CheckStateRole, Qt.PartiallyChecked)
 
-        # if self._children_checked == self.childCount():
-        #     super().setCheckState(column, Qt.Checked)
-        # elif self._children_unchecked == self.childCount():
-        #     super().setCheckState(column, Qt.Unchecked)
-        # else:
-        #     super().setCheckState(column, Qt.PartiallyChecked)
-
         if isinstance(self.parent(), QTreeItem):
             self.parent().childChecked(self, column, status)
 
 
 class PVNameTree(QTreeWidget):
     """Build a tree with SiriusPVNames."""
+
+    itemChecked = Signal(QTreeItem, int, int)
 
     class BuildTree(QThread):
         """QThread to build tree."""
@@ -292,13 +279,11 @@ class PVNameTree(QTreeWidget):
                     parent_key = item_key
             new_item = QTreeItem(row, parent)
             new_item.setCheckState(0, Qt.Unchecked)
-            # self._item_map.add_symbol(pvname, new_item)
             self._item_map[pvname] = new_item
             self._leafs.append(new_item)
         else:
             key = pvname[:2]
             item_key = parent_key + key
-            # item = self._item_map.symbol(item_key)
             item = self._item_map[item_key] \
                 if item_key in self._item_map else None
             if item is None:
@@ -311,7 +296,6 @@ class PVNameTree(QTreeWidget):
             # Insert leaf node pvname
             new_item = QTreeItem(row, parent)
             new_item.setCheckState(0, Qt.Unchecked)
-            # self._item_map.add_symbol(pvname, new_item)
             self._item_map[pvname] = new_item
             self._leafs.append(new_item)
 
@@ -355,6 +339,9 @@ class PVNameTree(QTreeWidget):
         menu.addAction(self._act_collapse_all)
         menu.popup(event.globalPos())
 
+    def setData(self, index, role, value):
+        print(index, role, value)
+        super().setData(index, role, value)
 
 if __name__ == "__main__":
     # import sys

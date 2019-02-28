@@ -4,15 +4,15 @@ import re
 
 from qtpy.QtCore import Qt, Slot
 from qtpy.QtWidgets import QWidget, QComboBox, QLabel, QPushButton, \
-    QHBoxLayout, QVBoxLayout, QLineEdit
+    QHBoxLayout, QVBoxLayout, QLineEdit, QSplitter, QFrame, QGridLayout
 
 from siriushla.misc.epics.wrapper import PyEpicsWrapper
 from siriushla.misc.epics.task import EpicsChecker, EpicsSetter
 from siriushla.widgets.windows import SiriusMainWindow
-from siriushla.widgets.pvnames_tree import PVNameTree
+from siriushla.widgets.pvnames_tree import QTreeItem, PVNameTree
 from siriushla.widgets.dialog import ReportDialog, ProgressDialog
 from siriushla.widgets.load_configuration import LoadConfigurationWidget
-from siriushla.widgets.horizontal_ruler import HorizontalRuler
+# from siriushla.widgets.horizontal_ruler import HorizontalRuler
 from siriushla.model import ConfigPVsTypeModel
 
 
@@ -38,12 +38,13 @@ class SetConfigurationWindow(SiriusMainWindow):
                 min-width: 40em;
                 min-height: 40em;
             }
-            LoadConfigurationWidget {
-                min-height: 10em;
-                max-height: 10em;
-            }
+            # LoadConfigurationWidget {
+            #     min-height: 10em;
+            #     max-height: 10em;
+            # }
         """)
         self.setWindowTitle('Set saved configuration')
+        self._nr_checked_items = 0
 
     def _setup_ui(self):
         # Set central widget
@@ -54,7 +55,7 @@ class SetConfigurationWindow(SiriusMainWindow):
         self.setCentralWidget(self._central_widget)
 
         self._set_widget = QWidget()
-        self._set_widget.layout = QVBoxLayout()
+        self._set_widget.layout = QGridLayout()
         self._set_widget.setLayout(self._set_widget.layout)
 
         self._central_widget.layout.addWidget(self._set_widget)
@@ -63,6 +64,9 @@ class SetConfigurationWindow(SiriusMainWindow):
         self._type_cb = QComboBox(self)
         self._type_cb.setObjectName('type_cb')
         self._type_cb.setModel(ConfigPVsTypeModel(self._db, self._type_cb))
+
+        self._splitter = QSplitter(orientation=Qt.Vertical, parent=self)
+        self._splitter.setChildrenCollapsible(True)
 
         # Add table for the configuration name
         self._config_table = LoadConfigurationWidget(self._db)
@@ -75,6 +79,8 @@ class SetConfigurationWindow(SiriusMainWindow):
         # Add Selection Tree
         self._tree_msg = QLabel(self)
         self._tree_msg.setObjectName('tree_msg')
+        self._tree_check_count = QLabel(self)
+        self._tree_check_count.setObjectName('tree_check_count')
         self._tree = PVNameTree(
             tree_levels=('sec', 'mag_group', 'device_name'))
         self._tree.setColumnCount(3)
@@ -85,23 +91,40 @@ class SetConfigurationWindow(SiriusMainWindow):
         self._set_btn.setObjectName('set_btn')
 
         # Add widgets
-        self._set_widget.layout.addWidget(
+        self._config_type_widget = QWidget(self)
+        self._config_type_widget.setLayout(QVBoxLayout())
+        self._config_type_widget.layout().addWidget(
             QLabel('<h3>Configuration Type</h3>'))
-        self._set_widget.layout.addWidget(self._type_cb)
-        self._set_widget.layout.addWidget(HorizontalRuler(self))
-        self._set_widget.layout.addWidget(
+        self._config_type_widget.layout().addWidget(self._type_cb)
+
+        self._config_name_widget = QWidget(self)
+        self._config_name_widget.setLayout(QVBoxLayout())
+        self._config_name_widget.layout().addWidget(
             QLabel('<h3>Configuration Name</h3>'))
-        self._set_widget.layout.addWidget(self._config_table)
-        self._set_widget.layout.addWidget(HorizontalRuler(self))
-        self._set_widget.layout.addWidget(QLabel('<h3>Configuration</h3>'))
-        self._set_widget.layout.addWidget(self._filter_le)
-        self._set_widget.layout.addWidget(self._tree_msg)
-        self._set_widget.layout.addWidget(self._tree)
-        self._set_widget.layout.addWidget(self._set_btn)
+        self._config_name_widget.layout().addWidget(self._config_table)
+
+        self._tree_widget = QWidget(self)
+        self._tree_label_layout = QHBoxLayout()
+        self._tree_label_layout.addWidget(self._tree_msg)
+        self._tree_label_layout.addWidget(self._tree_check_count)
+        self._tree_widget.layout = QVBoxLayout(self._tree_widget)
+        self._tree_widget.layout.addWidget(QLabel('<h3>Configuration</h3>'))
+        self._tree_widget.layout.addWidget(self._filter_le)
+        self._tree_widget.layout.addLayout(self._tree_label_layout)
+        self._tree_widget.layout.addWidget(self._tree)
+
+        self._set_widget.layout.addWidget(self._config_type_widget, 0, 0)
+        self._set_widget.layout.addWidget(self._config_name_widget, 1, 0)
+        self._set_widget.layout.addWidget(self._tree_widget, 0, 1, 2, 1)
+        self._set_widget.layout.addWidget(self._set_btn, 2, 1)
+
+        self._set_widget.layout.setColumnStretch(0, 1)
+        self._set_widget.layout.setColumnStretch(1, 1.5)
 
         # Add signals
         self._type_cb.currentTextChanged.connect(self._fill_config_names)
         self._config_table.configChanged.connect(self._fill_config)
+        self._tree.itemChecked.connect(self._item_checked)
         self._set_btn.clicked.connect(self._set)
 
     @Slot(str)
@@ -114,6 +137,7 @@ class SetConfigurationWindow(SiriusMainWindow):
         config_name = selected
         ret = self._db.get_config(config_type, config_name)
         self._tree.clear()
+        self._nr_checked_items = 0
         code = ret['code']
         if code == 200:
             try:
@@ -146,13 +170,13 @@ class SetConfigurationWindow(SiriusMainWindow):
                 node.setHidden(False)
                 selected_pvs += 1
             else:
-                node.setCheckState(0, Qt.Unchecked)
+                # node.setCheckState(0, Qt.Unchecked)
                 node.setHidden(True)
 
         self._tree_msg.setText('Showing {} PVs.'.format(selected_pvs))
 
     @Slot()
-    def _set(self):
+    def _set(self): 
         # Get selected PVs
         selected_pvs = self._tree.checked_items()
 
@@ -196,6 +220,16 @@ class SetConfigurationWindow(SiriusMainWindow):
             self.logger.warn('Failed to set/check {}'.format(item))
         self._report = ReportDialog(failed_items, self)
         self._report.show()
+
+    @Slot(QTreeItem, int, int)
+    def _item_checked(self, item, column, value):
+        if item.childCount() == 0:
+            if value == Qt.Checked:
+                self._nr_checked_items += 1
+            elif value == Qt.Unchecked:
+                self._nr_checked_items -= 1
+        self._tree_check_count.setText(
+            '{} PVs checked.'.format(self._nr_checked_items))
 
 
 if __name__ == '__main__':

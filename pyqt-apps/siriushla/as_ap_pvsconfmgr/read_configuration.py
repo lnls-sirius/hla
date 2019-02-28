@@ -177,7 +177,8 @@ class ReadConfigurationWindow(SiriusMainWindow):
             #     self, 'Configuration Name', error + label)
 
             config_name, status = SaveConfiguration(config_type, self).exec()
-            print(config_name, status)
+            if not config_name:
+                return
 
             # Check status and configuration name
             if not re.match('^((\w|[()])+([-_/](\w+|[()])])?)+$', config_name):
