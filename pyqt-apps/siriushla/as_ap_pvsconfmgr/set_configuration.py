@@ -38,6 +38,10 @@ class SetConfigurationWindow(SiriusMainWindow):
                 min-width: 40em;
                 min-height: 40em;
             }
+            LoadConfigurationWidget {
+                min-height: 10em;
+                max-height: 10em;
+            }
         """)
         self.setWindowTitle('Set saved configuration')
 
@@ -62,7 +66,6 @@ class SetConfigurationWindow(SiriusMainWindow):
 
         # Add table for the configuration name
         self._config_table = LoadConfigurationWidget(self._db)
-        self._config_table.setFixedHeight(200)
 
         # Add filter for tree
         self._filter_le = QLineEdit(self)
