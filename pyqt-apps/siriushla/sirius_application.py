@@ -14,7 +14,13 @@ class SiriusApplication(PyDMApplication):
         super().__init__(ui_file=ui_file, command_line_args=command_line_args,
                          use_main_window=use_main_window, **kwargs)
         font = self.font()
-        font.setPointSize(12)
+        width, _ = self._get_desktop_geometry()
+        if width > 1920:
+            font.setPointSize(12)
+        elif width == 1920:
+            font.setPointSize(10)
+        else:
+            font.setPointSize(7)
         self.setFont(font)
         set_style(self)
         self._windows = dict()
@@ -52,3 +58,8 @@ class SiriusApplication(PyDMApplication):
         else:
             self._windows[wid] = window
             self._windows[wid].show()
+
+    def _get_desktop_geometry(self):
+        screen = self.primaryScreen()
+        screenGeometry = screen.geometry()
+        return screenGeometry.width(), screenGeometry.height()

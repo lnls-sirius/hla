@@ -31,7 +31,7 @@ def _create_siriuswindow(qt_type):
             if event.matches(QKeySequence.ZoomIn):
                 font.setPointSize(font.pointSize() + 1)
                 self.app.setFont(font)
-            elif event.matches(QKeySequence.ZoomOut) and font.pointSize() > 9:
+            elif event.matches(QKeySequence.ZoomOut) and font.pointSize() > 6:
                 font.setPointSize(font.pointSize() - 1)
                 self.app.setFont(font)
             super().keyPressEvent(event)
