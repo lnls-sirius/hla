@@ -105,9 +105,17 @@ class ControlApplication(SiriusMainWindow):
         LI_launcher = QPushButton('Linac launcher', self)
         util.connect_newprocess(LI_launcher, 'sirius-hla-li-launcher.sh')
 
+        energy = QPushButton('Energy Meas', self)
+        util.connect_newprocess(energy, 'sirius-hla-li-ap-energy.py')
+
+        emit = QPushButton('Emittance Meas', self)
+        util.connect_newprocess(emit, 'sirius-hla-li-ap-emittance.py')
+
         lay = QHBoxLayout()
         lay.setAlignment(Qt.AlignLeft)
         lay.addWidget(LI_launcher)
+        lay.addWidget(energy)
+        lay.addWidget(emit)
         return lay
 
     def _create_section_layout(self, sec):
@@ -140,6 +148,9 @@ class ControlApplication(SiriusMainWindow):
         if 'tb' in sec:
             Slits = QPushButton('Slits', self)
             util.connect_newprocess(Slits, 'sirius-hla-tb-di-slits.py')
+
+            Emittance = QPushButton('Emittance Meas', self)
+            util.connect_newprocess(Emittance, 'sirius-hla-tb-ap-emittance.py')
 
         BPMs = QPushButton('BPMs', self)
         util.connect_newprocess(BPMs, ['sirius-hla-as-di-bpm.py', sec.upper()])
@@ -180,6 +191,7 @@ class ControlApplication(SiriusMainWindow):
             glay.addWidget(PosAng, 2, 1)
             glay.addWidget(ICTs, 3, 2)
         if 'tb' in sec:
+            glay.addWidget(Emittance, 2, 2)
             glay.addWidget(Slits, 3, 3)
         if 'bo' in sec or 'si' in sec:
             glay.addWidget(CurrLT, 2, 1)
