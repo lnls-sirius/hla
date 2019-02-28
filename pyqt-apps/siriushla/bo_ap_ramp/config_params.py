@@ -213,7 +213,7 @@ class DipoleRamp(QWidget):
         self.table.setStyleSheet("""
             #DipoleTable{
                 min-width: 30em;
-                min-height: 18em;
+                min-height: 18em; max-height: 18em;
             }
             QHeaderView::section {
                 background-color: #1F64FF;
@@ -1122,7 +1122,7 @@ class RFRamp(QWidget):
             """
             #RFTable{
                 min-width: 42em;
-                min-height: 10.69em;
+                min-height: 10.69em; max-height: 10.69em;
             }
             QHeaderView::section {
                 background-color: #4A5E28;

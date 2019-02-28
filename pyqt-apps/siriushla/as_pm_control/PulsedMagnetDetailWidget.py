@@ -26,7 +26,7 @@ class PulsedMagnetDetailWidget(QWidget):
         self.setStyleSheet("""
             #pulses_box,
             #pwrstate_box {
-                max-width: 5em;
+                max-width: 8em;
             }
         """)
 

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>639</width>
+    <width>655</width>
     <height>330</height>
    </rect>
   </property>
@@ -43,6 +43,7 @@
      <property name="styleSheet">
       <string notr="true">font-weight:bold;
 font-size:1.1em;
+qproperty-alignment: 'AlignVCenter | AlignRight';
 background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, stop:0 rgba(173, 190, 207, 255), stop:1 rgba(213, 213, 213, 255));
 height:1.29em;</string>
      </property>
@@ -53,24 +54,6 @@ height:1.29em;</string>
    </item>
    <item row="1" column="0">
     <widget class="QTabWidget" name="tabWidget">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>16777215</height>
-      </size>
-     </property>
      <property name="tabPosition">
       <enum>QTabWidget::North</enum>
      </property>
@@ -106,13 +89,13 @@ height:1.29em;</string>
            </property>
            <property name="minimumSize">
             <size>
-             <width>81</width>
+             <width>87</width>
              <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>81</width>
+             <width>87</width>
              <height>16777215</height>
             </size>
            </property>
@@ -139,13 +122,13 @@ max-width:5.81em;</string>
            </property>
            <property name="minimumSize">
             <size>
-             <width>22</width>
+             <width>19</width>
              <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>22</width>
+             <width>19</width>
              <height>16777215</height>
             </size>
            </property>
@@ -174,13 +157,13 @@ max-width:1.29em;</string>
            </property>
            <property name="minimumSize">
             <size>
-             <width>81</width>
+             <width>87</width>
              <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>81</width>
+             <width>87</width>
              <height>16777215</height>
             </size>
            </property>
@@ -201,13 +184,13 @@ max-width:5.81em;</string>
           <widget class="PyDMLabel" name="PyDMLabel">
            <property name="minimumSize">
             <size>
-             <width>85</width>
+             <width>87</width>
              <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>85</width>
+             <width>87</width>
              <height>16777215</height>
             </size>
            </property>
@@ -458,13 +441,13 @@ max-width:5.81em;</string>
            </property>
            <property name="minimumSize">
             <size>
-             <width>81</width>
+             <width>87</width>
              <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>81</width>
+             <width>87</width>
              <height>16777215</height>
             </size>
            </property>
@@ -491,13 +474,13 @@ max-width:5.81em;</string>
            </property>
            <property name="minimumSize">
             <size>
-             <width>22</width>
+             <width>19</width>
              <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>22</width>
+             <width>19</width>
              <height>16777215</height>
             </size>
            </property>
@@ -526,13 +509,13 @@ max-width:1.29em;</string>
            </property>
            <property name="minimumSize">
             <size>
-             <width>81</width>
+             <width>87</width>
              <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>81</width>
+             <width>87</width>
              <height>16777215</height>
             </size>
            </property>
@@ -553,13 +536,13 @@ max-width:5.81em;</string>
           <widget class="PyDMLabel" name="PyDMLabel_2">
            <property name="minimumSize">
             <size>
-             <width>85</width>
+             <width>87</width>
              <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>85</width>
+             <width>87</width>
              <height>16777215</height>
             </size>
            </property>
@@ -803,19 +786,22 @@ max-width:5.81em;</string>
    <header>pydm.widgets.label</header>
   </customwidget>
   <customwidget>
+   <class>QLed</class>
+   <extends>QFrame</extends>
+   <header>siriushla.widgets.QLed</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>PyDMLed</class>
    <extends>QLed</extends>
    <header>siriushla.widgets.led</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>SiriusLedAlert</class>
    <extends>PyDMLed</extends>
    <header>siriushla.widgets.led</header>
-  </customwidget>
-  <customwidget>
-   <class>QLed</class>
-   <extends>QFrame</extends>
-   <header>siriushla.widgets.QLed</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -2,6 +2,7 @@
 """HLA TB and TS ICT monitoring Window."""
 
 import sys
+import os as _os
 from qtpy.uic import loadUi
 from qtpy.QtCore import QPoint, Qt
 from qtpy.QtWidgets import QWidget, QVBoxLayout, QGridLayout, QFormLayout, \
@@ -31,9 +32,8 @@ class SlitMonitoring(QWidget):
         self._slit_width = 0
 
         tmp_file = _substitute_in_file(
-            '/home/sirius/repos/hla/pyqt-apps/siriushla/tl_ap_control'
-            '/ui_tb_ap_slit'+slit_orientation.lower()+'mon.ui',
-            {'PREFIX': prefix})
+            _os.path.abspath(_os.path.dirname(__file__))+'/ui_tb_ap_slit' +
+            slit_orientation.lower()+'mon.ui', {'PREFIX': prefix})
         self.centralwidget = loadUi(tmp_file)
         self.setLayout(QVBoxLayout())
         self.layout().setContentsMargins(0, 0, 0, 0)

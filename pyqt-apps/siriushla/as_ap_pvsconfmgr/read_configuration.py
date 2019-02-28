@@ -75,6 +75,7 @@ class ReadConfigurationWindow(SiriusMainWindow):
             }
         """)
         self.setWindowTitle('Create new configuration')
+        self._type_cb.setCurrentText('global_config')
 
     def _setup_ui(self):
         # Set central widget

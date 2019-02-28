@@ -6,57 +6,23 @@ import os
 import sys
 import argparse as _argparse
 from siriuspy.envars import vaca_prefix
-from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QWidget, QLabel, QSpacerItem, \
-                           QSizePolicy as QSzPlcy, QGridLayout
-from pydm.widgets import PyDMEnumComboBox, PyDMLabel
 from siriushla.sirius_application import SiriusApplication
-from siriushla.widgets import SiriusLedAlert
-from siriushla.as_di_scrns import SiriusScrnView
-from siriushla.widgets.windows import SiriusMainWindow
+from siriushla.as_di_scrns import SelectScrns
 
 
 parser = _argparse.ArgumentParser(
     description="Run Interface of Specified Screen.")
-parser.add_argument('scrn', type=str, default='TB-01:DI-Scrn-1',
-                    help='Select Screen.')
+parser.add_argument('sec', type=str, help='Select a section.')
 parser.add_argument('-p', "--prefix", type=str, default=vaca_prefix,
                     help="Define the prefix for the PVs in the window.")
 args = parser.parse_args()
 
-scrn_device = args.scrn
+sec = args.sec
 prefix = args.prefix
 
 os.environ['EPICS_CA_MAX_ARRAY_BYTES'] = '200000000'
 app = SiriusApplication()
-
-cw = QWidget()
-scrn_view = SiriusScrnView(prefix=prefix, device=scrn_device)
-cb_scrntype = PyDMEnumComboBox(
-    parent=cw, init_channel=prefix+scrn_device+':ScrnType-Sel')
-l_scrntype = PyDMLabel(
-    parent=cw, init_channel=prefix+scrn_device+':ScrnType-Sts')
-led_scrntype = SiriusLedAlert(
-    parent=cw, init_channel=prefix+scrn_device+':ScrnType-Sts')
-led_scrntype.shape = 2
-
-lay = QGridLayout()
-lay.addWidget(QLabel('<h3>Screen View</h3>',
-                     cw, alignment=Qt.AlignCenter), 0, 0, 1, 4)
-lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 1, 0)
-lay.addWidget(QLabel('Select Screen Type: ', cw,
-                     alignment=Qt.AlignRight), 2, 0)
-lay.addWidget(cb_scrntype, 2, 1)
-lay.addWidget(l_scrntype, 2, 2)
-lay.addWidget(led_scrntype, 2, 3)
-
-lay.addItem(QSpacerItem(20, 40, QSzPlcy.Fixed, QSzPlcy.Fixed), 4, 0)
-lay.addWidget(scrn_view, 5, 0, 1, 4)
-cw.setLayout(lay)
-
-window = SiriusMainWindow()
-window.setWindowTitle('Screen View: '+scrn_device)
-window.setCentralWidget(cw)
+window = SelectScrns(None, prefix=prefix, sec=sec)
+window.setWindowTitle('Select a Screen')
 window.show()
-window.setFocus(True)
 sys.exit(app.exec_())
