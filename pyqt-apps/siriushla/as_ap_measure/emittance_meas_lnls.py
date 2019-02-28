@@ -9,8 +9,8 @@ from PyQt5.QtWidgets import QPushButton, QLabel, QGridLayout, QGroupBox, \
 
 from matplotlib import rcParams
 
-from .utils import MatplotlibWidget, ProcessImage, gettransmat, C, E0
-from siriuspy.search import PSSearch as _PSS
+from .utils import MatplotlibWidget, ProcessImage, gettransmat, E0
+from siriuspy.factory import NormalizerFactory as _NormFact
 
 rcParams['font.size'] = 9
 
@@ -50,21 +50,21 @@ class EmittanceMeasure(QWidget):
     def _select_experimental_setup(self):
         if self._place.lower().startswith('li'):
             self.plt_image = ProcessImage(self, place='LI-Emittance')
-            self.conv2gl = _PSS().conv_psname_2_excdata('LI-01:PS-QF3')
+            self.conv2kl = _NormFact.create('LI-01:MA-QF3')
             self.quad_I_sp = PV('LA-CN:H1FQPS-3:seti')
             self.quad_I_rb = PV('LA-CN:H1FQPS-3:rdi')
             self.DIST = 2.8775
             self.QUAD_L = 0.112
         if self._place.lower().startswith('tb-qd2a'):
             self.plt_image = ProcessImage(self, place='TB-Emittance')
-            self.conv2gl = _PSS().conv_psname_2_excdata('TB-02:PS-QD2A')
+            self.conv2kl = _NormFact.create('TB-02:MA-QD2A')
             self.quad_I_sp = PV('TB-02:PS-QD2A:Current-SP')
             self.quad_I_rb = PV('TB-02:PS-QD2A:Current-RB')
             self.DIST = 6.904
             self.QUAD_L = 0.1
         if self._place.lower().startswith('tb-qf2a'):
             self.plt_image = ProcessImage(self, place='TB-Emittance')
-            self.conv2gl = _PSS().conv_psname_2_excdata('TB-02:PS-QF2A')
+            self.conv2kl = _NormFact.create('TB-02:MA-QF2A')
             self.quad_I_sp = PV('TB-02:PS-QF2A:Current-SP')
             self.quad_I_rb = PV('TB-02:PS-QF2A:Current-RB')
             self.DIST = 6.534
@@ -175,10 +175,10 @@ class EmittanceMeasure(QWidget):
             plt.figure.canvas.draw()
 
     def _get_K1_from_I(self, I_meas):
-        energy = self.spbox_energy.value()  # energy in MeV
-        pc = np.sqrt(energy*energy - E0*E0)
-        GL = self.conv2gl.interp_curr2mult(I_meas)['normal'][1]
-        return -GL/self.QUAD_L * C/pc/1e6  #
+        energy = self.spbox_energy.value() * 1e-3  # energy in GeV
+        KL = self.conv2kl.conv_current_2_strength(
+                                I_meas, strengths_dipole=energy)
+        return KL/self.QUAD_L
 
     def _trans_matrix_analysis(self, K1, sigma, pl='x'):
         Rx, Ry = self._get_trans_mat(K1)
