@@ -2,6 +2,8 @@
 
 from qtpy.QtCore import Qt, QAbstractListModel
 
+from siriuspy.servconf.conf_types import get_config_type_template
+
 
 class ConfigTypeModel(QAbstractListModel):
 
@@ -33,11 +35,7 @@ class ConfigTypeModel(QAbstractListModel):
         """Setup model data."""
         self.beginResetModel()
         self._configs = ['Select a configuration type...', ]
-        self._configs.extend(sorted(self._connection.get_config_types()))
-        # ret = self._connection.get_types()
-        # if ret['code'] == 200:
-        #     self._configs = ['Select a configuration type...', ]
-        #     self._configs.extend(sorted(ret['result']))
-        # else:
-        #     self._configs = [ret['message'], ]
+        configs = [c for c in self._connection.get_config_types()
+                   if 'pvs' in get_config_type_template(c)]
+        self._configs.extend(sorted(configs))
         self.endResetModel()

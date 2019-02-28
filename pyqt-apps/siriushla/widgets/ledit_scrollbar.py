@@ -1,7 +1,6 @@
 """Defines PyDM widget with a line edit and a double scrollbar."""
 from qtpy.QtWidgets import QWidget, QVBoxLayout, QStyle, QStyleOption
 from qtpy.QtGui import QPainter
-from pydm.widgets.line_edit import PyDMLineEdit
 from siriushla.widgets.scrollbar import PyDMScrollBar
 from siriushla.widgets.line_edit import SiriusLineEdit
 
@@ -25,7 +24,6 @@ class PyDMLinEditScrollbar(QWidget):
         self.layout.addWidget(self.sp_lineedit)
         self.layout.addWidget(self.sp_scrollbar)
         self.setLayout(self.layout)
-
 
     def paintEvent(self, event):
         """Need to override paintEvent in order to apply CSS."""

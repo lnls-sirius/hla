@@ -696,6 +696,7 @@ max-width:5.81em;</string>
      <property name="styleSheet">
       <string notr="true">font-weight:bold;
 font-size:1.1em;
+qproperty-alignment: 'AlignVCenter | AlignRight';
 background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:1, y2:0, stop:0 rgba(173, 190, 207, 255), stop:1 rgba(213, 213, 213, 255));
 height:1.29em;</string>
      </property>

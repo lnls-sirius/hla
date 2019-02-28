@@ -39,7 +39,7 @@ class OpticsAdjust(QGroupBox):
         self._corrfactorH = 100.0
         self._corrfactorV = 100.0
         self._setupUi()
-        self._tunecorr = BOTuneCorr('Default_1')
+        self._tunecorr = BOTuneCorr('Default')
         self._chromcorr = BOChromCorr('Default')
         self._conn_sofb = _ConnSOFB(prefix=self.prefix)
         self._norm_config_oldname = ''
