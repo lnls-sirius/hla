@@ -1,48 +1,29 @@
 #!/usr/bin/env python-sirius
 
-import os
-import sys
-import numpy as np
-import time
 from threading import Thread, Event
+import numpy as np
 from epics import PV
-from PyQt5.QtWidgets import (QPushButton, QLabel, QGridLayout, QGroupBox,
-                             QFormLayout, QMessageBox, QApplication,
-                             QSizePolicy, QWidget, QComboBox, QSpinBox,
-                             QVBoxLayout, QHBoxLayout, QDoubleSpinBox, QFileDialog)
-from PyQt5.QtGui import QColor
-from PyQt5.QtCore import QTimer, QSize, Qt
-from pydm.application import PyDMApplication
-from pydm.widgets import PyDMImageView, PyDMLabel
-
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as Canvas
-from matplotlib.figure import Figure
+from PyQt5.QtWidgets import QPushButton, QLabel, QGridLayout, QGroupBox, \
+    QFormLayout, QMessageBox, QWidget, QComboBox, QSpinBox, QVBoxLayout, \
+    QDoubleSpinBox, QFileDialog
 
 from matplotlib import rcParams
-from pyqtgraph import PlotCurveItem, mkPen
-from scipy.optimize import curve_fit
-from scipy.stats import norm
 
-from utils import set_environ, MatplotlibWidget, ProcessImage, gettransmat
+from .utils import MatplotlibWidget, ProcessImage, gettransmat, C, E0
+from siriuspy.search import PSSearch as _PSS
 
 rcParams['font.size'] = 9
 
-light_speed = 299792458
-electron_rest_en = 0.5109989461  # in MeV
 DT = 0.001
 SIMUL = False
 
 
 class EmittanceMeasure(QWidget):
-    I2K1 = [0.0089, -2.1891, -0.0493]
-    QUAD = 'H1FQPS-3'
-    DIST = 2.8775
-    QUAD_L = 0.112
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, place='LI'):
         super().__init__(parent=parent)
-        self.quad_I_sp = PV('LA-CN:' + self.QUAD + ':seti')
-        self.quad_I_rb = PV('LA-CN:' + self.QUAD + ':rdi')
+        self._place = place or 'LI'
+        self._select_experimental_setup()
         self.nemitx_tm = []
         self.nemity_tm = []
         self.nemitx_parf = []
@@ -65,6 +46,29 @@ class EmittanceMeasure(QWidget):
     def meas_emittance(self):
         self._acquire_data()
         self._perform_analysis()
+
+    def _select_experimental_setup(self):
+        if self._place.lower().startswith('li'):
+            self.plt_image = ProcessImage(self, place='LI-Emittance')
+            self.conv2gl = _PSS().conv_psname_2_excdata('LI-01:PS-QF3')
+            self.quad_I_sp = PV('LA-CN:H1FQPS-3:seti')
+            self.quad_I_rb = PV('LA-CN:H1FQPS-3:rdi')
+            self.DIST = 2.8775
+            self.QUAD_L = 0.112
+        if self._place.lower().startswith('tb-qd2a'):
+            self.plt_image = ProcessImage(self, place='TB-Emittance')
+            self.conv2gl = _PSS().conv_psname_2_excdata('TB-02:PS-QD2A')
+            self.quad_I_sp = PV('TB-02:PS-QD2A:Current-SP')
+            self.quad_I_rb = PV('TB-02:PS-QD2A:Current-RB')
+            self.DIST = 6.904
+            self.QUAD_L = 0.1
+        if self._place.lower().startswith('tb-qf2a'):
+            self.plt_image = ProcessImage(self, place='TB-Emittance')
+            self.conv2gl = _PSS().conv_psname_2_excdata('TB-02:PS-QF2A')
+            self.quad_I_sp = PV('TB-02:PS-QF2A:Current-SP')
+            self.quad_I_rb = PV('TB-02:PS-QF2A:Current-RB')
+            self.DIST = 6.534
+            self.QUAD_L = 0.1
 
     def _acquire_data(self):
         samples = self.spbox_samples.value()
@@ -138,33 +142,19 @@ class EmittanceMeasure(QWidget):
         sigma = np.array(self.sigma)
         I_meas = np.array(self.I_meas)
         pl = self.plane_meas
+        K1 = self._get_K1_from_I(I_meas)
 
-        if pl=='x':
-            # Method 1: Transfer Matrix
-            nemitx, betax, alphax = self._trans_matrix_method(
-                                            I_meas, sigma, pl='x')
-            self.nemitx_tm.append(nemitx)
-            self.betax_tm.append(betax)
-            self.alphax_tm.append(alphax)
-            # Method 2: Parabola Fitting
-            nemitx, betax, alphax = self._thin_lens_method(
-                                            I_meas, sigma, pl='x')
-            self.nemitx_parf.append(nemitx)
-            self.betax_parf.append(betax)
-            self.alphax_parf.append(alphax)
-        else:
-            # Method 1: Transfer Matrix
-            nemity, betay, alphay = self._trans_matrix_method(
-                                            I_meas, sigma, pl='y')
-            self.nemity_tm.append(nemity)
-            self.betay_tm.append(betay)
-            self.alphay_tm.append(alphay)
-            # Method 2: Parabola Fitting
-            nemity, betay, alphay = self._thin_lens_method(
-                                            I_meas, sigma, pl='y')
-            self.nemity_parf.append(nemity)
-            self.betay_parf.append(betay)
-            self.alphay_parf.append(alphay)
+        # Transfer Matrix
+        nem, bet, alp = self._trans_matrix_analysis(K1, sigma, pl=pl)
+        getattr(self, 'nemit' + pl + '_tm').append(nem)
+        getattr(self, 'beta' + pl + '_tm').append(bet)
+        getattr(self, 'alpha' + pl + '_tm').append(alp)
+
+        # Parabola Fitting
+        nem, bet, alp = self._thin_lens_approx(K1, sigma, pl=pl)
+        getattr(self, 'nemit' + pl + '_parf').append(nem)
+        getattr(self, 'beta' + pl + '_parf').append(bet)
+        getattr(self, 'alpha' + pl + '_parf').append(alp)
 
         for pref in ('nemit', 'beta', 'alpha'):
             for var in ('_tm', '_parf'):
@@ -175,48 +165,35 @@ class EmittanceMeasure(QWidget):
                 line.set_ydata(yd)
                 lb = getattr(self, 'lb_'+tp)
                 lb.setText('{0:.3f}'.format(yd.mean()))
-            all = []
+            params = []
             for var in ('x_tm', 'y_tm', 'x_parf', 'y_parf'):
-                all.extend(getattr(self, pref + var))
-            all = np.array(all)
+                params.extend(getattr(self, pref + var))
+            params = np.array(params)
             plt = getattr(self, 'plt_' + pref)
-            plt.axes.set_xlim([-0.1, all.shape[0]+0.1])
-            plt.axes.set_ylim([all.min()*(1-DT), all.max()*(1+DT)])
+            plt.axes.set_xlim([-0.1, params.shape[0]+0.1])
+            plt.axes.set_ylim([params.min()*(1-DT), params.max()*(1+DT)])
             plt.figure.canvas.draw()
 
     def _get_K1_from_I(self, I_meas):
-        energy = self.spbox_energy.value()
-        kin_en = np.sqrt(energy*energy - electron_rest_en*electron_rest_en)
-        return np.polyval(self.I2K1, I_meas)*light_speed/kin_en/1e6
+        energy = self.spbox_energy.value()  # energy in MeV
+        pc = np.sqrt(energy*energy - E0*E0)
+        GL = self.conv2gl.interp_curr2mult(I_meas)['normal'][1]
+        return -GL/self.QUAD_L * C/pc/1e6  #
 
-    def _twiss(self, s_11 , s_12, s_22, energy):
-        emit = np.sqrt(abs(s_11 * s_22 - s_12 * s_12))
-        beta = s_11 / emit
-        alpha = -s_12 / emit
-        gamma = s_22 / emit
-        nemit = emit * energy / electron_rest_en * 1e6  # in mm.mrad
-        return nemit, beta, alpha, gamma
-
-    def _trans_matrix_method(self, I_meas, sigma, pl='x'):
-        K1 = self._get_K1_from_I(I_meas)
-        energy = self.spbox_energy.value()
-
-        Rx, Ry = self._get_resp_mat(K1, energy)
+    def _trans_matrix_analysis(self, K1, sigma, pl='x'):
+        Rx, Ry = self._get_trans_mat(K1)
         R = Rx if pl == 'x' else Ry
-        # pseudo_inv = (np.linalg.inv(np.transpose(R) @ R) @ np.transpose(R))
-        # [s_11, s_12, s_22] = pseudo_inv @ (sigma*sigma)
-        s_11, s_12, s_22 = np.linalg.lstsq(R, sigma * sigma, rcond=None)[0]
-        nemit, beta, alpha, gamma = self._twiss(s_11, s_12, s_22, energy)
+        pseudo_inv = (np.linalg.inv(np.transpose(R) @ R) @ np.transpose(R))
+        [s_11, s_12, s_22] = pseudo_inv @ (sigma*sigma)
+        # s_11, s_12, s_22 = np.linalg.lstsq(R, sigma * sigma)[0]
+        nemit, beta, alpha, gamma = self._twiss(s_11, s_12, s_22)
         return nemit, beta, alpha
 
-    def _thin_lens_method(self, I_meas, sigma, pl='x'):
-        I_meas2 = I_meas if pl == 'x' else -I_meas
-        K1 = self._get_K1_from_I(I_meas2)
-        energy = self.spbox_energy.value()
-
+    def _thin_lens_approx(self, K1, sigma, pl='x'):
+        K1 = K1 if pl == 'x' else -K1
         a, b, c = np.polyfit(K1, sigma*sigma, 2)
         yd = np.sqrt(np.polyval([a, b, c], K1))
-        self.line_fit.set_xdata(I_meas)
+        self.line_fit.set_xdata(self.I_meas)
         self.line_fit.set_ydata(yd*1e3)
         self.plt_sigma.figure.canvas.draw()
 
@@ -225,8 +202,31 @@ class EmittanceMeasure(QWidget):
         s_11 = a/(d*l)**2
         s_12 = (-b-2*d*l*s_11)/(2*l*d*d)
         s_22 = (c-s_11-2*d*s_12)/d**2
-        nemit, beta, alpha, gamma = self._twiss(s_11, s_12, s_22, energy)
+        nemit, beta, alpha, gamma = self._twiss(s_11, s_12, s_22)
         return nemit, beta, alpha
+
+    def _twiss(self, s_11, s_12, s_22):
+        energy = self.spbox_energy.value()  # energy in MeV
+        emit = np.sqrt(abs(s_11 * s_22 - s_12 * s_12))
+        beta = s_11 / emit
+        alpha = -s_12 / emit
+        gamma = s_22 / emit
+        nemit = emit * energy / E0 * 1e6  # in mm.mrad
+        return nemit, beta, alpha, gamma
+
+    def _get_trans_mat(self, K1):
+        R = np.zeros((len(K1), 4, 4))
+        Rd = gettransmat('drift', L=self.DIST)
+        for i, k1 in enumerate(K1):
+            Rq = gettransmat('quad', L=self.QUAD_L, K1=k1)
+            R[i] = np.dot(Rd, Rq)
+        R11 = R[:, 0, 0].reshape(-1, 1)
+        R12 = R[:, 0, 1].reshape(-1, 1)
+        R33 = R[:, 2, 2].reshape(-1, 1)
+        R34 = R[:, 2, 3].reshape(-1, 1)
+        Rx = np.column_stack((R11*R11, 2*R11*R12, R12*R12))
+        Ry = np.column_stack((R33*R33, 2*R33*R34, R34*R34))
+        return Rx, Ry
 
     def _setupUi(self):
         gl = QGridLayout(self)
@@ -282,7 +282,7 @@ class EmittanceMeasure(QWidget):
             self.alphay_parf, '--rd', lw=1, label='Vert. Parab. Fit')[0]
         self.plt_alpha = wid
 
-        vl = QVBoxLayout()###archivo vinculado
+        vl = QVBoxLayout()
         gl.addItem(vl, 0, 1, 3, 1)
         gb = QGroupBox('Data Acquisition Configs.', self)
         fl = QFormLayout(gb)
@@ -372,23 +372,7 @@ class EmittanceMeasure(QWidget):
         self.line_fit = wid.axes.plot([], '-k', lw=1)[0]
         self.plt_sigma = wid
 
-        self.plt_image = ProcessImage(self, prof='PRF5')
         gl.addWidget(self.plt_image, 1, 2, 2, 1)
-
-    def _get_resp_mat(self, K1, energy):
-        gamma = energy/electron_rest_en
-        R = np.zeros((len(K1), 6, 6))
-        Rd = gettransmat('drift', L=self.DIST, gamma=gamma)
-        for i, k1 in enumerate(K1):
-            Rq = gettransmat('quad', L=self.QUAD_L, gamma=gamma, K1=k1)
-            R[i] = np.dot(Rd, Rq)
-        R11 = R[:, 0, 0].reshape(-1, 1)
-        R12 = R[:, 0, 1].reshape(-1, 1)
-        R33 = R[:, 2, 2].reshape(-1, 1)
-        R34 = R[:, 2, 3].reshape(-1, 1)
-        Rx = np.column_stack((R11*R11, 2*R11*R12, R12*R12))
-        Ry = np.column_stack((R33*R33, 2*R33*R34, R34*R34))
-        return Rx, Ry
 
     def pb_save_data_clicked(self):
         if self.I_meas is None or self.sigma is None:
@@ -403,7 +387,7 @@ class EmittanceMeasure(QWidget):
             return
         fname = QFileDialog.getSaveFileName(
                     self, 'Save file',
-                    '/home/fac_files/lnls-sirius/linac-opi/meas_codes',
+                    '/home/fernando/Desktop/Sirius_IOCs_Screens',
                     "Text Files (*.txt *.dat)")
         if fname[0]:
             self.save_to_file(fname[0])
@@ -417,13 +401,15 @@ class EmittanceMeasure(QWidget):
     def pb_load_data_clicked(self):
         fname = QFileDialog.getOpenFileName(
                     self, 'Open file',
-                    '/home/fac_files/lnls-sirius/linac-opi/meas_codes', '')
+                    '/home/fernando/Desktop/Sirius_IOCs_Screens',
+                    "Text Files (*.txt *.dat)")
         if fname[0]:
             self.load_from_file(fname[0])
 
     def load_from_file(self, fname):
         try:
-            self.I_meas, self.sigma = np.loadtxt(fname, skiprows=2, unpack=True)
+            self.I_meas, self.sigma = np.loadtxt(
+                                        fname, skiprows=2, unpack=True)
         except (ValueError, TypeError):
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Warning)
@@ -437,7 +423,7 @@ class EmittanceMeasure(QWidget):
         with open(fname, 'r') as f:
             self.plane_meas = f.readline().split()[-1]
 
-        if self.plane_meas=='x':
+        if self.plane_meas == 'x':
             self.line_sigmax.set_xdata(self.I_meas)
             self.line_sigmax.set_ydata(np.array(self.sigma)*1e3)
         else:
@@ -481,25 +467,3 @@ class EmittanceMeasure(QWidget):
         """
         print('Stopping...')
         self._measuring.set()
-
-    # def closeEvent(self, event):
-    #     reply = QMessageBox.question(
-    #         self, 'Message', u"Are you sure to quit?",
-    #         QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-    #
-    #     if reply == QMessageBox.Yes:
-    #         event.accept()
-    #         try:
-    #             self.t1.stop()
-    #         except Exception:
-    #             pass
-    #     else:
-    #         event.ignore()
-
-
-if __name__ == "__main__":
-    set_environ()
-    app = PyDMApplication(use_main_window=False)
-    win = EmittanceMeasure()
-    win.show()
-    sys.exit(app.exec_())

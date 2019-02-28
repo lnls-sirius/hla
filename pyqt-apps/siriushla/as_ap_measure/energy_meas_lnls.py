@@ -16,22 +16,13 @@ from PyQt5.QtCore import QTimer, QSize, Qt, pyqtSlot
 from pydm.application import PyDMApplication
 from pydm.widgets import PyDMImageView, PyDMLabel
 
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as Canvas
-from matplotlib.figure import Figure
-
 from matplotlib import rcParams
 from pyqtgraph import PlotCurveItem, mkPen
-# from scipy.optimize import curve_fit
-# from scipy.stats import norm
 
-from utils import set_environ, MatplotlibWidget, ProcessImage
-import siriuspy.search as _search
+from .utils import MatplotlibWidget, ProcessImage, C, E0
+from siriuspy.search import PSSearch as _PSS
 
 rcParams['font.size'] = 9
-
-light_speed = 299792458
-electron_rest_en = 0.5109989461  # in MeV
-DT = 0.001
 
 
 class EnergyMeasure(QWidget):
@@ -40,7 +31,6 @@ class EnergyMeasure(QWidget):
     DISP = 1.087
     B_ANG = np.pi/4
     MAX_SPREAD = 2
-    spect_excdata = None
 
     def __init__(self, parent=None):
         """."""
@@ -51,6 +41,7 @@ class EnergyMeasure(QWidget):
         self.centroidlist = []
         self.sigmalist = []
         self.bend_curr = PV('LA-CN:H1DPPS-1:seti')
+        self.spect_excdata = _PSS.conv_psname_2_excdata('LI-01:PS-Spect')
 
         self._setupUi()
 
@@ -196,20 +187,14 @@ class EnergyMeasure(QWidget):
             self.spreadlist.append(spread)
         self.plot_data()
 
-
     def convert_to_energy(self, bend_curr, cen_x, sigma_x):
         """."""
-        if EnergyMeasure.spect_excdata is None:
-            pss = _search.PSSearch()
-            EnergyMeasure.spect_excdata = \
-                pss.conv_psname_2_excdata('LI-01:PS-Spect')
-        multipoles = EnergyMeasure.spect_excdata.interp_curr2mult(
-            currents=bend_curr)
+        multipoles = self.spect_excdata.interp_curr2mult(currents=bend_curr)
         BL = multipoles['normal'][0]
 
-        nom_kin_en = BL/self.B_ANG*light_speed*1e-6  # in MeV
+        nom_kin_en = BL / self.B_ANG * C*1e-6  # in MeV
         kin_en = nom_kin_en * (1 - cen_x / self.DISP)
-        energy = np.sqrt(kin_en**2 + electron_rest_en**2)
+        energy = np.sqrt(kin_en**2 + E0*E0)
         spread = sigma_x / self.DISP * 100  # in percent%
         return energy, spread
 
@@ -235,6 +220,8 @@ class EnergyMeasure(QWidget):
         self.plot_data()
 
     def plot_data(self):
+        DT = 0.001
+
         npnts = self.spbox_npoints.value()
         if len(self.energylist) > npnts:
             self.energylist = self.energylist[-npnts-1:]
@@ -258,25 +245,3 @@ class EnergyMeasure(QWidget):
         self.plt_spread.figure.canvas.draw()
         self.lb_ave_sp.setText('{0:.3f}'.format(yd.mean()))
         self.lb_std_sp.setText('{0:.3f}'.format(yd.std()))
-
-    # def closeEvent(self, event):
-    #     reply = QMessageBox.question(
-    #         self, 'Message', u"Are you sure to quit?",
-    #         QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-    #
-    #     if reply == QMessageBox.Yes:
-    #         event.accept()
-    #         try:
-    #             self.t1.stop()
-    #         except Exception:
-    #             pass
-    #     else:
-    #         event.ignore()
-
-
-if __name__ == "__main__":
-    set_environ()
-    app = PyDMApplication(use_main_window=False)
-    win = EnergyMeasure()
-    win.show()
-    sys.exit(app.exec_())

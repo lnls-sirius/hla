@@ -1,66 +1,37 @@
-import os
-import sys
+import time
 import numpy as np
 from epics import PV
-from PyQt5.QtWidgets import (QPushButton, QLabel, QGridLayout, QGroupBox,
-                             QFormLayout, QMessageBox, QApplication,
-                             QSizePolicy, QWidget, QComboBox, QSpinBox,
-                             QVBoxLayout, QHBoxLayout, QCheckBox)
+from PyQt5.QtWidgets import QPushButton, QLabel, QGroupBox, QSizePolicy, \
+    QWidget, QComboBox, QSpinBox, QVBoxLayout, QHBoxLayout, QCheckBox, \
+    QFormLayout
 from PyQt5.QtGui import QColor
-from PyQt5.QtCore import QTimer, QSize, Qt, pyqtSlot
-from pydm.application import PyDMApplication
-from pydm.widgets import PyDMImageView, PyDMLabel
+from PyQt5.QtCore import QSize, pyqtSlot
+from pydm.widgets import PyDMImageView
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as Canvas
 from matplotlib.figure import Figure
 
-from matplotlib import rcParams
 from pyqtgraph import PlotCurveItem, mkPen
 from scipy.optimize import curve_fit
-from scipy.stats import norm
+import mathphys.constants as _consts
+
+C = _consts.light_speed
+E0 = _consts.electron_rest_energy / _consts.elementary_charge * 1e-6  # in MeV
 
 
-def set_environ():
-    os.environ['EPICS_CA_MAX_ARRAY_BYTES'] = '21000000'
-    os.environ['EPICS_CA_AUTO_ADDR_LIST'] = 'NO'
-    os.environ['EPICS_CA_ADDR_LIST'] = \
-        "10.128.1.11:5064 10.128.1.11:5066 10.128.1.11:5068 10.128.1.11:5070 \
-         10.128.1.12:5064 10.128.1.12:5070 10.128.1.13:5064 10.128.1.13:5068 \
-         10.128.1.13:5070 10.128.1.14:5064 10.128.1.14:5068 10.128.1.14:5070 \
-         10.128.1.15:5064 10.128.1.15:5068 10.128.1.15:5070 10.128.1.18:5064 \
-         10.128.1.18:5068 10.128.1.18:5070 10.128.1.19:5064 10.128.1.19:5068 \
-         10.128.1.19:5070 10.128.1.20:5064 10.128.1.20:5066 10.128.1.20:5068 \
-         10.128.1.20:5070 10.128.1.20:5072 10.128.1.20:5074 10.128.1.20:5076 \
-         10.128.1.20:5078 10.128.1.20:5080 10.128.1.20:5082 10.128.1.20:5084 \
-         10.128.1.20:5086 10.128.1.20:5088 10.128.1.20:5090 10.128.1.20:5092 \
-         10.128.1.20:5094 10.128.1.20:5096 10.128.1.20:5098 10.128.1.20:5100 \
-         10.128.1.20:5102 10.128.1.20:5104 10.128.1.20:5106 10.128.1.20:5108 \
-         10.128.1.20:5110 10.128.1.20:5112 10.128.1.20:5114 10.128.1.20:5116 \
-         10.128.1.20:5118 10.128.1.20:5120 10.128.1.20:5122 10.128.1.20:5124 \
-         10.128.1.20:5126 10.128.1.20:5128 10.128.1.20:5130 10.128.1.20:5132 \
-         10.128.1.20:5134 10.128.1.20:5136 10.128.1.20:5138 10.128.1.20:5140 \
-         10.128.1.20:5142 10.128.1.20:5144 10.128.1.20:5146 10.128.1.20:5148 \
-         10.128.1.20:5150 10.128.1.20:5152 10.128.1.20:5154 10.128.1.20:5156 \
-         10.128.1.20:5158 10.128.1.20:5160 10.128.1.20:5162 10.128.1.50:5064 \
-         10.128.1.50:5067 10.128.1.50:5069 10.128.1.50:5071 10.128.1.51:5064 \
-         10.128.1.51:5067 10.128.1.51:5069 10.128.1.51:5071 10.128.1.54:5064"
+def gettransmat(elem, L, K1=None, B=None):
+    R = np.eye(4)
 
-
-def gettransmat(type, L, gamma, K1=None, B=None):
-    R = np.eye(6)
-
-    if type.lower().startswith('qu') and K1 is not None and K1 == 0:
-        type = 'drift'
-    if type.lower().startswith('dr'):
+    if elem.lower().startswith('qu') and K1 is not None and K1 == 0:
+        elem = 'drift'
+    if elem.lower().startswith('dr'):
         R = np.array([
-            [1, L, 0, 0, 0, 0],
-            [0, 1, 0, 0, 0, 0],
-            [0, 0, 1, L, 0, 0],
-            [0, 0, 0, 1, 0, 0],
-            [0, 0, 0, 0, 1, L/gamma**2],
-            [0, 0, 0, 0, 0, 1],
+            [1, L, 0, 0],
+            [0, 1, 0, 0],
+            [0, 0, 1, L],
+            [0, 0, 0, 1],
             ])
-    elif type.lower().startswith('qu') and K1 is not None:
+    elif elem.lower().startswith('qu') and K1 is not None:
         kq = np.sqrt(abs(K1))
         c = np.cos(kq*L)
         s = np.sin(kq*L)
@@ -73,27 +44,10 @@ def gettransmat(type, L, gamma, K1=None, B=None):
             x11, x12, x21 = ch, 1/kq*sh, kq*sh
             y11, y12, y21 = c,  1/kq*s, -kq*s
         R = np.array([
-            [x11, x12, 0,   0,   0, 0],
-            [x21, x11, 0,   0,   0, 0],
-            [0,   0,   y11, y12, 0, 0],
-            [0,   0,   y21, y11, 0, 0],
-            [0,   0,   0,   0,   1, L/gamma**2],
-            [0,   0,   0,   0,   0, 1],
-            ])
-    elif type.lower().startswith('sol') and B is not None:
-        K = -light_speed*B/2.0/electron_rest_en/gamma/1e6
-        C = np.cos(K*L)
-        S = np.sin(K*L)
-        SC = C*S
-        C2 = C**2
-        S2 = S**2
-        R = np.array([
-            [C2,    SC/K,  SC,    S2/K, 0., 0.],
-            [-K*SC, C2,    -K*S2, SC,   0., 0.],
-            [-SC,   -S2/K, C2,    SC/K, 0., 0.],
-            [K*S2,  -SC,   -K*SC, C2,   0., 0.],
-            [0.,    0.,    0.,    0.,   1., L/(gamma**2)],
-            [0.,    0.,    0.,    0.,   0., 1.]
+            [x11, x12, 0,   0],
+            [x21, x11, 0,   0],
+            [0,   0,   y11, y12],
+            [0,   0,   y21, y11],
             ])
     return R
 
@@ -198,11 +152,10 @@ class ImageView(PyDMImageView):
 
 
 class ProcessImage(QWidget):
-    PROF = 'PRF4'
-
-    def __init__(self, parent=None, prof=None):
+    def __init__(self, parent=None, place='LI-Energy'):
         super().__init__(parent)
-        self.PROF = prof or self.PROF
+        self._place = place or 'LI-Energy'
+        self._select_experimental_setup()
         self.cen_x = None
         self.cen_y = None
         self.sigma_x = None
@@ -211,16 +164,37 @@ class ProcessImage(QWidget):
         self.bg = None
         self.nbg = 0
         self._setupUi()
-        self.gauss_coefx = PV('LA-BI:'+self.PROF+':X:Gauss:Coef')
-        self.gauss_coefy = PV('LA-BI:'+self.PROF+':Y:Gauss:Coef')
+
+    def _select_experimental_setup(self):
+        if self._place.lower().startswith('li-ene'):
+            prof = 'LA-BI:PRF4'
+            self.conv_coefx = PV(prof + ':X:Gauss:Coef')
+            self.conv_coefy = PV(prof + ':Y:Gauss:Coef')
+            self.image_channel = prof + ':RAW:ArrayData'
+            self.width_channel = prof + ':ROI:MaxSizeX_RBV'
+        elif self._place.lower().startswith('li-emit'):
+            prof = 'LA-BI:PRF5'
+            self.conv_coefx = PV(prof + ':X:Gauss:Coef')
+            self.conv_coefy = PV(prof + ':Y:Gauss:Coef')
+            self.image_channel = prof + ':RAW:ArrayData'
+            self.width_channel = prof + ':ROI:MaxSizeX_RBV'
+        elif self._place.lower().startswith('tb-emit'):
+            prof = 'TB-02:DI-ScrnCam-2'
+            self.conv_coefx = PV(prof + ':ImgScaleFactor-RB')
+            self.conv_coefy = PV(prof + ':ImgScaleFactor-RB')
+            prof = 'TB-02:DI-Scrn-2'
+            self.image_channel = prof + ':ImgData-Mon'
+            self.width_channel = prof + ':ImgROIWidth-RB'
+        else:
+            raise Exception('Wrong value for "place".')
 
     def _setupUi(self):
         vl = QVBoxLayout(self)
         self.image_view = ImageView(
             self.process_image,
             parent=self,
-            image_channel='ca://LA-BI:'+self.PROF+':RAW:ArrayData',
-            width_channel='ca://LA-BI:'+self.PROF+':ROI:MaxSizeX_RBV')
+            image_channel=self.image_channel,
+            width_channel=self.width_channel)
         self.image_view.maxRedrawRate = 5
         self.image_view.readingOrder = self.image_view.Clike
         self.plt_roi = PlotCurveItem([0, 0, 400, 400, 0], [0, 400, 400, 0, 0])
@@ -321,10 +295,6 @@ class ProcessImage(QWidget):
     def calc_roi(self, image):
         proj_x = image.sum(axis=0)
         proj_y = image.sum(axis=1)
-        # proj_x -= image.shape[0]//2  # backgroung removal
-        # proj_y -+ image.shape[1]//2  # backgroung removal
-        # proj_x[np.where(proj_x<0)] = 0
-        # proj_y[np.where(proj_y<0)] = 0
         axis_x = np.arange(image.shape[1])
         axis_y = np.arange(image.shape[0])
 
@@ -361,7 +331,6 @@ class ProcessImage(QWidget):
             image = image.reshape((-1, wid))
         except (TypeError, ValueError, AttributeError):
             return image
-
         if self.cbbox_acq_bg.isChecked():
             if self.bg is None:
                 self.bg = np.array(image, dtype=float)
@@ -369,10 +338,9 @@ class ProcessImage(QWidget):
                 self.bg += np.array(image, dtype=float)
             self.nbg += 1
             return image
-
         if self.bg_ready:
             image -= np.array(self.bg, dtype=image.dtype)
-            b = np.where(image <0)
+            b = np.where(image < 0)
             image[b] = 0
 
         maxi = self.spbox_img_max.value()
@@ -411,8 +379,8 @@ class ProcessImage(QWidget):
         self.lb_xstd.setText('{0:4d}'.format(int(std_x or 0)))
         self.lb_ystd.setText('{0:4d}'.format(int(std_y or 0)))
 
-        coefx = self.gauss_coefx.value
-        coefy = self.gauss_coefy.value
+        coefx = self.conv_coefx.value
+        coefy = self.conv_coefy.value
         if coefx is None or coefy is None:
             return
 
