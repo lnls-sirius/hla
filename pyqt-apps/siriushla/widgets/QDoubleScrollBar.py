@@ -1,13 +1,18 @@
-from qtpy.QtWidgets import QInputDialog, QScrollBar, QMenu
-from qtpy.QtCore import Qt, Signal, Slot, Property
+"""QDoubleScrollBar module."""
+
+from qtpy.QtWidgets import QInputDialog, QScrollBar, QMenu, QToolTip
+from qtpy.QtCore import Qt, Signal, Slot, Property, QPoint
 
 
 class QDoubleScrollBar(QScrollBar):
+    """A QScrollBar that handles float values."""
+
     rangeChanged = Signal(float, float)
     sliderMoved = Signal(float)
     valueChanged = Signal(float)
 
     def __init__(self, orientation=Qt.Horizontal, parent=None):
+        """Init."""
         self._decimals = 0
         self._scale = 1
         super(QDoubleScrollBar, self).__init__(orientation, parent)
@@ -29,6 +34,7 @@ class QDoubleScrollBar(QScrollBar):
 
     @Slot(bool)
     def dialogSingleStep(self, value):
+        """Show dialog to set singleStep."""
         mini = 1/self._scale
         maxi = (self.maximum - self.minimum)/10
         d, okPressed = QInputDialog.getDouble(self, "Single Step",
@@ -38,6 +44,7 @@ class QDoubleScrollBar(QScrollBar):
             self.setSingleStep(d)
 
     def dialogPageStep(self, value):
+        """Show dialog to set pageStep."""
         mini = 10/self._scale
         maxi = (self.maximum - self.minimum)
         d, okPressed = QInputDialog.getDouble(self, "Page Step", "Page Step:",
@@ -47,12 +54,15 @@ class QDoubleScrollBar(QScrollBar):
             self.setPageStep(d)
 
     def contextMenuEvent(self, ev):
+        """Show context menu."""
         self.contextMenu.exec_(ev.globalPos())
 
     def getDecimals(self):
+        """Return decimals."""
         return self._decimals
 
     def setDecimals(self, value):
+        """Set decimals."""
         mini = self.getMinimum()
         maxi = self.getMaximum()
         sgstep = self.getSingleStep()
@@ -72,23 +82,31 @@ class QDoubleScrollBar(QScrollBar):
     decimals = Property(int, getDecimals, setDecimals)
 
     def getMinimum(self):
+        """Return minimum value."""
         return super().minimum()/self._scale
 
     def setMinimum(self, value):
+        """Set minimum value."""
         super().setMinimum(round(value*self._scale))
+
     minimum = Property(float, getMinimum, setMinimum)
 
     def getMaximum(self):
+        """Return maximum value."""
         return super().maximum()/self._scale
 
     def setMaximum(self, value):
+        """Set maximum value."""
         super().setMaximum(round(value*self._scale))
+
     maximum = Property(float, getMaximum, setMaximum)
 
     def getSingleStep(self):
+        """Get single step."""
         return super().singleStep()/self._scale
 
     def setSingleStep(self, value):
+        """Set single step."""
         val = round(value*self._scale)
         rang = super().maximum() - super().minimum()
         if not val:
@@ -101,9 +119,11 @@ class QDoubleScrollBar(QScrollBar):
     singleStep = Property(float, getSingleStep, setSingleStep)
 
     def getPageStep(self):
+        """Get page step."""
         return super().pageStep()/self._scale
 
     def setPageStep(self, value):
+        """Set page step."""
         val = round(value*self._scale)
         rang = super().maximum() - super().minimum()
         if val < 10:
@@ -116,38 +136,54 @@ class QDoubleScrollBar(QScrollBar):
     pageStep = Property(float, getPageStep, setPageStep)
 
     def getValue(self):
+        """Get value."""
         return super().value()/self._scale
 
     @Slot(float)
     def setValue(self, value):
+        """Set value."""
         if value is not None:
             super().setValue(round(value*self._scale))
 
     value = Property(float, getValue, setValue)
 
     def getSliderPosition(self):
+        """Get slider position."""
         return super().sliderPosition()/self._scale
 
     def setSliderPosition(self, value):
+        """Set slider position."""
         super().setSliderPosition(round(value*self._scale))
 
     sliderPosition = Property(float, getSliderPosition, setSliderPosition)
 
     def keyPressEvent(self, event):
+        """Reimplement keyPressEvent."""
         singlestep = self.getSingleStep()
         pagestep = self.getPageStep()
         ctrl_hold = self.app.queryKeyboardModifiers() == Qt.ControlModifier
         if ctrl_hold and (event.key() == Qt.Key_Right):
             self.setSingleStep(10*singlestep)
             self.setPageStep(10*pagestep)
+            self._show_step_tooltip()
         elif ctrl_hold and (event.key() == Qt.Key_Left):
             self.setSingleStep(0.1*singlestep)
             self.setPageStep(0.1*pagestep)
+            self._show_step_tooltip()
         else:
             super().keyPressEvent(event)
 
+    def _show_step_tooltip(self):
+        QToolTip.showText(
+            self.mapToGlobal(
+                QPoint(self.x()+self.width()/2, self.y()-2*self.height())),
+            'Single step: '+str(self.singleStep) +
+            '\nPage step: '+str(self.pageStep),
+            self, self.rect(), 1000)
+
     @Slot(float, float)
     def setRange(self, mini, maxi):
+        """Set range."""
         super().setRange(round(mini/self._scale), round(maxi*self._scale))
 
     @Slot(int, int)
