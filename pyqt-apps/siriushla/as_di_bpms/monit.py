@@ -22,7 +22,7 @@ class MonitData(BaseWidget):
             ('Sum-Mon', 'black'))
         for name, cor in dt:
             opts = dict(
-                y_channel=name,
+                y_channel=self.get_pvname(name),
                 name=name[:-4],
                 color=cor,
                 lineStyle=1,

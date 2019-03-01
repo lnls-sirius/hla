@@ -18,6 +18,7 @@ class ACQTrigConfigs(BaseWidget):
         grpbx = self._create_formlayout_groupbox(
             'General Configurations', (
                 ('BPMMode-Sel', 'Operation Mode'),
+                ('TriggerRep-Sel', 'Repeat Acquisitions'),
                 ('TriggerHwDly-SP', 'Delay [us]'),
                 ('SamplesPre-SP', 'Pre-Trigger NrSamples'),
                 ('SamplesPost-SP', 'Post-Trigger NrSamples'),
@@ -48,7 +49,6 @@ class ACQTrigConfigs(BaseWidget):
 
         grpbx = self._create_formlayout_groupbox(
             'MultiBunch Configurations', (
-                ('TriggerRep-Sel', 'Repeat Acquisitions'),
                 ('Channel-Sel', 'Acquisition Rate'),
                 ('Shots-SP', 'Number of Shots'),
                 ('UpdateTime-SP', 'Update Interval')))

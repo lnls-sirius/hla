@@ -29,8 +29,6 @@ class SelectBPMs(BaseWidget):
         scarea.setWidgetResizable(True)
 
         wid = QWidget()
-        wid.setObjectName('BPMsList')
-        wid.setStyleSheet("""#BPMsList{min-width:16em; min-height:12em;}""")
         vbl2 = QVBoxLayout(wid)
         vbl2.setSpacing(15)
         for bpm in sorted(self.bpm_dict.keys()):
@@ -44,12 +42,15 @@ class SelectBPMs(BaseWidget):
         scarea.setWidget(wid)
         self.scarea = scarea
 
+        self.setObjectName('SelectBPMs')
+        self.setStyleSheet("""#SelectBPMs{min-width:16em; min-height:12em;}""")
+
     @Slot(str)
     def _filter_bpms(self, text):
         """Filter power supply widgets based on text inserted at line edit."""
         try:
             pattern = re.compile(text, re.I)
-        except Exception as e:  # Ignore malformed patterns?
+        except Exception:  # Ignore malformed patterns?
             pattern = re.compile("malformed")
 
         for bpm, wid in self.bpm_dict.items():

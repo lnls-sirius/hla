@@ -44,14 +44,14 @@ class OrbitWidget(BaseWidget):
         self.hbl.addWidget(grpbx)
         self.hbl.addStretch(1)
 
-        if self.isring:
-            btn = QPushButton('Correctors', grpbx)
-            vbl.addWidget(btn)
-            Window = create_window_from_widget(
-                CorrectorsWidget, name='CorrectorsWindow', size=(67, 60))
-            _util.connect_window(
-                btn, Window, self, prefix=self.prefix, acc=self.acc)
+        btn = QPushButton('Correctors', grpbx)
+        vbl.addWidget(btn)
+        Window = create_window_from_widget(
+            CorrectorsWidget, name='CorrectorsWindow', size=(67, 60))
+        _util.connect_window(
+            btn, Window, self, prefix=self.prefix, acc=self.acc)
 
+        if self.isring:
             btn = QPushButton('MultiTurn Orbit', grpbx)
             vbl.addWidget(btn)
             Window = create_window_from_widget(
@@ -222,11 +222,11 @@ class Spectrogram(SiriusSpectrogramView):
     def __init__(self, prefix='', **kwargs):
         super().__init__(**kwargs)
         self.prefix = prefix
+        self.multiturnidx = SiriusConnectionSignal(
+                                self.prefix + 'OrbitMultiTurnIdx-SP')
 
     def channels(self):
         chans = super().channels()
-        self.multiturnidx = SiriusConnectionSignal(
-            self.prefix + 'OrbitMultiTurnIdx-SP')
         chans.append(self.multiturnidx)
         return chans
 

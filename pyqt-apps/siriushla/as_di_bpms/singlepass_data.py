@@ -128,6 +128,8 @@ class SinglePassData(BaseWidget):
                 lineStyle=1,
                 lineWidth=1)  # NOTE: If > 1: very low performance
             if typ == 'pos':
+                opts['y_channel'] = self.get_pvname(
+                    opts['y_channel'], is_data=False)
                 graph.addYChannel(add_scale=1e-9, **opts)
             elif typ == 'amp':
                 opts['y_channel'] = self.get_pvname(

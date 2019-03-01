@@ -2,11 +2,11 @@ import datetime as _datetime
 from qtpy.QtWidgets import QListWidget, QListWidgetItem
 from qtpy.QtCore import Property, Q_ENUMS
 from qtpy.QtGui import QColor
-from pydm.widgets.base import PyDMWidget
+from pydm.widgets.base import PyDMWidget, TextFormatter
 from pydm.widgets.display_format import DisplayFormat, parse_value_for_display
 
 
-class PyDMLogLabel(QListWidget, PyDMWidget, DisplayFormat):
+class PyDMLogLabel(QListWidget, TextFormatter, PyDMWidget, DisplayFormat):
     """
     A QListWidget with support for Channels and more from PyDM.
 

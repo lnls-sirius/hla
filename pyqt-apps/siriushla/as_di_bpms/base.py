@@ -126,7 +126,7 @@ class BaseGraph(BaseWidget):
 
     def _add_scale(self, channel, scale):
         cdta = self.graph.curveAtIndex(-1)
-        chan = SiriusConnectionSignal(self.get_pvname(channel))
+        chan = SiriusConnectionSignal(channel)
         chan.new_value_signal[self.DATA_CLASS].connect(
             _part(self._apply_scale, cdta, scale))
         self._chans.append(chan)
