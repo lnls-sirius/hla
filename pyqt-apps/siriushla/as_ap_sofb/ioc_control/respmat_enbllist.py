@@ -22,13 +22,16 @@ class Led(SiriusLedAlert):
 
 class _PyDMLedList(PyDMWidget, QWidget):
 
-    def __init__(self, parent=None, init_channel=None, size=0):
+    def __init__(self, parent=None, init_channel=None, chan_otpl=None, size=0):
         QWidget.__init__(self, parent=parent)
         PyDMWidget.__init__(self, init_channel=init_channel)
         self.pv_sp = SiriusConnectionSignal(init_channel.replace('-RB', '-SP'))
+        self.pv_otpl = SiriusConnectionSignal(chan_otpl.replace('-RB', '-SP'))
         self.setVisible(False)
         self.btn_send = QPushButton('Apply Changes')
         self.btn_send.clicked.connect(self.send_value)
+        self.btn_send_otpl = QPushButton('Apply Both Planes')
+        self.btn_send_otpl.clicked.connect(_part(self.send_value, other=True))
         self.btn_enbl_all = QPushButton('Enable All')
         self.btn_enbl_all.clicked.connect(_part(self.toogle_all, True))
         self.btn_dsbl_all = QPushButton('Disable All')
@@ -57,7 +60,7 @@ class _PyDMLedList(PyDMWidget, QWidget):
             if not (bool(led.state) != value):
                 led.setSelected(True)
 
-    def send_value(self):
+    def send_value(self, other=False):
         if self.value is None:
             return
         value = self.value.copy()
@@ -66,6 +69,8 @@ class _PyDMLedList(PyDMWidget, QWidget):
                 value[i] = not value[i]
                 led.setSelected(False)
         self.pv_sp.send_value_signal[np.ndarray].emit(value)
+        if other:
+            self.pv_otpl.send_value_signal[np.ndarray].emit(value)
 
     def value_changed(self, new_val):
         super(_PyDMLedList, self).value_changed(new_val)
@@ -90,6 +95,8 @@ class SelectionMatrix(BaseWidget):
             'BPMY': self._csorb.BPM_POS,
             'CH': self._csorb.CH_POS,
             'CV': self._csorb.CV_POS}
+        self.devotpl = {
+            'BPMX': 'BPMY', 'BPMY': 'BPMX', 'CH': 'CV', 'CV': 'CH'}
         self.devnames = {
             'BPMX': (self._csorb.BPM_NAMES, self._csorb.BPM_NICKNAMES),
             'BPMY': (self._csorb.BPM_NAMES, self._csorb.BPM_NICKNAMES),
@@ -100,6 +107,7 @@ class SelectionMatrix(BaseWidget):
         self.pvs = _PyDMLedList(
             parent=self,
             init_channel=self.prefix + self.dev + 'EnblList-RB',
+            chan_otpl=self.prefix + self.devotpl[self.dev] + 'EnblList-RB',
             size=len(self.devnames[self.dev][0]))
         self._setup_ui()
 
@@ -149,6 +157,8 @@ class SelectionMatrix(BaseWidget):
         hbl.addWidget(self.pvs.btn_dsbl_all)
         hbl.addWidget(self.pvs.btn_enbl_all)
         hbl.addWidget(self.pvs.btn_send)
+        if self.dev.lower().startswith('bpm'):
+            hbl.addWidget(self.pvs.btn_send_otpl)
         grid_l.setSizeConstraint(grid_l.SetMinimumSize)
 
     def _create_matrix(self, parent):
