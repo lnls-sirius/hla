@@ -200,7 +200,9 @@ class PSDetailWidget(QWidget):
         open_loop_label = \
             PyDMLabel(self, self._prefixed_psname + ":CtrlLoop-Sel")
         open_loop_led = \
-            SiriusLedAlert(self, self._prefixed_psname + ":CtrlLoop-Sts")
+            SiriusLedState(self, self._prefixed_psname + ":CtrlLoop-Sts")
+        open_loop_led.setOffColor(SiriusLedState.LightGreen)
+        open_loop_led.setOnColor(SiriusLedState.DarkGreen)
 
         # Build layout
         layout = QGridLayout()
@@ -664,6 +666,7 @@ class DCLinkDetailWidget(PSDetailWidget):
         # layout.setColumnStretch(1, 1)
 
         return layout
+
 
 class FBPDCLinkDetailWidget(DCLinkDetailWidget):
 

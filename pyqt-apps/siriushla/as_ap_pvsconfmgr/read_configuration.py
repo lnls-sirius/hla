@@ -15,7 +15,7 @@ from siriushla.misc.epics.wrapper import PyEpicsWrapper
 from siriushla.misc.epics.task import EpicsGetter
 from siriushla.widgets.dialog import ReportDialog, ProgressDialog
 from siriushla.model import \
-    ConfigTypeModel, PVConfigurationTableModel
+    ConfigPVsTypeModel, PVConfigurationTableModel
 from siriushla.as_ap_pvsconfmgr.delegate import PVConfigurationDelegate
 from siriushla.as_ap_servconf import SaveConfiguration
 from siriuspy.envars import vaca_prefix as _VACA_PREFIX
@@ -88,7 +88,7 @@ class ReadConfigurationWindow(SiriusMainWindow):
         # Add combo box with types
         self._type_cb = QComboBox(self)
         self._type_cb.setObjectName('type_cb')
-        self._type_cb.setModel(ConfigTypeModel(self._db, self._type_cb))
+        self._type_cb.setModel(ConfigPVsTypeModel(self._db, self._type_cb))
 
         # Add LineEdit for configuration name
         # self._name_le = QLineEdit(self)
@@ -177,7 +177,8 @@ class ReadConfigurationWindow(SiriusMainWindow):
             #     self, 'Configuration Name', error + label)
 
             config_name, status = SaveConfiguration(config_type, self).exec()
-            print(config_name, status)
+            if not config_name:
+                return
 
             # Check status and configuration name
             if not re.match('^((\w|[()])+([-_/](\w+|[()])])?)+$', config_name):

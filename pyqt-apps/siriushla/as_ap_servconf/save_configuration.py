@@ -117,6 +117,7 @@ class SaveConfiguration(SiriusDialog):
         self.editor.setSortingEnabled(True)
         self.editor.horizontalHeader().setResizeMode(QHeaderView.Stretch)
         self.editor.hideColumn(0)
+        self.editor.hideColumn(3)
         self.editor.sortByColumn(2, Qt.DescendingOrder)
 
         # Update Selection when a configuration is selected
@@ -192,6 +193,7 @@ class SaveConfiguration(SiriusDialog):
         """Override exec."""
         super().exec()
         return self._config, self._status
+
 
 if __name__ == '__main__':
     import sys

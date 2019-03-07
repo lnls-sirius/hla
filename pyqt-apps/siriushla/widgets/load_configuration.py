@@ -2,7 +2,8 @@
 import re
 
 from qtpy.QtCore import Qt, Signal, Slot, QItemSelection
-from qtpy.QtWidgets import QWidget, QLineEdit, QTableView, QVBoxLayout
+from qtpy.QtWidgets import QWidget, QLineEdit, QTableView, QVBoxLayout, \
+    QHeaderView
 
 from siriushla.model import ConfigDbTableModel
 
@@ -37,6 +38,7 @@ class LoadConfigurationWidget(QWidget):
         self._table.setSortingEnabled(True)
         # self._table.horizontalHeader().setResizeMode(QHeaderView.Stretch)
         self._table.hideColumn(0)
+        self._table.hideColumn(3)
         self._table.sortByColumn(2, Qt.DescendingOrder)
 
         self.layout = QVBoxLayout()
@@ -103,7 +105,7 @@ class LoadConfigurationWidget(QWidget):
 
     def resizeEvent(self, event):
         """Reimplement resize event."""
-        self._table.setColumnWidth(1, self._table.width()*3/6)
-        self._table.setColumnWidth(2, self._table.width()*2/6)
-        self._table.setColumnWidth(3, self._table.width()*1/6)
+        width = self._table.width() - self._table.verticalHeader().width()
+        self._table.setColumnWidth(1, width*0.65)
+        self._table.setColumnWidth(2, width*0.33)
         super().resizeEvent(event)
