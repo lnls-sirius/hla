@@ -1,6 +1,8 @@
 """Base class for controlling a power supply."""
 import re
 
+from epics import caput
+
 from siriuspy.search import PSSearch, MASearch
 from siriushla.as_ps_control.PSWidget import BasePSWidget, PSWidget, MAWidget
 from qtpy.QtCore import Qt, QPoint, Slot, QLocale
@@ -86,10 +88,13 @@ class BasePSControlWidget(QWidget):
         """Execute actions from context menu."""
         for key, widget in self.widgets_list.items():
             if key in self.filtered_widgets:
-                if state:
-                    widget.turn_on()
-                else:
-                    widget.turn_off()
+                try:
+                    if state:
+                        widget.turn_on()
+                    else:
+                        widget.turn_off()
+                except TypeError:
+                    pass
 
     @Slot()
     def set_current_sp_action(self):
@@ -107,6 +112,16 @@ class BasePSControlWidget(QWidget):
                     except TypeError:
                         pass
 
+    @Slot()
+    def reset_interlocks(self):
+        """Reset interlocks."""
+        for key, widget in self.widgets_list.items():
+            if key in self.filtered_widgets:
+                try:
+                    caput(widget.psname + ":Reset-Cmd", 1, timeout=100e-3)
+                except TypeError:
+                    pass
+
     @Slot(QPoint)
     def show_context_menu(self, point):
         """Show a custom context menu."""
@@ -118,9 +133,12 @@ class BasePSControlWidget(QWidget):
         turn_off.triggered.connect(lambda: self.pwrstate_action(False))
         set_current_sp = QAction("Set Current SP", self)
         set_current_sp.triggered.connect(self.set_current_sp_action)
+        reset = QAction("Reset Interlocks", self)
+        reset.triggered.connect(self.reset_interlocks)
         menu.addAction(turn_on)
         menu.addAction(turn_off)
         menu.addAction(set_current_sp)
+        menu.addAction(reset)
 
         menu.popup(self.mapToGlobal(point))
 
