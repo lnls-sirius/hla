@@ -80,12 +80,17 @@ class ControlApplication(SiriusMainWindow):
         pstest = QPushButton('PS Test', self)
         util.connect_newprocess(pstest, 'sirius-hla-as-ps-test.py')
 
+        energy_setter = QPushButton('Energy Setter', self)
+        util.connect_newprocess(
+            energy_setter, 'sirius-hla-as-ap-energy-setter.py')
+
         lay = QHBoxLayout()
         lay.setAlignment(Qt.AlignLeft)
         lay.addWidget(injection)
         lay.addWidget(timing)
         lay.addWidget(pscycle)
         lay.addWidget(pstest)
+        lay.addWidget(energy_setter)
         return lay
 
     def _create_serv_layout(self):
