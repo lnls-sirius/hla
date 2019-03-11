@@ -109,6 +109,10 @@ class AcqControlWidget(BaseWidget):
         lbl.setStyleSheet("""min-width:10em; max-width:10em;""")
         wid = self.create_pair_sel(grp_bx, 'OrbitTrigAcqTrigger')
         fbl.addRow(lbl, wid)
+        lbl = QLabel('Repeat', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:10em; max-width:10em;""")
+        wid = self.create_pair_sel(grp_bx, 'OrbitTrigAcqRepeat')
+        fbl.addRow(lbl, wid)
         if self.isring:
             lbl = QLabel('Number of Shots', grp_bx, alignment=Qt.AlignCenter)
             lbl.setStyleSheet("""min-width:10em; max-width:10em;""")
