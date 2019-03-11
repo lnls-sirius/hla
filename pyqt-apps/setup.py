@@ -7,6 +7,7 @@ import unittest
 
 
 def my_test_suite():
+    """."""
     test_loader = unittest.TestLoader()
     test_suite = test_loader.discover('tests', pattern='test_*.py')
     return test_suite
@@ -14,6 +15,7 @@ def my_test_suite():
 
 with open('VERSION', 'r') as _f:
     __version__ = _f.read().strip()
+
 
 setup(
     name='siriushla',
@@ -32,7 +34,7 @@ setup(
     package_data={'siriushla': ['VERSION', '*/*.py']},
     include_package_data=True,
     scripts=[
-        'scripts/sirius-hla-as-ap-energy-setter.py',
+        'scripts/sirius-hla-as-ap-energybutton.py',
         'scripts/sirius-hla-as-ap-injection.py',
         'scripts/sirius-hla-as-ap-pvsconfmgr.py',
         'scripts/sirius-hla-as-ap-servconf.py',
