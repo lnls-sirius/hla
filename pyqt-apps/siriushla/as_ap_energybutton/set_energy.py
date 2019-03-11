@@ -76,7 +76,6 @@ def _create_objects(section):
             continue
         if maname.dis == 'PM':
             continue
-        print(maname)
         madata = _mdata.MAData(maname=maname)
         mfunc = _magfunc(madata)
         if mfunc == 'dipole':
