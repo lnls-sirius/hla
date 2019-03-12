@@ -4,6 +4,7 @@
 
 import sys
 import argparse as _argparse
+from siriuspy.envars import vaca_prefix
 from siriushla.sirius_application import SiriusApplication
 from siriushla.bo_ap_ramp.main_window import RampMain
 
