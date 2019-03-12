@@ -69,6 +69,9 @@ class ControlApplication(SiriusMainWindow):
         self.setCentralWidget(self.main_widget)
 
     def _create_as_layout(self):
+        operation = QPushButton('Operation', self)
+        util.connect_newprocess(operation, 'sirius-hla-as-ap-operation.py')
+
         injection = QPushButton('Injection', self)
         util.connect_newprocess(injection, 'sirius-hla-as-ap-injection.py')
 
@@ -85,13 +88,14 @@ class ControlApplication(SiriusMainWindow):
         util.connect_newprocess(
             energy_setter, 'sirius-hla-as-ap-energy-setter.py')
 
-        lay = QHBoxLayout()
+        lay = QGridLayout()
         lay.setAlignment(Qt.AlignLeft)
-        lay.addWidget(injection)
-        lay.addWidget(timing)
-        lay.addWidget(pscycle)
-        lay.addWidget(pstest)
-        lay.addWidget(energy_setter)
+        lay.addWidget(operation, 0, 0)
+        lay.addWidget(injection, 0, 1)
+        lay.addWidget(timing, 0, 2)
+        lay.addWidget(pscycle, 1, 0)
+        lay.addWidget(pstest, 1, 1)
+        lay.addWidget(energy_setter, 1, 2)
         return lay
 
     def _create_serv_layout(self):
