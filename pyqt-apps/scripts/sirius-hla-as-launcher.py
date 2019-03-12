@@ -84,6 +84,9 @@ class ControlApplication(SiriusMainWindow):
         pstest = QPushButton('PS Test', self)
         util.connect_newprocess(pstest, 'sirius-hla-as-ps-test.py')
 
+        psmonitor = QPushButton('PS Monitor', self)
+        util.connect_newprocess(psmonitor, 'sirius-hla-as-ps-monitor.py')
+
         energy_setter = QPushButton('Energy Setter', self)
         util.connect_newprocess(
             energy_setter, 'sirius-hla-as-ap-energy-setter.py')
@@ -95,7 +98,8 @@ class ControlApplication(SiriusMainWindow):
         lay.addWidget(timing, 0, 2)
         lay.addWidget(pscycle, 1, 0)
         lay.addWidget(pstest, 1, 1)
-        lay.addWidget(energy_setter, 1, 2)
+        lay.addWidget(psmonitor, 1, 2)
+        lay.addWidget(energy_setter, 1, 3)
         return lay
 
     def _create_serv_layout(self):
