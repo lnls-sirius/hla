@@ -22,10 +22,30 @@ class PSControlWindow(SiriusMainWindow):
 
         self._setup_ui()
 
+        sec2label = {
+            'TB': 'LTB ',
+            'BO': 'Booster ',
+            'TS': 'BTS ',
+            'SI': 'Storage Ring '}
+        dis2label = {
+            'MA': 'Magnets ',
+            'PS': 'Power Supplies '}
+        dev2label = {
+            'dipole': 'Dipoles ',
+            'quadrupole': 'Quadrupoles ',
+            'sextupole': 'Sextupoles ',
+            'quadrupole-skew': 'Skew Quadrupoles ',
+            'corrector-slow': 'Slow Correctors ',
+            'corrector-fast': 'Fast Correctors '}
+        self.setWindowTitle(sec2label[section] +
+                            (dev2label[device] if device else '') +
+                            dis2label[discipline])
+
     def _setup_ui(self):
         # Set Widget
         self.widget = ControlWidgetFactory.factory(
-            self._section, self._discipline, self._device)
+            parent=self, section=self._section,
+            discipline=self._discipline, device=self._device)
         if self._device != "dipole" or self._discipline == 'PS':
             self._connect_buttons(self.widget)
         self.setCentralWidget(self.widget)
