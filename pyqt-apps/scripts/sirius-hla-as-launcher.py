@@ -62,8 +62,8 @@ class ControlApplication(SiriusMainWindow):
 
         self.main_widget.setStyleSheet("""
             QPushButton{
-                min-width:12em; max-width:12em;
-                min-height:2em; max-height:2em;
+                min-width:9.5em; max-width:9.5em;
+                min-height:1.5em; max-height:1.5em;
             }""")
 
         self.setCentralWidget(self.main_widget)
@@ -99,10 +99,10 @@ class ControlApplication(SiriusMainWindow):
         return lay
 
     def _create_serv_layout(self):
-        servconf = QPushButton('Configurations Server')
+        servconf = QPushButton('Config Server')
         util.connect_newprocess(servconf, 'sirius-hla-as-ap-servconf.py')
 
-        pvsconfmgr = QPushButton('PVs Configuration Manager')
+        pvsconfmgr = QPushButton('Config Manager')
         util.connect_newprocess(pvsconfmgr, 'sirius-hla-as-ap-pvsconfmgr.py')
 
         lay = QHBoxLayout()
