@@ -34,6 +34,7 @@ setup(
     scripts=[
         'scripts/sirius-hla-as-ap-energy-setter.py',
         'scripts/sirius-hla-as-ap-injection.py',
+        'scripts/sirius-hla-as-ap-operation.py',
         'scripts/sirius-hla-as-ap-pvsconfmgr.py',
         'scripts/sirius-hla-as-ap-servconf.py',
         'scripts/sirius-hla-as-di-bpm.py',
