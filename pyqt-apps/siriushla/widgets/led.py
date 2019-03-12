@@ -1,6 +1,6 @@
 import numpy as _np
 from qtpy.QtGui import QColor
-from qtpy.QtCore import Property, Slot
+from qtpy.QtCore import Property, Slot, Signal
 from pydm.widgets.base import PyDMWidget
 from pydm.widgets.channel import PyDMChannel
 from .QLed import QLed
@@ -110,6 +110,8 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         A dict with channels as keys and desired PVs values as values.
     """
 
+    warning = Signal(list)
+
     default_colorlist = [PyDMLed.Red, PyDMLed.LightGreen]
 
     def __init__(self, parent=None, channels2values=dict(), color_list=None):
@@ -119,11 +121,18 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         self.channels2values = channels2values
         self.stateColors = color_list or self.default_colorlist
 
+        self._operations_dict = {'eq': self._eq,
+                                 'ne': self._ne,
+                                 'gt': self._gt,
+                                 'lt': self._lt,
+                                 'ge': self._ge,
+                                 'le': self._le}
+
         self.channels2ids = dict()
         for _id, address in enumerate(sorted(self.channels2values.keys())):
             stid = str(_id)
             setattr(self, 'channel' + stid, address)
-            setattr(self, 'channel' + stid + '_value', None)
+            setattr(self, 'channel' + stid + '_value', 'UNDEF')
             setattr(self, 'channel' + stid + '_connected', False)
             self.channels2ids[address] = stid
             channel = PyDMChannel(
@@ -135,17 +144,22 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
 
     def value_changed(self, new_val):
         """Receive new value and set led color accordingly."""
-        if new_val is None:
-            return
         address = self.sender().address
         setattr(self, 'channel'+self.channels2ids[address]+'_value', new_val)
         state = 1
         for address, desired_value in self.channels2values.items():
             val = getattr(self, 'channel'+self.channels2ids[address]+'_value')
-            if isinstance(val, _np.ndarray):
-                state &= _np.all(val == desired_value)
-            else:
-                state &= (val == desired_value)
+            if val != 'UNDEF':
+                if isinstance(desired_value, (tuple, list)):
+                    fun = self._operations_dict[desired_value[1]]
+                    is_desired = fun(val, desired_value[0])
+                else:
+                    fun = self._operations_dict['eq']
+                    is_desired = fun(val, desired_value)
+
+                if not is_desired:
+                    self.warning.emit([address, val])
+                state &= is_desired
         self.setState(state)
 
     @Slot(bool)
@@ -157,6 +171,67 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         for _id in self.channels2ids.values():
             allconn &= getattr(self, 'channel'+_id+'_connected')
         PyDMWidget.connection_changed(self, allconn)
+        self.setEnabled(allconn)
+
+    @staticmethod
+    def _eq(val1, val2):
+        if val1 is None or val2 is None:
+            return False
+        if isinstance(val1, _np.ndarray):
+            is_equal = _np.all(val1 == val2)
+        else:
+            is_equal = (val1 == val2)
+        return is_equal
+
+    @staticmethod
+    def _ne(val1, val2):
+        if val1 is None or val2 is None:
+            return False
+        if isinstance(val1, _np.ndarray):
+            is_not_equal = _np.all(val1 != val2)
+        else:
+            is_not_equal = (val1 != val2)
+        return is_not_equal
+
+    @staticmethod
+    def _gt(val1, val2):
+        if val1 is None or val2 is None:
+            return False
+        if isinstance(val1, _np.ndarray):
+            is_greater = _np.all(val1 > val2)
+        else:
+            is_greater = (val1 > val2)
+        return is_greater
+
+    @staticmethod
+    def _lt(val1, val2):
+        if val1 is None or val2 is None:
+            return False
+        if isinstance(val1, _np.ndarray):
+            is_less = _np.all(val1 < val2)
+        else:
+            is_less = (val1 < val2)
+        return is_less
+
+    @staticmethod
+    def _ge(val1, val2):
+        if val1 is None or val2 is None:
+            return False
+        if isinstance(val1, _np.ndarray):
+            is_greater_or_equal = _np.all(val1 >= val2)
+        else:
+            is_greater_or_equal = (val1 >= val2)
+        return is_greater_or_equal
+
+    @staticmethod
+    def _le(val1, val2):
+        if val1 is None or val2 is None:
+            return False
+        if isinstance(val1, _np.ndarray):
+            is_less_or_equal = _np.all(val1 <= val2)
+        else:
+            is_less_or_equal = (val1 <= val2)
+        return is_less_or_equal
 
 
 class PyDMLedMultiConnection(QLed, PyDMWidget):
