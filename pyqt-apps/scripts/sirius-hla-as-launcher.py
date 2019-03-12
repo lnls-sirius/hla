@@ -5,7 +5,8 @@
 import sys
 
 from qtpy.QtWidgets import QVBoxLayout, QHBoxLayout, QGridLayout, \
-                           QGroupBox, QPushButton, QWidget, QLabel
+                           QGroupBox, QPushButton, QWidget, QLabel, \
+                           QAction, QInputDialog, QLineEdit
 from qtpy.QtCore import Qt
 from siriushla.sirius_application import SiriusApplication
 from siriushla import util
@@ -29,7 +30,7 @@ class ControlApplication(SiriusMainWindow):
         self.AS_apps.setLayout(self._create_as_layout())
 
         self.LI_apps = QGroupBox('Linac')
-        self.LI_apps.setLayout(self._create_LI_layout())
+        self.LI_apps.setLayout(self._create_li_layout())
 
         self.TB_apps = QGroupBox('LTB')
         self.TB_apps.setLayout(self._create_section_layout('TB'))
@@ -106,9 +107,9 @@ class ControlApplication(SiriusMainWindow):
         lay.addWidget(pvsconfmgr)
         return lay
 
-    def _create_LI_layout(self):
+    def _create_li_layout(self):
         LI_launcher = QPushButton('Linac launcher', self)
-        util.connect_newprocess(LI_launcher, 'sirius-hla-li-launcher.sh')
+        LI_launcher.clicked.connect(self._open_li_launcher)
 
         energy = QPushButton('Energy Meas', self)
         util.connect_newprocess(energy, 'sirius-hla-li-ap-energy.py')
@@ -206,6 +207,19 @@ class ControlApplication(SiriusMainWindow):
             glay.addWidget(Ramp, 2, 4)
 
         return glay
+
+    def _open_li_launcher(self):
+        password, ok = QInputDialog.getText(
+            self, 'Opening Linac Launcher...',
+            'Enter password to phyuser@linacopi1: ',
+            echo=QLineEdit.Password)
+        if ok:
+            LI_action = QAction()
+            util.connect_newprocess(
+                LI_action,
+                ['sshpass', '-p', password, 'ssh', '-X', 'phyuser@linacopi1',
+                 'sh', '-c', '/home/sirius/work/opi/sirius-main.sh'])
+            LI_action.trigger()
 
 
 if __name__ == "__main__":
