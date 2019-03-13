@@ -5,7 +5,8 @@
 import sys
 
 from qtpy.QtWidgets import QVBoxLayout, QHBoxLayout, QGridLayout, \
-                           QGroupBox, QPushButton, QWidget, QLabel
+                           QGroupBox, QPushButton, QWidget, QLabel, \
+                           QAction, QInputDialog, QLineEdit, QMenu
 from qtpy.QtCore import Qt
 from siriushla.sirius_application import SiriusApplication
 from siriushla import util
@@ -29,7 +30,7 @@ class ControlApplication(SiriusMainWindow):
         self.AS_apps.setLayout(self._create_as_layout())
 
         self.LI_apps = QGroupBox('Linac')
-        self.LI_apps.setLayout(self._create_LI_layout())
+        self.LI_apps.setLayout(self._create_li_layout())
 
         self.TB_apps = QGroupBox('LTB')
         self.TB_apps.setLayout(self._create_section_layout('TB'))
@@ -61,13 +62,16 @@ class ControlApplication(SiriusMainWindow):
 
         self.main_widget.setStyleSheet("""
             QPushButton{
-                min-width:12em; max-width:12em;
-                min-height:2em; max-height:2em;
+                min-width:9.5em; max-width:9.5em;
+                min-height:1.5em; max-height:1.5em;
             }""")
 
         self.setCentralWidget(self.main_widget)
 
     def _create_as_layout(self):
+        operation = QPushButton('Operation', self)
+        util.connect_newprocess(operation, 'sirius-hla-as-ap-operation.py')
+
         injection = QPushButton('Injection', self)
         util.connect_newprocess(injection, 'sirius-hla-as-ap-injection.py')
 
@@ -80,24 +84,29 @@ class ControlApplication(SiriusMainWindow):
         pstest = QPushButton('PS Test', self)
         util.connect_newprocess(pstest, 'sirius-hla-as-ps-test.py')
 
+        psmonitor = QPushButton('PS Monitor', self)
+        util.connect_newprocess(psmonitor, 'sirius-hla-as-ps-monitor.py')
+
         energy_button = QPushButton('Energy Button', self)
         util.connect_newprocess(
             energy_button, 'sirius-hla-as-ap-energybutton.py')
 
-        lay = QHBoxLayout()
+        lay = QGridLayout()
         lay.setAlignment(Qt.AlignLeft)
-        lay.addWidget(injection)
-        lay.addWidget(timing)
-        lay.addWidget(pscycle)
-        lay.addWidget(pstest)
-        lay.addWidget(energy_button)
+        lay.addWidget(operation, 0, 0)
+        lay.addWidget(injection, 0, 1)
+        lay.addWidget(timing, 0, 2)
+        lay.addWidget(pscycle, 1, 0)
+        lay.addWidget(pstest, 1, 1)
+        lay.addWidget(psmonitor, 1, 2)
+        lay.addWidget(energy_button, 1, 3)
         return lay
 
     def _create_serv_layout(self):
-        servconf = QPushButton('Configurations Server')
+        servconf = QPushButton('Config Server')
         util.connect_newprocess(servconf, 'sirius-hla-as-ap-servconf.py')
 
-        pvsconfmgr = QPushButton('PVs Configuration Manager')
+        pvsconfmgr = QPushButton('Config Manager')
         util.connect_newprocess(pvsconfmgr, 'sirius-hla-as-ap-pvsconfmgr.py')
 
         lay = QHBoxLayout()
@@ -106,9 +115,9 @@ class ControlApplication(SiriusMainWindow):
         lay.addWidget(pvsconfmgr)
         return lay
 
-    def _create_LI_layout(self):
+    def _create_li_layout(self):
         LI_launcher = QPushButton('Linac launcher', self)
-        util.connect_newprocess(LI_launcher, 'sirius-hla-li-launcher.sh')
+        LI_launcher.clicked.connect(self._open_li_launcher)
 
         energy = QPushButton('Energy Meas', self)
         util.connect_newprocess(energy, 'sirius-hla-li-ap-energy.py')
@@ -131,11 +140,43 @@ class ControlApplication(SiriusMainWindow):
             util.connect_newprocess(launcher,
                                     'sirius-hla-'+sec+'-ap-control.py')
 
-        PS = QPushButton('Power Supplies', self)
-        util.connect_newprocess(PS, 'sirius-hla-'+sec+'-ps-control.py')
-
-        MA = QPushButton('Magnets', self)
-        util.connect_newprocess(MA, 'sirius-hla-'+sec+'-ma-control.py')
+        for dis in ['ps', 'ma']:
+            menu = QMenu(self)
+            all_dev = menu.addAction('All')
+            util.connect_newprocess(
+                all_dev, 'sirius-hla-'+sec+'-'+dis+'-control.py')
+            dip = menu.addAction('Dipoles')
+            util.connect_newprocess(
+                dip, ['sirius-hla-'+sec+'-'+dis+'-control.py',
+                      '--device', 'dipole'])
+            quad = menu.addAction('Quadrupoles')
+            util.connect_newprocess(
+                quad, ['sirius-hla-'+sec+'-'+dis+'-control.py',
+                       '--device', 'quadrupole'])
+            if 'bo' in sec or 'si' in sec:
+                sext = menu.addAction('Sextupoles')
+                util.connect_newprocess(
+                    sext, ['sirius-hla-'+sec+'-'+dis+'-control.py',
+                           '--device', 'sextupole'])
+                skew = menu.addAction('Skew Quadrupoles')
+                util.connect_newprocess(
+                    skew, ['sirius-hla-'+sec+'-'+dis+'-control.py',
+                           '--device', 'quadrupole-skew'])
+            corrs = menu.addAction('Correctors')
+            util.connect_newprocess(
+                corrs, ['sirius-hla-'+sec+'-'+dis+'-control.py',
+                        '--device', 'corrector-slow'])
+            if 'si' in sec:
+                fastcorrs = menu.addAction('Fast Correctors')
+                util.connect_newprocess(
+                    fastcorrs, ['sirius-hla-'+sec+'-'+dis+'-control.py',
+                                '--device', 'corrector-fast'])
+            if dis == 'ps':
+                PS = QPushButton('Power Supplies', self)
+                PS.setMenu(menu)
+            else:
+                MA = QPushButton('Magnets', self)
+                MA.setMenu(menu)
 
         PM = QPushButton('Pulsed Magnets', self)
         util.connect_newprocess(PM, 'sirius-hla-'+sec+'-pm-control.py')
@@ -206,6 +247,19 @@ class ControlApplication(SiriusMainWindow):
             glay.addWidget(Ramp, 2, 4)
 
         return glay
+
+    def _open_li_launcher(self):
+        password, ok = QInputDialog.getText(
+            self, 'Opening Linac Launcher...',
+            'Enter password to phyuser@linacopi1: ',
+            echo=QLineEdit.Password)
+        if ok:
+            LI_action = QAction()
+            util.connect_newprocess(
+                LI_action,
+                ['sshpass', '-p', password, 'ssh', '-X', 'phyuser@linacopi1',
+                 'sh', '-c', '/home/sirius/work/opi/sirius-main.sh'])
+            LI_action.trigger()
 
 
 if __name__ == "__main__":

@@ -33,8 +33,6 @@ class SelectBPMs(BaseWidget):
         vbl2.setSpacing(15)
         for bpm in sorted(self.bpm_dict.keys()):
             widb = BPMSummary(wid, prefix=self.prefix, bpm=bpm)
-            widb.setObjectName(bpm)
-            widb.setStyleSheet("""#{0}{{min-height:1.94em;}}""".format(bpm))
             vbl2.addWidget(widb)
             self.bpm_dict[bpm] = widb
 

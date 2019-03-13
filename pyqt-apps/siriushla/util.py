@@ -48,7 +48,10 @@ def connect_window(widget, w_class, parent, **kwargs):
 def connect_newprocess(widget, cmd, **kwargs):
     """Execute a child program in a new process."""
     signal = _define_widget_signal(widget)
+    signal.connect(lambda: _run_subprocess(cmd, **kwargs))
 
+
+def _run_subprocess(cmd, **kwargs):
     # Parse kwargs
     bufsize = kwargs['bufsize'] if 'bufsize' in kwargs else -1
     executable = kwargs['executable'] if 'executable' in kwargs else None
@@ -72,15 +75,28 @@ def connect_newprocess(widget, cmd, **kwargs):
     encoding = kwargs['encoding'] if 'encoding' in kwargs else None
     errors = kwargs['errors'] if 'errors' in kwargs else None
 
-    # Create process
-    signal.connect(lambda: _subprocess.Popen(
-        cmd, bufsize=bufsize, executable=executable,
-        stdin=stdin, stdout=stdout, stderr=stderr,
-        preexec_fn=preexec_fn, close_fds=close_fds,
-        shell=shell, cwd=cwd, env=env, universal_newlines=universal_newlines,
-        startupinfo=startupinfo, creationflags=creationflags,
-        restore_signals=restore_signals, start_new_session=start_new_session,
-        pass_fds=pass_fds, encoding=encoding, errors=errors))
+    # Maximize the window if it exists, else create a new one
+    scmd = (_subprocess.list2cmdline(cmd) if isinstance(cmd, list) else cmd)
+    pid = _subprocess.run(
+        "ps ax | grep \"[" + scmd[0] + "]" + scmd[1:] +
+        "\" | xargs | cut -f1 -d\" \" -",
+        stdin=_subprocess.PIPE, shell=True, stdout=_subprocess.PIPE,
+        check=True).stdout.decode('UTF-8').strip('\n')
+    if pid:
+        _subprocess.run(
+            "xdotool windowactivate `xdotool search --pid "+pid+" | tail -1`",
+            stdin=_subprocess.PIPE, shell=True)
+    else:
+        _subprocess.Popen(
+            cmd, bufsize=bufsize, executable=executable,
+            stdin=stdin, stdout=stdout, stderr=stderr,
+            preexec_fn=preexec_fn, close_fds=close_fds,
+            shell=shell, cwd=cwd, env=env,
+            universal_newlines=universal_newlines,
+            startupinfo=startupinfo, creationflags=creationflags,
+            restore_signals=restore_signals,
+            start_new_session=start_new_session,
+            pass_fds=pass_fds, encoding=encoding, errors=errors)
 
 
 def _define_widget_signal(widget):
