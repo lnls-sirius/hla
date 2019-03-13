@@ -31,8 +31,8 @@ class BPMSummary(BaseWidget):
         hbl.addSpacing(10)
         hbl.addStretch()
         pbt = QPushButton(self.bpm)
-        Window = create_window_from_widget(
-            BPMMain, 'BPMMain', is_main=True)
+        pbt.setStyleSheet('min-width:8em;')
+        Window = create_window_from_widget(BPMMain, 'BPMMain', is_main=True)
         util.connect_window(
             pbt, Window, parent=None, prefix=self.prefix, bpm=self.bpm)
         hbl.addWidget(pbt)
