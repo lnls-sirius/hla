@@ -1,7 +1,7 @@
 """Interface to set dipole energies with constant normalization."""
 
 from qtpy.QtWidgets import QVBoxLayout, QWidget, QDoubleSpinBox, QPushButton, \
-    QLabel, QListWidget
+    QListWidget
 from pydm.widgets import PyDMLabel
 
 
@@ -57,7 +57,7 @@ class EnergyButton(QWidget):
 if __name__ == '__main__':
     import sys
     from siriushla.sirius_application import SiriusApplication
-    from siriushla.energy_button.energy_setter import EnergySetter
+    from siriushla.as_ap_energybutton.energy_setter import EnergySetter
 
     app = SiriusApplication()
     setter = EnergySetter('tb')

@@ -3,7 +3,7 @@
 
 import sys
 from siriushla.sirius_application import SiriusApplication
-from siriushla.energy_button import EnergySetterWindow
+from siriushla.as_ap_energybutton import EnergySetterWindow
 
 app = SiriusApplication(None, sys.argv)
 window = EnergySetterWindow()
