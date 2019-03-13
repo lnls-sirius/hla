@@ -74,10 +74,8 @@ def _create_objects(section):
             continue
         if maname.sub != 'Fam' and ('SD' in maname.dev or 'SF' in maname.dev):
             continue
-        if 'EjeKckr' in maname.dev:
+        if maname.dis == 'PM':
             continue
-        # if 'Inj' in maname.dev:
-        #     continue
         madata = _mdata.MAData(maname=maname)
         mfunc = _magfunc(madata)
         if mfunc == 'dipole':

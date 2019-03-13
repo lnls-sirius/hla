@@ -87,9 +87,9 @@ class ControlApplication(SiriusMainWindow):
         psmonitor = QPushButton('PS Monitor', self)
         util.connect_newprocess(psmonitor, 'sirius-hla-as-ps-monitor.py')
 
-        energy_setter = QPushButton('Energy Setter', self)
+        energy_button = QPushButton('Energy Button', self)
         util.connect_newprocess(
-            energy_setter, 'sirius-hla-as-ap-energy-setter.py')
+            energy_button, 'sirius-hla-as-ap-energybutton.py')
 
         lay = QGridLayout()
         lay.setAlignment(Qt.AlignLeft)
@@ -99,7 +99,7 @@ class ControlApplication(SiriusMainWindow):
         lay.addWidget(pscycle, 1, 0)
         lay.addWidget(pstest, 1, 1)
         lay.addWidget(psmonitor, 1, 2)
-        lay.addWidget(energy_setter, 1, 3)
+        lay.addWidget(energy_button, 1, 3)
         return lay
 
     def _create_serv_layout(self):
