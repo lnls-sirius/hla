@@ -39,6 +39,30 @@ class AcqControlWidget(BaseWidget):
         wid = self.create_pair_sel(grp_bx, 'OrbitMode')
         fbl.addRow(wid)
 
+        grp_bx = QGroupBox('Orbit Smoothing Control', self)
+        vbl.addWidget(grp_bx)
+        vbl.addSpacing(20)
+        fbl = QFormLayout(grp_bx)
+        lbl = QLabel('Method', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
+        wid = self.create_pair_sel(grp_bx, 'OrbitSmoothMethod')
+        fbl.addRow(lbl, wid)
+        lbl = QLabel('Num. Pts.', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
+        wid = self.create_pair(grp_bx, 'OrbitSmoothNPnts')
+        fbl.addRow(lbl, wid)
+        pdm_btn = PyDMPushButton(
+            init_channel=self.prefix+'OrbitSmoothReset-Cmd',
+            pressValue=1,
+            label='Reset Buffer')
+        fbl.addWidget(pdm_btn)
+
+        vbl = QVBoxLayout()
+        if self.isring:
+            gdl.addItem(vbl, 1, 1)
+        else:
+            gdl.addItem(vbl, 2, 0)
+
         grp_bx = QGroupBox('Acquisition Rates', self)
         vbl.addWidget(grp_bx)
         vbl.addSpacing(20)
@@ -49,24 +73,6 @@ class AcqControlWidget(BaseWidget):
         lbl = QLabel('Kicks [Hz]', grp_bx, alignment=Qt.AlignCenter)
         wid = self.create_pair(grp_bx, 'KickAcqRate')
         fbl.addRow(lbl, wid)
-
-        vbl = QVBoxLayout()
-        if self.isring:
-            gdl.addItem(vbl, 1, 1)
-        else:
-            gdl.addItem(vbl, 2, 0)
-
-        grp_bx = QGroupBox('Number of Orbits for Smoothing', self)
-        vbl.addWidget(grp_bx)
-        vbl.addSpacing(20)
-        fbl = QFormLayout(grp_bx)
-        wid = self.create_pair(grp_bx, 'OrbitSmoothNPnts')
-        fbl.addWidget(wid)
-        pdm_btn = PyDMPushButton(
-            init_channel=self.prefix+'OrbitSmoothReset-Cmd',
-            pressValue=1,
-            label='Reset Buffer')
-        fbl.addWidget(pdm_btn)
 
         if self.isring:
             grp_bx = QGroupBox('MultiTurn Acquisition', self)
