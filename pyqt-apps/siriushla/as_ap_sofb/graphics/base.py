@@ -4,11 +4,11 @@ import pathlib as _pathlib
 from datetime import datetime as _datetime
 from functools import partial as _part
 import numpy as _np
-from pyqtgraph import mkBrush, mkPen, InfiniteLine, functions
+from pyqtgraph import mkBrush, mkPen, InfiniteLine, functions, TextItem
 from qtpy.QtWidgets import QWidget, QFileDialog, QLabel, QCheckBox, \
     QVBoxLayout, QHBoxLayout, QSizePolicy, QGroupBox, \
-    QFormLayout, QPushButton, QComboBox
-from qtpy.QtCore import Qt, QTimer, QThread, Signal, QObject
+    QFormLayout, QPushButton, QComboBox, QToolTip
+from qtpy.QtCore import Qt, QTimer, QThread, Signal, QObject, QPoint
 from qtpy.QtGui import QColor
 from pydm.widgets import PyDMWaveformPlot
 from siriushla.widgets import SiriusConnectionSignal
@@ -32,6 +32,7 @@ class BaseWidget(QWidget):
         self.timer = QTimer()
         self.thread = QThread()
         self.updater = []
+        self.graph = {'x': None, 'y': None}
         for _ in range(2):
             upd = UpdateGraph(ctrls, is_orb, acc)
             upd.moveToThread(self.thread)
@@ -107,7 +108,8 @@ class BaseWidget(QWidget):
     def uigetgraph(self, pln, size):
         graph = Graph(self)
         graph.doubleclick.connect(_part(self._set_enable_list, pln))
-
+        graph.plotItem.scene().sigMouseMoved.connect(
+                                _part(self._show_tooltip, pln=pln))
         graph.setLabel('bottom', text='BPM position', units='m')
         lab = 'Orbit' if self.is_orb else 'Kick Angle'
         unit = 'm' if self.is_orb else 'rad'
@@ -242,6 +244,26 @@ class BaseWidget(QWidget):
         cor //= len(self.line_names)
         cor += 0
         return QColor(255, cor, 0) if pln == 'y' else QColor(0, cor, 255)
+
+    def _show_tooltip(self, pos, pln='x'):
+        if self.is_orb:
+            names = self._csorb.BPM_NICKNAMES
+            posi = self._csorb.BPM_POS
+        elif pln == 'x':
+            names = self._csorb.CH_NICKNAMES
+            posi = self._csorb.CH_POS
+        else:
+            names = self._csorb.CV_NICKNAMES
+            posi = self._csorb.CV_POS
+
+        graph = self.graph[pln]
+        curve = graph.curveAtIndex(0)
+        posx = curve.scatter.mapFromScene(pos).x()
+        ind = _np.argmin(_np.abs(_np.array(posi)-posx))
+
+        QToolTip.showText(
+            graph.mapToGlobal(pos.toPoint()),
+            names[ind], graph, graph.geometry(), 500)
 
     def _set_enable_list(self, pln, idx):
         val = self.enbl_pvs_set[pln].getvalue()
