@@ -1,3 +1,5 @@
+#!/usr/bin/env python-sirius
+
 """Interface to handle general status."""
 
 import sys

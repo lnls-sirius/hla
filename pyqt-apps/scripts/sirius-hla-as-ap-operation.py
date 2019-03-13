@@ -1,3 +1,5 @@
+#!/usr/bin/env python-sirius
+
 """Interface to handle main operation commands."""
 
 import sys
