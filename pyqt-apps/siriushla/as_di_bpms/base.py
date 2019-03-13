@@ -10,6 +10,8 @@ from siriuspy.csdevice.bpms import get_bpm_database
 from siriushla.widgets import SiriusConnectionSignal, SiriusLabel, \
     SiriusSpinbox
 
+_BPMDB = get_bpm_database()
+
 
 class BaseWidget(QWidget):
 
@@ -18,8 +20,6 @@ class BaseWidget(QWidget):
         self.prefix = prefix
         self.bpm = bpm
         self.data_prefix = data_prefix
-        self.bpmdb = get_bpm_database(
-            prefix=self.get_pvname('', is_data=False))
         self._chans = []
 
     def channels(self):
@@ -47,8 +47,9 @@ class BaseWidget(QWidget):
                     wid.setStyleSheet("""min-width:5em;""")
                     wid.showStepExponent = False
                     wid.limitsFromChannel = False
-                    wid.setMinimum(self.bpmdb[chan1].get('low', -1e10))
-                    wid.setMaximum(self.bpmdb[chan1].get('high', 1e10))
+                    pvn = self.data_prefix + pv1
+                    wid.setMinimum(_BPMDB[pvn].get('low', -1e10))
+                    wid.setMaximum(_BPMDB[pvn].get('high', 1e10))
                 else:
                     wid = PyDMEnumComboBox(
                         self, init_channel=self.get_pvname(pv1))
