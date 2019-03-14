@@ -598,6 +598,9 @@ class DCLinkDetailWidget(PSDetailWidget):
         self.aux_box = QGroupBox('Other Params')
         self.aux_box.setObjectName('aux_box')
 
+        self.pru_box = QGroupBox('PRU')
+        self.pru_box.setObjectName('pru_box')
+
         # Set group boxes layouts
         self.version_box.setLayout(self._versionLayout())
         self.interlock_box.setLayout(self._interlockLayout())
@@ -606,6 +609,7 @@ class DCLinkDetailWidget(PSDetailWidget):
         self.analog_box.setLayout(self._analogLayout())
         self.command_box.setLayout(self._commandLayout())
         self.aux_box.setLayout(self._auxLayout())
+        self.pru_box.setLayout(self._pruLayout())
 
         # Add group boxes to laytout
         self.layout = self._setWidgetLayout()
@@ -632,6 +636,7 @@ class DCLinkDetailWidget(PSDetailWidget):
 
         analogs.addWidget(self.analog_box)
         analogs.addWidget(self.aux_box)
+        analogs.addWidget(self.pru_box)
 
         return layout
 
