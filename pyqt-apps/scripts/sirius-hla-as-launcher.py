@@ -91,6 +91,9 @@ class ControlApplication(SiriusMainWindow):
         util.connect_newprocess(
             energy_button, 'sirius-hla-as-ap-energybutton.py')
 
+        offconv = QPushButton('Offline Converter', self)
+        util.connect_newprocess(offconv, 'sirius-hla-as-ma-offconv.py')
+
         lay = QGridLayout()
         lay.setAlignment(Qt.AlignLeft)
         lay.addWidget(operation, 0, 0)
@@ -100,6 +103,7 @@ class ControlApplication(SiriusMainWindow):
         lay.addWidget(pstest, 1, 1)
         lay.addWidget(psmonitor, 1, 2)
         lay.addWidget(energy_button, 1, 3)
+        lay.addWidget(offconv, 1, 4)
         return lay
 
     def _create_serv_layout(self):

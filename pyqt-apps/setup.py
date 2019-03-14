@@ -42,6 +42,7 @@ setup(
         'scripts/sirius-hla-as-di-bpm.py',
         'scripts/sirius-hla-as-di-scrn.py',
         'scripts/sirius-hla-as-launcher.py',
+        'scripts/sirius-hla-as-ma-offconv.py',
         'scripts/sirius-hla-as-ps-cycle.py',
         'scripts/sirius-hla-as-ps-monitor.py',
         'scripts/sirius-hla-as-ps-test.py',
