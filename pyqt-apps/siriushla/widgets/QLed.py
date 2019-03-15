@@ -12,6 +12,7 @@ from qtpy.QtGui import QPainter, QColor
 from qtpy.QtCore import Signal, Qt, QSize, QTimer, QByteArray, \
                         QRectF, Property, Q_ENUMS, QFile
 from qtpy.QtSvg import QSvgRenderer
+import siriushla.resources
 
 __path__ = _os.path.dirname(__file__)
 
