@@ -27,7 +27,7 @@ class MainOperation(SiriusMainWindow):
         self._wrapper = wrapper
         self._setupUi()
         self.setWindowTitle('Main Controls')
-        self.move(0, 0)
+        self.move(0, 20)
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
 
     def _setupUi(self):
