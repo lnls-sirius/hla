@@ -52,8 +52,8 @@ class BasePSWidget(QWidget):
         }
         #psname_header,
         #psname_button {
-            min-width: 10em;
-            max-width: 10em;
+            min-width: 12em;
+            max-width: 12em;
             margin-right: 0.5em;
         }
         #intlk_header,
@@ -182,12 +182,9 @@ class BasePSWidget(QWidget):
         self.pwrstate_button.setObjectName("pwrstate_button")
         self.state_led = PyDMLed(self, self._pwrstate_rb_pv)
         self.state_led.setObjectName("state_led")
-        self.state_widget = QWidget(self)
+        self.state_widget = self._build_horizontal_widget(
+            [self.pwrstate_button, self.state_led])
         self.state_widget.setObjectName("state_widget")
-        self.state_widget.layout = QHBoxLayout()
-        self.state_widget.setLayout(self.state_widget.layout)
-        self.state_widget.layout.addWidget(self.pwrstate_button)
-        self.state_widget.layout.addWidget(self.state_led)
 
         self.layout.addWidget(self.psname_label)
         self.layout.addWidget(self.state_widget)
@@ -197,13 +194,9 @@ class BasePSWidget(QWidget):
                 SiriusLedAlert(self, self._intlksoft_mon_pv)
             self.intlkhard_led = \
                 SiriusLedAlert(self, self._intlkhard_mon_pv)
-            self.intlk_widget = QWidget(self)
+            self.intlk_widget = self._build_horizontal_widget(
+                [self.intlksoft_led, self.intlkhard_led])
             self.intlk_widget.setObjectName("intlk_widget")
-            self.intlk_widget.layout = QHBoxLayout()
-            self.intlk_widget.setLayout(self.intlk_widget.layout)
-            self.intlk_widget.layout.addWidget(self.intlksoft_led)
-            self.intlk_widget.layout.addWidget(self.intlkhard_led)
-
             self.layout.addWidget(self.intlk_widget)
         # Analog setpoint widget
         self.analog_widget = PyDMLinEditScrollbar(
@@ -255,6 +248,13 @@ class BasePSWidget(QWidget):
         else:
             self.setLayout(self.layout)
 
+    def _build_horizontal_widget(self, widgets):
+        widget = QWidget(self)
+        widget.setLayout(QHBoxLayout())
+        for w in widgets:
+            widget.layout().addWidget(w)
+        return widget
+
     def paintEvent(self, event):
         """Need to override paintEvent in order to apply CSS."""
         opt = QStyleOption()
@@ -281,13 +281,6 @@ class BasePSWidget(QWidget):
         """Turn power supply off."""
         if self.pwrstate_button._bit_val:
             self.pwrstate_button.send_value()
-
-    # def sizePolicy(self):
-    #     return QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
-
-    # def sizeHint(self):
-    #     """Return sizeHint."""
-    #     return QSize(1600, 100)
 
 
 class PulsedPSWidget(BasePSWidget):
