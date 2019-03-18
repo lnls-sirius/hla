@@ -24,7 +24,7 @@ Multipole = re.compile("^.*:(MA)-(Q|S|QS|CH|CV|FCH|FCV).*$")
 Trim = re.compile("^SI-.*[0-2][0-9].*:MA-Q(D|F|[1-4]).*$")
 
 
-class OffConvApp(SiriusMainWindow):
+class MagOffConvApp(SiriusMainWindow):
     """Offline converter interface."""
 
     def __init__(self, parent=None):
@@ -286,6 +286,6 @@ if __name__ == '__main__':
     import sys
 
     app = SiriusApplication()
-    w = OffConvApp(prefix=vaca_prefix)
+    w = MagOffConvApp(prefix=vaca_prefix)
     w.show()
     sys.exit(app.exec_())

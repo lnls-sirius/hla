@@ -5,7 +5,7 @@
 import sys
 import argparse as _argparse
 from siriushla.sirius_application import SiriusApplication
-from siriushla.as_ma_offconv import OffConvApp
+from siriushla.as_ap_magoffconv import MagOffConvApp
 
 
 parser = _argparse.ArgumentParser(description="Run Offline Converter App.")
@@ -13,6 +13,6 @@ args = parser.parse_args()
 
 
 app = SiriusApplication()
-window = OffConvApp()
+window = MagOffConvApp()
 window.show()
 sys.exit(app.exec_())

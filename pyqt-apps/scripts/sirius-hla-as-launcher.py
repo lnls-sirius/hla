@@ -92,7 +92,7 @@ class ControlApplication(SiriusMainWindow):
             energy_button, 'sirius-hla-as-ap-energybutton.py')
 
         offconv = QPushButton('Offline Converter', self)
-        util.connect_newprocess(offconv, 'sirius-hla-as-ma-offconv.py')
+        util.connect_newprocess(offconv, 'sirius-hla-as-ap-magoffconv.py')
 
         lay = QGridLayout()
         lay.setAlignment(Qt.AlignLeft)
