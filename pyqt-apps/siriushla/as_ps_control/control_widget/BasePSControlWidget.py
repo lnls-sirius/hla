@@ -152,8 +152,10 @@ class PSContainer(QWidget):
         """Overload to create a custom context menu."""
         widget = self.childAt(event.pos())
         parent = widget.parent()
+        grand_parent = parent.parent()
         if widget.objectName() == 'DCLinkContainer' or \
-                parent.objectName() == 'DCLinkContainer':
+                parent.objectName() == 'DCLinkContainer' or \
+                grand_parent.objectName() == 'DCLinkContainer':
             menu = QMenu(self)
             menu.addAction(self._turn_on_action)
             menu.addAction(self._turn_off_action)
