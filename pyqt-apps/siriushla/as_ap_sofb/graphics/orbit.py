@@ -1,17 +1,18 @@
 """Control the Orbit Graphic Displnay."""
 
 from functools import partial as _part
-import numpy as np
+import numpy as _np
+from pyqtgraph import functions
 from qtpy.QtWidgets import QWidget, QLabel, QVBoxLayout, QPushButton, \
-    QHBoxLayout, QGroupBox, QComboBox
+    QHBoxLayout, QGroupBox, QComboBox, QToolTip
 from qtpy.QtCore import Qt, Signal
+from siriuspy.csdevice.orbitcorr import OrbitCorrDevFactory
 import siriushla.util as _util
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets import SiriusSpectrogramView, SiriusConnectionSignal
 
 from siriushla.as_ap_sofb.graphics.base import BaseWidget, Graph
 from siriushla.as_ap_sofb.graphics.correctors import CorrectorsWidget
-
 
 class OrbitWidget(BaseWidget):
 
@@ -70,7 +71,8 @@ class OrbitWidget(BaseWidget):
         vbl.addWidget(btn)
         Window = create_window_from_widget(
             SinglePassSumWidget, name='SinglePassSumWindow', size=(32, 23))
-        _util.connect_window(btn, Window, self, prefix=self.prefix)
+        _util.connect_window(
+                    btn, Window, self, prefix=self.prefix, acc=self.acc)
 
     def channels(self):
         chans = super().channels()
@@ -143,10 +145,10 @@ class MultiTurnWidget(QWidget):
             yaxis_channel=self.prefix+'OrbitMultiTurnTime-Mon')
         self.spectx.normalizeData = True
         self.specty.normalizeData = True
-        self.spectx.yaxis.setLabel('time', units='ms')
-        self.specty.yaxis.setLabel('time', units='ms')
-        self.spectx.xaxis.setLabel('BPM position', units='m')
-        self.specty.xaxis.setLabel('BPM position', units='m')
+        self.spectx.yaxis.setLabel('time', units='s')
+        self.specty.yaxis.setLabel('time', units='s')
+        self.spectx.xaxis.setLabel('BPM Position', units='m')
+        self.specty.xaxis.setLabel('BPM Position', units='m')
         self.spectx.colorbar.label_format = '{:<8.1f}'
         self.specty.colorbar.label_format = '{:<8.1f}'
         lab = QLabel('Horizontal Orbit', self, alignment=Qt.AlignCenter)
@@ -183,8 +185,8 @@ class MultiTurnSumWidget(QWidget):
             yaxis_channel=self.prefix+'OrbitMultiTurnTime-Mon')
         self.spect.new_data_sig.connect(self.update_graph)
         self.spect.normalizeData = True
-        self.spect.yaxis.setLabel('time', units='ms')
-        self.spect.xaxis.setLabel('BPM position', units='m')
+        self.spect.yaxis.setLabel('time', units='s')
+        self.spect.xaxis.setLabel('BPM Position', units='m')
         self.spect.colorbar.label_format = '{:<8.1f}'
         lab = QLabel('Sum Orbit', self, alignment=Qt.AlignCenter)
         lab.setStyleSheet("font-weight: bold;")
@@ -197,7 +199,7 @@ class MultiTurnSumWidget(QWidget):
         vbl.addWidget(lab)
         graph = Graph(self)
         vbl.addWidget(graph)
-        graph.setLabel('bottom', text='time', units='ms')
+        graph.setLabel('bottom', text='time', units='s')
         graph.setLabel('left', text='Sum', units='count')
         opts = dict(
             y_channel='A',
@@ -217,7 +219,7 @@ class MultiTurnSumWidget(QWidget):
 
 
 class Spectrogram(SiriusSpectrogramView):
-    new_data_sig = Signal(np.ndarray)
+    new_data_sig = Signal(_np.ndarray)
 
     def __init__(self, prefix='', **kwargs):
         super().__init__(**kwargs)
@@ -250,9 +252,11 @@ class Spectrogram(SiriusSpectrogramView):
 
 class SinglePassSumWidget(QWidget):
 
-    def __init__(self, parent, prefix):
+    def __init__(self, parent, prefix, acc):
         super().__init__(parent)
         self.prefix = prefix
+        self.acc = acc.upper()
+        self._csorb = OrbitCorrDevFactory.create(acc)
         self.setupui()
 
     def setupui(self):
@@ -264,7 +268,7 @@ class SinglePassSumWidget(QWidget):
 
         graph = Graph(self)
         vbl.addWidget(graph)
-        graph.setLabel('bottom', text='time', units='ms')
+        graph.setLabel('bottom', text='BPM Position', units='m')
         graph.setLabel('left', text='Sum', units='count')
         opts = dict(
             y_channel=self.prefix+'OrbitSmoothSinglePassSum-Mon',
@@ -277,6 +281,26 @@ class SinglePassSumWidget(QWidget):
             symbol='o',
             symbolSize=10)
         graph.addChannel(**opts)
+        graph.plotItem.scene().sigMouseMoved.connect(self._show_tooltip)
+        self.graph = graph
+
+    def _show_tooltip(self, pos):
+        names = self._csorb.BPM_NICKNAMES
+        posi = self._csorb.BPM_POS
+        unit = 'count'
+
+        graph = self.graph
+        curve = graph.curveAtIndex(0)
+        posx = curve.scatter.mapFromScene(pos).x()
+        ind = _np.argmin(_np.abs(_np.array(posi)-posx))
+        posy = curve.scatter.mapFromScene(pos).y()
+
+        sca, prf = functions.siScale(posy)
+        txt = '{0:s}, y = {1:.3f} {2:s}'.format(
+                                names[ind], sca*posy, prf+unit)
+        QToolTip.showText(
+            graph.mapToGlobal(pos.toPoint()),
+            txt, graph, graph.geometry(), 500)
 
 
 def _main(prefix):
