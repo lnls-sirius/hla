@@ -10,7 +10,7 @@ from siriuspy.namesys import SiriusPVName
 
 class QTreeItem(QTreeWidgetItem):
     """Tree Item."""
-    
+
     def __init__(self, string_list, parent=None):
         """Init."""
         super().__init__(parent, string_list)
@@ -43,18 +43,6 @@ class QTreeItem(QTreeWidgetItem):
         if isinstance(self.parent(), QTreeItem):
             self.parent().childHidden(self, parent_status)
 
-    # def setCheckState(self, column, status):
-    #     print("SEt check!!!!")
-    #     super().setCheckState(column, status)
-    #     # Trigger parent check
-    #     if isinstance(self.parent, QTreeItem):
-    #         print(self.parent)
-    #         self.parent.childChecked(self, column, status)
-    #     # Trigger children check
-    #     if status in (Qt.Checked, Qt.Unchecked):
-    #         for i in range(self.childCount()):
-    #             self.child(i).superCheck(column, status)
-
     def setData(self, column, role, value):
         """Set data."""
         if column == 0 and role == Qt.CheckStateRole:
@@ -64,9 +52,9 @@ class QTreeItem(QTreeWidgetItem):
             # Trigger children check
             if value in (Qt.Checked, Qt.Unchecked):
                 if self.childCount() == 0:
-            if self.checkState(column) != value:
-                self.treeWidget().itemChecked.emit(self, column, value)
-        super().setData(column, role, value)
+                    if self.checkState(column) != value:
+                        self.treeWidget().itemChecked.emit(self, column, value)
+                    super().setData(column, role, value)
                 else:
                     for c in range(self.childCount()):
                         if not self.child(c).isHidden():
@@ -81,9 +69,6 @@ class QTreeItem(QTreeWidgetItem):
 
     def childChecked(self, child, column, status):
         """Child was checked."""
-        # if len(self._check_status) != self.childCount():
-        #     for c in range(self.childCount()):
-        #         self._check_status[c] = self.child(c).checkState(column)
         self._check_status[self.indexOfChild(child)] = status
 
         s = sum([v for v in self._check_status.values()])
@@ -133,15 +118,10 @@ class PVNameTree(QTreeWidget):
                 self.obj._add_item(item)
                 self.itemInserted.emit()
 
-            # for node in self.obj._ptee.children.values():
-            #     self.obj.addTopLevelItem(node.item)
-
             self.finished.emit()
 
-    # _node = namedtuple('_node', 'item, children')
 
-    def __init__(self, items=tuple(), tree_levels=tuple(), parent=None,
-                 checked_levels=tuple()):
+    def __init__(self, items=tuple(), tree_levels=tuple(), parent=None):
         """Constructor."""
         super().__init__(parent)
 
@@ -149,7 +129,6 @@ class PVNameTree(QTreeWidget):
 
         self._items = items
         self._pnames = tree_levels
-        # self._ptree = PVNameTree._node(None, dict())
         self._leafs = list()
 
         self._setup_ui()
@@ -157,13 +136,9 @@ class PVNameTree(QTreeWidget):
 
         self.setHeaderHidden(False)
         self.setHeaderLabels(['PVName', 'Value', 'Delay'])
-        # self.itemChanged.connect(self._item_checked)
-        # self.setGeometry(100, 100, 600, 1024)
 
         self.check_children = True
         self.check_parent = True
-
-        # self._check_requested_levels(checked_levels)
 
     def _setup_ui(self):
         self._add_items()
@@ -183,7 +158,6 @@ class PVNameTree(QTreeWidget):
     def clear(self):
         """Clear tree."""
         self._items = tuple()
-        # self._ptree = PVNameTree._node(None, dict())
         self._leafs = list()
         self._item_map = dict()
         super().clear()
@@ -348,6 +322,7 @@ class PVNameTree(QTreeWidget):
         print(index, role, value)
         super().setData(index, role, value)
 
+
 if __name__ == "__main__":
     # import sys
     from siriushla.sirius_application import SiriusApplication
@@ -359,8 +334,10 @@ if __name__ == "__main__":
     items = []
     for i in range(800):
         items.extend([('SI-Fam:MA-B1B1{}:PwrState-Sel'.format(i), 1, 0.0),
+                      ('BO-Fam:MA-QD{}:Current-SP'.format(i), 1, 0.0),
                       ('BO-Fam:MA-B-{}:PwrState-Sel'.format(i), 1, 0.0)])
     w.items = items
+    w.check_requested_levels(('BOQuadrupole', ))
 
     # sys.exit(app.exec_())
     app.exec_()
