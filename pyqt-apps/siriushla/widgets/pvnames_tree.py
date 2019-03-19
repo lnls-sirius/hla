@@ -63,11 +63,17 @@ class QTreeItem(QTreeWidgetItem):
                 self.parent().childChecked(self, column, value)
             # Trigger children check
             if value in (Qt.Checked, Qt.Unchecked):
-                for i in range(self.childCount()):
-                    self.child(i).superCheck(column, value)
+                if self.childCount() == 0:
             if self.checkState(column) != value:
                 self.treeWidget().itemChecked.emit(self, column, value)
         super().setData(column, role, value)
+                else:
+                    for c in range(self.childCount()):
+                        if not self.child(c).isHidden():
+                            self.child(c).setData(
+                                column, Qt.CheckStateRole, value)
+        else:
+            super().setData(column, role, value)
 
     def superCheck(self, column, status):
         """Check without triggers."""
