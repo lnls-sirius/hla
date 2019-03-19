@@ -237,11 +237,10 @@ class PVNameTree(QTreeWidget):
         else:
             return 'Other'
 
-    def _check_requested_levels(self, levels):
+    def check_requested_levels(self, levels):
         """Set requested levels checked."""
-        for node in self._ptree.children.values():
-            if node.item.text(0) in levels:
-                node.item.setCheckState(0, Qt.Checked)
+        for level in levels:
+            self._item_map[level].setCheckState(0, Qt.Checked)
 
     def _add_item(self, item):
 
