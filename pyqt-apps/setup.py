@@ -36,6 +36,7 @@ setup(
     scripts=[
         'scripts/sirius-hla-as-ap-energybutton.py',
         'scripts/sirius-hla-as-ap-injection.py',
+        'scripts/sirius-hla-as-ap-magoffconv.py',
         'scripts/sirius-hla-as-ap-operation.py',
         'scripts/sirius-hla-as-ap-pvsconfmgr.py',
         'scripts/sirius-hla-as-ap-servconf.py',

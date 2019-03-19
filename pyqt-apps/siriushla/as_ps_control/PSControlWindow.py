@@ -1,7 +1,10 @@
 """Defines a class to control a set of a device from a given class."""
 from pydm import PyDMApplication
 
+from qtpy.QtWidgets import QWidget
+
 from siriushla.widgets import SiriusMainWindow
+from .DCLinkWidget import DCLinkWidget
 from .control_widget.ControlWidgetFactory import ControlWidgetFactory
 from .PSDetailWindow import PSDetailWindow
 from .PSTrimWindow import PSTrimWindow
@@ -51,11 +54,10 @@ class PSControlWindow(SiriusMainWindow):
         self.setCentralWidget(self.widget)
 
     def _connect_buttons(self, widget):
-        # buttons = widget.get_detail_buttons()
-        for widget in widget.get_ps_widgets():
-            psname = widget.psname
-            detail_button = widget.get_detail_button()
-            trim_button = widget.get_trim_button()
+        for w in widget.get_ps_widgets():
+            psname = w.psname
+            detail_button = w.get_detail_button()
+            trim_button = w.get_trim_button()
 
             connect_window(detail_button, PSDetailWindow,
                            self, psname=psname)
@@ -63,3 +65,9 @@ class PSControlWindow(SiriusMainWindow):
             if trim_button is not None:
                 connect_window(trim_button, PSTrimWindow,
                                self, psname=psname)
+
+        for w in widget.findChildren(DCLinkWidget):
+            btn = w.detail_btn
+            name = btn.text()
+            connect_window(
+                w.detail_btn, PSDetailWindow, self, psname=[name])

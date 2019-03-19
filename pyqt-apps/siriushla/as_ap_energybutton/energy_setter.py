@@ -1,7 +1,7 @@
 """set energy module."""
 
-from qtpy.QtCore import Signal, QThread
-from siriushla.energy_button.set_energy import init_section, set_energy
+from qtpy.QtCore import Signal
+from siriushla.as_ap_energybutton.set_energy import init_section, set_energy
 
 
 class EnergySetter:

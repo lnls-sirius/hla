@@ -8,7 +8,170 @@ from siriushla.as_ps_control.PSWidget import BasePSWidget, PSWidget, MAWidget
 from qtpy.QtCore import Qt, QPoint, Slot, QLocale
 from qtpy.QtWidgets import QWidget, QVBoxLayout, QGroupBox, \
     QGridLayout, QLabel, QHBoxLayout, QScrollArea, QLineEdit, QAction, \
-    QMenu, QInputDialog, QFrame
+    QMenu, QInputDialog, QFrame, QSplitter, QPushButton
+from siriushla.as_ps_control.DCLinkWidget import \
+    DCLinkWidget, DCLinkWidgetHeader
+
+
+class PSContainer(QWidget):
+
+    def __init__(self, widget, parent=None):
+        super().__init__(parent)
+        # Works for PS or MA
+        self._widget = widget
+        self._name = widget.psname
+
+        if widget.psname in ['BO-Fam:MA-B', 'SI-Fam:MA-B1B2']:
+            psname = self._name.replace(':MA-', ':PS-')
+            psname = [psname + '-1', psname + '-2']
+            self._dclinks = list()
+            for name in psname:
+                self._dclinks.extend(PSSearch.conv_psname_2_dclink(name))
+        else:
+            psname = self._name.replace(':MA-', ':PS-')
+            self._dclinks = PSSearch.conv_psname_2_dclink(psname)
+
+        self._setup_ui()
+        self._create_actions()
+        self.setStyleSheet("""
+            #HideButton {
+                min-width: 10px;
+                max-width: 10px;
+            }
+            #DCLinkContainer {
+                background-color: lightgrey;
+            }
+        """)
+
+    def _setup_ui(self):
+        """Setup widget UI."""
+        self._layout = QGridLayout()
+        self._layout.setSpacing(0)
+        self._layout.setContentsMargins(0, 0, 0, 0)
+        self.setLayout(self._layout)
+        # self._splitter = QSplitter(Qt.Vertical, self)
+
+        self._dclink_container = QWidget(self)
+        self._dclink_container.setObjectName('DCLinkContainer')
+        self._dclink_container.setLayout(QVBoxLayout())
+        if self._dclinks:
+            self._dclink_container.layout().addWidget(DCLinkWidgetHeader(self))
+            for dclink_name in self._dclinks:
+                w = DCLinkWidget(dclink_name, self)
+                self._dclink_container.layout().addWidget(w)
+
+        # self._splitter.addWidget(self._widget)
+        # self._splitter.addWidget(self._dclink_container)
+
+        if self._dclinks:
+            self._hide = QPushButton('+', self)
+        else:
+            self._hide = QPushButton('', self)
+            self._hide.setEnabled(False)
+        self._hide.setObjectName('HideButton')
+        self._hide.setFlat(True)
+
+        self._layout.addWidget(self._hide, 0, 0, Qt.AlignCenter)
+        self._layout.addWidget(self._widget, 0, 1)
+        self._layout.addWidget(self._dclink_container, 1, 1)
+
+        self._layout.setColumnStretch(0, 1)
+        self._layout.setColumnStretch(1, 99)
+
+        # Configure
+        self._dclink_container.setHidden(True)
+        self._hide.clicked.connect(self._toggle_dclink)
+
+    def _toggle_dclink(self):
+        if self._dclink_container.isHidden():
+            self._hide.setText('-')
+            self._dclink_container.setHidden(False)
+        else:
+            self._hide.setText('+')
+            self._dclink_container.setHidden(True)
+
+    def _create_actions(self):
+        self._turn_on_action = QAction('Turn DCLinks On', self)
+        self._turn_on_action.triggered.connect(
+            lambda: self._set_dclink_pwrstate(True))
+        self._turn_off_action = QAction('Turn DCLinks Off', self)
+        self._turn_off_action.triggered.connect(
+            lambda: self._set_dclink_pwrstate(False))
+        self._open_loop_action = QAction('Open DCLinks Control Loop', self)
+        self._open_loop_action.triggered.connect(
+            lambda: self._set_dclink_control_loop(False))
+        self._close_loop_action = QAction('Close DCLinks Control Loop', self)
+        self._close_loop_action.triggered.connect(
+            lambda: self._set_dclink_control_loop(True))
+        self._set_setpoint_action = QAction('Set DCLinks voltage', self)
+        self._set_setpoint_action.triggered.connect(self._set_setpoint)
+        self._reset_intlk_action = QAction('Reset DCLinks Interlocks', self)
+
+    # Action methods
+    def _set_dclink_pwrstate(self, value):
+        for dclink in self.dclink_widgets():
+            btn = dclink.state_btn
+            if value:
+                if not btn._bit_val:
+                    btn.send_value()
+            else:
+                if btn._bit_val:
+                    btn.send_value()
+
+    def _set_dclink_control_loop(self, value):
+        for dclink in self.dclink_widgets():
+            btn = dclink.control_btn
+            if value:
+                if btn._bit_val:
+                    btn.send_value()
+            else:
+                if not btn._bit_val:
+                    btn.send_value()
+
+    def _set_setpoint(self):
+        """Set current setpoint for every visible widget."""
+        dlg = QInputDialog(self)
+        dlg.setLocale(QLocale(QLocale.English))
+        new_value, ok = dlg.getDouble(
+            self, "New setpoint", "Value")
+        if ok:
+            for dclink in self.dclink_widgets():
+                sp = dclink.setpoint.sp_lineedit
+                sp.setText(str(new_value))
+                try:
+                    sp.send_value()
+                except TypeError:
+                    pass
+
+    def _reset_intlk(self):
+        for dclink in self.dclink_widgets():
+            dclink.reset.click()
+
+    # Overloaded method
+    def contextMenuEvent(self, event):
+        """Overload to create a custom context menu."""
+        widget = self.childAt(event.pos())
+        parent = widget.parent()
+        grand_parent = parent.parent()
+        if widget.objectName() == 'DCLinkContainer' or \
+                parent.objectName() == 'DCLinkContainer' or \
+                grand_parent.objectName() == 'DCLinkContainer':
+            menu = QMenu(self)
+            menu.addAction(self._turn_on_action)
+            menu.addAction(self._turn_off_action)
+            menu.addSeparator()
+            menu.addAction(self._close_loop_action)
+            menu.addAction(self._open_loop_action)
+            menu.addSeparator()
+            menu.addAction(self._set_setpoint_action)
+            menu.addSeparator()
+            menu.addAction(self._reset_intlk_action)
+            menu.popup(event.globalPos())
+        else:
+            super().contextMenuEvent(event)
+
+    def dclink_widgets(self):
+        return self._dclink_container.findChildren(DCLinkWidget)
 
 
 class BasePSControlWidget(QWidget):
@@ -183,7 +346,8 @@ class BasePSControlWidget(QWidget):
                                                    parent=self, header=False)
                 else:
                     ps_widget = self._widget_class(psname=psname, parent=self)
-                group_widgets.append(ps_widget)
+                pscontainer = PSContainer(ps_widget, self)
+                group_widgets.append(pscontainer)
                 self.widgets_list[psname] = ps_widget
                 self.filtered_widgets.add(psname)
 
