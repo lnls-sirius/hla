@@ -46,6 +46,8 @@ class QTreeItem(QTreeWidgetItem):
     def setData(self, column, role, value):
         """Set data."""
         if column == 0 and role == Qt.CheckStateRole:
+            if self.checkState(0) == Qt.PartiallyChecked:
+                value = Qt.Unchecked
             # Trigger parent check
             if isinstance(self.parent(), QTreeItem):
                 self.parent().childChecked(self, column, value)
