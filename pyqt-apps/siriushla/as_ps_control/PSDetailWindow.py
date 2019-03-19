@@ -47,6 +47,8 @@ class PSDetailWindow(SiriusMainWindow):
                 dclinks = PSSearch.conv_psname_2_dclink(psname)
                 if dclinks:
                     connect_window(w, PSDetailWindow, self, psname=dclinks)
+                else:
+                    w.setHidden(True)
 
 
 if __name__ == '__main__':
