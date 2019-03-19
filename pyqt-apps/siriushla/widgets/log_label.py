@@ -87,6 +87,7 @@ class PyDMLogLabel(QListWidget, TextFormatter, PyDMWidget, DisplayFormat):
 
         if item is not None:
             self.addItem(item)
+            self.scrollToBottom()
 
     @Property(DisplayFormat)
     def displayFormat(self):
