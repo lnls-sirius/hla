@@ -246,9 +246,11 @@ class BaseWidget(QWidget):
         return QColor(255, cor, 0) if pln == 'y' else QColor(0, cor, 255)
 
     def _show_tooltip(self, pos, pln='x'):
+        unit = 'rad'
         if self.is_orb:
             names = self._csorb.BPM_NICKNAMES
             posi = self._csorb.BPM_POS
+            unit = 'm'
         elif pln == 'x':
             names = self._csorb.CH_NICKNAMES
             posi = self._csorb.CH_POS
@@ -260,10 +262,14 @@ class BaseWidget(QWidget):
         curve = graph.curveAtIndex(0)
         posx = curve.scatter.mapFromScene(pos).x()
         ind = _np.argmin(_np.abs(_np.array(posi)-posx))
+        posy = curve.scatter.mapFromScene(pos).y()
 
+        sca, prf = functions.siScale(posy)
+        txt = '{0:s}, y = {1:.3f} {2:s}'.format(
+                                names[ind], sca*posy, prf+unit)
         QToolTip.showText(
             graph.mapToGlobal(pos.toPoint()),
-            names[ind], graph, graph.geometry(), 500)
+            txt, graph, graph.geometry(), 500)
 
     def _set_enable_list(self, pln, idx):
         val = self.enbl_pvs_set[pln].getvalue()
