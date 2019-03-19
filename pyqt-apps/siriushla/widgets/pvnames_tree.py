@@ -120,8 +120,8 @@ class PVNameTree(QTreeWidget):
 
             self.finished.emit()
 
-
-    def __init__(self, items=tuple(), tree_levels=tuple(), parent=None):
+    def __init__(self, items=tuple(), tree_levels=tuple(),
+                 checked_levels=tuple(), parent=None):
         """Constructor."""
         super().__init__(parent)
 
@@ -139,6 +139,8 @@ class PVNameTree(QTreeWidget):
 
         self.check_children = True
         self.check_parent = True
+
+        self.check_requested_levels(checked_levels)
 
     def _setup_ui(self):
         self._add_items()
@@ -329,15 +331,15 @@ if __name__ == "__main__":
 
     app = SiriusApplication()
 
-    w = PVNameTree(tree_levels=('sec', 'mag_group'))
-    w.show()
     items = []
     for i in range(800):
         items.extend([('SI-Fam:MA-B1B1{}:PwrState-Sel'.format(i), 1, 0.0),
                       ('BO-Fam:MA-QD{}:Current-SP'.format(i), 1, 0.0),
                       ('BO-Fam:MA-B-{}:PwrState-Sel'.format(i), 1, 0.0)])
-    w.items = items
-    w.check_requested_levels(('BOQuadrupole', ))
+    w = PVNameTree(items=items, tree_levels=('sec', 'mag_group'), checked_levels=('BOQuadrupole', ))
+    w.show()
+    # w.items = items
+    # w.check_requested_levels(('BOQuadrupole', ))
 
     # sys.exit(app.exec_())
     app.exec_()
