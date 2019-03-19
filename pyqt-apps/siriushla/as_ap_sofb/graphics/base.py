@@ -110,7 +110,14 @@ class BaseWidget(QWidget):
         graph.doubleclick.connect(_part(self._set_enable_list, pln))
         graph.plotItem.scene().sigMouseMoved.connect(
                                 _part(self._show_tooltip, pln=pln))
-        graph.setLabel('bottom', text='BPM position', units='m')
+        if self.is_orb:
+            xlabel = 'BPM '
+        elif pln.lower().endswith('x'):
+            xlabel = 'CH '
+        else:
+            xlabel = 'CV '
+        xlabel += 'Position'
+        graph.setLabel('bottom', text=xlabel, units='m')
         lab = 'Orbit' if self.is_orb else 'Kick Angle'
         unit = 'm' if self.is_orb else 'rad'
         graph.setLabel('left', text=lab, units=unit)
