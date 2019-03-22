@@ -20,6 +20,7 @@ class BaseWidget(QWidget):
         self.prefix = prefix
         self.bpm = bpm
         self.data_prefix = data_prefix
+        self.bpmdb = _BPMDB
         self._chans = []
 
     def channels(self):
@@ -48,8 +49,8 @@ class BaseWidget(QWidget):
                     wid.showStepExponent = False
                     wid.limitsFromChannel = False
                     pvn = self.data_prefix + pv1
-                    wid.setMinimum(_BPMDB[pvn].get('low', -1e10))
-                    wid.setMaximum(_BPMDB[pvn].get('high', 1e10))
+                    wid.setMinimum(self.bpmdb[pvn].get('low', -1e10))
+                    wid.setMaximum(self.bpmdb[pvn].get('high', 1e10))
                 else:
                     wid = PyDMEnumComboBox(
                         self, init_channel=self.get_pvname(pv1))

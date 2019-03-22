@@ -14,6 +14,7 @@ from siriushla.widgets import SiriusSpectrogramView, SiriusConnectionSignal
 from siriushla.as_ap_sofb.graphics.base import BaseWidget, Graph
 from siriushla.as_ap_sofb.graphics.correctors import CorrectorsWidget
 
+
 class OrbitWidget(BaseWidget):
 
     def __init__(self, parent, prefix, ctrls=dict(), acc='SI'):
