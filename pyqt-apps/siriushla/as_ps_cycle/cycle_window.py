@@ -1,18 +1,17 @@
 """Magnet cycle window."""
-from math import isclose
+
 import time
-import epics
 
 from qtpy.QtCore import Signal, QThread, Qt
-from qtpy.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, \
+from qtpy.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, \
     QPushButton, QDialog, QLabel, QMessageBox
 
-from siriuspy.envars import vaca_prefix as VACA_PREFIX
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.as_ps_cycle.cycle_status_list import CycleStatusList
 from siriushla.widgets.pvnames_tree import PVNameTree
 from siriushla.widgets.dialog import ProgressDialog
-from siriuspy.search.ma_search import MASearch
+
+from .util import MagnetCycler, Timing, get_manames
 
 
 class CycleWindow(SiriusMainWindow):
@@ -22,6 +21,7 @@ class CycleWindow(SiriusMainWindow):
         """Constructor."""
         super().__init__(parent)
         # Data structs
+        self._timing = Timing()
         self._magnets = list()
         self._magnets_ready = list()
         self._magnets_failed = list()
@@ -45,8 +45,7 @@ class CycleWindow(SiriusMainWindow):
 
         self.prepare_button = QPushButton("Prepare to cycle", self)
         self.prepare_button.setObjectName('PrepareButton')
-        self.magnets_tree = PVNameTree(MASearch.get_manames({'dis': 'MA'}),
-                                       ('sec', 'mag_group'),
+        self.magnets_tree = PVNameTree(get_manames(), ('sec', 'mag_group'),
                                        self, self._checked_accs)
 
         self.central_widget.layout.addWidget(
@@ -60,7 +59,21 @@ class CycleWindow(SiriusMainWindow):
 
         self.prepare_button.pressed.connect(self._prepare_to_cycle)
 
+    def _prepare_timing(self):
+        self._timing.init()
+        status_nok = self._timing.status_nok
+        if status_nok:
+            sttr = 'Disconnected timing PVs: '
+            for pvname in status_nok:
+                sttr += pvname + ' '
+            QMessageBox.information(self, 'Message', sttr)
+            return False
+        return True
+
     def _prepare_to_cycle(self):
+
+        self._prepare_timing()
+
         self._magnets = self.magnets_tree.checked_items()
         self._magnets_ready = list()
         self._magnets_failed = list()
@@ -95,24 +108,9 @@ class CycleWindow(SiriusMainWindow):
         self.close()
 
     def _cycle(self):
-        def write_pv(pvname, value):
-            epics.caput(pvname, value, wait=True)
-            time.sleep(0.1)
-        write_pv('TAS-Glob:TI-EVG:ContinuousEvt-Sel', 0)
-        write_pv('TAS-Glob:TI-EVG:DevEnbl-Sel', 1)
-        write_pv('TAS-Glob:TI-EVG:ACDiv-SP', 30)
-        write_pv('TAS-Glob:TI-EVG:ACEnbl-Sel', 1)
-        write_pv('TAS-Glob:TI-EVG:RFDiv-SP', 4)
-        write_pv('TAS-Glob:TI-EVG:Evt01Mode-Sel', 'External')
-        write_pv('TAS-Glob:TI-EVR-1:DevEnbl-Sel', 1)
-        write_pv('TAS-Glob:TI-EVR-1:OTP08State-Sel', 1)
-        write_pv('TAS-Glob:TI-EVR-1:OTP08Width-SP', 7000)
-        write_pv('TAS-Glob:TI-EVR-1:OTP08Evt-SP', 1)
-        write_pv('TAS-Glob:TI-EVR-1:OTP08Polarity-Sel', 0)
-        write_pv('TAS-Glob:TI-EVR-1:OTP08Pulses-SP', 1)
-        write_pv('TAS-Glob:TI-EVR-1:OTP08Pulses-SP', 1)
-        write_pv('TAS-Glob:TI-EVG:Evt01Mode-Sel', 'External')
-        write_pv('TAS-Glob:TI-EVG:Evt01ExtTrig-Cmd', 1)
+        """."""
+        if self._prepare_timing():
+            self._timing.trigger()
 
     def _check_cycling_status(self, cycler, status):
         """Check magnet cycling status."""
@@ -121,111 +119,6 @@ class CycleWindow(SiriusMainWindow):
             self._magnets_ready.append(self._magnets[row])
         else:
             self._magnets_failed.append(self._magnets[row])
-
-
-class MagnetCycler:
-    """Handle magnet properties related to cycling."""
-
-    def __init__(self, maname):
-        """Constructor."""
-        self._maname = maname
-        self.pwrstate_sel = epics.get_pv(
-            VACA_PREFIX + self._maname + ':PwrState-Sel')
-        self.cycletype_sel = \
-            epics.get_pv(VACA_PREFIX + self._maname + ':CycleType-Sel')
-        self.cyclefreq_sp = \
-            epics.get_pv(VACA_PREFIX + self._maname + ':CycleFreq-SP')
-        self.cycleampl_sp = \
-            epics.get_pv(VACA_PREFIX + self._maname + ':CycleAmpl-SP')
-        self.opmode_sel = \
-            epics.get_pv(VACA_PREFIX + self._maname + ':OpMode-Sel')
-        self.pwrstate_sts = \
-            epics.get_pv(VACA_PREFIX + self._maname + ':PwrState-Sts')
-        self.cycletype_sts = \
-            epics.get_pv(VACA_PREFIX + self._maname + ':CycleType-Sts')
-        self.cyclefreq_rb = \
-            epics.get_pv(VACA_PREFIX + self._maname + ':CycleFreq-RB')
-        self.cycleampl_rb = \
-            epics.get_pv(VACA_PREFIX + self._maname + ':CycleAmpl-RB')
-        self.opmode_sts = \
-            epics.get_pv(VACA_PREFIX + self._maname + ':OpMode-Sts')
-
-        self.pwrstate = 1
-        self.cycletype = 0
-        self.cyclefreq = 0.3
-        self.cycleampl = 2.0
-        self.opmode = 2
-
-    @property
-    def maname(self):
-        """Magnet name."""
-        return self._maname
-
-    def set_on(self):
-        """Turn magnet PS on."""
-        return self.conn_put(self.pwrstate_sel, self.pwrstate)
-
-    def set_params(self):
-        """Set cycling params."""
-        return (self.conn_put(self.cycletype_sel, self.cycletype) and
-                self.conn_put(self.cyclefreq_sp, self.cyclefreq) and
-                self.conn_put(self.cycleampl_sp, self.cycleampl))
-
-    def set_mode(self):
-        """Set magnet to cycling mode."""
-        return self.conn_put(self.opmode_sel, self.opmode)
-
-    def set_cycle(self):
-        """Set magnet to cycling mode."""
-        self.conn_put(self.opmode_sel, 0)
-        self.set_on()
-        self.set_params()
-        self.set_mode()
-
-    def on_rdy(self):
-        """Return wether magnet PS is on."""
-        return self.timed_get(self.pwrstate_sts, self.pwrstate)
-
-    def params_rdy(self):
-        """Return wether magnet cycling parameters are set."""
-        return (self.timed_get(self.cycletype_sts, self.cycletype) and
-                self.timed_get(self.cyclefreq_rb, self.cyclefreq) and
-                self.timed_get(self.cycleampl_rb, self.cycleampl))
-
-    def mode_rdy(self):
-        """Return wether magnet is in cycling mode."""
-        return self.timed_get(self.opmode_sts, self.opmode)
-
-    def is_ready(self):
-        """Return wether magnet is ready to cycle."""
-        return self.on_rdy() and self.params_rdy() and self.mode_rdy()
-
-    def conn_put(self, pv, value):
-        """Put if connected."""
-        if not pv.connected:
-            return False
-        if pv.put(value):
-            time.sleep(0.1)
-            return True
-        return False
-
-    def timed_get(self, pv, value, wait=1):
-        """Do timed get."""
-        if not pv.connected:
-            return False
-        t = 0
-        init = time.time()
-        while t < wait:
-            if isinstance(value, float):
-                if isclose(pv.get(), value, rel_tol=1e-06, abs_tol=0.0):
-                    return True
-
-            else:
-                if pv.get() == value:
-                    return True
-            t = time.time() - init
-            time.sleep(0.1)
-        return False
 
 
 class CyclingDlg(QDialog):
@@ -357,18 +250,12 @@ class WaitCycle(QThread):
         self._cyclers = cyclers
         self.quit_task = False
 
-        field = ':CycleEnbl-Mon'
-        self.pvs = \
-            {cycler.maname: epics.get_pv(VACA_PREFIX + cycler.maname + field)
-             for cycler in cyclers}
-        self.pvs_state = \
-            {VACA_PREFIX + maname + field: 0 for maname in self.pvs}
-
-        self.ps_count = len(self.pvs)
+        self.pvs_state = {cycler.cycleenbl_mon.pvname: 0 for cycler in cyclers}
+        self.ps_count = len(self.pvs_state)
         self.ps_cycled = 0
 
-        for pv in self.pvs.values():
-            pv.add_callback(self.check_cycle_end)
+        for cycler in cyclers:
+            cycler.cycleenbl.add_callback(self.check_cycle_end)
 
     def size(self):
         """Return task size."""
@@ -411,7 +298,6 @@ if __name__ == '__main__':
     application = SiriusApplication()
 
     w = CycleWindow()
-    # w.setStyleSheet("font-size: 16pt;")
     w.show()
 
     sys.exit(application.exec_())
