@@ -6,6 +6,7 @@ from math import isclose as _isclose
 
 from siriuspy.envars import vaca_prefix as VACA_PREFIX
 from siriuspy.search.ma_search import MASearch
+from siriuspy.csdevice.pwrsupply import Const as _PSConst
 
 
 CONNECTION_TIMEOUT = 0.05
@@ -68,11 +69,11 @@ class Timing:
 
         Return list with names of failing PVs.
         """
-        if Timing._pvs_ti is None:
+        if Timing._pvs is None:
             Timing._create_pvs()
 
         self._status_nok = []
-        for prop, pv_defval in _pvs_ti.items():
+        for prop, pv_defval in Timing._pvs.items():
             pv, defval = pv_defval
             pv.get()  # force connection
             if pv.connected:
@@ -91,11 +92,11 @@ class Timing:
 
     def _create_pvs():
         """."""
-        global _pvs_ti
+        # global _pvs_ti
         Timing._pvs = dict()
         for key, value in Timing._properties.items():
             Timing._pvs[key] = (
-                _epics.PV(key, connection_timeout=CONNECTION_TIMEOUT), value)
+                _epics.PV(VACA_PREFIX + key, connection_timeout=CONNECTION_TIMEOUT), value)
 
 
 class MagnetCycler:
@@ -125,7 +126,7 @@ class MagnetCycler:
         self.opmode_sts = \
             _epics.get_pv(VACA_PREFIX + self._maname + ':OpMode-Sts')
         self.cycleenbl_mon = \
-            _epics.get_pv(VACA_PREFIX + self._maname + ':CyCleEnbl-Mon')
+            _epics.get_pv(VACA_PREFIX + self._maname + ':CycleEnbl-Mon')
 
         self.pwrstate = 1
         self.cycletype = 0
@@ -150,13 +151,15 @@ class MagnetCycler:
 
     def set_mode(self):
         """Set magnet to cycling mode."""
-        return self.conn_put(self.opmode_sel, self.opmode)
+        return self.conn_put(self.opmode_sel, _PSConst.OpMode.Cycle)
 
     def set_cycle(self):
         """Set magnet to cycling mode."""
         self.conn_put(self.opmode_sel, 0)
         self.set_on()
+        _time.sleep(1e-2)
         self.set_params()
+        _time.sleep(1e-2)
         self.set_mode()
 
     def on_rdy(self):
@@ -171,7 +174,7 @@ class MagnetCycler:
 
     def mode_rdy(self):
         """Return wether magnet is in cycling mode."""
-        return self.timed_get(self.opmode_sts, self.opmode)
+        return self.timed_get(self.opmode_sts, _PSConst.States.Cycle)
 
     def is_ready(self):
         """Return wether magnet is ready to cycle."""
@@ -182,11 +185,10 @@ class MagnetCycler:
         if not pv.connected:
             return False
         if pv.put(value):
-            _time.sleep(0.1)
             return True
         return False
 
-    def timed_get(self, pv, value, wait=1):
+    def timed_get(self, pv, value, wait=10):
         """Do timed get."""
         if not pv.connected:
             return False
@@ -201,5 +203,5 @@ class MagnetCycler:
                 if pv.get() == value:
                     return True
             t = _time.time() - init
-            _time.sleep(0.1)
+            _time.sleep(5e-3)
         return False
