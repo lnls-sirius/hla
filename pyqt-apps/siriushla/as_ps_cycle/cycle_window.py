@@ -109,9 +109,8 @@ class CycleWindow(SiriusMainWindow):
 
     def _cycle(self):
         """."""
-        # f self._prepare_timing():
-        #     self._timing.trigger()
-        self._timing.trigger()
+        if self._prepare_timing():
+            self._timing.trigger()
 
     def _check_cycling_status(self, cycler, status):
         """Check magnet cycling status."""
