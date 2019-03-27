@@ -51,11 +51,17 @@ class AcqControlWidget(BaseWidget):
         lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
         wid = self.create_pair(grp_bx, 'SmoothNrPts')
         fbl.addRow(lbl, wid)
+        lbl = QLabel('Buffer Size', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
+        pdm_lbl = PyDMLabel(grp_bx, init_channel=self.prefix+'BufferCount-Mon')
         pdm_btn = PyDMPushButton(
             init_channel=self.prefix+'SmoothReset-Cmd',
             pressValue=1,
             label='Reset Buffer')
-        fbl.addWidget(pdm_btn)
+        hbl = QHBoxLayout()
+        hbl.addWidget(pdm_lbl)
+        hbl.addWidget(pdm_btn)
+        fbl.addRow(lbl, hbl)
 
         vbl = QVBoxLayout()
         if self.isring:
