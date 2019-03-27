@@ -46,7 +46,7 @@ class CycleWindow(SiriusMainWindow):
         self.prepare_button = QPushButton("Prepare to cycle", self)
         self.prepare_button.setObjectName('PrepareButton')
         self.magnets_tree = PVNameTree(get_manames(), ('sec', 'mag_group'),
-                                       self, self._checked_accs)
+                                       self._checked_accs, self)
 
         self.central_widget.layout.addWidget(
             QLabel('<h3>Magnet Cycling</h3>', self, alignment=Qt.AlignCenter))
@@ -255,7 +255,7 @@ class WaitCycle(QThread):
         self.ps_cycled = 0
 
         for cycler in cyclers:
-            cycler.cycleenbl.add_callback(self.check_cycle_end)
+            cycler.cycleenbl_mon.add_callback(self.check_cycle_end)
 
     def size(self):
         """Return task size."""
