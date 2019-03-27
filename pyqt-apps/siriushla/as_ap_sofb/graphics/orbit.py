@@ -6,7 +6,7 @@ from pyqtgraph import functions
 from qtpy.QtWidgets import QWidget, QLabel, QVBoxLayout, QPushButton, \
     QHBoxLayout, QGroupBox, QComboBox, QToolTip
 from qtpy.QtCore import Qt, Signal
-from siriuspy.csdevice.orbitcorr import OrbitCorrDevFactory
+from siriuspy.csdevice.orbitcorr import SOFBFactory
 import siriushla.util as _util
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets import SiriusSpectrogramView, SiriusConnectionSignal
@@ -25,9 +25,9 @@ class OrbitWidget(BaseWidget):
         names = ['Line {0:d}'.format(i+1) for i in range(2)]
         super().__init__(parent, prefix, ctrls, names, True, acc)
 
-        txt1, txt2 = 'SinglePass', 'Reference Orbit'
+        txt1, txt2 = 'SPassOrb', 'RefOrb'
         if self.isring:
-            txt1 = 'Slow Orbit'
+            txt1 = 'SlowOrb'
 
         self.updater[0].some_changed('val', txt1)
         self.updater[0].some_changed('ref', txt2)
@@ -257,7 +257,7 @@ class SinglePassSumWidget(QWidget):
         super().__init__(parent)
         self.prefix = prefix
         self.acc = acc.upper()
-        self._csorb = OrbitCorrDevFactory.create(acc)
+        self._csorb = SOFBFactory.create(acc)
         self.setupui()
 
     def setupui(self):
