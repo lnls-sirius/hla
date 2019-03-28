@@ -6,7 +6,7 @@ import sys
 
 from qtpy.QtWidgets import QVBoxLayout, QHBoxLayout, QGridLayout, \
                            QGroupBox, QPushButton, QWidget, QLabel, \
-                           QAction, QInputDialog, QLineEdit, QMenu
+                           QInputDialog, QLineEdit, QMenu
 from qtpy.QtCore import Qt
 from siriushla.sirius_application import SiriusApplication
 from siriushla import util
@@ -81,6 +81,9 @@ class ControlApplication(SiriusMainWindow):
         pscycle = QPushButton('PS Cycle', self)
         util.connect_newprocess(pscycle, 'sirius-hla-as-ps-cycle.py')
 
+        psdiag = QPushButton('PS Diag', self)
+        util.connect_newprocess(psdiag, 'sirius-hla-as-ps-diag.py')
+
         pstest = QPushButton('PS Test', self)
         util.connect_newprocess(pstest, 'sirius-hla-as-ps-test.py')
 
@@ -101,9 +104,10 @@ class ControlApplication(SiriusMainWindow):
         lay.addWidget(timing, 0, 2)
         lay.addWidget(pscycle, 1, 0)
         lay.addWidget(pstest, 1, 1)
-        lay.addWidget(psmonitor, 1, 2)
-        lay.addWidget(energy_button, 1, 3)
-        lay.addWidget(offconv, 1, 4)
+        lay.addWidget(psdiag, 1, 2)
+        lay.addWidget(psmonitor, 1, 3)
+        lay.addWidget(energy_button, 1, 4)
+        lay.addWidget(offconv, 1, 5)
         return lay
 
     def _create_serv_layout(self):
