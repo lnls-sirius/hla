@@ -17,7 +17,6 @@ args = parser.parse_args()
 
 
 app = SiriusApplication()
-# when operating with all sections, remove 'sections' argument
-window = PSMonitor(prefix=args.prefix, sections=['LI', 'TB', 'BO'])
+window = PSMonitor(prefix=args.prefix)
 window.show()
 sys.exit(app.exec_())
