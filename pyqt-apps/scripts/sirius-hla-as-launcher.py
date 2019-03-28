@@ -258,12 +258,9 @@ class ControlApplication(SiriusMainWindow):
             'Enter password to phyuser@linacopi1: ',
             echo=QLineEdit.Password)
         if ok:
-            LI_action = QAction()
-            util.connect_newprocess(
-                LI_action,
+            util.run_newprocess(
                 ['sshpass', '-p', password, 'ssh', '-X', 'phyuser@linacopi1',
                  'sh', '-c', '/home/sirius/work/opi/sirius-main.sh'])
-            LI_action.trigger()
 
 
 if __name__ == "__main__":
