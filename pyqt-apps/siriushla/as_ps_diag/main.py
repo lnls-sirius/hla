@@ -26,24 +26,8 @@ from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, \
     PyDMLedMultiChannel, PyDMLed, PyDMLedMultiConnection, QLed
 
-
-LINAC_PS = [SiriusPVName(text) for text in (
-            'LA-CN:H1MLPS-1', 'LA-CN:H1MLPS-2', 'LA-CN:H1MLPS-3',
-            'LA-CN:H1MLPS-4', 'LA-CN:H1RCPS-1',
-            'LA-CN:H1SCPS-1', 'LA-CN:H1SCPS-2', 'LA-CN:H1SCPS-3',
-            'LA-CN:H1SCPS-4', 'LA-CN:H1LCPS-1', 'LA-CN:H1LCPS-2',
-            'LA-CN:H1LCPS-3', 'LA-CN:H1LCPS-4', 'LA-CN:H1LCPS-5',
-            'LA-CN:H1LCPS-6', 'LA-CN:H1LCPS-7', 'LA-CN:H1LCPS-8',
-            'LA-CN:H1LCPS-9', 'LA-CN:H1LCPS-10',
-            'LA-CN:H1SLPS-1', 'LA-CN:H1SLPS-2', 'LA-CN:H1SLPS-3',
-            'LA-CN:H1SLPS-4', 'LA-CN:H1SLPS-5', 'LA-CN:H1SLPS-6',
-            'LA-CN:H1SLPS-7', 'LA-CN:H1SLPS-8', 'LA-CN:H1SLPS-9',
-            'LA-CN:H1SLPS-10', 'LA-CN:H1SLPS-11', 'LA-CN:H1SLPS-12',
-            'LA-CN:H1SLPS-13', 'LA-CN:H1SLPS-14', 'LA-CN:H1SLPS-15',
-            'LA-CN:H1SLPS-16', 'LA-CN:H1SLPS-17', 'LA-CN:H1SLPS-18',
-            'LA-CN:H1SLPS-19', 'LA-CN:H1SLPS-20', 'LA-CN:H1SLPS-21',
-            'LA-CN:H1FQPS-1', 'LA-CN:H1FQPS-2', 'LA-CN:H1FQPS-3',
-            'LA-CN:H1DQPS-1', 'LA-CN:H1DQPS-2', 'LA-CN:H1DPPS-1')]
+from siriushla.as_ps_diag.util import LINAC_PS, sec2label, \
+                                      asps2labels, lips2labels
 
 
 class PSDiag(SiriusMainWindow):
@@ -66,24 +50,6 @@ class PSDiag(SiriusMainWindow):
         panel_lay.setHorizontalSpacing(5)
         panel.setLayout(panel_lay)
 
-        sec2label = {'LI': '<h3>Linac</h3>',
-                     'TB': '<h3>LTB</h3>',
-                     'BO': '<h3>Booster</h3>'}
-        # # TODO: discomment to use TS and SI
-        #              'TS': '<h3>BTS</h3>',
-        #              'SI': '<h3>Storage Ring</h3>'}
-        asps2labels = {'B.*': 'Dipoles',
-                       'Q(F|D).*': 'Quadrupoles',
-                       'QS.*': 'Skew Quadrupoles ',
-                       'S.*': 'Sextupoles',
-                       'C(H|V).*': 'Slow Correctors ',
-                       'FC(H|V).*': 'Fast Correctors '}
-        lips2labels = {'H1(ML|RC).*': 'Lens',
-                       'H1(SC|LC).*': 'Correctors',
-                       'H1SL.*': 'Solenoids',
-                       'H1(F|D)Q.*': 'Quadrupoles',
-                       'H1DP.*': 'Spectrometer'}
-
         # # Leds Header
         for i, lab in enumerate(
                 ['', 'PS\nConn?', 'MA\nConn?',
@@ -99,7 +65,7 @@ class PSDiag(SiriusMainWindow):
         _slowref = _PSConst.States.SlowRef
         i = 2
         for sec in sec2label.keys():
-            seclabel = QLabel(sec2label[sec], panel)
+            seclabel = QLabel('<h3>'+sec2label[sec]+'</h3>', panel)
             panel_lay.addWidget(seclabel, i, 0)
             i += 1
             if sec == 'LI':
