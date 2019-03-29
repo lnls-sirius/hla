@@ -1,4 +1,5 @@
 """Utilities for ps-cycle."""
+import numpy as np
 
 import time as _time
 import epics as _epics
@@ -116,15 +117,15 @@ class MagnetCycler:
         self.opmode_sel = \
             _epics.get_pv(VACA_PREFIX + self._maname + ':OpMode-Sel')
         self.pwrstate_sts = \
-            _epics.get_pv(VACA_PREFIX + self._maname + ':PwrState-Sts')
+            _epics.get_pv(VACA_PREFIX + self._maname + ':PwrState-Sts', form='native')
         self.cycletype_sts = \
-            _epics.get_pv(VACA_PREFIX + self._maname + ':CycleType-Sts')
+            _epics.get_pv(VACA_PREFIX + self._maname + ':CycleType-Sts', form='native')
         self.cyclefreq_rb = \
-            _epics.get_pv(VACA_PREFIX + self._maname + ':CycleFreq-RB')
+            _epics.get_pv(VACA_PREFIX + self._maname + ':CycleFreq-RB', form='native')
         self.cycleampl_rb = \
-            _epics.get_pv(VACA_PREFIX + self._maname + ':CycleAmpl-RB')
+            _epics.get_pv(VACA_PREFIX + self._maname + ':CycleAmpl-RB', form='native')
         self.opmode_sts = \
-            _epics.get_pv(VACA_PREFIX + self._maname + ':OpMode-Sts')
+            _epics.get_pv(VACA_PREFIX + self._maname + ':OpMode-Sts', form='native')
         self.cycleenbl_mon = \
             _epics.get_pv(VACA_PREFIX + self._maname + ':CycleEnbl-Mon')
 
@@ -188,7 +189,7 @@ class MagnetCycler:
             return True
         return False
 
-    def timed_get(self, pv, value, wait=10):
+    def timed_get(self, pv, value, wait=20):
         """Do timed get."""
         if not pv.connected:
             return False
@@ -200,8 +201,15 @@ class MagnetCycler:
                     return True
 
             else:
-                if pv.get() == value:
-                    return True
+                v = pv.get()
+                if isinstance(v, np.ndarray):
+                    if np.all(v == value):
+                        return True
+                else:
+                    if v == value:
+                        return True
+                # if pv.get() == value:
+                #     return True
             t = _time.time() - init
-            _time.sleep(5e-3)
+            _time.sleep(5e-1)
         return False

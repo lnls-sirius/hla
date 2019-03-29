@@ -105,7 +105,7 @@ class CycleWindow(SiriusMainWindow):
             return
 
         QMessageBox.information(self, 'Message', 'Cycle finished sucessfully!')
-        self.close()
+        # self.close()
 
     def _cycle(self):
         """."""
@@ -227,7 +227,6 @@ class VerifyCycle(QThread):
         if self.quit_task:
             self.finished.emit()
         else:
-            time.sleep(2)
             for cycler in self._cyclers:
                 self.currentItem.emit(cycler.maname)
                 status = cycler.is_ready()
