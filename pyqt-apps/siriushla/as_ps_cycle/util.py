@@ -97,7 +97,8 @@ class Timing:
         Timing._pvs = dict()
         for key, value in Timing._properties.items():
             Timing._pvs[key] = (
-                _epics.PV(VACA_PREFIX + key, connection_timeout=CONNECTION_TIMEOUT), value)
+                _epics.PV(VACA_PREFIX + key,
+                          connection_timeout=CONNECTION_TIMEOUT), value)
 
 
 class MagnetCycler:
@@ -117,15 +118,15 @@ class MagnetCycler:
         self.opmode_sel = \
             _epics.get_pv(VACA_PREFIX + self._maname + ':OpMode-Sel')
         self.pwrstate_sts = \
-            _epics.get_pv(VACA_PREFIX + self._maname + ':PwrState-Sts', form='native')
+            _epics.get_pv(VACA_PREFIX + self._maname + ':PwrState-Sts')
         self.cycletype_sts = \
-            _epics.get_pv(VACA_PREFIX + self._maname + ':CycleType-Sts', form='native')
+            _epics.get_pv(VACA_PREFIX + self._maname + ':CycleType-Sts')
         self.cyclefreq_rb = \
-            _epics.get_pv(VACA_PREFIX + self._maname + ':CycleFreq-RB', form='native')
+            _epics.get_pv(VACA_PREFIX + self._maname + ':CycleFreq-RB')
         self.cycleampl_rb = \
-            _epics.get_pv(VACA_PREFIX + self._maname + ':CycleAmpl-RB', form='native')
+            _epics.get_pv(VACA_PREFIX + self._maname + ':CycleAmpl-RB')
         self.opmode_sts = \
-            _epics.get_pv(VACA_PREFIX + self._maname + ':OpMode-Sts', form='native')
+            _epics.get_pv(VACA_PREFIX + self._maname + ':OpMode-Sts')
         self.cycleenbl_mon = \
             _epics.get_pv(VACA_PREFIX + self._maname + ':CycleEnbl-Mon')
 
@@ -211,5 +212,5 @@ class MagnetCycler:
                 # if pv.get() == value:
                 #     return True
             t = _time.time() - init
-            _time.sleep(5e-1)
+            _time.sleep(5e-3)
         return False
