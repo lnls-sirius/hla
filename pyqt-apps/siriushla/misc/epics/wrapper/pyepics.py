@@ -1,7 +1,9 @@
 import time
 import epics
 from math import isclose
+import numpy as _np
 from siriuspy.envars import vaca_prefix as _VACA_PREFIX
+
 
 class PyEpicsWrapper:
     """Wraps a PV object.
@@ -45,20 +47,23 @@ class PyEpicsWrapper:
         if not self.connected(self._pv):
             return False
 
-        t = 0
-        init = time.time()
-        while t < wait:
-            if isinstance(value, float):
-                pv_value = self._pv.get(use_monitor=False)
-                if (pv_value is not None and
-                        isclose(pv_value, value, rel_tol=1e-06, abs_tol=0.0)):
-                    return True
-            else:
-                if self._pv.get(use_monitor=False) == value:
-                    return True
-            t = time.time() - init
-            time.sleep(5e-3)
+        dt = 5e-3
+        for _ in range(int(wait/dt)):
+            pvv = self._pv.get(use_monitor=False)
+            if pvv is not None:
+                break
+            time.sleep(dt)
 
+        if pvv is None:
+            return False
+        elif isinstance(pvv, _np.ndarray) or isinstance(value, _np.ndarray):
+            if _np.allclose(pvv, value, rtol=1e-06, atol=0.0):
+                return True
+        elif isinstance(pvv, float) or isinstance(value, float):
+            if isclose(pvv, value, rel_tol=1e-06, abs_tol=0.0):
+                return True
+        elif pvv == value:
+            return True
         return False
 
     def get(self):

@@ -176,9 +176,9 @@ class SetConfigurationWindow(SiriusMainWindow):
         self._tree_msg.setText('Showing {} PVs.'.format(selected_pvs))
 
     @Slot()
-    def _set(self): 
+    def _set(self):
         # Get selected PVs
-        selected_pvs = self._tree.checked_items()
+        selected_pvs = set(self._tree.checked_items())
 
         set_pvs_tuple = list()
         check_pvs_tuple = list()
