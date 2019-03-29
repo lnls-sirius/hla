@@ -46,35 +46,7 @@ class ASAPPosAngCorr(SiriusMainWindow):
         self.setCentralWidget(self.centralwidget)
         self.setWindowTitle(self._tl + ' Position and Angle Correction Window')
 
-        widget2pv_list = [[self.centralwidget.PyDMSpinbox_OrbXDeltaPos_SP,
-                           self._tl + '-Glob:AP-PosAng:DeltaPosX-SP'],
-                          [self.centralwidget.PyDMLabel_OrbXDeltaPos_RB,
-                           self._tl + '-Glob:AP-PosAng:DeltaPosX-RB'],
-                          [self.centralwidget.PyDMSpinbox_OrbXDeltaAng_SP,
-                           self._tl + '-Glob:AP-PosAng:DeltaAngX-SP'],
-                          [self.centralwidget.PyDMLabel_OrbXDeltaAng_RB,
-                           self._tl + '-Glob:AP-PosAng:DeltaAngX-RB'],
-                          [self.centralwidget.PyDMSpinbox_OrbYDeltaPos_SP,
-                           self._tl + '-Glob:AP-PosAng:DeltaPosY-SP'],
-                          [self.centralwidget.PyDMLabel_OrbYDeltaPos_RB,
-                           self._tl + '-Glob:AP-PosAng:DeltaPosY-RB'],
-                          [self.centralwidget.PyDMSpinbox_OrbYDeltaAng_SP,
-                           self._tl + '-Glob:AP-PosAng:DeltaAngY-SP'],
-                          [self.centralwidget.PyDMLabel_OrbYDeltaAng_RB,
-                           self._tl + '-Glob:AP-PosAng:DeltaAngY-RB'],
-                          [self.centralwidget.PyDMPushButton_SetNewRefKick,
-                           self._tl + '-Glob:AP-PosAng:SetNewRefKick-Cmd'],
-                          [self.centralwidget.PyDMPushButton_ConfigMA,
-                           self._tl + '-Glob:AP-PosAng:ConfigMA-Cmd'],
-                          [self.centralwidget.PyDMLabel_RefKickCH1Mon,
-                           self._tl + '-Glob:AP-PosAng:RefKickCH1-Mon'],
-                          [self.centralwidget.PyDMLabel_RefKickCH2Mon,
-                           self._tl + '-Glob:AP-PosAng:RefKickCH2-Mon'],
-                          [self.centralwidget.PyDMLabel_RefKickCV1Mon,
-                           self._tl + '-Glob:AP-PosAng:RefKickCV1-Mon'],
-                          [self.centralwidget.PyDMLabel_RefKickCV2Mon,
-                           self._tl + '-Glob:AP-PosAng:RefKickCV2-Mon']]
-        self.set_widgets_channel(widget2pv_list)
+        self._set_widgets_channel()
 
         correctors = ['', '', '', '']
         if tl == 'ts':
@@ -87,25 +59,58 @@ class ASAPPosAngCorr(SiriusMainWindow):
             correctors[1] = Const.TB_CORRH_POSANG[1]
             correctors[2] = Const.TB_CORRV_POSANG[0]
             correctors[3] = Const.TB_CORRV_POSANG[1]
-        self._setCorrectorsChannels(correctors)
+        self._set_correctors_channels(correctors)
 
         act_settings = self.menuBar().addAction('Settings')
         _hlautil.connect_window(act_settings, _CorrParamsDetailWindow,
                                 parent=self, tl=self._tl, prefix=self._prefix)
 
-        self._setStatusLabels()
+        self._set_status_labels()
 
-    def set_widgets_channel(self, widget2pv_list):
-        """Set the PyDMWidgets channels.
+        self.setStyleSheet("""
+            PyDMSpinbox{
+                min-width: 5em;
+            }
+            PyDMLabel{
+                min-width: 5em;
+            }
+        """)
 
-        Receive:
-        widget_list --list of widgets to set channel
-        pv_list     --list of correspondent pvs
-        """
+    def _set_widgets_channel(self):
+        """Set the PyDMWidgets channels."""
+        widget2pv_list = [
+            [self.centralwidget.PyDMSpinbox_OrbXDeltaPos_SP,
+             self._tl + '-Glob:AP-PosAng:DeltaPosX-SP'],
+            [self.centralwidget.PyDMLabel_OrbXDeltaPos_RB,
+             self._tl + '-Glob:AP-PosAng:DeltaPosX-RB'],
+            [self.centralwidget.PyDMSpinbox_OrbXDeltaAng_SP,
+             self._tl + '-Glob:AP-PosAng:DeltaAngX-SP'],
+            [self.centralwidget.PyDMLabel_OrbXDeltaAng_RB,
+             self._tl + '-Glob:AP-PosAng:DeltaAngX-RB'],
+            [self.centralwidget.PyDMSpinbox_OrbYDeltaPos_SP,
+             self._tl + '-Glob:AP-PosAng:DeltaPosY-SP'],
+            [self.centralwidget.PyDMLabel_OrbYDeltaPos_RB,
+             self._tl + '-Glob:AP-PosAng:DeltaPosY-RB'],
+            [self.centralwidget.PyDMSpinbox_OrbYDeltaAng_SP,
+             self._tl + '-Glob:AP-PosAng:DeltaAngY-SP'],
+            [self.centralwidget.PyDMLabel_OrbYDeltaAng_RB,
+             self._tl + '-Glob:AP-PosAng:DeltaAngY-RB'],
+            [self.centralwidget.PyDMPushButton_SetNewRefKick,
+             self._tl + '-Glob:AP-PosAng:SetNewRefKick-Cmd'],
+            [self.centralwidget.PyDMPushButton_ConfigMA,
+             self._tl + '-Glob:AP-PosAng:ConfigMA-Cmd'],
+            [self.centralwidget.PyDMLabel_RefKickCH1Mon,
+             self._tl + '-Glob:AP-PosAng:RefKickCH1-Mon'],
+            [self.centralwidget.PyDMLabel_RefKickCH2Mon,
+             self._tl + '-Glob:AP-PosAng:RefKickCH2-Mon'],
+            [self.centralwidget.PyDMLabel_RefKickCV1Mon,
+             self._tl + '-Glob:AP-PosAng:RefKickCV1-Mon'],
+            [self.centralwidget.PyDMLabel_RefKickCV2Mon,
+             self._tl + '-Glob:AP-PosAng:RefKickCV2-Mon']]
         for widget, pv in widget2pv_list:
             widget.channel = self._prefix + pv
 
-    def _setCorrectorsChannels(self, correctors):
+    def _set_correctors_channels(self, correctors):
         self.centralwidget.pushButton_CH1.setText(correctors[0])
         _hlautil.connect_window(self.centralwidget.pushButton_CH1,
                                 _PSDetailWindow, self, psname=correctors[0])
@@ -145,7 +150,7 @@ class ASAPPosAngCorr(SiriusMainWindow):
         self.centralwidget.PyDMLabel_KickRBCV2.channel = (
             self._prefix + correctors[3] + ':Kick-RB')
 
-    def _setStatusLabels(self):
+    def _set_status_labels(self):
         for i in range(4):
             exec('self.centralwidget.label_status{0}.setText('
                  'Const.STATUSLABELS[{0}])'.format(i))
