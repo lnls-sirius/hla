@@ -136,13 +136,13 @@ class MultiTurnWidget(QWidget):
             parent=self,
             prefix=self.prefix,
             image_channel=self.prefix+'MTurnOrbX-Mon',
-            xaxis_channel=self.prefix+'BPMPosS-Cte',
+            xaxis_channel=self.prefix+'BPMPosS-Mon',
             yaxis_channel=self.prefix+'MTurnTime-Mon')
         self.specty = Spectrogram(
             parent=self,
             prefix=self.prefix,
             image_channel=self.prefix+'MTurnOrbY-Mon',
-            xaxis_channel=self.prefix+'BPMPosS-Cte',
+            xaxis_channel=self.prefix+'BPMPosS-Mon',
             yaxis_channel=self.prefix+'MTurnTime-Mon')
         self.spectx.normalizeData = True
         self.specty.normalizeData = True
@@ -182,7 +182,7 @@ class MultiTurnSumWidget(QWidget):
             parent=self,
             prefix=self.prefix,
             image_channel=self.prefix+'MTurnSum-Mon',
-            xaxis_channel=self.prefix+'BPMPosS-Cte',
+            xaxis_channel=self.prefix+'BPMPosS-Mon',
             yaxis_channel=self.prefix+'MTurnTime-Mon')
         self.spect.new_data_sig.connect(self.update_graph)
         self.spect.normalizeData = True
@@ -273,7 +273,7 @@ class SinglePassSumWidget(QWidget):
         graph.setLabel('left', text='Sum', units='count')
         opts = dict(
             y_channel=self.prefix+'SPassSum-Mon',
-            x_channel=self.prefix+'BPMPosS-Cte',
+            x_channel=self.prefix+'BPMPosS-Mon',
             name='',
             color='black',
             redraw_mode=2,
