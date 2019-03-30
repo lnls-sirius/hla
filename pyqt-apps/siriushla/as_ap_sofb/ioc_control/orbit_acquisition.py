@@ -38,6 +38,10 @@ class AcqControlWidget(BaseWidget):
         fbl = QFormLayout(grp_bx)
         wid = self.create_pair_sel(grp_bx, 'SOFBMode')
         fbl.addRow(wid)
+        lbl = QLabel('Extend Ring', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
+        wid = self.create_pair(grp_bx, 'RingSize')
+        fbl.addRow(lbl, wid)
 
         grp_bx = QGroupBox('Orbit Smoothing Control', self)
         vbl.addWidget(grp_bx)
