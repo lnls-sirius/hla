@@ -48,7 +48,6 @@ class BaseWidget(QWidget):
             'y': SiriusConnectionSignal(self.prefix+prefy+'EnblList-RB')}
         for pln, signal in self.enbl_pvs.items():
             sig = signal.new_value_signal[_np.ndarray]
-            sig.connect(_part(self._update_enable_list, pln))
             for upd in self.updater:
                 sig.connect(_part(upd.set_enbl_list, pln))
 
@@ -124,10 +123,11 @@ class BaseWidget(QWidget):
         graph.setObjectName(lab.replace(' ', '')+pln)
 
         pref = 'BPM' if self.is_orb else 'CH' if pln == 'x' else 'CV'
+        suf = 'Mon' if self.is_orb else 'Cte'
         for i, lname in enumerate(self.line_names):
             opts = dict(
                 y_channel='A',
-                x_channel=self.prefix + pref + 'PosS-Cte',
+                x_channel=self.prefix + pref + 'PosS-' + suf,
                 name=lname,
                 color=self._get_color(pln, i),
                 redraw_mode=2,
@@ -149,7 +149,8 @@ class BaseWidget(QWidget):
             self.updater[i].ave[pln].connect(cave.setValue)
             graph.addItem(cave)
             cdta = graph.curveAtIndex(-1)
-            self.updater[i].data_sig[pln].connect(cdta.receiveYWaveform)
+            self.updater[i].data_sig[pln].connect(
+                    _part(self._update_waveform, cdta, pln, i))
             cdta.setVisible(not i)
             cdta.curve.setZValue(-4*i)
             cdta.scatter.setZValue(-4*i)
@@ -268,6 +269,8 @@ class BaseWidget(QWidget):
         graph = self.graph[pln]
         curve = graph.curveAtIndex(0)
         posx = curve.scatter.mapFromScene(pos).x()
+        if self._csorb.isring():
+            posx = posx % self._csorb.C0
         ind = _np.argmin(_np.abs(_np.array(posi)-posx))
         posy = curve.scatter.mapFromScene(pos).y()
 
@@ -279,11 +282,11 @@ class BaseWidget(QWidget):
             txt, graph, graph.geometry(), 500)
 
     def _set_enable_list(self, pln, idx):
-        val = self.enbl_pvs_set[pln].getvalue()
+        val = self.enbl_pvs[pln].getvalue()
         val[idx] = not val[idx]
         self.enbl_pvs_set[pln].send_value_signal[_np.ndarray].emit(val)
 
-    def _update_enable_list(self, pln, array):
+    def _update_enable_list(self, pln, array, curve=None, idx=None):
         # cor = (255, 255, 255)
         # cor = (0, 200, 0)
         cor = (0, 0, 0)
@@ -293,8 +296,13 @@ class BaseWidget(QWidget):
         simb = 'o'
         offsz = 15
         size = 10
-        for i in range(len(self.line_names)):
-            trc = self.graph[pln].curveAtIndex(i)
+        trcs = []
+        if curve is None:
+            for i in range(len(self.line_names)):
+                trcs.append((i, self.graph[pln].curveAtIndex(i)))
+        else:
+            trcs.append((idx, curve))
+        for i, trc in trcs:
             cor = self._get_color(pln, i)
             brs = mkBrush(cor)
             pen = mkPen(cor)
@@ -315,6 +323,15 @@ class BaseWidget(QWidget):
             # trc.opts['symbol'] = simbs  # pyqtgraph bug does not allow this
             trc.opts['symbolSize'] = sizes
 
+    def _update_waveform(self, curve, plane, idx, data):
+        enbl = self.enbl_pvs[plane].value
+        if enbl is not None:
+            sz = min(enbl.size, data.size)
+            self._update_enable_list(plane, enbl[:sz], curve, idx)
+            curve.receiveYWaveform(data[:sz])
+        else:
+            curve.receiveYWaveform(data)
+
     def _save_difference(self, idx):
         updater = self.updater[idx]
         valx = updater.vectors['val']['x']
@@ -323,8 +340,9 @@ class BaseWidget(QWidget):
         refy = updater.vectors['ref']['y']
         if valx is None or refx is None or valy is None or refy is None:
             return
-        diffx = valx - refx
-        diffy = valy - refy
+        sz = min(valx.size, refx.size, valy.size, refy.size)
+        diffx = valx[:sz] - refx[:sz]
+        diffy = valy[:sz] - refy[:sz]
         header = '# ' + _datetime.now().strftime('%Y/%M/%d-%H:%M:%S') + '\n'
         filename = QFileDialog.getSaveFileName(
             caption='Define a File Name to Save the Orbit',
@@ -439,9 +457,13 @@ class UpdateGraph(QObject):
             ref = self.vectors['ref'][pln]
             if orb is None or ref is None:
                 return
-            diff = (orb - ref) * self.UNIT
-            if self.enbl_list[pln] is not None:
-                mask = diff[self.enbl_list[pln]]
+            sz = min(orb.size, ref.size)
+            diff = (orb[:sz] - ref[:sz]) * self.UNIT
+
+            enbl = self.enbl_list[pln]
+            if enbl is not None:
+                sz = min(sz, enbl.size)
+                mask = diff[:sz][enbl[:sz]]
             else:
                 mask = diff
             ave = float(mask.mean())
