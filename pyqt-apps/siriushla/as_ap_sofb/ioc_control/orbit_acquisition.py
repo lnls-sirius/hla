@@ -142,11 +142,10 @@ class AcqControlWidget(BaseWidget):
         lbl.setStyleSheet("""min-width:10em; max-width:10em;""")
         wid = self.create_pair(grp_bx, 'TrigNrSamplesPost')
         fbl.addRow(lbl, wid)
-        if self.isring:
-            lbl = QLabel('Downsampling', grp_bx, alignment=Qt.AlignCenter)
-            lbl.setStyleSheet("""min-width:10em; max-width:10em;""")
-            wid = self.create_pair(grp_bx, 'MTurnDownSample')
-            fbl.addRow(lbl, wid)
+        lbl = QLabel('Downsampling', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:10em; max-width:10em;""")
+        wid = self.create_pair(grp_bx, 'TrigDownSample')
+        fbl.addRow(lbl, wid)
 
         fbl.addItem(QSpacerItem(20, 20))
         lbl = QLabel('Control Acquisition:', grp_bx, alignment=Qt.AlignCenter)
