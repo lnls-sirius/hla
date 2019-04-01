@@ -113,10 +113,6 @@ class ASAPPosAngCorr(SiriusMainWindow):
         self.centralwidget.pushButton_CH1.setText(correctors[0])
         _hlautil.connect_window(self.centralwidget.pushButton_CH1,
                                 _PSDetailWindow, self, psname=correctors[0])
-        self.centralwidget.SiriusLedState_CH1.channel = (
-            self._prefix + correctors[0] + ':PwrState-Sts')
-        self.centralwidget.PyDMLabel_OpModeCH1.channel = (
-            self._prefix + correctors[0] + ':OpMode-Sts')
         self.centralwidget.PyDMLabel_KickRBCH1.channel = (
             self._prefix + correctors[0] + ':Kick-RB')
 
@@ -124,28 +120,18 @@ class ASAPPosAngCorr(SiriusMainWindow):
         _hlautil.connect_window(self.centralwidget.pushButton_CH2,
                                 _PulsedMagnetDetailWindow, self,
                                 maname=correctors[1])
-        self.centralwidget.SiriusLedState_CH2.channel = (
-            self._prefix + correctors[1] + ':PwrState-Sts')
         self.centralwidget.PyDMLabel_KickRBCH2.channel = (
             self._prefix + correctors[1] + ':Kick-RB')
 
         self.centralwidget.pushButton_CV1.setText(correctors[2])
         _hlautil.connect_window(self.centralwidget.pushButton_CV1,
                                 _PSDetailWindow, self, psname=correctors[2])
-        self.centralwidget.SiriusLedState_CV1.channel = (
-            self._prefix + correctors[2] + ':PwrState-Sts')
-        self.centralwidget.PyDMLabel_OpModeCV1.channel = (
-            self._prefix + correctors[2] + ':OpMode-Sts')
         self.centralwidget.PyDMLabel_KickRBCV1.channel = (
             self._prefix + correctors[2] + ':Kick-RB')
 
         self.centralwidget.pushButton_CV2.setText(correctors[3])
         _hlautil.connect_window(self.centralwidget.pushButton_CV2,
                                 _PSDetailWindow, self, psname=correctors[3])
-        self.centralwidget.SiriusLedState_CV2.channel = (
-            self._prefix + correctors[3] + ':PwrState-Sts')
-        self.centralwidget.PyDMLabel_OpModeCV2.channel = (
-            self._prefix + correctors[3] + ':OpMode-Sts')
         self.centralwidget.PyDMLabel_KickRBCV2.channel = (
             self._prefix + correctors[3] + ':Kick-RB')
 
