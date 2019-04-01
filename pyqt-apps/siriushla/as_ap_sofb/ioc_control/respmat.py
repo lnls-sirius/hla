@@ -190,7 +190,7 @@ class RespMatWidget(BaseWidget):
             return
         fname += '' if fname.endswith(self.EXT) else ('.' + self.EXT)
         respm = self._respmat_rb.getvalue()
-        respm = respm.reshape(2*self._csorb.NR_BPMS, -1)
+        respm = respm.reshape(-1, self._csorb.NR_CORRS)
         _np.savetxt(fname, respm, header=header)
 
     def _load_respmat_from_file(self):
@@ -220,7 +220,7 @@ class RespMatWidget(BaseWidget):
 
     def _save_respm(self, confname):
         val = self._respmat_rb.getvalue()
-        val = val.reshape(2*self._csorb.NR_BPMS, -1)
+        val = val.reshape(-1, self._csorb.NR_CORRS)
         try:
             self._servconf.config_insert(confname, val.tolist())
         except TypeError as e:
