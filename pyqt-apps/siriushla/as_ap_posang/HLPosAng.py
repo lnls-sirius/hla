@@ -246,3 +246,4 @@ class _ConfigLineEdit(PyDMLineEdit):
     def _config_changed(self, configname):
         self.setText(configname)
         self.send_value()
+        self.value_changed(configname)
