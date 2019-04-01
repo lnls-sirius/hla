@@ -24,7 +24,7 @@ class DetailWidgetFactory:
             if len(psname) > 1:
                 widget = QWidget(parent)
                 widget.layout = QGridLayout(widget)
-                n_lines = int(len(psname)/4)
+                n_lines = int(len(psname)/4) or 1
                 for idx, name in enumerate(psname):
                     widget.layout.addWidget(
                         DetailWidgetFactory._item(name, widget),
@@ -45,7 +45,7 @@ class DetailWidgetFactory:
             model = PSData(psname).psmodel
             if model == 'FBP_DCLink':
                 return FBPDCLinkDetailWidget(psname, parent)
-            elif model in ('FAC_ACDC', 'FAC_2P4S_ACDC'):
+            elif model in ('FAC_ACDC', 'FAC_2S_ACDC', 'FAC_2P4S_ACDC'):
                 return FACDCLinkDetailWidget(psname, parent)
             else:
                 raise ValueError('Undefined PS model: {}'.format(model))
