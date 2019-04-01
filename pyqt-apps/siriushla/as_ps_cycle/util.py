@@ -32,12 +32,12 @@ class Timing:
         'RA-RaMO:TI-EVG:UpdateEvt-Cmd': 1,
         'RA-RaMO:TI-EVG:CycleExtTrig-Cmd': None,  # There is not default value
 
-        'BO-Glob:TI-Mags:Src-Sel': 'Cycle',
-        'BO-Glob:TI-Mags:NrPulses-SP': DEFAULT_NRPULSES,
-        'BO-Glob:TI-Mags:Duration-SP': DEFAULT_DURATION,
-        'BO-Glob:TI-Mags:Delay-SP': DEFAULT_DELAY,
-        'BO-Glob:TI-Mags:Polarity-Sel': DEFAULT_POLARITY,  # test
-        'BO-Glob:TI-Mags:State-Sel': 'Enbl',
+        'TB-Glob:TI-Mags:Src-Sel': 'Cycle',
+        'TB-Glob:TI-Mags:NrPulses-SP': DEFAULT_NRPULSES,
+        'TB-Glob:TI-Mags:Duration-SP': DEFAULT_DURATION,
+        'TB-Glob:TI-Mags:Delay-SP': DEFAULT_DELAY,
+        'TB-Glob:TI-Mags:Polarity-Sel': DEFAULT_POLARITY,  # test
+        'TB-Glob:TI-Mags:State-Sel': 'Enbl',
 
         'BO-Glob:TI-Mags:Src-Sel': 'Cycle',
         'BO-Glob:TI-Mags:NrPulses-SP': DEFAULT_NRPULSES,
@@ -46,12 +46,13 @@ class Timing:
         'BO-Glob:TI-Mags:Polarity-Sel': DEFAULT_POLARITY,  # test
         'BO-Glob:TI-Mags:State-Sel': 'Enbl',
 
-        # 'BO-Glob:TI-Corrs:Src-Sel': 'Cycle',
-        # 'BO-Glob:TI-Corrs:NrPulses-SP': DEFAULT_NRPULSES,
-        # 'BO-Glob:TI-Corrs:Duration-SP': DEFAULT_DURATION_SP,
-        # 'BO-Glob:TI-Corrs:Delay-SP': DEFAULT_DELAY,
-        # 'BO-Glob:TI-Corrs:Polarity-Sel': DEFAULT_POLARITY,  # test
-        # 'BO-Glob:TI-Corrs:State-Sel': 'Enbl',
+        'BO-Glob:TI-Corrs:Src-Sel': 'Cycle',
+        'BO-Glob:TI-Corrs:NrPulses-SP': DEFAULT_NRPULSES,
+        'BO-Glob:TI-Corrs:Duration-SP': DEFAULT_DURATION,
+        'BO-Glob:TI-Corrs:Delay-SP': DEFAULT_DELAY,
+        'BO-Glob:TI-Corrs:Polarity-Sel': DEFAULT_POLARITY,  # test
+        'BO-Glob:TI-Corrs:State-Sel': 'Enbl',
+
     }
 
     _pvs = None
