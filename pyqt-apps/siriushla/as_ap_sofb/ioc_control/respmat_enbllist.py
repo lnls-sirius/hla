@@ -204,7 +204,6 @@ class SelectionMatrix(BaseWidget):
         for idx in range(len(self.devnames[self.dev][0])):
             wid2 = self._make_unit(wid, idx)
             i, j = self._get_position(idx)
-            print(idx, i)
             gdl.addWidget(wid2, i+1, j+1)
         return wid
 
