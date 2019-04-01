@@ -67,12 +67,6 @@ class AcqControlWidget(BaseWidget):
         hbl.addWidget(pdm_btn)
         fbl.addRow(lbl, hbl)
 
-        vbl = QVBoxLayout()
-        if self.isring:
-            gdl.addItem(vbl, 1, 1)
-        else:
-            gdl.addItem(vbl, 2, 0)
-
         grp_bx = QGroupBox('Acquisition Rates', self)
         vbl.addWidget(grp_bx)
         vbl.addSpacing(20)
@@ -83,6 +77,12 @@ class AcqControlWidget(BaseWidget):
         lbl = QLabel('Kicks [Hz]', grp_bx, alignment=Qt.AlignCenter)
         wid = self.create_pair(grp_bx, 'KickAcqRate')
         fbl.addRow(lbl, wid)
+
+        vbl = QVBoxLayout()
+        if self.isring:
+            gdl.addItem(vbl, 1, 1)
+        else:
+            gdl.addItem(vbl, 2, 0)
 
         if self.isring:
             grp_bx = QGroupBox('MultiTurn Acquisition', self)
@@ -99,6 +99,15 @@ class AcqControlWidget(BaseWidget):
                 grp_bx, init_channel=self.prefix+'MTurnIdxTime-Mon')
             pdm_lbl.setAlignment(Qt.AlignCenter)
             fbl.addRow(lbl, pdm_lbl)
+
+        grp_bx = QGroupBox('SinglePass Acquisition', self)
+        vbl.addWidget(grp_bx)
+        vbl.addSpacing(20)
+        fbl = QFormLayout(grp_bx)
+        lbl = QLabel('Position', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
+        wid = self.create_pair_sel(grp_bx, 'SPassMethod')
+        fbl.addRow(lbl, wid)
 
         lbl = QLabel('Triggered Acquisition Configurations',
                      self, alignment=Qt.AlignCenter)
