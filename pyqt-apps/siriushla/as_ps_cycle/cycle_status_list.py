@@ -1,7 +1,7 @@
 """List with magnet cycling status."""
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QListView, QApplication
-from qtpy.QtGui import QStandardItemModel, QStandardItem, QIcon
+from qtpy.QtGui import QStandardItemModel, QStandardItem
 
 from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
 

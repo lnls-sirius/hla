@@ -6,7 +6,8 @@ import epics as _epics
 from math import isclose as _isclose
 
 from siriuspy.envars import vaca_prefix as VACA_PREFIX
-from siriuspy.search.ma_search import MASearch
+from siriuspy.search.ma_search import MASearch as _MASearch
+from siriuspy.search.ps_search import PSSearch as _PSSearch
 from siriuspy.csdevice.pwrsupply import Const as _PSConst
 
 
@@ -15,7 +16,7 @@ CONNECTION_TIMEOUT = 0.05
 
 def get_manames():
     """."""
-    return MASearch.get_manames({'dis': 'MA'})
+    return _MASearch.get_manames({'dis': 'MA'})
 
 
 class Timing:
@@ -108,6 +109,8 @@ class MagnetCycler:
     def __init__(self, maname):
         """Constructor."""
         self._maname = maname
+        self._psnames = _MASearch.conv_maname_2_psnames(self._maname)
+        self.siggen = _PSSearch.conv_psname_2_siggenconf(self._psnames[0])
         self.pwrstate_sel = _epics.get_pv(
             VACA_PREFIX + self._maname + ':PwrState-Sel')
         self.cycletype_sel = \
@@ -132,10 +135,6 @@ class MagnetCycler:
             _epics.get_pv(VACA_PREFIX + self._maname + ':CycleEnbl-Mon')
 
         self.pwrstate = 1
-        self.cycletype = 0
-        self.cyclefreq = 0.3
-        self.cycleampl = 2.0
-        self.opmode = 2
 
     @property
     def maname(self):
@@ -148,9 +147,9 @@ class MagnetCycler:
 
     def set_params(self):
         """Set cycling params."""
-        return (self.conn_put(self.cycletype_sel, self.cycletype) and
-                self.conn_put(self.cyclefreq_sp, self.cyclefreq) and
-                self.conn_put(self.cycleampl_sp, self.cycleampl))
+        return (self.conn_put(self.cycletype_sel, self.siggen.type) and
+                self.conn_put(self.cyclefreq_sp, self.siggen.freq) and
+                self.conn_put(self.cycleampl_sp, self.siggen.amplitude))
 
     def set_mode(self):
         """Set magnet to cycling mode."""
@@ -171,9 +170,9 @@ class MagnetCycler:
 
     def params_rdy(self):
         """Return wether magnet cycling parameters are set."""
-        return (self.timed_get(self.cycletype_sts, self.cycletype) and
-                self.timed_get(self.cyclefreq_rb, self.cyclefreq) and
-                self.timed_get(self.cycleampl_rb, self.cycleampl))
+        return (self.timed_get(self.cycletype_sts, self.siggen.type) and
+                self.timed_get(self.cyclefreq_rb, self.siggen.freq) and
+                self.timed_get(self.cycleampl_rb, self.siggen.amplitue))
 
     def mode_rdy(self):
         """Return wether magnet is in cycling mode."""
