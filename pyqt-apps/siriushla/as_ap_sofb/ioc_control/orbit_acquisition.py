@@ -108,6 +108,18 @@ class AcqControlWidget(BaseWidget):
         lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
         wid = self.create_pair_sel(grp_bx, 'SPassMethod')
         fbl.addRow(lbl, wid)
+        lbl = QLabel('Nr Turns Avg', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
+        wid = self.create_pair(grp_bx, 'SPassAvgNrTurns')
+        fbl.addRow(lbl, wid)
+        lbl = QLabel('Win. Size', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
+        wid = self.create_pair(grp_bx, 'SPassDataSize')
+        fbl.addRow(lbl, wid)
+        lbl = QLabel('Win. Offset', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
+        wid = self.create_pair(grp_bx, 'SPassDataOffset')
+        fbl.addRow(lbl, wid)
 
         lbl = QLabel('Triggered Acquisition Configurations',
                      self, alignment=Qt.AlignCenter)
