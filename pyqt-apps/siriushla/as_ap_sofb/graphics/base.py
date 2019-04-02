@@ -415,6 +415,8 @@ class UpdateGraph(QObject):
         sig_y[_np.ndarray].connect(self.slots['val']['y'])
 
     def some_changed(self, orb_tp, text):
+        if text not in self.ctrls.keys():
+            return
         slot_x = self.slots[orb_tp]['x']
         slot_y = self.slots[orb_tp]['y']
 
