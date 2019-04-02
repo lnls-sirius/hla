@@ -7,7 +7,7 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QPushButton, QGridLayout, QLabel, QSpacerItem, \
     QAbstractItemView, QGroupBox, QSizePolicy as QSzPlcy, QHeaderView
 from pydm.widgets import PyDMEnumComboBox, PyDMLabel, PyDMLineEdit, \
-    PyDMWaveformTable, PyDMSpinbox
+    PyDMWaveformTable
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriuspy.csdevice.opticscorr import Const as _Const
@@ -115,24 +115,6 @@ class _CorrParamsDetailWindow(SiriusMainWindow):
             lay.addWidget(self.pydmlabel_sync, 5, self._nfam//2+1)
             lay.addItem(
                 QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Fixed), 6, 1)
-
-        if self._opticsparam == 'Tune':
-            label_corrfactor = QLabel('<h4>Correction Factor [%]</h4>', self,
-                                      alignment=Qt.AlignCenter)
-            self.pydmspinbox_corrfactor = PyDMSpinbox(
-                parent=self, init_channel=ioc_prefix+'CorrFactor-SP')
-            self.pydmspinbox_corrfactor.showStepExponent = False
-            self.pydmspinbox_corrfactor.setStyleSheet(
-                """min-width:10em; max-width:10em;""")
-
-            self.pydmlabel_corrfactor = PyDMLabel(
-                parent=self, init_channel=ioc_prefix+'CorrFactor-RB')
-
-            lay.addWidget(label_corrfactor, 7, 1, 1, self._nfam)
-            lay.addWidget(self.pydmspinbox_corrfactor, 8, self._nfam//2)
-            lay.addWidget(self.pydmlabel_corrfactor, 8, self._nfam//2+1)
-            lay.addItem(
-                QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Fixed), 9, 1)
 
         label_configname = QLabel('<h4>Configuration Name</h4>', self,
                                   alignment=Qt.AlignCenter)
