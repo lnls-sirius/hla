@@ -252,5 +252,10 @@ class _ConfigLineEdit(PyDMLineEdit):
         elif 'BO' in self.channel and 'Chrom' in self.channel:
             config_type = 'bo_chromcorr_params'
         popup = _LoadConfiguration(config_type)
-        popup.configname.connect(self.value_changed)
+        popup.configname.connect(self._config_changed)
         popup.exec_()
+
+    def _config_changed(self, configname):
+        self.setText(configname)
+        self.send_value()
+        self.value_changed(configname)
