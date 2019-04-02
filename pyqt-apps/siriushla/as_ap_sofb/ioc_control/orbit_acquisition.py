@@ -32,12 +32,16 @@ class AcqControlWidget(BaseWidget):
         vbl = QVBoxLayout()
         gdl.addItem(vbl, 1, 0)
 
-        grp_bx = QGroupBox('Orbit Mode', self)
+        grp_bx = QGroupBox('SOFB Mode', self)
         vbl.addWidget(grp_bx)
         vbl.addSpacing(20)
         fbl = QFormLayout(grp_bx)
-        wid = self.create_pair_sel(grp_bx, 'OrbitMode')
+        wid = self.create_pair_sel(grp_bx, 'SOFBMode')
         fbl.addRow(wid)
+        lbl = QLabel('Extend Ring', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
+        wid = self.create_pair(grp_bx, 'RingSize')
+        fbl.addRow(lbl, wid)
 
         grp_bx = QGroupBox('Orbit Smoothing Control', self)
         vbl.addWidget(grp_bx)
@@ -45,34 +49,40 @@ class AcqControlWidget(BaseWidget):
         fbl = QFormLayout(grp_bx)
         lbl = QLabel('Method', grp_bx, alignment=Qt.AlignCenter)
         lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
-        wid = self.create_pair_sel(grp_bx, 'OrbitSmoothMethod')
+        wid = self.create_pair_sel(grp_bx, 'SmoothMethod')
         fbl.addRow(lbl, wid)
         lbl = QLabel('Num. Pts.', grp_bx, alignment=Qt.AlignCenter)
         lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
-        wid = self.create_pair(grp_bx, 'OrbitSmoothNPnts')
+        wid = self.create_pair(grp_bx, 'SmoothNrPts')
         fbl.addRow(lbl, wid)
+        lbl = QLabel('Buffer Size', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
+        pdm_lbl = PyDMLabel(grp_bx, init_channel=self.prefix+'BufferCount-Mon')
         pdm_btn = PyDMPushButton(
-            init_channel=self.prefix+'OrbitSmoothReset-Cmd',
+            init_channel=self.prefix+'SmoothReset-Cmd',
             pressValue=1,
             label='Reset Buffer')
-        fbl.addWidget(pdm_btn)
-
-        vbl = QVBoxLayout()
-        if self.isring:
-            gdl.addItem(vbl, 1, 1)
-        else:
-            gdl.addItem(vbl, 2, 0)
+        hbl = QHBoxLayout()
+        hbl.addWidget(pdm_lbl)
+        hbl.addWidget(pdm_btn)
+        fbl.addRow(lbl, hbl)
 
         grp_bx = QGroupBox('Acquisition Rates', self)
         vbl.addWidget(grp_bx)
         vbl.addSpacing(20)
         fbl = QFormLayout(grp_bx)
         lbl = QLabel('Orbit [Hz]', grp_bx, alignment=Qt.AlignCenter)
-        wid = self.create_pair(grp_bx, 'OrbitAcqRate')
+        wid = self.create_pair(grp_bx, 'OrbAcqRate')
         fbl.addRow(lbl, wid)
         lbl = QLabel('Kicks [Hz]', grp_bx, alignment=Qt.AlignCenter)
         wid = self.create_pair(grp_bx, 'KickAcqRate')
         fbl.addRow(lbl, wid)
+
+        vbl = QVBoxLayout()
+        if self.isring:
+            gdl.addItem(vbl, 1, 1)
+        else:
+            gdl.addItem(vbl, 2, 0)
 
         if self.isring:
             grp_bx = QGroupBox('MultiTurn Acquisition', self)
@@ -81,14 +91,35 @@ class AcqControlWidget(BaseWidget):
             fbl = QFormLayout(grp_bx)
             lbl = QLabel('Index', grp_bx, alignment=Qt.AlignCenter)
             lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
-            wid = self.create_pair(grp_bx, 'OrbitMultiTurnIdx')
+            wid = self.create_pair(grp_bx, 'MTurnIdx')
             fbl.addRow(lbl, wid)
             lbl = QLabel('Time [ms]', grp_bx, alignment=Qt.AlignCenter)
             lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
             pdm_lbl = PyDMLabel(
-                grp_bx, init_channel=self.prefix+'OrbitMultiTurnIdxTime-Mon')
+                grp_bx, init_channel=self.prefix+'MTurnIdxTime-Mon')
             pdm_lbl.setAlignment(Qt.AlignCenter)
             fbl.addRow(lbl, pdm_lbl)
+
+        grp_bx = QGroupBox('SinglePass Acquisition', self)
+        vbl.addWidget(grp_bx)
+        vbl.addSpacing(20)
+        fbl = QFormLayout(grp_bx)
+        lbl = QLabel('Position', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
+        wid = self.create_pair_sel(grp_bx, 'SPassMethod')
+        fbl.addRow(lbl, wid)
+        lbl = QLabel('Nr Turns Avg', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
+        wid = self.create_pair(grp_bx, 'SPassAvgNrTurns')
+        fbl.addRow(lbl, wid)
+        lbl = QLabel('Win. Size', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
+        wid = self.create_pair(grp_bx, 'SPassDataSize')
+        fbl.addRow(lbl, wid)
+        lbl = QLabel('Win. Offset', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
+        wid = self.create_pair(grp_bx, 'SPassDataOffset')
+        fbl.addRow(lbl, wid)
 
         lbl = QLabel('Triggered Acquisition Configurations',
                      self, alignment=Qt.AlignCenter)
@@ -109,34 +140,33 @@ class AcqControlWidget(BaseWidget):
         fbl = QFormLayout(grp_bx)
         lbl = QLabel('Acquistion Channel', grp_bx, alignment=Qt.AlignCenter)
         lbl.setStyleSheet("""min-width:10em; max-width:10em;""")
-        wid = self.create_pair_sel(grp_bx, 'OrbitTrigAcqChan')
+        wid = self.create_pair_sel(grp_bx, 'TrigAcqChan')
         fbl.addRow(lbl, wid)
         lbl = QLabel('Acquistion Trigger', grp_bx, alignment=Qt.AlignCenter)
         lbl.setStyleSheet("""min-width:10em; max-width:10em;""")
-        wid = self.create_pair_sel(grp_bx, 'OrbitTrigAcqTrigger')
+        wid = self.create_pair_sel(grp_bx, 'TrigAcqTrigger')
         fbl.addRow(lbl, wid)
         lbl = QLabel('Repeat', grp_bx, alignment=Qt.AlignCenter)
         lbl.setStyleSheet("""min-width:10em; max-width:10em;""")
-        wid = self.create_pair_sel(grp_bx, 'OrbitTrigAcqRepeat')
+        wid = self.create_pair_sel(grp_bx, 'TrigAcqRepeat')
         fbl.addRow(lbl, wid)
         if self.isring:
-            lbl = QLabel('Number of Shots', grp_bx, alignment=Qt.AlignCenter)
+            lbl = QLabel('Nr of Shots', grp_bx, alignment=Qt.AlignCenter)
             lbl.setStyleSheet("""min-width:10em; max-width:10em;""")
-            wid = self.create_pair(grp_bx, 'OrbitTrigNrShots')
+            wid = self.create_pair(grp_bx, 'TrigNrShots')
             fbl.addRow(lbl, wid)
-        lbl = QLabel('Number of SamplesPre', grp_bx, alignment=Qt.AlignCenter)
+        lbl = QLabel('Nr of SamplesPre', grp_bx, alignment=Qt.AlignCenter)
         lbl.setStyleSheet("""min-width:10em; max-width:10em;""")
-        wid = self.create_pair(grp_bx, 'OrbitTrigNrSamplesPre')
+        wid = self.create_pair(grp_bx, 'TrigNrSamplesPre')
         fbl.addRow(lbl, wid)
-        lbl = QLabel('Number of SamplesPost', grp_bx, alignment=Qt.AlignCenter)
+        lbl = QLabel('Nr of SamplesPost', grp_bx, alignment=Qt.AlignCenter)
         lbl.setStyleSheet("""min-width:10em; max-width:10em;""")
-        wid = self.create_pair(grp_bx, 'OrbitTrigNrSamplesPost')
+        wid = self.create_pair(grp_bx, 'TrigNrSamplesPost')
         fbl.addRow(lbl, wid)
-        if self.isring:
-            lbl = QLabel('Downsampling', grp_bx, alignment=Qt.AlignCenter)
-            lbl.setStyleSheet("""min-width:10em; max-width:10em;""")
-            wid = self.create_pair(grp_bx, 'OrbitTrigDownSample')
-            fbl.addRow(lbl, wid)
+        lbl = QLabel('Downsampling', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:10em; max-width:10em;""")
+        wid = self.create_pair(grp_bx, 'MTurnDownSample')
+        fbl.addRow(lbl, wid)
 
         fbl.addItem(QSpacerItem(20, 20))
         lbl = QLabel('Control Acquisition:', grp_bx, alignment=Qt.AlignCenter)
@@ -145,18 +175,18 @@ class AcqControlWidget(BaseWidget):
         fbl.addRow(gdl2)
         pdm_btn1 = PyDMPushButton(
             grp_bx, label='Start',
-            init_channel=self.prefix+'OrbitTrigAcqCtrl-Sel',
-            pressValue=self._csorb.OrbitAcqCtrl.Start)
+            init_channel=self.prefix+'TrigAcqCtrl-Sel',
+            pressValue=self._csorb.TrigAcqCtrl.Start)
         pdm_btn2 = PyDMPushButton(
             grp_bx, label='Stop',
-            init_channel=self.prefix+'OrbitTrigAcqCtrl-Sel',
-            pressValue=self._csorb.OrbitAcqCtrl.Stop)
+            init_channel=self.prefix+'TrigAcqCtrl-Sel',
+            pressValue=self._csorb.TrigAcqCtrl.Stop)
         pdm_btn3 = PyDMPushButton(
             grp_bx, label='Abort',
-            init_channel=self.prefix+'OrbitTrigAcqCtrl-Sel',
-            pressValue=self._csorb.OrbitAcqCtrl.Abort)
+            init_channel=self.prefix+'TrigAcqCtrl-Sel',
+            pressValue=self._csorb.TrigAcqCtrl.Abort)
         pdmlbl = PyDMLabel(
-            grp_bx, init_channel=self.prefix+'OrbitTrigAcqCtrl-Sts')
+            grp_bx, init_channel=self.prefix+'TrigAcqCtrl-Sts')
         pdmlbl.setAlignment(Qt.AlignCenter)
         gdl2.addWidget(pdm_btn1, 0, 0)
         gdl2.addWidget(pdm_btn2, 0, 1)
@@ -169,7 +199,7 @@ class AcqControlWidget(BaseWidget):
         connect_window(
             btn, Window, self, prefix=self.prefix, acc=self.acc, is_orb=True)
         pdm_led = SiriusLedAlert(
-            grp_bx, init_channel=self.prefix+'OrbitStatus-Mon')
+            grp_bx, init_channel=self.prefix+'OrbStatus-Mon')
         hbl = QHBoxLayout()
         hbl.setContentsMargins(5, 30, 5, 0)
         hbl.setSpacing(9)
@@ -189,23 +219,23 @@ class AcqControlWidget(BaseWidget):
         fbl = QFormLayout(grp_bx)
         lbl = QLabel('Channel', grp_bx, alignment=Qt.AlignCenter)
         lbl.setStyleSheet("""min-width:5em; max-width:5em;""")
-        wid = self.create_pair_sel(grp_bx, 'OrbitTrigDataChan')
+        wid = self.create_pair_sel(grp_bx, 'TrigDataChan')
         fbl.addRow(lbl, wid)
         lbl = QLabel('Selection', grp_bx, alignment=Qt.AlignCenter)
         lbl.setStyleSheet("""min-width:5em; max-width:5em;""")
-        wid = self.create_pair_sel(grp_bx, 'OrbitTrigDataSel')
+        wid = self.create_pair_sel(grp_bx, 'TrigDataSel')
         fbl.addRow(lbl, wid)
         lbl = QLabel('Threshold', grp_bx, alignment=Qt.AlignCenter)
         lbl.setStyleSheet("""min-width:5em; max-width:5em;""")
-        wid = self.create_pair(grp_bx, 'OrbitTrigDataThres')
+        wid = self.create_pair(grp_bx, 'TrigDataThres')
         fbl.addRow(lbl, wid)
         lbl = QLabel('Hysteresis', grp_bx, alignment=Qt.AlignCenter)
         lbl.setStyleSheet("""min-width:5em; max-width:5em;""")
-        wid = self.create_pair(grp_bx, 'OrbitTrigDataHyst')
+        wid = self.create_pair(grp_bx, 'TrigDataHyst')
         fbl.addRow(lbl, wid)
         lbl = QLabel('Polarity', grp_bx, alignment=Qt.AlignCenter)
         lbl.setStyleSheet("""min-width:5em; max-width:5em;""")
-        wid = self.create_pair_sel(grp_bx, 'OrbitTrigDataPol')
+        wid = self.create_pair_sel(grp_bx, 'TrigDataPol')
         fbl.addRow(lbl, wid)
 
         grp_bx = QGroupBox('External Trigger Parameter', self)
@@ -214,15 +244,15 @@ class AcqControlWidget(BaseWidget):
         fbl = QFormLayout(grp_bx)
         lbl = QLabel('Duration [us]', grp_bx, alignment=Qt.AlignCenter)
         lbl.setStyleSheet("""min-width:7em; max-width:7em;""")
-        wid = self.create_pair(grp_bx, 'OrbitTrigExtDuration')
+        wid = self.create_pair(grp_bx, 'TrigExtDuration')
         fbl.addRow(lbl, wid)
         lbl = QLabel('Initial Delay [us]', grp_bx, alignment=Qt.AlignCenter)
         lbl.setStyleSheet("""min-width:7em; max-width:7em;""")
-        wid = self.create_pair(grp_bx, 'OrbitTrigExtDelay')
+        wid = self.create_pair(grp_bx, 'TrigExtDelay')
         fbl.addRow(lbl, wid)
         lbl = QLabel('Event Source', grp_bx, alignment=Qt.AlignCenter)
         lbl.setStyleSheet("""min-width:7em; max-width:7em;""")
-        wid = self.create_pair_sel(grp_bx, 'OrbitTrigExtEvtSrc')
+        wid = self.create_pair_sel(grp_bx, 'TrigExtEvtSrc')
         fbl.addRow(lbl, wid)
 
 

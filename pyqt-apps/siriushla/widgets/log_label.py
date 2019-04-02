@@ -31,7 +31,7 @@ class PyDMLogLabel(QListWidget, TextFormatter, PyDMWidget, DisplayFormat):
         self._prepend_date_time = True
         self._display_format_type = DisplayFormat.String
         self._string_encoding = "utf_8"
-        self._date_time_fmt = '%Y/%M/%d-%H:%M:%S'
+        self._date_time_fmt = '%Y/%m/%d-%H:%M:%S'
 
     def value_changed(self, new_value):
         """
@@ -114,7 +114,8 @@ class PyDMLogLabel(QListWidget, TextFormatter, PyDMWidget, DisplayFormat):
         if self._display_format_type != new_type:
             self._display_format_type = new_type
             # Trigger the update of display format
-            self.value_changed(self.value)
+            if self.value is not None:
+                self.value_changed(self.value)
 
     @Property(int)
     def bufferSize(self):

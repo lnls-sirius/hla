@@ -48,10 +48,10 @@ def connect_window(widget, w_class, parent, **kwargs):
 def connect_newprocess(widget, cmd, **kwargs):
     """Execute a child program in a new process."""
     signal = _define_widget_signal(widget)
-    signal.connect(lambda: _run_subprocess(cmd, **kwargs))
+    signal.connect(lambda: run_newprocess(cmd, **kwargs))
 
 
-def _run_subprocess(cmd, **kwargs):
+def run_newprocess(cmd, **kwargs):
     # Parse kwargs
     bufsize = kwargs['bufsize'] if 'bufsize' in kwargs else -1
     executable = kwargs['executable'] if 'executable' in kwargs else None

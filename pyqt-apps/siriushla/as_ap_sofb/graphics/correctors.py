@@ -69,10 +69,10 @@ class CorrectorsWidget(BaseWidget):
     @staticmethod
     def get_default_ctrls(prefix):
         chans = [
-            SiriusConnectionSignal(prefix+'DeltaKicksCH-Mon'),
-            SiriusConnectionSignal(prefix+'DeltaKicksCV-Mon'),
-            SiriusConnectionSignal(prefix+'KicksCH-Mon'),
-            SiriusConnectionSignal(prefix+'KicksCV-Mon')]
+            SiriusConnectionSignal(prefix+'DeltaKickCH-Mon'),
+            SiriusConnectionSignal(prefix+'DeltaKickCV-Mon'),
+            SiriusConnectionSignal(prefix+'KickCH-Mon'),
+            SiriusConnectionSignal(prefix+'KickCV-Mon')]
         ctrls = {
             'Delta Kicks': {
                 'x': {

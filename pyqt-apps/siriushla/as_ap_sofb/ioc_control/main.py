@@ -60,7 +60,7 @@ class SOFBControl(BaseWidget):
         _util.connect_window(
             btn, Window, self, prefix=self.prefix, acc=self.acc, is_orb=True)
         pdm_led = SiriusLedAlert(
-            grp_bx, init_channel=self.prefix+'OrbitStatus-Mon')
+            grp_bx, init_channel=self.prefix+'OrbStatus-Mon')
         hbl = QHBoxLayout()
         hbl.setSpacing(9)
         hbl.addWidget(btn)
@@ -75,10 +75,10 @@ class SOFBControl(BaseWidget):
             rules = (
                 '[{"name": "EnblRule", "property": "Enable", ' +
                 '"expression": "ch[0] in (1, )", "channels": [{"channel": "' +
-                self.prefix+'OrbitMode-Sts'+'", "trigger": true}]}]')
-            lbl = QLabel('Enable Auto Correction', grp_bx)
+                self.prefix+'SOFBMode-Sts'+'", "trigger": true}]}]')
+            lbl = QLabel('Closed Loop Status', grp_bx)
             pdm_btn = PyDMStateButton(
-                grp_bx, init_channel=self.prefix+'AutoCorr-Sel')
+                grp_bx, init_channel=self.prefix+'ClosedLoop-Sel')
             pdm_btn.rules = rules
             hbl = QHBoxLayout()
             hbl.addWidget(lbl)
@@ -86,7 +86,7 @@ class SOFBControl(BaseWidget):
             vbl.addItem(hbl)
 
             lbl = QLabel('Frequency [Hz]', grp_bx)
-            wid = self.create_pair(grp_bx, 'AutoCorrFreq')
+            wid = self.create_pair(grp_bx, 'ClosedLoopFreq')
             fbl = QFormLayout()
             fbl.setHorizontalSpacing(9)
             fbl.addRow(lbl, wid)
@@ -100,8 +100,8 @@ class SOFBControl(BaseWidget):
         fbl.setSpacing(9)
         vbl.addItem(fbl)
 
-        lbl = QLabel('Orbit Mode', grp_bx)
-        wid = self.create_pair_sel(grp_bx, 'OrbitMode')
+        lbl = QLabel('SOFB Mode', grp_bx)
+        wid = self.create_pair_sel(grp_bx, 'SOFBMode')
         fbl.addRow(lbl, wid)
 
         lbl = QLabel('Correct:', grp_bx)
@@ -110,7 +110,7 @@ class SOFBControl(BaseWidget):
         combo.rules = (
             '[{"name": "EnblRule", "property": "Enable", ' +
             '"expression": "not ch[0]", "channels": [{"channel": "' +
-            self.prefix+'OrbitMode-Sts'+'", "trigger": true}]}]')
+            self.prefix+'SOFBMode-Sts'+'", "trigger": true}]}]')
         fbl.addRow(lbl, combo)
 
         lbl = QLabel('as diff to:', grp_bx)
@@ -137,12 +137,12 @@ class SOFBControl(BaseWidget):
         vbl2.setSpacing(9)
         pdm_pbtn = PyDMPushButton(
             grpbx, 'Calculate Kicks', pressValue=1,
-            init_channel=self.prefix+'CalcCorr-Cmd')
+            init_channel=self.prefix+'CalcDelta-Cmd')
         if self.isring:
             rules = (
                 '[{"name": "EnblRule", "property": "Enable", ' +
                 '"expression": "not ch[0]", "channels": [{"channel": "' +
-                self.prefix+'AutoCorr-Sts'+'", "trigger": true}]}]')
+                self.prefix+'ClosedLoop-Sts'+'", "trigger": true}]}]')
             pdm_pbtn.rules = rules
         vbl2.addWidget(pdm_pbtn)
 
@@ -150,16 +150,17 @@ class SOFBControl(BaseWidget):
         ch = ''
         if self.isring:
             exp = 'ch[1] in (1, 3) and not ch[0]'
-            ch = '{"channel": "'+self.prefix+'AutoCorr-Sts", "trigger": true},'
+            ch = '{"channel": "' + self.prefix + \
+                'ClosedLoop-Sts", "trigger": true},'
         rules = (
             '[{"name": "EnblRule", "property": "Enable", ' +
             '"expression": "'+exp+'", "channels": ['+ch +
-            '{"channel": "'+self.prefix+'OrbitMode-Sel", "trigger": true}]}]')
+            '{"channel": "'+self.prefix+'SOFBMode-Sts", "trigger": true}]}]')
 
         pdm_pbtn = PyDMPushButton(
             grpbx, 'Apply All',
-            pressValue=self._csorb.ApplyCorr.All,
-            init_channel=self.prefix+'ApplyCorr-Cmd')
+            pressValue=self._csorb.ApplyDelta.All,
+            init_channel=self.prefix+'ApplyDelta-Cmd')
         pdm_pbtn.rules = rules
         vbl2.addWidget(pdm_pbtn)
 
@@ -168,21 +169,21 @@ class SOFBControl(BaseWidget):
         vbl3.setSpacing(9)
         pdm_pbtn = PyDMPushButton(
             grpbx, 'Apply CH',
-            pressValue=self._csorb.ApplyCorr.CH,
-            init_channel=self.prefix+'ApplyCorr-Cmd')
+            pressValue=self._csorb.ApplyDelta.CH,
+            init_channel=self.prefix+'ApplyDelta-Cmd')
         pdm_pbtn.rules = rules
         vbl3.addWidget(pdm_pbtn)
         pdm_pbtn = PyDMPushButton(
             grpbx, 'Apply CV',
-            pressValue=self._csorb.ApplyCorr.CV,
-            init_channel=self.prefix+'ApplyCorr-Cmd')
+            pressValue=self._csorb.ApplyDelta.CV,
+            init_channel=self.prefix+'ApplyDelta-Cmd')
         pdm_pbtn.rules = rules
         vbl3.addWidget(pdm_pbtn)
         if self.isring:
             pdm_pbtn = PyDMPushButton(
                 grpbx, 'Apply RF',
-                pressValue=self._csorb.ApplyCorr.RF,
-                init_channel=self.prefix+'ApplyCorr-Cmd')
+                pressValue=self._csorb.ApplyDelta.RF,
+                init_channel=self.prefix+'ApplyDelta-Cmd')
             pdm_pbtn.rules = rules
             vbl3.addWidget(pdm_pbtn)
 
@@ -219,10 +220,10 @@ class RefControl(BaseCombo):
     def __init__(self, parent, prefix, ctrls, acc='SI'):
         setpoint = dict()
         readback = dict()
-        setpoint['x'] = SiriusConnectionSignal(prefix+'OrbitRefX-SP')
-        setpoint['y'] = SiriusConnectionSignal(prefix+'OrbitRefY-SP')
-        readback['x'] = SiriusConnectionSignal(prefix+'OrbitRefX-RB')
-        readback['y'] = SiriusConnectionSignal(prefix+'OrbitRefY-RB')
+        setpoint['x'] = SiriusConnectionSignal(prefix+'RefOrbX-SP')
+        setpoint['y'] = SiriusConnectionSignal(prefix+'RefOrbY-SP')
+        readback['x'] = SiriusConnectionSignal(prefix+'RefOrbX-RB')
+        readback['y'] = SiriusConnectionSignal(prefix+'RefOrbY-RB')
         super().__init__(parent, ctrls, setpoint, readback, acc)
 
     def _selection_changed(self, text):
@@ -243,10 +244,10 @@ class OfflineOrbControl(BaseCombo):
     def __init__(self, parent, prefix, ctrls, acc='SI'):
         setpoint = dict()
         readback = dict()
-        setpoint['x'] = SiriusConnectionSignal(prefix+'OrbitOfflineX-SP')
-        setpoint['y'] = SiriusConnectionSignal(prefix+'OrbitOfflineY-SP')
-        readback['x'] = SiriusConnectionSignal(prefix+'OrbitOfflineX-RB')
-        readback['y'] = SiriusConnectionSignal(prefix+'OrbitOfflineY-RB')
+        setpoint['x'] = SiriusConnectionSignal(prefix+'OfflineOrbX-SP')
+        setpoint['y'] = SiriusConnectionSignal(prefix+'OfflineOrbY-SP')
+        readback['x'] = SiriusConnectionSignal(prefix+'OfflineOrbX-RB')
+        readback['y'] = SiriusConnectionSignal(prefix+'OfflineOrbY-RB')
         super().__init__(parent, ctrls, setpoint, readback, acc)
 
 
@@ -256,29 +257,29 @@ def _main():
     hbl = QHBoxLayout(win)
     prefix = pref+'SI-Glob:AP-SOFB:'
     pvs = [
-        'OrbitSmoothX-Mon', 'OrbitSmoothY-Mon',
-        'OrbitOfflineX-RB', 'OrbitOfflineY-RB',
-        'OrbitRefX-RB', 'OrbitRefY-RB']
+        'SlowOrbX-Mon', 'SlowOrbY-Mon',
+        'OfflineOrbX-RB', 'OfflineOrbY-RB',
+        'RefOrbX-RB', 'RefOrbY-RB']
     chans = []
     for pv in pvs:
         chans.append(SiriusConnectionSignal(prefix+pv))
     win._channels = chans
     ctrls = {
-        'Online Orbit': {
+        'SlowOrb': {
             'x': {
                 'signal': chans[0].new_value_signal,
                 'getvalue': chans[0].getvalue},
             'y': {
                 'signal': chans[1].new_value_signal,
                 'getvalue': chans[1].getvalue}},
-        'Offline Orbit': {
+        'OfflineOrb': {
             'x': {
                 'signal': chans[2].new_value_signal,
                 'getvalue': chans[2].getvalue},
             'y': {
                 'signal': chans[3].new_value_signal,
                 'getvalue': chans[3].getvalue}},
-        'Reference Orbit': {
+        'RefOrb': {
             'x': {
                 'signal': chans[4].new_value_signal,
                 'getvalue': chans[4].getvalue},

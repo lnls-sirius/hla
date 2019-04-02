@@ -7,7 +7,7 @@ from qtpy.QtWidgets import QMenu, QFileDialog, QWidget, QMessageBox, \
     QScrollArea, QLabel, QPushButton, QSizePolicy, \
     QGridLayout, QVBoxLayout, QHBoxLayout
 from qtpy.QtCore import Signal, Qt
-from siriuspy.csdevice.orbitcorr import OrbitCorrDevFactory
+from siriuspy.csdevice.orbitcorr import SOFBFactory
 from siriuspy.servconf.srvconfig import ConnConfigService
 from siriushla.as_ap_servconf import LoadConfiguration, SaveConfiguration
 from siriushla.widgets import SiriusConnectionSignal
@@ -23,20 +23,20 @@ class OrbitRegisters(QWidget):
         pre = self.prefix
         self._orbits = {
             'ref': [
-                SiriusConnectionSignal(pre + 'OrbitRefX-RB'),
-                SiriusConnectionSignal(pre + 'OrbitRefY-RB')],
+                SiriusConnectionSignal(pre + 'RefOrbX-RB'),
+                SiriusConnectionSignal(pre + 'RefOrbY-RB')],
             'mti': [
-                SiriusConnectionSignal(pre + 'OrbitMultiTurnX-Mon'),
-                SiriusConnectionSignal(pre + 'OrbitMultiTurnY-Mon')],
+                SiriusConnectionSignal(pre + 'MTurnIdxOrbX-Mon'),
+                SiriusConnectionSignal(pre + 'MTurnIdxOrbY-Mon')],
             'sp': [
-                SiriusConnectionSignal(pre + 'OrbitSmoothSinglePassX-Mon'),
-                SiriusConnectionSignal(pre + 'OrbitSmoothSinglePassY-Mon')],
+                SiriusConnectionSignal(pre + 'SPassOrbX-Mon'),
+                SiriusConnectionSignal(pre + 'SPassOrbY-Mon')],
             'orb': [
-                SiriusConnectionSignal(pre + 'OrbitSmoothX-Mon'),
-                SiriusConnectionSignal(pre + 'OrbitSmoothY-Mon')],
+                SiriusConnectionSignal(pre + 'SlowOrbX-Mon'),
+                SiriusConnectionSignal(pre + 'SlowOrbY-Mon')],
             'off': [
-                SiriusConnectionSignal(pre + 'OrbitOfflineX-SP'),
-                SiriusConnectionSignal(pre + 'OrbitOfflineY-SP')],
+                SiriusConnectionSignal(pre + 'OfflineOrbX-SP'),
+                SiriusConnectionSignal(pre + 'OfflineOrbY-SP')],
             }
         self.setupui()
 
@@ -108,7 +108,7 @@ class OrbitRegister(QWidget):
         self.EXT_FLT = 'Sirius Orbit Files (*.{})'.format(text)
         self._config_type = acc.lower() + '_orbit'
         self._servconf = ConnConfigService(self._config_type)
-        self._csorb = OrbitCorrDevFactory.create(acc.upper())
+        self._csorb = SOFBFactory.create(acc.upper())
         self.string_status = 'Empty'
         self.name = 'Register {0:d}'.format(self.idx)
         self.setup_ui()
@@ -161,22 +161,22 @@ class OrbitRegister(QWidget):
         btn.setMenu(menu)
         btn.clicked.connect(btn.showMenu)
 
-        act = menu.addAction('Load From &File')
+        act = menu.addAction('Get From &File')
         act.triggered.connect(self._load_orbit_from_file)
-        act = menu.addAction('Load From &ServConf')
+        act = menu.addAction('Get From &ServConf')
         act.triggered.connect(self._load_orbit_from_servconf)
-        menu2 = menu.addMenu('Load from &PV')
-        act = menu2.addAction('&Smooth Orbit')
+        menu2 = menu.addMenu('Get from &PV')
+        act = menu2.addAction('&SlowOrb')
         act.triggered.connect(_part(self._register_orbit, 'orb'))
-        act = menu2.addAction('&MultiTurn Orbit')
+        act = menu2.addAction('&MTurnOrb')
         act.triggered.connect(_part(self._register_orbit, 'mti'))
-        act = menu2.addAction('Single&Pass Orbit')
+        act = menu2.addAction('S&PassOrb')
         act.triggered.connect(_part(self._register_orbit, 'sp'))
-        act = menu2.addAction('&Reference Orbit')
+        act = menu2.addAction('&RefOrb')
         act.triggered.connect(_part(self._register_orbit, 'ref'))
-        act = menu2.addAction('&Offline Orbit')
+        act = menu2.addAction('&OfflineOrb')
         act.triggered.connect(_part(self._register_orbit, 'off'))
-        act = menu.addAction('&Clear Register')
+        act = menu.addAction('&Clear')
         act.triggered.connect(self._reset_orbit)
         act = menu.addAction('Save To File')
         act.triggered.connect(self._save_orbit_to_file)

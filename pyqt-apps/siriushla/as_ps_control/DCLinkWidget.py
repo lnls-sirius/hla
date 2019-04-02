@@ -99,10 +99,11 @@ class DCLinkWidget(QWidget):
         model = PSData(self._name).psmodel
         if model == 'FBP_DCLink':
             return 'Voltage'
-        elif model in ('FAC_ACDC', 'FAC_2P4S_ACDC'):
+        elif model in ('FAC_ACDC', 'FAC_2S_ACDC', 'FAC_2P4S_ACDC'):
             return 'CapacitorBankVoltage'
         else:
-            raise RuntimeError('Undefine PS model {}setpoint PV name')
+            raise RuntimeError(
+                'Undefined PS model {}setpoint PV name'.format(model))
 
     def _setup_ui(self):
         """Setups widget UI."""
