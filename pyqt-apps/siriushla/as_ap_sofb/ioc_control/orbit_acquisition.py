@@ -153,7 +153,7 @@ class AcqControlWidget(BaseWidget):
         fbl.addRow(lbl, wid)
         lbl = QLabel('Downsampling', grp_bx, alignment=Qt.AlignCenter)
         lbl.setStyleSheet("""min-width:10em; max-width:10em;""")
-        wid = self.create_pair(grp_bx, 'TrigDownSample')
+        wid = self.create_pair(grp_bx, 'MTurnDownSample')
         fbl.addRow(lbl, wid)
 
         fbl.addItem(QSpacerItem(20, 20))
