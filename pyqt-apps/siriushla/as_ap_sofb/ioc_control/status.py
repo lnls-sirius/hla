@@ -16,21 +16,21 @@ class StatusWidget(BaseWidget):
     def setupui(self):
         vbl = QVBoxLayout(self)
         lab = 'Config. Acquisition' if self.is_orb else 'Config. Correctors'
-        pv = 'OrbitTrigAcqConfig-Cmd' if self.is_orb else 'ConfigCorrs-Cmd'
+        pv = 'TrigAcqConfig-Cmd' if self.is_orb else 'CorrConfig-Cmd'
         pdm_btn = PyDMPushButton(
             self, label=lab, init_channel=self.prefix + pv, pressValue=1)
         vbl.addWidget(pdm_btn)
         vbl.addSpacing(20)
 
-        grpbx = self.creategroupbox('Orbit' if self.is_orb else 'Corr')
+        grpbx = self.creategroupbox('Orb' if self.is_orb else 'Corr')
         vbl.addWidget(grpbx)
 
     def creategroupbox(self, name):
         if name == 'Corr':
-            labels = self._csorb.StatusLabelsCorrs
+            labels = self._csorb.StsLblsCorr
             title = 'Correctors'
         else:
-            labels = self._csorb.StatusLabelsOrb
+            labels = self._csorb.StsLblsOrb
             title = 'Orbit'
         wid = QGroupBox(title + ' Status', self)
 

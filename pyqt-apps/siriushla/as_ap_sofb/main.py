@@ -4,7 +4,7 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QDockWidget, QSizePolicy, QVBoxLayout, \
     QPushButton, QHBoxLayout, QMenu, QMenuBar, QAction, QStatusBar
 from siriuspy.envars import vaca_prefix as LL_PREF
-from siriuspy.csdevice.orbitcorr import OrbitCorrDevFactory
+from siriuspy.csdevice.orbitcorr import SOFBFactory
 from siriushla import util
 from siriushla.widgets import SiriusMainWindow
 from siriushla.widgets import PyDMLogLabel
@@ -19,7 +19,7 @@ class MainWindow(SiriusMainWindow):
     def __init__(self, prefix, acc='SI'):
         super().__init__()
         self.prefix = prefix + acc + '-Glob:AP-SOFB:'
-        self._csorb = OrbitCorrDevFactory.create(acc)
+        self._csorb = SOFBFactory.create(acc)
         self.setupui()
 
     @property

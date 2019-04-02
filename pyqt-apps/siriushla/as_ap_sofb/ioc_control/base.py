@@ -6,7 +6,7 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QSizePolicy, QComboBox
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox
 from pydm.widgets.base import PyDMPrimitiveWidget
-from siriuspy.csdevice.orbitcorr import OrbitCorrDevFactory
+from siriuspy.csdevice.orbitcorr import SOFBFactory
 from siriushla.widgets import SiriusSpinbox
 
 
@@ -15,7 +15,7 @@ class BaseWidget(QWidget):
     def __init__(self, parent, prefix, acc='SI'):
         super().__init__(parent)
         self.prefix = prefix
-        self._csorb = OrbitCorrDevFactory.create(acc)
+        self._csorb = SOFBFactory.create(acc)
 
     @property
     def acc(self):
@@ -63,7 +63,7 @@ class BaseCombo(QComboBox, PyDMPrimitiveWidget):
         self.setpoint = setpoint
         self.readback = readback
         self.ctrls = ctrls
-        self._csorb = OrbitCorrDevFactory.create(acc)
+        self._csorb = SOFBFactory.create(acc)
         self.orbits = {
             'x': _np.zeros(self._csorb.NR_BPMS, dtype=float),
             'y': _np.zeros(self._csorb.NR_BPMS, dtype=float)}

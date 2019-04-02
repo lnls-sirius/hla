@@ -18,7 +18,7 @@ class KicksConfigWidget(BaseWidget):
 
     def setupui(self):
         names = ('Correction Factors', 'Maximum Kicks', 'Maximum Delta Kicks')
-        pvnames = ('CorrFactor', 'MaxKick', 'MaxDeltaKick')
+        pvnames = ('DeltaFactor', 'MaxKick', 'MaxDeltaKick')
         unitss = (('[%]', '[%]'), ('[urad]', '[urad]'), ('[urad]', '[urad]'))
         planes = ('CH', 'CV')
         if self.isring:
@@ -44,16 +44,16 @@ class KicksConfigWidget(BaseWidget):
         if self.show_details:
             vbl.addSpacing(40)
             if self.isring:
-                lbl = QLabel('Synchronize Kicks', self)
+                lbl = QLabel('Synchronize Correctors', self)
                 pdm_btn = PyDMStateButton(
-                    self, init_channel=self.prefix+'SyncKicks-Sel')
+                    self, init_channel=self.prefix+'CorrSync-Sel')
                 hbl = QHBoxLayout()
                 hbl.addWidget(lbl)
                 hbl.addWidget(pdm_btn)
                 vbl.addItem(hbl)
             pdm_btn = PyDMPushButton(
                 self, label='Configure Correctors',
-                init_channel=self.prefix+'ConfigCorrs-Cmd', pressValue=1)
+                init_channel=self.prefix+'CorrConfig-Cmd', pressValue=1)
             vbl.addSpacing(20)
             vbl.addWidget(pdm_btn)
 

@@ -1,45 +1,28 @@
 """Interface to handle general status."""
 
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QWidget, QGroupBox, QLabel, \
-    QFormLayout, QHBoxLayout, QGridLayout
+from qtpy.QtWidgets import QWidget, QGroupBox, QGridLayout, QLabel
 
 from siriuspy.envars import vaca_prefix
-from siriuspy.csdevice.pwrsupply import Const as _PSCons
-from siriuspy.search.ma_search import MASearch
+from siriuspy.search.ps_search import PSSearch
+from siriuspy.namesys import Filter
 
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, \
     PyDMLedMultiChannel
 
-
-LINAC_PS = [
-    'LA-CN:H1MLPS-1', 'LA-CN:H1MLPS-2', 'LA-CN:H1MLPS-3', 'LA-CN:H1MLPS-4',
-    'LA-CN:H1SCPS-1', 'LA-CN:H1SCPS-2', 'LA-CN:H1SCPS-3', 'LA-CN:H1SCPS-4',
-    'LA-CN:H1LCPS-1', 'LA-CN:H1LCPS-2', 'LA-CN:H1LCPS-3', 'LA-CN:H1LCPS-4',
-    'LA-CN:H1LCPS-5', 'LA-CN:H1LCPS-6', 'LA-CN:H1LCPS-7', 'LA-CN:H1LCPS-8',
-    'LA-CN:H1LCPS-9', 'LA-CN:H1LCPS-10',
-    'LA-CN:H1SLPS-1', 'LA-CN:H1SLPS-2', 'LA-CN:H1SLPS-3',
-    'LA-CN:H1SLPS-4', 'LA-CN:H1SLPS-5', 'LA-CN:H1SLPS-6',
-    'LA-CN:H1SLPS-7', 'LA-CN:H1SLPS-8', 'LA-CN:H1SLPS-9',
-    'LA-CN:H1SLPS-10', 'LA-CN:H1SLPS-11', 'LA-CN:H1SLPS-12',
-    'LA-CN:H1SLPS-13', 'LA-CN:H1SLPS-14', 'LA-CN:H1SLPS-15',
-    'LA-CN:H1SLPS-16', 'LA-CN:H1SLPS-17', 'LA-CN:H1SLPS-18',
-    'LA-CN:H1SLPS-19', 'LA-CN:H1SLPS-20', 'LA-CN:H1SLPS-21',
-    'LA-CN:H1FQPS-1', 'LA-CN:H1FQPS-2', 'LA-CN:H1FQPS-3',
-    'LA-CN:H1DQPS-1', 'LA-CN:H1DQPS-2',
-    'LA-CN:H1RCPS-1', 'LA-CN:H1DPPS-1']
+from siriushla.as_ps_diag.util import LINAC_PS, sec2label, \
+    lips2labels, asps2labels, sips2labels
 
 
 class PSMonitor(SiriusMainWindow):
     """Power Supplies Diagnosis."""
 
-    def __init__(self, parent=None, prefix=vaca_prefix, sections=list()):
+    def __init__(self, parent=None, prefix=vaca_prefix):
         """Init."""
         super().__init__(parent)
         self._prefix = prefix
-        self._sections = sections
-        self.setWindowTitle('Power Supplies Diagnosis')
+        self.setWindowTitle('Power Supplies Monitor')
         self._setupUi()
 
     def _setupUi(self):
@@ -47,69 +30,117 @@ class PSMonitor(SiriusMainWindow):
         layout = QGridLayout()
         layout.setHorizontalSpacing(15)
 
-        self._sec2label = {'LI': 'Linac',
-                           'TB': 'LTB',
-                           'BO': 'Booster',
-                           'TS': 'BTS',
-                           'SI': 'Storage Ring'}
-
-        for sec, label in self._sec2label.items():
-            if sec not in self._sections:
-                continue
+        for sec in sec2label.keys():
             if sec == 'LI':
-                status = self._make_magnets_groupbox(label, LINAC_PS)
+                status = self._make_magnets_groupbox(sec)
                 layout.addWidget(status, 1, 0, 2, 1)
-            elif sec == 'SI':
-                subsectors = ['{:02}'.format(i) for i in range(1, 21)]
-                i = 3
-                for sub in subsectors:
-                    manames = MASearch.get_manames(
-                        filters={'sec': sec, 'sub': sub+'.*'})
-                    status = self._make_magnets_groupbox(
-                        label + ' - Subsecton '+sub, manames)
-                    layout.addWidget(status, 1, i, 2, 1)
-                    i += 1
             else:
-                manames = MASearch.get_manames(filters={'sec': sec})
-                status = self._make_magnets_groupbox(label, manames)
+                status = self._make_magnets_groupbox(sec)
                 if sec == 'TB':
                     layout.addWidget(status, 1, 1)
-                elif sec == 'TS':
-                    layout.addWidget(status, 2, 1)
                 elif sec == 'BO':
                     layout.addWidget(status, 1, 2, 2, 1)
+                elif sec == 'TS':
+                    layout.addWidget(status, 2, 1)
+                elif sec == 'SI':
+                    layout.addWidget(status, 1, 3, 2, 1)
         cw.setLayout(layout)
         self.setCentralWidget(cw)
 
-    def _make_magnets_groupbox(self, group_name, manames):
-        status = QGroupBox(group_name, self)
-        status_lay = QFormLayout()
+    def _make_magnets_groupbox(self, sec):
+        status = QGroupBox(sec2label[sec], self)
+        status_lay = QGridLayout()
+        status_lay.setAlignment(Qt.AlignTop)
+        if sec == 'SI':
+            status_lay.setVerticalSpacing(20)
+            status_lay.setHorizontalSpacing(20)
+        status.setStyleSheet("""QLabel{max-height: 1.5em;}""")
         status.setLayout(status_lay)
-        lb_state = QLabel('<h4>State</h4>', self, alignment=Qt.AlignCenter)
-        lb_state.setStyleSheet("""min-width:2.4em;max-width:2.4em;""")
-        lb_intlk = QLabel('<h4>Intlk</h4>', self, alignment=Qt.AlignCenter)
-        lb_intlk.setStyleSheet("""min-width:2.4em;max-width:2.4em;""")
-        hbox_label = QHBoxLayout()
-        hbox_label.addWidget(lb_state)
-        hbox_label.addWidget(lb_intlk)
-        status_lay.addRow('', hbox_label)
-        for name in manames:
-            pname = self._prefix + name
-            lb = QLabel(name, self, alignment=Qt.AlignRight |
-                        Qt.AlignVCenter)
-            led_pwrstate = PyDMLedMultiChannel(
-                self, {pname + ':setpwm': 16} if 'Linac' in group_name else
-                {pname+':PwrState-Sts': _PSCons.PwrStateSts.On})
-            led_pwrstate.setStyleSheet("""min-width:2em;max-width:2em;""")
-            led_intlk = PyDMLedMultiChannel(
-                self, {pname + ':interlock': [55, 'lt']}
-                if 'Linac' in group_name else
-                {pname+':IntlkSoft-Mon': 0, pname+':IntlkHard-Mon': 0})
-            led_intlk.setStyleSheet("""min-width:2em;max-width:2em;""")
-            hbox = QHBoxLayout()
-            hbox.addWidget(led_pwrstate)
-            hbox.addWidget(led_intlk)
-            status_lay.addRow(lb, hbox)
+        col_count = 10
+
+        def get_ps2labels_dict(sec):
+            if sec == 'LI':
+                return lips2labels
+            elif sec == 'SI':
+                return sips2labels
+            else:
+                return asps2labels
+
+        def get_psnames(sec, f):
+            if sec == 'LI':
+                return Filter.process_filters(LINAC_PS, filters={'dis': f})
+            elif sec == 'SI':
+                return PSSearch.get_psnames(filters=f)
+            else:
+                return PSSearch.get_psnames(filters={'sec': sec, 'dev': f})
+
+        def get_ch2vals(sec, name):
+            if sec == 'LI':
+                return {self._prefix+name+':setpwm': 1,
+                        self._prefix+name+':interlock': {'value': 55,
+                                                         'comp': 'lt'}}
+            else:
+                return {self._prefix+name+':DiagStatus-Mon': 0}
+
+        def update_gridpos(row, col):
+            new_col = 0 if col == col_count-1 else col+1
+            new_row = row+1 if new_col == 0 else row
+            return [new_row, new_col]
+
+        def get_si_secpos(label):
+            if 'Dipole' in label:
+                return (0, 0, 1, 1)
+            elif 'Skew' in label:
+                return (3, 0, 3, 1)
+            elif 'Quad' in label:
+                return (1, 0, 1, 1)
+            elif 'Sext' in label:
+                return (2, 0, 1, 1)
+            elif 'Slow Hor' in label:
+                return (0, 1, 3, 1)
+            elif 'Fast Hor' in label:
+                return (3, 1, 3, 1)
+            elif 'Slow Ver' in label:
+                return (0, 2, 3, 1)
+            elif 'Fast Ver' in label:
+                return (3, 2, 3, 1)
+            elif 'Trims' in label:
+                return (0, 3, 6, 1)
+
+        row, col = 0, 0
+        for key, value in get_ps2labels_dict(sec).items():
+            label = key if sec == 'SI' else value
+            ps = value if sec == 'SI' else key
+            psnames = get_psnames(sec, ps)
+            if not psnames:
+                continue
+            if sec != 'SI':
+                status_lay.addWidget(QLabel(label, self),
+                                     row, col, 1, col_count)
+                row += 1
+                for name in psnames:
+                    led = PyDMLedMultiChannel(self, get_ch2vals(sec, name))
+                    led.setObjectName(name)
+                    led.setToolTip(name)
+                    status_lay.addWidget(led, row, col)
+                    row, col = update_gridpos(row, col)
+                row, col = row+1, 0
+            else:
+                grid = QGridLayout()
+                grid.setVerticalSpacing(6)
+                grid.setHorizontalSpacing(6)
+                grid.addWidget(QLabel(label, self), 0, 0, 1, 5)
+                aux_row, aux_col = 1, 0
+                for name in psnames:
+                    led = PyDMLedMultiChannel(self, get_ch2vals(sec, name))
+                    led.setObjectName(name)
+                    led.setToolTip(name)
+                    grid.addWidget(led, aux_row, aux_col)
+                    aux_row, aux_col = update_gridpos(aux_row, aux_col)
+                row, col, rowc, colc = get_si_secpos(label)
+                status_lay.addLayout(grid, row, col, rowc, colc,
+                                     alignment=Qt.AlignTop)
+
         return status
 
 

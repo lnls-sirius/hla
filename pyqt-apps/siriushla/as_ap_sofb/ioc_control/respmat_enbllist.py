@@ -22,7 +22,11 @@ class Led(SiriusLedAlert):
 
 class _PyDMLedList(PyDMWidget, QWidget):
 
-    def __init__(self, parent=None, init_channel=None, chan_otpl=None, size=0):
+    def __init__(
+            self, parent=None, init_channel=None, chan_otpl=None, size=0,
+            side_headers=[], top_headers=[]):
+        self.side_headers_wids = side_headers
+        self.top_headers_wids = top_headers
         QWidget.__init__(self, parent=parent)
         PyDMWidget.__init__(self, init_channel=init_channel)
         self.pv_sp = SiriusConnectionSignal(init_channel.replace('-RB', '-SP'))
@@ -46,11 +50,6 @@ class _PyDMLedList(PyDMWidget, QWidget):
             led.setSizePolicy(sz_polc)
             self.led_list.append(led)
 
-    def channels(self):
-        chans = super().channels()
-        chans.append(self.pv_sp)
-        return chans
-
     def undo_selection(self, _):
         for led in self.led_list:
             led.setSelected(False)
@@ -64,7 +63,8 @@ class _PyDMLedList(PyDMWidget, QWidget):
         if self.value is None:
             return
         value = self.value.copy()
-        for i, led in enumerate(self.led_list):
+        for i in range(value.size):
+            led = self.led_list[i]
             if led.isSelected():
                 value[i] = not value[i]
                 led.setSelected(False)
@@ -74,8 +74,16 @@ class _PyDMLedList(PyDMWidget, QWidget):
 
     def value_changed(self, new_val):
         super(_PyDMLedList, self).value_changed(new_val)
-        for i, checked in enumerate(self.value):
-            self.led_list[i].state = not checked
+        for i, led in enumerate(self.led_list):
+            if i < self.value.size:
+                led.setVisible(True)
+                led.state = not self.value[i]
+            else:
+                led.setVisible(False)
+        rsize = self.value.size / len(self.led_list)
+        ini = int(len(self.side_headers_wids) * rsize)
+        for i, head in enumerate(self.side_headers_wids):
+            head.setVisible(i < ini)
 
     def connection_changed(self, new_val):
         super(_PyDMLedList, self).connection_changed(new_val)
@@ -90,16 +98,22 @@ class SelectionMatrix(BaseWidget):
         """Initialize the matrix of the specified dev."""
         super().__init__(parent, prefix, acc)
         self.dev = dev
+        max_rz = self._csorb.MAX_RINGSZ
+        bpms = np.array(self._csorb.BPM_POS)
+        bpm_pos = [bpms + i*self._csorb.C0 for i in range(max_rz)]
+        bpm_pos = np.hstack(bpm_pos)
+        bpm_name = self._csorb.BPM_NAMES * max_rz
+        bpm_nknm = self._csorb.BPM_NICKNAMES * max_rz
         self.devpos = {
-            'BPMX': self._csorb.BPM_POS,
-            'BPMY': self._csorb.BPM_POS,
+            'BPMX': bpm_pos,
+            'BPMY': bpm_pos,
             'CH': self._csorb.CH_POS,
             'CV': self._csorb.CV_POS}
         self.devotpl = {
             'BPMX': 'BPMY', 'BPMY': 'BPMX', 'CH': 'CV', 'CV': 'CH'}
         self.devnames = {
-            'BPMX': (self._csorb.BPM_NAMES, self._csorb.BPM_NICKNAMES),
-            'BPMY': (self._csorb.BPM_NAMES, self._csorb.BPM_NICKNAMES),
+            'BPMX': (bpm_name, bpm_nknm),
+            'BPMY': (bpm_name, bpm_nknm),
             'CH': (self._csorb.CH_NAMES, self._csorb.CH_NICKNAMES),
             'CV': (self._csorb.CV_NAMES, self._csorb.CV_NICKNAMES)}
         self._get_headers()
@@ -108,7 +122,9 @@ class SelectionMatrix(BaseWidget):
             parent=self,
             init_channel=self.prefix + self.dev + 'EnblList-RB',
             chan_otpl=self.prefix + self.devotpl[self.dev] + 'EnblList-RB',
-            size=len(self.devnames[self.dev][0]))
+            size=len(self.devnames[self.dev][0]),
+            side_headers=self.side_headers_wids,
+            top_headers=self.top_headers_wids)
         self._setup_ui()
 
     def _get_headers(self):
@@ -128,9 +144,22 @@ class SelectionMatrix(BaseWidget):
             side_headers.append(side_headers[0])
         else:
             top_headers = nicks
-            side_headers = []
-        self.side_headers = side_headers
+            side_headers = [' ']
         self.top_headers = top_headers
+        self.side_headers = side_headers
+        if self.dev.lower().startswith('bpm'):
+            self.side_headers *= self._csorb.MAX_RINGSZ
+
+        side_headers_wids = []
+        top_headers_wids = []
+        for i, head in enumerate(self.top_headers):
+            head_wid = QLabel(head, alignment=Qt.AlignCenter)
+            top_headers_wids.append(head_wid)
+        for i, head in enumerate(self.side_headers):
+            head_wid = QLabel(head, alignment=Qt.AlignCenter)
+            side_headers_wids.append(head_wid)
+        self.top_headers_wids = top_headers_wids
+        self.side_headers_wids = side_headers_wids
 
     def _setup_ui(self):
         name = self.dev + "List"
@@ -166,36 +195,44 @@ class SelectionMatrix(BaseWidget):
         wid.setStyleSheet("font-weight: bold;")
         gdl = QGridLayout(wid)
 
-        for i, head in enumerate(self.top_headers):
-            gdl.addWidget(QLabel(head, wid, alignment=Qt.AlignCenter), 0, i+1)
-        for i, head in enumerate(self.side_headers):
-            gdl.addWidget(QLabel(head, wid, alignment=Qt.AlignCenter), i+1, 0)
-        for dev in self.devnames[self.dev][0]:
-            wid2, idx = self._make_unit(wid, dev)
+        for i, head in enumerate(self.top_headers_wids):
+            head.setParent(wid)
+            gdl.addWidget(head, 0, i+1)
+        for i, head in enumerate(self.side_headers_wids):
+            head.setParent(wid)
+            gdl.addWidget(head, i+1, 0)
+        for idx in range(len(self.devnames[self.dev][0])):
+            wid2 = self._make_unit(wid, idx)
             i, j = self._get_position(idx)
             gdl.addWidget(wid2, i+1, j+1)
         return wid
 
     def _get_position(self, idx):
         _, nicks = self.devnames[self.dev]
+        rsize, hsize, i = len(nicks), len(self.side_headers), 0
+        if self.dev.lower().startswith('bpm'):
+            rsize //= self._csorb.MAX_RINGSZ
+            hsize //= self._csorb.MAX_RINGSZ
+            i = (idx // rsize) * hsize
         if self.acc == 'BO':
             sec = int(nicks[idx][:2])
             j = ((sec-1) % 10) + 1
             j = self.top_headers.index('{0:02d}'.format(j))
-            i = (sec-1) // 10
-            if idx == len(nicks)-1 and sec == 1:
-                i = len(self.side_headers) - 1
+            if not (idx+1) % rsize and sec == 1:
+                i += hsize - 1
+            else:
+                i += (sec-1) // 10
         elif self.acc == 'SI':
             j = self.top_headers.index(nicks[idx][2:])
-            i = (idx+1) // len(self.top_headers)
-            if idx == len(nicks)-1:
-                i = len(self.side_headers)-1
+            if not (idx+1) % rsize:
+                i += hsize-1
+            else:
+                i += ((idx % rsize) + 1) // len(self.top_headers)
         else:
-            i, j = 0, idx
+            j = idx
         return i, j
 
-    def _make_unit(self, parent, dev):
-        index = self.devnames[self.dev][0].index(dev)
+    def _make_unit(self, parent, index):
         label = self.devnames[self.dev][1][index]
         label += '; Pos = {0:5.1f} m'.format(self.devpos[self.dev][index])
         wid = QWidget(parent)
@@ -204,7 +241,7 @@ class SelectionMatrix(BaseWidget):
         led.setParent(wid)
         led.setToolTip(label)
         hbl.addWidget(led)
-        return wid, index
+        return wid
 
 
 class MyWidget(QWidget):
@@ -241,7 +278,9 @@ class MyWidget(QWidget):
         self.update()
 
     def selectitems(self):
-        for led in self.led_list:
+        for i, led in enumerate(self.led_list):
+            if not led.isVisible():
+                continue
             pos = led.mapTo(self, led.pos())
             sz = led.size()
             x1 = pos.x()+sz.width()/2 > self.begin.x()
@@ -256,9 +295,13 @@ def _main():
     app = SiriusApplication()
     win = SiriusDialog()
     hbl = QHBoxLayout(win)
-    acc = 'TB'
-    wid = SelectionMatrix(win, 'CV', pref+acc+'-Glob:AP-SOFB:', acc)
-    hbl.addWidget(wid)
+    acc = 'BO'
+    widb = SelectionMatrix(win, 'BPMX', pref+acc+'-Glob:AP-SOFB:', acc)
+    widh = SelectionMatrix(win, 'CH', pref+acc+'-Glob:AP-SOFB:', acc)
+    widv = SelectionMatrix(win, 'CV', pref+acc+'-Glob:AP-SOFB:', acc)
+    hbl.addWidget(widb)
+    hbl.addWidget(widh)
+    hbl.addWidget(widv)
     win.show()
     sys.exit(app.exec_())
 

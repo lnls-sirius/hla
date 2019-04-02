@@ -6,13 +6,14 @@ from pyqtgraph import functions
 from qtpy.QtWidgets import QWidget, QLabel, QVBoxLayout, QPushButton, \
     QHBoxLayout, QGroupBox, QComboBox, QToolTip
 from qtpy.QtCore import Qt, Signal
-from siriuspy.csdevice.orbitcorr import OrbitCorrDevFactory
+from siriuspy.csdevice.orbitcorr import SOFBFactory
 import siriushla.util as _util
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets import SiriusSpectrogramView, SiriusConnectionSignal
 
 from siriushla.as_ap_sofb.graphics.base import BaseWidget, Graph
 from siriushla.as_ap_sofb.graphics.correctors import CorrectorsWidget
+
 
 class OrbitWidget(BaseWidget):
 
@@ -24,9 +25,9 @@ class OrbitWidget(BaseWidget):
         names = ['Line {0:d}'.format(i+1) for i in range(2)]
         super().__init__(parent, prefix, ctrls, names, True, acc)
 
-        txt1, txt2 = 'SinglePass', 'Reference Orbit'
+        txt1, txt2 = 'SPassOrb', 'RefOrb'
         if self.isring:
-            txt1 = 'Online Orbit'
+            txt1 = 'SlowOrb'
 
         self.updater[0].some_changed('val', txt1)
         self.updater[0].some_changed('ref', txt2)
@@ -82,17 +83,17 @@ class OrbitWidget(BaseWidget):
     @staticmethod
     def get_default_ctrls(prefix, isring=True):
         pvs = [
-            'OrbitSmoothSinglePassX-Mon', 'OrbitSmoothSinglePassY-Mon',
-            'OrbitOfflineX-RB', 'OrbitOfflineY-RB',
-            'OrbitRefX-RB', 'OrbitRefY-RB',
-            'BPMOffsetsX-Mon', 'BPMOffsetsY-Mon']
+            'SPassOrbX-Mon', 'SPassOrbY-Mon',
+            'OfflineOrbX-RB', 'OfflineOrbY-RB',
+            'RefOrbX-RB', 'RefOrbY-RB',
+            'BPMOffsetX-Mon', 'BPMOffsetY-Mon']
         orbs = [
-            'SinglePass', 'Offline Orbit', 'Reference Orbit', 'BPMs Offset']
+            'SPassOrb', 'OfflineOrb', 'RefOrb', 'BPMs Offset']
         if isring:
             pvs.extend([
-                'OrbitSmoothX-Mon', 'OrbitSmoothY-Mon',
-                'OrbitMultiTurnX-Mon', 'OrbitMultiTurnY-Mon'])
-            orbs.extend(['Online Orbit', 'MultiTurn Orbit'])
+                'SlowOrbX-Mon', 'SlowOrbY-Mon',
+                'MTurnIdxOrbX-Mon', 'MTurnIdxOrbY-Mon'])
+            orbs.extend(['SlowOrb', 'MTurnOrb'])
 
         chans = [SiriusConnectionSignal(prefix+pv) for pv in pvs]
         ctrls = dict()
@@ -134,15 +135,15 @@ class MultiTurnWidget(QWidget):
         self.spectx = Spectrogram(
             parent=self,
             prefix=self.prefix,
-            image_channel=self.prefix+'OrbitsMultiTurnX-Mon',
-            xaxis_channel=self.prefix+'BPMPosS-Cte',
-            yaxis_channel=self.prefix+'OrbitMultiTurnTime-Mon')
+            image_channel=self.prefix+'MTurnOrbX-Mon',
+            xaxis_channel=self.prefix+'BPMPosS-Mon',
+            yaxis_channel=self.prefix+'MTurnTime-Mon')
         self.specty = Spectrogram(
             parent=self,
             prefix=self.prefix,
-            image_channel=self.prefix+'OrbitsMultiTurnY-Mon',
-            xaxis_channel=self.prefix+'BPMPosS-Cte',
-            yaxis_channel=self.prefix+'OrbitMultiTurnTime-Mon')
+            image_channel=self.prefix+'MTurnOrbY-Mon',
+            xaxis_channel=self.prefix+'BPMPosS-Mon',
+            yaxis_channel=self.prefix+'MTurnTime-Mon')
         self.spectx.normalizeData = True
         self.specty.normalizeData = True
         self.spectx.yaxis.setLabel('time', units='s')
@@ -180,9 +181,9 @@ class MultiTurnSumWidget(QWidget):
         self.spect = Spectrogram(
             parent=self,
             prefix=self.prefix,
-            image_channel=self.prefix+'OrbitsMultiTurnSum-Mon',
-            xaxis_channel=self.prefix+'BPMPosS-Cte',
-            yaxis_channel=self.prefix+'OrbitMultiTurnTime-Mon')
+            image_channel=self.prefix+'MTurnSum-Mon',
+            xaxis_channel=self.prefix+'BPMPosS-Mon',
+            yaxis_channel=self.prefix+'MTurnTime-Mon')
         self.spect.new_data_sig.connect(self.update_graph)
         self.spect.normalizeData = True
         self.spect.yaxis.setLabel('time', units='s')
@@ -203,7 +204,7 @@ class MultiTurnSumWidget(QWidget):
         graph.setLabel('left', text='Sum', units='count')
         opts = dict(
             y_channel='A',
-            x_channel=self.prefix+'OrbitMultiTurnTime-Mon',
+            x_channel=self.prefix+'MTurnTime-Mon',
             name='',
             color='black',
             redraw_mode=2,
@@ -225,7 +226,7 @@ class Spectrogram(SiriusSpectrogramView):
         super().__init__(**kwargs)
         self.prefix = prefix
         self.multiturnidx = SiriusConnectionSignal(
-                                self.prefix + 'OrbitMultiTurnIdx-SP')
+                                self.prefix + 'MTurnIdx-SP')
 
     def channels(self):
         chans = super().channels()
@@ -256,13 +257,13 @@ class SinglePassSumWidget(QWidget):
         super().__init__(parent)
         self.prefix = prefix
         self.acc = acc.upper()
-        self._csorb = OrbitCorrDevFactory.create(acc)
+        self._csorb = SOFBFactory.create(acc)
         self.setupui()
 
     def setupui(self):
         vbl = QVBoxLayout(self)
 
-        lab = QLabel('Single Pass Sum BPMs', self, alignment=Qt.AlignCenter)
+        lab = QLabel('SinglePass Sum BPMs', self, alignment=Qt.AlignCenter)
         lab.setStyleSheet("font-weight: bold;")
         vbl.addWidget(lab)
 
@@ -271,8 +272,8 @@ class SinglePassSumWidget(QWidget):
         graph.setLabel('bottom', text='BPM Position', units='m')
         graph.setLabel('left', text='Sum', units='count')
         opts = dict(
-            y_channel=self.prefix+'OrbitSmoothSinglePassSum-Mon',
-            x_channel=self.prefix+'BPMPosS-Cte',
+            y_channel=self.prefix+'SPassSum-Mon',
+            x_channel=self.prefix+'BPMPosS-Mon',
             name='',
             color='black',
             redraw_mode=2,
