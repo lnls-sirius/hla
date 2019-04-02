@@ -108,9 +108,16 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         The parent widget for the led.
     channels2values: dict
         A dict with channels as keys and desired PVs values as values.
+        Values can be either a scalar, to simple comparision, or a dict.
+        This dict can have as keys:
+            - 'value' (the value to use in comparision);
+            - 'comp' (a string that select the type of comparision, can be
+                      'eq', 'ne', 'gt', 'lt', 'ge', 'le');
+            - and 'bit' (select a bit of the pv to compare to 'value').
     """
 
     warning = Signal(list)
+    normal = Signal(list)
 
     default_colorlist = [PyDMLed.Red, PyDMLed.LightGreen]
 
@@ -128,13 +135,11 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
                                  'ge': self._ge,
                                  'le': self._le}
 
-        self.channels2ids = dict()
-        for _id, address in enumerate(sorted(self.channels2values.keys())):
-            stid = str(_id)
-            setattr(self, 'channel' + stid, address)
-            setattr(self, 'channel' + stid + '_value', 'UNDEF')
-            setattr(self, 'channel' + stid + '_connected', False)
-            self.channels2ids[address] = stid
+        self.channels2conn = dict()
+        self.channels2status = dict()
+        for address in self.channels2values.keys():
+            self.channels2conn[address] = False
+            self.channels2status[address] = 'UNDEF'
             channel = PyDMChannel(
                 address=address,
                 connection_slot=self.connection_changed,
@@ -145,31 +150,44 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
     def value_changed(self, new_val):
         """Receive new value and set led color accordingly."""
         address = self.sender().address
-        setattr(self, 'channel'+self.channels2ids[address]+'_value', new_val)
-        state = 1
-        for address, desired_value in self.channels2values.items():
-            val = getattr(self, 'channel'+self.channels2ids[address]+'_value')
-            if val != 'UNDEF':
-                if isinstance(desired_value, (tuple, list)):
-                    fun = self._operations_dict[desired_value[1]]
-                    is_desired = fun(val, desired_value[0])
-                else:
-                    fun = self._operations_dict['eq']
-                    is_desired = fun(val, desired_value)
+        desired_value = self.channels2values[address]
 
-                if not is_desired:
-                    self.warning.emit([address, val])
-                state &= is_desired
+        if isinstance(desired_value, dict):
+            if 'bit' in desired_value.keys():
+                bit = desired_value['bit']
+                mask = 1 << bit
+                new_val = (new_val & mask) >> bit
+            if 'comp' in desired_value.keys():
+                fun = self._operations_dict[desired_value['comp']]
+            else:
+                fun = self._operations_dict['eq']
+            is_desired = fun(new_val, desired_value['value'])
+        else:
+            fun = self._operations_dict['eq']
+            is_desired = fun(new_val, desired_value)
+
+        self.channels2status[address] = is_desired
+        if not is_desired:
+            self.warning.emit([address, new_val])
+        else:
+            self.normal.emit([address, new_val])
+
+        state = 1
+        for status in self.channels2status.values():
+            if status == 'UNDEF':
+                state = 0
+                break
+            state &= status
         self.setState(state)
 
     @Slot(bool)
     def connection_changed(self, conn):
         """Reimplement connection_changed to handle all channels."""
         address = self.sender().address
-        setattr(self, 'channel'+self.channels2ids[address]+'_connected', conn)
+        self.channels2conn[address] = conn
         allconn = True
-        for _id in self.channels2ids.values():
-            allconn &= getattr(self, 'channel'+_id+'_connected')
+        for conn in self.channels2conn.values():
+            allconn &= conn
         PyDMWidget.connection_changed(self, allconn)
         self.setEnabled(allconn)
 
@@ -248,6 +266,9 @@ class PyDMLedMultiConnection(QLed, PyDMWidget):
         A list of channels.
     """
 
+    warning = Signal(list)
+    normal = Signal(list)
+
     default_colorlist = [PyDMLed.Red, PyDMLed.LightGreen]
 
     def __init__(self, parent=None, channels=list(), color_list=None):
@@ -256,13 +277,8 @@ class PyDMLedMultiConnection(QLed, PyDMWidget):
         PyDMWidget.__init__(self)
         self.stateColors = color_list or self.default_colorlist
 
-        self.channels2ids = dict()
         self._channels2conn = dict()
-        for _id, address in enumerate(sorted(channels)):
-            stid = str(_id)
-            setattr(self, 'channel' + stid, address)
-            setattr(self, 'channel' + stid + '_connected', False)
-            self.channels2ids[address] = stid
+        for address in channels:
             self._channels2conn[address] = False
             channel = PyDMChannel(
                 address=address, connection_slot=self.connection_changed)
@@ -278,10 +294,14 @@ class PyDMLedMultiConnection(QLed, PyDMWidget):
     def connection_changed(self, conn):
         """Reimplement connection_changed to handle all channels."""
         address = self.sender().address
-        setattr(self, 'channel'+self.channels2ids[address]+'_connected', conn)
+        if not conn:
+            self.warning.emit([address, conn])
+        else:
+            self.normal.emit([address, conn])
         self._channels2conn[address] = conn
+
         allconn = True
-        for _id in self.channels2ids.values():
-            allconn &= getattr(self, 'channel'+_id+'_connected')
+        for conn in self.channels2conn.values():
+            allconn &= conn
         self.setState(allconn)
         self._connected = allconn
