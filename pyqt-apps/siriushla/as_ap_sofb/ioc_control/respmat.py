@@ -140,8 +140,8 @@ class RespMatWidget(BaseWidget):
         grpbx = QGroupBox('Singular Values', self)
         vbl.addWidget(grpbx)
         fml = QFormLayout(grpbx)
-        lab = QLabel('Number used')
-        wid = self.create_pair(grpbx, 'NumSingValues')
+        lab = QLabel('Nr of SV')
+        wid = self.create_pair(grpbx, 'NrSingValues')
         fml.addRow(lab, wid)
         btn = QPushButton('Check Singular Values', grpbx)
         fml.addWidget(btn)
@@ -190,7 +190,7 @@ class RespMatWidget(BaseWidget):
             return
         fname += '' if fname.endswith(self.EXT) else ('.' + self.EXT)
         respm = self._respmat_rb.getvalue()
-        respm = respm.reshape(2*self._csorb.NR_BPMS, -1)
+        respm = respm.reshape(-1, self._csorb.NR_CORRS)
         _np.savetxt(fname, respm, header=header)
 
     def _load_respmat_from_file(self):
@@ -220,7 +220,7 @@ class RespMatWidget(BaseWidget):
 
     def _save_respm(self, confname):
         val = self._respmat_rb.getvalue()
-        val = val.reshape(2*self._csorb.NR_BPMS, -1)
+        val = val.reshape(-1, self._csorb.NR_CORRS)
         try:
             self._servconf.config_insert(confname, val.tolist())
         except TypeError as e:
@@ -266,7 +266,7 @@ class SingularValues(QWidget):
         pen.setWidth(3)
         line = InfLine(pos=0, pen=pen, angle=90)
         graph.addItem(line)
-        chan = SiriusConnectionSignal(self.prefix+'NumSingValues-RB')
+        chan = SiriusConnectionSignal(self.prefix+'NrSingValues-RB')
         chan.new_value_signal[int].connect(line.setValue)
         self._chans.append(chan)
 
