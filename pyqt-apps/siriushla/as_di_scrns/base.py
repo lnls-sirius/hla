@@ -3,7 +3,8 @@
 import time
 from copy import deepcopy as _dcopy
 import numpy as np
-from qtpy.QtWidgets import QHBoxLayout, QSizePolicy as QSzPlcy, QVBoxLayout
+from qtpy.QtWidgets import QHBoxLayout, QSizePolicy as QSzPlcy, QVBoxLayout, \
+    QToolTip
 from qtpy.QtCore import Qt, Slot, Signal, Property
 from pydm.widgets import PyDMImageView, PyDMLabel, PyDMSpinbox, \
                          PyDMPushButton, PyDMEnumComboBox
@@ -416,6 +417,15 @@ class SiriusImageView(PyDMImageView):
                 severity_slot=self.alarmSeverityChanged)
             self._channels[5] = self._maxheightchannel
             self._maxheightchannel.connect()
+
+    def mousePressEvent(self, ev):
+        pos = ev.pos()
+        pos_scene = self.view.mapSceneToView(pos)
+        txt = '{0}, {1}'.format(round(pos_scene.x()),
+                                round(pos_scene.y()))
+        QToolTip.showText(
+            self.mapToGlobal(pos), txt,
+            self, self.geometry(), 5000)
 
 
 def create_propty_layout(parent, prefix, propty, propty_type, cmd=dict(),
