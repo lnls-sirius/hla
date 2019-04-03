@@ -88,13 +88,14 @@ class PhysicalTriggers(BaseWidget):
         lab = QLabel('Length', grpbx)
         hbl = QHBoxLayout()
         fbl.addRow(lab, hbl)
-        chan = self.get_pvname(trig+'RcvLen-SP')
+        pvn = trig+'RcvLen-SP'
+        chan = self.get_pvname(pvn)
         spbx = SiriusSpinbox(
             grpbx, init_channel=chan)
         spbx.showStepExponent = False
         spbx.limitsFromChannel = False
-        low = self.bpmdb[chan].get('low', -1e10)
-        high = self.bpmdb[chan].get('high', 1e10)
+        low = self.bpmdb[pvn].get('low', -1e10)
+        high = self.bpmdb[pvn].get('high', 1e10)
         spbx.setRange(low, high)
         hbl.addWidget(spbx)
         lab = SiriusLabel(
@@ -102,13 +103,14 @@ class PhysicalTriggers(BaseWidget):
         lab.setAlignment(Qt.AlignCenter)
         hbl.addWidget(lab)
         hbl.addSpacing(20)
-        chan = self.get_pvname(trig+'TrnLen-SP')
+        pvn = trig+'TrnLen-SP'
+        chan = self.get_pvname(pvn)
         spbx = SiriusSpinbox(
             grpbx, init_channel=chan)
         spbx.showStepExponent = False
         spbx.limitsFromChannel = False
-        low = self.bpmdb[chan].get('low', -1e10)
-        high = self.bpmdb[chan].get('high', 1e10)
+        low = self.bpmdb[pvn].get('low', -1e10)
+        high = self.bpmdb[pvn].get('high', 1e10)
         spbx.setRange(low, high)
         hbl.addWidget(spbx)
         lab = SiriusLabel(
@@ -184,13 +186,14 @@ class LogicalTriggers(BaseWidget):
         lab = QLabel('Selection', grpbx)
         hbl = QHBoxLayout()
         fbl.addRow(lab, hbl)
-        chan = self.get_pvname(trig+'RcvInSel-SP')
+        pvn = trig+'RcvInSel-SP'
+        chan = self.get_pvname(pvn)
         spbx = SiriusSpinbox(
             grpbx, init_channel=chan)
         spbx.showStepExponent = False
         spbx.limitsFromChannel = False
-        low = self.bpmdb[chan].get('low', -1e10)
-        high = self.bpmdb[chan].get('high', 1e10)
+        low = self.bpmdb[pvn].get('low', -1e10)
+        high = self.bpmdb[pvn].get('high', 1e10)
         spbx.setRange(low, high)
         hbl.addWidget(spbx)
         lab = SiriusLabel(
@@ -198,13 +201,14 @@ class LogicalTriggers(BaseWidget):
         lab.setAlignment(Qt.AlignCenter)
         hbl.addWidget(lab)
         hbl.addSpacing(20)
-        chan = self.get_pvname(trig+'TrnOutSel-SP')
+        pvn = trig+'TrnOutSel-SP'
+        chan = self.get_pvname(pvn)
         spbx = SiriusSpinbox(
             grpbx, init_channel=chan)
         spbx.showStepExponent = False
         spbx.limitsFromChannel = False
-        low = self.bpmdb[chan].get('low', -1e10)
-        high = self.bpmdb[chan].get('high', 1e10)
+        low = self.bpmdb[pvn].get('low', -1e10)
+        high = self.bpmdb[pvn].get('high', 1e10)
         spbx.setRange(low, high)
         hbl.addWidget(spbx)
         lab = SiriusLabel(
