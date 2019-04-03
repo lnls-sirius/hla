@@ -23,14 +23,14 @@ args = parser.parse_args()
 app = SiriusApplication()
 pv = _PVName(args.bpm_sel)
 if pv.dev == 'BPM':
-    BPMMainWin = create_window_from_widget(BPMMain, 'BPMMainWin', is_main=True)
+    BPMMainWin = create_window_from_widget(
+        BPMMain, title=args.bpm_sel, is_main=True)
     window = BPMMainWin(None, prefix=args.prefix, bpm=pv)
-    window.setWindowTitle(args.bpm_sel)
 else:
     bpms_names = BPMSearch.get_names(filters={'sec': args.bpm_sel})
-    BPMsList = create_window_from_widget(SelectBPMs, 'BPMsList', is_main=True)
+    BPMsList = create_window_from_widget(
+        SelectBPMs, title=args.bpm_sel + ' BPM List', is_main=True)
     window = BPMsList(None, prefix=args.prefix, bpm_list=bpms_names)
-    window.setWindowTitle(args.bpm_sel + ' BPM List')
 
 window.show()
 sys.exit(app.exec_())

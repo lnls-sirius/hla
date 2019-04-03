@@ -32,7 +32,8 @@ class BPMSummary(BaseWidget):
         hbl.addStretch()
         pbt = QPushButton(self.bpm)
         pbt.setStyleSheet('min-width:8em;')
-        Window = create_window_from_widget(BPMMain, 'BPMMain', is_main=True)
+        Window = create_window_from_widget(
+            BPMMain, title=self.bpm, is_main=True)
         util.connect_window(
             pbt, Window, parent=None, prefix=self.prefix, bpm=self.bpm)
         hbl.addWidget(pbt)
@@ -65,7 +66,8 @@ class BPMMain(BaseWidget):
         hbl.addSpacing(10)
         hbl.addStretch()
         pbt = QPushButton('Open Settings')
-        Window = create_window_from_widget(ParamsSettings, 'ParamsSettings')
+        Window = create_window_from_widget(
+            ParamsSettings, title=self.bpm+': Settings')
         util.connect_window(
             pbt, Window, parent=grpbx, prefix=self.prefix, bpm=self.bpm)
         hbl.addWidget(pbt)
@@ -80,14 +82,17 @@ class BPMMain(BaseWidget):
         hbl.addSpacing(10)
         hbl.addStretch()
         pbt = QPushButton('MultiBunch/SinglePass')
-        Window = create_window_from_widget(TriggeredAcquisition, 'TrigAcq')
+        Window = create_window_from_widget(
+            TriggeredAcquisition,
+            title=self.bpm+': MultiBunch/SinglePass Acquisitions')
         util.connect_window(
             pbt, Window, parent=grpbx, prefix=self.prefix, bpm=self.bpm)
         hbl.addWidget(pbt)
         hbl.addSpacing(10)
         hbl.addStretch()
         pbt = QPushButton('PostMortem')
-        Window = create_window_from_widget(PostMortemAcquisition, 'PMAcq')
+        Window = create_window_from_widget(
+            PostMortemAcquisition, title=self.bpm+': PostMortem Acquisitions')
         util.connect_window(
             pbt, Window, parent=grpbx, prefix=self.prefix, bpm=self.bpm)
         hbl.addWidget(pbt)
@@ -108,7 +113,7 @@ class BPMMain(BaseWidget):
         hbl.addWidget(pbt)
         hbl.addStretch()
         Window = create_window_from_widget(
-            MonitData, 'ContMonit', size=(32, 40))
+            MonitData, title=self.bpm+': Monit Data', size=(32, 40))
         util.connect_window(
             pbt, Window, parent=grpbx, prefix=self.prefix, bpm=self.bpm)
         grpbx.layoutf.addRow(hbl)

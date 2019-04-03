@@ -165,7 +165,9 @@ class ScrnSettingsDetails(SiriusMainWindow):
         self.pb_trgdetails.setStyleSheet("""
             min-width:7.10em;\nmax-width:7.10em;\n
             min-height:1.29em;\nmax-height:1.29em;\n""")
-        trg_w = create_window_from_widget(HLTriggerDetailed, is_main=True)
+        trg_w = create_window_from_widget(
+            HLTriggerDetailed, title=trg_prefix+' Detailed Settings',
+            is_main=True)
         util.connect_window(self.pb_trgdetails, trg_w, parent=self,
                             prefix=trg_prefix)
         hlay_TIstatus = QHBoxLayout()

@@ -77,7 +77,7 @@ class MultiTurnData(BaseWidget):
             hbl2.addWidget(pb)
             hbl2.addStretch()
             Window = create_window_from_widget(
-                FFTData, 'FFTData', size=(45, 52))
+                FFTData, title=self.bpm+': FFT Data', size=(45, 52))
             util.connect_window(
                 pb, Window, parent=stack1, prefix=self.prefix,
                 bpm=self.bpm, data_prefix=self.data_prefix, position=False)
@@ -100,7 +100,7 @@ class MultiTurnData(BaseWidget):
             hbl2.addWidget(pb)
             hbl2.addStretch()
             Window = create_window_from_widget(
-                FFTData, 'FFTData', size=(45, 52))
+                FFTData, title=self.bpm+': FFT Data', size=(45, 52))
             util.connect_window(
                 pb, Window, parent=stack1, prefix=self.prefix,
                 bpm=self.bpm, data_prefix=self.data_prefix, position=True)
