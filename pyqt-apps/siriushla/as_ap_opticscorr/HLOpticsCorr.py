@@ -213,7 +213,7 @@ class _CorrParamsDetailWindow(SiriusMainWindow):
             lay.addWidget(label_nomchrom, 19, 1, 1, self._nfam)
             lay.addWidget(self.pydmlabel_nomchrom, 20, 1, 1, self._nfam)
 
-        self.bt_apply = QPushButton('Apply', self)
+        self.bt_apply = QPushButton('Ok', self)
         self.bt_apply.clicked.connect(self.close)
         lay.addWidget(self.bt_apply, 21, self._nfam)
 
