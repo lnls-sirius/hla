@@ -42,7 +42,7 @@ class LoadRampConfig(_LoadConfiguration):
 
     @Slot()
     def _load_configuration(self):
-        name = self._get_config_name()
+        name = self.editor.config_name
         if self.ramp_config is not None:
             if not self.ramp_config.configsrv_synchronized:
                 save_changes = MessageBox(
