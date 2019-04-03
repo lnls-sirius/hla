@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>491</width>
-    <height>929</height>
+    <height>932</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -25,7 +25,7 @@ width:36em;
 height:62em;
 }</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_3" rowstretch="1,1,8,1,32,1,16,1">
+  <layout class="QGridLayout" name="gridLayout_3" rowstretch="1,1,8,1,32,1,14,1">
    <item row="0" column="0">
     <widget class="QLabel" name="label">
      <property name="minimumSize">
@@ -1953,26 +1953,10 @@ max-width:8em;</string>
         </property>
        </widget>
       </item>
-      <item row="7" column="3">
-       <widget class="SiriusLedAlert" name="SiriusLedAlert_5">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>PyDMLed specialization to represent 2 states in red/light green.</string>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Glob:AP-ChromCorr:Status-Mon</string>
-        </property>
-        <property name="pvbit" stdset="0">
-         <number>4</number>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="4">
        <widget class="QLabel" name="label_status0">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -1988,7 +1972,7 @@ max-width:8em;</string>
       <item row="3" column="4">
        <widget class="QLabel" name="label_status2">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -2020,7 +2004,7 @@ max-width:8em;</string>
       <item row="2" column="4">
        <widget class="QLabel" name="label_status1">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -2049,7 +2033,7 @@ max-width:8em;</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="2" rowspan="8">
+      <item row="1" column="2" rowspan="7">
        <spacer name="horizontalSpacer_7">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -2068,23 +2052,7 @@ max-width:8em;</string>
       <item row="4" column="4">
        <widget class="QLabel" name="label_status3">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>TextLabel</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="7" column="4">
-       <widget class="QLabel" name="label_status4">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -2099,20 +2067,11 @@ max-width:8em;</string>
       </item>
       <item row="6" column="3" colspan="2">
        <widget class="PyDMPushButton" name="PyDMPushButton">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string/>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
         <property name="whatsThis">
          <string>
@@ -2151,9 +2110,6 @@ max-width:8em;</string>
         ID of channel to manipulate
 
     </string>
-        </property>
-        <property name="styleSheet">
-         <string notr="true"/>
         </property>
         <property name="text">
          <string>Config Sextupoles</string>
@@ -2166,61 +2122,7 @@ max-width:8em;</string>
         </property>
        </widget>
       </item>
-      <item row="9" column="3" colspan="2">
-       <widget class="PyDMPushButton" name="PyDMPushButton_2">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>
-    Basic PushButton to send a fixed value.
-
-    The PyDMPushButton is meant to hold a specific value, and send that value
-    to a channel when it is clicked, much like the MessageButton does in EDM.
-    The PyDMPushButton works in two different modes of operation, first, a
-    fixed value can be given to the :attr:`.pressValue` attribute, whenever the
-    button is clicked a signal containing this value will be sent to the
-    connected channel. This is the default behavior of the button. However, if
-    the :attr:`.relativeChange` is set to True, the fixed value will be added
-    to the current value of the channel. This means that the button will
-    increment a channel by a fixed amount with every click, a consistent
-    relative move
-
-    Parameters
-    ----------
-    parent : QObject, optional
-        Parent of PyDMPushButton
-
-    label : str, optional
-        String to place on button
-
-    icon : QIcon, optional
-        An Icon to display on the PyDMPushButton
-
-    pressValue : int, float, str
-        Value to be sent when the button is clicked
-
-    relative : bool, optional
-        Choice to have the button perform a relative put, instead of always
-        setting to an absolute value
-
-    init_channel : str, optional
-        ID of channel to manipulate
-
-    </string>
-        </property>
-        <property name="text">
-         <string>Config Timing</string>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Glob:AP-ChromCorr:ConfigTiming-Cmd</string>
-        </property>
-        <property name="pressValue" stdset="0">
-         <string>0</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" rowspan="9">
+      <item row="1" column="0" rowspan="8">
        <widget class="PyDMLogLabel" name="PyDMLogLabel">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">

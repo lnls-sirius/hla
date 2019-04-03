@@ -52,7 +52,8 @@ class OpticsCorrWindow(SiriusMainWindow):
         self._setStatusLabels()
 
     def _setStatusLabels(self):
-        status_bits = 5 if self._acc == 'SI' else 4
+        status_bits = 5 if (self.opticsparam == 'tune' and
+                            self._acc == 'SI') else 4
         for i in range(status_bits):
             exec('self.centralwidget.label_status{0}.setText'
                  '(_Const.STATUS_LABELS[{0}])'.format(i))
@@ -97,24 +98,26 @@ class _CorrParamsDetailWindow(SiriusMainWindow):
             self.pydmlabel_method = PyDMLabel(
                 parent=self, init_channel=ioc_prefix+'CorrMeth-Sts')
 
-            label_sync = QLabel('<h4>Syncronization</h4>',
-                                alignment=Qt.AlignCenter)
-            self.button_sync = PyDMStateButton(
-                parent=self, init_channel=ioc_prefix+'SyncCorr-Sel')
-            self.button_sync.shape = 1
-            self.pydmlabel_sync = PyDMLabel(
-                parent=self, init_channel=ioc_prefix+'SyncCorr-Sts')
-
             lay.addWidget(label_method, 1, 1, 1, self._nfam)
             lay.addWidget(self.combobox_method, 2, self._nfam//2)
             lay.addWidget(self.pydmlabel_method, 2, self._nfam//2+1)
             lay.addItem(
                 QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Fixed), 3, 1)
-            lay.addWidget(label_sync, 4, 1, 1, self._nfam)
-            lay.addWidget(self.button_sync, 5, self._nfam//2)
-            lay.addWidget(self.pydmlabel_sync, 5, self._nfam//2+1)
-            lay.addItem(
-                QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Fixed), 6, 1)
+
+            if self._opticsparam == 'Tune':
+                label_sync = QLabel('<h4>Syncronization</h4>',
+                                    alignment=Qt.AlignCenter)
+                self.button_sync = PyDMStateButton(
+                    parent=self, init_channel=ioc_prefix+'SyncCorr-Sel')
+                self.button_sync.shape = 1
+                self.pydmlabel_sync = PyDMLabel(
+                    parent=self, init_channel=ioc_prefix+'SyncCorr-Sts')
+
+                lay.addWidget(label_sync, 4, 1, 1, self._nfam)
+                lay.addWidget(self.button_sync, 5, self._nfam//2)
+                lay.addWidget(self.pydmlabel_sync, 5, self._nfam//2+1)
+                lay.addItem(
+                    QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Fixed), 6, 1)
 
         label_configname = QLabel('<h4>Configuration Name</h4>', self,
                                   alignment=Qt.AlignCenter)
