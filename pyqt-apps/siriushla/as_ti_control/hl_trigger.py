@@ -220,7 +220,8 @@ class HLTriggerList(BaseList):
         if prop == 'detailed':
             sp = QPushButton(prefix.device_name, self)
             Window = create_window_from_widget(
-                HLTriggerDetailed, title=prefix.device_name+': HL Trigger Detailed')
+                HLTriggerDetailed,
+                title=prefix.device_name+': HL Trigger Detailed')
             connect_window(sp, Window, self, prefix=prefix)
         elif prop == 'status':
             init_channel = prefix.substitute(propty="Status-Mon")
