@@ -42,9 +42,8 @@ class PSTestWindow(SiriusMainWindow):
     def _setup_ui(self):
         # Magnet tree selection widgets
         magnets_layout = QVBoxLayout()
-        self.tree = PVNameTree(MASearch.get_manames({'dis': 'MA'}),
-                               ('sec', 'mag_group'),
-                               self)
+        self.tree = PVNameTree(items=MASearch.get_manames({'dis': 'MA'}),
+                               tree_levels=('sec', 'mag_group'), parent=self)
         self.test_button = QPushButton('Test', self)
         self.test_button.setObjectName('TestButton')
         self.exit_button = QPushButton("Close", self)
