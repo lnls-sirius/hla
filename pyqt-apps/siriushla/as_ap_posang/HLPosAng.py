@@ -21,8 +21,7 @@ from siriushla.as_ps_control.PSDetailWindow import \
     PSDetailWindow as _PSDetailWindow
 from siriushla.as_pm_control.PulsedMagnetDetailWindow import \
     PulsedMagnetDetailWindow as _PulsedMagnetDetailWindow
-from siriushla.as_ap_servconf import \
-    LoadConfiguration as _LoadConfiguration
+from siriushla.as_ap_servconf import LoadConfiguration as _LoadConfiguration
 
 
 UI_FILE = (_os.path.abspath(_os.path.dirname(__file__))+'/ui_as_ap_posang.ui')
@@ -46,35 +45,7 @@ class ASAPPosAngCorr(SiriusMainWindow):
         self.setCentralWidget(self.centralwidget)
         self.setWindowTitle(self._tl + ' Position and Angle Correction Window')
 
-        widget2pv_list = [[self.centralwidget.PyDMSpinbox_OrbXDeltaPos_SP,
-                           self._tl + '-Glob:AP-PosAng:DeltaPosX-SP'],
-                          [self.centralwidget.PyDMLabel_OrbXDeltaPos_RB,
-                           self._tl + '-Glob:AP-PosAng:DeltaPosX-RB'],
-                          [self.centralwidget.PyDMSpinbox_OrbXDeltaAng_SP,
-                           self._tl + '-Glob:AP-PosAng:DeltaAngX-SP'],
-                          [self.centralwidget.PyDMLabel_OrbXDeltaAng_RB,
-                           self._tl + '-Glob:AP-PosAng:DeltaAngX-RB'],
-                          [self.centralwidget.PyDMSpinbox_OrbYDeltaPos_SP,
-                           self._tl + '-Glob:AP-PosAng:DeltaPosY-SP'],
-                          [self.centralwidget.PyDMLabel_OrbYDeltaPos_RB,
-                           self._tl + '-Glob:AP-PosAng:DeltaPosY-RB'],
-                          [self.centralwidget.PyDMSpinbox_OrbYDeltaAng_SP,
-                           self._tl + '-Glob:AP-PosAng:DeltaAngY-SP'],
-                          [self.centralwidget.PyDMLabel_OrbYDeltaAng_RB,
-                           self._tl + '-Glob:AP-PosAng:DeltaAngY-RB'],
-                          [self.centralwidget.PyDMPushButton_SetNewRefKick,
-                           self._tl + '-Glob:AP-PosAng:SetNewRefKick-Cmd'],
-                          [self.centralwidget.PyDMPushButton_ConfigMA,
-                           self._tl + '-Glob:AP-PosAng:ConfigMA-Cmd'],
-                          [self.centralwidget.PyDMLabel_RefKickCH1Mon,
-                           self._tl + '-Glob:AP-PosAng:RefKickCH1-Mon'],
-                          [self.centralwidget.PyDMLabel_RefKickCH2Mon,
-                           self._tl + '-Glob:AP-PosAng:RefKickCH2-Mon'],
-                          [self.centralwidget.PyDMLabel_RefKickCV1Mon,
-                           self._tl + '-Glob:AP-PosAng:RefKickCV1-Mon'],
-                          [self.centralwidget.PyDMLabel_RefKickCV2Mon,
-                           self._tl + '-Glob:AP-PosAng:RefKickCV2-Mon']]
-        self.set_widgets_channel(widget2pv_list)
+        self._set_widgets_channel()
 
         correctors = ['', '', '', '']
         if tl == 'ts':
@@ -87,32 +58,61 @@ class ASAPPosAngCorr(SiriusMainWindow):
             correctors[1] = Const.TB_CORRH_POSANG[1]
             correctors[2] = Const.TB_CORRV_POSANG[0]
             correctors[3] = Const.TB_CORRV_POSANG[1]
-        self._setCorrectorsChannels(correctors)
+        self._set_correctors_channels(correctors)
 
         act_settings = self.menuBar().addAction('Settings')
         _hlautil.connect_window(act_settings, _CorrParamsDetailWindow,
                                 parent=self, tl=self._tl, prefix=self._prefix)
 
-        self._setStatusLabels()
+        self._set_status_labels()
 
-    def set_widgets_channel(self, widget2pv_list):
-        """Set the PyDMWidgets channels.
+        self.setStyleSheet("""
+            PyDMSpinbox{
+                min-width: 5em;
+            }
+            PyDMLabel{
+                min-width: 5em;
+            }
+        """)
 
-        Receive:
-        widget_list --list of widgets to set channel
-        pv_list     --list of correspondent pvs
-        """
+    def _set_widgets_channel(self):
+        """Set the PyDMWidgets channels."""
+        widget2pv_list = [
+            [self.centralwidget.PyDMSpinbox_OrbXDeltaPos_SP,
+             self._tl + '-Glob:AP-PosAng:DeltaPosX-SP'],
+            [self.centralwidget.PyDMLabel_OrbXDeltaPos_RB,
+             self._tl + '-Glob:AP-PosAng:DeltaPosX-RB'],
+            [self.centralwidget.PyDMSpinbox_OrbXDeltaAng_SP,
+             self._tl + '-Glob:AP-PosAng:DeltaAngX-SP'],
+            [self.centralwidget.PyDMLabel_OrbXDeltaAng_RB,
+             self._tl + '-Glob:AP-PosAng:DeltaAngX-RB'],
+            [self.centralwidget.PyDMSpinbox_OrbYDeltaPos_SP,
+             self._tl + '-Glob:AP-PosAng:DeltaPosY-SP'],
+            [self.centralwidget.PyDMLabel_OrbYDeltaPos_RB,
+             self._tl + '-Glob:AP-PosAng:DeltaPosY-RB'],
+            [self.centralwidget.PyDMSpinbox_OrbYDeltaAng_SP,
+             self._tl + '-Glob:AP-PosAng:DeltaAngY-SP'],
+            [self.centralwidget.PyDMLabel_OrbYDeltaAng_RB,
+             self._tl + '-Glob:AP-PosAng:DeltaAngY-RB'],
+            [self.centralwidget.PyDMPushButton_SetNewRefKick,
+             self._tl + '-Glob:AP-PosAng:SetNewRefKick-Cmd'],
+            [self.centralwidget.PyDMPushButton_ConfigMA,
+             self._tl + '-Glob:AP-PosAng:ConfigMA-Cmd'],
+            [self.centralwidget.PyDMLabel_RefKickCH1Mon,
+             self._tl + '-Glob:AP-PosAng:RefKickCH1-Mon'],
+            [self.centralwidget.PyDMLabel_RefKickCH2Mon,
+             self._tl + '-Glob:AP-PosAng:RefKickCH2-Mon'],
+            [self.centralwidget.PyDMLabel_RefKickCV1Mon,
+             self._tl + '-Glob:AP-PosAng:RefKickCV1-Mon'],
+            [self.centralwidget.PyDMLabel_RefKickCV2Mon,
+             self._tl + '-Glob:AP-PosAng:RefKickCV2-Mon']]
         for widget, pv in widget2pv_list:
             widget.channel = self._prefix + pv
 
-    def _setCorrectorsChannels(self, correctors):
+    def _set_correctors_channels(self, correctors):
         self.centralwidget.pushButton_CH1.setText(correctors[0])
         _hlautil.connect_window(self.centralwidget.pushButton_CH1,
                                 _PSDetailWindow, self, psname=correctors[0])
-        self.centralwidget.SiriusLedState_CH1.channel = (
-            self._prefix + correctors[0] + ':PwrState-Sts')
-        self.centralwidget.PyDMLabel_OpModeCH1.channel = (
-            self._prefix + correctors[0] + ':OpMode-Sts')
         self.centralwidget.PyDMLabel_KickRBCH1.channel = (
             self._prefix + correctors[0] + ':Kick-RB')
 
@@ -120,32 +120,22 @@ class ASAPPosAngCorr(SiriusMainWindow):
         _hlautil.connect_window(self.centralwidget.pushButton_CH2,
                                 _PulsedMagnetDetailWindow, self,
                                 maname=correctors[1])
-        self.centralwidget.SiriusLedState_CH2.channel = (
-            self._prefix + correctors[1] + ':PwrState-Sts')
         self.centralwidget.PyDMLabel_KickRBCH2.channel = (
             self._prefix + correctors[1] + ':Kick-RB')
 
         self.centralwidget.pushButton_CV1.setText(correctors[2])
         _hlautil.connect_window(self.centralwidget.pushButton_CV1,
                                 _PSDetailWindow, self, psname=correctors[2])
-        self.centralwidget.SiriusLedState_CV1.channel = (
-            self._prefix + correctors[2] + ':PwrState-Sts')
-        self.centralwidget.PyDMLabel_OpModeCV1.channel = (
-            self._prefix + correctors[2] + ':OpMode-Sts')
         self.centralwidget.PyDMLabel_KickRBCV1.channel = (
             self._prefix + correctors[2] + ':Kick-RB')
 
         self.centralwidget.pushButton_CV2.setText(correctors[3])
         _hlautil.connect_window(self.centralwidget.pushButton_CV2,
                                 _PSDetailWindow, self, psname=correctors[3])
-        self.centralwidget.SiriusLedState_CV2.channel = (
-            self._prefix + correctors[3] + ':PwrState-Sts')
-        self.centralwidget.PyDMLabel_OpModeCV2.channel = (
-            self._prefix + correctors[3] + ':OpMode-Sts')
         self.centralwidget.PyDMLabel_KickRBCV2.channel = (
             self._prefix + correctors[3] + ':Kick-RB')
 
-    def _setStatusLabels(self):
+    def _set_status_labels(self):
         for i in range(4):
             exec('self.centralwidget.label_status{0}.setText('
                  'Const.STATUSLABELS[{0}])'.format(i))
@@ -250,5 +240,10 @@ class _ConfigLineEdit(PyDMLineEdit):
         elif 'TS' in self.channel:
             config_type = 'ts_posang_respm'
         popup = _LoadConfiguration(config_type)
-        popup.configname.connect(self.value_changed)
+        popup.configname.connect(self._config_changed)
         popup.exec_()
+
+    def _config_changed(self, configname):
+        self.setText(configname)
+        self.send_value()
+        self.value_changed(configname)
