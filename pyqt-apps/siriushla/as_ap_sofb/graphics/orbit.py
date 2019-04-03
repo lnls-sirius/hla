@@ -223,6 +223,7 @@ class Spectrogram(SiriusSpectrogramView):
     new_data_sig = Signal(_np.ndarray)
 
     def __init__(self, prefix='', **kwargs):
+        self._reforb = None
         super().__init__(**kwargs)
         self.prefix = prefix
         self.multiturnidx = SiriusConnectionSignal(
@@ -234,12 +235,12 @@ class Spectrogram(SiriusSpectrogramView):
         return chans
 
     def setreforbit(self, orb):
-        self._ref_orbit = orb
+        self._reforb = orb
         self.needs_redraw = True
 
     def process_image(self, img):
-        if hasattr(self, '_ref_orbit'):
-            return img - self._ref_orbit[None, :]
+        if self._reforb is not None and img.shape[1] == self._reforb.size:
+            img = img - self._reforb[None, :]
         self.new_data_sig.emit(img)
         return img
 
