@@ -16,7 +16,7 @@ from siriushla.as_ps_diag.util import LINAC_PS, sec2label, \
 
 
 class PSMonitor(SiriusMainWindow):
-    """Power Supplies Diagnosis."""
+    """Power Supplies Monitor."""
 
     def __init__(self, parent=None, prefix=vaca_prefix):
         """Init."""
