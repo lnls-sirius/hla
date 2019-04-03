@@ -144,7 +144,7 @@ class SiriusImageView(PyDMImageView):
         """
         self._calibration_grid_removeborder = value
         if self._calibration_grid_image is not None:
-                self._update_calibration_grid_image()
+            self._update_calibration_grid_image()
 
     def process_image(self, image):
         """Reimplement process_image method to add grid to image."""
