@@ -2,7 +2,8 @@
 
 import numpy as _np
 from qtpy.QtWidgets import QLabel, QGroupBox, QPushButton, QFormLayout, \
-    QVBoxLayout, QHBoxLayout
+    QVBoxLayout, QHBoxLayout, QGridLayout
+from qtpy.QtCore import Qt
 from pydm.widgets import PyDMPushButton
 from siriushla.widgets import SiriusConnectionSignal, PyDMStateButton, \
         SiriusLedAlert
@@ -95,26 +96,29 @@ class SOFBControl(BaseWidget):
         # ####################################################################
         # ########################## Orbit PVs ###############################
         # ####################################################################
-        fbl = QFormLayout()
-        fbl.setSpacing(9)
+        fbl = QGridLayout()
+        fbl.setVerticalSpacing(9)
         vbl.addItem(fbl)
 
         lbl = QLabel('SOFB Mode', grp_bx)
+        fbl.addWidget(lbl, 0, 0, alignment=Qt.AlignVCenter)
         wid = self.create_pair_sel(grp_bx, 'SOFBMode')
-        fbl.addRow(lbl, wid)
+        fbl.addWidget(wid, 0, 1)
 
-        lbl = QLabel('Correct:', grp_bx)
+        lbl = QLabel('OfflineOrb:', grp_bx)
+        fbl.addWidget(lbl, 1, 0, alignment=Qt.AlignVCenter)
         combo = OfflineOrbControl(
             self, self.prefix, self.ctrls, self.acc)
         combo.rules = (
             '[{"name": "EnblRule", "property": "Enable", ' +
             '"expression": "not ch[0]", "channels": [{"channel": "' +
             self.prefix+'SOFBMode-Sts'+'", "trigger": true}]}]')
-        fbl.addRow(lbl, combo)
+        fbl.addWidget(combo, 1, 1, alignment=Qt.AlignBottom)
 
-        lbl = QLabel('as diff to:', grp_bx)
+        lbl = QLabel('RefOrb:', grp_bx)
+        fbl.addWidget(lbl, 2, 0, alignment=Qt.AlignVCenter)
         combo = RefControl(self, self.prefix, self.ctrls, self.acc)
-        fbl.addRow(lbl, combo)
+        fbl.addWidget(combo, 2, 1, alignment=Qt.AlignBottom)
 
         vbl.addSpacing(40)
         # ####################################################################
