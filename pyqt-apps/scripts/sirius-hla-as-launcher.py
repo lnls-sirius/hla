@@ -264,7 +264,8 @@ class ControlApplication(SiriusMainWindow):
         if ok:
             util.run_newprocess(
                 ['sshpass', '-p', password, 'ssh', '-X', 'phyuser@linacopi1',
-                 'sh', '-c', '/home/sirius/work/opi/sirius-main.sh'])
+                 'sh', '-c', '/home/sirius/work/opi/sirius-main.sh'],
+                is_window=False)
 
 
 if __name__ == "__main__":
