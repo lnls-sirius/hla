@@ -1914,7 +1914,7 @@ max-width:8em;</string>
          <string>Apply</string>
         </property>
         <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Glob:AP-TuneCorr:ApplyCorr-Cmd</string>
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:ApplyDelta-Cmd</string>
         </property>
         <property name="pressValue" stdset="0">
          <string>0</string>
