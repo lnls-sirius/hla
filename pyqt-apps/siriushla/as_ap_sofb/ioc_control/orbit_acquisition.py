@@ -194,8 +194,7 @@ class AcqControlWidget(BaseWidget):
         gdl2.addWidget(pdmlbl, 1, 1)
 
         btn = QPushButton('Open Status', grp_bx)
-        Window = create_window_from_widget(
-            StatusWidget, name='StatusWindow')
+        Window = create_window_from_widget(StatusWidget, title='Status')
         connect_window(
             btn, Window, self, prefix=self.prefix, acc=self.acc, is_orb=True)
         pdm_led = SiriusLedAlert(

@@ -103,32 +103,32 @@ class TimingMain(SiriusMainWindow):
         menu = main_menu.addMenu('&Devices')
         action = menu.addAction('EVG')
         evg = LLTimeSearch.get_device_names(filters={'dev': 'EVG'})[0]
-        Window = create_window_from_widget(_EVG, name='EVG')
+        Window = create_window_from_widget(_EVG, title=evg)
         connect_window(action, Window, self, prefix=prefix + evg + ':')
 
         menu_evr = menu.addMenu('EVRs')
         for evr in LLTimeSearch.get_device_names(filters={'dev': 'EVR'}):
             action = menu_evr.addAction(evr)
-            Window = create_window_from_widget(_EVR, name='EVR')
+            Window = create_window_from_widget(_EVR, title=evr)
             connect_window(action, Window, self, prefix=prefix+evr+':')
 
         menu_eve = menu.addMenu('EVEs')
         for eve in LLTimeSearch.get_device_names(filters={'dev': 'EVE'}):
             action = menu_eve.addAction(eve)
-            Window = create_window_from_widget(_EVE, name='EVE')
+            Window = create_window_from_widget(_EVE, title=eve)
             connect_window(action, Window, self, prefix=prefix + eve + ':')
 
         menu_afc = menu.addMenu('AMCs')
         for afc in LLTimeSearch.get_device_names(
                                     filters={'dev': 'AMCFPGAEVR'}):
             action = menu_afc.addAction(afc)
-            Window = create_window_from_widget(_AFC, name='AFC')
+            Window = create_window_from_widget(_AFC, title=afc)
             connect_window(action, Window, self, prefix=prefix+afc+':')
 
         menu_fout = menu.addMenu('Fouts')
         for fout in LLTimeSearch.get_device_names(filters={'dev': 'Fout'}):
             action = menu_fout.addAction(fout)
-            Window = create_window_from_widget(_FOUT, name='Fout')
+            Window = create_window_from_widget(_FOUT, title=fout)
             connect_window(action, Window, self, prefix=prefix+fout+':')
 
     def _create_prop_widget(self, name, parent, wids, align_ver=True):

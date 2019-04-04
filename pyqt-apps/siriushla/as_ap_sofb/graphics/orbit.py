@@ -49,7 +49,7 @@ class OrbitWidget(BaseWidget):
         btn = QPushButton('Correctors', grpbx)
         vbl.addWidget(btn)
         Window = create_window_from_widget(
-            CorrectorsWidget, name='CorrectorsWindow', size=(67, 60))
+            CorrectorsWidget, title='Correctors', size=(67, 60))
         _util.connect_window(
             btn, Window, self, prefix=self.prefix, acc=self.acc)
 
@@ -57,7 +57,7 @@ class OrbitWidget(BaseWidget):
             btn = QPushButton('MultiTurn Orbit', grpbx)
             vbl.addWidget(btn)
             Window = create_window_from_widget(
-                MultiTurnWidget, name='MultiTurnWindow', size=(35, 65))
+                MultiTurnWidget, title='Multi Turn', size=(35, 65))
             _util.connect_window(
                 btn, Window, self,
                 sigs=self.updater[0].raw_ref_sig, prefix=self.prefix)
@@ -65,13 +65,13 @@ class OrbitWidget(BaseWidget):
             btn = QPushButton('MultiTurn Sum', grpbx)
             vbl.addWidget(btn)
             Window = create_window_from_widget(
-                MultiTurnSumWidget, name='MultiTurnSumWindow', size=(35, 65))
+                MultiTurnSumWidget, title='Multi Turn Sum', size=(35, 65))
             _util.connect_window(btn, Window, self, prefix=self.prefix)
 
         btn = QPushButton('SinglePass Sum', grpbx)
         vbl.addWidget(btn)
         Window = create_window_from_widget(
-            SinglePassSumWidget, name='SinglePassSumWindow', size=(32, 23))
+            SinglePassSumWidget, title='Single Pass Sum', size=(32, 23))
         _util.connect_window(
                     btn, Window, self, prefix=self.prefix, acc=self.acc)
 

@@ -10,8 +10,7 @@ from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, SiriusLedState
 from siriushla.as_ap_injection.CustomExceptions import PVConnectionError
 from siriushla.as_ap_injection.InjectionController import InjectionController
-from siriushla.as_ap_injection.BarGraphWidget \
-    import BarGraphWidget, PyDMBarGraph
+from siriushla.widgets.bar_graph import BarGraphWidget, PyDMBarGraph
 
 
 class WaitingDlg(QDialog):

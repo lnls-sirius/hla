@@ -203,7 +203,10 @@ class PulsedMagnetDetailWidget(QWidget):
         self._trigger_detail_btn = QPushButton('Open details', self)
 
         # Connect trigger window
-        trg_w = create_window_from_widget(HLTriggerDetailed, is_main=True)
+        trg_w = create_window_from_widget(
+            HLTriggerDetailed,
+            title=self._prefixed_trigger_name+' Detailed Settings',
+            is_main=True)
         util.connect_window(
             self._trigger_detail_btn, trg_w,
             parent=self, prefix=self._prefixed_maname.replace('PM-', 'TI-'))

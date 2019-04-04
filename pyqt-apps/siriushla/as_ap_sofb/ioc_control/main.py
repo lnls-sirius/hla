@@ -43,7 +43,7 @@ class SOFBControl(BaseWidget):
         # ####################################################################
         btn = QPushButton('Correctors Status', grp_bx)
         Window = create_window_from_widget(
-            StatusWidget, name='StatusWindow')
+            StatusWidget, title='Correctors Status')
         _util.connect_window(
             btn, Window, self, prefix=self.prefix, acc=self.acc, is_orb=False)
         pdm_led = SiriusLedAlert(
@@ -55,8 +55,7 @@ class SOFBControl(BaseWidget):
         vbl.addItem(hbl)
 
         btn = QPushButton('Orbit Status', grp_bx)
-        Window = create_window_from_widget(
-            StatusWidget, name='StatusWindow')
+        Window = create_window_from_widget(StatusWidget, title='Orbit Status')
         _util.connect_window(
             btn, Window, self, prefix=self.prefix, acc=self.acc, is_orb=True)
         pdm_led = SiriusLedAlert(
@@ -196,20 +195,20 @@ class SOFBControl(BaseWidget):
         vbl2 = QVBoxLayout(grpbx)
         vbl2.setSpacing(9)
         Window = create_window_from_widget(
-            RespMatWidget, name='RespMatWindow')
+            RespMatWidget, title='Response Matrix')
         btn = QPushButton('Response Matrix', grpbx)
         vbl2.addWidget(btn)
         _util.connect_window(
             btn, Window, grpbx, prefix=self.prefix, acc=self.acc)
         Window = create_window_from_widget(
-            KicksConfigWidget, name='KicksConfigWindow')
+            KicksConfigWidget, title='Correctors')
         btn = QPushButton('Correctors', grpbx)
         vbl2.addWidget(btn)
         _util.connect_window(
             btn, Window, grpbx, prefix=self.prefix, acc=self.acc,
             show_details=True)
         Window = create_window_from_widget(
-            AcqControlWidget, name='AcqControlWindow')
+            AcqControlWidget, title='Orbit Acquisition')
         btn = QPushButton('Orbit Acquisition', grpbx)
         _util.connect_window(
             btn, Window, grpbx, prefix=self.prefix, acc=self.acc)

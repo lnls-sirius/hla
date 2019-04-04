@@ -117,7 +117,8 @@ class FFTData(BaseWidget):
         pb = QPushButton('Open FFT Config', self)
         hbl.addWidget(pb)
         hbl.addStretch()
-        Window = create_window_from_widget(FFTConfig, 'FFTConfig')
+        Window = create_window_from_widget(
+            FFTConfig, title=self.bpm+': FFT Config')
         util.connect_window(
             pb, Window, parent=self, prefix=self.prefix, bpm=self.bpm,
             data_prefix=self.data_prefix, position=self.position)
