@@ -177,7 +177,6 @@ class PyDMBarGraphModel:
         """Return connection status."""
         return self._connected
 
-    # @Slot(bool)
     def connectionChanged(self, conn):
         """Slot called when connection state changes."""
         logging.debug("Connection changed to {}".format(conn))
@@ -279,7 +278,6 @@ class BarGraphWidget(BaseBarGraphWidget):
             - waveform: waveform to be displayed.
         """
         super().__init__()
-        # self.model = BarGraphModel(**kwargs)
         self.model = BarGraphModel(**kwargs)
 
     # Public Interface
@@ -343,7 +341,6 @@ if __name__ == "__main__":
 
     app = PyDMApplication(None, sys.argv)
     w = BarGraphWidget()
-    # w.model.pvname = "fac-lnls455-linux-SI-13C4:DI-DCCT:BbBCurrent-Mon"
     w.set_scale(100)
     w.set_brush("b")
     pv = "fac-lnls455-linux-SI-13C4:DI-DCCT:BbBCurrent-Mon"

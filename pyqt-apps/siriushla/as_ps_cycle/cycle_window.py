@@ -4,7 +4,7 @@ import time
 import epics
 
 from qtpy.QtCore import Signal, QThread, Qt
-from qtpy.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, \
+from qtpy.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, \
     QPushButton, QDialog, QLabel, QMessageBox
 
 from siriuspy.envars import vaca_prefix as VACA_PREFIX
@@ -47,7 +47,7 @@ class CycleWindow(SiriusMainWindow):
         self.prepare_button.setObjectName('PrepareButton')
         self.magnets_tree = PVNameTree(MASearch.get_manames({'dis': 'MA'}),
                                        ('sec', 'mag_group'),
-                                       self, self._checked_accs)
+                                       self._checked_accs, self)
 
         self.central_widget.layout.addWidget(
             QLabel('<h3>Magnet Cycling</h3>', self, alignment=Qt.AlignCenter))

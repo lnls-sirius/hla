@@ -128,7 +128,7 @@ class _ICTSettings(SiriusDialog):
 
         self.bt_cal = QPushButton('ICT Calibration', self)
         dialog = create_window_from_widget(
-            _ICTCalibration, name=self.ict_prefix+' Calibration')
+            _ICTCalibration, title=self.ict_prefix+' Calibration')
         util.connect_window(self.bt_cal, dialog, parent=self,
                             ict_prefix=self.ict_prefix)
         self.bt_cal.setAutoDefault(False)
@@ -215,7 +215,10 @@ class _ICTSettings(SiriusDialog):
         self.pb_trgdetails = QPushButton('Open details', self)
         self.pb_trgdetails.setAutoDefault(False)
         self.pb_trgdetails.setDefault(False)
-        trg_w = create_window_from_widget(HLTriggerDetailed, is_main=True)
+        trg_w = create_window_from_widget(
+            HLTriggerDetailed,
+            title=self.ict_trig_prefix+' Detailed Settings',
+            is_main=True)
         util.connect_window(
             self.pb_trgdetails, trg_w, parent=self,
             prefix=self.ict_trig_prefix+':')

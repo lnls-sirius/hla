@@ -54,7 +54,8 @@ class HLTriggerDetailed(BaseWidget):
 
         but = QPushButton('Open LL Triggers', self)
         obj_names = HLTimeSearch.get_ll_trigger_names(self.prefix.device_name)
-        Window = create_window_from_widget(LLTriggers, name='LLTriggers')
+        Window = create_window_from_widget(
+            LLTriggers, title=self.prefix.device_name+': LL Triggers')
         connect_window(
             but, Window, self, prefix=self.prefix.prefix + '-',
             hltrigger=self.prefix.device_name, obj_names=obj_names)
@@ -219,7 +220,8 @@ class HLTriggerList(BaseList):
         if prop == 'detailed':
             sp = QPushButton(prefix.device_name, self)
             Window = create_window_from_widget(
-                HLTriggerDetailed, name='HLTriggerDetailed')
+                HLTriggerDetailed,
+                title=prefix.device_name+': HL Trigger Detailed')
             connect_window(sp, Window, self, prefix=prefix)
         elif prop == 'status':
             init_channel = prefix.substitute(propty="Status-Mon")

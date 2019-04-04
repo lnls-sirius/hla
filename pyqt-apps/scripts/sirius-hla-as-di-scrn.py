@@ -7,6 +7,7 @@ import sys
 import argparse as _argparse
 from siriuspy.envars import vaca_prefix
 from siriushla.sirius_application import SiriusApplication
+from siriushla.widgets.windows import create_window_from_widget
 from siriushla.as_di_scrns import SelectScrns
 
 
@@ -22,7 +23,8 @@ prefix = args.prefix
 
 os.environ['EPICS_CA_MAX_ARRAY_BYTES'] = '200000000'
 app = SiriusApplication()
-window = SelectScrns(None, prefix=prefix, sec=sec)
-window.setWindowTitle('Select a Screen')
+MyWindow = create_window_from_widget(
+    SelectScrns, title='Select a Screen', is_main=True)
+window = MyWindow(None, prefix=prefix, sec=sec)
 window.show()
 sys.exit(app.exec_())
