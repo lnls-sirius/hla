@@ -150,7 +150,7 @@ class MainWindow(SiriusMainWindow):
         menubar.addAction(menuopen.menuAction())
 
         actbpm = QAction('Show BPM List', menubar)
-        Window = create_window_from_widget(SelectBPMs, 'SelectBPMs')
+        Window = create_window_from_widget(SelectBPMs, title='BPM List')
         util.connect_window(
             actbpm, Window, self, bpm_list=self._csorb.BPM_NAMES)
         menubar.addAction(actbpm)
@@ -171,7 +171,6 @@ class MainWindow(SiriusMainWindow):
 
 if __name__ == '__main__':
     import sys as _sys
-    import siriushla.util as _util
     from siriushla.sirius_application import SiriusApplication
 
     app = SiriusApplication()

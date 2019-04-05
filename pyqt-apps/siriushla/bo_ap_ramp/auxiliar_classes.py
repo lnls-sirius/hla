@@ -42,7 +42,7 @@ class LoadRampConfig(_LoadConfiguration):
 
     @Slot()
     def _load_configuration(self):
-        name = self._get_config_name()
+        name = self.editor.config_name
         if self.ramp_config is not None:
             if not self.ramp_config.configsrv_synchronized:
                 save_changes = MessageBox(
@@ -855,7 +855,9 @@ class DiagnosisSettings(SiriusDialog):
         self.pb_trgdetails = QPushButton('Open details', self)
         self.pb_trgdetails.setAutoDefault(False)
         self.pb_trgdetails.setDefault(False)
-        trg_w = create_window_from_widget(HLTriggerDetailed, is_main=True)
+        trg_w = create_window_from_widget(
+            HLTriggerDetailed, title='BO-35D:TI-DCCT Detailed Settings',
+            is_main=True)
         _hlautil.connect_window(
             self.pb_trgdetails, trg_w, parent=self,
             prefix=self.prefix+'BO-35D:TI-DCCT')

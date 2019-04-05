@@ -6,6 +6,7 @@ import sys
 import argparse as _argparse
 from siriushla.sirius_application import SiriusApplication
 from siriushla.as_ap_measure import EmittanceMeasure
+from siriushla.widgets.windows import create_window_from_widget
 
 
 parser = _argparse.ArgumentParser(
@@ -15,6 +16,8 @@ parser.add_argument('-p', "--place", type=str, default='TB-QF2A',
 args = parser.parse_args()
 
 app = SiriusApplication()
-window = EmittanceMeasure(place=args.place)
+MyWindow = create_window_from_widget(
+    EmittanceMeasure, title='TB Emittance Measure', is_main=True)
+window = MyWindow(place=args.place)
 window.show()
 sys.exit(app.exec_())
