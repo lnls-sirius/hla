@@ -81,8 +81,7 @@ SiriusMainWindow = _create_siriuswindow(QMainWindow)
 SiriusDialog = _create_siriuswindow(QDialog)
 
 
-def create_window_from_widget(
-                WidgetClass, name=None, size=None, is_main=False):
+def create_window_from_widget(WidgetClass, title='', size=None, is_main=False):
 
     if is_main:
         class MyWindow(SiriusMainWindow):
@@ -91,6 +90,7 @@ def create_window_from_widget(
                 super().__init__(parent)
                 wid = WidgetClass(self, *args, **kwargs)
                 self.setCentralWidget(wid)
+                self.setWindowTitle(title)
                 if size:
                     wid.setObjectName('celtralwidget')
                     wid.setStyleSheet("""
@@ -106,6 +106,7 @@ def create_window_from_widget(
                 hbl = QHBoxLayout(self)
                 wid = WidgetClass(self, *args, **kwargs)
                 hbl.addWidget(wid)
+                self.setWindowTitle(title)
                 if size:
                     wid.setObjectName('celtralwidget')
                     wid.setStyleSheet("""
@@ -114,6 +115,5 @@ def create_window_from_widget(
                             min-height:{1}em;
                         }}""".format(size[0], size[1]))
 
-    if name:
-        MyWindow.__name__ = name
+    MyWindow.__name__ = WidgetClass.__name__.replace('Widget', 'Window')
     return MyWindow

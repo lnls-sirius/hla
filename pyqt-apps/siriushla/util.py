@@ -51,52 +51,26 @@ def connect_newprocess(widget, cmd, **kwargs):
     signal.connect(lambda: run_newprocess(cmd, **kwargs))
 
 
-def run_newprocess(cmd, **kwargs):
-    # Parse kwargs
-    bufsize = kwargs['bufsize'] if 'bufsize' in kwargs else -1
-    executable = kwargs['executable'] if 'executable' in kwargs else None
-    stdin = kwargs['stdin'] if 'stdin' in kwargs else None
-    stdout = kwargs['stdout'] if 'stdout' in kwargs else None
-    stderr = kwargs['stderr'] if 'stderr' in kwargs else None
-    preexec_fn = kwargs['preexec_fn'] if 'preexec_fn' in kwargs else None
-    close_fds = kwargs['close_fds'] if 'close_fds' in kwargs else True
-    shell = kwargs['shell'] if 'shell' in kwargs else False
-    cwd = kwargs['cwd'] if 'cwd' in kwargs else None
-    env = kwargs['env'] if 'env' in kwargs else None
-    universal_newlines = kwargs['universal_newlines'] if 'universal_newlines'\
-        in kwargs else False
-    startupinfo = kwargs['startupinfo'] if 'startupinfo' in kwargs else None
-    creationflags = kwargs['creationflags'] if 'creationflags' in kwargs else 0
-    restore_signals = kwargs['restore_signals'] if 'restore_signals' in kwargs\
-        else True
-    start_new_session = kwargs['start_new_session'] if 'start_new_session' in\
-        kwargs else False
-    pass_fds = kwargs['pass_fds'] if 'pass_fds' in kwargs else ()
-    encoding = kwargs['encoding'] if 'encoding' in kwargs else None
-    errors = kwargs['errors'] if 'errors' in kwargs else None
-
-    # Maximize the window if it exists, else create a new one
-    scmd = (_subprocess.list2cmdline(cmd) if isinstance(cmd, list) else cmd)
-    pid = _subprocess.run(
-        "ps ax | grep \"[" + scmd[0] + "]" + scmd[1:] +
-        "\" | xargs | cut -f1 -d\" \" -",
-        stdin=_subprocess.PIPE, shell=True, stdout=_subprocess.PIPE,
-        check=True).stdout.decode('UTF-8').strip('\n')
-    if pid:
-        _subprocess.run(
-            "xdotool windowactivate `xdotool search --pid "+pid+" | tail -1`",
-            stdin=_subprocess.PIPE, shell=True)
-    else:
-        _subprocess.Popen(
-            cmd, bufsize=bufsize, executable=executable,
-            stdin=stdin, stdout=stdout, stderr=stderr,
-            preexec_fn=preexec_fn, close_fds=close_fds,
-            shell=shell, cwd=cwd, env=env,
-            universal_newlines=universal_newlines,
-            startupinfo=startupinfo, creationflags=creationflags,
-            restore_signals=restore_signals,
-            start_new_session=start_new_session,
-            pass_fds=pass_fds, encoding=encoding, errors=errors)
+def run_newprocess(cmd, is_window=True, **kwargs):
+    if is_window:
+        # Maximize the window if it exists, else create a new one
+        scmd = (_subprocess.list2cmdline(cmd)
+                if isinstance(cmd, list) else cmd)
+        pid = _subprocess.run(
+            "ps -A -o pid,command= | grep \"[" + scmd[0] + "]" + scmd[1:] +
+            "\" | xargs | cut -f1 -d\" \" -",
+            stdin=_subprocess.PIPE, shell=True, stdout=_subprocess.PIPE,
+            check=True).stdout.decode('UTF-8').strip('\n')
+        if pid:
+            window = _subprocess.run(
+                "xdotool search --pid "+pid+" | tail -1",
+                stdin=_subprocess.PIPE, shell=True, stdout=_subprocess.PIPE,
+                check=True).stdout.decode('UTF-8')
+            if window:
+                _subprocess.run("xdotool windowactivate "+window,
+                                stdin=_subprocess.PIPE, shell=True)
+                return
+    _subprocess.Popen(cmd, **kwargs)
 
 
 def _define_widget_signal(widget):

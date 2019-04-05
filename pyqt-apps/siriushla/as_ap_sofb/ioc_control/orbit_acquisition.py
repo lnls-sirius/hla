@@ -89,6 +89,10 @@ class AcqControlWidget(BaseWidget):
             vbl.addWidget(grp_bx)
             vbl.addSpacing(20)
             fbl = QFormLayout(grp_bx)
+            lbl = QLabel('Downsampling', grp_bx, alignment=Qt.AlignCenter)
+            lbl.setStyleSheet("""min-width:10em; max-width:10em;""")
+            wid = self.create_pair(grp_bx, 'MTurnDownSample')
+            fbl.addRow(lbl, wid)
             lbl = QLabel('Index', grp_bx, alignment=Qt.AlignCenter)
             lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
             wid = self.create_pair(grp_bx, 'MTurnIdx')
@@ -108,17 +112,17 @@ class AcqControlWidget(BaseWidget):
         lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
         wid = self.create_pair_sel(grp_bx, 'SPassMethod')
         fbl.addRow(lbl, wid)
-        lbl = QLabel('Nr Turns Avg', grp_bx, alignment=Qt.AlignCenter)
+        lbl = QLabel('Nr Turns', grp_bx, alignment=Qt.AlignCenter)
         lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
         wid = self.create_pair(grp_bx, 'SPassAvgNrTurns')
         fbl.addRow(lbl, wid)
-        lbl = QLabel('Win. Size', grp_bx, alignment=Qt.AlignCenter)
+        lbl = QLabel('Mask Begin', grp_bx, alignment=Qt.AlignCenter)
         lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
-        wid = self.create_pair(grp_bx, 'SPassDataSize')
+        wid = self.create_pair(grp_bx, 'SPassMaskSplBeg')
         fbl.addRow(lbl, wid)
-        lbl = QLabel('Win. Offset', grp_bx, alignment=Qt.AlignCenter)
+        lbl = QLabel('Mask End', grp_bx, alignment=Qt.AlignCenter)
         lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
-        wid = self.create_pair(grp_bx, 'SPassDataOffset')
+        wid = self.create_pair(grp_bx, 'SPassMaskSplEnd')
         fbl.addRow(lbl, wid)
 
         lbl = QLabel('Triggered Acquisition Configurations',
@@ -163,10 +167,6 @@ class AcqControlWidget(BaseWidget):
         lbl.setStyleSheet("""min-width:10em; max-width:10em;""")
         wid = self.create_pair(grp_bx, 'TrigNrSamplesPost')
         fbl.addRow(lbl, wid)
-        lbl = QLabel('Downsampling', grp_bx, alignment=Qt.AlignCenter)
-        lbl.setStyleSheet("""min-width:10em; max-width:10em;""")
-        wid = self.create_pair(grp_bx, 'MTurnDownSample')
-        fbl.addRow(lbl, wid)
 
         fbl.addItem(QSpacerItem(20, 20))
         lbl = QLabel('Control Acquisition:', grp_bx, alignment=Qt.AlignCenter)
@@ -194,8 +194,7 @@ class AcqControlWidget(BaseWidget):
         gdl2.addWidget(pdmlbl, 1, 1)
 
         btn = QPushButton('Open Status', grp_bx)
-        Window = create_window_from_widget(
-            StatusWidget, name='StatusWindow')
+        Window = create_window_from_widget(StatusWidget, title='Status')
         connect_window(
             btn, Window, self, prefix=self.prefix, acc=self.acc, is_orb=True)
         pdm_led = SiriusLedAlert(

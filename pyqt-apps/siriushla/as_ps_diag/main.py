@@ -4,6 +4,8 @@ import re as _re
 from datetime import datetime as _datetime
 from functools import partial as _partial
 
+from pcaspy import Severity as _Severity
+
 from qtpy.QtGui import QStandardItemModel, QStandardItem
 from qtpy.QtCore import Qt, Slot, Signal
 from qtpy.QtWidgets import QWidget, QLabel, QPushButton, \
@@ -37,7 +39,7 @@ class PSDiag(SiriusMainWindow):
         """Init."""
         super().__init__(parent)
         self._prefix = prefix
-        self.setWindowTitle('Power Supply Diagnostic')
+        self.setWindowTitle('Power Supplies Diagnostics')
         self._setupUi()
         self._initialized = False
 
@@ -441,7 +443,8 @@ class LogTable(QTreeView, PyDMWidget):
             value = self.sender()._value
             new_value = {'logtype': 'WARN', 'psname': pv.device_name,
                          'propty': pv.propty_name, 'value': str(value)}
-            if new_alarm_severity != 0:
+            if new_alarm_severity in [_Severity.MINOR_ALARM,
+                                      _Severity.MAJOR_ALARM]:
                 self.add_log(new_value)
             elif self._is_status:
                 self.remove_log(new_value)

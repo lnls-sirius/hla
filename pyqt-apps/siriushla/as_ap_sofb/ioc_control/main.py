@@ -2,7 +2,8 @@
 
 import numpy as _np
 from qtpy.QtWidgets import QLabel, QGroupBox, QPushButton, QFormLayout, \
-    QVBoxLayout, QHBoxLayout
+    QVBoxLayout, QHBoxLayout, QGridLayout
+from qtpy.QtCore import Qt
 from pydm.widgets import PyDMPushButton
 from siriushla.widgets import SiriusConnectionSignal, PyDMStateButton, \
         SiriusLedAlert
@@ -43,7 +44,7 @@ class SOFBControl(BaseWidget):
         # ####################################################################
         btn = QPushButton('Correctors Status', grp_bx)
         Window = create_window_from_widget(
-            StatusWidget, name='StatusWindow')
+            StatusWidget, title='Correctors Status')
         _util.connect_window(
             btn, Window, self, prefix=self.prefix, acc=self.acc, is_orb=False)
         pdm_led = SiriusLedAlert(
@@ -55,8 +56,7 @@ class SOFBControl(BaseWidget):
         vbl.addItem(hbl)
 
         btn = QPushButton('Orbit Status', grp_bx)
-        Window = create_window_from_widget(
-            StatusWidget, name='StatusWindow')
+        Window = create_window_from_widget(StatusWidget, title='Orbit Status')
         _util.connect_window(
             btn, Window, self, prefix=self.prefix, acc=self.acc, is_orb=True)
         pdm_led = SiriusLedAlert(
@@ -96,26 +96,29 @@ class SOFBControl(BaseWidget):
         # ####################################################################
         # ########################## Orbit PVs ###############################
         # ####################################################################
-        fbl = QFormLayout()
-        fbl.setSpacing(9)
+        fbl = QGridLayout()
+        fbl.setVerticalSpacing(9)
         vbl.addItem(fbl)
 
         lbl = QLabel('SOFB Mode', grp_bx)
+        fbl.addWidget(lbl, 0, 0, alignment=Qt.AlignVCenter)
         wid = self.create_pair_sel(grp_bx, 'SOFBMode')
-        fbl.addRow(lbl, wid)
+        fbl.addWidget(wid, 0, 1)
 
-        lbl = QLabel('Correct:', grp_bx)
+        lbl = QLabel('OfflineOrb:', grp_bx)
+        fbl.addWidget(lbl, 1, 0, alignment=Qt.AlignVCenter)
         combo = OfflineOrbControl(
             self, self.prefix, self.ctrls, self.acc)
         combo.rules = (
             '[{"name": "EnblRule", "property": "Enable", ' +
             '"expression": "not ch[0]", "channels": [{"channel": "' +
             self.prefix+'SOFBMode-Sts'+'", "trigger": true}]}]')
-        fbl.addRow(lbl, combo)
+        fbl.addWidget(combo, 1, 1, alignment=Qt.AlignBottom)
 
-        lbl = QLabel('as diff to:', grp_bx)
+        lbl = QLabel('RefOrb:', grp_bx)
+        fbl.addWidget(lbl, 2, 0, alignment=Qt.AlignVCenter)
         combo = RefControl(self, self.prefix, self.ctrls, self.acc)
-        fbl.addRow(lbl, combo)
+        fbl.addWidget(combo, 2, 1, alignment=Qt.AlignBottom)
 
         vbl.addSpacing(40)
         # ####################################################################
@@ -196,20 +199,20 @@ class SOFBControl(BaseWidget):
         vbl2 = QVBoxLayout(grpbx)
         vbl2.setSpacing(9)
         Window = create_window_from_widget(
-            RespMatWidget, name='RespMatWindow')
+            RespMatWidget, title='Response Matrix')
         btn = QPushButton('Response Matrix', grpbx)
         vbl2.addWidget(btn)
         _util.connect_window(
             btn, Window, grpbx, prefix=self.prefix, acc=self.acc)
         Window = create_window_from_widget(
-            KicksConfigWidget, name='KicksConfigWindow')
+            KicksConfigWidget, title='Correctors')
         btn = QPushButton('Correctors', grpbx)
         vbl2.addWidget(btn)
         _util.connect_window(
             btn, Window, grpbx, prefix=self.prefix, acc=self.acc,
             show_details=True)
         Window = create_window_from_widget(
-            AcqControlWidget, name='AcqControlWindow')
+            AcqControlWidget, title='Orbit Acquisition')
         btn = QPushButton('Orbit Acquisition', grpbx)
         _util.connect_window(
             btn, Window, grpbx, prefix=self.prefix, acc=self.acc)

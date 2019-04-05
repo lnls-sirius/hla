@@ -7,6 +7,7 @@ import argparse as _argparse
 from siriuspy.envars import vaca_prefix
 from siriushla.sirius_application import SiriusApplication
 from siriushla.as_ap_measure import EmittanceMeasure
+from siriushla.widgets.windows import create_window_from_widget
 
 
 parser = _argparse.ArgumentParser(
@@ -16,6 +17,8 @@ parser.add_argument('-p', "--prefix", type=str, default=vaca_prefix,
 args = parser.parse_args()
 
 app = SiriusApplication()
-window = EmittanceMeasure(place='LI')
+MyWindow = create_window_from_widget(
+    EmittanceMeasure, title='Linac Emittance Measure', is_main=True)
+window = MyWindow(place='LI')
 window.show()
 sys.exit(app.exec_())

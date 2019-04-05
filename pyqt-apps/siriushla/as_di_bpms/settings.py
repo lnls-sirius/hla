@@ -44,12 +44,14 @@ class ParamsSettings(BaseWidget):
         vbl2 = QVBoxLayout(grpbx)
         vbl2.setSpacing(10)
         pbt = QPushButton('Software')
-        Window = create_window_from_widget(AdvancedSettings, 'AdvancedInfo')
+        Window = create_window_from_widget(
+            AdvancedSettings, title=self.bpm+': Advanced Settings')
         util.connect_window(
             pbt, Window, parent=grpbx, prefix=self.prefix, bpm=self.bpm)
         vbl2.addWidget(pbt)
         pbt = QPushButton('Hardware')
-        Window = create_window_from_widget(HardwareSettings, 'HdwrSettings')
+        Window = create_window_from_widget(
+            HardwareSettings, title=self.bpm+': Hardware Settings')
         util.connect_window(
             pbt, Window, parent=grpbx, prefix=self.prefix, bpm=self.bpm)
         vbl2.addWidget(pbt)
@@ -130,20 +132,23 @@ class AdvancedSettings(BaseWidget):
         hbl.setSpacing(10)
         hbl.addStretch()
         pbt = QPushButton('Physical Triggers')
-        Window = create_window_from_widget(PhysicalTriggers, 'PhysTrigs')
+        Window = create_window_from_widget(
+            PhysicalTriggers, title=self.bpm+': Physical Triggers')
         util.connect_window(
             pbt, Window, parent=grpbx, prefix=self.prefix, bpm=self.bpm)
         hbl.addWidget(pbt)
         hbl.addStretch()
         pbt = QPushButton('ACQ Logical Triggers')
-        Window = create_window_from_widget(LogicalTriggers, 'ACQTrigs')
+        Window = create_window_from_widget(
+            LogicalTriggers, title=self.bpm+': ACQ Logical Triggers')
         util.connect_window(
             pbt, Window, parent=grpbx, prefix=self.prefix, bpm=self.bpm,
             trig_tp='')
         hbl.addWidget(pbt)
         hbl.addStretch()
         pbt = QPushButton('Post-Mortem Logical Triggers')
-        Window = create_window_from_widget(LogicalTriggers, 'PMTrigs')
+        Window = create_window_from_widget(
+            LogicalTriggers, title=self.bpm+': Post-Mortem Logical Triggers')
         util.connect_window(
             pbt, Window, parent=grpbx, prefix=self.prefix, bpm=self.bpm,
             trig_tp='_PM')
