@@ -172,7 +172,7 @@ class MagnetCycler:
         """Return wether magnet cycling parameters are set."""
         return (self.timed_get(self.cycletype_sts, self.siggen.type) and
                 self.timed_get(self.cyclefreq_rb, self.siggen.freq) and
-                self.timed_get(self.cycleampl_rb, self.siggen.amplitue))
+                self.timed_get(self.cycleampl_rb, self.siggen.amplitude))
 
     def mode_rdy(self):
         """Return wether magnet is in cycling mode."""
