@@ -202,7 +202,10 @@ class MagnetCycler:
                     return True
 
             else:
-                v = pv.get()
+                if 'Type' in pv.pvname:
+                    v = pv.get(as_string=True)
+                else:
+                    v = pv.get()
                 if isinstance(v, np.ndarray):
                     if np.all(v == value):
                         return True
