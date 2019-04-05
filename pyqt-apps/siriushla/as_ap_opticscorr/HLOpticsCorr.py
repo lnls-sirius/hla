@@ -7,7 +7,7 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QPushButton, QGridLayout, QLabel, QSpacerItem, \
     QAbstractItemView, QGroupBox, QSizePolicy as QSzPlcy, QHeaderView
 from pydm.widgets import PyDMEnumComboBox, PyDMLabel, PyDMLineEdit, \
-    PyDMWaveformTable, PyDMSpinbox
+    PyDMWaveformTable
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriuspy.csdevice.opticscorr import Const as _Const
@@ -52,7 +52,8 @@ class OpticsCorrWindow(SiriusMainWindow):
         self._setStatusLabels()
 
     def _setStatusLabels(self):
-        status_bits = 5 if self._acc == 'SI' else 4
+        status_bits = 5 if (self.opticsparam == 'tune' and
+                            self._acc == 'SI') else 4
         for i in range(status_bits):
             exec('self.centralwidget.label_status{0}.setText'
                  '(_Const.STATUS_LABELS[{0}])'.format(i))
@@ -97,42 +98,26 @@ class _CorrParamsDetailWindow(SiriusMainWindow):
             self.pydmlabel_method = PyDMLabel(
                 parent=self, init_channel=ioc_prefix+'CorrMeth-Sts')
 
-            label_sync = QLabel('<h4>Syncronization</h4>',
-                                alignment=Qt.AlignCenter)
-            self.button_sync = PyDMStateButton(
-                parent=self, init_channel=ioc_prefix+'SyncCorr-Sel')
-            self.button_sync.shape = 1
-            self.pydmlabel_sync = PyDMLabel(
-                parent=self, init_channel=ioc_prefix+'SyncCorr-Sts')
-
             lay.addWidget(label_method, 1, 1, 1, self._nfam)
             lay.addWidget(self.combobox_method, 2, self._nfam//2)
             lay.addWidget(self.pydmlabel_method, 2, self._nfam//2+1)
             lay.addItem(
                 QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Fixed), 3, 1)
-            lay.addWidget(label_sync, 4, 1, 1, self._nfam)
-            lay.addWidget(self.button_sync, 5, self._nfam//2)
-            lay.addWidget(self.pydmlabel_sync, 5, self._nfam//2+1)
-            lay.addItem(
-                QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Fixed), 6, 1)
 
-        if self._opticsparam == 'Tune':
-            label_corrfactor = QLabel('<h4>Correction Factor [%]</h4>', self,
-                                      alignment=Qt.AlignCenter)
-            self.pydmspinbox_corrfactor = PyDMSpinbox(
-                parent=self, init_channel=ioc_prefix+'CorrFactor-SP')
-            self.pydmspinbox_corrfactor.showStepExponent = False
-            self.pydmspinbox_corrfactor.setStyleSheet(
-                """min-width:10em; max-width:10em;""")
+            if self._opticsparam == 'Tune':
+                label_sync = QLabel('<h4>Syncronization</h4>',
+                                    alignment=Qt.AlignCenter)
+                self.button_sync = PyDMStateButton(
+                    parent=self, init_channel=ioc_prefix+'SyncCorr-Sel')
+                self.button_sync.shape = 1
+                self.pydmlabel_sync = PyDMLabel(
+                    parent=self, init_channel=ioc_prefix+'SyncCorr-Sts')
 
-            self.pydmlabel_corrfactor = PyDMLabel(
-                parent=self, init_channel=ioc_prefix+'CorrFactor-RB')
-
-            lay.addWidget(label_corrfactor, 7, 1, 1, self._nfam)
-            lay.addWidget(self.pydmspinbox_corrfactor, 8, self._nfam//2)
-            lay.addWidget(self.pydmlabel_corrfactor, 8, self._nfam//2+1)
-            lay.addItem(
-                QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Fixed), 9, 1)
+                lay.addWidget(label_sync, 4, 1, 1, self._nfam)
+                lay.addWidget(self.button_sync, 5, self._nfam//2)
+                lay.addWidget(self.pydmlabel_sync, 5, self._nfam//2+1)
+                lay.addItem(
+                    QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Fixed), 6, 1)
 
         label_configname = QLabel('<h4>Configuration Name</h4>', self,
                                   alignment=Qt.AlignCenter)
@@ -231,7 +216,7 @@ class _CorrParamsDetailWindow(SiriusMainWindow):
             lay.addWidget(label_nomchrom, 19, 1, 1, self._nfam)
             lay.addWidget(self.pydmlabel_nomchrom, 20, 1, 1, self._nfam)
 
-        self.bt_apply = QPushButton('Apply', self)
+        self.bt_apply = QPushButton('Ok', self)
         self.bt_apply.clicked.connect(self.close)
         lay.addWidget(self.bt_apply, 21, self._nfam)
 
@@ -252,5 +237,10 @@ class _ConfigLineEdit(PyDMLineEdit):
         elif 'BO' in self.channel and 'Chrom' in self.channel:
             config_type = 'bo_chromcorr_params'
         popup = _LoadConfiguration(config_type)
-        popup.configname.connect(self.value_changed)
+        popup.configname.connect(self._config_changed)
         popup.exec_()
+
+    def _config_changed(self, configname):
+        self.setText(configname)
+        self.send_value()
+        self.value_changed(configname)
