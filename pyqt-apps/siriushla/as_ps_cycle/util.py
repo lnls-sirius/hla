@@ -9,9 +9,14 @@ from siriuspy.envars import vaca_prefix as VACA_PREFIX
 from siriuspy.search.ma_search import MASearch as _MASearch
 from siriuspy.search.ps_search import PSSearch as _PSSearch
 from siriuspy.csdevice.pwrsupply import Const as _PSConst
+from siriuspy.csdevice.pwrsupply import ETypes as _et
 
 
 CONNECTION_TIMEOUT = 0.05
+SLEEP_CAPUT = 0.1
+
+
+_pvs = dict()
 
 
 def get_manames():
@@ -106,81 +111,144 @@ class Timing:
 class MagnetCycler:
     """Handle magnet properties related to cycling."""
 
+    _properties = [
+        'PwrState-Sel', 'PwrState-Sts',
+        'OpMode-Sel', 'OpMode-Sts',
+        'CycleType-Sel', 'CycleType-Sts',
+        'CycleFreq-SP', 'CycleFreq-RB',
+        'CycleAmpl-SP', 'CycleAmpl-RB',
+        'CycleAuxParam-SP', 'CycleAuxParam-RB',
+        'CycleEnbl-Mon',
+    ]
+
     def __init__(self, maname):
         """Constructor."""
+        global _pvs
         self._maname = maname
         self._psnames = _MASearch.conv_maname_2_psnames(self._maname)
         self.siggen = _PSSearch.conv_psname_2_siggenconf(self._psnames[0])
-        self.pwrstate_sel = _epics.get_pv(
-            VACA_PREFIX + self._maname + ':PwrState-Sel')
-        self.cycletype_sel = \
-            _epics.get_pv(VACA_PREFIX + self._maname + ':CycleType-Sel')
-        self.cyclefreq_sp = \
-            _epics.get_pv(VACA_PREFIX + self._maname + ':CycleFreq-SP')
-        self.cycleampl_sp = \
-            _epics.get_pv(VACA_PREFIX + self._maname + ':CycleAmpl-SP')
-        self.opmode_sel = \
-            _epics.get_pv(VACA_PREFIX + self._maname + ':OpMode-Sel')
-        self.pwrstate_sts = \
-            _epics.get_pv(VACA_PREFIX + self._maname + ':PwrState-Sts')
-        self.cycletype_sts = \
-            _epics.get_pv(VACA_PREFIX + self._maname + ':CycleType-Sts')
-        self.cyclefreq_rb = \
-            _epics.get_pv(VACA_PREFIX + self._maname + ':CycleFreq-RB')
-        self.cycleampl_rb = \
-            _epics.get_pv(VACA_PREFIX + self._maname + ':CycleAmpl-RB')
-        self.opmode_sts = \
-            _epics.get_pv(VACA_PREFIX + self._maname + ':OpMode-Sts')
-        self.cycleenbl_mon = \
-            _epics.get_pv(VACA_PREFIX + self._maname + ':CycleEnbl-Mon')
-
-        self.pwrstate = 1
+        # self._pvs = dict()
+        for prop in MagnetCycler._properties:
+            pvname = self._get_pvname(prop)
+            if pvname not in _pvs:
+                _pvs[prop] = \
+                    _epics.PV(pvname, connection_timeout=CONNECTION_TIMEOUT)
 
     @property
     def maname(self):
         """Magnet name."""
         return self._maname
 
+    @property
+    def connected(self):
+        """Return connected state."""
+        for prop in MagnetCycler._properties:
+            pvname = self._get_pvname(prop)
+            if not _pvs[pvname].connected:
+                return False
+        return True
+
     def set_on(self):
         """Turn magnet PS on."""
-        return self.conn_put(self.pwrstate_sel, self.pwrstate)
+        pvname = self._get_pvname('PwrState-Sel')
+        return self.conn_put(_pvs[pvname], _PSConst.PwrStateSel.On)
 
-    def set_params(self):
+    def __getitem__(self, prop):
+        """."""
+        pvname = self._get_pvname(prop)
+        return _pvs[pvname]
+
+    def set_cycle_params(self):
         """Set cycling params."""
-        return (self.conn_put(self.cycletype_sel, self.siggen.type) and
-                self.conn_put(self.cyclefreq_sp, self.siggen.freq) and
-                self.conn_put(self.cycleampl_sp, self.siggen.amplitude))
+        status = True
+        status &= self.conn_put(_pvs[self._get_pvname('CycleType-Sel')],
+                                self.siggen.type)
+        _time.sleep(SLEEP_CAPUT)
+        status &= self.conn_put(_pvs[self._get_pvname('CycleFreq-SP')],
+                                self.siggen.freq)
+        _time.sleep(SLEEP_CAPUT)
+        status &= self.conn_put(_pvs[self._get_pvname('CycleAmpl-SP')],
+                                self.siggen.amplitude)
+        _time.sleep(SLEEP_CAPUT)
+        status &= self.conn_put(_pvs[self._get_pvname('CycleAuxParam-SP')],
+                                self.siggen.aux_param)
 
-    def set_mode(self):
-        """Set magnet to cycling mode."""
-        return self.conn_put(self.opmode_sel, _PSConst.OpMode.Cycle)
+    def set_mode(self, opmode):
+        """Set magnet to opmode."""
+        if opmode not in _et.OPMODES:
+            return False
+        else:
+            return self.conn_put(_pvs[self._get_pvname('OpMode-Sel')], opmode)
 
-    def set_cycle(self):
-        """Set magnet to cycling mode."""
-        self.conn_put(self.opmode_sel, 0)
-        self.set_on()
-        _time.sleep(1e-2)
-        self.set_params()
-        _time.sleep(1e-2)
-        self.set_mode()
+    def config_cycle(self):
+        """Config magnet to cycling mode."""
+        status = True
+
+        status &= self.set_mode(_PSConst.OpMode.SlowRef)
+        _time.sleep(SLEEP_CAPUT)
+
+        status &= self.set_on()
+        _time.sleep(SLEEP_CAPUT)
+
+        status &= self.set_cycle_params()
+        _time.sleep(SLEEP_CAPUT)
+
+        status &= self.set_mode(_PSConst.OpMode.Cycle)
+
+        return status
+
+    def config_rmpwfm(self):
+        """Config magnet to rmpwfm mode."""
+        status = True
+
+        status &= self.set_mode(_PSConst.OpMode.SlowRef)
+        _time.sleep(SLEEP_CAPUT)
+
+        status &= self.set_on()
+        _time.sleep(SLEEP_CAPUT)
+
+        status &= self.set_mode(_PSConst.OpMode.Cycle)
+
+        return status
 
     def on_rdy(self):
         """Return wether magnet PS is on."""
-        return self.timed_get(self.pwrstate_sts, self.pwrstate)
+        pvname = self._get_pvname('PwrState-Sts')
+        status = self.timed_get(_pvs[pvname], _PSConst.PwrStateSts.On)
+        return status
 
     def params_rdy(self):
         """Return wether magnet cycling parameters are set."""
-        return (self.timed_get(self.cycletype_sts, self.siggen.type) and
-                self.timed_get(self.cyclefreq_rb, self.siggen.freq) and
-                self.timed_get(self.cycleampl_rb, self.siggen.amplitude))
+        status = True
 
-    def mode_rdy(self):
-        """Return wether magnet is in cycling mode."""
-        return self.timed_get(self.opmode_sts, _PSConst.States.Cycle)
+        pvname = self._get_pvname('CycleType-Sts')
+        type_idx = _et.CYCLE_TYPES.index(self.siggen.type)
+        status &= self.timed_get(_pvs[pvname], type_idx)
 
-    def is_ready(self):
-        """Return wether magnet is ready to cycle."""
-        return self.on_rdy() and self.params_rdy() and self.mode_rdy()
+        pvname = self._get_pvname('CycleFreq-RB')
+        status &= self.timed_get(_pvs[pvname], self.siggen.freq)
+
+        pvname = self._get_pvname('CycleAmpl-RB')
+        status &= self.timed_get(_pvs[pvname], self.siggen.amplitude)
+
+        pvname = self._get_pvname('CycleAuxParam-RB')
+        status &= self.timed_get(_pvs[pvname], self.siggen.aux_param)
+
+        return status
+
+    def mode_rdy(self, opmode):
+        """Return wether magnet is in opmode."""
+        if opmode not in _et.OPMODES:
+            return False
+        pvname = self._get_pvname('OpMode-Sts')
+        return self.timed_get(_pvs[pvname], opmode)
+
+    def is_ready(self, opmode):
+        """Return wether magnet is ready."""
+        status = self.on_rdy() and self.mode_rdy(opmode)
+        if opmode == 'Cycle':
+            status &= self.params_rdy()
+        return status
 
     def conn_put(self, pv, value):
         """Put if connected."""
@@ -190,30 +258,34 @@ class MagnetCycler:
             return True
         return False
 
-    def timed_get(self, pv, value, wait=20):
+    def timed_get(self, pv, value, wait=1.0):
         """Do timed get."""
         if not pv.connected:
             return False
-        t = 0
-        init = _time.time()
-        while t < wait:
-            if isinstance(value, float):
-                if _isclose(pv.get(), value, rel_tol=1e-06, abs_tol=0.0):
-                    return True
-
+        t0 = _time.time()
+        while _time.time() - t0 < wait:
+            pvvalue = pv.get()
+            status = False
+            if isinstance(value, (tuple, list, np.ndarray)):
+                if not isinstance(pvvalue, (tuple, list, np.ndarray)):
+                    status = False
+                if len(value) != len(pvvalue):
+                    status = False
+                for i in range(len(value)):
+                    if _isclose(pvvalue[i], value[i],
+                                rel_tol=1e-06, abs_tol=0.0):
+                        status = True
+                    else:
+                        status = False
             else:
-                if 'Type' in pv.pvname:
-                    v = pv.get(as_string=True)
+                if _isclose(pvvalue[i], value[i],
+                            rel_tol=1e-06, abs_tol=0.0):
+                    status = True
                 else:
-                    v = pv.get()
-                if isinstance(v, np.ndarray):
-                    if np.all(v == value):
-                        return True
-                else:
-                    if v == value:
-                        return True
-                # if pv.get() == value:
-                #     return True
-            t = _time.time() - init
-            _time.sleep(5e-3)
-        return False
+                    status = False
+            _time.sleep(wait/10.0)
+        return status
+
+    def _get_pvname(self, prop):
+        """."""
+        return VACA_PREFIX + self._maname + ':' + prop
