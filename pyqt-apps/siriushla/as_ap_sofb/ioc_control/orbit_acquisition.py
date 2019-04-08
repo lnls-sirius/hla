@@ -1,7 +1,7 @@
 """Define Controllers for the orbits displayed in the graphic."""
 
 from qtpy.QtWidgets import QLabel, QGroupBox, QSpacerItem, QFormLayout, \
-                QGridLayout, QVBoxLayout, QHBoxLayout, QPushButton
+                QGridLayout, QVBoxLayout, QHBoxLayout, QPushButton, QWidget
 from qtpy.QtCore import Qt
 from pydm.widgets import PyDMLabel, PyDMPushButton
 from siriushla.util import connect_window
@@ -123,6 +123,25 @@ class AcqControlWidget(BaseWidget):
         lbl = QLabel('Mask End', grp_bx, alignment=Qt.AlignCenter)
         lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
         wid = self.create_pair(grp_bx, 'SPassMaskSplEnd')
+        fbl.addRow(lbl, wid)
+        wid = QWidget(grp_bx)
+        hbl = QHBoxLayout(wid)
+        pdm_btn1 = PyDMPushButton(
+            init_channel=self.prefix+'SPassBgCtrl-Cmd',
+            pressValue=0, label='Acquire')
+        pdm_btn2 = PyDMPushButton(
+            init_channel=self.prefix+'SPassBgCtrl-Cmd',
+            pressValue=1, label='Reset')
+        pdm_lbl = PyDMLabel(wid, init_channel=self.prefix+'SPassBgSts-Mon')
+        hbl.addWidget(pdm_btn1)
+        hbl.addWidget(pdm_btn2)
+        hbl.addWidget(pdm_lbl)
+        lbl = QLabel('BG acq.:', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
+        fbl.addRow(lbl, wid)
+        lbl = QLabel('Use BG', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
+        wid = self.create_pair_sel(grp_bx, 'SPassUseBg')
         fbl.addRow(lbl, wid)
 
         lbl = QLabel('Triggered Acquisition Configurations',
