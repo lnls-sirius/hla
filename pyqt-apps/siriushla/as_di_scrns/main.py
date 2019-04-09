@@ -11,7 +11,7 @@ from qtpy.QtCore import Qt, Slot
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla import util
-from siriushla.widgets import SiriusLedAlert
+from siriushla.widgets import PyDMLed
 from siriushla.widgets.signal_channel import SiriusConnectionSignal
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.as_di_scrns.base import \
@@ -489,8 +489,10 @@ class IndividualScrn(SiriusMainWindow):
             parent=cw, init_channel=self._prefix+self._scrn+':ScrnType-Sel')
         self.l_scrntype = PyDMLabel(
             parent=cw, init_channel=self._prefix+self._scrn+':ScrnType-Sts')
-        self.led_scrntype = SiriusLedAlert(
-            parent=cw, init_channel=self._prefix+self._scrn+':ScrnType-Sts')
+        self.led_scrntype = PyDMLed(
+            parent=cw, init_channel=self._prefix+self._scrn+':ScrnType-Sts',
+            color_list=[PyDMLed.LightGreen, PyDMLed.Red, PyDMLed.Red,
+                        PyDMLed.Yellow])
         self.led_scrntype.shape = 2
 
         lay = QGridLayout()

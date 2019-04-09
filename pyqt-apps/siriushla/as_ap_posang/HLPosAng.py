@@ -207,7 +207,7 @@ class _CorrParamsDetailWindow(SiriusMainWindow):
         self.table_matrix_Y.setSizePolicy(QSzPlcy.MinimumExpanding,
                                           QSzPlcy.Preferred)
 
-        self.bt_apply = QPushButton('Apply', self)
+        self.bt_apply = QPushButton('Ok', self)
         self.bt_apply.clicked.connect(self.close)
 
         lay = QGridLayout()
