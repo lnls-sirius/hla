@@ -1,4 +1,4 @@
-"""Control the Orbit Graphic Displnay."""
+"""Control the Orbit Graphic Display."""
 
 import numpy as _np
 from pyqtgraph import functions, mkPen
