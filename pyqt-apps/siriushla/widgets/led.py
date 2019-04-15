@@ -1,3 +1,4 @@
+from copy import deepcopy as _dcopy
 import numpy as _np
 from qtpy.QtGui import QColor
 from qtpy.QtCore import Property, Slot, Signal
@@ -277,18 +278,46 @@ class PyDMLedMultiConnection(QLed, PyDMWidget):
         PyDMWidget.__init__(self)
         self.stateColors = color_list or self.default_colorlist
 
-        self._channels2conn = dict()
-        for address in channels:
-            self._channels2conn[address] = False
-            channel = PyDMChannel(
-                address=address, connection_slot=self.connection_changed)
-            channel.connect()
-            self._channels.append(channel)
+        self._address2conn = dict()
+        self._address2channel = dict()
+        self.set_channels(channels)
 
     @property
     def channels2conn(self):
         """Return dict with connection state of each channel."""
-        return self._channels2conn
+        return _dcopy(self._address2conn)
+
+    def set_channels(self, new_channels):
+        if not new_channels:
+            self.setEnabled(False)
+        else:
+            self.setEnabled(True)
+
+        # Check which channel can be removed
+        address2pop = list()
+        for address in self._address2channel.keys():
+            if address not in new_channels:
+                address2pop.append(address)
+            else:
+                new_channels.remove(address)
+
+        # Remove channels
+        for address in address2pop:
+            self._address2channel[address].disconnect()
+            self._address2channel.pop(address)
+            self._address2conn.pop(address)
+
+        # Add new channels
+        for address in new_channels:
+            self._address2conn[address] = False
+            channel = PyDMChannel(
+                address=address, connection_slot=self.connection_changed)
+            channel.connect()
+            self._address2channel[address] = channel
+
+        self._channels = list(self._address2channel.values())
+
+        self._update_state()
 
     @Slot(bool)
     def connection_changed(self, conn):
@@ -298,10 +327,12 @@ class PyDMLedMultiConnection(QLed, PyDMWidget):
             self.warning.emit([address, conn])
         else:
             self.normal.emit([address, conn])
-        self._channels2conn[address] = conn
+        self._address2conn[address] = conn
+        self._update_state()
 
+    def _update_state(self):
         allconn = True
-        for conn in self.channels2conn.values():
+        for conn in self._address2conn.values():
             allconn &= conn
         self.setState(allconn)
         self._connected = allconn
