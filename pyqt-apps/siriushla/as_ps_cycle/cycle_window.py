@@ -180,16 +180,13 @@ class CycleWindow(SiriusMainWindow):
             return True
         else:
             self.status_list.magnets = self._magnets_failed
-            # return False
-            pass
-            return True
+            return False
 
     def _prepare_to_cycle(self, mode):
         # Prepare timing to cycle
         status = self._prepare_timing(mode)
         if not status:
-            # return
-            pass
+            return
 
         status = self._prepare_magnets(mode)
         if not status:
@@ -216,8 +213,7 @@ class CycleWindow(SiriusMainWindow):
             if mode == 'Demag':
                 self.demag_bt.setEnabled(False)
             self.status_list.magnets = self._magnets_failed
-            # return False
-            pass
+            return False
 
         # Trigger timing and wait cyling end
         task = WaitCycle(self._magnets, self._timing, mode, self)
