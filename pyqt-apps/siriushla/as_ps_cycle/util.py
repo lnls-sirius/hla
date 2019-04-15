@@ -2,137 +2,199 @@
 import numpy as np
 
 import time as _time
-import epics as _epics
+from epics import PV as _PV
 from math import isclose as _isclose
 
 from siriuspy.envars import vaca_prefix as VACA_PREFIX
 from siriuspy.search.ma_search import MASearch as _MASearch
 from siriuspy.search.ps_search import PSSearch as _PSSearch
 from siriuspy.csdevice.pwrsupply import Const as _PSConst
+from siriuspy.csdevice.timesys import Const as _TIConst
 from siriuspy.csdevice.pwrsupply import ETypes as _et
 
 
-CONNECTION_TIMEOUT = 0.05
+TIMEOUT = 0.05
 SLEEP_CAPUT = 0.1
 
 
-_pvs = dict()
-
-
 def get_manames():
-    """."""
-    return _MASearch.get_manames({'dis': 'MA'})
+    """Return manames."""
+    return _MASearch.get_manames({'sec': '(SI|TS|BO|TB)', 'dis': 'MA'})
+
+
+def get_manames_from_same_udc(maname):
+    """Return manames that are controled by same udc as maname."""
+    psname = _MASearch.conv_maname_2_psnames(maname)[0]
+    udc = _PSSearch.conv_psname_2_udc(psname)
+    bsmp_list = _PSSearch.conv_udc_2_bsmps(udc)
+    psnames = [bsmp[0] for bsmp in bsmp_list]
+    manames = set([_MASearch.conv_psname_2_psmaname(psname)
+                   for psname in psnames])
+    return manames
 
 
 class Timing:
     """Timing."""
 
-    DEFAULT_DURATION = 150  # [us]
-    DEFAULT_NRPULSES = 1
+    EVTNAME_CYCLE = 'Cycle'
+    EVTNAME_RAMP = 'RmpBO'
+
+    DEFAULT_CYCLE_DURATION = 150  # [us]
+    DEFAULT_CYCLE_NRPULSES = 1
+    DEFAULT_RMPBO_DURATION = 490000  # [us]
+    DEFAULT_RMPBO_NRPULSES = 3920
     DEFAULT_DELAY = 0  # [us]
-    DEFAULT_POLARITY = 'Normal'  # test
+    DEFAULT_POLARITY = _TIConst.TrigPol.Normal  # test
+    DEFAULT_STATE = _TIConst.DsblEnbl.Enbl
 
-    _properties = {
+    DEFAULT_RAMP_NRCYCLES = 10
+    DEFAULT_RAMP_TOTDURATION = DEFAULT_RMPBO_DURATION * \
+        DEFAULT_RAMP_NRCYCLES/1000000  # [s]
 
-        'RA-RaMO:TI-EVG:CycleMode-Sel': 'External',
-        'RA-RaMO:TI-EVG:UpdateEvt-Cmd': 1,
-        'RA-RaMO:TI-EVG:CycleExtTrig-Cmd': None,  # There is not default value
+    properties = {
+        'Demag': {
+            # EVG settings
+            'RA-RaMO:TI-EVG:DevEnbl-Sel': DEFAULT_STATE,
+            'RA-RaMO:TI-EVG:UpdateEvt-Cmd': 1,
 
-        'TB-Glob:TI-Mags:Src-Sel': 'Cycle',
-        'TB-Glob:TI-Mags:NrPulses-SP': DEFAULT_NRPULSES,
-        'TB-Glob:TI-Mags:Duration-SP': DEFAULT_DURATION,
-        'TB-Glob:TI-Mags:Delay-SP': DEFAULT_DELAY,
-        'TB-Glob:TI-Mags:Polarity-Sel': DEFAULT_POLARITY,  # test
-        'TB-Glob:TI-Mags:State-Sel': 'Enbl',
+            # Cycle event settings
+            'RA-RaMO:TI-EVG:CycleMode-Sel': _TIConst.EvtModes.External,
+            'RA-RaMO:TI-EVG:CycleDelayType-Sel': _TIConst.EvtDlyTyp.Fixed,
+            'RA-RaMO:TI-EVG:CycleExtTrig-Cmd': 1,  # There is not default value
 
-        'BO-Glob:TI-Mags:Src-Sel': 'Cycle',
-        'BO-Glob:TI-Mags:NrPulses-SP': DEFAULT_NRPULSES,
-        'BO-Glob:TI-Mags:Duration-SP': DEFAULT_DURATION,
-        'BO-Glob:TI-Mags:Delay-SP': DEFAULT_DELAY,
-        'BO-Glob:TI-Mags:Polarity-Sel': DEFAULT_POLARITY,  # test
-        'BO-Glob:TI-Mags:State-Sel': 'Enbl',
+            # TB magnets trigger settings
+            'TB-Glob:TI-Mags:Src-Sel': EVTNAME_CYCLE,
+            'TB-Glob:TI-Mags:Duration-SP': DEFAULT_CYCLE_DURATION,
+            'TB-Glob:TI-Mags:NrPulses-SP': DEFAULT_CYCLE_NRPULSES,
+            'TB-Glob:TI-Mags:Delay-SP': DEFAULT_DELAY,
+            'TB-Glob:TI-Mags:Polarity-Sel': DEFAULT_POLARITY,
+            'TB-Glob:TI-Mags:State-Sel': DEFAULT_STATE,
 
-        'BO-Glob:TI-Corrs:Src-Sel': 'Cycle',
-        'BO-Glob:TI-Corrs:NrPulses-SP': DEFAULT_NRPULSES,
-        'BO-Glob:TI-Corrs:Duration-SP': DEFAULT_DURATION,
-        'BO-Glob:TI-Corrs:Delay-SP': DEFAULT_DELAY,
-        'BO-Glob:TI-Corrs:Polarity-Sel': DEFAULT_POLARITY,  # test
-        'BO-Glob:TI-Corrs:State-Sel': 'Enbl',
+            # BO magnets trigger settings
+            'BO-Glob:TI-Mags:Src-Sel': EVTNAME_CYCLE,
+            'BO-Glob:TI-Mags:Duration-SP': DEFAULT_CYCLE_DURATION,
+            'BO-Glob:TI-Mags:NrPulses-SP': DEFAULT_CYCLE_NRPULSES,
+            'BO-Glob:TI-Mags:Delay-SP': DEFAULT_DELAY,
+            'BO-Glob:TI-Mags:Polarity-Sel': DEFAULT_POLARITY,
+            'BO-Glob:TI-Mags:State-Sel': DEFAULT_STATE,
 
+            # BO correctors trigger settings
+            'BO-Glob:TI-Corrs:Src-Sel': EVTNAME_CYCLE,
+            'BO-Glob:TI-Corrs:Duration-SP': DEFAULT_CYCLE_DURATION,
+            'BO-Glob:TI-Corrs:NrPulses-SP': DEFAULT_CYCLE_NRPULSES,
+            'BO-Glob:TI-Corrs:Delay-SP': DEFAULT_DELAY,
+            'BO-Glob:TI-Corrs:Polarity-Sel': DEFAULT_POLARITY,
+            'BO-Glob:TI-Corrs:State-Sel': DEFAULT_STATE,
+        },
+        'Cycle': {
+            # EVG settings
+            'RA-RaMO:TI-EVG:DevEnbl-Sel': DEFAULT_STATE,
+            'RA-RaMO:TI-EVG:ContinuousEvt-Sel': DEFAULT_STATE,
+
+            # Ramp event settings
+            'RA-RaMO:TI-EVG:RmpBOMode-Sel': None,
+            'RA-RaMO:TI-EVG:RmpBODelayType-Sel': _TIConst.EvtDlyTyp.Incr,
+            'RA-RaMO:TI-EVG:RmpBODelay-SP': DEFAULT_DELAY,
+
+            # BO magnets trigger settings
+            'BO-Glob:TI-Mags:Src-Sel': EVTNAME_RAMP,
+            'BO-Glob:TI-Mags:Duration-SP': DEFAULT_RMPBO_DURATION,
+            'BO-Glob:TI-Mags:NrPulses-SP': DEFAULT_RMPBO_NRPULSES,
+            'BO-Glob:TI-Mags:Delay-SP': DEFAULT_DELAY,
+            'BO-Glob:TI-Mags:Polarity-Sel': DEFAULT_POLARITY,
+            'BO-Glob:TI-Mags:State-Sel': DEFAULT_STATE,
+
+            # BO correctors trigger settings
+            'BO-Glob:TI-Corrs:Src-Sel': EVTNAME_RAMP,
+            'BO-Glob:TI-Corrs:Duration-SP': DEFAULT_RMPBO_DURATION,
+            'BO-Glob:TI-Corrs:NrPulses-SP': DEFAULT_RMPBO_NRPULSES,
+            'BO-Glob:TI-Corrs:Delay-SP': DEFAULT_DELAY,
+            'BO-Glob:TI-Corrs:Polarity-Sel': DEFAULT_POLARITY,
+            'BO-Glob:TI-Corrs:State-Sel': DEFAULT_STATE,
+        }
     }
 
     _pvs = None
 
     def __init__(self):
         """Init."""
-        self.init()
+        self._create_pvs()
+        self._status_nok = []
 
     @property
     def status_nok(self):
-        """."""
+        """Return list with names of failing PVs."""
         return self._status_nok.copy()
 
-    def init(self):
-        """Initialize timing properties.
-
-        Return list with names of failing PVs.
-        """
-        if Timing._pvs is None:
-            Timing._create_pvs()
-
-        self._status_nok = []
-        for prop, pv_defval in Timing._pvs.items():
-            pv, defval = pv_defval
+    def init(self, mode):
+        """Initialize properties."""
+        for prop, defval in Timing.properties[mode].items():
+            pv = Timing[VACA_PREFIX+prop]
             pv.get()  # force connection
-            if pv.connected:
-                if defval is not None:
-                    pv.value = defval
-            else:
+            if pv.connected and defval is not None:
+                pv.value = defval
+
+    @property
+    def connected(self):
+        """Return connected state."""
+        self._status_nok = []
+        for pv in Timing._pvs.values():
+            if not pv.connected:
                 self._status_nok.append(pv.pvname)
+        return not bool(self._status_nok)
 
-    def trigger(self):
-        """Trigger timming."""
-        if Timing._pvs is None:
-            self._create_pvs()
-
-        pv, _ = Timing._pvs['RA-RaMO:TI-EVG:CycleExtTrig-Cmd']
+    def trigger2demag(self):
+        """Trigger timming to cycle magnets."""
+        pv = Timing._pvs['RA-RaMO:TI-EVG:CycleExtTrig-Cmd']
         pv.value = 1
 
-    def _create_pvs():
-        """."""
-        # global _pvs_ti
+    def init_ramp(self):
+        pv = Timing._pvs['RA-RaMO:TI-EVG:RmpBOMode-Sel']
+        pv.value = _TIConst.EvtModes.Continuous
+
+    def finish_ramp(self):
+        pv = Timing._pvs['RA-RaMO:TI-EVG:RmpBOMode-Sel']
+        pv.value = _TIConst.EvtModes.Disabled
+
+    def _create_pvs(self):
+        """Create PVs."""
         Timing._pvs = dict()
-        for key, value in Timing._properties.items():
-            Timing._pvs[key] = (
-                _epics.PV(VACA_PREFIX + key,
-                          connection_timeout=CONNECTION_TIMEOUT), value)
+        for mode, dict_ in Timing.properties.items():
+            for pvname in dict_.keys():
+                Timing._pvs[pvname] = _PV(VACA_PREFIX+pvname,
+                                          connection_timeout=TIMEOUT)
+                Timing._pvs[pvname].get()
 
 
 class MagnetCycler:
     """Handle magnet properties related to cycling."""
 
-    _properties = [
+    properties = [
         'PwrState-Sel', 'PwrState-Sts',
         'OpMode-Sel', 'OpMode-Sts',
         'CycleType-Sel', 'CycleType-Sts',
         'CycleFreq-SP', 'CycleFreq-RB',
         'CycleAmpl-SP', 'CycleAmpl-RB',
+        'CycleOffset-SP', 'CycleOffset-RB',
+        'CycleNrCycles-SP', 'CycleNrCycles-RB',
         'CycleAuxParam-SP', 'CycleAuxParam-RB',
         'CycleEnbl-Mon',
+        'WfmData-SP', 'WfmData-RB',
+        'RmpIncNrCycles-SP', 'RmpIncNrCycles-RB',
+        'RmpReady-Mon',
     ]
 
     def __init__(self, maname):
         """Constructor."""
-        global _pvs
         self._maname = maname
         self._psnames = _MASearch.conv_maname_2_psnames(self._maname)
         self.siggen = _PSSearch.conv_psname_2_siggenconf(self._psnames[0])
-        # self._pvs = dict()
-        for prop in MagnetCycler._properties:
-            pvname = self._get_pvname(prop)
-            if pvname not in _pvs:
-                _pvs[prop] = \
-                    _epics.PV(pvname, connection_timeout=CONNECTION_TIMEOUT)
+        self._pvs = dict()
+        for prop in MagnetCycler.properties:
+            if prop not in self._pvs.keys():
+                pvname = VACA_PREFIX + self._maname + ':' + prop
+                self._pvs[prop] = _PV(pvname, connection_timeout=TIMEOUT)
+                self._pvs[prop].get()
 
     @property
     def maname(self):
@@ -142,112 +204,113 @@ class MagnetCycler:
     @property
     def connected(self):
         """Return connected state."""
-        for prop in MagnetCycler._properties:
-            pvname = self._get_pvname(prop)
-            if not _pvs[pvname].connected:
+        for prop in MagnetCycler.properties:
+            if not self[prop].connected:
                 return False
         return True
 
+    def cycle_duration(self, mode):
+        """Return the duration of the cycling in seconds."""
+        if mode == 'Demag':
+            return self.siggen.num_cycles/self.siggen.freq
+        else:
+            return (Timing.DEFAULT_RAMP_TOTDURATION)
+
     def set_on(self):
         """Turn magnet PS on."""
-        pvname = self._get_pvname('PwrState-Sel')
-        return self.conn_put(_pvs[pvname], _PSConst.PwrStateSel.On)
+        return self.conn_put(self['PwrState-Sel'],
+                             _PSConst.PwrStateSel.On)
 
-    def __getitem__(self, prop):
-        """."""
-        pvname = self._get_pvname(prop)
-        return _pvs[pvname]
-
-    def set_cycle_params(self):
-        """Set cycling params."""
+    def set_params(self, mode):
         status = True
-        status &= self.conn_put(_pvs[self._get_pvname('CycleType-Sel')],
-                                self.siggen.type)
-        _time.sleep(SLEEP_CAPUT)
-        status &= self.conn_put(_pvs[self._get_pvname('CycleFreq-SP')],
-                                self.siggen.freq)
-        _time.sleep(SLEEP_CAPUT)
-        status &= self.conn_put(_pvs[self._get_pvname('CycleAmpl-SP')],
-                                self.siggen.amplitude)
-        _time.sleep(SLEEP_CAPUT)
-        status &= self.conn_put(_pvs[self._get_pvname('CycleAuxParam-SP')],
-                                self.siggen.aux_param)
-
-    def set_mode(self, opmode):
-        """Set magnet to opmode."""
-        if opmode not in _et.OPMODES:
-            return False
+        if mode == 'Demag':
+            status &= self.conn_put(self['CycleType-Sel'],
+                                    self.siggen.type)
+            _time.sleep(SLEEP_CAPUT)
+            status &= self.conn_put(self['CycleFreq-SP'],
+                                    self.siggen.freq)
+            _time.sleep(SLEEP_CAPUT)
+            status &= self.conn_put(self['CycleAmpl-SP'],
+                                    self.siggen.amplitude)
+            _time.sleep(SLEEP_CAPUT)
+            status &= self.conn_put(self['CycleOffset-SP'],
+                                    self.siggen.offset)
+            _time.sleep(SLEEP_CAPUT)
+            status &= self.conn_put(self['CycleAuxParam-SP'],
+                                    self.siggen.aux_param)
+            _time.sleep(SLEEP_CAPUT)
+            status &= self.conn_put(self['CycleNrCycles-SP'],
+                                    self.siggen.num_cycles)
         else:
-            return self.conn_put(_pvs[self._get_pvname('OpMode-Sel')], opmode)
+            status &= self.conn_put(self['RmpIncNrCycles-SP'], 1)
+            _time.sleep(SLEEP_CAPUT)
+            status &= self.conn_put(self['WfmData-SP'],
+                                    Timing.DEFAULT_RMPBO_NRPULSES*[0])
+        return status
 
-    def config_cycle(self):
+    def set_opmode(self, opmode):
+        """Set magnet opmode to mode."""
+        return self.conn_put(self['OpMode-Sel'], opmode)
+
+    def config_cycle(self, mode):
         """Config magnet to cycling mode."""
         status = True
 
-        status &= self.set_mode(_PSConst.OpMode.SlowRef)
-        _time.sleep(SLEEP_CAPUT)
-
         status &= self.set_on()
         _time.sleep(SLEEP_CAPUT)
 
-        status &= self.set_cycle_params()
+        status &= self.set_opmode(_PSConst.OpMode.SlowRef)
         _time.sleep(SLEEP_CAPUT)
 
-        status &= self.set_mode(_PSConst.OpMode.Cycle)
-
-        return status
-
-    def config_rmpwfm(self):
-        """Config magnet to rmpwfm mode."""
-        status = True
-
-        status &= self.set_mode(_PSConst.OpMode.SlowRef)
+        status &= self.set_params(mode)
         _time.sleep(SLEEP_CAPUT)
 
-        status &= self.set_on()
-        _time.sleep(SLEEP_CAPUT)
-
-        status &= self.set_mode(_PSConst.OpMode.Cycle)
-
+        opmode = _PSConst.OpMode.Cycle if mode == 'Demag'\
+            else _PSConst.OpMode.RmpWfm
+        status &= self.set_opmode(opmode)
         return status
 
     def on_rdy(self):
         """Return wether magnet PS is on."""
-        pvname = self._get_pvname('PwrState-Sts')
-        status = self.timed_get(_pvs[pvname], _PSConst.PwrStateSts.On)
+        status = self.timed_get(
+            self['PwrState-Sts'], _PSConst.PwrStateSts.On)
         return status
 
-    def params_rdy(self):
+    def params_rdy(self, mode):
         """Return wether magnet cycling parameters are set."""
         status = True
-
-        pvname = self._get_pvname('CycleType-Sts')
-        type_idx = _et.CYCLE_TYPES.index(self.siggen.type)
-        status &= self.timed_get(_pvs[pvname], type_idx)
-
-        pvname = self._get_pvname('CycleFreq-RB')
-        status &= self.timed_get(_pvs[pvname], self.siggen.freq)
-
-        pvname = self._get_pvname('CycleAmpl-RB')
-        status &= self.timed_get(_pvs[pvname], self.siggen.amplitude)
-
-        pvname = self._get_pvname('CycleAuxParam-RB')
-        status &= self.timed_get(_pvs[pvname], self.siggen.aux_param)
-
+        if mode == 'Demag':
+            type_idx = _et.CYCLE_TYPES.index(self.siggen.type)
+            status &= self.timed_get(self['CycleType-Sts'], type_idx)
+            status &= self.timed_get(
+                self['CycleFreq-RB'], self.siggen.freq)
+            status &= self.timed_get(
+                self['CycleAmpl-RB'], self.siggen.amplitude)
+            status &= self.timed_get(
+                self['CycleOffset-RB'], self.siggen.offset)
+            status &= self.timed_get(
+                self['CycleAuxParam-RB'], self.siggen.aux_param)
+            status &= self.timed_get(
+                self['CycleNrCycles-RB'], self.siggen.num_cycles)
+        else:
+            status &= self.timed_get(self['RmpIncNrCycles-RB'], 1)
+            _time.sleep(SLEEP_CAPUT)
+            status &= self.timed_get(
+                self['WfmData-RB'], Timing.DEFAULT_RMPBO_NRPULSES*[0])
         return status
 
-    def mode_rdy(self, opmode):
-        """Return wether magnet is in opmode."""
-        if opmode not in _et.OPMODES:
-            return False
-        pvname = self._get_pvname('OpMode-Sts')
-        return self.timed_get(_pvs[pvname], opmode)
+    def mode_rdy(self, mode):
+        """Return wether magnet is in mode."""
+        opmode = _PSConst.States.Cycle if mode == 'Demag'\
+            else _PSConst.States.RmpWfm
+        return self.timed_get(self['OpMode-Sts'], opmode)
 
-    def is_ready(self, opmode):
+    def is_ready(self, mode):
         """Return wether magnet is ready."""
-        status = self.on_rdy() and self.mode_rdy(opmode)
-        if opmode == 'Cycle':
-            status &= self.params_rdy()
+        status = True
+        status &= self.on_rdy()
+        status &= self.params_rdy(mode)
+        status &= self.mode_rdy(mode)
         return status
 
     def conn_put(self, pv, value):
@@ -269,23 +332,27 @@ class MagnetCycler:
             if isinstance(value, (tuple, list, np.ndarray)):
                 if not isinstance(pvvalue, (tuple, list, np.ndarray)):
                     status = False
-                if len(value) != len(pvvalue):
+                elif len(value) != len(pvvalue):
                     status = False
-                for i in range(len(value)):
-                    if _isclose(pvvalue[i], value[i],
-                                rel_tol=1e-06, abs_tol=0.0):
-                        status = True
+                else:
+                    for i in range(len(value)):
+                        if _isclose(pvvalue[i], value[i],
+                                    rel_tol=1e-06, abs_tol=0.0):
+                            status = True
+                            break
+                        else:
+                            status = False
                     else:
-                        status = False
+                        break
             else:
-                if _isclose(pvvalue[i], value[i],
-                            rel_tol=1e-06, abs_tol=0.0):
+                if _isclose(pvvalue, value, rel_tol=1e-06, abs_tol=0.0):
                     status = True
+                    break
                 else:
                     status = False
             _time.sleep(wait/10.0)
         return status
 
-    def _get_pvname(self, prop):
-        """."""
-        return VACA_PREFIX + self._maname + ':' + prop
+    def __getitem__(self, prop):
+        """Return item."""
+        return self._pvs[prop]
