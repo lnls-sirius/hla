@@ -15,6 +15,7 @@ class EpicsTask(QThread):
 
     currentItem = Signal(str)
     itemDone = Signal()
+    completed = Signal()
 
     def __init__(self, pvs, values, delays, cls_epics, parent=None):
         """Constructor.

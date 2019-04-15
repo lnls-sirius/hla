@@ -70,16 +70,16 @@ class ProgressDialog(QDialog):
             for i in range(1, len(self._task)):
                 self._task[i].currentItem.connect(self.cur_item_label.setText)
                 self._task[i].itemDone.connect(self.inc_value)
-                self._task[i - 1].finished.connect(self._update_label)
-                self._task[i - 1].finished.connect(self._task[i].start)
+                self._task[i - 1].completed.connect(self._update_label)
+                self._task[i - 1].completed.connect(self._task[i].start)
                 self.progress_bar.setMaximum(self.progress_bar.maximum() +
                                              self._task[i].size())
-            self._task[-1].finished.connect(lambda: self._exit_dlg(1))
+            self._task[-1].completed.connect(lambda: self._exit_dlg(1))
         else:
             self.dlg_label.setText(self._label)
             self._task.currentItem.connect(self.cur_item_label.setText)
             self._task.itemDone.connect(self.inc_value)
-            self._task.finished.connect(lambda: self._exit_dlg(1))
+            self._task.completed.connect(lambda: self._exit_dlg(1))
             self.progress_bar.setMaximum(self._task.size())
 
     def _update_label(self):
@@ -115,7 +115,7 @@ class ProgressDialog(QDialog):
 
     def _is_finished(self):
         if self.progress_bar.maximum() == self.progress_bar.value():
-            self._exit_dlg(0)
+            self._exit_dlg(1)
 
     def set_value(self, value):
         """Set progress bar value."""

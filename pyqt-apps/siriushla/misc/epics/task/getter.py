@@ -2,6 +2,7 @@
 from .task import EpicsTask
 from qtpy.QtCore import Signal, QVariant
 
+
 class EpicsGetter(EpicsTask):
     """Get value of a set of PVs."""
 
@@ -14,7 +15,7 @@ class EpicsGetter(EpicsTask):
     def run(self):
         """Thread execution."""
         if self._quit_task:
-            self.finished.emit()
+            self.completed.emit()
         else:
             for i in range(len(self._pvs)):
                 pv = self._pvs[i]
@@ -27,4 +28,4 @@ class EpicsGetter(EpicsTask):
                     self.itemNotRead.emit(pv.pvname)
                 if self._quit_task:
                     break
-            self.finished.emit()
+            self.completed.emit()

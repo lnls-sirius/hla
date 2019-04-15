@@ -2,6 +2,7 @@
 from .task import EpicsTask
 from qtpy.QtCore import Signal
 
+
 class EpicsChecker(EpicsTask):
     """Check if a set of PVs has the proper values."""
 
@@ -10,7 +11,7 @@ class EpicsChecker(EpicsTask):
     def run(self):
         """Thread execution."""
         if self._quit_task:
-            self.finished.emit()
+            self.completed.emit()
         else:
             for i in range(len(self._pvs)):
                 pv, val = self._pvs[i], self._values[i]
@@ -20,4 +21,4 @@ class EpicsChecker(EpicsTask):
                 self.itemChecked.emit(pv.pvname, equal)
                 if self._quit_task:
                     break
-            self.finished.emit()
+            self.completed.emit()
