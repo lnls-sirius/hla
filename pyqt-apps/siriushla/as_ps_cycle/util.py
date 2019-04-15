@@ -6,8 +6,7 @@ from epics import PV as _PV
 from math import isclose as _isclose
 
 from siriuspy.envars import vaca_prefix as VACA_PREFIX
-from siriuspy.search.ma_search import MASearch as _MASearch
-from siriuspy.search.ps_search import PSSearch as _PSSearch
+from siriuspy.search import MASearch as _MASearch, PSSearch as _PSSearch
 from siriuspy.csdevice.pwrsupply import Const as _PSConst
 from siriuspy.csdevice.timesys import Const as _TIConst
 from siriuspy.csdevice.pwrsupply import ETypes as _et
@@ -15,6 +14,8 @@ from siriuspy.csdevice.pwrsupply import ETypes as _et
 
 TIMEOUT = 0.05
 SLEEP_CAPUT = 0.1
+BO_MA_CYCLE_LIST = _MASearch.get_manames(
+    {'sec': 'BO', 'dis': 'MA', 'sub': 'Fam'})
 
 
 def get_manames():

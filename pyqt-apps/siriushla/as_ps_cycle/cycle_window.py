@@ -18,7 +18,7 @@ from siriushla.widgets.dialog import ProgressDialog
 from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
 
 from .util import MagnetCycler, Timing, get_manames, \
-    get_manames_from_same_udc
+    get_manames_from_same_udc, BO_MA_CYCLE_LIST
 
 _cyclers = dict()
 
@@ -31,7 +31,6 @@ class CycleWindow(SiriusMainWindow):
         super().__init__(parent)
         # Data structs
         self._timing = Timing()
-        self._magnets = list()
         self._magnets_ready = list()
         self._magnets_failed = list()
         self._checked_accs = checked_accs
@@ -76,7 +75,7 @@ class CycleWindow(SiriusMainWindow):
         vlay_demag.addWidget(self.demag_bt)
         gb_demag.setLayout(vlay_demag)
 
-        gb_cycle = QGroupBox('Cycle')
+        gb_cycle = QGroupBox('Cycle Booster Magnets')
         self.prepare_cycle_bt = QPushButton('Prepare', self)
         # self.prepare_cycle_bt.setEnabled(False)
         self.prepare_cycle_bt.pressed.connect(
@@ -152,22 +151,14 @@ class CycleWindow(SiriusMainWindow):
         return True
 
     def _prepare_magnets(self, mode):
-        global _cyclers
-        self._magnets = self.magnets_tree.checked_items()
-
-        if not self._magnets:
-            QMessageBox.about(self, 'Message', 'Select magnets to cycle!')
+        magnets = self._get_magnets_list(mode, prepare=True)
+        if not magnets:
             return False
-
-        # Create new cyclers, if necessary
-        for maname in self._magnets:
-            if maname not in _cyclers.keys():
-                _cyclers[maname] = MagnetCycler(maname)
 
         # Set magnets to proper cycling state
         self._magnets_ready = list()
         self._magnets_failed = list()
-        task = SetToCycle(self._magnets, mode, self)
+        task = SetToCycle(magnets, mode, self)
         task.itemDone.connect(self._update_cycling_status)
         dlg = ProgressDialog('Setting magnets...', task, self)
         ret = dlg.exec_()
@@ -199,9 +190,13 @@ class CycleWindow(SiriusMainWindow):
                 self.cycle_bt.setEnabled(True)
 
     def _cycle(self, mode):
+        magnets = self._get_magnets_list(mode)
+        if not magnets:
+            return False
+
         self._magnets_ready = list()
         self._magnets_failed = list()
-        task = VerifyCycle(self._magnets, mode, self)
+        task = VerifyCycle(magnets, mode, self)
         task.itemDone.connect(self._update_cycling_status)
         dlg = ProgressDialog('Checking magnets...', task, self)
         ret = dlg.exec_()
@@ -216,12 +211,42 @@ class CycleWindow(SiriusMainWindow):
             return False
 
         # Trigger timing and wait cyling end
-        task = WaitCycle(self._magnets, self._timing, mode, self)
+        task = WaitCycle(magnets, self._timing, mode, self)
         dlg = ProgressDialog('Wait for magnets...', task, self)
         ret = dlg.exec_()
         if ret == dlg.Rejected:
             return False
         QMessageBox.information(self, 'Message', 'Cycle finished sucessfully!')
+
+    def _get_magnets_list(self, mode, prepare=False):
+        # Get magnets list
+        selected_magnets = self.magnets_tree.checked_items()
+        if mode == 'Demag':
+            magnets = selected_magnets
+        else:
+            magnets = [magnet for magnet in selected_magnets
+                       if magnet in BO_MA_CYCLE_LIST]
+
+        # Show message if no magnet is selected
+        if not magnets:
+            aux_str = ' Booster' if mode == 'Cycle' else ''
+            btfunc_str = 'prepare to ' if prepare else ''
+            mode_str = 'demagnetize' if mode == 'Demag' else 'cycle'
+            QMessageBox.about(
+                self, 'Message', 'Select' + aux_str +
+                ' magnets to ' + btfunc_str + mode_str + '!')
+            return False
+
+        # Create new cyclers if needed
+        self._create_cyclers(magnets)
+        return magnets
+
+    def _create_cyclers(self, manames):
+        """Create new cyclers, if necessary."""
+        global _cyclers
+        for maname in manames:
+            if maname not in _cyclers.keys():
+                _cyclers[maname] = MagnetCycler(maname)
 
     def _update_cycling_status(self, maname, status):
         """Check magnet cycling status."""
