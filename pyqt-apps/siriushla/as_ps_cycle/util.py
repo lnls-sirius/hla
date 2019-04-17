@@ -14,8 +14,12 @@ from siriuspy.csdevice.pwrsupply import ETypes as _et
 
 TIMEOUT = 0.05
 SLEEP_CAPUT = 0.1
-BO_MA_CYCLE_LIST = _MASearch.get_manames(
-    {'sec': 'BO', 'dis': 'MA', 'sub': 'Fam'})
+MAGNETS_2_RAMP_AMPLITUDE = {  # A
+    'BO-Fam:MA-B': 1100,
+    'BO-Fam:MA-QD': 32,
+    'BO-Fam:MA-QF': 130,
+    'BO-Fam:MA-SD': 150,
+    'BO-Fam:MA-SF': 150}
 
 
 def get_manames():
@@ -43,12 +47,12 @@ class Timing:
     DEFAULT_CYCLE_DURATION = 150  # [us]
     DEFAULT_CYCLE_NRPULSES = 1
     DEFAULT_RMPBO_DURATION = 490000  # [us]
-    DEFAULT_RMPBO_NRPULSES = 3920
+    DEFAULT_RMPBO_NRPULSES = 4000
     DEFAULT_DELAY = 0  # [us]
     DEFAULT_POLARITY = _TIConst.TrigPol.Normal  # test
     DEFAULT_STATE = _TIConst.DsblEnbl.Enbl
 
-    DEFAULT_RAMP_NRCYCLES = 10
+    DEFAULT_RAMP_NRCYCLES = 16
     DEFAULT_RAMP_TOTDURATION = DEFAULT_RMPBO_DURATION * \
         DEFAULT_RAMP_NRCYCLES/1000000  # [s]
 
@@ -104,14 +108,6 @@ class Timing:
             'BO-Glob:TI-Mags:Delay-SP': DEFAULT_DELAY,
             'BO-Glob:TI-Mags:Polarity-Sel': DEFAULT_POLARITY,
             'BO-Glob:TI-Mags:State-Sel': DEFAULT_STATE,
-
-            # BO correctors trigger settings
-            'BO-Glob:TI-Corrs:Src-Sel': EVTNAME_RAMP,
-            'BO-Glob:TI-Corrs:Duration-SP': DEFAULT_RMPBO_DURATION,
-            'BO-Glob:TI-Corrs:NrPulses-SP': DEFAULT_RMPBO_NRPULSES,
-            'BO-Glob:TI-Corrs:Delay-SP': DEFAULT_DELAY,
-            'BO-Glob:TI-Corrs:Polarity-Sel': DEFAULT_POLARITY,
-            'BO-Glob:TI-Corrs:State-Sel': DEFAULT_STATE,
         }
     }
 
