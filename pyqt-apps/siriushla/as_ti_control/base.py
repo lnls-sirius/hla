@@ -71,8 +71,8 @@ class BaseList(CustomGroupBox):
     _LABELS = {}
     _ALL_PROPS = tuple()
 
-    def __init__(self, name=None, parent=None, prefix='',
-                 props=set(), obj_names=list(), has_search=True):
+    def __init__(self, name=None, parent=None, prefix='', props=set(),
+                 obj_names=list(), has_search=True, props2search=set()):
         """Initialize object."""
         super().__init__(name, parent)
         try:
@@ -81,6 +81,7 @@ class BaseList(CustomGroupBox):
             self.prefix = prefix
         self.props = props or set(self._ALL_PROPS)
         self.has_search = has_search
+        self.props2search = set(props2search) or set()
         self.obj_names = obj_names
         self.setupUi()
 
@@ -98,7 +99,7 @@ class BaseList(CustomGroupBox):
         for i, obj_name in enumerate(self.obj_names, 1):
             pref = _PVName(self.prefix + obj_name)
             objs = self.getLine(pref)
-            self.lines[pref] = [obj[1] for obj in objs]
+            self.lines[pref] = objs
             self.filtered_lines.add(pref)
             for j, obj in enumerate(objs):
                 glay.setColumnStretch(j, 10*self._MIN_WIDs[obj[0]])
@@ -158,24 +159,41 @@ class BaseList(CustomGroupBox):
         """Filter lines according to the regexp filter."""
         try:
             pattern = re.compile(text, re.I)
-        except Exception:  # Ignore malformed patterns
-            pattern = re.compile("malformed")
+        except Exception:
+            return
 
         self.filtered_lines.clear()
-        for line in self.lines.keys():
-            if pattern.search(line):
+        for line, objs in self.lines.items():
+            keep = False
+            for prop, lay in objs:
+                if prop not in self.props2search:
+                    continue
+                cnt = lay.count()
+                wid = lay.itemAt(cnt-1).widget()
+                if hasattr(wid, 'text'):
+                    keep |= bool(pattern.search(wid.text()))
+                    break
+                elif hasattr(wid, 'enum_strings') and hasattr(wid, 'value'):
+                    conds = wid.enum_strings is not None
+                    conds &= isinstance(wid.value, int)
+                    conds &= wid.value < len(wid.enum_strings)
+                    if conds:
+                        enum = wid.enum_strings[wid.value]
+                        keep |= bool(pattern.search(enum))
+                        break
+            if keep:
                 self.filtered_lines.add(line)
 
         self._set_lines_visibility()
 
     def _set_lines_visibility(self):
-        for key, line in self.lines.items():
+        for key, objs in self.lines.items():
             if key in self.filtered_lines:
-                for layout in line:
+                for _, layout in objs:
                     for idx in range(layout.count()):
                         layout.itemAt(idx).widget().setVisible(True)
             else:
-                for layout in line:
+                for _, layout in objs:
                     for idx in range(layout.count()):
                         layout.itemAt(idx).widget().setVisible(False)
 

@@ -50,6 +50,11 @@ class LLTriggerList(BaseList):
         'delay', 'timestamp', 'interlock', 'source', 'trigger', 'rf_delay',
         'rf_delay_type', 'fine_delay')
 
+    def __init__(self, **kwargs):
+        srch = set(('device', 'name', 'polarity', 'source', 'interlock'))
+        kwargs['props2search'] = srch
+        super().__init__(**kwargs)
+
     def _createObjs(self, prefix, prop):
         intlb = LLTimeSearch.get_channel_internal_trigger_pvname(prefix)
         outlb = LLTimeSearch.get_channel_output_port_pvname(prefix)

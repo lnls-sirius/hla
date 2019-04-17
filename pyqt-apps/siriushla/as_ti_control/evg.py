@@ -246,6 +246,10 @@ class EventList(BaseList):
     _ALL_PROPS = (
         'ext_trig', 'mode', 'delay_type', 'delay', 'description', 'code')
 
+    def __init__(self, **kwargs):
+        kwargs['props2search'] = set(('mode', 'ext_trig', 'delay_type'))
+        super().__init__(**kwargs)
+
     def _createObjs(self, prefix, prop):
         sp = rb = None
         if prop == 'ext_trig':
