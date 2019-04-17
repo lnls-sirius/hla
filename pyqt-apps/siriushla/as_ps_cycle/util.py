@@ -4,22 +4,19 @@ import numpy as np
 import time as _time
 from epics import PV as _PV
 from math import isclose as _isclose
+import numpy as _np
 
 from siriuspy.envars import vaca_prefix as VACA_PREFIX
 from siriuspy.search import MASearch as _MASearch, PSSearch as _PSSearch
 from siriuspy.csdevice.pwrsupply import Const as _PSConst
 from siriuspy.csdevice.timesys import Const as _TIConst
-from siriuspy.csdevice.pwrsupply import ETypes as _et
+from siriuspy.csdevice.pwrsupply import ETypes as _PSet
+from siriushla.as_ps_cycle.ramp_data import BASE_RAMP_CURVE_ORIG as \
+    _BASE_RAMP_CURVE_ORIG
 
 
 TIMEOUT = 0.05
 SLEEP_CAPUT = 0.1
-MAGNETS_2_RAMP_AMPLITUDE = {  # A
-    'BO-Fam:MA-B': 1100,
-    'BO-Fam:MA-QD': 32,
-    'BO-Fam:MA-QF': 130,
-    'BO-Fam:MA-SD': 150,
-    'BO-Fam:MA-SF': 150}
 
 
 def get_manames():
@@ -33,8 +30,7 @@ def get_manames_from_same_udc(maname):
     udc = _PSSearch.conv_psname_2_udc(psname)
     bsmp_list = _PSSearch.conv_udc_2_bsmps(udc)
     psnames = [bsmp[0] for bsmp in bsmp_list]
-    manames = set([_MASearch.conv_psname_2_psmaname(psname)
-                   for psname in psnames])
+    manames = set([_MASearch.conv_psname_2_psmaname(name) for name in psnames])
     return manames
 
 
@@ -65,7 +61,7 @@ class Timing:
             # Cycle event settings
             'RA-RaMO:TI-EVG:CycleMode-Sel': _TIConst.EvtModes.External,
             'RA-RaMO:TI-EVG:CycleDelayType-Sel': _TIConst.EvtDlyTyp.Fixed,
-            'RA-RaMO:TI-EVG:CycleExtTrig-Cmd': 1,  # There is not default value
+            'RA-RaMO:TI-EVG:CycleExtTrig-Cmd': 1,  # There is no default value
 
             # TB magnets trigger settings
             'TB-Glob:TI-Mags:Src-Sel': EVTNAME_CYCLE,
@@ -126,7 +122,7 @@ class Timing:
     def init(self, mode):
         """Initialize properties."""
         for prop, defval in Timing.properties[mode].items():
-            pv = Timing[VACA_PREFIX+prop]
+            pv = Timing._pvs[prop]
             pv.get()  # force connection
             if pv.connected and defval is not None:
                 pv.value = defval
@@ -146,10 +142,12 @@ class Timing:
         pv.value = 1
 
     def init_ramp(self):
+        """."""
         pv = Timing._pvs['RA-RaMO:TI-EVG:RmpBOMode-Sel']
         pv.value = _TIConst.EvtModes.Continuous
 
     def finish_ramp(self):
+        """."""
         pv = Timing._pvs['RA-RaMO:TI-EVG:RmpBOMode-Sel']
         pv.value = _TIConst.EvtModes.Disabled
 
@@ -163,8 +161,25 @@ class Timing:
                 Timing._pvs[pvname].get()
 
 
+def _generate_base_wfmdata():
+    t0 = _BASE_RAMP_CURVE_ORIG[:, 0]
+    w0 = _BASE_RAMP_CURVE_ORIG[:, 1]
+    nrpulses = Timing.DEFAULT_RMPBO_NRPULSES
+    duration = Timing.DEFAULT_RMPBO_DURATION/1000.0
+    t = _np.linspace(0.0, duration, nrpulses)
+    w = _np.interp(t, t0, w0)
+    return w
+
+
 class MagnetCycler:
-    """Handle magnet properties related to cycling."""
+    """Handle magnet properties related to Cycle and RmpWfm ps modes."""
+
+    RAMP_AMPLITUDE = {  # A
+        'BO-Fam:MA-B':  1100,
+        'BO-Fam:MA-QD': 32,
+        'BO-Fam:MA-QF': 130,
+        'BO-Fam:MA-SD': 150,
+        'BO-Fam:MA-SF': 150}
 
     properties = [
         'PwrState-Sel', 'PwrState-Sts',
@@ -179,19 +194,41 @@ class MagnetCycler:
         'WfmData-SP', 'WfmData-RB',
         'RmpIncNrCycles-SP', 'RmpIncNrCycles-RB',
         'RmpReady-Mon',
+        'Current-SP',
     ]
 
-    def __init__(self, maname):
+    _base_wfmdata = _generate_base_wfmdata()
+
+    def __init__(self, maname, ramp_config=None):
         """Constructor."""
         self._maname = maname
         self._psnames = _MASearch.conv_maname_2_psnames(self._maname)
         self.siggen = _PSSearch.conv_psname_2_siggenconf(self._psnames[0])
+        self._ramp_config = ramp_config
         self._pvs = dict()
         for prop in MagnetCycler.properties:
             if prop not in self._pvs.keys():
                 pvname = VACA_PREFIX + self._maname + ':' + prop
                 self._pvs[prop] = _PV(pvname, connection_timeout=TIMEOUT)
                 self._pvs[prop].get()
+        self.waveform = self._get_waveform()  # needs self._pvs
+
+    def _get_waveform(self, wfmdata_method):
+        if self._ramp_config is None:
+            # Uses a template wfmdata scaled to maximum magnet ps current
+            w = MagnetCycler._base_wfmdata
+            if self.maname in MagnetCycler.RAMP_AMPLITUDE:
+                # bypass upper_limit if maname in dictionary
+                amp = MagnetCycler.RAMP_AMPLITUDE[self.maname]
+            else:
+                amp = self._pvs['Current-SP'].upper_ctrl_limit
+            wfmdata = amp * w
+        else:
+            # load waveform from config database
+            errmsg = ('Creation of waveform from ramp config '
+                      'not yet implemented')
+            raise NotImplementedError(errmsg)
+        return wfmdata
 
     @property
     def maname(self):
@@ -219,6 +256,7 @@ class MagnetCycler:
                              _PSConst.PwrStateSel.On)
 
     def set_params(self, mode):
+        """."""
         status = True
         if mode == 'Demag':
             status &= self.conn_put(self['CycleType-Sel'],
@@ -277,7 +315,7 @@ class MagnetCycler:
         """Return wether magnet cycling parameters are set."""
         status = True
         if mode == 'Demag':
-            type_idx = _et.CYCLE_TYPES.index(self.siggen.type)
+            type_idx = _PSet.CYCLE_TYPES.index(self.siggen.type)
             status &= self.timed_get(self['CycleType-Sts'], type_idx)
             status &= self.timed_get(
                 self['CycleFreq-RB'], self.siggen.freq)

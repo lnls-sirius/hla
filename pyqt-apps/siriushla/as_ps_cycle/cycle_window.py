@@ -18,7 +18,7 @@ from siriushla.widgets.dialog import ProgressDialog
 from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
 
 from .util import MagnetCycler, Timing, get_manames, \
-    get_manames_from_same_udc, MAGNETS_2_RAMP_AMPLITUDE
+    get_manames_from_same_udc
 
 _cyclers = dict()
 
@@ -221,11 +221,12 @@ class CycleWindow(SiriusMainWindow):
     def _get_magnets_list(self, mode, prepare=False):
         # Get magnets list
         selected_magnets = self.magnets_tree.checked_items()
-        if mode == 'Demag':
-            magnets = selected_magnets
-        else:
-            magnets = [magnet for magnet in selected_magnets
-                       if magnet in MAGNETS_2_RAMP_AMPLITUDE.keys()]
+        # if mode == 'Demag':
+        #     magnets = selected_magnets
+        # else:
+        #     magnets = [magnet for magnet in selected_magnets
+        #                if magnet in MAGNETS_2_RAMP_AMPLITUDE.keys()]
+        magnets = selected_magnets
 
         # Show message if no magnet is selected
         if not magnets:
