@@ -75,6 +75,9 @@ class ControlApplication(SiriusMainWindow):
         injection = QPushButton('Injection', self)
         util.connect_newprocess(injection, 'sirius-hla-as-ap-injection.py')
 
+        interlocks = QPushButton('Interlocks', self)
+        util.connect_newprocess(interlocks, 'sirius-hla-as-interlocks.py')
+
         timing = QPushButton('Timing', self)
         util.connect_newprocess(timing, 'sirius-hla-as-ti-control.py')
 
@@ -101,7 +104,8 @@ class ControlApplication(SiriusMainWindow):
         lay.setAlignment(Qt.AlignLeft)
         lay.addWidget(operation, 0, 0)
         lay.addWidget(injection, 0, 1)
-        lay.addWidget(timing, 0, 2)
+        lay.addWidget(interlocks, 0, 2)
+        lay.addWidget(timing, 0, 3)
         lay.addWidget(pscycle, 1, 0)
         lay.addWidget(pstest, 1, 1)
         lay.addWidget(psdiag, 1, 2)
