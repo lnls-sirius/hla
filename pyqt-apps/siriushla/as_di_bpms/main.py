@@ -1,6 +1,6 @@
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QHBoxLayout, QVBoxLayout, QPushButton, \
-    QStackedLayout, QLabel
+    QStackedLayout, QLabel, QGridLayout
 from siriushla import util
 from siriushla.widgets import PyDMLedMultiChannel, SiriusConnectionSignal
 from siriushla.widgets.windows import create_window_from_widget
@@ -133,12 +133,10 @@ class TriggeredAcquisition(BaseWidget):
         self._chans.append(mode)
 
     def setupui(self):
-        vbl = QVBoxLayout(self)
+        vbl = QGridLayout(self)
         lab = QLabel('<h2>' + self.bpm + ' Triggered Acquisitions</h2>')
         lab.setAlignment(Qt.AlignCenter)
-        vbl.addWidget(lab)
-        vbl.setStretch(0, 3)
-        vbl.addSpacing(10)
+        vbl.addWidget(lab, 0, 0, 1, 2)
         self.stack = QStackedLayout()
         multi_pass = MultiTurnData(
             parent=self, acq_type='ACQ', prefix=self.prefix, bpm=self.bpm)
@@ -149,21 +147,13 @@ class TriggeredAcquisition(BaseWidget):
 
         self.stack.addWidget(multi_pass)
         self.stack.addWidget(single_pass)
-        vbl.addLayout(self.stack)
-        vbl.setStretch(1, 48)
-        vbl.addSpacing(30)
+        vbl.addLayout(self.stack, 1, 0)
         config = ACQTrigConfigs(
             parent=self, prefix=self.prefix, bpm=self.bpm, data_prefix='ACQ')
         config.setObjectName('config')
-        vbl.addWidget(config)
-        vbl.setStretch(2, 21)
-        vbl.addSpacing(10)
+        vbl.addWidget(config, 1, 1)
 
-        self.setObjectName('TriggeredAcquisition')
         self.setStyleSheet("""
-            #TriggeredAcquisition{
-                min-width:52em;
-                min-height:72em;}
             #multi_pass{
                 min-width:50em;
                 min-height:48em;}

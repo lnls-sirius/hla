@@ -8,10 +8,9 @@ from siriuspy.csdevice import timesys
 from siriushla.widgets import PyDMLed, SiriusLedAlert, PyDMStateButton
 from siriushla.util import connect_window
 from siriushla.widgets.windows import create_window_from_widget
-from siriushla.as_ti_control.base import BaseList, BaseWidget, \
-    MySpinBox as _MySpinBox, MyComboBox as _MyComboBox
-from siriushla.as_ti_control.ll_trigger import \
-    LLTriggerList, OTPList, OUTList, AFCOUTList
+from .base import BaseList, BaseWidget, MySpinBox as _MySpinBox, \
+    MyComboBox as _MyComboBox
+from .ll_trigger import LLTriggerList, OTPList, OUTList, AFCOUTList
 
 
 class HLTriggerDetailed(BaseWidget):
@@ -214,6 +213,11 @@ class HLTriggerList(BaseList):
         'detailed', 'state', 'interlock', 'source', 'polarity', 'pulses',
         'duration', 'delay_type', 'delay', 'status',
         )
+
+    def __init__(self, **kwargs):
+        srch = set(('source', 'detailed', 'polarity', 'state'))
+        kwargs['props2search'] = srch
+        super().__init__(**kwargs)
 
     def _createObjs(self, prefix, prop):
         sp = rb = None

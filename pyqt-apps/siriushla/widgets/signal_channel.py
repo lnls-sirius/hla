@@ -1,8 +1,9 @@
 #!/usr/bin/env python-sirius
 
+from copy import deepcopy as _dcopy
 import numpy as _np
-from pydm.widgets.channel import PyDMChannel
 from qtpy.QtCore import Signal, Slot, QObject
+from pydm.widgets.channel import PyDMChannel
 
 
 class SiriusConnectionSignal(QObject, PyDMChannel):
@@ -41,7 +42,7 @@ class SiriusConnectionSignal(QObject, PyDMChannel):
 
     def getvalue(self):
         if self.connected and self._value is not None:
-            return self._value.copy()
+            return _dcopy(self._value)
 
     value = property(fget=getvalue)
 

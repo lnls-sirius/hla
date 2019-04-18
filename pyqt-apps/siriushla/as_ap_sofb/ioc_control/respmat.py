@@ -4,11 +4,9 @@ import pathlib as _pathlib
 from datetime import datetime as _datetime
 import numpy as _np
 from qtpy.QtWidgets import QLabel, QGroupBox, QPushButton, QFormLayout, \
-    QGridLayout, QVBoxLayout, QHBoxLayout, QSpacerItem, QSizePolicy, QWidget, \
+    QGridLayout, QVBoxLayout, QHBoxLayout, QSpacerItem, QSizePolicy, \
     QMessageBox, QFileDialog
-from qtpy.QtGui import QColor
 from qtpy.QtCore import Qt
-from pyqtgraph import mkPen
 from pydm.widgets import PyDMLabel, PyDMPushButton, PyDMCheckbox
 from siriuspy.csdevice.orbitcorr import ConstTLines
 from siriuspy.servconf.srvconfig import ConnConfigService
@@ -17,9 +15,9 @@ from siriushla.widgets import SiriusLedState, SiriusConnectionSignal
 from siriushla.util import connect_window
 from siriushla.as_ap_servconf import LoadConfiguration, SaveConfiguration
 
-from siriushla.as_ap_sofb.ioc_control.respmat_enbllist import SelectionMatrix
-from siriushla.as_ap_sofb.ioc_control.base import BaseWidget
-from siriushla.as_ap_sofb.graphics.base import Graph, InfLine
+from .respmat_enbllist import SelectionMatrix
+from .base import BaseWidget
+from ..graphics import SingularValues, ShowMatrixWidget
 
 
 class RespMatWidget(BaseWidget):
@@ -148,6 +146,11 @@ class RespMatWidget(BaseWidget):
         Window = create_window_from_widget(
             SingularValues, title='Check Singular Values', size=(32, 25))
         connect_window(btn, Window, grpbx, prefix=self.prefix)
+        btn = QPushButton('Check RespMat', grpbx)
+        fml.addWidget(btn)
+        Window = create_window_from_widget(
+            ShowMatrixWidget, title='Check RespMat', size=(32, 25))
+        connect_window(btn, Window, grpbx, prefix=self.prefix, acc=self.acc)
 
         vbl.addSpacing(40)
         # ####################################################################
@@ -225,57 +228,6 @@ class RespMatWidget(BaseWidget):
             self._servconf.config_insert(confname, val.tolist())
         except TypeError as e:
             QMessageBox.warning(self, 'Warning', str(e), QMessageBox.Ok)
-
-
-class SingularValues(QWidget):
-
-    def __init__(self, parent, prefix):
-        super().__init__(parent)
-        self.prefix = prefix
-        self._chans = []
-        self.setupui()
-
-    def channels(self):
-        return self._chans
-
-    def setupui(self):
-        vbl = QVBoxLayout(self)
-        vbl.setAlignment(Qt.AlignCenter)
-        lab = QLabel('Singular Values', self, alignment=Qt.AlignCenter)
-        lab.setStyleSheet("font-weight: bold;")
-        vbl.addWidget(lab)
-        graph = Graph()
-        graph.setShowLegend(False)
-        graph.setLabel('left', text='Singular Values', units='m/rad')
-        graph.setLabel('bottom', text='Index')
-        vbl.addWidget(graph)
-        opts = dict(
-            y_channel=self.prefix+'SingValues-Mon',
-            color='black',
-            redraw_mode=2,
-            lineStyle=1,
-            lineWidth=2,
-            symbol='o',
-            symbolSize=10)
-        graph.addChannel(**opts)
-        cur = graph.curveAtIndex(0)
-        cur.setSymbolBrush(0, 0, 0)
-
-        pen = mkPen(QColor(150, 150, 150))
-        pen.setStyle(2)
-        pen.setWidth(3)
-        line = InfLine(pos=0, pen=pen, angle=90)
-        graph.addItem(line)
-        chan = SiriusConnectionSignal(self.prefix+'NrSingValues-RB')
-        chan.new_value_signal[int].connect(line.setValue)
-        self._chans.append(chan)
-
-        graph.setObjectName('graph_singvalues')
-        graph.setStyleSheet("""
-            #graph_singvalues{
-                min-width:30em;
-                min-height:22m;
-            }""")
 
 
 def _main():

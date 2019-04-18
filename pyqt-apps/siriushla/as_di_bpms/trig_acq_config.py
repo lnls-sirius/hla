@@ -45,15 +45,21 @@ class ACQTrigConfigs(BaseWidget):
         lab = PyDMLabel(grpbx, init_channel=self.get_pvname('Status-Sts'))
         lab.setAlignment(Qt.AlignCenter)
         gdl.addWidget(lab, 2, 1)
-        self.layoutg.addWidget(grpbx, 0, 1)
+        self.layoutg.addWidget(grpbx, 1, 0)
 
         grpbx = self._create_formlayout_groupbox(
             'MultiBunch Configurations', (
                 ('Channel-Sel', 'Acquisition Rate'),
                 ('Shots-SP', 'Number of Shots'),
-                ('UpdateTime-SP', 'Update Interval')))
+                ('UpdateTime-SP', 'Update Interval'),
+                ('TbtTagEn-Sel', 'Sync Timing', False),
+                ('TbtTagDly-SP', 'TbT Delay', False),
+                ('TbtDataMaskEn-Sel', 'Mask Data', False),
+                ('TbtDataMaskSamplesBeg-SP', 'Mask Begin', False),
+                ('TbtDataMaskSamplesEnd-SP', 'Mask End', False),
+                ))
         grpbx.rules = self.basic_rule('BPMMode-Sts', True)
-        self.layoutg.addWidget(grpbx, 1, 0)
+        self.layoutg.addWidget(grpbx, 2, 0)
 
         grpbx = self._create_formlayout_groupbox(
             'Auto Trigger Configurations', (
@@ -63,7 +69,7 @@ class ACQTrigConfigs(BaseWidget):
                 ('TriggerDataThres-SP', 'Threshold'),
                 ('TriggerDataHyst-SP', 'Hysteresis')))
         grpbx.rules = self.basic_rule('Trigger-Sts', True, val=2)
-        self.layoutg.addWidget(grpbx, 1, 1)
+        self.layoutg.addWidget(grpbx, 3, 0)
 
     def basic_rule(self, channel, flag, val=0):
         chan = self.get_pvname(channel)

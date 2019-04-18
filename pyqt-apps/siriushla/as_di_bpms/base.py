@@ -37,13 +37,18 @@ class BaseWidget(QWidget):
         fbl = QFormLayout(grpbx)
         grpbx.layoutf = fbl
         fbl.setLabelAlignment(Qt.AlignVCenter)
-        for pv1, txt in props:
+        for prop in props:
+            if len(prop) == 2:
+                pv1, txt = prop
+                isdata = True
+            elif len(prop) == 3:
+                pv1, txt, isdata = prop
             hbl = QHBoxLayout()
             not_enum = pv1.endswith('-SP')
             pv2 = pv1.replace('-SP', '-RB').replace('-Sel', '-Sts')
             if pv2 != pv1:
                 if not_enum:
-                    chan1 = self.get_pvname(pv1)
+                    chan1 = self.get_pvname(pv1, is_data=isdata)
                     wid = SiriusSpinbox(self, init_channel=chan1)
                     wid.setStyleSheet("""min-width:5em;""")
                     wid.showStepExponent = False
@@ -53,12 +58,14 @@ class BaseWidget(QWidget):
                     wid.setMaximum(self.bpmdb[pvn].get('high', 1e10))
                 else:
                     wid = PyDMEnumComboBox(
-                        self, init_channel=self.get_pvname(pv1))
+                        self,
+                        init_channel=self.get_pvname(pv1, is_data=isdata))
                     wid.setStyleSheet("""min-width:5em;""")
                 wid.setObjectName(pv1.replace('-', ''))
                 hbl.addWidget(wid)
 
-            lab = SiriusLabel(self, init_channel=self.get_pvname(pv2))
+            lab = SiriusLabel(
+                self, init_channel=self.get_pvname(pv2, is_data=isdata))
             lab.setObjectName(pv2.replace('-', ''))
             lab.showUnits = True
             lab.setStyleSheet("""min-width:5em;""")
