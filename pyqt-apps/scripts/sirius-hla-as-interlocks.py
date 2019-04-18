@@ -1,6 +1,6 @@
 #!/usr/bin/env python-sirius
 
-"""Open Window of Specified BPM."""
+"""Open Interlocks Window."""
 
 import sys
 import argparse as _argparse
