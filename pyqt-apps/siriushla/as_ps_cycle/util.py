@@ -34,6 +34,16 @@ def get_manames_from_same_udc(maname):
     return manames
 
 
+def _generate_base_wfmdata():
+    t0 = _BASE_RAMP_CURVE_ORIG[:, 0]
+    w0 = _BASE_RAMP_CURVE_ORIG[:, 1]
+    nrpulses = Timing.DEFAULT_RMPBO_NRPULSES
+    duration = Timing.DEFAULT_RMPBO_DURATION/1000.0
+    t = _np.linspace(0.0, duration, nrpulses)
+    w = _np.interp(t, t0, w0)
+    return w
+
+
 class Timing:
     """Timing."""
 
@@ -161,22 +171,12 @@ class Timing:
                 Timing._pvs[pvname].get()
 
 
-def _generate_base_wfmdata():
-    t0 = _BASE_RAMP_CURVE_ORIG[:, 0]
-    w0 = _BASE_RAMP_CURVE_ORIG[:, 1]
-    nrpulses = Timing.DEFAULT_RMPBO_NRPULSES
-    duration = Timing.DEFAULT_RMPBO_DURATION/1000.0
-    t = _np.linspace(0.0, duration, nrpulses)
-    w = _np.interp(t, t0, w0)
-    return w
-
-
 class MagnetCycler:
     """Handle magnet properties related to Cycle and RmpWfm ps modes."""
 
     RAMP_AMPLITUDE = {  # A
         'BO-Fam:MA-B':  1100,
-        'BO-Fam:MA-QD': 32,
+        'BO-Fam:MA-QD': 30,
         'BO-Fam:MA-QF': 130,
         'BO-Fam:MA-SD': 150,
         'BO-Fam:MA-SF': 150}
@@ -211,9 +211,9 @@ class MagnetCycler:
                 pvname = VACA_PREFIX + self._maname + ':' + prop
                 self._pvs[prop] = _PV(pvname, connection_timeout=TIMEOUT)
                 self._pvs[prop].get()
-        self.waveform = self._get_waveform()  # needs self._pvs
+        self._waveform = self._get_waveform()  # needs self._pvs
 
-    def _get_waveform(self, wfmdata_method):
+    def _get_waveform(self):
         if self._ramp_config is None:
             # Uses a template wfmdata scaled to maximum magnet ps current
             w = MagnetCycler._base_wfmdata
@@ -256,7 +256,7 @@ class MagnetCycler:
                              _PSConst.PwrStateSel.On)
 
     def set_params(self, mode):
-        """."""
+        """Set params to cycle."""
         status = True
         if mode == 'Demag':
             status &= self.conn_put(self['CycleType-Sel'],
@@ -277,10 +277,9 @@ class MagnetCycler:
             status &= self.conn_put(self['CycleNrCycles-SP'],
                                     self.siggen.num_cycles)
         else:
-            status &= self.conn_put(self['RmpIncNrCycles-SP'], 1)
+            status &= self.conn_put(self['WfmData-SP'], self._waveform)
             _time.sleep(SLEEP_CAPUT)
-            status &= self.conn_put(self['WfmData-SP'],
-                                    Timing.DEFAULT_RMPBO_NRPULSES*[0])
+            status &= self.conn_put(self['RmpIncNrCycles-SP'], 1)
         return status
 
     def set_opmode(self, opmode):
@@ -291,10 +290,10 @@ class MagnetCycler:
         """Config magnet to cycling mode."""
         status = True
 
-        status &= self.set_on()
+        status &= self.set_opmode(_PSConst.OpMode.SlowRef)
         _time.sleep(SLEEP_CAPUT)
 
-        status &= self.set_opmode(_PSConst.OpMode.SlowRef)
+        status &= self.set_on()
         _time.sleep(SLEEP_CAPUT)
 
         status &= self.set_params(mode)
