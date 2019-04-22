@@ -10,11 +10,12 @@ from siriuspy.search import LLTimeSearch, HLTimeSearch
 from siriushla.util import connect_window
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets import SiriusMainWindow, PyDMLed, PyDMStateButton
-from siriushla.as_ti_control.evg import EventList as _EventList, EVG as _EVG
-from siriushla.as_ti_control.evr_eve import EVR as _EVR, EVE as _EVE
-from siriushla.as_ti_control.afc import AFC as _AFC
-from siriushla.as_ti_control.fout import FOUT as _FOUT
-from siriushla.as_ti_control.hl_trigger import HLTriggerList as _HLTriggerList
+from siriushla.as_interlocks import Interlocks
+from .evg import EventList as _EventList, EVG as _EVG
+from .evr_eve import EVR as _EVR, EVE as _EVE
+from .afc import AFC as _AFC
+from .fout import FOUT as _FOUT
+from .hl_trigger import HLTriggerList as _HLTriggerList
 
 
 class TimingMain(SiriusMainWindow):
@@ -130,6 +131,10 @@ class TimingMain(SiriusMainWindow):
             action = menu_fout.addAction(fout)
             Window = create_window_from_widget(_FOUT, title=fout)
             connect_window(action, Window, self, prefix=prefix+fout+':')
+
+        menu = main_menu.addMenu('&Interlocks')
+        action = menu.addAction('Timing Interlocks')
+        connect_window(action, Interlocks, None, prefix=prefix)
 
     def _create_prop_widget(self, name, parent, wids, align_ver=True):
         pwid = QWidget(parent)
