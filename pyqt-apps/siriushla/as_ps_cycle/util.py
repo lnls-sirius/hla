@@ -71,7 +71,7 @@ class Timing:
             # Cycle event settings
             'RA-RaMO:TI-EVG:CycleMode-Sel': _TIConst.EvtModes.External,
             'RA-RaMO:TI-EVG:CycleDelayType-Sel': _TIConst.EvtDlyTyp.Fixed,
-            'RA-RaMO:TI-EVG:CycleExtTrig-Cmd': 1,  # There is no default value
+            'RA-RaMO:TI-EVG:CycleExtTrig-Cmd': None,
 
             # TB magnets trigger settings
             'TB-Glob:TI-Mags:Src-Sel': EVTNAME_CYCLE,
@@ -100,10 +100,13 @@ class Timing:
         'Cycle': {
             # EVG settings
             'RA-RaMO:TI-EVG:DevEnbl-Sel': DEFAULT_STATE,
-            'RA-RaMO:TI-EVG:ContinuousEvt-Sel': DEFAULT_STATE,
+            'RA-RaMO:TI-EVG:InjectionEvt-Sel': _TIConst.DsblEnbl.Dsbl,
+            'RA-RaMO:TI-EVG:BucketList-SP': [1, ],
+            'RA-RaMO:TI-EVG:RepeatBucketList-SP': DEFAULT_RAMP_NRCYCLES,
+            'RA-RaMO:TI-EVG:InjCount-Mon': None,
 
             # Ramp event settings
-            'RA-RaMO:TI-EVG:RmpBOMode-Sel': None,
+            'RA-RaMO:TI-EVG:RmpBOMode-Sel': _TIConst.EvtModes.Injection,
             'RA-RaMO:TI-EVG:RmpBODelayType-Sel': _TIConst.EvtDlyTyp.Incr,
             'RA-RaMO:TI-EVG:RmpBODelay-SP': DEFAULT_DELAY,
 
@@ -146,20 +149,23 @@ class Timing:
                 self._status_nok.append(pv.pvname)
         return not bool(self._status_nok)
 
-    def trigger2demag(self):
+    def trigger(self, mode):
         """Trigger timming to cycle magnets."""
-        pv = Timing._pvs['RA-RaMO:TI-EVG:CycleExtTrig-Cmd']
-        pv.value = 1
+        if mode == 'Demag':
+            pv = Timing._pvs['RA-RaMO:TI-EVG:CycleExtTrig-Cmd']
+            pv.value = 1
+        else:
+            pv = Timing._pvs['RA-RaMO:TI-EVG:InjectionEvt-Sel']
+            pv.value = _TIConst.DsblEnbl.Enbl
+            _time.sleep(10*SLEEP_CAPUT)
 
-    def init_ramp(self):
-        """."""
-        pv = Timing._pvs['RA-RaMO:TI-EVG:RmpBOMode-Sel']
-        pv.value = _TIConst.EvtModes.Continuous
+    def get_cycle_count(self):
+        pv = Timing._pvs['RA-RaMO:TI-EVG:InjCount-Mon']
+        return pv.value
 
-    def finish_ramp(self):
-        """."""
-        pv = Timing._pvs['RA-RaMO:TI-EVG:RmpBOMode-Sel']
-        pv.value = _TIConst.EvtModes.Disabled
+    def check_ramp_end(self):
+        pv = Timing._pvs['RA-RaMO:TI-EVG:InjCount-Mon']
+        return (pv.value == Timing.DEFAULT_RAMP_NRCYCLES)
 
     def _create_pvs(self):
         """Create PVs."""
