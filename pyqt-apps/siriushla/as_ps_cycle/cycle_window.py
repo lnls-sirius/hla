@@ -9,6 +9,7 @@ from qtpy.QtWidgets import QWidget, QGridLayout, QVBoxLayout, QGroupBox, \
     QPushButton, QLabel, QMessageBox, QLineEdit, QApplication
 
 from siriuspy.envars import vaca_prefix as VACA_PREFIX
+from siriuspy.search import MASearch as _MASearch
 
 from siriushla.widgets import SiriusMainWindow, \
     PyDMLedMultiConnection as PyDMLedMultiConn
@@ -75,7 +76,7 @@ class CycleWindow(SiriusMainWindow):
         vlay_demag.addWidget(self.demag_bt)
         gb_demag.setLayout(vlay_demag)
 
-        gb_cycle = QGroupBox('Cycle Booster Magnets')
+        gb_cycle = QGroupBox('Cycle')
         self.prepare_cycle_bt = QPushButton('Prepare', self)
         # self.prepare_cycle_bt.setEnabled(False)
         self.prepare_cycle_bt.pressed.connect(
@@ -220,13 +221,20 @@ class CycleWindow(SiriusMainWindow):
 
     def _get_magnets_list(self, mode, prepare=False):
         # Get magnets list
-        selected_magnets = self.magnets_tree.checked_items()
-        # if mode == 'Demag':
-        #     magnets = selected_magnets
-        # else:
-        #     magnets = [magnet for magnet in selected_magnets
-        #                if magnet in MAGNETS_2_RAMP_AMPLITUDE.keys()]
-        magnets = selected_magnets
+        magnets = self.magnets_tree.checked_items()
+        if mode == 'Cycle':
+            bo_ma = _MASearch.get_manames(filters={'sec': 'BO', 'dis': 'MA'})
+            not_bo = ''
+            for name in magnets:
+                if name not in bo_ma:
+                    not_bo += name + '\n'
+            if not_bo:
+                ans = QMessageBox.question(
+                    self, 'Warning',
+                    'Are you sure you\'re ramping the following magnets?\n' +
+                    not_bo, QMessageBox.Yes, QMessageBox.Cancel)
+                if ans == QMessageBox.Cancel:
+                    return False
 
         # Show message if no magnet is selected
         if not magnets:
