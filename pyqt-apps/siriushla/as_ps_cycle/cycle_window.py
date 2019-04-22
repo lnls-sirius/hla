@@ -404,6 +404,12 @@ class WaitCycle(QThread):
             ma_cycle_duration = _cyclers[maname].cycle_duration(mode)
             self._duration = max(ma_cycle_duration, self._duration)
 
+        if mode == 'Demag':
+            self._format_msg = 'Missing {} seconds...'
+        else:
+            self._format_msg = 'Cycle {} of ' +\
+                str(self._timing_conn.DEFAULT_RAMP_NRCYCLES)+'...'
+
     def size(self):
         """Return task size."""
         return self._duration
@@ -417,29 +423,30 @@ class WaitCycle(QThread):
         if self._quit_task:
             pass
         else:
-            interrupted = False
-
             # Trigger timing
-            if self._mode == 'Demag':
-                self._timing_conn.trigger2demag()
-            else:
-                self._timing_conn.init_ramp()
+            self._timing_conn.trigger(self._mode)
 
             # Wait for cycling
             t0 = _time.time()
-            while _time.time() - t0 < self._duration:
-                missing = round(self._duration - (_time.time()-t0))
-                self.currentItem.emit('Missing '+str(missing)+' seconds...')
+            interrupted = False
+            keep_waiting = True
+            while keep_waiting:
+                t = round(self._duration - (_time.time()-t0))
+                if self._mode == 'Cycle':
+                    t = self._timing_conn.get_cycle_count()
+                self.currentItem.emit(self._format_msg.format(t))
                 _time.sleep(min(1, self._duration/10))
+                if self._mode == 'Demag':
+                    keep_waiting = _time.time() - t0 < self._duration
+                else:
+                    keep_waiting = not self._timing_conn.check_ramp_end()
+                    print('ended', not keep_waiting)
                 self.itemDone.emit()
                 if self._quit_task:
                     interrupted = True
                     break
 
-            # End cycling
-            if self._mode == 'Cycle':
-                self._timing_conn.finish_ramp()
-
+            # If ended without interruption
             if not interrupted:
                 self.completed.emit()
 
