@@ -4,7 +4,7 @@ import re
 
 from qtpy.QtCore import Qt, Slot
 from qtpy.QtWidgets import QWidget, QComboBox, QLabel, QPushButton, \
-    QHBoxLayout, QVBoxLayout, QLineEdit, QSplitter, QFrame, QGridLayout
+    QHBoxLayout, QVBoxLayout, QLineEdit, QSplitter, QGridLayout
 
 from siriushla.misc.epics.wrapper import PyEpicsWrapper
 from siriushla.misc.epics.task import EpicsChecker, EpicsSetter
