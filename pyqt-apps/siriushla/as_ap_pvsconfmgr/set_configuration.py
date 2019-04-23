@@ -234,11 +234,12 @@ class SetConfigurationWindow(SiriusMainWindow):
 
 if __name__ == '__main__':
     import sys
-    from siriushla.sirius_application import SiriusApplication
+    import siriuspy.envars as _envars
     from siriuspy.servconf.conf_service import ConfigService
+    from siriushla.sirius_application import SiriusApplication
 
     app = SiriusApplication()
-    db = ConfigService('http://10.0.7.55:8085')
+    db = ConfigService(_envars.server_url_configdb)
     w = SetConfigurationWindow(db)
     w.show()
 

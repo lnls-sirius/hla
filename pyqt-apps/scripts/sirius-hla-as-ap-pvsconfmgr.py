@@ -3,13 +3,15 @@
 """Lauch PVs configuration manager."""
 import sys
 
+import siriuspy.envars as _envars
+from siriuspy.servconf.conf_service import ConfigService
+
 from qtpy.QtWidgets import QWidget, QPushButton, QHBoxLayout
 
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.as_ap_pvsconfmgr import \
     SetConfigurationWindow, ReadConfigurationWindow
-from siriuspy.servconf.conf_service import ConfigService
 
 
 class PVConfiguration(SiriusMainWindow):
@@ -18,9 +20,8 @@ class PVConfiguration(SiriusMainWindow):
     def __init__(self, parent=None):
         """Setup UI."""
         super().__init__(parent)
+        self._db = ConfigService(_envars.server_url_configdb)
         self._setup_ui()
-        self._db = ConfigService('http://10.0.7.55:8085')
-        self._windows = []
         self.setWindowTitle("PVs Configuration")
 
     def _setup_ui(self):
