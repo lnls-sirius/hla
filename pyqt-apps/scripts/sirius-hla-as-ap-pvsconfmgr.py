@@ -10,6 +10,7 @@ from qtpy.QtWidgets import QWidget, QPushButton, QHBoxLayout
 
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets.windows import SiriusMainWindow
+from siriushla.util import connect_window
 from siriushla.as_ap_pvsconfmgr import \
     SetConfigurationWindow, ReadConfigurationWindow
 
@@ -38,25 +39,7 @@ class PVConfiguration(SiriusMainWindow):
         self.central_widget.layout.addWidget(self.save_btn)
         self.central_widget.layout.addWidget(self.load_btn)
 
-        self.save_btn.clicked.connect(self._save_configuration)
-        self.load_btn.clicked.connect(self._load_configuration)
-
-    def _save_configuration(self):
-        window = ReadConfigurationWindow(self._db, parent=self)
-        self._windows.append(window)
-        window.show()
-
-    def _load_configuration(self):
-        window = SetConfigurationWindow(self._db, parent=self)
-        self._windows.append(window)
-        window.show()
-
-
-if __name__ == '__main__':
-    app = SiriusApplication()
-    w = PVConfiguration()
-
-    w.centralWidget().setStyleSheet("""
+        self.central_widget.setStyleSheet("""
         #SaveBtn, #LoadBtn {
             background: qlineargradient(x1:0 y1:0, x2:0 y2:1,
                                         stop:0 white, stop:1 lightgrey);
@@ -67,9 +50,16 @@ if __name__ == '__main__':
         #SaveBtn:hover, #LoadBtn:hover {
             background: qlineargradient(x1:0 y1:0, x2:0 y2:1,
                                         stop:0 lightgrey, stop:1 white);
-        }
-    """)
+        }""")
 
+        connect_window(self.save_btn, ReadConfigurationWindow, self,
+                       db=self._db)
+        connect_window(self.load_btn, SetConfigurationWindow, self,
+                       db=self._db)
+
+
+if __name__ == '__main__':
+    app = SiriusApplication()
+    w = PVConfiguration()
     w.show()
-
     sys.exit(app.exec_())
