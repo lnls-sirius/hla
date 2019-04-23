@@ -37,8 +37,8 @@ def get_manames_from_same_udc(maname):
 def _generate_base_wfmdata():
     t0 = _BASE_RAMP_CURVE_ORIG[:, 0]
     w0 = _BASE_RAMP_CURVE_ORIG[:, 1]
-    nrpulses = Timing.DEFAULT_RMPBO_NRPULSES
-    duration = Timing.DEFAULT_RMPBO_DURATION/1000.0
+    nrpulses = Timing.DEFAULT_RAMP_NRPULSES
+    duration = Timing.DEFAULT_RAMP_DURATION/1000.0
     t = _np.linspace(0.0, duration, nrpulses)
     w = _np.interp(t, t0, w0)
     return w
@@ -52,18 +52,18 @@ class Timing:
 
     DEFAULT_CYCLE_DURATION = 150  # [us]
     DEFAULT_CYCLE_NRPULSES = 1
-    DEFAULT_RMPBO_DURATION = 490000  # [us]
-    DEFAULT_RMPBO_NRPULSES = 4000
+    DEFAULT_RAMP_DURATION = 490000  # [us]
+    DEFAULT_RAMP_NRPULSES = 4000
     DEFAULT_DELAY = 0  # [us]
     DEFAULT_POLARITY = _TIConst.TrigPol.Normal  # test
     DEFAULT_STATE = _TIConst.DsblEnbl.Enbl
 
     DEFAULT_RAMP_NRCYCLES = 16
-    DEFAULT_RAMP_TOTDURATION = DEFAULT_RMPBO_DURATION * \
+    DEFAULT_RAMP_TOTDURATION = DEFAULT_RAMP_DURATION * \
         DEFAULT_RAMP_NRCYCLES/1000000  # [s]
 
     properties = {
-        'Demag': {
+        'Cycle': {
             # EVG settings
             'RA-RaMO:TI-EVG:DevEnbl-Sel': DEFAULT_STATE,
             'RA-RaMO:TI-EVG:UpdateEvt-Cmd': 1,
@@ -97,7 +97,7 @@ class Timing:
             'BO-Glob:TI-Corrs:Polarity-Sel': DEFAULT_POLARITY,
             'BO-Glob:TI-Corrs:State-Sel': DEFAULT_STATE,
         },
-        'Cycle': {
+        'Ramp': {
             # EVG settings
             'RA-RaMO:TI-EVG:DevEnbl-Sel': DEFAULT_STATE,
             'RA-RaMO:TI-EVG:InjectionEvt-Sel': _TIConst.DsblEnbl.Dsbl,
@@ -112,8 +112,8 @@ class Timing:
 
             # BO magnets trigger settings
             'BO-Glob:TI-Mags:Src-Sel': EVTNAME_RAMP,
-            'BO-Glob:TI-Mags:Duration-SP': DEFAULT_RMPBO_DURATION,
-            'BO-Glob:TI-Mags:NrPulses-SP': DEFAULT_RMPBO_NRPULSES,
+            'BO-Glob:TI-Mags:Duration-SP': DEFAULT_RAMP_DURATION,
+            'BO-Glob:TI-Mags:NrPulses-SP': DEFAULT_RAMP_NRPULSES,
             'BO-Glob:TI-Mags:Delay-SP': DEFAULT_DELAY,
             'BO-Glob:TI-Mags:Polarity-Sel': DEFAULT_POLARITY,
             'BO-Glob:TI-Mags:State-Sel': DEFAULT_STATE,
@@ -151,7 +151,7 @@ class Timing:
 
     def trigger(self, mode):
         """Trigger timming to cycle magnets."""
-        if mode == 'Demag':
+        if mode == 'Cycle':
             pv = Timing._pvs['RA-RaMO:TI-EVG:CycleExtTrig-Cmd']
             pv.value = 1
         else:
@@ -251,7 +251,7 @@ class MagnetCycler:
 
     def cycle_duration(self, mode):
         """Return the duration of the cycling in seconds."""
-        if mode == 'Demag':
+        if mode == 'Cycle':
             return self.siggen.num_cycles/self.siggen.freq
         else:
             return (Timing.DEFAULT_RAMP_TOTDURATION)
@@ -264,7 +264,7 @@ class MagnetCycler:
     def set_params(self, mode):
         """Set params to cycle."""
         status = True
-        if mode == 'Demag':
+        if mode == 'Cycle':
             status &= self.conn_put(self['CycleType-Sel'],
                                     self.siggen.type)
             _time.sleep(SLEEP_CAPUT)
@@ -307,7 +307,7 @@ class MagnetCycler:
         return status
 
     def config_cycle_opmode(self, mode):
-        opmode = _PSConst.OpMode.Cycle if mode == 'Demag'\
+        opmode = _PSConst.OpMode.Cycle if mode == 'Cycle'\
             else _PSConst.OpMode.RmpWfm
         return self.set_opmode(opmode)
 
@@ -320,7 +320,7 @@ class MagnetCycler:
     def params_rdy(self, mode):
         """Return wether magnet cycling parameters are set."""
         status = True
-        if mode == 'Demag':
+        if mode == 'Cycle':
             type_idx = _PSet.CYCLE_TYPES.index(self.siggen.type)
             status &= self.timed_get(self['CycleType-Sts'], type_idx)
             status &= self.timed_get(
@@ -342,7 +342,7 @@ class MagnetCycler:
 
     def mode_rdy(self, mode):
         """Return wether magnet is in mode."""
-        opmode = _PSConst.States.Cycle if mode == 'Demag'\
+        opmode = _PSConst.States.Cycle if mode == 'Cycle'\
             else _PSConst.States.RmpWfm
         return self.timed_get(self['OpMode-Sts'], opmode)
 

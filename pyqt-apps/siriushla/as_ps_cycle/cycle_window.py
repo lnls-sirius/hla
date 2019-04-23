@@ -67,10 +67,10 @@ class CycleWindow(SiriusMainWindow):
         gb_demag = QGroupBox('Demagnetize')
         self.prepare_demag_bt = QPushButton('Prepare', self)
         self.prepare_demag_bt.pressed.connect(
-            _part(self._prepare_to_cycle, 'Demag'))
+            _part(self._prepare_to_cycle, 'Cycle'))
         self.demag_bt = QPushButton('Demagnetize', self)
         self.demag_bt.setEnabled(False)
-        self.demag_bt.pressed.connect(_part(self._cycle, 'Demag'))
+        self.demag_bt.pressed.connect(_part(self._cycle, 'Cycle'))
         vlay_demag = QVBoxLayout()
         vlay_demag.addWidget(self.prepare_demag_bt)
         vlay_demag.addWidget(self.demag_bt)
@@ -80,10 +80,10 @@ class CycleWindow(SiriusMainWindow):
         self.prepare_cycle_bt = QPushButton('Prepare', self)
         # self.prepare_cycle_bt.setEnabled(False)
         self.prepare_cycle_bt.pressed.connect(
-            _part(self._prepare_to_cycle, 'Cycle'))
+            _part(self._prepare_to_cycle, 'Ramp'))
         self.cycle_bt = QPushButton('Cycle', self)
         self.cycle_bt.setEnabled(False)
-        self.cycle_bt.pressed.connect(_part(self._cycle, 'Cycle'))
+        self.cycle_bt.pressed.connect(_part(self._cycle, 'Ramp'))
         vlay_cycle = QVBoxLayout()
         vlay_cycle.addWidget(self.prepare_cycle_bt)
         vlay_cycle.addWidget(self.cycle_bt)
@@ -185,7 +185,7 @@ class CycleWindow(SiriusMainWindow):
             self.demag_bt.setEnabled(False)
             self.cycle_bt.setEnabled(False)
         else:
-            if mode == 'Demag':
+            if mode == 'Cycle':
                 self.demag_bt.setEnabled(True)
             else:
                 self.cycle_bt.setEnabled(True)
@@ -206,7 +206,7 @@ class CycleWindow(SiriusMainWindow):
 
         if self._magnets_failed:
             self.cycle_bt.setEnabled(False)
-            if mode == 'Demag':
+            if mode == 'Cycle':
                 self.demag_bt.setEnabled(False)
             self.status_list.magnets = self._magnets_failed
             return False
@@ -222,7 +222,7 @@ class CycleWindow(SiriusMainWindow):
     def _get_magnets_list(self, mode, prepare=False):
         # Get magnets list
         magnets = self.magnets_tree.checked_items()
-        if mode == 'Cycle':
+        if mode == 'Ramp':
             bo_ma = _MASearch.get_manames(filters={'sec': 'BO', 'dis': 'MA'})
             not_bo = ''
             for name in magnets:
@@ -238,9 +238,9 @@ class CycleWindow(SiriusMainWindow):
 
         # Show message if no magnet is selected
         if not magnets:
-            aux_str = ' Booster' if mode == 'Cycle' else ''
+            aux_str = ' Booster' if mode == 'Ramp' else ''
             btfunc_str = 'prepare to ' if prepare else ''
-            mode_str = 'demagnetize' if mode == 'Demag' else 'cycle'
+            mode_str = 'demagnetize' if mode == 'Cycle' else 'cycle'
             QMessageBox.about(
                 self, 'Message', 'Select' + aux_str +
                 ' magnets to ' + btfunc_str + mode_str + '!')
@@ -413,7 +413,7 @@ class WaitCycle(QThread):
             ma_cycle_duration = _cyclers[maname].cycle_duration(mode)
             self._duration = max(ma_cycle_duration, self._duration)
 
-        if mode == 'Demag':
+        if mode == 'Cycle':
             self._format_msg = 'Missing {} seconds...'
         else:
             self._format_msg = 'Cycle {} of ' +\
@@ -440,16 +440,11 @@ class WaitCycle(QThread):
             interrupted = False
             keep_waiting = True
             while keep_waiting:
-                t = round(self._duration - (_time.time()-t0))
-                if self._mode == 'Cycle':
-                    t = self._timing_conn.get_cycle_count()
-                self.currentItem.emit(self._format_msg.format(t))
+                self.currentItem.emit(self._format_msg.format(
+                    self._check_curr_step(t0)))
                 _time.sleep(min(1, self._duration/10))
-                if self._mode == 'Demag':
-                    keep_waiting = _time.time() - t0 < self._duration
-                else:
-                    keep_waiting = not self._timing_conn.check_ramp_end()
-                    print('ended', not keep_waiting)
+                keep_waiting = self._check_keep_waiting(t0)
+                print('ended', not keep_waiting)
                 self.itemDone.emit()
                 if self._quit_task:
                     interrupted = True
@@ -458,6 +453,18 @@ class WaitCycle(QThread):
             # If ended without interruption
             if not interrupted:
                 self.completed.emit()
+
+    def _check_curr_step(self, t0):
+        if self._mode == 'Cycle':
+            return round(self._duration - (_time.time()-t0))
+        else:
+            return self._timing_conn.get_cycle_count()
+
+    def _check_keep_waiting(self, t0):
+        if self._mode == 'Cycle':
+            return _time.time() - t0 < self._duration
+        else:
+            return not self._timing_conn.check_ramp_end()
 
 
 if __name__ == '__main__':
