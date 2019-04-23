@@ -292,7 +292,7 @@ class MagnetCycler:
         """Set magnet opmode to mode."""
         return self.conn_put(self['OpMode-Sel'], opmode)
 
-    def config_cycle(self, mode):
+    def config_cycle_params(self, mode):
         """Config magnet to cycling mode."""
         status = True
 
@@ -303,12 +303,13 @@ class MagnetCycler:
         _time.sleep(SLEEP_CAPUT)
 
         status &= self.set_params(mode)
-        _time.sleep(SLEEP_CAPUT)
+        _time.sleep(5*SLEEP_CAPUT)
+        return status
 
+    def config_cycle_opmode(self, mode):
         opmode = _PSConst.OpMode.Cycle if mode == 'Demag'\
             else _PSConst.OpMode.RmpWfm
-        status &= self.set_opmode(opmode)
-        return status
+        return self.set_opmode(opmode)
 
     def on_rdy(self):
         """Return wether magnet PS is on."""

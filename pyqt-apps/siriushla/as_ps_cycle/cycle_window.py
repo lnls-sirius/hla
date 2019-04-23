@@ -324,7 +324,7 @@ class SetToCycle(QThread):
 
     def size(self):
         """Return task size."""
-        return len(self._manames)
+        return 2*len(self._manames)
 
     def exit_task(self):
         """Set flag to quit thread."""
@@ -335,10 +335,19 @@ class SetToCycle(QThread):
         if self._quit_task:
             pass
         else:
+            # config params
             for maname in self._manames:
                 cycler = _cyclers[maname]
-                self.currentItem.emit(maname)
-                done = cycler.config_cycle(self._mode)
+                self.currentItem.emit('Setting '+maname+' parameters...')
+                done = cycler.config_cycle_params(self._mode)
+                self.itemDone.emit(maname, done)
+                if self._quit_task:
+                    break
+            # config opmodes
+            for maname in self._manames:
+                cycler = _cyclers[maname]
+                self.currentItem.emit('Setting '+maname+' OpMode...')
+                done = cycler.config_cycle_opmode(self._mode)
                 self.itemDone.emit(maname, done)
                 if self._quit_task:
                     break
