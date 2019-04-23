@@ -1,8 +1,9 @@
 """Configuration database model."""
 import time
 
-from qtpy.QtCore import Qt, Signal, Slot, QAbstractTableModel, \
+from qtpy.QtCore import Qt, Signal, QAbstractTableModel, \
     QAbstractItemModel, QModelIndex
+from qtpy.QtWidgets import QMessageBox
 
 
 class ConfigDbTableModel(QAbstractTableModel):
@@ -79,6 +80,7 @@ class ConfigDbTableModel(QAbstractTableModel):
             self._configs = request['result']
         else:
             self._configs = []
+            QMessageBox.warning(self.parent(), 'Error', request['message'])
         self.endResetModel()
 
     def sort(self, column, order=Qt.AscendingOrder):

@@ -2,8 +2,7 @@
 import re
 
 from qtpy.QtCore import Qt, Signal, Slot, QItemSelection
-from qtpy.QtWidgets import QWidget, QLineEdit, QTableView, QVBoxLayout, \
-    QHeaderView
+from qtpy.QtWidgets import QWidget, QLineEdit, QTableView, QVBoxLayout
 
 from siriushla.model import ConfigDbTableModel
 
