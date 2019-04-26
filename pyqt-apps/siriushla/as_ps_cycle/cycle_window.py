@@ -193,7 +193,9 @@ class CycleWindow(SiriusMainWindow):
         else:
             if mode == 'Cycle':
                 self.demag_bt.setEnabled(True)
+                self.cycle_bt.setEnabled(False)
             else:
+                self.demag_bt.setEnabled(False)
                 self.cycle_bt.setEnabled(True)
 
     def _cycle(self, mode):
@@ -302,6 +304,10 @@ class CycleWindow(SiriusMainWindow):
         if maname in ['TB', 'BO', 'TS', 'SI']:
             return
         app.open_window(PSDetailWindow, parent=self, **{'psname': maname})
+
+    def _disable_cycle_buttons(self):
+        self.demag_bt.setEnabled(False)
+        self.cycle_bt.setEnabled(False)
 
     def _check_manames_from_same_udc(self, item):
         maname = item.data(0, Qt.DisplayRole)
