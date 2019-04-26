@@ -151,7 +151,8 @@ class Timing:
         else:
             pv = Timing._pvs['RA-RaMO:TI-EVG:InjectionEvt-Sel']
             pv.value = _TIConst.DsblEnbl.Enbl
-            _time.sleep(10*SLEEP_CAPUT)
+            # Wait for timing to turn injection mode on
+            _time.sleep(80*SLEEP_CAPUT)
 
     def get_cycle_count(self):
         pv = Timing._pvs['RA-RaMO:TI-EVG:InjCount-Mon']
