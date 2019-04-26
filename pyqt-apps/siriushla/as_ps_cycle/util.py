@@ -1,6 +1,7 @@
 """Utilities for ps-cycle."""
 import numpy as np
 
+import re as _re
 import time as _time
 from epics import PV as _PV
 from math import isclose as _isclose
@@ -122,9 +123,12 @@ class Timing:
         """Return list with names of failing PVs."""
         return self._status_nok.copy()
 
-    def init(self, mode):
+    def init(self, mode, sections=list()):
         """Initialize properties."""
+        filt = self._create_section_re(sections)
         for prop, defval in Timing.properties[mode].items():
+            if 'RA-RaMO:TI-EVG' not in prop and not filt.search(prop):
+                continue
             pv = Timing._pvs[prop]
             pv.get()  # force connection
             if pv.connected and defval is not None:
@@ -165,6 +169,15 @@ class Timing:
                 Timing._pvs[pvname] = _PV(VACA_PREFIX+pvname,
                                           connection_timeout=TIMEOUT)
                 Timing._pvs[pvname].get()
+
+    @staticmethod
+    def _create_section_re(sections):
+        filt = ''
+        for sec in sections:
+            if filt != '':
+                filt += '|'
+            filt += sec+'-'
+        return _re.compile(filt)
 
 
 class MagnetCycler:
