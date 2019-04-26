@@ -219,7 +219,19 @@ class CycleWindow(SiriusMainWindow):
             return False
         QMessageBox.information(self, 'Message', 'Cycle finished sucessfully!')
 
-    def _get_magnets_list(self, mode, prepare=False):
+    def _reset_magnets(self):
+        magnets = self._get_magnets_list()
+        if not magnets:
+            return False
+        task = ResetMagnetsOpMode(magnets, self)
+        dlg = ProgressDialog('Setting OpMode to SlowRef...', task, self)
+        ret = dlg.exec_()
+        if ret == dlg.Rejected:
+            return False
+
+    def _reset_timing(self):
+        self._timing.reset()
+
         # Get magnets list
         magnets = self.magnets_tree.checked_items()
         if mode == 'Ramp':
@@ -496,6 +508,42 @@ class WaitCycle(QThread):
             return _time.time() - t0 < self._duration
         else:
             return not self._timing_conn.check_ramp_end()
+
+
+class ResetMagnetsOpMode(QThread):
+    """Set magnet to cycle."""
+
+    currentItem = Signal(str)
+    itemDone = Signal(str, bool)
+    completed = Signal()
+
+    def __init__(self, manames, parent=None):
+        """Constructor."""
+        super().__init__(parent)
+        self._manames = manames
+        self._quit_task = False
+
+    def size(self):
+        """Return task size."""
+        return len(self._manames)
+
+    def exit_task(self):
+        """Set flag to quit thread."""
+        self._quit_task = True
+
+    def run(self):
+        """Set magnets to cycling."""
+        if self._quit_task:
+            pass
+        else:
+            for maname in self._manames:
+                self.currentItem.emit(maname)
+                done = _cyclers[maname].reset_opmode()
+                self.itemDone.emit(maname, done)
+                if self._quit_task:
+                    break
+            else:
+                self.completed.emit()
 
 
 if __name__ == '__main__':
