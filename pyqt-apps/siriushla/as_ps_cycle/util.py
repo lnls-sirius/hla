@@ -1,5 +1,4 @@
 """Utilities for ps-cycle."""
-import numpy as np
 
 import re as _re
 import time as _time
@@ -374,8 +373,8 @@ class MagnetCycler:
         while _time.time() - t0 < wait:
             pvvalue = pv.get()
             status = False
-            if isinstance(value, (tuple, list, np.ndarray)):
-                if not isinstance(pvvalue, (tuple, list, np.ndarray)):
+            if isinstance(value, (tuple, list, _np.ndarray)):
+                if not isinstance(pvvalue, (tuple, list, _np.ndarray)):
                     status = False
                 elif len(value) != len(pvvalue):
                     status = False
