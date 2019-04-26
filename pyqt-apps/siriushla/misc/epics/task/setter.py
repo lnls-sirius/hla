@@ -9,7 +9,7 @@ class EpicsSetter(EpicsTask):
     def run(self):
         """Thread execution."""
         if self._quit_task:
-            self.finished.emit()
+            self.completed.emit()
         else:
             for i in range(len(self._pvs)):
                 self.currentItem.emit(self._pvs[i].pvname)
@@ -18,4 +18,4 @@ class EpicsSetter(EpicsTask):
                 self.itemDone.emit()
                 if self._quit_task:
                     break
-            self.finished.emit()
+            self.completed.emit()

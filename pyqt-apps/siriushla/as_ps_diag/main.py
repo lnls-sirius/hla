@@ -461,10 +461,10 @@ class LogTable(QTreeView, PyDMWidget):
             str_value = 'disconnected'
             logtype = 'DISCONNECT'
         elif pv.propty_name == 'PwrState':
-            str_value = _PSEnums.PWRSTATE_STS[value]
+            str_value = _PSEnums.PWRSTATE_STS[int(value)]
             logtype = 'ERR'
         elif pv.propty_name == 'OpMode':
-            str_value = _PSEnums.STATES[value]
+            str_value = _PSEnums.STATES[int(value)]
             logtype = 'WARN'
         else:
             str_value = str(value)

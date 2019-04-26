@@ -5,7 +5,7 @@
    when python packages are imported.
 */
 
-    
+
 /* * {
   font-size: 20pt;
 } */
@@ -148,15 +148,6 @@ QTreeWidget::text {
     spacing: 1em;
 }
 
-/*PSTestWindow #TestButton,
-CycleWindow #PrepareButton {
-    color: white;
-    background-color: blue;
-}
-#ExitButton {
-    color: white;
-    background-color: red;
-}*/
 ProgressDialog {
     min-width: 400px;
     max-width: 400px;
