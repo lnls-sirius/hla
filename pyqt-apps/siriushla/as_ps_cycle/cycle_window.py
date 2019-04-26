@@ -182,12 +182,11 @@ class CycleWindow(SiriusMainWindow):
             return False
 
     def _prepare_to_cycle(self, mode):
-        # Prepare timing to cycle
-        status = self._prepare_timing(mode)
-        if not status:
-            return
-
+        # Prepare magnets to cycle
         status = self._prepare_magnets(mode)
+        if status:
+            status = self._prepare_timing(mode)
+
         if not status:
             self.demag_bt.setEnabled(False)
             self.cycle_bt.setEnabled(False)
