@@ -196,11 +196,11 @@ class MagnetCycler:
     """Handle magnet properties related to Cycle and RmpWfm ps modes."""
 
     RAMP_AMPLITUDE = {  # A
-        'BO-Fam:MA-B':  1100,
+        'BO-Fam:MA-B':  1072,
         'BO-Fam:MA-QD': 30,
-        'BO-Fam:MA-QF': 130,
-        'BO-Fam:MA-SD': 150,
-        'BO-Fam:MA-SF': 150}
+        'BO-Fam:MA-QF': 120,
+        'BO-Fam:MA-SD': 149,
+        'BO-Fam:MA-SF': 149}
 
     properties = [
         'PwrState-Sel', 'PwrState-Sts',
