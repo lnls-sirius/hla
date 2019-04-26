@@ -19,6 +19,6 @@ args = parser.parse_args()
 app = SiriusApplication()
 MyWindow = create_window_from_widget(
     EmittanceMeasure, title='Linac Emittance Measure', is_main=True)
-window = MyWindow(place='LI')
+window = MyWindow(None, place='LI')
 window.show()
 sys.exit(app.exec_())
