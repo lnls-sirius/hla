@@ -2,11 +2,13 @@
 
 import time as _time
 import re as _re
+from datetime import datetime as _datetime
 from functools import partial as _part
 
 from qtpy.QtCore import Signal, QThread, Qt
-from qtpy.QtWidgets import QWidget, QGridLayout, QVBoxLayout, QGroupBox, \
-    QPushButton, QLabel, QMessageBox, QLineEdit, QApplication
+from qtpy.QtWidgets import QWidget, QGridLayout, QVBoxLayout, QHBoxLayout, \
+    QPushButton, QLabel, QMessageBox, QLineEdit, QApplication, QGroupBox, \
+    QTabWidget, QListWidget
 
 from siriuspy.envars import vaca_prefix as VACA_PREFIX
 from siriuspy.search import MASearch as _MASearch
@@ -20,13 +22,15 @@ from siriushla.widgets.dialog import ProgressDialog
 from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
 
 from .util import MagnetCycler, Timing, get_manames, \
-    get_manames_from_same_udc
+    get_manames_from_same_udc, AutomatedCycle
 
 _cyclers = dict()
 
 
 class CycleWindow(SiriusMainWindow):
     """Magnet cycle window."""
+
+    auto_cycle_aborted = Signal()
 
     def __init__(self, parent=None, checked_accs=()):
         """Constructor."""
@@ -44,15 +48,9 @@ class CycleWindow(SiriusMainWindow):
     def _setup_ui(self):
         # central widget
         self.central_widget = QWidget()
-        self.central_widget.setObjectName('CentralWidget')
-        self.central_widget.setStyleSheet("""
-            #CentralWidget {
-                min-width: 30em;
-                min-height: 40em;
-            }""")
         self.setCentralWidget(self.central_widget)
 
-        # widgets
+        # treeview
         gb_ma = QGroupBox('Select magnets:')
         self.search_le = QLineEdit()
         self.search_le.setPlaceholderText('Filter...')
@@ -66,33 +64,8 @@ class CycleWindow(SiriusMainWindow):
         glay_ma.addWidget(self.magnets_tree)
         gb_ma.setLayout(glay_ma)
 
-        gb_demag = QGroupBox('Demagnetize')
-        self.prepare_demag_bt = QPushButton('Prepare', self)
-        self.prepare_demag_bt.pressed.connect(
-            _part(self._prepare_to_cycle, 'Cycle'))
-        self.demag_bt = QPushButton('Demagnetize', self)
-        self.demag_bt.setEnabled(False)
-        self.demag_bt.pressed.connect(_part(self._cycle, 'Cycle'))
-        vlay_demag = QVBoxLayout()
-        vlay_demag.addWidget(self.prepare_demag_bt)
-        vlay_demag.addWidget(self.demag_bt)
-        gb_demag.setLayout(vlay_demag)
-
-        gb_cycle = QGroupBox('Cycle')
-        self.prepare_cycle_bt = QPushButton('Prepare', self)
-        # self.prepare_cycle_bt.setEnabled(False)
-        self.prepare_cycle_bt.pressed.connect(
-            _part(self._prepare_to_cycle, 'Ramp'))
-        self.cycle_bt = QPushButton('Cycle', self)
-        self.cycle_bt.setEnabled(False)
-        self.cycle_bt.pressed.connect(_part(self._cycle, 'Ramp'))
-        vlay_cycle = QVBoxLayout()
-        vlay_cycle.addWidget(self.prepare_cycle_bt)
-        vlay_cycle.addWidget(self.cycle_bt)
-        gb_cycle.setLayout(vlay_cycle)
-
+        # leds
         gb_status = QGroupBox('Status')
-        self.status_list = CycleStatusList()
         tipvs = list()
         for cycletype in self._timing.properties:
             for pvname in self._timing.properties[cycletype].keys():
@@ -103,22 +76,96 @@ class CycleWindow(SiriusMainWindow):
         self.maconn_led.shape = 2
         glay_status = QGridLayout()
         glay_status.addWidget(QLabel('Timing conn?', self,
-                              alignment=Qt.AlignCenter), 0, 0)
+                                     alignment=Qt.AlignCenter), 0, 0)
         glay_status.addWidget(self.ticonn_led, 1, 0)
         glay_status.addWidget(QLabel('Selected magnets conn?', self,
-                              alignment=Qt.AlignCenter), 0, 1)
+                                     alignment=Qt.AlignCenter), 0, 1)
         glay_status.addWidget(self.maconn_led, 1, 1)
-        glay_status.addWidget(QLabel('List of failed magnets:'), 3, 0, 1, 2)
-        glay_status.addWidget(self.status_list, 4, 0, 1, 2)
-        glay_status.setRowStretch(0, 2)
-        glay_status.setRowStretch(1, 2)
-        glay_status.setRowStretch(2, 1)
-        glay_status.setRowStretch(3, 2)
-        glay_status.setRowStretch(4, 30)
+        glay_status.setAlignment(Qt.AlignBottom)
         gb_status.setLayout(glay_status)
+
+        # tabwidget
+        self._tab_widget = QTabWidget()
+
+        self._tab_widget.setStyleSheet("""
+            QTabWidget::pane {
+                border-top: 2px solid black;
+                border-bottom: 2px solid gray;
+                border-left: 2px solid gray;
+                border-right: 2px solid gray;}""")
+
+        # Tab Automated
+        self._tab_auto = QWidget()
+        # widgets
+        self.auto_exec_bt = QPushButton('Execute automated cycle')
+        self.auto_exec_bt.setStyleSheet('min-height:2.5em;')
+        self.auto_exec_bt.clicked.connect(self._auto_cycle)
+        self.progress_list = QListWidget()
+        self.auto_cancel_bt = QPushButton('Cancel')
+        self.auto_cancel_bt.clicked.connect(self.auto_cycle_aborted.emit)
+        autolay = QVBoxLayout()
+        autolay.addWidget(self.auto_exec_bt)
+        autolay.addWidget(self.progress_list)
+        autolay.addWidget(self.auto_cancel_bt)
+        self._tab_auto.setLayout(autolay)
+        self._tab_widget.addTab(self._tab_auto, 'Automated')
+
+        # Tab Manual
+        self._tab_manual = QWidget()
+        gb_demag = QGroupBox('Demagnetize')
+        self.prepare_demag_bt = QPushButton('Prepare', self)
+        self.prepare_demag_bt.clicked.connect(
+            _part(self._prepare_to_cycle, 'Cycle'))
+        self.demag_bt = QPushButton('Demagnetize', self)
+        self.demag_bt.setEnabled(False)
+        self.demag_bt.clicked.connect(_part(self._cycle, 'Cycle'))
+        vlay_demag = QVBoxLayout()
+        vlay_demag.addWidget(self.prepare_demag_bt)
+        vlay_demag.addWidget(self.demag_bt)
+        gb_demag.setLayout(vlay_demag)
+
+        gb_cycle = QGroupBox('Cycle')
+        self.prepare_cycle_bt = QPushButton('Prepare', self)
+        # self.prepare_cycle_bt.setEnabled(False)
+        self.prepare_cycle_bt.clicked.connect(
+            _part(self._prepare_to_cycle, 'Ramp'))
+        self.cycle_bt = QPushButton('Cycle', self)
+        self.cycle_bt.setEnabled(False)
+        self.cycle_bt.clicked.connect(_part(self._cycle, 'Ramp'))
+        vlay_cycle = QVBoxLayout()
+        vlay_cycle.addWidget(self.prepare_cycle_bt)
+        vlay_cycle.addWidget(self.cycle_bt)
+        gb_cycle.setLayout(vlay_cycle)
+
+        gb_failed = QGroupBox('List of failed magnets:')
+        self.status_list = CycleStatusList()
+        vlay_failed = QVBoxLayout()
+        vlay_failed.addWidget(self.status_list)
+        gb_failed.setLayout(vlay_failed)
+
+        manuallay = QGridLayout()
+        manuallay.addWidget(gb_demag, 0, 0)
+        manuallay.addWidget(gb_cycle, 0, 1)
+        manuallay.addWidget(gb_failed, 1, 0, 1, 2)
+        manuallay.setRowStretch(0, 3)
+        manuallay.setRowStretch(1, 12)
+        self._tab_manual.setLayout(manuallay)
+        self._tab_widget.addTab(self._tab_manual, 'Manual')
+
+        # reset
+        gb_reset = QGroupBox('Reset')
+        self.reset_ma_bt = QPushButton('Reset Magnets')
+        self.reset_ma_bt.clicked.connect(self._reset_magnets)
+        self.reset_ti_bt = QPushButton('Reset Timing')
+        self.reset_ti_bt.clicked.connect(self._reset_timing)
+        glay_reset = QHBoxLayout()
+        glay_reset.addWidget(self.reset_ti_bt)
+        glay_reset.addWidget(self.reset_ma_bt)
+        gb_reset.setLayout(glay_reset)
 
         # connect tree signals
         self.magnets_tree.doubleClicked.connect(self._open_magnet_detail)
+        self.magnets_tree.itemChanged.connect(self._disable_cycle_buttons)
         self.magnets_tree.itemChanged.connect(
             self._check_manames_from_same_udc)
 
@@ -127,17 +174,19 @@ class CycleWindow(SiriusMainWindow):
         layout.setVerticalSpacing(10)
         layout.setHorizontalSpacing(10)
         layout.addWidget(QLabel('<h3>Magnet Cycling</h3>', self,
-                                alignment=Qt.AlignCenter), 0, 0, 1, 3)
-        layout.addWidget(gb_ma, 1, 0, 2, 1)
-        layout.addWidget(gb_demag, 1, 1)
-        layout.addWidget(gb_cycle, 1, 2)
-        layout.addWidget(gb_status, 2, 1, 1, 2)
-        layout.setColumnStretch(0, 2)
+                                alignment=Qt.AlignCenter), 0, 0, 1, 2)
+        layout.addWidget(gb_ma, 1, 0, 4, 1)
+        layout.addWidget(gb_status, 1, 1)
+        layout.addWidget(self._tab_widget, 2, 1)
+        layout.addWidget(QLabel(''), 3, 1)
+        layout.addWidget(gb_reset, 4, 1)
+        layout.setColumnStretch(0, 1)
         layout.setColumnStretch(1, 1)
-        layout.setColumnStretch(2, 1)
-        layout.setRowStretch(0, 1)
+        layout.setRowStretch(0, 3)
         layout.setRowStretch(1, 3)
-        layout.setRowStretch(2, 15)
+        layout.setRowStretch(2, 30)
+        layout.setRowStretch(3, 1)
+        layout.setRowStretch(4, 3)
 
         self.central_widget.setLayout(layout)
 
@@ -240,6 +289,16 @@ class CycleWindow(SiriusMainWindow):
     def _reset_timing(self):
         self._timing.reset()
 
+    def _auto_cycle(self):
+        magnets = self._get_magnets_list()
+        if not magnets:
+            return
+        self.progress_list.clear()
+        auto = CycleAutomatically(magnets, self._timing, self)
+        auto.updated.connect(self._update_auto_progress)
+        self.auto_cycle_aborted.connect(auto.exit_thread)
+        auto.start()
+
     def _get_magnets_list(self, mode='Cycle', prepare=False):
         # Get magnets list
         magnets = self.magnets_tree.checked_items()
@@ -283,6 +342,22 @@ class CycleWindow(SiriusMainWindow):
             self._magnets_ready.append(maname)
         else:
             self._magnets_failed.append(maname)
+
+    def _update_auto_progress(self, text, done):
+        if done:
+            last_item = self.progress_list.item(self.progress_list.count()-1)
+            curr_text = last_item.text()
+            last_item.setText(curr_text+' done.')
+        elif 'Missing' in text:
+            last_item = self.progress_list.item(self.progress_list.count()-1)
+            if 'Missing' in last_item.text():
+                last_item.setText(text)
+            else:
+                self.progress_list.addItem(text)
+                self.progress_list.scrollToBottom()
+        else:
+            self.progress_list.addItem(text)
+            self.progress_list.scrollToBottom()
 
     def _filter_manames(self):
         text = self.search_le.text()
@@ -557,6 +632,36 @@ class ResetMagnetsOpMode(QThread):
                     break
             else:
                 self.completed.emit()
+
+
+class CycleAutomatically(QThread):
+    """Cycle Automatically."""
+
+    updated = Signal(str, bool)
+
+    def __init__(self, manames, timing, parent=None):
+        super().__init__(parent)
+        cyclers = dict()
+        for ma in manames:
+            cyclers[ma] = _cyclers[ma]
+        self._auto = AutomatedCycle(
+            cyclers=cyclers, timing=timing, logger=self)
+        self._quit_thread = False
+
+    def exit_thread(self):
+        self._quit_thread = True
+        self._auto.aborted = True
+
+    def run(self):
+        if not self._quit_thread:
+            self._auto.execute()
+
+    def update(self, message, done):
+        self.updated.emit(self._strnow+'  '+message, done)
+
+    @property
+    def _strnow(self):
+        return _datetime.now().strftime('%Y/%m/%d-%H:%M:%S')
 
 
 if __name__ == '__main__':
