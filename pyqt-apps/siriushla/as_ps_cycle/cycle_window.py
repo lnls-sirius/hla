@@ -252,10 +252,9 @@ class CycleWindow(SiriusMainWindow):
 
     def _create_cyclers(self, manames):
         """Create new cyclers, if necessary."""
-        global _cyclers
-        for maname in manames:
-            if maname not in _cyclers.keys():
-                _cyclers[maname] = MagnetCycler(maname)
+        task = CreateCyclers(manames)
+        dlg = ProgressDialog('Connecting to magnets...', task, self)
+        dlg.exec_()
 
     def _update_cycling_status(self, maname, status):
         """Check magnet cycling status."""
@@ -306,6 +305,39 @@ class CycleWindow(SiriusMainWindow):
         self.maconn_led.set_channels(
             [VACA_PREFIX + name + ':Version-Cte'
              for name in self.magnets_tree.checked_items()])
+
+
+class CreateCyclers(QThread):
+
+    currentItem = Signal(str)
+    itemDone = Signal()
+    completed = Signal()
+
+    def __init__(self, manames, parent=None):
+        super().__init__(parent)
+        self._manames = manames
+        self._quit_task = False
+
+    def size(self):
+        """Return task size."""
+        return len(self._manames)
+
+    def exit_task(self):
+        """Set flag to quit thread."""
+        self._quit_task = True
+
+    def run(self):
+        """Create cyclers."""
+        if self._quit_task:
+            pass
+        else:
+            global _cyclers
+            for maname in self._manames:
+                if maname not in _cyclers.keys():
+                    self.currentItem.emit(maname)
+                    _cyclers[maname] = MagnetCycler(maname)
+                    self.itemDone.emit()
+            self.completed.emit()
 
 
 class SetToCycle(QThread):
