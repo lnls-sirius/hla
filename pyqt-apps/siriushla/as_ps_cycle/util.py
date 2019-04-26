@@ -50,7 +50,6 @@ class Timing:
     """Timing."""
 
     EVTNAME_CYCLE = 'Cycle'
-    EVTNAME_RAMP = 'RmpBO'
 
     DEFAULT_CYCLE_DURATION = 150  # [us]
     DEFAULT_CYCLE_NRPULSES = 1
@@ -64,6 +63,12 @@ class Timing:
     DEFAULT_RAMP_TOTDURATION = DEFAULT_RAMP_DURATION * \
         DEFAULT_RAMP_NRCYCLES/1000000  # [s]
 
+    _trigger_list = [
+        'TB-Glob:TI-Mags', 'BO-Glob:TI-Mags', 'BO-Glob:TI-Corrs']
+    # TODO: uncomment when using TS and SI
+    #    'TS-Glob:TI-Mags', 'SI-Glob:TI-Dips', 'SI-Glob:TI-Quads',
+    #    'SI-Glob:TI-Sexts', 'SI-Glob:TI-Skews', 'SI-Glob:TI-Corrs']
+
     properties = {
         'Cycle': {
             # EVG settings
@@ -74,30 +79,6 @@ class Timing:
             'RA-RaMO:TI-EVG:CycleMode-Sel': _TIConst.EvtModes.External,
             'RA-RaMO:TI-EVG:CycleDelayType-Sel': _TIConst.EvtDlyTyp.Fixed,
             'RA-RaMO:TI-EVG:CycleExtTrig-Cmd': None,
-
-            # TB magnets trigger settings
-            'TB-Glob:TI-Mags:Src-Sel': EVTNAME_CYCLE,
-            'TB-Glob:TI-Mags:Duration-SP': DEFAULT_CYCLE_DURATION,
-            'TB-Glob:TI-Mags:NrPulses-SP': DEFAULT_CYCLE_NRPULSES,
-            'TB-Glob:TI-Mags:Delay-SP': DEFAULT_DELAY,
-            'TB-Glob:TI-Mags:Polarity-Sel': DEFAULT_POLARITY,
-            'TB-Glob:TI-Mags:State-Sel': DEFAULT_STATE,
-
-            # BO magnets trigger settings
-            'BO-Glob:TI-Mags:Src-Sel': EVTNAME_CYCLE,
-            'BO-Glob:TI-Mags:Duration-SP': DEFAULT_CYCLE_DURATION,
-            'BO-Glob:TI-Mags:NrPulses-SP': DEFAULT_CYCLE_NRPULSES,
-            'BO-Glob:TI-Mags:Delay-SP': DEFAULT_DELAY,
-            'BO-Glob:TI-Mags:Polarity-Sel': DEFAULT_POLARITY,
-            'BO-Glob:TI-Mags:State-Sel': DEFAULT_STATE,
-
-            # BO correctors trigger settings
-            'BO-Glob:TI-Corrs:Src-Sel': EVTNAME_CYCLE,
-            'BO-Glob:TI-Corrs:Duration-SP': DEFAULT_CYCLE_DURATION,
-            'BO-Glob:TI-Corrs:NrPulses-SP': DEFAULT_CYCLE_NRPULSES,
-            'BO-Glob:TI-Corrs:Delay-SP': DEFAULT_DELAY,
-            'BO-Glob:TI-Corrs:Polarity-Sel': DEFAULT_POLARITY,
-            'BO-Glob:TI-Corrs:State-Sel': DEFAULT_STATE,
         },
         'Ramp': {
             # EVG settings
@@ -107,20 +88,27 @@ class Timing:
             'RA-RaMO:TI-EVG:RepeatBucketList-SP': DEFAULT_RAMP_NRCYCLES,
             'RA-RaMO:TI-EVG:InjCount-Mon': None,
 
-            # Ramp event settings
-            'RA-RaMO:TI-EVG:RmpBOMode-Sel': _TIConst.EvtModes.Injection,
-            'RA-RaMO:TI-EVG:RmpBODelayType-Sel': _TIConst.EvtDlyTyp.Incr,
-            'RA-RaMO:TI-EVG:RmpBODelay-SP': DEFAULT_DELAY,
-
-            # BO magnets trigger settings
-            'BO-Glob:TI-Mags:Src-Sel': EVTNAME_RAMP,
-            'BO-Glob:TI-Mags:Duration-SP': DEFAULT_RAMP_DURATION,
-            'BO-Glob:TI-Mags:NrPulses-SP': DEFAULT_RAMP_NRPULSES,
-            'BO-Glob:TI-Mags:Delay-SP': DEFAULT_DELAY,
-            'BO-Glob:TI-Mags:Polarity-Sel': DEFAULT_POLARITY,
-            'BO-Glob:TI-Mags:State-Sel': DEFAULT_STATE,
+            # Cycle event settings
+            'RA-RaMO:TI-EVG:CycleMode-Sel': _TIConst.EvtModes.Injection,
+            'RA-RaMO:TI-EVG:CycleDelayType-Sel': _TIConst.EvtDlyTyp.Incr,
+            'RA-RaMO:TI-EVG:CycleDelay-SP': DEFAULT_DELAY,
         }
     }
+
+    for trig in _trigger_list:
+        properties['Cycle'][trig+':Src-Sel'] = EVTNAME_CYCLE
+        properties['Cycle'][trig+':Duration-SP'] = DEFAULT_CYCLE_DURATION
+        properties['Cycle'][trig+':NrPulses-SP'] = DEFAULT_CYCLE_NRPULSES
+        properties['Cycle'][trig+':Delay-SP'] = DEFAULT_DELAY
+        properties['Cycle'][trig+':Polarity-Sel'] = DEFAULT_POLARITY
+        properties['Cycle'][trig+':State-Sel'] = DEFAULT_STATE
+
+        properties['Ramp'][trig+':Src-Sel'] = EVTNAME_CYCLE
+        properties['Ramp'][trig+':Duration-SP'] = DEFAULT_RAMP_DURATION
+        properties['Ramp'][trig+':NrPulses-SP'] = DEFAULT_RAMP_NRPULSES
+        properties['Ramp'][trig+':Delay-SP'] = DEFAULT_DELAY
+        properties['Ramp'][trig+':Polarity-Sel'] = DEFAULT_POLARITY
+        properties['Ramp'][trig+':State-Sel'] = DEFAULT_STATE
 
     _pvs = None
 
