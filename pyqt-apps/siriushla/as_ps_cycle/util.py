@@ -21,7 +21,9 @@ SLEEP_CAPUT = 0.1
 
 def get_manames():
     """Return manames."""
-    return _MASearch.get_manames({'sec': '(SI|TS|BO|TB)', 'dis': 'MA'})
+    return _MASearch.get_manames({'sec': '(TB|BO)', 'dis': 'MA'})
+    # TODO: uncomment when using TS and SI
+    # return _MASearch.get_manames({'sec': '(TB|BO|TS|SI)', 'dis': 'MA'})
 
 
 def get_manames_from_same_udc(maname):
