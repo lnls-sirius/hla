@@ -10,7 +10,9 @@ from PyQt5.QtWidgets import QPushButton, QLabel, QGridLayout, QGroupBox, \
 from matplotlib import rcParams
 
 from .utils import MatplotlibWidget, ProcessImage, gettransmat, E0
+import siriuspy.util as _util
 from siriuspy.factory import NormalizerFactory as _NormFact
+from siriuspy.magnet.excdata import ExcitationData as _ED
 
 rcParams['font.size'] = 9
 
@@ -50,7 +52,7 @@ class EmittanceMeasure(QWidget):
     def _select_experimental_setup(self):
         if self._place.lower().startswith('li'):
             self.plt_image = ProcessImage(self, place='LI-Emittance')
-            self.conv2kl = _NormFact.create('LI-01:MA-QF3')
+            self.conv2kl = _ED('li-quadrupole-short.txt')
             self.quad_I_sp = PV('LA-CN:H1FQPS-3:seti')
             self.quad_I_rb = PV('LA-CN:H1FQPS-3:rdi')
             self.DIST = 2.8775
@@ -176,7 +178,12 @@ class EmittanceMeasure(QWidget):
 
     def _get_K1_from_I(self, I_meas):
         energy = self.spbox_energy.value() * 1e-3  # energy in GeV
-        KL = self.conv2kl.conv_current_2_strength(
+        if self._place.lower().startswith('li'):
+            KL = self.conv2kl.interp_curr2mult(I_meas)
+            brho, *_ = _util.beam_rigidity(energy)
+            KL = KL['normal'][1] / brho
+        else:
+            KL = self.conv2kl.conv_current_2_strength(
                                 I_meas, strengths_dipole=energy)
         return KL/self.QUAD_L
 

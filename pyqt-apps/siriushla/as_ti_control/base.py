@@ -166,13 +166,16 @@ class BaseList(CustomGroupBox):
         for line, objs in self.lines.items():
             keep = False
             for prop, lay in objs:
+                if keep:
+                    self.filtered_lines.add(line)
+                    break
                 if prop not in self.props2search:
                     continue
                 cnt = lay.count()
                 wid = lay.itemAt(cnt-1).widget()
                 if hasattr(wid, 'text'):
                     keep |= bool(pattern.search(wid.text()))
-                    break
+                    continue
                 elif hasattr(wid, 'enum_strings') and hasattr(wid, 'value'):
                     conds = wid.enum_strings is not None
                     conds &= isinstance(wid.value, int)
@@ -180,9 +183,7 @@ class BaseList(CustomGroupBox):
                     if conds:
                         enum = wid.enum_strings[wid.value]
                         keep |= bool(pattern.search(enum))
-                        break
-            if keep:
-                self.filtered_lines.add(line)
+                        continue
 
         self._set_lines_visibility()
 
