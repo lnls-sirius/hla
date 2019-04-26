@@ -476,7 +476,6 @@ class WaitCycle(QThread):
                     self._check_curr_step(t0)))
                 _time.sleep(min(1, self._duration/10))
                 keep_waiting = self._check_keep_waiting(t0)
-                print('ended', not keep_waiting)
                 self.itemDone.emit()
                 if self._quit_task:
                     interrupted = True
