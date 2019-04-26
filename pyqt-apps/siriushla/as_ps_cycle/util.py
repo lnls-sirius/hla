@@ -161,6 +161,15 @@ class Timing:
         pv = Timing._pvs['RA-RaMO:TI-EVG:InjCount-Mon']
         return (pv.value == Timing.DEFAULT_RAMP_NRCYCLES)
 
+    def reset(self):
+        pv_event = Timing._pvs['RA-RaMO:TI-EVG:CycleMode-Sel']
+        pv_event.value = _TIConst.EvtModes.Disabled
+        pv_bktlist = Timing._pvs['RA-RaMO:TI-EVG:RepeatBucketList-SP']
+        pv_bktlist.value = 0
+        for trig in self._trigger_list:
+            pv = Timing._pvs[trig+':Src-Sel']
+            pv.value = 'Dsbl'
+
     def _create_pvs(self):
         """Create PVs."""
         Timing._pvs = dict()
@@ -356,6 +365,9 @@ class MagnetCycler:
         status &= self.params_rdy(mode)
         status &= self.mode_rdy(mode)
         return status
+
+    def reset_opmode(self):
+        return self.set_opmode(_PSConst.OpMode.SlowRef)
 
     def conn_put(self, pv, value):
         """Put if connected."""
