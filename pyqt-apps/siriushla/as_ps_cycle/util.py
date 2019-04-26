@@ -346,10 +346,9 @@ class MagnetCycler:
             status &= self.timed_get(
                 self['CycleNrCycles-RB'], self.siggen.num_cycles)
         else:
-            status &= self.timed_get(self['RmpIncNrCycles-RB'], 1)
+            status &= self.timed_get(self['WfmData-RB'], self._waveform)
             _time.sleep(SLEEP_CAPUT)
-            status &= self.timed_get(
-                self['WfmData-RB'], Timing.DEFAULT_RMPBO_NRPULSES*[0])
+            status &= self.timed_get(self['RmpIncNrCycles-RB'], 1)
         return status
 
     def mode_rdy(self, mode):
