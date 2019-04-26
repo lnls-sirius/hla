@@ -1,7 +1,9 @@
 """Utilities for ps-cycle."""
 
+import sys as _sys
 import re as _re
 import time as _time
+import logging as _log
 from epics import PV as _PV
 from math import isclose as _isclose
 import numpy as _np
@@ -11,6 +13,7 @@ from siriuspy.search import MASearch as _MASearch, PSSearch as _PSSearch
 from siriuspy.csdevice.pwrsupply import Const as _PSConst
 from siriuspy.csdevice.timesys import Const as _TIConst
 from siriuspy.csdevice.pwrsupply import ETypes as _PSet
+from siriuspy.namesys import Filter as _Filter
 from siriushla.as_ps_cycle.ramp_data import BASE_RAMP_CURVE_ORIG as \
     _BASE_RAMP_CURVE_ORIG
 
@@ -411,3 +414,178 @@ class MagnetCycler:
     def __getitem__(self, prop):
         """Return item."""
         return self._pvs[prop]
+
+
+class AutomatedCycle:
+    """Class to perform automated cycle procedure."""
+
+    def __init__(self, cyclers=None, timing=None,
+                 ramp_config=None, logger=None):
+        """Initialize."""
+        if cyclers:
+            self.cyclers = cyclers
+        else:
+            self.cyclers = dict()
+            for maname in get_manames():
+                self.cyclers[maname] = MagnetCycler(maname, ramp_config)
+        self._timing = timing if timing is not None else Timing()
+
+        self._logger = logger
+        self._logger_message = ''
+        _log.basicConfig(
+            format='%(asctime)s %(levelname)8s %(name)s | %(message)s',
+            datefmt='%F %T', level=_log.INFO, stream=_sys.stdout)
+
+        self._cycle_duration = 0
+        for ma in self.manames_2_cycle:
+            self._cycle_duration = max(
+                self._cycle_duration, self.cyclers[ma].cycle_duration('Cycle'))
+
+        self._ramp_duration = 0
+        for ma in self.manames_2_ramp:
+            self._ramp_duration = max(
+                self._ramp_duration, self.cyclers[ma].cycle_duration('Ramp'))
+
+        self.cycling = False
+        self.aborted = False
+
+    @property
+    def manames_2_cycle(self):
+        """Return manames to cycle."""
+        return _Filter.process_filters(
+            self.cyclers.keys(), filters={'sec': 'TB', 'dis': 'MA'})
+        # TODO: uncomment when using TS and SI
+        #    self.cyclers.keys(), filters={'sec': '(TB|TS|SI)', 'dis': 'MA'})
+
+    @property
+    def manames_2_ramp(self):
+        """Return manames to ramp."""
+        return _Filter.process_filters(
+            self.cyclers.keys(), filters={'sec': 'BO', 'dis': 'MA'})
+
+    def prepare_all_magnets(self, mode):
+        """Prepare magnets to cycle according to mode."""
+        manames = self.manames_2_cycle if mode == 'Cycle'\
+            else self.manames_2_ramp
+        # Set all magnets params
+        for maname in manames:
+            self._update_log('Preparing '+maname+' params...')
+            self.cyclers[maname].config_cycle_params(mode)
+            if self.aborted:
+                self._update_log('Aborted.')
+                return
+            self._update_log(done=True)
+        # Change all magnets OpMode
+        for maname in manames:
+            self._update_log('Preparing '+maname+' opmode...')
+            self.cyclers[maname].config_cycle_opmode(mode)
+            if self.aborted:
+                self._update_log('Aborted.')
+                return
+            self._update_log(done=True)
+
+    def prepare_timing(self, mode):
+        """Prepare timing to cycle according to mode."""
+        self._update_log('Preparing Timing...')
+        self._timing.init(mode)
+        self._update_log(done=True)
+
+    def check_all_magnets(self, mode):
+        manames = self.manames_2_cycle if mode == 'Cycle'\
+            else self.manames_2_ramp
+        # Check all magnets params
+        for maname in manames:
+            self._update_log('Checking '+maname+' settings...')
+            is_ready = self.cyclers[maname].is_ready(mode)
+            if self.aborted:
+                self._update_log('Aborted.')
+                return False
+            if is_ready:
+                self._update_log(done=True)
+            else:
+                self._update_log(maname+' is not ready.')
+                return False
+        return True
+
+    def init(self, mode):
+        """Trigger timing according to mode to init cycling."""
+        self._update_log('Triggering timing...')
+        self._timing.trigger(mode)
+        self._update_log(done=True)
+
+    def wait(self, mode):
+        """Wait/Sleep while cycling according to mode."""
+        self._update_log('Waiting for cycling...')
+        sleep = self._cycle_duration if mode == 'Cycle'\
+            else self._ramp_duration
+        t0 = _time.time()
+        while _time.time() - t0 < sleep:
+            _time.sleep(min(1, sleep/10))
+            t = round(sleep - (_time.time()-t0))
+            self._update_log('Missing {}s...'.format(t))
+        self._update_log(done=True)
+
+    def reset_all_subsystems(self):
+        self._update_log('Reseting TI and setting magnets to SlowRef...')
+        for ma in self.manames_2_cycle:
+            self.cyclers[ma].reset_opmode()
+        for ma in self.manames_2_ramp:
+            self.cyclers[ma].reset_opmode()
+        self._timing.reset()
+        self._update_log(done=True)
+
+    def execute(self):
+        """Execute automated cycle."""
+        # Indicate cycle init
+        self.cycling = True
+
+        # Cycle
+        if self.manames_2_cycle:
+            self.prepare_all_magnets('Cycle')
+            if self.aborted:
+                return
+            self.prepare_timing('Cycle')
+            if self.aborted:
+                return
+            self._update_log('Waiting to check magnets state...')
+            _time.sleep(10)
+            status = self.check_all_magnets('Cycle')
+            if not status:
+                _log.warning('There are magnets not ready to cycle.')
+                return False
+            if self.aborted:
+                return
+            self.init('Cycle')
+            self.wait('Cycle')
+
+        # Ramp
+        if self.manames_2_ramp:
+            self.prepare_all_magnets('Ramp')
+            if self.aborted:
+                return
+            self.prepare_timing('Ramp')
+            if self.aborted:
+                return
+            self._update_log('Waiting to check magnets state...')
+            _time.sleep(10)
+            status = self.check_all_magnets('Ramp')
+            if not status:
+                _log.warning('There are magnets not ready to ramp.')
+                return False
+            if self.aborted:
+                return
+            self.init('Ramp')
+            self.wait('Ramp')
+
+        self.reset_all_subsystems()
+
+        # Indicate cycle end
+        self.cycling = False
+
+    def _update_log(self, message='', done=False):
+        self._logger_message = message
+        if self._logger:
+            self._logger.update(message, done)
+        if done and not message:
+            message = 'Done.'
+        _log.info(message)
