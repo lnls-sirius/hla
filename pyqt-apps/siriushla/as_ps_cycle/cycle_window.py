@@ -10,6 +10,7 @@ from qtpy.QtWidgets import QWidget, QGridLayout, QVBoxLayout, QGroupBox, \
 
 from siriuspy.envars import vaca_prefix as VACA_PREFIX
 from siriuspy.search import MASearch as _MASearch
+from siriuspy.namesys import Filter
 
 from siriushla.widgets import SiriusMainWindow, \
     PyDMLedMultiConnection as PyDMLedMultiConn
@@ -32,6 +33,7 @@ class CycleWindow(SiriusMainWindow):
         super().__init__(parent)
         # Data structs
         self._timing = Timing()
+        self._magnets2cycle = list()
         self._magnets_ready = list()
         self._magnets_failed = list()
         self._checked_accs = checked_accs
@@ -148,18 +150,23 @@ class CycleWindow(SiriusMainWindow):
             QMessageBox.information(
                 self, 'Message', 'Timing PVs are not connected!\n'+sttr)
             return False
-        self._timing.init(mode)
+
+        sections = list()
+        for s in ['TB', 'BO', 'TS', 'SI']:
+            if Filter.process_filters(self._magnets2cycle, filters={'sec': s}):
+                sections.append(s)
+        self._timing.init(mode, sections)
         return True
 
     def _prepare_magnets(self, mode):
-        magnets = self._get_magnets_list(mode, prepare=True)
-        if not magnets:
+        self._magnets2cycle = self._get_magnets_list(mode=mode, prepare=True)
+        if not self._magnets2cycle:
             return False
 
         # Set magnets to proper cycling state
         self._magnets_ready = list()
         self._magnets_failed = list()
-        task = SetToCycle(magnets, mode, self)
+        task = SetToCycle(self._magnets2cycle, mode, self)
         task.itemDone.connect(self._update_cycling_status)
         dlg = ProgressDialog('Setting magnets...', task, self)
         ret = dlg.exec_()
@@ -191,7 +198,7 @@ class CycleWindow(SiriusMainWindow):
                 self.cycle_bt.setEnabled(True)
 
     def _cycle(self, mode):
-        magnets = self._get_magnets_list(mode)
+        magnets = self._get_magnets_list(mode=mode)
         if not magnets:
             return False
 
@@ -232,6 +239,7 @@ class CycleWindow(SiriusMainWindow):
     def _reset_timing(self):
         self._timing.reset()
 
+    def _get_magnets_list(self, mode='Cycle', prepare=False):
         # Get magnets list
         magnets = self.magnets_tree.checked_items()
         if mode == 'Ramp':
