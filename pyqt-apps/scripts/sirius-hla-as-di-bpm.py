@@ -9,16 +9,21 @@ from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.search import BPMSearch
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets.windows import create_window_from_widget
-from siriushla.as_di_bpms import SelectBPMs, BPMMain, SinglePassSummary
+from siriushla.as_di_bpms import SelectBPMs, BPMMain, SinglePassSummary, \
+    MultiTurnSummary
 
 
 parser = _argparse.ArgumentParser(
     description="Run Interface of Specified BPM.")
 parser.add_argument(
     'bpm_sel', type=str, help='Select a section or a BPM name.')
+# parser.add_argument(
+#     '-s', '--subsection'
+# )
 parser.add_argument(
-    '-s', '--singlepass', action='store_true', default=False,
-    help='If selected show results of singlePass data for all BPMs.')
+    '-w', '--window', type=str, default='Summary',
+    help="type of window to open (default= 'Summary').",
+    choices=('SPass', 'MTurn', 'Summary'))
 parser.add_argument(
     '-p', "--prefix", type=str, default=vaca_prefix,
     help="Define the prefix for the PVs in the window.")
@@ -32,7 +37,13 @@ if pv.dev == 'BPM':
     window = BPMMainWin(None, prefix=args.prefix, bpm=pv)
 else:
     bpms_names = BPMSearch.get_names(filters={'sec': args.bpm_sel.upper()})
-    clas = SinglePassSummary if args.singlepass else SelectBPMs
+    if args.window == 'Summary':
+        clas = SelectBPMs
+    elif args.window == 'SPass':
+        clas = SinglePassSummary
+    else:
+        clas = MultiTurnSummary
+    # bpms_names = bpms_names[:20]
     BPMsList = create_window_from_widget(
         clas, title=args.bpm_sel.upper() + ' BPM List', is_main=True)
     window = BPMsList(None, prefix=args.prefix, bpm_list=bpms_names)

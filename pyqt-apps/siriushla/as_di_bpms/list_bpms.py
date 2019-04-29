@@ -179,6 +179,110 @@ class SinglePassSummary(BaseWidget):
         self.scarea.verticalScrollBar().setValue(0)
 
 
+class MultiTurnSummary(BaseWidget):
+
+    def __init__(self, parent=None, prefix='', bpm_list=[]):
+        super().__init__(
+            parent=parent, prefix=prefix, bpm='', data_prefix='GEN_')
+        self.bpm_dict = {bpm: '' for bpm in bpm_list}
+        self.setupui()
+        print('here')
+
+    def setupui(self):
+        vbl = QVBoxLayout(self)
+        lab = QLabel('<h2>BPMs List</h2>', alignment=Qt.AlignCenter)
+        vbl.addWidget(lab)
+        vbl.addSpacing(20)
+
+        search = QLineEdit(parent=self)
+        search.setPlaceholderText("Search for BPMs...")
+        search.textEdited.connect(self._filter_bpms)
+        vbl.addWidget(search)
+
+        scarea = QScrollArea(self)
+        scarea.setSizeAdjustPolicy(scarea.AdjustToContents)
+        scarea.setWidgetResizable(True)
+
+        wid = QWidget()
+        gdl = QGridLayout(wid)
+        gdl.setSpacing(15)
+        for i, bpm in enumerate(sorted(self.bpm_dict.keys())):
+            widb = QWidget(wid)
+            vbl2 = QVBoxLayout(widb)
+            vbl2.addWidget(QLabel(
+                '<h3>'+bpm+'</h3>', alignment=Qt.AlignCenter))
+            wbpm = self.create_graph(widb, bpm=bpm, typ='pos')
+            vbl2.addWidget(wbpm)
+
+            gdl.addWidget(widb, i // 3, i % 3)
+            self.bpm_dict[bpm] = widb
+        self.gdl = gdl
+        vbl.addWidget(scarea)
+        scarea.setWidget(wid)
+        self.setStyleSheet('GraphWave{min-width:20em;min-height:15em;}')
+        self.scarea = scarea
+
+    def create_graph(self, wid, bpm, typ='pos'):
+        text, unit, names, colors = self._get_properties(typ)
+        if typ == 'pos':
+            unit = unit[1:]
+
+        graph = GraphWave(
+            wid, prefix=self.prefix, bpm=self.bpm,
+            data_prefix=self.data_prefix)
+        graph.setObjectName('MultiTurnDataGraph')
+        graph.setLabel('left', text=text, units=unit)
+        for name, cor in zip(names, colors):
+            opts = dict(
+                y_channel=name+'ArrayData',
+                name=text[:3]+name,
+                color=cor,
+                lineStyle=1,
+                lineWidth=1)  # NOTE: If > 1: very low performance
+            opts['y_channel'] = self.get_pvname(opts['y_channel'])
+            if typ == 'pos':
+                graph.addChannel(add_scale=1e-9, **opts)
+            else:
+                graph.addChannel(**opts)
+        return graph
+
+    def _get_properties(self, typ):
+        if typ == 'pos':
+            text = 'Positions'
+            unit = 'nm'
+            names = ('X', 'Y', 'Q', 'SUM')
+            colors = ('blue', 'red', 'green', 'black')
+        else:
+            text = 'Antennas'
+            unit = 'count'
+            names = ('A', 'B', 'C', 'D')
+            colors = ('blue', 'red', 'green', 'magenta')
+        return text, unit, names, colors
+
+    @Slot(str)
+    def _filter_bpms(self, text):
+        """Filter power supply widgets based on text inserted at line edit."""
+        try:
+            pattern = re.compile(text, re.I)
+        except Exception:
+            return
+
+        for i in range(self.gdl.rowCount()):
+            for j in range(self.gdl.columnCount()):
+                self.gdl.removeItem(self.gdl.itemAtPosition(i, j))
+        wids = []
+        for bpm, wid in self.bpm_dict.items():
+            mat = bool(pattern.search(bpm))
+            wid.setVisible(mat)
+            if mat:
+                wids.append(wid)
+
+        for i, wid in enumerate(wids):
+            self.gdl.addWidget(wid, i // 3, i % 3)
+        # Sroll to top
+        self.scarea.verticalScrollBar().setValue(0)
+
+
 if __name__ == '__main__':
     from siriushla.sirius_application import SiriusApplication
     from siriushla.widgets import SiriusDialog

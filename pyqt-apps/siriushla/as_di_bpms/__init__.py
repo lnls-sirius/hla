@@ -1,5 +1,5 @@
 from .fft import FFTConfig, FFTData
-from .list_bpms import SelectBPMs, SinglePassSummary
+from .list_bpms import SelectBPMs, SinglePassSummary, MultiTurnSummary
 from .main import BPMMain, BPMSummary, TriggeredAcquisition, \
     PostMortemAcquisition
 from .monit import MonitData
