@@ -152,43 +152,8 @@ class ControlApplication(SiriusMainWindow):
             util.connect_newprocess(launcher,
                                     'sirius-hla-'+sec+'-ap-control.py')
 
-        for dis in ['ps', 'ma']:
-            menu = QMenu(self)
-            all_dev = menu.addAction('All')
-            util.connect_newprocess(
-                all_dev, 'sirius-hla-'+sec+'-'+dis+'-control.py')
-            dip = menu.addAction('Dipoles')
-            util.connect_newprocess(
-                dip, ['sirius-hla-'+sec+'-'+dis+'-control.py',
-                      '--device', 'dipole'])
-            quad = menu.addAction('Quadrupoles')
-            util.connect_newprocess(
-                quad, ['sirius-hla-'+sec+'-'+dis+'-control.py',
-                       '--device', 'quadrupole'])
-            if 'bo' in sec or 'si' in sec:
-                sext = menu.addAction('Sextupoles')
-                util.connect_newprocess(
-                    sext, ['sirius-hla-'+sec+'-'+dis+'-control.py',
-                           '--device', 'sextupole'])
-                skew = menu.addAction('Skew Quadrupoles')
-                util.connect_newprocess(
-                    skew, ['sirius-hla-'+sec+'-'+dis+'-control.py',
-                           '--device', 'quadrupole-skew'])
-            corrs = menu.addAction('Correctors')
-            util.connect_newprocess(
-                corrs, ['sirius-hla-'+sec+'-'+dis+'-control.py',
-                        '--device', 'corrector-slow'])
-            if 'si' in sec:
-                fastcorrs = menu.addAction('Fast Correctors')
-                util.connect_newprocess(
-                    fastcorrs, ['sirius-hla-'+sec+'-'+dis+'-control.py',
-                                '--device', 'corrector-fast'])
-            if dis == 'ps':
-                PS = QPushButton('Power Supplies', self)
-                PS.setMenu(menu)
-            else:
-                MA = QPushButton('Magnets', self)
-                MA.setMenu(menu)
+        PS = self._set_psma_menu(sec, dis='ps')
+        MA = self._set_psma_menu(sec, dis='ma')
 
         PM = QPushButton('Pulsed Magnets', self)
         util.connect_newprocess(PM, 'sirius-hla-'+sec+'-pm-control.py')
@@ -210,8 +175,7 @@ class ControlApplication(SiriusMainWindow):
             Emittance = QPushButton('Emittance Meas', self)
             util.connect_newprocess(Emittance, 'sirius-hla-tb-ap-emittance.py')
 
-        BPMs = QPushButton('BPMs', self)
-        util.connect_newprocess(BPMs, ['sirius-hla-as-di-bpm.py', sec.upper()])
+        BPMs = self._set_bpm_menu(sec)
 
         if 'si' not in sec:
             Scrns = QPushButton('Screens', self)
@@ -259,6 +223,50 @@ class ControlApplication(SiriusMainWindow):
             glay.addWidget(Ramp, 2, 4)
 
         return glay
+
+    def _set_bpm_menu(self, sec):
+        cmd = ['sirius-hla-as-di-bpm.py', sec.lower(), '-w']
+        menu = QMenu(self)
+        action = menu.addAction('Summary')
+        util.connect_newprocess(action, cmd + ['Summary', ])
+        action = menu.addAction('Single Pass')
+        util.connect_newprocess(action, cmd + ['SPass', ])
+        action = menu.addAction('Multi Turn')
+        util.connect_newprocess(action, cmd + ['MTurn', ])
+        bpm = QPushButton('BPMs', self)
+        bpm.setMenu(menu)
+        return bpm
+
+    def _set_psma_menu(self, sec, dis='ps'):
+        scr = 'sirius-hla-' + sec + '-' + dis + '-control.py'
+        menu = QMenu(self)
+
+        all_dev = menu.addAction('All')
+        util.connect_newprocess(all_dev, scr)
+
+        dip = menu.addAction('Dipoles')
+        util.connect_newprocess(dip, [scr, '--device', 'dipole'])
+
+        quad = menu.addAction('Quadrupoles')
+        util.connect_newprocess(quad, [scr, '--device', 'quadrupole'])
+
+        if 'bo' in sec or 'si' in sec:
+            sext = menu.addAction('Sextupoles')
+            util.connect_newprocess(sext, [scr, '--device', 'sextupole'])
+
+            skew = menu.addAction('Skew Quadrupoles')
+            util.connect_newprocess(skew, [scr, '--device', 'quadrupole-skew'])
+
+        corrs = menu.addAction('Correctors')
+        util.connect_newprocess(corrs, [scr, '--device', 'corrector-slow'])
+
+        if 'si' in sec:
+            fcorr = menu.addAction('Fast Correctors')
+            util.connect_newprocess(fcorr, [scr, '--device', 'corrector-fast'])
+
+        but = QPushButton('Magnets' if dis == 'ma' else 'Power Supplies', self)
+        but.setMenu(menu)
+        return but
 
     def _open_li_launcher(self):
         password, ok = QInputDialog.getText(
