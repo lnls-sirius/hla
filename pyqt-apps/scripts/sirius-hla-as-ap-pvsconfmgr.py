@@ -31,8 +31,8 @@ class PVConfiguration(SiriusMainWindow):
         self.central_widget.setLayout(self.central_widget.layout)
         self.setCentralWidget(self.central_widget)
 
-        self.save_btn = QPushButton('Save new configuration', self)
-        self.load_btn = QPushButton('Load new configuration', self)
+        self.save_btn = QPushButton('Save configuration', self)
+        self.load_btn = QPushButton('Load configuration', self)
         self.save_btn.setObjectName('SaveBtn')
         self.load_btn.setObjectName('LoadBtn')
 
