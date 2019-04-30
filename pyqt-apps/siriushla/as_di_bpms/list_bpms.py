@@ -1,6 +1,6 @@
 import re
 from qtpy.QtWidgets import QWidget, QVBoxLayout, QScrollArea, QLineEdit, \
-    QLabel, QHBoxLayout, QGridLayout
+    QLabel, QHBoxLayout, QGridLayout, QPushButton
 from qtpy.QtCore import Qt, Slot
 from siriushla.as_di_bpms.base import BaseWidget, GraphTime, GraphWave
 from siriushla.as_di_bpms.main import BPMSummary
@@ -71,10 +71,15 @@ class SinglePassSummary(BaseWidget):
         vbl.addWidget(lab)
         vbl.addSpacing(20)
 
+        hbl = QHBoxLayout()
         search = QLineEdit(parent=self)
         search.setPlaceholderText("Search for BPMs...")
         search.textEdited.connect(self._filter_bpms)
-        vbl.addWidget(search)
+        hbl.addWidget(search)
+        hbl.addStretch()
+        self.btnautorange = QPushButton('Auto Range graphics', self)
+        hbl.addWidget(self.btnautorange)
+        vbl.addItem(hbl)
 
         scarea = QScrollArea(self)
         scarea.setSizeAdjustPolicy(scarea.AdjustToContents)
@@ -115,6 +120,9 @@ class SinglePassSummary(BaseWidget):
         graph = CLASS(
             wid, prefix=self.prefix, bpm=bpm,
             data_prefix=self.data_prefix)
+        graph.maxRedrawRate = 2.1
+        graph.graph.plotItem.vb.autoRange()
+        self.btnautorange.clicked.connect(graph.graph.plotItem.vb.autoRange)
         graph.setLabel('left', text=text, units=unit)
         for name, cor in zip(names, colors):
             opts = dict(
@@ -194,10 +202,15 @@ class MultiTurnSummary(BaseWidget):
         vbl.addWidget(lab)
         vbl.addSpacing(20)
 
+        hbl = QHBoxLayout()
         search = QLineEdit(parent=self)
         search.setPlaceholderText("Search for BPMs...")
         search.textEdited.connect(self._filter_bpms)
-        vbl.addWidget(search)
+        hbl.addWidget(search)
+        hbl.addStretch()
+        self.btnautorange = QPushButton('Auto Range graphics', self)
+        hbl.addWidget(self.btnautorange)
+        vbl.addItem(hbl)
 
         scarea = QScrollArea(self)
         scarea.setSizeAdjustPolicy(scarea.AdjustToContents)
@@ -230,6 +243,9 @@ class MultiTurnSummary(BaseWidget):
         graph = GraphWave(
             wid, prefix=self.prefix, bpm=self.bpm,
             data_prefix=self.data_prefix)
+        graph.maxRedrawRate = 2.1
+        graph.graph.plotItem.vb.autoRange()
+        self.btnautorange.clicked.connect(graph.graph.plotItem.vb.autoRange)
         graph.setObjectName('MultiTurnDataGraph')
         graph.setLabel('left', text=text, units=unit)
         for name, cor in zip(names, colors):
