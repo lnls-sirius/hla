@@ -147,7 +147,7 @@ class ControlApplication(SiriusMainWindow):
     def _create_section_layout(self, sec):
         sec = sec.lower()
 
-        if 'tb' in sec or 'ts' in sec:
+        if sec in {'tb', 'ts'}:
             launcher = QPushButton('Main', self)
             util.connect_newprocess(launcher,
                                     'sirius-hla-'+sec+'-ap-control.py')
@@ -161,7 +161,7 @@ class ControlApplication(SiriusMainWindow):
         SOFB = QPushButton('SOFB', self)
         util.connect_newprocess(SOFB, 'sirius-hla-'+sec+'-ap-sofb.py')
 
-        if 'tb' in sec or 'ts' in sec:
+        if sec in {'tb', 'ts'}:
             PosAng = QPushButton('PosAng', self)
             util.connect_newprocess(PosAng, 'sirius-hla-'+sec+'-ap-posang.py')
 
@@ -182,7 +182,7 @@ class ControlApplication(SiriusMainWindow):
             util.connect_newprocess(Scrns,
                                     ['sirius-hla-as-di-scrn.py', sec.upper()])
 
-        if 'bo' in sec or 'si' in sec:
+        if sec in {'bo', 'si'}:
             CurrLT = QPushButton('Current and Lifetime', self)
             util.connect_newprocess(CurrLT, 'sirius-hla-'+sec+'-ap-currlt.py')
 
@@ -208,14 +208,14 @@ class ControlApplication(SiriusMainWindow):
         glay.addWidget(BPMs, 3, 0)
         if 'si' not in sec:
             glay.addWidget(Scrns, 3, 1)
-        if 'tb' in sec or 'ts' in sec:
+        if sec in {'tb', 'ts'}:
             glay.addWidget(launcher, 0, 0)
             glay.addWidget(PosAng, 2, 1)
             glay.addWidget(ICTs, 3, 2)
         if 'tb' in sec:
             glay.addWidget(Emittance, 2, 2)
             glay.addWidget(Slits, 3, 3)
-        if 'bo' in sec or 'si' in sec:
+        if sec in {'bo', 'si'}:
             glay.addWidget(CurrLT, 2, 1)
             glay.addWidget(TuneCorr, 2, 2)
             glay.addWidget(ChromCorr, 2, 3)
@@ -225,14 +225,31 @@ class ControlApplication(SiriusMainWindow):
         return glay
 
     def _set_bpm_menu(self, sec):
-        cmd = ['sirius-hla-as-di-bpm.py', sec.lower(), '-w']
+        cmd = ['sirius-hla-as-di-bpm.py', sec, '-w']
         menu = QMenu(self)
         action = menu.addAction('Summary')
         util.connect_newprocess(action, cmd + ['Summary', ])
-        action = menu.addAction('Single Pass')
-        util.connect_newprocess(action, cmd + ['SPass', ])
-        action = menu.addAction('Multi Turn')
-        util.connect_newprocess(action, cmd + ['MTurn', ])
+        typs = ('Single Pass', 'Multi Turn')
+        acts = ('SPass', 'MTurn')
+        for typ, act in zip(typs, acts):
+            action = menu.addAction(typ)
+            if sec == 'bo':
+                menu2 = QMenu(self)
+                action2 = menu2.addAction('All')
+                util.connect_newprocess(action2, cmd + [act, ])
+                action2 = menu2.addAction('subsec 02-13')
+                util.connect_newprocess(action2, cmd + [act, '-s', '1'])
+                action2 = menu2.addAction('subsec 14-25')
+                util.connect_newprocess(action2, cmd + [act, '-s', '2'])
+                action2 = menu2.addAction('subsec 26-37')
+                util.connect_newprocess(action2, cmd + [act, '-s', '3'])
+                action2 = menu2.addAction('subsec 38-49')
+                util.connect_newprocess(action2, cmd + [act, '-s', '4'])
+                action2 = menu2.addAction('subsec 50 e 01')
+                util.connect_newprocess(action2, cmd + [act, '-s', '5'])
+                action.setMenu(menu2)
+            else:
+                util.connect_newprocess(action, cmd + [act, ])
         bpm = QPushButton('BPMs', self)
         bpm.setMenu(menu)
         return bpm
@@ -250,7 +267,7 @@ class ControlApplication(SiriusMainWindow):
         quad = menu.addAction('Quadrupoles')
         util.connect_newprocess(quad, [scr, '--device', 'quadrupole'])
 
-        if 'bo' in sec or 'si' in sec:
+        if sec in {'bo', 'si'}:
             sext = menu.addAction('Sextupoles')
             util.connect_newprocess(sext, [scr, '--device', 'sextupole'])
 
@@ -260,7 +277,7 @@ class ControlApplication(SiriusMainWindow):
         corrs = menu.addAction('Correctors')
         util.connect_newprocess(corrs, [scr, '--device', 'corrector-slow'])
 
-        if 'si' in sec:
+        if sec in 'si':
             fcorr = menu.addAction('Fast Correctors')
             util.connect_newprocess(fcorr, [scr, '--device', 'corrector-fast'])
 

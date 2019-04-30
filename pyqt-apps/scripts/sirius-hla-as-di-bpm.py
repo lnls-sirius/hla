@@ -17,9 +17,10 @@ parser = _argparse.ArgumentParser(
     description="Run Interface of Specified BPM.")
 parser.add_argument(
     'bpm_sel', type=str, help='Select a section or a BPM name.')
-# parser.add_argument(
-#     '-s', '--subsection'
-# )
+parser.add_argument(
+    '-s', '--subsection', type=str, default='all',
+    help='Subdivide take the nth subgroup of the bpms.',
+    choices=('all', '1', '2', '3', '4', '5'))
 parser.add_argument(
     '-w', '--window', type=str, default='Summary',
     help="type of window to open (default= 'Summary').",
@@ -43,7 +44,12 @@ else:
         clas = SinglePassSummary
     else:
         clas = MultiTurnSummary
-    # bpms_names = bpms_names[:20]
+    slc = slice(None, None)
+    if args.subsection != 'all':
+        sub = int(args.subsection)
+        siz = len(bpms_names)//(5-1)
+        slc = slice(siz*(sub-1), siz*sub)
+    bpms_names = bpms_names[slc]
     BPMsList = create_window_from_widget(
         clas, title=args.bpm_sel.upper() + ' BPM List', is_main=True)
     window = BPMsList(None, prefix=args.prefix, bpm_list=bpms_names)
