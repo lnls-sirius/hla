@@ -379,6 +379,9 @@ class MagnetCycler:
         status &= self.mode_rdy(mode)
         return status
 
+    def check_cycle_enable(self):
+        return self.timed_get(self['CycleEnbl-Mon'], _PSConst.DsblEnbl.Enbl)
+
     def check_final_state(self, mode):
         status = True
         status &= self.reset_opmode()
@@ -520,7 +523,7 @@ class AutomatedCycle:
         self._timing.init(mode, sections)
         self._update_log(done=True)
 
-    def check_all_magnets(self, mode):
+    def check_magnets_preparation(self, mode):
         manames = self.manames_2_cycle if mode == 'Cycle'\
             else self.manames_2_ramp
         # Check all magnets params
@@ -571,7 +574,15 @@ class AutomatedCycle:
             _time.sleep(min(1, sleep/10))
             t = round(sleep - (_time.time()-t0))
             self._update_log('Missing {}s...'.format(t))
+            if mode == 'Cycle':
+                maname = self.manames_2_cycle[0]
+                status = self.cyclers[maname].check_cycle_enable()
+                if not status:
+                    self._update_log(
+                        'Magnets are not cycling! Verify triggers!')
+                    return False
         self._update_log(done=True)
+        return True
 
     def reset_all_subsystems(self):
         self._update_log('Reseting TI and setting magnets to SlowRef...')
@@ -594,14 +605,16 @@ class AutomatedCycle:
                 return
             self._update_log('Waiting to check magnets state...')
             _time.sleep(10)
-            status = self.check_all_magnets('Cycle')
+            status = self.check_magnets_preparation('Cycle')
             if not status:
                 _log.warning('There are magnets not ready to cycle.')
-                return False
+                return
             if self.aborted:
                 return
             self.init('Cycle')
-            self.wait('Cycle')
+            status = self.wait('Cycle')
+            if not status:
+                return
             self.check_magnets_final_state('Cycle')
 
         # Ramp
@@ -614,10 +627,10 @@ class AutomatedCycle:
                 return
             self._update_log('Waiting to check magnets state...')
             _time.sleep(10)
-            status = self.check_all_magnets('Ramp')
+            status = self.check_magnets_preparation('Ramp')
             if not status:
                 _log.warning('There are magnets not ready to ramp.')
-                return False
+                return
             if self.aborted:
                 return
             self.init('Ramp')
