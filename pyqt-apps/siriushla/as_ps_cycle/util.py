@@ -203,6 +203,7 @@ class MagnetCycler:
         'BO-Fam:MA-SF': 149}
 
     properties = [
+        'Current-SP', 'Current-RB',
         'PwrState-Sel', 'PwrState-Sts',
         'OpMode-Sel', 'OpMode-Sts',
         'CycleType-Sel', 'CycleType-Sts',
@@ -276,6 +277,10 @@ class MagnetCycler:
         return self.conn_put(self['PwrState-Sel'],
                              _PSConst.PwrStateSel.On)
 
+    def set_current_2_zero(self):
+        """Set PS current to zero ."""
+        return self.conn_put(self['Current-SP'], 0)
+
     def set_params(self, mode):
         """Set params to cycle."""
         status = True
@@ -317,6 +322,9 @@ class MagnetCycler:
         status &= self.set_on()
         _time.sleep(SLEEP_CAPUT)
 
+        status &= self.set_current_2_zero()
+        _time.sleep(SLEEP_CAPUT)
+
         status &= self.set_params(mode)
         _time.sleep(5*SLEEP_CAPUT)
         return status
@@ -328,9 +336,11 @@ class MagnetCycler:
 
     def on_rdy(self):
         """Return wether magnet PS is on."""
-        status = self.timed_get(
-            self['PwrState-Sts'], _PSConst.PwrStateSts.On)
-        return status
+        return self.timed_get(self['PwrState-Sts'], _PSConst.PwrStateSts.On)
+
+    def current_rdy(self):
+        """Return wether magnet PS current is zero."""
+        return self.timed_get(self['Current-RB'], 0)
 
     def params_rdy(self, mode):
         """Return wether magnet cycling parameters are set."""
@@ -364,6 +374,7 @@ class MagnetCycler:
         """Return wether magnet is ready."""
         status = True
         status &= self.on_rdy()
+        status &= self.current_rdy()
         status &= self.params_rdy(mode)
         status &= self.mode_rdy(mode)
         return status
