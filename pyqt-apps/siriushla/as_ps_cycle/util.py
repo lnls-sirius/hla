@@ -474,7 +474,6 @@ class AutomatedCycle:
             self._ramp_duration = max(
                 self._ramp_duration, self.cyclers[ma].cycle_duration('Ramp'))
 
-        self.cycling = False
         self.aborted = False
 
     @property
@@ -585,9 +584,6 @@ class AutomatedCycle:
 
     def execute(self):
         """Execute automated cycle."""
-        # Indicate cycle init
-        self.cycling = True
-
         # Cycle
         if self.manames_2_cycle:
             self.prepare_all_magnets('Cycle')
@@ -631,7 +627,7 @@ class AutomatedCycle:
         self.reset_all_subsystems()
 
         # Indicate cycle end
-        self.cycling = False
+        self._update_log('Cycle finished sucessfully!')
 
     def _update_log(self, message='', done=False):
         self._logger_message = message
