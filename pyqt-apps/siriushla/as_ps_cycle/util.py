@@ -574,7 +574,7 @@ class AutomatedCycle:
             _time.sleep(min(1, sleep/10))
             t = round(sleep - (_time.time()-t0))
             self._update_log('Missing {}s...'.format(t))
-            if mode == 'Cycle':
+            if (mode == 'Cycle') and (2 < _time.time() - t0 < 5):
                 maname = self.manames_2_cycle[0]
                 status = self.cyclers[maname].check_cycle_enable()
                 if not status:
