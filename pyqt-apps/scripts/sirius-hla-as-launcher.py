@@ -286,14 +286,16 @@ class ControlApplication(SiriusMainWindow):
         return but
 
     def _open_li_launcher(self):
-        password, ok = QInputDialog.getText(
+        pswd, ok = QInputDialog.getText(
             self, 'Opening Linac Launcher...',
-            'Enter password to phyuser@linacopi1: ',
+            'Enter password to phyuser@linac-serv-nfs: ',
             echo=QLineEdit.Password)
         if ok:
             util.run_newprocess(
-                ['sshpass', '-p', password, 'ssh', '-X', 'phyuser@linacopi1',
-                 'sh', '-c', '/home/sirius/work/opi/sirius-main.sh'],
+                [
+                    'sshpass', '-p', pswd, 'ssh', '-X',
+                    'phyuser@linac-serv-nfs', 'sh', '-c',
+                    '/home/sirius/work/opi/sirius-main.sh'],
                 is_window=False)
 
 
