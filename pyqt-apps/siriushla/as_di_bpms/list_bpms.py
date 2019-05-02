@@ -194,7 +194,6 @@ class MultiTurnSummary(BaseWidget):
             parent=parent, prefix=prefix, bpm='', data_prefix='GEN_')
         self.bpm_dict = {bpm: '' for bpm in bpm_list}
         self.setupui()
-        print('here')
 
     def setupui(self):
         vbl = QVBoxLayout(self)
@@ -241,7 +240,7 @@ class MultiTurnSummary(BaseWidget):
             unit = unit[1:]
 
         graph = GraphWave(
-            wid, prefix=self.prefix, bpm=self.bpm,
+            wid, prefix=self.prefix, bpm=bpm,
             data_prefix=self.data_prefix)
         graph.maxRedrawRate = 2.1
         graph.graph.plotItem.vb.autoRange()
@@ -255,7 +254,7 @@ class MultiTurnSummary(BaseWidget):
                 color=cor,
                 lineStyle=1,
                 lineWidth=1)  # NOTE: If > 1: very low performance
-            opts['y_channel'] = self.get_pvname(opts['y_channel'])
+            opts['y_channel'] = graph.get_pvname(opts['y_channel'])
             if typ == 'pos':
                 graph.addChannel(add_scale=1e-9, **opts)
             else:

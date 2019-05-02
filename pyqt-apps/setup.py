@@ -59,7 +59,7 @@ setup(
         'scripts/sirius-hla-bo-offconfig.py',
         'scripts/sirius-hla-bo-pm-control.py',
         'scripts/sirius-hla-bo-ps-control.py',
-        'scripts/sirius-hla-li-launcher.sh',
+        'scripts/sirius-hla-li-launcher.py',
         'scripts/sirius-hla-si-ap-chromcorr.py',
         'scripts/sirius-hla-si-ap-currlt.py',
         'scripts/sirius-hla-si-ap-sofb.py',
