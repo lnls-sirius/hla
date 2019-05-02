@@ -710,6 +710,7 @@ class CycleAutomatically(QThread):
     def run(self):
         if not self._quit_thread:
             self._auto.execute()
+            self._quit_thread = True
 
     def update(self, message, done):
         self.updated.emit(self._strnow+'  '+message, done)
