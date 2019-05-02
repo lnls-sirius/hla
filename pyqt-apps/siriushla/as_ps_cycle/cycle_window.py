@@ -283,7 +283,7 @@ class CycleWindow(SiriusMainWindow):
             return False
         if self._magnets_failed:
             self._update_mafailed_status(mode)
-            QMessageBox.error(self, 'Message', 'Check magnets interlock!')
+            QMessageBox.critical(self, 'Message', 'Check magnets interlock!')
             return False
 
         QMessageBox.information(self, 'Message', 'Cycle finished sucessfully!')
