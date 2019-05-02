@@ -394,7 +394,7 @@ class MagnetCycler:
 
         if mode == 'Ramp':
             pulses = Timing.DEFAULT_RAMP_NRCYCLES*Timing.DEFAULT_RAMP_NRPULSES
-            status = self.timed_get('PRUSyncPulseCount-Mon', pulses)
+            status = self.timed_get(self['PRUSyncPulseCount-Mon'], pulses)
             return 1  # indicate lack of trigger pulses
 
         return 0
