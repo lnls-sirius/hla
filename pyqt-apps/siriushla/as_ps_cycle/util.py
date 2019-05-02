@@ -215,8 +215,8 @@ class MagnetCycler:
         'CycleEnbl-Mon',
         'WfmData-SP', 'WfmData-RB',
         'RmpIncNrCycles-SP', 'RmpIncNrCycles-RB',
-        'RmpReady-Mon',
-        'Current-SP',
+        'PRUSyncPulseCount-Mon',
+        'IntlkSoft-Mon', 'IntlkHard-Mon'
     ]
 
     _base_wfmdata = _generate_base_wfmdata()
@@ -379,6 +379,23 @@ class MagnetCycler:
         status &= self.mode_rdy(mode)
         return status
 
+    def check_final_state(self, mode):
+        status = True
+        status &= self.reset_opmode()
+        _time.sleep(5*SLEEP_CAPUT)
+        status &= self.timed_get(self['PwrState-Sts'], _PSConst.PwrStateSts.On)
+        status &= self.timed_get(self['IntlkSoft-Mon'], 0)
+        status &= self.timed_get(self['IntlkHard-Mon'], 0)
+        if not status:
+            return 2  # indicate interlock problems
+
+        if mode == 'Ramp':
+            pulses = Timing.DEFAULT_RAMP_NRCYCLES*Timing.DEFAULT_RAMP_NRPULSES
+            status = self.timed_get('PRUSyncPulseCount-Mon', pulses)
+            return 1  # indicate lack of trigger pulses
+
+        return 0
+
     def reset_opmode(self):
         return self.set_opmode(_PSConst.OpMode.SlowRef)
 
@@ -521,6 +538,24 @@ class AutomatedCycle:
                 return False
         return True
 
+    def check_magnets_final_state(self, mode):
+        manames = self.manames_2_cycle if mode == 'Cycle'\
+            else self.manames_2_ramp
+        # Check all magnets params
+        for maname in manames:
+            self._update_log('Checking '+maname+' final state...')
+            has_prob = self.cyclers[maname].check_final_state(mode)
+            if self.aborted:
+                self._update_log('Aborted.')
+                return False
+            if not has_prob:
+                self._update_log(done=True)
+            elif has_prob == 1:
+                self._update_log(maname+' is not ok after '+mode.lower())
+            else:
+                self._update_log(maname+' has interlock problems.')
+        return True
+
     def init(self, mode):
         """Trigger timing according to mode to init cycling."""
         self._update_log('Triggering timing...')
@@ -571,6 +606,7 @@ class AutomatedCycle:
                 return
             self.init('Cycle')
             self.wait('Cycle')
+            self.check_magnets_final_state('Cycle')
 
         # Ramp
         if self.manames_2_ramp:
@@ -590,6 +626,7 @@ class AutomatedCycle:
                 return
             self.init('Ramp')
             self.wait('Ramp')
+            self.check_magnets_final_state('Ramp')
 
         self.reset_all_subsystems()
 
