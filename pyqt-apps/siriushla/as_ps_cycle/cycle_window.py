@@ -262,10 +262,7 @@ class CycleWindow(SiriusMainWindow):
             return False
 
         if self._magnets_failed:
-            self.cycle_bt.setEnabled(False)
-            if mode == 'Cycle':
-                self.demag_bt.setEnabled(False)
-            self.status_list.magnets = self._magnets_failed
+            self._update_mafailed_status(mode)
             return False
 
         # Trigger timing and wait cyling end
@@ -274,6 +271,21 @@ class CycleWindow(SiriusMainWindow):
         ret = dlg.exec_()
         if ret == dlg.Rejected:
             return False
+
+        # Verify ps interlocks
+        self._magnets_ready = list()
+        self._magnets_failed = list()
+        task = VerifyFinalState(magnets, self)
+        dlg = ProgressDialog('Verifying magnet interlocks...', task, self)
+        task.itemDone.connect(self._update_cycling_status)
+        ret = dlg.exec_()
+        if ret == dlg.Rejected:
+            return False
+        if self._magnets_failed:
+            self._update_mafailed_status(mode)
+            QMessageBox.error(self, 'Message', 'Check magnets interlock!')
+            return False
+
         QMessageBox.information(self, 'Message', 'Cycle finished sucessfully!')
 
     def _reset_magnets(self):
@@ -342,6 +354,12 @@ class CycleWindow(SiriusMainWindow):
             self._magnets_ready.append(maname)
         else:
             self._magnets_failed.append(maname)
+
+    def _update_mafailed_status(self, mode):
+        self.cycle_bt.setEnabled(False)
+        if mode == 'Cycle':
+            self.demag_bt.setEnabled(False)
+        self.status_list.magnets = self._magnets_failed
 
     def _update_auto_progress(self, text, done):
         if done:
@@ -596,6 +614,43 @@ class WaitCycle(QThread):
             return _time.time() - t0 < self._duration
         else:
             return not self._timing_conn.check_ramp_end()
+
+
+class VerifyFinalState(QThread):
+    """Verify cycle."""
+
+    currentItem = Signal(str)
+    itemDone = Signal(str, bool)
+    completed = Signal()
+
+    def __init__(self, manames, parent=None):
+        """Constructor."""
+        super().__init__(parent)
+        self._manames = manames
+        self._quit_task = False
+
+    def size(self):
+        """Return task size."""
+        return len(self._manames)
+
+    def exit_task(self):
+        """Set flag to quit thread."""
+        self._quit_task = True
+
+    def run(self):
+        """Set magnets to cycling."""
+        if self._quit_task:
+            pass
+        else:
+            for maname in self._manames:
+                cycler = _cyclers[maname]
+                self.currentItem.emit(maname)
+                status = cycler.check_final_state()
+                self.itemDone.emit(maname, status)
+                if self._quit_task:
+                    break
+            else:
+                self.completed.emit()
 
 
 class ResetMagnetsOpMode(QThread):
