@@ -486,8 +486,11 @@ class AutomatedCycle:
 
     def prepare_timing(self, mode):
         """Prepare timing to cycle according to mode."""
+        sections = ['TB', ] if mode == 'Cycle' else ['BO', ]
+        # TODO: uncomment when using TS and SI
+        # sections = ['TB', 'TS', 'SI'] if mode == 'Cycle' else ['BO', ]
         self._update_log('Preparing Timing...')
-        self._timing.init(mode)
+        self._timing.init(mode, sections)
         self._update_log(done=True)
 
     def check_all_magnets(self, mode):
