@@ -87,6 +87,7 @@ class Timing:
             # EVG settings
             'RA-RaMO:TI-EVG:DevEnbl-Sel': DEFAULT_STATE,
             'RA-RaMO:TI-EVG:InjectionEvt-Sel': _TIConst.DsblEnbl.Dsbl,
+            'RA-RaMO:TI-EVG:InjectionEvt-Sts': _TIConst.DsblEnbl.Dsbl,
             'RA-RaMO:TI-EVG:BucketList-SP': [1, ],
             'RA-RaMO:TI-EVG:RepeatBucketList-SP': DEFAULT_RAMP_NRCYCLES,
             'RA-RaMO:TI-EVG:InjCount-Mon': None,
@@ -155,6 +156,13 @@ class Timing:
             pv.value = _TIConst.DsblEnbl.Enbl
             # Wait for timing to turn injection mode on
             _time.sleep(50*SLEEP_CAPUT)
+
+    def wait_trigger_enable(self, mode):
+        # Wait for timing to turn injection mode on
+        if mode == 'Ramp':
+            pv_sts = Timing._pvs['RA-RaMO:TI-EVG:InjectionEvt-Sts']
+            while pv_sts.value != _TIConst.DsblEnbl.Enbl:
+                _time.sleep(TIMEOUT)
 
     def get_cycle_count(self):
         pv = Timing._pvs['RA-RaMO:TI-EVG:InjCount-Mon']
@@ -567,13 +575,17 @@ class AutomatedCycle:
     def wait(self, mode):
         """Wait/Sleep while cycling according to mode."""
         self._update_log('Waiting for cycling...')
-        sleep = self._cycle_duration if mode == 'Cycle'\
-            else self._ramp_duration
         t0 = _time.time()
-        while _time.time() - t0 < sleep:
-            _time.sleep(min(1, sleep/10))
-            t = round(sleep - (_time.time()-t0))
-            self._update_log('Missing {}s...'.format(t))
+        keep_waiting = True
+        while keep_waiting:
+            _time.sleep(1)
+            if mode == 'Cycle':
+                t = round(self._cycle_duration - (_time.time()-t0))
+            else:
+                t = round(self._ramp_duration -
+                          self._timing.get_cycle_count() *
+                          self._timing.DEFAULT_RAMP_DURATION/1000000)
+            self._update_log('Remaining time: {}s...'.format(t))
             if (mode == 'Cycle') and (2 < _time.time() - t0 < 5):
                 maname = self.manames_2_cycle[0]
                 status = self.cyclers[maname].check_cycle_enable()
@@ -581,11 +593,16 @@ class AutomatedCycle:
                     self._update_log(
                         'Magnets are not cycling! Verify triggers!')
                     return False
+            if mode == 'Cycle':
+                keep_waiting = _time.time() - t0 < self._cycle_duration
+            else:
+                keep_waiting = not self._timing.check_ramp_end()
         self._update_log(done=True)
         return True
 
     def reset_all_subsystems(self):
-        self._update_log('Reseting TI and setting magnets to SlowRef...')
+        self._update_log('Turning TI off and setting magnets to SlowRef...')
+        _time.sleep(4)
         for ma in self.manames_2_cycle:
             self.cyclers[ma].reset_opmode()
         for ma in self.manames_2_ramp:
