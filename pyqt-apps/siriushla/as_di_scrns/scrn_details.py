@@ -46,6 +46,9 @@ class ScrnSettingsDetails(SiriusMainWindow):
         gbox_ROI = QGroupBox('Camera Region of Interest (ROI) Settings', self)
         gbox_ROI.setLayout(self._setupROISettingsLayout())
 
+        gbox_bg = QGroupBox('Background Acquisition', self)
+        gbox_bg.setLayout(self._setupBGAcqLayout())
+
         gbox_err = QGroupBox('Camera Errors Monitoring', self)
         gbox_err.setLayout(self._setupErrorMonLayout())
 
@@ -70,12 +73,15 @@ class ScrnSettingsDetails(SiriusMainWindow):
         lay.addWidget(gbox_ROI, 8, 0, 1, 2)
         lay.addItem(QSpacerItem(
             40, 20, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding), 9, 0)
-        lay.addWidget(gbox_err, 10, 0, 1, 2)
+        lay.addWidget(gbox_bg, 10, 0, 1, 2)
         lay.addItem(QSpacerItem(
             40, 20, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding), 11, 0)
-        lay.addWidget(bt_cal, 12, 1)
+        lay.addWidget(gbox_err, 12, 0, 1, 2)
         lay.addItem(QSpacerItem(
             40, 20, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding), 13, 0)
+        lay.addWidget(bt_cal, 14, 1)
+        lay.addItem(QSpacerItem(
+            40, 20, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding), 15, 0)
         self.centralwidget.setLayout(lay)
 
     def _setupGeneralInfoLayout(self):
@@ -240,6 +246,32 @@ class ScrnSettingsDetails(SiriusMainWindow):
         flay.addRow(label_AutoCenterY, hbox_AutoCenterY)
         flay.setLabelAlignment(Qt.AlignRight)
         flay.setFormAlignment(Qt.AlignHCenter)
+        return flay
+
+    def _setupBGAcqLayout(self):
+        label_SaveBG = QLabel('Save BG: ', self)
+        hbox_SaveBG = _create_propty_layout(
+            parent=self, prefix=self.scrn_prefix, propty='ImgSaveBG',
+            cmd={'label': 'Save',
+                 'pressValue': 1,
+                 'name': 'ImgSaveBG'})
+
+        label_ValidBG = QLabel('Is valid BG? ', self)
+        hbox_ValidBG = _create_propty_layout(
+            parent=self, prefix=self.scrn_prefix, propty='ImgValidBG',
+            propty_type='mon')
+
+        label_EnblBG = QLabel('Enable subtraction: ', self)
+        hbox_EnblBG = _create_propty_layout(
+            parent=self, prefix=self.scrn_prefix,
+            propty='ImgEnblBGSubtraction', propty_type='enbldisabl')
+
+        flay = QFormLayout()
+        flay.addRow(label_SaveBG, hbox_SaveBG)
+        flay.addRow(label_ValidBG, hbox_ValidBG)
+        flay.addRow(label_EnblBG, hbox_EnblBG)
+        flay.setLabelAlignment(Qt.AlignRight)
+        flay.setFormAlignment(Qt.AlignCenter)
         return flay
 
     def _setupErrorMonLayout(self):

@@ -428,7 +428,7 @@ class SiriusImageView(PyDMImageView):
             self, self.geometry(), 5000)
 
 
-def create_propty_layout(parent, prefix, propty, propty_type, cmd=dict(),
+def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
                          layout='hbox', width=7.10, height=1.29):
     """Return a layout that handles a property according to 'propty_type'."""
     if layout == 'hbox':
