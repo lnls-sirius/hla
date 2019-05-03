@@ -7,6 +7,7 @@ from pydm.widgets import PyDMLabel, PyDMPushButton
 from siriushla.util import connect_window
 from siriushla.widgets import SiriusLedAlert
 from siriushla.widgets.windows import create_window_from_widget
+from siriushla.as_ti_control import HLTriggerDetailed as _HLTriggerDetailed
 
 from siriushla.as_ap_sofb.ioc_control.base import BaseWidget
 from siriushla.as_ap_sofb.ioc_control.status import StatusWidget
@@ -128,7 +129,7 @@ class AcqControlWidget(BaseWidget):
         lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
         wid = self.create_pair_sel(grp_bx, 'SPassMethod')
         fbl.addRow(lbl, wid)
-        lbl = QLabel('Nr Turns', grp_bx, alignment=Qt.AlignCenter)
+        lbl = QLabel('Avg Turns', grp_bx, alignment=Qt.AlignCenter)
         lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
         wid = self.create_pair(grp_bx, 'SPassAvgNrTurns')
         fbl.addRow(lbl, wid)
@@ -272,22 +273,28 @@ class AcqControlWidget(BaseWidget):
         wid = self.create_pair_sel(grp_bx, 'TrigDataPol')
         fbl.addRow(lbl, wid)
 
+        pref = self.prefix.prefix + self._csorb.TRIGGER_ACQ_NAME + ':'
         grp_bx = QGroupBox('External Trigger Parameter', self)
         vbl.addWidget(grp_bx)
         vbl.addSpacing(20)
         fbl = QFormLayout(grp_bx)
         lbl = QLabel('Duration [us]', grp_bx, alignment=Qt.AlignCenter)
         lbl.setStyleSheet("""min-width:7em; max-width:7em;""")
-        wid = self.create_pair(grp_bx, 'TrigExtDuration')
+        wid = self.create_pair(grp_bx, 'Duration', prefix=pref)
         fbl.addRow(lbl, wid)
-        lbl = QLabel('Initial Delay [us]', grp_bx, alignment=Qt.AlignCenter)
+        lbl = QLabel('Delay [us]', grp_bx, alignment=Qt.AlignCenter)
         lbl.setStyleSheet("""min-width:7em; max-width:7em;""")
-        wid = self.create_pair(grp_bx, 'TrigExtDelay')
+        wid = self.create_pair(grp_bx, 'Delay', prefix=pref)
         fbl.addRow(lbl, wid)
-        lbl = QLabel('Event Source', grp_bx, alignment=Qt.AlignCenter)
+        lbl = QLabel('Source', grp_bx, alignment=Qt.AlignCenter)
         lbl.setStyleSheet("""min-width:7em; max-width:7em;""")
-        wid = self.create_pair_sel(grp_bx, 'TrigExtEvtSrc')
+        wid = self.create_pair_sel(grp_bx, 'Src', prefix=pref)
         fbl.addRow(lbl, wid)
+        btn = QPushButton('Open Trigger Window', grp_bx)
+        win = create_window_from_widget(
+            _HLTriggerDetailed, title=self._csorb.TRIGGER_ACQ_NAME)
+        connect_window(btn, win, grp_bx, prefix=pref)
+        fbl.addRow(btn)
 
 
 def _main():
