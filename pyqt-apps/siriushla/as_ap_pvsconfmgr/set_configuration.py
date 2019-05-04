@@ -1,4 +1,4 @@
-Wait"""Set configuration window."""
+"""Set configuration window."""
 import logging
 import re
 import time
