@@ -1,4 +1,4 @@
-"""Set configuration window."""
+Wait"""Set configuration window."""
 import logging
 import re
 import time
@@ -15,6 +15,8 @@ from siriushla.widgets.dialog import ReportDialog, ProgressDialog
 from siriushla.widgets.load_configuration import LoadConfigurationWidget
 # from siriushla.widgets.horizontal_ruler import HorizontalRuler
 from siriushla.model import ConfigPVsTypeModel
+
+from qtpy.QtCore import QThread, Signal
 
 
 class SetConfigurationWindow(SiriusMainWindow):
@@ -210,14 +212,18 @@ class SetConfigurationWindow(SiriusMainWindow):
         check_task.itemChecked.connect(
             lambda pv, status: failed_items.append(pv) if not status else None)
 
+        sleep_task = Wait(pvs_tuple=check_pvs_tuple, wait_time=2.0,
+                           filter='TB-.*:(PS|MA)-(C|Q).*$')
+
         # Set/Check PVs values and show wait dialog informing user
-        labels = ['Setting PV values', 'Checking PV values']
-        tasks = [set_task, check_task]
+        labels = ['Setting PV values',
+                  'Waiting IOCs updates',
+                  'Checking PV values']
+        tasks = [set_task, sleep_task, check_task]
         self.logger.info(
             'Setting {} configuration'.format(self._current_config['name']))
         dlg = ProgressDialog(labels, tasks, self)
         dlg.rejected.connect(set_task.exit_task)
-        SetConfigurationWindow._include_sleep_for_TB_ps(check_pvs_tuple)
         dlg.rejected.connect(check_task.exit_task)
         ret = dlg.exec_()
         if ret == dlg.Rejected:
@@ -238,23 +244,60 @@ class SetConfigurationWindow(SiriusMainWindow):
         self._tree_check_count.setText(
             '{} PVs checked.'.format(self._nr_checked_items))
 
-    @staticmethod
-    def _include_sleep_for_TB_ps(pvs_tuple):
-        """Include sleep for TB power supply PVs."""
-        # NOTE: This sleep for TB PS PVs is currently necessary since the BBB
-        # needs to control around 10 power supplies that share the serial line.
-        # There is a noticiable delay between setpoints and readbacks updates.
-        _sleep = 1.0
-        wait_flag = False
-        for pvitem in pvs_tuple:
+
+class Wait(QThread):
+    """."""
+
+    currentItem = Signal(str)
+    itemDone = Signal()
+    completed = Signal()
+    itemChecked = Signal(str, bool)
+
+    def __init__(self, pvs_tuple, wait_time=1.0, filter=None, parent=None):
+        """."""
+        super().__init__(parent)
+        self.wait_time = wait_time
+        self.pvs_tuple = pvs_tuple
+        self._size = 2*len(pvs_tuple) // 20
+        self._is_tb_ps = re.compile(filter)
+        self.sleep_flag = self.check_wait()
+        self._quit_task = False
+
+    def check_wait(self):
+        """."""
+        self.sleep_flag = False
+        for pvitem in self.pvs_tuple:
             pv, value, delay = pvitem
-            if pv.startswith('TB-') and (':PS' in pv or ':MA' in pv):
-                wait_flag = True
+            if self._is_tb_ps.match(pv):
+                self.sleep_flag = True
                 break
-        if wait_flag:
-            print('Configuration includes TB PS PVs. '
-                  'sleeping for {} seconds...', _sleep)
-            time.sleep(_sleep)
+
+    def size(self):
+        """Task Size."""
+        return self._size
+
+    def exit_task(self):
+        """Set flag to exit thread."""
+        self._quit_task = True
+
+    def run(self):
+        """."""
+        if self._quit_task:
+            self.completed.emit()
+        else:
+            print('Waiting for {} seconds...', self.wait_time)
+            t0 = time.time()
+            if self.size:
+                for i in range(self._size):
+                    dt = time.time() - t0
+                    self.currentItem.emit('Waiting for {:3.2f} s...'.format(self.wait_time - dt))
+                    time.sleep(self.wait_time/self._size)
+
+                    self.itemDone.emit()
+                    self.itemChecked.emit(str(i), True)
+            else:
+                time.sleep(self.wait_time)
+            self.completed.emit()
 
 
 if __name__ == '__main__':
