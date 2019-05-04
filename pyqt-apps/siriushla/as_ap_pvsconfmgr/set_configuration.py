@@ -1,6 +1,7 @@
 """Set configuration window."""
 import logging
 import re
+import time
 
 from qtpy.QtCore import Qt, Slot
 from qtpy.QtWidgets import QWidget, QComboBox, QLabel, QPushButton, \
@@ -45,6 +46,11 @@ class SetConfigurationWindow(SiriusMainWindow):
         """)
         self.setWindowTitle('Set saved configuration')
         self._nr_checked_items = 0
+
+        # init with global_config, if it exists
+        index = self._type_cb.findText('global_config', Qt.MatchFixedString)
+        if index >= 0:
+            self._type_cb.setCurrentText('global_config')
 
     def _setup_ui(self):
         # Set central widget
@@ -211,6 +217,7 @@ class SetConfigurationWindow(SiriusMainWindow):
             'Setting {} configuration'.format(self._current_config['name']))
         dlg = ProgressDialog(labels, tasks, self)
         dlg.rejected.connect(set_task.exit_task)
+        SetConfigurationWindow._include_sleep_for_TB_ps(check_pvs_tuple)
         dlg.rejected.connect(check_task.exit_task)
         ret = dlg.exec_()
         if ret == dlg.Rejected:
@@ -230,6 +237,24 @@ class SetConfigurationWindow(SiriusMainWindow):
                 self._nr_checked_items -= 1
         self._tree_check_count.setText(
             '{} PVs checked.'.format(self._nr_checked_items))
+
+    @staticmethod
+    def _include_sleep_for_TB_ps(pvs_tuple):
+        """Include sleep for TB power supply PVs."""
+        # NOTE: This sleep for TB PS PVs is currently necessary since the BBB
+        # needs to control around 10 power supplies that share the serial line.
+        # There is a noticiable delay between setpoints and readbacks updates.
+        _sleep = 1.0
+        wait_flag = False
+        for pvitem in pvs_tuple:
+            pv, value, delay = pvitem
+            if pv.startswith('TB-') and (':PS' in pv or ':MA' in pv):
+                wait_flag = True
+                break
+        if wait_flag:
+            print('Configuration includes TB PS PVs. '
+                  'sleeping for {} seconds...', _sleep)
+            time.sleep(_sleep)
 
 
 if __name__ == '__main__':
