@@ -471,9 +471,10 @@ class AutomatedCycle:
 
         self._logger = logger
         self._logger_message = ''
-        _log.basicConfig(
-            format='%(asctime)s %(levelname)8s %(name)s | %(message)s',
-            datefmt='%F %T', level=_log.INFO, stream=_sys.stdout)
+        if not logger:
+            _log.basicConfig(
+                format='%(asctime)s | %(message)s',
+                datefmt='%F %T', level=_log.INFO, stream=_sys.stdout)
 
         self._cycle_duration = 0
         for ma in self.manames_2_cycle:
@@ -544,7 +545,7 @@ class AutomatedCycle:
             if is_ready:
                 self._update_log(done=True)
             else:
-                self._update_log(maname+' is not ready.')
+                self._update_log(maname+' is not ready.', error=True)
                 return False
         return True
 
@@ -556,14 +557,16 @@ class AutomatedCycle:
             self._update_log('Checking '+maname+' final state...')
             has_prob = self.cyclers[maname].check_final_state(mode)
             if self.aborted:
-                self._update_log('Aborted.')
-                return False
+            self._update_log('Aborted.', error=True)
             if not has_prob:
                 self._update_log(done=True)
             elif has_prob == 1:
-                self._update_log(maname+' is not ok after '+mode.lower())
+                self._update_log(
+                    'Verify the number of pulses '+maname+' received!',
+                    warning=True)
             else:
-                self._update_log(maname+' has interlock problems.')
+                self._update_log(maname+' has interlock problems.',
+                                 error=True)
         return True
 
     def init(self, mode):
@@ -591,7 +594,8 @@ class AutomatedCycle:
                 status = self.cyclers[maname].check_cycle_enable()
                 if not status:
                     self._update_log(
-                        'Magnets are not cycling! Verify triggers!')
+                        'Magnets are not cycling! Verify triggers!',
+                        error=True)
                     return False
             if mode == 'Cycle':
                 keep_waiting = _time.time() - t0 < self._cycle_duration
@@ -624,7 +628,8 @@ class AutomatedCycle:
             _time.sleep(10)
             status = self.check_magnets_preparation('Cycle')
             if not status:
-                _log.warning('There are magnets not ready to cycle.')
+                self._update_log(
+                    'There are magnets not ready to cycle. Stopping.')
                 return
             if self.aborted:
                 return
@@ -646,7 +651,8 @@ class AutomatedCycle:
             _time.sleep(10)
             status = self.check_magnets_preparation('Ramp')
             if not status:
-                _log.warning('There are magnets not ready to ramp.')
+                self._update_log(
+                    'There are magnets not ready to ramp. Stopping.')
                 return
             if self.aborted:
                 return
@@ -657,12 +663,13 @@ class AutomatedCycle:
         self.reset_all_subsystems()
 
         # Indicate cycle end
-        self._update_log('Cycle finished sucessfully!')
+        self._update_log('Cycle finished!')
 
-    def _update_log(self, message='', done=False):
+    def _update_log(self, message='', done=False, warning=False, error=False):
         self._logger_message = message
         if self._logger:
-            self._logger.update(message, done)
-        if done and not message:
-            message = 'Done.'
-        _log.info(message)
+            self._logger.update(message, done, warning, error)
+        else:
+            if done and not message:
+                message = 'Done.'
+            _log.info(message)
