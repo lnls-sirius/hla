@@ -162,7 +162,7 @@ class CycleWindow(SiriusMainWindow):
         gb_reset = QGroupBox('Turn Off Cycle')
         self.reset_ma_bt = QPushButton('Put Magnets in SlowRef')
         self.reset_ma_bt.clicked.connect(self._reset_magnets)
-        self.reset_ti_bt = QPushButton('Turn of Timing')
+        self.reset_ti_bt = QPushButton('Turn off Timing')
         self.reset_ti_bt.clicked.connect(self._reset_timing)
         glay_reset = QHBoxLayout()
         glay_reset.addWidget(self.reset_ti_bt)
@@ -278,11 +278,11 @@ class CycleWindow(SiriusMainWindow):
         if ret == dlg.Rejected:
             return False
 
-        # Verify ps interlocks
+        # Verify ps final state
         self._magnets_ready = list()
         self._magnets_failed = list()
         task = VerifyFinalState(magnets, mode, self)
-        dlg = ProgressDialog('Verifying magnet interlocks...', task, self)
+        dlg = ProgressDialog('Verifying magnet final state...', task, self)
         task.itemDone.connect(self._update_cycling_status)
         ret = dlg.exec_()
         if ret == dlg.Rejected:
@@ -292,7 +292,7 @@ class CycleWindow(SiriusMainWindow):
             QMessageBox.critical(self, 'Message', 'Check magnets interlock!')
             return False
 
-        QMessageBox.information(self, 'Message', 'Cycle finished sucessfully!')
+        QMessageBox.information(self, 'Message', 'Cycle finished!')
 
     def _reset_magnets(self):
         magnets = self._get_magnets_list()
