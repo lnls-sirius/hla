@@ -237,15 +237,15 @@ class ControlApplication(SiriusMainWindow):
                 menu2 = QMenu(self)
                 action2 = menu2.addAction('All')
                 util.connect_newprocess(action2, cmd + [act, ])
-                action2 = menu2.addAction('subsec 02-13')
+                action2 = menu2.addAction('subsec 02-11')
                 util.connect_newprocess(action2, cmd + [act, '-s', '1'])
-                action2 = menu2.addAction('subsec 14-25')
+                action2 = menu2.addAction('subsec 12-21')
                 util.connect_newprocess(action2, cmd + [act, '-s', '2'])
-                action2 = menu2.addAction('subsec 26-37')
+                action2 = menu2.addAction('subsec 22-31')
                 util.connect_newprocess(action2, cmd + [act, '-s', '3'])
-                action2 = menu2.addAction('subsec 38-49')
+                action2 = menu2.addAction('subsec 32-41')
                 util.connect_newprocess(action2, cmd + [act, '-s', '4'])
-                action2 = menu2.addAction('subsec 50 e 01')
+                action2 = menu2.addAction('subsec 42-01')
                 util.connect_newprocess(action2, cmd + [act, '-s', '5'])
                 action.setMenu(menu2)
             else:
@@ -286,14 +286,16 @@ class ControlApplication(SiriusMainWindow):
         return but
 
     def _open_li_launcher(self):
-        password, ok = QInputDialog.getText(
+        pswd, ok = QInputDialog.getText(
             self, 'Opening Linac Launcher...',
-            'Enter password to phyuser@linacopi1: ',
+            'Enter password to phyuser@linac-serv-nfs: ',
             echo=QLineEdit.Password)
         if ok:
             util.run_newprocess(
-                ['sshpass', '-p', password, 'ssh', '-X', 'phyuser@linacopi1',
-                 'sh', '-c', '/home/sirius/work/opi/sirius-main.sh'],
+                [
+                    'sshpass', '-p', pswd, 'ssh', '-X',
+                    'phyuser@linac-serv-nfs', 'sh', '-c',
+                    '/home/sirius/work/opi/sirius-main.sh'],
                 is_window=False)
 
 

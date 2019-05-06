@@ -47,7 +47,7 @@ else:
     slc = slice(None, None)
     if args.subsection != 'all':
         sub = int(args.subsection)
-        siz = len(bpms_names)//(5-1)
+        siz = len(bpms_names)//5
         slc = slice(siz*(sub-1), siz*sub)
     bpms_names = bpms_names[slc]
     BPMsList = create_window_from_widget(

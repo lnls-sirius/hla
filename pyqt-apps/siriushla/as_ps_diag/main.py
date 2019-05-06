@@ -6,6 +6,8 @@ from functools import partial as _partial
 
 from pcaspy import Severity as _Severity
 
+import numpy as _np
+
 from qtpy.QtGui import QStandardItemModel, QStandardItem
 from qtpy.QtCore import Qt, Slot, Signal
 from qtpy.QtWidgets import QWidget, QLabel, QPushButton, \
@@ -461,10 +463,14 @@ class LogTable(QTreeView, PyDMWidget):
             str_value = 'disconnected'
             logtype = 'DISCONNECT'
         elif pv.propty_name == 'PwrState':
-            str_value = _PSEnums.PWRSTATE_STS[int(value)]
+            # TODO: remove the folowing step when the bug in PS is solved
+            val = value[0] if isinstance(value, _np.ndarray) else value
+            str_value = _PSEnums.PWRSTATE_STS[val]
             logtype = 'ERR'
         elif pv.propty_name == 'OpMode':
-            str_value = _PSEnums.STATES[int(value)]
+            # TODO: remove the folowing step when the bug in PS is solved
+            val = value[0] if isinstance(value, _np.ndarray) else value
+            str_value = _PSEnums.PWRSTATE_STS[val]
             logtype = 'WARN'
         else:
             str_value = str(value)
