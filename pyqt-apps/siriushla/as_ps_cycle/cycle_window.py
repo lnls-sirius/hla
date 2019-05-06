@@ -5,10 +5,11 @@ import re as _re
 from datetime import datetime as _datetime
 from functools import partial as _part
 
+from qtpy.QtGui import QColor
 from qtpy.QtCore import Signal, QThread, Qt
 from qtpy.QtWidgets import QWidget, QGridLayout, QVBoxLayout, QHBoxLayout, \
     QPushButton, QLabel, QMessageBox, QLineEdit, QApplication, QGroupBox, \
-    QTabWidget, QListWidget
+    QTabWidget, QListWidget, QListWidgetItem
 
 from siriuspy.envars import vaca_prefix as VACA_PREFIX
 from siriuspy.search import MASearch as _MASearch
@@ -25,6 +26,10 @@ from .util import MagnetCycler, Timing, get_manames, \
     get_manames_from_same_udc, AutomatedCycle
 
 _cyclers = dict()
+
+
+errorcolor = QColor(255, 0, 0)
+warncolor = QColor(200, 200, 0)
 
 
 class CycleWindow(SiriusMainWindow):
@@ -362,7 +367,7 @@ class CycleWindow(SiriusMainWindow):
             self.demag_bt.setEnabled(False)
         self.status_list.magnets = self._magnets_failed
 
-    def _update_auto_progress(self, text, done):
+    def _update_auto_progress(self, text, done, warning=False, error=False):
         if done:
             last_item = self.progress_list.item(self.progress_list.count()-1)
             curr_text = last_item.text()
@@ -375,7 +380,12 @@ class CycleWindow(SiriusMainWindow):
                 self.progress_list.addItem(text)
                 self.progress_list.scrollToBottom()
         else:
-            self.progress_list.addItem(text)
+            item = QListWidgetItem(text)
+            if error:
+                item.setForeground(errorcolor)
+            elif warning:
+                item.setForeground(warncolor)
+            self.progress_list.addItem(item)
             self.progress_list.scrollToBottom()
 
     def _filter_manames(self):
@@ -696,7 +706,7 @@ class ResetMagnetsOpMode(QThread):
 class CycleAutomatically(QThread):
     """Cycle Automatically."""
 
-    updated = Signal(str, bool)
+    updated = Signal(str, bool, bool, bool)
 
     def __init__(self, manames, timing, parent=None):
         super().__init__(parent)
@@ -716,8 +726,8 @@ class CycleAutomatically(QThread):
             self._auto.execute()
             self._quit_thread = True
 
-    def update(self, message, done):
-        self.updated.emit(self._strnow+'  '+message, done)
+    def update(self, message, done, warning, error):
+        self.updated.emit(self._strnow+'  '+message, done, warning, error)
 
     @property
     def _strnow(self):
