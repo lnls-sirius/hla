@@ -328,7 +328,7 @@ class MagnetCycler:
         _time.sleep(SLEEP_CAPUT)
 
         status &= self.set_on()
-        _time.sleep(SLEEP_CAPUT)
+        _time.sleep(20*SLEEP_CAPUT)
 
         status &= self.set_current_2_zero()
         _time.sleep(SLEEP_CAPUT)
