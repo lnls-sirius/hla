@@ -2,6 +2,7 @@
 
 import time as _time
 import re as _re
+import threading as _thread
 from datetime import datetime as _datetime
 from functools import partial as _part
 
@@ -460,13 +461,27 @@ class CreateCyclers(QThread):
         if self._quit_task:
             pass
         else:
-            global _cyclers
+            interrupted = False
+            threads = dict()
             for maname in self._manames:
-                if maname not in _cyclers.keys():
-                    self.currentItem.emit(maname)
-                    _cyclers[maname] = MagnetCycler(maname)
-                    self.itemDone.emit()
-            self.completed.emit()
+                threads[maname] = _thread.Thread(
+                    target=self.create_cycler,
+                    args=(maname, ), daemon=True)
+                threads[maname].start()
+                if self._quit_task:
+                    interrupted = True
+                    break
+            for t in threads.values():
+                t.join()
+            if not interrupted:
+                self.completed.emit()
+
+    def create_cycler(self, maname):
+        global _cyclers
+        self.currentItem.emit(maname)
+        if maname not in _cyclers.keys():
+            _cyclers[maname] = MagnetCycler(maname)
+        self.itemDone.emit()
 
 
 class SetToCycle(QThread):
@@ -497,23 +512,27 @@ class SetToCycle(QThread):
             pass
         else:
             # config params
+            interrupted = False
+            threads = dict()
             for maname in self._manames:
-                cycler = _cyclers[maname]
-                self.currentItem.emit('Setting '+maname+' parameters...')
-                done = cycler.config_cycle_params(self._mode)
-                self.itemDone.emit(maname, done)
+                threads[maname] = _thread.Thread(
+                    target=self.prepare_magnet,
+                    args=(maname, self._mode), daemon=True)
+                threads[maname].start()
                 if self._quit_task:
+                    interrupted = True
                     break
-            # config opmodes
-            for maname in self._manames:
-                cycler = _cyclers[maname]
-                self.currentItem.emit('Setting '+maname+' OpMode...')
-                done = cycler.config_cycle_opmode(self._mode)
-                self.itemDone.emit(maname, done)
-                if self._quit_task:
-                    break
-            else:
+            for t in threads.values():
+                t.join()
+            if not interrupted:
                 self.completed.emit()
+
+    def prepare_magnet(self, maname, mode):
+        global _cyclers
+        self.currentItem.emit('Preparing '+maname+'...')
+        done = _cyclers[maname].config_cycle_params(mode)
+        done &= _cyclers[maname].config_cycle_opmode(mode)
+        self.itemDone.emit(maname, done)
 
 
 class VerifyCycle(QThread):
@@ -543,15 +562,26 @@ class VerifyCycle(QThread):
         if self._quit_task:
             pass
         else:
+            interrupted = False
+            threads = dict()
             for maname in self._manames:
-                cycler = _cyclers[maname]
-                self.currentItem.emit(maname)
-                status = cycler.is_ready(self._mode)
-                self.itemDone.emit(maname, status)
+                threads[maname] = _thread.Thread(
+                    target=self.check_magnet,
+                    args=(maname, self._mode), daemon=True)
+                threads[maname].start()
                 if self._quit_task:
+                    interrupted = True
                     break
-            else:
+            for t in threads.values():
+                t.join()
+            if not interrupted:
                 self.completed.emit()
+
+    def check_magnet(self, maname, mode):
+        global _cyclers
+        self.currentItem.emit(maname)
+        status = _cyclers[maname].is_ready(mode)
+        self.itemDone.emit(maname, status)
 
 
 class WaitCycle(QThread):
@@ -656,15 +686,26 @@ class VerifyFinalState(QThread):
             pass
         else:
             _time.sleep(4)
+            interrupted = False
+            threads = dict()
             for maname in self._manames:
-                cycler = _cyclers[maname]
-                self.currentItem.emit(maname)
-                status = cycler.check_final_state(self._mode)
-                self.itemDone.emit(maname, status)
+                threads[maname] = _thread.Thread(
+                    target=self.check_magnet_final_state,
+                    args=(maname, self._mode), daemon=True)
+                threads[maname].start()
                 if self._quit_task:
+                    interrupted = True
                     break
-            else:
+            for t in threads.values():
+                t.join()
+            if not interrupted:
                 self.completed.emit()
+
+    def check_magnet_final_state(self, maname, mode):
+        global _cyclers
+        self.currentItem.emit(maname)
+        status = _cyclers[maname].check_final_state(mode)
+        self.itemDone.emit(maname, status)
 
 
 class ResetMagnetsOpMode(QThread):
@@ -693,14 +734,26 @@ class ResetMagnetsOpMode(QThread):
         if self._quit_task:
             pass
         else:
+            interrupted = False
+            threads = dict()
             for maname in self._manames:
-                self.currentItem.emit(maname)
-                done = _cyclers[maname].reset_opmode()
-                self.itemDone.emit(maname, done)
+                threads[maname] = _thread.Thread(
+                    target=self.reset_magnet_opmode,
+                    args=(maname, ), daemon=True)
+                threads[maname].start()
                 if self._quit_task:
+                    interrupted = True
                     break
-            else:
+            for t in threads.values():
+                t.join()
+            if not interrupted:
                 self.completed.emit()
+
+    def reset_magnet_opmode(self, maname):
+        global _cyclers
+        self.currentItem.emit(maname)
+        done = _cyclers[maname].reset_opmode()
+        self.itemDone.emit(maname, done)
 
 
 class CycleAutomatically(QThread):
