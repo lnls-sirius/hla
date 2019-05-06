@@ -149,10 +149,10 @@ class SOFBControl(BaseWidget):
             pdm_pbtn.rules = rules
         vbl2.addWidget(pdm_pbtn)
 
-        exp = 'ch[0] in (1, 3)'
+        exp = 'ch[0] in (1, 2, 3)'
         ch = ''
         if self.isring:
-            exp = 'ch[1] in (1, 3) and not ch[0]'
+            exp = 'ch[1] in (1, 2, 3) and not ch[0]'
             ch = '{"channel": "' + self.prefix + \
                 'ClosedLoop-Sts", "trigger": true},'
         rules = (
