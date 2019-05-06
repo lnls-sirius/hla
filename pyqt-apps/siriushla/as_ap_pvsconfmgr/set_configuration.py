@@ -46,6 +46,11 @@ class SetConfigurationWindow(SiriusMainWindow):
         self.setWindowTitle('Set saved configuration')
         self._nr_checked_items = 0
 
+        # init with global_config, if it exists
+        index = self._type_cb.findText('global_config', Qt.MatchFixedString)
+        if index >= 0:
+            self._type_cb.setCurrentText('global_config')
+
     def _setup_ui(self):
         # Set central widget
         self._central_widget = QWidget()

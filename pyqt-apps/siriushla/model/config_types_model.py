@@ -32,7 +32,7 @@ class ConfigTypeModel(QAbstractListModel):
         return self._configs[index.row()]
 
     def setupModelData(self):
-        """Setup model data."""
+        """Set model data up."""
         self.beginResetModel()
         self._configs = ['Select a configuration type...', ]
         self._configs.extend(self._connection.get_config_types())
@@ -42,10 +42,22 @@ class ConfigTypeModel(QAbstractListModel):
 class ConfigPVsTypeModel(ConfigTypeModel):
 
     def setupModelData(self):
-        """Setup model data."""
+        """Set model data up."""
         self.beginResetModel()
         self._configs = ['Select a configuration type...', ]
-        configs = [c for c in self._connection.get_config_types()
+
+        # sort all configs of PV type
+        allconfigs = self._connection.get_config_types()
+        configs = [c for c in allconfigs
                    if 'pvs' in get_config_type_template(c)]
-        self._configs.extend(sorted(configs))
+        configs = sorted(configs)
+
+        # move 'global_config' to begin, if it exists
+        try:
+            configs.remove('global_config')
+            configs.insert(0, 'global_config')
+        except ValueError:
+            pass
+
+        self._configs.extend(configs)
         self.endResetModel()
