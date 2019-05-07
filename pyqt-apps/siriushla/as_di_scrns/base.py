@@ -4,12 +4,18 @@ import time
 from copy import deepcopy as _dcopy
 import numpy as np
 from qtpy.QtWidgets import QHBoxLayout, QSizePolicy as QSzPlcy, QVBoxLayout, \
-    QToolTip
+    QToolTip, QLabel, QPushButton, QFormLayout
 from qtpy.QtCore import Qt, Slot, Signal, Property
 from pydm.widgets import PyDMImageView, PyDMLabel, PyDMSpinbox, \
     PyDMPushButton, PyDMEnumComboBox, PyDMLineEdit
 from pydm.widgets.channel import PyDMChannel
-from siriushla.widgets import PyDMStateButton, SiriusLedState
+
+from siriushla import util
+from siriushla.widgets import PyDMStateButton, SiriusLedState, \
+    PyDMLedMultiChannel
+from siriushla.widgets.windows import create_window_from_widget
+
+from siriushla.as_ti_control.hl_trigger import HLTriggerDetailed
 
 
 class SiriusImageView(PyDMImageView):
@@ -552,3 +558,37 @@ def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
     layout.setAlignment(Qt.AlignVCenter)
 
     return layout
+
+
+def create_trigger_layout(parent, device, prefix):
+    if 'TB' in device or 'BO' in device:
+        trg_prefix = prefix+'AS-Fam:TI-Scrn-TBBO'
+    elif 'TS' in device:
+        trg_prefix = prefix+'TS-Fam:TI-Scrn'
+
+    l_TIstatus = QLabel('Status: ', parent)
+    ledmulti_TIStatus = PyDMLedMultiChannel(
+        parent=parent, channels2values={trg_prefix+':State-Sts': 1,
+                                        trg_prefix+':Status-Mon': 0})
+    pb_trgdetails = QPushButton('Open details', parent)
+    trg_w = create_window_from_widget(
+        HLTriggerDetailed, title=trg_prefix+' Detailed Settings',
+        is_main=True)
+    util.connect_window(pb_trgdetails, trg_w, parent=parent,
+                        prefix=trg_prefix)
+    hlay_TIstatus = QHBoxLayout()
+    hlay_TIstatus.addWidget(ledmulti_TIStatus)
+    hlay_TIstatus.addWidget(pb_trgdetails)
+
+    l_TIdelay = QLabel('Delay [us]: ', parent)
+    l_TIdelay.setStyleSheet("""min-width:5em;""")
+    hlay_TIdelay = create_propty_layout(
+        parent=parent, prefix=trg_prefix, propty='Delay',
+        propty_type='sprb', width=6)
+
+    flay = QFormLayout()
+    flay.addRow(l_TIstatus, hlay_TIstatus)
+    flay.addRow(l_TIdelay, hlay_TIdelay)
+    flay.setLabelAlignment(Qt.AlignRight)
+    flay.setFormAlignment(Qt.AlignCenter)
+    return flay

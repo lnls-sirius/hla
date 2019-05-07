@@ -1,19 +1,18 @@
 """SiriusScrnView widget."""
 
-from qtpy.QtWidgets import QGridLayout, QHBoxLayout, QFormLayout, \
-                           QWidget, QGroupBox, QLabel, QPushButton
+from qtpy.QtWidgets import QGridLayout, QFormLayout, \
+    QWidget, QGroupBox, QLabel, QPushButton
 from qtpy.QtCore import Qt
 from pydm.widgets import PyDMLabel
 
 from siriuspy.namesys import SiriusPVName
 
 from siriushla import util
-from siriushla.widgets import PyDMLedMultiChannel
-from siriushla.widgets.windows import SiriusMainWindow, \
-                                      create_window_from_widget
-from siriushla.as_ti_control.hl_trigger import HLTriggerDetailed
+
+from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.as_di_scrns.base import \
-    create_propty_layout as _create_propty_layout
+    create_propty_layout as _create_propty_layout, \
+    create_trigger_layout as _create_trigger_layout
 from siriushla.as_di_scrns.scrn_calib import \
     ScrnCalibrationSettings as _ScrnCalibrationSettings
 
@@ -154,42 +153,8 @@ class ScrnSettingsDetails(SiriusMainWindow):
         return flay
 
     def _setupScrnTriggerLayout(self):
-        if 'TB' in self.device or 'BO' in self.device:
-            trg_prefix = self.prefix+'AS-Fam:TI-Scrn-TBBO'
-        elif 'TS' in self.device:
-            trg_prefix = self.prefix+'TS-Fam:TI-Scrn'
-
-        l_TIstatus = QLabel('Status: ', self)
-        self.ledmulti_TIStatus = PyDMLedMultiChannel(
-            parent=self, channels2values={trg_prefix+':State-Sts': 1,
-                                          trg_prefix+':Status-Mon': 0})
-        self.ledmulti_TIStatus.setStyleSheet("""
-            min-width:7.10em;\nmax-width:7.10em;\n
-            min-height:1.29em;\nmax-height:1.29em;\n""")
-        self.pb_trgdetails = QPushButton('Open details', self)
-        self.pb_trgdetails.setStyleSheet("""
-            min-width:7.10em;\nmax-width:7.10em;\n
-            min-height:1.29em;\nmax-height:1.29em;\n""")
-        trg_w = create_window_from_widget(
-            HLTriggerDetailed, title=trg_prefix+' Detailed Settings',
-            is_main=True)
-        util.connect_window(self.pb_trgdetails, trg_w, parent=self,
-                            prefix=trg_prefix)
-        hlay_TIstatus = QHBoxLayout()
-        hlay_TIstatus.addWidget(self.ledmulti_TIStatus)
-        hlay_TIstatus.addWidget(self.pb_trgdetails)
-
-        l_TIdelay = QLabel('Delay [us]: ', self)
-        hlay_TIdelay = _create_propty_layout(
-            parent=self, prefix=trg_prefix, propty='Delay',
-            propty_type='sprb')
-
-        flay = QFormLayout()
-        flay.addRow(l_TIstatus, hlay_TIstatus)
-        flay.addRow(l_TIdelay, hlay_TIdelay)
-        flay.setLabelAlignment(Qt.AlignRight)
-        flay.setFormAlignment(Qt.AlignCenter)
-        return flay
+        return _create_trigger_layout(
+            parent=self, device=self.device, prefix=self.prefix)
 
     def _setupROISettingsLayout(self):
         label_ImgMaxWidth = QLabel('Maximum Width [pixels]: ', self)
@@ -340,7 +305,7 @@ class ScrnSettingsDetails(SiriusMainWindow):
                                     'name': 'CamClearLastErr'})
 
         cam_prefix = SiriusPVName(self.scrn_prefix).substitute(dev='ScrnCam')
-        label_Reset = QLabel('Reset Screen: ', self)
+        label_Reset = QLabel('Reset Camera: ', self)
         hbox_Reset = _create_propty_layout(
             parent=self, prefix=cam_prefix, propty='Reset',
             cmd={'label': 'Reset', 'pressValue': 1, 'name': 'Rst'})
