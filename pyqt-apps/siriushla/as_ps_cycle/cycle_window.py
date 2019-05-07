@@ -713,7 +713,8 @@ class VerifyFinalState(QThread):
     def check_magnet_final_state(self, maname, mode):
         global _cyclers
         self.currentItem.emit(maname)
-        status = _cyclers[maname].check_final_state(mode)
+        ans = _cyclers[maname].check_final_state(mode)
+        status = False if ans != 0 else True
         self.itemDone.emit(maname, status)
 
 
