@@ -7,7 +7,7 @@ from qtpy.QtWidgets import QHBoxLayout, QSizePolicy as QSzPlcy, QVBoxLayout, \
     QToolTip
 from qtpy.QtCore import Qt, Slot, Signal, Property
 from pydm.widgets import PyDMImageView, PyDMLabel, PyDMSpinbox, \
-                         PyDMPushButton, PyDMEnumComboBox
+    PyDMPushButton, PyDMEnumComboBox, PyDMLineEdit
 from pydm.widgets.channel import PyDMChannel
 from siriushla.widgets import PyDMStateButton, SiriusLedState
 
@@ -429,7 +429,8 @@ class SiriusImageView(PyDMImageView):
 
 
 def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
-                         layout='hbox', width=7.10, height=1.29):
+                         layout='hbox', width=7.10, height=1.29,
+                         use_linedit=False):
     """Return a layout that handles a property according to 'propty_type'."""
     if layout == 'hbox':
         layout = QHBoxLayout()
@@ -437,17 +438,23 @@ def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
         layout = QVBoxLayout()
 
     if propty_type == 'sprb':
-        setattr(parent, 'PyDMSpinbox_'+propty,
-                PyDMSpinbox(parent=parent,
-                            init_channel=prefix+':'+propty+'-SP'))
-        spinbox = getattr(parent, 'PyDMSpinbox_'+propty)
-        spinbox.setStyleSheet("""
+        if use_linedit:
+            setattr(parent, 'PyDMLineEdit_'+propty,
+                    PyDMLineEdit(parent=parent,
+                                 init_channel=prefix+':'+propty+'-SP'))
+            sp = getattr(parent, 'PyDMLineEdit_'+propty)
+        else:
+            setattr(parent, 'PyDMSpinbox_'+propty,
+                    PyDMSpinbox(parent=parent,
+                                init_channel=prefix+':'+propty+'-SP'))
+            sp = getattr(parent, 'PyDMSpinbox_'+propty)
+            sp.showStepExponent = False
+        sp.setStyleSheet("""
             min-width:wvalem; max-width:wvalem; min-height:hvalem;
             max-height:hvalem;""".replace('wval', str(width)).replace(
             'hval', str(height)))
-        spinbox.setAlignment(Qt.AlignCenter)
-        spinbox.showStepExponent = False
-        layout.addWidget(spinbox)
+        sp.setAlignment(Qt.AlignCenter)
+        layout.addWidget(sp)
         setattr(parent, 'PyDMLabel_'+propty,
                 PyDMLabel(parent=parent,
                           init_channel=prefix+':'+propty+'-RB'))
