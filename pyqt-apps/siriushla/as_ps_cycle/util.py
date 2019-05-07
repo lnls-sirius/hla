@@ -1,9 +1,11 @@
 """Utilities for ps-cycle."""
 
 import sys as _sys
+from copy import deepcopy as _dcopy
 import re as _re
 import time as _time
 import logging as _log
+import threading as _thread
 from epics import PV as _PV
 from math import isclose as _isclose
 import numpy as _np
@@ -87,6 +89,7 @@ class Timing:
             # EVG settings
             'RA-RaMO:TI-EVG:DevEnbl-Sel': DEFAULT_STATE,
             'RA-RaMO:TI-EVG:InjectionEvt-Sel': _TIConst.DsblEnbl.Dsbl,
+            'RA-RaMO:TI-EVG:InjectionEvt-Sts': _TIConst.DsblEnbl.Dsbl,
             'RA-RaMO:TI-EVG:BucketList-SP': [1, ],
             'RA-RaMO:TI-EVG:RepeatBucketList-SP': DEFAULT_RAMP_NRCYCLES,
             'RA-RaMO:TI-EVG:InjCount-Mon': None,
@@ -156,6 +159,13 @@ class Timing:
             # Wait for timing to turn injection mode on
             _time.sleep(50*SLEEP_CAPUT)
 
+    def wait_trigger_enable(self, mode):
+        # Wait for timing to turn injection mode on
+        if mode == 'Ramp':
+            pv = Timing._pvs['RA-RaMO:TI-EVG:InjectionEvt-Sts']
+            while pv.value != _TIConst.DsblEnbl.Enbl:
+                _time.sleep(TIMEOUT)
+
     def get_cycle_count(self):
         pv = Timing._pvs['RA-RaMO:TI-EVG:InjCount-Mon']
         return pv.value
@@ -203,6 +213,7 @@ class MagnetCycler:
         'BO-Fam:MA-SF': 149}
 
     properties = [
+        'Current-SP', 'Current-RB',
         'PwrState-Sel', 'PwrState-Sts',
         'OpMode-Sel', 'OpMode-Sts',
         'CycleType-Sel', 'CycleType-Sts',
@@ -214,8 +225,8 @@ class MagnetCycler:
         'CycleEnbl-Mon',
         'WfmData-SP', 'WfmData-RB',
         'RmpIncNrCycles-SP', 'RmpIncNrCycles-RB',
-        'RmpReady-Mon',
-        'Current-SP',
+        'PRUSyncPulseCount-Mon',
+        'IntlkSoft-Mon', 'IntlkHard-Mon'
     ]
 
     _base_wfmdata = _generate_base_wfmdata()
@@ -276,6 +287,10 @@ class MagnetCycler:
         return self.conn_put(self['PwrState-Sel'],
                              _PSConst.PwrStateSel.On)
 
+    def set_current_2_zero(self):
+        """Set PS current to zero ."""
+        return self.conn_put(self['Current-SP'], 0)
+
     def set_params(self, mode):
         """Set params to cycle."""
         status = True
@@ -311,14 +326,17 @@ class MagnetCycler:
         """Config magnet to cycling mode."""
         status = True
 
-        status &= self.set_opmode(_PSConst.OpMode.SlowRef)
-        _time.sleep(SLEEP_CAPUT)
+        status &= self.reset_opmode()
+        status &= self.timed_get(self['OpMode-Sts'], _PSConst.States.SlowRef)
 
         status &= self.set_on()
-        _time.sleep(SLEEP_CAPUT)
+        status &= self.on_rdy()
+
+        status &= self.set_current_2_zero()
+        status &= self.current_rdy()
 
         status &= self.set_params(mode)
-        _time.sleep(5*SLEEP_CAPUT)
+        status &= self.params_rdy(mode)
         return status
 
     def config_cycle_opmode(self, mode):
@@ -328,9 +346,11 @@ class MagnetCycler:
 
     def on_rdy(self):
         """Return wether magnet PS is on."""
-        status = self.timed_get(
-            self['PwrState-Sts'], _PSConst.PwrStateSts.On)
-        return status
+        return self.timed_get(self['PwrState-Sts'], _PSConst.PwrStateSts.On)
+
+    def current_rdy(self):
+        """Return wether magnet PS current is zero."""
+        return self.timed_get(self['Current-RB'], 0)
 
     def params_rdy(self, mode):
         """Return wether magnet cycling parameters are set."""
@@ -364,9 +384,37 @@ class MagnetCycler:
         """Return wether magnet is ready."""
         status = True
         status &= self.on_rdy()
+        status &= self.current_rdy()
         status &= self.params_rdy(mode)
         status &= self.mode_rdy(mode)
         return status
+
+    def check_cycle_enable(self):
+        return self.timed_get(self['CycleEnbl-Mon'], _PSConst.DsblEnbl.Enbl)
+
+    def check_final_state(self, mode):
+        if mode == 'Ramp':
+            pulses = Timing.DEFAULT_RAMP_NRCYCLES*Timing.DEFAULT_RAMP_NRPULSES
+            status = self.timed_get(
+                self['PRUSyncPulseCount-Mon'], pulses, wait=10.0)
+            if not status:
+                return 1  # indicate lack of trigger pulses
+            status = self.reset_opmode()
+            status &= self.timed_get(
+                self['OpMode-Sts'], _PSConst.States.SlowRef)
+        else:
+            status = self.timed_get(
+                self['OpMode-Sts'], _PSConst.States.SlowRef, wait=10.0)
+            if not status:
+                return 2  # indicate cycling not finished yet
+
+        status &= self.timed_get(self['PwrState-Sts'], _PSConst.PwrStateSts.On)
+        status &= self.timed_get(self['IntlkSoft-Mon'], 0, wait=1.0)
+        status &= self.timed_get(self['IntlkHard-Mon'], 0, wait=1.0)
+        if not status:
+            return 3  # indicate interlock problems
+
+        return 0
 
     def reset_opmode(self):
         return self.set_opmode(_PSConst.OpMode.SlowRef)
@@ -379,7 +427,7 @@ class MagnetCycler:
             return True
         return False
 
-    def timed_get(self, pv, value, wait=1.0):
+    def timed_get(self, pv, value, wait=50*SLEEP_CAPUT):
         """Do timed get."""
         if not pv.connected:
             return False
@@ -397,9 +445,9 @@ class MagnetCycler:
                         if _isclose(pvvalue[i], value[i],
                                     rel_tol=1e-06, abs_tol=0.0):
                             status = True
-                            break
                         else:
                             status = False
+                            break
                     else:
                         break
             else:
@@ -432,9 +480,10 @@ class AutomatedCycle:
 
         self._logger = logger
         self._logger_message = ''
-        _log.basicConfig(
-            format='%(asctime)s %(levelname)8s %(name)s | %(message)s',
-            datefmt='%F %T', level=_log.INFO, stream=_sys.stdout)
+        if not logger:
+            _log.basicConfig(
+                format='%(asctime)s | %(message)s',
+                datefmt='%F %T', level=_log.INFO, stream=_sys.stdout)
 
         self._cycle_duration = 0
         for ma in self.manames_2_cycle:
@@ -446,7 +495,6 @@ class AutomatedCycle:
             self._ramp_duration = max(
                 self._ramp_duration, self.cyclers[ma].cycle_duration('Ramp'))
 
-        self.cycling = False
         self.aborted = False
 
     @property
@@ -468,44 +516,98 @@ class AutomatedCycle:
         manames = self.manames_2_cycle if mode == 'Cycle'\
             else self.manames_2_ramp
         # Set all magnets params
+        threads = dict()
         for maname in manames:
-            self._update_log('Preparing '+maname+' params...')
-            self.cyclers[maname].config_cycle_params(mode)
-            if self.aborted:
-                self._update_log('Aborted.')
-                return
-            self._update_log(done=True)
-        # Change all magnets OpMode
+            threads[maname] = _thread.Thread(
+                target=self.prepare_magnet,
+                args=(maname, mode), daemon=True)
+            self._update_log('Preparing '+maname+'...')
+            threads[maname].start()
         for maname in manames:
-            self._update_log('Preparing '+maname+' opmode...')
-            self.cyclers[maname].config_cycle_opmode(mode)
-            if self.aborted:
-                self._update_log('Aborted.')
-                return
-            self._update_log(done=True)
+            threads[maname].join()
+        if self.aborted:
+            self._update_log('Aborted.', error=True)
+            return
+
+    def prepare_magnet(self, maname, mode):
+        self.cyclers[maname].config_cycle_params(mode)
+        self.cyclers[maname].config_cycle_opmode(mode)
 
     def prepare_timing(self, mode):
         """Prepare timing to cycle according to mode."""
+        sections = ['TB', ] if mode == 'Cycle' else ['BO', ]
+        # TODO: uncomment when using TS and SI
+        # sections = ['TB', 'TS', 'SI'] if mode == 'Cycle' else ['BO', ]
         self._update_log('Preparing Timing...')
-        self._timing.init(mode)
+        self._timing.init(mode, sections)
         self._update_log(done=True)
 
-    def check_all_magnets(self, mode):
+    def check_all_magnets_preparation(self, mode):
         manames = self.manames_2_cycle if mode == 'Cycle'\
             else self.manames_2_ramp
         # Check all magnets params
+        threads = dict()
+        self._checks_prep_result = dict()
+        for maname in manames:
+            threads[maname] = _thread.Thread(
+                target=self.check_magnet_preparation,
+                args=(maname, mode), daemon=True)
+            threads[maname].start()
+        for maname in manames:
+            threads[maname].join()
+        if self.aborted:
+            self._update_log('Aborted.', error=True)
+            return False
+
         for maname in manames:
             self._update_log('Checking '+maname+' settings...')
-            is_ready = self.cyclers[maname].is_ready(mode)
-            if self.aborted:
-                self._update_log('Aborted.')
-                return False
-            if is_ready:
+            if self._checks_prep_result[maname]:
                 self._update_log(done=True)
             else:
-                self._update_log(maname+' is not ready.')
+                self._update_log(maname+' is not ready.', error=True)
                 return False
         return True
+
+    def check_magnet_preparation(self, maname, mode):
+        self._checks_prep_result[maname] = self.cyclers[maname].is_ready(mode)
+
+    def check_all_magnets_final_state(self, mode):
+        manames = self.manames_2_cycle if mode == 'Cycle'\
+            else self.manames_2_ramp
+        # Check all magnets params
+        threads = dict()
+        self._checks_final_result = dict()
+        for maname in manames:
+            threads[maname] = _thread.Thread(
+                target=self.check_magnet_final_state,
+                args=(maname, mode), daemon=True)
+            threads[maname].start()
+        for maname in manames:
+            threads[maname].join()
+        if self.aborted:
+            self._update_log('Aborted.', error=True)
+            return False
+
+        for maname in manames:
+            self._update_log('Checking '+maname+' final state...')
+            has_prob = self._checks_final_result[maname]
+            if not has_prob:
+                self._update_log(done=True)
+            elif has_prob == 1:
+                self._update_log(
+                    'Verify the number of pulses '+maname+' received!',
+                    warning=True)
+            elif has_prob == 2:
+                self._update_log(maname+' is finishing cycling...',
+                                 warning=True)
+            else:
+                self._update_log(maname+' has interlock problems.',
+                                 error=True)
+        return True
+
+    def check_magnet_final_state(self, maname, mode):
+        self._checks_final_result[maname] = \
+            self.cyclers[maname].check_final_state(mode)
 
     def init(self, mode):
         """Trigger timing according to mode to init cycling."""
@@ -516,29 +618,49 @@ class AutomatedCycle:
     def wait(self, mode):
         """Wait/Sleep while cycling according to mode."""
         self._update_log('Waiting for cycling...')
-        sleep = self._cycle_duration if mode == 'Cycle'\
-            else self._ramp_duration
         t0 = _time.time()
-        while _time.time() - t0 < sleep:
-            _time.sleep(min(1, sleep/10))
-            t = round(sleep - (_time.time()-t0))
-            self._update_log('Missing {}s...'.format(t))
+        keep_waiting = True
+        while keep_waiting:
+            _time.sleep(1)
+            if mode == 'Cycle':
+                t = round(self._cycle_duration - (_time.time()-t0))
+            else:
+                t = round(self._ramp_duration -
+                          self._timing.get_cycle_count() *
+                          self._timing.DEFAULT_RAMP_DURATION/1000000)
+            self._update_log('Remaining time: {}s...'.format(t))
+            if (mode == 'Cycle') and (5 < _time.time() - t0 < 10):
+                maname = self.manames_2_cycle[0]
+                status = self.cyclers[maname].check_cycle_enable()
+                if not status:
+                    self._update_log(
+                        'Magnets are not cycling! Verify triggers!',
+                        error=True)
+                    return False
+            if mode == 'Cycle':
+                keep_waiting = _time.time() - t0 < self._cycle_duration
+            else:
+                keep_waiting = not self._timing.check_ramp_end()
         self._update_log(done=True)
+        return True
 
     def reset_all_subsystems(self):
-        self._update_log('Reseting TI and setting magnets to SlowRef...')
-        for ma in self.manames_2_cycle:
-            self.cyclers[ma].reset_opmode()
-        for ma in self.manames_2_ramp:
-            self.cyclers[ma].reset_opmode()
+        self._update_log('Turning TI off and setting magnets to SlowRef...')
+        _time.sleep(4)
+        threads = list()
+        manames = _dcopy(self.manames_2_cycle)
+        manames.extend(self.manames_2_ramp)
+        for ma in manames:
+            threads.append(_thread.Thread(
+                target=self.cyclers[ma].reset_opmode, daemon=True))
+            threads[-1].start()
+        for t in threads:
+            t.join()
         self._timing.reset()
         self._update_log(done=True)
 
     def execute(self):
         """Execute automated cycle."""
-        # Indicate cycle init
-        self.cycling = True
-
         # Cycle
         if self.manames_2_cycle:
             self.prepare_all_magnets('Cycle')
@@ -548,15 +670,20 @@ class AutomatedCycle:
             if self.aborted:
                 return
             self._update_log('Waiting to check magnets state...')
-            _time.sleep(10)
-            status = self.check_all_magnets('Cycle')
+            _time.sleep(15)
+            status = self.check_all_magnets_preparation('Cycle')
             if not status:
-                _log.warning('There are magnets not ready to cycle.')
-                return False
+                self._update_log(
+                    'There are magnets not ready to cycle. Stopping.',
+                    error=True)
+                return
             if self.aborted:
                 return
             self.init('Cycle')
-            self.wait('Cycle')
+            status = self.wait('Cycle')
+            if not status:
+                return
+            self.check_all_magnets_final_state('Cycle')
 
         # Ramp
         if self.manames_2_ramp:
@@ -567,25 +694,29 @@ class AutomatedCycle:
             if self.aborted:
                 return
             self._update_log('Waiting to check magnets state...')
-            _time.sleep(10)
-            status = self.check_all_magnets('Ramp')
+            _time.sleep(8)
+            status = self.check_all_magnets_preparation('Ramp')
             if not status:
-                _log.warning('There are magnets not ready to ramp.')
-                return False
+                self._update_log(
+                    'There are magnets not ready to ramp. Stopping.',
+                    error=True)
+                return
             if self.aborted:
                 return
             self.init('Ramp')
             self.wait('Ramp')
+            self.check_all_magnets_final_state('Ramp')
 
         self.reset_all_subsystems()
 
         # Indicate cycle end
-        self.cycling = False
+        self._update_log('Cycle finished!')
 
-    def _update_log(self, message='', done=False):
+    def _update_log(self, message='', done=False, warning=False, error=False):
         self._logger_message = message
         if self._logger:
-            self._logger.update(message, done)
-        if done and not message:
-            message = 'Done.'
-        _log.info(message)
+            self._logger.update(message, done, warning, error)
+        else:
+            if done and not message:
+                message = 'Done.'
+            _log.info(message)

@@ -60,7 +60,7 @@ class RespMatWidget(BaseWidget):
                 btns[dev], Window, self,
                 dev=dev, prefix=self.prefix, acc=self.acc)
         gdl = QGridLayout(grpbx)
-        gdl.setSpacing(9)
+        # gdl.setSpacing(9)
         gdl.addWidget(btns['BPMX'], 0, 0)
         gdl.addWidget(btns['BPMY'], 1, 0)
         gdl.addWidget(btns['CH'], 0, 1)
@@ -78,7 +78,7 @@ class RespMatWidget(BaseWidget):
             hbl.addWidget(pdm_led)
             gdl.addItem(hbl, 2, 1)
 
-        vbl.addSpacing(40)
+        # vbl.addSpacing(40)
         # ####################################################################
         # ######################### Measurement ##############################
         # ####################################################################
@@ -102,7 +102,7 @@ class RespMatWidget(BaseWidget):
         pdm_lbl = PyDMLabel(grpbx, init_channel=self.prefix+'MeasRespMat-Mon')
         pdm_lbl.setAlignment(Qt.AlignCenter)
         gdl = QGridLayout(grpbx)
-        gdl.setSpacing(9)
+        # gdl.setSpacing(9)
         gdl.addWidget(pdm_pbtn, 0, 0)
         gdl.addWidget(pdm_pbtn2, 0, 1)
         gdl.addWidget(pdm_pbtn3, 1, 0)
@@ -112,7 +112,7 @@ class RespMatWidget(BaseWidget):
             2, 0, 1, 2)
 
         fml = QFormLayout()
-        fml.setSpacing(9)
+        # fml.setSpacing(9)
         gdl.addItem(fml, 3, 0, 1, 2)
         lbl = QLabel('Meas. CH kick [urad]', grpbx)
         wid = self.create_pair(grpbx, 'MeasRespMatKickCH')
@@ -131,7 +131,7 @@ class RespMatWidget(BaseWidget):
         wid = self.create_pair(grpbx, 'MeasRespMatWait')
         fml.addRow(lbl, wid)
 
-        vbl.addSpacing(40)
+        # vbl.addSpacing(40)
         # ####################################################################
         # ####################### Singular Values ############################
         # ####################################################################
@@ -152,14 +152,14 @@ class RespMatWidget(BaseWidget):
             ShowMatrixWidget, title='Check RespMat', size=(32, 25))
         connect_window(btn, Window, grpbx, prefix=self.prefix, acc=self.acc)
 
-        vbl.addSpacing(40)
+        # vbl.addSpacing(40)
         # ####################################################################
         # ######################## Load/Save/Set #############################
         # ####################################################################
         grpbx = QGroupBox('Load and Save', self)
         vbl.addWidget(grpbx)
         gdl = QGridLayout(grpbx)
-        gdl.setVerticalSpacing(15)
+        # gdl.setVerticalSpacing(15)
         lbl = QLabel('Load from:', grpbx)
         gdl.addWidget(lbl, 0, 0)
         pbtn = QPushButton('File', grpbx)
@@ -179,7 +179,7 @@ class RespMatWidget(BaseWidget):
         gdl.addWidget(pbtn, 1, 2)
 
     def _save_respmat_to_file(self, _):
-        header = '# ' + _datetime.now().strftime('%Y/%M/%d-%H:%M:%S') + '\n'
+        header = '# ' + _datetime.now().strftime('%Y/%m/%d-%H:%M:%S') + '\n'
         if self.isring:
             header += '# (BPMX, BPMY) [um] x (CH, CV, RF) [urad, Hz]' + '\n'
         else:

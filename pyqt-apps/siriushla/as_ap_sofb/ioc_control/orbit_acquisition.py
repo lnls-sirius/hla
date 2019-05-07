@@ -7,6 +7,7 @@ from pydm.widgets import PyDMLabel, PyDMPushButton
 from siriushla.util import connect_window
 from siriushla.widgets import SiriusLedAlert
 from siriushla.widgets.windows import create_window_from_widget
+from siriushla.as_ti_control import HLTriggerDetailed as _HLTriggerDetailed
 
 from siriushla.as_ap_sofb.ioc_control.base import BaseWidget
 from siriushla.as_ap_sofb.ioc_control.status import StatusWidget
@@ -20,10 +21,10 @@ class AcqControlWidget(BaseWidget):
 
     def setupui(self):
         gdl = QGridLayout(self)
-        gdl.setHorizontalSpacing(40)
-        gdl.setVerticalSpacing(20)
 
-        lbl = QLabel('General Configurations', self, alignment=Qt.AlignCenter)
+        lbl = QLabel(
+            '<h2>General Configs<h2>', self, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet('max-height: 2em;')
         if self.isring:
             gdl.addWidget(lbl, 0, 0, 1, 2)
         else:
@@ -32,9 +33,59 @@ class AcqControlWidget(BaseWidget):
         vbl = QVBoxLayout()
         gdl.addItem(vbl, 1, 0)
 
-        grp_bx = QGroupBox('SOFB Mode', self)
+        grp_bx = self._get_sofbmode_grpbx()
         vbl.addWidget(grp_bx)
-        vbl.addSpacing(20)
+
+        grp_bx = self._get_acqrates_grpbx()
+        vbl.addWidget(grp_bx)
+
+        vbl = QVBoxLayout()
+        if self.isring:
+            gdl.addItem(vbl, 1, 1)
+        else:
+            gdl.addItem(vbl, 2, 0)
+
+        grp_bx = self._get_orbit_smoothing_grpbx()
+        vbl.addWidget(grp_bx)
+
+        lbl = QLabel(
+            '<h2>Triggered Acq Configs<h2>', self, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet('max-height: 2em;')
+        if self.isring:
+            gdl.addWidget(lbl, 2, 0, 1, 2)
+        else:
+            gdl.addWidget(lbl, 3, 0)
+
+        vbl = QVBoxLayout()
+        if self.isring:
+            gdl.addItem(vbl, 3, 0)
+        else:
+            gdl.addItem(vbl, 4, 0)
+
+        grp_bx = self._get_acq_commom_params_grpbx()
+        vbl.addWidget(grp_bx)
+
+        grp_bx = self._get_single_pass_acq_grpbx()
+        vbl.addWidget(grp_bx)
+
+        vbl = QVBoxLayout()
+        if self.isring:
+            gdl.addItem(vbl, 3, 1)
+        else:
+            gdl.addItem(vbl, 5, 0)
+
+        grp_bx = self._get_trigdata_params_grpbx()
+        vbl.addWidget(grp_bx)
+
+        grp_bx = self._get_trigext_params_grpbx()
+        vbl.addWidget(grp_bx)
+
+        if self.isring:
+            grp_bx = self._get_multturn_acq_grpbx()
+            vbl.addWidget(grp_bx)
+
+    def _get_sofbmode_grpbx(self):
+        grp_bx = QGroupBox('SOFB Mode', self)
         fbl = QFormLayout(grp_bx)
         wid = self.create_pair_sel(grp_bx, 'SOFBMode')
         fbl.addRow(wid)
@@ -42,10 +93,21 @@ class AcqControlWidget(BaseWidget):
         lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
         wid = self.create_pair(grp_bx, 'RingSize')
         fbl.addRow(lbl, wid)
+        return grp_bx
 
-        grp_bx = QGroupBox('Orbit Smoothing Control', self)
-        vbl.addWidget(grp_bx)
-        vbl.addSpacing(20)
+    def _get_acqrates_grpbx(self):
+        grp_bx = QGroupBox('Acquisition Rates', self)
+        fbl = QFormLayout(grp_bx)
+        lbl = QLabel('Orbit [Hz]', grp_bx, alignment=Qt.AlignCenter)
+        wid = self.create_pair(grp_bx, 'OrbAcqRate')
+        fbl.addRow(lbl, wid)
+        lbl = QLabel('Kicks [Hz]', grp_bx, alignment=Qt.AlignCenter)
+        wid = self.create_pair(grp_bx, 'KickAcqRate')
+        fbl.addRow(lbl, wid)
+        return grp_bx
+
+    def _get_orbit_smoothing_grpbx(self):
+        grp_bx = QGroupBox('Orbit Smoothing', self)
         fbl = QFormLayout(grp_bx)
         lbl = QLabel('Method', grp_bx, alignment=Qt.AlignCenter)
         lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
@@ -66,69 +128,173 @@ class AcqControlWidget(BaseWidget):
         hbl.addWidget(pdm_lbl)
         hbl.addWidget(pdm_btn)
         fbl.addRow(lbl, hbl)
+        return grp_bx
 
-        grp_bx = QGroupBox('Acquisition Rates', self)
-        vbl.addWidget(grp_bx)
-        vbl.addSpacing(20)
+    def _get_acq_commom_params_grpbx(self):
+        grp_bx = QGroupBox('Common Parameters', self)
         fbl = QFormLayout(grp_bx)
-        lbl = QLabel('Orbit [Hz]', grp_bx, alignment=Qt.AlignCenter)
-        wid = self.create_pair(grp_bx, 'OrbAcqRate')
+        lbl = QLabel('Acquistion Channel', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:10em; max-width:10em;""")
+        wid = self.create_pair_sel(grp_bx, 'TrigAcqChan')
         fbl.addRow(lbl, wid)
-        lbl = QLabel('Kicks [Hz]', grp_bx, alignment=Qt.AlignCenter)
-        wid = self.create_pair(grp_bx, 'KickAcqRate')
+        lbl = QLabel('Acquistion Trigger', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:10em; max-width:10em;""")
+        wid = self.create_pair_sel(grp_bx, 'TrigAcqTrigger')
         fbl.addRow(lbl, wid)
-
-        vbl = QVBoxLayout()
+        lbl = QLabel('Repeat', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:10em; max-width:10em;""")
+        wid = self.create_pair_sel(grp_bx, 'TrigAcqRepeat')
+        fbl.addRow(lbl, wid)
         if self.isring:
-            gdl.addItem(vbl, 1, 1)
-        else:
-            gdl.addItem(vbl, 2, 0)
-
-        if self.isring:
-            grp_bx = QGroupBox('MultiTurn Acquisition', self)
-            vbl.addWidget(grp_bx)
-            vbl.addSpacing(20)
-            fbl = QFormLayout(grp_bx)
-            lbl = QLabel('Downsampling', grp_bx, alignment=Qt.AlignCenter)
+            lbl = QLabel('Nr of Shots', grp_bx, alignment=Qt.AlignCenter)
             lbl.setStyleSheet("""min-width:10em; max-width:10em;""")
-            wid = self.create_pair(grp_bx, 'MTurnDownSample')
+            wid = self.create_pair(grp_bx, 'TrigNrShots')
             fbl.addRow(lbl, wid)
-            lbl = QLabel('Index', grp_bx, alignment=Qt.AlignCenter)
-            lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
-            wid = self.create_pair(grp_bx, 'MTurnIdx')
-            fbl.addRow(lbl, wid)
-            lbl = QLabel('Time [ms]', grp_bx, alignment=Qt.AlignCenter)
-            lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
-            pdm_lbl = PyDMLabel(
-                grp_bx, init_channel=self.prefix+'MTurnIdxTime-Mon')
-            pdm_lbl.setAlignment(Qt.AlignCenter)
-            fbl.addRow(lbl, pdm_lbl)
-            lbl = QLabel('TbT Sync', grp_bx, alignment=Qt.AlignCenter)
-            lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
-            wid = self.create_pair_sel(grp_bx, 'MTurnSyncTim')
-            fbl.addRow(lbl, wid)
-            lbl = QLabel('TbT Mask', grp_bx, alignment=Qt.AlignCenter)
-            lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
-            wid = self.create_pair_sel(grp_bx, 'MTurnUseMask')
-            fbl.addRow(lbl, wid)
-            lbl = QLabel('Mask Begin', grp_bx, alignment=Qt.AlignCenter)
-            lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
-            wid = self.create_pair(grp_bx, 'MTurnMaskSplBeg')
-            fbl.addRow(lbl, wid)
-            lbl = QLabel('Mask End', grp_bx, alignment=Qt.AlignCenter)
-            lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
-            wid = self.create_pair(grp_bx, 'MTurnMaskSplEnd')
-            fbl.addRow(lbl, wid)
+        lbl = QLabel('Nr of SamplesPre', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:10em; max-width:10em;""")
+        wid = self.create_pair(grp_bx, 'TrigNrSamplesPre')
+        fbl.addRow(lbl, wid)
+        lbl = QLabel('Nr of SamplesPost', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:10em; max-width:10em;""")
+        wid = self.create_pair(grp_bx, 'TrigNrSamplesPost')
+        fbl.addRow(lbl, wid)
 
+        # fbl.addItem(QSpacerItem(20, 20))
+        lbl = QLabel('Control Acquisition:', grp_bx, alignment=Qt.AlignCenter)
+        fbl.addRow(lbl)
+        gdl2 = QGridLayout()
+        fbl.addRow(gdl2)
+        pdm_btn1 = PyDMPushButton(
+            grp_bx, label='Start',
+            init_channel=self.prefix+'TrigAcqCtrl-Sel',
+            pressValue=self._csorb.TrigAcqCtrl.Start)
+        pdm_btn2 = PyDMPushButton(
+            grp_bx, label='Stop',
+            init_channel=self.prefix+'TrigAcqCtrl-Sel',
+            pressValue=self._csorb.TrigAcqCtrl.Stop)
+        pdm_btn3 = PyDMPushButton(
+            grp_bx, label='Abort',
+            init_channel=self.prefix+'TrigAcqCtrl-Sel',
+            pressValue=self._csorb.TrigAcqCtrl.Abort)
+        pdmlbl = PyDMLabel(
+            grp_bx, init_channel=self.prefix+'TrigAcqCtrl-Sts')
+        pdmlbl.setAlignment(Qt.AlignCenter)
+        gdl2.addWidget(pdm_btn1, 0, 0)
+        gdl2.addWidget(pdm_btn2, 0, 1)
+        gdl2.addWidget(pdm_btn3, 1, 0)
+        gdl2.addWidget(pdmlbl, 1, 1)
+
+        btn = QPushButton('Open Status', grp_bx)
+        Window = create_window_from_widget(StatusWidget, title='Status')
+        connect_window(
+            btn, Window, self, prefix=self.prefix, acc=self.acc, is_orb=True)
+
+        lab = 'Reset'
+        pv = 'TrigAcqConfig-Cmd'
+        pdm_btn = PyDMPushButton(
+            self, label=lab, init_channel=self.prefix + pv, pressValue=1)
+        pdm_led = SiriusLedAlert(
+            grp_bx, init_channel=self.prefix+'OrbStatus-Mon')
+        hbl = QHBoxLayout()
+        hbl.setContentsMargins(5, 30, 5, 0)
+        # hbl.setSpacing(9)
+        hbl.addWidget(btn)
+        hbl.addWidget(pdm_led)
+        hbl.addWidget(pdm_btn)
+        fbl.addRow(hbl)
+        return grp_bx
+
+    def _get_trigdata_params_grpbx(self):
+        grp_bx = QGroupBox('Data-Driven Trigger Parameters', self)
+        fbl = QFormLayout(grp_bx)
+        lbl = QLabel('Channel', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:5em; max-width:5em;""")
+        wid = self.create_pair_sel(grp_bx, 'TrigDataChan')
+        fbl.addRow(lbl, wid)
+        lbl = QLabel('Selection', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:5em; max-width:5em;""")
+        wid = self.create_pair_sel(grp_bx, 'TrigDataSel')
+        fbl.addRow(lbl, wid)
+        lbl = QLabel('Threshold', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:5em; max-width:5em;""")
+        wid = self.create_pair(grp_bx, 'TrigDataThres')
+        fbl.addRow(lbl, wid)
+        lbl = QLabel('Hysteresis', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:5em; max-width:5em;""")
+        wid = self.create_pair(grp_bx, 'TrigDataHyst')
+        fbl.addRow(lbl, wid)
+        lbl = QLabel('Polarity', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:5em; max-width:5em;""")
+        wid = self.create_pair_sel(grp_bx, 'TrigDataPol')
+        fbl.addRow(lbl, wid)
+        return grp_bx
+
+    def _get_trigext_params_grpbx(self):
+        pref = self.prefix.prefix + self._csorb.TRIGGER_ACQ_NAME + ':'
+        grp_bx = QGroupBox('External Trigger Parameter', self)
+        fbl = QFormLayout(grp_bx)
+        lbl = QLabel('Duration [us]', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:7em; max-width:7em;""")
+        wid = self.create_pair(grp_bx, 'Duration', prefix=pref)
+        fbl.addRow(lbl, wid)
+        lbl = QLabel('Delay [us]', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:7em; max-width:7em;""")
+        wid = self.create_pair(grp_bx, 'Delay', prefix=pref)
+        fbl.addRow(lbl, wid)
+        lbl = QLabel('Source', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:7em; max-width:7em;""")
+        wid = self.create_pair_sel(grp_bx, 'Src', prefix=pref)
+        fbl.addRow(lbl, wid)
+        btn = QPushButton('Open Trigger Window', grp_bx)
+        win = create_window_from_widget(
+            _HLTriggerDetailed, title=self._csorb.TRIGGER_ACQ_NAME)
+        connect_window(btn, win, grp_bx, prefix=pref)
+        fbl.addRow(btn)
+        return grp_bx
+
+    def _get_multturn_acq_grpbx(self):
+        grp_bx = QGroupBox('MultiTurn Acquisition', self)
+        fbl = QFormLayout(grp_bx)
+        lbl = QLabel('Downsampling', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:10em; max-width:10em;""")
+        wid = self.create_pair(grp_bx, 'MTurnDownSample')
+        fbl.addRow(lbl, wid)
+        lbl = QLabel('Index', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
+        wid = self.create_pair(grp_bx, 'MTurnIdx')
+        fbl.addRow(lbl, wid)
+        lbl = QLabel('Time [ms]', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
+        pdm_lbl = PyDMLabel(
+            grp_bx, init_channel=self.prefix+'MTurnIdxTime-Mon')
+        pdm_lbl.setAlignment(Qt.AlignCenter)
+        fbl.addRow(lbl, pdm_lbl)
+        lbl = QLabel('TbT Sync', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
+        wid = self.create_pair_sel(grp_bx, 'MTurnSyncTim')
+        fbl.addRow(lbl, wid)
+        lbl = QLabel('TbT Mask', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
+        wid = self.create_pair_sel(grp_bx, 'MTurnUseMask')
+        fbl.addRow(lbl, wid)
+        lbl = QLabel('Mask Begin', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
+        wid = self.create_pair(grp_bx, 'MTurnMaskSplBeg')
+        fbl.addRow(lbl, wid)
+        lbl = QLabel('Mask End', grp_bx, alignment=Qt.AlignCenter)
+        lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
+        wid = self.create_pair(grp_bx, 'MTurnMaskSplEnd')
+        fbl.addRow(lbl, wid)
+        return grp_bx
+
+    def _get_single_pass_acq_grpbx(self):
         grp_bx = QGroupBox('SinglePass Acquisition', self)
-        vbl.addWidget(grp_bx)
-        vbl.addSpacing(20)
         fbl = QFormLayout(grp_bx)
         lbl = QLabel('Position', grp_bx, alignment=Qt.AlignCenter)
         lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
         wid = self.create_pair_sel(grp_bx, 'SPassMethod')
         fbl.addRow(lbl, wid)
-        lbl = QLabel('Nr Turns', grp_bx, alignment=Qt.AlignCenter)
+        lbl = QLabel('Avg Turns', grp_bx, alignment=Qt.AlignCenter)
         lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
         wid = self.create_pair(grp_bx, 'SPassAvgNrTurns')
         fbl.addRow(lbl, wid)
@@ -159,135 +325,7 @@ class AcqControlWidget(BaseWidget):
         lbl.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
         wid = self.create_pair_sel(grp_bx, 'SPassUseBg')
         fbl.addRow(lbl, wid)
-
-        lbl = QLabel('Triggered Acquisition Configurations',
-                     self, alignment=Qt.AlignCenter)
-        if self.isring:
-            gdl.addWidget(lbl, 2, 0, 1, 2)
-        else:
-            gdl.addWidget(lbl, 3, 0)
-
-        vbl = QVBoxLayout()
-        if self.isring:
-            gdl.addItem(vbl, 3, 0)
-        else:
-            gdl.addItem(vbl, 4, 0)
-
-        grp_bx = QGroupBox('Common Parameters', self)
-        vbl.addWidget(grp_bx)
-        vbl.addSpacing(20)
-        fbl = QFormLayout(grp_bx)
-        lbl = QLabel('Acquistion Channel', grp_bx, alignment=Qt.AlignCenter)
-        lbl.setStyleSheet("""min-width:10em; max-width:10em;""")
-        wid = self.create_pair_sel(grp_bx, 'TrigAcqChan')
-        fbl.addRow(lbl, wid)
-        lbl = QLabel('Acquistion Trigger', grp_bx, alignment=Qt.AlignCenter)
-        lbl.setStyleSheet("""min-width:10em; max-width:10em;""")
-        wid = self.create_pair_sel(grp_bx, 'TrigAcqTrigger')
-        fbl.addRow(lbl, wid)
-        lbl = QLabel('Repeat', grp_bx, alignment=Qt.AlignCenter)
-        lbl.setStyleSheet("""min-width:10em; max-width:10em;""")
-        wid = self.create_pair_sel(grp_bx, 'TrigAcqRepeat')
-        fbl.addRow(lbl, wid)
-        if self.isring:
-            lbl = QLabel('Nr of Shots', grp_bx, alignment=Qt.AlignCenter)
-            lbl.setStyleSheet("""min-width:10em; max-width:10em;""")
-            wid = self.create_pair(grp_bx, 'TrigNrShots')
-            fbl.addRow(lbl, wid)
-        lbl = QLabel('Nr of SamplesPre', grp_bx, alignment=Qt.AlignCenter)
-        lbl.setStyleSheet("""min-width:10em; max-width:10em;""")
-        wid = self.create_pair(grp_bx, 'TrigNrSamplesPre')
-        fbl.addRow(lbl, wid)
-        lbl = QLabel('Nr of SamplesPost', grp_bx, alignment=Qt.AlignCenter)
-        lbl.setStyleSheet("""min-width:10em; max-width:10em;""")
-        wid = self.create_pair(grp_bx, 'TrigNrSamplesPost')
-        fbl.addRow(lbl, wid)
-
-        fbl.addItem(QSpacerItem(20, 20))
-        lbl = QLabel('Control Acquisition:', grp_bx, alignment=Qt.AlignCenter)
-        fbl.addRow(lbl)
-        gdl2 = QGridLayout()
-        fbl.addRow(gdl2)
-        pdm_btn1 = PyDMPushButton(
-            grp_bx, label='Start',
-            init_channel=self.prefix+'TrigAcqCtrl-Sel',
-            pressValue=self._csorb.TrigAcqCtrl.Start)
-        pdm_btn2 = PyDMPushButton(
-            grp_bx, label='Stop',
-            init_channel=self.prefix+'TrigAcqCtrl-Sel',
-            pressValue=self._csorb.TrigAcqCtrl.Stop)
-        pdm_btn3 = PyDMPushButton(
-            grp_bx, label='Abort',
-            init_channel=self.prefix+'TrigAcqCtrl-Sel',
-            pressValue=self._csorb.TrigAcqCtrl.Abort)
-        pdmlbl = PyDMLabel(
-            grp_bx, init_channel=self.prefix+'TrigAcqCtrl-Sts')
-        pdmlbl.setAlignment(Qt.AlignCenter)
-        gdl2.addWidget(pdm_btn1, 0, 0)
-        gdl2.addWidget(pdm_btn2, 0, 1)
-        gdl2.addWidget(pdm_btn3, 1, 0)
-        gdl2.addWidget(pdmlbl, 1, 1)
-
-        btn = QPushButton('Open Status', grp_bx)
-        Window = create_window_from_widget(StatusWidget, title='Status')
-        connect_window(
-            btn, Window, self, prefix=self.prefix, acc=self.acc, is_orb=True)
-        pdm_led = SiriusLedAlert(
-            grp_bx, init_channel=self.prefix+'OrbStatus-Mon')
-        hbl = QHBoxLayout()
-        hbl.setContentsMargins(5, 30, 5, 0)
-        hbl.setSpacing(9)
-        hbl.addWidget(btn)
-        hbl.addWidget(pdm_led)
-        fbl.addRow(hbl)
-
-        vbl = QVBoxLayout()
-        if self.isring:
-            gdl.addItem(vbl, 3, 1)
-        else:
-            gdl.addItem(vbl, 5, 0)
-
-        grp_bx = QGroupBox('Data-Driven Trigger Parameters', self)
-        vbl.addWidget(grp_bx)
-        vbl.addSpacing(20)
-        fbl = QFormLayout(grp_bx)
-        lbl = QLabel('Channel', grp_bx, alignment=Qt.AlignCenter)
-        lbl.setStyleSheet("""min-width:5em; max-width:5em;""")
-        wid = self.create_pair_sel(grp_bx, 'TrigDataChan')
-        fbl.addRow(lbl, wid)
-        lbl = QLabel('Selection', grp_bx, alignment=Qt.AlignCenter)
-        lbl.setStyleSheet("""min-width:5em; max-width:5em;""")
-        wid = self.create_pair_sel(grp_bx, 'TrigDataSel')
-        fbl.addRow(lbl, wid)
-        lbl = QLabel('Threshold', grp_bx, alignment=Qt.AlignCenter)
-        lbl.setStyleSheet("""min-width:5em; max-width:5em;""")
-        wid = self.create_pair(grp_bx, 'TrigDataThres')
-        fbl.addRow(lbl, wid)
-        lbl = QLabel('Hysteresis', grp_bx, alignment=Qt.AlignCenter)
-        lbl.setStyleSheet("""min-width:5em; max-width:5em;""")
-        wid = self.create_pair(grp_bx, 'TrigDataHyst')
-        fbl.addRow(lbl, wid)
-        lbl = QLabel('Polarity', grp_bx, alignment=Qt.AlignCenter)
-        lbl.setStyleSheet("""min-width:5em; max-width:5em;""")
-        wid = self.create_pair_sel(grp_bx, 'TrigDataPol')
-        fbl.addRow(lbl, wid)
-
-        grp_bx = QGroupBox('External Trigger Parameter', self)
-        vbl.addWidget(grp_bx)
-        vbl.addSpacing(20)
-        fbl = QFormLayout(grp_bx)
-        lbl = QLabel('Duration [us]', grp_bx, alignment=Qt.AlignCenter)
-        lbl.setStyleSheet("""min-width:7em; max-width:7em;""")
-        wid = self.create_pair(grp_bx, 'TrigExtDuration')
-        fbl.addRow(lbl, wid)
-        lbl = QLabel('Initial Delay [us]', grp_bx, alignment=Qt.AlignCenter)
-        lbl.setStyleSheet("""min-width:7em; max-width:7em;""")
-        wid = self.create_pair(grp_bx, 'TrigExtDelay')
-        fbl.addRow(lbl, wid)
-        lbl = QLabel('Event Source', grp_bx, alignment=Qt.AlignCenter)
-        lbl.setStyleSheet("""min-width:7em; max-width:7em;""")
-        wid = self.create_pair_sel(grp_bx, 'TrigExtEvtSrc')
-        fbl.addRow(lbl, wid)
+        return grp_bx
 
 
 def _main():

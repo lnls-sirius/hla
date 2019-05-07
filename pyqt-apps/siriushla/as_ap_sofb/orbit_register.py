@@ -200,7 +200,7 @@ class OrbitRegister(QWidget):
             'Orbit Registered.', pvx.getvalue(), pvy.getvalue())
 
     def _save_orbit_to_file(self, _):
-        header = '# ' + _datetime.now().strftime('%Y/%M/%d-%H:%M:%S') + '\n'
+        header = '# ' + _datetime.now().strftime('%Y/%m/%d-%H:%M:%S') + '\n'
         header += '# ' + 'BPMX [um]       BPMY [um]' + '\n'
         filename = QFileDialog.getSaveFileName(
             caption='Define a File Name to Save the Orbit',

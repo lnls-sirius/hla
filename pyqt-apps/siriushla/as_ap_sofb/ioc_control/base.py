@@ -6,6 +6,7 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QSizePolicy, QComboBox
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox
 from pydm.widgets.base import PyDMPrimitiveWidget
+from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.csdevice.orbitcorr import SOFBFactory
 from siriushla.widgets import SiriusSpinbox
 
@@ -14,7 +15,7 @@ class BaseWidget(QWidget):
 
     def __init__(self, parent, prefix, acc='SI'):
         super().__init__(parent)
-        self.prefix = prefix
+        self.prefix = _PVName(prefix)
         self._csorb = SOFBFactory.create(acc)
 
     @property
@@ -29,25 +30,27 @@ class BaseWidget(QWidget):
     def isring(self):
         return self._csorb.isring()
 
-    def create_pair(self, parent, pvname):
+    def create_pair(self, parent, pvname, prefix=None):
+        prefix = prefix or self.prefix
         wid = QWidget(parent)
         hbl = QHBoxLayout(wid)
-        hbl.setContentsMargins(9, 0, 0, 0)
-        pdm_spbx = SiriusSpinbox(wid, init_channel=self.prefix+pvname+'-SP')
+        hbl.setContentsMargins(0, 0, 0, 0)
+        pdm_spbx = SiriusSpinbox(wid, init_channel=prefix+pvname+'-SP')
         pdm_spbx.showStepExponent = False
-        pdm_lbl = PyDMLabel(wid, init_channel=self.prefix+pvname+'-RB')
+        pdm_lbl = PyDMLabel(wid, init_channel=prefix+pvname+'-RB')
         pdm_lbl.setAlignment(Qt.AlignCenter)
         hbl.addWidget(pdm_spbx)
         hbl.addWidget(pdm_lbl)
         return wid
 
-    def create_pair_sel(self, parent, pvname):
+    def create_pair_sel(self, parent, pvname, prefix=None):
+        prefix = prefix or self.prefix
         wid = QWidget(parent)
         hbl = QHBoxLayout(wid)
-        hbl.setContentsMargins(9, 0, 0, 9)
+        hbl.setContentsMargins(0, 0, 0, 0)
         pdm_cbbx = PyDMEnumComboBox(
-            wid, init_channel=self.prefix+pvname+'-Sel')
-        pdm_lbl = PyDMLabel(wid, init_channel=self.prefix+pvname+'-Sts')
+            wid, init_channel=prefix+pvname+'-Sel')
+        pdm_lbl = PyDMLabel(wid, init_channel=prefix+pvname+'-Sts')
         pdm_lbl.setAlignment(Qt.AlignCenter)
         hbl.addWidget(pdm_cbbx)
         hbl.addWidget(pdm_lbl)
