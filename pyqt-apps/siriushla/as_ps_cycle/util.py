@@ -162,8 +162,8 @@ class Timing:
     def wait_trigger_enable(self, mode):
         # Wait for timing to turn injection mode on
         if mode == 'Ramp':
-            pv_sts = Timing._pvs['RA-RaMO:TI-EVG:InjectionEvt-Sts']
-            while pv_sts.value != _TIConst.DsblEnbl.Enbl:
+            pv = Timing._pvs['RA-RaMO:TI-EVG:InjectionEvt-Sts']
+            while pv.value != _TIConst.DsblEnbl.Enbl:
                 _time.sleep(TIMEOUT)
 
     def get_cycle_count(self):
@@ -438,9 +438,9 @@ class MagnetCycler:
                         if _isclose(pvvalue[i], value[i],
                                     rel_tol=1e-06, abs_tol=0.0):
                             status = True
-                            break
                         else:
                             status = False
+                            break
                     else:
                         break
             else:
@@ -660,7 +660,7 @@ class AutomatedCycle:
             if self.aborted:
                 return
             self._update_log('Waiting to check magnets state...')
-            _time.sleep(10)
+            _time.sleep(15)
             status = self.check_all_magnets_preparation('Cycle')
             if not status:
                 self._update_log(
