@@ -326,17 +326,17 @@ class MagnetCycler:
         """Config magnet to cycling mode."""
         status = True
 
-        status &= self.set_opmode(_PSConst.OpMode.SlowRef)
-        _time.sleep(SLEEP_CAPUT)
+        status &= self.reset_opmode()
+        status &= self.timed_get(self['OpMode-Sts'], _PSConst.States.SlowRef)
 
         status &= self.set_on()
-        _time.sleep(20*SLEEP_CAPUT)
+        status &= self.on_rdy()
 
         status &= self.set_current_2_zero()
-        _time.sleep(SLEEP_CAPUT)
+        status &= self.current_rdy()
 
         status &= self.set_params(mode)
-        _time.sleep(5*SLEEP_CAPUT)
+        status &= self.params_rdy(mode)
         return status
 
     def config_cycle_opmode(self, mode):
