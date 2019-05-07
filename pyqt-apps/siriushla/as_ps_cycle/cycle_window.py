@@ -275,6 +275,7 @@ class CycleWindow(SiriusMainWindow):
         # Trigger timing and wait cyling end
         task = WaitCycle(magnets, self._timing, mode, self)
         dlg = ProgressDialog('Wait for magnets...', task, self)
+        task.initValue.connect(dlg.set_value)
         ret = dlg.exec_()
         if ret == dlg.Rejected:
             return False
@@ -589,6 +590,7 @@ class WaitCycle(QThread):
 
     currentItem = Signal(str)
     itemDone = Signal()
+    initValue = Signal(int)
     completed = Signal()
 
     def __init__(self, manames, timing_conn, mode, parent=None):
@@ -598,21 +600,24 @@ class WaitCycle(QThread):
         self._timing_conn = timing_conn
         self._mode = mode
         self._quit_task = False
+        self._init_done = False
 
-        self._duration = 0
-        for maname in manames:
-            ma_cycle_duration = _cyclers[maname].cycle_duration(mode)
-            self._duration = max(ma_cycle_duration, self._duration)
+        if mode == 'Cycle':
+            size = 0
+            for maname in manames:
+                size = max(_cyclers[maname].cycle_duration(mode), size)
+            self._size = size
+        else:
+            self._size = self._timing_conn.DEFAULT_RAMP_NRCYCLES
 
         if mode == 'Cycle':
             self._format_msg = 'Remaining time: {}s...'
         else:
-            self._format_msg = 'Cycle {} of ' +\
-                str(self._timing_conn.DEFAULT_RAMP_NRCYCLES)+'...'
+            self._format_msg = 'Cycle {} of ' + str(self._size)+'...'
 
     def size(self):
         """Return task size."""
-        return self._duration
+        return self._size
 
     def exit_task(self):
         """Set flag to quit thread."""
@@ -634,7 +639,7 @@ class WaitCycle(QThread):
             while keep_waiting:
                 self.currentItem.emit(self._format_msg.format(
                     self._check_curr_step(t0)))
-                _time.sleep(min(1, self._duration/10))
+                _time.sleep(min(1, self._size/10))
                 keep_waiting = self._check_keep_waiting(t0)
                 self.itemDone.emit()
                 if self._quit_task:
@@ -649,7 +654,11 @@ class WaitCycle(QThread):
         if self._mode == 'Cycle':
             return round(self._duration - (_time.time()-t0))
         else:
-            return self._timing_conn.get_cycle_count()
+            count = self._timing_conn.get_cycle_count()
+            if not self._init_done:
+                self._init_done = True
+                self.initValue.emit(count)
+            return count
 
     def _check_keep_waiting(self, t0):
         if self._mode == 'Cycle':
