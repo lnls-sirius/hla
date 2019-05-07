@@ -288,9 +288,10 @@ class CycleWindow(SiriusMainWindow):
         ret = dlg.exec_()
         if ret == dlg.Rejected:
             return False
+        self._update_mafailed_status(mode)
         if self._magnets_failed:
-            self._update_mafailed_status(mode)
-            QMessageBox.critical(self, 'Message', 'Check magnets interlock!')
+            QMessageBox.critical(
+                self, 'Message', 'Check magnets in failed list!')
             return False
 
         QMessageBox.information(self, 'Message', 'Cycle finished!')
@@ -364,8 +365,7 @@ class CycleWindow(SiriusMainWindow):
 
     def _update_mafailed_status(self, mode):
         self.cycle_bt.setEnabled(False)
-        if mode == 'Cycle':
-            self.demag_bt.setEnabled(False)
+        self.demag_bt.setEnabled(False)
         self.status_list.magnets = self._magnets_failed
 
     def _update_auto_progress(self, text, done, warning=False, error=False):
