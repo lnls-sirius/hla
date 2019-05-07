@@ -179,7 +179,7 @@ class RespMatWidget(BaseWidget):
         gdl.addWidget(pbtn, 1, 2)
 
     def _save_respmat_to_file(self, _):
-        header = '# ' + _datetime.now().strftime('%Y/%M/%d-%H:%M:%S') + '\n'
+        header = '# ' + _datetime.now().strftime('%Y/%m/%d-%H:%M:%S') + '\n'
         if self.isring:
             header += '# (BPMX, BPMY) [um] x (CH, CV, RF) [urad, Hz]' + '\n'
         else:

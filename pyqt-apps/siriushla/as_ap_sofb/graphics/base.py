@@ -4,11 +4,11 @@ import pathlib as _pathlib
 from datetime import datetime as _datetime
 from functools import partial as _part
 import numpy as _np
-from pyqtgraph import mkBrush, mkPen, InfiniteLine, functions, TextItem
+from pyqtgraph import mkBrush, mkPen, InfiniteLine, functions
 from qtpy.QtWidgets import QWidget, QFileDialog, QLabel, QCheckBox, \
     QVBoxLayout, QHBoxLayout, QSizePolicy, QGroupBox, \
     QFormLayout, QPushButton, QComboBox, QToolTip
-from qtpy.QtCore import Qt, QTimer, QThread, Signal, QObject, QPoint
+from qtpy.QtCore import Qt, QTimer, QThread, Signal, QObject
 from qtpy.QtGui import QColor
 from pydm.widgets import PyDMWaveformPlot
 from siriushla.widgets import SiriusConnectionSignal
@@ -343,7 +343,7 @@ class BaseWidget(QWidget):
         sz = min(valx.size, refx.size, valy.size, refy.size)
         diffx = valx[:sz] - refx[:sz]
         diffy = valy[:sz] - refy[:sz]
-        header = '# ' + _datetime.now().strftime('%Y/%M/%d-%H:%M:%S') + '\n'
+        header = '# ' + _datetime.now().strftime('%Y/%m/%d-%H:%M:%S') + '\n'
         filename = QFileDialog.getSaveFileName(
             caption='Define a File Name to Save the Orbit',
             directory=self.last_dir, filter=self.EXT_FLT)
