@@ -44,8 +44,8 @@ class MainWindow(SiriusMainWindow):
         self.orbit_regist = self._create_orbit_registers()
         self.sofb_control = self._create_ioc_controllers()
 
-        self.addDockWidget(Qt.BottomDockWidgetArea, self.ioc_log)
-        self.addDockWidget(Qt.BottomDockWidgetArea, self.orbit_regist)
+        self.addDockWidget(Qt.LeftDockWidgetArea, self.ioc_log)
+        self.addDockWidget(Qt.LeftDockWidgetArea, self.orbit_regist)
         self.addDockWidget(Qt.RightDockWidgetArea, self.sofb_control)
 
         mwid = self._create_central_widget()
@@ -74,7 +74,7 @@ class MainWindow(SiriusMainWindow):
         wid.setObjectName('doc_OrgReg')
         wid.setStyleSheet("""
             #doc_OrgReg{
-                min-width:42em;
+                min-width:20em;
                 min-height:14em;}""")
 
         wid_cont = OrbitRegisters(self, self.prefix, self.acc, 5)
@@ -108,8 +108,8 @@ class MainWindow(SiriusMainWindow):
         docwid.setObjectName('doc_IOCLog')
         docwid.setStyleSheet("""
             #doc_IOCLog{
-                min-width:42em;
-                min-height:14em;}""")
+                min-width:20em;
+                min-height:34em;}""")
         wid_cont = QWidget()
         docwid.setWidget(wid_cont)
         vbl = QVBoxLayout(wid_cont)

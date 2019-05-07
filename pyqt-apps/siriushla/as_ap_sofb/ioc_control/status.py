@@ -20,7 +20,6 @@ class StatusWidget(BaseWidget):
         pdm_btn = PyDMPushButton(
             self, label=lab, init_channel=self.prefix + pv, pressValue=1)
         vbl.addWidget(pdm_btn)
-        vbl.addSpacing(20)
 
         grpbx = self.creategroupbox('Orb' if self.is_orb else 'Corr')
         vbl.addWidget(grpbx)
@@ -35,8 +34,6 @@ class StatusWidget(BaseWidget):
         wid = QGroupBox(title + ' Status', self)
 
         fbl = QFormLayout(wid)
-        fbl.setHorizontalSpacing(20)
-        fbl.setVerticalSpacing(20)
         channel = self.prefix + name + 'Status-Mon'
         for bit, label in enumerate(labels._fields):
             led = SiriusLedAlert(self, channel, bit)

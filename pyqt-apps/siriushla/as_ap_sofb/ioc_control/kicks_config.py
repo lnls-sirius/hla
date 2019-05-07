@@ -36,13 +36,13 @@ class KicksConfigWidget(BaseWidget):
         for name, pvname, units in zip(names, pvnames, unitss):
             grpbx = QGroupBox(name)
             fbl = QFormLayout(grpbx)
-            fbl.setSpacing(9)
+            # fbl.setSpacing(9)
             for unit, pln in zip(units, planes):
                 lbl = QLabel(pln+' '+unit+'  ', grpbx)
                 fbl.addRow(lbl, self.create_pair(grpbx, pvname+pln))
             vbl.addWidget(grpbx)
         if self.show_details:
-            vbl.addSpacing(40)
+            # vbl.addSpacing(40)
             if self.isring:
                 lbl = QLabel('Synchronize Correctors', self)
                 pdm_btn = PyDMStateButton(
@@ -54,7 +54,7 @@ class KicksConfigWidget(BaseWidget):
             pdm_btn = PyDMPushButton(
                 self, label='Configure Correctors',
                 init_channel=self.prefix+'CorrConfig-Cmd', pressValue=1)
-            vbl.addSpacing(20)
+            # vbl.addSpacing(20)
             vbl.addWidget(pdm_btn)
 
 
