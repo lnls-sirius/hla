@@ -664,7 +664,8 @@ class AutomatedCycle:
             status = self.check_all_magnets_preparation('Cycle')
             if not status:
                 self._update_log(
-                    'There are magnets not ready to cycle. Stopping.')
+                    'There are magnets not ready to cycle. Stopping.',
+                    error=True)
                 return
             if self.aborted:
                 return
@@ -687,7 +688,8 @@ class AutomatedCycle:
             status = self.check_all_magnets_preparation('Ramp')
             if not status:
                 self._update_log(
-                    'There are magnets not ready to ramp. Stopping.')
+                    'There are magnets not ready to ramp. Stopping.',
+                    error=True)
                 return
             if self.aborted:
                 return
