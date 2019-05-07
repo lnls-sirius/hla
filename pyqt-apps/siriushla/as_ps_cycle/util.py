@@ -393,19 +393,26 @@ class MagnetCycler:
         return self.timed_get(self['CycleEnbl-Mon'], _PSConst.DsblEnbl.Enbl)
 
     def check_final_state(self, mode):
-        status = True
-        status &= self.reset_opmode()
-        _time.sleep(5*SLEEP_CAPUT)
-        status &= self.timed_get(self['PwrState-Sts'], _PSConst.PwrStateSts.On)
-        status &= self.timed_get(self['IntlkSoft-Mon'], 0)
-        status &= self.timed_get(self['IntlkHard-Mon'], 0)
-        if not status:
-            return 2  # indicate interlock problems
-
         if mode == 'Ramp':
             pulses = Timing.DEFAULT_RAMP_NRCYCLES*Timing.DEFAULT_RAMP_NRPULSES
-            status = self.timed_get(self['PRUSyncPulseCount-Mon'], pulses)
-            return 1  # indicate lack of trigger pulses
+            status = self.timed_get(
+                self['PRUSyncPulseCount-Mon'], pulses, wait=10.0)
+            if not status:
+                return 1  # indicate lack of trigger pulses
+            status = self.reset_opmode()
+            status &= self.timed_get(
+                self['OpMode-Sts'], _PSConst.States.SlowRef)
+        else:
+            status = self.timed_get(
+                self['OpMode-Sts'], _PSConst.States.SlowRef, wait=10.0)
+            if not status:
+                return 2  # indicate cycling not finished yet
+
+        status &= self.timed_get(self['PwrState-Sts'], _PSConst.PwrStateSts.On)
+        status &= self.timed_get(self['IntlkSoft-Mon'], 0, wait=1.0)
+        status &= self.timed_get(self['IntlkHard-Mon'], 0, wait=1.0)
+        if not status:
+            return 3  # indicate interlock problems
 
         return 0
 
@@ -420,7 +427,7 @@ class MagnetCycler:
             return True
         return False
 
-    def timed_get(self, pv, value, wait=1.0):
+    def timed_get(self, pv, value, wait=50*SLEEP_CAPUT):
         """Do timed get."""
         if not pv.connected:
             return False
@@ -590,6 +597,9 @@ class AutomatedCycle:
                 self._update_log(
                     'Verify the number of pulses '+maname+' received!',
                     warning=True)
+            elif has_prob == 2:
+                self._update_log(maname+' is finishing cycling...',
+                                 warning=True)
             else:
                 self._update_log(maname+' has interlock problems.',
                                  error=True)
