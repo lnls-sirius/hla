@@ -470,7 +470,7 @@ class LogTable(QTreeView, PyDMWidget):
         elif pv.propty_name == 'OpMode':
             # TODO: remove the folowing step when the bug in PS is solved
             val = value[0] if isinstance(value, _np.ndarray) else value
-            str_value = _PSEnums.PWRSTATE_STS[val]
+            str_value = _PSEnums.STATES[val]
             logtype = 'WARN'
         else:
             str_value = str(value)
