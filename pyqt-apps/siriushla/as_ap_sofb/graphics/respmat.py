@@ -71,6 +71,9 @@ class ShowMatrixWidget(QWidget):
 
     def _show_tooltip(self, pos):
         names = self._csorb.BPM_NICKNAMES
+        cname = self._csorb.CH_NICKNAMES + self._csorb.CV_NICKNAMES
+        if self._csorb.isring():
+            cname += ['RF', ]
         posi = self._csorb.BPM_POS
         unit = 'count'
 
@@ -82,9 +85,10 @@ class ShowMatrixWidget(QWidget):
         ind = _np.argmin(_np.abs(_np.array(posi)-posx))
         posy = curve.scatter.mapFromScene(pos).y()
 
+        indy = int(posy // self.spbox.value())
+        indy = max(min(indy, len(cname)-1), 0)
         sca, prf = functions.siScale(posy)
-        txt = '{0:s}, y = {1:.3f} {2:s}'.format(
-                                names[ind], sca*posy, prf+unit)
+        txt = 'BPM = {0:s}, Corr = {1:s}'.format(names[ind], cname[indy])
         QToolTip.showText(
             graph.mapToGlobal(pos.toPoint()),
             txt, graph, graph.geometry(), 500)
@@ -128,11 +132,7 @@ class SingularValues(QWidget):
     def __init__(self, parent, prefix):
         super().__init__(parent)
         self.prefix = prefix
-        self._chans = []
         self.setupui()
-
-    def channels(self):
-        return self._chans
 
     def setupui(self):
         vbl = QVBoxLayout(self)
@@ -164,7 +164,6 @@ class SingularValues(QWidget):
         graph.addItem(line)
         chan = SiriusConnectionSignal(self.prefix+'NrSingValues-RB')
         chan.new_value_signal[int].connect(line.setValue)
-        self._chans.append(chan)
 
         graph.setObjectName('graph_singvalues')
         graph.setStyleSheet("""

@@ -34,7 +34,7 @@ class BaseWidget(QWidget):
         prefix = prefix or self.prefix
         wid = QWidget(parent)
         hbl = QHBoxLayout(wid)
-        hbl.setContentsMargins(9, 0, 0, 0)
+        hbl.setContentsMargins(0, 0, 0, 0)
         pdm_spbx = SiriusSpinbox(wid, init_channel=prefix+pvname+'-SP')
         pdm_spbx.showStepExponent = False
         pdm_lbl = PyDMLabel(wid, init_channel=prefix+pvname+'-RB')
@@ -47,7 +47,7 @@ class BaseWidget(QWidget):
         prefix = prefix or self.prefix
         wid = QWidget(parent)
         hbl = QHBoxLayout(wid)
-        hbl.setContentsMargins(9, 0, 0, 9)
+        hbl.setContentsMargins(0, 0, 0, 0)
         pdm_cbbx = PyDMEnumComboBox(
             wid, init_channel=prefix+pvname+'-Sel')
         pdm_lbl = PyDMLabel(wid, init_channel=prefix+pvname+'-Sts')
