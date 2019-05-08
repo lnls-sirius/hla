@@ -8,15 +8,20 @@ from qtpy.QtWidgets import QGridLayout, QHBoxLayout, QFormLayout, \
                            QComboBox, QPushButton, QCheckBox, QMessageBox, \
                            QSizePolicy as QSzPlcy, QSpinBox
 from qtpy.QtCore import Qt, Slot
+
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox
+
 from siriuspy.envars import vaca_prefix as _vaca_prefix
+from siriuspy.namesys import SiriusPVName
+
 from siriushla import util
 from siriushla.widgets import PyDMLed
 from siriushla.widgets.signal_channel import SiriusConnectionSignal
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.as_di_scrns.base import \
     SiriusImageView as _SiriusImageView, \
-    create_propty_layout as _create_propty_layout
+    create_propty_layout as _create_propty_layout, \
+    create_trigger_layout as _create_trigger_layout
 from siriushla.as_di_scrns.scrn_details import \
     ScrnSettingsDetails as _ScrnSettingsDetails
 
@@ -60,60 +65,58 @@ class SiriusScrnView(QWidget):
 
     def _setupUi(self):
         self.setLayout(QGridLayout())
+        self.layout().setHorizontalSpacing(10)
+        self.layout().setVerticalSpacing(10)
 
         self.cameraview_widget = QWidget()
         self.cameraview_widget.setLayout(self._cameraviewLayout())
-        self.layout().addWidget(self.cameraview_widget, 0, 0, 1, 5)
-
-        self.layout().addItem(
-            QSpacerItem(4, 20, QSzPlcy.Preferred, QSzPlcy.Preferred), 1, 0)
+        self.layout().addWidget(self.cameraview_widget, 0, 0, 1, 2)
 
         self.settings_groupBox = QGroupBox('Settings', self)
         self.settings_groupBox.setLayout(self._settingsLayout())
-        self.layout().addWidget(self.settings_groupBox, 2, 1, 3, 1)
+        self.layout().addWidget(self.settings_groupBox, 1, 0, 5, 1)
+        self.settings_groupBox.setStyleSheet("""
+            .QLabel{
+                min-width: 5em;}
+            QLabel{
+                qproperty-alignment: AlignCenter;}""")
 
-        self.layout().addItem(
-            QSpacerItem(10, 20, QSzPlcy.Preferred, QSzPlcy.Preferred), 2, 2)
+        self.trigger_groupBox = QGroupBox('Trigger', self)
+        self.trigger_groupBox.setLayout(self._triggerLayout())
+        self.layout().addWidget(self.trigger_groupBox, 6, 0, 3, 1)
 
         self.statistics_groupBox = QGroupBox('Statistics', self)
         self.statistics_groupBox.setLayout(self._statisticsLayout())
-        self.layout().addWidget(self.statistics_groupBox, 2, 3)
+        self.layout().addWidget(self.statistics_groupBox, 1, 1, 4, 1)
         self.statistics_groupBox.setSizePolicy(
             QSzPlcy.Expanding, QSzPlcy.Expanding)
         self.statistics_groupBox.setStyleSheet("""
             .QLabel{
-                min-width:0.32em;\nmax-width:0.32em;\n
-                min-height:1.29em;\nmax-height:1.29em;\n}
+                min-width:0.32em; max-width:0.32em;
+                min-height:1.29em; max-height:1.29em;}
             QLabel{
-                qproperty-alignment: AlignCenter;\n}
+                qproperty-alignment: AlignCenter;}
             PyDMWidget{
-                min-width:4.84em;\nmax-width:4.84em;\n
-                min-height:1.29em;\nmax-height:1.29em;\n}""")
-
-        self.layout().addItem(
-            QSpacerItem(30, 20, QSzPlcy.Preferred, QSzPlcy.Preferred), 3, 3)
+                min-width:4.84em; max-width:4.84em;
+                min-height:1.29em; max-height:1.29em;}""")
 
         self.calibrationgrid_groupBox = QGroupBox('Calibration')
         self.calibrationgrid_groupBox.setLayout(self._calibrationgridLayout())
         self.calibrationgrid_groupBox.setSizePolicy(
             QSzPlcy.Expanding, QSzPlcy.Expanding)
         self.calibrationgrid_groupBox.layout().setAlignment(Qt.AlignHCenter)
-        self.layout().addWidget(self.calibrationgrid_groupBox, 4, 3)
+        self.layout().addWidget(self.calibrationgrid_groupBox, 5, 1, 4, 1)
 
-        self.layout().addItem(
-            QSpacerItem(4, 20, QSzPlcy.Preferred, QSzPlcy.Preferred), 5, 4)
-
-        self.layout().setColumnStretch(0, 1)
-        self.layout().setColumnStretch(1, 20)
-        self.layout().setColumnStretch(2, 1)
-        self.layout().setColumnStretch(3, 20)
-        self.layout().setColumnStretch(4, 1)
-        self.layout().setRowStretch(0, 60)
+        self.layout().setRowStretch(0, 12)
         self.layout().setRowStretch(1, 1)
-        self.layout().setRowStretch(2, 24)
+        self.layout().setRowStretch(2, 1)
         self.layout().setRowStretch(3, 1)
-        self.layout().setRowStretch(4, 16)
+        self.layout().setRowStretch(4, 1)
         self.layout().setRowStretch(5, 1)
+        self.layout().setRowStretch(6, 1)
+        self.layout().setRowStretch(7, 1)
+        self.layout().setRowStretch(8, 1)
+        self.layout().setRowStretch(9, 1)
 
     def _cameraviewLayout(self):
         label = QLabel(self.device, self)
@@ -213,77 +216,59 @@ class SiriusScrnView(QWidget):
         return lay
 
     def _settingsLayout(self):
-        label_CamEnbl = QLabel('Enable: ', self, alignment=Qt.AlignCenter)
+        label_CamEnbl = QLabel('Enable: ', self)
         hbox_CamEnbl = _create_propty_layout(
             parent=self, prefix=self.scrn_prefix, propty='CamEnbl',
-            propty_type='enbldisabl', width=4.68)
+            propty_type='enbldisabl')
 
-        label_CamAcqPeriod = QLabel('Acquire\nPeriod [s]:', self,
-                                    alignment=Qt.AlignCenter)
+        label_CamAcqPeriod = QLabel('Acquire\nPeriod [s]:', self)
         hbox_CamAcqPeriod = _create_propty_layout(
             parent=self, prefix=self.scrn_prefix, propty='CamAcqPeriod',
-            propty_type='sprb', width=4.68)
+            propty_type='sprb')
 
-        label_CamExposureTime = QLabel('Exposure\nTime [us]:', self,
-                                       alignment=Qt.AlignCenter)
+        label_CamExposureTime = QLabel('Exposure\nTime [us]:', self)
         hbox_CamExposureTime = _create_propty_layout(
             parent=self, prefix=self.scrn_prefix, propty='CamExposureTime',
-            propty_type='sprb', width=4.68)
+            propty_type='sprb')
 
-        label_CamGain = QLabel('Gain[dB]:', self, alignment=Qt.AlignRight)
+        label_CamGain = QLabel('Gain[dB]:', self)
         hbox_CamGain = _create_propty_layout(
             parent=self, prefix=self.scrn_prefix, propty='CamGain',
-            propty_type='sprb', width=4.68)
+            propty_type='sprb')
         hbox_AutoCamGain = _create_propty_layout(
             parent=self, prefix=self.scrn_prefix, propty='AutoGain',
-            propty_type='', width=4.68, cmd={'label': 'Auto Gain',
-                                             'pressValue': 1,
-                                             'name': 'CamAutoGain'})
+            propty_type='', cmd={'label': 'Auto Gain',
+                                 'pressValue': 1,
+                                 'name': 'CamAutoGain'})
 
-        label_ROIOffsetX = QLabel('Offset X: ', self, alignment=Qt.AlignRight)
-        hbox_ROIOffsetX = _create_propty_layout(
-            parent=self, prefix=self.scrn_prefix, propty='ImgROIOffsetX',
-            propty_type='sprb', width=4.68)
-
-        label_ROIOffsetY = QLabel('Offset Y: ', self, alignment=Qt.AlignRight)
-        hbox_ROIOffsetY = _create_propty_layout(
-            parent=self, prefix=self.scrn_prefix, propty='ImgROIOffsetY',
-            propty_type='sprb', width=4.68)
-
-        label_ROIWidth = QLabel('Width: ', self, alignment=Qt.AlignRight)
-        hbox_ROIWidth = _create_propty_layout(
-            parent=self, prefix=self.scrn_prefix, propty='ImgROIWidth',
-            propty_type='sprb', width=4.68)
-
-        label_ROIHeight = QLabel('Heigth: ', self, alignment=Qt.AlignRight)
-        hbox_ROIHeight = _create_propty_layout(
-            parent=self, prefix=self.scrn_prefix, propty='ImgROIHeight',
-            propty_type='sprb', width=4.68)
+        cam_prefix = SiriusPVName(self.scrn_prefix).substitute(dev='ScrnCam')
+        label_Reset = QLabel('Reset: ', self)
+        hbox_Reset = _create_propty_layout(
+            parent=self, prefix=cam_prefix, propty='Reset',
+            cmd={'label': 'Reset', 'pressValue': 1, 'name': 'Rst'})
 
         self.pb_moreSettings = QPushButton('More settings...', self)
+        self.pb_moreSettings.setSizePolicy(
+            QSzPlcy.Expanding, QSzPlcy.Preferred)
         util.connect_window(self.pb_moreSettings, _ScrnSettingsDetails,
                             parent=self, prefix=self.prefix,
                             device=self.device)
 
         lay = QFormLayout()
         lay.setFormAlignment(Qt.AlignCenter)
-        lay.addRow(QLabel('<h4>Camera Acquisition</h4>',
-                          alignment=Qt.AlignCenter))
+        lay.addRow(QLabel('<h4>Camera Acquisition</h4>', self))
         lay.addRow(label_CamEnbl, hbox_CamEnbl)
+        lay.addRow(label_Reset, hbox_Reset)
         lay.addRow(label_CamAcqPeriod, hbox_CamAcqPeriod)
         lay.addRow(label_CamExposureTime, hbox_CamExposureTime)
         lay.addRow(label_CamGain, hbox_CamGain)
         lay.addRow('', hbox_AutoCamGain)
-        lay.addItem(QSpacerItem(4, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
-        lay.addRow(QLabel('<h4>Camera ROI Settings [pixels]</h4>',
-                          alignment=Qt.AlignCenter))
-        lay.addRow(label_ROIWidth, hbox_ROIWidth)
-        lay.addRow(label_ROIHeight, hbox_ROIHeight)
-        lay.addRow(label_ROIOffsetX, hbox_ROIOffsetX)
-        lay.addRow(label_ROIOffsetY, hbox_ROIOffsetY)
-        lay.addItem(QSpacerItem(4, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
         lay.addRow('', self.pb_moreSettings)
         return lay
+
+    def _triggerLayout(self):
+        return _create_trigger_layout(
+            parent=self, device=self.device, prefix=self.prefix)
 
     def _statisticsLayout(self):
         # - Method

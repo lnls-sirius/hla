@@ -26,7 +26,40 @@ class ScrnCalibrationSettings(SiriusDialog):
                        alignment=Qt.AlignCenter)
 
         positioning = QGroupBox('Positioning', self)
+        positioning.setStyleSheet("""
+            .QLabel{
+                min-width:16em;\nmax-width:16em;
+                qproperty-alignment: AlignRight;\n}""")
+        positioning.setLayout(self._setupPositionLayout())
 
+        LED = QGroupBox('LED Brightness', self)
+        LED.setStyleSheet("""
+            .QLabel{
+                min-width:11em;\nmax-width:11em;
+                qproperty-alignment: AlignRight;\n}""")
+        LED.setLayout(self._setupLEDLayout())
+
+        Img = QGroupBox('Statistics Unit Conversion (Pixels→mm)', self)
+        Img.setStyleSheet("""
+            .QLabel{
+                min-width:12em;\nmax-width:12em;
+                qproperty-alignment: AlignRight;\n}""")
+        Img.setLayout(self._setupImageCalibLayout())
+
+        vlay = QVBoxLayout()
+        vlay.addWidget(label)
+        vlay.addItem(
+            QSpacerItem(1, 10, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding))
+        vlay.addWidget(positioning)
+        vlay.addItem(
+            QSpacerItem(1, 10, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding))
+        vlay.addWidget(LED)
+        vlay.addItem(
+            QSpacerItem(1, 10, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding))
+        vlay.addWidget(Img)
+        self.setLayout(vlay)
+
+    def _setupPositionLayout(self):
         label_AcceptedErr = QLabel('Error Tolerance [mm]: ', self)
         hbox_AcceptedErr = _create_propty_layout(
             parent=self, prefix=self.scrn_prefix, propty='AcceptedErr',
@@ -53,8 +86,20 @@ class ScrnCalibrationSettings(SiriusDialog):
                                      'pressValue': 1,
                                      'name': 'GetNoneScrnPos'})
 
-        LED = QGroupBox('LED Brightness', self)
+        flay_pos = QFormLayout()
+        flay_pos.addItem(
+            QSpacerItem(1, 10, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding))
+        flay_pos.addRow(label_AcceptedErr, hbox_AcceptedErr)
+        flay_pos.addRow(label_FluorScrnPos, hbox_FluorScrnPos)
+        flay_pos.addRow(label_CalScrnPos, hbox_CalScrnPos)
+        flay_pos.addRow(label_NoneScrnPos, hbox_NoneScrnPos)
+        flay_pos.addItem(
+            QSpacerItem(1, 10, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding))
+        flay_pos.setLabelAlignment(Qt.AlignRight)
+        flay_pos.setFormAlignment(Qt.AlignCenter)
+        return flay_pos
 
+    def _setupLEDLayout(self):
         label_LedPwrLvl = QLabel('Intensity [%]: ', self)
         hbox_LedPwrLvl = _create_propty_layout(
             parent=self, prefix=self.scrn_prefix, propty='LEDPwrLvl',
@@ -70,51 +115,6 @@ class ScrnCalibrationSettings(SiriusDialog):
             parent=self, prefix=self.scrn_prefix, propty='LEDThold',
             propty_type='sprb')
 
-        Img = QGroupBox('Statistics Unit Conversion (Pixels→mm)', self)
-
-        cam_prefix = SiriusPVName(self.scrn_prefix).substitute(dev='ScrnCam')
-
-        label_ImgScaleFactor = QLabel('Scale Factor: ', self)
-        hbox_ImgScaleFactor = _create_propty_layout(
-            parent=self, prefix=cam_prefix, propty='ImgScaleFactor',
-            propty_type='sprb')
-
-        label_ImgCenterOffsetX = QLabel('Center Offset X: ', self)
-        hbox_ImgCenterOffsetX = _create_propty_layout(
-            parent=self, prefix=cam_prefix, propty='ImgCenterOffsetX',
-            propty_type='sprb')
-
-        label_ImgCenterOffsetY = QLabel('Center Offset Y: ', self)
-        hbox_ImgCenterOffsetY = _create_propty_layout(
-            parent=self, prefix=cam_prefix, propty='ImgCenterOffsetY',
-            propty_type='sprb')
-
-        positioning.setStyleSheet("""
-            .QLabel{
-                min-width:16em;\nmax-width:16em;
-                qproperty-alignment: AlignRight;\n}""")
-        LED.setStyleSheet("""
-            .QLabel{
-                min-width:11em;\nmax-width:11em;
-                qproperty-alignment: AlignRight;\n}""")
-        Img.setStyleSheet("""
-            .QLabel{
-                min-width:8em;\nmax-width:8em;
-                qproperty-alignment: AlignRight;\n}""")
-
-        flay_pos = QFormLayout()
-        flay_pos.addItem(
-            QSpacerItem(1, 10, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding))
-        flay_pos.addRow(label_AcceptedErr, hbox_AcceptedErr)
-        flay_pos.addRow(label_FluorScrnPos, hbox_FluorScrnPos)
-        flay_pos.addRow(label_CalScrnPos, hbox_CalScrnPos)
-        flay_pos.addRow(label_NoneScrnPos, hbox_NoneScrnPos)
-        flay_pos.addItem(
-            QSpacerItem(1, 10, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding))
-        flay_pos.setLabelAlignment(Qt.AlignRight)
-        flay_pos.setFormAlignment(Qt.AlignCenter)
-        positioning.setLayout(flay_pos)
-
         flay_LED = QFormLayout()
         flay_LED.addItem(
             QSpacerItem(1, 10, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding))
@@ -125,29 +125,46 @@ class ScrnCalibrationSettings(SiriusDialog):
             QSpacerItem(1, 10, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding))
         flay_LED.setLabelAlignment(Qt.AlignRight)
         flay_LED.setFormAlignment(Qt.AlignCenter)
-        LED.setLayout(flay_LED)
+        return flay_LED
+
+    def _setupImageCalibLayout(self):
+        cam_prefix = SiriusPVName(self.scrn_prefix).substitute(dev='ScrnCam')
+
+        label_ImgScaleFactorX = QLabel('Scale Factor X: ', self)
+        hbox_ImgScaleFactorX = _create_propty_layout(
+            parent=self, prefix=cam_prefix, propty='ImgScaleFactorX',
+            propty_type='sprb')
+
+        label_ImgScaleFactorY = QLabel('Scale Factor Y: ', self)
+        hbox_ImgScaleFactorY = _create_propty_layout(
+            parent=self, prefix=cam_prefix, propty='ImgScaleFactorY',
+            propty_type='sprb')
+
+        label_ImgCenterOffsetX = QLabel('Center Offset X [pixels]: ', self)
+        hbox_ImgCenterOffsetX = _create_propty_layout(
+            parent=self, prefix=cam_prefix, propty='ImgCenterOffsetX',
+            propty_type='sprb')
+
+        label_ImgCenterOffsetY = QLabel('Center Offset Y [pixels]: ', self)
+        hbox_ImgCenterOffsetY = _create_propty_layout(
+            parent=self, prefix=cam_prefix, propty='ImgCenterOffsetY',
+            propty_type='sprb')
+
+        label_ImgThetaOffset = QLabel('Theta Offset [pixels]: ', self)
+        hbox_ImgThetaOffset = _create_propty_layout(
+            parent=self, prefix=cam_prefix, propty='ImgThetaOffset',
+            propty_type='sprb')
 
         flay_Img = QFormLayout()
         flay_Img.addItem(
             QSpacerItem(1, 10, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding))
-        flay_Img.addRow(label_ImgScaleFactor, hbox_ImgScaleFactor)
+        flay_Img.addRow(label_ImgScaleFactorX, hbox_ImgScaleFactorX)
+        flay_Img.addRow(label_ImgScaleFactorY, hbox_ImgScaleFactorY)
         flay_Img.addRow(label_ImgCenterOffsetX, hbox_ImgCenterOffsetX)
         flay_Img.addRow(label_ImgCenterOffsetY, hbox_ImgCenterOffsetY)
+        flay_Img.addRow(label_ImgThetaOffset, hbox_ImgThetaOffset)
         flay_Img.addItem(
             QSpacerItem(1, 10, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding))
         flay_Img.setLabelAlignment(Qt.AlignRight)
         flay_Img.setFormAlignment(Qt.AlignCenter)
-        Img.setLayout(flay_Img)
-
-        vlay = QVBoxLayout()
-        vlay.addWidget(label)
-        vlay.addItem(
-            QSpacerItem(1, 10, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding))
-        vlay.addWidget(positioning)
-        vlay.addItem(
-            QSpacerItem(1, 10, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding))
-        vlay.addWidget(LED)
-        vlay.addItem(
-            QSpacerItem(1, 10, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding))
-        vlay.addWidget(Img)
-        self.setLayout(vlay)
+        return flay_Img

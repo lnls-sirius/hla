@@ -399,6 +399,8 @@ class LogTable(QTreeView, PyDMWidget):
 
     def add_log_slot(self, updated):
         new_value = self._get_newitem_data(updated)
+        if not new_value:
+            return
         self.add_log(new_value)
 
     def add_log(self, new_value):
@@ -421,6 +423,8 @@ class LogTable(QTreeView, PyDMWidget):
 
     def remove_log_slot(self, updated):
         new_value = self._get_newitem_data(updated)
+        if not new_value:
+            return
         self.remove_log(new_value)
 
     def remove_log(self, new_value):
@@ -463,14 +467,16 @@ class LogTable(QTreeView, PyDMWidget):
             str_value = 'disconnected'
             logtype = 'DISCONNECT'
         elif pv.propty_name == 'PwrState':
-            # TODO: remove the folowing step when the bug in PS is solved
-            val = value[0] if isinstance(value, _np.ndarray) else value
-            str_value = _PSEnums.PWRSTATE_STS[val]
+            # TODO: remove the following steps when the bug in PS is solved
+            if isinstance(value, _np.ndarray):
+                return
+            str_value = _PSEnums.PWRSTATE_STS[value]
             logtype = 'ERR'
         elif pv.propty_name == 'OpMode':
-            # TODO: remove the folowing step when the bug in PS is solved
-            val = value[0] if isinstance(value, _np.ndarray) else value
-            str_value = _PSEnums.STATES[val]
+            # TODO: remove the following step when the bug in PS is solved
+            if isinstance(value, _np.ndarray):
+                return
+            str_value = _PSEnums.STATES[value]
             logtype = 'WARN'
         else:
             str_value = str(value)
@@ -524,9 +530,9 @@ def create_led_class(type='multichannel'):
 
         filterlog = Signal(str)
 
-        def __init__(self, filter, **kwargs):
+        def __init__(self, filt, **kwargs):
             super().__init__(**kwargs)
-            self.filter = filter
+            self.filter = filt
 
         def mouseDoubleClickEvent(self, ev):
             self.filterlog.emit(self.filter)

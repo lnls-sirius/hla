@@ -652,7 +652,7 @@ class WaitCycle(QThread):
 
     def _check_curr_step(self, t0):
         if self._mode == 'Cycle':
-            return round(self._duration - (_time.time()-t0))
+            return round(self._size - (_time.time()-t0))
         else:
             count = self._timing_conn.get_cycle_count()
             if not self._init_done:
@@ -662,7 +662,7 @@ class WaitCycle(QThread):
 
     def _check_keep_waiting(self, t0):
         if self._mode == 'Cycle':
-            return _time.time() - t0 < self._duration
+            return _time.time() - t0 < self._size
         else:
             return not self._timing_conn.check_ramp_end()
 
