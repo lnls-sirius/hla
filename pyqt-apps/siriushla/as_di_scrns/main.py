@@ -1,13 +1,16 @@
 """SiriusScrnView widget."""
 
 import sys
+import os
 import time
 from threading import Thread
+from datetime import datetime
+import numpy as np
 from qtpy.QtWidgets import QGridLayout, QHBoxLayout, QFormLayout, \
                            QSpacerItem, QWidget, QGroupBox, QLabel, \
                            QComboBox, QPushButton, QCheckBox, QMessageBox, \
-                           QSizePolicy as QSzPlcy, QSpinBox
-from qtpy.QtCore import Qt, Slot
+                           QSizePolicy as QSzPlcy, QSpinBox, QFileDialog
+from qtpy.QtCore import Qt, Slot, Signal
 
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox
 
@@ -33,6 +36,8 @@ class SiriusScrnView(QWidget):
     You can control it by using the method/Slot updateCalibrationGridFlag.
     """
 
+    save_files = Signal()
+
     def __init__(self, parent=None, prefix=_vaca_prefix, device=None):
         """Initialize object."""
         QWidget.__init__(self, parent=parent)
@@ -46,6 +51,7 @@ class SiriusScrnView(QWidget):
         self.screen_type_conn.new_value_signal.connect(
             self.updateCalibrationGridFlag)
         self._calibrationgrid_flag = self.screen_type_conn.getvalue()
+        self.save_files.connect(self._saveGridLocalFiles)
         self.ch_ImgROIHeight = SiriusConnectionSignal(
             self.scrn_prefix+':ImgROIHeight-RB')
         self.ch_ImgROIWidth = SiriusConnectionSignal(
@@ -56,6 +62,7 @@ class SiriusScrnView(QWidget):
             self.scrn_prefix+':ImgROIOffsetY-RB')
 
         self._setupUi()
+        self._loadCalibrationGrid(default=True)
 
     @property
     def calibrationgrid_flag(self):
@@ -168,9 +175,15 @@ class SiriusScrnView(QWidget):
             min-width:4.36em;\nmax-width:4.36em;\n
             min-height:1.29em;\nmax-height:1.29em;\n""")
         self.pushbutton_savegrid.clicked.connect(self._saveCalibrationGrid)
+        self.pushbutton_loadgrid = QPushButton('Load', self)
+        self.pushbutton_loadgrid.setStyleSheet("""
+            min-width:4.36em;\nmax-width:4.36em;\n
+            min-height:1.29em;\nmax-height:1.29em;\n""")
+        self.pushbutton_loadgrid.clicked.connect(self._loadCalibrationGrid)
         hbox_grid = QHBoxLayout()
         hbox_grid.addWidget(self.checkBox_showgrid)
         hbox_grid.addWidget(self.pushbutton_savegrid)
+        hbox_grid.addWidget(self.pushbutton_loadgrid)
 
         lb = QLabel('Show levels <')
         lb.setStyleSheet("""min-width:6em;max-width:6em;""")
@@ -444,6 +457,59 @@ class SiriusScrnView(QWidget):
         # Enable showing saved grid
         time.sleep(0.1)
         self.checkBox_showgrid.setEnabled(True)
+        self.save_files.emit()
+
+    def _saveGridLocalFiles(self):
+        home = os.path.expanduser('~')
+        folder_month = datetime.now().strftime('%Y-%m')
+        folder_day = datetime.now().strftime('%Y-%m-%d')
+        path = os.path.join(
+            home, 'Desktop', 'screen-iocs', folder_month, folder_day)
+        if not os.path.exists(path):
+            os.makedirs(path)
+        fn, _ = QFileDialog.getSaveFileName(
+            self, 'Save Grid As...', path + '/' + self.device +
+            datetime.now().strftime('_%Y-%m-%d_%Hh%Mmin'), '*.txt')
+        if not fn:
+            return False
+        if not fn.endswith('.txt'):
+            fn += '.txt'
+
+        path_default = os.path.join(
+            home, 'Desktop', 'screen-iocs', 'default')
+        if not os.path.exists(path_default):
+            os.makedirs(path_default)
+        fn_default = path_default + '/' + self.device + '.txt'
+
+        grid = self.image_view.calibrationGrid
+        width = self.image_view.imageWidth
+        data = np.append(width, grid)
+        np.savetxt(fn, data)
+        np.savetxt(fn_default, data)
+
+    def _loadCalibrationGrid(self, default=False):
+        home = os.path.expanduser('~')
+        if not default:
+            folder_month = datetime.now().strftime('%Y-%m')
+            path = os.path.join(
+                home, 'Desktop', 'screen-iocs', folder_month)
+            fn, _ = QFileDialog.getOpenFileName(
+                self, 'Load Grid...', path, '*.txt')
+            if not fn:
+                return
+        else:
+            path = os.path.join(
+                home, 'Desktop', 'screen-iocs', 'default')
+            fn = path + '/' + self.device + '.txt'
+
+        try:
+            data = np.loadtxt(fn)
+            self.image_view.calibrationGrid = data
+        except Exception:
+            return
+
+        # Enable showing saved grid
+        self.checkBox_showgrid.setEnabled(True)
 
     def _setReceivedDataFlag(self):
         self._receivedData = True
@@ -506,7 +572,6 @@ class IndividualScrn(SiriusMainWindow):
 
 if __name__ == '__main__':
     """Run test."""
-    import os
     from siriushla.sirius_application import SiriusApplication
 
     os.environ['EPICS_CA_MAX_ARRAY_BYTES'] = '200000000'

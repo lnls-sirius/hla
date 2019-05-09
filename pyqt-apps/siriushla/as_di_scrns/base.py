@@ -96,6 +96,19 @@ class SiriusImageView(PyDMImageView):
         self.needs_redraw = True
 
     @property
+    def calibrationGrid(self):
+        """Return Numpy array containing original grid."""
+        return _dcopy(self._calibration_grid_orig)
+
+    @calibrationGrid.setter
+    def calibrationGrid(self, data):
+        """Receive a list 'data' which elements are: [width, new_grid:]."""
+        self._calibration_grid_orig = data[1:]
+        self._calibration_grid_width = int(data[0])
+        self._calibration_grid_maxdata = data[1:].max()
+        self._update_calibration_grid_image()
+
+    @property
     def calibration_grid_filterfactor(self):
         """Factor used to filter calibration grid.
 
