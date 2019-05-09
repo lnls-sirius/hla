@@ -15,9 +15,7 @@ from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriuspy.namesys import SiriusPVName
 
 from siriushla import util
-from siriushla.widgets import PyDMLed
-from siriushla.widgets.signal_channel import SiriusConnectionSignal
-from siriushla.widgets.windows import SiriusMainWindow
+from siriushla.widgets import PyDMLed, SiriusConnectionSignal, SiriusMainWindow
 from siriushla.as_di_scrns.base import \
     SiriusImageView as _SiriusImageView, \
     create_propty_layout as _create_propty_layout, \
@@ -42,11 +40,21 @@ class SiriusScrnView(QWidget):
         self.device = device
         self.scrn_prefix = self.prefix+self.device
         self._receivedData = False
+
         self.screen_type_conn = SiriusConnectionSignal(
             self.scrn_prefix+':ScrnType-Sts')
         self.screen_type_conn.new_value_signal.connect(
             self.updateCalibrationGridFlag)
         self._calibrationgrid_flag = self.screen_type_conn.getvalue()
+        self.ch_ImgROIHeight = SiriusConnectionSignal(
+            self.scrn_prefix+':ImgROIHeight-RB')
+        self.ch_ImgROIWidth = SiriusConnectionSignal(
+            self.scrn_prefix+':ImgROIWidth-RB')
+        self.ch_ImgROIOffsetX = SiriusConnectionSignal(
+            self.scrn_prefix+':ImgROIOffsetX-RB')
+        self.ch_ImgROIOffsetY = SiriusConnectionSignal(
+            self.scrn_prefix+':ImgROIOffsetY-RB')
+
         self._setupUi()
 
     @property
@@ -388,10 +396,10 @@ class SiriusScrnView(QWidget):
         Thread(target=self._saveCalibrationGrid_thread, daemon=True).start()
 
     def _saveCalibrationGrid_thread(self):
-        roi_h = float(self.PyDMLabel_ImgROIHeight.text())
-        roi_w = float(self.PyDMLabel_ImgROIWidth.text())
-        roi_offsetx = float(self.PyDMLabel_ImgROIOffsetX.text())
-        roi_offsety = float(self.PyDMLabel_ImgROIOffsetY.text())
+        roi_h = float(self.ch_ImgROIHeight.value)
+        roi_w = float(self.ch_ImgROIWidth.value)
+        roi_offsetx = float(self.ch_ImgROIOffsetX.value)
+        roi_offsety = float(self.ch_ImgROIOffsetY.value)
 
         # Disable camera acquisition and wait for disabling
         self.PyDMStateButton_CamEnbl.send_value_signal[int].emit(0)
@@ -401,12 +409,12 @@ class SiriusScrnView(QWidget):
             state = self.SiriusLedState_CamEnbl.state
 
         # Change ROI to get entire image
-        self.PyDMSpinbox_ImgROIHeight.send_value_signal[float].emit(
+        self.ch_ImgROIHeight.send_value_signal[float].emit(
             float(self.image_view.image_maxheight))
-        self.PyDMSpinbox_ImgROIWidth.send_value_signal[float].emit(
+        self.ch_ImgROIWidth.send_value_signal[float].emit(
             float(self.image_view.image_maxwidth))
-        self.PyDMSpinbox_ImgROIOffsetX.send_value_signal[float].emit(0)
-        self.PyDMSpinbox_ImgROIOffsetY.send_value_signal[float].emit(0)
+        self.ch_ImgROIOffsetX.send_value_signal[float].emit(0)
+        self.ch_ImgROIOffsetY.send_value_signal[float].emit(0)
 
         # Enable camera acquisition and wait for receiveing first frame
         self._receivedData = False
@@ -425,12 +433,10 @@ class SiriusScrnView(QWidget):
             state = self.SiriusLedState_CamEnbl.state
 
         # Change ROI to original size
-        self.PyDMSpinbox_ImgROIHeight.send_value_signal[float].emit(roi_h)
-        self.PyDMSpinbox_ImgROIWidth.send_value_signal[float].emit(roi_w)
-        self.PyDMSpinbox_ImgROIOffsetX.send_value_signal[float].emit(
-            roi_offsetx)
-        self.PyDMSpinbox_ImgROIOffsetY.send_value_signal[float].emit(
-            roi_offsety)
+        self.ch_ImgROIHeight.send_value_signal[float].emit(roi_h)
+        self.ch_ImgROIWidth.send_value_signal[float].emit(roi_w)
+        self.ch_ImgROIOffsetX.send_value_signal[float].emit(roi_offsetx)
+        self.ch_ImgROIOffsetY.send_value_signal[float].emit(roi_offsety)
 
         # Enable camera acquisition
         self.PyDMStateButton_CamEnbl.send_value_signal[int].emit(1)
