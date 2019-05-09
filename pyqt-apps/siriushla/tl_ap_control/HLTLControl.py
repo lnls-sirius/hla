@@ -451,7 +451,10 @@ class TLAPControlWindow(SiriusMainWindow):
     def _openReference(self):
         """Load and show reference image."""
         home = _os.path.expanduser('~')
-        path = _os.path.join(home, 'sirius-hlas', self._tl + '_ap_control')
+        folder_month = _datetime.now().strftime('%Y-%m')
+        folder_day = _datetime.now().strftime('%Y-%m-%d')
+        path = _os.path.join(
+            home, 'Desktop', 'screen-iocs', folder_month, folder_day)
         fn, _ = QFileDialog.getOpenFileName(
             self, 'Open Reference...', path,
             'Images (*.png *.xpm *.jpg);;All Files (*)')
@@ -462,7 +465,10 @@ class TLAPControlWindow(SiriusMainWindow):
     def _saveReference(self):
         """Save reference image."""
         home = _os.path.expanduser('~')
-        path = _os.path.join(home, 'sirius-hlas', self._tl + '_ap_control')
+        folder_month = _datetime.now().strftime('%Y-%m')
+        folder_day = _datetime.now().strftime('%Y-%m-%d')
+        path = _os.path.join(
+            home, 'Desktop', 'screen-iocs', folder_month, folder_day)
         if not _os.path.exists(path):
             _os.makedirs(path)
         fn, _ = QFileDialog.getSaveFileName(
