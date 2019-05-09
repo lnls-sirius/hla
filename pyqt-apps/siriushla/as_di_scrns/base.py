@@ -139,6 +139,7 @@ class SiriusImageView(PyDMImageView):
             self._calibration_grid_filterfactor = value
             if self._calibration_grid_image is not None:
                 self._update_calibration_grid_image()
+                self.needs_redraw = True
 
     def set_calibration_grid_border2remove(self, value):
         """Set factor used to remove border of the calibration grid.
@@ -152,6 +153,7 @@ class SiriusImageView(PyDMImageView):
         self._calibration_grid_removeborder = value
         if self._calibration_grid_image is not None:
             self._update_calibration_grid_image()
+            self.needs_redraw = True
 
     def process_image(self, image):
         """Reimplement process_image method to add grid to image."""
