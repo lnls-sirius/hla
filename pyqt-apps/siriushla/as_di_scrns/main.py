@@ -464,7 +464,7 @@ class SiriusScrnView(QWidget):
         folder_month = datetime.now().strftime('%Y-%m')
         folder_day = datetime.now().strftime('%Y-%m-%d')
         path = os.path.join(
-            home, 'Desktop', 'screen-iocs', folder_month, folder_day)
+            home, 'Desktop', 'screens-iocs', folder_month, folder_day)
         if not os.path.exists(path):
             os.makedirs(path)
         fn, _ = QFileDialog.getSaveFileName(
@@ -476,7 +476,7 @@ class SiriusScrnView(QWidget):
             fn += '.txt'
 
         path_default = os.path.join(
-            home, 'Desktop', 'screen-iocs', 'default')
+            home, 'Desktop', 'screens-iocs', 'default')
         if not os.path.exists(path_default):
             os.makedirs(path_default)
         fn_default = path_default + '/' + self.device + '.txt'
@@ -492,14 +492,14 @@ class SiriusScrnView(QWidget):
         if not default:
             folder_month = datetime.now().strftime('%Y-%m')
             path = os.path.join(
-                home, 'Desktop', 'screen-iocs', folder_month)
+                home, 'Desktop', 'screens-iocs', folder_month)
             fn, _ = QFileDialog.getOpenFileName(
                 self, 'Load Grid...', path, '*.txt')
             if not fn:
                 return
         else:
             path = os.path.join(
-                home, 'Desktop', 'screen-iocs', 'default')
+                home, 'Desktop', 'screens-iocs', 'default')
             fn = path + '/' + self.device + '.txt'
 
         try:
