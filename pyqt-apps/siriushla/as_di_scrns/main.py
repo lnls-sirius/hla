@@ -506,6 +506,14 @@ class SiriusScrnView(QWidget):
                 self, 'Load Grid...', path, '*.npy')
             if not fn:
                 return
+            if self.device not in fn:
+                ans = QMessageBox.question(
+                    self, 'Warning',
+                    'The name of the selected file does not contain the name' +
+                    ' of this screen. Are you sure you\'re loading this grid?',
+                    QMessageBox.Yes, QMessageBox.Cancel)
+                if ans == QMessageBox.Cancel:
+                    return
         else:
             path = os.path.join(
                 home, 'Desktop', 'screens-iocs', 'default')
