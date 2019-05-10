@@ -107,6 +107,7 @@ class SiriusImageView(PyDMImageView):
         self._calibration_grid_width = int(data[0])
         self._calibration_grid_maxdata = data[1:].max()
         self._update_calibration_grid_image()
+        self.needs_redraw = True
 
     @property
     def calibration_grid_filterfactor(self):
