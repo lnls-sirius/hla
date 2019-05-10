@@ -279,11 +279,11 @@ class SiriusScrnView(QWidget):
         lay.setFormAlignment(Qt.AlignCenter)
         lay.addRow(QLabel('<h4>Camera Acquisition</h4>', self))
         lay.addRow(label_CamEnbl, hbox_CamEnbl)
-        lay.addRow(label_Reset, hbox_Reset)
         lay.addRow(label_CamAcqPeriod, hbox_CamAcqPeriod)
         lay.addRow(label_CamExposureTime, hbox_CamExposureTime)
         lay.addRow(label_CamGain, hbox_CamGain)
         lay.addRow('', hbox_AutoCamGain)
+        lay.addRow(label_Reset, hbox_Reset)
         lay.addRow('', self.pb_moreSettings)
         return lay
 
