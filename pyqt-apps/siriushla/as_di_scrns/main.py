@@ -430,6 +430,11 @@ class SiriusScrnView(QWidget):
         self.ch_ImgROIOffsetX.send_value_signal[float].emit(0)
         self.ch_ImgROIOffsetY.send_value_signal[float].emit(0)
 
+        # Enable led and wait for status
+        self.PyDMStateButton_EnblLED.send_value_signal[int].emit(1)
+        while not self.SiriusLedState_EnblLED.state:
+            time.sleep(0.1)
+
         # Enable camera acquisition and wait for receiveing first frame
         self._receivedData = False
         self.PyDMStateButton_CamEnbl.send_value_signal[int].emit(1)
