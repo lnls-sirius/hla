@@ -406,7 +406,8 @@ class SiriusScrnView(QWidget):
         self.PyDMLabel_SigmaYNDStats.setVisible(visible)
 
     def _saveCalibrationGrid(self):
-        Thread(target=self._saveCalibrationGrid_thread, daemon=True).start()
+        t = Thread(target=self._saveCalibrationGrid_thread, daemon=True)
+        t.start()
 
     def _saveCalibrationGrid_thread(self):
         roi_h = float(self.ch_ImgROIHeight.value)
@@ -469,23 +470,21 @@ class SiriusScrnView(QWidget):
             os.makedirs(path)
         fn, _ = QFileDialog.getSaveFileName(
             self, 'Save Grid As...', path + '/' + self.device +
-            datetime.now().strftime('_%Y-%m-%d_%Hh%Mmin'), '*.txt')
+            datetime.now().strftime('_%Y-%m-%d_%Hh%Mmin'), '*.npy')
         if not fn:
             return False
-        if not fn.endswith('.txt'):
-            fn += '.txt'
 
         path_default = os.path.join(
             home, 'Desktop', 'screens-iocs', 'default')
         if not os.path.exists(path_default):
             os.makedirs(path_default)
-        fn_default = path_default + '/' + self.device + '.txt'
+        fn_default = path_default + '/' + self.device
 
         grid = self.image_view.calibrationGrid
         width = self.image_view.imageWidth
         data = np.append(width, grid)
-        np.savetxt(fn, data)
-        np.savetxt(fn_default, data)
+        np.save(fn, data)
+        np.save(fn_default, data)
 
     def _loadCalibrationGrid(self, default=False):
         home = os.path.expanduser('~')
@@ -494,16 +493,16 @@ class SiriusScrnView(QWidget):
             path = os.path.join(
                 home, 'Desktop', 'screens-iocs', folder_month)
             fn, _ = QFileDialog.getOpenFileName(
-                self, 'Load Grid...', path, '*.txt')
+                self, 'Load Grid...', path, '*.npy')
             if not fn:
                 return
         else:
             path = os.path.join(
                 home, 'Desktop', 'screens-iocs', 'default')
-            fn = path + '/' + self.device + '.txt'
+            fn = path + '/' + self.device
 
         try:
-            data = np.loadtxt(fn)
+            data = np.load(fn+'.npy')
             self.image_view.calibrationGrid = data
         except Exception:
             if not default:
