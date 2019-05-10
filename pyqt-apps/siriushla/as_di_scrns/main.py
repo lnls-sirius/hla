@@ -517,10 +517,10 @@ class SiriusScrnView(QWidget):
         else:
             path = os.path.join(
                 home, 'Desktop', 'screens-iocs', 'default')
-            fn = path + '/' + self.device
+            fn = path + '/' + self.device + '.npy'
 
         try:
-            data = np.load(fn+'.npy')
+            data = np.load(fn)
             self.image_view.calibrationGrid = data
         except Exception:
             if not default:
