@@ -415,20 +415,24 @@ class SiriusScrnView(QWidget):
         roi_offsetx = float(self.ch_ImgROIOffsetX.value)
         roi_offsety = float(self.ch_ImgROIOffsetY.value)
 
-        # Disable camera acquisition and wait for disabling
-        self.PyDMStateButton_CamEnbl.send_value_signal[int].emit(0)
-        state = self.SiriusLedState_CamEnbl.state
-        while state == 1:
-            time.sleep(0.1)
+        cond = roi_h != float(self.image_view.image_maxheight) or \
+            roi_w != float(self.image_view.image_maxwidth) or \
+            roi_offsetx != 0 or roi_offsety != 0
+        if cond:
+            # Disable camera acquisition and wait for disabling
+            self.PyDMStateButton_CamEnbl.send_value_signal[int].emit(0)
             state = self.SiriusLedState_CamEnbl.state
+            while state == 1:
+                time.sleep(0.1)
+                state = self.SiriusLedState_CamEnbl.state
 
-        # Change ROI to get entire image
-        self.ch_ImgROIHeight.send_value_signal[float].emit(
-            float(self.image_view.image_maxheight))
-        self.ch_ImgROIWidth.send_value_signal[float].emit(
-            float(self.image_view.image_maxwidth))
-        self.ch_ImgROIOffsetX.send_value_signal[float].emit(0)
-        self.ch_ImgROIOffsetY.send_value_signal[float].emit(0)
+            # Change ROI to get entire image
+            self.ch_ImgROIHeight.send_value_signal[float].emit(
+                float(self.image_view.image_maxheight))
+            self.ch_ImgROIWidth.send_value_signal[float].emit(
+                float(self.image_view.image_maxwidth))
+            self.ch_ImgROIOffsetX.send_value_signal[float].emit(0)
+            self.ch_ImgROIOffsetY.send_value_signal[float].emit(0)
 
         # Enable led and wait for status
         self.PyDMStateButton_EnblLED.send_value_signal[int].emit(1)
@@ -444,21 +448,22 @@ class SiriusScrnView(QWidget):
         # Save grid
         self.image_view.saveCalibrationGrid()
 
-        # Disable camera acquisition and wait for disabling
-        self.PyDMStateButton_CamEnbl.send_value_signal[int].emit(0)
-        state = self.SiriusLedState_CamEnbl.state
-        while state == 1:
-            time.sleep(0.1)
+        if cond:
+            # Disable camera acquisition and wait for disabling
+            self.PyDMStateButton_CamEnbl.send_value_signal[int].emit(0)
             state = self.SiriusLedState_CamEnbl.state
+            while state == 1:
+                time.sleep(0.1)
+                state = self.SiriusLedState_CamEnbl.state
 
-        # Change ROI to original size
-        self.ch_ImgROIHeight.send_value_signal[float].emit(roi_h)
-        self.ch_ImgROIWidth.send_value_signal[float].emit(roi_w)
-        self.ch_ImgROIOffsetX.send_value_signal[float].emit(roi_offsetx)
-        self.ch_ImgROIOffsetY.send_value_signal[float].emit(roi_offsety)
+            # Change ROI to original size
+            self.ch_ImgROIHeight.send_value_signal[float].emit(roi_h)
+            self.ch_ImgROIWidth.send_value_signal[float].emit(roi_w)
+            self.ch_ImgROIOffsetX.send_value_signal[float].emit(roi_offsetx)
+            self.ch_ImgROIOffsetY.send_value_signal[float].emit(roi_offsety)
 
-        # Enable camera acquisition
-        self.PyDMStateButton_CamEnbl.send_value_signal[int].emit(1)
+            # Enable camera acquisition
+            self.PyDMStateButton_CamEnbl.send_value_signal[int].emit(1)
 
         # Enable showing saved grid
         time.sleep(0.1)
