@@ -36,8 +36,8 @@ class SiriusImageView(PyDMImageView):
         self._calibration_grid_image = None
         self._calibration_grid_maxdata = None
         self._calibration_grid_width = None
-        self._calibration_grid_filterfactor = 0.5
-        self._calibration_grid_removeborder = 0
+        self._calibration_grid_filterfactor = 0.25
+        self._calibration_grid_removeborder = 150
         self._image_roi_offsetx = 0
         self._offsetxchannel = None
         self._image_roi_offsety = 0
