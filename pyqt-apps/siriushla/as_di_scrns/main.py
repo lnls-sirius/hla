@@ -522,11 +522,12 @@ class SiriusScrnView(QWidget):
         try:
             data = np.load(fn)
             self.image_view.calibrationGrid = data
-        except Exception:
+        except Exception as e:
             if not default:
                 QMessageBox.critical(
                     self, 'Error',
-                    'Could not load calibration grid from file '+fn,
+                    'Could not load calibration grid from file '+fn+'. ' +
+                    '\nError message: '+str(e),
                     QMessageBox.Ok)
             return
 
