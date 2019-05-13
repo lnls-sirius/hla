@@ -19,7 +19,7 @@ from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 # import pymodels as _pymodels
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla import util as _hlautil
-from siriushla.widgets import SiriusLedAlert, SiriusLedState, \
+from siriushla.widgets import PyDMLed, SiriusLedAlert, SiriusLedState, \
     SiriusMainWindow, PyDMLinEditScrollbar
 # from siriushla.widgets import SiriusFigureCanvas
 from siriushla.as_di_scrns import SiriusScrnView
@@ -287,8 +287,10 @@ class TLAPControlWindow(SiriusMainWindow):
         pydmlabel_scrntype.setAlignment(Qt.AlignCenter)
         scrn_details.layout().addWidget(pydmlabel_scrntype, 1, 4)
 
-        led_scrntype = SiriusLedAlert(
-            parent=self, init_channel=self.prefix+scrn_device+':ScrnType-Sts')
+        led_scrntype = PyDMLed(
+            parent=self, init_channel=self.prefix+scrn_device+':ScrnType-Sts',
+            color_list=[PyDMLed.LightGreen, PyDMLed.Red, PyDMLed.Red,
+                        PyDMLed.Yellow])
         led_scrntype.shape = 2
         led_scrntype.setObjectName('Led_ScrnType_Sts_Scrn' + str(scrn_idx))
         led_scrntype.setStyleSheet("""min-width:5.8em; max-width:5.8em;""")
@@ -451,7 +453,10 @@ class TLAPControlWindow(SiriusMainWindow):
     def _openReference(self):
         """Load and show reference image."""
         home = _os.path.expanduser('~')
-        path = _os.path.join(home, 'sirius-hlas', self._tl + '_ap_control')
+        folder_month = _datetime.now().strftime('%Y-%m')
+        folder_day = _datetime.now().strftime('%Y-%m-%d')
+        path = _os.path.join(
+            home, 'Desktop', 'screen-iocs', folder_month, folder_day)
         fn, _ = QFileDialog.getOpenFileName(
             self, 'Open Reference...', path,
             'Images (*.png *.xpm *.jpg);;All Files (*)')
@@ -462,7 +467,10 @@ class TLAPControlWindow(SiriusMainWindow):
     def _saveReference(self):
         """Save reference image."""
         home = _os.path.expanduser('~')
-        path = _os.path.join(home, 'sirius-hlas', self._tl + '_ap_control')
+        folder_month = _datetime.now().strftime('%Y-%m')
+        folder_day = _datetime.now().strftime('%Y-%m-%d')
+        path = _os.path.join(
+            home, 'Desktop', 'screen-iocs', folder_month, folder_day)
         if not _os.path.exists(path):
             _os.makedirs(path)
         fn, _ = QFileDialog.getSaveFileName(

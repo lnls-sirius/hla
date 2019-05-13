@@ -36,8 +36,8 @@ class SiriusImageView(PyDMImageView):
         self._calibration_grid_image = None
         self._calibration_grid_maxdata = None
         self._calibration_grid_width = None
-        self._calibration_grid_filterfactor = 0.5
-        self._calibration_grid_removeborder = 0
+        self._calibration_grid_filterfactor = 0.25
+        self._calibration_grid_removeborder = 150
         self._image_roi_offsetx = 0
         self._offsetxchannel = None
         self._image_roi_offsety = 0
@@ -96,6 +96,20 @@ class SiriusImageView(PyDMImageView):
         self.needs_redraw = True
 
     @property
+    def calibrationGrid(self):
+        """Return Numpy array containing original grid."""
+        return _dcopy(self._calibration_grid_orig)
+
+    @calibrationGrid.setter
+    def calibrationGrid(self, data):
+        """Receive a list 'data' which elements are: [width, new_grid:]."""
+        self._calibration_grid_orig = data[1:]
+        self._calibration_grid_width = int(data[0])
+        self._calibration_grid_maxdata = data[1:].max()
+        self._update_calibration_grid_image()
+        self.needs_redraw = True
+
+    @property
     def calibration_grid_filterfactor(self):
         """Factor used to filter calibration grid.
 
@@ -139,6 +153,7 @@ class SiriusImageView(PyDMImageView):
             self._calibration_grid_filterfactor = value
             if self._calibration_grid_image is not None:
                 self._update_calibration_grid_image()
+                self.needs_redraw = True
 
     def set_calibration_grid_border2remove(self, value):
         """Set factor used to remove border of the calibration grid.
@@ -152,6 +167,7 @@ class SiriusImageView(PyDMImageView):
         self._calibration_grid_removeborder = value
         if self._calibration_grid_image is not None:
             self._update_calibration_grid_image()
+            self.needs_redraw = True
 
     def process_image(self, image):
         """Reimplement process_image method to add grid to image."""

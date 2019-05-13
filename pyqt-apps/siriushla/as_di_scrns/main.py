@@ -1,13 +1,16 @@
 """SiriusScrnView widget."""
 
 import sys
+import os
 import time
 from threading import Thread
+from datetime import datetime
+import numpy as np
 from qtpy.QtWidgets import QGridLayout, QHBoxLayout, QFormLayout, \
                            QSpacerItem, QWidget, QGroupBox, QLabel, \
                            QComboBox, QPushButton, QCheckBox, QMessageBox, \
-                           QSizePolicy as QSzPlcy, QSpinBox
-from qtpy.QtCore import Qt, Slot
+                           QSizePolicy as QSzPlcy, QSpinBox, QFileDialog
+from qtpy.QtCore import Qt, Slot, Signal
 
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox
 
@@ -15,9 +18,7 @@ from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriuspy.namesys import SiriusPVName
 
 from siriushla import util
-from siriushla.widgets import PyDMLed
-from siriushla.widgets.signal_channel import SiriusConnectionSignal
-from siriushla.widgets.windows import SiriusMainWindow
+from siriushla.widgets import PyDMLed, SiriusConnectionSignal, SiriusMainWindow
 from siriushla.as_di_scrns.base import \
     SiriusImageView as _SiriusImageView, \
     create_propty_layout as _create_propty_layout, \
@@ -35,6 +36,8 @@ class SiriusScrnView(QWidget):
     You can control it by using the method/Slot updateCalibrationGridFlag.
     """
 
+    save_files = Signal()
+
     def __init__(self, parent=None, prefix=_vaca_prefix, device=None):
         """Initialize object."""
         QWidget.__init__(self, parent=parent)
@@ -42,12 +45,24 @@ class SiriusScrnView(QWidget):
         self.device = device
         self.scrn_prefix = self.prefix+self.device
         self._receivedData = False
+
         self.screen_type_conn = SiriusConnectionSignal(
             self.scrn_prefix+':ScrnType-Sts')
         self.screen_type_conn.new_value_signal.connect(
             self.updateCalibrationGridFlag)
         self._calibrationgrid_flag = self.screen_type_conn.getvalue()
+        self.save_files.connect(self._saveGridLocalFiles)
+        self.ch_ImgROIHeight = SiriusConnectionSignal(
+            self.scrn_prefix+':ImgROIHeight-RB')
+        self.ch_ImgROIWidth = SiriusConnectionSignal(
+            self.scrn_prefix+':ImgROIWidth-RB')
+        self.ch_ImgROIOffsetX = SiriusConnectionSignal(
+            self.scrn_prefix+':ImgROIOffsetX-RB')
+        self.ch_ImgROIOffsetY = SiriusConnectionSignal(
+            self.scrn_prefix+':ImgROIOffsetY-RB')
+
         self._setupUi()
+        self._loadCalibrationGrid(default=True)
 
     @property
     def calibrationgrid_flag(self):
@@ -160,9 +175,15 @@ class SiriusScrnView(QWidget):
             min-width:4.36em;\nmax-width:4.36em;\n
             min-height:1.29em;\nmax-height:1.29em;\n""")
         self.pushbutton_savegrid.clicked.connect(self._saveCalibrationGrid)
+        self.pushbutton_loadgrid = QPushButton('Load', self)
+        self.pushbutton_loadgrid.setStyleSheet("""
+            min-width:4.36em;\nmax-width:4.36em;\n
+            min-height:1.29em;\nmax-height:1.29em;\n""")
+        self.pushbutton_loadgrid.clicked.connect(self._loadCalibrationGrid)
         hbox_grid = QHBoxLayout()
         hbox_grid.addWidget(self.checkBox_showgrid)
         hbox_grid.addWidget(self.pushbutton_savegrid)
+        hbox_grid.addWidget(self.pushbutton_loadgrid)
 
         lb = QLabel('Show levels <')
         lb.setStyleSheet("""min-width:6em;max-width:6em;""")
@@ -258,11 +279,11 @@ class SiriusScrnView(QWidget):
         lay.setFormAlignment(Qt.AlignCenter)
         lay.addRow(QLabel('<h4>Camera Acquisition</h4>', self))
         lay.addRow(label_CamEnbl, hbox_CamEnbl)
-        lay.addRow(label_Reset, hbox_Reset)
         lay.addRow(label_CamAcqPeriod, hbox_CamAcqPeriod)
         lay.addRow(label_CamExposureTime, hbox_CamExposureTime)
         lay.addRow(label_CamGain, hbox_CamGain)
         lay.addRow('', hbox_AutoCamGain)
+        lay.addRow(label_Reset, hbox_Reset)
         lay.addRow('', self.pb_moreSettings)
         return lay
 
@@ -385,28 +406,38 @@ class SiriusScrnView(QWidget):
         self.PyDMLabel_SigmaYNDStats.setVisible(visible)
 
     def _saveCalibrationGrid(self):
-        Thread(target=self._saveCalibrationGrid_thread, daemon=True).start()
+        t = Thread(target=self._saveCalibrationGrid_thread, daemon=True)
+        t.start()
 
     def _saveCalibrationGrid_thread(self):
-        roi_h = float(self.PyDMLabel_ImgROIHeight.text())
-        roi_w = float(self.PyDMLabel_ImgROIWidth.text())
-        roi_offsetx = float(self.PyDMLabel_ImgROIOffsetX.text())
-        roi_offsety = float(self.PyDMLabel_ImgROIOffsetY.text())
+        roi_h = float(self.ch_ImgROIHeight.value)
+        roi_w = float(self.ch_ImgROIWidth.value)
+        roi_offsetx = float(self.ch_ImgROIOffsetX.value)
+        roi_offsety = float(self.ch_ImgROIOffsetY.value)
 
-        # Disable camera acquisition and wait for disabling
-        self.PyDMStateButton_CamEnbl.send_value_signal[int].emit(0)
-        state = self.SiriusLedState_CamEnbl.state
-        while state == 1:
-            time.sleep(0.1)
+        cond = roi_h != float(self.image_view.image_maxheight) or \
+            roi_w != float(self.image_view.image_maxwidth) or \
+            roi_offsetx != 0 or roi_offsety != 0
+        if cond:
+            # Disable camera acquisition and wait for disabling
+            self.PyDMStateButton_CamEnbl.send_value_signal[int].emit(0)
             state = self.SiriusLedState_CamEnbl.state
+            while state == 1:
+                time.sleep(0.1)
+                state = self.SiriusLedState_CamEnbl.state
 
-        # Change ROI to get entire image
-        self.PyDMSpinbox_ImgROIHeight.send_value_signal[float].emit(
-            float(self.image_view.image_maxheight))
-        self.PyDMSpinbox_ImgROIWidth.send_value_signal[float].emit(
-            float(self.image_view.image_maxwidth))
-        self.PyDMSpinbox_ImgROIOffsetX.send_value_signal[float].emit(0)
-        self.PyDMSpinbox_ImgROIOffsetY.send_value_signal[float].emit(0)
+            # Change ROI to get entire image
+            self.ch_ImgROIHeight.send_value_signal[float].emit(
+                float(self.image_view.image_maxheight))
+            self.ch_ImgROIWidth.send_value_signal[float].emit(
+                float(self.image_view.image_maxwidth))
+            self.ch_ImgROIOffsetX.send_value_signal[float].emit(0)
+            self.ch_ImgROIOffsetY.send_value_signal[float].emit(0)
+
+        # Enable led and wait for status
+        self.PyDMStateButton_EnblLED.send_value_signal[int].emit(1)
+        while not self.SiriusLedState_EnblLED.state:
+            time.sleep(0.1)
 
         # Enable camera acquisition and wait for receiveing first frame
         self._receivedData = False
@@ -417,26 +448,90 @@ class SiriusScrnView(QWidget):
         # Save grid
         self.image_view.saveCalibrationGrid()
 
-        # Disable camera acquisition and wait for disabling
-        self.PyDMStateButton_CamEnbl.send_value_signal[int].emit(0)
-        state = self.SiriusLedState_CamEnbl.state
-        while state == 1:
-            time.sleep(0.1)
+        if cond:
+            # Disable camera acquisition and wait for disabling
+            self.PyDMStateButton_CamEnbl.send_value_signal[int].emit(0)
             state = self.SiriusLedState_CamEnbl.state
+            while state == 1:
+                time.sleep(0.1)
+                state = self.SiriusLedState_CamEnbl.state
 
-        # Change ROI to original size
-        self.PyDMSpinbox_ImgROIHeight.send_value_signal[float].emit(roi_h)
-        self.PyDMSpinbox_ImgROIWidth.send_value_signal[float].emit(roi_w)
-        self.PyDMSpinbox_ImgROIOffsetX.send_value_signal[float].emit(
-            roi_offsetx)
-        self.PyDMSpinbox_ImgROIOffsetY.send_value_signal[float].emit(
-            roi_offsety)
+            # Change ROI to original size
+            self.ch_ImgROIHeight.send_value_signal[float].emit(roi_h)
+            self.ch_ImgROIWidth.send_value_signal[float].emit(roi_w)
+            self.ch_ImgROIOffsetX.send_value_signal[float].emit(roi_offsetx)
+            self.ch_ImgROIOffsetY.send_value_signal[float].emit(roi_offsety)
 
-        # Enable camera acquisition
-        self.PyDMStateButton_CamEnbl.send_value_signal[int].emit(1)
+            # Enable camera acquisition
+            self.PyDMStateButton_CamEnbl.send_value_signal[int].emit(1)
 
         # Enable showing saved grid
         time.sleep(0.1)
+        self.checkBox_showgrid.setEnabled(True)
+        self.save_files.emit()
+
+    def _saveGridLocalFiles(self):
+        home = os.path.expanduser('~')
+        folder_month = datetime.now().strftime('%Y-%m')
+        folder_day = datetime.now().strftime('%Y-%m-%d')
+        path = os.path.join(
+            home, 'Desktop', 'screens-iocs', folder_month, folder_day)
+        if not os.path.exists(path):
+            os.makedirs(path)
+        fn, _ = QFileDialog.getSaveFileName(
+            self, 'Save Grid As...', path + '/' + self.device +
+            datetime.now().strftime('_%Y-%m-%d_%Hh%Mmin'), '*.npy')
+        if not fn:
+            return False
+
+        path_default = os.path.join(
+            home, 'Desktop', 'screens-iocs', 'default')
+        if not os.path.exists(path_default):
+            os.makedirs(path_default)
+        fn_default = path_default + '/' + self.device
+
+        grid = self.image_view.calibrationGrid
+        width = self.image_view.imageWidth
+        data = np.append(width, grid)
+        np.save(fn, data)
+        np.save(fn_default, data)
+
+    def _loadCalibrationGrid(self, default=False):
+        home = os.path.expanduser('~')
+        if not default:
+            folder_month = datetime.now().strftime('%Y-%m')
+            path = os.path.join(
+                home, 'Desktop', 'screens-iocs', folder_month)
+            fn, _ = QFileDialog.getOpenFileName(
+                self, 'Load Grid...', path, '*.npy')
+            if not fn:
+                return
+            if self.device not in fn:
+                ans = QMessageBox.question(
+                    self, 'Warning',
+                    'The name of the selected file does not contain the name' +
+                    ' of this screen. Are you sure you\'re loading this grid?',
+                    QMessageBox.Yes, QMessageBox.Cancel)
+                if ans == QMessageBox.Cancel:
+                    return
+        else:
+            path = os.path.join(
+                home, 'Desktop', 'screens-iocs', 'default')
+            fn = path + '/' + self.device + '.npy'
+
+        try:
+            data = np.load(fn)
+            self.image_view.calibrationGrid = data
+        except Exception as e:
+            if not default:
+                QMessageBox.critical(
+                    self, 'Error',
+                    'Could not load calibration grid from file '+fn+'. ' +
+                    '\nError message: '+str(e),
+                    QMessageBox.Ok)
+            return
+
+        # Enable showing saved grid
         self.checkBox_showgrid.setEnabled(True)
 
     def _setReceivedDataFlag(self):
@@ -500,7 +595,6 @@ class IndividualScrn(SiriusMainWindow):
 
 if __name__ == '__main__':
     """Run test."""
-    import os
     from siriushla.sirius_application import SiriusApplication
 
     os.environ['EPICS_CA_MAX_ARRAY_BYTES'] = '200000000'

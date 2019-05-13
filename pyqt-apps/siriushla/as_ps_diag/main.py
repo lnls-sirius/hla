@@ -91,11 +91,11 @@ class PSDiag(SiriusMainWindow):
 
                     f = 'LA-.*:'+ps
                     conn_led = MyLedMultiConnection(
-                        filter=f, parent=panel, channels=conn_chs)
+                        filters=f, parent=panel, channels=conn_chs)
                     ps_led = MyLedMultiChannel(
-                        filter=f, parent=panel, channels2values=ps_ch2vals)
+                        filters=f, parent=panel, channels2values=ps_ch2vals)
                     intlk_led = MyLedMultiChannel(
-                        filter=f, parent=panel, channels2values=intlk_ch2vals)
+                        filters=f, parent=panel, channels2values=intlk_ch2vals)
 
                     suf = ps.strip('.*')+'_led'
                     conn_led.setObjectName('conn' + suf)
@@ -138,20 +138,20 @@ class PSDiag(SiriusMainWindow):
                         asps2labels[ps], panel,
                         alignment=Qt.AlignRight | Qt.AlignVCenter)
                     psconn_led = MyLedMultiConnection(
-                        filter=f, parent=panel, channels=psconn_chs)
+                        filters=f, parent=panel, channels=psconn_chs)
                     maconn_led = MyLedMultiConnection(
-                        filter=f.replace('PS', 'MA'),
+                        filters=f.replace('PS', 'MA'),
                         parent=panel, channels=maconn_chs)
                     ps_led = MyLedMultiChannel(
-                        filter=f, parent=panel, channels2values=ps_ch2vals)
+                        filters=f, parent=panel, channels2values=ps_ch2vals)
                     intlk_led = MyLedMultiChannel(
-                        filter=f, parent=panel, channels2values=intlk_ch2vals)
+                        filters=f, parent=panel, channels2values=intlk_ch2vals)
                     opm_led = MyLedMultiChannel(
-                        filter=f, parent=panel, channels2values=opm_ch2vals)
+                        filters=f, parent=panel, channels2values=opm_ch2vals)
                     opm_led.setOnColor(PyDMLed.LightGreen)
                     opm_led.setOffColor(PyDMLed.Yellow)
                     diff_led = MyLedMultiChannel(
-                        filter=f, parent=panel, channels2values=diff_ch2vlas)
+                        filters=f, parent=panel, channels2values=diff_ch2vlas)
 
                     suf = ps.strip('.*')+'_led'
                     psconn_led.setObjectName('psconn' + suf)
@@ -530,9 +530,9 @@ def create_led_class(type='multichannel'):
 
         filterlog = Signal(str)
 
-        def __init__(self, filt, **kwargs):
+        def __init__(self, filters, **kwargs):
             super().__init__(**kwargs)
-            self.filter = filt
+            self.filter = filters
 
         def mouseDoubleClickEvent(self, ev):
             self.filterlog.emit(self.filter)
