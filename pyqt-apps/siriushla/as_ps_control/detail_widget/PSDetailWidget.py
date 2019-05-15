@@ -504,10 +504,6 @@ class PSDetailWidget(QWidget):
 
         wfm_data_sp_ch = self._prefixed_psname + ":WfmData-SP"
         wfm_data_rb_ch = self._prefixed_psname + ":WfmData-RB"
-        rmp_n_cycles_sp = self._prefixed_psname + ':RmpIncNrCycles-SP'
-        rmp_n_cycles_rb = self._prefixed_psname + ':RmpIncNrCycles-RB'
-        rmp_n_cycles_mon = self._prefixed_psname + ':RmpIncNrCycles-Mon'
-        rmp_ready = self._prefixed_psname + ':RmpReady-Mon'
 
         self.wfmdata = PyDMWaveformPlot()
         self.wfmdata.setMaximumSize(400, 300)
@@ -520,30 +516,8 @@ class PSDetailWidget(QWidget):
         self.wfmdata.addChannel(y_channel=wfm_data_rb_ch, name='WfmData-RB',
                                 color='blue', lineWidth=2)
 
-        # Labels
-        self.rmp_n_cycles_label = QLabel('Ramp cycles', self)
-        self.rmp_curr_cycle_label = QLabel('Current cycle', self)
-        self.rmp_ready = QLabel('Ramp ready', self)
-
-        self.rmp_n_cycles_sp_sb = PyDMSpinbox(self, rmp_n_cycles_sp)
-        self.rmp_n_cycles_rb_label = PyDMLabel(self, rmp_n_cycles_rb)
-        # rmp_n_cycles_layout = QHBoxLayout()
-        # rmp_n_cycles_layout.addWidget(self.rmp_n_cycles_sp_sb)
-        # rmp_n_cycles_layout.addWidget(self.rmp_n_cycles_rb_label)
-        self.rmp_n_cycles_mon_label = PyDMLabel(self, rmp_n_cycles_mon)
-        self.rmp_ready_mon_led = SiriusLedAlert(self, rmp_ready)
-        self.rmp_ready_mon_led.setOnColor(SiriusLedAlert.LightGreen)
-        self.rmp_ready_mon_led.setOffColor(SiriusLedAlert.Red)
         # Add widgets
         layout.addWidget(self.wfmdata, 0, 0, 1, 3)
-        # layout.addLayout(rmp_n_cycles_layout)
-        layout.addWidget(self.rmp_n_cycles_label, 1, 0)
-        layout.addWidget(self.rmp_n_cycles_sp_sb, 1, 1)
-        layout.addWidget(self.rmp_n_cycles_rb_label, 1, 2)
-        layout.addWidget(self.rmp_curr_cycle_label, 2, 0)
-        layout.addWidget(self.rmp_n_cycles_mon_label, 2, 1)
-        layout.addWidget(self.rmp_ready, 3, 0)
-        layout.addWidget(self.rmp_ready_mon_led, 3, 1)
         layout.setRowStretch(4, 1)
 
         return layout
@@ -579,22 +553,22 @@ class DCLinkDetailWidget(PSDetailWidget):
         # Group boxes that compose the widget
         self.version_box = QGroupBox('Version')
         self.version_box.setObjectName("version")
-        
+
         self.interlock_box = QGroupBox('Interlock')
         self.interlock_box.setObjectName('interlock')
-        
+
         self.opmode_box = QGroupBox('Operation Mode')
         self.opmode_box.setObjectName('operation_mode')
 
         self.pwrstate_box = QGroupBox('PwrState')
         self.pwrstate_box.setObjectName('power_state')
-        
+
         self.analog_box = QGroupBox(self._analog_varname)
         self.analog_box.setObjectName('current')
-        
+
         self.command_box = QGroupBox('Commands')
         self.command_box.setObjectName('command_box')
-        
+
         self.aux_box = QGroupBox('Other Params')
         self.aux_box.setObjectName('aux_box')
 
