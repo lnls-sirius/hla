@@ -5,11 +5,10 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGroupBox, QGridLayout, QLabel, \
     QPushButton, QVBoxLayout, QHBoxLayout, QFormLayout
 from qtpy.QtGui import QColor
-# from epics import get_pv
 
 from siriuspy.envars import vaca_prefix
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox, PyDMPushButton, \
-    PyDMLineEdit, PyDMWaveformPlot, PyDMSpinbox
+    PyDMLineEdit, PyDMWaveformPlot
 from siriushla.widgets.state_button import PyDMStateButton
 from siriushla.widgets import PyDMLinEditScrollbar
 from siriushla.widgets.led import SiriusLedState, SiriusLedAlert
@@ -500,7 +499,7 @@ class PSDetailWidget(QWidget):
         return layout
 
     def _waveformLayout(self):
-        layout = QGridLayout()
+        layout = QVBoxLayout()
 
         wfm_data_sp_ch = self._prefixed_psname + ":WfmData-SP"
         wfm_data_rb_ch = self._prefixed_psname + ":WfmData-RB"
@@ -517,8 +516,7 @@ class PSDetailWidget(QWidget):
                                 color='blue', lineWidth=2)
 
         # Add widgets
-        layout.addWidget(self.wfmdata, 0, 0, 1, 3)
-        layout.setRowStretch(4, 1)
+        layout.addWidget(self.wfmdata)
 
         return layout
 
