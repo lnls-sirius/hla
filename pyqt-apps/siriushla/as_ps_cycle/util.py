@@ -10,6 +10,7 @@ from epics import PV as _PV
 from math import isclose as _isclose
 import numpy as _np
 
+from siriuspy.namesys import SiriusPVName
 from siriuspy.envars import vaca_prefix as VACA_PREFIX
 from siriuspy.search import MASearch as _MASearch, PSSearch as _PSSearch
 from siriuspy.csdevice.pwrsupply import Const as _PSConst
@@ -120,6 +121,7 @@ class Timing:
 
     def __init__(self):
         """Init."""
+        self._initial_state = dict()
         self._create_pvs()
         self._status_nok = []
 
@@ -183,14 +185,26 @@ class Timing:
             pv = Timing._pvs[trig+':Src-Sel']
             pv.value = 'Dsbl'
 
+    def restore_initial_state(self):
+        """Restore initial state."""
+        for pvname, init_val in self._initial_state.items():
+            if ':BucketList-SP' in pvname and isinstance(init_val, int):
+                init_val = [init_val, ]
+            Timing._pvs[pvname].put(init_val)
+            _time.sleep(1.5*SLEEP_CAPUT)
+
     def _create_pvs(self):
         """Create PVs."""
         Timing._pvs = dict()
         for mode, dict_ in Timing.properties.items():
             for pvname in dict_.keys():
+                if pvname in Timing._pvs.keys():
+                    continue
+                pvname = SiriusPVName(pvname)
                 Timing._pvs[pvname] = _PV(VACA_PREFIX+pvname,
                                           connection_timeout=TIMEOUT)
-                Timing._pvs[pvname].get()
+                self._initial_state[pvname] = Timing._pvs[pvname].get()
+
 
     @staticmethod
     def _create_section_re(sections):
@@ -645,7 +659,8 @@ class AutomatedCycle:
         return True
 
     def reset_all_subsystems(self):
-        self._update_log('Turning TI off and setting magnets to SlowRef...')
+        self._update_log(
+            'Restoring Timing initial state and setting magnets to SlowRef...')
         _time.sleep(4)
         threads = list()
         manames = _dcopy(self.manames_2_cycle)
@@ -656,7 +671,7 @@ class AutomatedCycle:
             threads[-1].start()
         for t in threads:
             t.join()
-        self._timing.reset()
+        self._timing.restore_initial_state()
         self._update_log(done=True)
 
     def execute(self):
