@@ -376,7 +376,14 @@ class CycleWindow(SiriusMainWindow):
 
     def _create_cyclers(self, manames):
         """Create new cyclers, if necessary."""
-        task = CreateCyclers(manames)
+        ma2create = list()
+        for maname in manames:
+            if maname not in _cyclers.keys():
+                ma2create.append(maname)
+        if not ma2create:
+            return
+
+        task = CreateCyclers(ma2create)
         dlg = ProgressDialog('Connecting to magnets...', task, self)
         dlg.exec_()
 
