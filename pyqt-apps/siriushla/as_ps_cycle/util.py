@@ -570,6 +570,7 @@ class AutomatedCycle:
                 self._ramp_duration, self.cyclers[ma].cycle_duration('Ramp'))
 
         self.aborted = False
+        self._size = None
 
     @property
     def manames_2_cycle(self):
@@ -584,6 +585,17 @@ class AutomatedCycle:
         """Return manames to ramp."""
         return _Filter.process_filters(
             self.cyclers.keys(), filters={'sec': 'BO', 'dis': 'MA'})
+
+    @property
+    def size(self):
+        if not self._size:
+            s = 0
+            if self.manames_2_cycle:
+                s += 3*len(self.manames_2_cycle)+7+round(self._cycle_duration)
+            if self.manames_2_ramp:
+                s += 3*len(self.manames_2_ramp)+7+round(self._ramp_duration)
+        self._size = s
+        return self._size
 
     def prepare_all_magnets(self, mode):
         """Prepare magnets to cycle according to mode."""

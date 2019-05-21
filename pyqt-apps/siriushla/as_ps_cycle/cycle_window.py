@@ -10,7 +10,7 @@ from qtpy.QtGui import QColor
 from qtpy.QtCore import Signal, QThread, Qt
 from qtpy.QtWidgets import QWidget, QGridLayout, QVBoxLayout, QHBoxLayout, \
     QPushButton, QLabel, QMessageBox, QLineEdit, QApplication, QGroupBox, \
-    QTabWidget, QListWidget, QListWidgetItem
+    QTabWidget, QListWidget, QListWidgetItem, QProgressBar
 
 from siriuspy.envars import vaca_prefix as VACA_PREFIX
 from siriuspy.search import MASearch as _MASearch
@@ -103,15 +103,17 @@ class CycleWindow(SiriusMainWindow):
         # Tab Automated
         self._tab_auto = QWidget()
         # widgets
-        self.auto_exec_bt = QPushButton('Execute automated cycle')
+        self.auto_exec_bt = QPushButton('Execute automated cycle', self)
         self.auto_exec_bt.setStyleSheet('min-height:2.5em;')
         self.auto_exec_bt.clicked.connect(self._auto_cycle)
-        self.progress_list = QListWidget()
-        self.auto_cancel_bt = QPushButton('Cancel')
+        self.progress_list = QListWidget(self)
+        self.progress_bar = QProgressBar(self)
+        self.auto_cancel_bt = QPushButton('Cancel', self)
         self.auto_cancel_bt.clicked.connect(self.auto_cycle_aborted.emit)
         autolay = QVBoxLayout()
         autolay.addWidget(self.auto_exec_bt)
         autolay.addWidget(self.progress_list)
+        autolay.addWidget(self.progress_bar)
         autolay.addWidget(self.auto_cancel_bt)
         self._tab_auto.setLayout(autolay)
         self._tab_widget.addTab(self._tab_auto, 'Automated')
@@ -331,6 +333,10 @@ class CycleWindow(SiriusMainWindow):
         auto = CycleAutomatically(magnets, self._timing, self)
         auto.updated.connect(self._update_auto_progress)
         self.auto_cycle_aborted.connect(auto.exit_thread)
+        self.auto_cycle_aborted.connect(_part(self.progress_bar.setValue, 0))
+        self.progress_bar.setMinimum(0)
+        self.progress_bar.setMaximum(auto.size())
+        self.progress_bar.setValue(0)
         auto.start()
 
     def _get_magnets_list(self, mode='Cycle', prepare=False):
@@ -383,10 +389,13 @@ class CycleWindow(SiriusMainWindow):
         self.status_list.magnets = self._magnets_failed
 
     def _update_auto_progress(self, text, done, warning=False, error=False):
+        """Update automated cycle progress list and bar."""
+        bar_currvalue = self.progress_bar.value()
         if done:
             last_item = self.progress_list.item(self.progress_list.count()-1)
             curr_text = last_item.text()
             last_item.setText(curr_text+' done.')
+            bar_newvalue = bar_currvalue
         elif 'Remaining time' in text:
             last_item = self.progress_list.item(self.progress_list.count()-1)
             if 'Remaining time' in last_item.text():
@@ -394,14 +403,25 @@ class CycleWindow(SiriusMainWindow):
             else:
                 self.progress_list.addItem(text)
                 self.progress_list.scrollToBottom()
+            bar_newvalue = bar_currvalue+1
         else:
             item = QListWidgetItem(text)
             if error:
                 item.setForeground(errorcolor)
+                self.auto_exec_bt.setEnabled(True)
+                bar_newvalue = 0
             elif warning:
                 item.setForeground(warncolor)
+                bar_newvalue = bar_currvalue
+            elif 'finished' in text:
+                self.auto_exec_bt.setEnabled(True)
+                bar_newvalue = self.progress_bar.maximum()
+            else:
+                bar_newvalue = bar_currvalue+1
             self.progress_list.addItem(item)
             self.progress_list.scrollToBottom()
+
+        self.progress_bar.setValue(bar_newvalue)
 
     def _filter_manames(self):
         text = self.search_le.text()
@@ -791,6 +811,9 @@ class CycleAutomatically(QThread):
         self._auto = AutomatedCycle(
             cyclers=cyclers, timing=timing, logger=self)
         self._quit_thread = False
+
+    def size(self):
+        return self._auto.size
 
     def exit_thread(self):
         self._quit_thread = True
