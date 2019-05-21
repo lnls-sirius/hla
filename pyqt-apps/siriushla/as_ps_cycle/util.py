@@ -704,14 +704,13 @@ class AutomatedCycle:
                           self._timing.get_cycle_count() *
                           self._timing.DEFAULT_RAMP_DURATION/1000000)
             self._update_log('Remaining time: {}s...'.format(t))
-            if (mode == 'Cycle') and (5 < _time.time() - t0 < 10):
-                maname = self.manames_2_cycle[0]
-                status = self.cyclers[maname].check_cycle_enable()
-                if not status:
-                    self._update_log(
-                        'Magnets are not cycling! Verify triggers!',
-                        error=True)
-                    return False
+            if (mode == 'Cycle') and (5 < _time.time() - t0 < 8):
+                for maname in self.manames_2_cycle:
+                    if not self.cyclers[maname].check_cycle_enable():
+                        self._update_log(
+                            'Magnets are not cycling! Verify triggers!',
+                            error=True)
+                        return False
             if mode == 'Cycle':
                 keep_waiting = _time.time() - t0 < self._cycle_duration
             else:
