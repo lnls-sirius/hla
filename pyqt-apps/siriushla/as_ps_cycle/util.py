@@ -737,6 +737,9 @@ class AutomatedCycle:
 
     def execute(self):
         """Execute automated cycle."""
+        # Turn off timing
+        self._timing.turnoff()
+
         # Cycle
         if self.manames_2_cycle:
             self.prepare_all_magnets('Cycle')
@@ -767,6 +770,9 @@ class AutomatedCycle:
             if not self.wait('Cycle'):
                 return
             self.check_all_magnets_final_state('Cycle')
+
+        # Turn off timing
+        self._timing.turnoff()
 
         # Ramp
         if self.manames_2_ramp:
