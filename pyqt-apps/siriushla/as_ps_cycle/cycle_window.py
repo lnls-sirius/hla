@@ -132,7 +132,6 @@ class CycleWindow(SiriusMainWindow):
 
         gb_cycle = QGroupBox('Cycle')
         self.prepare_cycle_bt = QPushButton('Prepare', self)
-        # self.prepare_cycle_bt.setEnabled(False)
         self.prepare_cycle_bt.clicked.connect(
             _part(self._prepare_to_cycle, 'Ramp'))
         self.cycle_bt = QPushButton('Cycle', self)
@@ -159,16 +158,16 @@ class CycleWindow(SiriusMainWindow):
         self._tab_manual.setLayout(manuallay)
         self._tab_widget.addTab(self._tab_manual, 'Manual')
 
-        # reset
-        gb_reset = QGroupBox('Turn Off Cycle')
-        self.reset_ma_bt = QPushButton('Put Magnets in SlowRef')
-        self.reset_ma_bt.clicked.connect(self._reset_magnets)
-        self.reset_ti_bt = QPushButton('Turn off Timing')
-        self.reset_ti_bt.clicked.connect(self._reset_timing)
-        glay_reset = QHBoxLayout()
-        glay_reset.addWidget(self.reset_ti_bt)
-        glay_reset.addWidget(self.reset_ma_bt)
-        gb_reset.setLayout(glay_reset)
+        # turnoff
+        gb_turnoff = QGroupBox('Turn Off Cycle')
+        self.set_ma_2_slowref_bt = QPushButton('Put Magnets in SlowRef')
+        self.set_ma_2_slowref_bt.clicked.connect(self._set_magnets_2_slowref)
+        self.restore_ti_bt = QPushButton('Restore Timing initial state')
+        self.restore_ti_bt.clicked.connect(self._restore_timing)
+        glay_turnoff = QHBoxLayout()
+        glay_turnoff.addWidget(self.restore_ti_bt)
+        glay_turnoff.addWidget(self.set_ma_2_slowref_bt)
+        gb_turnoff.setLayout(glay_turnoff)
 
         # connect tree signals
         self.magnets_tree.doubleClicked.connect(self._open_magnet_detail)
@@ -186,7 +185,7 @@ class CycleWindow(SiriusMainWindow):
         layout.addWidget(gb_status, 1, 1)
         layout.addWidget(self._tab_widget, 2, 1)
         layout.addWidget(QLabel(''), 3, 1)
-        layout.addWidget(gb_reset, 4, 1)
+        layout.addWidget(gb_turnoff, 4, 1)
         layout.setColumnStretch(0, 1)
         layout.setColumnStretch(1, 1)
         layout.setRowStretch(0, 3)
@@ -219,6 +218,7 @@ class CycleWindow(SiriusMainWindow):
         return True
 
     def _prepare_magnets(self, mode):
+        # Prepare magnets to cycle
         self._magnets2cycle = self._get_magnets_list(mode=mode, prepare=True)
         if not self._magnets2cycle:
             return False
@@ -310,7 +310,7 @@ class CycleWindow(SiriusMainWindow):
 
         QMessageBox.information(self, 'Message', 'Cycle finished!')
 
-    def _reset_magnets(self):
+    def _set_magnets_2_slowref(self):
         magnets = self._get_magnets_list()
         if not magnets:
             return False
@@ -320,8 +320,8 @@ class CycleWindow(SiriusMainWindow):
         if ret == dlg.Rejected:
             return False
 
-    def _reset_timing(self):
-        self._timing.reset()
+    def _restore_timing(self):
+        self._timing.restore_initial_state()
 
     def _auto_cycle(self):
         magnets = self._get_magnets_list()
@@ -760,7 +760,7 @@ class ResetMagnetsOpMode(QThread):
             threads = dict()
             for maname in self._manames:
                 threads[maname] = _thread.Thread(
-                    target=self.reset_magnet_opmode,
+                    target=self.set_magnet_opmode_slowref,
                     args=(maname, ), daemon=True)
                 threads[maname].start()
                 if self._quit_task:
@@ -771,10 +771,10 @@ class ResetMagnetsOpMode(QThread):
             if not interrupted:
                 self.completed.emit()
 
-    def reset_magnet_opmode(self, maname):
+    def set_magnet_opmode_slowref(self, maname):
         global _cyclers
+        done = _cyclers[maname].set_opmode_slowref()
         self.currentItem.emit(maname)
-        done = _cyclers[maname].reset_opmode()
         self.itemDone.emit(maname, done)
 
 

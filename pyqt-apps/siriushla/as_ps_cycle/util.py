@@ -212,14 +212,17 @@ class Timing:
         pv = Timing._pvs['RA-RaMO:TI-EVG:InjCount-Mon']
         return (pv.value == Timing.DEFAULT_RAMP_NRCYCLES)
 
-    def reset(self):
+    def turnoff(self):
+        """Turn timing off."""
         pv_event = Timing._pvs['RA-RaMO:TI-EVG:CycleMode-Sel']
         pv_event.value = _TIConst.EvtModes.Disabled
         pv_bktlist = Timing._pvs['RA-RaMO:TI-EVG:RepeatBucketList-SP']
         pv_bktlist.value = 0
         for trig in self._trigger_list:
             pv = Timing._pvs[trig+':Src-Sel']
-            pv.value = 'Dsbl'
+            pv.value = _TIConst.DsblEnbl.Dsbl
+            pv = Timing._pvs[trig+':State-Sel']
+            pv.value = _TIConst.DsblEnbl.Dsbl
 
     def restore_initial_state(self):
         """Restore initial state."""
@@ -385,7 +388,7 @@ class MagnetCycler:
         """Config magnet to cycling mode."""
         status = True
 
-        status &= self.reset_opmode()
+        status &= self.set_opmode_slowref()
         status &= self.timed_get(self['OpMode-Sts'], _PSConst.States.SlowRef)
 
         status &= self.set_on()
@@ -458,7 +461,7 @@ class MagnetCycler:
                 self['PRUSyncPulseCount-Mon'], pulses, wait=10.0)
             if not status:
                 return 1  # indicate lack of trigger pulses
-            status = self.reset_opmode()
+            status = self.set_opmode_slowref()
             status &= self.timed_get(
                 self['OpMode-Sts'], _PSConst.States.SlowRef)
         else:
@@ -475,7 +478,7 @@ class MagnetCycler:
 
         return 0
 
-    def reset_opmode(self):
+    def set_opmode_slowref(self):
         return self.set_opmode(_PSConst.OpMode.SlowRef)
 
     def conn_put(self, pv, value):
@@ -725,7 +728,7 @@ class AutomatedCycle:
         manames.extend(self.manames_2_ramp)
         for ma in manames:
             threads.append(_thread.Thread(
-                target=self.cyclers[ma].reset_opmode, daemon=True))
+                target=self.cyclers[ma].set_opmode_slowref, daemon=True))
             threads[-1].start()
         for t in threads:
             t.join()
