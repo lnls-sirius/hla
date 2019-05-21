@@ -14,7 +14,8 @@ from siriuspy.namesys import SiriusPVName
 from siriuspy.envars import vaca_prefix as VACA_PREFIX
 from siriuspy.search import MASearch as _MASearch, PSSearch as _PSSearch
 from siriuspy.csdevice.pwrsupply import Const as _PSConst
-from siriuspy.csdevice.timesys import Const as _TIConst
+from siriuspy.csdevice.timesys import Const as _TIConst, \
+    get_hl_trigger_database as _get_trig_db
 from siriuspy.csdevice.pwrsupply import ETypes as _PSet
 from siriuspy.namesys import Filter as _Filter
 from siriushla.as_ps_cycle.ramp_data import BASE_RAMP_CURVE_ORIG as \
@@ -23,6 +24,8 @@ from siriushla.as_ps_cycle.ramp_data import BASE_RAMP_CURVE_ORIG as \
 
 TIMEOUT = 0.05
 SLEEP_CAPUT = 0.1
+INTERVAL_WAITCYCLE = 15
+INTERVAL_WAITRAMP = 8
 
 
 def get_manames():
@@ -90,7 +93,6 @@ class Timing:
             # EVG settings
             'RA-RaMO:TI-EVG:DevEnbl-Sel': DEFAULT_STATE,
             'RA-RaMO:TI-EVG:InjectionEvt-Sel': _TIConst.DsblEnbl.Dsbl,
-            'RA-RaMO:TI-EVG:InjectionEvt-Sts': _TIConst.DsblEnbl.Dsbl,
             'RA-RaMO:TI-EVG:BucketList-SP': [1, ],
             'RA-RaMO:TI-EVG:RepeatBucketList-SP': DEFAULT_RAMP_NRCYCLES,
             'RA-RaMO:TI-EVG:InjCount-Mon': None,
@@ -102,6 +104,7 @@ class Timing:
         }
     }
 
+    cycle_idx = dict()
     for trig in _trigger_list:
         properties['Cycle'][trig+':Src-Sel'] = EVTNAME_CYCLE
         properties['Cycle'][trig+':Duration-SP'] = DEFAULT_CYCLE_DURATION
@@ -116,6 +119,9 @@ class Timing:
         properties['Ramp'][trig+':Delay-SP'] = DEFAULT_DELAY
         properties['Ramp'][trig+':Polarity-Sel'] = DEFAULT_POLARITY
         properties['Ramp'][trig+':State-Sel'] = DEFAULT_STATE
+
+        _trig_db = _get_trig_db(trig)
+        cycle_idx[trig] = _trig_db['Src-Sel']['enums'].index('Cycle')
 
     _pvs = None
 
@@ -143,6 +149,38 @@ class Timing:
             if pv.connected:
                 pv.value = defval
                 _time.sleep(1.5*SLEEP_CAPUT)
+
+    def check(self, mode, sections=list()):
+        """Check if timing is configured."""
+        filt = self._create_section_re(sections)
+        for prop, defval in Timing.properties[mode].items():
+            if defval is None:
+                continue
+            if 'RA-RaMO:TI-EVG' not in prop and not filt.search(prop):
+                continue
+            prop = SiriusPVName(prop)
+            if prop.propty_suffix == 'SP':
+                prop_sts = prop.substitute(propty_suffix='RB')
+            elif prop.propty_suffix == 'Sel':
+                prop_sts = prop.substitute(propty_suffix='Sts')
+            else:
+                continue
+            pv = Timing._pvs[prop_sts]
+            pv.get()  # force connection
+            if not pv.connected:
+                return False
+            else:
+                if prop_sts.propty_name == 'Src':
+                    defval = Timing.cycle_idx[prop_sts.device_name]
+                elif prop_sts.propty_name == 'Duration':
+                    if not _isclose(pv.value, defval, abs_tol=1):
+                        return False
+                elif isinstance(defval, (_np.ndarray, list, tuple)):
+                    if _np.any(pv.value[0:len(defval)] != defval):
+                        return False
+                elif pv.value != defval:
+                    return False
+        return True
 
     @property
     def connected(self):
@@ -203,6 +241,15 @@ class Timing:
                                           connection_timeout=TIMEOUT)
                 self._initial_state[pvname] = Timing._pvs[pvname].get()
 
+                if pvname.propty_suffix == 'SP':
+                    pvname_sts = pvname.substitute(propty_suffix='RB')
+                elif pvname.propty_suffix == 'Sel':
+                    pvname_sts = pvname.substitute(propty_suffix='Sts')
+                else:
+                    continue
+                Timing._pvs[pvname_sts] = _PV(VACA_PREFIX+pvname_sts,
+                                              connection_timeout=TIMEOUT)
+                Timing._pvs[pvname_sts].get()  # force connection
 
     @staticmethod
     def _create_section_re(sections):
@@ -583,6 +630,19 @@ class AutomatedCycle:
     def check_magnet_preparation(self, maname, mode):
         self._checks_prep_result[maname] = self.cyclers[maname].is_ready(mode)
 
+    def check_timing(self, mode):
+        sections = ['TB', ] if mode == 'Cycle' else ['BO', ]
+        # TODO: uncomment when using TS and SI
+        # sections = ['TB', 'TS', 'SI'] if mode == 'Cycle' else ['BO', ]
+        self._update_log('Checking Timing...')
+        status = self._timing.check(mode, sections)
+        if not status:
+            self._update_log('Timing is not configured.', error=True)
+            return False
+        else:
+            self._update_log(done=True)
+            return True
+
     def check_all_magnets_final_state(self, mode):
         manames = self.manames_2_cycle if mode == 'Cycle'\
             else self.manames_2_ramp
@@ -681,20 +741,27 @@ class AutomatedCycle:
                 return
             self.prepare_timing('Cycle')
             if self.aborted:
+                self._update_log('Aborted.', error=True)
                 return
             self._update_log('Waiting to check magnets state...')
-            _time.sleep(15)
-            status = self.check_all_magnets_preparation('Cycle')
-            if not status:
+            for i in range(INTERVAL_WAITCYCLE):
+                _time.sleep(1)
+                if self.aborted:
+                    self._update_log('Aborted.', error=True)
+                    return
+
+            if not self.check_timing('Cycle'):
+                return
+            if not self.check_all_magnets_preparation('Cycle'):
                 self._update_log(
                     'There are magnets not ready to cycle. Stopping.',
                     error=True)
                 return
             if self.aborted:
+                self._update_log('Aborted.', error=True)
                 return
             self.init('Cycle')
-            status = self.wait('Cycle')
-            if not status:
+            if not self.wait('Cycle'):
                 return
             self.check_all_magnets_final_state('Cycle')
 
@@ -705,16 +772,23 @@ class AutomatedCycle:
                 return
             self.prepare_timing('Ramp')
             if self.aborted:
+                self._update_log('Aborted.', error=True)
                 return
             self._update_log('Waiting to check magnets state...')
-            _time.sleep(8)
-            status = self.check_all_magnets_preparation('Ramp')
-            if not status:
+            for i in range(INTERVAL_WAITRAMP):
+                _time.sleep(1)
+                if self.aborted:
+                    self._update_log('Aborted.', error=True)
+                    return
+            if not self.check_timing('Ramp'):
+                return
+            if not self.check_all_magnets_preparation('Ramp'):
                 self._update_log(
                     'There are magnets not ready to ramp. Stopping.',
                     error=True)
                 return
             if self.aborted:
+                self._update_log('Aborted.', error=True)
                 return
             self.init('Ramp')
             self.wait('Ramp')

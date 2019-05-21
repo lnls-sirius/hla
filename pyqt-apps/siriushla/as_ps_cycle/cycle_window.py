@@ -197,7 +197,7 @@ class CycleWindow(SiriusMainWindow):
 
         self.central_widget.setLayout(layout)
 
-    def _prepare_timing(self, mode):
+    def _control_timing(self, action, mode):
         if not self._timing.connected:
             pvs_disconnected = self._timing.status_nok
             sttr = ''
@@ -211,7 +211,11 @@ class CycleWindow(SiriusMainWindow):
         for s in ['TB', 'BO', 'TS', 'SI']:
             if Filter.process_filters(self._magnets2cycle, filters={'sec': s}):
                 sections.append(s)
-        self._timing.init(mode, sections)
+
+        if action == 'prepare':
+            self._timing.init(mode, sections)
+        elif action == 'check':
+            self._timing.check(mode, sections)
         return True
 
     def _prepare_magnets(self, mode):
@@ -241,7 +245,7 @@ class CycleWindow(SiriusMainWindow):
         # Prepare magnets to cycle
         status = self._prepare_magnets(mode)
         if status:
-            status = self._prepare_timing(mode)
+            status = self._control_timing('prepare', mode)
 
         if not status:
             self.demag_bt.setEnabled(False)
@@ -259,6 +263,15 @@ class CycleWindow(SiriusMainWindow):
         if not magnets:
             return False
 
+        # Check if timing is prepared
+        status = self._control_timing('check', mode)
+        if not status:
+            self._disable_cycle_buttons()
+            QMessageBox.critical(
+                self, 'Message', 'Timing is not configured!')
+            return False
+
+        # Check if magnets are prepared
         self._magnets_ready = list()
         self._magnets_failed = list()
         task = VerifyCycle(magnets, mode, self)
