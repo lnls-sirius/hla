@@ -630,7 +630,6 @@ class WaitCycle(QThread):
         else:
             # Trigger timing
             self._timing_conn.trigger(self._mode)
-            self._timing_conn.wait_trigger_enable(self._mode)
 
             # Wait for cycling
             t0 = _time.time()

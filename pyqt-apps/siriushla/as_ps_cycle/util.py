@@ -161,12 +161,7 @@ class Timing:
         else:
             pv = Timing._pvs['RA-RaMO:TI-EVG:InjectionEvt-Sel']
             pv.value = _TIConst.DsblEnbl.Enbl
-            # Wait for timing to turn injection mode on
-            _time.sleep(50*SLEEP_CAPUT)
 
-    def wait_trigger_enable(self, mode):
-        # Wait for timing to turn injection mode on
-        if mode == 'Ramp':
             pv = Timing._pvs['RA-RaMO:TI-EVG:InjectionEvt-Sts']
             while pv.value != _TIConst.DsblEnbl.Enbl:
                 _time.sleep(TIMEOUT)
