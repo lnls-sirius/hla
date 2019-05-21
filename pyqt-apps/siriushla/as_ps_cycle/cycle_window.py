@@ -288,11 +288,14 @@ class CycleWindow(SiriusMainWindow):
             return False
 
         # Trigger timing and wait cyling end
+        self._magnets_notcycling = False
         task = WaitCycle(magnets, self._timing, mode, self)
         dlg = ProgressDialog('Wait for magnets...', task, self)
+        task.notCycling.connect(self._show_notcycling_msg)
         task.initValue.connect(dlg.set_value)
         ret = dlg.exec_()
-        if ret == dlg.Rejected:
+        if ret == dlg.Rejected or self._magnets_notcycling:
+            self._disable_cycle_buttons()
             return False
 
         # Verify ps final state
@@ -428,6 +431,12 @@ class CycleWindow(SiriusMainWindow):
             self.progress_list.scrollToBottom()
 
         self.progress_bar.setValue(bar_newvalue)
+
+    def _show_notcycling_msg(self):
+        """Show error message when magnets are not cycling ."""
+        QMessageBox.critical(
+            self, 'Message', 'Magnets are not cycling! Verify triggers!')
+        self._magnets_notcycling = True
 
     def _filter_manames(self):
         text = self.search_le.text()
@@ -654,6 +663,7 @@ class WaitCycle(QThread):
     currentItem = Signal(str)
     itemDone = Signal()
     initValue = Signal(int)
+    notCycling = Signal()
     completed = Signal()
 
     def __init__(self, manames, timing_conn, mode, parent=None):
@@ -724,6 +734,11 @@ class WaitCycle(QThread):
 
     def _check_keep_waiting(self, t0):
         if self._mode == 'Cycle':
+            if (5 < _time.time() - t0 < 7):
+                for maname in self._manames:
+                    if not _cyclers[maname].check_cycle_enable():
+                        self.notCycling.emit()
+                        return False
             return _time.time() - t0 < self._size
         else:
             return not self._timing_conn.check_ramp_end()
