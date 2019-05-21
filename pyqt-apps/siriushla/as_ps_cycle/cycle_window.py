@@ -512,10 +512,10 @@ class CreateCyclers(QThread):
 
     def create_cycler(self, maname):
         global _cyclers
-        self.currentItem.emit(maname)
         if maname not in _cyclers.keys():
             _cyclers[maname] = MagnetCycler(maname)
-        self.itemDone.emit()
+            self.currentItem.emit(maname)
+            self.itemDone.emit()
 
 
 class SetToCycle(QThread):
@@ -563,9 +563,9 @@ class SetToCycle(QThread):
 
     def prepare_magnet(self, maname, mode):
         global _cyclers
-        self.currentItem.emit('Preparing '+maname+'...')
         done = _cyclers[maname].config_cycle_params(mode)
         done &= _cyclers[maname].config_cycle_opmode(mode)
+        self.currentItem.emit('Preparing '+maname+'...')
         self.itemDone.emit(maname, done)
 
 
@@ -613,8 +613,8 @@ class VerifyCycle(QThread):
 
     def check_magnet(self, maname, mode):
         global _cyclers
-        self.currentItem.emit(maname)
         status = _cyclers[maname].is_ready(mode)
+        self.currentItem.emit(maname)
         self.itemDone.emit(maname, status)
 
 
@@ -744,9 +744,9 @@ class VerifyFinalState(QThread):
 
     def check_magnet_final_state(self, maname, mode):
         global _cyclers
-        self.currentItem.emit(maname)
         ans = _cyclers[maname].check_final_state(mode)
         status = False if ans != 0 else True
+        self.currentItem.emit(maname)
         self.itemDone.emit(maname, status)
 
 
