@@ -24,7 +24,8 @@ from siriushla.widgets.dialog import ProgressDialog
 from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
 
 from .util import MagnetCycler, Timing, get_manames, \
-    get_manames_from_same_udc, AutomatedCycle
+    get_manames_from_same_udc, AutomatedCycle, \
+    INTERVAL_WAITCYCLE, INTERVAL_WAITRAMP
 
 _cyclers = dict()
 
@@ -229,7 +230,7 @@ class CycleWindow(SiriusMainWindow):
         self._magnets_ready = list()
         self._magnets_failed = list()
         task = SetToCycle(self._magnets2cycle, mode, self)
-        task.itemDone.connect(self._update_cycling_status)
+        task.itemDone.connect(self._update_magnets_status)
         dlg = ProgressDialog('Setting magnets...', task, self)
         ret = dlg.exec_()
         if ret == dlg.Rejected:
@@ -244,25 +245,22 @@ class CycleWindow(SiriusMainWindow):
             return False
 
     def _prepare_to_cycle(self, mode):
-        # Prepare magnets to cycle
+        self._disable_cycle_buttons()
+
         status = self._prepare_magnets(mode)
         if status:
             status = self._control_timing('prepare', mode)
 
-        if not status:
-            self.demag_bt.setEnabled(False)
-            self.cycle_bt.setEnabled(False)
-        else:
-            if mode == 'Cycle':
-                self.demag_bt.setEnabled(True)
-                self.cycle_bt.setEnabled(False)
-            else:
-                self.demag_bt.setEnabled(False)
-                self.cycle_bt.setEnabled(True)
+        if status:
+            t = _thread.Thread(
+                target=self._enable_cycle_buttons,
+                args=(mode, ), daemon=True)
+            t.start()
 
     def _cycle(self, mode):
         magnets = self._get_magnets_list(mode=mode)
         if not magnets:
+            self._disable_cycle_buttons()
             return False
 
         # Check if timing is prepared
@@ -277,14 +275,16 @@ class CycleWindow(SiriusMainWindow):
         self._magnets_ready = list()
         self._magnets_failed = list()
         task = VerifyCycle(magnets, mode, self)
-        task.itemDone.connect(self._update_cycling_status)
+        task.itemDone.connect(self._update_magnets_status)
         dlg = ProgressDialog('Checking magnets...', task, self)
         ret = dlg.exec_()
         if ret == dlg.Rejected:
             return False
-
         if self._magnets_failed:
-            self._update_mafailed_status(mode)
+            QMessageBox.critical(
+                self, 'Message', 'Magnets are not prepared to cycle!')
+            self._disable_cycle_buttons()
+            self.status_list.magnets = self._magnets_failed
             return False
 
         # Trigger timing and wait cyling end
@@ -300,16 +300,18 @@ class CycleWindow(SiriusMainWindow):
         self._magnets_failed = list()
         task = VerifyFinalState(magnets, mode, self)
         dlg = ProgressDialog('Verifying magnet final state...', task, self)
-        task.itemDone.connect(self._update_cycling_status)
+        task.itemDone.connect(self._update_magnets_status)
         ret = dlg.exec_()
         if ret == dlg.Rejected:
             return False
-        self._update_mafailed_status(mode)
         if self._magnets_failed:
+            self._disable_cycle_buttons()
+            self.status_list.magnets = self._magnets_failed
             QMessageBox.critical(
                 self, 'Message', 'Check magnets in failed list!')
             return False
 
+        self._disable_cycle_buttons()
         QMessageBox.information(self, 'Message', 'Cycle finished!')
 
     def _set_magnets_2_slowref(self):
@@ -326,6 +328,7 @@ class CycleWindow(SiriusMainWindow):
         self._timing.restore_initial_state()
 
     def _auto_cycle(self):
+        self.auto_exec_bt.setEnabled(False)
         magnets = self._get_magnets_list()
         if not magnets:
             return
@@ -340,6 +343,7 @@ class CycleWindow(SiriusMainWindow):
         auto.start()
 
     def _get_magnets_list(self, mode='Cycle', prepare=False):
+        """Return list of magnets to cycle."""
         # Get magnets list
         magnets = self.magnets_tree.checked_items()
         if mode == 'Ramp':
@@ -376,17 +380,12 @@ class CycleWindow(SiriusMainWindow):
         dlg = ProgressDialog('Connecting to magnets...', task, self)
         dlg.exec_()
 
-    def _update_cycling_status(self, maname, status):
+    def _update_magnets_status(self, maname, status):
         """Check magnet cycling status."""
         if status:
             self._magnets_ready.append(maname)
         else:
             self._magnets_failed.append(maname)
-
-    def _update_mafailed_status(self, mode):
-        self.cycle_bt.setEnabled(False)
-        self.demag_bt.setEnabled(False)
-        self.status_list.magnets = self._magnets_failed
 
     def _update_auto_progress(self, text, done, warning=False, error=False):
         """Update automated cycle progress list and bar."""
@@ -444,7 +443,31 @@ class CycleWindow(SiriusMainWindow):
             return
         app.open_window(PSDetailWindow, parent=self, **{'psname': maname})
 
+    def _enable_cycle_buttons(self, mode):
+        """Enable cycle buttons."""
+        def toggle_button_color(bt):
+            if bt.styleSheet() == "background-color: gray;":
+                bt.setStyleSheet("")
+            else:
+                bt.setStyleSheet("background-color: gray;")
+
+        if mode == 'Cycle':
+            for i in range(INTERVAL_WAITCYCLE*2):
+                _time.sleep(0.5)
+                toggle_button_color(self.demag_bt)
+            self.demag_bt.setStyleSheet("")
+            self.demag_bt.setEnabled(True)
+            self.cycle_bt.setEnabled(False)
+        else:
+            for i in range(INTERVAL_WAITRAMP*2):
+                _time.sleep(0.5)
+                toggle_button_color(self.cycle_bt)
+            self.cycle_bt.setStyleSheet("")
+            self.demag_bt.setEnabled(False)
+            self.cycle_bt.setEnabled(True)
+
     def _disable_cycle_buttons(self):
+        """Disable cycle buttons."""
         self.demag_bt.setEnabled(False)
         self.cycle_bt.setEnabled(False)
 
