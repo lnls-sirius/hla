@@ -134,12 +134,15 @@ class Timing:
         """Initialize properties."""
         filt = self._create_section_re(sections)
         for prop, defval in Timing.properties[mode].items():
+            if defval is None:
+                continue
             if 'RA-RaMO:TI-EVG' not in prop and not filt.search(prop):
                 continue
             pv = Timing._pvs[prop]
             pv.get()  # force connection
-            if pv.connected and defval is not None:
+            if pv.connected:
                 pv.value = defval
+                _time.sleep(1.5*SLEEP_CAPUT)
 
     @property
     def connected(self):
