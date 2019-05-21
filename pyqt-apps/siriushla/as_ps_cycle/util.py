@@ -297,15 +297,15 @@ class MagnetCycler:
         """Constructor."""
         self._maname = maname
         self._psnames = _MASearch.conv_maname_2_psnames(self._maname)
-        self.siggen = _PSSearch.conv_psname_2_siggenconf(self._psnames[0])
+        self._siggen = None
         self._ramp_config = ramp_config
+        self._waveform = None
         self._pvs = dict()
         for prop in MagnetCycler.properties:
             if prop not in self._pvs.keys():
                 pvname = VACA_PREFIX + self._maname + ':' + prop
                 self._pvs[prop] = _PV(pvname, connection_timeout=TIMEOUT)
                 self._pvs[prop].get()
-        self._waveform = self._get_waveform()  # needs self._pvs
 
     def _get_waveform(self):
         if self._ramp_config is None:
@@ -336,6 +336,18 @@ class MagnetCycler:
             if not self[prop].connected:
                 return False
         return True
+
+    @property
+    def waveform(self):
+        if self._waveform is None:
+            self._waveform = self._get_waveform()  # needs self._pvs
+        return self._waveform
+
+    @property
+    def siggen(self):
+        if self._siggen is None:
+            self._siggen = _PSSearch.conv_psname_2_siggenconf(self._psnames[0])
+        return self._siggen
 
     def cycle_duration(self, mode):
         """Return the duration of the cycling in seconds."""
@@ -375,7 +387,7 @@ class MagnetCycler:
             status &= self.conn_put(self['CycleNrCycles-SP'],
                                     self.siggen.num_cycles)
         else:
-            status &= self.conn_put(self['WfmData-SP'], self._waveform)
+            status &= self.conn_put(self['WfmData-SP'], self.waveform)
             _time.sleep(SLEEP_CAPUT)
             status &= self.conn_put(self['RmpIncNrCycles-SP'], 1)
         return status
@@ -431,7 +443,7 @@ class MagnetCycler:
             status &= self.timed_get(
                 self['CycleNrCycles-RB'], self.siggen.num_cycles)
         else:
-            status &= self.timed_get(self['WfmData-RB'], self._waveform)
+            status &= self.timed_get(self['WfmData-RB'], self.waveform)
             _time.sleep(SLEEP_CAPUT)
             status &= self.timed_get(self['RmpIncNrCycles-RB'], 1)
         return status
