@@ -88,12 +88,13 @@ class Settings(QMenuBar):
         self.open_menu = self.addMenu('Open...')
         self.act_cycle = QAction('PS Cycle')
         _hlautil.connect_window(self.act_cycle, _CycleWindow, parent=self,
-                                checked_accs=('BO,'))
+                                checked_accs=('BO',))
         self.act_ma = QAction('Booster Magnets')
         _hlautil.connect_window(self.act_ma, _MAControlWindow, parent=self,
                                 section='BO', discipline='MA')
         self.act_pm = QAction('Pulsed Magnets')
-        _hlautil.connect_window(self.act_pm, _PMControlWindow, parent=self)
+        _hlautil.connect_window(self.act_pm, _PMControlWindow, section='BO',
+                                parent=self)
         self.act_sofb = QAction('Booster SOFB')
         _hlautil.connect_newprocess(self.act_sofb, 'sirius-hla-bo-ap-sofb.py')
         self.act_ti = QAction('Timing')

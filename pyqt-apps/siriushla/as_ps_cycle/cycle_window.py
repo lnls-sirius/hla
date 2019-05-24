@@ -62,7 +62,7 @@ class CycleWindow(SiriusMainWindow):
         self.search_le.setPlaceholderText('Filter...')
         self.search_le.editingFinished.connect(self._filter_manames)
         self.magnets_tree = PVNameTree(get_manames(), ('sec', 'mag_group'),
-                                       self._checked_accs, self)
+                                       tuple(), self)
         self.magnets_tree.setHeaderHidden(True)
         self.magnets_tree.setColumnCount(1)
         glay_ma = QVBoxLayout()
@@ -175,6 +175,7 @@ class CycleWindow(SiriusMainWindow):
         self.magnets_tree.itemChanged.connect(self._disable_cycle_buttons)
         self.magnets_tree.itemChanged.connect(
             self._check_manames_from_same_udc)
+        self.magnets_tree.check_requested_levels(self._checked_accs)
 
         # layout
         layout = QGridLayout()
