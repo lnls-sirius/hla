@@ -37,7 +37,7 @@ class LoadRampConfig(_LoadConfiguration):
     def __init__(self, ramp_config, parent=None):
         """Initialize object."""
         self.ramp_config = ramp_config
-        super().__init__('bo_ramp', parent)
+        super().__init__('bo_ramp_params', parent)
         self.setWindowTitle('Load ramp configuration from server')
 
     @Slot()
@@ -339,7 +339,7 @@ class EditNormalizedConfig(SiriusDialog):
         self.data = QWidget()
         self.data.setObjectName('data')
         flay_configdata = QFormLayout()
-        manames = self.norm_config.get_config_type_template().keys()
+        manames = self.norm_config.manames
         for ma in manames:
             ma_value = MyDoubleSpinBox(self.data)
             ma_value.setDecimals(6)
@@ -386,7 +386,7 @@ class EditNormalizedConfig(SiriusDialog):
         self.setLayout(glay)
 
     def _handleStrengtsLimits(self, state):
-        manames = self.norm_config.get_config_type_template().keys()
+        manames = self.norm_config.manames
         if state:
             for ma in manames:
                 ma_value = self.data.findChild(QDoubleSpinBox, name=ma)
@@ -403,9 +403,8 @@ class EditNormalizedConfig(SiriusDialog):
                 ma_value.setMaximum(100)
 
     def _emitConfigChanges(self):
-        config_template = self.norm_config.get_config_type_template()
         nconfig = dict()
-        for ma in config_template.keys():
+        for ma in self.norm_config.manames:
             w = self.data.findChild(QDoubleSpinBox, name=ma)
             nconfig[ma] = w.value()
         self.editConfig.emit(nconfig)

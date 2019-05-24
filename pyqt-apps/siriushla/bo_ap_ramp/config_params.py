@@ -622,7 +622,7 @@ class MultipolesRamp(QWidget):
         self.ax.grid()
         self.ax.set_xlabel('t [ms]')
         self.lines = dict()
-        for maname in ramp.BoosterNormalized().get_config_type_template():
+        for maname in ramp.BoosterNormalized().manames:
             if maname != 'BO-Fam:MA-B':
                 self.lines[maname], = self.ax.plot([0], [0], '-b')
         self.markers, = self.ax.plot([0], [0], '+r')
@@ -802,8 +802,7 @@ class MultipolesRamp(QWidget):
         self.updateMultipoleRampSignal.emit()
 
     def _showChooseMagnetToPlot(self):
-        manames = list(
-            ramp.BoosterNormalized().get_config_type_template().keys())
+        manames = list(ramp.BoosterNormalized().manames)
         idx = manames.index('BO-Fam:MA-B')
         del manames[idx]
         self._chooseMagnetsPopup = _ChooseMagnetsToPlot(
@@ -853,8 +852,7 @@ class MultipolesRamp(QWidget):
                 self.lines[maname].set_ydata(ydata)
 
             ydata = list()
-            template = ramp.BoosterNormalized().get_config_type_template()
-            for maname in template:
+            for maname in ramp.BoosterNormalized().manames:
                 if maname in self._magnets_to_plot:
                     self.lines[maname].set_linewidth(1.5)
                     ydata.append(self.lines[maname].get_ydata())
