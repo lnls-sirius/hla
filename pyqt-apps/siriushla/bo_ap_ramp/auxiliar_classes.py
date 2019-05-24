@@ -1,5 +1,7 @@
 """Booster Ramp Control HLA: Auxiliar Classes Module."""
 
+import epics
+
 from qtpy.QtCore import Qt, Signal, Slot, QLocale
 from qtpy.QtWidgets import QLabel, QWidget, QScrollArea, QAbstractItemView, \
                            QHBoxLayout, QVBoxLayout, QGridLayout, QLineEdit, \
@@ -773,14 +775,6 @@ class DiagnosisSettings(SiriusDialog):
                 min-width:7em; max-width:7em;}""")
 
     def _setupReliableMeasWidget(self):
-        reliablemeas_channel = SiriusConnectionSignal(
-            self.dcct_prefix+'ReliableMeasLabels-Mon')
-        reliablemeas_channel.new_value_signal.connect(
-            self._updateReliableMeasLabels)
-
-        gbox_reliablemeas = _GroupBoxWithChannel(
-            'DCCT Measure Reliability Status', self, [reliablemeas_channel])
-
         self.label_reliablemeas0 = QLabel('', self)
         self.led_ReliableMeas0 = SiriusLedAlert(
             parent=self, init_channel=self.dcct_prefix+'ReliableMeas-Mon',
@@ -793,7 +787,17 @@ class DiagnosisSettings(SiriusDialog):
         self.led_ReliableMeas2 = SiriusLedAlert(
             parent=self, init_channel=self.dcct_prefix+'ReliableMeas-Mon',
             bit=2)
+
+        self.reliablemeas_channel = epics.PV(
+            self.dcct_prefix+'ReliableMeasLabels-Cte',
+            callback=self._updateReliableMeasLabels)
+        gbox_reliablemeas = _GroupBoxWithChannel(
+            'DCCT Measure Reliability Status', self,
+            [self.reliablemeas_channel])
+
         lay_reliablemeas = QGridLayout()
+        lay_reliablemeas.setColumnStretch(0, 1)
+        lay_reliablemeas.setColumnStretch(1, 10)
         lay_reliablemeas.addWidget(self.led_ReliableMeas0, 0, 0)
         lay_reliablemeas.addWidget(self.label_reliablemeas0, 0, 1)
         lay_reliablemeas.addWidget(self.led_ReliableMeas1, 1, 0)
@@ -1046,11 +1050,11 @@ class DiagnosisSettings(SiriusDialog):
         gbox_effparams.setLayout(flay_effparams)
         return gbox_effparams
 
-    def _updateReliableMeasLabels(self, labels):
-        if labels:
-            self.label_reliablemeas0.setText(labels[0])
-            self.label_reliablemeas1.setText(labels[1])
-            self.label_reliablemeas2.setText(labels[2])
+    def _updateReliableMeasLabels(self, pvname, value,  **kwargs):
+        if value:
+            self.label_reliablemeas0.setText(value[0])
+            self.label_reliablemeas1.setText(value[1])
+            self.label_reliablemeas2.setText(value[2])
 
     def _showMeasModeSettings(self, value):
         if value == DCCT_MEASMODE_NORMAL:
