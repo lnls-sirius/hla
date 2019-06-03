@@ -21,7 +21,6 @@ class LLTriggerList(BaseList):
         'pulses': 4.8,
         'delay': 4.8,
         'timestamp': 3.2,
-        'interlock': 6,
         'source': 6.5,
         'trigger': 4,
         'rf_delay': 4.8,
@@ -38,7 +37,6 @@ class LLTriggerList(BaseList):
         'pulses': 'Nr Pulses',
         'delay': 'Delay',
         'timestamp': 'Log',
-        'interlock': 'Intlk Active',
         'source': 'Source',
         'trigger': 'Trigger',
         'rf_delay': 'RF Delay',
@@ -47,11 +45,11 @@ class LLTriggerList(BaseList):
         }
     _ALL_PROPS = (
         'device', 'name', 'state', 'event', 'width', 'polarity', 'pulses',
-        'delay', 'timestamp', 'interlock', 'source', 'trigger', 'rf_delay',
+        'delay', 'timestamp', 'source', 'trigger', 'rf_delay',
         'rf_delay_type', 'fine_delay')
 
     def __init__(self, **kwargs):
-        srch = set(('device', 'name', 'polarity', 'source', 'interlock'))
+        srch = set(('device', 'name', 'polarity', 'source'))
         kwargs['props2search'] = srch
         super().__init__(**kwargs)
 
@@ -109,12 +107,7 @@ class LLTriggerList(BaseList):
             sp = PyDMStateButton(self, init_channel=pvname)
             pvname = intlb.substitute(propty=intlb.propty+"Log-Sts")
             rb = PyDMLed(self, init_channel=pvname)
-        elif prop == 'interlock':
-            pvname = intlb.substitute(propty=intlb.propty+"ByPassIntlk-Sel")
-            sp = PyDMStateButton(self, init_channel=pvname)
-            pvname = intlb.substitute(propty=intlb.propty+"ByPassIntlk-Sts")
-            rb = PyDMLed(self, init_channel=pvname)
-        if prop == 'source':
+        elif prop == 'source':
             pvname = outlb.substitute(propty=outlb.propty+"Src-Sel")
             sp = _MyComboBox(self, init_channel=pvname)
             pvname = outlb.substitute(propty=outlb.propty+"Src-Sts")
@@ -157,7 +150,7 @@ class OTPList(LLTriggerList):
 
     _ALL_PROPS = (
         'name', 'state', 'event', 'width', 'polarity', 'pulses', 'delay',
-        'timestamp', 'interlock')
+        'timestamp')
 
 
 class OUTList(LLTriggerList):
