@@ -10,7 +10,7 @@ from qtpy.QtGui import QColor
 from qtpy.QtCore import Signal, QThread, Qt
 from qtpy.QtWidgets import QWidget, QGridLayout, QVBoxLayout, QHBoxLayout, \
     QPushButton, QLabel, QMessageBox, QLineEdit, QApplication, QGroupBox, \
-    QTabWidget, QListWidget, QListWidgetItem
+    QTabWidget, QListWidget, QListWidgetItem, QProgressBar
 
 from siriuspy.envars import vaca_prefix as VACA_PREFIX
 from siriuspy.search import MASearch as _MASearch
@@ -24,7 +24,8 @@ from siriushla.widgets.dialog import ProgressDialog
 from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
 
 from .util import MagnetCycler, Timing, get_manames, \
-    get_manames_from_same_udc, AutomatedCycle
+    get_manames_from_same_udc, AutomatedCycle, \
+    INTERVAL_WAITCYCLE, INTERVAL_WAITRAMP
 
 _cyclers = dict()
 
@@ -103,15 +104,17 @@ class CycleWindow(SiriusMainWindow):
         # Tab Automated
         self._tab_auto = QWidget()
         # widgets
-        self.auto_exec_bt = QPushButton('Execute automated cycle')
+        self.auto_exec_bt = QPushButton('Execute automated cycle', self)
         self.auto_exec_bt.setStyleSheet('min-height:2.5em;')
         self.auto_exec_bt.clicked.connect(self._auto_cycle)
-        self.progress_list = QListWidget()
-        self.auto_cancel_bt = QPushButton('Cancel')
+        self.progress_list = QListWidget(self)
+        self.progress_bar = QProgressBar(self)
+        self.auto_cancel_bt = QPushButton('Cancel', self)
         self.auto_cancel_bt.clicked.connect(self.auto_cycle_aborted.emit)
         autolay = QVBoxLayout()
         autolay.addWidget(self.auto_exec_bt)
         autolay.addWidget(self.progress_list)
+        autolay.addWidget(self.progress_bar)
         autolay.addWidget(self.auto_cancel_bt)
         self._tab_auto.setLayout(autolay)
         self._tab_widget.addTab(self._tab_auto, 'Automated')
@@ -132,7 +135,6 @@ class CycleWindow(SiriusMainWindow):
 
         gb_cycle = QGroupBox('Cycle')
         self.prepare_cycle_bt = QPushButton('Prepare', self)
-        # self.prepare_cycle_bt.setEnabled(False)
         self.prepare_cycle_bt.clicked.connect(
             _part(self._prepare_to_cycle, 'Ramp'))
         self.cycle_bt = QPushButton('Cycle', self)
@@ -159,16 +161,16 @@ class CycleWindow(SiriusMainWindow):
         self._tab_manual.setLayout(manuallay)
         self._tab_widget.addTab(self._tab_manual, 'Manual')
 
-        # reset
-        gb_reset = QGroupBox('Turn Off Cycle')
-        self.reset_ma_bt = QPushButton('Put Magnets in SlowRef')
-        self.reset_ma_bt.clicked.connect(self._reset_magnets)
-        self.reset_ti_bt = QPushButton('Turn off Timing')
-        self.reset_ti_bt.clicked.connect(self._reset_timing)
-        glay_reset = QHBoxLayout()
-        glay_reset.addWidget(self.reset_ti_bt)
-        glay_reset.addWidget(self.reset_ma_bt)
-        gb_reset.setLayout(glay_reset)
+        # turnoff
+        gb_turnoff = QGroupBox('Turn Off Cycle')
+        self.set_ma_2_slowref_bt = QPushButton('Put Magnets in SlowRef')
+        self.set_ma_2_slowref_bt.clicked.connect(self._set_magnets_2_slowref)
+        self.restore_ti_bt = QPushButton('Restore Timing initial state')
+        self.restore_ti_bt.clicked.connect(self._restore_timing)
+        glay_turnoff = QHBoxLayout()
+        glay_turnoff.addWidget(self.restore_ti_bt)
+        glay_turnoff.addWidget(self.set_ma_2_slowref_bt)
+        gb_turnoff.setLayout(glay_turnoff)
 
         # connect tree signals
         self.magnets_tree.doubleClicked.connect(self._open_magnet_detail)
@@ -186,7 +188,7 @@ class CycleWindow(SiriusMainWindow):
         layout.addWidget(gb_status, 1, 1)
         layout.addWidget(self._tab_widget, 2, 1)
         layout.addWidget(QLabel(''), 3, 1)
-        layout.addWidget(gb_reset, 4, 1)
+        layout.addWidget(gb_turnoff, 4, 1)
         layout.setColumnStretch(0, 1)
         layout.setColumnStretch(1, 1)
         layout.setRowStretch(0, 3)
@@ -197,7 +199,7 @@ class CycleWindow(SiriusMainWindow):
 
         self.central_widget.setLayout(layout)
 
-    def _prepare_timing(self, mode):
+    def _control_timing(self, action, mode):
         if not self._timing.connected:
             pvs_disconnected = self._timing.status_nok
             sttr = ''
@@ -211,10 +213,15 @@ class CycleWindow(SiriusMainWindow):
         for s in ['TB', 'BO', 'TS', 'SI']:
             if Filter.process_filters(self._magnets2cycle, filters={'sec': s}):
                 sections.append(s)
-        self._timing.init(mode, sections)
+
+        if action == 'prepare':
+            self._timing.init(mode, sections)
+        elif action == 'check':
+            self._timing.check(mode, sections)
         return True
 
     def _prepare_magnets(self, mode):
+        # Prepare magnets to cycle
         self._magnets2cycle = self._get_magnets_list(mode=mode, prepare=True)
         if not self._magnets2cycle:
             return False
@@ -223,7 +230,7 @@ class CycleWindow(SiriusMainWindow):
         self._magnets_ready = list()
         self._magnets_failed = list()
         task = SetToCycle(self._magnets2cycle, mode, self)
-        task.itemDone.connect(self._update_cycling_status)
+        task.itemDone.connect(self._update_magnets_status)
         dlg = ProgressDialog('Setting magnets...', task, self)
         ret = dlg.exec_()
         if ret == dlg.Rejected:
@@ -238,46 +245,57 @@ class CycleWindow(SiriusMainWindow):
             return False
 
     def _prepare_to_cycle(self, mode):
-        # Prepare magnets to cycle
+        self._disable_cycle_buttons()
+
         status = self._prepare_magnets(mode)
         if status:
-            status = self._prepare_timing(mode)
+            status = self._control_timing('prepare', mode)
 
-        if not status:
-            self.demag_bt.setEnabled(False)
-            self.cycle_bt.setEnabled(False)
-        else:
-            if mode == 'Cycle':
-                self.demag_bt.setEnabled(True)
-                self.cycle_bt.setEnabled(False)
-            else:
-                self.demag_bt.setEnabled(False)
-                self.cycle_bt.setEnabled(True)
+        if status:
+            t = _thread.Thread(
+                target=self._enable_cycle_buttons,
+                args=(mode, ), daemon=True)
+            t.start()
 
     def _cycle(self, mode):
         magnets = self._get_magnets_list(mode=mode)
         if not magnets:
+            self._disable_cycle_buttons()
             return False
 
+        # Check if timing is prepared
+        status = self._control_timing('check', mode)
+        if not status:
+            self._disable_cycle_buttons()
+            QMessageBox.critical(
+                self, 'Message', 'Timing is not configured!')
+            return False
+
+        # Check if magnets are prepared
         self._magnets_ready = list()
         self._magnets_failed = list()
         task = VerifyCycle(magnets, mode, self)
-        task.itemDone.connect(self._update_cycling_status)
+        task.itemDone.connect(self._update_magnets_status)
         dlg = ProgressDialog('Checking magnets...', task, self)
         ret = dlg.exec_()
         if ret == dlg.Rejected:
             return False
-
         if self._magnets_failed:
-            self._update_mafailed_status(mode)
+            QMessageBox.critical(
+                self, 'Message', 'Magnets are not prepared to cycle!')
+            self._disable_cycle_buttons()
+            self.status_list.magnets = self._magnets_failed
             return False
 
         # Trigger timing and wait cyling end
+        self._magnets_notcycling = False
         task = WaitCycle(magnets, self._timing, mode, self)
         dlg = ProgressDialog('Wait for magnets...', task, self)
+        task.notCycling.connect(self._show_notcycling_msg)
         task.initValue.connect(dlg.set_value)
         ret = dlg.exec_()
-        if ret == dlg.Rejected:
+        if ret == dlg.Rejected or self._magnets_notcycling:
+            self._disable_cycle_buttons()
             return False
 
         # Verify ps final state
@@ -285,19 +303,21 @@ class CycleWindow(SiriusMainWindow):
         self._magnets_failed = list()
         task = VerifyFinalState(magnets, mode, self)
         dlg = ProgressDialog('Verifying magnet final state...', task, self)
-        task.itemDone.connect(self._update_cycling_status)
+        task.itemDone.connect(self._update_magnets_status)
         ret = dlg.exec_()
         if ret == dlg.Rejected:
             return False
-        self._update_mafailed_status(mode)
         if self._magnets_failed:
+            self._disable_cycle_buttons()
+            self.status_list.magnets = self._magnets_failed
             QMessageBox.critical(
                 self, 'Message', 'Check magnets in failed list!')
             return False
 
+        self._disable_cycle_buttons()
         QMessageBox.information(self, 'Message', 'Cycle finished!')
 
-    def _reset_magnets(self):
+    def _set_magnets_2_slowref(self):
         magnets = self._get_magnets_list()
         if not magnets:
             return False
@@ -307,10 +327,11 @@ class CycleWindow(SiriusMainWindow):
         if ret == dlg.Rejected:
             return False
 
-    def _reset_timing(self):
-        self._timing.reset()
+    def _restore_timing(self):
+        self._timing.restore_initial_state()
 
     def _auto_cycle(self):
+        self.auto_exec_bt.setEnabled(False)
         magnets = self._get_magnets_list()
         if not magnets:
             return
@@ -318,9 +339,14 @@ class CycleWindow(SiriusMainWindow):
         auto = CycleAutomatically(magnets, self._timing, self)
         auto.updated.connect(self._update_auto_progress)
         self.auto_cycle_aborted.connect(auto.exit_thread)
+        self.auto_cycle_aborted.connect(_part(self.progress_bar.setValue, 0))
+        self.progress_bar.setMinimum(0)
+        self.progress_bar.setMaximum(auto.size())
+        self.progress_bar.setValue(0)
         auto.start()
 
     def _get_magnets_list(self, mode='Cycle', prepare=False):
+        """Return list of magnets to cycle."""
         # Get magnets list
         magnets = self.magnets_tree.checked_items()
         if mode == 'Ramp':
@@ -353,27 +379,32 @@ class CycleWindow(SiriusMainWindow):
 
     def _create_cyclers(self, manames):
         """Create new cyclers, if necessary."""
-        task = CreateCyclers(manames)
+        ma2create = list()
+        for maname in manames:
+            if maname not in _cyclers.keys():
+                ma2create.append(maname)
+        if not ma2create:
+            return
+
+        task = CreateCyclers(ma2create)
         dlg = ProgressDialog('Connecting to magnets...', task, self)
         dlg.exec_()
 
-    def _update_cycling_status(self, maname, status):
+    def _update_magnets_status(self, maname, status):
         """Check magnet cycling status."""
         if status:
             self._magnets_ready.append(maname)
         else:
             self._magnets_failed.append(maname)
 
-    def _update_mafailed_status(self, mode):
-        self.cycle_bt.setEnabled(False)
-        self.demag_bt.setEnabled(False)
-        self.status_list.magnets = self._magnets_failed
-
     def _update_auto_progress(self, text, done, warning=False, error=False):
+        """Update automated cycle progress list and bar."""
+        bar_currvalue = self.progress_bar.value()
         if done:
             last_item = self.progress_list.item(self.progress_list.count()-1)
             curr_text = last_item.text()
             last_item.setText(curr_text+' done.')
+            bar_newvalue = bar_currvalue
         elif 'Remaining time' in text:
             last_item = self.progress_list.item(self.progress_list.count()-1)
             if 'Remaining time' in last_item.text():
@@ -381,14 +412,31 @@ class CycleWindow(SiriusMainWindow):
             else:
                 self.progress_list.addItem(text)
                 self.progress_list.scrollToBottom()
+            bar_newvalue = bar_currvalue+1
         else:
             item = QListWidgetItem(text)
             if error:
                 item.setForeground(errorcolor)
+                self.auto_exec_bt.setEnabled(True)
+                bar_newvalue = 0
             elif warning:
                 item.setForeground(warncolor)
+                bar_newvalue = bar_currvalue
+            elif 'finished' in text:
+                self.auto_exec_bt.setEnabled(True)
+                bar_newvalue = self.progress_bar.maximum()
+            else:
+                bar_newvalue = bar_currvalue+1
             self.progress_list.addItem(item)
             self.progress_list.scrollToBottom()
+
+        self.progress_bar.setValue(bar_newvalue)
+
+    def _show_notcycling_msg(self):
+        """Show error message when magnets are not cycling ."""
+        QMessageBox.critical(
+            self, 'Message', 'Magnets are not cycling! Verify triggers!')
+        self._magnets_notcycling = True
 
     def _filter_manames(self):
         text = self.search_le.text()
@@ -411,7 +459,31 @@ class CycleWindow(SiriusMainWindow):
             return
         app.open_window(PSDetailWindow, parent=self, **{'psname': maname})
 
+    def _enable_cycle_buttons(self, mode):
+        """Enable cycle buttons."""
+        def toggle_button_color(bt):
+            if bt.styleSheet() == "background-color: gray;":
+                bt.setStyleSheet("")
+            else:
+                bt.setStyleSheet("background-color: gray;")
+
+        if mode == 'Cycle':
+            for i in range(INTERVAL_WAITCYCLE*2):
+                _time.sleep(0.5)
+                toggle_button_color(self.demag_bt)
+            self.demag_bt.setStyleSheet("")
+            self.demag_bt.setEnabled(True)
+            self.cycle_bt.setEnabled(False)
+        else:
+            for i in range(INTERVAL_WAITRAMP*2):
+                _time.sleep(0.5)
+                toggle_button_color(self.cycle_bt)
+            self.cycle_bt.setStyleSheet("")
+            self.demag_bt.setEnabled(False)
+            self.cycle_bt.setEnabled(True)
+
     def _disable_cycle_buttons(self):
+        """Disable cycle buttons."""
         self.demag_bt.setEnabled(False)
         self.cycle_bt.setEnabled(False)
 
@@ -479,10 +551,10 @@ class CreateCyclers(QThread):
 
     def create_cycler(self, maname):
         global _cyclers
-        self.currentItem.emit(maname)
         if maname not in _cyclers.keys():
             _cyclers[maname] = MagnetCycler(maname)
-        self.itemDone.emit()
+            self.currentItem.emit(maname)
+            self.itemDone.emit()
 
 
 class SetToCycle(QThread):
@@ -530,9 +602,9 @@ class SetToCycle(QThread):
 
     def prepare_magnet(self, maname, mode):
         global _cyclers
-        self.currentItem.emit('Preparing '+maname+'...')
         done = _cyclers[maname].config_cycle_params(mode)
         done &= _cyclers[maname].config_cycle_opmode(mode)
+        self.currentItem.emit('Preparing '+maname+'...')
         self.itemDone.emit(maname, done)
 
 
@@ -580,8 +652,8 @@ class VerifyCycle(QThread):
 
     def check_magnet(self, maname, mode):
         global _cyclers
-        self.currentItem.emit(maname)
         status = _cyclers[maname].is_ready(mode)
+        self.currentItem.emit(maname)
         self.itemDone.emit(maname, status)
 
 
@@ -591,6 +663,7 @@ class WaitCycle(QThread):
     currentItem = Signal(str)
     itemDone = Signal()
     initValue = Signal(int)
+    notCycling = Signal()
     completed = Signal()
 
     def __init__(self, manames, timing_conn, mode, parent=None):
@@ -630,7 +703,6 @@ class WaitCycle(QThread):
         else:
             # Trigger timing
             self._timing_conn.trigger(self._mode)
-            self._timing_conn.wait_trigger_enable(self._mode)
 
             # Wait for cycling
             t0 = _time.time()
@@ -662,6 +734,11 @@ class WaitCycle(QThread):
 
     def _check_keep_waiting(self, t0):
         if self._mode == 'Cycle':
+            if (5 < _time.time() - t0 < 7):
+                for maname in self._manames:
+                    if not _cyclers[maname].check_cycle_enable():
+                        self.notCycling.emit()
+                        return False
             return _time.time() - t0 < self._size
         else:
             return not self._timing_conn.check_ramp_end()
@@ -712,9 +789,9 @@ class VerifyFinalState(QThread):
 
     def check_magnet_final_state(self, maname, mode):
         global _cyclers
-        self.currentItem.emit(maname)
         ans = _cyclers[maname].check_final_state(mode)
         status = False if ans != 0 else True
+        self.currentItem.emit(maname)
         self.itemDone.emit(maname, status)
 
 
@@ -748,7 +825,7 @@ class ResetMagnetsOpMode(QThread):
             threads = dict()
             for maname in self._manames:
                 threads[maname] = _thread.Thread(
-                    target=self.reset_magnet_opmode,
+                    target=self.set_magnet_opmode_slowref,
                     args=(maname, ), daemon=True)
                 threads[maname].start()
                 if self._quit_task:
@@ -759,10 +836,10 @@ class ResetMagnetsOpMode(QThread):
             if not interrupted:
                 self.completed.emit()
 
-    def reset_magnet_opmode(self, maname):
+    def set_magnet_opmode_slowref(self, maname):
         global _cyclers
+        done = _cyclers[maname].set_opmode_slowref()
         self.currentItem.emit(maname)
-        done = _cyclers[maname].reset_opmode()
         self.itemDone.emit(maname, done)
 
 
@@ -779,6 +856,9 @@ class CycleAutomatically(QThread):
         self._auto = AutomatedCycle(
             cyclers=cyclers, timing=timing, logger=self)
         self._quit_thread = False
+
+    def size(self):
+        return self._auto.size
 
     def exit_thread(self):
         self._quit_thread = True
