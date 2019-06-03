@@ -67,18 +67,14 @@ class AFC(BaseWidget):
 
         lb = QLabel("<b>Network</b>")
         rb = SiriusLedAlert(self, init_channel=prefix + "Network-Mon")
-        on_c, off_c = rb.onColor, rb.offColor
-        rb.offColor = on_c
-        rb.onColor = off_c
+        rb.offColor, rb.onColor = rb.onColor, rb.offColor
         gb = self._create_small_GB('', self.status_wid, (lb, rb))
         gb.setStyleSheet('border: 2px solid transparent;')
         status_layout.addWidget(gb, 0, 2)
 
         lb = QLabel("<b>UP Link</b>")
-        rb = SiriusLedAlert(self, init_channel=prefix + "Link-Mon")
-        on_c, off_c = rb.onColor, rb.offColor
-        rb.offColor = on_c
-        rb.onColor = off_c
+        rb = SiriusLedAlert(self, init_channel=prefix + "LinkStatus-Mon")
+        rb.offColor, rb.onColor = rb.onColor, rb.offColor
         gb = self._create_small_GB('', self.status_wid, (lb, rb))
         gb.setStyleSheet('border: 2px solid transparent;')
         status_layout.addWidget(gb, 0, 3)

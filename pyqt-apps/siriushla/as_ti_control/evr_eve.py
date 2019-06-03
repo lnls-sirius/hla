@@ -3,7 +3,8 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGroupBox, QLabel, QVBoxLayout, \
     QHBoxLayout, QGridLayout, QSpacerItem, QSizePolicy as QSzPol
 from pydm.widgets import PyDMLabel
-from siriushla.widgets import PyDMLed, SiriusLedAlert, PyDMStateButton
+from siriushla.widgets import PyDMLed, SiriusLedAlert, PyDMStateButton, \
+    SiriusLedState
 from siriushla.as_ti_control.base import BaseWidget, MyComboBox as _MyComboBox
 from siriushla.as_ti_control.ll_trigger import OTPList, OUTList
 
@@ -65,15 +66,13 @@ class _EVR_EVE(BaseWidget):
 
         lb = QLabel("<b>Network</b>")
         rb = SiriusLedAlert(self, init_channel=prefix + "Network-Mon")
-        on_c, off_c = rb.onColor, rb.offColor
-        rb.offColor = on_c
-        rb.onColor = off_c
+        rb.offColor, rb.onColor = rb.onColor, rb.offColor
         gb = self._create_small_GB('', self.status_wid, (lb, rb))
         gb.setStyleSheet('border: 2px solid transparent;')
         status_layout.addWidget(gb, 0, 2)
 
         lb = QLabel("<b>UP Link</b>")
-        rb = SiriusLedAlert(self, init_channel=prefix + "Link-Mon")
+        rb = SiriusLedAlert(self, init_channel=prefix + "LinkStatus-Mon")
         on_c, off_c = rb.onColor, rb.offColor
         rb.offColor = on_c
         rb.onColor = off_c
@@ -81,11 +80,17 @@ class _EVR_EVE(BaseWidget):
         gb.setStyleSheet('border: 2px solid transparent;')
         status_layout.addWidget(gb, 0, 3)
 
-        lb = QLabel("<b>Interlock</b>")
-        rb = SiriusLedAlert(self, init_channel=prefix + "Intlk-Mon")
+        lb = QLabel("<b>Interlock Status</b>")
+        rb = SiriusLedAlert(self, init_channel=prefix + "IntlkStatus-Mon")
         gb = self._create_small_GB('', self.status_wid, (lb, rb))
         gb.setStyleSheet('border: 2px solid transparent;')
         status_layout.addWidget(gb, 0, 4)
+
+        lb = QLabel("<b>Interlock Enabled</b>")
+        rb = SiriusLedState(self, init_channel=prefix + "IntlkEnbl-Mon")
+        gb = self._create_small_GB('', self.status_wid, (lb, rb))
+        gb.setStyleSheet('border: 2px solid transparent;')
+        status_layout.addWidget(gb, 0, 5)
 
         if self.device_type == 'EVR':
             wids = list()
@@ -99,7 +104,7 @@ class _EVR_EVE(BaseWidget):
             sp = _MyComboBox(self, init_channel=prefix + "RFOut-Sel")
             rb = PyDMLabel(self, init_channel=prefix + "RFOut-Sts")
             gb = self._create_small_GB('RF Output', self.status_wid, (sp, rb))
-        status_layout.addWidget(gb, 0, 5)
+        status_layout.addWidget(gb, 0, 6)
 
     def _create_small_GB(self, name, parent, wids, align_ver=True):
         gb = QGroupBox(name, parent)
