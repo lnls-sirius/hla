@@ -337,7 +337,7 @@ class DipoleRamp(QWidget):
             global _flag_stack_next_command, _flag_stacking
             if _flag_stack_next_command:
                 _flag_stacking = True
-                command = _CommandChangeTableCell(
+                command = _UndoRedoTableCell(
                     self.table, row, column, old_value, new_value,
                     'set dipole table item at row {0}, column {1}'.format(
                         row, column))
@@ -367,7 +367,7 @@ class DipoleRamp(QWidget):
             global _flag_stack_next_command, _flag_stacking
             if _flag_stack_next_command and (old_value != new_value):
                 _flag_stacking = True
-                command = _CommandChangeSpinbox(
+                command = _UndoRedoSpinbox(
                     self.sb_psdelay, old_value, new_value,
                     'set PS ramp delay to {}'.format(new_value))
                 self._undo_stack.push(command)
@@ -396,7 +396,7 @@ class DipoleRamp(QWidget):
             global _flag_stack_next_command, _flag_stacking
             if _flag_stack_next_command and (old_value != new_value):
                 _flag_stacking = True
-                command = _CommandChangeSpinbox(
+                command = _UndoRedoSpinbox(
                     self.sb_nrpoints, old_value, new_value,
                     'set dipole ramp number of points to {}'.format(new_value))
                 self._undo_stack.push(command)
@@ -755,7 +755,7 @@ class MultipolesRamp(QWidget):
             global _flag_stack_next_command, _flag_stacking
             if _flag_stack_next_command:
                 _flag_stacking = True
-                command = _CommandChangeTableCell(
+                command = _UndoRedoTableCell(
                     self.table, row, column, old_value[0], new_value,
                     'set multipole table item at row {0}, column {1}'.format(
                         row, column))
@@ -1228,7 +1228,7 @@ class RFRamp(QWidget):
             global _flag_stack_next_command, _flag_stacking
             if _flag_stack_next_command:
                 _flag_stacking = True
-                command = _CommandChangeTableCell(
+                command = _UndoRedoTableCell(
                     self.table, row, column, old_value, new_value,
                     'set RF table item at row {0}, column {1}'.format(
                         row, column))
@@ -1258,7 +1258,7 @@ class RFRamp(QWidget):
             global _flag_stack_next_command, _flag_stacking
             if _flag_stack_next_command and (old_value != new_value):
                 _flag_stacking = True
-                command = _CommandChangeSpinbox(
+                command = _UndoRedoSpinbox(
                     self.sb_rfdelay, old_value, new_value,
                     'set RF ramp delay to {}'.format(new_value))
                 self._undo_stack.push(command)
@@ -1286,7 +1286,7 @@ class RFRamp(QWidget):
             global _flag_stack_next_command, _flag_stacking
             if _flag_stack_next_command:
                 _flag_stacking = True
-                command = _CommandChangeSpinbox(
+                command = _UndoRedoSpinbox(
                     self.sb_rmpincintvl, old_value, new_value,
                     'set RF ramping increase duration to {0}'.format(
                      new_value))
@@ -1428,7 +1428,7 @@ class RFRamp(QWidget):
         self.updateTable()
 
 
-class _CommandChangeTableCell(QUndoCommand):
+class _UndoRedoTableCell(QUndoCommand):
     """Class to define command change table cell."""
 
     def __init__(self, table, row, column, old_data, new_data, description):
@@ -1455,7 +1455,7 @@ class _CommandChangeTableCell(QUndoCommand):
             _flag_stacking = False
 
 
-class _CommandChangeSpinbox(QUndoCommand):
+class _UndoRedoSpinbox(QUndoCommand):
     """Class to define command change ramp number of points."""
 
     def __init__(self, spinbox, old_data, new_data, description):
