@@ -10,7 +10,6 @@ from siriuspy.servconf import exceptions as _srvexceptions
 from siriushla.bo_ap_ramp.status_and_commands import StatusAndCommands
 from siriushla.bo_ap_ramp.settings import Settings
 from siriushla.bo_ap_ramp.config_params import ConfigParameters
-from siriushla.bo_ap_ramp.optics_adjust import OpticsAdjust
 from siriushla.bo_ap_ramp.diagnosis import Diagnosis
 
 
@@ -59,14 +58,8 @@ class RampMain(SiriusMainWindow):
             self._tunecorr_configname, self._chromcorr_configname)
         self.config_parameters.setObjectName('ConfigParameters')
 
-        self.optics_adjust = OpticsAdjust(self, self.prefix, self.ramp_config)
-        self.optics_adjust.setObjectName('OpticsAdjust')
-
         vlay1 = QVBoxLayout()
         vlay1.addWidget(self.config_parameters)
-        vlay1.addWidget(self.optics_adjust)
-        vlay1.setStretch(0, 35)
-        vlay1.setStretch(1, 10)
         glay.addLayout(vlay1, 1, 0)
 
         self.status_and_commands = StatusAndCommands(
@@ -127,15 +120,10 @@ class RampMain(SiriusMainWindow):
             self._verifySync)
         self.config_parameters.mult_ramp.updateMultipoleRampSignal.connect(
             self.status_and_commands.update_ma_params)
-        self.config_parameters.mult_ramp.configsIndexChangedSignal.connect(
-            self.optics_adjust.getConfigIndices)
         self.config_parameters.rf_ramp.updateRFRampSignal.connect(
             self._verifySync)
         self.config_parameters.rf_ramp.updateRFRampSignal.connect(
             self.status_and_commands.update_rf_params)
-
-        self.optics_adjust.normConfigChanged.connect(
-            self.config_parameters.mult_ramp.handleNormConfigsChanged)
 
         self.loadSignal.connect(self.settings.getRampConfig)
         self.loadSignal.connect(self.config_parameters.handleLoadRampConfig)
@@ -145,7 +133,6 @@ class RampMain(SiriusMainWindow):
             self.config_parameters.mult_ramp.handleLoadRampConfig)
         self.loadSignal.connect(
             self.config_parameters.rf_ramp.handleLoadRampConfig)
-        self.loadSignal.connect(self.optics_adjust.handleLoadRampConfig)
         self.loadSignal.connect(self.status_and_commands.handleLoadRampConfig)
 
     def _addActions(self):
@@ -176,7 +163,8 @@ class RampMain(SiriusMainWindow):
         """Verify sync status related to ConfServer."""
         if self.ramp_config is not None:
             if not self.ramp_config.configsrv_synchronized:
-                self.config_parameters.setStyleSheet('QGroupBox {color: red;}')
+                self.config_parameters.setStyleSheet(
+                    '#ConfigParameters {color: red;}')
                 self.config_parameters.setToolTip('There are unsaved changes')
             else:
                 self.config_parameters.setStyleSheet('')
