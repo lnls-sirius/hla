@@ -407,7 +407,7 @@ class EditNormalizedConfig(SiriusDialog):
 class OpticsAdjustSettings(SiriusDialog):
     """Auxiliar window to optics adjust settings."""
 
-    updateSettings = Signal(list)
+    updateSettings = Signal(str, str)
 
     def __init__(self, tuneconfig_currname, chromconfig_currname, parent=None):
         """Initialize object."""
@@ -663,7 +663,7 @@ class OpticsAdjustSettings(SiriusDialog):
     def _emitSettings(self):
         tuneconfig_name = self.cb_tuneconfig.currentText()
         chromconfig_name = self.cb_chromconfig.currentText()
-        self.updateSettings.emit([tuneconfig_name, chromconfig_name])
+        self.updateSettings.emit(tuneconfig_name, chromconfig_name)
         self.close()
 
 

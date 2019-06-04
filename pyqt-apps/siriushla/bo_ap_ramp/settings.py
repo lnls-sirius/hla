@@ -25,17 +25,18 @@ class Settings(QMenuBar):
 
     newConfigNameSignal = Signal(str)
     loadSignal = Signal()
-    opticsSettingsSignal = Signal(list)
+    opticsSettingsSignal = Signal(str, str)
     diagSettingsSignal = Signal(list)
     plotUnitSignal = Signal(str)
 
-    def __init__(self, parent=None, prefix='', ramp_config=None):
+    def __init__(self, parent=None, prefix='', ramp_config=None,
+                 tunecorr_configname='', chromcorr_configname=''):
         """Initialize object."""
         super().__init__(parent)
         self.prefix = prefix
         self.ramp_config = ramp_config
-        self._tunecorr_name = 'Default_1'
-        self._chromcorr_name = 'Default'
+        self._tunecorr_configname = tunecorr_configname
+        self._chromcorr_configname = chromcorr_configname
         self._injcurr_idx = 0
         self._ejecurr_idx = -1
         self._setupUi()
@@ -120,7 +121,7 @@ class Settings(QMenuBar):
 
     def _showOpticsSettingsPopup(self):
         self._opticsSettingsPopup = _OpticsAdjustSettings(
-            self._tunecorr_name, self._chromcorr_name, self)
+            self._tunecorr_configname, self._chromcorr_configname, self)
         self._opticsSettingsPopup.updateSettings.connect(
             self._emitOpticsSettings)
         self._opticsSettingsPopup.open()
@@ -162,10 +163,12 @@ class Settings(QMenuBar):
     def _emitLoadSignal(self):
         self.loadSignal.emit()
 
-    def _emitOpticsSettings(self, settings):
-        self._tunecorr_name = settings[0]
-        self._chromcorr_name = settings[1]
-        self.opticsSettingsSignal.emit(settings)
+    @Slot(str, str)
+    def _emitOpticsSettings(self, tunecorr_configname, chromcorr_configname):
+        self._tunecorr_configname = tunecorr_configname
+        self._chromcorr_configname = chromcorr_configname
+        self.opticsSettingsSignal.emit(
+            tunecorr_configname, chromcorr_configname)
 
     def _emitDiagSettings(self, settings):
         self._injcurr_idx = settings[0]

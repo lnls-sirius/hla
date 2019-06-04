@@ -4,7 +4,7 @@ from functools import partial as _part
 from copy import deepcopy as _dcopy
 import numpy as _np
 
-from qtpy.QtCore import Qt, Signal
+from qtpy.QtCore import Qt, Signal, Slot
 from qtpy.QtGui import QKeySequence
 from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
     QGridLayout, QScrollArea, QFormLayout, QCheckBox, QDoubleSpinBox, \
@@ -483,6 +483,9 @@ class BONormEdit(SiriusMainWindow):
                     new_value))
         self._deltas[tune] = new_value
 
+        self._updateDeltaKL()
+
+    def _updateDeltaKL(self):
         self._deltaKL = self._tunecorr.calculate_deltaKL(
             [self._deltas['tuneX'], self._deltas['tuneY']])
         self.l_deltaKLQF.setText('{: 4f}'.format(self._deltaKL[0]))
@@ -526,6 +529,9 @@ class BONormEdit(SiriusMainWindow):
                     new_value))
         self._deltas[chrom] = new_value
 
+        self._updateDeltaSL()
+
+    def _updateDeltaSL(self):
         desired_Chrom = _np.array([self._deltas['chromX'],
                                    self._deltas['chromY']])
         deltas = desired_Chrom - self._currChrom
@@ -575,6 +581,14 @@ class BONormEdit(SiriusMainWindow):
             self.normConfigChanged.emit(
                 self.norm_config, self._norm_config_oldname,
                 self.time, apply)
+
+    @Slot(str, str)
+    def updateSettings(self, tunecorr_configname, chromcorr_configname):
+        self._tunecorr = BOTuneCorr(tunecorr_configname)
+        self._chromcorr = BOChromCorr(chromcorr_configname)
+        self._updateDeltaKL()
+        self._estimateChrom(use_ref=True)
+        self._updateDeltaSL()
 
     # ---------- handle undo redo stask ----------
 

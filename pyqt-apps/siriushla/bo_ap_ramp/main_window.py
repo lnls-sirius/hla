@@ -26,6 +26,10 @@ class RampMain(SiriusMainWindow):
         self.prefix = prefix
         self.ramp_config = None
         self._undo_stack = QUndoStack(self)
+
+        self._tunecorr_configname = 'Default'
+        self._chromcorr_configname = 'Default'
+
         self._setupUi()
         self._connSignals()
         self._addActions()
@@ -45,11 +49,14 @@ class RampMain(SiriusMainWindow):
                               stop:1 rgba(213, 213, 213, 255));""")
         glay.addWidget(lab, 0, 0, 1, 2)
 
-        self.settings = Settings(self, self.prefix, self.ramp_config)
+        self.settings = Settings(
+            self, self.prefix, self.ramp_config,
+            self._tunecorr_configname, self._chromcorr_configname)
         self.setMenuBar(self.settings)
 
         self.config_parameters = ConfigParameters(
-            self, self.prefix, self.ramp_config, self._undo_stack)
+            self, self.prefix, self.ramp_config, self._undo_stack,
+            self._tunecorr_configname, self._chromcorr_configname)
         self.config_parameters.setObjectName('ConfigParameters')
 
         self.optics_adjust = OpticsAdjust(self, self.prefix, self.ramp_config)
@@ -100,7 +107,7 @@ class RampMain(SiriusMainWindow):
         self.settings.newConfigNameSignal.connect(self._receiveNewConfigName)
         self.settings.loadSignal.connect(self._emitLoadSignal)
         self.settings.opticsSettingsSignal.connect(
-            self.optics_adjust.handleUpdateSettings)
+            self._handleUpdateOpticsAdjustSettings)
         self.settings.diagSettingsSignal.connect(
             self.diagnosis.handleUpdateSettings)
         self.settings.plotUnitSignal.connect(
@@ -200,6 +207,13 @@ class RampMain(SiriusMainWindow):
     def _acceptClose(self):
         self.close_ev.accept()
         super().closeEvent(self.close_ev)
+
+    @Slot(str, str)
+    def _handleUpdateOpticsAdjustSettings(self, tune_cname, chrom_cname):
+        self._tunecorr_configname = tune_cname
+        self._chromcorr_configname = chrom_cname
+        self.config_parameters.updateOpticsAdjustSettings(
+            tune_cname, chrom_cname)
 
 
 if __name__ == '__main__':

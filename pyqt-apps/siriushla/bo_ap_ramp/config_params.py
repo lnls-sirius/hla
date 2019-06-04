@@ -30,13 +30,16 @@ _flag_stacking = False
 class ConfigParameters(QGroupBox):
     """Widget to set and monitor ramp parametes."""
 
-    def __init__(self, parent=None, prefix='', ramp_config=None,
-                 undo_stack=None):
+    def __init__(self, parent=None, prefix='',
+                 ramp_config=None, undo_stack=None,
+                 tunecorr_configname='', chromcorr_configname=''):
         """Initialize object."""
         super().__init__('Ramping Parameters: ', parent)
         self.prefix = prefix
         self.ramp_config = ramp_config
         self._undo_stack = undo_stack
+        self._tunecorr_configname = tunecorr_configname
+        self._chromcorr_configname = chromcorr_configname
         self._setupUi()
 
     def _setupUi(self):
@@ -46,7 +49,8 @@ class ConfigParameters(QGroupBox):
         self.dip_ramp = DipoleRamp(
             self, self.prefix, self.ramp_config, self._undo_stack)
         self.mult_ramp = MultipolesRamp(
-            self, self.prefix, self.ramp_config, self._undo_stack)
+            self, self.prefix, self.ramp_config, self._undo_stack,
+            self._tunecorr_configname, self._chromcorr_configname)
         self.rf_ramp = RFRamp(
             self, self.prefix, self.ramp_config, self._undo_stack)
         my_lay.addWidget(self.dip_ramp)
@@ -61,6 +65,12 @@ class ConfigParameters(QGroupBox):
         """Update all widgets when ramp_config is loaded."""
         self.ramp_config = ramp_config
         self.setTitle('Ramping Parameters: ' + self.ramp_config.name)
+
+    def updateOpticsAdjustSettings(self, tune_cname, chrom_cname):
+        """Update settings."""
+        self._tunecorr_configname = tune_cname
+        self._chromcorr_configname = chrom_cname
+        self.mult_ramp.updateOpticsAdjustSettings(tune_cname, chrom_cname)
 
     @Slot(str)
     def getPlotUnits(self, units):
@@ -552,16 +562,22 @@ class MultipolesRamp(QWidget):
     updateMultipoleRampSignal = Signal()
     configsIndexChangedSignal = Signal(dict)
 
-    def __init__(self, parent=None, prefix='', ramp_config=None,
-                 undo_stack=None):
+    def __init__(self, parent=None, prefix='',
+                 ramp_config=None, undo_stack=None,
+                 tunecorr_configname='', chromcorr_configname=''):
         """Initialize object."""
         super().__init__(parent)
         self.prefix = prefix
         self.ramp_config = ramp_config
         self._undo_stack = undo_stack
+
         self._getNormalizedConfigs()
+
         self._magnets_to_plot = []
         self.plot_unit = 'Strengths'
+
+        self._tunecorr_configname = tunecorr_configname
+        self._chromcorr_configname = chromcorr_configname
         self._setupUi()
 
     def _setupUi(self):
@@ -986,6 +1002,11 @@ class MultipolesRamp(QWidget):
         self.ramp_config[norm_config.name] = norm_config
         self.handleLoadRampConfig()
         self.updateMultipoleRampSignal.emit()
+
+    def updateOpticsAdjustSettings(self, tuneconfig_name, chromconfig_name):
+        self._tunecorr_configname = tuneconfig_name
+        self._chromcorr_configname = chromconfig_name
+        self.updateOptAdjSettingsSignal.emit(tuneconfig_name, chromconfig_name)
 
 
 class RFRamp(QWidget):
