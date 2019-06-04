@@ -57,7 +57,7 @@ class FOUT(BaseWidget):
         status_layout.addWidget(gb, 0, 2)
 
         lb = QLabel("<b>UP Link</b>")
-        rb = SiriusLedAlert(self, init_channel=prefix + "Link-Mon")
+        rb = SiriusLedAlert(self, init_channel=prefix + "LinkStatus-Mon")
         on_c, off_c = rb.onColor, rb.offColor
         rb.offColor = on_c
         rb.onColor = off_c
