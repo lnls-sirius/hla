@@ -391,10 +391,15 @@ class StatusAndCommands(QGroupBox):
             c2v[p+c.TrgLLRFRmp_Delay.replace('SP', 'RB')] = \
                 r.ti_params_rf_ramp_delay
             c2v[p+c.EvtRmpBO_Delay.replace('SP', 'RB')] = 0
-            [linac_dly, injbo_dly, injsi_dly] = conn.calc_evts_delay()
-            c2v[p+c.EvtLinac_Delay.replace('SP', 'RB')] = linac_dly
-            c2v[p+c.EvtInjBO_Delay.replace('SP', 'RB')] = injbo_dly
-            c2v[p+c.EvtInjSI_Delay.replace('SP', 'RB')] = injsi_dly
+            params = conn.calc_evts_delay()
+            if not params:
+                QMessageBox.critical(self, 'Timing not connected',
+                                     'There are TI not connected PVs!',
+                                     QMessageBox.Ok)
+                params = [None]*3
+            c2v[p+c.EvtLinac_Delay.replace('SP', 'RB')] = params[0]
+            c2v[p+c.EvtInjBO_Delay.replace('SP', 'RB')] = params[1]
+            c2v[p+c.EvtInjSI_Delay.replace('SP', 'RB')] = params[2]
             self.led_ti_apply.channels2values.update(c2v)
 
 
