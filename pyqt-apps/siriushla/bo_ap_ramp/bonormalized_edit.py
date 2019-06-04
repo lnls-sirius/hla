@@ -548,6 +548,7 @@ class BONormEdit(SiriusMainWindow):
         self.verifySync()
 
     def _resetChromChanges(self):
+        self._currChrom = self._estimateChrom(use_ref=True)
         self.sb_ChromX.setValue(self._currChrom[0])
         self.sb_ChromY.setValue(self._currChrom[1])
         self._deltaSL = [0.0, 0.0]
@@ -566,12 +567,10 @@ class BONormEdit(SiriusMainWindow):
         elif matype == 'quads':
             self._resetTuneChanges()
         elif matype == 'sexts':
-            self._currChrom = self._estimateChrom(use_ref=True)
             self._resetChromChanges()
         else:
             self._resetOrbitChanges()
             self._resetTuneChanges()
-            self._currChrom = self._estimateChrom(use_ref=True)
             self._resetChromChanges()
 
         self.verifySync()
