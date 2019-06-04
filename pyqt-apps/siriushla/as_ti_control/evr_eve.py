@@ -1,12 +1,17 @@
 import sys
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGroupBox, QLabel, QVBoxLayout, \
-    QHBoxLayout, QGridLayout, QSpacerItem, QSizePolicy as QSzPol
+    QHBoxLayout, QGridLayout, QSpacerItem, QSizePolicy as QSzPol, \
+    QMenuBar
 from pydm.widgets import PyDMLabel
+from siriuspy.search import LLTimeSearch
+from siriushla.util import connect_window
 from siriushla.widgets import PyDMLed, SiriusLedAlert, PyDMStateButton, \
     SiriusLedState
-from siriushla.as_ti_control.base import BaseWidget, MyComboBox as _MyComboBox
-from siriushla.as_ti_control.ll_trigger import OTPList, OUTList
+from siriushla.widgets.windows import create_window_from_widget
+from siriushla import as_ti_control as _ti_ctrl
+from .base import BaseWidget, MyComboBox as _MyComboBox
+from .ll_trigger import OTPList, OUTList
 
 
 class _EVR_EVE(BaseWidget):
@@ -22,29 +27,42 @@ class _EVR_EVE(BaseWidget):
         self.my_layout = QGridLayout(self)
         self.my_layout.setHorizontalSpacing(20)
         self.my_layout.setVerticalSpacing(20)
+
+        self.my_layout.addWidget(self.setupmenus(), 0, 0, 1, 2)
+
         lab = QLabel('<h1>' + self.prefix.device_name + '</h1>', self)
-        self.my_layout.addWidget(lab, 0, 0, 1, 2)
+        self.my_layout.addWidget(lab, 1, 0, 1, 2)
         self.my_layout.setAlignment(lab, Qt.AlignCenter)
+
+        self.status_wid = QGroupBox('Status', self)
+        self.my_layout.addWidget(self.status_wid, 2, 0, 1, 2)
+        self._setup_status_wid()
 
         self.otps_wid = OTPList(
             name='Internal Trigger (OTP)', parent=self, prefix=self.prefix,
             obj_names=['OTP{0:02d}'.format(i) for i in range(24)])
         self.otps_wid.setObjectName('otps_wid')
         self.otps_wid.setStyleSheet("""#otps_wid{min-width:60em;}""")
-        self.my_layout.addWidget(self.otps_wid, 2, 0)
+        self.my_layout.addWidget(self.otps_wid, 3, 0)
 
         self.outs_wid = OUTList(
             name='OUT', parent=self, prefix=self.prefix,
             obj_names=['OUT{0:d}'.format(i) for i in range(8)])
         self.outs_wid.setObjectName('outs_wid')
         self.outs_wid.setStyleSheet("""#outs_wid{min-width:44em;}""")
-        self.my_layout.addWidget(self.outs_wid, 2, 1)
-        self.my_layout.addItem(QSpacerItem(
-                0, 0, QSzPol.Minimum, QSzPol.Expanding))
+        self.my_layout.addWidget(self.outs_wid, 3, 1)
 
-        self.status_wid = QGroupBox('Status', self)
-        self.my_layout.addWidget(self.status_wid, 1, 0, 1, 2)
-        self._setup_status_wid()
+    def setupmenus(self):
+        prefix = self.prefix
+        main_menu = QMenuBar()
+        main_menu.setNativeMenuBar(False)
+        menu = main_menu.addMenu('&Uplink')
+
+        fout = LLTimeSearch.get_fout_channel(prefix + 'OTP0')
+        action = menu.addAction(fout)
+        Win = create_window_from_widget(_ti_ctrl.FOUT, title=fout.device_name)
+        connect_window(action, Win, self, prefix=fout.device_name+':')
+        return main_menu
 
     def _setup_status_wid(self):
         prefix = self.prefix

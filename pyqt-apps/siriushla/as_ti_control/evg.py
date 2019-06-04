@@ -1,11 +1,15 @@
 import sys
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QGroupBox, QLabel, QWidget, \
+from qtpy.QtWidgets import QGroupBox, QLabel, QWidget, QMenuBar, \
     QVBoxLayout, QHBoxLayout, QGridLayout, QSizePolicy as QSzPol
 from pydm.widgets import PyDMLabel, PyDMLineEdit, PyDMPushButton
+from siriuspy.search import LLTimeSearch
 from siriuspy.csdevice import timesys as _cstime
+from siriushla.util import connect_window
 from siriushla.widgets import PyDMLed, SiriusLedAlert, PyDMStateButton
-from siriushla.as_ti_control.base import BaseList, BaseWidget, \
+from siriushla.widgets.windows import create_window_from_widget
+from siriushla import as_ti_control as _ti_ctrl
+from .base import BaseList, BaseWidget, \
     MySpinBox as _MySpinBox, MyComboBox as _MyComboBox
 
 
@@ -21,23 +25,34 @@ class EVG(BaseWidget):
         mylayout = QGridLayout(self)
         mylayout.setHorizontalSpacing(20)
         mylayout.setVerticalSpacing(20)
+
+        mylayout.addWidget(self._setupmenus(), 0, 0, 1, 2)
+
         lab = QLabel('<h1>' + self.prefix.device_name + '</h1>', self)
-        mylayout.addWidget(lab, 0, 0, 1, 2)
+        mylayout.addWidget(lab, 1, 0, 1, 2)
         mylayout.setAlignment(lab, Qt.AlignCenter)
+
+        self.configs_wid = QGroupBox('Configurations', self)
+        mylayout.addWidget(self.configs_wid, 2, 0)
+        self._setup_configs_wid()
+
+        self.status_wid = QGroupBox('Status', self)
+        mylayout.addWidget(self.status_wid, 2, 1)
+        self._setup_status_wid()
 
         self.events_wid = EventList(
             name='Events', parent=self, prefix=self.prefix,
             obj_names=sorted(_cstime.Const.EvtLL._fields[1:]))
         self.events_wid.setObjectName('events_wid')
         self.events_wid.setStyleSheet("""#events_wid{min-width:40em;}""")
-        mylayout.addWidget(self.events_wid, 2, 0)
+        mylayout.addWidget(self.events_wid, 3, 0)
 
         self.clocks_wid = ClockList(
             name='Clocks', parent=self, prefix=self.prefix,
             props={'name', 'mux_enbl', 'frequency'},
             obj_names=sorted(_cstime.Const.ClkLL._fields)
             )
-        mylayout.addWidget(self.clocks_wid, 2, 1)
+        mylayout.addWidget(self.clocks_wid, 3, 1)
 
         # grpbx = self._create_formlayout_groupbox('Configurations', (
         #     ('DevEnbl-Sel', 'Enabled'),
@@ -49,13 +64,25 @@ class EVG(BaseWidget):
         #     ('RepeatBucketList-SP', 'Repeat Bucket List'),
         #     ))
         # mylayout.addWidget(grpbx, 1, 0)
-        self.configs_wid = QGroupBox('Configurations', self)
-        mylayout.addWidget(self.configs_wid, 1, 0)
-        self._setup_configs_wid()
 
-        self.status_wid = QGroupBox('Status', self)
-        mylayout.addWidget(self.status_wid, 1, 1)
-        self._setup_status_wid()
+    def _setupmenus(self):
+        prefix = self.prefix
+        main_menu = QMenuBar()
+        main_menu.setNativeMenuBar(False)
+        menu = main_menu.addMenu('&Downlinks')
+
+        downs = LLTimeSearch.get_device_names({'dev': 'Fout'})
+        link = list(LLTimeSearch.In2OutMap[downs[0].dev])[0]
+        downs2 = list()
+        for down in downs:
+            out = LLTimeSearch.get_evg_channel(down.substitute(propty=link))
+            downs2.append((out.propty, down.device_name))
+
+        for out, down in sorted(downs2):
+            action = menu.addAction(out + ' --> ' + down)
+            Win = create_window_from_widget(_ti_ctrl.FOUT, title=down)
+            connect_window(action, Win, self, prefix=down + ':')
+        return main_menu
 
     def _setup_configs_wid(self):
         prefix = self.prefix
