@@ -1,10 +1,13 @@
 import sys
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QLabel
+from qtpy.QtWidgets import QLabel, QPushButton
 from pydm.widgets import PyDMLabel
 from siriuspy.search import LLTimeSearch
 from siriushla.widgets import PyDMLed, PyDMStateButton
-from siriushla.as_ti_control.base import BaseList, \
+from siriushla.util import connect_window
+from siriushla.widgets.windows import create_window_from_widget
+from siriushla import as_ti_control as _ti_ctrl
+from .base import BaseList, \
     MySpinBox as _MySpinBox, MyComboBox as _MyComboBox
 
 
@@ -21,7 +24,6 @@ class LLTriggerList(BaseList):
         'pulses': 4.8,
         'delay': 4.8,
         'timestamp': 3.2,
-        'interlock': 6,
         'source': 6.5,
         'trigger': 4,
         'rf_delay': 4.8,
@@ -38,7 +40,6 @@ class LLTriggerList(BaseList):
         'pulses': 'Nr Pulses',
         'delay': 'Delay',
         'timestamp': 'Log',
-        'interlock': 'Intlk Active',
         'source': 'Source',
         'trigger': 'Trigger',
         'rf_delay': 'RF Delay',
@@ -47,11 +48,11 @@ class LLTriggerList(BaseList):
         }
     _ALL_PROPS = (
         'device', 'name', 'state', 'event', 'width', 'polarity', 'pulses',
-        'delay', 'timestamp', 'interlock', 'source', 'trigger', 'rf_delay',
+        'delay', 'timestamp', 'source', 'trigger', 'rf_delay',
         'rf_delay_type', 'fine_delay')
 
     def __init__(self, **kwargs):
-        srch = set(('device', 'name', 'polarity', 'source', 'interlock'))
+        srch = set(('device', 'name', 'polarity', 'source'))
         kwargs['props2search'] = srch
         super().__init__(**kwargs)
 
@@ -60,8 +61,18 @@ class LLTriggerList(BaseList):
         outlb = LLTimeSearch.get_channel_output_port_pvname(prefix)
         sp = rb = None
         if prop == 'device':
-            sp = QLabel(outlb.device_name, self)
-            sp.setAlignment(Qt.AlignCenter)
+            devt = outlb.dev
+            if devt == 'EVR':
+                devt = _ti_ctrl.EVR
+            elif devt == 'EVE':
+                devt = _ti_ctrl.EVE
+            else:
+                devt = _ti_ctrl.AFC
+            sp = QPushButton(outlb.device_name, self)
+            sp.setAutoDefault(False)
+            sp.setDefault(False)
+            Win = create_window_from_widget(devt, title=outlb.device_name)
+            connect_window(sp, Win, self, prefix=outlb.device_name + ':')
         elif prop == 'name':
             sp = QLabel(outlb.propty, self)
             sp.setAlignment(Qt.AlignCenter)
@@ -109,12 +120,7 @@ class LLTriggerList(BaseList):
             sp = PyDMStateButton(self, init_channel=pvname)
             pvname = intlb.substitute(propty=intlb.propty+"Log-Sts")
             rb = PyDMLed(self, init_channel=pvname)
-        elif prop == 'interlock':
-            pvname = intlb.substitute(propty=intlb.propty+"ByPassIntlk-Sel")
-            sp = PyDMStateButton(self, init_channel=pvname)
-            pvname = intlb.substitute(propty=intlb.propty+"ByPassIntlk-Sts")
-            rb = PyDMLed(self, init_channel=pvname)
-        if prop == 'source':
+        elif prop == 'source':
             pvname = outlb.substitute(propty=outlb.propty+"Src-Sel")
             sp = _MyComboBox(self, init_channel=pvname)
             pvname = outlb.substitute(propty=outlb.propty+"Src-Sts")
@@ -157,7 +163,7 @@ class OTPList(LLTriggerList):
 
     _ALL_PROPS = (
         'name', 'state', 'event', 'width', 'polarity', 'pulses', 'delay',
-        'timestamp', 'interlock')
+        'timestamp')
 
 
 class OUTList(LLTriggerList):

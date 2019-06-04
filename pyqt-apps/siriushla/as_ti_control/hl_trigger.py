@@ -52,6 +52,8 @@ class HLTriggerDetailed(BaseWidget):
         ll_list_layout.setVerticalSpacing(20)
 
         but = QPushButton('Open LL Triggers', self)
+        but.setAutoDefault(False)
+        but.setDefault(False)
         obj_names = HLTimeSearch.get_ll_trigger_names(self.prefix.device_name)
         Window = create_window_from_widget(
             LLTriggers, title=self.prefix.device_name+': LL Triggers')
@@ -104,18 +106,6 @@ class HLTriggerDetailed(BaseWidget):
         rb = PyDMLabel(self, init_channel=init_channel)
         gb = self._create_small_GB('Delay [us]', self.ll_list_wid, (sp, rb))
         ll_list_layout.addWidget(gb, 4, 0, 1, 2)
-
-        if HLTimeSearch.has_bypass_interlock(self.prefix.device_name):
-            init_channel = prefix.substitute(propty="ByPassIntlk-Sel")
-            sp = PyDMStateButton(self, init_channel=init_channel)
-            sp.shape = 1
-            sp.setSizePolicy(QSzPol.Minimum, QSzPol.Maximum)
-            init_channel = prefix.substitute(propty="ByPassIntlk-Sts")
-            rb = PyDMLed(self, init_channel=init_channel)
-            rb.setSizePolicy(QSzPol.Minimum, QSzPol.Maximum)
-            gb = self._create_small_GB(
-                        'Intlk Active', self.ll_list_wid, (sp, rb))
-            ll_list_layout.addWidget(gb, 5, 0)
 
         if HLTimeSearch.has_delay_type(self.prefix.device_name):
             init_channel = prefix.substitute(propty="RFDelayType-Sel")
@@ -189,7 +179,6 @@ class HLTriggerList(BaseList):
         'detailed': 10,
         'status': 4.8,
         'state': 3.8,
-        'interlock': 8,
         'source': 4.8,
         'pulses': 4.8,
         'duration': 8,
@@ -201,7 +190,6 @@ class HLTriggerList(BaseList):
         'detailed': 'Detailed View',
         'status': 'Status',
         'state': 'Enabled',
-        'interlock': 'Intlk Active',
         'source': 'Source',
         'pulses': 'Nr Pulses',
         'duration': 'Duration [us]',
@@ -210,7 +198,7 @@ class HLTriggerList(BaseList):
         'delay': 'Delay [us]',
         }
     _ALL_PROPS = (
-        'detailed', 'state', 'interlock', 'source', 'polarity', 'pulses',
+        'detailed', 'state', 'source', 'polarity', 'pulses',
         'duration', 'delay_type', 'delay', 'status',
         )
 
@@ -235,11 +223,6 @@ class HLTriggerList(BaseList):
             init_channel = prefix.substitute(propty="State-Sel")
             sp = PyDMStateButton(self, init_channel=init_channel)
             init_channel = prefix.substitute(propty="State-Sts")
-            rb = PyDMLed(self, init_channel=init_channel)
-        elif prop == 'interlock':
-            init_channel = prefix.substitute(propty="ByPassIntlk-Sel")
-            sp = PyDMStateButton(self, init_channel=init_channel)
-            init_channel = prefix.substitute(propty="ByPassIntlk-Sts")
             rb = PyDMLed(self, init_channel=init_channel)
         elif prop == 'source':
             init_channel = prefix.substitute(propty="Src-Sel")
