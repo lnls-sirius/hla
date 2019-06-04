@@ -4,12 +4,10 @@ import epics
 
 from qtpy.QtCore import Qt, Signal, Slot, QLocale
 from qtpy.QtWidgets import QLabel, QWidget, QScrollArea, QAbstractItemView, \
-                           QHBoxLayout, QVBoxLayout, QGridLayout, QLineEdit, \
-                           QPushButton, QTableWidget, QTableWidgetItem, \
-                           QRadioButton, QFormLayout, QDoubleSpinBox, \
-                           QComboBox, QSpinBox, QStyledItemDelegate, \
-                           QSpacerItem, QSizePolicy as QSzPlcy, QCheckBox, \
-                           QTabWidget, QGroupBox, QHeaderView
+    QHBoxLayout, QVBoxLayout, QGridLayout, QLineEdit, QPushButton, QCheckBox, \
+    QTableWidget, QTableWidgetItem, QRadioButton, QFormLayout, QDoubleSpinBox,\
+    QComboBox, QSpinBox, QStyledItemDelegate, QSpacerItem, QTabWidget, \
+    QSizePolicy as QSzPlcy, QGroupBox, QHeaderView, QMessageBox
 from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox, \
                          PyDMPushButton
 from siriushla.widgets.windows import SiriusDialog, create_window_from_widget
@@ -47,13 +45,13 @@ class LoadRampConfig(_LoadConfiguration):
         name = self.editor.config_name
         if self.ramp_config is not None:
             if not self.ramp_config.configsrv_synchronized:
-                save_changes = MessageBox(
+                ans = QMessageBox.question(
                     self, 'Save changes?',
                     'There are unsaved changes in {}. \n'
                     'Do you want to save?'.format(name),
-                    'Yes', 'Cancel')
-                save_changes.acceptedSignal.connect(self._saveChanges)
-                save_changes.exec_()
+                    QMessageBox.Yes, QMessageBox.Cancel)
+                if ans == QMessageBox.Yes:
+                    self.saveSignal.emit()
 
             if name != self.ramp_config.name:
                 self.configname.emit(name)
@@ -62,9 +60,6 @@ class LoadRampConfig(_LoadConfiguration):
         else:
             self.configname.emit(name)
         self.accept()
-
-    def _saveChanges(self):
-        self.saveSignal.emit()
 
 
 class NewRampConfigGetName(_SaveConfiguration):
@@ -91,22 +86,19 @@ class NewRampConfigGetName(_SaveConfiguration):
         name = self.search_lineedit.text()
         if (self._new_from_template and (self.config is not None)):
             if not self.config.configsrv_synchronized:
-                save_changes = MessageBox(
+                ans = QMessageBox.question(
                     self, 'Save changes?',
                     'There are unsaved changes in {}. \n'
                     'Do you want to save?'.format(name),
-                    'Yes', 'Cancel')
-                save_changes.acceptedSignal.connect(self._saveChanges)
-                save_changes.exec_()
+                    QMessageBox.Yes, QMessageBox.Cancel)
+                if ans == QMessageBox.Yes:
+                    self.saveSignal.emit()
             else:
                 self.configname.emit(name)
                 self.accept()
         else:
             self.configname.emit(name)
             self.accept()
-
-    def _saveChanges(self):
-        self.saveSignal.emit()
 
 
 class InsertNormalizedConfig(SiriusDialog):
@@ -243,8 +235,7 @@ class InsertNormalizedConfig(SiriusDialog):
                 n.configsrv_load()
                 nconfig = n.configuration
             except _srvexceptions.SrvError as e:
-                err_msg = MessageBox(self, 'Error', str(e), 'Ok')
-                err_msg.open()
+                QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
         elif sender is self.bt_create:
             time = self.sb_create_time.value()
             name = self.le_create_name.text()
@@ -437,8 +428,7 @@ class OpticsAdjustSettings(SiriusDialog):
             for m in metadata:
                 self.cb_chromconfig.addItem(m['name'])
         except _srvexceptions.SrvError as e:
-            err_msg = MessageBox(self, 'Error', str(e), 'Ok')
-            err_msg.open()
+            QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
         finally:
             self.cb_tuneconfig.setCurrentText(self.tuneconfig_currname)
             self._showTuneConfigData()
@@ -630,8 +620,7 @@ class OpticsAdjustSettings(SiriusDialog):
             mat = config['matrix']
             nomKL = config['nominal KLs']
         except _srvexceptions.SrvError as e:
-            err_msg = MessageBox(self, 'Error', str(e), 'Ok')
-            err_msg.open()
+            QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
         else:
             self.table_tunemat.setItem(0, 0, QTableWidgetItem(str(mat[0][0])))
             self.table_tunemat.setItem(0, 1, QTableWidgetItem(str(mat[0][1])))
@@ -655,8 +644,7 @@ class OpticsAdjustSettings(SiriusDialog):
             nomSL = config['nominal SLs']
             nomChrom = config['nominal chrom']
         except _srvexceptions.SrvError as e:
-            err_msg = MessageBox(self, 'Error', str(e), 'Ok')
-            err_msg.open()
+            QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
         else:
             self.table_chrommat.setItem(0, 0, QTableWidgetItem(str(mat[0][0])))
             self.table_chrommat.setItem(0, 1, QTableWidgetItem(str(mat[0][1])))
@@ -1206,48 +1194,6 @@ class SpinBoxDelegate(QStyledItemDelegate):
     def updateEditorGeometry(self, spinBox, option, index):
         """Update editor geometry."""
         spinBox.setGeometry(option.rect)
-
-
-class MessageBox(SiriusDialog):
-    """Auxiliar dialog to inform user about errors and pendencies."""
-
-    acceptedSignal = Signal()
-    rejectedSignal = Signal()
-
-    def __init__(self, parent=None, title='', message='',
-                 accept_button_text='', regect_button_text=''):
-        """Initialize object."""
-        super().__init__(parent)
-        self.setWindowTitle(title)
-        self.message = message
-        self.accept_button_text = accept_button_text
-        self.regect_button_text = regect_button_text
-        self._setupUi()
-
-    def _setupUi(self):
-        glay = QGridLayout()
-
-        self.label = QLabel(self.message, self)
-        glay.addWidget(self.label, 0, 0, 1, 3)
-
-        self.accept_button = QPushButton(self.accept_button_text, self)
-        self.accept_button.clicked.connect(self._emitAccepted)
-        glay.addWidget(self.accept_button, 1, 1)
-
-        if self.regect_button_text != '':
-            self.regect_button = QPushButton(self.regect_button_text, self)
-            self.regect_button.clicked.connect(self._emitRegected)
-            glay.addWidget(self.regect_button, 1, 2)
-
-        self.setLayout(glay)
-
-    def _emitAccepted(self):
-        self.acceptedSignal.emit()
-        self.close()
-
-    def _emitRegected(self):
-        self.rejectedSignal.emit()
-        self.close()
 
 
 class CustomTableWidgetItem(QTableWidgetItem):

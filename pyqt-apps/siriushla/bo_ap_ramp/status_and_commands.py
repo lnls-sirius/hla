@@ -1,6 +1,7 @@
 """Booster Ramp Control HLA: General Status Module."""
 
-from qtpy.QtWidgets import QGroupBox, QLabel, QPushButton, QGridLayout
+from qtpy.QtWidgets import QGroupBox, QLabel, QPushButton, QGridLayout, \
+    QMessageBox
 from qtpy.QtCore import Slot, Signal, QThread
 from siriuspy.ramp import ramp
 from siriuspy.ramp.conn import ConnMagnets as _ConnMagnets, ConnRF as _ConnRF,\
@@ -10,7 +11,6 @@ from siriuspy.csdevice.timesys import Const as _TIc
 from pydm.widgets import PyDMPushButton
 from siriushla.widgets import PyDMLedMultiChannel, PyDMLedMultiConnection, \
                               SiriusLedState
-from siriushla.bo_ap_ramp.auxiliar_classes import MessageBox as _MessageBox
 
 COMMANDS_TIMEOUT = 1
 
@@ -23,7 +23,6 @@ class StatusAndCommands(QGroupBox):
         super().__init__('Controls', parent)
         self.prefix = prefix
         self.ramp_config = ramp_config
-        self._manames = ramp.BoosterNormalized().manames
         self._conn_ma = _ConnMagnets(prefix=self.prefix)
         self._conn_ti = _ConnTiming(prefix=self.prefix)
         self._conn_rf = _ConnRF(prefix=self.prefix)
@@ -331,8 +330,7 @@ class StatusAndCommands(QGroupBox):
     @Slot(list)
     def show_warning_message(self, args):
         """Show warning message."""
-        warn_msg = _MessageBox(self, args[0], args[1], 'Ok')
-        warn_msg.exec_()
+        QMessageBox.warning(self, args[0], args[1], QMessageBox.Ok)
 
     @Slot(ramp.BoosterRamp)
     def handleLoadRampConfig(self, ramp_config):
@@ -348,12 +346,10 @@ class StatusAndCommands(QGroupBox):
     def update_ma_params(self):
         """Update MA parameters leds channels2values dict."""
         if self.ramp_config:
-            r = self.ramp_config
-            p = self.prefix
             c2v = dict()
             for maname in self._conn_ma.manames:
-                wf = r.ps_waveform_get(maname)
-                c2v[p + maname + ':WfmData-RB'] = wf.currents
+                wf = self.ramp_config.ps_waveform_get(maname)
+                c2v[self.prefix + maname + ':WfmData-RB'] = wf.currents
             self.led_ma_apply.channels2values.update(c2v)
 
     def update_rf_params(self):

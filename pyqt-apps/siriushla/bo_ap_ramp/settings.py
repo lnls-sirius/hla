@@ -2,7 +2,7 @@
 
 from qtpy.QtCore import Qt, Signal, Slot
 from qtpy.QtGui import QKeySequence
-from qtpy.QtWidgets import QMenuBar, QAction
+from qtpy.QtWidgets import QMenuBar, QAction, QMessageBox
 from siriuspy.servconf.util import \
     generate_config_name as _generate_config_name
 from siriuspy.servconf import exceptions as _srvexceptions
@@ -17,8 +17,7 @@ from siriushla.bo_ap_ramp.auxiliar_classes import \
     LoadRampConfig as _LoadRampConfig, \
     NewRampConfigGetName as _NewRampConfigGetName, \
     OpticsAdjustSettings as _OpticsAdjustSettings, \
-    DiagnosisSettings as _DiagnosisSettings, \
-    MessageBox as _MessageBox
+    DiagnosisSettings as _DiagnosisSettings
 
 
 class Settings(QMenuBar):
@@ -153,8 +152,7 @@ class Settings(QMenuBar):
             else:
                 self.ramp_config.configsrv_save()
         except _srvexceptions.SrvError as e:
-            err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
-            err_msg.open()
+            QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
         else:
             self._emitConfigName(self.ramp_config.name)
 

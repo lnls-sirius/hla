@@ -8,7 +8,7 @@ from qtpy.QtCore import Qt, Signal
 from qtpy.QtGui import QKeySequence
 from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
     QGridLayout, QScrollArea, QFormLayout, QCheckBox, QDoubleSpinBox, \
-    QUndoStack, QUndoCommand, QHBoxLayout
+    QUndoStack, QUndoCommand, QHBoxLayout, QMessageBox
 
 from siriuspy.search import MASearch as _MASearch
 from siriuspy.ramp import ramp
@@ -20,8 +20,7 @@ from siriuspy.servconf import exceptions as _srvexceptions
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.bo_ap_ramp.auxiliar_classes import \
     NewRampConfigGetName as _NewRampConfigGetName, \
-    MyDoubleSpinBox as _MyDoubleSpinBox, \
-    MessageBox as _MessageBox
+    MyDoubleSpinBox as _MyDoubleSpinBox
 
 
 _flag_stack_next_command = True
@@ -347,8 +346,7 @@ class BONormEdit(SiriusMainWindow):
         try:
             self.norm_config.configsrv_load()
         except _srvexceptions.SrvError as e:
-            err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
-            err_msg.open()
+            QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
         else:
             self._resetTuneChanges()
             self._resetChromChanges()
@@ -366,8 +364,7 @@ class BONormEdit(SiriusMainWindow):
                 self.norm_config.configsrv_save()
                 self.act_load.setEnabled(True)
         except _srvexceptions.SrvError as e:
-            err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
-            err_msg.open()
+            QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
         finally:
             self.label_name.setText('<h2>'+self.norm_config.name+'</h2>')
             self.verifySync()
@@ -434,18 +431,16 @@ class BONormEdit(SiriusMainWindow):
 
     def _handleGetKicksFromSOFB(self):
         if not self._conn_sofb.connected:
-            warn_msg = _MessageBox(
+            QMessageBox.warning(
                 self, 'Not Connected',
-                'There are not connected PVs!', 'Ok')
-            warn_msg.exec_()
+                'There are not connected PVs!', QMessageBox.Ok)
             return
         dkicks = self._conn_sofb.get_deltakicks()
 
         if not dkicks:
-            warn_msg = _MessageBox(
+            QMessageBox.warning(
                 self, 'Could not get kicks',
-                'Could not get kicks from SOFB!', 'Ok')
-            warn_msg.exec_()
+                'Could not get kicks from SOFB!', QMessageBox.Ok)
             return
 
         self._deltas['kicks'] = dkicks

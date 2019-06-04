@@ -4,10 +4,9 @@ import math as _math
 from qtpy.QtCore import Qt, Signal, Slot
 from qtpy.QtGui import QBrush, QColor
 from qtpy.QtWidgets import QGroupBox, QLabel, QWidget, QSpacerItem, \
-                           QVBoxLayout, QHBoxLayout, QGridLayout, QFormLayout,\
-                           QPushButton, QTableWidget, QTableWidgetItem, \
-                           QSizePolicy as QSzPlcy, QHeaderView, QUndoCommand, \
-                           QAbstractItemView
+    QVBoxLayout, QHBoxLayout, QGridLayout, QFormLayout, \
+    QPushButton, QTableWidget, QTableWidgetItem, QSizePolicy as QSzPlcy, \
+    QHeaderView, QUndoCommand, QAbstractItemView, QMenu, QMessageBox
 from matplotlib.backends.backend_qt5agg import (
     NavigationToolbar2QT as NavigationToolbar)
 from matplotlib.figure import Figure
@@ -15,7 +14,7 @@ import numpy as np
 from siriuspy.ramp import ramp, exceptions
 from siriuspy.csdevice.pwrsupply import MAX_WFMSIZE
 from siriushla.widgets import SiriusFigureCanvas
-from siriushla.bo_ap_ramp.auxiliar_classes import MessageBox as _MessageBox, \
+from siriushla.bo_ap_ramp.auxiliar_classes import \
     InsertNormalizedConfig as _InsertNormalizedConfig, \
     DeleteNormalizedConfig as _DeleteNormalizedConfig, \
     SpinBoxDelegate as _SpinBoxDelegate, \
@@ -327,8 +326,7 @@ class DipoleRamp(QWidget):
                 self.ramp_config.ps_ramp_duration = new_value
 
         except exceptions.RampInvalidDipoleWfmParms as e:
-            err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
-            err_msg.open()
+            QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
         else:
             self.updateGraph()
             self.updateDipoleRampSignal.emit()
@@ -359,8 +357,7 @@ class DipoleRamp(QWidget):
             self.ramp_config.ti_params_ps_ramp_delay = new_value
         except exceptions.RampInvalidDipoleWfmParms as e:
             self.updatePSDelay()
-            err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
-            err_msg.open()
+            QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
         else:
             self.updateGraph()
             self.updateDipoleRampSignal.emit()
@@ -388,8 +385,7 @@ class DipoleRamp(QWidget):
             self.ramp_config.ps_ramp_wfm_nrpoints = new_value
         except exceptions.RampInvalidDipoleWfmParms as e:
             self.updateWfmNrPoints()
-            err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
-            err_msg.open()
+            QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
         else:
             self.updateGraph()
             self.updateDipoleRampSignal.emit()
@@ -426,8 +422,7 @@ class DipoleRamp(QWidget):
         text = 'Caution to the following anomalies: \n'
         for anom in self.ramp_config.ps_waveform_anomalies:
             text += anom + '\n'
-        anomaliesPopup = _MessageBox(self, 'Caution', text, 'Ok')
-        anomaliesPopup.open()
+        QMessageBox.warning(self, 'Caution', text, QMessageBox.Ok)
 
     def _showExcLimPopup(self):
         manames_exclimits = self.ramp_config.ps_waveform_manames_exclimits
@@ -435,8 +430,7 @@ class DipoleRamp(QWidget):
             text = 'The waveform of the following magnets\n' \
                    'are exceeding current limits:\n' \
                    '    - BO-Fam:MA-B'
-        anomaliesPopup = _MessageBox(self, 'Warning', text, 'Ok')
-        anomaliesPopup.open()
+        QMessageBox.warning(self, 'Warning', text, QMessageBox.Ok)
 
     def updateGraph(self):
         """Update and redraw graph when ramp_config is loaded."""
@@ -745,8 +739,7 @@ class MultipolesRamp(QWidget):
             self.ramp_config.ps_normalized_configs_change_time(
                 config_changed_name, new_value)
         except exceptions.RampInvalidNormConfig as e:
-            err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
-            err_msg.open()
+            QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
         else:
             self.updateGraph()
             self.updateMultipoleRampSignal.emit()
@@ -779,8 +772,7 @@ class MultipolesRamp(QWidget):
                                                           name=config[1],
                                                           nconfig=config[2])
         except exceptions.RampInvalidNormConfig as e:
-            err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
-            err_msg.open()
+            QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
         else:
             self.handleLoadRampConfig()
             self.updateMultipoleRampSignal.emit()
@@ -836,8 +828,7 @@ class MultipolesRamp(QWidget):
                'are exceeding current limits:\n'
         for maname in manames_exclimits:
             text += '    - ' + maname + '\n'
-        anomaliesPopup = _MessageBox(self, 'Warning', text, 'Ok')
-        anomaliesPopup.open()
+        QMessageBox.warning(self, 'Warning', text, QMessageBox.Ok)
 
     def updateGraph(self):
         """Update and redraw graph."""
@@ -1219,8 +1210,7 @@ class RFRamp(QWidget):
                 self.ramp_config.rf_ramp_rampdown_stop_time = new_value
 
         except exceptions.RampInvalidRFParms as e:
-            err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
-            err_msg.open()
+            QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
         else:
             self.updateGraph()
             self.updateRFRampSignal.emit()
@@ -1250,8 +1240,7 @@ class RFRamp(QWidget):
             self.ramp_config.ti_params_ps_ramp_delay = new_value
         except exceptions.RampInvalidRFParms as e:
             self.updateRFDelay()
-            err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
-            err_msg.open()
+            QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
         else:
             self.updateGraph()
             self.updateRFRampSignal.emit()
@@ -1278,8 +1267,7 @@ class RFRamp(QWidget):
         try:
             self.ramp_config.rf_ramp_rampinc_duration = new_value
         except exceptions.RampInvalidRFParms as e:
-            err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
-            err_msg.open()
+            QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
         else:
             self.updateGraph()
             self.updateRFRampSignal.emit()

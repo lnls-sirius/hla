@@ -3,8 +3,7 @@
 from qtpy.QtCore import Slot, Signal
 from qtpy.QtGui import QKeySequence
 from qtpy.QtWidgets import QLabel, QWidget, QVBoxLayout, QGridLayout, \
-                           QUndoStack
-from siriushla.sirius_application import SiriusApplication
+                           QUndoStack, QMessageBox
 from siriushla.widgets.windows import SiriusMainWindow
 from siriuspy.ramp import ramp
 from siriuspy.servconf import exceptions as _srvexceptions
@@ -13,7 +12,6 @@ from siriushla.bo_ap_ramp.settings import Settings
 from siriushla.bo_ap_ramp.config_params import ConfigParameters
 from siriushla.bo_ap_ramp.optics_adjust import OpticsAdjust
 from siriushla.bo_ap_ramp.diagnosis import Diagnosis
-from siriushla.bo_ap_ramp.auxiliar_classes import MessageBox as _MessageBox
 
 
 class RampMain(SiriusMainWindow):
@@ -161,8 +159,7 @@ class RampMain(SiriusMainWindow):
             if self.ramp_config.configsrv_exist():
                 self.ramp_config.configsrv_load()
         except _srvexceptions.SrvError as e:
-            err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
-            err_msg.open()
+            QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
         else:
             self.loadSignal.emit(self.ramp_config)
         finally:
@@ -186,14 +183,15 @@ class RampMain(SiriusMainWindow):
             return self._acceptClose()
 
         if not self.ramp_config.configsrv_synchronized:
-            save_changes = _MessageBox(
+            ans = QMessageBox.question(
                 self, 'Save changes?',
                 'There are unsaved changes in {}. \n'
                 'Do you want to save?'.format(self.ramp_config.name),
-                'Yes', 'Cancel')
-            save_changes.acceptedSignal.connect(self._ignoreCloseAndSave)
-            save_changes.rejectedSignal.connect(self._acceptClose)
-            save_changes.exec_()
+                QMessageBox.Yes, QMessageBox.Cancel)
+            if ans == QMessageBox.Yes:
+                self._ignoreCloseAndSave()
+            else:
+                self._acceptClose()
 
     def _ignoreCloseAndSave(self):
         self.close_ev.ignore()
@@ -207,6 +205,7 @@ class RampMain(SiriusMainWindow):
 if __name__ == '__main__':
     """Run Example."""
     import sys
+    from siriushla.sirius_application import SiriusApplication
     from siriuspy.envars import vaca_prefix as _vaca_prefix
 
     app = SiriusApplication()
