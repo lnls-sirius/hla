@@ -69,6 +69,8 @@ class LLTriggerList(BaseList):
             else:
                 devt = _ti_ctrl.AFC
             sp = QPushButton(outlb.device_name, self)
+            sp.setAutoDefault(False)
+            sp.setDefault(False)
             Win = create_window_from_widget(devt, title=outlb.device_name)
             connect_window(sp, Win, self, prefix=outlb.device_name + ':')
         elif prop == 'name':

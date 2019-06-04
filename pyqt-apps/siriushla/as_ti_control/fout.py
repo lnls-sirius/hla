@@ -51,9 +51,9 @@ class FOUT(BaseWidget):
                 devt = _ti_ctrl.EVE
             else:
                 devt = _ti_ctrl.AFC
-            action = menu.addAction(out + ' --> ' + down.device_name)
-            Win = create_window_from_widget(devt, title=down.device_name)
-            connect_window(action, Win, self, prefix=down.device_name + ':')
+            action = menu.addAction(out + ' --> ' + down)
+            Win = create_window_from_widget(devt, title=down)
+            connect_window(action, Win, self, prefix=down + ':')
 
         menu = main_menu.addMenu('&Uplink')
         link = list(LLTimeSearch.In2OutMap[prefix.dev])[0]

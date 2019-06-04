@@ -52,6 +52,8 @@ class HLTriggerDetailed(BaseWidget):
         ll_list_layout.setVerticalSpacing(20)
 
         but = QPushButton('Open LL Triggers', self)
+        but.setAutoDefault(False)
+        but.setDefault(False)
         obj_names = HLTimeSearch.get_ll_trigger_names(self.prefix.device_name)
         Window = create_window_from_widget(
             LLTriggers, title=self.prefix.device_name+': LL Triggers')
