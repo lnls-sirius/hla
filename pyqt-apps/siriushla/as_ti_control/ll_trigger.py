@@ -1,10 +1,13 @@
 import sys
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QLabel
+from qtpy.QtWidgets import QLabel, QPushButton
 from pydm.widgets import PyDMLabel
 from siriuspy.search import LLTimeSearch
 from siriushla.widgets import PyDMLed, PyDMStateButton
-from siriushla.as_ti_control.base import BaseList, \
+from siriushla.util import connect_window
+from siriushla.widgets.windows import create_window_from_widget
+from siriushla import as_ti_control as _ti_ctrl
+from .base import BaseList, \
     MySpinBox as _MySpinBox, MyComboBox as _MyComboBox
 
 
@@ -58,8 +61,16 @@ class LLTriggerList(BaseList):
         outlb = LLTimeSearch.get_channel_output_port_pvname(prefix)
         sp = rb = None
         if prop == 'device':
-            sp = QLabel(outlb.device_name, self)
-            sp.setAlignment(Qt.AlignCenter)
+            devt = outlb.dev
+            if devt == 'EVR':
+                devt = _ti_ctrl.EVR
+            elif devt == 'EVE':
+                devt = _ti_ctrl.EVE
+            else:
+                devt = _ti_ctrl.AFC
+            sp = QPushButton(outlb.device_name, self)
+            Win = create_window_from_widget(devt, title=outlb.device_name)
+            connect_window(sp, Win, self, prefix=outlb.device_name + ':')
         elif prop == 'name':
             sp = QLabel(outlb.propty, self)
             sp.setAlignment(Qt.AlignCenter)
