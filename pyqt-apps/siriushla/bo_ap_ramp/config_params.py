@@ -813,7 +813,8 @@ class MultipolesRamp(QWidget):
 
     def _showInsertNormConfigPopup(self):
         if self.ramp_config is not None:
-            self._insertConfigPopup = _InsertNormalizedConfig(self)
+            self._insertConfigPopup = _InsertNormalizedConfig(
+                self, self.ramp_config)
             self._insertConfigPopup.insertConfig.connect(
                 self._handleInsertNormConfig)
             self._insertConfigPopup.open()

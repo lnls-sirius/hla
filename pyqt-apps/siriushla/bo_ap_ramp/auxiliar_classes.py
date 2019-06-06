@@ -106,9 +106,10 @@ class InsertNormalizedConfig(SiriusDialog):
 
     insertConfig = Signal(list)
 
-    def __init__(self, parent):
+    def __init__(self, parent, ramp_config):
         """Initialize object."""
         super().__init__(parent)
+        self.ramp_config = ramp_config
         self.normalized_config = ramp.BoosterNormalized()
         self.setWindowTitle('Insert Normalized Configuration')
         self._setupUi()
@@ -184,6 +185,8 @@ class InsertNormalizedConfig(SiriusDialog):
         # to insert a new norm config from an existing one
         flay_confsrv = QFormLayout()
         self.le_confsrv_name = _ConfigLineEdit(self)
+        self.le_confsrv_name.textChanged.connect(
+            self._handleInsertExistingConfig)
         self.sb_confsrv_time = QDoubleSpinBox(self)
         self.sb_confsrv_time.setMaximum(490)
         self.sb_confsrv_time.setDecimals(6)
@@ -214,10 +217,16 @@ class InsertNormalizedConfig(SiriusDialog):
         self.confsrv_settings.setLayout(flay_confsrv)
         self.create_settings.setLayout(flay_create)
 
-    def _showLoadConfigPopup(self):
-        popup = _LoadConfiguration('bo_normalized')
-        popup.configname.connect(self.le_confsrv_name.setText)
-        popup.exec_()
+    @Slot(str)
+    def _handleInsertExistingConfig(self, configname):
+        try:
+            n = ramp.BoosterNormalized(configname)
+            n.configsrv_load()
+            energy = n[ramp.BoosterRamp.MANAME_DIPOLE]
+            time = self.ramp_config.ps_waveform_interp_time(energy)
+            self.sb_confsrv_time.setValue(time)
+        except _srvexceptions.SrvError as e:
+            QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
 
     def _emitInsertConfigData(self):
         sender = self.sender()
