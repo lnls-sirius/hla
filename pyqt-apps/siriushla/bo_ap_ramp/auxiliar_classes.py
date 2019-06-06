@@ -37,7 +37,7 @@ class LoadRampConfig(_LoadConfiguration):
     def __init__(self, ramp_config, parent=None):
         """Initialize object."""
         self.ramp_config = ramp_config
-        super().__init__('bo_ramp_params', parent)
+        super().__init__('bo_ramp', parent)
         self.setWindowTitle('Load ramp configuration from server')
 
     @Slot()

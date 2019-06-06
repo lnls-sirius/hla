@@ -107,7 +107,7 @@ class Settings(QMenuBar):
 
     def _showGetNewConfigNamePopup(self):
         self._newConfigNamePopup = _NewRampConfigGetName(
-            self.ramp_config, 'bo_ramp_params', self, new_from_template=True)
+            self.ramp_config, 'bo_ramp', self, new_from_template=True)
         self._newConfigNamePopup.configname.connect(self._emitConfigName)
         self._newConfigNamePopup.saveSignal.connect(self.showSaveAsPopup)
         self._newConfigNamePopup.open()
@@ -137,7 +137,7 @@ class Settings(QMenuBar):
         if self.ramp_config is None:
             return
         self._saveAsPopup = _NewRampConfigGetName(
-            self.ramp_config, 'bo_ramp_params', self, new_from_template=False)
+            self.ramp_config, 'bo_ramp', self, new_from_template=False)
         self._saveAsPopup.configname.connect(self._saveAndEmitConfigName)
         self._saveAsPopup.open()
 
