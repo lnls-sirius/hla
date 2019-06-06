@@ -5,7 +5,7 @@ from qtpy.QtWidgets import QHBoxLayout, QVBoxLayout, \
     QWidget, QFrame, QLabel, QPushButton, QMessageBox
 from qtpy.QtCore import Slot, Signal
 
-from siriuspy.servconf.conf_service import ConfigService
+from siriuspy.clientconfigdb import ConfigDBClient, ConfigDBException
 from siriushla.widgets.windows import SiriusDialog
 from siriushla.widgets.load_configuration import LoadConfigurationWidget
 
@@ -21,7 +21,7 @@ class LoadConfiguration(SiriusDialog):
     def __init__(self, config_type, parent=None):
         """Constructor."""
         super().__init__(parent)
-        self._model = ConfigService()
+        self._model = ConfigDBClient()
         self._config_type = config_type
         self._logger = logging.getLogger(__name__)
         self._logger.setLevel(logging.DEBUG)
@@ -66,10 +66,10 @@ class LoadConfiguration(SiriusDialog):
 
         hbl = QHBoxLayout()
         hbl.addWidget(QLabel('<b>DB Size:</b>', self.sub_header))
-        request = self._model.query_db_size()
-        if request['code'] == 200:
-            dbsize = '{:.2f} MB'.format(request['result']['size']/(1024*1024))
-        else:
+        try:
+            dbsize = self._model.get_dbsize()
+            dbsize = '{:.2f} MB'.format(dbsize/(1024*1024))
+        except ConfigDBException:
             dbsize = 'Failed to retrieve information'
         hbl.addWidget(QLabel(dbsize, self.sub_header))
         hbl.addStretch()
@@ -89,9 +89,11 @@ class LoadConfiguration(SiriusDialog):
             '<b>Number of Configurations:</b>', self.sub_header))
         self.nr_configs = QLabel(self.sub_header)
         hbl.addWidget(self.nr_configs)
-        request = self._model.find_nr_configs(config_type=self._config_type)
-        if request['code'] == 200:
-            self.nr_configs.setText(str(request['result']))
+        try:
+            leng = len(self._model.find_configs(config_type=self._config_type))
+        except ConfigDBException:
+            leng = 'NA'
+        self.nr_configs.setText(str(leng))
         hbl.addStretch()
         vbl.addLayout(hbl)
 

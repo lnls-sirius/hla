@@ -1,6 +1,6 @@
 """Model that gets the pvs field of configuration type."""
 from qtpy.QtCore import Qt, QAbstractTableModel
-from siriuspy.servconf.conf_types import get_config_type_template
+from siriuspy.clientconfigdb import ConfigDBClient
 
 
 class PVConfigurationTableModel(QAbstractTableModel):
@@ -72,7 +72,7 @@ class PVConfigurationTableModel(QAbstractTableModel):
         if self._config_type is None:
             return
         self.beginResetModel()
-        config = get_config_type_template(self._config_type)
+        config = ConfigDBClient().get_value_template(self._config_type)
         if 'pvs' in config:
             self._data = config['pvs']
             # self._data.sort(key=lambda x: x[0])

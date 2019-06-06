@@ -16,12 +16,12 @@ class LoadConfigurationWidget(QWidget):
     configChanged = Signal(str, str)
     connectionError = Signal(int, str, str)
 
-    def __init__(self, connection, parent=None):
+    def __init__(self, client, parent=None):
         """Constructor."""
         super().__init__(parent)
-        self._connection = connection
+        self._client = client
         self._setup_ui()
-        self.config_type = ''
+        self.config_type = 'not_exist'
         self._table.model().connectionError.connect(self.connectionError)
 
     def _setup_ui(self):
@@ -31,7 +31,7 @@ class LoadConfigurationWidget(QWidget):
 
         self._table = QTableView(self)
         self._table.setModel(
-            ConfigDbTableModel('',  self._connection))
+            ConfigDbTableModel('not_exist',  self._client))
         self._table.setSelectionBehavior(self._table.SelectRows)
         self._table.setSelectionMode(self._table.SingleSelection)
         self._table.setSortingEnabled(True)

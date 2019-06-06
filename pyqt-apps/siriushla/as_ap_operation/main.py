@@ -5,8 +5,8 @@ from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
     QGridLayout, QHBoxLayout
 
 from siriuspy.envars import vaca_prefix
-from siriuspy.timesys.ll_classes import get_evg_name
-from siriuspy.servconf.srvconfig import ConnConfigService
+from siriuspy.timesys import get_evg_name
+from siriuspy.clientconfigdb import ConfigDBClient
 
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, PyDMStateButton, \
@@ -112,9 +112,9 @@ class MainOperation(SiriusMainWindow):
         elif 'TurnOff' in sender_text:
             config_name = 'turnoff'
 
-        server_global = ConnConfigService('global_config')
+        server_global = ConfigDBClient(config_type='global_config')
         try:
-            config = server_global.config_get(config_name)[0]['pvs']
+            config = server_global.get_config_value(config_name)['pvs']
         except Exception:
             print('Configuration \''+config_name+'\' not found in Server!')
             return

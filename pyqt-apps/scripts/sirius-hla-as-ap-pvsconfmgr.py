@@ -4,7 +4,7 @@
 import sys
 
 import siriuspy.envars as _envars
-from siriuspy.servconf.conf_service import ConfigService
+from siriuspy.clientconfigdb import ConfigDBClient
 
 from qtpy.QtWidgets import QWidget, QPushButton, QHBoxLayout
 
@@ -21,7 +21,7 @@ class PVConfiguration(SiriusMainWindow):
     def __init__(self, parent=None):
         """Setup UI."""
         super().__init__(parent)
-        self._db = ConfigService(_envars.server_url_configdb)
+        self._client = ConfigDBClient(_envars.server_url_configdb)
         self._setup_ui()
         self.setWindowTitle("PVs Configuration")
 
@@ -52,10 +52,10 @@ class PVConfiguration(SiriusMainWindow):
                                         stop:0 lightgrey, stop:1 white);
         }""")
 
-        connect_window(self.save_btn, ReadConfigurationWindow, self,
-                       db=self._db)
-        connect_window(self.load_btn, SetConfigurationWindow, self,
-                       db=self._db)
+        connect_window(
+            self.save_btn, ReadConfigurationWindow, self, client=self._client)
+        connect_window(
+            self.load_btn, SetConfigurationWindow, self, client=self._client)
 
 
 if __name__ == '__main__':

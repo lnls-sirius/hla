@@ -8,6 +8,7 @@ from qtpy.QtWidgets import QGridLayout, QHBoxLayout, QVBoxLayout, \
 from qtpy.QtCore import Qt, Slot, Signal, QModelIndex, \
     QAbstractItemModel
 
+from siriuspy.clientconfigdb import ConfigDBException
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.model import ConfigTypeModel, ConfigDbTableModel
 
@@ -141,16 +142,24 @@ class JsonTreeModel(QAbstractItemModel):
         # Parse json data to python structures
         configs = list()
         for config_type, name in config_list:
-            request = self._connection.get_config(config_type, name)
-            if request['code'] == 200:
-                if 'modified' in request['result']:
-                    request['result']['modified'] = \
+            if not config_type:
+                continue
+            try:
+                request = self._connection.get_config_info(
+                    name, config_type=config_type)
+                request['value'] = self._connection.get_config_value(
+                    name, config_type=config_type)
+                if 'modified' in request:
+                    request['modified'] = \
                         [time.strftime(
                             '%d/%m/%Y %H:%M:%S', time.localtime(float(t)))
-                         for t in request['result']['modified']]
-                configs.append(request['result'])
-            else:
-                configs.append(request['code'])
+                         for t in request['modified']]
+                    request['created'] = time.strftime(
+                            '%d/%m/%Y %H:%M:%S', time.localtime(float(
+                                request['created'])))
+                configs.append(request)
+            except ConfigDBException as err:
+                configs.append(err.server_code)
         self._fillTree(configs)
 
     def _fillTree(self, config):
@@ -259,10 +268,10 @@ class ConfigurationManager(SiriusMainWindow):
 
         self.size_layout = QHBoxLayout()
         self.size_layout.addWidget(QLabel('<b>DB Size:</b>', self.sub_header))
-        request = self._model.query_db_size()
-        if request['code'] == 200:
-            dbsize = '{:.2f} MB'.format(request['result']['size']/(1024*1024))
-        else:
+        try:
+            dbsize = self._model.get_dbsize()
+            dbsize = '{:.2f} MB'.format(dbsize/(1024*1024))
+        except ConfigDBException:
             dbsize = 'Failed to retrieve information'
         self.size_layout.addWidget(QLabel(dbsize, self.sub_header))
         self.size_layout.addStretch()
@@ -299,8 +308,8 @@ class ConfigurationManager(SiriusMainWindow):
         self.layout.setColumnStretch(2, 2)
 
         # Set table models and options
-        self.editor_model = ConfigDbTableModel('', self._model)
-        self.d_editor_model = ConfigDbTableModel('', self._model, True)
+        self.editor_model = ConfigDbTableModel('notexist', self._model)
+        self.d_editor_model = ConfigDbTableModel('notexist', self._model, True)
         self.editor.setModel(self.editor_model)
         self.editor.setSelectionBehavior(self.editor.SelectRows)
         self.editor.setSortingEnabled(True)
@@ -349,14 +358,12 @@ class ConfigurationManager(SiriusMainWindow):
     @Slot(str)
     def _fill_table(self, config_type):
         """Fill table with configuration of `config_type`."""
-        request = self._model.find_nr_configs(
-            config_type=config_type, discarded=None)
-        if request['code'] == 200:
-            self.nr_configs.setText(str(request['result']))
-        request = self._model.find_nr_configs(
-            config_type=config_type, discarded=True)
-        if request['code'] == 200:
-            self.nr_discarded.setText(str(request['result']))
+        leng = len(self._model.find_configs(
+            config_type=config_type, discarded=False))
+        self.nr_configs.setText(str(leng))
+        leng = len(self._model.find_configs(
+            config_type=config_type, discarded=True))
+        self.nr_discarded.setText(str(leng))
 
         self.editor_model.setupModelData(config_type)
         self.d_editor_model.setupModelData(config_type)
