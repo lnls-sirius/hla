@@ -8,7 +8,7 @@ from qtpy.QtWidgets import QMenu, QFileDialog, QWidget, QMessageBox, \
     QGridLayout, QVBoxLayout, QHBoxLayout
 from qtpy.QtCore import Signal, Qt
 from siriuspy.csdevice.orbitcorr import SOFBFactory
-from siriuspy.servconf.srvconfig import ConnConfigService
+from siriuspy.clientconfigdb import ConfigDBClient, ConfigDBException
 from siriushla.as_ap_servconf import LoadConfiguration, SaveConfiguration
 from siriushla.widgets import SiriusConnectionSignal
 
@@ -107,7 +107,7 @@ class OrbitRegister(QWidget):
         self.EXT = '.' + text
         self.EXT_FLT = 'Sirius Orbit Files (*.{})'.format(text)
         self._config_type = acc.lower() + '_orbit'
-        self._servconf = ConnConfigService(self._config_type)
+        self._client = ConfigDBClient(config_type=self._config_type)
         self._csorb = SOFBFactory.create(acc.upper())
         self.string_status = 'Empty'
         self.name = 'Register {0:d}'.format(self.idx)
@@ -228,7 +228,7 @@ class OrbitRegister(QWidget):
         win.show()
 
     def _set_orbit(self, confname):
-        data, _ = self._servconf.config_get(confname)
+        data = self._client.get_config_value(confname)
         self._update_and_emit(
             'Orbit Loaded: '+confname,
             _np.array(data['x']), _np.array(data['y']))
@@ -241,9 +241,9 @@ class OrbitRegister(QWidget):
     def _save_orbit(self, confname):
         data = {'x': self._orbx.tolist(), 'y': self.orby.tolist()}
         try:
-            self._servconf.config_insert(confname, data)
-        except TypeError as e:
-            QMessageBox.warning(self, 'Warning', str(e), QMessageBox.Ok)
+            self._client.insert_config(confname, data)
+        except (ConfigDBException, TypeError) as err:
+            QMessageBox.warning(self, 'Warning', str(err), QMessageBox.Ok)
 
     def _update_and_emit(self, string, orbx=None, orby=None, fname=''):
         if orbx is None or orby is None:

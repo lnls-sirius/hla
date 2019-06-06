@@ -9,7 +9,7 @@ from qtpy.QtWidgets import QLabel, QGroupBox, QPushButton, QFormLayout, \
 from qtpy.QtCore import Qt
 from pydm.widgets import PyDMLabel, PyDMPushButton, PyDMCheckbox
 from siriuspy.csdevice.orbitcorr import ConstTLines
-from siriuspy.servconf.srvconfig import ConnConfigService
+from siriuspy.clientconfigdb import ConfigDBClient, ConfigDBException
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets import SiriusLedState, SiriusConnectionSignal
 from siriushla.util import connect_window
@@ -28,7 +28,7 @@ class RespMatWidget(BaseWidget):
         super().__init__(parent, prefix, acc=acc)
         self.setupui()
         self._config_type = acc.lower() + '_orbcorr_respm'
-        self._servconf = ConnConfigService(self._config_type)
+        self._client = ConfigDBClient(config_type=self._config_type)
         self.EXT = self._csorb.RESPMAT_FILENAME.split('.')[1]
         self.EXT_FLT = 'RespMat Files (*.{})'.format(self.EXT)
         self.last_dir = self.DEFAULT_DIR
@@ -212,7 +212,7 @@ class RespMatWidget(BaseWidget):
         win.show()
 
     def _set_respm(self, confname):
-        data, _ = self._servconf.config_get(confname)
+        data = self._client.get_config_value(confname)
         self._respmat_sp.send_value_signal[_np.ndarray].emit(
             _np.array(data).flatten())
 
@@ -225,9 +225,9 @@ class RespMatWidget(BaseWidget):
         val = self._respmat_rb.getvalue()
         val = val.reshape(-1, self._csorb.NR_CORRS)
         try:
-            self._servconf.config_insert(confname, val.tolist())
-        except TypeError as e:
-            QMessageBox.warning(self, 'Warning', str(e), QMessageBox.Ok)
+            self._client.insert_config(confname, val.tolist())
+        except (ConfigDBException, TypeError) as err:
+            QMessageBox.warning(self, 'Warning', str(err), QMessageBox.Ok)
 
 
 def _main():
