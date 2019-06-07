@@ -3,17 +3,14 @@
 from qtpy.QtCore import Slot, Signal
 from qtpy.QtGui import QKeySequence
 from qtpy.QtWidgets import QLabel, QWidget, QVBoxLayout, QGridLayout, \
-                           QUndoStack
-from siriushla.sirius_application import SiriusApplication
+                           QUndoStack, QMessageBox
 from siriushla.widgets.windows import SiriusMainWindow
 from siriuspy.ramp import ramp
 from siriuspy.servconf import exceptions as _srvexceptions
 from siriushla.bo_ap_ramp.status_and_commands import StatusAndCommands
 from siriushla.bo_ap_ramp.settings import Settings
 from siriushla.bo_ap_ramp.config_params import ConfigParameters
-from siriushla.bo_ap_ramp.optics_adjust import OpticsAdjust
 from siriushla.bo_ap_ramp.diagnosis import Diagnosis
-from siriushla.bo_ap_ramp.auxiliar_classes import MessageBox as _MessageBox
 
 
 class RampMain(SiriusMainWindow):
@@ -28,6 +25,10 @@ class RampMain(SiriusMainWindow):
         self.prefix = prefix
         self.ramp_config = None
         self._undo_stack = QUndoStack(self)
+
+        self._tunecorr_configname = 'Default'
+        self._chromcorr_configname = 'Default'
+
         self._setupUi()
         self._connSignals()
         self._addActions()
@@ -47,21 +48,18 @@ class RampMain(SiriusMainWindow):
                               stop:1 rgba(213, 213, 213, 255));""")
         glay.addWidget(lab, 0, 0, 1, 2)
 
-        self.settings = Settings(self, self.prefix, self.ramp_config)
+        self.settings = Settings(
+            self, self.prefix, self.ramp_config,
+            self._tunecorr_configname, self._chromcorr_configname)
         self.setMenuBar(self.settings)
 
         self.config_parameters = ConfigParameters(
-            self, self.prefix, self.ramp_config, self._undo_stack)
+            self, self.prefix, self.ramp_config, self._undo_stack,
+            self._tunecorr_configname, self._chromcorr_configname)
         self.config_parameters.setObjectName('ConfigParameters')
-
-        self.optics_adjust = OpticsAdjust(self, self.prefix, self.ramp_config)
-        self.optics_adjust.setObjectName('OpticsAdjust')
 
         vlay1 = QVBoxLayout()
         vlay1.addWidget(self.config_parameters)
-        vlay1.addWidget(self.optics_adjust)
-        vlay1.setStretch(0, 35)
-        vlay1.setStretch(1, 10)
         glay.addLayout(vlay1, 1, 0)
 
         self.status_and_commands = StatusAndCommands(
@@ -102,7 +100,7 @@ class RampMain(SiriusMainWindow):
         self.settings.newConfigNameSignal.connect(self._receiveNewConfigName)
         self.settings.loadSignal.connect(self._emitLoadSignal)
         self.settings.opticsSettingsSignal.connect(
-            self.optics_adjust.handleUpdateSettings)
+            self._handleUpdateOpticsAdjustSettings)
         self.settings.diagSettingsSignal.connect(
             self.diagnosis.handleUpdateSettings)
         self.settings.plotUnitSignal.connect(
@@ -122,15 +120,10 @@ class RampMain(SiriusMainWindow):
             self._verifySync)
         self.config_parameters.mult_ramp.updateMultipoleRampSignal.connect(
             self.status_and_commands.update_ma_params)
-        self.config_parameters.mult_ramp.configsIndexChangedSignal.connect(
-            self.optics_adjust.getConfigIndices)
         self.config_parameters.rf_ramp.updateRFRampSignal.connect(
             self._verifySync)
         self.config_parameters.rf_ramp.updateRFRampSignal.connect(
             self.status_and_commands.update_rf_params)
-
-        self.optics_adjust.normConfigChanged.connect(
-            self.config_parameters.mult_ramp.handleNormConfigsChanged)
 
         self.loadSignal.connect(self.settings.getRampConfig)
         self.loadSignal.connect(self.config_parameters.handleLoadRampConfig)
@@ -140,7 +133,6 @@ class RampMain(SiriusMainWindow):
             self.config_parameters.mult_ramp.handleLoadRampConfig)
         self.loadSignal.connect(
             self.config_parameters.rf_ramp.handleLoadRampConfig)
-        self.loadSignal.connect(self.optics_adjust.handleLoadRampConfig)
         self.loadSignal.connect(self.status_and_commands.handleLoadRampConfig)
 
     def _addActions(self):
@@ -161,8 +153,7 @@ class RampMain(SiriusMainWindow):
             if self.ramp_config.configsrv_exist():
                 self.ramp_config.configsrv_load()
         except _srvexceptions.SrvError as e:
-            err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
-            err_msg.open()
+            QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
         else:
             self.loadSignal.emit(self.ramp_config)
         finally:
@@ -172,7 +163,8 @@ class RampMain(SiriusMainWindow):
         """Verify sync status related to ConfServer."""
         if self.ramp_config is not None:
             if not self.ramp_config.configsrv_synchronized:
-                self.config_parameters.setStyleSheet('QGroupBox {color: red;}')
+                self.config_parameters.setStyleSheet(
+                    '#ConfigParameters {color: red;}')
                 self.config_parameters.setToolTip('There are unsaved changes')
             else:
                 self.config_parameters.setStyleSheet('')
@@ -186,14 +178,15 @@ class RampMain(SiriusMainWindow):
             return self._acceptClose()
 
         if not self.ramp_config.configsrv_synchronized:
-            save_changes = _MessageBox(
+            ans = QMessageBox.question(
                 self, 'Save changes?',
                 'There are unsaved changes in {}. \n'
                 'Do you want to save?'.format(self.ramp_config.name),
-                'Yes', 'Cancel')
-            save_changes.acceptedSignal.connect(self._ignoreCloseAndSave)
-            save_changes.rejectedSignal.connect(self._acceptClose)
-            save_changes.exec_()
+                QMessageBox.Yes, QMessageBox.Cancel)
+            if ans == QMessageBox.Yes:
+                self._ignoreCloseAndSave()
+            else:
+                self._acceptClose()
 
     def _ignoreCloseAndSave(self):
         self.close_ev.ignore()
@@ -203,10 +196,18 @@ class RampMain(SiriusMainWindow):
         self.close_ev.accept()
         super().closeEvent(self.close_ev)
 
+    @Slot(str, str)
+    def _handleUpdateOpticsAdjustSettings(self, tune_cname, chrom_cname):
+        self._tunecorr_configname = tune_cname
+        self._chromcorr_configname = chrom_cname
+        self.config_parameters.updateOpticsAdjustSettings(
+            tune_cname, chrom_cname)
+
 
 if __name__ == '__main__':
     """Run Example."""
     import sys
+    from siriushla.sirius_application import SiriusApplication
     from siriuspy.envars import vaca_prefix as _vaca_prefix
 
     app = SiriusApplication()
