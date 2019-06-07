@@ -2,7 +2,7 @@
 
 from qtpy.QtCore import Qt, Signal, Slot
 from qtpy.QtGui import QKeySequence
-from qtpy.QtWidgets import QMenuBar, QAction
+from qtpy.QtWidgets import QMenuBar, QAction, QMessageBox
 from siriuspy.servconf.util import \
     generate_config_name as _generate_config_name
 from siriuspy.servconf import exceptions as _srvexceptions
@@ -17,8 +17,7 @@ from siriushla.bo_ap_ramp.auxiliar_classes import \
     LoadRampConfig as _LoadRampConfig, \
     NewRampConfigGetName as _NewRampConfigGetName, \
     OpticsAdjustSettings as _OpticsAdjustSettings, \
-    DiagnosisSettings as _DiagnosisSettings, \
-    MessageBox as _MessageBox
+    DiagnosisSettings as _DiagnosisSettings
 
 
 class Settings(QMenuBar):
@@ -26,17 +25,18 @@ class Settings(QMenuBar):
 
     newConfigNameSignal = Signal(str)
     loadSignal = Signal()
-    opticsSettingsSignal = Signal(list)
+    opticsSettingsSignal = Signal(str, str)
     diagSettingsSignal = Signal(list)
     plotUnitSignal = Signal(str)
 
-    def __init__(self, parent=None, prefix='', ramp_config=None):
+    def __init__(self, parent=None, prefix='', ramp_config=None,
+                 tunecorr_configname='', chromcorr_configname=''):
         """Initialize object."""
         super().__init__(parent)
         self.prefix = prefix
         self.ramp_config = ramp_config
-        self._tunecorr_name = 'Default_1'
-        self._chromcorr_name = 'Default'
+        self._tunecorr_configname = tunecorr_configname
+        self._chromcorr_configname = chromcorr_configname
         self._injcurr_idx = 0
         self._ejecurr_idx = -1
         self._setupUi()
@@ -88,12 +88,13 @@ class Settings(QMenuBar):
         self.open_menu = self.addMenu('Open...')
         self.act_cycle = QAction('PS Cycle')
         _hlautil.connect_window(self.act_cycle, _CycleWindow, parent=self,
-                                checked_accs=('BO,'))
+                                checked_accs=('BO',))
         self.act_ma = QAction('Booster Magnets')
         _hlautil.connect_window(self.act_ma, _MAControlWindow, parent=self,
                                 section='BO', discipline='MA')
         self.act_pm = QAction('Pulsed Magnets')
-        _hlautil.connect_window(self.act_pm, _PMControlWindow, parent=self)
+        _hlautil.connect_window(self.act_pm, _PMControlWindow, section='BO',
+                                parent=self)
         self.act_sofb = QAction('Booster SOFB')
         _hlautil.connect_newprocess(self.act_sofb, 'sirius-hla-bo-ap-sofb.py')
         self.act_ti = QAction('Timing')
@@ -120,7 +121,7 @@ class Settings(QMenuBar):
 
     def _showOpticsSettingsPopup(self):
         self._opticsSettingsPopup = _OpticsAdjustSettings(
-            self._tunecorr_name, self._chromcorr_name, self)
+            self._tunecorr_configname, self._chromcorr_configname, self)
         self._opticsSettingsPopup.updateSettings.connect(
             self._emitOpticsSettings)
         self._opticsSettingsPopup.open()
@@ -152,8 +153,7 @@ class Settings(QMenuBar):
             else:
                 self.ramp_config.configsrv_save()
         except _srvexceptions.SrvError as e:
-            err_msg = _MessageBox(self, 'Error', str(e), 'Ok')
-            err_msg.open()
+            QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
         else:
             self._emitConfigName(self.ramp_config.name)
 
@@ -163,10 +163,12 @@ class Settings(QMenuBar):
     def _emitLoadSignal(self):
         self.loadSignal.emit()
 
-    def _emitOpticsSettings(self, settings):
-        self._tunecorr_name = settings[0]
-        self._chromcorr_name = settings[1]
-        self.opticsSettingsSignal.emit(settings)
+    @Slot(str, str)
+    def _emitOpticsSettings(self, tunecorr_configname, chromcorr_configname):
+        self._tunecorr_configname = tunecorr_configname
+        self._chromcorr_configname = chromcorr_configname
+        self.opticsSettingsSignal.emit(
+            tunecorr_configname, chromcorr_configname)
 
     def _emitDiagSettings(self, settings):
         self._injcurr_idx = settings[0]

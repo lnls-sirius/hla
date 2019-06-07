@@ -1,8 +1,8 @@
 """Booster Ramp Control HLA: General Status Module."""
 
-from qtpy.QtWidgets import QGroupBox, QLabel, QPushButton, QVBoxLayout, \
-                            QGridLayout
-from qtpy.QtCore import Qt, Slot, Signal, QThread
+from qtpy.QtWidgets import QGroupBox, QLabel, QPushButton, QGridLayout, \
+    QMessageBox
+from qtpy.QtCore import Slot, Signal, QThread
 from siriuspy.ramp import ramp
 from siriuspy.ramp.conn import ConnMagnets as _ConnMagnets, ConnRF as _ConnRF,\
                                ConnTiming as _ConnTiming, ConnSOFB as _ConnSOFB
@@ -11,7 +11,6 @@ from siriuspy.csdevice.timesys import Const as _TIc
 from pydm.widgets import PyDMPushButton
 from siriushla.widgets import PyDMLedMultiChannel, PyDMLedMultiConnection, \
                               SiriusLedState
-from siriushla.bo_ap_ramp.auxiliar_classes import MessageBox as _MessageBox
 
 COMMANDS_TIMEOUT = 1
 
@@ -21,10 +20,9 @@ class StatusAndCommands(QGroupBox):
 
     def __init__(self, parent=None, prefix='', ramp_config=None):
         """Initialize object."""
-        super().__init__('General Status and Commands', parent)
+        super().__init__('Controls', parent)
         self.prefix = prefix
         self.ramp_config = ramp_config
-        self._manames = ramp.BoosterNormalized().manames
         self._conn_ma = _ConnMagnets(prefix=self.prefix)
         self._conn_ti = _ConnTiming(prefix=self.prefix)
         self._conn_rf = _ConnRF(prefix=self.prefix)
@@ -32,21 +30,26 @@ class StatusAndCommands(QGroupBox):
         self._setupUi()
 
     def _setupUi(self):
-        status_layout = self._setupStatusLayout()
-        commands_layout = self._setupCommandsLayout()
+        self.layout = QGridLayout()
+        self.layout.setVerticalSpacing(6)
+        self.layout.setHorizontalSpacing(6)
+        self.setLayout(self.layout)
+        self._setupStatusLayout()
+        self._setupCommandsLayout()
 
-        vlay = QVBoxLayout()
-        vlay.setAlignment(Qt.AlignCenter)
-        vlay.addStretch()
-        vlay.addLayout(status_layout)
-        vlay.addStretch()
-        vlay.addLayout(commands_layout)
-        vlay.addStretch()
-        vlay.setStretch(1, 1)
-        vlay.setStretch(3, 1)
-        self.setLayout(vlay)
+        self.setStyleSheet("""
+            QLabel{
+                qproperty-alignment: AlignCenter;
+                min-height:1.55em; max-height:1.55em;}
+            PyDMLedMultiChannel, PyDMLedMultiConnection{
+                min-width:3em; max-width:3em;}""")
 
     def _setupStatusLayout(self):
+        self.label_status = QLabel('<h4>Status</h4>', self)
+        self.label_status.setStyleSheet("""
+            qproperty-alignment: AlignBottom;
+            min-height:1.55em; max-height:1.55em;""")
+
         pfx = self.prefix
 
         # Connection Leds
@@ -63,12 +66,15 @@ class StatusAndCommands(QGroupBox):
                     channels.append(pfx + conn[p].pvname_rb)
             setattr(self, led_name, PyDMLedMultiConnection(self, channels))
 
+            label_name = led_name.replace('led', 'label').replace('_conn', '')
+            text = '<h4>' + label_name.replace('label_', '').upper() + '</h4>'
+            setattr(self, label_name, QLabel(text, self))
+
         # MA Leds
         conn = self._conn_ma
         c2v_intlk = dict()
         c2v_setup = dict()
         c2v_apply = dict()
-        c2v_rmprdy = dict()
         for p in conn.properties:
             if 'IntlkSoft' in conn[p].name or 'IntlkHard' in conn[p].name:
                 c2v_intlk[pfx + conn[p].pvname_rb] = 0
@@ -78,13 +84,10 @@ class StatusAndCommands(QGroupBox):
                 c2v_setup[pfx + conn[p].pvname_rb] = _PSc.PwrStateSel.On
             elif 'WfmData' in conn[p].name:
                 c2v_apply[pfx + conn[p].pvname_rb] = None
-            elif 'RmpReady' in conn[p].name:
-                c2v_rmprdy[pfx + conn[p].pvname_rb] = 1
 
         self.led_ma_intlk = PyDMLedMultiChannel(self, c2v_intlk)
         self.led_ma_setup = PyDMLedMultiChannel(self, c2v_setup)
         self.led_ma_apply = PyDMLedMultiChannel(self, c2v_apply)
-        self.led_ma_rmprdy = PyDMLedMultiChannel(self, c2v_rmprdy)
 
         # RF Leds
         conn = self._conn_rf
@@ -102,8 +105,8 @@ class StatusAndCommands(QGroupBox):
         c2v_rmprdy = {pfx + conn.Const.Rmp_RmpReady: 1}
 
         self.led_rf_intlk = PyDMLedMultiChannel(self, c2v_intlk)
-        self.led_rf_apply = PyDMLedMultiChannel(self, c2v_apply)
         self.led_rf_rmprdy = PyDMLedMultiChannel(self, c2v_rmprdy)
+        self.led_rf_apply = PyDMLedMultiChannel(self, c2v_apply)
 
         # TI Leds
         conn = self._conn_ti
@@ -119,40 +122,36 @@ class StatusAndCommands(QGroupBox):
         self.led_ti_setup = PyDMLedMultiChannel(self, c2v_basicsetup)
         self.led_ti_apply = PyDMLedMultiChannel(self, c2v_configsetup)
 
-        self.setStyleSheet("""
-            QLabel{
-                qproperty-alignment: AlignCenter;
-                min-height:1.55em; max-height:1.55em;}""")
-
-        glay = QGridLayout()
-        glay.setHorizontalSpacing(10)
-        glay.addWidget(QLabel(''), 0, 0)
-        glay.addWidget(QLabel('<h4>MA</h4>', self), 0, 1)
-        glay.addWidget(QLabel('<h4>RF</h4>', self), 0, 2)
-        glay.addWidget(QLabel('<h4>TI</h4>', self), 0, 3)
-        glay.addWidget(QLabel('<h4>SOFB</h4>', self), 0, 4)
-        glay.addWidget(QLabel('Connection', self), 1, 0)
-        glay.addWidget(self.led_ma_conn, 1, 1)
-        glay.addWidget(self.led_rf_conn, 1, 2)
-        glay.addWidget(self.led_ti_conn, 1, 3)
-        glay.addWidget(self.led_sofb_conn, 1, 4)
-        glay.addWidget(QLabel('Interlocks', self), 2, 0)
-        glay.addWidget(self.led_ma_intlk, 2, 1)
-        glay.addWidget(self.led_rf_intlk, 2, 2)
-        glay.addWidget(self.led_ti_intlk, 2, 3)
-        glay.addWidget(QLabel('Basic setup to ramp', self), 3, 0)
-        glay.addWidget(self.led_ma_setup, 3, 1)
-        glay.addWidget(self.led_ti_setup, 3, 3)
-        glay.addWidget(QLabel('Current config applied', self), 4, 0)
-        glay.addWidget(self.led_ma_apply, 4, 1)
-        glay.addWidget(self.led_rf_apply, 4, 2)
-        glay.addWidget(self.led_ti_apply, 4, 3)
-        glay.addWidget(QLabel('Ramp Ready', self), 5, 0)
-        glay.addWidget(self.led_ma_rmprdy, 5, 1)
-        glay.addWidget(self.led_rf_rmprdy, 5, 2)
-        return glay
+        self.layout.addWidget(self.label_status, 0, 0, 1, 6)
+        self.layout.addWidget(QLabel(''), 1, 0)
+        self.layout.addWidget(self.label_ma, 1, 1)
+        self.layout.addWidget(self.label_rf, 1, 2)
+        self.layout.addWidget(self.label_ti, 1, 3)
+        self.layout.addWidget(self.label_sofb, 1, 4)
+        self.layout.addWidget(QLabel('Connection', self), 2, 0)
+        self.layout.addWidget(self.led_ma_conn, 2, 1)
+        self.layout.addWidget(self.led_rf_conn, 2, 2)
+        self.layout.addWidget(self.led_ti_conn, 2, 3)
+        self.layout.addWidget(self.led_sofb_conn, 2, 4)
+        self.layout.addWidget(QLabel('Interlocks', self), 3, 0)
+        self.layout.addWidget(self.led_ma_intlk, 3, 1)
+        self.layout.addWidget(self.led_rf_intlk, 3, 2)
+        self.layout.addWidget(self.led_ti_intlk, 3, 3)
+        self.layout.addWidget(QLabel('Basic setup to ramp', self), 4, 0)
+        self.layout.addWidget(self.led_ma_setup, 4, 1)
+        self.layout.addWidget(self.led_rf_rmprdy, 4, 2)
+        self.layout.addWidget(self.led_ti_setup, 4, 3)
+        self.layout.addWidget(QLabel('Current config applied', self), 5, 0)
+        self.layout.addWidget(self.led_ma_apply, 5, 1)
+        self.layout.addWidget(self.led_rf_apply, 5, 2)
+        self.layout.addWidget(self.led_ti_apply, 5, 3)
 
     def _setupCommandsLayout(self):
+        self.label_commands = QLabel('<h4>Commands</h4>', self)
+        self.label_commands.setStyleSheet("""
+            qproperty-alignment: AlignBottom;
+            min-height:1.55em; max-height:1.55em;""")
+
         self.bt_setup_ma = QPushButton('MA', self)
         self.bt_setup_ma.clicked.connect(self._setup_ramp_ma)
         self.bt_setup_ti = QPushButton('TI', self)
@@ -179,10 +178,7 @@ class StatusAndCommands(QGroupBox):
             init_channel=self.prefix+c.EVG_ContinuousEvt.replace('Sel', 'Sts'))
 
         # Build rules to control injection commands enabling
-        rule_channels = ''
-        for ch in list(self.led_ma_rmprdy.channels2values.keys()):
-            rule_channels += '{"channel": "' + ch + '", "trigger": true}, '
-        rule_channels += '{"channel": "' + \
+        rule_channels = '{"channel": "' + \
             self.prefix+self._conn_rf.Const.Rmp_RmpReady+'", "trigger": true}'
         rules = (
             '[{"name": "EnblRule", "property": "Enable",' +
@@ -212,27 +208,24 @@ class StatusAndCommands(QGroupBox):
             else:
                 w.setStyleSheet("""min-height:1.55em; max-height: 1.55em;""")
 
-        glay = QGridLayout()
-        glay.setVerticalSpacing(15)
-        glay.setHorizontalSpacing(10)
-        glay.addWidget(QLabel('Basic setup to ramp: ', self), 0, 0)
-        glay.addWidget(self.bt_setup_ma, 0, 1)
-        glay.addWidget(self.bt_setup_ti, 0, 3)
-        glay.addWidget(self.bt_setup_all, 0, 4)
-        glay.addWidget(QLabel('Apply current config: ', self), 1, 0)
-        glay.addWidget(self.bt_apply_ma, 1, 1)
-        glay.addWidget(self.bt_apply_rf, 1, 2)
-        glay.addWidget(self.bt_apply_ti, 1, 3)
-        glay.addWidget(self.bt_apply_all, 1, 4)
-        glay.addWidget(QLabel('Ramping: ', self), 2, 0)
-        glay.addWidget(self.bt_start_ramp, 2, 1, 1, 2)
-        glay.addWidget(self.bt_stop_ramp, 2, 3, 1, 2)
-        glay.addWidget(self.led_ramping, 2, 5)
-        glay.addWidget(QLabel('Injection: ', self), 3, 0)
-        glay.addWidget(self.bt_start_inj, 3, 1, 1, 2)
-        glay.addWidget(self.bt_stop_inj, 3, 3, 1, 2)
-        glay.addWidget(self.led_injecting, 3, 5)
-        return glay
+        self.layout.addWidget(self.label_commands, 6, 0, 1, 6)
+        self.layout.addWidget(QLabel('Basic setup to ramp: ', self), 7, 0)
+        self.layout.addWidget(self.bt_setup_ma, 7, 1)
+        self.layout.addWidget(self.bt_setup_ti, 7, 3)
+        self.layout.addWidget(self.bt_setup_all, 7, 4)
+        self.layout.addWidget(QLabel('Apply current config: ', self), 8, 0)
+        self.layout.addWidget(self.bt_apply_ma, 8, 1)
+        self.layout.addWidget(self.bt_apply_rf, 8, 2)
+        self.layout.addWidget(self.bt_apply_ti, 8, 3)
+        self.layout.addWidget(self.bt_apply_all, 8, 4)
+        self.layout.addWidget(QLabel('Ramping: ', self), 9, 0)
+        self.layout.addWidget(self.bt_start_ramp, 9, 1, 1, 2)
+        self.layout.addWidget(self.bt_stop_ramp, 9, 3, 1, 2)
+        self.layout.addWidget(self.led_ramping, 9, 5)
+        self.layout.addWidget(QLabel('Injection: ', self), 10, 0)
+        self.layout.addWidget(self.bt_start_inj, 10, 1, 1, 2)
+        self.layout.addWidget(self.bt_stop_inj, 10, 3, 1, 2)
+        self.layout.addWidget(self.led_injecting, 10, 5)
 
     def _setup_ramp_ma(self):
         thread = _CommandThread(
@@ -337,8 +330,7 @@ class StatusAndCommands(QGroupBox):
     @Slot(list)
     def show_warning_message(self, args):
         """Show warning message."""
-        warn_msg = _MessageBox(self, args[0], args[1], 'Ok')
-        warn_msg.exec_()
+        QMessageBox.warning(self, args[0], args[1], QMessageBox.Ok)
 
     @Slot(ramp.BoosterRamp)
     def handleLoadRampConfig(self, ramp_config):
@@ -354,12 +346,10 @@ class StatusAndCommands(QGroupBox):
     def update_ma_params(self):
         """Update MA parameters leds channels2values dict."""
         if self.ramp_config:
-            r = self.ramp_config
-            p = self.prefix
             c2v = dict()
             for maname in self._conn_ma.manames:
-                wf = r.ps_waveform_get(maname)
-                c2v[p + maname + ':WfmData-RB'] = wf.currents
+                wf = self.ramp_config.ps_waveform_get(maname)
+                c2v[self.prefix + maname + ':WfmData-RB'] = wf.currents
             self.led_ma_apply.channels2values.update(c2v)
 
     def update_rf_params(self):
@@ -401,10 +391,15 @@ class StatusAndCommands(QGroupBox):
             c2v[p+c.TrgLLRFRmp_Delay.replace('SP', 'RB')] = \
                 r.ti_params_rf_ramp_delay
             c2v[p+c.EvtRmpBO_Delay.replace('SP', 'RB')] = 0
-            [linac_dly, injbo_dly, injsi_dly] = conn.calc_evts_delay()
-            c2v[p+c.EvtLinac_Delay.replace('SP', 'RB')] = linac_dly
-            c2v[p+c.EvtInjBO_Delay.replace('SP', 'RB')] = injbo_dly
-            c2v[p+c.EvtInjSI_Delay.replace('SP', 'RB')] = injsi_dly
+            params = conn.calc_evts_delay()
+            if not params:
+                QMessageBox.critical(self, 'Timing not connected',
+                                     'There are TI not connected PVs!',
+                                     QMessageBox.Ok)
+                params = [None]*3
+            c2v[p+c.EvtLinac_Delay.replace('SP', 'RB')] = params[0]
+            c2v[p+c.EvtInjBO_Delay.replace('SP', 'RB')] = params[1]
+            c2v[p+c.EvtInjSI_Delay.replace('SP', 'RB')] = params[2]
             self.led_ti_apply.channels2values.update(c2v)
 
 
