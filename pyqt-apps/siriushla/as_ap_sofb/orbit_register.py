@@ -9,7 +9,7 @@ from qtpy.QtWidgets import QMenu, QFileDialog, QWidget, QMessageBox, \
 from qtpy.QtCore import Signal, Qt
 from siriuspy.csdevice.orbitcorr import SOFBFactory
 from siriuspy.clientconfigdb import ConfigDBClient, ConfigDBException
-from siriushla.as_ap_servconf import LoadConfiguration, SaveConfiguration
+from siriushla.as_ap_configdb import LoadConfiguration, SaveConfiguration
 from siriushla.widgets import SiriusConnectionSignal
 
 

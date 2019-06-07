@@ -16,7 +16,7 @@ from siriushla.misc.epics.wrapper import PyEpicsWrapper
 from siriushla.misc.epics.task import EpicsGetter
 from siriushla.widgets.dialog import ReportDialog, ProgressDialog
 from siriushla.model import ConfigPVsTypeModel, PVConfigurationTableModel
-from siriushla.as_ap_servconf import SaveConfiguration
+from siriushla.as_ap_configdb import SaveConfiguration
 from .delegate import PVConfigurationDelegate
 
 

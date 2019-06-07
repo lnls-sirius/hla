@@ -4,7 +4,7 @@
 
 import sys
 from siriushla.sirius_application import SiriusApplication
-from siriushla.as_ap_servconf import ConfigManagerWindow
+from siriushla.as_ap_configdb import ConfigManagerWindow
 
 
 app = SiriusApplication(None, sys.argv)

@@ -13,7 +13,7 @@ from siriuspy.clientconfigdb import ConfigDBClient, ConfigDBException
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets import SiriusLedState, SiriusConnectionSignal
 from siriushla.util import connect_window
-from siriushla.as_ap_servconf import LoadConfiguration, SaveConfiguration
+from siriushla.as_ap_configdb import LoadConfiguration, SaveConfiguration
 
 from .respmat_enbllist import SelectionMatrix
 from .base import BaseWidget

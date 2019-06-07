@@ -15,7 +15,7 @@ from siriushla import util as _hlautil
 from siriushla.widgets import PyDMStateButton
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.as_ps_control import PSDetailWindow as _PSDetailWindow
-from siriushla.as_ap_servconf import LoadConfiguration as _LoadConfiguration
+from siriushla.as_ap_configdb import LoadConfiguration as _LoadConfiguration
 
 
 class OpticsCorrWindow(SiriusMainWindow):

@@ -21,7 +21,7 @@ from siriushla.as_ps_control.PSDetailWindow import \
     PSDetailWindow as _PSDetailWindow
 from siriushla.as_pm_control.PulsedMagnetDetailWindow import \
     PulsedMagnetDetailWindow as _PulsedMagnetDetailWindow
-from siriushla.as_ap_servconf import LoadConfiguration as _LoadConfiguration
+from siriushla.as_ap_configdb import LoadConfiguration as _LoadConfiguration
 
 
 UI_FILE = (_os.path.abspath(_os.path.dirname(__file__))+'/ui_as_ap_posang.ui')

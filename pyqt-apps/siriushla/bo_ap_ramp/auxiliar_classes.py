@@ -13,7 +13,7 @@ from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox, \
 from siriushla.widgets.windows import SiriusDialog, create_window_from_widget
 from siriushla.widgets import PyDMStateButton, SiriusConnectionSignal, \
                               SiriusLedAlert, PyDMLedMultiChannel
-from siriushla.as_ap_servconf import LoadConfiguration as _LoadConfiguration, \
+from siriushla.as_ap_configdb import LoadConfiguration as _LoadConfiguration, \
                                      SaveConfiguration as _SaveConfiguration
 from siriushla import util as _hlautil
 from siriushla.as_ti_control.hl_trigger import HLTriggerDetailed
