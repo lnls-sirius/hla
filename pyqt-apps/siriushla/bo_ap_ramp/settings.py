@@ -3,9 +3,8 @@
 from qtpy.QtCore import Qt, Signal, Slot
 from qtpy.QtGui import QKeySequence
 from qtpy.QtWidgets import QMenuBar, QAction, QMessageBox
-from siriuspy.servconf.util import \
-    generate_config_name as _generate_config_name
-from siriuspy.servconf import exceptions as _srvexceptions
+from siriuspy.clientconfigdb import ConfigDBException as _ConfigDBException, \
+    ConfigDBDocument as _ConfigDBDocument
 from siriuspy.ramp import ramp
 from siriushla import util as _hlautil
 from siriushla.as_ps_control.PSTabControlWindow import \
@@ -13,7 +12,7 @@ from siriushla.as_ps_control.PSTabControlWindow import \
 from siriushla.as_pm_control.PulsedMagnetControlWindow import \
     PulsedMagnetControlWindow as _PMControlWindow
 from siriushla.as_ps_cycle.cycle_window import CycleWindow as _CycleWindow
-from siriushla.bo_ap_ramp.auxiliar_classes import \
+from .auxiliar_classes import \
     LoadRampConfig as _LoadRampConfig, \
     NewRampConfigGetName as _NewRampConfigGetName, \
     OpticsAdjustSettings as _OpticsAdjustSettings, \
@@ -145,15 +144,15 @@ class Settings(QMenuBar):
         if not self.ramp_config:
             return
         try:
-            if self.ramp_config.configsrv_exist():
+            if self.ramp_config.exist():
                 old_name = self.ramp_config.name
                 if not new_name:
-                    new_name = _generate_config_name(old_name)
-                self.ramp_config.configsrv_save(new_name)
+                    new_name = _ConfigDBDocument.generate_config_name(old_name)
+                self.ramp_config.save(new_name)
             else:
-                self.ramp_config.configsrv_save()
-        except _srvexceptions.SrvError as e:
-            QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
+                self.ramp_config.save()
+        except _ConfigDBException as err:
+            QMessageBox.critical(self, 'Error', str(err), QMessageBox.Ok)
         else:
             self._emitConfigName(self.ramp_config.name)
 

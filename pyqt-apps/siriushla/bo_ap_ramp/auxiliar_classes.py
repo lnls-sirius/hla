@@ -17,10 +17,9 @@ from siriushla.as_ap_servconf import LoadConfiguration as _LoadConfiguration, \
                                      SaveConfiguration as _SaveConfiguration
 from siriushla import util as _hlautil
 from siriushla.as_ti_control.hl_trigger import HLTriggerDetailed
-from siriuspy.servconf.srvconfig import ConnConfigService as _ConnConfigService
-from siriuspy.servconf.util import \
-    generate_config_name as _generate_config_name
-from siriuspy.servconf import exceptions as _srvexceptions
+from siriuspy.clientconfigdb import ConfigDBClient as _ConfigDBClient, \
+    ConfigDBDocument as _ConfigDBDocument, \
+    ConfigDBException as _ConfigDBException
 from siriuspy.ramp import ramp
 
 
@@ -44,7 +43,7 @@ class LoadRampConfig(_LoadConfiguration):
     def _load_configuration(self):
         name = self.editor.config_name
         if self.ramp_config is not None:
-            if not self.ramp_config.configsrv_synchronized:
+            if not self.ramp_config.synchronized:
                 ans = QMessageBox.question(
                     self, 'Save changes?',
                     'There are unsaved changes in {}. \n'
@@ -85,7 +84,7 @@ class NewRampConfigGetName(_SaveConfiguration):
     def _load_configuration(self):
         name = self.search_lineedit.text()
         if (self._new_from_template and (self.config is not None)):
-            if not self.config.configsrv_synchronized:
+            if not self.config.synchronized:
                 ans = QMessageBox.question(
                     self, 'Save changes?',
                     'There are unsaved changes in {}. \n'
@@ -110,7 +109,7 @@ class InsertNormalizedConfig(SiriusDialog):
         """Initialize object."""
         super().__init__(parent)
         self.ramp_config = ramp_config
-        self.normalized_config = ramp.BoosterNormalized()
+        self.norm_config = ramp.BoosterNormalized()
         self.setWindowTitle('Insert Normalized Configuration')
         self._setupUi()
 
@@ -170,7 +169,7 @@ class InsertNormalizedConfig(SiriusDialog):
         # to insert interpolating existing norm configs
         flay_interp = QFormLayout()
         self.le_interp_name = QLineEdit(self)
-        self.le_interp_name.setText(_generate_config_name())
+        self.le_interp_name.setText(_ConfigDBDocument.generate_config_name())
         self.sb_interp_time = QDoubleSpinBox(self)
         self.sb_interp_time.setMaximum(490)
         self.sb_interp_time.setDecimals(6)
@@ -201,7 +200,7 @@ class InsertNormalizedConfig(SiriusDialog):
         # to insert a new norm config equal to template
         flay_create = QFormLayout()
         self.le_create_name = QLineEdit(self)
-        self.le_create_name.setText(_generate_config_name())
+        self.le_create_name.setText(self.norm_config.generate_config_name())
         self.sb_create_time = QDoubleSpinBox(self)
         self.sb_create_time.setDecimals(6)
         self.sb_create_time.setMaximum(490)
@@ -220,13 +219,13 @@ class InsertNormalizedConfig(SiriusDialog):
     @Slot(str)
     def _handleInsertExistingConfig(self, configname):
         try:
-            n = ramp.BoosterNormalized(configname)
-            n.configsrv_load()
-            energy = n[ramp.BoosterRamp.MANAME_DIPOLE]
+            nor = ramp.BoosterNormalized(configname)
+            nor.load()
+            energy = nor[ramp.BoosterRamp.MANAME_DIPOLE]
             time = self.ramp_config.ps_waveform_interp_time(energy)
             self.sb_confsrv_time.setValue(time)
-        except _srvexceptions.SrvError as e:
-            QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
+        except _ConfigDBException as err:
+            QMessageBox.critical(self, 'Error', str(err), QMessageBox.Ok)
 
     def _emitInsertConfigData(self):
         sender = self.sender()
@@ -234,22 +233,23 @@ class InsertNormalizedConfig(SiriusDialog):
         if sender is self.bt_interp:
             time = self.sb_interp_time.value()
             name = self.le_interp_name.text()
-            nconfig = None
+            nconf = None
         elif sender is self.bt_confsrv:
             time = self.sb_confsrv_time.value()
             name = self.le_confsrv_name.text()
-            nconfig = None
+            nconf = None
             try:
-                n = ramp.BoosterNormalized(name)
-                n.configsrv_load()
-                nconfig = n.configuration
-            except _srvexceptions.SrvError as e:
-                QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
+                nor = ramp.BoosterNormalized(name)
+                nor.load()
+                nconfig = n.value
+            except _ConfigDBException as err:
+                QMessageBox.critical(self, 'Error', str(err), QMessageBox.Ok)
+
         elif sender is self.bt_create:
             time = self.sb_create_time.value()
             name = self.le_create_name.text()
-            nconfig = self.normalized_config.get_config_type_template()
-        data = [time, name, nconfig]
+            nconf = self.norm_config.get_value_template()
+        data = [time, name, nconf]
         self.insertConfig.emit(data)
         self.close()
 
@@ -262,7 +262,7 @@ class DeleteNormalizedConfig(SiriusDialog):
     def __init__(self, parent, table_map, selected_item):
         """Initialize object."""
         super().__init__(parent)
-        self.normalized_config = ramp.BoosterNormalized()
+        self.norm_config = ramp.BoosterNormalized()
         self.setWindowTitle('Delete Normalized Configuration')
         self.table_map = table_map
         self.selected_item = selected_item
@@ -424,20 +424,22 @@ class OpticsAdjustSettings(SiriusDialog):
         self.setWindowTitle('Optics Adjust Settings')
         self.tuneconfig_currname = tuneconfig_currname
         self.chromconfig_currname = chromconfig_currname
-        self.conn_tuneparams = _ConnConfigService('bo_tunecorr_params')
-        self.conn_chromparams = _ConnConfigService('bo_chromcorr_params')
+        self.conn_tuneparams = _ConfigDBClient(
+            config_type='bo_tunecorr_params')
+        self.conn_chromparams = _ConfigDBClient(
+            config_type='bo_chromcorr_params')
         self._setupUi()
 
         try:
-            _, metadata = self.conn_tuneparams.config_find()
-            for m in metadata:
-                self.cb_tuneconfig.addItem(m['name'])
+            infos = self.conn_tuneparams.find_configs()
+            for info in infos:
+                self.cb_tuneconfig.addItem(info['name'])
 
-            _, metadata = self.conn_chromparams.config_find()
-            for m in metadata:
-                self.cb_chromconfig.addItem(m['name'])
-        except _srvexceptions.SrvError as e:
-            QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
+            infos = self.conn_chromparams.find_configs()
+            for info in infos:
+                self.cb_chromconfig.addItem(info['name'])
+        except _ConfigDBException as err:
+            QMessageBox.critical(self, 'Error', str(err), QMessageBox.Ok)
         finally:
             self.cb_tuneconfig.setCurrentText(self.tuneconfig_currname)
             self._showTuneConfigData()
@@ -624,12 +626,12 @@ class OpticsAdjustSettings(SiriusDialog):
     @Slot(str)
     def _showTuneConfigData(self):
         try:
-            config, _ = self.conn_tuneparams.config_get(
+            config = self.conn_tuneparams.get_config_value(
                 name=self.tuneconfig_currname)
             mat = config['matrix']
             nomKL = config['nominal KLs']
-        except _srvexceptions.SrvError as e:
-            QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
+        except _ConfigDBException as err:
+            QMessageBox.critical(self, 'Error', str(err), QMessageBox.Ok)
         else:
             self.table_tunemat.setItem(0, 0, QTableWidgetItem(str(mat[0][0])))
             self.table_tunemat.setItem(0, 1, QTableWidgetItem(str(mat[0][1])))
@@ -647,13 +649,13 @@ class OpticsAdjustSettings(SiriusDialog):
     @Slot(str)
     def _showChromConfigData(self):
         try:
-            config, _ = self.conn_chromparams.config_get(
+            config = self.conn_chromparams.get_config_value(
                 name=self.chromconfig_currname)
             mat = config['matrix']
             nomSL = config['nominal SLs']
             nomChrom = config['nominal chrom']
-        except _srvexceptions.SrvError as e:
-            QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
+        except _ConfigDBException as err:
+            QMessageBox.critical(self, 'Error', str(err), QMessageBox.Ok)
         else:
             self.table_chrommat.setItem(0, 0, QTableWidgetItem(str(mat[0][0])))
             self.table_chrommat.setItem(0, 1, QTableWidgetItem(str(mat[0][1])))

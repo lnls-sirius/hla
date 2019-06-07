@@ -13,12 +13,11 @@ from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
 from siriuspy.search import MASearch as _MASearch
 from siriuspy.ramp import ramp
 from siriuspy.optics.opticscorr import BOTuneCorr, BOChromCorr
-from siriuspy.servconf.util import \
-    generate_config_name as _generate_config_name
-from siriuspy.servconf import exceptions as _srvexceptions
+from siriuspy.clientconfigdb import ConfigDBException as _ConfigDBException, \
+    ConfigDBDocument as _ConfigDBDocument
 
 from siriushla.widgets.windows import SiriusMainWindow
-from siriushla.bo_ap_ramp.auxiliar_classes import \
+from .auxiliar_classes import \
     NewRampConfigGetName as _NewRampConfigGetName, \
     MyDoubleSpinBox as _MyDoubleSpinBox
 
@@ -76,7 +75,7 @@ class BONormEdit(SiriusMainWindow):
         self.menu = self.menuBar().addMenu('Options')
         self.act_load = self.menu.addAction('Load')
         self.act_load.triggered.connect(self._load)
-        if not self.norm_config.configsrv_exist():
+        if not self.norm_config.exist():
             self.act_load.setEnabled(False)
         self.act_save = self.menu.addAction('Save')
         self.act_save.triggered.connect(self._save)
@@ -344,9 +343,9 @@ class BONormEdit(SiriusMainWindow):
 
     def _load(self):
         try:
-            self.norm_config.configsrv_load()
-        except _srvexceptions.SrvError as e:
-            QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
+            self.norm_config.load()
+        except _ConfigDBException as err:
+            QMessageBox.critical(self, 'Error', str(err), QMessageBox.Ok)
         else:
             self._resetTuneChanges()
             self._resetChromChanges()
@@ -355,16 +354,17 @@ class BONormEdit(SiriusMainWindow):
 
     def _save(self, new_name=None):
         try:
-            if self.norm_config.configsrv_exist():
+            if self.norm_config.exist():
                 self._norm_config_oldname = self.norm_config.name
                 if not new_name:
-                    new_name = _generate_config_name(self._norm_config_oldname)
-                self.norm_config.configsrv_save(new_name)
+                    new_name = self.norm_config.generate_config_name(
+                        self._norm_config_oldname)
+                self.norm_config.save(new_name)
             else:
-                self.norm_config.configsrv_save()
+                self.norm_config.save()
                 self.act_load.setEnabled(True)
-        except _srvexceptions.SrvError as e:
-            QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
+        except _ConfigDBException as err:
+            QMessageBox.critical(self, 'Error', str(err), QMessageBox.Ok)
         finally:
             self.label_name.setText('<h2>'+self.norm_config.name+'</h2>')
             self.verifySync()
@@ -377,7 +377,7 @@ class BONormEdit(SiriusMainWindow):
 
     def verifySync(self):
         """Verify sync status related to ConfServer."""
-        if not self.norm_config.configsrv_synchronized:
+        if not self.norm_config.synchronized:
             self.act_save.setEnabled(True)
             self.label_name.setStyleSheet("color:red;")
             self.setToolTip("There are unsaved changes")
