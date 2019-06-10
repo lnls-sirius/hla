@@ -10,7 +10,7 @@ import math as _math
 from qtpy.QtCore import Qt, Signal, Slot
 from qtpy.QtGui import QBrush, QColor
 from qtpy.QtWidgets import QGroupBox, QLabel, QWidget, QSpacerItem, \
-    QVBoxLayout, QHBoxLayout, QGridLayout, QFormLayout, \
+    QVBoxLayout, QHBoxLayout, QGridLayout, QFormLayout, QCheckBox, \
     QPushButton, QTableWidget, QTableWidgetItem, QSizePolicy as QSzPlcy, \
     QHeaderView, QUndoCommand, QAbstractItemView, QMenu, QMessageBox
 from matplotlib.backends.backend_qt5agg import (
@@ -1150,12 +1150,18 @@ class RFRamp(QWidget):
         glay.addWidget(self.table, 3, 0, 1, 3)
 
     def _setupGraph(self):
+        self.cb_show_syncphase = QCheckBox('Show Φs', self)
+        self.cb_show_syncphase.setChecked(1)
+        self.cb_show_syncphase.stateChanged.connect(
+            self._handleShowSyncPhase)
+
         self.graph = SiriusFigureCanvas(Figure())
         self.graph.setObjectName('RFGraph')
         self.graph.setStyleSheet("""
             #RFGraph{min-width:42em;min-height:18em;max-height:18em;}""")
         self.graph.setSizePolicy(QSzPlcy.MinimumExpanding, QSzPlcy.Preferred)
         self.graph.figure.set_tight_layout({'pad': .0})
+
         self.ax1 = self.graph.figure.subplots()
         self.ax1.grid()
         self.ax1.set_xlabel('t [ms]')
@@ -1178,6 +1184,7 @@ class RFRamp(QWidget):
         lay = QVBoxLayout()
         lay.addWidget(self.graph)
         lay.addWidget(self.toolbar)
+        lay.addWidget(self.cb_show_syncphase, alignment=Qt.AlignRight)
         self.graphview.setLayout(lay)
 
     def _setupRFDelayAndRmpIncIntvl(self):
@@ -1407,6 +1414,13 @@ class RFRamp(QWidget):
         ph = [_math.degrees(phase) for phase in ph]
         ph = ph[0] if isinstance(t, (int, float)) else ph
         return ph
+
+    @Slot(int)
+    def _handleShowSyncPhase(self, show):
+        width = 1.5 if show else 0
+        self.ax2.set_visible(show)
+        self.line2.set_linewidth(width)
+        self.updateGraph()
 
     def updateGraph(self, update_axis=False):
         """Update and redraw graph."""
