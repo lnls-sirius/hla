@@ -13,7 +13,7 @@ from siriuspy.clientconfigdb import ConfigDBClient, ConfigDBException
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets import SiriusLedState, SiriusConnectionSignal
 from siriushla.util import connect_window
-from siriushla.as_ap_configdb import LoadConfiguration, SaveConfiguration
+from siriushla.as_ap_configdb import LoadConfigDialog, SaveConfigDialog
 
 from .respmat_enbllist import SelectionMatrix
 from .base import BaseWidget
@@ -207,7 +207,7 @@ class RespMatWidget(BaseWidget):
         self._respmat_sp.send_value_signal[_np.ndarray].emit(respm.flatten())
 
     def _open_load_config_servconf(self):
-        win = LoadConfiguration(self._config_type, self)
+        win = LoadConfigDialog(self._config_type, self)
         win.configname.connect(self._set_respm)
         win.show()
 
@@ -217,7 +217,7 @@ class RespMatWidget(BaseWidget):
             _np.array(data).flatten())
 
     def _open_save_config_servconf(self):
-        win = SaveConfiguration(self._config_type, self)
+        win = SaveConfigDialog(self._config_type, self)
         win.configname.connect(self._save_respm)
         win.show()
 

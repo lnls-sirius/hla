@@ -13,13 +13,13 @@ class ConfigDbTableModel(QAbstractTableModel):
 
     removeRow = Signal(QModelIndex)
     connectionError = Signal(int, str, str)
+    horizontalHeader = ('config_type', 'name', 'created', 'modified')
 
     def __init__(self, config_type, client, discarded=False, parent=None):
         """Constructor."""
         super().__init__(parent)
         self._client = client
         self._discarded = discarded
-        self.horizontalHeader = ['config_type', 'name', 'created', 'modified']
         self._config_type = config_type
         self.setupModelData(config_type)
 

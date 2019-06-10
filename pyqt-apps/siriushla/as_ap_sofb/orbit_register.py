@@ -9,7 +9,7 @@ from qtpy.QtWidgets import QMenu, QFileDialog, QWidget, QMessageBox, \
 from qtpy.QtCore import Signal, Qt
 from siriuspy.csdevice.orbitcorr import SOFBFactory
 from siriuspy.clientconfigdb import ConfigDBClient, ConfigDBException
-from siriushla.as_ap_configdb import LoadConfiguration, SaveConfiguration
+from siriushla.as_ap_configdb import LoadConfigDialog, SaveConfigDialog
 from siriushla.widgets import SiriusConnectionSignal
 
 
@@ -223,7 +223,7 @@ class OrbitRegister(QWidget):
         self._update_and_emit('Orbit Loaded: ', orbx, orby, filename[0])
 
     def _load_orbit_from_servconf(self):
-        win = LoadConfiguration(self._config_type, self)
+        win = LoadConfigDialog(self._config_type, self)
         win.configname.connect(self._set_orbit)
         win.show()
 
@@ -234,7 +234,7 @@ class OrbitRegister(QWidget):
             _np.array(data['x']), _np.array(data['y']))
 
     def _save_orbit_to_servconf(self):
-        win = SaveConfiguration(self._config_type, self)
+        win = SaveConfigDialog(self._config_type, self)
         win.configname.connect(self._save_orbit)
         win.show()
 

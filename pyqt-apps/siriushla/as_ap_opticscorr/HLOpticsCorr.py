@@ -15,7 +15,7 @@ from siriushla import util as _hlautil
 from siriushla.widgets import PyDMStateButton
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.as_ps_control import PSDetailWindow as _PSDetailWindow
-from siriushla.as_ap_configdb import LoadConfiguration as _LoadConfiguration
+from siriushla.as_ap_configdb import LoadConfigDialog as _LoadConfigDialog
 
 
 class OpticsCorrWindow(SiriusMainWindow):
@@ -236,7 +236,7 @@ class _ConfigLineEdit(PyDMLineEdit):
             config_type = 'si_chromcorr_params'
         elif 'BO' in self.channel and 'Chrom' in self.channel:
             config_type = 'bo_chromcorr_params'
-        popup = _LoadConfiguration(config_type)
+        popup = _LoadConfigDialog(config_type)
         popup.configname.connect(self._config_changed)
         popup.exec_()
 

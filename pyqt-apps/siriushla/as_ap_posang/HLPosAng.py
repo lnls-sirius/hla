@@ -21,7 +21,7 @@ from siriushla.as_ps_control.PSDetailWindow import \
     PSDetailWindow as _PSDetailWindow
 from siriushla.as_pm_control.PulsedMagnetDetailWindow import \
     PulsedMagnetDetailWindow as _PulsedMagnetDetailWindow
-from siriushla.as_ap_configdb import LoadConfiguration as _LoadConfiguration
+from siriushla.as_ap_configdb import LoadConfigDialog as _LoadConfigDialog
 
 
 UI_FILE = (_os.path.abspath(_os.path.dirname(__file__))+'/ui_as_ap_posang.ui')
@@ -239,7 +239,7 @@ class _ConfigLineEdit(PyDMLineEdit):
             config_type = 'tb_posang_respm'
         elif 'TS' in self.channel:
             config_type = 'ts_posang_respm'
-        popup = _LoadConfiguration(config_type)
+        popup = _LoadConfigDialog(config_type)
         popup.configname.connect(self._config_changed)
         popup.exec_()
 

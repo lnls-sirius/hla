@@ -1,3 +1,5 @@
 from .ConfigManagerWindow import ConfigManagerWindow
-from .load_configuration import LoadConfiguration
-from .save_configuration import SaveConfiguration
+from .configdialogs import LoadConfigDialog, SaveConfigDialog, \
+    RenameConfigDialog
+from .configwidgets import ConfigTableWidget, ConfigDBSearchEngine, \
+    ConfigDBInfoHeader

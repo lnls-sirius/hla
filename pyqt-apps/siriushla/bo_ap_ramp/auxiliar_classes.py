@@ -10,24 +10,25 @@ from qtpy.QtWidgets import QLabel, QWidget, QScrollArea, QAbstractItemView, \
     QSizePolicy as QSzPlcy, QGroupBox, QHeaderView, QMessageBox
 from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox, \
                          PyDMPushButton
-from siriushla.widgets.windows import SiriusDialog, create_window_from_widget
-from siriushla.widgets import PyDMStateButton, SiriusConnectionSignal, \
-                              SiriusLedAlert, PyDMLedMultiChannel
-from siriushla.as_ap_configdb import LoadConfiguration as _LoadConfiguration, \
-                                     SaveConfiguration as _SaveConfiguration
-from siriushla import util as _hlautil
-from siriushla.as_ti_control.hl_trigger import HLTriggerDetailed
+
 from siriuspy.clientconfigdb import ConfigDBClient as _ConfigDBClient, \
     ConfigDBDocument as _ConfigDBDocument, \
     ConfigDBException as _ConfigDBException
 from siriuspy.ramp import ramp
+from siriushla.widgets.windows import SiriusDialog, create_window_from_widget
+from siriushla.widgets import PyDMStateButton, SiriusConnectionSignal, \
+                              SiriusLedAlert, PyDMLedMultiChannel
+from siriushla.as_ap_configdb import LoadConfigDialog as _LoadConfigDialog, \
+                                     SaveConfigDialog as _SaveConfigDialog
+from siriushla import util as _hlautil
+from siriushla.as_ti_control.hl_trigger import HLTriggerDetailed
 
 
 DCCT_MEASMODE_NORMAL = 1
 DCCT_MEASMODE_FAST = 2
 
 
-class LoadRampConfig(_LoadConfiguration):
+class LoadRampConfig(_LoadConfigDialog):
     """Auxiliar window to get a ramp config name to load."""
 
     loadSignal = Signal()
@@ -41,7 +42,7 @@ class LoadRampConfig(_LoadConfiguration):
 
     @Slot()
     def _load_configuration(self):
-        name = self.editor.config_name
+        name = self.config_name
         if self.ramp_config is not None:
             if not self.ramp_config.synchronized:
                 ans = QMessageBox.question(
@@ -61,7 +62,7 @@ class LoadRampConfig(_LoadConfiguration):
         self.accept()
 
 
-class NewRampConfigGetName(_SaveConfiguration):
+class NewRampConfigGetName(_SaveConfigDialog):
     """Auxiliar window to get a configuration name to create a new one."""
 
     saveSignal = Signal()
@@ -75,14 +76,14 @@ class NewRampConfigGetName(_SaveConfiguration):
         self._new_from_template = new_from_template
         if new_from_template:
             self.setWindowTitle('New config from template')
-            self.save_button.setText('Create')
+            self.ok_button.setText('Create')
         else:
             self.setWindowTitle('Save current config as...')
-            self.save_button.setText('Save as...')
+            self.ok_button.setText('Save as...')
 
     @Slot()
     def _load_configuration(self):
-        name = self.search_lineedit.text()
+        name = self.config_name
         if (self._new_from_template and (self.config is not None)):
             if not self.config.synchronized:
                 ans = QMessageBox.question(
@@ -1246,6 +1247,6 @@ class MyDoubleSpinBox(QDoubleSpinBox):
 class _ConfigLineEdit(QLineEdit):
 
     def mouseReleaseEvent(self, ev):
-        popup = _LoadConfiguration('bo_normalized')
+        popup = _LoadConfigDialog('bo_normalized')
         popup.configname.connect(self.setText)
         popup.exec_()

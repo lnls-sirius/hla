@@ -3,7 +3,7 @@ import logging
 import re
 import time
 
-from qtpy.QtCore import Qt, Slot
+from qtpy.QtCore import Qt, Slot, QThread, Signal
 from qtpy.QtWidgets import QWidget, QComboBox, QLabel, QPushButton, \
     QHBoxLayout, QVBoxLayout, QLineEdit, QSplitter, QGridLayout
 
@@ -13,14 +13,12 @@ from siriushla.misc.epics.task import EpicsChecker, EpicsSetter
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.widgets.pvnames_tree import QTreeItem, PVNameTree
 from siriushla.widgets.dialog import ReportDialog, ProgressDialog
-from siriushla.widgets.load_configuration import LoadConfigurationWidget
+from .. import LoadConfigDialog
 # from siriushla.widgets.horizontal_ruler import HorizontalRuler
-from siriushla.model import ConfigPVsTypeModel
-
-from qtpy.QtCore import QThread, Signal
+from ..models import ConfigPVsTypeModel
 
 
-class SetConfigurationWindow(SiriusMainWindow):
+class LoadAndApplyConfig2MachineWindow(SiriusMainWindow):
     """Configuration Window to set configration via epics."""
 
     def __init__(self, client, wrapper=PyEpicsWrapper, parent=None):
@@ -43,7 +41,7 @@ class SetConfigurationWindow(SiriusMainWindow):
                 min-width: 40em;
                 min-height: 40em;
             }
-            # LoadConfigurationWidget {
+            # ConfigTableWidget {
             #     min-height: 10em;
             #     max-height: 10em;
             # }
@@ -78,7 +76,13 @@ class SetConfigurationWindow(SiriusMainWindow):
         self._splitter.setChildrenCollapsible(True)
 
         # Add table for the configuration name
-        self._config_table = LoadConfigurationWidget(self._client)
+        # self._config_table = ConfigTableWidget(self._client)
+        self._config_table = LoadConfigDialog('notexist', self)
+        self._config_table.label_exist.hide()
+        self._config_table.sub_header.hide()
+        self._config_table.ok_button.hide()
+        self._config_table.cancel_button.hide()
+
         # Add filter for tree
         self._filter_le = QLineEdit(self)
         self._filter_le.setPlaceholderText("Filter PVs...")
@@ -131,13 +135,13 @@ class SetConfigurationWindow(SiriusMainWindow):
 
         # Add signals
         self._type_cb.currentTextChanged.connect(self._fill_config_names)
-        self._config_table.configChanged.connect(self._fill_config)
+        self._config_table.editor.configChanged.connect(self._fill_config)
         self._tree.itemChecked.connect(self._item_checked)
         self._set_btn.clicked.connect(self._set)
 
     @Slot(str)
     def _fill_config_names(self, config_type):
-        self._config_table.config_type = config_type
+        self._config_table.editor.config_type = config_type
 
     @Slot(str, str)
     def _fill_config(self, selected, deselected):
@@ -313,7 +317,7 @@ if __name__ == '__main__':
 
     app = SiriusApplication()
     client = ConfigDBClient(_envars.server_url_configdb)
-    w = SetConfigurationWindow(client)
+    w = LoadAndApplyConfig2MachineWindow(client)
     w.show()
 
     sys.exit(app.exec_())
