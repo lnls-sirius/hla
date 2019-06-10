@@ -87,9 +87,9 @@ class ConfigParameters(QGroupBox):
     def getPlotUnits(self, units):
         """Change units used in plot."""
         self.dip_ramp.plot_unit = units
-        self.dip_ramp.updateGraph()
+        self.dip_ramp.updateGraph(update_axis=True)
         self.mult_ramp.plot_unit = units
-        self.mult_ramp.updateGraph()
+        self.mult_ramp.updateGraph(update_axis=True)
 
 
 class DipoleRamp(QWidget):
@@ -453,7 +453,7 @@ class DipoleRamp(QWidget):
                    '    - BO-Fam:MA-B'
         QMessageBox.warning(self, 'Warning', text, QMessageBox.Ok)
 
-    def updateGraph(self):
+    def updateGraph(self, update_axis=False):
         """Update and redraw graph when ramp_config is loaded."""
         if self.ramp_config is None:
             return
@@ -467,8 +467,9 @@ class DipoleRamp(QWidget):
             ydata = self.ramp_config.ps_waveform_get_currents('BO-Fam:MA-B')
         self.line.set_xdata(xdata)
         self.line.set_ydata(ydata)
-        self.ax.set_xlim(min(xdata), max(xdata))
-        self.ax.set_ylim(min(ydata)*0.95, max(ydata)*1.05)
+        if update_axis:
+            self.ax.set_xlim(min(xdata), max(xdata))
+            self.ax.set_ylim(min(ydata)*0.95, max(ydata)*1.05)
 
         if self.plot_unit == 'Strengths':
             func = self.ramp_config.ps_waveform_interp_strengths
@@ -560,7 +561,7 @@ class DipoleRamp(QWidget):
     def handleLoadRampConfig(self, ramp_config):
         """Update all widgets when ramp_config is loaded."""
         self.ramp_config = ramp_config
-        self.updateGraph()
+        self.updateGraph(update_axis=True)
         self.updatePSDelay()
         self.updateWfmNrPoints()
         self.updateTable()
@@ -860,7 +861,7 @@ class MultipolesRamp(QWidget):
     @Slot(list)
     def _handleChooseMagnetToPlot(self, maname_list):
         self._magnets_to_plot = maname_list
-        self.updateGraph()
+        self.updateGraph(update_axis=True)
 
     def _showNormConfigMenu(self, pos):
         if not self.ramp_config:
@@ -928,7 +929,7 @@ class MultipolesRamp(QWidget):
             text += '    - ' + maname + '\n'
         QMessageBox.warning(self, 'Warning', text, QMessageBox.Ok)
 
-    def updateGraph(self):
+    def updateGraph(self, update_axis=False):
         """Update and redraw graph."""
         if self.ramp_config is not None:
             xdata = self.ramp_config.ps_waveform_get_times()
@@ -948,15 +949,16 @@ class MultipolesRamp(QWidget):
                 elif maname != 'BO-Fam:MA-B':
                     self.lines[maname].set_linewidth(0)
 
-            self.ax.set_xlim(min(xdata), max(xdata))
-            ydata = np.array(ydata)
-            if len(ydata) > 0:
-                if ydata.min() == ydata.max():
-                    self.ax.set_ylim(ydata.min()-0.2, ydata.max()+0.2)
-                elif ydata.min() < 0:
-                    self.ax.set_ylim(ydata.min()*1.05, ydata.max()*1.05)
-                else:
-                    self.ax.set_ylim(ydata.min()*0.95, ydata.max()*1.05)
+            if update_axis:
+                self.ax.set_xlim(min(xdata), max(xdata))
+                ydata = np.array(ydata)
+                if len(ydata) > 0:
+                    if ydata.min() == ydata.max():
+                        self.ax.set_ylim(ydata.min()-0.2, ydata.max()+0.2)
+                    elif ydata.min() < 0:
+                        self.ax.set_ylim(ydata.min()*1.05, ydata.max()*1.05)
+                    else:
+                        self.ax.set_ylim(ydata.min()*0.95, ydata.max()*1.05)
 
             if self.plot_unit == 'Strengths':
                 ylabel = None
@@ -1062,7 +1064,7 @@ class MultipolesRamp(QWidget):
         self.table.cellChanged.disconnect(self._handleCellChanged)
         self._setupTable()
         self.updateTable()
-        self.updateGraph()
+        self.updateGraph(update_axis=True)
         self._verifyWarnings()
 
     @Slot(ramp.BoosterNormalized, str, float, bool)
@@ -1395,7 +1397,7 @@ class RFRamp(QWidget):
         ph = ph[0] if isinstance(t, (int, float)) else ph
         return ph
 
-    def updateGraph(self):
+    def updateGraph(self, update_axis=False):
         """Update and redraw graph."""
         if self.ramp_config is None:
             return
@@ -1406,7 +1408,6 @@ class RFRamp(QWidget):
             xdata.append(i)
         xdata.append(490)
         self.line1.set_xdata(xdata)
-        self.ax1.set_xlim(min(xdata), max(xdata))
 
         ydata = list()
         ydata.append(self.ramp_config.rf_ramp_voltages[0])
@@ -1414,7 +1415,6 @@ class RFRamp(QWidget):
             ydata.append(i)
         ydata.append(self.ramp_config.rf_ramp_voltages[0])
         self.line1.set_ydata(ydata)
-        self.ax1.set_ylim(min(ydata)*0.95, max(ydata)*1.05)
 
         times = self.ramp_config.ps_ramp_times
         self.markers.set_xdata(times)
@@ -1434,7 +1434,11 @@ class RFRamp(QWidget):
         ph = self._calc_syncphase(ph_times)
         self.line2.set_xdata(ph_times)
         self.line2.set_ydata(ph)
-        self.ax2.set_ylim(min(ph)*0.95, max(ph)*1.05)
+
+        if update_axis:
+            self.ax1.set_xlim(min(xdata), max(xdata))
+            self.ax1.set_ylim(min(ydata)*0.95, max(ydata)*1.05)
+            self.ax2.set_ylim(min(ph)*0.95, max(ph)*1.05)
 
         self.graph.figure.canvas.draw()
         self.graph.figure.canvas.flush_events()
@@ -1509,7 +1513,7 @@ class RFRamp(QWidget):
     def handleLoadRampConfig(self, ramp_config):
         """Update all widgets in loading BoosterRamp config."""
         self.ramp_config = ramp_config
-        self.updateGraph()
+        self.updateGraph(update_axis=True)
         self.updateRFDelay()
         self.updateRmpIncIntvl()
         self.updateTable()
