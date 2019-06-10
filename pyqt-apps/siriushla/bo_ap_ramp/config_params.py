@@ -222,18 +222,19 @@ class DipoleRamp(QWidget):
                      3: 'Ejection',
                      4: 'RampUp-Stop',
                      5: 'Plateau-Start',
-                     6: 'RampDown-Start',
-                     7: 'RampDown-Stop',
-                     8: 'Stop'},
+                     6: 'Plateau-Stop',
+                     7: 'RampDown-Start',
+                     8: 'RampDown-Stop',
+                     9: 'Stop'},
             'columns': {0: '',
                         1: 'T [ms]',
-                        2: 'Index',
-                        3: 'E [GeV]'}}
+                        2: 'E [GeV]',
+                        3: 'Index'}}
         self.table.setObjectName('DipoleTable')
         self.table.setStyleSheet("""
             #DipoleTable{
                 min-width: 30em;
-                min-height: 18em; max-height: 18em;
+                min-height: 20em; max-height: 20em;
             }
             QHeaderView::section {
                 background-color: #1F64FF;
@@ -245,8 +246,8 @@ class DipoleRamp(QWidget):
             QTableWidget QTableCornerButton::section {
                 background-color: #1F64FF;
             }""")
-        self.table.setRowCount(9)
-        self.table.setColumnCount(4)
+        self.table.setRowCount(max(self.table_map['rows'].keys())+1)
+        self.table.setColumnCount(max(self.table_map['columns'].keys())+1)
         self.table.horizontalHeader().setStyleSheet("""
             min-height:1.55em; max-height:1.55em;""")
         self.table.horizontalHeader().setSectionResizeMode(
@@ -263,16 +264,24 @@ class DipoleRamp(QWidget):
         for row, vlabel in self.table_map['rows'].items():
             label_item = QTableWidgetItem(vlabel)
             t_item = QTableWidgetItem('0')
-            np_item = QTableWidgetItem('0')
             e_item = QTableWidgetItem('0')
+            np_item = QTableWidgetItem('0')
 
             label_item.setFlags(Qt.ItemIsEnabled)
             np_item.setFlags(Qt.ItemIsEnabled)
+            if vlabel in ['Injection', 'Ejection']:
+                label_item.setBackground(QBrush(QColor(220, 220, 220)))
+                e_item.setBackground(QBrush(QColor(220, 220, 220)))
+                np_item.setBackground(QBrush(QColor(220, 220, 220)))
+
             if vlabel in ['Start', 'Plateau-Start']:
                 t_item.setFlags(Qt.ItemIsEnabled)
                 e_item.setBackground(QBrush(QColor("white")))
             elif vlabel in ['Injection', 'Ejection', 'Stop']:
                 t_item.setBackground(QBrush(QColor("white")))
+                e_item.setFlags(Qt.ItemIsEnabled)
+            elif vlabel == 'Plateau-Stop':
+                t_item.setFlags(Qt.ItemIsEnabled)
                 e_item.setFlags(Qt.ItemIsEnabled)
             else:
                 t_item.setBackground(QBrush(QColor("white")))
@@ -280,8 +289,8 @@ class DipoleRamp(QWidget):
 
             self.table.setItem(row, 0, label_item)
             self.table.setItem(row, 1, t_item)
-            self.table.setItem(row, 2, np_item)
-            self.table.setItem(row, 3, e_item)
+            self.table.setItem(row, 2, e_item)
+            self.table.setItem(row, 3, np_item)
 
         self.table.setItemDelegate(_SpinBoxDelegate())
         self.table.cellChanged.connect(self._handleCellChanged)
@@ -504,7 +513,7 @@ class DipoleRamp(QWidget):
         self.table.cellChanged.disconnect(self._handleCellChanged)
         for row, label in self.table_map['rows'].items():
             t_item = self.table.item(row, 1)  # time column
-            e_item = self.table.item(row, 3)  # energy column
+            e_item = self.table.item(row, 2)  # energy column
             if label == 'Start':
                 time = 0.0
                 energy = self.ramp_config.ps_ramp_start_energy
@@ -523,6 +532,9 @@ class DipoleRamp(QWidget):
             elif label == 'Plateau-Start':
                 time = self.ramp_config.ps_ramp_plateau_start_time
                 energy = self.ramp_config.ps_ramp_plateau_energy
+            elif label == 'Plateau-Stop':
+                time = self.ramp_config.ps_ramp_plateau_stop_time
+                energy = self.ramp_config.ps_ramp_plateau_energy
             elif label == 'RampDown-Start':
                 time = self.ramp_config.ps_ramp_rampdown_start_time
                 energy = self.ramp_config.ps_ramp_rampdown_start_energy
@@ -532,15 +544,15 @@ class DipoleRamp(QWidget):
             elif label == 'Stop':
                 time = self.ramp_config.ps_ramp_duration
                 energy = self.ramp_config.ps_ramp_start_energy
-            t_item.setData(Qt.DisplayRole, str(time))
-            e_item.setData(Qt.DisplayRole, str(energy))
+            t_item.setData(Qt.DisplayRole, '{0:.3f}'.format(time))
+            e_item.setData(Qt.DisplayRole, '{0:.4f}'.format(energy))
 
         for row in self.table_map['rows'].keys():
             D = self.ramp_config.ps_ramp_duration
             N = self.ramp_config.ps_ramp_wfm_nrpoints
             T = float(self.table.item(row, 1).data(Qt.DisplayRole))
             value = round(T*N/D)
-            item = self.table.item(row, 2)  # index column
+            item = self.table.item(row, 3)  # index column
             item.setData(Qt.DisplayRole, str(value))
 
         rampupv = ((self.ramp_config.ps_ramp_rampup_stop_energy -
@@ -592,7 +604,9 @@ class MultipolesRamp(QWidget):
         self._tunecorr_configname = tunecorr_configname
         self._chromcorr_configname = chromcorr_configname
         self._conn_sofb = _ConnSOFB(self.prefix)
-        self._manames = None
+
+        self._manames = _MASearch.get_manames({'sec': 'BO', 'dis': 'MA'})
+        self._manames.remove('BO-Fam:MA-B')
         self._aux_magnets = dict()
         t = _Thread(target=self._createMagnets, daemon=True)
         t.start()
@@ -601,13 +615,12 @@ class MultipolesRamp(QWidget):
 
     @property
     def manames(self):
-        if not self._manames:
-            self._manames = _MASearch.get_manames({'sec': 'BO', 'dis': 'MA'})
         return self._manames
 
     def _createMagnets(self):
         for ma in self.manames:
             self._aux_magnets[ma] = _Magnet(ma)
+        self._aux_magnets['BO-Fam:MA-B'] = _Magnet('BO-Fam:MA-B')
 
     def _setupUi(self):
         glay = QGridLayout(self)
@@ -662,8 +675,7 @@ class MultipolesRamp(QWidget):
         self.ax.set_xlabel('t [ms]')
         self.lines = dict()
         for maname in self.manames:
-            if maname != 'BO-Fam:MA-B':
-                self.lines[maname], = self.ax.plot([0], [0], '-b')
+            self.lines[maname], = self.ax.plot([0], [0], '-b')
         self.markers, = self.ax.plot([0], [0], '+r')
         self.m_inj, = self.ax.plot([0], [0], 'or')
         self.m_ej, = self.ax.plot([0], [0], 'or')
@@ -694,8 +706,8 @@ class MultipolesRamp(QWidget):
                      len(self.normalized_configs)+1: 'Ejection'},
             'columns': {0: '',
                         1: 'T [ms]',
-                        2: 'Index',
-                        3: 'E [GeV]'}}
+                        2: 'E [GeV]',
+                        3: 'Index'}}
         idx = 1
         normalized_config_rows = list()
         for config in self.normalized_configs:
@@ -726,7 +738,7 @@ class MultipolesRamp(QWidget):
         self.table.horizontalHeader().setStyleSheet("""
             min-height:1.55em; max-height:1.55em;""")
         self.table.setRowCount(2+len(self.normalized_configs))
-        self.table.setColumnCount(4)
+        self.table.setColumnCount(max(self.table_map['columns'].keys())+1)
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.table.horizontalHeader().setSectionResizeMode(
             0, QHeaderView.ResizeToContents)
@@ -739,25 +751,27 @@ class MultipolesRamp(QWidget):
         for row, vlabel in self.table_map['rows'].items():
             label_item = _CustomTableWidgetItem(vlabel)
             t_item = _CustomTableWidgetItem('0')
-            np_item = _CustomTableWidgetItem('0')
             e_item = _CustomTableWidgetItem('0')
+            np_item = _CustomTableWidgetItem('0')
 
-            if vlabel in ['Injection', 'Ejection']:
-                label_item.setFlags(Qt.ItemIsEnabled)
-            else:
-                label_item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsSelectable)
             np_item.setFlags(Qt.ItemIsEnabled)
             e_item.setFlags(Qt.ItemIsEnabled)
-            if row in normalized_config_rows:
+            if vlabel in ['Injection', 'Ejection']:
+                label_item.setFlags(Qt.ItemIsEnabled)
+                label_item.setBackground(QBrush(QColor(220, 220, 220)))
+                t_item.setFlags(Qt.ItemIsEnabled)
+                t_item.setBackground(QBrush(QColor(220, 220, 220)))
+                np_item.setBackground(QBrush(QColor(220, 220, 220)))
+                e_item.setBackground(QBrush(QColor(220, 220, 220)))
+            else:
+                label_item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsSelectable)
                 label_item.setBackground(QBrush(QColor("white")))
                 t_item.setBackground(QBrush(QColor("white")))
-            else:
-                t_item.setFlags(Qt.ItemIsEnabled)
 
             self.table.setItem(row, 0, label_item)
             self.table.setItem(row, 1, t_item)
-            self.table.setItem(row, 2, np_item)
-            self.table.setItem(row, 3, e_item)
+            self.table.setItem(row, 2, e_item)
+            self.table.setItem(row, 3, np_item)
 
         self.table.setItemDelegate(_SpinBoxDelegate())
         self.table.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
@@ -849,11 +863,8 @@ class MultipolesRamp(QWidget):
         self.updateMultipoleRampSignal.emit()
 
     def _showChooseMagnetToPlot(self):
-        manames = self.manames
-        idx = manames.index('BO-Fam:MA-B')
-        del manames[idx]
         self._chooseMagnetsPopup = _ChooseMagnetsToPlot(
-            self, manames, self._magnets_to_plot)
+            self, self.manames, self._magnets_to_plot)
         self._chooseMagnetsPopup.choosePlotSignal.connect(
             self._handleChooseMagnetToPlot)
         self._chooseMagnetsPopup.open()
@@ -946,7 +957,7 @@ class MultipolesRamp(QWidget):
                 if maname in self._magnets_to_plot:
                     self.lines[maname].set_linewidth(1.5)
                     ydata.append(self.lines[maname].get_ydata())
-                elif maname != 'BO-Fam:MA-B':
+                else:
                     self.lines[maname].set_linewidth(0)
 
             if update_axis:
@@ -1027,29 +1038,29 @@ class MultipolesRamp(QWidget):
         for row, label in self.table_map['rows'].items():
             label_item = self.table.item(row, 0)  # name column
             t_item = self.table.item(row, 1)  # time column
-            e_item = self.table.item(row, 3)  # energy column
+            e_item = self.table.item(row, 2)  # energy column
 
             if label == 'Injection':
                 time = self.ramp_config.ti_params_injection_time
-                energy = str(self.ramp_config.ps_waveform_interp_energy(time))
+                energy = self.ramp_config.ps_waveform_interp_energy(time)
             elif label == 'Ejection':
                 time = self.ramp_config.ti_params_ejection_time
-                energy = str(self.ramp_config.ps_waveform_interp_energy(time))
+                energy = self.ramp_config.ps_waveform_interp_energy(time)
             elif label in config_dict.values():
                 label_item.setData(Qt.DisplayRole, str(label))
                 time = [t for t, n in config_dict.items() if n == label]
                 time = time[0]
                 energy = self.ramp_config.ps_waveform_interp_energy(time)
                 del config_dict[time]
-            t_item.setData(Qt.DisplayRole, str(time))
-            e_item.setData(Qt.DisplayRole, str(energy))
+            t_item.setData(Qt.DisplayRole, '{0:.3f}'.format(time))
+            e_item.setData(Qt.DisplayRole, '{0:.4f}'.format(energy))
 
         for row in self.table_map['rows'].keys():
             D = self.ramp_config.ps_ramp_duration
             N = self.ramp_config.ps_ramp_wfm_nrpoints
             T = float(self.table.item(row, 1).data(Qt.DisplayRole))
             value = round(T*N/D)
-            item = self.table.item(row, 2)  # index column
+            item = self.table.item(row, 3)  # index column
             item.setData(Qt.DisplayRole, str(value))
         self._sortTable()
 
@@ -1205,8 +1216,8 @@ class RFRamp(QWidget):
                         1: 'T [ms]',
                         2: '|Vgap| [kV]',
                         3: '∠Vgap [°]',
-                        4: 'E [GeV]',
-                        5: 'Φs [°]'}}
+                        4: 'E [GeV]'}}
+        #                 5: 'Φs [°]'}}
         self.table.setObjectName('RFTable')
         self.table.setStyleSheet(
             """
@@ -1225,8 +1236,8 @@ class RFRamp(QWidget):
                 background-color: #4A5E28;
             }
             """)
-        self.table.setRowCount(5)
-        self.table.setColumnCount(6)
+        self.table.setRowCount(max(self.table_map['rows'].keys())+1)
+        self.table.setColumnCount(max(self.table_map['columns'].keys())+1)
         self.table.horizontalHeader().setStyleSheet("""
             min-height:1.55em; max-height:1.55em;""")
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
@@ -1478,9 +1489,9 @@ class RFRamp(QWidget):
                 time = self.ramp_config.rf_ramp_rampdown_stop_time
                 vgap = self.ramp_config.rf_ramp_bottom_voltage
                 ph = self.ramp_config.rf_ramp_bottom_phase
-            t_item.setData(Qt.DisplayRole, str(time))
-            Vgap_item.setData(Qt.DisplayRole, str(vgap))
-            Ph_item.setData(Qt.DisplayRole, str(ph))
+            t_item.setData(Qt.DisplayRole, '{0:.3f}'.format(time))
+            Vgap_item.setData(Qt.DisplayRole, '{0:.3f}'.format(vgap))
+            Ph_item.setData(Qt.DisplayRole, '{0:.3f}'.format(ph))
 
         for column, label in self.table_map['columns'].items():
             for row in self.table_map['rows'].keys():
@@ -1489,13 +1500,13 @@ class RFRamp(QWidget):
                     time = float(t_item.data(Qt.DisplayRole))
                     energy = self.ramp_config.ps_waveform_interp_energy(time)
                     e_item = self.table.item(row, column)
-                    e_item.setData(Qt.DisplayRole, str(energy))
-                elif label == 'Φs [°]':
-                    t_item = self.table.item(row, 1)
-                    time = float(t_item.data(Qt.DisplayRole))
-                    value = self._calc_syncphase(time)
-                    item = self.table.item(row, column)
-                    item.setData(Qt.DisplayRole, str(value))
+                    e_item.setData(Qt.DisplayRole, '{0:.4f}'.format(energy))
+                # elif label == 'Φs [°]':
+                #     t_item = self.table.item(row, 1)
+                #     time = float(t_item.data(Qt.DisplayRole))
+                #     value = self._calc_syncphase(time)
+                #     item = self.table.item(row, column)
+                #     item.setData(Qt.DisplayRole, '{0:.3f}'.format(value))
 
         rampupv = ((self.ramp_config.rf_ramp_top_voltage -
                    self.ramp_config.rf_ramp_bottom_voltage) /
