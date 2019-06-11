@@ -172,7 +172,8 @@ class Timing:
             else:
                 if prop_sts.propty_name == 'Src':
                     defval = Timing.cycle_idx[prop_sts.device_name]
-                elif prop_sts.propty_name == 'Duration':
+
+                if prop_sts.propty_name.endswith(('Duration', 'Delay')):
                     if not _isclose(pv.value, defval, abs_tol=1):
                         return False
                 elif isinstance(defval, (_np.ndarray, list, tuple)):
