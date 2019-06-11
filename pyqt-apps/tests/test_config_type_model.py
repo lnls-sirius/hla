@@ -2,7 +2,7 @@
 import unittest
 from unittest import mock
 
-from siriushla.as_ap_pvsconfmgr import ConfigTypeModel
+from siriushla.as_ap_configdb.pvsconfigs import ConfigTypeModel
 
 
 class TestConfigTypeModel(unittest.TestCase):

@@ -3,6 +3,7 @@ from epics import caget
 from qtpy.QtCore import Signal, QThread
 from qtpy.QtWidgets import QDialog
 
+
 class LoadingThread(QThread):
     VACA_PREFIX = os.environ.get('VACA_PREFIX', default='')
 

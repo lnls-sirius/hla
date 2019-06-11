@@ -38,7 +38,7 @@ setup(
         'scripts/sirius-hla-as-ap-injection.py',
         'scripts/sirius-hla-as-ap-magoffconv.py',
         'scripts/sirius-hla-as-ap-operation.py',
-        'scripts/sirius-hla-as-ap-pvsconfmgr.py',
+        'scripts/sirius-hla-as-ap-pvsconfigs.py',
         'scripts/sirius-hla-as-ap-configdb.py',
         'scripts/sirius-hla-as-di-bpm.py',
         'scripts/sirius-hla-as-di-scrn.py',

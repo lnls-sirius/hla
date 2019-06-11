@@ -6,9 +6,6 @@ from qtpy.QtGui import QColor
 from siriuspy.clientconfigdb import ConfigDBClient
 
 
-CONFIG_SERVICE_HOSTNAME = "http://lnls350-linux"
-
-
 class Configuration:
     """Represents a configuration."""
 
@@ -16,7 +13,7 @@ class Configuration:
         """Init."""
         self._name = name
         self._config_type = config_type
-        self._values = values
+        self._values = values['pvs']
 
         self._old_name = None
         self._renamed = False
@@ -74,7 +71,7 @@ class Configuration:
     @property
     def values(self):
         """PV values."""
-        return self._values
+        return {'pvs': self._values}
 
     @property
     def dirty(self):
@@ -104,7 +101,8 @@ class Configuration:
         if self._is_new or self._renamed or self._dirty_pvs:
             # Insert configuration
             db.insert_config(
-                self._name, self._values, config_type=self._config_type)
+                self._name, {'pvs': self._values},
+                config_type=self._config_type)
             # Clear flags
             self._is_new = False
             self._renamed = False
@@ -297,14 +295,14 @@ class ConfigModel(QAbstractTableModel):
         self._vertical_header = list()
         client = ConfigDBClient()
         if self._config_type == 'bo_normalized':
-            pvs = client.get_value_template('bo_normalized')
+            pvs = client.get_value_template('bo_normalized')['pvs']
         elif self._config_type == 'si_normalized':
-            pvs = client.get_value_template('si_normalized')
+            pvs = client.get_value_template('si_normalized')['pvs']
         else:
             raise Exception("Module {} not found".format(self._config_type))
         # pvs = get_dict()["value"]
         # pvs = getattr(ConfigurationPvs, self._config_type)().pvs()
-        for name, value in pvs.items():
+        for name, value, _ in pvs:
             self._vertical_header.append({'name': name, 'type': type(value)})
         self._vertical_header.sort(
             key=lambda x: elem(x['name']) + subSection(x['name']))

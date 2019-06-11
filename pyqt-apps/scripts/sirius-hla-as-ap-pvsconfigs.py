@@ -3,7 +3,7 @@
 """Lauch PVs configuration manager."""
 import sys
 from siriushla.sirius_application import SiriusApplication
-from siriushla.as_ap_configdb.pvsconfmgr import PVsConfigManager
+from siriushla.as_ap_configdb.pvsconfigs import PVsConfigManager
 
 
 if __name__ == '__main__':

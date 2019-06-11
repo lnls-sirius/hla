@@ -4,9 +4,9 @@ from unittest import mock
 
 from numpy import array
 
-from siriushla.as_ap_pvsconfmgr import PVConfigurationTableModel
+from siriushla.as_ap_configdb.pvsconfigs import PVConfigurationTableModel
 
-path = 'siriushla.as_ap_pvsconfmgr'
+path = 'siriushla.as_ap_configdb.pvsconfigs'
 fake_url = 'FakeURL'
 pvs = [['SI-01M1:MA-CH:PwrState-Sel', 1],
        ['SI-01M1:MA-CH:Current-SP', 1.0],

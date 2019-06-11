@@ -6,9 +6,9 @@ from numpy import array, ndarray
 from qtpy.QtWidgets import QComboBox, QLabel, QPushButton, QTableView
 
 from siriushla.sirius_application import SiriusApplication
-from siriushla.as_ap_pvsconfmgr import ReadConfigurationWindow
+from siriushla.as_ap_configdb.pvsconfigs import ReadConfigurationWindow
 
-path = 'siriushla.as_ap_pvsconfmgr'
+path = 'siriushla.as_ap_configdb.pvsconfigs'
 fake_url = 'FakeURL'
 db_types_ret = ['Type1', 'Type2']
 pvs = [['SI-01M1:MA-CH:PwrState-Sel', 1],

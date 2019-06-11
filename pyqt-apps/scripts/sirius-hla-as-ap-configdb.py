@@ -5,8 +5,7 @@ import sys
 
 from siriuspy.clientconfigdb import ConfigDBClient
 from siriushla.sirius_application import SiriusApplication
-from siriushla.as_ap_configdb.client_configdb import \
-    ConfigurationManager
+from siriushla.as_ap_configdb import ConfigurationManager
 
 app = SiriusApplication()
 model = ConfigDBClient()
