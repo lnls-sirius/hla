@@ -287,7 +287,6 @@ class MagnetCycler:
         'CycleAuxParam-SP', 'CycleAuxParam-RB',
         'CycleEnbl-Mon',
         'WfmData-SP', 'WfmData-RB',
-        'RmpIncNrCycles-SP', 'RmpIncNrCycles-RB',
         'PRUSyncPulseCount-Mon',
         'IntlkSoft-Mon', 'IntlkHard-Mon'
     ]
@@ -389,8 +388,6 @@ class MagnetCycler:
                                     self.siggen.num_cycles)
         else:
             status &= self.conn_put(self['WfmData-SP'], self.waveform)
-            _time.sleep(SLEEP_CAPUT)
-            status &= self.conn_put(self['RmpIncNrCycles-SP'], 1)
         return status
 
     def set_opmode(self, opmode):
@@ -445,8 +442,6 @@ class MagnetCycler:
                 self['CycleNrCycles-RB'], self.siggen.num_cycles)
         else:
             status &= self.timed_get(self['WfmData-RB'], self.waveform)
-            _time.sleep(SLEEP_CAPUT)
-            status &= self.timed_get(self['RmpIncNrCycles-RB'], 1)
         return status
 
     def mode_rdy(self, mode):
