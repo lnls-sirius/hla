@@ -9,19 +9,18 @@ from qtpy.QtWidgets import QWidget, QComboBox, QLabel, QPushButton, \
     QHBoxLayout, QVBoxLayout, QTableView, QInputDialog, QMessageBox, \
     QAbstractItemView, QApplication
 
+from siriuspy.envars import vaca_prefix as _VACA_PREFIX
+from siriuspy.clientconfigdb import ConfigDBException, ConfigDBClient
 from siriushla.widgets.windows import SiriusMainWindow
-
 from siriushla.misc.epics.wrapper import PyEpicsWrapper
 from siriushla.misc.epics.task import EpicsGetter
 from siriushla.widgets.dialog import ReportDialog, ProgressDialog
-from siriushla.model import \
-    ConfigPVsTypeModel, PVConfigurationTableModel
-from siriushla.as_ap_pvsconfmgr.delegate import PVConfigurationDelegate
-from siriushla.as_ap_servconf import SaveConfiguration
-from siriuspy.envars import vaca_prefix as _VACA_PREFIX
+from ..models import ConfigPVsTypeModel, PVConfigurationTableModel
+from .. import SaveConfigDialog
+from .delegate import PVConfigurationDelegate
 
 
-class CustomTable(QTableView):
+class _CustomTable(QTableView):
 
     def keyPressEvent(self, event):
         if event.type() == QKeyEvent.KeyPress:
@@ -48,17 +47,16 @@ class CustomTable(QTableView):
             value = float(value)
         except ValueError:
             return
-        
         self.model().setData(index, value)
 
 
-class ReadConfigurationWindow(SiriusMainWindow):
+class ReadAndSaveConfig2ServerWindow(SiriusMainWindow):
     """Read configuration window."""
 
-    def __init__(self, db, wrapper=PyEpicsWrapper, parent=None):
+    def __init__(self, client, wrapper=PyEpicsWrapper, parent=None):
         """Constructor."""
         super().__init__(parent)
-        self._db = db
+        self._client = client
         self._wrapper = wrapper
 
         self._current_config = None
@@ -88,14 +86,14 @@ class ReadConfigurationWindow(SiriusMainWindow):
         # Add combo box with types
         self._type_cb = QComboBox(self)
         self._type_cb.setObjectName('type_cb')
-        self._type_cb.setModel(ConfigPVsTypeModel(self._db, self._type_cb))
+        self._type_cb.setModel(ConfigPVsTypeModel(self._client, self._type_cb))
 
         # Add LineEdit for configuration name
         # self._name_le = QLineEdit(self)
         # self._name_le.setObjectName('name_le')
 
         # Add configuration table
-        self._table = CustomTable(self)
+        self._table = _CustomTable(self)
         self._table.setObjectName('config_tbl')
         self._table.setModel(PVConfigurationTableModel())
         self._table.setItemDelegate(PVConfigurationDelegate())
@@ -176,39 +174,27 @@ class ReadConfigurationWindow(SiriusMainWindow):
             # config_name, status = QInputDialog.getText(
             #     self, 'Configuration Name', error + label)
 
-            config_name, status = SaveConfiguration(config_type, self).exec()
-            if not config_name:
+            config_name, status = SaveConfigDialog(config_type, self).exec()
+            if not status or not config_name:
                 return
 
             # Check status and configuration name
-            if not re.match('^((\w|[()])+([-_/](\w+|[()])])?)+$', config_name):
+            if not ConfigDBClient.check_valid_configname(config_name):
                 self.logger.warning('Name not allowed')
                 error = 'Name not allowed<br>'
-                continue
             else:
                 success = True
 
         # Get config_type, config_name, data and insert new configuration
         data = self._table.model().model_data
         try:
-            ret = self._db.insert_config(
-                config_type, config_name, {'pvs': data})
-        except TypeError as e:
-            QMessageBox.warning(self, 'Save', '{}'.format(e))
-            success = True
+            ret = self._client.insert_config(
+                config_name, {'pvs': data}, config_type=config_type)
+        except (TypeError, ConfigDBException) as err:
+            QMessageBox.warning(self, 'Save', '{}'.format(str(err)))
         else:
-            if ret['code'] == 200:  # Worked
-                success = True
-                self._save_btn.setEnabled(False)
-                QMessageBox.information(self, 'Save', 'Saved successfully')
-            else:  # Smth went wrong
-                code, message = ret['code'], ret['message']
-                self.logger.warning('Error {}: {}'.format(code, message))
-                if code == 409:
-                    error = 'Name already taken'
-                else:
-                    error = message
-                    error += '<br/><br/>'
+            self._save_btn.setEnabled(False)
+            QMessageBox.information(self, 'Save', 'Saved successfully')
 
     def _is_configuration_valid(self):
         if self._table.model().model_data:
@@ -220,12 +206,12 @@ class ReadConfigurationWindow(SiriusMainWindow):
 
 if __name__ == '__main__':
     import sys
+    from siriuspy.envars import server_url_configdb
     from siriushla.sirius_application import SiriusApplication
-    from siriuspy.servconf.conf_service import ConfigService
 
     app = SiriusApplication()
-    db = ConfigService('http://10.0.7.55:8085')
-    w = ReadConfigurationWindow(db)
+    client = ConfigDBClient(url=server_url_configdb)
+    w = ReadAndSaveConfig2ServerWindow(client)
     w.show()
 
     sys.exit(app.exec_())

@@ -178,8 +178,9 @@ class BaseList(CustomGroupBox):
                     continue
                 elif hasattr(wid, 'enum_strings') and hasattr(wid, 'value'):
                     conds = wid.enum_strings is not None
-                    conds &= isinstance(wid.value, int)
-                    conds &= wid.value < len(wid.enum_strings)
+                    if conds:
+                        conds &= isinstance(wid.value, int)
+                        conds &= wid.value < len(wid.enum_strings)
                     if conds:
                         enum = wid.enum_strings[wid.value]
                         keep |= bool(pattern.search(enum))

@@ -1,6 +1,8 @@
 """Model to get registered configuration names for a given type."""
 from qtpy.QtCore import Qt, QAbstractListModel
 
+from siriuspy.clientconfigdb import ConfigDBException
+
 
 class ConfigNamesModel(QAbstractListModel):
     """Model that gets a list of names given a configuration type."""
@@ -46,13 +48,14 @@ class ConfigNamesModel(QAbstractListModel):
         if self._config_type is None:
             self._items = ['No configuration found...', ]
         else:
-            ret = self._connection.get_names_by_type(self._config_type)
-            if ret['code'] == 200:
-                if not ret['result']:
-                    self._items = ['No configuration found...', ]
-                else:
+            try:
+                ret = self._connection.find_configs(
+                    config_type=self._config_type)
+                if ret:
                     self._items = ['Select a configuration...', ]
-                    self._items.extend(sorted(ret['result']))
-            else:
-                self._items = [ret['message'], ]
+                    self._items.extend(sorted([r['name'] for r in ret]))
+                else:
+                    self._items = ['No configuration found...', ]
+            except ConfigDBException as err:
+                self._items = [err.server_message, ]
         self.endResetModel()

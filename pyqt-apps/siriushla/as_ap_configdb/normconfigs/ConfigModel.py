@@ -3,77 +3,49 @@ import re
 from qtpy.QtCore import Qt, QAbstractTableModel, QModelIndex, QVariant
 from qtpy.QtWidgets import QItemDelegate, QDoubleSpinBox
 from qtpy.QtGui import QColor
-from siriuspy.servconf.conf_service import ConfigService
-from siriuspy.servconf.conf_types import get_config_type_template
-
-
-CONFIG_SERVICE_HOSTNAME = "http://lnls350-linux"
+from siriuspy.clientconfigdb import ConfigDBClient
 
 
 class Configuration:
     """Represents a configuration."""
 
-    def __init__(self, name, config_type, values, id=None, new=True):
+    def __init__(self, name, config_type, values, new=True):
         """Init."""
-        self._id = id
         self._name = name
         self._config_type = config_type
-        self._values = values
+        self._values = values['pvs']
 
         self._old_name = None
         self._renamed = False
         self._dirty_pvs = dict()
         self._is_new = new
 
-    @classmethod
-    def newConfiguration(configuration, name, config_type, values):
+    @staticmethod
+    def newConfiguration(name, config_type, values):
         """Create new configuration."""
-        c = configuration(name, config_type, values)
-        return c
+        return Configuration(name, config_type, values)
 
-    @classmethod
-    def loadConfiguration(configuration, config_type, name):
+    @staticmethod
+    def loadConfiguration(config_type, name):
         """Load existing configuration."""
         config = Configuration._load(config_type, name)  # Might fail
         name = config["name"]
         config_type = config["config_type"]
         values = config["value"]
-        id = config["_id"]
-        return configuration(name, config_type, values, id, False)
-
-    @staticmethod
-    def _handle_response(response):
-        try:
-            return response["result"]
-        except KeyError:
-            raise Exception("{}".format(response["message"]))
-        except Exception as e:
-            raise Exception("{}".format(e))
+        return Configuration(name, config_type, values, False)
 
     @staticmethod
     def _load(config_type, name):
-        db = ConfigService()
-        response = db.get_config(config_type, name)
-        return Configuration._handle_response(response)
-
-        # if resp != 200:
-        #     raise Exception("error")
-        #
-        # return db.get_result()[0]
+        db = ConfigDBClient()
+        data = db.get_config_info(name, config_type=config_type)
+        data['value'] = db.get_config_value(name, config_type=config_type)
+        return data
 
     @staticmethod
-    def delete_config(config):
+    def delete_config(config_type, name):
         """Delete configuration."""
-        db = ConfigService()
-        response = db.delete_config(config)
-        return Configuration._handle_response(response)
-        # if resp != 200:
-        #     raise Exception("server error {}".format(resp))
-
-    @property
-    def id(self):
-        """Configuration id."""
-        return self._id
+        db = ConfigDBClient()
+        return db.delete_config(name, config_type=config_type)
 
     @property
     def name(self):
@@ -99,7 +71,7 @@ class Configuration:
     @property
     def values(self):
         """PV values."""
-        return self._values
+        return {'pvs': self._values}
 
     @property
     def dirty(self):
@@ -125,40 +97,21 @@ class Configuration:
 
     def save(self):
         """Save data."""
-        db = ConfigService()
-        if self._is_new:
+        db = ConfigDBClient()
+        if self._is_new or self._renamed or self._dirty_pvs:
             # Insert configuration
-            response = db.insert_config(
-                self._config_type, self._name, self._values)
-            result = self._handle_response(response)
-            self._id = result["_id"]
+            db.insert_config(
+                self._name, {'pvs': self._values},
+                config_type=self._config_type)
             # Clear flags
             self._is_new = False
-
-        else:
-            if self._renamed or len(self._dirty_pvs) > 0:
-                # Build config object
-                config = {"_id": self._id,
-                          "name": self._name,
-                          "config_type": self._config_type,
-                          "discarded": False,
-                          "value": self._values}
-                # Update it
-                response = db.update_config(config)
-                self._handle_response(response)
-                # Clear flags
-                self._renamed = False
-                self._dirty_pvs = dict()
+            self._renamed = False
+            self._dirty_pvs = dict()
 
     def delete(self):
         """Delete configuration."""
-        db = ConfigService()
-        config = {"_id": self._id,
-                  "name": self._name,
-                  "config_type": self._config_type,
-                  "values": self._values}
-        response = db.delete_config(config)
-        self._handle_response(response)
+        db = ConfigDBClient()
+        db.delete_config(self._name, config_type=self._config_type)
 
 
 class ConfigDelegate(QItemDelegate):
@@ -340,15 +293,16 @@ class ConfigModel(QAbstractTableModel):
                 return 20
 
         self._vertical_header = list()
+        client = ConfigDBClient()
         if self._config_type == 'bo_normalized':
-            pvs = get_config_type_template('bo_normalized')
+            pvs = client.get_value_template('bo_normalized')['pvs']
         elif self._config_type == 'si_normalized':
-            pvs = get_config_type_template('si_normalized')
+            pvs = client.get_value_template('si_normalized')['pvs']
         else:
             raise Exception("Module {} not found".format(self._config_type))
         # pvs = get_dict()["value"]
         # pvs = getattr(ConfigurationPvs, self._config_type)().pvs()
-        for name, value in pvs.items():
+        for name, value, _ in pvs:
             self._vertical_header.append({'name': name, 'type': type(value)})
         self._vertical_header.sort(
             key=lambda x: elem(x['name']) + subSection(x['name']))
@@ -382,22 +336,14 @@ class ConfigModel(QAbstractTableModel):
 
     def getConfigurations(self, deleted=False):
         """Return name of saved configurations."""
-        db = ConfigService()
-        response = db.find_configs(
+        db = ConfigDBClient()
+        return db.find_configs(
             config_type=self._config_type, discarded=deleted)
-        try:
-            return response["result"]
-        except KeyError:
-            raise Exception("{}".format(response["message"]))
 
     def getTuneMatrix(self):
         """Get tune matrix from db."""
-        db = ConfigService()
-        response = db.get_config("tune_matrix", "tune_matrix")
-        try:
-            return response["result"]
-        except KeyError:
-            raise Exception("{}".format(response["message"]))
+        db = ConfigDBClient()
+        return db.get_config_value("tune_matrix", "tune_matrix")
 
     # Actions
     def saveConfiguration(self, column):
@@ -468,10 +414,10 @@ class ConfigModel(QAbstractTableModel):
             self._addConfiguration(
                 self.columnCount(), config_name=name, values=values)
 
-    def deleteConfiguration(self, config):
+    def deleteConfiguration(self, config_info):
         """Delete configuration from database."""
-        col = self.getConfigurationColumn(config["name"])
-        Configuration.delete_config(config)
+        col = self.getConfigurationColumn(config_info["name"])
+        Configuration.delete_config(config_info['config_type'], config_info['name'])
         if col >= 0:
             self.closeConfiguration(col)
 

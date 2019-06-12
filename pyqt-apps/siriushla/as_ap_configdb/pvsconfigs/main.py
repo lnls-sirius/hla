@@ -1,29 +1,26 @@
-#!/usr/bin/env python-sirius
-
-"""Lauch PVs configuration manager."""
 import sys
 
 import siriuspy.envars as _envars
-from siriuspy.servconf.conf_service import ConfigService
+from siriuspy.clientconfigdb import ConfigDBClient
 
 from qtpy.QtWidgets import QWidget, QPushButton, QHBoxLayout
 
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.util import connect_window
-from siriushla.as_ap_pvsconfmgr import \
-    SetConfigurationWindow, ReadConfigurationWindow
+from .load_and_apply import LoadAndApplyConfig2MachineWindow
+from .read_and_save import ReadAndSaveConfig2ServerWindow
 
 
-class PVConfiguration(SiriusMainWindow):
+class PVsConfigManager(SiriusMainWindow):
     """Window to manage configuration."""
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, url=None):
         """Setup UI."""
         super().__init__(parent)
-        self._db = ConfigService(_envars.server_url_configdb)
+        self._client = ConfigDBClient(url)
         self._setup_ui()
-        self.setWindowTitle("PVs Configuration")
+        self.setWindowTitle("PVs Configuration Manager")
 
     def _setup_ui(self):
         self.central_widget = QWidget(self)
@@ -31,8 +28,8 @@ class PVConfiguration(SiriusMainWindow):
         self.central_widget.setLayout(self.central_widget.layout)
         self.setCentralWidget(self.central_widget)
 
-        self.save_btn = QPushButton('Save configuration', self)
-        self.load_btn = QPushButton('Load configuration', self)
+        self.save_btn = QPushButton('Read And Save', self)
+        self.load_btn = QPushButton('Load And Apply', self)
         self.save_btn.setObjectName('SaveBtn')
         self.load_btn.setObjectName('LoadBtn')
 
@@ -52,14 +49,9 @@ class PVConfiguration(SiriusMainWindow):
                                         stop:0 lightgrey, stop:1 white);
         }""")
 
-        connect_window(self.save_btn, ReadConfigurationWindow, self,
-                       db=self._db)
-        connect_window(self.load_btn, SetConfigurationWindow, self,
-                       db=self._db)
-
-
-if __name__ == '__main__':
-    app = SiriusApplication()
-    w = PVConfiguration()
-    w.show()
-    sys.exit(app.exec_())
+        connect_window(
+            self.save_btn, ReadAndSaveConfig2ServerWindow,
+            self, client=self._client)
+        connect_window(
+            self.load_btn, LoadAndApplyConfig2MachineWindow,
+            self, client=self._client)
