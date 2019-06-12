@@ -1135,11 +1135,11 @@ class RFRamp(QWidget):
         glay = QGridLayout(self)
         glay.setAlignment(Qt.AlignTop)
         self.graphview = QWidget()
-        self.set_rfdelay_and_rmpincintvl = QFormLayout()
+        self.set_rfdelay = QFormLayout()
         self.table = QTableWidget(self)
 
         self._setupGraph()
-        self._setupRFDelayAndRmpIncIntvl()
+        self._setupRFDelay()
         self._setupTable()
 
         vlay_v = QVBoxLayout()
@@ -1212,7 +1212,7 @@ class RFRamp(QWidget):
         lay.addWidget(self.cb_show_syncphase, alignment=Qt.AlignRight)
         self.graphview.setLayout(lay)
 
-    def _setupRFDelayAndRmpIncIntvl(self):
+    def _setupRFDelay(self):
         label_rfdelay = QLabel('RF delay [ms]:', self,
                                alignment=Qt.AlignVCenter)
         self.sb_rfdelay = _MyDoubleSpinBox(self)
@@ -1220,22 +1220,8 @@ class RFRamp(QWidget):
         self.sb_rfdelay.setMaximum(410)
         self.sb_rfdelay.setDecimals(6)
         self.sb_rfdelay.setSingleStep(0.000008)
-        self.sb_rfdelay.editingFinished.connect(
-            self._handleChangeRFDelay)
-
-        label_rmpincintvl = QLabel('Ramp Increase Duration [min]:', self,
-                                   alignment=Qt.AlignVCenter)
-        self.sb_rmpincintvl = _MyDoubleSpinBox(self)
-        self.sb_rmpincintvl.setMinimum(0)
-        self.sb_rmpincintvl.setMaximum(28)
-        self.sb_rmpincintvl.setDecimals(2)
-        self.sb_rmpincintvl.setSingleStep(0.1)
-        self.sb_rmpincintvl.editingFinished.connect(
-            self._handleChangeRmpIncIntvl)
-
-        self.set_rfdelay_and_rmpincintvl.addRow(label_rfdelay, self.sb_rfdelay)
-        self.set_rfdelay_and_rmpincintvl.addRow(label_rmpincintvl,
-                                                self.sb_rmpincintvl)
+        self.sb_rfdelay.editingFinished.connect(self._handleChangeRFDelay)
+        self.set_rfdelay.addRow(label_rfdelay, self.sb_rfdelay)
 
     def _setupTable(self):
         self.table_map = {
@@ -1497,10 +1483,6 @@ class RFRamp(QWidget):
         """Update rf delay when ramp_config is loaded."""
         self.sb_rfdelay.setValue(self.ramp_config.ti_params_rf_ramp_delay)
 
-    def updateRmpIncIntvl(self):
-        """Update RF ramping increase duration when ramp_config is loaded."""
-        self.sb_rmpincintvl.setValue(self.ramp_config.rf_ramp_rampinc_duration)
-
     def updateTable(self):
         """Update and rebuild table."""
         self.table.cellChanged.disconnect(self._handleCellChanged)
@@ -1565,7 +1547,6 @@ class RFRamp(QWidget):
         self.ramp_config = ramp_config
         self.updateGraph(update_axis=True)
         self.updateRFDelay()
-        self.updateRmpIncIntvl()
         self.updateTable()
 
 
