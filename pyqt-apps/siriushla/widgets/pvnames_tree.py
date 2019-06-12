@@ -1,6 +1,6 @@
 """PVName selection tree view."""
 import re
-
+import uuid
 from qtpy.QtCore import Qt, QSize, Signal, QThread
 from qtpy.QtWidgets import QTreeWidget, QTreeWidgetItem, QProgressDialog, \
     QAction, QMenu
@@ -14,8 +14,16 @@ class QTreeItem(QTreeWidgetItem):
     def __init__(self, string_list, parent=None):
         """Init."""
         super().__init__(parent, string_list)
-        self._hidden_status = {}
-        self._check_status = {}
+        self._hidden_status = dict()
+        # self._check_status = {}
+        self._unchecked = set()
+        self._checked = set()
+        self._partially = set()
+        self._myhash = uuid.uuid4()
+
+    @property
+    def myhash(self):
+        return self._myhash
 
     def isLeaf(self):
         """Return if is Leaf."""
@@ -31,7 +39,7 @@ class QTreeItem(QTreeWidgetItem):
 
     def childHidden(self, child, status):
         """Set child hidden."""
-        self._hidden_status[self.indexOfChild(child)] = status
+        self._hidden_status[child.myhash] = status
         for s in self._hidden_status.values():
             if s is False:
                 parent_status = False
@@ -69,21 +77,63 @@ class QTreeItem(QTreeWidgetItem):
         """Check without triggers."""
         super().setCheckState(column, status)
 
+    # def _check_children(self):
+    #     """Child was checked."""
+    #     state = set(self._check_status.values())
+    #     if len(state) >= 2:
+    #         return Qt.PartiallyChecked
+    #     return state.pop()
+
+    # def childChecked(self, child, column, status):
+    #     """Child was checked."""
+    #     self._check_status[child.myhash] = status
+
+    #     mystate = self.checkState(column)
+    #     if status == Qt.PartiallyChecked:
+    #         status = Qt.PartiallyChecked
+    #     elif status != mystate:
+    #         status = self._check_children()
+    #     else:
+    #         status = mystate
+
+    #     super().setData(column, Qt.CheckStateRole, status)
+    #     if isinstance(self.parent(), QTreeItem):
+    #         self.parent().childChecked(self, column, status)
+
+    def _check_children(self):
+        """Child was checked."""
+        if self._partially:
+            return Qt.PartiallyChecked
+        elif self._checked and self._unchecked:
+            return Qt.PartiallyChecked
+        elif self._checked:
+            return Qt.Checked
+        return Qt.Unchecked
+
     def childChecked(self, child, column, status):
         """Child was checked."""
-        self._check_status[self.indexOfChild(child)] = status
+        if status == Qt.Checked:
+            self._checked.add(child.myhash)
+            self._unchecked.discard(child.myhash)
+            self._partially.discard(child.myhash)
+        if status == Qt.Unchecked:
+            self._checked.discard(child.myhash)
+            self._unchecked.add(child.myhash)
+            self._partially.discard(child.myhash)
+        elif status == Qt.PartiallyChecked:
+            self._checked.discard(child.myhash)
+            self._unchecked.discard(child.myhash)
+            self._partially.add(child.myhash)
 
-        s = sum([v for v in self._check_status.values()])
-        if s == 2*self.childCount():
-            status = Qt.Checked
-            super().setData(column, Qt.CheckStateRole, Qt.Checked)
-        elif s == 0:
-            status = Qt.Unchecked
-            super().setData(column, Qt.CheckStateRole, Qt.Unchecked)
-        else:
+        mystate = self.checkState(column)
+        if status == Qt.PartiallyChecked:
             status = Qt.PartiallyChecked
-            super().setData(column, Qt.CheckStateRole, Qt.PartiallyChecked)
+        elif status != mystate:
+            status = self._check_children()
+        else:
+            status = mystate
 
+        super().setData(column, Qt.CheckStateRole, status)
         if isinstance(self.parent(), QTreeItem):
             self.parent().childChecked(self, column, status)
 
@@ -114,11 +164,16 @@ class PVNameTree(QTreeWidget):
 
         def run(self):
             """Build tree."""
-            for item in self.obj.items:
+            leng = len(self.obj.items)
+            curr = 0
+            for itr, item in enumerate(self.obj.items):
                 if self._quit_task:
                     break
                 self.obj._add_item(item)
-                self.itemInserted.emit()
+                pct = int(itr/leng*100)
+                if pct >= curr:
+                    curr = pct + 1
+                    self.itemInserted.emit()
 
             self.finished.emit()
 
@@ -260,10 +315,6 @@ class PVNameTree(QTreeWidget):
                         # parent.addChild(new_item)
                         parent = new_item
                     parent_key = item_key
-            new_item = QTreeItem(row, parent)
-            new_item.setCheckState(0, Qt.Unchecked)
-            self._item_map[pvname] = new_item
-            self._leafs.append(new_item)
         else:
             key = pvname[:2]
             item_key = parent_key + key
@@ -276,16 +327,16 @@ class PVNameTree(QTreeWidget):
                 parent = new_item
             else:
                 parent = item
-            # Insert leaf node pvname
-            new_item = QTreeItem(row, parent)
-            new_item.setCheckState(0, Qt.Unchecked)
-            self._item_map[pvname] = new_item
-            self._leafs.append(new_item)
+        # Insert leaf node pvname
+        new_item = QTreeItem(row, parent)
+        new_item.setCheckState(0, Qt.Checked)
+        self._item_map[pvname] = new_item
+        self._leafs.append(new_item)
 
     def _add_items(self):
         dlg = QProgressDialog(
             labelText='Building Tree',
-            minimum=0, maximum=len(self._items), parent=self)
+            minimum=0, maximum=100, parent=self)
         t = self.BuildTree(self)
         # Connect signals
         t.itemInserted.connect(lambda: dlg.setValue(dlg.value() + 1))
