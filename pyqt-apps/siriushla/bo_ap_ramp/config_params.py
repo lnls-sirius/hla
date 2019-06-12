@@ -69,7 +69,7 @@ class ConfigParameters(QGroupBox):
         my_lay.addWidget(self.rf_ramp)
         my_lay.setStretch(0, 30)
         my_lay.setStretch(1, 30)
-        my_lay.setStretch(2, 42)
+        my_lay.setStretch(2, 30)
 
     @Slot(ramp.BoosterRamp)
     def handleLoadRampConfig(self, ramp_config):
@@ -1158,7 +1158,9 @@ class RFRamp(QWidget):
         self.graph = SiriusFigureCanvas(Figure())
         self.graph.setObjectName('RFGraph')
         self.graph.setStyleSheet("""
-            #RFGraph{min-width:42em;min-height:18em;max-height:18em;}""")
+            #RFGraph{
+                min-width:30em;
+                min-height:18em;max-height:18em;}""")
         self.graph.setSizePolicy(QSzPlcy.MinimumExpanding, QSzPlcy.Preferred)
         self.graph.figure.set_tight_layout({'pad': .0})
 
@@ -1229,7 +1231,7 @@ class RFRamp(QWidget):
         self.table.setStyleSheet(
             """
             #RFTable{
-                min-width: 42em;
+                min-width: 30em;
                 min-height: 10.69em; max-height: 10.69em;
             }
             QHeaderView::section {

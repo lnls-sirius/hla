@@ -15,8 +15,7 @@ from siriushla.as_ps_cycle.cycle_window import CycleWindow as _CycleWindow
 from .auxiliar_classes import \
     LoadRampConfig as _LoadRampConfig, \
     NewRampConfigGetName as _NewRampConfigGetName, \
-    OpticsAdjustSettings as _OpticsAdjustSettings, \
-    DiagnosisSettings as _DiagnosisSettings
+    OpticsAdjustSettings as _OpticsAdjustSettings
 
 
 class Settings(QMenuBar):
@@ -79,10 +78,7 @@ class Settings(QMenuBar):
         self.optics_menu.addAction(self.act_optics_settings)
 
         self.diag_menu = self.addMenu('Ramp Diagnosis')
-        self.act_diag_settings = QAction('Settings', self)
-        self.act_diag_settings.triggered.connect(
-            self._showDiagSettingsPopup)
-        self.diag_menu.addAction(self.act_diag_settings)
+        # TODO: menu to access all windows related to diagnostics
 
         self.open_menu = self.addMenu('Open...')
         self.act_cycle = QAction('PS Cycle')
@@ -124,12 +120,6 @@ class Settings(QMenuBar):
         self._opticsSettingsPopup.updateSettings.connect(
             self._emitOpticsSettings)
         self._opticsSettingsPopup.open()
-
-    def _showDiagSettingsPopup(self):
-        self._diagSettingsPopup = _DiagnosisSettings(
-            self, self.prefix, self._injcurr_idx, self._ejecurr_idx)
-        self._diagSettingsPopup.updateSettings.connect(self._emitDiagSettings)
-        self._diagSettingsPopup.open()
 
     def showSaveAsPopup(self):
         """Show a popup to get a new name to save config."""

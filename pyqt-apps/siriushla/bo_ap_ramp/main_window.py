@@ -2,15 +2,14 @@
 
 from qtpy.QtCore import Slot, Signal
 from qtpy.QtGui import QKeySequence
-from qtpy.QtWidgets import QLabel, QWidget, QVBoxLayout, QGridLayout, \
+from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, \
                            QUndoStack, QMessageBox
-from siriushla.widgets.windows import SiriusMainWindow
 from siriuspy.ramp import ramp
 from siriuspy.clientconfigdb import ConfigDBException as _ConfigDBException
+from siriushla.widgets.windows import SiriusMainWindow
 from .status_and_commands import StatusAndCommands
 from .settings import Settings
 from .config_params import ConfigParameters
-from .diagnosis import Diagnosis
 
 
 class RampMain(SiriusMainWindow):
@@ -57,42 +56,18 @@ class RampMain(SiriusMainWindow):
             self, self.prefix, self.ramp_config, self._undo_stack,
             self._tunecorr_configname, self._chromcorr_configname)
         self.config_parameters.setObjectName('ConfigParameters')
-
-        vlay1 = QVBoxLayout()
-        vlay1.addWidget(self.config_parameters)
-        glay.addLayout(vlay1, 1, 0)
+        glay.addWidget(self.config_parameters, 1, 0)
 
         self.status_and_commands = StatusAndCommands(
             self, self.prefix, self.ramp_config)
         self.status_and_commands.setObjectName('StatusAndCommands')
-
-        self.diagnosis = Diagnosis(self, self.prefix, self.ramp_config)
-        self.diagnosis.setObjectName('Diagnosis')
-
-        vlay2 = QVBoxLayout()
-        vlay2.addWidget(self.status_and_commands)
-        vlay2.addWidget(self.diagnosis)
-        vlay2.setStretch(0, 10)
-        vlay2.setStretch(1, 23)
-        glay.addLayout(vlay2, 1, 1)
+        glay.addWidget(self.status_and_commands, 1, 1)
 
         cw.setStyleSheet("""
             #CentralWidget{
-                min-width: 138em;
-                min-height: 81em;}
-            #ConfigParameters{
-                min-width: 108em;
-                min-height: 59em;}
-            #OpticsAdjust{
-                min-width: 108em;
-                min-height: 16em;}
-            #StatusAndCommands{
-                min-width: 28em;
-                min-height: 25em;}
-            #Diagnosis{
-                min-width: 28em;
-                min-height: 50em;}""")
-        glay.setColumnStretch(0, 4)
+                min-width: 144em;
+                min-height: 72em;}""")
+        glay.setColumnStretch(0, 5)
         glay.setColumnStretch(1, 1)
         self.setCentralWidget(cw)
 
@@ -101,8 +76,6 @@ class RampMain(SiriusMainWindow):
         self.settings.loadSignal.connect(self._emitLoadSignal)
         self.settings.opticsSettingsSignal.connect(
             self._handleUpdateOpticsAdjustSettings)
-        self.settings.diagSettingsSignal.connect(
-            self.diagnosis.handleUpdateSettings)
         self.settings.plotUnitSignal.connect(
             self.config_parameters.getPlotUnits)
 
