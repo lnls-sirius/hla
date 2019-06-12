@@ -7,8 +7,7 @@ from qtpy.QtWidgets import QVBoxLayout, QPushButton, \
 from qtpy.QtGui import QKeySequence
 from siriushla.widgets import SiriusMainWindow
 from siriushla.widgets import LoadingDialog
-from .ConfigModel import ConfigModel
-from .ConfigModel import ConfigDelegate
+from .ConfigModel import ConfigModel, ConfigDelegate
 from .TuneDlg import TuneDlg
 from .LoadingThread import LoadingThread
 

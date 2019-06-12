@@ -5,20 +5,21 @@ from qtpy.QtCore import Qt, Signal, QAbstractTableModel, \
     QAbstractItemModel, QModelIndex
 from qtpy.QtWidgets import QMessageBox
 
+from siriuspy.clientconfigdb import ConfigDBException
+
 
 class ConfigDbTableModel(QAbstractTableModel):
     """Model for configuration database."""
 
     removeRow = Signal(QModelIndex)
     connectionError = Signal(int, str, str)
+    horizontalHeader = ('config_type', 'name', 'created', 'modified')
 
-    def __init__(self, config_type, connection, discarded=False, parent=None):
+    def __init__(self, config_type, client, discarded=False, parent=None):
         """Constructor."""
         super().__init__(parent)
-        self._connection = connection
+        self._client = client
         self._discarded = discarded
-        self.horizontalHeader = \
-            ['config_type', 'name', 'created', 'modified']
         self._config_type = config_type
         self.setupModelData(config_type)
 
@@ -74,13 +75,12 @@ class ConfigDbTableModel(QAbstractTableModel):
     def setupModelData(self, config_type, discarded=False):
         """Set model data."""
         self.beginResetModel()
-        request = self._connection.request_configs(
-            {'config_type': config_type, 'discarded': self._discarded})
-        if request['code'] == 200:
-            self._configs = request['result']
-        else:
+        try:
+            self._configs = self._client.find_configs(
+                config_type=config_type, discarded=self._discarded)
+        except ConfigDBException as err:
             self._configs = []
-            QMessageBox.warning(self.parent(), 'Error', request['message'])
+            QMessageBox.warning(self.parent(), 'Error', str(err))
         self.endResetModel()
 
     def sort(self, column, order=Qt.AscendingOrder):
@@ -105,31 +105,24 @@ class ConfigDbTableModel(QAbstractTableModel):
     def removeRows(self, row, count=1, index=QModelIndex()):
         """Updated table."""
         self.beginRemoveRows(index, row, row + count - 1)
+        config = self._configs[row]
         if not self._discarded:
-            request = self._connection.delete_config(self._configs[row])
-            if request['code'] != 200:
+            try:
+                request = self._client.delete_config(
+                    config['name'], config_type=config['config_type'])
+            except ConfigDBException as err:
                 self.connectionError.emit(
-                    request['code'], request['message'],
+                    err.server_code, err.server_message,
                     'delete configuration')
                 return False
         else:
-            config = self._configs[row]
-            full_config = self._getFullConfig(
-                config['config_type'], config['name'])
-            request = self._connection.retrieve_config(full_config)
-            if request['code'] != 200:
+            try:
+                request = self._client.retrieve_config(
+                    config['name'], config_type=config['config_type'])
+            except ConfigDBException as err:
                 self.connectionError.emit(
-                    request['code'], request['message'],
+                    err.server_code, err.server_message,
                     'retrieve configuration')
         self._configs = self._configs[:row] + self._configs[row + count:]
         self.endRemoveRows()
         return True
-
-    def _getFullConfig(self, config_type, name):
-        request = self._connection.get_config(config_type, name)
-        if request['code'] != 200:
-            self.connectionError.emit(
-                request['code'], request['message'],
-                'get configuration')
-            return {}
-        return request['result']

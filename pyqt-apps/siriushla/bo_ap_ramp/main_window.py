@@ -6,11 +6,11 @@ from qtpy.QtWidgets import QLabel, QWidget, QVBoxLayout, QGridLayout, \
                            QUndoStack, QMessageBox
 from siriushla.widgets.windows import SiriusMainWindow
 from siriuspy.ramp import ramp
-from siriuspy.servconf import exceptions as _srvexceptions
-from siriushla.bo_ap_ramp.status_and_commands import StatusAndCommands
-from siriushla.bo_ap_ramp.settings import Settings
-from siriushla.bo_ap_ramp.config_params import ConfigParameters
-from siriushla.bo_ap_ramp.diagnosis import Diagnosis
+from siriuspy.clientconfigdb import ConfigDBException as _ConfigDBException
+from .status_and_commands import StatusAndCommands
+from .settings import Settings
+from .config_params import ConfigParameters
+from .diagnosis import Diagnosis
 
 
 class RampMain(SiriusMainWindow):
@@ -150,10 +150,10 @@ class RampMain(SiriusMainWindow):
 
     def _emitLoadSignal(self):
         try:
-            if self.ramp_config.configsrv_exist():
-                self.ramp_config.configsrv_load()
-        except _srvexceptions.SrvError as e:
-            QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
+            if self.ramp_config.exist():
+                self.ramp_config.load()
+        except _ConfigDBException as err:
+            QMessageBox.critical(self, 'Error', str(err), QMessageBox.Ok)
         else:
             self.loadSignal.emit(self.ramp_config)
         finally:
@@ -162,7 +162,7 @@ class RampMain(SiriusMainWindow):
     def _verifySync(self):
         """Verify sync status related to ConfServer."""
         if self.ramp_config is not None:
-            if not self.ramp_config.configsrv_synchronized:
+            if not self.ramp_config.synchronized:
                 self.config_parameters.setStyleSheet(
                     '#ConfigParameters {color: red;}')
                 self.config_parameters.setToolTip('There are unsaved changes')
@@ -177,7 +177,7 @@ class RampMain(SiriusMainWindow):
         if self.ramp_config is None:
             return self._acceptClose()
 
-        if not self.ramp_config.configsrv_synchronized:
+        if not self.ramp_config.synchronized:
             ans = QMessageBox.question(
                 self, 'Save changes?',
                 'There are unsaved changes in {}. \n'

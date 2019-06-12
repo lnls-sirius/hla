@@ -2,8 +2,6 @@
 
 from qtpy.QtCore import Qt, QAbstractListModel
 
-from siriuspy.servconf.conf_types import get_config_type_template
-
 
 class ConfigTypeModel(QAbstractListModel):
 
@@ -47,9 +45,9 @@ class ConfigPVsTypeModel(ConfigTypeModel):
         self._configs = ['Select a configuration type...', ]
 
         # sort all configs of PV type
-        allconfigs = self._connection.get_config_types()
-        configs = [c for c in allconfigs
-                   if 'pvs' in get_config_type_template(c)]
+        conn = self._connection
+        allconfs = conn.get_config_types()
+        configs = [c for c in allconfs if 'pvs' in conn.get_value_template(c)]
         configs = sorted(configs)
 
         # move 'global_config' to begin, if it exists

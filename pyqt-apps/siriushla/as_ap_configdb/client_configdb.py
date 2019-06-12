@@ -8,8 +8,10 @@ from qtpy.QtWidgets import QGridLayout, QHBoxLayout, QVBoxLayout, \
 from qtpy.QtCore import Qt, Slot, Signal, QModelIndex, \
     QAbstractItemModel
 
+from siriuspy.clientconfigdb import ConfigDBException
 from siriushla.widgets.windows import SiriusMainWindow
-from siriushla.model import ConfigTypeModel, ConfigDbTableModel
+from .models import ConfigTypeModel, ConfigDbTableModel
+from .configdialogs import RenameConfigDialog
 
 
 class TreeItem:
@@ -141,16 +143,24 @@ class JsonTreeModel(QAbstractItemModel):
         # Parse json data to python structures
         configs = list()
         for config_type, name in config_list:
-            request = self._connection.get_config(config_type, name)
-            if request['code'] == 200:
-                if 'modified' in request['result']:
-                    request['result']['modified'] = \
+            if not config_type:
+                continue
+            try:
+                request = self._connection.get_config_info(
+                    name, config_type=config_type)
+                request['value'] = self._connection.get_config_value(
+                    name, config_type=config_type)
+                if 'modified' in request:
+                    request['modified'] = \
                         [time.strftime(
                             '%d/%m/%Y %H:%M:%S', time.localtime(float(t)))
-                         for t in request['result']['modified']]
-                configs.append(request['result'])
-            else:
-                configs.append(request['code'])
+                         for t in request['modified']]
+                    request['created'] = time.strftime(
+                            '%d/%m/%Y %H:%M:%S', time.localtime(float(
+                                request['created'])))
+                configs.append(request)
+            except ConfigDBException as err:
+                configs.append(err.server_code)
         self._fillTree(configs)
 
     def _fillTree(self, config):
@@ -212,6 +222,8 @@ class ConfigurationManager(SiriusMainWindow):
         self.editor = QTableView()
         self.delete_button = QPushButton('Delete', self)
         self.delete_button.setObjectName('DeleteButton')
+        self.rename_button = QPushButton('Rename', self)
+        self.rename_button.setObjectName('RenameButton')
         self.d_editor = QTableView()
         self.retrieve_button = QPushButton('Retrieve', self)
         self.retrieve_button.setObjectName('RetrieveButton')
@@ -226,7 +238,10 @@ class ConfigurationManager(SiriusMainWindow):
         self.tab2 = QWidget()
         self.tab2.layout = QVBoxLayout(self.tab2)
         self.tab1.layout.addWidget(self.editor)
-        self.tab1.layout.addWidget(self.delete_button)
+        hlay = QHBoxLayout()
+        hlay.addWidget(self.rename_button)
+        hlay.addWidget(self.delete_button)
+        self.tab1.layout.addLayout(hlay)
         self.tab2.layout.addWidget(self.d_editor)
         self.tab2.layout.addWidget(self.retrieve_button)
 
@@ -259,10 +274,10 @@ class ConfigurationManager(SiriusMainWindow):
 
         self.size_layout = QHBoxLayout()
         self.size_layout.addWidget(QLabel('<b>DB Size:</b>', self.sub_header))
-        request = self._model.query_db_size()
-        if request['code'] == 200:
-            dbsize = '{:.2f} MB'.format(request['result']['size']/(1024*1024))
-        else:
+        try:
+            dbsize = self._model.get_dbsize()
+            dbsize = '{:.2f} MB'.format(dbsize/(1024*1024))
+        except ConfigDBException:
             dbsize = 'Failed to retrieve information'
         self.size_layout.addWidget(QLabel(dbsize, self.sub_header))
         self.size_layout.addStretch()
@@ -299,8 +314,8 @@ class ConfigurationManager(SiriusMainWindow):
         self.layout.setColumnStretch(2, 2)
 
         # Set table models and options
-        self.editor_model = ConfigDbTableModel('', self._model)
-        self.d_editor_model = ConfigDbTableModel('', self._model, True)
+        self.editor_model = ConfigDbTableModel('notexist', self._model)
+        self.d_editor_model = ConfigDbTableModel('notexist', self._model, True)
         self.editor.setModel(self.editor_model)
         self.editor.setSelectionBehavior(self.editor.SelectRows)
         self.editor.setSortingEnabled(True)
@@ -315,6 +330,7 @@ class ConfigurationManager(SiriusMainWindow):
         self.tree.setModel(self.tree_model)
         # Delete button
         self.delete_button.setEnabled(False)
+        self.rename_button.setEnabled(True)
         self.retrieve_button.setEnabled(False)
 
         # Signals and slots
@@ -336,6 +352,7 @@ class ConfigurationManager(SiriusMainWindow):
             lambda idx: self.tree.resizeColumnToContents(idx.column()))
         # Button action
         self.delete_button.pressed.connect(self._remove_configuration)
+        self.rename_button.pressed.connect(self._rename_configuration)
         self.retrieve_button.pressed.connect(self._retrieve_configuration)
         # Set constants
         ConfigurationManager.NAME_COL = \
@@ -349,14 +366,12 @@ class ConfigurationManager(SiriusMainWindow):
     @Slot(str)
     def _fill_table(self, config_type):
         """Fill table with configuration of `config_type`."""
-        request = self._model.find_nr_configs(
-            config_type=config_type, discarded=None)
-        if request['code'] == 200:
-            self.nr_configs.setText(str(request['result']))
-        request = self._model.find_nr_configs(
-            config_type=config_type, discarded=True)
-        if request['code'] == 200:
-            self.nr_discarded.setText(str(request['result']))
+        leng = len(self._model.find_configs(
+            config_type=config_type, discarded=False))
+        self.nr_configs.setText(str(leng))
+        leng = len(self._model.find_configs(
+            config_type=config_type, discarded=True))
+        self.nr_discarded.setText(str(leng))
 
         self.editor_model.setupModelData(config_type)
         self.d_editor_model.setupModelData(config_type)
@@ -378,14 +393,22 @@ class ConfigurationManager(SiriusMainWindow):
                 self.delete_button.setEnabled(True)
                 self.delete_button.setText(
                     'Delete {} ({})'.format(configs[0][1], configs[0][0]))
+                self.rename_button.setEnabled(True)
+                self.rename_button.setText(
+                    'Rename {} ({})'.format(configs[0][1], configs[0][0]))
 
             elif len(configs) > 1:
+                self.rename_button.setEnabled(False)
+                self.rename_button.setText('Rename')
                 self.delete_button.setEnabled(True)
                 self.delete_button.setText(
                     'Delete {} configurations'.format(len(configs)))
             else:
+                self.rename_button.setEnabled(False)
+                self.rename_button.setText('Rename')
                 self.delete_button.setEnabled(False)
             self.delete_button.style().polish(self.delete_button)
+            self.rename_button.style().polish(self.rename_button)
         else:
             try:
                 row = self._get_selected_rows(self.d_editor).pop()
@@ -418,6 +441,27 @@ class ConfigurationManager(SiriusMainWindow):
             rows.sort(reverse=True)
             for row in rows:
                 self.editor_model.removeRows(row)
+
+        self.editor.selectionModel().clearSelection()
+        self._fill_table(self.config_type.currentText())
+
+    @Slot()
+    def _rename_configuration(self):
+        # self.editor.selectRow(index.row())
+        rows = list(self._get_selected_rows(self.editor))
+        if not rows:
+            return
+        config_type = self.editor_model.createIndex(rows[0], 0).data()
+        name = self.editor_model.createIndex(rows[0], 1).data()
+
+        wid = RenameConfigDialog(config_type, self)
+        wid.setWindowTitle('Rename: {}'.format(name))
+        wid.search_le.setText(name)
+        newname, status = wid.exec_()
+        if not newname or not status:
+            return
+        self._model.rename_config(
+            name, newname, config_type=config_type)
 
         self.editor.selectionModel().clearSelection()
         self._fill_table(self.config_type.currentText())
@@ -457,6 +501,9 @@ class ConfigurationManager(SiriusMainWindow):
             self.delete_button.setText('Delete')
             self.delete_button.setEnabled(False)
             self.delete_button.style().polish(self.delete_button)
+            self.rename_button.setText('Rename')
+            self.rename_button.setEnabled(False)
+            self.rename_button.style().polish(self.rename_button)
         else:
             self.d_editor.selectionModel().clearSelection()
             self.retrieve_button.setEnabled(False)

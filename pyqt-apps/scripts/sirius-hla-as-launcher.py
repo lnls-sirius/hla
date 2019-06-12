@@ -111,11 +111,11 @@ class ControlApplication(SiriusMainWindow):
         return lay
 
     def _create_serv_layout(self):
-        servconf = QPushButton('Config Server')
-        util.connect_newprocess(servconf, 'sirius-hla-as-ap-servconf.py')
+        servconf = QPushButton('ConfigDB Manager')
+        util.connect_newprocess(servconf, 'sirius-hla-as-ap-configdb.py')
 
-        pvsconfmgr = QPushButton('Config Manager')
-        util.connect_newprocess(pvsconfmgr, 'sirius-hla-as-ap-pvsconfmgr.py')
+        pvsconfmgr = QPushButton('PVs Configs')
+        util.connect_newprocess(pvsconfmgr, 'sirius-hla-as-ap-pvsconfigs.py')
 
         lay = QHBoxLayout()
         lay.setAlignment(Qt.AlignLeft)
