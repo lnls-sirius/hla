@@ -231,7 +231,7 @@ class InsertNormalizedConfig(SiriusDialog):
             try:
                 nor = ramp.BoosterNormalized(name)
                 nor.load()
-                nconfig = n.value
+                nconf = nor.value
             except _ConfigDBException as err:
                 QMessageBox.critical(self, 'Error', str(err), QMessageBox.Ok)
 
