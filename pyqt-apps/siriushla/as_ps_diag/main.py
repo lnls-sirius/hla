@@ -125,49 +125,63 @@ class PSDiag(SiriusMainWindow):
                         if maname:
                             maconn_chs.append(
                                 self._prefix+maname+':Version-Cte')
-                        psconn_chs.append(pname+':Version-Cte')
                         ps_ch2vals[pname+':PwrState-Sts'] = _on
-                        intlk_ch2vals[pname+':IntlkSoft-Mon'] = 0
-                        intlk_ch2vals[pname+':IntlkHard-Mon'] = 0
-                        opm_ch2vals[pname+':OpMode-Sts'] = _slowref
-                        diff_ch2vlas[pname+':DiagStatus-Mon'] = \
-                            {'value': 0, 'bit': 2}
+                        if name.dis == 'PS':
+                            psconn_chs.append(pname+':Version-Cte')
+                            intlk_ch2vals[pname+':IntlkSoft-Mon'] = 0
+                            intlk_ch2vals[pname+':IntlkHard-Mon'] = 0
+                            opm_ch2vals[pname+':OpMode-Sts'] = _slowref
+                            diff_ch2vlas[pname+':DiagStatus-Mon'] = \
+                                {'value': 0, 'bit': 2}
+                        elif name.dis == 'PU':
+                            psconn_chs.append(pname+':PwrState-Sts')
+                            for idx in range(1, 9):
+                                sidx = str(idx)
+                                intlk_ch2vals[pname+':Intlk'+sidx+'-Mon'] = 1
 
-                    f = sec+'-.*PS-'+ps
+                    f = sec+'-.*'+psnames[0].dis+'-'+ps
                     ps_label = QLabel(
                         asps2labels[ps], panel,
                         alignment=Qt.AlignRight | Qt.AlignVCenter)
                     psconn_led = MyLedMultiConnection(
                         filters=f, parent=panel, channels=psconn_chs)
                     maconn_led = MyLedMultiConnection(
-                        filters=f.replace('PS', 'MA'),
+                        filters=f.replace('PS', 'MA') if psnames[0].dis == 'PS'
+                        else f.replace('PU', 'PM'),
                         parent=panel, channels=maconn_chs)
                     ps_led = MyLedMultiChannel(
                         filters=f, parent=panel, channels2values=ps_ch2vals)
                     intlk_led = MyLedMultiChannel(
                         filters=f, parent=panel, channels2values=intlk_ch2vals)
-                    opm_led = MyLedMultiChannel(
-                        filters=f, parent=panel, channels2values=opm_ch2vals)
-                    opm_led.setOnColor(PyDMLed.LightGreen)
-                    opm_led.setOffColor(PyDMLed.Yellow)
-                    diff_led = MyLedMultiChannel(
-                        filters=f, parent=panel, channels2values=diff_ch2vlas)
 
                     suf = ps.strip('.*')+'_led'
                     psconn_led.setObjectName('psconn' + suf)
                     maconn_led.setObjectName('maconn' + suf)
                     ps_led.setObjectName('ps' + suf)
                     intlk_led.setObjectName('intlk' + suf)
-                    opm_led.setObjectName('opm' + suf)
-                    diff_led.setObjectName('diff' + suf)
 
                     panel_lay.addWidget(ps_label, i, 0)
                     panel_lay.addWidget(psconn_led, i, 1)
                     panel_lay.addWidget(maconn_led, i, 2)
                     panel_lay.addWidget(ps_led, i, 3)
                     panel_lay.addWidget(intlk_led, i, 4)
-                    panel_lay.addWidget(opm_led, i, 5)
-                    panel_lay.addWidget(diff_led, i, 6)
+
+                    if psnames[0].dis == 'PS':
+                        opm_led = MyLedMultiChannel(
+                            filters=f, parent=panel,
+                            channels2values=opm_ch2vals)
+                        opm_led.setOnColor(PyDMLed.LightGreen)
+                        opm_led.setOffColor(PyDMLed.Yellow)
+                        diff_led = MyLedMultiChannel(
+                            filters=f, parent=panel,
+                            channels2values=diff_ch2vlas)
+
+                        opm_led.setObjectName('opm' + suf)
+                        diff_led.setObjectName('diff' + suf)
+
+                        panel_lay.addWidget(opm_led, i, 5)
+                        panel_lay.addWidget(diff_led, i, 6)
+
                     i += 1
             panel_lay.addItem(QSpacerItem(1, 10, QSzPlcy.Ignored,
                               QSzPlcy.MinimumExpanding), i, 0)
@@ -175,7 +189,7 @@ class PSDiag(SiriusMainWindow):
 
         # Current State and Log Tables
         channels = list()
-        for ps in PSSearch.get_psnames():
+        for ps in PSSearch.get_psnames(filters={'dis': 'PS'}):
             channels.append(self._prefix+ps+':DiagCurrentDiff-Mon')
         self._status = LogTable(cw, channels, is_status=True)
         self._status.setObjectName('status_table')
@@ -493,6 +507,8 @@ class LogTable(QTreeView, PyDMWidget):
         text = self._model.data(self._model.index(idx[0].row(), 3))
         if SiriusPVName(text).dis == 'MA':
             _run_newprocess(['sirius-hla-as-ps-detail.py', text])
+        elif SiriusPVName(text).dis == 'PM':
+            _run_newprocess(['sirius-hla-as-pm-detail.py', text])
         else:
             try:
                 PSSearch.conv_psname_2_dclink(text)

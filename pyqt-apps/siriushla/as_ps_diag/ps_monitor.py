@@ -4,8 +4,9 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGroupBox, QGridLayout, QLabel
 
 from siriuspy.envars import vaca_prefix
-from siriuspy.search.ps_search import PSSearch
+from siriuspy.search import PSSearch
 from siriuspy.namesys import Filter
+from siriuspy.csdevice.pwrsupply import Const as _PSc
 
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, \
@@ -79,6 +80,17 @@ class PSMonitor(SiriusMainWindow):
                 return {self._prefix+name+':setpwm': 1,
                         self._prefix+name+':interlock': {'value': 55,
                                                          'comp': 'lt'}}
+            elif name.dis == 'PU':
+                return {self._prefix+name+':PwrState-Sts': _PSc.PwrStateSts.On,
+                        self._prefix+name+':Pulse-Sts': _PSc.DsblEnbl.Enbl,
+                        self._prefix+name+':Intlk1-Mon': 1,
+                        self._prefix+name+':Intlk2-Mon': 1,
+                        self._prefix+name+':Intlk3-Mon': 1,
+                        self._prefix+name+':Intlk4-Mon': 1,
+                        self._prefix+name+':Intlk5-Mon': 1,
+                        self._prefix+name+':Intlk6-Mon': 1,
+                        self._prefix+name+':Intlk7-Mon': 1,
+                        self._prefix+name+':Intlk8-Mon': 1}
             else:
                 return {self._prefix+name+':DiagStatus-Mon': 0}
 

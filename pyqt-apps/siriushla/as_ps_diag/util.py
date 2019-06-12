@@ -43,7 +43,8 @@ asps2labels = {'B.*': 'Dipoles',
                'QS.*': 'Skew Quadrupoles ',
                'S.*': 'Sextupoles',
                'C(H|V).*': 'Slow Correctors ',
-               'FC(H|V).*': 'Fast Correctors '}
+               'FC(H|V).*': 'Fast Correctors ',
+               '(Inj|Eje).*': 'Pulsed Magnets'}
 
 sips2labels = {'Dipoles Families': {'sec': 'SI', 'dev': 'B.*'},
                'Quadrupoles Families': {'sec': 'SI', 'sub': 'Fam',
