@@ -1,4 +1,5 @@
 """Detailed widget for controlling a pulsed mangnet."""
+from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, \
     QLabel, QGroupBox, QPushButton
 from pydm.widgets import PyDMLabel, PyDMSpinbox
@@ -58,8 +59,8 @@ class PulsedMagnetDetailWidget(QWidget):
         self._ctrlmode_pv = self._prefixed_maname + ":CtrlMode-Mon"
         self._prefixed_trigger_name = \
             self._prefixed_maname.replace('PM-', 'TI-')
-        self._timing_delay_sp = self._prefixed_trigger_name + "Delay-SP"
-        self._timing_delay_rb = self._prefixed_trigger_name + "Delay-RB"
+        self._timing_delay_sp = self._prefixed_trigger_name + ":Delay-SP"
+        self._timing_delay_rb = self._prefixed_trigger_name + ":Delay-RB"
         self._timing_status_pv = self._prefixed_trigger_name + ":Status-Mon"
         self._timing_state_pv = self._prefixed_trigger_name + ":State-Sts"
 
@@ -84,7 +85,7 @@ class PulsedMagnetDetailWidget(QWidget):
         kick_box = QGroupBox(parent=self, title="Kick")
         kick_box.setObjectName("kick_box")
         kick_box.setLayout(self._kick_layout())
-        timing_box = QGroupBox(parent=self, title='Timing')
+        timing_box = QGroupBox(parent=self, title='Trigger')
         timing_box.setObjectName('timing_box')
         timing_box.setLayout(self._timing_layout())
 
@@ -189,17 +190,18 @@ class PulsedMagnetDetailWidget(QWidget):
         timing_layout = QGridLayout()
 
         # Led, Timing-SP/RB, trigger window
-        self._trigger_delay_label = QLabel('Timing Trigger Delay', self)
+        self._trigger_delay_label = QLabel('Delay', self)
         self._trigger_delay_sp = PyDMSpinbox(
             parent=self, init_channel=self._timing_delay_sp)
+        self._trigger_delay_sp.showStepExponent = False
         self._trigger_delay_rb = PyDMLabel(
             parent=self, init_channel=self._timing_delay_rb)
-        self._trigger_status_label = QLabel('Timing Trigger Status')
+        self._trigger_status_label = QLabel('Status')
         self._trigger_status_led = PyDMLedMultiChannel(
             parent=self,
             channels2values={
-                self._timing_status_pv: 1,
-                self._timing_state_pv: 0})
+                self._timing_status_pv: 0,
+                self._timing_state_pv: 1})
         self._trigger_detail_btn = QPushButton('Open details', self)
 
         # Connect trigger window
@@ -211,10 +213,12 @@ class PulsedMagnetDetailWidget(QWidget):
             self._trigger_detail_btn, trg_w,
             parent=self, prefix=self._prefixed_maname.replace('PM-', 'TI-'))
 
-        timing_layout.addWidget(self._trigger_delay_label, 0, 0)
+        timing_layout.addWidget(self._trigger_delay_label, 0, 0,
+                                alignment=Qt.AlignCenter)
         timing_layout.addWidget(self._trigger_delay_sp, 0, 1)
         timing_layout.addWidget(self._trigger_delay_rb, 0, 2)
-        timing_layout.addWidget(self._trigger_status_label, 1, 0)
+        timing_layout.addWidget(self._trigger_status_label, 1, 0,
+                                alignment=Qt.AlignCenter)
         timing_layout.addWidget(self._trigger_status_led, 1, 1)
         timing_layout.addWidget(self._trigger_detail_btn, 1, 2)
 
