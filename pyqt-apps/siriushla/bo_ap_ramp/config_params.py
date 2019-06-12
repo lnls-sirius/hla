@@ -96,6 +96,7 @@ class DipoleRamp(QWidget):
     """Widget to set and monitor dipole ramp."""
 
     updateDipoleRampSignal = Signal()
+    applyChanges2MachineSignal = Signal()
 
     def __init__(self, parent=None, prefix='', ramp_config=None,
                  undo_stack=None):
@@ -106,6 +107,7 @@ class DipoleRamp(QWidget):
         self._undo_stack = undo_stack
         self.plot_unit = 'Strengths'
         self._setupUi()
+        self.setObjectName('DipoleRampWidget')
 
     def _setupUi(self):
         glay = QGridLayout(self)
@@ -154,6 +156,10 @@ class DipoleRamp(QWidget):
         lay_exclim.addWidget(self.label_exclim)
         lay_exclim.addWidget(self.pb_exclim)
 
+        self.bt_apply2machine = QPushButton('Apply Changes to Machine', self)
+        self.bt_apply2machine.clicked.connect(
+            self.applyChanges2MachineSignal.emit)
+
         label = QLabel('<h4>Dipole Ramp</h4>', self, alignment=Qt.AlignCenter)
         label.setStyleSheet("""
             min-height:1.55em; max-height:1.55em;
@@ -166,6 +172,8 @@ class DipoleRamp(QWidget):
         glay.addWidget(self.table, 3, 0, 1, 2)
         glay.addLayout(lay_anom, 4, 0, 1, 2, alignment=Qt.AlignCenter)
         glay.addLayout(lay_exclim, 5, 0, 1, 2, alignment=Qt.AlignCenter)
+        glay.addWidget(self.bt_apply2machine, 6, 0, 1, 2,
+                       alignment=Qt.AlignRight)
 
     def _setupGraph(self):
         self.graph = SiriusFigureCanvas(Figure())
@@ -612,6 +620,7 @@ class MultipolesRamp(QWidget):
         t.start()
 
         self._setupUi()
+        self.setObjectName('MultipolesRampWidget')
 
     @property
     def manames(self):
@@ -650,6 +659,10 @@ class MultipolesRamp(QWidget):
         lay_exclim.addItem(
             QSpacerItem(2, 2, QSzPlcy.Expanding, QSzPlcy.Ignored))
 
+        self.bt_apply2machine = QPushButton('Apply Changes to Machine', self)
+        self.bt_apply2machine.clicked.connect(
+            self.applyChanges2MachineSignal.emit)
+
         label = QLabel('<h4>Multipoles Ramp</h4>', self)
         label.setStyleSheet("""
             min-height: 1.55em; max-height: 1.55em;""")
@@ -659,6 +672,8 @@ class MultipolesRamp(QWidget):
         glay.addWidget(self.bt_delete, 2, 1)
         glay.addWidget(self.table, 3, 0, 1, 2)
         glay.addLayout(lay_exclim, 4, 0, 1, 2)
+        glay.addWidget(self.bt_apply2machine, 5, 0, 1, 2,
+                       alignment=Qt.AlignRight)
 
     def _setupGraph(self):
         self.graph = SiriusFigureCanvas(Figure())
@@ -1104,6 +1119,7 @@ class RFRamp(QWidget):
     """Widget to set and monitor RF ramp."""
 
     updateRFRampSignal = Signal()
+    applyChanges2MachineSignal = Signal()
 
     def __init__(self, parent=None, prefix='', ramp_config=None,
                  undo_stack=None):
@@ -1113,6 +1129,7 @@ class RFRamp(QWidget):
         self.ramp_config = ramp_config
         self._undo_stack = undo_stack
         self._setupUi()
+        self.setObjectName('RFRampWidget')
 
     def _setupUi(self):
         glay = QGridLayout(self)
@@ -1139,15 +1156,21 @@ class RFRamp(QWidget):
         vlay_v.addWidget(self.l_rampupv)
         vlay_v.addWidget(self.l_rampdownv)
 
+        self.bt_apply2machine = QPushButton('Apply Changes to Machine', self)
+        self.bt_apply2machine.clicked.connect(
+            self.applyChanges2MachineSignal.emit)
+
         label = QLabel('<h4>RF Ramp</h4>', self)
         label.setStyleSheet("""
             min-height:1.55em; max-height: 1.55em;
             qproperty-alignment: AlignCenter;""")
         glay.addWidget(label, 0, 0, 1, 3, alignment=Qt.AlignCenter)
         glay.addWidget(self.graphview, 1, 0, 1, 3)
-        glay.addLayout(self.set_rfdelay_and_rmpincintvl, 2, 0)
+        glay.addLayout(self.set_rfdelay, 2, 0)
         glay.addLayout(vlay_v, 2, 2)
         glay.addWidget(self.table, 3, 0, 1, 3)
+        glay.addWidget(self.bt_apply2machine, 4, 0, 1, 3,
+                       alignment=Qt.AlignRight)
 
     def _setupGraph(self):
         self.cb_show_syncphase = QCheckBox('Show Φs', self)
