@@ -125,7 +125,8 @@ class ControlApplication(SiriusMainWindow):
 
     def _create_li_layout(self):
         LI_launcher = QPushButton('Linac launcher', self)
-        LI_launcher.clicked.connect(self._open_li_launcher)
+        # LI_launcher.clicked.connect(self._open_li_launcher)
+        util.connect_newprocess(LI_launcher, 'sirius-hla-li-launcher.sh')
 
         energy = QPushButton('Energy Meas', self)
         util.connect_newprocess(energy, 'sirius-hla-li-ap-energy.py')
