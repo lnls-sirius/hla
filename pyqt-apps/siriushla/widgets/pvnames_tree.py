@@ -65,10 +65,6 @@ class QTreeItem(QTreeWidgetItem):
         else:
             super().setData(column, role, value)
 
-    def superCheck(self, column, status):
-        """Check without triggers."""
-        super().setCheckState(column, status)
-
     def _check_children(self):
         """Child was checked."""
         check = self._status
@@ -298,14 +294,14 @@ class PVNameTree(QTreeWidget):
     def _add_items(self):
         # Connect signals
         t = self.BuildTree(self)
+        t.finished.connect(t.deleteLater)
         dlg = None
-        if len(self.items) > 1500:
-            dlg = QProgressDialog(
-                labelText='Building Tree',
-                minimum=0, maximum=100, parent=self)
-            t.itemInserted.connect(lambda: dlg.setValue(dlg.value() + 1))
-            t.finished.connect(dlg.close)
-            t.finished.connect(t.deleteLater)
+        # if len(self.items) > 1500:
+        dlg = QProgressDialog(
+            labelText='Building Tree',
+            minimum=0, maximum=100, parent=self)
+        t.itemInserted.connect(lambda: dlg.setValue(dlg.value() + 1))
+        t.finished.connect(dlg.close)
         # Start
         t.start()
         if dlg and len(self._items) > 0:
