@@ -296,17 +296,19 @@ class PVNameTree(QTreeWidget):
         self._leafs.append(new_item)
 
     def _add_items(self):
-        dlg = QProgressDialog(
-            labelText='Building Tree',
-            minimum=0, maximum=100, parent=self)
-        t = self.BuildTree(self)
         # Connect signals
-        t.itemInserted.connect(lambda: dlg.setValue(dlg.value() + 1))
-        t.finished.connect(dlg.close)
-        t.finished.connect(t.deleteLater)
+        t = self.BuildTree(self)
+        dlg = None
+        if len(self.items) > 1500:
+            dlg = QProgressDialog(
+                labelText='Building Tree',
+                minimum=0, maximum=100, parent=self)
+            t.itemInserted.connect(lambda: dlg.setValue(dlg.value() + 1))
+            t.finished.connect(dlg.close)
+            t.finished.connect(t.deleteLater)
         # Start
         t.start()
-        if len(self._items) > 0:
+        if dlg and len(self._items) > 0:
             dlg.exec_()
 
     def checked_items(self):
