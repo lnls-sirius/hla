@@ -15,6 +15,8 @@ class QTreeItem(QTreeWidgetItem):
         """Init."""
         super().__init__(parent, string_list)
         self._shown = set()
+        self._status = {
+            Qt.Checked: set(), Qt.Unchecked: set(), Qt.PartiallyChecked: set()}
         self._myhash = uuid.uuid4()
 
     @property
@@ -67,53 +69,23 @@ class QTreeItem(QTreeWidgetItem):
         """Check without triggers."""
         super().setCheckState(column, status)
 
-    # def _check_children(self):
-    #     """Child was checked."""
-    #     state = set(self._check_status.values())
-    #     if len(state) >= 2:
-    #         return Qt.PartiallyChecked
-    #     return state.pop()
-
-    # def childChecked(self, child, column, status):
-    #     """Child was checked."""
-    #     self._check_status[child.myhash] = status
-
-    #     mystate = self.checkState(column)
-    #     if status == Qt.PartiallyChecked:
-    #         status = Qt.PartiallyChecked
-    #     elif status != mystate:
-    #         status = self._check_children()
-    #     else:
-    #         status = mystate
-
-    #     super().setData(column, Qt.CheckStateRole, status)
-    #     if isinstance(self.parent(), QTreeItem):
-    #         self.parent().childChecked(self, column, status)
-
     def _check_children(self):
         """Child was checked."""
-        if self._partially:
+        check = self._status
+        if check[Qt.PartiallyChecked]:
             return Qt.PartiallyChecked
-        elif self._checked and self._unchecked:
+        elif check[Qt.Checked] and check[Qt.Unchecked]:
             return Qt.PartiallyChecked
-        elif self._checked:
+        elif check[Qt.Checked]:
             return Qt.Checked
         return Qt.Unchecked
 
     def childChecked(self, child, column, status):
         """Child was checked."""
-        if status == Qt.Checked:
-            self._checked.add(child.myhash)
-            self._unchecked.discard(child.myhash)
-            self._partially.discard(child.myhash)
-        if status == Qt.Unchecked:
-            self._checked.discard(child.myhash)
-            self._unchecked.add(child.myhash)
-            self._partially.discard(child.myhash)
-        elif status == Qt.PartiallyChecked:
-            self._checked.discard(child.myhash)
-            self._unchecked.discard(child.myhash)
-            self._partially.add(child.myhash)
+        self._status[status].add(child.myhash)
+        left = self._status.keys() - {status, }
+        for sts in left:
+            self._status[sts].discard(child.myhash)
 
         mystate = self.checkState(column)
         if status == Qt.PartiallyChecked:
