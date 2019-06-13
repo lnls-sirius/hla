@@ -14,11 +14,7 @@ class QTreeItem(QTreeWidgetItem):
     def __init__(self, string_list, parent=None):
         """Init."""
         super().__init__(parent, string_list)
-        self._hidden_status = dict()
-        # self._check_status = {}
-        self._unchecked = set()
-        self._checked = set()
-        self._partially = set()
+        self._shown = set()
         self._myhash = uuid.uuid4()
 
     @property
@@ -39,17 +35,11 @@ class QTreeItem(QTreeWidgetItem):
 
     def childHidden(self, child, status):
         """Set child hidden."""
-        self._hidden_status[child.myhash] = status
-        for s in self._hidden_status.values():
-            if s is False:
-                parent_status = False
-                super().setHidden(False)
-                break
-        else:
-            parent_status = True
-            super().setHidden(True)
+        getattr(self._shown, 'discard' if status else 'add')(child.myhash)
+        status = not self._shown
+        super().setHidden(status)
         if isinstance(self.parent(), QTreeItem):
-            self.parent().childHidden(self, parent_status)
+            self.parent().childHidden(self, status)
 
     def setData(self, column, role, value):
         """Set data."""
