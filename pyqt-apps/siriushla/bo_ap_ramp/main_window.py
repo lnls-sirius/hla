@@ -151,29 +151,23 @@ class RampMain(SiriusMainWindow):
 
     def closeEvent(self, ev):
         """Reimplement closeEvent to avoid forgeting saving changes."""
-        self.close_ev = ev
-
         if self.ramp_config is None:
-            return self._acceptClose()
-
-        if not self.ramp_config.synchronized:
+            ev.accept()
+            super().closeEvent(ev)
+        elif not self.ramp_config.synchronized:
             ans = QMessageBox.question(
                 self, 'Save changes?',
                 'There are unsaved changes in {}. \n'
                 'Do you want to save?'.format(self.ramp_config.name),
-                QMessageBox.Yes, QMessageBox.Cancel)
+                QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel)
             if ans == QMessageBox.Yes:
-                self._ignoreCloseAndSave()
-            else:
-                self._acceptClose()
-
-    def _ignoreCloseAndSave(self):
-        self.close_ev.ignore()
-        self.settings.showSaveAsPopup()
-
-    def _acceptClose(self):
-        self.close_ev.accept()
-        super().closeEvent(self.close_ev)
+                ev.ignore()
+                self.settings.showSaveAsPopup()
+            elif ans == QMessageBox.No:
+                ev.accept()
+                super().closeEvent(ev)
+            elif ans == QMessageBox.Cancel:
+                ev.ignore()
 
     @Slot(str, str)
     def _handleUpdateOpticsAdjustSettings(self, tune_cname, chrom_cname):
