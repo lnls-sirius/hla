@@ -1,11 +1,16 @@
 import sys
+from copy import deepcopy as _dcopy
+import numpy as _np
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGroupBox, QLabel, QPushButton, QFormLayout, \
-    QVBoxLayout, QGridLayout, QSizePolicy as QSzPol, QWidget
+    QVBoxLayout, QGridLayout, QSizePolicy as QSzPol, QWidget, QDoubleSpinBox, \
+    QFrame, QScrollArea
 from pydm.widgets import PyDMLabel
+from pydm.widgets.base import PyDMWritableWidget
 from siriuspy.search import HLTimeSearch
 from siriuspy.csdevice import timesys
-from siriushla.widgets import PyDMLed, SiriusLedAlert, PyDMStateButton
+from siriushla.widgets import PyDMLed, SiriusLedAlert, PyDMStateButton, \
+    SiriusLabel, SiriusSpinbox
 from siriushla.util import connect_window
 from siriushla.widgets.windows import create_window_from_widget
 from .base import BaseList, BaseWidget, MySpinBox as _MySpinBox, \
@@ -62,26 +67,34 @@ class HLTriggerDetailed(BaseWidget):
             hltrigger=self.prefix.device_name, obj_names=obj_names)
         ll_list_layout.addWidget(but, 0, 0, 1, 2)
 
+        init_channel = prefix.substitute(propty="LowLvlLock-Sel")
+        sp = PyDMStateButton(self, init_channel=init_channel)
+        init_channel = prefix.substitute(propty="LowLvlLock-Sts")
+        rb = PyDMLed(self, init_channel=init_channel)
+        gb = self._create_small_GB(
+            'Lock Low Level', self.ll_list_wid, (sp, rb))
+        ll_list_layout.addWidget(gb, 1, 0)
+
         init_channel = prefix.substitute(propty="State-Sel")
         sp = PyDMStateButton(self, init_channel=init_channel)
         init_channel = prefix.substitute(propty="State-Sts")
         rb = PyDMLed(self, init_channel=init_channel)
         gb = self._create_small_GB('Enabled', self.ll_list_wid, (sp, rb))
-        ll_list_layout.addWidget(gb, 1, 0)
+        ll_list_layout.addWidget(gb, 1, 1)
 
         init_channel = prefix.substitute(propty="Polarity-Sel")
         sp = _MyComboBox(self, init_channel=init_channel)
         init_channel = prefix.substitute(propty="Polarity-Sts")
         rb = PyDMLabel(self, init_channel=init_channel)
         gb = self._create_small_GB('Polarity', self.ll_list_wid, (sp, rb))
-        ll_list_layout.addWidget(gb, 1, 1)
+        ll_list_layout.addWidget(gb, 2, 0)
 
         init_channel = prefix.substitute(propty="Src-Sel")
         sp = _MyComboBox(self, init_channel=init_channel)
         init_channel = prefix.substitute(propty="Src-Sts")
         rb = PyDMLabel(self, init_channel=init_channel)
         gb = self._create_small_GB('Source', self.ll_list_wid, (sp, rb))
-        ll_list_layout.addWidget(gb, 2, 0)
+        ll_list_layout.addWidget(gb, 2, 1)
 
         init_channel = prefix.substitute(propty="NrPulses-SP")
         sp = _MySpinBox(self, init_channel=init_channel)
@@ -89,7 +102,7 @@ class HLTriggerDetailed(BaseWidget):
         init_channel = prefix.substitute(propty="NrPulses-RB")
         rb = PyDMLabel(self, init_channel=init_channel)
         gb = self._create_small_GB('Nr Pulses', self.ll_list_wid, (sp, rb))
-        ll_list_layout.addWidget(gb, 2, 1)
+        ll_list_layout.addWidget(gb, 3, 0)
 
         init_channel = prefix.substitute(propty="Duration-SP")
         sp = _MySpinBox(self, init_channel=init_channel)
@@ -97,24 +110,68 @@ class HLTriggerDetailed(BaseWidget):
         init_channel = prefix.substitute(propty="Duration-RB")
         rb = PyDMLabel(self, init_channel=init_channel)
         gb = self._create_small_GB('Duration [us]', self.ll_list_wid, (sp, rb))
-        ll_list_layout.addWidget(gb, 3, 0, 1, 2)
+        ll_list_layout.addWidget(gb, 3, 1)
 
         init_channel = prefix.substitute(propty="Delay-SP")
         sp = _MySpinBox(self, init_channel=init_channel)
         sp.showStepExponent = False
         init_channel = prefix.substitute(propty="Delay-RB")
         rb = PyDMLabel(self, init_channel=init_channel)
-        gb = self._create_small_GB('Delay [us]', self.ll_list_wid, (sp, rb))
-        ll_list_layout.addWidget(gb, 4, 0, 1, 2)
+        gbdel = self._create_small_GB('Delay [us]', self.ll_list_wid, (sp, rb))
 
-        if HLTimeSearch.has_delay_type(self.prefix.device_name):
+        if HLTimeSearch.has_delay_type(prefix.device_name):
             init_channel = prefix.substitute(propty="RFDelayType-Sel")
             sp = _MyComboBox(self, init_channel=init_channel)
             init_channel = prefix.substitute(propty="RFDelayType-Sts")
             rb = PyDMLabel(self, init_channel=init_channel)
             gb = self._create_small_GB(
                         'Delay Type', self.ll_list_wid, (sp, rb))
-            ll_list_layout.addWidget(gb, 5, 1)
+            ll_list_layout.addWidget(gb, 4, 0)
+            ll_list_layout.addWidget(gbdel, 4, 1)
+        else:
+            ll_list_layout.addWidget(gbdel, 4, 0, 1, 2)
+
+        gbdelta = self._create_deltadelay()
+        ll_list_layout.addWidget(gbdelta, 0, 2, 5, 1)
+
+    def _create_deltadelay(self):
+        gb = QGroupBox('Delta Delay')
+        lay = QVBoxLayout(gb)
+        sc_area = QScrollArea()
+        sc_area.setWidgetResizable(True)
+        sc_area.setFrameShape(QFrame.NoFrame)
+        lay.addWidget(sc_area)
+
+        wid = QWidget(sc_area)
+        sc_area.setWidget(wid)
+        # sc_area.setViewport(wid)
+        # wid = sc_area
+
+        lay = QGridLayout(wid)
+        lay.setAlignment(Qt.AlignTop)
+        lay.addWidget(QLabel('<h4>Low Level</h4>'), 0, 0, Qt.AlignCenter)
+        lay.addWidget(QLabel('<h4>SP [us]</h4>'), 0, 1, Qt.AlignCenter)
+        lay.addWidget(QLabel('<h4>RB [us]</h4>'), 0, 2, Qt.AlignCenter)
+        pref = self.prefix
+        devname = pref.device_name
+        ll_obj_names = HLTimeSearch.get_ll_trigger_names(devname)
+        for idx, obj in enumerate(ll_obj_names, 1):
+            nam = QLabel(obj, wid)
+            spin = _SpinBox(
+                wid, init_channel=pref.substitute(propty='DeltaDelay-SP'),
+                index=idx-1)
+            spin.setStyleSheet('min-width:7em;')
+            lbl = _Label(
+                wid, init_channel=pref.substitute(propty='DeltaDelay-SP'),
+                index=idx-1)
+            lbl.setStyleSheet('min-width:6em;')
+            lay.addWidget(nam, idx, 0)
+            lay.addWidget(spin, idx, 1)
+            lay.addWidget(lbl, idx, 2)
+        sc_area.setSizeAdjustPolicy(QScrollArea.AdjustToContentsOnFirstShow)
+        sc_area.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        # sc_area.setWidgetResizable(False)
+        return gb
 
     def _create_small_GB(self, name, parent, wids):
         gb = QGroupBox(name, parent)
@@ -122,6 +179,44 @@ class HLTriggerDetailed(BaseWidget):
         for wid in wids:
             lv.addWidget(wid)
         return gb
+
+
+class _SpinBox(SiriusSpinbox):
+
+    def __init__(self, parent=None, init_channel=None, index=0):
+        self._index = index
+        super().__init__(parent=parent, init_channel=init_channel)
+        self.showStepExponent = False
+
+    def value_changed(self, value):
+        self.valueBeingSet = True
+        if isinstance(value, _np.ndarray):
+            self.setValue(value[self._index])
+        self.valueBeingSet = False
+        PyDMWritableWidget.value_changed(self, value)
+
+    def send_value(self):
+        """
+        Method invoked to send the current value on the QDoubleSpinBox to
+        the channel using the `send_value_signal`.
+        """
+        value = QDoubleSpinBox.value(self)
+        val = _dcopy(self.value)
+        val[self._index] = value
+        if not self.valueBeingSet:
+            self.send_value_signal[_np.ndarray].emit(val)
+
+
+class _Label(SiriusLabel):
+
+    def __init__(self, parent=None, init_channel=None, index=0):
+        self._index = index
+        super().__init__(parent=parent, init_channel=init_channel)
+
+    def value_changed(self, value):
+        if isinstance(value, _np.ndarray):
+            value = value[self._index]
+        super().value_changed(value)
 
 
 class LLTriggers(QWidget):
