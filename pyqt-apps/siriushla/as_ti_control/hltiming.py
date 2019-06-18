@@ -134,7 +134,7 @@ class TimingMain(SiriusMainWindow):
 
         action = main_menu.addAction('&Summary')
         Window = create_window_from_widget(_Summary, title='Timing Summary')
-        connect_window(action, Window, self)
+        connect_window(action, Window, self, prefix=self.prefix)
 
     def _create_prop_widget(self, name, parent, wids, align_ver=True):
         pwid = QWidget(parent)

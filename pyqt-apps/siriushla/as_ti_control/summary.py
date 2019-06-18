@@ -63,13 +63,14 @@ class Button(QWidget):
 
 class Summary(QWidget):
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, prefix=''):
         super().__init__(parent=parent)
+        self.prefix = prefix
         self.setupui()
 
     def setupui(self):
         evg = LLTimeSearch.get_device_names({'dev': 'EVG'})
-        g1 = Button(evg[0], '', self)
+        g1 = Button(self.prefix+evg[0], '', self)
         self.g1 = g1
 
         downs = LLTimeSearch.get_device_names({'dev': 'Fout'})
@@ -105,7 +106,7 @@ class Summary(QWidget):
         lay.setColumnMinimumWidth(1, 300)
 
     def setupdown(self, down):
-        return [Button(pre, lnk, self) for lnk, pre in down]
+        return [Button(self.prefix+pre, lnk, self) for lnk, pre in down]
 
     def paintEvent(self, event):
         sz = self.g1.size()
