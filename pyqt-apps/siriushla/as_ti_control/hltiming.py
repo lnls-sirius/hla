@@ -15,6 +15,7 @@ from .evr_eve import EVR as _EVR, EVE as _EVE
 from .afc import AFC as _AFC
 from .fout import FOUT as _FOUT
 from .hl_trigger import HLTriggerList as _HLTriggerList
+from .summary import Summary as _Summary
 
 
 class TimingMain(SiriusMainWindow):
@@ -130,6 +131,10 @@ class TimingMain(SiriusMainWindow):
             action = menu_fout.addAction(fout)
             Window = create_window_from_widget(_FOUT, title=fout)
             connect_window(action, Window, self, prefix=prefix+fout+':')
+
+        action = main_menu.addAction('&Summary')
+        Window = create_window_from_widget(_Summary, title='Timing Summary')
+        connect_window(action, Window, self)
 
     def _create_prop_widget(self, name, parent, wids, align_ver=True):
         pwid = QWidget(parent)
