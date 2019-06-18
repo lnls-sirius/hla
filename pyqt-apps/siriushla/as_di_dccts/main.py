@@ -20,6 +20,7 @@ class DCCTMain(SiriusMainWindow):
         self.device = device
         self.setWindowTitle(device)
         self._setupUi()
+        self.setFocusPolicy(Qt.StrongFocus)
 
     def _setupUi(self):
         cw = QWidget()
@@ -27,17 +28,16 @@ class DCCTMain(SiriusMainWindow):
         lay.setVerticalSpacing(10)
         self.setCentralWidget(cw)
 
-        self.curr_graph = DCCTMonitor(self, self.prefix, self.device)
-        aux = QLabel('')
-        aux.setStyleSheet('min-height:1.5em; max-height:1.5em;')
-        self.curr_graph.layout().addWidget(aux)
+        self.curr_graph = DCCTMonitor(self, self.prefix, self.device,
+                                      layout_with_settings=True)
         self.settings = DCCTSettings(self, self.prefix, self.device)
 
         lay.addWidget(
             QLabel('<h3>'+self.device+'</h3>', alignment=Qt.AlignCenter),
             0, 0, 1, 2)
         lay.addWidget(self.curr_graph, 1, 0)
-        lay.addWidget(self.settings, 1, 1)
+        self.curr_graph.layout().addWidget(self.settings, 0, 1, 2, 1)
+        self.settings.layout().setContentsMargins(0, 0, 0, 0)
 
         if 'BO' in self.device:
             self.ramfeff_graph = BORampEffMonitor(self, self.prefix)

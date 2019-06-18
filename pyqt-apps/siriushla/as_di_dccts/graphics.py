@@ -1,26 +1,30 @@
 """DCCT graphics module."""
 
 import numpy as np
-from qtpy.QtCore import Qt
+from qtpy.QtCore import Qt, Signal
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QWidget, QLabel, QPushButton, QGridLayout, \
-    QHBoxLayout, QVBoxLayout, QGroupBox, QSpinBox, QComboBox, QSpacerItem, \
+    QHBoxLayout, QGroupBox, QSpinBox, QComboBox, QSpacerItem, \
     QSizePolicy as QSzPly
 from siriuspy.namesys import SiriusPVName
 from siriuspy.csdevice.dccts import Const as _DCCTc
-from pydm.widgets import PyDMWaveformPlot, PyDMLabel
+from pydm.widgets import PyDMWaveformPlot
 from siriushla.widgets import SiriusConnectionSignal as SignalChannel
 
 
 class DCCTMonitor(QWidget):
     """Widget to ramp status monitoring."""
 
-    def __init__(self, parent=None, prefix='', device=''):
+    _buffSizeUpdate = Signal(str)
+
+    def __init__(self, parent=None, prefix='', device='',
+                 layout_with_settings=False):
         """Initialize object."""
         super().__init__(parent)
         self.prefix = SiriusPVName(prefix)
         self.device = SiriusPVName(device)
         self.use_raw = False
+        self.layout_with_settings = layout_with_settings
         if self.device.sec == 'BO':
             self.use_raw = True
         self.dcct_prefix = prefix + device + ':'
@@ -47,21 +51,8 @@ class DCCTMonitor(QWidget):
         self._setupUi()
 
     def _setupUi(self):
-        lay = QVBoxLayout()
-        self.setLayout(lay)
-
         text = 'Current Raw Readings' if self.use_raw else 'Current History'
         label = QLabel('<h3>'+text+'</h3>', self, alignment=Qt.AlignCenter)
-        lay.addWidget(label)
-
-        if not self.use_raw:
-            l_curr = QLabel('Current [mA]: ', self, alignment=Qt.AlignRight)
-            self.label_current = PyDMLabel(
-                parent=self, init_channel=self.dcct_prefix + 'Current-Mon')
-            hlay_current = QHBoxLayout()
-            hlay_current.addWidget(l_curr)
-            hlay_current.addWidget(self.label_current)
-            lay.addLayout(hlay_current)
 
         self.graph = PyDMWaveformPlot(self)
         self.graph.autoRangeX = True
@@ -86,7 +77,17 @@ class DCCTMonitor(QWidget):
         leftAxis = self.graph.getAxis('left')
         leftAxis.setStyle(autoExpandTextSpace=False, tickTextWidth=25)
         self.curve = self.graph.curveAtIndex(0)
-        lay.addWidget(self.graph)
+
+        lay = QGridLayout()
+        lay.setAlignment(Qt.AlignTop)
+        lay.setRowStretch(0, 1)
+        lay.setRowStretch(1, 9)
+        lay.addWidget(label, 0, 0)
+        if self.layout_with_settings:
+            lay.addWidget(self.graph, 1, 0, 2, 1)
+        else:
+            lay.addWidget(self.graph, 1, 0)
+        self.setLayout(lay)
 
         # Smoothing
         if self.use_raw:
@@ -104,13 +105,14 @@ class DCCTMonitor(QWidget):
 
             l_smoothbuff = QLabel('Buffer Size: ', self)
             l_smoothbuff.setSizePolicy(QSzPly.Minimum, QSzPly.Preferred)
-            self.label_smooth_buffsize = QLabel('', self)
-            self.label_smooth_buffsize.setStyleSheet(
+            self.label_buffsize = QLabel('', self)
+            self.label_buffsize.setStyleSheet(
                 'min-width:3em; max-width:3em;')
+            self._buffSizeUpdate.connect(self.label_buffsize.setText)
             self.pb_resetbuff = QPushButton('Reset', self)
             self.pb_resetbuff.clicked.connect(self.resetBuffer)
             hlay_buff = QHBoxLayout()
-            hlay_buff.addWidget(self.label_smooth_buffsize)
+            hlay_buff.addWidget(self.label_buffsize)
             hlay_buff.addWidget(self.pb_resetbuff)
 
             l_down = QLabel('Downsampling: ', self)
@@ -118,31 +120,46 @@ class DCCTMonitor(QWidget):
             self.sb_down.setValue(1)
             self.sb_down.valueChanged.connect(self.setDownsampling)
 
-            gbox_smooth = QGroupBox('Smoothing')
+            gbox_smooth = QGroupBox('Smoothing of Readings')
             glay_smooth = QGridLayout(gbox_smooth)
-            glay_smooth.addWidget(l_smoothmethod, 0, 0)
-            glay_smooth.addWidget(self.cb_smoothmethod, 0, 1)
-            glay_smooth.addWidget(l_smoothnracq, 1, 0)
-            glay_smooth.addWidget(self.sb_smoothnracq, 1, 1)
-            glay_smooth.addWidget(QLabel(''), 0, 2)
-            glay_smooth.addWidget(l_smoothbuff, 0, 3)
-            glay_smooth.addLayout(hlay_buff, 0, 4, 1, 2)
-            glay_smooth.addWidget(l_down, 1, 3)
-            glay_smooth.addWidget(self.sb_down, 1, 4, 1, 2)
-            glay_smooth.setColumnStretch(0, 10)
-            glay_smooth.setColumnStretch(1, 10)
-            glay_smooth.setColumnStretch(2, 2)
-            glay_smooth.setColumnStretch(3, 10)
-            glay_smooth.setColumnStretch(4, 5)
-            glay_smooth.setColumnStretch(5, 5)
+            if self.layout_with_settings:
+                glay_smooth.addWidget(l_smoothmethod, 0, 0)
+                glay_smooth.addWidget(self.cb_smoothmethod, 0, 1)
+                glay_smooth.addWidget(l_smoothnracq, 1, 0)
+                glay_smooth.addWidget(self.sb_smoothnracq, 1, 1)
+                glay_smooth.addWidget(l_smoothbuff, 2, 0)
+                glay_smooth.addLayout(hlay_buff, 2, 1)
+                glay_smooth.addWidget(l_down, 3, 0)
+                glay_smooth.addWidget(self.sb_down, 3, 1)
+                glay_smooth.setAlignment(Qt.AlignCenter)
+                lay.addWidget(gbox_smooth, 2, 1)
+            else:
+                glay_smooth.addWidget(l_smoothmethod, 0, 0)
+                glay_smooth.addWidget(self.cb_smoothmethod, 0, 1)
+                glay_smooth.addWidget(l_smoothnracq, 1, 0)
+                glay_smooth.addWidget(self.sb_smoothnracq, 1, 1)
+                glay_smooth.addWidget(QLabel(''), 0, 2)
+                glay_smooth.addWidget(l_smoothbuff, 0, 3)
+                glay_smooth.addLayout(hlay_buff, 0, 4, 1, 2)
+                glay_smooth.addWidget(l_down, 1, 3)
+                glay_smooth.addWidget(self.sb_down, 1, 4, 1, 2)
+                glay_smooth.setColumnStretch(0, 10)
+                glay_smooth.setColumnStretch(1, 10)
+                glay_smooth.setColumnStretch(2, 2)
+                glay_smooth.setColumnStretch(3, 10)
+                glay_smooth.setColumnStretch(4, 5)
+                glay_smooth.setColumnStretch(5, 5)
+                lay.addWidget(gbox_smooth, 2, 0)
+                lay.setRowStretch(2, 3)
             gbox_smooth.setStyleSheet("""
                 .QLabel{
                     qproperty-alignment: 'AlignVCenter | AlignRight';}
                 QPushButton{
                     min-width:3em; max-width:3em;}""")
-            lay.addWidget(gbox_smooth)
 
         self.setStyleSheet("""
+            .QLabel{
+                max-height:1.5em;}
             PyDMWaveformPlot{
                 min-width:30em; min-height:20em;}
         """)
@@ -163,18 +180,24 @@ class DCCTMonitor(QWidget):
         self._smooth_buffer.append(data)
         if len(self._smooth_buffer) > self._smooth_nracq:
             self._smooth_buffer.pop(0)
-        self.label_smooth_buffsize.setText(str(self.bufferSize))
 
         self._updateCurve()
 
     def _updateCurve(self):
-        down = self._downsampling
         buff = np.array(self._smooth_buffer, dtype=float)
-        if self._smooth_method == 'Average':
-            fdata = np.mean(buff, axis=0)
-        elif self._smooth_method == 'Median':
-            fdata = np.median(buff, axis=0)
+        self._buffSizeUpdate.emit(str(self.bufferSize))
 
+        if not len(buff):
+            return
+        if len(buff) > 1:
+            if self._smooth_method == 'Average':
+                fdata = np.mean(buff, axis=0)
+            elif self._smooth_method == 'Median':
+                fdata = np.median(buff, axis=0)
+        else:
+            fdata = buff[0]
+
+        down = self._downsampling
         if down > 1:
             fdata = np.mean(fdata.reshape(-1, down), axis=1)
 
@@ -207,6 +230,7 @@ class DCCTMonitor(QWidget):
     def resetBuffer(self):
         """Reset smoothing buffer."""
         self._smooth_buffer = list()
+        self._updateCurve()
 
     def setNrSamples(self, new_value):
         address = self.sender().address
