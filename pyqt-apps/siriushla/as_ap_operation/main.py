@@ -35,9 +35,9 @@ class MainOperation(SiriusMainWindow):
         egun = QGroupBox('Egun Trigger')
 
         egun_trigger_enable = PyDMStateButton(
-            parent=self, init_channel=self._prefix+'egun:triggerps:enable')
+            parent=self, init_channel=self._prefix+'LI-01:EG-TriggerPS:enable')
         egun_trigger_status = SiriusLedAlert(
-            parent=self, init_channel=self._prefix+'egun:triggerps:status')
+            parent=self, init_channel=self._prefix+'LI-01:EG-TriggerPS:status')
         egun_trigger_status.setOnColor(SiriusLedAlert.LightGreen)
         egun_trigger_status.setOffColor(SiriusLedAlert.DarkGreen)
 
