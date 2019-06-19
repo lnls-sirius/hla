@@ -249,7 +249,7 @@ class PVNameTree(QTreeWidget):
         parent = self.invisibleRootItem()
         parent_key = ''
         # if pvname.count(':') == 2 and pvname.count('-') == 3:
-        if re.match('^.*-.*:.*-.*:.*-.*$', pvname):
+        if re.match('^.*-.*:.*-.*:.*$', pvname):
             # Parse it with SiriusPVName
             pvname = SiriusPVName(pvname)
             # Parse PVName
