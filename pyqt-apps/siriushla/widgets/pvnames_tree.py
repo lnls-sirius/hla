@@ -287,7 +287,7 @@ class PVNameTree(QTreeWidget):
                 parent = item
         # Insert leaf node pvname
         new_item = QTreeItem(row, parent)
-        new_item.setCheckState(0, Qt.Checked)
+        # new_item.setCheckState(0, Qt.Checked)
         self._item_map[pvname] = new_item
         self._leafs.append(new_item)
 
