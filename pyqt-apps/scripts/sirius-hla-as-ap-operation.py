@@ -17,6 +17,5 @@ args = parser.parse_args()
 
 
 app = SiriusApplication()
-window = MainOperation(prefix=args.prefix)
-window.show()
+app.open_window(MainOperation, parent=None, prefix=args.prefix)
 sys.exit(app.exec_())

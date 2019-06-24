@@ -8,6 +8,5 @@ from siriushla.as_ps_cycle.cycle_window import CycleWindow
 
 
 app = SiriusApplication(None, sys.argv)
-window = CycleWindow()
-window.show()
+app.open_window(CycleWindow)
 sys.exit(app.exec_())

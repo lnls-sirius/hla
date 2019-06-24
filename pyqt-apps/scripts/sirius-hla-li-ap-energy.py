@@ -19,6 +19,5 @@ args = parser.parse_args()
 app = SiriusApplication()
 MyWindow = create_window_from_widget(
     EnergyMeasure, title='Linac Energy Measure', is_main=True)
-window = MyWindow(None)
-window.show()
+app.open_window(MyWindow)
 sys.exit(app.exec_())

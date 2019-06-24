@@ -15,6 +15,5 @@ parser.add_argument('-p', "--prefix", type=str, default=vaca_prefix,
 args = parser.parse_args()
 
 app = SiriusApplication()
-window = MainWindow(args.prefix, acc='TB')
-window.show()
+app.open_window(MainWindow, parent=None, prefix=args.prefix, acc='TB')
 sys.exit(app.exec_())

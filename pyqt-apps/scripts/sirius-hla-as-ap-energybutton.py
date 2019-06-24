@@ -6,6 +6,5 @@ from siriushla.sirius_application import SiriusApplication
 from siriushla.as_ap_energybutton import EnergySetterWindow
 
 app = SiriusApplication(None, sys.argv)
-window = EnergySetterWindow()
-window.show()
+app.open_window(EnergySetterWindow, parent=None)
 sys.exit(app.exec_())

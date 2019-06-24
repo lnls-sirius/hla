@@ -16,6 +16,5 @@ parser.add_argument('-p', "--prefix", type=str, default=vaca_prefix,
 args = parser.parse_args()
 
 app = SiriusApplication()
-w = ICTMonitoring(tl='TS', prefix=args.prefix)
-w.show()
+app.open_window(ICTMonitoring, parent=None, tl='TS', prefix=args.prefix)
 sys.exit(app.exec_())

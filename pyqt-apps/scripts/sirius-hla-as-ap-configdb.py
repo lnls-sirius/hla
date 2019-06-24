@@ -9,6 +9,5 @@ from siriushla.as_ap_configdb import ConfigurationManager
 
 app = SiriusApplication()
 model = ConfigDBClient()
-widget = ConfigurationManager(model)
-widget.show()
+app.open_window(ConfigurationManager, parent=None, model=model)
 sys.exit(app.exec_())

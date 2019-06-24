@@ -15,8 +15,10 @@ device = args.device
 
 app = SiriusApplication()
 if device:
-    window = PSControlWindow(section='TB', discipline='PS', device=device)
+    window = PSControlWindow
+    kwargs = dict(section='TB', discipline='PS', device=device)
 else:
-    window = PSTabControlWindow(section='TB', discipline='PS')
-window.show()
+    window = PSTabControlWindow
+    kwargs = dict(section='TB', discipline='PS')
+app.open_window(window, parent=None, **kwargs)
 sys.exit(app.exec_())
