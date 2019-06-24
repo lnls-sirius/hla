@@ -125,7 +125,6 @@ class ControlApplication(SiriusMainWindow):
 
     def _create_li_layout(self):
         LI_launcher = QPushButton('Linac launcher', self)
-        # LI_launcher.clicked.connect(self._open_li_launcher)
         util.connect_newprocess(LI_launcher, 'sirius-hla-li-launcher.sh')
 
         energy = QPushButton('Energy Meas', self)
@@ -281,19 +280,6 @@ class ControlApplication(SiriusMainWindow):
         but = QPushButton('Magnets' if dis == 'ma' else 'Power Supplies', self)
         but.setMenu(menu)
         return but
-
-    def _open_li_launcher(self):
-        pswd, ok = QInputDialog.getText(
-            self, 'Opening Linac Launcher...',
-            'Enter password to phyuser@linac-serv-nfs: ',
-            echo=QLineEdit.Password)
-        if ok:
-            util.run_newprocess(
-                [
-                    'sshpass', '-p', pswd, 'ssh', '-X',
-                    'phyuser@linac-serv-nfs', 'sh', '-c',
-                    '/home/sirius/work/opi/sirius-main.sh'],
-                is_window=False)
 
 
 if __name__ == "__main__":
