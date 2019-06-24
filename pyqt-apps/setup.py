@@ -17,6 +17,10 @@ with open('VERSION', 'r') as _f:
     __version__ = _f.read().strip()
 
 
+with open('requirements.txt', 'r') as _f:
+    _requirements = _f.read().strip().split('\n')
+
+
 setup(
     name='siriushla',
     version=__version__,
@@ -31,6 +35,7 @@ setup(
         'Topic :: Scientific/Engineering'
         ],
     packages=find_packages(),
+    install_requires=_requirements,
     package_data={'siriushla': ['VERSION', '*/*.py']},
     include_package_data=True,
     scripts=[
