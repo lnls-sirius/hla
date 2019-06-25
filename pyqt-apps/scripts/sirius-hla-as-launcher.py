@@ -158,10 +158,10 @@ class ControlApplication(SiriusMainWindow):
         # self.connect_newprocess(pvsconfmgr, 'sirius-hla-as-ap-pvsconfigs.py')
         pvssave = QPushButton('Save Config')
         self.connect_newprocess(
-            pvsconfmgr, 'sirius-hla-as-ap-pvsconfigs-save.py')
+            pvssave, 'sirius-hla-as-ap-pvsconfigs-save.py')
         pvsload = QPushButton('Load Config')
         self.connect_newprocess(
-            pvsconfmgr, 'sirius-hla-as-ap-pvsconfigs-load.py')
+            pvsload, 'sirius-hla-as-ap-pvsconfigs-load.py')
 
         lay = QHBoxLayout()
         lay.setAlignment(Qt.AlignLeft)
