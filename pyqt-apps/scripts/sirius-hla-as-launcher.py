@@ -154,13 +154,21 @@ class ControlApplication(SiriusMainWindow):
         servconf = QPushButton('ConfigDB Manager')
         self.connect_newprocess(servconf, 'sirius-hla-as-ap-configdb.py')
 
-        pvsconfmgr = QPushButton('PVs Configs')
-        self.connect_newprocess(pvsconfmgr, 'sirius-hla-as-ap-pvsconfigs.py')
+        # pvsconfmgr = QPushButton('PVs Configs')
+        # self.connect_newprocess(pvsconfmgr, 'sirius-hla-as-ap-pvsconfigs.py')
+        pvssave = QPushButton('Save Config')
+        self.connect_newprocess(
+            pvsconfmgr, 'sirius-hla-as-ap-pvsconfigs-save.py')
+        pvsload = QPushButton('Load Config')
+        self.connect_newprocess(
+            pvsconfmgr, 'sirius-hla-as-ap-pvsconfigs-load.py')
 
         lay = QHBoxLayout()
         lay.setAlignment(Qt.AlignLeft)
         lay.addWidget(servconf)
-        lay.addWidget(pvsconfmgr)
+        # lay.addWidget(pvsconfmgr)
+        lay.addWidget(pvssave)
+        lay.addWidget(pvsload)
         return lay
 
     def _create_li_layout(self):
