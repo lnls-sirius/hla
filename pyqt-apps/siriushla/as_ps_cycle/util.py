@@ -63,7 +63,7 @@ class Timing:
     DEFAULT_CYCLE_DURATION = 150  # [us]
     DEFAULT_CYCLE_NRPULSES = 1
     DEFAULT_RAMP_DURATION = 490000  # [us]
-    DEFAULT_RAMP_NRPULSES = 4000
+    DEFAULT_RAMP_NRPULSES = 3920
     DEFAULT_DELAY = 0  # [us]
     DEFAULT_POLARITY = _TIConst.TrigPol.Normal  # test
     DEFAULT_STATE = _TIConst.DsblEnbl.Enbl
