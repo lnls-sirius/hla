@@ -10,22 +10,12 @@ from qtpy.QtWidgets import QWidget, QLabel, QGroupBox, QSpacerItem, \
                            QSizePolicy as QSzPlcy, QVBoxLayout
 from siriushla.sirius_application import SiriusApplication
 from siriushla.tl_ap_control import SlitMonitoring
-from siriushla.widgets.windows import SiriusMainWindow
-
-
-parser = _argparse.ArgumentParser(
-    description="Run Interface to control TB Slits widgets.")
-parser.add_argument('-p', "--prefix", type=str, default=vaca_prefix,
-                    help="Define the prefix for the PVs in the window.")
-args = parser.parse_args()
-prefix = args.prefix
-
-app = SiriusApplication()
+from siriushla.widgets.windows import create_window_from_widget
 
 
 class _cw(QWidget):
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, prefix=''):
         super(_cw, self).__init__(None)
         gbox_slith = QGroupBox('TB-01:DI-SlitH')
         self.slith = SlitMonitoring('H', self, prefix)
@@ -57,8 +47,13 @@ class _cw(QWidget):
         super().changeEvent(event)
 
 
-window = SiriusMainWindow()
-window.setWindowTitle('Slits View')
-window.setCentralWidget(_cw())
-window.show()
+parser = _argparse.ArgumentParser(
+    description="Run Interface to control TB Slits widgets.")
+parser.add_argument('-p', "--prefix", type=str, default=vaca_prefix,
+                    help="Define the prefix for the PVs in the window.")
+args = parser.parse_args()
+prefix = args.prefix
+app = SiriusApplication()
+window = create_window_from_widget(_cw, title='Slits View', is_main=True)
+app.open_window(window, parent=None, prefix=prefix)
 sys.exit(app.exec_())

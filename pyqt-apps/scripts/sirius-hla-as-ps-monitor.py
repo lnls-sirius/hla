@@ -17,6 +17,5 @@ args = parser.parse_args()
 
 
 app = SiriusApplication()
-window = PSMonitor(prefix=args.prefix)
-window.show()
+app.open_window(PSMonitor, parent=None, prefix=args.prefix)
 sys.exit(app.exec_())

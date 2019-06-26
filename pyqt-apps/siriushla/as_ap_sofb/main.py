@@ -16,8 +16,8 @@ from siriushla.as_di_bpms import SelectBPMs
 
 
 class MainWindow(SiriusMainWindow):
-    def __init__(self, prefix, acc='SI'):
-        super().__init__()
+    def __init__(self, parent=None, prefix='', acc='SI'):
+        super().__init__(parent=parent)
         self.prefix = prefix + acc + '-Glob:AP-SOFB:'
         self._csorb = SOFBFactory.create(acc)
         self.setupui()

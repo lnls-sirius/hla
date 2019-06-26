@@ -15,6 +15,5 @@ args = parser.parse_args()
 
 
 app = SiriusApplication()
-window = PulsedMagnetDetailWindow(maname=args.pmname)
-window.show()
+app.open_window(PulsedMagnetDetailWindow, parent=None, maname=args.pmname)
 sys.exit(app.exec_())

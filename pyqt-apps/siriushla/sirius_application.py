@@ -1,5 +1,5 @@
 """Definition of the Sirius Application class."""
-from pydm import PyDMApplication
+from pydm import PyDMApplication, data_plugins
 from qtpy.QtWidgets import QMessageBox
 
 from .util import get_window_id, set_style
@@ -48,16 +48,17 @@ class SiriusApplication(PyDMApplication):
             self._windows[wid].showNormal()
 
     def _create_and_show(self, wid, w_class, parent, **kwargs):
-        try:
-            window = w_class(parent=parent, **kwargs)
-        except ValueError as e:
-            QMessageBox.critical(
-                self.activeWindow(),
-                'Could not open window',
-                'Failed to open window: {}'.format(e))
-        else:
-            self._windows[wid] = window
-            self._windows[wid].show()
+        with data_plugins.connection_queue():
+            try:
+                window = w_class(parent=parent, **kwargs)
+            except ValueError as e:
+                QMessageBox.critical(
+                    self.activeWindow(),
+                    'Could not open window',
+                    'Failed to open window: {}'.format(e))
+            else:
+                self._windows[wid] = window
+                self._windows[wid].show()
 
     def _get_desktop_geometry(self):
         screen = self.primaryScreen()

@@ -16,8 +16,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     app = SiriusApplication()
-
-    window = OpticsCorrWindow(acc='si', opticsparam='chrom',
-                              prefix=args.prefix)
-    window.show()
+    app.open_window(
+        OpticsCorrWindow, parent=None, acc='si', opticsparam='chrom',
+        prefix=args.prefix)
     _sys.exit(app.exec_())

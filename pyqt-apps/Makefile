@@ -2,9 +2,12 @@
 install-resources:
 	cd ./resources; pyrcc5 resources.qrc -o ../siriushla/resources.py
 
-install: install-resources
+install: clean install-resources
 	sudo ./setup.py install
 
-develop: install-resources
+develop: clean install-resources
 	sudo ./setup.py develop
 	cd ./resources
+
+clean:
+	git clean -fdX

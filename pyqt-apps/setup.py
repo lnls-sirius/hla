@@ -17,6 +17,10 @@ with open('VERSION', 'r') as _f:
     __version__ = _f.read().strip()
 
 
+with open('requirements.txt', 'r') as _f:
+    _requirements = _f.read().strip().split('\n')
+
+
 setup(
     name='siriushla',
     version=__version__,
@@ -31,6 +35,7 @@ setup(
         'Topic :: Scientific/Engineering'
         ],
     packages=find_packages(),
+    install_requires=_requirements,
     package_data={'siriushla': ['VERSION', '*/*.py']},
     include_package_data=True,
     scripts=[
@@ -39,6 +44,8 @@ setup(
         'scripts/sirius-hla-as-ap-magoffconv.py',
         'scripts/sirius-hla-as-ap-operation.py',
         'scripts/sirius-hla-as-ap-pvsconfigs.py',
+        'scripts/sirius-hla-as-ap-pvsconfigs-save.py',
+        'scripts/sirius-hla-as-ap-pvsconfigs-load.py',
         'scripts/sirius-hla-as-ap-configdb.py',
         'scripts/sirius-hla-as-di-bpm.py',
         'scripts/sirius-hla-as-di-dcct.py',
@@ -60,7 +67,6 @@ setup(
         'scripts/sirius-hla-bo-offconfig.py',
         'scripts/sirius-hla-bo-pm-control.py',
         'scripts/sirius-hla-bo-ps-control.py',
-        'scripts/sirius-hla-li-launcher.py',
         'scripts/sirius-hla-si-ap-chromcorr.py',
         'scripts/sirius-hla-si-ap-currlt.py',
         'scripts/sirius-hla-si-ap-sofb.py',

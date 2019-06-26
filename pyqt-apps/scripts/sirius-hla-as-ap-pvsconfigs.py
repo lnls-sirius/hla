@@ -6,8 +6,6 @@ from siriushla.sirius_application import SiriusApplication
 from siriushla.as_ap_configdb.pvsconfigs import PVsConfigManager
 
 
-if __name__ == '__main__':
-    app = SiriusApplication()
-    w = PVsConfigManager()
-    w.show()
-    sys.exit(app.exec_())
+app = SiriusApplication()
+app.open_window(PVsConfigManager)
+sys.exit(app.exec_())

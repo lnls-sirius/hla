@@ -25,6 +25,5 @@ os.environ['EPICS_CA_MAX_ARRAY_BYTES'] = '200000000'
 app = SiriusApplication()
 MyWindow = create_window_from_widget(
     SelectScrns, title='Select a Screen', is_main=True)
-window = MyWindow(None, prefix=prefix, sec=sec)
-window.show()
+app.open_window(MyWindow, parent=None, prefix=prefix, sec=sec)
 sys.exit(app.exec_())
