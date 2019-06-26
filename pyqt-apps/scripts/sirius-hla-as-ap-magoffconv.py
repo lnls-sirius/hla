@@ -13,6 +13,5 @@ args = parser.parse_args()
 
 
 app = SiriusApplication()
-window = MagOffConvApp()
-window.show()
+app.open_window(MagOffConvApp)
 sys.exit(app.exec_())

@@ -15,6 +15,5 @@ args = parser.parse_args()
 
 
 app = SiriusApplication()
-window = PSDetailWindow(parent=None, psname=args.psname)
-window.show()
+app.open_window(PSDetailWindow, parent=None, psname=args.psname)
 sys.exit(app.exec_())

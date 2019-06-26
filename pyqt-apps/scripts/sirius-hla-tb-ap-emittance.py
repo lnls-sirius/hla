@@ -18,6 +18,5 @@ args = parser.parse_args()
 app = SiriusApplication()
 MyWindow = create_window_from_widget(
     EmittanceMeasure, title='TB Emittance Measure', is_main=True)
-window = MyWindow(None, place=args.place)
-window.show()
+app.open_window(MyWindow, parent=None, place=args.place)
 sys.exit(app.exec_())

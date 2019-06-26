@@ -28,8 +28,8 @@ class PVsConfigManager(SiriusMainWindow):
         self.central_widget.setLayout(self.central_widget.layout)
         self.setCentralWidget(self.central_widget)
 
-        self.save_btn = QPushButton('Read And Save', self)
-        self.load_btn = QPushButton('Load And Apply', self)
+        self.save_btn = QPushButton('Save', self)
+        self.load_btn = QPushButton('Load', self)
         self.save_btn.setObjectName('SaveBtn')
         self.load_btn.setObjectName('LoadBtn')
 

@@ -8,7 +8,6 @@ from siriushla.as_ap_injection import InjectionController, InjectionWindow
 
 
 app = SiriusApplication(None, sys.argv)
-controller = InjectionController()
-window = InjectionWindow(controller)
-window.show()
+ctlr = InjectionController()
+app.open_window(InjectionWindow, parent=None, controller=ctlr)
 sys.exit(app.exec_())

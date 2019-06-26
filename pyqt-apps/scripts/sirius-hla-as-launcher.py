@@ -3,26 +3,55 @@
 """Mock application launcher."""
 
 import sys
-
-from qtpy.QtWidgets import QVBoxLayout, QHBoxLayout, QGridLayout, \
-                           QGroupBox, QPushButton, QWidget, QLabel, \
-                           QInputDialog, QLineEdit, QMenu
-from qtpy.QtCore import Qt
+import time as _time
+from functools import partial as _part
+from qtpy.QtWidgets import QVBoxLayout, QHBoxLayout, QGridLayout, QMenu, \
+    QGroupBox, QPushButton, QWidget, QLabel, QInputDialog, QLineEdit, QDialog
+from qtpy.QtCore import Qt, Signal, QThread
 from siriushla.sirius_application import SiriusApplication
 from siriushla import util
 from siriushla.widgets import SiriusMainWindow
 
 
+class MyDialog(QDialog):
+
+    def __init__(self, parent, title, message):
+        super().__init__(parent=parent)
+        self.setWindowTitle(title)
+        lay = QHBoxLayout(self)
+        lay.addWidget(QLabel(message))
+
+
+class MyThread(QThread):
+
+    openmessage = Signal()
+    closemessage = Signal()
+
+    def __init__(self, parent=None, cmd=''):
+        super().__init__(parent=parent)
+        self.cmd = cmd or ''
+
+    def run(self):
+        self.openmessage.emit()
+        wind = ''
+        while not wind:
+            _, wind = util.check_process(self.cmd)
+            _time.sleep(0.01)
+        self.closemessage.emit()
+
+
 class ControlApplication(SiriusMainWindow):
     """Main launcher."""
 
-    def __init__(self):
+    def __init__(self, parent=None):
         """Constructor."""
-        super().__init__()
+        super().__init__(parent=parent)
         self.setWindowTitle("AS Launcher")
         self._setup_ui()
 
     def _setup_ui(self):
+        self.message = MyDialog(self, 'Wait', '<h3>Loading Window</h3>')
+
         self.layout = QVBoxLayout()
         self.layout.setSpacing(15)
 
@@ -70,32 +99,32 @@ class ControlApplication(SiriusMainWindow):
 
     def _create_as_layout(self):
         operation = QPushButton('Operation', self)
-        util.connect_newprocess(operation, 'sirius-hla-as-ap-operation.py')
+        self.connect_newprocess(operation, 'sirius-hla-as-ap-operation.py')
 
         injection = QPushButton('Injection', self)
-        util.connect_newprocess(injection, 'sirius-hla-as-ap-injection.py')
+        self.connect_newprocess(injection, 'sirius-hla-as-ap-injection.py')
 
         timing = QPushButton('Timing', self)
-        util.connect_newprocess(timing, 'sirius-hla-as-ti-control.py')
+        self.connect_newprocess(timing, 'sirius-hla-as-ti-control.py')
 
         pscycle = QPushButton('PS Cycle', self)
-        util.connect_newprocess(pscycle, 'sirius-hla-as-ps-cycle.py')
+        self.connect_newprocess(pscycle, 'sirius-hla-as-ps-cycle.py')
 
         psdiag = QPushButton('PS Diag', self)
-        util.connect_newprocess(psdiag, 'sirius-hla-as-ps-diag.py')
+        self.connect_newprocess(psdiag, 'sirius-hla-as-ps-diag.py')
 
         pstest = QPushButton('PS Test', self)
-        util.connect_newprocess(pstest, 'sirius-hla-as-ps-test.py')
+        self.connect_newprocess(pstest, 'sirius-hla-as-ps-test.py')
 
         psmonitor = QPushButton('PS Monitor', self)
-        util.connect_newprocess(psmonitor, 'sirius-hla-as-ps-monitor.py')
+        self.connect_newprocess(psmonitor, 'sirius-hla-as-ps-monitor.py')
 
         energy_button = QPushButton('Energy Button', self)
-        util.connect_newprocess(
+        self.connect_newprocess(
             energy_button, 'sirius-hla-as-ap-energybutton.py')
 
         offconv = QPushButton('Offline Converter', self)
-        util.connect_newprocess(offconv, 'sirius-hla-as-ap-magoffconv.py')
+        self.connect_newprocess(offconv, 'sirius-hla-as-ap-magoffconv.py')
 
         lay = QGridLayout()
         lay.setAlignment(Qt.AlignLeft)
@@ -110,29 +139,47 @@ class ControlApplication(SiriusMainWindow):
         lay.addWidget(offconv, 1, 5)
         return lay
 
+    def connect_newprocess(self, button, cmd):
+        signal = util.get_appropriate_signal(button)
+        signal.connect(_part(self._prepare, cmd))
+        util.connect_newprocess(button, cmd)
+
+    def _prepare(self, cmd):
+        th = MyThread(self, cmd=cmd)
+        th.openmessage.connect(self.message.show)
+        th.closemessage.connect(self.message.close)
+        th.start()
+
     def _create_serv_layout(self):
         servconf = QPushButton('ConfigDB Manager')
-        util.connect_newprocess(servconf, 'sirius-hla-as-ap-configdb.py')
+        self.connect_newprocess(servconf, 'sirius-hla-as-ap-configdb.py')
 
-        pvsconfmgr = QPushButton('PVs Configs')
-        util.connect_newprocess(pvsconfmgr, 'sirius-hla-as-ap-pvsconfigs.py')
+        # pvsconfmgr = QPushButton('PVs Configs')
+        # self.connect_newprocess(pvsconfmgr, 'sirius-hla-as-ap-pvsconfigs.py')
+        pvssave = QPushButton('Save Config')
+        self.connect_newprocess(
+            pvssave, 'sirius-hla-as-ap-pvsconfigs-save.py')
+        pvsload = QPushButton('Load Config')
+        self.connect_newprocess(
+            pvsload, 'sirius-hla-as-ap-pvsconfigs-load.py')
 
         lay = QHBoxLayout()
         lay.setAlignment(Qt.AlignLeft)
         lay.addWidget(servconf)
-        lay.addWidget(pvsconfmgr)
+        # lay.addWidget(pvsconfmgr)
+        lay.addWidget(pvssave)
+        lay.addWidget(pvsload)
         return lay
 
     def _create_li_layout(self):
         LI_launcher = QPushButton('Linac launcher', self)
-        # LI_launcher.clicked.connect(self._open_li_launcher)
         util.connect_newprocess(LI_launcher, 'sirius-hla-li-launcher.sh')
 
         energy = QPushButton('Energy Meas', self)
-        util.connect_newprocess(energy, 'sirius-hla-li-ap-energy.py')
+        self.connect_newprocess(energy, 'sirius-hla-li-ap-energy.py')
 
         emit = QPushButton('Emittance Meas', self)
-        util.connect_newprocess(emit, 'sirius-hla-li-ap-emittance.py')
+        self.connect_newprocess(emit, 'sirius-hla-li-ap-emittance.py')
 
         lay = QHBoxLayout()
         lay.setAlignment(Qt.AlignLeft)
@@ -146,54 +193,54 @@ class ControlApplication(SiriusMainWindow):
 
         if sec in {'tb', 'ts'}:
             launcher = QPushButton('Main', self)
-            util.connect_newprocess(launcher,
+            self.connect_newprocess(launcher,
                                     'sirius-hla-'+sec+'-ap-control.py')
 
         PS = self._set_psma_menu(sec, dis='ps')
         MA = self._set_psma_menu(sec, dis='ma')
 
         PM = QPushButton('Pulsed Magnets', self)
-        util.connect_newprocess(PM, 'sirius-hla-'+sec+'-pm-control.py')
+        self.connect_newprocess(PM, 'sirius-hla-'+sec+'-pm-control.py')
 
         SOFB = QPushButton('SOFB', self)
-        util.connect_newprocess(SOFB, 'sirius-hla-'+sec+'-ap-sofb.py')
+        self.connect_newprocess(SOFB, 'sirius-hla-'+sec+'-ap-sofb.py')
 
         if sec in {'tb', 'ts'}:
             PosAng = QPushButton('PosAng', self)
-            util.connect_newprocess(PosAng, 'sirius-hla-'+sec+'-ap-posang.py')
+            self.connect_newprocess(PosAng, 'sirius-hla-'+sec+'-ap-posang.py')
 
             ICTs = QPushButton('ICTs', self)
-            util.connect_newprocess(ICTs, 'sirius-hla-'+sec+'-di-icts.py')
+            self.connect_newprocess(ICTs, 'sirius-hla-'+sec+'-di-icts.py')
 
         if 'tb' in sec:
             Slits = QPushButton('Slits', self)
-            util.connect_newprocess(Slits, 'sirius-hla-tb-di-slits.py')
+            self.connect_newprocess(Slits, 'sirius-hla-tb-di-slits.py')
 
             Emittance = QPushButton('Emittance Meas', self)
-            util.connect_newprocess(Emittance, 'sirius-hla-tb-ap-emittance.py')
+            self.connect_newprocess(Emittance, 'sirius-hla-tb-ap-emittance.py')
 
         BPMs = self._set_bpm_menu(sec)
 
         if 'si' not in sec:
             Scrns = QPushButton('Screens', self)
-            util.connect_newprocess(Scrns,
+            self.connect_newprocess(Scrns,
                                     ['sirius-hla-as-di-scrn.py', sec.upper()])
 
         if sec in {'bo', 'si'}:
             CurrLT = QPushButton('Current and Lifetime', self)
-            util.connect_newprocess(CurrLT, 'sirius-hla-'+sec+'-ap-currlt.py')
+            self.connect_newprocess(CurrLT, 'sirius-hla-'+sec+'-ap-currlt.py')
 
             TuneCorr = QPushButton('Tune Correction', self)
-            util.connect_newprocess(TuneCorr,
+            self.connect_newprocess(TuneCorr,
                                     'sirius-hla-'+sec+'-ap-tunecorr.py')
 
             ChromCorr = QPushButton('Chromaticity Correction', self)
-            util.connect_newprocess(ChromCorr,
+            self.connect_newprocess(ChromCorr,
                                     'sirius-hla-'+sec+'-ap-chromcorr.py')
 
         if 'bo' in sec:
             Ramp = QPushButton('Ramp', self)
-            util.connect_newprocess(Ramp, 'sirius-hla-bo-ap-ramp.py')
+            self.connect_newprocess(Ramp, 'sirius-hla-bo-ap-ramp.py')
 
         glay = QGridLayout()
         glay.setVerticalSpacing(15)
@@ -225,7 +272,7 @@ class ControlApplication(SiriusMainWindow):
         cmd = ['sirius-hla-as-di-bpm.py', sec, '-w']
         menu = QMenu(self)
         action = menu.addAction('Summary')
-        util.connect_newprocess(action, cmd + ['Summary', ])
+        self.connect_newprocess(action, cmd + ['Summary', ])
         typs = ('Single Pass', 'Multi Turn')
         acts = ('SPass', 'MTurn')
         for typ, act in zip(typs, acts):
@@ -233,20 +280,20 @@ class ControlApplication(SiriusMainWindow):
             if sec == 'bo':
                 menu2 = QMenu(self)
                 action2 = menu2.addAction('All')
-                util.connect_newprocess(action2, cmd + [act, ])
+                self.connect_newprocess(action2, cmd + [act, ])
                 action2 = menu2.addAction('subsec 02-11')
-                util.connect_newprocess(action2, cmd + [act, '-s', '1'])
+                self.connect_newprocess(action2, cmd + [act, '-s', '1'])
                 action2 = menu2.addAction('subsec 12-21')
-                util.connect_newprocess(action2, cmd + [act, '-s', '2'])
+                self.connect_newprocess(action2, cmd + [act, '-s', '2'])
                 action2 = menu2.addAction('subsec 22-31')
-                util.connect_newprocess(action2, cmd + [act, '-s', '3'])
+                self.connect_newprocess(action2, cmd + [act, '-s', '3'])
                 action2 = menu2.addAction('subsec 32-41')
-                util.connect_newprocess(action2, cmd + [act, '-s', '4'])
+                self.connect_newprocess(action2, cmd + [act, '-s', '4'])
                 action2 = menu2.addAction('subsec 42-01')
-                util.connect_newprocess(action2, cmd + [act, '-s', '5'])
+                self.connect_newprocess(action2, cmd + [act, '-s', '5'])
                 action.setMenu(menu2)
             else:
-                util.connect_newprocess(action, cmd + [act, ])
+                self.connect_newprocess(action, cmd + [act, ])
         bpm = QPushButton('BPMs', self)
         bpm.setMenu(menu)
         return bpm
@@ -256,50 +303,35 @@ class ControlApplication(SiriusMainWindow):
         menu = QMenu(self)
 
         all_dev = menu.addAction('All')
-        util.connect_newprocess(all_dev, scr)
+        self.connect_newprocess(all_dev, scr)
 
         dip = menu.addAction('Dipoles')
-        util.connect_newprocess(dip, [scr, '--device', 'dipole'])
+        self.connect_newprocess(dip, [scr, '--device', 'dipole'])
 
         quad = menu.addAction('Quadrupoles')
-        util.connect_newprocess(quad, [scr, '--device', 'quadrupole'])
+        self.connect_newprocess(quad, [scr, '--device', 'quadrupole'])
 
         if sec in {'bo', 'si'}:
             sext = menu.addAction('Sextupoles')
-            util.connect_newprocess(sext, [scr, '--device', 'sextupole'])
+            self.connect_newprocess(sext, [scr, '--device', 'sextupole'])
 
             skew = menu.addAction('Skew Quadrupoles')
-            util.connect_newprocess(skew, [scr, '--device', 'quadrupole-skew'])
+            self.connect_newprocess(skew, [scr, '--device', 'quadrupole-skew'])
 
         corrs = menu.addAction('Correctors')
-        util.connect_newprocess(corrs, [scr, '--device', 'corrector-slow'])
+        self.connect_newprocess(corrs, [scr, '--device', 'corrector-slow'])
 
         if sec in 'si':
             fcorr = menu.addAction('Fast Correctors')
-            util.connect_newprocess(fcorr, [scr, '--device', 'corrector-fast'])
+            self.connect_newprocess(fcorr, [scr, '--device', 'corrector-fast'])
 
         but = QPushButton('Magnets' if dis == 'ma' else 'Power Supplies', self)
         but.setMenu(menu)
         return but
 
-    def _open_li_launcher(self):
-        pswd, ok = QInputDialog.getText(
-            self, 'Opening Linac Launcher...',
-            'Enter password to phyuser@linac-serv-nfs: ',
-            echo=QLineEdit.Password)
-        if ok:
-            util.run_newprocess(
-                [
-                    'sshpass', '-p', pswd, 'ssh', '-X',
-                    'phyuser@linac-serv-nfs', 'sh', '-c',
-                    '/home/sirius/work/opi/sirius-main.sh'],
-                is_window=False)
-
 
 if __name__ == "__main__":
 
     app = SiriusApplication()
-
-    window = ControlApplication()
-    window.show()
+    app.open_window(ControlApplication)
     sys.exit(app.exec_())

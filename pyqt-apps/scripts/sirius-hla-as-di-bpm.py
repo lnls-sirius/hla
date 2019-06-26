@@ -33,9 +33,9 @@ args = parser.parse_args()
 app = SiriusApplication()
 pv = _PVName(args.bpm_sel)
 if pv.dev == 'BPM':
-    BPMMainWin = create_window_from_widget(
+    window = create_window_from_widget(
         BPMMain, title=args.bpm_sel, is_main=True)
-    window = BPMMainWin(None, prefix=args.prefix, bpm=pv)
+    kwargs = dict(prefix=args.prefix, bpm=pv)
 else:
     bpms_names = BPMSearch.get_names(filters={'sec': args.bpm_sel.upper()})
     if args.window == 'Summary':
@@ -50,9 +50,9 @@ else:
         siz = len(bpms_names)//5
         slc = slice(siz*(sub-1), siz*sub)
     bpms_names = bpms_names[slc]
-    BPMsList = create_window_from_widget(
+    window = create_window_from_widget(
         clas, title=args.bpm_sel.upper() + ' BPM List', is_main=True)
-    window = BPMsList(None, prefix=args.prefix, bpm_list=bpms_names)
+    kwargs = dict(prefix=args.prefix, bpm_list=bpms_names)
 
-window.show()
+app.open_window(window, parent=None, **kwargs)
 sys.exit(app.exec_())

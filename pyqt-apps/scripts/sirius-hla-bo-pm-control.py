@@ -8,6 +8,6 @@ from siriushla.as_pm_control import PulsedMagnetControlWindow
 
 
 app = SiriusApplication()
-window = PulsedMagnetControlWindow(is_main=False, section='BO')
-window.show()
+app.open_window(
+    PulsedMagnetControlWindow, parent=None, is_main=False, section='BO')
 sys.exit(app.exec_())

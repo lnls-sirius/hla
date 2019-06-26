@@ -18,6 +18,5 @@ args = parser.parse_args()
 
 os.environ['EPICS_CA_MAX_ARRAY_BYTES'] = '200000000'
 app = SiriusApplication()
-window = TLAPControlWindow(prefix=args.prefix, tl='ts')
-window.show()
+app.open_window(TLAPControlWindow, parent=None, prefix=args.prefix, tl='ts')
 sys.exit(app.exec_())
