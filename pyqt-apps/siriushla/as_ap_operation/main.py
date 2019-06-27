@@ -2,7 +2,7 @@
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
-    QGridLayout, QHBoxLayout
+    QGridLayout, QHBoxLayout, QMessageBox
 
 from siriuspy.envars import vaca_prefix
 from siriuspy.timesys import get_evg_name
@@ -14,6 +14,7 @@ from siriushla.widgets import SiriusMainWindow, PyDMStateButton, \
 from siriushla.misc.epics.wrapper import PyEpicsWrapper
 from siriushla.misc.epics.task import EpicsChecker, EpicsSetter
 from siriushla.widgets.dialog import ReportDialog, ProgressDialog
+from .menu import MainMenuBar
 
 
 class MainOperation(SiriusMainWindow):
@@ -26,6 +27,9 @@ class MainOperation(SiriusMainWindow):
         self._prefix = prefix
         self._wrapper = wrapper
         self._setupUi()
+        menubar = MainMenuBar()
+        menubar.setNativeMenuBar(False)
+        self.setMenuBar(menubar)
         self.setWindowTitle('Main Controls')
         self.move(0, 20)
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
@@ -80,78 +84,13 @@ class MainOperation(SiriusMainWindow):
         timing_lay.addWidget(evg_injection_sts, 2, 1)
         timing.setLayout(timing_lay)
 
-        # Load standby and turnoff configurations
-        standby_pb = QPushButton('Set \'Standby\' Configuration')
-        standby_pb.setAutoDefault(False)
-        standby_pb.setDefault(False)
-        standby_pb.clicked.connect(self._applyconfig)
-        turnoff_pb = QPushButton('Set \'TurnOff\' Configuration')
-        turnoff_pb.setAutoDefault(False)
-        turnoff_pb.setDefault(False)
-        turnoff_pb.clicked.connect(self._applyconfig)
-
-        setconfigs_lay = QGridLayout()
-        setconfigs_lay.setVerticalSpacing(5)
-        setconfigs_lay.setHorizontalSpacing(15)
-        setconfigs_lay.addWidget(standby_pb, 0, 0)
-        setconfigs_lay.addWidget(turnoff_pb, 1, 0)
-
         layout = QHBoxLayout()
         layout.addWidget(egun)
         layout.addWidget(timing)
-        layout.addLayout(setconfigs_lay)
 
         cw = QWidget(self)
         cw.setLayout(layout)
         self.setCentralWidget(cw)
-
-    def _applyconfig(self):
-        sender_text = self.sender().text()
-        if 'Standby' in sender_text:
-            config_name = 'standby'
-        elif 'TurnOff' in sender_text:
-            config_name = 'turnoff'
-
-        server_global = ConfigDBClient(config_type='global_config')
-        try:
-            config = server_global.get_config_value(config_name)['pvs']
-        except Exception:
-            print('Configuration \''+config_name+'\' not found in Server!')
-            return
-
-        set_pvs_tuple = list()
-        check_pvs_tuple = list()
-        for t in config:
-            try:
-                pv, value, delay = t
-            except ValueError:
-                pv, value = t
-                delay = 1e-2
-            set_pvs_tuple.append((pv, value, delay))
-            check_pvs_tuple.append((pv, value, delay))
-
-        # Create thread
-        failed_items = []
-        pvs, values, delays = zip(*set_pvs_tuple)
-        set_task = EpicsSetter(pvs, values, delays, self._wrapper, self)
-        pvs, values, delays = zip(*check_pvs_tuple)
-        check_task = EpicsChecker(pvs, values, delays, self._wrapper, self)
-        check_task.itemChecked.connect(
-           lambda pv, status: failed_items.append(pv) if not status else None)
-
-        # Set/Check PVs values and show wait dialog informing user
-        labels = ['Setting PV values', 'Checking PV values']
-        tasks = [set_task, check_task]
-        dlg = ProgressDialog(labels, tasks, self)
-        dlg.rejected.connect(set_task.exit_task)
-        dlg.rejected.connect(check_task.exit_task)
-        ret = dlg.exec_()
-        if ret == dlg.Rejected:
-            return
-        # Show report dialog informing user results
-        self._report = ReportDialog(failed_items, self)
-        self._report.show()
-
 
 if __name__ == '__main__':
     import sys
