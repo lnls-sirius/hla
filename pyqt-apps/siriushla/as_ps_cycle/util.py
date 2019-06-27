@@ -24,8 +24,7 @@ from siriushla.as_ps_cycle.ramp_data import BASE_RAMP_CURVE_ORIG as \
 
 TIMEOUT = 0.05
 SLEEP_CAPUT = 0.1
-INTERVAL_WAITCYCLE = 15
-INTERVAL_WAITRAMP = 8
+TIMEOUT_CHECK_MAGNETS = 20
 
 
 def get_manames():
@@ -203,7 +202,7 @@ class Timing:
 
             pv = Timing._pvs['RA-RaMO:TI-EVG:InjectionEvt-Sts']
             while pv.value != _TIConst.DsblEnbl.Enbl:
-                _time.sleep(TIMEOUT)
+                _time.sleep(SLEEP_CAPUT)
 
     def get_cycle_count(self):
         pv = Timing._pvs['RA-RaMO:TI-EVG:InjCount-Mon']
@@ -651,7 +650,12 @@ class AutomatedCycle:
         return True
 
     def check_magnet_preparation(self, maname, mode):
-        self._checks_prep_result[maname] = self.cyclers[maname].is_ready(mode)
+        t0 = _time.time()
+        cycler = self.cyclers[maname]
+        r = cycler.is_ready(mode)
+        while not r or _time.time()-t0 > TIMEOUT_CHECK_MAGNETS:
+            r = cycler.is_ready(mode)
+        self._checks_prep_result[maname] = r
 
     def check_timing(self, mode):
         sections = ['TB', ] if mode == 'Cycle' else ['BO', ]
@@ -769,11 +773,6 @@ class AutomatedCycle:
                 self._update_log('Aborted.', error=True)
                 return
             self._update_log('Waiting to check magnets state...')
-            for i in range(INTERVAL_WAITCYCLE):
-                _time.sleep(1)
-                if self.aborted:
-                    self._update_log('Aborted.', error=True)
-                    return
 
             if not self.check_timing('Cycle'):
                 return
@@ -803,11 +802,7 @@ class AutomatedCycle:
                 self._update_log('Aborted.', error=True)
                 return
             self._update_log('Waiting to check magnets state...')
-            for i in range(INTERVAL_WAITRAMP):
-                _time.sleep(1)
-                if self.aborted:
-                    self._update_log('Aborted.', error=True)
-                    return
+
             if not self.check_timing('Ramp'):
                 return
             if not self.check_all_magnets_preparation('Ramp'):
