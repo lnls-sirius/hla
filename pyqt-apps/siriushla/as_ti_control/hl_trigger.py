@@ -24,6 +24,8 @@ class HLTriggerDetailed(BaseWidget):
     def __init__(self, parent=None, prefix=''):
         """Initialize object."""
         super().__init__(parent, prefix)
+        name = self.prefix.sec + 'App'
+        self.setObjectName(name)
         self._setupUi()
 
     def _setupUi(self):
@@ -301,6 +303,7 @@ class HLTriggerList(BaseList):
         srch = set(('source', 'detailed', 'polarity', 'state'))
         kwargs['props2search'] = srch
         super().__init__(**kwargs)
+        self.setObjectName('ASApp')
 
     def _createObjs(self, prefix, prop):
         sp = rb = None
