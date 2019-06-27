@@ -21,6 +21,7 @@ class MainWindow(SiriusMainWindow):
         self.prefix = prefix + acc + '-Glob:AP-SOFB:'
         self._csorb = SOFBFactory.create(acc)
         self.setupui()
+        self.setObjectName(acc+'App')
 
     @property
     def acc(self):

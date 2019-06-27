@@ -6,7 +6,7 @@ import sys
 import argparse as _argparse
 from siriuspy.envars import vaca_prefix
 from siriushla.sirius_application import SiriusApplication
-from siriushla.as_ap_operation import MainOperation
+from siriushla.as_ap_launcher import MainOperation
 
 
 parser = _argparse.ArgumentParser(
@@ -14,7 +14,6 @@ parser = _argparse.ArgumentParser(
 parser.add_argument('-p', "--prefix", type=str, default=vaca_prefix,
                     help="Define the prefix for the PVs in the window.")
 args = parser.parse_args()
-
 
 app = SiriusApplication()
 app.open_window(MainOperation, parent=None, prefix=args.prefix)
