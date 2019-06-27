@@ -2,7 +2,6 @@
 
 import sys as _sys
 from copy import deepcopy as _dcopy
-import re as _re
 import time as _time
 import logging as _log
 import threading as _thread
@@ -10,19 +9,18 @@ from epics import PV as _PV
 from math import isclose as _isclose
 import numpy as _np
 
-from siriuspy.namesys import SiriusPVName
+from siriuspy.namesys import SiriusPVName as _SiriusPVName, \
+    get_pair_sprb as _get_pair_sprb, Filter as _Filter
 from siriuspy.envars import vaca_prefix as VACA_PREFIX
 from siriuspy.search import MASearch as _MASearch, PSSearch as _PSSearch
-from siriuspy.csdevice.pwrsupply import Const as _PSConst
+from siriuspy.csdevice.pwrsupply import Const as _PSConst, ETypes as _PSet
 from siriuspy.csdevice.timesys import Const as _TIConst, \
     get_hl_trigger_database as _get_trig_db
-from siriuspy.csdevice.pwrsupply import ETypes as _PSet
-from siriuspy.namesys import Filter as _Filter
 from siriushla.as_ps_cycle.ramp_data import BASE_RAMP_CURVE_ORIG as \
     _BASE_RAMP_CURVE_ORIG
 
 
-TIMEOUT = 0.05
+TIMEOUT_CONNECTION = 0.05
 SLEEP_CAPUT = 0.1
 TIMEOUT_CHECK_MAGNETS = 20
 
@@ -128,21 +126,42 @@ class Timing:
         """Init."""
         self._initial_state = dict()
         self._create_pvs()
-        self._status_nok = []
 
-    @property
-    def status_nok(self):
-        """Return list with names of failing PVs."""
-        return self._status_nok.copy()
+    def connected(self, sections=list(), return_disconn=False):
+        """Return connected state."""
+        disconn = set()
+        for name, pv in Timing._pvs.items():
+            if sections and _SiriusPVName(name).sec not in sections:
+                continue
+            if not pv.connected:
+                disconn.add(pv.pvname)
+        if return_disconn:
+            return disconn
+        return not bool(disconn)
 
-    def init(self, mode, sections=list()):
-        """Initialize properties."""
-        filt = self._create_section_re(sections)
+    def get_pvnames_by_section(self, sections=list()):
+        pvnames = set()
+        for mode in Timing.properties.keys():
+            for prop in Timing.properties[mode].keys():
+                prop = _SiriusPVName(prop)
+                if prop.dev == 'EVG' or prop.sec in sections:
+                    pvnames.add(prop)
+        return pvnames
+
+    def get_pvname_2_defval_dict(self, mode, sections=list()):
+        pvname_2_defval_dict = dict()
         for prop, defval in Timing.properties[mode].items():
             if defval is None:
                 continue
-            if 'RA-RaMO:TI-EVG' not in prop and not filt.search(prop):
-                continue
+            prop = _SiriusPVName(prop)
+            if prop.dev == 'EVG' or prop.sec in sections:
+                pvname_2_defval_dict[prop] = defval
+        return pvname_2_defval_dict
+
+    def prepare(self, mode, sections=list()):
+        """Initialize properties."""
+        pvs_2_init = self.get_pvname_2_defval_dict(mode, sections)
+        for prop, defval in pvs_2_init.items():
             pv = Timing._pvs[prop]
             pv.get()  # force connection
             if pv.connected:
@@ -151,18 +170,11 @@ class Timing:
 
     def check(self, mode, sections=list()):
         """Check if timing is configured."""
-        filt = self._create_section_re(sections)
-        for prop, defval in Timing.properties[mode].items():
-            if defval is None:
-                continue
-            if 'RA-RaMO:TI-EVG' not in prop and not filt.search(prop):
-                continue
-            prop = SiriusPVName(prop)
-            if prop.propty_suffix == 'SP':
-                prop_sts = prop.substitute(propty_suffix='RB')
-            elif prop.propty_suffix == 'Sel':
-                prop_sts = prop.substitute(propty_suffix='Sts')
-            else:
+        pvs_2_init = self.get_pvname_2_defval_dict(mode, sections)
+        for prop, defval in pvs_2_init.items():
+            try:
+                prop_sts = _get_pair_sprb(prop)[1]
+            except TypeError:
                 continue
             pv = Timing._pvs[prop_sts]
             pv.get()  # force connection
@@ -173,7 +185,7 @@ class Timing:
                     defval = Timing.cycle_idx[prop_sts.device_name]
 
                 if prop_sts.propty_name.endswith(('Duration', 'Delay')):
-                    if not _isclose(pv.value, defval, abs_tol=1):
+                    if not _isclose(pv.value, defval, abs_tol=20):
                         return False
                 elif isinstance(defval, (_np.ndarray, list, tuple)):
                     if _np.any(pv.value[0:len(defval)] != defval):
@@ -181,15 +193,6 @@ class Timing:
                 elif pv.value != defval:
                     return False
         return True
-
-    @property
-    def connected(self):
-        """Return connected state."""
-        self._status_nok = []
-        for pv in Timing._pvs.values():
-            if not pv.connected:
-                self._status_nok.append(pv.pvname)
-        return not bool(self._status_nok)
 
     def trigger(self, mode):
         """Trigger timming to cycle magnets."""
@@ -239,9 +242,9 @@ class Timing:
             for pvname in dict_.keys():
                 if pvname in Timing._pvs.keys():
                     continue
-                pvname = SiriusPVName(pvname)
-                Timing._pvs[pvname] = _PV(VACA_PREFIX+pvname,
-                                          connection_timeout=TIMEOUT)
+                pvname = _SiriusPVName(pvname)
+                Timing._pvs[pvname] = _PV(
+                    VACA_PREFIX+pvname, connection_timeout=TIMEOUT_CONNECTION)
                 self._initial_state[pvname] = Timing._pvs[pvname].get()
 
                 if pvname.propty_suffix == 'SP':
@@ -250,18 +253,10 @@ class Timing:
                     pvname_sts = pvname.substitute(propty_suffix='Sts')
                 else:
                     continue
-                Timing._pvs[pvname_sts] = _PV(VACA_PREFIX+pvname_sts,
-                                              connection_timeout=TIMEOUT)
+                Timing._pvs[pvname_sts] = _PV(
+                    VACA_PREFIX+pvname_sts,
+                    connection_timeout=TIMEOUT_CONNECTION)
                 Timing._pvs[pvname_sts].get()  # force connection
-
-    @staticmethod
-    def _create_section_re(sections):
-        filt = ''
-        for sec in sections:
-            if filt != '':
-                filt += '|'
-            filt += sec+'-'
-        return _re.compile(filt)
 
 
 class MagnetCycler:
@@ -303,7 +298,8 @@ class MagnetCycler:
         for prop in MagnetCycler.properties:
             if prop not in self._pvs.keys():
                 pvname = VACA_PREFIX + self._maname + ':' + prop
-                self._pvs[prop] = _PV(pvname, connection_timeout=TIMEOUT)
+                self._pvs[prop] = _PV(
+                    pvname, connection_timeout=TIMEOUT_CONNECTION)
                 self._pvs[prop].get()
 
     def _get_waveform(self):
@@ -620,7 +616,7 @@ class AutomatedCycle:
         # TODO: uncomment when using TS and SI
         # sections = ['TB', 'TS', 'SI'] if mode == 'Cycle' else ['BO', ]
         self._update_log('Preparing Timing...')
-        self._timing.init(mode, sections)
+        self._timing.prepare(mode, sections)
         self._update_log(done=True)
 
     def check_all_magnets_preparation(self, mode):

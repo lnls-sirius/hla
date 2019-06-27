@@ -73,13 +73,11 @@ class CycleWindow(SiriusMainWindow):
 
         # leds
         gb_status = QGroupBox('Status')
-        tipvs = list()
-        for cycletype in self._timing.properties:
-            for pvname in self._timing.properties[cycletype].keys():
-                tipvs.append(VACA_PREFIX + pvname)
-        self.ticonn_led = PyDMLedMultiConn(self, tipvs)
+        tipvs = [VACA_PREFIX + pv
+                 for pv in self._timing.get_pvnames_by_section()]
+        self.ticonn_led = PyDMLedMultiConn(self, channels=tipvs)
         self.ticonn_led.shape = 2
-        self.maconn_led = PyDMLedMultiConn()
+        self.maconn_led = PyDMLedMultiConn(self)
         self.maconn_led.shape = 2
         glay_status = QGridLayout()
         glay_status.addWidget(QLabel('Timing conn?', self,
@@ -201,8 +199,11 @@ class CycleWindow(SiriusMainWindow):
         self.central_widget.setLayout(layout)
 
     def _control_timing(self, action, mode):
-        if not self._timing.connected:
-            pvs_disconnected = self._timing.status_nok
+        sections = self._get_sections_2_ti()
+
+        pvs_disconnected = self._timing.connected(
+            sections=sections, return_disconn=True)
+        if pvs_disconnected:
             sttr = ''
             for item in pvs_disconnected:
                 sttr += item + '\n'
@@ -210,13 +211,8 @@ class CycleWindow(SiriusMainWindow):
                 self, 'Message', 'Timing PVs are not connected!\n'+sttr)
             return False
 
-        sections = list()
-        for s in ['TB', 'BO', 'TS', 'SI']:
-            if Filter.process_filters(self._magnets2cycle, filters={'sec': s}):
-                sections.append(s)
-
         if action == 'prepare':
-            self._timing.init(mode, sections)
+            self._timing.prepare(mode, sections)
         elif action == 'check':
             self._timing.check(mode, sections)
         return True
@@ -520,9 +516,21 @@ class CycleWindow(SiriusMainWindow):
                 self.magnets_tree.blockSignals(True)
                 item.setCheckState(0, state2set)
                 self.magnets_tree.blockSignals(False)
-        self._update_maled_channels()
+        self._update_led_channels()
 
-    def _update_maled_channels(self):
+    def _get_sections_2_ti(self):
+        sections = list()
+        magnets2cycle = self.magnets_tree.checked_items()
+        for s in ['TB', 'BO', 'TS', 'SI']:
+            if Filter.process_filters(magnets2cycle, filters={'sec': s}):
+                sections.append(s)
+        return sections
+
+    def _update_led_channels(self):
+        sections = self._get_sections_2_ti()
+        self.ticonn_led.set_channels(
+            [VACA_PREFIX + name
+             for name in self._timing.get_pvnames_by_section(sections)])
         self.maconn_led.set_channels(
             [VACA_PREFIX + name + ':Version-Cte'
              for name in self.magnets_tree.checked_items()])
