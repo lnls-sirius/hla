@@ -24,6 +24,7 @@ class TimingMain(SiriusMainWindow):
         super().__init__(parent)
         self.prefix = prefix
         self.setupui()
+        self.setObjectName('ASApp')
 
     def setupui(self):
         self.setupmenus()

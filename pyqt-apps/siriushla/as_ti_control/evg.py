@@ -20,6 +20,7 @@ class EVG(BaseWidget):
         """Initialize object."""
         super().__init__(parent, prefix=prefix)
         self.setupui()
+        self.setObjectName('ASApp')
 
     def setupui(self):
         mylayout = QGridLayout(self)
@@ -276,6 +277,7 @@ class EventList(BaseList):
     def __init__(self, **kwargs):
         kwargs['props2search'] = set(('mode', 'ext_trig', 'delay_type'))
         super().__init__(**kwargs)
+        self.setObjectName('ASApp')
 
     def _createObjs(self, prefix, prop):
         sp = rb = None
@@ -326,6 +328,7 @@ class ClockList(BaseList):
         """Initialize object."""
         super().__init__(name=name, parent=parent, prefix=prefix, props=props,
                          obj_names=obj_names, has_search=has_search)
+        self.setObjectName('ASApp')
 
     def _createObjs(self, prefix, prop):
         if prop == 'frequency':
