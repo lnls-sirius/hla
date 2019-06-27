@@ -14,7 +14,7 @@ from siriushla.widgets import SiriusMainWindow, PyDMStateButton, \
 from siriushla.misc.epics.wrapper import PyEpicsWrapper
 from siriushla.misc.epics.task import EpicsChecker, EpicsSetter
 from siriushla.widgets.dialog import ReportDialog, ProgressDialog
-from .menu import MainMenuBar
+from .menu import get_object
 
 
 class MainOperation(SiriusMainWindow):
@@ -26,10 +26,10 @@ class MainOperation(SiriusMainWindow):
         super().__init__(parent)
         self._prefix = prefix
         self._wrapper = wrapper
-        self._setupUi()
-        menubar = MainMenuBar()
+        menubar = get_object(ismenubar=True)
         menubar.setNativeMenuBar(False)
         self.setMenuBar(menubar)
+        self._setupUi()
         self.setWindowTitle('Main Controls')
         self.move(0, 20)
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
@@ -37,6 +37,7 @@ class MainOperation(SiriusMainWindow):
     def _setupUi(self):
         # Egun triggers
         egun = QGroupBox('Egun Trigger')
+        egun.setStyleSheet('min-width: 8em;')
 
         egun_trigger_enable = PyDMStateButton(
             parent=self, init_channel=self._prefix+'LI-01:EG-TriggerPS:enable')
@@ -48,6 +49,7 @@ class MainOperation(SiriusMainWindow):
         egun_lay = QGridLayout()
         egun_lay.setVerticalSpacing(5)
         egun_lay.setHorizontalSpacing(15)
+        egun_lay.addWidget(QLabel(''))
         egun_lay.addWidget(egun_trigger_enable, 1, 0)
         egun_lay.addWidget(egun_trigger_status, 2, 0)
         egun.setLayout(egun_lay)
@@ -84,13 +86,29 @@ class MainOperation(SiriusMainWindow):
         timing_lay.addWidget(evg_injection_sts, 2, 1)
         timing.setLayout(timing_lay)
 
-        layout = QHBoxLayout()
-        layout.addWidget(egun)
-        layout.addWidget(timing)
+        pbt = QPushButton('v', self)
+        pbt.clicked.connect(self._toggle_expand)
+        pbt.setStyleSheet('max-width: 0.8em;')
+
+        self.expandwid = get_object(ismenubar=False, parent=self)
+        self.expandwid.setVisible(False)
+
+        layout = QGridLayout()
+        layout.addWidget(egun, 0, 0)
+        layout.addWidget(timing, 0, 1)
+        layout.addWidget(pbt, 0, 2, alignment=Qt.AlignLeft | Qt.AlignBottom)
+        layout.addWidget(self.expandwid, 2, 0, 1, 3)
 
         cw = QWidget(self)
         cw.setLayout(layout)
         self.setCentralWidget(cw)
+
+    def _toggle_expand(self):
+        self.expandwid.setVisible(self.expandwid.isHidden())
+        text = 'v' if self.expandwid.isHidden() else '^'
+        self.sender().setText(text)
+        self.centralWidget().adjustSize()
+        self.adjustSize()
 
 if __name__ == '__main__':
     import sys
