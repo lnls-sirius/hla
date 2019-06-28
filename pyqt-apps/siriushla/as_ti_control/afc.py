@@ -22,6 +22,7 @@ class AFC(BaseWidget):
         super().__init__(parent, prefix=prefix)
         self.prefix = _PVName(prefix)
         self._setupUi()
+        self.setObjectName('ASApp')
 
     def _setupUi(self):
         self.my_layout = QGridLayout(self)

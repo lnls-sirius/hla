@@ -22,6 +22,7 @@ class _EVR_EVE(BaseWidget):
         super().__init__(parent, prefix)
         self.device_type = device
         self.setupui()
+        self.setObjectName('ASApp')
 
     def setupui(self):
         self.my_layout = QGridLayout(self)

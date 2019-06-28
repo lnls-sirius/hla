@@ -22,6 +22,7 @@ class BaseWidget(QWidget):
 
     def __init__(self, parent, prefix, ctrls, names, is_orb, acc='SI'):
         super(BaseWidget, self).__init__(parent)
+        self.setObjectName(acc.upper()+'App')
         self.line_names = names
         self.controls = ctrls
         self._csorb = SOFBFactory.create(acc)
@@ -499,6 +500,8 @@ class Graph(PyDMWaveformPlot):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.setObjectName('graph')
+        self.setStyleSheet('#graph {min-height: 15em; min-width: 20em;}')
         self.maxRedrawRate = 2
         self.mouseEnabledX = True
         self.setShowXGrid(True)
