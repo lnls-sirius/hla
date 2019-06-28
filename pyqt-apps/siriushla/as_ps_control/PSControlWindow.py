@@ -19,6 +19,7 @@ class PSControlWindow(SiriusMainWindow):
         """Class constructor."""
         super(PSControlWindow, self).__init__(parent)
         self.app = PyDMApplication.instance()
+        self.setObjectName(section+'App')
         self._section = section
         self._discipline = discipline
         self._device = device
