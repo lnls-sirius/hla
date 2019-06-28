@@ -4,6 +4,7 @@ from qtpy.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, \
     QLabel, QGroupBox, QPushButton
 from pydm.widgets import PyDMLabel, PyDMSpinbox
 
+from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.envars import vaca_prefix as _VACA_PREFIX
 from siriushla import util
 from siriushla.widgets import SiriusLedState, SiriusLedAlert, PyDMLed, \
@@ -18,7 +19,8 @@ class PulsedMagnetDetailWidget(QWidget):
     def __init__(self, maname, parent=None):
         """Receive a parent and a pulsed mangnet name."""
         super().__init__(parent)
-        self._maname = maname
+        self._maname = _PVName(maname)
+        self.setObjectName(self._maname.sec+'App')
         self._prefixed_maname = _VACA_PREFIX + self._maname
 
         self._create_pvs()

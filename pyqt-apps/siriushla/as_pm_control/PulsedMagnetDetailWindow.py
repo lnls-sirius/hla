@@ -1,5 +1,6 @@
 """Define detail window for a pulsed magnet."""
 from pydm import PyDMApplication
+from siriuspy.namesys import SiriusPVName as _PVName
 from siriushla.widgets import SiriusMainWindow
 from .PulsedMagnetDetailWidget import PulsedMagnetDetailWidget
 
@@ -10,7 +11,8 @@ class PulsedMagnetDetailWindow(SiriusMainWindow):
     def __init__(self, maname, parent=None):
         """Constructor."""
         super().__init__(parent)
-        self._maname = maname
+        self._maname = _PVName(maname)
+        self.setObjectName(self._maname.sec+'App')
         self.app = PyDMApplication.instance()
         self._setup_ui()
 
