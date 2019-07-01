@@ -187,7 +187,7 @@ class Timing:
                 if prop_sts.propty_name.endswith(('Duration', 'Delay')):
                     tol = 0.008 * 1.5
                     if mode == 'Ramp':
-                        tol *= self.DEFAULT_RAMP_NRCYCLES
+                        tol *= self.DEFAULT_RAMP_NRPULSES
                     if not _isclose(pv.value, defval, abs_tol=tol):
                         return False
                 elif isinstance(defval, (_np.ndarray, list, tuple)):
