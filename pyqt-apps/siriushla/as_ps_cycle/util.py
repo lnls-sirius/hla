@@ -120,7 +120,7 @@ class Timing:
         _trig_db = _get_trig_db(trig)
         cycle_idx[trig] = _trig_db['Src-Sel']['enums'].index('Cycle')
 
-    _pvs = None
+    _pvs = dict()
 
     def __init__(self):
         """Init."""
@@ -185,7 +185,10 @@ class Timing:
                     defval = Timing.cycle_idx[prop_sts.device_name]
 
                 if prop_sts.propty_name.endswith(('Duration', 'Delay')):
-                    if not _isclose(pv.value, defval, abs_tol=20):
+                    tol = 0.008 * 1.5
+                    if mode == 'Ramp':
+                        tol *= self.DEFAULT_RAMP_NRCYCLES
+                    if not _isclose(pv.value, defval, abs_tol=tol):
                         return False
                 elif isinstance(defval, (_np.ndarray, list, tuple)):
                     if _np.any(pv.value[0:len(defval)] != defval):
