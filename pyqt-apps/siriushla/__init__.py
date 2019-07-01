@@ -1,4 +1,5 @@
 __all__ = [
+    'as_ap_launcher',
     'as_ap_injection',
     'as_ap_opticscorr',
     'as_ap_posang',
