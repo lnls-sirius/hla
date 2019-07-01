@@ -652,8 +652,10 @@ class AutomatedCycle:
         t0 = _time.time()
         cycler = self.cyclers[maname]
         r = cycler.is_ready(mode)
-        while not r or _time.time()-t0 > TIMEOUT_CHECK_MAGNETS:
+        while _time.time()-t0 > TIMEOUT_CHECK_MAGNETS:
             r = cycler.is_ready(mode)
+            if r:
+                break
         self._checks_prep_result[maname] = r
 
     def check_timing(self, mode):
