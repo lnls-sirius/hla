@@ -145,9 +145,9 @@ class HLTriggerDetailed(BaseWidget):
         lay.addWidget(sc_area)
 
         wid = QWidget(sc_area)
+        wid.setObjectName('wid')
+        wid.setStyleSheet('#wid {background-color: transparent;}')
         sc_area.setWidget(wid)
-        # sc_area.setViewport(wid)
-        # wid = sc_area
 
         lay = QGridLayout(wid)
         lay.setAlignment(Qt.AlignTop)
@@ -172,7 +172,6 @@ class HLTriggerDetailed(BaseWidget):
             lay.addWidget(lbl, idx, 2)
         sc_area.setSizeAdjustPolicy(QScrollArea.AdjustToContentsOnFirstShow)
         sc_area.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        # sc_area.setWidgetResizable(False)
         return gb
 
     def _create_small_GB(self, name, parent, wids):
@@ -230,6 +229,7 @@ class LLTriggers(QWidget):
         vl.addWidget(QLabel(
             '<h1>Low Level Triggers of '+hltrigger+'</h1>',
             self, alignment=Qt.AlignCenter))
+        self.setObjectName(hltrigger.sec+'App')
 
         amc_list = set()
         otp_list = set()

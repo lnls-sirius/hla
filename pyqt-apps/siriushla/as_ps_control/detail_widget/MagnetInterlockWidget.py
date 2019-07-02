@@ -1,6 +1,7 @@
 """Magnet Interlock widget."""
 from epics import get_pv
 
+from siriuspy.namesys import SiriusPVName as _PVName
 from siriushla.widgets import SiriusMainWindow
 from siriushla.widgets import SiriusLedAlert
 from qtpy.QtWidgets import \
@@ -33,7 +34,8 @@ class MagnetInterlockWidget(QWidget):
 
     def __init__(self, parent=None, magnet='', interlock=0):
         super().__init__(parent)
-        self._magnet_name = magnet
+        self._magnet_name = _PVName(magnet)
+        self.setObjectName(self._magnet_name.sec+'App')
 
         if interlock == self.SOFT:
             self._intlk_mon = 'IntlkSoft-Mon'
@@ -75,7 +77,15 @@ class MagnetInterlockWindow(SiriusMainWindow):
 
     def __init__(self, parent=None, magnet='', interlock=0):
         super().__init__(parent)
-        self._magnet_name = magnet
+        self._magnet_name = _PVName(magnet)
+        name = self._magnet_name
+        secs = {'AS', 'TB', 'BO', 'TS', 'SI', 'LI'}
+        if name.sec in secs:
+            self.setObjectName(name.sec+'App')
+        elif name.idx[:2] in secs:
+            self.setObjectName(name.idx[:2]+'App')
+        else:
+            self.setObjectName('ASApp')
         self._interlock = interlock
         self._setup_ui()
 

@@ -6,6 +6,7 @@ from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QCheckBox, \
 from qtpy.QtGui import QColor
 from pydm.widgets import PyDMWaveformPlot, PyDMTimePlot, PyDMEnumComboBox
 from pydm.widgets.base import PyDMPrimitiveWidget
+from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.csdevice.bpms import get_bpm_database
 from siriushla.widgets import SiriusConnectionSignal, SiriusLabel, \
     SiriusSpinbox
@@ -17,8 +18,9 @@ class BaseWidget(QWidget):
 
     def __init__(self, parent=None, prefix='', bpm='', data_prefix=''):
         super().__init__(parent)
-        self.prefix = prefix
-        self.bpm = bpm
+        self.prefix = _PVName(prefix)
+        self.bpm = _PVName(bpm)
+        self.setObjectName(self.bpm.sec+'App')
         self.data_prefix = data_prefix
         self.bpmdb = _BPMDB
         self._chans = []

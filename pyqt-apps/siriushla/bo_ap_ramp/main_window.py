@@ -22,6 +22,7 @@ class RampMain(SiriusMainWindow):
         """Initialize object."""
         super().__init__(parent)
         self.setWindowTitle('Booster Energy Ramping')
+        self.setObjectName('BOApp')
         self.prefix = prefix
         self.ramp_config = None
         self._undo_stack = QUndoStack(self)

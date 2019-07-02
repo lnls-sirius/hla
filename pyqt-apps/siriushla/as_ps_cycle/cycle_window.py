@@ -42,6 +42,7 @@ class CycleWindow(SiriusMainWindow):
     def __init__(self, parent=None, checked_accs=()):
         """Constructor."""
         super().__init__(parent)
+        self.setObjectName('ASApp')
         # Data structs
         self._timing = Timing()
         self._magnets2cycle = list()

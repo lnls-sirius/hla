@@ -3,7 +3,7 @@
 from qtpy.QtWidgets import QFormLayout, QSizePolicy as QSzPlcy, QVBoxLayout, \
                            QSpacerItem, QGroupBox, QLabel
 from qtpy.QtCore import Qt
-from siriuspy.namesys.implementation import SiriusPVName
+from siriuspy.namesys import SiriusPVName
 from siriushla.widgets.windows import SiriusDialog
 from siriushla.as_di_scrns.base import \
     create_propty_layout as _create_propty_layout
@@ -17,8 +17,9 @@ class ScrnCalibrationSettings(SiriusDialog):
         super().__init__(parent=parent)
         self.prefix = prefix
         self.device = device
-        self.scrn_prefix = self.prefix+self.device
+        self.scrn_prefix = SiriusPVName(self.prefix+self.device)
         self.setWindowTitle('Screen Calibration')
+        self.setObjectName(self.scrn_prefix.sec+'App')
         self._setupUi()
 
     def _setupUi(self):

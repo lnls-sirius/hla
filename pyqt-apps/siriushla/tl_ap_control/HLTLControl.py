@@ -42,6 +42,7 @@ class TLAPControlWindow(SiriusMainWindow):
         super(TLAPControlWindow, self).__init__(parent)
         self.prefix = prefix
         self._tl = tl
+        self.setObjectName(tl.upper()+'App')
         self.setWindowTitle(self._tl.upper() + ' Control Window')
         self._setupUi()
 

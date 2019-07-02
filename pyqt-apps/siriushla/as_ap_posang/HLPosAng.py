@@ -39,6 +39,7 @@ class ASAPPosAngCorr(SiriusMainWindow):
             self._prefix = prefix
 
         self._tl = tl.upper()
+        self.setObjectName(tl.upper()+'App')
         tmp_file = _substitute_in_file(UI_FILE, {'TRANSPORTLINE': self._tl,
                                                  'PREFIX': self._prefix})
         self.centralwidget = _loadUi(tmp_file)

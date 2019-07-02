@@ -43,8 +43,9 @@ class SiriusScrnView(QWidget):
         QWidget.__init__(self, parent=parent)
         self.prefix = prefix
         self.device = device
-        self.scrn_prefix = self.prefix+self.device
+        self.scrn_prefix = SiriusPVName(self.prefix+self.device)
         self._receivedData = False
+        self.setObjectName(self.scrn_prefix.sec+'App')
 
         self.screen_type_conn = SiriusConnectionSignal(
             self.scrn_prefix+':ScrnType-Sts')
@@ -559,7 +560,8 @@ class IndividualScrn(SiriusMainWindow):
         """Init."""
         super().__init__(parent=parent)
         self._prefix = prefix
-        self._scrn = scrn
+        self._scrn = SiriusPVName(scrn)
+        self.setObjectName(self._scrn.sec+'App')
         self._setupUi()
 
     def _setupUi(self):

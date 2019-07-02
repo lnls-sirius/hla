@@ -16,9 +16,8 @@
 #BOApp {background-color: #c8e6c9;}
 #TSApp {background-color: #b2ebf2;}
 #SIApp {background-color: #bbdefb;}
-
 QScrollArea {background-color: transparent;}
-QScrollAreaContents {background-color: transparent;}
+
 
 QLed {
   min-height: 1.29em;

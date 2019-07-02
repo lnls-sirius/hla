@@ -387,6 +387,8 @@ class BasePSControlWidget(QWidget):
 
     def _createGroupBox(self, title, widget_group):
         w = QWidget(self)
+        w.setObjectName('groupbox')
+        w.setStyleSheet('#groupbox {background-color: transparent;}')
         w.layout = QVBoxLayout()
         w.setLayout(w.layout)
         for line, widget in enumerate(widget_group):

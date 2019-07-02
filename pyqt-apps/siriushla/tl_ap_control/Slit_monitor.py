@@ -10,6 +10,7 @@ from qtpy.QtWidgets import QWidget, QVBoxLayout, QGridLayout, QFormLayout, \
                            QLabel, QGroupBox
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 from pydm.widgets import PyDMLabel, PyDMPushButton
+from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, SiriusDialog, PyDMLed, \
@@ -35,6 +36,8 @@ class SlitMonitoring(QWidget):
             _os.path.abspath(_os.path.dirname(__file__))+'/ui_tb_ap_slit' +
             slit_orientation.lower()+'mon.ui', {'PREFIX': prefix})
         self.centralwidget = loadUi(tmp_file)
+        self.setObjectName('TBApp')
+        self.centralwidget.setObjectName('TBApp')
         self.setLayout(QVBoxLayout())
         self.layout().setContentsMargins(0, 0, 0, 0)
         self.layout().addWidget(self.centralwidget)
@@ -121,7 +124,8 @@ class _SlitDetails(SiriusDialog):
     def __init__(self, slit_prefix, parent=None):
         """Init."""
         super(_SlitDetails, self).__init__(parent)
-        self.slit_prefix = slit_prefix
+        self.slit_prefix = _PVName(slit_prefix)
+        self.setObjectName(self.slit_prefix.sec+'App')
         self._setupUi()
 
     def _setupUi(self):

@@ -17,6 +17,7 @@ class _cw(QWidget):
 
     def __init__(self, parent=None, prefix=''):
         super(_cw, self).__init__(None)
+        self.setObjectName('TBApp')
         gbox_slith = QGroupBox('TB-01:DI-SlitH')
         self.slith = SlitMonitoring('H', self, prefix)
         lay_slith = QVBoxLayout()

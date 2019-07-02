@@ -132,6 +132,8 @@ class BaseList(CustomGroupBox):
         sc_area.setWidgetResizable(True)
         sc_area.setFrameShape(QFrame.NoFrame)
         sc_area.setWidget(wid)
+        wid.setObjectName('wid')
+        wid.setStyleSheet('#wid {background-color: transparent;}')
         self.my_layout.addWidget(sc_area)
 
     def getLine(self, prefix=None, header=False):

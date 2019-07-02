@@ -6,6 +6,7 @@ from qtpy.QtWidgets import QWidget, QLabel, QVBoxLayout, QHBoxLayout, \
     QToolTip, QSpinBox
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
+from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.csdevice.orbitcorr import SOFBFactory
 from siriushla.widgets import SiriusConnectionSignal
 from .base import BaseWidget, Graph, InfLine
@@ -18,6 +19,7 @@ class ShowMatrixWidget(QWidget):
         super().__init__(parent)
         self.prefix = prefix
         self.acc = acc.upper()
+        self.setObjectName(self.acc+'App')
         self._csorb = SOFBFactory.create(acc)
         self._inflines = []
         self.setupui()
@@ -131,7 +133,8 @@ class SingularValues(QWidget):
 
     def __init__(self, parent, prefix):
         super().__init__(parent)
-        self.prefix = prefix
+        self.prefix = _PVName(prefix)
+        self.setObjectName(self.prefix.sec+'App')
         self.setupui()
 
     def setupui(self):

@@ -15,6 +15,7 @@ class BaseWidget(QWidget):
 
     def __init__(self, parent, prefix, acc='SI'):
         super().__init__(parent)
+        self.setObjectName(acc.upper()+'App')
         self.prefix = _PVName(prefix)
         self._csorb = SOFBFactory.create(acc)
 
