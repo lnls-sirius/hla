@@ -25,8 +25,9 @@ class ScrnSettingsDetails(SiriusMainWindow):
         super().__init__(parent=parent)
         self.prefix = prefix
         self.device = device
-        self.scrn_prefix = self.prefix+self.device
+        self.scrn_prefix = SiriusPVName(self.prefix+self.device)
         self.setWindowTitle('Screen Settings Details')
+        self.setObjectName(self.scrn_prefix.sec+'App')
         self.centralwidget = QWidget(self)
         self._setupUi()
         self.setCentralWidget(self.centralwidget)

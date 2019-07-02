@@ -14,6 +14,7 @@ from pydm.widgets import PyDMLabel, PyDMEnumComboBox, PyDMSpinbox, \
                          PyDMPushButton, PyDMWaveformPlot
 from pydm.widgets.waveformplot import WaveformCurveItem
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
+from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, SiriusDialog, \
@@ -34,17 +35,19 @@ class ICTMonitoring(SiriusMainWindow):
         super(ICTMonitoring, self).__init__(parent)
         # Set transport line
         if tl.upper() == 'TB':
-            ICT1 = 'TB-02:DI-ICT'
-            ICT2 = 'TB-04:DI-ICT'
+            ICT1 = _PVName('TB-02:DI-ICT')
+            ICT2 = _PVName('TB-04:DI-ICT')
         elif tl.upper() == 'TS':
-            ICT1 = 'TS-01:DI-ICT'
-            ICT2 = 'TS-04:DI-ICT'
+            ICT1 = _PVName('TS-01:DI-ICT')
+            ICT2 = _PVName('TS-04:DI-ICT')
 
         tmp_file = _substitute_in_file(
             _os.path.abspath(_os.path.dirname(__file__))+'/ui_tl_ap_ictmon.ui',
             {'TL': tl.upper(), 'ICT1': ICT1, 'ICT2': ICT2, 'PREFIX': prefix})
         self.setWindowTitle(tl.upper()+' ICTs Monitor')
         self.centralwidget = loadUi(tmp_file)
+        self.setObjectName(tl.upper()+'App')
+        self.centralwidget.setObjectName(tl.upper()+'App')
         self.setCentralWidget(self.centralwidget)
 
         # Add curves accordingly
@@ -114,9 +117,10 @@ class _ICTSettings(SiriusDialog):
         super().__init__(parent)
         self.prefix = prefix
         self.device = device
-        self.ict_prefix = prefix+device
+        self.ict_prefix = _PVName(prefix+device)
         self.ict_trig_prefix = self.ict_prefix.replace(':DI-', ':TI-')
         self.setWindowTitle(self.ict_prefix+' Settings')
+        self.setObjectName(self.ict_prefix.sec+'App')
         self._setupUi()
 
     def _setupUi(self):
@@ -272,7 +276,7 @@ class _ICTCalibration(QWidget):
         """Initialize object."""
         super().__init__(parent)
         self.ict_prefix = ict_prefix
-        self.setObjectName('ICTCalibration')
+        self.setObjectName(ict_prefix.sec+'App')
         self._setupUi()
 
     def _setupUi(self):
@@ -291,8 +295,7 @@ class _ICTCalibration(QWidget):
                               alignment=Qt.AlignCenter), 1, 1)
         glay.addWidget(self.graph_rawread, 2, 1, 2, 1)
         self.setLayout(glay)
-        self.setStyleSheet("""
-            #ICTCalibration{
+        style = '#' + self.objectName() + """{
                 min-width:65em;
                 min-height:34em;}
             PyDMSpinbox{
@@ -310,7 +313,8 @@ class _ICTCalibration(QWidget):
                 min-height:1.29em;\nmax-height:1.29em;
                 qproperty-alignment: AlignCenter;\n}
             QPushButton{
-                min-width:14.2em;\nmax-width:14.2em;\n}""")
+                min-width:14.2em;\nmax-width:14.2em;\n}"""
+        self.setStyleSheet(style)
         glay.setRowStretch(0, 4)
         glay.setRowStretch(1, 2)
         glay.setRowStretch(2, 24)

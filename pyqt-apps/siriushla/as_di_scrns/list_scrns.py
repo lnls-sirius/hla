@@ -48,6 +48,7 @@ class SelectScrns(QWidget):
             self.scrn_list = ['TS-01:DI-Scrn', 'TS-02:DI-Scrn',
                               'TS-03:DI-Scrn', 'TS-04:DI-Scrn-1',
                               'TS-04:DI-Scrn-2', 'TS-04:DI-Scrn-3']
+        self.setObjectName(sec+'App')
         self._setupUi()
 
     def _setupUi(self):

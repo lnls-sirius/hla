@@ -33,6 +33,8 @@ class OpticsCorrWindow(SiriusMainWindow):
                    acc + '_ap_' + opticsparam + 'corr.ui')
         tmp_file = _substitute_in_file(UI_FILE, {'PREFIX': prefix})
         self.centralwidget = loadUi(tmp_file)
+        self.setObjectName(acc.upper()+'App')
+        self.centralwidget.setObjectName(acc.upper()+'App')
         self.setCentralWidget(self.centralwidget)
         self.setWindowTitle(
             self._acc + ' Tune' if opticsparam == 'tune' else ' Chromaticity' +

@@ -23,6 +23,8 @@ class CurrLTWindow(SiriusMainWindow):
         tmp_file = _substitute_in_file(UI_FILE, {'PREFIX': prefix})
 
         self.centralwidget = loadUi(tmp_file)
+        self.setObjectName(acc.upper()+'App')
+        self.centralwidget.setObjectName(acc.upper()+'App')
         self.setCentralWidget(self.centralwidget)
         self.setWindowTitle(acc.upper()+' Current Info: Current and Lifetime')
 
