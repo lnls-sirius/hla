@@ -206,7 +206,10 @@ class Timing:
             pv.value = _TIConst.DsblEnbl.Enbl
 
             pv = Timing._pvs['RA-RaMO:TI-EVG:InjectionEvt-Sts']
-            while pv.value != _TIConst.DsblEnbl.Enbl:
+            t0 = _time.time()
+            while _time.time() - t0 < TIMEOUT_CHECK:
+                if pv.value == _TIConst.DsblEnbl.Enbl:
+                    break
                 _time.sleep(SLEEP_CAPUT)
 
     def get_cycle_count(self):
@@ -597,7 +600,7 @@ class CycleController:
         """Cycle size."""
         if not self._cycle_size:
             s_check = len(self.manames)+3
-            s_cycle = round(self._cycle_duration)+3*len(self.manames)+3
+            s_cycle = round(self._cycle_duration)+3*len(self.manames)+4
             self._cycle_size = s_check + s_cycle
         return self._cycle_size
 
@@ -669,6 +672,7 @@ class CycleController:
                 r = cycler.check_opmode_cycle(self.mode)
             if r:
                 break
+            _time.sleep(SLEEP_CAPUT)
         self._checks_result[maname] = r
 
     def check_timing(self):
@@ -682,6 +686,7 @@ class CycleController:
             status = self._timing.check(self.mode, sections)
             if status:
                 break
+            _time.sleep(SLEEP_CAPUT)
         if not status:
             self._update_log('Timing is not configured.', error=True)
             return False
@@ -763,17 +768,16 @@ class CycleController:
 
     def reset_all_subsystems(self):
         """Reset all subsystems."""
-        self._update_log(
-            'Restoring Timing initial state and setting magnets to SlowRef...')
-        _time.sleep(4)
+        self._update_log('Setting magnets to SlowRef...')
         threads = list()
         for ma in self.manames:
             t = _thread.Thread(
                 target=self.cyclers[ma].set_opmode_slowref, daemon=True)
-            t.start()
             threads.append(t)
+            t.start()
         for t in threads:
             t.join()
+        self._update_log('Restoring Timing initial state...')
         self._timing.restore_initial_state()
         self._update_log(done=True)
 
@@ -835,7 +839,7 @@ class CycleController:
         if not self.wait():
             return
         self.check_all_magnets_final_state()
-
+        _time.sleep(4)
         self.reset_all_subsystems()
 
         # Indicate cycle end
