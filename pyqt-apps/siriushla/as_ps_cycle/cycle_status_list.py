@@ -1,18 +1,16 @@
 """List with magnet cycling status."""
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QListView, QApplication
+from qtpy.QtWidgets import QListView, QApplication, QDialog, QVBoxLayout, \
+    QLabel, QPushButton
 from qtpy.QtGui import QStandardItemModel, QStandardItem
 
 from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
 
 
-class CycleStatusList(QListView):
-    """Magnet cycling status list."""
+class MagnetsList(QListView):
+    """Magnets List."""
 
-    # OK = QIcon('icons8-checkmark.svg')
-    # NOK = QIcon('icons8-delete.svg')
-
-    def __init__(self, magnets=list(), parent=None):
+    def __init__(self, magnets=set(), parent=None):
         """Constructor."""
         super().__init__(parent)
         self._magnets = magnets
@@ -35,7 +33,6 @@ class CycleStatusList(QListView):
         for magnet in self._magnets:
             text = QStandardItem()
             text.setData(magnet, Qt.DisplayRole)
-            # text.setData(CycleStatusList.NOK, Qt.DecorationRole)
             self._model.appendRow(text)
 
         self.setModel(self._model)
@@ -44,3 +41,25 @@ class CycleStatusList(QListView):
         app = QApplication.instance()
         maname = index.data()
         app.open_window(PSDetailWindow, parent=self, **{'psname': maname})
+
+
+class MagnetsListDialog(QDialog):
+    """Dialog to show list of magnets not ok."""
+
+    def __init__(self, magnets=set(), text='', parent=None):
+        super().__init__(parent)
+        self.magnets = magnets
+        self.text = text
+        self._setup_ui()
+
+    def _setup_ui(self):
+        label = QLabel(self.text, self)
+        self._status_list = MagnetsList(self.magnets, self)
+        self._ok_bt = QPushButton('Ok', self)
+        self._ok_bt.clicked.connect(self.close)
+
+        lay = QVBoxLayout()
+        lay.addWidget(label)
+        lay.addWidget(self._status_list)
+        lay.addWidget(self._ok_bt)
+        self.setLayout(lay)
