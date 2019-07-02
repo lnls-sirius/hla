@@ -2,7 +2,7 @@
 
 import time as _time
 import re as _re
-import threading as _thread
+from threading import Thread as _Thread, Lock as _Lock
 from datetime import datetime as _datetime
 from functools import partial as _part
 
@@ -25,10 +25,10 @@ from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
 
 from .util import MagnetCycler, Timing, get_manames, \
     get_manames_from_same_udc, AutomatedCycle, \
-    INTERVAL_WAITCYCLE, INTERVAL_WAITRAMP
+    TIMEOUT_CHECK_MAGNETS
 
 _cyclers = dict()
-
+_lock = _Lock()
 
 errorcolor = QColor(255, 0, 0)
 warncolor = QColor(200, 200, 0)
@@ -73,13 +73,11 @@ class CycleWindow(SiriusMainWindow):
 
         # leds
         gb_status = QGroupBox('Status')
-        tipvs = list()
-        for cycletype in self._timing.properties:
-            for pvname in self._timing.properties[cycletype].keys():
-                tipvs.append(VACA_PREFIX + pvname)
-        self.ticonn_led = PyDMLedMultiConn(self, tipvs)
+        tipvs = [VACA_PREFIX + pv
+                 for pv in self._timing.get_pvnames_by_section()]
+        self.ticonn_led = PyDMLedMultiConn(self, channels=tipvs)
         self.ticonn_led.shape = 2
-        self.maconn_led = PyDMLedMultiConn()
+        self.maconn_led = PyDMLedMultiConn(self)
         self.maconn_led.shape = 2
         glay_status = QGridLayout()
         glay_status.addWidget(QLabel('Timing conn?', self,
@@ -201,8 +199,11 @@ class CycleWindow(SiriusMainWindow):
         self.central_widget.setLayout(layout)
 
     def _control_timing(self, action, mode):
-        if not self._timing.connected:
-            pvs_disconnected = self._timing.status_nok
+        sections = self._get_sections_2_ti()
+
+        pvs_disconnected = self._timing.connected(
+            sections=sections, return_disconn=True)
+        if pvs_disconnected:
             sttr = ''
             for item in pvs_disconnected:
                 sttr += item + '\n'
@@ -210,13 +211,8 @@ class CycleWindow(SiriusMainWindow):
                 self, 'Message', 'Timing PVs are not connected!\n'+sttr)
             return False
 
-        sections = list()
-        for s in ['TB', 'BO', 'TS', 'SI']:
-            if Filter.process_filters(self._magnets2cycle, filters={'sec': s}):
-                sections.append(s)
-
         if action == 'prepare':
-            self._timing.init(mode, sections)
+            self._timing.prepare(mode, sections)
         elif action == 'check':
             self._timing.check(mode, sections)
         return True
@@ -253,7 +249,7 @@ class CycleWindow(SiriusMainWindow):
             status = self._control_timing('prepare', mode)
 
         if status:
-            t = _thread.Thread(
+            t = _Thread(
                 target=self._enable_cycle_buttons,
                 args=(mode, ), daemon=True)
             t.start()
@@ -460,6 +456,16 @@ class CycleWindow(SiriusMainWindow):
             return
         app.open_window(PSDetailWindow, parent=self, **{'psname': maname})
 
+    def _check_magnets_prepared(self, mag_ready, mode):
+        t0 = _time.time()
+        while any([value is False for value in mag_ready.values()]):
+            for mag, ready in mag_ready.items():
+                if not ready:
+                    mag_ready[mag] = _cyclers[mag].is_ready(mode)
+            if _time.time() - t0 > TIMEOUT_CHECK_MAGNETS:
+                break
+        self._check_magnets_prepared_ended = True
+
     def _enable_cycle_buttons(self, mode):
         """Enable cycle buttons."""
         def toggle_button_color(bt):
@@ -468,20 +474,27 @@ class CycleWindow(SiriusMainWindow):
             else:
                 bt.setStyleSheet("background-color: gray;")
 
-        if mode == 'Cycle':
-            for i in range(INTERVAL_WAITCYCLE*2):
-                _time.sleep(0.5)
-                toggle_button_color(self.demag_bt)
-            self.demag_bt.setStyleSheet("")
-            self.demag_bt.setEnabled(True)
+        is_demag = (mode == 'Cycle')
+        bt = self.demag_bt if is_demag else self.cycle_bt
+
+        mag_ready = dict()
+        for mag in self._magnets2cycle:
+            mag_ready[mag] = False
+        t = _Thread(target=self._check_magnets_prepared,
+                    args=(mag_ready, mode), daemon=True)
+        t.start()
+        self._check_magnets_prepared_ended = False
+        while not self._check_magnets_prepared_ended:
+            _time.sleep(0.5)
+            toggle_button_color(bt)
+        bt.setStyleSheet("")
+
+        if any([value is False for value in mag_ready.values()]):
+            self.demag_bt.setEnabled(False)
             self.cycle_bt.setEnabled(False)
         else:
-            for i in range(INTERVAL_WAITRAMP*2):
-                _time.sleep(0.5)
-                toggle_button_color(self.cycle_bt)
-            self.cycle_bt.setStyleSheet("")
-            self.demag_bt.setEnabled(False)
-            self.cycle_bt.setEnabled(True)
+            self.demag_bt.setEnabled(is_demag)
+            self.cycle_bt.setEnabled(not is_demag)
 
     def _disable_cycle_buttons(self):
         """Disable cycle buttons."""
@@ -503,9 +516,21 @@ class CycleWindow(SiriusMainWindow):
                 self.magnets_tree.blockSignals(True)
                 item.setCheckState(0, state2set)
                 self.magnets_tree.blockSignals(False)
-        self._update_maled_channels()
+        self._update_led_channels()
 
-    def _update_maled_channels(self):
+    def _get_sections_2_ti(self):
+        sections = list()
+        magnets2cycle = self.magnets_tree.checked_items()
+        for s in ['TB', 'BO', 'TS', 'SI']:
+            if Filter.process_filters(magnets2cycle, filters={'sec': s}):
+                sections.append(s)
+        return sections
+
+    def _update_led_channels(self):
+        sections = self._get_sections_2_ti()
+        self.ticonn_led.set_channels(
+            [VACA_PREFIX + name
+             for name in self._timing.get_pvnames_by_section(sections)])
         self.maconn_led.set_channels(
             [VACA_PREFIX + name + ':Version-Cte'
              for name in self.magnets_tree.checked_items()])
@@ -538,7 +563,7 @@ class CreateCyclers(QThread):
             interrupted = False
             threads = dict()
             for maname in self._manames:
-                threads[maname] = _thread.Thread(
+                threads[maname] = _Thread(
                     target=self.create_cycler,
                     args=(maname, ), daemon=True)
                 threads[maname].start()
@@ -552,10 +577,14 @@ class CreateCyclers(QThread):
 
     def create_cycler(self, maname):
         global _cyclers
-        if maname not in _cyclers.keys():
-            _cyclers[maname] = MagnetCycler(maname)
-            self.currentItem.emit(maname)
-            self.itemDone.emit()
+        if maname in _cyclers.keys():
+            pass
+        else:
+            c = MagnetCycler(maname)
+            with _lock:
+                _cyclers[maname] = c
+        self.currentItem.emit(maname)
+        self.itemDone.emit()
 
 
 class SetToCycle(QThread):
@@ -589,7 +618,7 @@ class SetToCycle(QThread):
             interrupted = False
             threads = dict()
             for maname in self._manames:
-                threads[maname] = _thread.Thread(
+                threads[maname] = _Thread(
                     target=self.prepare_magnet,
                     args=(maname, self._mode), daemon=True)
                 threads[maname].start()
@@ -639,7 +668,7 @@ class VerifyCycle(QThread):
             interrupted = False
             threads = dict()
             for maname in self._manames:
-                threads[maname] = _thread.Thread(
+                threads[maname] = _Thread(
                     target=self.check_magnet,
                     args=(maname, self._mode), daemon=True)
                 threads[maname].start()
@@ -776,7 +805,7 @@ class VerifyFinalState(QThread):
             interrupted = False
             threads = dict()
             for maname in self._manames:
-                threads[maname] = _thread.Thread(
+                threads[maname] = _Thread(
                     target=self.check_magnet_final_state,
                     args=(maname, self._mode), daemon=True)
                 threads[maname].start()
@@ -825,7 +854,7 @@ class ResetMagnetsOpMode(QThread):
             interrupted = False
             threads = dict()
             for maname in self._manames:
-                threads[maname] = _thread.Thread(
+                threads[maname] = _Thread(
                     target=self.set_magnet_opmode_slowref,
                     args=(maname, ), daemon=True)
                 threads[maname].start()
