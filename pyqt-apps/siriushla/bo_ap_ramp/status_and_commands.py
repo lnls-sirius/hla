@@ -2,14 +2,14 @@
 
 from threading import Thread as _Thread
 from qtpy.QtWidgets import QGroupBox, QLabel, QPushButton, QGridLayout, \
-    QMessageBox, QHBoxLayout, QSizePolicy as QSzPly
-from qtpy.QtCore import Slot, Signal, QThread
+    QMessageBox, QVBoxLayout
+from qtpy.QtCore import Qt, Slot, Signal, QThread
 from siriuspy.ramp import ramp
 from siriuspy.ramp.conn import ConnMagnets as _ConnMagnets, ConnRF as _ConnRF,\
                                ConnTiming as _ConnTiming
 from siriuspy.csdevice.pwrsupply import Const as _PSc
 from siriushla.widgets import PyDMLedMultiChannel, PyDMLedMultiConnection, \
-                              SiriusLedState, PyDMStateButton, SiriusDialog
+                              SiriusDialog
 
 COMMANDS_TIMEOUT = 1
 
@@ -19,7 +19,7 @@ class StatusAndCommands(QGroupBox):
 
     def __init__(self, parent=None, prefix='', ramp_config=None):
         """Initialize object."""
-        super().__init__('Controls', parent)
+        super().__init__('', parent)
         self.prefix = prefix
         self.ramp_config = ramp_config
         self._setupUi()
@@ -27,82 +27,67 @@ class StatusAndCommands(QGroupBox):
         thread.start()
 
     def _setupUi(self):
-        lay = QHBoxLayout()
-        lay.setSpacing(6)
-        lay.addStretch()
+        lay = QVBoxLayout()
+        lay.setAlignment(Qt.AlignTop)
         lay.addLayout(self._setupStatusLayout())
-        lay.addStretch()
         lay.addLayout(self._setupCommandsLayout())
-        lay.addStretch()
         self.setLayout(lay)
 
         self.setStyleSheet("""
             QLabel{
                 qproperty-alignment: AlignCenter;
                 min-height:1.55em; max-height:1.55em;
-                max-width:10em;}
-            #RampGb, #InjectGb{
-                min-width:7em; max-width:7em;}""")
+                max-width:10em;}""")
 
     def _setupStatusLayout(self):
         self.led_conn = PyDMLedMultiConnection(self)
         self.led_intlk = PyDMLedMultiChannel(self)
         self.led_setup = PyDMLedMultiChannel(self)
         self.led_apply = PyDMLedMultiChannel(self)
-        self.pb_opendetails = QPushButton('Open\ndetails')
-        self.pb_opendetails.setSizePolicy(
-            QSzPly.Preferred, QSzPly.Expanding)
+        self.pb_opendetails = QPushButton('...')
         self.pb_opendetails.clicked.connect(self._open_status_details)
+        self.pb_opendetails.setStyleSheet('max-height:1em; max-width:2em;')
 
-        glay = QGridLayout()
-        glay.setHorizontalSpacing(10)
-        glay.setVerticalSpacing(6)
-        glay.addWidget(QLabel('Connection', self), 0, 0)
-        glay.addWidget(self.led_conn, 1, 0)
-        glay.addWidget(QLabel('Interlock', self), 0, 1)
-        glay.addWidget(self.led_intlk, 1, 1)
-        glay.addWidget(QLabel('Basic Setup', self), 0, 2)
-        glay.addWidget(self.led_setup, 1, 2)
-        glay.addWidget(QLabel('Config Applied?', self), 0, 3)
-        glay.addWidget(self.led_apply, 1, 3)
-        glay.addWidget(self.pb_opendetails, 0, 4, 2, 1)
-        return glay
+        lay = QGridLayout()
+        lay.setVerticalSpacing(10)
+        lay.addWidget(QLabel('<h4>Status</h4>', self), 0, 0)
+        lay.addWidget(self.pb_opendetails, 0, 1, alignment=Qt.AlignRight)
+        lay.addWidget(QLabel('Connection', self), 1, 0)
+        lay.addWidget(self.led_conn, 1, 1)
+        lay.addWidget(QLabel('Interlock', self), 2, 0)
+        lay.addWidget(self.led_intlk, 2, 1)
+        lay.addWidget(QLabel('Basic Setup', self), 3, 0)
+        lay.addWidget(self.led_setup, 3, 1)
+        lay.addWidget(QLabel('Config Applied?', self), 4, 0)
+        lay.addWidget(self.led_apply, 4, 1)
+        return lay
 
     def _setupCommandsLayout(self):
-        self.bt_setup = QPushButton('Setup\nsubsystems', self)
-        self.bt_setup.setSizePolicy(
-            QSzPly.Preferred, QSzPly.Expanding)
-        self.bt_setup.clicked.connect(self._setup_ramp)
+        self.bt_prepare_ma = QPushButton('Prepare magnets', self)
+        self.bt_prepare_ma.clicked.connect(self._prepare_ma)
+        self.bt_prepare_ma.setStyleSheet('min-height:1.5em;')
+        self.bt_prepare_rf = QPushButton('Prepare RF', self)
+        self.bt_prepare_rf.clicked.connect(self._prepare_rf)
+        self.bt_prepare_rf.setStyleSheet('min-height:1.5em;')
+        self.bt_prepare_ti = QPushButton('Prepare timing', self)
+        self.bt_prepare_ti.clicked.connect(self._prepare_ti)
+        self.bt_prepare_ti.setStyleSheet('min-height:1.5em;')
 
-        gbox_ramp = QGroupBox('Ramp', self)
-        gbox_ramp.setObjectName('RampGb')
-        hlay_ramp = QHBoxLayout(gbox_ramp)
-        ppty = _ConnTiming.Const.EVG_ContinuousEvt
-        self.bt_ramp = PyDMStateButton(
-            parent=self, init_channel=self.prefix+ppty)
-        self.led_ramp = SiriusLedState(
-            parent=self, init_channel=self.prefix+ppty.replace('Sel', 'Sts'))
-        hlay_ramp.addWidget(self.bt_ramp)
-        hlay_ramp.addWidget(self.led_ramp)
+        self.bt_apply_all = QPushButton('Apply All Changes\nto Machine', self)
+        self.bt_apply_all.setObjectName('All')
+        self.bt_apply_all.clicked.connect(self.apply_changes)
+        self.bt_apply_all.setStyleSheet('min-height:1.5em;')
 
-        gbox_inject = QGroupBox('Inject', self)
-        gbox_inject.setObjectName('InjectGb')
-        hlay_inj = QHBoxLayout(gbox_inject)
-        ppty = _ConnTiming.Const.EVG_InjectionEvt
-        self.bt_inject = PyDMStateButton(
-            parent=self, init_channel=self.prefix+ppty)
-        self.led_inject = SiriusLedState(
-            parent=self, init_channel=self.prefix+ppty.replace('Sel', 'Sts'))
-        hlay_inj.addWidget(self.bt_inject)
-        hlay_inj.addWidget(self.led_inject)
-
-        glay = QGridLayout()
-        glay.setHorizontalSpacing(10)
-        glay.setVerticalSpacing(6)
-        glay.addWidget(self.bt_setup, 0, 0)
-        glay.addWidget(gbox_ramp, 0, 1)
-        glay.addWidget(gbox_inject, 0, 2)
-        return glay
+        lay = QVBoxLayout()
+        lay.setSpacing(10)
+        lay.addStretch()
+        lay.addWidget(self.bt_prepare_ma)
+        lay.addWidget(self.bt_prepare_rf)
+        lay.addWidget(self.bt_prepare_ti)
+        lay.addStretch()
+        lay.addWidget(self.bt_apply_all)
+        lay.addStretch()
+        return lay
 
     def _create_connectors(self):
         # Create connectors
@@ -161,21 +146,15 @@ class StatusAndCommands(QGroupBox):
         self.led_setup.set_channels2values(c2v_setup)
         self.led_apply.set_channels2values(c2v_apply)
 
-    def _setup_ramp(self):
-        # MA
+    def _prepare_ma(self):
         thread = _CommandThread(
             conn=self._conn_ma,
-            cmds=[self._conn_ma.cmd_opmode_slowref,
-                  self._conn_ma.cmd_pwrstate_on,
-                  self._conn_ma.cmd_opmode_rmpwfm],
-            warn_msgs=[
-                'Failed to set MA OpMode to SlowRef!',
-                'Failed to set MA PwrState to On!',
-                'Failed to set MA OpMode to RmpWfm!'],
+            cmds=self._conn_ma.cmd_opmode_rmpwfm,
+            warn_msgs='Failed to set MA OpMode to RmpWfm!',
             parent=self)
         thread.start()
 
-        # RF
+    def _prepare_rf(self):
         thread_RF = _CommandThread(
             conn=self._conn_rf,
             cmds=self._conn_rf.cmd_ramping_enable,
@@ -183,7 +162,7 @@ class StatusAndCommands(QGroupBox):
             parent=self)
         thread_RF.start()
 
-        # TI
+    def _prepare_ti(self):
         thread = _CommandThread(
             conn=self._conn_ti,
             cmds=self._conn_ti.cmd_setup,
@@ -228,11 +207,16 @@ class StatusAndCommands(QGroupBox):
         sender_name = self.sender().objectName()
         if 'Dipole' in sender_name:
             self._apply_ma()
-            # self._apply_ti()
+            self._apply_ti()
         elif 'Multipoles' in sender_name:
             self._apply_ma()
         elif 'RF' in sender_name:
             self._apply_rf()
+            self._apply_ti()
+        elif 'All' in sender_name:
+            self._apply_ma()
+            self._apply_rf()
+            self._apply_ti()
 
     @Slot(str)
     def show_warning_message(self, msg):

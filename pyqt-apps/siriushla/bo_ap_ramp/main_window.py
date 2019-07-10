@@ -45,7 +45,7 @@ class RampMain(SiriusMainWindow):
             background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273,
                               x2:0, y2:0, stop:0 rgba(173, 190, 207, 255),
                               stop:1 rgba(213, 213, 213, 255));""")
-        glay.addWidget(lab, 0, 0)
+        glay.addWidget(lab, 0, 0, 1, 2)
 
         self.settings = Settings(
             self, self.prefix, self.ramp_config,
@@ -54,17 +54,16 @@ class RampMain(SiriusMainWindow):
 
         self.status_and_commands = StatusAndCommands(
             self, self.prefix, self.ramp_config)
-        glay.addWidget(self.status_and_commands, 1, 0)
+        glay.addWidget(self.status_and_commands, 1, 1)
 
         self.config_parameters = ConfigParameters(
             self, self.prefix, self.ramp_config, self._undo_stack,
             self._tunecorr_configname, self._chromcorr_configname)
         self.config_parameters.setObjectName('ConfigParameters')
-        glay.addWidget(self.config_parameters, 2, 0)
+        glay.addWidget(self.config_parameters, 1, 0)
 
-        glay.setRowStretch(0, 1)
-        glay.setRowStretch(1, 3)
-        glay.setRowStretch(2, 18)
+        glay.setColumnStretch(0, 15)
+        glay.setColumnStretch(1, 1)
         self.setCentralWidget(cw)
 
     def _connSignals(self):
