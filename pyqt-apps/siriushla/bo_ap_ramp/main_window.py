@@ -34,7 +34,6 @@ class RampMain(SiriusMainWindow):
 
     def _setupUi(self):
         cw = QWidget(self)
-        cw.setObjectName('CentralWidget')
         glay = QGridLayout(cw)
         glay.setHorizontalSpacing(10)
         glay.setVerticalSpacing(10)
@@ -45,30 +44,26 @@ class RampMain(SiriusMainWindow):
             background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273,
                               x2:0, y2:0, stop:0 rgba(173, 190, 207, 255),
                               stop:1 rgba(213, 213, 213, 255));""")
-        glay.addWidget(lab, 0, 0, 1, 2)
+        glay.addWidget(lab, 0, 0)
 
         self.settings = Settings(
             self, self.prefix, self.ramp_config,
             self._tunecorr_configname, self._chromcorr_configname)
         self.setMenuBar(self.settings)
 
+        self.status_and_commands = StatusAndCommands(
+            self, self.prefix, self.ramp_config)
+        glay.addWidget(self.status_and_commands, 1, 0)
+
         self.config_parameters = ConfigParameters(
             self, self.prefix, self.ramp_config, self._undo_stack,
             self._tunecorr_configname, self._chromcorr_configname)
         self.config_parameters.setObjectName('ConfigParameters')
-        glay.addWidget(self.config_parameters, 1, 0)
+        glay.addWidget(self.config_parameters, 2, 0)
 
-        self.status_and_commands = StatusAndCommands(
-            self, self.prefix, self.ramp_config)
-        self.status_and_commands.setObjectName('StatusAndCommands')
-        glay.addWidget(self.status_and_commands, 1, 1)
-
-        cw.setStyleSheet("""
-            #CentralWidget{
-                min-width: 144em;
-                min-height: 72em;}""")
-        glay.setColumnStretch(0, 5)
-        glay.setColumnStretch(1, 1)
+        glay.setRowStretch(0, 1)
+        glay.setRowStretch(1, 3)
+        glay.setRowStretch(2, 18)
         self.setCentralWidget(cw)
 
     def _connSignals(self):
@@ -157,7 +152,7 @@ class RampMain(SiriusMainWindow):
         elif not self.ramp_config.synchronized:
             ans = QMessageBox.question(
                 self, 'Save changes?',
-                'There are unsaved changes in {}. \n'
+                'There are unsaved changes in \'{}\'. \n'
                 'Do you want to save?'.format(self.ramp_config.name),
                 QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel)
             if ans == QMessageBox.Yes:
