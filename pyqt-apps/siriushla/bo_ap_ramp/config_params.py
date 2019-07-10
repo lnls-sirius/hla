@@ -187,8 +187,8 @@ class DipoleRamp(QWidget):
         self.ax.set_xlabel('t [ms]')
         self.line, = self.ax.plot([0], [0], '-b')
         self.markers, = self.ax.plot([0], [0], '+r')
-        self.m_inj, = self.ax.plot([0], [0], 'or')
-        self.m_ej, = self.ax.plot([0], [0], 'or')
+        self.m_inj, = self.ax.plot([0], [0], marker='o', color='#787878')
+        self.m_ej, = self.ax.plot([0], [0], marker='o', color='#787878')
 
         self.toolbar = NavigationToolbar(self.graph, self)
         self.toolbar.setObjectName('toolbar')
@@ -691,9 +691,8 @@ class MultipolesRamp(QWidget):
         self.lines = dict()
         for maname in self.manames:
             self.lines[maname], = self.ax.plot([0], [0], '-b')
-        self.markers, = self.ax.plot([0], [0], '+r')
-        self.m_inj, = self.ax.plot([0], [0], 'or')
-        self.m_ej, = self.ax.plot([0], [0], 'or')
+        self.m_inj, = self.ax.plot([0], [0], marker='o', color='#787878')
+        self.m_ej, = self.ax.plot([0], [0], marker='o', color='#787878')
 
         self.toolbar = NavigationToolbar(self.graph, self)
         self.toolbar.setObjectName('toolbar')
@@ -1016,9 +1015,6 @@ class MultipolesRamp(QWidget):
             ej_marker_time = self.ramp_config.ti_params_ejection_time
             self.m_ej.set_xdata(ej_marker_time)
 
-            markers_base_time = self.ramp_config.ps_ramp_times
-            markers_time = list()
-            markers_value = list()
             inj_marker_value = list()
             ej_marker_value = list()
             if self.plot_unit == 'Strengths':
@@ -1026,12 +1022,8 @@ class MultipolesRamp(QWidget):
             else:
                 func = self.ramp_config.ps_waveform_interp_currents
             for maname in self._magnets_to_plot:
-                markers_time.append(markers_base_time)
-                markers_value.append(func(maname, markers_base_time))
                 inj_marker_value.append(func(maname, inj_marker_time))
                 ej_marker_value.append(func(maname, ej_marker_time))
-            self.markers.set_xdata(markers_time)
-            self.markers.set_ydata(markers_value)
             self.m_inj.set_ydata(inj_marker_value)
             self.m_ej.set_ydata(ej_marker_value)
 
@@ -1192,9 +1184,8 @@ class RFRamp(QWidget):
         self.ax1.set_xlabel('t [ms]')
         self.ax1.set_ylabel('|Vgap| [kV]')
         self.line1, = self.ax1.plot([0], [0], '-b')
-        self.markers, = self.ax1.plot([0], [0], '+r')
-        self.m_inj, = self.ax1.plot([0], [0], 'or')
-        self.m_ej, = self.ax1.plot([0], [0], 'or')
+        self.m_inj, = self.ax1.plot([0], [0], marker='o', color='#787878')
+        self.m_ej, = self.ax1.plot([0], [0], marker='o', color='#787878')
 
         self.ax2 = self.ax1.twinx()
         self.ax2.grid()
@@ -1451,10 +1442,6 @@ class RFRamp(QWidget):
             ydata.append(i)
         ydata.append(self.ramp_config.rf_ramp_voltages[0])
         self.line1.set_ydata(ydata)
-
-        times = self.ramp_config.ps_ramp_times
-        self.markers.set_xdata(times)
-        self.markers.set_ydata(self.ramp_config.rf_ramp_interp_voltages(times))
 
         inj_marker_time = self.ramp_config.ti_params_injection_time
         self.m_inj.set_xdata(inj_marker_time)
