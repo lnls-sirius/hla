@@ -314,7 +314,7 @@ class TLAPControlWindow(SiriusMainWindow):
         corr_details.layout().setContentsMargins(0, 0, 0, 0)
         corr_details.layout().setAlignment(Qt.AlignCenter)
 
-        if corr.split('-')[0] == 'LA':  # Linac PVs
+        if corr.split('-')[0] == 'LI':  # Linac PVs
             led = SiriusLedAlert(
                 parent=self, init_channel=self.prefix+corr+':setpwm')
             led.onColor = SiriusLedAlert.LightGreen
@@ -419,7 +419,7 @@ class TLAPControlWindow(SiriusMainWindow):
             ICT2 = 'TB-04:DI-ICT'
 
             correctors_list = [
-                [['LA-CN:H1LCPS-10'], 'LA-CN:H1LCPS-9', 0, 'TB-01:DI-Scrn-1'],
+                [['LI-01:PS-CH-7'], 'LI-01:PS-CV-7', 0, 'TB-01:DI-Scrn-1'],
                 [['TB-01:MA-CH-1'], 'TB-01:MA-CV-1', 1, 'TB-01:DI-Scrn-2'],
                 [['TB-01:MA-CH-2'], 'TB-01:MA-CV-2', 2, 'TB-02:DI-Scrn-1'],
                 [['TB-02:MA-CH-1'], 'TB-02:MA-CV-1', 3, 'TB-02:DI-Scrn-2'],

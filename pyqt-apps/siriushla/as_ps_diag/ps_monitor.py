@@ -5,14 +5,13 @@ from qtpy.QtWidgets import QWidget, QGroupBox, QGridLayout, QLabel
 
 from siriuspy.envars import vaca_prefix
 from siriuspy.search import PSSearch
-from siriuspy.namesys import Filter
 from siriuspy.csdevice.pwrsupply import Const as _PSc
 
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, \
     PyDMLedMultiChannel
 
-from siriushla.as_ps_diag.util import LINAC_PS, sec2label, \
+from siriushla.as_ps_diag.util import sec2label, \
     lips2labels, asps2labels, sips2labels
 
 
@@ -32,19 +31,17 @@ class PSMonitor(SiriusMainWindow):
         layout.setHorizontalSpacing(15)
 
         for sec in sec2label.keys():
+            status = self._make_magnets_groupbox(sec)
             if sec == 'LI':
-                status = self._make_magnets_groupbox(sec)
                 layout.addWidget(status, 1, 0, 2, 1)
-            else:
-                status = self._make_magnets_groupbox(sec)
-                if sec == 'TB':
-                    layout.addWidget(status, 1, 1)
-                elif sec == 'BO':
-                    layout.addWidget(status, 1, 2, 2, 1)
-                elif sec == 'TS':
-                    layout.addWidget(status, 2, 1)
-                elif sec == 'SI':
-                    layout.addWidget(status, 1, 3, 2, 1)
+            elif sec == 'TB':
+                layout.addWidget(status, 1, 1)
+            elif sec == 'BO':
+                layout.addWidget(status, 1, 2, 2, 1)
+            elif sec == 'TS':
+                layout.addWidget(status, 2, 1)
+            elif sec == 'SI':
+                layout.addWidget(status, 1, 3, 2, 1)
         cw.setLayout(layout)
         self.setCentralWidget(cw)
 
@@ -68,9 +65,7 @@ class PSMonitor(SiriusMainWindow):
                 return asps2labels
 
         def get_psnames(sec, f):
-            if sec == 'LI':
-                return Filter.process_filters(LINAC_PS, filters={'dis': f})
-            elif sec == 'SI':
+            if sec == 'SI':
                 return PSSearch.get_psnames(filters=f)
             else:
                 return PSSearch.get_psnames(filters={'sec': sec, 'dev': f})
@@ -81,16 +76,21 @@ class PSMonitor(SiriusMainWindow):
                         self._prefix+name+':interlock': {'value': 55,
                                                          'comp': 'lt'}}
             elif name.dis == 'PU':
-                return {self._prefix+name+':PwrState-Sts': _PSc.PwrStateSts.On,
-                        self._prefix+name+':Pulse-Sts': _PSc.DsblEnbl.Enbl,
-                        self._prefix+name+':Intlk1-Mon': 1,
-                        self._prefix+name+':Intlk2-Mon': 1,
-                        self._prefix+name+':Intlk3-Mon': 1,
-                        self._prefix+name+':Intlk4-Mon': 1,
-                        self._prefix+name+':Intlk5-Mon': 1,
-                        self._prefix+name+':Intlk6-Mon': 1,
-                        self._prefix+name+':Intlk7-Mon': 1,
-                        self._prefix+name+':Intlk8-Mon': 1}
+                ch2vals = {
+                    self._prefix+name+':PwrState-Sts': _PSc.PwrStateSts.On,
+                    self._prefix+name+':Pulse-Sts': _PSc.DsblEnbl.Enbl,
+                    self._prefix+name+':Intlk1-Mon': 1,
+                    self._prefix+name+':Intlk2-Mon': 1,
+                    self._prefix+name+':Intlk3-Mon': 1,
+                    self._prefix+name+':Intlk4-Mon': 1,
+                    self._prefix+name+':Intlk5-Mon': 1,
+                    self._prefix+name+':Intlk6-Mon': 1,
+                    self._prefix+name+':Intlk7-Mon': 1,
+                    self._prefix+name+':Intlk8-Mon': 1}
+                if 'Sept' in name:
+                    del ch2vals[self._prefix+name+':Intlk8-Mon']
+                return ch2vals
+
             else:
                 return {self._prefix+name+':DiagStatus-Mon': 0}
 
@@ -118,6 +118,7 @@ class PSMonitor(SiriusMainWindow):
                 return (3, 2, 3, 1)
             elif 'Trims' in label:
                 return (0, 3, 6, 1)
+            # TODO: adjust to add pulsed magnets when using TS and SI
 
         row, col = 0, 0
         for key, value in get_ps2labels_dict(sec).items():
