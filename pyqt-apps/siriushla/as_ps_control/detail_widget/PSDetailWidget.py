@@ -1,5 +1,6 @@
 """MagnetDetailWidget definition."""
 import re
+import numpy as _np
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGroupBox, QGridLayout, QLabel, \
@@ -10,7 +11,7 @@ from siriuspy.envars import vaca_prefix
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox, PyDMPushButton, \
     PyDMLineEdit, PyDMWaveformPlot
 from siriushla.widgets.state_button import PyDMStateButton
-from siriushla.widgets import PyDMLinEditScrollbar
+from siriushla.widgets import PyDMLinEditScrollbar, SiriusConnectionSignal
 from siriushla.widgets.led import SiriusLedState, SiriusLedAlert
 from siriushla import util as _util
 from .MagnetInterlockWidget import MagnetInterlockWindow
@@ -499,11 +500,11 @@ class PSDetailWidget(QWidget):
         return layout
 
     def _waveformLayout(self):
-        layout = QVBoxLayout()
 
         wfm_data_sp_ch = self._prefixed_psname + ":WfmData-SP"
         wfm_data_rb_ch = self._prefixed_psname + ":WfmData-RB"
 
+        # Plot
         self.wfmdata = PyDMWaveformPlot()
         self.wfmdata.setMaximumSize(400, 300)
         self.wfmdata.autoRangeX = True
@@ -515,10 +516,22 @@ class PSDetailWidget(QWidget):
         self.wfmdata.addChannel(y_channel=wfm_data_rb_ch, name='WfmData-RB',
                                 color='blue', lineWidth=2)
 
+        # NrPoints
+        self.nrpoints = QLabel('', self)
+        self.nrpoints_channel = SiriusConnectionSignal(wfm_data_rb_ch)
+        self.nrpoints_channel.new_value_signal[_np.ndarray].connect(self._nrpoints_update)
+
         # Add widgets
+        layout = QVBoxLayout()
         layout.addWidget(self.wfmdata)
+        layout.addWidget(self.nrpoints)
 
         return layout
+
+
+    def _nrpoints_update(self, value):
+        n = len(value)
+        self.nrpoints.setText("Nr. points WfmData-RB: {}".format(n))
 
     def _getElementType(self):
         dipole = re.compile("(SI|BO|LI|TS|TB)-(Fam|\w{2,4}):MA-B")
