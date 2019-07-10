@@ -134,7 +134,7 @@ class PSDiag(SiriusMainWindow):
                                 {'value': 0, 'bit': 2}
                         elif name.dis == 'PU':
                             psconn_chs.append(pname+':PwrState-Sts')
-                            intlkcount = 7 if 'InjSept' in name.dev else 8
+                            intlkcount = 7 if 'Sept' in name.dev else 8
                             for idx in range(1, intlkcount+1):
                                 sidx = str(idx)
                                 intlk_ch2vals[pname+':Intlk'+sidx+'-Mon'] = 1

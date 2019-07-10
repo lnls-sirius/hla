@@ -87,7 +87,7 @@ class PSMonitor(SiriusMainWindow):
                     self._prefix+name+':Intlk6-Mon': 1,
                     self._prefix+name+':Intlk7-Mon': 1,
                     self._prefix+name+':Intlk8-Mon': 1}
-                if 'InjSept' in name:
+                if 'Sept' in name:
                     del ch2vals[self._prefix+name+':Intlk8-Mon']
                 return ch2vals
 
