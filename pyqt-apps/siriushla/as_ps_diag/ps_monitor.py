@@ -76,16 +76,21 @@ class PSMonitor(SiriusMainWindow):
                         self._prefix+name+':interlock': {'value': 55,
                                                          'comp': 'lt'}}
             elif name.dis == 'PU':
-                return {self._prefix+name+':PwrState-Sts': _PSc.PwrStateSts.On,
-                        self._prefix+name+':Pulse-Sts': _PSc.DsblEnbl.Enbl,
-                        self._prefix+name+':Intlk1-Mon': 1,
-                        self._prefix+name+':Intlk2-Mon': 1,
-                        self._prefix+name+':Intlk3-Mon': 1,
-                        self._prefix+name+':Intlk4-Mon': 1,
-                        self._prefix+name+':Intlk5-Mon': 1,
-                        self._prefix+name+':Intlk6-Mon': 1,
-                        self._prefix+name+':Intlk7-Mon': 1,
-                        self._prefix+name+':Intlk8-Mon': 1}
+                ch2vals = {
+                    self._prefix+name+':PwrState-Sts': _PSc.PwrStateSts.On,
+                    self._prefix+name+':Pulse-Sts': _PSc.DsblEnbl.Enbl,
+                    self._prefix+name+':Intlk1-Mon': 1,
+                    self._prefix+name+':Intlk2-Mon': 1,
+                    self._prefix+name+':Intlk3-Mon': 1,
+                    self._prefix+name+':Intlk4-Mon': 1,
+                    self._prefix+name+':Intlk5-Mon': 1,
+                    self._prefix+name+':Intlk6-Mon': 1,
+                    self._prefix+name+':Intlk7-Mon': 1,
+                    self._prefix+name+':Intlk8-Mon': 1}
+                if 'InjSept' in name:
+                    del ch2vals[self._prefix+name+':Intlk8-Mon']
+                return ch2vals
+
             else:
                 return {self._prefix+name+':DiagStatus-Mon': 0}
 
@@ -113,6 +118,7 @@ class PSMonitor(SiriusMainWindow):
                 return (3, 2, 3, 1)
             elif 'Trims' in label:
                 return (0, 3, 6, 1)
+            # TODO: adjust to add pulsed magnets when using TS and SI
 
         row, col = 0, 0
         for key, value in get_ps2labels_dict(sec).items():
