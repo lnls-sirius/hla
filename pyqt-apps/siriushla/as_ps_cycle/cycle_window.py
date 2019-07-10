@@ -13,6 +13,8 @@ from qtpy.QtWidgets import QWidget, QGridLayout, QVBoxLayout, QHBoxLayout, \
 
 from siriuspy.envars import vaca_prefix as VACA_PREFIX
 from siriuspy.namesys import Filter
+from siriuspy.cycle import get_manames, get_manames_from_same_udc, \
+    Timing, MagnetCycler, CycleController
 
 from siriushla.widgets import SiriusMainWindow, \
     PyDMLedMultiConnection as PyDMLedMultiConn
@@ -20,8 +22,6 @@ from siriushla.widgets.pvnames_tree import PVNameTree
 from siriushla.widgets.dialog import ProgressDialog
 from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
 from .cycle_status_list import MagnetsListDialog
-from .util import MagnetCycler, Timing, get_manames, \
-    get_manames_from_same_udc, CycleController
 
 _cyclers = dict()
 _lock = _Lock()
