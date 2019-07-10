@@ -126,7 +126,6 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         """Init."""
         QLed.__init__(self, parent)
         PyDMWidget.__init__(self)
-        self.channels2values = _dcopy(channels2values)
         self.stateColors = _dcopy(color_list) or self.default_colorlist
 
         self._operations_dict = {'eq': self._eq,
@@ -136,22 +135,61 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
                                  'ge': self._ge,
                                  'le': self._le}
 
-        self.channels2conn = dict()
-        self.channels2status = dict()
-        for address in self.channels2values.keys():
-            self.channels2conn[address] = False
-            self.channels2status[address] = 'UNDEF'
+        self._address2conn = dict()
+        self._address2channel = dict()
+        self._address2status = dict()
+        self.set_channels2values(_dcopy(channels2values))
+
+    @property
+    def channels2values(self):
+        return _dcopy(self._address2values)
+
+    @property
+    def channels2status(self):
+        return _dcopy(self._address2status)
+
+    def set_channels2values(self, new_channels2values):
+        self._address2values = new_channels2values
+
+        if not new_channels2values:
+            self.setEnabled(False)
+        else:
+            self.setEnabled(True)
+
+        # Check which channel can be removed
+        address2pop = list()
+        for address in self._address2channel.keys():
+            if address not in new_channels2values:
+                address2pop.append(address)
+            else:
+                new_channels2values.remove(address)
+
+        # Remove channels
+        for address in address2pop:
+            self._address2channel[address].disconnect()
+            self._address2channel.pop(address)
+            self._address2status.pop(address)
+            self._address2conn.pop(address)
+
+        # Add new channels
+        for address in new_channels2values:
+            self._address2conn[address] = False
+            self._address2status[address] = 'UNDEF'
             channel = PyDMChannel(
                 address=address,
                 connection_slot=self.connection_changed,
                 value_slot=self.value_changed)
             channel.connect()
-            self._channels.append(channel)
+            self._address2channel[address] = channel
+
+        self._channels = list(self._address2channel.values())
+
+        self._update_statuses()
 
     def value_changed(self, new_val):
         """Receive new value and set led color accordingly."""
         address = self.sender().address
-        desired_value = self.channels2values[address]
+        desired_value = self._address2values[address]
 
         if isinstance(desired_value, dict):
             if 'bit' in desired_value.keys():
@@ -167,29 +205,29 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
             fun = self._operations_dict['eq']
             is_desired = fun(new_val, desired_value)
 
-        self.channels2status[address] = is_desired
+        self._address2status[address] = is_desired
         if not is_desired:
             self.warning.emit([address, new_val])
         else:
             self.normal.emit([address, new_val])
-        self.setState(self.comp_statuses())
+        self._update_statuses()
 
-    def comp_statuses(self):
+    def _update_statuses(self):
         state = True
-        for status in self.channels2status.values():
+        for status in self._address2status.values():
             if status == 'UNDEF':
                 state = False
                 break
             state &= status
-        return state
+        self.setState(state)
 
     @Slot(bool)
     def connection_changed(self, conn):
         """Reimplement connection_changed to handle all channels."""
         address = self.sender().address
-        self.channels2conn[address] = conn
+        self._address2conn[address] = conn
         allconn = True
-        for conn in self.channels2conn.values():
+        for conn in self._address2conn.values():
             allconn &= conn
         PyDMWidget.connection_changed(self, allconn)
         self.setEnabled(allconn)
