@@ -40,7 +40,7 @@ class EnergyMeasure(QWidget):
         self.currentlist = []
         self.centroidlist = []
         self.sigmalist = []
-        self.bend_curr = PV('LA-CN:H1DPPS-1:seti')
+        self.bend_curr = PV('LI-01:PS-Spect:seti')
         self.spect_excdata = _PSS.conv_psname_2_excdata('LI-01:PS-Spect')
 
         self._setupUi()

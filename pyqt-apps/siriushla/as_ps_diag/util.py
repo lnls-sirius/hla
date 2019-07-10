@@ -2,27 +2,57 @@
 
 from siriuspy.namesys import SiriusPVName
 
-
 # Constants
 
-LINAC_PS = [SiriusPVName(text) for text in (
-            'LA-CN:H1MLPS-1', 'LA-CN:H1MLPS-2', 'LA-CN:H1MLPS-3',
-            'LA-CN:H1MLPS-4', 'LA-CN:H1RCPS-1',
-            'LA-CN:H1SCPS-1', 'LA-CN:H1SCPS-2', 'LA-CN:H1SCPS-3',
-            'LA-CN:H1SCPS-4', 'LA-CN:H1LCPS-1', 'LA-CN:H1LCPS-2',
-            'LA-CN:H1LCPS-3', 'LA-CN:H1LCPS-4', 'LA-CN:H1LCPS-5',
-            'LA-CN:H1LCPS-6', 'LA-CN:H1LCPS-7', 'LA-CN:H1LCPS-8',
-            'LA-CN:H1LCPS-9', 'LA-CN:H1LCPS-10',
-            'LA-CN:H1SLPS-1', 'LA-CN:H1SLPS-2', 'LA-CN:H1SLPS-3',
-            'LA-CN:H1SLPS-4', 'LA-CN:H1SLPS-5', 'LA-CN:H1SLPS-6',
-            'LA-CN:H1SLPS-7', 'LA-CN:H1SLPS-8', 'LA-CN:H1SLPS-9',
-            'LA-CN:H1SLPS-10', 'LA-CN:H1SLPS-11', 'LA-CN:H1SLPS-12',
-            'LA-CN:H1SLPS-13', 'LA-CN:H1SLPS-14', 'LA-CN:H1SLPS-15',
-            'LA-CN:H1SLPS-16', 'LA-CN:H1SLPS-17', 'LA-CN:H1SLPS-18',
-            'LA-CN:H1SLPS-19', 'LA-CN:H1SLPS-20', 'LA-CN:H1SLPS-21',
-            'LA-CN:H1FQPS-1', 'LA-CN:H1FQPS-2', 'LA-CN:H1FQPS-3',
-            'LA-CN:H1DQPS-1', 'LA-CN:H1DQPS-2', 'LA-CN:H1DPPS-1')]
+LINAC_PS = (
+    'LI-01:PS-LensRev',
+    'LI-01:PS-Lens-1',
+    'LI-01:PS-Lens-2',
+    'LI-01:PS-Lens-3',
+    'LI-01:PS-Lens-4',
+    'LI-01:PS-CV-1',
+    'LI-01:PS-CH-1',
+    'LI-01:PS-CV-2',
+    'LI-01:PS-CH-2',
+    'LI-01:PS-CV-3',
+    'LI-01:PS-CH-3',
+    'LI-01:PS-CV-4',
+    'LI-01:PS-CH-4',
+    'LI-01:PS-CV-5',
+    'LI-01:PS-CH-5',
+    'LI-01:PS-CV-6',
+    'LI-01:PS-CH-6',
+    'LI-01:PS-CV-7',
+    'LI-01:PS-CH-7',
+    'LI-01:PS-Slnd-1',
+    'LI-01:PS-Slnd-2',
+    'LI-01:PS-Slnd-3',
+    'LI-01:PS-Slnd-4',
+    'LI-01:PS-Slnd-5',
+    'LI-01:PS-Slnd-6',
+    'LI-01:PS-Slnd-7',
+    'LI-01:PS-Slnd-8',
+    'LI-01:PS-Slnd-9',
+    'LI-01:PS-Slnd-10',
+    'LI-01:PS-Slnd-11',
+    'LI-01:PS-Slnd-12',
+    'LI-01:PS-Slnd-13',
+    'LI-Fam:PS-Slnd-14',
+    'LI-Fam:PS-Slnd-15',
+    'LI-Fam:PS-Slnd-16',
+    'LI-Fam:PS-Slnd-17',
+    'LI-Fam:PS-Slnd-18',
+    'LI-Fam:PS-Slnd-19',
+    'LI-Fam:PS-Slnd-20',
+    'LI-Fam:PS-Slnd-21',
+    'LI-Fam:PS-QF1',
+    'LI-Fam:PS-QF2',
+    'LI-01:PS-QF3',
+    'LI-01:PS-QD1',
+    'LI-01:PS-QD2',
+    'LI-01:PS-Spect')
 
+LINAC_PS = [SiriusPVName(text) for text in LINAC_PS]
 
 sec2label = {'LI': 'Linac',
              'TB': 'LTB',
@@ -32,11 +62,11 @@ sec2label = {'LI': 'Linac',
 # # TODO: discomment to use TS and SI
 
 
-lips2labels = {'H1(ML|RC).*': 'Lens',
-               'H1(SC|LC).*': 'Correctors',
-               'H1SL.*': 'Solenoids',
-               'H1(F|D)Q.*': 'Quadrupoles',
-               'H1DP.*': 'Spectrometer'}
+lips2labels = {':PS-Lens.*': 'Lens',
+               ':PS-(CH|CV).*': 'Correctors',
+               ':PS-Slnd.*': 'Solenoids',
+               ':PS-(QF|QD).*': 'Quadrupoles',
+               ':PS-Spect.*': 'Spectrometer'}
 
 asps2labels = {'B.*': 'Dipoles',
                'Q(F|D|[1-4]).*': 'Quadrupoles',
