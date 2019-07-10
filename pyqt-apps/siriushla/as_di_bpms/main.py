@@ -113,7 +113,7 @@ class BPMMain(BaseWidget):
         hbl.addWidget(pbt)
         hbl.addStretch()
         Window = create_window_from_widget(
-            MonitData, title=self.bpm+': Monit Data', size=(32, 40))
+            MonitData, title=self.bpm+': Monit Data')
         util.connect_window(
             pbt, Window, parent=grpbx, prefix=self.prefix, bpm=self.bpm)
         grpbx.layoutf.addRow(hbl)

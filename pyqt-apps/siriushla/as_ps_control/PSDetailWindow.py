@@ -1,12 +1,12 @@
 """Define a window with detailed controls for a given magnet."""
 from pydm import PyDMApplication
 from qtpy.QtWidgets import QPushButton
+from siriuspy.namesys import SiriusPVName as _PVName
 from siriushla.widgets import SiriusMainWindow
 from siriushla.as_ps_control.detail_widget.DetailWidgetFactory \
     import DetailWidgetFactory
-from siriuspy.search.ps_search import PSSearch
-from siriuspy.search.ma_search import MASearch
-# from ..util import connect_window
+from siriuspy.search import PSSearch
+from siriuspy.search import MASearch
 from siriushla.util import connect_window
 
 
@@ -17,9 +17,19 @@ class PSDetailWindow(SiriusMainWindow):
         """Init UI."""
         super(PSDetailWindow, self).__init__(parent)
         self.app = PyDMApplication.instance()
-
-        self._psname = psname
-
+        if isinstance(psname, str):
+            self._psname = _PVName(psname)
+            name = self._psname
+        else:
+            self._psname = [_PVName(psn) for psn in psname]
+            name = self._psname[0]
+        secs = {'AS', 'TB', 'BO', 'TS', 'SI', 'LI'}
+        if name.sec in secs:
+            self.setObjectName(name.sec+'App')
+        elif name.idx[:2] in secs:
+            self.setObjectName(name.idx[:2]+'App')
+        else:
+            self.setObjectName('ASApp')
         self._setup_ui()
 
     def _setup_ui(self):

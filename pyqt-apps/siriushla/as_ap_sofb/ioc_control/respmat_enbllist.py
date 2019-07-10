@@ -3,7 +3,7 @@
 from functools import partial as _part
 import numpy as np
 from qtpy.QtWidgets import QGridLayout, QHBoxLayout, QVBoxLayout, QLabel, \
-    QSizePolicy, QScrollArea, QWidget, QPushButton
+    QSizePolicy, QScrollArea, QWidget, QPushButton, QDialog
 from qtpy.QtCore import Qt, QRect, QPoint
 from qtpy.QtGui import QBrush, QColor, QPainter
 from siriushla.widgets import SiriusLedAlert, SiriusConnectionSignal
@@ -84,6 +84,13 @@ class _PyDMLedList(PyDMWidget, QWidget):
         ini = int(len(self.side_headers_wids) * rsize)
         for i, head in enumerate(self.side_headers_wids):
             head.setVisible(i < ini)
+        self.adjustSize()
+        parent = self.parent()
+        while parent is not None:
+            parent.adjustSize()
+            if isinstance(parent, QDialog):
+                break
+            parent = parent.parent()
 
     def connection_changed(self, new_val):
         super(_PyDMLedList, self).connection_changed(new_val)
@@ -97,6 +104,7 @@ class SelectionMatrix(BaseWidget):
     def __init__(self, parent, dev, prefix, acc='SI'):
         """Initialize the matrix of the specified dev."""
         super().__init__(parent, prefix, acc)
+        self.setObjectName(acc.upper()+'App')
         self.dev = dev
         max_rz = self._csorb.MAX_RINGSZ
         bpms = np.array(self._csorb.BPM_POS)
@@ -118,13 +126,6 @@ class SelectionMatrix(BaseWidget):
             'CV': (self._csorb.CV_NAMES, self._csorb.CV_NICKNAMES)}
         self._get_headers()
         self.prefix = prefix
-        self.pvs = _PyDMLedList(
-            parent=self,
-            init_channel=self.prefix + self.dev + 'EnblList-RB',
-            chan_otpl=self.prefix + self.devotpl[self.dev] + 'EnblList-RB',
-            size=len(self.devnames[self.dev][0]),
-            side_headers=self.side_headers_wids,
-            top_headers=self.top_headers_wids)
         self._setup_ui()
 
     def _get_headers(self):
@@ -163,7 +164,6 @@ class SelectionMatrix(BaseWidget):
 
     def _setup_ui(self):
         name = self.dev + "List"
-        self.setObjectName(name)
         grid_l = QGridLayout(self)
 
         lab = QLabel(name, self, alignment=Qt.AlignCenter)
@@ -174,13 +174,25 @@ class SelectionMatrix(BaseWidget):
         grid_l.addWidget(scr_ar, 1, 0, 1, 1)
         scr_ar.setWidgetResizable(True)
         scr_ar_wid = QWidget()
+        scr_ar_wid.setObjectName('scrollarea')
+        scr_ar_wid.setStyleSheet(
+            '#scrollarea {background-color: transparent;}')
         scr_ar.setWidget(scr_ar_wid)
         vbl = QVBoxLayout(scr_ar_wid)
         vbl.setContentsMargins(0, 0, 0, 0)
+
+        self.pvs = _PyDMLedList(
+            parent=scr_ar_wid,
+            init_channel=self.prefix + self.dev + 'EnblList-RB',
+            chan_otpl=self.prefix + self.devotpl[self.dev] + 'EnblList-RB',
+            size=len(self.devnames[self.dev][0]),
+            side_headers=self.side_headers_wids,
+            top_headers=self.top_headers_wids)
         wid = self._create_matrix(scr_ar_wid)
         vbl.addWidget(wid)
 
-        wid = QWidget(scr_ar_wid)
+        wid = QWidget(self)
+        wid.setObjectName('scrollarea')
         grid_l.addWidget(wid, 2, 0, 1, 1)
         hbl = QHBoxLayout(wid)
         hbl.addWidget(self.pvs.btn_dsbl_all)
@@ -192,7 +204,8 @@ class SelectionMatrix(BaseWidget):
 
     def _create_matrix(self, parent):
         wid = MyWidget(self.pvs.led_list, parent)
-        wid.setStyleSheet("font-weight: bold;")
+        self.pvs.setParent(wid)
+        wid.setStyleSheet("font-weight: bold; background: transparent;")
         gdl = QGridLayout(wid)
 
         for i, head in enumerate(self.top_headers_wids):

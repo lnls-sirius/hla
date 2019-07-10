@@ -53,7 +53,7 @@ class RespMatWidget(BaseWidget):
         elif not self.isring:
             szy = 10
         Window = create_window_from_widget(
-            SelectionMatrix, title='Corrs and BPMs selection', size=(24, szy))
+            SelectionMatrix, title='Corrs and BPMs selection')
         for dev in ('BPMX', 'BPMY', 'CH', 'CV'):
             btns[dev] = QPushButton(dev, grpbx)
             connect_window(
@@ -144,12 +144,12 @@ class RespMatWidget(BaseWidget):
         btn = QPushButton('Check Singular Values', grpbx)
         fml.addWidget(btn)
         Window = create_window_from_widget(
-            SingularValues, title='Check Singular Values', size=(32, 25))
+            SingularValues, title='Check Singular Values')
         connect_window(btn, Window, grpbx, prefix=self.prefix)
         btn = QPushButton('Check RespMat', grpbx)
         fml.addWidget(btn)
         Window = create_window_from_widget(
-            ShowMatrixWidget, title='Check RespMat', size=(32, 25))
+            ShowMatrixWidget, title='Check RespMat')
         connect_window(btn, Window, grpbx, prefix=self.prefix, acc=self.acc)
 
         # vbl.addSpacing(40)

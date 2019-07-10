@@ -67,6 +67,7 @@ class Summary(QWidget):
         super().__init__(parent=parent)
         self.prefix = prefix
         self.setupui()
+        self.setObjectName('ASApp')
 
     def setupui(self):
         evg = LLTimeSearch.get_device_names({'dev': 'EVG'})

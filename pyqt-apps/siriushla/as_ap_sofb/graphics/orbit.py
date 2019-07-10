@@ -6,6 +6,7 @@ from pyqtgraph import functions
 from qtpy.QtWidgets import QWidget, QLabel, QVBoxLayout, QPushButton, \
     QHBoxLayout, QGroupBox, QComboBox, QToolTip
 from qtpy.QtCore import Qt, Signal
+from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.csdevice.orbitcorr import SOFBFactory
 import siriushla.util as _util
 from siriushla.widgets.windows import create_window_from_widget
@@ -49,7 +50,7 @@ class OrbitWidget(BaseWidget):
         btn = QPushButton('Correctors', grpbx)
         vbl.addWidget(btn)
         Window = create_window_from_widget(
-            CorrectorsWidget, title='Correctors', size=(67, 60))
+            CorrectorsWidget, title='Correctors')
         _util.connect_window(
             btn, Window, self, prefix=self.prefix, acc=self.acc)
 
@@ -57,7 +58,7 @@ class OrbitWidget(BaseWidget):
             btn = QPushButton('MultiTurn Orbit', grpbx)
             vbl.addWidget(btn)
             Window = create_window_from_widget(
-                MultiTurnWidget, title='Multi Turn', size=(35, 65))
+                MultiTurnWidget, title='Multi Turn')
             _util.connect_window(
                 btn, Window, self,
                 sigs=self.updater[0].raw_ref_sig, prefix=self.prefix)
@@ -65,13 +66,13 @@ class OrbitWidget(BaseWidget):
             btn = QPushButton('MultiTurn Sum', grpbx)
             vbl.addWidget(btn)
             Window = create_window_from_widget(
-                MultiTurnSumWidget, title='Multi Turn Sum', size=(35, 65))
+                MultiTurnSumWidget, title='Multi Turn Sum')
             _util.connect_window(btn, Window, self, prefix=self.prefix)
 
         btn = QPushButton('SinglePass Sum', grpbx)
         vbl.addWidget(btn)
         Window = create_window_from_widget(
-            SinglePassSumWidget, title='Single Pass Sum', size=(32, 23))
+            SinglePassSumWidget, title='Single Pass Sum')
         _util.connect_window(
                     btn, Window, self, prefix=self.prefix, acc=self.acc)
 
@@ -115,7 +116,8 @@ class MultiTurnWidget(QWidget):
 
     def __init__(self, parent, sigs, prefix):
         super().__init__(parent)
-        self.prefix = prefix
+        self.prefix = _PVName(prefix)
+        self.setObjectName(self.prefix.sec+'App')
         self.setupui()
         self.sigs = sigs
         self.fun2setref = {
@@ -173,7 +175,8 @@ class MultiTurnSumWidget(QWidget):
 
     def __init__(self, parent, prefix):
         super().__init__(parent)
-        self.prefix = prefix
+        self.prefix = _PVName(prefix)
+        self.setObjectName(self.prefix.sec+'App')
         self.setupui()
 
     def setupui(self):
@@ -225,6 +228,8 @@ class Spectrogram(SiriusSpectrogramView):
     def __init__(self, prefix='', **kwargs):
         self._reforb = None
         super().__init__(**kwargs)
+        self.setObjectName('graph')
+        self.setStyleSheet('#graph {min-height: 15em; min-width: 20em;}')
         self.prefix = prefix
         self.multiturnidx = SiriusConnectionSignal(
                                 self.prefix + 'MTurnIdx-SP')
@@ -256,7 +261,8 @@ class SinglePassSumWidget(QWidget):
 
     def __init__(self, parent, prefix, acc):
         super().__init__(parent)
-        self.prefix = prefix
+        self.prefix = _PVName(prefix)
+        self.setObjectName(self.prefix.sec+'App')
         self.acc = acc.upper()
         self._csorb = SOFBFactory.create(acc)
         self.setupui()

@@ -27,6 +27,7 @@ class LoadRampConfig(_LoadConfigDialog):
         """Initialize object."""
         self.ramp_config = ramp_config
         super().__init__('bo_ramp', parent)
+        self.setObjectName('BOApp')
         self.setWindowTitle('Load ramp configuration from server')
 
     @Slot()
@@ -60,6 +61,7 @@ class NewRampConfigGetName(_SaveConfigDialog):
                  new_from_template=True):
         """Initialize object."""
         super().__init__(config_type, parent)
+        self.setObjectName('BOApp')
         self.config = config
         self.config_type = config_type
         self._new_from_template = new_from_template
@@ -98,6 +100,7 @@ class InsertNormalizedConfig(SiriusDialog):
     def __init__(self, parent, ramp_config):
         """Initialize object."""
         super().__init__(parent)
+        self.setObjectName('BOApp')
         self.ramp_config = ramp_config
         self.norm_config = ramp.BoosterNormalized()
         self.setWindowTitle('Insert Normalized Configuration')
@@ -252,6 +255,7 @@ class DeleteNormalizedConfig(SiriusDialog):
     def __init__(self, parent, table_map, selected_item):
         """Initialize object."""
         super().__init__(parent)
+        self.setObjectName('BOApp')
         self.norm_config = ramp.BoosterNormalized()
         self.setWindowTitle('Delete Normalized Configuration')
         self.table_map = table_map
@@ -316,6 +320,7 @@ class OpticsAdjustSettings(SiriusDialog):
         """Initialize object."""
         super().__init__(parent)
         self.setWindowTitle('Optics Adjust Settings')
+        self.setObjectName('BOApp')
         self.tuneconfig_currname = tuneconfig_currname
         self.chromconfig_currname = chromconfig_currname
         self.conn_tuneparams = _ConfigDBClient(
@@ -581,6 +586,7 @@ class ChooseMagnetsToPlot(SiriusDialog):
         """Initialize object."""
         super().__init__(parent)
         self.setWindowTitle('Choose Magnets To Plot')
+        self.setObjectName('BOApp')
         self.manames = manames
         self.current_plots = current_plots
         self._setupUi()

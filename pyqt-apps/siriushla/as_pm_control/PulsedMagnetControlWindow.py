@@ -21,6 +21,7 @@ class PulsedMagnetControlWindow(SiriusMainWindow):
         super().__init__(parent)
         self._is_main = is_main
         self._section = section
+        self.setObjectName(self._section+'App')
         self._setup_ui()
         self.setStyleSheet(PulsedMagnetControlWindow.StyleSheet)
         self.setCentralWidget(self.main_widget)

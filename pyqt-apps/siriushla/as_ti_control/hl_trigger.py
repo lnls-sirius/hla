@@ -24,6 +24,8 @@ class HLTriggerDetailed(BaseWidget):
     def __init__(self, parent=None, prefix=''):
         """Initialize object."""
         super().__init__(parent, prefix)
+        name = self.prefix.sec + 'App'
+        self.setObjectName(name)
         self._setupUi()
 
     def _setupUi(self):
@@ -143,9 +145,9 @@ class HLTriggerDetailed(BaseWidget):
         lay.addWidget(sc_area)
 
         wid = QWidget(sc_area)
+        wid.setObjectName('wid')
+        wid.setStyleSheet('#wid {background-color: transparent;}')
         sc_area.setWidget(wid)
-        # sc_area.setViewport(wid)
-        # wid = sc_area
 
         lay = QGridLayout(wid)
         lay.setAlignment(Qt.AlignTop)
@@ -170,7 +172,6 @@ class HLTriggerDetailed(BaseWidget):
             lay.addWidget(lbl, idx, 2)
         sc_area.setSizeAdjustPolicy(QScrollArea.AdjustToContentsOnFirstShow)
         sc_area.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        # sc_area.setWidgetResizable(False)
         return gb
 
     def _create_small_GB(self, name, parent, wids):
@@ -228,6 +229,7 @@ class LLTriggers(QWidget):
         vl.addWidget(QLabel(
             '<h1>Low Level Triggers of '+hltrigger+'</h1>',
             self, alignment=Qt.AlignCenter))
+        self.setObjectName(hltrigger.sec+'App')
 
         amc_list = set()
         otp_list = set()
@@ -301,6 +303,7 @@ class HLTriggerList(BaseList):
         srch = set(('source', 'detailed', 'polarity', 'state'))
         kwargs['props2search'] = srch
         super().__init__(**kwargs)
+        self.setObjectName('ASApp')
 
     def _createObjs(self, prefix, prop):
         sp = rb = None

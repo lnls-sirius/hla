@@ -31,6 +31,7 @@ class Settings(QMenuBar):
                  tunecorr_configname='', chromcorr_configname=''):
         """Initialize object."""
         super().__init__(parent)
+        self.setObjectName('BOApp')
         self.prefix = prefix
         self.ramp_config = ramp_config
         self._tunecorr_configname = tunecorr_configname

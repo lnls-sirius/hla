@@ -13,6 +13,7 @@ from qtpy.QtGui import QPainter
 from qtpy.QtCore import QSize
 from pydm.widgets.label import PyDMLabel
 
+from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.envars import vaca_prefix as _VACA_PREFIX
 from siriushla.widgets import PyDMLinEditScrollbar
 from siriushla.widgets.state_button import PyDMStateButton
@@ -98,11 +99,12 @@ class BasePSWidget(QWidget):
     def __init__(self, psname, header=True, parent=None):
         """Init widget UI."""
         super().__init__(parent)
-        if ':MA-' in psname:
+        self._psname = _PVName(psname)
+        self.setObjectName(self._psname.sec+'App')
+        if self._psname.dis == 'MA':
             self._is_magnet = True
         else:
             self._is_magnet = False
-        self._psname = psname
         self._prefixed_psname = _VACA_PREFIX + self._psname + ":"
         self._header = header
         self._has_trim = False
@@ -117,8 +119,6 @@ class BasePSWidget(QWidget):
         # if self._has_trim:
         #     self.trim_button.clicked.connect(self._open_trim_window)
         self.setStyleSheet(self.StyleSheet)
-
-        self.setObjectName(self._psname)
 
     @property
     def psname(self):

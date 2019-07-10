@@ -61,6 +61,7 @@ class OrbitRegisters(QWidget):
         scr_ar_wid.setStyleSheet("""
             #scr_ar_wid{
                 min-width:40em; min-height:10em;
+                background-color: transparent;
             }""")
         hbl = QHBoxLayout(scr_ar_wid)
         hbl.setContentsMargins(0, 0, 0, 0)
