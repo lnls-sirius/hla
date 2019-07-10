@@ -24,7 +24,7 @@ from siriuspy.ramp.magnet import Magnet as _Magnet
 from siriuspy.ramp.conn import ConnSOFB as _ConnSOFB
 
 from siriushla.widgets import SiriusFigureCanvas
-from .auxiliar_classes import \
+from siriushla.bo_ap_ramp.auxiliar_classes import \
     InsertNormalizedConfig as _InsertNormalizedConfig, \
     DeleteNormalizedConfig as _DeleteNormalizedConfig, \
     SpinBoxDelegate as _SpinBoxDelegate, \

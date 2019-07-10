@@ -13,11 +13,10 @@ from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
 from siriuspy.search import MASearch as _MASearch
 from siriuspy.ramp import ramp
 from siriuspy.optics.opticscorr import BOTuneCorr, BOChromCorr
-from siriuspy.clientconfigdb import ConfigDBException as _ConfigDBException, \
-    ConfigDBDocument as _ConfigDBDocument
+from siriuspy.clientconfigdb import ConfigDBException as _ConfigDBException
 
 from siriushla.widgets.windows import SiriusMainWindow
-from .auxiliar_classes import \
+from siriushla.bo_ap_ramp.auxiliar_classes import \
     NewRampConfigGetName as _NewRampConfigGetName, \
     MyDoubleSpinBox as _MyDoubleSpinBox
 
