@@ -11,7 +11,6 @@ from siriushla.as_ps_control.PSTabControlWindow import \
     PSTabControlWindow as _MAControlWindow
 from siriushla.as_pm_control.PulsedMagnetControlWindow import \
     PulsedMagnetControlWindow as _PMControlWindow
-from siriushla.as_ps_cycle.cycle_window import CycleWindow as _CycleWindow
 from .auxiliar_classes import \
     LoadRampConfig as _LoadRampConfig, \
     NewRampConfigGetName as _NewRampConfigGetName, \
@@ -44,58 +43,50 @@ class Settings(QMenuBar):
         self.setStyleSheet(
             """QMenuBar::item {\npadding: 0 1em 0 0.17em;\n}""")
         self.config_menu = self.addMenu('Booster Ramp Configuration')
-        self.act_new = QAction('New from template', self)
+        self.act_new = self.config_menu.addAction('New from template')
         self.act_new.setShortcut(QKeySequence.New)
         self.act_new.triggered.connect(self._showGetNewConfigNamePopup)
-        self.act_load = QAction('Load existing config...', self)
+        self.act_load = self.config_menu.addAction('Load existing config...')
         self.act_load.setShortcut(QKeySequence.Open)
         self.act_load.triggered.connect(self._showLoadExistingConfigPopup)
-        self.act_save = QAction('Save', self)
+        self.act_save = self.config_menu.addAction('Save')
         self.act_save.setShortcut(QKeySequence.Save)
         self.act_save.triggered.connect(self._saveAndEmitConfigName)
-        self.act_save_as = QAction('Save As...', self)
+        self.act_save_as = self.config_menu.addAction('Save As...')
         self.act_save_as.setShortcut(QKeySequence(Qt.CTRL+Qt.SHIFT+Qt.Key_S))
         self.act_save_as.triggered.connect(self.showSaveAsPopup)
-        self.config_menu.addAction(self.act_new)
-        self.config_menu.addAction(self.act_load)
-        self.config_menu.addAction(self.act_save)
-        self.config_menu.addAction(self.act_save_as)
         self.config_menu.addSeparator()
 
         self.ramp_params_menu = self.addMenu('Ramping Parameters')
         self.menu_plotunits = self.ramp_params_menu.addMenu(
             'Plot magnet waveforms in...')
-        self.act_plotcurrents = QAction('Currents', self)
+        self.act_plotcurrents = self.menu_plotunits.addAction('Currents')
         self.act_plotcurrents.triggered.connect(self._emitPlotUnits)
-        self.act_plotstrengths = QAction('Strengths', self)
+        self.act_plotstrengths = self.menu_plotunits.addAction('Strengths')
         self.act_plotstrengths.triggered.connect(self._emitPlotUnits)
-        self.menu_plotunits.addAction(self.act_plotcurrents)
-        self.menu_plotunits.addAction(self.act_plotstrengths)
 
         self.optics_menu = self.addMenu('Optics Adjustments')
-        self.act_optics_settings = QAction('Settings', self)
+        self.act_optics_settings = self.optics_menu.addAction('Settings')
         self.act_optics_settings.triggered.connect(
             self._showOpticsSettingsPopup)
-        self.optics_menu.addAction(self.act_optics_settings)
 
         self.diag_menu = self.addMenu('Ramp Diagnosis')
+        self.act_dcct = self.diag_menu.addAction('DCCT')
+        _hlautil.connect_newprocess(
+            self.act_dcct, ['sirius-hla-as-di-dcct.py', 'BO'])
         # TODO: menu to access all windows related to diagnostics
 
         self.open_menu = self.addMenu('Open...')
-        self.act_cycle = QAction('PS Cycle')
-        _hlautil.connect_window(self.act_cycle, _CycleWindow, parent=self,
-                                checked_accs=('BO',))
-        self.act_ma = QAction('Booster Magnets')
+        self.act_ma = QAction('Booster Magnets', self)
         _hlautil.connect_window(self.act_ma, _MAControlWindow, parent=self,
                                 section='BO', discipline='MA')
-        self.act_pm = QAction('Pulsed Magnets')
+        self.act_pm = QAction('Pulsed Magnets', self)
         _hlautil.connect_window(self.act_pm, _PMControlWindow, section='BO',
                                 parent=self)
-        self.act_sofb = QAction('Booster SOFB')
+        self.act_sofb = QAction('Booster SOFB', self)
         _hlautil.connect_newprocess(self.act_sofb, 'sirius-hla-bo-ap-sofb.py')
-        self.act_ti = QAction('Timing')
+        self.act_ti = QAction('Timing', self)
         _hlautil.connect_newprocess(self.act_ti, 'sirius-hla-as-ti-control.py')
-        self.open_menu.addAction(self.act_cycle)
         self.open_menu.addAction(self.act_ma)
         self.open_menu.addAction(self.act_pm)
         self.open_menu.addAction(self.act_sofb)
