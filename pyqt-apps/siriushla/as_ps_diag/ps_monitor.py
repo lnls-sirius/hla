@@ -5,14 +5,13 @@ from qtpy.QtWidgets import QWidget, QGroupBox, QGridLayout, QLabel
 
 from siriuspy.envars import vaca_prefix
 from siriuspy.search import PSSearch
-from siriuspy.namesys import Filter
 from siriuspy.csdevice.pwrsupply import Const as _PSc
 
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, \
     PyDMLedMultiChannel
 
-from siriushla.as_ps_diag.util import LINAC_PS, sec2label, \
+from siriushla.as_ps_diag.util import sec2label, \
     lips2labels, asps2labels, sips2labels
 
 
@@ -32,19 +31,17 @@ class PSMonitor(SiriusMainWindow):
         layout.setHorizontalSpacing(15)
 
         for sec in sec2label.keys():
+            status = self._make_magnets_groupbox(sec)
             if sec == 'LI':
-                status = self._make_magnets_groupbox(sec)
                 layout.addWidget(status, 1, 0, 2, 1)
-            else:
-                status = self._make_magnets_groupbox(sec)
-                if sec == 'TB':
-                    layout.addWidget(status, 1, 1)
-                elif sec == 'BO':
-                    layout.addWidget(status, 1, 2, 2, 1)
-                elif sec == 'TS':
-                    layout.addWidget(status, 2, 1)
-                elif sec == 'SI':
-                    layout.addWidget(status, 1, 3, 2, 1)
+            elif sec == 'TB':
+                layout.addWidget(status, 1, 1)
+            elif sec == 'BO':
+                layout.addWidget(status, 1, 2, 2, 1)
+            elif sec == 'TS':
+                layout.addWidget(status, 2, 1)
+            elif sec == 'SI':
+                layout.addWidget(status, 1, 3, 2, 1)
         cw.setLayout(layout)
         self.setCentralWidget(cw)
 
@@ -68,9 +65,7 @@ class PSMonitor(SiriusMainWindow):
                 return asps2labels
 
         def get_psnames(sec, f):
-            if sec == 'LI':
-                return Filter.process_filters(LINAC_PS, filters={'dis': f})
-            elif sec == 'SI':
+            if sec == 'SI':
                 return PSSearch.get_psnames(filters=f)
             else:
                 return PSSearch.get_psnames(filters={'sec': sec, 'dev': f})
