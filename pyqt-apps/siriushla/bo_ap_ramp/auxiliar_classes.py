@@ -13,83 +13,7 @@ from siriuspy.clientconfigdb import ConfigDBClient as _ConfigDBClient, \
 from siriuspy.ramp import ramp
 
 from siriushla.widgets.windows import SiriusDialog
-from siriushla.as_ap_configdb import LoadConfigDialog as _LoadConfigDialog, \
-                                     SaveConfigDialog as _SaveConfigDialog
-
-
-class LoadRampConfig(_LoadConfigDialog):
-    """Auxiliar window to get a ramp config name to load."""
-
-    loadSignal = Signal()
-    saveSignal = Signal()
-
-    def __init__(self, ramp_config, parent=None):
-        """Initialize object."""
-        self.ramp_config = ramp_config
-        super().__init__('bo_ramp', parent)
-        self.setObjectName('BOApp')
-        self.setWindowTitle('Load ramp configuration from server')
-
-    @Slot()
-    def _load_configuration(self):
-        name = self.config_name
-        if self.ramp_config is not None:
-            if not self.ramp_config.synchronized:
-                ans = QMessageBox.question(
-                    self, 'Save changes?',
-                    'There are unsaved changes in {}. \n'
-                    'Do you want to save?'.format(name),
-                    QMessageBox.Yes, QMessageBox.Cancel)
-                if ans == QMessageBox.Yes:
-                    self.saveSignal.emit()
-
-            if name != self.ramp_config.name:
-                self.configname.emit(name)
-            else:
-                self.loadSignal.emit()
-        else:
-            self.configname.emit(name)
-        self.accept()
-
-
-class NewRampConfigGetName(_SaveConfigDialog):
-    """Auxiliar window to get a configuration name to create a new one."""
-
-    saveSignal = Signal()
-
-    def __init__(self, config, config_type, parent=None,
-                 new_from_template=True):
-        """Initialize object."""
-        super().__init__(config_type, parent)
-        self.setObjectName('BOApp')
-        self.config = config
-        self.config_type = config_type
-        self._new_from_template = new_from_template
-        if new_from_template:
-            self.setWindowTitle('New config from template')
-            self.ok_button.setText('Create')
-        else:
-            self.setWindowTitle('Save current config as...')
-            self.ok_button.setText('Save as...')
-
-    @Slot()
-    def _load_configuration(self):
-        name = self.config_name
-        if (self._new_from_template and (self.config is not None)):
-            if not self.config.synchronized:
-                ans = QMessageBox.question(
-                    self, 'Save changes?',
-                    'There are unsaved changes in {}. \n'
-                    'Do you want to save?'.format(name),
-                    QMessageBox.Yes, QMessageBox.Cancel)
-                if ans == QMessageBox.Yes:
-                    self.saveSignal.emit()
-            else:
-                self.configname.emit(name)
-                self.accept()
-        else:
-            self.configname.emit(name)
-            self.accept()
+from siriushla.as_ap_configdb import LoadConfigDialog as _LoadConfigDialog
 
 
 class InsertNormalizedConfig(SiriusDialog):
@@ -722,7 +646,7 @@ class CustomTableWidgetItem(QTableWidgetItem):
 
 
 class MyDoubleSpinBox(QDoubleSpinBox):
-    """Subclass QDoubleSpinBox to reimplement whellEvent."""
+    """Subclass QDoubleSpinBox to reimplement wheelEvent."""
 
     def __init__(self, parent):
         """Initialize object."""

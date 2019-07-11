@@ -1,20 +1,20 @@
 """Booster Ramp Control HLA: Ramp Settings Module."""
 
+from functools import partial as _part
+
 from qtpy.QtCore import Qt, Signal, Slot
 from qtpy.QtGui import QKeySequence
 from qtpy.QtWidgets import QMenuBar, QAction, QMessageBox
-from siriuspy.clientconfigdb import ConfigDBException as _ConfigDBException, \
-    ConfigDBDocument as _ConfigDBDocument
+from siriuspy.clientconfigdb import ConfigDBException as _ConfigDBException
 from siriuspy.ramp import ramp
 from siriushla import util as _hlautil
 from siriushla.as_ps_control.PSTabControlWindow import \
     PSTabControlWindow as _MAControlWindow
 from siriushla.as_pm_control.PulsedMagnetControlWindow import \
     PulsedMagnetControlWindow as _PMControlWindow
-from .auxiliar_classes import \
-    LoadRampConfig as _LoadRampConfig, \
-    NewRampConfigGetName as _NewRampConfigGetName, \
-    OpticsAdjustSettings as _OpticsAdjustSettings
+from siriushla.as_ap_configdb import LoadConfigDialog as _LoadConfigDialog, \
+    SaveConfigDialog as _SaveConfigDialog
+from .auxiliar_classes import OpticsAdjustSettings as _OpticsAdjustSettings
 
 
 class Settings(QMenuBar):
@@ -45,10 +45,10 @@ class Settings(QMenuBar):
         self.config_menu = self.addMenu('Booster Ramp Configuration')
         self.act_new = self.config_menu.addAction('New from template')
         self.act_new.setShortcut(QKeySequence.New)
-        self.act_new.triggered.connect(self._showGetNewConfigNamePopup)
+        self.act_new.triggered.connect(self.createNewConfigFromTemplate)
         self.act_load = self.config_menu.addAction('Load existing config...')
         self.act_load.setShortcut(QKeySequence.Open)
-        self.act_load.triggered.connect(self._showLoadExistingConfigPopup)
+        self.act_load.triggered.connect(self.showLoadExistingConfigPopup)
         self.act_save = self.config_menu.addAction('Save')
         self.act_save.setShortcut(QKeySequence.Save)
         self.act_save.triggered.connect(self._saveAndEmitConfigName)
@@ -61,9 +61,11 @@ class Settings(QMenuBar):
         self.menu_plotunits = self.ramp_params_menu.addMenu(
             'Plot magnet waveforms in...')
         self.act_plotcurrents = self.menu_plotunits.addAction('Currents')
-        self.act_plotcurrents.triggered.connect(self._emitPlotUnits)
+        self.act_plotcurrents.triggered.connect(
+            _part(self.plotUnitSignal.emit, 'Currents'))
         self.act_plotstrengths = self.menu_plotunits.addAction('Strengths')
-        self.act_plotstrengths.triggered.connect(self._emitPlotUnits)
+        self.act_plotstrengths.triggered.connect(
+            _part(self.plotUnitSignal.emit, 'Strengths'))
 
         self.optics_menu = self.addMenu('Optics Adjustments')
         self.act_optics_settings = self.optics_menu.addAction('Settings')
@@ -92,19 +94,57 @@ class Settings(QMenuBar):
         self.open_menu.addAction(self.act_sofb)
         self.open_menu.addAction(self.act_ti)
 
-    def _showGetNewConfigNamePopup(self):
-        self._newConfigNamePopup = _NewRampConfigGetName(
-            self.ramp_config, 'bo_ramp', self, new_from_template=True)
-        self._newConfigNamePopup.configname.connect(self._emitConfigName)
-        self._newConfigNamePopup.saveSignal.connect(self.showSaveAsPopup)
-        self._newConfigNamePopup.open()
+    def verifyUnsavedChanges(self):
+        if self.ramp_config is None or self.ramp_config.synchronized:
+            return True
+        ans = QMessageBox.question(
+            self, 'Save changes?', 'There are unsaved changes in {}.\n'
+            'Do you want to save?'.format(self.ramp_config.name),
+            QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel)
+        if ans == QMessageBox.Yes:
+            self._saveAndEmitConfigName()
+            return False
+        elif ans == QMessageBox.No:
+            return True
+        elif ans == QMessageBox.Cancel:
+            return False
 
-    def _showLoadExistingConfigPopup(self):
-        self._loadPopup = _LoadRampConfig(self.ramp_config, self)
-        self._loadPopup.configname.connect(self._emitConfigName)
-        self._loadPopup.loadSignal.connect(self._emitLoadSignal)
-        self._loadPopup.saveSignal.connect(self.showSaveAsPopup)
+    def createNewConfigFromTemplate(self):
+        if not self.verifyUnsavedChanges():
+            return
+        self.newConfigNameSignal.emit('**New Configuration**')
+
+    def showLoadExistingConfigPopup(self):
+        if not self.verifyUnsavedChanges():
+            return
+        self._loadPopup = _LoadConfigDialog('bo_ramp', self)
+        self._loadPopup.setWindowTitle('Load ramp configuration...')
+        self._loadPopup.configname.connect(self.newConfigNameSignal.emit)
         self._loadPopup.open()
+
+    def showSaveAsPopup(self):
+        """Show a popup to get a new name to save config."""
+        if self.ramp_config is None:
+            return
+        self._saveAsPopup = _SaveConfigDialog('bo_ramp', self)
+        self._saveAsPopup.setWindowTitle('Save ramp configuration as...')
+        self._saveAsPopup.configname.connect(self._saveAndEmitConfigName)
+        self._saveAsPopup.open()
+
+    def _saveAndEmitConfigName(self, new_name=None):
+        if not self.ramp_config:
+            return
+        if not new_name:
+            new_name = None
+            if self.ramp_config.name == '**New Configuration**':
+                self.showSaveAsPopup()
+                return
+        try:
+            self.ramp_config.save(new_name)
+        except _ConfigDBException as err:
+            QMessageBox.critical(self, 'Error', str(err), QMessageBox.Ok)
+        else:
+            self.loadSignal.emit()
 
     def _showOpticsSettingsPopup(self):
         self._opticsSettingsPopup = _OpticsAdjustSettings(
@@ -113,52 +153,12 @@ class Settings(QMenuBar):
             self._emitOpticsSettings)
         self._opticsSettingsPopup.open()
 
-    def showSaveAsPopup(self):
-        """Show a popup to get a new name to save config."""
-        if self.ramp_config is None:
-            return
-        self._saveAsPopup = _NewRampConfigGetName(
-            self.ramp_config, 'bo_ramp', self, new_from_template=False)
-        self._saveAsPopup.configname.connect(self._saveAndEmitConfigName)
-        self._saveAsPopup.open()
-
-    def _saveAndEmitConfigName(self, new_name=None):
-        if not self.ramp_config:
-            return
-        try:
-            if self.ramp_config.exist():
-                old_name = self.ramp_config.name
-                if not new_name:
-                    new_name = _ConfigDBDocument.generate_config_name(old_name)
-                self.ramp_config.save(new_name)
-            else:
-                self.ramp_config.save()
-        except _ConfigDBException as err:
-            QMessageBox.critical(self, 'Error', str(err), QMessageBox.Ok)
-        else:
-            self._emitConfigName(self.ramp_config.name)
-
-    def _emitConfigName(self, config_name):
-        self.newConfigNameSignal.emit(config_name)
-
-    def _emitLoadSignal(self):
-        self.loadSignal.emit()
-
     @Slot(str, str)
     def _emitOpticsSettings(self, tunecorr_configname, chromcorr_configname):
         self._tunecorr_configname = tunecorr_configname
         self._chromcorr_configname = chromcorr_configname
         self.opticsSettingsSignal.emit(
             tunecorr_configname, chromcorr_configname)
-
-    def _emitDiagSettings(self, settings):
-        self._injcurr_idx = settings[0]
-        self._ejecurr_idx = settings[1]
-        self.diagSettingsSignal.emit(settings)
-
-    def _emitPlotUnits(self):
-        sender_text = self.sender().text()
-        self.plotUnitSignal.emit(sender_text)
 
     @Slot(ramp.BoosterRamp)
     def getRampConfig(self, ramp_config):

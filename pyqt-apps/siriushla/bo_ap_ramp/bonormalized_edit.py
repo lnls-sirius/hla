@@ -16,8 +16,8 @@ from siriuspy.optics.opticscorr import BOTuneCorr, BOChromCorr
 from siriuspy.clientconfigdb import ConfigDBException as _ConfigDBException
 
 from siriushla.widgets.windows import SiriusMainWindow
+from siriushla.as_ap_configdb import SaveConfigDialog as _SaveConfigDialog
 from siriushla.bo_ap_ramp.auxiliar_classes import \
-    NewRampConfigGetName as _NewRampConfigGetName, \
     MyDoubleSpinBox as _MyDoubleSpinBox
 
 
@@ -369,8 +369,7 @@ class BONormEdit(SiriusMainWindow):
             self.verifySync()
 
     def _showSaveAsPopup(self):
-        self._saveAsPopup = _NewRampConfigGetName(
-            self.norm_config, 'bo_normalized', self, new_from_template=False)
+        self._saveAsPopup = _SaveConfigDialog('bo_normalized', self)
         self._saveAsPopup.configname.connect(self._save)
         self._saveAsPopup.open()
 

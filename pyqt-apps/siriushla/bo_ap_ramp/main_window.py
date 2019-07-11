@@ -121,7 +121,11 @@ class RampMain(SiriusMainWindow):
 
     @Slot(str)
     def _receiveNewConfigName(self, new_config_name):
-        self.ramp_config = ramp.BoosterRamp(new_config_name, auto_update=True)
+        if self.ramp_config is None or \
+                self.ramp_config.name != new_config_name:
+            self.ramp_config = ramp.BoosterRamp(new_config_name,
+                                                auto_update=True)
+            self._undo_stack.clear()
         self._emitLoadSignal()
 
     def _emitLoadSignal(self):
@@ -152,18 +156,11 @@ class RampMain(SiriusMainWindow):
             ev.accept()
             super().closeEvent(ev)
         elif not self.ramp_config.synchronized:
-            ans = QMessageBox.question(
-                self, 'Save changes?',
-                'There are unsaved changes in \'{}\'. \n'
-                'Do you want to save?'.format(self.ramp_config.name),
-                QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel)
-            if ans == QMessageBox.Yes:
-                ev.ignore()
-                self.settings.showSaveAsPopup()
-            elif ans == QMessageBox.No:
+            accept = self.settings.verifyUnsavedChanges()
+            if accept:
                 ev.accept()
                 super().closeEvent(ev)
-            elif ans == QMessageBox.Cancel:
+            else:
                 ev.ignore()
 
     @Slot(str, str)
