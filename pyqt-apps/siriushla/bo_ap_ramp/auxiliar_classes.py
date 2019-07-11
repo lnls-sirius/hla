@@ -598,6 +598,19 @@ class ChooseMagnetsToPlot(SiriusDialog):
         self.close()
 
 
+class MyTableWidget(QTableWidget):
+    """Reimplement mousePressEvent to show contextMenu."""
+
+    def __init__(self, parent=None, show_menu_fun=None):
+        super().__init__(parent)
+        self.show_menu_fun = show_menu_fun
+
+    def mousePressEvent(self, ev):
+        if ev.button() == Qt.RightButton:
+            self.show_menu_fun(ev.pos())
+        super().mousePressEvent(ev)
+
+
 class SpinBoxDelegate(QStyledItemDelegate):
     """Auxiliar class to draw a SpinBox in table items on editing."""
 

@@ -30,7 +30,8 @@ from siriushla.bo_ap_ramp.auxiliar_classes import \
     SpinBoxDelegate as _SpinBoxDelegate, \
     CustomTableWidgetItem as _CustomTableWidgetItem, \
     ChooseMagnetsToPlot as _ChooseMagnetsToPlot, \
-    MyDoubleSpinBox as _MyDoubleSpinBox
+    MyDoubleSpinBox as _MyDoubleSpinBox, \
+    MyTableWidget as _MyTableWidget
 from siriushla.bo_ap_ramp.bonormalized_edit import BONormEdit as _BONormEdit
 
 
@@ -651,7 +652,7 @@ class MultipolesRamp(QWidget):
         glay = QGridLayout(self)
         glay.setAlignment(Qt.AlignTop)
         self.graphview = QWidget()
-        self.table = QTableWidget(self)
+        self.table = _MyTableWidget(self, self._showNormConfigMenu)
         self.bt_insert = QPushButton('Insert Normalized Config', self)
         self.bt_delete = QPushButton('Delete Normalized Config', self)
 
@@ -812,8 +813,6 @@ class MultipolesRamp(QWidget):
             QAbstractItemView.SelectionMode.SingleSelection)
         self.table.setSelectionBehavior(
             QAbstractItemView.SelectionBehavior.SelectRows)
-        self.table.setContextMenuPolicy(Qt.CustomContextMenu)
-        self.table.customContextMenuRequested.connect(self._showNormConfigMenu)
 
     def _getNormalizedConfigs(self):
         if self.ramp_config is not None:
@@ -931,7 +930,7 @@ class MultipolesRamp(QWidget):
             if maname not in self._aux_magnets.keys():
                 QMessageBox.warning(
                     self, 'Wait...',
-                    'Auxiliary magnet classes are not ready... \n'
+                    'Loading magnets data... \n'
                     'Wait a moment and try again.', QMessageBox.Ok)
 
         self._editNormConfigWindow = _BONormEdit(
