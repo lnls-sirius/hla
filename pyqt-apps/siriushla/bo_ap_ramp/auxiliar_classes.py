@@ -212,9 +212,9 @@ class InsertNormalizedConfig(SiriusDialog):
     @Slot(str)
     def _handleInsertExistingConfig(self, configname):
         try:
-            nor = ramp.BoosterNormalized(configname)
-            nor.load()
-            energy = nor[ramp.BoosterRamp.MANAME_DIPOLE]
+            self.norm_config.name = configname
+            self.norm_config.load()
+            energy = self.norm_config[ramp.BoosterRamp.MANAME_DIPOLE]
             time = self.ramp_config.ps_waveform_interp_time(energy)
             self.sb_confsrv_time.setValue(time)
         except _ConfigDBException as err:
@@ -232,9 +232,9 @@ class InsertNormalizedConfig(SiriusDialog):
             name = self.le_confsrv_name.text()
             nconf = None
             try:
-                nor = ramp.BoosterNormalized(name)
-                nor.load()
-                nconf = nor.value
+                self.norm_config.name = name
+                self.norm_config.load()
+                nconf = self.norm_config.value
             except _ConfigDBException as err:
                 QMessageBox.critical(self, 'Error', str(err), QMessageBox.Ok)
 
@@ -256,7 +256,6 @@ class DeleteNormalizedConfig(SiriusDialog):
         """Initialize object."""
         super().__init__(parent)
         self.setObjectName('BOApp')
-        self.norm_config = ramp.BoosterNormalized()
         self.setWindowTitle('Delete Normalized Configuration')
         self.table_map = table_map
         self.selected_item = selected_item
