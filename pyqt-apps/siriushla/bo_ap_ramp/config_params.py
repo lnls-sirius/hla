@@ -76,6 +76,9 @@ class ConfigParameters(QGroupBox):
         """Update all widgets when ramp_config is loaded."""
         self.ramp_config = ramp_config
         self.setTitle('Ramping Parameters: ' + self.ramp_config.name)
+        self.dip_ramp.handleLoadRampConfig(self.ramp_config)
+        self.mult_ramp.handleLoadRampConfig(self.ramp_config)
+        self.rf_ramp.handleLoadRampConfig(self.ramp_config)
 
     def updateOpticsAdjustSettings(self, tune_cname, chrom_cname):
         """Update settings."""

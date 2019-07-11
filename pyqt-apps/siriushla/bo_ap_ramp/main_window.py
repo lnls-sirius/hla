@@ -103,12 +103,6 @@ class RampMain(SiriusMainWindow):
 
         self.loadSignal.connect(self.settings.getRampConfig)
         self.loadSignal.connect(self.config_parameters.handleLoadRampConfig)
-        self.loadSignal.connect(
-            self.config_parameters.dip_ramp.handleLoadRampConfig)
-        self.loadSignal.connect(
-            self.config_parameters.mult_ramp.handleLoadRampConfig)
-        self.loadSignal.connect(
-            self.config_parameters.rf_ramp.handleLoadRampConfig)
         self.loadSignal.connect(self.status_and_commands.handleLoadRampConfig)
 
     def _addActions(self):
