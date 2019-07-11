@@ -517,21 +517,33 @@ class PSDetailWidget(QWidget):
                                 color='blue', lineWidth=2)
 
         # NrPoints
-        self.nrpoints = QLabel('', self)
-        self.nrpoints_channel = SiriusConnectionSignal(wfm_data_rb_ch)
-        self.nrpoints_channel.new_value_signal[_np.ndarray].connect(self._nrpoints_update)
+        self._wnrpts_sp = 0
+        self._wnrpts_rb = 0
+        self.wnrpts = QLabel('', self)
+        self.wnrpts_ch_rb = SiriusConnectionSignal(wfm_data_rb_ch)
+        self.wnrpts_ch_rb.new_value_signal[_np.ndarray].connect(self._wnrpts_update_rb)
+        self.wnrpts_ch_sp = SiriusConnectionSignal(wfm_data_sp_ch)
+        self.wnrpts_ch_sp.new_value_signal[_np.ndarray].connect(
+            self._wnrpts_update_sp)
 
         # Add widgets
         layout = QVBoxLayout()
         layout.addWidget(self.wfmdata)
-        layout.addWidget(self.nrpoints)
+        layout.addWidget(self.wnrpts)
 
         return layout
 
+    def _set_wnrpts_label(self):
+        self.wnrpts.setText(
+            "WfmData nrpts (SP|RB): {}|{}".format(self._wnrpts_sp, self._wnrpts_rb))
 
-    def _nrpoints_update(self, value):
-        n = len(value)
-        self.nrpoints.setText("Nr. points WfmData-RB: {}".format(n))
+    def _wnrpts_update_rb(self, value):
+        self._wnrpts_rb = len(value)
+        self._set_wnrpts_label()
+
+    def _wnrpts_update_sp(self, value):
+        self._wnrpts_sp = len(value)
+        self._set_wnrpts_label()
 
     def _getElementType(self):
         dipole = re.compile("(SI|BO|LI|TS|TB)-(Fam|\w{2,4}):MA-B")
