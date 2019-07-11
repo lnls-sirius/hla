@@ -1,6 +1,6 @@
 """Booster Ramp Main Window."""
 
-from qtpy.QtCore import Slot, Signal
+from qtpy.QtCore import Qt, Slot, Signal
 from qtpy.QtGui import QKeySequence
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, \
                            QUndoStack, QMessageBox
@@ -32,6 +32,8 @@ class RampMain(SiriusMainWindow):
         self._setupUi()
         self._connSignals()
         self._addActions()
+
+        self.setFocusPolicy(Qt.StrongFocus)
 
     def _setupUi(self):
         cw = QWidget(self)

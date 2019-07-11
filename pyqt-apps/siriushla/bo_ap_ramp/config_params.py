@@ -391,6 +391,11 @@ class DipoleRamp(QWidget):
 
         old_value = self.ramp_config.ti_params_ps_ramp_delay
         new_value = self.sb_psdelay.value()
+        if new_value == old_value:
+            # Avoid several updates on Enter or spinbox focusOutEvent.
+            # It is necessary due to several emits of editingFinished signal.
+            return
+
         try:
             self.ramp_config.ti_params_ps_ramp_delay = new_value
         except exceptions.RampInvalidDipoleWfmParms as e:
@@ -399,6 +404,7 @@ class DipoleRamp(QWidget):
         else:
             self.updateGraph()
             self.updateDipoleRampSignal.emit()
+
             global _flag_stack_next_command, _flag_stacking
             if _flag_stack_next_command and (old_value != new_value):
                 _flag_stacking = True
@@ -419,6 +425,11 @@ class DipoleRamp(QWidget):
 
         old_value = self.ramp_config.ps_ramp_wfm_nrpoints
         new_value = int(self.sb_nrpoints.value())
+        if new_value == old_value:
+            # Avoid several updates on Enter or spinbox focusOutEvent.
+            # It is necessary due to several emits of editingFinished signal.
+            return
+
         try:
             self.ramp_config.ps_ramp_wfm_nrpoints = new_value
         except exceptions.RampInvalidDipoleWfmParms as e:
@@ -427,6 +438,7 @@ class DipoleRamp(QWidget):
         else:
             self.updateGraph()
             self.updateDipoleRampSignal.emit()
+
             global _flag_stack_next_command, _flag_stacking
             if _flag_stack_next_command and (old_value != new_value):
                 _flag_stacking = True
@@ -1358,6 +1370,11 @@ class RFRamp(QWidget):
 
         old_value = self.ramp_config.ti_params_rf_ramp_delay
         new_value = self.sb_rfdelay.value()
+        if new_value == old_value:
+            # Avoid several updates on Enter or spinbox focusOutEvent.
+            # It is necessary due to several emits of editingFinished signal.
+            return
+
         try:
             self.ramp_config.ti_params_ps_ramp_delay = new_value
         except exceptions.RampInvalidRFParms as e:
@@ -1366,40 +1383,13 @@ class RFRamp(QWidget):
         else:
             self.updateGraph()
             self.updateRFRampSignal.emit()
+
             global _flag_stack_next_command, _flag_stacking
             if _flag_stack_next_command and (old_value != new_value):
                 _flag_stacking = True
                 command = _UndoRedoSpinbox(
                     self.sb_rfdelay, old_value, new_value,
                     'set RF ramp delay to {}'.format(new_value))
-                self._undo_stack.push(command)
-            else:
-                _flag_stack_next_command = True
-        finally:
-            self.updateTable()
-
-    @Slot()
-    def _handleChangeRmpIncIntvl(self):
-        """Handle change RF ramping increase duration."""
-        if self.ramp_config is None:
-            return
-
-        old_value = self.ramp_config.rf_ramp_rampinc_duration
-        new_value = self.sb_rmpincintvl.value()
-        try:
-            self.ramp_config.rf_ramp_rampinc_duration = new_value
-        except exceptions.RampInvalidRFParms as e:
-            QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
-        else:
-            self.updateGraph()
-            self.updateRFRampSignal.emit()
-            global _flag_stack_next_command, _flag_stacking
-            if _flag_stack_next_command:
-                _flag_stacking = True
-                command = _UndoRedoSpinbox(
-                    self.sb_rmpincintvl, old_value, new_value,
-                    'set RF ramping increase duration to {0}'.format(
-                     new_value))
                 self._undo_stack.push(command)
             else:
                 _flag_stack_next_command = True
