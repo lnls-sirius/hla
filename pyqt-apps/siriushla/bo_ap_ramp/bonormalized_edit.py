@@ -8,7 +8,7 @@ from qtpy.QtCore import Qt, Signal, Slot
 from qtpy.QtGui import QKeySequence
 from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
     QGridLayout, QScrollArea, QFormLayout, QCheckBox, QDoubleSpinBox, \
-    QUndoStack, QUndoCommand, QHBoxLayout, QMessageBox
+    QUndoStack, QUndoCommand, QHBoxLayout, QMessageBox, QMenuBar
 
 from siriuspy.search import MASearch as _MASearch
 from siriuspy.ramp import ramp
@@ -36,6 +36,7 @@ class BONormEdit(SiriusMainWindow):
         """Initialize object."""
         super().__init__(parent)
         self.setWindowTitle('Edit Normalized Configuration')
+        self.setObjectName('BOApp')
         self.prefix = prefix
         self.norm_config = norm_config
         self.time = time
@@ -59,28 +60,11 @@ class BONormEdit(SiriusMainWindow):
         }
         self._conn_sofb = conn_sofb
         self._setupUi()
-
-        self._undo_stack = QUndoStack(self)
-        self.act_undo = self._undo_stack.createUndoAction(self, 'Undo')
-        self.act_undo.setShortcut(QKeySequence.Undo)
-        self.menu.addAction(self.act_undo)
-        self.act_redo = self._undo_stack.createRedoAction(self, 'Redo')
-        self.act_redo.setShortcut(QKeySequence.Redo)
-        self.menu.addAction(self.act_redo)
+        self._setupMenu()
 
     # ---------- setup/build layout ----------
 
     def _setupUi(self):
-        self.menu = self.menuBar().addMenu('Options')
-        self.act_load = self.menu.addAction('Load')
-        self.act_load.triggered.connect(self._load)
-        if not self.norm_config.exist():
-            self.act_load.setEnabled(False)
-        self.act_save = self.menu.addAction('Save')
-        self.act_save.triggered.connect(self._save)
-        self.act_saveas = self.menu.addAction('Save as...')
-        self.act_saveas.triggered.connect(self._showSaveAsPopup)
-
         self.label_name = QLabel('<h2>'+self.norm_config.name+'</h2>', self)
         self.label_name.setAlignment(Qt.AlignCenter)
 
@@ -123,6 +107,27 @@ class BONormEdit(SiriusMainWindow):
         cw.setFocusPolicy(Qt.StrongFocus)
         self.setCentralWidget(cw)
 
+    def _setupMenu(self):
+        self.menubar = QMenuBar(self)
+        self.layout().setMenuBar(self.menubar)
+        self.menu = self.menubar.addMenu('Options')
+        self.act_load = self.menu.addAction('Load')
+        self.act_load.triggered.connect(self._load)
+        if not self.norm_config.exist():
+            self.act_load.setEnabled(False)
+        self.act_save = self.menu.addAction('Save')
+        self.act_save.triggered.connect(self._save)
+        self.act_saveas = self.menu.addAction('Save as...')
+        self.act_saveas.triggered.connect(self._showSaveAsPopup)
+
+        self._undo_stack = QUndoStack(self)
+        self.act_undo = self._undo_stack.createUndoAction(self, 'Undo')
+        self.act_undo.setShortcut(QKeySequence.Undo)
+        self.menu.addAction(self.act_undo)
+        self.act_redo = self._undo_stack.createRedoAction(self, 'Redo')
+        self.act_redo.setShortcut(QKeySequence.Redo)
+        self.menu.addAction(self.act_redo)
+
     def _setupStrengthWidget(self):
         scrollarea = QScrollArea()
         self.nconfig_data = QWidget()
@@ -164,6 +169,9 @@ class BONormEdit(SiriusMainWindow):
             ma_value.setStyleSheet("min-height:1.29em; max-height:1.29em;")
             self._map_manames2wigdets[ma] = ma_value
 
+        self.nconfig_data.setObjectName('data')
+        self.nconfig_data.setStyleSheet("""
+            #data{background-color: transparent;}""")
         self.nconfig_data.setLayout(flay_configdata)
         scrollarea.setWidget(self.nconfig_data)
 
@@ -395,10 +403,11 @@ class BONormEdit(SiriusMainWindow):
         self.norm_config[maname] = new_value
 
     def _handleStrengtsLimits(self, state):
-        manames = self.norm_config.manames
+        manames = _dcopy(self.norm_config.manames)
+        manames.remove('BO-Fam:MA-B')
         if state:
             for ma in manames:
-                ma_value = self.data.findChild(QDoubleSpinBox, name=ma)
+                ma_value = self.nconfig_data.findChild(QDoubleSpinBox, name=ma)
                 aux = self._aux_magnets[ma]
                 currs = (aux.current_min, aux.current_max)
                 lims = aux.conv_current_2_strength(
@@ -407,7 +416,7 @@ class BONormEdit(SiriusMainWindow):
                 ma_value.setMaximum(max(lims))
         else:
             for ma in manames:
-                ma_value = self.data.findChild(QDoubleSpinBox, name=ma)
+                ma_value = self.nconfig_data.findChild(QDoubleSpinBox, name=ma)
                 ma_value.setMinimum(-100)
                 ma_value.setMaximum(100)
 
