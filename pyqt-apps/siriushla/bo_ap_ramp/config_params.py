@@ -190,8 +190,8 @@ class DipoleRamp(QWidget):
         self.ax.set_xlabel('t [ms]')
         self.line, = self.ax.plot([0], [0], '-b')
         self.markers, = self.ax.plot([0], [0], '+r')
-        self.m_inj, = self.ax.plot([0], [0], marker='o', color='#787878')
-        self.m_ej, = self.ax.plot([0], [0], marker='o', color='#787878')
+        self.m_inj, = self.ax.plot([0], [0], marker='o', c='#787878')
+        self.m_ej, = self.ax.plot([0], [0], marker='o', c='#787878')
 
         self.toolbar = NavigationToolbar(self.graph, self)
         self.toolbar.setObjectName('toolbar')
@@ -707,8 +707,8 @@ class MultipolesRamp(QWidget):
         self.lines = dict()
         for maname in self.manames:
             self.lines[maname], = self.ax.plot([0], [0], '-b')
-        self.m_inj, = self.ax.plot([0], [0], marker='o', color='#787878')
-        self.m_ej, = self.ax.plot([0], [0], marker='o', color='#787878')
+        self.m_inj, = self.ax.plot([0], [0], ls='', marker='o', c='#787878')
+        self.m_ej, = self.ax.plot([0], [0], ls='', marker='o', c='#787878')
 
         self.toolbar = NavigationToolbar(self.graph, self)
         self.toolbar.setObjectName('toolbar')
@@ -1200,8 +1200,8 @@ class RFRamp(QWidget):
         self.ax1.set_xlabel('t [ms]')
         self.ax1.set_ylabel('|Vgap| [kV]')
         self.line1, = self.ax1.plot([0], [0], '-b')
-        self.m_inj, = self.ax1.plot([0], [0], marker='o', color='#787878')
-        self.m_ej, = self.ax1.plot([0], [0], marker='o', color='#787878')
+        self.m_inj, = self.ax1.plot([0], [0], marker='o', c='#787878')
+        self.m_ej, = self.ax1.plot([0], [0], marker='o', c='#787878')
 
         self.ax2 = self.ax1.twinx()
         self.ax2.grid()
