@@ -238,9 +238,22 @@ class PSDetailWidget(QWidget):
             self, self._prefixed_psname + ":CtrlMode-Mon")
         self.ctrlmode_label.setObjectName("ctrlmode1_label")
 
+        if self._is_magnet:
+            self.psconnsts_led = SiriusLedState(
+                self, self._prefixed_psname + ":PSConnStatus-Mon")
+            self.psconnsts_led.setOffColor(SiriusLedState.Red)
+            self.psconnsts_led.setObjectName("ctrlmode1_psconn_led")
+            self.psconnsts_label = PyDMLabel(
+                self, self._prefixed_psname + ":PSConnStatus-Mon")
+            self.psconnsts_label.setObjectName("ctrlmode1_psconn_label")
+
+
         ctrlmode_layout = QHBoxLayout()
         ctrlmode_layout.addWidget(self.ctrlmode_led)
         ctrlmode_layout.addWidget(self.ctrlmode_label)
+        if self._is_magnet:
+            ctrlmode_layout.addWidget(self.psconnsts_led)
+            ctrlmode_layout.addWidget(self.psconnsts_label)
 
         layout.addWidget(self.opmode_sp, 0, 0, Qt.AlignHCenter)
         layout.addWidget(self.opmode_rb, 1, 0, Qt.AlignHCenter)
