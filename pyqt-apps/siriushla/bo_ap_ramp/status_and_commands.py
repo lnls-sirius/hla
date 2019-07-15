@@ -124,7 +124,7 @@ class StatusAndCommands(QGroupBox):
         conn = self._conn_rf
         c2v_intlk[pfx + conn.Const.Rmp_Intlk] = 0
         c2v_setup[pfx + conn.Const.Rmp_RmpReady] = 1
-        c2v_setup[pfx + conn.Const.Rmp_IncTs] = 0
+        c2v_setup[pfx + conn.Const.Rmp_IncTs] = 0.0
         c2v_apply[pfx + conn.Const.Rmp_Ts1.replace('SP', 'RB')] = None
         c2v_apply[pfx + conn.Const.Rmp_Ts2.replace('SP', 'RB')] = None
         c2v_apply[pfx + conn.Const.Rmp_Ts3.replace('SP', 'RB')] = None
@@ -201,7 +201,7 @@ class StatusAndCommands(QGroupBox):
         self.status_details.open()
 
     def apply_changes(self):
-        if not self.ramp_config:
+        if self.ramp_config is None:
             return
 
         sender_name = self.sender().objectName()
@@ -241,7 +241,9 @@ class StatusAndCommands(QGroupBox):
 
     def update_ma_params(self):
         """Update MA parameters leds channels2values dict."""
-        if not self.ramp_config:
+        if self.ramp_config is None:
+            return
+        if not self.ramp_config.ps_normalized_configs:
             return
         c2v = dict()
         for maname in self._conn_ma.manames:
@@ -251,7 +253,7 @@ class StatusAndCommands(QGroupBox):
 
     def update_rf_params(self):
         """Update RF parameters leds channels2values dict."""
-        if not self.ramp_config:
+        if self.ramp_config is None:
             return
         c = self._conn_rf.Const
         r = self.ramp_config
@@ -269,7 +271,7 @@ class StatusAndCommands(QGroupBox):
 
     def update_ti_params(self):
         """Update TI parameters leds channels2values dict."""
-        if not self.ramp_config:
+        if self.ramp_config is None:
             return
         conn = self._conn_ti
         c = conn.Const
@@ -284,7 +286,7 @@ class StatusAndCommands(QGroupBox):
         c2v[p+c.TrgCorrs_Delay.replace('SP', 'RB')] = r.ti_params_ps_ramp_delay
         c2v[p+c.TrgLLRFRmp_Delay.replace('SP', 'RB')] = \
             r.ti_params_rf_ramp_delay
-        c2v[p+c.EvtRmpBO_Delay.replace('SP', 'RB')] = 0
+        c2v[p+c.EvtRmpBO_Delay.replace('SP', 'RB')] = 0.0
         params = conn.calc_evts_delay()
         if not params:
             self.show_warning_message('There are TI not connected PVs!')
@@ -355,8 +357,7 @@ class StatusDetails(SiriusDialog):
         self._conn_ti = connTI or _ConnTiming(prefix=self.prefix)
         self._conn_rf = connRF or _ConnRF(prefix=self.prefix)
         self._setupUi()
-        import threading
-        t = threading.Thread(target=self.thread_print, daemon=True)
+        t = _Thread(target=self.thread_print, daemon=True)
         t.start()
 
     def _setupUi(self):
@@ -392,11 +393,11 @@ class StatusDetails(SiriusDialog):
             elif 'PwrState' in p:
                 c2v_setup[pfx + conn[p].pvname_rb] = _PSc.PwrStateSts.On
             elif 'WfmData' in p:
-                if self.ramp_config:
+                if self.ramp_config is None:
+                    c2v_apply[pfx + conn[p].pvname_rb] = None
+                elif self.ramp_config.ps_normalized_configs:
                     wf = self.ramp_config.ps_waveform_get(p.device_name)
                     c2v_apply[pfx + conn[p].pvname_rb] = wf.currents
-                else:
-                    c2v_apply[pfx + conn[p].pvname_rb] = None
 
         self.led_ma_intlk = PyDMLedMultiChannel(self, c2v_intlk)
         self.led_ma_setup = PyDMLedMultiChannel(self, c2v_setup)
@@ -461,4 +462,4 @@ class StatusDetails(SiriusDialog):
     def thread_print(self):
         import time
         time.sleep(2)
-        print(self.led_ma_apply.channels2status)
+        print(self.led_ma_setup.channels2status)

@@ -115,6 +115,7 @@ class Settings(QMenuBar):
         self.newConfigNameSignal.emit('**New Configuration**')
 
     def showLoadExistingConfigPopup(self):
+        """Show popup to load an existing config."""
         if not self.verifyUnsavedChanges():
             return
         self._loadPopup = _LoadConfigDialog('bo_ramp', self)
@@ -132,7 +133,7 @@ class Settings(QMenuBar):
         self._saveAsPopup.open()
 
     def _saveAndEmitConfigName(self, new_name=None):
-        if not self.ramp_config:
+        if self.ramp_config is None:
             return
         if not new_name:
             new_name = None

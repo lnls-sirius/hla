@@ -904,7 +904,7 @@ class MultipolesRamp(QWidget):
         self.updateGraph(update_axis=True)
 
     def _showNormConfigMenu(self, pos):
-        if not self.ramp_config:
+        if self.ramp_config is None:
             return
 
         selecteditems = self.table.selectedItems()
@@ -971,7 +971,16 @@ class MultipolesRamp(QWidget):
 
     def updateGraph(self, update_axis=False):
         """Update and redraw graph."""
-        if self.ramp_config is not None:
+        if self.ramp_config is None:
+            return
+        if not self.ramp_config.ps_normalized_configs:
+            for maname in self.manames:
+                self.lines[maname].set_linewidth(0)
+                self.m_inj.set_xdata([])
+                self.m_inj.set_ydata([])
+                self.m_ej.set_xdata([])
+                self.m_ej.set_ydata([])
+        else:
             xdata = self.ramp_config.ps_waveform_get_times()
             for maname in self._magnets_to_plot:
                 if self.plot_unit == 'Strengths':
@@ -1042,8 +1051,8 @@ class MultipolesRamp(QWidget):
             self.m_inj.set_ydata(inj_marker_value)
             self.m_ej.set_ydata(ej_marker_value)
 
-            self.graph.figure.canvas.draw()
-            self.graph.figure.canvas.flush_events()
+        self.graph.figure.canvas.draw()
+        self.graph.figure.canvas.flush_events()
 
     def updateTable(self):
         """Update and rebuild table."""
