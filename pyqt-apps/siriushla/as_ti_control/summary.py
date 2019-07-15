@@ -30,7 +30,14 @@ class Button(QWidget):
     def setupui(self):
         lbl0 = QLabel(self.link, self)
 
-        but = QPushButton(self.prefix.device_name, self)
+        name = self.prefix.sub + '-'
+        if self.prefix.dev == 'AMCFPGAEVR':
+            name += 'AMC'
+        else:
+            name += self.prefix.dev
+        if self.prefix.idx:
+            name += '-' + self.prefix.idx
+        but = QPushButton(name, self)
         but.setAutoDefault(False)
         but.setDefault(False)
         clss = self._dic[self.prefix.dev]
@@ -38,15 +45,19 @@ class Button(QWidget):
         connect_window(but, Window, self, prefix=self.prefix + ':')
 
         prop1 = 'Network'
+        pp1 = 'Net'
         prop2 = 'LinkStatus'
+        pp2 = 'Link'
         if self.prefix.dev == 'EVG':
             prop2 = 'RFStatus'
+            pp2 = 'RFSts'
         elif self.prefix.dev == 'AMCFPGAEVR':
             prop1 = 'RefClkLocked'
+            pp1 = 'Lckd'
         pv1 = self.prefix.substitute(propty=prop1+'-Mon')
         pv2 = self.prefix.substitute(propty=prop2+'-Mon')
-        lbl1 = QLabel(prop1, self)
-        lbl2 = QLabel(prop2, self)
+        lbl1 = QLabel(pp1, self)
+        lbl2 = QLabel(pp2, self)
         led1 = SiriusLedAlert(self, init_channel=pv1)
         led1.onColor, led1.offColor = led1.offColor, led1.onColor
         led2 = SiriusLedAlert(self, init_channel=pv2)
@@ -92,7 +103,7 @@ class Summary(QWidget):
             g3.append(self.setupdown(downs))
 
         lay = QGridLayout(self)
-        lay.setVerticalSpacing(80)
+        lay.setVerticalSpacing(30)
         align = Qt.AlignVCenter | Qt.AlignLeft
         lay.addWidget(g1, 0, 0, len(g3), 1, align)
         for i, g in enumerate(g2):
@@ -104,7 +115,7 @@ class Summary(QWidget):
                     self.g3.append(g)
                 lay.addWidget(g, i, j+2)
         lay.setColumnMinimumWidth(0, 300)
-        lay.setColumnMinimumWidth(1, 300)
+        lay.setColumnMinimumWidth(1, 200)
 
     def setupdown(self, down):
         return [Button(self.prefix+pre, lnk, self) for lnk, pre in down]

@@ -259,6 +259,17 @@ class EVG(BaseWidget):
             hbl.setAlignment(wid, Qt.AlignCenter)
         return pwid
 
+    # def _create_prop_widget(self, name, parent, wids, align_ver=True):
+    #     pwid = QWidget(parent)
+    #     lay = QGridLayout(pwid)
+    #     lab = QLabel(name)
+    #     lab.setAlignment(Qt.AlignCenter)
+    #     lay.addWidget(lab, 0, 0, 1, len(wids))
+    #     for i, wid in enumerate(wids):
+    #         wid.setParent(pwid)
+    #         lay.addWidget(wid, 1, i)
+    #     return pwid
+
 
 class EventList(BaseList):
     """Template for control of Events."""

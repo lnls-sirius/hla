@@ -14,9 +14,7 @@ class EpicsGetter(EpicsTask):
 
     def run(self):
         """Thread execution."""
-        if self._quit_task:
-            self.completed.emit()
-        else:
+        if not self._quit_task:
             for i in range(len(self._pvs)):
                 pv = self._pvs[i]
                 self.currentItem.emit(pv.pvname)
@@ -28,4 +26,4 @@ class EpicsGetter(EpicsTask):
                     self.itemNotRead.emit(pv.pvname)
                 if self._quit_task:
                     break
-            self.completed.emit()
+        self.completed.emit()
