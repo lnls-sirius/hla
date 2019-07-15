@@ -83,6 +83,8 @@ class RampMain(SiriusMainWindow):
         self.config_parameters.dip_ramp.updateDipoleRampSignal.connect(
             self.config_parameters.mult_ramp.updateGraph)
         self.config_parameters.dip_ramp.updateDipoleRampSignal.connect(
+            self.config_parameters.rf_ramp.updateGraph)
+        self.config_parameters.dip_ramp.updateDipoleRampSignal.connect(
             self.status_and_commands.update_ma_params)
         self.config_parameters.dip_ramp.updateDipoleRampSignal.connect(
             self.status_and_commands.update_ti_params)
