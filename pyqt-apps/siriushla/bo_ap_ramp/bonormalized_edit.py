@@ -28,7 +28,7 @@ _flag_stacking = False
 class BONormEdit(SiriusMainWindow):
     """Widget to perform optics adjust in normalized configurations."""
 
-    normConfigChanged = Signal(ramp.BoosterNormalized, str, float, bool)
+    normConfigChanged = Signal(ramp.BoosterNormalized, str)
 
     def __init__(self, parent=None, prefix='', norm_config=None,
                  time=None, energy=None, magnets=dict(), conn_sofb=None,
@@ -39,7 +39,6 @@ class BONormEdit(SiriusMainWindow):
         self.setObjectName('BOApp')
         self.prefix = prefix
         self.norm_config = norm_config
-        self.time = time
         self.energy = energy
 
         self._aux_magnets = magnets
@@ -73,23 +72,19 @@ class BONormEdit(SiriusMainWindow):
         self.tune = self._setupTuneWidget()
         self.chrom = self._setupChromWidget()
 
-        self.bt_save2rampconfig = QPushButton('Save changes', self)
-        self.bt_save2rampconfig.clicked.connect(self._updateRampConfig)
         self.bt_apply2machine = QPushButton('Apply changes to machine', self)
-        self.bt_apply2machine.clicked.connect(
-            _part(self._updateRampConfig, apply=True))
+        self.bt_apply2machine.clicked.connect(self._updateRampConfig)
 
         cw = QWidget()
         lay = QGridLayout()
         lay.setVerticalSpacing(10)
         lay.setHorizontalSpacing(10)
         lay.addWidget(self.label_name, 0, 0, 1, 2)
-        lay.addWidget(self.strengths, 1, 0, 5, 1)
+        lay.addWidget(self.strengths, 1, 0, 4, 1)
         lay.addWidget(self.orbit, 1, 1)
         lay.addWidget(self.tune, 2, 1)
         lay.addWidget(self.chrom, 3, 1)
-        lay.addWidget(self.bt_save2rampconfig, 4, 1)
-        lay.addWidget(self.bt_apply2machine, 5, 1)
+        lay.addWidget(self.bt_apply2machine, 4, 1)
         lay.setColumnStretch(0, 2)
         lay.setColumnStretch(1, 2)
         lay.setRowStretch(0, 2)
@@ -401,6 +396,7 @@ class BONormEdit(SiriusMainWindow):
             self.sender(), self.norm_config[maname], new_value,
             message='set '+maname+' strength to {}'.format(new_value))
         self.norm_config[maname] = new_value
+        self.verifySync()
 
     def _handleStrengtsLimits(self, state):
         manames = _dcopy(self.norm_config.manames)
@@ -583,11 +579,15 @@ class BONormEdit(SiriusMainWindow):
 
         self.verifySync()
 
-    def _updateRampConfig(self, apply=False):
+    def _updateRampConfig(self):
         if self.norm_config is not None:
             self.normConfigChanged.emit(
-                self.norm_config, self._norm_config_oldname,
-                self.time, apply)
+                self.norm_config, self._norm_config_oldname)
+
+    def updateEnergy(self, energy):
+        """Updta energy and strength limits."""
+        self.energy = energy
+        self._handleStrengtsLimits(self.cb_checklims.checkState())
 
     @Slot(str, str)
     def updateSettings(self, tunecorr_configname, chromcorr_configname):

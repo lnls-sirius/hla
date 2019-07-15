@@ -621,7 +621,8 @@ class MultipolesRamp(QWidget):
         self.ramp_config = ramp_config
         self._undo_stack = undo_stack
 
-        self._getNormalizedConfigs()
+        self.normalized_configs = list()
+        self.bonorm_edit_dict = dict()
 
         self._magnets_to_plot = []
         self.plot_unit = 'Strengths'
@@ -815,10 +816,9 @@ class MultipolesRamp(QWidget):
             QAbstractItemView.SelectionBehavior.SelectRows)
 
     def _getNormalizedConfigs(self):
-        if self.ramp_config is not None:
-            self.normalized_configs = self.ramp_config.ps_normalized_configs
-        else:
-            self.normalized_configs = list()
+        if self.ramp_config is None:
+            return
+        self.normalized_configs = self.ramp_config.ps_normalized_configs
 
     def _sortTable(self):
         self.table.sortByColumn(1, Qt.AscendingOrder)
@@ -826,15 +826,14 @@ class MultipolesRamp(QWidget):
             self.table_map['rows'][row] = self.table.item(row, 0).text()
 
     def _handleCellChanged(self, row, column):
+        nconfig_name = self.table.item(row, 0).data(Qt.DisplayRole)
         try:
-            config_changed_name = self.table.item(row, 0).data(
-                Qt.DisplayRole)
             old_value = [t for t, n in self.normalized_configs
-                         if n == config_changed_name]
+                         if n == nconfig_name]
             new_value = float(self.table.item(row, column).data(
                 Qt.DisplayRole))
             self.ramp_config.ps_normalized_configs_change_time(
-                config_changed_name, new_value)
+                nconfig_name, new_value)
         except exceptions.RampInvalidNormConfig as e:
             QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
         else:
@@ -854,6 +853,11 @@ class MultipolesRamp(QWidget):
                 _flag_stack_next_command = True
         finally:
             self.updateTable()
+
+            if nconfig_name in self.bonorm_edit_dict.keys():
+                energy = float(self.table.item(row, 2).data(Qt.DisplayRole))
+                w = self.bonorm_edit_dict[nconfig_name]
+                w.updateEnergy(energy)
 
     def _showInsertNormConfigPopup(self):
         if self.ramp_config is not None:
@@ -907,45 +911,49 @@ class MultipolesRamp(QWidget):
         if self.ramp_config is None:
             return
 
-        selecteditems = self.table.selectedItems()
-        if not selecteditems:
-            return
-        row = selecteditems[0].row()
+        item = self.table.itemAt(pos)
+        row = item.row()
         nconfig_name = self.table_map['rows'][row]
-        time = float(self.table.item(row, 1).data(Qt.DisplayRole))
-        energy = float(self.table.item(row, 3).data(Qt.DisplayRole))
+        if nconfig_name in ['Injection', 'Ejection']:
+            return
+        energy = float(self.table.item(row, 2).data(Qt.DisplayRole))
 
         menu = QMenu()
         edit_act = menu.addAction('Edit')
         edit_act.triggered.connect(
-            _part(self._openEditNormWindow, nconfig_name, time, energy))
+            _part(self._openEditNormWindow, nconfig_name, energy))
 
         delete_act = menu.addAction('Delete')
         delete_act.triggered.connect(self._showDeleteNormConfigPopup)
 
         menu.exec_(self.table.mapToGlobal(pos))
 
-    def _openEditNormWindow(self, nconfig_name, time, energy):
+    def _openEditNormWindow(self, nconfig_name, energy):
         for maname in self.manames:
             if maname not in self._aux_magnets.keys():
                 QMessageBox.warning(
                     self, 'Wait...',
                     'Loading magnets data... \n'
                     'Wait a moment and try again.', QMessageBox.Ok)
+                return
 
-        self._editNormConfigWindow = _BONormEdit(
-            parent=self, prefix=self.prefix,
-            norm_config=self.ramp_config[nconfig_name],
-            time=time, energy=energy,
-            magnets=self._aux_magnets,
-            conn_sofb=self._conn_sofb,
-            tunecorr_configname=self._tunecorr_configname,
-            chromcorr_configname=self._chromcorr_configname)
-        self._editNormConfigWindow.normConfigChanged.connect(
-            self.handleNormConfigsChanged)
-        self.updateOptAdjSettingsSignal.connect(
-            self._editNormConfigWindow.updateSettings)
-        self._editNormConfigWindow.show()
+        if nconfig_name in self.bonorm_edit_dict.keys():
+            w = self.bonorm_edit_dict[nconfig_name]
+        else:
+            w = _BONormEdit(parent=self, prefix=self.prefix,
+                            norm_config=self.ramp_config[nconfig_name],
+                            energy=energy, magnets=self._aux_magnets,
+                            conn_sofb=self._conn_sofb,
+                            tunecorr_configname=self._tunecorr_configname,
+                            chromcorr_configname=self._chromcorr_configname)
+            w.normConfigChanged.connect(self.handleNormConfigsChanged)
+            self.updateOptAdjSettingsSignal.connect(w.updateSettings)
+            self.bonorm_edit_dict[nconfig_name] = w
+        if w.isHidden():
+            w.show()
+        elif w.isMinimized():
+            w.showNormal()
+        w.activateWindow()
 
     def _verifyWarnings(self):
         manames_exclimits = self.ramp_config.ps_waveform_manames_exclimits
@@ -1109,11 +1117,12 @@ class MultipolesRamp(QWidget):
         self.updateGraph(update_axis=True)
         self._verifyWarnings()
 
-    @Slot(ramp.BoosterNormalized, str, float, bool)
-    def handleNormConfigsChanged(self, nconfig=None, old_nconfig_name='',
-                                 time=0.0, apply=False):
+    @Slot(ramp.BoosterNormalized, str)
+    def handleNormConfigsChanged(self, nconfig=None, old_nconfig_name=''):
         """Reload normalized configs on change and update graph."""
         if old_nconfig_name:
+            row = 0
+            time = float(self.table.item(row, 1).data(Qt.DisplayRole))
             self.ramp_config.ps_normalized_configs_delete(old_nconfig_name)
             self.ramp_config.ps_normalized_configs_insert(
                 time=time, name=nconfig.name, nconfig=nconfig.configuration)
@@ -1122,8 +1131,7 @@ class MultipolesRamp(QWidget):
 
         self.handleLoadRampConfig()
         self.updateMultipoleRampSignal.emit()
-        if apply:
-            self.applyChanges2MachineSignal.emit()
+        self.applyChanges2MachineSignal.emit()
 
     def updateOpticsAdjustSettings(self, tuneconfig_name, chromconfig_name):
         self._tunecorr_configname = tuneconfig_name
