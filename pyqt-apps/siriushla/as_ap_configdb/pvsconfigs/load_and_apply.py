@@ -289,9 +289,7 @@ class Wait(QThread):
 
     def run(self):
         """."""
-        if self._quit_task:
-            self.completed.emit()
-        else:
+        if not self._quit_task:
             print('Waiting for {} seconds...', self.wait_time)
             t0 = time.time()
             if self.size:
@@ -305,7 +303,7 @@ class Wait(QThread):
                     self.itemChecked.emit(str(i), True)
             else:
                 time.sleep(self.wait_time)
-            self.completed.emit()
+        self.completed.emit()
 
 
 if __name__ == '__main__':

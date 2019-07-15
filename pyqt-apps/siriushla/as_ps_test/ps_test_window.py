@@ -125,6 +125,7 @@ class ResetPS(QThread):
 
     currentItem = Signal(str)
     itemDone = Signal()
+    completed = Signal()
 
     def __init__(self, devices, parent=None):
         """Constructor."""
@@ -150,7 +151,7 @@ class ResetPS(QThread):
                     pv.put(1)
                     time.sleep(5e-3)
                 self.itemDone.emit()
-        self.finished.emit()
+        self.completed.emit()
 
 
 class TurnPSOn(QThread):
@@ -158,6 +159,7 @@ class TurnPSOn(QThread):
 
     currentItem = Signal(str)
     itemDone = Signal()
+    completed = Signal()
 
     def __init__(self, devices, parent=None):
         """Constructor."""
@@ -177,9 +179,7 @@ class TurnPSOn(QThread):
 
     def run(self):
         """Set PS on."""
-        if self._quit_task:
-            self.finished.emit()
-        else:
+        if not self._quit_task:
             for pv in self._pvs:
                 if pv.connected:
                     pv.put(1)
@@ -188,7 +188,7 @@ class TurnPSOn(QThread):
                 if self._quit_task:
                     break
             time.sleep(5e-3*self.size())
-            self.finished.emit()
+        self.completed.emit()
 
 
 class CheckPSOn(QThread):
@@ -197,6 +197,7 @@ class CheckPSOn(QThread):
     currentItem = Signal(str)
     itemDone = Signal()
     isOn = Signal(str, bool)
+    completed = Signal()
 
     def __init__(self, devices, parent=None):
         """Constructor."""
@@ -217,9 +218,7 @@ class CheckPSOn(QThread):
     def run(self):
         """Set PS on."""
         time.sleep(1)
-        if self._quit_task:
-            self.finished.emit()
-        else:
+        if not self._quit_task:
             for device, pv in zip(self._devices, self._pvs):
                 t = time.time()
                 is_on = False
@@ -235,7 +234,7 @@ class CheckPSOn(QThread):
                 time.sleep(5e-3)
                 if self._quit_task:
                     break
-            self.finished.emit()
+        self.completed.emit()
 
 
 class TestPS(QThread):
@@ -244,6 +243,7 @@ class TestPS(QThread):
     currentItem = Signal(str)
     itemDone = Signal()
     itemTested = Signal(str, bool)
+    completed = Signal()
 
     def __init__(self, devices, parent=None):
         """Constructor."""
@@ -267,53 +267,52 @@ class TestPS(QThread):
     def run(self):
         """Set PS Current."""
         time.sleep(0.1)
-        if self._quit_task:
-            self.finished.emit()
-        for i in range(len(self._devices)):
-            dev_name = self._devices[i]
-            rb = self._rb_pvs[i]
-            sp = self._sp_pvs[i]
+        if not self._quit_task:
+            for i in range(len(self._devices)):
+                dev_name = self._devices[i]
+                rb = self._rb_pvs[i]
+                sp = self._sp_pvs[i]
 
-            if not rb.connected or not sp.connected:
-                self.itemTested.emit(dev_name, False)
-            else:
-                success = False
-                splims = MAData(dev_name).splims
-                # sp.put(splims['HIGH'] - 2.0)
-                # # time.sleep(0.01)
+                if not rb.connected or not sp.connected:
+                    self.itemTested.emit(dev_name, False)
+                else:
+                    success = False
+                    splims = MAData(dev_name).splims
+                    # sp.put(splims['HIGH'] - 2.0)
+                    # # time.sleep(0.01)
 
-                # init = time.time()
-                # while time.time() - init < 5:
-                #     if self._cmp(rb.get(), splims['HIGH'] - 2.0):
-                #         success = True
-                #         break
-                #     if self._quit_task:
-                #         break
+                    # init = time.time()
+                    # while time.time() - init < 5:
+                    #     if self._cmp(rb.get(), splims['HIGH'] - 2.0):
+                    #         success = True
+                    #         break
+                    #     if self._quit_task:
+                    #         break
 
-                # if not success:
-                #     self.itemTested.emit(dev_name, False)
-                #     self.itemDone.emit()
-                #     continue
+                    # if not success:
+                    #     self.itemTested.emit(dev_name, False)
+                    #     self.itemDone.emit()
+                    #     continue
 
-                # success = False
-                sp.put(splims['HIGH'] - 1.0)
-                # time.sleep(0.01)
+                    # success = False
+                    sp.put(splims['HIGH'] - 1.0)
+                    # time.sleep(0.01)
 
-                init = time.time()
-                while time.time() - init < 10:
-                    if self._cmp(rb.get(), splims['HIGH'] - 1.0):
-                        success = True
-                        break
-                    if self._quit_task:
-                        break
+                    init = time.time()
+                    while time.time() - init < 10:
+                        if self._cmp(rb.get(), splims['HIGH'] - 1.0):
+                            success = True
+                            break
+                        if self._quit_task:
+                            break
 
-                self.itemTested.emit(dev_name, success)
+                    self.itemTested.emit(dev_name, success)
 
-            self.itemDone.emit()
+                self.itemDone.emit()
 
-            if self._quit_task:
-                break
-        self.finished.emit()
+                if self._quit_task:
+                    break
+        self.completed.emit()
 
     def _cmp(self, value, target, error=1e-3):
         if abs(value - target) < error:

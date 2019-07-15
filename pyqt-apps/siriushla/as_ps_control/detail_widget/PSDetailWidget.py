@@ -1,5 +1,6 @@
 """MagnetDetailWidget definition."""
 import re
+import numpy as _np
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGroupBox, QGridLayout, QLabel, \
@@ -10,7 +11,7 @@ from siriuspy.envars import vaca_prefix
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox, PyDMPushButton, \
     PyDMLineEdit, PyDMWaveformPlot
 from siriushla.widgets.state_button import PyDMStateButton
-from siriushla.widgets import PyDMLinEditScrollbar
+from siriushla.widgets import PyDMLinEditScrollbar, SiriusConnectionSignal
 from siriushla.widgets.led import SiriusLedState, SiriusLedAlert
 from siriushla import util as _util
 from .MagnetInterlockWidget import MagnetInterlockWindow
@@ -237,9 +238,22 @@ class PSDetailWidget(QWidget):
             self, self._prefixed_psname + ":CtrlMode-Mon")
         self.ctrlmode_label.setObjectName("ctrlmode1_label")
 
+        if self._is_magnet:
+            self.psconnsts_led = SiriusLedState(
+                self, self._prefixed_psname + ":PSConnStatus-Mon")
+            self.psconnsts_led.setOffColor(SiriusLedState.Red)
+            self.psconnsts_led.setObjectName("ctrlmode1_psconn_led")
+            self.psconnsts_label = PyDMLabel(
+                self, self._prefixed_psname + ":PSConnStatus-Mon")
+            self.psconnsts_label.setObjectName("ctrlmode1_psconn_label")
+
+
         ctrlmode_layout = QHBoxLayout()
         ctrlmode_layout.addWidget(self.ctrlmode_led)
         ctrlmode_layout.addWidget(self.ctrlmode_label)
+        if self._is_magnet:
+            ctrlmode_layout.addWidget(self.psconnsts_led)
+            ctrlmode_layout.addWidget(self.psconnsts_label)
 
         layout.addWidget(self.opmode_sp, 0, 0, Qt.AlignHCenter)
         layout.addWidget(self.opmode_rb, 1, 0, Qt.AlignHCenter)
@@ -499,11 +513,11 @@ class PSDetailWidget(QWidget):
         return layout
 
     def _waveformLayout(self):
-        layout = QVBoxLayout()
 
         wfm_data_sp_ch = self._prefixed_psname + ":WfmData-SP"
         wfm_data_rb_ch = self._prefixed_psname + ":WfmData-RB"
 
+        # Plot
         self.wfmdata = PyDMWaveformPlot()
         self.wfmdata.setMaximumSize(400, 300)
         self.wfmdata.autoRangeX = True
@@ -515,10 +529,34 @@ class PSDetailWidget(QWidget):
         self.wfmdata.addChannel(y_channel=wfm_data_rb_ch, name='WfmData-RB',
                                 color='blue', lineWidth=2)
 
+        # NrPoints
+        self._wnrpts_sp = 0
+        self._wnrpts_rb = 0
+        self.wnrpts = QLabel('', self)
+        self.wnrpts_ch_rb = SiriusConnectionSignal(wfm_data_rb_ch)
+        self.wnrpts_ch_rb.new_value_signal[_np.ndarray].connect(self._wnrpts_update_rb)
+        self.wnrpts_ch_sp = SiriusConnectionSignal(wfm_data_sp_ch)
+        self.wnrpts_ch_sp.new_value_signal[_np.ndarray].connect(
+            self._wnrpts_update_sp)
+
         # Add widgets
+        layout = QVBoxLayout()
         layout.addWidget(self.wfmdata)
+        layout.addWidget(self.wnrpts)
 
         return layout
+
+    def _set_wnrpts_label(self):
+        self.wnrpts.setText(
+            "WfmData nrpts (SP|RB): {}|{}".format(self._wnrpts_sp, self._wnrpts_rb))
+
+    def _wnrpts_update_rb(self, value):
+        self._wnrpts_rb = len(value)
+        self._set_wnrpts_label()
+
+    def _wnrpts_update_sp(self, value):
+        self._wnrpts_sp = len(value)
+        self._set_wnrpts_label()
 
     def _getElementType(self):
         dipole = re.compile("(SI|BO|LI|TS|TB)-(Fam|\w{2,4}):MA-B")

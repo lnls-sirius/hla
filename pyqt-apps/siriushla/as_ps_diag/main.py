@@ -23,15 +23,14 @@ from siriuspy.csdevice.pwrsupply import Const as _PSConst, \
     ETypes as _PSEnums
 from siriuspy.search.ps_search import PSSearch
 from siriuspy.search.ma_search import MASearch
-from siriuspy.namesys import SiriusPVName, Filter
+from siriuspy.namesys import SiriusPVName
 
 from siriushla.util import run_newprocess as _run_newprocess
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, \
     PyDMLedMultiChannel, PyDMLed, PyDMLedMultiConnection, QLed
 
-from siriushla.as_ps_diag.util import LINAC_PS, sec2label, \
-                                      asps2labels, lips2labels
+from siriushla.as_ps_diag.util import sec2label, asps2labels, lips2labels
 
 
 class PSDiag(SiriusMainWindow):
@@ -77,11 +76,11 @@ class PSDiag(SiriusMainWindow):
                     ps_label = QLabel(
                         lips2labels[ps], panel,
                         alignment=Qt.AlignRight | Qt.AlignVCenter)
+                    psnames = PSSearch.get_psnames(
+                        filters={'sec': sec, 'dev': ps})
                     ps_ch2vals = dict()
                     intlk_ch2vals = dict()
                     conn_chs = list()
-                    psnames = Filter.process_filters(
-                        LINAC_PS, filters={'dis': ps})
                     for name in psnames:
                         pname = self._prefix + name
                         conn_chs.append(pname+':setpwm')
@@ -89,7 +88,7 @@ class PSDiag(SiriusMainWindow):
                         intlk_ch2vals[pname + ':interlock'] = \
                             {'value': 55, 'comp': 'lt'}
 
-                    f = 'LA-.*:'+ps
+                    f = 'LI-.*:PS-'+ps
                     conn_led = MyLedMultiConnection(
                         filters=f, parent=panel, channels=conn_chs)
                     ps_led = MyLedMultiChannel(
@@ -135,7 +134,8 @@ class PSDiag(SiriusMainWindow):
                                 {'value': 0, 'bit': 2}
                         elif name.dis == 'PU':
                             psconn_chs.append(pname+':PwrState-Sts')
-                            for idx in range(1, 9):
+                            intlkcount = 7 if 'Sept' in name.dev else 8
+                            for idx in range(1, intlkcount+1):
                                 sidx = str(idx)
                                 intlk_ch2vals[pname+':Intlk'+sidx+'-Mon'] = 1
 
