@@ -84,8 +84,8 @@ class AFC(BaseWidget):
         gb.setStyleSheet('border: 2px solid transparent;')
         status_layout.addWidget(gb, 0, 1)
 
-        lb = QLabel("<b>Network</b>")
-        rb = SiriusLedAlert(self, init_channel=prefix + "Network-Mon")
+        lb = QLabel("<b>Locked</b>")
+        rb = SiriusLedAlert(self, init_channel=prefix + "RefClkLocked-Mon")
         rb.offColor, rb.onColor = rb.onColor, rb.offColor
         gb = self._create_small_GB('', self.status_wid, (lb, rb))
         gb.setStyleSheet('border: 2px solid transparent;')
