@@ -29,9 +29,9 @@ class LLTriggerList(BaseList):
         'source': 6.5,
         'trigger': 4,
         'rf_delayraw': 4.8,
-        'rf_delay': 4.8,
+        'rf_delay': 6.5,
         'fine_delayraw': 4.8,
-        'fine_delay': 4.8,
+        'fine_delay': 6.5,
         'rf_delay_type': 6.5,
         }
     _LABELS = {
@@ -199,24 +199,24 @@ class OTPList(LLTriggerList):
     """Template for control of Timing devices Internal Triggers."""
 
     _ALL_PROPS = (
-        'name', 'state', 'event', 'widthraw', 'polarity', 'pulses', 'delayraw',
-        'timestamp')
+        'name', 'state', 'event', 'widthraw', 'width', 'polarity', 'pulses',
+        'delayraw', 'delay', 'timestamp')
 
 
 class OUTList(LLTriggerList):
     """Template for control of Timing Devices Output Channels."""
 
     _ALL_PROPS = (
-        'name', 'source', 'trigger', 'rf_delayraw', 'rf_delay_type',
-        'fine_delayraw')
+        'name', 'source', 'trigger', 'rf_delayraw', 'rf_delay',
+        'rf_delay_type', 'fine_delayraw', 'fine_delay')
 
 
 class AFCOUTList(LLTriggerList):
     """Template for control of Timing devices Internal Triggers."""
 
     _ALL_PROPS = (
-        'name', 'state', 'event', 'source', 'width', 'polarity', 'pulses',
-        'delay', 'timestamp')
+        'name', 'state', 'event', 'source', 'widthraw', 'width', 'polarity',
+        'pulses', 'delayraw', 'delay', 'timestamp')
 
 
 if __name__ == '__main__':

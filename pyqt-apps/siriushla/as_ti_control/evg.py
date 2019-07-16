@@ -333,7 +333,7 @@ class ClockList(BaseList):
         'mux_enbl': 4.8,
         }
     _LABELS = {
-        'name': 'Clock Name',
+        'name': 'Name',
         'frequency': 'Freq. [Hz]',
         'mux_div': 'Mux Divisor',
         'mux_enbl': 'Enabled',
