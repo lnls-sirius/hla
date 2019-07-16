@@ -44,15 +44,21 @@ class _EVR_EVE(BaseWidget):
         splitter.setHandleWidth(20)
         self.my_layout.addWidget(splitter, 3, 0, 1, 2)
 
+        props = {
+            'name', 'state', 'event', 'widthraw', 'polarity', 'pulses',
+            'delayraw', 'timestamp'}
         self.otps_wid = OTPList(
             name='Internal Trigger (OTP)', parent=self, prefix=self.prefix,
-            obj_names=['OTP{0:02d}'.format(i) for i in range(24)])
+            props=props, obj_names=['OTP{0:02d}'.format(i) for i in range(24)])
         self.otps_wid.setObjectName('otps_wid')
         self.otps_wid.setStyleSheet("""#otps_wid{min-width:60em;}""")
         splitter.addWidget(self.otps_wid)
 
+        props = {
+            'name', 'source', 'trigger', 'rf_delayraw', 'rf_delay_type',
+            'fine_delayraw'}
         self.outs_wid = OUTList(
-            name='OUT', parent=self, prefix=self.prefix,
+            name='OUT', parent=self, prefix=self.prefix, props=props,
             obj_names=['OUT{0:d}'.format(i) for i in range(8)])
         self.outs_wid.setObjectName('outs_wid')
         self.outs_wid.setStyleSheet("""#outs_wid{min-width:44em;}""")
