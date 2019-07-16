@@ -40,6 +40,8 @@ class MagnetsList(QListView):
     def _open_detail(self, index):
         app = QApplication.instance()
         maname = index.data()
+        if 'LI' in maname:
+            return
         app.open_window(PSDetailWindow, parent=self, **{'psname': maname})
 
 
