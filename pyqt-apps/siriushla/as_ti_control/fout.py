@@ -54,7 +54,7 @@ class FOUT(BaseWidget):
                 devt = _ti_ctrl.AFC
             action = menu.addAction(out + ' --> ' + down)
             Win = create_window_from_widget(devt, title=down)
-            connect_window(action, Win, self, prefix=down + ':')
+            connect_window(action, Win, None, prefix=down + ':')
 
         menu = main_menu.addMenu('&Uplink')
         link = list(LLTimeSearch.In2OutMap[prefix.dev])[0]
@@ -62,7 +62,7 @@ class FOUT(BaseWidget):
             prefix.device_name.substitute(propty=link))
         action = menu.addAction(evg)
         Win = create_window_from_widget(_ti_ctrl.EVG, title=evg.device_name)
-        connect_window(action, Win, self, prefix=evg.device_name + ':')
+        connect_window(action, Win, None, prefix=evg.device_name + ':')
         return main_menu
 
     def _setup_status_wid(self):

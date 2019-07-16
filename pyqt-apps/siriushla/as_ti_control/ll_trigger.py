@@ -72,7 +72,7 @@ class LLTriggerList(BaseList):
             sp.setAutoDefault(False)
             sp.setDefault(False)
             Win = create_window_from_widget(devt, title=outlb.device_name)
-            connect_window(sp, Win, self, prefix=outlb.device_name + ':')
+            connect_window(sp, Win, None, prefix=outlb.device_name + ':')
         elif prop == 'name':
             sp = QLabel(outlb.propty, self)
             sp.setAlignment(Qt.AlignCenter)

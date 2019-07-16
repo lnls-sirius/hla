@@ -82,7 +82,7 @@ class EVG(BaseWidget):
         for out, down in sorted(downs2):
             action = menu.addAction(out + ' --> ' + down)
             Win = create_window_from_widget(_ti_ctrl.FOUT, title=down)
-            connect_window(action, Win, self, prefix=down + ':')
+            connect_window(action, Win, None, prefix=down + ':')
         return main_menu
 
     def _setup_configs_wid(self):

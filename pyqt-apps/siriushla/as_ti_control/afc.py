@@ -63,7 +63,7 @@ class AFC(BaseWidget):
         fout = _LLTimeSearch.get_fout_channel(prefix + 'CRT0')
         action = menu.addAction(fout)
         Win = create_window_from_widget(_ti_ctrl.FOUT, title=fout.device_name)
-        connect_window(action, Win, self, prefix=fout.device_name+':')
+        connect_window(action, Win, None, prefix=fout.device_name+':')
         return main_menu
 
     def _setup_status_wid(self):
