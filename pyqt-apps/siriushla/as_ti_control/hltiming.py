@@ -3,7 +3,7 @@
 import sys as _sys
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, \
-    QGridLayout, QGroupBox, QLabel
+    QGridLayout, QGroupBox, QLabel, QSplitter, QSizePolicy
 from pydm.widgets import PyDMPushButton
 from siriuspy.csdevice import timesys as _cstime
 from siriuspy.search import LLTimeSearch, HLTimeSearch
@@ -38,22 +38,29 @@ class TimingMain(SiriusMainWindow):
         globpars = self.setglobalparameters()
         gridlayout.addWidget(globpars, 0, 0, 1, 2)
 
+        splitter = QSplitter(Qt.Horizontal)
+        splitter.setContentsMargins(0, 0, 0, 0)
+        splitter.setHandleWidth(20)
+        gridlayout.addWidget(splitter, 1, 0, 1, 2)
         events = self.setevents()
         events.setObjectName('events')
-        events.setStyleSheet("""
-            #events{min-width:30em; min-height:40em;}""")
-        gridlayout.addWidget(events, 1, 0)
-        gridlayout.setColumnStretch(0, 3)
+        # events.setStyleSheet("""
+        #     #events{min-width:30em; min-height:40em;}""")
+        # gridlayout.addWidget(events, 1, 0)
+        # gridlayout.setColumnStretch(0, 3)
+        splitter.addWidget(events)
 
         triggers = self.settriggers()
         triggers.setObjectName('triggers')
-        triggers.setStyleSheet("""
-            #triggers{min-width:58em; min-height:40em;}""")
-        gridlayout.addWidget(triggers, 1, 1)
-        gridlayout.setColumnStretch(1, 5)
+        # triggers.setStyleSheet("""
+        #     #triggers{min-width:58em; min-height:40em;}""")
+        # gridlayout.addWidget(triggers, 1, 1)
+        # gridlayout.setColumnStretch(1, 5)
+        splitter.addWidget(triggers)
 
     def setglobalparameters(self):
         wid = QGroupBox(self.centralWidget())
+        wid.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
         hbl = QHBoxLayout(wid)
 
         evg_pref = LLTimeSearch.get_device_names({'dev': 'EVG'})[0]
