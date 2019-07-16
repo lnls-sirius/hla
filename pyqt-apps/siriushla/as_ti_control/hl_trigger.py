@@ -295,9 +295,8 @@ class HLTriggerList(BaseList):
         'delay': 'Delay [us]',
         }
     _ALL_PROPS = (
-        'detailed', 'state', 'source', 'polarity', 'pulses',
-        'duration', 'delay_type', 'delay', 'status',
-        )
+        'status', 'detailed', 'state', 'source', 'polarity', 'pulses',
+        'duration', 'delay_type', 'delay')
 
     def __init__(self, **kwargs):
         srch = set(('source', 'detailed', 'polarity', 'state'))
