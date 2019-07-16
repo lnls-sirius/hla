@@ -3,7 +3,7 @@
 import sys as _sys
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, \
-    QGridLayout, QGroupBox, QLabel
+    QGridLayout, QGroupBox, QLabel, QSplitter, QSizePolicy
 from pydm.widgets import PyDMPushButton
 from siriuspy.csdevice import timesys as _cstime
 from siriuspy.search import LLTimeSearch, HLTimeSearch
@@ -38,22 +38,29 @@ class TimingMain(SiriusMainWindow):
         globpars = self.setglobalparameters()
         gridlayout.addWidget(globpars, 0, 0, 1, 2)
 
+        splitter = QSplitter(Qt.Horizontal)
+        splitter.setContentsMargins(0, 0, 0, 0)
+        splitter.setHandleWidth(20)
+        gridlayout.addWidget(splitter, 1, 0, 1, 2)
         events = self.setevents()
         events.setObjectName('events')
-        events.setStyleSheet("""
-            #events{min-width:30em; min-height:40em;}""")
-        gridlayout.addWidget(events, 1, 0)
-        gridlayout.setColumnStretch(0, 3)
+        # events.setStyleSheet("""
+        #     #events{min-width:30em; min-height:40em;}""")
+        # gridlayout.addWidget(events, 1, 0)
+        # gridlayout.setColumnStretch(0, 3)
+        splitter.addWidget(events)
 
         triggers = self.settriggers()
         triggers.setObjectName('triggers')
-        triggers.setStyleSheet("""
-            #triggers{min-width:58em; min-height:40em;}""")
-        gridlayout.addWidget(triggers, 1, 1)
-        gridlayout.setColumnStretch(1, 5)
+        # triggers.setStyleSheet("""
+        #     #triggers{min-width:58em; min-height:40em;}""")
+        # gridlayout.addWidget(triggers, 1, 1)
+        # gridlayout.setColumnStretch(1, 5)
+        splitter.addWidget(triggers)
 
     def setglobalparameters(self):
         wid = QGroupBox(self.centralWidget())
+        wid.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
         hbl = QHBoxLayout(wid)
 
         evg_pref = LLTimeSearch.get_device_names({'dev': 'EVG'})[0]
@@ -106,36 +113,36 @@ class TimingMain(SiriusMainWindow):
         action = menu.addAction('EVG')
         evg = LLTimeSearch.get_device_names(filters={'dev': 'EVG'})[0]
         Window = create_window_from_widget(_EVG, title=evg)
-        connect_window(action, Window, self, prefix=prefix + evg + ':')
+        connect_window(action, Window, None, prefix=prefix + evg + ':')
 
         menu_evr = menu.addMenu('EVRs')
         for evr in LLTimeSearch.get_device_names(filters={'dev': 'EVR'}):
             action = menu_evr.addAction(evr)
             Window = create_window_from_widget(_EVR, title=evr)
-            connect_window(action, Window, self, prefix=prefix+evr+':')
+            connect_window(action, Window, None, prefix=prefix+evr+':')
 
         menu_eve = menu.addMenu('EVEs')
         for eve in LLTimeSearch.get_device_names(filters={'dev': 'EVE'}):
             action = menu_eve.addAction(eve)
             Window = create_window_from_widget(_EVE, title=eve)
-            connect_window(action, Window, self, prefix=prefix + eve + ':')
+            connect_window(action, Window, None, prefix=prefix + eve + ':')
 
         menu_afc = menu.addMenu('AMCs')
         for afc in LLTimeSearch.get_device_names(
                                     filters={'dev': 'AMCFPGAEVR'}):
             action = menu_afc.addAction(afc)
             Window = create_window_from_widget(_AFC, title=afc)
-            connect_window(action, Window, self, prefix=prefix+afc+':')
+            connect_window(action, Window, None, prefix=prefix+afc+':')
 
         menu_fout = menu.addMenu('Fouts')
         for fout in LLTimeSearch.get_device_names(filters={'dev': 'Fout'}):
             action = menu_fout.addAction(fout)
             Window = create_window_from_widget(_FOUT, title=fout)
-            connect_window(action, Window, self, prefix=prefix+fout+':')
+            connect_window(action, Window, None, prefix=prefix+fout+':')
 
         action = main_menu.addAction('&Summary')
         Window = create_window_from_widget(_Summary, title='Timing Summary')
-        connect_window(action, Window, self, prefix=self.prefix)
+        connect_window(action, Window, None, prefix=self.prefix)
 
     def _create_prop_widget(self, name, parent, wids, align_ver=True):
         pwid = QWidget(parent)

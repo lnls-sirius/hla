@@ -295,9 +295,8 @@ class HLTriggerList(BaseList):
         'delay': 'Delay [us]',
         }
     _ALL_PROPS = (
-        'detailed', 'state', 'source', 'polarity', 'pulses',
-        'duration', 'delay_type', 'delay', 'status',
-        )
+        'status', 'detailed', 'state', 'source', 'polarity', 'pulses',
+        'duration', 'delay_type', 'delay')
 
     def __init__(self, **kwargs):
         srch = set(('source', 'detailed', 'polarity', 'state'))
@@ -312,7 +311,7 @@ class HLTriggerList(BaseList):
             Window = create_window_from_widget(
                 HLTriggerDetailed,
                 title=prefix.device_name+': HL Trigger Detailed')
-            connect_window(sp, Window, self, prefix=prefix)
+            connect_window(sp, Window, None, prefix=prefix)
         elif prop == 'status':
             init_channel = prefix.substitute(propty="Status-Mon")
             sp = SiriusLedAlert(self, init_channel=init_channel)

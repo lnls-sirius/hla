@@ -19,15 +19,19 @@ class LLTriggerList(BaseList):
         'device': 12,
         'state': 5.8,
         'event': 4.8,
+        'widthraw': 4.8,
         'width': 4.8,
         'polarity': 5,
         'pulses': 4.8,
+        'delayraw': 4.8,
         'delay': 4.8,
         'timestamp': 3.2,
         'source': 6.5,
         'trigger': 4,
-        'rf_delay': 4.8,
-        'fine_delay': 4.8,
+        'rf_delayraw': 4.8,
+        'rf_delay': 6.5,
+        'fine_delayraw': 4.8,
+        'fine_delay': 6.5,
         'rf_delay_type': 6.5,
         }
     _LABELS = {
@@ -35,21 +39,26 @@ class LLTriggerList(BaseList):
         'device': 'Device',
         'state': 'State',
         'event': 'Event',
-        'width': 'Width',
+        'widthraw': 'Width',
+        'width': 'Width [us]',
         'polarity': 'Polarity',
         'pulses': 'Nr Pulses',
-        'delay': 'Delay',
+        'delayraw': 'Delay',
+        'delay': 'Delay [us]',
         'timestamp': 'Log',
         'source': 'Source',
         'trigger': 'Trigger',
-        'rf_delay': 'RF Delay',
-        'fine_delay': 'Fine Delay',
+        'rf_delayraw': 'RF Delay',
+        'rf_delay': 'RF Delay [ns]',
+        'fine_delayraw': 'Fine Delay',
+        'fine_delay': 'Fine Delay [ps]',
         'rf_delay_type': 'RF Delay Type',
         }
     _ALL_PROPS = (
-        'device', 'name', 'state', 'event', 'width', 'polarity', 'pulses',
-        'delay', 'timestamp', 'source', 'trigger', 'rf_delay',
-        'rf_delay_type', 'fine_delay')
+        'device', 'name', 'state', 'event', 'widthraw', 'width',
+        'polarity', 'pulses', 'delayraw', 'delay', 'timestamp', 'source',
+        'trigger', 'rf_delayraw', 'rf_delay', 'rf_delay_type', 'fine_delayraw',
+        'fine_delay')
 
     def __init__(self, **kwargs):
         srch = set(('device', 'name', 'polarity', 'source'))
@@ -72,7 +81,7 @@ class LLTriggerList(BaseList):
             sp.setAutoDefault(False)
             sp.setDefault(False)
             Win = create_window_from_widget(devt, title=outlb.device_name)
-            connect_window(sp, Win, self, prefix=outlb.device_name + ':')
+            connect_window(sp, Win, None, prefix=outlb.device_name + ':')
         elif prop == 'name':
             sp = QLabel(outlb.propty, self)
             sp.setAlignment(Qt.AlignCenter)
@@ -86,6 +95,13 @@ class LLTriggerList(BaseList):
             sp = _MySpinBox(self, init_channel=pvname)
             sp.showStepExponent = False
             pvname = intlb.substitute(propty=intlb.propty+'Evt-RB')
+            rb = PyDMLabel(self, init_channel=pvname)
+            rb.setAlignment(Qt.AlignCenter)
+        elif prop == 'widthraw':
+            pvname = intlb.substitute(propty=intlb.propty+"WidthRaw-SP")
+            sp = _MySpinBox(self, init_channel=pvname)
+            sp.showStepExponent = False
+            pvname = intlb.substitute(propty=intlb.propty+"WidthRaw-RB")
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'width':
@@ -106,6 +122,13 @@ class LLTriggerList(BaseList):
             sp = _MySpinBox(self, init_channel=pvname)
             sp.showStepExponent = False
             pvname = intlb.substitute(propty=intlb.propty+"NrPulses-RB")
+            rb = PyDMLabel(self, init_channel=pvname)
+            rb.setAlignment(Qt.AlignCenter)
+        elif prop == 'delayraw':
+            pvname = intlb.substitute(propty=intlb.propty+"DelayRaw-SP")
+            sp = _MySpinBox(self, init_channel=pvname)
+            sp.showStepExponent = False
+            pvname = intlb.substitute(propty=intlb.propty+"DelayRaw-RB")
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'delay':
@@ -133,6 +156,13 @@ class LLTriggerList(BaseList):
             pvname = outlb.substitute(propty=outlb.propty+"SrcTrig-RB")
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
+        elif prop == 'rf_delayraw':
+            pvname = outlb.substitute(propty=outlb.propty+"RFDelayRaw-SP")
+            sp = _MySpinBox(self, init_channel=pvname)
+            sp.showStepExponent = False
+            pvname = outlb.substitute(propty=outlb.propty+"RFDelayRaw-RB")
+            rb = PyDMLabel(self, init_channel=pvname)
+            rb.setAlignment(Qt.AlignCenter)
         elif prop == 'rf_delay':
             pvname = outlb.substitute(propty=outlb.propty+"RFDelay-SP")
             sp = _MySpinBox(self, init_channel=pvname)
@@ -144,6 +174,13 @@ class LLTriggerList(BaseList):
             pvname = outlb.substitute(propty=outlb.propty+"RFDelayType-Sel")
             sp = _MyComboBox(self, init_channel=pvname)
             pvname = outlb.substitute(propty=outlb.propty+"RFDelayType-Sts")
+            rb = PyDMLabel(self, init_channel=pvname)
+            rb.setAlignment(Qt.AlignCenter)
+        elif prop == 'fine_delayraw':
+            pvname = outlb.substitute(propty=outlb.propty+"FineDelayRaw-SP")
+            sp = _MySpinBox(self, init_channel=pvname)
+            sp.showStepExponent = False
+            pvname = outlb.substitute(propty=outlb.propty+"FineDelayRaw-RB")
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'fine_delay':
@@ -162,23 +199,24 @@ class OTPList(LLTriggerList):
     """Template for control of Timing devices Internal Triggers."""
 
     _ALL_PROPS = (
-        'name', 'state', 'event', 'width', 'polarity', 'pulses', 'delay',
-        'timestamp')
+        'name', 'state', 'event', 'widthraw', 'width', 'polarity', 'pulses',
+        'delayraw', 'delay', 'timestamp')
 
 
 class OUTList(LLTriggerList):
     """Template for control of Timing Devices Output Channels."""
 
     _ALL_PROPS = (
-        'name', 'source', 'trigger', 'rf_delay', 'rf_delay_type', 'fine_delay')
+        'name', 'source', 'trigger', 'rf_delayraw', 'rf_delay',
+        'rf_delay_type', 'fine_delayraw', 'fine_delay')
 
 
 class AFCOUTList(LLTriggerList):
     """Template for control of Timing devices Internal Triggers."""
 
     _ALL_PROPS = (
-        'name', 'state', 'event', 'source', 'width', 'polarity', 'pulses',
-        'delay', 'timestamp')
+        'name', 'state', 'event', 'source', 'widthraw', 'width', 'polarity',
+        'pulses', 'delayraw', 'delay', 'timestamp')
 
 
 if __name__ == '__main__':

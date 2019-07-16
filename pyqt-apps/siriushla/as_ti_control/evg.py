@@ -1,7 +1,8 @@
 import sys
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGroupBox, QLabel, QWidget, QMenuBar, \
-    QVBoxLayout, QHBoxLayout, QGridLayout, QSizePolicy as QSzPol
+    QVBoxLayout, QHBoxLayout, QGridLayout, QSizePolicy as QSzPol, \
+    QSplitter
 from pydm.widgets import PyDMLabel, PyDMLineEdit, PyDMPushButton
 from siriuspy.search import LLTimeSearch
 from siriuspy.csdevice import timesys as _cstime
@@ -41,19 +42,24 @@ class EVG(BaseWidget):
         mylayout.addWidget(self.status_wid, 2, 1)
         self._setup_status_wid()
 
+        splitter = QSplitter(Qt.Horizontal)
+        splitter.setContentsMargins(0, 0, 0, 0)
+        splitter.setHandleWidth(20)
+        mylayout.addWidget(splitter, 3, 0, 1, 2)
+
         self.events_wid = EventList(
             name='Events', parent=self, prefix=self.prefix,
             obj_names=sorted(_cstime.Const.EvtLL._fields[1:]))
         self.events_wid.setObjectName('events_wid')
         self.events_wid.setStyleSheet("""#events_wid{min-width:40em;}""")
-        mylayout.addWidget(self.events_wid, 3, 0)
+        splitter.addWidget(self.events_wid)
 
         self.clocks_wid = ClockList(
             name='Clocks', parent=self, prefix=self.prefix,
             props={'name', 'mux_enbl', 'frequency'},
             obj_names=sorted(_cstime.Const.ClkLL._fields)
             )
-        mylayout.addWidget(self.clocks_wid, 3, 1)
+        splitter.addWidget(self.clocks_wid)
 
         # grpbx = self._create_formlayout_groupbox('Configurations', (
         #     ('DevEnbl-Sel', 'Enabled'),
@@ -82,7 +88,7 @@ class EVG(BaseWidget):
         for out, down in sorted(downs2):
             action = menu.addAction(out + ' --> ' + down)
             Win = create_window_from_widget(_ti_ctrl.FOUT, title=down)
-            connect_window(action, Win, self, prefix=down + ':')
+            connect_window(action, Win, None, prefix=down + ':')
         return main_menu
 
     def _setup_configs_wid(self):
@@ -327,7 +333,7 @@ class ClockList(BaseList):
         'mux_enbl': 4.8,
         }
     _LABELS = {
-        'name': 'Clock Name',
+        'name': 'Name',
         'frequency': 'Freq. [Hz]',
         'mux_div': 'Mux Divisor',
         'mux_enbl': 'Enabled',
