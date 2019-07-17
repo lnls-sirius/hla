@@ -1,6 +1,7 @@
 """Definition of the Sirius Application class."""
+import sys, traceback
 from pydm import PyDMApplication, data_plugins
-from qtpy.QtWidgets import QMessageBox
+from qtpy.QtWidgets import QMessageBox, QWidget, QTextEdit
 
 from .util import get_window_id, set_style
 
@@ -40,6 +41,21 @@ class SiriusApplication(PyDMApplication):
             # KeyError - Window does not exist
             # RuntimeError: wrapped C/C++ object of type x has been deleted
             self._create_and_show(wid, w_class, parent, **kwargs)
+
+    def disclaimer(self):
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        if exc_type == SystemExit:
+            return
+        msgbox = QMessageBox()
+        msgbox.setText(str(exc_type))
+        msgbox.setInformativeText(str(exc_value))
+        msgbox.setDetailedText(''.join(
+                    traceback.format_tb(exc_traceback)))
+        msgbox.setIcon(msgbox.Critical)
+        msgbox.setWindowTitle('Error')
+        msgbox.setStyleSheet(
+            '#qt_msgbox_informativelabel {min-width: 40em;}')
+        msgbox.exec()
 
     def _show(self, wid):
         if self._windows[wid].isHidden():
