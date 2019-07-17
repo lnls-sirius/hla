@@ -2,7 +2,7 @@ import sys
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGroupBox, QLabel, QVBoxLayout, \
     QHBoxLayout, QGridLayout, QSpacerItem, QSizePolicy as QSzPol, \
-    QMenuBar
+    QMenuBar, QSplitter
 from pydm.widgets import PyDMLabel
 from siriuspy.search import LLTimeSearch
 from siriushla.util import connect_window
@@ -39,19 +39,30 @@ class _EVR_EVE(BaseWidget):
         self.my_layout.addWidget(self.status_wid, 2, 0, 1, 2)
         self._setup_status_wid()
 
+        splitter = QSplitter(Qt.Horizontal)
+        splitter.setContentsMargins(0, 0, 0, 0)
+        splitter.setHandleWidth(20)
+        self.my_layout.addWidget(splitter, 3, 0, 1, 2)
+
+        props = {
+            'name', 'state', 'event', 'widthraw', 'polarity', 'pulses',
+            'delayraw', 'timestamp'}
         self.otps_wid = OTPList(
             name='Internal Trigger (OTP)', parent=self, prefix=self.prefix,
-            obj_names=['OTP{0:02d}'.format(i) for i in range(24)])
+            props=props, obj_names=['OTP{0:02d}'.format(i) for i in range(24)])
         self.otps_wid.setObjectName('otps_wid')
         self.otps_wid.setStyleSheet("""#otps_wid{min-width:60em;}""")
-        self.my_layout.addWidget(self.otps_wid, 3, 0)
+        splitter.addWidget(self.otps_wid)
 
+        props = {
+            'name', 'source', 'trigger', 'rf_delayraw', 'rf_delay_type',
+            'fine_delayraw'}
         self.outs_wid = OUTList(
-            name='OUT', parent=self, prefix=self.prefix,
+            name='OUT', parent=self, prefix=self.prefix, props=props,
             obj_names=['OUT{0:d}'.format(i) for i in range(8)])
         self.outs_wid.setObjectName('outs_wid')
         self.outs_wid.setStyleSheet("""#outs_wid{min-width:44em;}""")
-        self.my_layout.addWidget(self.outs_wid, 3, 1)
+        splitter.addWidget(self.outs_wid)
 
     def setupmenus(self):
         prefix = self.prefix
@@ -62,7 +73,7 @@ class _EVR_EVE(BaseWidget):
         fout = LLTimeSearch.get_fout_channel(prefix + 'OTP0')
         action = menu.addAction(fout)
         Win = create_window_from_widget(_ti_ctrl.FOUT, title=fout.device_name)
-        connect_window(action, Win, self, prefix=fout.device_name+':')
+        connect_window(action, Win, None, prefix=fout.device_name+':')
         return main_menu
 
     def _setup_status_wid(self):
