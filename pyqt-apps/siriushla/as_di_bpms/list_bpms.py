@@ -11,6 +11,7 @@ class SelectBPMs(BaseWidget):
     def __init__(self, parent=None, prefix='', bpm_list=[]):
         super().__init__(parent=parent, prefix=prefix, bpm='')
         self.bpm_dict = {bpm: '' for bpm in bpm_list}
+        self.setObjectName(bpm_list[0][:2] + 'App')
         self.setupui()
 
     def setupui(self):
@@ -28,20 +29,20 @@ class SelectBPMs(BaseWidget):
         scarea.setSizeAdjustPolicy(scarea.AdjustToContents)
         scarea.setWidgetResizable(True)
 
-        wid = QWidget()
-        vbl2 = QVBoxLayout(wid)
+        scr_ar_wid = QWidget()
+        scr_ar_wid.setObjectName('scrollarea')
+        scr_ar_wid.setStyleSheet(
+            '#scrollarea {background-color: transparent;}')
+        vbl2 = QVBoxLayout(scr_ar_wid)
         vbl2.setSpacing(15)
         for bpm in sorted(self.bpm_dict.keys()):
-            widb = BPMSummary(wid, prefix=self.prefix, bpm=bpm)
+            widb = BPMSummary(scr_ar_wid, prefix=self.prefix, bpm=bpm)
             vbl2.addWidget(widb)
             self.bpm_dict[bpm] = widb
 
         vbl.addWidget(scarea)
-        scarea.setWidget(wid)
+        scarea.setWidget(scr_ar_wid)
         self.scarea = scarea
-
-        self.setObjectName('SelectBPMs')
-        self.setStyleSheet("""#SelectBPMs{min-width:16em; min-height:12em;}""")
 
     @Slot(str)
     def _filter_bpms(self, text):
@@ -63,6 +64,7 @@ class SinglePassSummary(BaseWidget):
         super().__init__(
             parent=parent, prefix=prefix, bpm='', data_prefix='SP_')
         self.bpm_dict = {bpm: '' for bpm in bpm_list}
+        self.setObjectName(bpm_list[0][:2] + 'App')
         self.setupui()
 
     def setupui(self):
@@ -86,6 +88,8 @@ class SinglePassSummary(BaseWidget):
         scarea.setWidgetResizable(True)
 
         wid = QWidget()
+        wid.setObjectName('scrollarea')
+        wid.setStyleSheet('#scrollarea {background-color: transparent;}')
         gdl = QGridLayout(wid)
         gdl.setSpacing(15)
         for i, bpm in enumerate(sorted(self.bpm_dict.keys())):
@@ -193,6 +197,7 @@ class MultiTurnSummary(BaseWidget):
         super().__init__(
             parent=parent, prefix=prefix, bpm='', data_prefix='GEN_')
         self.bpm_dict = {bpm: '' for bpm in bpm_list}
+        self.setObjectName(bpm_list[0][:2] + 'App')
         self.setupui()
 
     def setupui(self):
@@ -216,6 +221,8 @@ class MultiTurnSummary(BaseWidget):
         scarea.setWidgetResizable(True)
 
         wid = QWidget()
+        wid.setObjectName('scrollarea')
+        wid.setStyleSheet('#scrollarea {background-color: transparent;}')
         gdl = QGridLayout(wid)
         gdl.setSpacing(15)
         for i, bpm in enumerate(sorted(self.bpm_dict.keys())):

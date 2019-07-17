@@ -16,6 +16,7 @@ class BPMSummary(BaseWidget):
 
     def __init__(self, parent=None, prefix='', bpm=''):
         super().__init__(parent=parent, prefix=prefix, bpm=bpm)
+        self.setObjectName(self.bpm.sec+'App')
         self.setupui()
 
     def setupui(self):
