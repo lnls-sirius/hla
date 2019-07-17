@@ -13,5 +13,7 @@ try:
         ConfigManagerWindow, parent=None, config_type='bo_normalized')
     sys.exit(app.exec_())
 except:
-    app = SiriusApplication()
+    app = SiriusApplication.instance()
+    if app is None:
+        app = SiriusApplication(None, sys.argv)
     app.disclaimer()

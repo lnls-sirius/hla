@@ -21,5 +21,7 @@ try:
     app.open_window(ICTMonitoring, parent=None, tl='TS', prefix=args.prefix)
     sys.exit(app.exec_())
 except:
-    app = SiriusApplication()
+    app = SiriusApplication.instance()
+    if app is None:
+        app = SiriusApplication(None, sys.argv)
     app.disclaimer()

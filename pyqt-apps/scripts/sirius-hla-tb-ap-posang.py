@@ -21,5 +21,7 @@ try:
     app.open_window(ASAPPosAngCorr, parent=None, prefix=args.prefix, tl='tb')
     sys.exit(app.exec_())
 except:
-    app = SiriusApplication()
+    app = SiriusApplication.instance()
+    if app is None:
+        app = SiriusApplication(None, sys.argv)
     app.disclaimer()

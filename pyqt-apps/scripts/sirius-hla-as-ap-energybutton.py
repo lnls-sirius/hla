@@ -11,5 +11,7 @@ try:
     app.open_window(EnergySetterWindow, parent=None)
     sys.exit(app.exec_())
 except:
-    app = SiriusApplication()
+    app = SiriusApplication.instance()
+    if app is None:
+        app = SiriusApplication(None, sys.argv)
     app.disclaimer()

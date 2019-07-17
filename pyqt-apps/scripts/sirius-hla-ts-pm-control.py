@@ -13,5 +13,7 @@ try:
         PulsedMagnetControlWindow, parent=None, is_main=False, section='TS')
     sys.exit(app.exec_())
 except:
-    app = SiriusApplication()
+    app = SiriusApplication.instance()
+    if app is None:
+        app = SiriusApplication(None, sys.argv)
     app.disclaimer()

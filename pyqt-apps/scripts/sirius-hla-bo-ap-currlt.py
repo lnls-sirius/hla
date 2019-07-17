@@ -20,5 +20,7 @@ try:
     app.open_window(CurrLTWindow, parent=None, prefix=args.prefix, acc='bo')
     sys.exit(app.exec_())
 except:
-    app = SiriusApplication()
+    app = SiriusApplication.instance()
+    if app is None:
+        app = SiriusApplication(None, sys.argv)
     app.disclaimer()

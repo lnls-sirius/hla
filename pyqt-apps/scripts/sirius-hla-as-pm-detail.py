@@ -18,5 +18,7 @@ try:
     app.open_window(PulsedMagnetDetailWindow, parent=None, maname=args.pmname)
     sys.exit(app.exec_())
 except:
-    app = SiriusApplication()
+    app = SiriusApplication.instance()
+    if app is None:
+        app = SiriusApplication(None, sys.argv)
     app.disclaimer()

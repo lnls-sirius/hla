@@ -13,5 +13,7 @@ try:
     app.open_window(InjectionWindow, parent=None, controller=ctlr)
     sys.exit(app.exec_())
 except:
-    app = SiriusApplication()
+    app = SiriusApplication.instance()
+    if app is None:
+        app = SiriusApplication(None, sys.argv)
     app.disclaimer()
