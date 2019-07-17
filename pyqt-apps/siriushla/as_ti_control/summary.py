@@ -42,7 +42,7 @@ class Button(QWidget):
         but.setDefault(False)
         clss = self._dic[self.prefix.dev]
         Window = create_window_from_widget(clss, title=self.prefix.device_name)
-        connect_window(but, Window, self, prefix=self.prefix + ':')
+        connect_window(but, Window, None, prefix=self.prefix + ':')
 
         prop1 = 'Network'
         pp1 = 'Net'
