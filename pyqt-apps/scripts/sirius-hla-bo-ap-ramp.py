@@ -4,16 +4,24 @@
 
 import sys
 import argparse as _argparse
-from siriuspy.envars import vaca_prefix
 from siriushla.sirius_application import SiriusApplication
-from siriushla.bo_ap_ramp.main_window import RampMain
 
-parser = _argparse.ArgumentParser(
-    description="Run Booster Ramp HLA Interface.")
-parser.add_argument('-p', "--prefix", type=str, default=vaca_prefix,
-                    help="Define the prefix for the PVs in the window.")
-args = parser.parse_args()
+try:
+    from siriuspy.envars import vaca_prefix
+    from siriushla.bo_ap_ramp.main_window import RampMain
 
-app = SiriusApplication(None, sys.argv)
-app.open_window(RampMain, parent=None, prefix=args.prefix)
-sys.exit(app.exec_())
+    parser = _argparse.ArgumentParser(
+        description="Run Booster Ramp HLA Interface.")
+    parser.add_argument(
+        '-p', "--prefix", type=str, default=vaca_prefix,
+        help="Define the prefix for the PVs in the window.")
+    args = parser.parse_args()
+
+    app = SiriusApplication(None, sys.argv)
+    app.open_window(RampMain, parent=None, prefix=args.prefix)
+    sys.exit(app.exec_())
+except:
+    app = SiriusApplication.instance()
+    if app is None:
+        app = SiriusApplication(None, sys.argv)
+    app.disclaimer()

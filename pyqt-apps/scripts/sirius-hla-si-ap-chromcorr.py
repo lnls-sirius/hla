@@ -3,16 +3,17 @@
 
 import sys as _sys
 import argparse as _argparse
-from siriuspy.envars import vaca_prefix
 from siriushla.sirius_application import SiriusApplication
-from siriushla.as_ap_opticscorr.HLOpticsCorr import OpticsCorrWindow
 
+try:
+    from siriuspy.envars import vaca_prefix
+    from siriushla.as_ap_opticscorr.HLOpticsCorr import OpticsCorrWindow
 
-if __name__ == '__main__':
     parser = _argparse.ArgumentParser(
         description="Run Storage Ring Chromaticity Correction HLA Interface.")
-    parser.add_argument('-p', "--prefix", type=str, default=vaca_prefix,
-                        help="Define the prefix for the PVs in the window.")
+    parser.add_argument(
+        '-p', "--prefix", type=str, default=vaca_prefix,
+        help="Define the prefix for the PVs in the window.")
     args = parser.parse_args()
 
     app = SiriusApplication()
@@ -20,3 +21,8 @@ if __name__ == '__main__':
         OpticsCorrWindow, parent=None, acc='si', opticsparam='chrom',
         prefix=args.prefix)
     _sys.exit(app.exec_())
+except:
+    app = SiriusApplication.instance()
+    if app is None:
+        app = SiriusApplication(None, sys.argv)
+    app.disclaimer()
