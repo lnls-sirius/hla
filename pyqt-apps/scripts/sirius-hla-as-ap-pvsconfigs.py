@@ -3,9 +3,15 @@
 """Lauch PVs configuration manager."""
 import sys
 from siriushla.sirius_application import SiriusApplication
-from siriushla.as_ap_configdb.pvsconfigs import PVsConfigManager
 
+try:
+    from siriushla.as_ap_configdb.pvsconfigs import PVsConfigManager
 
-app = SiriusApplication()
-app.open_window(PVsConfigManager)
-sys.exit(app.exec_())
+    app = SiriusApplication()
+    app.open_window(PVsConfigManager)
+    sys.exit(app.exec_())
+except:
+    app = SiriusApplication.instance()
+    if app is None:
+        app = SiriusApplication(None, sys.argv)
+    app.disclaimer()
