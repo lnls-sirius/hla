@@ -44,7 +44,7 @@ class SiriusApplication(PyDMApplication):
 
     def disclaimer(self):
         exc_type, exc_value, exc_traceback = sys.exc_info()
-        if exc_value:
+        if exc_type == SystemExit:
             return
         msgbox = QMessageBox()
         msgbox.setText(str(exc_type))
