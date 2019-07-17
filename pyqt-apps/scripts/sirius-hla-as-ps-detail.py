@@ -5,15 +5,18 @@
 import sys
 import argparse as _argparse
 from siriushla.sirius_application import SiriusApplication
-from siriushla.as_ps_control import PSDetailWindow
 
+try:
+    from siriushla.as_ps_control import PSDetailWindow
 
-parser = _argparse.ArgumentParser(
-    description="Run Power Supply Detailed Control Interface.")
-parser.add_argument("psname", type=str, help="PS name.")
-args = parser.parse_args()
+    parser = _argparse.ArgumentParser(
+        description="Run Power Supply Detailed Control Interface.")
+    parser.add_argument("psname", type=str, help="PS name.")
+    args = parser.parse_args()
 
-
-app = SiriusApplication()
-app.open_window(PSDetailWindow, parent=None, psname=args.psname)
-sys.exit(app.exec_())
+    app = SiriusApplication()
+    app.open_window(PSDetailWindow, parent=None, psname=args.psname)
+    sys.exit(app.exec_())
+except:
+    app = SiriusApplication()
+    app.disclaimer()

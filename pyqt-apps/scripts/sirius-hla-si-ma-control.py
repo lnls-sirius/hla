@@ -5,20 +5,25 @@
 import sys
 import argparse as _argparse
 from siriushla.sirius_application import SiriusApplication
-from siriushla.as_ps_control import PSTabControlWindow, PSControlWindow
 
-parser = _argparse.ArgumentParser(description="Run SI MA Interface.")
-parser.add_argument('-dev', "--device", type=str, default='')
-args = parser.parse_args()
+try:
+    from siriushla.as_ps_control import PSTabControlWindow, PSControlWindow
 
-device = args.device
+    parser = _argparse.ArgumentParser(description="Run SI MA Interface.")
+    parser.add_argument('-dev', "--device", type=str, default='')
+    args = parser.parse_args()
 
-app = SiriusApplication()
-if device:
-    wclass = PSControlWindow
-    kwargs = dict(section='SI', discipline='MA', device=device)
-else:
-    wclass = PSTabControlWindow
-    kwargs = dict(section='SI', discipline='MA')
-app.open_window(wclass, parent=None, **kwargs)
-sys.exit(app.exec_())
+    device = args.device
+
+    app = SiriusApplication()
+    if device:
+        wclass = PSControlWindow
+        kwargs = dict(section='SI', discipline='MA', device=device)
+    else:
+        wclass = PSTabControlWindow
+        kwargs = dict(section='SI', discipline='MA')
+    app.open_window(wclass, parent=None, **kwargs)
+    sys.exit(app.exec_())
+except:
+    app = SiriusApplication()
+    app.disclaimer()
