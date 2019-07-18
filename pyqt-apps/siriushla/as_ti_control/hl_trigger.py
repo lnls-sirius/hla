@@ -243,6 +243,8 @@ class LLTriggers(QWidget):
                 out_list.add(name)
         if amc_list:
             props = set(AFCOUTList()._ALL_PROPS)
+            props.discard('widthraw')
+            props.discard('delayraw')
             props.add('device')
             amc_wid = LLTriggerList(name='AMCs', parent=self, props=props,
                                     prefix=prefix, obj_names=amc_list)
@@ -251,6 +253,8 @@ class LLTriggers(QWidget):
             vl.addWidget(amc_wid)
         if otp_list:
             props = set(OTPList()._ALL_PROPS)
+            props.discard('width')
+            props.discard('delay')
             props.add('device')
             otp_wid = LLTriggerList(name='OTPs', parent=self, props=props,
                                     prefix=prefix, obj_names=otp_list)
@@ -259,8 +263,11 @@ class LLTriggers(QWidget):
             vl.addWidget(otp_wid)
         if out_list:
             props = set(OTPList()._ALL_PROPS)
-            for prop in OUTList()._ALL_PROPS:
-                props.add(prop)
+            props.update(OUTList()._ALL_PROPS)
+            props.discard('width')
+            props.discard('delay')
+            props.discard('fine_delay')
+            props.discard('rf_delay')
             props.add('device')
             out_wid = LLTriggerList(name='OUTs', parent=self, props=props,
                                     prefix=prefix, obj_names=out_list)
