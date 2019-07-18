@@ -4,16 +4,11 @@
 import sys
 
 from siriushla.sirius_application import SiriusApplication
+from siriuspy.clientconfigdb import ConfigDBClient
+from siriushla.as_ap_configdb import ConfigurationManager
 
-try:
-    from siriuspy.clientconfigdb import ConfigDBClient
-    from siriushla.as_ap_configdb import ConfigurationManager
-    app = SiriusApplication()
-    model = ConfigDBClient()
-    app.open_window(ConfigurationManager, parent=None, model=model)
-    sys.exit(app.exec_())
-except:
-    app = SiriusApplication.instance()
-    if app is None:
-        app = SiriusApplication(None, sys.argv)
-    app.disclaimer()
+
+app = SiriusApplication()
+model = ConfigDBClient()
+app.open_window(ConfigurationManager, parent=None, model=model)
+sys.exit(app.exec_())

@@ -54,8 +54,8 @@ class MainOperation(SiriusMainWindow):
         # EVG control
         timing = QGroupBox('EVG Control')
 
-        evg_continuous_label = QLabel('<h4>Continuous</h4>', self,
-                                      alignment=Qt.AlignCenter)
+        evg_continuous_label = QLabel(
+            '<h4>Continuous</h4>', self, alignment=Qt.AlignCenter)
         evg_continuous_sel = PyDMStateButton(
             parent=self,
             init_channel=self._prefix+get_evg_name()+':ContinuousEvt-Sel')
@@ -63,8 +63,8 @@ class MainOperation(SiriusMainWindow):
             parent=self,
             init_channel=self._prefix+get_evg_name()+':ContinuousEvt-Sts')
 
-        evg_injection_label = QLabel('<h4>Injection</h4>', self,
-                                     alignment=Qt.AlignCenter)
+        evg_injection_label = QLabel(
+            '<h4>Injection</h4>', self, alignment=Qt.AlignCenter)
         evg_injection_sel = PyDMStateButton(
             parent=self,
             init_channel=self._prefix+get_evg_name()+':InjectionEvt-Sel')
