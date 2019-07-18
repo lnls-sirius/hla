@@ -23,19 +23,16 @@ class PSTestWindow(SiriusMainWindow):
     def __init__(self, parent=None):
         """Constructor."""
         super().__init__(parent)
-        self._setup_ui()
         self.setWindowTitle('Power Supply Test')
+        self.setObjectName('ASApp')
+        self._setup_ui()
 
     def _setup_ui(self):
         # setup central widget
         self.central_widget = QFrame()
-        self.central_widget.setObjectName("CentralWidget")
         lay = QHBoxLayout()
         self.central_widget.setLayout(lay)
         self.central_widget.setStyleSheet("""
-            #CentralWidget {
-                min-width: 70em;
-            }
             #OkList {
                 background-color: #eafaea;
             }
@@ -56,21 +53,36 @@ class PSTestWindow(SiriusMainWindow):
         self.tree.setHeaderHidden(True)
         self.tree.setColumnCount(1)
         self.tree.doubleClicked.connect(self._open_detail)
-        self.reset_bt = QPushButton('Reset', self)
-        self.reset_bt.pressed.connect(self._reset_interlocks)
+
+        self.resetps_bt = QPushButton('Reset', self)
+        self.resetps_bt.pressed.connect(_part(self._reset_interlocks, 'ps'))
+        self.resetdclink_bt = QPushButton('Reset DCLinks', self)
+        self.resetdclink_bt.pressed.connect(
+            _part(self._reset_interlocks, 'dclink'))
+
         self.turnoff_bt = QPushButton('Turn Off', self)
         self.turnoff_bt.pressed.connect(_part(self._set_check_pwrstate, 'off'))
+
+        self.turnondclink_bt = QPushButton('Turn On DCLinks', self)
+        self.turnondclink_bt.pressed.connect(self._turn_on_dclinks)
+
         self.turnon_bt = QPushButton('Turn On', self)
         self.turnon_bt.pressed.connect(_part(self._set_check_pwrstate, 'on'))
+
         self.test_bt = QPushButton('Test', self)
         self.test_bt.pressed.connect(self._test_ps)
+
         self.currzero_bt = QPushButton('Zero Current', self)
         self.currzero_bt.pressed.connect(self._zero_current)
+
         magnets_layout = QVBoxLayout()
+        magnets_layout.addWidget(QLabel('Select power supplies to test:'))
         magnets_layout.addWidget(self.search_le)
         magnets_layout.addWidget(self.tree)
-        magnets_layout.addWidget(self.reset_bt)
+        magnets_layout.addWidget(self.resetps_bt)
+        magnets_layout.addWidget(self.resetdclink_bt)
         magnets_layout.addWidget(self.turnoff_bt)
+        magnets_layout.addWidget(self.turnondclink_bt)
         magnets_layout.addWidget(self.turnon_bt)
         magnets_layout.addWidget(self.test_bt)
         magnets_layout.addWidget(self.currzero_bt)
@@ -95,12 +107,16 @@ class PSTestWindow(SiriusMainWindow):
         nok_layout.addWidget(self.nok_ps)
         lay.addLayout(nok_layout, stretch=1)
 
-    def _reset_interlocks(self):
+    def _reset_interlocks(self, pstype=''):
         self.ok_ps.clear()
         self.nok_ps.clear()
-        devices = self._get_manames()
-        if not devices:
+        powersupplies = self._get_selected_ps()
+        if not powersupplies:
             return
+        if pstype == 'dclink':
+            devices = self._get_ps_related_dclinks(powersupplies)
+        else:
+            devices = powersupplies
 
         task1 = ResetIntlk(devices, self)
         task2 = CheckIntlk(devices, self)
@@ -127,10 +143,13 @@ class PSTestWindow(SiriusMainWindow):
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
+    def _turn_on_dclinks(self):
+        pass
+
     def _test_ps(self):
         self.ok_ps.clear()
         self.nok_ps.clear()
-        devices = self._get_manames()
+        devices = self._get_selected_ps()
         if not devices:
             return
 
@@ -153,13 +172,26 @@ class PSTestWindow(SiriusMainWindow):
         dlg = ProgressDialog('Setting current to zero PS...', task, self)
         dlg.exec_()
 
-    def _get_manames(self):
+    def _get_selected_ps(self):
         devices = self.tree.checked_items()
-
         if not devices:
             QMessageBox.critical(self, 'Message', 'No magnet selected!')
             return False
         return devices
+
+    def _get_ps_related_dclinks(self, tree_names):
+        alldclinks = set()
+        for name in tree_names:
+            if 'LI' in name:
+                continue
+            psnames = MASearch.conv_maname_2_psnames(name)
+            dclinks = set()
+            for ps in psnames:
+                aux = PSSearch.conv_psname_2_dclink(ps)
+                if aux:
+                    dclinks.update(aux)
+            alldclinks.update(dclinks)
+        return list(alldclinks)
 
     def _log(self, name, status):
         if status:

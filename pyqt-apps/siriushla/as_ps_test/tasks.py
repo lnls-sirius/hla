@@ -5,12 +5,12 @@ from qtpy.QtCore import Signal, QThread
 
 from siriuspy.envars import vaca_prefix as VACA_PREFIX
 from siriuspy.csdevice.pwrsupply import Const as _PSC
-from siriuspy.magnet.data import MAData
+from siriuspy.search import MASearch, PSSearch
 
 
 TIMEOUT_CHECK = 8
 TIMEOUT_SLEEP = 0.1
-TEST_TOLERANCE = 1e-3
+TEST_TOLERANCE = 1e-1
 
 
 class ResetIntlk(QThread):
@@ -24,8 +24,8 @@ class ResetIntlk(QThread):
         """Constructor."""
         super().__init__(parent)
         self._devices = devices
-        self._pvs = [_PV(VACA_PREFIX + device + ':Reset-Cmd')
-                     for device in devices]
+        self._pvs = [_PV(VACA_PREFIX + dev + ':Reset-Cmd')
+                     for dev in devices if 'LI' not in dev]
         self._quit_task = False
 
     def size(self):
@@ -61,9 +61,12 @@ class CheckIntlk(QThread):
         super().__init__(parent)
         self._devices = devices
         self._pvs = list()
-        for device in devices:
-            self._pvs.append(_PV(VACA_PREFIX+device+':IntlkHard-Mon'))
-            self._pvs.append(_PV(VACA_PREFIX+device+':IntlkSoft-Mon'))
+        for dev in devices:
+            if 'LI' in dev:
+                self._pvs.append(_PV(VACA_PREFIX + dev + ':interlock'))
+            else:
+                self._pvs.append(_PV(VACA_PREFIX + dev + ':IntlkHard-Mon'))
+                self._pvs.append(_PV(VACA_PREFIX + dev + ':IntlkSoft-Mon'))
         self._quit_task = False
 
     def size(self):
@@ -77,21 +80,20 @@ class CheckIntlk(QThread):
     def run(self):
         """Set PS on."""
         if not self._quit_task:
-            for device, pv in zip(self._devices, self._pvs):
-                self.currentItem.emit(device)
+            for dev, pv in zip(self._devices, self._pvs):
+                self.currentItem.emit(dev)
                 t = _time.time()
                 is_ok = False
                 pv.get()  # force connection
                 if pv.connected:
                     while _time.time() - t < TIMEOUT_CHECK:
-                        if pv.value == 0:
+                        if (pv.value == 0 and 'LI' not in dev) or \
+                                (pv.value < 55 and 'LI' in dev):
                             is_ok = True
                             break
                         if self._quit_task:
                             break
-                else:
-                    print(pv.pvname, 'not conn')
-                self.itemDone.emit(device, is_ok)
+                self.itemDone.emit(dev, is_ok)
                 _time.sleep(TIMEOUT_SLEEP)
                 if self._quit_task:
                     break
@@ -111,8 +113,10 @@ class SetPwrState(QThread):
         self._devices = devices
         self._state = (_PSC.PwrStateSel.On if state == 'on'
                        else _PSC.PwrStateSel.Off)
-        self._pvs = [_PV(VACA_PREFIX + device + ':PwrState-Sel')
-                     for device in devices]
+        self._pvs = list()
+        for dev in devices:
+            ppty = ':setpwm' if 'LI' in dev else ':PwrState-Sel'
+            self._pvs.append(_PV(VACA_PREFIX + dev + ppty))
         self._quit_task = False
 
     def size(self):
@@ -151,8 +155,10 @@ class CheckPwrState(QThread):
         self._devices = devices
         self._state = (_PSC.PwrStateSts.On if state == 'on'
                        else _PSC.PwrStateSts.Off)
-        self._pvs = [_PV(VACA_PREFIX + device + ':PwrState-Sts')
-                     for device in devices]
+        self._pvs = list()
+        for dev in devices:
+            ppty = ':rdpwm' if 'LI' in dev else ':PwrState-Sts'
+            self._pvs.append(_PV(VACA_PREFIX + dev + ppty))
         self._quit_task = False
 
     def size(self):
@@ -198,10 +204,13 @@ class SetCurrent(QThread):
         self._quit_task = False
         self._is_test = is_test
         self._devices = devices
-        self._sp_pvs = [_PV(VACA_PREFIX + device + ':Current-SP')
-                        for device in devices]
-        self._rb_pvs = [_PV(VACA_PREFIX + device + ':Current-RB')
-                        for device in devices]
+        self._sp_pvs = list()
+        self._rb_pvs = list()
+        for dev in devices:
+            sp_ppty = ':seti' if 'LI' in dev else ':Current-SP'
+            self._sp_pvs.append(_PV(VACA_PREFIX + dev + sp_ppty))
+            rb_ppty = ':rdi' if 'LI' in dev else ':Current-RB'
+            self._rb_pvs.append(_PV(VACA_PREFIX + dev + rb_ppty))
 
     def size(self):
         """Task size."""
@@ -227,7 +236,11 @@ class SetCurrent(QThread):
                     self.itemDone.emit(dev_name, False)
                 else:
                     if self._is_test:
-                        splims = MAData(dev_name).splims
+                        if 'LI' in dev_name:
+                            splims = PSSearch.conv_pstype_2_splims(
+                                PSSearch.conv_psname_2_pstype(dev_name))
+                        else:
+                            splims = MASearch.conv_maname_2_splims(dev_name)
                         sp_val = splims['HIGH']/2.0
                     else:
                         sp_val = 0.0
