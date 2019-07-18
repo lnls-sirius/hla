@@ -10,7 +10,6 @@ from qtpy.QtWidgets import QWidget, QGroupBox, QComboBox, QLabel, \
 from siriuspy.envars import vaca_prefix
 from siriuspy.search.ma_search import MASearch
 from siriuspy.factory import NormalizerFactory
-from siriuspy.magnet import util as _mutil
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow
 
@@ -31,8 +30,6 @@ class MagOffConvApp(SiriusMainWindow):
         """Init."""
         super().__init__(parent)
         self._normalizer = None
-        self._normalizer_dipole = None
-        self._normalizer_fam = None
         self._last_edited = None
         self._setupUi()
         self.setWindowTitle('Offline Strength/Current Converter')
@@ -68,6 +65,8 @@ class MagOffConvApp(SiriusMainWindow):
             sb = getattr(self, name)
             sb.setObjectName(name)
             sb.setValue(0)
+            sb.setMinimum(-100000)
+            sb.setMaximum(100000)
             sb.setDecimals(4)
             sb.setStyleSheet("min-width:8em; max-width:8em;")
             sb.editingFinished.connect(self._update_inputs)
@@ -164,33 +163,12 @@ class MagOffConvApp(SiriusMainWindow):
         self._lb_strength.setText(text_strength)
 
         # update limits, if necessary
-        self._update_inputs(update_limits=True)
+        self._update_inputs()
 
     def _create_normalizer(self, maname):
         self._normalizer = NormalizerFactory.create(maname)
-        lims = self._normalizer._madata.splims
-        self._sb_current.setMinimum(lims['LOLO'])
-        self._sb_current.setMaximum(lims['HIHI'])
-        if Dipole.match(maname):
-            lims = (lims['HIHI'], lims['LOLO'])
-            strength_lims = self._normalizer.conv_current_2_strength(lims)
-            self._sb_strength.setMinimum(min(strength_lims))
-            self._sb_strength.setMaximum(max(strength_lims))
-        else:
-            self._sb_strength.setMinimum(0)
-            self._sb_strength.setMaximum(0)
-            self._sb_quadfam_kl.setMinimum(0)
-            self._sb_quadfam_kl.setMaximum(0)
-            dipole_name = _mutil.get_section_dipole_name(maname)
-            self._normalizer_dipole = NormalizerFactory.create(dipole_name)
-            dip_lims = self._normalizer_dipole._madata.splims
-            dip_lims = (dip_lims['HIHI'], dip_lims['LOLO'])
-            energy_lims = self._normalizer_dipole.conv_current_2_strength(
-                dip_lims)
-            self._sb_energy.setMinimum(min(energy_lims))
-            self._sb_energy.setMaximum(max(energy_lims))
 
-    def _update_inputs(self, update_limits=False):
+    def _update_inputs(self):
         sender = self.sender().objectName()
         if 'strength' in sender:
             self._last_edited = 's'
@@ -205,30 +183,6 @@ class MagOffConvApp(SiriusMainWindow):
             quadfam_kl = self._sb_quadfam_kl.value()
         if self._sb_energy.isVisible():
             energy = self._sb_energy.value()
-
-        if 'energy' in sender or update_limits:
-            maname = self._matype_cb.currentText()
-            malims = self._normalizer._madata.splims
-            malims = (malims['HIHI'], malims['LOLO'])
-            if Trim.match(maname):
-                # calculate strengths limits
-                strength_lims = self._normalizer.conv_current_2_strength(
-                    malims, strengths_dipole=energy,
-                    strengths_family=quadfam_kl)
-                # and update fam limits
-                family_name = _mutil.get_magnet_family_name(maname)
-                self._normalizer_fam = NormalizerFactory.create(family_name)
-                fam_lims = self._normalizer_fam._madata.splims
-                fam_lims = (fam_lims['HIHI'], fam_lims['LOLO'])
-                kl_lims = self._normalizer_fam.conv_current_2_strength(
-                    fam_lims, strengths_dipole=energy)
-                self._sb_quadfam_kl.setMinimum(min(kl_lims))
-                self._sb_quadfam_kl.setMaximum(max(kl_lims))
-            else:
-                strength_lims = self._normalizer.conv_current_2_strength(
-                    malims, strengths_dipole=energy)
-            self._sb_strength.setMinimum(min(strength_lims))
-            self._sb_strength.setMaximum(max(strength_lims))
 
         if self._last_edited == 's':
             current = self._conv_strength2curr(strength, energy, quadfam_kl)
