@@ -2,18 +2,15 @@
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
-    QGridLayout, QHBoxLayout, QMessageBox
+    QGridLayout
 
 from siriuspy.envars import vaca_prefix
 from siriuspy.timesys import get_evg_name
-from siriuspy.clientconfigdb import ConfigDBClient
 
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, PyDMStateButton, \
     SiriusLedState, SiriusLedAlert
 from siriushla.misc.epics.wrapper import PyEpicsWrapper
-from siriushla.misc.epics.task import EpicsChecker, EpicsSetter
-from siriushla.widgets.dialog import ReportDialog, ProgressDialog
 from .menu import get_object
 
 
@@ -109,6 +106,7 @@ class MainOperation(SiriusMainWindow):
         self.sender().setText(text)
         self.centralWidget().adjustSize()
         self.adjustSize()
+
 
 if __name__ == '__main__':
     import sys
