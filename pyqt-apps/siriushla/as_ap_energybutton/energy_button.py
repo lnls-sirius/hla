@@ -4,6 +4,8 @@ from qtpy.QtWidgets import QVBoxLayout, QWidget, QDoubleSpinBox, QPushButton, \
     QListWidget
 from pydm.widgets import PyDMLabel
 
+from siriuspy.envars import vaca_prefix as _vaca_prefix
+
 
 class EnergyButton(QWidget):
     """Set dipole energy."""
@@ -13,20 +15,29 @@ class EnergyButton(QWidget):
         super().__init__(parent)
         self.setter = setter
         self._setup_ui()
-        self._connect_signal_and_slots()
 
     def _setup_ui(self):
         self.setLayout(QVBoxLayout())
 
-        # self.section = QLabel("<h3>" + self.setter.section.upper() + "</h3>")
         self.energy_value = QDoubleSpinBox(self)
+        self.energy_value.setSingleStep(0.01)
+        self.energy_value.setMinimum(self.setter.lower_limit)
+        self.energy_value.setMaximum(self.setter.upper_limit)
+        self.energy_value.setDecimals(4)
+
         if self.setter.section == 'tb':
-            self.energy_sp = PyDMLabel(self, 'TB-Fam:MA-B:Energy-SP')
+            sp_channel = _vaca_prefix + 'TB-Fam:MA-B:Energy-RB'
         elif self.setter.section == 'bo':
-            self.energy_sp = PyDMLabel(self, 'BO-Fam:MA-B:Energy-SP')
+            sp_channel = _vaca_prefix + 'BO-Fam:MA-B:Energy-RB'
         else:
             raise RuntimeError
+        self.energy_sp = PyDMLabel(self)
+        self.energy_sp.channel = sp_channel
+        self.energy_sp.showUnits = True
+
         self.set_energy = QPushButton('Set', self)
+        self.set_energy.clicked.connect(self._process)
+
         self.failed = QListWidget(self)
 
         # self.layout().addWidget(self.section)
@@ -34,16 +45,6 @@ class EnergyButton(QWidget):
         self.layout().addWidget(self.energy_sp)
         self.layout().addWidget(self.set_energy)
         self.layout().addWidget(self.failed)
-
-        self.energy_value.setSingleStep(0.01)
-        self.energy_value.setMinimum(self.setter.lower_limit)
-        self.energy_value.setMaximum(self.setter.upper_limit)
-        self.energy_value.setDecimals(4)
-
-        self.energy_sp.showUnits = True
-
-    def _connect_signal_and_slots(self):
-        self.set_energy.clicked.connect(self._process)
 
     def _process(self):
         failed = self.setter.set_values(self.energy_value.value())
