@@ -57,11 +57,11 @@ class PyEpicsWrapper:
         if pvv is None:
             return False
         elif isinstance(pvv, _np.ndarray) or isinstance(value, _np.ndarray):
-            if _np.allclose(pvv, value, rtol=1e-06, atol=0.0):
-                return True
+            if len(pvv) != len(value):
+                return False
+            return _np.allclose(pvv, value, rtol=1e-06, atol=0.0)
         elif isinstance(pvv, float) or isinstance(value, float):
-            if isclose(pvv, value, rel_tol=1e-06, abs_tol=0.0):
-                return True
+            return isclose(pvv, value, rel_tol=1e-06, abs_tol=0.0)
         elif pvv == value:
             return True
         return False
