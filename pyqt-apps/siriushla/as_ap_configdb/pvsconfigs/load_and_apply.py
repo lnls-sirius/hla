@@ -36,16 +36,8 @@ class LoadAndApplyConfig2MachineWindow(SiriusMainWindow):
         self.logger.setLevel(logging.DEBUG)
 
         self._setup_ui()
-        self._central_widget.setStyleSheet("""
-            #CentralWidget {
-                min-width: 40em;
-                min-height: 40em;
-            }
-            # ConfigTableWidget {
-            #     min-height: 10em;
-            #     max-height: 10em;
-            # }
-        """)
+        self._central_widget.setStyleSheet(
+            '#config_table {min-width: 30em;}')
         self.setWindowTitle('Set saved configuration')
         self._nr_checked_items = 0
 
@@ -56,28 +48,26 @@ class LoadAndApplyConfig2MachineWindow(SiriusMainWindow):
 
     def _setup_ui(self):
         # Set central widget
-        self._central_widget = QWidget()
+        self._central_widget = QSplitter(Qt.Horizontal)
         self._central_widget.setObjectName('CentralWidget')
-        self._central_widget.layout = QHBoxLayout()
-        self._central_widget.setLayout(self._central_widget.layout)
         self.setCentralWidget(self._central_widget)
 
+        self._load_widget = QWidget()
+        self._load_widget.setLayout(QVBoxLayout())
         self._set_widget = QWidget()
-        self._set_widget.layout = QGridLayout()
-        self._set_widget.setLayout(self._set_widget.layout)
-        self._central_widget.layout.addWidget(self._set_widget)
+        self._set_widget.setLayout(QVBoxLayout())
+        self._central_widget.addWidget(self._load_widget)
+        self._central_widget.addWidget(self._set_widget)
 
         # Add combo box with types
         self._type_cb = QComboBox(self)
         self._type_cb.setObjectName('type_cb')
         self._type_cb.setModel(ConfigPVsTypeModel(self._client, self._type_cb))
 
-        self._splitter = QSplitter(orientation=Qt.Vertical, parent=self)
-        self._splitter.setChildrenCollapsible(True)
-
         # Add table for the configuration name
         # self._config_table = ConfigTableWidget(self._client)
         self._config_table = LoadConfigDialog('notexist', self)
+        self._config_table.setObjectName('config_table')
         self._config_table.label_exist.hide()
         self._config_table.sub_header.hide()
         self._config_table.ok_button.hide()
@@ -125,13 +115,10 @@ class LoadAndApplyConfig2MachineWindow(SiriusMainWindow):
         self._tree_widget.layout.addLayout(self._tree_label_layout)
         self._tree_widget.layout.addWidget(self._tree)
 
-        self._set_widget.layout.addWidget(self._config_type_widget, 0, 0)
-        self._set_widget.layout.addWidget(self._config_name_widget, 1, 0)
-        self._set_widget.layout.addWidget(self._tree_widget, 0, 1, 2, 1)
-        self._set_widget.layout.addWidget(self._set_btn, 2, 1)
-
-        self._set_widget.layout.setColumnStretch(0, 1)
-        self._set_widget.layout.setColumnStretch(1, 1.5)
+        self._load_widget.layout().addWidget(self._config_type_widget)
+        self._load_widget.layout().addWidget(self._config_name_widget)
+        self._set_widget.layout().addWidget(self._tree_widget)
+        self._set_widget.layout().addWidget(self._set_btn)
 
         # Add signals
         self._type_cb.currentTextChanged.connect(self._fill_config_names)
