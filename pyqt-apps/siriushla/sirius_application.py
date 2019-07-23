@@ -1,9 +1,59 @@
 """Definition of the Sirius Application class."""
-import sys, traceback
+import sys
+import time
+from io import StringIO
+import traceback
 from pydm import PyDMApplication, data_plugins
-from qtpy.QtWidgets import QMessageBox, QWidget, QTextEdit
+from qtpy.QtWidgets import QMessageBox
 
 from .util import get_window_id, set_style
+
+
+# https://riverbankcomputing.com/pipermail/pyqt/2009-May/022961.html
+def excepthook(exctype, excvalue, tracebackobj):
+    """
+    Global function to catch unhandled exceptions.
+
+    @param exctype exception type
+    @param excvalue exception value
+    @param tracebackobj traceback object
+    """
+    app = SiriusApplication.instance()
+    if app is None:
+        app = SiriusApplication(None, sys.argv)
+
+    separator = '-' * 120 + '\n'
+    logfile = "/tmp/sirius-hla.log"
+    notice = \
+        'An unhandled exception occurred. Please report the problem '\
+        'via email to <{}>.\nA log has been written to "{}".\n\n'\
+        'Error information:\n'.format("fernando.sa@lnls.br", logfile)
+    timestring = time.strftime("%Y-%m-%d, %H:%M:%S") + '\n'
+
+    tbinfofile = StringIO()
+    traceback.print_tb(tracebackobj, None, tbinfofile)
+    tbinfofile.seek(0)
+    tbinfo = tbinfofile.read()
+
+    errmsg = '%s: \n%s\n' % (str(exctype), str(excvalue))
+    sections = [timestring, errmsg, tbinfo]
+    msg = separator.join(sections)
+    try:
+        with open(logfile, 'a') as fil:
+            fil.write('\n' + msg + '\n')
+    except IOError:
+        pass
+    errorbox = QMessageBox()
+    errorbox.setText(notice)
+    errorbox.setInformativeText(msg)
+    errorbox.setIcon(QMessageBox.Critical)
+    errorbox.setWindowTitle('Error')
+    errorbox.setStyleSheet(
+        '#qt_msgbox_informativelabel {min-width: 40em;}')
+    errorbox.exec_()
+
+
+sys.excepthook = excepthook
 
 
 class SiriusApplication(PyDMApplication):
@@ -41,21 +91,6 @@ class SiriusApplication(PyDMApplication):
             # KeyError - Window does not exist
             # RuntimeError: wrapped C/C++ object of type x has been deleted
             self._create_and_show(wid, w_class, parent, **kwargs)
-
-    def disclaimer(self):
-        exc_type, exc_value, exc_traceback = sys.exc_info()
-        if exc_type == SystemExit:
-            return
-        msgbox = QMessageBox()
-        msgbox.setText(str(exc_type))
-        msgbox.setInformativeText(str(exc_value))
-        msgbox.setDetailedText(''.join(
-                    traceback.format_tb(exc_traceback)))
-        msgbox.setIcon(msgbox.Critical)
-        msgbox.setWindowTitle('Error')
-        msgbox.setStyleSheet(
-            '#qt_msgbox_informativelabel {min-width: 40em;}')
-        msgbox.exec()
 
     def _show(self, wid):
         if self._windows[wid].isHidden():

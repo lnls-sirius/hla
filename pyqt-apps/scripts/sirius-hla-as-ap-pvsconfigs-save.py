@@ -3,18 +3,11 @@
 """Lauch PVs configuration manager."""
 import sys
 from siriushla.sirius_application import SiriusApplication
+from siriuspy.clientconfigdb import ConfigDBClient
+from siriushla.as_ap_configdb.pvsconfigs import ReadAndSaveConfig2ServerWindow
 
-try:
-    from siriuspy.clientconfigdb import ConfigDBClient
-    from siriushla.as_ap_configdb.pvsconfigs import \
-        ReadAndSaveConfig2ServerWindow
 
-    app = SiriusApplication()
-    client = ConfigDBClient()
-    app.open_window(ReadAndSaveConfig2ServerWindow, parent=None, client=client)
-    sys.exit(app.exec_())
-except:
-    app = SiriusApplication.instance()
-    if app is None:
-        app = SiriusApplication(None, sys.argv)
-    app.disclaimer()
+app = SiriusApplication()
+client = ConfigDBClient()
+app.open_window(ReadAndSaveConfig2ServerWindow, parent=None, client=client)
+sys.exit(app.exec_())

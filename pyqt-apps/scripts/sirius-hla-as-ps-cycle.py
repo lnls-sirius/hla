@@ -4,15 +4,9 @@
 
 import sys
 from siriushla.sirius_application import SiriusApplication
+from siriushla.as_ps_cycle.cycle_window import CycleWindow
 
-try:
-    from siriushla.as_ps_cycle.cycle_window import CycleWindow
 
-    app = SiriusApplication(None, sys.argv)
-    app.open_window(CycleWindow)
-    sys.exit(app.exec_())
-except:
-    app = SiriusApplication.instance()
-    if app is None:
-        app = SiriusApplication(None, sys.argv)
-    app.disclaimer()
+app = SiriusApplication(None, sys.argv)
+app.open_window(CycleWindow)
+sys.exit(app.exec_())
