@@ -72,7 +72,7 @@ class PSMonitor(SiriusMainWindow):
 
         def get_ch2vals(sec, name):
             if sec == 'LI':
-                return {self._prefix+name+':setpwm': 1,
+                return {self._prefix+name+':rdpwm': 1,
                         self._prefix+name+':interlock': {'value': 55,
                                                          'comp': 'lt'}}
             elif name.dis == 'PU':
