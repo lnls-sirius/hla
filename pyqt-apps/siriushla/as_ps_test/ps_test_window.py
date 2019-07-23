@@ -7,14 +7,19 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QLineEdit, \
     QPushButton, QListWidget, QLabel, QApplication, QMessageBox
 
+from siriushla.sirius_application import SiriusApplication
 from siriuspy.search import PSSearch, MASearch
+from siriuspy.csdevice.pwrsupply import Const as _PSC
 
 from siriushla.widgets import SiriusMainWindow, PVNameTree
 from siriushla.widgets.dialog import ProgressDialog
-from siriushla.sirius_application import SiriusApplication
 from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
 from .tasks import ResetIntlk, CheckIntlk, \
-    SetPwrState, CheckPwrState, SetCurrent
+    SetOpModeSlowRef, CheckOpModeSlowRef, \
+    SetPwrState, CheckPwrState, \
+    SetCtrlLoop, CheckCtrlLoop, \
+    SetCapBankVolt, SetCurrent
+from .util import DEFAULT_CAP_BANK_VOLT
 
 
 class PSTestWindow(SiriusMainWindow):
@@ -48,6 +53,7 @@ class PSTestWindow(SiriusMainWindow):
         self.search_le = QLineEdit()
         self.search_le.setPlaceholderText('Filter...')
         self.search_le.editingFinished.connect(self._filter_manames)
+
         self.tree = PVNameTree(items=self._get_tree_names(),
                                tree_levels=('sec', 'mag_group'), parent=self)
         self.tree.setHeaderHidden(True)
@@ -55,10 +61,13 @@ class PSTestWindow(SiriusMainWindow):
         self.tree.doubleClicked.connect(self._open_detail)
 
         self.resetps_bt = QPushButton('Reset', self)
-        self.resetps_bt.pressed.connect(_part(self._reset_interlocks, 'ps'))
+        self.resetps_bt.pressed.connect(_part(self._reset_intlk, 'ps'))
+
         self.resetdclink_bt = QPushButton('Reset DCLinks', self)
-        self.resetdclink_bt.pressed.connect(
-            _part(self._reset_interlocks, 'dclink'))
+        self.resetdclink_bt.pressed.connect(_part(self._reset_intlk, 'dclink'))
+
+        self.setslowref_bt = QPushButton('Set OpMode to SlowRef', self)
+        self.setslowref_bt.pressed.connect(self._set_check_opmode)
 
         self.turnoff_bt = QPushButton('Turn Off', self)
         self.turnoff_bt.pressed.connect(_part(self._set_check_pwrstate, 'off'))
@@ -81,6 +90,7 @@ class PSTestWindow(SiriusMainWindow):
         magnets_layout.addWidget(self.tree)
         magnets_layout.addWidget(self.resetps_bt)
         magnets_layout.addWidget(self.resetdclink_bt)
+        magnets_layout.addWidget(self.setslowref_bt)
         magnets_layout.addWidget(self.turnoff_bt)
         magnets_layout.addWidget(self.turnondclink_bt)
         magnets_layout.addWidget(self.turnon_bt)
@@ -107,14 +117,14 @@ class PSTestWindow(SiriusMainWindow):
         nok_layout.addWidget(self.nok_ps)
         lay.addLayout(nok_layout, stretch=1)
 
-    def _reset_interlocks(self, pstype=''):
+    def _reset_intlk(self, pstype=''):
         self.ok_ps.clear()
         self.nok_ps.clear()
         powersupplies = self._get_selected_ps()
         if not powersupplies:
             return
         if pstype == 'dclink':
-            devices = self._get_ps_related_dclinks(powersupplies)
+            devices = self._get_ps_related_dclinks(powersupplies).keys()
         else:
             devices = powersupplies
 
@@ -122,7 +132,23 @@ class PSTestWindow(SiriusMainWindow):
         task2 = CheckIntlk(devices, self)
         task2.itemDone.connect(self._log)
 
-        labels = ['Reseting PS', 'Checking PS Interlocks']
+        labels = ['Reseting PS...', 'Checking PS Interlocks...']
+        tasks = [task1, task2]
+        dlg = ProgressDialog(labels, tasks, self)
+        dlg.exec_()
+
+    def _set_check_opmode(self):
+        self.ok_ps.clear()
+        self.nok_ps.clear()
+        devices = self._get_selected_ps()
+        if not devices:
+            return
+
+        task1 = SetOpModeSlowRef(devices, self)
+        task2 = CheckOpModeSlowRef(devices, self)
+        task2.itemDone.connect(self._log)
+
+        labels = ['Setting PS OpMode to SlowRef...', 'Checking PS OpMode...']
         tasks = [task1, task2]
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
@@ -130,7 +156,7 @@ class PSTestWindow(SiriusMainWindow):
     def _set_check_pwrstate(self, state):
         self.ok_ps.clear()
         self.nok_ps.clear()
-        devices = self._get_manames()
+        devices = self._get_selected_ps()
         if not devices:
             return
 
@@ -138,13 +164,64 @@ class PSTestWindow(SiriusMainWindow):
         task2 = CheckPwrState(devices, state, self)
         task2.itemDone.connect(self._log)
 
-        labels = ['Turning PS '+state, 'Checking PS power '+state]
+        labels = ['Turning PS '+state+'...',
+                  'Checking PS powered '+state+'...']
         tasks = [task1, task2]
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
     def _turn_on_dclinks(self):
-        pass
+        self.ok_ps.clear()
+        self.nok_ps.clear()
+        pwrsupplies = self._get_selected_ps()
+        if not pwrsupplies:
+            return
+        dev2params = self._get_ps_related_dclinks(pwrsupplies)
+        if not dev2params:
+            return
+
+        # turn on dclinks
+        task1 = SetPwrState(dev2params.keys(), 'on', self)
+        task2 = CheckPwrState(dev2params.keys(), 'on', self)
+        task2.itemDone.connect(self._log)
+        labels = ['Turning DCLinks On...', 'Checking DCLinks powered on...']
+        tasks = [task1, task2]
+        dlg = ProgressDialog(labels, tasks, self)
+        dlg.exec_()
+        if self.nok_ps.count() > 0:
+            return
+
+        # wait untill dclinks initialize
+        self.ok_ps.clear()
+        task = CheckOpModeSlowRef(dev2params.keys(), self)
+        task.itemDone.connect(self._log)
+        dlg = ProgressDialog(
+            'Wait DCLinks OpMode turn to SlowRef...', task, self)
+        dlg.exec_()
+        if self.nok_ps.count() > 0:
+            return
+
+        # set dclinks ctrlloop
+        self.ok_ps.clear()
+        task1 = SetCtrlLoop(dev2params, self)
+        task2 = CheckCtrlLoop(dev2params, self)
+        task2.itemDone.connect(self._log)
+        labels = ['Setting DCLinks CtrlLoop...',
+                  'Checking DCLinks CtrlLoop state...']
+        tasks = [task1, task2]
+        dlg = ProgressDialog(labels, tasks, self)
+        dlg.exec_()
+        if self.nok_ps.count() > 0:
+            return
+
+        # set capacitor bank voltage
+        self.ok_ps.clear()
+        task = SetCapBankVolt(dev2params, self)
+        task.itemDone.connect(self._log)
+        dlg = ProgressDialog('Setting capacitor bank voltage...', task, self)
+        dlg.exec_()
+        if self.nok_ps.count() > 0:
+            return
 
     def _test_ps(self):
         self.ok_ps.clear()
@@ -162,7 +239,7 @@ class PSTestWindow(SiriusMainWindow):
     def _zero_current(self):
         self.ok_ps.clear()
         self.nok_ps.clear()
-        devices = self._get_manames()
+        devices = self._get_selected_ps()
         if not devices:
             return
 
@@ -180,18 +257,25 @@ class PSTestWindow(SiriusMainWindow):
         return devices
 
     def _get_ps_related_dclinks(self, tree_names):
-        alldclinks = set()
+        alldclinks = dict()
         for name in tree_names:
             if 'LI' in name:
                 continue
             psnames = MASearch.conv_maname_2_psnames(name)
-            dclinks = set()
+            dclinkparams = dict()
             for ps in psnames:
-                aux = PSSearch.conv_psname_2_dclink(ps)
-                if aux:
-                    dclinks.update(aux)
-            alldclinks.update(dclinks)
-        return list(alldclinks)
+                dclinks = PSSearch.conv_psname_2_dclink(ps)
+                if dclinks:
+                    for dcl in dclinks:
+                        if PSSearch.conv_psname_2_psmodel(dcl) == 'FBP_DCLink':
+                            ctrlloop = _PSC.OpenLoop.Open
+                            capvolt = DEFAULT_CAP_BANK_VOLT['Default']
+                        else:
+                            ctrlloop = _PSC.OpenLoop.Closed
+                            capvolt = DEFAULT_CAP_BANK_VOLT[ps]
+                        dclinkparams.update({dcl: [ctrlloop, capvolt]})
+            alldclinks.update(dclinkparams)
+        return alldclinks
 
     def _log(self, name, status):
         if status:
