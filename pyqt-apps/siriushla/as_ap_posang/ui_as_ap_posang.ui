@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>485</width>
-    <height>640</height>
+    <height>647</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -128,6 +128,9 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
         <property name="showUnits" stdset="0">
          <bool>true</bool>
         </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}${TRANSPORTLINE}-Glob:AP-PosAng:DeltaPosX-RB</string>
+        </property>
        </widget>
       </item>
       <item row="0" column="2">
@@ -221,6 +224,9 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
         The channel to be used by the widget.
     </string>
         </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}${TRANSPORTLINE}-Glob:AP-PosAng:DeltaPosX-SP</string>
+        </property>
         <property name="showStepExponent" stdset="0">
          <bool>false</bool>
         </property>
@@ -261,6 +267,9 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
     init_channel : str, optional
         The channel to be used by the widget.
     </string>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}${TRANSPORTLINE}-Glob:AP-PosAng:DeltaAngX-SP</string>
         </property>
         <property name="showStepExponent" stdset="0">
          <bool>false</bool>
@@ -304,6 +313,9 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
         </property>
         <property name="showUnits" stdset="0">
          <bool>true</bool>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}${TRANSPORTLINE}-Glob:AP-PosAng:DeltaAngX-RB</string>
         </property>
        </widget>
       </item>
@@ -353,6 +365,9 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
         </property>
         <property name="showUnits" stdset="0">
          <bool>true</bool>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}${TRANSPORTLINE}-Glob:AP-PosAng:DeltaAngY-RB</string>
         </property>
        </widget>
       </item>
@@ -481,6 +496,9 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
         <property name="styleSheet">
          <string notr="true"/>
         </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}${TRANSPORTLINE}-Glob:AP-PosAng:DeltaAngY-SP</string>
+        </property>
         <property name="showStepExponent" stdset="0">
          <bool>false</bool>
         </property>
@@ -523,6 +541,9 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
         </property>
         <property name="showUnits" stdset="0">
          <bool>true</bool>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}${TRANSPORTLINE}-Glob:AP-PosAng:DeltaPosY-RB</string>
         </property>
        </widget>
       </item>
@@ -578,6 +599,9 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
         <property name="styleSheet">
          <string notr="true"/>
         </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}${TRANSPORTLINE}-Glob:AP-PosAng:DeltaPosY-SP</string>
+        </property>
         <property name="showStepExponent" stdset="0">
          <bool>false</bool>
         </property>
@@ -617,6 +641,9 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}${TRANSPORTLINE}-Glob:AP-PosAng:RefKickCH1-Mon</string>
         </property>
        </widget>
       </item>
@@ -704,6 +731,9 @@ max-width:8.71em;</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}${TRANSPORTLINE}-Glob:AP-PosAng:RefKickCV2-Mon</string>
         </property>
        </widget>
       </item>
@@ -798,6 +828,9 @@ max-width:8.71em;</string>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
         </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}${TRANSPORTLINE}-Glob:AP-PosAng:RefKickCV1-Mon</string>
+        </property>
        </widget>
       </item>
       <item row="0" column="3">
@@ -835,6 +868,9 @@ max-width:8.71em;</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}${TRANSPORTLINE}-Glob:AP-PosAng:RefKickCH2-Mon</string>
         </property>
        </widget>
       </item>
@@ -963,7 +999,7 @@ max-width:8.71em;</string>
       <string>Correction Status</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_4" columnstretch="15,1,1,5">
-      <item row="0" column="2">
+      <item row="1" column="2">
        <widget class="SiriusLedAlert" name="SiriusLedAlert">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -1000,7 +1036,7 @@ max-width:8.71em;</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="3">
+      <item row="1" column="3">
        <widget class="QLabel" name="label_status0">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
@@ -1016,7 +1052,7 @@ max-width:8.71em;</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="2">
+      <item row="2" column="2">
        <widget class="SiriusLedAlert" name="SiriusLedAlert_2">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -1053,7 +1089,7 @@ max-width:8.71em;</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="3">
+      <item row="2" column="3">
        <widget class="QLabel" name="label_status1">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
@@ -1069,7 +1105,7 @@ max-width:8.71em;</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="2">
+      <item row="3" column="2">
        <widget class="SiriusLedAlert" name="SiriusLedAlert_3">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -1106,7 +1142,7 @@ max-width:8.71em;</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="3">
+      <item row="3" column="3">
        <widget class="QLabel" name="label_status2">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
@@ -1122,7 +1158,7 @@ max-width:8.71em;</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="2">
+      <item row="4" column="2">
        <widget class="SiriusLedAlert" name="SiriusLedAlert_4">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -1159,7 +1195,7 @@ max-width:8.71em;</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="3">
+      <item row="4" column="3">
        <widget class="QLabel" name="label_status3">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
@@ -1175,40 +1211,7 @@ max-width:8.71em;</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="0" rowspan="5">
-       <widget class="PyDMLogLabel" name="PyDMLogLabel">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>184</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string/>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">QListWidget{
-min-height:12em;
-}</string>
-        </property>
-        <property name="channel" stdset="0">
-         <string>${PREFIX}${TRANSPORTLINE}-Glob:AP-PosAng:Log-Mon</string>
-        </property>
-        <property name="dateTimeFmt" stdset="0">
-         <string>%Y/%m/%d-%H:%M:%S</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="2" colspan="2">
+      <item row="5" column="2" colspan="2">
        <widget class="PyDMPushButton" name="PyDMPushButton_ConfigMA">
         <property name="minimumSize">
          <size>
@@ -1269,12 +1272,15 @@ min-height:12em;
         <property name="text">
          <string>Config Correctors</string>
         </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}${TRANSPORTLINE}-Glob:AP-PosAng:ConfigMA-Cmd</string>
+        </property>
         <property name="pressValue" stdset="0">
-         <string>0</string>
+         <string>1</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="1" rowspan="5">
+      <item row="1" column="1" rowspan="5">
        <spacer name="horizontalSpacer_7">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -1289,6 +1295,52 @@ min-height:12em;
          </size>
         </property>
        </spacer>
+      </item>
+      <item row="0" column="0" rowspan="6">
+       <widget class="PyDMLogLabel" name="PyDMLogLabel">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>184</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string/>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QListWidget{
+min-height:12em;
+}</string>
+        </property>
+        <property name="channel" stdset="0">
+         <string>${PREFIX}${TRANSPORTLINE}-Glob:AP-PosAng:Log-Mon</string>
+        </property>
+        <property name="dateTimeFmt" stdset="0">
+         <string>%Y/%m/%d-%H:%M:%S</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QLabel" name="label_corrtype">
+        <property name="styleSheet">
+         <string notr="true">font-weight:normal;</string>
+        </property>
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <layout class="QHBoxLayout" name="hlay_corrtype"/>
       </item>
      </layout>
     </widget>
@@ -1384,7 +1436,7 @@ min-height:12em;
      <property name="minimumSize">
       <size>
        <width>0</width>
-       <height>0</height>
+       <height>38</height>
       </size>
      </property>
      <property name="toolTip">
@@ -1429,13 +1481,16 @@ min-height:12em;
     </string>
      </property>
      <property name="styleSheet">
-      <string notr="true"/>
+      <string notr="true">min-height: 2.4em; max-height: 2.4em;</string>
      </property>
      <property name="text">
       <string>Update Reference</string>
      </property>
+     <property name="channel" stdset="0">
+      <string>${PREFIX}${TRANSPORTLINE}-Glob:AP-PosAng:SetNewRefKick-Cmd</string>
+     </property>
      <property name="pressValue" stdset="0">
-      <string>0</string>
+      <string>1</string>
      </property>
     </widget>
    </item>
