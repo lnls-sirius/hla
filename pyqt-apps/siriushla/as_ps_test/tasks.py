@@ -6,7 +6,7 @@ from qtpy.QtCore import Signal, QThread
 from siriuspy.envars import vaca_prefix as VACA_PREFIX
 from siriuspy.csdevice.pwrsupply import Const as _PSC
 from siriuspy.search import MASearch, PSSearch
-from .util import DEFAULT_CAP_BANK_VOLT
+from .dclinks_data import DEFAULT_CAP_BANK_VOLT
 
 
 TIMEOUT_CHECK = 10

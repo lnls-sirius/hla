@@ -19,7 +19,7 @@ from .tasks import ResetIntlk, CheckIntlk, \
     SetPwrState, CheckPwrState, \
     SetCtrlLoop, CheckCtrlLoop, \
     SetCapBankVolt, SetCurrent
-from .util import DEFAULT_CAP_BANK_VOLT
+from .dclinks_data import DEFAULT_CAP_BANK_VOLT
 
 
 class PSTestWindow(SiriusMainWindow):
