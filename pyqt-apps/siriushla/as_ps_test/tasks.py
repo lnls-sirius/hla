@@ -174,8 +174,13 @@ class CheckOpModeSlowRef(QThread):
                 is_ok = False
                 if pv.connected:
                     while _time.time() - t < 3*TIMEOUT_CHECK:
-                        if pv.get() == self._state:
+                        value = pv.get()
+                        if value == self._state:
                             is_ok = True
+                            break
+                        elif (value == _PSC.States.Interlock) or \
+                                (value == _PSC.States.Off):
+                            is_ok = False
                             break
                         if self._quit_task:
                             break

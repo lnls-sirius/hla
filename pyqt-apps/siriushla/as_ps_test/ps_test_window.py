@@ -171,8 +171,6 @@ class PSTestWindow(SiriusMainWindow):
         dlg.exec_()
 
     def _turn_on_dclinks(self):
-        self.ok_ps.clear()
-        self.nok_ps.clear()
         pwrsupplies = self._get_selected_ps()
         if not pwrsupplies:
             return
@@ -181,6 +179,8 @@ class PSTestWindow(SiriusMainWindow):
             return
 
         # turn on dclinks
+        self.ok_ps.clear()
+        self.nok_ps.clear()
         task1 = SetPwrState(dev2params.keys(), 'on', self)
         task2 = CheckPwrState(dev2params.keys(), 'on', self)
         task2.itemDone.connect(self._log)
