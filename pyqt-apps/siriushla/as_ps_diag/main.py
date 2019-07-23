@@ -83,8 +83,8 @@ class PSDiag(SiriusMainWindow):
                     conn_chs = list()
                     for name in psnames:
                         pname = self._prefix + name
-                        conn_chs.append(pname+':setpwm')
-                        ps_ch2vals[pname + ':setpwm'] = 1
+                        conn_chs.append(pname+':rdpwm')
+                        ps_ch2vals[pname + ':rdpwm'] = 1
                         intlk_ch2vals[pname + ':interlock'] = \
                             {'value': 55, 'comp': 'lt'}
 

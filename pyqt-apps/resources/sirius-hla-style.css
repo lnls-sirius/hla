@@ -44,6 +44,19 @@ QMenuBar::item:selected {
   border-bottom: black;
 }
 
+/* QSplitter */
+QSplitter::handle {
+    background: qlineargradient(spread: pad, x1:0.993909, y1:0.455, x2:0, y2:0.511, stop:0 rgba(172, 172, 172, 255), stop:1 transparent);
+    width: 0.5em;
+    height: 0.5em;
+}
+
+QSplitter::handle:hover {
+    background: qlineargradient(spread: pad, x1:0, y1:0.511, x2:0.993909, y2:0.455, stop:0 rgba(172, 172, 172, 255), stop:1 transparent);
+    width: 0.5em;
+    height: 0.5em;
+}
+
 /* Tab Widget */
 QTabWidget::pane {
     border-top: 2px solid black;

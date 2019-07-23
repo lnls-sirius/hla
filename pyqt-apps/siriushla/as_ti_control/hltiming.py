@@ -39,23 +39,13 @@ class TimingMain(SiriusMainWindow):
         gridlayout.addWidget(globpars, 0, 0, 1, 2)
 
         splitter = QSplitter(Qt.Horizontal)
-        splitter.setContentsMargins(0, 0, 0, 0)
-        splitter.setHandleWidth(20)
         gridlayout.addWidget(splitter, 1, 0, 1, 2)
         events = self.setevents()
         events.setObjectName('events')
-        # events.setStyleSheet("""
-        #     #events{min-width:30em; min-height:40em;}""")
-        # gridlayout.addWidget(events, 1, 0)
-        # gridlayout.setColumnStretch(0, 3)
         splitter.addWidget(events)
 
         triggers = self.settriggers()
         triggers.setObjectName('triggers')
-        # triggers.setStyleSheet("""
-        #     #triggers{min-width:58em; min-height:40em;}""")
-        # gridlayout.addWidget(triggers, 1, 1)
-        # gridlayout.setColumnStretch(1, 5)
         splitter.addWidget(triggers)
 
     def setglobalparameters(self):
