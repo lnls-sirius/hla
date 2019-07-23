@@ -77,6 +77,7 @@ setup(
         'scripts/sirius-hla-si-ps-control.py',
         'scripts/sirius-hla-tb-ap-control.py',
         'scripts/sirius-hla-tb-ap-emittance.py',
+        'scripts/sirius-hla-tb-ap-posang-chch.py',
         'scripts/sirius-hla-tb-ap-posang.py',
         'scripts/sirius-hla-tb-ap-sofb.py',
         'scripts/sirius-hla-tb-di-icts.py',
