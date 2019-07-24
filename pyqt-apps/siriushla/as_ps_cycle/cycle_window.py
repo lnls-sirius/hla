@@ -90,9 +90,14 @@ class CycleWindow(SiriusMainWindow):
         self.prepare_timing_bt = QPushButton('Prepare\nTiming', self)
         self.prepare_timing_bt.clicked.connect(
             _part(self._prepare, 'timing'))
-        self.prepare_magnets_bt = QPushButton('Prepare\nMagnets', self)
-        self.prepare_magnets_bt.clicked.connect(
-            _part(self._prepare, 'magnets'))
+        self.prepare_magnets_params_bt = QPushButton(
+            'Prepare Magnets\nParameters', self)
+        self.prepare_magnets_params_bt.clicked.connect(
+            _part(self._prepare, 'magnets', 'params'))
+        self.prepare_magnets_opmode_bt = QPushButton(
+            'Prepare Magnets\nOpMode', self)
+        self.prepare_magnets_opmode_bt.clicked.connect(
+            _part(self._prepare, 'magnets', 'opmode'))
         self.cycle_bt = QPushButton('Cycle', self)
         self.cycle_bt.clicked.connect(self._cycle)
         # self.cycle_bt.setEnabled(False)
@@ -103,10 +108,11 @@ class CycleWindow(SiriusMainWindow):
         self.progress_bar = QProgressBar(self)
         cyclelay = QGridLayout()
         cyclelay.addWidget(self.prepare_timing_bt, 0, 0)
-        cyclelay.addWidget(self.prepare_magnets_bt, 0, 1)
-        cyclelay.addWidget(self.cycle_bt, 0, 2)
-        cyclelay.addWidget(self.progress_list, 1, 0, 1, 3)
-        cyclelay.addWidget(self.progress_bar, 2, 0, 1, 3)
+        cyclelay.addWidget(self.prepare_magnets_params_bt, 0, 1)
+        cyclelay.addWidget(self.prepare_magnets_opmode_bt, 0, 2)
+        cyclelay.addWidget(self.cycle_bt, 0, 3)
+        cyclelay.addWidget(self.progress_list, 1, 0, 1, 4)
+        cyclelay.addWidget(self.progress_bar, 2, 0, 1, 4)
 
         # commands
         gb_comm = QGroupBox('Auxiliar Commands', self)
@@ -174,7 +180,7 @@ class CycleWindow(SiriusMainWindow):
             return False
         return True
 
-    def _prepare(self, subsystem='magnets'):
+    def _prepare(self, subsystem='magnets', ppty='params'):
         if not self._check_connected(subsystem):
             return
         magnets = self._get_magnets_list()
@@ -210,7 +216,7 @@ class CycleWindow(SiriusMainWindow):
                 self._allButtons_setEnabled(True)
                 return False
 
-            prepare_task = PrepareMagnets(magnets, self._timing, self)
+            prepare_task = PrepareMagnets(magnets, self._timing, ppty, self)
         else:
             prepare_task = PrepareTiming(magnets, self._timing, self)
 
@@ -373,7 +379,7 @@ class CycleWindow(SiriusMainWindow):
             if error:
                 item.setForeground(errorcolor)
                 self._allButtons_setEnabled(True)
-                bar_newvalue = 0
+                bar_newvalue = bar_currvalue
             elif warning:
                 item.setForeground(warncolor)
                 bar_newvalue = bar_currvalue
@@ -401,7 +407,8 @@ class CycleWindow(SiriusMainWindow):
 
     def _allButtons_setEnabled(self, enable):
         self.prepare_timing_bt.setEnabled(enable)
-        self.prepare_magnets_bt.setEnabled(enable)
+        self.prepare_magnets_params_bt.setEnabled(enable)
+        self.prepare_magnets_opmode_bt.setEnabled(enable)
         self.cycle_bt.setEnabled(enable)
         self.restore_ti_bt.setEnabled(enable)
         self.set_ma_2_slowref_bt.setEnabled(enable)
@@ -615,13 +622,14 @@ class PrepareMagnets(QThread):
 
     updated = Signal(str, bool, bool, bool)
 
-    def __init__(self, manames, timing, parent=None):
+    def __init__(self, manames, timing, ppty, parent=None):
         super().__init__(parent)
         cyclers = dict()
         for ma in manames:
             cyclers[ma] = _cyclers[ma]
         self._controller = CycleController(
             cyclers=cyclers, timing=timing, logger=self)
+        self._ppty = ppty
         self._quit_thread = False
 
     def size(self):
@@ -632,7 +640,10 @@ class PrepareMagnets(QThread):
 
     def run(self):
         if not self._quit_thread:
-            self._controller.prepare_magnets()
+            if self._ppty == 'params':
+                self._controller.prepare_magnets_parameters()
+            else:
+                self._controller.prepare_magnets_opmode()
             self._quit_thread = True
 
     def update(self, message, done, warning, error):
