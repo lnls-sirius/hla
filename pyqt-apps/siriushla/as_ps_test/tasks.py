@@ -2,6 +2,7 @@ import time as _time
 from epics import PV as _PV
 
 from qtpy.QtCore import Signal, QThread
+# from siriushla.widgets import SiriusConnectionSignal as _Ch
 
 from siriuspy.envars import vaca_prefix as VACA_PREFIX
 from siriuspy.csdevice.pwrsupply import Const as _PSC
@@ -147,11 +148,16 @@ class CheckOpModeSlowRef(QThread):
     itemDone = Signal(str, bool)
     completed = Signal()
 
-    def __init__(self, devices, parent=None):
+    def __init__(self, devices, pstype='ps', parent=None):
         """Constructor."""
         super().__init__(parent)
         self._devices = devices
-        self._state = _PSC.States.SlowRef
+        if pstype == 'ps':
+            self._states = [_PSC.States.SlowRef,
+                            _PSC.States.Off,
+                            _PSC.States.Interlock]
+        else:
+            self._states = [_PSC.States.SlowRef, ]
         self._pvs = [_PV(VACA_PREFIX + dev + ':OpMode-Sts')
                      for dev in devices if 'LI' not in dev]
         self._quit_task = False
@@ -175,12 +181,8 @@ class CheckOpModeSlowRef(QThread):
                 if pv.connected:
                     while _time.time() - t < 3*TIMEOUT_CHECK:
                         value = pv.get()
-                        if value == self._state:
+                        if value in self._states:
                             is_ok = True
-                            break
-                        elif (value == _PSC.States.Interlock) or \
-                                (value == _PSC.States.Off):
-                            is_ok = False
                             break
                         if self._quit_task:
                             break
@@ -380,11 +382,13 @@ class SetCapBankVolt(QThread):
         self._devices_2_defvals = devices_2_defvals
         self._sp_pvs = dict()
         self._mon_pvs = dict()
-        for dev in devices_2_defvals.keys():
-            self._sp_pvs[dev] = \
-                _PV(VACA_PREFIX + dev + ':CapacitorBankVoltage-SP')
-            self._mon_pvs[dev] = \
-                _PV(VACA_PREFIX + dev + ':CapacitorBankVoltage-Mon')
+        for dev, defval in devices_2_defvals.items():
+            if defval[1] == DEFAULT_CAP_BANK_VOLT['Default']:
+                ppty = 'Voltage'
+            else:
+                ppty = 'CapacitorBankVoltage'
+            self._sp_pvs[dev] = _PV(VACA_PREFIX+dev+':'+ppty+'-SP')
+            self._mon_pvs[dev] = _PV(VACA_PREFIX+dev+':'+ppty+'-Mon')
 
     def size(self):
         """Task size."""
@@ -409,7 +413,7 @@ class SetCapBankVolt(QThread):
                     self.itemDone.emit(dev, False)
                 else:
                     sp.put(defval[1])
-                    if defval != DEFAULT_CAP_BANK_VOLT['Default']:
+                    if defval[1] != DEFAULT_CAP_BANK_VOLT['Default']:
                         success = False
                         t = _time.time()
                         while _time.time() - t < 6*TIMEOUT_CHECK:
@@ -480,17 +484,21 @@ class SetCurrent(QThread):
                         if 'LI' in dev_name:
                             splims = PSSearch.conv_pstype_2_splims(
                                 PSSearch.conv_psname_2_pstype(dev_name))
+                            sp_val = splims['HIGH']/2.0
+                            error = TEST_TOLERANCE
                         else:
                             splims = MASearch.conv_maname_2_splims(dev_name)
-                        sp_val = splims['HIGH']/2.0
+                            sp_val = splims['TSTV']
+                            error = splims['TSTR']
                     else:
                         sp_val = 0.0
+                        error = TEST_TOLERANCE
                     sp.put(sp_val)
                     success = False
 
                     t = _time.time()
                     while _time.time() - t < TIMEOUT_CHECK:
-                        if self._cmp(mon.get(), sp_val):
+                        if self._cmp(mon.get(), sp_val, error):
                             success = True
                             break
                         if self._quit_task:
