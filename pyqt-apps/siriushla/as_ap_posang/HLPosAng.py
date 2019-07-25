@@ -31,7 +31,7 @@ UI_FILE = (_os.path.abspath(_os.path.dirname(__file__))+'/ui_as_ap_posang.ui')
 class ASAPPosAngCorr(SiriusMainWindow):
     """Main Class."""
 
-    def __init__(self, parent=None, prefix='', tl=None, corrtype='ch-ch'):
+    def __init__(self, parent=None, prefix='', tl=None, corrtype='ch-sept'):
         """Class construc."""
         super(ASAPPosAngCorr, self).__init__(parent)
         if not prefix:
