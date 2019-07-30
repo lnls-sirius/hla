@@ -102,7 +102,7 @@ class CheckOpModeSlowRef(BaseTask):
 
     def function(self):
         """Check PS OpMode in SlowRef."""
-        self._check(method='check_slowref', timeout=3*TIMEOUT_CHECK)
+        self._check(method='check_slowref')
 
 
 class SetPwrState(BaseTask):
@@ -158,7 +158,7 @@ class CheckCapBankVolt(BaseTask):
 
     def function(self):
         """Check DCLink Capacitor Bank Voltage."""
-        self._check(method='check_capvolt')
+        self._check(method='check_capvolt', timeout=6*TIMEOUT_CHECK)
 
 
 class SetCurrent(BaseTask):
