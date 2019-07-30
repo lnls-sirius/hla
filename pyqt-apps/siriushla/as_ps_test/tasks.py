@@ -1,515 +1,179 @@
 import time as _time
-from epics import PV as _PV
 
 from qtpy.QtCore import Signal, QThread
-# from siriushla.widgets import SiriusConnectionSignal as _Ch
-
-from siriuspy.envars import vaca_prefix as VACA_PREFIX
-from siriuspy.csdevice.pwrsupply import Const as _PSC
-from siriuspy.search import MASearch, PSSearch
-from .dclinks_data import DEFAULT_CAP_BANK_VOLT
 
 
 TIMEOUT_CHECK = 10
 TIMEOUT_SLEEP = 0.1
-TEST_TOLERANCE = 1e-1
 
 
-class ResetIntlk(QThread):
-    """Reset Interlocks."""
+class BaseTask(QThread):
+    """Setter."""
 
     currentItem = Signal(str)
-    itemDone = Signal()
+    itemDone = Signal(str, bool)
     completed = Signal()
 
-    def __init__(self, devices, parent=None):
+    def __init__(self, testers, state=None, is_test=None, parent=None):
         """Constructor."""
         super().__init__(parent)
-        self._devices = devices
-        self._pvs = [_PV(VACA_PREFIX + dev + ':Reset-Cmd')
-                     for dev in devices if 'LI' not in dev]
+        self._testers = testers
+        self._state = state
+        self._is_test = is_test
         self._quit_task = False
 
     def size(self):
         """Task size."""
-        return len(self._pvs)
+        return len(self._testers.keys())
 
     def exit_task(self):
         """Set quit flag."""
         self._quit_task = True
 
     def run(self):
-        """Execute task."""
+        """Run task."""
         if not self._quit_task:
-            for dev, pv in zip(self._devices, self._pvs):
-                self.currentItem.emit(dev)
-                pv.get()  # force connection
-                if pv.connected:
-                    pv.put(1)
-                    _time.sleep(TIMEOUT_SLEEP)
-                self.itemDone.emit()
+            self.function()
         self.completed.emit()
 
+    def function(self):
+        """Must be reimplemented in each class."""
+        raise NotImplementedError
 
-class CheckIntlk(QThread):
+    def _set(self, method, **kwargs):
+        """Set."""
+        for dev, tester in self._testers.items():
+            self.currentItem.emit(dev)
+            func = getattr(tester, method)
+            func(**kwargs)
+            self.itemDone.emit(dev, True)
+            if self._quit_task:
+                break
+
+    def _check(self, method, timeout=TIMEOUT_CHECK, **kwargs):
+        """Check."""
+        need_check = list(self._testers.keys())
+        t = _time.time()
+        while _time.time() - t < timeout:
+            for dev, tester in self._testers.items():
+                if dev not in need_check:
+                    continue
+                func = getattr(tester, method)
+                if func(**kwargs):
+                    self.currentItem.emit(dev)
+                    need_check.remove(dev)
+                    self.itemDone.emit(dev, True)
+                if self._quit_task:
+                    break
+            if (not need_check) or (self._quit_task):
+                break
+            _time.sleep(TIMEOUT_SLEEP)
+        for dev in need_check:
+            self.currentItem.emit(dev)
+            self.itemDone.emit(dev, False)
+
+
+class ResetIntlk(BaseTask):
+    """Reset Interlocks."""
+
+    def function(self):
+        """Reset PS."""
+        self._set(method='reset')
+
+
+class CheckIntlk(BaseTask):
     """Check Interlocks."""
 
-    currentItem = Signal(str)
-    itemDone = Signal(str, bool)
-    completed = Signal()
-
-    def __init__(self, devices, parent=None):
-        """Constructor."""
-        super().__init__(parent)
-        self._devices = devices
-        self._pvs = list()
-        for dev in devices:
-            if 'LI' in dev:
-                self._pvs.append(_PV(VACA_PREFIX + dev + ':interlock'))
-            else:
-                self._pvs.append(_PV(VACA_PREFIX + dev + ':IntlkHard-Mon'))
-                self._pvs.append(_PV(VACA_PREFIX + dev + ':IntlkSoft-Mon'))
-        self._quit_task = False
-
-    def size(self):
-        """Return task size."""
-        return len(self._pvs)
-
-    def exit_task(self):
-        """Set flag to quit thread."""
-        self._quit_task = True
-
-    def run(self):
-        """Set PS on."""
-        if not self._quit_task:
-            for dev, pv in zip(self._devices, self._pvs):
-                self.currentItem.emit(dev)
-                t = _time.time()
-                is_ok = False
-                pv.get()  # force connection
-                if pv.connected:
-                    while _time.time() - t < TIMEOUT_CHECK:
-                        if (pv.value == 0 and 'LI' not in dev) or \
-                                (pv.value < 55 and 'LI' in dev):
-                            is_ok = True
-                            break
-                        if self._quit_task:
-                            break
-                self.itemDone.emit(dev, is_ok)
-                _time.sleep(TIMEOUT_SLEEP)
-                if self._quit_task:
-                    break
-        self.completed.emit()
+    def function(self):
+        """Check PS interlocks."""
+        self._check(method='check_intlk')
 
 
-class SetOpModeSlowRef(QThread):
+class SetOpModeSlowRef(BaseTask):
     """Set PS OpMode to SlowRef."""
 
-    currentItem = Signal(str)
-    itemDone = Signal()
-    completed = Signal()
-
-    def __init__(self, devices, parent=None):
-        """Constructor."""
-        super().__init__(parent)
-        self._devices = devices
-        self._opmode = _PSC.OpMode.SlowRef
-        self._pvs = [_PV(VACA_PREFIX + dev + ':OpMode-Sel')
-                     for dev in devices if 'LI' not in dev]
-        self._quit_task = False
-
-    def size(self):
-        """Return task size."""
-        return len(self._pvs)
-
-    def exit_task(self):
-        """Set flag to quit thread."""
-        self._quit_task = True
-
-    def run(self):
+    def function(self):
         """Set PS OpMode to SlowRef."""
-        if not self._quit_task:
-            for dev, pv in zip(self._devices, self._pvs):
-                self.currentItem.emit(dev)
-                pv.get()  # force connection
-                if pv.connected:
-                    pv.put(self._opmode)
-                    _time.sleep(TIMEOUT_SLEEP)
-                self.itemDone.emit()
-                if self._quit_task:
-                    break
-        self.completed.emit()
+        self._set(method='set_slowref')
 
 
-class CheckOpModeSlowRef(QThread):
+class CheckOpModeSlowRef(BaseTask):
     """Check if PS OpMode is in SlowRef."""
 
-    currentItem = Signal(str)
-    itemDone = Signal(str, bool)
-    completed = Signal()
-
-    def __init__(self, devices, pstype='ps', parent=None):
-        """Constructor."""
-        super().__init__(parent)
-        self._devices = devices
-        if pstype == 'ps':
-            self._states = [_PSC.States.SlowRef,
-                            _PSC.States.Off,
-                            _PSC.States.Interlock]
-        else:
-            self._states = [_PSC.States.SlowRef, ]
-        self._pvs = [_PV(VACA_PREFIX + dev + ':OpMode-Sts')
-                     for dev in devices if 'LI' not in dev]
-        self._quit_task = False
-
-    def size(self):
-        """Return task size."""
-        return len(self._pvs)
-
-    def exit_task(self):
-        """Set flag to quit thread."""
-        self._quit_task = True
-
-    def run(self):
+    def function(self):
         """Check PS OpMode in SlowRef."""
-        if not self._quit_task:
-            for dev, pv in zip(self._devices, self._pvs):
-                self.currentItem.emit(dev)
-                pv.get()  # force connection
-                t = _time.time()
-                is_ok = False
-                if pv.connected:
-                    while _time.time() - t < 3*TIMEOUT_CHECK:
-                        value = pv.get()
-                        if value in self._states:
-                            is_ok = True
-                            break
-                        if self._quit_task:
-                            break
-                self.itemDone.emit(dev, is_ok)
-                _time.sleep(TIMEOUT_SLEEP)
-                if self._quit_task:
-                    break
-        self.completed.emit()
+        self._check(method='check_slowref', timeout=3*TIMEOUT_CHECK)
 
 
-class SetPwrState(QThread):
+class SetPwrState(BaseTask):
     """Set PS PwrState."""
 
-    currentItem = Signal(str)
-    itemDone = Signal()
-    completed = Signal()
-
-    def __init__(self, devices, state, parent=None):
-        """Constructor."""
-        super().__init__(parent)
-        self._devices = devices
-        self._state = (_PSC.PwrStateSel.On if state == 'on'
-                       else _PSC.PwrStateSel.Off)
-        self._pvs = list()
-        for dev in devices:
-            ppty = ':setpwm' if 'LI' in dev else ':PwrState-Sel'
-            self._pvs.append(_PV(VACA_PREFIX + dev + ppty))
-        self._quit_task = False
-
-    def size(self):
-        """Return task size."""
-        return len(self._pvs)
-
-    def exit_task(self):
-        """Set flag to quit thread."""
-        self._quit_task = True
-
-    def run(self):
+    def function(self):
         """Set PS PwrState."""
-        if not self._quit_task:
-            for dev, pv in zip(self._devices, self._pvs):
-                self.currentItem.emit(dev)
-                pv.get()  # force connection
-                if pv.connected:
-                    pv.put(self._state)
-                    _time.sleep(TIMEOUT_SLEEP)
-                self.itemDone.emit()
-                if self._quit_task:
-                    break
-        self.completed.emit()
+        self._set(method='set_pwrstate', state=self._state)
 
 
-class CheckPwrState(QThread):
+class CheckPwrState(BaseTask):
     """Check PS PwrState."""
 
-    currentItem = Signal(str)
-    itemDone = Signal(str, bool)
-    completed = Signal()
-
-    def __init__(self, devices, state, parent=None):
-        """Constructor."""
-        super().__init__(parent)
-        self._devices = devices
-        self._state = (_PSC.PwrStateSts.On if state == 'on'
-                       else _PSC.PwrStateSts.Off)
-        self._pvs = list()
-        for dev in devices:
-            ppty = ':rdpwm' if 'LI' in dev else ':PwrState-Sts'
-            self._pvs.append(_PV(VACA_PREFIX + dev + ppty))
-        self._quit_task = False
-
-    def size(self):
-        """Return task size."""
-        return len(self._pvs)
-
-    def exit_task(self):
-        """Set flag to quit thread."""
-        self._quit_task = True
-
-    def run(self):
+    def function(self):
         """Check PS PwrState."""
-        if not self._quit_task:
-            for dev, pv in zip(self._devices, self._pvs):
-                self.currentItem.emit(dev)
-                pv.get()  # force connection
-                t = _time.time()
-                is_ok = False
-                if pv.connected:
-                    while _time.time() - t < TIMEOUT_CHECK:
-                        if pv.get() == self._state:
-                            is_ok = True
-                            break
-                        if self._quit_task:
-                            break
-                self.itemDone.emit(dev, is_ok)
-                _time.sleep(TIMEOUT_SLEEP)
-                if self._quit_task:
-                    break
-        self.completed.emit()
+        self._check(method='check_pwrstate', state=self._state)
 
 
-class SetCtrlLoop(QThread):
+class CheckInitOk(BaseTask):
+    """Check if PS OpMode is in SlowRef."""
+
+    def function(self):
+        """Check PS OpMode in SlowRef."""
+        self._check(method='check_init_ok', timeout=3*TIMEOUT_CHECK)
+
+
+class SetCtrlLoop(BaseTask):
     """Set PS CtrlLoop."""
 
-    currentItem = Signal(str)
-    itemDone = Signal()
-    completed = Signal()
-
-    def __init__(self, devices_2_defvals, parent=None):
-        """Constructor."""
-        super().__init__(parent)
-        self._devices_2_defvals = devices_2_defvals
-        self._pvs = {dev: _PV(VACA_PREFIX + dev + ':CtrlLoop-Sel')
-                     for dev in devices_2_defvals.keys()}
-        self._quit_task = False
-
-    def size(self):
-        """Return task size."""
-        return len(self._pvs)
-
-    def exit_task(self):
-        """Set flag to quit thread."""
-        self._quit_task = True
-
-    def run(self):
+    def function(self):
         """Set PS CtrlLoop."""
-        if not self._quit_task:
-            for dev, pv in self._pvs.items():
-                self.currentItem.emit(dev)
-                pv.get()  # force connection
-                if pv.connected:
-                    pv.put(self._devices_2_defvals[dev][0])
-                    _time.sleep(TIMEOUT_SLEEP)
-                self.itemDone.emit()
-                if self._quit_task:
-                    break
-        self.completed.emit()
+        self._set(method='set_ctrlloop')
 
 
-class CheckCtrlLoop(QThread):
+class CheckCtrlLoop(BaseTask):
     """Check PS CtrlLoop."""
 
-    currentItem = Signal(str)
-    itemDone = Signal(str, bool)
-    completed = Signal()
-
-    def __init__(self, devices_2_defvals, parent=None):
-        """Constructor."""
-        super().__init__(parent)
-        self._devices_2_defvals = devices_2_defvals
-        self._pvs = {dev: _PV(VACA_PREFIX + dev + ':CtrlLoop-Sts')
-                     for dev in devices_2_defvals.keys()}
-        self._quit_task = False
-
-    def size(self):
-        """Return task size."""
-        return len(self._pvs)
-
-    def exit_task(self):
-        """Set flag to quit thread."""
-        self._quit_task = True
-
-    def run(self):
+    def function(self):
         """Check PS CtrlLoop."""
-        if not self._quit_task:
-            for dev, pv in self._pvs.items():
-                self.currentItem.emit(dev)
-                pv.get()  # force connection
-                t = _time.time()
-                is_ok = False
-                if pv.connected:
-                    while _time.time() - t < TIMEOUT_CHECK:
-                        defval = self._devices_2_defvals[dev][0]
-                        if pv.get() == defval:
-                            is_ok = True
-                            break
-                        if self._quit_task:
-                            break
-                self.itemDone.emit(dev, is_ok)
-                _time.sleep(TIMEOUT_SLEEP)
-                if self._quit_task:
-                    break
-        self.completed.emit()
+        self._check(method='check_ctrlloop')
 
 
-class SetCapBankVolt(QThread):
+class SetCapBankVolt(BaseTask):
+    """Set capacitor bank voltage."""
+
+    def function(self):
+        """Set DCLink Capacitor Bank Voltage."""
+        self._set(method='set_capvolt')
+
+
+class CheckCapBankVolt(BaseTask):
+    """Check capacitor bank voltage."""
+
+    def function(self):
+        """Check DCLink Capacitor Bank Voltage."""
+        self._check(method='check_capvolt')
+
+
+class SetCurrent(BaseTask):
     """Set current value and check if it RB is achieved."""
 
-    currentItem = Signal(str)
-    itemDone = Signal(str, bool)
-    completed = Signal()
-
-    def __init__(self, devices_2_defvals, parent=None):
-        """Constructor."""
-        super().__init__(parent)
-        self._quit_task = False
-        self._devices_2_defvals = devices_2_defvals
-        self._sp_pvs = dict()
-        self._mon_pvs = dict()
-        for dev, defval in devices_2_defvals.items():
-            if defval[1] == DEFAULT_CAP_BANK_VOLT['Default']:
-                ppty = 'Voltage'
-            else:
-                ppty = 'CapacitorBankVoltage'
-            self._sp_pvs[dev] = _PV(VACA_PREFIX+dev+':'+ppty+'-SP')
-            self._mon_pvs[dev] = _PV(VACA_PREFIX+dev+':'+ppty+'-Mon')
-
-    def size(self):
-        """Task size."""
-        return len(self._devices_2_defvals.keys())
-
-    def exit_task(self):
-        """Exit flag."""
-        self._quit_task = True
-
-    def run(self):
+    def function(self):
         """Set PS Current."""
-        if not self._quit_task:
-            for dev, defval in self._devices_2_defvals.items():
-                self.currentItem.emit(dev)
-
-                sp = self._sp_pvs[dev]
-                sp.get()  # force connection
-                mon = self._mon_pvs[dev]
-                mon.get()  # force connection
-
-                if not mon.connected or not sp.connected:
-                    self.itemDone.emit(dev, False)
-                else:
-                    sp.put(defval[1])
-                    if defval[1] != DEFAULT_CAP_BANK_VOLT['Default']:
-                        success = False
-                        t = _time.time()
-                        while _time.time() - t < 6*TIMEOUT_CHECK:
-                            if self._cmp(mon.get(), defval[1]):
-                                success = True
-                                break
-                            if self._quit_task:
-                                break
-                    else:
-                        success = True
-                    self.itemDone.emit(dev, success)
-                if self._quit_task:
-                    break
-        self.completed.emit()
-
-    def _cmp(self, value, target):
-        if value > target:
-            return True
-        else:
-            return False
+        self._set(method='set_current', test=self._is_test)
 
 
-class SetCurrent(QThread):
+class CheckCurrent(BaseTask):
     """Set current value and check if it RB is achieved."""
 
-    currentItem = Signal(str)
-    itemDone = Signal(str, bool)
-    completed = Signal()
-
-    def __init__(self, devices, is_test=False, parent=None):
-        """Constructor."""
-        super().__init__(parent)
-        self._quit_task = False
-        self._is_test = is_test
-        self._devices = devices
-        self._sp_pvs = list()
-        self._mon_pvs = list()
-        for dev in devices:
-            sp_ppty = ':seti' if 'LI' in dev else ':Current-SP'
-            self._sp_pvs.append(_PV(VACA_PREFIX + dev + sp_ppty))
-            mon_ppty = ':rdi' if 'LI' in dev else ':Current-Mon'
-            self._mon_pvs.append(_PV(VACA_PREFIX + dev + mon_ppty))
-
-    def size(self):
-        """Task size."""
-        return len(self._devices)
-
-    def exit_task(self):
-        """Exit flag."""
-        self._quit_task = True
-
-    def run(self):
+    def function(self):
         """Set PS Current."""
-        if not self._quit_task:
-            for i in range(len(self._devices)):
-                dev_name = self._devices[i]
-                self.currentItem.emit(dev_name)
-
-                sp = self._sp_pvs[i]
-                sp.get()  # force connection
-                mon = self._mon_pvs[i]
-                mon.get()  # force connection
-
-                if not mon.connected or not sp.connected:
-                    self.itemDone.emit(dev_name, False)
-                else:
-                    if self._is_test:
-                        if 'LI' in dev_name:
-                            splims = PSSearch.conv_pstype_2_splims(
-                                PSSearch.conv_psname_2_pstype(dev_name))
-                            sp_val = splims['HIGH']/2.0
-                            error = TEST_TOLERANCE
-                        else:
-                            splims = MASearch.conv_maname_2_splims(dev_name)
-                            sp_val = splims['TSTV']
-                            error = splims['TSTR']
-                    else:
-                        sp_val = 0.0
-                        error = TEST_TOLERANCE
-                    sp.put(sp_val)
-                    success = False
-
-                    t = _time.time()
-                    while _time.time() - t < TIMEOUT_CHECK:
-                        if self._cmp(mon.get(), sp_val, error):
-                            success = True
-                            break
-                        if self._quit_task:
-                            break
-                    self.itemDone.emit(dev_name, success)
-                if self._quit_task:
-                    break
-        self.completed.emit()
-
-    def _cmp(self, value, target, error=TEST_TOLERANCE):
-        if abs(value - target) < error:
-            return True
-        else:
-            return False
+        self._check(method='check_current',
+                    timeout=TIMEOUT_CHECK,
+                    test=self._is_test)
