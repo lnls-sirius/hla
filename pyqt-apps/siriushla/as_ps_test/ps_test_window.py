@@ -442,7 +442,6 @@ class PSTestWindow(SiriusMainWindow):
         nok_status = list()
         for dev, t in testers.items():
             if not t.connected:
-                print(dev)
                 nok_status.append(dev)
 
         if nok_status:
