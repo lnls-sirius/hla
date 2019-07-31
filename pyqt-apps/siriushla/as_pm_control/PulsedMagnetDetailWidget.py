@@ -49,7 +49,6 @@ class PulsedMagnetDetailWidget(QWidget):
         self._intlk5_mon_pv = self._prefixed_maname + ":Intlk5-Mon"
         self._intlk6_mon_pv = self._prefixed_maname + ":Intlk6-Mon"
         self._intlk7_mon_pv = self._prefixed_maname + ":Intlk7-Mon"
-        self._intlk8_mon_pv = self._prefixed_maname + ":Intlk8-Mon"
         self._intlk1label_cte_pv = self._prefixed_maname + ":Intlk1Label-Cte"
         self._intlk2label_cte_pv = self._prefixed_maname + ":Intlk2Label-Cte"
         self._intlk3label_cte_pv = self._prefixed_maname + ":Intlk3Label-Cte"
@@ -57,7 +56,9 @@ class PulsedMagnetDetailWidget(QWidget):
         self._intlk5label_cte_pv = self._prefixed_maname + ":Intlk5Label-Cte"
         self._intlk6label_cte_pv = self._prefixed_maname + ":Intlk6Label-Cte"
         self._intlk7label_cte_pv = self._prefixed_maname + ":Intlk7Label-Cte"
-        self._intlk8label_cte_pv = self._prefixed_maname + ":Intlk8Label-Cte"
+        if 'Sept' not in self._maname:
+            self._intlk8_mon_pv = self._prefixed_maname + ":Intlk8-Mon"
+            self._intlk8label_cte_pv = self._prefixed_maname+":Intlk8Label-Cte"
         self._ctrlmode_pv = self._prefixed_maname + ":CtrlMode-Mon"
         self._prefixed_trigger_name = \
             self._prefixed_maname.replace('PM-', 'TI-')
@@ -105,7 +106,8 @@ class PulsedMagnetDetailWidget(QWidget):
     def _interlock_layout(self):
         interlock_layout = QGridLayout()
 
-        for i in range(8):
+        intlk_cnt = 8 if 'Sept' not in self._maname else 7
+        for i in range(intlk_cnt):
             label = PyDMLabel(
                 self, getattr(self, '_intlk' + str(i+1) + 'label_cte_pv'))
             led = PyDMLed(
