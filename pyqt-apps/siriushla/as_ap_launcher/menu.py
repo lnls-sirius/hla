@@ -2,47 +2,23 @@
 
 """Mock application launcher."""
 
-import time as _time
-from functools import partial as _part
-from qtpy.QtWidgets import QVBoxLayout, QDialog, QMessageBox, QMenuBar, \
-    QMenu, QLabel, QHBoxLayout, QWidget, QPushButton, QAction, QGroupBox
-from qtpy.QtCore import Signal, QThread
+from epics import PV as _PV
+
+from qtpy.QtWidgets import QVBoxLayout, QMessageBox, QMenuBar, \
+    QMenu, QHBoxLayout, QWidget, QPushButton, QAction, QGroupBox, \
+    QInputDialog
+
+from siriuspy.envars import vaca_prefix as _prefix
 from siriuspy.clientconfigdb import ConfigDBClient
+
 from siriushla import util
 from siriushla.widgets.dialog import ReportDialog, ProgressDialog
 from siriushla.misc.epics.wrapper import PyEpicsWrapper
 from siriushla.misc.epics.task import EpicsChecker, EpicsSetter
 
 
-class MyDialog(QDialog):
-
-    def __init__(self, parent, title, message):
-        super().__init__(parent=parent)
-        self.setWindowTitle(title)
-        lay = QHBoxLayout(self)
-        lay.addWidget(QLabel(message))
-
-
-class MyThread(QThread):
-
-    openmessage = Signal()
-    closemessage = Signal()
-
-    def __init__(self, parent=None, cmd=''):
-        super().__init__(parent=parent)
-        self.cmd = cmd or ''
-
-    def run(self):
-        self.openmessage.emit()
-        wind = ''
-        while not wind:
-            _, wind = util.check_process(self.cmd)
-            _time.sleep(0.01)
-        self.closemessage.emit()
-
-
-def get_pushbutton(name, pai):
-    wid = QPushButton(name, pai)
+def get_pushbutton(name, parent):
+    wid = QPushButton(name, parent)
     menu = QMenu(wid)
     wid.setMenu(menu)
     return menu
@@ -68,8 +44,6 @@ def get_object(ismenubar=True, parent=None):
                 }""")
 
         def _setup_ui(self):
-            self.message = MyDialog(self, 'Wait', '<h3>Loading Window</h3>')
-
             as_apps = self._create_as_menu()
             li_apps = self._create_li_menu()
             tb_apps = self._create_section_menu('TB', 'TB')
@@ -188,7 +162,8 @@ def get_object(ismenubar=True, parent=None):
             menu = LEVEL1('LI', self)
             menu.setObjectName('LIApp')
             launcher = LEVEL2A('Launcher', menu)
-            util.connect_newprocess(launcher, 'sirius-hla-li-launcher.sh')
+            util.connect_newprocess(launcher, 'sirius-hla-li-launcher.sh',
+                                    is_window=False)
 
             optics = LEVEL2M('Optics', menu)
             optics.setObjectName('LIApp')
@@ -358,15 +333,7 @@ def get_object(ismenubar=True, parent=None):
             return psma
 
         def connect_newprocess(self, button, cmd):
-            signal = util.get_appropriate_signal(button)
-            signal.connect(_part(self._prepare, cmd))
-            util.connect_newprocess(button, cmd)
-
-        def _prepare(self, cmd):
-            th = MyThread(self, cmd=cmd)
-            th.openmessage.connect(self.message.show)
-            th.closemessage.connect(self.message.close)
-            th.start()
+            util.connect_newprocess(button, cmd, parent=self)
 
         def _applyconfig(self):
             sender_text = self.sender().text()
@@ -377,11 +344,28 @@ def get_object(ismenubar=True, parent=None):
 
             ans = QMessageBox.question(
                 self, 'Are you Sure?',
-                "Do you really want to apply the Configuration'" +
+                "Do you really want to apply the Configuration '" +
                 config_name + "' to the machine?",
                 QMessageBox.Yes, QMessageBox.Cancel)
             if ans != QMessageBox.Yes:
                 return
+
+            if config_name == 'standby':
+                current, ok = QInputDialog.getDouble(
+                    self, 'Enter value: ',
+                    'Enter FilaPS standby current [A]\n'
+                    'or cancel to not set it: ',
+                    value=0.7, min=0.0, max=1.5, decimals=3)
+                if ok:
+                    fila_pv = _PV(_prefix+'LI-01:EG-FilaPS:currentoutsoft',
+                                  connection_timeout=0.05)
+                    fila_pv.get()  # force connection
+                    if fila_pv.connected:
+                        fila_pv.put(current)
+                    else:
+                        QMessageBox.warning(
+                            self, 'Message',
+                            'Could not connect to LI-01:EG-FilaPS!')
 
             server_global = ConfigDBClient(config_type='global_config')
             try:
@@ -422,10 +406,13 @@ def get_object(ismenubar=True, parent=None):
             ret = dlg.exec_()
             if ret == dlg.Rejected:
                 return
+
             # Show report dialog informing user results
             self._report = ReportDialog(failed, self)
             self._report.show()
+
     return MainMenuBar(parent=parent)
+
 
 if __name__ == '__main__':
     import sys
