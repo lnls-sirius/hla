@@ -287,6 +287,7 @@ class PVNameTree(QTreeWidget):
                 parent = item
         # Insert leaf node pvname
         new_item = QTreeItem(row, parent)
+        new_item.setCheckState(0, Qt.Unchecked)
         self._item_map[pvname] = new_item
         self._leafs.append(new_item)
 
@@ -348,7 +349,8 @@ if __name__ == "__main__":
         items.extend([('SI-Fam:MA-B1B1{}:PwrState-Sel'.format(i), 1, 0.0),
                       ('BO-Fam:MA-QD{}:Current-SP'.format(i), 1, 0.0),
                       ('BO-Fam:MA-B-{}:PwrState-Sel'.format(i), 1, 0.0)])
-    w = PVNameTree(items=items, tree_levels=('sec', 'mag_group'), checked_levels=('BOQuadrupole', ))
+    w = PVNameTree(items=items, tree_levels=('sec', 'mag_group'),
+                   checked_levels=('BOQuadrupole', ))
     w.show()
     # w.items = items
     # w.check_requested_levels(('BOQuadrupole', ))

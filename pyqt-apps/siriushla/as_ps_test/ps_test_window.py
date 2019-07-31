@@ -1,20 +1,30 @@
 """Window to test power supplies."""
-import time
 import sys
+import re as _re
+from functools import partial as _part
+from threading import Thread as _Thread, Lock as _Lock
 
-import epics
 from qtpy.QtCore import Qt, Signal, QThread
-from qtpy.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, \
-    QPushButton, QListWidget, QLabel, QApplication
+from qtpy.QtWidgets import QFrame, QGridLayout, QVBoxLayout, QHBoxLayout, \
+    QLineEdit, QGroupBox, QPushButton, QListWidget, QLabel, QApplication, \
+    QMessageBox, QSizePolicy
 
-from siriushla.widgets.windows import SiriusMainWindow
-from siriushla.widgets.pvnames_tree import PVNameTree
+from siriuspy.search import PSSearch, MASearch
+from siriuspy.namesys import SiriusPVName as PVName
+
+from siriushla.widgets import SiriusMainWindow, PVNameTree
 from siriushla.widgets.dialog import ProgressDialog
-from siriushla.sirius_application import SiriusApplication
 from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
-from siriuspy.magnet.data import MAData
-from siriuspy.envars import vaca_prefix as VACA_PREFIX
-from siriuspy.search.ma_search import MASearch
+from .tasks import ResetIntlk, CheckIntlk, \
+    SetOpModeSlowRef, CheckOpModeSlowRef, \
+    SetPwrState, CheckPwrState, CheckInitOk, \
+    SetCtrlLoop, CheckCtrlLoop, \
+    SetCapBankVolt, CheckCapBankVolt, \
+    SetCurrent, CheckCurrent
+from .conn import TesterDCLink, TesterDCLinkFBP, TesterPS, TesterPSLinac
+
+_lock = _Lock()
+_testers = dict()
 
 
 class PSTestWindow(SiriusMainWindow):
@@ -23,90 +33,341 @@ class PSTestWindow(SiriusMainWindow):
     def __init__(self, parent=None):
         """Constructor."""
         super().__init__(parent)
-        self._setup_ui()
         self.setWindowTitle('Power Supply Test')
-        self.central_widget.setStyleSheet("""
-            #CentralWidget {
-                min-width: 70em;
-            }
-            #OkTextEdit {
-                background-color: #eafaea;
-            }
-            #NokTextEdit {
-                background-color: #ffebe6;
-            }
-            QLabel {
-                font-weight: bold;
-            }""")
+        self.setObjectName('ASApp')
+        self._setup_ui()
 
     def _setup_ui(self):
-        # Magnet tree selection widgets
-        magnets_layout = QVBoxLayout()
-        self.tree = PVNameTree(items=MASearch.get_manames({'dis': 'MA'}),
-                               tree_levels=('sec', 'mag_group'), parent=self)
-        self.test_button = QPushButton('Test', self)
-        self.test_button.setObjectName('TestButton')
-        self.exit_button = QPushButton("Close", self)
-        self.exit_button.setObjectName('ExitButton')
-        magnets_layout.addWidget(self.tree)
-        magnets_layout.addWidget(self.test_button)
-        magnets_layout.addWidget(self.exit_button)
-        # Text edits
-        ok_layout = QVBoxLayout()
-        nok_layout = QVBoxLayout()
-        self.ok_ps = QListWidget(self)
-        self.ok_ps.setObjectName('OkTextEdit')
-        ok_layout.addWidget(
-            QLabel('Ok Power Supplies', self), alignment=Qt.AlignCenter)
-        ok_layout.addWidget(self.ok_ps)
-        self.nok_ps = QListWidget(self)
-        self.nok_ps.setObjectName('NokTextEdit')
-        nok_layout.addWidget(
-            QLabel('Failed Power Supplies', self), alignment=Qt.AlignCenter)
-        nok_layout.addWidget(self.nok_ps)
-        # Set central widget
+        # setup central widget
         self.central_widget = QFrame()
-        self.central_widget.setObjectName("CentralWidget")
-        self.central_widget.layout = QHBoxLayout()
-        self.central_widget.layout.addLayout(magnets_layout, stretch=1)
-        self.central_widget.layout.addLayout(ok_layout, stretch=1)
-        self.central_widget.layout.addLayout(nok_layout, stretch=1)
-        self.central_widget.setLayout(self.central_widget.layout)
+        self.central_widget.setStyleSheet("""
+            #OkList {
+                background-color: #eafaea;
+            }
+            #NokList {
+                background-color: #ffebe6;
+            }""")
         self.setCentralWidget(self.central_widget)
 
-        # Signals
-        self.test_button.pressed.connect(self._check_power_status)
-        self.exit_button.pressed.connect(self.close)
-        self.nok_ps.doubleClicked.connect(self._open_detail)
+        # magnets selection
+        self.search_le = QLineEdit()
+        self.search_le.setPlaceholderText('Filter...')
+        self.search_le.editingFinished.connect(self._filter_manames)
 
-    def _check_power_status(self):
+        self.tree = PVNameTree(items=self._get_tree_names(),
+                               tree_levels=('sec', 'mag_group'), parent=self)
+        self.tree.setHeaderHidden(True)
+        self.tree.setObjectName('tree')
+        self.tree.setStyleSheet('#tree {max-width:15em; max-height:25em;}')
+        self.tree.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        self.tree.setColumnCount(1)
+        self.tree.doubleClicked.connect(self._open_detail)
+        gbox_select = QGroupBox('Select power supplies: ', self)
+        select_layout = QVBoxLayout()
+        select_layout.addWidget(self.search_le)
+        select_layout.addWidget(self.tree)
+        gbox_select.setLayout(select_layout)
+
+        # commands
+        self.setslowref_bt = QPushButton(
+            'Set PS and DCLinks to SlowRef', self)
+        self.setslowref_bt.clicked.connect(self._set_lastcomm)
+        self.setslowref_bt.clicked.connect(self._set_check_opmode)
+
+        self.reset_bt = QPushButton('Reset PS and DCLinks', self)
+        self.reset_bt.clicked.connect(self._set_lastcomm)
+        self.reset_bt.clicked.connect(self._reset_intlk)
+
+        self.turnoff_ps_bt = QPushButton('Turn PS Off', self)
+        self.turnoff_ps_bt.clicked.connect(self._set_lastcomm)
+        self.turnoff_ps_bt.clicked.connect(
+            _part(self._set_check_pwrstate, 'off'))
+
+        self.turnon_dcl_bt = QPushButton('Turn DCLinks On', self)
+        self.turnon_dcl_bt.clicked.connect(self._set_lastcomm)
+        self.turnon_dcl_bt.clicked.connect(self._turn_on_dclinks)
+
+        self.setctrlloop_dcl_bt = QPushButton('Set DCLinks CtrlLoop', self)
+        self.setctrlloop_dcl_bt.clicked.connect(self._set_lastcomm)
+        self.setctrlloop_dcl_bt.clicked.connect(
+            self._set_check_dclinks_ctrlloop)
+
+        self.setvolt_dcl_bt = QPushButton('Set DCLinks Voltage', self)
+        self.setvolt_dcl_bt.clicked.connect(self._set_lastcomm)
+        self.setvolt_dcl_bt.clicked.connect(
+            self._set_check_dclinks_capvolt)
+
+        self.turnon_ps_bt = QPushButton('Turn PS On', self)
+        self.turnon_ps_bt.clicked.connect(self._set_lastcomm)
+        self.turnon_ps_bt.clicked.connect(
+            _part(self._set_check_pwrstate, 'on'))
+
+        self.test_bt = QPushButton('Test PS', self)
+        self.test_bt.clicked.connect(self._set_lastcomm)
+        self.test_bt.clicked.connect(self._test_ps)
+
+        self.currzero_bt = QPushButton('Set PS Current to zero', self)
+        self.currzero_bt.clicked.connect(self._set_lastcomm)
+        self.currzero_bt.clicked.connect(self._zero_current)
+
+        gbox_comm = QGroupBox('Commands', self)
+        comm_layout = QVBoxLayout()
+        comm_layout.setContentsMargins(20, 9, 20, 9)
+        comm_layout.addWidget(QLabel(''))
+        comm_layout.addWidget(QLabel('<h4>Prepare</h4>', self,
+                                     alignment=Qt.AlignCenter))
+        comm_layout.addWidget(self.setslowref_bt)
+        comm_layout.addWidget(self.reset_bt)
+        comm_layout.addWidget(self.turnoff_ps_bt)
+        comm_layout.addWidget(QLabel(''))
+        comm_layout.addWidget(QLabel('<h4>Config DCLinks</h4>', self,
+                                     alignment=Qt.AlignCenter))
+        comm_layout.addWidget(self.turnon_dcl_bt)
+        comm_layout.addWidget(self.setctrlloop_dcl_bt)
+        comm_layout.addWidget(self.setvolt_dcl_bt)
+        comm_layout.addWidget(QLabel(''))
+        comm_layout.addWidget(QLabel('<h4>Test</h4>', self,
+                                     alignment=Qt.AlignCenter))
+        comm_layout.addWidget(self.turnon_ps_bt)
+        comm_layout.addWidget(self.test_bt)
+        comm_layout.addWidget(self.currzero_bt)
+        comm_layout.addWidget(QLabel(''))
+        gbox_comm.setLayout(comm_layout)
+
+        # lists
+        self.label_lastcomm = QLabel('Last Command: ', self)
+        self.ok_ps = QListWidget(self)
+        self.ok_ps.setObjectName('OkList')
+        self.ok_ps.doubleClicked.connect(self._open_detail)
+        self.nok_ps = QListWidget(self)
+        self.nok_ps.setObjectName('NokList')
+        self.nok_ps.doubleClicked.connect(self._open_detail)
+        self.clearlists_bt = QPushButton('Clear', self)
+        self.clearlists_bt.clicked.connect(self._clear_lastcomm)
+        hbox = QHBoxLayout()
+        hbox.addWidget(self.label_lastcomm)
+        hbox.addWidget(self.clearlists_bt, alignment=Qt.AlignRight)
+        list_layout = QGridLayout()
+        list_layout.setContentsMargins(0, 0, 0, 0)
+        list_layout.setVerticalSpacing(6)
+        list_layout.setHorizontalSpacing(9)
+        list_layout.addLayout(hbox, 0, 0, 1, 2)
+        list_layout.addWidget(QLabel('<h4>Ok</h4>', self,
+                                     alignment=Qt.AlignCenter), 1, 0)
+        list_layout.addWidget(self.ok_ps, 2, 0)
+        list_layout.addWidget(QLabel('<h4>Failed</h4>', self,
+                                     alignment=Qt.AlignCenter), 1, 1)
+        list_layout.addWidget(self.nok_ps, 2, 1)
+
+        # layout
+        lay = QGridLayout()
+        lay.setHorizontalSpacing(15)
+        lay.addWidget(QLabel('<h3>Power Supplies Test</h3>', self,
+                             alignment=Qt.AlignCenter), 0, 0, 1, 3)
+        lay.addWidget(gbox_select, 1, 0)
+        lay.addWidget(gbox_comm, 1, 1)
+        lay.addLayout(list_layout, 1, 2)
+        lay.setColumnStretch(0, 1)
+        lay.setColumnStretch(1, 1)
+        lay.setColumnStretch(2, 2)
+        lay.setRowStretch(0, 2)
+        lay.setRowStretch(1, 18)
+        self.central_widget.setLayout(lay)
+
+    # ---------- commands ------------
+
+    def _set_check_opmode(self):
         self.ok_ps.clear()
         self.nok_ps.clear()
-        devices = self.tree.checked_items()
-        task1 = ResetPS(devices, self)
-        task2 = TurnPSOn(devices, self)
-        task3 = CheckPSOn(devices, self)
-        task3.isOn.connect(self._log)
+        devices = self._get_selected_ps()
+        if not devices:
+            return
+        dclinks = self._get_related_dclinks(devices)
+        devices.extend(dclinks)
+        devices = [dev for dev in devices if 'LI-' not in dev]
 
-        labels = ['Reseting PS', 'Turning PS on', 'Checking PS power status']
-        tasks = [task1, task2, task3]
-
-        dlg = ProgressDialog(labels, tasks, self)
-        ret = dlg.exec_()
-        if ret == dlg.Rejected:
+        testers = self._get_testers(devices)
+        if not self._check_testers_conn(testers):
             return
 
-        self._test_power_supply()
+        task1 = SetOpModeSlowRef(testers, parent=self)
+        task2 = CheckOpModeSlowRef(testers, parent=self)
+        task2.itemDone.connect(self._log)
 
-    def _test_power_supply(self):
-        devices = [self.ok_ps.item(row).data(0)
-                   for row in range(self.ok_ps.count())]
-        task = TestPS(devices, self)
-        task.itemTested.connect(self._log)
-        self.ok_ps.clear()
-
-        dlg = ProgressDialog('Testing PS...', task, self)
+        labels = ['Setting PS OpMode to SlowRef...', 'Checking PS OpMode...']
+        tasks = [task1, task2]
+        dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
+
+    def _reset_intlk(self):
+        self.ok_ps.clear()
+        self.nok_ps.clear()
+        devices = self._get_selected_ps()
+        if not devices:
+            return
+        dclinks = self._get_related_dclinks(devices)
+        devices.extend(dclinks)
+
+        testers = self._get_testers(devices)
+        if not self._check_testers_conn(testers):
+            return
+
+        testers_wth_li = {dev: tester for dev, tester in testers.items()
+                          if 'LI' not in dev}
+        task1 = ResetIntlk(testers_wth_li, parent=self)
+        task2 = CheckIntlk(testers, parent=self)
+        task2.itemDone.connect(self._log)
+
+        labels = ['Reseting PS and DCLinks...',
+                  'Checking PS and DCLinks Interlocks...']
+        tasks = [task1, task2]
+        dlg = ProgressDialog(labels, tasks, self)
+        dlg.exec_()
+
+    def _set_check_pwrstate(self, state):
+        self.ok_ps.clear()
+        self.nok_ps.clear()
+        devices = self._get_selected_ps()
+        if not devices:
+            return
+
+        testers = self._get_testers(devices)
+        if not self._check_testers_conn(testers):
+            return
+
+        task1 = SetPwrState(testers, state=state, parent=self)
+        task2 = CheckPwrState(testers, state=state, parent=self)
+        task2.itemDone.connect(self._log)
+
+        labels = ['Turning PS '+state+'...',
+                  'Checking PS powered '+state+'...']
+        tasks = [task1, task2]
+        dlg = ProgressDialog(labels, tasks, self)
+        dlg.exec_()
+
+    def _turn_on_dclinks(self):
+        self.ok_ps.clear()
+        self.nok_ps.clear()
+        pwrsupplies = self._get_selected_ps()
+        if not pwrsupplies:
+            return
+        devices = self._get_related_dclinks(pwrsupplies)
+        if not devices:
+            return
+
+        testers = self._get_testers(devices)
+        if not self._check_testers_conn(testers):
+            return
+
+        task1 = SetPwrState(testers, state='on', parent=self)
+        task2 = CheckPwrState(testers, state='on', parent=self)
+        task3 = CheckInitOk(testers, parent=self)
+        task3.itemDone.connect(self._log)
+        labels = ['Turning DCLinks On...',
+                  'Checking DCLinks powered on...',
+                  'Wait DCLinks OpMode turn to SlowRef...']
+        tasks = [task1, task2, task3]
+        dlg = ProgressDialog(labels, tasks, self)
+        dlg.exec_()
+
+    def _set_check_dclinks_ctrlloop(self):
+        self.ok_ps.clear()
+        self.nok_ps.clear()
+        pwrsupplies = self._get_selected_ps()
+        if not pwrsupplies:
+            return
+        devices = self._get_related_dclinks(pwrsupplies)
+        if not devices:
+            return
+
+        testers = self._get_testers(devices)
+        if not self._check_testers_conn(testers):
+            return
+
+        task1 = SetCtrlLoop(testers, parent=self)
+        task2 = CheckCtrlLoop(testers, parent=self)
+        task2.itemDone.connect(self._log)
+        labels = ['Setting DCLinks CtrlLoop...',
+                  'Checking DCLinks CtrlLoop state...']
+        tasks = [task1, task2]
+        dlg = ProgressDialog(labels, tasks, self)
+        dlg.exec_()
+
+    def _set_check_dclinks_capvolt(self):
+        self.ok_ps.clear()
+        self.nok_ps.clear()
+        pwrsupplies = self._get_selected_ps()
+        if not pwrsupplies:
+            return
+        devices = self._get_related_dclinks(pwrsupplies)
+        if not devices:
+            return
+
+        testers = self._get_testers(devices)
+        if not self._check_testers_conn(testers):
+            return
+
+        task1 = SetCapBankVolt(testers, parent=self)
+        task2 = CheckCapBankVolt(testers, parent=self)
+        task2.itemDone.connect(self._log)
+        labels = ['Setting capacitor bank voltage...',
+                  'Checking capacitor bank voltage...']
+        tasks = [task1, task2]
+        dlg = ProgressDialog(labels, tasks, self)
+        dlg.exec_()
+
+    def _test_ps(self):
+        self.ok_ps.clear()
+        self.nok_ps.clear()
+        devices = self._get_selected_ps()
+        if not devices:
+            return
+
+        testers = self._get_testers(devices)
+        if not self._check_testers_conn(testers):
+            return
+
+        task1 = SetCurrent(testers, is_test=True, parent=self)
+        task2 = CheckCurrent(testers, is_test=True, parent=self)
+        task2.itemDone.connect(self._log)
+
+        labels = ['Testing PS... Setting current...',
+                  'Testing PS... Checking current value...']
+        tasks = [task1, task2]
+        dlg = ProgressDialog(labels, tasks, self)
+        dlg.exec_()
+
+    def _zero_current(self):
+        self.ok_ps.clear()
+        self.nok_ps.clear()
+        devices = self._get_selected_ps()
+        if not devices:
+            return
+
+        testers = self._get_testers(devices)
+        if not self._check_testers_conn(testers):
+            return
+
+        task1 = SetCurrent(testers, parent=self)
+        task2 = CheckCurrent(testers, parent=self)
+        task2.itemDone.connect(self._log)
+
+        labels = ['Setting current to zero...',
+                  'Checking current value...']
+        tasks = [task1, task2]
+        dlg = ProgressDialog(labels, tasks, self)
+        dlg.exec_()
+
+    # ---------- log updates -----------
+
+    def _set_lastcomm(self):
+        sender_text = self.sender().text()
+        self.label_lastcomm.setText('Last Command: '+sender_text)
+
+    def _clear_lastcomm(self):
+        self.ok_ps.clear()
+        self.nok_ps.clear()
+        self.label_lastcomm.setText('Last Command: ')
 
     def _log(self, name, status):
         if status:
@@ -114,214 +375,151 @@ class PSTestWindow(SiriusMainWindow):
         else:
             self.nok_ps.addItem(name)
 
+    # ---------- devices control ----------
+
+    def _get_tree_names(self):
+        lipsnames = PSSearch.get_psnames({'sec': 'LI', 'dis': 'PS'})
+        manames = MASearch.get_manames({'sec': '(TB|BO)', 'dis': 'MA'})
+        # TODO: uncomment when using TS and SI
+        # manames = MASearch.get_manames({'sec': '(TB|BO|TS|SI)', 'dis': 'MA'})
+        manames.extend(lipsnames)
+        return manames
+
+    def _filter_manames(self):
+        text = self.search_le.text()
+
+        try:
+            pattern = _re.compile(text, _re.I)
+        except Exception:  # Ignore malformed patterns?
+            pattern = _re.compile("malformed")
+
+        for node in self.tree._leafs:
+            if pattern.search(node.data(0, 0)):
+                node.setHidden(False)
+            else:
+                node.setHidden(True)
+
+    def _get_selected_ps(self):
+        devices = self.tree.checked_items()
+        if not devices:
+            QMessageBox.critical(self, 'Message', 'No magnet selected!')
+            return False
+
+        self._create_testers(devices)
+        return devices
+
+    def _get_related_dclinks(self, manames):
+        alldclinks = set()
+        for name in manames:
+            if 'LI' in name:
+                continue
+            psnames = MASearch.conv_maname_2_psnames(name)
+            for ps in psnames:
+                dclinks = PSSearch.conv_psname_2_dclink(ps)
+                if dclinks:
+                    alldclinks.update(dclinks)
+
+        alldclinks_list = list(alldclinks)
+        self._create_testers(alldclinks_list)
+        return alldclinks_list
+
+    def _create_testers(self, devices):
+        tester2create = list()
+        for n in devices:
+            if n not in _testers.keys():
+                tester2create.append(n)
+        if not tester2create:
+            return
+
+        task = CreateTesters(tester2create, self)
+        dlg = ProgressDialog('Connecting to devices...', task, self)
+        dlg.exec_()
+
+    def _get_testers(self, devices):
+        return {dev: _testers[dev] for dev in devices}
+
+    def _check_testers_conn(self, testers):
+        nok_status = list()
+        for dev, t in testers.items():
+            if not t.connected:
+                nok_status.append(dev)
+
+        if nok_status:
+            text = 'There are not connected PVs! Verify devices:\n'
+            for dev in nok_status:
+                text += dev + '\n'
+            QMessageBox.critical(self, 'Message', text)
+            return False
+        return True
+
     def _open_detail(self, index):
         app = QApplication.instance()
         maname = index.data()
+        if 'LI' in maname or maname in ['TB', 'BO', 'TS', 'SI']:
+            return
         app.open_window(PSDetailWindow, parent=self, **{'psname': maname})
 
 
-class ResetPS(QThread):
-    """Reset."""
+class CreateTesters(QThread):
+    """Create testers."""
 
     currentItem = Signal(str)
     itemDone = Signal()
     completed = Signal()
 
     def __init__(self, devices, parent=None):
-        """Constructor."""
         super().__init__(parent)
         self._devices = devices
-        self._pvs = [epics.get_pv(VACA_PREFIX + device + ':Reset-Cmd')
-                     for device in devices]
-        self._quit_task = False
-
-    def size(self):
-        """Task size."""
-        return len(self._devices)
-
-    def exit_task(self):
-        """Set quit flag."""
-        self._quit_task = True
-
-    def run(self):
-        """Execute task."""
-        if not self._quit_task:
-            for pv in self._pvs:
-                if pv.connected:
-                    pv.put(1)
-                    time.sleep(5e-3)
-                self.itemDone.emit()
-        self.completed.emit()
-
-
-class TurnPSOn(QThread):
-    """Turn PS on."""
-
-    currentItem = Signal(str)
-    itemDone = Signal()
-    completed = Signal()
-
-    def __init__(self, devices, parent=None):
-        """Constructor."""
-        super().__init__(parent)
-        self._devices = devices
-        self._pvs = [epics.get_pv(VACA_PREFIX + device + ':PwrState-Sel')
-                     for device in devices]
         self._quit_task = False
 
     def size(self):
         """Return task size."""
-        return len(self._pvs)
+        return len(self._devices)
 
     def exit_task(self):
         """Set flag to quit thread."""
         self._quit_task = True
 
     def run(self):
-        """Set PS on."""
+        """Create cyclers."""
         if not self._quit_task:
-            for pv in self._pvs:
-                if pv.connected:
-                    pv.put(1)
-                    time.sleep(5e-3)
-                self.itemDone.emit()
+            interrupted = False
+            threads = list()
+            for dev in self._devices:
+                self.create_tester(dev)
+                t = _Thread(
+                    target=self.create_tester,
+                    args=(dev, ), daemon=True)
+                t.start()
+                threads.append(t)
                 if self._quit_task:
+                    interrupted = True
                     break
-            time.sleep(5e-3*self.size())
-        self.completed.emit()
+            for t in threads:
+                t.join()
+            if not interrupted:
+                self.completed.emit()
 
-
-class CheckPSOn(QThread):
-    """Check if PS is on."""
-
-    currentItem = Signal(str)
-    itemDone = Signal()
-    isOn = Signal(str, bool)
-    completed = Signal()
-
-    def __init__(self, devices, parent=None):
-        """Constructor."""
-        super().__init__(parent)
-        self._devices = devices
-        self._pvs = [epics.get_pv(VACA_PREFIX + device + ':PwrState-Sts')
-                     for device in devices]
-        self._quit_task = False
-
-    def size(self):
-        """Return task size."""
-        return len(self._pvs)
-
-    def exit_task(self):
-        """Set flag to quit thread."""
-        self._quit_task = True
-
-    def run(self):
-        """Set PS on."""
-        time.sleep(1)
-        if not self._quit_task:
-            for device, pv in zip(self._devices, self._pvs):
-                t = time.time()
-                is_on = False
-                if pv.connected:
-                    while time.time() - t < 10:
-                        if pv.get() == 1:
-                            is_on = True
-                            break
-                        if self._quit_task:
-                            break
+    def create_tester(self, dev):
+        global _testers
+        with _lock:
+            if dev not in _testers.keys():
+                if PVName(dev).sec == 'LI':
+                    t = TesterPSLinac(dev)
+                elif PVName(dev).dis == 'MA':
+                    t = TesterPS(dev)
+                elif PSSearch.conv_psname_2_psmodel(dev) == 'FBP_DCLink':
+                    t = TesterDCLinkFBP(dev)
+                elif 'bo-dclink' in PSSearch.conv_psname_2_pstype(dev):
+                    t = TesterDCLink(dev)
+                _testers[dev] = t
+                self.currentItem.emit(dev)
                 self.itemDone.emit()
-                self.isOn.emit(device, is_on)
-                time.sleep(5e-3)
-                if self._quit_task:
-                    break
-        self.completed.emit()
-
-
-class TestPS(QThread):
-    """Set value and check if it rb is achieved."""
-
-    currentItem = Signal(str)
-    itemDone = Signal()
-    itemTested = Signal(str, bool)
-    completed = Signal()
-
-    def __init__(self, devices, parent=None):
-        """Constructor."""
-        super().__init__(parent)
-        self._error = 1e-6
-        self._quit_task = False
-        self._devices = devices
-        self._sp_pvs = [epics.get_pv(VACA_PREFIX + device + ':Current-SP')
-                        for device in devices]
-        self._rb_pvs = [epics.get_pv(VACA_PREFIX + device + ':Current-RB')
-                        for device in devices]
-
-    def size(self):
-        """Task size."""
-        return len(self._devices)
-
-    def exit_task(self):
-        """Exit flag."""
-        self._quit_task = True
-
-    def run(self):
-        """Set PS Current."""
-        time.sleep(0.1)
-        if not self._quit_task:
-            for i in range(len(self._devices)):
-                dev_name = self._devices[i]
-                rb = self._rb_pvs[i]
-                sp = self._sp_pvs[i]
-
-                if not rb.connected or not sp.connected:
-                    self.itemTested.emit(dev_name, False)
-                else:
-                    success = False
-                    splims = MAData(dev_name).splims
-                    # sp.put(splims['HIGH'] - 2.0)
-                    # # time.sleep(0.01)
-
-                    # init = time.time()
-                    # while time.time() - init < 5:
-                    #     if self._cmp(rb.get(), splims['HIGH'] - 2.0):
-                    #         success = True
-                    #         break
-                    #     if self._quit_task:
-                    #         break
-
-                    # if not success:
-                    #     self.itemTested.emit(dev_name, False)
-                    #     self.itemDone.emit()
-                    #     continue
-
-                    # success = False
-                    sp.put(splims['HIGH'] - 1.0)
-                    # time.sleep(0.01)
-
-                    init = time.time()
-                    while time.time() - init < 10:
-                        if self._cmp(rb.get(), splims['HIGH'] - 1.0):
-                            success = True
-                            break
-                        if self._quit_task:
-                            break
-
-                    self.itemTested.emit(dev_name, success)
-
-                self.itemDone.emit()
-
-                if self._quit_task:
-                    break
-        self.completed.emit()
-
-    def _cmp(self, value, target, error=1e-3):
-        if abs(value - target) < error:
-            return True
-        else:
-            return False
 
 
 if __name__ == '__main__':
+    from siriushla.sirius_application import SiriusApplication
+
     application = SiriusApplication()
     w = PSTestWindow()
     w.show()
