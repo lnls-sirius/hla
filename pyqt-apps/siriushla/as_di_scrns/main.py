@@ -18,7 +18,7 @@ from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriuspy.namesys import SiriusPVName
 
 from siriushla import util
-from siriushla.widgets import PyDMLed, SiriusConnectionSignal, SiriusMainWindow
+from siriushla.widgets import PyDMLed, SiriusConnectionSignal
 from siriushla.as_di_scrns.base import \
     SiriusImageView as _SiriusImageView, \
     create_propty_layout as _create_propty_layout, \
@@ -553,7 +553,7 @@ class SiriusScrnView(QWidget):
                             QMessageBox.Ok)
 
 
-class IndividualScrn(SiriusMainWindow):
+class IndividualScrn(QWidget):
     """Individual Screen."""
 
     def __init__(self, parent=None, prefix=_vaca_prefix, scrn=''):
@@ -565,23 +565,22 @@ class IndividualScrn(SiriusMainWindow):
         self._setupUi()
 
     def _setupUi(self):
-        cw = QWidget()
         self.scrn_view = SiriusScrnView(prefix=self._prefix, device=self._scrn)
         self.cb_scrntype = PyDMEnumComboBox(
-            parent=cw, init_channel=self._prefix+self._scrn+':ScrnType-Sel')
+            parent=self, init_channel=self._prefix+self._scrn+':ScrnType-Sel')
         self.l_scrntype = PyDMLabel(
-            parent=cw, init_channel=self._prefix+self._scrn+':ScrnType-Sts')
+            parent=self, init_channel=self._prefix+self._scrn+':ScrnType-Sts')
         self.led_scrntype = PyDMLed(
-            parent=cw, init_channel=self._prefix+self._scrn+':ScrnType-Sts',
+            parent=self, init_channel=self._prefix+self._scrn+':ScrnType-Sts',
             color_list=[PyDMLed.LightGreen, PyDMLed.Red, PyDMLed.Red,
                         PyDMLed.Yellow])
         self.led_scrntype.shape = 2
 
         lay = QGridLayout()
         lay.addWidget(QLabel('<h3>Screen View</h3>',
-                             cw, alignment=Qt.AlignCenter), 0, 0, 1, 4)
+                             self, alignment=Qt.AlignCenter), 0, 0, 1, 4)
         lay.addItem(QSpacerItem(20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 1, 0)
-        lay.addWidget(QLabel('Select Screen Type: ', cw,
+        lay.addWidget(QLabel('Select Screen Type: ', self,
                              alignment=Qt.AlignRight), 2, 0)
         lay.addWidget(self.cb_scrntype, 2, 1)
         lay.addWidget(self.l_scrntype, 2, 2)
@@ -589,10 +588,7 @@ class IndividualScrn(SiriusMainWindow):
 
         lay.addItem(QSpacerItem(20, 40, QSzPlcy.Fixed, QSzPlcy.Fixed), 4, 0)
         lay.addWidget(self.scrn_view, 5, 0, 1, 4)
-        cw.setLayout(lay)
-
-        self.setWindowTitle('Screen View: '+self._scrn)
-        self.setCentralWidget(cw)
+        self.setLayout(lay)
 
 
 if __name__ == '__main__':
