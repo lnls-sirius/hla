@@ -5,7 +5,6 @@ from qtpy.QtWidgets import QWidget, QLabel, QPushButton, \
 from qtpy.QtCore import Qt
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla import util
-from siriushla.as_di_scrns import IndividualScrn
 
 
 class ScrnSummary(QWidget):
@@ -23,8 +22,9 @@ class ScrnSummary(QWidget):
         hlay.addStretch()
         pbt = QPushButton(self._scrn)
         pbt.setStyleSheet("""min-width:10em;""")
-        util.connect_window(pbt, IndividualScrn, parent=None,
-                            prefix=self._prefix, scrn=self._scrn)
+        util.connect_newprocess(
+            pbt, ['sirius-hla-as-di-scrn.py', '-p', self._prefix, self._scrn],
+            parent=self)
         hlay.addWidget(pbt)
         hlay.addStretch()
 
