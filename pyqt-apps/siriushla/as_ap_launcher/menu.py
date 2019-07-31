@@ -2,13 +2,21 @@
 
 """Mock application launcher."""
 
+from epics import PV as _PV
+
 from qtpy.QtWidgets import QVBoxLayout, QMessageBox, QMenuBar, \
     QMenu, QHBoxLayout, QWidget, QPushButton, QAction, QGroupBox
+
+from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriuspy.clientconfigdb import ConfigDBClient
+
 from siriushla import util
 from siriushla.widgets.dialog import ReportDialog, ProgressDialog
 from siriushla.misc.epics.wrapper import PyEpicsWrapper
 from siriushla.misc.epics.task import EpicsChecker, EpicsSetter
+
+
+_STANDBY_FILAPS_CURRENT = 0.7
 
 
 def get_pushbutton(name, parent):
@@ -383,9 +391,22 @@ def get_object(ismenubar=True, parent=None):
             ret = dlg.exec_()
             if ret == dlg.Rejected:
                 return
+
+            if config_name == 'standby':
+                fila_pv = _PV(_vaca_prefix + 'LI-01:EG-FilaPS:currentoutsoft',
+                              connection_timeout=0.05)
+                fila_pv.get()  # force connection
+                if fila_pv.connected:
+                    fila_pv.put(_STANDBY_FILAPS_CURRENT)
+                else:
+                    QMessageBox.warning(
+                        self, 'Message',
+                        'Could not connect to LI-01:EG-FilaPS!')
+
             # Show report dialog informing user results
             self._report = ReportDialog(failed, self)
             self._report.show()
+
     return MainMenuBar(parent=parent)
 
 
