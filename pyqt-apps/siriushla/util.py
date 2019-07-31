@@ -1,10 +1,13 @@
 """Util module."""
 import os as _os
+import time as _time
 import pathlib as _pathlib
 import subprocess as _subprocess
+from functools import partial as _part
 
-from qtpy.QtCore import QFile as _QFile
-from qtpy.QtWidgets import QPushButton, QAction, QApplication
+from qtpy.QtCore import QFile as _QFile, Signal as _Signal, QThread as _QThread
+from qtpy.QtWidgets import QPushButton, QAction, QApplication, QDialog, \
+    QHBoxLayout, QLabel
 from pydm.utilities.stylesheet import _get_style_data as pydm_get_style_data
 import siriushla.resources as _resources
 
@@ -45,10 +48,12 @@ def connect_window(widget, w_class, parent, **kwargs):
         app.sender().w_class, parent=parent, **app.sender().kwargs))
 
 
-def connect_newprocess(widget, cmd, **kwargs):
+def connect_newprocess(widget, cmd, is_window=True, parent=None, **kwargs):
     """Execute a child program in a new process."""
     signal = get_appropriate_signal(widget)
     signal.connect(lambda: run_newprocess(cmd, **kwargs))
+    if is_window:
+        signal.connect(_part(_show_loading_message, parent, cmd))
 
 
 def check_process(cmd, is_window=True):
@@ -86,3 +91,38 @@ def get_appropriate_signal(widget):
     else:
         raise AttributeError("Undefined signal for {}".format(widget))
     return signal
+
+
+def _show_loading_message(parent, cmd):
+    th = LoadingThread(parent, cmd=cmd)
+    message = LoadingDialog(parent, 'Wait', '<h3>Loading Window</h3>')
+    th.openmessage.connect(message.show)
+    th.closemessage.connect(message.close)
+    th.start()
+
+
+class LoadingDialog(QDialog):
+
+    def __init__(self, parent, title, message):
+        super().__init__(parent=parent)
+        self.setWindowTitle(title)
+        lay = QHBoxLayout(self)
+        lay.addWidget(QLabel(message))
+
+
+class LoadingThread(_QThread):
+
+    openmessage = _Signal()
+    closemessage = _Signal()
+
+    def __init__(self, parent=None, cmd=''):
+        super().__init__(parent=parent)
+        self.cmd = cmd
+
+    def run(self):
+        self.openmessage.emit()
+        wind = ''
+        while not wind:
+            _, wind = check_process(self.cmd)
+            _time.sleep(0.01)
+        self.closemessage.emit()
