@@ -18,19 +18,13 @@ from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 # import pyaccel as _pyaccel
 # import pymodels as _pymodels
 from siriuspy.envars import vaca_prefix as _vaca_prefix
-from siriushla import util as _hlautil
+from siriushla import util
 from siriushla.widgets import PyDMLed, SiriusLedAlert, SiriusLedState, \
     SiriusMainWindow, PyDMLinEditScrollbar
 # from siriushla.widgets import SiriusFigureCanvas
 from siriushla.as_di_scrns import SiriusScrnView
-from siriushla.as_ap_posang.HLPosAng import ASAPPosAngCorr
-from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
-from siriushla.as_ps_control.PSTabControlWindow import PSTabControlWindow
-from siriushla.as_pm_control.PulsedMagnetDetailWindow import (
-    PulsedMagnetDetailWindow)
-from siriushla.as_pm_control.PulsedMagnetControlWindow import (
-    PulsedMagnetControlWindow)
-from siriushla.tl_ap_control.ICT_monitor import ICTMonitoring
+from siriushla.as_ps_control import PSDetailWindow
+from siriushla.as_pm_control import PulsedMagnetDetailWindow
 from siriushla.tl_ap_control.Slit_monitor import SlitMonitoring
 
 
@@ -47,8 +41,10 @@ class TLAPControlWindow(SiriusMainWindow):
         self._setupUi()
 
     def _setupUi(self):
-        [UI_FILE, SVG_FILE, ICT1, ICT2, self._corr_devicenames_list,
-            self._scrn_devicenames_list] = self._getTLData(self._tl)
+        [UI_FILE, SVG_FILE, ICT1, ICT2, self._devices_dict] = \
+            self._getTLData(self._tl)
+        self._scrns_dict = {idx: scr for scr, [_, _, idx]
+                            in self._devices_dict.items()}
 
         # Set central widget
         curr_dir = _os.path.abspath(_os.path.dirname(__file__)) + '/'
@@ -66,28 +62,37 @@ class TLAPControlWindow(SiriusMainWindow):
         # Create MenuBar and connect TL apps
         menubar = QMenuBar(self)
         menubar.setNativeMenuBar(False)
-        # openLatticeAndTwiss = QAction("Show Lattice and Twiss", self)
-        # _hlautil.connect_window(openLatticeAndTwiss, ShowLatticeAndTwiss,
-        #                         parent=self, tl=self._tl)
-        openPosAngCorrApp = QAction("Position and Angle Correction", self)
-        _hlautil.connect_window(openPosAngCorrApp, ASAPPosAngCorr, parent=self,
-                                prefix=self.prefix, tl=self._tl)
-        openMAApp = QAction("MA", self)
-        _hlautil.connect_window(openMAApp, PSTabControlWindow, parent=self,
-                                section=self._tl.upper(), discipline='MA')
-        openPMApp = QAction("PM", self)
-        _hlautil.connect_window(openPMApp, PulsedMagnetControlWindow, self)
-        openSOFB = QAction("SOFB", self)
-        _hlautil.connect_newprocess(openSOFB, 'sirius-hla-tb-ap-sofb.py')
-        openICTsApp = QAction("ICTs", self)
-        _hlautil.connect_window(openICTsApp, ICTMonitoring, parent=self,
-                                tl=self._tl, prefix=self.prefix)
         appsMenu = menubar.addMenu("Open...")
+        # openLatticeAndTwiss = QAction("Show Lattice and Twiss", self)
+        # util.connect_window(openLatticeAndTwiss, ShowLatticeAndTwiss,
+        #                         parent=self, tl=self._tl)
         # appsMenu.addAction(openLatticeAndTwiss)
-        appsMenu.addAction(openPosAngCorrApp)
+        openPosAngApp = QAction("PosAng CH-Sept", self)
+        util.connect_newprocess(
+            openPosAngApp, 'sirius-hla-'+self._tl+'-ap-posang.py',
+            parent=self)
+        appsMenu.addAction(openPosAngApp)
+        if self._tl == 'tb':
+            openPosAngCHCHApp = QAction("PosAng CH-CH", self)
+            util.connect_newprocess(
+                openPosAngCHCHApp, 'sirius-hla-tb-ap-posang-chch.py',
+                parent=self)
+            appsMenu.addAction(openPosAngCHCHApp)
+        openMAApp = QAction("MA", self)
+        util.connect_newprocess(
+            openMAApp, 'sirius-hla-'+self._tl+'-ma-control.py', parent=self)
         appsMenu.addAction(openMAApp)
+        openPMApp = QAction("PM", self)
+        util.connect_newprocess(
+            openPMApp, 'sirius-hla-'+self._tl+'-pm-control.py', parent=self)
         appsMenu.addAction(openPMApp)
+        openSOFB = QAction("SOFB", self)
+        util.connect_newprocess(
+            openSOFB, 'sirius-hla-'+self._tl+'-ap-sofb.py', parent=self)
         appsMenu.addAction(openSOFB)
+        openICTsApp = QAction("ICTs", self)
+        util.connect_newprocess(
+            openICTsApp, 'sirius-hla-'+self._tl+'-di-icts.py', parent=self)
         appsMenu.addAction(openICTsApp)
         self.setMenuBar(menubar)
 
@@ -133,17 +138,25 @@ class TLAPControlWindow(SiriusMainWindow):
         headerline.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
         correctors_vlayout.addWidget(headerline)
 
-        for ch_group, cv, scrn, scrnprefix in self._corr_devicenames_list:
+        for scrnprefix, devices in self._devices_dict.items():
+            ch_group, cv_group, scrn = devices
+
             scrn_details = self._create_scrndetailwidget(scrnprefix, scrn)
             scrn_details.layout().setContentsMargins(0, 9, 0, 9)
+
             ch_widget = QWidget()
             ch_widget.setLayout(QVBoxLayout())
             ch_widget.layout().setContentsMargins(0, 9, 0, 9)
             for ch in ch_group:
                 ch_details = self._create_correctordetailwidget(scrn, ch)
                 ch_widget.layout().addWidget(ch_details)
-            cv_details = self._create_correctordetailwidget(scrn, cv)
-            cv_details.layout().setContentsMargins(0, 9, 0, 9)
+
+            cv_widget = QWidget()
+            cv_widget.setLayout(QVBoxLayout())
+            cv_widget.layout().setContentsMargins(0, 9, 0, 9)
+            for cv in cv_group:
+                cv_details = self._create_correctordetailwidget(scrn, cv)
+                cv_widget.layout().addWidget(cv_details)
 
             hlay_scrncorr = QHBoxLayout()
             hlay_scrncorr.setContentsMargins(0, 0, 0, 0)
@@ -152,7 +165,7 @@ class TLAPControlWindow(SiriusMainWindow):
             hlay_scrncorr.addStretch()
             hlay_scrncorr.addWidget(ch_widget)
             hlay_scrncorr.addStretch()
-            hlay_scrncorr.addWidget(cv_details)
+            hlay_scrncorr.addWidget(cv_widget)
             hlay_scrncorr.addStretch()
             widget_scrncorr = QWidget()
             widget_scrncorr.setObjectName('widget_correctors_scrn')
@@ -167,7 +180,7 @@ class TLAPControlWindow(SiriusMainWindow):
         self.scrnview_widgets_dict = dict()
         wid_scrn = SiriusScrnView(
             parent=self, prefix=self.prefix,
-            device=self._scrn_devicenames_list[self._currScrn])
+            device=self._scrns_dict[self._currScrn])
         self.centralwidget.widget_Scrn.layout().addWidget(wid_scrn, 2, 0)
         wid_scrn.setVisible(True)
         self.scrnview_widgets_dict[self._currScrn] = wid_scrn
@@ -202,7 +215,7 @@ class TLAPControlWindow(SiriusMainWindow):
         self.centralwidget.layout().setColumnStretch(1, 90)
 
     def _allCHsTurnOn(self):
-        for ch_group, _, _, _ in self._corr_devicenames_list:
+        for ch_group, _, _, in self._devices_dict.values():
             for ch in ch_group:
                 pv = _epics.PV(self.prefix+ch+':PwrState-Sel')
                 if pv.connected:
@@ -211,7 +224,7 @@ class TLAPControlWindow(SiriusMainWindow):
                     pv = None
 
     def _allCVsTurnOn(self):
-        for _, cv, _, _ in self._corr_devicenames_list:
+        for _, cv, _, in self._devices_dict.values():
             pv = _epics.PV(self.prefix+cv+':PwrState-Sel')
             if pv.connected:
                 pv.put(1)
@@ -219,7 +232,7 @@ class TLAPControlWindow(SiriusMainWindow):
                 pv = None
 
     def _allScrnsDoHoming(self):
-        for scrn in self._scrn_devicenames_list:
+        for scrn in self._devices_dict.keys():
             pv = _epics.PV(self.prefix+scrn+':ScrnType-Sel')
             if pv.connected:
                 pv.put(0)
@@ -369,11 +382,11 @@ class TLAPControlWindow(SiriusMainWindow):
             pushbutton = QPushButton(corr, self)
             pushbutton.setObjectName('pushButton_'+name+'App_Scrn'+str(scrn))
             if corr.split('-')[1].split(':')[1] == 'PM':
-                _hlautil.connect_window(pushbutton, PulsedMagnetDetailWindow,
-                                        parent=self, maname=corr)
+                util.connect_window(pushbutton, PulsedMagnetDetailWindow,
+                                    parent=self, maname=corr)
             else:
-                _hlautil.connect_window(pushbutton, PSDetailWindow,
-                                        parent=self, psname=corr)
+                util.connect_window(pushbutton, PSDetailWindow,
+                                    parent=self, psname=corr)
             pushbutton.setStyleSheet("""
                 min-width:10em; max-width:10em; min-height:1.29em;""")
             corr_details.layout().addWidget(pushbutton, 1, 2)
@@ -418,16 +431,15 @@ class TLAPControlWindow(SiriusMainWindow):
             ICT1 = 'TB-02:DI-ICT'
             ICT2 = 'TB-04:DI-ICT'
 
-            correctors_list = [
-                [['LI-01:PS-CH-7'], 'LI-01:PS-CV-7', 0, 'TB-01:DI-Scrn-1'],
-                [['TB-01:MA-CH-1'], 'TB-01:MA-CV-1', 1, 'TB-01:DI-Scrn-2'],
-                [['TB-01:MA-CH-2'], 'TB-01:MA-CV-2', 2, 'TB-02:DI-Scrn-1'],
-                [['TB-02:MA-CH-1'], 'TB-02:MA-CV-1', 3, 'TB-02:DI-Scrn-2'],
-                [['TB-02:MA-CH-2'], 'TB-02:MA-CV-2', 4, 'TB-03:DI-Scrn'],
-                [['TB-04:MA-CH'], 'TB-04:MA-CV-1', 5, 'TB-04:DI-Scrn']]
-            scrn_list = ['TB-01:DI-Scrn-1', 'TB-01:DI-Scrn-2',
-                         'TB-02:DI-Scrn-1', 'TB-02:DI-Scrn-2',
-                         'TB-03:DI-Scrn', 'TB-04:DI-Scrn']
+            devices_dict = {
+                'TB-01:DI-Scrn-1': [['LI-01:PS-CH-7'], ['LI-01:PS-CV-7'], 0],
+                'TB-01:DI-Scrn-2': [['TB-01:MA-CH-1'], ['TB-01:MA-CV-1'], 1],
+                'TB-02:DI-Scrn-1': [['TB-01:MA-CH-2'], ['TB-01:MA-CV-2'], 2],
+                'TB-02:DI-Scrn-2': [['TB-02:MA-CH-1'], ['TB-02:MA-CV-1'], 3],
+                'TB-03:DI-Scrn':   [['TB-02:MA-CH-2'], ['TB-02:MA-CV-2'], 4],
+                'TB-04:DI-Scrn':   [
+                    ['TB-04:MA-CH-1', 'TB-04:MA-CH-2', 'TB-04:PM-InjSept'],
+                    ['TB-04:MA-CV-1', 'TB-04:MA-CV-2'], 5]}
         elif tl.lower() == 'ts':
             UI_FILE = ('ui_ts_ap_control.ui')
             SVG_FILE = ('TS.svg')
@@ -435,21 +447,18 @@ class TLAPControlWindow(SiriusMainWindow):
             ICT1 = 'TS-01:DI-ICT'
             ICT2 = 'TS-04:DI-ICT'
 
-            correctors_list = [
-                [['TS-01:PM-EjeSeptF', 'TS-01:PM-EjeSeptG'],
-                 'TS-01:MA-CV-1', 0, 'TS-01:DI-Scrn'],
-                [['TS-01:MA-CH'], 'TS-01:MA-CV-2', 1, 'TS-02:DI-Scrn'],
-                [['TS-02:MA-CH'], 'TS-02:MA-CV', 2, 'TS-03:DI-Scrn'],
-                [['TS-03:MA-CH'], 'TS-03:MA-CV', 3, 'TS-04:DI-Scrn-1'],
-                [['TS-04:MA-CH'], 'TS-04:MA-CV-1', 4, 'TS-04:DI-Scrn-2'],
-                [['TS-04:PM-InjSeptG-1', 'TS-04:PM-InjSeptG-2',
-                  'TS-04:PM-InjSeptF'], 'TS-04:MA-CV-2', 5,
-                 'TS-04:DI-Scrn-3']]
-            scrn_list = ['TS-01:DI-Scrn', 'TS-02:DI-Scrn',
-                         'TS-03:DI-Scrn', 'TS-04:DI-Scrn-1',
-                         'TS-04:DI-Scrn-2', 'TS-04:DI-Scrn-3']
+            devices_dict = {
+                'TS-01:DI-Scrn':   [['TS-01:PM-EjeSeptF', 'TS-01:PM-EjeSeptG'],
+                                    ['TS-01:MA-CV-1'], 0],
+                'TS-02:DI-Scrn':   [['TS-01:MA-CH'], ['TS-01:MA-CV-2'], 1],
+                'TS-03:DI-Scrn':   [['TS-02:MA-CH'], ['TS-02:MA-CV'], 2],
+                'TS-04:DI-Scrn-1': [['TS-03:MA-CH'], ['TS-03:MA-CV'], 3],
+                'TS-04:DI-Scrn-2': [['TS-04:MA-CH'], ['TS-04:MA-CV-1'], 4],
+                'TS-04:DI-Scrn-3': [
+                    ['TS-04:PM-InjSeptG-1', 'TS-04:PM-InjSeptG-2',
+                     'TS-04:PM-InjSeptF'], ['TS-04:MA-CV-2'], 5]}
 
-        return [UI_FILE, SVG_FILE, ICT1, ICT2, correctors_list, scrn_list]
+        return [UI_FILE, SVG_FILE, ICT1, ICT2, devices_dict]
 
     def _openReference(self):
         """Load and show reference image."""
@@ -476,7 +485,7 @@ class TLAPControlWindow(SiriusMainWindow):
             _os.makedirs(path)
         fn, _ = QFileDialog.getSaveFileName(
             self, 'Save Reference As...',
-            path + '/' + self._scrn_devicenames_list[self._currScrn] +
+            path + '/' + self._scrns_dict[self._currScrn] +
             _datetime.now().strftime('_%Y-%m-%d_%Hh%Mmin'),
             'Images (*.png *.xpm *.jpg);;All Files (*)')
         if not fn:
@@ -502,7 +511,7 @@ class TLAPControlWindow(SiriusMainWindow):
         if self._currScrn not in self.scrnview_widgets_dict.keys():
             scrn_obj = SiriusScrnView(
                 parent=self, prefix=self.prefix,
-                device=self._scrn_devicenames_list[self._currScrn])
+                device=self._scrns_dict[self._currScrn])
             self.centralwidget.widget_Scrn.layout().addWidget(scrn_obj, 2, 0)
             self.scrnview_widgets_dict[self._currScrn] = scrn_obj
         else:
