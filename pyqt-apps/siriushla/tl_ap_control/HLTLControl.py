@@ -13,7 +13,6 @@ from qtpy.QtWidgets import QVBoxLayout, QHBoxLayout, QGridLayout, \
 from qtpy.QtGui import QPixmap
 from qtpy.QtSvg import QSvgWidget
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox
-from pydm.widgets.base import PyDMWidget
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 # import pyaccel as _pyaccel
 # import pymodels as _pymodels
