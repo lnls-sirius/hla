@@ -8,9 +8,24 @@ from siriuspy.csdevice.pwrsupply import Const as _PSC
 
 DEFAULT_CAP_BANK_VOLT = {
     'FBP_DCLink': 100,
-    'BO-Fam:PS-B-1': 240,
-    'BO-Fam:PS-B-2': 240,
-    'BO-Fam:PS-QF': 300
+    'PA-RaPSE01:PS-DCLink-BO': 240,
+    'PA-RaPSE02:PS-DCLink-BO': 240,
+    'PA-RaPSE03:PS-DCLink-BO': 240,
+    'PA-RaPSE04:PS-DCLink-BO': 240,
+    'PA-RaPSE06:PS-DCLink-BO': 240,
+    'PA-RaPSE07:PS-DCLink-BO': 240,
+    'PA-RaPSE08:PS-DCLink-BO': 240,
+    'PA-RaPSE09:PS-DCLink-BO': 240,
+    'PA-RaPSF01:PS-DCLink-BO': 240,
+    'PA-RaPSF02:PS-DCLink-BO': 240,
+    'PA-RaPSF03:PS-DCLink-BO': 240,
+    'PA-RaPSF04:PS-DCLink-BO': 240,
+    'PA-RaPSF06:PS-DCLink-BO': 240,
+    'PA-RaPSF07:PS-DCLink-BO': 240,
+    'PA-RaPSF08:PS-DCLink-BO': 240,
+    'PA-RaPSF09:PS-DCLink-BO': 240,
+    'PA-RaPSC03:PS-DCLink-BO1': 300,
+    'PA-RaPSC03:PS-DCLink-BO2': 300,
 }
 
 
@@ -130,9 +145,10 @@ class TesterDCLink(_Tester):
                                   connection_timeout=TIMEOUT_CONN)
             self._pvs[ppty].get()
 
-    def check_slowref(self):
+    def check_init_ok(self):
         """Check OpMode in SlowRef."""
-        return (self._pvs['OpMode-Sts'].value == _PSC.States.SlowRef)
+        status = (self._pvs['OpMode-Sts'].value == _PSC.States.SlowRef)
+        return status
 
     def set_ctrlloop(self):
         """Set CtrlLoop."""

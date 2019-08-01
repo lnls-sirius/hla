@@ -1,23 +1,13 @@
 #!/usr/bin/env python-sirius
 
-#!/usr/bin/env python-sirius
-
-import os
-import sys
 import numpy as np
 from epics import PV
-from PyQt5.QtWidgets import (QMainWindow, QLabel, QGridLayout, QGroupBox,
-                             QFormLayout, QMessageBox, QApplication,
-                             QSizePolicy, QWidget, QComboBox, QSpinBox,
-                             QVBoxLayout, QHBoxLayout, QCheckBox,
-                             QPushButton, QFileDialog)
-from PyQt5.QtGui import QColor
-from PyQt5.QtCore import QTimer, QSize, Qt, pyqtSlot
-from pydm.application import PyDMApplication
-from pydm.widgets import PyDMImageView, PyDMLabel
+from qtpy.QtWidgets import QLabel, QGridLayout, QGroupBox, QFormLayout, \
+    QMessageBox, QWidget, QSpinBox, QVBoxLayout, QHBoxLayout, QPushButton,\
+    QFileDialog
+from qtpy.QtCore import QTimer
 
 from matplotlib import rcParams
-from pyqtgraph import PlotCurveItem, mkPen
 
 from .utils import MatplotlibWidget, ProcessImage, C, E0
 from siriuspy.search import PSSearch as _PSS

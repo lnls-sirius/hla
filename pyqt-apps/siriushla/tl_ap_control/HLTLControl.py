@@ -13,7 +13,6 @@ from qtpy.QtWidgets import QVBoxLayout, QHBoxLayout, QGridLayout, \
 from qtpy.QtGui import QPixmap
 from qtpy.QtSvg import QSvgWidget
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox
-from pydm.widgets.base import PyDMWidget
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 # import pyaccel as _pyaccel
 # import pymodels as _pymodels
@@ -501,9 +500,6 @@ class TLAPControlWindow(SiriusMainWindow):
     def _setScrnWidget(self):
         scrn_obj = self.scrnview_widgets_dict[self._currScrn]
         scrn_obj.setVisible(False)
-        for child in scrn_obj.findChildren(PyDMWidget):
-            for ch in child.channels():
-                ch.disconnect()
 
         sender = self.sender()
         self._currScrn = self._scrn_selection_widget.id(sender)
@@ -516,9 +512,6 @@ class TLAPControlWindow(SiriusMainWindow):
             self.scrnview_widgets_dict[self._currScrn] = scrn_obj
         else:
             scrn_obj = self.scrnview_widgets_dict[self._currScrn]
-            for child in scrn_obj.findChildren(PyDMWidget):
-                for ch in child.channels():
-                    ch.connect()
 
         self.scrnview_widgets_dict[self._currScrn].setVisible(True)
 
