@@ -501,9 +501,6 @@ class TLAPControlWindow(SiriusMainWindow):
     def _setScrnWidget(self):
         scrn_obj = self.scrnview_widgets_dict[self._currScrn]
         scrn_obj.setVisible(False)
-        for child in scrn_obj.findChildren(PyDMWidget):
-            for ch in child.channels():
-                ch.disconnect()
 
         sender = self.sender()
         self._currScrn = self._scrn_selection_widget.id(sender)
@@ -516,9 +513,6 @@ class TLAPControlWindow(SiriusMainWindow):
             self.scrnview_widgets_dict[self._currScrn] = scrn_obj
         else:
             scrn_obj = self.scrnview_widgets_dict[self._currScrn]
-            for child in scrn_obj.findChildren(PyDMWidget):
-                for ch in child.channels():
-                    ch.connect()
 
         self.scrnview_widgets_dict[self._currScrn].setVisible(True)
 
