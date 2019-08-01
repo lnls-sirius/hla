@@ -30,7 +30,7 @@ def gettransmat(elem, L, K1=None, B=None):
             [0, 1, 0, 0],
             [0, 0, 1, L],
             [0, 0, 0, 1],
-            ])
+        ])
     elif elem.lower().startswith('qu') and K1 is not None:
         kq = np.sqrt(abs(K1))
         c = np.cos(kq*L)
@@ -48,7 +48,7 @@ def gettransmat(elem, L, K1=None, B=None):
             [x21, x11, 0,   0],
             [0,   0,   y11, y12],
             [0,   0,   y21, y11],
-            ])
+        ])
     return R
 
 
@@ -109,6 +109,7 @@ class MatplotlibWidget(Canvas):
     self.widget.axes.plot(x, x**2)
     self.wdiget.axes.plot(x, x**3)
     """
+
     def __init__(self, parent=None, title='', xlabel='', ylabel='',
                  xlim=None, ylim=None, xscale='linear', yscale='linear',
                  width=4, height=3, dpi=100, hold=False):
@@ -345,7 +346,7 @@ class ProcessImage(QWidget):
             image[b] = 0
 
         maxi = self.spbox_img_max.value()
-        if maxi>0:
+        if maxi > 0:
             b = np.where(image > maxi)
             self.image_view.colorMapMax = maxi
             image[b] = maxi
