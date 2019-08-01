@@ -144,6 +144,7 @@ class ImageView(PyDMImageView):
     def __init__(self, callback, **kwargs):
         self.callback = callback
         super().__init__(**kwargs)
+        self.colorMap = self.Jet
 
     @pyqtSlot(np.ndarray)
     def image_value_changed(self, image):

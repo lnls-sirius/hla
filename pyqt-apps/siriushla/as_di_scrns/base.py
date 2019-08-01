@@ -56,6 +56,7 @@ class SiriusImageView(PyDMImageView):
             self.maxWidthChannel = maxwidth_channel
         if maxheight_channel:
             self.maxHeightChannel = maxheight_channel
+        self.colorMap = self.Jet
 
     @Slot()
     def saveCalibrationGrid(self):
