@@ -182,8 +182,8 @@ class ProcessImage(QWidget):
             self.width_channel = prof + ':ROI:MaxSizeX_RBV'
         elif self._place.lower().startswith('tb-emit'):
             prof = 'TB-02:DI-ScrnCam-2'
-            self.conv_coefx = PV(prof + ':ImgScaleFactor-RB')
-            self.conv_coefy = PV(prof + ':ImgScaleFactor-RB')
+            self.conv_coefx = PV(prof + ':ImgScaleFactorX-RB')
+            self.conv_coefy = PV(prof + ':ImgScaleFactorY-RB')
             prof = 'TB-02:DI-Scrn-2'
             self.image_channel = prof + ':ImgData-Mon'
             self.width_channel = prof + ':ImgROIWidth-RB'
