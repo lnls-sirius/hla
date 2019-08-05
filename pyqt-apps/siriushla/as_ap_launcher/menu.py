@@ -202,6 +202,11 @@ def get_object(ismenubar=True, parent=None):
                 self.connect_newprocess(
                     launcher, 'sirius-hla-'+sec+'-ap-control.py')
                 optics.addAction(launcher)
+            elif sec == 'bo':
+                injbo = QAction('InjBO', optics)
+                self.connect_newprocess(
+                    injbo, 'sirius-hla-bo-ap-injcontrol.py')
+                optics.addAction(injbo)
 
             sofb = QAction('SOFB', optics)
             self.connect_newprocess(sofb, 'sirius-hla-'+sec+'-ap-sofb.py')
