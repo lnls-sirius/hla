@@ -33,10 +33,9 @@ class BPMSummary(BaseWidget):
         hbl.addStretch()
         pbt = QPushButton(self.bpm)
         pbt.setStyleSheet('min-width:8em;')
-        Window = create_window_from_widget(
-            BPMMain, title=self.bpm, is_main=True)
-        util.connect_window(
-            pbt, Window, parent=None, prefix=self.prefix, bpm=self.bpm)
+        util.connect_newprocess(
+            pbt, ['sirius-hla-as-di-bpm.py', '-p', self.prefix, self.bpm],
+            parent=self)
         hbl.addWidget(pbt)
         hbl.addSpacing(10)
         hbl.addStretch()

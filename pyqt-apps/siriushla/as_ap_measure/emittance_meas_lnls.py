@@ -3,16 +3,14 @@
 from threading import Thread, Event
 import numpy as np
 from epics import PV
-from PyQt5.QtWidgets import QPushButton, QLabel, QGridLayout, QGroupBox, \
+from qtpy.QtWidgets import QPushButton, QLabel, QGridLayout, QGroupBox, \
     QFormLayout, QMessageBox, QWidget, QComboBox, QSpinBox, QVBoxLayout, \
     QDoubleSpinBox, QFileDialog
 
 from matplotlib import rcParams
 
 from .utils import MatplotlibWidget, ProcessImage, gettransmat, E0
-import siriuspy.util as _util
 from siriuspy.factory import NormalizerFactory as _NormFact
-from siriuspy.magnet.excdata import ExcitationData as _ED
 
 rcParams['font.size'] = 9
 

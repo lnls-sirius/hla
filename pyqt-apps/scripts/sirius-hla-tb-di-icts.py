@@ -6,7 +6,7 @@ import sys
 import argparse as _argparse
 from siriushla.sirius_application import SiriusApplication
 from siriuspy.envars import vaca_prefix
-from siriushla.tl_ap_control import ICTMonitoring
+from siriushla.as_di_icts import ICTMonitoring
 
 
 parser = _argparse.ArgumentParser(
