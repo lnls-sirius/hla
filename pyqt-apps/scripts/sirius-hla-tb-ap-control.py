@@ -6,7 +6,7 @@ import os
 import sys
 import argparse
 from siriushla.sirius_application import SiriusApplication
-from siriushla.tl_ap_control.HLTLControl import TLAPControlWindow
+from siriushla.as_ap_injcontrol import TLControlWindow
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 
 
@@ -20,5 +20,5 @@ args = parser.parse_args()
 os.environ['EPICS_CA_MAX_ARRAY_BYTES'] = '200000000'
 app = SiriusApplication()
 app.open_window(
-    TLAPControlWindow, parent=None, prefix=args.prefix, tl='tb')
+    TLControlWindow, parent=None, prefix=args.prefix, tl='tb')
 sys.exit(app.exec_())
