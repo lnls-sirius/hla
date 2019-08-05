@@ -6,7 +6,7 @@ import sys as sys
 import argparse as argparse
 from siriushla.sirius_application import SiriusApplication
 from siriuspy.envars import vaca_prefix
-from siriushla.as_ap_posang.HLPosAng import ASAPPosAngCorr
+from siriushla.as_ap_posang.HLPosAng import PosAngCorr
 
 
 parser = argparse.ArgumentParser(
@@ -17,5 +17,5 @@ parser.add_argument(
 args = parser.parse_args()
 
 app = SiriusApplication()
-app.open_window(ASAPPosAngCorr, parent=None, prefix=args.prefix, tl='tb')
+app.open_window(PosAngCorr, parent=None, prefix=args.prefix, tl='tb')
 sys.exit(app.exec_())

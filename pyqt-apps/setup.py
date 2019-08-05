@@ -58,6 +58,7 @@ setup(
         'scripts/sirius-hla-as-ti-control.py',
         'scripts/sirius-hla-bo-ap-chromcorr.py',
         'scripts/sirius-hla-bo-ap-currlt.py',
+        'scripts/sirius-hla-bo-ap-injcontrol.py',
         'scripts/sirius-hla-bo-ap-ramp.py',
         'scripts/sirius-hla-bo-ap-sofb.py',
         'scripts/sirius-hla-bo-ap-tunecorr.py',

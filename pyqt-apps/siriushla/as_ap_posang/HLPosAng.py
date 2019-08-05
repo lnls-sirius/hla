@@ -28,12 +28,12 @@ from siriushla.as_ap_configdb import LoadConfigDialog as _LoadConfigDialog
 UI_FILE = (_os.path.abspath(_os.path.dirname(__file__))+'/ui_as_ap_posang.ui')
 
 
-class ASAPPosAngCorr(SiriusMainWindow):
+class PosAngCorr(SiriusMainWindow):
     """Main Class."""
 
     def __init__(self, parent=None, prefix='', tl=None, corrtype='ch-sept'):
         """Class construc."""
-        super(ASAPPosAngCorr, self).__init__(parent)
+        super(PosAngCorr, self).__init__(parent)
         if not prefix:
             self._prefix = _vaca_prefix
         else:
@@ -67,7 +67,7 @@ class ASAPPosAngCorr(SiriusMainWindow):
         self._set_correctors_channels(correctors)
 
         act_settings = self.menuBar().addAction('Settings')
-        _hlautil.connect_window(act_settings, _CorrParamsDetailWindow,
+        _hlautil.connect_window(act_settings, CorrParamsDetailWindow,
                                 parent=self, tl=self._tl, prefix=self._prefix)
 
         self._set_status_labels()
@@ -126,12 +126,12 @@ class ASAPPosAngCorr(SiriusMainWindow):
         self.centralwidget.label_corrtype.setText(text)
 
 
-class _CorrParamsDetailWindow(SiriusMainWindow):
+class CorrParamsDetailWindow(SiriusMainWindow):
     """Correction parameters detail window."""
 
     def __init__(self, tl, parent=None, prefix=None):
         """Class constructor."""
-        super(_CorrParamsDetailWindow, self).__init__(parent)
+        super(CorrParamsDetailWindow, self).__init__(parent)
         self._tl = tl
         self._prefix = prefix
         self.setWindowTitle(self._tl +
