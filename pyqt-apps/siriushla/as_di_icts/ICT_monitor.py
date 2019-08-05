@@ -27,6 +27,63 @@ from siriushla.as_ti_control.hl_trigger import HLTriggerDetailed
 POINTS_TO_PLOT = 500
 
 
+class ICTSummary(QWidget):
+    """ICT Monitor Summary."""
+
+    def __init__(self, parent=None, prefix=_vaca_prefix, tl=''):
+        super().__init__(parent)
+        self.prefix = prefix
+        self.tl = tl
+        if tl == 'tb':
+            self.ICT1 = 'TB-02:DI-ICT'
+            self.ICT2 = 'TB-04:DI-ICT'
+        else:
+            self.ICT1 = 'TS-01:DI-ICT'
+            self.ICT2 = 'TS-04:DI-ICT'
+        self._setupUi()
+
+    def _setupUi(self):
+        lay = QGridLayout()
+        lay.setVerticalSpacing(20)
+        lay.setHorizontalSpacing(12)
+
+        self.lb_transpeff = PyDMLabel(
+            parent=self,
+            init_channel=self.prefix+self.tl+'-Glob:AP-TranspEff:Eff-Mon')
+        self.lb_transpeff.setAlignment(Qt.AlignCenter)
+        lay_transpeff = QVBoxLayout()
+        lay_transpeff.addWidget(QLabel('<h4>Transport Efficiency [%]</h4>',
+                                       self, alignment=Qt.AlignCenter))
+        lay_transpeff.addWidget(self.lb_transpeff)
+        lay.addLayout(lay_transpeff, 0, 0, 1, 2)
+
+        for col, ict in enumerate([self.ICT1, self.ICT2]):
+            txt_status = QLabel('Status: ', self,
+                                alignment=Qt.AlignRight | Qt.AlignVCenter)
+            led_status = SiriusLedAlert(
+                parent=self, init_channel=self.prefix+ict+':ReliableMeas-Mon')
+            led_status.setObjectName(ict+'_status')
+            txt_charge = QLabel('Charge: ', self,
+                                alignment=Qt.AlignRight | Qt.AlignVCenter)
+            lb_charge = PyDMLabel(
+                parent=self, init_channel=self.prefix+ict+':Charge-Mon')
+            lb_charge.setObjectName(ict+'_charge')
+            lay_ict = QGridLayout()
+            lay_ict.addWidget(QLabel(ict, self, alignment=Qt.AlignCenter),
+                              0, 0, 1, 2)
+            lay_ict.addWidget(txt_status, 1, 0)
+            lay_ict.addWidget(led_status, 1, 1, alignment=Qt.AlignLeft)
+            lay_ict.addWidget(txt_charge, 2, 0)
+            lay_ict.addWidget(lb_charge, 2, 1)
+            lay.addLayout(lay_ict, 1, col)
+
+        lay.setRowStretch(0, 2)
+        lay.setRowStretch(1, 3)
+        lay.setColumnStretch(0, 1)
+        lay.setColumnStretch(1, 1)
+        self.setLayout(lay)
+
+
 class ICTMonitoring(SiriusMainWindow):
     """Class to create ICTs History Monitor Window."""
 
@@ -42,7 +99,7 @@ class ICTMonitoring(SiriusMainWindow):
             ICT2 = _PVName('TS-04:DI-ICT')
 
         tmp_file = _substitute_in_file(
-            _os.path.abspath(_os.path.dirname(__file__))+'/ui_tl_ap_ictmon.ui',
+            _os.path.abspath(_os.path.dirname(__file__))+'/ui_ictmon.ui',
             {'TL': tl.upper(), 'ICT1': ICT1, 'ICT2': ICT2, 'PREFIX': prefix})
         self.setWindowTitle(tl.upper()+' ICTs Monitor')
         self.centralwidget = loadUi(tmp_file)
