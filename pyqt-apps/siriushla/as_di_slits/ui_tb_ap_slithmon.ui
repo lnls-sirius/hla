@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>398</width>
-    <height>142</height>
+    <width>480</width>
+    <height>150</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -18,7 +18,7 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>0</width>
+    <width>480</width>
     <height>0</height>
    </size>
   </property>
@@ -27,7 +27,7 @@
   </property>
   <property name="styleSheet">
    <string notr="true">#CentralWidget{
-min-width:28em;
+min-width:32em;
 }
 </string>
   </property>
@@ -48,14 +48,14 @@ min-width:28em;
     <widget class="QWidget" name="widget_controls" native="true">
      <property name="minimumSize">
       <size>
-       <width>252</width>
-       <height>140</height>
+       <width>270</width>
+       <height>150</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>252</width>
-       <height>140</height>
+       <width>270</width>
+       <height>150</height>
       </size>
      </property>
      <property name="styleSheet">
@@ -331,7 +331,47 @@ width:4.84em;
         </item>
        </layout>
       </item>
-      <item row="4" column="0" colspan="2">
+      <item row="5" column="0">
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Expanding</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="6" column="0" colspan="2">
+       <widget class="QPushButton" name="pb_details">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">.QWidget{
+width:1.61em;
+}</string>
+        </property>
+        <property name="text">
+         <string>See more controls</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
        <widget class="PyDMPushButton" name="PyDMPushButton">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -387,53 +427,13 @@ width:4.84em;
     </string>
         </property>
         <property name="text">
-         <string>Do Homing</string>
+         <string>Open</string>
         </property>
         <property name="channel" stdset="0">
-         <string>${PREFIX}TB-01:DI-SlitH:Home-Cmd</string>
+         <string>${PREFIX}TB-01:DI-SlitH:Width-SP</string>
         </property>
         <property name="pressValue" stdset="0">
-         <string>1</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="0">
-       <spacer name="verticalSpacer">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Expanding</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="6" column="0" colspan="2">
-       <widget class="QPushButton" name="pb_details">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">.QWidget{
-width:1.61em;
-}</string>
-        </property>
-        <property name="text">
-         <string>See more controls</string>
+         <string>25.0</string>
         </property>
        </widget>
       </item>
@@ -450,14 +450,14 @@ width:1.61em;
      </property>
      <property name="minimumSize">
       <size>
-       <width>140</width>
-       <height>140</height>
+       <width>150</width>
+       <height>150</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>140</width>
-       <height>140</height>
+       <width>150</width>
+       <height>150</height>
       </size>
      </property>
      <property name="styleSheet">

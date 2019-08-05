@@ -238,6 +238,10 @@ class _SlitDetails(SiriusDialog):
         return flay
 
     def _setupForceCommandsLayout(self):
+        self.PyDMPushButton_DoHome = PyDMPushButton(
+            parent=self, label='Do Homing', pressValue=1,
+            init_channel=self.slit_prefix+':Home-Cmd')
+
         self.PyDMPushButton_NegDoneMov = PyDMPushButton(
             parent=self, label='Force Negative Edge Position', pressValue=1,
             init_channel=self.slit_prefix+':ForceNegativeEdgePos-Cmd')
@@ -254,6 +258,7 @@ class _SlitDetails(SiriusDialog):
             max-width:7.10em; max-height:1.29em;""")
 
         flay = QFormLayout()
+        flay.addRow(self.PyDMPushButton_DoHome)
         flay.addRow(self.PyDMPushButton_NegDoneMov)
         flay.addRow(self.PyDMPushButton_PosDoneMov)
         flay.addRow(label_ForceComplete, self.PyDMLed_ForceComplete)
