@@ -7,11 +7,7 @@ from qtpy.QtGui import QKeySequence
 from qtpy.QtWidgets import QMenuBar, QAction, QMessageBox
 from siriuspy.clientconfigdb import ConfigDBException as _ConfigDBException
 from siriuspy.ramp import ramp
-from siriushla import util as _hlautil
-from siriushla.as_ps_control.PSTabControlWindow import \
-    PSTabControlWindow as _MAControlWindow
-from siriushla.as_pm_control.PulsedMagnetControlWindow import \
-    PulsedMagnetControlWindow as _PMControlWindow
+from siriushla import util
 from siriushla.as_ap_configdb import LoadConfigDialog as _LoadConfigDialog, \
     SaveConfigDialog as _SaveConfigDialog
 from .auxiliar_classes import OpticsAdjustSettings as _OpticsAdjustSettings
@@ -74,21 +70,23 @@ class Settings(QMenuBar):
 
         self.diag_menu = self.addMenu('Ramp Diagnosis')
         self.act_dcct = self.diag_menu.addAction('DCCT')
-        _hlautil.connect_newprocess(
+        util.connect_newprocess(
             self.act_dcct, ['sirius-hla-as-di-dcct.py', 'BO'])
         # TODO: menu to access all windows related to diagnostics
 
         self.open_menu = self.addMenu('Open...')
-        self.act_ma = QAction('Booster Magnets', self)
-        _hlautil.connect_window(self.act_ma, _MAControlWindow, parent=self,
-                                section='BO', discipline='MA')
-        self.act_pm = QAction('Pulsed Magnets', self)
-        _hlautil.connect_window(self.act_pm, _PMControlWindow, section='BO',
+        self.act_ma = QAction('MA', self)
+        util.connect_newprocess(self.act_ma, 'sirius-hla-bo-ma-control.py',
                                 parent=self)
-        self.act_sofb = QAction('Booster SOFB', self)
-        _hlautil.connect_newprocess(self.act_sofb, 'sirius-hla-bo-ap-sofb.py')
+        self.act_pm = QAction('PM', self)
+        util.connect_newprocess(self.act_pm, 'sirius-hla-bo-pm-control.py',
+                                parent=self)
+        self.act_sofb = QAction('SOFB', self)
+        util.connect_newprocess(self.act_sofb, 'sirius-hla-bo-ap-sofb.py',
+                                parent=self)
         self.act_ti = QAction('Timing', self)
-        _hlautil.connect_newprocess(self.act_ti, 'sirius-hla-as-ti-control.py')
+        util.connect_newprocess(self.act_ti, 'sirius-hla-as-ti-control.py',
+                                parent=self)
         self.open_menu.addAction(self.act_ma)
         self.open_menu.addAction(self.act_pm)
         self.open_menu.addAction(self.act_sofb)
