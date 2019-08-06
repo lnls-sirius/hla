@@ -1108,8 +1108,9 @@ class MultipolesRamp(QWidget):
     @Slot(ramp.BoosterRamp)
     def handleLoadRampConfig(self, ramp_config=None):
         """Update all widgets in loading BoosterRamp config."""
-        if ramp_config:
+        if ramp_config is not None:
             self.ramp_config = ramp_config
+            self.bonorm_edit_dict = dict()
         self._getNormalizedConfigs()
         self.table.cellChanged.disconnect(self._handleCellChanged)
         self._setupTable()
@@ -1121,14 +1122,16 @@ class MultipolesRamp(QWidget):
     def handleNormConfigsChanged(self, nconfig=None, old_nconfig_name=''):
         """Reload normalized configs on change and update graph."""
         if old_nconfig_name:
-            row = 0
-            time = float(self.table.item(row, 1).data(Qt.DisplayRole))
+            row = [idx for idx, oldname in self.table_map['rows'].items()
+                   if oldname == old_nconfig_name]
+            time = float(self.table.item(row[0], 1).data(Qt.DisplayRole))
             self.ramp_config.ps_normalized_configs_delete(old_nconfig_name)
             self.ramp_config.ps_normalized_configs_insert(
-                time=time, name=nconfig.name, nconfig=nconfig.configuration)
+                time=time, name=nconfig.name, nconfig=nconfig.value)
         else:
             self.ramp_config[nconfig.name] = nconfig
 
+        self.bonorm_edit_dict = dict()
         self.handleLoadRampConfig()
         self.updateMultipoleRampSignal.emit()
         self.applyChanges2MachineSignal.emit()
