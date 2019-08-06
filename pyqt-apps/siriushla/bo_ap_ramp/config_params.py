@@ -136,17 +136,17 @@ class DipoleRamp(QWidget):
         lay_v.addWidget(self.l_rampupv)
         lay_v.addWidget(self.l_rampdownv)
 
-        self.label_anom = QLabel('', self)
-        self.label_anom.setStyleSheet("""
-            min-height:1.55em;max-height:1.55em;""")
-        self.pb_anom = QPushButton('?', self)
-        self.pb_anom.setVisible(False)
-        self.pb_anom.setStyleSheet("""
-            background-color:red;min-width:1.55em;max-width:1.55em;""")
-        self.pb_anom.clicked.connect(self._showAnomaliesPopup)
-        lay_anom = QHBoxLayout()
-        lay_anom.addWidget(self.label_anom)
-        lay_anom.addWidget(self.pb_anom)
+        # self.label_anom = QLabel('', self)
+        # self.label_anom.setStyleSheet("""
+        #     min-height:1.55em;max-height:1.55em;""")
+        # self.pb_anom = QPushButton('?', self)
+        # self.pb_anom.setVisible(False)
+        # self.pb_anom.setStyleSheet("""
+        #     background-color:red;min-width:1.55em;max-width:1.55em;""")
+        # self.pb_anom.clicked.connect(self._showAnomaliesPopup)
+        # lay_anom = QHBoxLayout()
+        # lay_anom.addWidget(self.label_anom)
+        # lay_anom.addWidget(self.pb_anom)
 
         self.label_exclim = QLabel('', self)
         self.label_exclim.setStyleSheet("""
@@ -174,8 +174,8 @@ class DipoleRamp(QWidget):
                        alignment=Qt.AlignLeft)
         glay.addLayout(lay_v, 2, 1, alignment=Qt.AlignRight)
         glay.addWidget(self.table, 3, 0, 1, 2)
-        glay.addLayout(lay_anom, 4, 0, 1, 2, alignment=Qt.AlignCenter)
-        glay.addLayout(lay_exclim, 5, 0, 1, 2, alignment=Qt.AlignCenter)
+        glay.addLayout(lay_exclim, 4, 0, 1, 2, alignment=Qt.AlignCenter)
+        # glay.addLayout(lay_anom, 4, 0, 1, 2, alignment=Qt.AlignCenter)
         glay.addWidget(self.bt_apply2machine, 6, 0, 1, 2,
                        alignment=Qt.AlignRight)
 
@@ -229,15 +229,13 @@ class DipoleRamp(QWidget):
     def _setupTable(self):
         self.table_map = {
             'rows': {0: 'Start',
-                     1: 'RampUp-Start',
+                     1: 'RampUp1-Start',
                      2: 'Injection',
-                     3: 'Ejection',
-                     4: 'RampUp-Stop',
-                     5: 'Plateau-Start',
-                     6: 'Plateau-Stop',
-                     7: 'RampDown-Start',
-                     8: 'RampDown-Stop',
-                     9: 'Stop'},
+                     3: 'RampUp2-Start',
+                     4: 'Ejection',
+                     5: 'RampDown-Start',
+                     6: 'RampDown-Stop',
+                     7: 'Stop'},
             'columns': {0: '',
                         1: 'T [ms]',
                         2: 'E [GeV]',
@@ -246,7 +244,7 @@ class DipoleRamp(QWidget):
         self.table.setStyleSheet("""
             #DipoleTable{
                 min-width: 30em;
-                min-height: 20em; max-height: 20em;
+                min-height: 16.2em; max-height: 16.2em;
             }
             QHeaderView::section {
                 background-color: #1F64FF;
@@ -286,14 +284,11 @@ class DipoleRamp(QWidget):
                 e_item.setBackground(QBrush(QColor(220, 220, 220)))
                 np_item.setBackground(QBrush(QColor(220, 220, 220)))
 
-            if vlabel in ['Start', 'Plateau-Start']:
+            if vlabel in ['Start', ]:
                 t_item.setFlags(Qt.ItemIsEnabled)
                 e_item.setBackground(QBrush(QColor("white")))
             elif vlabel in ['Injection', 'Ejection', 'Stop']:
                 t_item.setBackground(QBrush(QColor("white")))
-                e_item.setFlags(Qt.ItemIsEnabled)
-            elif vlabel == 'Plateau-Stop':
-                t_item.setFlags(Qt.ItemIsEnabled)
                 e_item.setFlags(Qt.ItemIsEnabled)
             else:
                 t_item.setBackground(QBrush(QColor("white")))
@@ -319,33 +314,29 @@ class DipoleRamp(QWidget):
                 old_value = self.ramp_config.ps_ramp_start_energy
                 self.ramp_config.ps_ramp_start_energy = new_value
 
-            elif self.table_map['rows'][row] == 'RampUp-Start':
+            elif self.table_map['rows'][row] == 'RampUp1-Start':
                 if self.table_map['columns'][column] == 'T [ms]':
-                    old_value = self.ramp_config.ps_ramp_rampup_start_time
-                    self.ramp_config.ps_ramp_rampup_start_time = new_value
+                    old_value = self.ramp_config.ps_ramp_rampup1_start_time
+                    self.ramp_config.ps_ramp_rampup1_start_time = new_value
                 elif self.table_map['columns'][column] == 'E [GeV]':
-                    old_value = self.ramp_config.ps_ramp_rampup_start_energy
-                    self.ramp_config.ps_ramp_rampup_start_energy = new_value
+                    old_value = self.ramp_config.ps_ramp_rampup1_start_energy
+                    self.ramp_config.ps_ramp_rampup1_start_energy = new_value
 
             elif self.table_map['rows'][row] == 'Injection':
                 old_value = self.ramp_config.ti_params_injection_time
                 self.ramp_config.ti_params_injection_time = new_value
 
+            elif self.table_map['rows'][row] == 'RampUp2-Start':
+                if self.table_map['columns'][column] == 'T [ms]':
+                    old_value = self.ramp_config.ps_ramp_rampup2_start_time
+                    self.ramp_config.ps_ramp_rampup2_start_time = new_value
+                elif self.table_map['columns'][column] == 'E [GeV]':
+                    old_value = self.ramp_config.ps_ramp_rampup2_start_energy
+                    self.ramp_config.ps_ramp_rampup2_start_energy = new_value
+
             elif self.table_map['rows'][row] == 'Ejection':
                 old_value = self.ramp_config.ti_params_ejection_time
                 self.ramp_config.ti_params_ejection_time = new_value
-
-            elif self.table_map['rows'][row] == 'RampUp-Stop':
-                if self.table_map['columns'][column] == 'T [ms]':
-                    old_value = self.ramp_config.ps_ramp_rampup_stop_time
-                    self.ramp_config.ps_ramp_rampup_stop_time = new_value
-                elif self.table_map['columns'][column] == 'E [GeV]':
-                    old_value = self.ramp_config.ps_ramp_rampup_stop_energy
-                    self.ramp_config.ps_ramp_rampup_stop_energy = new_value
-
-            elif self.table_map['rows'][row] == 'Plateau-Start':
-                old_value = self.ramp_config.ps_ramp_plateau_energy
-                self.ramp_config.ps_ramp_plateau_energy = new_value
 
             elif self.table_map['rows'][row] == 'RampDown-Start':
                 if self.table_map['columns'][column] == 'T [ms]':
@@ -456,13 +447,13 @@ class DipoleRamp(QWidget):
             self.updateTable()
 
     def _verifyWarnings(self):
-        if len(self.ramp_config.ps_waveform_anomalies) > 0:
-            self.label_anom.setText('<h6>Caution: there are anomalies '
-                                    'in the waveforms.</h6>')
-            self.pb_anom.setVisible(True)
-        else:
-            self.label_anom.setText('')
-            self.pb_anom.setVisible(False)
+        # if len(self.ramp_config.ps_waveform_anomalies) > 0:
+        #     self.label_anom.setText('<h6>Caution: there are anomalies '
+        #                             'in the waveforms.</h6>')
+        #     self.pb_anom.setVisible(True)
+        # else:
+        #     self.label_anom.setText('')
+        #     self.pb_anom.setVisible(False)
 
         if 'BO-Fam:MA-B' in self.ramp_config.ps_waveform_manames_exclimits:
             self.label_exclim.setText('<h6>Waveform is exceeding current '
@@ -474,8 +465,8 @@ class DipoleRamp(QWidget):
 
     def _showAnomaliesPopup(self):
         text = 'Caution to the following anomalies: \n'
-        for anom in self.ramp_config.ps_waveform_anomalies:
-            text += anom + '\n'
+        # for anom in self.ramp_config.ps_waveform_anomalies:
+        #     text += anom + '\n'
         QMessageBox.warning(self, 'Caution', text, QMessageBox.Ok)
 
     def _showExcLimPopup(self):
@@ -541,24 +532,18 @@ class DipoleRamp(QWidget):
             if label == 'Start':
                 time = 0.0
                 energy = self.ramp_config.ps_ramp_start_energy
-            elif label == 'RampUp-Start':
-                time = self.ramp_config.ps_ramp_rampup_start_time
-                energy = self.ramp_config.ps_ramp_rampup_start_energy
+            elif label == 'RampUp1-Start':
+                time = self.ramp_config.ps_ramp_rampup1_start_time
+                energy = self.ramp_config.ps_ramp_rampup1_start_energy
             elif label == 'Injection':
                 time = self.ramp_config.ti_params_injection_time
                 energy = self.ramp_config.ps_waveform_interp_energy(time)
+            elif label == 'RampUp2-Stop':
+                time = self.ramp_config.ps_ramp_rampup2_start_time
+                energy = self.ramp_config.ps_ramp_rampup2_start_energy
             elif label == 'Ejection':
                 time = self.ramp_config.ti_params_ejection_time
                 energy = self.ramp_config.ps_waveform_interp_energy(time)
-            elif label == 'RampUp-Stop':
-                time = self.ramp_config.ps_ramp_rampup_stop_time
-                energy = self.ramp_config.ps_ramp_rampup_stop_energy
-            elif label == 'Plateau-Start':
-                time = self.ramp_config.ps_ramp_plateau_start_time
-                energy = self.ramp_config.ps_ramp_plateau_energy
-            elif label == 'Plateau-Stop':
-                time = self.ramp_config.ps_ramp_plateau_stop_time
-                energy = self.ramp_config.ps_ramp_plateau_energy
             elif label == 'RampDown-Start':
                 time = self.ramp_config.ps_ramp_rampdown_start_time
                 energy = self.ramp_config.ps_ramp_rampdown_start_energy
@@ -579,17 +564,10 @@ class DipoleRamp(QWidget):
             item = self.table.item(row, 3)  # index column
             item.setData(Qt.DisplayRole, str(value))
 
-        rampupv = ((self.ramp_config.ps_ramp_rampup_stop_energy -
-                   self.ramp_config.ps_ramp_rampup_start_energy) /
-                   (self.ramp_config.ps_ramp_rampup_stop_time -
-                   self.ramp_config.ps_ramp_rampup_start_time))
-        self.l_rampupv.setText('RmpU {: .3f} [GeV/s]'.format(1000*rampupv))
-
-        rampdownv = ((self.ramp_config.ps_ramp_rampdown_stop_energy -
-                      self.ramp_config.ps_ramp_rampdown_start_energy) /
-                     (self.ramp_config.ps_ramp_rampdown_stop_time -
-                     self.ramp_config.ps_ramp_rampdown_start_time))
-        self.l_rampdownv.setText('RmpD {: .3f} [GeV/s]'.format(1000*rampdownv))
+        self.l_rampupv.setText('RmpU {: .3f} [GeV/s]'.format(
+                               self.ramp_config.ps_ramp_rampup2_slope))
+        self.l_rampdownv.setText('RmpD {: .3f} [GeV/s]'.format(
+                                 self.ramp_config.ps_ramp_rampdown_slope))
 
         self.table.cellChanged.connect(self._handleCellChanged)
 
@@ -1425,7 +1403,12 @@ class RFRamp(QWidget):
         E_nom = 0.150  # GeV
         U0 = [U0_nom*(E/E_nom)**4 for E in energies]
         V = 1e3 * self.ramp_config.rf_ramp_interp_voltages(times)  # V
-        ph = [_math.asin(U0[i]/(V[i])) for i in range(len(times))]
+        ph = list()
+        for i in range(len(times)):
+            try:
+                ph.append(_math.asin(U0[i]/(V[i])))
+            except Exception:
+                ph.append(_math.pi/2)
         ph = [_math.degrees(phase) for phase in ph]
         ph = ph[0] if isinstance(t, (int, float)) else ph
         return ph
