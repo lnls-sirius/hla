@@ -1,12 +1,11 @@
 """Define a window to save configurations."""
 
 import logging
-import re
-from qtpy.QtWidgets import QHBoxLayout, QVBoxLayout, QTableView, QLineEdit, \
-    QWidget, QFrame, QLabel, QPushButton, QMessageBox, QHeaderView
-from qtpy.QtCore import Slot, Signal, Qt
+from qtpy.QtWidgets import QHBoxLayout, QVBoxLayout, \
+    QWidget, QLabel, QPushButton, QMessageBox
+from qtpy.QtCore import Slot, Signal
 
-from siriuspy.clientconfigdb import ConfigDBClient, ConfigDBException
+from siriuspy.clientconfigdb import ConfigDBClient
 from siriushla.widgets.windows import SiriusDialog
 from .configwidgets import ConfigTableWidget, ConfigDBInfoHeader, \
     ConfigDBSearchEngine

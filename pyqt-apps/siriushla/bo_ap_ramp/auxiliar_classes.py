@@ -1,106 +1,19 @@
 """Booster Ramp Control HLA: Auxiliar Classes Module."""
 
-import epics
-
 from qtpy.QtCore import Qt, Signal, Slot, QLocale
-from qtpy.QtWidgets import QLabel, QWidget, QScrollArea, QAbstractItemView, \
+from qtpy.QtWidgets import QLabel, QWidget, QAbstractItemView, QMessageBox, \
     QHBoxLayout, QVBoxLayout, QGridLayout, QLineEdit, QPushButton, QCheckBox, \
     QTableWidget, QTableWidgetItem, QRadioButton, QFormLayout, QDoubleSpinBox,\
     QComboBox, QSpinBox, QStyledItemDelegate, QSpacerItem, QTabWidget, \
-    QSizePolicy as QSzPlcy, QGroupBox, QHeaderView, QMessageBox
-from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox, \
-                         PyDMPushButton
+    QSizePolicy as QSzPlcy, QHeaderView
 
 from siriuspy.clientconfigdb import ConfigDBClient as _ConfigDBClient, \
     ConfigDBDocument as _ConfigDBDocument, \
     ConfigDBException as _ConfigDBException
 from siriuspy.ramp import ramp
-from siriushla.widgets.windows import SiriusDialog, create_window_from_widget
-from siriushla.widgets import PyDMStateButton, SiriusConnectionSignal, \
-                              SiriusLedAlert, PyDMLedMultiChannel
-from siriushla.as_ap_configdb import LoadConfigDialog as _LoadConfigDialog, \
-                                     SaveConfigDialog as _SaveConfigDialog
-from siriushla import util as _hlautil
-from siriushla.as_ti_control.hl_trigger import HLTriggerDetailed
 
-
-DCCT_MEASMODE_NORMAL = 1
-DCCT_MEASMODE_FAST = 2
-
-
-class LoadRampConfig(_LoadConfigDialog):
-    """Auxiliar window to get a ramp config name to load."""
-
-    loadSignal = Signal()
-    saveSignal = Signal()
-
-    def __init__(self, ramp_config, parent=None):
-        """Initialize object."""
-        self.ramp_config = ramp_config
-        super().__init__('bo_ramp', parent)
-        self.setObjectName('BOApp')
-        self.setWindowTitle('Load ramp configuration from server')
-
-    @Slot()
-    def _load_configuration(self):
-        name = self.config_name
-        if self.ramp_config is not None:
-            if not self.ramp_config.synchronized:
-                ans = QMessageBox.question(
-                    self, 'Save changes?',
-                    'There are unsaved changes in {}. \n'
-                    'Do you want to save?'.format(name),
-                    QMessageBox.Yes, QMessageBox.Cancel)
-                if ans == QMessageBox.Yes:
-                    self.saveSignal.emit()
-
-            if name != self.ramp_config.name:
-                self.configname.emit(name)
-            else:
-                self.loadSignal.emit()
-        else:
-            self.configname.emit(name)
-        self.accept()
-
-
-class NewRampConfigGetName(_SaveConfigDialog):
-    """Auxiliar window to get a configuration name to create a new one."""
-
-    saveSignal = Signal()
-
-    def __init__(self, config, config_type, parent=None,
-                 new_from_template=True):
-        """Initialize object."""
-        super().__init__(config_type, parent)
-        self.setObjectName('BOApp')
-        self.config = config
-        self.config_type = config_type
-        self._new_from_template = new_from_template
-        if new_from_template:
-            self.setWindowTitle('New config from template')
-            self.ok_button.setText('Create')
-        else:
-            self.setWindowTitle('Save current config as...')
-            self.ok_button.setText('Save as...')
-
-    @Slot()
-    def _load_configuration(self):
-        name = self.config_name
-        if (self._new_from_template and (self.config is not None)):
-            if not self.config.synchronized:
-                ans = QMessageBox.question(
-                    self, 'Save changes?',
-                    'There are unsaved changes in {}. \n'
-                    'Do you want to save?'.format(name),
-                    QMessageBox.Yes, QMessageBox.Cancel)
-                if ans == QMessageBox.Yes:
-                    self.saveSignal.emit()
-            else:
-                self.configname.emit(name)
-                self.accept()
-        else:
-            self.configname.emit(name)
-            self.accept()
+from siriushla.widgets.windows import SiriusDialog
+from siriushla.as_ap_configdb import LoadConfigDialog as _LoadConfigDialog
 
 
 class InsertNormalizedConfig(SiriusDialog):
@@ -223,9 +136,9 @@ class InsertNormalizedConfig(SiriusDialog):
     @Slot(str)
     def _handleInsertExistingConfig(self, configname):
         try:
-            nor = ramp.BoosterNormalized(configname)
-            nor.load()
-            energy = nor[ramp.BoosterRamp.MANAME_DIPOLE]
+            self.norm_config.name = configname
+            self.norm_config.load()
+            energy = self.norm_config[ramp.BoosterRamp.MANAME_DIPOLE]
             time = self.ramp_config.ps_waveform_interp_time(energy)
             self.sb_confsrv_time.setValue(time)
         except _ConfigDBException as err:
@@ -243,9 +156,9 @@ class InsertNormalizedConfig(SiriusDialog):
             name = self.le_confsrv_name.text()
             nconf = None
             try:
-                nor = ramp.BoosterNormalized(name)
-                nor.load()
-                nconfig = n.value
+                self.norm_config.name = name
+                self.norm_config.load()
+                nconf = self.norm_config.value
             except _ConfigDBException as err:
                 QMessageBox.critical(self, 'Error', str(err), QMessageBox.Ok)
 
@@ -267,7 +180,6 @@ class DeleteNormalizedConfig(SiriusDialog):
         """Initialize object."""
         super().__init__(parent)
         self.setObjectName('BOApp')
-        self.norm_config = ramp.BoosterNormalized()
         self.setWindowTitle('Delete Normalized Configuration')
         self.table_map = table_map
         self.selected_item = selected_item
@@ -319,102 +231,6 @@ class DeleteNormalizedConfig(SiriusDialog):
 
     def _emitDeleteConfigData(self):
         self.deleteConfig.emit(self.l_configname.text())
-        self.close()
-
-
-class EditNormalizedConfig(SiriusDialog):
-    """Auxiliar window to edit an existing normalized config."""
-
-    editConfig = Signal(dict)
-
-    def __init__(self, parent, norm_config, energyGeV, aux_magnets):
-        """Initialize object."""
-        super().__init__(parent)
-        self.norm_config = norm_config
-        self.energy = energyGeV
-        self._aux_magnets = aux_magnets
-        self.setWindowTitle('Edit Normalized Configuration')
-        self._setupUi()
-
-    def _setupUi(self):
-        glay = QGridLayout()
-        label = QLabel(self.norm_config.name, self)
-        label.setAlignment(Qt.AlignCenter)
-        label.setStyleSheet("""font-weight: bold;""")
-
-        scrollarea = QScrollArea()
-        self.data = QWidget()
-        self.data.setObjectName('data')
-        flay_configdata = QFormLayout()
-        manames = self.norm_config.manames
-        for ma in manames:
-            ma_value = MyDoubleSpinBox(self.data)
-            ma_value.setDecimals(6)
-            ma_value.setValue(self.norm_config[ma])
-            ma_value.setObjectName(ma)
-            ma_value.setStyleSheet("""
-                min-width:8em; max-width:8em;
-                min-height:1.29em; max-height:1.29em;""")
-
-            aux = self._aux_magnets[ma]
-            currs = (aux.current_min, aux.current_max)
-            lims = aux.conv_current_2_strength(
-                currents=currs, strengths_dipole=self.energy)
-            ma_value.setMinimum(min(lims))
-            ma_value.setMaximum(max(lims))
-
-            flay_configdata.addRow(QLabel(ma + ': ', self), ma_value)
-        self.data.setLayout(flay_configdata)
-        self.data.setStyleSheet("""
-            #data{
-                min-width:18em; max-width:18em;
-                min-height:100em; max-height:100em;}""")
-        scrollarea.setWidget(self.data)
-
-        self.cb_checklims = QCheckBox('Set limits according to energy', self)
-        self.cb_checklims.setChecked(True)
-        self.cb_checklims.stateChanged.connect(self._handleStrengtsLimits)
-        self.cb_checklims.setStyleSheet("""min-width:20em; max-width:20em;""")
-        self.bt_apply = QPushButton('Apply Changes', self)
-        self.bt_apply.setAutoDefault(False)
-        self.bt_apply.setDefault(False)
-        self.bt_apply.clicked.connect(self._emitConfigChanges)
-        self.bt_cancel = QPushButton('Cancel', self)
-        self.bt_cancel.setAutoDefault(False)
-        self.bt_cancel.setDefault(False)
-        self.bt_cancel.clicked.connect(self.close)
-
-        glay.addWidget(label, 0, 0, 1, 2)
-        glay.addWidget(scrollarea, 1, 0, 1, 2)
-        glay.addWidget(self.cb_checklims, 2, 0, 1, 2)
-        glay.addWidget(self.bt_apply, 3, 0)
-        glay.addWidget(self.bt_cancel, 3, 1)
-
-        self.setLayout(glay)
-
-    def _handleStrengtsLimits(self, state):
-        manames = self.norm_config.manames
-        if state:
-            for ma in manames:
-                ma_value = self.data.findChild(QDoubleSpinBox, name=ma)
-                aux = self._aux_magnets[ma]
-                currs = (aux.current_min, aux.current_max)
-                lims = aux.conv_current_2_strength(
-                    currents=currs, strengths_dipole=self.energy)
-                ma_value.setMinimum(min(lims))
-                ma_value.setMaximum(max(lims))
-        else:
-            for ma in manames:
-                ma_value = self.data.findChild(QDoubleSpinBox, name=ma)
-                ma_value.setMinimum(-100)
-                ma_value.setMaximum(100)
-
-    def _emitConfigChanges(self):
-        nconfig = dict()
-        for ma in self.norm_config.manames:
-            w = self.data.findChild(QDoubleSpinBox, name=ma)
-            nconfig[ma] = w.value()
-        self.editConfig.emit(nconfig)
         self.close()
 
 
@@ -684,409 +500,6 @@ class OpticsAdjustSettings(SiriusDialog):
         self.close()
 
 
-class DiagnosisSettings(SiriusDialog):
-    """Auxiliar window to diagnosis settings."""
-
-    updateSettings = Signal(list)
-
-    def __init__(self, parent, prefix, injcurr_idx, ejecurr_idx):
-        """Initialize object."""
-        super().__init__(parent)
-        self.setWindowTitle('Diagnosis Settings')
-        self.setObjectName('BOApp')
-        self.prefix = prefix
-        self.injcurr_idx = injcurr_idx
-        self.ejecurr_idx = ejecurr_idx
-        self._setupUi()
-
-    def _setupUi(self):
-        self.dcct_prefix = self.prefix+'BO-35D:DI-DCCT:'
-
-        l_dcctacq = QLabel('<h3>Ramp Diagnosis Settings</h3>', self,
-                           alignment=Qt.AlignCenter)
-
-        self.gbox_reliablemeas = self._setupReliableMeasWidget()
-        self.gbox_generalsettings = self._setupDCCTGeneralSettingsWidget()
-
-        self.mode_channel = SiriusConnectionSignal(
-            self.dcct_prefix+'MeasMode-Sts')
-        self.mode_channel.new_value_signal.connect(self._showMeasModeSettings)
-        self.gbox_normalmode = self._setupDCCTNormalMeasSettingsWidget()
-        self.gbox_fastmode = self._setupDCCTFastMeasSettingsWidget()
-        lay_mode = QGridLayout()
-        lay_mode.addWidget(self.gbox_normalmode, 0, 0)
-        lay_mode.addWidget(self.gbox_fastmode, 0, 0)
-
-        self.gbox_effparams = self._setupRampEffIndicesWidget()
-
-        self.bt_apply = QPushButton('Apply settings', self)
-        self.bt_apply.clicked.connect(self._emitSettings)
-        self.bt_apply.setAutoDefault(False)
-        self.bt_apply.setDefault(False)
-        hlay_apply = QHBoxLayout()
-        hlay_apply.addItem(
-            QSpacerItem(4, 2, QSzPlcy.Expanding, QSzPlcy.Ignored))
-        hlay_apply.addWidget(self.bt_apply)
-
-        lay = QVBoxLayout()
-        lay.addStretch()
-        lay.addWidget(l_dcctacq)
-        lay.addStretch()
-        lay.addWidget(self.gbox_reliablemeas)
-        lay.addStretch()
-        lay.addWidget(self.gbox_generalsettings)
-        lay.addStretch()
-        lay.addLayout(lay_mode)
-        lay.addStretch()
-        lay.addWidget(self.gbox_effparams)
-        lay.addStretch()
-        lay.addLayout(hlay_apply)
-        lay.addStretch()
-        lay.setSpacing(20)
-        self.setLayout(lay)
-
-        self.gbox_generalsettings.setStyleSheet("""
-            PyDMEnumComboBox{
-                min-width:7em; max-width:7em;}
-            PyDMSpinbox{
-                min-width:7em; max-width:7em;
-                qproperty-alignment: AlignCenter;}
-            PyDMLabel{
-                min-width:7em; max-width:7em;
-                qproperty-alignment: AlignCenter;}
-            PyDMLedMultiChannel{
-                min-width:7em; max-width:7em;}
-            PyDMStateButton{
-                min-width:7em; max-width:7em;}""")
-        self.gbox_normalmode.setStyleSheet("""
-            PyDMSpinbox{
-                min-width:7em; max-width:7em;
-                qproperty-alignment: AlignCenter;}
-            PyDMLabel{
-                min-width:7em; max-width:7em;
-                qproperty-alignment: AlignCenter;}
-            PyDMStateButton{
-                min-width:7em; max-width:7em;}""")
-        self.gbox_fastmode.setStyleSheet("""
-            PyDMSpinbox{
-                min-width:7em; max-width:7em;
-                qproperty-alignment: AlignCenter;}
-            PyDMLabel{
-                min-width:7em; max-width:7em;
-                qproperty-alignment: AlignCenter;}
-            PyDMStateButton{
-                min-width:7em; max-width:7em;}""")
-        self.gbox_effparams.setStyleSheet("""
-            QSpinBox{
-                min-width:7em; max-width:7em;}""")
-
-    def _setupReliableMeasWidget(self):
-        self.label_reliablemeas0 = QLabel('', self)
-        self.led_ReliableMeas0 = SiriusLedAlert(
-            parent=self, init_channel=self.dcct_prefix+'ReliableMeas-Mon',
-            bit=0)
-        self.label_reliablemeas1 = QLabel('', self)
-        self.led_ReliableMeas1 = SiriusLedAlert(
-            parent=self, init_channel=self.dcct_prefix+'ReliableMeas-Mon',
-            bit=1)
-        self.label_reliablemeas2 = QLabel('', self)
-        self.led_ReliableMeas2 = SiriusLedAlert(
-            parent=self, init_channel=self.dcct_prefix+'ReliableMeas-Mon',
-            bit=2)
-
-        self.reliablemeas_channel = epics.PV(
-            self.dcct_prefix+'ReliableMeasLabels-Cte',
-            callback=self._updateReliableMeasLabels)
-        gbox_reliablemeas = _GroupBoxWithChannel(
-            'DCCT Measure Reliability Status', self,
-            [self.reliablemeas_channel])
-
-        lay_reliablemeas = QGridLayout()
-        lay_reliablemeas.setColumnStretch(0, 1)
-        lay_reliablemeas.setColumnStretch(1, 10)
-        lay_reliablemeas.addWidget(self.led_ReliableMeas0, 0, 0)
-        lay_reliablemeas.addWidget(self.label_reliablemeas0, 0, 1)
-        lay_reliablemeas.addWidget(self.led_ReliableMeas1, 1, 0)
-        lay_reliablemeas.addWidget(self.label_reliablemeas1, 1, 1)
-        lay_reliablemeas.addWidget(self.led_ReliableMeas2, 2, 0)
-        lay_reliablemeas.addWidget(self.label_reliablemeas2, 2, 1)
-        gbox_reliablemeas.setLayout(lay_reliablemeas)
-        return gbox_reliablemeas
-
-    def _setupDCCTGeneralSettingsWidget(self):
-        gbox_generalsettings = QGroupBox(
-            'DCCT General Measurement Settings', self)
-
-        l_measmode = QLabel('Measurement Mode: ', self)
-        self.pydmenumcombobox_MeasMode = PyDMEnumComboBox(
-            parent=self, init_channel=self.dcct_prefix+'MeasMode-Sel')
-        self.pydmlabel_MeasMode = PyDMLabel(
-            parent=self, init_channel=self.dcct_prefix+'MeasMode-Sts')
-        hlay_measmode = QHBoxLayout()
-        hlay_measmode.addWidget(self.pydmenumcombobox_MeasMode)
-        hlay_measmode.addWidget(self.pydmlabel_MeasMode)
-
-        l_currthold = QLabel('Current Threshold [mA]: ', self)
-        self.pydmspinbox_CurrThold = PyDMSpinbox(
-            parent=self, init_channel=self.dcct_prefix+'CurrThold-SP')
-        self.pydmspinbox_CurrThold.showStepExponent = False
-        self.pydmlabel_CurrThold = PyDMLabel(
-            parent=self, init_channel=self.dcct_prefix+'CurrThold-RB')
-        hlay_currthold = QHBoxLayout()
-        hlay_currthold.addWidget(self.pydmspinbox_CurrThold)
-        hlay_currthold.addWidget(self.pydmlabel_CurrThold)
-
-        l_hfreject = QLabel('High Frequency Rejection: ', self)
-        self.pydmstatebutton_HFReject = PyDMStateButton(
-            parent=self, init_channel=self.dcct_prefix+'HFReject-Sel')
-        self.pydmstatebutton_HFReject.shape = 1
-        self.pydmlabel_HFReject = PyDMLabel(
-            parent=self, init_channel=self.dcct_prefix+'HFReject-Sts')
-        hlay_hfreject = QHBoxLayout()
-        hlay_hfreject.addWidget(self.pydmstatebutton_HFReject)
-        hlay_hfreject.addWidget(self.pydmlabel_HFReject)
-
-        l_meastrig = QLabel('Measurement Trigger Source: ', self)
-        self.pydmenumcombobox_MeasTrg = PyDMEnumComboBox(
-            parent=self, init_channel=self.dcct_prefix+'MeasTrg-Sel')
-        self.pydmlabel_MeasTrg = PyDMLabel(
-            parent=self, init_channel=self.dcct_prefix+'MeasTrg-Sts')
-        hlay_meastrig = QHBoxLayout()
-        hlay_meastrig.addWidget(self.pydmenumcombobox_MeasTrg)
-        hlay_meastrig.addWidget(self.pydmlabel_MeasTrg)
-
-        l_TIstatus = QLabel('Timing Trigger Status: ', self)
-        self.ledmulti_TIStatus = PyDMLedMultiChannel(
-            parent=self,
-            channels2values={
-                self.prefix+'BO-35D:TI-DCCT:State-Sts': 1,
-                self.prefix+'BO-35D:TI-DCCT:Status-Mon': 0})
-        self.pb_trgdetails = QPushButton('Open details', self)
-        self.pb_trgdetails.setAutoDefault(False)
-        self.pb_trgdetails.setDefault(False)
-        trg_w = create_window_from_widget(
-            HLTriggerDetailed, title='BO-35D:TI-DCCT Detailed Settings',
-            is_main=True)
-        _hlautil.connect_window(
-            self.pb_trgdetails, trg_w, parent=self,
-            prefix=self.prefix+'BO-35D:TI-DCCT')
-        hlay_TIstatus = QHBoxLayout()
-        hlay_TIstatus.addWidget(self.ledmulti_TIStatus)
-        hlay_TIstatus.addWidget(self.pb_trgdetails)
-
-        l_TIdelay = QLabel('Timing Trigger Delay: ', self)
-        self.pydmspinbox_TIDelay = PyDMSpinbox(
-            parent=self,
-            init_channel=self.prefix+'BO-35D:TI-DCCT:Delay-SP')
-        self.pydmspinbox_TIDelay.showStepExponent = False
-        self.pydmlabel_TIDelay = PyDMLabel(
-            parent=self,
-            init_channel=self.prefix+'BO-35D:TI-DCCT:Delay-RB')
-        hlay_TIdelay = QHBoxLayout()
-        hlay_TIdelay.addWidget(self.pydmspinbox_TIDelay)
-        hlay_TIdelay.addWidget(self.pydmlabel_TIDelay)
-
-        l_trgdelay = QLabel('Measurement Delay After Trigger [s]: ', self)
-        self.pydmspinbox_TrgDelay = PyDMSpinbox(
-            parent=self, init_channel=self.dcct_prefix+'TrgDelay-SP')
-        self.pydmspinbox_TrgDelay.showStepExponent = False
-        self.pydmlabel_TrgDelay = PyDMLabel(
-            parent=self, init_channel=self.dcct_prefix+'TrgDelay-RB')
-        hlay_trgdelay = QHBoxLayout()
-        hlay_trgdelay.addWidget(self.pydmspinbox_TrgDelay)
-        hlay_trgdelay.addWidget(self.pydmlabel_TrgDelay)
-
-        flay_generalsettings = QFormLayout()
-        flay_generalsettings.setLabelAlignment(Qt.AlignRight)
-        flay_generalsettings.setFormAlignment(Qt.AlignCenter)
-        flay_generalsettings.addRow(l_measmode, hlay_measmode)
-        flay_generalsettings.addRow(l_currthold, hlay_currthold)
-        flay_generalsettings.addRow(l_hfreject, hlay_hfreject)
-        flay_generalsettings.addRow(l_meastrig, hlay_meastrig)
-        flay_generalsettings.addRow(l_TIstatus, hlay_TIstatus)
-        flay_generalsettings.addRow(l_TIdelay, hlay_TIdelay)
-        flay_generalsettings.addRow(l_trgdelay, hlay_trgdelay)
-        gbox_generalsettings.setLayout(flay_generalsettings)
-        return gbox_generalsettings
-
-    def _setupDCCTNormalMeasSettingsWidget(self):
-        gbox_normalmode = _GroupBoxWithChannel(
-            'DCCT Normal Measurement Mode Settings', self, [self.mode_channel])
-
-        l_smpcnt = QLabel('Sample Count: ', self)
-        self.pydmspinbox_SampleCnt = PyDMSpinbox(
-            parent=self, init_channel=self.dcct_prefix+'SampleCnt-SP')
-        self.pydmspinbox_SampleCnt.showStepExponent = False
-        self.pydmlabel_SampleCnt = PyDMLabel(
-            parent=self, init_channel=self.dcct_prefix+'SampleCnt-RB')
-        hlay_smpcnt = QHBoxLayout()
-        hlay_smpcnt.addWidget(self.pydmspinbox_SampleCnt)
-        hlay_smpcnt.addWidget(self.pydmlabel_SampleCnt)
-
-        l_measperiod = QLabel('Measurement Period [s]: ', self)
-        self.pydmspinbox_MeasPeriod = PyDMSpinbox(
-            parent=self, init_channel=self.dcct_prefix+'MeasPeriod-SP')
-        self.pydmspinbox_MeasPeriod.showStepExponent = False
-        self.pydmlabel_MeasPeriod = PyDMLabel(
-            parent=self, init_channel=self.dcct_prefix+'MeasPeriod-RB')
-        hlay_measperiod = QHBoxLayout()
-        hlay_measperiod.addWidget(self.pydmspinbox_MeasPeriod)
-        hlay_measperiod.addWidget(self.pydmlabel_MeasPeriod)
-
-        l_offset = QLabel('Relative Offset Enable: ', self)
-        self.pydmstatebutton_RelEnbl = PyDMStateButton(
-            parent=self, init_channel=self.dcct_prefix+'RelEnbl-Sel')
-        self.pydmstatebutton_RelEnbl.shape = 1
-        self.pydmlabel_RelEnbl = PyDMLabel(
-            parent=self, init_channel=self.dcct_prefix+'RelEnbl-Sts')
-        self.pydmpushbutton_RelEnbl = PyDMPushButton(
-            parent=self, label='Acquire Offset', pressValue=1,
-            init_channel=self.dcct_prefix+'RelAcq-Cmd')
-        hlay_offset = QHBoxLayout()
-        hlay_offset.addWidget(self.pydmstatebutton_RelEnbl)
-        hlay_offset.addWidget(self.pydmlabel_RelEnbl)
-        hlay_offset.addWidget(self.pydmpushbutton_RelEnbl)
-
-        l_rellvl = QLabel('Relative Offset Level [V]: ', self)
-        self.pydmspinbox_RelLvl = PyDMSpinbox(
-            parent=self, init_channel=self.dcct_prefix+'RelLvl-SP')
-        self.pydmspinbox_RelLvl.showStepExponent = False
-        self.pydmlabel_RelLvl = PyDMLabel(
-            parent=self, init_channel=self.dcct_prefix+'RelLvl-RB')
-        hlay_rellvl = QHBoxLayout()
-        hlay_rellvl.addWidget(self.pydmspinbox_RelLvl)
-        hlay_rellvl.addWidget(self.pydmlabel_RelLvl)
-
-        flay_normalmode = QFormLayout()
-        flay_normalmode.setLabelAlignment(Qt.AlignRight)
-        flay_normalmode.setFormAlignment(Qt.AlignCenter)
-        flay_normalmode.addRow(l_smpcnt, hlay_smpcnt)
-        flay_normalmode.addRow(l_measperiod, hlay_measperiod)
-        flay_normalmode.addRow(l_offset, hlay_offset)
-        flay_normalmode.addRow(l_rellvl, hlay_rellvl)
-        gbox_normalmode.setLayout(flay_normalmode)
-        gbox_normalmode.setVisible(True)
-        return gbox_normalmode
-
-    def _setupDCCTFastMeasSettingsWidget(self):
-        gbox_fastmode = _GroupBoxWithChannel(
-            'DCCT Fast Measurement Mode Settings', self, [self.mode_channel])
-
-        l_fastsmpcnt = QLabel('Sample Count: ', self)
-        self.pydmspinbox_FastSampleCnt = PyDMSpinbox(
-            parent=self, init_channel=self.dcct_prefix+'FastSampleCnt-SP')
-        self.pydmspinbox_FastSampleCnt.showStepExponent = False
-        self.pydmlabel_FastSampleCnt = PyDMLabel(
-            parent=self, init_channel=self.dcct_prefix+'FastSampleCnt-RB')
-        hlay_fastsmpcnt = QHBoxLayout()
-        hlay_fastsmpcnt.addWidget(self.pydmspinbox_FastSampleCnt)
-        hlay_fastsmpcnt.addWidget(self.pydmlabel_FastSampleCnt)
-
-        l_fastmeasperiod = QLabel('Measurement Period [s]: ', self)
-        self.pydmspinbox_FastMeasPeriod = PyDMSpinbox(
-            parent=self, init_channel=self.dcct_prefix+'FastMeasPeriod-SP')
-        self.pydmspinbox_FastMeasPeriod.showStepExponent = False
-        self.pydmlabel_FastMeasPeriod = PyDMLabel(
-            parent=self, init_channel=self.dcct_prefix+'FastMeasPeriod-RB')
-        hlay_fastmeasperiod = QHBoxLayout()
-        hlay_fastmeasperiod.addWidget(self.pydmspinbox_FastMeasPeriod)
-        hlay_fastmeasperiod.addWidget(self.pydmlabel_FastMeasPeriod)
-
-        l_fastoffset = QLabel('Relative Offset Enable: ', self)
-        self.pydmstatebutton_FastRelEnbl = PyDMStateButton(
-            parent=self, init_channel=self.dcct_prefix+'FastRelEnbl-Sel')
-        self.pydmstatebutton_FastRelEnbl.shape = 1
-        self.pydmlabel_FastRelEnbl = PyDMLabel(
-            parent=self, init_channel=self.dcct_prefix+'FastRelEnbl-Sts')
-        self.pydmpushbutton_FastRelEnbl = PyDMPushButton(
-            parent=self, label='Acquire Offset', pressValue=1,
-            init_channel=self.dcct_prefix+'FastRelAcq-Cmd')
-        hlay_fastoffset = QHBoxLayout()
-        hlay_fastoffset.addWidget(self.pydmstatebutton_FastRelEnbl)
-        hlay_fastoffset.addWidget(self.pydmlabel_FastRelEnbl)
-        hlay_fastoffset.addWidget(self.pydmpushbutton_FastRelEnbl)
-
-        l_fastrellvl = QLabel('Relative Offset Level [V]: ', self)
-        self.pydmspinbox_FastRelLvl = PyDMSpinbox(
-            parent=self, init_channel=self.dcct_prefix+'FastRelLvl-SP')
-        self.pydmspinbox_FastRelLvl.showStepExponent = False
-        self.pydmlabel_FastRelLvl = PyDMLabel(
-            parent=self, init_channel=self.dcct_prefix+'FastRelLvl-RB')
-        hlay_fastrellvl = QHBoxLayout()
-        hlay_fastrellvl.addWidget(self.pydmspinbox_FastRelLvl)
-        hlay_fastrellvl.addWidget(self.pydmlabel_FastRelLvl)
-
-        flay_fastmode = QFormLayout()
-        flay_fastmode.setLabelAlignment(Qt.AlignRight)
-        flay_fastmode.setFormAlignment(Qt.AlignCenter)
-        flay_fastmode.addRow(l_fastsmpcnt, hlay_fastsmpcnt)
-        flay_fastmode.addRow(l_fastmeasperiod, hlay_fastmeasperiod)
-        flay_fastmode.addRow(l_fastoffset, hlay_fastoffset)
-        flay_fastmode.addRow(l_fastrellvl, hlay_fastrellvl)
-        gbox_fastmode.setLayout(flay_fastmode)
-        gbox_fastmode.setVisible(False)
-        return gbox_fastmode
-
-    def _setupRampEffIndicesWidget(self):
-        gbox_effparams = QGroupBox(
-            'Ramp Efficiency Calculation Indices', self)
-
-        l_injcurr = QLabel('Injected Current: ', self)
-        self.sb_injcurr = QSpinBox(self)
-        self.sb_injcurr.setValue(self.injcurr_idx)
-        self.sb_injcurr.setMinimum(0)
-        if self.pydmlabel_SampleCnt._connected:
-            self.sb_injcurr.setMaximum(int(self.pydmlabel_SampleCnt.text())-1)
-        else:
-            self.sb_injcurr.setMaximum(1)
-
-        l_ejecurr = QLabel('Ejected Current: ', self)
-        self.sb_ejecurr = QSpinBox(self)
-        self.sb_ejecurr.setValue(self.ejecurr_idx)
-        self.sb_ejecurr.setMinimum(0)
-        if self.pydmlabel_SampleCnt._connected:
-            self.sb_ejecurr.setMaximum(int(self.pydmlabel_SampleCnt.text())-1)
-        else:
-            self.sb_ejecurr.setMaximum(1)
-
-        flay_effparams = QFormLayout()
-        flay_effparams.setFormAlignment(Qt.AlignCenter)
-        flay_effparams.addRow(l_injcurr, self.sb_injcurr)
-        flay_effparams.addRow(l_ejecurr, self.sb_ejecurr)
-        gbox_effparams.setLayout(flay_effparams)
-        return gbox_effparams
-
-    def _updateReliableMeasLabels(self, pvname, value,  **kwargs):
-        if value:
-            self.label_reliablemeas0.setText(value[0])
-            self.label_reliablemeas1.setText(value[1])
-            self.label_reliablemeas2.setText(value[2])
-
-    def _showMeasModeSettings(self, value):
-        if value == DCCT_MEASMODE_NORMAL:
-            self.gbox_normalmode.setVisible(True)
-            self.gbox_fastmode.setVisible(False)
-        if value == DCCT_MEASMODE_FAST:
-            self.gbox_normalmode.setVisible(False)
-            self.gbox_fastmode.setVisible(True)
-
-    def _emitSettings(self):
-        self.updateSettings.emit([self.sb_injcurr.value(),
-                                  self.sb_ejecurr.value()])
-        self.close()
-
-
-class _GroupBoxWithChannel(QGroupBox):
-
-    def __init__(self, title='', parent=None, channels=None):
-        self._channels = channels
-        super().__init__(title, parent)
-
-    def channels(self):
-        """Return channels."""
-        return self._channels
-
-
 class ChooseMagnetsToPlot(SiriusDialog):
     """Auxiliar window to select which magnets will to be shown in plot."""
 
@@ -1185,6 +598,19 @@ class ChooseMagnetsToPlot(SiriusDialog):
         self.close()
 
 
+class MyTableWidget(QTableWidget):
+    """Reimplement mousePressEvent to show contextMenu."""
+
+    def __init__(self, parent=None, show_menu_fun=None):
+        super().__init__(parent)
+        self.show_menu_fun = show_menu_fun
+
+    def mousePressEvent(self, ev):
+        if ev.button() == Qt.RightButton:
+            self.show_menu_fun(ev.pos())
+        super().mousePressEvent(ev)
+
+
 class SpinBoxDelegate(QStyledItemDelegate):
     """Auxiliar class to draw a SpinBox in table items on editing."""
 
@@ -1233,7 +659,7 @@ class CustomTableWidgetItem(QTableWidgetItem):
 
 
 class MyDoubleSpinBox(QDoubleSpinBox):
-    """Subclass QDoubleSpinBox to reimplement whellEvent."""
+    """Subclass QDoubleSpinBox to reimplement wheelEvent."""
 
     def __init__(self, parent):
         """Initialize object."""

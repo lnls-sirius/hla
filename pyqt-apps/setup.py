@@ -48,6 +48,7 @@ setup(
         'scripts/sirius-hla-as-ap-configdb.py',
         'scripts/sirius-hla-as-ap-launcher.py',
         'scripts/sirius-hla-as-di-bpm.py',
+        'scripts/sirius-hla-as-di-dcct.py',
         'scripts/sirius-hla-as-di-scrn.py',
         'scripts/sirius-hla-as-pm-detail.py',
         'scripts/sirius-hla-as-ps-cycle.py',

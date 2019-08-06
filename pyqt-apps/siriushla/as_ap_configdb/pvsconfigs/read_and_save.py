@@ -1,13 +1,11 @@
 """Read configuration window."""
 import logging
-import re
 import time
 
 from qtpy.QtCore import Slot
 from qtpy.QtGui import QKeySequence, QKeyEvent
-from qtpy.QtWidgets import QWidget, QComboBox, QLabel, QPushButton, \
-    QHBoxLayout, QVBoxLayout, QTableView, QInputDialog, QMessageBox, \
-    QAbstractItemView, QApplication
+from qtpy.QtWidgets import QWidget, QComboBox, QPushButton, \
+    QVBoxLayout, QTableView, QMessageBox, QApplication
 
 from siriuspy.envars import vaca_prefix as _VACA_PREFIX
 from siriuspy.clientconfigdb import ConfigDBException, ConfigDBClient

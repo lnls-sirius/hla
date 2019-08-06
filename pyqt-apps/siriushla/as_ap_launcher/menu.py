@@ -257,6 +257,11 @@ def get_object(ismenubar=True, parent=None):
                 ICTs = QAction('ICTs', diag)
                 self.connect_newprocess(ICTs, 'sirius-hla-'+sec+'-di-icts.py')
                 diag.addAction(ICTs)
+            elif sec in {'si', 'bo'}:
+                DCCT = QAction('DCCTs', diag)
+                self.connect_newprocess(
+                    DCCT, ['sirius-hla-as-di-dcct.py', sec.upper()])
+                diag.addAction(DCCT)
             if 'tb' in sec:
                 Slits = QAction('Slits', diag)
                 self.connect_newprocess(Slits, 'sirius-hla-tb-di-slits.py')

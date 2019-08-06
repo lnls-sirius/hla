@@ -1,16 +1,15 @@
 """Booster Ramp Main Window."""
 
-from qtpy.QtCore import Slot, Signal
+from qtpy.QtCore import Qt, Slot, Signal
 from qtpy.QtGui import QKeySequence
-from qtpy.QtWidgets import QLabel, QWidget, QVBoxLayout, QGridLayout, \
+from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, \
                            QUndoStack, QMessageBox
-from siriushla.widgets.windows import SiriusMainWindow
 from siriuspy.ramp import ramp
 from siriuspy.clientconfigdb import ConfigDBException as _ConfigDBException
-from .status_and_commands import StatusAndCommands
-from .settings import Settings
-from .config_params import ConfigParameters
-from .diagnosis import Diagnosis
+from siriushla.widgets.windows import SiriusMainWindow
+from siriushla.bo_ap_ramp.status_and_commands import StatusAndCommands
+from siriushla.bo_ap_ramp.settings import Settings
+from siriushla.bo_ap_ramp.config_params import ConfigParameters
 
 
 class RampMain(SiriusMainWindow):
@@ -34,9 +33,10 @@ class RampMain(SiriusMainWindow):
         self._connSignals()
         self._addActions()
 
+        self.setFocusPolicy(Qt.StrongFocus)
+
     def _setupUi(self):
         cw = QWidget(self)
-        cw.setObjectName('CentralWidget')
         glay = QGridLayout(cw)
         glay.setHorizontalSpacing(10)
         glay.setVerticalSpacing(10)
@@ -54,46 +54,17 @@ class RampMain(SiriusMainWindow):
             self._tunecorr_configname, self._chromcorr_configname)
         self.setMenuBar(self.settings)
 
+        self.status_and_commands = StatusAndCommands(
+            self, self.prefix, self.ramp_config)
+        glay.addWidget(self.status_and_commands, 1, 1)
+
         self.config_parameters = ConfigParameters(
             self, self.prefix, self.ramp_config, self._undo_stack,
             self._tunecorr_configname, self._chromcorr_configname)
         self.config_parameters.setObjectName('ConfigParameters')
+        glay.addWidget(self.config_parameters, 1, 0)
 
-        vlay1 = QVBoxLayout()
-        vlay1.addWidget(self.config_parameters)
-        glay.addLayout(vlay1, 1, 0)
-
-        self.status_and_commands = StatusAndCommands(
-            self, self.prefix, self.ramp_config)
-        self.status_and_commands.setObjectName('StatusAndCommands')
-
-        self.diagnosis = Diagnosis(self, self.prefix, self.ramp_config)
-        self.diagnosis.setObjectName('Diagnosis')
-
-        vlay2 = QVBoxLayout()
-        vlay2.addWidget(self.status_and_commands)
-        vlay2.addWidget(self.diagnosis)
-        vlay2.setStretch(0, 10)
-        vlay2.setStretch(1, 23)
-        glay.addLayout(vlay2, 1, 1)
-
-        cw.setStyleSheet("""
-            #CentralWidget{
-                min-width: 138em;
-                min-height: 81em;}
-            #ConfigParameters{
-                min-width: 108em;
-                min-height: 59em;}
-            #OpticsAdjust{
-                min-width: 108em;
-                min-height: 16em;}
-            #StatusAndCommands{
-                min-width: 28em;
-                min-height: 25em;}
-            #Diagnosis{
-                min-width: 28em;
-                min-height: 50em;}""")
-        glay.setColumnStretch(0, 4)
+        glay.setColumnStretch(0, 15)
         glay.setColumnStretch(1, 1)
         self.setCentralWidget(cw)
 
@@ -102,8 +73,6 @@ class RampMain(SiriusMainWindow):
         self.settings.loadSignal.connect(self._emitLoadSignal)
         self.settings.opticsSettingsSignal.connect(
             self._handleUpdateOpticsAdjustSettings)
-        self.settings.diagSettingsSignal.connect(
-            self.diagnosis.handleUpdateSettings)
         self.settings.plotUnitSignal.connect(
             self.config_parameters.getPlotUnits)
 
@@ -114,26 +83,28 @@ class RampMain(SiriusMainWindow):
         self.config_parameters.dip_ramp.updateDipoleRampSignal.connect(
             self.config_parameters.mult_ramp.updateGraph)
         self.config_parameters.dip_ramp.updateDipoleRampSignal.connect(
+            self.config_parameters.rf_ramp.updateGraph)
+        self.config_parameters.dip_ramp.updateDipoleRampSignal.connect(
             self.status_and_commands.update_ma_params)
         self.config_parameters.dip_ramp.updateDipoleRampSignal.connect(
             self.status_and_commands.update_ti_params)
+        self.config_parameters.dip_ramp.applyChanges2MachineSignal.connect(
+            self.status_and_commands.apply_changes)
         self.config_parameters.mult_ramp.updateMultipoleRampSignal.connect(
             self._verifySync)
         self.config_parameters.mult_ramp.updateMultipoleRampSignal.connect(
             self.status_and_commands.update_ma_params)
+        self.config_parameters.mult_ramp.applyChanges2MachineSignal.connect(
+            self.status_and_commands.apply_changes)
         self.config_parameters.rf_ramp.updateRFRampSignal.connect(
             self._verifySync)
         self.config_parameters.rf_ramp.updateRFRampSignal.connect(
             self.status_and_commands.update_rf_params)
+        self.config_parameters.rf_ramp.applyChanges2MachineSignal.connect(
+            self.status_and_commands.apply_changes)
 
         self.loadSignal.connect(self.settings.getRampConfig)
         self.loadSignal.connect(self.config_parameters.handleLoadRampConfig)
-        self.loadSignal.connect(
-            self.config_parameters.dip_ramp.handleLoadRampConfig)
-        self.loadSignal.connect(
-            self.config_parameters.mult_ramp.handleLoadRampConfig)
-        self.loadSignal.connect(
-            self.config_parameters.rf_ramp.handleLoadRampConfig)
         self.loadSignal.connect(self.status_and_commands.handleLoadRampConfig)
 
     def _addActions(self):
@@ -146,7 +117,11 @@ class RampMain(SiriusMainWindow):
 
     @Slot(str)
     def _receiveNewConfigName(self, new_config_name):
-        self.ramp_config = ramp.BoosterRamp(new_config_name, auto_update=True)
+        if self.ramp_config is None or \
+                self.ramp_config.name != new_config_name:
+            self.ramp_config = ramp.BoosterRamp(new_config_name,
+                                                auto_update=True)
+            self._undo_stack.clear()
         self._emitLoadSignal()
 
     def _emitLoadSignal(self):
@@ -173,29 +148,16 @@ class RampMain(SiriusMainWindow):
 
     def closeEvent(self, ev):
         """Reimplement closeEvent to avoid forgeting saving changes."""
-        self.close_ev = ev
-
         if self.ramp_config is None:
-            return self._acceptClose()
-
-        if not self.ramp_config.synchronized:
-            ans = QMessageBox.question(
-                self, 'Save changes?',
-                'There are unsaved changes in {}. \n'
-                'Do you want to save?'.format(self.ramp_config.name),
-                QMessageBox.Yes, QMessageBox.Cancel)
-            if ans == QMessageBox.Yes:
-                self._ignoreCloseAndSave()
+            ev.accept()
+            super().closeEvent(ev)
+        elif not self.ramp_config.synchronized:
+            accept = self.settings.verifyUnsavedChanges()
+            if accept:
+                ev.accept()
+                super().closeEvent(ev)
             else:
-                self._acceptClose()
-
-    def _ignoreCloseAndSave(self):
-        self.close_ev.ignore()
-        self.settings.showSaveAsPopup()
-
-    def _acceptClose(self):
-        self.close_ev.accept()
-        super().closeEvent(self.close_ev)
+                ev.ignore()
 
     @Slot(str, str)
     def _handleUpdateOpticsAdjustSettings(self, tune_cname, chrom_cname):

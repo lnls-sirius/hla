@@ -8,17 +8,16 @@ from qtpy.QtCore import Qt, Signal, Slot
 from qtpy.QtGui import QKeySequence
 from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
     QGridLayout, QScrollArea, QFormLayout, QCheckBox, QDoubleSpinBox, \
-    QUndoStack, QUndoCommand, QHBoxLayout, QMessageBox
+    QUndoStack, QUndoCommand, QHBoxLayout, QMessageBox, QMenuBar
 
 from siriuspy.search import MASearch as _MASearch
 from siriuspy.ramp import ramp
 from siriuspy.optics.opticscorr import BOTuneCorr, BOChromCorr
-from siriuspy.clientconfigdb import ConfigDBException as _ConfigDBException, \
-    ConfigDBDocument as _ConfigDBDocument
+from siriuspy.clientconfigdb import ConfigDBException as _ConfigDBException
 
 from siriushla.widgets.windows import SiriusMainWindow
-from .auxiliar_classes import \
-    NewRampConfigGetName as _NewRampConfigGetName, \
+from siriushla.as_ap_configdb import SaveConfigDialog as _SaveConfigDialog
+from siriushla.bo_ap_ramp.auxiliar_classes import \
     MyDoubleSpinBox as _MyDoubleSpinBox
 
 
@@ -29,7 +28,7 @@ _flag_stacking = False
 class BONormEdit(SiriusMainWindow):
     """Widget to perform optics adjust in normalized configurations."""
 
-    normConfigChanged = Signal(ramp.BoosterNormalized, str, float, bool)
+    normConfigChanged = Signal(ramp.BoosterNormalized, str)
 
     def __init__(self, parent=None, prefix='', norm_config=None,
                  time=None, energy=None, magnets=dict(), conn_sofb=None,
@@ -37,9 +36,9 @@ class BONormEdit(SiriusMainWindow):
         """Initialize object."""
         super().__init__(parent)
         self.setWindowTitle('Edit Normalized Configuration')
+        self.setObjectName('BOApp')
         self.prefix = prefix
         self.norm_config = norm_config
-        self.time = time
         self.energy = energy
 
         self._aux_magnets = magnets
@@ -60,28 +59,11 @@ class BONormEdit(SiriusMainWindow):
         }
         self._conn_sofb = conn_sofb
         self._setupUi()
-
-        self._undo_stack = QUndoStack(self)
-        self.act_undo = self._undo_stack.createUndoAction(self, 'Undo')
-        self.act_undo.setShortcut(QKeySequence.Undo)
-        self.menu.addAction(self.act_undo)
-        self.act_redo = self._undo_stack.createRedoAction(self, 'Redo')
-        self.act_redo.setShortcut(QKeySequence.Redo)
-        self.menu.addAction(self.act_redo)
+        self._setupMenu()
 
     # ---------- setup/build layout ----------
 
     def _setupUi(self):
-        self.menu = self.menuBar().addMenu('Options')
-        self.act_load = self.menu.addAction('Load')
-        self.act_load.triggered.connect(self._load)
-        if not self.norm_config.exist():
-            self.act_load.setEnabled(False)
-        self.act_save = self.menu.addAction('Save')
-        self.act_save.triggered.connect(self._save)
-        self.act_saveas = self.menu.addAction('Save as...')
-        self.act_saveas.triggered.connect(self._showSaveAsPopup)
-
         self.label_name = QLabel('<h2>'+self.norm_config.name+'</h2>', self)
         self.label_name.setAlignment(Qt.AlignCenter)
 
@@ -90,23 +72,19 @@ class BONormEdit(SiriusMainWindow):
         self.tune = self._setupTuneWidget()
         self.chrom = self._setupChromWidget()
 
-        self.bt_save2rampconfig = QPushButton('Save changes', self)
-        self.bt_save2rampconfig.clicked.connect(self._updateRampConfig)
         self.bt_apply2machine = QPushButton('Apply changes to machine', self)
-        self.bt_apply2machine.clicked.connect(
-            _part(self._updateRampConfig, apply=True))
+        self.bt_apply2machine.clicked.connect(self._updateRampConfig)
 
         cw = QWidget()
         lay = QGridLayout()
         lay.setVerticalSpacing(10)
         lay.setHorizontalSpacing(10)
         lay.addWidget(self.label_name, 0, 0, 1, 2)
-        lay.addWidget(self.strengths, 1, 0, 5, 1)
+        lay.addWidget(self.strengths, 1, 0, 4, 1)
         lay.addWidget(self.orbit, 1, 1)
         lay.addWidget(self.tune, 2, 1)
         lay.addWidget(self.chrom, 3, 1)
-        lay.addWidget(self.bt_save2rampconfig, 4, 1)
-        lay.addWidget(self.bt_apply2machine, 5, 1)
+        lay.addWidget(self.bt_apply2machine, 4, 1)
         lay.setColumnStretch(0, 2)
         lay.setColumnStretch(1, 2)
         lay.setRowStretch(0, 2)
@@ -123,6 +101,27 @@ class BONormEdit(SiriusMainWindow):
                 padding: 0 2px 0 2px;}""")
         cw.setFocusPolicy(Qt.StrongFocus)
         self.setCentralWidget(cw)
+
+    def _setupMenu(self):
+        self.menubar = QMenuBar(self)
+        self.layout().setMenuBar(self.menubar)
+        self.menu = self.menubar.addMenu('Options')
+        self.act_load = self.menu.addAction('Load')
+        self.act_load.triggered.connect(self._load)
+        if not self.norm_config.exist():
+            self.act_load.setEnabled(False)
+        self.act_save = self.menu.addAction('Save')
+        self.act_save.triggered.connect(self._save)
+        self.act_saveas = self.menu.addAction('Save as...')
+        self.act_saveas.triggered.connect(self._showSaveAsPopup)
+
+        self._undo_stack = QUndoStack(self)
+        self.act_undo = self._undo_stack.createUndoAction(self, 'Undo')
+        self.act_undo.setShortcut(QKeySequence.Undo)
+        self.menu.addAction(self.act_undo)
+        self.act_redo = self._undo_stack.createRedoAction(self, 'Redo')
+        self.act_redo.setShortcut(QKeySequence.Redo)
+        self.menu.addAction(self.act_redo)
 
     def _setupStrengthWidget(self):
         scrollarea = QScrollArea()
@@ -165,6 +164,9 @@ class BONormEdit(SiriusMainWindow):
             ma_value.setStyleSheet("min-height:1.29em; max-height:1.29em;")
             self._map_manames2wigdets[ma] = ma_value
 
+        self.nconfig_data.setObjectName('data')
+        self.nconfig_data.setStyleSheet("""
+            #data{background-color: transparent;}""")
         self.nconfig_data.setLayout(flay_configdata)
         scrollarea.setWidget(self.nconfig_data)
 
@@ -370,8 +372,7 @@ class BONormEdit(SiriusMainWindow):
             self.verifySync()
 
     def _showSaveAsPopup(self):
-        self._saveAsPopup = _NewRampConfigGetName(
-            self.norm_config, 'bo_normalized', self, new_from_template=False)
+        self._saveAsPopup = _SaveConfigDialog('bo_normalized', self)
         self._saveAsPopup.configname.connect(self._save)
         self._saveAsPopup.open()
 
@@ -395,12 +396,14 @@ class BONormEdit(SiriusMainWindow):
             self.sender(), self.norm_config[maname], new_value,
             message='set '+maname+' strength to {}'.format(new_value))
         self.norm_config[maname] = new_value
+        self.verifySync()
 
     def _handleStrengtsLimits(self, state):
-        manames = self.norm_config.manames
+        manames = _dcopy(self.norm_config.manames)
+        manames.remove('BO-Fam:MA-B')
         if state:
             for ma in manames:
-                ma_value = self.data.findChild(QDoubleSpinBox, name=ma)
+                ma_value = self.nconfig_data.findChild(QDoubleSpinBox, name=ma)
                 aux = self._aux_magnets[ma]
                 currs = (aux.current_min, aux.current_max)
                 lims = aux.conv_current_2_strength(
@@ -409,7 +412,7 @@ class BONormEdit(SiriusMainWindow):
                 ma_value.setMaximum(max(lims))
         else:
             for ma in manames:
-                ma_value = self.data.findChild(QDoubleSpinBox, name=ma)
+                ma_value = self.nconfig_data.findChild(QDoubleSpinBox, name=ma)
                 ma_value.setMinimum(-100)
                 ma_value.setMaximum(100)
 
@@ -576,11 +579,15 @@ class BONormEdit(SiriusMainWindow):
 
         self.verifySync()
 
-    def _updateRampConfig(self, apply=False):
+    def _updateRampConfig(self):
         if self.norm_config is not None:
             self.normConfigChanged.emit(
-                self.norm_config, self._norm_config_oldname,
-                self.time, apply)
+                self.norm_config, self._norm_config_oldname)
+
+    def updateEnergy(self, energy):
+        """Updta energy and strength limits."""
+        self.energy = energy
+        self._handleStrengtsLimits(self.cb_checklims.checkState())
 
     @Slot(str, str)
     def updateSettings(self, tunecorr_configname, chromcorr_configname):
