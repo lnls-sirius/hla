@@ -410,6 +410,8 @@ class DCCTSettingsDetails(QWidget):
         spinbox_RelLvl.showStepExponent = False
         label_RelLvl = PyDMLabel(
             parent=self, init_channel=prefix+'RelLvl-RB')
+        label_RelLvl.precisionFromPV = False
+        label_RelLvl.precision = 9
         pushbutton_RelAcq = PyDMPushButton(
             parent=self, label='Acquire Offset', pressValue=1,
             init_channel=prefix+'RelAcq-Cmd')
