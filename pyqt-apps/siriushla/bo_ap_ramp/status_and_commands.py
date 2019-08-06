@@ -1,5 +1,6 @@
 """Booster Ramp Control HLA: General Status Module."""
 
+from functools import partial as _part
 from threading import Thread as _Thread
 from qtpy.QtWidgets import QGroupBox, QLabel, QPushButton, QGridLayout, \
     QMessageBox, QVBoxLayout
@@ -170,10 +171,10 @@ class StatusAndCommands(QGroupBox):
             parent=self)
         thread.start()
 
-    def _apply_ma(self):
+    def _apply_ma(self, manames=list()):
         thread = _CommandThread(
             conn=self._conn_ma,
-            cmds=self._conn_ma.cmd_wfmdata,
+            cmds=_part(self._conn_ma.cmd_wfmdata, manames),
             warn_msgs='Failed to set MA waveforms!',
             parent=self)
         thread.start()
@@ -205,16 +206,34 @@ class StatusAndCommands(QGroupBox):
             return
 
         sender_name = self.sender().objectName()
+
+        manames = list()
+        if not self.ramp_config.ps_normalized_configs:
+            mb = QMessageBox()
+            mb.setIcon(QMessageBox.Warning)
+            mb.setWindowTitle('Message')
+            if 'Dipole' in sender_name or 'All' in sender_name:
+                manames = ['BO-Fam:MA-B', ]
+                msg = 'Only Dipole will be applied because there is no '\
+                      'normalized configuration defined!'
+                mb.setText(msg)
+                mb.exec_()
+            elif 'Multipoles' in sender_name:
+                msg = 'Nothing applied! No normalized configuration defined!'
+                mb.setText(msg)
+                mb.exec_()
+                return
+
         if 'Dipole' in sender_name:
-            self._apply_ma()
+            self._apply_ma(manames)
             self._apply_ti()
         elif 'Multipoles' in sender_name:
-            self._apply_ma()
+            self._apply_ma(manames)
         elif 'RF' in sender_name:
             self._apply_rf()
             self._apply_ti()
         elif 'All' in sender_name:
-            self._apply_ma()
+            self._apply_ma(manames)
             self._apply_rf()
             self._apply_ti()
 
@@ -393,7 +412,8 @@ class StatusDetails(SiriusDialog):
             elif 'PwrState' in p:
                 c2v_setup[pfx + conn[p].pvname_rb] = _PSc.PwrStateSts.On
             elif 'WfmData' in p:
-                if self.ramp_config is None:
+                if self.ramp_config is None or \
+                        not self.ramp_config.ps_normalized_configs:
                     c2v_apply[pfx + conn[p].pvname_rb] = None
                 elif self.ramp_config.ps_normalized_configs:
                     wf = self.ramp_config.ps_waveform_get(p.device_name)
