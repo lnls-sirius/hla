@@ -25,8 +25,9 @@ from siriuspy.ramp.conn import ConnSOFB as _ConnSOFB
 
 from siriushla.widgets import SiriusFigureCanvas
 from siriushla.bo_ap_ramp.auxiliar_classes import \
-    InsertNormalizedConfig as _InsertNormalizedConfig, \
-    DeleteNormalizedConfig as _DeleteNormalizedConfig, \
+    InsertNormalizedConfig as _InsertNormConfig, \
+    DeleteNormalizedConfig as _DeleteNormConfig, \
+    DuplicateNormConfig as _DuplicateNormConfig, \
     SpinBoxDelegate as _SpinBoxDelegate, \
     CustomTableWidgetItem as _CustomTableWidgetItem, \
     ChooseMagnetsToPlot as _ChooseMagnetsToPlot, \
@@ -838,31 +839,32 @@ class MultipolesRamp(QWidget):
                 w.updateEnergy(energy)
 
     def _showInsertNormConfigPopup(self):
-        if self.ramp_config is not None:
-            self._insertConfigPopup = _InsertNormalizedConfig(
-                self, self.ramp_config)
-            self._insertConfigPopup.insertConfig.connect(
-                self._handleInsertNormConfig)
-            self._insertConfigPopup.open()
+        self._insertConfigPopup = _InsertNormConfig(self, self.ramp_config)
+        self._insertConfigPopup.insertConfig.connect(
+            self._handleInsertNormConfig)
+        self._insertConfigPopup.open()
+
+    def _showDuplicateNormConfigPopup(self, nconfig_name):
+        data = self.ramp_config[nconfig_name].value
+        self._duplicConfigPopup = _DuplicateNormConfig(self, data)
+        self._duplicConfigPopup.insertConfig.connect(
+            self._handleInsertNormConfig)
+        self._duplicConfigPopup.open()
 
     @Slot(list)
     def _handleInsertNormConfig(self, config):
         try:
-            self.ramp_config.ps_normalized_configs_insert(time=config[0],
-                                                          name=config[1],
-                                                          nconfig=config[2])
-        except exceptions.RampInvalidNormConfig as e:
+            self.ramp_config.ps_normalized_configs_insert(
+                time=config[0], name=config[1], nconfig=config[2])
+        except exceptions.RampError as e:
             QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
         else:
             self.handleLoadRampConfig()
             self.updateMultipoleRampSignal.emit()
 
-    def _showDeleteNormConfigPopup(self):
-        if self.ramp_config is None:
-            return
-        selected_item = self.table.selectedItems()
-        self._deleteConfigPopup = _DeleteNormalizedConfig(
-            self, self.table_map, selected_item)
+    def _showDeleteNormConfigPopup(self, selected_row=None):
+        self._deleteConfigPopup = _DeleteNormConfig(
+            self, self.table_map, selected_row)
         self._deleteConfigPopup.deleteConfig.connect(
             self._handleDeleteNormConfig)
         self._deleteConfigPopup.open()
@@ -901,14 +903,19 @@ class MultipolesRamp(QWidget):
         menu = QMenu()
         edit_act = menu.addAction('Edit')
         edit_act.triggered.connect(
-            _part(self._openEditNormWindow, nconfig_name, energy))
+            _part(self._showEditNormConfigWindow, nconfig_name, energy))
+
+        duplic_act = menu.addAction('Duplicate')
+        duplic_act.triggered.connect(
+            _part(self._showDuplicateNormConfigPopup, nconfig_name))
 
         delete_act = menu.addAction('Delete')
-        delete_act.triggered.connect(self._showDeleteNormConfigPopup)
+        delete_act.triggered.connect(
+            _part(self._showDeleteNormConfigPopup, row))
 
         menu.exec_(self.table.mapToGlobal(pos))
 
-    def _openEditNormWindow(self, nconfig_name, energy):
+    def _showEditNormConfigWindow(self, nconfig_name, energy):
         for maname in self.manames:
             if maname not in self._aux_magnets.keys():
                 QMessageBox.warning(
