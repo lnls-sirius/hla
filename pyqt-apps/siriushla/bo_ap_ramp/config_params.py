@@ -890,6 +890,8 @@ class MultipolesRamp(QWidget):
             return
 
         item = self.table.itemAt(pos)
+        if not item:
+            return
         row = item.row()
         nconfig_name = self.table_map['rows'][row]
         if nconfig_name in ['Injection', 'Ejection']:
