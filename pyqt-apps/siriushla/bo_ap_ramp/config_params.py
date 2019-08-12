@@ -126,28 +126,16 @@ class DipoleRamp(QWidget):
         self._setupTable()
 
         lay_v = QVBoxLayout()
-        self.l_rampupv = QLabel('RmpU 0 [GeV/s]', self)
+        self.l_rampupv = QLabel('RmpU2 0 [GeV/s]', self)
         self.l_rampupv.setStyleSheet("""
             min-width:10.5em;max-width:10.5em;
             qproperty-alignment: AlignRight;""")
-        self.l_rampdownv = QLabel('RmpD 0 [GeV/s]', self)
+        self.l_rampdownv = QLabel('RmpD  0 [GeV/s]', self)
         self.l_rampdownv.setStyleSheet("""
             min-width:10.5em;max-width:10.5em;
             qproperty-alignment: AlignRight;""")
         lay_v.addWidget(self.l_rampupv)
         lay_v.addWidget(self.l_rampdownv)
-
-        # self.label_anom = QLabel('', self)
-        # self.label_anom.setStyleSheet("""
-        #     min-height:1.55em;max-height:1.55em;""")
-        # self.pb_anom = QPushButton('?', self)
-        # self.pb_anom.setVisible(False)
-        # self.pb_anom.setStyleSheet("""
-        #     background-color:red;min-width:1.55em;max-width:1.55em;""")
-        # self.pb_anom.clicked.connect(self._showAnomaliesPopup)
-        # lay_anom = QHBoxLayout()
-        # lay_anom.addWidget(self.label_anom)
-        # lay_anom.addWidget(self.pb_anom)
 
         self.label_exclim = QLabel('', self)
         self.label_exclim.setStyleSheet("""
@@ -176,7 +164,6 @@ class DipoleRamp(QWidget):
         glay.addLayout(lay_v, 2, 1, alignment=Qt.AlignRight)
         glay.addWidget(self.table, 3, 0, 1, 2)
         glay.addLayout(lay_exclim, 4, 0, 1, 2, alignment=Qt.AlignCenter)
-        # glay.addLayout(lay_anom, 4, 0, 1, 2, alignment=Qt.AlignCenter)
         glay.addWidget(self.bt_apply2machine, 6, 0, 1, 2,
                        alignment=Qt.AlignRight)
 
@@ -191,7 +178,18 @@ class DipoleRamp(QWidget):
         self.ax.grid()
         self.ax.set_xlabel('t [ms]')
         self.line, = self.ax.plot([0], [0], '-b')
-        self.markers, = self.ax.plot([0], [0], '+r')
+        self.m_rampup1_start, = self.ax.plot([0], [0], '-.', color='#8DB0FF')
+        self.m_rampup2_start, = self.ax.plot([0], [0], '-.', color='#8DB0FF')
+        self.m_rampdown_start, = self.ax.plot([0], [0], '-.', color='#8DB0FF')
+        self.m_rampdown_stop, = self.ax.plot([0], [0], '-.', color='#8DB0FF')
+        self.m_rampup_smooth_intvl1, = self.ax.plot(
+            [0], [0], '-.', color='orchid')
+        self.m_rampup_smooth_intvl2, = self.ax.plot(
+            [0], [0], '-.', color='orchid')
+        self.m_rampdown_smooth_intvl1, = self.ax.plot(
+            [0], [0], '-.', color='orchid')
+        self.m_rampdown_smooth_intvl2, = self.ax.plot(
+            [0], [0], '-.', color='orchid')
         self.m_inj, = self.ax.plot([0], [0], marker='o', c='#787878')
         self.m_ej, = self.ax.plot([0], [0], marker='o', c='#787878')
 
@@ -236,8 +234,11 @@ class DipoleRamp(QWidget):
                      4: 'Ejection',
                      5: 'RampDown-Start',
                      6: 'RampDown-Stop',
-                     7: 'Stop'},
-            'columns': {0: '',
+                     7: 'Stop',
+                     8: 'Smoothing Areas',
+                     9: 'RampUp',
+                     10: 'RampDown'},
+            'columns': {0: 'Time Instants',
                         1: 'T [ms]',
                         2: 'E [GeV]',
                         3: 'Index'}}
@@ -245,7 +246,7 @@ class DipoleRamp(QWidget):
         self.table.setStyleSheet("""
             #DipoleTable{
                 min-width: 30em;
-                min-height: 16.2em; max-height: 16.2em;
+                min-height: 21.6em; max-height: 21.6em;
             }
             QHeaderView::section {
                 background-color: #1F64FF;
@@ -260,7 +261,7 @@ class DipoleRamp(QWidget):
         self.table.setRowCount(max(self.table_map['rows'].keys())+1)
         self.table.setColumnCount(max(self.table_map['columns'].keys())+1)
         self.table.horizontalHeader().setStyleSheet("""
-            min-height:1.55em; max-height:1.55em;""")
+            min-height:1.8em; max-height:1.8em;""")
         self.table.horizontalHeader().setSectionResizeMode(
             QHeaderView.Stretch)
         self.table.horizontalHeader().setSectionResizeMode(
@@ -281,9 +282,26 @@ class DipoleRamp(QWidget):
             label_item.setFlags(Qt.ItemIsEnabled)
             np_item.setFlags(Qt.ItemIsEnabled)
             if vlabel in ['Injection', 'Ejection']:
-                label_item.setBackground(QBrush(QColor(220, 220, 220)))
-                e_item.setBackground(QBrush(QColor(220, 220, 220)))
-                np_item.setBackground(QBrush(QColor(220, 220, 220)))
+                gray = QColor(220, 220, 220)
+                label_item.setBackground(QBrush(gray))
+                e_item.setBackground(QBrush(gray))
+                np_item.setBackground(QBrush(gray))
+            elif vlabel == 'Smoothing Areas':
+                dark_orchid = QColor(194, 131, 181)
+                label_item.setBackground(QBrush(dark_orchid))
+                label_item.setTextAlignment(Qt.AlignCenter)
+                t_item.setBackground(QBrush(dark_orchid))
+                t_item.setTextAlignment(Qt.AlignCenter)
+                e_item.setBackground(QBrush(dark_orchid))
+                e_item.setTextAlignment(Qt.AlignCenter)
+                np_item.setBackground(QBrush(dark_orchid))
+                np_item.setTextAlignment(Qt.AlignCenter)
+            elif vlabel in ['RampUp', 'RampDown']:
+                light_orchid = QColor(241, 217, 248)
+                label_item.setBackground(QBrush(light_orchid))
+                e_item.setBackground(QBrush(light_orchid))
+                np_item.setBackground(QBrush(light_orchid))
+                np_item.setData(Qt.DisplayRole, '-')
 
             if vlabel in ['Start', ]:
                 t_item.setFlags(Qt.ItemIsEnabled)
@@ -291,6 +309,12 @@ class DipoleRamp(QWidget):
             elif vlabel in ['Injection', 'Ejection', 'Stop']:
                 t_item.setBackground(QBrush(QColor("white")))
                 e_item.setFlags(Qt.ItemIsEnabled)
+            elif vlabel == 'Smoothing Areas':
+                t_item.setFlags(Qt.ItemIsEnabled)
+                e_item.setFlags(Qt.ItemIsEnabled)
+                t_item.setData(Qt.DisplayRole, 'Interval [ms]')
+                e_item.setData(Qt.DisplayRole, 'E Range [GeV]')
+                np_item.setData(Qt.DisplayRole, ' ')
             else:
                 t_item.setBackground(QBrush(QColor("white")))
                 e_item.setBackground(QBrush(QColor("white")))
@@ -359,7 +383,23 @@ class DipoleRamp(QWidget):
                 old_value = self.ramp_config.ps_ramp_duration
                 self.ramp_config.ps_ramp_duration = new_value
 
-        except exceptions.RampInvalidDipoleWfmParms as e:
+            elif self.table_map['rows'][row] == 'RampUp':
+                if self.table_map['columns'][column] == 'T [ms]':
+                    old_value = self.ramp_config.ps_ramp_rampup_smooth_intvl
+                    self.ramp_config.ps_ramp_rampup_smooth_intvl = new_value
+                elif self.table_map['columns'][column] == 'E [GeV]':
+                    old_value = self.ramp_config.ps_ramp_rampup_smooth_energy
+                    self.ramp_config.ps_ramp_rampup_smooth_energy = new_value
+
+            elif self.table_map['rows'][row] == 'RampDown':
+                if self.table_map['columns'][column] == 'T [ms]':
+                    old_value = self.ramp_config.ps_ramp_rampdown_smooth_intvl
+                    self.ramp_config.ps_ramp_rampdown_smooth_intvl = new_value
+                elif self.table_map['columns'][column] == 'E [GeV]':
+                    old_value = self.ramp_config.ps_ramp_rampdown_smooth_energy
+                    self.ramp_config.ps_ramp_rampdown_smooth_energy = new_value
+
+        except exceptions.RampError as e:
             QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
         else:
             self.updateGraph()
@@ -394,7 +434,7 @@ class DipoleRamp(QWidget):
 
         try:
             self.ramp_config.ti_params_ps_ramp_delay = new_value
-        except exceptions.RampInvalidDipoleWfmParms as e:
+        except exceptions.RampError as e:
             self.updatePSDelay()
             QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
         else:
@@ -428,7 +468,7 @@ class DipoleRamp(QWidget):
 
         try:
             self.ramp_config.ps_ramp_wfm_nrpoints = new_value
-        except exceptions.RampInvalidDipoleWfmParms as e:
+        except exceptions.RampError as e:
             self.updateWfmNrPoints()
             QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
         else:
@@ -448,14 +488,6 @@ class DipoleRamp(QWidget):
             self.updateTable()
 
     def _verifyWarnings(self):
-        # if len(self.ramp_config.ps_waveform_anomalies) > 0:
-        #     self.label_anom.setText('<h6>Caution: there are anomalies '
-        #                             'in the waveforms.</h6>')
-        #     self.pb_anom.setVisible(True)
-        # else:
-        #     self.label_anom.setText('')
-        #     self.pb_anom.setVisible(False)
-
         if 'BO-Fam:MA-B' in self.ramp_config.ps_waveform_manames_exclimits:
             self.label_exclim.setText('<h6>Waveform is exceeding current '
                                       'limits.</h6>')
@@ -463,12 +495,6 @@ class DipoleRamp(QWidget):
         else:
             self.label_exclim.setText('')
             self.pb_exclim.setVisible(False)
-
-    def _showAnomaliesPopup(self):
-        text = 'Caution to the following anomalies: \n'
-        # for anom in self.ramp_config.ps_waveform_anomalies:
-        #     text += anom + '\n'
-        QMessageBox.warning(self, 'Caution', text, QMessageBox.Ok)
 
     def _showExcLimPopup(self):
         manames_exclimits = self.ramp_config.ps_waveform_manames_exclimits
@@ -496,14 +522,26 @@ class DipoleRamp(QWidget):
             self.ax.set_xlim(min(xdata), max(xdata))
             self.ax.set_ylim(min(ydata)*0.95, max(ydata)*1.05)
 
+        minv, maxv = 0.9*min(ydata), 1.1*max(ydata)
+        t1 = self.ramp_config.ps_ramp_rampup1_start_time
+        self.m_rampup1_start.set_data([t1, t1], [minv, maxv])
+        t2 = self.ramp_config.ps_ramp_rampup2_start_time
+        self.m_rampup2_start.set_data([t2, t2], [minv, maxv])
+        t3 = self.ramp_config.ps_ramp_rampdown_start_time
+        self.m_rampdown_start.set_data([t3, t3], [minv, maxv])
+        t4 = self.ramp_config.ps_ramp_rampdown_stop_time
+        self.m_rampdown_stop.set_data([t4, t4], [minv, maxv])
+        dt1 = self.ramp_config.ps_ramp_rampup_smooth_intvl/2
+        self.m_rampup_smooth_intvl1.set_data([t2-dt1, t2-dt1], [minv, maxv])
+        self.m_rampup_smooth_intvl2.set_data([t2+dt1, t2+dt1], [minv, maxv])
+        dt2 = self.ramp_config.ps_ramp_rampdown_smooth_intvl/2
+        self.m_rampdown_smooth_intvl1.set_data([t3-dt2, t3-dt2], [minv, maxv])
+        self.m_rampdown_smooth_intvl2.set_data([t3+dt2, t3+dt2], [minv, maxv])
+
         if self.plot_unit == 'Strengths':
             func = self.ramp_config.ps_waveform_interp_strengths
         else:
             func = self.ramp_config.ps_waveform_interp_currents
-
-        markers_time = self.ramp_config.ps_ramp_times
-        self.markers.set_xdata(markers_time)
-        self.markers.set_ydata(func('BO-Fam:MA-B', markers_time))
 
         inj_marker_time = self.ramp_config.ti_params_injection_time
         self.m_inj.set_xdata(inj_marker_time)
@@ -539,7 +577,7 @@ class DipoleRamp(QWidget):
             elif label == 'Injection':
                 time = self.ramp_config.ti_params_injection_time
                 energy = self.ramp_config.ps_waveform_interp_energy(time)
-            elif label == 'RampUp2-Stop':
+            elif label == 'RampUp2-Start':
                 time = self.ramp_config.ps_ramp_rampup2_start_time
                 energy = self.ramp_config.ps_ramp_rampup2_start_energy
             elif label == 'Ejection':
@@ -554,10 +592,21 @@ class DipoleRamp(QWidget):
             elif label == 'Stop':
                 time = self.ramp_config.ps_ramp_duration
                 energy = self.ramp_config.ps_ramp_start_energy
-            t_item.setData(Qt.DisplayRole, '{0:.3f}'.format(time))
-            e_item.setData(Qt.DisplayRole, '{0:.4f}'.format(energy))
+            elif label == 'Smoothing Areas':
+                time = None
+                energy = None
+            elif label == 'RampUp':
+                time = self.ramp_config.ps_ramp_rampup_smooth_intvl
+                energy = self.ramp_config.ps_ramp_rampup_smooth_energy
+            elif label == 'RampDown':
+                time = self.ramp_config.ps_ramp_rampdown_smooth_intvl
+                energy = self.ramp_config.ps_ramp_rampdown_smooth_energy
 
-        for row in self.table_map['rows'].keys():
+            if time is not None:
+                t_item.setData(Qt.DisplayRole, '{0:.3f}'.format(time))
+                e_item.setData(Qt.DisplayRole, '{0:.4f}'.format(energy))
+
+        for row in range(8):  # before smoothing areas section
             D = self.ramp_config.ps_ramp_duration
             N = self.ramp_config.ps_ramp_wfm_nrpoints
             T = float(self.table.item(row, 1).data(Qt.DisplayRole))
@@ -565,9 +614,9 @@ class DipoleRamp(QWidget):
             item = self.table.item(row, 3)  # index column
             item.setData(Qt.DisplayRole, str(value))
 
-        self.l_rampupv.setText('RmpU {: .3f} [GeV/s]'.format(
+        self.l_rampupv.setText('RmpU2 {: .3f} [GeV/s]'.format(
                                self.ramp_config.ps_ramp_rampup2_slope))
-        self.l_rampdownv.setText('RmpD {: .3f} [GeV/s]'.format(
+        self.l_rampdownv.setText('RmpD  {: .3f} [GeV/s]'.format(
                                  self.ramp_config.ps_ramp_rampdown_slope))
 
         self.table.cellChanged.connect(self._handleCellChanged)
@@ -745,9 +794,9 @@ class MultipolesRamp(QWidget):
         self.table.setSizePolicy(QSzPlcy.MinimumExpanding,
                                  QSzPlcy.MinimumExpanding)
         self.table.verticalHeader().setStyleSheet("""
-            min-width:1.55em; max-width:1.55em;""")
+            min-width:1.8em; max-width:1.8em;""")
         self.table.horizontalHeader().setStyleSheet("""
-            min-height:1.55em; max-height:1.55em;""")
+            min-height:1.8em; max-height:1.8em;""")
         self.table.setRowCount(2+len(self.normalized_configs))
         self.table.setColumnCount(max(self.table_map['columns'].keys())+1)
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
@@ -813,7 +862,7 @@ class MultipolesRamp(QWidget):
                 Qt.DisplayRole))
             self.ramp_config.ps_normalized_configs_change_time(
                 nconfig_name, new_value)
-        except exceptions.RampInvalidNormConfig as e:
+        except exceptions.RampError as e:
             QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
         else:
             self.updateGraph()
@@ -1254,7 +1303,7 @@ class RFRamp(QWidget):
             """
             #RFTable{
                 min-width: 30em;
-                min-height: 10.69em; max-height: 10.69em;
+                min-height: 10.8em; max-height: 10.8em;
             }
             QHeaderView::section {
                 background-color: #4A5E28;
@@ -1270,7 +1319,7 @@ class RFRamp(QWidget):
         self.table.setRowCount(max(self.table_map['rows'].keys())+1)
         self.table.setColumnCount(max(self.table_map['columns'].keys())+1)
         self.table.horizontalHeader().setStyleSheet("""
-            min-height:1.55em; max-height:1.55em;""")
+            min-height:1.8em; max-height:1.8em;""")
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.table.horizontalHeader().setSectionResizeMode(
             0, QHeaderView.ResizeToContents)
@@ -1352,7 +1401,7 @@ class RFRamp(QWidget):
                 old_value = self.ramp_config.rf_ramp_rampdown_stop_time
                 self.ramp_config.rf_ramp_rampdown_stop_time = new_value
 
-        except exceptions.RampInvalidRFParms as e:
+        except exceptions.RampError as e:
             QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
         else:
             self.updateGraph()
@@ -1386,7 +1435,7 @@ class RFRamp(QWidget):
 
         try:
             self.ramp_config.ti_params_ps_ramp_delay = new_value
-        except exceptions.RampInvalidRFParms as e:
+        except exceptions.RampError as e:
             self.updateRFDelay()
             QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
         else:
