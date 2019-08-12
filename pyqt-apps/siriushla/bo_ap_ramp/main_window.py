@@ -118,7 +118,8 @@ class RampMain(SiriusMainWindow):
     @Slot(str)
     def _receiveNewConfigName(self, new_config_name):
         if self.ramp_config is None or \
-                self.ramp_config.name != new_config_name:
+                self.ramp_config.name != new_config_name or \
+                self.ramp_config.name == '**New Configuration**':
             self.ramp_config = ramp.BoosterRamp(new_config_name,
                                                 auto_update=True)
             self._undo_stack.clear()
