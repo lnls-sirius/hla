@@ -304,7 +304,7 @@ class ConfigurationManager(SiriusMainWindow):
 
         # Main widget layout setup
         self.layout.addWidget(self.header, 0, 0, 1, 3)
-        self.layout.addWidget(self.sub_header, 1, 0, 1, 2, )
+        self.layout.addWidget(self.sub_header, 1, 0, 1, 2)
         self.layout.addWidget(self.query_form, 2, 0, 1, 2)
         self.layout.addWidget(self.config_viewer, 3, 0, 1, 2)
         self.layout.addWidget(self.tree, 1, 2, 4, 1)

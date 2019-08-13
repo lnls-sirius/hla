@@ -23,7 +23,7 @@ class InsertNormalizedConfig(SiriusDialog):
 
     insertConfig = Signal(list)
 
-    def __init__(self, parent, ramp_config, ):
+    def __init__(self, parent, ramp_config):
         """Initialize object."""
         super().__init__(parent)
         self.setObjectName('BOApp')
