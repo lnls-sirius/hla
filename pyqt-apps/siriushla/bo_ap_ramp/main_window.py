@@ -7,9 +7,9 @@ from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, \
 from siriuspy.ramp import ramp
 from siriuspy.clientconfigdb import ConfigDBException as _ConfigDBException
 from siriushla.widgets.windows import SiriusMainWindow
+from siriushla.bo_ap_ramp.menu import Settings
+from siriushla.bo_ap_ramp.boramp_edit import ConfigParameters
 from siriushla.bo_ap_ramp.status_and_commands import StatusAndCommands
-from siriushla.bo_ap_ramp.settings import Settings
-from siriushla.bo_ap_ramp.config_params import ConfigParameters
 
 
 class RampMain(SiriusMainWindow):

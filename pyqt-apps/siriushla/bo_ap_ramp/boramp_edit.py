@@ -24,13 +24,14 @@ from siriuspy.ramp.magnet import Magnet as _Magnet
 from siriuspy.ramp.conn import ConnSOFB as _ConnSOFB
 
 from siriushla.widgets import SiriusFigureCanvas
-from siriushla.bo_ap_ramp.auxiliar_classes import \
+from siriushla.bo_ap_ramp.auxiliary_dialogs import \
     InsertNormalizedConfig as _InsertNormConfig, \
     DeleteNormalizedConfig as _DeleteNormConfig, \
     DuplicateNormConfig as _DuplicateNormConfig, \
+    ChooseMagnetsToPlot as _ChooseMagnetsToPlot
+from siriushla.bo_ap_ramp.custom_widgets import \
     SpinBoxDelegate as _SpinBoxDelegate, \
     CustomTableWidgetItem as _CustomTableWidgetItem, \
-    ChooseMagnetsToPlot as _ChooseMagnetsToPlot, \
     MyDoubleSpinBox as _MyDoubleSpinBox, \
     MyTableWidget as _MyTableWidget
 from siriushla.bo_ap_ramp.bonormalized_edit import BONormEdit as _BONormEdit

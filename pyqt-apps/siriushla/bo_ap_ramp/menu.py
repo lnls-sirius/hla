@@ -10,7 +10,7 @@ from siriuspy.ramp import ramp
 from siriushla import util
 from siriushla.as_ap_configdb import LoadConfigDialog as _LoadConfigDialog, \
     SaveConfigDialog as _SaveConfigDialog
-from .auxiliar_classes import OpticsAdjustSettings as _OpticsAdjustSettings
+from .auxiliary_dialogs import OpticsAdjustSettings as _OpticsAdjustSettings
 
 
 class Settings(QMenuBar):
