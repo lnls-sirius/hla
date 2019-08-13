@@ -71,7 +71,7 @@ class Settings(QMenuBar):
         self.diag_menu = self.addMenu('Ramp Diagnosis')
         self.act_dcct = self.diag_menu.addAction('DCCT')
         util.connect_newprocess(
-            self.act_dcct, ['sirius-hla-as-di-dcct.py', 'BO'])
+            self.act_dcct, ['sirius-hla-as-di-dcct.py', 'BO'], parent=self)
         # TODO: menu to access all windows related to diagnostics
 
         self.open_menu = self.addMenu('Open...')
