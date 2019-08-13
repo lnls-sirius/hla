@@ -376,8 +376,6 @@ class StatusDetails(SiriusDialog):
         self._conn_ti = connTI or _ConnTiming(prefix=self.prefix)
         self._conn_rf = connRF or _ConnRF(prefix=self.prefix)
         self._setupUi()
-        t = _Thread(target=self.thread_print, daemon=True)
-        t.start()
 
     def _setupUi(self):
         pfx = self.prefix
@@ -478,8 +476,3 @@ class StatusDetails(SiriusDialog):
         glay.addWidget(self.led_rf_apply, 5, 2)
         glay.addWidget(self.led_ti_apply, 5, 3)
         self.setLayout(glay)
-
-    def thread_print(self):
-        import time
-        time.sleep(2)
-        print(self.led_ma_setup.channels2status)
