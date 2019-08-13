@@ -65,6 +65,10 @@ class PyDMLed(QLed, PyDMWidget):
         PyDMWidget.value_changed(self, new_val)
         if new_val is None:
             return
+        # TODO: remove the following step when the bug in PS is solved
+        if isinstance(new_val, _np.ndarray):
+            self.setState(0)
+            return
         value = int(new_val)
         if self._bit < 0:  # Led represents value of PV
             self.setState(value)
@@ -82,6 +86,13 @@ class SiriusLedState(PyDMLed):
         self.setOffColor(PyDMLed.DarkGreen)
         self.setOnColor(PyDMLed.LightGreen)
 
+    def value_changed(self, new_val):
+        """Reimplement value_changed to filter bug."""
+        # TODO: remove the following step when the bug in PS is solved
+        if isinstance(new_val, _np.ndarray):
+            new_val = 1
+        super().value_changed(new_val)
+
 
 class SiriusLedAlert(PyDMLed):
     """PyDMLed specialization to represent 2 states in red/light green."""
@@ -94,7 +105,12 @@ class SiriusLedAlert(PyDMLed):
 
     def value_changed(self, new_val):
         """If no bit is set, treat new_val as 2 states, zero and non-zero."""
-        super().value_changed(int(new_val != 0) if self._bit < 0 else new_val)
+        # TODO: remove the following step when the bug in PS is solved
+        if isinstance(new_val, _np.ndarray):
+            value = 0
+        else:
+            value = int(new_val != 0) if self._bit < 0 else new_val
+        super().value_changed(value)
 
 
 class PyDMLedMultiChannel(QLed, PyDMWidget):
@@ -189,20 +205,25 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
     def value_changed(self, new_val):
         """Receive new value and set led color accordingly."""
         address = self.sender().address
-        desired_value = self._address2values[address]
+        desired = self._address2values[address]
 
-        if isinstance(desired_value, dict):
-            if 'bit' in desired_value.keys():
-                bit = desired_value['bit']
+        if isinstance(desired, dict):
+            if 'bit' in desired.keys():
+                bit = desired['bit']
                 mask = 1 << bit
                 new_val = (new_val & mask) >> bit
-            if 'comp' in desired_value.keys():
-                fun = self._operations_dict[desired_value['comp']]
+            if 'comp' in desired.keys():
+                fun = self._operations_dict[desired['comp']]
             else:
                 fun = self._operations_dict['eq']
-            is_desired = fun(new_val, desired_value['value'])
+            desired_value = desired['value']
         else:
             fun = self._operations_dict['eq']
+            desired_value = desired
+        # TODO: remove the following step when the bug in PS is solved
+        if type(new_val) != type(desired_value):
+            is_desired = False
+        else:
             is_desired = fun(new_val, desired_value)
 
         self._address2status[address] = is_desired
