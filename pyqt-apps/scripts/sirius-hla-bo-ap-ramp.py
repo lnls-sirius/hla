@@ -6,7 +6,7 @@ import sys
 import argparse as _argparse
 from siriushla.sirius_application import SiriusApplication
 from siriuspy.envars import vaca_prefix
-from siriushla.bo_ap_ramp.main_window import RampMain
+from siriushla.bo_ap_ramp import RampMain
 
 
 parser = _argparse.ArgumentParser(

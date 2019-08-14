@@ -17,7 +17,7 @@ from siriuspy.clientconfigdb import ConfigDBException as _ConfigDBException
 
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.as_ap_configdb import SaveConfigDialog as _SaveConfigDialog
-from siriushla.bo_ap_ramp.auxiliar_classes import \
+from siriushla.bo_ap_ramp.custom_widgets import \
     MyDoubleSpinBox as _MyDoubleSpinBox
 
 

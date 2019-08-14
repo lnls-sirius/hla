@@ -1,11 +1,10 @@
 """Booster Ramp Control HLA: Auxiliar Classes Module."""
 
-from qtpy.QtCore import Qt, Signal, Slot, QLocale
+from qtpy.QtCore import Qt, Signal, Slot
 from qtpy.QtWidgets import QLabel, QWidget, QAbstractItemView, QMessageBox, \
     QHBoxLayout, QVBoxLayout, QGridLayout, QLineEdit, QPushButton, QCheckBox, \
-    QTableWidget, QTableWidgetItem, QRadioButton, QFormLayout, QDoubleSpinBox,\
-    QComboBox, QSpinBox, QStyledItemDelegate, QSpacerItem, QTabWidget, \
-    QSizePolicy as QSzPlcy, QHeaderView
+    QTableWidget, QTableWidgetItem, QRadioButton, QDoubleSpinBox, QComboBox, \
+    QSpinBox, QSpacerItem, QTabWidget, QHeaderView, QSizePolicy as QSzPlcy
 
 from siriuspy.clientconfigdb import ConfigDBClient as _ConfigDBClient, \
     ConfigDBDocument as _ConfigDBDocument, \
@@ -13,11 +12,11 @@ from siriuspy.clientconfigdb import ConfigDBClient as _ConfigDBClient, \
 from siriuspy.ramp import ramp
 
 from siriushla.widgets.windows import SiriusDialog
-from siriushla.as_ap_configdb import LoadConfigDialog as _LoadConfigDialog
+from .custom_widgets import ConfigLineEdit as _ConfigLineEdit
 
 
 class InsertNormalizedConfig(SiriusDialog):
-    """Auxiliar window to insert a new normalized config."""
+    """Auxiliary window to insert a new normalized config."""
 
     insertConfig = Signal(list)
 
@@ -31,107 +30,60 @@ class InsertNormalizedConfig(SiriusDialog):
         self._setupUi()
 
     def _setupUi(self):
-        self.rb_interp = QRadioButton('By interpolation')
-        self.rb_confsrv = QRadioButton(
-            'By taking an existing one from Config Server')
-        self.rb_create = QRadioButton(
-            'By creating a new nominal configuration')
+        # selection widgets
+        self.rb_interp = QRadioButton('Interpolate')
+        self.rb_confsrv = QRadioButton('Take from Config Server')
+        self.rb_create = QRadioButton('Create from template')
+
+        # data widget
         self.config_data = QWidget()
-        self._setupConfigDataWidget()
-
-        self.rb_interp.toggled.connect(self.interp_settings.setVisible)
-        self.rb_interp.setChecked(True)
-        self.rb_confsrv.toggled.connect(self.confsrv_settings.setVisible)
-        self.rb_create.toggled.connect(self.create_settings.setVisible)
-
-        vlay = QVBoxLayout()
-        vlay.addItem(QSpacerItem(40, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
-        vlay.addWidget(
-            QLabel('<h4>Insert a Normalized Configuration</h4>', self),
-            alignment=Qt.AlignCenter)
-        vlay.addItem(QSpacerItem(40, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
-        vlay.addWidget(self.rb_interp)
-        vlay.addWidget(self.rb_confsrv)
-        vlay.addWidget(self.rb_create)
-        vlay.addItem(QSpacerItem(40, 20, QSzPlcy.Ignored, QSzPlcy.Preferred))
-        vlay.addWidget(self.config_data)
-
-        self.setLayout(vlay)
-        self.setStyleSheet("""
-            #interp_settings{
-                min-width:20em;max-width:20em;
-                min-height:6em;max-height:6em;}
-            #confsrv_settings{
-                min-width:20em;max-width:20em;
-                min-height:6em;max-height:6em;}
-            #create_settings{
-                min-width:20em;max-width:20em;
-                min-height:6em;max-height:6em;}""")
-
-    def _setupConfigDataWidget(self):
-        vlay = QVBoxLayout()
-        self.interp_settings = QWidget()
-        self.interp_settings.setObjectName('interp_settings')
-        self.confsrv_settings = QWidget()
-        self.confsrv_settings.setObjectName('confsrv_settings')
-        self.create_settings = QWidget()
-        self.create_settings.setObjectName('create_settings')
-        self.confsrv_settings.setVisible(False)
-        self.create_settings.setVisible(False)
-        vlay.addWidget(self.interp_settings)
-        vlay.addWidget(self.confsrv_settings)
-        vlay.addWidget(self.create_settings)
-        self.config_data.setLayout(vlay)
-
-        # to insert interpolating existing norm configs
-        flay_interp = QFormLayout()
-        self.le_interp_name = QLineEdit(self)
+        glay_data = QGridLayout(self.config_data)
+        self.le_interp_name = QLineEdit(self)  # interpolate
         self.le_interp_name.setText(_ConfigDBDocument.generate_config_name())
-        self.sb_interp_time = QDoubleSpinBox(self)
-        self.sb_interp_time.setMaximum(490)
-        self.sb_interp_time.setDecimals(6)
-        self.bt_interp = QPushButton('Insert', self)
-        self.bt_interp.setAutoDefault(False)
-        self.bt_interp.setDefault(False)
-        self.bt_interp.clicked.connect(self._emitInsertConfigData)
-        flay_interp.addRow(QLabel('Name: ', self), self.le_interp_name)
-        flay_interp.addRow(QLabel('Time: ', self), self.sb_interp_time)
-        flay_interp.addRow(self.bt_interp)
-
-        # to insert a new norm config from an existing one
-        flay_confsrv = QFormLayout()
-        self.le_confsrv_name = _ConfigLineEdit(self)
+        self.le_confsrv_name = _ConfigLineEdit(self)  # from ConfigDB
         self.le_confsrv_name.textChanged.connect(
             self._handleInsertExistingConfig)
-        self.sb_confsrv_time = QDoubleSpinBox(self)
-        self.sb_confsrv_time.setMaximum(490)
-        self.sb_confsrv_time.setDecimals(6)
-        self.bt_confsrv = QPushButton('Insert', self)
-        self.bt_confsrv.setAutoDefault(False)
-        self.bt_confsrv.setDefault(False)
-        self.bt_confsrv.clicked.connect(self._emitInsertConfigData)
-        flay_confsrv.addRow(QLabel('Name: ', self), self.le_confsrv_name)
-        flay_confsrv.addRow(QLabel('Time: ', self), self.sb_confsrv_time)
-        flay_confsrv.addRow(self.bt_confsrv)
+        self.le_confsrv_name.setVisible(False)
+        self.le_nominal_name = QLineEdit(self)  # from template
+        self.le_nominal_name.setText(_ConfigDBDocument.generate_config_name())
+        self.le_nominal_name.setVisible(False)
+        self.sb_time = QDoubleSpinBox(self)
+        self.sb_time.setMaximum(490)
+        self.sb_time.setDecimals(6)
+        self.bt_insert = QPushButton('Insert', self)
+        self.bt_insert.setAutoDefault(False)
+        self.bt_insert.setDefault(False)
+        self.bt_insert.clicked.connect(self._emitConfigData)
+        self.bt_cancel = QPushButton('Cancel', self)
+        self.bt_cancel.setAutoDefault(False)
+        self.bt_cancel.setDefault(False)
+        self.bt_cancel.clicked.connect(self.close)
+        glay_data.addWidget(QLabel('Name: ', self), 0, 0)
+        glay_data.addWidget(self.le_interp_name, 0, 1)
+        glay_data.addWidget(self.le_confsrv_name, 0, 1)
+        glay_data.addWidget(self.le_nominal_name, 0, 1)
+        glay_data.addWidget(QLabel('Time: ', self), 1, 0)
+        glay_data.addWidget(self.sb_time, 1, 1)
+        glay_data.addWidget(self.bt_cancel, 2, 0)
+        glay_data.addWidget(self.bt_insert, 2, 1)
 
-        # to insert a new norm config equal to template
-        flay_create = QFormLayout()
-        self.le_create_name = QLineEdit(self)
-        self.le_create_name.setText(self.norm_config.generate_config_name())
-        self.sb_create_time = QDoubleSpinBox(self)
-        self.sb_create_time.setDecimals(6)
-        self.sb_create_time.setMaximum(490)
-        self.bt_create = QPushButton('Insert', self)
-        self.bt_create.setAutoDefault(False)
-        self.bt_create.setDefault(False)
-        self.bt_create.clicked.connect(self._emitInsertConfigData)
-        flay_create.addRow(QLabel('Name: ', self), self.le_create_name)
-        flay_create.addRow(QLabel('Time: ', self), self.sb_create_time)
-        flay_create.addRow(self.bt_create)
+        # connect visibility signals
+        self.rb_interp.toggled.connect(self.le_interp_name.setVisible)
+        self.rb_interp.setChecked(True)
+        self.rb_confsrv.toggled.connect(self.le_confsrv_name.setVisible)
+        self.rb_create.toggled.connect(self.le_nominal_name.setVisible)
 
-        self.interp_settings.setLayout(flay_interp)
-        self.confsrv_settings.setLayout(flay_confsrv)
-        self.create_settings.setLayout(flay_create)
+        # layout
+        lay = QVBoxLayout()
+        lay.addWidget(
+            QLabel('<h4>Insert a Normalized Configuration</h4>', self),
+            alignment=Qt.AlignCenter)
+        lay.addWidget(self.rb_interp)
+        lay.addWidget(self.rb_confsrv)
+        lay.addWidget(self.rb_create)
+        lay.addStretch()
+        lay.addWidget(self.config_data)
+        self.setLayout(lay)
 
     @Slot(str)
     def _handleInsertExistingConfig(self, configname):
@@ -140,84 +92,131 @@ class InsertNormalizedConfig(SiriusDialog):
             self.norm_config.load()
             energy = self.norm_config[ramp.BoosterRamp.MANAME_DIPOLE]
             time = self.ramp_config.ps_waveform_interp_time(energy)
-            self.sb_confsrv_time.setValue(time)
+            self.sb_time.setValue(time)
         except _ConfigDBException as err:
             QMessageBox.critical(self, 'Error', str(err), QMessageBox.Ok)
 
-    def _emitInsertConfigData(self):
-        sender = self.sender()
-        data = list()
-        if sender is self.bt_interp:
-            time = self.sb_interp_time.value()
+    def _emitConfigData(self):
+        time = self.sb_time.value()
+        if self.le_interp_name.isVisible():
             name = self.le_interp_name.text()
             nconf = None
-        elif sender is self.bt_confsrv:
-            time = self.sb_confsrv_time.value()
+        elif self.le_confsrv_name.isVisible():
             name = self.le_confsrv_name.text()
             nconf = None
             try:
-                self.norm_config.name = name
-                self.norm_config.load()
+                # self.norm_config.name = name
+                # self.norm_config.load()
                 nconf = self.norm_config.value
             except _ConfigDBException as err:
                 QMessageBox.critical(self, 'Error', str(err), QMessageBox.Ok)
-
-        elif sender is self.bt_create:
-            time = self.sb_create_time.value()
-            name = self.le_create_name.text()
+        elif self.le_nominal_name.isVisible():
+            name = self.le_nominal_name.text()
             nconf = self.norm_config.get_value_template()
-        data = [time, name, nconf]
-        self.insertConfig.emit(data)
+        self.insertConfig.emit([time, name, nconf])
+        self.close()
+
+
+class DuplicateNormConfig(SiriusDialog):
+    """Auxiliary window to duplicate a normalized config."""
+
+    insertConfig = Signal(list)
+
+    def __init__(self, parent, data):
+        """Initialize object."""
+        super().__init__(parent)
+        self.setObjectName('BOApp')
+        self.setWindowTitle('Duplicate Normalized Configuration')
+        self.data = data
+        self._setupUi()
+
+    def _setupUi(self):
+        self.le_name = QLineEdit(self)
+        self.le_name.setText(_ConfigDBDocument.generate_config_name())
+        self.sb_time = QDoubleSpinBox(self)
+        self.sb_time.setMaximum(490)
+        self.sb_time.setDecimals(6)
+        self.bt_duplic = QPushButton('Duplicate', self)
+        self.bt_duplic.setAutoDefault(False)
+        self.bt_duplic.setDefault(False)
+        self.bt_duplic.clicked.connect(self._emitConfigData)
+        self.bt_cancel = QPushButton('Cancel', self)
+        self.bt_cancel.setAutoDefault(False)
+        self.bt_cancel.setDefault(False)
+        self.bt_cancel.clicked.connect(self.close)
+
+        # layout
+        lay = QGridLayout()
+        lay.setVerticalSpacing(15)
+        lay.addWidget(
+            QLabel('<h4>Duplicate Normalized Configuration</h4>', self),
+            0, 0, 1, 2, alignment=Qt.AlignCenter)
+        lay.addWidget(
+            QLabel('Choose a name and a time to insert\n'
+                   'the new configuration:', self), 1, 0, 1, 2)
+        lay.addWidget(QLabel('Name: ', self), 2, 0)
+        lay.addWidget(self.le_name, 2, 1)
+        lay.addWidget(QLabel('Time: ', self), 3, 0)
+        lay.addWidget(self.sb_time, 3, 1)
+        lay.addWidget(self.bt_cancel, 4, 0)
+        lay.addWidget(self.bt_duplic, 4, 1)
+        self.setLayout(lay)
+
+    def _emitConfigData(self):
+        time = self.sb_time.value()
+        name = self.le_name.text()
+        nconf = self.data
+        self.insertConfig.emit([time, name, nconf])
         self.close()
 
 
 class DeleteNormalizedConfig(SiriusDialog):
-    """Auxiliar window to delete a normalized config."""
+    """Auxiliary window to delete a normalized config."""
 
     deleteConfig = Signal(str)
 
-    def __init__(self, parent, table_map, selected_item):
+    def __init__(self, parent, table_map, selected_row):
         """Initialize object."""
         super().__init__(parent)
         self.setObjectName('BOApp')
         self.setWindowTitle('Delete Normalized Configuration')
         self.table_map = table_map
-        self.selected_item = selected_item
+        self.selected_row = selected_row
         self._setupUi()
 
     def _setupUi(self):
-        glay = QGridLayout()
-        label = QLabel('<h4>Delete a Normalized Configuration</h4>', self)
-        label.setAlignment(Qt.AlignCenter)
-        glay.addWidget(label, 0, 0, 1, 2)
-
         self.sb_confignumber = QSpinBox(self)
         self.sb_confignumber.setMinimum(1)
         self.sb_confignumber.setMaximum(max(self.table_map['rows'].keys())+1)
         self.sb_confignumber.setStyleSheet("""max-width:5em;""")
         self.sb_confignumber.valueChanged.connect(self._searchConfigByIndex)
+
         self.bt_delete = QPushButton('Delete', self)
         self.bt_delete.setAutoDefault(False)
         self.bt_delete.setDefault(False)
-        self.bt_delete.clicked.connect(self._emitDeleteConfigData)
+        self.bt_delete.clicked.connect(self._emitConfigData)
+
         self.l_configname = QLabel('', self)
         self.l_configname.setSizePolicy(QSzPlcy.MinimumExpanding,
                                         QSzPlcy.Expanding)
-        if self.selected_item:
-            row = self.selected_item[0].row()
-        else:
-            row = 0
-        self.sb_confignumber.setValue(row+1)
-        self._searchConfigByIndex(row+1)
+        self.sb_confignumber.setValue(self.selected_row+1)
+        self._searchConfigByIndex(self.selected_row+1)
 
-        glay.addItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum), 1, 0)
+        self.bt_cancel = QPushButton('Cancel', self)
+        self.bt_cancel.setAutoDefault(False)
+        self.bt_cancel.setDefault(False)
+        self.bt_cancel.clicked.connect(self.close)
+
+        glay = QGridLayout()
+        glay.setVerticalSpacing(15)
+        glay.setHorizontalSpacing(10)
+        label = QLabel('<h4>Delete a Normalized Configuration</h4>', self)
+        label.setAlignment(Qt.AlignCenter)
+        glay.addWidget(label, 0, 0, 1, 2)
         glay.addWidget(self.sb_confignumber, 2, 0)
         glay.addWidget(self.l_configname, 2, 1)
-        glay.addItem(
-            QSpacerItem(40, 20, QSzPlcy.Expanding, QSzPlcy.Minimum), 3, 0)
-        glay.addWidget(self.bt_delete, 4, 0, 1, 2)
-
+        glay.addWidget(self.bt_cancel, 4, 0)
+        glay.addWidget(self.bt_delete, 4, 1)
         self.setLayout(glay)
 
     @Slot(int)
@@ -229,7 +228,7 @@ class DeleteNormalizedConfig(SiriusDialog):
         else:
             self.bt_delete.setEnabled(True)
 
-    def _emitDeleteConfigData(self):
+    def _emitConfigData(self):
         self.deleteConfig.emit(self.l_configname.text())
         self.close()
 
@@ -596,90 +595,3 @@ class ChooseMagnetsToPlot(SiriusDialog):
 
         self.choosePlotSignal.emit(maname_list)
         self.close()
-
-
-class MyTableWidget(QTableWidget):
-    """Reimplement mousePressEvent to show contextMenu."""
-
-    def __init__(self, parent=None, show_menu_fun=None):
-        super().__init__(parent)
-        self.show_menu_fun = show_menu_fun
-
-    def mousePressEvent(self, ev):
-        if ev.button() == Qt.RightButton:
-            self.show_menu_fun(ev.pos())
-        super().mousePressEvent(ev)
-
-
-class SpinBoxDelegate(QStyledItemDelegate):
-    """Auxiliar class to draw a SpinBox in table items on editing."""
-
-    def createEditor(self, parent, option, index):
-        """Create editor."""
-        editor = QDoubleSpinBox(parent)
-        editor.setMinimum(0)
-        editor.setMaximum(500)
-        editor.setDecimals(4)
-        locale = QLocale(QLocale.English, country=QLocale.UnitedStates)
-        locale.setNumberOptions(locale.RejectGroupSeparator)
-        editor.setLocale(locale)
-        return editor
-
-    def setEditorData(self, spinBox, index):
-        """Set editor data."""
-        value = index.model().data(index, Qt.EditRole)
-        spinBox.setValue(float(value))
-
-    def setModelData(self, spinBox, model, index):
-        """Set model data."""
-        spinBox.interpretText()
-        value = spinBox.value()
-        model.setData(index, value, Qt.EditRole)
-
-    def updateEditorGeometry(self, spinBox, option, index):
-        """Update editor geometry."""
-        spinBox.setGeometry(option.rect)
-
-
-class CustomTableWidgetItem(QTableWidgetItem):
-    """Auxiliar class to make a table column sortable by numeric data."""
-
-    def __init__(self, value):
-        """Initialize object."""
-        super().__init__('{}'.format(value))
-
-    def __lt__(self, other):
-        """Change default sort method to sort by numeric data."""
-        if isinstance(other, CustomTableWidgetItem):
-            selfDataValue = float(self.data(Qt.EditRole))
-            otherDataValue = float(other.data(Qt.EditRole))
-            return selfDataValue < otherDataValue
-        else:
-            return QTableWidgetItem.__lt__(self, other)
-
-
-class MyDoubleSpinBox(QDoubleSpinBox):
-    """Subclass QDoubleSpinBox to reimplement wheelEvent."""
-
-    def __init__(self, parent):
-        """Initialize object."""
-        super().__init__(parent)
-        locale = QLocale(QLocale.English, country=QLocale.UnitedStates)
-        locale.setNumberOptions(locale.RejectGroupSeparator)
-        self.setLocale(locale)
-        self.setFocusPolicy(Qt.StrongFocus)
-
-    def wheelEvent(self, event):
-        """Reimplement wheel event to ignore event when out of focus."""
-        if not self.hasFocus():
-            event.ignore()
-        else:
-            super().wheelEvent(event)
-
-
-class _ConfigLineEdit(QLineEdit):
-
-    def mouseReleaseEvent(self, ev):
-        popup = _LoadConfigDialog('bo_normalized')
-        popup.configname.connect(self.setText)
-        popup.exec_()

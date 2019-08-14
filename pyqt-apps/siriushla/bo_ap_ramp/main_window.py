@@ -7,9 +7,9 @@ from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, \
 from siriuspy.ramp import ramp
 from siriuspy.clientconfigdb import ConfigDBException as _ConfigDBException
 from siriushla.widgets.windows import SiriusMainWindow
+from siriushla.bo_ap_ramp.menu import Settings
+from siriushla.bo_ap_ramp.boramp_edit import ConfigParameters
 from siriushla.bo_ap_ramp.status_and_commands import StatusAndCommands
-from siriushla.bo_ap_ramp.settings import Settings
-from siriushla.bo_ap_ramp.config_params import ConfigParameters
 
 
 class RampMain(SiriusMainWindow):
@@ -118,7 +118,8 @@ class RampMain(SiriusMainWindow):
     @Slot(str)
     def _receiveNewConfigName(self, new_config_name):
         if self.ramp_config is None or \
-                self.ramp_config.name != new_config_name:
+                self.ramp_config.name != new_config_name or \
+                self.ramp_config.name == '**New Configuration**':
             self.ramp_config = ramp.BoosterRamp(new_config_name,
                                                 auto_update=True)
             self._undo_stack.clear()
