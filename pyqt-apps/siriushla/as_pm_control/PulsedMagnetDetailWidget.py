@@ -1,4 +1,5 @@
 """Detailed widget for controlling a pulsed mangnet."""
+import qtawesome as qta
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, \
     QLabel, QGroupBox, QPushButton
@@ -21,6 +22,7 @@ class PulsedMagnetDetailWidget(QWidget):
         super().__init__(parent)
         self._maname = _PVName(maname)
         self.setObjectName(self._maname.sec+'App')
+        self.setWindowIcon(qta.icon('mdi.current-ac', color='#969696'))
         self._prefixed_maname = _VACA_PREFIX + self._maname
 
         self._create_pvs()

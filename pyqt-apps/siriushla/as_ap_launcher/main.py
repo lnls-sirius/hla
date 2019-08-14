@@ -1,5 +1,7 @@
 """Interface to handle main operation commands."""
 
+import qtawesome as qta
+
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
     QGridLayout
@@ -28,6 +30,7 @@ class MainOperation(SiriusMainWindow):
         self.setMenuBar(menubar)
         self._setupUi()
         self.setWindowTitle('Main Controls')
+        self.setWindowIcon(qta.icon('mdi.rocket', color='#969696'))
         self.move(0, 20)
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
 

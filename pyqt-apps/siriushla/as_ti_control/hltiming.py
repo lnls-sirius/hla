@@ -1,6 +1,7 @@
 """Control of EVG Timing Device."""
 
 import sys as _sys
+import qtawesome as qta
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, \
     QGridLayout, QGroupBox, QLabel, QSplitter, QSizePolicy
@@ -25,6 +26,7 @@ class TimingMain(SiriusMainWindow):
         self.prefix = prefix
         self.setupui()
         self.setObjectName('ASApp')
+        self.setWindowIcon(qta.icon('mdi.timer', color='#969696'))
 
     def setupui(self):
         self.setupmenus()

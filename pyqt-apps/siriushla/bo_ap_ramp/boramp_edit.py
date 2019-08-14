@@ -7,12 +7,15 @@ from threading import Thread as _Thread
 import numpy as np
 import math as _math
 
+import qtawesome as qta
+
 from qtpy.QtCore import Qt, Signal, Slot
 from qtpy.QtGui import QBrush, QColor
 from qtpy.QtWidgets import QGroupBox, QLabel, QWidget, QSpacerItem, \
     QVBoxLayout, QHBoxLayout, QGridLayout, QFormLayout, QCheckBox, \
     QPushButton, QTableWidget, QTableWidgetItem, QSizePolicy as QSzPlcy, \
     QHeaderView, QUndoCommand, QAbstractItemView, QMenu, QMessageBox
+
 from matplotlib.backends.backend_qt5agg import (
     NavigationToolbar2QT as NavigationToolbar)
 from matplotlib.figure import Figure
@@ -150,9 +153,10 @@ class DipoleRamp(QWidget):
         lay_exclim.addWidget(self.label_exclim)
         lay_exclim.addWidget(self.pb_exclim)
 
-        self.bt_apply2machine = QPushButton('Apply Changes to Machine', self)
-        self.bt_apply2machine.clicked.connect(
-            self.applyChanges2MachineSignal.emit)
+        self.bt_apply = QPushButton(qta.icon('mdi.download'), '', self)
+        self.bt_apply.setToolTip('Apply Changes to Machine')
+        self.bt_apply.setStyleSheet('icon-size: 30px 30px;')
+        self.bt_apply.clicked.connect(self.applyChanges2MachineSignal.emit)
 
         label = QLabel('<h4>Dipole Ramp</h4>', self, alignment=Qt.AlignCenter)
         label.setStyleSheet("""
@@ -165,7 +169,7 @@ class DipoleRamp(QWidget):
         glay.addLayout(lay_v, 2, 1, alignment=Qt.AlignRight)
         glay.addWidget(self.table, 3, 0, 1, 2)
         glay.addLayout(lay_exclim, 4, 0, 1, 2, alignment=Qt.AlignCenter)
-        glay.addWidget(self.bt_apply2machine, 6, 0, 1, 2,
+        glay.addWidget(self.bt_apply, 6, 0, 1, 2,
                        alignment=Qt.AlignRight)
 
     def _setupGraph(self):
@@ -679,17 +683,32 @@ class MultipolesRamp(QWidget):
         self._aux_magnets['BO-Fam:MA-B'] = _Magnet('BO-Fam:MA-B')
 
     def _setupUi(self):
-        glay = QGridLayout(self)
-        glay.setAlignment(Qt.AlignTop)
         self.graphview = QWidget()
-        self.table = _MyTableWidget(self, self._showNormConfigMenu)
-        self.bt_insert = QPushButton('Insert Normalized Config', self)
-        self.bt_delete = QPushButton('Delete Normalized Config', self)
-
         self._setupGraph()
+
+        self.table = _MyTableWidget(self, self._showNormConfigMenu)
         self._setupTable()
+
+        self.bt_insert = QPushButton(qta.icon('fa5s.plus'), '', self)
+        self.bt_insert.setObjectName('bt_insert')
+        self.bt_insert.setStyleSheet("""
+            #bt_insert{
+                background-color: #FF7C52; icon-size: 20px 20px;
+                max-height: 1.29em; min-width: 3.7em;}""")
+        self.bt_insert.setToolTip('Insert a Normalized Configuration')
         self.bt_insert.clicked.connect(self._showInsertNormConfigPopup)
+        self.bt_delete = QPushButton(qta.icon('fa5s.minus'), '', self)
+        self.bt_delete.setObjectName('bt_delete')
+        self.bt_delete.setStyleSheet("""
+            #bt_delete{
+                background-color: #FF7C52; icon-size: 20px 20px;
+                max-height: 1.29em; min-width: 3.7em;}""")
+        self.bt_delete.setToolTip('Delete a Normalized Configuration')
         self.bt_delete.clicked.connect(self._showDeleteNormConfigPopup)
+        hlay_insdel = QHBoxLayout()
+        hlay_insdel.setSpacing(12)
+        hlay_insdel.addWidget(self.bt_insert)
+        hlay_insdel.addWidget(self.bt_delete)
 
         self.label_exclim = QLabel('', self)
         self.pb_exclim = QPushButton('?', self)
@@ -706,20 +725,22 @@ class MultipolesRamp(QWidget):
         lay_exclim.addItem(
             QSpacerItem(2, 2, QSzPlcy.Expanding, QSzPlcy.Ignored))
 
-        self.bt_apply2machine = QPushButton('Apply Changes to Machine', self)
-        self.bt_apply2machine.clicked.connect(
-            self.applyChanges2MachineSignal.emit)
+        self.bt_apply = QPushButton(qta.icon('mdi.download'), '', self)
+        self.bt_apply.setToolTip('Apply Changes to Machine')
+        self.bt_apply.setStyleSheet('icon-size: 30px 30px;')
+        self.bt_apply.clicked.connect(self.applyChanges2MachineSignal.emit)
 
+        glay = QGridLayout(self)
+        glay.setAlignment(Qt.AlignTop)
         label = QLabel('<h4>Multipoles Ramp</h4>', self)
         label.setStyleSheet("""
             min-height: 1.55em; max-height: 1.55em;""")
         glay.addWidget(label, 0, 0, 1, 2, alignment=Qt.AlignCenter)
         glay.addWidget(self.graphview, 1, 0, 1, 2)
-        glay.addWidget(self.bt_insert, 2, 0)
-        glay.addWidget(self.bt_delete, 2, 1)
+        glay.addLayout(hlay_insdel, 2, 0, 1, 2, alignment=Qt.AlignRight)
         glay.addWidget(self.table, 3, 0, 1, 2)
         glay.addLayout(lay_exclim, 4, 0, 1, 2)
-        glay.addWidget(self.bt_apply2machine, 5, 0, 1, 2,
+        glay.addWidget(self.bt_apply, 5, 0, 1, 2,
                        alignment=Qt.AlignRight)
 
     def _setupGraph(self):
@@ -889,12 +910,16 @@ class MultipolesRamp(QWidget):
                 w.updateEnergy(energy)
 
     def _showInsertNormConfigPopup(self):
+        if self.ramp_config is None:
+            return
         self._insertConfigPopup = _InsertNormConfig(self, self.ramp_config)
         self._insertConfigPopup.insertConfig.connect(
             self._handleInsertNormConfig)
         self._insertConfigPopup.open()
 
     def _showDuplicateNormConfigPopup(self, nconfig_name):
+        if self.ramp_config is None:
+            return
         data = self.ramp_config[nconfig_name].value
         self._duplicConfigPopup = _DuplicateNormConfig(self, data)
         self._duplicConfigPopup.insertConfig.connect(
@@ -913,6 +938,8 @@ class MultipolesRamp(QWidget):
             self.updateMultipoleRampSignal.emit()
 
     def _showDeleteNormConfigPopup(self, selected_row=None):
+        if self.ramp_config is None:
+            return
         self._deleteConfigPopup = _DeleteNormConfig(
             self, self.table_map, selected_row)
         self._deleteConfigPopup.deleteConfig.connect(
@@ -1197,7 +1224,6 @@ class RFRamp(QWidget):
 
     def _setupUi(self):
         glay = QGridLayout(self)
-        glay.setAlignment(Qt.AlignTop)
         self.graphview = QWidget()
         self.set_rfdelay = QFormLayout()
         self.table = QTableWidget(self)
@@ -1220,9 +1246,10 @@ class RFRamp(QWidget):
         vlay_v.addWidget(self.l_rampupv)
         vlay_v.addWidget(self.l_rampdownv)
 
-        self.bt_apply2machine = QPushButton('Apply Changes to Machine', self)
-        self.bt_apply2machine.clicked.connect(
-            self.applyChanges2MachineSignal.emit)
+        self.bt_apply = QPushButton(qta.icon('mdi.download'), '', self)
+        self.bt_apply.setToolTip('Apply Changes to Machine')
+        self.bt_apply.setStyleSheet('icon-size: 30px 30px;')
+        self.bt_apply.clicked.connect(self.applyChanges2MachineSignal.emit)
 
         label = QLabel('<h4>RF Ramp</h4>', self)
         label.setStyleSheet("""
@@ -1233,8 +1260,9 @@ class RFRamp(QWidget):
         glay.addLayout(self.set_rfdelay, 2, 0)
         glay.addLayout(vlay_v, 2, 2)
         glay.addWidget(self.table, 3, 0, 1, 3)
-        glay.addWidget(self.bt_apply2machine, 4, 0, 1, 3,
-                       alignment=Qt.AlignRight)
+        glay.addItem(
+            QSpacerItem(10, 10, QSzPlcy.Expanding, QSzPlcy.Expanding), 4, 0)
+        glay.addWidget(self.bt_apply, 5, 0, 1, 3, alignment=Qt.AlignRight)
 
     def _setupGraph(self):
         self.cb_show_syncphase = QCheckBox('Show Φs', self)

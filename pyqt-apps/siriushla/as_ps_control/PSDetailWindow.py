@@ -1,4 +1,5 @@
 """Define a window with detailed controls for a given magnet."""
+import qtawesome as qta
 from pydm import PyDMApplication
 from qtpy.QtWidgets import QPushButton
 from siriuspy.namesys import SiriusPVName as _PVName
@@ -30,6 +31,7 @@ class PSDetailWindow(SiriusMainWindow):
             self.setObjectName(name.idx[:2]+'App')
         else:
             self.setObjectName('ASApp')
+        self.setWindowIcon(qta.icon('mdi.magnet', color='#969696'))
         self._setup_ui()
 
     def _setup_ui(self):

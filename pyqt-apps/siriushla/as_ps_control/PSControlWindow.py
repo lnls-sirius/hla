@@ -1,7 +1,7 @@
 """Defines a class to control a set of a device from a given class."""
 from pydm import PyDMApplication
 
-from qtpy.QtWidgets import QWidget
+import qtawesome as qta
 
 from siriushla.widgets import SiriusMainWindow
 from .DCLinkWidget import DCLinkWidget
@@ -20,6 +20,7 @@ class PSControlWindow(SiriusMainWindow):
         super(PSControlWindow, self).__init__(parent)
         self.app = PyDMApplication.instance()
         self.setObjectName(section+'App')
+        self.setWindowIcon(qta.icon('mdi.magnet', color='#969696'))
         self._section = section
         self._discipline = discipline
         self._device = device

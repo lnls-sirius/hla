@@ -1,5 +1,7 @@
 """Booster Ramp Main Window."""
 
+import qtawesome as qta
+
 from qtpy.QtCore import Qt, Slot, Signal
 from qtpy.QtGui import QKeySequence
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, \
@@ -109,9 +111,11 @@ class RampMain(SiriusMainWindow):
 
     def _addActions(self):
         self.act_undo = self._undo_stack.createUndoAction(self, 'Undo')
+        self.act_undo.setIcon(qta.icon('mdi.undo'))
         self.act_undo.setShortcut(QKeySequence.Undo)
         self.settings.config_menu.addAction(self.act_undo)
         self.act_redo = self._undo_stack.createRedoAction(self, 'Redo')
+        self.act_redo.setIcon(qta.icon('mdi.redo'))
         self.act_redo.setShortcut(QKeySequence.Redo)
         self.settings.config_menu.addAction(self.act_redo)
 
