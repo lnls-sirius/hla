@@ -2,6 +2,7 @@ from copy import deepcopy as _dcopy
 import numpy as _np
 from qtpy.QtGui import QColor
 from qtpy.QtCore import Property, Slot, Signal
+from qtpy.QtWidgets import QMessageBox
 from pydm.widgets.base import PyDMWidget
 from pydm.widgets.channel import PyDMChannel
 from .QLed import QLed
@@ -67,6 +68,10 @@ class PyDMLed(QLed, PyDMWidget):
             return
         # TODO: remove the following step when the bug in PS is solved
         if isinstance(new_val, _np.ndarray):
+            QMessageBox.critical(
+                self, 'Warning',
+                'PyDMLed with channel '+self.channel +
+                ' received a numpy array ('+str(new_val)+')!')
             self.setState(0)
             return
         value = int(new_val)
@@ -90,6 +95,10 @@ class SiriusLedState(PyDMLed):
         """Reimplement value_changed to filter bug."""
         # TODO: remove the following step when the bug in PS is solved
         if isinstance(new_val, _np.ndarray):
+            QMessageBox.critical(
+                self, 'Warning',
+                'SiriusLedState with channel '+self.channel +
+                ' received a numpy array ('+str(new_val)+')!')
             new_val = 1
         super().value_changed(new_val)
 
@@ -107,6 +116,10 @@ class SiriusLedAlert(PyDMLed):
         """If no bit is set, treat new_val as 2 states, zero and non-zero."""
         # TODO: remove the following step when the bug in PS is solved
         if isinstance(new_val, _np.ndarray):
+            QMessageBox.critical(
+                self, 'Warning',
+                'SiriusLedAlert with channel '+self.channel +
+                ' received a numpy array ('+str(new_val)+')!')
             value = 0
         else:
             value = int(new_val != 0) if self._bit < 0 else new_val
@@ -225,6 +238,10 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         # TODO: remove the following step when the bug in PS is solved
         if (type(new_val) != type(desired_value)) \
                 and isinstance(new_val, _np.ndarray):
+            QMessageBox.critical(
+                self, 'Warning',
+                'PyDMLedMultiChannel received a numpy array to ' +
+                address+' ('+str(new_val)+')!')
             is_desired = False
         else:
             is_desired = fun(new_val, desired_value)
