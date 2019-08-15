@@ -204,6 +204,8 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
 
     def value_changed(self, new_val):
         """Receive new value and set led color accordingly."""
+        if not self.sender():   # do nothing when sender None
+            return
         address = self.sender().address
         desired = self._address2values[address]
 
@@ -246,6 +248,8 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
     @Slot(bool)
     def connection_changed(self, conn):
         """Reimplement connection_changed to handle all channels."""
+        if not self.sender():   # do nothing when sender None
+            return
         address = self.sender().address
         self._address2conn[address] = conn
         allconn = True
@@ -384,6 +388,8 @@ class PyDMLedMultiConnection(QLed, PyDMWidget):
     @Slot(bool)
     def connection_changed(self, conn):
         """Reimplement connection_changed to handle all channels."""
+        if not self.sender():   # do nothing when sender None
+            return
         address = self.sender().address
         if not conn:
             self.warning.emit([address, conn])
