@@ -221,7 +221,8 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
             fun = self._operations_dict['eq']
             desired_value = desired
         # TODO: remove the following step when the bug in PS is solved
-        if type(new_val) != type(desired_value):
+        if (type(new_val) != type(desired_value)) \
+                and isinstance(new_val, _np.ndarray):
             is_desired = False
         else:
             is_desired = fun(new_val, desired_value)
