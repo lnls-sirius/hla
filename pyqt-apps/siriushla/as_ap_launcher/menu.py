@@ -162,7 +162,7 @@ def get_object(ismenubar=True, parent=None):
             menu = LEVEL1('LI', self)
             menu.setObjectName('LIApp')
             launcher = LEVEL2A('Launcher', menu)
-            util.connect_newprocess(launcher, 'sirius-hla-li-launcher.sh',
+            util.connect_newprocess(launcher, 'sirius-hla-li-ap-launcher.sh',
                                     is_window=False)
 
             optics = LEVEL2M('Optics', menu)
