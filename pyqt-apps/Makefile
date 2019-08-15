@@ -1,5 +1,5 @@
 DESIGNER_PLUGIN_FILE = designer_plugin.py
-INSTALL_DESIGNER_DIR ?= /usr/local/share/Qt
+INSTALL_DESIGNER_DIR ?= /usr/local/share/Qt/designer
 
 install-resources:
 	cd ./resources; pyrcc5 resources.qrc -o ../siriushla/resources.py
