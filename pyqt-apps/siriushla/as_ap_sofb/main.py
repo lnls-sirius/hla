@@ -69,9 +69,6 @@ class MainWindow(SiriusMainWindow):
         # Create Context Menus for Registers and
         # assign them to the clicked signal
         wid = QDockWidget(self)
-        wid.setWindowIcon(
-            qta.icon(
-                'fa5s.hammer', color=util.get_appropriate_color(self.acc)))
         wid.setWindowTitle("Orbit Registers")
         sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sz_pol.setVerticalStretch(1)
@@ -92,9 +89,6 @@ class MainWindow(SiriusMainWindow):
 
     def _create_ioc_controllers(self):
         docwid = QDockWidget(self)
-        docwid.setWindowIcon(
-            qta.icon(
-                'fa5s.hammer', color=util.get_appropriate_color(self.acc)))
         docwid.setWindowTitle("IOC Control")
         sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sz_pol.setVerticalStretch(1)
@@ -112,9 +106,6 @@ class MainWindow(SiriusMainWindow):
 
     def _create_log_docwidget(self):
         docwid = QDockWidget(self)
-        docwid.setWindowIcon(
-            qta.icon(
-                'fa5s.hammer', color=util.get_appropriate_color(self.acc)))
         docwid.setWindowTitle('IOC Log')
         sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         docwid.setSizePolicy(sz_pol)
