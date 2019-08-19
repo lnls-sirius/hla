@@ -130,7 +130,7 @@ class BaseWidget(QWidget):
         for i, lname in enumerate(self.line_names):
             opts = dict(
                 y_channel='A',
-                x_channel=self.prefix + pref + 'PosS-' + suf,
+                x_channel='B',
                 name=lname,
                 color=self._get_color(pln, i),
                 redraw_mode=2,
@@ -333,12 +333,25 @@ class BaseWidget(QWidget):
             trc.opts['symbolSize'] = sizes
 
     def _update_waveform(self, curve, plane, idx, data):
+        bpm_pos = self._csorb.BPM_POS
+        if not self.is_orb and plane == 'x':
+            bpm_pos = self._csorb.CH_POS
+        elif not self.is_orb and plane == 'y':
+            bpm_pos = self._csorb.CV_POS
+        bpm_pos = _np.array(bpm_pos)
+
         enbl = self.enbl_pvs[plane].value
         if enbl is not None:
             sz = min(enbl.size, data.size)
             self._update_enable_list(plane, enbl[:sz], curve, idx)
+            nring = sz // bpm_pos.size
+            if nring > 1:
+                bpm_pos = [bpm_pos + i*self._csorb.C0 for i in range(nring)]
+                bpm_pos = _np.hstack(bpm_pos)
+            curve.receiveXWaveform(bpm_pos)
             curve.receiveYWaveform(data[:sz])
         else:
+            curve.receiveXWaveform(bpm_pos)
             curve.receiveYWaveform(data)
 
     def _save_difference(self, idx):
