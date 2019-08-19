@@ -1,11 +1,10 @@
 """Booster Ramp Main Window."""
 
-import qtawesome as qta
-
 from qtpy.QtCore import Qt, Slot, Signal
 from qtpy.QtGui import QKeySequence
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, \
                            QUndoStack, QMessageBox
+import qtawesome as qta
 from siriuspy.ramp import ramp
 from siriuspy.clientconfigdb import ConfigDBException as _ConfigDBException
 from siriushla.widgets.windows import SiriusMainWindow
@@ -148,7 +147,8 @@ class RampMain(SiriusMainWindow):
                     '#ConfigParameters {color: red;}')
                 self.config_parameters.setToolTip('There are unsaved changes')
             else:
-                self.config_parameters.setStyleSheet('')
+                self.config_parameters.setStyleSheet(
+                    '#ConfigParameters {color: black;}')
                 self.config_parameters.setToolTip('')
 
     def closeEvent(self, ev):
