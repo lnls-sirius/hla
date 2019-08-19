@@ -10,6 +10,8 @@ from qtpy.QtWidgets import QWidget, QFileDialog, QLabel, QCheckBox, \
     QFormLayout, QPushButton, QComboBox, QToolTip
 from qtpy.QtCore import Qt, QTimer, QThread, Signal, QObject
 from qtpy.QtGui import QColor
+import qtawesome as qta
+
 from pydm.widgets import PyDMWaveformPlot
 from siriushla.widgets import SiriusConnectionSignal
 from siriuspy.csdevice.orbitcorr import SOFBFactory

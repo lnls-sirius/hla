@@ -3,6 +3,8 @@
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QDockWidget, QSizePolicy, QVBoxLayout, \
     QPushButton, QHBoxLayout, QMenu, QMenuBar, QAction, QStatusBar
+import qtawesome as qta
+
 from siriuspy.envars import vaca_prefix as LL_PREF
 from siriuspy.csdevice.orbitcorr import SOFBFactory
 from siriushla import util
@@ -22,6 +24,8 @@ class MainWindow(SiriusMainWindow):
         self._csorb = SOFBFactory.create(acc)
         self.setupui()
         self.setObjectName(acc+'App')
+        self.setWindowIcon(
+            qta.icon('fa5s.hammer', color=util.get_appropriate_color(acc)))
 
     @property
     def acc(self):
@@ -37,7 +41,7 @@ class MainWindow(SiriusMainWindow):
 
     def setupui(self):
         self.setWindowModality(Qt.WindowModal)
-        self.setWindowTitle("Slow Orbit Feedback System")
+        self.setWindowTitle(self.acc + " - SOFB")
         self.setDocumentMode(False)
         self.setDockNestingEnabled(True)
 
@@ -65,6 +69,9 @@ class MainWindow(SiriusMainWindow):
         # Create Context Menus for Registers and
         # assign them to the clicked signal
         wid = QDockWidget(self)
+        wid.setWindowIcon(
+            qta.icon(
+                'fa5s.hammer', color=util.get_appropriate_color(self.acc)))
         wid.setWindowTitle("Orbit Registers")
         sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sz_pol.setVerticalStretch(1)
@@ -85,7 +92,10 @@ class MainWindow(SiriusMainWindow):
 
     def _create_ioc_controllers(self):
         docwid = QDockWidget(self)
-        docwid.setWindowTitle("SOFB Control")
+        docwid.setWindowIcon(
+            qta.icon(
+                'fa5s.hammer', color=util.get_appropriate_color(self.acc)))
+        docwid.setWindowTitle("IOC Control")
         sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sz_pol.setVerticalStretch(1)
         docwid.setSizePolicy(sz_pol)
@@ -102,6 +112,9 @@ class MainWindow(SiriusMainWindow):
 
     def _create_log_docwidget(self):
         docwid = QDockWidget(self)
+        docwid.setWindowIcon(
+            qta.icon(
+                'fa5s.hammer', color=util.get_appropriate_color(self.acc)))
         docwid.setWindowTitle('IOC Log')
         sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         docwid.setSizePolicy(sz_pol)
