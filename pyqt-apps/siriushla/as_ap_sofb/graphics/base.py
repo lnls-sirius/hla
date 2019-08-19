@@ -6,8 +6,8 @@ from functools import partial as _part
 import numpy as _np
 from pyqtgraph import mkBrush, mkPen, InfiniteLine, functions
 from qtpy.QtWidgets import QWidget, QFileDialog, QLabel, QCheckBox, \
-    QVBoxLayout, QHBoxLayout, QSizePolicy, QGroupBox, \
-    QFormLayout, QPushButton, QComboBox, QToolTip, QGridLayout
+    QVBoxLayout, QHBoxLayout, QSizePolicy, QGroupBox, QPushButton, QComboBox, \
+    QToolTip, QGridLayout
 from qtpy.QtCore import Qt, QTimer, QThread, Signal, QObject
 from qtpy.QtGui import QColor
 import qtawesome as qta
