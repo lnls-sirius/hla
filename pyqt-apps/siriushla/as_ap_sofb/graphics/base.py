@@ -491,8 +491,8 @@ class UpdateGraph(QObject):
                 mask = diff[:sz][enbl[:sz]]
             else:
                 mask = diff
-            ave = float(mask.mean())
-            std = float(mask.std(ddof=1))
+            ave = float(mask.mean()) if mask.size > 0 else 0.0
+            std = float(mask.std(ddof=1)) if mask.size > 1 else 0.0
 
             self.data_sig[pln].emit(diff)
             self.ave[pln].emit(ave)
