@@ -5,13 +5,12 @@ from functools import partial as _part
 
 import numpy as _np
 
-import qtawesome as qta
-
 from qtpy.QtCore import Qt, Signal, Slot
 from qtpy.QtGui import QKeySequence
 from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
     QGridLayout, QScrollArea, QFormLayout, QCheckBox, QDoubleSpinBox, \
     QUndoStack, QUndoCommand, QHBoxLayout, QMessageBox, QMenuBar
+import qtawesome as qta
 
 from siriuspy.search import MASearch as _MASearch
 from siriuspy.ramp import ramp
@@ -75,7 +74,7 @@ class BONormEdit(SiriusMainWindow):
         self.tune = self._setupTuneWidget()
         self.chrom = self._setupChromWidget()
 
-        self.bt_apply = QPushButton(qta.icon('mdi.download'), '', self)
+        self.bt_apply = QPushButton(qta.icon('fa5s.angle-right'), '', self)
         self.bt_apply.setToolTip('Apply Changes to Machine')
         self.bt_apply.setStyleSheet('icon-size: 30px 30px;')
         self.bt_apply.clicked.connect(self._updateRampConfig)

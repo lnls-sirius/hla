@@ -2,11 +2,11 @@
 
 from functools import partial as _part
 
-import qtawesome as qta
-
 from qtpy.QtCore import Qt, Signal, Slot
 from qtpy.QtGui import QKeySequence
 from qtpy.QtWidgets import QMenuBar, QAction, QMessageBox
+import qtawesome as qta
+
 from siriuspy.clientconfigdb import ConfigDBException as _ConfigDBException
 from siriuspy.ramp import ramp
 from siriushla import util

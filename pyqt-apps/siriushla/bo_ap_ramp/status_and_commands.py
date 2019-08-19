@@ -3,11 +3,10 @@
 from functools import partial as _part
 from threading import Thread as _Thread
 
-import qtawesome as qta
-
 from qtpy.QtWidgets import QGroupBox, QLabel, QPushButton, QGridLayout, \
     QMessageBox, QVBoxLayout
 from qtpy.QtCore import Qt, Slot, Signal, QThread
+import qtawesome as qta
 
 from siriuspy.ramp import ramp
 from siriuspy.ramp.conn import ConnMagnets as _ConnMagnets, ConnRF as _ConnRF,\
@@ -80,8 +79,8 @@ class StatusAndCommands(QGroupBox):
         self.bt_prepare_ti.clicked.connect(self._prepare_ti)
         self.bt_prepare_ti.setStyleSheet('min-height:1.5em;')
 
-        self.bt_apply_all = QPushButton(
-            qta.icon('mdi.download-multiple'), '', self)
+        icon_all = qta.icon('fa5s.angle-double-right')
+        self.bt_apply_all = QPushButton(icon_all, '', self)
         self.bt_apply_all.setToolTip('Apply All Changes to Machine')
         self.bt_apply_all.setObjectName('All')
         self.bt_apply_all.clicked.connect(self.apply_changes)
