@@ -5,8 +5,10 @@ from datetime import datetime as _datetime
 import numpy as _np
 from qtpy.QtWidgets import QLabel, QGroupBox, QPushButton, QFormLayout, \
     QGridLayout, QVBoxLayout, QHBoxLayout, QSpacerItem, QSizePolicy, \
-    QMessageBox, QFileDialog
+    QMessageBox, QFileDialog, QWidget, QTabWidget
 from qtpy.QtCore import Qt
+import qtawesome as qta
+
 from pydm.widgets import PyDMLabel, PyDMPushButton, PyDMCheckbox
 from siriuspy.csdevice.orbitcorr import ConstTLines
 from siriuspy.clientconfigdb import ConfigDBClient, ConfigDBException
@@ -36,129 +38,159 @@ class RespMatWidget(BaseWidget):
         self._respmat_sp = SiriusConnectionSignal(prefix+'RespMat-SP')
         self._respmat_rb = SiriusConnectionSignal(prefix+'RespMat-RB')
 
-    def channels(self):
-        return [self._respmat_sp, self._respmat_rb]
-
     def setupui(self):
-        vbl = QVBoxLayout(self)
+        gbox = QGroupBox('Matrix', self)
+        self.setLayout(QVBoxLayout())
+        self.layout().addWidget(gbox)
+        vbl = QVBoxLayout(gbox)
+        tabw = QTabWidget(gbox)
+        vbl.addWidget(tabw)
+
+        mainwid = QWidget(tabw)
+        vbl = QVBoxLayout(mainwid)
+        tabw.addTab(mainwid, 'Main')
+
         # ####################################################################
         # ####################### Selection Lists ############################
         # ####################################################################
-        btns = dict()
-        grpbx = QGroupBox('Corrs and BPMs selection', self)
+        grpbx = QGroupBox('Corrs and BPMs selection', mainwid)
         vbl.addWidget(grpbx)
-        szy = 55
-        if self.acc == 'BO':
-            szy = 32
-        elif not self.isring:
-            szy = 10
         Window = create_window_from_widget(
             SelectionMatrix, title='Corrs and BPMs selection')
-        for dev in ('BPMX', 'BPMY', 'CH', 'CV'):
-            btns[dev] = QPushButton(dev, grpbx)
-            connect_window(
-                btns[dev], Window, self,
-                dev=dev, prefix=self.prefix, acc=self.acc)
         gdl = QGridLayout(grpbx)
-        # gdl.setSpacing(9)
-        gdl.addWidget(btns['BPMX'], 0, 0)
-        gdl.addWidget(btns['BPMY'], 1, 0)
-        gdl.addWidget(btns['CH'], 0, 1)
-        gdl.addWidget(btns['CV'], 1, 1)
+        for idx, dev in enumerate(('BPMX', 'BPMY', 'CH', 'CV')):
+            btn = QPushButton(dev, grpbx)
+            btn.setObjectName('btn')
+            btn.setStyleSheet('#btn{max-width:3.8em;}')
+            connect_window(
+                btn, Window, self,
+                dev=dev, prefix=self.prefix, acc=self.acc)
+            # gdl.addWidget(btn, idx // 2, idx % 2)
+            gdl.addWidget(btn, 0, idx)
 
         if self.isring:
             pdm_chbx = PyDMCheckbox(
                 grpbx, init_channel=self.prefix+'RFEnbl-Sel')
-            pdm_chbx.setText('Enable RF')
+            pdm_chbx.setText('use RF')
             pdm_led = SiriusLedState(
                 grpbx, init_channel=self.prefix+'RFEnbl-Sts')
             hbl = QHBoxLayout()
             hbl.setContentsMargins(0, 0, 0, 0)
+            hbl.addStretch()
             hbl.addWidget(pdm_chbx)
             hbl.addWidget(pdm_led)
-            gdl.addItem(hbl, 2, 1)
+            gdl.addItem(hbl, 1, 0, 1, 4)
 
-        # vbl.addSpacing(40)
+        # ####################################################################
+        # ####################### Singular Values ############################
+        # ####################################################################
+        hbl = QHBoxLayout()
+        hbl.setSpacing(6)
+        vbl.addItem(hbl)
+
+        btn = QPushButton('', mainwid)
+        btn.setToolTip('Visualize RespMat')
+        btn.setIcon(qta.icon('mdi.chart-line'))
+        btn.setObjectName('btn')
+        btn.setStyleSheet('#btn{max-width:40px; icon-size:40px;}')
+        Window = create_window_from_widget(
+            ShowMatrixWidget, title='Check RespMat')
+        connect_window(btn, Window, mainwid, prefix=self.prefix, acc=self.acc)
+        hbl.addWidget(btn)
+
+        grpbx = QGroupBox('Singular Values', mainwid)
+        hbl.addWidget(grpbx)
+        fml = QVBoxLayout(grpbx)
+        wid = self.create_pair(grpbx, 'NrSingValues')
+        btn = QPushButton('', grpbx)
+        btn.setToolTip('Check Singular Values')
+        btn.setIcon(qta.icon('mdi.chart-line'))
+        btn.setObjectName('btn')
+        btn.setStyleSheet('#btn{max-width:25px; icon-size:20px;}')
+        hbl = QHBoxLayout()
+        hbl.addWidget(wid)
+        hbl.addWidget(btn)
+        fml.addItem(hbl)
+        Window = create_window_from_widget(
+            SingularValues, title='Check Singular Values')
+        connect_window(btn, Window, grpbx, prefix=self.prefix)
+
         # ####################################################################
         # ######################### Measurement ##############################
         # ####################################################################
-        grpbx = QGroupBox('RespMat Measurement', self)
-        vbl.addWidget(grpbx)
-        pdm_pbtn = PyDMPushButton(
-            grpbx, label="Start",
+        grpbx = QWidget(tabw)
+        vbl = QVBoxLayout(grpbx)
+        tabw.addTab(grpbx, 'Meas')
+
+        strt = PyDMPushButton(
+            grpbx,
             init_channel=self.prefix+"MeasRespMat-Cmd",
             pressValue=ConstTLines.MeasRespMatCmd.Start)
-        pdm_pbtn.setEnabled(True)
-        pdm_pbtn2 = PyDMPushButton(
-            grpbx, label="Stop",
+        strt.setEnabled(True)
+        strt.setToolTip('Start Measurement')
+        strt.setIcon(qta.icon('fa5s.play'))
+        strt.setObjectName('strt')
+        strt.setStyleSheet(
+            '#strt{min-width:25px; max-width:25px; icon-size:20px;}')
+        stop = PyDMPushButton(
+            grpbx,
             init_channel=self.prefix+"MeasRespMat-Cmd",
             pressValue=ConstTLines.MeasRespMatCmd.Stop)
-        pdm_pbtn2.setEnabled(True)
-        pdm_pbtn3 = PyDMPushButton(
-            grpbx, label="Reset",
+        stop.setEnabled(True)
+        stop.setToolTip('Stop Measurement')
+        stop.setIcon(qta.icon('fa5s.stop'))
+        stop.setObjectName('stop')
+        stop.setStyleSheet(
+            '#stop{min-width:25px; max-width:25px; icon-size:20px;}')
+        rst = PyDMPushButton(
+            grpbx,
             init_channel=self.prefix+"MeasRespMat-Cmd",
             pressValue=ConstTLines.MeasRespMatCmd.Reset)
-        pdm_pbtn3.setEnabled(True)
-        pdm_lbl = PyDMLabel(grpbx, init_channel=self.prefix+'MeasRespMat-Mon')
-        pdm_lbl.setAlignment(Qt.AlignCenter)
-        gdl = QGridLayout(grpbx)
-        # gdl.setSpacing(9)
-        gdl.addWidget(pdm_pbtn, 0, 0)
-        gdl.addWidget(pdm_pbtn2, 0, 1)
-        gdl.addWidget(pdm_pbtn3, 1, 0)
-        gdl.addWidget(pdm_lbl, 1, 1)
-        gdl.addItem(
-            QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding),
-            2, 0, 1, 2)
+        rst.setEnabled(True)
+        rst.setToolTip('Reset Measurement Status')
+        rst.setIcon(qta.icon('fa5s.sync'))
+        rst.setObjectName('conf')
+        rst.setStyleSheet(
+            '#conf{min-width:25px; max-width:25px; icon-size:20px;}')
+        lbl = PyDMLabel(grpbx, init_channel=self.prefix+'MeasRespMat-Mon')
+        lbl.setAlignment(Qt.AlignCenter)
+        hbl = QHBoxLayout()
+        hbl.setSpacing(8)
+        vbl.addItem(hbl)
+        hbl.addWidget(strt)
+        hbl.addWidget(stop)
+        hbl.addWidget(rst)
+        hbl.addStretch()
+        hbl.addWidget(lbl)
 
         fml = QFormLayout()
-        # fml.setSpacing(9)
-        gdl.addItem(fml, 3, 0, 1, 2)
-        lbl = QLabel('Meas. CH kick [urad]', grpbx)
+        vbl.addSpacing(20)
+        vbl.addItem(fml)
+        lbl = QLabel('CH kick [urad]', grpbx)
         wid = self.create_pair(grpbx, 'MeasRespMatKickCH')
         fml.addRow(lbl, wid)
-        lbl = QLabel('Meas. CV kick [urad]', grpbx)
+        lbl = QLabel('CV kick [urad]', grpbx)
         wid = self.create_pair(grpbx, 'MeasRespMatKickCV')
         fml.addRow(lbl, wid)
         if self.isring:
-            lbl = QLabel('Meas. RF kick [Hz]', grpbx)
+            lbl = QLabel('RF kick [Hz]', grpbx)
             wid = self.create_pair(grpbx, 'MeasRespMatKickRF')
             fml.addRow(lbl, wid)
         fml.addItem(QSpacerItem(
             20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding))
 
-        lbl = QLabel('Wait between kicks [s]', grpbx)
+        lbl = QLabel('Wait [s]', grpbx)
+        lbl.setToolTip('Time to wait between kicks')
         wid = self.create_pair(grpbx, 'MeasRespMatWait')
         fml.addRow(lbl, wid)
 
-        # vbl.addSpacing(40)
-        # ####################################################################
-        # ####################### Singular Values ############################
-        # ####################################################################
-        grpbx = QGroupBox('Singular Values', self)
-        vbl.addWidget(grpbx)
-        fml = QFormLayout(grpbx)
-        lab = QLabel('Nr of SV')
-        wid = self.create_pair(grpbx, 'NrSingValues')
-        fml.addRow(lab, wid)
-        btn = QPushButton('Check Singular Values', grpbx)
-        fml.addWidget(btn)
-        Window = create_window_from_widget(
-            SingularValues, title='Check Singular Values')
-        connect_window(btn, Window, grpbx, prefix=self.prefix)
-        btn = QPushButton('Check RespMat', grpbx)
-        fml.addWidget(btn)
-        Window = create_window_from_widget(
-            ShowMatrixWidget, title='Check RespMat')
-        connect_window(btn, Window, grpbx, prefix=self.prefix, acc=self.acc)
-
-        # vbl.addSpacing(40)
         # ####################################################################
         # ######################## Load/Save/Set #############################
         # ####################################################################
-        grpbx = QGroupBox('Load and Save', self)
-        vbl.addWidget(grpbx)
+        grpbx = QWidget(tabw)
         gdl = QGridLayout(grpbx)
+        tabw.addTab(grpbx, 'Load/Save')
+
         # gdl.setVerticalSpacing(15)
         lbl = QLabel('Load from:', grpbx)
         gdl.addWidget(lbl, 0, 0)
@@ -177,6 +209,10 @@ class RespMatWidget(BaseWidget):
         pbtn = QPushButton('ServConf', grpbx)
         pbtn.clicked.connect(self._open_save_config_servconf)
         gdl.addWidget(pbtn, 1, 2)
+
+        gdl.addItem(
+            QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding),
+            2, 0, 1, 2)
 
     def _save_respmat_to_file(self, _):
         header = '# ' + _datetime.now().strftime('%Y/%m/%d-%H:%M:%S') + '\n'

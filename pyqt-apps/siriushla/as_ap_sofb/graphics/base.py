@@ -7,7 +7,7 @@ import numpy as _np
 from pyqtgraph import mkBrush, mkPen, InfiniteLine, functions
 from qtpy.QtWidgets import QWidget, QFileDialog, QLabel, QCheckBox, \
     QVBoxLayout, QHBoxLayout, QSizePolicy, QGroupBox, \
-    QFormLayout, QPushButton, QComboBox, QToolTip
+    QFormLayout, QPushButton, QComboBox, QToolTip, QGridLayout
 from qtpy.QtCore import Qt, QTimer, QThread, Signal, QObject
 from qtpy.QtGui import QColor
 import qtawesome as qta
@@ -173,27 +173,33 @@ class BaseWidget(QWidget):
         grpbx.setCheckable(True)
         grpbx.setChecked(not idx)
         grpbx.toggled.connect(self.updater[idx].set_visible)
-        fbl = QFormLayout(grpbx)
+        vbl = QVBoxLayout(grpbx)
+        gdl = QGridLayout()
+        gdl.setSpacing(4)
+        vbl.addItem(gdl)
 
         if self.is_orb:
             lbl_orb = self.uicreate_label('Show', grpbx)
             lbl_ref = self.uicreate_label('as diff to:', grpbx)
             cbx_ref = self.uicreate_combobox(grpbx, 'ref', idx)
             cbx_orb = self.uicreate_combobox(grpbx, 'val', idx)
-            fbl.addRow(lbl_orb, cbx_orb)
-            fbl.addRow(lbl_ref, cbx_ref)
+            gdl.addWidget(lbl_orb, 0, 0)
+            gdl.addWidget(lbl_ref, 1, 0)
+            gdl.addWidget(cbx_orb, 0, 1)
+            gdl.addWidget(cbx_ref, 1, 1)
 
-            pb_save = QPushButton('Save diff to file', grpbx)
+            pb_save = QPushButton('', grpbx)
             pb_save.clicked.connect(_part(self._save_difference, idx))
-            fbl.addRow(QLabel(grpbx), pb_save)
+            pb_save.setObjectName('butt')
+            pb_save.setStyleSheet('#butt {max-width: 40px; icon-size: 35px;}')
+            pb_save.setIcon(qta.icon('fa5.save'))
+            pb_save.setToolTip('Save diff to file')
+            gdl.addWidget(pb_save, 0, 2, 2, 1)
 
-        lab = QLabel('Statistics', grpbx)
-        lab.setAlignment(Qt.AlignCenter)
-        fbl.addRow(lab)
         unit = 'm' if self.is_orb else 'rad'
         for pln in ('x', 'y'):
             wid = QWidget(grpbx)
-            fbl.addRow(wid)
+            vbl.addWidget(wid)
             hbl = QHBoxLayout(wid)
             cbx = QCheckBox('{0:s}:'.format(pln.upper()), wid)
             cbx.setObjectName(pln + 'checkbox')
@@ -231,9 +237,9 @@ class BaseWidget(QWidget):
 
     def uicreate_label(self, lab, parent):
         label = QLabel(lab, parent)
-        sz_pol = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Preferred)
+        sz_pol = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
         label.setSizePolicy(sz_pol)
-        label.setStyleSheet("""min-width:1.94em;""")
+        label.setStyleSheet("""min-width:2.5em;""")
         label.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
         return label
 
