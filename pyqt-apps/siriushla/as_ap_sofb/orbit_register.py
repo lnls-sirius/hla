@@ -1,12 +1,14 @@
 """Creates the Contextes Menus for the Register."""
 
-import numpy as _np
 from functools import partial as _part
 from datetime import datetime as _datetime
+import numpy as _np
 from qtpy.QtWidgets import QMenu, QFileDialog, QWidget, QMessageBox, \
-    QScrollArea, QLabel, QPushButton, QSizePolicy, \
-    QGridLayout, QVBoxLayout, QHBoxLayout
+    QScrollArea, QLabel, QPushButton, QSizePolicy, QGridLayout, QVBoxLayout, \
+    QHBoxLayout
 from qtpy.QtCore import Signal, Qt
+import qtawesome as qta
+
 from siriuspy.csdevice.orbitcorr import SOFBFactory
 from siriuspy.clientconfigdb import ConfigDBClient, ConfigDBException
 from siriushla.as_ap_configdb import LoadConfigDialog, SaveConfigDialog
@@ -163,25 +165,35 @@ class OrbitRegister(QWidget):
         btn.clicked.connect(btn.showMenu)
 
         act = menu.addAction('Get From &File')
+        act.setIcon(qta.icon('mdi.file-upload-outline'))
         act.triggered.connect(self._load_orbit_from_file)
         act = menu.addAction('Get From &ServConf')
+        act.setIcon(qta.icon('mdi.cloud-download-outline'))
         act.triggered.connect(self._load_orbit_from_servconf)
         menu2 = menu.addMenu('Get from &PV')
+        menu2.setIcon(qta.icon('mdi.download-network-outline'))
         act = menu2.addAction('&SlowOrb')
+        act.setIcon(qta.icon('mdi.turtle'))
         act.triggered.connect(_part(self._register_orbit, 'orb'))
         act = menu2.addAction('&MTurnOrb')
+        act.setIcon(qta.icon('mdi.alarm-multiple'))
         act.triggered.connect(_part(self._register_orbit, 'mti'))
         act = menu2.addAction('S&PassOrb')
+        act.setIcon(qta.icon('mdi.clock-fast'))
         act.triggered.connect(_part(self._register_orbit, 'sp'))
         act = menu2.addAction('&RefOrb')
         act.triggered.connect(_part(self._register_orbit, 'ref'))
         act = menu2.addAction('&OfflineOrb')
+        act.setIcon(qta.icon('mdi.signal-off'))
         act.triggered.connect(_part(self._register_orbit, 'off'))
         act = menu.addAction('&Clear')
+        act.setIcon(qta.icon('mdi.delete-empty'))
         act.triggered.connect(self._reset_orbit)
         act = menu.addAction('Save To File')
+        act.setIcon(qta.icon('mdi.file-download-outline'))
         act.triggered.connect(self._save_orbit_to_file)
         act = menu.addAction('Save To ServConf')
+        act.setIcon(qta.icon('mdi.cloud-upload-outline'))
         act.triggered.connect(self._save_orbit_to_servconf)
 
     def _reset_orbit(self):
