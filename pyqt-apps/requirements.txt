@@ -1,2 +1,2 @@
-pydm==1.7.1
+pydm==1.7.3
 QtAwesome==0.6.0
