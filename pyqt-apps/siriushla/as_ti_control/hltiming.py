@@ -1,14 +1,15 @@
 """Control of EVG Timing Device."""
 
 import sys as _sys
-import qtawesome as qta
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, \
     QGridLayout, QGroupBox, QLabel, QSplitter, QSizePolicy
-from pydm.widgets import PyDMPushButton
+import qtawesome as qta
+
+from pydm.widgets import PyDMPushButton, PyDMLabel
 from siriuspy.csdevice import timesys as _cstime
 from siriuspy.search import LLTimeSearch, HLTimeSearch
-from siriushla.util import connect_window
+from siriushla.util import connect_window, get_appropriate_color
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets import SiriusMainWindow, PyDMLed, PyDMStateButton
 from .evg import EventList as _EventList, EVG as _EVG
@@ -26,7 +27,8 @@ class TimingMain(SiriusMainWindow):
         self.prefix = prefix
         self.setupui()
         self.setObjectName('ASApp')
-        self.setWindowIcon(qta.icon('mdi.timer', color='#969696'))
+        self.setWindowIcon(
+            qta.icon('mdi.timer', color=get_appropriate_color('AS')))
 
     def setupui(self):
         self.setupmenus()
@@ -44,22 +46,28 @@ class TimingMain(SiriusMainWindow):
         gridlayout.addWidget(splitter, 1, 0, 1, 2)
         events = self.setevents()
         events.setObjectName('events')
+        events.setStyleSheet('#events{min-width:30em;}')
         splitter.addWidget(events)
 
         triggers = self.settriggers()
         triggers.setObjectName('triggers')
+        triggers.setStyleSheet('#triggers{min-width:55em;}')
         splitter.addWidget(triggers)
 
     def setglobalparameters(self):
-        wid = QGroupBox(self.centralWidget())
+        wid = QWidget(self.centralWidget())
         wid.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
         hbl = QHBoxLayout(wid)
 
         evg_pref = LLTimeSearch.get_device_names({'dev': 'EVG'})[0]
         evg_pref = self.prefix + evg_pref + ':'
         sp = PyDMPushButton(
-            self, init_channel=evg_pref+"UpdateEvt-Cmd", pressValue=1,
-            label='Update')
+            self, init_channel=evg_pref+"UpdateEvt-Cmd", pressValue=1)
+        sp.setIcon(qta.icon('fa5s.sync'))
+        sp.setToolTip('Update Events Table')
+        sp.setObjectName('but')
+        sp.setStyleSheet(
+            '#but{min-width:25px; max-width:25px; icon-size:20px;}')
         rb = PyDMLed(self, init_channel=evg_pref + "EvtSyncStatus-Mon")
         hbl.addWidget(self._create_prop_widget(
             '<h4>Update Evts</h4>', wid, (sp, rb)))
@@ -76,7 +84,7 @@ class TimingMain(SiriusMainWindow):
         return wid
 
     def setevents(self):
-        props = {'ext_trig', 'mode', 'delay_type', 'delay'}
+        props = {'name', 'ext_trig', 'mode', 'delay_type', 'delay'}
         evg_pref = LLTimeSearch.get_device_names({'dev': 'EVG'})[0] + ':'
         names = list(map(
             lambda x: evg_pref + x[1],
@@ -89,7 +97,7 @@ class TimingMain(SiriusMainWindow):
 
     def settriggers(self):
         props = {
-            'detailed', 'status', 'state', 'source',
+            'detailed', 'status', 'name', 'state', 'source',
             'pulses', 'duration', 'delay'}
         names = HLTimeSearch.get_hl_triggers()
         trigs = _HLTriggerList(
@@ -101,39 +109,43 @@ class TimingMain(SiriusMainWindow):
         prefix = self.prefix
         main_menu = self.menuBar()
         main_menu.setNativeMenuBar(False)
+
+        icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
+
         menu = main_menu.addMenu('&Devices')
         action = menu.addAction('EVG')
         evg = LLTimeSearch.get_device_names(filters={'dev': 'EVG'})[0]
-        Window = create_window_from_widget(_EVG, title=evg)
+        Window = create_window_from_widget(_EVG, title=evg, icon=icon)
         connect_window(action, Window, None, prefix=prefix + evg + ':')
 
         menu_evr = menu.addMenu('EVRs')
         for evr in LLTimeSearch.get_device_names(filters={'dev': 'EVR'}):
             action = menu_evr.addAction(evr)
-            Window = create_window_from_widget(_EVR, title=evr)
+            Window = create_window_from_widget(_EVR, title=evr, icon=icon)
             connect_window(action, Window, None, prefix=prefix+evr+':')
 
         menu_eve = menu.addMenu('EVEs')
         for eve in LLTimeSearch.get_device_names(filters={'dev': 'EVE'}):
             action = menu_eve.addAction(eve)
-            Window = create_window_from_widget(_EVE, title=eve)
+            Window = create_window_from_widget(_EVE, title=eve, icon=icon)
             connect_window(action, Window, None, prefix=prefix + eve + ':')
 
         menu_afc = menu.addMenu('AMCs')
         for afc in LLTimeSearch.get_device_names(
                                     filters={'dev': 'AMCFPGAEVR'}):
             action = menu_afc.addAction(afc)
-            Window = create_window_from_widget(_AFC, title=afc)
+            Window = create_window_from_widget(_AFC, title=afc, icon=icon)
             connect_window(action, Window, None, prefix=prefix+afc+':')
 
         menu_fout = menu.addMenu('Fouts')
         for fout in LLTimeSearch.get_device_names(filters={'dev': 'Fout'}):
             action = menu_fout.addAction(fout)
-            Window = create_window_from_widget(_FOUT, title=fout)
+            Window = create_window_from_widget(_FOUT, title=fout, icon=icon)
             connect_window(action, Window, None, prefix=prefix+fout+':')
 
         action = main_menu.addAction('&Summary')
-        Window = create_window_from_widget(_Summary, title='Timing Summary')
+        Window = create_window_from_widget(
+            _Summary, title='Timing Summary', icon=icon)
         connect_window(action, Window, None, prefix=self.prefix)
 
     def _create_prop_widget(self, name, parent, wids, align_ver=True):

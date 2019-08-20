@@ -2,10 +2,12 @@ import sys
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QGroupBox, QLabel, QVBoxLayout, QHBoxLayout, \
     QGridLayout, QMenuBar
+import qtawesome as qta
+
 from pydm.widgets.label import PyDMLabel
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.search import LLTimeSearch as _LLTimeSearch
-from siriushla.util import connect_window
+from siriushla.util import connect_window, get_appropriate_color
 from siriushla.widgets.led import PyDMLed, SiriusLedAlert
 from siriushla.widgets.state_button import PyDMStateButton
 from siriushla.widgets.windows import create_window_from_widget
@@ -62,7 +64,9 @@ class AFC(BaseWidget):
 
         fout = _LLTimeSearch.get_fout_channel(prefix + 'CRT0')
         action = menu.addAction(fout)
-        Win = create_window_from_widget(_ti_ctrl.FOUT, title=fout.device_name)
+        icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
+        Win = create_window_from_widget(
+            _ti_ctrl.FOUT, title=fout.device_name, icon=icon)
         connect_window(action, Win, None, prefix=fout.device_name+':')
         return main_menu
 

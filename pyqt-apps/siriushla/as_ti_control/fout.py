@@ -2,9 +2,11 @@ import sys
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGroupBox, QLabel, QVBoxLayout, QHBoxLayout, \
     QGridLayout, QMenuBar
+import qtawesome as qta
+
 from pydm.widgets.label import PyDMLabel
 from siriuspy.search import LLTimeSearch
-from siriushla.util import connect_window
+from siriushla.util import connect_window, get_appropriate_color
 from siriushla.widgets.led import PyDMLed, SiriusLedAlert
 from siriushla.widgets.state_button import PyDMStateButton
 from siriushla.widgets.windows import create_window_from_widget
@@ -42,6 +44,7 @@ class FOUT(BaseWidget):
         main_menu.setNativeMenuBar(False)
         menu = main_menu.addMenu('&Downlinks')
 
+        icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
         downs = LLTimeSearch.get_fout2trigsrc_mapping()[prefix.device_name]
         downs = sorted([(ou, dwn) for ou, dwn in downs.items()])
         for out, dwn in downs:
@@ -53,7 +56,7 @@ class FOUT(BaseWidget):
             else:
                 devt = _ti_ctrl.AFC
             action = menu.addAction(out + ' --> ' + down)
-            Win = create_window_from_widget(devt, title=down)
+            Win = create_window_from_widget(devt, title=down, icon=icon)
             connect_window(action, Win, None, prefix=down + ':')
 
         menu = main_menu.addMenu('&Uplink')
@@ -61,7 +64,8 @@ class FOUT(BaseWidget):
         evg = LLTimeSearch.get_evg_channel(
             prefix.device_name.substitute(propty=link))
         action = menu.addAction(evg)
-        Win = create_window_from_widget(_ti_ctrl.EVG, title=evg.device_name)
+        Win = create_window_from_widget(
+            _ti_ctrl.EVG, title=evg.device_name, icon=icon)
         connect_window(action, Win, None, prefix=evg.device_name + ':')
         return main_menu
 

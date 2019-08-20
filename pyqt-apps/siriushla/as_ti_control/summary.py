@@ -1,11 +1,12 @@
 from qtpy.QtCore import Qt, QPoint
 from qtpy.QtGui import QPainter
-from qtpy.QtWidgets import QGroupBox, QLabel, QPushButton, QWidget, \
-    QVBoxLayout, QGridLayout, QHBoxLayout
+from qtpy.QtWidgets import QLabel, QPushButton, QWidget, QGridLayout
+import qtawesome as qta
+
 from siriuspy.namesys import SiriusPVName as PVName
-from siriuspy.search import HLTimeSearch, LLTimeSearch
+from siriuspy.search import LLTimeSearch
 from siriushla.widgets import SiriusLedAlert
-from siriushla.util import connect_window
+from siriushla.util import connect_window, get_appropriate_color
 from siriushla.widgets.windows import create_window_from_widget
 if __name__ == '__main__':
     from siriushla.as_ti_control import AFC, EVE, EVR, EVG, FOUT
@@ -41,7 +42,9 @@ class Button(QWidget):
         but.setAutoDefault(False)
         but.setDefault(False)
         clss = self._dic[self.prefix.dev]
-        Window = create_window_from_widget(clss, title=self.prefix.device_name)
+        icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
+        Window = create_window_from_widget(
+            clss, title=self.prefix.device_name, icon=icon)
         connect_window(but, Window, None, prefix=self.prefix + ':')
 
         prop1 = 'Network'

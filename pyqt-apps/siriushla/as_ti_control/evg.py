@@ -3,11 +3,14 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGroupBox, QLabel, QWidget, QMenuBar, \
     QVBoxLayout, QHBoxLayout, QGridLayout, QSizePolicy as QSzPol, \
     QSplitter
+import qtawesome as qta
+
 from pydm.widgets import PyDMLabel, PyDMLineEdit, PyDMPushButton
 from siriuspy.search import LLTimeSearch
 from siriuspy.csdevice import timesys as _cstime
-from siriushla.util import connect_window
-from siriushla.widgets import PyDMLed, SiriusLedAlert, PyDMStateButton
+from siriushla.util import connect_window, get_appropriate_color
+from siriushla.widgets import PyDMLed, SiriusLedAlert, PyDMStateButton, \
+    SiriusLabel
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla import as_ti_control as _ti_ctrl
 from .base import BaseList, BaseWidget, \
@@ -87,7 +90,9 @@ class EVG(BaseWidget):
 
         for out, down in sorted(downs2):
             action = menu.addAction(out + ' --> ' + down)
-            Win = create_window_from_widget(_ti_ctrl.FOUT, title=down)
+            icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
+            Win = create_window_from_widget(
+                _ti_ctrl.FOUT, title=down, icon=icon)
             connect_window(action, Win, None, prefix=down + ':')
         return main_menu
 
@@ -118,15 +123,23 @@ class EVG(BaseWidget):
         configlayout.addStretch()
 
         sp = PyDMPushButton(
-            self, init_channel=prefix+"RFReset-Cmd", pressValue=1,
-            label='Reset')
+            self, init_channel=prefix+"RFReset-Cmd", pressValue=1)
+        sp.setIcon(qta.icon('fa5s.sync'))
+        sp.setToolTip('Reset RF Status')
+        sp.setObjectName('but')
+        sp.setStyleSheet(
+            '#but{min-width:25px; max-width:25px; icon-size:20px;}')
         rb = PyDMLed(self, init_channel=prefix + "RFStatus-Mon")
         layrow.addWidget(self._create_prop_widget(
                         'RF Status', self.configs_wid, (sp, rb)))
 
         sp = PyDMPushButton(
-            self, init_channel=prefix+"UpdateEvt-Cmd", pressValue=1,
-            label='Update')
+            self, init_channel=prefix+"UpdateEvt-Cmd", pressValue=1)
+        sp.setIcon(qta.icon('fa5s.sync'))
+        sp.setToolTip('Update Events Table')
+        sp.setObjectName('but')
+        sp.setStyleSheet(
+            '#but{min-width:25px; max-width:25px; icon-size:20px;}')
         rb = PyDMLed(self, init_channel=prefix + "EvtSyncStatus-Mon")
         layrow.addWidget(self._create_prop_widget(
                         'Update Evts', self.configs_wid, (sp, rb)))
@@ -281,27 +294,39 @@ class EventList(BaseList):
     """Template for control of Events."""
 
     _MIN_WIDs = {
-        'ext_trig': 4.8, 'mode': 6.6, 'delay_type': 4.2, 'delay': 4.8,
-        'description': 9.7, 'code': 3.2,
+        'ext_trig': 3, 'mode': 6.6, 'delay_type': 4.2, 'delay': 4.8,
+        'description': 9.7, 'code': 3.2, 'name': 4.8,
         }
     _LABELS = {
-        'ext_trig': 'Ext. Trig.', 'mode': 'Mode', 'description': 'Description',
+        'ext_trig': 'Trig.', 'mode': 'Mode', 'description': 'Description',
         'delay_type': 'Type', 'delay': 'Delay [us]', 'code': 'Code',
+        'name': 'Name',
         }
     _ALL_PROPS = (
-        'ext_trig', 'mode', 'delay_type', 'delay', 'description', 'code')
+        'ext_trig', 'name', 'mode', 'delay_type', 'delay', 'description',
+        'code')
 
     def __init__(self, **kwargs):
-        kwargs['props2search'] = set(('mode', 'ext_trig', 'delay_type'))
+        kwargs['props2search'] = set(
+            ('name', 'mode', 'delay_type'))
         super().__init__(**kwargs)
         self.setObjectName('ASApp')
 
     def _createObjs(self, prefix, prop):
         sp = rb = None
         if prop == 'ext_trig':
-            sp = PyDMPushButton(
-                self, init_channel=prefix+'ExtTrig-Cmd', pressValue=1)
-            sp.setText(prefix.propty)
+            sp = QWidget(self)
+            but = PyDMPushButton(
+                sp, init_channel=prefix+'ExtTrig-Cmd', pressValue=1)
+            but.setIcon(qta.icon('fa5s.step-forward'))
+            but.setObjectName('but')
+            but.setStyleSheet(
+                '#but{min-width:40px; min-height:30px; icon-size:20px;}')
+            but.setToolTip('Run event asynchronously')
+            hbl = QHBoxLayout(sp)
+            hbl.addWidget(but)
+        elif prop == 'name':
+            sp = QLabel(prefix.propty, self, alignment=Qt.AlignCenter)
         elif prop == 'mode':
             sp = _MyComboBox(self, init_channel=prefix + "Mode-Sel")
             rb = PyDMLabel(self, init_channel=prefix + "Mode-Sts")
