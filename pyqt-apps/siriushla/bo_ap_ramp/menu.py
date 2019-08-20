@@ -88,7 +88,7 @@ class Settings(QMenuBar):
         util.connect_newprocess(self.act_pm, 'sirius-hla-bo-pm-control.py',
                                 parent=self)
         self.act_sofb = QAction('SOFB', self)
-        self.act_sofb.setIcon(qta.icon('mdi.hammer'))
+        self.act_sofb.setIcon(qta.icon('fa5s.hammer'))
         util.connect_newprocess(self.act_sofb, 'sirius-hla-bo-ap-sofb.py',
                                 parent=self)
         self.act_ti = QAction('Timing', self)

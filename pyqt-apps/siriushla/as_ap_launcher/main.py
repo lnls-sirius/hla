@@ -9,6 +9,7 @@ from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
 from siriuspy.envars import vaca_prefix
 from siriuspy.timesys import get_evg_name
 
+from siriushla.util import get_appropriate_color
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, PyDMStateButton, \
     SiriusLedState, SiriusLedAlert
@@ -30,7 +31,8 @@ class MainOperation(SiriusMainWindow):
         self.setMenuBar(menubar)
         self._setupUi()
         self.setWindowTitle('Main Controls')
-        self.setWindowIcon(qta.icon('mdi.rocket', color='#969696'))
+        self.setWindowIcon(
+            qta.icon('mdi.rocket', color=get_appropriate_color('AS')))
         self.move(0, 20)
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
 

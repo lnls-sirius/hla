@@ -7,6 +7,7 @@ from epics import PV as _PV
 from qtpy.QtWidgets import QVBoxLayout, QMessageBox, QMenuBar, \
     QMenu, QHBoxLayout, QWidget, QPushButton, QAction, QGroupBox, \
     QInputDialog
+import qtawesome as qta
 
 from siriuspy.envars import vaca_prefix as _prefix
 from siriuspy.clientconfigdb import ConfigDBClient
@@ -84,7 +85,9 @@ def get_object(ismenubar=True, parent=None):
                     pai.setLayout(QHBoxLayout(pai))
                     lay = pai.layout()
                 if isinstance(filho, QMenu):
+                    icon = filho.icon()
                     filho = filho.parent()
+                    filho.setIcon(icon)
                 lay.addWidget(filho)
 
         def _create_config_menu(self):
@@ -125,9 +128,11 @@ def get_object(ismenubar=True, parent=None):
             injection = LEVEL2A('Injection', menu)
             self.connect_newprocess(injection, 'sirius-hla-as-ap-injection.py')
             timing = LEVEL2A('Timing', menu)
+            timing.setIcon(qta.icon('mdi.timer'))
             self.connect_newprocess(timing, 'sirius-hla-as-ti-control.py')
 
             pwrsupply = LEVEL2M('PS', menu)
+            pwrsupply.setIcon(qta.icon('mdi.car-battery'))
             pwrsupply.setObjectName('ASApp')
             pscycle = QAction('Cycle', pwrsupply)
             self.connect_newprocess(pscycle, 'sirius-hla-as-ps-cycle.py')
@@ -184,7 +189,9 @@ def get_object(ismenubar=True, parent=None):
             menu.setObjectName(sec.upper()+'App')
 
             PS = self._set_psma_menu(sec, dis='ps')
+            PS.setIcon(qta.icon('mdi.car-battery'))
             MA = self._set_psma_menu(sec, dis='ma')
+            MA.setIcon(qta.icon('mdi.magnet'))
             OPT = self._set_optics_menu(sec)
             DIG = self._set_diagnostic_menu(sec)
             self.add_object_to_level1(menu, PS)
@@ -209,6 +216,7 @@ def get_object(ismenubar=True, parent=None):
                 optics.addAction(injbo)
 
             sofb = QAction('SOFB', optics)
+            sofb.setIcon(qta.icon('fa5s.hammer'))
             self.connect_newprocess(sofb, 'sirius-hla-'+sec+'-ap-sofb.py')
             optics.addAction(sofb)
 
@@ -250,6 +258,7 @@ def get_object(ismenubar=True, parent=None):
             diag.setObjectName(sec.upper()+'App')
             BPMs = self._set_bpm_menu(sec)
             act = QAction('BPMs', diag)
+            act.setIcon(qta.icon('mdi.currency-sign'))
             act.setMenu(BPMs)
             diag.addAction(act)
             # diag.addMenu(BPMs)
@@ -277,6 +286,7 @@ def get_object(ismenubar=True, parent=None):
             cmd = ['sirius-hla-as-di-bpm.py', sec, '-w']
             menu = QMenu('BPMs', self)
             menu.setObjectName(sec.upper()+'App')
+            menu.setIcon(qta.icon('mdi.currency-sign'))
             action = menu.addAction('Summary')
             self.connect_newprocess(action, cmd + ['Summary', ])
             typs = ('Single Pass', 'Multi Turn')

@@ -196,7 +196,7 @@ class SOFBControl(BaseWidget):
                 grpbx, ' '+itm, pressValue=val,
                 init_channel=self.prefix+'ApplyDelta-Cmd')
             btn.rules = rules
-            btn.setIcon(qta.icon('mdi.hammer'))
+            btn.setIcon(qta.icon('fa5s.hammer'))
             btn.setToolTip('Apply ' + itm)
             btn.setObjectName('button')
             btn.setStyleSheet('#button {\
