@@ -1,4 +1,5 @@
 import sys
+import numpy as _np
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGroupBox, QLabel, QWidget, QMenuBar, \
     QVBoxLayout, QHBoxLayout, QGridLayout, QSizePolicy as QSzPol, \
@@ -15,6 +16,29 @@ from siriushla.widgets.windows import create_window_from_widget
 from siriushla import as_ti_control as _ti_ctrl
 from .base import BaseList, BaseWidget, \
     MySpinBox as _MySpinBox, MyComboBox as _MyComboBox
+
+
+class BucketListLineEdit(PyDMLineEdit):
+
+    def value_changed(self, value):
+        super().value_changed(value)
+        self.channeltype = _np.ndarray
+        self.subtype = int
+
+
+class BucketListLabel(SiriusLabel):
+
+    def value_changed(self, value):
+        maxele = 20
+        if isinstance(value, _np.ndarray):
+            zeros = _np.where(value == 0)[0]
+            if zeros.size > 0:
+                value = value[:zeros[0]]
+            txt = '[ ' + ' '.join([str(i) for i in value[:maxele]])
+            txt += ' ...]' if value.size > maxele else ']'
+            self.setText(txt)
+        else:
+            super().value_changed(value)
 
 
 class EVG(BaseWidget):
@@ -41,20 +65,23 @@ class EVG(BaseWidget):
         mylayout.addWidget(self.configs_wid, 2, 0)
         self._setup_configs_wid()
 
+        bucketlist_wid = self._setup_bucketlist_wid()
+        mylayout.addWidget(bucketlist_wid, 3, 0)
+
         self.status_wid = QGroupBox('Status', self)
-        mylayout.addWidget(self.status_wid, 2, 1)
+        mylayout.addWidget(self.status_wid, 2, 1, 2, 1)
         self._setup_status_wid()
 
         splitter = QSplitter(Qt.Horizontal)
         splitter.setContentsMargins(0, 0, 0, 0)
         splitter.setHandleWidth(20)
-        mylayout.addWidget(splitter, 3, 0, 1, 2)
+        mylayout.addWidget(splitter, 4, 0, 1, 2)
 
         self.events_wid = EventList(
             name='Events', parent=self, prefix=self.prefix,
             obj_names=sorted(_cstime.Const.EvtLL._fields[1:]))
         self.events_wid.setObjectName('events_wid')
-        self.events_wid.setStyleSheet("""#events_wid{min-width:40em;}""")
+        self.events_wid.setStyleSheet("events_wid{min-width:40em;}")
         splitter.addWidget(self.events_wid)
 
         self.clocks_wid = ClockList(
@@ -64,19 +91,7 @@ class EVG(BaseWidget):
             )
         splitter.addWidget(self.clocks_wid)
 
-        # grpbx = self._create_formlayout_groupbox('Configurations', (
-        #     ('DevEnbl-Sel', 'Enabled'),
-        #     ('ContinuousEvt-Sel', 'Continuous'),
-        #     ('InjectionEvt-Sel', 'Injection'),
-        #     ('ACDiv-SP', 'AC Divisor'),
-        #     ('RFDiv-SP', 'RF Divisor'),
-        #     # ('BucketList-SP', 'Bucket List'),
-        #     ('RepeatBucketList-SP', 'Repeat Bucket List'),
-        #     ))
-        # mylayout.addWidget(grpbx, 1, 0)
-
     def _setupmenus(self):
-        prefix = self.prefix
         main_menu = QMenuBar()
         main_menu.setNativeMenuBar(False)
         menu = main_menu.addMenu('&Downlinks')
@@ -99,7 +114,9 @@ class EVG(BaseWidget):
     def _setup_configs_wid(self):
         prefix = self.prefix
 
-        configlayout = QHBoxLayout(self.configs_wid)
+        suplay = QVBoxLayout(self.configs_wid)
+        configlayout = QHBoxLayout()
+        suplay.addItem(configlayout)
         layrow = QVBoxLayout()
         layrow.setSpacing(30)
         configlayout.addStretch()
@@ -179,21 +196,6 @@ class EVG(BaseWidget):
         configlayout.addLayout(layrow)
         configlayout.addStretch()
 
-        sp = _MySpinBox(self, init_channel=prefix + "RepeatBucketList-SP")
-        sp.showStepExponent = False
-        rb = PyDMLabel(self, init_channel=prefix + "RepeatBucketList-RB")
-        layrow.addWidget(self._create_prop_widget(
-                        'Repeat BL', self.configs_wid, (sp, rb)))
-
-        rb = PyDMLabel(self, init_channel=prefix + "BucketListLen-Mon")
-        layrow.addWidget(self._create_prop_widget(
-                        'Bucket List Size', self.configs_wid, (rb, )))
-
-        layrow = QVBoxLayout()
-        layrow.setSpacing(30)
-        configlayout.addLayout(layrow)
-        configlayout.addStretch()
-
         sp = PyDMStateButton(self, init_channel=prefix + "ContinuousEvt-Sel")
         rb = PyDMLed(self, init_channel=prefix + "ContinuousEvt-Sts")
         layrow.addWidget(self._create_prop_widget(
@@ -204,15 +206,34 @@ class EVG(BaseWidget):
         layrow.addWidget(self._create_prop_widget(
                         'Injection', self.configs_wid, (sp, rb)))
 
-        # sp = PyDMLineEdit(self, init_channel=prefix + "BucketList-SP")
-        # sp.setStyleSheet("""min-width:9.7em; max-height:1.15em;""")
-        # sp.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
-        # rb = PyDMLabel(self, init_channel=prefix + "BucketList-RB")
-        # rb.setStyleSheet(
-        #    """min-width:9.7em; max-width:16em; max-height:1.15em;""")
-        # rb.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
-        # # gb = self._create_small_GB('Bucket List', self.configs_wid, (sp, rb))
-        # # configs_layout.addWidget(gb, 2, 0, 1, 2)
+    def _setup_bucketlist_wid(self):
+        prefix = self.prefix
+        wid = QGroupBox('Bucket List', self)
+        lay = QHBoxLayout(wid)
+
+        sp = BucketListLineEdit(wid, init_channel=prefix + "BucketList-SP")
+        sp.setStyleSheet("min-width:38em; max-width:38em; max-height:1.15em;")
+        sp.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
+        rb = BucketListLabel(wid, init_channel=prefix + "BucketList-RB")
+        rb.setStyleSheet("min-width:38em; max-width:38em; max-height:1.15em;")
+        rb.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
+        vlay = QVBoxLayout()
+        lay.addItem(vlay)
+        vlay.addWidget(sp)
+        vlay.addWidget(rb)
+
+        rb = PyDMLabel(wid, init_channel=prefix + "BucketListLen-Mon")
+        vlay = QVBoxLayout()
+        lay.addItem(vlay)
+        vlay.addWidget(QLabel('Size', wid), alignment=Qt.AlignCenter)
+        vlay.addWidget(rb, alignment=Qt.AlignCenter)
+
+        sp = _MySpinBox(wid, init_channel=prefix + "RepeatBucketList-SP")
+        sp.showStepExponent = False
+        rb = PyDMLabel(wid, init_channel=prefix + "RepeatBucketList-RB")
+        lay.addWidget(self._create_prop_widget('Repeat', wid, (sp, rb)))
+
+        return wid
 
     def _setup_status_wid(self):
         prefix = self.prefix
