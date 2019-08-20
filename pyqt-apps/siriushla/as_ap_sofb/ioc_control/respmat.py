@@ -14,7 +14,7 @@ from siriuspy.csdevice.orbitcorr import ConstTLines
 from siriuspy.clientconfigdb import ConfigDBClient, ConfigDBException
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets import SiriusLedState, SiriusConnectionSignal
-from siriushla.util import connect_window
+from siriushla.util import connect_window, get_appropriate_color
 from siriushla.as_ap_configdb import LoadConfigDialog, SaveConfigDialog
 
 from .respmat_enbllist import SelectionMatrix
@@ -40,6 +40,8 @@ class RespMatWidget(BaseWidget):
 
     def setupui(self):
         gbox = QGroupBox('Matrix', self)
+        gbox.setObjectName('grbx')
+        gbox.setStyleSheet('#grbx{min-height:13.0em; max-height:13.0em;}')
         self.setLayout(QVBoxLayout())
         self.layout().addWidget(gbox)
         vbl = QVBoxLayout(gbox)
@@ -55,18 +57,19 @@ class RespMatWidget(BaseWidget):
         # ####################################################################
         grpbx = QGroupBox('Corrs and BPMs selection', mainwid)
         vbl.addWidget(grpbx)
+        icon = qta.icon('fa5s.hammer', color=get_appropriate_color(self.acc))
         Window = create_window_from_widget(
-            SelectionMatrix, title='Corrs and BPMs selection')
-        gdl = QGridLayout(grpbx)
-        for idx, dev in enumerate(('BPMX', 'BPMY', 'CH', 'CV')):
-            btn = QPushButton(dev, grpbx)
-            btn.setObjectName('btn')
-            btn.setStyleSheet('#btn{max-width:3.8em;}')
-            connect_window(
-                btn, Window, self,
-                dev=dev, prefix=self.prefix, acc=self.acc)
-            # gdl.addWidget(btn, idx // 2, idx % 2)
-            gdl.addWidget(btn, 0, idx)
+            SelectionMatrix, title='Corrs and BPMs selection', icon=icon)
+        hbl = QHBoxLayout(grpbx)
+        btn = QPushButton('', grpbx)
+        btn.setObjectName('btn')
+        btn.setIcon(qta.icon('fa5s.tasks'))
+        btn.setToolTip('Open window to select BPMs and correctors')
+        btn.setStyleSheet(
+            '#btn{min-width:3.8em; max-width:3.8em;\
+            min-height:2em; max-height:2em; icon-size:25px;}')
+        connect_window(btn, Window, None, prefix=self.prefix, acc=self.acc)
+        hbl.addWidget(btn)
 
         if self.isring:
             pdm_chbx = PyDMCheckbox(
@@ -74,12 +77,9 @@ class RespMatWidget(BaseWidget):
             pdm_chbx.setText('use RF')
             pdm_led = SiriusLedState(
                 grpbx, init_channel=self.prefix+'RFEnbl-Sts')
-            hbl = QHBoxLayout()
-            hbl.setContentsMargins(0, 0, 0, 0)
             hbl.addStretch()
             hbl.addWidget(pdm_chbx)
             hbl.addWidget(pdm_led)
-            gdl.addItem(hbl, 1, 0, 1, 4)
 
         # ####################################################################
         # ####################### Singular Values ############################

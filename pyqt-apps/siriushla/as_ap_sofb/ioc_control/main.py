@@ -244,7 +244,7 @@ class SOFBControl(BaseWidget):
             vbl2.addItem(fbl)
 
         # ####################################################################
-        # ###################### Detailed Configurations #####################
+        # ###################### Response Matrix #####################
         # ####################################################################
         wid = RespMatWidget(self, self.prefix, self.acc)
         wid.layout().setContentsMargins(0, 0, 0, 0)
