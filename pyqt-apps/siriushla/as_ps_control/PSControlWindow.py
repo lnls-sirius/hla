@@ -9,7 +9,7 @@ from .control_widget.ControlWidgetFactory import ControlWidgetFactory
 from .PSDetailWindow import PSDetailWindow
 from .PSTrimWindow import PSTrimWindow
 
-from ..util import connect_window
+from ..util import connect_window, get_appropriate_color
 
 
 class PSControlWindow(SiriusMainWindow):
@@ -20,10 +20,15 @@ class PSControlWindow(SiriusMainWindow):
         super(PSControlWindow, self).__init__(parent)
         self.app = PyDMApplication.instance()
         self.setObjectName(section+'App')
-        self.setWindowIcon(qta.icon('mdi.magnet', color='#969696'))
         self._section = section
         self._discipline = discipline
         self._device = device
+        if discipline.lower().startswith('ma'):
+            icon = qta.icon('mdi.magnet', color=get_appropriate_color(section))
+        else:
+            icon = qta.icon(
+                'mdi.car-battery', color=get_appropriate_color(section))
+        self.setWindowIcon(icon)
 
         self._setup_ui()
 
