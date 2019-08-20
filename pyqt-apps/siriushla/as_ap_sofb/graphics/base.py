@@ -206,17 +206,17 @@ class BaseWidget(QWidget):
             cbx.setChecked(True)
             hbl.addWidget(cbx)
 
-            lab_avg = Label(unit, '0.000', wid)
+            lab_avg = Label(unit, '-100.000 mrad', wid)
             self.updater[idx].ave[pln].connect(lab_avg.setFloat)
-            lab_avg.setStyleSheet("""min-width:3.87em;""")
-            lab_avg.setAlignment(Qt.AlignCenter)
+            lab_avg.setStyleSheet("""min-width:5.8em;""")
+            lab_avg.setAlignment(Qt.AlignRight)
             hbl.addWidget(lab_avg)
             hbl.addWidget(QLabel(
                 "<html><head/><body><p>&#177;</p></body></html>", wid))
-            lab_std = Label(unit, '0.000', wid)
+            lab_std = Label(unit, '100.000 mrad', wid)
             self.updater[idx].std[pln].connect(lab_std.setFloat)
-            lab_std.setStyleSheet("""min-width:3.87em;""")
-            lab_std.setAlignment(Qt.AlignCenter)
+            lab_std.setStyleSheet("""min-width:5.8em;""")
+            lab_std.setAlignment(Qt.AlignLeft)
             hbl.addWidget(lab_std)
         return grpbx
 
