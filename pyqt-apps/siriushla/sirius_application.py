@@ -1,12 +1,20 @@
 """Definition of the Sirius Application class."""
 import sys
+import os
 import time
-from io import StringIO
 import traceback
+import subprocess as sub
+from io import StringIO
 from pydm import PyDMApplication, data_plugins
 from qtpy.QtWidgets import QMessageBox
 
 from .util import get_window_id, set_style
+
+
+# Set QT_SCALE_FACTOR
+res = int(sub.getoutput('xrandr | grep current').split(',')[1].split()[3])
+if res > 2000:
+    os.environ['QT_SCALE_FACTOR'] = '1.5'
 
 
 # https://riverbankcomputing.com/pipermail/pyqt/2009-May/022961.html
