@@ -26,17 +26,18 @@ class PSDetailWindow(SiriusMainWindow):
             name = self._psname[0]
         secs = {'AS', 'TB', 'BO', 'TS', 'SI', 'LI'}
         if name.sec in secs:
-            self.setObjectName(name.sec+'App')
+            sec = name.sec
         elif name.idx[:2] in secs:
-            self.setObjectName(name.idx[:2]+'App')
+            sec = name.idx[:2]
         else:
-            self.setObjectName('ASApp')
+            sec = 'AS'
+        self.setObjectName(sec+'App')
         if name.dis.lower().startswith('ma'):
             icon = qta.icon(
-                'mdi.magnet', color=get_appropriate_color(name.sec))
+                'mdi.magnet', color=get_appropriate_color(sec))
         else:
             icon = qta.icon(
-                'mdi.car-battery', color=get_appropriate_color(name.sec))
+                'mdi.car-battery', color=get_appropriate_color(sec))
         self.setWindowIcon(icon)
         self._setup_ui()
 
