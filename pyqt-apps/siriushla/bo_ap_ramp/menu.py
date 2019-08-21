@@ -5,6 +5,8 @@ from functools import partial as _part
 from qtpy.QtCore import Qt, Signal, Slot
 from qtpy.QtGui import QKeySequence
 from qtpy.QtWidgets import QMenuBar, QAction, QMessageBox
+import qtawesome as qta
+
 from siriuspy.clientconfigdb import ConfigDBException as _ConfigDBException
 from siriuspy.ramp import ramp
 from siriushla import util
@@ -31,8 +33,6 @@ class Settings(QMenuBar):
         self.ramp_config = ramp_config
         self._tunecorr_configname = tunecorr_configname
         self._chromcorr_configname = chromcorr_configname
-        self._injcurr_idx = 0
-        self._ejecurr_idx = -1
         self._setupUi()
 
     def _setupUi(self):
@@ -40,15 +40,19 @@ class Settings(QMenuBar):
             """QMenuBar::item {\npadding: 0 1em 0 0.17em;\n}""")
         self.config_menu = self.addMenu('Booster Ramp Configuration')
         self.act_new = self.config_menu.addAction('New from template')
+        self.act_new.setIcon(qta.icon('mdi.file'))
         self.act_new.setShortcut(QKeySequence.New)
         self.act_new.triggered.connect(self.createNewConfigFromTemplate)
         self.act_load = self.config_menu.addAction('Load existing config...')
+        self.act_load.setIcon(qta.icon('mdi.folder-open'))
         self.act_load.setShortcut(QKeySequence.Open)
         self.act_load.triggered.connect(self.showLoadExistingConfigPopup)
         self.act_save = self.config_menu.addAction('Save')
+        self.act_save.setIcon(qta.icon('mdi.content-save'))
         self.act_save.setShortcut(QKeySequence.Save)
         self.act_save.triggered.connect(self._saveAndEmitConfigName)
         self.act_save_as = self.config_menu.addAction('Save As...')
+        self.act_save_as.setIcon(qta.icon('mdi.content-save-settings'))
         self.act_save_as.setShortcut(QKeySequence(Qt.CTRL+Qt.SHIFT+Qt.Key_S))
         self.act_save_as.triggered.connect(self.showSaveAsPopup)
         self.config_menu.addSeparator()
@@ -56,6 +60,7 @@ class Settings(QMenuBar):
         self.ramp_params_menu = self.addMenu('Ramping Parameters')
         self.menu_plotunits = self.ramp_params_menu.addMenu(
             'Plot magnet waveforms in...')
+        self.menu_plotunits.setIcon(qta.icon('mdi.chart-line'))
         self.act_plotcurrents = self.menu_plotunits.addAction('Currents')
         self.act_plotcurrents.triggered.connect(
             _part(self.plotUnitSignal.emit, 'Currents'))
@@ -63,28 +68,31 @@ class Settings(QMenuBar):
         self.act_plotstrengths.triggered.connect(
             _part(self.plotUnitSignal.emit, 'Strengths'))
 
-        self.optics_menu = self.addMenu('Optics Adjustments')
-        self.act_optics_settings = self.optics_menu.addAction('Settings')
-        self.act_optics_settings.triggered.connect(
-            self._showOpticsSettingsPopup)
+        self.act_optics = self.addAction('Optics Adjustments Settings')
+        self.act_optics.triggered.connect(self._showOpticsSettingsPopup)
 
         self.diag_menu = self.addMenu('Ramp Diagnosis')
         self.act_dcct = self.diag_menu.addAction('DCCT')
+        self.act_dcct.setIcon(qta.icon('mdi.current-dc'))
         util.connect_newprocess(
             self.act_dcct, ['sirius-hla-as-di-dcct.py', 'BO'], parent=self)
         # TODO: menu to access all windows related to diagnostics
 
         self.open_menu = self.addMenu('Open...')
         self.act_ma = QAction('MA', self)
+        self.act_ma.setIcon(qta.icon('mdi.magnet'))
         util.connect_newprocess(self.act_ma, 'sirius-hla-bo-ma-control.py',
                                 parent=self)
         self.act_pm = QAction('PM', self)
+        self.act_pm.setIcon(qta.icon('mdi.current-ac'))
         util.connect_newprocess(self.act_pm, 'sirius-hla-bo-pm-control.py',
                                 parent=self)
         self.act_sofb = QAction('SOFB', self)
+        self.act_sofb.setIcon(qta.icon('fa5s.hammer'))
         util.connect_newprocess(self.act_sofb, 'sirius-hla-bo-ap-sofb.py',
                                 parent=self)
         self.act_ti = QAction('Timing', self)
+        self.act_ti.setIcon(qta.icon('mdi.timer'))
         util.connect_newprocess(self.act_ti, 'sirius-hla-as-ti-control.py',
                                 parent=self)
         self.open_menu.addAction(self.act_ma)

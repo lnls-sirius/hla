@@ -74,7 +74,7 @@ QTabBar::tab {
     border-top-left-radius: 1em;
     border-top-right-radius: 1em;
     border: 0.1em solid black;
-    margin-top: 2em;
+    margin-top: 0.0em;
 }
 
 QTabBar::tab:selected, QTabBar::tab:hover {
@@ -104,7 +104,7 @@ QTabBar::tab:selected, QTabBar::tab:hover {
 }
 
 QTabBar::tab:!selected {
-    margin-top: 2.2em; /* make non-selected tabs look smaller */
+    margin-top: 0.2em; /* make non-selected tabs look smaller */
     font-weight: 200;
 }
 

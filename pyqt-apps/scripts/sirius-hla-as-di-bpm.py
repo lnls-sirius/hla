@@ -4,10 +4,13 @@
 
 import sys
 import argparse as _argparse
+import qtawesome as qta
+
 from siriushla.sirius_application import SiriusApplication
 from siriuspy.envars import vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.search import BPMSearch
+from siriushla.util import get_appropriate_color
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.as_di_bpms import SelectBPMs, BPMMain, SinglePassSummary, \
     MultiTurnSummary
@@ -33,11 +36,13 @@ args = parser.parse_args()
 app = SiriusApplication()
 pv = _PVName(args.bpm_sel)
 if pv.dev == 'BPM':
+    icon = qta.icon('mdi.currency-sign', color=get_appropriate_color(pv.sec))
     window = create_window_from_widget(
-        BPMMain, title=args.bpm_sel, is_main=True)
+        BPMMain, title=args.bpm_sel, is_main=True, icon=icon)
     kwargs = dict(prefix=args.prefix, bpm=pv)
 else:
-    bpms_names = BPMSearch.get_names(filters={'sec': args.bpm_sel.upper()})
+    sec = args.bpm_sel.upper()
+    bpms_names = BPMSearch.get_names(filters={'sec': sec})
     if args.window == 'Summary':
         clas = SelectBPMs
     elif args.window == 'SPass':
@@ -50,8 +55,9 @@ else:
         siz = len(bpms_names)//5
         slc = slice(siz*(sub-1), siz*sub)
     bpms_names = bpms_names[slc]
+    icon = qta.icon('mdi.currency-sign', color=get_appropriate_color(sec))
     window = create_window_from_widget(
-        clas, title=args.bpm_sel.upper() + ' BPM List', is_main=True)
+        clas, title=sec + ' BPM List', is_main=True, icon=icon)
     kwargs = dict(prefix=args.prefix, bpm_list=bpms_names)
 
 app.open_window(window, parent=None, **kwargs)

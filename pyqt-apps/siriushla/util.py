@@ -83,6 +83,18 @@ def run_newprocess(cmd, is_window=True, **kwargs):
         _subprocess.Popen(cmd, **kwargs)
 
 
+def get_appropriate_color(section='SI'):
+    dic = {
+        'AS': '#d7ccc8',
+        'LI': '#ffcdd2',
+        'TB': '#f8bbd0',
+        'BO': '#c8e6c9',
+        'TS': '#b2ebf2',
+        'SI': '#bbdefb',
+    }
+    return dic[section]
+
+
 def get_appropriate_signal(widget):
     if isinstance(widget, QAction):
         signal = widget.triggered

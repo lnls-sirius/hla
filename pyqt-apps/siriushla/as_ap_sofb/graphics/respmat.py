@@ -46,7 +46,11 @@ class ShowMatrixWidget(QWidget):
         self.spbox.setKeyboardTracking(False)
         self.spbox.editingFinished.connect(self._update_graph)
 
-        vbl.addWidget(self.spbox)
+        hbl = QHBoxLayout()
+        vbl.addItem(hbl)
+        hbl.addWidget(QLabel('Lines spacing:', self))
+        hbl.addWidget(self.spbox)
+        hbl.addStretch()
 
         graph.setShowLegend(False)
         graph.setLabel('bottom', text='BPM Position', units='m')
@@ -108,7 +112,7 @@ class ShowMatrixWidget(QWidget):
     def _update_horizontal(self, _):
         val = self.rsize.getvalue()
         if val is None:
-            return
+            val = 1
         bpm_pos = _np.array(self._csorb.BPM_POS)
         bpm_pos = [bpm_pos + i*self._csorb.C0 for i in range(2*val)]
         bpm_pos = _np.hstack(bpm_pos)

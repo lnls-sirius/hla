@@ -3,6 +3,7 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QFormLayout, \
     QScrollArea, QGroupBox, QLabel, QGridLayout, QSizePolicy as QSzPol, \
     QFrame, QLineEdit, QPushButton, QMenu
+import qtawesome as qta
 from pydm.widgets import PyDMEnumComboBox
 from pydm.widgets.base import PyDMPrimitiveWidget
 from siriuspy.namesys import SiriusPVName as _PVName
@@ -99,7 +100,14 @@ class BaseList(CustomGroupBox):
             self.search_lineedit.setPlaceholderText("Search...")
             self.search_lineedit.textEdited.connect(self.filter_lines)
             # Create search menu
-            pbt = QPushButton('Show Columns', self)
+            pbt = QPushButton('  ', self)
+            pbt.setToolTip('Choose which columns to show')
+            pbt.setObjectName('but')
+            pbt.setIcon(qta.icon('mdi.view-column'))
+            pbt.setStyleSheet(
+                '#but{min-width:35px; max-width:35px;\
+                min-height:25px; max-height:25px;\
+                icon-size:25px;}')
             hbl.addWidget(pbt)
             self.search_menu = QMenu(pbt)
             self.search_menu.triggered.connect(self.filter_lines)
@@ -119,9 +127,12 @@ class BaseList(CustomGroupBox):
             headerlay.addLayout(obj)
             for idx in range(obj.count()):
                 wid = obj.itemAt(idx).widget()
+                name = wid.objectName() or 'obj'
+                wid.setObjectName(name)
                 wid.setStyleSheet(
-                    'min-width: {0:.1f}em; max-width: {0:.1f}em;'.format(
-                        self._MIN_WIDs[prop]))
+                    '#{0:s}{{min-width:{1:.1f}em;\
+                    max-width: {1:.1f}em;}}'.format(
+                        name, self._MIN_WIDs[prop]))
 
         # Create scrollarea
         sc_area = QScrollArea()
@@ -153,9 +164,12 @@ class BaseList(CustomGroupBox):
                 hlay.addLayout(obj)
                 for idx in range(obj.count()):
                     wid = obj.itemAt(idx).widget()
+                    name = wid.objectName() or 'obj'
+                    wid.setObjectName(name)
                     wid.setStyleSheet(
-                        'min-width: {0:.1f}em; max-width: {0:.1f}em;'.format(
-                            self._MIN_WIDs[prop]))
+                        '#{0:s}{{min-width:{1:.1f}em;\
+                        max-width: {1:.1f}em;}}'.format(
+                            name, self._MIN_WIDs[prop]))
 
     def getLine(self, prefix=None, header=False):
         objects = list()

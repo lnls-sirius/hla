@@ -4,7 +4,7 @@ from functools import partial as _part
 import numpy as _np
 from pyqtgraph import functions
 from qtpy.QtWidgets import QWidget, QLabel, QVBoxLayout, QPushButton, \
-    QHBoxLayout, QGroupBox, QComboBox, QToolTip
+    QHBoxLayout, QGroupBox, QComboBox, QToolTip, QGridLayout
 from qtpy.QtCore import Qt, Signal
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.csdevice.orbitcorr import SOFBFactory
@@ -42,13 +42,13 @@ class OrbitWidget(BaseWidget):
         self.add_buttons_for_images()
 
     def add_buttons_for_images(self):
-        grpbx = QGroupBox('Other Graphics', self)
-        vbl = QVBoxLayout(grpbx)
+        grpbx = QGroupBox('Other Graphs', self)
+        gdl = QGridLayout(grpbx)
         self.hbl.addWidget(grpbx)
         self.hbl.addStretch(1)
 
         btn = QPushButton('Correctors', grpbx)
-        vbl.addWidget(btn)
+        gdl.addWidget(btn, 0, 0)
         Window = create_window_from_widget(
             CorrectorsWidget, title='Correctors')
         _util.connect_window(
@@ -56,7 +56,7 @@ class OrbitWidget(BaseWidget):
 
         if self.isring:
             btn = QPushButton('MultiTurn Orbit', grpbx)
-            vbl.addWidget(btn)
+            gdl.addWidget(btn, 1, 0)
             Window = create_window_from_widget(
                 MultiTurnWidget, title='Multi Turn')
             _util.connect_window(
@@ -64,13 +64,13 @@ class OrbitWidget(BaseWidget):
                 sigs=self.updater[0].raw_ref_sig, prefix=self.prefix)
 
             btn = QPushButton('MultiTurn Sum', grpbx)
-            vbl.addWidget(btn)
+            gdl.addWidget(btn, 1, 1)
             Window = create_window_from_widget(
                 MultiTurnSumWidget, title='Multi Turn Sum')
             _util.connect_window(btn, Window, self, prefix=self.prefix)
 
         btn = QPushButton('SinglePass Sum', grpbx)
-        vbl.addWidget(btn)
+        gdl.addWidget(btn, 0, 1)
         Window = create_window_from_widget(
             SinglePassSumWidget, title='Single Pass Sum')
         _util.connect_window(

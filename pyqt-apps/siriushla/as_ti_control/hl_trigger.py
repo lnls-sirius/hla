@@ -4,14 +4,16 @@ import numpy as _np
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGroupBox, QLabel, QPushButton, QFormLayout, \
     QVBoxLayout, QGridLayout, QSizePolicy as QSzPol, QWidget, QDoubleSpinBox, \
-    QFrame, QScrollArea
+    QFrame, QScrollArea, QHBoxLayout
+import qtawesome as qta
+
 from pydm.widgets import PyDMLabel
 from pydm.widgets.base import PyDMWritableWidget
 from siriuspy.search import HLTimeSearch
 from siriuspy.csdevice import timesys
 from siriushla.widgets import PyDMLed, SiriusLedAlert, PyDMStateButton, \
     SiriusLabel, SiriusSpinbox
-from siriushla.util import connect_window
+from siriushla.util import connect_window, get_appropriate_color
 from siriushla.widgets.windows import create_window_from_widget
 from .base import BaseList, BaseWidget, MySpinBox as _MySpinBox, \
     MyComboBox as _MyComboBox
@@ -62,8 +64,11 @@ class HLTriggerDetailed(BaseWidget):
         but.setAutoDefault(False)
         but.setDefault(False)
         obj_names = HLTimeSearch.get_ll_trigger_names(self.prefix.device_name)
+        icon = qta.icon(
+            'mdi.timer', color=get_appropriate_color(self.prefix.sec))
         Window = create_window_from_widget(
-            LLTriggers, title=self.prefix.device_name+': LL Triggers')
+            LLTriggers, title=self.prefix.device_name+': LL Triggers',
+            icon=icon)
         connect_window(
             but, Window, self, prefix=self.prefix.prefix + '-',
             hltrigger=self.prefix.device_name, obj_names=obj_names)
@@ -280,8 +285,9 @@ class HLTriggerList(BaseList):
     """Template for control of High Level Triggers."""
 
     _MIN_WIDs = {
-        'detailed': 10,
-        'status': 4.8,
+        'name': 10,
+        'detailed': 3,
+        'status': 4,
         'state': 3.8,
         'source': 4.8,
         'pulses': 4.8,
@@ -291,7 +297,8 @@ class HLTriggerList(BaseList):
         'delay': 5.5,
         }
     _LABELS = {
-        'detailed': 'Detailed View',
+        'detailed': '',
+        'name': 'Name',
         'status': 'Status',
         'state': 'Enabled',
         'source': 'Source',
@@ -302,27 +309,41 @@ class HLTriggerList(BaseList):
         'delay': 'Delay [us]',
         }
     _ALL_PROPS = (
-        'status', 'detailed', 'state', 'source', 'polarity', 'pulses',
+        'detailed', 'status', 'name', 'state', 'source', 'polarity', 'pulses',
         'duration', 'delay_type', 'delay')
 
     def __init__(self, **kwargs):
-        srch = set(('source', 'detailed', 'polarity', 'state'))
+        srch = set(('source', 'name', 'polarity', 'state'))
         kwargs['props2search'] = srch
         super().__init__(**kwargs)
         self.setObjectName('ASApp')
 
     def _createObjs(self, prefix, prop):
         sp = rb = None
-        if prop == 'detailed':
-            sp = QPushButton(prefix.device_name, self)
-            Window = create_window_from_widget(
-                HLTriggerDetailed,
-                title=prefix.device_name+': HL Trigger Detailed')
-            connect_window(sp, Window, None, prefix=prefix)
+        if prop == 'name':
+            sp = QLabel(prefix.device_name, self, alignment=Qt.AlignCenter)
         elif prop == 'status':
             init_channel = prefix.substitute(propty="Status-Mon")
             sp = SiriusLedAlert(self, init_channel=init_channel)
             sp.setShape(sp.ShapeMap.Square)
+        elif prop == 'detailed':
+            sp = QWidget(self)
+            but = QPushButton('', sp)
+            but.setToolTip('Open Detailed View Window')
+            but.setIcon(qta.icon('fa5s.list-ul'))
+            but.setObjectName('but')
+            but.setStyleSheet(
+                '#but{min-width:25px; max-width:25px;\
+                min-height:25px; max-height:25px;\
+                icon-size:20px;}')
+            icon = qta.icon(
+                'mdi.timer', color=get_appropriate_color(prefix.sec))
+            Window = create_window_from_widget(
+                HLTriggerDetailed,
+                title=prefix.device_name+': HL Trigger Detailed',
+                icon=icon)
+            connect_window(but, Window, None, prefix=prefix)
+            QHBoxLayout(sp).addWidget(but)
         elif prop == 'state':
             init_channel = prefix.substitute(propty="State-Sel")
             sp = PyDMStateButton(self, init_channel=init_channel)

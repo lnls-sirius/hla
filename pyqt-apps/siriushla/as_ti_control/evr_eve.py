@@ -3,9 +3,11 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGroupBox, QLabel, QVBoxLayout, \
     QHBoxLayout, QGridLayout, QSpacerItem, QSizePolicy as QSzPol, \
     QMenuBar, QSplitter
+import qtawesome as qta
+
 from pydm.widgets import PyDMLabel
 from siriuspy.search import LLTimeSearch
-from siriushla.util import connect_window
+from siriushla.util import connect_window, get_appropriate_color
 from siriushla.widgets import PyDMLed, SiriusLedAlert, PyDMStateButton, \
     SiriusLedState
 from siriushla.widgets.windows import create_window_from_widget
@@ -72,7 +74,9 @@ class _EVR_EVE(BaseWidget):
 
         fout = LLTimeSearch.get_fout_channel(prefix + 'OTP0')
         action = menu.addAction(fout)
-        Win = create_window_from_widget(_ti_ctrl.FOUT, title=fout.device_name)
+        icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
+        Win = create_window_from_widget(
+            _ti_ctrl.FOUT, title=fout.device_name, icon=icon)
         connect_window(action, Win, None, prefix=fout.device_name+':')
         return main_menu
 

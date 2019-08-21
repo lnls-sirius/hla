@@ -1,7 +1,8 @@
 """Booster Ramp Control HLA: Optics Adjust Module."""
 
-from functools import partial as _part
 from copy import deepcopy as _dcopy
+from functools import partial as _part
+
 import numpy as _np
 
 from qtpy.QtCore import Qt, Signal, Slot
@@ -9,6 +10,7 @@ from qtpy.QtGui import QKeySequence
 from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
     QGridLayout, QScrollArea, QFormLayout, QCheckBox, QDoubleSpinBox, \
     QUndoStack, QUndoCommand, QHBoxLayout, QMessageBox, QMenuBar
+import qtawesome as qta
 
 from siriuspy.search import MASearch as _MASearch
 from siriuspy.ramp import ramp
@@ -72,8 +74,10 @@ class BONormEdit(SiriusMainWindow):
         self.tune = self._setupTuneWidget()
         self.chrom = self._setupChromWidget()
 
-        self.bt_apply2machine = QPushButton('Apply changes to machine', self)
-        self.bt_apply2machine.clicked.connect(self._updateRampConfig)
+        self.bt_apply = QPushButton(qta.icon('fa5s.angle-right'), '', self)
+        self.bt_apply.setToolTip('Apply Changes to Machine')
+        self.bt_apply.setStyleSheet('icon-size: 30px 30px;')
+        self.bt_apply.clicked.connect(self._updateRampConfig)
 
         cw = QWidget()
         lay = QGridLayout()
@@ -84,7 +88,7 @@ class BONormEdit(SiriusMainWindow):
         lay.addWidget(self.orbit, 1, 1)
         lay.addWidget(self.tune, 2, 1)
         lay.addWidget(self.chrom, 3, 1)
-        lay.addWidget(self.bt_apply2machine, 4, 1)
+        lay.addWidget(self.bt_apply, 4, 1)
         lay.setColumnStretch(0, 2)
         lay.setColumnStretch(1, 2)
         lay.setRowStretch(0, 2)
