@@ -134,7 +134,9 @@ class LoadingThread(_QThread):
     def run(self):
         self.openmessage.emit()
         wind = ''
-        while not wind:
+        for _ in range(500):
             _, wind = check_process(self.cmd)
+            if wind:
+                break
             _time.sleep(0.01)
         self.closemessage.emit()
