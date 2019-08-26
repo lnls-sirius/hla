@@ -51,7 +51,7 @@ def get_object(ismenubar=True, parent=None):
             bo_apps = self._create_section_menu('BO', 'BO')
             ts_apps = self._create_section_menu('TS', 'TS')
             si_apps = self._create_section_menu('SI', 'SI')
-            serv_apps = self._create_serv_menu()
+            tool_apps = self._create_tool_menu()
             config = self._create_config_menu()
 
             self.add_object_to_level0(config)
@@ -61,7 +61,7 @@ def get_object(ismenubar=True, parent=None):
             self.add_object_to_level0(bo_apps)
             self.add_object_to_level0(ts_apps)
             self.add_object_to_level0(si_apps)
-            self.add_object_to_level0(serv_apps)
+            self.add_object_to_level0(tool_apps)
 
         def add_object_to_level0(self, widget):
             if ismenubar:
@@ -113,12 +113,15 @@ def get_object(ismenubar=True, parent=None):
             self.add_object_to_level1(pvsconfig, turnoff)
             return pvsconfig
 
-        def _create_serv_menu(self):
-            menu = LEVEL1('Services', self)
-            menu.setObjectName('ServMenu')
+        def _create_tool_menu(self):
+            menu = LEVEL1('Tools', self)
+            menu.setObjectName('ToolMenu')
             servconf = LEVEL2A('ConfigDB', menu)
             self.connect_newprocess(servconf, 'sirius-hla-as-ap-configdb.py')
             self.add_object_to_level1(menu, servconf)
+            chart = LEVEL2A('TimeChart', menu)
+            self.connect_newprocess(chart, 'timechart')
+            self.add_object_to_level1(menu, chart)
             return menu
 
         def _create_as_menu(self):
