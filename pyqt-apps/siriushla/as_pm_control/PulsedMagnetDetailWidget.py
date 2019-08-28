@@ -3,7 +3,7 @@ import qtawesome as qta
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, \
     QLabel, QGroupBox, QPushButton
-from pydm.widgets import PyDMLabel, PyDMSpinbox
+from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMPushButton
 
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.envars import vaca_prefix as _VACA_PREFIX
@@ -44,6 +44,7 @@ class PulsedMagnetDetailWidget(QWidget):
         self._pwrstate_sts_pv = self._prefixed_maname + ":PwrState-Sts"
         self._enablepulses_sel_pv = self._prefixed_maname + ":Pulse-Sel"
         self._enablepulses_sts_pv = self._prefixed_maname + ":Pulse-Sts"
+        self._reset_cmd_pv = self._prefixed_maname + ":Reset-Cmd"
         self._intlk1_mon_pv = self._prefixed_maname + ":Intlk1-Mon"
         self._intlk2_mon_pv = self._prefixed_maname + ":Intlk2-Mon"
         self._intlk3_mon_pv = self._prefixed_maname + ":Intlk3-Mon"
@@ -84,6 +85,9 @@ class PulsedMagnetDetailWidget(QWidget):
         pulses_box = QGroupBox(parent=self, title="Pulses")
         pulses_box.setObjectName("pulses_box")
         pulses_box.setLayout(self._pulses_layout())
+        reset_box = QGroupBox(parent=self, title="Reset")
+        reset_box.setObjectName("reset_box")
+        reset_box.setLayout(self._reset_layout())
         voltage_box = QGroupBox(parent=self, title="Voltage")
         voltage_box.setObjectName("voltage_box")
         voltage_box.setLayout(self._voltage_layout())
@@ -96,8 +100,11 @@ class PulsedMagnetDetailWidget(QWidget):
 
         self.layout.addWidget(self.header_label, 0, 0, 1, 3)
         self.layout.addWidget(interlock_box, 1, 0, 2, 1)
-        self.layout.addWidget(pwrstate_box, 1, 1)
-        self.layout.addWidget(pulses_box, 2, 1)
+        vbl = QVBoxLayout()
+        vbl.addWidget(pwrstate_box)
+        vbl.addWidget(pulses_box)
+        vbl.addWidget(reset_box)
+        self.layout.addLayout(vbl, 1, 1, 2, 1)
         self.layout.addWidget(voltage_box, 1, 2)
         self.layout.addWidget(kick_box, 2, 2)
         self.layout.addWidget(timing_box, 3, 0, 1, 3)
@@ -151,6 +158,21 @@ class PulsedMagnetDetailWidget(QWidget):
         pulses_layout.addStretch()
 
         return pulses_layout
+
+    def _reset_layout(self):
+        self.reset_state_button = PyDMPushButton(
+            parent=self, init_channel=self._reset_cmd_pv, pressValue=1)
+        self.reset_state_button.setIcon(qta.icon('fa5s.sync'))
+        self.reset_state_button.setObjectName('reset_button')
+        self.reset_state_button.setStyleSheet(
+            '#reset_button{min-width:25px; max-width:25px; icon-size:20px;}')
+
+        reset_layout = QHBoxLayout()
+        reset_layout.addStretch()
+        reset_layout.addWidget(self.reset_state_button)
+        reset_layout.addStretch()
+
+        return reset_layout
 
     def _voltage_layout(self):
         voltage_layout = QVBoxLayout()
