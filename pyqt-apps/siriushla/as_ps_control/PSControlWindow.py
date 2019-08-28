@@ -1,10 +1,7 @@
 """Defines a class to control a set of a device from a given class."""
-from pydm import PyDMApplication
 
-from qtpy.QtWidgets import QWidget
-
+from siriuspy.namesys import SiriusPVName as _PVName
 from siriushla.widgets import SiriusMainWindow
-from .DCLinkWidget import DCLinkWidget
 from .control_widget.ControlWidgetFactory import ControlWidgetFactory
 from .PSDetailWindow import PSDetailWindow
 from .PSTrimWindow import PSTrimWindow
@@ -18,7 +15,6 @@ class PSControlWindow(SiriusMainWindow):
     def __init__(self, section, discipline, device, parent=None):
         """Class constructor."""
         super(PSControlWindow, self).__init__(parent)
-        self.app = PyDMApplication.instance()
         self.setObjectName(section+'App')
         self._section = section
         self._discipline = discipline
@@ -46,29 +42,18 @@ class PSControlWindow(SiriusMainWindow):
                             dis2label[discipline])
 
     def _setup_ui(self):
-        # Set Widget
         self.widget = ControlWidgetFactory.factory(
             parent=self, section=self._section,
             discipline=self._discipline, device=self._device)
-        # if self._device != "dipole" or self._discipline == 'PS':
         self._connect_buttons(self.widget)
         self.setCentralWidget(self.widget)
 
     def _connect_buttons(self, widget):
-        for w in widget.get_ps_widgets():
-            psname = w.psname
-            detail_button = w.get_detail_button()
-            trim_button = w.get_trim_button()
+        for w in widget.get_summary_widgets():
+            detail_bt = w.get_detail_button()
+            psname = _PVName(detail_bt.text())
+            connect_window(detail_bt, PSDetailWindow, self, psname=psname)
 
-            connect_window(detail_button, PSDetailWindow,
-                           self, psname=psname)
-
-            if trim_button is not None:
-                connect_window(trim_button, PSTrimWindow,
-                               self, psname=psname)
-
-        for w in widget.findChildren(DCLinkWidget):
-            btn = w.detail_btn
-            name = btn.text()
-            connect_window(
-                w.detail_btn, PSDetailWindow, self, psname=[name])
+            trim_bt = w.get_trim_button()
+            if trim_bt is not None:
+                connect_window(trim_bt, PSTrimWindow, self, psname=psname)
