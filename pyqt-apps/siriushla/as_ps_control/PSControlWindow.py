@@ -39,8 +39,8 @@ class PSControlWindow(SiriusMainWindow):
             'quadrupole': 'Quadrupoles ',
             'sextupole': 'Sextupoles ',
             'quadrupole-skew': 'Skew Quadrupoles ',
-            'corrector-slow': 'Slow Correctors ',
-            'corrector-fast': 'Fast Correctors '}
+            'corrector-slow': 'Slow Correctors '}
+        #     'corrector-fast': 'Fast Correctors '}
         self.setWindowTitle(sec2label[section] +
                             (dev2label[device] if device else '') +
                             dis2label[discipline])

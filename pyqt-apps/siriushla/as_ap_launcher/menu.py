@@ -330,11 +330,11 @@ def get_object(ismenubar=True, parent=None):
             corrs = QAction('Correctors', psma)
             self.connect_newprocess(corrs, [scr, '--device', 'corrector-slow'])
             psma.addAction(corrs)
-            if sec in 'si':
-                fcorr = QAction('Fast Correctors', psma)
-                self.connect_newprocess(
-                    fcorr, [scr, '--device', 'corrector-fast'])
-                psma.addAction(fcorr)
+            # if sec in 'si':
+            #     fcorr = QAction('Fast Correctors', psma)
+            #     self.connect_newprocess(
+            #         fcorr, [scr, '--device', 'corrector-fast'])
+            #     psma.addAction(fcorr)
             if dis in 'ma':
                 pmag = QAction('Pulsed Magnets', psma)
                 self.connect_newprocess(
