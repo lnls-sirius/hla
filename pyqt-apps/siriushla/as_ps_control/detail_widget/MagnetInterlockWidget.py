@@ -70,7 +70,8 @@ class MagnetInterlockWidget(QWidget):
                     self._intlk_mon
                 line = bit % 8
                 column = int(bit / 8)
-                self.layout.addWidget(Interlock(self, channel, bit, label), line, column)
+                self.layout.addWidget(Interlock(self, channel, bit, label),
+                                      line, column)
 
 
 class MagnetInterlockWindow(SiriusMainWindow):
@@ -115,7 +116,6 @@ class MagnetInterlockWindow(SiriusMainWindow):
             self._tab_widget.addTab(ma, ps)
         # self._central_widget.layout.addLayout(self._interlock_layout)
         self._central_widget.layout.addWidget(self._tab_widget)
-
 
     def _get_ps_list(self, magnet):
         if 'SI-Fam:MA-B1B2' in magnet:

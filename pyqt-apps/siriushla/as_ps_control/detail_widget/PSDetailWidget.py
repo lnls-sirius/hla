@@ -196,7 +196,7 @@ class PSDetailWidget(QWidget):
         openloop_label = QLabel('ControlLoop', self)
         open_loop_btn = \
             PyDMStateButton(self, self._prefixed_psname + ':CtrlLoop-Sel',
-            invert=True)
+                            invert=True)
         open_loop_label = \
             PyDMLabel(self, self._prefixed_psname + ":CtrlLoop-Sel")
         open_loop_led = \
@@ -246,7 +246,6 @@ class PSDetailWidget(QWidget):
             self.psconnsts_label = PyDMLabel(
                 self, self._prefixed_psname + ":PSConnStatus-Mon")
             self.psconnsts_label.setObjectName("ctrlmode1_psconn_label")
-
 
         ctrlmode_layout = QHBoxLayout()
         ctrlmode_layout.addWidget(self.ctrlmode_led)
@@ -534,7 +533,8 @@ class PSDetailWidget(QWidget):
         self._wnrpts_rb = 0
         self.wnrpts = QLabel('', self)
         self.wnrpts_ch_rb = SiriusConnectionSignal(wfm_data_rb_ch)
-        self.wnrpts_ch_rb.new_value_signal[_np.ndarray].connect(self._wnrpts_update_rb)
+        self.wnrpts_ch_rb.new_value_signal[_np.ndarray].connect(
+            self._wnrpts_update_rb)
         self.wnrpts_ch_sp = SiriusConnectionSignal(wfm_data_sp_ch)
         self.wnrpts_ch_sp.new_value_signal[_np.ndarray].connect(
             self._wnrpts_update_sp)
@@ -548,7 +548,8 @@ class PSDetailWidget(QWidget):
 
     def _set_wnrpts_label(self):
         self.wnrpts.setText(
-            "WfmData nrpts (SP|RB): {}|{}".format(self._wnrpts_sp, self._wnrpts_rb))
+            "WfmData nrpts (SP|RB): {}|{}".format(
+                self._wnrpts_sp, self._wnrpts_rb))
 
     def _wnrpts_update_rb(self, value):
         self._wnrpts_rb = len(value)
