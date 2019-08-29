@@ -1,11 +1,19 @@
 """Define factory class to get a control widget."""
-from ..detail_widget.DetailWidgetFactory import DetailWidgetFactory
-from siriushla.as_ps_control.control_widget.DipoleControlWidget import *
-from siriushla.as_ps_control.control_widget.FamQuadrupoleControlWidget import *
-from siriushla.as_ps_control.control_widget.FamSextupoleControlWidget import *
-from siriushla.as_ps_control.control_widget.SlowCorrectorControlWidget import *
-from siriushla.as_ps_control.control_widget.FastCorrectorControlWidget import *
-from siriushla.as_ps_control.control_widget.SkewQuadControlWidget import *
+from .DipoleControlWidget import \
+    TBDipoleControlWidget, BODipoleControlWidget,\
+    TSDipoleControlWidget, SIDipoleControlWidget
+from .FamQuadrupoleControlWidget import \
+    TBQuadrupoleControlWidget, BOFamQuadrupoleControlWidget,\
+    TSQuadrupoleControlWidget, SIFamQuadrupoleControlWidget
+from .FamSextupoleControlWidget import \
+    BOFamSextupoleControlWidget, SIFamSextupoleControlWidget
+from .SlowCorrectorControlWidget import \
+    TBSlowCorrectorControlWidget, BoSlowCorrectorControlWidget, \
+    TSSlowCorrectorControlWidget, SISlowCorrectorControlWidget
+from .SkewQuadControlWidget import BOSkewQuadControlWidget, \
+    SISkewQuadControlWidget
+from .FastCorrectorControlWidget import \
+    SIFastCorrectorControlWidget
 
 
 class ControlWidgetFactory:
@@ -23,65 +31,82 @@ class ControlWidgetFactory:
     def factory(parent, section, discipline, device, orientation=2):
         if section == "TB":
             if device == "dipole":
-                return TBDipoleControlWidget(
-                    dev_type=discipline, orientation=orientation, parent=parent)
+                return TBDipoleControlWidget(dev_type=discipline,
+                                             orientation=orientation,
+                                             parent=parent)
             elif device == "quadrupole":
-                return TBQuadrupoleControlWidget(
-                        dev_type=discipline, orientation=orientation, parent=parent)
+                return TBQuadrupoleControlWidget(dev_type=discipline,
+                                                 orientation=orientation,
+                                                 parent=parent)
             elif device == "corrector-slow":
-                return TBSlowCorrectorControlWidget(
-                    dev_type=discipline, orientation=orientation, parent=parent)
+                return TBSlowCorrectorControlWidget(dev_type=discipline,
+                                                    orientation=orientation,
+                                                    parent=parent)
             else:
                 ControlWidgetFactory._device_not_found(section, device)
         elif section == "BO":
             if device == "dipole":
-                return BODipoleControlWidget(
-                    dev_type=discipline, orientation=orientation, parent=parent)
+                return BODipoleControlWidget(dev_type=discipline,
+                                             orientation=orientation,
+                                             parent=parent)
             elif device == "quadrupole":
-                return BOFamQuadrupoleControlWidget(
-                    dev_type=discipline, orientation=orientation, parent=parent)
+                return BOFamQuadrupoleControlWidget(dev_type=discipline,
+                                                    orientation=orientation,
+                                                    parent=parent)
             elif device == "sextupole":
-                return BOFamSextupoleControlWidget(
-                    dev_type=discipline, orientation=orientation, parent=parent)
+                return BOFamSextupoleControlWidget(dev_type=discipline,
+                                                   orientation=orientation,
+                                                   parent=parent)
             elif device == "corrector-slow":
-                return BoSlowCorrectorControlWidget(
-                    dev_type=discipline, orientation=orientation, parent=parent)
+                return BoSlowCorrectorControlWidget(dev_type=discipline,
+                                                    orientation=orientation,
+                                                    parent=parent)
             elif device == "quadrupole-skew":
-                return BOSkewQuadControlWidget(
-                    dev_type=discipline, orientation=orientation, parent=parent)
+                return BOSkewQuadControlWidget(dev_type=discipline,
+                                               orientation=orientation,
+                                               parent=parent)
             else:
                 ControlWidgetFactory._device_not_found(section, device)
         elif section == "TS":
             if device == "dipole":
-                return TSDipoleControlWidget(
-                    dev_type=discipline, orientation=orientation, parent=parent)
+                return TSDipoleControlWidget(dev_type=discipline,
+                                             orientation=orientation,
+                                             parent=parent)
             elif device == "quadrupole":
-                return TSQuadrupoleControlWidget(
-                        dev_type=discipline, orientation=orientation, parent=parent)
+                return TSQuadrupoleControlWidget(dev_type=discipline,
+                                                 orientation=orientation,
+                                                 parent=parent)
             elif device == "corrector-slow":
-                return TSSlowCorrectorControlWidget(
-                    dev_type=discipline, orientation=orientation, parent=parent)
+                return TSSlowCorrectorControlWidget(dev_type=discipline,
+                                                    orientation=orientation,
+                                                    parent=parent)
             else:
                 ControlWidgetFactory._device_not_found(section, device)
         elif section == "SI":
             if device == "dipole":
-                return SIDipoleControlWidget(
-                    dev_type=discipline, orientation=orientation, parent=parent)
+                return SIDipoleControlWidget(dev_type=discipline,
+                                             orientation=orientation,
+                                             parent=parent)
             elif device == "quadrupole":
-                return SIFamQuadrupoleControlWidget(
-                    dev_type=discipline, orientation=orientation, parent=parent)
+                return SIFamQuadrupoleControlWidget(dev_type=discipline,
+                                                    orientation=orientation,
+                                                    parent=parent)
             elif device == "sextupole":
-                return SIFamSextupoleControlWidget(
-                    dev_type=discipline, orientation=orientation, parent=parent)
+                return SIFamSextupoleControlWidget(dev_type=discipline,
+                                                   orientation=orientation,
+                                                   parent=parent)
             elif device == "corrector-slow":
-                return SISlowCorrectorControlWidget(
-                    dev_type=discipline, orientation=orientation, parent=parent)
+                return SISlowCorrectorControlWidget(dev_type=discipline,
+                                                    orientation=orientation,
+                                                    parent=parent)
             elif device == "corrector-fast":
-                return SIFastCorrectorControlWidget(
-                    dev_type=discipline, orientation=orientation, parent=parent)
+                return SIFastCorrectorControlWidget(dev_type=discipline,
+                                                    orientation=orientation,
+                                                    parent=parent)
             elif device == "quadrupole-skew":
-                return SISkewQuadControlWidget(
-                    dev_type=discipline, orientation=orientation, parent=parent)
+                return SISkewQuadControlWidget(dev_type=discipline,
+                                               orientation=orientation,
+                                               parent=parent)
             else:
                 ControlWidgetFactory._device_not_found(section, device)
         else:

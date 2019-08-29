@@ -1,21 +1,15 @@
 """This module defines a factory to get a detailed window."""
 import re
 
-from siriuspy.pwrsupply.data import PSData
-from siriushla.as_ps_control.detail_widget.PSDetailWidget \
-    import PSDetailWidget, FBPDCLinkDetailWidget, FACDCLinkDetailWidget
-from siriushla.as_ps_control.detail_widget.DipoleDetailWidget \
-    import DipoleDetailWidget
-from siriushla.as_pm_control.PulsedMagnetDetailWidget \
-    import PulsedMagnetDetailWidget
 from qtpy.QtWidgets import QWidget, QGridLayout
+from siriuspy.search import PSSearch
+from .PSDetailWidget import PSDetailWidget, FBPDCLinkDetailWidget, \
+    FACDCLinkDetailWidget
+from .DipoleDetailWidget import DipoleDetailWidget
 
 
 class DetailWidgetFactory:
     """Return a detail widget."""
-
-    FamDipole = re.compile("^(SI|BO)-Fam:MA-B.*$")
-    PulsedMagnet = re.compile("^.*:PM.*$")
 
     @staticmethod
     def factory(psname, parent=None):
@@ -37,12 +31,10 @@ class DetailWidgetFactory:
 
     @staticmethod
     def _item(psname, parent=None):
-        if DetailWidgetFactory.PulsedMagnet.match(psname):
-            return PulsedMagnetDetailWidget(psname, parent)
-        elif DetailWidgetFactory.FamDipole.match(psname):
+        if re.match("(SI|BO)-Fam:MA-B.*", psname):
             return DipoleDetailWidget(psname, parent)
         elif 'DCLink' in psname:
-            model = PSData(psname).psmodel
+            model = PSSearch.conv_psname_2_psmodel(psname)
             if model == 'FBP_DCLink':
                 return FBPDCLinkDetailWidget(psname, parent)
             elif model in ('FAC_ACDC', 'FAC_2S_ACDC', 'FAC_2P4S_ACDC'):

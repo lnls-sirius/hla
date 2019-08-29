@@ -5,15 +5,12 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGridLayout, QLabel, QSizePolicy, \
     QFrame, QHBoxLayout, QPushButton, QVBoxLayout
 
-from siriuspy.envars import vaca_prefix
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox, PyDMLineEdit
-from siriushla.widgets import SiriusMainWindow
-from siriushla.widgets.state_button import PyDMStateButton
-from siriushla.as_ps_control.detail_widget.PSDetailWidget \
-    import PSDetailWidget
-from siriushla.widgets import PyDMLinEditScrollbar
-from siriushla.widgets.led import SiriusLedState, SiriusLedAlert
+from siriuspy.envars import vaca_prefix
 from siriushla import util as _util
+from siriushla.widgets import SiriusMainWindow, PyDMStateButton, \
+    PyDMLinEditScrollbar, SiriusLedState, SiriusLedAlert
+from .PSDetailWidget import PSDetailWidget
 from .MagnetInterlockWidget import MagnetInterlockWindow
 
 
@@ -23,15 +20,13 @@ class DipoleDetailWidget(PSDetailWidget):
     def __init__(self, magnet_name, parent=None):
         """Class constructor."""
         self._vaca_prefix = vaca_prefix
-        if re.match("(SI|BO)-Fam:MA-B\w*", magnet_name):
+        if re.match("(SI|BO)-Fam:MA-B.*", magnet_name):
             self._magnet_name = magnet_name
             self._prefixed_magnet = self._vaca_prefix + self._magnet_name
         else:
             raise ValueError("Magnet not supported by this class!")
-
         ps_name = re.sub(":MA", ":PS", self._prefixed_magnet)
-        self._ps_list = [ps_name + "-1",
-                         ps_name + "-2"]
+        self._ps_list = [ps_name + "-1", ps_name + "-2"]
 
         super(DipoleDetailWidget, self).__init__(self._magnet_name, parent)
 

@@ -1,12 +1,11 @@
 """Defines a class to control a set of a device from a given class."""
 
 from siriuspy.namesys import SiriusPVName as _PVName
+from siriushla.util import connect_window
 from siriushla.widgets import SiriusMainWindow
 from .control_widget.ControlWidgetFactory import ControlWidgetFactory
 from .PSDetailWindow import PSDetailWindow
 from .PSTrimWindow import PSTrimWindow
-
-from ..util import connect_window
 
 
 class PSControlWindow(SiriusMainWindow):

@@ -58,8 +58,6 @@ class PSContainer(QWidget):
             for dclink_name in self._dclinks:
                 w = SummaryWidget(dclink_name, visible_props, self)
                 self._dclink_container.layout().addWidget(w)
-
-        if self._dclinks:
             self._hide = QPushButton('+', self)
         else:
             self._hide = QPushButton('', self)

@@ -1,7 +1,6 @@
 """Sked Quadrupole control widgets."""
 
-from siriushla.as_ps_control.control_widget.BasePSControlWidget import \
-    BasePSControlWidget
+from .BasePSControlWidget import BasePSControlWidget
 
 
 class SISkewQuadControlWidget(BasePSControlWidget):

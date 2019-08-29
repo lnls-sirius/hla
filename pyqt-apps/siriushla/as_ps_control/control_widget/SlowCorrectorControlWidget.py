@@ -1,6 +1,5 @@
 """Define widget for controlling slow correctors."""
-from siriushla.as_ps_control.control_widget.BasePSControlWidget import \
-    BasePSControlWidget
+from .BasePSControlWidget import BasePSControlWidget
 
 
 class SISlowCorrectorControlWidget(BasePSControlWidget):

@@ -1,7 +1,6 @@
 """Widgets to control Fam Quadrupoles magnets."""
 
-from siriushla.as_ps_control.control_widget.BasePSControlWidget import \
-    BasePSControlWidget
+from .BasePSControlWidget import BasePSControlWidget
 
 
 class TBQuadrupoleControlWidget(BasePSControlWidget):
@@ -48,17 +47,6 @@ class SIFamQuadrupoleControlWidget(BasePSControlWidget):
         return [('Focusing Quadrupoles', "-QF"),
                 ('Defocusing Quadrupoles', "-QD"),
                 ('Dispersive Quadrupoles', "-Q[0-9]")]
-
-    # def _createGroupWidgets(self, ma):
-    #     # magnet_widgets = super()._createGroupWidgets(ma)
-    #     magnet_widget = super()._createGroupWidgets(ma)
-    #
-    #     # if self._hasTrimButton():
-    #     #     trim_btn = QPushButton(">", self)
-    #     #     trim_btn.setObjectName("trim_" + ma)
-    #     #     magnet_widget.layout.addWidget(trim_btn)
-    #
-    #     return magnet_widget
 
 
 class BOFamQuadrupoleControlWidget(SIFamQuadrupoleControlWidget):

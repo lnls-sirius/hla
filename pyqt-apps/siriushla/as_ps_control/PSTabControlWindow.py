@@ -1,7 +1,7 @@
 """Defines a class to control elements from a given class."""
 from qtpy.QtWidgets import QTabWidget, QWidget, QGridLayout
 
-from siriushla.as_ps_control.PSControlWindow import PSControlWindow
+from .PSControlWindow import PSControlWindow
 from .control_widget.ControlWidgetFactory import ControlWidgetFactory
 
 
@@ -44,9 +44,6 @@ class PSTabControlWindow(PSControlWindow):
         for device in self.Devices[self._section]:
             widget = ControlWidgetFactory.factory(
                 self, self._section, self._discipline, device)
-            # if device == "dipole" and self._discipline == 'MA':
-            #     widget = self._dipoleWidgetWrapper(widget)
-            # if device != "dipole" or self._discipline == 'PS':
             self._connect_buttons(widget)
             self.tabs.addTab(widget, self.TabName[device])
 
