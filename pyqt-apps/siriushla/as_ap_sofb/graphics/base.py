@@ -6,10 +6,12 @@ from functools import partial as _part
 import numpy as _np
 from pyqtgraph import mkBrush, mkPen, InfiniteLine, functions
 from qtpy.QtWidgets import QWidget, QFileDialog, QLabel, QCheckBox, \
-    QVBoxLayout, QHBoxLayout, QSizePolicy, QGroupBox, \
-    QFormLayout, QPushButton, QComboBox, QToolTip
+    QVBoxLayout, QHBoxLayout, QSizePolicy, QGroupBox, QPushButton, QComboBox, \
+    QToolTip, QGridLayout
 from qtpy.QtCore import Qt, QTimer, QThread, Signal, QObject
 from qtpy.QtGui import QColor
+import qtawesome as qta
+
 from pydm.widgets import PyDMWaveformPlot
 from siriushla.widgets import SiriusConnectionSignal
 from siriuspy.csdevice.orbitcorr import SOFBFactory
@@ -128,7 +130,7 @@ class BaseWidget(QWidget):
         for i, lname in enumerate(self.line_names):
             opts = dict(
                 y_channel='A',
-                x_channel=self.prefix + pref + 'PosS-' + suf,
+                x_channel='B',
                 name=lname,
                 color=self._get_color(pln, i),
                 redraw_mode=2,
@@ -171,44 +173,50 @@ class BaseWidget(QWidget):
         grpbx.setCheckable(True)
         grpbx.setChecked(not idx)
         grpbx.toggled.connect(self.updater[idx].set_visible)
-        fbl = QFormLayout(grpbx)
+        vbl = QVBoxLayout(grpbx)
+        gdl = QGridLayout()
+        gdl.setSpacing(4)
+        vbl.addItem(gdl)
 
         if self.is_orb:
             lbl_orb = self.uicreate_label('Show', grpbx)
             lbl_ref = self.uicreate_label('as diff to:', grpbx)
             cbx_ref = self.uicreate_combobox(grpbx, 'ref', idx)
             cbx_orb = self.uicreate_combobox(grpbx, 'val', idx)
-            fbl.addRow(lbl_orb, cbx_orb)
-            fbl.addRow(lbl_ref, cbx_ref)
+            gdl.addWidget(lbl_orb, 0, 0)
+            gdl.addWidget(lbl_ref, 1, 0)
+            gdl.addWidget(cbx_orb, 0, 1)
+            gdl.addWidget(cbx_ref, 1, 1)
 
-            pb_save = QPushButton('Save diff to file', grpbx)
+            pb_save = QPushButton('', grpbx)
             pb_save.clicked.connect(_part(self._save_difference, idx))
-            fbl.addRow(QLabel(grpbx), pb_save)
+            pb_save.setObjectName('butt')
+            pb_save.setStyleSheet('#butt {max-width: 40px; icon-size: 35px;}')
+            pb_save.setIcon(qta.icon('fa5.save'))
+            pb_save.setToolTip('Save diff to file')
+            gdl.addWidget(pb_save, 0, 2, 2, 1)
 
-        lab = QLabel('Statistics', grpbx)
-        lab.setAlignment(Qt.AlignCenter)
-        fbl.addRow(lab)
         unit = 'm' if self.is_orb else 'rad'
         for pln in ('x', 'y'):
             wid = QWidget(grpbx)
-            fbl.addRow(wid)
+            vbl.addWidget(wid)
             hbl = QHBoxLayout(wid)
             cbx = QCheckBox('{0:s}:'.format(pln.upper()), wid)
             cbx.setObjectName(pln + 'checkbox')
             cbx.setChecked(True)
             hbl.addWidget(cbx)
 
-            lab_avg = Label(unit, '0.000', wid)
+            lab_avg = Label(unit, '-100.000 mrad', wid)
             self.updater[idx].ave[pln].connect(lab_avg.setFloat)
-            lab_avg.setStyleSheet("""min-width:3.87em;""")
-            lab_avg.setAlignment(Qt.AlignCenter)
+            lab_avg.setStyleSheet("""min-width:5.8em;""")
+            lab_avg.setAlignment(Qt.AlignRight)
             hbl.addWidget(lab_avg)
             hbl.addWidget(QLabel(
                 "<html><head/><body><p>&#177;</p></body></html>", wid))
-            lab_std = Label(unit, '0.000', wid)
+            lab_std = Label(unit, '100.000 mrad', wid)
             self.updater[idx].std[pln].connect(lab_std.setFloat)
-            lab_std.setStyleSheet("""min-width:3.87em;""")
-            lab_std.setAlignment(Qt.AlignCenter)
+            lab_std.setStyleSheet("""min-width:5.8em;""")
+            lab_std.setAlignment(Qt.AlignLeft)
             hbl.addWidget(lab_std)
         return grpbx
 
@@ -229,9 +237,9 @@ class BaseWidget(QWidget):
 
     def uicreate_label(self, lab, parent):
         label = QLabel(lab, parent)
-        sz_pol = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Preferred)
+        sz_pol = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
         label.setSizePolicy(sz_pol)
-        label.setStyleSheet("""min-width:1.94em;""")
+        label.setStyleSheet("""min-width:2.5em;""")
         label.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
         return label
 
@@ -325,12 +333,25 @@ class BaseWidget(QWidget):
             trc.opts['symbolSize'] = sizes
 
     def _update_waveform(self, curve, plane, idx, data):
+        bpm_pos = self._csorb.BPM_POS
+        if not self.is_orb and plane == 'x':
+            bpm_pos = self._csorb.CH_POS
+        elif not self.is_orb and plane == 'y':
+            bpm_pos = self._csorb.CV_POS
+        bpm_pos = _np.array(bpm_pos)
+
         enbl = self.enbl_pvs[plane].value
         if enbl is not None:
             sz = min(enbl.size, data.size)
             self._update_enable_list(plane, enbl[:sz], curve, idx)
+            nring = sz // bpm_pos.size
+            if nring > 1:
+                bpm_pos = [bpm_pos + i*self._csorb.C0 for i in range(nring)]
+                bpm_pos = _np.hstack(bpm_pos)
+            curve.receiveXWaveform(bpm_pos)
             curve.receiveYWaveform(data[:sz])
         else:
+            curve.receiveXWaveform(bpm_pos)
             curve.receiveYWaveform(data)
 
     def _save_difference(self, idx):
@@ -470,8 +491,8 @@ class UpdateGraph(QObject):
                 mask = diff[:sz][enbl[:sz]]
             else:
                 mask = diff
-            ave = float(mask.mean())
-            std = float(mask.std(ddof=1))
+            ave = float(mask.mean()) if mask.size > 0 else 0.0
+            std = float(mask.std(ddof=1)) if mask.size > 1 else 0.0
 
             self.data_sig[pln].emit(diff)
             self.ave[pln].emit(ave)

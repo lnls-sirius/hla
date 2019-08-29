@@ -1,10 +1,12 @@
 import sys
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QLabel, QPushButton
+import qtawesome as qta
+
 from pydm.widgets import PyDMLabel
 from siriuspy.search import LLTimeSearch
 from siriushla.widgets import PyDMLed, PyDMStateButton
-from siriushla.util import connect_window
+from siriushla.util import connect_window, get_appropriate_color
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla import as_ti_control as _ti_ctrl
 from .base import BaseList, \
@@ -80,7 +82,9 @@ class LLTriggerList(BaseList):
             sp = QPushButton(outlb.device_name, self)
             sp.setAutoDefault(False)
             sp.setDefault(False)
-            Win = create_window_from_widget(devt, title=outlb.device_name)
+            icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
+            Win = create_window_from_widget(
+                devt, title=outlb.device_name, icon=icon)
             connect_window(sp, Win, None, prefix=outlb.device_name + ':')
         elif prop == 'name':
             sp = QLabel(outlb.propty, self)

@@ -3,7 +3,7 @@
 from functools import partial as _part
 import numpy as np
 from qtpy.QtWidgets import QGridLayout, QHBoxLayout, QVBoxLayout, QLabel, \
-    QSizePolicy, QScrollArea, QWidget, QPushButton, QDialog
+    QSizePolicy, QScrollArea, QWidget, QPushButton, QDialog, QTabWidget
 from qtpy.QtCore import Qt, QRect, QPoint
 from qtpy.QtGui import QBrush, QColor, QPainter
 from siriushla.widgets import SiriusLedAlert, SiriusConnectionSignal
@@ -99,6 +99,18 @@ class _PyDMLedList(PyDMWidget, QWidget):
 
 
 class SelectionMatrix(BaseWidget):
+
+    def __init__(self, parent, prefix, acc='SI'):
+        super().__init__(parent, prefix, acc)
+        tab = QTabWidget(self)
+        QHBoxLayout(self).addWidget(tab)
+
+        for dev in ('BPMX', 'BPMY', 'CH', 'CV'):
+            tab.addTab(
+                SingleSelMatrix(tab, dev, self.prefix, acc=self.acc), dev)
+
+
+class SingleSelMatrix(BaseWidget):
     """Create the Selection Matrices for BPMs and Correctors."""
 
     def __init__(self, parent, dev, prefix, acc='SI'):
@@ -205,7 +217,6 @@ class SelectionMatrix(BaseWidget):
     def _create_matrix(self, parent):
         wid = MyWidget(self.pvs.led_list, parent)
         self.pvs.setParent(wid)
-        wid.setStyleSheet("font-weight: bold; background: transparent;")
         gdl = QGridLayout(wid)
 
         for i, head in enumerate(self.top_headers_wids):

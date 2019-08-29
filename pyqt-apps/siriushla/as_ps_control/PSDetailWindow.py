@@ -1,9 +1,10 @@
 """Define a window with detailed controls for a given magnet."""
 
 from qtpy.QtWidgets import QPushButton
+import qtawesome as qta
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.search import PSSearch, MASearch
-from siriushla.util import connect_window
+from siriushla.util import connect_window, get_appropriate_color
 from siriushla.widgets import SiriusMainWindow
 from .detail_widget.DetailWidgetFactory import DetailWidgetFactory
 
@@ -24,11 +25,19 @@ class PSDetailWindow(SiriusMainWindow):
             ('dclink' in PSSearch.conv_psname_2_pstype(name))
         secs = {'AS', 'TB', 'BO', 'TS', 'SI', 'LI'}
         if name.sec in secs:
-            self.setObjectName(name.sec+'App')
+            sec = name.sec
         elif name.idx[:2] in secs:
-            self.setObjectName(name.idx[:2]+'App')
+            sec = name.idx[:2]
         else:
-            self.setObjectName('ASApp')
+            sec = 'AS'
+        self.setObjectName(sec+'App')
+        if name.dis.lower().startswith('ma'):
+            icon = qta.icon(
+                'mdi.magnet', color=get_appropriate_color(sec))
+        else:
+            icon = qta.icon(
+                'mdi.car-battery', color=get_appropriate_color(sec))
+        self.setWindowIcon(icon)
         self._setup_ui()
 
     def _setup_ui(self):

@@ -2,13 +2,17 @@
 
 from functools import partial as _part
 from threading import Thread as _Thread
+
 from qtpy.QtWidgets import QGroupBox, QLabel, QPushButton, QGridLayout, \
     QMessageBox, QVBoxLayout
 from qtpy.QtCore import Qt, Slot, Signal, QThread
+import qtawesome as qta
+
 from siriuspy.ramp import ramp
 from siriuspy.ramp.conn import ConnMagnets as _ConnMagnets, ConnRF as _ConnRF,\
                                ConnTiming as _ConnTiming
 from siriuspy.csdevice.pwrsupply import Const as _PSc
+
 from siriushla.widgets import PyDMLedMultiChannel, PyDMLedMultiConnection, \
                               SiriusDialog
 
@@ -45,9 +49,10 @@ class StatusAndCommands(QGroupBox):
         self.led_intlk = PyDMLedMultiChannel(self)
         self.led_setup = PyDMLedMultiChannel(self)
         self.led_apply = PyDMLedMultiChannel(self)
-        self.pb_opendetails = QPushButton('...')
+        self.pb_opendetails = QPushButton(qta.icon('fa5s.list-ul'), '', self)
         self.pb_opendetails.clicked.connect(self._open_status_details)
-        self.pb_opendetails.setStyleSheet('max-height:1em; max-width:2em;')
+        self.pb_opendetails.setStyleSheet(
+            'icon-size: 16px 16px; max-height:1.29em; max-width:2em;')
 
         lay = QGridLayout()
         lay.setVerticalSpacing(10)
@@ -74,12 +79,16 @@ class StatusAndCommands(QGroupBox):
         self.bt_prepare_ti.clicked.connect(self._prepare_ti)
         self.bt_prepare_ti.setStyleSheet('min-height:1.5em;')
 
-        self.bt_apply_all = QPushButton('Apply All Changes\nto Machine', self)
+        icon_all = qta.icon('fa5s.angle-double-right')
+        self.bt_apply_all = QPushButton(icon_all, '', self)
+        self.bt_apply_all.setToolTip('Apply All Changes to Machine')
         self.bt_apply_all.setObjectName('All')
         self.bt_apply_all.clicked.connect(self.apply_changes)
-        self.bt_apply_all.setStyleSheet('min-height:1.5em;')
+        self.bt_apply_all.setStyleSheet(
+            'icon-size: 35px 35px;')
 
         lay = QVBoxLayout()
+        lay.setAlignment(Qt.AlignCenter)
         lay.setSpacing(10)
         lay.addStretch()
         lay.addWidget(self.bt_prepare_ma)
@@ -87,7 +96,6 @@ class StatusAndCommands(QGroupBox):
         lay.addWidget(self.bt_prepare_ti)
         lay.addStretch()
         lay.addWidget(self.bt_apply_all)
-        lay.addStretch()
         return lay
 
     def _create_connectors(self):

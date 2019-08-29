@@ -4,6 +4,7 @@ from qtpy.QtCore import Qt, Slot, Signal
 from qtpy.QtGui import QKeySequence
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, \
                            QUndoStack, QMessageBox
+import qtawesome as qta
 from siriuspy.ramp import ramp
 from siriuspy.clientconfigdb import ConfigDBException as _ConfigDBException
 from siriushla.widgets.windows import SiriusMainWindow
@@ -109,9 +110,11 @@ class RampMain(SiriusMainWindow):
 
     def _addActions(self):
         self.act_undo = self._undo_stack.createUndoAction(self, 'Undo')
+        self.act_undo.setIcon(qta.icon('mdi.undo'))
         self.act_undo.setShortcut(QKeySequence.Undo)
         self.settings.config_menu.addAction(self.act_undo)
         self.act_redo = self._undo_stack.createRedoAction(self, 'Redo')
+        self.act_redo.setIcon(qta.icon('mdi.redo'))
         self.act_redo.setShortcut(QKeySequence.Redo)
         self.settings.config_menu.addAction(self.act_redo)
 
@@ -144,7 +147,8 @@ class RampMain(SiriusMainWindow):
                     '#ConfigParameters {color: red;}')
                 self.config_parameters.setToolTip('There are unsaved changes')
             else:
-                self.config_parameters.setStyleSheet('')
+                self.config_parameters.setStyleSheet(
+                    '#ConfigParameters {color: black;}')
                 self.config_parameters.setToolTip('')
 
     def closeEvent(self, ev):

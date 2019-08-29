@@ -1,6 +1,6 @@
 """Modulet that defines the window class that control pulsed mangets."""
-from qtpy.QtWidgets import QWidget, QVBoxLayout, QTabWidget
 
+from qtpy.QtWidgets import QWidget, QVBoxLayout, QTabWidget
 from siriuspy.search import MASearch
 from siriushla.widgets import SiriusMainWindow
 from siriushla.as_ps_control.SummaryWidgets import SummaryWidget, SummaryHeader
@@ -18,6 +18,7 @@ class PulsedMagnetControlWindow(SiriusMainWindow):
         self._section = section
         self.setObjectName(self._section+'App')
         self.setWindowTitle(section.upper() + ' Pulsed Magnets Control Window')
+        self.setWindowIcon(qta.icon('mdi.current-ac', color='#969696'))
         self._setup_ui()
         self.setCentralWidget(self.main_widget)
         self.setFocus()

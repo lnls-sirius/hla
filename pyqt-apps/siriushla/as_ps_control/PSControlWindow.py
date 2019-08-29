@@ -1,7 +1,8 @@
 """Defines a class to control a set of a device from a given class."""
+import qtawesome as qta
 
 from siriuspy.namesys import SiriusPVName as _PVName
-from siriushla.util import connect_window
+from siriushla.util import connect_window, get_appropriate_color
 from siriushla.widgets import SiriusMainWindow
 from .control_widget.ControlWidgetFactory import ControlWidgetFactory
 from .PSDetailWindow import PSDetailWindow
@@ -18,6 +19,12 @@ class PSControlWindow(SiriusMainWindow):
         self._section = section
         self._discipline = discipline
         self._device = device
+        if discipline.lower().startswith('ma'):
+            icon = qta.icon('mdi.magnet', color=get_appropriate_color(section))
+        else:
+            icon = qta.icon(
+                'mdi.car-battery', color=get_appropriate_color(section))
+        self.setWindowIcon(icon)
 
         self._setup_ui()
 
