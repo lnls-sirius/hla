@@ -1,5 +1,6 @@
 """Epics Setter."""
 import time
+import logging as _log
 from .task import EpicsTask
 
 
@@ -14,10 +15,9 @@ class EpicsSetter(EpicsTask):
                 try:
                     self._pvs[i].put(self._values[i])
                     time.sleep(self._delays[i])
-                except Exception:
-                    print(
-                        'PV ', self._pvs[i].pvname, 
-                        ' not set wit value: ', self._values[i])
+                except TypeError:
+                    _log.warning('PV {} not set with value: {}'.format(
+                        self._pvs[i].pvname, self._values[i]))
                 self.itemDone.emit()
                 if self._quit_task:
                     break
