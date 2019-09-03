@@ -185,6 +185,7 @@ class SummaryWidget(QWidget):
 
         if self._name.dis == 'MA':
             self.psconn_led = SiriusLedState(self, self._psconn_mon)
+            self.psconn_led.setOffColor(SiriusLedAlert.Red)
             self.psconn_wid = self._build_widget(
                 [self.psconn_led, ], name='psconn')
             lay.addWidget(self.psconn_wid)
