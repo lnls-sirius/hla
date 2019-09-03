@@ -51,14 +51,14 @@ class PSDetailWindow(SiriusMainWindow):
         self.setCentralWidget(self.widget)
 
     def _connect_buttons(self, widget):
-        if self._psname[0] in ['BO-Fam:MA-B', 'SI-Fam:MA-B1B2']:
+        if self._psname[0] == 'BO-Fam:MA-B':
             w1 = widget.findChild(QPushButton, 'dclink1_button')
             w2 = widget.findChild(QPushButton, 'dclink2_button')
             psnames = MASearch.conv_maname_2_psnames(self._psname[0])
             for psname, w in zip(psnames, (w1, w2)):
                 dclinks = PSSearch.conv_psname_2_dclink(psname)
                 connect_window(w, PSDetailWindow, self, psname=dclinks)
-        else:
+        elif self._psname[0] != 'SI-Fam:MA-B1B2':
             w = widget.findChild(QPushButton, 'dclink_button')
             if w:
                 psname = self._psname[0].replace(':MA-', ':PS-')

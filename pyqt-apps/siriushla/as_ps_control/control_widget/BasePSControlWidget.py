@@ -7,6 +7,7 @@ from qtpy.QtWidgets import QWidget, QVBoxLayout, QGroupBox, \
     QGridLayout, QLabel, QHBoxLayout, QScrollArea, QLineEdit, QAction, \
     QMenu, QInputDialog, QFrame, QPushButton
 import qtawesome as qta
+from siriuspy.search import PSSearch, MASearch
 from ..SummaryWidgets import SummaryWidget, SummaryHeader, get_prop2label
 
 
@@ -18,13 +19,12 @@ class PSContainer(QWidget):
         self._widget = widget
         self._name = widget.devname
 
-        if widget.devname in ['BO-Fam:MA-B', 'SI-Fam:MA-B1B2']:
-            psname = self._name.replace(':MA-', ':PS-')
-            psname = [psname + '-1', psname + '-2']
-            self._dclinks = list()
-            for name in psname:
+        self._dclinks = list()
+        if self._name == 'BO-Fam:MA-B':
+            psnames = MASearch.conv_maname_2_psnames(self._name)
+            for name in psnames:
                 self._dclinks.extend(PSSearch.conv_psname_2_dclink(name))
-        else:
+        elif self._name != 'SI-Fam:MA-B1B2':
             psname = self._name.replace(':MA-', ':PS-')
             self._dclinks = PSSearch.conv_psname_2_dclink(psname)
 
