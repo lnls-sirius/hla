@@ -147,7 +147,7 @@ class LoadAndApplyConfig2MachineWindow(SiriusMainWindow):
             self._tree_msg.setText(
                 'Configuration has {} items'.format(len(pvs)))
             self._tree.check_all()
-            self._tree.expand_all()
+            self._tree.collapseAll()
             self._filter_pvs(self._filter_le.text())
         except KeyError:
             self._tree_msg.setText('Configuration has no field pvs')

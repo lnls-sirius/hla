@@ -56,9 +56,12 @@ class PyEpicsWrapper:
 
         if pvv is None:
             return False
-        elif isinstance(pvv, _np.ndarray) or isinstance(value, _np.ndarray):
-            if len(pvv) != len(value):
-                return False
+        elif self._isarray(pvv) or self._isarray(value):
+            try:
+                if len(pvv) != len(value):
+                    return False
+            except TypeError:
+                return False  # one of them is not an array
             return _np.allclose(pvv, value, rtol=1e-06, atol=0.0)
         elif isinstance(pvv, float) or isinstance(value, float):
             return isclose(pvv, value, rel_tol=1e-06, abs_tol=0.0)
@@ -70,3 +73,6 @@ class PyEpicsWrapper:
         """Return PV value."""
         if self.connected(self._pv):
             return self._pv.get(timeout=50e-3)
+
+    def _isarray(self, value):
+        return isinstance(value, (_np.ndarray, list, tuple))

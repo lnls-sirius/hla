@@ -443,7 +443,7 @@ class SiriusImageView(PyDMImageView):
 
     def mousePressEvent(self, ev):
         pos = ev.pos()
-        pos_scene = self.view.mapSceneToView(pos)
+        pos_scene = self.view.vb.mapSceneToView(pos)
         txt = '{0}, {1}'.format(round(pos_scene.x()),
                                 round(pos_scene.y()))
         QToolTip.showText(
