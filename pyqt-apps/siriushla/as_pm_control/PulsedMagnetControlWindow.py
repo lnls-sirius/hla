@@ -1,6 +1,7 @@
 """Modulet that defines the window class that control pulsed mangets."""
 
 from qtpy.QtWidgets import QWidget, QVBoxLayout, QTabWidget
+import qtawesome as qta
 from siriuspy.search import MASearch
 from siriushla.widgets import SiriusMainWindow
 from siriushla.as_ps_control.SummaryWidgets import SummaryWidget, SummaryHeader
