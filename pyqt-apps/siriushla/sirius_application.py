@@ -4,11 +4,20 @@ import os
 import time
 import traceback
 import subprocess as sub
+import logging as _log
 from io import StringIO
-from pydm import PyDMApplication, data_plugins
 from qtpy.QtWidgets import QMessageBox
+from pydm import PyDMApplication, data_plugins
 
 from .util import get_window_id, set_style
+
+
+# Configure Logging
+fmt = '%(levelname)7s | %(asctime)s | ' +\
+      '%(module)15s.%(funcName)-20s[%(lineno)4d] ::: %(message)s'
+_log.basicConfig(
+    format=fmt, datefmt='%F %T', level=_log.INFO,
+    filename='/tmp/sirius-hla.log', filemode='a')
 
 
 # Set QT_SCALE_FACTOR
