@@ -28,7 +28,7 @@ class ControlWidgetFactory:
         raise AttributeError("{} not defined for {}".format(device, section))
 
     @staticmethod
-    def factory(parent, section, discipline, device, orientation=2):
+    def factory(parent, section, discipline, device, orientation=0):
         if section == "TB":
             if device == "dipole":
                 return TBDipoleControlWidget(dev_type=discipline,

@@ -2,6 +2,7 @@
 
 import re
 
+from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QPushButton, \
     QLabel, QSizePolicy as QSzPlcy
 import qtawesome as qta
@@ -68,38 +69,51 @@ def get_strength_name(maname):
 
 
 def get_prop2width(psname):
-    dic = {
-        'detail': '12',
+    detail_wid = '7' if psname.dev != 'DCLink' else '3'
+    dic = {'detail': detail_wid}
+    if psname.dis == 'MA':
+        dic.update({'psconn': '4'})
+    dic.update({
         'opmode': '8',
-        'ctrlmode': '8',
-        'state': '8',
+        'ctrlmode': '6',
+        'state': '6'
+    })
+    if psname.dis == 'PM':
+        dic.update({'pulse': '8'})
+    dic.update({
         'intlk':  '5',
         'reset': '4',
         'ctrlloop': '8',
-        'setpoint': '10',
-        'readback': '10',
-        'monitor': '10',
-    }
+        'setpoint': '6',
+        'readback': '6',
+        'monitor': '6',
+    })
     if psname.dis in ['MA', 'PM']:
         dic.update({
-            'strength_sp': '10',
-            'strength_rb': '10',
-            'strength_mon': '10'
+            'strength_sp': '6',
+            'strength_rb': '6',
+            'strength_mon': '6'
         })
     if HasTrim.match(psname):
-        dic.update({'trim': '5'})
+        dic.update({'trim': '2'})
     return dic
 
 
 def get_prop2label(psname):
-    dic = {
-        'detail': 'Name',
+    dic = {'detail': 'Detail'}
+    if psname.dis == 'MA':
+        dic.update({'psconn': 'PSConn'})
+    dic.update({
         'opmode': 'OpMode',
         'ctrlmode': 'Control Mode',
-        'state': 'Power State',
+        'state': 'PwrState'
+    })
+    if psname.dis == 'PM':
+        dic.update({'pulse': 'Pulse'})
+    dic.update({
         'intlk':  'Interlocks',
         'reset': 'Reset'
-    }
+    })
     if psname.dis == 'MA':
         name = MASearch.conv_maname_2_psnames(psname)
         analog = get_analog_name(name[0])
@@ -157,16 +171,27 @@ class SummaryWidget(QWidget):
     def _setup_ui(self):
         """Setups widget UI."""
         lay = QHBoxLayout()
-        lay.setSpacing(15)
+        lay.setContentsMargins(0, 0, 0, 0)
+        lay.setSpacing(10)
 
-        self.detail_bt = QPushButton(self._name, self)
+        if self._name.dev != 'DCLink':
+            self.detail_bt = QPushButton(self._name, self)
+        else:
+            self.detail_bt = QPushButton(qta.icon('fa5s.list-ul'), '', self)
+            self.detail_bt.setToolTip(self._name)
         self.detail_wid = self._build_widget(
             [self.detail_bt, ], orientation='v', name='detail')
         lay.addWidget(self.detail_wid)
 
+        if self._name.dis == 'MA':
+            self.psconn_led = SiriusLedState(self, self._psconn_mon)
+            self.psconn_wid = self._build_widget(
+                [self.psconn_led, ], name='psconn')
+            lay.addWidget(self.psconn_wid)
+
         opmode_list = list()
         if 'Voltage' not in self._analog_name:
-            self.opmode_cb = PyDMEnumComboBox(self, self._opmode_sel)
+            self.opmode_cb = MyComboBox(self, self._opmode_sel)
             opmode_list.append(self.opmode_cb)
         self.opmode_lb = PyDMLabel(self, self._opmode_sts)
         opmode_list.append(self.opmode_lb)
@@ -185,6 +210,13 @@ class SummaryWidget(QWidget):
             [self.state_bt, self.state_led], name='state')
         lay.addWidget(self.state_wid)
 
+        if self._name.dis == 'PM':
+            self.pulse_bt = PyDMStateButton(self, self._pulse_sel)
+            self.pulse_led = SiriusLedState(self, self._pulse_sts)
+            self.pulse_wid = self._build_widget(
+                [self.pulse_bt, self.pulse_led], name='pulse')
+            lay.addWidget(self.pulse_wid)
+
         if self._has_softhard_intlk:
             self.soft_intlk_led = SiriusLedAlert(self, self._soft_intlk)
             self.hard_intlk_led = SiriusLedAlert(self, self._hard_intlk)
@@ -192,7 +224,7 @@ class SummaryWidget(QWidget):
                 [self.soft_intlk_led, self.hard_intlk_led], name='intlk')
         else:
             self.intlk_led = PyDMLedMultiChannel(
-                self, channels2values={ch: 0 for ch in self._intlk})
+                self, channels2values={ch: 1 for ch in self._intlk})
             self.intlk_wid = self._build_widget(
                 [self.intlk_led, ], name='intlk')
         lay.addWidget(self.intlk_wid)
@@ -253,9 +285,9 @@ class SummaryWidget(QWidget):
 
         # Add trim button
         if self._has_trim:
-            self.trim_bt = QPushButton(">", self)
+            self.trim_bt = QPushButton(qta.icon('fa5s.angle-right'), '', self)
             self.trim_wid = self._build_widget(
-                [self.trim_bt, ], orientation='v', name='trim_widget')
+                [self.trim_bt, ], orientation='v', name='trim')
             lay.addWidget(self.trim_wid)
 
         _widths = get_prop2width(self._name)
@@ -303,14 +335,11 @@ class SummaryWidget(QWidget):
             self._soft_intlk = self._prefixed_name + ':IntlkSoft-Mon'
             self._hard_intlk = self._prefixed_name + ':IntlkHard-Mon'
         else:
-            self._intlk = ['' for i in range(7)]
-            self._intlk[0] = self._prefixed_name + ":Intlk1-Mon"
-            self._intlk[1] = self._prefixed_name + ":Intlk2-Mon"
-            self._intlk[2] = self._prefixed_name + ":Intlk3-Mon"
-            self._intlk[3] = self._prefixed_name + ":Intlk4-Mon"
-            self._intlk[4] = self._prefixed_name + ":Intlk5-Mon"
-            self._intlk[5] = self._prefixed_name + ":Intlk6-Mon"
-            self._intlk[6] = self._prefixed_name + ":Intlk7-Mon"
+            self._intlk = list()
+            for i in range(1, 8):
+                self._intlk.append(self._prefixed_name+":Intlk"+str(i)+"-Mon")
+            if 'Sept' not in self._name.dev:
+                self._intlk.append(self._prefixed_name+":Intlk8-Mon")
         self._reset_intlk = self._prefixed_name + ':Reset-Cmd'
 
         sp = self._analog_name
@@ -323,6 +352,11 @@ class SummaryWidget(QWidget):
             self._strength_sp = self._prefixed_name + ':{}-SP'.format(st)
             self._strength_rb = self._prefixed_name + ':{}-RB'.format(st)
             self._strength_mon = self._prefixed_name + ':{}-Mon'.format(st)
+            if self._name.dis == 'MA':
+                self._psconn_mon = self._prefixed_name + ':PSConnStatus-Mon'
+            elif self._name.dis == 'PM':
+                self._pulse_sel = self._prefixed_name + ':Pulse-Sel'
+                self._pulse_sts = self._prefixed_name + ':Pulse-Sts'
 
     def _build_widget(self, widgets, orientation='h', name=''):
         widget = QWidget(self)
@@ -333,6 +367,8 @@ class SummaryWidget(QWidget):
             lay = QVBoxLayout(widget)
         for w in widgets:
             lay.addWidget(w)
+        lay.setSpacing(0)
+        lay.setContentsMargins(0, 0, 0, 0)
         return widget
 
     def get_detail_button(self):
@@ -379,10 +415,14 @@ class SummaryHeader(QWidget):
         _labels = get_prop2label(self._name)
 
         lay = QHBoxLayout()
-        lay.setSpacing(15)
+        lay.setSpacing(10)
+        lay.setContentsMargins(0, 0, 0, 0)
 
-        if self._name.dis in ['PS', 'MA'] and self._name.dev != 'DCLink':
-            lay.addWidget(QLabel(' '))
+        if self._name.dis in ['PS', 'MA'] and 'DCLink' not in self._name.dev:
+            hidden = QLabel(' ')
+            hidden.setObjectName('HiddenButton')
+            hidden.setStyleSheet('min-width: 10px; max-width: 10px;')
+            lay.addWidget(hidden)
         for idt, label in _labels.items():
             widget = QLabel(label, self)
             widget.setObjectName(idt)
@@ -397,14 +437,30 @@ class SummaryHeader(QWidget):
         self.setLayout(lay)
 
 
+class MyComboBox(PyDMEnumComboBox):
+    """Subclass PyDMEnumComboBox to reimplement whellEvent."""
+
+    def __init__(self, parent, init_channel=None):
+        """Initialize object."""
+        super().__init__(parent=parent, init_channel=init_channel)
+        self.setFocusPolicy(Qt.StrongFocus)
+
+    def wheelEvent(self, event):
+        """Reimplement wheel event to ignore event when out of focus."""
+        if not self.hasFocus():
+            event.ignore()
+        else:
+            super().wheelEvent(event)
+
+
 if __name__ == '__main__':
     import sys
     from siriushla.sirius_application import SiriusApplication
 
     app = SiriusApplication()
 
-    name = 'PA-RaPSF01:PS-DCLink-BO'
-    name = 'BO-Fam:MA-B'
+    # name = 'PA-RaPSF01:PS-DCLink-BO'
+    # name = 'BO-Fam:MA-B'
     name = 'BO-Fam:PS-B-1'
     visible_props = {'detail', 'opmode', 'state', 'intlk', 'reset',
                      'setpoint', 'monitor'}

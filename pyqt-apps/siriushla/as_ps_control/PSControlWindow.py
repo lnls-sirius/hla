@@ -57,7 +57,10 @@ class PSControlWindow(SiriusMainWindow):
     def _connect_buttons(self, widget):
         for w in widget.get_summary_widgets():
             detail_bt = w.get_detail_button()
-            psname = _PVName(detail_bt.text())
+            psname = detail_bt.text()
+            if not psname:
+                psname = detail_bt.toolTip()
+            psname = _PVName(psname)
             connect_window(detail_bt, PSDetailWindow, self, psname=psname)
 
             trim_bt = w.get_trim_button()

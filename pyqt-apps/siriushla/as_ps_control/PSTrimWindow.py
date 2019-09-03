@@ -27,10 +27,8 @@ class PSTrimWindow(SiriusMainWindow):
         self.setCentralWidget(self.central_widget)
         # Create family MagnetWidget
         self.fam_widget = SummaryWidget(
-            name=self._psname,
-            visible_props={'detail', 'opmode', 'state', 'intlk', 'reset',
-                           'setpoint', 'monitor'},
-            parent=self)
+            name=self._psname, parent=self,
+            visible_props={'detail', 'state', 'intlk', 'setpoint', 'monitor'})
         self.fam_widget.get_trim_button().setEnabled(False)
         # Connect family detail window
         fam_button = self.fam_widget.get_detail_button()
@@ -39,7 +37,7 @@ class PSTrimWindow(SiriusMainWindow):
         device = self._psname.split("-")[-1]
         self.trim_widget = TrimControlWidget(
             dev_type='PS', trim=device, parent=self,
-            orientation=TrimControlWidget.VERTICAL)
+            orientation=TrimControlWidget.HORIZONTAL)
         # Connect Trim detail buttons
         self._connect_buttons(self.trim_widget)
         # Add to leyout

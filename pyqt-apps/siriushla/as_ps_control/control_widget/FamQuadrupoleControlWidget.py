@@ -45,8 +45,8 @@ class SIFamQuadrupoleControlWidget(BasePSControlWidget):
 
     def _getGroups(self):
         return [('Focusing Quadrupoles', "-QF"),
-                ('Defocusing Quadrupoles', "-QD"),
-                ('Dispersive Quadrupoles', "-Q[0-9]")]
+                ('Dispersive Quadrupoles', "-Q[1-4]"),
+                ('Defocusing Quadrupoles', "-QD")]
 
 
 class BOFamQuadrupoleControlWidget(SIFamQuadrupoleControlWidget):
