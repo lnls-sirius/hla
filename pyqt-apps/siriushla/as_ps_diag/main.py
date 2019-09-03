@@ -1,6 +1,7 @@
 """Interface to handle power supply diagnostic."""
 
 import re as _re
+import logging as _log
 from datetime import datetime as _datetime
 from functools import partial as _partial
 
@@ -474,6 +475,10 @@ class LogTable(QTreeView, PyDMWidget):
     def _get_newitem_data(self, updated):
         pv, value = updated
         pv = SiriusPVName(pv)
+        if isinstance(value, _np.ndarray):
+            _log.warning('PSDiag window received a numpy array to ' +
+                         pv+' ('+str(value)+')!')
+            return
 
         if value is None:
             return
@@ -481,15 +486,9 @@ class LogTable(QTreeView, PyDMWidget):
             str_value = 'disconnected'
             logtype = 'DISCONNECT'
         elif pv.propty_name == 'PwrState':
-            # TODO: remove the following steps when the bug in PS is solved
-            if isinstance(value, _np.ndarray):
-                return
             str_value = _PSEnums.PWRSTATE_STS[value]
             logtype = 'ERR'
         elif pv.propty_name == 'OpMode':
-            # TODO: remove the following step when the bug in PS is solved
-            if isinstance(value, _np.ndarray):
-                return
             str_value = _PSEnums.STATES[value]
             logtype = 'WARN'
         else:

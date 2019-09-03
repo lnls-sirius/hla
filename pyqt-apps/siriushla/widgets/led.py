@@ -1,8 +1,8 @@
 from copy import deepcopy as _dcopy
+import logging as _log
 import numpy as _np
 from qtpy.QtGui import QColor
 from qtpy.QtCore import Property, Slot, Signal
-from qtpy.QtWidgets import QMessageBox
 from pydm.widgets.base import PyDMWidget
 from pydm.widgets.channel import PyDMChannel
 from .QLed import QLed
@@ -66,13 +66,9 @@ class PyDMLed(QLed, PyDMWidget):
         PyDMWidget.value_changed(self, new_val)
         if new_val is None:
             return
-        # TODO: remove the following step when the bug in PS is solved
         if isinstance(new_val, _np.ndarray):
-            QMessageBox.critical(
-                self, 'Warning',
-                'PyDMLed with channel '+self.channel +
-                ' received a numpy array ('+str(new_val)+')!')
-            self.setState(0)
+            _log.warning('PyDMLed received a numpy array to ' +
+                         self.channel+' ('+str(new_val)+')!')
             return
         value = int(new_val)
         if self._bit < 0:  # Led represents value of PV
@@ -93,13 +89,10 @@ class SiriusLedState(PyDMLed):
 
     def value_changed(self, new_val):
         """Reimplement value_changed to filter bug."""
-        # TODO: remove the following step when the bug in PS is solved
         if isinstance(new_val, _np.ndarray):
-            QMessageBox.critical(
-                self, 'Warning',
-                'SiriusLedState with channel '+self.channel +
-                ' received a numpy array ('+str(new_val)+')!')
-            new_val = 1
+            _log.warning('SiriusLedState received a numpy array to ' +
+                         self.channel+' ('+str(new_val)+')!')
+            return
         super().value_changed(new_val)
 
 
@@ -114,15 +107,11 @@ class SiriusLedAlert(PyDMLed):
 
     def value_changed(self, new_val):
         """If no bit is set, treat new_val as 2 states, zero and non-zero."""
-        # TODO: remove the following step when the bug in PS is solved
         if isinstance(new_val, _np.ndarray):
-            QMessageBox.critical(
-                self, 'Warning',
-                'SiriusLedAlert with channel '+self.channel +
-                ' received a numpy array ('+str(new_val)+')!')
-            value = 0
-        else:
-            value = int(new_val != 0) if self._bit < 0 else new_val
+            _log.warning('SiriusLedAlert received a numpy array to ' +
+                         self.channel+' ('+str(new_val)+')!')
+            return
+        value = int(new_val != 0) if self._bit < 0 else new_val
         super().value_changed(value)
 
 
@@ -235,17 +224,13 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         else:
             fun = self._operations_dict['eq']
             desired_value = desired
-        # TODO: remove the following step when the bug in PS is solved
         if (type(new_val) != type(desired_value)) \
                 and isinstance(new_val, _np.ndarray):
-            QMessageBox.critical(
-                self, 'Warning',
-                'PyDMLedMultiChannel received a numpy array to ' +
-                address+' ('+str(new_val)+')!')
-            is_desired = False
-        else:
-            is_desired = fun(new_val, desired_value)
+            _log.warning('PyDMLedMultiChannel received a numpy array to ' +
+                         address+' ('+str(new_val)+')!')
+            return
 
+        is_desired = fun(new_val, desired_value)
         self._address2status[address] = is_desired
         if not is_desired:
             self.warning.emit([address, new_val])

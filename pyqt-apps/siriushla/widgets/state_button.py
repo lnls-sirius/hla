@@ -1,5 +1,7 @@
 """PyDM State Button Class."""
 
+import logging as _log
+import numpy as _np
 from qtpy.QtWidgets import QStyleOption, QFrame
 from qtpy.QtGui import QPainter
 from qtpy.QtCore import Property, Q_ENUMS, QByteArray, QRectF, \
@@ -1418,8 +1420,6 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
 
     clicked = Signal()
 
-
-
     def __init__(self, parent=None, init_channel=None, invert=False):
         """Initialize all internal states and properties."""
         QFrame.__init__(self, parent)
@@ -1435,7 +1435,6 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
         self.clicked.connect(self.send_value)
         self.shape = 0
         self.renderer = QSvgRenderer()
-
 
     def mouseReleaseEvent(self, ev):
         """Deal with mouse clicks. Only accept clicks within the figure."""
@@ -1457,6 +1456,10 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
         new_value : str, int, float, bool or np.ndarray
             The new value from the channel. The type depends on the channel.
         """
+        if isinstance(new_val, _np.ndarray):
+            _log.warning('PyDMStateButton received a numpy array to ' +
+                         self.channel+' ('+str(new_val)+')!')
+            return
         super(PyDMStateButton, self).value_changed(new_val)
         value = int(new_val)
         self.value = value
@@ -1576,30 +1579,29 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
 
     @Property(bool)
     def invert(self):
-       """
-       Property that indicates whether to invert button on/off representation.
+        """
+        Property that indicates whether to invert button on/off representation.
 
-       Return
-       ------
-       bool
-       """
-       return self._invert
-   
+        Return
+        ------
+        bool
+        """
+        return self._invert
+
     @invert.setter
     def invert(self, value):
-       """
-       Property that indicates whether to invert button on/off representation.
+        """
+        Property that indicates whether to invert button on/off representation.
 
-       Parameters
-       ----------
-       value: bool
-       """
-       self._invert = value
-       if self._invert:
-         self._on = 0
-         self._off = 1
-       else:
-         self._on = 1
-         self._off = 0
-       # Trigger paintEvent somehow
-      
+        Parameters
+        ----------
+        value: bool
+        """
+        self._invert = value
+        if self._invert:
+            self._on = 0
+            self._off = 1
+        else:
+            self._on = 1
+            self._off = 0
+        # Trigger paintEvent somehow

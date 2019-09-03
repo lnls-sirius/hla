@@ -2,6 +2,7 @@
 
 from functools import partial as _part
 from threading import Thread as _Thread
+import numpy as _np
 
 from qtpy.QtWidgets import QGroupBox, QLabel, QPushButton, QGridLayout, \
     QMessageBox, QVBoxLayout
@@ -420,7 +421,7 @@ class StatusDetails(SiriusDialog):
             elif 'WfmData' in p:
                 if self.ramp_config is None or \
                         not self.ramp_config.ps_normalized_configs:
-                    c2v_apply[pfx + conn[p].pvname_rb] = None
+                    c2v_apply[pfx + conn[p].pvname_rb] = _np.array([])
                 elif self.ramp_config.ps_normalized_configs:
                     wf = self.ramp_config.ps_waveform_get(p.device_name)
                     c2v_apply[pfx + conn[p].pvname_rb] = wf.currents
