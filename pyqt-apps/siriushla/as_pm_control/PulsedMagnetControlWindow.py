@@ -54,9 +54,9 @@ class PulsedMagnetControlWindow(SiriusMainWindow):
         lay = QVBoxLayout(widget)
 
         magnets = MASearch.get_manames({'sec': section, 'dis': 'PM'})
-
-        visible_props = {'detail', 'state', 'intlk', 'reset',
-                         'setpoint', 'monitor', 'strength_sp', 'strength_mon'}
+        visible_props = {'detail', 'state', 'intlk',
+                         'setpoint', 'monitor',
+                         'strength_sp', 'strength_mon'}
 
         lay.addWidget(SummaryHeader(magnets[0], visible_props, self))
         for magnet in magnets:
