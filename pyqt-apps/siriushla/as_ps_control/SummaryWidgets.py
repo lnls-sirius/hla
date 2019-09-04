@@ -69,7 +69,7 @@ def get_strength_name(maname):
 
 
 def get_prop2width(psname):
-    detail_wid = '7' if psname.dev != 'DCLink' else '3'
+    detail_wid = '8.5' if psname.dev != 'DCLink' else '3'
     dic = {'detail': detail_wid}
     if psname.dis == 'MA':
         dic.update({'psconn': '4'})
