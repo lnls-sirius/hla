@@ -1,6 +1,5 @@
 """Widgets to control Trim Quadrupoles magnets."""
-from siriushla.as_ps_control.control_widget.BasePSControlWidget import \
-    BasePSControlWidget
+from .BasePSControlWidget import BasePSControlWidget
 
 
 class TrimControlWidget(BasePSControlWidget):
@@ -21,5 +20,4 @@ class TrimControlWidget(BasePSControlWidget):
         return True
 
     def _getGroups(self):
-        return [('Trims (1-10)', "SI-(0\d|10)"),
-                ('Trims (11-20)', "SI-(1[1-9]|20)")]
+        return [('Trims', "")]

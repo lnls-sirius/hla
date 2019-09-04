@@ -1,14 +1,12 @@
 """Define a window with detailed controls for a given magnet."""
-import qtawesome as qta
-from pydm import PyDMApplication
+
 from qtpy.QtWidgets import QPushButton
+import qtawesome as qta
 from siriuspy.namesys import SiriusPVName as _PVName
-from siriushla.widgets import SiriusMainWindow
-from siriushla.as_ps_control.detail_widget.DetailWidgetFactory \
-    import DetailWidgetFactory
-from siriuspy.search import PSSearch
-from siriuspy.search import MASearch
+from siriuspy.search import PSSearch, MASearch
 from siriushla.util import connect_window, get_appropriate_color
+from siriushla.widgets import SiriusMainWindow
+from .detail_widget.DetailWidgetFactory import DetailWidgetFactory
 
 
 class PSDetailWindow(SiriusMainWindow):
@@ -17,13 +15,14 @@ class PSDetailWindow(SiriusMainWindow):
     def __init__(self, psname, parent=None):
         """Init UI."""
         super(PSDetailWindow, self).__init__(parent)
-        self.app = PyDMApplication.instance()
         if isinstance(psname, str):
-            self._psname = _PVName(psname)
-            name = self._psname
+            self._psname = [_PVName(psname), ]
         else:
             self._psname = [_PVName(psn) for psn in psname]
-            name = self._psname[0]
+        name = self._psname[0]
+        dis = name.dis
+        self._is_dclink = (dis == 'PS') and \
+            ('dclink' in PSSearch.conv_psname_2_pstype(name))
         secs = {'AS', 'TB', 'BO', 'TS', 'SI', 'LI'}
         if name.sec in secs:
             sec = name.sec
@@ -42,27 +41,27 @@ class PSDetailWindow(SiriusMainWindow):
         self._setup_ui()
 
     def _setup_ui(self):
-        if isinstance(self._psname, list):
+        if self._is_dclink:
             self.setWindowTitle('DCLinks Window')
         else:
-            self.setWindowTitle(self._psname)
+            self.setWindowTitle(self._psname[0])
         # Set window layout
         self.widget = DetailWidgetFactory.factory(self._psname, self)
         self._connect_buttons(self.widget)
         self.setCentralWidget(self.widget)
 
     def _connect_buttons(self, widget):
-        if self._psname in ['BO-Fam:MA-B', 'SI-Fam:MA-B1B2']:
+        if self._psname[0] == 'BO-Fam:MA-B':
             w1 = widget.findChild(QPushButton, 'dclink1_button')
             w2 = widget.findChild(QPushButton, 'dclink2_button')
-            psnames = MASearch.conv_maname_2_psnames(self._psname)
+            psnames = MASearch.conv_maname_2_psnames(self._psname[0])
             for psname, w in zip(psnames, (w1, w2)):
                 dclinks = PSSearch.conv_psname_2_dclink(psname)
                 connect_window(w, PSDetailWindow, self, psname=dclinks)
-        else:
+        elif self._psname[0] != 'SI-Fam:MA-B1B2':
             w = widget.findChild(QPushButton, 'dclink_button')
             if w:
-                psname = self._psname.replace(':MA-', ':PS-')
+                psname = self._psname[0].replace(':MA-', ':PS-')
                 dclinks = PSSearch.conv_psname_2_dclink(psname)
                 if dclinks:
                     connect_window(w, PSDetailWindow, self, psname=dclinks)

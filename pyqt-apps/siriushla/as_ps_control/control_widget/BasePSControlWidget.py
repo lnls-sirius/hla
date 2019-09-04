@@ -1,16 +1,14 @@
 """Base class for controlling a power supply."""
 import re
 
-from epics import caput
-
-from siriuspy.search import PSSearch, MASearch
-from siriushla.as_ps_control.PSWidget import BasePSWidget, PSWidget, MAWidget
-from qtpy.QtCore import Qt, QPoint, Slot, QLocale
+from qtpy.QtCore import Qt, Slot, QLocale
 from qtpy.QtWidgets import QWidget, QVBoxLayout, QGroupBox, \
     QGridLayout, QLabel, QHBoxLayout, QScrollArea, QLineEdit, QAction, \
-    QMenu, QInputDialog, QFrame, QSplitter, QPushButton
-from siriushla.as_ps_control.DCLinkWidget import \
-    DCLinkWidget, DCLinkWidgetHeader
+    QMenu, QInputDialog, QFrame, QPushButton, QSplitter, \
+    QSizePolicy as QSzPlcy
+import qtawesome as qta
+from siriuspy.search import PSSearch, MASearch
+from ..SummaryWidgets import SummaryWidget, SummaryHeader, get_prop2label
 
 
 class PSContainer(QWidget):
@@ -19,15 +17,14 @@ class PSContainer(QWidget):
         super().__init__(parent)
         # Works for PS or MA
         self._widget = widget
-        self._name = widget.psname
+        self._name = widget.devname
 
-        if widget.psname in ['BO-Fam:MA-B', 'SI-Fam:MA-B1B2']:
-            psname = self._name.replace(':MA-', ':PS-')
-            psname = [psname + '-1', psname + '-2']
-            self._dclinks = list()
-            for name in psname:
+        self._dclinks = list()
+        if self._name == 'BO-Fam:MA-B':
+            psnames = MASearch.conv_maname_2_psnames(self._name)
+            for name in psnames:
                 self._dclinks.extend(PSSearch.conv_psname_2_dclink(name))
-        else:
+        elif self._name != 'SI-Fam:MA-B1B2':
             psname = self._name.replace(':MA-', ':PS-')
             self._dclinks = PSSearch.conv_psname_2_dclink(psname)
 
@@ -46,37 +43,31 @@ class PSContainer(QWidget):
     def _setup_ui(self):
         """Setup widget UI."""
         self._layout = QGridLayout()
-        self._layout.setSpacing(0)
+        self._layout.setSpacing(10)
         self._layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self._layout)
-        # self._splitter = QSplitter(Qt.Vertical, self)
 
         self._dclink_container = QWidget(self)
         self._dclink_container.setObjectName('DCLinkContainer')
         self._dclink_container.setLayout(QVBoxLayout())
         if self._dclinks:
-            self._dclink_container.layout().addWidget(DCLinkWidgetHeader(self))
+            visible_props = {'detail', 'state', 'intlk', 'setpoint', 'monitor'}
+            self._dclink_container.layout().addWidget(
+                SummaryHeader(self._dclinks[0], visible_props, self))
             for dclink_name in self._dclinks:
-                w = DCLinkWidget(dclink_name, self)
+                w = SummaryWidget(dclink_name, visible_props, self)
                 self._dclink_container.layout().addWidget(w)
-
-        # self._splitter.addWidget(self._widget)
-        # self._splitter.addWidget(self._dclink_container)
-
-        if self._dclinks:
-            self._hide = QPushButton('+', self)
+            self._hide = QPushButton(qta.icon('mdi.plus'), '', self)
         else:
             self._hide = QPushButton('', self)
             self._hide.setEnabled(False)
         self._hide.setObjectName('HideButton')
+        self._hide.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
         self._hide.setFlat(True)
 
         self._layout.addWidget(self._hide, 0, 0, Qt.AlignCenter)
         self._layout.addWidget(self._widget, 0, 1)
         self._layout.addWidget(self._dclink_container, 1, 1)
-
-        self._layout.setColumnStretch(0, 1)
-        self._layout.setColumnStretch(1, 99)
 
         # Configure
         self._dclink_container.setHidden(True)
@@ -84,12 +75,13 @@ class PSContainer(QWidget):
 
     def _toggle_dclink(self):
         if self._dclink_container.isHidden():
-            self._hide.setText('-')
+            self._hide.setIcon(qta.icon('mdi.minus'))
             self._dclink_container.setHidden(False)
         else:
-            self._hide.setText('+')
+            self._hide.setIcon(qta.icon('mdi.plus'))
             self._dclink_container.setHidden(True)
 
+    # Action methods
     def _create_actions(self):
         self._turn_on_action = QAction('Turn DCLinks On', self)
         self._turn_on_action.triggered.connect(
@@ -103,11 +95,10 @@ class PSContainer(QWidget):
         self._close_loop_action = QAction('Close DCLinks Control Loop', self)
         self._close_loop_action.triggered.connect(
             lambda: self._set_dclink_control_loop(True))
-        self._set_setpoint_action = QAction('Set DCLinks voltage', self)
+        self._set_setpoint_action = QAction('Set DCLinks Voltage', self)
         self._set_setpoint_action.triggered.connect(self._set_setpoint)
         self._reset_intlk_action = QAction('Reset DCLinks Interlocks', self)
 
-    # Action methods
     def _set_dclink_pwrstate(self, value):
         for dclink in self.dclink_widgets():
             btn = dclink.state_btn
@@ -170,22 +161,12 @@ class PSContainer(QWidget):
         else:
             super().contextMenuEvent(event)
 
-    def dclink_widgets(self):
-        return self._dclink_container.findChildren(DCLinkWidget)
-
 
 class BasePSControlWidget(QWidget):
     """Base widget class to control power supply."""
 
-    SQUARE = 0
-    HORIZONTAL = 1
-    VERTICAL = 2
-
-    StyleSheet = """
-        QScrollArea {
-            min-width: 75em;
-        }
-    """
+    HORIZONTAL = 0
+    VERTICAL = 1
 
     def __init__(self, dev_type, orientation=0, parent=None):
         """Class constructor.
@@ -197,59 +178,218 @@ class BasePSControlWidget(QWidget):
                       laid out.
         """
         super(BasePSControlWidget, self).__init__(parent)
-        self._dev_type = dev_type
         self._orientation = orientation
+
+        self._dev_type = dev_type
         if dev_type == 'PS':
             self._dev_list = PSSearch.get_psnames(self._getFilter())
-            self._widget_class = PSWidget
         elif dev_type == 'MA':
             self._dev_list = MASearch.get_manames(self._getFilter())
-            self._widget_class = MAWidget
         else:
             raise ValueError("Invalid device type, must be either PS or MA.")
-        # Data structures used to filter the widgets
-        self.widgets_list = dict()
-        self.filtered_widgets = set()  # Set with key of visible widgets
-        # Setup the UI and apply css
-        self._setup_ui()
-        self.setStyleSheet(self.StyleSheet)
-        # Set custom context menu
-        # TODO: maybe no here
-        self.setContextMenuPolicy(Qt.CustomContextMenu)
-        self.customContextMenuRequested.connect(self.show_context_menu)
 
-    @Slot(str)
-    def filter_pwrsupplies(self, text):
+        self.all_props = get_prop2label(self._dev_list[0])
+        self.visible_props = {
+            'detail', 'state', 'intlk', 'setpoint', 'monitor'}
+        if 'psconn' in self.all_props:
+            self.visible_props.update(
+                ['psconn', 'strength_sp', 'strength_mon'])
+        if 'trim' in self.all_props:
+            self.visible_props.update(['trim', ])
+
+        # Data used to filter the widgets
+        self.ps_widgets_dict = dict()
+        self.containers_dict = dict()
+        self.filtered_widgets = set()  # Set with key of visible widgets
+
+        # Setup the UI
+        self.groups = self._getGroups()
+        self._setup_ui()
+        self._create_actions()
+        if len(self.groups) in [1, 3]:
+            self.setObjectName('cw')
+            self.setStyleSheet('#cw{min-height: 40em;}')
+
+    def _setup_ui(self):
+        self.layout = QVBoxLayout()
+
+        # Create filters
+        self.search_le = QLineEdit(parent=self)
+        self.search_le.setObjectName("search_lineedit")
+        self.search_le.setPlaceholderText("Search for a power supply...")
+        self.search_le.textEdited.connect(self._filter_pwrsupplies)
+        self.filter_pb = QPushButton(qta.icon('mdi.view-column'), '', self)
+        self.search_menu = QMenu(self.filter_pb)
+        self.filter_pb.setMenu(self.search_menu)
+        for prop, label in self.all_props.items():
+            act = self.search_menu.addAction(label)
+            act.setObjectName(prop)
+            act.setCheckable(True)
+            act.setChecked(prop in self.visible_props)
+            act.toggled.connect(self._set_widgets_visibility)
+        hlay_filter = QHBoxLayout()
+        hlay_filter.addWidget(self.search_le)
+        hlay_filter.addWidget(self.filter_pb)
+        self.layout.addLayout(hlay_filter)
+
+        self.count_label = QLabel(parent=self)
+        self.count_label.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        self.layout.addWidget(self.count_label)
+
+        self.pwrsupplies_layout = self._getSplitter()
+        self.layout.addWidget(self.pwrsupplies_layout)
+        if len(self.groups) == 3:
+            splitt_v = QSplitter(Qt.Vertical)
+
+        # Build power supply Layout
+        # Create group boxes and pop. layout
+        for idx, group in enumerate(self.groups):
+
+            # Get power supplies that belong to group
+            pwrsupplies = list()
+            pattern = re.compile(group[1])
+            for el in self._dev_list:
+                if pattern.search(el):
+                    pwrsupplies.append(el)
+
+            # Create header
+            header = SummaryHeader(pwrsupplies[0],
+                                   visible_props=self.visible_props,
+                                   parent=self)
+            self.containers_dict['header '+group[0]] = header
+            self.filtered_widgets.add('header '+group[0])
+
+            # Loop power supply to create all the widgets of a groupbox
+            group_widgets = list()
+            for n, psname in enumerate(pwrsupplies):
+                ps_widget = SummaryWidget(name=psname,
+                                          visible_props=self.visible_props,
+                                          parent=self)
+                pscontainer = PSContainer(ps_widget, self)
+                group_widgets.append(pscontainer)
+                self.containers_dict[psname] = pscontainer
+                self.filtered_widgets.add(psname)
+                self.ps_widgets_dict[psname] = ps_widget
+
+            # Create group
+            group_box = self._createGroupBox(group[0], header, group_widgets)
+
+            # Add group box to grid layout
+            if len(self.groups) == 3:
+                if idx in [0, 1]:
+                    splitt_v.addWidget(group_box)
+                else:
+                    self.pwrsupplies_layout.addWidget(splitt_v)
+                    self.pwrsupplies_layout.addWidget(group_box)
+            else:
+                self.pwrsupplies_layout.addWidget(group_box)
+
+        self.count_label.setText(
+            "Showing {} power supplies.".format(
+                len(self.filtered_widgets)-len(self.groups)))
+        self.setLayout(self.layout)
+
+    def _createGroupBox(self, title, header, widget_group):
+        scr_area_wid = QWidget(self)
+        scr_area_wid.setObjectName('scr_ar_wid')
+        scr_area_wid.setStyleSheet(
+            '#scr_ar_wid {background-color: transparent;}')
+        w_lay = QVBoxLayout(scr_area_wid)
+        w_lay.setSpacing(0)
+        w_lay.setContentsMargins(0, 0, 0, 0)
+        for line, widget in enumerate(widget_group):
+            w_lay.addWidget(widget, alignment=Qt.AlignLeft)
+        w_lay.addStretch()
+
+        min_width = '39.5' if self._dev_type == 'PS' else '55.5'
+        scr_area = QScrollArea(self)
+        scr_area.setObjectName('scr_area')
+        scr_area.setStyleSheet('#scr_area{min-width: '+min_width+'em;}')
+        scr_area.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        scr_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        scr_area.setWidgetResizable(True)
+        scr_area.setFrameShape(QFrame.NoFrame)
+        scr_area.setWidget(scr_area_wid)
+
+        group_box = QGroupBox(title, parent=self)
+        gb_lay = QVBoxLayout(group_box)
+        gb_lay.addWidget(header, alignment=Qt.AlignLeft)
+        gb_lay.addWidget(scr_area)
+        return group_box
+
+    def _getSplitter(self):
+        if self._orientation == self.HORIZONTAL:
+            return QSplitter(Qt.Horizontal)
+        else:
+            return QSplitter(Qt.Vertical)
+
+    def _filter_pwrsupplies(self, text):
         """Filter power supply widgets based on text inserted at line edit."""
         try:
             pattern = re.compile(text, re.I)
-        except Exception as e:  # Ignore malformed patterns?
+        except Exception:  # Ignore malformed patterns?
             pattern = re.compile("malformed")
+
         # Clear filtered widgets and add the ones that match the new pattern
         self.filtered_widgets.clear()
-        for widget in self.widgets_list:
-            if pattern.search(widget):
-                self.filtered_widgets.add(widget)
+        for name in self.containers_dict.keys():
+            if pattern.search(name) or 'header' in name:
+                self.filtered_widgets.add(name)
+
         # Set widgets visibility and the number of widgets matched
-        self.set_widgets_visibility()
+        self._set_widgets_visibility()
         self.count_label.setText(
-            "Showing {} power supplies".format(len(self.filtered_widgets)))
-        # Sroll to top
+            "Showing {} power supplies".format(
+                len(self.filtered_widgets)-len(self.groups)))
+
+        # Scroll to top
         for scroll_area in self.findChildren(QScrollArea):
             scroll_area.verticalScrollBar().setValue(0)
 
-    def set_widgets_visibility(self):
+    def _set_widgets_visibility(self):
         """Set visibility of the widgets."""
-        for key, widget in self.widgets_list.items():
-            if key in self.filtered_widgets:
-                widget.setVisible(True)
+        props = {act.objectName() for act in self.search_menu.actions()
+                 if act.isChecked()}
+        for key, wid in self.containers_dict.items():
+            if 'header' in key:
+                for ob in wid.findChildren(QWidget):
+                    name = ob.objectName()
+                    ob.setVisible(name in props or 'Hidden' in name)
             else:
-                widget.setVisible(False)
+                vis = key in self.filtered_widgets
+                wid.setVisible(vis)
+                if not vis:
+                    continue
+                objs = wid.findChildren(SummaryWidget)
+                objs.extend(wid.findChildren(SummaryHeader))
+                for ob in objs:
+                    chil = ob.findChildren(
+                        QWidget, options=Qt.FindDirectChildrenOnly)
+                    for c in chil:
+                        name = c.objectName()
+                        c.setVisible(name in props)
+
+    # Actions methods
+    def _create_actions(self):
+        self.turn_on_act = QAction("Turn On", self)
+        self.turn_on_act.triggered.connect(lambda: self._set_pwrstate(True))
+
+        self.turn_off_act = QAction("Turn Off", self)
+        self.turn_off_act.triggered.connect(lambda: self._set_pwrstate(False))
+
+        self.set_slowref_act = QAction("Set OpMode to SlowRef", self)
+        self.set_slowref_act.triggered.connect(self._set_slowref)
+
+        self.set_current_sp_act = QAction("Set Current SP", self)
+        self.set_current_sp_act.triggered.connect(self._set_current_sp)
+
+        self.reset_act = QAction("Reset Interlocks", self)
+        self.reset_act.triggered.connect(self._reset_interlocks)
 
     @Slot(bool)
-    def pwrstate_action(self, state):
-        """Execute actions from context menu."""
-        for key, widget in self.widgets_list.items():
+    def _set_pwrstate(self, state):
+        """Execute turn on/off actions."""
+        for key, widget in self.ps_widgets_dict.items():
             if key in self.filtered_widgets:
                 try:
                     if state:
@@ -260,160 +400,53 @@ class BasePSControlWidget(QWidget):
                     pass
 
     @Slot()
-    def set_current_sp_action(self):
+    def _set_slowref(self):
+        """Set opmode to SlowRef for every visible widget."""
+        for key, widget in self.ps_widgets_dict.items():
+            if key in self.filtered_widgets:
+                try:
+                    widget.set_opmode_slowref()
+                except TypeError:
+                    pass
+
+    @Slot()
+    def _set_current_sp(self):
         """Set current setpoint for every visible widget."""
         dlg = QInputDialog(self)
         dlg.setLocale(QLocale(QLocale.English))
         new_value, ok = dlg.getDouble(
             self, "Insert current setpoint", "Value")
         if ok:
-            for key, widget in self.widgets_list.items():
+            for key, widget in self.ps_widgets_dict.items():
                 if key in self.filtered_widgets:
-                    widget.analog_widget.sp_lineedit.setText(str(new_value))
+                    widget.setpoint.sp_lineedit.setText(str(new_value))
                     try:
-                        widget.analog_widget.sp_lineedit.send_value()
+                        widget.setpoint.sp_lineedit.send_value()
                     except TypeError:
                         pass
 
     @Slot()
-    def reset_interlocks(self):
+    def _reset_interlocks(self):
         """Reset interlocks."""
-        for key, widget in self.widgets_list.items():
+        for key, widget in self.ps_widgets_dict.items():
             if key in self.filtered_widgets:
                 try:
-                    caput(widget.psname + ":Reset-Cmd", 1, timeout=100e-3)
+                    widget.reset()
                 except TypeError:
                     pass
 
-    @Slot(QPoint)
-    def show_context_menu(self, point):
+    # Overloaded method
+    def contextMenuEvent(self, event):
         """Show a custom context menu."""
+        point = event.pos()
         menu = QMenu("Actions", self)
-
-        turn_on = QAction("Turn On", self)
-        turn_on.triggered.connect(lambda: self.pwrstate_action(True))
-        turn_off = QAction("Turn Off", self)
-        turn_off.triggered.connect(lambda: self.pwrstate_action(False))
-        set_current_sp = QAction("Set Current SP", self)
-        set_current_sp.triggered.connect(self.set_current_sp_action)
-        reset = QAction("Reset Interlocks", self)
-        reset.triggered.connect(self.reset_interlocks)
-        menu.addAction(turn_on)
-        menu.addAction(turn_off)
-        menu.addAction(set_current_sp)
-        menu.addAction(reset)
-
+        menu.addAction(self.turn_on_act)
+        menu.addAction(self.turn_off_act)
+        menu.addAction(self.set_slowref_act)
+        menu.addAction(self.set_current_sp_act)
+        menu.addAction(self.reset_act)
         menu.popup(self.mapToGlobal(point))
 
-    def get_ps_widgets(self):
-        """Return PSWidget and MAWidget widgets."""
-        return self.findChildren(BasePSWidget)
-
-    def _setup_ui(self):
-        self.layout = QVBoxLayout()
-        self.pwrsupplies_layout = self._getLayout()
-        # Create search bar
-        self.search_lineedit = QLineEdit(parent=self)
-        self.search_lineedit.setObjectName("search_lineedit")
-        self.search_lineedit.setPlaceholderText("Search for a power supply...")
-        self.search_lineedit.textEdited.connect(self.filter_pwrsupplies)
-
-        self.count_label = QLabel(parent=self)
-
-        self.layout.addWidget(self.search_lineedit)
-        self.layout.addWidget(self.count_label)
-        self.layout.addLayout(self.pwrsupplies_layout)
-
-        # Build power supply Layout
-        groups = self._getGroups()
-
-        # Create group boxes and pop. layout
-        for idx, group in enumerate(groups):
-
-            # Get power supplies that belong to group
-            pwrsupplies = list()
-            # element_list = self._getElementList()
-            pattern = re.compile(group[1])
-            for el in self._dev_list:
-                if pattern.search(el):
-                    pwrsupplies.append(el)
-
-            # Loop power supply to create all the widgets of a groupbox
-            group_widgets = list()
-            for n, psname in enumerate(pwrsupplies):
-                if n > 0:
-                    ps_widget = self._widget_class(psname=psname,
-                                                   parent=self, header=False)
-                else:
-                    ps_widget = self._widget_class(psname=psname, parent=self)
-                pscontainer = PSContainer(ps_widget, self)
-                group_widgets.append(pscontainer)
-                self.widgets_list[psname] = ps_widget
-                self.filtered_widgets.add(psname)
-
-            # Create group and scroll area
-            main_widget = self._createGroupBox(group[0], group_widgets)
-            main_widget.layout.setContentsMargins(0, 0, 0, 0)
-            # main_widget.setAutoFillBackground(False)
-            # if self._hasScrollArea():
-            widget = QScrollArea(self)
-            # widget.viewport().setAutoFillBackground(False)
-            widget.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-            widget.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-            widget.setWidgetResizable(True)
-            widget.setFrameShape(QFrame.NoFrame)
-            widget.setWidget(main_widget)
-            # else:
-            #     widget = main_widget
-
-            group_box = QGroupBox(group[0], parent=self)
-            group_box.layout = QVBoxLayout()
-            group_box.setLayout(group_box.layout)
-            group_box.layout.addWidget(widget)
-
-            # Add group box or scroll area to grid layout
-            if self._orientation == self.SQUARE:
-                if idx % 2 == 0:
-                    self.pwrsupplies_layout.addWidget(group_box, int(idx), 0)
-                else:
-                    self.pwrsupplies_layout.addWidget(group_box, int(idx/2), 1)
-            else:
-                self.pwrsupplies_layout.addWidget(group_box)
-
-        self.count_label.setText(
-            "Showing {} power supplies.".format(len(self.widgets_list)))
-
-        self.setLayout(self.layout)
-
-    def _createGroupBox(self, title, widget_group):
-        w = QWidget(self)
-        w.setObjectName('groupbox')
-        w.setStyleSheet('#groupbox {background-color: transparent;}')
-        w.layout = QVBoxLayout()
-        w.setLayout(w.layout)
-        for line, widget in enumerate(widget_group):
-            w.layout.addWidget(widget)
-        w.layout.addStretch()
-
-        return w
-
-    # def _getElementList(self):
-    #     return filter(lambda ps: re.match(
-    #         self._getPattern(), ps), self._psname_list)
-
-    # def _getSection(self, name):
-    #     section = name.split(":")[0].split("-")[1][:2]
-    #     try:
-    #         int(section)
-    #     except Exception:
-    #         return 0
-    #
-    #     return int(section)
-
-    def _getLayout(self):
-        if self._orientation == self.SQUARE:
-            return QGridLayout()
-        elif self._orientation == self.HORIZONTAL:
-            return QHBoxLayout()
-        else:
-            return QVBoxLayout()
+    def get_summary_widgets(self):
+        """Return Summary Widgets."""
+        return self.findChildren(SummaryWidget)

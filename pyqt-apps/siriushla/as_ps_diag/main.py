@@ -1,6 +1,7 @@
 """Interface to handle power supply diagnostic."""
 
 import re as _re
+import logging as _log
 from datetime import datetime as _datetime
 from functools import partial as _partial
 
@@ -30,7 +31,7 @@ from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, \
     PyDMLedMultiChannel, PyDMLed, PyDMLedMultiConnection, QLed
 
-from siriushla.as_ps_diag.util import sec2label, asps2labels, lips2labels
+from siriushla.as_ps_diag.util import asps2labels, lips2labels
 
 
 class PSDiag(SiriusMainWindow):
@@ -60,15 +61,16 @@ class PSDiag(SiriusMainWindow):
                  'OpMode\nSlowRef?', 'Current\nDiff']):
             label = QLabel(lab, panel, alignment=Qt.AlignCenter)
             if i > 0:
-                label.setStyleSheet("min-width:4em; max-width:4em;")
+                label.setStyleSheet('min-width:3.4em; max-width:3.4em;')
             panel_lay.addWidget(label, 0, i)
 
         # # Leds panel
         _on = _PSConst.PwrStateSts.On
         _slowref = _PSConst.States.SlowRef
         i = 2
-        for sec in sec2label.keys():
-            seclabel = QLabel('<h3>'+sec2label[sec]+'</h3>', panel)
+        # for sec in ['LI', 'TB', 'BO', 'TS', 'SI']  TODO:
+        for sec in ['LI', 'TB', 'BO']:
+            seclabel = QLabel('<h3>'+sec+'</h3>', panel)
             panel_lay.addWidget(seclabel, i, 0)
             i += 1
             if sec == 'LI':
@@ -188,14 +190,22 @@ class PSDiag(SiriusMainWindow):
             i += 1
 
         # Current State and Log Tables
+        table_label2px = {
+            'Date': 110,
+            'Time': 85,
+            'Type': 70,
+            'PS Name': 145,
+            'Property': 85,
+            'Value': 120}
+
         channels = list()
         for ps in PSSearch.get_psnames(filters={'dis': 'PS'}):
             channels.append(self._prefix+ps+':DiagCurrentDiff-Mon')
-        self._status = LogTable(cw, channels, is_status=True)
+        self._status = LogTable(cw, channels, table_label2px, is_status=True)
         self._status.setObjectName('status_table')
         self._status.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self._status.updated.connect(self._filter_table)
-        self._log = LogTable(cw, channels)
+        self._log = LogTable(cw, channels, table_label2px)
         self._log.setObjectName('log_table')
         self._log.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self._tables_stack = QStackedLayout()
@@ -211,13 +221,22 @@ class PSDiag(SiriusMainWindow):
         self._rb_log.setObjectName('rb_log')
         self._rb_log.toggled.connect(_partial(self._toggle_table, 1))
 
-        for name in ['Date', 'Time', 'Log Type',
-                     'PS Name', 'Property', 'Value']:
-            setattr(self, '_search_'+name.replace(' ', '').lower(),
-                    QLineEdit())
-            le = getattr(self, '_search_'+name.replace(' ', '').lower())
+        for name, width in table_label2px.items():
+            attr = '_search_'+name.replace(' ', '').lower()
+            setattr(self, attr, QLineEdit())
+            le = getattr(self, attr)
+            le.setObjectName(name)
             le.setPlaceholderText(name + '...')
             le.editingFinished.connect(self._filter_table)
+            width = str(width-1)
+            if name == 'Value':
+                le.setStyleSheet(
+                    '#'+name+'{min-width:'+width+'px;}')
+                le.setSizePolicy(QSzPlcy.Expanding, QSzPlcy.Maximum)
+            else:
+                le.setStyleSheet(
+                    '#'+name+'{min-width:'+width+'px; max-width:'+width+'px;}')
+                le.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
 
         self._scrollup_pb = QPushButton('↟', cw)
         self._scrollup_pb.setObjectName('scrollup_pb')
@@ -229,10 +248,10 @@ class PSDiag(SiriusMainWindow):
 
         tables_lay = QGridLayout()
         tables_lay.setVerticalSpacing(2)
-        tables_lay.setHorizontalSpacing(1)
+        tables_lay.setHorizontalSpacing(0)
         tables_lay.addWidget(self._search_date, 0, 0)
         tables_lay.addWidget(self._search_time, 0, 1)
-        tables_lay.addWidget(self._search_logtype, 0, 2)
+        tables_lay.addWidget(self._search_type, 0, 2)
         tables_lay.addWidget(self._search_psname, 0, 3)
         tables_lay.addWidget(self._search_property, 0, 4)
         tables_lay.addWidget(self._search_value, 0, 5)
@@ -259,7 +278,7 @@ class PSDiag(SiriusMainWindow):
                               alignment=Qt.AlignCenter)
         layout = QGridLayout()
         layout.setVerticalSpacing(20)
-        layout.setHorizontalSpacing(10)
+        layout.setHorizontalSpacing(5)
         layout.addWidget(window_title, 0, 0, 1, 2)
         layout.addWidget(panel, 1, 0)
         layout.addWidget(tables, 1, 1)
@@ -277,7 +296,7 @@ class PSDiag(SiriusMainWindow):
                 border: 1px solid #bebebe;
             }
             #tables{
-                min-width: 45em;
+                min-width: 700px;
             }
             #rb_status, #rb_log{
                 min-width: 5em;
@@ -311,7 +330,7 @@ class PSDiag(SiriusMainWindow):
         pats = list()
         date_txt = self._search_date.text()
         time_txt = self._search_time.text()
-        logtype_txt = self._search_logtype.text()
+        logtype_txt = self._search_type.text()
         psname_txt = self._search_psname.text()
         property_txt = self._search_property.text()
         value_txt = self._search_value.text()
@@ -363,24 +382,26 @@ class LogTable(QTreeView, PyDMWidget):
 
     updated = Signal()
 
-    def __init__(self, parent=None, channels=list(), is_status=False):
+    def __init__(self, parent=None, channels=list(), label2width=dict(),
+                 is_status=False):
         # QTableView.__init__(self, parent)
         QTreeView.__init__(self, parent)
         PyDMWidget.__init__(self)
 
         # setup table
         self._is_status = is_status
-        self._date_fmt = '%Y/%m/%d'
-        self._time_fmt = '%H:%M:%S'
-        self.headerLabels = ['Date', 'Time', 'Log Type',
-                             'PS Name', 'Property', 'Value']
+        self._date_fmt = ' %Y/%m/%d '
+        self._time_fmt = ' %H:%M:%S '
+        self.headerLabels = label2width.keys()
         self._model = QStandardItemModel()
         self._model.setHorizontalHeaderLabels(self.headerLabels)
         self.setModel(self._model)
         self.setUniformRowHeights(True)
-        self._hheader = QHeaderView(Qt.Horizontal)
-        self._hheader.setResizeMode(QHeaderView.Stretch)
-        self.setHeader(self._hheader)
+        self.setHeader(QHeaderView(Qt.Horizontal))
+        for idx, width in enumerate(label2width.values()):
+            self.header().resizeSection(idx, width)
+        self.header().resizeSections(QHeaderView.Fixed)
+        self.header().setStretchLastSection(True)
         self.setSortingEnabled(True)
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setItemDelegateForColumn(2, LogItemDelegate(self))
@@ -474,22 +495,20 @@ class LogTable(QTreeView, PyDMWidget):
     def _get_newitem_data(self, updated):
         pv, value = updated
         pv = SiriusPVName(pv)
+        if isinstance(value, _np.ndarray):
+            _log.warning('PSDiag window received a numpy array to ' +
+                         pv+' ('+str(value)+')!')
+            return
 
         if value is None:
             return
         if 'conn' in self.sender().objectName():
             str_value = 'disconnected'
-            logtype = 'DISCONNECT'
+            logtype = 'DISCONN'
         elif pv.propty_name == 'PwrState':
-            # TODO: remove the following steps when the bug in PS is solved
-            if isinstance(value, _np.ndarray):
-                return
             str_value = _PSEnums.PWRSTATE_STS[value]
             logtype = 'ERR'
         elif pv.propty_name == 'OpMode':
-            # TODO: remove the following step when the bug in PS is solved
-            if isinstance(value, _np.ndarray):
-                return
             str_value = _PSEnums.STATES[value]
             logtype = 'WARN'
         else:
@@ -498,7 +517,7 @@ class LogTable(QTreeView, PyDMWidget):
 
         return {'logtype': logtype,
                 'psname': pv.device_name,
-                'propty': '' if logtype == 'DISCONNECT' else pv.propty_name,
+                'propty': '' if logtype == 'DISCONN' else pv.propty_name,
                 'value': str_value}
 
     def mouseDoubleClickEvent(self, ev):
@@ -530,7 +549,7 @@ class LogItemDelegate(QItemDelegate):
             painter.fillRect(option.rect, PyDMLed.Yellow)
         elif logtype.upper() == 'ERR':
             painter.fillRect(option.rect, PyDMLed.Red)
-        elif logtype.upper() == 'DISCONNECT':
+        elif logtype.upper() == 'DISCONN':
             painter.fillRect(option.rect, PyDMLed.Gray)
 
         QItemDelegate.paint(self, painter, option, index)

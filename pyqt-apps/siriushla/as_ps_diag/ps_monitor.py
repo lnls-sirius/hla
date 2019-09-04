@@ -11,8 +11,7 @@ from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, \
     PyDMLedMultiChannel
 
-from siriushla.as_ps_diag.util import sec2label, \
-    lips2labels, asps2labels, sips2labels
+from siriushla.as_ps_diag.util import lips2labels, asps2labels, sips2labels
 
 
 class PSMonitor(SiriusMainWindow):
@@ -30,23 +29,25 @@ class PSMonitor(SiriusMainWindow):
         layout = QGridLayout()
         layout.setHorizontalSpacing(15)
 
-        for sec in sec2label.keys():
+        # for sec in ['LI', 'TB', 'BO', 'TS', 'SI']:  TODO
+        for sec in ['LI', 'TB', 'BO']:
             status = self._make_magnets_groupbox(sec)
             if sec == 'LI':
-                layout.addWidget(status, 1, 0, 2, 1)
+                layout.addWidget(status, 1, 0)
             elif sec == 'TB':
-                layout.addWidget(status, 1, 1)
+                layout.addWidget(status, 2, 0)
             elif sec == 'BO':
-                layout.addWidget(status, 1, 2, 2, 1)
+                # layout.addWidget(status, 1, 1)  TODO
+                layout.addWidget(status, 1, 1, 2, 1)
             elif sec == 'TS':
                 layout.addWidget(status, 2, 1)
             elif sec == 'SI':
-                layout.addWidget(status, 1, 3, 2, 1)
+                layout.addWidget(status, 1, 2, 2, 1)
         cw.setLayout(layout)
         self.setCentralWidget(cw)
 
     def _make_magnets_groupbox(self, sec):
-        status = QGroupBox(sec2label[sec], self)
+        status = QGroupBox(sec, self)
         status_lay = QGridLayout()
         status_lay.setAlignment(Qt.AlignTop)
         if sec == 'SI':
@@ -54,7 +55,6 @@ class PSMonitor(SiriusMainWindow):
             status_lay.setHorizontalSpacing(20)
         status.setStyleSheet("""QLabel{max-height: 1.5em;}""")
         status.setLayout(status_lay)
-        col_count = 10
 
         def get_ps2labels_dict(sec):
             if sec == 'LI':
@@ -100,24 +100,24 @@ class PSMonitor(SiriusMainWindow):
             return [new_row, new_col]
 
         def get_si_secpos(label):
-            if 'Dipole' in label:
+            if 'B' in label:
                 return (0, 0, 1, 1)
-            elif 'Skew' in label:
-                return (3, 0, 3, 1)
-            elif 'Quad' in label:
+            elif 'QS' in label:
+                return (3, 0, 1, 1)
+            elif 'Q' in label:
                 return (1, 0, 1, 1)
-            elif 'Sext' in label:
+            elif 'S' in label:
                 return (2, 0, 1, 1)
-            elif 'Slow Hor' in label:
-                return (0, 1, 3, 1)
-            elif 'Fast Hor' in label:
-                return (3, 1, 3, 1)
-            elif 'Slow Ver' in label:
-                return (0, 2, 3, 1)
-            elif 'Fast Ver' in label:
-                return (3, 2, 3, 1)
+            elif 'CH' in label:
+                return (0, 1, 4, 1)
+            elif 'CV' in label:
+                return (0, 2, 4, 1)
             elif 'Trims' in label:
-                return (0, 3, 6, 1)
+                return (5, 0, 1, 3)
+            # elif 'FCH' in label:
+            #     return (3, 1, 3, 1)
+            # elif 'FCV' in label:
+            #     return (3, 2, 3, 1)
             # TODO: adjust to add pulsed magnets when using TS and SI
 
         row, col = 0, 0
@@ -125,6 +125,7 @@ class PSMonitor(SiriusMainWindow):
             label = key if sec == 'SI' else value
             ps = value if sec == 'SI' else key
             psnames = get_psnames(sec, ps)
+            col_count = 10 if label != 'Trims' else 35
             if not psnames:
                 continue
             if sec != 'SI':

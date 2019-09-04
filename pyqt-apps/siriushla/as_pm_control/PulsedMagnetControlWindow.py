@@ -1,21 +1,16 @@
 """Modulet that defines the window class that control pulsed mangets."""
-import qtawesome as qta
-from pydm import PyDMApplication
-from qtpy.QtWidgets import QWidget, QVBoxLayout, QTabWidget
 
+from qtpy.QtWidgets import QWidget, QVBoxLayout, QTabWidget
+import qtawesome as qta
 from siriuspy.search import MASearch
 from siriushla.widgets import SiriusMainWindow
-from siriushla.as_ps_control.PSWidget import PulsedMAWidget
-from siriushla.as_pm_control.PulsedMagnetDetailWindow \
-    import PulsedMagnetDetailWindow
+from siriushla.as_ps_control.SummaryWidgets import SummaryWidget, SummaryHeader
 from siriushla.util import connect_window
+from .PulsedMagnetDetailWindow import PulsedMagnetDetailWindow
 
 
 class PulsedMagnetControlWindow(SiriusMainWindow):
     """Window to control pulsed magnets."""
-
-    StyleSheet = """
-    """
 
     def __init__(self, parent=None, is_main=True, section=None):
         """Constructor."""
@@ -23,11 +18,10 @@ class PulsedMagnetControlWindow(SiriusMainWindow):
         self._is_main = is_main
         self._section = section
         self.setObjectName(self._section+'App')
-        self._setup_ui()
-        self.setStyleSheet(PulsedMagnetControlWindow.StyleSheet)
-        self.setCentralWidget(self.main_widget)
         self.setWindowTitle(section.upper() + ' Pulsed Magnets Control Window')
         self.setWindowIcon(qta.icon('mdi.current-ac', color='#969696'))
+        self._setup_ui()
+        self.setCentralWidget(self.main_widget)
         self.setFocus()
 
     def _setup_ui(self):
@@ -57,35 +51,34 @@ class PulsedMagnetControlWindow(SiriusMainWindow):
 
     def _make_tab_widget(self, section):
         widget = QWidget(self)
-        widget.layout = QVBoxLayout()
+        lay = QVBoxLayout(widget)
 
         magnets = MASearch.get_manames({'sec': section, 'dis': 'PM'})
+        visible_props = {'detail', 'state', 'intlk',
+                         'setpoint', 'monitor',
+                         'strength_sp', 'strength_mon'}
 
-        header = True
+        lay.addWidget(SummaryHeader(magnets[0], visible_props, self))
         for magnet in magnets:
-            ma_widget = PulsedMAWidget(magnet, header, self)
-            widget.layout.addWidget(ma_widget)
-            header &= False
+            ma_widget = SummaryWidget(magnet, visible_props, self)
+            lay.addWidget(ma_widget)
 
-        widget.layout.addStretch()
-
-        widget.setLayout(widget.layout)
+        lay.addStretch()
         return widget
 
     def _connect_buttons(self):
-        """Return buttons in the PulsedMAWidgets."""
-        widgets = self.main_widget.findChildren(PulsedMAWidget)
+        """Connect buttons in the SummaryWidgets."""
+        widgets = self.main_widget.findChildren(SummaryWidget)
         for widget in widgets:
-            maname = widget.psname
-            button = widget.get_detail_button()
-            connect_window(button, PulsedMagnetDetailWindow,
-                           parent=self, maname=maname)
+            maname = widget.devname
+            bt = widget.get_detail_button()
+            connect_window(bt, PulsedMagnetDetailWindow, self, maname=maname)
 
 
 if __name__ == "__main__":
     import sys
-
-    app = PyDMApplication(None, sys.argv)
+    from sirius_application import SiriusApplication
+    app = SiriusApplication()
     w = PulsedMagnetControlWindow()
     w.show()
     sys.exit(app.exec_())
