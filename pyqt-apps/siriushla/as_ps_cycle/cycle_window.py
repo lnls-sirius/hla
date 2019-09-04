@@ -1,11 +1,12 @@
 """Magnet cycle window."""
 
 import re as _re
+import time as _time
 from threading import Thread as _Thread, Lock as _Lock
 from datetime import datetime as _datetime
 from functools import partial as _part
 
-from qtpy.QtGui import QColor
+from qtpy.QtGui import QColor, QPalette
 from qtpy.QtCore import Signal, QThread, Qt
 from qtpy.QtWidgets import QWidget, QGridLayout, QVBoxLayout, \
     QPushButton, QLabel, QMessageBox, QLineEdit, QApplication, \
@@ -43,6 +44,11 @@ class CycleWindow(SiriusMainWindow):
         self._magnets_ready = list()
         self._magnets_failed = list()
         self._checked_accs = checked_accs
+        # Flags
+        self._is_preparing = ''
+        self._prepared = {'timing': False,
+                          'mag_params': False,
+                          'mag_opmode': False}
         # Setup UI
         self._setup_ui()
         self.setWindowTitle('Magnet Cycling')
@@ -87,25 +93,32 @@ class CycleWindow(SiriusMainWindow):
         lay_status.addWidget(self.maconn_led, 1, 1)
 
         # cycle
-        self.prepare_timing_bt = QPushButton('Prepare\nTiming', self)
+        self.prepare_timing_bt = QPushButton('1. Prepare\nTiming', self)
+        self.prepare_timing_bt.setToolTip('Prepare EVG, triggers and events')
         self.prepare_timing_bt.clicked.connect(
             _part(self._prepare, 'timing'))
         self.prepare_magnets_params_bt = QPushButton(
-            'Prepare Magnets\nParameters', self)
+            '2. Prepare Magnets\nParameters', self)
+        self.prepare_magnets_params_bt.setToolTip(
+            'Set magnets current to zero and \n'
+            'configure cycle parameters or waveform.')
         self.prepare_magnets_params_bt.clicked.connect(
             _part(self._prepare, 'magnets', 'params'))
         self.prepare_magnets_opmode_bt = QPushButton(
-            'Prepare Magnets\nOpMode', self)
+            '3. Prepare Magnets\nOpMode', self)
+        self.prepare_magnets_opmode_bt.setToolTip(
+            'Set magnets OpMode to Cycle or RmpWfm.')
         self.prepare_magnets_opmode_bt.clicked.connect(
             _part(self._prepare, 'magnets', 'opmode'))
-        self.cycle_bt = QPushButton('Cycle', self)
+        self.cycle_bt = QPushButton('4. Cycle', self)
+        self.cycle_bt.setToolTip('Check all configurations and trigger cycle.')
         self.cycle_bt.clicked.connect(self._cycle)
-        # self.cycle_bt.setEnabled(False)
+        self.cycle_bt.setEnabled(False)
         self.progress_list = QListWidget(self)
         self.progress_list.setObjectName('progresslist')
         self.progress_list.setStyleSheet("""
             #progresslist{min-width:28em; max-width:28em;}""")
-        self.progress_bar = QProgressBar(self)
+        self.progress_bar = MyProgressBar(self)
         cyclelay = QGridLayout()
         cyclelay.addWidget(self.prepare_timing_bt, 0, 0)
         cyclelay.addWidget(self.prepare_magnets_params_bt, 0, 1)
@@ -216,15 +229,25 @@ class CycleWindow(SiriusMainWindow):
                 self._allButtons_setEnabled(True)
                 return False
 
+            self._is_preparing = 'mag_' + ppty
             prepare_task = PrepareMagnets(magnets, self._timing, ppty, self)
         else:
+            self._is_preparing = 'timing'
             prepare_task = PrepareTiming(magnets, self._timing, self)
 
         prepare_task.updated.connect(self._update_progress)
+        duration = prepare_task.duration()
         self.progress_bar.setMinimum(0)
-        self.progress_bar.setMaximum(prepare_task.size())
+        self.progress_bar.setMaximum(duration)
         self.progress_bar.setValue(0)
+        pal = self.progress_bar.palette()
+        pal.setColor(QPalette.Highlight, self.progress_bar.default_color)
+        self.progress_bar.setPalette(pal)
+        self.update_bar = UpdateProgressBar(duration, self)
+        self.update_bar.increment.connect(self.progress_bar.increment)
+
         prepare_task.start()
+        self.update_bar.start()
 
     def _cycle(self):
         if not self._check_connected('timing'):
@@ -247,12 +270,22 @@ class CycleWindow(SiriusMainWindow):
             self._allButtons_setEnabled(True)
             return
 
+        self._is_preparing = ''
+        self.cycle_bt.setEnabled(False)
         cycle_task = Cycle(magnets, self._timing, self)
         cycle_task.updated.connect(self._update_progress)
+        duration = cycle_task.duration()
         self.progress_bar.setMinimum(0)
-        self.progress_bar.setMaximum(cycle_task.size())
+        self.progress_bar.setMaximum(duration)
         self.progress_bar.setValue(0)
+        pal = self.progress_bar.palette()
+        pal.setColor(QPalette.Highlight, self.progress_bar.default_color)
+        self.progress_bar.setPalette(pal)
+        self.update_bar = UpdateProgressBar(duration, self)
+        self.update_bar.increment.connect(self.progress_bar.increment)
+
         cycle_task.start()
+        self.update_bar.start()
 
     def _set_magnets_current_2_zero(self):
         if not self._check_connected('magnets'):
@@ -287,6 +320,8 @@ class CycleWindow(SiriusMainWindow):
         """Return list of magnets to cycle."""
         # Get magnets list
         magnets = self.magnets_tree.checked_items()
+        if not magnets:
+            QMessageBox.critical(self, 'Message', 'No magnet selected!')
 
         if without_linac:
             magnets = [ma for ma in magnets if 'LI' not in ma]
@@ -360,12 +395,10 @@ class CycleWindow(SiriusMainWindow):
 
     def _update_progress(self, text, done, warning=False, error=False):
         """Update automated cycle progress list and bar."""
-        bar_currvalue = self.progress_bar.value()
         if done:
             last_item = self.progress_list.item(self.progress_list.count()-1)
             curr_text = last_item.text()
             last_item.setText(curr_text+' done.')
-            bar_newvalue = bar_currvalue
         elif 'Remaining time' in text:
             last_item = self.progress_list.item(self.progress_list.count()-1)
             if 'Remaining time' in last_item.text():
@@ -373,25 +406,36 @@ class CycleWindow(SiriusMainWindow):
             else:
                 self.progress_list.addItem(text)
                 self.progress_list.scrollToBottom()
-            bar_newvalue = bar_currvalue+1
         else:
             item = QListWidgetItem(text)
             if error:
                 item.setForeground(errorcolor)
+                self.update_bar.exit_task()
+                pal = self.progress_bar.palette()
+                pal.setColor(QPalette.Highlight,
+                             self.progress_bar.warning_color)
+                self.progress_bar.setPalette(pal)
+                if self._is_preparing:
+                    self._prepared[self._is_preparing] = False
+                else:
+                    self._prepared = {k: False for k in self._prepared.keys()}
                 self._allButtons_setEnabled(True)
-                bar_newvalue = bar_currvalue
             elif warning:
                 item.setForeground(warncolor)
-                bar_newvalue = bar_currvalue
             elif 'finished' in text:
-                self._allButtons_setEnabled(True)
-                bar_newvalue = self.progress_bar.maximum()
-            else:
-                bar_newvalue = bar_currvalue+1
+                self.update_bar.exit_task()
+                self.progress_bar.setValue(self.progress_bar.maximum())
+                if self._is_preparing:
+                    self._prepared[self._is_preparing] = True
+                    cycle = all(self._prepared.values())
+                else:
+                    self._prepared = {k: False for k in self._prepared.keys()}
+                    self.cycle_bt.setEnabled(False)
+                    cycle = False
+                self._allButtons_setEnabled(True, cycle)
+
             self.progress_list.addItem(item)
             self.progress_list.scrollToBottom()
-
-        self.progress_bar.setValue(bar_newvalue)
 
     def _update_led_channels(self):
         sections = self._get_sections()
@@ -405,15 +449,57 @@ class CycleWindow(SiriusMainWindow):
             ma_ch.append(VACA_PREFIX + name + ppty)
         self.maconn_led.set_channels(ma_ch)
 
-    def _allButtons_setEnabled(self, enable):
+    def _allButtons_setEnabled(self, enable, cycle=False):
         self.prepare_timing_bt.setEnabled(enable)
         self.prepare_magnets_params_bt.setEnabled(enable)
         self.prepare_magnets_opmode_bt.setEnabled(enable)
-        self.cycle_bt.setEnabled(enable)
         self.restore_ti_bt.setEnabled(enable)
         self.set_ma_2_slowref_bt.setEnabled(enable)
         self.zero_ma_curr_bt.setEnabled(enable)
+        if cycle:
+            self.cycle_bt.setEnabled(enable)
 
+
+# Auxiliar progress monitoring classes
+
+class MyProgressBar(QProgressBar):
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        pal = self.palette()
+        self.default_color = pal.color(QPalette.Highlight)
+        self.warning_color = Qt.red
+
+    def increment(self):
+        current_val = self.value()
+        max_val = self.maximum()
+        if max_val > current_val:
+            self.setValue(current_val+1)
+
+
+class UpdateProgressBar(QThread):
+
+    increment = Signal()
+
+    def __init__(self, duration, parent=None):
+        super().__init__(parent)
+        self._duration = duration
+        self._quit_task = False
+
+    def exit_task(self):
+        """Set flag to quit thread."""
+        self._quit_task = True
+
+    def run(self):
+        t0 = _time.time()
+        while _time.time() - t0 < self._duration:
+            if self._quit_task:
+                break
+            _time.sleep(1)
+            self.increment.emit()
+
+
+# Tasks
 
 class CreateCyclers(QThread):
 
@@ -515,8 +601,14 @@ class VerifyMagnet(QThread):
         global _cyclers
         cycler = _cyclers[maname]
         status = cycler.connected
+        if not status:
+            print(maname, 'connection')
         status &= cycler.check_on()
+        if not status:
+            print(maname, 'off')
         status &= cycler.check_intlks()
+        if not status:
+            print(maname, 'intlk')
         self.currentItem.emit(maname)
         self.itemDone.emit(maname, status)
 
@@ -635,6 +727,10 @@ class PrepareMagnets(QThread):
     def size(self):
         return self._controller.prepare_magnets_size
 
+    def duration(self):
+        """Return task maximum duration."""
+        return self._controller.prepare_magnets_max_duration
+
     def exit_thread(self):
         self._quit_thread = True
 
@@ -668,6 +764,10 @@ class PrepareTiming(QThread):
     def size(self):
         return self._controller.prepare_timing_size
 
+    def duration(self):
+        """Return task maximum duration."""
+        return self._controller.prepare_timing_max_duration
+
     def exit_thread(self):
         self._quit_thread = True
 
@@ -697,6 +797,10 @@ class Cycle(QThread):
 
     def size(self):
         return self._controller.cycle_size
+
+    def duration(self):
+        """Return task maximum duration."""
+        return self._controller.cycle_max_duration
 
     def exit_thread(self):
         self._quit_thread = True
