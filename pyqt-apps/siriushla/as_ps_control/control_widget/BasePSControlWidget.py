@@ -301,7 +301,7 @@ class BasePSControlWidget(QWidget):
             w_lay.addWidget(widget, alignment=Qt.AlignLeft)
         w_lay.addStretch()
 
-        min_width = '38' if self._dev_type == 'PS' else '54'
+        min_width = '39.5' if self._dev_type == 'PS' else '55.5'
         scr_area = QScrollArea(self)
         scr_area.setObjectName('scr_area')
         scr_area.setStyleSheet('#scr_area{min-width: '+min_width+'em;}')
