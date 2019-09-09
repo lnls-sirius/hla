@@ -165,13 +165,11 @@ class SOFBControl(BaseWidget):
             min-height: 45px; min-width: 45px;\
             max-height: 45px; max-width: 45px;\
             icon-size: 40px;}')
-
-        if self.isring:
-            rules = (
-                '[{"name": "EnblRule", "property": "Enable", ' +
-                '"expression": "not ch[0]", "channels": [{"channel": "' +
-                self.prefix+'ClosedLoop-Sts'+'", "trigger": true}]}]')
-            calc.rules = rules
+        rules = (
+            '[{"name": "EnblRule", "property": "Enable", ' +
+            '"expression": "not ch[0]", "channels": [{"channel": "' +
+            self.prefix+'ClosedLoop-Sts'+'", "trigger": true}]}]')
+        calc.rules = rules
 
         exp = 'ch[0] in (1, 2, 3)'
         ch = ''
@@ -218,30 +216,29 @@ class SOFBControl(BaseWidget):
         # ####################################################################
         # ####################### Auto Correction ############################
         # ####################################################################
-        if self.isring:
-            grpbx = QGroupBox('Auto Correction', self)
-            grpbx.setObjectName('grp')
-            grpbx.setStyleSheet('#grp{min-height: 5em; max-height: 5em;}')
-            vbl2 = QVBoxLayout(grpbx)
-            vbl.addWidget(grpbx)
+        grpbx = QGroupBox('Auto Correction', parent)
+        grpbx.setObjectName('grp')
+        grpbx.setStyleSheet('#grp{min-height: 5em; max-height: 5em;}')
+        vbl2 = QVBoxLayout(grpbx)
+        vbl.addWidget(grpbx)
 
-            # rules = (
-            #     '[{"name": "EnblRule", "property": "Enable", ' +
-            #     '"expression": "ch[0] in (1, )", "channels": [{"channel": "' +
-            #     self.prefix+'SOFBMode-Sts'+'", "trigger": true}]}]')
-            lbl = QLabel('State', grpbx)
-            wid = self.create_pair_sel(grpbx, 'ClosedLoop')
-            hbl = QHBoxLayout()
-            hbl.addWidget(lbl)
-            hbl.addWidget(wid)
-            vbl2.addItem(hbl)
+        # rules = (
+        #     '[{"name": "EnblRule", "property": "Enable", ' +
+        #     '"expression": "ch[0] in (1, )", "channels": [{"channel": "' +
+        #     self.prefix+'SOFBMode-Sts'+'", "trigger": true}]}]')
+        lbl = QLabel('State', grpbx)
+        wid = self.create_pair_sel(grpbx, 'ClosedLoop')
+        hbl = QHBoxLayout()
+        hbl.addWidget(lbl)
+        hbl.addWidget(wid)
+        vbl2.addItem(hbl)
 
-            lbl = QLabel('Freq. [Hz]', grpbx)
-            wid = self.create_pair(grpbx, 'ClosedLoopFreq')
-            fbl = QFormLayout()
-            fbl.setHorizontalSpacing(9)
-            fbl.addRow(lbl, wid)
-            vbl2.addItem(fbl)
+        lbl = QLabel('Freq. [Hz]', grpbx)
+        wid = self.create_pair(grpbx, 'ClosedLoopFreq')
+        fbl = QFormLayout()
+        fbl.setHorizontalSpacing(9)
+        fbl.addRow(lbl, wid)
+        vbl2.addItem(fbl)
 
         # ####################################################################
         # ###################### Response Matrix #####################
