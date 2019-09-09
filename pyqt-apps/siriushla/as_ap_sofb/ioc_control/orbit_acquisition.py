@@ -1,8 +1,7 @@
 """Define Controllers for the orbits displayed in the graphic."""
 
 from qtpy.QtWidgets import QLabel, QGroupBox, QSpacerItem, QFormLayout, \
-                QGridLayout, QVBoxLayout, QHBoxLayout, QPushButton, QWidget, \
-                QTabWidget
+    QGridLayout, QVBoxLayout, QHBoxLayout, QPushButton, QWidget, QTabWidget
 from qtpy.QtCore import Qt
 import qtawesome as qta
 from pydm.widgets import PyDMLabel, PyDMPushButton
@@ -20,56 +19,56 @@ class AcqControlWidget(BaseWidget):
     def __init__(self, parent, prefix, acc='SI'):
         super().__init__(parent, prefix, acc)
         self.setupui()
+        name = acc + 'App'
+        self.setObjectName(name)
+        self.setStyleSheet("#"+name+"{min-width:20em; min-height:58em;}")
 
     def setupui(self):
-        gdl = QGridLayout(self)
-
-        lbl = QLabel(
-            '<h2>General Configs<h2>', self, alignment=Qt.AlignCenter)
-        lbl.setStyleSheet('max-height: 2em;')
-        gdl.addWidget(lbl, 0, 0)
+        vbl = QVBoxLayout(self)
+        vbl.setSpacing(10)
 
         grp_bx = self._get_sofbmode_grpbx()
-        gdl.addWidget(grp_bx, 1, 0)
+        vbl.addWidget(grp_bx)
+        vbl.addStretch()
 
         tabw = QTabWidget(self)
-        gdl.addWidget(tabw, 2, 0)
         grp_bx = self._get_orbit_smoothing_grpbx()
         tabw.addTab(grp_bx, 'Smoothing')
         grp_bx = self._get_acqrates_grpbx()
         tabw.addTab(grp_bx, 'Acq. Rates')
-
-        lbl = QLabel(
-            '<h2>Triggered Acq Configs<h2>', self, alignment=Qt.AlignCenter)
-        lbl.setStyleSheet('max-height: 2em;')
-        gdl.addWidget(lbl, 3, 0)
+        vbl.addWidget(tabw)
+        vbl.addStretch()
 
         grp_bx = self._get_acq_commom_params_grpbx()
-        gdl.addWidget(grp_bx, 4, 0)
+        vbl.addWidget(grp_bx)
+        vbl.addStretch()
 
         tabw = QTabWidget(self)
-        gdl.addWidget(tabw, 5, 0)
         grp_bx = self._get_single_pass_acq_grpbx()
         tabw.addTab(grp_bx, 'SinglePass')
         if self.isring:
             grp_bx = self._get_multturn_acq_grpbx()
             tabw.addTab(grp_bx, 'MultiTurn')
+            tabw.setCurrentIndex(1)
+        vbl.addWidget(tabw)
+        vbl.addStretch()
 
         tabw = QTabWidget(self)
-        gdl.addWidget(tabw, 6, 0)
         grp_bx = self._get_trigext_params_grpbx()
         tabw.addTab(grp_bx, 'External Trigger')
         grp_bx = self._get_trigdata_params_grpbx()
         tabw.addTab(grp_bx, 'Data-Driven Trigger')
+        vbl.addWidget(tabw)
 
     def _get_sofbmode_grpbx(self):
         grp_bx = QGroupBox('SOFB Mode', self)
         fbl = QFormLayout(grp_bx)
         wid = self.create_pair_sel(grp_bx, 'SOFBMode')
         fbl.addRow(wid)
-        lbl = QLabel('Extend Ring', grp_bx, alignment=Qt.AlignCenter)
-        wid = self.create_pair(grp_bx, 'RingSize')
-        fbl.addRow(lbl, wid)
+        if self.isring:
+            lbl = QLabel('Extend Ring', grp_bx, alignment=Qt.AlignCenter)
+            wid = self.create_pair(grp_bx, 'RingSize')
+            fbl.addRow(lbl, wid)
         return grp_bx
 
     def _get_acqrates_grpbx(self):
