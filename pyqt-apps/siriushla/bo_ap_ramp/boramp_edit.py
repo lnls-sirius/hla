@@ -139,7 +139,11 @@ class DipoleRamp(QWidget):
         lay_v.addStretch()
 
         self.label_exclim = QLabel('', self)
+        self.label_exclim.setStyleSheet("""
+            min-height:1.55em; max-height:1.55em;""")
         self.pb_exclim = QPushButton('?', self)
+        self.pb_exclim.setStyleSheet("""
+            background-color:red; min-width:1.55em; max-width:1.55em;""")
         self.pb_exclim.setVisible(False)
         self.pb_exclim.clicked.connect(self._showExcLimPopup)
         lay_exclim = QHBoxLayout()
