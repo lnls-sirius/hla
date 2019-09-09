@@ -181,6 +181,7 @@ class MultiTurnSumWidget(QWidget):
 
     def setupui(self):
         vbl = QVBoxLayout(self)
+
         self.spect = Spectrogram(
             parent=self,
             prefix=self.prefix,
@@ -196,7 +197,6 @@ class MultiTurnSumWidget(QWidget):
         lab.setStyleSheet("font-weight: bold;")
         vbl.addWidget(lab)
         vbl.addWidget(self.spect)
-        vbl.addSpacing(50)
 
         lab = QLabel('Sum Accross BPMs', self, alignment=Qt.AlignCenter)
         lab.setStyleSheet("font-weight: bold;")
@@ -217,6 +217,26 @@ class MultiTurnSumWidget(QWidget):
             symbolSize=10)
         graph.addChannel(**opts)
         self.curve = graph.curveAtIndex(0)
+        vbl.addSpacing(50)
+
+        lab = QLabel('Sum at selected Index', self, alignment=Qt.AlignCenter)
+        lab.setStyleSheet("font-weight: bold;")
+        vbl.addWidget(lab)
+        graph = Graph(self)
+        vbl.addWidget(graph)
+        graph.setLabel('bottom', text='BPM Position', units='m')
+        graph.setLabel('left', text='Sum', units='count')
+        opts = dict(
+            y_channel=self.prefix+'MTurnIdxSum-Mon',
+            x_channel=self.prefix+'BPMPosS-Mon',
+            name='',
+            color='black',
+            redraw_mode=2,
+            lineStyle=1,
+            lineWidth=3,
+            symbol='o',
+            symbolSize=10)
+        graph.addChannel(**opts)
 
     def update_graph(self, data):
         self.curve.receiveYWaveform(data.mean(axis=1))
@@ -229,7 +249,7 @@ class Spectrogram(SiriusSpectrogramView):
         self._reforb = None
         super().__init__(**kwargs)
         self.setObjectName('graph')
-        self.setStyleSheet('#graph {min-height: 15em; min-width: 20em;}')
+        self.setStyleSheet('#graph {min-height: 15em; min-width: 25em;}')
         self.prefix = prefix
         self.multiturnidx = SiriusConnectionSignal(
                                 self.prefix + 'MTurnIdx-SP')

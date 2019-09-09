@@ -1,4 +1,5 @@
 """Control the Orbit Graphic Display."""
+from functools import partial as _part
 
 import numpy as _np
 from pyqtgraph import functions, mkPen
@@ -170,30 +171,11 @@ class SingularValues(QWidget):
         line = InfLine(pos=0, pen=pen, angle=90)
         graph.addItem(line)
         chan = SiriusConnectionSignal(self.prefix+'NrSingValues-RB')
-        chan.new_value_signal[int].connect(line.setValue)
+        chan.new_value_signal[int].connect(_part(self.setValue, line))
 
         graph.setObjectName('graph_singvalues')
-        graph.setStyleSheet("""
-            #graph_singvalues{
-                min-width:30em;
-                min-height:22m;
-            }""")
+        graph.setStyleSheet(
+            "#graph_singvalues{min-width:30em; min-height:22m;}")
 
-
-def _main(prefix):
-    app = SiriusApplication()
-    win = SiriusDialog()
-    hbl = QHBoxLayout(win)
-    prefix = prefix + 'SI-Glob:AP-SOFB:'
-    wid = OrbitWidget(win, prefix)
-    hbl.addWidget(wid)
-    win.show()
-    sys.exit(app.exec_())
-
-
-if __name__ == '__main__':
-    from siriushla.sirius_application import SiriusApplication
-    from siriushla.widgets import SiriusDialog
-    from siriuspy.envars import vaca_prefix
-    import sys
-    _main(vaca_prefix)
+    def setValue(self, line, value):
+        line.setValue(value-0.8)
