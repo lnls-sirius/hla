@@ -10,7 +10,8 @@ from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.csdevice.orbitcorr import SOFBFactory
 import siriushla.util as _util
 from siriushla.widgets.windows import create_window_from_widget
-from siriushla.widgets import SiriusSpectrogramView, SiriusConnectionSignal
+from siriushla.widgets import SiriusSpectrogramView, SiriusConnectionSignal, \
+    SiriusLabel
 
 from siriushla.as_ap_sofb.graphics.base import BaseWidget, Graph
 from siriushla.as_ap_sofb.graphics.correctors import CorrectorsWidget
@@ -193,12 +194,12 @@ class MultiTurnSumWidget(QWidget):
         self.spect.yaxis.setLabel('time', units='s')
         self.spect.xaxis.setLabel('BPM Position', units='m')
         self.spect.colorbar.label_format = '{:<8.1f}'
-        lab = QLabel('Sum Orbit', self, alignment=Qt.AlignCenter)
+        lab = QLabel('MTurnSum Orbit', self, alignment=Qt.AlignCenter)
         lab.setStyleSheet("font-weight: bold;")
         vbl.addWidget(lab)
         vbl.addWidget(self.spect)
 
-        lab = QLabel('Sum Accross BPMs', self, alignment=Qt.AlignCenter)
+        lab = QLabel('MTurnSum Turn-by-Turn', self, alignment=Qt.AlignCenter)
         lab.setStyleSheet("font-weight: bold;")
         vbl.addWidget(lab)
         graph = Graph(self)
@@ -219,9 +220,21 @@ class MultiTurnSumWidget(QWidget):
         self.curve = graph.curveAtIndex(0)
         vbl.addSpacing(50)
 
-        lab = QLabel('Sum at selected Index', self, alignment=Qt.AlignCenter)
+        wid = QWidget(self)
+        lab = QLabel(
+            'MTurnSum orbit at index:', wid,
+            alignment=Qt.AlignRight | Qt.AlignVCenter)
         lab.setStyleSheet("font-weight: bold;")
-        vbl.addWidget(lab)
+        pdmlab = SiriusLabel(
+            wid, init_channel=self.prefix+'MTurnIdx-RB')
+        pdmlab.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        pdmlab.setStyleSheet('min-width:4em;')
+        wid.setLayout(QHBoxLayout())
+        wid.layout().addStretch()
+        wid.layout().addWidget(lab)
+        wid.layout().addWidget(pdmlab)
+        wid.layout().addStretch()
+        vbl.addWidget(wid)
         graph = Graph(self)
         vbl.addWidget(graph)
         graph.setLabel('bottom', text='BPM Position', units='m')
