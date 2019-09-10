@@ -133,7 +133,7 @@ class PSDiag(SiriusMainWindow):
                             intlk_ch2vals[pname+':IntlkHard-Mon'] = 0
                             opm_ch2vals[pname+':OpMode-Sts'] = _slowref
                             diff_ch2vlas[pname+':DiagStatus-Mon'] = \
-                                {'value': 0, 'bit': 2}
+                                {'value': 0, 'bit': 5}
                         elif name.dis == 'PU':
                             psconn_chs.append(pname+':PwrState-Sts')
                             intlkcount = 7 if 'Sept' in name.dev else 8

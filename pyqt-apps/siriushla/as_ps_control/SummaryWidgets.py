@@ -173,6 +173,7 @@ class SummaryWidget(QWidget):
         lay = QHBoxLayout()
         lay.setContentsMargins(0, 0, 0, 0)
         lay.setSpacing(10)
+        self._widgets_dict = dict()
 
         if self._name.dev != 'DCLink':
             self.detail_bt = QPushButton(self._name, self)
@@ -181,6 +182,7 @@ class SummaryWidget(QWidget):
             self.detail_bt.setToolTip(self._name)
         self.detail_wid = self._build_widget(
             [self.detail_bt, ], orientation='v', name='detail')
+        self._widgets_dict['detail'] = self.detail_wid
         lay.addWidget(self.detail_wid)
 
         if self._name.dis == 'MA':
@@ -188,6 +190,7 @@ class SummaryWidget(QWidget):
             self.psconn_led.setOffColor(SiriusLedAlert.Red)
             self.psconn_wid = self._build_widget(
                 [self.psconn_led, ], name='psconn')
+            self._widgets_dict['psconn'] = self.psconn_wid
             lay.addWidget(self.psconn_wid)
 
         opmode_list = list()
@@ -198,17 +201,20 @@ class SummaryWidget(QWidget):
         opmode_list.append(self.opmode_lb)
         self.opmode_wid = self._build_widget(
             opmode_list, orientation='v', name='opmode')
+        self._widgets_dict['opmode'] = self.opmode_wid
         lay.addWidget(self.opmode_wid)
 
         self.ctrlmode_lb = PyDMLabel(self, self._ctrlmode_sts)
         self.ctrlmode_wid = self._build_widget(
             [self.ctrlmode_lb, ], orientation='v', name='ctrlmode')
+        self._widgets_dict['ctrlmode'] = self.ctrlmode_wid
         lay.addWidget(self.ctrlmode_wid)
 
         self.state_bt = PyDMStateButton(self, self._pwrstate_sel)
         self.state_led = SiriusLedState(self, self._pwrstate_sts)
         self.state_wid = self._build_widget(
             [self.state_bt, self.state_led], name='state')
+        self._widgets_dict['state'] = self.state_wid
         lay.addWidget(self.state_wid)
 
         if self._name.dis == 'PM':
@@ -216,6 +222,7 @@ class SummaryWidget(QWidget):
             self.pulse_led = SiriusLedState(self, self._pulse_sts)
             self.pulse_wid = self._build_widget(
                 [self.pulse_bt, self.pulse_led], name='pulse')
+            self._widgets_dict['pulse'] = self.pulse_wid
             lay.addWidget(self.pulse_wid)
 
         if self._has_softhard_intlk:
@@ -223,20 +230,23 @@ class SummaryWidget(QWidget):
             self.hard_intlk_led = SiriusLedAlert(self, self._hard_intlk)
             self.intlk_wid = self._build_widget(
                 [self.soft_intlk_led, self.hard_intlk_led], name='intlk')
+            self._widgets_dict['intlk'] = self.intlk_wid
         else:
             self.intlk_led = PyDMLedMultiChannel(
                 self, channels2values={ch: 1 for ch in self._intlk})
             self.intlk_wid = self._build_widget(
                 [self.intlk_led, ], name='intlk')
+            self._widgets_dict['intlk'] = self.intlk_wid
         lay.addWidget(self.intlk_wid)
 
-        self.reset = PyDMPushButton(
+        self.reset_bt = PyDMPushButton(
             parent=self, init_channel=self._reset_intlk, pressValue=1)
-        self.reset.setIcon(qta.icon('fa5s.sync'))
-        self.reset.setObjectName('reset_bt')
-        self.reset.setStyleSheet(
+        self.reset_bt.setIcon(qta.icon('fa5s.sync'))
+        self.reset_bt.setObjectName('reset_bt')
+        self.reset_bt.setStyleSheet(
             '#reset_bt{min-width:25px; max-width:25px; icon-size:20px;}')
-        self.reset_wid = self._build_widget([self.reset, ], name='reset')
+        self.reset_wid = self._build_widget([self.reset_bt, ], name='reset')
+        self._widgets_dict['reset'] = self.reset_wid
         lay.addWidget(self.reset_wid)
 
         self.ctrlloop_bt = PyDMStateButton(
@@ -244,22 +254,26 @@ class SummaryWidget(QWidget):
         self.ctrlloop_lb = PyDMLabel(self, self._ctrlloop_sts)
         self.ctrlloop_wid = self._build_widget(
             [self.ctrlloop_bt, self.ctrlloop_lb], name='ctrlloop')
+        self._widgets_dict['ctrlloop'] = self.ctrlloop_wid
         lay.addWidget(self.ctrlloop_wid)
 
         self.setpoint = PyDMLinEditScrollbar(self._analog_sp, self)
         self.setpoint.sp_scrollbar.setTracking(False)
         self.setpoint_wid = self._build_widget(
             [self.setpoint, ], orientation='v', name='setpoint')
+        self._widgets_dict['setpoint'] = self.setpoint_wid
         lay.addWidget(self.setpoint_wid)
 
         self.readback = PyDMLabel(self, self._analog_rb)
         self.readback_wid = self._build_widget(
             [self.readback, ], orientation='v', name='readback')
+        self._widgets_dict['readback'] = self.readback_wid
         lay.addWidget(self.readback_wid)
 
         self.monitor = PyDMLabel(self, self._analog_mon)
         self.monitor_wid = self._build_widget(
             [self.monitor, ], orientation='v', name='monitor')
+        self._widgets_dict['monitor'] = self.monitor_wid
         lay.addWidget(self.monitor_wid)
 
         if self._is_magnet:
@@ -268,6 +282,7 @@ class SummaryWidget(QWidget):
             self.strength_sp_le.sp_scrollbar.setTracking(False)
             self.strength_sp_wid = self._build_widget(
                 [self.strength_sp_le, ], orientation='v', name='strength_sp')
+            self._widgets_dict['strength_sp'] = self.strength_sp_wid
             lay.addWidget(self.strength_sp_wid)
 
             self.strength_rb_lb = PyDMLabel(
@@ -275,6 +290,7 @@ class SummaryWidget(QWidget):
             self.strength_rb_lb.showUnits = True
             self.strength_rb_wid = self._build_widget(
                 [self.strength_rb_lb, ], orientation='v', name='strength_rb')
+            self._widgets_dict['strength_rb'] = self.strength_rb_wid
             lay.addWidget(self.strength_rb_wid)
 
             self.strength_mon_lb = PyDMLabel(
@@ -282,6 +298,7 @@ class SummaryWidget(QWidget):
             self.strength_mon_lb.showUnits = True
             self.strength_mon_wid = self._build_widget(
                 [self.strength_mon_lb, ], orientation='v', name='strength_mon')
+            self._widgets_dict['strength_mon'] = self.strength_mon_wid
             lay.addWidget(self.strength_mon_wid)
 
         # Add trim button
@@ -289,16 +306,12 @@ class SummaryWidget(QWidget):
             self.trim_bt = QPushButton(qta.icon('fa5s.angle-right'), '', self)
             self.trim_wid = self._build_widget(
                 [self.trim_bt, ], orientation='v', name='trim')
+            self._widgets_dict['trim'] = self.trim_wid
             lay.addWidget(self.trim_wid)
 
         _widths = get_prop2width(self._name)
-        self._widgets_dict = dict()
-        for widget in self.findChildren(QWidget):
-            name = widget.objectName()
-            if name not in _widths.keys():
-                continue
+        for name, widget in self._widgets_dict.items():
             width = _widths[name]
-            self._widgets_dict[name] = widget
             widget.setStyleSheet(
                 '#'+name+'{min-width:'+str(width)+'em;'
                 'max-width:'+str(width)+'em;}')
@@ -399,7 +412,7 @@ class SummaryWidget(QWidget):
 
     def reset(self):
         """Reset power supply."""
-        self.reset.sendValue()
+        self.reset_bt.sendValue()
 
 
 class SummaryHeader(QWidget):

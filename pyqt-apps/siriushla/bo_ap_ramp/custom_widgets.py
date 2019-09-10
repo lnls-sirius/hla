@@ -26,7 +26,7 @@ class SpinBoxDelegate(QStyledItemDelegate):
         """Create editor."""
         editor = QDoubleSpinBox(parent)
         editor.setMinimum(0)
-        editor.setMaximum(500)
+        editor.setMaximum(1100)
         editor.setDecimals(4)
         locale = QLocale(QLocale.English, country=QLocale.UnitedStates)
         locale.setNumberOptions(locale.RejectGroupSeparator)
