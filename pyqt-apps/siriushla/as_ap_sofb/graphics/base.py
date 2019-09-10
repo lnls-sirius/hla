@@ -159,7 +159,7 @@ class BaseWidget(QWidget):
             cdta.scatter.setZValue(-4*i)
             for j, cur in enumerate((cpstd, cmstd, cave), 1):
                 cur.setZValue(-4*i - j)
-                cur.setVisible(not i)
+                cur.setVisible(False)
             graph.plotItem.legend.removeItem('')
         graph.setStyleSheet("""
             #{0}{{
@@ -203,7 +203,7 @@ class BaseWidget(QWidget):
             hbl = QHBoxLayout(wid)
             cbx = QCheckBox('{0:s}:'.format(pln.upper()), wid)
             cbx.setObjectName(pln + 'checkbox')
-            cbx.setChecked(True)
+            cbx.setChecked(False)
             hbl.addWidget(cbx)
 
             lab_avg = Label(unit, '-100.000 mrad', wid)
@@ -522,7 +522,7 @@ class Graph(PyDMWaveformPlot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.setObjectName('graph')
-        self.setStyleSheet('#graph {min-height: 15em; min-width: 20em;}')
+        self.setStyleSheet('#graph {min-height: 15em; min-width: 25em;}')
         self.maxRedrawRate = 2
         self.mouseEnabledX = True
         self.setShowXGrid(True)

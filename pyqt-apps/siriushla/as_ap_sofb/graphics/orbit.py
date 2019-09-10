@@ -10,7 +10,8 @@ from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.csdevice.orbitcorr import SOFBFactory
 import siriushla.util as _util
 from siriushla.widgets.windows import create_window_from_widget
-from siriushla.widgets import SiriusSpectrogramView, SiriusConnectionSignal
+from siriushla.widgets import SiriusSpectrogramView, SiriusConnectionSignal, \
+    SiriusLabel
 
 from siriushla.as_ap_sofb.graphics.base import BaseWidget, Graph
 from siriushla.as_ap_sofb.graphics.correctors import CorrectorsWidget
@@ -181,6 +182,7 @@ class MultiTurnSumWidget(QWidget):
 
     def setupui(self):
         vbl = QVBoxLayout(self)
+
         self.spect = Spectrogram(
             parent=self,
             prefix=self.prefix,
@@ -192,13 +194,12 @@ class MultiTurnSumWidget(QWidget):
         self.spect.yaxis.setLabel('time', units='s')
         self.spect.xaxis.setLabel('BPM Position', units='m')
         self.spect.colorbar.label_format = '{:<8.1f}'
-        lab = QLabel('Sum Orbit', self, alignment=Qt.AlignCenter)
+        lab = QLabel('MTurnSum Orbit', self, alignment=Qt.AlignCenter)
         lab.setStyleSheet("font-weight: bold;")
         vbl.addWidget(lab)
         vbl.addWidget(self.spect)
-        vbl.addSpacing(50)
 
-        lab = QLabel('Sum Accross BPMs', self, alignment=Qt.AlignCenter)
+        lab = QLabel('MTurnSum Turn-by-Turn', self, alignment=Qt.AlignCenter)
         lab.setStyleSheet("font-weight: bold;")
         vbl.addWidget(lab)
         graph = Graph(self)
@@ -217,6 +218,38 @@ class MultiTurnSumWidget(QWidget):
             symbolSize=10)
         graph.addChannel(**opts)
         self.curve = graph.curveAtIndex(0)
+        vbl.addSpacing(50)
+
+        wid = QWidget(self)
+        lab = QLabel(
+            'MTurnSum orbit at index:', wid,
+            alignment=Qt.AlignRight | Qt.AlignVCenter)
+        lab.setStyleSheet("font-weight: bold;")
+        pdmlab = SiriusLabel(
+            wid, init_channel=self.prefix+'MTurnIdx-RB')
+        pdmlab.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        pdmlab.setStyleSheet('min-width:4em;')
+        wid.setLayout(QHBoxLayout())
+        wid.layout().addStretch()
+        wid.layout().addWidget(lab)
+        wid.layout().addWidget(pdmlab)
+        wid.layout().addStretch()
+        vbl.addWidget(wid)
+        graph = Graph(self)
+        vbl.addWidget(graph)
+        graph.setLabel('bottom', text='BPM Position', units='m')
+        graph.setLabel('left', text='Sum', units='count')
+        opts = dict(
+            y_channel=self.prefix+'MTurnIdxSum-Mon',
+            x_channel=self.prefix+'BPMPosS-Mon',
+            name='',
+            color='black',
+            redraw_mode=2,
+            lineStyle=1,
+            lineWidth=3,
+            symbol='o',
+            symbolSize=10)
+        graph.addChannel(**opts)
 
     def update_graph(self, data):
         self.curve.receiveYWaveform(data.mean(axis=1))
@@ -229,7 +262,7 @@ class Spectrogram(SiriusSpectrogramView):
         self._reforb = None
         super().__init__(**kwargs)
         self.setObjectName('graph')
-        self.setStyleSheet('#graph {min-height: 15em; min-width: 20em;}')
+        self.setStyleSheet('#graph {min-height: 15em; min-width: 25em;}')
         self.prefix = prefix
         self.multiturnidx = SiriusConnectionSignal(
                                 self.prefix + 'MTurnIdx-SP')

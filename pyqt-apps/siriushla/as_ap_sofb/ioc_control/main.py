@@ -2,7 +2,7 @@
 
 import numpy as _np
 from qtpy.QtWidgets import QLabel, QGroupBox, QPushButton, QFormLayout, \
-    QVBoxLayout, QHBoxLayout, QGridLayout
+    QVBoxLayout, QHBoxLayout, QGridLayout, QWidget, QTabWidget
 from qtpy.QtCore import Qt, QSize
 import qtawesome as qta
 
@@ -25,37 +25,44 @@ class SOFBControl(BaseWidget):
         super().__init__(parent, prefix, acc=acc)
         self.ctrls = ctrls
         self.setupui()
-        self.setObjectName('SOFBControl')
-        self.setStyleSheet("""
-            #SOFBControl{
-                min-width:18em;
-                min-height:48em;
-            }""")
 
     def setupui(self):
         vbl = QVBoxLayout(self)
-        vbl.setContentsMargins(0, -1, -1, 0)
+        vbl.setContentsMargins(0, 0, 0, 0)
+        tabw = QTabWidget(self)
+        vbl.addWidget(tabw)
+
+        mainwid = QWidget(tabw)
+        mainwid.setLayout(self.get_mainvbl(mainwid))
+        tabw.addTab(mainwid, 'Main')
+
+        wid = AcqControlWidget(tabw, prefix=self.prefix, acc=self.acc)
+        tabw.addTab(wid, 'Orbit')
+
+    def get_mainvbl(self, parent):
+        vbl = QVBoxLayout()
+        vbl.setContentsMargins(0, 0, 0, 0)
         vbl.setSpacing(10)
 
         # ####################################################################
         # ########################## Orbit PVs ###############################
         # ####################################################################
-        grpbx = QGroupBox('Orbit', self)
+        grpbx = QGroupBox('Orbit', parent)
         grpbx.setObjectName('grp')
         grpbx.setStyleSheet('#grp{min-height: 10em; max-height: 10em;}')
         fbl = QGridLayout(grpbx)
         vbl.addWidget(grpbx)
 
-        Window = create_window_from_widget(
-            AcqControlWidget, title='Orbit Acquisition')
-        dtail = QPushButton('', grpbx)
-        dtail.setToolTip('Open Detailed Configs Window')
-        dtail.setIcon(qta.icon('fa5s.ellipsis-h'))
-        dtail.setObjectName('dtail')
-        dtail.setStyleSheet(
-            '#dtail{min-width:25px; max-width:25px; icon-size:20px;}')
-        _util.connect_window(
-            dtail, Window, grpbx, prefix=self.prefix, acc=self.acc)
+        # Window = create_window_from_widget(
+        #     AcqControlWidget, title='Orbit Acquisition')
+        # dtail = QPushButton('', grpbx)
+        # dtail.setToolTip('Open Detailed Configs Window')
+        # dtail.setIcon(qta.icon('fa5s.ellipsis-h'))
+        # dtail.setObjectName('dtail')
+        # dtail.setStyleSheet(
+        #     '#dtail{min-width:25px; max-width:25px; icon-size:20px;}')
+        # _util.connect_window(
+        #     dtail, Window, self, prefix=self.prefix, acc=self.acc)
 
         conf = PyDMPushButton(
             grpbx, init_channel=self.prefix+'TrigAcqConfig-Cmd', pressValue=1)
@@ -85,7 +92,7 @@ class SOFBControl(BaseWidget):
         lbl = QLabel('Status:', grpbx)
         hbl = QHBoxLayout()
         hbl.setSpacing(9)
-        hbl.addWidget(dtail)
+        # hbl.addWidget(dtail)
         hbl.addStretch()
         hbl.addWidget(lbl)
         hbl.addWidget(pdm_led)
@@ -142,14 +149,14 @@ class SOFBControl(BaseWidget):
         # ####################################################################
         # ######################## Kicks Configs. ############################
         # ####################################################################
-        wid = KicksConfigWidget(self, self.prefix, self.acc)
+        wid = KicksConfigWidget(parent, self.prefix, self.acc)
         wid.layout().setContentsMargins(0, 0, 0, 0)
         vbl.addWidget(wid)
 
         # ####################################################################
         # ###################### Manual Correction ###########################
         # ####################################################################
-        grpbx = QGroupBox('Manual Correction', self)
+        grpbx = QGroupBox('Manual Correction', parent)
         grpbx.setObjectName('grp')
         grpbx.setStyleSheet('#grp{min-height: 70px; max-height: 70px;}')
         gdl = QGridLayout(grpbx)
@@ -165,13 +172,11 @@ class SOFBControl(BaseWidget):
             min-height: 45px; min-width: 45px;\
             max-height: 45px; max-width: 45px;\
             icon-size: 40px;}')
-
-        if self.isring:
-            rules = (
-                '[{"name": "EnblRule", "property": "Enable", ' +
-                '"expression": "not ch[0]", "channels": [{"channel": "' +
-                self.prefix+'ClosedLoop-Sts'+'", "trigger": true}]}]')
-            calc.rules = rules
+        rules = (
+            '[{"name": "EnblRule", "property": "Enable", ' +
+            '"expression": "not ch[0]", "channels": [{"channel": "' +
+            self.prefix+'ClosedLoop-Sts'+'", "trigger": true}]}]')
+        calc.rules = rules
 
         exp = 'ch[0] in (1, 2, 3)'
         ch = ''
@@ -218,37 +223,38 @@ class SOFBControl(BaseWidget):
         # ####################################################################
         # ####################### Auto Correction ############################
         # ####################################################################
-        if self.isring:
-            grpbx = QGroupBox('Auto Correction', self)
-            grpbx.setObjectName('grp')
-            grpbx.setStyleSheet('#grp{min-height: 5em; max-height: 5em;}')
-            vbl2 = QVBoxLayout(grpbx)
-            vbl.addWidget(grpbx)
+        grpbx = QGroupBox('Auto Correction', parent)
+        grpbx.setObjectName('grp')
+        grpbx.setStyleSheet('#grp{min-height: 5em; max-height: 5em;}')
+        vbl2 = QVBoxLayout(grpbx)
+        vbl.addWidget(grpbx)
 
-            # rules = (
-            #     '[{"name": "EnblRule", "property": "Enable", ' +
-            #     '"expression": "ch[0] in (1, )", "channels": [{"channel": "' +
-            #     self.prefix+'SOFBMode-Sts'+'", "trigger": true}]}]')
-            lbl = QLabel('State', grpbx)
-            wid = self.create_pair_sel(grpbx, 'ClosedLoop')
-            hbl = QHBoxLayout()
-            hbl.addWidget(lbl)
-            hbl.addWidget(wid)
-            vbl2.addItem(hbl)
+        # rules = (
+        #     '[{"name": "EnblRule", "property": "Enable", ' +
+        #     '"expression": "ch[0] in (1, )", "channels": [{"channel": "' +
+        #     self.prefix+'SOFBMode-Sts'+'", "trigger": true}]}]')
+        lbl = QLabel('State', grpbx)
+        wid = self.create_pair_sel(grpbx, 'ClosedLoop')
+        hbl = QHBoxLayout()
+        hbl.addWidget(lbl)
+        hbl.addWidget(wid)
+        vbl2.addItem(hbl)
 
-            lbl = QLabel('Freq. [Hz]', grpbx)
-            wid = self.create_pair(grpbx, 'ClosedLoopFreq')
-            fbl = QFormLayout()
-            fbl.setHorizontalSpacing(9)
-            fbl.addRow(lbl, wid)
-            vbl2.addItem(fbl)
+        lbl = QLabel('Freq. [Hz]', grpbx)
+        wid = self.create_pair(grpbx, 'ClosedLoopFreq')
+        fbl = QFormLayout()
+        fbl.setHorizontalSpacing(9)
+        fbl.addRow(lbl, wid)
+        vbl2.addItem(fbl)
 
         # ####################################################################
         # ###################### Response Matrix #####################
         # ####################################################################
-        wid = RespMatWidget(self, self.prefix, self.acc)
+        wid = RespMatWidget(parent, self.prefix, self.acc)
         wid.layout().setContentsMargins(0, 0, 0, 0)
         vbl.addWidget(wid)
+
+        return vbl
 
 
 class RefControl(BaseCombo):

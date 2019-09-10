@@ -76,11 +76,8 @@ class MainWindow(SiriusMainWindow):
         wid.setFloating(False)
         wid.setFeatures(QDockWidget.AllDockWidgetFeatures)
         wid.setAllowedAreas(Qt.AllDockWidgetAreas)
-        wid.setObjectName('doc_OrgReg')
-        wid.setStyleSheet("""
-            #doc_OrgReg{
-                min-width:20em;
-                min-height:14em;}""")
+        wid.setObjectName('doc_OrbReg')
+        wid.setStyleSheet("#doc_OrbReg{min-width:20em; min-height:14em;}")
 
         wid_cont = OrbitRegisters(self, self.prefix, self.acc, 5)
         wid.setWidget(wid_cont)
@@ -95,13 +92,11 @@ class MainWindow(SiriusMainWindow):
         docwid.setSizePolicy(sz_pol)
         docwid.setFloating(False)
         docwid.setFeatures(QDockWidget.AllDockWidgetFeatures)
-        wid2 = QWidget(docwid)
-        docwid.setWidget(wid2)
+        docwid.setAllowedAreas(Qt.AllDockWidgetAreas)
 
-        vbl = QVBoxLayout(wid2)
         ctrls = self.orb_regtr.get_registers_control()
-        wid = SOFBControl(wid2, self.prefix, ctrls, self.acc)
-        vbl.addWidget(wid)
+        wid = SOFBControl(self, self.prefix, ctrls, self.acc)
+        docwid.setWidget(wid)
         return docwid
 
     def _create_log_docwidget(self):
@@ -111,10 +106,7 @@ class MainWindow(SiriusMainWindow):
         docwid.setSizePolicy(sz_pol)
         docwid.setFloating(False)
         docwid.setObjectName('doc_IOCLog')
-        docwid.setStyleSheet("""
-            #doc_IOCLog{
-                min-width:20em;
-                min-height:34em;}""")
+        docwid.setStyleSheet("#doc_IOCLog{min-width:20em; min-height:34em;}")
         wid_cont = QWidget()
         docwid.setWidget(wid_cont)
         vbl = QVBoxLayout(wid_cont)
