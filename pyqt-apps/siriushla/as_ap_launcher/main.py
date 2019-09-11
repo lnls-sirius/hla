@@ -7,7 +7,7 @@ from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
     QGridLayout
 
 from siriuspy.envars import vaca_prefix
-from siriuspy.timesys import get_evg_name
+from siriuspy.search import LLTimeSearch as _LLTimeSearch
 
 from siriushla.util import get_appropriate_color
 from siriushla.sirius_application import SiriusApplication
@@ -59,23 +59,24 @@ class MainOperation(SiriusMainWindow):
         # EVG control
         timing = QGroupBox('EVG Control')
 
+        evg_name = _LLTimeSearch.get_evg_name()
         evg_continuous_label = QLabel(
             '<h4>Continuous</h4>', self, alignment=Qt.AlignCenter)
         evg_continuous_sel = PyDMStateButton(
             parent=self,
-            init_channel=self._prefix+get_evg_name()+':ContinuousEvt-Sel')
+            init_channel=self._prefix+evg_name+':ContinuousEvt-Sel')
         evg_continuous_sts = SiriusLedState(
             parent=self,
-            init_channel=self._prefix+get_evg_name()+':ContinuousEvt-Sts')
+            init_channel=self._prefix+evg_name+':ContinuousEvt-Sts')
 
         evg_injection_label = QLabel(
             '<h4>Injection</h4>', self, alignment=Qt.AlignCenter)
         evg_injection_sel = PyDMStateButton(
             parent=self,
-            init_channel=self._prefix+get_evg_name()+':InjectionEvt-Sel')
+            init_channel=self._prefix+evg_name+':InjectionEvt-Sel')
         evg_injection_sts = SiriusLedState(
             parent=self,
-            init_channel=self._prefix+get_evg_name()+':InjectionEvt-Sts')
+            init_channel=self._prefix+evg_name+':InjectionEvt-Sts')
 
         timing_lay = QGridLayout()
         timing_lay.setVerticalSpacing(5)
