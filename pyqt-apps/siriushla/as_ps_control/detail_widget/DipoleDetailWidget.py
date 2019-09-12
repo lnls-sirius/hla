@@ -230,11 +230,15 @@ class DipoleDetailWidget(PSDetailWidget):
 
         self.ctrlloop1_led = SiriusLedState(
             self, self._ps_list[0] + ":CtrlLoop-Sts")
+        self.ctrlloop1_led.setOffColor(SiriusLedState.LightGreen)
+        self.ctrlloop1_led.setOnColor(SiriusLedState.DarkGreen)
         self.ctrlloop1_label = PyDMLabel(
             self, self._ps_list[0] + ":CtrlLoop-Sts")
         self.ctrlloop1_label.setObjectName("ctrlloop1_label")
         self.ctrlloop2_led = SiriusLedState(
             self, self._ps_list[1] + ":CtrlLoop-Sts")
+        self.ctrlloop2_led.setOffColor(SiriusLedState.LightGreen)
+        self.ctrlloop2_led.setOnColor(SiriusLedState.DarkGreen)
         self.ctrlloop2_label = PyDMLabel(
             self, self._ps_list[1] + ":CtrlLoop-Sts")
         self.ctrlloop2_label.setObjectName("ctrlloop2_label")
