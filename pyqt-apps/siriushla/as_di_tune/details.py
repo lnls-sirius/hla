@@ -94,6 +94,7 @@ class BOTuneDetails(SiriusMainWindow):
         lbl_acq = QLabel('Enable', self)
         self.bt_acq = PyDMStateButton(
             parent=self, init_channel=self.device + ':SpecAnaGetSpec-Sel')
+        self.bt_acq.shape = 1
         self.led_acq = SiriusLedState(
             parent=self, init_channel=self.device + ':SpecAnaGetSpec-Sts')
         hbox_acq = QHBoxLayout()
@@ -150,10 +151,11 @@ class BOTuneDetails(SiriusMainWindow):
         hbox_Fc.addWidget(self.le_Fc)
         hbox_Fc.addWidget(self.lb_Fc)
 
-        # Auto Center
-        lbl_autoFc = QLabel('Auto Center', self)
+        # Lock Center Freq.
+        lbl_autoFc = QLabel('Lock Center Frequency ', self)
         self.bt_autoFc = PyDMStateButton(
             parent=self, init_channel=self.device + ':CenterFreqAuto-Sel')
+        self.bt_autoFc.shape = 1
         self.led_autoFc = SiriusLedState(
             parent=self, init_channel=self.device + ':CenterFreqAuto-Sts')
         hbox_autoFc = QHBoxLayout()
@@ -183,6 +185,7 @@ class BOTuneDetails(SiriusMainWindow):
         lbl_drive = QLabel('Enable', self)
         self.bt_drive = PyDMStateButton(
             parent=self, init_channel=self.device + ':Enbl-Sel')
+        self.bt_drive.shape = 1
         self.led_drive = PyDMLedMultiChannel(
             parent=self, channels2values={self.device + ':Enbl-Sts': 0b111})
         hbox_drive = QHBoxLayout()
@@ -190,7 +193,8 @@ class BOTuneDetails(SiriusMainWindow):
         hbox_drive.addWidget(self.led_drive)
 
         # Status
-        lbl_enblsts = QLabel('Enable Status\nDetailed')
+        lbl_enblsts = QLabel('Enable Status\nDetailed', self,
+                             alignment=Qt.AlignBottom | Qt.AlignRight)
         # # Carrier Generator
         self.led_carrier = SiriusLedState(
             parent=self, init_channel=self.device + ':EnblCarrierGen-Sts')
@@ -233,6 +237,7 @@ class BOTuneDetails(SiriusMainWindow):
         lbl_driveauto = QLabel('Auto Configure', self)
         self.bt_driveauto = PyDMStateButton(
             parent=self, init_channel=self.device + ':DriveAuto-Sel')
+        self.bt_driveauto.shape = 1
         self.led_driveauto = SiriusLedState(
             parent=self, init_channel=self.device + ':DriveAuto-Sts')
         hbox_driveauto = QHBoxLayout()
@@ -368,6 +373,7 @@ class BOTuneDetails(SiriusMainWindow):
         lbl_roiauto = QLabel('Auto Positioning', self)
         self.bt_roiauto = PyDMStateButton(
             parent=self, init_channel=self.device + ':ROIAuto-Sel')
+        self.bt_roiauto.shape = 1
         self.led_roiauto = SiriusLedState(
             parent=self, init_channel=self.device + ':ROIAuto-Sts')
         hbox_roiauto = QHBoxLayout()
