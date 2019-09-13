@@ -33,6 +33,7 @@ class PulsedMagnetDetailWidget(QWidget):
                 max-width: 8em;
             }
         """)
+        self.setFocusPolicy(Qt.StrongFocus)
 
     def _create_pvs(self):
         """Create variables with pvs that'll be used."""
