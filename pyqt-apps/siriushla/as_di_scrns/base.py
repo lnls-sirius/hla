@@ -366,7 +366,7 @@ class SiriusImageView(PyDMImageView):
     @Property(str)
     def maxWidthChannel(self):
         """
-        Return the channel address in use for the image ROI horizontal offset.
+        Return the channel address in use for the image maximum width.
 
         Returns
         -------
@@ -382,7 +382,7 @@ class SiriusImageView(PyDMImageView):
     @maxWidthChannel.setter
     def maxWidthChannel(self, value):
         """
-        Return the channel address in use for the image ROI horizontal offset.
+        Return the channel address in use for the image maximum width.
 
         Parameters
         ----------
@@ -405,7 +405,7 @@ class SiriusImageView(PyDMImageView):
     @Property(str)
     def maxHeightChannel(self):
         """
-        Return the channel address in use for the image ROI vertical offset.
+        Return the channel address in use for the image maximum height.
 
         Returns
         -------
@@ -421,7 +421,7 @@ class SiriusImageView(PyDMImageView):
     @maxHeightChannel.setter
     def maxHeightChannel(self, value):
         """
-        Return the channel address in use for the image ROI vertical offset.
+        Return the channel address in use for the image maximum height.
 
         Parameters
         ----------
