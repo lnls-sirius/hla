@@ -60,6 +60,10 @@ class BOTuneSpec(SiriusSpectrogramView):
         self.image_waveform = new_image[:spec_size]
         self.needs_redraw = True
 
+    def process_image(self, image):
+        """Flip data in time axis."""
+        return np.flip(image, 0)
+
     def roioffsetx_connection_state_changed(self, conn):
         """
         Run when the ROIOffsetX Channel connection state changes.
