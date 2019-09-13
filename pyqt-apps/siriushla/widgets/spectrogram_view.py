@@ -10,7 +10,7 @@ from qtpy.QtGui import QColor, QLinearGradient, QBrush, QPen
 from qtpy.QtCore import Signal, Slot, Property, QTimer, Q_ENUMS, \
                          QThread, Qt, QRectF, QPointF
 from pyqtgraph import ViewBox, ImageItem, AxisItem, GraphicsLayoutWidget, \
-                      ColorMap, GraphicsWidget
+                      ColorMap, GraphicsWidget, LabelItem
 from pyqtgraph.graphicsItems.ViewBox.ViewBoxMenu import ViewBoxMenu
 from pydm.widgets.channel import PyDMChannel
 from pydm.widgets.colormaps import cmaps, cmap_names, PyDMColorMap
@@ -250,7 +250,7 @@ class SiriusSpectrogramView(
     color_maps = cmaps
 
     def __init__(self, parent=None, image_channel=None, xaxis_channel=None,
-                 yaxis_channel=None, background='w'):
+                 yaxis_channel=None, title='', background='w'):
         """Initialize widget."""
         GraphicsLayoutWidget.__init__(self, parent)
         PyDMWidget.__init__(self)
@@ -261,32 +261,41 @@ class SiriusSpectrogramView(
         self._channels = 3*[None, ]
         self.image_waveform = np.zeros(0)
         self._image_width = 0
+        self._image_height = 0
         self._normalize_data = False
         self._auto_downsample = True
         self._last_yaxis_data = None
         self._last_xaxis_data = None
 
-        self.setBackground(background)
-
-        # Add viewBox and imageItem.
+        # ViewBox and imageItem.
         self._view = ViewBox()
         self._image_item = ImageItem()
         self._view.addItem(self._image_item)
-        self.addItem(self._view, 0, 1)
-        self.ci.layout.setColumnSpacing(0, 0)
-        self.ci.layout.setRowSpacing(0, 0)
 
-        # Add axis.
+        # Axis.
         self.xaxis = AxisItem('bottom')
         self.xaxis.setPen(QColor(0, 0, 0))
         self.yaxis = AxisItem('left')
         self.yaxis.setPen(QColor(0, 0, 0))
-        self.addItem(self.yaxis, 0, 0)
-        self.addItem(self.xaxis, 1, 1)
 
-        # Add colorbar legend.
+        # Colorbar legend.
         self.colorbar = _GradientLegend()
-        self.addItem(self.colorbar, 0, 2)
+
+        # Title.
+        start_row = 0
+        if title:
+            self.title = LabelItem(text=title, color='#000000')
+            self.addItem(self.title, 0, 0, 1, 3)
+            start_row = 1
+
+        # Set layout
+        self.addItem(self._view, start_row, 1)
+        self.addItem(self.yaxis, start_row, 0)
+        self.addItem(self.colorbar, start_row, 2)
+        self.addItem(self.xaxis, start_row+1, 1)
+        self.setBackground(background)
+        self.ci.layout.setColumnSpacing(0, 0)
+        self.ci.layout.setRowSpacing(start_row, 0)
 
         # Set color map limits.
         self.cm_min = 0.0
@@ -529,6 +538,8 @@ class SiriusSpectrogramView(
         self._last_xaxis_data = new_array
         if self._reading_order == self.Clike:
             self._image_width = new_array.size
+        else:
+            self._image_height = new_array.size
 
     @Slot(np.ndarray)
     def image_yaxis_changed(self, new_array):
@@ -545,6 +556,8 @@ class SiriusSpectrogramView(
         self._last_yaxis_data = new_array
         if self._reading_order == self.Fortranlike:
             self._image_width = new_array.size
+        else:
+            self._image_height = new_array.size
 
     def process_image(self, image):
         """
@@ -665,6 +678,17 @@ class SiriusSpectrogramView(
         if boo:
             self._image_width = int(new_width)
 
+    @Property(int)
+    def imageHeight(self):
+        """
+        Return the height of the image.
+
+        Return
+        ------
+        int
+        """
+        return self._image_height
+
     @Property(bool)
     def normalizeData(self):
         """
@@ -714,8 +738,10 @@ class SiriusSpectrogramView(
 
         if order == self.Clike and self._last_xaxis_data is not None:
             self._image_width = self._last_xaxis_data.size
+            self._image_height = self._last_yaxis_data.size
         elif order == self.Fortranlike and self._last_yaxis_data is not None:
             self._image_width = self._last_yaxis_data.size
+            self._image_height = self._last_xaxis_data.size
 
     def keyPressEvent(self, ev):
         """Handle keypress events."""
