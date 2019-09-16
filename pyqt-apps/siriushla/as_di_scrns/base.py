@@ -6,6 +6,7 @@ import numpy as np
 from qtpy.QtWidgets import QHBoxLayout, QSizePolicy as QSzPlcy, QVBoxLayout, \
     QToolTip, QLabel, QPushButton, QFormLayout
 from qtpy.QtCore import Qt, Slot, Signal, Property
+import qtawesome as qta
 from pydm.widgets import PyDMImageView, PyDMLabel, PyDMSpinbox, \
     PyDMPushButton, PyDMEnumComboBox, PyDMLineEdit
 from pydm.widgets.channel import PyDMChannel
@@ -482,10 +483,11 @@ def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
                 PyDMLabel(parent=parent,
                           init_channel=prefix+':'+propty+'-RB'))
         label = getattr(parent, 'PyDMLabel_'+propty)
-        label.setStyleSheet("""
+        if not cmd:
+            label.setStyleSheet("""
             min-width:wvalem; max-width:wvalem; min-height:hvalem;
             max-height:hvalem;""".replace('wval', str(width)).replace(
-            'hval', str(height)))
+                'hval', str(height)))
         label.setAlignment(Qt.AlignCenter)
         layout.addWidget(label)
     elif propty_type == 'enbldisabl':
@@ -503,10 +505,9 @@ def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
                 SiriusLedState(parent=parent,
                                init_channel=prefix+':'+propty+'-Sts'))
         led = getattr(parent, 'SiriusLedState_'+propty)
-        led.setStyleSheet("""
-            min-width:wvalem; max-width:wvalem; min-height:hvalem;
-            max-height:hvalem;""".replace('wval', str(width)).replace(
-            'hval', str(height)))
+        led.setStyleSheet(
+            "min-width:1.29em; max-width:1.29em; "
+            "min-height:1.29em; max-height:1.29em;")
         led.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
         layout.addWidget(led)
     elif propty_type == 'offon':
@@ -524,10 +525,11 @@ def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
                 PyDMLabel(parent=parent,
                           init_channel=prefix+':'+propty+'-Sts'))
         label = getattr(parent, 'PyDMLabel_'+propty)
-        label.setStyleSheet("""
+        if not cmd:
+            label.setStyleSheet("""
             min-width:wvalem; max-width:wvalem; min-height:hvalem;
             max-height:hvalem;""".replace('wval', str(width)).replace(
-            'hval', str(height)))
+                'hval', str(height)))
         label.setAlignment(Qt.AlignCenter)
         layout.addWidget(label)
     elif propty_type == 'enum':
@@ -538,16 +540,17 @@ def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
         combobox.setStyleSheet("""
             min-width:wvalem; max-width:wvalem; min-height:hvalem;
             max-height:hvalem;""".replace('wval', str(width)).replace(
-            'hval', str(height)))
+                'hval', str(height)))
         layout.addWidget(combobox)
         setattr(parent, 'PyDMLabel_'+propty,
                 PyDMLabel(parent=parent,
                           init_channel=prefix+':'+propty+'-Sts'))
         label = getattr(parent, 'PyDMLabel_'+propty)
-        label.setStyleSheet("""
-            min-width:wvalem; max-width:wvalem; min-height:hvalem;
-            max-height:hvalem;""".replace('wval', str(width)).replace(
-            'hval', str(height)))
+        if not cmd:
+            label.setStyleSheet("""
+                min-width:wvalem; max-width:wvalem; min-height:hvalem;
+                max-height:hvalem;""".replace('wval', str(width)).replace(
+                    'hval', str(height)))
         label.setAlignment(Qt.AlignCenter)
         layout.addWidget(label)
     elif propty_type == 'mon':
@@ -565,11 +568,27 @@ def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
     if cmd:
         setattr(parent, 'PyDMPushButton_'+propty,
                 PyDMPushButton(parent=parent, label=cmd['label'],
-                               pressValue=cmd['pressValue'],
-                               init_channel=prefix+':'+cmd['name']+'-Cmd'))
+                               pressValue=cmd['pressValue']))
         pb = getattr(parent, 'PyDMPushButton_'+propty)
-        pb.setStyleSheet("""max-width:wvalem; max-height:hvalem;""".replace(
-            'wval', str(width)).replace('hval', str(height)))
+        pb.setObjectName('PyDMPushButton_'+propty)
+        if 'icon' in cmd.keys():
+            pb.setIcon(cmd['icon'])
+        if 'toolTip' in cmd.keys():
+            pb.setToolTip(cmd['toolTip'])
+        pb.channel = prefix+':'+cmd['name']+'-Cmd'
+
+        _w = cmd['width']+'px' if 'width' in cmd.keys() else str(width)+'em'
+        _h = cmd['height']+'px' if 'height' in cmd.keys() else str(height)+'em'
+        stylesheet = """
+            #PyDMPushButton_""" + propty + """{
+                min-width:wval; max-width:wval;
+                min-height:hval; max-height:hval;
+                iconsize;
+            }""".replace('wval', _w).replace('hval', _h)
+        _is = 'icon-size:'+cmd['icon-size']+'px;' \
+            if 'icon-size' in cmd.keys() else ''
+        stylesheet.replace('iconsize;',  _is)
+        pb.setStyleSheet(stylesheet)
         layout.addWidget(pb)
 
     layout.setAlignment(Qt.AlignVCenter)
@@ -587,7 +606,14 @@ def create_trigger_layout(parent, device, prefix):
     ledmulti_TIStatus = PyDMLedMultiChannel(
         parent=parent, channels2values={trg_prefix+':State-Sts': 1,
                                         trg_prefix+':Status-Mon': 0})
-    pb_trgdetails = QPushButton('Open details', parent)
+    ledmulti_TIStatus.setStyleSheet(
+        "min-width:1.29em; max-width:1.29em;"
+        "min-height:1.29em; max-height:1.29em;")
+    pb_trgdetails = QPushButton(qta.icon('fa5s.ellipsis-h'), '', parent)
+    pb_trgdetails.setToolTip('Open details')
+    pb_trgdetails.setObjectName('detail')
+    pb_trgdetails.setStyleSheet(
+        "#detail{min-width:25px; max-width:25px; icon-size:20px;}")
     trg_w = create_window_from_widget(
         HLTriggerDetailed, title=trg_prefix+' Detailed Settings',
         is_main=True)
