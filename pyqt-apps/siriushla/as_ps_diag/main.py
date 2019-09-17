@@ -527,7 +527,7 @@ class LogTable(QTreeView, PyDMWidget):
         if SiriusPVName(text).dis == 'MA':
             _run_newprocess(['sirius-hla-as-ps-detail.py', text])
         elif SiriusPVName(text).dis == 'PM':
-            _run_newprocess(['sirius-hla-as-pm-detail.py', text])
+            _run_newprocess(['sirius-hla-as-pu-detail.py', text])
         else:
             try:
                 PSSearch.conv_psname_2_dclink(text)

@@ -9,5 +9,5 @@ from siriushla.as_pu_control import PUControlWindow
 
 app = SiriusApplication()
 app.open_window(
-    PUControlWindow, parent=None, is_main=False, section='TB')
+    PUControlWindow, parent=None, section='TB', devtype='PM', is_main=False)
 sys.exit(app.exec_())
