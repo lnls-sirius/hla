@@ -1118,7 +1118,7 @@ class SiriusSpectrogramView(
         else:
             valy = y
 
-        txt = '{0:.3f}, {1:.3f}'.format(valx, valy)
+        txt = '{0:.4g}, {1:.4g}'.format(valx, valy)
         QToolTip.showText(
             self.mapToGlobal(pos), txt, self, self.geometry(), 5000)
         super().mouseMoveEvent(ev)
