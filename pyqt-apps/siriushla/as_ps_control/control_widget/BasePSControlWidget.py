@@ -26,7 +26,11 @@ class PSContainer(QWidget):
                 self._dclinks.extend(PSSearch.conv_psname_2_dclink(name))
         elif self._name != 'SI-Fam:MA-B1B2':
             psname = self._name.replace(':MA-', ':PS-')
-            self._dclinks = PSSearch.conv_psname_2_dclink(psname)
+            dclinks = PSSearch.conv_psname_2_dclink(psname)
+            if dclinks:
+                dclinks_type = PSSearch.conv_psname_2_psmodel(dclinks[0])
+                if dclinks_type != 'REGATRON_DCLink':
+                    self._dclinks = dclinks
 
         self._setup_ui()
         self._create_actions()
