@@ -15,7 +15,7 @@ from siriushla.widgets import SiriusMainWindow, PyDMLed, SiriusLedAlert, \
     SiriusLedState, PyDMLinEditScrollbar
 from siriushla.as_di_scrns import SiriusScrnView
 from siriushla.as_ps_control import PSDetailWindow
-from siriushla.as_pm_control import PulsedMagnetDetailWindow
+from siriushla.as_pu_control import PulsedMagnetDetailWindow
 
 
 class BaseWindow(SiriusMainWindow):

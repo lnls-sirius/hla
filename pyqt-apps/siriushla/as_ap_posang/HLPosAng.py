@@ -20,7 +20,7 @@ from siriushla.widgets import SiriusMainWindow, PyDMLedMultiChannel, \
     SiriusConnectionSignal
 from siriushla.as_ps_control.PSDetailWindow import \
     PSDetailWindow as _PSDetailWindow
-from siriushla.as_pm_control.PulsedMagnetDetailWindow import \
+from siriushla.as_pu_control.PulsedMagnetDetailWindow import \
     PulsedMagnetDetailWindow as _PulsedMagnetDetailWindow
 from siriushla.as_ap_configdb import LoadConfigDialog as _LoadConfigDialog
 

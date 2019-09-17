@@ -5,7 +5,7 @@
 import sys
 import argparse as _argparse
 from siriushla.sirius_application import SiriusApplication
-from siriushla.as_pm_control import PulsedMagnetDetailWindow
+from siriushla.as_pu_control import PulsedMagnetDetailWindow
 
 
 parser = _argparse.ArgumentParser(
