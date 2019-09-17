@@ -33,9 +33,7 @@ class BOTuneSpec(SiriusSpectrogramView):
                          roioffsety_channel=roioffy_channel,
                          roiwidth_channel=roiwidth_channel,
                          roiheight_channel=roiheight_channel,
-                         title=title,
-                         background=background,
-                         image_width=500)
+                         title=title, background=background)
         self.normalizeData = True
 
     @Slot(np.ndarray)

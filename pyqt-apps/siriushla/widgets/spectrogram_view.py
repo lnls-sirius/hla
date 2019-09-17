@@ -253,7 +253,8 @@ class SiriusSpectrogramView(
                  xaxis_channel=None, yaxis_channel=None,
                  roioffsetx_channel=None, roioffsety_channel=None,
                  roiwidth_channel=None, roiheight_channel=None,
-                 title='', background='w', image_width=0):
+                 title='', background='w',
+                 image_width=0, image_height=0):
         """Initialize widget."""
         GraphicsLayoutWidget.__init__(self, parent)
         PyDMWidget.__init__(self)
@@ -268,7 +269,7 @@ class SiriusSpectrogramView(
         self._channels = 7*[None, ]
         self.image_waveform = np.zeros(0)
         self._image_width = image_width if not xaxis_channel else 0
-        self._image_height = 0
+        self._image_height = image_height if not yaxis_channel else 0
         self._roi_offsetx = 0
         self._roi_offsety = 0
         self._roi_width = 0
@@ -325,7 +326,7 @@ class SiriusSpectrogramView(
         self.cm_min = 0.0
         self.cm_max = 255.0
 
-        # Set default reading order of numpy array data to Fortranlike.
+        # Set default reading order of numpy array data to Clike.
         self._reading_order = ReadingOrder.Clike
 
         # Make a right-click menu for changing the color map.
@@ -611,6 +612,10 @@ class SiriusSpectrogramView(
         logging.debug("SpectrogramView Received New Image: Needs Redraw->True")
         self.image_waveform = new_image
         self.needs_redraw = True
+        if not self._image_height and self._image_width:
+            self._image_height = new_image.size/self._image_width
+        elif not self._image_width and self._image_height:
+            self._image_width = new_image.size/self._image_height
 
     @Slot(np.ndarray)
     def xaxis_value_changed(self, new_array):
@@ -756,19 +761,31 @@ class SiriusSpectrogramView(
         logging.debug("SpectrogramView Update Display with new image")
 
         # Update axis
-        if self._last_yaxis_data is not None and \
-                self._last_xaxis_data is not None:
+        if self._last_xaxis_data is not None:
             szx = self._last_xaxis_data.size
-            szy = self._last_yaxis_data.size
             xMin = self._last_xaxis_data.min()
             xMax = self._last_xaxis_data.max()
+        else:
+            szx = self.imageWidth if self.readingOrder == self.Clike \
+                else self.imageHeight
+            xMin = 0
+            xMax = szx
+
+        if self._last_yaxis_data is not None:
+            szy = self._last_yaxis_data.size
             yMin = self._last_yaxis_data.min()
             yMax = self._last_yaxis_data.max()
-            self.xaxis.setRange(xMin, xMax)
-            self.yaxis.setRange(yMin, yMax)
-            self._view.setLimits(
-                xMin=0, xMax=szx, yMin=0, yMax=szy,
-                minXRange=szx, maxXRange=szx, minYRange=szy, maxYRange=szy)
+        else:
+            szy = self.imageHeight if self.readingOrder == self.Clike \
+                else self.imageWidth
+            yMin = 0
+            yMax = szy
+
+        self.xaxis.setRange(xMin, xMax)
+        self.yaxis.setRange(yMin, yMax)
+        self._view.setLimits(
+            xMin=0, xMax=szx, yMin=0, yMax=szy,
+            minXRange=szx, maxXRange=szx, minYRange=szy, maxYRange=szy)
 
         # Update image
         self.colorbar.setLimits(data)
@@ -878,8 +895,7 @@ class SiriusSpectrogramView(
         """
         Set the ROI offset in X axis in pixels.
 
-        Can be overridden by :attr:`ROIOffsetXChannel` and
-        :attr:`ROIOffsetYChannel`.
+        Can be overridden by :attr:`ROIOffsetXChannel`.
 
         Parameters
         ----------
@@ -889,7 +905,6 @@ class SiriusSpectrogramView(
             return
         boo = self._roi_offsetx != int(new_offset)
         boo &= not self._roioffsetxchannel
-        boo &= not self._roioffsetychannel
         if boo:
             self._roi_offsetx = int(new_offset)
             self.redrawROI()
@@ -910,8 +925,7 @@ class SiriusSpectrogramView(
         """
         Set the ROI offset in Y axis in pixels.
 
-        Can be overridden by :attr:`ROIOffsetXChannel` and
-        :attr:`ROIOffsetYChannel`.
+        Can be overridden by :attr:`ROIOffsetYChannel`.
 
         Parameters
         ----------
@@ -920,7 +934,6 @@ class SiriusSpectrogramView(
         if new_offset is None:
             return
         boo = self._roi_offsety != int(new_offset)
-        boo &= not self._roioffsetxchannel
         boo &= not self._roioffsetychannel
         if boo:
             self._roi_offsety = int(new_offset)
@@ -1033,12 +1046,16 @@ class SiriusSpectrogramView(
         if self._reading_order != order:
             self._reading_order = order
 
-        if order == self.Clike and self._last_xaxis_data is not None:
-            self._image_width = self._last_xaxis_data.size
-            self._image_height = self._last_yaxis_data.size
-        elif order == self.Fortranlike and self._last_yaxis_data is not None:
-            self._image_width = self._last_yaxis_data.size
-            self._image_height = self._last_xaxis_data.size
+        if order == self.Clike:
+            if self._last_xaxis_data is not None:
+                self._image_width = self._last_xaxis_data.size
+            if self._last_yaxis_data is not None:
+                self._image_height = self._last_yaxis_data.size
+        elif order == self.Fortranlike:
+            if self._last_yaxis_data is not None:
+                self._image_width = self._last_yaxis_data.size
+            if self._last_xaxis_data is not None:
+                self._image_height = self._last_xaxis_data.size
 
     @Property(int)
     def maxRedrawRate(self):
@@ -1073,6 +1090,9 @@ class SiriusSpectrogramView(
         return
 
     def mouseMoveEvent(self, ev):
+        if not self._image_item.width() or not self._image_item.height():
+            super().mouseMoveEvent(ev)
+            return
         pos = ev.pos()
         posaux = self._image_item.mapFromDevice(ev.pos())
         if posaux.x() < 0 or posaux.x() >= self._image_item.width() or \
@@ -1083,16 +1103,21 @@ class SiriusSpectrogramView(
         pos_scene = self._view.mapSceneToView(pos)
         x = round(pos_scene.x())
         y = round(pos_scene.y())
-        if self.xAxisChannel and self.yAxisChannel:
+
+        if self.xAxisChannel and self._last_xaxis_data is not None:
             maxx = len(self._last_xaxis_data)-1
             x = x if x < maxx else maxx
             valx = self._last_xaxis_data[x]
+        else:
+            valx = x
+
+        if self.yAxisChannel and self._last_yaxis_data is not None:
             maxy = len(self._last_yaxis_data)-1
             y = y if y < maxy else maxy
             valy = self._last_yaxis_data[y]
         else:
-            valx = x
             valy = y
+
         txt = '{0:.3f}, {1:.3f}'.format(valx, valy)
         QToolTip.showText(
             self.mapToGlobal(pos), txt, self, self.geometry(), 5000)
