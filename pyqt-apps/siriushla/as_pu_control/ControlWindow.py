@@ -6,10 +6,10 @@ from siriuspy.search import MASearch
 from siriushla.widgets import SiriusMainWindow
 from siriushla.as_ps_control.SummaryWidgets import SummaryWidget, SummaryHeader
 from siriushla.util import connect_window
-from .PulsedMagnetDetailWindow import PulsedMagnetDetailWindow
+from .DetailWindow import PUDetailWindow
 
 
-class PulsedMagnetControlWindow(SiriusMainWindow):
+class PUControlWindow(SiriusMainWindow):
     """Window to control pulsed magnets."""
 
     def __init__(self, parent=None, is_main=True, section=None):
@@ -72,13 +72,13 @@ class PulsedMagnetControlWindow(SiriusMainWindow):
         for widget in widgets:
             maname = widget.devname
             bt = widget.get_detail_button()
-            connect_window(bt, PulsedMagnetDetailWindow, self, maname=maname)
+            connect_window(bt, PUDetailWindow, self, maname=maname)
 
 
 if __name__ == "__main__":
     import sys
     from sirius_application import SiriusApplication
     app = SiriusApplication()
-    w = PulsedMagnetControlWindow()
+    w = PUControlWindow()
     w.show()
     sys.exit(app.exec_())

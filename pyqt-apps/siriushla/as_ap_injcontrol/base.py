@@ -15,7 +15,7 @@ from siriushla.widgets import SiriusMainWindow, PyDMLed, SiriusLedAlert, \
     SiriusLedState, PyDMLinEditScrollbar
 from siriushla.as_di_scrns import SiriusScrnView
 from siriushla.as_ps_control import PSDetailWindow
-from siriushla.as_pu_control import PulsedMagnetDetailWindow
+from siriushla.as_pu_control import PUDetailWindow
 
 
 class BaseWindow(SiriusMainWindow):
@@ -230,7 +230,7 @@ class BaseWindow(SiriusMainWindow):
 
             pb = QPushButton(corr, self)
             if corr.split('-')[1].split(':')[1] == 'PM':
-                util.connect_window(pb, PulsedMagnetDetailWindow,
+                util.connect_window(pb, PUDetailWindow,
                                     parent=self, maname=corr)
             else:
                 util.connect_window(pb, PSDetailWindow,

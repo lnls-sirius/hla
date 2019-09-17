@@ -2,10 +2,10 @@
 import qtawesome as qta
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriushla.widgets import SiriusMainWindow
-from .PulsedMagnetDetailWidget import PulsedMagnetDetailWidget
+from .DetailWidget import PUDetailWidget
 
 
-class PulsedMagnetDetailWindow(SiriusMainWindow):
+class PUDetailWindow(SiriusMainWindow):
     """Window with all controls of Pulsed Manget."""
 
     def __init__(self, maname, parent=None):
@@ -18,5 +18,5 @@ class PulsedMagnetDetailWindow(SiriusMainWindow):
         self._setup_ui()
 
     def _setup_ui(self):
-        self.central_widget = PulsedMagnetDetailWidget(self._maname, self)
+        self.central_widget = PUDetailWidget(self._maname, self)
         self.setCentralWidget(self.central_widget)

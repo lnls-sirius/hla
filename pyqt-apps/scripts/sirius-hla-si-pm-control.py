@@ -4,10 +4,10 @@
 
 import sys
 from siriushla.sirius_application import SiriusApplication
-from siriushla.as_pu_control import PulsedMagnetControlWindow
+from siriushla.as_pu_control import PUControlWindow
 
 
 app = SiriusApplication()
 app.open_window(
-    PulsedMagnetControlWindow, parent=None, is_main=False, section='SI')
+    PUControlWindow, parent=None, is_main=False, section='SI')
 sys.exit(app.exec_())

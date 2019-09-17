@@ -14,7 +14,7 @@ from siriushla.widgets.windows import create_window_from_widget
 from siriushla.as_ti_control.hl_trigger import HLTriggerDetailed
 
 
-class PulsedMagnetDetailWidget(QWidget):
+class PUDetailWidget(QWidget):
     """Detailed widget for controlling a pulsed magnet."""
 
     def __init__(self, maname, parent=None):
@@ -258,6 +258,6 @@ if __name__ == "__main__":
     from siriushla.sirius_application import SiriusApplication
 
     app = SiriusApplication(None, sys.argv)
-    w = PulsedMagnetDetailWidget(maname="SI-01SA:PM-InjDpKckr")
+    w = PUDetailWidget(maname="SI-01SA:PM-InjDpKckr")
     w.show()
     sys.exit(app.exec_())

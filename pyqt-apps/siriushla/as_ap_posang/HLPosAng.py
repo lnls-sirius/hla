@@ -18,10 +18,8 @@ from pydm.widgets import PyDMWaveformTable, PyDMLabel, PyDMLineEdit
 from siriushla import util as _hlautil
 from siriushla.widgets import SiriusMainWindow, PyDMLedMultiChannel, \
     SiriusConnectionSignal
-from siriushla.as_ps_control.PSDetailWindow import \
-    PSDetailWindow as _PSDetailWindow
-from siriushla.as_pu_control.PulsedMagnetDetailWindow import \
-    PulsedMagnetDetailWindow as _PulsedMagnetDetailWindow
+from siriushla.as_ps_control import PSDetailWindow as _PSDetailWindow
+from siriushla.as_pu_control import PUDetailWindow as _PUDetailWindow
 from siriushla.as_ap_configdb import LoadConfigDialog as _LoadConfigDialog
 
 
@@ -99,7 +97,7 @@ class PosAngCorr(SiriusMainWindow):
 
         self.centralwidget.pushButton_CH2.setText(correctors[1])
         _hlautil.connect_window(self.centralwidget.pushButton_CH2,
-                                _PulsedMagnetDetailWindow, self,
+                                _PUDetailWindow, self,
                                 maname=correctors[1])
         self.centralwidget.PyDMLabel_KickRBCH2.channel = (
             self._prefix + correctors[1] + ':Kick-RB')
