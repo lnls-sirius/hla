@@ -4,6 +4,7 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QLabel, QPushButton, QGroupBox, \
     QGridLayout, QHBoxLayout, QVBoxLayout, QFormLayout, QSpacerItem, \
     QSizePolicy as QSzPly
+import qtawesome as qta
 import epics
 from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox, \
     PyDMPushButton
@@ -86,8 +87,21 @@ class DCCTSettings(QWidget):
             self.dcct_prefix+'MeasMode-Sel')
         self.mode_channel.new_value_signal.connect(self._showMeasModeSettings)
 
+        # Details
+        self.pb_details = QPushButton(qta.icon('fa5s.ellipsis-h'), '', self)
+        self.pb_details.setToolTip('Open details')
+        self.pb_details.setObjectName('detail')
+        self.pb_details.setStyleSheet(
+            "#detail{min-width:25px; max-width:25px; icon-size:20px;}")
+        detail_window = create_window_from_widget(
+            DCCTSettingsDetails, title=self.device+' Settings Details')
+        _hlautil.connect_window(
+            self.pb_details, detail_window,
+            self, prefix=self.prefix, device=self.device)
+
         gbox_gen = QGroupBox('Measure')
         glay_gen = QGridLayout(gbox_gen)
+        glay_gen.setAlignment(Qt.AlignVCenter)
         glay_gen.addWidget(l_curr, 0, 0)
         glay_gen.addLayout(hlay_current, 0, 1)
         glay_gen.addWidget(l_reliablemeas, 1, 0)
@@ -100,7 +114,8 @@ class DCCTSettings(QWidget):
         glay_gen.addWidget(l_measmode, 4, 0)
         glay_gen.addLayout(hlay_measmode, 4, 1)
         glay_gen.addLayout(glay_mode, 5, 0, 1, 2)
-        glay_gen.setAlignment(Qt.AlignVCenter)
+        glay_gen.addWidget(self.pb_details, 6, 0, 1, 2,
+                           alignment=Qt.AlignRight)
         gbox_gen.setStyleSheet("""
             .QLabel{
                 qproperty-alignment: 'AlignVCenter | AlignRight';
@@ -116,16 +131,6 @@ class DCCTSettings(QWidget):
             self, self.prefix, self.device))
         lay.addWidget(self.trigger_widget)
         lay.setStretch(2, 3)
-
-        # Details
-        self.pb_opendetails = QPushButton('More settings', self)
-        detail_window = create_window_from_widget(
-            DCCTSettingsDetails, title=self.device+' Settings Details')
-        _hlautil.connect_window(
-            self.pb_opendetails, detail_window,
-            self, prefix=self.prefix, device=self.device)
-        lay.addWidget(self.pb_opendetails, alignment=Qt.AlignRight)
-        lay.setStretch(3, 1)
 
         self.setLayout(lay)
         self.setStyleSheet("""
@@ -188,6 +193,10 @@ class DCCTSettingsDetails(QWidget):
         super().__init__(parent)
         self.prefix = prefix
         self.device = device
+        if 'BO' in device:
+            self.setObjectName('BOApp')
+        else:
+            self.setObjectName('SIApp')
         self.dcct_prefix = self.prefix + device + ':'
         self._setupUi()
 
@@ -549,7 +558,11 @@ def _create_trigger_layout(parent, prefix, device, label_align=Qt.AlignRight):
     ledmulti_TIStatus = PyDMLedMultiChannel(
         parent=parent, channels2values={trg_prefix+':State-Sts': 1,
                                         trg_prefix+':Status-Mon': 0})
-    pb_trgdetails = QPushButton('Open details', parent)
+    pb_trgdetails = QPushButton(qta.icon('fa5s.ellipsis-h'), '', parent)
+    pb_trgdetails.setToolTip('Open details')
+    pb_trgdetails.setObjectName('detail')
+    pb_trgdetails.setStyleSheet(
+        "#detail{min-width:25px; max-width:25px; icon-size:20px;}")
     pb_trgdetails.setAutoDefault(False)
     pb_trgdetails.setDefault(False)
     trg_w = create_window_from_widget(
@@ -558,8 +571,8 @@ def _create_trigger_layout(parent, prefix, device, label_align=Qt.AlignRight):
     _hlautil.connect_window(pb_trgdetails, trg_w, parent=None,
                             prefix=trg_prefix)
     hlay_TIstatus = QHBoxLayout()
-    hlay_TIstatus.addWidget(ledmulti_TIStatus, alignment=Qt.AlignLeft)
-    hlay_TIstatus.addWidget(pb_trgdetails)
+    hlay_TIstatus.addWidget(ledmulti_TIStatus)
+    hlay_TIstatus.addWidget(pb_trgdetails, alignment=Qt.AlignLeft)
 
     l_TIdelay = QLabel('Delay [us]: ', parent)
     spinbox_TIDelay = PyDMSpinbox(

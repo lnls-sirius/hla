@@ -76,7 +76,7 @@ class DipoleDetailWidget(PSDetailWidget):
         self.soft_intlk_bt.setStyleSheet(
             '#soft_intlk_bt{min-width:25px; max-width:25px; icon-size:20px;}')
         _util.connect_window(self.soft_intlk_bt, InterlockWindow, self,
-                             **{'magnet': self._magnet_name, 'interlock': 0})
+                             **{'devname': self._magnet_name, 'interlock': 0})
         self.led_soft_ma = SiriusLedAlert(
             parent=self, init_channel=self._prefixed_magnet + ':IntlkSoft-Mon')
         self.led_soft_ps0 = SiriusLedAlert(
@@ -89,7 +89,7 @@ class DipoleDetailWidget(PSDetailWidget):
         self.hard_intlk_bt.setStyleSheet(
             '#hard_intlk_bt{min-width:25px; max-width:25px; icon-size:20px;}')
         _util.connect_window(self.hard_intlk_bt, InterlockWindow, self,
-                             **{'magnet': self._magnet_name, 'interlock': 1})
+                             **{'devname': self._magnet_name, 'interlock': 1})
         self.led_hard_ma = SiriusLedAlert(
             parent=self, init_channel=self._prefixed_magnet + ':IntlkHard-Mon')
         self.led_hard_ps0 = SiriusLedAlert(

@@ -229,7 +229,7 @@ class PSDetailWidget(QWidget):
         self.soft_intlk_bt.setStyleSheet(
             '#soft_intlk_bt{min-width:25px; max-width:25px; icon-size:20px;}')
         util.connect_window(self.soft_intlk_bt, InterlockWindow, self,
-                            **{'magnet': self._psname, 'interlock': 0})
+                            **{'devname': self._psname, 'interlock': 0})
         self.soft_intlk_led = SiriusLedAlert(
             parent=self, init_channel=self._prefixed_psname + ":IntlkSoft-Mon")
 
@@ -238,7 +238,7 @@ class PSDetailWidget(QWidget):
         self.hard_intlk_bt.setStyleSheet(
             '#hard_intlk_bt{min-width:25px; max-width:25px; icon-size:20px;}')
         util.connect_window(self.hard_intlk_bt, InterlockWindow, self,
-                            **{'magnet': self._psname, 'interlock': 1})
+                            **{'devname': self._psname, 'interlock': 1})
         self.hard_intlk_led = SiriusLedAlert(
             parent=self, init_channel=self._prefixed_psname + ":IntlkHard-Mon")
 

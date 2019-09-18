@@ -2,6 +2,7 @@
 
 from qtpy.QtWidgets import QWidget, QVBoxLayout
 
+from siriuspy.namesys import SiriusPVName
 from siriushla.widgets import SiriusMainWindow
 from siriushla.util import connect_window
 from .control_widget.TrimControlWidget import TrimControlWidget
@@ -16,27 +17,28 @@ class PSTrimWindow(SiriusMainWindow):
         """Class constructor."""
         super(PSTrimWindow, self).__init__(parent)
         self.setObjectName('SIApp')
-        self._psname = psname
+        self._devname = SiriusPVName(psname)
+        self._devtype = self._devname.dis
         self._setup_ui()
 
     def _setup_ui(self):
-        self.setWindowTitle(self._psname + ' Trims')
+        self.setWindowTitle(self._devname + ' Trims')
         self.central_widget = QWidget()
         self.central_widget.layout = QVBoxLayout()
         self.central_widget.setLayout(self.central_widget.layout)
         self.setCentralWidget(self.central_widget)
         # Create family MagnetWidget
         self.fam_widget = SummaryWidget(
-            name=self._psname, parent=self,
+            name=self._devname, parent=self,
             visible_props={'detail', 'state', 'intlk', 'setpoint', 'monitor'})
         self.fam_widget.get_trim_button().setEnabled(False)
         # Connect family detail window
         fam_button = self.fam_widget.get_detail_button()
-        connect_window(fam_button, PSDetailWindow, self, psname=self._psname)
+        connect_window(fam_button, PSDetailWindow, self, psname=self._devname)
         # Create TrimWidget
-        device = self._psname.split("-")[-1]
+        device = self._devname.split("-")[-1]
         self.trim_widget = TrimControlWidget(
-            dev_type='PS', trim=device, parent=self,
+            dev_type=self._devtype, trim=device, parent=self,
             orientation=TrimControlWidget.HORIZONTAL)
         # Connect Trim detail buttons
         self._connect_buttons(self.trim_widget)

@@ -4,7 +4,7 @@ from qtpy.QtWidgets import QLabel, QPushButton
 import qtawesome as qta
 
 from pydm.widgets import PyDMLabel
-from siriuspy.search import LLTimeSearch
+from siriuspy.search import LLTimeSearch, HLTimeSearch
 from siriushla.widgets import PyDMLed, PyDMStateButton
 from siriushla.util import connect_window, get_appropriate_color
 from siriushla.widgets.windows import create_window_from_widget
@@ -35,6 +35,7 @@ class LLTriggerList(BaseList):
         'fine_delayraw': 4.8,
         'fine_delay': 6.5,
         'rf_delay_type': 6.5,
+        'hl_trigger': 10,
         }
     _LABELS = {
         'name': 'Name',
@@ -55,6 +56,7 @@ class LLTriggerList(BaseList):
         'fine_delayraw': 'Fine Delay',
         'fine_delay': 'Fine Delay [ps]',
         'rf_delay_type': 'RF Delay Type',
+        'hl_trigger': 'HL Trigger',
         }
     _ALL_PROPS = (
         'device', 'name', 'state', 'event', 'widthraw', 'width',
@@ -88,6 +90,10 @@ class LLTriggerList(BaseList):
             connect_window(sp, Win, None, prefix=outlb.device_name + ':')
         elif prop == 'name':
             sp = QLabel(outlb.propty, self)
+            sp.setAlignment(Qt.AlignCenter)
+        elif prop == 'hl_trigger':
+            trig = HLTimeSearch.get_hl_from_ll_triggers(prefix)
+            sp = QLabel(trig, self)
             sp.setAlignment(Qt.AlignCenter)
         elif prop == 'state':
             pvname = intlb.substitute(propty=intlb.propty+"State-Sel")
@@ -204,7 +210,7 @@ class OTPList(LLTriggerList):
 
     _ALL_PROPS = (
         'name', 'state', 'event', 'widthraw', 'width', 'polarity', 'pulses',
-        'delayraw', 'delay', 'timestamp')
+        'delayraw', 'delay', 'timestamp', 'hl_trigger')
 
 
 class OUTList(LLTriggerList):
@@ -212,7 +218,7 @@ class OUTList(LLTriggerList):
 
     _ALL_PROPS = (
         'name', 'source', 'trigger', 'rf_delayraw', 'rf_delay',
-        'rf_delay_type', 'fine_delayraw', 'fine_delay')
+        'rf_delay_type', 'fine_delayraw', 'fine_delay', 'hl_trigger')
 
 
 class AFCOUTList(LLTriggerList):
@@ -220,7 +226,9 @@ class AFCOUTList(LLTriggerList):
 
     _ALL_PROPS = (
         'name', 'state', 'event', 'source', 'widthraw', 'width', 'polarity',
-        'pulses', 'delayraw', 'delay', 'timestamp')
+        'pulses', 'delayraw', 'delay', 'timestamp', 'hl_trigger')
+    _MIN_WIDs = LLTriggerList._MIN_WIDs
+    _MIN_WIDs['name'] = 3.7
 
 
 if __name__ == '__main__':
