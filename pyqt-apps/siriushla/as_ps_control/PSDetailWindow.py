@@ -64,7 +64,11 @@ class PSDetailWindow(SiriusMainWindow):
                 psname = self._psname[0].replace(':MA-', ':PS-')
                 dclinks = PSSearch.conv_psname_2_dclink(psname)
                 if dclinks:
-                    connect_window(w, PSDetailWindow, self, psname=dclinks)
+                    dclink_type = PSSearch.conv_psname_2_psmodel(dclinks[0])
+                    if dclink_type != 'REGATRON_DCLink':
+                        connect_window(w, PSDetailWindow, self, psname=dclinks)
+                    else:
+                        w.setHidden(True)
                 else:
                     w.setHidden(True)
 
