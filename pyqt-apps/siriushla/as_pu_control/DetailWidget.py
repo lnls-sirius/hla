@@ -23,11 +23,11 @@ class PUDetailWidget(QWidget):
         self._devname = _PVName(devname)
         self._section = self._devname.sec
         self._devtype = self._devname.dis
+        self._prefdevname = self._devname.substitute(prefix=_VACA_PREFIX)
         self.setObjectName(self._section+'App')
         self.setWindowIcon(
             qta.icon('mdi.current-ac',
                      color=util.get_appropriate_color(self._section)))
-        self._prefdevname = _VACA_PREFIX + self._devname
 
         self._create_pvs()
         self._setup_ui()
@@ -71,8 +71,22 @@ class PUDetailWidget(QWidget):
             self._intlk8label_cte_pv = self._prefdevname+":Intlk8Label-Cte"
         self._ctrlmode_pv = self._prefdevname + ":CtrlMode-Mon"
 
-        self._preftrigname = self._prefdevname.replace(
-            'PM-', 'TI-').replace('PU-', 'TI-')
+        self._preftrigname = self._prefdevname.substitute(dis='TI')
+        if self._preftrigname.sec == 'TS':
+            if 'Eje' in self._preftrigname.dev:
+                sub = 'Fam'
+                dev = 'EjeSept'
+                idx = ''
+            elif self._preftrigname.dev == 'InjSeptG':
+                sub = 'Fam'
+                dev = 'InjSeptG'
+                idx = ''
+            else:
+                sub = self._preftrigname.sub
+                dev = self._preftrigname.dev
+                idx = self._preftrigname.idx
+            self._preftrigname = self._preftrigname.substitute(
+                sub=sub, dev=dev, idx=idx)
         self._timing_delay_sp = self._preftrigname + ":Delay-SP"
         self._timing_delay_rb = self._preftrigname + ":Delay-RB"
         self._timing_status_pv = self._preftrigname + ":Status-Mon"
@@ -229,21 +243,20 @@ class PUDetailWidget(QWidget):
         self._trigger_status_led = PyDMLedMultiChannel(
             parent=self, channels2values={self._timing_status_pv: 0,
                                           self._timing_state_pv: 1})
-        self._trigger_detail_btn = QPushButton(
+        self._trigger_detail_bt = QPushButton(
             qta.icon('fa5s.ellipsis-h'), '', self)
-        self._trigger_detail_btn.setObjectName('detail')
-        self._trigger_detail_btn.setStyleSheet(
+        self._trigger_detail_bt.setObjectName('detail')
+        self._trigger_detail_bt.setStyleSheet(
             '#detail{min-width:25px; max-width:25px; icon-size:20px;}')
         trg_w = create_window_from_widget(
             HLTriggerDetailed, title=self._preftrigname+' Detailed Settings',
             is_main=True)
         util.connect_window(
-            self._trigger_detail_btn, trg_w,
-            parent=self, prefix=self._prefdevname.replace(
-                'PM-', 'TI-').replace('PU-', 'TI-'))
+            self._trigger_detail_bt, trg_w, parent=self,
+            prefix=self._preftrigname)
         hbox_sts = QHBoxLayout()
         hbox_sts.addWidget(self._trigger_status_led)
-        hbox_sts.addWidget(self._trigger_detail_btn, alignment=Qt.AlignRight)
+        hbox_sts.addWidget(self._trigger_detail_bt, alignment=Qt.AlignRight)
 
         self._trigger_delay_label = QLabel('Delay', self)
         self._trigger_delay_sp = PyDMSpinbox(
