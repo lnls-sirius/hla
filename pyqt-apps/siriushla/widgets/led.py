@@ -177,10 +177,8 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         # Check which channel can be removed
         address2pop = list()
         for address in self._address2channel.keys():
-            if address not in new_channels2values:
+            if address not in new_channels2values.keys():
                 address2pop.append(address)
-            else:
-                new_channels2values.remove(address)
 
         # Remove channels
         for address in address2pop:
@@ -190,15 +188,17 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
             self._address2conn.pop(address)
 
         # Add new channels
-        for address in new_channels2values:
-            self._address2conn[address] = False
-            self._address2status[address] = 'UNDEF'
-            channel = PyDMChannel(
-                address=address,
-                connection_slot=self.connection_changed,
-                value_slot=self.value_changed)
-            channel.connect()
-            self._address2channel[address] = channel
+        for address, value in new_channels2values.items():
+            if address not in self._address2channel.keys():
+                self._address2conn[address] = False
+                self._address2status[address] = 'UNDEF'
+                channel = PyDMChannel(
+                    address=address,
+                    connection_slot=self.connection_changed,
+                    value_slot=self.value_changed)
+                channel.connect()
+                self._address2channel[address] = channel
+            self._address2values[address] = value
 
         self._channels = list(self._address2channel.values())
 

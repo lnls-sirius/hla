@@ -5,12 +5,12 @@ Based on ImageView from pydm and GradientLegend from pyqtgraph.
 
 import numpy as np
 import logging
-from qtpy.QtWidgets import QActionGroup
+from qtpy.QtWidgets import QActionGroup, QToolTip
 from qtpy.QtGui import QColor, QLinearGradient, QBrush, QPen
 from qtpy.QtCore import Signal, Slot, Property, QTimer, Q_ENUMS, \
-                         QThread, Qt, QRectF, QPointF
+    QThread, Qt, QRectF, QPointF
 from pyqtgraph import ViewBox, ImageItem, AxisItem, GraphicsLayoutWidget, \
-                      ColorMap, GraphicsWidget
+    ColorMap, GraphicsWidget, LabelItem, PlotCurveItem, mkPen
 from pyqtgraph.graphicsItems.ViewBox.ViewBoxMenu import ViewBoxMenu
 from pydm.widgets.channel import PyDMChannel
 from pydm.widgets.colormaps import cmaps, cmap_names, PyDMColorMap
@@ -249,8 +249,12 @@ class SiriusSpectrogramView(
 
     color_maps = cmaps
 
-    def __init__(self, parent=None, image_channel=None, xaxis_channel=None,
-                 yaxis_channel=None, background='w'):
+    def __init__(self, parent=None, image_channel=None,
+                 xaxis_channel=None, yaxis_channel=None,
+                 roioffsetx_channel=None, roioffsety_channel=None,
+                 roiwidth_channel=None, roiheight_channel=None,
+                 title='', background='w',
+                 image_width=0, image_height=0):
         """Initialize widget."""
         GraphicsLayoutWidget.__init__(self, parent)
         PyDMWidget.__init__(self)
@@ -258,41 +262,71 @@ class SiriusSpectrogramView(
         self._imagechannel = None
         self._xaxischannel = None
         self._yaxischannel = None
-        self._channels = 3*[None, ]
+        self._roioffsetxchannel = None
+        self._roioffsetychannel = None
+        self._roiwidthchannel = None
+        self._roiheightchannel = None
+        self._channels = 7*[None, ]
         self.image_waveform = np.zeros(0)
-        self._image_width = 0
+        self._image_width = image_width if not xaxis_channel else 0
+        self._image_height = image_height if not yaxis_channel else 0
+        self._roi_offsetx = 0
+        self._roi_offsety = 0
+        self._roi_width = 0
+        self._roi_height = 0
         self._normalize_data = False
         self._auto_downsample = True
         self._last_yaxis_data = None
         self._last_xaxis_data = None
 
-        self.setBackground(background)
-
-        # Add viewBox and imageItem.
+        # ViewBox and imageItem.
         self._view = ViewBox()
         self._image_item = ImageItem()
         self._view.addItem(self._image_item)
-        self.addItem(self._view, 0, 1)
-        self.ci.layout.setColumnSpacing(0, 0)
-        self.ci.layout.setRowSpacing(0, 0)
 
-        # Add axis.
+        # ROI
+        self.ROICurve = PlotCurveItem([0, 0, 0, 0, 0], [0, 0, 0, 0, 0])
+        self.ROIColor = QColor('red')
+        pen = mkPen()
+        pen.setColor(QColor('transparent'))
+        pen.setWidth(1)
+        self.ROICurve.setPen(pen)
+        self._view.addItem(self.ROICurve)
+
+        # Axis.
         self.xaxis = AxisItem('bottom')
         self.xaxis.setPen(QColor(0, 0, 0))
+        if not xaxis_channel:
+            self.xaxis.setVisible(False)
         self.yaxis = AxisItem('left')
         self.yaxis.setPen(QColor(0, 0, 0))
-        self.addItem(self.yaxis, 0, 0)
-        self.addItem(self.xaxis, 1, 1)
+        if not yaxis_channel:
+            self.yaxis.setVisible(False)
 
-        # Add colorbar legend.
+        # Colorbar legend.
         self.colorbar = _GradientLegend()
-        self.addItem(self.colorbar, 0, 2)
+
+        # Title.
+        start_row = 0
+        if title:
+            self.title = LabelItem(text=title, color='#000000')
+            self.addItem(self.title, 0, 0, 1, 3)
+            start_row = 1
+
+        # Set layout.
+        self.addItem(self._view, start_row, 1)
+        self.addItem(self.yaxis, start_row, 0)
+        self.addItem(self.colorbar, start_row, 2)
+        self.addItem(self.xaxis, start_row+1, 1)
+        self.setBackground(background)
+        self.ci.layout.setColumnSpacing(0, 0)
+        self.ci.layout.setRowSpacing(start_row, 0)
 
         # Set color map limits.
         self.cm_min = 0.0
         self.cm_max = 255.0
 
-        # Set default reading order of numpy array data to Fortranlike.
+        # Set default reading order of numpy array data to Clike.
         self._reading_order = ReadingOrder.Clike
 
         # Make a right-click menu for changing the color map.
@@ -315,10 +349,16 @@ class SiriusSpectrogramView(
         self.maxRedrawRate = self._redraw_rate
         self.newImageSignal = self._image_item.sigImageChanged
 
+        # Set Channels.
         self.imageChannel = image_channel
         self.xAxisChannel = xaxis_channel
         self.yAxisChannel = yaxis_channel
+        self.ROIOffsetXChannel = roioffsetx_channel
+        self.ROIOffsetYChannel = roioffsety_channel
+        self.ROIWidthChannel = roiwidth_channel
+        self.ROIHeightChannel = roiheight_channel
 
+    # --- Context menu ---
     def widget_ctx_menu(self):
         """
         Fetch the Widget specific context menu.
@@ -338,6 +378,7 @@ class SiriusSpectrogramView(
         cm_menu.triggered.connect(self._changeColorMap)
         return self.menu
 
+    # --- Colormap methods ---
     def _changeColorMap(self, action):
         """
         Method invoked by the colormap Action Menu.
@@ -466,6 +507,7 @@ class SiriusSpectrogramView(
         self.colorbar.setIntColorScale(colors=lut)
         self._image_item.setLookupTable(lut)
 
+    # --- Connection Slots ---
     @Slot(bool)
     def image_connection_state_changed(self, conn):
         """
@@ -493,6 +535,63 @@ class SiriusSpectrogramView(
         """
         self._timeaxis_connected = connected
 
+    @Slot(bool)
+    def roioffsetx_connection_state_changed(self, conn):
+        """
+        Run when the ROIOffsetX Channel connection state changes.
+
+        Parameters
+        ----------
+        conn : bool
+            The new connection state.
+
+        """
+        if not conn:
+            self._roi_offsetx = 0
+
+    @Slot(bool)
+    def roioffsety_connection_state_changed(self, conn):
+        """
+        Run when the ROIOffsetY Channel connection state changes.
+
+        Parameters
+        ----------
+        conn : bool
+            The new connection state.
+
+        """
+        if not conn:
+            self._roi_offsety = 0
+
+    @Slot(bool)
+    def roiwidth_connection_state_changed(self, conn):
+        """
+        Run when the ROIWidth Channel connection state changes.
+
+        Parameters
+        ----------
+        conn : bool
+            The new connection state.
+
+        """
+        if not conn:
+            self._roi_width = 0
+
+    @Slot(bool)
+    def roiheight_connection_state_changed(self, conn):
+        """
+        Run when the ROIHeight Channel connection state changes.
+
+        Parameters
+        ----------
+        conn : bool
+            The new connection state.
+
+        """
+        if not conn:
+            self._roi_height = 0
+
+    # --- Value Slots ---
     @Slot(np.ndarray)
     def image_value_changed(self, new_image):
         """
@@ -513,9 +612,13 @@ class SiriusSpectrogramView(
         logging.debug("SpectrogramView Received New Image: Needs Redraw->True")
         self.image_waveform = new_image
         self.needs_redraw = True
+        if not self._image_height and self._image_width:
+            self._image_height = new_image.size/self._image_width
+        elif not self._image_width and self._image_height:
+            self._image_width = new_image.size/self._image_height
 
     @Slot(np.ndarray)
-    def image_xaxis_changed(self, new_array):
+    def xaxis_value_changed(self, new_array):
         """
         Callback invoked when the Image Width Channel value is changed.
 
@@ -529,9 +632,11 @@ class SiriusSpectrogramView(
         self._last_xaxis_data = new_array
         if self._reading_order == self.Clike:
             self._image_width = new_array.size
+        else:
+            self._image_height = new_array.size
 
     @Slot(np.ndarray)
-    def image_yaxis_changed(self, new_array):
+    def yaxis_value_changed(self, new_array):
         """
         Callback invoked when the TimeAxis Channel value is changed.
 
@@ -545,7 +650,74 @@ class SiriusSpectrogramView(
         self._last_yaxis_data = new_array
         if self._reading_order == self.Fortranlike:
             self._image_width = new_array.size
+        else:
+            self._image_height = new_array.size
 
+    @Slot(int)
+    def roioffsetx_value_changed(self, new_offset):
+        """
+        Run when the ROIOffsetX Channel value changes.
+
+        Parameters
+        ----------
+        new_offsetx : int
+            The new image ROI horizontal offset
+
+        """
+        if new_offset is None:
+            return
+        self._roi_offsetx = new_offset
+        self.redrawROI()
+
+    @Slot(int)
+    def roioffsety_value_changed(self, new_offset):
+        """
+        Run when the ROIOffsetY Channel value changes.
+
+        Parameters
+        ----------
+        new_offsety : int
+            The new image ROI vertical offset
+
+        """
+        if new_offset is None:
+            return
+        self._roi_offsety = new_offset
+        self.redrawROI()
+
+    @Slot(int)
+    def roiwidth_value_changed(self, new_width):
+        """
+        Run when the ROIWidth Channel value changes.
+
+        Parameters
+        ----------
+        new_width : int
+            The new image ROI width
+
+        """
+        if new_width is None:
+            return
+        self._roi_width = int(new_width)
+        self.redrawROI()
+
+    @Slot(int)
+    def roiheight_value_changed(self, new_height):
+        """
+        Run when the ROIHeight Channel value changes.
+
+        Parameters
+        ----------
+        new_height : int
+            The new image ROI height
+
+        """
+        if new_height is None:
+            return
+        self._roi_height = int(new_height)
+        self.redrawROI()
+
+    # --- Image update methods ---
     def process_image(self, image):
         """
         Boilerplate method.
@@ -589,15 +761,26 @@ class SiriusSpectrogramView(
         logging.debug("SpectrogramView Update Display with new image")
 
         # Update axis
-        if self._last_yaxis_data is None or \
-                self._last_xaxis_data is None:
-            return
-        szx = self._last_xaxis_data.size
-        szy = self._last_yaxis_data.size
-        xMin = self._last_xaxis_data.min()
-        xMax = self._last_xaxis_data.max()
-        yMin = self._last_yaxis_data.min()
-        yMax = self._last_yaxis_data.max()
+        if self._last_xaxis_data is not None:
+            szx = self._last_xaxis_data.size
+            xMin = self._last_xaxis_data.min()
+            xMax = self._last_xaxis_data.max()
+        else:
+            szx = self.imageWidth if self.readingOrder == self.Clike \
+                else self.imageHeight
+            xMin = 0
+            xMax = szx
+
+        if self._last_yaxis_data is not None:
+            szy = self._last_yaxis_data.size
+            yMin = self._last_yaxis_data.min()
+            yMax = self._last_yaxis_data.max()
+        else:
+            szy = self.imageHeight if self.readingOrder == self.Clike \
+                else self.imageWidth
+            yMin = 0
+            yMax = szy
+
         self.xaxis.setRange(xMin, xMax)
         self.yaxis.setRange(yMin, yMax)
         self._view.setLimits(
@@ -614,6 +797,26 @@ class SiriusSpectrogramView(
             autoLevels=False,
             autoDownsample=self.autoDownsample)
 
+    # ROI update methods
+    def redrawROI(self):
+        startx = self._roi_offsetx
+        endx = self._roi_offsetx + self._roi_width
+        starty = self._roi_offsety
+        endy = self._roi_offsety + self._roi_height
+        self.ROICurve.setData(
+            [startx, startx, endx, endx, startx],
+            [starty, endy, endy, starty, starty])
+
+    def showROI(self, show):
+        """Set ROI visibility."""
+        pen = mkPen()
+        if show:
+            pen.setColor(self.ROIColor)
+        else:
+            pen.setColor(QColor('transparent'))
+        self.ROICurve.setPen(pen)
+
+    # --- Properties ---
     @Property(bool)
     def autoDownsample(self):
         """
@@ -665,6 +868,137 @@ class SiriusSpectrogramView(
         if boo:
             self._image_width = int(new_width)
 
+    @Property(int)
+    def imageHeight(self):
+        """
+        Return the height of the image.
+
+        Return
+        ------
+        int
+        """
+        return self._image_height
+
+    @Property(int)
+    def ROIOffsetX(self):
+        """
+        Return the ROI offset in X axis in pixels.
+
+        Return
+        ------
+        int
+        """
+        return self._roi_offsetx
+
+    @ROIOffsetX.setter
+    def ROIOffsetX(self, new_offset):
+        """
+        Set the ROI offset in X axis in pixels.
+
+        Can be overridden by :attr:`ROIOffsetXChannel`.
+
+        Parameters
+        ----------
+        new_offset: int
+        """
+        if new_offset is None:
+            return
+        boo = self._roi_offsetx != int(new_offset)
+        boo &= not self._roioffsetxchannel
+        if boo:
+            self._roi_offsetx = int(new_offset)
+            self.redrawROI()
+
+    @Property(int)
+    def ROIOffsetY(self):
+        """
+        Return the ROI offset in Y axis in pixels.
+
+        Return
+        ------
+        int
+        """
+        return self._roi_offsety
+
+    @ROIOffsetY.setter
+    def ROIOffsetY(self, new_offset):
+        """
+        Set the ROI offset in Y axis in pixels.
+
+        Can be overridden by :attr:`ROIOffsetYChannel`.
+
+        Parameters
+        ----------
+        new_offset: int
+        """
+        if new_offset is None:
+            return
+        boo = self._roi_offsety != int(new_offset)
+        boo &= not self._roioffsetychannel
+        if boo:
+            self._roi_offsety = int(new_offset)
+            self.redrawROI()
+
+    @Property(int)
+    def ROIWidth(self):
+        """
+        Return the ROI width in pixels.
+
+        Return
+        ------
+        int
+        """
+        return self._roi_width
+
+    @ROIWidth.setter
+    def ROIWidth(self, new_width):
+        """
+        Set the ROI width in pixels.
+
+        Can be overridden by :attr:`ROIWidthChannel`.
+
+        Parameters
+        ----------
+        new_width: int
+        """
+        if new_width is None:
+            return
+        boo = self._roi_width != int(new_width)
+        boo &= not self._roiwidthchannel
+        if boo:
+            self._roi_width = int(new_width)
+            self.redrawROI()
+
+    @Property(int)
+    def ROIHeight(self):
+        """
+        Return the ROI height in pixels.
+
+        Return
+        ------
+        int
+        """
+        return self._roi_height
+
+    @ROIHeight.setter
+    def ROIHeight(self, new_height):
+        """
+        Set the ROI height in pixels.
+
+        Can be overridden by :attr:`ROIHeightChannel`.
+
+        Parameters
+        ----------
+        new_height: int
+        """
+        if new_height is None:
+            return
+        boo = self._roi_height != int(new_height)
+        boo &= not self._roiheightchannel
+        if boo:
+            self._roi_height = int(new_height)
+            self.redrawROI()
+
     @Property(bool)
     def normalizeData(self):
         """
@@ -712,15 +1046,84 @@ class SiriusSpectrogramView(
         if self._reading_order != order:
             self._reading_order = order
 
-        if order == self.Clike and self._last_xaxis_data is not None:
-            self._image_width = self._last_xaxis_data.size
-        elif order == self.Fortranlike and self._last_yaxis_data is not None:
-            self._image_width = self._last_yaxis_data.size
+        if order == self.Clike:
+            if self._last_xaxis_data is not None:
+                self._image_width = self._last_xaxis_data.size
+            if self._last_yaxis_data is not None:
+                self._image_height = self._last_yaxis_data.size
+        elif order == self.Fortranlike:
+            if self._last_yaxis_data is not None:
+                self._image_width = self._last_yaxis_data.size
+            if self._last_xaxis_data is not None:
+                self._image_height = self._last_xaxis_data.size
 
+    @Property(int)
+    def maxRedrawRate(self):
+        """
+        The maximum rate (in Hz) at which the plot will be redrawn.
+
+        The plot will not be redrawn if there is not new data to draw.
+
+        Returns
+        -------
+        int
+        """
+        return self._redraw_rate
+
+    @maxRedrawRate.setter
+    def maxRedrawRate(self, redraw_rate):
+        """
+        The maximum rate (in Hz) at which the plot will be redrawn.
+
+        The plot will not be redrawn if there is not new data to draw.
+
+        Parameters
+        -------
+        redraw_rate : int
+        """
+        self._redraw_rate = redraw_rate
+        self.redraw_timer.setInterval(int((1.0 / self._redraw_rate) * 1000))
+
+    # --- Events rederivations ---
     def keyPressEvent(self, ev):
         """Handle keypress events."""
         return
 
+    def mouseMoveEvent(self, ev):
+        if not self._image_item.width() or not self._image_item.height():
+            super().mouseMoveEvent(ev)
+            return
+        pos = ev.pos()
+        posaux = self._image_item.mapFromDevice(ev.pos())
+        if posaux.x() < 0 or posaux.x() >= self._image_item.width() or \
+                posaux.y() < 0 or posaux.y() >= self._image_item.height():
+            super().mouseMoveEvent(ev)
+            return
+
+        pos_scene = self._view.mapSceneToView(pos)
+        x = round(pos_scene.x())
+        y = round(pos_scene.y())
+
+        if self.xAxisChannel and self._last_xaxis_data is not None:
+            maxx = len(self._last_xaxis_data)-1
+            x = x if x < maxx else maxx
+            valx = self._last_xaxis_data[x]
+        else:
+            valx = x
+
+        if self.yAxisChannel and self._last_yaxis_data is not None:
+            maxy = len(self._last_yaxis_data)-1
+            y = y if y < maxy else maxy
+            valy = self._last_yaxis_data[y]
+        else:
+            valy = y
+
+        txt = '{0:.4g}, {1:.4g}'.format(valx, valy)
+        QToolTip.showText(
+            self.mapToGlobal(pos), txt, self, self.geometry(), 5000)
+        super().mouseMoveEvent(ev)
+
+    # --- Channels ---
     @Property(str)
     def imageChannel(self):
         """
@@ -792,9 +1195,9 @@ class SiriusSpectrogramView(
             self._xaxischannel = PyDMChannel(
                 address=value,
                 connection_slot=self.connectionStateChanged,
-                value_slot=self.image_xaxis_changed,
+                value_slot=self.xaxis_value_changed,
                 severity_slot=self.alarmSeverityChanged)
-            self._channels[0] = self._xaxischannel
+            self._channels[1] = self._xaxischannel
             self._xaxischannel.connect()
 
     @Property(str)
@@ -830,10 +1233,170 @@ class SiriusSpectrogramView(
             self._yaxischannel = PyDMChannel(
                 address=value,
                 connection_slot=self.yaxis_connection_state_changed,
-                value_slot=self.image_yaxis_changed,
+                value_slot=self.yaxis_value_changed,
                 severity_slot=self.alarmSeverityChanged)
-            self._channels[0] = self._yaxischannel
+            self._channels[2] = self._yaxischannel
             self._yaxischannel.connect()
+
+    @Property(str)
+    def ROIOffsetXChannel(self):
+        """
+        Return the channel address in use for the image ROI horizontal offset.
+
+        Returns
+        -------
+        str
+            Channel address
+
+        """
+        if self._roioffsetxchannel:
+            return str(self._roioffsetxchannel.address)
+        else:
+            return ''
+
+    @ROIOffsetXChannel.setter
+    def ROIOffsetXChannel(self, value):
+        """
+        Return the channel address in use for the image ROI horizontal offset.
+
+        Parameters
+        ----------
+        value : str
+            Channel address
+
+        """
+        if self._roioffsetxchannel != value:
+            # Disconnect old channel
+            if self._roioffsetxchannel:
+                self._roioffsetxchannel.disconnect()
+            # Create and connect new channel
+            self._roioffsetxchannel = PyDMChannel(
+                address=value,
+                connection_slot=self.roioffsetx_connection_state_changed,
+                value_slot=self.roioffsetx_value_changed,
+                severity_slot=self.alarmSeverityChanged)
+            self._channels[3] = self._roioffsetxchannel
+            self._roioffsetxchannel.connect()
+
+    @Property(str)
+    def ROIOffsetYChannel(self):
+        """
+        Return the channel address in use for the image ROI vertical offset.
+
+        Returns
+        -------
+        str
+            Channel address
+
+        """
+        if self._roioffsetychannel:
+            return str(self._roioffsetychannel.address)
+        else:
+            return ''
+
+    @ROIOffsetYChannel.setter
+    def ROIOffsetYChannel(self, value):
+        """
+        Return the channel address in use for the image ROI vertical offset.
+
+        Parameters
+        ----------
+        value : str
+            Channel address
+
+        """
+        if self._roioffsetychannel != value:
+            # Disconnect old channel
+            if self._roioffsetychannel:
+                self._roioffsetychannel.disconnect()
+            # Create and connect new channel
+            self._roioffsetychannel = PyDMChannel(
+                address=value,
+                connection_slot=self.roioffsety_connection_state_changed,
+                value_slot=self.roioffsety_value_changed,
+                severity_slot=self.alarmSeverityChanged)
+            self._channels[4] = self._roioffsetychannel
+            self._roioffsetychannel.connect()
+
+    @Property(str)
+    def ROIWidthChannel(self):
+        """
+        Return the channel address in use for the image ROI width.
+
+        Returns
+        -------
+        str
+            Channel address
+
+        """
+        if self._roiwidthchannel:
+            return str(self._roiwidthchannel.address)
+        else:
+            return ''
+
+    @ROIWidthChannel.setter
+    def ROIWidthChannel(self, value):
+        """
+        Return the channel address in use for the image ROI width.
+
+        Parameters
+        ----------
+        value : str
+            Channel address
+
+        """
+        if self._roiwidthchannel != value:
+            # Disconnect old channel
+            if self._roiwidthchannel:
+                self._roiwidthchannel.disconnect()
+            # Create and connect new channel
+            self._roiwidthchannel = PyDMChannel(
+                address=value,
+                connection_slot=self.roiwidth_connection_state_changed,
+                value_slot=self.roiwidth_value_changed,
+                severity_slot=self.alarmSeverityChanged)
+            self._channels[5] = self._roiwidthchannel
+            self._roiwidthchannel.connect()
+
+    @Property(str)
+    def ROIHeightChannel(self):
+        """
+        Return the channel address in use for the image ROI height.
+
+        Returns
+        -------
+        str
+            Channel address
+
+        """
+        if self._roiheightchannel:
+            return str(self._roiheightchannel.address)
+        else:
+            return ''
+
+    @ROIHeightChannel.setter
+    def ROIHeightChannel(self, value):
+        """
+        Return the channel address in use for the image ROI height.
+
+        Parameters
+        ----------
+        value : str
+            Channel address
+
+        """
+        if self._roiheightchannel != value:
+            # Disconnect old channel
+            if self._roiheightchannel:
+                self._roiheightchannel.disconnect()
+            # Create and connect new channel
+            self._roiheightchannel = PyDMChannel(
+                address=value,
+                connection_slot=self.roiheight_connection_state_changed,
+                value_slot=self.roiheight_value_changed,
+                severity_slot=self.alarmSeverityChanged)
+            self._channels[6] = self._roiheightchannel
+            self._roiheightchannel.connect()
 
     def channels(self):
         """
@@ -849,30 +1412,3 @@ class SiriusSpectrogramView(
     def channels_for_tools(self):
         """Return channels for tools."""
         return [self._imagechannel]
-
-    @Property(int)
-    def maxRedrawRate(self):
-        """
-        The maximum rate (in Hz) at which the plot will be redrawn.
-
-        The plot will not be redrawn if there is not new data to draw.
-
-        Returns
-        -------
-        int
-        """
-        return self._redraw_rate
-
-    @maxRedrawRate.setter
-    def maxRedrawRate(self, redraw_rate):
-        """
-        The maximum rate (in Hz) at which the plot will be redrawn.
-
-        The plot will not be redrawn if there is not new data to draw.
-
-        Parameters
-        -------
-        redraw_rate : int
-        """
-        self._redraw_rate = redraw_rate
-        self.redraw_timer.setInterval(int((1.0 / self._redraw_rate) * 1000))

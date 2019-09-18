@@ -6,6 +6,7 @@ from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QWidget, QLabel, QPushButton, QGridLayout, \
     QHBoxLayout, QGroupBox, QSpinBox, QComboBox, QSpacerItem, \
     QSizePolicy as QSzPly
+import qtawesome as qta
 from siriuspy.namesys import SiriusPVName
 from siriuspy.csdevice.dccts import Const as _DCCTc
 from pydm.widgets import PyDMWaveformPlot
@@ -109,7 +110,13 @@ class DCCTMonitor(QWidget):
             self.label_buffsize.setStyleSheet(
                 'min-width:3em; max-width:3em;')
             self._buffSizeUpdate.connect(self.label_buffsize.setText)
-            self.pb_resetbuff = QPushButton('Reset', self)
+            self.pb_resetbuff = QPushButton(
+                qta.icon('mdi.delete-empty'), '', self)
+            self.pb_resetbuff.setToolTip('Reset buffer')
+            self.pb_resetbuff.setObjectName('resetbuff')
+            self.pb_resetbuff.setToolTip('Reset buffer')
+            self.pb_resetbuff.setStyleSheet(
+                "#resetbuff{min-width:25px; max-width:25px; icon-size:20px;}")
             self.pb_resetbuff.clicked.connect(self.resetBuffer)
             hlay_buff = QHBoxLayout()
             hlay_buff.addWidget(self.label_buffsize)
@@ -285,7 +292,12 @@ class BORampEffMonitor(QWidget):
         leftAxis.setStyle(autoExpandTextSpace=False, tickTextWidth=25)
         self.curve = self.graph.curveAtIndex(0)
 
-        self.pb_clearGraph = QPushButton('Clear graph', self)
+        self.pb_clearGraph = QPushButton(
+            qta.icon('mdi.delete-empty'), '', self)
+        self.pb_clearGraph.setObjectName('clear')
+        self.pb_clearGraph.setToolTip('Clear graph')
+        self.pb_clearGraph.setStyleSheet(
+            "#clear{min-width:25px; max-width:25px; icon-size:20px;}")
         self.pb_clearGraph.clicked.connect(self._clearGraph)
 
         l_indices = QLabel('Curve indices', self, alignment=Qt.AlignCenter)

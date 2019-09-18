@@ -3,7 +3,8 @@
 from qtpy.QtWidgets import QGridLayout, QFormLayout, \
     QWidget, QGroupBox, QLabel, QPushButton
 from qtpy.QtCore import Qt
-from pydm.widgets import PyDMLabel
+import qtawesome as qta
+from pydm.widgets import PyDMLabel, PyDMPushButton
 
 from siriuspy.namesys import SiriusPVName
 
@@ -132,8 +133,10 @@ class ScrnSettingsDetails(SiriusMainWindow):
         label_Gain = QLabel('Gain [dB]: ', self)
         hbox_Gain = _create_propty_layout(
             parent=self, prefix=self.scrn_prefix, propty='CamGain',
-            propty_type='sprb', cmd={'label': 'Auto Gain',
-                                     'pressValue': 1,
+            propty_type='sprb', cmd={'label': '', 'pressValue': 1,
+                                     'icon': qta.icon('mdi.auto-fix'),
+                                     'width': '25', 'height': '25',
+                                     'icon-size': '20', 'toolTip': 'Auto Gain',
                                      'name': 'CamAutoGain'})
 
         label_BlackLevel = QLabel('Black Level: ', self)
@@ -307,14 +310,17 @@ class ScrnSettingsDetails(SiriusMainWindow):
 
         cam_prefix = SiriusPVName(self.scrn_prefix).substitute(dev='ScrnCam')
         label_Reset = QLabel('Reset Camera: ', self)
-        hbox_Reset = _create_propty_layout(
-            parent=self, prefix=cam_prefix, propty='Reset',
-            cmd={'label': 'Reset', 'pressValue': 1, 'name': 'Rst'})
+        self.pb_dtl = PyDMPushButton(
+            label='', icon=qta.icon('fa5s.sync'),
+            parent=self, pressValue=1, init_channel=cam_prefix+':Rst-Cmd')
+        self.pb_dtl.setObjectName('reset')
+        self.pb_dtl.setStyleSheet(
+            "#reset{min-width:25px; max-width:25px; icon-size:20px;}")
 
         flay = QFormLayout()
         flay.addRow(label_CamTemp, hbox_CamTempState)
         flay.addRow(label_LastErr, hbox_LastErr)
-        flay.addRow(label_Reset, hbox_Reset)
+        flay.addRow(label_Reset, self.pb_dtl)
         flay.setLabelAlignment(Qt.AlignRight)
         flay.setFormAlignment(Qt.AlignCenter)
         return flay
