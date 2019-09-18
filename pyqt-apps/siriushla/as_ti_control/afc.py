@@ -1,7 +1,7 @@
 import sys
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QGroupBox, QLabel, QVBoxLayout, QHBoxLayout, \
-    QGridLayout, QMenuBar
+    QGridLayout, QMenuBar, QTabWidget
 import qtawesome as qta
 
 from pydm.widgets.label import PyDMLabel
@@ -31,30 +31,38 @@ class AFC(BaseWidget):
         self.my_layout.setHorizontalSpacing(20)
         self.my_layout.setVerticalSpacing(20)
 
-        self.my_layout.addWidget(self._setupmenus(), 0, 0, 1, 2)
+        self.my_layout.addWidget(self._setupmenus(), 0, 0)
 
         lab = QLabel('<h1>' + self.prefix.device_name + '</h1>', self)
-        self.my_layout.addWidget(lab, 1, 0, 1, 2)
+        self.my_layout.addWidget(lab, 1, 0)
         self.my_layout.setAlignment(lab, Qt.AlignCenter)
 
         self.status_wid = QGroupBox('Status', self)
-        self.my_layout.addWidget(self.status_wid, 2, 0, 1, 2)
+        self.my_layout.addWidget(self.status_wid, 2, 0)
         self._setup_status_wid()
 
+        tab = QTabWidget(self)
+        self.my_layout.addWidget(tab, 3, 0)
+
+        props = {
+            'name', 'state', 'event', 'source', 'width', 'polarity', 'pulses',
+            'delay', 'timestamp'}
         set_ = _LLTimeSearch.In2OutMap['AMCFPGAEVR']['SFP8']
         obj_names = sorted([out for out in set_ if out.startswith('FMC')])
-        self.fmcs_wid = AFCOUTList(name='FMC Outputs', parent=self,
-                                   prefix=self.prefix, obj_names=obj_names)
+        self.fmcs_wid = AFCOUTList(
+            name='', parent=self, props=props,
+            prefix=self.prefix, obj_names=obj_names)
         self.fmcs_wid.setObjectName('fmcs_wid')
         self.fmcs_wid.setStyleSheet("""#fmcs_wid{min-width:60em;}""")
-        self.my_layout.addWidget(self.fmcs_wid, 3, 0)
+        tab.addTab(self.fmcs_wid, 'FMC Outputs')
 
         obj_names = sorted([out for out in set_ if out.startswith('CRT')])
-        self.crts_wid = AFCOUTList(name='CRT Outputs', parent=self,
-                                   prefix=self.prefix, obj_names=obj_names)
+        self.crts_wid = AFCOUTList(
+            name='', parent=self, props=props,
+            prefix=self.prefix, obj_names=obj_names)
         self.crts_wid.setObjectName('crts_wid')
         self.crts_wid.setStyleSheet("""#crts_wid{min-width:60em;}""")
-        self.my_layout.addWidget(self.crts_wid, 3, 1)
+        tab.addTab(self.crts_wid, 'CRT Outputs')
 
     def _setupmenus(self):
         prefix = self.prefix
