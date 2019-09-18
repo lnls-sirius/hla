@@ -278,6 +278,10 @@ def get_object(ismenubar=True, parent=None):
                 Slits = QAction('Slits', diag)
                 self.connect_newprocess(Slits, 'sirius-hla-tb-di-slits.py')
                 diag.addAction(Slits)
+            if 'bo' in sec:
+                Tune = QAction('Tune', diag)
+                self.connect_newprocess(Tune, 'sirius-hla-bo-di-tune.py')
+                diag.addAction(Tune)
             if 'si' not in sec:
                 Scrns = QAction('Screens', diag)
                 self.connect_newprocess(

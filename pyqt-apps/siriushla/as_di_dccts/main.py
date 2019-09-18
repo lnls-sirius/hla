@@ -18,6 +18,10 @@ class DCCTMain(SiriusMainWindow):
         super().__init__(parent)
         self.prefix = prefix
         self.device = device
+        if 'BO' in device:
+            self.setObjectName('BOApp')
+        else:
+            self.setObjectName('SIApp')
         self.setWindowTitle(device)
         self._setupUi()
         self.setFocusPolicy(Qt.StrongFocus)
@@ -51,6 +55,7 @@ class SISelectDCCT(QWidget):
         """Init."""
         super().__init__(parent=parent)
         self.prefix = prefix
+        self.setObjectName('SIApp')
         self.dcct_list = ['SI-13C4:DI-DCCT', 'SI-14C4:DI-DCCT']
         self.setWindowTitle('Select a DCCT')
         self._setupUi()
