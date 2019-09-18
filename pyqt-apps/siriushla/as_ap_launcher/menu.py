@@ -352,11 +352,13 @@ def get_object(ismenubar=True, parent=None):
             #     self.connect_newprocess(
             #         fcorr, [scr, '--device', 'corrector-fast'])
             #     psma.addAction(fcorr)
-            if dis in 'ma':
-                pmag = QAction('Pulsed Magnets', psma)
-                self.connect_newprocess(
-                    pmag, 'sirius-hla-'+sec+'-pm-control.py')
-                psma.addAction(pmag)
+            pmag = QAction('Pulsed Magnets', psma)
+            if dis == 'ps':
+                script = 'sirius-hla-'+sec+'-pu-control.py'
+            elif dis == 'ma':
+                script = 'sirius-hla-'+sec+'-pm-control.py'
+            self.connect_newprocess(pmag, script)
+            psma.addAction(pmag)
             return psma
 
         def connect_newprocess(self, button, cmd):
