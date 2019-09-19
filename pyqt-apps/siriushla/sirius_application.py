@@ -21,8 +21,9 @@ _log.basicConfig(
 
 
 # Set QT_SCALE_FACTOR
-res = sub.getoutput('xrandr | grep current')
-if res:
+res = sub.getoutput('xrandr')
+if 'current' in res:
+    res = sub.getoutput('xrandr | grep current')
     res = int(res.split(',')[1].split()[3])
     if res > 2000:
         os.environ['QT_SCALE_FACTOR'] = '1.5'
