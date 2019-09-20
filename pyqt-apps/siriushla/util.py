@@ -61,11 +61,15 @@ def check_process(cmd, is_window=True):
     scmd = (_subprocess.list2cmdline(cmd) if isinstance(cmd, list) else cmd)
     window = ''
     pid = ''
+    sess = _subprocess.getoutput(
+        'ps -A -o sess,args | grep "[p]s -A -o sess,args" | xargs '
+        '| cut -f1 -d " " -')
     info = _subprocess.getoutput(
-        'ps h -A -o pid,command= | grep "['+scmd[0]+']'+scmd[1:]+'"')
+        'ps h -A -o pid,sess,command= | grep "['+scmd[0]+']'+scmd[1:]+'" | '
+        'grep '+sess)
     if info and is_window:
         info = info.split('\n')[0]
-        pid, comm = info.split(' ')[:2]
+        pid, _, comm = info.split()[:3]
         window = _check_window_by_pid(pid, comm)
     if pid and not window:
         infos = _subprocess.getoutput(
@@ -73,7 +77,7 @@ def check_process(cmd, is_window=True):
         for info in infos:
             if not info:
                 continue
-            pidc, comm = info.split(' ')[:2]
+            pidc, comm = info.split()[:2]
             window = _check_window_by_pid(pidc, comm)
             if window:
                 pid = pidc
@@ -88,7 +92,7 @@ def _check_window_by_pid(pid, comm):
         wind = _subprocess.getoutput('wmctrl -lpx | grep ' + pid)
     if not wind:
         return ''
-    window = wind.split('\n')[0].split(' ')[0]
+    window = wind.split('\n')[0].split()[0]
     return window
 
 
