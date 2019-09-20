@@ -117,6 +117,7 @@ class DipoleRamp(QWidget):
         self.ramp_config = ramp_config
         self._undo_stack = undo_stack
         self.plot_unit = 'Strengths'
+        self.setObjectName('DipoleRampWidget')
         self._setupUi()
 
     def _setupUi(self):
@@ -159,6 +160,7 @@ class DipoleRamp(QWidget):
         self.bt_apply = QPushButton(qta.icon('fa5s.angle-right'), '', self)
         self.bt_apply.setToolTip('Apply Changes to Machine')
         self.bt_apply.setStyleSheet('icon-size: 30px 30px;')
+        self.bt_apply.setObjectName('Apply Dipole and Timing')
         self.bt_apply.clicked.connect(self.applyChanges2MachineSignal.emit)
 
         lay = QVBoxLayout(self)
@@ -680,6 +682,7 @@ class MultipolesRamp(QWidget):
         t = _Thread(target=self._createMagnets, daemon=True)
         t.start()
 
+        self.setObjectName('MultipolesRampWidget')
         self._setupUi()
 
     @property
@@ -749,6 +752,7 @@ class MultipolesRamp(QWidget):
         self.bt_apply = QPushButton(qta.icon('fa5s.angle-right'), '', self)
         self.bt_apply.setToolTip('Apply Changes to Machine')
         self.bt_apply.setStyleSheet('icon-size: 30px 30px;')
+        self.bt_apply.setObjectName('Apply Multipoles')
         self.bt_apply.clicked.connect(self.applyChanges2MachineSignal.emit)
 
         lay = QVBoxLayout(self)
@@ -1262,6 +1266,7 @@ class RFRamp(QWidget):
         self.bt_apply = QPushButton(qta.icon('fa5s.angle-right'), '', self)
         self.bt_apply.setToolTip('Apply Changes to Machine')
         self.bt_apply.setStyleSheet('icon-size: 30px 30px;')
+        self.bt_apply.setObjectName('Apply RF')
         self.bt_apply.clicked.connect(self.applyChanges2MachineSignal.emit)
 
         lay = QVBoxLayout(self)
