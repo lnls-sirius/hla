@@ -4,12 +4,14 @@
 import sys
 import os as _os
 import numpy as np
+import epics
 from qtpy.uic import loadUi
 from qtpy.QtCore import Slot, Qt
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QFormLayout, QGridLayout, QHBoxLayout, QVBoxLayout,\
                            QSizePolicy as QSzPlcy, QLabel, QPushButton,\
                            QSpacerItem, QGroupBox, QWidget, QSpinBox
+import qtawesome as qta
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox, PyDMSpinbox, \
                          PyDMPushButton, PyDMWaveformPlot
 from pydm.widgets.waveformplot import WaveformCurveItem
@@ -18,8 +20,7 @@ from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, SiriusDialog, \
-                              SiriusConnectionSignal, SiriusLedAlert, \
-                              PyDMStateButton, PyDMLedMultiChannel
+    SiriusLedAlert, PyDMStateButton, PyDMLedMultiChannel
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla import util
 from siriushla.as_ti_control.hl_trigger import HLTriggerDetailed
@@ -175,7 +176,10 @@ class _ICTSettings(SiriusDialog):
         self.prefix = prefix
         self.device = device
         self.ict_prefix = _PVName(prefix+device)
-        self.ict_trig_prefix = self.ict_prefix.replace(':DI-', ':TI-')
+        self.ict_trig_digi_prefix = self.ict_prefix.substitute(
+            sub='Fam', dis='TI', idx='Digit')
+        self.ict_trig_integ_prefix = self.ict_prefix.substitute(
+            sub='Fam', dis='TI', idx='Integ')
         self.setWindowTitle(self.ict_prefix+' Settings')
         self.setObjectName(self.ict_prefix.sec+'App')
         self._setupUi()
@@ -198,17 +202,20 @@ class _ICTSettings(SiriusDialog):
         hlay_cal.addItem(QSpacerItem(4, 2, QSzPlcy.Expanding, QSzPlcy.Fixed))
         hlay_cal.addWidget(self.bt_cal)
 
-        self.gbox_generalsettings.setStyleSheet("""
+        self.setStyleSheet("""
             PyDMSpinbox{
-                min-width:7.10em;\nmax-width:7.10em;
-                min-height:1.29em;\nmax-height:1.29em;
-                qproperty-alignment: AlignCenter;\n}
+                min-width:7.10em; max-width:7.10em;
+                min-height:1.29em; max-height:1.29em;
+                qproperty-alignment: AlignCenter;
+            }
             PyDMEnumComboBox{
-                min-width:7.10em;\nmax-width:7.10em;
-                min-height:1.29em;\nmax-height:1.29em;\n}
-            PyDMLedMultiChannel{
-                min-width:7.10em;\nmax-width:7.10em;
-                min-height:1.29em;\nmax-height:1.29em;\n}""")
+                min-width:7.10em; max-width:7.10em;
+                min-height:1.29em; max-height:1.29em;
+            }
+            PyDMLed{
+                min-width:1.29em; max-width:1.29em;
+                min-height:1.29em; max-height:1.29em;
+            }""")
 
         lay = QVBoxLayout()
         lay.addStretch()
@@ -224,13 +231,11 @@ class _ICTSettings(SiriusDialog):
         self.setLayout(lay)
 
     def _setupReliableMeasWidget(self):
-        reliablemeas_channel = SiriusConnectionSignal(
-            self.ict_prefix+':ReliableMeasLabels-Mon')
-        reliablemeas_channel.new_value_signal.connect(
-            self._updateReliableMeasLabels)
+        self.reliablemeas_channel = epics.PV(
+            self.ict_prefix+':ReliableMeasLabels-Cte',
+            callback=self._updateReliableMeasLabels)
 
-        gbox_reliablemeas = _GroupBoxWithChannel(
-            'ICT Measure Reliability Status', self, [reliablemeas_channel])
+        gbox_reliablemeas = QGroupBox('ICT Measure Reliability Status', self)
         gbox_reliablemeas.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Fixed)
 
         self.label_reliablemeas0 = QLabel('', self)
@@ -256,10 +261,9 @@ class _ICTSettings(SiriusDialog):
         return gbox_reliablemeas
 
     def _setupICTGeneralSettingsWidget(self):
-        gbox_generalsettings = QGroupBox(
-            'ICT Measurement Settings', self)
+        gbox_generalsettings = QGroupBox('ICT Measurement Settings', self)
 
-        l_sampletrg = QLabel('Measurement Trigger Source: ', self)
+        l_sampletrg = QLabel('Trigger Source: ', self)
         self.pydmenumcombobox_SampleTrg = PyDMEnumComboBox(
             parent=self, init_channel=self.ict_prefix+':SampleTrg-Sel')
         self.pydmlabel_SampleTrg = PyDMLabel(
@@ -268,36 +272,93 @@ class _ICTSettings(SiriusDialog):
         hlay_sampletrg.addWidget(self.pydmenumcombobox_SampleTrg)
         hlay_sampletrg.addWidget(self.pydmlabel_SampleTrg)
 
-        l_TIstatus = QLabel('Timing Trigger Status: ', self)
-        self.ledmulti_TIStatus = PyDMLedMultiChannel(
+        # Digitizer trigger
+        label_Digi = QLabel('<h4>Digitizer: </h4>', self)
+
+        l_DigiSts = QLabel('Status: ', self)
+        self.led_DigiSts = PyDMLedMultiChannel(
             parent=self,
-            channels2values={self.ict_trig_prefix+':State-Sts': 1,
-                             self.ict_trig_prefix+':Status-Mon': 0})
-        self.pb_trgdetails = QPushButton('Open details', self)
-        self.pb_trgdetails.setAutoDefault(False)
-        self.pb_trgdetails.setDefault(False)
+            channels2values={self.ict_trig_digi_prefix+':State-Sts': 1,
+                             self.ict_trig_digi_prefix+':Status-Mon': 0})
+        self.pb_DigiDetails = QPushButton(
+            qta.icon('fa5s.ellipsis-h'), '', self)
+        self.pb_DigiDetails.setObjectName('trgdigidtls')
+        self.pb_DigiDetails.setStyleSheet(
+            "#trgdigidtls{min-width:25px; max-width:25px; icon-size:20px;}")
+        self.pb_DigiDetails.setAutoDefault(False)
+        self.pb_DigiDetails.setDefault(False)
         trg_w = create_window_from_widget(
-            HLTriggerDetailed,
-            title=self.ict_trig_prefix+' Detailed Settings',
-            is_main=True)
-        util.connect_window(
-            self.pb_trgdetails, trg_w, parent=self,
-            prefix=self.ict_trig_prefix+':')
-        hlay_TIstatus = QHBoxLayout()
-        hlay_TIstatus.addWidget(self.ledmulti_TIStatus)
-        hlay_TIstatus.addWidget(self.pb_trgdetails)
+            HLTriggerDetailed, is_main=True,
+            title=self.ict_trig_digi_prefix+' Detailed Settings')
+        util.connect_window(self.pb_DigiDetails, trg_w, parent=self,
+                            prefix=self.ict_trig_digi_prefix+':')
+        l_DigiDelay = QLabel('Delay: ', self)
+        self.pydmspinbox_DigiDelay = PyDMSpinbox(
+            parent=self, init_channel=self.ict_trig_digi_prefix+':Delay-SP')
+        self.pydmspinbox_DigiDelay.showStepExponent = False
+        self.pydmlabel_DigiDelay = PyDMLabel(
+            parent=self, init_channel=self.ict_trig_digi_prefix+':Delay-RB')
+        l_DigiDuration = QLabel('Duration: ', self)
+        self.pydmspinbox_DigiDuration = PyDMSpinbox(
+            parent=self, init_channel=self.ict_trig_digi_prefix+':Duration-SP')
+        self.pydmspinbox_DigiDuration.showStepExponent = False
+        self.pydmlabel_DigiDuration = PyDMLabel(
+            parent=self, init_channel=self.ict_trig_digi_prefix+':Duration-RB')
+        lay_Digi = QGridLayout()
+        lay_Digi.addWidget(l_DigiSts, 0, 0)
+        lay_Digi.addWidget(self.led_DigiSts, 0, 1, alignment=Qt.AlignLeft)
+        lay_Digi.addWidget(self.pb_DigiDetails, 0, 2, alignment=Qt.AlignLeft)
+        lay_Digi.addWidget(l_DigiDelay, 1, 0)
+        lay_Digi.addWidget(self.pydmspinbox_DigiDelay, 1, 1)
+        lay_Digi.addWidget(self.pydmlabel_DigiDelay, 1, 2)
+        lay_Digi.addWidget(l_DigiDuration, 2, 0)
+        lay_Digi.addWidget(self.pydmspinbox_DigiDuration, 2, 1)
+        lay_Digi.addWidget(self.pydmlabel_DigiDuration, 2, 2)
 
-        l_TIdelay = QLabel('Timing Trigger Delay: ', self)
-        self.pydmspinbox_TIDelay = PyDMSpinbox(
-            parent=self, init_channel=self.ict_trig_prefix+':Delay-SP')
-        self.pydmspinbox_TIDelay.showStepExponent = False
-        self.pydmlabel_TIDelay = PyDMLabel(
-            parent=self, init_channel=self.ict_trig_prefix+':Delay-RB')
-        hlay_TIdelay = QHBoxLayout()
-        hlay_TIdelay.addWidget(self.pydmspinbox_TIDelay)
-        hlay_TIdelay.addWidget(self.pydmlabel_TIDelay)
+        # Integrator trigger
+        label_Inte = QLabel('<h4>Integrator: </h4>', self)
 
-        l_thold = QLabel('Charge Threshold [mA]: ', self)
+        l_IntegSts = QLabel('Status: ', self)
+        self.led_IntegSts = PyDMLedMultiChannel(
+            parent=self,
+            channels2values={self.ict_trig_integ_prefix+':State-Sts': 1,
+                             self.ict_trig_integ_prefix+':Status-Mon': 0})
+        self.pb_IntegDetails = QPushButton(
+            qta.icon('fa5s.ellipsis-h'), '', self)
+        self.pb_IntegDetails.setObjectName('trgdigidtls')
+        self.pb_IntegDetails.setStyleSheet(
+            "#trgdigidtls{min-width:25px; max-width:25px; icon-size:20px;}")
+        self.pb_IntegDetails.setAutoDefault(False)
+        self.pb_IntegDetails.setDefault(False)
+        trg_w = create_window_from_widget(
+            HLTriggerDetailed, is_main=True,
+            title=self.ict_trig_integ_prefix+' Detailed Settings')
+        util.connect_window(self.pb_IntegDetails, trg_w, parent=self,
+                            prefix=self.ict_trig_integ_prefix+':')
+        l_IntegDelay = QLabel('Delay: ', self)
+        self.pydmspinbox_IntegDelay = PyDMSpinbox(
+            parent=self, init_channel=self.ict_trig_digi_prefix+':Delay-SP')
+        self.pydmspinbox_IntegDelay.showStepExponent = False
+        self.pydmlabel_IntegDelay = PyDMLabel(
+            parent=self, init_channel=self.ict_trig_digi_prefix+':Delay-RB')
+        l_IntegDuration = QLabel('Delay: ', self)
+        self.pydmspinbox_IntegDuration = PyDMSpinbox(
+            parent=self, init_channel=self.ict_trig_digi_prefix+':Duration-SP')
+        self.pydmspinbox_IntegDuration.showStepExponent = False
+        self.pydmlabel_IntegDuration = PyDMLabel(
+            parent=self, init_channel=self.ict_trig_digi_prefix+':Duration-RB')
+        lay_Integ = QGridLayout()
+        lay_Integ.addWidget(l_IntegSts, 0, 0)
+        lay_Integ.addWidget(self.led_IntegSts, 0, 1, alignment=Qt.AlignLeft)
+        lay_Integ.addWidget(self.pb_IntegDetails, 0, 2, alignment=Qt.AlignLeft)
+        lay_Integ.addWidget(l_IntegDelay, 1, 0)
+        lay_Integ.addWidget(self.pydmspinbox_IntegDelay, 1, 1)
+        lay_Integ.addWidget(self.pydmlabel_IntegDelay, 1, 2)
+        lay_Integ.addWidget(l_IntegDuration, 2, 0)
+        lay_Integ.addWidget(self.pydmspinbox_IntegDuration, 2, 1)
+        lay_Integ.addWidget(self.pydmlabel_IntegDuration, 2, 2)
+
+        l_thold = QLabel('Threshold [nC]: ', self)
         self.pydmspinbox_Threshold = PyDMSpinbox(
             parent=self, init_channel=self.ict_prefix+':Threshold-SP')
         self.pydmspinbox_Threshold.showStepExponent = False
@@ -307,24 +368,25 @@ class _ICTSettings(SiriusDialog):
         hlay_thold.addWidget(self.pydmspinbox_Threshold)
         hlay_thold.addWidget(self.pydmlabel_Threshold)
 
-        flay_generalsettings = QFormLayout()
-        flay_generalsettings.setFormAlignment(Qt.AlignCenter)
-        flay_generalsettings.addRow(l_sampletrg, hlay_sampletrg)
-        flay_generalsettings.addRow(l_TIstatus, hlay_TIstatus)
-        flay_generalsettings.addRow(l_TIdelay, hlay_TIdelay)
-        flay_generalsettings.addItem(
-            QSpacerItem(1, 20, QSzPlcy.Fixed, QSzPlcy.Fixed))
-        flay_generalsettings.addRow(l_thold, hlay_thold)
-        flay_generalsettings.setFormAlignment(Qt.AlignCenter)
-        flay_generalsettings.setLabelAlignment(Qt.AlignRight)
-        gbox_generalsettings.setLayout(flay_generalsettings)
+        flay = QFormLayout()
+        flay.addRow(l_sampletrg, hlay_sampletrg)
+        flay.addItem(QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        flay.addRow(QLabel('<h4>Triggers</h4>'))
+        flay.addRow(label_Digi, lay_Digi)
+        flay.addItem(QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        flay.addRow(label_Inte, lay_Integ)
+        flay.addItem(QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        flay.addRow(l_thold, hlay_thold)
+        flay.setFormAlignment(Qt.AlignCenter)
+        flay.setLabelAlignment(Qt.AlignRight)
+        gbox_generalsettings.setLayout(flay)
         return gbox_generalsettings
 
-    def _updateReliableMeasLabels(self, labels):
-        if labels:
-            self.label_reliablemeas0.setText(labels[0])
-            self.label_reliablemeas1.setText(labels[1])
-            self.label_reliablemeas2.setText(labels[2])
+    def _updateReliableMeasLabels(self, pvname, value, **kwars):
+        if value:
+            self.label_reliablemeas0.setText(value[0])
+            self.label_reliablemeas1.setText(value[1])
+            self.label_reliablemeas2.setText(value[2])
 
 
 class _ICTCalibration(QWidget):
@@ -481,10 +543,15 @@ class _ICTCalibration(QWidget):
         hlay_calcharge.addWidget(self.pydmenumcombobox_CalCharge)
         hlay_calcharge.addWidget(self.pydmlabel_CalCharge)
 
-        l_download = QLabel('Download to hardware? ', self)
+        l_download = QLabel('Download to hardware ', self)
         self.pydmpushbutton_Download = PyDMPushButton(
             parent=self, init_channel=self.ict_prefix+':Download-Cmd',
-            label='Download', pressValue=1)
+            label='', icon=qta.icon('fa5s.download'), pressValue=1)
+        self.pydmpushbutton_Download.setObjectName('download')
+        self.pydmpushbutton_Download.setStyleSheet(
+            "#download{min-width:25px; max-width:25px; icon-size:20px;}")
+        self.pydmpushbutton_Download.setAutoDefault(False)
+        self.pydmpushbutton_Download.setDefault(False)
 
         flay = QFormLayout()
         flay.addRow(l_thold, hlay_thold)
@@ -533,7 +600,8 @@ class _ICTCalibration(QWidget):
 
         label_graphsettings = QLabel('<h4>Graph Settings</h4>', self,
                                      alignment=Qt.AlignHCenter)
-        l_plot = QLabel('Plot first', self, alignment=Qt.AlignRight)
+        l_plot = QLabel('Plot first', self,
+                        alignment=Qt.AlignRight | Qt.AlignVCenter)
         l_points = QLabel(' points ', self)
         self.sb_nrpoints = QSpinBox(self)
         self.sb_nrpoints.setMinimum(0)
@@ -553,17 +621,6 @@ class _ICTCalibration(QWidget):
     def _set_nrpoints(self):
         global POINTS_TO_PLOT
         POINTS_TO_PLOT = self.sb_nrpoints.value()
-
-
-class _GroupBoxWithChannel(QGroupBox):
-
-    def __init__(self, title='', parent=None, channels=None):
-        self._channels = channels
-        super().__init__(title, parent)
-
-    def channels(self):
-        """Return channels."""
-        return self._channels
 
 
 class _MyWaveformCurveItem(WaveformCurveItem):
