@@ -76,6 +76,9 @@ class Settings(QMenuBar):
         self.act_dcct.setIcon(qta.icon('mdi.current-dc'))
         util.connect_newprocess(
             self.act_dcct, ['sirius-hla-as-di-dcct.py', 'BO'], parent=self)
+        self.act_tune = self.diag_menu.addAction('Tune')
+        util.connect_newprocess(
+            self.act_tune, 'sirius-hla-bo-di-tune.py', parent=self)
         # TODO: menu to access all windows related to diagnostics
 
         self.open_menu = self.addMenu('Open...')

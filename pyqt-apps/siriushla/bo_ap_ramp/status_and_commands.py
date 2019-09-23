@@ -129,7 +129,7 @@ class StatusAndCommands(QGroupBox):
             elif 'PwrState' in p:
                 c2v_setup[pfx + conn[p].pvname_rb] = _PSc.PwrStateSts.On
             elif 'WfmData' in p:
-                c2v_apply[pfx + conn[p].pvname_rb] = None
+                c2v_apply[pfx + conn[p].pvname_rb] = _np.array([])
 
         conn = self._conn_rf
         c2v_intlk[pfx + conn.Const.Rmp_Intlk] = 0
