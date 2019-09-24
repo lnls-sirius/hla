@@ -170,10 +170,10 @@ class PSDetailWidget(QWidget):
         controls.addWidget(self.version_box, 0, 0, 1, 2)
         if self._is_magnet:
             controls.addWidget(self.psconn_box, 1, 0, 1, 2)
-        controls.addWidget(self.interlock_box, 2, 0)
-        controls.addWidget(self.opmode_box, 2, 1)
-        controls.addWidget(self.pwrstate_box, 3, 0)
-        controls.addWidget(self.ctrlloop_box, 3, 1)
+        controls.addWidget(self.opmode_box, 2, 0)
+        controls.addWidget(self.pwrstate_box, 2, 1)
+        controls.addWidget(self.ctrlloop_box, 3, 0)
+        controls.addWidget(self.interlock_box, 3, 1)
         controls.addWidget(self.pru_box, 4, 0, 1, 2)
 
         analogs = QVBoxLayout()

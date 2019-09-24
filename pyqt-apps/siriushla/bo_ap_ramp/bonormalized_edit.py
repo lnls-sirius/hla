@@ -140,15 +140,14 @@ class BONormEdit(SiriusMainWindow):
             else:
                 ma_value = _MyDoubleSpinBox(self.nconfig_data)
                 ma_value.setDecimals(6)
-                ma_value.setValue(self.norm_config[ma])
-                ma_value.editingFinished.connect(self._handleStrenghtsSet)
-
                 aux = self._aux_magnets[ma]
                 currs = (aux.current_min, aux.current_max)
                 lims = aux.conv_current_2_strength(
                     currents=currs, strengths_dipole=self.energy)
                 ma_value.setMinimum(min(lims))
                 ma_value.setMaximum(max(lims))
+                ma_value.setValue(self.norm_config[ma])
+                ma_value.editingFinished.connect(self._handleStrenghtsSet)
 
                 if 'Q' in ma:
                     unit_txt = '1/m'
@@ -601,7 +600,7 @@ class BONormEdit(SiriusMainWindow):
         self._estimateChrom(use_ref=True)
         self._updateDeltaSL()
 
-    # ---------- handle undo redo stask ----------
+    # ---------- handle undo redo stack ----------
 
     def _stack_command(self, widget, old_value, new_value, message):
         global _flag_stack_next_command, _flag_stacking
