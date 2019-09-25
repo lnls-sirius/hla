@@ -129,13 +129,16 @@ class PSDetailWidget(QWidget):
         self.pru_box.setObjectName('pru_box')
         self.current_box = QGroupBox("Current")
         self.current_box.setObjectName("current")
-        self.wfm_tab = QWidget()
-        self.wfm_tab.setObjectName("wfm_tab")
+        self.wfmdata_tab = QWidget()
+        self.wfmdata_tab.setObjectName("wfmdata_tab")
+        self.wfmref_tab = QWidget()
+        self.wfmref_tab.setObjectName("wfmref_tab")
         self.siggen_tab = QWidget()
         self.siggen_tab.setObjectName('cycle_tab')
         self.cycle_tabs = QTabWidget()
         self.cycle_tabs.addTab(self.siggen_tab, 'SigGen')
-        self.cycle_tabs.addTab(self.wfm_tab, 'Waveforms')
+        self.cycle_tabs.addTab(self.wfmdata_tab, 'WfmData')
+        self.cycle_tabs.addTab(self.wfmref_tab, 'WfmRef')
         if self._psname.sec == 'BO':
             self.cycle_tabs.setCurrentIndex(1)
         if self._is_magnet:
@@ -153,7 +156,8 @@ class PSDetailWidget(QWidget):
         self.ctrlloop_box.setLayout(self._ctrlLoopLayout())
         self.pru_box.setLayout(self._pruLayout())
         self.current_box.setLayout(self._currentLayout())
-        self.wfm_tab.setLayout(self._waveformLayout())
+        self.wfmdata_tab.setLayout(self._wfmdataLayout())
+        self.wfmref_tab.setLayout(self._wfmrefLayout())
         self.siggen_tab.setLayout(self._siggenLayout())
         if self._is_magnet:
             self.psconn_box.setLayout(self._psConnLayout())
@@ -504,7 +508,7 @@ class PSDetailWidget(QWidget):
         layout.setColumnStretch(3, 1)
         return layout
 
-    def _waveformLayout(self):
+    def _wfmdataLayout(self):
         wfm_data_sp_ch = self._prefixed_psname + ":WfmData-SP"
         wfm_data_rb_ch = self._prefixed_psname + ":WfmData-RB"
 
@@ -521,36 +525,84 @@ class PSDetailWidget(QWidget):
                                 color='blue', lineWidth=2)
 
         # NrPoints
-        self._wnrpts_sp = 0
-        self._wnrpts_rb = 0
-        self.wnrpts = QLabel('', self)
-        self.wnrpts.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
-        self.wnrpts_ch_rb = SiriusConnectionSignal(wfm_data_rb_ch)
-        self.wnrpts_ch_rb.new_value_signal[_np.ndarray].connect(
-            self._wnrpts_update_rb)
-        self.wnrpts_ch_sp = SiriusConnectionSignal(wfm_data_sp_ch)
-        self.wnrpts_ch_sp.new_value_signal[_np.ndarray].connect(
-            self._wnrpts_update_sp)
+        self._wfmdata_nrpts_sp = 0
+        self._wfmdata_nrpts_rb = 0
+        self.wfmdata_nrpts = QLabel('', self)
+        self.wfmdata_nrpts.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        self.wfmdata_nrpts_ch_rb = SiriusConnectionSignal(wfm_data_rb_ch)
+        self.wfmdata_nrpts_ch_rb.new_value_signal[_np.ndarray].connect(
+            self._wfmdata_nrpts_update_rb)
+        self.wfmdata_nrpts_ch_sp = SiriusConnectionSignal(wfm_data_sp_ch)
+        self.wfmdata_nrpts_ch_sp.new_value_signal[_np.ndarray].connect(
+            self._wfmdata_nrpts_update_sp)
 
         # Add widgets
         layout = QVBoxLayout()
         layout.setAlignment(Qt.AlignTop)
         layout.addWidget(self.wfmdata)
-        layout.addWidget(self.wnrpts)
+        layout.addWidget(self.wfmdata_nrpts)
         return layout
 
-    def _set_wnrpts_label(self):
-        self.wnrpts.setText(
+    def _wfmrefLayout(self):
+        wfm_data_sp_ch = self._prefixed_psname + ":WfmRef-SP"
+        wfm_data_rb_ch = self._prefixed_psname + ":WfmRef-RB"
+
+        # Plot
+        self.wfmref = PyDMWaveformPlot()
+        self.wfmref.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        self.wfmref.autoRangeX = True
+        self.wfmref.autoRangeY = True
+        self.wfmref.setBackgroundColor(QColor(255, 255, 255))
+        self.wfmref.setShowLegend(True)
+        self.wfmref.addChannel(y_channel=wfm_data_sp_ch, name='WfmRef-SP',
+                               color='red', lineWidth=2)
+        self.wfmref.addChannel(y_channel=wfm_data_rb_ch, name='WfmRef-RB',
+                               color='blue', lineWidth=2)
+
+        # NrPoints
+        self._wfmref_nrpts_sp = 0
+        self._wfmref_nrpts_rb = 0
+        self.wfmref_nrpts = QLabel('', self)
+        self.wfmref_nrpts.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        self.wfmref_nrpts_ch_rb = SiriusConnectionSignal(wfm_data_rb_ch)
+        self.wfmref_nrpts_ch_rb.new_value_signal[_np.ndarray].connect(
+            self._wfmref_nrpts_update_rb)
+        self.wfmref_nrpts_ch_sp = SiriusConnectionSignal(wfm_data_sp_ch)
+        self.wfmref_nrpts_ch_sp.new_value_signal[_np.ndarray].connect(
+            self._wfmref_nrpts_update_sp)
+
+        # Add widgets
+        layout = QVBoxLayout()
+        layout.setAlignment(Qt.AlignTop)
+        layout.addWidget(self.wfmref)
+        layout.addWidget(self.wfmref_nrpts)
+        return layout
+
+    def _set_wfmdata_nrpts_label(self):
+        self.wfmdata_nrpts.setText(
             "WfmData nrpts (SP|RB): {}|{}".format(
-                self._wnrpts_sp, self._wnrpts_rb))
+                self._wfmdata_nrpts_sp, self._wfmdata_nrpts_rb))
 
-    def _wnrpts_update_rb(self, value):
-        self._wnrpts_rb = len(value)
-        self._set_wnrpts_label()
+    def _wfmdata_nrpts_update_rb(self, value):
+        self._wfmdata_nrpts_rb = len(value)
+        self._set_wfmdata_nrpts_label()
 
-    def _wnrpts_update_sp(self, value):
-        self._wnrpts_sp = len(value)
-        self._set_wnrpts_label()
+    def _wfmdata_nrpts_update_sp(self, value):
+        self._wfmdata_nrpts_sp = len(value)
+        self._set_wfmdata_nrpts_label()
+
+    def _set_wfmref_nrpts_label(self):
+        self.wfmref_nrpts.setText(
+            "WfmRef nrpts (SP|RB): {}|{}".format(
+                self._wfmref_nrpts_sp, self._wfmref_nrpts_rb))
+
+    def _wfmref_nrpts_update_rb(self, value):
+        self._wfmref_nrpts_rb = len(value)
+        self._set_wfmref_nrpts_label()
+
+    def _wfmref_nrpts_update_sp(self, value):
+        self._wfmref_nrpts_sp = len(value)
+        self._set_wfmref_nrpts_label()
 
     def _getElementType(self):
         dipole = re.compile("(SI|BO|LI|TS|TB)-(Fam|\w{2,4}):MA-B")
