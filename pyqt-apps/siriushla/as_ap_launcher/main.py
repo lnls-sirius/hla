@@ -13,7 +13,7 @@ from siriushla.util import get_appropriate_color
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, PyDMStateButton, \
     SiriusLedState, SiriusLedAlert
-from siriushla.misc.epics.wrapper import PyEpicsWrapper
+from siriushla.common.epics.wrapper import PyEpicsWrapper
 from .menu import get_object
 
 
