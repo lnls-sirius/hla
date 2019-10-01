@@ -564,6 +564,17 @@ def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
             'hval', str(height)))
         label.setAlignment(Qt.AlignCenter)
         layout.addWidget(label)
+    elif propty_type == 'cte':
+        setattr(parent, 'PyDMLabel_'+propty,
+                PyDMLabel(parent=parent,
+                          init_channel=prefix+':'+propty+'-Cte'))
+        label = getattr(parent, 'PyDMLabel_'+propty)
+        label.setStyleSheet("""
+            min-width:wvalem; max-width:wvalem; min-height:hvalem;
+            max-height:hvalem;""".replace('wval', str(width)).replace(
+            'hval', str(height)))
+        label.setAlignment(Qt.AlignCenter)
+        layout.addWidget(label)
 
     if cmd:
         setattr(parent, 'PyDMPushButton_'+propty,
@@ -596,11 +607,16 @@ def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
     return layout
 
 
-def create_trigger_layout(parent, device, prefix):
+def create_trigger_layout(parent, device, prefix, delay=True, duration=False,
+                          nrpulses=False):
     if 'TB' in device or 'BO' in device:
         trg_prefix = prefix+'AS-Fam:TI-Scrn-TBBO'
     elif 'TS' in device:
         trg_prefix = prefix+'TS-Fam:TI-Scrn'
+
+    flay = QFormLayout()
+    flay.setLabelAlignment(Qt.AlignRight)
+    flay.setFormAlignment(Qt.AlignCenter)
 
     l_TIstatus = QLabel('Status: ', parent)
     ledmulti_TIStatus = PyDMLedMultiChannel(
@@ -622,16 +638,29 @@ def create_trigger_layout(parent, device, prefix):
     hlay_TIstatus = QHBoxLayout()
     hlay_TIstatus.addWidget(ledmulti_TIStatus)
     hlay_TIstatus.addWidget(pb_trgdetails)
-
-    l_TIdelay = QLabel('Delay [us]: ', parent)
-    l_TIdelay.setStyleSheet("""min-width:5em;""")
-    hlay_TIdelay = create_propty_layout(
-        parent=parent, prefix=trg_prefix, propty='Delay',
-        propty_type='sprb', width=6)
-
-    flay = QFormLayout()
     flay.addRow(l_TIstatus, hlay_TIstatus)
-    flay.addRow(l_TIdelay, hlay_TIdelay)
-    flay.setLabelAlignment(Qt.AlignRight)
-    flay.setFormAlignment(Qt.AlignCenter)
+
+    if delay:
+        l_TIdelay = QLabel('Delay [us]: ', parent)
+        l_TIdelay.setStyleSheet("min-width:5em;")
+        hlay_TIdelay = create_propty_layout(
+            parent=parent, prefix=trg_prefix, propty='Delay',
+            propty_type='sprb', width=6)
+        flay.addRow(l_TIdelay, hlay_TIdelay)
+
+    if duration:
+        l_TIduration = QLabel('Duration [us]: ', parent)
+        l_TIduration.setStyleSheet("min-width:5em;")
+        hlay_TIduration = create_propty_layout(
+            parent=parent, prefix=trg_prefix, propty='Duration',
+            propty_type='sprb', width=6)
+        flay.addRow(l_TIduration, hlay_TIduration)
+
+    if nrpulses:
+        l_TInrpulses = QLabel('Nr Pulses: ', parent)
+        l_TInrpulses.setStyleSheet("min-width:5em;")
+        hlay_TInrpulses = create_propty_layout(
+            parent=parent, prefix=trg_prefix, propty='NrPulses',
+            propty_type='sprb', width=6)
+        flay.addRow(l_TInrpulses, hlay_TInrpulses)
     return flay
