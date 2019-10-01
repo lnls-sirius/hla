@@ -131,14 +131,14 @@ class PSDetailWidget(QWidget):
         self.current_box.setObjectName("current")
         self.wfmdata_tab = QWidget()
         self.wfmdata_tab.setObjectName("wfmdata_tab")
-        self.wfmref_tab = QWidget()
-        self.wfmref_tab.setObjectName("wfmref_tab")
+        self.wfm_tab = QWidget()
+        self.wfm_tab.setObjectName("wfm_tab")
         self.siggen_tab = QWidget()
         self.siggen_tab.setObjectName('cycle_tab')
         self.cycle_tabs = QTabWidget()
         self.cycle_tabs.addTab(self.siggen_tab, 'SigGen')
         self.cycle_tabs.addTab(self.wfmdata_tab, 'WfmData')
-        self.cycle_tabs.addTab(self.wfmref_tab, 'WfmRef')
+        self.cycle_tabs.addTab(self.wfm_tab, 'WfmRef')
         if self._psname.sec == 'BO':
             self.cycle_tabs.setCurrentIndex(1)
         if self._is_magnet:
@@ -157,7 +157,7 @@ class PSDetailWidget(QWidget):
         self.pru_box.setLayout(self._pruLayout())
         self.current_box.setLayout(self._currentLayout())
         self.wfmdata_tab.setLayout(self._wfmdataLayout())
-        self.wfmref_tab.setLayout(self._wfmrefLayout())
+        self.wfm_tab.setLayout(self._wfmLayout())
         self.siggen_tab.setLayout(self._siggenLayout())
         if self._is_magnet:
             self.psconn_box.setLayout(self._psConnLayout())
@@ -543,39 +543,39 @@ class PSDetailWidget(QWidget):
         layout.addWidget(self.wfmdata_nrpts)
         return layout
 
-    def _wfmrefLayout(self):
+    def _wfmLayout(self):
         wfm_data_sp_ch = self._prefixed_psname + ":WfmRef-SP"
         wfm_data_rb_ch = self._prefixed_psname + ":WfmRef-RB"
 
         # Plot
-        self.wfmref = PyDMWaveformPlot()
-        self.wfmref.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
-        self.wfmref.autoRangeX = True
-        self.wfmref.autoRangeY = True
-        self.wfmref.setBackgroundColor(QColor(255, 255, 255))
-        self.wfmref.setShowLegend(True)
-        self.wfmref.addChannel(y_channel=wfm_data_sp_ch, name='WfmRef-SP',
+        self.wfm = PyDMWaveformPlot()
+        self.wfm.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        self.wfm.autoRangeX = True
+        self.wfm.autoRangeY = True
+        self.wfm.setBackgroundColor(QColor(255, 255, 255))
+        self.wfm.setShowLegend(True)
+        self.wfm.addChannel(y_channel=wfm_data_sp_ch, name='WfmRef-SP',
                                color='red', lineWidth=2)
-        self.wfmref.addChannel(y_channel=wfm_data_rb_ch, name='WfmRef-RB',
+        self.wfm.addChannel(y_channel=wfm_data_rb_ch, name='WfmRef-RB',
                                color='blue', lineWidth=2)
 
         # NrPoints
-        self._wfmref_nrpts_sp = 0
-        self._wfmref_nrpts_rb = 0
-        self.wfmref_nrpts = QLabel('', self)
-        self.wfmref_nrpts.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
-        self.wfmref_nrpts_ch_rb = SiriusConnectionSignal(wfm_data_rb_ch)
-        self.wfmref_nrpts_ch_rb.new_value_signal[_np.ndarray].connect(
-            self._wfmref_nrpts_update_rb)
-        self.wfmref_nrpts_ch_sp = SiriusConnectionSignal(wfm_data_sp_ch)
-        self.wfmref_nrpts_ch_sp.new_value_signal[_np.ndarray].connect(
-            self._wfmref_nrpts_update_sp)
+        self._wfm_nrpts_sp = 0
+        self._wfm_nrpts_rb = 0
+        self.wfm_nrpts = QLabel('', self)
+        self.wfm_nrpts.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        self.wfm_nrpts_ch_rb = SiriusConnectionSignal(wfm_data_rb_ch)
+        self.wfm_nrpts_ch_rb.new_value_signal[_np.ndarray].connect(
+            self._wfm_nrpts_update_rb)
+        self.wfm_nrpts_ch_sp = SiriusConnectionSignal(wfm_data_sp_ch)
+        self.wfm_nrpts_ch_sp.new_value_signal[_np.ndarray].connect(
+            self._wfm_nrpts_update_sp)
 
         # Add widgets
         layout = QVBoxLayout()
         layout.setAlignment(Qt.AlignTop)
-        layout.addWidget(self.wfmref)
-        layout.addWidget(self.wfmref_nrpts)
+        layout.addWidget(self.wfm)
+        layout.addWidget(self.wfm_nrpts)
         return layout
 
     def _set_wfmdata_nrpts_label(self):
@@ -591,18 +591,18 @@ class PSDetailWidget(QWidget):
         self._wfmdata_nrpts_sp = len(value)
         self._set_wfmdata_nrpts_label()
 
-    def _set_wfmref_nrpts_label(self):
-        self.wfmref_nrpts.setText(
+    def _set_wfm_nrpts_label(self):
+        self.wfm_nrpts.setText(
             "WfmRef nrpts (SP|RB): {}|{}".format(
-                self._wfmref_nrpts_sp, self._wfmref_nrpts_rb))
+                self._wfm_nrpts_sp, self._wfm_nrpts_rb))
 
-    def _wfmref_nrpts_update_rb(self, value):
-        self._wfmref_nrpts_rb = len(value)
-        self._set_wfmref_nrpts_label()
+    def _wfm_nrpts_update_rb(self, value):
+        self._wfm_nrpts_rb = len(value)
+        self._set_wfm_nrpts_label()
 
-    def _wfmref_nrpts_update_sp(self, value):
-        self._wfmref_nrpts_sp = len(value)
-        self._set_wfmref_nrpts_label()
+    def _wfm_nrpts_update_sp(self, value):
+        self._wfm_nrpts_sp = len(value)
+        self._set_wfm_nrpts_label()
 
     def _getElementType(self):
         dipole = re.compile("(SI|BO|LI|TS|TB)-(Fam|\w{2,4}):MA-B")
