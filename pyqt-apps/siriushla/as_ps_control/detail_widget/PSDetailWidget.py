@@ -546,7 +546,7 @@ class PSDetailWidget(QWidget):
     def _wfmLayout(self):
         wfm_data_sp_ch = self._prefixed_psname + ":Wfm-SP"
         wfm_data_rb_ch = self._prefixed_psname + ":Wfm-RB"
-        wfm_data_rm_ch = self._prefixed_psname + ":WfmRef-RB"
+        wfm_data_rm_ch = self._prefixed_psname + ":WfmRef-Mon"
 
         # Plot
         self.wfm = PyDMWaveformPlot()
