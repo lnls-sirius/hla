@@ -28,6 +28,8 @@ class BaslerCamSettings(QTabWidget):
         self.addTab(self._imgIntesityAndBGWidget(), 'Intensity and BG')
         self.addTab(self._ROIWidget(), 'ROI')
         self.setCurrentIndex(2)
+        self.setStyleSheet(
+            '#'+self.device.sec+'App{min-width: 31em; max-width: 31em;}')
 
     def _infoWidget(self):
         label_DevID = QLabel('Device ID:', self)
