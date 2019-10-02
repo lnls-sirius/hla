@@ -282,6 +282,9 @@ def get_object(ismenubar=True, parent=None):
                 Tune = QAction('Tune', diag)
                 self.connect_newprocess(Tune, 'sirius-hla-bo-di-tune.py')
                 diag.addAction(Tune)
+                VLight = QAction('VLight', diag)
+                self.connect_newprocess(VLight, 'sirius-hla-bo-di-vlight.py')
+                diag.addAction(VLight)
             if 'si' not in sec:
                 Scrns = QAction('Screens', diag)
                 self.connect_newprocess(
