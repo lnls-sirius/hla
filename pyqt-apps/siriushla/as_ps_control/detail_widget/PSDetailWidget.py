@@ -114,7 +114,7 @@ class PSDetailWidget(QWidget):
 
     def _setup_ui(self):
         # Group boxes that compose the widget
-        self.version_box = QGroupBox("Version")
+        self.version_box = QGroupBox("Firmware Version")
         self.version_box.setObjectName("version")
         self.version_box.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
         self.interlock_box = QGroupBox("Interlock")
@@ -125,8 +125,8 @@ class PSDetailWidget(QWidget):
         self.opmode_box.setObjectName("operation_mode")
         self.ctrlloop_box = QGroupBox('Control Loop')
         self.ctrlloop_box.setObjectName('ctrlloop_box')
-        self.pru_box = QGroupBox('PRU')
-        self.pru_box.setObjectName('pru_box')
+        self.params_box = QGroupBox('Params')
+        self.params_box.setObjectName('params_box')
         self.current_box = QGroupBox("Current")
         self.current_box.setObjectName("current")
         self.wfmdata_tab = QWidget()
@@ -154,7 +154,7 @@ class PSDetailWidget(QWidget):
         self.pwrstate_box.setLayout(self._powerStateLayout())
         self.opmode_box.setLayout(self._opModeLayout())
         self.ctrlloop_box.setLayout(self._ctrlLoopLayout())
-        self.pru_box.setLayout(self._pruLayout())
+        self.params_box.setLayout(self._paramsLayout())
         self.current_box.setLayout(self._currentLayout())
         self.wfmdata_tab.setLayout(self._wfmdataLayout())
         self.wfm_tab.setLayout(self._wfmLayout())
@@ -178,7 +178,7 @@ class PSDetailWidget(QWidget):
         controls.addWidget(self.pwrstate_box, 2, 1)
         controls.addWidget(self.ctrlloop_box, 3, 0)
         controls.addWidget(self.interlock_box, 3, 1)
-        controls.addWidget(self.pru_box, 4, 0, 1, 2)
+        controls.addWidget(self.params_box, 4, 0, 1, 2)
 
         analogs = QVBoxLayout()
         analogs.addWidget(self.current_box, Qt.AlignCenter)
@@ -468,26 +468,31 @@ class PSDetailWidget(QWidget):
         layout.addWidget(self.cycle_auxparam_rb_label, 7, 2)
         return layout
 
-    def _pruLayout(self):
+    def _paramsLayout(self):
         sync_mode_ca = self._prefixed_psname + ':PRUSyncMode-Mon'
         block_index_ca = self._prefixed_psname + ':PRUBlockIndex-Mon'
         sync_count_ca = self._prefixed_psname + ':PRUSyncPulseCount-Mon'
+        wfm_count_ca = self._prefixed_psname + ':WfmIndex-Mon'
         queue_size_ca = self._prefixed_psname + ':PRUCtrlQueueSize-Mon'
         bsmp_comm_ca = self._prefixed_psname + ':BSMPComm-Sts'
         bsmp_comm_sel = self._prefixed_psname + ':BSMPComm-Sel'
 
-        sync_mode_label = QLabel('Sync Mode', self)
+        sync_mode_label = QLabel('PRU Sync Mode', self)
         sync_mode_rb_label = PyDMLabel(self, sync_mode_ca)
 
-        block_index_label = QLabel('Block Index', self)
+        block_index_label = QLabel('PRU Block Index', self)
         block_index_rb_label = PyDMLabel(self, block_index_ca)
-        sync_count_label = QLabel('Pulse Count', self)
+
+        sync_count_label = QLabel('PRU Pulse Count', self)
         sync_count_rb_label = PyDMLabel(self, sync_count_ca)
 
-        queue_size_label = QLabel('Queue Size', self)
+        wfm_count_label = QLabel('WfmIndex', self)
+        wfm_count_rb_label = PyDMLabel(self, wfm_count_ca)
+
+        queue_size_label = QLabel('IOC Queue Size', self)
         queue_size_rb_label = PyDMLabel(self, queue_size_ca)
 
-        bsmp_comm_label = QLabel('BSMP Comm.', self)
+        bsmp_comm_label = QLabel('IOC Serial Comm.', self)
         bsmp_comm_sts_led = SiriusLedAlert(self, bsmp_comm_ca)
         bsmp_comm_sts_led.setOnColor(SiriusLedAlert.LightGreen)
         bsmp_comm_sts_led.setOffColor(SiriusLedAlert.Red)
@@ -500,11 +505,13 @@ class PSDetailWidget(QWidget):
         layout.addWidget(block_index_rb_label, 1, 1)
         layout.addWidget(sync_count_label, 2, 0, Qt.AlignRight)
         layout.addWidget(sync_count_rb_label, 2, 1)
-        layout.addWidget(queue_size_label, 3, 0, Qt.AlignRight)
-        layout.addWidget(queue_size_rb_label, 3, 1)
-        layout.addWidget(bsmp_comm_label, 4, 0, Qt.AlignRight)
-        layout.addWidget(bsmp_comm_btn, 4, 1)
-        layout.addWidget(bsmp_comm_sts_led, 4, 2)
+        layout.addWidget(wfm_count_label, 3, 0, Qt.AlignRight)
+        layout.addWidget(wfm_count_rb_label, 3, 1)
+        layout.addWidget(queue_size_label, 4, 0, Qt.AlignRight)
+        layout.addWidget(queue_size_rb_label, 4, 1)
+        layout.addWidget(bsmp_comm_label, 5, 0, Qt.AlignRight)
+        layout.addWidget(bsmp_comm_btn, 5, 1)
+        layout.addWidget(bsmp_comm_sts_led, 6, 2)
         layout.setColumnStretch(3, 1)
         return layout
 
@@ -656,8 +663,8 @@ class DCLinkDetailWidget(PSDetailWidget):
         self.opmode_box.setObjectName('operation_mode')
         self.ctrlloop_box = QGroupBox('Control Loop')
         self.ctrlloop_box.setObjectName('ctrlloop_box')
-        self.pru_box = QGroupBox('PRU')
-        self.pru_box.setObjectName('pru_box')
+        self.params_box = QGroupBox('Params')
+        self.params_box.setObjectName('params_box')
         self.analog_box = QGroupBox(self._analog_varname)
         self.analog_box.setObjectName('current')
         self.aux_box = QGroupBox('Other Params')
@@ -669,7 +676,7 @@ class DCLinkDetailWidget(PSDetailWidget):
         self.pwrstate_box.setLayout(self._powerStateLayout())
         self.opmode_box.setLayout(self._opModeLayout())
         self.ctrlloop_box.setLayout(self._ctrlLoopLayout())
-        self.pru_box.setLayout(self._pruLayout())
+        self.params_box.setLayout(self._paramsLayout())
         self.analog_box.setLayout(self._analogLayout())
         self.aux_box.setLayout(self._auxLayout())
 
@@ -686,7 +693,7 @@ class DCLinkDetailWidget(PSDetailWidget):
         controls.addWidget(self.opmode_box, 1, 1)
         controls.addWidget(self.pwrstate_box, 2, 0)
         controls.addWidget(self.ctrlloop_box, 2, 1)
-        controls.addWidget(self.pru_box, 3, 0, 1, 2)
+        controls.addWidget(self.params_box, 3, 0, 1, 2)
 
         analogs = QVBoxLayout()
         analogs.addWidget(self.analog_box)
