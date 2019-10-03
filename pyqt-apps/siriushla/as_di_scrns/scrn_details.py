@@ -1,19 +1,17 @@
 """SiriusScrnView widget."""
 
 from qtpy.QtWidgets import QGridLayout, QFormLayout, \
-    QWidget, QGroupBox, QLabel, QPushButton
+    QWidget, QGroupBox, QLabel, QPushButton, QVBoxLayout
 from qtpy.QtCore import Qt
-import qtawesome as qta
-from pydm.widgets import PyDMLabel, PyDMPushButton
+from pydm.widgets import PyDMLabel
 
 from siriuspy.namesys import SiriusPVName
 
 from siriushla import util
 
 from siriushla.widgets.windows import SiriusMainWindow
-from siriushla.as_di_scrns.base import \
-    create_propty_layout as _create_propty_layout, \
-    create_trigger_layout as _create_trigger_layout
+from siriushla.common.cam_basler import \
+    BaslerCamSettings as _BaslerCamSettings
 from siriushla.as_di_scrns.scrn_calib import \
     ScrnCalibrationSettings as _ScrnCalibrationSettings
 
@@ -24,9 +22,9 @@ class ScrnSettingsDetails(SiriusMainWindow):
     def __init__(self, parent=None, device=None, prefix=None):
         """Init."""
         super().__init__(parent=parent)
-        self.prefix = prefix
-        self.device = device
-        self.scrn_prefix = SiriusPVName(self.prefix+self.device)
+        self.prefix = SiriusPVName(prefix)
+        self.device = SiriusPVName(device)
+        self.scrn_prefix = SiriusPVName(prefix+device)
         self.setWindowTitle('Screen Settings Details')
         self.setObjectName(self.scrn_prefix.sec+'App')
         self.centralwidget = QWidget(self)
@@ -40,48 +38,20 @@ class ScrnSettingsDetails(SiriusMainWindow):
         gbox_general = QGroupBox('Low Level Devices Prefixes', self)
         gbox_general.setLayout(self._setupGeneralInfoLayout())
 
-        gbox_acq = QGroupBox('Camera Acquire Settings', self)
-        gbox_acq.setLayout(self._setupCamAcqSettingsLayout())
-
-        gbox_trg = QGroupBox('Screen Trigger', self)
-        gbox_trg.setLayout(self._setupScrnTriggerLayout())
-
-        gbox_ROI = QGroupBox('Camera Region of Interest (ROI) Settings', self)
-        gbox_ROI.setLayout(self._setupROISettingsLayout())
-
-        gbox_bg = QGroupBox('Background Acquisition', self)
-        gbox_bg.setLayout(self._setupBGAcqLayout())
-
-        gbox_intensity = QGroupBox('Image Intensity Settings', self)
-        gbox_intensity.setLayout(self._setupImgIntensityLayout())
-
-        gbox_err = QGroupBox('Camera Errors Monitoring', self)
-        gbox_err.setLayout(self._setupErrorMonLayout())
+        gbox_cam = QGroupBox('Camera Settings', self)
+        gbox_cam.setLayout(self._setupCamSettingsLayout())
 
         bt_cal = QPushButton('Screen Calibration', self)
         util.connect_window(bt_cal, _ScrnCalibrationSettings,
                             parent=self, prefix=self.prefix,
                             device=self.device)
 
-        lay = QGridLayout()
-        lay.setVerticalSpacing(15)
-        lay.setHorizontalSpacing(15)
-        lay.addWidget(label, 0, 0, 1, 3)
-        lay.addWidget(gbox_general, 1, 0, 1, 1)
-        lay.addWidget(gbox_acq, 2, 0, 2, 1)
-        lay.addWidget(gbox_trg, 4, 0, 1, 1)
-        lay.addWidget(gbox_err, 5, 0, 1, 1)
-        lay.addWidget(gbox_ROI, 1, 1, 2, 2)
-        lay.addWidget(gbox_bg, 3, 1, 1, 2)
-        lay.addWidget(gbox_intensity, 4, 1, 2, 2)
-        lay.addWidget(bt_cal, 6, 2)
-        lay.setRowStretch(0, 1)
-        lay.setRowStretch(1, 2)
-        lay.setRowStretch(2, 6)
-        lay.setRowStretch(3, 3)
-        lay.setRowStretch(4, 2)
-        lay.setRowStretch(5, 3)
-        lay.setRowStretch(6, 1)
+        lay = QVBoxLayout()
+        lay.setSpacing(15)
+        lay.addWidget(label)
+        lay.addWidget(gbox_general)
+        lay.addWidget(gbox_cam)
+        lay.addWidget(bt_cal, alignment=Qt.AlignRight)
         self.centralwidget.setLayout(lay)
 
     def _setupGeneralInfoLayout(self):
@@ -104,223 +74,9 @@ class ScrnSettingsDetails(SiriusMainWindow):
         flay.setFormAlignment(Qt.AlignCenter)
         return flay
 
-    def _setupCamAcqSettingsLayout(self):
-        label_CamEnbl = QLabel('Acquire Enable Status: ', self)
-        hbox_CamEnbl = _create_propty_layout(
-            parent=self, prefix=self.scrn_prefix, propty='CamEnbl',
-            propty_type='enbldisabl')
-
-        label_AcqMode = QLabel('Acquire Mode: ', self)
-        hbox_AcqMode = _create_propty_layout(
-            parent=self, prefix=self.scrn_prefix, propty='CamAcqMode',
-            propty_type='enum')
-
-        label_AcqPeriod = QLabel('Acquire Period [s]: ', self)
-        hbox_AcqPeriod = _create_propty_layout(
-            parent=self, prefix=self.scrn_prefix, propty='CamAcqPeriod',
-            propty_type='sprb')
-
-        label_ExpMode = QLabel('Exposure Mode: ', self)
-        hbox_ExpMode = _create_propty_layout(
-            parent=self, prefix=self.scrn_prefix, propty='CamExposureMode',
-            propty_type='enum')
-
-        label_ExpTime = QLabel('Exposure Time [us]: ', self)
-        hbox_ExpTime = _create_propty_layout(
-            parent=self, prefix=self.scrn_prefix, propty='CamExposureTime',
-            propty_type='sprb')
-
-        label_Gain = QLabel('Gain [dB]: ', self)
-        hbox_Gain = _create_propty_layout(
-            parent=self, prefix=self.scrn_prefix, propty='CamGain',
-            propty_type='sprb', cmd={'label': '', 'pressValue': 1,
-                                     'icon': qta.icon('mdi.auto-fix'),
-                                     'width': '25', 'height': '25',
-                                     'icon-size': '20', 'toolTip': 'Auto Gain',
-                                     'name': 'CamAutoGain'})
-
-        label_BlackLevel = QLabel('Black Level: ', self)
-        hbox_BlackLevel = _create_propty_layout(
-            parent=self, prefix=self.scrn_prefix, propty='CamBlackLevel',
-            propty_type='sprb')
-
-        flay = QFormLayout()
-        flay.addRow(label_CamEnbl, hbox_CamEnbl)
-        flay.addRow(label_AcqMode, hbox_AcqMode)
-        flay.addRow(label_AcqPeriod, hbox_AcqPeriod)
-        flay.addRow(label_ExpMode, hbox_ExpMode)
-        flay.addRow(label_ExpTime, hbox_ExpTime)
-        flay.addRow(label_Gain, hbox_Gain)
-        flay.addRow(label_BlackLevel, hbox_BlackLevel)
-        flay.setLabelAlignment(Qt.AlignRight)
-        flay.setFormAlignment(Qt.AlignCenter)
-        return flay
-
-    def _setupScrnTriggerLayout(self):
-        return _create_trigger_layout(
-            parent=self, device=self.device, prefix=self.prefix)
-
-    def _setupROISettingsLayout(self):
-        label_ImgMaxWidth = QLabel('Maximum Width [pixels]: ', self)
-        self.PyDMLabel_ImgMaxWidth = PyDMLabel(
-            parent=self, init_channel=self.scrn_prefix+':ImgMaxWidth-Cte')
-        self.PyDMLabel_ImgMaxWidth.setStyleSheet(
-            """max-width:7.10em; max-height:1.29em;""")
-
-        label_ImgMaxHeight = QLabel('Maximum Height [pixels]: ', self)
-        self.PyDMLabel_ImgMaxHeight = PyDMLabel(
-            parent=self, init_channel=self.scrn_prefix+':ImgMaxHeight-Cte')
-        self.PyDMLabel_ImgMaxHeight.setStyleSheet(
-            """max-width:7.10em; max-height:1.29em;""")
-
-        label_ROIWidth = QLabel('Width [pixels]: ', self)
-        hbox_ROIWidth = _create_propty_layout(
-            parent=self, prefix=self.scrn_prefix, propty='ImgROIWidth',
-            propty_type='sprb')
-
-        label_ROIHeight = QLabel('Heigth [pixels]: ', self)
-        hbox_ROIHeight = _create_propty_layout(
-            parent=self, prefix=self.scrn_prefix, propty='ImgROIHeight',
-            propty_type='sprb')
-
-        label_ROIOffsetX = QLabel('Offset X [pixels]: ', self)
-        hbox_ROIOffsetX = _create_propty_layout(
-            parent=self, prefix=self.scrn_prefix, propty='ImgROIOffsetX',
-            propty_type='sprb')
-
-        label_ROIOffsetY = QLabel('Offset Y [pixels]: ', self)
-        hbox_ROIOffsetY = _create_propty_layout(
-            parent=self, prefix=self.scrn_prefix, propty='ImgROIOffsetY',
-            propty_type='sprb')
-
-        label_AutoCenterX = QLabel('Auto Center X: ', self)
-        hbox_AutoCenterX = _create_propty_layout(
-            parent=self, prefix=self.scrn_prefix, propty='ImgROIAutoCenterX',
-            propty_type='offon')
-
-        label_AutoCenterY = QLabel('Auto Center Y: ', self)
-        hbox_AutoCenterY = _create_propty_layout(
-            parent=self, prefix=self.scrn_prefix, propty='ImgROIAutoCenterY',
-            propty_type='offon')
-
-        flay = QFormLayout()
-        flay.addRow(label_ImgMaxWidth, self.PyDMLabel_ImgMaxWidth)
-        flay.addRow(label_ImgMaxHeight, self.PyDMLabel_ImgMaxHeight)
-        flay.addRow(label_ROIWidth, hbox_ROIWidth)
-        flay.addRow(label_ROIHeight, hbox_ROIHeight)
-        flay.addRow(label_ROIOffsetX, hbox_ROIOffsetX)
-        flay.addRow(label_ROIOffsetY, hbox_ROIOffsetY)
-        flay.addRow(label_AutoCenterX, hbox_AutoCenterX)
-        flay.addRow(label_AutoCenterY, hbox_AutoCenterY)
-        flay.setLabelAlignment(Qt.AlignRight)
-        flay.setFormAlignment(Qt.AlignHCenter)
-        return flay
-
-    def _setupBGAcqLayout(self):
-        label_EnblBG = QLabel('Enable subtraction: ', self)
-        hbox_EnblBG = _create_propty_layout(
-            parent=self, prefix=self.scrn_prefix,
-            propty='ImgEnblBGSubtraction', propty_type='enbldisabl')
-
-        label_SaveBG = QLabel('Save BG: ', self)
-        hbox_SaveBG = _create_propty_layout(
-            parent=self, prefix=self.scrn_prefix, propty='ImgSaveBG',
-            cmd={'label': 'Save', 'pressValue': 1, 'name': 'ImgSaveBG'})
-
-        label_ValidBG = QLabel('Is valid BG? ', self)
-        hbox_ValidBG = _create_propty_layout(
-            parent=self, prefix=self.scrn_prefix, propty='ImgValidBG',
-            propty_type='mon')
-
-        flay = QFormLayout()
-        flay.addRow(label_EnblBG, hbox_EnblBG)
-        flay.addRow(label_SaveBG, hbox_SaveBG)
-        flay.addRow(label_ValidBG, hbox_ValidBG)
-        flay.setLabelAlignment(Qt.AlignRight)
-        flay.setFormAlignment(Qt.AlignCenter)
-        return flay
-
-    def _setupImgIntensityLayout(self):
-        label_EnblAdjust = QLabel('Enable Scale and Offset Adjust:', self)
-        hbox_EnblAdjust = _create_propty_layout(
-            parent=self, prefix=self.scrn_prefix, propty='ImgEnblOffsetScale',
-            propty_type='enbldisabl')
-
-        label_AutoAdjust = QLabel('Automatic Intensity Adjust:', self)
-        hbox_AutoAdjust = _create_propty_layout(
-            parent=self, prefix=self.scrn_prefix, propty='ImgAutoOffsetScale',
-            cmd={'label': 'Auto Adjust', 'pressValue': 1,
-                 'name': 'ImgAutoOffsetScale'})
-
-        label_PixelScale = QLabel('Pixel Scale:', self)
-        hbox_PixelScale = _create_propty_layout(
-            parent=self, prefix=self.scrn_prefix, propty='ImgPixelScale',
-            propty_type='sprb', use_linedit=True)
-
-        label_PixelOffset = QLabel('Pixel Offset:', self)
-        hbox_PixelOffset = _create_propty_layout(
-            parent=self, prefix=self.scrn_prefix, propty='ImgPixelOffset',
-            propty_type='sprb', use_linedit=True)
-
-        label_EnblLowClip = QLabel('Enable Low Cliping: ', self)
-        hbox_EnblLowClip = _create_propty_layout(
-            parent=self, prefix=self.scrn_prefix, propty='ImgEnblLowClip',
-            propty_type='enbldisabl')
-
-        label_LowClip = QLabel('Minimum Intensity for Low Cliping: ', self)
-        hbox_LowClip = _create_propty_layout(
-            parent=self, prefix=self.scrn_prefix, propty='ImgLowClip',
-            propty_type='sprb', use_linedit=True)
-
-        label_EnblHighClip = QLabel('Enable High Cliping: ', self)
-        hbox_EnblHighClip = _create_propty_layout(
-            parent=self, prefix=self.scrn_prefix, propty='ImgEnblHighClip',
-            propty_type='enbldisabl')
-
-        label_HighClip = QLabel('Maximum Intensity for High Cliping: ', self)
-        hbox_HighClip = _create_propty_layout(
-            parent=self, prefix=self.scrn_prefix, propty='ImgHighClip',
-            propty_type='sprb', use_linedit=True)
-
-        flay = QFormLayout()
-        flay.addRow(label_EnblAdjust, hbox_EnblAdjust)
-        flay.addRow(label_AutoAdjust, hbox_AutoAdjust)
-        flay.addRow(label_PixelScale, hbox_PixelScale)
-        flay.addRow(label_PixelOffset, hbox_PixelOffset)
-        flay.addRow(label_EnblLowClip, hbox_EnblLowClip)
-        flay.addRow(label_LowClip, hbox_LowClip)
-        flay.addRow(label_EnblHighClip, hbox_EnblHighClip)
-        flay.addRow(label_HighClip, hbox_HighClip)
-        flay.setLabelAlignment(Qt.AlignRight)
-        flay.setFormAlignment(Qt.AlignCenter)
-        return flay
-
-    def _setupErrorMonLayout(self):
-        label_CamTemp = QLabel('Temperature State: ', self)
-        hbox_CamTempState = _create_propty_layout(
-            parent=self, prefix=self.scrn_prefix, propty='CamTempState',
-            propty_type='mon')
-
-        label_LastErr = QLabel('Last Error: ', self)
-        hbox_LastErr = _create_propty_layout(
-            parent=self, prefix=self.scrn_prefix, propty='CamLastErr',
-            propty_type='mon', cmd={'label': 'Clear Last Error',
-                                    'pressValue': 1,
-                                    'name': 'CamClearLastErr'})
-
-        cam_prefix = SiriusPVName(self.scrn_prefix).substitute(dev='ScrnCam')
-        label_Reset = QLabel('Reset Camera: ', self)
-        self.pb_dtl = PyDMPushButton(
-            label='', icon=qta.icon('fa5s.sync'),
-            parent=self, pressValue=1, init_channel=cam_prefix+':Rst-Cmd')
-        self.pb_dtl.setObjectName('reset')
-        self.pb_dtl.setStyleSheet(
-            "#reset{min-width:25px; max-width:25px; icon-size:20px;}")
-
-        flay = QFormLayout()
-        flay.addRow(label_CamTemp, hbox_CamTempState)
-        flay.addRow(label_LastErr, hbox_LastErr)
-        flay.addRow(label_Reset, self.pb_dtl)
-        flay.setLabelAlignment(Qt.AlignRight)
-        flay.setFormAlignment(Qt.AlignCenter)
-        return flay
+    def _setupCamSettingsLayout(self):
+        lay = QGridLayout()
+        camdev = self.device.substitute(dev='ScrnCam')
+        self._cam_settings = _BaslerCamSettings(self, camdev, self.prefix)
+        lay.addWidget(self._cam_settings, 0, 0)
+        return lay

@@ -5,7 +5,7 @@ from qtpy.QtWidgets import QFormLayout, QSizePolicy as QSzPlcy, QVBoxLayout, \
 from qtpy.QtCore import Qt
 from siriuspy.namesys import SiriusPVName
 from siriushla.widgets.windows import SiriusDialog
-from siriushla.as_di_scrns.base import \
+from siriushla.common.cam_basler import \
     create_propty_layout as _create_propty_layout
 
 
