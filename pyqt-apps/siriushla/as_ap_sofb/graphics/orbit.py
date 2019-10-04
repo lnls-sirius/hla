@@ -333,7 +333,7 @@ class SinglePassSumWidget(QWidget):
         graph = self.graph
         curve = graph.curveAtIndex(0)
         posx = curve.scatter.mapFromScene(pos).x()
-        if self._csorb.isring():
+        if self._csorb.isring:
             posx = posx % self._csorb.C0
         ind = _np.argmin(_np.abs(_np.array(posi)-posx))
         posy = curve.scatter.mapFromScene(pos).y()

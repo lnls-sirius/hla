@@ -79,7 +79,7 @@ class ShowMatrixWidget(QWidget):
     def _show_tooltip(self, pos):
         names = self._csorb.BPM_NICKNAMES
         cname = self._csorb.CH_NICKNAMES + self._csorb.CV_NICKNAMES
-        if self._csorb.isring():
+        if self._csorb.acc == 'SI':
             cname += ['RF', ]
         posi = self._csorb.BPM_POS
         unit = 'count'
@@ -87,7 +87,7 @@ class ShowMatrixWidget(QWidget):
         graph = self.graph
         curve = graph.curveAtIndex(0)
         posx = curve.scatter.mapFromScene(pos).x()
-        if self._csorb.isring():
+        if self._csorb.isring:
             posx = posx % self._csorb.C0
         ind = _np.argmin(_np.abs(_np.array(posi)-posx))
         posy = curve.scatter.mapFromScene(pos).y()
