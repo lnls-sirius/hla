@@ -8,8 +8,8 @@ from qtpy.QtWidgets import QWidget, QComboBox, QLabel, QPushButton, \
     QHBoxLayout, QVBoxLayout, QLineEdit, QSplitter, QGridLayout
 
 from siriuspy.clientconfigdb import ConfigDBException
-from siriushla.misc.epics.wrapper import PyEpicsWrapper
-from siriushla.misc.epics.task import EpicsChecker, EpicsSetter
+from siriushla.common.epics.wrapper import PyEpicsWrapper
+from siriushla.common.epics.task import EpicsChecker, EpicsSetter
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.widgets.pvnames_tree import QTreeItem, PVNameTree
 from siriushla.widgets.dialog import ReportDialog, ProgressDialog

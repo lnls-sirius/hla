@@ -10,8 +10,8 @@ from qtpy.QtWidgets import QWidget, QComboBox, QPushButton, \
 from siriuspy.envars import vaca_prefix as _VACA_PREFIX
 from siriuspy.clientconfigdb import ConfigDBException, ConfigDBClient
 from siriushla.widgets.windows import SiriusMainWindow
-from siriushla.misc.epics.wrapper import PyEpicsWrapper
-from siriushla.misc.epics.task import EpicsGetter
+from siriushla.common.epics.wrapper import PyEpicsWrapper
+from siriushla.common.epics.task import EpicsGetter
 from siriushla.widgets.dialog import ReportDialog, ProgressDialog
 from ..models import ConfigPVsTypeModel, PVConfigurationTableModel
 from .. import SaveConfigDialog

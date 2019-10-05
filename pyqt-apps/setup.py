@@ -64,6 +64,7 @@ setup(
         'scripts/sirius-hla-bo-ap-sofb.py',
         'scripts/sirius-hla-bo-ap-tunecorr.py',
         'scripts/sirius-hla-bo-di-tune.py',
+        'scripts/sirius-hla-bo-di-vlight.py',
         'scripts/sirius-hla-bo-ma-control.py',
         'scripts/sirius-hla-bo-offconfig.py',
         'scripts/sirius-hla-bo-pm-control.py',

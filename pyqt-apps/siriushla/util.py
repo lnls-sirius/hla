@@ -60,25 +60,47 @@ def check_process(cmd, is_window=True):
     # Maximize the window if it exists, else create a new one
     scmd = (_subprocess.list2cmdline(cmd) if isinstance(cmd, list) else cmd)
     window = ''
-    pid = _subprocess.run(
-        "ps -A -o pid,command= | grep \"[" + scmd[0] + "]" + scmd[1:] +
-        "\" | xargs | cut -f1 -d\" \" -",
-        stdin=_subprocess.PIPE, shell=True, stdout=_subprocess.PIPE,
-        stderr=_subprocess.DEVNULL,
-        check=True).stdout.decode('UTF-8').strip('\n')
-    if pid and is_window:
-        window = _subprocess.run(
-            "xdotool search --pid "+pid+" | tail -1",
-            stdin=_subprocess.PIPE, shell=True, stdout=_subprocess.PIPE,
-            stderr=_subprocess.DEVNULL, check=True).stdout.decode('UTF-8')
+    pid = ''
+    sess = _subprocess.getoutput(
+        'ps -A -o sess,args | grep "[p]s -A -o sess,args" | xargs '
+        '| cut -f1 -d " " -')
+    info = _subprocess.getoutput(
+        'ps h -A -o pid,sess,command= | grep "['+scmd[0]+']'+scmd[1:]+'" | '
+        'grep '+sess)
+    if info and is_window:
+        info = info.split('\n')[0]
+        pid, _, comm = info.split()[:3]
+        window = _check_window_by_pid(pid, comm)
+    if pid and not window:
+        infos = _subprocess.getoutput(
+            'ps h -o pid,command= --ppid ' + pid).split('\n')
+        for info in infos:
+            if not info:
+                continue
+            pidc, comm = info.split()[:2]
+            window = _check_window_by_pid(pidc, comm)
+            if window:
+                pid = pidc
+                break
     return pid, window
+
+
+def _check_window_by_pid(pid, comm):
+    if 'edm' in comm:
+        wind = _subprocess.getoutput('wmctrl -lpx | grep edm | grep SIRIUS')
+    else:
+        wind = _subprocess.getoutput('wmctrl -lpx | grep ' + pid)
+    if not wind:
+        return ''
+    window = wind.split('\n')[0].split()[0]
+    return window
 
 
 def run_newprocess(cmd, is_window=True, **kwargs):
     pid, window = check_process(cmd, is_window=is_window)
     if window:
-        _subprocess.run("xdotool windowactivate "+window,
-                        stdin=_subprocess.PIPE, shell=True)
+        _subprocess.run(
+            "wmctrl -iR " + window, stdin=_subprocess.PIPE, shell=True)
     elif not pid:
         _subprocess.Popen(cmd, **kwargs)
 

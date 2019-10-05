@@ -19,7 +19,7 @@ from siriuspy.namesys import SiriusPVName
 
 from siriushla import util
 from siriushla.widgets import PyDMLed, SiriusConnectionSignal
-from siriushla.as_di_scrns.base import \
+from siriushla.common.cam_basler import \
     SiriusImageView as _SiriusImageView, \
     create_propty_layout as _create_propty_layout, \
     create_trigger_layout as _create_trigger_layout

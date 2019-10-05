@@ -14,8 +14,8 @@ from siriuspy.clientconfigdb import ConfigDBClient
 
 from siriushla import util
 from siriushla.widgets.dialog import ReportDialog, ProgressDialog
-from siriushla.misc.epics.wrapper import PyEpicsWrapper
-from siriushla.misc.epics.task import EpicsChecker, EpicsSetter
+from siriushla.common.epics.wrapper import PyEpicsWrapper
+from siriushla.common.epics.task import EpicsChecker, EpicsSetter
 
 
 def get_pushbutton(name, parent):
@@ -282,6 +282,9 @@ def get_object(ismenubar=True, parent=None):
                 Tune = QAction('Tune', diag)
                 self.connect_newprocess(Tune, 'sirius-hla-bo-di-tune.py')
                 diag.addAction(Tune)
+                VLight = QAction('VLight', diag)
+                self.connect_newprocess(VLight, 'sirius-hla-bo-di-vlight.py')
+                diag.addAction(VLight)
             if 'si' not in sec:
                 Scrns = QAction('Screens', diag)
                 self.connect_newprocess(
