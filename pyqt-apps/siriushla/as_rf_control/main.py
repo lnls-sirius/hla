@@ -76,6 +76,7 @@ class RFStatus(SiriusMainWindow):
 
         lb_show = QLabel('Show ', self,
                          alignment=Qt.AlignRight | Qt.AlignVCenter)
+        lb_show.setStyleSheet('font-weight:normal;')
         self.rb_Stat = QRadioButton('Static', self)
         self.rb_Stat.toggled.connect(_part(self._toogleWidgets, 0))
         self.rb_Stat.setStyleSheet('max-width: 4em;')
@@ -85,6 +86,7 @@ class RFStatus(SiriusMainWindow):
         self.rb_Ramp.setStyleSheet('max-width: 4em;')
         lb_params = QLabel('params', self,
                            alignment=Qt.AlignLeft | Qt.AlignVCenter)
+        lb_params.setStyleSheet('font-weight:normal;')
         vlay_params = QVBoxLayout()
         vlay_params.setSpacing(6)
         vlay_params.addWidget(self.rb_Stat)
@@ -113,42 +115,41 @@ class RFStatus(SiriusMainWindow):
             QLed{
                 min-width: 1.29em; max-width: 1.29em;
             }
+            .QLabel{
+                font-weight: bold;
+            }
         """)
         self.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
 
     def _setupStaticStatusesWidget(self):
         # Power
-        lb_Pwr = QLabel('Power [mV]: ', self)
+        lb_Pwr = QLabel('Power [W]: ', self)
         self.lb_Pwr = PyDMLabel(
-            parent=self, init_channel='BR-RF-DLLRF-01:CAV:AMP')
-        # lb_Pwr = QLabel('Power [W]: ', self)
-        # self.lb_Pwr = PyDMLabel(
-        #     parent=self, init_channel='BO-05D:RF-P5Cav:Cell3Pwr-Mon')
+            parent=self, init_channel='BO-05D:RF-P5Cav:Cell3Pwr-Mon')
 
         # Reflected Power
-        lb_ReflPwr = QLabel('Reflected Power [mV]: ', self)
+        lb_ReflPwr = QLabel('Reflected Power [W]: ', self)
         self.lb_ReflPwr = PyDMLabel(
-            parent=self, init_channel='BR-RF-DLLRF-01:REVCAV:AMP')
-        # lb_ReflPwr = QLabel('Reflected Power [W]: ', self)
-        # self.lb_ReflPwr = PyDMLabel(
-        #     parent=self, init_channel='BO-05D:RF-P5Cav:PwrRev-Mon')
+            parent=self, init_channel='BO-05D:RF-P5Cav:PwrRev-Mon')
 
         # Gap Voltage
-        lb_vgap = QLabel('Gap Voltage [mV]: ', self)
+        lb_vgap = QLabel('Gap Voltage [kV]: ', self)
         self.lb_VGap = PyDMLabel(
-            parent=self, init_channel='BR-RF-DLLRF-01:CAV:AMP')
-        # lb_vgap = QLabel('Gap Voltage [kV]: ', self)
-        # self.lb_VGap = PyDMLabel(
-        #     parent=self, init_channel='BO-05D:RF-P5Cav:VCav')
-        lb_auxvgap = QLabel('/')
-        lb_auxvgap.setStyleSheet('max-width:1em;')
-        self.lb_VGapRef = PyDMLabel(
+            parent=self, init_channel='BO-05D:RF-P5Cav:VCav')
+
+        # Gap Voltage Ref
+        lb_vgapCheck = QLabel('Gap Voltage (LL) [mV]: ', self)
+        self.lb_VGapCheck = PyDMLabel(
+            parent=self, init_channel='BR-RF-DLLRF-01:SL:INP:AMP')
+        lb_auxvgapCheck = QLabel('/')
+        lb_auxvgapCheck.setStyleSheet('max-width:1em;')
+        self.lb_VGapRefCheck = PyDMLabel(
             parent=self, init_channel='BR-RF-DLLRF-01:SL:REF:AMP')
-        self.lb_VGapRef.setStyleSheet('max-width: 4em;')
-        hlay_vgap = QHBoxLayout()
-        hlay_vgap.addWidget(self.lb_VGap)
-        hlay_vgap.addWidget(lb_auxvgap)
-        hlay_vgap.addWidget(self.lb_VGapRef)
+        self.lb_VGapRefCheck.setStyleSheet('max-width: 4em;')
+        hlay_vgapCheck = QHBoxLayout()
+        hlay_vgapCheck.addWidget(self.lb_VGapCheck)
+        hlay_vgapCheck.addWidget(lb_auxvgapCheck)
+        hlay_vgapCheck.addWidget(self.lb_VGapRefCheck)
 
         # Phase
         lb_phs = QLabel('Phase [°]: ', self)
@@ -176,8 +177,11 @@ class RFStatus(SiriusMainWindow):
         lay.setLabelAlignment(Qt.AlignRight)
         lay.addRow(lb_Pwr, self.lb_Pwr)
         lay.addRow(lb_ReflPwr, self.lb_ReflPwr)
-        lay.addRow(lb_vgap, hlay_vgap)
+        lay.addRow(lb_vgap, self.lb_VGap)
+        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        lay.addRow(lb_vgapCheck, hlay_vgapCheck)
         lay.addRow(lb_phs, hlay_phs)
+        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
         lay.addRow(lb_detune, self.lb_Detune)
         return wid
 
@@ -210,28 +214,19 @@ class RFStatus(SiriusMainWindow):
         self.graph_rmp.curveAtIndex(0).redrawCurve()
 
         # Power
-        lb_rmppwr = QLabel('Power [mV]: ', self)
+        lb_rmppwr = QLabel('Power [W]: ', self)
         self.lb_RmpPwr = PyDMLabel(
-            parent=self, init_channel='BR-RF-DLLRF-01:RAMP:TOP')
-        # lb_rmppwr = QLabel('Power [W]: ', self)
-        # self.lb_RmpPwr = PyDMLabel(
-        #     parent=self, init_channel='BR-RF-DLLRF-01:RAMP:TOP:W')
+            parent=self, init_channel='BR-RF-DLLRF-01:RAMP:TOP:W')
 
         # Reflected Power
-        lb_rmpreflpwr = QLabel('Reflected Power [mV]: ', self)
+        lb_rmpreflpwr = QLabel('Reflected Power [W]: ', self)
         self.lb_RmpRefPwr = PyDMLabel(
-            parent=self, init_channel='BR-RF-DLLRF-01:TOP:REVCAV:AMP')
-        # lb_rmpreflpwr = QLabel('Reflected Power [W]: ', self)
-        # self.lb_RmpRefPwr = PyDMLabel(
-        #     parent=self, init_channel='BO-05D:RF-P5Cav:PwrRevTop-Mon')
+            parent=self, init_channel='BO-05D:RF-P5Cav:PwrRevTop-Mon')
 
         # Gap Voltage
-        lb_rmpvcav = QLabel('Gap Voltage [mV]: ', self)
+        lb_rmpvcav = QLabel('Gap Voltage [kV]: ', self)
         self.lb_RmpVCav = PyDMLabel(
-            parent=self, init_channel='BR-RF-DLLRF-01:RAMP:TOP')
-        # lb_rmpvcav = QLabel('Gap Voltage [kV]: ', self)
-        # self.lb_RmpVCav = PyDMLabel(
-        #     parent=self, init_channel='BR-RF-DLLRF-01:RmpVoltTop-Mon')
+            parent=self, init_channel='BR-RF-DLLRF-01:RmpVoltTop-Mon')
 
         lb_RmpPhsTop = QLabel('Phase Top [°]: ', self)
         self.lb_auxRmpPhsTop = PyDMLabel(
