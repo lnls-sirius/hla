@@ -554,6 +554,7 @@ class PSDetailWidget(QWidget):
         wfm_data_sp_ch = self._prefixed_psname + ":Wfm-SP"
         wfm_data_rb_ch = self._prefixed_psname + ":Wfm-RB"
         wfm_data_rm_ch = self._prefixed_psname + ":WfmRef-Mon"
+        wfm_data_mo_ch = self._prefixed_psname + ":Wfm-Mon"
 
         # Plot
         self.wfm = PyDMWaveformPlot()
@@ -568,11 +569,14 @@ class PSDetailWidget(QWidget):
                             color='blue', lineWidth=2)
         self.wfm.addChannel(y_channel=wfm_data_rm_ch, name='Ref-Mon',
                             color='green', lineWidth=2)
+        self.wfm.addChannel(y_channel=wfm_data_mo_ch, name='Mon',
+                            color='black', lineWidth=2)
 
         # NrPoints
         self._wfm_nrpts_sp = 0
         self._wfm_nrpts_rb = 0
         self._wfm_nrpts_rm = 0
+        self._wfm_nrpts_mo = 0
         self.wfm_nrpts = QLabel('', self)
         self.wfm_nrpts.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
         self.wfm_nrpts_ch_rb = SiriusConnectionSignal(wfm_data_rb_ch)
@@ -584,6 +588,9 @@ class PSDetailWidget(QWidget):
         self.wfm_nrpts_ch_rm = SiriusConnectionSignal(wfm_data_rm_ch)
         self.wfm_nrpts_ch_rm.new_value_signal[_np.ndarray].connect(
             self._wfm_nrpts_update_rm)
+        self.wfm_nrpts_ch_mo = SiriusConnectionSignal(wfm_data_mo_ch)
+        self.wfm_nrpts_ch_mo.new_value_signal[_np.ndarray].connect(
+            self._wfm_nrpts_update_mo)
 
         # Add widgets
         layout = QVBoxLayout()
@@ -607,10 +614,11 @@ class PSDetailWidget(QWidget):
 
     def _set_wfm_nrpts_label(self):
         self.wfm_nrpts.setText(
-            "Wfm nrpts (SP|RB|Ref-Mon): {}|{}|{}".format(
+            "Wfm nrpts (SP|RB|Ref-Mon|Mon): {}|{}|{}|{}".format(
                 self._wfm_nrpts_sp,
                 self._wfm_nrpts_rb,
-                self._wfm_nrpts_rm))
+                self._wfm_nrpts_rm,
+                self._wfm_nrpts_mo))
 
     def _wfm_nrpts_update_rb(self, value):
         self._wfm_nrpts_rb = len(value)
@@ -622,6 +630,10 @@ class PSDetailWidget(QWidget):
 
     def _wfm_nrpts_update_rm(self, value):
         self._wfm_nrpts_rm = len(value)
+        self._set_wfm_nrpts_label()
+
+    def _wfm_nrpts_update_mo(self, value):
+        self._wfm_nrpts_mo = len(value)
         self._set_wfm_nrpts_label()
 
     def _getElementType(self):
