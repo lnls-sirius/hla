@@ -572,7 +572,7 @@ class DipoleRamp(QWidget):
 
     def updatePSDelay(self):
         """Update PS delay when ramp_config is loaded."""
-        self.sb_nrpoints.setValue(self.ramp_config.ti_params_ps_ramp_delay)
+        self.sb_psdelay.setValue(self.ramp_config.ti_params_ps_ramp_delay)
 
     def updateWfmNrPoints(self):
         """Update waveform number of points when ramp_config is loaded."""
