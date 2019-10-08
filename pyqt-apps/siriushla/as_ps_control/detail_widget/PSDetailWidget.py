@@ -607,7 +607,7 @@ class PSDetailWidget(QWidget):
 
     def _set_wfmdata_nrpts_label(self):
         self.wfmdata_nrpts.setText(
-            "WfmData nrpts (SP|RB): {}|{}".format(
+            "Nrpts (SP|RB): {}|{}".format(
                 self._wfmdata_nrpts_sp, self._wfmdata_nrpts_rb))
 
     def _wfmdata_nrpts_update_rb(self, value):
@@ -620,7 +620,7 @@ class PSDetailWidget(QWidget):
 
     def _set_wfm_nrpts_label(self):
         self.wfm_nrpts.setText(
-            "Wfm nrpts (SP|RB|Ref-Mon|Mon): {}|{}|{}|{}".format(
+            "Nrpts (SP|RB|Ref-Mon|Mon): {}|{}|{}|{}".format(
                 self._wfm_nrpts_sp,
                 self._wfm_nrpts_rb,
                 self._wfm_nrpts_rm,
