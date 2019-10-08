@@ -76,7 +76,6 @@ class ConfigParameters(QGroupBox):
 
         self.setStyleSheet("""
             QLabel{qproperty-alignment: AlignCenter;}
-            QDoubleSpinBox{min-width: 6em; max-width: 6em;}
         """)
 
     @Slot(ramp.BoosterRamp)
@@ -223,23 +222,45 @@ class DipoleRamp(QWidget):
         self.sb_psdelay.setDecimals(6)
         self.sb_psdelay.setSingleStep(0.000008)
         self.sb_psdelay.editingFinished.connect(self._handleChangePSDelay)
+        self.sb_psdelay.setObjectName('sb_psdelay')
+        self.sb_psdelay.setStyleSheet(
+            '#sb_psdelay{min-width:5em;max-width:5em;}')
 
-        label_nrpoints = QLabel('# of points:', self,
-                                alignment=Qt.AlignVCenter)
-        self.sb_nrpoints = _MyDoubleSpinBox(self)
-        self.sb_nrpoints.setMinimum(1)
-        self.sb_nrpoints.setMaximum(MAX_WFMSIZE)
-        self.sb_nrpoints.setDecimals(0)
-        self.sb_nrpoints.setSingleStep(1)
-        self.sb_nrpoints.editingFinished.connect(self._handleChangeNrPoints)
+        label_nrpoints_fams = QLabel('# of points: fams:', self,
+                                     alignment=Qt.AlignVCenter)
+        self.sb_nrpoints_fams = _MyDoubleSpinBox(self)
+        self.sb_nrpoints_fams.setMinimum(1)
+        self.sb_nrpoints_fams.setMaximum(MAX_WFMSIZE)
+        self.sb_nrpoints_fams.setDecimals(0)
+        self.sb_nrpoints_fams.setSingleStep(1)
+        self.sb_nrpoints_fams.editingFinished.connect(
+            self._handleChangeNrPointsFams)
+        self.sb_nrpoints_fams.setObjectName('sb_nrpoints_fams')
+        self.sb_nrpoints_fams.setStyleSheet(
+            '#sb_nrpoints_fams{min-width:3.5em;max-width:3.5em;}')
+
+        label_nrpoints_corrs = QLabel('corrs:', self,
+                                      alignment=Qt.AlignVCenter)
+        self.sb_nrpoints_corrs = _MyDoubleSpinBox(self)
+        self.sb_nrpoints_corrs.setMinimum(1)
+        self.sb_nrpoints_corrs.setMaximum(MAX_WFMSIZE)
+        self.sb_nrpoints_corrs.setDecimals(0)
+        self.sb_nrpoints_corrs.setSingleStep(1)
+        self.sb_nrpoints_corrs.editingFinished.connect(
+            self._handleChangeNrPointsCorrs)
+        self.sb_nrpoints_corrs.setObjectName('sb_nrpoints_corrs')
+        self.sb_nrpoints_corrs.setStyleSheet(
+            '#sb_nrpoints_corrs{min-width:3.5em;max-width:3.5em;}')
 
         lay = QHBoxLayout(self.set_psdelay_and_nrpoints)
         lay.setContentsMargins(9, 0, 9, 0)
         lay.addWidget(label_psdelay)
         lay.addWidget(self.sb_psdelay)
         lay.addStretch()
-        lay.addWidget(label_nrpoints)
-        lay.addWidget(self.sb_nrpoints)
+        lay.addWidget(label_nrpoints_fams)
+        lay.addWidget(self.sb_nrpoints_fams)
+        lay.addWidget(label_nrpoints_corrs)
+        lay.addWidget(self.sb_nrpoints_corrs)
 
     def _setupTable(self):
         self.table_map = {
@@ -470,22 +491,22 @@ class DipoleRamp(QWidget):
             self.updateTable()
 
     @Slot()
-    def _handleChangeNrPoints(self):
+    def _handleChangeNrPointsFams(self):
         """Handle change waveform number of points."""
         if self.ramp_config is None:
             return
 
-        old_value = self.ramp_config.ps_ramp_wfm_nrpoints
-        new_value = int(self.sb_nrpoints.value())
+        old_value = self.ramp_config.ps_ramp_wfm_nrpoints_fams
+        new_value = int(self.sb_nrpoints_fams.value())
         if new_value == old_value:
             # Avoid several updates on Enter or spinbox focusOutEvent.
             # It is necessary due to several emits of editingFinished signal.
             return
 
         try:
-            self.ramp_config.ps_ramp_wfm_nrpoints = new_value
+            self.ramp_config.ps_ramp_wfm_nrpoints_fams = new_value
         except exceptions.RampError as e:
-            self.updateWfmNrPoints()
+            self.updateWfmNrPointsFams()
             QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
         else:
             self.updateGraph()
@@ -495,8 +516,44 @@ class DipoleRamp(QWidget):
             if _flag_stack_next_command and (old_value != new_value):
                 _flag_stacking = True
                 command = _UndoRedoSpinbox(
-                    self.sb_nrpoints, old_value, new_value,
-                    'set dipole ramp number of points to {}'.format(new_value))
+                    self.sb_nrpoints_fams, old_value, new_value,
+                    'set families ramp number of points to {}'.format(
+                        new_value))
+                self._undo_stack.push(command)
+            else:
+                _flag_stack_next_command = True
+        finally:
+            self.updateTable()
+
+    @Slot()
+    def _handleChangeNrPointsCorrs(self):
+        """Handle change waveform number of points."""
+        if self.ramp_config is None:
+            return
+
+        old_value = self.ramp_config.ps_ramp_wfm_nrpoints_corrs
+        new_value = int(self.sb_nrpoints_corrs.value())
+        if new_value == old_value:
+            # Avoid several updates on Enter or spinbox focusOutEvent.
+            # It is necessary due to several emits of editingFinished signal.
+            return
+
+        try:
+            self.ramp_config.ps_ramp_wfm_nrpoints_corrs = new_value
+        except exceptions.RampError as e:
+            self.updateWfmNrPointsCorrs()
+            QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
+        else:
+            self.updateGraph()
+            self.updateDipoleRampSignal.emit()
+
+            global _flag_stack_next_command, _flag_stacking
+            if _flag_stack_next_command and (old_value != new_value):
+                _flag_stacking = True
+                command = _UndoRedoSpinbox(
+                    self.sb_nrpoints_corrs, old_value, new_value,
+                    'set correctors ramp number of points to {}'.format(
+                        new_value))
                 self._undo_stack.push(command)
             else:
                 _flag_stack_next_command = True
@@ -525,7 +582,7 @@ class DipoleRamp(QWidget):
         if self.ramp_config is None:
             return
 
-        xdata = self.ramp_config.ps_waveform_get_times()
+        xdata = self.ramp_config.ps_waveform_get_times('BO-Fam:MA-B')
         if self.plot_unit == 'Strengths':
             self.ax.set_ylabel('E [GeV]')
             ydata = self.ramp_config.ps_waveform_get_strengths('BO-Fam:MA-B')
@@ -574,9 +631,15 @@ class DipoleRamp(QWidget):
         """Update PS delay when ramp_config is loaded."""
         self.sb_psdelay.setValue(self.ramp_config.ti_params_ps_ramp_delay)
 
-    def updateWfmNrPoints(self):
+    def updateWfmNrPointsFams(self):
         """Update waveform number of points when ramp_config is loaded."""
-        self.sb_nrpoints.setValue(self.ramp_config.ps_ramp_wfm_nrpoints)
+        self.sb_nrpoints_fams.setValue(
+            self.ramp_config.ps_ramp_wfm_nrpoints_fams)
+
+    def updateWfmNrPointsCorrs(self):
+        """Update waveform number of points when ramp_config is loaded."""
+        self.sb_nrpoints_corrs.setValue(
+            self.ramp_config.ps_ramp_wfm_nrpoints_corrs)
 
     def updateTable(self):
         """Update and rebuild table when ramp_config is loaded."""
@@ -624,7 +687,7 @@ class DipoleRamp(QWidget):
 
         for row in range(8):  # before smoothing areas section
             D = self.ramp_config.ps_ramp_duration
-            N = self.ramp_config.ps_ramp_wfm_nrpoints
+            N = self.ramp_config.ps_ramp_wfm_nrpoints_fams
             T = float(self.table.item(row, 1).data(Qt.DisplayRole))
             value = round(T*N/D)
             item = self.table.item(row, 3)  # index column
@@ -645,7 +708,8 @@ class DipoleRamp(QWidget):
         self.ramp_config = ramp_config
         self.updateGraph(update_axis=True)
         self.updatePSDelay()
-        self.updateWfmNrPoints()
+        self.updateWfmNrPointsFams()
+        self.updateWfmNrPointsCorrs()
         self.updateTable()
         self._verifyWarnings()
 
@@ -1066,33 +1130,41 @@ class MultipolesRamp(QWidget):
                 self.m_ej.set_xdata([])
                 self.m_ej.set_ydata([])
         else:
-            xdata = self.ramp_config.ps_waveform_get_times()
-            for maname in self._magnets_to_plot:
-                if self.plot_unit == 'Strengths':
-                    ydata = self.ramp_config.ps_waveform_get_strengths(maname)
-                elif self.plot_unit == 'Currents':
-                    ydata = self.ramp_config.ps_waveform_get_currents(maname)
-                self.lines[maname].set_xdata(xdata)
-                self.lines[maname].set_ydata(ydata)
-
-            ydata = list()
+            xds_min = list()
+            xds_max = list()
+            yds_min = list()
+            yds_max = list()
             for maname in self.manames:
                 if maname in self._magnets_to_plot:
                     self.lines[maname].set_linewidth(1.5)
-                    ydata.append(self.lines[maname].get_ydata())
+                    # x data
+                    xd = self.ramp_config.ps_waveform_get_times(maname)
+                    xds_min.append(xd.min())
+                    xds_max.append(xd.max())
+                    self.lines[maname].set_xdata(xd)
+                    # y data
+                    if self.plot_unit == 'Strengths':
+                        yd = self.ramp_config.ps_waveform_get_strengths(maname)
+                    elif self.plot_unit == 'Currents':
+                        yd = self.ramp_config.ps_waveform_get_currents(maname)
+                    yds_min.append(yd.min())
+                    yds_max.append(yd.max())
+                    self.lines[maname].set_ydata(yd)
                 else:
                     self.lines[maname].set_linewidth(0)
 
-            if update_axis:
-                self.ax.set_xlim(min(xdata), max(xdata))
-                ydata = np.array(ydata)
-                if len(ydata) > 0:
-                    if ydata.min() == ydata.max():
-                        self.ax.set_ylim(ydata.min()-0.2, ydata.max()+0.2)
-                    elif ydata.min() < 0:
-                        self.ax.set_ylim(ydata.min()*1.05, ydata.max()*1.05)
-                    else:
-                        self.ax.set_ylim(ydata.min()*0.95, ydata.max()*1.05)
+            if update_axis and len(xds_min) > 0:
+                xds_min = np.array(xds_min)
+                xds_max = np.array(xds_max)
+                self.ax.set_xlim(xds_min.min(), xds_max.max())
+                yds_min = np.array(yds_min)
+                yds_max = np.array(yds_max)
+                if yds_min.min() == yds_max.max():
+                    self.ax.set_ylim(yds_min.min()-0.2, yds_max.max()+0.2)
+                elif yds_min.min() < 0:
+                    self.ax.set_ylim(yds_min.min()*1.05, yds_max.max()*1.05)
+                else:
+                    self.ax.set_ylim(yds_min.min()*0.95, yds_max.max()*1.05)
 
             if self.plot_unit == 'Strengths':
                 ylabel = None
@@ -1173,7 +1245,7 @@ class MultipolesRamp(QWidget):
 
         for row in self.table_map['rows'].keys():
             D = self.ramp_config.ps_ramp_duration
-            N = self.ramp_config.ps_ramp_wfm_nrpoints
+            N = self.ramp_config.ps_ramp_wfm_nrpoints_fams
             T = float(self.table.item(row, 1).data(Qt.DisplayRole))
             value = round(T*N/D)
             item = self.table.item(row, 3)  # index column
@@ -1322,6 +1394,9 @@ class RFRamp(QWidget):
         self.sb_rfdelay.setDecimals(6)
         self.sb_rfdelay.setSingleStep(0.000008)
         self.sb_rfdelay.editingFinished.connect(self._handleChangeRFDelay)
+        self.sb_rfdelay.setObjectName('sb_rfdelay')
+        self.sb_rfdelay.setStyleSheet(
+            '#sb_rfdelay{min-width:5em;max-width:5em;}')
 
         lay = QHBoxLayout(self.set_rfdelay)
         lay.setContentsMargins(9, 0, 9, 0)
@@ -1551,7 +1626,7 @@ class RFRamp(QWidget):
         self.m_ej.set_ydata(self.ramp_config.rf_ramp_interp_voltages(
             ej_marker_time))
 
-        ph_times = self.ramp_config.ps_waveform_get_times()
+        ph_times = self.ramp_config.ps_waveform_get_times('BO-Fam:MA-B')
         ph = self._calc_syncphase(ph_times)
         self.line2.set_xdata(ph_times)
         self.line2.set_ydata(ph)
