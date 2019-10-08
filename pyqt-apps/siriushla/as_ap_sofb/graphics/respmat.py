@@ -140,6 +140,7 @@ class SingularValues(QWidget):
         super().__init__(parent)
         self.prefix = _PVName(prefix)
         self.setObjectName(self.prefix.sec+'App')
+        self._chan = SiriusConnectionSignal(self.prefix+'NrSingValues-RB')
         self.setupui()
 
     def setupui(self):
@@ -170,8 +171,7 @@ class SingularValues(QWidget):
         pen.setWidth(3)
         line = InfLine(pos=0, pen=pen, angle=90)
         graph.addItem(line)
-        chan = SiriusConnectionSignal(self.prefix+'NrSingValues-RB')
-        chan.new_value_signal[int].connect(_part(self.setValue, line))
+        self._chan.new_value_signal[int].connect(_part(self.setValue, line))
 
         graph.setObjectName('graph_singvalues')
         graph.setStyleSheet(
