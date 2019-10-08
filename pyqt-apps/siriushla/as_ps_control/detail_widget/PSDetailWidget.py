@@ -140,7 +140,7 @@ class PSDetailWidget(QWidget):
         self.cycle_tabs.addTab(self.wfmdata_tab, 'WfmData')
         self.cycle_tabs.addTab(self.wfm_tab, 'Wfm')
         if self._psname.sec == 'BO':
-            self.cycle_tabs.setCurrentIndex(1)
+            self.cycle_tabs.setCurrentIndex(2)
         if self._is_magnet:
             self.psconn_box = QGroupBox("PS Connection")
             self.psconn_box.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
@@ -472,7 +472,8 @@ class PSDetailWidget(QWidget):
         sync_mode_ca = self._prefixed_psname + ':PRUSyncMode-Mon'
         block_index_ca = self._prefixed_psname + ':PRUBlockIndex-Mon'
         sync_count_ca = self._prefixed_psname + ':PRUSyncPulseCount-Mon'
-        wfm_count_ca = self._prefixed_psname + ':WfmIndex-Mon'
+        wfm_index_ca = self._prefixed_psname + ':WfmIndex-Mon'
+        wfm_count_ca = self._prefixed_psname + ':WfmSyncPulseCount-Mon'
         queue_size_ca = self._prefixed_psname + ':PRUCtrlQueueSize-Mon'
         bsmp_comm_ca = self._prefixed_psname + ':BSMPComm-Sts'
         bsmp_comm_sel = self._prefixed_psname + ':BSMPComm-Sel'
@@ -486,7 +487,10 @@ class PSDetailWidget(QWidget):
         sync_count_label = QLabel('PRU Pulse Count', self)
         sync_count_rb_label = PyDMLabel(self, sync_count_ca)
 
-        wfm_count_label = QLabel('WfmIndex', self)
+        wfm_index_label = QLabel('Wfm Index', self)
+        wfm_index_rb_label = PyDMLabel(self, wfm_index_ca)
+
+        wfm_count_label = QLabel('Wfm Pulse Count', self)
         wfm_count_rb_label = PyDMLabel(self, wfm_count_ca)
 
         queue_size_label = QLabel('IOC Queue Size', self)
@@ -505,12 +509,14 @@ class PSDetailWidget(QWidget):
         layout.addWidget(block_index_rb_label, 1, 1)
         layout.addWidget(sync_count_label, 2, 0, Qt.AlignRight)
         layout.addWidget(sync_count_rb_label, 2, 1)
-        layout.addWidget(wfm_count_label, 3, 0, Qt.AlignRight)
-        layout.addWidget(wfm_count_rb_label, 3, 1)
-        layout.addWidget(queue_size_label, 4, 0, Qt.AlignRight)
-        layout.addWidget(queue_size_rb_label, 4, 1)
-        layout.addWidget(bsmp_comm_label, 5, 0, Qt.AlignRight)
-        layout.addWidget(bsmp_comm_btn, 5, 1)
+        layout.addWidget(wfm_index_label, 3, 0, Qt.AlignRight)
+        layout.addWidget(wfm_index_rb_label, 3, 1)
+        layout.addWidget(wfm_count_label, 4, 0, Qt.AlignRight)
+        layout.addWidget(wfm_count_rb_label, 4, 1)
+        layout.addWidget(queue_size_label, 5, 0, Qt.AlignRight)
+        layout.addWidget(queue_size_rb_label, 5, 1)
+        layout.addWidget(bsmp_comm_label, 6, 0, Qt.AlignRight)
+        layout.addWidget(bsmp_comm_btn, 6, 1)
         layout.addWidget(bsmp_comm_sts_led, 6, 2)
         layout.setColumnStretch(3, 1)
         return layout
