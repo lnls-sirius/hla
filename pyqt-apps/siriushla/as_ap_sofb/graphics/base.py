@@ -71,7 +71,7 @@ class BaseWidget(QWidget):
 
     @property
     def isring(self):
-        return self._csorb.isring()
+        return self._csorb.isring
 
     def channels(self):
         chans = list(self.enbl_pvs.values())
@@ -278,7 +278,7 @@ class BaseWidget(QWidget):
         graph = self.graph[pln]
         curve = graph.curveAtIndex(0)
         posx = curve.scatter.mapFromScene(pos).x()
-        if self._csorb.isring():
+        if self._csorb.isring:
             posx = posx % self._csorb.C0
         ind = _np.argmin(_np.abs(_np.array(posi)-posx))
         posy = curve.scatter.mapFromScene(pos).y()

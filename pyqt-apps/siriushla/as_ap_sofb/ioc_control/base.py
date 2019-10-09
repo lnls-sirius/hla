@@ -29,7 +29,7 @@ class BaseWidget(QWidget):
 
     @property
     def isring(self):
-        return self._csorb.isring()
+        return self._csorb.isring
 
     def create_pair(self, parent, pvname, prefix=None):
         prefix = prefix or self.prefix
@@ -88,7 +88,7 @@ class BaseCombo(QComboBox, PyDMPrimitiveWidget):
 
     @property
     def isring(self):
-        return self._csorb.isring()
+        return self._csorb.isring
 
     def channels(self):
         chans = list(self.readback.values())

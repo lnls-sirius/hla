@@ -79,7 +79,7 @@ class ShowMatrixWidget(QWidget):
     def _show_tooltip(self, pos):
         names = self._csorb.BPM_NICKNAMES
         cname = self._csorb.CH_NICKNAMES + self._csorb.CV_NICKNAMES
-        if self._csorb.isring():
+        if self._csorb.acc == 'SI':
             cname += ['RF', ]
         posi = self._csorb.BPM_POS
         unit = 'count'
@@ -87,7 +87,7 @@ class ShowMatrixWidget(QWidget):
         graph = self.graph
         curve = graph.curveAtIndex(0)
         posx = curve.scatter.mapFromScene(pos).x()
-        if self._csorb.isring():
+        if self._csorb.isring:
             posx = posx % self._csorb.C0
         ind = _np.argmin(_np.abs(_np.array(posi)-posx))
         posy = curve.scatter.mapFromScene(pos).y()
@@ -140,6 +140,7 @@ class SingularValues(QWidget):
         super().__init__(parent)
         self.prefix = _PVName(prefix)
         self.setObjectName(self.prefix.sec+'App')
+        self._chan = SiriusConnectionSignal(self.prefix+'NrSingValues-RB')
         self.setupui()
 
     def setupui(self):
@@ -170,8 +171,7 @@ class SingularValues(QWidget):
         pen.setWidth(3)
         line = InfLine(pos=0, pen=pen, angle=90)
         graph.addItem(line)
-        chan = SiriusConnectionSignal(self.prefix+'NrSingValues-RB')
-        chan.new_value_signal[int].connect(_part(self.setValue, line))
+        self._chan.new_value_signal[int].connect(_part(self.setValue, line))
 
         graph.setObjectName('graph_singvalues')
         graph.setStyleSheet(
