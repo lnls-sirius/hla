@@ -67,7 +67,7 @@ class KicksConfigWidget(BaseWidget):
         pvnames = ('DeltaFactor', 'MaxKick', 'MaxDeltaKick')
         unitss = (('[%]', '[%]'), ('[urad]', '[urad]'), ('[urad]', '[urad]'))
         planes = ('CH', 'CV')
-        if self.isring:
+        if self.acc == 'SI':
             unitss = (
                 ('[%]', '[%]', '[%]'),
                 ('[urad]', '[urad]', '[Hz]'),

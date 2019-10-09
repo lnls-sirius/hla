@@ -71,7 +71,7 @@ class RespMatWidget(BaseWidget):
         connect_window(btn, Window, None, prefix=self.prefix, acc=self.acc)
         hbl.addWidget(btn)
 
-        if self.isring:
+        if self.acc == 'SI':
             pdm_chbx = PyDMCheckbox(
                 grpbx, init_channel=self.prefix+'RFEnbl-Sel')
             pdm_chbx.setText('use RF')
@@ -172,7 +172,7 @@ class RespMatWidget(BaseWidget):
         lbl = QLabel('CV kick [urad]', grpbx)
         wid = self.create_pair(grpbx, 'MeasRespMatKickCV')
         fml.addRow(lbl, wid)
-        if self.isring:
+        if self.acc == 'SI':
             lbl = QLabel('RF kick [Hz]', grpbx)
             wid = self.create_pair(grpbx, 'MeasRespMatKickRF')
             fml.addRow(lbl, wid)
@@ -216,7 +216,7 @@ class RespMatWidget(BaseWidget):
 
     def _save_respmat_to_file(self, _):
         header = '# ' + _datetime.now().strftime('%Y/%m/%d-%H:%M:%S') + '\n'
-        if self.isring:
+        if self.acc == 'SI':
             header += '# (BPMX, BPMY) [um] x (CH, CV, RF) [urad, Hz]' + '\n'
         else:
             header += '# (BPMX, BPMY) [um] x (CH, CV) [urad]' + '\n'

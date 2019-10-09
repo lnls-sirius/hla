@@ -37,7 +37,7 @@ class MainWindow(SiriusMainWindow):
 
     @property
     def isring(self):
-        return self._csorb.isring()
+        return self._csorb.isring
 
     def setupui(self):
         self.setWindowModality(Qt.WindowModal)
