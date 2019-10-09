@@ -123,66 +123,59 @@ class RFStatus(SiriusMainWindow):
 
     def _setupStaticStatusesWidget(self):
         # Power
-        lb_Pwr = QLabel('Power [W]: ', self)
-        self.lb_Pwr = PyDMLabel(
+        lb_CavPwr = QLabel('Cavity Power [W]: ', self)
+        self.lb_CavPwr = PyDMLabel(
             parent=self, init_channel='BO-05D:RF-P5Cav:Cell3Pwr-Mon')
 
-        # Reflected Power
-        lb_ReflPwr = QLabel('Reflected Power [W]: ', self)
-        self.lb_ReflPwr = PyDMLabel(
+        # Forward Power
+        lb_FwdPwr = QLabel('Forward Power [W]: ', self)
+        self.lb_FwdPwr = PyDMLabel(
+            parent=self, init_channel='BO-05D:RF-P5Cav:PwrFwd-Mon')
+
+        # Reverse Power
+        lb_RevPwr = QLabel('Reverse Power [W]: ', self)
+        self.lb_RevPwr = PyDMLabel(
             parent=self, init_channel='BO-05D:RF-P5Cav:PwrRev-Mon')
 
         # Gap Voltage
-        lb_vgap = QLabel('Gap Voltage [kV]: ', self)
+        lb_vgap = QLabel('Cavity Gap Voltage [kV]: ', self)
         self.lb_VGap = PyDMLabel(
             parent=self, init_channel='BO-05D:RF-P5Cav:VCav')
 
-        # Gap Voltage Ref
-        lb_vgapCheck = QLabel('Gap Voltage (LL) [mV]: ', self)
-        self.lb_VGapCheck = PyDMLabel(
-            parent=self, init_channel='BR-RF-DLLRF-01:SL:INP:AMP')
-        lb_auxvgapCheck = QLabel('/')
-        lb_auxvgapCheck.setStyleSheet('max-width:1em;')
-        self.lb_VGapRefCheck = PyDMLabel(
-            parent=self, init_channel='BR-RF-DLLRF-01:SL:REF:AMP')
-        self.lb_VGapRefCheck.setStyleSheet('max-width: 4em;')
-        hlay_vgapCheck = QHBoxLayout()
-        hlay_vgapCheck.addWidget(self.lb_VGapCheck)
-        hlay_vgapCheck.addWidget(lb_auxvgapCheck)
-        hlay_vgapCheck.addWidget(self.lb_VGapRefCheck)
-
         # Phase
-        lb_phs = QLabel('Phase [°]: ', self)
+        lb_phs = QLabel('Cavity Phase [°]: ', self)
         self.lb_Phs = PyDMLabel(
-            parent=self, init_channel='BR-RF-DLLRF-01:SL:INP:PHS')
-        self.lb_Phs.setStyleSheet('max-width: 4em;')
-        lb_auxphs = QLabel('/')
-        lb_auxphs.setStyleSheet('max-width:1em;')
-        self.lb_PhsRef = PyDMLabel(
-            parent=self, init_channel='BR-RF-DLLRF-01:SL:REF:PHS')
-        self.lb_PhsRef.setStyleSheet('max-width: 4em;')
-        hlay_phs = QHBoxLayout()
-        hlay_phs.addWidget(self.lb_Phs)
-        hlay_phs.addWidget(lb_auxphs)
-        hlay_phs.addWidget(self.lb_PhsRef)
+            parent=self, init_channel='BR-RF-DLLRF-01:PL:REF')
 
         # Detune
         lb_detune = QLabel('Detune [°]: ')
         self.lb_Detune = PyDMLabel(
             parent=self, init_channel='BR-RF-DLLRF-01:DTune-RB')
 
+        # Slow Loop Errors
+        lb_SLErr = QLabel('Control Loop Errors (Slow Loop) ', self,
+                          alignment=Qt.AlignCenter)
+        lb_SLErrVgap = QLabel('Gap Voltage [mV]: ', self)
+        self.lb_SLErrVgap = PyDMLabel(
+            parent=self, init_channel='BR-RF-DLLRF-01:SL:ERR:AMP')
+        lb_SLErrPhs = QLabel('Phase [°]: ', self)
+        self.lb_SLErrPhs = PyDMLabel(
+            parent=self, init_channel='BR-RF-DLLRF-01:SL:ERR:PHS')
+
         wid = QWidget()
         lay = QFormLayout(wid)
         lay.setFormAlignment(Qt.AlignHCenter)
         lay.setLabelAlignment(Qt.AlignRight)
-        lay.addRow(lb_Pwr, self.lb_Pwr)
-        lay.addRow(lb_ReflPwr, self.lb_ReflPwr)
+        lay.addRow(lb_CavPwr, self.lb_CavPwr)
+        lay.addRow(lb_FwdPwr, self.lb_FwdPwr)
+        lay.addRow(lb_RevPwr, self.lb_RevPwr)
         lay.addRow(lb_vgap, self.lb_VGap)
-        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
-        lay.addRow(lb_vgapCheck, hlay_vgapCheck)
-        lay.addRow(lb_phs, hlay_phs)
-        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        lay.addRow(lb_phs, self.lb_Phs)
         lay.addRow(lb_detune, self.lb_Detune)
+        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        lay.addRow(lb_SLErr)
+        lay.addRow(lb_SLErrVgap, self.lb_SLErrVgap)
+        lay.addRow(lb_SLErrPhs, self.lb_SLErrPhs)
         return wid
 
     def _setupRampStatusesWidget(self):
@@ -213,60 +206,60 @@ class RFStatus(SiriusMainWindow):
             color=QColor('blue'))
         self.graph_rmp.curveAtIndex(0).redrawCurve()
 
-        # Power
-        lb_rmppwr = QLabel('Power [W]: ', self)
-        self.lb_RmpPwr = PyDMLabel(
-            parent=self, init_channel='BR-RF-DLLRF-01:RAMP:TOP:W')
-
-        # Reflected Power
-        lb_rmpreflpwr = QLabel('Reflected Power [W]: ', self)
-        self.lb_RmpRefPwr = PyDMLabel(
-            parent=self, init_channel='BO-05D:RF-P5Cav:PwrRevTop-Mon')
-
+        # # Ramp Top
+        lb_RmpTop = QLabel('Ramp Top', self)
+        # Cavity Power
+        lb_RmpPwrTop = QLabel('Cavity Power [W]: ', self)
+        self.lb_RmpPwrTop = PyDMLabel(
+            parent=self, init_channel='BO-05D:RF-P5Cav:Cell3PwrTop-Mon')
         # Gap Voltage
-        lb_rmpvcav = QLabel('Gap Voltage [kV]: ', self)
-        self.lb_RmpVCav = PyDMLabel(
+        lb_RmpVCavTop = QLabel('Cavity Gap Voltage [kV]: ', self)
+        self.lb_RmpVCavTopRB = PyDMLabel(
+            parent=self, init_channel='BR-RF-DLLRF-01:RmpVoltTop-RB')
+        lbaux_RmpVCavTop = QLabel('/', self)
+        self.lb_RmpVCavTopMon = PyDMLabel(
             parent=self, init_channel='BR-RF-DLLRF-01:RmpVoltTop-Mon')
-
-        lb_RmpPhsTop = QLabel('Phase Top [°]: ', self)
-        self.lb_auxRmpPhsTop = PyDMLabel(
-            parent=self, init_channel='BR-RF-DLLRF-01:RmpPhsTop-SP')
-        self.lb_auxRmpPhsTop.setStyleSheet('max-width: 4em;')
-        lb_auxRmpPhsTop = QLabel('/')
-        lb_auxRmpPhsTop.setStyleSheet('max-width:1em;')
-        self.lb_auxRmpPhsTopRef = PyDMLabel(
+        hbox_RmpVCavTop = QHBoxLayout()
+        hbox_RmpVCavTop.addWidget(self.lb_RmpVCavTopRB)
+        hbox_RmpVCavTop.addWidget(lbaux_RmpVCavTop)
+        hbox_RmpVCavTop.addWidget(self.lb_RmpVCavTopMon)
+        # Phase
+        lb_RmpPhsTop = QLabel('Phase [°]: ', self)
+        self.lb_RmpPhsTop = PyDMLabel(
             parent=self, init_channel='BR-RF-DLLRF-01:RmpPhsTop-RB')
-        self.lb_auxRmpPhsTopRef.setStyleSheet('max-width: 4em;')
-        hlay_rmpphstop = QHBoxLayout()
-        hlay_rmpphstop.addWidget(self.lb_auxRmpPhsTop)
-        hlay_rmpphstop.addWidget(lb_auxRmpPhsTop)
-        hlay_rmpphstop.addWidget(self.lb_auxRmpPhsTopRef)
 
-        lb_RmpPhsBot = QLabel('Phase Bottom [°]: ', self)
-        self.lb_auxRmpPhsTop = PyDMLabel(
-            parent=self, init_channel='BR-RF-DLLRF-01:RmpPhsBot-SP')
-        self.lb_auxRmpPhsTop.setStyleSheet('max-width: 4em;')
-        lb_auxRmpPhsTop = QLabel('/')
-        lb_auxRmpPhsTop.setStyleSheet('max-width:1em;')
-        self.lb_auxRmpPhsTopRef = PyDMLabel(
+        # # Ramp Bottom
+        lb_RmpBot = QLabel('Ramp Bottom', self)
+        # Cavity Power
+        lb_RmpPwrBot = QLabel('Cavity Power [W]: ', self)
+        self.lb_RmpPwrBot = PyDMLabel(
+            parent=self, init_channel='BO-05D:RF-P5Cav:Cell3PwrBot-Mon')
+        # Gap Voltage
+        lb_RmpVCavBot = QLabel('Cavity Gap Voltage [kV]: ', self)
+        self.lb_RmpVCav = PyDMLabel(
+            parent=self, init_channel='BR-RF-DLLRF-01:RmpVoltBot-RB')
+        # Phase
+        lb_RmpPhsBot = QLabel('Phase [°]: ', self)
+        self.lb_RmpPhsBot = PyDMLabel(
             parent=self, init_channel='BR-RF-DLLRF-01:RmpPhsBot-RB')
-        self.lb_auxRmpPhsTopRef.setStyleSheet('max-width: 4em;')
-        hlay_rmpphsbot = QHBoxLayout()
-        hlay_rmpphsbot.addWidget(self.lb_auxRmpPhsTop)
-        hlay_rmpphsbot.addWidget(lb_auxRmpPhsTop)
-        hlay_rmpphsbot.addWidget(self.lb_auxRmpPhsTopRef)
 
         wid = QWidget()
         lay = QFormLayout(wid)
         lay.setFormAlignment(Qt.AlignHCenter)
         lay.setLabelAlignment(Qt.AlignRight)
-        lay.addRow(lb_rmprdy, self.led_RmpReady)
         lay.addRow(self.graph_rmp)
-        lay.addRow(lb_rmppwr, self.lb_RmpPwr)
-        lay.addRow(lb_rmpreflpwr, self.lb_RmpRefPwr)
-        lay.addRow(lb_rmpvcav, self.lb_RmpVCav)
-        lay.addRow(lb_RmpPhsTop, hlay_rmpphstop)
-        lay.addRow(lb_RmpPhsBot, hlay_rmpphsbot)
+        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        lay.addRow(lb_rmprdy, self.led_RmpReady)
+        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        lay.addRow(lb_RmpTop)
+        lay.addRow(lb_RmpPwrTop, self.lb_RmpPwrTop)
+        lay.addRow(lb_RmpVCavTop, hbox_RmpVCavTop)
+        lay.addRow(lb_RmpPhsTop, self.lb_RmpPhsTop)
+        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        lay.addRow(lb_RmpBot)
+        lay.addRow(lb_RmpPwrBot, self.lb_RmpPwrBot)
+        lay.addRow(lb_RmpVCavBot, self.lb_RmpVCav)
+        lay.addRow(lb_RmpPhsBot, self.lb_RmpPhsBot)
         return wid
 
     def _toogleWidgets(self, index):
