@@ -2,14 +2,15 @@
 from qtpy.QtGui import QPalette
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QLabel, QFormLayout, QHBoxLayout, QVBoxLayout, \
-    QGridLayout, QGroupBox, QWidget, QPushButton
+    QGridLayout, QGroupBox, QWidget, QPushButton, QSpacerItem, \
+    QSizePolicy as QSzPlcy
 import qtawesome as qta
 from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox, \
     PyDMPushButton, PyDMLineEdit
 
 from siriuspy.namesys import SiriusPVName
 import siriushla.util as util
-from siriushla.widgets import PyDMLedMultiChannel, SiriusMainWindow, \
+from siriushla.widgets import PyDMLedMultiChannel, SiriusMainWindow, PyDMLed, \
     PyDMStateButton, SiriusLedState, SiriusLedAlert, SiriusConnectionSignal
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.as_ti_control import HLTriggerDetailed
@@ -42,15 +43,9 @@ class BOTuneDetails(SiriusMainWindow):
         self.title_label.setAutoFillBackground(True)
         self.title_label.setPalette(pal)
 
-        # acquisition
-        self.acq_gbox = QGroupBox('Acquisition', self)
-        self.acq_gbox.setLayout(self._acqLayout())
-        # excitation
-        self.exc_gbox = QGroupBox('Excitation', self)
-        self.exc_gbox.setLayout(self._excitLayout())
-        vbox1 = QVBoxLayout()
-        vbox1.addWidget(self.acq_gbox)
-        vbox1.addWidget(self.exc_gbox)
+        # measurement
+        self.meas_gbox = QGroupBox('Measurement', self)
+        self.meas_gbox.setLayout(self._measLayout())
 
         # trigger
         self.trg_gbox = BOTuneTrigger(self, self.prefix)
@@ -63,17 +58,17 @@ class BOTuneDetails(SiriusMainWindow):
         # roi
         self.roi_gbox = QGroupBox('ROI', self)
         self.roi_gbox.setLayout(self._roiLayout())
-        vbox2 = QVBoxLayout()
-        vbox2.addWidget(self.trg_gbox)
-        vbox2.addWidget(self.config_gbox)
-        vbox2.addWidget(self.spec_gbox)
-        vbox2.addWidget(self.roi_gbox)
+        vbox = QVBoxLayout()
+        vbox.addWidget(self.trg_gbox)
+        vbox.addWidget(self.config_gbox)
+        vbox.addWidget(self.spec_gbox)
+        vbox.addWidget(self.roi_gbox)
 
         cw = QWidget(self)
         lay = QGridLayout(cw)
         lay.addWidget(self.title_label, 0, 0, 1, 2)
-        lay.addLayout(vbox1, 1, 0)
-        lay.addLayout(vbox2, 1, 1)
+        lay.addWidget(self.meas_gbox, 1, 0)
+        lay.addLayout(vbox, 1, 1)
         self.setCentralWidget(cw)
 
         self.setStyleSheet("""
@@ -89,9 +84,9 @@ class BOTuneDetails(SiriusMainWindow):
                 min-width:6em; max-width:6em;
             }""")
 
-    def _acqLayout(self):
-        # Enable
-        lbl_acq = QLabel('Enable', self)
+    def _measLayout(self):
+        # Acquisition
+        lbl_acq = QLabel('Acquisition', self)
         self.bt_acq = PyDMStateButton(
             parent=self, init_channel=self.device + ':SpecAnaGetSpec-Sel')
         self.bt_acq.shape = 1
@@ -100,6 +95,38 @@ class BOTuneDetails(SiriusMainWindow):
         hbox_acq = QHBoxLayout()
         hbox_acq.addWidget(self.bt_acq)
         hbox_acq.addWidget(self.led_acq)
+
+        # Excitation
+        lbl_drive = QLabel('Excitation', self)
+        self.bt_drive = PyDMStateButton(
+            parent=self, init_channel=self.device + ':Enbl-Sel')
+        self.bt_drive.shape = 1
+        self.led_drive = PyDMLedMultiChannel(
+            parent=self, channels2values={self.device + ':Enbl-Sts': 0b111})
+        self.led_drive.setOffColor(PyDMLed.DarkGreen)
+        hbox_drive = QHBoxLayout()
+        hbox_drive.addWidget(self.bt_drive)
+        hbox_drive.addWidget(self.led_drive)
+
+        # Excitation Status Detailed
+        lbl_enblsts = QLabel('Excitation\nEnable Status\nDetailed', self,
+                             alignment=Qt.AlignVCenter | Qt.AlignRight)
+        # # Carrier Generator
+        self.led_carrier = SiriusLedState(
+            parent=self, init_channel=self.device + ':EnblCarrierGen-Sts')
+        # # Noise Generator
+        self.led_noise = SiriusLedState(
+            parent=self, init_channel=self.device + ':EnblNoiseGen-Sts')
+        # # Amplifier
+        self.led_amp = SiriusLedState(
+            parent=self, init_channel=self.device + ':EnblAmp-Sts')
+        gbox_enblsts = QGridLayout()
+        gbox_enblsts.addWidget(self.led_carrier, 0, 0)
+        gbox_enblsts.addWidget(QLabel('Carrier Generator'), 0, 1)
+        gbox_enblsts.addWidget(self.led_noise, 1, 0)
+        gbox_enblsts.addWidget(QLabel('Noise Generator'), 1, 1)
+        gbox_enblsts.addWidget(self.led_amp, 2, 0)
+        gbox_enblsts.addWidget(QLabel('Amplifier'), 2, 1)
 
         # Frame Count
         lbl_acqcnt = QLabel('Frame Count', self)
@@ -116,6 +143,33 @@ class BOTuneDetails(SiriusMainWindow):
         hbox_acqcnt.addWidget(self.lb_acqcnt)
         hbox_acqcnt.addWidget(self.led_acqcnt)
 
+        # Nr. Samples p/ spec
+        lbl_nrsmp = QLabel('Nr. Samples p/ Spec.', self)
+        self.lb_nrsmp = PyDMLabel(
+            parent=self,
+            init_channel=self.device.substitute(dev='TuneProc')+':SwePts-RB')
+
+        # Span
+        lbl_span = QLabel('Span [kHz]', self)
+        self.le_span = PyDMLineEdit(
+            parent=self, init_channel=self.device + ':Span-SP')
+        self.le_span.precisionFromPV = True
+        self.lb_span = PyDMLabel(
+            parent=self, init_channel=self.device + ':Span-RB')
+        hbox_span = QHBoxLayout()
+        hbox_span.addWidget(self.le_span)
+        hbox_span.addWidget(self.lb_span)
+
+        # RBW
+        lbl_rbw = QLabel('RBW', self)
+        self.cb_rbw = PyDMEnumComboBox(
+            parent=self, init_channel=self.device + ':SpecAnaRBW-Sel')
+        self.lb_rbw = PyDMLabel(
+            parent=self, init_channel=self.device + ':SpecAnaRBW-Sts')
+        hbox_rbw = QHBoxLayout()
+        hbox_rbw.addWidget(self.cb_rbw)
+        hbox_rbw.addWidget(self.lb_rbw)
+
         # Harmonic
         lbl_h = QLabel('Harmonic (n)', self)
         self.sb_h = PyDMSpinbox(
@@ -127,6 +181,12 @@ class BOTuneDetails(SiriusMainWindow):
         hbox_h = QHBoxLayout()
         hbox_h.addWidget(self.sb_h)
         hbox_h.addWidget(self.lb_h)
+
+        # Harmonic Frequency
+        lbl_Fh = QLabel('Harm. Freq. [MHz]', self)
+        self.lb_Fh = PyDMLabel(parent=self)
+        self.lb_Fh.setToolTip('Frf/(h*n)')
+        self.lb_Fh.channel = self.device + ':FreqRevN-Mon'
 
         # Frequency Offset
         lbl_foff = QLabel('Frequency Offset [kHz]', self)
@@ -162,79 +222,8 @@ class BOTuneDetails(SiriusMainWindow):
         hbox_autoFc.addWidget(self.bt_autoFc)
         hbox_autoFc.addWidget(self.led_autoFc)
 
-        # Harmonic Frequency
-        lbl_Fh = QLabel('Harmonic Frequency [MHz]', self)
-        self.lb_Fh = PyDMLabel(
-            parent=self, init_channel=self.device + ':FreqRevN-Mon')
-        self.lb_Fh.setToolTip('Frf/(h*n)')
-
-        lay = QFormLayout()
-        lay.setLabelAlignment(Qt.AlignRight)
-        lay.setFormAlignment(Qt.AlignCenter)
-        lay.addRow(lbl_acq, hbox_acq)
-        lay.addRow(lbl_acqcnt, hbox_acqcnt)
-        lay.addRow(lbl_h, hbox_h)
-        lay.addRow(lbl_foff, hbox_foff)
-        lay.addRow(lbl_Fc, hbox_Fc)
-        lay.addRow(lbl_autoFc, hbox_autoFc)
-        lay.addRow(lbl_Fh, self.lb_Fh)
-        return lay
-
-    def _excitLayout(self):
-        # Enable
-        lbl_drive = QLabel('Enable', self)
-        self.bt_drive = PyDMStateButton(
-            parent=self, init_channel=self.device + ':Enbl-Sel')
-        self.bt_drive.shape = 1
-        self.led_drive = PyDMLedMultiChannel(
-            parent=self, channels2values={self.device + ':Enbl-Sts': 0b111})
-        hbox_drive = QHBoxLayout()
-        hbox_drive.addWidget(self.bt_drive)
-        hbox_drive.addWidget(self.led_drive)
-
-        # Status
-        lbl_enblsts = QLabel('Enable Status\nDetailed', self,
-                             alignment=Qt.AlignBottom | Qt.AlignRight)
-        # # Carrier Generator
-        self.led_carrier = SiriusLedState(
-            parent=self, init_channel=self.device + ':EnblCarrierGen-Sts')
-        # # Noise Generator
-        self.led_noise = SiriusLedState(
-            parent=self, init_channel=self.device + ':EnblNoiseGen-Sts')
-        # # Amplifier
-        self.led_amp = SiriusLedState(
-            parent=self, init_channel=self.device + ':EnblAmp-Sts')
-        gbox_enblsts = QGridLayout()
-        gbox_enblsts.addWidget(self.led_carrier, 0, 0)
-        gbox_enblsts.addWidget(QLabel('Carrier Generator'), 0, 1)
-        gbox_enblsts.addWidget(self.led_noise, 1, 0)
-        gbox_enblsts.addWidget(QLabel('Noise Generator'), 1, 1)
-        gbox_enblsts.addWidget(self.led_amp, 2, 0)
-        gbox_enblsts.addWidget(QLabel('Amplifier'), 2, 1)
-
-        # Span
-        lbl_span = QLabel('Span [kHz]', self)
-        self.le_span = PyDMLineEdit(
-            parent=self, init_channel=self.device + ':Span-SP')
-        self.le_span.precisionFromPV = True
-        self.lb_span = PyDMLabel(
-            parent=self, init_channel=self.device + ':Span-RB')
-        hbox_span = QHBoxLayout()
-        hbox_span.addWidget(self.le_span)
-        hbox_span.addWidget(self.lb_span)
-
-        # RBW
-        lbl_rbw = QLabel('RBW', self)
-        self.cb_rbw = PyDMEnumComboBox(
-            parent=self, init_channel=self.device + ':SpecAnaRBW-Sel')
-        self.lb_rbw = PyDMLabel(
-            parent=self, init_channel=self.device + ':SpecAnaRBW-Sts')
-        hbox_rbw = QHBoxLayout()
-        hbox_rbw.addWidget(self.cb_rbw)
-        hbox_rbw.addWidget(self.lb_rbw)
-
-        # Auto Configure
-        lbl_driveauto = QLabel('Auto Configure', self)
+        # Auto Configure Excitation
+        lbl_driveauto = QLabel('Auto Config. Excit.', self)
         self.bt_driveauto = PyDMStateButton(
             parent=self, init_channel=self.device + ':DriveAuto-Sel')
         self.bt_driveauto.shape = 1
@@ -271,10 +260,23 @@ class BOTuneDetails(SiriusMainWindow):
         lay = QFormLayout()
         lay.setLabelAlignment(Qt.AlignRight)
         lay.setFormAlignment(Qt.AlignCenter)
+        lay.addRow(lbl_acq, hbox_acq)
+        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
         lay.addRow(lbl_drive, hbox_drive)
         lay.addRow(lbl_enblsts, gbox_enblsts)
+        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        lay.addRow(lbl_acqcnt, hbox_acqcnt)
+        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        lay.addRow(lbl_nrsmp, self.lb_nrsmp)
         lay.addRow(lbl_span, hbox_span)
         lay.addRow(lbl_rbw, hbox_rbw)
+        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        lay.addRow(lbl_h, hbox_h)
+        lay.addRow(lbl_Fh, self.lb_Fh)
+        lay.addRow(lbl_foff, hbox_foff)
+        lay.addRow(lbl_Fc, hbox_Fc)
+        lay.addRow(lbl_autoFc, hbox_autoFc)
+        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
         lay.addRow(lbl_driveauto, hbox_driveauto)
         lay.addRow(lbl_drivegain, hbox_drivegain)
         lay.addRow(lbl_noiseamp, hbox_noiseamp)

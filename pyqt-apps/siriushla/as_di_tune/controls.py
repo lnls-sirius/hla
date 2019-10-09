@@ -9,7 +9,7 @@ from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMLineEdit, \
 
 from siriuspy.namesys import SiriusPVName
 import siriushla.util as util
-from siriushla.widgets import PyDMLedMultiChannel, \
+from siriushla.widgets import PyDMLedMultiChannel, PyDMLed, \
     PyDMStateButton, SiriusLedState, SiriusConnectionSignal
 from .details import BOTuneDetails
 
@@ -29,7 +29,7 @@ class BOTuneControls(QWidget):
         self._setupUi()
 
     def _setupUi(self):
-        # # Acquisition
+        # # Measurement
         # Acquisition
         lbl_acq = QLabel('Acquisition', self)
         self.bt_acq = PyDMStateButton(
@@ -40,6 +40,18 @@ class BOTuneControls(QWidget):
         hbox_acq = QHBoxLayout()
         hbox_acq.addWidget(self.bt_acq)
         hbox_acq.addWidget(self.led_acq)
+
+        # Drive Enable
+        lbl_drive = QLabel('Excitation', self)
+        self.bt_drive = PyDMStateButton(
+            parent=self, init_channel=self.device + ':Enbl-Sel')
+        self.bt_drive.shape = 1
+        self.led_drive = PyDMLedMultiChannel(
+            parent=self, channels2values={self.device + ':Enbl-Sts': 0b111})
+        self.led_drive.setOffColor(PyDMLed.DarkGreen)
+        hbox_drive = QHBoxLayout()
+        hbox_drive.addWidget(self.bt_drive)
+        hbox_drive.addWidget(self.led_drive)
 
         # Frame Count
         lbl_acqcnt = QLabel('Frame Count', self)
@@ -56,6 +68,33 @@ class BOTuneControls(QWidget):
         hbox_acqcnt.addWidget(self.lb_acqcnt)
         hbox_acqcnt.addWidget(self.led_acqcnt)
 
+        # Nr. Samples p/ spec
+        lbl_nrsmp = QLabel('Nr. Samples p/ Spec.', self)
+        self.lb_nrsmp = PyDMLabel(
+            parent=self,
+            init_channel=self.device.substitute(dev='TuneProc')+':SwePts-RB')
+
+        # Span
+        lbl_span = QLabel('Span [kHz]', self)
+        self.le_span = PyDMLineEdit(
+            parent=self, init_channel=self.device + ':Span-SP')
+        self.le_span.precisionFromPV = True
+        self.lb_span = PyDMLabel(
+            parent=self, init_channel=self.device + ':Span-RB')
+        hbox_span = QHBoxLayout()
+        hbox_span.addWidget(self.le_span)
+        hbox_span.addWidget(self.lb_span)
+
+        # RBW
+        lbl_rbw = QLabel('RBW', self)
+        self.cb_rbw = PyDMEnumComboBox(
+            parent=self, init_channel=self.device + ':SpecAnaRBW-Sel')
+        self.lb_rbw = PyDMLabel(
+            parent=self, init_channel=self.device + ':SpecAnaRBW-Sts')
+        hbox_rbw = QHBoxLayout()
+        hbox_rbw.addWidget(self.cb_rbw)
+        hbox_rbw.addWidget(self.lb_rbw)
+
         # Harmonic
         lbl_h = QLabel('Harmonic (n)', self)
         self.sb_h = PyDMSpinbox(
@@ -68,6 +107,12 @@ class BOTuneControls(QWidget):
         hbox_h.addWidget(self.sb_h)
         hbox_h.addWidget(self.lb_h)
 
+        # Harmonic Frequency
+        lbl_Fh = QLabel('Harm. Freq. [MHz]', self)
+        self.lb_Fh = PyDMLabel(parent=self)
+        self.lb_Fh.setToolTip('Frf/(h*n)')
+        self.lb_Fh.channel = self.device + ':FreqRevN-Mon'
+
         # Frequency Offset
         lbl_foff = QLabel('Freq. Offset [kHz]', self)
         self.sb_foff = PyDMSpinbox(
@@ -79,12 +124,6 @@ class BOTuneControls(QWidget):
         hbox_foff = QHBoxLayout()
         hbox_foff.addWidget(self.sb_foff)
         hbox_foff.addWidget(self.lb_foff)
-
-        # Harmonic Frequency
-        lbl_Fh = QLabel('Harm. Freq. [MHz]', self)
-        self.lb_Fh = PyDMLabel(
-            parent=self, init_channel=self.device + ':FreqRevN-Mon')
-        self.lb_Fh.setToolTip('Frf/(h*n)')
 
         # Center Frequency
         lbl_Fc = QLabel('Center Freq. [MHz]', self)
@@ -107,39 +146,6 @@ class BOTuneControls(QWidget):
         hbox_autoFc = QHBoxLayout()
         hbox_autoFc.addWidget(self.bt_autoFc)
         hbox_autoFc.addWidget(self.led_autoFc)
-
-        # # Excitation
-        # Drive Enable
-        lbl_drive = QLabel('Excitation', self)
-        self.bt_drive = PyDMStateButton(
-            parent=self, init_channel=self.device + ':Enbl-Sel')
-        self.bt_drive.shape = 1
-        self.led_drive = PyDMLedMultiChannel(
-            parent=self, channels2values={self.device + ':Enbl-Sts': 0b111})
-        hbox_drive = QHBoxLayout()
-        hbox_drive.addWidget(self.bt_drive)
-        hbox_drive.addWidget(self.led_drive)
-
-        # Span
-        lbl_span = QLabel('Span [kHz]', self)
-        self.le_span = PyDMLineEdit(
-            parent=self, init_channel=self.device + ':Span-SP')
-        self.le_span.precisionFromPV = True
-        self.lb_span = PyDMLabel(
-            parent=self, init_channel=self.device + ':Span-RB')
-        hbox_span = QHBoxLayout()
-        hbox_span.addWidget(self.le_span)
-        hbox_span.addWidget(self.lb_span)
-
-        # RBW
-        lbl_rbw = QLabel('RBW', self)
-        self.cb_rbw = PyDMEnumComboBox(
-            parent=self, init_channel=self.device + ':SpecAnaRBW-Sel')
-        self.lb_rbw = PyDMLabel(
-            parent=self, init_channel=self.device + ':SpecAnaRBW-Sts')
-        hbox_rbw = QHBoxLayout()
-        hbox_rbw.addWidget(self.cb_rbw)
-        hbox_rbw.addWidget(self.lb_rbw)
 
         # # ROI
         # StartX
@@ -213,19 +219,21 @@ class BOTuneControls(QWidget):
         lay = QFormLayout(self)
         lay.setLabelAlignment(Qt.AlignRight)
         lay.setFormAlignment(Qt.AlignCenter)
-        lay.addRow(QLabel('<h4>Acquisition</h4>'))
+        lay.addRow(QLabel('<h4>Measurement Settings</h4>'))
         lay.addRow(lbl_acq, hbox_acq)
-        lay.addRow(lbl_acqcnt, hbox_acqcnt)
-        lay.addRow(lbl_h, hbox_h)
-        lay.addRow(lbl_foff, hbox_foff)
-        lay.addRow(lbl_Fh, self.lb_Fh)
-        lay.addRow(lbl_Fc, hbox_Fc)
-        lay.addRow(lbl_autoFc, hbox_autoFc)
-        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
-        lay.addRow(QLabel('<h4>Excitation</h4>'))
         lay.addRow(lbl_drive, hbox_drive)
+        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        lay.addRow(lbl_acqcnt, hbox_acqcnt)
+        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        lay.addRow(lbl_nrsmp, self.lb_nrsmp)
         lay.addRow(lbl_span, hbox_span)
         lay.addRow(lbl_rbw, hbox_rbw)
+        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        lay.addRow(lbl_h, hbox_h)
+        lay.addRow(lbl_Fh, self.lb_Fh)
+        lay.addRow(lbl_foff, hbox_foff)
+        lay.addRow(lbl_Fc, hbox_Fc)
+        lay.addRow(lbl_autoFc, hbox_autoFc)
         lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
         lay.addRow(QLabel('<h4>ROI</h4>'))
         lay.addRow(lbl_roistartx, hbox_roistartx)
@@ -240,7 +248,7 @@ class BOTuneControls(QWidget):
                 min-width:1.29em; max-width:1.29em;
             }
             PyDMLabel, PyDMSpinbox, PyDMStateButton,
-            PyDMLineEdit{
+            PyDMLineEdit, PyDMEnumComboBox{
                 min-width:6em; max-width:6em;
             }""")
         pal = self.palette()

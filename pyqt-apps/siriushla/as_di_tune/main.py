@@ -65,8 +65,9 @@ class BOTune(SiriusMainWindow):
             parent=self, prefix=self.prefix, orientation='V',
             title='<h3>Vertical</h3>', background=vcolor)
         self.specV.setObjectName('specV')
+
         self.setStyleSheet(
-            "#specH, #specV {min-width:32em; }")
+            "#specH, #specV {min-width:60em; }")
         vbox_meas = QVBoxLayout()
         vbox_meas.addWidget(self.specH)
         vbox_meas.addSpacing(10)
