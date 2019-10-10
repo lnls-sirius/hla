@@ -201,6 +201,10 @@ def get_object(ismenubar=True, parent=None):
             self.add_object_to_level1(menu, MA)
             self.add_object_to_level1(menu, DIG)
             self.add_object_to_level1(menu, OPT)
+
+            if sec == 'bo':
+                RF = self._set_rf_menu(sec)
+                self.add_object_to_level1(menu, RF)
             return menu
 
         def _set_optics_menu(self, sec):
@@ -363,6 +367,16 @@ def get_object(ismenubar=True, parent=None):
             self.connect_newprocess(pmag, script)
             psma.addAction(pmag)
             return psma
+
+        def _set_rf_menu(self, sec):
+            menu = LEVEL2M('RF', self)
+            menu.setObjectName(sec.upper()+'App')
+
+            status = QAction('Status', menu)
+            self.connect_newprocess(
+                status, 'sirius-hla-'+sec.lower()+'-rf-control.py')
+            menu.addAction(status)
+            return menu
 
         def connect_newprocess(self, button, cmd):
             util.connect_newprocess(button, cmd, parent=self)

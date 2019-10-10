@@ -70,6 +70,7 @@ setup(
         'scripts/sirius-hla-bo-pm-control.py',
         'scripts/sirius-hla-bo-ps-control.py',
         'scripts/sirius-hla-bo-pu-control.py',
+        'scripts/sirius-hla-bo-rf-control.py',
         'scripts/sirius-hla-si-ap-chromcorr.py',
         'scripts/sirius-hla-si-ap-currlt.py',
         'scripts/sirius-hla-si-ap-sofb.py',
