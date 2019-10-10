@@ -3,7 +3,7 @@ import numpy as np
 
 from qtpy.QtGui import QPalette, QColor
 from qtpy.QtCore import Qt, Slot, Signal
-from qtpy.QtWidgets import QWidget, QGridLayout, QHBoxLayout, \
+from qtpy.QtWidgets import QWidget, QGridLayout, QHBoxLayout, QVBoxLayout, \
     QComboBox, QCheckBox, QLabel, QSpinBox, QPushButton
 import qtawesome as qta
 from pydm.widgets import PyDMWaveformPlot
@@ -17,6 +17,8 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
 
     new_data = Signal(np.ndarray)
     buffer_size = Signal(str)
+    buffer_data_size = Signal(int)
+    idx2send_changed = Signal(str)
 
     def __init__(self, parent=None, prefix='', orientation='H',
                  background='w'):
@@ -41,10 +43,10 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
                          background=background)
         self.normalizeData = True
         self.ROIColor = QColor('cyan')
-        self.autoSetColorbarLims = False
-        self.colorbar.setLimits([-120, 0])
+        # self.autoSetColorbarLims = False
+        # self.colorbar.setLimits([-120, 0])
         self.format_tooltip = '{0:.3f}, {1:.3f}'
-        self.idx2send = 0
+        self._idx2send = 0
         self.buffer = list()
         self.nravgs = 1
 
@@ -80,12 +82,13 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
         if len(self.buffer) > self.nravgs:
             self.buffer.pop(0)
         self.buffer_size.emit(str(len(self.buffer)))
+        self.buffer_data_size.emit(self.buffer[-1].shape[0]-1)
 
         # Perform average
         image = np.mean(self.buffer, axis=0)
 
         # Emit spectrum data
-        self.new_data.emit(image[self.idx2send, :])
+        self.new_data.emit(image[self._idx2send, :])
 
         # Return image
         return image
@@ -100,10 +103,10 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
         self.resetBuffer()
         self.xAxisChannel = self.prefix + self.device + new_ch
 
-    def setNrAvgs(self, new_nravgs):
+    def setBufferSize(self, new_size):
         """Set number of averages, or, buffer size."""
-        if new_nravgs >= 1:
-            self.nravgs = new_nravgs
+        if new_size >= 1:
+            self.nravgs = new_size
             while len(self.buffer) > self.nravgs:
                 self.buffer.pop(0)
 
@@ -111,55 +114,29 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
         """Reset buffer."""
         self.buffer = list()
 
+    def getDataIndex(self):
+        """Return index of the spectrogram to send in new_data signal."""
+        return self._idx2send
+
+    def setIndex2Send(self, new_idx):
+        """Set index of the spectrogram to send in new_data signal."""
+        max_idx = self.buffer[-1].shape[0] - 1
+        if new_idx > max_idx:
+            self._idx2send = max_idx
+        else:
+            self._idx2send = new_idx
+        self.idx2send_changed.emit(str(self._idx2send))
+
     def mouseDoubleClickEvent(self, ev):
         if ev.button() == Qt.LeftButton:
             pos = self._image_item.mapFromDevice(ev.pos())
             if pos.y() > 0 and pos.y() <= self._image_item.height():
-                self.idx2send = int(pos.y())
+                self._idx2send = int(pos.y())
+                self.idx2send_changed.emit(str(self._idx2send))
         super().mouseDoubleClickEvent(ev)
 
 
-class BOTuneSpectrumView(PyDMWaveformPlot):
-    """BO Tune Spectrum View."""
-
-    def __init__(self, parent=None, prefix='', orientation='H'):
-        """Init."""
-        super().__init__(parent)
-        self.prefix = prefix
-        self.device = SiriusPVName(prefix + 'BO-Glob:DI-Tune-' + orientation)
-
-        self.autoRangeX = True
-        self.autoRangeY = True
-        self.showLegend = False
-        self.showXGrid = True
-        self.showYGrid = True
-        self.axisColor = QColor(0, 0, 0)
-        self.backgroundColor = QColor(255, 255, 255)
-        self.setLabels(left='Spectrum')
-        leftAxis = self.getAxis('left')
-        leftAxis.setStyle(autoExpandTextSpace=False, tickTextWidth=25)
-        self.addChannel(
-            y_channel='FAKE:Spectrum',
-            x_channel=self.prefix+self.device+':TuneFracArray-Mon',
-            redraw_mode=2, color='blue', lineWidth=1, lineStyle=Qt.SolidLine)
-        self.curve = self.curveAtIndex(0)
-
-    def toggleXChannel(self):
-        """Toggle X channel between FreqArray and TuneFracArray."""
-        if 'TuneFracArray' in self.curve.x_address:
-            new_ch = ':FreqArray-Mon'
-        elif 'FreqArray' in self.curve.x_address:
-            new_ch = ':TuneFracArray-Mon'
-        self.curve.x_address = self.prefix + self.device + new_ch
-        self.curve.x_channel.connect()
-
-    def receiveData(self, data):
-        """Update curve."""
-        self.curve.receiveYWaveform(data)
-        self.curve.redrawCurve()
-
-
-class BOTuneSpecControls(QWidget):
+class BOTuneSpectrogramControls(QWidget):
     """Booster Tune Spectrogram Controls."""
 
     def __init__(self, parent=None, prefix='', orientation='H',
@@ -177,19 +154,22 @@ class BOTuneSpecControls(QWidget):
 
         self.spectrogram = BOTuneSpectrogram(
             self, self.prefix, self.orientation)
-        self.spectrum = BOTuneSpectrumView(
-            self, self.prefix, self.orientation)
-        self.spectrogram.new_data.connect(self.spectrum.receiveData)
 
         self.cb_show_roi = QCheckBox('Show ROI', self)
         self.cb_show_roi.stateChanged.connect(self.spectrogram.showROI)
         self.cb_show_roi.setChecked(True)
 
+        self.cb_idx2send = QSpinBox(self)
+        self.cb_idx2send.valueChanged.connect(self.spectrogram.setIndex2Send)
+        self.lb_idx2send = QLabel('0')
+        self.spectrogram.idx2send_changed.connect(self.lb_idx2send.setText)
+        self.spectrogram.buffer_data_size.connect(self.cb_idx2send.setMaximum)
+
         self.sb_nravgs = QSpinBox(self)
         self.sb_nravgs.setValue(1)
         self.sb_nravgs.setMinimum(1)
         self.sb_nravgs.setMaximum(100)
-        self.sb_nravgs.valueChanged.connect(self.spectrogram.setNrAvgs)
+        self.sb_nravgs.valueChanged.connect(self.spectrogram.setBufferSize)
         self.lb_buffsz = QLabel('1', self)
         self.lb_buffsz.setStyleSheet('min-width:1.29em;max-width:1.29em;')
         self.spectrogram.buffer_size.connect(self.lb_buffsz.setText)
@@ -202,24 +182,26 @@ class BOTuneSpecControls(QWidget):
         self.pb_resetbuff.clicked.connect(self.spectrogram.resetBuffer)
 
         self.cb_choose_x = QComboBox(self)
-        self.cb_choose_x.addItem('Tune Fraction')
+        self.cb_choose_x.addItem('Tune Frac.')
         self.cb_choose_x.addItem('Frequency')
         self.cb_choose_x.currentIndexChanged.connect(
             self.spectrogram.toggleXChannel)
-        self.cb_choose_x.currentIndexChanged.connect(
-            self.spectrum.toggleXChannel)
 
         hbox_ctrls = QHBoxLayout()
         hbox_ctrls.setContentsMargins(0, 0, 0, 0)
         hbox_ctrls.setSpacing(6)
         hbox_ctrls.addWidget(self.cb_show_roi)
         hbox_ctrls.addStretch()
-        hbox_ctrls.addWidget(QLabel('Nr. Averages: '), alignment=Qt.AlignLeft)
+        hbox_ctrls.addWidget(QLabel('Send Index:'), alignment=Qt.AlignLeft)
+        hbox_ctrls.addWidget(self.cb_idx2send, alignment=Qt.AlignLeft)
+        hbox_ctrls.addWidget(self.lb_idx2send, alignment=Qt.AlignLeft)
+        hbox_ctrls.addStretch()
+        hbox_ctrls.addWidget(QLabel('Buff.:'), alignment=Qt.AlignLeft)
         hbox_ctrls.addWidget(self.sb_nravgs, alignment=Qt.AlignLeft)
         hbox_ctrls.addWidget(self.lb_buffsz, alignment=Qt.AlignLeft)
         hbox_ctrls.addWidget(self.pb_resetbuff, alignment=Qt.AlignLeft)
         hbox_ctrls.addStretch()
-        hbox_ctrls.addWidget(QLabel('X Axis: '), alignment=Qt.AlignRight)
+        hbox_ctrls.addWidget(QLabel('X Axis:'), alignment=Qt.AlignRight)
         hbox_ctrls.addWidget(self.cb_choose_x, alignment=Qt.AlignRight)
 
         pal = self.palette()
@@ -233,5 +215,112 @@ class BOTuneSpecControls(QWidget):
         lay.setContentsMargins(6, 6, 6, 6)
         lay.addWidget(self.lb_title, 0, 0, 1, 2)
         lay.addWidget(self.spectrogram, 1, 0)
-        lay.addWidget(self.spectrum, 1, 1)
         lay.addLayout(hbox_ctrls, 2, 0, 1, 2)
+
+
+class BOTuneSpectraView(PyDMWaveformPlot):
+    """BO Tune Spectra View."""
+
+    def __init__(self, parent=None, prefix=''):
+        """Init."""
+        super().__init__(parent)
+        self.prefix = prefix
+
+        self.autoRangeX = True
+        self.autoRangeY = True
+        self.showLegend = False
+        self.showXGrid = True
+        self.showYGrid = True
+        self.axisColor = QColor(0, 0, 0)
+        self.backgroundColor = QColor(255, 255, 255)
+        self.showLegend = True
+        leftAxis = self.getAxis('left')
+        leftAxis.setStyle(autoExpandTextSpace=False, tickTextWidth=25)
+
+        self.addChannel(
+            y_channel='FAKE:SpectrumH', name='Tune H',
+            x_channel=self.prefix+'BO-Glob:DI-Tune-H:TuneFracArray-Mon',
+            redraw_mode=2, color='blue', lineWidth=1, lineStyle=Qt.SolidLine)
+        self.curveH = self.curveAtIndex(0)
+        self.curveH.setVisible(True)
+
+        self.addChannel(
+            y_channel='FAKE:SpectrumV', name='Tune V',
+            x_channel=self.prefix+'BO-Glob:DI-Tune-V:TuneFracArray-Mon',
+            redraw_mode=2, color='red', lineWidth=1, lineStyle=Qt.SolidLine)
+        self.curveV = self.curveAtIndex(1)
+        self.curveV.setVisible(True)
+
+    def toggleXChannel(self):
+        """Toggle X channel between FreqArray and TuneFracArray."""
+        if 'TuneFracArray' in self.curveH.x_address:
+            new_ch = ':FreqArray-Mon'
+        elif 'FreqArray' in self.curveH.x_address:
+            new_ch = ':TuneFracArray-Mon'
+        self.curveH.x_address = self.prefix + 'BO-Glob:DI-Tune-H' + new_ch
+        self.curveH.x_channel.connect()
+        self.curveV.x_address = self.prefix + 'BO-Glob:DI-Tune-V' + new_ch
+        self.curveV.x_channel.connect()
+
+    def showTuneH(self, show):
+        """Whether to show or not curve of Tune H."""
+        if show != self.curveH.isVisible():
+            self.curveH.setVisible(show)
+
+    def showTuneV(self, show):
+        """Whether to show or not curve of Tune V."""
+        if show != self.curveV.isVisible():
+            self.curveV.setVisible(show)
+
+    def receiveDataH(self, data):
+        """Update curve X."""
+        self.curveH.receiveYWaveform(data)
+        self.curveH.redrawCurve()
+
+    def receiveDataV(self, data):
+        """Update curve Y."""
+        self.curveV.receiveYWaveform(data)
+        self.curveV.redrawCurve()
+
+
+class BOTuneSpectraControls(QWidget):
+    """Booster Tune Spectra Controls."""
+
+    def __init__(self, parent=None, prefix=''):
+        """Init."""
+        super().__init__(parent)
+        self.prefix = prefix
+        self._setupUi()
+
+    def _setupUi(self):
+        self.spectra = BOTuneSpectraView(self, self.prefix)
+
+        lb_show_trace = QLabel('Show')
+        self.cb_show_x = QCheckBox('X', self)
+        self.cb_show_x.setChecked(True)
+        self.cb_show_x.stateChanged.connect(self.spectra.showTuneH)
+        self.cb_show_y = QCheckBox('Y', self)
+        self.cb_show_y.setChecked(True)
+        self.cb_show_y.stateChanged.connect(self.spectra.showTuneV)
+
+        self.cb_choose_x = QComboBox(self)
+        self.cb_choose_x.addItem('Tune Frac.')
+        self.cb_choose_x.addItem('Frequency')
+        self.cb_choose_x.currentIndexChanged.connect(
+            self.spectra.toggleXChannel)
+
+        hbox_ctrls = QHBoxLayout()
+        hbox_ctrls.setContentsMargins(0, 0, 0, 0)
+        hbox_ctrls.setSpacing(6)
+        hbox_ctrls.addWidget(lb_show_trace, alignment=Qt.AlignLeft)
+        hbox_ctrls.addWidget(self.cb_show_x, alignment=Qt.AlignLeft)
+        hbox_ctrls.addWidget(self.cb_show_y, alignment=Qt.AlignLeft)
+        hbox_ctrls.addStretch()
+        hbox_ctrls.addWidget(QLabel('X Axis: '), alignment=Qt.AlignRight)
+        hbox_ctrls.addWidget(self.cb_choose_x, alignment=Qt.AlignRight)
+
+        lay = QVBoxLayout(self)
+        lay.setSpacing(6)
+        lay.setContentsMargins(6, 6, 6, 6)
+        lay.addWidget(self.spectra)
+        lay.addLayout(hbox_ctrls)
