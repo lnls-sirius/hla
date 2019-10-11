@@ -416,8 +416,8 @@ class BONormEdit(SiriusMainWindow):
         else:
             for ma in manames:
                 ma_value = self.nconfig_data.findChild(QDoubleSpinBox, name=ma)
-                ma_value.setMinimum(-100)
-                ma_value.setMaximum(100)
+                ma_value.setMinimum(-10000)
+                ma_value.setMaximum(10000)
 
     def _updateStrenghtsWidget(self, matype):
         manames = self._getManames(matype)
