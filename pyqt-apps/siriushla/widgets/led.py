@@ -1,6 +1,7 @@
 from copy import deepcopy as _dcopy
 import logging as _log
 import numpy as _np
+import math as _math
 from qtpy.QtGui import QColor
 from qtpy.QtCore import Property, Slot, Signal
 from pydm.widgets.base import PyDMWidget
@@ -147,6 +148,7 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         self.stateColors = _dcopy(color_list) or self.default_colorlist
 
         self._operations_dict = {'eq': self._eq,
+                                 'cl': self._isclose,
                                  'ne': self._ne,
                                  'gt': self._gt,
                                  'lt': self._lt,
@@ -211,6 +213,7 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         address = self.sender().address
         desired = self._address2values[address]
 
+        tol = None
         if isinstance(desired, dict):
             if 'bit' in desired.keys():
                 bit = desired['bit']
@@ -220,6 +223,8 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
                 fun = self._operations_dict[desired['comp']]
             else:
                 fun = self._operations_dict['eq']
+            if 'tol' in desired.keys():
+                tol = desired['tol']
             desired_value = desired['value']
         else:
             fun = self._operations_dict['eq']
@@ -230,7 +235,13 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
                          address+' ('+str(new_val)+')!')
             return
 
-        is_desired = fun(new_val, desired_value)
+        if desired_value is None:
+            is_desired = True
+        else:
+            if tol is not None:
+                is_desired = fun(new_val, desired_value, tol)
+            else:
+                is_desired = fun(new_val, desired_value)
         self._address2status[address] = is_desired
         if not is_desired:
             self.warning.emit([address, new_val])
@@ -269,6 +280,12 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         else:
             is_equal = (val1 == val2)
         return is_equal
+
+    @staticmethod
+    def _isclose(val1, val2, tol=0.008):
+        if val1 is None or val2 is None:
+            return False
+        return _math.isclose(val1, val2, abs_tol=tol)
 
     @staticmethod
     def _ne(val1, val2):

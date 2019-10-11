@@ -3,7 +3,7 @@
 from functools import partial as _part
 from threading import Thread as _Thread
 import numpy as _np
-
+import time as _time
 from qtpy.QtWidgets import QGroupBox, QLabel, QPushButton, QGridLayout, \
     QMessageBox, QVBoxLayout, QComboBox
 from qtpy.QtCore import Qt, Slot, Signal, QThread
@@ -18,9 +18,8 @@ from siriushla.widgets import PyDMLedMultiChannel, PyDMLedMultiConnection, \
                               SiriusDialog
 
 COMMANDS_TIMEOUT = 1
-EVT_LIST = ['Linac', 'InjBO', 'InjSI',
-            'DigLI', 'DigTB', 'DigBO', 'DigTS', 'DigSI',
-            'OrbBO', 'OrbSI', 'CplSI', 'TunSI', 'Study']
+EVT_LIST = ['Linac', 'InjBO', 'InjSI', 'Study',
+            'DigLI', 'DigTB', 'DigBO', 'DigTS', 'DigSI']
 
 
 class StatusAndCommands(QGroupBox):
@@ -179,7 +178,8 @@ class StatusAndCommands(QGroupBox):
         for prpty, value in conn.ramp_basicsetup.items():
             c2v_setup[pfx + prpty] = value
         for prpty, value in conn.ramp_configsetup.items():
-            c2v_apply[pfx + prpty] = value
+            c2v_apply[pfx + prpty] = {'value': value,
+                                      'comp': 'cl', 'tol': 0.008}
 
         self.led_conn.set_channels(c2v_conn)
         self.led_intlk.set_channels2values(c2v_intlk)
@@ -236,7 +236,7 @@ class StatusAndCommands(QGroupBox):
             parent=self)
         thread.start()
         # update values of inj and eje times in fact implemented
-        thread.join()
+        _time.sleep(3)
         inj_time = self._conn_ti.get_injection_time()/1000  # [ms]
         eje_time = self._conn_ti.get_ejection_time()/1000  # [ms]
         self.inj_eje_times.emit(inj_time, eje_time)
@@ -449,6 +449,8 @@ class StatusDetails(SiriusDialog):
         self._conn_ti = connTI or _ConnTiming(prefix=self.prefix)
         self._conn_rf = connRF or _ConnRF(prefix=self.prefix)
         self._setupUi()
+        t = _Thread(target=self._print, daemon=True)
+        t.start()
 
     def _setupUi(self):
         pfx = self.prefix
@@ -521,7 +523,8 @@ class StatusDetails(SiriusDialog):
             c2v_setup[pfx + prpty] = value
         c2v_apply = dict()
         for prpty, value in conn.ramp_configsetup.items():
-            c2v_apply[pfx + prpty] = value
+            c2v_apply[pfx + prpty] = {'value': value,
+                                      'comp': 'cl', 'tol': 0.008}
 
         self.led_ti_intlk = PyDMLedMultiChannel(self, c2v_intlk)
         self.led_ti_setup = PyDMLedMultiChannel(self, c2v_setup)
@@ -549,3 +552,10 @@ class StatusDetails(SiriusDialog):
         glay.addWidget(self.led_rf_apply, 5, 2)
         glay.addWidget(self.led_ti_apply, 5, 3)
         self.setLayout(glay)
+
+    def _print(self):
+        _time.sleep(4)
+        for k, v in self.led_ti_apply.channels2values.items():
+            print(k, v)
+        for k, v in self.led_ti_apply.channels2status.items():
+            print(k, v)
