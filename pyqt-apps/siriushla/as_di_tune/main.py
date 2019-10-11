@@ -5,7 +5,7 @@ from qtpy.QtWidgets import QWidget, QGridLayout, QTabWidget, QVBoxLayout, \
 
 from siriuspy.envars import vaca_prefix
 from siriushla.widgets import SiriusMainWindow
-from .spectrogram import BOTuneSpecControls
+from .spectrogram import BOTuneSpectrogramControls, BOTuneSpectraControls
 from .controls import BOTuneControls
 from .details import BOTuneTrigger
 
@@ -56,27 +56,38 @@ class BOTune(SiriusMainWindow):
         vbox_sett.addWidget(self.trig_gbox)
 
         # Sepctrograms
-        self.specH = BOTuneSpecControls(
+        self.specH = BOTuneSpectrogramControls(
             parent=self, prefix=self.prefix, orientation='H',
             title='<h3>Horizontal</h3>', background=hcolor)
         self.specH.setObjectName('specH')
-
-        self.specV = BOTuneSpecControls(
+        self.specV = BOTuneSpectrogramControls(
             parent=self, prefix=self.prefix, orientation='V',
             title='<h3>Vertical</h3>', background=vcolor)
         self.specV.setObjectName('specV')
-        self.setStyleSheet(
-            "#specH, #specV {min-width:32em; }")
         vbox_meas = QVBoxLayout()
         vbox_meas.addWidget(self.specH)
         vbox_meas.addSpacing(10)
         vbox_meas.addWidget(self.specV)
+
+        # Spectra view
+        self.spectra_view = BOTuneSpectraControls(self, self.prefix)
+        self.spectra_view.setObjectName('spectra_view')
+        self.specH.spectrogram.new_data.connect(
+            self.spectra_view.spectra.receiveDataH)
+        self.specV.spectrogram.new_data.connect(
+            self.spectra_view.spectra.receiveDataV)
+
+        self.setStyleSheet(
+            "#specH, #specV {min-width:40em;}"
+            "#spectra_view {min-width:40em;}")
 
         cw = QWidget(self)
         lay = QGridLayout(cw)
         lay.addWidget(label, 0, 0, 1, 2)
         lay.addLayout(vbox_sett, 1, 0)
         lay.addLayout(vbox_meas, 1, 1)
+        lay.addWidget(self.spectra_view, 1, 2)
         lay.setColumnStretch(0, 1)
-        lay.setColumnStretch(1, 2)
+        lay.setColumnStretch(1, 1)
+        lay.setColumnStretch(2, 1)
         self.setCentralWidget(cw)

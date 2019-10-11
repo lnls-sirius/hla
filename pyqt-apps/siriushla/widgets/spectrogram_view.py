@@ -278,6 +278,8 @@ class SiriusSpectrogramView(
         self._auto_downsample = True
         self._last_yaxis_data = None
         self._last_xaxis_data = None
+        self._auto_colorbar_lims = True
+        self.format_tooltip = '{0:.4g}, {1:.4g}'
 
         # ViewBox and imageItem.
         self._view = ViewBox()
@@ -788,7 +790,8 @@ class SiriusSpectrogramView(
             minXRange=szx, maxXRange=szx, minYRange=szy, maxYRange=szy)
 
         # Update image
-        self.colorbar.setLimits(data)
+        if self.autoSetColorbarLims:
+            self.colorbar.setLimits(data)
         mini, maxi = data[0], data[1]
         img = data[2]
         self._image_item.setLevels([mini, maxi])
@@ -839,6 +842,29 @@ class SiriusSpectrogramView(
         """
         if new_value != self._auto_downsample:
             self._auto_downsample = new_value
+
+    @Property(bool)
+    def autoSetColorbarLims(self):
+        """
+        Return if we should or not auto set colorbar limits.
+
+        Return
+        ------
+        bool
+        """
+        return self._auto_colorbar_lims
+
+    @autoSetColorbarLims.setter
+    def autoSetColorbarLims(self, new_value):
+        """
+        Whether we should or not auto set colorbar limits.
+
+        Parameters
+        ----------
+        new_value: bool
+        """
+        if new_value != self._auto_colorbar_lims:
+            self._auto_colorbar_lims = new_value
 
     @Property(int)
     def imageWidth(self):
@@ -1118,7 +1144,7 @@ class SiriusSpectrogramView(
         else:
             valy = y
 
-        txt = '{0:.4g}, {1:.4g}'.format(valx, valy)
+        txt = self.format_tooltip.format(valx, valy)
         QToolTip.showText(
             self.mapToGlobal(pos), txt, self, self.geometry(), 5000)
         super().mouseMoveEvent(ev)

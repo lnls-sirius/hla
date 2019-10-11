@@ -114,7 +114,6 @@ class DCCTMonitor(QWidget):
                 qta.icon('mdi.delete-empty'), '', self)
             self.pb_resetbuff.setToolTip('Reset buffer')
             self.pb_resetbuff.setObjectName('resetbuff')
-            self.pb_resetbuff.setToolTip('Reset buffer')
             self.pb_resetbuff.setStyleSheet(
                 "#resetbuff{min-width:25px; max-width:25px; icon-size:20px;}")
             self.pb_resetbuff.clicked.connect(self.resetBuffer)
