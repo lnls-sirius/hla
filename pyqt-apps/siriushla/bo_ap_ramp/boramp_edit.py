@@ -1569,7 +1569,7 @@ class RFRamp(QWidget):
             return
 
         try:
-            self.ramp_config.ti_params_ps_ramp_delay = new_value
+            self.ramp_config.ti_params_rf_ramp_delay = new_value
         except exceptions.RampError as e:
             self.updateRFDelay()
             QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
