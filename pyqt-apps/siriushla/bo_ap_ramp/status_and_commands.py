@@ -128,7 +128,7 @@ class StatusAndCommands(QGroupBox):
                 c2v_setup[pfx + conn[p].pvname_rb] = _PSc.States.RmpWfm
             elif 'PwrState' in p:
                 c2v_setup[pfx + conn[p].pvname_rb] = _PSc.PwrStateSts.On
-            elif 'WfmData' in p:
+            elif 'Wfm' in p:
                 c2v_apply[pfx + conn[p].pvname_rb] = _np.array([])
 
         conn = self._conn_rf
@@ -183,7 +183,7 @@ class StatusAndCommands(QGroupBox):
     def _apply_ma(self, manames=list()):
         thread = _CommandThread(
             conn=self._conn_ma,
-            cmds=_part(self._conn_ma.cmd_wfmdata, manames),
+            cmds=_part(self._conn_ma.cmd_wfm, manames),
             warn_msgs='Failed to set MA waveforms!',
             parent=self)
         thread.start()
@@ -276,7 +276,7 @@ class StatusAndCommands(QGroupBox):
         c2v = dict()
         for maname in self._conn_ma.manames:
             wf = self.ramp_config.ps_waveform_get(maname)
-            c2v[self.prefix + maname + ':WfmData-RB'] = wf.currents
+            c2v[self.prefix + maname + ':Wfm-RB'] = wf.currents
         self.led_apply.channels2values.update(c2v)
 
     def update_rf_params(self):
@@ -308,8 +308,10 @@ class StatusAndCommands(QGroupBox):
         c2v = dict()
         c2v[p+c.TrgMags_Duration.replace('SP', 'RB')] = r.ps_ramp_duration
         c2v[p+c.TrgCorrs_Duration.replace('SP', 'RB')] = r.ps_ramp_duration
-        c2v[p+c.TrgMags_NrPulses.replace('SP', 'RB')] = r.ps_ramp_wfm_nrpoints
-        c2v[p+c.TrgCorrs_NrPulses.replace('SP', 'RB')] = r.ps_ramp_wfm_nrpoints
+        c2v[p+c.TrgMags_NrPulses.replace('SP', 'RB')] = \
+            r.ps_ramp_wfm_nrpoints_fams
+        c2v[p+c.TrgCorrs_NrPulses.replace('SP', 'RB')] = \
+            r.ps_ramp_wfm_nrpoints_corrs
         c2v[p+c.TrgMags_Delay.replace('SP', 'RB')] = r.ti_params_ps_ramp_delay
         c2v[p+c.TrgCorrs_Delay.replace('SP', 'RB')] = r.ti_params_ps_ramp_delay
         c2v[p+c.TrgLLRFRmp_Delay.replace('SP', 'RB')] = \
@@ -418,7 +420,7 @@ class StatusDetails(SiriusDialog):
                 c2v_setup[pfx + conn[p].pvname_rb] = _PSc.States.RmpWfm
             elif 'PwrState' in p:
                 c2v_setup[pfx + conn[p].pvname_rb] = _PSc.PwrStateSts.On
-            elif 'WfmData' in p:
+            elif 'Wfm' in p:
                 if self.ramp_config is None or \
                         not self.ramp_config.ps_normalized_configs:
                     c2v_apply[pfx + conn[p].pvname_rb] = _np.array([])

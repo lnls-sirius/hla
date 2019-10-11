@@ -1,6 +1,7 @@
 """MagnetDetailWidget definition."""
 import re
 import numpy as _np
+from datetime import datetime as _datetime
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
@@ -114,9 +115,9 @@ class PSDetailWidget(QWidget):
 
     def _setup_ui(self):
         # Group boxes that compose the widget
-        self.version_box = QGroupBox("Version")
-        self.version_box.setObjectName("version")
-        self.version_box.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+        self.frmwr_box = QGroupBox("Firmware && IOC")
+        self.frmwr_box.setObjectName("version")
+        self.frmwr_box.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
         self.interlock_box = QGroupBox("Interlock")
         self.interlock_box.setObjectName("interlock")
         self.pwrstate_box = QGroupBox("PwrState")
@@ -125,19 +126,22 @@ class PSDetailWidget(QWidget):
         self.opmode_box.setObjectName("operation_mode")
         self.ctrlloop_box = QGroupBox('Control Loop')
         self.ctrlloop_box.setObjectName('ctrlloop_box')
-        self.pru_box = QGroupBox('PRU')
-        self.pru_box.setObjectName('pru_box')
+        self.params_box = QGroupBox('Params')
+        self.params_box.setObjectName('params_box')
         self.current_box = QGroupBox("Current")
         self.current_box.setObjectName("current")
+        self.wfmdata_tab = QWidget()
+        self.wfmdata_tab.setObjectName("wfmdata_tab")
         self.wfm_tab = QWidget()
         self.wfm_tab.setObjectName("wfm_tab")
         self.siggen_tab = QWidget()
         self.siggen_tab.setObjectName('cycle_tab')
         self.cycle_tabs = QTabWidget()
         self.cycle_tabs.addTab(self.siggen_tab, 'SigGen')
-        self.cycle_tabs.addTab(self.wfm_tab, 'Waveforms')
+        self.cycle_tabs.addTab(self.wfmdata_tab, 'WfmData')
+        self.cycle_tabs.addTab(self.wfm_tab, 'Wfm')
         if self._psname.sec == 'BO':
-            self.cycle_tabs.setCurrentIndex(1)
+            self.cycle_tabs.setCurrentIndex(2)
         if self._is_magnet:
             self.psconn_box = QGroupBox("PS Connection")
             self.psconn_box.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
@@ -146,14 +150,15 @@ class PSDetailWidget(QWidget):
             self.metric_box.setObjectName("metric")
 
         # Set group boxes layouts
-        self.version_box.setLayout(self._versionLayout())
+        self.frmwr_box.setLayout(self._frmwrLayout())
         self.interlock_box.setLayout(self._interlockLayout())
         self.pwrstate_box.setLayout(self._powerStateLayout())
         self.opmode_box.setLayout(self._opModeLayout())
         self.ctrlloop_box.setLayout(self._ctrlLoopLayout())
-        self.pru_box.setLayout(self._pruLayout())
+        self.params_box.setLayout(self._paramsLayout())
         self.current_box.setLayout(self._currentLayout())
-        self.wfm_tab.setLayout(self._waveformLayout())
+        self.wfmdata_tab.setLayout(self._wfmdataLayout())
+        self.wfm_tab.setLayout(self._wfmLayout())
         self.siggen_tab.setLayout(self._siggenLayout())
         if self._is_magnet:
             self.psconn_box.setLayout(self._psConnLayout())
@@ -167,14 +172,14 @@ class PSDetailWidget(QWidget):
 
     def _setWidgetLayout(self):
         controls = QGridLayout()
-        controls.addWidget(self.version_box, 0, 0, 1, 2)
+        controls.addWidget(self.frmwr_box, 0, 0, 1, 2)
         if self._is_magnet:
             controls.addWidget(self.psconn_box, 1, 0, 1, 2)
         controls.addWidget(self.opmode_box, 2, 0)
         controls.addWidget(self.pwrstate_box, 2, 1)
         controls.addWidget(self.ctrlloop_box, 3, 0)
         controls.addWidget(self.interlock_box, 3, 1)
-        controls.addWidget(self.pru_box, 4, 0, 1, 2)
+        controls.addWidget(self.params_box, 4, 0, 1, 2)
 
         analogs = QVBoxLayout()
         analogs.addWidget(self.current_box, Qt.AlignCenter)
@@ -197,15 +202,61 @@ class PSDetailWidget(QWidget):
         layout.addWidget(dclink_button)
         return layout
 
-    def _versionLayout(self):
+    def _frmwrLayout(self):
+        self.version_label = QLabel('ARM & DSP')
+        self.version_label.setObjectName("version_label")
+        self.version_label.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+
         self.version_cte = PyDMLabel(
             self, self._prefixed_psname + ":Version-Cte")
         self.version_cte.setObjectName("version_cte_label")
         self.version_cte.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
 
+        self.tstamp_boot_label = QLabel('IOC Boot')
+        self.tstamp_boot_label.setObjectName("tstamp_label")
+        self.tstamp_boot_label.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+
+        self.tstamp_boot = QLabel('', self)
+        self.tstamp_boot_ch = SiriusConnectionSignal(
+            self._prefixed_psname + ":TimestampBoot-Cte")
+        self.tstamp_boot_ch.new_value_signal[float].connect(
+            self._tstamp_boot_met)
+        self.tstamp_boot.setObjectName("tstamp_boot_label")
+        self.tstamp_boot.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+
+        self.tstamp_update_label = QLabel('IOC Update')
+        self.tstamp_update_label.setObjectName("tstamp_label")
+        self.tstamp_update_label.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+
+        self.tstamp_update = QLabel('', self)
+        self.tstamp_update_ch = SiriusConnectionSignal(
+            self._prefixed_psname + ":TimestampUpdate-Mon")
+        self.tstamp_update_ch.new_value_signal[float].connect(self._tstamp_update_met)
+        self.tstamp_update.setObjectName("tstamp_update_label")
+        self.tstamp_update.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+
         layout = QGridLayout()
-        layout.addWidget(self.version_cte, 0, 0, Qt.AlignHCenter)
+        layout.addWidget(self.version_label, 0, 0, Qt.AlignHCenter)
+        layout.addWidget(self.version_cte, 0, 1, Qt.AlignHCenter)
+        layout.addWidget(self.tstamp_boot_label, 1, 0, Qt.AlignHCenter)
+        layout.addWidget(self.tstamp_boot, 1, 1, Qt.AlignHCenter)
+        layout.addWidget(self.tstamp_update_label, 2, 0, Qt.AlignHCenter)
+        layout.addWidget(self.tstamp_update, 2, 1, Qt.AlignHCenter)
         return layout
+
+    @staticmethod
+    def conv_time_string(value):
+        time_str = _datetime.fromtimestamp(value).strftime('%Y-%m-%d %H:%M:%S')
+        time_str += '.{:03d}'.format(int(1e3*(value % 1)))
+        return time_str
+
+    def _tstamp_update_met(self, value):
+        time_str = self.conv_time_string(value)
+        self.tstamp_update.setText(time_str)
+
+    def _tstamp_boot_met(self, value):
+        time_str = self.conv_time_string(value)
+        self.tstamp_boot.setText(time_str)
 
     def _psConnLayout(self):
         self.psconnsts_led = SiriusLedState(
@@ -464,26 +515,35 @@ class PSDetailWidget(QWidget):
         layout.addWidget(self.cycle_auxparam_rb_label, 7, 2)
         return layout
 
-    def _pruLayout(self):
+    def _paramsLayout(self):
         sync_mode_ca = self._prefixed_psname + ':PRUSyncMode-Mon'
         block_index_ca = self._prefixed_psname + ':PRUBlockIndex-Mon'
         sync_count_ca = self._prefixed_psname + ':PRUSyncPulseCount-Mon'
+        wfm_index_ca = self._prefixed_psname + ':WfmIndex-Mon'
+        wfm_count_ca = self._prefixed_psname + ':WfmSyncPulseCount-Mon'
         queue_size_ca = self._prefixed_psname + ':PRUCtrlQueueSize-Mon'
         bsmp_comm_ca = self._prefixed_psname + ':BSMPComm-Sts'
         bsmp_comm_sel = self._prefixed_psname + ':BSMPComm-Sel'
 
-        sync_mode_label = QLabel('Sync Mode', self)
+        sync_mode_label = QLabel('PRU Sync Mode', self)
         sync_mode_rb_label = PyDMLabel(self, sync_mode_ca)
 
-        block_index_label = QLabel('Block Index', self)
+        block_index_label = QLabel('PRU Block Index', self)
         block_index_rb_label = PyDMLabel(self, block_index_ca)
-        sync_count_label = QLabel('Pulse Count', self)
+
+        sync_count_label = QLabel('PRU Pulse Count', self)
         sync_count_rb_label = PyDMLabel(self, sync_count_ca)
 
-        queue_size_label = QLabel('Queue Size', self)
+        wfm_index_label = QLabel('Wfm Index', self)
+        wfm_index_rb_label = PyDMLabel(self, wfm_index_ca)
+
+        wfm_count_label = QLabel('Wfm Pulse Count', self)
+        wfm_count_rb_label = PyDMLabel(self, wfm_count_ca)
+
+        queue_size_label = QLabel('IOC Queue Size', self)
         queue_size_rb_label = PyDMLabel(self, queue_size_ca)
 
-        bsmp_comm_label = QLabel('BSMP Comm.', self)
+        bsmp_comm_label = QLabel('IOC Serial Comm.', self)
         bsmp_comm_sts_led = SiriusLedAlert(self, bsmp_comm_ca)
         bsmp_comm_sts_led.setOnColor(SiriusLedAlert.LightGreen)
         bsmp_comm_sts_led.setOffColor(SiriusLedAlert.Red)
@@ -496,15 +556,19 @@ class PSDetailWidget(QWidget):
         layout.addWidget(block_index_rb_label, 1, 1)
         layout.addWidget(sync_count_label, 2, 0, Qt.AlignRight)
         layout.addWidget(sync_count_rb_label, 2, 1)
-        layout.addWidget(queue_size_label, 3, 0, Qt.AlignRight)
-        layout.addWidget(queue_size_rb_label, 3, 1)
-        layout.addWidget(bsmp_comm_label, 4, 0, Qt.AlignRight)
-        layout.addWidget(bsmp_comm_btn, 4, 1)
-        layout.addWidget(bsmp_comm_sts_led, 4, 2)
+        layout.addWidget(wfm_index_label, 3, 0, Qt.AlignRight)
+        layout.addWidget(wfm_index_rb_label, 3, 1)
+        layout.addWidget(wfm_count_label, 4, 0, Qt.AlignRight)
+        layout.addWidget(wfm_count_rb_label, 4, 1)
+        layout.addWidget(queue_size_label, 5, 0, Qt.AlignRight)
+        layout.addWidget(queue_size_rb_label, 5, 1)
+        layout.addWidget(bsmp_comm_label, 6, 0, Qt.AlignRight)
+        layout.addWidget(bsmp_comm_btn, 6, 1)
+        layout.addWidget(bsmp_comm_sts_led, 6, 2)
         layout.setColumnStretch(3, 1)
         return layout
 
-    def _waveformLayout(self):
+    def _wfmdataLayout(self):
         wfm_data_sp_ch = self._prefixed_psname + ":WfmData-SP"
         wfm_data_rb_ch = self._prefixed_psname + ":WfmData-RB"
 
@@ -521,36 +585,109 @@ class PSDetailWidget(QWidget):
                                 color='blue', lineWidth=2)
 
         # NrPoints
-        self._wnrpts_sp = 0
-        self._wnrpts_rb = 0
-        self.wnrpts = QLabel('', self)
-        self.wnrpts.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
-        self.wnrpts_ch_rb = SiriusConnectionSignal(wfm_data_rb_ch)
-        self.wnrpts_ch_rb.new_value_signal[_np.ndarray].connect(
-            self._wnrpts_update_rb)
-        self.wnrpts_ch_sp = SiriusConnectionSignal(wfm_data_sp_ch)
-        self.wnrpts_ch_sp.new_value_signal[_np.ndarray].connect(
-            self._wnrpts_update_sp)
+        self._wfmdata_nrpts_sp = 0
+        self._wfmdata_nrpts_rb = 0
+        self.wfmdata_nrpts = QLabel('', self)
+        self.wfmdata_nrpts.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        self.wfmdata_nrpts_ch_rb = SiriusConnectionSignal(wfm_data_rb_ch)
+        self.wfmdata_nrpts_ch_rb.new_value_signal[_np.ndarray].connect(
+            self._wfmdata_nrpts_update_rb)
+        self.wfmdata_nrpts_ch_sp = SiriusConnectionSignal(wfm_data_sp_ch)
+        self.wfmdata_nrpts_ch_sp.new_value_signal[_np.ndarray].connect(
+            self._wfmdata_nrpts_update_sp)
 
         # Add widgets
         layout = QVBoxLayout()
         layout.setAlignment(Qt.AlignTop)
         layout.addWidget(self.wfmdata)
-        layout.addWidget(self.wnrpts)
+        layout.addWidget(self.wfmdata_nrpts)
         return layout
 
-    def _set_wnrpts_label(self):
-        self.wnrpts.setText(
-            "WfmData nrpts (SP|RB): {}|{}".format(
-                self._wnrpts_sp, self._wnrpts_rb))
+    def _wfmLayout(self):
+        wfm_data_sp_ch = self._prefixed_psname + ":Wfm-SP"
+        wfm_data_rb_ch = self._prefixed_psname + ":Wfm-RB"
+        wfm_data_rm_ch = self._prefixed_psname + ":WfmRef-Mon"
+        wfm_data_mo_ch = self._prefixed_psname + ":Wfm-Mon"
 
-    def _wnrpts_update_rb(self, value):
-        self._wnrpts_rb = len(value)
-        self._set_wnrpts_label()
+        # Plot
+        self.wfm = PyDMWaveformPlot()
+        self.wfm.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        self.wfm.autoRangeX = True
+        self.wfm.autoRangeY = True
+        self.wfm.setBackgroundColor(QColor(255, 255, 255))
+        self.wfm.setShowLegend(True)
+        self.wfm.addChannel(y_channel=wfm_data_sp_ch, name='Wfm-SP',
+                            color='red', lineWidth=2)
+        self.wfm.addChannel(y_channel=wfm_data_rb_ch, name='Wfm-RB',
+                            color='blue', lineWidth=2)
+        self.wfm.addChannel(y_channel=wfm_data_rm_ch, name='Ref-Mon',
+                            color='green', lineWidth=2)
+        self.wfm.addChannel(y_channel=wfm_data_mo_ch, name='Mon',
+                            color='black', lineWidth=2)
 
-    def _wnrpts_update_sp(self, value):
-        self._wnrpts_sp = len(value)
-        self._set_wnrpts_label()
+        # NrPoints
+        self._wfm_nrpts_sp = 0
+        self._wfm_nrpts_rb = 0
+        self._wfm_nrpts_rm = 0
+        self._wfm_nrpts_mo = 0
+        self.wfm_nrpts = QLabel('', self)
+        self.wfm_nrpts.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        self.wfm_nrpts_ch_rb = SiriusConnectionSignal(wfm_data_rb_ch)
+        self.wfm_nrpts_ch_rb.new_value_signal[_np.ndarray].connect(
+            self._wfm_nrpts_update_rb)
+        self.wfm_nrpts_ch_sp = SiriusConnectionSignal(wfm_data_sp_ch)
+        self.wfm_nrpts_ch_sp.new_value_signal[_np.ndarray].connect(
+            self._wfm_nrpts_update_sp)
+        self.wfm_nrpts_ch_rm = SiriusConnectionSignal(wfm_data_rm_ch)
+        self.wfm_nrpts_ch_rm.new_value_signal[_np.ndarray].connect(
+            self._wfm_nrpts_update_rm)
+        self.wfm_nrpts_ch_mo = SiriusConnectionSignal(wfm_data_mo_ch)
+        self.wfm_nrpts_ch_mo.new_value_signal[_np.ndarray].connect(
+            self._wfm_nrpts_update_mo)
+
+        # Add widgets
+        layout = QVBoxLayout()
+        layout.setAlignment(Qt.AlignTop)
+        layout.addWidget(self.wfm)
+        layout.addWidget(self.wfm_nrpts)
+        return layout
+
+    def _set_wfmdata_nrpts_label(self):
+        self.wfmdata_nrpts.setText(
+            "Nrpts (SP|RB): {}|{}".format(
+                self._wfmdata_nrpts_sp, self._wfmdata_nrpts_rb))
+
+    def _wfmdata_nrpts_update_rb(self, value):
+        self._wfmdata_nrpts_rb = len(value)
+        self._set_wfmdata_nrpts_label()
+
+    def _wfmdata_nrpts_update_sp(self, value):
+        self._wfmdata_nrpts_sp = len(value)
+        self._set_wfmdata_nrpts_label()
+
+    def _set_wfm_nrpts_label(self):
+        self.wfm_nrpts.setText(
+            "Nrpts (SP|RB|Ref-Mon|Mon): {}|{}|{}|{}".format(
+                self._wfm_nrpts_sp,
+                self._wfm_nrpts_rb,
+                self._wfm_nrpts_rm,
+                self._wfm_nrpts_mo))
+
+    def _wfm_nrpts_update_rb(self, value):
+        self._wfm_nrpts_rb = len(value)
+        self._set_wfm_nrpts_label()
+
+    def _wfm_nrpts_update_sp(self, value):
+        self._wfm_nrpts_sp = len(value)
+        self._set_wfm_nrpts_label()
+
+    def _wfm_nrpts_update_rm(self, value):
+        self._wfm_nrpts_rm = len(value)
+        self._set_wfm_nrpts_label()
+
+    def _wfm_nrpts_update_mo(self, value):
+        self._wfm_nrpts_mo = len(value)
+        self._set_wfm_nrpts_label()
 
     def _getElementType(self):
         dipole = re.compile("(SI|BO|LI|TS|TB)-(Fam|\w{2,4}):MA-B")
@@ -581,8 +718,8 @@ class DCLinkDetailWidget(PSDetailWidget):
 
     def _setup_ui(self):
         # Group boxes that compose the widget
-        self.version_box = QGroupBox('Version')
-        self.version_box.setObjectName("version")
+        self.frmwr_box = QGroupBox('Firmware && IOC')
+        self.frmwr_box.setObjectName("Firmware")
         self.interlock_box = QGroupBox('Interlock')
         self.interlock_box.setObjectName('interlock')
         self.pwrstate_box = QGroupBox('PwrState')
@@ -591,20 +728,20 @@ class DCLinkDetailWidget(PSDetailWidget):
         self.opmode_box.setObjectName('operation_mode')
         self.ctrlloop_box = QGroupBox('Control Loop')
         self.ctrlloop_box.setObjectName('ctrlloop_box')
-        self.pru_box = QGroupBox('PRU')
-        self.pru_box.setObjectName('pru_box')
+        self.params_box = QGroupBox('Params')
+        self.params_box.setObjectName('params_box')
         self.analog_box = QGroupBox(self._analog_varname)
         self.analog_box.setObjectName('current')
         self.aux_box = QGroupBox('Other Params')
         self.aux_box.setObjectName('aux_box')
 
         # Set group boxes layouts
-        self.version_box.setLayout(self._versionLayout())
+        self.frmwr_box.setLayout(self._frmwrLayout())
         self.interlock_box.setLayout(self._interlockLayout())
         self.pwrstate_box.setLayout(self._powerStateLayout())
         self.opmode_box.setLayout(self._opModeLayout())
         self.ctrlloop_box.setLayout(self._ctrlLoopLayout())
-        self.pru_box.setLayout(self._pruLayout())
+        self.params_box.setLayout(self._paramsLayout())
         self.analog_box.setLayout(self._analogLayout())
         self.aux_box.setLayout(self._auxLayout())
 
@@ -616,12 +753,12 @@ class DCLinkDetailWidget(PSDetailWidget):
 
     def _setWidgetLayout(self):
         controls = QGridLayout()
-        controls.addWidget(self.version_box, 0, 0, 1, 2)
+        controls.addWidget(self.frmwr_box, 0, 0, 1, 2)
         controls.addWidget(self.interlock_box, 1, 0)
         controls.addWidget(self.opmode_box, 1, 1)
         controls.addWidget(self.pwrstate_box, 2, 0)
         controls.addWidget(self.ctrlloop_box, 2, 1)
-        controls.addWidget(self.pru_box, 3, 0, 1, 2)
+        controls.addWidget(self.params_box, 3, 0, 1, 2)
 
         analogs = QVBoxLayout()
         analogs.addWidget(self.analog_box)

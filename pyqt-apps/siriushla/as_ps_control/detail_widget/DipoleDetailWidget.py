@@ -43,7 +43,7 @@ class DipoleDetailWidget(PSDetailWidget):
         controls.addWidget(self.pwrstate_box, 2, 1)
         controls.addWidget(self.ctrlloop_box, 3, 0)
         controls.addWidget(self.interlock_box, 3, 1)
-        controls.addWidget(self.pru_box, 4, 0, 1, 2)
+        controls.addWidget(self.params_box, 4, 0, 1, 2)
 
         # Analogs
         analogs = QVBoxLayout()
