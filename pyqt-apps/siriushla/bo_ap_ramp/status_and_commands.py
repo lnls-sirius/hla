@@ -5,7 +5,7 @@ from threading import Thread as _Thread
 import numpy as _np
 
 from qtpy.QtWidgets import QGroupBox, QLabel, QPushButton, QGridLayout, \
-    QMessageBox, QVBoxLayout
+    QMessageBox, QVBoxLayout, QComboBox
 from qtpy.QtCore import Qt, Slot, Signal, QThread
 import qtawesome as qta
 
@@ -18,6 +18,9 @@ from siriushla.widgets import PyDMLedMultiChannel, PyDMLedMultiConnection, \
                               SiriusDialog
 
 COMMANDS_TIMEOUT = 1
+EVT_LIST = ['Linac', 'InjBO', 'InjSI',
+            'DigLI', 'DigTB', 'DigBO', 'DigTS', 'DigSI',
+            'OrbBO', 'OrbSI', 'CplSI', 'TunSI', 'Study']
 
 
 class StatusAndCommands(QGroupBox):
@@ -36,6 +39,9 @@ class StatusAndCommands(QGroupBox):
         lay = QVBoxLayout()
         lay.setAlignment(Qt.AlignTop)
         lay.addLayout(self._setupStatusLayout())
+        lay.addStretch()
+        lay.addLayout(self._setupChooseTIEventLayout())
+        lay.addStretch()
         lay.addLayout(self._setupCommandsLayout())
         self.setLayout(lay)
 
@@ -97,6 +103,28 @@ class StatusAndCommands(QGroupBox):
         lay.addWidget(self.bt_prepare_ti)
         lay.addStretch()
         lay.addWidget(self.bt_apply_all)
+        return lay
+
+    def _setupChooseTIEventLayout(self):
+        lay = QGridLayout()
+        lay.setVerticalSpacing(3)
+        lay.addWidget(QLabel('Control events:'), 0, 0, 1, 2)
+        for i, ev in enumerate(EVT_LIST):
+            lb = QLabel(ev, self)
+            cb = QComboBox(self)
+            cb.addItems(['None', 'Inj', 'Eje'])
+            if ev in ['Linac', 'InjBO']:
+                cb.setCurrentText('Inj')
+                cb.setEnabled(False)
+            elif ev == 'InjSI':
+                cb.setCurrentText('Eje')
+                cb.setEnabled(False)
+            else:
+                cb.setCurrentText('None')
+                cb.setEnabled(True)
+            cb.setObjectName(ev)
+            lay.addWidget(lb, i+1, 0)
+            lay.addWidget(cb, i+1, 1)
         return lay
 
     def _create_connectors(self):
@@ -197,9 +225,11 @@ class StatusAndCommands(QGroupBox):
         thread.start()
 
     def _apply_ti(self):
+        events_inj, events_eje = self._get_inj_eje_events()
         thread = _CommandThread(
             conn=self._conn_ti,
-            cmds=self._conn_ti.cmd_config_ramp,
+            cmds=_part(self._conn_ti.cmd_config_ramp,
+                       events_inj, events_eje),
             warn_msgs='Failed to set TI parameters!',
             parent=self)
         thread.start()
@@ -308,23 +338,48 @@ class StatusAndCommands(QGroupBox):
         c2v = dict()
         c2v[p+c.TrgMags_Duration.replace('SP', 'RB')] = r.ps_ramp_duration
         c2v[p+c.TrgCorrs_Duration.replace('SP', 'RB')] = r.ps_ramp_duration
+
         c2v[p+c.TrgMags_NrPulses.replace('SP', 'RB')] = \
             r.ps_ramp_wfm_nrpoints_fams
         c2v[p+c.TrgCorrs_NrPulses.replace('SP', 'RB')] = \
             r.ps_ramp_wfm_nrpoints_corrs
+
         c2v[p+c.TrgMags_Delay.replace('SP', 'RB')] = r.ti_params_ps_ramp_delay
         c2v[p+c.TrgCorrs_Delay.replace('SP', 'RB')] = r.ti_params_ps_ramp_delay
         c2v[p+c.TrgLLRFRmp_Delay.replace('SP', 'RB')] = \
             r.ti_params_rf_ramp_delay
         c2v[p+c.EvtRmpBO_Delay.replace('SP', 'RB')] = 0.0
-        params = conn.calc_evts_delay()
-        if not params:
+
+        events_inj, events_eje = self._get_inj_eje_events()
+        delays = conn.calc_evts_delay(events_inj, events_eje)
+        if not delays:
             self.show_warning_message('There are TI not connected PVs!')
-            params = [None]*3
-        c2v[p+c.EvtLinac_Delay.replace('SP', 'RB')] = params[0]
-        c2v[p+c.EvtInjBO_Delay.replace('SP', 'RB')] = params[1]
-        c2v[p+c.EvtInjSI_Delay.replace('SP', 'RB')] = params[2]
+            delays = {ev: None for ev in EVT_LIST}
+        for ev in events_inj:
+            attr = getattr(c, 'Evt'+ev+'_Delay')
+            attr = attr.replace('SP', 'RB')
+            c2v[p+attr] = delays[ev]
+        for ev in events_eje:
+            attr = getattr(c, 'Evt'+ev+'_Delay')
+            attr = attr.replace('SP', 'RB')
+            c2v[p+attr] = delays[ev]
+        for ev in EVT_LIST:
+            if ev in events_inj or ev in events_eje:
+                continue
+            attr = getattr(c, 'Evt'+ev+'_Delay')
+            c2v[p+attr] = None
         self.led_apply.channels2values.update(c2v)
+
+    def _get_inj_eje_events(self):
+        events_inj = list()
+        events_eje = list()
+        for ev in EVT_LIST:
+            cb = self.findChild(QComboBox, ev)
+            if cb.currentText() == 'Inj':
+                events_inj.append(ev)
+            elif cb.currentText() == 'Eje':
+                events_eje.append(ev)
+        return events_inj, events_eje
 
 
 class _CommandThread(QThread):
