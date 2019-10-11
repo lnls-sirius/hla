@@ -18,7 +18,7 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
     new_data = Signal(np.ndarray)
     buffer_size = Signal(str)
     buffer_data_size = Signal(int)
-    idx2send_changed = Signal(str)
+    idx2send_changed = Signal(int)
 
     def __init__(self, parent=None, prefix='', orientation='H',
                  background='w'):
@@ -125,14 +125,14 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
             self._idx2send = max_idx
         else:
             self._idx2send = new_idx
-        self.idx2send_changed.emit(str(self._idx2send))
+        self.idx2send_changed.emit(self._idx2send)
 
     def mouseDoubleClickEvent(self, ev):
         if ev.button() == Qt.LeftButton:
             pos = self._image_item.mapFromDevice(ev.pos())
             if pos.y() > 0 and pos.y() <= self._image_item.height():
                 self._idx2send = int(pos.y())
-                self.idx2send_changed.emit(str(self._idx2send))
+                self.idx2send_changed.emit(self._idx2send)
         super().mouseDoubleClickEvent(ev)
 
 
@@ -159,11 +159,11 @@ class BOTuneSpectrogramControls(QWidget):
         self.cb_show_roi.stateChanged.connect(self.spectrogram.showROI)
         self.cb_show_roi.setChecked(True)
 
-        self.cb_idx2send = QSpinBox(self)
-        self.cb_idx2send.valueChanged.connect(self.spectrogram.setIndex2Send)
-        self.lb_idx2send = QLabel('0')
-        self.spectrogram.idx2send_changed.connect(self.lb_idx2send.setText)
-        self.spectrogram.buffer_data_size.connect(self.cb_idx2send.setMaximum)
+        self.cb_idx2plot = QSpinBox(self)
+        self.cb_idx2plot.valueChanged.connect(self.spectrogram.setIndex2Send)
+        self.lb_idx2plot = QLabel('0')
+        self.spectrogram.idx2send_changed.connect(self._update_idx2plot)
+        self.spectrogram.buffer_data_size.connect(self.cb_idx2plot.setMaximum)
 
         self.sb_nravgs = QSpinBox(self)
         self.sb_nravgs.setValue(1)
@@ -192,9 +192,9 @@ class BOTuneSpectrogramControls(QWidget):
         hbox_ctrls.setSpacing(6)
         hbox_ctrls.addWidget(self.cb_show_roi)
         hbox_ctrls.addStretch()
-        hbox_ctrls.addWidget(QLabel('Send Index:'), alignment=Qt.AlignLeft)
-        hbox_ctrls.addWidget(self.cb_idx2send, alignment=Qt.AlignLeft)
-        hbox_ctrls.addWidget(self.lb_idx2send, alignment=Qt.AlignLeft)
+        hbox_ctrls.addWidget(QLabel('Plot Index:'), alignment=Qt.AlignLeft)
+        hbox_ctrls.addWidget(self.cb_idx2plot, alignment=Qt.AlignLeft)
+        hbox_ctrls.addWidget(self.lb_idx2plot, alignment=Qt.AlignLeft)
         hbox_ctrls.addStretch()
         hbox_ctrls.addWidget(QLabel('Buff.:'), alignment=Qt.AlignLeft)
         hbox_ctrls.addWidget(self.sb_nravgs, alignment=Qt.AlignLeft)
@@ -216,6 +216,12 @@ class BOTuneSpectrogramControls(QWidget):
         lay.addWidget(self.lb_title, 0, 0, 1, 2)
         lay.addWidget(self.spectrogram, 1, 0)
         lay.addLayout(hbox_ctrls, 2, 0, 1, 2)
+
+    def _update_idx2plot(self, value):
+        self.cb_idx2plot.blockSignals(True)
+        self.cb_idx2plot.setValue(value)
+        self.lb_idx2plot.setText(str(value))
+        self.cb_idx2plot.blockSignals(False)
 
 
 class BOTuneSpectraView(PyDMWaveformPlot):
