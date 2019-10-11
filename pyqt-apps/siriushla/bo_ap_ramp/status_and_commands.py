@@ -26,6 +26,8 @@ EVT_LIST = ['Linac', 'InjBO', 'InjSI',
 class StatusAndCommands(QGroupBox):
     """Widget to show general Booster timing and magnets status."""
 
+    inj_eje_times = Signal(float, float)
+
     def __init__(self, parent=None, prefix='', ramp_config=None):
         """Initialize object."""
         super().__init__('', parent)
@@ -233,6 +235,11 @@ class StatusAndCommands(QGroupBox):
             warn_msgs='Failed to set TI parameters!',
             parent=self)
         thread.start()
+        # update values of inj and eje times in fact implemented
+        thread.join()
+        inj_time = self._conn_ti.get_injection_time()/1000  # [ms]
+        eje_time = self._conn_ti.get_ejection_time()/1000  # [ms]
+        self.inj_eje_times.emit(inj_time, eje_time)
 
     def _open_status_details(self):
         self.status_details = StatusDetails(

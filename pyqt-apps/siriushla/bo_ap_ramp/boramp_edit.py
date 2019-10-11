@@ -702,6 +702,22 @@ class DipoleRamp(QWidget):
 
         self.table.cellChanged.connect(self._handleCellChanged)
 
+    def updateInjEjeTimes(self, inj_time, eje_time):
+        """Update inj and eje times."""
+        row = 2  # Injection
+        t_item = self.table.item(row, 1)  # time column
+        e_item = self.table.item(row, 2)  # energy column
+        energy = self.ramp_config.ps_waveform_interp_energy(inj_time)
+        t_item.setData(Qt.DisplayRole, '{0:.3f}'.format(inj_time))
+        e_item.setData(Qt.DisplayRole, '{0:.4f}'.format(energy))
+
+        row = 4  # Ejection
+        t_item = self.table.item(row, 1)  # time column
+        e_item = self.table.item(row, 2)  # energy column
+        energy = self.ramp_config.ps_waveform_interp_energy(eje_time)
+        t_item.setData(Qt.DisplayRole, '{0:.3f}'.format(eje_time))
+        e_item.setData(Qt.DisplayRole, '{0:.4f}'.format(energy))
+
     @Slot(ramp.BoosterRamp)
     def handleLoadRampConfig(self, ramp_config):
         """Update all widgets when ramp_config is loaded."""

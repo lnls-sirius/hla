@@ -104,6 +104,9 @@ class RampMain(SiriusMainWindow):
         self.config_parameters.rf_ramp.applyChanges2MachineSignal.connect(
             self.status_and_commands.apply_changes)
 
+        self.status_and_commands.inj_eje_times.connect(
+            self.config_parameters.dip_ramp.updateInjEjeTimes)
+
         self.loadSignal.connect(self.settings.getRampConfig)
         self.loadSignal.connect(self.config_parameters.handleLoadRampConfig)
         self.loadSignal.connect(self.status_and_commands.handleLoadRampConfig)
