@@ -429,11 +429,11 @@ class BONormEdit(SiriusMainWindow):
     # ---------- orbit ----------
 
     def _updateCorrKicks(self):
-        for maname, dkick in self._deltas['kicks']:
+        for maname, dkick in self._deltas['kicks'].items():
             corr_factor = self._deltas['factorV'] if 'CV' in maname \
                 else self._deltas['factorH']
-            current_kick = self.norm_config[maname]
-            self.norm_config[maname] = current_kick + dkick*corr_factor
+            self.norm_config[maname] = self._current_kicks[maname] + \
+                dkick*corr_factor
 
     def _handleGetKicksFromSOFB(self):
         if not self._conn_sofb.connected:
@@ -448,6 +448,10 @@ class BONormEdit(SiriusMainWindow):
                 self, 'Could not get kicks',
                 'Could not get kicks from SOFB!', QMessageBox.Ok)
             return
+
+        self._current_kicks = dict()
+        for maname in self._getManames():
+            self._current_kicks[maname] = self.norm_config[maname]
 
         self._deltas['kicks'] = dkicks
         self._updateCorrKicks()
