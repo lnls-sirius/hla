@@ -203,8 +203,6 @@ class PSDetailWidget(QWidget):
         return layout
 
     def _frmwrLayout(self):
-
-        print('here')
         self.version_label = QLabel('ARM & DSP')
         self.version_label.setObjectName("version_label")
         self.version_label.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
