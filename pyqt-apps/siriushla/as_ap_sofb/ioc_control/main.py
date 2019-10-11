@@ -193,7 +193,7 @@ class SOFBControl(BaseWidget):
             ('All', self._csorb.ApplyDelta.All),
             ('CH', self._csorb.ApplyDelta.CH),
             ('CV', self._csorb.ApplyDelta.CV)]
-        if self.isring:
+        if self.acc == 'SI':
             lst.append(('RF', self._csorb.ApplyDelta.RF))
         btns = dict()
         for itm, val in lst:
@@ -213,7 +213,7 @@ class SOFBControl(BaseWidget):
         gdl.addWidget(calc, 0, 0, 2, 1)
         gdl.addWidget(btns['CH'], 0, 1)
         gdl.addWidget(btns['CV'], 0, 2)
-        if self.isring:
+        if self.acc == 'SI':
             gdl.addWidget(btns['RF'], 0, 3)
             gdl.addWidget(btns['All'], 1, 1, 1, 3)
         else:
