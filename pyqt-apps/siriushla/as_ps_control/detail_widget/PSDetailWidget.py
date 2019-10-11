@@ -1,6 +1,7 @@
 """MagnetDetailWidget definition."""
 import re
 import numpy as _np
+from datetime import datetime as _datetime
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
@@ -114,9 +115,9 @@ class PSDetailWidget(QWidget):
 
     def _setup_ui(self):
         # Group boxes that compose the widget
-        self.version_box = QGroupBox("Firmware Version")
-        self.version_box.setObjectName("version")
-        self.version_box.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+        self.frmwr_box = QGroupBox("Firmware && IOC")
+        self.frmwr_box.setObjectName("version")
+        self.frmwr_box.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
         self.interlock_box = QGroupBox("Interlock")
         self.interlock_box.setObjectName("interlock")
         self.pwrstate_box = QGroupBox("PwrState")
@@ -149,7 +150,7 @@ class PSDetailWidget(QWidget):
             self.metric_box.setObjectName("metric")
 
         # Set group boxes layouts
-        self.version_box.setLayout(self._versionLayout())
+        self.frmwr_box.setLayout(self._frmwrLayout())
         self.interlock_box.setLayout(self._interlockLayout())
         self.pwrstate_box.setLayout(self._powerStateLayout())
         self.opmode_box.setLayout(self._opModeLayout())
@@ -171,7 +172,7 @@ class PSDetailWidget(QWidget):
 
     def _setWidgetLayout(self):
         controls = QGridLayout()
-        controls.addWidget(self.version_box, 0, 0, 1, 2)
+        controls.addWidget(self.frmwr_box, 0, 0, 1, 2)
         if self._is_magnet:
             controls.addWidget(self.psconn_box, 1, 0, 1, 2)
         controls.addWidget(self.opmode_box, 2, 0)
@@ -201,15 +202,63 @@ class PSDetailWidget(QWidget):
         layout.addWidget(dclink_button)
         return layout
 
-    def _versionLayout(self):
+    def _frmwrLayout(self):
+
+        print('here')
+        self.version_label = QLabel('ARM & DSP')
+        self.version_label.setObjectName("version_label")
+        self.version_label.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+
         self.version_cte = PyDMLabel(
             self, self._prefixed_psname + ":Version-Cte")
         self.version_cte.setObjectName("version_cte_label")
         self.version_cte.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
 
+        self.tstamp_boot_label = QLabel('IOC Boot')
+        self.tstamp_boot_label.setObjectName("tstamp_label")
+        self.tstamp_boot_label.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+
+        self.tstamp_boot = QLabel('', self)
+        self.tstamp_boot_ch = SiriusConnectionSignal(
+            self._prefixed_psname + ":TimestampBoot-Cte")
+        self.tstamp_boot_ch.new_value_signal[float].connect(
+            self._tstamp_boot_met)
+        self.tstamp_boot.setObjectName("tstamp_boot_label")
+        self.tstamp_boot.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+
+        self.tstamp_update_label = QLabel('IOC Update')
+        self.tstamp_update_label.setObjectName("tstamp_label")
+        self.tstamp_update_label.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+
+        self.tstamp_update = QLabel('', self)
+        self.tstamp_update_ch = SiriusConnectionSignal(
+            self._prefixed_psname + ":TimestampUpdate-Mon")
+        self.tstamp_update_ch.new_value_signal[float].connect(self._tstamp_update_met)
+        self.tstamp_update.setObjectName("tstamp_update_label")
+        self.tstamp_update.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+
         layout = QGridLayout()
-        layout.addWidget(self.version_cte, 0, 0, Qt.AlignHCenter)
+        layout.addWidget(self.version_label, 0, 0, Qt.AlignHCenter)
+        layout.addWidget(self.version_cte, 0, 1, Qt.AlignHCenter)
+        layout.addWidget(self.tstamp_boot_label, 1, 0, Qt.AlignHCenter)
+        layout.addWidget(self.tstamp_boot, 1, 1, Qt.AlignHCenter)
+        layout.addWidget(self.tstamp_update_label, 2, 0, Qt.AlignHCenter)
+        layout.addWidget(self.tstamp_update, 2, 1, Qt.AlignHCenter)
         return layout
+
+    @staticmethod
+    def conv_time_string(value):
+        time_str = _datetime.fromtimestamp(value).strftime('%Y-%m-%d %H:%M:%S')
+        time_str += '.{:03d}'.format(int(1e3*(value % 1)))
+        return time_str
+
+    def _tstamp_update_met(self, value):
+        time_str = self.conv_time_string(value)
+        self.tstamp_update.setText(time_str)
+
+    def _tstamp_boot_met(self, value):
+        time_str = self.conv_time_string(value)
+        self.tstamp_boot.setText(time_str)
 
     def _psConnLayout(self):
         self.psconnsts_led = SiriusLedState(
@@ -671,8 +720,8 @@ class DCLinkDetailWidget(PSDetailWidget):
 
     def _setup_ui(self):
         # Group boxes that compose the widget
-        self.version_box = QGroupBox('Version')
-        self.version_box.setObjectName("version")
+        self.frmwr_box = QGroupBox('Firmware && IOC')
+        self.frmwr_box.setObjectName("Firmware")
         self.interlock_box = QGroupBox('Interlock')
         self.interlock_box.setObjectName('interlock')
         self.pwrstate_box = QGroupBox('PwrState')
@@ -689,7 +738,7 @@ class DCLinkDetailWidget(PSDetailWidget):
         self.aux_box.setObjectName('aux_box')
 
         # Set group boxes layouts
-        self.version_box.setLayout(self._versionLayout())
+        self.frmwr_box.setLayout(self._frmwrLayout())
         self.interlock_box.setLayout(self._interlockLayout())
         self.pwrstate_box.setLayout(self._powerStateLayout())
         self.opmode_box.setLayout(self._opModeLayout())
@@ -706,7 +755,7 @@ class DCLinkDetailWidget(PSDetailWidget):
 
     def _setWidgetLayout(self):
         controls = QGridLayout()
-        controls.addWidget(self.version_box, 0, 0, 1, 2)
+        controls.addWidget(self.frmwr_box, 0, 0, 1, 2)
         controls.addWidget(self.interlock_box, 1, 0)
         controls.addWidget(self.opmode_box, 1, 1)
         controls.addWidget(self.pwrstate_box, 2, 0)
