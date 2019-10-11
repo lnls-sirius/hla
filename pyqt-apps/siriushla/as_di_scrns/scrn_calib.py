@@ -133,27 +133,27 @@ class ScrnCalibrationSettings(SiriusDialog):
 
         label_ImgScaleFactorX = QLabel('Scale Factor X: ', self)
         hbox_ImgScaleFactorX = _create_propty_layout(
-            parent=self, prefix=cam_prefix, propty='ImgScaleFactorX',
+            parent=self, prefix=cam_prefix, propty='ScaleFactorX',
             propty_type='sprb')
 
         label_ImgScaleFactorY = QLabel('Scale Factor Y: ', self)
         hbox_ImgScaleFactorY = _create_propty_layout(
-            parent=self, prefix=cam_prefix, propty='ImgScaleFactorY',
+            parent=self, prefix=cam_prefix, propty='ScaleFactorY',
             propty_type='sprb')
 
         label_ImgCenterOffsetX = QLabel('Center Offset X [pixels]: ', self)
         hbox_ImgCenterOffsetX = _create_propty_layout(
-            parent=self, prefix=cam_prefix, propty='ImgCenterOffsetX',
+            parent=self, prefix=cam_prefix, propty='CenterOffsetX',
             propty_type='sprb')
 
         label_ImgCenterOffsetY = QLabel('Center Offset Y [pixels]: ', self)
         hbox_ImgCenterOffsetY = _create_propty_layout(
-            parent=self, prefix=cam_prefix, propty='ImgCenterOffsetY',
+            parent=self, prefix=cam_prefix, propty='CenterOffsetY',
             propty_type='sprb')
 
         label_ImgThetaOffset = QLabel('Theta Offset [pixels]: ', self)
         hbox_ImgThetaOffset = _create_propty_layout(
-            parent=self, prefix=cam_prefix, propty='ImgThetaOffset',
+            parent=self, prefix=cam_prefix, propty='ThetaOffset',
             propty_type='sprb')
 
         flay_Img = QFormLayout()
