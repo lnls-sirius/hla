@@ -1,10 +1,14 @@
-
+import os
+from datetime import datetime
+import time
+from functools import partial as _part
 import numpy as np
 
 from qtpy.QtGui import QPalette, QColor
 from qtpy.QtCore import Qt, Slot, Signal
 from qtpy.QtWidgets import QWidget, QGridLayout, QHBoxLayout, QVBoxLayout, \
-    QComboBox, QCheckBox, QLabel, QSpinBox, QPushButton
+    QComboBox, QCheckBox, QLabel, QSpinBox, QPushButton, QMenu, QSpacerItem, \
+    QSizePolicy as QSzPlcy, QFileDialog
 import qtawesome as qta
 from pydm.widgets import PyDMWaveformPlot
 
@@ -325,8 +329,99 @@ class BOTuneSpectraControls(QWidget):
         hbox_ctrls.addWidget(QLabel('X Axis: '), alignment=Qt.AlignRight)
         hbox_ctrls.addWidget(self.cb_choose_x, alignment=Qt.AlignRight)
 
+        # Registers
+        self.registers = {i: None for i in range(4)}
+        self.spectra.curveReg = [None, None, None, None]
+        self.cb_reg = {i: QCheckBox(self) for i in range(4)}
+        self.bt_reg = {i: QPushButton('Register '+str(i), self)
+                       for i in range(4)}
+        self.lb_reg = {i: QLabel('Empty') for i in range(4)}
+        self.bt_save = {i: QPushButton(qta.icon('fa5s.save'), '', self)
+                        for i in range(4)}
+        self.colors = ['cyan', 'darkGreen', 'magenta', 'darkRed']
+        glay_reg = QGridLayout()
+        # glay_reg.setAlignment(Qt.AlignLeft)
+        for i in range(4):
+            # checks
+            self.spectra.addChannel(
+                y_channel='FAKE:Register'+str(i), name='Register '+str(i),
+                redraw_mode=2, color=self.colors[i],
+                lineWidth=1, lineStyle=Qt.SolidLine)
+            self.spectra.curveReg[i] = self.spectra.curveAtIndex(i+2)
+            self.spectra.curveReg[i].setVisible(False)
+            self.cb_reg[i].setStyleSheet(
+                'min-width:1.2em; max-width:1.2em;'
+                'min-height:1.29em; color:'+self.colors[i]+';')
+            self.cb_reg[i].stateChanged.connect(_part(self._show_curve, i))
+            glay_reg.addWidget(self.cb_reg[i], i, 0, alignment=Qt.AlignLeft)
+            # buttons
+            self.bt_reg[i].setStyleSheet('min-width:5em; max-width:5em;')
+            self.bt_reg[i].setMenu(QMenu())
+            self.bt_reg[i].menu().addAction(
+                'Save Tune H', _part(self._registerData, i, 'H'))
+            self.bt_reg[i].menu().addAction(
+                'Save Tune V', _part(self._registerData, i, 'V'))
+            self.bt_reg[i].menu().addAction(
+                'Clear', _part(self._clear_register, i))
+            glay_reg.addWidget(self.bt_reg[i], i, 1, alignment=Qt.AlignLeft)
+            # label
+            self.lb_reg[i].setStyleSheet('min-height:1.29em;')
+            glay_reg.addWidget(self.lb_reg[i], i, 2, alignment=Qt.AlignLeft)
+            glay_reg.addItem(
+                QSpacerItem(i, 1, QSzPlcy.Expanding, QSzPlcy.Ignored), i, 3)
+            # save button
+            self.bt_save[i].clicked.connect(_part(self._export_data, i))
+            glay_reg.addWidget(self.bt_save[i], i, 4, alignment=Qt.AlignRight)
+
         lay = QVBoxLayout(self)
-        lay.setSpacing(6)
-        lay.setContentsMargins(6, 6, 6, 6)
+        lay.setSpacing(10)
+        lay.setContentsMargins(10, 6, 6, 6)
         lay.addWidget(self.spectra)
         lay.addLayout(hbox_ctrls)
+        lay.addLayout(glay_reg)
+
+    def _registerData(self, idx, tune):
+        curve = self.spectra.curveH if tune == 'H' else self.spectra.curveV
+        self.registers[idx] = [curve.latest_x, curve.latest_y]
+        self.lb_reg[idx].setText(
+            'Tune '+tune+' at '+time.strftime(
+                '%d/%m/%Y %H:%M:%S', time.localtime(time.time())))
+        self._show_curve(idx, self.cb_reg[idx].checkState())
+
+    def _clear_register(self, idx):
+        self.registers[idx] = None
+        self._show_curve(idx, self.cb_reg[idx].checkState())
+
+    def _show_curve(self, idx, show):
+        if not self.registers[idx]:
+            self.spectra.curveReg[idx].receiveXWaveform([])
+            self.spectra.curveReg[idx].receiveYWaveform([])
+            self.spectra.curveReg[idx].redrawCurve()
+            return
+        if show:
+            self.spectra.curveReg[idx].receiveXWaveform(self.registers[idx][0])
+            self.spectra.curveReg[idx].receiveYWaveform(self.registers[idx][1])
+            self.spectra.curveReg[idx].redrawCurve()
+            self.spectra.curveReg[idx].setVisible(True)
+        else:
+            self.spectra.curveReg[idx].setVisible(False)
+
+    def _export_data(self, idx):
+        if not self.registers[idx]:
+            return
+
+        home = os.path.expanduser('~')
+        folder_month = datetime.now().strftime('%Y-%m')
+        folder_day = datetime.now().strftime('%Y-%m-%d')
+        path = os.path.join(
+            home, 'Desktop', 'screens-iocs', folder_month, folder_day)
+        if not os.path.exists(path):
+            os.makedirs(path)
+        fn, _ = QFileDialog.getSaveFileName(self, 'Save as...', path, '*.txt')
+        if not fn:
+            return False
+        if not fn.endswith('.txt'):
+            fn += '.txt'
+
+        data = np.array([self.registers[idx][0], self.registers[idx][1]]).T
+        np.savetxt(fn, data)
