@@ -432,6 +432,7 @@ class BONormEdit(SiriusMainWindow):
         for maname, dkick in self._deltas['kicks'].items():
             corr_factor = self._deltas['factorV'] if 'CV' in maname \
                 else self._deltas['factorH']
+            corr_factor /= 100
             self.norm_config[maname] = self._current_kicks[maname] + \
                 dkick*corr_factor
 
