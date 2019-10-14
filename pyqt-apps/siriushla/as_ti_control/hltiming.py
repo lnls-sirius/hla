@@ -71,6 +71,8 @@ class TimingMain(SiriusMainWindow):
         sp.setStyleSheet(
             '#but{min-width:25px; max-width:25px; icon-size:20px;}')
         rb = PyDMLed(self, init_channel=evg_pref + "EvtSyncStatus-Mon")
+        rb.setOffColor(rb.Red)
+        rb.setOnColor(rb.LightGreen)
         hbl.addWidget(self._create_prop_widget(
             '<h4>Update Evts</h4>', wid, (sp, rb)))
 
