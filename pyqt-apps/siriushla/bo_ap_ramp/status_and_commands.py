@@ -359,6 +359,7 @@ class StatusAndCommands(QGroupBox):
 
         events_inj, events_eje = self._get_inj_eje_events()
         delays = conn.calc_evts_delay(events_inj, events_eje)
+        conn.update_ramp_configsetup(events_inj, events_eje, delays)
         if not delays:
             self.show_warning_message('There are TI not connected PVs!')
             delays = {ev: None for ev in EVT_LIST}
@@ -554,8 +555,11 @@ class StatusDetails(SiriusDialog):
         self.setLayout(glay)
 
     def _print(self):
+        led = self.led_ti_apply
         _time.sleep(4)
-        for k, v in self.led_ti_apply.channels2values.items():
+        for k, v in led.channels2values.items():
             print(k, v)
-        for k, v in self.led_ti_apply.channels2status.items():
+        print('')
+        for k, v in led.channels2status.items():
             print(k, v)
+        print('\n\n')
