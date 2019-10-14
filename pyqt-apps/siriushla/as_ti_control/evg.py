@@ -65,7 +65,7 @@ class EVG(BaseWidget):
         mylayout.addWidget(self.configs_wid, 2, 0)
         self._setup_configs_wid()
 
-        bucketlist_wid = self._setup_bucketlist_wid()
+        bucketlist_wid = BucketList(self, self.prefix)
         mylayout.addWidget(bucketlist_wid, 3, 0)
 
         self.status_wid = QGroupBox('Status', self)
@@ -206,50 +206,43 @@ class EVG(BaseWidget):
         layrow.addWidget(self._create_prop_widget(
                         'Injection', self.configs_wid, (sp, rb)))
 
-    def _setup_bucketlist_wid(self):
-        prefix = self.prefix
-        wid = QGroupBox('Bucket List', self)
-        lay = QHBoxLayout(wid)
-
-        sp = BucketListLineEdit(wid, init_channel=prefix + "BucketList-SP")
-        sp.setStyleSheet("min-width:38em; max-width:38em; max-height:1.15em;")
-        sp.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
-        rb = BucketListLabel(wid, init_channel=prefix + "BucketList-RB")
-        rb.setStyleSheet("min-width:38em; max-width:38em; max-height:1.15em;")
-        rb.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
-        vlay = QVBoxLayout()
-        lay.addItem(vlay)
-        vlay.addWidget(sp)
-        vlay.addWidget(rb)
-
-        rb = PyDMLabel(wid, init_channel=prefix + "BucketListLen-Mon")
-        vlay = QVBoxLayout()
-        lay.addItem(vlay)
-        vlay.addWidget(QLabel('Size', wid), alignment=Qt.AlignCenter)
-        vlay.addWidget(rb, alignment=Qt.AlignCenter)
-
-        sp = _MySpinBox(wid, init_channel=prefix + "RepeatBucketList-SP")
-        sp.showStepExponent = False
-        rb = PyDMLabel(wid, init_channel=prefix + "RepeatBucketList-RB")
-        lay.addWidget(self._create_prop_widget('Repeat', wid, (sp, rb)))
-
-        return wid
-
     def _setup_status_wid(self):
         prefix = self.prefix
         status_layout = QGridLayout(self.status_wid)
         status_layout.setHorizontalSpacing(30)
-        status_layout.setVerticalSpacing(30)
+        status_layout.setVerticalSpacing(5)
 
-        rb = PyDMLabel(self, init_channel=prefix + "STATEMACHINE")
-        status_layout.addWidget(rb, 0, 0, 1, 3)
-        status_layout.setAlignment(rb, Qt.AlignCenter)
+        rb1 = PyDMLabel(self.status_wid, init_channel=prefix + 'STATEMACHINE')
+        rb2 = PyDMLabel(self.status_wid, init_channel=prefix + 'DevStatus-Mon')
+        hlay = QHBoxLayout()
+        hlay.addStretch()
+        hlay.addWidget(rb1)
+        hlay.addStretch()
+        hlay.addWidget(rb2)
+        hlay.addStretch()
+        status_layout.addItem(hlay, 0, 0, 1, 3)
+        status_layout.setAlignment(hlay, Qt.AlignCenter)
+
+        hlay = QHBoxLayout()
+        pydmlab = PyDMLabel(
+            self.status_wid, init_channel=prefix+'TotalInjCount-Mon')
+        pydmlab.setStyleSheet('min-width:5em;')
+        pydmlab.setAlignment(Qt.AlignCenter)
+        hlay.addWidget(self._create_prop_widget(
+            '<b>Total Inj Count</b>', self.status_wid, (pydmlab, )))
+        pydmlab = PyDMLabel(
+            self.status_wid, init_channel=prefix+'InjCount-Mon')
+        pydmlab.setStyleSheet('min-width:5em;')
+        pydmlab.setAlignment(Qt.AlignCenter)
+        hlay.addWidget(self._create_prop_widget(
+            '<b>Run Inj Count</b>', self.status_wid, (pydmlab, )))
+        status_layout.addItem(hlay, 1, 0, 1, 3)
 
         lb = QLabel("<b>Alive</b>")
         rb = PyDMLabel(self, init_channel=prefix + "Alive-Mon")
         gb = self._create_small_GB('', self.status_wid, (lb, rb))
         gb.setStyleSheet('border: 2px solid transparent;')
-        status_layout.addWidget(gb, 1, 0)
+        status_layout.addWidget(gb, 2, 0)
 
         lb = QLabel("<b>Network</b>")
         rb = SiriusLedAlert(self, init_channel=prefix + "Network-Mon")
@@ -258,7 +251,7 @@ class EVG(BaseWidget):
         rb.onColor = off_c
         gb = self._create_small_GB('', self.status_wid, (lb, rb))
         gb.setStyleSheet('border: 2px solid transparent;')
-        status_layout.addWidget(gb, 1, 1)
+        status_layout.addWidget(gb, 2, 1)
 
         lb = QLabel("<b>RF Sts</b>")
         rb = SiriusLedAlert(self, init_channel=prefix + "RFStatus-Mon")
@@ -267,7 +260,7 @@ class EVG(BaseWidget):
         rb.onColor = off_c
         gb = self._create_small_GB('', self.status_wid, (lb, rb))
         gb.setStyleSheet('border: 2px solid transparent;')
-        status_layout.addWidget(gb, 1, 2)
+        status_layout.addWidget(gb, 2, 2)
 
         wids = list()
         for i in range(8):
@@ -275,7 +268,7 @@ class EVG(BaseWidget):
             wids.append(rb)
         gb = self._create_small_GB(
                 'Down Connection', self.status_wid, wids, align_ver=False)
-        status_layout.addWidget(gb, 2, 0, 1, 3)
+        status_layout.addWidget(gb, 3, 0, 1, 3)
 
     def _create_small_GB(self, name, parent, wids, align_ver=True):
         gb = QGroupBox(name, parent)
@@ -309,6 +302,85 @@ class EVG(BaseWidget):
     #         wid.setParent(pwid)
     #         lay.addWidget(wid, 1, i)
     #     return pwid
+
+
+class BucketList(BaseWidget):
+
+    def __init__(self, parent=None, prefix=''):
+        super().__init__(parent, prefix=prefix)
+        self.setObjectName('ASApp')
+        self.setupui()
+
+    def setupui(self):
+        self.setLayout(QHBoxLayout(self))
+        wid = QGroupBox('Bucket List', self)
+        self.layout().addWidget(wid)
+        self.layout().setContentsMargins(0, 0, 0, 0)
+        lay = QHBoxLayout(wid)
+        prefix = self.prefix
+
+        sp = BucketListLineEdit(wid, init_channel=prefix + "BucketList-SP")
+        sp.setStyleSheet("min-width:38em; max-width:38em; max-height:1.15em;")
+        sp.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
+        lab = QLabel('SP : ', wid)
+        lay_sp = QHBoxLayout()
+        lay_sp.addWidget(lab)
+        lay_sp.addWidget(sp)
+        rb = BucketListLabel(wid, init_channel=prefix + "BucketList-RB")
+        rb.setStyleSheet("min-width:38em; max-width:38em; max-height:1.15em;")
+        rb.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
+        lab = QLabel('RB : ', wid)
+        lay_rb = QHBoxLayout()
+        lay_rb.addWidget(lab)
+        lay_rb.addWidget(rb)
+        mn = BucketListLabel(wid, init_channel=prefix + "BucketList-Mon")
+        mn.setStyleSheet("min-width:38em; max-width:38em; max-height:1.15em;")
+        mn.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
+        lab = QLabel('Mon: ', wid)
+        lay_mn = QHBoxLayout()
+        lay_mn.addWidget(lab)
+        lay_mn.addWidget(mn)
+        vlay = QVBoxLayout()
+        lay.addItem(vlay)
+        vlay.addItem(lay_sp)
+        vlay.addItem(lay_rb)
+        vlay.addItem(lay_mn)
+
+        rb = PyDMLed(wid, init_channel=prefix + "BucketListSyncStatus-Mon")
+        rb.setOffColor(rb.Red)
+        rb.setOnColor(rb.LightGreen)
+        lab = QLabel('Sync', wid)
+        lab.setStyleSheet("min-width:4em; max-height:1.15em;")
+        lab.setAlignment(Qt.AlignCenter)
+        vlay = QVBoxLayout()
+        lay.addItem(vlay)
+        vlay.addWidget(lab)
+        vlay.addWidget(rb)
+
+        rb = PyDMLabel(wid, init_channel=prefix + "BucketListLen-Mon")
+        rb.setStyleSheet("min-width:4em; max-height:1.15em;")
+        rb.setAlignment(Qt.AlignCenter)
+        lab = QLabel('Size', wid)
+        lab.setStyleSheet("min-width:4em; max-height:1.15em;")
+        lab.setAlignment(Qt.AlignCenter)
+        vlay = QVBoxLayout()
+        lay.addItem(vlay)
+        vlay.addWidget(lab)
+        vlay.addWidget(rb)
+
+        sp = _MySpinBox(wid, init_channel=prefix + "RepeatBucketList-SP")
+        sp.showStepExponent = False
+        rb = PyDMLabel(wid, init_channel=prefix + "RepeatBucketList-RB")
+        rb.setStyleSheet("min-width:2.5em; max-height:1.15em;")
+        rb.setStyleSheet("min-width:4em; max-height:1.15em;")
+        lab = QLabel('Repeat', wid, alignment=Qt.AlignCenter)
+        vlay = QVBoxLayout()
+        hlay = QHBoxLayout()
+        lay.addItem(vlay)
+        vlay.addWidget(lab)
+        vlay.addItem(hlay)
+        hlay.addWidget(sp)
+        hlay.addWidget(rb)
 
 
 class EventList(BaseList):

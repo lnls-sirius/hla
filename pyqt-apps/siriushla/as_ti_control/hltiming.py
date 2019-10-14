@@ -13,8 +13,7 @@ from siriushla.util import connect_window, get_appropriate_color
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets import SiriusMainWindow, PyDMLed, PyDMStateButton
 from .base import MySpinBox as _MySpinBox
-from .evg import EventList as _EventList, EVG as _EVG, BucketListLabel, \
-    BucketListLineEdit
+from .evg import EventList as _EventList, EVG as _EVG, BucketList
 from .evr_eve import EVR as _EVR, EVE as _EVE
 from .afc import AFC as _AFC
 from .fout import FOUT as _FOUT
@@ -59,7 +58,7 @@ class TimingMain(SiriusMainWindow):
     def setglobalparameters(self):
         wid = QWidget(self.centralWidget())
         wid.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
-        hbl = QHBoxLayout(wid)
+        lay = QGridLayout(wid)
 
         evg_pref = LLTimeSearch.get_device_names({'dev': 'EVG'})[0]
         evg_pref = self.prefix + evg_pref + ':'
@@ -73,62 +72,39 @@ class TimingMain(SiriusMainWindow):
         rb = PyDMLed(self, init_channel=evg_pref + "EvtSyncStatus-Mon")
         rb.setOffColor(rb.Red)
         rb.setOnColor(rb.LightGreen)
-        hbl.addWidget(self._create_prop_widget(
-            '<h4>Update Evts</h4>', wid, (sp, rb)))
+        lay.addWidget(self._create_prop_widget(
+            '<h4>Update Evts</h4>', wid, (sp, rb)), 0, 0)
 
         sp = PyDMStateButton(self, init_channel=evg_pref + "ContinuousEvt-Sel")
         rb = PyDMLed(self, init_channel=evg_pref + "ContinuousEvt-Sts")
-        hbl.addWidget(self._create_prop_widget(
-            '<h4>Continuous</h4>', wid, (sp, rb)))
+        lay.addWidget(self._create_prop_widget(
+            '<h4>Continuous</h4>', wid, (sp, rb)), 0, 1)
 
         sp = PyDMStateButton(self, init_channel=evg_pref + "InjectionEvt-Sel")
         rb = PyDMLed(self, init_channel=evg_pref + "InjectionEvt-Sts")
-        hbl.addWidget(self._create_prop_widget(
-            '<h4>Injection</h4>', wid, (sp, rb)))
+        lay.addWidget(self._create_prop_widget(
+            '<h4>Injection</h4>', wid, (sp, rb)), 0, 2)
 
-        bucketlist_wid = self._setup_bucketlist_wid(evg_pref)
-        hbl.addWidget(bucketlist_wid)
-        return wid
+        bucketlist_wid = BucketList(self.centralWidget(), evg_pref)
+        lay.addWidget(bucketlist_wid, 0, 3, 2, 1)
 
-    def _setup_bucketlist_wid(self, prefix):
-        wid = QGroupBox('Bucket List', self.centralWidget())
-        lay = QHBoxLayout(wid)
-
-        sp = BucketListLineEdit(wid, init_channel=prefix + "BucketList-SP")
-        sp.setStyleSheet("min-width:38em; max-width:38em; max-height:1.15em;")
-        sp.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
-        rb = BucketListLabel(wid, init_channel=prefix + "BucketList-RB")
-        rb.setStyleSheet("min-width:38em; max-width:38em; max-height:1.15em;")
-        rb.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
-        vlay = QVBoxLayout()
-        lay.addItem(vlay)
-        vlay.addWidget(sp)
-        vlay.addWidget(rb)
-
-        rb = PyDMLabel(wid, init_channel=prefix + "BucketListLen-Mon")
-        rb.setStyleSheet("min-width:4em; max-height:1.15em;")
-        rb.setAlignment(Qt.AlignCenter)
-        lab = QLabel('Size', wid)
-        lab.setStyleSheet("min-width:4em; max-height:1.15em;")
-        lab.setAlignment(Qt.AlignCenter)
-        vlay = QVBoxLayout()
-        lay.addItem(vlay)
-        vlay.addWidget(lab)
-        vlay.addWidget(rb)
-
-        sp = _MySpinBox(wid, init_channel=prefix + "RepeatBucketList-SP")
-        sp.showStepExponent = False
-        rb = PyDMLabel(wid, init_channel=prefix + "RepeatBucketList-RB")
-        rb.setStyleSheet("min-width:2.5em; max-height:1.15em;")
-        rb.setStyleSheet("min-width:4em; max-height:1.15em;")
-        lab = QLabel('Repeat', wid, alignment=Qt.AlignCenter)
-        vlay = QVBoxLayout()
         hlay = QHBoxLayout()
-        lay.addItem(vlay)
-        vlay.addWidget(lab)
-        vlay.addItem(hlay)
-        hlay.addWidget(sp)
-        hlay.addWidget(rb)
+        lab = QLabel('Total Inj Count:', wid)
+        pydmlab = PyDMLabel(wid, init_channel=evg_pref+'TotalInjCount-Mon')
+        pydmlab.setStyleSheet('min-width:5em;')
+        pydmlab.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        hlay.addStretch()
+        hlay.addWidget(lab)
+        hlay.addWidget(pydmlab)
+        hlay.addStretch()
+        lab = QLabel('Run Inj Count:', wid)
+        pydmlab = PyDMLabel(wid, init_channel=evg_pref+'InjCount-Mon')
+        pydmlab.setStyleSheet('min-width:5em;')
+        pydmlab.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        hlay.addWidget(lab)
+        hlay.addWidget(pydmlab)
+        hlay.addStretch()
+        lay.addItem(hlay, 1, 0, 1, 3)
         return wid
 
     def setevents(self):
