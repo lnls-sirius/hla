@@ -89,19 +89,24 @@ class TimingMain(SiriusMainWindow):
         lay.addWidget(bucketlist_wid, 0, 3, 2, 1)
 
         hlay = QHBoxLayout()
-        lab = QLabel('Total Inj Count:', wid)
-        pydmlab = PyDMLabel(wid, init_channel=evg_pref+'TotalInjCount-Mon')
+        lab = QLabel('Inj Count:', wid)
+        pydmlab = PyDMLabel(wid, init_channel=evg_pref+'InjCount-Mon')
         pydmlab.setStyleSheet('min-width:5em;')
         pydmlab.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         hlay.addStretch()
         hlay.addWidget(lab)
         hlay.addWidget(pydmlab)
         hlay.addStretch()
-        lab = QLabel('Run Inj Count:', wid)
-        pydmlab = PyDMLabel(wid, init_channel=evg_pref+'InjCount-Mon')
-        pydmlab.setStyleSheet('min-width:5em;')
-        pydmlab.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        hlay.addWidget(lab)
+        pydmlab = PyDMLabel(wid, init_channel=evg_pref+'STATEMACHINE')
+        pydmlab.setStyleSheet('min-width:10em;')
+        hlay.addWidget(pydmlab)
+        hlay.addStretch()
+        pydmlab = PyDMLabel(wid, init_channel=evg_pref+'SeqCount-SP')
+        pydmlab.rules =\
+            '[{"name": "VisibleRule", "property": "Visible", ' +\
+            '"expression": "ch[0]==5", "channels": [{"channel": "' +\
+            evg_pref + 'STATEMACHINE", "trigger": true}]}]'
+        pydmlab.setStyleSheet('min-width:3em;')
         hlay.addWidget(pydmlab)
         hlay.addStretch()
         lay.addItem(hlay, 1, 0, 1, 3)
