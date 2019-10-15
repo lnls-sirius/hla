@@ -13,6 +13,7 @@ from siriuspy.ramp import ramp
 from siriuspy.ramp.conn import ConnMagnets as _ConnMagnets, ConnRF as _ConnRF,\
                                ConnTiming as _ConnTiming
 from siriuspy.csdevice.pwrsupply import Const as _PSc
+from siriuspy.csdevice.timesys import Const as _TIc
 
 from siriushla.widgets import PyDMLedMultiChannel, PyDMLedMultiConnection, \
                               SiriusDialog
@@ -187,11 +188,24 @@ class StatusAndCommands(QGroupBox):
         self.led_apply.set_channels2values(c2v_apply)
 
     def _prepare_ma(self):
+        # turn off triggers
         thread = _CommandThread(
-            conn=self._conn_ma,
-            cmds=self._conn_ma.cmd_opmode_rmpwfm,
-            warn_msgs='Failed to set MA OpMode to RmpWfm!',
-            parent=self)
+            conn=self._conn_ti, cmds=_part(
+                self._conn_ti.cmd_set_magnet_trigger_state,
+                _TIc.DsblEnbl.Dsbl),
+            warn_msgs='Failed to turn magnets trigger off!', parent=self)
+        thread.start()
+        # set magnets opmode
+        thread = _CommandThread(
+            conn=self._conn_ma, cmds=self._conn_ma.cmd_opmode_rmpwfm,
+            warn_msgs='Failed to set MA OpMode to RmpWfm!', parent=self)
+        thread.start()
+        # turn on triggers
+        thread = _CommandThread(
+            conn=self._conn_ti, cmds=_part(
+                self._conn_ti.cmd_set_magnet_trigger_state,
+                _TIc.DsblEnbl.Enbl),
+            warn_msgs='Failed to turn magnets trigger on!', parent=self)
         thread.start()
 
     def _prepare_rf(self):
