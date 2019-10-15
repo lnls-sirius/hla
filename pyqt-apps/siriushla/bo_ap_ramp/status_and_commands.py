@@ -359,10 +359,12 @@ class StatusAndCommands(QGroupBox):
 
         events_inj, events_eje = self._get_inj_eje_events()
         delays = conn.calc_evts_delay(events_inj, events_eje)
-        conn.update_ramp_configsetup(events_inj, events_eje, delays)
         if not delays:
             self.show_warning_message('There are TI not connected PVs!')
             delays = {ev: None for ev in EVT_LIST}
+        else:
+            conn.update_ramp_configsetup(events_inj, events_eje, delays)
+
         for ev in events_inj:
             attr = getattr(c, 'Evt'+ev+'_Delay')
             attr = attr.replace('SP', 'RB')
