@@ -18,7 +18,6 @@ from siriuspy.csdevice.timesys import Const as _TIc
 from siriushla.widgets import PyDMLedMultiChannel, PyDMLedMultiConnection, \
                               SiriusDialog
 
-COMMANDS_TIMEOUT = 1
 EVT_LIST = ['Linac', 'InjBO', 'InjSI', 'Study',
             'DigLI', 'DigTB', 'DigBO', 'DigTS', 'DigSI']
 
@@ -411,15 +410,13 @@ class _CommandThread(QThread):
 
     sentWarning = Signal(str)
 
-    def __init__(self, conn, cmds, warn_msgs=list(),
-                 timeout=COMMANDS_TIMEOUT, parent=None):
+    def __init__(self, conn, cmds, warn_msgs=list(), parent=None):
         """Initialize."""
         super().__init__(parent)
         self._conn = conn
         self._subsystem = self._get_subsystem()
         self._cmds = cmds
         self._warn_msgs = warn_msgs
-        self._timeout = timeout
         self.sentWarning.connect(parent.show_warning_message)
 
     def _get_subsystem(self):
@@ -449,7 +446,7 @@ class _CommandThread(QThread):
         if not isinstance(self._warn_msgs, list):
             self._warn_msgs = [self._warn_msgs, ]
         for cmd, msg in zip(self._cmds, self._warn_msgs):
-            cmd_success = cmd(self._timeout)
+            cmd_success = cmd()
             if not cmd_success:
                 self.sentWarning.emit(msg)
 
