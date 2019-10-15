@@ -37,7 +37,7 @@ class DipoleDetailWidget(PSDetailWidget):
 
         # Basic controls
         controls = QGridLayout()
-        controls.addWidget(self.version_box, 0, 0, 1, 2)
+        controls.addWidget(self.frmwr_box, 0, 0, 1, 2)
         controls.addWidget(self.psconn_box, 1, 0, 1, 2)
         controls.addWidget(self.opmode_box, 2, 0)
         controls.addWidget(self.pwrstate_box, 2, 1)
