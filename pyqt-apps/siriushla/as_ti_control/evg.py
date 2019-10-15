@@ -224,18 +224,49 @@ class EVG(BaseWidget):
         status_layout.setAlignment(hlay, Qt.AlignCenter)
 
         hlay = QHBoxLayout()
-        pydmlab = PyDMLabel(
+        wid = QWidget(self.status_wid)
+        wid.setLayout(QHBoxLayout())
+        wid.layout().setContentsMargins(0, 0, 0, 0)
+        pydmlab1 = PyDMLabel(
             self.status_wid, init_channel=prefix+'TotalInjCount-Mon')
-        pydmlab.setStyleSheet('min-width:5em;')
-        pydmlab.setAlignment(Qt.AlignCenter)
-        hlay.addWidget(self._create_prop_widget(
-            '<b>Total Inj Count</b>', self.status_wid, (pydmlab, )))
-        pydmlab = PyDMLabel(
+        pydmlab1.setStyleSheet('min-width:5em;')
+        pydmlab1.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        pydmlab2 = PyDMLabel(
             self.status_wid, init_channel=prefix+'InjCount-Mon')
-        pydmlab.setStyleSheet('min-width:5em;')
-        pydmlab.setAlignment(Qt.AlignCenter)
+        pydmlab2.setAlignment(Qt.AlignCenter)
+        lab1 = QLabel(
+            '(', self.status_wid, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        lab2 = QLabel(
+            ')', self.status_wid, alignment=Qt.AlignLeft | Qt.AlignVCenter)
+        wid.layout().addStretch()
+        wid.layout().addWidget(pydmlab1)
+        wid.layout().addWidget(lab1)
+        wid.layout().addWidget(pydmlab2)
+        wid.layout().addWidget(lab2)
+        wid.layout().addStretch()
         hlay.addWidget(self._create_prop_widget(
-            '<b>Run Inj Count</b>', self.status_wid, (pydmlab, )))
+            '<b>Inj Count: All (Now)</b>', self.status_wid, (wid, )))
+
+        wid = QWidget(self.status_wid)
+        wid.setLayout(QHBoxLayout())
+        wid.layout().setContentsMargins(0, 0, 0, 0)
+        pydmlab1 = PyDMLabel(
+            self.status_wid, init_channel=prefix+'SeqStatus-Mon')
+        pydmlab1.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        pydmlab2 = PyDMLabel(
+            self.status_wid, init_channel=prefix+'SeqCount-SP')
+        lab1 = QLabel(
+            '(', self.status_wid, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        lab2 = QLabel(
+            ')', self.status_wid, alignment=Qt.AlignLeft | Qt.AlignVCenter)
+        wid.layout().addStretch()
+        wid.layout().addWidget(pydmlab1)
+        wid.layout().addWidget(lab1)
+        wid.layout().addWidget(pydmlab2)
+        wid.layout().addWidget(lab2)
+        wid.layout().addStretch()
+        hlay.addWidget(self._create_prop_widget(
+            '<b>Sequence: Table (Count)</b>', self.status_wid, (wid, )))
         status_layout.addItem(hlay, 1, 0, 1, 3)
 
         lb = QLabel("<b>Alive</b>")
