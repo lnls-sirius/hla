@@ -31,7 +31,7 @@ from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, \
     PyDMLedMultiChannel, PyDMLed, PyDMLedMultiConnection, QLed
 
-from siriushla.as_ps_diag.util import asps2labels, lips2labels
+from siriushla.as_ps_diag.util import asps2filters, lips2filters, sips2filters
 
 
 class PSDiag(SiriusMainWindow):
@@ -68,18 +68,16 @@ class PSDiag(SiriusMainWindow):
         _on = _PSConst.PwrStateSts.On
         _slowref = _PSConst.States.SlowRef
         i = 2
-        # for sec in ['LI', 'TB', 'BO', 'TS', 'SI']  TODO:
-        for sec in ['LI', 'TB', 'BO']:
+        for sec in ['LI', 'TB', 'BO', 'TS', 'SI']:
             seclabel = QLabel('<h3>'+sec+'</h3>', panel)
             panel_lay.addWidget(seclabel, i, 0)
             i += 1
             if sec == 'LI':
-                for ps in lips2labels.keys():
+                for label, filt in lips2filters.items():
                     ps_label = QLabel(
-                        lips2labels[ps], panel,
+                        label, panel,
                         alignment=Qt.AlignRight | Qt.AlignVCenter)
-                    psnames = PSSearch.get_psnames(
-                        filters={'sec': sec, 'dev': ps})
+                    psnames = PSSearch.get_psnames(filters=filt)
                     ps_ch2vals = dict()
                     intlk_ch2vals = dict()
                     conn_chs = list()
@@ -90,7 +88,7 @@ class PSDiag(SiriusMainWindow):
                         intlk_ch2vals[pname + ':interlock'] = \
                             {'value': 55, 'comp': 'lt'}
 
-                    f = 'LI-.*:PS-'+ps
+                    f = 'LI-.*:PS-'+filt['dev']
                     conn_led = MyLedMultiConnection(
                         filters=f, parent=panel, channels=conn_chs)
                     ps_led = MyLedMultiChannel(
@@ -98,7 +96,7 @@ class PSDiag(SiriusMainWindow):
                     intlk_led = MyLedMultiChannel(
                         filters=f, parent=panel, channels2values=intlk_ch2vals)
 
-                    suf = ps.strip('.*')+'_led'
+                    suf = sec+filt['dev'].strip('.*')+'_led'
                     conn_led.setObjectName('conn' + suf)
                     ps_led.setObjectName('ps' + suf)
                     intlk_led.setObjectName('intlk' + suf)
@@ -109,9 +107,10 @@ class PSDiag(SiriusMainWindow):
                     panel_lay.addWidget(intlk_led, i, 4)
                     i += 1
             else:
-                for ps in asps2labels.keys():
-                    psnames = PSSearch.get_psnames(
-                        filters={'sec': sec, 'dev': ps})
+                l2f = sips2filters if sec == 'SI' else asps2filters
+                for label, filters in l2f.items():
+                    filters['sec'] = sec
+                    psnames = PSSearch.get_psnames(filters=filters)
                     if not psnames:
                         continue
                     maconn_chs = list()
@@ -141,9 +140,9 @@ class PSDiag(SiriusMainWindow):
                                 sidx = str(idx)
                                 intlk_ch2vals[pname+':Intlk'+sidx+'-Mon'] = 1
 
-                    f = sec+'-.*'+psnames[0].dis+'-'+ps
+                    f = sec+'-'+filters['sub']+psnames[0].dis+'-'+filters['dev']
                     ps_label = QLabel(
-                        asps2labels[ps], panel,
+                        label, panel,
                         alignment=Qt.AlignRight | Qt.AlignVCenter)
                     psconn_led = MyLedMultiConnection(
                         filters=f, parent=panel, channels=psconn_chs)
@@ -156,7 +155,7 @@ class PSDiag(SiriusMainWindow):
                     intlk_led = MyLedMultiChannel(
                         filters=f, parent=panel, channels2values=intlk_ch2vals)
 
-                    suf = ps.strip('.*')+'_led'
+                    suf = sec+filt['dev'].strip('.*')+'_led'
                     psconn_led.setObjectName('psconn' + suf)
                     maconn_led.setObjectName('maconn' + suf)
                     ps_led.setObjectName('ps' + suf)

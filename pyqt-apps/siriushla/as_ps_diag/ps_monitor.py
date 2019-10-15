@@ -11,7 +11,7 @@ from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, \
     PyDMLedMultiChannel
 
-from siriushla.as_ps_diag.util import lips2labels, asps2labels, sips2labels
+from siriushla.as_ps_diag.util import lips2filters, asps2filters, sips2filters
 
 
 class PSMonitor(SiriusMainWindow):
@@ -29,16 +29,14 @@ class PSMonitor(SiriusMainWindow):
         layout = QGridLayout()
         layout.setHorizontalSpacing(15)
 
-        # for sec in ['LI', 'TB', 'BO', 'TS', 'SI']:  TODO
-        for sec in ['LI', 'TB', 'BO']:
+        for sec in ['LI', 'TB', 'BO', 'TS', 'SI']:
             status = self._make_magnets_groupbox(sec)
             if sec == 'LI':
                 layout.addWidget(status, 1, 0)
             elif sec == 'TB':
                 layout.addWidget(status, 2, 0)
             elif sec == 'BO':
-                # layout.addWidget(status, 1, 1)  TODO
-                layout.addWidget(status, 1, 1, 2, 1)
+                layout.addWidget(status, 1, 1)
             elif sec == 'TS':
                 layout.addWidget(status, 2, 1)
             elif sec == 'SI':
@@ -58,17 +56,16 @@ class PSMonitor(SiriusMainWindow):
 
         def get_ps2labels_dict(sec):
             if sec == 'LI':
-                return lips2labels
+                return lips2filters
             elif sec == 'SI':
-                return sips2labels
+                return sips2filters
             else:
-                return asps2labels
+                return asps2filters
 
         def get_psnames(sec, f):
-            if sec == 'SI':
-                return PSSearch.get_psnames(filters=f)
-            else:
-                return PSSearch.get_psnames(filters={'sec': sec, 'dev': f})
+            if sec != 'SI':
+                f['sec'] = sec
+            return PSSearch.get_psnames(filters=f)
 
         def get_ch2vals(sec, name):
             if sec == 'LI':
@@ -108,6 +105,8 @@ class PSMonitor(SiriusMainWindow):
                 return (1, 0, 1, 1)
             elif 'S' in label:
                 return (2, 0, 1, 1)
+            elif 'PM' in label:
+                return (4, 0, 1, 1)
             elif 'CH' in label:
                 return (0, 1, 4, 1)
             elif 'CV' in label:
@@ -118,14 +117,11 @@ class PSMonitor(SiriusMainWindow):
             #     return (3, 1, 3, 1)
             # elif 'FCV' in label:
             #     return (3, 2, 3, 1)
-            # TODO: adjust to add pulsed magnets when using TS and SI
 
         row, col = 0, 0
-        for key, value in get_ps2labels_dict(sec).items():
-            label = key if sec == 'SI' else value
-            ps = value if sec == 'SI' else key
+        for label, ps in get_ps2labels_dict(sec).items():
             psnames = get_psnames(sec, ps)
-            col_count = 10 if label != 'Trims' else 35
+            col_count = 8 if label != 'Trims' else 35
             if not psnames:
                 continue
             if sec != 'SI':
