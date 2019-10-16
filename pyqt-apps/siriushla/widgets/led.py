@@ -1,7 +1,6 @@
 from copy import deepcopy as _dcopy
 import logging as _log
 import numpy as _np
-import math as _math
 from qtpy.QtGui import QColor
 from qtpy.QtCore import Property, Slot, Signal
 from pydm.widgets.base import PyDMWidget
@@ -282,11 +281,23 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
     def _isclose(val1, val2, **kws):
         if val1 is None or val2 is None:
             return False
-        if 'tol' in kws.keys():
-            tol = kws['tol']
+        if type(val1) != type(val2):
+            return False
+        if isinstance(val1, (_np.ndarray, tuple, list)) and \
+                len(val1) != len(val2):
+            return False
+        if 'abs_tol' in kws.keys():
+            atol = kws['abs_tol']
         else:
-            tol = 0.008
-        return _math.isclose(val1, val2, abs_tol=tol)
+            atol = 1e-8
+        if 'rel_tol' in kws.keys():
+            rtol = kws['rel_tol']
+        else:
+            rtol = 1e-5
+        isclose = _np.isclose(val1, val2, atol=atol, rtol=rtol)
+        if isinstance(val1, (_np.ndarray, tuple, list)):
+            isclose = all(isclose)
+        return isclose
 
     @staticmethod
     def _ne(val1, val2, **kws):

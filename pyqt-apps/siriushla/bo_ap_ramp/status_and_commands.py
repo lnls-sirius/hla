@@ -158,7 +158,9 @@ class StatusAndCommands(QGroupBox):
             elif 'PwrState' in p:
                 c2v_setup[pfx + conn[p].pvname_rb] = _PSc.PwrStateSts.On
             elif 'Wfm' in p:
-                c2v_apply[pfx + conn[p].pvname_rb] = _np.array([])
+                c2v_apply[pfx + conn[p].pvname_rb] = {'value': _np.array([]),
+                                                      'comp': 'cl',
+                                                      'abs_tol': 1e-5}
 
         conn = self._conn_rf
         c2v_intlk[pfx + conn.Const.Rmp_Intlk] = 0
@@ -179,7 +181,7 @@ class StatusAndCommands(QGroupBox):
             c2v_setup[pfx + prpty] = value
         for prpty, value in conn.ramp_configsetup.items():
             c2v_apply[pfx + prpty] = {'value': value,
-                                      'comp': 'cl', 'tol': 0.008}
+                                      'comp': 'cl', 'abs_tol': 0.008}
 
         self.led_conn.set_channels(c2v_conn)
         self.led_intlk.set_channels2values(c2v_intlk)
@@ -194,11 +196,13 @@ class StatusAndCommands(QGroupBox):
                 _TIc.DsblEnbl.Dsbl),
             warn_msgs='Failed to turn magnets trigger off!', parent=self)
         thread.start()
+        _time.sleep(1)
         # set magnets opmode
         thread = _CommandThread(
             conn=self._conn_ma, cmds=self._conn_ma.cmd_opmode_rmpwfm,
             warn_msgs='Failed to set MA OpMode to RmpWfm!', parent=self)
         thread.start()
+        _time.sleep(1)
         # turn on triggers
         thread = _CommandThread(
             conn=self._conn_ti, cmds=_part(
@@ -326,7 +330,8 @@ class StatusAndCommands(QGroupBox):
         c2v = dict()
         for maname in self._conn_ma.manames:
             wf = self.ramp_config.ps_waveform_get(maname)
-            c2v[self.prefix + maname + ':Wfm-RB'] = wf.currents
+            c2v[self.prefix + maname + ':Wfm-RB'] = {
+                'value': wf.currents, 'comp': 'cl', 'abs_tol': 1e-5}
         self.led_apply.channels2values.update(c2v)
 
     def update_rf_params(self):
@@ -501,10 +506,12 @@ class StatusDetails(SiriusDialog):
             elif 'Wfm' in p:
                 if self.ramp_config is None or \
                         not self.ramp_config.ps_normalized_configs:
-                    c2v_apply[pfx + conn[p].pvname_rb] = _np.array([])
+                    c2v_apply[pfx + conn[p].pvname_rb] = {
+                        'value': _np.array([]), 'comp': 'cl', 'abs_tol': 1e-5}
                 elif self.ramp_config.ps_normalized_configs:
                     wf = self.ramp_config.ps_waveform_get(p.device_name)
-                    c2v_apply[pfx + conn[p].pvname_rb] = wf.currents
+                    c2v_apply[pfx + conn[p].pvname_rb] = {
+                        'value': wf.currents, 'comp': 'cl', 'abs_tol': 1e-5}
 
         self.led_ma_intlk = PyDMLedMultiChannel(self, c2v_intlk)
         self.led_ma_setup = PyDMLedMultiChannel(self, c2v_setup)
@@ -538,7 +545,7 @@ class StatusDetails(SiriusDialog):
         c2v_apply = dict()
         for prpty, value in conn.ramp_configsetup.items():
             c2v_apply[pfx + prpty] = {'value': value,
-                                      'comp': 'cl', 'tol': 0.008}
+                                      'comp': 'cl', 'abs_tol': 0.008}
 
         self.led_ti_intlk = PyDMLedMultiChannel(self, c2v_intlk)
         self.led_ti_setup = PyDMLedMultiChannel(self, c2v_setup)
@@ -568,7 +575,7 @@ class StatusDetails(SiriusDialog):
         self.setLayout(glay)
 
     def _print(self):
-        led = self.led_ti_apply
+        led = self.led_ma_apply
         _time.sleep(4)
         for k, v in led.channels2values.items():
             print(k, v)
