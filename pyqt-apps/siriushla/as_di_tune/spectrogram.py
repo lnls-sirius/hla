@@ -271,14 +271,14 @@ class BOTuneSpectraView(PyDMWaveformPlot):
         self.addChannel(
             y_channel='FAKE:SpectrumH', name='Tune H',
             x_channel=self.prefix+'BO-Glob:DI-Tune-H:TuneFracArray-Mon',
-            redraw_mode=2, color='blue', lineWidth=1, lineStyle=Qt.SolidLine)
+            redraw_mode=2, color='blue', lineWidth=2, lineStyle=Qt.SolidLine)
         self.curveH = self.curveAtIndex(0)
         self.curveH.setVisible(True)
 
         self.addChannel(
             y_channel='FAKE:SpectrumV', name='Tune V',
             x_channel=self.prefix+'BO-Glob:DI-Tune-V:TuneFracArray-Mon',
-            redraw_mode=2, color='red', lineWidth=1, lineStyle=Qt.SolidLine)
+            redraw_mode=2, color='red', lineWidth=2, lineStyle=Qt.SolidLine)
         self.curveV = self.curveAtIndex(1)
         self.curveV.setVisible(True)
 
@@ -327,10 +327,12 @@ class BOTuneSpectraControls(QWidget):
         self.spectra = BOTuneSpectraView(self, self.prefix)
 
         lb_show_trace = QLabel('Show')
-        self.cb_show_x = QCheckBox('X', self)
+        self.cb_show_x = QCheckBox('H', self)
+        self.cb_show_x.setStyleSheet('color: blue;')
         self.cb_show_x.setChecked(True)
         self.cb_show_x.stateChanged.connect(self.spectra.showTuneH)
-        self.cb_show_y = QCheckBox('Y', self)
+        self.cb_show_y = QCheckBox('V', self)
+        self.cb_show_y.setStyleSheet('color: red;')
         self.cb_show_y.setChecked(True)
         self.cb_show_y.stateChanged.connect(self.spectra.showTuneV)
 
@@ -367,7 +369,7 @@ class BOTuneSpectraControls(QWidget):
             self.spectra.addChannel(
                 y_channel='FAKE:Register'+str(i), name='Register '+str(i),
                 redraw_mode=2, color=self.colors[i],
-                lineWidth=1, lineStyle=Qt.SolidLine)
+                lineWidth=2, lineStyle=Qt.SolidLine)
             self.spectra.curveReg[i] = self.spectra.curveAtIndex(i+2)
             self.spectra.curveReg[i].setVisible(False)
             self.cb_reg[i].setStyleSheet(
