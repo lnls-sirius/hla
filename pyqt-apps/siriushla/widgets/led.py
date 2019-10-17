@@ -151,7 +151,8 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
                                  'gt': self._gt,
                                  'lt': self._lt,
                                  'ge': self._ge,
-                                 'le': self._le}
+                                 'le': self._le,
+                                 'in': self._in}
 
         self._address2conn = dict()
         self._address2channel = dict()
@@ -319,6 +320,12 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         else:
             is_less_or_equal = (val1 <= val2)
         return is_less_or_equal
+
+    @staticmethod
+    def _in(val1, val2, **kws):
+        if val1 is None or val2 is None:
+            return False
+        return val1 in val2
 
 
 class PyDMLedMultiConnection(QLed, PyDMWidget):
