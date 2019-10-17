@@ -244,12 +244,55 @@ class PVNameTree(QTreeWidget):
             pvname = item[0]
             row = [item[0], ]
             row.extend([str(i) for i in item[1:]])
-
         # pvals = []
         parent = self.invisibleRootItem()
         parent_key = ''
         # if pvname.count(':') == 2 and pvname.count('-') == 3:
-        if re.match('^.*-.*:.*-.*:.*$', pvname):
+        try:
+            pvname = SiriusPVName(pvname)
+        except (IndexError, ValueError):
+            pass
+        # Deal with LI LLRF PVs:
+        if pvname.startswith('LA'):
+            dic_ = {'sec': 'LI', 'dis': 'RF', 'dev': 'LLRF'}
+            for p in self._pnames:
+                key = dic_.get(p, 'DLLRF')
+                if key:
+                    item_key = parent_key + key
+                    # item = self._item_map.symbol(item_key)
+                    item = self._item_map[item_key] \
+                        if item_key in self._item_map else None
+                    if item is not None:
+                        parent = item
+                    else:
+                        new_item = QTreeItem([key], parent)
+                        new_item.setCheckState(0, Qt.Unchecked)
+                        # self._item_map.add_symbol(item_key, new_item)
+                        self._item_map[item_key] = new_item
+                        # parent.addChild(new_item)
+                        parent = new_item
+                    parent_key = item_key
+        # Deal with BO LLRF PVs:
+        elif pvname.startswith('BR'):
+            dic_ = {'sec': 'BO', 'dis': 'RF', 'dev': 'DLLRF'}
+            for p in self._pnames:
+                key = dic_.get(p, 'DLLRF')
+                if key:
+                    item_key = parent_key + key
+                    # item = self._item_map.symbol(item_key)
+                    item = self._item_map[item_key] \
+                        if item_key in self._item_map else None
+                    if item is not None:
+                        parent = item
+                    else:
+                        new_item = QTreeItem([key], parent)
+                        new_item.setCheckState(0, Qt.Unchecked)
+                        # self._item_map.add_symbol(item_key, new_item)
+                        self._item_map[item_key] = new_item
+                        # parent.addChild(new_item)
+                        parent = new_item
+                    parent_key = item_key
+        elif isinstance(pvname, SiriusPVName):
             # Parse it with SiriusPVName
             pvname = SiriusPVName(pvname)
             # Parse PVName
