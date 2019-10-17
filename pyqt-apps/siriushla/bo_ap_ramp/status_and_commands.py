@@ -222,8 +222,10 @@ class StatusAndCommands(QGroupBox):
     def _prepare_ti(self):
         thread = _CommandThread(
             conn=self._conn_ti,
-            cmds=self._conn_ti.cmd_setup,
-            warn_msgs='Failed to setup TI to ramp!',
+            cmds=[self._conn_ti.cmd_setup,
+                  self._conn_ti.cmd_update_evts],
+            warn_msgs=['Failed to setup TI to ramp!',
+                       'Failed to update events!'],
             parent=self)
         thread.start()
 
@@ -247,9 +249,11 @@ class StatusAndCommands(QGroupBox):
         events_inj, events_eje = self._get_inj_eje_events()
         thread = _CommandThread(
             conn=self._conn_ti,
-            cmds=_part(self._conn_ti.cmd_config_ramp,
-                       events_inj, events_eje),
-            warn_msgs='Failed to set TI parameters!',
+            cmds=[_part(self._conn_ti.cmd_config_ramp,
+                        events_inj, events_eje),
+                  self._conn_ti.cmd_update_evts],
+            warn_msgs=['Failed to set TI parameters!',
+                       'Failed to update events!'],
             parent=self)
         thread.start()
         # update values of inj and eje times in fact implemented
@@ -300,14 +304,17 @@ class StatusAndCommands(QGroupBox):
             self._apply_rf()
             self._apply_ti()
 
-    @Slot(str)
-    def show_warning_message(self, msg):
+    @Slot(str, list)
+    def show_warning_message(self, msg, problems):
         """Show warning message."""
+        text = msg + '\n\nVerify PVs:\n'
+        for problem in problems:
+            text += problem + '\n'
         mb = QMessageBox()
         mb.setMinimumSize(300, 150)
         mb.setWindowTitle('Message')
         mb.setIcon(QMessageBox.Warning)
-        mb.setText(msg)
+        mb.setText(text)
         mb.exec()
 
     @Slot(ramp.BoosterRamp)
@@ -413,7 +420,7 @@ class StatusAndCommands(QGroupBox):
 class _CommandThread(QThread):
     """Thread to perform commands."""
 
-    sentWarning = Signal(str)
+    sentWarning = Signal(str, list)
 
     def __init__(self, conn, cmds, warn_msgs=list(), parent=None):
         """Initialize."""
@@ -437,8 +444,9 @@ class _CommandThread(QThread):
         if not self._conn:
             return False
         if not self._conn.connected:
-            self.sentWarning.emit(
-                'There are not connected PVs in {}!'.format(self._subsystem))
+            msg = 'There are not connected PVs in {}!'.format(self._subsystem)
+            problems = self._conn.disconnected_properties
+            self.sentWarning.emit(msg, problems)
             return False
         return True
 
@@ -451,9 +459,9 @@ class _CommandThread(QThread):
         if not isinstance(self._warn_msgs, list):
             self._warn_msgs = [self._warn_msgs, ]
         for cmd, msg in zip(self._cmds, self._warn_msgs):
-            cmd_success = cmd()
+            cmd_success, problems = cmd()
             if not cmd_success:
-                self.sentWarning.emit(msg)
+                self.sentWarning.emit(msg, problems)
 
 
 class StatusDetails(SiriusDialog):
@@ -575,7 +583,7 @@ class StatusDetails(SiriusDialog):
         self.setLayout(glay)
 
     def _print(self):
-        led = self.led_ma_apply
+        led = self.led_ti_setup
         _time.sleep(4)
         for k, v in led.channels2values.items():
             print(k, v)
