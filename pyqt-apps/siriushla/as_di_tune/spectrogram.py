@@ -20,8 +20,9 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
     """BO Tune Spectrogram View."""
 
     new_data = Signal(np.ndarray)
-    buffer_size = Signal(str)
+    buffer_curr_size = Signal(str)
     buffer_data_size = Signal(int)
+    buffer_size_changed = Signal(int)
     idx2send_changed = Signal(int)
 
     def __init__(self, parent=None, prefix='', orientation='H',
@@ -52,6 +53,7 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
         self.format_tooltip = '{0:.3f}, {1:.3f}'
         self._idx2send = 0
         self.buffer = list()
+        self.last_data = None
         self.nravgs = 1
 
     @Slot(np.ndarray)
@@ -85,14 +87,18 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
         self.buffer.append(image)
         if len(self.buffer) > self.nravgs:
             self.buffer.pop(0)
-        self.buffer_size.emit(str(len(self.buffer)))
-        self.buffer_data_size.emit(self.buffer[-1].shape[0]-1)
+        self.buffer_curr_size.emit(str(len(self.buffer)))
 
         # Perform average
         image = np.mean(self.buffer, axis=0)
 
-        # Emit spectrum data
-        self.new_data.emit(image[self._idx2send, :])
+        # update last data
+        self.last_data = image
+        last_data_size = self.last_data.shape[0]-1
+        self.buffer_data_size.emit(last_data_size)
+        if self.nravgs == 1 and self._idx2send < last_data_size:
+            # Emit spectrum data
+            self.new_data.emit(image[self._idx2send, :])
 
         # Return image
         return image
@@ -113,6 +119,7 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
             self.nravgs = new_size
             while len(self.buffer) > self.nravgs:
                 self.buffer.pop(0)
+            self.buffer_size_changed.emit(self.nravgs)
 
     def resetBuffer(self):
         """Reset buffer."""
@@ -129,14 +136,18 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
             self._idx2send = max_idx
         else:
             self._idx2send = new_idx
-        self.idx2send_changed.emit(self._idx2send)
+        self.new_data.emit(self.last_data[self._idx2send, :])
 
     def mouseDoubleClickEvent(self, ev):
         if ev.button() == Qt.LeftButton:
             pos = self._image_item.mapFromDevice(ev.pos())
-            if pos.y() > 0 and pos.y() <= self._image_item.height():
+            if not self._image_item.height():
+                pass
+            elif pos.y() > 0 and pos.y() <= self._image_item.height():
                 self._idx2send = int(pos.y())
                 self.idx2send_changed.emit(self._idx2send)
+                if self.last_data is not None:
+                    self.new_data.emit(self.last_data[self._idx2send, :])
         super().mouseDoubleClickEvent(ev)
 
 
@@ -163,20 +174,20 @@ class BOTuneSpectrogramControls(QWidget):
         self.cb_show_roi.stateChanged.connect(self.spectrogram.showROI)
         self.cb_show_roi.setChecked(True)
 
-        self.cb_idx2plot = QSpinBox(self)
-        self.cb_idx2plot.valueChanged.connect(self.spectrogram.setIndex2Send)
+        self.sb_idx2plot = QSpinBox(self)
+        self.sb_idx2plot.editingFinished.connect(self.update_idx2plot)
         self.lb_idx2plot = QLabel('0')
-        self.spectrogram.idx2send_changed.connect(self._update_idx2plot)
-        self.spectrogram.buffer_data_size.connect(self.cb_idx2plot.setMaximum)
+        self.spectrogram.idx2send_changed.connect(self.update_idx2plot)
+        self.spectrogram.buffer_data_size.connect(self.sb_idx2plot.setMaximum)
 
-        self.sb_nravgs = QSpinBox(self)
-        self.sb_nravgs.setValue(1)
-        self.sb_nravgs.setMinimum(1)
-        self.sb_nravgs.setMaximum(100)
-        self.sb_nravgs.valueChanged.connect(self.spectrogram.setBufferSize)
+        self.sb_buffsz = QSpinBox(self)
+        self.sb_buffsz.setValue(1)
+        self.sb_buffsz.setMinimum(1)
+        self.sb_buffsz.setMaximum(100)
+        self.sb_buffsz.editingFinished.connect(self.update_buffsize)
         self.lb_buffsz = QLabel('1', self)
         self.lb_buffsz.setStyleSheet('min-width:1.29em;max-width:1.29em;')
-        self.spectrogram.buffer_size.connect(self.lb_buffsz.setText)
+        self.spectrogram.buffer_curr_size.connect(self.lb_buffsz.setText)
         self.pb_resetbuff = QPushButton(
             qta.icon('mdi.delete-empty'), '', self)
         self.pb_resetbuff.setToolTip('Reset buffer')
@@ -197,11 +208,11 @@ class BOTuneSpectrogramControls(QWidget):
         hbox_ctrls.addWidget(self.cb_show_roi)
         hbox_ctrls.addStretch()
         hbox_ctrls.addWidget(QLabel('Plot Index:'), alignment=Qt.AlignLeft)
-        hbox_ctrls.addWidget(self.cb_idx2plot, alignment=Qt.AlignLeft)
+        hbox_ctrls.addWidget(self.sb_idx2plot, alignment=Qt.AlignLeft)
         hbox_ctrls.addWidget(self.lb_idx2plot, alignment=Qt.AlignLeft)
         hbox_ctrls.addStretch()
         hbox_ctrls.addWidget(QLabel('Buff.:'), alignment=Qt.AlignLeft)
-        hbox_ctrls.addWidget(self.sb_nravgs, alignment=Qt.AlignLeft)
+        hbox_ctrls.addWidget(self.sb_buffsz, alignment=Qt.AlignLeft)
         hbox_ctrls.addWidget(self.lb_buffsz, alignment=Qt.AlignLeft)
         hbox_ctrls.addWidget(self.pb_resetbuff, alignment=Qt.AlignLeft)
         hbox_ctrls.addStretch()
@@ -221,11 +232,21 @@ class BOTuneSpectrogramControls(QWidget):
         lay.addWidget(self.spectrogram, 1, 0)
         lay.addLayout(hbox_ctrls, 2, 0, 1, 2)
 
-    def _update_idx2plot(self, value):
-        self.cb_idx2plot.blockSignals(True)
-        self.cb_idx2plot.setValue(value)
+    def update_idx2plot(self, value=None):
+        if not value:
+            value = self.sender().value()
+        self.sb_idx2plot.blockSignals(True)
+        self.sb_idx2plot.setValue(value)
         self.lb_idx2plot.setText(str(value))
-        self.cb_idx2plot.blockSignals(False)
+        self.spectrogram.setIndex2Send(value)
+        self.sb_idx2plot.blockSignals(False)
+
+    def update_buffsize(self):
+        value = self.sender().value()
+        self.sb_buffsz.blockSignals(True)
+        self.sb_buffsz.setValue(value)
+        self.spectrogram.setBufferSize(value)
+        self.sb_buffsz.blockSignals(False)
 
 
 class BOTuneSpectraView(PyDMWaveformPlot):
@@ -283,12 +304,12 @@ class BOTuneSpectraView(PyDMWaveformPlot):
             self.curveV.setVisible(show)
 
     def receiveDataH(self, data):
-        """Update curve X."""
+        """Update curve H."""
         self.curveH.receiveYWaveform(data)
         self.curveH.redrawCurve()
 
     def receiveDataV(self, data):
-        """Update curve Y."""
+        """Update curve V."""
         self.curveV.receiveYWaveform(data)
         self.curveV.redrawCurve()
 
