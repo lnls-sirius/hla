@@ -143,7 +143,8 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
             pos = self._image_item.mapFromDevice(ev.pos())
             if not self._image_item.height():
                 pass
-            elif pos.y() > 0 and pos.y() <= self._image_item.height():
+            elif pos.y() > 0 and pos.y() <= self._image_item.height() and\
+                    pos.x() > 0 and pos.x() <= self._image_item.width():
                 self._idx2send = int(pos.y())
                 self.idx2send_changed.emit(self._idx2send)
                 if self.last_data is not None:
@@ -233,7 +234,7 @@ class BOTuneSpectrogramControls(QWidget):
         lay.addLayout(hbox_ctrls, 2, 0, 1, 2)
 
     def update_idx2plot(self, value=None):
-        if not value:
+        if value is None:
             value = self.sender().value()
         self.sb_idx2plot.blockSignals(True)
         self.sb_idx2plot.setValue(value)
