@@ -6,7 +6,8 @@ from qtpy.QtCore import Qt
 import qtawesome as qta
 from pydm.widgets import PyDMLabel, PyDMPushButton
 from siriushla.util import connect_window
-from siriushla.widgets import SiriusLedAlert, SiriusSpinbox
+from siriushla.widgets import SiriusLedAlert, SiriusSpinbox, PyDMStateButton, \
+    SiriusLedState
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.as_ti_control import HLTriggerDetailed as _HLTriggerDetailed
 
@@ -73,13 +74,32 @@ class AcqControlWidget(BaseWidget):
 
     def _get_acqrates_grpbx(self):
         grp_bx = QWidget(self)
-        fbl = QFormLayout(grp_bx)
+        hbl = QHBoxLayout(grp_bx)
+        fbl = QFormLayout()
+        hbl.addItem(fbl)
         lbl = QLabel('Orbit [Hz]', grp_bx, alignment=Qt.AlignCenter)
         wid = self.create_pair(grp_bx, 'OrbAcqRate')
         fbl.addRow(lbl, wid)
         lbl = QLabel('Kicks [Hz]', grp_bx, alignment=Qt.AlignCenter)
         wid = self.create_pair(grp_bx, 'KickAcqRate')
         fbl.addRow(lbl, wid)
+
+        wid = QWidget(grp_bx)
+        wid.setStyleSheet('max-width:6em;')
+        hbl.addWidget(wid)
+        vbl = QVBoxLayout(wid)
+        vbl.setContentsMargins(0, 0, 0, 0)
+        lab = QLabel('Sync. Injection', wid, alignment=Qt.AlignCenter)
+        vbl.addWidget(lab)
+        hbl = QHBoxLayout()
+        hbl.setContentsMargins(0, 0, 0, 0)
+        vbl.addItem(hbl)
+        spt = PyDMStateButton(
+            wid, init_channel=self.prefix+'SyncWithInjection-Sel')
+        rdb = SiriusLedState(
+            wid, init_channel=self.prefix+'SyncWithInjection-Sts')
+        hbl.addWidget(spt)
+        hbl.addWidget(rdb)
         return grp_bx
 
     def _get_orbit_smoothing_grpbx(self):
