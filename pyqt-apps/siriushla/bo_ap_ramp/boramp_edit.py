@@ -781,7 +781,9 @@ class MultipolesRamp(QWidget):
         self.graphview = QWidget()
         self._setupGraph()
 
-        self.table = _MyTableWidget(self, self._showNormConfigMenu)
+        self.table = _MyTableWidget(
+            self, show_menu_fun=self._showNormConfigMenu,
+            open_window_fun=self._showEditNormConfigWindow)
         self._setupTable()
 
         icon = qta.icon('mdi.chart-line', 'mdi.dots-horizontal',
@@ -1061,19 +1063,12 @@ class MultipolesRamp(QWidget):
         if self.ramp_config is None:
             return
 
-        item = self.table.itemAt(pos)
-        if not item:
-            return
-        row = item.row()
-        nconfig_name = self.table_map['rows'][row]
-        if nconfig_name in ['Injection', 'Ejection']:
-            return
-        energy = float(self.table.item(row, 2).data(Qt.DisplayRole))
+        row, nconfig_name, _, _ = self._get_data_in_pos(pos)
 
         menu = QMenu()
         edit_act = menu.addAction('Edit')
         edit_act.triggered.connect(
-            _part(self._showEditNormConfigWindow, nconfig_name, energy))
+            _part(self._showEditNormConfigWindow, pos))
 
         duplic_act = menu.addAction('Duplicate')
         duplic_act.triggered.connect(
@@ -1085,7 +1080,7 @@ class MultipolesRamp(QWidget):
 
         menu.exec_(self.table.mapToGlobal(pos))
 
-    def _showEditNormConfigWindow(self, nconfig_name, energy):
+    def _showEditNormConfigWindow(self, pos):
         for maname in self.manames:
             if maname not in self._aux_magnets.keys():
                 QMessageBox.warning(
@@ -1094,6 +1089,7 @@ class MultipolesRamp(QWidget):
                     'Wait a moment and try again.', QMessageBox.Ok)
                 return
 
+        _, nconfig_name, _, energy = self._get_data_in_pos(pos)
         if nconfig_name in self.bonorm_edit_dict.keys():
             w = self.bonorm_edit_dict[nconfig_name]
         else:
@@ -1111,6 +1107,18 @@ class MultipolesRamp(QWidget):
         elif w.isMinimized():
             w.showNormal()
         w.activateWindow()
+
+    def _get_data_in_pos(self, pos):
+        item = self.table.itemAt(pos)
+        if not item:
+            return
+        row = item.row()
+        nconfig_name = self.table_map['rows'][row]
+        if nconfig_name in ['Injection', 'Ejection']:
+            return
+        time = float(self.table.item(row, 1).data(Qt.DisplayRole))
+        energy = float(self.table.item(row, 2).data(Qt.DisplayRole))
+        return row, nconfig_name, time, energy
 
     def _verifyWarnings(self):
         manames_exclimits = self.ramp_config.ps_waveform_manames_exclimits
