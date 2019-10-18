@@ -13,7 +13,7 @@ import qtawesome as qta
 from pydm.widgets import PyDMWaveformPlot
 
 from siriuspy.namesys import SiriusPVName
-from siriushla.widgets import SiriusSpectrogramView
+from siriushla.widgets import SiriusSpectrogramView, SiriusConnectionSignal
 
 
 class BOTuneSpectrogram(SiriusSpectrogramView):
@@ -96,7 +96,7 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
         self.last_data = image
         last_data_size = self.last_data.shape[0]-1
         self.buffer_data_size.emit(last_data_size)
-        if self.nravgs == 1 and self._idx2send < last_data_size:
+        if not self._idx2send > last_data_size:
             # Emit spectrum data
             self.new_data.emit(image[self._idx2send, :])
 
@@ -269,30 +269,36 @@ class BOTuneSpectraView(PyDMWaveformPlot):
         leftAxis = self.getAxis('left')
         leftAxis.setStyle(autoExpandTextSpace=False, tickTextWidth=25)
 
+        self.x_channel = 'Tune'
+
         self.addChannel(
             y_channel='FAKE:SpectrumH', name='Tune H',
-            x_channel=self.prefix+'BO-Glob:DI-Tune-H:TuneFracArray-Mon',
             redraw_mode=2, color='blue', lineWidth=2, lineStyle=Qt.SolidLine)
         self.curveH = self.curveAtIndex(0)
+        self.curveH.x_channels = {
+            'Tune': SiriusConnectionSignal(
+                self.prefix+'BO-Glob:DI-Tune-H:TuneFracArray-Mon'),
+            'Freq': SiriusConnectionSignal(
+                self.prefix+'BO-Glob:DI-Tune-H:FreqArray-Mon')
+        }
         self.curveH.setVisible(True)
 
         self.addChannel(
             y_channel='FAKE:SpectrumV', name='Tune V',
-            x_channel=self.prefix+'BO-Glob:DI-Tune-V:TuneFracArray-Mon',
             redraw_mode=2, color='red', lineWidth=2, lineStyle=Qt.SolidLine)
         self.curveV = self.curveAtIndex(1)
+        self.curveV.x_channels = {
+            'Tune': SiriusConnectionSignal(
+                self.prefix+'BO-Glob:DI-Tune-V:TuneFracArray-Mon'),
+            'Freq': SiriusConnectionSignal(
+                self.prefix+'BO-Glob:DI-Tune-V:FreqArray-Mon')
+        }
         self.curveV.setVisible(True)
 
     def toggleXChannel(self):
         """Toggle X channel between FreqArray and TuneFracArray."""
-        if 'TuneFracArray' in self.curveH.x_address:
-            new_ch = ':FreqArray-Mon'
-        elif 'FreqArray' in self.curveH.x_address:
-            new_ch = ':TuneFracArray-Mon'
-        self.curveH.x_address = self.prefix + 'BO-Glob:DI-Tune-H' + new_ch
-        self.curveH.x_channel.connect()
-        self.curveV.x_address = self.prefix + 'BO-Glob:DI-Tune-V' + new_ch
-        self.curveV.x_channel.connect()
+        self.x_channel = 'Tune' if 'Tune' in self.sender().currentText() \
+            else 'Freq'
 
     def showTuneH(self, show):
         """Whether to show or not curve of Tune H."""
@@ -306,11 +312,15 @@ class BOTuneSpectraView(PyDMWaveformPlot):
 
     def receiveDataH(self, data):
         """Update curve H."""
+        self.curveH.receiveXWaveform(
+            self.curveH.x_channels[self.x_channel].value)
         self.curveH.receiveYWaveform(data)
         self.curveH.redrawCurve()
 
     def receiveDataV(self, data):
         """Update curve V."""
+        self.curveV.receiveXWaveform(
+            self.curveV.x_channels[self.x_channel].value)
         self.curveV.receiveYWaveform(data)
         self.curveV.redrawCurve()
 
@@ -342,6 +352,8 @@ class BOTuneSpectraControls(QWidget):
         self.cb_choose_x.addItem('Frequency')
         self.cb_choose_x.currentIndexChanged.connect(
             self.spectra.toggleXChannel)
+        self.cb_choose_x.currentIndexChanged.connect(
+            self._toggle_registers_axis)
 
         hbox_ctrls = QHBoxLayout()
         hbox_ctrls.setContentsMargins(0, 0, 0, 0)
@@ -406,7 +418,9 @@ class BOTuneSpectraControls(QWidget):
 
     def _registerData(self, idx, tune):
         curve = self.spectra.curveH if tune == 'H' else self.spectra.curveV
-        self.registers[idx] = [curve.latest_x, curve.latest_y]
+        latest_freq = curve.x_channels['Freq'].value
+        latest_tune = curve.x_channels['Tune'].value
+        self.registers[idx] = [latest_tune, latest_freq, curve.latest_y]
         self.lb_reg[idx].setText(
             'Tune '+tune+' at '+time.strftime(
                 '%d/%m/%Y %H:%M:%S', time.localtime(time.time())))
@@ -416,19 +430,28 @@ class BOTuneSpectraControls(QWidget):
         self.registers[idx] = None
         self._show_curve(idx, self.cb_reg[idx].checkState())
 
-    def _show_curve(self, idx, show):
-        if not self.registers[idx]:
-            self.spectra.curveReg[idx].receiveXWaveform([])
-            self.spectra.curveReg[idx].receiveYWaveform([])
-            self.spectra.curveReg[idx].redrawCurve()
+    def _show_curve(self, i, show):
+        if not self.registers[i]:
+            self.spectra.curveReg[i].receiveXWaveform([])
+            self.spectra.curveReg[i].receiveYWaveform([])
+            self.spectra.curveReg[i].redrawCurve()
             return
         if show:
-            self.spectra.curveReg[idx].receiveXWaveform(self.registers[idx][0])
-            self.spectra.curveReg[idx].receiveYWaveform(self.registers[idx][1])
-            self.spectra.curveReg[idx].redrawCurve()
-            self.spectra.curveReg[idx].setVisible(True)
+            self.spectra.curveReg[i].receiveXWaveform(
+                self.registers[i][self.cb_choose_x.currentIndex()])
+            self.spectra.curveReg[i].receiveYWaveform(self.registers[i][2])
+            self.spectra.curveReg[i].redrawCurve()
+            self.spectra.curveReg[i].setVisible(True)
         else:
-            self.spectra.curveReg[idx].setVisible(False)
+            self.spectra.curveReg[i].setVisible(False)
+
+    def _toggle_registers_axis(self, idx):
+        for i in range(4):
+            if self.registers[i] is None:
+                continue
+            self.spectra.curveReg[i].receiveXWaveform(self.registers[i][idx])
+            self.spectra.curveReg[i].receiveYWaveform(self.registers[i][2])
+            self.spectra.curveReg[i].redrawCurve()
 
     def _export_data(self, idx):
         if not self.registers[idx]:

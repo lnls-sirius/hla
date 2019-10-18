@@ -101,7 +101,7 @@ class BOTune(SiriusMainWindow):
 
         cw = QWidget(self)
         lay = QGridLayout(cw)
-        lay.addWidget(label, 0, 0, 1, 2)
+        lay.addWidget(label, 0, 0, 1, 3)
         lay.addLayout(vbox_sett, 1, 0)
         lay.addLayout(vbox_meas, 1, 1)
         lay.addWidget(self.spectra_view, 1, 2)
