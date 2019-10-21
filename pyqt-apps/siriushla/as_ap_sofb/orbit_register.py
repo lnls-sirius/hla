@@ -158,7 +158,7 @@ class OrbitRegister(QWidget):
         lbl.setSizePolicy(sz_pol)
         lbl.setMouseTracking(True)
         lbl.setAcceptDrops(True)
-        lbl.setTextInteractionFlags(Qt.TextSelectableByMouse)
+        lbl.setTextInteractionFlags(Qt.TextEditorInteraction)
         self.new_string_signal.connect(lbl.setText)
 
         menu = QMenu(btn)
