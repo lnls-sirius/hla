@@ -1302,16 +1302,18 @@ class MultipolesRamp(QWidget):
     def handleNormConfigsChanged(self, nconfig=None, old_nconfig_name=''):
         """Reload normalized configs on change and update graph."""
         if old_nconfig_name:
-            row = [idx for idx, oldname in self.table_map['rows'].items()
-                   if oldname == old_nconfig_name]
-            time = float(self.table.item(row[0], 1).data(Qt.DisplayRole))
-            self.ramp_config.ps_normalized_configs_delete(old_nconfig_name)
-            self.ramp_config.ps_normalized_configs_insert(
-                time=time, name=nconfig.name, nconfig=nconfig.value)
+            rows = [idx for idx, oldname in self.table_map['rows'].items()
+                    if oldname == old_nconfig_name]
+            for row in rows:
+                time = float(self.table.item(row, 1).data(Qt.DisplayRole))
+                self.ramp_config.ps_normalized_configs_delete(old_nconfig_name)
+                self.ramp_config.ps_normalized_configs_insert(
+                    time=time, name=nconfig.name, nconfig=nconfig.value)
+            w = self.bonorm_edit_dict.pop(old_nconfig_name)
+            self.bonorm_edit_dict[nconfig.name] = w
         else:
             self.ramp_config[nconfig.name] = nconfig
 
-        self.bonorm_edit_dict = dict()
         self.handleLoadRampConfig()
         self.updateMultipoleRampSignal.emit()
         self.applyChanges2MachineSignal.emit()

@@ -359,14 +359,14 @@ class BONormEdit(SiriusMainWindow):
 
     def _save(self, new_name=None):
         try:
+            self._norm_config_oldname = self.norm_config.name
             if self.norm_config.exist():
-                self._norm_config_oldname = self.norm_config.name
                 if not new_name:
                     new_name = self.norm_config.generate_config_name(
                         self._norm_config_oldname)
                 self.norm_config.save(new_name)
             else:
-                self.norm_config.save()
+                self.norm_config.save(new_name)
                 self.act_load.setEnabled(True)
         except _ConfigDBException as err:
             QMessageBox.critical(self, 'Error', str(err), QMessageBox.Ok)
@@ -591,6 +591,7 @@ class BONormEdit(SiriusMainWindow):
         if self.norm_config is not None:
             self.normConfigChanged.emit(
                 self.norm_config, self._norm_config_oldname)
+            self._norm_config_oldname = ''
 
     def updateEnergy(self, energy):
         """Updta energy and strength limits."""
