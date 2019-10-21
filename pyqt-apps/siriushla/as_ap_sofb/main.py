@@ -79,7 +79,7 @@ class MainWindow(SiriusMainWindow):
         wid.setObjectName('doc_OrbReg')
         wid.setStyleSheet("#doc_OrbReg{min-width:20em; min-height:14em;}")
 
-        wid_cont = OrbitRegisters(self, self.prefix, self.acc, 5)
+        wid_cont = OrbitRegisters(self, self.prefix, self.acc, 7)
         wid.setWidget(wid_cont)
         self.orb_regtr = wid_cont
         return wid
