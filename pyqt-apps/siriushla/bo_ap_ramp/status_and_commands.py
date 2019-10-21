@@ -385,7 +385,8 @@ class StatusAndCommands(QGroupBox):
         events_inj, events_eje = self._get_inj_eje_events()
         delays = conn.calc_evts_delay(events_inj, events_eje)
         if not delays:
-            self.show_warning_message('There are TI not connected PVs!')
+            self.show_warning_message('There are TI not connected PVs!',
+                                      conn.disconnected_properties)
             delays = {ev: None for ev in EVT_LIST}
         else:
             conn.update_ramp_configsetup(events_inj, events_eje, delays)
