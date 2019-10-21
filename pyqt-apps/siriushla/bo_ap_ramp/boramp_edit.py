@@ -1091,21 +1091,28 @@ class MultipolesRamp(QWidget):
 
         _, nconfig_name, _, energy = self._get_data_in_pos(pos)
         if nconfig_name in self.bonorm_edit_dict.keys():
+            # verify if there is a bonorm_edit window that was not closed,
+            # only minimized or without focus
             w = self.bonorm_edit_dict[nconfig_name]
-        else:
-            w = _BONormEdit(parent=self, prefix=self.prefix,
-                            norm_config=self.ramp_config[nconfig_name],
-                            energy=energy, magnets=self._aux_magnets,
-                            conn_sofb=self._conn_sofb,
-                            tunecorr_configname=self._tunecorr_configname,
-                            chromcorr_configname=self._chromcorr_configname)
-            w.normConfigChanged.connect(self.handleNormConfigsChanged)
-            self.updateOptAdjSettingsSignal.connect(w.updateSettings)
-            self.bonorm_edit_dict[nconfig_name] = w
-        if w.isHidden():
-            w.show()
-        elif w.isMinimized():
-            w.showNormal()
+            if w.isMinimized():
+                w.showNormal()
+                w.activateWindow()
+                return
+            elif not w.hasFocus() and not w.isHidden():
+                w.show()
+                w.activateWindow()
+                return
+        # creating a new bonorm_edit
+        w = _BONormEdit(parent=self, prefix=self.prefix,
+                        norm_config=self.ramp_config[nconfig_name],
+                        energy=energy, magnets=self._aux_magnets,
+                        conn_sofb=self._conn_sofb,
+                        tunecorr_configname=self._tunecorr_configname,
+                        chromcorr_configname=self._chromcorr_configname)
+        w.normConfigChanged.connect(self.handleNormConfigsChanged)
+        self.updateOptAdjSettingsSignal.connect(w.updateSettings)
+        self.bonorm_edit_dict[nconfig_name] = w
+        w.show()
         w.activateWindow()
 
     def _get_data_in_pos(self, pos):
