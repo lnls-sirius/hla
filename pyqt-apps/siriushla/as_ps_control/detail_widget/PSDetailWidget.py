@@ -515,8 +515,8 @@ class PSDetailWidget(QWidget):
         wfm_index_ca = self._prefixed_psname + ':WfmIndex-Mon'
         wfm_count_ca = self._prefixed_psname + ':WfmSyncPulseCount-Mon'
         queue_size_ca = self._prefixed_psname + ':PRUCtrlQueueSize-Mon'
-        bsmp_comm_ca = self._prefixed_psname + ':WfmUpdateAuto-Sts'
-        bsmp_comm_sel = self._prefixed_psname + ':WfmUpdateAuto-Sel'
+        wfm_updateauto_ca = self._prefixed_psname + ':WfmUpdateAuto-Sts'
+        wfm_updateauto_sel = self._prefixed_psname + ':WfmUpdateAuto-Sel'
 
         wfm_index_label = QLabel('Wfm Index', self)
         wfm_index_rb_label = PyDMLabel(self, wfm_index_ca)
@@ -527,11 +527,11 @@ class PSDetailWidget(QWidget):
         queue_size_label = QLabel('IOC Queue Size', self)
         queue_size_rb_label = PyDMLabel(self, queue_size_ca)
 
-        bsmp_comm_label = QLabel('Wfm UpdateAuto', self)
-        bsmp_comm_sts_led = SiriusLedAlert(self, bsmp_comm_ca)
-        bsmp_comm_sts_led.setOnColor(SiriusLedAlert.LightGreen)
-        bsmp_comm_sts_led.setOffColor(SiriusLedAlert.Red)
-        bsmp_comm_btn = PyDMStateButton(self, bsmp_comm_sel)
+        wfm_updateauto_label = QLabel('Wfm UpdateAuto', self)
+        wfm_updateauto_sts_led = SiriusLedAlert(self, wfm_updateauto_ca)
+        wfm_updateauto_sts_led.setOnColor(SiriusLedAlert.LightGreen)
+        wfm_updateauto_sts_led.setOffColor(SiriusLedAlert.Red)
+        wfm_updateauto_btn = PyDMStateButton(self, wfm_updateauto_sel)
 
         layout = QGridLayout()
         layout.addWidget(queue_size_label, 3, 0, Qt.AlignRight)
@@ -540,9 +540,9 @@ class PSDetailWidget(QWidget):
         layout.addWidget(wfm_index_rb_label, 4, 1)
         layout.addWidget(wfm_count_label, 5, 0, Qt.AlignRight)
         layout.addWidget(wfm_count_rb_label, 5, 1)
-        layout.addWidget(bsmp_comm_label, 6, 0, Qt.AlignRight)
-        layout.addWidget(bsmp_comm_btn, 6, 1)
-        layout.addWidget(bsmp_comm_sts_led, 6, 2)
+        layout.addWidget(wfm_updateauto_label, 6, 0, Qt.AlignRight)
+        layout.addWidget(wfm_updateauto_btn, 6, 1)
+        layout.addWidget(wfm_updateauto_sts_led, 6, 2)
         layout.setColumnStretch(3, 1)
         return layout
 
