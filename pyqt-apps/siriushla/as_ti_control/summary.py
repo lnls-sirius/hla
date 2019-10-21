@@ -47,32 +47,31 @@ class Button(QWidget):
             clss, title=self.prefix.device_name, icon=icon)
         connect_window(but, Window, None, prefix=self.prefix + ':')
 
-        prop1 = 'Network'
-        pp1 = 'Net'
-        prop2 = 'LinkStatus'
-        pp2 = 'Link'
+        props = ['DevEnbl', 'Network', 'LinkStatus', 'IntlkStatus']
+        suffs = ['-Sts', '-Mon', '-Mon', '-Mon']
+        chng = [True, True, True, False]
         if self.prefix.dev == 'EVG':
-            prop2 = 'RFStatus'
-            pp2 = 'RFSts'
+            props[2] = 'RFStatus'
+            props[3] = 'ACStatus'
+            chng[3] = True
         elif self.prefix.dev == 'AMCFPGAEVR':
-            prop1 = 'RefClkLocked'
-            pp1 = 'Lckd'
-        pv1 = self.prefix.substitute(propty=prop1+'-Mon')
-        pv2 = self.prefix.substitute(propty=prop2+'-Mon')
-        lbl1 = QLabel(pp1, self)
-        lbl2 = QLabel(pp2, self)
-        led1 = SiriusLedAlert(self, init_channel=pv1)
-        led1.onColor, led1.offColor = led1.offColor, led1.onColor
-        led2 = SiriusLedAlert(self, init_channel=pv2)
-        led2.onColor, led2.offColor = led2.offColor, led2.onColor
+            props[1] = 'RefClkLocked'
+            props = props[:-1]
+        elif self.prefix.dev == 'Fout':
+            props = props[:-1]
 
         lay = QGridLayout(self)
-        lay.addWidget(lbl0, 0, 0, 1, 5, Qt.AlignCenter)
-        lay.addWidget(but, 1, 0, 1, 5)
-        lay.addWidget(lbl1, 2, 0)
-        lay.addWidget(led1, 2, 1)
-        lay.addWidget(lbl2, 2, 3)
-        lay.addWidget(led2, 2, 4)
+        lay.addWidget(lbl0, 0, 0, 1, len(props), Qt.AlignCenter)
+        lay.addWidget(but, 1, 0, 1, len(props))
+
+        for i, prop in enumerate(props):
+            pvn = self.prefix.substitute(propty=prop+suffs[i])
+            led = SiriusLedAlert(self)
+            led.channel = pvn
+            led.setToolTip(prop)
+            if chng[i]:
+                led.onColor, led.offColor = led.offColor, led.onColor
+            lay.addWidget(led, 2, i)
 
 
 class Summary(QWidget):

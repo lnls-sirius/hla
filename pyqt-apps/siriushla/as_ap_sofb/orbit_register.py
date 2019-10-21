@@ -5,8 +5,9 @@ from datetime import datetime as _datetime
 import numpy as _np
 from qtpy.QtWidgets import QMenu, QFileDialog, QWidget, QMessageBox, \
     QScrollArea, QLabel, QPushButton, QSizePolicy, QGridLayout, QVBoxLayout, \
-    QHBoxLayout
+    QHBoxLayout, QDialog, QComboBox, QLineEdit
 from qtpy.QtCore import Signal, Qt
+from qtpy.QtGui import QDoubleValidator
 import qtawesome as qta
 
 from siriuspy.csdevice.orbitcorr import SOFBFactory
@@ -39,6 +40,7 @@ class OrbitRegisters(QWidget):
             'off': [
                 SiriusConnectionSignal(pre + 'OfflineOrbX-SP'),
                 SiriusConnectionSignal(pre + 'OfflineOrbY-SP')],
+            'mat': SiriusConnectionSignal(pre + 'RespMat-RB'),
             }
         self.setupui()
 
@@ -156,7 +158,7 @@ class OrbitRegister(QWidget):
         lbl.setSizePolicy(sz_pol)
         lbl.setMouseTracking(True)
         lbl.setAcceptDrops(True)
-        lbl.setTextInteractionFlags(Qt.TextSelectableByMouse)
+        lbl.setTextInteractionFlags(Qt.TextEditorInteraction)
         self.new_string_signal.connect(lbl.setText)
 
         menu = QMenu(btn)
@@ -186,6 +188,12 @@ class OrbitRegister(QWidget):
         act = menu2.addAction('&OfflineOrb')
         act.setIcon(qta.icon('mdi.signal-off'))
         act.triggered.connect(_part(self._register_orbit, 'off'))
+        act = menu2.addAction('RespMat')
+        act.setIcon(qta.icon('mdi.matrix'))
+        act.triggered.connect(self._open_matrix_sel)
+        act = menu.addAction('&Edit Orbit')
+        act.setIcon(qta.icon('mdi.table-edit'))
+        act.triggered.connect(self._edit_orbit)
         act = menu.addAction('&Clear')
         act.setIcon(qta.icon('mdi.delete-empty'))
         act.triggered.connect(self._reset_orbit)
@@ -211,6 +219,120 @@ class OrbitRegister(QWidget):
             return
         self._update_and_emit(
             'Orbit Registered.', pvx.getvalue(), pvy.getvalue())
+
+    def _open_matrix_sel(self):
+        wid = QDialog(self)
+        wid.setObjectName(self._csorb.acc+'App')
+        wid.setLayout(QVBoxLayout())
+
+        cbbox = QComboBox(wid)
+        corrnames = self._csorb.CH_NAMES + self._csorb.CV_NAMES
+        if self._csorb.acc == 'SI':
+            corrnames.append('RF')
+        cbbox.addItems(corrnames)
+        wid.layout().addWidget(QLabel('Choose the corrector:', wid))
+        wid.layout().addWidget(cbbox)
+
+        ledit = QLineEdit(wid)
+        ledit.setValidator(QDoubleValidator())
+        ledit.setText('1.0')
+        wid.layout().addWidget(QLabel('Choose the Kick [urad]:', wid))
+        wid.layout().addWidget(ledit)
+
+        hlay = QHBoxLayout()
+        cancel = QPushButton('Cancel', wid)
+        confirm = QPushButton('Ok', wid)
+        cancel.clicked.connect(wid.reject)
+        confirm.clicked.connect(wid.accept)
+        hlay.addStretch()
+        hlay.addWidget(cancel)
+        hlay.addStretch()
+        hlay.addWidget(confirm)
+        hlay.addStretch()
+        wid.layout().addItem(hlay)
+        res = wid.exec_()
+
+        if res == QDialog.Accepted:
+            idx = cbbox.currentIndex()
+            kick = float(ledit.text())
+            pvm = self._orbits.get('mat')
+            if pvm is None or not pvm.connected:
+                self._update_and_emit(
+                    'Error: PV {0:s} not connected.'.format(pvm.pvname))
+            val = pvm.getvalue()
+            orbs = val.reshape(-1, self._csorb.NR_CORRS)[:, idx]
+            orbx = orbs[:len(orbs)//2] * kick
+            orby = orbs[len(orbs)//2:] * kick
+            self._update_and_emit(
+                'RespMat: {0:s}'.format(corrnames[idx]), orbx, orby)
+
+    def _edit_orbit(self):
+        orbx = self.orbx
+        orby = self.orby
+
+        wid = QDialog(self)
+        wid.setObjectName(self._csorb.acc+'App')
+        wid.setLayout(QVBoxLayout())
+
+        hbl = QHBoxLayout()
+        wid.layout().addItem(hbl)
+        hbl.addWidget(QLabel('X = ', wid))
+        multx = QLineEdit(wid)
+        multx.setValidator(QDoubleValidator())
+        multx.setText('1.0')
+        # multx.setAlignment(Qt.AlignVCenter | Qt.AlignRight)
+        multx.setAlignment(Qt.AlignCenter)
+        multx.setStyleSheet('max-width:5em;')
+        hbl.addWidget(multx)
+        hbl.addWidget(QLabel('*X   +   ', wid))
+        addx = QLineEdit(wid)
+        addx.setValidator(QDoubleValidator())
+        addx.setText('0.0')
+        addx.setAlignment(Qt.AlignCenter)
+        addx.setStyleSheet('max-width:5em;')
+        hbl.addWidget(addx)
+        hbl.addWidget(QLabel(' [um]', wid))
+
+        hbl = QHBoxLayout()
+        wid.layout().addItem(hbl)
+        hbl.addWidget(QLabel('Y = ', wid))
+        multy = QLineEdit(wid)
+        multy.setValidator(QDoubleValidator())
+        multy.setText('1.0')
+        # multy.setAlignment(Qt.AlignVCenter | Qt.AlignRight)
+        multy.setAlignment(Qt.AlignCenter)
+        multy.setStyleSheet('max-width:5em;')
+        hbl.addWidget(multy)
+        hbl.addWidget(QLabel('*Y   +   ', wid))
+        addy = QLineEdit(wid)
+        addy.setValidator(QDoubleValidator())
+        addy.setText('0.0')
+        addy.setAlignment(Qt.AlignCenter)
+        addy.setStyleSheet('max-width:5em;')
+        hbl.addWidget(addy)
+        hbl.addWidget(QLabel(' [um]', wid))
+
+        hlay = QHBoxLayout()
+        cancel = QPushButton('Cancel', wid)
+        confirm = QPushButton('Ok', wid)
+        cancel.clicked.connect(wid.reject)
+        confirm.clicked.connect(wid.accept)
+        hlay.addStretch()
+        hlay.addWidget(cancel)
+        hlay.addStretch()
+        hlay.addWidget(confirm)
+        hlay.addStretch()
+        wid.layout().addItem(hlay)
+        res = wid.exec_()
+
+        if res == QDialog.Accepted:
+            mltx = float(multx.text())
+            mlty = float(multy.text())
+            plusx = float(addx.text())
+            plusy = float(addy.text())
+            orbx = mltx * orbx + plusx
+            orby = mlty * orby + plusy
+            self._update_and_emit('Orbit Edited', orbx, orby)
 
     def _save_orbit_to_file(self, _):
         header = '# ' + _datetime.now().strftime('%Y/%m/%d-%H:%M:%S') + '\n'
