@@ -77,13 +77,31 @@ class BOTune(SiriusMainWindow):
         self.specV.spectrogram.new_data.connect(
             self.spectra_view.spectra.receiveDataV)
 
+        # Connect signals
+        self.specH.spectrogram.idx2send_changed.connect(
+            self.specV.update_idx2plot)
+        self.specH.sb_idx2plot.editingFinished.connect(
+            self.specV.update_idx2plot)
+        self.specH.pb_resetbuff.clicked.connect(
+            self.specV.spectrogram.resetBuffer)
+        self.specH.sb_buffsz.editingFinished.connect(
+            self.specV.update_buffsize)
+        self.specV.spectrogram.idx2send_changed.connect(
+            self.specH.update_idx2plot)
+        self.specV.sb_idx2plot.editingFinished.connect(
+            self.specH.update_idx2plot)
+        self.specV.pb_resetbuff.clicked.connect(
+            self.specH.spectrogram.resetBuffer)
+        self.specV.sb_buffsz.editingFinished.connect(
+            self.specH.update_buffsize)
+
         self.setStyleSheet(
             "#specH, #specV {min-width:40em;}"
             "#spectra_view {min-width:40em;}")
 
         cw = QWidget(self)
         lay = QGridLayout(cw)
-        lay.addWidget(label, 0, 0, 1, 2)
+        lay.addWidget(label, 0, 0, 1, 3)
         lay.addLayout(vbox_sett, 1, 0)
         lay.addLayout(vbox_meas, 1, 1)
         lay.addWidget(self.spectra_view, 1, 2)

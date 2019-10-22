@@ -20,9 +20,9 @@ class SiriusConnectionSignal(QObject, PyDMChannel):
     upper_ctrl_limit_signal = Signal([float], [int])
     lower_ctrl_limit_signal = Signal([float], [int])
 
-    def __init__(self, address):
+    def __init__(self, address, **kws):
         QObject.__init__(self)
-        PyDMChannel.__init__(self, address)
+        PyDMChannel.__init__(self, address, **kws)
 
         self.connection_slot = self._connection_slot
         self.value_slot = self._value_slot

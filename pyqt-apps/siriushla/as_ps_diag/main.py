@@ -5,7 +5,7 @@ import logging as _log
 from datetime import datetime as _datetime
 from functools import partial as _partial
 
-from pcaspy import Severity as _Severity
+from pcaspy import Severity as _Sev
 
 import numpy as _np
 
@@ -16,7 +16,6 @@ from qtpy.QtWidgets import QWidget, QLabel, QPushButton, \
     QTreeView, QItemDelegate, QHeaderView, QAbstractItemView, \
     QStackedLayout, QRadioButton
 
-from pydm.widgets.channel import PyDMChannel
 from pydm.widgets.base import PyDMWidget
 
 from siriuspy.envars import vaca_prefix
@@ -28,7 +27,7 @@ from siriuspy.namesys import SiriusPVName
 
 from siriushla.util import run_newprocess as _run_newprocess
 from siriushla.sirius_application import SiriusApplication
-from siriushla.widgets import SiriusMainWindow, \
+from siriushla.widgets import SiriusMainWindow, SiriusConnectionSignal, \
     PyDMLedMultiChannel, PyDMLed, PyDMLedMultiConnection, QLed
 
 from siriushla.as_ps_diag.util import asps2filters, lips2filters, sips2filters
@@ -67,6 +66,7 @@ class PSDiag(SiriusMainWindow):
         # # Leds panel
         _on = _PSConst.PwrStateSts.On
         _slowref = _PSConst.States.SlowRef
+        _rmpwfm = _PSConst.States.RmpWfm
         i = 2
         for sec in ['LI', 'TB', 'BO', 'TS', 'SI']:
             seclabel = QLabel('<h3>'+sec+'</h3>', panel)
@@ -108,9 +108,9 @@ class PSDiag(SiriusMainWindow):
                     i += 1
             else:
                 l2f = sips2filters if sec == 'SI' else asps2filters
-                for label, filters in l2f.items():
-                    filters['sec'] = sec
-                    psnames = PSSearch.get_psnames(filters=filters)
+                for label, filt in l2f.items():
+                    filt['sec'] = sec
+                    psnames = PSSearch.get_psnames(filters=filt)
                     if not psnames:
                         continue
                     maconn_chs = list()
@@ -130,7 +130,11 @@ class PSDiag(SiriusMainWindow):
                             psconn_chs.append(pname+':Version-Cte')
                             intlk_ch2vals[pname+':IntlkSoft-Mon'] = 0
                             intlk_ch2vals[pname+':IntlkHard-Mon'] = 0
-                            opm_ch2vals[pname+':OpMode-Sts'] = _slowref
+                            if sec == 'BO':
+                                opm_ch2vals[pname+':OpMode-Sts'] = {
+                                    'value': [_slowref, _rmpwfm], 'comp': 'in'}
+                            else:
+                                opm_ch2vals[pname+':OpMode-Sts'] = _slowref
                             diff_ch2vlas[pname+':DiagStatus-Mon'] = \
                                 {'value': 0, 'bit': 5}
                         elif name.dis == 'PU':
@@ -140,7 +144,7 @@ class PSDiag(SiriusMainWindow):
                                 sidx = str(idx)
                                 intlk_ch2vals[pname+':Intlk'+sidx+'-Mon'] = 1
 
-                    f = sec+'-'+filters['sub']+psnames[0].dis+'-'+filters['dev']
+                    f = sec+'-'+filt['sub']+psnames[0].dis+'-'+filt['dev']
                     ps_label = QLabel(
                         label, panel,
                         alignment=Qt.AlignRight | Qt.AlignVCenter)
@@ -200,6 +204,7 @@ class PSDiag(SiriusMainWindow):
         channels = list()
         for ps in PSSearch.get_psnames(filters={'dis': 'PS'}):
             channels.append(self._prefix+ps+':DiagCurrentDiff-Mon')
+            channels.append(self._prefix+ps+':OpMode-Sts')
         self._status = LogTable(cw, channels, table_label2px, is_status=True)
         self._status.setObjectName('status_table')
         self._status.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
@@ -409,24 +414,26 @@ class LogTable(QTreeView, PyDMWidget):
         self.setStyleSheet("gridline-color: #ffffff;")
 
         # set channels
-        self.channels2conn = dict()
+        self.address2conn = dict()
+        self.address2channels = dict()
         for address in channels:
-            self.channels2conn[address] = False
-            channel = PyDMChannel(
+            self.address2conn[address] = False
+            channel = SiriusConnectionSignal(
                 address=address,
                 connection_slot=self.connection_changed,
                 value_slot=self.value_changed,
                 severity_slot=self.alarm_severity_changed)
             channel.connect()
+            self.address2channels[address] = channel
             self._channels.append(channel)
 
     @Slot(bool)
     def connection_changed(self, conn):
         """Reimplement connection_changed to handle all channels."""
         address = self.sender().address
-        self.channels2conn[address] = conn
+        self.address2conn[address] = conn
         allconn = True
-        for conn in self.channels2conn.values():
+        for conn in self.address2conn.values():
             allconn &= conn
         self.setState(allconn)
         self._connected = allconn
@@ -478,13 +485,18 @@ class LogTable(QTreeView, PyDMWidget):
     def alarm_severity_changed(self, new_alarm_severity):
         """Reimplement alarm_severity_changed."""
         if self.sender():
-            address = self.sender().address
-            pv = SiriusPVName(address)
-            value = self.sender()._value
-            new_value = {'logtype': 'WARN', 'psname': pv.device_name,
-                         'propty': pv.propty_name, 'value': str(value)}
-            if new_alarm_severity in [_Severity.MINOR_ALARM,
-                                      _Severity.MAJOR_ALARM]:
+            pv_diff = SiriusPVName(self.sender().address)
+            val_diff = self.address2channels[pv_diff].value
+
+            pv_opmd = pv_diff.substitute(
+                propty_name='OpMode', propty_suffix='Sts')
+            val_opmd = self.address2channels[pv_opmd].value
+            is_slowref = val_opmd == _PSConst.States.SlowRef
+
+            new_value = {'logtype': 'WARN', 'psname': pv_diff.device_name,
+                         'propty': pv_diff.propty_name, 'value': str(val_diff)}
+            if new_alarm_severity in [_Sev.MINOR_ALARM, _Sev.MAJOR_ALARM] and \
+                    is_slowref:
                 self.add_log(new_value)
             elif self._is_status:
                 self.remove_log(new_value)

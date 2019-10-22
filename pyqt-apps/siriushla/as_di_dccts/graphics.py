@@ -314,10 +314,6 @@ class BORampEffMonitor(QWidget):
         self.sb_ejeidx.valueChanged.connect(self._updateIndices)
 
         # Set index limits
-        self.fastsamplecnt_channel = SignalChannel(
-            self.dcct_prefix+'FastSampleCnt-RB')
-        self.fastsamplecnt_channel.new_value_signal[int].connect(
-            self._updateIndecesLimits)
         self.sb_injidx.setMinimum(0)
         self.sb_ejeidx.setMinimum(0)
 
@@ -356,6 +352,16 @@ class BORampEffMonitor(QWidget):
 
     def _updateRampEffGraph(self, data):
         if data is not None:
+            if not self._init_indices:
+                self._inj_idx = 0
+                self._eje_idx = len(data)-1
+                self._init_indices = True
+            self._eje_idx = min(self._eje_idx, len(data))
+            self.sb_injidx.setMaximum(len(data)-1)
+            self.sb_ejeidx.setMaximum(len(data)-1)
+            self.sb_injidx.setValue(self._inj_idx)
+            self.sb_ejeidx.setValue(self._eje_idx)
+
             inj_curr = data[self._inj_idx]
             eje_curr = data[self._eje_idx]
             eff = 100*eje_curr/inj_curr
@@ -380,19 +386,6 @@ class BORampEffMonitor(QWidget):
             self._inj_idx = index
         else:
             self._eje_idx = index
-
-    def _updateIndecesLimits(self, new_max_lim):
-        """Update upper indeces limit."""
-        if not self._init_indices:
-            self._inj_idx = 0
-            self.sb_injidx.setMaximum(new_max_lim-1)
-            self.sb_injidx.setValue(0)
-            self._eje_idx = new_max_lim-1
-            self.sb_ejeidx.setMaximum(new_max_lim-1)
-            self.sb_ejeidx.setValue(new_max_lim-1)
-            self._init_indices = True
-        self.sb_injidx.setMaximum(new_max_lim-1)
-        self.sb_ejeidx.setMaximum(new_max_lim-1)
 
 
 if __name__ == '__main__':
