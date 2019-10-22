@@ -528,9 +528,7 @@ class PSDetailWidget(QWidget):
         queue_size_rb_label = PyDMLabel(self, queue_size_ca)
 
         wfm_updateauto_label = QLabel('Wfm UpdateAuto', self)
-        wfm_updateauto_sts_led = SiriusLedAlert(self, wfm_updateauto_ca)
-        wfm_updateauto_sts_led.setOnColor(SiriusLedAlert.LightGreen)
-        wfm_updateauto_sts_led.setOffColor(SiriusLedAlert.DarkGreen)
+        wfm_updateauto_sts_led = SiriusLedState(self, wfm_updateauto_ca)
         wfm_updateauto_btn = PyDMStateButton(self, wfm_updateauto_sel)
 
         layout = QGridLayout()
