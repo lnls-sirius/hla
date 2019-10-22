@@ -130,15 +130,12 @@ class PSDetailWidget(QWidget):
         self.params_box.setObjectName('params_box')
         self.current_box = QGroupBox("Current")
         self.current_box.setObjectName("current")
-        self.wfmdata_tab = QWidget()
-        self.wfmdata_tab.setObjectName("wfmdata_tab")
         self.wfm_tab = QWidget()
         self.wfm_tab.setObjectName("wfm_tab")
         self.siggen_tab = QWidget()
         self.siggen_tab.setObjectName('cycle_tab')
         self.cycle_tabs = QTabWidget()
         self.cycle_tabs.addTab(self.siggen_tab, 'SigGen')
-        self.cycle_tabs.addTab(self.wfmdata_tab, 'WfmData')
         self.cycle_tabs.addTab(self.wfm_tab, 'Wfm')
         if self._psname.sec == 'BO':
             self.cycle_tabs.setCurrentIndex(2)
@@ -157,7 +154,6 @@ class PSDetailWidget(QWidget):
         self.ctrlloop_box.setLayout(self._ctrlLoopLayout())
         self.params_box.setLayout(self._paramsLayout())
         self.current_box.setLayout(self._currentLayout())
-        self.wfmdata_tab.setLayout(self._wfmdataLayout())
         self.wfm_tab.setLayout(self._wfmLayout())
         self.siggen_tab.setLayout(self._siggenLayout())
         if self._is_magnet:
@@ -516,23 +512,11 @@ class PSDetailWidget(QWidget):
         return layout
 
     def _paramsLayout(self):
-        sync_mode_ca = self._prefixed_psname + ':PRUSyncMode-Mon'
-        block_index_ca = self._prefixed_psname + ':PRUBlockIndex-Mon'
-        sync_count_ca = self._prefixed_psname + ':PRUSyncPulseCount-Mon'
         wfm_index_ca = self._prefixed_psname + ':WfmIndex-Mon'
         wfm_count_ca = self._prefixed_psname + ':WfmSyncPulseCount-Mon'
         queue_size_ca = self._prefixed_psname + ':PRUCtrlQueueSize-Mon'
-        bsmp_comm_ca = self._prefixed_psname + ':BSMPComm-Sts'
-        bsmp_comm_sel = self._prefixed_psname + ':BSMPComm-Sel'
-
-        sync_mode_label = QLabel('PRU Sync Mode', self)
-        sync_mode_rb_label = PyDMLabel(self, sync_mode_ca)
-
-        block_index_label = QLabel('PRU Block Index', self)
-        block_index_rb_label = PyDMLabel(self, block_index_ca)
-
-        sync_count_label = QLabel('PRU Pulse Count', self)
-        sync_count_rb_label = PyDMLabel(self, sync_count_ca)
+        wfm_updateauto_ca = self._prefixed_psname + ':WfmUpdateAuto-Sts'
+        wfm_updateauto_sel = self._prefixed_psname + ':WfmUpdateAuto-Sel'
 
         wfm_index_label = QLabel('Wfm Index', self)
         wfm_index_rb_label = PyDMLabel(self, wfm_index_ca)
@@ -543,64 +527,21 @@ class PSDetailWidget(QWidget):
         queue_size_label = QLabel('IOC Queue Size', self)
         queue_size_rb_label = PyDMLabel(self, queue_size_ca)
 
-        bsmp_comm_label = QLabel('IOC Serial Comm.', self)
-        bsmp_comm_sts_led = SiriusLedAlert(self, bsmp_comm_ca)
-        bsmp_comm_sts_led.setOnColor(SiriusLedAlert.LightGreen)
-        bsmp_comm_sts_led.setOffColor(SiriusLedAlert.Red)
-        bsmp_comm_btn = PyDMStateButton(self, bsmp_comm_sel)
+        wfm_updateauto_label = QLabel('Wfm UpdateAuto', self)
+        wfm_updateauto_sts_led = SiriusLedState(self, wfm_updateauto_ca)
+        wfm_updateauto_btn = PyDMStateButton(self, wfm_updateauto_sel)
 
         layout = QGridLayout()
-        layout.addWidget(sync_mode_label, 0, 0, Qt.AlignRight)
-        layout.addWidget(sync_mode_rb_label, 0, 1)
-        layout.addWidget(block_index_label, 1, 0, Qt.AlignRight)
-        layout.addWidget(block_index_rb_label, 1, 1)
-        layout.addWidget(sync_count_label, 2, 0, Qt.AlignRight)
-        layout.addWidget(sync_count_rb_label, 2, 1)
-        layout.addWidget(wfm_index_label, 3, 0, Qt.AlignRight)
-        layout.addWidget(wfm_index_rb_label, 3, 1)
-        layout.addWidget(wfm_count_label, 4, 0, Qt.AlignRight)
-        layout.addWidget(wfm_count_rb_label, 4, 1)
-        layout.addWidget(queue_size_label, 5, 0, Qt.AlignRight)
-        layout.addWidget(queue_size_rb_label, 5, 1)
-        layout.addWidget(bsmp_comm_label, 6, 0, Qt.AlignRight)
-        layout.addWidget(bsmp_comm_btn, 6, 1)
-        layout.addWidget(bsmp_comm_sts_led, 6, 2)
+        layout.addWidget(queue_size_label, 3, 0, Qt.AlignRight)
+        layout.addWidget(queue_size_rb_label, 3, 1)
+        layout.addWidget(wfm_index_label, 4, 0, Qt.AlignRight)
+        layout.addWidget(wfm_index_rb_label, 4, 1)
+        layout.addWidget(wfm_count_label, 5, 0, Qt.AlignRight)
+        layout.addWidget(wfm_count_rb_label, 5, 1)
+        layout.addWidget(wfm_updateauto_label, 6, 0, Qt.AlignRight)
+        layout.addWidget(wfm_updateauto_btn, 6, 1)
+        layout.addWidget(wfm_updateauto_sts_led, 6, 2)
         layout.setColumnStretch(3, 1)
-        return layout
-
-    def _wfmdataLayout(self):
-        wfm_data_sp_ch = self._prefixed_psname + ":WfmData-SP"
-        wfm_data_rb_ch = self._prefixed_psname + ":WfmData-RB"
-
-        # Plot
-        self.wfmdata = PyDMWaveformPlot()
-        self.wfmdata.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
-        self.wfmdata.autoRangeX = True
-        self.wfmdata.autoRangeY = True
-        self.wfmdata.setBackgroundColor(QColor(255, 255, 255))
-        self.wfmdata.setShowLegend(True)
-        self.wfmdata.addChannel(y_channel=wfm_data_sp_ch, name='WfmData-SP',
-                                color='red', lineWidth=2)
-        self.wfmdata.addChannel(y_channel=wfm_data_rb_ch, name='WfmData-RB',
-                                color='blue', lineWidth=2)
-
-        # NrPoints
-        self._wfmdata_nrpts_sp = 0
-        self._wfmdata_nrpts_rb = 0
-        self.wfmdata_nrpts = QLabel('', self)
-        self.wfmdata_nrpts.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
-        self.wfmdata_nrpts_ch_rb = SiriusConnectionSignal(wfm_data_rb_ch)
-        self.wfmdata_nrpts_ch_rb.new_value_signal[_np.ndarray].connect(
-            self._wfmdata_nrpts_update_rb)
-        self.wfmdata_nrpts_ch_sp = SiriusConnectionSignal(wfm_data_sp_ch)
-        self.wfmdata_nrpts_ch_sp.new_value_signal[_np.ndarray].connect(
-            self._wfmdata_nrpts_update_sp)
-
-        # Add widgets
-        layout = QVBoxLayout()
-        layout.setAlignment(Qt.AlignTop)
-        layout.addWidget(self.wfmdata)
-        layout.addWidget(self.wfmdata_nrpts)
         return layout
 
     def _wfmLayout(self):
@@ -651,19 +592,6 @@ class PSDetailWidget(QWidget):
         layout.addWidget(self.wfm)
         layout.addWidget(self.wfm_nrpts)
         return layout
-
-    def _set_wfmdata_nrpts_label(self):
-        self.wfmdata_nrpts.setText(
-            "Nrpts (SP|RB): {}|{}".format(
-                self._wfmdata_nrpts_sp, self._wfmdata_nrpts_rb))
-
-    def _wfmdata_nrpts_update_rb(self, value):
-        self._wfmdata_nrpts_rb = len(value)
-        self._set_wfmdata_nrpts_label()
-
-    def _wfmdata_nrpts_update_sp(self, value):
-        self._wfmdata_nrpts_sp = len(value)
-        self._set_wfmdata_nrpts_label()
 
     def _set_wfm_nrpts_label(self):
         self.wfm_nrpts.setText(
