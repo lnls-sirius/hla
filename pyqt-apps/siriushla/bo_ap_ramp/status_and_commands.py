@@ -3,9 +3,9 @@
 from functools import partial as _part
 from threading import Thread as _Thread
 import numpy as _np
-
+import time as _time
 from qtpy.QtWidgets import QGroupBox, QLabel, QPushButton, QGridLayout, \
-    QMessageBox, QVBoxLayout
+    QMessageBox, QVBoxLayout, QComboBox
 from qtpy.QtCore import Qt, Slot, Signal, QThread
 import qtawesome as qta
 
@@ -13,15 +13,19 @@ from siriuspy.ramp import ramp
 from siriuspy.ramp.conn import ConnMagnets as _ConnMagnets, ConnRF as _ConnRF,\
                                ConnTiming as _ConnTiming
 from siriuspy.csdevice.pwrsupply import Const as _PSc
+from siriuspy.csdevice.timesys import Const as _TIc
 
 from siriushla.widgets import PyDMLedMultiChannel, PyDMLedMultiConnection, \
                               SiriusDialog
 
-COMMANDS_TIMEOUT = 1
+EVT_LIST = ['Linac', 'InjBO', 'InjSI', 'Study',
+            'DigLI', 'DigTB', 'DigBO', 'DigTS', 'DigSI']
 
 
 class StatusAndCommands(QGroupBox):
     """Widget to show general Booster timing and magnets status."""
+
+    inj_eje_times = Signal(float, float)
 
     def __init__(self, parent=None, prefix='', ramp_config=None):
         """Initialize object."""
@@ -36,6 +40,9 @@ class StatusAndCommands(QGroupBox):
         lay = QVBoxLayout()
         lay.setAlignment(Qt.AlignTop)
         lay.addLayout(self._setupStatusLayout())
+        lay.addStretch()
+        lay.addLayout(self._setupChooseTIEventLayout())
+        lay.addStretch()
         lay.addLayout(self._setupCommandsLayout())
         self.setLayout(lay)
 
@@ -99,6 +106,28 @@ class StatusAndCommands(QGroupBox):
         lay.addWidget(self.bt_apply_all)
         return lay
 
+    def _setupChooseTIEventLayout(self):
+        lay = QGridLayout()
+        lay.setVerticalSpacing(3)
+        lay.addWidget(QLabel('Control events:'), 0, 0, 1, 2)
+        for i, ev in enumerate(EVT_LIST):
+            lb = QLabel(ev, self)
+            cb = QComboBox(self)
+            cb.addItems(['None', 'Inj', 'Eje'])
+            if ev in ['Linac', 'InjBO']:
+                cb.setCurrentText('Inj')
+                cb.setEnabled(False)
+            elif ev == 'InjSI':
+                cb.setCurrentText('Eje')
+                cb.setEnabled(False)
+            else:
+                cb.setCurrentText('None')
+                cb.setEnabled(True)
+            cb.setObjectName(ev)
+            lay.addWidget(lb, i+1, 0)
+            lay.addWidget(cb, i+1, 1)
+        return lay
+
     def _create_connectors(self):
         # Create connectors
         self._conn_ma = _ConnMagnets(prefix=self.prefix)
@@ -129,7 +158,9 @@ class StatusAndCommands(QGroupBox):
             elif 'PwrState' in p:
                 c2v_setup[pfx + conn[p].pvname_rb] = _PSc.PwrStateSts.On
             elif 'Wfm' in p:
-                c2v_apply[pfx + conn[p].pvname_rb] = _np.array([])
+                c2v_apply[pfx + conn[p].pvname_rb] = {'value': _np.array([]),
+                                                      'comp': 'cl',
+                                                      'abs_tol': 1e-5}
 
         conn = self._conn_rf
         c2v_intlk[pfx + conn.Const.Rmp_Intlk] = 0
@@ -149,7 +180,8 @@ class StatusAndCommands(QGroupBox):
         for prpty, value in conn.ramp_basicsetup.items():
             c2v_setup[pfx + prpty] = value
         for prpty, value in conn.ramp_configsetup.items():
-            c2v_apply[pfx + prpty] = value
+            c2v_apply[pfx + prpty] = {'value': value,
+                                      'comp': 'cl', 'abs_tol': 0.008}
 
         self.led_conn.set_channels(c2v_conn)
         self.led_intlk.set_channels2values(c2v_intlk)
@@ -157,11 +189,26 @@ class StatusAndCommands(QGroupBox):
         self.led_apply.set_channels2values(c2v_apply)
 
     def _prepare_ma(self):
+        # turn off triggers
         thread = _CommandThread(
-            conn=self._conn_ma,
-            cmds=self._conn_ma.cmd_opmode_rmpwfm,
-            warn_msgs='Failed to set MA OpMode to RmpWfm!',
-            parent=self)
+            conn=self._conn_ti, cmds=_part(
+                self._conn_ti.cmd_set_magnet_trigger_state,
+                _TIc.DsblEnbl.Dsbl),
+            warn_msgs='Failed to turn magnets trigger off!', parent=self)
+        thread.start()
+        _time.sleep(1)
+        # set magnets opmode
+        thread = _CommandThread(
+            conn=self._conn_ma, cmds=self._conn_ma.cmd_opmode_rmpwfm,
+            warn_msgs='Failed to set MA OpMode to RmpWfm!', parent=self)
+        thread.start()
+        _time.sleep(1)
+        # turn on triggers
+        thread = _CommandThread(
+            conn=self._conn_ti, cmds=_part(
+                self._conn_ti.cmd_set_magnet_trigger_state,
+                _TIc.DsblEnbl.Enbl),
+            warn_msgs='Failed to turn magnets trigger on!', parent=self)
         thread.start()
 
     def _prepare_rf(self):
@@ -175,8 +222,10 @@ class StatusAndCommands(QGroupBox):
     def _prepare_ti(self):
         thread = _CommandThread(
             conn=self._conn_ti,
-            cmds=self._conn_ti.cmd_setup,
-            warn_msgs='Failed to setup TI to ramp!',
+            cmds=[self._conn_ti.cmd_setup,
+                  self._conn_ti.cmd_update_evts],
+            warn_msgs=['Failed to setup TI to ramp!',
+                       'Failed to update events!'],
             parent=self)
         thread.start()
 
@@ -197,12 +246,21 @@ class StatusAndCommands(QGroupBox):
         thread.start()
 
     def _apply_ti(self):
+        events_inj, events_eje = self._get_inj_eje_events()
         thread = _CommandThread(
             conn=self._conn_ti,
-            cmds=self._conn_ti.cmd_config_ramp,
-            warn_msgs='Failed to set TI parameters!',
+            cmds=[_part(self._conn_ti.cmd_config_ramp,
+                        events_inj, events_eje),
+                  self._conn_ti.cmd_update_evts],
+            warn_msgs=['Failed to set TI parameters!',
+                       'Failed to update events!'],
             parent=self)
         thread.start()
+        # update values of inj and eje times in fact implemented
+        _time.sleep(3)
+        inj_time = self._conn_ti.get_injection_time()/1000  # [ms]
+        eje_time = self._conn_ti.get_ejection_time()/1000  # [ms]
+        self.inj_eje_times.emit(inj_time, eje_time)
 
     def _open_status_details(self):
         self.status_details = StatusDetails(
@@ -246,14 +304,17 @@ class StatusAndCommands(QGroupBox):
             self._apply_rf()
             self._apply_ti()
 
-    @Slot(str)
-    def show_warning_message(self, msg):
+    @Slot(str, list)
+    def show_warning_message(self, msg, problems):
         """Show warning message."""
+        text = msg + '\n\nVerify PVs:\n'
+        for problem in problems:
+            text += problem + '\n'
         mb = QMessageBox()
         mb.setMinimumSize(300, 150)
         mb.setWindowTitle('Message')
         mb.setIcon(QMessageBox.Warning)
-        mb.setText(msg)
+        mb.setText(text)
         mb.exec()
 
     @Slot(ramp.BoosterRamp)
@@ -276,7 +337,8 @@ class StatusAndCommands(QGroupBox):
         c2v = dict()
         for maname in self._conn_ma.manames:
             wf = self.ramp_config.ps_waveform_get(maname)
-            c2v[self.prefix + maname + ':Wfm-RB'] = wf.currents
+            c2v[self.prefix + maname + ':Wfm-RB'] = {
+                'value': wf.currents, 'comp': 'cl', 'abs_tol': 1e-5}
         self.led_apply.channels2values.update(c2v)
 
     def update_rf_params(self):
@@ -308,39 +370,66 @@ class StatusAndCommands(QGroupBox):
         c2v = dict()
         c2v[p+c.TrgMags_Duration.replace('SP', 'RB')] = r.ps_ramp_duration
         c2v[p+c.TrgCorrs_Duration.replace('SP', 'RB')] = r.ps_ramp_duration
+
         c2v[p+c.TrgMags_NrPulses.replace('SP', 'RB')] = \
             r.ps_ramp_wfm_nrpoints_fams
         c2v[p+c.TrgCorrs_NrPulses.replace('SP', 'RB')] = \
             r.ps_ramp_wfm_nrpoints_corrs
+
         c2v[p+c.TrgMags_Delay.replace('SP', 'RB')] = r.ti_params_ps_ramp_delay
         c2v[p+c.TrgCorrs_Delay.replace('SP', 'RB')] = r.ti_params_ps_ramp_delay
         c2v[p+c.TrgLLRFRmp_Delay.replace('SP', 'RB')] = \
             r.ti_params_rf_ramp_delay
         c2v[p+c.EvtRmpBO_Delay.replace('SP', 'RB')] = 0.0
-        params = conn.calc_evts_delay()
-        if not params:
-            self.show_warning_message('There are TI not connected PVs!')
-            params = [None]*3
-        c2v[p+c.EvtLinac_Delay.replace('SP', 'RB')] = params[0]
-        c2v[p+c.EvtInjBO_Delay.replace('SP', 'RB')] = params[1]
-        c2v[p+c.EvtInjSI_Delay.replace('SP', 'RB')] = params[2]
+
+        events_inj, events_eje = self._get_inj_eje_events()
+        delays = conn.calc_evts_delay(events_inj, events_eje)
+        if not delays:
+            self.show_warning_message('There are TI not connected PVs!',
+                                      conn.disconnected_properties)
+            delays = {ev: None for ev in EVT_LIST}
+        else:
+            conn.update_ramp_configsetup(events_inj, events_eje, delays)
+
+        for ev in events_inj:
+            attr = getattr(c, 'Evt'+ev+'_Delay')
+            attr = attr.replace('SP', 'RB')
+            c2v[p+attr] = delays[ev]
+        for ev in events_eje:
+            attr = getattr(c, 'Evt'+ev+'_Delay')
+            attr = attr.replace('SP', 'RB')
+            c2v[p+attr] = delays[ev]
+        for ev in EVT_LIST:
+            if ev in events_inj or ev in events_eje:
+                continue
+            attr = getattr(c, 'Evt'+ev+'_Delay')
+            c2v[p+attr] = None
         self.led_apply.channels2values.update(c2v)
+
+    def _get_inj_eje_events(self):
+        events_inj = list()
+        events_eje = list()
+        for ev in EVT_LIST:
+            cb = self.findChild(QComboBox, ev)
+            if cb.currentText() == 'Inj':
+                events_inj.append(ev)
+            elif cb.currentText() == 'Eje':
+                events_eje.append(ev)
+        return events_inj, events_eje
 
 
 class _CommandThread(QThread):
     """Thread to perform commands."""
 
-    sentWarning = Signal(str)
+    sentWarning = Signal(str, list)
 
-    def __init__(self, conn, cmds, warn_msgs=list(),
-                 timeout=COMMANDS_TIMEOUT, parent=None):
+    def __init__(self, conn, cmds, warn_msgs=list(), parent=None):
         """Initialize."""
         super().__init__(parent)
         self._conn = conn
         self._subsystem = self._get_subsystem()
         self._cmds = cmds
         self._warn_msgs = warn_msgs
-        self._timeout = timeout
         self.sentWarning.connect(parent.show_warning_message)
 
     def _get_subsystem(self):
@@ -356,8 +445,9 @@ class _CommandThread(QThread):
         if not self._conn:
             return False
         if not self._conn.connected:
-            self.sentWarning.emit(
-                'There are not connected PVs in {}!'.format(self._subsystem))
+            msg = 'There are not connected PVs in {}!'.format(self._subsystem)
+            problems = self._conn.disconnected_properties
+            self.sentWarning.emit(msg, problems)
             return False
         return True
 
@@ -370,9 +460,9 @@ class _CommandThread(QThread):
         if not isinstance(self._warn_msgs, list):
             self._warn_msgs = [self._warn_msgs, ]
         for cmd, msg in zip(self._cmds, self._warn_msgs):
-            cmd_success = cmd(self._timeout)
+            cmd_success, problems = cmd()
             if not cmd_success:
-                self.sentWarning.emit(msg)
+                self.sentWarning.emit(msg, problems)
 
 
 class StatusDetails(SiriusDialog):
@@ -387,6 +477,8 @@ class StatusDetails(SiriusDialog):
         self._conn_ti = connTI or _ConnTiming(prefix=self.prefix)
         self._conn_rf = connRF or _ConnRF(prefix=self.prefix)
         self._setupUi()
+        t = _Thread(target=self._print, daemon=True)
+        t.start()
 
     def _setupUi(self):
         pfx = self.prefix
@@ -423,10 +515,12 @@ class StatusDetails(SiriusDialog):
             elif 'Wfm' in p:
                 if self.ramp_config is None or \
                         not self.ramp_config.ps_normalized_configs:
-                    c2v_apply[pfx + conn[p].pvname_rb] = _np.array([])
+                    c2v_apply[pfx + conn[p].pvname_rb] = {
+                        'value': _np.array([]), 'comp': 'cl', 'abs_tol': 1e-5}
                 elif self.ramp_config.ps_normalized_configs:
                     wf = self.ramp_config.ps_waveform_get(p.device_name)
-                    c2v_apply[pfx + conn[p].pvname_rb] = wf.currents
+                    c2v_apply[pfx + conn[p].pvname_rb] = {
+                        'value': wf.currents, 'comp': 'cl', 'abs_tol': 1e-5}
 
         self.led_ma_intlk = PyDMLedMultiChannel(self, c2v_intlk)
         self.led_ma_setup = PyDMLedMultiChannel(self, c2v_setup)
@@ -459,7 +553,8 @@ class StatusDetails(SiriusDialog):
             c2v_setup[pfx + prpty] = value
         c2v_apply = dict()
         for prpty, value in conn.ramp_configsetup.items():
-            c2v_apply[pfx + prpty] = value
+            c2v_apply[pfx + prpty] = {'value': value,
+                                      'comp': 'cl', 'abs_tol': 0.008}
 
         self.led_ti_intlk = PyDMLedMultiChannel(self, c2v_intlk)
         self.led_ti_setup = PyDMLedMultiChannel(self, c2v_setup)
@@ -487,3 +582,13 @@ class StatusDetails(SiriusDialog):
         glay.addWidget(self.led_rf_apply, 5, 2)
         glay.addWidget(self.led_ti_apply, 5, 3)
         self.setLayout(glay)
+
+    def _print(self):
+        led = self.led_ti_setup
+        _time.sleep(4)
+        for k, v in led.channels2values.items():
+            print(k, v)
+        print('')
+        for k, v in led.channels2status.items():
+            print(k, v)
+        print('\n\n')

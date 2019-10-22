@@ -359,14 +359,14 @@ class BONormEdit(SiriusMainWindow):
 
     def _save(self, new_name=None):
         try:
+            self._norm_config_oldname = self.norm_config.name
             if self.norm_config.exist():
-                self._norm_config_oldname = self.norm_config.name
                 if not new_name:
                     new_name = self.norm_config.generate_config_name(
                         self._norm_config_oldname)
                 self.norm_config.save(new_name)
             else:
-                self.norm_config.save()
+                self.norm_config.save(new_name)
                 self.act_load.setEnabled(True)
         except _ConfigDBException as err:
             QMessageBox.critical(self, 'Error', str(err), QMessageBox.Ok)
@@ -416,8 +416,8 @@ class BONormEdit(SiriusMainWindow):
         else:
             for ma in manames:
                 ma_value = self.nconfig_data.findChild(QDoubleSpinBox, name=ma)
-                ma_value.setMinimum(-100)
-                ma_value.setMaximum(100)
+                ma_value.setMinimum(-10000)
+                ma_value.setMaximum(10000)
 
     def _updateStrenghtsWidget(self, matype):
         manames = self._getManames(matype)
@@ -429,11 +429,12 @@ class BONormEdit(SiriusMainWindow):
     # ---------- orbit ----------
 
     def _updateCorrKicks(self):
-        for maname, dkick in self._deltas['kicks']:
+        for maname, dkick in self._deltas['kicks'].items():
             corr_factor = self._deltas['factorV'] if 'CV' in maname \
                 else self._deltas['factorH']
-            current_kick = self.norm_config[maname]
-            self.norm_config[maname] = current_kick + dkick*corr_factor
+            corr_factor /= 100
+            self.norm_config[maname] = self._current_kicks[maname] + \
+                dkick*corr_factor
 
     def _handleGetKicksFromSOFB(self):
         if not self._conn_sofb.connected:
@@ -448,6 +449,10 @@ class BONormEdit(SiriusMainWindow):
                 self, 'Could not get kicks',
                 'Could not get kicks from SOFB!', QMessageBox.Ok)
             return
+
+        self._current_kicks = dict()
+        for maname in self._getManames():
+            self._current_kicks[maname] = self.norm_config[maname]
 
         self._deltas['kicks'] = dkicks
         self._updateCorrKicks()
@@ -586,6 +591,7 @@ class BONormEdit(SiriusMainWindow):
         if self.norm_config is not None:
             self.normConfigChanged.emit(
                 self.norm_config, self._norm_config_oldname)
+            self._norm_config_oldname = ''
 
     def updateEnergy(self, energy):
         """Updta energy and strength limits."""

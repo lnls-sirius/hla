@@ -147,6 +147,7 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         self.stateColors = _dcopy(color_list) or self.default_colorlist
 
         self._operations_dict = {'eq': self._eq,
+                                 'cl': self._isclose,
                                  'ne': self._ne,
                                  'gt': self._gt,
                                  'lt': self._lt,
@@ -212,6 +213,7 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         address = self.sender().address
         desired = self._address2values[address]
 
+        kws = dict()
         if isinstance(desired, dict):
             if 'bit' in desired.keys():
                 bit = desired['bit']
@@ -221,6 +223,8 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
                 fun = self._operations_dict[desired['comp']]
             else:
                 fun = self._operations_dict['eq']
+            if 'tol' in desired.keys():
+                kws['tol'] = desired['tol']
             desired_value = desired['value']
         else:
             fun = self._operations_dict['eq']
@@ -231,7 +235,10 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
                          address+' ('+str(new_val)+')!')
             return
 
-        is_desired = fun(new_val, desired_value)
+        if desired_value is None:
+            is_desired = True
+        else:
+            is_desired = fun(new_val, desired_value, **kws)
         self._address2status[address] = is_desired
         if not is_desired:
             self.warning.emit([address, new_val])
@@ -262,7 +269,7 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         self.setEnabled(allconn)
 
     @staticmethod
-    def _eq(val1, val2):
+    def _eq(val1, val2, **kws):
         if val1 is None or val2 is None:
             return False
         if isinstance(val1, _np.ndarray):
@@ -272,7 +279,29 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         return is_equal
 
     @staticmethod
-    def _ne(val1, val2):
+    def _isclose(val1, val2, **kws):
+        if val1 is None or val2 is None:
+            return False
+        if type(val1) != type(val2):
+            return False
+        if isinstance(val1, (_np.ndarray, tuple, list)) and \
+                len(val1) != len(val2):
+            return False
+        if 'abs_tol' in kws.keys():
+            atol = kws['abs_tol']
+        else:
+            atol = 1e-8
+        if 'rel_tol' in kws.keys():
+            rtol = kws['rel_tol']
+        else:
+            rtol = 1e-5
+        isclose = _np.isclose(val1, val2, atol=atol, rtol=rtol)
+        if isinstance(val1, (_np.ndarray, tuple, list)):
+            isclose = all(isclose)
+        return isclose
+
+    @staticmethod
+    def _ne(val1, val2, **kws):
         if val1 is None or val2 is None:
             return False
         if isinstance(val1, _np.ndarray):
@@ -282,7 +311,7 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         return is_not_equal
 
     @staticmethod
-    def _gt(val1, val2):
+    def _gt(val1, val2, **kws):
         if val1 is None or val2 is None:
             return False
         if isinstance(val1, _np.ndarray):
@@ -292,7 +321,7 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         return is_greater
 
     @staticmethod
-    def _lt(val1, val2):
+    def _lt(val1, val2, **kws):
         if val1 is None or val2 is None:
             return False
         if isinstance(val1, _np.ndarray):
@@ -302,7 +331,7 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         return is_less
 
     @staticmethod
-    def _ge(val1, val2):
+    def _ge(val1, val2, **kws):
         if val1 is None or val2 is None:
             return False
         if isinstance(val1, _np.ndarray):
@@ -312,7 +341,7 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         return is_greater_or_equal
 
     @staticmethod
-    def _le(val1, val2):
+    def _le(val1, val2, **kws):
         if val1 is None or val2 is None:
             return False
         if isinstance(val1, _np.ndarray):

@@ -702,6 +702,22 @@ class DipoleRamp(QWidget):
 
         self.table.cellChanged.connect(self._handleCellChanged)
 
+    def updateInjEjeTimes(self, inj_time, eje_time):
+        """Update inj and eje times."""
+        row = 2  # Injection
+        t_item = self.table.item(row, 1)  # time column
+        e_item = self.table.item(row, 2)  # energy column
+        energy = self.ramp_config.ps_waveform_interp_energy(inj_time)
+        t_item.setData(Qt.DisplayRole, '{0:.3f}'.format(inj_time))
+        e_item.setData(Qt.DisplayRole, '{0:.4f}'.format(energy))
+
+        row = 4  # Ejection
+        t_item = self.table.item(row, 1)  # time column
+        e_item = self.table.item(row, 2)  # energy column
+        energy = self.ramp_config.ps_waveform_interp_energy(eje_time)
+        t_item.setData(Qt.DisplayRole, '{0:.3f}'.format(eje_time))
+        e_item.setData(Qt.DisplayRole, '{0:.4f}'.format(energy))
+
     @Slot(ramp.BoosterRamp)
     def handleLoadRampConfig(self, ramp_config):
         """Update all widgets when ramp_config is loaded."""
@@ -765,7 +781,9 @@ class MultipolesRamp(QWidget):
         self.graphview = QWidget()
         self._setupGraph()
 
-        self.table = _MyTableWidget(self, self._showNormConfigMenu)
+        self.table = _MyTableWidget(
+            self, show_menu_fun=self._showNormConfigMenu,
+            open_window_fun=self._showEditNormConfigWindow)
         self._setupTable()
 
         icon = qta.icon('mdi.chart-line', 'mdi.dots-horizontal',
@@ -1045,19 +1063,12 @@ class MultipolesRamp(QWidget):
         if self.ramp_config is None:
             return
 
-        item = self.table.itemAt(pos)
-        if not item:
-            return
-        row = item.row()
-        nconfig_name = self.table_map['rows'][row]
-        if nconfig_name in ['Injection', 'Ejection']:
-            return
-        energy = float(self.table.item(row, 2).data(Qt.DisplayRole))
+        row, nconfig_name, _, _ = self._get_data_in_pos(pos)
 
         menu = QMenu()
         edit_act = menu.addAction('Edit')
         edit_act.triggered.connect(
-            _part(self._showEditNormConfigWindow, nconfig_name, energy))
+            _part(self._showEditNormConfigWindow, pos))
 
         duplic_act = menu.addAction('Duplicate')
         duplic_act.triggered.connect(
@@ -1069,7 +1080,7 @@ class MultipolesRamp(QWidget):
 
         menu.exec_(self.table.mapToGlobal(pos))
 
-    def _showEditNormConfigWindow(self, nconfig_name, energy):
+    def _showEditNormConfigWindow(self, pos):
         for maname in self.manames:
             if maname not in self._aux_magnets.keys():
                 QMessageBox.warning(
@@ -1078,23 +1089,43 @@ class MultipolesRamp(QWidget):
                     'Wait a moment and try again.', QMessageBox.Ok)
                 return
 
+        _, nconfig_name, _, energy = self._get_data_in_pos(pos)
         if nconfig_name in self.bonorm_edit_dict.keys():
+            # verify if there is a bonorm_edit window that was not closed,
+            # only minimized or without focus
             w = self.bonorm_edit_dict[nconfig_name]
-        else:
-            w = _BONormEdit(parent=self, prefix=self.prefix,
-                            norm_config=self.ramp_config[nconfig_name],
-                            energy=energy, magnets=self._aux_magnets,
-                            conn_sofb=self._conn_sofb,
-                            tunecorr_configname=self._tunecorr_configname,
-                            chromcorr_configname=self._chromcorr_configname)
-            w.normConfigChanged.connect(self.handleNormConfigsChanged)
-            self.updateOptAdjSettingsSignal.connect(w.updateSettings)
-            self.bonorm_edit_dict[nconfig_name] = w
-        if w.isHidden():
-            w.show()
-        elif w.isMinimized():
-            w.showNormal()
+            if w.isMinimized():
+                w.showNormal()
+                w.activateWindow()
+                return
+            elif not w.hasFocus() and not w.isHidden():
+                w.show()
+                w.activateWindow()
+                return
+        # creating a new bonorm_edit
+        w = _BONormEdit(parent=self, prefix=self.prefix,
+                        norm_config=self.ramp_config[nconfig_name],
+                        energy=energy, magnets=self._aux_magnets,
+                        conn_sofb=self._conn_sofb,
+                        tunecorr_configname=self._tunecorr_configname,
+                        chromcorr_configname=self._chromcorr_configname)
+        w.normConfigChanged.connect(self.handleNormConfigsChanged)
+        self.updateOptAdjSettingsSignal.connect(w.updateSettings)
+        self.bonorm_edit_dict[nconfig_name] = w
+        w.show()
         w.activateWindow()
+
+    def _get_data_in_pos(self, pos):
+        item = self.table.itemAt(pos)
+        if not item:
+            return
+        row = item.row()
+        nconfig_name = self.table_map['rows'][row]
+        if nconfig_name in ['Injection', 'Ejection']:
+            return
+        time = float(self.table.item(row, 1).data(Qt.DisplayRole))
+        energy = float(self.table.item(row, 2).data(Qt.DisplayRole))
+        return row, nconfig_name, time, energy
 
     def _verifyWarnings(self):
         manames_exclimits = self.ramp_config.ps_waveform_manames_exclimits
@@ -1271,16 +1302,18 @@ class MultipolesRamp(QWidget):
     def handleNormConfigsChanged(self, nconfig=None, old_nconfig_name=''):
         """Reload normalized configs on change and update graph."""
         if old_nconfig_name:
-            row = [idx for idx, oldname in self.table_map['rows'].items()
-                   if oldname == old_nconfig_name]
-            time = float(self.table.item(row[0], 1).data(Qt.DisplayRole))
-            self.ramp_config.ps_normalized_configs_delete(old_nconfig_name)
-            self.ramp_config.ps_normalized_configs_insert(
-                time=time, name=nconfig.name, nconfig=nconfig.value)
+            rows = [idx for idx, oldname in self.table_map['rows'].items()
+                    if oldname == old_nconfig_name]
+            for row in rows:
+                time = float(self.table.item(row, 1).data(Qt.DisplayRole))
+                self.ramp_config.ps_normalized_configs_delete(old_nconfig_name)
+                self.ramp_config.ps_normalized_configs_insert(
+                    time=time, name=nconfig.name, nconfig=nconfig.value)
+            w = self.bonorm_edit_dict.pop(old_nconfig_name)
+            self.bonorm_edit_dict[nconfig.name] = w
         else:
             self.ramp_config[nconfig.name] = nconfig
 
-        self.bonorm_edit_dict = dict()
         self.handleLoadRampConfig()
         self.updateMultipoleRampSignal.emit()
         self.applyChanges2MachineSignal.emit()
@@ -1553,7 +1586,7 @@ class RFRamp(QWidget):
             return
 
         try:
-            self.ramp_config.ti_params_ps_ramp_delay = new_value
+            self.ramp_config.ti_params_rf_ramp_delay = new_value
         except exceptions.RampError as e:
             self.updateRFDelay()
             QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)

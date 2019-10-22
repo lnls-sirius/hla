@@ -9,14 +9,19 @@ from siriushla.as_ap_configdb import LoadConfigDialog as _LoadConfigDialog
 class MyTableWidget(QTableWidget):
     """Reimplement mousePressEvent to show contextMenu."""
 
-    def __init__(self, parent=None, show_menu_fun=None):
+    def __init__(self, parent=None, show_menu_fun=None, open_window_fun=None):
         super().__init__(parent)
         self.show_menu_fun = show_menu_fun
+        self.open_window_fun = open_window_fun
 
     def mousePressEvent(self, ev):
         if ev.button() == Qt.RightButton:
             self.show_menu_fun(ev.pos())
         super().mousePressEvent(ev)
+
+    def mouseDoubleClickEvent(self, ev):
+        self.open_window_fun(ev.pos())
+        super().mouseDoubleClickEvent(ev)
 
 
 class SpinBoxDelegate(QStyledItemDelegate):
