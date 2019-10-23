@@ -255,6 +255,9 @@ def get_object(ismenubar=True, parent=None):
                 optics.addAction(TuneCorr)
                 optics.addAction(ChromCorr)
             if 'bo' in sec:
+                ChargeMon = QAction('Charge Monitor', optics)
+                self.connect_newprocess(ChargeMon, 'sirius-hla-bo-ap-chargemon.py')
+                optics.addAction(ChargeMon)
                 Ramp = QAction('Ramp', optics)
                 self.connect_newprocess(Ramp, 'sirius-hla-bo-ap-ramp.py')
                 optics.addAction(Ramp)
