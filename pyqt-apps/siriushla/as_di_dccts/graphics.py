@@ -4,12 +4,12 @@ import numpy as np
 from qtpy.QtCore import Qt, Signal
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QWidget, QLabel, QPushButton, QGridLayout, \
-    QHBoxLayout, QGroupBox, QSpinBox, QComboBox, QSpacerItem, \
-    QSizePolicy as QSzPly
+    QHBoxLayout, QGroupBox, QSpinBox, QComboBox, QSizePolicy as QSzPly, \
+    QVBoxLayout
 import qtawesome as qta
 from siriuspy.namesys import SiriusPVName
 from siriuspy.csdevice.dccts import Const as _DCCTc
-from pydm.widgets import PyDMWaveformPlot
+from pydm.widgets import PyDMLabel, PyDMWaveformPlot, PyDMTimePlot
 from siriushla.widgets import SiriusConnectionSignal as SignalChannel
 
 
@@ -268,124 +268,63 @@ class BORampEffMonitor(QWidget):
         label = QLabel('<h3>Booster Ramp Efficiency</h3>', self,
                        alignment=Qt.AlignCenter)
 
-        self.rawreadings_channel = SignalChannel(
-            self.dcct_prefix+'RawReadings-Mon')
-        self.rawreadings_channel.new_value_signal[np.ndarray].connect(
-            self._updateRampEffGraph)
-
-        self.graph = PyDMWaveformPlot(self)
-        self.graph.autoRangeX = True
-        self.graph.autoRangeY = True
+        self.graph = PyDMTimePlot(self)
+        self.graph.timeSpan = 1000  # [s]
+        self.graph.setAutoRangeX(True)
+        self.graph.setAutoRangeY(True)
         self.graph.backgroundColor = QColor(255, 255, 255)
         self.graph.axisColor = QColor(0, 0, 0)
         self.graph.showLegend = False
         self.graph.showXGrid = True
         self.graph.showYGrid = True
-        self.graph.setLabels(
-            left='Ramp Efficiency [%]', bottom='Pulse')
-        self.graph.addChannel(
-            y_channel='FAKE:RampEff-Mon', name='Efficiency',
+        self.graph.setLabels(left='Ramp Efficiency [%]')
+        self.graph.addYChannel(
+            y_channel='BO-Glob:AP-CurrInfo:RampEff-Mon', name='Efficiency',
             color='blue', lineWidth=2, lineStyle=Qt.SolidLine,
             symbol='o', symbolSize=2)
         leftAxis = self.graph.getAxis('left')
         leftAxis.setStyle(autoExpandTextSpace=False, tickTextWidth=25)
         self.curve = self.graph.curveAtIndex(0)
 
-        self.pb_clearGraph = QPushButton(
-            qta.icon('mdi.delete-empty'), '', self)
-        self.pb_clearGraph.setObjectName('clear')
-        self.pb_clearGraph.setToolTip('Clear graph')
-        self.pb_clearGraph.setStyleSheet(
-            "#clear{min-width:25px; max-width:25px; icon-size:20px;}")
-        self.pb_clearGraph.clicked.connect(self._clearGraph)
-
-        l_indices = QLabel('Curve indices', self, alignment=Qt.AlignCenter)
-        l_indices.setStyleSheet('font-weight: bold;')
-        l_injidx = QLabel('Injection: ', self)
-        self.sb_injidx = QSpinBox(self)
-        self.sb_injidx.setValue(self._inj_idx)
-        self.sb_injidx.setObjectName('injection_index')
-        self.sb_injidx.valueChanged.connect(self._updateIndices)
-
-        l_ejeidx = QLabel('Ejection: ', self)
-        self.sb_ejeidx = QSpinBox(self)
-        self.sb_ejeidx.setValue(self._eje_idx)
-        self.sb_ejeidx.setObjectName('ejection_index')
-        self.sb_ejeidx.valueChanged.connect(self._updateIndices)
-
-        # Set index limits
-        self.sb_injidx.setMinimum(0)
-        self.sb_ejeidx.setMinimum(0)
-
         l_injcurr = QLabel('Injected:', self)
-        self.label_injcurr = QLabel(self)
-        l_ejecurr = QLabel('Ejected:', self)
-        self.label_ejecurr = QLabel(self)
-        l_rampeff = QLabel('<h4>Efficiency:</h4>', self)
-        self.label_rampeff = QLabel(self)
+        self.label_injcurr = PyDMLabel(
+            parent=self, init_channel='BO-Glob:AP-CurrInfo:Current150MeV-Mon')
+        self.label_injcurr.showUnits = True
 
-        glay = QGridLayout()
-        glay.addWidget(label, 0, 0, 1, 8)
-        glay.addWidget(self.graph, 1, 0, 1, 8)
-        glay.addItem(QSpacerItem(1, 1, QSzPly.Expanding, QSzPly.Ignored), 2, 0)
-        glay.addWidget(l_indices, 2, 1, 1, 2)
-        glay.addWidget(l_injidx, 3, 1)
-        glay.addWidget(self.sb_injidx, 3, 2)
-        glay.addWidget(l_ejeidx, 4, 1)
-        glay.addWidget(self.sb_ejeidx, 4, 2)
-        glay.addItem(QSpacerItem(1, 1, QSzPly.Expanding, QSzPly.Ignored), 2, 3)
-        glay.addWidget(l_rampeff, 2, 4)
-        glay.addWidget(self.label_rampeff, 2, 5)
-        glay.addWidget(l_injcurr, 3, 4)
-        glay.addWidget(self.label_injcurr, 3, 5)
-        glay.addWidget(l_ejecurr, 4, 4)
-        glay.addWidget(self.label_ejecurr, 4, 5)
-        glay.addItem(QSpacerItem(1, 1, QSzPly.Expanding, QSzPly.Ignored), 2, 6)
-        glay.addWidget(self.pb_clearGraph, 2, 7, alignment=Qt.AlignRight)
-        self.setLayout(glay)
+        l_ejecurr = QLabel('Ejected:', self)
+        self.label_ejecurr = PyDMLabel(
+            parent=self, init_channel='BO-Glob:AP-CurrInfo:Current3GeV-Mon')
+        self.label_ejecurr.showUnits = True
+
+        l_rampeff = QLabel('<h4>Efficiency:</h4>', self)
+        self.label_rampeff = PyDMLabel(
+            parent=self, init_channel='BO-Glob:AP-CurrInfo:RampEff-Mon')
+        self.label_rampeff.showUnits = True
+
+        hbox_eff = QHBoxLayout()
+        hbox_eff.addStretch()
+        hbox_eff.addWidget(l_rampeff)
+        hbox_eff.addWidget(self.label_rampeff)
+        hbox_eff.addStretch()
+        hbox_eff.addWidget(l_injcurr)
+        hbox_eff.addWidget(self.label_injcurr)
+        hbox_eff.addStretch()
+        hbox_eff.addWidget(l_ejecurr)
+        hbox_eff.addWidget(self.label_ejecurr)
+        hbox_eff.addStretch()
+
+        lay = QVBoxLayout()
+        lay.addWidget(label)
+        lay.addWidget(self.graph)
+        lay.addLayout(hbox_eff)
+        self.setLayout(lay)
         self.setStyleSheet("""
-            .QLabel{
-                qproperty-alignment:'AlignCenter';}
-            PyDMWaveformPlot{
+            PyDMLabel{
+                qproperty-alignment:'AlignCenter';
+                min-width:5em; max-width:5em;}
+            PyDMTimePlot{
                 min-width:30em; min-height:20em;}
         """)
-
-    def _updateRampEffGraph(self, data):
-        if data is not None:
-            if not self._init_indices:
-                self._inj_idx = 0
-                self._eje_idx = len(data)-1
-                self._init_indices = True
-            self._eje_idx = min(self._eje_idx, len(data))
-            self.sb_injidx.setMaximum(len(data)-1)
-            self.sb_ejeidx.setMaximum(len(data)-1)
-            self.sb_injidx.setValue(self._inj_idx)
-            self.sb_ejeidx.setValue(self._eje_idx)
-
-            inj_curr = data[self._inj_idx]
-            eje_curr = data[self._eje_idx]
-            eff = 100*eje_curr/inj_curr
-            self._wavEff.append(eff)
-            if len(self._wavEff) > 1000:
-                self._wavEff.pop(0)
-            self.label_injcurr.setText(str('{: .4f} mA'.format(inj_curr)))
-            self.label_ejecurr.setText(str('{: .4f} mA'.format(eje_curr)))
-            self.label_rampeff.setText(str('{: .3f} %'.format(eff)))
-            self.curve.receiveYWaveform(np.array(self._wavEff))
-            self.curve.redrawCurve()
-
-    def _clearGraph(self):
-        self._wavEff.clear()
-        self.curve.receiveYWaveform(np.array(self._wavEff))
-        self.graph.redrawPlot()
-
-    def _updateIndices(self, index):
-        """Update indices to calculate ramp efficiency."""
-        sender_name = self.sender().objectName()
-        if 'injection' in sender_name:
-            self._inj_idx = index
-        else:
-            self._eje_idx = index
 
 
 if __name__ == '__main__':

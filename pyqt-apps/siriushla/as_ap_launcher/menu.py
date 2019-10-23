@@ -242,19 +242,24 @@ def get_object(ismenubar=True, parent=None):
                     Emittance, 'sirius-hla-tb-ap-emittance.py')
                 optics.addAction(Emittance)
             if sec in {'bo', 'si'}:
-                CurrLT = QAction('Current and Lifetime', optics)
-                self.connect_newprocess(
-                    CurrLT, 'sirius-hla-'+sec+'-ap-currlt.py')
                 TuneCorr = QAction('Tune Correction', optics)
                 self.connect_newprocess(
                     TuneCorr, 'sirius-hla-'+sec+'-ap-tunecorr.py')
                 ChromCorr = QAction('Chromaticity Correction', optics)
+                optics.addAction(TuneCorr)
                 self.connect_newprocess(
                     ChromCorr, 'sirius-hla-'+sec+'-ap-chromcorr.py')
-                optics.addAction(CurrLT)
-                optics.addAction(TuneCorr)
                 optics.addAction(ChromCorr)
+            if 'si' in sec:
+                CurrLT = QAction('Current and Lifetime', optics)
+                self.connect_newprocess(
+                    CurrLT, 'sirius-hla-'+sec+'-ap-currlt.py')
+                optics.addAction(CurrLT)
             if 'bo' in sec:
+                ChargeMon = QAction('Charge Monitor', optics)
+                self.connect_newprocess(
+                    ChargeMon, 'sirius-hla-bo-ap-chargemon.py')
+                optics.addAction(ChargeMon)
                 Ramp = QAction('Ramp', optics)
                 self.connect_newprocess(Ramp, 'sirius-hla-bo-ap-ramp.py')
                 optics.addAction(Ramp)
