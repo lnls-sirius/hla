@@ -63,7 +63,7 @@ class CycleWindow(SiriusMainWindow):
         self.search_le = QLineEdit()
         self.search_le.setPlaceholderText('Filter...')
         self.search_le.editingFinished.connect(self._filter_manames)
-        self.magnets_tree = PVNameTree(get_manames(), ('sec', 'mag_group'),
+        self.magnets_tree = PVNameTree(get_manames(), ('sec', ),
                                        tuple(), self)
         self.magnets_tree.setHeaderHidden(True)
         self.magnets_tree.setColumnCount(1)
