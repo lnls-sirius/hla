@@ -6,7 +6,7 @@ import sys as sys
 import argparse as argparse
 from siriushla.sirius_application import SiriusApplication
 from siriuspy.envars import vaca_prefix
-from siriushla.as_ap_currlt.HLCurrentLifetime import CurrLTWindow
+from siriushla.as_ap_currlt.current_and_lifetime import CurrLTWindow
 
 
 parser = argparse.ArgumentParser(
@@ -17,5 +17,5 @@ parser.add_argument(
 args = parser.parse_args()
 
 app = SiriusApplication()
-app.open_window(CurrLTWindow, parent=None, prefix=args.prefix, acc='si')
+app.open_window(CurrLTWindow, parent=None, prefix=args.prefix)
 sys.exit(app.exec_())

@@ -14,22 +14,22 @@ from siriuspy.envars import vaca_prefix as _vaca_prefix
 class CurrLTWindow(SiriusMainWindow):
     """Class to include some intelligence in the .ui file."""
 
-    def __init__(self, parent=None, prefix=_vaca_prefix, acc=None):
+    def __init__(self, parent=None, prefix=_vaca_prefix):
         """Initialize some widgets."""
         super(CurrLTWindow, self).__init__(parent)
 
-        UI_FILE = (_os.path.abspath(_os.path.dirname(__file__)) + '/ui_' +
-                   acc.lower() + '_ap_currlt.ui')
+        UI_FILE = (_os.path.abspath(_os.path.dirname(__file__)) +
+                   '/ui_si_ap_currlt.ui')
         tmp_file = _substitute_in_file(UI_FILE, {'PREFIX': prefix})
 
         self.centralwidget = loadUi(tmp_file)
-        self.setObjectName(acc.upper()+'App')
-        self.centralwidget.setObjectName(acc.upper()+'App')
+        self.setObjectName('SIApp')
+        self.centralwidget.setObjectName('SIApp')
         self.setCentralWidget(self.centralwidget)
-        self.setWindowTitle(acc.upper()+' Current Info: Current and Lifetime')
+        self.setWindowTitle('SI Current Info: Current and Lifetime')
 
         self.lifetime_pv = _epics.PV(
-            prefix+acc.upper()+'-Glob:AP-CurrInfo:Lifetime-Mon')
+            prefix+'SI-Glob:AP-CurrInfo:Lifetime-Mon')
         self.lifetime_pv.add_callback(self.formatLifetime)
         self.centralwidget.CurrLT.setText("0:00:00")
 
