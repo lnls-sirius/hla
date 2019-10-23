@@ -379,8 +379,8 @@ class PSTestWindow(SiriusMainWindow):
 
     def _get_tree_names(self):
         lipsnames = PSSearch.get_psnames({'sec': 'LI', 'dis': 'PS'})
-        manames = PSSearch.get_psnames({'sec': '(TB|BO)', 'dis': 'PS'})
-        # TODO: uncomment when using TS and SI
+        manames = PSSearch.get_psnames({'sec': '(TB|BO|TS)', 'dis': 'PS'})
+        # TODO: uncomment when using SI
         # manames = PSSearch.get_psnames({'sec': '(TB|BO|TS|SI)', 'dis': 'PS'})
         manames.extend(lipsnames)
         return manames
