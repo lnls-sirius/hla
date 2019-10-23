@@ -9,7 +9,7 @@ from qtpy.QtWidgets import QFrame, QGridLayout, QVBoxLayout, QHBoxLayout, \
     QLineEdit, QGroupBox, QPushButton, QListWidget, QLabel, QApplication, \
     QMessageBox, QSizePolicy
 
-from siriuspy.search import PSSearch, MASearch
+from siriuspy.search import PSSearch
 from siriuspy.namesys import SiriusPVName as PVName
 
 from siriushla.widgets import SiriusMainWindow, PVNameTree
@@ -379,9 +379,9 @@ class PSTestWindow(SiriusMainWindow):
 
     def _get_tree_names(self):
         lipsnames = PSSearch.get_psnames({'sec': 'LI', 'dis': 'PS'})
-        manames = MASearch.get_manames({'sec': '(TB|BO)', 'dis': 'MA'})
+        manames = PSSearch.get_psnames({'sec': '(TB|BO)', 'dis': 'PS'})
         # TODO: uncomment when using TS and SI
-        # manames = MASearch.get_manames({'sec': '(TB|BO|TS|SI)', 'dis': 'MA'})
+        # manames = PSSearch.get_psnames({'sec': '(TB|BO|TS|SI)', 'dis': 'PS'})
         manames.extend(lipsnames)
         return manames
 
@@ -408,16 +408,14 @@ class PSTestWindow(SiriusMainWindow):
         self._create_testers(devices)
         return devices
 
-    def _get_related_dclinks(self, manames):
+    def _get_related_dclinks(self, psnames):
         alldclinks = set()
-        for name in manames:
+        for name in psnames:
             if 'LI' in name:
                 continue
-            psnames = MASearch.conv_maname_2_psnames(name)
-            for ps in psnames:
-                dclinks = PSSearch.conv_psname_2_dclink(ps)
-                if dclinks:
-                    alldclinks.update(dclinks)
+            dclinks = PSSearch.conv_psname_2_dclink(name)
+            if dclinks:
+                alldclinks.update(dclinks)
 
         alldclinks_list = list(alldclinks)
         self._create_testers(alldclinks_list)

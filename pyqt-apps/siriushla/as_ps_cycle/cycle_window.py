@@ -14,7 +14,7 @@ from qtpy.QtWidgets import QWidget, QGridLayout, QVBoxLayout, \
 
 from siriuspy.envars import vaca_prefix as VACA_PREFIX
 from siriuspy.namesys import Filter, SiriusPVName as PVName
-from siriuspy.cycle import get_manames, get_manames_from_same_udc, \
+from siriuspy.cycle import get_psnames, get_psnames_from_same_udc, \
     Timing, MagnetCycler, LinacMagnetCycler, CycleController
 
 from siriushla.widgets import SiriusMainWindow, \
@@ -63,7 +63,7 @@ class CycleWindow(SiriusMainWindow):
         self.search_le = QLineEdit()
         self.search_le.setPlaceholderText('Filter...')
         self.search_le.editingFinished.connect(self._filter_manames)
-        self.magnets_tree = PVNameTree(get_manames(), ('sec', ),
+        self.magnets_tree = PVNameTree(get_psnames(), ('sec', ),
                                        tuple(), self)
         self.magnets_tree.setHeaderHidden(True)
         self.magnets_tree.setColumnCount(1)
@@ -377,7 +377,7 @@ class CycleWindow(SiriusMainWindow):
         if len(maname) == 2 or PVName(maname).sec == 'LI':
             pass
         else:
-            manames2check = get_manames_from_same_udc(maname)
+            manames2check = get_psnames_from_same_udc(maname)
             manames2check.remove(maname)
             for maname in manames2check:
                 item = self.magnets_tree._item_map[maname]
