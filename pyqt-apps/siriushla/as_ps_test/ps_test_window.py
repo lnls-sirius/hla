@@ -49,10 +49,10 @@ class PSTestWindow(SiriusMainWindow):
             }""")
         self.setCentralWidget(self.central_widget)
 
-        # magnets selection
+        # power supplies selection
         self.search_le = QLineEdit()
         self.search_le.setPlaceholderText('Filter...')
-        self.search_le.editingFinished.connect(self._filter_manames)
+        self.search_le.editingFinished.connect(self._filter_psnames)
 
         self.tree = PVNameTree(items=self._get_tree_names(),
                                tree_levels=('sec', ), parent=self)
@@ -379,13 +379,13 @@ class PSTestWindow(SiriusMainWindow):
 
     def _get_tree_names(self):
         lipsnames = PSSearch.get_psnames({'sec': 'LI', 'dis': 'PS'})
-        manames = PSSearch.get_psnames({'sec': '(TB|BO|TS)', 'dis': 'PS'})
+        psnames = PSSearch.get_psnames({'sec': '(TB|BO|TS)', 'dis': 'PS'})
         # TODO: uncomment when using SI
-        # manames = PSSearch.get_psnames({'sec': '(TB|BO|TS|SI)', 'dis': 'PS'})
-        manames.extend(lipsnames)
-        return manames
+        # psnames = PSSearch.get_psnames({'sec': '(TB|BO|TS|SI)', 'dis': 'PS'})
+        psnames.extend(lipsnames)
+        return psnames
 
-    def _filter_manames(self):
+    def _filter_psnames(self):
         text = self.search_le.text()
 
         try:
@@ -402,7 +402,7 @@ class PSTestWindow(SiriusMainWindow):
     def _get_selected_ps(self):
         devices = self.tree.checked_items()
         if not devices:
-            QMessageBox.critical(self, 'Message', 'No magnet selected!')
+            QMessageBox.critical(self, 'Message', 'No power supply selected!')
             return False
 
         self._create_testers(devices)
@@ -452,10 +452,10 @@ class PSTestWindow(SiriusMainWindow):
 
     def _open_detail(self, index):
         app = QApplication.instance()
-        maname = index.data()
-        if 'LI' in maname or maname in ['TB', 'BO', 'TS', 'SI']:
+        psname = index.data()
+        if 'LI' in psname or psname in ['TB', 'BO', 'TS', 'SI']:
             return
-        app.open_window(PSDetailWindow, parent=self, **{'psname': maname})
+        app.open_window(PSDetailWindow, parent=self, **{'psname': psname})
 
 
 class CreateTesters(QThread):
