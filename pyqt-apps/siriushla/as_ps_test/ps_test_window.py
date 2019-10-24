@@ -504,12 +504,12 @@ class CreateTesters(QThread):
             if dev not in _testers.keys():
                 if PVName(dev).sec == 'LI':
                     t = TesterPSLinac(dev)
-                elif PVName(dev).dis == 'MA':
-                    t = TesterPS(dev)
                 elif PSSearch.conv_psname_2_psmodel(dev) == 'FBP_DCLink':
                     t = TesterDCLinkFBP(dev)
                 elif 'bo-dclink' in PSSearch.conv_psname_2_pstype(dev):
                     t = TesterDCLink(dev)
+                elif PVName(dev).dis == 'PS':
+                    t = TesterPS(dev)
                 _testers[dev] = t
                 self.currentItem.emit(dev)
                 self.itemDone.emit()
