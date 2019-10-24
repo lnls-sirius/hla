@@ -217,6 +217,10 @@ class PVNameTree(QTreeWidget):
             return 'Quadrupole'
         elif re.match('^QS.*$', name.dev):
             return 'Quadrupole Skew'
+        elif re.match('^Spect.*$', name.dev):
+            return 'Spetrometer'
+        elif re.match('^Slnd.*$', name.dev):
+            return 'Solenoid'
         elif re.match('^S\w*(-[0-9])?$', name.dev):
             return 'Sextupole'
         elif re.match('^C(H|V)(-[0-9])?$', name.dev):
@@ -225,6 +229,8 @@ class PVNameTree(QTreeWidget):
             return 'Fast Corrector'
         elif re.match('(Inj|Eje).*$', name.dev):
             return 'Pulsed'
+        elif re.match('^Lens.*$', name.dev):
+            return 'Lens'
         else:
             return 'Other'
 
