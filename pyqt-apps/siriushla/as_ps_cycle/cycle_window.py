@@ -333,7 +333,7 @@ class CycleWindow(SiriusMainWindow):
     def _get_sections(self):
         sections = list()
         ps2cycle = self.pwrsupplies_tree.checked_items()
-        for s in ['TB', 'BO', 'TS', 'SI']:
+        for s in ['LI', 'TB', 'BO', 'TS', 'SI']:
             if Filter.process_filters(ps2cycle, filters={'sec': s}):
                 sections.append(s)
         return sections
