@@ -138,7 +138,7 @@ class PSDetailWidget(QWidget):
         self.cycle_tabs.addTab(self.siggen_tab, 'SigGen')
         self.cycle_tabs.addTab(self.wfm_tab, 'Wfm')
         if self._psname.sec == 'BO':
-            self.cycle_tabs.setCurrentIndex(2)
+            self.cycle_tabs.setCurrentIndex(1)
         if self._is_magnet:
             self.psconn_box = QGroupBox("PS Connection")
             self.psconn_box.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
