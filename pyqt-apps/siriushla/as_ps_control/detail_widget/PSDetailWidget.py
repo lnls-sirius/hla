@@ -517,6 +517,7 @@ class PSDetailWidget(QWidget):
         queue_size_ca = self._prefixed_psname + ':PRUCtrlQueueSize-Mon'
         wfm_updateauto_ca = self._prefixed_psname + ':WfmUpdateAuto-Sts'
         wfm_updateauto_sel = self._prefixed_psname + ':WfmUpdateAuto-Sel'
+        syncpulse_cmd_ca = self._prefixed_psname + ':SyncPulse-Cmd'
 
         wfm_index_label = QLabel('Wfm Index', self)
         wfm_index_rb_label = PyDMLabel(self, wfm_index_ca)
@@ -531,6 +532,14 @@ class PSDetailWidget(QWidget):
         wfm_updateauto_sts_led = SiriusLedState(self, wfm_updateauto_ca)
         wfm_updateauto_btn = PyDMStateButton(self, wfm_updateauto_sel)
 
+        syncpulse_cmd_lb = QLabel('Sync Pulse Cmd', self)
+        syncpulse_cmd_btn = PyDMPushButton(
+            parent=self, icon=qta.icon('fa5s.step-forward'), pressValue=1,
+            init_channel=syncpulse_cmd_ca)
+        syncpulse_cmd_btn.setObjectName('syncpulse')
+        syncpulse_cmd_btn.setStyleSheet(
+            '#syncpulse{min-width:25px; max-width:32px; icon-size:20px;}')
+
         layout = QGridLayout()
         layout.addWidget(queue_size_label, 3, 0, Qt.AlignRight)
         layout.addWidget(queue_size_rb_label, 3, 1)
@@ -539,8 +548,10 @@ class PSDetailWidget(QWidget):
         layout.addWidget(wfm_count_label, 5, 0, Qt.AlignRight)
         layout.addWidget(wfm_count_rb_label, 5, 1)
         layout.addWidget(wfm_updateauto_label, 6, 0, Qt.AlignRight)
-        layout.addWidget(wfm_updateauto_btn, 6, 1)
+        layout.addWidget(wfm_updateauto_btn, 6, 1, Qt.AlignHCenter)
         layout.addWidget(wfm_updateauto_sts_led, 6, 2)
+        layout.addWidget(syncpulse_cmd_lb, 7, 0, Qt.AlignRight)
+        layout.addWidget(syncpulse_cmd_btn, 7, 1)
         layout.setColumnStretch(3, 1)
         return layout
 
