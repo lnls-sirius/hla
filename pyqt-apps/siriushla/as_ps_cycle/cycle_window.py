@@ -63,7 +63,7 @@ class CycleWindow(SiriusMainWindow):
         self.search_le = QLineEdit()
         self.search_le.setPlaceholderText('Filter...')
         self.search_le.editingFinished.connect(self._filter_psnames)
-        self.pwrsupplies_tree = PVNameTree(get_psnames(), ('sec', ),
+        self.pwrsupplies_tree = PVNameTree(get_psnames(), ('sec', 'mag_group'),
                                            tuple(), self)
         self.pwrsupplies_tree.setHeaderHidden(True)
         self.pwrsupplies_tree.setColumnCount(1)
@@ -374,7 +374,7 @@ class CycleWindow(SiriusMainWindow):
 
     def _check_ps_from_same_udc(self, item):
         psname = item.data(0, Qt.DisplayRole)
-        if len(psname) == 2 or PVName(psname).sec == 'LI':
+        if not _re.match('.*-.*:.*-.*', psname) or PVName(psname).sec == 'LI':
             pass
         else:
             psnames2check = get_psnames_from_same_udc(psname)

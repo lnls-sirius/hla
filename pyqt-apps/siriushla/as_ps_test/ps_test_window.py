@@ -55,7 +55,7 @@ class PSTestWindow(SiriusMainWindow):
         self.search_le.editingFinished.connect(self._filter_psnames)
 
         self.tree = PVNameTree(items=self._get_tree_names(),
-                               tree_levels=('sec', ), parent=self)
+                               tree_levels=('sec', 'mag_group'), parent=self)
         self.tree.setHeaderHidden(True)
         self.tree.setObjectName('tree')
         self.tree.setStyleSheet('#tree {max-width:15em; max-height:25em;}')
