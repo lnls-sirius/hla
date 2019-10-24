@@ -9,7 +9,7 @@ from qtpy.QtWidgets import QFrame, QGridLayout, QVBoxLayout, QHBoxLayout, \
     QLineEdit, QGroupBox, QPushButton, QListWidget, QLabel, QApplication, \
     QMessageBox, QSizePolicy
 
-from siriuspy.search import PSSearch, MASearch
+from siriuspy.search import PSSearch
 from siriuspy.namesys import SiriusPVName as PVName
 
 from siriushla.widgets import SiriusMainWindow, PVNameTree
@@ -49,10 +49,10 @@ class PSTestWindow(SiriusMainWindow):
             }""")
         self.setCentralWidget(self.central_widget)
 
-        # magnets selection
+        # power supplies selection
         self.search_le = QLineEdit()
         self.search_le.setPlaceholderText('Filter...')
-        self.search_le.editingFinished.connect(self._filter_manames)
+        self.search_le.editingFinished.connect(self._filter_psnames)
 
         self.tree = PVNameTree(items=self._get_tree_names(),
                                tree_levels=('sec', 'mag_group'), parent=self)
@@ -379,13 +379,13 @@ class PSTestWindow(SiriusMainWindow):
 
     def _get_tree_names(self):
         lipsnames = PSSearch.get_psnames({'sec': 'LI', 'dis': 'PS'})
-        manames = MASearch.get_manames({'sec': '(TB|BO)', 'dis': 'MA'})
-        # TODO: uncomment when using TS and SI
-        # manames = MASearch.get_manames({'sec': '(TB|BO|TS|SI)', 'dis': 'MA'})
-        manames.extend(lipsnames)
-        return manames
+        psnames = PSSearch.get_psnames({'sec': '(TB|BO|TS)', 'dis': 'PS'})
+        # TODO: uncomment when using SI
+        # psnames = PSSearch.get_psnames({'sec': '(TB|BO|TS|SI)', 'dis': 'PS'})
+        psnames.extend(lipsnames)
+        return psnames
 
-    def _filter_manames(self):
+    def _filter_psnames(self):
         text = self.search_le.text()
 
         try:
@@ -402,22 +402,20 @@ class PSTestWindow(SiriusMainWindow):
     def _get_selected_ps(self):
         devices = self.tree.checked_items()
         if not devices:
-            QMessageBox.critical(self, 'Message', 'No magnet selected!')
+            QMessageBox.critical(self, 'Message', 'No power supply selected!')
             return False
 
         self._create_testers(devices)
         return devices
 
-    def _get_related_dclinks(self, manames):
+    def _get_related_dclinks(self, psnames):
         alldclinks = set()
-        for name in manames:
+        for name in psnames:
             if 'LI' in name:
                 continue
-            psnames = MASearch.conv_maname_2_psnames(name)
-            for ps in psnames:
-                dclinks = PSSearch.conv_psname_2_dclink(ps)
-                if dclinks:
-                    alldclinks.update(dclinks)
+            dclinks = PSSearch.conv_psname_2_dclink(name)
+            if dclinks:
+                alldclinks.update(dclinks)
 
         alldclinks_list = list(alldclinks)
         self._create_testers(alldclinks_list)
@@ -454,10 +452,10 @@ class PSTestWindow(SiriusMainWindow):
 
     def _open_detail(self, index):
         app = QApplication.instance()
-        maname = index.data()
-        if 'LI' in maname or maname in ['TB', 'BO', 'TS', 'SI']:
+        psname = index.data()
+        if 'LI' in psname or psname in ['TB', 'BO', 'TS', 'SI']:
             return
-        app.open_window(PSDetailWindow, parent=self, **{'psname': maname})
+        app.open_window(PSDetailWindow, parent=self, **{'psname': psname})
 
 
 class CreateTesters(QThread):
@@ -506,12 +504,12 @@ class CreateTesters(QThread):
             if dev not in _testers.keys():
                 if PVName(dev).sec == 'LI':
                     t = TesterPSLinac(dev)
-                elif PVName(dev).dis == 'MA':
-                    t = TesterPS(dev)
                 elif PSSearch.conv_psname_2_psmodel(dev) == 'FBP_DCLink':
                     t = TesterDCLinkFBP(dev)
                 elif 'bo-dclink' in PSSearch.conv_psname_2_pstype(dev):
                     t = TesterDCLink(dev)
+                elif PVName(dev).dis == 'PS':
+                    t = TesterPS(dev)
                 _testers[dev] = t
                 self.currentItem.emit(dev)
                 self.itemDone.emit()

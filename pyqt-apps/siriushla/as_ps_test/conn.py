@@ -192,7 +192,8 @@ class TesterPS(_Tester):
                                   connection_timeout=TIMEOUT_CONN)
             self._pvs[ppty].get()
 
-        splims = MASearch.conv_maname_2_splims(device)
+        maname = MASearch.conv_psname_2_psmaname(device)
+        splims = MASearch.conv_maname_2_splims(maname)
         self.test_current = splims['TSTV']
         self.test_tol = splims['TSTR']
 
