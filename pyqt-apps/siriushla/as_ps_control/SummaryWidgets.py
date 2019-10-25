@@ -92,7 +92,7 @@ def get_prop2width(psname):
         dic.update({
             'strength_sp': '6',
             'strength_rb': '6',
-            'strength_mon': '6'
+            'strength_mon': '8'
         })
     if HasTrim.match(psname):
         dic.update({'trim': '2'})
