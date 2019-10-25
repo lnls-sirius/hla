@@ -80,10 +80,12 @@ class _Tester:
     def check_pwrstate(self, state='on'):
         """Check PwrState."""
         if state == 'on':
-            state = _PSC.PwrStateSts.On
+            ok = self._pvs['PwrState-Sts'].value == _PSC.PwrStateSts.On
+            ok &= self._pvs['OpMode-Sts'].value == _PSC.States.SlowRef
         else:
-            state = _PSC.PwrStateSts.Off
-        return (self._pvs['PwrState-Sts'].value == state)
+            ok = self._pvs['PwrState-Sts'].value == _PSC.PwrStateSts.Off
+            ok &= self._pvs['OpMode-Sts'].value == _PSC.States.Off
+        return ok
 
 
 class TesterDCLinkFBP(_Tester):
