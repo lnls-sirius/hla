@@ -6,7 +6,7 @@ from datetime import datetime as _datetime
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
     QGridLayout, QVBoxLayout, QHBoxLayout, QFormLayout, QTabWidget, \
-    QSizePolicy as QSzPlcy
+    QSizePolicy as QSzPlcy, QCheckBox
 from qtpy.QtGui import QColor
 import qtawesome as qta
 
@@ -222,12 +222,14 @@ class PSDetailWidget(QWidget):
 
         self.tstamp_update_label = QLabel('IOC Update')
         self.tstamp_update_label.setObjectName("tstamp_label")
-        self.tstamp_update_label.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        self.tstamp_update_label.setSizePolicy(
+            QSzPlcy.Minimum, QSzPlcy.Maximum)
 
         self.tstamp_update = QLabel('', self)
         self.tstamp_update_ch = SiriusConnectionSignal(
             self._prefixed_psname + ":TimestampUpdate-Mon")
-        self.tstamp_update_ch.new_value_signal[float].connect(self._tstamp_update_met)
+        self.tstamp_update_ch.new_value_signal[float].connect(
+            self._tstamp_update_met)
         self.tstamp_update.setObjectName("tstamp_update_label")
         self.tstamp_update.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
 
@@ -556,52 +558,101 @@ class PSDetailWidget(QWidget):
         return layout
 
     def _wfmLayout(self):
+        # Channels
         wfm_data_sp_ch = self._prefixed_psname + ":Wfm-SP"
         wfm_data_rb_ch = self._prefixed_psname + ":Wfm-RB"
         wfm_data_rm_ch = self._prefixed_psname + ":WfmRef-Mon"
         wfm_data_mo_ch = self._prefixed_psname + ":Wfm-Mon"
 
-        # Plot
-        self.wfm = PyDMWaveformPlot()
-        self.wfm.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
-        self.wfm.autoRangeX = True
-        self.wfm.autoRangeY = True
-        self.wfm.setBackgroundColor(QColor(255, 255, 255))
-        self.wfm.setShowLegend(True)
-        self.wfm.addChannel(y_channel=wfm_data_sp_ch, name='Wfm-SP',
-                            color='red', lineWidth=2)
-        self.wfm.addChannel(y_channel=wfm_data_rb_ch, name='Wfm-RB',
-                            color='blue', lineWidth=2)
-        self.wfm.addChannel(y_channel=wfm_data_rm_ch, name='Ref-Mon',
-                            color='green', lineWidth=2)
-        self.wfm.addChannel(y_channel=wfm_data_mo_ch, name='Mon',
-                            color='black', lineWidth=2)
-
-        # NrPoints
+        # Constants
+        self._wfm_data_rm = _np.array([])
+        self._wfm_data_mo = _np.array([])
         self._wfm_nrpts_sp = 0
         self._wfm_nrpts_rb = 0
         self._wfm_nrpts_rm = 0
         self._wfm_nrpts_mo = 0
-        self.wfm_nrpts = QLabel('', self)
+
+        # NrPoints
+        self.wfm_nrpts = QLabel('Nrpts (SP|RB|Ref-Mon|Mon):', self)
         self.wfm_nrpts.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
         self.wfm_nrpts_ch_rb = SiriusConnectionSignal(wfm_data_rb_ch)
         self.wfm_nrpts_ch_rb.new_value_signal[_np.ndarray].connect(
-            self._wfm_nrpts_update_rb)
+            self._wfm_update_rb)
         self.wfm_nrpts_ch_sp = SiriusConnectionSignal(wfm_data_sp_ch)
         self.wfm_nrpts_ch_sp.new_value_signal[_np.ndarray].connect(
-            self._wfm_nrpts_update_sp)
+            self._wfm_update_sp)
         self.wfm_nrpts_ch_rm = SiriusConnectionSignal(wfm_data_rm_ch)
         self.wfm_nrpts_ch_rm.new_value_signal[_np.ndarray].connect(
-            self._wfm_nrpts_update_rm)
+            self._wfm_update_rm)
         self.wfm_nrpts_ch_mo = SiriusConnectionSignal(wfm_data_mo_ch)
         self.wfm_nrpts_ch_mo.new_value_signal[_np.ndarray].connect(
-            self._wfm_nrpts_update_mo)
+            self._wfm_update_mo)
+
+        # Plot
+        self.wfm = PyDMWaveformPlot()
+        self.wfm.setObjectName('graph')
+        self.wfm.setStyleSheet('#graph{max-height:15em; max-width:16.5em;}')
+        self.wfm.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        self.wfm.autoRangeX = True
+        self.wfm.autoRangeY = True
+        self.wfm.setBackgroundColor(QColor(255, 255, 255))
+        # self.wfm.setShowLegend(True)
+        self.wfm.addChannel(y_channel=wfm_data_sp_ch, name='Wfm-SP',
+                            color='red', lineWidth=2)
+        self.wfm.addChannel(y_channel=wfm_data_rb_ch, name='Wfm-RB',
+                            color='blue', lineWidth=2)
+        self.wfm.addChannel(y_channel=wfm_data_rm_ch, name='WfmRef-Mon',
+                            color='green', lineWidth=2)
+        self.wfm.addChannel(y_channel=wfm_data_mo_ch, name='Wfm-Mon',
+                            color='black', lineWidth=2)
+        self.wfm.addChannel(y_channel='FAKE:DiffMon2Ref', name='Mon - Ref',
+                            color='magenta', lineWidth=2)
+        self._wfm_curves = {'Wfm-SP': self.wfm.curveAtIndex(0),
+                            'Wfm-RB': self.wfm.curveAtIndex(1),
+                            'WfmRef-Mon': self.wfm.curveAtIndex(2),
+                            'Wfm-Mon': self.wfm.curveAtIndex(3),
+                            'Mon - Ref': self.wfm.curveAtIndex(4)}
+
+        # Show
+        self.show_wfm_sp = QCheckBox('SP')
+        self.show_wfm_sp.setChecked(True)
+        self.show_wfm_sp.setStyleSheet('color: red;')
+        self.show_wfm_sp.stateChanged.connect(
+            self._wfm_curves['Wfm-SP'].setVisible)
+        self.show_wfm_rb = QCheckBox('RB')
+        self.show_wfm_rb.setChecked(True)
+        self.show_wfm_rb.setStyleSheet('color: blue;')
+        self.show_wfm_rb.stateChanged.connect(
+            self._wfm_curves['Wfm-RB'].setVisible)
+        self.show_wfm_rm = QCheckBox('Ref-Mon')
+        self.show_wfm_rm.setChecked(True)
+        self.show_wfm_rm.setStyleSheet('color: green;')
+        self.show_wfm_rm.stateChanged.connect(
+            self._wfm_curves['WfmRef-Mon'].setVisible)
+        self.show_wfm_mo = QCheckBox('Mon')
+        self.show_wfm_mo.setChecked(True)
+        self.show_wfm_mo.setStyleSheet('color: black;')
+        self.show_wfm_mo.stateChanged.connect(
+            self._wfm_curves['Wfm-Mon'].setVisible)
+        self.show_wfm_diff = QCheckBox('Mon - Ref')
+        self.show_wfm_diff.setChecked(True)
+        self.show_wfm_diff.setStyleSheet('color: magenta;')
+        self.show_wfm_diff.stateChanged.connect(
+            self._wfm_curves['Mon - Ref'].setVisible)
+        hbox_show = QHBoxLayout()
+        hbox_show.setSpacing(9)
+        hbox_show.addWidget(self.show_wfm_sp)
+        hbox_show.addWidget(self.show_wfm_rb)
+        hbox_show.addWidget(self.show_wfm_rm)
+        hbox_show.addWidget(self.show_wfm_mo)
+        hbox_show.addWidget(self.show_wfm_diff)
 
         # Add widgets
         layout = QVBoxLayout()
         layout.setAlignment(Qt.AlignTop)
         layout.addWidget(self.wfm)
         layout.addWidget(self.wfm_nrpts)
+        layout.addLayout(hbox_show)
         return layout
 
     def _set_wfm_nrpts_label(self):
@@ -612,21 +663,33 @@ class PSDetailWidget(QWidget):
                 self._wfm_nrpts_rm,
                 self._wfm_nrpts_mo))
 
-    def _wfm_nrpts_update_rb(self, value):
+    def _update_wfm_diff(self):
+        if self._wfm_nrpts_rm != self._wfm_nrpts_mo:
+            self._wfm_curves['Mon - Ref'].receiveYWaveform(_np.array([]))
+        else:
+            self._wfm_curves['Mon - Ref'].receiveYWaveform(
+                self._wfm_data_rm - self._wfm_data_mo)
+        self._wfm_curves['Mon - Ref'].redrawCurve()
+
+    def _wfm_update_rb(self, value):
         self._wfm_nrpts_rb = len(value)
         self._set_wfm_nrpts_label()
 
-    def _wfm_nrpts_update_sp(self, value):
+    def _wfm_update_sp(self, value):
         self._wfm_nrpts_sp = len(value)
         self._set_wfm_nrpts_label()
 
-    def _wfm_nrpts_update_rm(self, value):
+    def _wfm_update_rm(self, value):
+        self._wfm_data_rm = value
         self._wfm_nrpts_rm = len(value)
         self._set_wfm_nrpts_label()
+        self._update_wfm_diff()
 
-    def _wfm_nrpts_update_mo(self, value):
+    def _wfm_update_mo(self, value):
+        self._wfm_data_mo = value
         self._wfm_nrpts_mo = len(value)
         self._set_wfm_nrpts_label()
+        self._update_wfm_diff()
 
     def _getElementType(self):
         dipole = re.compile("(SI|BO|LI|TS|TB)-(Fam|\w{2,4}):MA-B")
