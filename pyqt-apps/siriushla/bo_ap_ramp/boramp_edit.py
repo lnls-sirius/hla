@@ -361,7 +361,10 @@ class DipoleRamp(QWidget):
             self.table.setItem(row, 2, e_item)
             self.table.setItem(row, 3, np_item)
 
-        self.table.setItemDelegate(_SpinBoxDelegate())
+        self.table.setItemDelegateForColumn(
+            1, _SpinBoxDelegate(parent=self.table, mini=0, maxi=500, prec=3))
+        self.table.setItemDelegateForColumn(
+            2, _SpinBoxDelegate(parent=self.table, mini=0, maxi=3.5, prec=4))
         self.table.cellChanged.connect(self._handleCellChanged)
 
     @Slot(int, int)
@@ -950,7 +953,8 @@ class MultipolesRamp(QWidget):
             self.table.setItem(row, 2, e_item)
             self.table.setItem(row, 3, np_item)
 
-        self.table.setItemDelegate(_SpinBoxDelegate())
+        self.table.setItemDelegateForColumn(
+            1, _SpinBoxDelegate(parent=self.table, mini=0, maxi=500, prec=3))
         self.table.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.table.setVerticalScrollMode(QAbstractItemView.ScrollPerItem)
         self.table.cellChanged.connect(self._handleCellChanged)
@@ -1521,9 +1525,17 @@ class RFRamp(QWidget):
             self.table.setItem(row, 2, Vgap_item)
             self.table.setItem(row, 3, Ph_item)
             self.table.setItem(row, 4, e_item)
-            self.table.setItem(row, 5, phsinc_item)
+            # self.table.setItem(row, 5, phsinc_item)
 
-        self.table.setItemDelegate(_SpinBoxDelegate())
+        self.table.setItemDelegateForColumn(
+            1, _SpinBoxDelegate(parent=self.table,
+                                mini=0, maxi=500, prec=3))
+        self.table.setItemDelegateForColumn(
+            2, _SpinBoxDelegate(parent=self.table,
+                                mini=0, maxi=1200, prec=2))
+        self.table.setItemDelegateForColumn(
+            3, _SpinBoxDelegate(parent=self.table,
+                                mini=-180, maxi=180, prec=2))
         self.table.cellChanged.connect(self._handleCellChanged)
 
     @Slot(int, int)
