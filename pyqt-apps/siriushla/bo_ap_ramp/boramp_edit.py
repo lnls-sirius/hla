@@ -1063,7 +1063,12 @@ class MultipolesRamp(QWidget):
         if self.ramp_config is None:
             return
 
-        row, nconfig_name, _, _ = self._get_data_in_pos(pos)
+        data = self._get_data_in_pos(pos)
+        if not data:
+            return
+        row, col, nconfig_name, _, _ = data
+        if col != 0:
+            return
 
         menu = QMenu()
         edit_act = menu.addAction('Edit')
@@ -1089,7 +1094,13 @@ class MultipolesRamp(QWidget):
                     'Wait a moment and try again.', QMessageBox.Ok)
                 return
 
-        _, nconfig_name, _, energy = self._get_data_in_pos(pos)
+        data = self._get_data_in_pos(pos)
+        if not data:
+            return
+        _, col, nconfig_name, _, energy = data
+        if col != 0:
+            return
+
         if nconfig_name in self.bonorm_edit_dict.keys():
             # verify if there is a bonorm_edit window that was not closed,
             # only minimized or without focus
@@ -1120,12 +1131,13 @@ class MultipolesRamp(QWidget):
         if not item:
             return
         row = item.row()
+        col = item.column()
         nconfig_name = self.table_map['rows'][row]
         if nconfig_name in ['Injection', 'Ejection']:
             return
         time = float(self.table.item(row, 1).data(Qt.DisplayRole))
         energy = float(self.table.item(row, 2).data(Qt.DisplayRole))
-        return row, nconfig_name, time, energy
+        return row, col, nconfig_name, time, energy
 
     def _verifyWarnings(self):
         manames_exclimits = self.ramp_config.ps_waveform_manames_exclimits
