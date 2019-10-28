@@ -453,8 +453,13 @@ class PSTestWindow(SiriusMainWindow):
     def _open_detail(self, index):
         app = QApplication.instance()
         psname = index.data()
-        if 'LI' in psname or psname in ['TB', 'BO', 'TS', 'SI']:
+        if PVName(psname).sec == 'LI':
             return
+        elif not _re.match('.*-.*:.*-.*', psname):
+            if index.model().rowCount(index) == 1:
+                psname = index.child(0, 0).data()
+            else:
+                return
         app.open_window(PSDetailWindow, parent=self, **{'psname': psname})
 
 
