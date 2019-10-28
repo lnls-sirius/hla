@@ -155,8 +155,9 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
                                  'le': self._le,
                                  'in': self._in}
 
-        self._address2conn = dict()
+        self._address2values = dict()
         self._address2channel = dict()
+        self._address2conn = dict()
         self._address2status = dict()
         self.set_channels2values(_dcopy(channels2values))
 
@@ -169,7 +170,7 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         return _dcopy(self._address2status)
 
     def set_channels2values(self, new_channels2values):
-        self._address2values = new_channels2values
+        self._address2values = _dcopy(new_channels2values)
 
         if not new_channels2values:
             self.setEnabled(False)
@@ -223,8 +224,10 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
                 fun = self._operations_dict[desired['comp']]
             else:
                 fun = self._operations_dict['eq']
-            if 'tol' in desired.keys():
-                kws['tol'] = desired['tol']
+            if 'abs_tol' in desired.keys():
+                kws['abs_tol'] = desired['abs_tol']
+            if 'rel_tol' in desired.keys():
+                kws['rel_tol'] = desired['rel_tol']
             desired_value = desired['value']
         else:
             fun = self._operations_dict['eq']
