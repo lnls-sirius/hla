@@ -975,14 +975,22 @@ class MultipolesRamp(QWidget):
             self.table_map['rows'][row] = self.table.item(row, 0).text()
 
     def _handleCellChanged(self, row, column):
-        nconfig_name = self.table.item(row, 0).data(Qt.DisplayRole)
+        index = row
+        inj_idx = [i for i in self.table_map['rows'].keys()
+                   if self.table_map['rows'][i] == 'Injection']
+        if row > inj_idx[0]:
+            index -= 1
+        eje_idx = [i for i in self.table_map['rows'].keys()
+                   if self.table_map['rows'][i] == 'Ejection']
+        if row > eje_idx[0]:
+            index -= 1
+
         try:
-            old_value = [t for t, n in self.normalized_configs
-                         if n == nconfig_name]
+            old_value = self.normalized_configs[index][0]
             new_value = float(self.table.item(row, column).data(
                 Qt.DisplayRole))
             self.ramp_config.ps_normalized_configs_change_time(
-                nconfig_name, new_value)
+                index, new_value)
         except exceptions.RampError as e:
             QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
         else:
@@ -994,7 +1002,7 @@ class MultipolesRamp(QWidget):
             if _flag_stack_next_command:
                 _flag_stacking = True
                 command = _UndoRedoTableCell(
-                    self.table, row, column, old_value[0], new_value,
+                    self.table, row, column, old_value, new_value,
                     'set multipole table item at row {0}, column {1}'.format(
                         row, column))
                 self._undo_stack.push(command)
@@ -1003,6 +1011,7 @@ class MultipolesRamp(QWidget):
         finally:
             self.updateTable()
 
+            nconfig_name = self.table.item(row, 0).data(Qt.DisplayRole)
             if nconfig_name in self.bonorm_edit_dict.keys():
                 energy = float(self.table.item(row, 2).data(Qt.DisplayRole))
                 w = self.bonorm_edit_dict[nconfig_name]
