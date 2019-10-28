@@ -1503,11 +1503,11 @@ class RFRamp(QWidget):
             Ph_item = QTableWidgetItem('0')
             Vgap_item = QTableWidgetItem('0')
             e_item = QTableWidgetItem('0')
-            phsinc_item = QTableWidgetItem('0')
+            # phsinc_item = QTableWidgetItem('0')
 
             label_item.setFlags(Qt.ItemIsEnabled)
             e_item.setFlags(Qt.ItemIsEnabled)
-            phsinc_item.setFlags(Qt.ItemIsEnabled)
+            # phsinc_item.setFlags(Qt.ItemIsEnabled)
             if vlabel == 'Start':
                 t_item.setFlags(Qt.ItemIsEnabled)
                 Ph_item.setBackground(QBrush(QColor("white")))
@@ -1518,6 +1518,7 @@ class RFRamp(QWidget):
                 Vgap_item.setBackground(QBrush(QColor("white")))
             else:
                 t_item.setBackground(QBrush(QColor("white")))
+                Ph_item.setFlags(Qt.ItemIsEnabled)
                 Vgap_item.setFlags(Qt.ItemIsEnabled)
 
             self.table.setItem(row, 0, label_item)
