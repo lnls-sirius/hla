@@ -3,6 +3,7 @@ import logging as _log
 import numpy as _np
 from qtpy.QtGui import QColor
 from qtpy.QtCore import Property, Slot, Signal
+from qtpy.QtWidgets import QMessageBox
 from pydm.widgets.base import PyDMWidget
 from pydm.widgets.channel import PyDMChannel
 from .QLed import QLed
@@ -155,21 +156,26 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
                                  'le': self._le,
                                  'in': self._in}
 
-        self._address2conn = dict()
+        self._address2values = dict()
         self._address2channel = dict()
+        self._address2conn = dict()
         self._address2status = dict()
+        self._address2currvals = dict()
         self.set_channels2values(_dcopy(channels2values))
 
     @property
     def channels2values(self):
+        """Return channels2values dict."""
         return _dcopy(self._address2values)
 
     @property
     def channels2status(self):
+        """Return channels2status dict."""
         return _dcopy(self._address2status)
 
     def set_channels2values(self, new_channels2values):
-        self._address2values = new_channels2values
+        """Set channels2values."""
+        self._address2values = _dcopy(new_channels2values)
 
         if not new_channels2values:
             self.setEnabled(False)
@@ -188,12 +194,14 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
             self._address2channel.pop(address)
             self._address2status.pop(address)
             self._address2conn.pop(address)
+            self._address2currvals.pop(address)
 
         # Add new channels
         for address, value in new_channels2values.items():
             if address not in self._address2channel.keys():
                 self._address2conn[address] = False
                 self._address2status[address] = 'UNDEF'
+                self._address2currvals[address] = 'UNDEF'
                 channel = PyDMChannel(
                     address=address,
                     connection_slot=self.connection_changed,
@@ -208,7 +216,7 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
 
     def value_changed(self, new_val):
         """Receive new value and set led color accordingly."""
-        if not self.sender():   # do nothing when sender None
+        if not self.sender():   # do nothing when sender is None
             return
         address = self.sender().address
         desired = self._address2values[address]
@@ -223,8 +231,10 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
                 fun = self._operations_dict[desired['comp']]
             else:
                 fun = self._operations_dict['eq']
-            if 'tol' in desired.keys():
-                kws['tol'] = desired['tol']
+            if 'abs_tol' in desired.keys():
+                kws['abs_tol'] = desired['abs_tol']
+            if 'rel_tol' in desired.keys():
+                kws['rel_tol'] = desired['rel_tol']
             desired_value = desired['value']
         else:
             fun = self._operations_dict['eq']
@@ -239,6 +249,7 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
             is_desired = True
         else:
             is_desired = fun(new_val, desired_value, **kws)
+        self._address2currvals[address] = new_val
         self._address2status[address] = is_desired
         if not is_desired:
             self.warning.emit([address, new_val])
@@ -258,7 +269,7 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
     @Slot(bool)
     def connection_changed(self, conn):
         """Reimplement connection_changed to handle all channels."""
-        if not self.sender():   # do nothing when sender None
+        if not self.sender():   # do nothing when sender is None
             return
         address = self.sender().address
         self._address2conn[address] = conn
@@ -356,6 +367,25 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
             return False
         return val1 in val2
 
+    def mouseDoubleClickEvent(self, ev):
+        text = ''
+        for k, v in self._address2status.items():
+            if not v:
+                text += k+'\n'
+        if text:
+            msg = QMessageBox()
+            msg.setWindowTitle('Channels Status')
+            msg.setText('There are PVs with values different from '
+                        'the desired values!')
+            msg.setDetailedText(text)
+            msg.setIcon(QMessageBox.Information)
+            for bt in msg.buttons():
+                if msg.buttonRole(bt) == QMessageBox.ActionRole:
+                    bt.click()
+                    break
+            msg.exec_()
+        super().mouseDoubleClickEvent(ev)
+
 
 class PyDMLedMultiConnection(QLed, PyDMWidget):
     """
@@ -426,7 +456,7 @@ class PyDMLedMultiConnection(QLed, PyDMWidget):
     @Slot(bool)
     def connection_changed(self, conn):
         """Reimplement connection_changed to handle all channels."""
-        if not self.sender():   # do nothing when sender None
+        if not self.sender():   # do nothing when sender is None
             return
         address = self.sender().address
         if not conn:

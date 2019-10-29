@@ -361,7 +361,10 @@ class DipoleRamp(QWidget):
             self.table.setItem(row, 2, e_item)
             self.table.setItem(row, 3, np_item)
 
-        self.table.setItemDelegate(_SpinBoxDelegate())
+        self.table.setItemDelegateForColumn(
+            1, _SpinBoxDelegate(parent=self.table, mini=0, maxi=500, prec=3))
+        self.table.setItemDelegateForColumn(
+            2, _SpinBoxDelegate(parent=self.table, mini=0, maxi=3.5, prec=4))
         self.table.cellChanged.connect(self._handleCellChanged)
 
     @Slot(int, int)
@@ -950,7 +953,8 @@ class MultipolesRamp(QWidget):
             self.table.setItem(row, 2, e_item)
             self.table.setItem(row, 3, np_item)
 
-        self.table.setItemDelegate(_SpinBoxDelegate())
+        self.table.setItemDelegateForColumn(
+            1, _SpinBoxDelegate(parent=self.table, mini=0, maxi=500, prec=3))
         self.table.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.table.setVerticalScrollMode(QAbstractItemView.ScrollPerItem)
         self.table.cellChanged.connect(self._handleCellChanged)
@@ -971,14 +975,22 @@ class MultipolesRamp(QWidget):
             self.table_map['rows'][row] = self.table.item(row, 0).text()
 
     def _handleCellChanged(self, row, column):
-        nconfig_name = self.table.item(row, 0).data(Qt.DisplayRole)
+        index = row
+        inj_idx = [i for i in self.table_map['rows'].keys()
+                   if self.table_map['rows'][i] == 'Injection']
+        if row > inj_idx[0]:
+            index -= 1
+        eje_idx = [i for i in self.table_map['rows'].keys()
+                   if self.table_map['rows'][i] == 'Ejection']
+        if row > eje_idx[0]:
+            index -= 1
+
         try:
-            old_value = [t for t, n in self.normalized_configs
-                         if n == nconfig_name]
+            old_value = self.normalized_configs[index][0]
             new_value = float(self.table.item(row, column).data(
                 Qt.DisplayRole))
             self.ramp_config.ps_normalized_configs_change_time(
-                nconfig_name, new_value)
+                index, new_value)
         except exceptions.RampError as e:
             QMessageBox.critical(self, 'Error', str(e), QMessageBox.Ok)
         else:
@@ -990,7 +1002,7 @@ class MultipolesRamp(QWidget):
             if _flag_stack_next_command:
                 _flag_stacking = True
                 command = _UndoRedoTableCell(
-                    self.table, row, column, old_value[0], new_value,
+                    self.table, row, column, old_value, new_value,
                     'set multipole table item at row {0}, column {1}'.format(
                         row, column))
                 self._undo_stack.push(command)
@@ -999,6 +1011,7 @@ class MultipolesRamp(QWidget):
         finally:
             self.updateTable()
 
+            nconfig_name = self.table.item(row, 0).data(Qt.DisplayRole)
             if nconfig_name in self.bonorm_edit_dict.keys():
                 energy = float(self.table.item(row, 2).data(Qt.DisplayRole))
                 w = self.bonorm_edit_dict[nconfig_name]
@@ -1063,7 +1076,12 @@ class MultipolesRamp(QWidget):
         if self.ramp_config is None:
             return
 
-        row, nconfig_name, _, _ = self._get_data_in_pos(pos)
+        data = self._get_data_in_pos(pos)
+        if not data:
+            return
+        row, col, nconfig_name, _, _ = data
+        if col != 0:
+            return
 
         menu = QMenu()
         edit_act = menu.addAction('Edit')
@@ -1089,7 +1107,13 @@ class MultipolesRamp(QWidget):
                     'Wait a moment and try again.', QMessageBox.Ok)
                 return
 
-        _, nconfig_name, _, energy = self._get_data_in_pos(pos)
+        data = self._get_data_in_pos(pos)
+        if not data:
+            return
+        _, col, nconfig_name, _, energy = data
+        if col != 0:
+            return
+
         if nconfig_name in self.bonorm_edit_dict.keys():
             # verify if there is a bonorm_edit window that was not closed,
             # only minimized or without focus
@@ -1120,12 +1144,13 @@ class MultipolesRamp(QWidget):
         if not item:
             return
         row = item.row()
+        col = item.column()
         nconfig_name = self.table_map['rows'][row]
         if nconfig_name in ['Injection', 'Ejection']:
             return
         time = float(self.table.item(row, 1).data(Qt.DisplayRole))
         energy = float(self.table.item(row, 2).data(Qt.DisplayRole))
-        return row, nconfig_name, time, energy
+        return row, col, nconfig_name, time, energy
 
     def _verifyWarnings(self):
         manames_exclimits = self.ramp_config.ps_waveform_manames_exclimits
@@ -1487,11 +1512,11 @@ class RFRamp(QWidget):
             Ph_item = QTableWidgetItem('0')
             Vgap_item = QTableWidgetItem('0')
             e_item = QTableWidgetItem('0')
-            phsinc_item = QTableWidgetItem('0')
+            # phsinc_item = QTableWidgetItem('0')
 
             label_item.setFlags(Qt.ItemIsEnabled)
             e_item.setFlags(Qt.ItemIsEnabled)
-            phsinc_item.setFlags(Qt.ItemIsEnabled)
+            # phsinc_item.setFlags(Qt.ItemIsEnabled)
             if vlabel == 'Start':
                 t_item.setFlags(Qt.ItemIsEnabled)
                 Ph_item.setBackground(QBrush(QColor("white")))
@@ -1502,6 +1527,7 @@ class RFRamp(QWidget):
                 Vgap_item.setBackground(QBrush(QColor("white")))
             else:
                 t_item.setBackground(QBrush(QColor("white")))
+                Ph_item.setFlags(Qt.ItemIsEnabled)
                 Vgap_item.setFlags(Qt.ItemIsEnabled)
 
             self.table.setItem(row, 0, label_item)
@@ -1509,9 +1535,17 @@ class RFRamp(QWidget):
             self.table.setItem(row, 2, Vgap_item)
             self.table.setItem(row, 3, Ph_item)
             self.table.setItem(row, 4, e_item)
-            self.table.setItem(row, 5, phsinc_item)
+            # self.table.setItem(row, 5, phsinc_item)
 
-        self.table.setItemDelegate(_SpinBoxDelegate())
+        self.table.setItemDelegateForColumn(
+            1, _SpinBoxDelegate(parent=self.table,
+                                mini=0, maxi=500, prec=3))
+        self.table.setItemDelegateForColumn(
+            2, _SpinBoxDelegate(parent=self.table,
+                                mini=0, maxi=1200, prec=2))
+        self.table.setItemDelegateForColumn(
+            3, _SpinBoxDelegate(parent=self.table,
+                                mini=-180, maxi=180, prec=2))
         self.table.cellChanged.connect(self._handleCellChanged)
 
     @Slot(int, int)

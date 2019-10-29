@@ -10,13 +10,12 @@ from qtpy.QtCore import Qt, Slot, Signal, QThread
 import qtawesome as qta
 
 from siriuspy.ramp import ramp
-from siriuspy.ramp.conn import ConnMagnets as _ConnMagnets, ConnRF as _ConnRF,\
-                               ConnTiming as _ConnTiming
+from siriuspy.ramp.conn import ConnMA as _ConnMA, ConnRF as _ConnRF,\
+                               ConnTI as _ConnTI
 from siriuspy.csdevice.pwrsupply import Const as _PSc
 from siriuspy.csdevice.timesys import Const as _TIc
 
-from siriushla.widgets import PyDMLedMultiChannel, PyDMLedMultiConnection, \
-                              SiriusDialog
+from siriushla.widgets import PyDMLedMultiChannel, PyDMLedMultiConnection
 
 EVT_LIST = ['Linac', 'InjBO', 'InjSI', 'Study',
             'DigLI', 'DigTB', 'DigBO', 'DigTS', 'DigSI']
@@ -53,36 +52,46 @@ class StatusAndCommands(QGroupBox):
                 max-width:10em;}""")
 
     def _setupStatusLayout(self):
-        self.led_conn = PyDMLedMultiConnection(self)
-        self.led_intlk = PyDMLedMultiChannel(self)
-        self.led_setup = PyDMLedMultiChannel(self)
-        self.led_apply = PyDMLedMultiChannel(self)
-        self.pb_opendetails = QPushButton(qta.icon('fa5s.list-ul'), '', self)
-        self.pb_opendetails.clicked.connect(self._open_status_details)
-        self.pb_opendetails.setStyleSheet(
-            'icon-size: 16px 16px; max-height:1.29em; max-width:2em;')
+        self.led_ma_conn = PyDMLedMultiConnection(self)
+        self.led_ma_intlk = PyDMLedMultiChannel(self)
+        self.led_ma_setup = PyDMLedMultiChannel(self)
+        self.led_ma_apply = PyDMLedMultiChannel(self)
+        self.led_rf_conn = PyDMLedMultiConnection(self)
+        self.led_rf_intlk = PyDMLedMultiChannel(self)
+        self.led_rf_setup = PyDMLedMultiChannel(self)
+        self.led_rf_apply = PyDMLedMultiChannel(self)
+        self.led_ti_conn = PyDMLedMultiConnection(self)
+        self.led_ti_intlk = PyDMLedMultiChannel(self)
+        self.led_ti_setup = PyDMLedMultiChannel(self)
+        self.led_ti_apply = PyDMLedMultiChannel(self)
 
         lay = QGridLayout()
-        lay.setVerticalSpacing(10)
-        lay.addWidget(QLabel('<h4>Status</h4>', self), 0, 0)
-        lay.addWidget(self.pb_opendetails, 0, 1, alignment=Qt.AlignRight)
-        lay.addWidget(QLabel('Connection', self), 1, 0)
-        lay.addWidget(self.led_conn, 1, 1)
-        lay.addWidget(QLabel('Interlock', self), 2, 0)
-        lay.addWidget(self.led_intlk, 2, 1)
-        lay.addWidget(QLabel('Basic Setup', self), 3, 0)
-        lay.addWidget(self.led_setup, 3, 1)
-        lay.addWidget(QLabel('Config Applied?', self), 4, 0)
-        lay.addWidget(self.led_apply, 4, 1)
+        lay.addWidget(QLabel('<h4>Status</h4>'), 1, 0)
+        lay.addWidget(QLabel('<h4>MA</h4>'), 1, 1)
+        lay.addWidget(QLabel('<h4>RF</h4>'), 1, 2)
+        lay.addWidget(QLabel('<h4>TI</h4>'), 1, 3)
+        lay.addWidget(QLabel('Connection', self), 2, 0)
+        lay.addWidget(self.led_ma_conn, 2, 1)
+        lay.addWidget(self.led_rf_conn, 2, 2)
+        lay.addWidget(self.led_ti_conn, 2, 3)
+        lay.addWidget(QLabel('Interlocks', self), 3, 0)
+        lay.addWidget(self.led_ma_intlk, 3, 1)
+        lay.addWidget(self.led_rf_intlk, 3, 2)
+        lay.addWidget(self.led_ti_intlk, 3, 3)
+        lay.addWidget(QLabel('Basic Setup', self), 4, 0)
+        lay.addWidget(self.led_ma_setup, 4, 1)
+        lay.addWidget(self.led_rf_setup, 4, 2)
+        lay.addWidget(self.led_ti_setup, 4, 3)
+        lay.addWidget(QLabel('Config Applied', self), 5, 0)
+        lay.addWidget(self.led_ma_apply, 5, 1)
+        lay.addWidget(self.led_rf_apply, 5, 2)
+        lay.addWidget(self.led_ti_apply, 5, 3)
         return lay
 
     def _setupCommandsLayout(self):
         self.bt_prepare_ma = QPushButton('Prepare magnets', self)
         self.bt_prepare_ma.clicked.connect(self._prepare_ma)
         self.bt_prepare_ma.setStyleSheet('min-height:1.5em;')
-        self.bt_prepare_rf = QPushButton('Prepare RF', self)
-        self.bt_prepare_rf.clicked.connect(self._prepare_rf)
-        self.bt_prepare_rf.setStyleSheet('min-height:1.5em;')
         self.bt_prepare_ti = QPushButton('Prepare timing', self)
         self.bt_prepare_ti.clicked.connect(self._prepare_ti)
         self.bt_prepare_ti.setStyleSheet('min-height:1.5em;')
@@ -100,7 +109,6 @@ class StatusAndCommands(QGroupBox):
         lay.setSpacing(10)
         lay.addStretch()
         lay.addWidget(self.bt_prepare_ma)
-        lay.addWidget(self.bt_prepare_rf)
         lay.addWidget(self.bt_prepare_ti)
         lay.addStretch()
         lay.addWidget(self.bt_apply_all)
@@ -130,26 +138,32 @@ class StatusAndCommands(QGroupBox):
 
     def _create_connectors(self):
         # Create connectors
-        self._conn_ma = _ConnMagnets(prefix=self.prefix)
-        self._conn_ti = _ConnTiming(prefix=self.prefix)
+        self._conn_ma = _ConnMA(prefix=self.prefix)
+        self._conn_ti = _ConnTI(prefix=self.prefix)
         self._conn_rf = _ConnRF(prefix=self.prefix)
 
         # Build leds channels
         pfx = self.prefix
-        c2v_conn = list()
-        c2v_intlk = dict()
-        c2v_setup = dict()
-        c2v_apply = dict()
 
+        # # Connection Leds
         for conn in [self._conn_ma, self._conn_rf, self._conn_ti]:
+            c2v_conn = list()
+            conn_type = conn.__class__.__name__.strip('Conn')
             for p in conn.properties:
-                if 'Magnets' in conn.__class__.__name__:
+                if conn_type == 'MA':
                     if 'PwrState' in conn[p].name:
                         c2v_conn.append(pfx + conn[p].pvname_rb)
                 else:
                     c2v_conn.append(pfx + conn[p].pvname_rb)
+            led_name = 'led_' + conn_type.lower() + '_conn'
+            led = getattr(self, led_name)
+            led.set_channels(c2v_conn)
 
+        # # MA
         conn = self._conn_ma
+        c2v_intlk = dict()
+        c2v_setup = dict()
+        c2v_apply = dict()
         for p in conn.properties:
             if 'IntlkSoft' in p or 'IntlkHard' in p:
                 c2v_intlk[pfx + conn[p].pvname_rb] = 0
@@ -161,11 +175,18 @@ class StatusAndCommands(QGroupBox):
                 c2v_apply[pfx + conn[p].pvname_rb] = {'value': _np.array([]),
                                                       'comp': 'cl',
                                                       'abs_tol': 1e-5}
+        self.led_ma_intlk.set_channels2values(c2v_intlk)
+        self.led_ma_setup.set_channels2values(c2v_setup)
+        self.led_ma_apply.set_channels2values(c2v_apply)
 
+        # # RF
         conn = self._conn_rf
+        c2v_intlk = dict()
+        c2v_setup = dict()
+        c2v_apply = dict()
         c2v_intlk[pfx + conn.Const.Rmp_Intlk] = 0
         c2v_setup[pfx + conn.Const.Rmp_RmpReady] = 1
-        c2v_setup[pfx + conn.Const.Rmp_IncTs] = 0.0
+        c2v_setup[pfx + conn.Const.Rmp_Enbl] = 1
         c2v_apply[pfx + conn.Const.Rmp_Ts1.replace('SP', 'RB')] = None
         c2v_apply[pfx + conn.Const.Rmp_Ts2.replace('SP', 'RB')] = None
         c2v_apply[pfx + conn.Const.Rmp_Ts3.replace('SP', 'RB')] = None
@@ -174,19 +195,27 @@ class StatusAndCommands(QGroupBox):
         c2v_apply[pfx + conn.Const.Rmp_VoltTop.replace('SP', 'RB')] = None
         c2v_apply[pfx + conn.Const.Rmp_PhsBot.replace('SP', 'RB')] = None
         c2v_apply[pfx + conn.Const.Rmp_PhsTop.replace('SP', 'RB')] = None
+        self.led_rf_intlk.set_channels2values(c2v_intlk)
+        self.led_rf_setup.set_channels2values(c2v_setup)
+        self.led_rf_apply.set_channels2values(c2v_apply)
 
+        # # TI
         conn = self._conn_ti
+        c2v_intlk = dict()
+        c2v_setup = dict()
+        c2v_apply = dict()
         c2v_intlk[pfx + conn.Const.Intlk] = 0
         for prpty, value in conn.ramp_basicsetup.items():
-            c2v_setup[pfx + prpty] = value
+            prpty = prpty.replace('SP', 'RB').replace('Sel', 'Sts')
+            c2v_setup[pfx + prpty] = {'value': value, 'comp': 'cl',
+                                      'abs_tol': 0.008}
         for prpty, value in conn.ramp_configsetup.items():
-            c2v_apply[pfx + prpty] = {'value': value,
-                                      'comp': 'cl', 'abs_tol': 0.008}
-
-        self.led_conn.set_channels(c2v_conn)
-        self.led_intlk.set_channels2values(c2v_intlk)
-        self.led_setup.set_channels2values(c2v_setup)
-        self.led_apply.set_channels2values(c2v_apply)
+            prpty = prpty.replace('SP', 'RB').replace('Sel', 'Sts')
+            c2v_apply[pfx + prpty] = {'value': value, 'comp': 'cl',
+                                      'abs_tol': 0.008}
+        self.led_ti_intlk.set_channels2values(c2v_intlk)
+        self.led_ti_setup.set_channels2values(c2v_setup)
+        self.led_ti_apply.set_channels2values(c2v_apply)
 
     def _prepare_ma(self):
         # turn off triggers
@@ -210,14 +239,6 @@ class StatusAndCommands(QGroupBox):
                 _TIc.DsblEnbl.Enbl),
             warn_msgs='Failed to turn magnets trigger on!', parent=self)
         thread.start()
-
-    def _prepare_rf(self):
-        thread_RF = _CommandThread(
-            conn=self._conn_rf,
-            cmds=self._conn_rf.cmd_ramping_enable,
-            warn_msgs='Failed to enable RF ramp!',
-            parent=self)
-        thread_RF.start()
 
     def _prepare_ti(self):
         thread = _CommandThread(
@@ -261,12 +282,6 @@ class StatusAndCommands(QGroupBox):
         inj_time = self._conn_ti.get_injection_time()/1000  # [ms]
         eje_time = self._conn_ti.get_ejection_time()/1000  # [ms]
         self.inj_eje_times.emit(inj_time, eje_time)
-
-    def _open_status_details(self):
-        self.status_details = StatusDetails(
-            self, prefix=self.prefix, ramp_config=self.ramp_config,
-            connMA=self._conn_ma, connTI=self._conn_ti, connRF=self._conn_rf)
-        self.status_details.open()
 
     def apply_changes(self):
         if self.ramp_config is None:
@@ -339,7 +354,7 @@ class StatusAndCommands(QGroupBox):
             wf = self.ramp_config.ps_waveform_get(maname)
             c2v[self.prefix + maname + ':Wfm-RB'] = {
                 'value': wf.currents, 'comp': 'cl', 'abs_tol': 1e-5}
-        self.led_apply.channels2values.update(c2v)
+        self.led_ma_apply.set_channels2values(c2v)
 
     def update_rf_params(self):
         """Update RF parameters leds channels2values dict."""
@@ -357,7 +372,7 @@ class StatusAndCommands(QGroupBox):
         c2v[p+c.Rmp_VoltTop.replace('SP', 'RB')] = r.rf_ramp_top_voltage
         c2v[p+c.Rmp_PhsBot.replace('SP', 'RB')] = r.rf_ramp_bottom_phase
         c2v[p+c.Rmp_PhsTop.replace('SP', 'RB')] = r.rf_ramp_top_phase
-        self.led_apply.channels2values.update(c2v)
+        self.led_rf_apply.set_channels2values(c2v)
 
     def update_ti_params(self):
         """Update TI parameters leds channels2values dict."""
@@ -376,11 +391,17 @@ class StatusAndCommands(QGroupBox):
         c2v[p+c.TrgCorrs_NrPulses.replace('SP', 'RB')] = \
             r.ps_ramp_wfm_nrpoints_corrs
 
-        c2v[p+c.TrgMags_Delay.replace('SP', 'RB')] = r.ti_params_ps_ramp_delay
-        c2v[p+c.TrgCorrs_Delay.replace('SP', 'RB')] = r.ti_params_ps_ramp_delay
+        c2v[p+c.TrgMags_Delay.replace('SP', 'RB')] =  \
+            {'value': r.ti_params_ps_ramp_delay, 'comp': 'cl',
+             'abs_tol': 0.008}
+        c2v[p+c.TrgCorrs_Delay.replace('SP', 'RB')] = \
+            {'value': r.ti_params_ps_ramp_delay, 'comp': 'cl',
+             'abs_tol': 0.008}
         c2v[p+c.TrgLLRFRmp_Delay.replace('SP', 'RB')] = \
-            r.ti_params_rf_ramp_delay
-        c2v[p+c.EvtRmpBO_Delay.replace('SP', 'RB')] = 0.0
+            {'value': r.ti_params_rf_ramp_delay, 'comp': 'cl',
+             'abs_tol': 0.008}
+        c2v[p+c.EvtRmpBO_Delay.replace('SP', 'RB')] = \
+            {'value': 0.0, 'comp': 'cl', 'abs_tol': 0.008}
 
         events_inj, events_eje = self._get_inj_eje_events()
         delays = conn.calc_evts_delay(events_inj, events_eje)
@@ -394,17 +415,18 @@ class StatusAndCommands(QGroupBox):
         for ev in events_inj:
             attr = getattr(c, 'Evt'+ev+'_Delay')
             attr = attr.replace('SP', 'RB')
-            c2v[p+attr] = delays[ev]
+            c2v[p+attr] = {'value': delays[ev], 'comp': 'cl', 'abs_tol': 0.008}
         for ev in events_eje:
             attr = getattr(c, 'Evt'+ev+'_Delay')
             attr = attr.replace('SP', 'RB')
-            c2v[p+attr] = delays[ev]
+            c2v[p+attr] = {'value': delays[ev], 'comp': 'cl', 'abs_tol': 0.008}
         for ev in EVT_LIST:
             if ev in events_inj or ev in events_eje:
                 continue
             attr = getattr(c, 'Evt'+ev+'_Delay')
+            attr = attr.replace('SP', 'RB')
             c2v[p+attr] = None
-        self.led_apply.channels2values.update(c2v)
+        self.led_ti_apply.set_channels2values(c2v)
 
     def _get_inj_eje_events(self):
         events_inj = list()
@@ -463,132 +485,3 @@ class _CommandThread(QThread):
             cmd_success, problems = cmd()
             if not cmd_success:
                 self.sentWarning.emit(msg, problems)
-
-
-class StatusDetails(SiriusDialog):
-    """Status details."""
-
-    def __init__(self, parent=None, prefix='', ramp_config=None,
-                 connMA=None, connTI=None, connRF=None):
-        super().__init__(parent)
-        self.prefix = prefix
-        self.ramp_config = ramp_config
-        self._conn_ma = connMA or _ConnMagnets(prefix=self.prefix)
-        self._conn_ti = connTI or _ConnTiming(prefix=self.prefix)
-        self._conn_rf = connRF or _ConnRF(prefix=self.prefix)
-        self._setupUi()
-        t = _Thread(target=self._print, daemon=True)
-        t.start()
-
-    def _setupUi(self):
-        pfx = self.prefix
-
-        # Connection Leds
-        for led_name in ['led_ma_conn', 'led_rf_conn', 'led_ti_conn']:
-            channels = list()
-            conn = getattr(
-                self, led_name.replace('_conn', '').replace('led', '_conn'))
-            for p in conn.properties:
-                if 'ma' in led_name:
-                    if 'PwrState' in conn[p].name:
-                        channels.append(pfx + conn[p].pvname_rb)
-                else:
-                    channels.append(pfx + conn[p].pvname_rb)
-            setattr(self, led_name, PyDMLedMultiConnection(self, channels))
-
-            label_name = led_name.replace('led', 'label').replace('_conn', '')
-            text = '<h4>' + label_name.replace('label_', '').upper() + '</h4>'
-            setattr(self, label_name, QLabel(text, self))
-
-        # MA Leds
-        conn = self._conn_ma
-        c2v_intlk = dict()
-        c2v_setup = dict()
-        c2v_apply = dict()
-        for p in conn.properties:
-            if 'IntlkSoft' in p or 'IntlkHard' in p:
-                c2v_intlk[pfx + conn[p].pvname_rb] = 0
-            elif 'OpMode' in p:
-                c2v_setup[pfx + conn[p].pvname_rb] = _PSc.States.RmpWfm
-            elif 'PwrState' in p:
-                c2v_setup[pfx + conn[p].pvname_rb] = _PSc.PwrStateSts.On
-            elif 'Wfm' in p:
-                if self.ramp_config is None or \
-                        not self.ramp_config.ps_normalized_configs:
-                    c2v_apply[pfx + conn[p].pvname_rb] = {
-                        'value': _np.array([]), 'comp': 'cl', 'abs_tol': 1e-5}
-                elif self.ramp_config.ps_normalized_configs:
-                    wf = self.ramp_config.ps_waveform_get(p.device_name)
-                    c2v_apply[pfx + conn[p].pvname_rb] = {
-                        'value': wf.currents, 'comp': 'cl', 'abs_tol': 1e-5}
-
-        self.led_ma_intlk = PyDMLedMultiChannel(self, c2v_intlk)
-        self.led_ma_setup = PyDMLedMultiChannel(self, c2v_setup)
-        self.led_ma_apply = PyDMLedMultiChannel(self, c2v_apply)
-
-        # RF Leds
-        conn = self._conn_rf
-        c2v_intlk = {pfx + conn.Const.Rmp_Intlk: 0}
-        c2v_setup = {pfx + conn.Const.Rmp_RmpReady: 1,
-                     pfx + conn.Const.Rmp_IncTs: 0}
-        c2v_apply = dict()
-        c2v_apply[pfx + conn.Const.Rmp_Ts1.replace('SP', 'RB')] = 0
-        c2v_apply[pfx + conn.Const.Rmp_Ts2.replace('SP', 'RB')] = 0
-        c2v_apply[pfx + conn.Const.Rmp_Ts3.replace('SP', 'RB')] = 0
-        c2v_apply[pfx + conn.Const.Rmp_Ts4.replace('SP', 'RB')] = 0
-        c2v_apply[pfx + conn.Const.Rmp_VoltBot.replace('SP', 'RB')] = 0
-        c2v_apply[pfx + conn.Const.Rmp_VoltTop.replace('SP', 'RB')] = 0
-        c2v_apply[pfx + conn.Const.Rmp_PhsBot.replace('SP', 'RB')] = 0
-        c2v_apply[pfx + conn.Const.Rmp_PhsTop.replace('SP', 'RB')] = 0
-
-        self.led_rf_intlk = PyDMLedMultiChannel(self, c2v_intlk)
-        self.led_rf_rmprdy = PyDMLedMultiChannel(self, c2v_setup)
-        self.led_rf_apply = PyDMLedMultiChannel(self, c2v_apply)
-
-        # TI Leds
-        conn = self._conn_ti
-        c2v_intlk = {pfx + conn.Const.Intlk: 0}
-        c2v_setup = dict()
-        for prpty, value in conn.ramp_basicsetup.items():
-            c2v_setup[pfx + prpty] = value
-        c2v_apply = dict()
-        for prpty, value in conn.ramp_configsetup.items():
-            c2v_apply[pfx + prpty] = {'value': value,
-                                      'comp': 'cl', 'abs_tol': 0.008}
-
-        self.led_ti_intlk = PyDMLedMultiChannel(self, c2v_intlk)
-        self.led_ti_setup = PyDMLedMultiChannel(self, c2v_setup)
-        self.led_ti_apply = PyDMLedMultiChannel(self, c2v_apply)
-
-        glay = QGridLayout()
-        glay.addWidget(QLabel('<h4>Status</h4>'), 1, 0, 1, 4)
-        glay.addWidget(self.label_ma, 1, 1)
-        glay.addWidget(self.label_rf, 1, 2)
-        glay.addWidget(self.label_ti, 1, 3)
-        glay.addWidget(QLabel('Connection', self), 2, 0)
-        glay.addWidget(self.led_ma_conn, 2, 1)
-        glay.addWidget(self.led_rf_conn, 2, 2)
-        glay.addWidget(self.led_ti_conn, 2, 3)
-        glay.addWidget(QLabel('Interlocks', self), 3, 0)
-        glay.addWidget(self.led_ma_intlk, 3, 1)
-        glay.addWidget(self.led_rf_intlk, 3, 2)
-        glay.addWidget(self.led_ti_intlk, 3, 3)
-        glay.addWidget(QLabel('Basic setup to ramp', self), 4, 0)
-        glay.addWidget(self.led_ma_setup, 4, 1)
-        glay.addWidget(self.led_rf_rmprdy, 4, 2)
-        glay.addWidget(self.led_ti_setup, 4, 3)
-        glay.addWidget(QLabel('Current config applied', self), 5, 0)
-        glay.addWidget(self.led_ma_apply, 5, 1)
-        glay.addWidget(self.led_rf_apply, 5, 2)
-        glay.addWidget(self.led_ti_apply, 5, 3)
-        self.setLayout(glay)
-
-    def _print(self):
-        led = self.led_ti_setup
-        _time.sleep(4)
-        for k, v in led.channels2values.items():
-            print(k, v)
-        print('')
-        for k, v in led.channels2status.items():
-            print(k, v)
-        print('\n\n')

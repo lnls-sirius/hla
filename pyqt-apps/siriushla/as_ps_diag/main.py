@@ -582,7 +582,6 @@ def create_led_class(type='multichannel'):
 
         def mouseDoubleClickEvent(self, ev):
             self.filterlog.emit(self.filter)
-            super().mouseDoubleClickEvent(ev)
 
     return MyLed
 

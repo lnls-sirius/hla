@@ -27,12 +27,18 @@ class MyTableWidget(QTableWidget):
 class SpinBoxDelegate(QStyledItemDelegate):
     """Auxiliar class to draw a SpinBox in table items on editing."""
 
+    def __init__(self, parent, mini, maxi, prec):
+        super().__init__(parent)
+        self.mini = mini
+        self.maxi = maxi
+        self.prec = prec
+
     def createEditor(self, parent, option, index):
         """Create editor."""
         editor = QDoubleSpinBox(parent)
-        editor.setMinimum(0)
-        editor.setMaximum(1100)
-        editor.setDecimals(4)
+        editor.setMinimum(self.mini)
+        editor.setMaximum(self.maxi)
+        editor.setDecimals(self.prec)
         locale = QLocale(QLocale.English, country=QLocale.UnitedStates)
         locale.setNumberOptions(locale.RejectGroupSeparator)
         editor.setLocale(locale)
