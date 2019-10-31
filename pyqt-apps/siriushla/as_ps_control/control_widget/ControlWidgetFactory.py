@@ -12,6 +12,7 @@ from .SlowCorrectorControlWidget import \
     TSSlowCorrectorControlWidget, SISlowCorrectorControlWidget
 from .SkewQuadControlWidget import BOSkewQuadControlWidget, \
     SISkewQuadControlWidget
+from .TrimAllControlWidget import SITrimAllControlWidget
 from .FastCorrectorControlWidget import \
     SIFastCorrectorControlWidget
 
@@ -107,6 +108,10 @@ class ControlWidgetFactory:
                 return SISkewQuadControlWidget(dev_type=discipline,
                                                orientation=orientation,
                                                parent=parent)
+            elif device == "quadrupole-trim":
+                return SITrimAllControlWidget(dev_type=discipline,
+                                              orientation=orientation,
+                                              parent=parent)
             else:
                 ControlWidgetFactory._device_not_found(section, device)
         else:

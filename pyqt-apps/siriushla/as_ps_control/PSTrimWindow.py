@@ -5,7 +5,7 @@ from qtpy.QtWidgets import QWidget, QVBoxLayout
 from siriuspy.namesys import SiriusPVName
 from siriushla.widgets import SiriusMainWindow
 from siriushla.util import connect_window
-from .control_widget.TrimControlWidget import TrimControlWidget
+from .control_widget.TrimFamControlWidget import SITrimFamControlWidget
 from .PSDetailWindow import PSDetailWindow
 from .SummaryWidgets import SummaryWidget
 
@@ -37,9 +37,9 @@ class PSTrimWindow(SiriusMainWindow):
         connect_window(fam_button, PSDetailWindow, self, psname=self._devname)
         # Create TrimWidget
         device = self._devname.split("-")[-1]
-        self.trim_widget = TrimControlWidget(
+        self.trim_widget = SITrimFamControlWidget(
             dev_type=self._devtype, trim=device, parent=self,
-            orientation=TrimControlWidget.HORIZONTAL)
+            orientation=SITrimFamControlWidget.HORIZONTAL)
         # Connect Trim detail buttons
         self._connect_buttons(self.trim_widget)
         # Add to leyout

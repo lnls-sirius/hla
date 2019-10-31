@@ -14,15 +14,15 @@ class PSTabControlWindow(PSControlWindow):
                "quadrupole-skew"],
         "TS": ["dipole", "quadrupole", "corrector-slow"],
         "SI": ["dipole", "quadrupole", "sextupole", "corrector-slow",
-               "quadrupole-skew"]}
-    #           "corrector-fast", "quadrupole-skew"]}
+               "quadrupole-trim", "quadrupole-skew"]}
 
     TabName = {"dipole": "Dipoles",
                "quadrupole": "Quadrupoles",
                "sextupole": "Sextupoles",
                "corrector-slow": "Slow Correctors",
-               "quadrupole-skew": "Quadrupoles Skew"}
-    #           "corrector-fast": "Fast Correctors",
+               "quadrupole-skew": "Quadrupoles Skew",
+               "quadrupole-trim": "Trims",
+               }
 
     def __init__(self, section, discipline, parent=None):
         """Class constructor."""
