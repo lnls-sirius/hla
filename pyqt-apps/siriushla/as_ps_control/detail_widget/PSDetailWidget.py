@@ -514,47 +514,49 @@ class PSDetailWidget(QWidget):
         return layout
 
     def _paramsLayout(self):
-        wfm_index_ca = self._prefixed_psname + ':WfmIndex-Mon'
-        wfm_count_ca = self._prefixed_psname + ':WfmSyncPulseCount-Mon'
         queue_size_ca = self._prefixed_psname + ':PRUCtrlQueueSize-Mon'
-        wfm_updateauto_ca = self._prefixed_psname + ':WfmUpdateAuto-Sts'
-        wfm_updateauto_sel = self._prefixed_psname + ':WfmUpdateAuto-Sel'
-        syncpulse_cmd_ca = self._prefixed_psname + ':SyncPulse-Cmd'
-
-        wfm_index_label = QLabel('Wfm Index', self)
-        wfm_index_rb_label = PyDMLabel(self, wfm_index_ca)
-
-        wfm_count_label = QLabel('Wfm Pulse Count', self)
-        wfm_count_rb_label = PyDMLabel(self, wfm_count_ca)
-
         queue_size_label = QLabel('IOC Queue Size', self)
         queue_size_rb_label = PyDMLabel(self, queue_size_ca)
 
-        wfm_updateauto_label = QLabel('Wfm UpdateAuto', self)
-        wfm_updateauto_sts_led = SiriusLedState(self, wfm_updateauto_ca)
-        wfm_updateauto_btn = PyDMStateButton(self, wfm_updateauto_sel)
-
-        syncpulse_cmd_lb = QLabel('Sync Pulse Cmd', self)
-        syncpulse_cmd_btn = PyDMPushButton(
-            parent=self, icon=qta.icon('fa5s.step-forward'), pressValue=1,
-            init_channel=syncpulse_cmd_ca)
-        syncpulse_cmd_btn.setObjectName('syncpulse')
-        syncpulse_cmd_btn.setStyleSheet(
-            '#syncpulse{min-width:25px; max-width:32px; icon-size:20px;}')
-
         layout = QGridLayout()
-        layout.addWidget(queue_size_label, 3, 0, Qt.AlignRight)
-        layout.addWidget(queue_size_rb_label, 3, 1)
-        layout.addWidget(wfm_index_label, 4, 0, Qt.AlignRight)
-        layout.addWidget(wfm_index_rb_label, 4, 1)
-        layout.addWidget(wfm_count_label, 5, 0, Qt.AlignRight)
-        layout.addWidget(wfm_count_rb_label, 5, 1)
-        layout.addWidget(wfm_updateauto_label, 6, 0, Qt.AlignRight)
-        layout.addWidget(wfm_updateauto_btn, 6, 1, Qt.AlignHCenter)
-        layout.addWidget(wfm_updateauto_sts_led, 6, 2)
-        layout.addWidget(syncpulse_cmd_lb, 7, 0, Qt.AlignRight)
-        layout.addWidget(syncpulse_cmd_btn, 7, 1)
         layout.setColumnStretch(3, 1)
+        layout.addWidget(queue_size_label, 0, 0, Qt.AlignRight)
+        layout.addWidget(queue_size_rb_label, 0, 1)
+
+        if 'DCLink' not in self._prefixed_psname:
+            wfm_index_ca = self._prefixed_psname + ':WfmIndex-Mon'
+            wfm_count_ca = self._prefixed_psname + ':WfmSyncPulseCount-Mon'
+            wfm_updateauto_ca = self._prefixed_psname + ':WfmUpdateAuto-Sts'
+            wfm_updateauto_sel = self._prefixed_psname + ':WfmUpdateAuto-Sel'
+            syncpulse_cmd_ca = self._prefixed_psname + ':SyncPulse-Cmd'
+
+            wfm_index_label = QLabel('Wfm Index', self)
+            wfm_index_rb_label = PyDMLabel(self, wfm_index_ca)
+
+            wfm_count_label = QLabel('Wfm Pulse Count', self)
+            wfm_count_rb_label = PyDMLabel(self, wfm_count_ca)
+
+            wfm_updateauto_label = QLabel('Wfm UpdateAuto', self)
+            wfm_updateauto_sts_led = SiriusLedState(self, wfm_updateauto_ca)
+            wfm_updateauto_btn = PyDMStateButton(self, wfm_updateauto_sel)
+
+            syncpulse_cmd_lb = QLabel('Sync Pulse Cmd', self)
+            syncpulse_cmd_btn = PyDMPushButton(
+                parent=self, icon=qta.icon('fa5s.step-forward'), pressValue=1,
+                init_channel=syncpulse_cmd_ca)
+            syncpulse_cmd_btn.setObjectName('syncpulse')
+            syncpulse_cmd_btn.setStyleSheet(
+                '#syncpulse{min-width:25px; max-width:32px; icon-size:20px;}')
+
+            layout.addWidget(wfm_index_label, 1, 0, Qt.AlignRight)
+            layout.addWidget(wfm_index_rb_label, 1, 1)
+            layout.addWidget(wfm_count_label, 2, 0, Qt.AlignRight)
+            layout.addWidget(wfm_count_rb_label, 2, 1)
+            layout.addWidget(wfm_updateauto_label, 3, 0, Qt.AlignRight)
+            layout.addWidget(wfm_updateauto_btn, 3, 1, Qt.AlignHCenter)
+            layout.addWidget(wfm_updateauto_sts_led, 3, 2)
+            layout.addWidget(syncpulse_cmd_lb, 4, 0, Qt.AlignRight)
+            layout.addWidget(syncpulse_cmd_btn, 4, 1)
         return layout
 
     def _wfmLayout(self):
