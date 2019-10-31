@@ -61,6 +61,7 @@ def _create_objects(section):
     dipnames = {
         'TB': 'TB-Fam:MA-B',
         'BO': 'BO-Fam:MA-B',
+        'TS': 'TS-Fam:MA-B',
         'SI': 'BO-Fam:MA-B1B2'
     }
     dipname = dipnames[section]

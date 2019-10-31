@@ -31,7 +31,7 @@ class EnergySetterWindow(SiriusMainWindow):
             self.centralWidget().addTab(widget, widget.setter.section.upper())
 
     def _create_widgets(self):
-        for section in ('tb', 'bo'):
+        for section in ('tb', 'bo', 'ts'):
             self._widgets.append(EnergyButton(EnergySetter(section)))
 
 

@@ -29,6 +29,8 @@ class EnergyButton(QWidget):
             sp_channel = _vaca_prefix + 'TB-Fam:MA-B:Energy-RB'
         elif self.setter.section == 'bo':
             sp_channel = _vaca_prefix + 'BO-Fam:MA-B:Energy-RB'
+        elif self.setter.section == 'ts':
+            sp_channel = _vaca_prefix + 'TS-Fam:MA-B:Energy-RB'
         else:
             raise RuntimeError
         self.energy_sp = PyDMLabel(self)
