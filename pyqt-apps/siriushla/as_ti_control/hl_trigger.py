@@ -399,7 +399,7 @@ if __name__ == '__main__':
     win = SiriusMainWindow()
     list_ctrl = HLTriggerList(
         name="Triggers", props=props,
-        obj_names=['BO-Fam:TI-Corrs-1', 'BO-Fam:TI-Corrs-2'])
+        obj_names=['BO-Glob:TI-Mags-Corrs', 'SI-Glob:TI-Mags-Corrs'])
     win.setCentralWidget(list_ctrl)
     win.show()
     sys.exit(app.exec_())
