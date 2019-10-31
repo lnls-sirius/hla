@@ -145,7 +145,7 @@ class RFStatus(SiriusMainWindow):
         # Phase
         lb_phs = QLabel('Cavity Phase [°]: ', self)
         self.lb_Phs = PyDMLabel(
-            parent=self, init_channel='BR-RF-DLLRF-01:PL:REF')
+            parent=self, init_channel='BR-RF-DLLRF-01:SL:INP:PHS')
 
         # Detune
         lb_detune = QLabel('Detune [°]: ')
