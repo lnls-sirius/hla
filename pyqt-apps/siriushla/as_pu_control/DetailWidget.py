@@ -73,21 +73,6 @@ class PUDetailWidget(QWidget):
         self._ctrlmode_pv = self._prefdevname + ":CtrlMode-Mon"
 
         self._preftrigname = self._prefdevname.substitute(dis='TI')
-        if self._preftrigname.sec == 'TS':
-            if 'Eje' in self._preftrigname.dev:
-                sub = 'Fam'
-                dev = 'EjeSept'
-                idx = ''
-            elif self._preftrigname.dev == 'InjSeptG':
-                sub = 'Fam'
-                dev = 'InjSeptG'
-                idx = ''
-            else:
-                sub = self._preftrigname.sub
-                dev = self._preftrigname.dev
-                idx = self._preftrigname.idx
-            self._preftrigname = self._preftrigname.substitute(
-                sub=sub, dev=dev, idx=idx)
         self._timing_delay_sp = self._preftrigname + ":Delay-SP"
         self._timing_delay_rb = self._preftrigname + ":Delay-RB"
         self._timing_status_pv = self._preftrigname + ":Status-Mon"
