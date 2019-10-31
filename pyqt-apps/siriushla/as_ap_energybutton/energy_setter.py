@@ -20,9 +20,11 @@ class EnergySetter:
     @property
     def upper_limit(self):
         if self.section == 'tb':
-            return 300.0
+            return 0.155
         elif self.section == 'bo':
-            return 60.0
+            return 0.160
+        elif self.section == 'ts':
+            return 3.2
         else:
             raise RuntimeError
 
@@ -31,7 +33,9 @@ class EnergySetter:
         if self.section == 'tb':
             return 0.0
         elif self.section == 'bo':
-            return -60.0
+            return 0.0
+        elif self.section == 'ts':
+            return 0.0
         else:
             raise RuntimeError
 
