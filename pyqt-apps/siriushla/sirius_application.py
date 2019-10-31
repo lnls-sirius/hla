@@ -46,7 +46,7 @@ def excepthook(exctype, excvalue, tracebackobj):
     logfile = "/tmp/sirius-hla.log"
     notice = \
         'An unhandled exception occurred. Please report the problem '\
-        'via email to <{}>.\nA log has been written to "{}".\n\n'\
+        'via email to <{}>.\nA log has {{}}been written to "{}".\n\n'\
         'Error information:\n'.format("fernando.sa@lnls.br", logfile)
     timestring = time.strftime("%Y-%m-%d, %H:%M:%S") + '\n'
 
@@ -59,10 +59,13 @@ def excepthook(exctype, excvalue, tracebackobj):
     sections = [timestring, errmsg, tbinfo]
     msg = separator.join(sections)
     try:
-        with open(logfile, 'a') as fil:
-            fil.write('\n' + msg + '\n')
-    except IOError:
-        pass
+        fil = open(logfile, 'a')
+        os.chmod(logfile, 0o666)
+    except (IOError, PermissionError):
+        notice.format('NOT ')
+    else:
+        notice.format('')
+        fil.write('\n' + msg + '\n')
     errorbox = QMessageBox()
     errorbox.setText(notice)
     errorbox.setInformativeText(msg)
