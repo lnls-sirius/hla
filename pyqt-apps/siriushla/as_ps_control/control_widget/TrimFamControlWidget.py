@@ -2,7 +2,7 @@
 from .BasePSControlWidget import BasePSControlWidget
 
 
-class TrimControlWidget(BasePSControlWidget):
+class SITrimFamControlWidget(BasePSControlWidget):
     """Class to control a Fam Quad from the Sirius section."""
 
     def __init__(self, trim, **kwargs):

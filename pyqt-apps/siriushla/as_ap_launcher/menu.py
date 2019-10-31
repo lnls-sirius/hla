@@ -356,14 +356,21 @@ def get_object(ismenubar=True, parent=None):
                 self.connect_newprocess(
                     skew, [scr, '--device', 'quadrupole-skew'])
                 psma.addAction(skew)
+
             corrs = QAction('Correctors', psma)
             self.connect_newprocess(corrs, [scr, '--device', 'corrector-slow'])
             psma.addAction(corrs)
-            # if sec in 'si':
+
+            if sec in 'si':
+                trims = QAction('Trims', psma)
+                self.connect_newprocess(
+                    trims, [scr, '--device', 'quadrupole-trim'])
+                psma.addAction(trims)
             #     fcorr = QAction('Fast Correctors', psma)
             #     self.connect_newprocess(
             #         fcorr, [scr, '--device', 'corrector-fast'])
             #     psma.addAction(fcorr)
+
             pmag = QAction('Pulsed Magnets', psma)
             if dis == 'ps':
                 script = 'sirius-hla-'+sec+'-pu-control.py'

@@ -397,22 +397,26 @@ class SummaryWidget(QWidget):
 
     def set_opmode_slowref(self):
         """Set power supply OpMode to SlowRef."""
-        index = self.opmode_cb.findText('SlowRef')
-        self.opmode_cb.internal_combo_box_activated_int(index)
+        if self.opmode_cb.isEnabled():
+            index = self.opmode_cb.findText('SlowRef')
+            self.opmode_cb.internal_combo_box_activated_int(index)
 
     def turn_on(self):
         """Turn power supply on."""
-        if not self.state_bt.value:
-            self.state_bt.send_value()
+        if self.state_bt.isEnabled():
+            if not self.state_bt.value:
+                self.state_bt.send_value()
 
     def turn_off(self):
         """Turn power supply off."""
-        if self.state_bt.value:
-            self.state_bt.send_value()
+        if self.state_bt.isEnabled():
+            if self.state_bt.value:
+                self.state_bt.send_value()
 
     def reset(self):
         """Reset power supply."""
-        self.reset_bt.sendValue()
+        if self.reset_bt.isEnabled():
+            self.reset_bt.sendValue()
 
 
 class SummaryHeader(QWidget):
