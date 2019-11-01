@@ -30,6 +30,7 @@ class EnergyMeasure(QWidget):
         self.currentlist = []
         self.centroidlist = []
         self.sigmalist = []
+        self._do_acquire = True
         self.bend_curr = PV('LI-01:PS-Spect:seti')
         self.spect_excdata = _PSS.conv_psname_2_excdata('LI-01:PS-Spect')
 
@@ -102,7 +103,10 @@ class EnergyMeasure(QWidget):
         hl.addWidget(self.spbox_npoints)
         self.pb_reset_data = QPushButton('Reset Data', self)
         self.pb_reset_data.clicked.connect(self.pb_reset_data_clicked)
+        self.pb_stop_acq = QPushButton('Stop Acq.', self)
+        self.pb_stop_acq.clicked.connect(self.pb_stop_acq_clicked)
         hl.addWidget(self.pb_reset_data)
+        hl.addWidget(self.pb_stop_acq)
         vl.addItem(hl)
 
         self.plt_image = ProcessImage(self)
@@ -112,8 +116,16 @@ class EnergyMeasure(QWidget):
         """."""
         self.energylist = [self.energylist[-1]]
         self.spreadlist = [self.spreadlist[-1]]
+        self.currentlist = [self.currentlist[-1]]
+        self.centroidlist = [self.centroidlist[-1]]
+        self.sigmalist = [self.sigmalist[-1]]
         self.plot_data()
         return
+
+    def pb_stop_acq_clicked(self):
+        self.pb_stop_acq.setText(
+            'Start Acq.' if self._do_acquire else 'Stop Acq.')
+        self._do_acquire = not self._do_acquire
 
     def pb_save_data_clicked(self):
         """."""
@@ -135,12 +147,14 @@ class EnergyMeasure(QWidget):
             self.save_to_file(fname[0])
 
     def save_to_file(self, fname):
-        header = '{0:15s} {1:17s} {2:17s}'.format(
-                        'Current [A]', 'Beam Center [m]', 'Beam Size [m]')
+        header = '{0:15s} {1:17s} {2:17s} {3:17s} {4:17s}'.format(
+            'Current [A]', 'Beam Center [m]', 'Beam Size [m]', 'Energy [MeV]',
+            'Spread [%]')
         np.savetxt(
-            fname, np.column_stack(
-                    (self.currentlist, self.centroidlist, self.sigmalist)),
-            header=header, fmt='%-17.9f %-17.10f %-17.10f')
+            fname, np.column_stack((
+                self.currentlist, self.centroidlist, self.sigmalist,
+                self.energylist, self.spreadlist)),
+            header=header, fmt='%-17.9f %-17.10f %-17.10f %-17.10f %-17.10f')
 
     def pb_load_data_clicked(self):
         """."""
@@ -152,8 +166,8 @@ class EnergyMeasure(QWidget):
 
     def load_from_file(self, fname):
         try:
-            self.currentlist, self.centroidlist, self.sigmalist = \
-                                    np.loadtxt(fname, skiprows=1, unpack=True)
+            self.currentlist, self.centroidlist, self.sigmalist = np.loadtxt(
+                fname, skiprows=1, unpack=True, usecols=(0, 1, 2))
         except (ValueError, TypeError):
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Warning)
@@ -168,6 +182,7 @@ class EnergyMeasure(QWidget):
         self.currentlist = self.currentlist.tolist()
         self.centroidlist = self.centroidlist.tolist()
         self.sigmalist = self.sigmalist.tolist()
+        print('here')
         for i in range(len(self.currentlist)):
             energy, spread = self.convert_to_energy(
                 self.currentlist[i], self.centroidlist[i], self.sigmalist[i])
@@ -175,6 +190,7 @@ class EnergyMeasure(QWidget):
                 return
             self.energylist.append(energy)
             self.spreadlist.append(spread)
+        print('here2')
         self.plot_data()
 
     def convert_to_energy(self, bend_curr, cen_x, sigma_x):
@@ -193,20 +209,24 @@ class EnergyMeasure(QWidget):
         cen_x, sigma_x, cen_y, sigma_y = self.plt_image.get_params()
         if cen_x is None:
             return
+        cen_x, sigma_x, cen_y, sigma_y = 0, 0.0001, 0, 0.0001
 
         bend_curr = self.bend_curr.value
         if bend_curr is None:
             return
-        energy, spread = self.convert_to_energy(bend_curr, cen_x, sigma_x)
 
+        energy, spread = self.convert_to_energy(bend_curr, cen_x, sigma_x)
+        energy = 150
+        spread = 0.3
         if spread >= self.MAX_SPREAD or spread <= 0:
             return
 
-        self.energylist.append(energy)
-        self.spreadlist.append(spread)
-        self.currentlist.append(bend_curr)
-        self.centroidlist.append(cen_x)
-        self.sigmalist.append(sigma_x)
+        if self._do_acquire:
+            self.energylist.append(energy)
+            self.spreadlist.append(spread)
+            self.currentlist.append(bend_curr)
+            self.centroidlist.append(cen_x)
+            self.sigmalist.append(sigma_x)
         self.plot_data()
 
     def plot_data(self):
