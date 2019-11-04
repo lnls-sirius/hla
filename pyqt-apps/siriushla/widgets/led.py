@@ -139,13 +139,14 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
     warning = Signal(list)
     normal = Signal(list)
 
-    default_colorlist = [PyDMLed.Red, PyDMLed.LightGreen]
+    default_colorlist = [PyDMLed.Red, PyDMLed.LightGreen, PyDMLed.Gray]
 
     def __init__(self, parent=None, channels2values=dict(), color_list=None):
         """Init."""
         QLed.__init__(self, parent)
         PyDMWidget.__init__(self)
         self.stateColors = _dcopy(color_list) or self.default_colorlist
+        self._connected = False
 
         self._operations_dict = {'eq': self._eq,
                                  'cl': self._isclose,
@@ -268,12 +269,14 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         return is_desired
 
     def _update_statuses(self):
-        state = True
-        for status in self._address2status.values():
-            if status == 'UNDEF':
-                state = False
-                break
-            state &= status
+        state = 1
+        if not self._connected:
+            state = 2
+        else:
+            for status in self._address2status.values():
+                if status == 'UNDEF' or not status:
+                    state = 0
+                    break
         self.setState(state)
 
     @Slot(bool)
@@ -287,7 +290,8 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         for conn in self._address2conn.values():
             allconn &= conn
         PyDMWidget.connection_changed(self, allconn)
-        self.setEnabled(allconn)
+        self._connected = allconn
+        self._update_statuses()
 
     @staticmethod
     def _eq(val1, val2, **kws):
