@@ -12,12 +12,22 @@ from pydm import PyDMApplication, data_plugins
 from .util import get_window_id, set_style
 
 
+# Create log file
+LOGFILE = '/tmp/sirius-hla.log'
+try:
+    with open(LOGFILE, 'a'):
+        pass
+    os.chmod(LOGFILE, 0o666)
+except (OSError, PermissionError):
+    pass
+
+
 # Configure Logging
 fmt = '%(levelname)7s | %(asctime)s | ' +\
       '%(module)15s.%(funcName)-20s[%(lineno)4d] ::: %(message)s'
 _log.basicConfig(
     format=fmt, datefmt='%F %T', level=_log.INFO,
-    filename='/tmp/sirius-hla.log', filemode='a')
+    filename=LOGFILE, filemode='a')
 
 
 # Set QT_SCALE_FACTOR
@@ -43,11 +53,10 @@ def excepthook(exctype, excvalue, tracebackobj):
         app = SiriusApplication(None, sys.argv)
 
     separator = '-' * 120 + '\n'
-    logfile = "/tmp/sirius-hla.log"
     notice = \
         'An unhandled exception occurred. Please report the problem '\
         'via email to <{}>.\nA log has {{}}been written to "{}".\n\n'\
-        'Error information:\n'.format("fernando.sa@lnls.br", logfile)
+        'Error information:\n'.format("fernando.sa@lnls.br", LOGFILE)
     timestring = time.strftime("%Y-%m-%d, %H:%M:%S") + '\n'
 
     tbinfofile = StringIO()
@@ -59,13 +68,16 @@ def excepthook(exctype, excvalue, tracebackobj):
     sections = [timestring, errmsg, tbinfo]
     msg = separator.join(sections)
     try:
-        fil = open(logfile, 'a')
-        os.chmod(logfile, 0o666)
-    except (IOError, PermissionError):
-        notice.format('NOT ')
+        with open(LOGFILE, 'a') as fil:
+            fil.write('\n' + msg + '\n')
+        try:
+            os.chmod(LOGFILE, 0o666)
+        except OSError:
+            pass
+    except PermissionError:
+        notice = notice.format('NOT ')
     else:
-        notice.format('')
-        fil.write('\n' + msg + '\n')
+        notice = notice.format('')
     errorbox = QMessageBox()
     errorbox.setText(notice)
     errorbox.setInformativeText(msg)
