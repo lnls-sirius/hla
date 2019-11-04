@@ -212,6 +212,11 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
 
         self._channels = list(self._address2channel.values())
 
+        # redo comparisions
+        for ad, des in self._address2values.items():
+            self._address2status[ad] = self._check_status(
+                ad, des, self._address2currvals[ad])
+
         self._update_statuses()
 
     def value_changed(self, new_val):
@@ -220,13 +225,23 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
             return
         address = self.sender().address
         desired = self._address2values[address]
+        self._address2currvals[address] = new_val
 
+        is_desired = self._check_status(address, desired, new_val)
+        self._address2status[address] = is_desired
+        if not is_desired:
+            self.warning.emit([address, new_val])
+        else:
+            self.normal.emit([address, new_val])
+        self._update_statuses()
+
+    def _check_status(self, address, desired, current):
         kws = dict()
         if isinstance(desired, dict):
             if 'bit' in desired.keys():
                 bit = desired['bit']
                 mask = 1 << bit
-                new_val = (new_val & mask) >> bit
+                current = (current & mask) >> bit
             if 'comp' in desired.keys():
                 fun = self._operations_dict[desired['comp']]
             else:
@@ -239,23 +254,18 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         else:
             fun = self._operations_dict['eq']
             desired_value = desired
-        if (type(new_val) != type(desired_value)) \
-                and isinstance(new_val, _np.ndarray):
+        if (desired_value is not None) and \
+                (type(current) != type(desired_value)) and \
+                isinstance(current, _np.ndarray):
             _log.warning('PyDMLedMultiChannel received a numpy array to ' +
-                         address+' ('+str(new_val)+')!')
+                         address+' ('+str(current)+')!')
             return
 
         if desired_value is None:
             is_desired = True
         else:
-            is_desired = fun(new_val, desired_value, **kws)
-        self._address2currvals[address] = new_val
-        self._address2status[address] = is_desired
-        if not is_desired:
-            self.warning.emit([address, new_val])
-        else:
-            self.normal.emit([address, new_val])
-        self._update_statuses()
+            is_desired = fun(current, desired_value, **kws)
+        return is_desired
 
     def _update_statuses(self):
         state = True
