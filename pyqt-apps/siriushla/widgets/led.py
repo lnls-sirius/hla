@@ -1,11 +1,16 @@
+from qtpy.QtGui import QStandardItemModel, QStandardItem
+from qtpy.QtWidgets import QListView, QVBoxLayout, QLabel, QPushButton, \
+    QGridLayout, QCheckBox
+from qtpy.QtCore import Qt
 from copy import deepcopy as _dcopy
 import logging as _log
 import numpy as _np
 from qtpy.QtGui import QColor
 from qtpy.QtCore import Property, Slot, Signal
-from qtpy.QtWidgets import QMessageBox
 from pydm.widgets.base import PyDMWidget
 from pydm.widgets.channel import PyDMChannel
+from pydm.widgets import PyDMWaveformPlot
+from .windows import SiriusDialog
 from .QLed import QLed
 
 
@@ -382,23 +387,26 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         return val1 in val2
 
     def mouseDoubleClickEvent(self, ev):
-        text = ''
+        pvs = set()
         for k, v in self._address2status.items():
-            if not v:
-                text += k+'\n'
-        if text:
-            msg = QMessageBox()
-            msg.setWindowTitle('Channels Status')
-            msg.setText('There are PVs with values different from '
-                        'the desired values!')
-            msg.setDetailedText(text)
-            msg.setIcon(QMessageBox.Information)
-            for bt in msg.buttons():
-                if msg.buttonRole(bt) == QMessageBox.ActionRole:
-                    bt.click()
-                    break
+            if (not v) or (v == 'UNDEF'):
+                pvs.add(k)
+        if pvs:
+            msg = _MultiChannelStatusDialog(
+                parent=self, pvs=pvs,
+                text='There are PVs with values different\n'
+                     'from the desired values!',
+                fun_show_diff=self._show_diff)
             msg.exec_()
         super().mouseDoubleClickEvent(ev)
+
+    def _show_diff(self, address):
+        des_val = self._address2values[address]
+        if isinstance(self._address2values[address], dict):
+            des_val = des_val['value']
+        curr_val = self._address2currvals[address]
+        dialog = _DiffStatus(self, des_val, curr_val)
+        dialog.exec_()
 
 
 class PyDMLedMultiConnection(QLed, PyDMWidget):
@@ -486,3 +494,126 @@ class PyDMLedMultiConnection(QLed, PyDMWidget):
             allconn &= conn
         self.setState(allconn)
         self._connected = allconn
+
+    def mouseDoubleClickEvent(self, ev):
+        pvs = set()
+        for k, v in self._address2conn.items():
+            if not v:
+                pvs.add(k)
+        if pvs:
+            msg = _MultiChannelStatusDialog(
+                parent=self, pvs=pvs,
+                text='There are disconnected PVs!')
+            msg.exec_()
+        super().mouseDoubleClickEvent(ev)
+
+
+class _MultiChannelStatusDialog(SiriusDialog):
+
+    def __init__(self, parent=None, text='', pvs=set(), fun_show_diff=None):
+        super().__init__(parent)
+        self.setWindowTitle('Channels Status')
+        self._fun_show_diff = fun_show_diff
+        self._label = QLabel(text, self)
+        self._pv_list = _PVList(pvs, self)
+        if fun_show_diff:
+            self._pv_list.clicked_item_data.connect(fun_show_diff)
+        self._ok_bt = QPushButton('Ok', self)
+        self._ok_bt.clicked.connect(self.close)
+        lay = QVBoxLayout(self)
+        lay.addWidget(self._label)
+        lay.addWidget(self._pv_list)
+        lay.addWidget(self._ok_bt)
+
+
+class _PVList(QListView):
+    """PV List."""
+
+    clicked_item_data = Signal(str)
+
+    def __init__(self, pvs=set(), parent=None):
+        """Constructor."""
+        super().__init__(parent)
+        self._model = QStandardItemModel(self)
+        for pv in pvs:
+            text = QStandardItem()
+            text.setData(pv, Qt.DisplayRole)
+            self._model.appendRow(text)
+        self.setModel(self._model)
+        self.doubleClicked.connect(self.emit_item_data)
+
+    def emit_item_data(self, index):
+        self.clicked_item_data.emit(index.data())
+
+
+class _DiffStatus(SiriusDialog):
+
+    def __init__(self, parent=None, desired=None, current=None):
+        super().__init__(parent)
+        self.setWindowTitle('Diff Status')
+        self._desired = desired
+        self._current = current
+        self._setupUi()
+
+    def _setupUi(self):
+        self._text = 'It is all ok!'
+        self._plot = None
+        if isinstance(self._desired, type(self._current)):
+            if isinstance(self._desired, (_np.ndarray, tuple, list)):
+                if len(self._desired) != len(self._current):
+                    self._text = 'Current and desired values have different\n'\
+                                 'lenghts: {} and {}, respectively!'.format(
+                                     len(self._desired), len(self._current))
+                else:
+                    self._text = 'Difference: '
+                    self._plot = PyDMWaveformPlot()
+                    self._plot.autoRangeX = True
+                    self._plot.autoRangeY = True
+                    self._plot.setBackgroundColor(QColor(255, 255, 255))
+                    self._plot.addChannel(y_channel='DES', color='blue')
+                    self._plot.addChannel(y_channel='CURR', color='black')
+                    self._plot.addChannel(y_channel='DIFF', color='magenta')
+                    self._desired_curve = self._plot.curveAtIndex(0)
+                    self._desired_curve.receiveYWaveform(self._desired)
+                    self._desired_curve.redrawCurve()
+                    self._current_curve = self._plot.curveAtIndex(1)
+                    self._current_curve.receiveYWaveform(self._current)
+                    self._current_curve.redrawCurve()
+                    self._diff_curve = self._plot.curveAtIndex(2)
+                    diff = self._current-self._desired
+                    self._diff_curve.receiveYWaveform(diff)
+                    self._diff_curve.redrawCurve()
+            elif isinstance(self._desired, (int, float, str)):
+                self._text = 'Current: {}\nDesired: {}'.format(
+                    self._current, self._desired)
+        elif self._current == 'UNDEF':
+            self._text = 'PV is disconnected!'
+        else:
+            self._text = 'Current value (of type {}) has type\n' \
+                         'different from desired ({})!'.format(
+                             type(self._current), type(self._desired))
+
+        lay = QGridLayout(self)
+        self._label = QLabel(self._text, self, alignment=Qt.AlignCenter)
+        self._label.setStyleSheet("min-width: 20em;")
+        lay.addWidget(self._label, 0, 0, 1, 3)
+        if self._plot:
+            lay.addWidget(self._plot, 1, 0, 1, 3)
+            self.show_des = QCheckBox('Desired')
+            self.show_des.setChecked(True)
+            self.show_des.setStyleSheet('color: blue;')
+            self.show_des.stateChanged.connect(self._desired_curve.setVisible)
+            lay.addWidget(self.show_des, 2, 0)
+            self.show_cur = QCheckBox('Current')
+            self.show_cur.setChecked(True)
+            self.show_cur.setStyleSheet('color: black;')
+            self.show_cur.stateChanged.connect(self._current_curve.setVisible)
+            lay.addWidget(self.show_cur, 2, 1)
+            self.show_dif = QCheckBox('Diff')
+            self.show_dif.setChecked(True)
+            self.show_dif.setStyleSheet('color: magenta;')
+            self.show_dif.stateChanged.connect(self._diff_curve.setVisible)
+            lay.addWidget(self.show_dif, 2, 2)
+        self._ok_bt = QPushButton('Ok', self)
+        self._ok_bt.clicked.connect(self.close)
+        lay.addWidget(self._ok_bt, 3, 1)
