@@ -2,7 +2,6 @@
 
 from functools import partial as _part
 from threading import Thread as _Thread
-import numpy as _np
 import time as _time
 from qtpy.QtWidgets import QGroupBox, QLabel, QPushButton, QGridLayout, \
     QMessageBox, QVBoxLayout, QComboBox
@@ -48,8 +47,7 @@ class StatusAndCommands(QGroupBox):
         self.setStyleSheet("""
             QLabel{
                 qproperty-alignment: AlignCenter;
-                min-height:1.55em; max-height:1.55em;
-                max-width:10em;}""")
+                min-height:1.55em; max-height:1.55em;}""")
 
     def _setupStatusLayout(self):
         self.led_ma_conn = PyDMLedMultiConnection(self)
@@ -132,6 +130,7 @@ class StatusAndCommands(QGroupBox):
                 cb.setCurrentText('None')
                 cb.setEnabled(True)
             cb.setObjectName(ev)
+            cb.currentTextChanged.connect(self.update_ti_params)
             lay.addWidget(lb, i+1, 0)
             lay.addWidget(cb, i+1, 1)
         return lay
@@ -172,9 +171,7 @@ class StatusAndCommands(QGroupBox):
             elif 'PwrState' in p:
                 c2v_setup[pfx + conn[p].pvname_rb] = _PSc.PwrStateSts.On
             elif 'Wfm' in p:
-                c2v_apply[pfx + conn[p].pvname_rb] = {'value': _np.array([]),
-                                                      'comp': 'cl',
-                                                      'abs_tol': 1e-5}
+                c2v_apply[pfx + conn[p].pvname_rb] = None
         self.led_ma_intlk.set_channels2values(c2v_intlk)
         self.led_ma_setup.set_channels2values(c2v_setup)
         self.led_ma_apply.set_channels2values(c2v_apply)
@@ -210,9 +207,8 @@ class StatusAndCommands(QGroupBox):
             c2v_setup[pfx + prpty] = {'value': value, 'comp': 'cl',
                                       'abs_tol': 0.008}
         for prpty, value in conn.ramp_configsetup.items():
-            prpty = prpty.replace('SP', 'RB').replace('Sel', 'Sts')
-            c2v_apply[pfx + prpty] = {'value': value, 'comp': 'cl',
-                                      'abs_tol': 0.008}
+            prpty = prpty.replace('SP', 'RB')
+            c2v_apply[pfx + prpty] = None
         self.led_ti_intlk.set_channels2values(c2v_intlk)
         self.led_ti_setup.set_channels2values(c2v_setup)
         self.led_ti_apply.set_channels2values(c2v_apply)
@@ -364,14 +360,22 @@ class StatusAndCommands(QGroupBox):
         r = self.ramp_config
         p = self.prefix
         c2v = dict()
-        c2v[p+c.Rmp_Ts1.replace('SP', 'RB')] = r.rf_ramp_bottom_duration
-        c2v[p+c.Rmp_Ts2.replace('SP', 'RB')] = r.rf_ramp_rampup_duration
-        c2v[p+c.Rmp_Ts3.replace('SP', 'RB')] = r.rf_ramp_top_duration
-        c2v[p+c.Rmp_Ts4.replace('SP', 'RB')] = r.rf_ramp_rampdown_duration
-        c2v[p+c.Rmp_VoltBot.replace('SP', 'RB')] = r.rf_ramp_bottom_voltage
-        c2v[p+c.Rmp_VoltTop.replace('SP', 'RB')] = r.rf_ramp_top_voltage
-        c2v[p+c.Rmp_PhsBot.replace('SP', 'RB')] = r.rf_ramp_bottom_phase
-        c2v[p+c.Rmp_PhsTop.replace('SP', 'RB')] = r.rf_ramp_top_phase
+        c2v[p+c.Rmp_Ts1.replace('SP', 'RB')] = {
+            'value': r.rf_ramp_bottom_duration, 'comp': 'cl', 'rel_tol': 0.1}
+        c2v[p+c.Rmp_Ts2.replace('SP', 'RB')] = {
+            'value': r.rf_ramp_rampup_duration, 'comp': 'cl', 'rel_tol': 0.1}
+        c2v[p+c.Rmp_Ts3.replace('SP', 'RB')] = {
+            'value': r.rf_ramp_top_duration, 'comp': 'cl', 'rel_tol': 0.1}
+        c2v[p+c.Rmp_Ts4.replace('SP', 'RB')] = {
+            'value': r.rf_ramp_rampdown_duration, 'comp': 'cl', 'rel_tol': 0.1}
+        c2v[p+c.Rmp_VoltBot.replace('SP', 'RB')] = {
+            'value': r.rf_ramp_bottom_voltage, 'comp': 'cl', 'rel_tol': 0.1}
+        c2v[p+c.Rmp_VoltTop.replace('SP', 'RB')] = {
+            'value': r.rf_ramp_top_voltage, 'comp': 'cl', 'rel_tol': 0.1}
+        c2v[p+c.Rmp_PhsBot.replace('SP', 'RB')] = {
+            'value': r.rf_ramp_bottom_phase, 'comp': 'cl', 'rel_tol': 0.1}
+        c2v[p+c.Rmp_PhsTop.replace('SP', 'RB')] = {
+            'value': r.rf_ramp_top_phase, 'comp': 'cl', 'rel_tol': 0.1}
         self.led_rf_apply.set_channels2values(c2v)
 
     def update_ti_params(self):
@@ -383,13 +387,6 @@ class StatusAndCommands(QGroupBox):
         r = self.ramp_config
         p = self.prefix
         c2v = dict()
-        c2v[p+c.TrgMags_Duration.replace('SP', 'RB')] = r.ps_ramp_duration
-        c2v[p+c.TrgCorrs_Duration.replace('SP', 'RB')] = r.ps_ramp_duration
-
-        c2v[p+c.TrgMags_NrPulses.replace('SP', 'RB')] = \
-            r.ps_ramp_wfm_nrpoints_fams
-        c2v[p+c.TrgCorrs_NrPulses.replace('SP', 'RB')] = \
-            r.ps_ramp_wfm_nrpoints_corrs
 
         c2v[p+c.TrgMags_Delay.replace('SP', 'RB')] =  \
             {'value': r.ti_params_ps_ramp_delay, 'comp': 'cl',
@@ -400,6 +397,7 @@ class StatusAndCommands(QGroupBox):
         c2v[p+c.TrgLLRFRmp_Delay.replace('SP', 'RB')] = \
             {'value': r.ti_params_rf_ramp_delay, 'comp': 'cl',
              'abs_tol': 0.008}
+
         c2v[p+c.EvtRmpBO_Delay.replace('SP', 'RB')] = \
             {'value': 0.0, 'comp': 'cl', 'abs_tol': 0.008}
 
@@ -412,20 +410,13 @@ class StatusAndCommands(QGroupBox):
         else:
             conn.update_ramp_configsetup(events_inj, events_eje, delays)
 
-        for ev in events_inj:
-            attr = getattr(c, 'Evt'+ev+'_Delay')
-            attr = attr.replace('SP', 'RB')
-            c2v[p+attr] = {'value': delays[ev], 'comp': 'cl', 'abs_tol': 0.008}
-        for ev in events_eje:
-            attr = getattr(c, 'Evt'+ev+'_Delay')
-            attr = attr.replace('SP', 'RB')
-            c2v[p+attr] = {'value': delays[ev], 'comp': 'cl', 'abs_tol': 0.008}
         for ev in EVT_LIST:
-            if ev in events_inj or ev in events_eje:
-                continue
             attr = getattr(c, 'Evt'+ev+'_Delay')
             attr = attr.replace('SP', 'RB')
-            c2v[p+attr] = None
+            c2v[p+attr] = None \
+                if (ev not in delays.keys() or delays[ev] is None) \
+                else {'value': delays[ev], 'comp': 'cl', 'abs_tol': 0.008}
+
         self.led_ti_apply.set_channels2values(c2v)
 
     def _get_inj_eje_events(self):
