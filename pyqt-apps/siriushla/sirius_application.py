@@ -15,8 +15,7 @@ from .util import get_window_id, set_style
 # Create log file
 LOGFILE = '/tmp/sirius-hla.log'
 try:
-    with open(LOGFILE, 'a'):
-        pass
+    open(LOGFILE, 'a').close()
     os.chmod(LOGFILE, 0o666)
 except (OSError, PermissionError):
     pass
