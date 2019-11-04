@@ -655,7 +655,7 @@ class ShowCorrectorKicks(SiriusDialog):
             self,  alignment=Qt.AlignCenter)
 
         lay = QVBoxLayout(self)
-        lay.setVerticalSpacing(10)
+        lay.setSpacing(10)
         lay.addWidget(label_ch)
         lay.addWidget(self.graph_ch)
         lay.addWidget(label_cv)
