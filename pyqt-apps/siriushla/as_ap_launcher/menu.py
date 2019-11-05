@@ -176,6 +176,7 @@ def get_object(ismenubar=True, parent=None):
             optics = LEVEL2M('Optics', menu)
             optics.setObjectName('LIApp')
             energy = QAction('Energy Meas', optics)
+            energy.setIcon(qta.icon('mdi.gauge'))
             self.connect_newprocess(energy, 'sirius-hla-li-ap-energy.py')
             emit = QAction('Emittance Meas', optics)
             self.connect_newprocess(emit, 'sirius-hla-li-ap-emittance.py')
