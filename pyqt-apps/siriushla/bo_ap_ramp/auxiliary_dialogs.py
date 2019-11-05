@@ -2,14 +2,10 @@
 
 import numpy as _np
 from qtpy.QtCore import Qt, Signal, Slot
-from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QLabel, QWidget, QAbstractItemView, QMessageBox, \
     QHBoxLayout, QVBoxLayout, QGridLayout, QLineEdit, QPushButton, QCheckBox, \
     QTableWidget, QTableWidgetItem, QRadioButton, QDoubleSpinBox, QComboBox, \
-    QSpinBox, QSpacerItem, QTabWidget, QHeaderView, QSizePolicy as QSzPlcy, \
-    QToolTip
-from pyqtgraph import functions
-from pydm.widgets import PyDMWaveformPlot
+    QSpinBox, QSpacerItem, QTabWidget, QHeaderView, QSizePolicy as QSzPlcy
 
 from siriuspy.csdevice.orbitcorr import SOFBFactory
 from siriuspy.clientconfigdb import ConfigDBClient as _ConfigDBClient, \
@@ -19,7 +15,9 @@ from siriuspy.search import MASearch
 from siriuspy.ramp import ramp
 
 from siriushla.widgets.windows import SiriusDialog
-from .custom_widgets import ConfigLineEdit as _ConfigLineEdit
+from .custom_widgets import \
+    ConfigLineEdit as _ConfigLineEdit, \
+    GraphKicks as _GraphKicks
 
 
 class InsertNormalizedConfig(SiriusDialog):
@@ -662,53 +660,3 @@ class ShowCorrectorKicks(SiriusDialog):
         lay.addWidget(self.graph_cv)
         lay.addWidget(lb_stats)
         lay.addWidget(self.lb_statsdata)
-
-
-class _GraphKicks(PyDMWaveformPlot):
-
-    def __init__(self, parent=None, xdata=list(), ydata=list(),
-                 tooltip_names=list(), c0=0, color='blue'):
-        super().__init__(parent)
-        self.setBackgroundColor(QColor(255, 255, 255))
-        self.setAutoRangeX(True)
-        self.setAutoRangeY(True)
-        self.setShowXGrid(True)
-        self.setShowYGrid(True)
-        self.setObjectName('graph')
-        self.setStyleSheet('#graph{min-width:32em;min-height:14em;}')
-
-        self.xdata = xdata
-        self.ydata = ydata
-        self.tooltip_names = tooltip_names
-        self.c0 = c0
-
-        self.addChannel(
-            y_channel='Kicks', x_channel='Pos',
-            color=color, lineWidth=2, symbol='o', symbolSize=10)
-        self.curve = self.curveAtIndex(0)
-        self.curve.receiveXWaveform(xdata)
-        self.curve.receiveYWaveform(ydata)
-        self.curve.redrawCurve()
-
-        self.addChannel(
-            y_channel='Mean', x_channel='Pos',
-            color='black', lineStyle=1, lineWidth=2)
-        self.mean = self.curveAtIndex(1)
-        self.mean.receiveXWaveform(xdata)
-        self.mean.receiveYWaveform(_np.array([_np.mean(ydata)]*len(ydata)))
-        self.mean.redrawCurve()
-
-    def mouseMoveEvent(self, ev):
-        unit = 'urad'
-        pos = ev.pos()
-
-        posx = self.curve.scatter.mapFromScene(pos).x()
-        posx = posx % self.c0
-        ind = _np.argmin(_np.abs(_np.array(self.xdata)-posx))
-        posy = self.curve.scatter.mapFromScene(pos).y()
-
-        sca, prf = functions.siScale(posy)
-        txt = '{0:s}, y = {1:.3f} {2:s}'.format(
-            self.tooltip_names[ind], sca*posy, prf+unit)
-        QToolTip.showText(
-            self.mapToGlobal(pos), txt, self, self.geometry(), 500)
