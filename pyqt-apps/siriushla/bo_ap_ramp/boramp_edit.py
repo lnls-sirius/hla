@@ -1181,10 +1181,10 @@ class MultipolesRamp(QWidget):
         if not self.ramp_config.ps_normalized_configs:
             for maname in self.manames:
                 self.lines[maname].set_linewidth(0)
-                self.m_inj.set_xdata([])
-                self.m_inj.set_ydata([])
-                self.m_ej.set_xdata([])
-                self.m_ej.set_ydata([])
+            self.m_inj.set_xdata([])
+            self.m_inj.set_ydata([])
+            self.m_ej.set_xdata([])
+            self.m_ej.set_ydata([])
         else:
             xds_min = list()
             xds_max = list()
