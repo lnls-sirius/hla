@@ -9,11 +9,12 @@ import qtawesome as qta
 
 from siriuspy.ramp import ramp
 from siriuspy.ramp.conn import ConnMA as _ConnMA, ConnRF as _ConnRF,\
-                               ConnTI as _ConnTI
+    ConnTI as _ConnTI
 from siriuspy.csdevice.pwrsupply import Const as _PSc
 from siriuspy.csdevice.timesys import Const as _TIc
 
 from siriushla.widgets import PyDMLedMultiChannel, PyDMLedMultiConnection
+from siriushla.widgets.dialog import ProgressDialog
 
 EVT_LIST = ['Linac', 'InjBO', 'InjSI', 'Study',
             'DigLI', 'DigTB', 'DigBO', 'DigTS', 'DigSI']
@@ -138,57 +139,56 @@ class StatusAndCommands(QGroupBox):
         return lay
 
     def _prepare_ma(self):
-        # turn off triggers
-        thread = _CommandThread(
-            conn=self.conn_ti,
+        tasks = [None]*3
+        tasks[0] = _CommandThread(
+            parent=self, conn=self.conn_ti,
             cmds=_part(self.conn_ti.cmd_set_magnet_trigger_state,
                        _TIc.DsblEnbl.Dsbl),
-            warn_msgs='Failed to turn magnets trigger off!', parent=self)
-        thread.start()
-        _time.sleep(1)
-        # set magnets opmode
-        thread = _CommandThread(
-            conn=self.conn_ma, cmds=self.conn_ma.cmd_opmode_rmpwfm,
-            warn_msgs='Failed to set MA OpMode to RmpWfm!', parent=self)
-        thread.start()
-        _time.sleep(1)
-        # turn on triggers
-        thread = _CommandThread(
-            conn=self.conn_ti,
+            warn_msgs='Failed to turn magnets trigger off!')
+        tasks[1] = _CommandThread(
+            parent=self, conn=self.conn_ma, use_log=True,
+            cmds=self.conn_ma.cmd_opmode_rmpwfm,
+            warn_msgs='Failed to set MA OpMode to RmpWfm!')
+        tasks[2] = _CommandThread(
+            parent=self, conn=self.conn_ti,
             cmds=_part(self.conn_ti.cmd_set_magnet_trigger_state,
                        _TIc.DsblEnbl.Enbl),
-            warn_msgs='Failed to turn magnets trigger on!', parent=self)
-        thread.start()
+            warn_msgs='Failed to turn magnets trigger on!')
+
+        labels = ['Turning magnets trigger off...',
+                  'Setting magents OpMode to RmpWfm...',
+                  'Turning magnets trigger on...']
+        dlg = ProgressDialog(labels, tasks, self)
+        dlg.exec_()
 
     def _prepare_ti(self):
-        thread = _CommandThread(
-            conn=self.conn_ti,
-            cmds=[self.conn_ti.cmd_setup,
-                  self.conn_ti.cmd_update_evts],
+        task = _CommandThread(
+            parent=self, conn=self.conn_ti,
+            cmds=[self.conn_ti.cmd_setup, self.conn_ti.cmd_update_evts],
             warn_msgs=['Failed to setup TI to ramp!',
-                       'Failed to update events!'],
-            parent=self)
-        thread.start()
+                       'Failed to update events!'])
+        dlg = ProgressDialog('Preparing TI to ramp...', task, self)
+        dlg.exec_()
 
     def _apply_ma(self, manames=list()):
-        thread = _CommandThread(
-            conn=self.conn_ma,
+        task = _CommandThread(
+            parent=self, conn=self.conn_ma, use_log=True,
             cmds=_part(self.conn_ma.cmd_wfm, manames),
-            warn_msgs='Failed to set MA waveforms!',
-            parent=self)
-        thread.start()
+            warn_msgs='Failed to set waveform!')
+        dlg = ProgressDialog('Setting magnets waveforms...', task, self)
+        dlg.exec_()
 
     def _apply_rf(self):
-        thread = _CommandThread(
-            conn=self.conn_rf,
+        task = _CommandThread(
+            parent=self, conn=self.conn_rf, use_log=True,
             cmds=self.conn_rf.cmd_config_ramp,
-            warn_msgs='Failed to set RF parameters!',
-            parent=self)
-        thread.start()
+            warn_msgs='Failed to set RF parameters!')
+        dlg = ProgressDialog('Setting RF parameters...', task, self)
+        dlg.exec_()
 
     def _apply_ti(self):
         events_inj, events_eje = self._get_inj_eje_events()
-        thread = _CommandThread(
+        task = _CommandThread(
             conn=self.conn_ti,
             cmds=[_part(self.conn_ti.cmd_config_ramp,
                         events_inj, events_eje),
@@ -196,7 +196,8 @@ class StatusAndCommands(QGroupBox):
             warn_msgs=['Failed to set TI parameters!',
                        'Failed to update events!'],
             parent=self)
-        thread.start()
+        dlg = ProgressDialog('Setting TI parameters...', task, self)
+        dlg.exec_()
         # update values of inj and eje times in fact implemented
         _time.sleep(3)
         inj_time = self.conn_ti.get_injection_time()/1000  # [ms]
@@ -225,6 +226,8 @@ class StatusAndCommands(QGroupBox):
                 mb.setText(msg)
                 mb.exec_()
                 return
+        else:
+            manames = self.conn_ma.manames
 
         if 'Dipole' in sender_name:
             self._apply_ma(manames)
@@ -358,16 +361,41 @@ class StatusAndCommands(QGroupBox):
 class _CommandThread(QThread):
     """Thread to perform commands."""
 
+    currentItem = Signal(str)
+    itemDone = Signal(str)
+    completed = Signal()
     sentWarning = Signal(str, list)
 
-    def __init__(self, conn, cmds, warn_msgs=list(), parent=None):
+    def __init__(self, conn, cmds, warn_msgs=list(), parent=None,
+                 use_log=False, size=None):
         """Initialize."""
         super().__init__(parent)
+        self._quit_task = False
+
+        self._cmds = cmds
+        if not isinstance(self._cmds, list):
+            self._cmds = [self._cmds, ]
+        self._size = size if size is not None else len(self._cmds)
+
+        self._warn_msgs = warn_msgs
+        if not isinstance(self._warn_msgs, list):
+            self._warn_msgs = [self._warn_msgs, ]
+
         self._conn = conn
         self._subsystem = self._get_subsystem()
-        self._cmds = cmds
-        self._warn_msgs = warn_msgs
+        self._use_log = use_log
+        if use_log:
+            self._conn.logger = self
+
         self.sentWarning.connect(parent.show_warning_message)
+
+    def size(self):
+        """Task size."""
+        return self._size
+
+    def exit_task(self):
+        """Set quit flag."""
+        self._quit_task = True
 
     def _get_subsystem(self):
         conn_name = self._conn.__class__.__name__
@@ -390,16 +418,24 @@ class _CommandThread(QThread):
 
     def run(self):
         """Run."""
-        if not self._verify_connector():
-            return
-        if not isinstance(self._cmds, list):
-            self._cmds = [self._cmds, ]
-        if not isinstance(self._warn_msgs, list):
-            self._warn_msgs = [self._warn_msgs, ]
-        for cmd, msg in zip(self._cmds, self._warn_msgs):
-            cmd_success, problems = cmd()
-            if not cmd_success:
-                self.sentWarning.emit(msg, problems)
+        if not self._quit_task:
+            if not self._verify_connector():
+                return
+            for cmd, msg in zip(self._cmds, self._warn_msgs):
+                cmd_success, problems = cmd()
+                if not self._use_log:
+                    self.itemDone.emit()
+                if not cmd_success:
+                    self.sentWarning.emit(msg, problems)
+                if self._quit_task:
+                    break
+        self.completed.emit()
+        if self._use_log:
+            self._conn.logger = None
+
+    def update(self, item):
+        self.currentItem(item)
+        self.itemDone(item)
 
 
 class _createConnectorsThread(QThread):
