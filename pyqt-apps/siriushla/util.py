@@ -12,6 +12,9 @@ from pydm.utilities.stylesheet import _get_style_data as pydm_get_style_data
 import siriushla.resources as _resources
 
 
+THREAD = None
+
+
 def set_style(app, force_default=False):
     """Implement sirius-hla-style.css as default Qt resource file HLA."""
     if force_default:
@@ -128,11 +131,12 @@ def get_appropriate_signal(widget):
 
 
 def _show_loading_message(parent, cmd):
-    th = LoadingThread(parent, cmd=cmd)
+    global THREAD
+    THREAD = LoadingThread(parent, cmd=cmd)
     message = LoadingDialog(parent, 'Wait', '<h3>Loading Window</h3>')
-    th.openmessage.connect(message.show)
-    th.closemessage.connect(message.close)
-    th.start()
+    THREAD.openmessage.connect(message.show)
+    THREAD.closemessage.connect(message.close)
+    THREAD.start()
 
 
 class LoadingDialog(QDialog):
