@@ -447,9 +447,9 @@ class _CommandThread(QThread):
 
     def _get_subsystem(self):
         conn_name = self._conn.__class__.__name__
-        if conn_name == 'ConnMagnets':
+        if conn_name == 'ConnMA':
             return 'MA'
-        elif conn_name == 'ConnTiming':
+        elif conn_name == 'ConnTI':
             return 'TI'
         elif conn_name == 'ConnRF':
             return 'RF'
