@@ -67,9 +67,6 @@ class CycleWindow(SiriusMainWindow):
                                            tuple(), self)
         self.pwrsupplies_tree.setHeaderHidden(True)
         self.pwrsupplies_tree.setColumnCount(1)
-        self.pwrsupplies_tree.setObjectName('pstree')
-        self.pwrsupplies_tree.setStyleSheet(
-            '#pstree{min-width:15em; max-width:15em;}')
         glay_tree = QVBoxLayout(gb_tree)
         glay_tree.addWidget(self.search_le)
         glay_tree.addWidget(self.pwrsupplies_tree)
@@ -115,9 +112,6 @@ class CycleWindow(SiriusMainWindow):
         self.cycle_bt.clicked.connect(self._cycle)
         self.cycle_bt.setEnabled(False)
         self.progress_list = QListWidget(self)
-        self.progress_list.setObjectName('progresslist')
-        self.progress_list.setStyleSheet("""
-            #progresslist{min-width:28em; max-width:28em;}""")
         self.progress_bar = MyProgressBar(self)
         cyclelay = QGridLayout()
         cyclelay.addWidget(self.prepare_timing_bt, 0, 0)
@@ -161,9 +155,9 @@ class CycleWindow(SiriusMainWindow):
                                 alignment=Qt.AlignCenter), 0, 0, 1, 3)
         layout.addWidget(gb_tree, 1, 0, 5, 1)
         layout.addWidget(gb_status, 1, 1)
-        layout.addWidget(QLabel(''), 2, 2)
+        layout.addWidget(QLabel(''), 2, 1)
         layout.addLayout(cyclelay, 3, 1)
-        layout.addWidget(QLabel(''), 4, 2)
+        layout.addWidget(QLabel(''), 4, 1)
         layout.addWidget(gb_comm, 5, 1)
         layout.setRowStretch(0, 1)
         layout.setRowStretch(1, 3)
@@ -171,6 +165,8 @@ class CycleWindow(SiriusMainWindow):
         layout.setRowStretch(3, 15)
         layout.setRowStretch(4, 1)
         layout.setRowStretch(5, 3)
+        layout.setColumnStretch(0, 1)
+        layout.setColumnStretch(1, 2)
         self.central_widget.setLayout(layout)
         self.central_widget.setStyleSheet("""
             QPushButton{min-height:2em;}
