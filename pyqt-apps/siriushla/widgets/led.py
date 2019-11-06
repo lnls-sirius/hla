@@ -269,6 +269,10 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
 
         if desired_value is None:
             is_desired = True
+        elif current is None:
+            is_desired = False
+        elif current == 'UNDEF':
+            is_desired = False
         else:
             is_desired = fun(current, desired_value, **kws)
         return is_desired
@@ -300,8 +304,6 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
 
     @staticmethod
     def _eq(val1, val2, **kws):
-        if val1 is None or val2 is None:
-            return False
         if isinstance(val1, _np.ndarray):
             is_equal = _np.all(val1 == val2)
         else:
@@ -310,8 +312,6 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
 
     @staticmethod
     def _isclose(val1, val2, **kws):
-        if val1 is None or val2 is None:
-            return False
         if type(val1) != type(val2):
             return False
         if isinstance(val1, (_np.ndarray, tuple, list)) and \
@@ -332,8 +332,6 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
 
     @staticmethod
     def _ne(val1, val2, **kws):
-        if val1 is None or val2 is None:
-            return False
         if isinstance(val1, _np.ndarray):
             is_not_equal = _np.all(val1 != val2)
         else:
@@ -342,8 +340,6 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
 
     @staticmethod
     def _gt(val1, val2, **kws):
-        if val1 is None or val2 is None:
-            return False
         if isinstance(val1, _np.ndarray):
             is_greater = _np.all(val1 > val2)
         else:
@@ -352,8 +348,6 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
 
     @staticmethod
     def _lt(val1, val2, **kws):
-        if val1 is None or val2 is None:
-            return False
         if isinstance(val1, _np.ndarray):
             is_less = _np.all(val1 < val2)
         else:
@@ -362,8 +356,6 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
 
     @staticmethod
     def _ge(val1, val2, **kws):
-        if val1 is None or val2 is None:
-            return False
         if isinstance(val1, _np.ndarray):
             is_greater_or_equal = _np.all(val1 >= val2)
         else:
@@ -372,8 +364,6 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
 
     @staticmethod
     def _le(val1, val2, **kws):
-        if val1 is None or val2 is None:
-            return False
         if isinstance(val1, _np.ndarray):
             is_less_or_equal = _np.all(val1 <= val2)
         else:
@@ -382,8 +372,6 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
 
     @staticmethod
     def _in(val1, val2, **kws):
-        if val1 is None or val2 is None:
-            return False
         return val1 in val2
 
     def mouseDoubleClickEvent(self, ev):
