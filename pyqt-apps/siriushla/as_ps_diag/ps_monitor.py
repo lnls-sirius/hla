@@ -98,19 +98,19 @@ class PSMonitor(SiriusMainWindow):
 
         def get_si_secpos(label):
             if 'B' in label:
-                return (0, 0, 1, 1)
+                return (0, 0, 2, 1)
             elif 'QS' in label:
-                return (3, 0, 1, 1)
+                return (4, 0, 1, 3)
             elif 'Q' in label:
-                return (1, 0, 1, 1)
+                return (0, 1, 2, 1)
             elif 'S' in label:
-                return (2, 0, 1, 1)
+                return (0, 2, 2, 1)
             elif 'PM' in label:
-                return (4, 0, 1, 1)
+                return (1, 0, 1, 1)
             elif 'CH' in label:
-                return (0, 1, 4, 1)
+                return (2, 0, 1, 3)
             elif 'CV' in label:
-                return (0, 2, 4, 1)
+                return (3, 0, 1, 3)
             elif 'Trims' in label:
                 return (5, 0, 1, 3)
             # elif 'FCH' in label:
@@ -118,10 +118,22 @@ class PSMonitor(SiriusMainWindow):
             # elif 'FCV' in label:
             #     return (3, 2, 3, 1)
 
+        def get_col_count(sec, label):
+            if 'QS' in label:
+                return 8 if sec != 'SI' else 30
+            elif 'CH' in label:
+                return 8 if sec != 'SI' else 30
+            elif 'CV' in label:
+                return 8 if sec != 'SI' else 30
+            elif 'Trims' in label:
+                return 8 if sec != 'SI' else 30
+            else:
+                return 8
+
         row, col = 0, 0
         for label, ps in get_ps2labels_dict(sec).items():
             psnames = get_psnames(sec, ps)
-            col_count = 8 if label != 'Trims' else 35
+            col_count = get_col_count(sec, label)
             if not psnames:
                 continue
             if sec != 'SI':
@@ -150,6 +162,10 @@ class PSMonitor(SiriusMainWindow):
                 row, col, rowc, colc = get_si_secpos(label)
                 status_lay.addLayout(grid, row, col, rowc, colc,
                                      alignment=Qt.AlignTop)
+        if sec == 'SI':
+            status_lay.setColumnStretch(0, 1)
+            status_lay.setColumnStretch(1, 1)
+            status_lay.setColumnStretch(2, 1)
 
         return status
 
