@@ -378,11 +378,9 @@ class PSTestWindow(SiriusMainWindow):
     # ---------- devices control ----------
 
     def _get_tree_names(self):
-        lipsnames = PSSearch.get_psnames({'sec': 'LI', 'dis': 'PS'})
-        psnames = PSSearch.get_psnames({'sec': '(TB|BO|TS)', 'dis': 'PS'})
-        # TODO: uncomment when using SI
-        # psnames = PSSearch.get_psnames({'sec': '(TB|BO|TS|SI)', 'dis': 'PS'})
-        psnames.extend(lipsnames)
+        psnames = PSSearch.get_psnames({
+            'sec': '(LI|TB|BO|TS|SI)', 'dis': 'PS',
+            'dev': '(B|Q.*|S.*|CH|CV|Lens|Slnd|Spect)'})
         return psnames
 
     def _filter_psnames(self):
