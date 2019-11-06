@@ -214,7 +214,10 @@ class PVNameTree(QTreeWidget):
         if re.match('^B\w*(-[0-9])?$', name.dev):
             return 'Dipole'
         elif re.match('^Q[A-RT-Z0-9]\w*(-[0-9])?$', name.dev):
-            return 'Quadrupole'
+            if re.match('Fam', name.sub):
+                return 'Quadrupole'
+            else:
+                return 'Trim'
         elif re.match('^QS.*$', name.dev):
             return 'Quadrupole Skew'
         elif re.match('^Spect.*$', name.dev):
