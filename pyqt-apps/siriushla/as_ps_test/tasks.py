@@ -118,7 +118,8 @@ class CheckPwrState(BaseTask):
 
     def function(self):
         """Check PS PwrState."""
-        self._check(method='check_pwrstate', state=self._state)
+        self._check(method='check_pwrstate', state=self._state,
+                    timeout=3*TIMEOUT_CHECK)
 
 
 class CheckInitOk(BaseTask):
