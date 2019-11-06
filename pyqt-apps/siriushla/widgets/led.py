@@ -271,7 +271,7 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
             is_desired = True
         elif current is None:
             is_desired = False
-        elif current == 'UNDEF':
+        elif isinstance(current, str) and current == 'UNDEF':
             is_desired = False
         else:
             is_desired = fun(current, desired_value, **kws)
