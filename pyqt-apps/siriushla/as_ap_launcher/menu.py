@@ -130,9 +130,17 @@ def get_object(ismenubar=True, parent=None):
 
             injection = LEVEL2A('Injection', menu)
             self.connect_newprocess(injection, 'sirius-hla-as-ap-injection.py')
-            timing = LEVEL2A('Timing', menu)
+            timing = LEVEL2M('Timing', menu)
             timing.setIcon(qta.icon('mdi.timer'))
-            self.connect_newprocess(timing, 'sirius-hla-as-ti-control.py')
+            timing.setObjectName('ASApp')
+            main = QAction('Main', timing)
+            self.connect_newprocess(
+                main, ['sirius-hla-as-ti-control.py', '-t', 'main'])
+            summary = QAction('Summary', timing)
+            self.connect_newprocess(
+                summary, ['sirius-hla-as-ti-control.py', '-t', 'summary'])
+            timing.addAction(main)
+            timing.addAction(summary)
 
             pwrsupply = LEVEL2M('PS', menu)
             pwrsupply.setIcon(qta.icon('mdi.car-battery'))

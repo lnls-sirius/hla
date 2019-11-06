@@ -9,7 +9,8 @@ import qtawesome as qta
 from pydm.widgets import PyDMPushButton, PyDMLabel
 from siriuspy.csdevice import timesys as _cstime
 from siriuspy.search import LLTimeSearch, HLTimeSearch
-from siriushla.util import connect_window, get_appropriate_color
+from siriushla.util import connect_window, get_appropriate_color, \
+    connect_newprocess
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets import SiriusMainWindow, PyDMLed, PyDMStateButton
 from .base import MySpinBox as _MySpinBox
@@ -18,7 +19,7 @@ from .evr_eve import EVR as _EVR, EVE as _EVE
 from .afc import AFC as _AFC
 from .fout import FOUT as _FOUT
 from .hl_trigger import HLTriggerList as _HLTriggerList
-from .summary import Summary as _Summary
+from .summary import SummaryWindow as _SummaryWindow
 
 
 class TimingMain(SiriusMainWindow):
@@ -173,9 +174,9 @@ class TimingMain(SiriusMainWindow):
             connect_window(action, Window, None, prefix=prefix+fout+':')
 
         action = main_menu.addAction('&Summary')
-        Window = create_window_from_widget(
-            _Summary, title='Timing Summary', icon=icon)
-        connect_window(action, Window, None, prefix=self.prefix)
+        connect_newprocess(
+            action, ['sirius-hla-as-ti-control.py', '-t', 'summary'],
+            parent=self, is_window=True)
 
     def _create_prop_widget(self, name, parent, wids, align_ver=True):
         pwid = QWidget(parent)

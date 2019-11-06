@@ -1,23 +1,27 @@
 from qtpy.QtCore import Qt, QPoint
 from qtpy.QtGui import QPainter
-from qtpy.QtWidgets import QLabel, QPushButton, QWidget, QGridLayout
+from qtpy.QtWidgets import QLabel, QPushButton, QWidget, QGridLayout, \
+    QGroupBox, QVBoxLayout, QHBoxLayout, QApplication
 import qtawesome as qta
 
 from siriuspy.namesys import SiriusPVName as PVName
-from siriuspy.search import LLTimeSearch
-from siriushla.widgets import SiriusLedAlert
-from siriushla.util import connect_window, get_appropriate_color
+from siriuspy.search import LLTimeSearch, HLTimeSearch
+from siriushla.widgets import SiriusLedAlert, SiriusMainWindow, \
+    PyDMLedMultiChannel
+from siriushla.util import get_appropriate_color
 from siriushla.widgets.windows import create_window_from_widget
 if __name__ == '__main__':
-    from siriushla.as_ti_control import AFC, EVE, EVR, EVG, FOUT
+    from siriushla.as_ti_control import AFC, EVE, EVR, EVG, FOUT, \
+        HLTriggerDetailed
 else:
     from .afc import AFC
     from .evg import EVG
     from .evr_eve import EVR, EVE
     from .fout import FOUT
+    from .hl_trigger import HLTriggerDetailed
 
 
-class Button(QWidget):
+class LLButton(QWidget):
 
     def __init__(self, prefix, link, parent=None):
         super().__init__(parent)
@@ -38,14 +42,7 @@ class Button(QWidget):
             name += self.prefix.dev
         if self.prefix.idx:
             name += '-' + self.prefix.idx
-        but = QPushButton(name, self)
-        but.setAutoDefault(False)
-        but.setDefault(False)
         clss = self._dic[self.prefix.dev]
-        icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
-        Window = create_window_from_widget(
-            clss, title=self.prefix.device_name, icon=icon)
-        connect_window(but, Window, None, prefix=self.prefix + ':')
 
         props = ['DevEnbl', 'Network', 'LinkStatus', 'IntlkStatus']
         suffs = ['-Sts', '-Mon', '-Mon', '-Mon']
@@ -60,31 +57,83 @@ class Button(QWidget):
         elif self.prefix.dev == 'Fout':
             props = props[:-1]
 
-        lay = QGridLayout(self)
-        lay.addWidget(lbl0, 0, 0, 1, len(props), Qt.AlignCenter)
-        lay.addWidget(but, 1, 0, 1, len(props))
-
+        channels2values = dict()
         for i, prop in enumerate(props):
             pvn = self.prefix.substitute(propty=prop+suffs[i])
-            led = SiriusLedAlert(self)
-            led.channel = pvn
-            led.setToolTip(prop)
-            if chng[i]:
-                led.onColor, led.offColor = led.offColor, led.onColor
-            lay.addWidget(led, 2, i)
+            channels2values[pvn] = 1 if chng[i] else 0
+        led = PyDMLedMultiChannel(
+             parent=self, channels2values=channels2values)
+        led.setToolTip(self.prefix)
+        icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
+        Window = create_window_from_widget(
+            clss, title=self.prefix.device_name, icon=icon)
+        led.clicked.connect(lambda: QApplication.instance().open_window(
+            Window, parent=None, prefix=self.prefix + ':'))
+
+        lay = QHBoxLayout(self)
+        lay.addWidget(lbl0)
+        lay.addWidget(led)
 
 
-class Summary(QWidget):
+class HLButton(QWidget):
+
+    def __init__(self, trigger, parent=None):
+        super().__init__(parent=parent)
+        hl = QHBoxLayout()
+        self.setLayout(hl)
+        self.layout().setContentsMargins(0, 0, 0, 0)
+        led = SiriusLedAlert(self)
+        led.setToolTip(trigger)
+        led.channel = trigger.substitute(propty='Status-Mon')
+        self.layout().addWidget(led)
+        icon = qta.icon('mdi.timer', color=get_appropriate_color(trigger.sec))
+        Window = create_window_from_widget(
+            HLTriggerDetailed, title=trigger, icon=icon)
+        led.clicked.connect(lambda: QApplication.instance().open_window(
+            Window, parent=None, prefix=trigger + ':'))
+
+
+class SummaryHL(QGroupBox):
 
     def __init__(self, parent=None, prefix=''):
-        super().__init__(parent=parent)
         self.prefix = prefix
-        self.setupui()
+        super().__init__('High Level Summary', parent=parent)
+        self._setupui()
         self.setObjectName('ASApp')
 
-    def setupui(self):
+    def _setupui(self):
+        lay = QGridLayout()
+        self.setLayout(lay)
+        hltrigs = HLTimeSearch.get_hl_triggers()
+        secs = set(map(lambda x: x.sec, hltrigs))
+        secs = {sec: [] for sec in secs}
+        nrcols = 10
+        for trig in hltrigs:
+            secs[trig.sec].append(trig)
+
+        for sec in sorted(secs):
+            lab = QLabel(sec)
+            lab.setStyleSheet('font-weight: bold;')
+            lay.addWidget(lab, lay.rowCount(), 0, 1, nrcols)
+            row = lay.rowCount()
+            for i, trig in enumerate(sorted(secs[sec])):
+                if i and not i % nrcols:
+                    row = lay.rowCount()
+                but = HLButton(trig, self)
+                lay.addWidget(but, row, i % nrcols)
+
+
+class SummaryLL(QGroupBox):
+
+    def __init__(self, parent=None, prefix=''):
+        super().__init__('Low Level Summary', parent=parent)
+        self.prefix = prefix
+        self._setupui()
+        self.setObjectName('ASApp')
+
+    def _setupui(self):
         evg = LLTimeSearch.get_device_names({'dev': 'EVG'})
-        g1 = Button(self.prefix+evg[0], '', self)
+        g1 = LLButton(self.prefix+evg[0], '', self)
         self.g1 = g1
 
         downs = LLTimeSearch.get_device_names({'dev': 'Fout'})
@@ -116,13 +165,14 @@ class Summary(QWidget):
                 if not j:
                     self.g3.append(g)
                 lay.addWidget(g, i, j+2)
-        lay.setColumnMinimumWidth(0, 300)
-        lay.setColumnMinimumWidth(1, 200)
+        lay.setColumnMinimumWidth(0, 100)
+        lay.setColumnMinimumWidth(1, 120)
 
     def setupdown(self, down):
-        return [Button(self.prefix+pre, lnk, self) for lnk, pre in down]
+        return [LLButton(self.prefix+pre, lnk, self) for lnk, pre in down]
 
     def paintEvent(self, event):
+        super().paintEvent(event)
         sz = self.g1.size()
         p1 = self.g1.pos() + QPoint(sz.width(), sz.height()//2)
         for i, g2 in enumerate(self.g2):
@@ -135,9 +185,9 @@ class Summary(QWidget):
             self.drawarrow(p2, p3)
 
     def drawarrow(self, p1, p2):
-        line = self.drawline(p1, p2, 0)
-        line = self.drawline(p2, p1, 10, True)
-        line = self.drawline(p2, p1, -10, True)
+        self.drawline(p1, p2, 0)
+        self.drawline(p2, p1, 10, True)
+        self.drawline(p2, p1, -10, True)
 
     def drawline(self, p1, p2, angle, tip=False):
         painter = QPainter()
@@ -145,18 +195,39 @@ class Summary(QWidget):
         painter.setRenderHint(QPainter.Antialiasing)
         painter.setPen(Qt.blue)
         pen = painter.pen()
-        pen.setWidth(3)
+        pen.setWidth(2)
         painter.setPen(pen)
         painter.setBrush(Qt.blue)
         painter.translate(p1)
         painter.rotate(angle)
         pt = (p2-p1)
         if tip:
-            pt /= (pt.x()**2 + pt.y()**2)**0.5 / 20
+            pt /= (pt.x()**2 + pt.y()**2)**0.5 / 10
         # painter.scale(scale, scale)
         # painter.drawLine(QPoint(0, 0), (p2-p1)*scale)
         painter.drawLine(QPoint(0, 0), pt)
         return painter
+
+
+class SummaryWindow(SiriusMainWindow):
+
+    def __init__(self, parent=None, prefix=''):
+        self.prefix = prefix
+        super().__init__(parent=parent)
+        self._setupui()
+        self.setObjectName('ASApp')
+        self.setWindowIcon(
+            qta.icon('mdi.timer', color=get_appropriate_color('AS')))
+
+    def _setupui(self):
+        wid = QWidget(self)
+        self.setCentralWidget(wid)
+        gl = QGridLayout(wid)
+        gl.addWidget(QLabel(
+            '<h1>Timing Summary</h1>', alignment=Qt.AlignCenter), 0, 0, 1, 2)
+        gl.addWidget(SummaryLL(self, prefix=self.prefix), 1, 0)
+        gl.addWidget(SummaryHL(self, prefix=self.prefix), 1, 1)
+
 
 if __name__ == '__main__':
     """Run Example."""
@@ -166,8 +237,6 @@ if __name__ == '__main__':
 
     props = {'detailed', 'state', 'pulses', 'duration'}
     app = SiriusApplication()
-    win = SiriusMainWindow()
-    wid = Summary(parent=win)
-    win.setCentralWidget(wid)
+    win = SummaryWindow()
     win.show()
     sys.exit(app.exec_())
