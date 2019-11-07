@@ -13,9 +13,8 @@ from siriuspy.envars import vaca_prefix as _prefix
 from siriuspy.clientconfigdb import ConfigDBClient
 
 from siriushla import util
-from siriushla.widgets.dialog import ReportDialog, ProgressDialog
-from siriushla.common.epics.wrapper import PyEpicsWrapper
-from siriushla.common.epics.task import EpicsChecker, EpicsSetter
+from siriushla.widgets.windows import create_window_from_widget
+from siriushla.as_ap_configdb.pvsconfigs import SelectAndApplyPVsWidget
 
 
 def get_pushbutton(name, parent):
@@ -426,49 +425,14 @@ def get_object(ismenubar=True, parent=None):
                             self, 'Message',
                             'Could not connect to LI-01:EG-FilaPS!')
 
-            server_global = ConfigDBClient(config_type='global_config')
-            try:
-                config = server_global.get_config_value(config_name)['pvs']
-            except Exception:
-                QMessageBox.critical(
-                    self, 'Problem Loading',
-                    'Configuration \''+config_name+'\' not found in Server!')
-                return
+            client = ConfigDBClient()
 
-            set_pvs_tuple = list()
-            check_pvs_tuple = list()
-            for t in config:
-                try:
-                    pv, value, delay = t
-                except ValueError:
-                    pv, value = t
-                    delay = 1e-2
-                set_pvs_tuple.append((pv, value, delay))
-                check_pvs_tuple.append((pv, value, delay))
-
-            # Create thread
-            pvs, values, delays = zip(*set_pvs_tuple)
-            set_task = EpicsSetter(pvs, values, delays, PyEpicsWrapper, self)
-            pvs, values, delays = zip(*check_pvs_tuple)
-            check_task = EpicsChecker(
-                pvs, values, delays, PyEpicsWrapper, self)
-            failed = []
-            check_task.itemChecked.connect(
-                lambda pv, status: failed.append(pv) if not status else None)
-
-            # Set/Check PVs values and show wait dialog informing user
-            labels = ['Setting PV values', 'Checking PV values']
-            tasks = [set_task, check_task]
-            dlg = ProgressDialog(labels, tasks, self)
-            dlg.rejected.connect(set_task.exit_task)
-            dlg.rejected.connect(check_task.exit_task)
-            ret = dlg.exec_()
-            if ret == dlg.Rejected:
-                return
-
-            # Show report dialog informing user results
-            self._report = ReportDialog(failed, self)
-            self._report.show()
+            WinClass = create_window_from_widget(
+                SelectAndApplyPVsWidget, 'Select PVs to Apply Standby')
+            wind = WinClass(self, client)
+            wind.widget.settingFinished.connect(wind.close)
+            wind.widget.fill_config('global_config', config_name)
+            wind.exec_()
 
     return MainMenuBar(parent=parent)
 
