@@ -25,7 +25,8 @@ sips2filters = {'B': {'sec': 'SI', 'sub': '.*', 'dev': 'B.*'},
                 'CH': {'sec': 'SI', 'sub': '.*', 'dev': 'CH.*'},
                 'Trims': {'sec': 'SI', 'sub': '[0-2][0-9].*',
                           'dev': 'Q(F|D|[1-4]).*'},
-                'QS': {'sec': 'SI', 'sub': '.*', 'dev': 'QS.*'},
+                'QS': {'sec': 'SI', 'sub': '[0-2][0-9](M1|M2|C1|C3)',
+                       'dev': 'QS'},
                 # 'FCV ': {'sec': 'SI', 'sub': '.*', 'dev': 'FCV.*'},
                 # 'FCH ': {'sec': 'SI', 'sub': '.*', 'dev': 'FCH.*'}}
                 }
