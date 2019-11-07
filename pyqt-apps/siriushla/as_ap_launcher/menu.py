@@ -408,22 +408,22 @@ def get_object(ismenubar=True, parent=None):
             if ans != QMessageBox.Yes:
                 return
 
-            if config_name == 'standby':
-                current, ok = QInputDialog.getDouble(
-                    self, 'Enter value: ',
-                    'Enter FilaPS standby current [A]\n'
-                    'or cancel to not set it: ',
-                    value=0.7, min=0.0, max=1.5, decimals=3)
-                if ok:
-                    fila_pv = _PV(_prefix+'LI-01:EG-FilaPS:currentoutsoft',
-                                  connection_timeout=0.05)
-                    fila_pv.get()  # force connection
-                    if fila_pv.connected:
-                        fila_pv.put(current)
-                    else:
-                        QMessageBox.warning(
-                            self, 'Message',
-                            'Could not connect to LI-01:EG-FilaPS!')
+            current, ok = QInputDialog.getDouble(
+                self, 'Enter value: ',
+                'Enter FilaPS standby current [A]\n'
+                'or cancel to not set it: ',
+                value=0.7, min=0.0, max=1.5, decimals=3)
+            if ok:
+                fila_pv = _PV(
+                    _prefix+'LI-01:EG-FilaPS:currentoutsoft',
+                    connection_timeout=0.05)
+                fila_pv.get()  # force connection
+                if fila_pv.connected:
+                    fila_pv.put(current)
+                else:
+                    QMessageBox.warning(
+                        self, 'Message',
+                        'Could not connect to LI-01:EG-FilaPS!')
 
             client = ConfigDBClient()
 
