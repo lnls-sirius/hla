@@ -88,24 +88,24 @@ def create_window_from_widget(WidgetClass, title='', icon=None, is_main=False):
 
             def __init__(self, parent, *args, **kwargs):
                 super().__init__(parent)
-                wid = WidgetClass(self, *args, **kwargs)
-                self.setCentralWidget(wid)
+                self.widget = WidgetClass(self, *args, **kwargs)
+                self.setCentralWidget(self.widget)
                 self.setWindowTitle(title)
                 if icon:
                     self.setWindowIcon(icon)
-                self.setObjectName(wid.objectName())
+                self.setObjectName(self.widget.objectName())
     else:
         class MyWindow(SiriusDialog):
 
             def __init__(self, parent, *args, **kwargs):
                 super().__init__(parent)
                 hbl = QHBoxLayout(self)
-                wid = WidgetClass(self, *args, **kwargs)
-                hbl.addWidget(wid)
+                self.widget = WidgetClass(self, *args, **kwargs)
+                hbl.addWidget(self.widget)
                 self.setWindowTitle(title)
                 if icon:
                     self.setWindowIcon(icon)
-                self.setObjectName(wid.objectName())
+                self.setObjectName(self.widget.objectName())
 
     MyWindow.__name__ = WidgetClass.__name__.replace('Widget', 'Window')
     return MyWindow
