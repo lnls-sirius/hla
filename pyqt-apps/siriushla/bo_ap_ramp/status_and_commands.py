@@ -172,7 +172,7 @@ class StatusAndCommands(QGroupBox):
 
     def _apply_ma(self, manames=list()):
         task = _CommandThread(
-            parent=self, conn=self.conn_ma, use_log=True,
+            parent=self, conn=self.conn_ma, use_log=True, size=len(manames),
             cmds=_part(self.conn_ma.cmd_wfm, manames),
             warn_msgs='Failed to set waveform!')
         dlg = ProgressDialog('Setting magnets waveforms...', task, self)
@@ -189,13 +189,12 @@ class StatusAndCommands(QGroupBox):
     def _apply_ti(self):
         events_inj, events_eje = self._get_inj_eje_events()
         task = _CommandThread(
-            conn=self.conn_ti,
+            conn=self.conn_ti, parent=self,
             cmds=[_part(self.conn_ti.cmd_config_ramp,
                         events_inj, events_eje),
                   self.conn_ti.cmd_update_evts],
             warn_msgs=['Failed to set TI parameters!',
-                       'Failed to update events!'],
-            parent=self)
+                       'Failed to update events!'])
         dlg = ProgressDialog('Setting TI parameters...', task, self)
         dlg.exec_()
         # update values of inj and eje times in fact implemented
@@ -424,7 +423,7 @@ class _CommandThread(QThread):
             for cmd, msg in zip(self._cmds, self._warn_msgs):
                 cmd_success, problems = cmd()
                 if not self._use_log:
-                    self.itemDone.emit()
+                    self.itemDone.emit('')
                 if not cmd_success:
                     self.sentWarning.emit(msg, problems)
                 if self._quit_task:
@@ -434,8 +433,8 @@ class _CommandThread(QThread):
             self._conn.logger = None
 
     def update(self, item):
-        self.currentItem(item)
-        self.itemDone(item)
+        self.currentItem.emit(item)
+        self.itemDone.emit(item)
 
 
 class _createConnectorsThread(QThread):
