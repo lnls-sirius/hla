@@ -1,7 +1,8 @@
-from siriushla.as_ti_control.hltiming import TimingMain
-from siriushla.as_ti_control.evg import EVG, EventList, ClockList
-from siriushla.as_ti_control.fout import FOUT
-from siriushla.as_ti_control.afc import AFC
-from siriushla.as_ti_control.evr_eve import EVE, EVR
-from siriushla.as_ti_control.hl_trigger import HLTriggerDetailed, HLTriggerList
-from siriushla.as_ti_control.ll_trigger import LLTriggerList
+from .hltiming import TimingMain
+from .summary import SummaryWindow
+from .evg import EVG, EventList, ClockList
+from .fout import FOUT
+from .afc import AFC
+from .evr_eve import EVE, EVR
+from .hl_trigger import HLTriggerDetailed, HLTriggerList
+from .ll_trigger import LLTriggerList
