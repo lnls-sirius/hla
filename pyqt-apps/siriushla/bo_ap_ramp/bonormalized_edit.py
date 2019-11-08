@@ -21,6 +21,8 @@ from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.as_ap_configdb import SaveConfigDialog as _SaveConfigDialog
 from siriushla.bo_ap_ramp.custom_widgets import \
     MyDoubleSpinBox as _MyDoubleSpinBox
+from siriushla.bo_ap_ramp.auxiliary_dialogs import \
+    ShowCorrectorKicks as _ShowCorrectorKicks
 
 
 _flag_stack_next_command = True
@@ -177,12 +179,16 @@ class BONormEdit(SiriusMainWindow):
         self.cb_checklims.setChecked(True)
         self.cb_checklims.stateChanged.connect(self._handleStrengtsLimits)
 
+        self.bt_graph = QPushButton(qta.icon('mdi.chart-line'), '', self)
+        self.bt_graph.clicked.connect(self._show_kicks_graph)
+
         gbox = QGroupBox()
         gbox.setObjectName('strengths')
         gbox.setStyleSheet('#strengths{min-width:20em;}')
         glay = QGridLayout()
         glay.addWidget(scrollarea, 0, 0, 1, 2)
-        glay.addWidget(self.cb_checklims, 1, 0, 1, 2)
+        glay.addWidget(self.cb_checklims, 1, 0, alignment=Qt.AlignLeft)
+        glay.addWidget(self.bt_graph, 1, 1, alignment=Qt.AlignRight)
         gbox.setLayout(glay)
         return gbox
 
@@ -638,6 +644,10 @@ class BONormEdit(SiriusMainWindow):
             manames.extend(sorted(_MASearch.get_manames(
                 filters={'sec': 'BO', 'dev': 'CV'})))
         return manames
+
+    def _show_kicks_graph(self):
+        graph = _ShowCorrectorKicks(self, self.norm_config)
+        graph.exec_()
 
 
 class _UndoRedoSpinbox(QUndoCommand):

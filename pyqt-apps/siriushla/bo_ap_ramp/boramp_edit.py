@@ -2,12 +2,10 @@
 
 from functools import partial as _part
 
-from threading import Thread as _Thread
-
 import numpy as np
 import math as _math
 
-from qtpy.QtCore import Qt, Signal, Slot
+from qtpy.QtCore import Qt, Signal, Slot, QThread
 from qtpy.QtGui import QBrush, QColor
 from qtpy.QtWidgets import QGroupBox, QLabel, QWidget, QMessageBox, \
     QVBoxLayout, QHBoxLayout, QGridLayout, QCheckBox, QPushButton, \
@@ -22,7 +20,7 @@ from matplotlib.figure import Figure
 from siriuspy.csdevice.pwrsupply import MAX_WFMSIZE
 from siriuspy.search import MASearch as _MASearch
 from siriuspy.ramp import ramp, exceptions
-from siriuspy.ramp.magnet import Magnet as _Magnet
+from siriuspy.ramp.magnet import get_magnet as _get_magnet
 from siriuspy.ramp.conn import ConnSOFB as _ConnSOFB
 
 from siriushla.widgets import SiriusFigureCanvas
@@ -41,6 +39,7 @@ from siriushla.bo_ap_ramp.bonormalized_edit import BONormEdit as _BONormEdit
 
 _flag_stack_next_command = True
 _flag_stacking = False
+_aux_magnets = dict()
 
 
 class ConfigParameters(QGroupBox):
@@ -619,13 +618,13 @@ class DipoleRamp(QWidget):
         else:
             func = self.ramp_config.ps_waveform_interp_currents
 
-        inj_marker_time = self.ramp_config.ti_params_injection_time
-        self.m_inj.set_xdata(inj_marker_time)
-        self.m_inj.set_ydata(func('BO-Fam:MA-B', inj_marker_time))
+        inj_time = self.ramp_config.ti_params_injection_time
+        self.m_inj.set_xdata(inj_time)
+        self.m_inj.set_ydata(func('BO-Fam:MA-B', inj_time))
 
-        ej_marker_time = self.ramp_config.ti_params_ejection_time
-        self.m_ej.set_xdata(ej_marker_time)
-        self.m_ej.set_ydata(func('BO-Fam:MA-B', ej_marker_time))
+        ej_time = self.ramp_config.ti_params_ejection_time
+        self.m_ej.set_xdata(ej_time)
+        self.m_ej.set_ydata(func('BO-Fam:MA-B', ej_time))
 
         self.graph.figure.canvas.draw()
         self.graph.figure.canvas.flush_events()
@@ -760,10 +759,9 @@ class MultipolesRamp(QWidget):
         self._conn_sofb = _ConnSOFB(self.prefix)
 
         self._manames = _MASearch.get_manames({'sec': 'BO', 'dis': 'MA'})
+        th = _createMagnets(self, self._manames)
+        th.start()
         self._manames.remove('BO-Fam:MA-B')
-        self._aux_magnets = dict()
-        t = _Thread(target=self._createMagnets, daemon=True)
-        t.start()
 
         self.setObjectName('MultipolesRampWidget')
         self._setupUi()
@@ -771,11 +769,6 @@ class MultipolesRamp(QWidget):
     @property
     def manames(self):
         return self._manames
-
-    def _createMagnets(self):
-        for ma in self.manames:
-            self._aux_magnets[ma] = _Magnet(ma)
-        self._aux_magnets['BO-Fam:MA-B'] = _Magnet('BO-Fam:MA-B')
 
     def _setupUi(self):
         label = QLabel('<h3>Multipoles Ramp</h3>', self)
@@ -863,8 +856,8 @@ class MultipolesRamp(QWidget):
         self.ax.grid()
         self.ax.set_xlabel('t [ms]')
         self.lines = dict()
-        for maname in self.manames:
-            self.lines[maname], = self.ax.plot([0], [0], '-b')
+        th = _createGraphCurves(self, self._manames, self.ax, self.lines)
+        th.start()
         self.m_inj, = self.ax.plot([0], [0], ls='', marker='o', c='#787878')
         self.m_ej, = self.ax.plot([0], [0], ls='', marker='o', c='#787878')
 
@@ -1100,7 +1093,7 @@ class MultipolesRamp(QWidget):
 
     def _showEditNormConfigWindow(self, pos):
         for maname in self.manames:
-            if maname not in self._aux_magnets.keys():
+            if maname not in _aux_magnets.keys():
                 QMessageBox.warning(
                     self, 'Wait...',
                     'Loading magnets data... \n'
@@ -1129,7 +1122,7 @@ class MultipolesRamp(QWidget):
         # creating a new bonorm_edit
         w = _BONormEdit(parent=self, prefix=self.prefix,
                         norm_config=self.ramp_config[nconfig_name],
-                        energy=energy, magnets=self._aux_magnets,
+                        energy=energy, magnets=_aux_magnets,
                         conn_sofb=self._conn_sofb,
                         tunecorr_configname=self._tunecorr_configname,
                         chromcorr_configname=self._chromcorr_configname)
@@ -1181,10 +1174,10 @@ class MultipolesRamp(QWidget):
         if not self.ramp_config.ps_normalized_configs:
             for maname in self.manames:
                 self.lines[maname].set_linewidth(0)
-                self.m_inj.set_xdata([])
-                self.m_inj.set_ydata([])
-                self.m_ej.set_xdata([])
-                self.m_ej.set_ydata([])
+            self.m_inj.set_xdata([])
+            self.m_inj.set_ydata([])
+            self.m_ej.set_xdata([])
+            self.m_ej.set_ydata([])
         else:
             xds_min = list()
             xds_max = list()
@@ -1247,10 +1240,10 @@ class MultipolesRamp(QWidget):
             else:
                 self.ax.set_ylabel('Currents [A]')
 
-            inj_marker_time = self.ramp_config.ti_params_injection_time
-            self.m_inj.set_xdata(inj_marker_time)
-            ej_marker_time = self.ramp_config.ti_params_ejection_time
-            self.m_ej.set_xdata(ej_marker_time)
+            inj_time = self.ramp_config.ti_params_injection_time
+            self.m_inj.set_xdata(inj_time)
+            ej_time = self.ramp_config.ti_params_ejection_time
+            self.m_ej.set_xdata(ej_time)
 
             inj_marker_value = list()
             ej_marker_value = list()
@@ -1259,8 +1252,8 @@ class MultipolesRamp(QWidget):
             else:
                 func = self.ramp_config.ps_waveform_interp_currents
             for maname in self._magnets_to_plot:
-                inj_marker_value.append(func(maname, inj_marker_time))
-                ej_marker_value.append(func(maname, ej_marker_time))
+                inj_marker_value.append(func(maname, inj_time))
+                ej_marker_value.append(func(maname, ej_time))
             self.m_inj.set_ydata(inj_marker_value)
             self.m_ej.set_ydata(ej_marker_value)
 
@@ -1313,6 +1306,13 @@ class MultipolesRamp(QWidget):
     @Slot(ramp.BoosterRamp)
     def handleLoadRampConfig(self, ramp_config=None):
         """Update all widgets in loading BoosterRamp config."""
+        for maname in self.manames:
+            if maname not in self.lines.keys():
+                QMessageBox.warning(
+                    self, 'Wait...',
+                    'Loading magnets curves... \n'
+                    'Wait a moment and try again.', QMessageBox.Ok)
+                return
         if ramp_config is not None:
             self.ramp_config = ramp_config
             self.bonorm_edit_dict = dict()
@@ -1683,15 +1683,15 @@ class RFRamp(QWidget):
         ydata.append(self.ramp_config.rf_ramp_voltages[0])
         self.line1.set_ydata(ydata)
 
-        inj_marker_time = self.ramp_config.ti_params_injection_time
-        self.m_inj.set_xdata(inj_marker_time)
-        self.m_inj.set_ydata(self.ramp_config.rf_ramp_interp_voltages(
-            inj_marker_time))
+        inj_time = self.ramp_config.ti_params_injection_time
+        self.m_inj.set_xdata(inj_time)
+        self.m_inj.set_ydata(
+            self.ramp_config.rf_ramp_interp_voltages(inj_time))
 
-        ej_marker_time = self.ramp_config.ti_params_ejection_time
-        self.m_ej.set_xdata(ej_marker_time)
-        self.m_ej.set_ydata(self.ramp_config.rf_ramp_interp_voltages(
-            ej_marker_time))
+        ej_time = self.ramp_config.ti_params_ejection_time
+        self.m_ej.set_xdata(ej_time)
+        self.m_ej.set_ydata(
+            self.ramp_config.rf_ramp_interp_voltages(ej_time))
 
         ph_times = self.ramp_config.ps_waveform_get_times('BO-Fam:MA-B')
         ph = self._calc_syncphase(ph_times)
@@ -1776,6 +1776,34 @@ class RFRamp(QWidget):
         self.updateRFDelay()
         self.updateTable()
 
+
+# ---------- auxiliar threads ----------
+
+class _createMagnets(QThread):
+
+    def __init__(self, parent, manames):
+        super().__init__(parent)
+        self.manames = manames
+
+    def run(self):
+        for ma in self.manames:
+            _aux_magnets[ma] = _get_magnet(ma)
+
+
+class _createGraphCurves(QThread):
+
+    def __init__(self, parent, manames, axis, lines):
+        super().__init__(parent)
+        self.manames = manames
+        self.axis = axis
+        self.lines = lines
+
+    def run(self):
+        for maname in self.manames:
+            self.lines[maname], = self.axis.plot([0], [0], '-b')
+
+
+# ----- undo/redo auxiliar classes -----
 
 class _UndoRedoTableCell(QUndoCommand):
     """Class to define command change table cell."""

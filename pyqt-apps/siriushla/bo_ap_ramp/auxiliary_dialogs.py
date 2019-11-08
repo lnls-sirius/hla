@@ -1,18 +1,23 @@
 """Booster Ramp Control HLA: Auxiliar Classes Module."""
 
+import numpy as _np
 from qtpy.QtCore import Qt, Signal, Slot
 from qtpy.QtWidgets import QLabel, QWidget, QAbstractItemView, QMessageBox, \
     QHBoxLayout, QVBoxLayout, QGridLayout, QLineEdit, QPushButton, QCheckBox, \
     QTableWidget, QTableWidgetItem, QRadioButton, QDoubleSpinBox, QComboBox, \
     QSpinBox, QSpacerItem, QTabWidget, QHeaderView, QSizePolicy as QSzPlcy
 
+from siriuspy.csdevice.orbitcorr import SOFBFactory
 from siriuspy.clientconfigdb import ConfigDBClient as _ConfigDBClient, \
     ConfigDBDocument as _ConfigDBDocument, \
     ConfigDBException as _ConfigDBException
+from siriuspy.search import MASearch
 from siriuspy.ramp import ramp
 
 from siriushla.widgets.windows import SiriusDialog
-from .custom_widgets import ConfigLineEdit as _ConfigLineEdit
+from .custom_widgets import \
+    ConfigLineEdit as _ConfigLineEdit, \
+    GraphKicks as _GraphKicks
 
 
 class InsertNormalizedConfig(SiriusDialog):
@@ -595,3 +600,63 @@ class ChooseMagnetsToPlot(SiriusDialog):
 
         self.choosePlotSignal.emit(maname_list)
         self.close()
+
+
+class ShowCorrectorKicks(SiriusDialog):
+    """Auxiliar window to show corrector kicks waveform."""
+
+    def __init__(self, parent, norm_config):
+        """Init."""
+        super().__init__(parent)
+        self.setWindowTitle('Kicks')
+        self.setObjectName('BOApp')
+        self.norm_config = norm_config
+        self.consts = SOFBFactory.create('BO')
+        self._setupUi()
+
+    def _setupUi(self):
+        self.kicks = dict()
+        for dev in ['CV', 'CH']:
+            f = {'sec': 'BO', 'dev': dev}
+            names = MASearch.get_manames(filters=f)
+            corr2kicks = {n.strip(':Kick-SP'): k
+                          for n, k, d in self.norm_config.value['pvs']}
+            self.kicks[dev] = _np.array([corr2kicks[n] for n in names])
+
+        label_ch = QLabel('<h3>Horizontal</h3>', self,
+                          alignment=Qt.AlignCenter)
+        self.graph_ch = _GraphKicks(
+            parent=self,
+            xdata=_np.array(self.consts.CH_POS),
+            ydata=self.kicks['CH'],
+            tooltip_names=self.consts.CH_NICKNAMES,
+            c0=self.consts.C0,
+            color='blue')
+
+        label_cv = QLabel('<h3>Vertical</h3>', self,
+                          alignment=Qt.AlignCenter)
+        self.graph_cv = _GraphKicks(
+            parent=self,
+            xdata=_np.array(self.consts.CV_POS),
+            ydata=self.kicks['CV'],
+            tooltip_names=self.consts.CV_NICKNAMES,
+            c0=self.consts.C0,
+            color='red')
+
+        lb_stats = QLabel('<h4>Statistics: </h4>', self,
+                          alignment=Qt.AlignCenter)
+        self.lb_statsdata = QLabel(
+            'X: {:7.3f} ± {:7.3f} urad\n'
+            'Y: {:7.3f} ± {:7.3f} urad'.format(
+                _np.mean(self.kicks['CH']), _np.std(self.kicks['CH']),
+                _np.mean(self.kicks['CV']), _np.std(self.kicks['CV'])),
+            self,  alignment=Qt.AlignCenter)
+
+        lay = QVBoxLayout(self)
+        lay.setSpacing(10)
+        lay.addWidget(label_ch)
+        lay.addWidget(self.graph_ch)
+        lay.addWidget(label_cv)
+        lay.addWidget(self.graph_cv)
+        lay.addWidget(lb_stats)
+        lay.addWidget(self.lb_statsdata)

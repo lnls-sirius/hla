@@ -1,8 +1,6 @@
 """Booster Ramp Control HLA: General Status Module."""
 
 from functools import partial as _part
-from threading import Thread as _Thread
-import numpy as _np
 import time as _time
 from qtpy.QtWidgets import QGroupBox, QLabel, QPushButton, QGridLayout, \
     QMessageBox, QVBoxLayout, QComboBox
@@ -11,11 +9,12 @@ import qtawesome as qta
 
 from siriuspy.ramp import ramp
 from siriuspy.ramp.conn import ConnMA as _ConnMA, ConnRF as _ConnRF,\
-                               ConnTI as _ConnTI
+    ConnTI as _ConnTI
 from siriuspy.csdevice.pwrsupply import Const as _PSc
 from siriuspy.csdevice.timesys import Const as _TIc
 
 from siriushla.widgets import PyDMLedMultiChannel, PyDMLedMultiConnection
+from siriushla.widgets.dialog import ProgressDialog
 
 EVT_LIST = ['Linac', 'InjBO', 'InjSI', 'Study',
             'DigLI', 'DigTB', 'DigBO', 'DigTS', 'DigSI']
@@ -32,8 +31,11 @@ class StatusAndCommands(QGroupBox):
         self.prefix = prefix
         self.ramp_config = ramp_config
         self._setupUi()
-        thread = _Thread(target=self._create_connectors, daemon=True)
-        thread.start()
+        self.conn_ma = None
+        self.conn_rf = None
+        self.conn_ti = None
+        th = _createConnectorsThread(self, prefix)
+        th.start()
 
     def _setupUi(self):
         lay = QVBoxLayout()
@@ -48,8 +50,7 @@ class StatusAndCommands(QGroupBox):
         self.setStyleSheet("""
             QLabel{
                 qproperty-alignment: AlignCenter;
-                min-height:1.55em; max-height:1.55em;
-                max-width:10em;}""")
+                min-height:1.55em; max-height:1.55em;}""")
 
     def _setupStatusLayout(self):
         self.led_ma_conn = PyDMLedMultiConnection(self)
@@ -132,155 +133,74 @@ class StatusAndCommands(QGroupBox):
                 cb.setCurrentText('None')
                 cb.setEnabled(True)
             cb.setObjectName(ev)
+            cb.currentTextChanged.connect(self.update_ti_params)
             lay.addWidget(lb, i+1, 0)
             lay.addWidget(cb, i+1, 1)
         return lay
 
-    def _create_connectors(self):
-        # Create connectors
-        self._conn_ma = _ConnMA(prefix=self.prefix)
-        self._conn_ti = _ConnTI(prefix=self.prefix)
-        self._conn_rf = _ConnRF(prefix=self.prefix)
-
-        # Build leds channels
-        pfx = self.prefix
-
-        # # Connection Leds
-        for conn in [self._conn_ma, self._conn_rf, self._conn_ti]:
-            c2v_conn = list()
-            conn_type = conn.__class__.__name__.strip('Conn')
-            for p in conn.properties:
-                if conn_type == 'MA':
-                    if 'PwrState' in conn[p].name:
-                        c2v_conn.append(pfx + conn[p].pvname_rb)
-                else:
-                    c2v_conn.append(pfx + conn[p].pvname_rb)
-            led_name = 'led_' + conn_type.lower() + '_conn'
-            led = getattr(self, led_name)
-            led.set_channels(c2v_conn)
-
-        # # MA
-        conn = self._conn_ma
-        c2v_intlk = dict()
-        c2v_setup = dict()
-        c2v_apply = dict()
-        for p in conn.properties:
-            if 'IntlkSoft' in p or 'IntlkHard' in p:
-                c2v_intlk[pfx + conn[p].pvname_rb] = 0
-            elif 'OpMode' in p:
-                c2v_setup[pfx + conn[p].pvname_rb] = _PSc.States.RmpWfm
-            elif 'PwrState' in p:
-                c2v_setup[pfx + conn[p].pvname_rb] = _PSc.PwrStateSts.On
-            elif 'Wfm' in p:
-                c2v_apply[pfx + conn[p].pvname_rb] = {'value': _np.array([]),
-                                                      'comp': 'cl',
-                                                      'abs_tol': 1e-5}
-        self.led_ma_intlk.set_channels2values(c2v_intlk)
-        self.led_ma_setup.set_channels2values(c2v_setup)
-        self.led_ma_apply.set_channels2values(c2v_apply)
-
-        # # RF
-        conn = self._conn_rf
-        c2v_intlk = dict()
-        c2v_setup = dict()
-        c2v_apply = dict()
-        c2v_intlk[pfx + conn.Const.Rmp_Intlk] = 0
-        c2v_setup[pfx + conn.Const.Rmp_RmpReady] = 1
-        c2v_setup[pfx + conn.Const.Rmp_Enbl] = 1
-        c2v_apply[pfx + conn.Const.Rmp_Ts1.replace('SP', 'RB')] = None
-        c2v_apply[pfx + conn.Const.Rmp_Ts2.replace('SP', 'RB')] = None
-        c2v_apply[pfx + conn.Const.Rmp_Ts3.replace('SP', 'RB')] = None
-        c2v_apply[pfx + conn.Const.Rmp_Ts4.replace('SP', 'RB')] = None
-        c2v_apply[pfx + conn.Const.Rmp_VoltBot.replace('SP', 'RB')] = None
-        c2v_apply[pfx + conn.Const.Rmp_VoltTop.replace('SP', 'RB')] = None
-        c2v_apply[pfx + conn.Const.Rmp_PhsBot.replace('SP', 'RB')] = None
-        c2v_apply[pfx + conn.Const.Rmp_PhsTop.replace('SP', 'RB')] = None
-        self.led_rf_intlk.set_channels2values(c2v_intlk)
-        self.led_rf_setup.set_channels2values(c2v_setup)
-        self.led_rf_apply.set_channels2values(c2v_apply)
-
-        # # TI
-        conn = self._conn_ti
-        c2v_intlk = dict()
-        c2v_setup = dict()
-        c2v_apply = dict()
-        c2v_intlk[pfx + conn.Const.Intlk] = 0
-        for prpty, value in conn.ramp_basicsetup.items():
-            prpty = prpty.replace('SP', 'RB').replace('Sel', 'Sts')
-            c2v_setup[pfx + prpty] = {'value': value, 'comp': 'cl',
-                                      'abs_tol': 0.008}
-        for prpty, value in conn.ramp_configsetup.items():
-            prpty = prpty.replace('SP', 'RB').replace('Sel', 'Sts')
-            c2v_apply[pfx + prpty] = {'value': value, 'comp': 'cl',
-                                      'abs_tol': 0.008}
-        self.led_ti_intlk.set_channels2values(c2v_intlk)
-        self.led_ti_setup.set_channels2values(c2v_setup)
-        self.led_ti_apply.set_channels2values(c2v_apply)
-
     def _prepare_ma(self):
-        # turn off triggers
-        thread = _CommandThread(
-            conn=self._conn_ti, cmds=_part(
-                self._conn_ti.cmd_set_magnet_trigger_state,
-                _TIc.DsblEnbl.Dsbl),
-            warn_msgs='Failed to turn magnets trigger off!', parent=self)
-        thread.start()
-        _time.sleep(1)
-        # set magnets opmode
-        thread = _CommandThread(
-            conn=self._conn_ma, cmds=self._conn_ma.cmd_opmode_rmpwfm,
-            warn_msgs='Failed to set MA OpMode to RmpWfm!', parent=self)
-        thread.start()
-        _time.sleep(1)
-        # turn on triggers
-        thread = _CommandThread(
-            conn=self._conn_ti, cmds=_part(
-                self._conn_ti.cmd_set_magnet_trigger_state,
-                _TIc.DsblEnbl.Enbl),
-            warn_msgs='Failed to turn magnets trigger on!', parent=self)
-        thread.start()
+        tasks = [None]*3
+        tasks[0] = _CommandThread(
+            parent=self, conn=self.conn_ti,
+            cmds=_part(self.conn_ti.cmd_set_magnet_trigger_state,
+                       _TIc.DsblEnbl.Dsbl),
+            warn_msgs='Failed to turn magnets trigger off!')
+        tasks[1] = _CommandThread(
+            parent=self, conn=self.conn_ma, use_log=True,
+            cmds=self.conn_ma.cmd_opmode_rmpwfm,
+            warn_msgs='Failed to set MA OpMode to RmpWfm!')
+        tasks[2] = _CommandThread(
+            parent=self, conn=self.conn_ti,
+            cmds=_part(self.conn_ti.cmd_set_magnet_trigger_state,
+                       _TIc.DsblEnbl.Enbl),
+            warn_msgs='Failed to turn magnets trigger on!')
+
+        labels = ['Turning magnets trigger off...',
+                  'Setting magents OpMode to RmpWfm...',
+                  'Turning magnets trigger on...']
+        dlg = ProgressDialog(labels, tasks, self)
+        dlg.exec_()
 
     def _prepare_ti(self):
-        thread = _CommandThread(
-            conn=self._conn_ti,
-            cmds=[self._conn_ti.cmd_setup,
-                  self._conn_ti.cmd_update_evts],
+        task = _CommandThread(
+            parent=self, conn=self.conn_ti,
+            cmds=[self.conn_ti.cmd_setup, self.conn_ti.cmd_update_evts],
             warn_msgs=['Failed to setup TI to ramp!',
-                       'Failed to update events!'],
-            parent=self)
-        thread.start()
+                       'Failed to update events!'])
+        dlg = ProgressDialog('Preparing TI to ramp...', task, self)
+        dlg.exec_()
 
     def _apply_ma(self, manames=list()):
-        thread = _CommandThread(
-            conn=self._conn_ma,
-            cmds=_part(self._conn_ma.cmd_wfm, manames),
-            warn_msgs='Failed to set MA waveforms!',
-            parent=self)
-        thread.start()
+        task = _CommandThread(
+            parent=self, conn=self.conn_ma, use_log=True, size=len(manames),
+            cmds=_part(self.conn_ma.cmd_wfm, manames),
+            warn_msgs='Failed to set waveform!')
+        dlg = ProgressDialog('Setting magnets waveforms...', task, self)
+        dlg.exec_()
 
     def _apply_rf(self):
-        thread = _CommandThread(
-            conn=self._conn_rf,
-            cmds=self._conn_rf.cmd_config_ramp,
-            warn_msgs='Failed to set RF parameters!',
-            parent=self)
-        thread.start()
+        task = _CommandThread(
+            parent=self, conn=self.conn_rf, use_log=True,
+            cmds=self.conn_rf.cmd_config_ramp,
+            warn_msgs='Failed to set RF parameters!')
+        dlg = ProgressDialog('Setting RF parameters...', task, self)
+        dlg.exec_()
 
     def _apply_ti(self):
         events_inj, events_eje = self._get_inj_eje_events()
-        thread = _CommandThread(
-            conn=self._conn_ti,
-            cmds=[_part(self._conn_ti.cmd_config_ramp,
+        task = _CommandThread(
+            conn=self.conn_ti, parent=self,
+            cmds=[_part(self.conn_ti.cmd_config_ramp,
                         events_inj, events_eje),
-                  self._conn_ti.cmd_update_evts],
+                  self.conn_ti.cmd_update_evts],
             warn_msgs=['Failed to set TI parameters!',
-                       'Failed to update events!'],
-            parent=self)
-        thread.start()
+                       'Failed to update events!'])
+        dlg = ProgressDialog('Setting TI parameters...', task, self)
+        dlg.exec_()
         # update values of inj and eje times in fact implemented
         _time.sleep(3)
-        inj_time = self._conn_ti.get_injection_time()/1000  # [ms]
-        eje_time = self._conn_ti.get_ejection_time()/1000  # [ms]
+        inj_time = self.conn_ti.get_injection_time()/1000  # [ms]
+        eje_time = self.conn_ti.get_ejection_time()/1000  # [ms]
         self.inj_eje_times.emit(inj_time, eje_time)
 
     def apply_changes(self):
@@ -305,6 +225,8 @@ class StatusAndCommands(QGroupBox):
                 mb.setText(msg)
                 mb.exec_()
                 return
+        else:
+            manames = self.conn_ma.manames
 
         if 'Dipole' in sender_name:
             self._apply_ma(manames)
@@ -336,9 +258,9 @@ class StatusAndCommands(QGroupBox):
     def handleLoadRampConfig(self, ramp_config):
         """Receive connectors."""
         self.ramp_config = ramp_config
-        self._conn_ma.get_ramp_config(self.ramp_config)
-        self._conn_ti.get_ramp_config(self.ramp_config)
-        self._conn_rf.get_ramp_config(self.ramp_config)
+        self.conn_ma.get_ramp_config(self.ramp_config)
+        self.conn_ti.get_ramp_config(self.ramp_config)
+        self.conn_rf.get_ramp_config(self.ramp_config)
         self.update_ma_params()
         self.update_rf_params()
         self.update_ti_params()
@@ -350,7 +272,7 @@ class StatusAndCommands(QGroupBox):
         if not self.ramp_config.ps_normalized_configs:
             return
         c2v = dict()
-        for maname in self._conn_ma.manames:
+        for maname in self.conn_ma.manames:
             wf = self.ramp_config.ps_waveform_get(maname)
             c2v[self.prefix + maname + ':Wfm-RB'] = {
                 'value': wf.currents, 'comp': 'cl', 'abs_tol': 1e-5}
@@ -360,36 +282,37 @@ class StatusAndCommands(QGroupBox):
         """Update RF parameters leds channels2values dict."""
         if self.ramp_config is None:
             return
-        c = self._conn_rf.Const
+        c = self.conn_rf.Const
         r = self.ramp_config
         p = self.prefix
         c2v = dict()
-        c2v[p+c.Rmp_Ts1.replace('SP', 'RB')] = r.rf_ramp_bottom_duration
-        c2v[p+c.Rmp_Ts2.replace('SP', 'RB')] = r.rf_ramp_rampup_duration
-        c2v[p+c.Rmp_Ts3.replace('SP', 'RB')] = r.rf_ramp_top_duration
-        c2v[p+c.Rmp_Ts4.replace('SP', 'RB')] = r.rf_ramp_rampdown_duration
-        c2v[p+c.Rmp_VoltBot.replace('SP', 'RB')] = r.rf_ramp_bottom_voltage
-        c2v[p+c.Rmp_VoltTop.replace('SP', 'RB')] = r.rf_ramp_top_voltage
-        c2v[p+c.Rmp_PhsBot.replace('SP', 'RB')] = r.rf_ramp_bottom_phase
-        c2v[p+c.Rmp_PhsTop.replace('SP', 'RB')] = r.rf_ramp_top_phase
+        c2v[p+c.Rmp_Ts1.replace('SP', 'RB')] = {
+            'value': r.rf_ramp_bottom_duration, 'comp': 'cl', 'rel_tol': 0.1}
+        c2v[p+c.Rmp_Ts2.replace('SP', 'RB')] = {
+            'value': r.rf_ramp_rampup_duration, 'comp': 'cl', 'rel_tol': 0.1}
+        c2v[p+c.Rmp_Ts3.replace('SP', 'RB')] = {
+            'value': r.rf_ramp_top_duration, 'comp': 'cl', 'rel_tol': 0.1}
+        c2v[p+c.Rmp_Ts4.replace('SP', 'RB')] = {
+            'value': r.rf_ramp_rampdown_duration, 'comp': 'cl', 'rel_tol': 0.1}
+        c2v[p+c.Rmp_VoltBot.replace('SP', 'RB')] = {
+            'value': r.rf_ramp_bottom_voltage, 'comp': 'cl', 'rel_tol': 0.1}
+        c2v[p+c.Rmp_VoltTop.replace('SP', 'RB')] = {
+            'value': r.rf_ramp_top_voltage, 'comp': 'cl', 'rel_tol': 0.1}
+        c2v[p+c.Rmp_PhsBot.replace('SP', 'RB')] = {
+            'value': r.rf_ramp_bottom_phase, 'comp': 'cl', 'rel_tol': 0.1}
+        c2v[p+c.Rmp_PhsTop.replace('SP', 'RB')] = {
+            'value': r.rf_ramp_top_phase, 'comp': 'cl', 'rel_tol': 0.1}
         self.led_rf_apply.set_channels2values(c2v)
 
     def update_ti_params(self):
         """Update TI parameters leds channels2values dict."""
         if self.ramp_config is None:
             return
-        conn = self._conn_ti
+        conn = self.conn_ti
         c = conn.Const
         r = self.ramp_config
         p = self.prefix
         c2v = dict()
-        c2v[p+c.TrgMags_Duration.replace('SP', 'RB')] = r.ps_ramp_duration
-        c2v[p+c.TrgCorrs_Duration.replace('SP', 'RB')] = r.ps_ramp_duration
-
-        c2v[p+c.TrgMags_NrPulses.replace('SP', 'RB')] = \
-            r.ps_ramp_wfm_nrpoints_fams
-        c2v[p+c.TrgCorrs_NrPulses.replace('SP', 'RB')] = \
-            r.ps_ramp_wfm_nrpoints_corrs
 
         c2v[p+c.TrgMags_Delay.replace('SP', 'RB')] =  \
             {'value': r.ti_params_ps_ramp_delay, 'comp': 'cl',
@@ -400,6 +323,7 @@ class StatusAndCommands(QGroupBox):
         c2v[p+c.TrgLLRFRmp_Delay.replace('SP', 'RB')] = \
             {'value': r.ti_params_rf_ramp_delay, 'comp': 'cl',
              'abs_tol': 0.008}
+
         c2v[p+c.EvtRmpBO_Delay.replace('SP', 'RB')] = \
             {'value': 0.0, 'comp': 'cl', 'abs_tol': 0.008}
 
@@ -412,20 +336,13 @@ class StatusAndCommands(QGroupBox):
         else:
             conn.update_ramp_configsetup(events_inj, events_eje, delays)
 
-        for ev in events_inj:
-            attr = getattr(c, 'Evt'+ev+'_Delay')
-            attr = attr.replace('SP', 'RB')
-            c2v[p+attr] = {'value': delays[ev], 'comp': 'cl', 'abs_tol': 0.008}
-        for ev in events_eje:
-            attr = getattr(c, 'Evt'+ev+'_Delay')
-            attr = attr.replace('SP', 'RB')
-            c2v[p+attr] = {'value': delays[ev], 'comp': 'cl', 'abs_tol': 0.008}
         for ev in EVT_LIST:
-            if ev in events_inj or ev in events_eje:
-                continue
             attr = getattr(c, 'Evt'+ev+'_Delay')
             attr = attr.replace('SP', 'RB')
-            c2v[p+attr] = None
+            c2v[p+attr] = None \
+                if (ev not in delays.keys() or delays[ev] is None) \
+                else {'value': delays[ev], 'comp': 'cl', 'abs_tol': 0.008}
+
         self.led_ti_apply.set_channels2values(c2v)
 
     def _get_inj_eje_events(self):
@@ -443,22 +360,47 @@ class StatusAndCommands(QGroupBox):
 class _CommandThread(QThread):
     """Thread to perform commands."""
 
+    currentItem = Signal(str)
+    itemDone = Signal(str)
+    completed = Signal()
     sentWarning = Signal(str, list)
 
-    def __init__(self, conn, cmds, warn_msgs=list(), parent=None):
+    def __init__(self, conn, cmds, warn_msgs=list(), parent=None,
+                 use_log=False, size=None):
         """Initialize."""
         super().__init__(parent)
+        self._quit_task = False
+
+        self._cmds = cmds
+        if not isinstance(self._cmds, list):
+            self._cmds = [self._cmds, ]
+        self._size = size if size is not None else len(self._cmds)
+
+        self._warn_msgs = warn_msgs
+        if not isinstance(self._warn_msgs, list):
+            self._warn_msgs = [self._warn_msgs, ]
+
         self._conn = conn
         self._subsystem = self._get_subsystem()
-        self._cmds = cmds
-        self._warn_msgs = warn_msgs
+        self._use_log = use_log
+        if use_log:
+            self._conn.logger = self
+
         self.sentWarning.connect(parent.show_warning_message)
+
+    def size(self):
+        """Task size."""
+        return self._size
+
+    def exit_task(self):
+        """Set quit flag."""
+        self._quit_task = True
 
     def _get_subsystem(self):
         conn_name = self._conn.__class__.__name__
-        if conn_name == 'ConnMagnets':
+        if conn_name == 'ConnMA':
             return 'MA'
-        elif conn_name == 'ConnTiming':
+        elif conn_name == 'ConnTI':
             return 'TI'
         elif conn_name == 'ConnRF':
             return 'RF'
@@ -475,13 +417,109 @@ class _CommandThread(QThread):
 
     def run(self):
         """Run."""
-        if not self._verify_connector():
-            return
-        if not isinstance(self._cmds, list):
-            self._cmds = [self._cmds, ]
-        if not isinstance(self._warn_msgs, list):
-            self._warn_msgs = [self._warn_msgs, ]
-        for cmd, msg in zip(self._cmds, self._warn_msgs):
-            cmd_success, problems = cmd()
-            if not cmd_success:
-                self.sentWarning.emit(msg, problems)
+        if not self._quit_task:
+            if not self._verify_connector():
+                return
+            for cmd, msg in zip(self._cmds, self._warn_msgs):
+                cmd_success, problems = cmd()
+                if not self._use_log:
+                    self.itemDone.emit('')
+                if not cmd_success:
+                    self.sentWarning.emit(msg, problems)
+                if self._quit_task:
+                    break
+        self.completed.emit()
+        if self._use_log:
+            self._conn.logger = None
+
+    def update(self, item):
+        self.currentItem.emit(item)
+        self.itemDone.emit(item)
+
+
+class _createConnectorsThread(QThread):
+    """Thread to create connectors and set leds channels."""
+
+    def __init__(self, parent, prefix):
+        super().__init__(parent)
+        self.parent = parent
+        self.prefix = prefix
+
+    def run(self):
+        # Create connectors
+        self.parent.conn_ma = _ConnMA(prefix=self.prefix)
+        self.parent.conn_ti = _ConnTI(prefix=self.prefix)
+        self.parent.conn_rf = _ConnRF(prefix=self.prefix)
+
+        # Build leds channels
+        pfx = self.prefix
+
+        # # Connection Leds
+        for conn_name in ['conn_ma', 'conn_rf', 'conn_ti']:
+            conn = getattr(self.parent, conn_name)
+            c2v_conn = list()
+            conn_type = conn.__class__.__name__.strip('Conn')
+            for p in conn.properties:
+                if conn_type == 'MA':
+                    if 'PwrState' in conn[p].name:
+                        c2v_conn.append(pfx + conn[p].pvname_rb)
+                else:
+                    c2v_conn.append(pfx + conn[p].pvname_rb)
+            led_name = 'led_' + conn_type.lower() + '_conn'
+            led = getattr(self.parent, led_name)
+            led.set_channels(c2v_conn)
+
+        # # MA
+        conn = getattr(self.parent, 'conn_ma')
+        c2v_intlk = dict()
+        c2v_setup = dict()
+        c2v_apply = dict()
+        for p in conn.properties:
+            if 'IntlkSoft' in p or 'IntlkHard' in p:
+                c2v_intlk[pfx + conn[p].pvname_rb] = 0
+            elif 'OpMode' in p:
+                c2v_setup[pfx + conn[p].pvname_rb] = _PSc.States.RmpWfm
+            elif 'PwrState' in p:
+                c2v_setup[pfx + conn[p].pvname_rb] = _PSc.PwrStateSts.On
+            elif 'Wfm' in p:
+                c2v_apply[pfx + conn[p].pvname_rb] = None
+        self.parent.led_ma_intlk.set_channels2values(c2v_intlk)
+        self.parent.led_ma_setup.set_channels2values(c2v_setup)
+        self.parent.led_ma_apply.set_channels2values(c2v_apply)
+
+        # # RF
+        conn = getattr(self.parent, 'conn_rf')
+        c2v_intlk = dict()
+        c2v_setup = dict()
+        c2v_apply = dict()
+        c2v_intlk[pfx + conn.Const.Rmp_Intlk] = 0
+        c2v_setup[pfx + conn.Const.Rmp_RmpReady] = 1
+        c2v_setup[pfx + conn.Const.Rmp_Enbl] = 1
+        c2v_apply[pfx + conn.Const.Rmp_Ts1.replace('SP', 'RB')] = None
+        c2v_apply[pfx + conn.Const.Rmp_Ts2.replace('SP', 'RB')] = None
+        c2v_apply[pfx + conn.Const.Rmp_Ts3.replace('SP', 'RB')] = None
+        c2v_apply[pfx + conn.Const.Rmp_Ts4.replace('SP', 'RB')] = None
+        c2v_apply[pfx + conn.Const.Rmp_VoltBot.replace('SP', 'RB')] = None
+        c2v_apply[pfx + conn.Const.Rmp_VoltTop.replace('SP', 'RB')] = None
+        c2v_apply[pfx + conn.Const.Rmp_PhsBot.replace('SP', 'RB')] = None
+        c2v_apply[pfx + conn.Const.Rmp_PhsTop.replace('SP', 'RB')] = None
+        self.parent.led_rf_intlk.set_channels2values(c2v_intlk)
+        self.parent.led_rf_setup.set_channels2values(c2v_setup)
+        self.parent.led_rf_apply.set_channels2values(c2v_apply)
+
+        # # TI
+        conn = getattr(self.parent, 'conn_ti')
+        c2v_intlk = dict()
+        c2v_setup = dict()
+        c2v_apply = dict()
+        c2v_intlk[pfx + conn.Const.Intlk] = 0
+        for prpty, value in conn.ramp_basicsetup.items():
+            prpty = prpty.replace('SP', 'RB').replace('Sel', 'Sts')
+            c2v_setup[pfx + prpty] = {'value': value, 'comp': 'cl',
+                                      'abs_tol': 0.008}
+        for prpty, value in conn.ramp_configsetup.items():
+            prpty = prpty.replace('SP', 'RB')
+            c2v_apply[pfx + prpty] = None
+        self.parent.led_ti_intlk.set_channels2values(c2v_intlk)
+        self.parent.led_ti_setup.set_channels2values(c2v_setup)
+        self.parent.led_ti_apply.set_channels2values(c2v_apply)
