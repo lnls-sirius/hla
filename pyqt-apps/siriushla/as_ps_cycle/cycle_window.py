@@ -14,8 +14,9 @@ from qtpy.QtWidgets import QWidget, QGridLayout, QVBoxLayout, \
 
 from siriuspy.envars import vaca_prefix as VACA_PREFIX
 from siriuspy.namesys import Filter, SiriusPVName as PVName
-from siriuspy.cycle import get_psnames, get_psnames_from_same_udc, \
+from siriuspy.cycle import get_psnames, \
     Timing, PSCycler, LinacPSCycler, CycleController
+from siriuspy.search import PSSearch
 
 from siriushla.widgets import SiriusMainWindow, \
     PyDMLedMultiConnection as PyDMLedMultiConn
@@ -144,7 +145,7 @@ class CycleWindow(SiriusMainWindow):
 
         # connect tree signals
         self.pwrsupplies_tree.doubleClicked.connect(self._open_ps_detail)
-        self.pwrsupplies_tree.itemChanged.connect(self._check_ps_from_same_udc)
+        self.pwrsupplies_tree.itemChanged.connect(self._check_both_ps_dipole)
         self.pwrsupplies_tree.check_requested_levels(self._checked_accs)
 
         # layout
@@ -373,21 +374,23 @@ class CycleWindow(SiriusMainWindow):
                 return
         app.open_window(PSDetailWindow, parent=self, **{'psname': psname})
 
-    def _check_ps_from_same_udc(self, item):
-        psname = item.data(0, Qt.DisplayRole)
-        if not _re.match('.*-.*:.*-.*', psname) or PVName(psname).sec == 'LI':
-            pass
-        else:
-            psnames2check = get_psnames_from_same_udc(psname)
-            psnames2check.remove(psname)
-            for psname in psnames2check:
-                item = self.pwrsupplies_tree._item_map[psname]
-                state = item.checkState(0)
-                state2set = Qt.Checked if state == Qt.Unchecked \
-                    else Qt.Unchecked
-                self.pwrsupplies_tree.blockSignals(True)
-                item.setCheckState(0, state2set)
-                self.pwrsupplies_tree.blockSignals(False)
+    def _check_both_ps_dipole(self, item):
+        psname = PVName(item.data(0, Qt.DisplayRole))
+        if not (psname.sec in ['BO', 'SI'] and psname.dev in ['B', 'B1B2']):
+            return
+
+        psnames2check = PSSearch.get_psnames({'sec': psname.sec, 'dev': 'B'})
+        psnames2check.remove(psname)
+        item = self.pwrsupplies_tree._item_map[psnames2check[0]]
+
+        state = item.checkState(0)
+        state2set = Qt.Checked if state == Qt.Unchecked \
+            else Qt.Unchecked
+
+        self.pwrsupplies_tree.blockSignals(True)
+        item.setCheckState(0, state2set)
+        self.pwrsupplies_tree.blockSignals(False)
+
         self._update_led_channels()
 
     def _get_ps_not_ready_2_cycle(self, psname, status):
