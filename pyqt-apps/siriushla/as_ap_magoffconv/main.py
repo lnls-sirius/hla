@@ -5,7 +5,7 @@ import re
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGroupBox, QComboBox, QLabel, \
     QDoubleSpinBox, QVBoxLayout, QHBoxLayout, QGridLayout, QSpacerItem, \
-    QSizePolicy as QSzPlcy, QApplication
+    QSizePolicy as QSzPlcy, QApplication, QMessageBox
 
 from siriuspy.envars import vaca_prefix
 from siriuspy.search.ma_search import MASearch
@@ -38,8 +38,9 @@ class MagOffConvApp(SiriusMainWindow):
         # Layout to enter
         matype_label = QLabel('Choose a magnet: ', self)
         self._matype_cb = QComboBox(self)
+        self._matype_items = MASearch.get_pwrsupply_manames()
         self._matype_cb.addItem('Select...')
-        self._matype_cb.addItems(MASearch.get_pwrsupply_manames())
+        self._matype_cb.addItems(self._matype_items)
         self._matype_cb.setEditable(True)
         self._matype_cb.setMaxVisibleItems(10)
         self._matype_cb.currentIndexChanged.connect(
@@ -109,9 +110,19 @@ class MagOffConvApp(SiriusMainWindow):
         cw.setStyleSheet("""#central_widget{min-width:42em;}""")
         cw.setLayout(layout)
         self.setCentralWidget(cw)
+        self.setFocusPolicy(Qt.StrongFocus)
 
     def _fill_normalizer_layout(self, index):
         text = self.sender().currentText()
+        if text not in self._matype_items:
+            QMessageBox.critical(self, 'Error', 'Enter a valid magnet name!')
+            self._sb_current.setEnabled(False)
+            self._sb_strength.setEnabled(False)
+            self._lb_energy.setVisible(False)
+            self._sb_energy.setVisible(False)
+            self._lb_quadfam_kl.setVisible(False)
+            self._sb_quadfam_kl.setVisible(False)
+            return
 
         # Reset all fields
         self._sb_current.setValue(0)

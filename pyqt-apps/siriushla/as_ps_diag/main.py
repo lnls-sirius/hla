@@ -144,7 +144,7 @@ class PSDiag(SiriusMainWindow):
                                 sidx = str(idx)
                                 intlk_ch2vals[pname+':Intlk'+sidx+'-Mon'] = 1
 
-                    f = sec+'-'+filt['sub']+psnames[0].dis+'-'+filt['dev']
+                    f = sec+'-'+filt['sub']+':'+psnames[0].dis+'-'+filt['dev']
                     ps_label = QLabel(
                         label, panel,
                         alignment=Qt.AlignRight | Qt.AlignVCenter)

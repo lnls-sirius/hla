@@ -14,8 +14,9 @@ from qtpy.QtWidgets import QWidget, QGridLayout, QVBoxLayout, \
 
 from siriuspy.envars import vaca_prefix as VACA_PREFIX
 from siriuspy.namesys import Filter, SiriusPVName as PVName
-from siriuspy.cycle import get_psnames, get_psnames_from_same_udc, \
+from siriuspy.cycle import get_psnames, \
     Timing, PSCycler, LinacPSCycler, CycleController
+from siriuspy.search import PSSearch
 
 from siriushla.widgets import SiriusMainWindow, \
     PyDMLedMultiConnection as PyDMLedMultiConn
@@ -67,9 +68,6 @@ class CycleWindow(SiriusMainWindow):
                                            tuple(), self)
         self.pwrsupplies_tree.setHeaderHidden(True)
         self.pwrsupplies_tree.setColumnCount(1)
-        self.pwrsupplies_tree.setObjectName('pstree')
-        self.pwrsupplies_tree.setStyleSheet(
-            '#pstree{min-width:15em; max-width:15em;}')
         glay_tree = QVBoxLayout(gb_tree)
         glay_tree.addWidget(self.search_le)
         glay_tree.addWidget(self.pwrsupplies_tree)
@@ -115,9 +113,6 @@ class CycleWindow(SiriusMainWindow):
         self.cycle_bt.clicked.connect(self._cycle)
         self.cycle_bt.setEnabled(False)
         self.progress_list = QListWidget(self)
-        self.progress_list.setObjectName('progresslist')
-        self.progress_list.setStyleSheet("""
-            #progresslist{min-width:28em; max-width:28em;}""")
         self.progress_bar = MyProgressBar(self)
         cyclelay = QGridLayout()
         cyclelay.addWidget(self.prepare_timing_bt, 0, 0)
@@ -150,7 +145,7 @@ class CycleWindow(SiriusMainWindow):
 
         # connect tree signals
         self.pwrsupplies_tree.doubleClicked.connect(self._open_ps_detail)
-        self.pwrsupplies_tree.itemChanged.connect(self._check_ps_from_same_udc)
+        self.pwrsupplies_tree.itemChanged.connect(self._check_both_ps_dipole)
         self.pwrsupplies_tree.check_requested_levels(self._checked_accs)
 
         # layout
@@ -161,9 +156,9 @@ class CycleWindow(SiriusMainWindow):
                                 alignment=Qt.AlignCenter), 0, 0, 1, 3)
         layout.addWidget(gb_tree, 1, 0, 5, 1)
         layout.addWidget(gb_status, 1, 1)
-        layout.addWidget(QLabel(''), 2, 2)
+        layout.addWidget(QLabel(''), 2, 1)
         layout.addLayout(cyclelay, 3, 1)
-        layout.addWidget(QLabel(''), 4, 2)
+        layout.addWidget(QLabel(''), 4, 1)
         layout.addWidget(gb_comm, 5, 1)
         layout.setRowStretch(0, 1)
         layout.setRowStretch(1, 3)
@@ -171,6 +166,8 @@ class CycleWindow(SiriusMainWindow):
         layout.setRowStretch(3, 15)
         layout.setRowStretch(4, 1)
         layout.setRowStretch(5, 3)
+        layout.setColumnStretch(0, 1)
+        layout.setColumnStretch(1, 2)
         self.central_widget.setLayout(layout)
         self.central_widget.setStyleSheet("""
             QPushButton{min-height:2em;}
@@ -377,21 +374,23 @@ class CycleWindow(SiriusMainWindow):
                 return
         app.open_window(PSDetailWindow, parent=self, **{'psname': psname})
 
-    def _check_ps_from_same_udc(self, item):
-        psname = item.data(0, Qt.DisplayRole)
-        if not _re.match('.*-.*:.*-.*', psname) or PVName(psname).sec == 'LI':
-            pass
-        else:
-            psnames2check = get_psnames_from_same_udc(psname)
-            psnames2check.remove(psname)
-            for psname in psnames2check:
-                item = self.pwrsupplies_tree._item_map[psname]
-                state = item.checkState(0)
-                state2set = Qt.Checked if state == Qt.Unchecked \
-                    else Qt.Unchecked
-                self.pwrsupplies_tree.blockSignals(True)
-                item.setCheckState(0, state2set)
-                self.pwrsupplies_tree.blockSignals(False)
+    def _check_both_ps_dipole(self, item):
+        psname = PVName(item.data(0, Qt.DisplayRole))
+        if not (psname.sec in ['BO', 'SI'] and psname.dev in ['B', 'B1B2']):
+            return
+
+        psnames2check = PSSearch.get_psnames({'sec': psname.sec, 'dev': 'B'})
+        psnames2check.remove(psname)
+        item = self.pwrsupplies_tree._item_map[psnames2check[0]]
+
+        state = item.checkState(0)
+        state2set = Qt.Checked if state == Qt.Unchecked \
+            else Qt.Unchecked
+
+        self.pwrsupplies_tree.blockSignals(True)
+        item.setCheckState(0, state2set)
+        self.pwrsupplies_tree.blockSignals(False)
+
         self._update_led_channels()
 
     def _get_ps_not_ready_2_cycle(self, psname, status):
