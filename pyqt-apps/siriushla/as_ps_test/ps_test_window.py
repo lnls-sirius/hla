@@ -13,14 +13,17 @@ from siriuspy.search import PSSearch
 from siriuspy.namesys import SiriusPVName as PVName
 
 from siriushla.widgets import SiriusMainWindow, PVNameTree
+from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets.dialog import ProgressDialog, PSStatusDialog
 from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
+from siriushla.as_ti_control import HLTriggerDetailed
 from .tasks import ResetIntlk, CheckIntlk, \
     SetOpModeSlowRef, CheckOpModeSlowRef, \
     SetPwrState, CheckPwrState, CheckInitOk, \
     SetCtrlLoop, CheckCtrlLoop, \
     SetCapBankVolt, CheckCapBankVolt, \
-    SetCurrent, CheckCurrent
+    SetCurrent, CheckCurrent, \
+    SetTriggerState, CheckTriggerState
 from .conn import TesterDCLink, TesterDCLinkFBP, TesterPS, TesterPSLinac
 
 _lock = _Lock()
@@ -46,6 +49,9 @@ class PSTestWindow(SiriusMainWindow):
             }
             #NokList {
                 background-color: #ffebe6;
+            }
+            QLabel{
+                max-height: 1.29em;
             }""")
         self.setCentralWidget(self.central_widget)
 
@@ -57,8 +63,6 @@ class PSTestWindow(SiriusMainWindow):
         self.tree = PVNameTree(items=self._get_tree_names(),
                                tree_levels=('sec', 'mag_group'), parent=self)
         self.tree.setHeaderHidden(True)
-        self.tree.setObjectName('tree')
-        self.tree.setStyleSheet('#tree {max-width:15em; max-height:25em;}')
         self.tree.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         self.tree.setColumnCount(1)
         self.tree.doubleClicked.connect(self._open_detail)
@@ -69,6 +73,10 @@ class PSTestWindow(SiriusMainWindow):
         gbox_select.setLayout(select_layout)
 
         # commands
+        self.dsbltrigger_bt = QPushButton('Disable triggers', self)
+        self.dsbltrigger_bt.clicked.connect(self._set_lastcomm)
+        self.dsbltrigger_bt.clicked.connect(self._disable_triggers)
+
         self.setslowref_bt = QPushButton(
             'Set PS and DCLinks to SlowRef', self)
         self.setslowref_bt.clicked.connect(self._set_lastcomm)
@@ -110,12 +118,17 @@ class PSTestWindow(SiriusMainWindow):
         self.currzero_bt.clicked.connect(self._set_lastcomm)
         self.currzero_bt.clicked.connect(self._zero_current)
 
+        self.restoretrigger_bt = QPushButton('Restore triggers', self)
+        self.restoretrigger_bt.clicked.connect(self._set_lastcomm)
+        self.restoretrigger_bt.clicked.connect(self._restore_triggers_state)
+
         gbox_comm = QGroupBox('Commands', self)
         comm_layout = QVBoxLayout()
         comm_layout.setContentsMargins(20, 9, 20, 9)
         comm_layout.addWidget(QLabel(''))
         comm_layout.addWidget(QLabel('<h4>Prepare</h4>', self,
                                      alignment=Qt.AlignCenter))
+        comm_layout.addWidget(self.dsbltrigger_bt)
         comm_layout.addWidget(self.setslowref_bt)
         comm_layout.addWidget(self.reset_bt)
         comm_layout.addWidget(self.turnoff_ps_bt)
@@ -131,6 +144,10 @@ class PSTestWindow(SiriusMainWindow):
         comm_layout.addWidget(self.turnon_ps_bt)
         comm_layout.addWidget(self.test_bt)
         comm_layout.addWidget(self.currzero_bt)
+        comm_layout.addWidget(QLabel(''))
+        comm_layout.addWidget(QLabel('<h4>Restore</h4>', self,
+                                     alignment=Qt.AlignCenter))
+        comm_layout.addWidget(self.restoretrigger_bt)
         comm_layout.addWidget(QLabel(''))
         gbox_comm.setLayout(comm_layout)
 
@@ -175,6 +192,17 @@ class PSTestWindow(SiriusMainWindow):
         self.central_widget.setLayout(lay)
 
     # ---------- commands ------------
+
+    def _disable_triggers(self):
+        self.ok_ps.clear()
+        self.nok_ps.clear()
+        task1 = SetTriggerState(parent=self)
+        task2 = CheckTriggerState(parent=self)
+        task2.itemDone.connect(self._log)
+        tasks = [task1, task2]
+        labels = ['Disabling triggers...', 'Checking trigger states...']
+        dlg = ProgressDialog(labels, tasks, self)
+        dlg.exec_()
 
     def _set_check_opmode(self):
         self.ok_ps.clear()
@@ -358,6 +386,17 @@ class PSTestWindow(SiriusMainWindow):
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
+    def _restore_triggers_state(self):
+        self.ok_ps.clear()
+        self.nok_ps.clear()
+        task1 = SetTriggerState(restore_initial_value=True, parent=self)
+        task2 = CheckTriggerState(restore_initial_value=True, parent=self)
+        task2.itemDone.connect(self._log)
+        tasks = [task1, task2]
+        labels = ['Restoring trigger states...', 'Checking trigger states...']
+        dlg = ProgressDialog(labels, tasks, self)
+        dlg.exec_()
+
     # ---------- log updates -----------
 
     def _set_lastcomm(self):
@@ -457,15 +496,20 @@ class PSTestWindow(SiriusMainWindow):
 
     def _open_detail(self, index):
         app = QApplication.instance()
-        psname = index.data()
-        if PVName(psname).sec == 'LI':
+        name = PVName(index.data())
+        if name.sec == 'LI':
             return
-        elif not _re.match('.*-.*:.*-.*', psname):
+        elif name.dis == 'TI':
+            wind = create_window_from_widget(HLTriggerDetailed, title=name,
+                                             is_main=True)
+            app.open_window(wind, parent=self, **{'prefix': name})
+            return
+        elif not _re.match('.*-.*:.*-.*', name):
             if index.model().rowCount(index) == 1:
-                psname = index.child(0, 0).data()
+                name = index.child(0, 0).data()
             else:
                 return
-        app.open_window(PSDetailWindow, parent=self, **{'psname': psname})
+        app.open_window(PSDetailWindow, parent=self, **{'psname': name})
 
 
 class CreateTesters(QThread):
