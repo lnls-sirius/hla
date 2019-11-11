@@ -45,7 +45,7 @@ class PSList(QListView):
         app.open_window(PSDetailWindow, parent=self, **{'psname': psname})
 
 
-class PSListDialog(QDialog):
+class PSStatusDialog(QDialog):
     """Dialog to show list of pwrsupplies not ok."""
 
     def __init__(self, pwrsupplies=set(), text='', parent=None):

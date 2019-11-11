@@ -21,9 +21,8 @@ from siriuspy.search import PSSearch
 from siriushla.widgets import SiriusMainWindow, \
     PyDMLedMultiConnection as PyDMLedMultiConn
 from siriushla.widgets.pvnames_tree import PVNameTree
-from siriushla.widgets.dialog import ProgressDialog
+from siriushla.widgets.dialog import ProgressDialog, PSStatusDialog
 from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
-from .cycle_status_list import PSListDialog
 
 _cyclers = dict()
 _lock = _Lock()
@@ -228,7 +227,7 @@ class CycleWindow(SiriusMainWindow):
             if self._ps_failed:
                 text = 'Verify power state and interlocks' \
                        ' of the following power supplies'
-                dlg = PSListDialog(self._ps_failed, text, self)
+                dlg = PSStatusDialog(self._ps_failed, text, self)
                 dlg.exec_()
                 self._allButtons_setEnabled(True)
                 return False
