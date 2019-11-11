@@ -120,7 +120,7 @@ class MultiTurnWidget(QWidget):
         self.prefix = _PVName(prefix)
         self.setObjectName(self.prefix.sec+'App')
         self.setupui()
-        self.si gs = sigs
+        self.sigs = sigs
         self.fun2setref = {
             'x': _part(self.setreforbits, 'x'),
             'y': _part(self.setreforbits, 'y')}
