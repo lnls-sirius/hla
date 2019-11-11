@@ -212,6 +212,7 @@ class MultiTurnSumWidget(QWidget):
             symbol='o',
             symbolSize=10)
         graph.addChannel(**opts)
+        graph.setShowLegend(False)
         self.curve = graph.curveAtIndex(0)
 
         if not self.orbtype.startswith('sum'):
@@ -248,6 +249,7 @@ class MultiTurnSumWidget(QWidget):
             symbol='o',
             symbolSize=10)
         graph.addChannel(**opts)
+        graph.setShowLegend(False)
 
     def update_graph(self, data):
         scale = 1e-6
@@ -324,6 +326,7 @@ class SinglePassSumWidget(QWidget):
             symbolSize=10)
         graph.addChannel(**opts)
         graph.plotItem.scene().sigMouseMoved.connect(self._show_tooltip)
+        graph.setShowLegend(False)
         self.graph = graph
 
     def _show_tooltip(self, pos):
