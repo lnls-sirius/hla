@@ -134,95 +134,94 @@ class MultiTurnWidget(QWidget):
             sig.disconnect(self.fun2setref[pln])
 
     def setupui(self):
-        vbl = QVBoxLayout(self)
-        self.spectx = Spectrogram(
-            parent=self,
-            prefix=self.prefix,
-            image_channel=self.prefix+'MTurnOrbX-Mon',
-            xaxis_channel=self.prefix+'BPMPosS-Mon',
-            yaxis_channel=self.prefix+'MTurnTime-Mon')
-        self.specty = Spectrogram(
-            parent=self,
-            prefix=self.prefix,
-            image_channel=self.prefix+'MTurnOrbY-Mon',
-            xaxis_channel=self.prefix+'BPMPosS-Mon',
-            yaxis_channel=self.prefix+'MTurnTime-Mon')
-        self.spectx.normalizeData = True
-        self.specty.normalizeData = True
-        self.spectx.yaxis.setLabel('time', units='s')
-        self.specty.yaxis.setLabel('time', units='s')
-        self.spectx.xaxis.setLabel('BPM Position', units='m')
-        self.specty.xaxis.setLabel('BPM Position', units='m')
-        self.spectx.colorbar.label_format = '{:<8.1f}'
-        self.specty.colorbar.label_format = '{:<8.1f}'
-        lab = QLabel('Horizontal Orbit', self, alignment=Qt.AlignCenter)
-        lab.setStyleSheet("font-weight: bold;")
-        vbl.addWidget(lab)
-        vbl.addWidget(self.spectx)
-        vbl.addSpacing(50)
-        lab = QLabel('Vertical Orbit', self, alignment=Qt.AlignCenter)
-        lab.setStyleSheet("font-weight: bold;")
-        vbl.addWidget(lab)
-        vbl.addWidget(self.specty)
+        hbl = QHBoxLayout(self)
+        self.spectx = MultiTurnSumWidget(self, self.prefix, orbtype='X')
+        self.specty = MultiTurnSumWidget(self, self.prefix, orbtype='Y')
+        hbl.addWidget(self.spectx)
+        hbl.addSpacing(50)
+        hbl.addWidget(self.specty)
 
     def setreforbits(self, pln, orb):
         if pln.lower() == 'x':
-            self.spectx.setreforbit(orb)
+            self.spectx.spect.setreforbit(orb)
         else:
-            self.specty.setreforbit(orb)
+            self.specty.spect.setreforbit(orb)
 
 
 class MultiTurnSumWidget(QWidget):
 
-    def __init__(self, parent, prefix):
+    def __init__(self, parent, prefix, orbtype='sum'):
         super().__init__(parent)
         self.prefix = _PVName(prefix)
+        self.orbtype = orbtype.lower()
         self.setObjectName(self.prefix.sec+'App')
         self.setupui()
 
     def setupui(self):
         vbl = QVBoxLayout(self)
+        if self.orbtype.startswith('sum'):
+            img_propty = 'MTurnSum-Mon'
+            orb_propty = 'MTurnIdxSum-Mon'
+            unit = 'count'
+            color = 'black'
+        elif self.orbtype.startswith('x'):
+            img_propty = 'MTurnOrbX-Mon'
+            orb_propty = 'MTurnIdxOrbX-Mon'
+            unit = 'm'
+            color = 'blue'
+        else:
+            img_propty = 'MTurnOrbY-Mon'
+            orb_propty = 'MTurnIdxOrbY-Mon'
+            unit = 'm'
+            color = 'red'
+        lbl_text = img_propty.split('-')[0]
 
         self.spect = Spectrogram(
             parent=self,
             prefix=self.prefix,
-            image_channel=self.prefix+'MTurnSum-Mon',
+            image_channel=self.prefix+img_propty,
             xaxis_channel=self.prefix+'BPMPosS-Mon',
             yaxis_channel=self.prefix+'MTurnTime-Mon')
         self.spect.new_data_sig.connect(self.update_graph)
         self.spect.normalizeData = True
-        self.spect.yaxis.setLabel('time', units='s')
+        self.spect.yaxis.setLabel('Time', units='s')
         self.spect.xaxis.setLabel('BPM Position', units='m')
         self.spect.colorbar.label_format = '{:<8.1f}'
-        lab = QLabel('MTurnSum Orbit', self, alignment=Qt.AlignCenter)
+        lab = QLabel(lbl_text + ' Orbit', self, alignment=Qt.AlignCenter)
         lab.setStyleSheet("font-weight: bold;")
         vbl.addWidget(lab)
         vbl.addWidget(self.spect)
 
-        lab = QLabel('MTurnSum Turn-by-Turn', self, alignment=Qt.AlignCenter)
+        vbl.addSpacing(50)
+        lab = QLabel(
+            'Average ' + lbl_text + ' vs Time', self, alignment=Qt.AlignCenter)
         lab.setStyleSheet("font-weight: bold;")
         vbl.addWidget(lab)
         graph = Graph(self)
         vbl.addWidget(graph)
-        graph.setLabel('bottom', text='time', units='s')
-        graph.setLabel('left', text='Sum', units='count')
+        graph.setLabel('bottom', text='Time', units='s')
+        graph.setLabel('left', text='Avg ' + lbl_text, units=unit)
         opts = dict(
             y_channel='A',
             x_channel=self.prefix+'MTurnTime-Mon',
             name='',
-            color='black',
+            color=color,
             redraw_mode=2,
             lineStyle=1,
             lineWidth=3,
             symbol='o',
             symbolSize=10)
         graph.addChannel(**opts)
+        graph.setShowLegend(False)
         self.curve = graph.curveAtIndex(0)
-        vbl.addSpacing(50)
 
+        if not self.orbtype.startswith('sum'):
+            return
+
+        vbl.addSpacing(50)
         wid = QWidget(self)
         lab = QLabel(
-            'MTurnSum orbit at index:', wid,
+            lbl_text + ' orbit at index:', wid,
             alignment=Qt.AlignRight | Qt.AlignVCenter)
         lab.setStyleSheet("font-weight: bold;")
         pdmlab = SiriusLabel(
@@ -240,19 +239,23 @@ class MultiTurnSumWidget(QWidget):
         graph.setLabel('bottom', text='BPM Position', units='m')
         graph.setLabel('left', text='Sum', units='count')
         opts = dict(
-            y_channel=self.prefix+'MTurnIdxSum-Mon',
+            y_channel=self.prefix+orb_propty,
             x_channel=self.prefix+'BPMPosS-Mon',
             name='',
-            color='black',
+            color=color,
             redraw_mode=2,
             lineStyle=1,
             lineWidth=3,
             symbol='o',
             symbolSize=10)
         graph.addChannel(**opts)
+        graph.setShowLegend(False)
 
     def update_graph(self, data):
-        self.curve.receiveYWaveform(data.mean(axis=1))
+        scale = 1e-6
+        if self.orbtype.startswith('sum'):
+            scale = 1
+        self.curve.receiveYWaveform(scale*data.mean(axis=1))
 
 
 class Spectrogram(SiriusSpectrogramView):
@@ -323,6 +326,7 @@ class SinglePassSumWidget(QWidget):
             symbolSize=10)
         graph.addChannel(**opts)
         graph.plotItem.scene().sigMouseMoved.connect(self._show_tooltip)
+        graph.setShowLegend(False)
         self.graph = graph
 
     def _show_tooltip(self, pos):
