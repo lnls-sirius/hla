@@ -40,8 +40,8 @@ class PSControlWindow(SiriusMainWindow):
             'dipole': 'Dipoles ',
             'quadrupole': 'Quadrupoles ',
             'sextupole': 'Sextupoles ',
-            'quadrupole-skew': 'Skew Quadrupoles ',
-            'quadrupole-trim': 'Trims ',
+            'skew-quadrupole': 'Skew Quadrupoles ',
+            'trim-quadrupole': 'Trims ',
             'corrector-slow': 'Slow Correctors '}
         #     'corrector-fast': 'Fast Correctors '}
         self.setWindowTitle(sec2label[section] +

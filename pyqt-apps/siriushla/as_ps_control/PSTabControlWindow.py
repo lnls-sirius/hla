@@ -11,17 +11,17 @@ class PSTabControlWindow(PSControlWindow):
     Devices = {
         "TB": ["dipole", "quadrupole", "corrector-slow"],
         "BO": ["dipole", "quadrupole", "sextupole", "corrector-slow",
-               "quadrupole-skew"],
+               "skew-quadrupole"],
         "TS": ["dipole", "quadrupole", "corrector-slow"],
         "SI": ["dipole", "quadrupole", "sextupole", "corrector-slow",
-               "quadrupole-trim", "quadrupole-skew"]}
+               "trim-quadrupole", "skew-quadrupole"]}
 
     TabName = {"dipole": "Dipoles",
                "quadrupole": "Quadrupoles",
                "sextupole": "Sextupoles",
                "corrector-slow": "Slow Correctors",
-               "quadrupole-skew": "Quadrupoles Skew",
-               "quadrupole-trim": "Trims",
+               "skew-quadrupole": "Quadrupoles Skew",
+               "trim-quadrupole": "Trims",
                }
 
     def __init__(self, section, discipline, parent=None):
