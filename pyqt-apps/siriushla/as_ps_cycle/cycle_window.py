@@ -7,7 +7,7 @@ from datetime import datetime as _datetime
 from functools import partial as _part
 
 from qtpy.QtGui import QColor, QPalette
-from qtpy.QtCore import Signal, QThread, Qt
+from qtpy.QtCore import Signal, QThread, Qt, QTimer
 from qtpy.QtWidgets import QWidget, QGridLayout, QVBoxLayout, \
     QPushButton, QLabel, QMessageBox, QLineEdit, QApplication, \
     QListWidget, QListWidgetItem, QProgressBar, QGroupBox
@@ -51,7 +51,12 @@ class CycleWindow(SiriusMainWindow):
                           'ps_params': False,
                           'ps_opmode': False}
         # Setup UI
+        self._needs_update_leds = False
         self._setup_ui()
+        self._update_led_timer = QTimer(self)
+        self._update_led_timer.timeout.connect(self._update_led_channels)
+        self._update_led_timer.setInterval(500)
+        self._update_led_timer.start()
         self.setWindowTitle('PS Cycle')
 
     def _setup_ui(self):
@@ -75,7 +80,7 @@ class CycleWindow(SiriusMainWindow):
         # status
         gb_status = QGroupBox('Connection Status', self)
         tipvs = [VACA_PREFIX + pv
-                 for pv in self._timing.get_pvnames_by_section()]
+                 for pv in self._timing.get_pvnames_by_psnames()]
         label_ticonn = QLabel('<h4>Timing</h4>', self,
                               alignment=Qt.AlignBottom | Qt.AlignHCenter)
         self.ticonn_led = PyDMLedMultiConn(self, channels=tipvs)
@@ -145,7 +150,8 @@ class CycleWindow(SiriusMainWindow):
 
         # connect tree signals
         self.pwrsupplies_tree.doubleClicked.connect(self._open_ps_detail)
-        self.pwrsupplies_tree.itemChanged.connect(self._check_both_ps_dipole)
+        self.pwrsupplies_tree.itemChanged.connect(
+            self._handle_checked_items_changed)
         self.pwrsupplies_tree.check_requested_levels(self._checked_accs)
 
         # layout
@@ -195,6 +201,7 @@ class CycleWindow(SiriusMainWindow):
             return
         pwrsupplies = self._get_ps_list()
         if not pwrsupplies:
+            QMessageBox.critical(self, 'Message', 'No power supply selected!')
             return
 
         self._allButtons_setEnabled(False)
@@ -254,6 +261,7 @@ class CycleWindow(SiriusMainWindow):
 
         pwrsupplies = self._get_ps_list()
         if not pwrsupplies:
+            QMessageBox.critical(self, 'Message', 'No power supply selected!')
             return
 
         self._allButtons_setEnabled(False)
@@ -289,6 +297,7 @@ class CycleWindow(SiriusMainWindow):
             return
         pwrsupplies = self._get_ps_list()
         if not pwrsupplies:
+            QMessageBox.critical(self, 'Message', 'No power supply selected!')
             return False
         task = ZeroPSCurrent(pwrsupplies, self)
         dlg = ProgressDialog('Setting currents to zero...', task, self)
@@ -301,6 +310,7 @@ class CycleWindow(SiriusMainWindow):
             return
         pwrsupplies = self._get_ps_list(without_linac=True)
         if not pwrsupplies:
+            QMessageBox.critical(self, 'Message', 'No power supply selected!')
             return False
         task = ResetPSOpMode(pwrsupplies, self)
         dlg = ProgressDialog('Setting OpMode to SlowRef...', task, self)
@@ -322,7 +332,7 @@ class CycleWindow(SiriusMainWindow):
         # Get power supplies list
         pwrsupplies = self.pwrsupplies_tree.checked_items()
         if not pwrsupplies:
-            QMessageBox.critical(self, 'Message', 'No power supply selected!')
+            return False
 
         if without_linac:
             pwrsupplies = [ps for ps in pwrsupplies if 'LI' not in ps]
@@ -378,24 +388,19 @@ class CycleWindow(SiriusMainWindow):
                 return
         app.open_window(PSDetailWindow, parent=self, **{'psname': psname})
 
-    def _check_both_ps_dipole(self, item):
+    def _handle_checked_items_changed(self, item):
         psname = PVName(item.data(0, Qt.DisplayRole))
-        if not (psname.sec in ['BO', 'SI'] and psname.dev in ['B', 'B1B2']):
-            return
+        if (psname.sec in ['BO', 'SI'] and psname.dev in ['B', 'B1B2']):
+            psname2check = PSSearch.get_psnames(
+                {'sec': psname.sec, 'dev': 'B.*'})
+            psname2check.remove(psname)
+            item2check = self.pwrsupplies_tree._item_map[psname2check[0]]
 
-        psnames2check = PSSearch.get_psnames({'sec': psname.sec, 'dev': 'B'})
-        psnames2check.remove(psname)
-        item = self.pwrsupplies_tree._item_map[psnames2check[0]]
-
-        state = item.checkState(0)
-        state2set = Qt.Checked if state == Qt.Unchecked \
-            else Qt.Unchecked
-
-        self.pwrsupplies_tree.blockSignals(True)
-        item.setCheckState(0, state2set)
-        self.pwrsupplies_tree.blockSignals(False)
-
-        self._update_led_channels()
+            state2set = item.checkState(0)
+            state2change = item2check.checkState(0)
+            if state2change != state2set:
+                item2check.setCheckState(0, state2set)
+        self._needs_update_leds = True
 
     def _get_ps_not_ready_2_cycle(self, psname, status):
         if not status:
@@ -446,16 +451,21 @@ class CycleWindow(SiriusMainWindow):
             self.progress_list.scrollToBottom()
 
     def _update_led_channels(self):
-        sections = self._get_sections()
+        if not self._needs_update_leds:
+            return
+
+        psnames = self.pwrsupplies_tree.checked_items()
         ti_ch = [VACA_PREFIX + name
-                 for name in self._timing.get_pvnames_by_section(sections)]
+                 for name in self._timing.get_pvnames_by_psnames(psnames)]
         self.ticonn_led.set_channels(ti_ch)
 
         ps_ch = list()
-        for name in self.pwrsupplies_tree.checked_items():
+        for name in psnames:
             ppty = ':Version-Cte' if PVName(name).sec != 'LI' else ':setpwm'
             ps_ch.append(VACA_PREFIX + name + ppty)
         self.psconn_led.set_channels(ps_ch)
+
+        self._needs_update_leds = False
 
     def _allButtons_setEnabled(self, enable, cycle=False):
         self.prepare_timing_bt.setEnabled(enable)
@@ -466,6 +476,10 @@ class CycleWindow(SiriusMainWindow):
         self.zero_ps_curr_bt.setEnabled(enable)
         if cycle:
             self.cycle_bt.setEnabled(enable)
+
+    def closeEvent(self, ev):
+        self._update_led_timer.stop()
+        super().closeEvent(ev)
 
 
 # Auxiliar progress monitoring classes
