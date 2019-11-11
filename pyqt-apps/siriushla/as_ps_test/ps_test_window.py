@@ -13,7 +13,7 @@ from siriuspy.search import PSSearch
 from siriuspy.namesys import SiriusPVName as PVName
 
 from siriushla.widgets import SiriusMainWindow, PVNameTree
-from siriushla.widgets.dialog import ProgressDialog
+from siriushla.widgets.dialog import ProgressDialog, PSStatusDialog
 from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
 from .tasks import ResetIntlk, CheckIntlk, \
     SetOpModeSlowRef, CheckOpModeSlowRef, \
@@ -419,7 +419,9 @@ class PSTestWindow(SiriusMainWindow):
                 continue
             dclinks = PSSearch.conv_psname_2_dclink(name)
             if dclinks:
-                alldclinks.update(dclinks)
+                dclink_type = PSSearch.conv_psname_2_psmodel(dclinks[0])
+                if dclink_type != 'REGATRON_DCLink':
+                    alldclinks.update(dclinks)
 
         alldclinks_list = list(alldclinks)
         self._create_testers(alldclinks_list)
@@ -448,9 +450,8 @@ class PSTestWindow(SiriusMainWindow):
 
         if nok_status:
             text = 'There are not connected PVs! Verify devices:\n'
-            for dev in nok_status:
-                text += dev + '\n'
-            QMessageBox.critical(self, 'Message', text)
+            dlg = PSStatusDialog(nok_status, text, self)
+            dlg.exec_()
             return False
         return True
 
