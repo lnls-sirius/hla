@@ -311,7 +311,11 @@ class CycleWindow(SiriusMainWindow):
     def _restore_timing(self):
         if not self._check_connected('timing'):
             return
-        self._timing.restore_initial_state()
+        task = RestoreTiming(self._timing, self)
+        dlg = ProgressDialog('Restoring timing initial state...', task, self)
+        ret = dlg.exec_()
+        if ret == dlg.Rejected:
+            return False
 
     def _get_ps_list(self, without_linac=False):
         """Return list of power supplies to cycle."""
@@ -506,6 +510,7 @@ class UpdateProgressBar(QThread):
 # Tasks
 
 class CreateCyclers(QThread):
+    """Create cyclers."""
 
     currentItem = Signal(str)
     itemDone = Signal()
@@ -666,7 +671,7 @@ class ZeroPSCurrent(QThread):
 
 
 class ResetPSOpMode(QThread):
-    """Set power supply to cycle."""
+    """Set power supply to SlowRef."""
 
     currentItem = Signal(str)
     itemDone = Signal(str, bool)
@@ -714,7 +719,7 @@ class ResetPSOpMode(QThread):
 
 
 class PreparePS(QThread):
-    """Cycle."""
+    """Prepare power suplies to cycle."""
 
     updated = Signal(str, bool, bool, bool)
 
@@ -752,7 +757,7 @@ class PreparePS(QThread):
 
 
 class PrepareTiming(QThread):
-    """Cycle."""
+    """Prepare timing to cycle."""
 
     updated = Signal(str, bool, bool, bool)
 
@@ -783,6 +788,38 @@ class PrepareTiming(QThread):
     def update(self, message, done, warning, error):
         now = _datetime.now().strftime('%Y/%m/%d-%H:%M:%S')
         self.updated.emit(now+'  '+message, done, warning, error)
+
+
+class RestoreTiming(QThread):
+    """Restore timing initial state."""
+
+    currentItem = Signal(str)
+    itemDone = Signal()
+    completed = Signal()
+
+    def __init__(self, timing, parent=None):
+        """Constructor."""
+        super().__init__(parent)
+        self._quit_task = False
+        self._timing = timing
+
+    def size(self):
+        """Return task size."""
+        return 2
+
+    def exit_task(self):
+        """Set flag to quit thread."""
+        self._quit_task = True
+
+    def run(self):
+        """Set power supplies to cycling."""
+        if self._quit_task:
+            pass
+        else:
+            self.itemDone.emit()
+            self._timing.restore_initial_state()
+            self.itemDone.emit()
+            self.completed.emit()
 
 
 class Cycle(QThread):
