@@ -239,12 +239,16 @@ class OrbitRegister(QWidget):
         ledit.setText('1.0')
         wid.layout().addWidget(QLabel('Choose the Kick [urad]:', wid))
         wid.layout().addWidget(ledit)
+        ledit.textChanged.connect(_part(self._accept_mat_sel, ledit, cbbox))
+        cbbox.currentIndexChanged.connect(
+            _part(self._accept_mat_sel, ledit, cbbox))
 
         hlay = QHBoxLayout()
         cancel = QPushButton('Cancel', wid)
         confirm = QPushButton('Ok', wid)
         cancel.clicked.connect(wid.reject)
         confirm.clicked.connect(wid.accept)
+        confirm.setDefault(True)
         hlay.addStretch()
         hlay.addWidget(cancel)
         hlay.addStretch()
@@ -253,19 +257,25 @@ class OrbitRegister(QWidget):
         wid.layout().addItem(hlay)
         res = wid.exec_()
 
-        if res == QDialog.Accepted:
-            idx = cbbox.currentIndex()
-            kick = float(ledit.text())
-            pvm = self._orbits.get('mat')
-            if pvm is None or not pvm.connected:
-                self._update_and_emit(
-                    'Error: PV {0:s} not connected.'.format(pvm.pvname))
-            val = pvm.getvalue()
-            orbs = val.reshape(-1, self._csorb.NR_CORRS)[:, idx]
-            orbx = orbs[:len(orbs)//2] * kick
-            orby = orbs[len(orbs)//2:] * kick
+        if res != QDialog.Accepted:
+            self._reset_orbit()
+
+    def _accept_mat_sel(self, ledit, cbbox, _):
+        idx = cbbox.currentIndex()
+        corr = cbbox.currentText()
+        if not ledit.text():
+            return
+        kick = float(ledit.text())
+        pvm = self._orbits.get('mat')
+        if pvm is None or not pvm.connected:
             self._update_and_emit(
-                'RespMat: {0:s}'.format(corrnames[idx]), orbx, orby)
+                'Error: PV {0:s} not connected.'.format(pvm.pvname))
+        val = pvm.getvalue()
+        orbs = val.reshape(-1, self._csorb.NR_CORRS)[:, idx]
+        orbx = orbs[:len(orbs)//2] * kick
+        orby = orbs[len(orbs)//2:] * kick
+        self._update_and_emit(
+            'RespMat: {0:s}'.format(corr), orbx, orby)
 
     def _edit_orbit(self):
         orbx = self.orbx
