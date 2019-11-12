@@ -362,7 +362,7 @@ def get_object(ismenubar=True, parent=None):
 
                 skew = QAction('Skew Quadrupoles', psma)
                 self.connect_newprocess(
-                    skew, [scr, '--device', 'quadrupole-skew'])
+                    skew, [scr, '--device', 'skew-quadrupole'])
                 psma.addAction(skew)
 
             corrs = QAction('Correctors', psma)
@@ -372,7 +372,7 @@ def get_object(ismenubar=True, parent=None):
             if sec in 'si':
                 trims = QAction('Trims', psma)
                 self.connect_newprocess(
-                    trims, [scr, '--device', 'quadrupole-trim'])
+                    trims, [scr, '--device', 'trim-quadrupole'])
                 psma.addAction(trims)
             #     fcorr = QAction('Fast Correctors', psma)
             #     self.connect_newprocess(

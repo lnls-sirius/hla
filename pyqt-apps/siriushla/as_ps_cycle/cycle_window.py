@@ -7,7 +7,7 @@ from datetime import datetime as _datetime
 from functools import partial as _part
 
 from qtpy.QtGui import QColor, QPalette
-from qtpy.QtCore import Signal, QThread, Qt
+from qtpy.QtCore import Signal, QThread, Qt, QTimer
 from qtpy.QtWidgets import QWidget, QGridLayout, QVBoxLayout, \
     QPushButton, QLabel, QMessageBox, QLineEdit, QApplication, \
     QListWidget, QListWidgetItem, QProgressBar, QGroupBox
@@ -21,9 +21,8 @@ from siriuspy.search import PSSearch
 from siriushla.widgets import SiriusMainWindow, \
     PyDMLedMultiConnection as PyDMLedMultiConn
 from siriushla.widgets.pvnames_tree import PVNameTree
-from siriushla.widgets.dialog import ProgressDialog
+from siriushla.widgets.dialog import ProgressDialog, PSStatusDialog
 from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
-from .cycle_status_list import PSListDialog
 
 _cyclers = dict()
 _lock = _Lock()
@@ -51,7 +50,12 @@ class CycleWindow(SiriusMainWindow):
                           'ps_params': False,
                           'ps_opmode': False}
         # Setup UI
+        self._needs_update_leds = False
         self._setup_ui()
+        self._update_led_timer = QTimer(self)
+        self._update_led_timer.timeout.connect(self._update_led_channels)
+        self._update_led_timer.setInterval(500)
+        self._update_led_timer.start()
         self.setWindowTitle('PS Cycle')
 
     def _setup_ui(self):
@@ -75,7 +79,7 @@ class CycleWindow(SiriusMainWindow):
         # status
         gb_status = QGroupBox('Connection Status', self)
         tipvs = [VACA_PREFIX + pv
-                 for pv in self._timing.get_pvnames_by_section()]
+                 for pv in self._timing.get_pvnames_by_psnames()]
         label_ticonn = QLabel('<h4>Timing</h4>', self,
                               alignment=Qt.AlignBottom | Qt.AlignHCenter)
         self.ticonn_led = PyDMLedMultiConn(self, channels=tipvs)
@@ -145,7 +149,8 @@ class CycleWindow(SiriusMainWindow):
 
         # connect tree signals
         self.pwrsupplies_tree.doubleClicked.connect(self._open_ps_detail)
-        self.pwrsupplies_tree.itemChanged.connect(self._check_both_ps_dipole)
+        self.pwrsupplies_tree.itemChanged.connect(
+            self._handle_checked_items_changed)
         self.pwrsupplies_tree.check_requested_levels(self._checked_accs)
 
         # layout
@@ -195,6 +200,7 @@ class CycleWindow(SiriusMainWindow):
             return
         pwrsupplies = self._get_ps_list()
         if not pwrsupplies:
+            QMessageBox.critical(self, 'Message', 'No power supply selected!')
             return
 
         self._allButtons_setEnabled(False)
@@ -221,7 +227,7 @@ class CycleWindow(SiriusMainWindow):
             if self._ps_failed:
                 text = 'Verify power state and interlocks' \
                        ' of the following power supplies'
-                dlg = PSListDialog(self._ps_failed, text, self)
+                dlg = PSStatusDialog(self._ps_failed, text, self)
                 dlg.exec_()
                 self._allButtons_setEnabled(True)
                 return False
@@ -254,6 +260,7 @@ class CycleWindow(SiriusMainWindow):
 
         pwrsupplies = self._get_ps_list()
         if not pwrsupplies:
+            QMessageBox.critical(self, 'Message', 'No power supply selected!')
             return
 
         self._allButtons_setEnabled(False)
@@ -289,6 +296,7 @@ class CycleWindow(SiriusMainWindow):
             return
         pwrsupplies = self._get_ps_list()
         if not pwrsupplies:
+            QMessageBox.critical(self, 'Message', 'No power supply selected!')
             return False
         task = ZeroPSCurrent(pwrsupplies, self)
         dlg = ProgressDialog('Setting currents to zero...', task, self)
@@ -301,6 +309,7 @@ class CycleWindow(SiriusMainWindow):
             return
         pwrsupplies = self._get_ps_list(without_linac=True)
         if not pwrsupplies:
+            QMessageBox.critical(self, 'Message', 'No power supply selected!')
             return False
         task = ResetPSOpMode(pwrsupplies, self)
         dlg = ProgressDialog('Setting OpMode to SlowRef...', task, self)
@@ -311,14 +320,18 @@ class CycleWindow(SiriusMainWindow):
     def _restore_timing(self):
         if not self._check_connected('timing'):
             return
-        self._timing.restore_initial_state()
+        task = RestoreTiming(self._timing, self)
+        dlg = ProgressDialog('Restoring timing initial state...', task, self)
+        ret = dlg.exec_()
+        if ret == dlg.Rejected:
+            return False
 
     def _get_ps_list(self, without_linac=False):
         """Return list of power supplies to cycle."""
         # Get power supplies list
         pwrsupplies = self.pwrsupplies_tree.checked_items()
         if not pwrsupplies:
-            QMessageBox.critical(self, 'Message', 'No power supply selected!')
+            return False
 
         if without_linac:
             pwrsupplies = [ps for ps in pwrsupplies if 'LI' not in ps]
@@ -374,24 +387,19 @@ class CycleWindow(SiriusMainWindow):
                 return
         app.open_window(PSDetailWindow, parent=self, **{'psname': psname})
 
-    def _check_both_ps_dipole(self, item):
+    def _handle_checked_items_changed(self, item):
         psname = PVName(item.data(0, Qt.DisplayRole))
-        if not (psname.sec in ['BO', 'SI'] and psname.dev in ['B', 'B1B2']):
-            return
+        if (psname.sec in ['BO', 'SI'] and psname.dev in ['B', 'B1B2']):
+            psname2check = PSSearch.get_psnames(
+                {'sec': psname.sec, 'dev': 'B.*'})
+            psname2check.remove(psname)
+            item2check = self.pwrsupplies_tree._item_map[psname2check[0]]
 
-        psnames2check = PSSearch.get_psnames({'sec': psname.sec, 'dev': 'B'})
-        psnames2check.remove(psname)
-        item = self.pwrsupplies_tree._item_map[psnames2check[0]]
-
-        state = item.checkState(0)
-        state2set = Qt.Checked if state == Qt.Unchecked \
-            else Qt.Unchecked
-
-        self.pwrsupplies_tree.blockSignals(True)
-        item.setCheckState(0, state2set)
-        self.pwrsupplies_tree.blockSignals(False)
-
-        self._update_led_channels()
+            state2set = item.checkState(0)
+            state2change = item2check.checkState(0)
+            if state2change != state2set:
+                item2check.setCheckState(0, state2set)
+        self._needs_update_leds = True
 
     def _get_ps_not_ready_2_cycle(self, psname, status):
         if not status:
@@ -442,16 +450,21 @@ class CycleWindow(SiriusMainWindow):
             self.progress_list.scrollToBottom()
 
     def _update_led_channels(self):
-        sections = self._get_sections()
+        if not self._needs_update_leds:
+            return
+
+        psnames = self.pwrsupplies_tree.checked_items()
         ti_ch = [VACA_PREFIX + name
-                 for name in self._timing.get_pvnames_by_section(sections)]
+                 for name in self._timing.get_pvnames_by_psnames(psnames)]
         self.ticonn_led.set_channels(ti_ch)
 
         ps_ch = list()
-        for name in self.pwrsupplies_tree.checked_items():
+        for name in psnames:
             ppty = ':Version-Cte' if PVName(name).sec != 'LI' else ':setpwm'
             ps_ch.append(VACA_PREFIX + name + ppty)
         self.psconn_led.set_channels(ps_ch)
+
+        self._needs_update_leds = False
 
     def _allButtons_setEnabled(self, enable, cycle=False):
         self.prepare_timing_bt.setEnabled(enable)
@@ -462,6 +475,10 @@ class CycleWindow(SiriusMainWindow):
         self.zero_ps_curr_bt.setEnabled(enable)
         if cycle:
             self.cycle_bt.setEnabled(enable)
+
+    def closeEvent(self, ev):
+        self._update_led_timer.stop()
+        super().closeEvent(ev)
 
 
 # Auxiliar progress monitoring classes
@@ -506,6 +523,7 @@ class UpdateProgressBar(QThread):
 # Tasks
 
 class CreateCyclers(QThread):
+    """Create cyclers."""
 
     currentItem = Signal(str)
     itemDone = Signal()
@@ -666,7 +684,7 @@ class ZeroPSCurrent(QThread):
 
 
 class ResetPSOpMode(QThread):
-    """Set power supply to cycle."""
+    """Set power supply to SlowRef."""
 
     currentItem = Signal(str)
     itemDone = Signal(str, bool)
@@ -714,7 +732,7 @@ class ResetPSOpMode(QThread):
 
 
 class PreparePS(QThread):
-    """Cycle."""
+    """Prepare power suplies to cycle."""
 
     updated = Signal(str, bool, bool, bool)
 
@@ -752,7 +770,7 @@ class PreparePS(QThread):
 
 
 class PrepareTiming(QThread):
-    """Cycle."""
+    """Prepare timing to cycle."""
 
     updated = Signal(str, bool, bool, bool)
 
@@ -783,6 +801,38 @@ class PrepareTiming(QThread):
     def update(self, message, done, warning, error):
         now = _datetime.now().strftime('%Y/%m/%d-%H:%M:%S')
         self.updated.emit(now+'  '+message, done, warning, error)
+
+
+class RestoreTiming(QThread):
+    """Restore timing initial state."""
+
+    currentItem = Signal(str)
+    itemDone = Signal()
+    completed = Signal()
+
+    def __init__(self, timing, parent=None):
+        """Constructor."""
+        super().__init__(parent)
+        self._quit_task = False
+        self._timing = timing
+
+    def size(self):
+        """Return task size."""
+        return 2
+
+    def exit_task(self):
+        """Set flag to quit thread."""
+        self._quit_task = True
+
+    def run(self):
+        """Set power supplies to cycling."""
+        if self._quit_task:
+            pass
+        else:
+            self.itemDone.emit()
+            self._timing.restore_initial_state()
+            self.itemDone.emit()
+            self.completed.emit()
 
 
 class Cycle(QThread):

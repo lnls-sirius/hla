@@ -62,7 +62,7 @@ class ControlWidgetFactory:
                 return BoSlowCorrectorControlWidget(dev_type=discipline,
                                                     orientation=orientation,
                                                     parent=parent)
-            elif device == "quadrupole-skew":
+            elif device == "skew-quadrupole":
                 return BOSkewQuadControlWidget(dev_type=discipline,
                                                orientation=orientation,
                                                parent=parent)
@@ -104,11 +104,11 @@ class ControlWidgetFactory:
                 return SIFastCorrectorControlWidget(dev_type=discipline,
                                                     orientation=orientation,
                                                     parent=parent)
-            elif device == "quadrupole-skew":
+            elif device == "skew-quadrupole":
                 return SISkewQuadControlWidget(dev_type=discipline,
                                                orientation=orientation,
                                                parent=parent)
-            elif device == "quadrupole-trim":
+            elif device == "trim-quadrupole":
                 return SITrimAllControlWidget(dev_type=discipline,
                                               orientation=orientation,
                                               parent=parent)
