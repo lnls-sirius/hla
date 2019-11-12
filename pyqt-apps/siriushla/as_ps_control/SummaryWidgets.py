@@ -38,15 +38,15 @@ def get_analog_name(psname):
     if 'dclink' in pstype:
         if psmodel == 'FBP_DCLink':
             return 'Voltage'
-        elif psmodel in ('FAC_ACDC', 'FAC_2S_ACDC', 'FAC_2P4S_ACDC'):
+        elif psmodel in {'FAC_ACDC', 'FAC_2S_ACDC', 'FAC_2P4S_ACDC'}:
             return 'CapacitorBankVoltage'
         else:
             raise RuntimeError(
                 'Undefined PS model {} setpoint PV name'.format(psmodel))
     else:
-        if psname.dis in ['PS', 'MA']:
+        if psname.dis in {'PS', 'MA'}:
             return 'Current'
-        elif psname.dis in ['PU', 'PM']:
+        elif psname.dis in {'PU', 'PM'}:
             return 'Voltage'
         else:
             raise RuntimeError(
@@ -78,7 +78,7 @@ def get_prop2width(psname):
         'ctrlmode': '6',
         'state': '6'
     })
-    if psname.dis == 'PM':
+    if psname.dis in {'PU', 'PM'}:
         dic.update({'pulse': '8'})
     dic.update({
         'intlk':  '5',
@@ -88,7 +88,7 @@ def get_prop2width(psname):
         'readback': '6',
         'monitor': '6',
     })
-    if psname.dis in ['MA', 'PM']:
+    if psname.dis in {'MA', 'PM'}:
         dic.update({
             'strength_sp': '6',
             'strength_rb': '6',
@@ -108,7 +108,7 @@ def get_prop2label(psname):
         'ctrlmode': 'Control Mode',
         'state': 'PwrState'
     })
-    if psname.dis == 'PM':
+    if psname.dis in {'PU', 'PM'}:
         dic.update({'pulse': 'Pulse'})
     dic.update({
         'intlk':  'Interlocks',
@@ -128,7 +128,7 @@ def get_prop2label(psname):
         'monitor': analog + '-Mon',
     })
 
-    if psname.dis in ['MA', 'PM']:
+    if psname.dis in {'MA', 'PM'}:
         strength = get_strength_name(psname)
         dic.update({
             'strength_sp': strength + '-SP',
@@ -149,7 +149,8 @@ class SummaryWidget(QWidget):
         self._name = PVName(name)
         self.visible_props = visible_props
         self._prefixed_name = VACA_PREFIX + name
-        self._is_magnet = True if self._name.dis in ['MA', 'PM'] else False
+        self._is_magnet = self._name.dis in {'MA', 'PM'}
+        self._is_pulsed = self._name.dis in {'PU', 'PM'}
 
         if self._is_magnet:
             psnames = MASearch.conv_maname_2_psnames(name)
@@ -217,7 +218,7 @@ class SummaryWidget(QWidget):
         self._widgets_dict['state'] = self.state_wid
         lay.addWidget(self.state_wid)
 
-        if self._name.dis == 'PM':
+        if self._is_pulsed:
             self.pulse_bt = PyDMStateButton(self, self._pulse_sel)
             self.pulse_led = SiriusLedState(self, self._pulse_sts)
             self.pulse_wid = self._build_widget(
@@ -368,9 +369,10 @@ class SummaryWidget(QWidget):
             self._strength_mon = self._prefixed_name + ':{}-Mon'.format(st)
             if self._name.dis == 'MA':
                 self._psconn_mon = self._prefixed_name + ':PSConnStatus-Mon'
-            elif self._name.dis == 'PM':
-                self._pulse_sel = self._prefixed_name + ':Pulse-Sel'
-                self._pulse_sts = self._prefixed_name + ':Pulse-Sts'
+
+        if self._is_pulsed:
+            self._pulse_sel = self._prefixed_name + ':Pulse-Sel'
+            self._pulse_sts = self._prefixed_name + ':Pulse-Sts'
 
     def _build_widget(self, widgets, orientation='h', name=''):
         widget = QWidget(self)
@@ -436,7 +438,7 @@ class SummaryHeader(QWidget):
         lay.setSpacing(10)
         lay.setContentsMargins(0, 0, 0, 0)
 
-        if self._name.dis in ['PS', 'MA'] and 'DCLink' not in self._name.dev:
+        if self._name.dis in {'PS', 'MA'} and 'DCLink' not in self._name.dev:
             hidden = QLabel(' ')
             hidden.setObjectName('HiddenButton')
             hidden.setStyleSheet('min-width: 10px; max-width: 10px;')
