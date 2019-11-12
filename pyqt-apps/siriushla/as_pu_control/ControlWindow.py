@@ -61,8 +61,8 @@ class PUControlWindow(SiriusMainWindow):
             devices = PSSearch.get_psnames({'sec': section, 'dis': 'PU'})
         else:
             devices = MASearch.get_manames({'sec': section, 'dis': 'PM'})
-        visible_props = {'detail', 'state', 'intlk',
-                         'setpoint', 'monitor',
+        visible_props = {'detail', 'state', 'reset', 'intlk',
+                         'setpoint', 'monitor', 'pulse',
                          'strength_sp', 'strength_mon'}
 
         lay.addWidget(SummaryHeader(devices[0], visible_props, self))
