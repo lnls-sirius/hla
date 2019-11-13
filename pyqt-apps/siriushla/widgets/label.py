@@ -21,8 +21,8 @@ class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
         The channel to be used by the widget.
     """
 
-    def __init__(self, parent=None, init_channel=None):
-        QLabel.__init__(self, parent)
+    def __init__(self, parent=None, init_channel=None, **kws):
+        QLabel.__init__(self, parent, **kws)
         PyDMWidget.__init__(self, init_channel=init_channel)
         self.app = QApplication.instance()
         self.setTextFormat(Qt.PlainText)
@@ -58,7 +58,7 @@ class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
         """
         self.format_string = "{}"
         if isinstance(self.value, (int, float)):
-            self.format_string = "{:." + str(self._prec) + "f}"
+            self.format_string = "{:." + str(self.precision) + "f}"
         if self._show_units and self._unit != "":
             unt_opt = units.find_unit_options(self._unit)
             if unt_opt:
@@ -82,7 +82,7 @@ class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
         """
         super(SiriusLabel, self).value_changed(new_value)
         new_value = parse_value_for_display(
-            value=new_value, precision=self._prec,
+            value=new_value, precision=self.precision,
             display_format_type=self._display_format_type,
             string_encoding=self._string_encoding, widget=self)
         # If the value is a string, just display it as-is, no formatting
