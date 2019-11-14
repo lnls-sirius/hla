@@ -2,6 +2,7 @@
 
 """Open Window of energy measurement in LI."""
 
+import os
 import sys
 import argparse as _argparse
 import qtawesome as qta
@@ -11,6 +12,9 @@ from siriushla.sirius_application import SiriusApplication
 from siriushla.as_ap_measure import EnergyMeasure
 from siriushla.widgets.windows import create_window_from_widget
 
+
+# Linac image is very large! (2448 X 2050)
+os.environ['EPICS_CA_MAX_ARRAY_BYTES'] = '21000000'
 
 parser = _argparse.ArgumentParser(
     description="Run Interface of energy measurement in LI.")
