@@ -8,8 +8,8 @@ from siriuspy.search import PSSearch
 from siriuspy.csdevice.pwrsupply import Const as _PSc
 
 from siriushla.sirius_application import SiriusApplication
-from siriushla.widgets import SiriusMainWindow, \
-    PyDMLedMultiChannel
+from siriushla.widgets import SiriusMainWindow, PyDMLedMultiChannel
+from siriushla.util import run_newprocess
 
 from siriushla.as_ps_diag.util import lips2filters, asps2filters, sips2filters
 
@@ -141,7 +141,7 @@ class PSMonitor(SiriusMainWindow):
                                      row, col, 1, col_count)
                 row += 1
                 for name in psnames:
-                    led = PyDMLedMultiChannel(self, get_ch2vals(sec, name))
+                    led = MyLed(self, get_ch2vals(sec, name))
                     led.setObjectName(name)
                     led.setToolTip(name)
                     status_lay.addWidget(led, row, col)
@@ -154,7 +154,7 @@ class PSMonitor(SiriusMainWindow):
                 grid.addWidget(QLabel(label, self), 0, 0, 1, 5)
                 aux_row, aux_col = 1, 0
                 for name in psnames:
-                    led = PyDMLedMultiChannel(self, get_ch2vals(sec, name))
+                    led = MyLed(self, get_ch2vals(sec, name))
                     led.setObjectName(name)
                     led.setToolTip(name)
                     grid.addWidget(led, aux_row, aux_col)
@@ -168,6 +168,13 @@ class PSMonitor(SiriusMainWindow):
             status_lay.setColumnStretch(2, 1)
 
         return status
+
+
+class MyLed(PyDMLedMultiChannel):
+
+    def mouseDoubleClickEvent(self, ev):
+        ps = self.objectName()
+        run_newprocess(['sirius-hla-as-ps-detail.py', ps])
 
 
 if __name__ == '__main__':
