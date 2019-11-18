@@ -35,6 +35,8 @@ class SelectBPMs(BaseWidget):
         super().__init__(parent=parent, prefix=prefix, bpm='')
         self.bpm_dict = {bpm: '' for bpm in bpm_list}
         self.setObjectName(bpm_list[0][:2] + 'App')
+        is_si = all(map(lambda x: x.sec, bpm_list))
+        self.ncols = 8 if is_si else 10
         self.setupui()
 
     def setupui(self):
@@ -56,11 +58,10 @@ class SelectBPMs(BaseWidget):
         scr_ar_wid.setObjectName('scrollarea')
         scr_ar_wid.setStyleSheet(
             '#scrollarea {background-color: transparent;}')
-        vbl2 = QVBoxLayout(scr_ar_wid)
-        vbl2.setSpacing(15)
-        for bpm in sorted(self.bpm_dict.keys()):
+        gdl = QGridLayout(scr_ar_wid)
+        for i, bpm in enumerate(sorted(self.bpm_dict.keys())):
             widb = BPMSummary(scr_ar_wid, prefix=self.prefix, bpm=bpm)
-            vbl2.addWidget(widb)
+            gdl.addWidget(widb, i // self.ncols, i % self.ncols)
             self.bpm_dict[bpm] = widb
 
         vbl.addWidget(scarea)
