@@ -8,7 +8,7 @@ from siriuspy.namesys import SiriusPVName as PVName
 from siriuspy.search import LLTimeSearch, HLTimeSearch
 from siriushla.widgets import SiriusLedAlert, SiriusMainWindow, \
     PyDMLedMultiChannel
-from siriushla.util import get_appropriate_color
+from siriushla.util import get_appropriate_color, connect_window
 from siriushla.widgets.windows import create_window_from_widget
 if __name__ == '__main__':
     from siriushla.as_ti_control import AFC, EVE, EVR, EVG, FOUT, \
@@ -67,8 +67,8 @@ class LLButton(QWidget):
         icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
         Window = create_window_from_widget(
             clss, title=self.prefix.device_name, icon=icon)
-        led.clicked.connect(lambda: QApplication.instance().open_window(
-            Window, parent=None, prefix=self.prefix + ':'))
+        connect_window(
+            led, Window, None, signal=led.clicked, prefix=self.prefix + ':')
 
         lay = QHBoxLayout(self)
         lay.addWidget(lbl0)
