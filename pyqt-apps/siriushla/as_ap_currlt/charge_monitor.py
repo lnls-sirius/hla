@@ -3,7 +3,7 @@ import numpy as np
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QLabel, QCheckBox, \
     QVBoxLayout, QGridLayout, QDoubleSpinBox, QApplication
-from pydm.widgets import PyDMTimePlot, PyDMLabel
+from pydm.widgets import PyDMTimePlot
 from siriuspy.envars import vaca_prefix
 from siriuspy.clientarch import ClientArchiver
 from siriushla.widgets import SiriusMainWindow, SiriusConnectionSignal
@@ -120,8 +120,9 @@ class BOMonitor(SiriusMainWindow):
         t1_str = t1.isoformat() + '-03:00'
         timestamp, value, _, _ = carch.getData(pvname, t0_str, t1_str)
         # ignore first sample
-        timestamp[0] = t0.timestamp()
-        value[0] = value[1]
+        if len(value) > 1:
+            timestamp[0] = t0.timestamp()
+            value[0] = value[1]
         return timestamp, value
 
     def _update_charges(self, value):
