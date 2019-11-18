@@ -22,8 +22,8 @@ parser.add_argument(
     'bpm_sel', type=str, help='Select a section or a BPM name.')
 parser.add_argument(
     '-s', '--subsection', type=str, default='all',
-    help='Subdivide take the nth subgroup of the bpms.',
-    choices=('all', '1', '2', '3', '4', '5'))
+    help='Show the ith subgroup of the bpms.' +
+         ' The maximum number of groups for BO is 5 and for SI is 20')
 parser.add_argument(
     '-w', '--window', type=str, default='Summary',
     help="type of window to open (default= 'Summary').",
@@ -35,11 +35,12 @@ args = parser.parse_args()
 
 app = SiriusApplication()
 pv = _PVName(args.bpm_sel)
+kwargs = dict()
 if pv.dev == 'BPM':
     icon = qta.icon('mdi.currency-sign', color=get_appropriate_color(pv.sec))
     window = create_window_from_widget(
         BPMMain, title=args.bpm_sel, is_main=True, icon=icon)
-    kwargs = dict(prefix=args.prefix, bpm=pv)
+    kwargs.update(dict(prefix=args.prefix, bpm=pv))
 else:
     sec = args.bpm_sel.upper()
     bpms_names = BPMSearch.get_names(filters={'sec': sec})
@@ -50,15 +51,17 @@ else:
     else:
         clas = MultiTurnSummary
     slc = slice(None, None)
+    maxn = 5 if sec == 'BO' else 20
     if args.subsection != 'all':
         sub = int(args.subsection)
-        siz = len(bpms_names)//5
+        sub = min(sub, maxn)
+        siz = len(bpms_names)//maxn
         slc = slice(siz*(sub-1), siz*sub)
     bpms_names = bpms_names[slc]
     icon = qta.icon('mdi.currency-sign', color=get_appropriate_color(sec))
     window = create_window_from_widget(
         clas, title=sec + ' BPM List', is_main=True, icon=icon)
-    kwargs = dict(prefix=args.prefix, bpm_list=bpms_names)
+    kwargs.update(dict(prefix=args.prefix, bpm_list=bpms_names))
 
 app.open_window(window, parent=None, **kwargs)
 sys.exit(app.exec_())

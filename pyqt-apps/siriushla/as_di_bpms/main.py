@@ -12,35 +12,6 @@ from siriushla.as_di_bpms.trig_acq_config import ACQTrigConfigs
 from siriushla.as_di_bpms.monit import MonitData
 
 
-class BPMSummary(BaseWidget):
-
-    def __init__(self, parent=None, prefix='', bpm=''):
-        super().__init__(parent=parent, prefix=prefix, bpm=bpm)
-        self.setObjectName(self.bpm.sec+'App')
-        self.setupui()
-
-    def setupui(self):
-        hbl = QHBoxLayout(self)
-        hbl.addSpacing(10)
-        hbl.addStretch()
-        chan2vals = {
-            'asyn.CNCT': 1, 'asyn.ENBL': 1,
-            'RFFEasyn.CNCT': 1, 'RFFEasyn.ENBL': 1}
-        chan2vals = {self.get_pvname(k): v for k, v in chan2vals.items()}
-        led = PyDMLedMultiChannel(self, channels2values=chan2vals)
-        hbl.addWidget(led)
-        hbl.addSpacing(10)
-        hbl.addStretch()
-        pbt = QPushButton(self.bpm)
-        pbt.setStyleSheet('min-width:8em;')
-        util.connect_newprocess(
-            pbt, ['sirius-hla-as-di-bpm.py', '-p', self.prefix, self.bpm],
-            parent=self)
-        hbl.addWidget(pbt)
-        hbl.addSpacing(10)
-        hbl.addStretch()
-
-
 class BPMMain(BaseWidget):
 
     def __init__(self, parent=None, prefix='', bpm=''):

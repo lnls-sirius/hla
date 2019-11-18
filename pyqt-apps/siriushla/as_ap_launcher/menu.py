@@ -334,6 +334,13 @@ def get_object(ismenubar=True, parent=None):
                     self.connect_newprocess(action2, cmd + [act, '-s', '4'])
                     action2 = menu2.addAction('subsec 42-01')
                     self.connect_newprocess(action2, cmd + [act, '-s', '5'])
+                elif sec == 'si':
+                    menu2 = menu.addMenu(typ)
+                    menu2.setObjectName(sec.upper()+'App')
+                    for i in range(1, 21):
+                        sub = '{0:02d}'.format(i)
+                        action = menu2.addAction('SI-' + sub)
+                        self.connect_newprocess(action, cmd + [act, '-s', sub])
                 else:
                     action = menu.addAction(typ)
                     self.connect_newprocess(action, cmd + [act, ])

@@ -3,7 +3,30 @@ from qtpy.QtWidgets import QWidget, QVBoxLayout, QScrollArea, QLineEdit, \
     QLabel, QHBoxLayout, QGridLayout, QPushButton
 from qtpy.QtCore import Qt, Slot
 from siriushla.as_di_bpms.base import BaseWidget, GraphTime, GraphWave
-from siriushla.as_di_bpms.main import BPMSummary
+from siriushla.widgets import PyDMLedMultiChannel
+import siriushla.util as util
+
+
+class BPMSummary(BaseWidget):
+
+    def __init__(self, parent=None, prefix='', bpm=''):
+        super().__init__(parent=parent, prefix=prefix, bpm=bpm)
+        self.setObjectName(self.bpm.sec+'App')
+        self.setupui()
+
+    def setupui(self):
+        hbl = QHBoxLayout(self)
+        hbl.setContentsMargins(0, 0, 0, 0)
+        chan2vals = {
+            'asyn.CNCT': 1, 'asyn.ENBL': 1,
+            'RFFEasyn.CNCT': 1, 'RFFEasyn.ENBL': 1}
+        chan2vals = {self.get_pvname(k): v for k, v in chan2vals.items()}
+        led = PyDMLedMultiChannel(self, channels2values=chan2vals)
+        led.setToolTip(self.bpm)
+        hbl.addWidget(led)
+        util.connect_newprocess(
+            led, ['sirius-hla-as-di-bpm.py', '-p', self.prefix, self.bpm],
+            parent=self, signal=led.clicked)
 
 
 class SelectBPMs(BaseWidget):
@@ -12,6 +35,8 @@ class SelectBPMs(BaseWidget):
         super().__init__(parent=parent, prefix=prefix, bpm='')
         self.bpm_dict = {bpm: '' for bpm in bpm_list}
         self.setObjectName(bpm_list[0][:2] + 'App')
+        is_si = all(map(lambda x: x.sec, bpm_list))
+        self.ncols = 8 if is_si else 10
         self.setupui()
 
     def setupui(self):
@@ -33,11 +58,10 @@ class SelectBPMs(BaseWidget):
         scr_ar_wid.setObjectName('scrollarea')
         scr_ar_wid.setStyleSheet(
             '#scrollarea {background-color: transparent;}')
-        vbl2 = QVBoxLayout(scr_ar_wid)
-        vbl2.setSpacing(15)
-        for bpm in sorted(self.bpm_dict.keys()):
+        gdl = QGridLayout(scr_ar_wid)
+        for i, bpm in enumerate(sorted(self.bpm_dict.keys())):
             widb = BPMSummary(scr_ar_wid, prefix=self.prefix, bpm=bpm)
-            vbl2.addWidget(widb)
+            gdl.addWidget(widb, i // self.ncols, i % self.ncols)
             self.bpm_dict[bpm] = widb
 
         vbl.addWidget(scarea)

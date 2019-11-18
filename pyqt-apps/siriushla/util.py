@@ -41,9 +41,9 @@ def get_window_id(w_class, **kwargs):
     return ''.join([w_class.__name__, str(kwargs)])
 
 
-def connect_window(widget, w_class, parent, **kwargs):
+def connect_window(widget, w_class, parent, signal=None, **kwargs):
     """Connect a widget to a window."""
-    signal = get_appropriate_signal(widget)
+    signal = signal or get_appropriate_signal(widget)
     app = QApplication.instance()
     widget.w_class = w_class
     widget.kwargs = kwargs
@@ -51,9 +51,10 @@ def connect_window(widget, w_class, parent, **kwargs):
         app.sender().w_class, parent=parent, **app.sender().kwargs))
 
 
-def connect_newprocess(widget, cmd, is_window=True, parent=None, **kwargs):
+def connect_newprocess(widget, cmd, is_window=True, parent=None, signal=None,
+                       **kwargs):
     """Execute a child program in a new process."""
-    signal = get_appropriate_signal(widget)
+    signal = signal or get_appropriate_signal(widget)
     signal.connect(lambda: run_newprocess(cmd, **kwargs))
     if is_window:
         signal.connect(_part(_show_loading_message, parent, cmd))
