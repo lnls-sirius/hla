@@ -86,8 +86,25 @@ class CustomGroupBox(QGroupBox, PyDMPrimitiveWidget):
         PyDMPrimitiveWidget.__init__(self)
 
 
+def get_custom_widget_class(CLASS):
+    class MyWidget(CLASS):
+
+        def __init__(self, parent=None, **kws):
+            """Initialize object."""
+            super().__init__(parent=parent, **kws)
+            self.setFocusPolicy(Qt.StrongFocus)
+
+        def wheelEvent(self, event):
+            """Reimplement wheel event to ignore event when out of focus."""
+            if not self.hasFocus():
+                event.ignore()
+            else:
+                super().wheelEvent(event)
+    return MyWidget
+
+
 class BaseGraph(BaseWidget):
-    CLASS = PyDMWaveformPlot
+    CLASS = get_custom_widget_class(PyDMWaveformPlot)
     DATA_CLASS = np.ndarray
 
     def __init__(self, parent=None, prefix='', bpm='', data_prefix=''):
@@ -162,7 +179,7 @@ class GraphWave(BaseGraph):
 
 
 class GraphTime(BaseGraph):
-    CLASS = PyDMTimePlot
+    CLASS = get_custom_widget_class(PyDMTimePlot)
     DATA_CLASS = float
 
     def __init__(self, *args, **kwargs):
