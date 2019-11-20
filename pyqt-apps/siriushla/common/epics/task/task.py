@@ -2,7 +2,6 @@
 from qtpy.QtCore import QThread, Signal
 
 
-
 class EpicsTask(QThread):
     """Interface to execute some task.
 
