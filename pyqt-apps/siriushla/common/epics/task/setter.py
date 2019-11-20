@@ -11,7 +11,6 @@ class EpicsSetter(EpicsTask):
         """Thread execution."""
         if not self._quit_task:
             for i in range(len(self._pvnames)):
-                print(i, len(EpicsTask.PVs))
                 pv = EpicsTask.PVs[i]
                 self.currentItem.emit(pv.pvname)
                 try:
