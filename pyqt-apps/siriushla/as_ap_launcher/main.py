@@ -9,10 +9,11 @@ from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
 from siriuspy.envars import vaca_prefix
 from siriuspy.search import LLTimeSearch as _LLTimeSearch
 
+from pydm.widgets import PyDMPushButton
 from siriushla.util import get_appropriate_color
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, PyDMStateButton, \
-    SiriusLedState, SiriusLedAlert
+    SiriusLedState, SiriusLedAlert, SiriusSpinbox, SiriusLabel
 from siriushla.common.epics.wrapper import PyEpicsWrapper
 from .menu import get_object
 
@@ -39,7 +40,7 @@ class MainOperation(SiriusMainWindow):
     def _setupUi(self):
         # Egun triggers
         egun = QGroupBox('Egun Trigger')
-        egun.setStyleSheet('min-width: 8em;')
+        egun.setStyleSheet('min-width: 5em;')
 
         egun_trigger_enable = PyDMStateButton(
             parent=self, init_channel=self._prefix+'LI-01:EG-TriggerPS:enable')
@@ -78,15 +79,47 @@ class MainOperation(SiriusMainWindow):
             parent=self,
             init_channel=self._prefix+evg_name+':InjectionEvt-Sts')
 
+        evg_update_label = QLabel(
+            '<h4>Update</h4>', self, alignment=Qt.AlignCenter)
+        evg_update_sel = PyDMPushButton(
+            self,
+            init_channel=self._prefix+evg_name+':UpdateEvt-Cmd', pressValue=1)
+        evg_update_sel.setIcon(qta.icon('fa5s.sync'))
+        evg_update_sel.setToolTip('Update Events Table')
+        evg_update_sel.setObjectName('but')
+        evg_update_sel.setStyleSheet(
+            '#but{min-width:25px; max-width:25px; icon-size:20px;}')
+        evg_update_sts = SiriusLedAlert(
+            parent=self,
+            init_channel=self._prefix+evg_name+':EvtSyncStatus-Mon')
+        evg_update_sts.setOffColor(evg_update_sts.Red)
+        evg_update_sts.setOnColor(evg_update_sts.LightGreen)
+
+        evg_repeat_label = QLabel(
+            '<h4>Repeat</h4>', self, alignment=Qt.AlignCenter)
+        evg_repeat_sel = SiriusSpinbox(
+            self, init_channel=self._prefix+evg_name+':RepeatBucketList-SP')
+        evg_repeat_sel.showStepExponent = False
+        evg_repeat_sts = SiriusLabel(
+            self, init_channel=self._prefix+evg_name+':RepeatBucketList-RB')
+        evg_repeat_sts.setStyleSheet('min-width:2.5em; max-height:1.15em;')
+        evg_repeat_sts.setStyleSheet('min-width:4em; max-height:1.15em;')
+
         timing_lay = QGridLayout()
         timing_lay.setVerticalSpacing(5)
         timing_lay.setHorizontalSpacing(15)
-        timing_lay.addWidget(evg_continuous_label, 0, 0)
-        timing_lay.addWidget(evg_continuous_sel, 1, 0)
-        timing_lay.addWidget(evg_continuous_sts, 2, 0)
-        timing_lay.addWidget(evg_injection_label, 0, 1)
-        timing_lay.addWidget(evg_injection_sel, 1, 1)
-        timing_lay.addWidget(evg_injection_sts, 2, 1)
+        timing_lay.addWidget(evg_update_label, 0, 0)
+        timing_lay.addWidget(evg_update_sel, 1, 0, alignment=Qt.AlignCenter)
+        timing_lay.addWidget(evg_update_sts, 2, 0)
+        timing_lay.addWidget(evg_continuous_label, 0, 1)
+        timing_lay.addWidget(evg_continuous_sel, 1, 1)
+        timing_lay.addWidget(evg_continuous_sts, 2, 1)
+        timing_lay.addWidget(evg_injection_label, 0, 2)
+        timing_lay.addWidget(evg_injection_sel, 1, 2)
+        timing_lay.addWidget(evg_injection_sts, 2, 2)
+        timing_lay.addWidget(evg_repeat_label, 0, 3)
+        timing_lay.addWidget(evg_repeat_sel, 1, 3)
+        timing_lay.addWidget(evg_repeat_sts, 2, 3, alignment=Qt.AlignCenter)
         timing.setLayout(timing_lay)
 
         pbt = QPushButton('v', self)
