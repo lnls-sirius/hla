@@ -337,9 +337,10 @@ class EVG(BaseWidget):
 
 class BucketList(BaseWidget):
 
-    def __init__(self, parent=None, prefix=''):
+    def __init__(self, parent=None, prefix='', min_size=38):
         super().__init__(parent, prefix=prefix)
         self.setObjectName('ASApp')
+        self._min_size = min_size
         self.setupui()
 
     def setupui(self):
@@ -350,22 +351,24 @@ class BucketList(BaseWidget):
         lay = QHBoxLayout(wid)
         prefix = self.prefix
 
+        tm = 'min-width:{0:d}em; max-width:{0:d}em; max-height:1.15em;'.format(
+            self._min_size)
         sp = BucketListLineEdit(wid, init_channel=prefix + "BucketList-SP")
-        sp.setStyleSheet("min-width:38em; max-width:38em; max-height:1.15em;")
+        sp.setStyleSheet(tm)
         sp.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
         lab = QLabel('SP : ', wid)
         lay_sp = QHBoxLayout()
         lay_sp.addWidget(lab)
         lay_sp.addWidget(sp)
         rb = BucketListLabel(wid, init_channel=prefix + "BucketList-RB")
-        rb.setStyleSheet("min-width:38em; max-width:38em; max-height:1.15em;")
+        rb.setStyleSheet(tm)
         rb.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
         lab = QLabel('RB : ', wid)
         lay_rb = QHBoxLayout()
         lay_rb.addWidget(lab)
         lay_rb.addWidget(rb)
         mn = BucketListLabel(wid, init_channel=prefix + "BucketList-Mon")
-        mn.setStyleSheet("min-width:38em; max-width:38em; max-height:1.15em;")
+        mn.setStyleSheet(tm)
         mn.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
         lab = QLabel('Mon: ', wid)
         lay_mn = QHBoxLayout()
