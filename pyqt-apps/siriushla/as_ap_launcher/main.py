@@ -12,8 +12,9 @@ from siriuspy.search import LLTimeSearch as _LLTimeSearch
 from pydm.widgets import PyDMPushButton
 from siriushla.util import get_appropriate_color
 from siriushla.sirius_application import SiriusApplication
+from siriushla.as_ti_control import BucketList
 from siriushla.widgets import SiriusMainWindow, PyDMStateButton, \
-    SiriusLedState, SiriusLedAlert, SiriusSpinbox, SiriusLabel
+    SiriusLedState, SiriusLedAlert
 from siriushla.common.epics.wrapper import PyEpicsWrapper
 from .menu import get_object
 
@@ -95,15 +96,14 @@ class MainOperation(SiriusMainWindow):
         evg_update_sts.setOffColor(evg_update_sts.Red)
         evg_update_sts.setOnColor(evg_update_sts.LightGreen)
 
-        evg_repeat_label = QLabel(
-            '<h4>Repeat</h4>', self, alignment=Qt.AlignCenter)
-        evg_repeat_sel = SiriusSpinbox(
-            self, init_channel=self._prefix+evg_name+':RepeatBucketList-SP')
-        evg_repeat_sel.showStepExponent = False
-        evg_repeat_sts = SiriusLabel(
-            self, init_channel=self._prefix+evg_name+':RepeatBucketList-RB')
-        evg_repeat_sts.setStyleSheet('min-width:2.5em; max-height:1.15em;')
-        evg_repeat_sts.setStyleSheet('min-width:4em; max-height:1.15em;')
+        evg_bucket_list = BucketList(
+            self, prefix=self._prefix+evg_name+':', min_size=15)
+
+        pbt = QPushButton('>', self)
+        pbt.clicked.connect(self._toggle_expand_horizontal)
+        pbt.setStyleSheet('max-width: 0.8em;')
+        self.expandwid_hor = evg_bucket_list
+        self.expandwid_hor.setVisible(False)
 
         timing_lay = QGridLayout()
         timing_lay.setVerticalSpacing(5)
@@ -117,9 +117,8 @@ class MainOperation(SiriusMainWindow):
         timing_lay.addWidget(evg_injection_label, 0, 2)
         timing_lay.addWidget(evg_injection_sel, 1, 2)
         timing_lay.addWidget(evg_injection_sts, 2, 2)
-        timing_lay.addWidget(evg_repeat_label, 0, 3)
-        timing_lay.addWidget(evg_repeat_sel, 1, 3)
-        timing_lay.addWidget(evg_repeat_sts, 2, 3, alignment=Qt.AlignCenter)
+        timing_lay.addWidget(evg_bucket_list, 0, 3, 3, 1)
+        timing_lay.addWidget(pbt, 2, 4)
         timing.setLayout(timing_lay)
 
         pbt = QPushButton('v', self)
@@ -143,6 +142,14 @@ class MainOperation(SiriusMainWindow):
         self.expandwid.setVisible(self.expandwid.isHidden())
         text = 'v' if self.expandwid.isHidden() else '^'
         self.sender().setText(text)
+        self.centralWidget().adjustSize()
+        self.adjustSize()
+
+    def _toggle_expand_horizontal(self):
+        self.expandwid_hor.setVisible(self.expandwid_hor.isHidden())
+        text = '>' if self.expandwid_hor.isHidden() else '<'
+        self.sender().setText(text)
+        self.sender().parent().adjustSize()
         self.centralWidget().adjustSize()
         self.adjustSize()
 
