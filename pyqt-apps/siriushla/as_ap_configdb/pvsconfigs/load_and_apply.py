@@ -226,7 +226,7 @@ class SelectConfigWidget(QWidget):
         hl.setContentsMargins(9, 9, 9, 9)
         hl.addWidget(self._type_cb)
         hl.addWidget(self._reload_btn)
-        self._config_type_widget.layout().addItem(hl)
+        self._config_type_widget.layout().addLayout(hl)
 
         # Add table for the configuration name
         self._config_table = LoadConfigDialog('notexist', self)
