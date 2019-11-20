@@ -1,6 +1,4 @@
-"""Epics Getter."""
-import logging as _log
-from qtpy.QtCore import Signal, QVariant
+"""Epics Connector."""
 from .task import EpicsTask
 
 
@@ -15,8 +13,8 @@ class EpicsConnector(EpicsTask):
     exit_task (method)
     """
 
-    def __init__(self, values, cls_epics, parent=None):
-        super().__init__(values, None, None, cls_epics, parent)
+    def __init__(self, pvs, cls_epics, parent=None):
+        super().__init__(pvs, None, None, cls_epics, parent)
 
     def run(self):
         """Thread execution."""
