@@ -11,8 +11,8 @@ class EpicsChecker(EpicsTask):
     def run(self):
         """Thread execution."""
         if not self._quit_task:
-            for i in range(len(self._pvs)):
-                pv, val = self._pvs[i], self._values[i]
+            for i in range(len(self._pvnames)):
+                pv, val = EpicsTask.PVs[i], self._values[i]
                 self.currentItem.emit(pv.pvname)
                 equal = pv.check(val)
                 self.itemDone.emit()

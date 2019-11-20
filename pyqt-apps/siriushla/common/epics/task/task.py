@@ -2,6 +2,7 @@
 from qtpy.QtCore import QThread, Signal
 
 
+
 class EpicsTask(QThread):
     """Interface to execute some task.
 
@@ -13,6 +14,7 @@ class EpicsTask(QThread):
     exit_task (method)
     """
 
+    PVs = []
     currentItem = Signal(str)
     itemDone = Signal()
     completed = Signal()
@@ -28,14 +30,15 @@ class EpicsTask(QThread):
         parent - parent QObject [optional]
         """
         super().__init__(parent)
-        self._pvs = [cls_epics(pv) for pv in pvs]
+        self._pvnames = pvs
         self._values = values
         self._delays = delays
+        self._cls_epics = cls_epics
         self._quit_task = False
 
     def size(self):
         """Task Size."""
-        return len(self._pvs)
+        return len(self._pvnames)
 
     def exit_task(self):
         """Set flag to exit thread."""
