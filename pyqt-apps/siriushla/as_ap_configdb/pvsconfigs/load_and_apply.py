@@ -204,7 +204,6 @@ class SelectConfigWidget(QWidget):
         super().__init__(parent=parent)
         self._client = client
         self.setupui()
-        self.setStyleSheet('#config_table {min-width: 30em;}')
 
     def setupui(self):
         self.setLayout(QVBoxLayout())
@@ -223,7 +222,7 @@ class SelectConfigWidget(QWidget):
         self._config_type_widget.layout().addWidget(
             QLabel('<h3>Configuration Type</h3>'))
         hl = QHBoxLayout()
-        hl.setContentsMargins(9, 9, 9, 9)
+        hl.setContentsMargins(9, 9, 18, 9)
         hl.addWidget(self._type_cb)
         hl.addWidget(self._reload_btn)
         self._config_type_widget.layout().addLayout(hl)
@@ -231,6 +230,7 @@ class SelectConfigWidget(QWidget):
         # Add table for the configuration name
         self._config_table = LoadConfigDialog('notexist', self)
         self._config_table.setObjectName('config_table')
+        self._config_table.setStyleSheet('#config_table {min-width: 30em;}')
         self._config_table.label_exist.hide()
         self._config_table.sub_header.hide()
         self._config_table.ok_button.hide()
