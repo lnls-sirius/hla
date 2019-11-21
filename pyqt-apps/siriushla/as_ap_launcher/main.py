@@ -9,8 +9,10 @@ from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
 from siriuspy.envars import vaca_prefix
 from siriuspy.search import LLTimeSearch as _LLTimeSearch
 
+from pydm.widgets import PyDMPushButton
 from siriushla.util import get_appropriate_color
 from siriushla.sirius_application import SiriusApplication
+from siriushla.as_ti_control import BucketList
 from siriushla.widgets import SiriusMainWindow, PyDMStateButton, \
     SiriusLedState, SiriusLedAlert
 from siriushla.common.epics.wrapper import PyEpicsWrapper
@@ -39,7 +41,7 @@ class MainOperation(SiriusMainWindow):
     def _setupUi(self):
         # Egun triggers
         egun = QGroupBox('Egun Trigger')
-        egun.setStyleSheet('min-width: 8em;')
+        egun.setStyleSheet('min-width: 5em;')
 
         egun_trigger_enable = PyDMStateButton(
             parent=self, init_channel=self._prefix+'LI-01:EG-TriggerPS:enable')
@@ -78,15 +80,45 @@ class MainOperation(SiriusMainWindow):
             parent=self,
             init_channel=self._prefix+evg_name+':InjectionEvt-Sts')
 
+        evg_update_label = QLabel(
+            '<h4>Update</h4>', self, alignment=Qt.AlignCenter)
+        evg_update_sel = PyDMPushButton(
+            self,
+            init_channel=self._prefix+evg_name+':UpdateEvt-Cmd', pressValue=1)
+        evg_update_sel.setIcon(qta.icon('fa5s.sync'))
+        evg_update_sel.setToolTip('Update Events Table')
+        evg_update_sel.setObjectName('but')
+        evg_update_sel.setStyleSheet(
+            '#but{min-width:25px; max-width:25px; icon-size:20px;}')
+        evg_update_sts = SiriusLedAlert(
+            parent=self,
+            init_channel=self._prefix+evg_name+':EvtSyncStatus-Mon')
+        evg_update_sts.setOffColor(evg_update_sts.Red)
+        evg_update_sts.setOnColor(evg_update_sts.LightGreen)
+
+        evg_bucket_list = BucketList(
+            self, prefix=self._prefix+evg_name+':', min_size=15)
+
+        pbt = QPushButton('>', self)
+        pbt.clicked.connect(self._toggle_expand_horizontal)
+        pbt.setStyleSheet('max-width: 0.8em;')
+        self.expandwid_hor = evg_bucket_list
+        self.expandwid_hor.setVisible(False)
+
         timing_lay = QGridLayout()
         timing_lay.setVerticalSpacing(5)
         timing_lay.setHorizontalSpacing(15)
-        timing_lay.addWidget(evg_continuous_label, 0, 0)
-        timing_lay.addWidget(evg_continuous_sel, 1, 0)
-        timing_lay.addWidget(evg_continuous_sts, 2, 0)
-        timing_lay.addWidget(evg_injection_label, 0, 1)
-        timing_lay.addWidget(evg_injection_sel, 1, 1)
-        timing_lay.addWidget(evg_injection_sts, 2, 1)
+        timing_lay.addWidget(evg_update_label, 0, 0)
+        timing_lay.addWidget(evg_update_sel, 1, 0, alignment=Qt.AlignCenter)
+        timing_lay.addWidget(evg_update_sts, 2, 0)
+        timing_lay.addWidget(evg_continuous_label, 0, 1)
+        timing_lay.addWidget(evg_continuous_sel, 1, 1)
+        timing_lay.addWidget(evg_continuous_sts, 2, 1)
+        timing_lay.addWidget(evg_injection_label, 0, 2)
+        timing_lay.addWidget(evg_injection_sel, 1, 2)
+        timing_lay.addWidget(evg_injection_sts, 2, 2)
+        timing_lay.addWidget(evg_bucket_list, 0, 3, 3, 1)
+        timing_lay.addWidget(pbt, 2, 4)
         timing.setLayout(timing_lay)
 
         pbt = QPushButton('v', self)
@@ -110,6 +142,14 @@ class MainOperation(SiriusMainWindow):
         self.expandwid.setVisible(self.expandwid.isHidden())
         text = 'v' if self.expandwid.isHidden() else '^'
         self.sender().setText(text)
+        self.centralWidget().adjustSize()
+        self.adjustSize()
+
+    def _toggle_expand_horizontal(self):
+        self.expandwid_hor.setVisible(self.expandwid_hor.isHidden())
+        text = '>' if self.expandwid_hor.isHidden() else '<'
+        self.sender().setText(text)
+        self.sender().parent().adjustSize()
         self.centralWidget().adjustSize()
         self.adjustSize()
 

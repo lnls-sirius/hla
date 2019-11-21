@@ -179,7 +179,7 @@ class CheckCurrent(BaseTask):
     def function(self):
         """Set PS Current."""
         self._check(method='check_current',
-                    timeout=TIMEOUT_CHECK,
+                    timeout=2*TIMEOUT_CHECK,
                     test=self._is_test)
 
 

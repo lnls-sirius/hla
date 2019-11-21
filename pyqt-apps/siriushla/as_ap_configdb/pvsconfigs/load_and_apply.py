@@ -11,7 +11,8 @@ import qtawesome as qta
 
 from siriuspy.clientconfigdb import ConfigDBException
 from siriushla.common.epics.wrapper import PyEpicsWrapper
-from siriushla.common.epics.task import EpicsChecker, EpicsSetter
+from siriushla.common.epics.task import EpicsChecker, EpicsSetter, \
+    EpicsConnector
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.widgets.pvnames_tree import QTreeItem, PVNameTree
 from siriushla.widgets.dialog import ReportDialog, ProgressDialog
@@ -112,6 +113,7 @@ class SelectAndApplyPVsWidget(QWidget):
         # Create thread
         failed_items = []
         pvs, values, delays = zip(*set_pvs_tuple)
+        conn_task = EpicsConnector(pvs, self._wrapper, self)
         set_task = EpicsSetter(pvs, values, delays, self._wrapper, self)
         pvs, values, delays = zip(*check_pvs_tuple)
         check_task = EpicsChecker(pvs, values, delays, self._wrapper, self)
@@ -123,10 +125,12 @@ class SelectAndApplyPVsWidget(QWidget):
             fltr='TB-.*:(PS|MA)-(C|Q).*$')
 
         # Set/Check PVs values and show wait dialog informing user
-        labels = ['Setting PV values',
-                  'Waiting IOCs updates',
-                  'Checking PV values']
-        tasks = [set_task, sleep_task, check_task]
+        labels = [
+            'Connecting with PVs',
+            'Setting PV values',
+            'Waiting IOCs updates',
+            'Checking PV values']
+        tasks = [conn_task, set_task, sleep_task, check_task]
         self.logger.info(
             'Setting {} configuration'.format(self._current_config['name']))
         dlg = ProgressDialog(labels, tasks, self)
@@ -204,7 +208,6 @@ class SelectConfigWidget(QWidget):
         super().__init__(parent=parent)
         self._client = client
         self.setupui()
-        self.setStyleSheet('#config_table {min-width: 30em;}')
 
     def setupui(self):
         self.setLayout(QVBoxLayout())
@@ -223,14 +226,15 @@ class SelectConfigWidget(QWidget):
         self._config_type_widget.layout().addWidget(
             QLabel('<h3>Configuration Type</h3>'))
         hl = QHBoxLayout()
-        hl.setContentsMargins(9, 9, 9, 9)
+        hl.setContentsMargins(9, 9, 18, 9)
         hl.addWidget(self._type_cb)
         hl.addWidget(self._reload_btn)
-        self._config_type_widget.layout().addItem(hl)
+        self._config_type_widget.layout().addLayout(hl)
 
         # Add table for the configuration name
         self._config_table = LoadConfigDialog('notexist', self)
         self._config_table.setObjectName('config_table')
+        self._config_table.setStyleSheet('#config_table {min-width: 30em;}')
         self._config_table.label_exist.hide()
         self._config_table.sub_header.hide()
         self._config_table.ok_button.hide()

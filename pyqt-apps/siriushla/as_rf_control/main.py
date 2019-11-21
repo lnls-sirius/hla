@@ -5,7 +5,7 @@ from qtpy.QtWidgets import QWidget, QLabel, \
     QGridLayout, QVBoxLayout, QHBoxLayout, QFormLayout
 from qtpy.QtCore import Qt
 from pydm.widgets import PyDMLabel, PyDMWaveformPlot
-from siriushla.widgets import SiriusMainWindow, SiriusLedState, SiriusLedAlert
+from siriushla.widgets import SiriusMainWindow, SiriusLedState, PyDMLed
 
 
 class RFStatus(SiriusMainWindow):
@@ -181,8 +181,10 @@ class RFStatus(SiriusMainWindow):
     def _setupRampStatusesWidget(self):
         # Ramp Ready
         lb_rmprdy = QLabel('Ramp Ready: ', self)
-        self.led_RmpReady = SiriusLedAlert(
+        self.led_RmpReady = PyDMLed(
             parent=self, init_channel='BR-RF-DLLRF-01:RmpReady-Mon')
+        self.led_RmpReady.onColor = PyDMLed.LightGreen
+        self.led_RmpReady.offColor = PyDMLed.Red
 
         # Power Sensor
         self.graph_rmp = PyDMWaveformPlot(

@@ -11,7 +11,7 @@ from siriuspy.envars import vaca_prefix as _VACA_PREFIX
 from siriuspy.clientconfigdb import ConfigDBException, ConfigDBClient
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.common.epics.wrapper import PyEpicsWrapper
-from siriushla.common.epics.task import EpicsGetter
+from siriushla.common.epics.task import EpicsConnector, EpicsGetter
 from siriushla.widgets.dialog import ReportDialog, ProgressDialog
 from ..models import ConfigPVsTypeModel, PVConfigurationTableModel
 from .. import SaveConfigDialog
@@ -136,13 +136,16 @@ class ReadAndSaveConfig2ServerWindow(SiriusMainWindow):
                 self, 'Error', 'Configuration has duplicated values')
             return
         # Create thread to read PVs
-        task = EpicsGetter(list(pvs), self._wrapper, parent=self)
+        pvsl = list(pvs)
+        connt = EpicsConnector(pvsl, self._wrapper, parent=self)
+        task = EpicsGetter(pvsl, self._wrapper, parent=self)
         task.itemRead.connect(
             lambda pv, value: self._fill_value(pvs[pv.replace(vp, '')], value))
         task.itemNotRead.connect(failed_items.append)
         # Show progress dialog
         time.sleep(1)
-        dlg = ProgressDialog('Reading PVs...', task, self)
+        dlg = ProgressDialog(
+            ['Connecting to PVs', 'Reading PVs...'], [connt, task], self)
         ret = dlg.exec_()
         if ret == dlg.Rejected:
             return

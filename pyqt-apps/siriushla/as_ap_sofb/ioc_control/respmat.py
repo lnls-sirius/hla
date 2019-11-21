@@ -55,12 +55,16 @@ class RespMatWidget(BaseWidget):
         # ####################################################################
         # ####################### Selection Lists ############################
         # ####################################################################
+        hbl = QHBoxLayout()
+        hbl.setSpacing(6)
+        vbl.addLayout(hbl)
+
         grpbx = QGroupBox('Corrs and BPMs selection', mainwid)
-        vbl.addWidget(grpbx)
+        hbl.addWidget(grpbx)
         icon = qta.icon('fa5s.hammer', color=get_appropriate_color(self.acc))
         Window = create_window_from_widget(
             SelectionMatrix, title='Corrs and BPMs selection', icon=icon)
-        hbl = QHBoxLayout(grpbx)
+        hbl2 = QHBoxLayout(grpbx)
         btn = QPushButton('', grpbx)
         btn.setObjectName('btn')
         btn.setIcon(qta.icon('fa5s.tasks'))
@@ -69,7 +73,7 @@ class RespMatWidget(BaseWidget):
             '#btn{min-width:3.8em; max-width:3.8em;\
             min-height:2em; max-height:2em; icon-size:25px;}')
         connect_window(btn, Window, None, prefix=self.prefix, acc=self.acc)
-        hbl.addWidget(btn)
+        hbl2.addWidget(btn)
 
         if self.acc == 'SI':
             pdm_chbx = PyDMCheckbox(
@@ -77,16 +81,9 @@ class RespMatWidget(BaseWidget):
             pdm_chbx.setText('use RF')
             pdm_led = SiriusLedState(
                 grpbx, init_channel=self.prefix+'RFEnbl-Sts')
-            hbl.addStretch()
-            hbl.addWidget(pdm_chbx)
-            hbl.addWidget(pdm_led)
-
-        # ####################################################################
-        # ####################### Singular Values ############################
-        # ####################################################################
-        hbl = QHBoxLayout()
-        hbl.setSpacing(6)
-        vbl.addItem(hbl)
+            hbl2.addStretch()
+            hbl2.addWidget(pdm_chbx)
+            hbl2.addWidget(pdm_led)
 
         btn = QPushButton('', mainwid)
         btn.setToolTip('Visualize RespMat')
@@ -98,15 +95,19 @@ class RespMatWidget(BaseWidget):
         connect_window(btn, Window, mainwid, prefix=self.prefix, acc=self.acc)
         hbl.addWidget(btn)
 
+        # ####################################################################
+        # ####################### Singular Values ############################
+        # ####################################################################
+
         grpbx = QGroupBox('Singular Values', mainwid)
-        hbl.addWidget(grpbx)
+        vbl.addWidget(grpbx)
         fml = QVBoxLayout(grpbx)
         wid = self.create_pair(grpbx, 'NrSingValues')
         btn = QPushButton('', grpbx)
         btn.setToolTip('Check Singular Values')
         btn.setIcon(qta.icon('mdi.chart-line'))
         btn.setObjectName('btn')
-        btn.setStyleSheet('#btn{max-width:25px; icon-size:20px;}')
+        btn.setStyleSheet('#btn{max-width:30px; icon-size:30px;}')
         hbl = QHBoxLayout()
         hbl.addWidget(wid)
         hbl.addWidget(btn)

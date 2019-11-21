@@ -9,14 +9,14 @@ class EpicsGetter(EpicsTask):
     itemRead = Signal(str, QVariant)
     itemNotRead = Signal(str)
 
-    def __init__(self, values, cls_epics, parent=None):
-        super().__init__(values, None, None, cls_epics, parent)
+    def __init__(self, pvs, cls_epics, parent=None):
+        super().__init__(pvs, None, None, cls_epics, parent)
 
     def run(self):
         """Thread execution."""
         if not self._quit_task:
-            for i in range(len(self._pvs)):
-                pv = self._pvs[i]
+            for i in range(len(self._pvnames)):
+                pv = EpicsTask.PVs[i]
                 self.currentItem.emit(pv.pvname)
                 value = pv.get()
                 self.itemDone.emit()
