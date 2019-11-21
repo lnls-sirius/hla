@@ -2,7 +2,8 @@ import re
 from qtpy.QtWidgets import QWidget, QVBoxLayout, QScrollArea, QLineEdit, \
     QLabel, QHBoxLayout, QGridLayout, QPushButton
 from qtpy.QtCore import Qt, Slot
-from siriushla.as_di_bpms.base import BaseWidget, GraphTime, GraphWave
+from siriushla.as_di_bpms.base import BaseWidget, GraphTime, GraphWave, \
+    get_custom_widget_class
 from siriushla.widgets import PyDMLedMultiChannel
 import siriushla.util as util
 
@@ -107,7 +108,8 @@ class SinglePassSummary(BaseWidget):
         hbl.addWidget(self.btnautorange)
         vbl.addItem(hbl)
 
-        scarea = QScrollArea(self)
+        sa_class = get_custom_widget_class(QScrollArea)
+        scarea = sa_class(self)
         scarea.setSizeAdjustPolicy(scarea.AdjustToContents)
         scarea.setWidgetResizable(True)
 
@@ -240,7 +242,8 @@ class MultiTurnSummary(BaseWidget):
         hbl.addWidget(self.btnautorange)
         vbl.addItem(hbl)
 
-        scarea = QScrollArea(self)
+        sa_class = get_custom_widget_class(QScrollArea)
+        scarea = sa_class(self)
         scarea.setSizeAdjustPolicy(scarea.AdjustToContents)
         scarea.setWidgetResizable(True)
 
