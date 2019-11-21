@@ -393,6 +393,12 @@ def get_object(ismenubar=True, parent=None):
                 script = 'sirius-hla-'+sec+'-pm-control.py'
             self.connect_newprocess(pmag, script)
             psma.addAction(pmag)
+
+            if sec == 'bo':
+                wfmerr = QAction('Waveform Error', psma)
+                self.connect_newprocess(wfmerr, 'sirius-hla-bo-ps-wfmerror.py')
+                psma.addAction(wfmerr)
+
             return psma
 
         def _set_rf_menu(self, sec):

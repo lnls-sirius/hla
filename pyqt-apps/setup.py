@@ -69,6 +69,7 @@ setup(
         'scripts/sirius-hla-bo-offconfig.py',
         'scripts/sirius-hla-bo-pm-control.py',
         'scripts/sirius-hla-bo-ps-control.py',
+        'scripts/sirius-hla-bo-ps-wfmerror.py',
         'scripts/sirius-hla-bo-pu-control.py',
         'scripts/sirius-hla-bo-rf-control.py',
         'scripts/sirius-hla-si-ap-chromcorr.py',
