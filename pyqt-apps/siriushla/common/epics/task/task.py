@@ -1,5 +1,6 @@
 """EpicsTask interface."""
 from qtpy.QtCore import QThread, Signal
+from ..wrapper import PyEpicsWrapper
 
 
 class EpicsTask(QThread):
@@ -18,7 +19,8 @@ class EpicsTask(QThread):
     itemDone = Signal()
     completed = Signal()
 
-    def __init__(self, pvs, values, delays, cls_epics, parent=None):
+    def __init__(self, pvs, values, delays, cls_epics=PyEpicsWrapper,
+                 parent=None, timeout=PyEpicsWrapper.TIMEOUT):
         """Constructor.
 
         Parameters
@@ -34,6 +36,7 @@ class EpicsTask(QThread):
         self._delays = delays
         self._cls_epics = cls_epics
         self._quit_task = False
+        self._timeout = timeout
 
     def size(self):
         """Task Size."""
