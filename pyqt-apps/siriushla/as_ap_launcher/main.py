@@ -37,6 +37,7 @@ class MainOperation(SiriusMainWindow):
             qta.icon('mdi.rocket', color=get_appropriate_color('AS')))
         self.move(0, 20)
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
+        self.setObjectName('ASApp')
 
     def _setupUi(self):
         # Egun triggers
