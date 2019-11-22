@@ -647,7 +647,7 @@ class BONormEdit(SiriusMainWindow):
 
     def _show_kicks_graph(self):
         graph = _ShowCorrectorKicks(self, self.norm_config)
-        graph.exec_()
+        graph.show()
 
 
 class _UndoRedoSpinbox(QUndoCommand):
