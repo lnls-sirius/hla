@@ -2,9 +2,8 @@
 import sys
 import re as _re
 from functools import partial as _part
-from threading import Thread as _Thread, Lock as _Lock
 
-from qtpy.QtCore import Qt, Signal, QThread
+from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QFrame, QGridLayout, QVBoxLayout, QHBoxLayout, \
     QLineEdit, QGroupBox, QPushButton, QListWidget, QLabel, QApplication, \
     QMessageBox, QSizePolicy
@@ -14,20 +13,17 @@ from siriuspy.namesys import SiriusPVName as PVName
 
 from siriushla.widgets import SiriusMainWindow, PVNameTree
 from siriushla.widgets.windows import create_window_from_widget
-from siriushla.widgets.dialog import ProgressDialog, PSStatusDialog
+from siriushla.widgets.dialog import ProgressDialog
 from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
 from siriushla.as_ti_control import HLTriggerDetailed
-from .tasks import ResetIntlk, CheckIntlk, \
+from .tasks import CreateTesters, \
+    ResetIntlk, CheckIntlk, \
     SetOpModeSlowRef, CheckOpModeSlowRef, \
     SetPwrState, CheckPwrState, CheckInitOk, \
     SetCtrlLoop, CheckCtrlLoop, \
     SetCapBankVolt, CheckCapBankVolt, \
     SetCurrent, CheckCurrent, \
     SetTriggerState, CheckTriggerState
-from .conn import TesterDCLink, TesterDCLinkFBP, TesterPS, TesterPSLinac
-
-_lock = _Lock()
-_testers = dict()
 
 
 class PSTestWindow(SiriusMainWindow):
@@ -214,16 +210,15 @@ class PSTestWindow(SiriusMainWindow):
         devices.extend(dclinks)
         devices = [dev for dev in devices if 'LI-' not in dev]
 
-        testers = self._get_testers(devices)
-        if not self._check_testers_conn(testers):
-            return
-
-        task1 = SetOpModeSlowRef(testers, parent=self)
-        task2 = CheckOpModeSlowRef(testers, parent=self)
+        task0 = CreateTesters(devices, parent=self)
+        task1 = SetOpModeSlowRef(devices, parent=self)
+        task2 = CheckOpModeSlowRef(devices, parent=self)
         task2.itemDone.connect(self._log)
 
-        labels = ['Setting PS OpMode to SlowRef...', 'Checking PS OpMode...']
-        tasks = [task1, task2]
+        labels = ['Connecting to devices...',
+                  'Setting PS OpMode to SlowRef...',
+                  'Checking PS OpMode...']
+        tasks = [task0, task1, task2]
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
@@ -236,19 +231,16 @@ class PSTestWindow(SiriusMainWindow):
         dclinks = self._get_related_dclinks(devices)
         devices.extend(dclinks)
 
-        testers = self._get_testers(devices)
-        if not self._check_testers_conn(testers):
-            return
-
-        testers_wth_li = {dev: tester for dev, tester in testers.items()
-                          if 'LI' not in dev}
-        task1 = ResetIntlk(testers_wth_li, parent=self)
-        task2 = CheckIntlk(testers, parent=self)
+        devices_wth_li = {dev for dev in devices if 'LI' not in dev}
+        task0 = CreateTesters(devices, parent=self)
+        task1 = ResetIntlk(devices_wth_li, parent=self)
+        task2 = CheckIntlk(devices, parent=self)
         task2.itemDone.connect(self._log)
 
-        labels = ['Reseting PS and DCLinks...',
+        labels = ['Connecting to devices...',
+                  'Reseting PS and DCLinks...',
                   'Checking PS and DCLinks Interlocks...']
-        tasks = [task1, task2]
+        tasks = [task0, task1, task2]
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
@@ -259,17 +251,15 @@ class PSTestWindow(SiriusMainWindow):
         if not devices:
             return
 
-        testers = self._get_testers(devices)
-        if not self._check_testers_conn(testers):
-            return
-
-        task1 = SetPwrState(testers, state=state, parent=self)
-        task2 = CheckPwrState(testers, state=state, parent=self)
+        task0 = CreateTesters(devices, parent=self)
+        task1 = SetPwrState(devices, state=state, parent=self)
+        task2 = CheckPwrState(devices, state=state, parent=self)
         task2.itemDone.connect(self._log)
 
-        labels = ['Turning PS '+state+'...',
+        labels = ['Connecting to devices...',
+                  'Turning PS '+state+'...',
                   'Checking PS powered '+state+'...']
-        tasks = [task1, task2]
+        tasks = [task0, task1, task2]
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
@@ -283,18 +273,16 @@ class PSTestWindow(SiriusMainWindow):
         if not devices:
             return
 
-        testers = self._get_testers(devices)
-        if not self._check_testers_conn(testers):
-            return
-
-        task1 = SetPwrState(testers, state='on', parent=self)
-        task2 = CheckPwrState(testers, state='on', parent=self)
-        task3 = CheckInitOk(testers, parent=self)
+        task0 = CreateTesters(devices, parent=self)
+        task1 = SetPwrState(devices, state='on', parent=self)
+        task2 = CheckPwrState(devices, state='on', parent=self)
+        task3 = CheckInitOk(devices, parent=self)
         task3.itemDone.connect(self._log)
-        labels = ['Turning DCLinks On...',
+        labels = ['Connecting to devices...',
+                  'Turning DCLinks On...',
                   'Checking DCLinks powered on...',
                   'Wait DCLinks OpMode turn to SlowRef...']
-        tasks = [task1, task2, task3]
+        tasks = [task0, task1, task2, task3]
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
@@ -308,16 +296,14 @@ class PSTestWindow(SiriusMainWindow):
         if not devices:
             return
 
-        testers = self._get_testers(devices)
-        if not self._check_testers_conn(testers):
-            return
-
-        task1 = SetCtrlLoop(testers, parent=self)
-        task2 = CheckCtrlLoop(testers, parent=self)
+        task0 = CreateTesters(devices, parent=self)
+        task1 = SetCtrlLoop(devices, parent=self)
+        task2 = CheckCtrlLoop(devices, parent=self)
         task2.itemDone.connect(self._log)
-        labels = ['Setting DCLinks CtrlLoop...',
+        labels = ['Connecting to devices...',
+                  'Setting DCLinks CtrlLoop...',
                   'Checking DCLinks CtrlLoop state...']
-        tasks = [task1, task2]
+        tasks = [task0, task1, task2]
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
@@ -331,16 +317,14 @@ class PSTestWindow(SiriusMainWindow):
         if not devices:
             return
 
-        testers = self._get_testers(devices)
-        if not self._check_testers_conn(testers):
-            return
-
-        task1 = SetCapBankVolt(testers, parent=self)
-        task2 = CheckCapBankVolt(testers, parent=self)
+        task0 = CreateTesters(devices, parent=self)
+        task1 = SetCapBankVolt(devices, parent=self)
+        task2 = CheckCapBankVolt(devices, parent=self)
         task2.itemDone.connect(self._log)
-        labels = ['Setting capacitor bank voltage...',
+        labels = ['Connecting to devices...',
+                  'Setting capacitor bank voltage...',
                   'Checking capacitor bank voltage...']
-        tasks = [task1, task2]
+        tasks = [task0, task1, task2]
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
@@ -351,17 +335,15 @@ class PSTestWindow(SiriusMainWindow):
         if not devices:
             return
 
-        testers = self._get_testers(devices)
-        if not self._check_testers_conn(testers):
-            return
-
-        task1 = SetCurrent(testers, is_test=True, parent=self)
-        task2 = CheckCurrent(testers, is_test=True, parent=self)
+        task0 = CreateTesters(devices, parent=self)
+        task1 = SetCurrent(devices, is_test=True, parent=self)
+        task2 = CheckCurrent(devices, is_test=True, parent=self)
         task2.itemDone.connect(self._log)
 
-        labels = ['Testing PS... Setting current...',
+        labels = ['Connecting to devices...',
+                  'Testing PS... Setting current...',
                   'Testing PS... Checking current value...']
-        tasks = [task1, task2]
+        tasks = [task0, task1, task2]
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
@@ -372,17 +354,15 @@ class PSTestWindow(SiriusMainWindow):
         if not devices:
             return
 
-        testers = self._get_testers(devices)
-        if not self._check_testers_conn(testers):
-            return
-
-        task1 = SetCurrent(testers, parent=self)
-        task2 = CheckCurrent(testers, parent=self)
+        task0 = CreateTesters(devices, parent=self)
+        task1 = SetCurrent(devices, parent=self)
+        task2 = CheckCurrent(devices, parent=self)
         task2.itemDone.connect(self._log)
 
-        labels = ['Setting current to zero...',
+        labels = ['Connecting to devices...',
+                  'Setting current to zero...',
                   'Checking current value...']
-        tasks = [task1, task2]
+        tasks = [task0, task1, task2]
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
@@ -447,8 +427,6 @@ class PSTestWindow(SiriusMainWindow):
         if not devices:
             QMessageBox.critical(self, 'Message', 'No power supply selected!')
             return False
-
-        self._create_testers(devices)
         return devices
 
     def _get_related_dclinks(self, psnames):
@@ -461,38 +439,7 @@ class PSTestWindow(SiriusMainWindow):
                 dclink_type = PSSearch.conv_psname_2_psmodel(dclinks[0])
                 if dclink_type != 'REGATRON_DCLink':
                     alldclinks.update(dclinks)
-
-        alldclinks_list = list(alldclinks)
-        self._create_testers(alldclinks_list)
-        return alldclinks_list
-
-    def _create_testers(self, devices):
-        tester2create = list()
-        for n in devices:
-            if n not in _testers.keys():
-                tester2create.append(n)
-        if not tester2create:
-            return
-
-        task = CreateTesters(tester2create, self)
-        dlg = ProgressDialog('Connecting to devices...', task, self)
-        dlg.exec_()
-
-    def _get_testers(self, devices):
-        return {dev: _testers[dev] for dev in devices}
-
-    def _check_testers_conn(self, testers):
-        nok_status = list()
-        for dev, t in testers.items():
-            if not t.connected:
-                nok_status.append(dev)
-
-        if nok_status:
-            text = 'There are not connected PVs! Verify devices:\n'
-            dlg = PSStatusDialog(nok_status, text, self)
-            dlg.exec_()
-            return False
-        return True
+        return list(alldclinks)
 
     def _open_detail(self, index):
         app = QApplication.instance()
@@ -510,63 +457,6 @@ class PSTestWindow(SiriusMainWindow):
             else:
                 return
         app.open_window(PSDetailWindow, parent=self, **{'psname': name})
-
-
-class CreateTesters(QThread):
-    """Create testers."""
-
-    currentItem = Signal(str)
-    itemDone = Signal()
-    completed = Signal()
-
-    def __init__(self, devices, parent=None):
-        super().__init__(parent)
-        self._devices = devices
-        self._quit_task = False
-
-    def size(self):
-        """Return task size."""
-        return len(self._devices)
-
-    def exit_task(self):
-        """Set flag to quit thread."""
-        self._quit_task = True
-
-    def run(self):
-        """Create cyclers."""
-        if not self._quit_task:
-            interrupted = False
-            threads = list()
-            for dev in self._devices:
-                self.create_tester(dev)
-                t = _Thread(
-                    target=self.create_tester,
-                    args=(dev, ), daemon=True)
-                t.start()
-                threads.append(t)
-                if self._quit_task:
-                    interrupted = True
-                    break
-            for t in threads:
-                t.join()
-            if not interrupted:
-                self.completed.emit()
-
-    def create_tester(self, dev):
-        global _testers
-        with _lock:
-            if dev not in _testers.keys():
-                if PVName(dev).sec == 'LI':
-                    t = TesterPSLinac(dev)
-                elif PSSearch.conv_psname_2_psmodel(dev) == 'FBP_DCLink':
-                    t = TesterDCLinkFBP(dev)
-                elif 'bo-dclink' in PSSearch.conv_psname_2_pstype(dev):
-                    t = TesterDCLink(dev)
-                elif PVName(dev).dis == 'PS':
-                    t = TesterPS(dev)
-                _testers[dev] = t
-                self.currentItem.emit(dev)
-                self.itemDone.emit()
 
 
 if __name__ == '__main__':
