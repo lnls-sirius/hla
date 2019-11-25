@@ -170,23 +170,30 @@ class StatusAndCommands(QGroupBox):
         dlg = ProgressDialog('Preparing TI to ramp...', task, self)
         dlg.exec_()
 
-    def _apply_ma(self, manames=list()):
+    def _apply_ma(self, manames=list(), dialog_parent=None):
+        if dialog_parent is None:
+            dialog_parent = self
         task = _CommandThread(
             parent=self, conn=self.conn_ma, use_log=True, size=len(manames),
             cmds=_part(self.conn_ma.cmd_wfm, manames),
             warn_msgs='Failed to set waveform!')
-        dlg = ProgressDialog('Setting magnets waveforms...', task, self)
+        dlg = ProgressDialog(
+            'Setting magnets waveforms...', task, dialog_parent)
         dlg.exec_()
 
-    def _apply_rf(self):
+    def _apply_rf(self, dialog_parent=None):
+        if dialog_parent is None:
+            dialog_parent = self
         task = _CommandThread(
             parent=self, conn=self.conn_rf, use_log=True,
             cmds=self.conn_rf.cmd_config_ramp,
             warn_msgs='Failed to set RF parameters!')
-        dlg = ProgressDialog('Setting RF parameters...', task, self)
+        dlg = ProgressDialog('Setting RF parameters...', task, dialog_parent)
         dlg.exec_()
 
-    def _apply_ti(self):
+    def _apply_ti(self, dialog_parent=None):
+        if dialog_parent is None:
+            dialog_parent = self
         events_inj, events_eje = self._get_inj_eje_events()
         task = _CommandThread(
             conn=self.conn_ti, parent=self,
@@ -195,7 +202,7 @@ class StatusAndCommands(QGroupBox):
                   self.conn_ti.cmd_update_evts],
             warn_msgs=['Failed to set TI parameters!',
                        'Failed to update events!'])
-        dlg = ProgressDialog('Setting TI parameters...', task, self)
+        dlg = ProgressDialog('Setting TI parameters...', task, dialog_parent)
         dlg.exec_()
         # update values of inj and eje times in fact implemented
         _time.sleep(3)
@@ -203,9 +210,11 @@ class StatusAndCommands(QGroupBox):
         eje_time = self.conn_ti.get_ejection_time()/1000  # [ms]
         self.inj_eje_times.emit(inj_time, eje_time)
 
-    def apply_changes(self):
+    def apply_changes(self, dialog_parent=None):
         if self.ramp_config is None:
             return
+        if dialog_parent is None:
+            dialog_parent = self
 
         sender_name = self.sender().objectName()
 
@@ -229,17 +238,17 @@ class StatusAndCommands(QGroupBox):
             manames = self.conn_ma.manames
 
         if 'Dipole' in sender_name:
-            self._apply_ma(manames)
-            self._apply_ti()
+            self._apply_ma(manames, dialog_parent)
+            self._apply_ti(dialog_parent)
         elif 'Multipoles' in sender_name:
-            self._apply_ma(manames)
+            self._apply_ma(manames, dialog_parent)
         elif 'RF' in sender_name:
-            self._apply_rf()
-            self._apply_ti()
+            self._apply_rf(dialog_parent)
+            self._apply_ti(dialog_parent)
         elif 'All' in sender_name:
-            self._apply_ma(manames)
-            self._apply_rf()
-            self._apply_ti()
+            self._apply_ma(manames, dialog_parent)
+            self._apply_rf(dialog_parent)
+            self._apply_ti(dialog_parent)
 
     @Slot(str, list)
     def show_warning_message(self, msg, problems):
