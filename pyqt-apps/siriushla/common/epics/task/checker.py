@@ -1,5 +1,6 @@
 """Epics Checker Task."""
 from .task import EpicsTask
+from ..wrapper import PyEpicsWrapper
 from qtpy.QtCore import Signal
 
 
@@ -8,10 +9,9 @@ class EpicsChecker(EpicsTask):
 
     itemChecked = Signal(str, bool)
 
-    def __init__(self, pvs, values, delays, cls_epics, parent=None,
-                 timeout=10):
-        super().__init__(pvs, values, delays, cls_epics, parent)
-        self._timeout = timeout
+    def __init__(self, pvs, values, delays, cls_epics=PyEpicsWrapper,
+                 parent=None, timeout=PyEpicsWrapper.TIMEOUT):
+        super().__init__(pvs, values, delays, cls_epics, parent, timeout)
 
     def run(self):
         """Thread execution."""

@@ -1,8 +1,9 @@
-import time
 import epics
 from math import isclose
 import numpy as _np
 from siriuspy.envars import vaca_prefix as _VACA_PREFIX
+
+_TIMEOUT = 0.5
 
 
 class PyEpicsWrapper:
@@ -10,11 +11,12 @@ class PyEpicsWrapper:
 
     Implements:
     pvname
-    connected
     put
     check
     get
     """
+
+    TIMEOUT = _TIMEOUT
 
     def __init__(self, pv):
         """Create PV object."""
@@ -25,35 +27,15 @@ class PyEpicsWrapper:
         """PV Name."""
         return self._pv.pvname
 
-    def connected(self, pv, wait=50e-3):
-        """Wait pv connection."""
-        t = 0
-        init = time.time()
-        while not pv.connected:
-            t = time.time() - init
-            if t > wait:
-                return False
-            time.sleep(5e-3)
-        return True
-
-    def put(self, value):
+    def put(self, value, wait=_TIMEOUT):
         """Put if connected."""
-        if not self.connected(self._pv):
+        if not self._pv.wait_for_connection(wait):
             return False
         return self._pv.put(value)
 
-    def check(self, value, wait=10):
+    def check(self, value, wait=_TIMEOUT):
         """Do timed get."""
-        if not self.connected(self._pv):
-            return False
-
-        dt = 5e-3
-        for _ in range(int(wait/dt)):
-            pvv = self._pv.get(use_monitor=False)
-            if pvv is not None:
-                break
-            time.sleep(dt)
-
+        pvv = self.get(wait=wait)
         if pvv is None:
             return False
         elif self._isarray(pvv) or self._isarray(value):
@@ -69,10 +51,10 @@ class PyEpicsWrapper:
             return True
         return False
 
-    def get(self):
+    def get(self, wait=_TIMEOUT):
         """Return PV value."""
-        if self.connected(self._pv):
-            return self._pv.get(timeout=50e-3)
+        if self._pv.wait_for_connection(wait):
+            return self._pv.get(timeout=wait)
 
     def _isarray(self, value):
         return isinstance(value, (_np.ndarray, list, tuple))

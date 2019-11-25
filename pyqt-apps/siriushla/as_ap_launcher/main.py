@@ -37,6 +37,7 @@ class MainOperation(SiriusMainWindow):
             qta.icon('mdi.rocket', color=get_appropriate_color('AS')))
         self.move(0, 20)
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
+        self.setObjectName('ASApp')
 
     def _setupUi(self):
         # Egun triggers
@@ -117,8 +118,8 @@ class MainOperation(SiriusMainWindow):
         timing_lay.addWidget(evg_injection_label, 0, 2)
         timing_lay.addWidget(evg_injection_sel, 1, 2)
         timing_lay.addWidget(evg_injection_sts, 2, 2)
-        timing_lay.addWidget(evg_bucket_list, 0, 3, 3, 1)
-        timing_lay.addWidget(pbt, 2, 4)
+        timing_lay.addWidget(pbt, 2, 3)
+        timing_lay.addWidget(evg_bucket_list, 0, 4, 3, 1)
         timing.setLayout(timing_lay)
 
         pbt = QPushButton('v', self)

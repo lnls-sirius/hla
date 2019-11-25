@@ -1,5 +1,6 @@
 """Epics Connector."""
 from .task import EpicsTask
+from ..wrapper import PyEpicsWrapper
 
 
 class EpicsConnector(EpicsTask):
@@ -13,7 +14,7 @@ class EpicsConnector(EpicsTask):
     exit_task (method)
     """
 
-    def __init__(self, pvs, cls_epics, parent=None):
+    def __init__(self, pvs, cls_epics=PyEpicsWrapper, parent=None):
         super().__init__(pvs, None, None, cls_epics, parent)
 
     def run(self):
