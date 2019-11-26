@@ -20,10 +20,17 @@ class PUControlWindow(SiriusMainWindow):
         self._section = section
         self._devtype = devtype
         self._is_main = is_main
-        self.setObjectName(self._section+'App')
         self.setWindowTitle(section.upper() + ' Pulsed Magnets Control Window')
-        self.setWindowIcon(
-            qta.icon('mdi.current-ac', color=get_appropriate_color(section)))
+        if section in {'InjBO', 'EjeBO'}:
+            color = get_appropriate_color('BO')
+            self.setObjectName('BOApp')
+        elif section in {'InjSI', 'Ping'}:
+            color = get_appropriate_color('SI')
+            self.setObjectName('SIApp')
+        else:
+            color = get_appropriate_color(section)
+            self.setObjectName(section+'App')
+        self.setWindowIcon(qta.icon('mdi.current-ac', color=color))
         self._setup_ui()
         self.setCentralWidget(self.main_widget)
         self.setFocusPolicy(Qt.StrongFocus)
@@ -33,34 +40,42 @@ class PUControlWindow(SiriusMainWindow):
             self.main_widget = QTabWidget(self)
             self.main_widget.layout = QVBoxLayout()
             self.main_widget.setLayout(self.main_widget.layout)
-
             self.main_widget.addTab(self._make_tab_widget('TB'), 'TB')
             self.main_widget.addTab(self._make_tab_widget('BO'), 'Booster')
             self.main_widget.addTab(self._make_tab_widget('TS'), 'TS')
-            self.main_widget.addTab(self._make_tab_widget('SI'),
-                                    'Storage Ring')
+            self.main_widget.addTab(
+                self._make_tab_widget('SI'), 'Storage Ring')
             self._connect_buttons()
         elif self._section is not None:
-            if self._section == 'TB':
-                self.main_widget = self._make_tab_widget('TB')
-            elif self._section == 'BO':
-                self.main_widget = self._make_tab_widget('BO')
-            elif self._section == 'TS':
-                self.main_widget = self._make_tab_widget('TS')
-            elif self._section == 'SI':
-                self.main_widget = self._make_tab_widget('SI')
+            self.main_widget = self._make_tab_widget(self._section)
             self._connect_buttons()
         else:
             raise ValueError('Invalid \'section\' argument!')
 
-    def _make_tab_widget(self, section):
+    def _make_tab_widget(self, sec):
         widget = QWidget(self)
         lay = QVBoxLayout(widget)
 
         if self._devtype == 'PU':
-            devices = PSSearch.get_psnames({'sec': section, 'dis': 'PU'})
+            fsearch = PSSearch.get_psnames
         else:
-            devices = MASearch.get_manames({'sec': section, 'dis': 'PM'})
+            fsearch = MASearch.get_manames
+
+        if sec in {'TB', 'BO', 'TS', 'SI'}:
+            devices = fsearch({'sec': sec, 'dis': self._devtype})
+        elif sec == 'InjBO':
+            devices = fsearch(
+                {'sec': '(TB|BO)', 'dis': self._devtype, 'dev': 'Inj'})
+        elif sec == 'EjeBO':
+            devices = fsearch(
+                {'sec': '(BO|TS)', 'dis': self._devtype, 'dev': 'Eje'})
+        elif sec == 'InjSI':
+            devices = fsearch(
+                {'sec': '(TS|SI)', 'dis': self._devtype, 'dev': 'Inj'})
+        elif sec == 'Ping':
+            devices = fsearch(
+                {'sec': 'SI', 'dis': self._devtype, 'dev': 'Ping'})
+
         visible_props = {'detail', 'state', 'reset', 'intlk',
                          'setpoint', 'monitor', 'pulse',
                          'strength_sp', 'strength_mon'}
@@ -84,7 +99,7 @@ class PUControlWindow(SiriusMainWindow):
 
 if __name__ == "__main__":
     import sys
-    from sirius_application import SiriusApplication
+    from siriushla.sirius_application import SiriusApplication
     app = SiriusApplication()
     w = PUControlWindow()
     w.show()
