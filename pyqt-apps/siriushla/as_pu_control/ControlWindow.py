@@ -1,7 +1,7 @@
 """Modulet that defines the window class that control pulsed mangets."""
 
-from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QWidget, QVBoxLayout, QTabWidget
+from qtpy.QtCore import Qt, Slot
+from qtpy.QtWidgets import QWidget, QVBoxLayout, QTabWidget, QAction, QMenu
 import qtawesome as qta
 from siriuspy.search import PSSearch, MASearch
 from siriushla.util import get_appropriate_color
@@ -31,9 +31,11 @@ class PUControlWindow(SiriusMainWindow):
             color = get_appropriate_color(section)
             self.setObjectName(section+'App')
         self.setWindowIcon(qta.icon('mdi.current-ac', color=color))
+        self.pu_widgets_dict = dict()
         self._setup_ui()
         self.setCentralWidget(self.main_widget)
         self.setFocusPolicy(Qt.StrongFocus)
+        self._create_actions()
 
     def _setup_ui(self):
         if self._is_main:
@@ -84,6 +86,7 @@ class PUControlWindow(SiriusMainWindow):
         for device in devices:
             ma_widget = SummaryWidget(device, visible_props, self)
             lay.addWidget(ma_widget)
+            self.pu_widgets_dict[device] = ma_widget
 
         lay.addStretch()
         return widget
@@ -95,6 +98,69 @@ class PUControlWindow(SiriusMainWindow):
             devname = widget.devname
             bt = widget.get_detail_button()
             connect_window(bt, PUDetailWindow, self, devname=devname)
+
+    # Actions methods
+    def _create_actions(self):
+        wid = self.centralWidget()
+        self.turn_on_act = QAction("Turn On", wid)
+        self.turn_on_act.triggered.connect(lambda: self._set_pwrstate(True))
+
+        self.turn_off_act = QAction("Turn Off", wid)
+        self.turn_off_act.triggered.connect(lambda: self._set_pwrstate(False))
+
+        self.pulse_on_act = QAction("Pulse On", wid)
+        self.pulse_on_act.triggered.connect(lambda: self._set_pulse(True))
+
+        self.pulse_off_act = QAction("Pulse Off", wid)
+        self.pulse_off_act.triggered.connect(lambda: self._set_pulse(False))
+
+        self.reset_act = QAction("Reset Interlocks", wid)
+        self.reset_act.triggered.connect(self._reset_interlocks)
+
+    # # Overloaded method
+    def contextMenuEvent(self, event):
+        """Show a custom context menu."""
+        point = event.pos()
+        menu = QMenu("Actions", self)
+        menu.addAction(self.turn_on_act)
+        menu.addAction(self.turn_off_act)
+        menu.addAction(self.pulse_on_act)
+        menu.addAction(self.pulse_off_act)
+        menu.addAction(self.reset_act)
+        menu.popup(self.mapToGlobal(point))
+
+    @Slot(bool)
+    def _set_pwrstate(self, state):
+        """Execute turn on/off actions."""
+        for key, widget in self.pu_widgets_dict.items():
+            try:
+                if state:
+                    widget.turn_on()
+                else:
+                    widget.turn_off()
+            except TypeError:
+                pass
+
+    @Slot(bool)
+    def _set_pulse(self, state):
+        """Execute turn on/off actions."""
+        for key, widget in self.pu_widgets_dict.items():
+            try:
+                if state:
+                    widget.pulse_on()
+                else:
+                    widget.pulse_off()
+            except TypeError:
+                pass
+
+    @Slot()
+    def _reset_interlocks(self):
+        """Reset interlocks."""
+        for key, widget in self.pu_widgets_dict.items():
+            try:
+                widget.reset()
+            except TypeError:
+                pass
 
 
 if __name__ == "__main__":

@@ -415,6 +415,18 @@ class SummaryWidget(QWidget):
             if self.state_bt.value:
                 self.state_bt.send_value()
 
+    def pulse_on(self):
+        """Turn power supply on."""
+        if self.pulse_bt.isEnabled():
+            if not self.pulse_bt.value:
+                self.pulse_bt.send_value()
+
+    def pulse_off(self):
+        """Turn power supply off."""
+        if self.pulse_bt.isEnabled():
+            if self.pulse_bt.value:
+                self.pulse_bt.send_value()
+
     def reset(self):
         """Reset power supply."""
         if self.reset_bt.isEnabled():
