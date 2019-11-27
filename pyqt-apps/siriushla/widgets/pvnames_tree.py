@@ -1,9 +1,11 @@
 """PVName selection tree view."""
 import re
 import uuid
-from qtpy.QtCore import Qt, QSize, Signal, QThread
+from copy import deepcopy as _dcopy
+from qtpy.QtCore import Qt, QSize, Signal, QThread, Slot
 from qtpy.QtWidgets import QTreeWidget, QTreeWidgetItem, QProgressDialog, \
-    QAction, QMenu
+    QAction, QMenu, QLabel, QWidget, QVBoxLayout, QHBoxLayout, QLineEdit, \
+    QHeaderView
 
 from siriuspy.namesys import SiriusPVName
 
@@ -55,12 +57,13 @@ class QTreeItem(QTreeWidgetItem):
             if value in (Qt.Checked, Qt.Unchecked):
                 if self.childCount() == 0:
                     if self.checkState(column) != value:
-                        self.treeWidget().itemChecked.emit(self, column, value)
+                        self.treeWidget().parent().itemChecked.emit(
+                            self, column, value)
                     super().setData(column, role, value)
                 else:
-                    for c in range(self.childCount()):
-                        if not self.child(c).isHidden():
-                            self.child(c).setData(
+                    for chil in range(self.childCount()):
+                        if not self.child(chil).isHidden():
+                            self.child(chil).setData(
                                 column, Qt.CheckStateRole, value)
         else:
             super().setData(column, role, value)
@@ -96,44 +99,63 @@ class QTreeItem(QTreeWidgetItem):
             self.parent().childChecked(self, column, status)
 
 
-class PVNameTree(QTreeWidget):
+class BuildTree(QThread):
+    """QThread to build tree."""
+
+    currentItem = Signal(str)
+    itemDone = Signal()
+    completed = Signal()
+
+    def __init__(self, obj):
+        """Init."""
+        super().__init__(obj)
+        self.obj = obj
+        self._quit_task = False
+
+    def size(self):
+        """Return task size."""
+        return len(self.obj.items)
+
+    def exit_task(self):
+        """Set flag to quit thread."""
+        self._quit_task = True
+
+    def run(self):
+        """Build tree."""
+        for item in self.obj.items:
+            if self._quit_task:
+                break
+            name = item
+            if not isinstance(name, str):
+                name = item[0]
+            self.currentItem.emit(name)
+            self.obj._add_item(item)
+            self.itemDone.emit()
+        self.completed.emit()
+
+
+class Tree(QTreeWidget):
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        # self.header().setSectionsMovable(False)
+
+    def resizeEvent(self, event):
+        # self.setColumnWidth(0, self.width()*3/6)
+        self.setColumnWidth(1, self.width()*1.3/6)
+        # self.setColumnWidth(2, self.width()*0.4/6)
+        if not self.header().isHidden():
+            self.header().setSectionResizeMode(0, QHeaderView.Stretch)
+            self.header().setSectionResizeMode(1, QHeaderView.Fixed)
+            self.header().setSectionResizeMode(2, QHeaderView.ResizeToContents)
+            self.header().setStretchLastSection(False)
+        super().resizeEvent(event)
+
+
+class PVNameTree(QWidget):
     """Build a tree with SiriusPVNames."""
 
     itemChecked = Signal(QTreeItem, int, int)
-
-    class BuildTree(QThread):
-        """QThread to build tree."""
-
-        itemInserted = Signal()
-
-        def __init__(self, obj):
-            """Init."""
-            super().__init__(obj)
-            self.obj = obj
-            self._quit_task = False
-
-        def size(self):
-            """Return task size."""
-            return len(self.obj.items)
-
-        def exit_task(self):
-            """Set flag to quit thread."""
-            self._quit_task = True
-
-        def run(self):
-            """Build tree."""
-            leng = len(self.obj.items)
-            curr = 0
-            for itr, item in enumerate(self.obj.items):
-                if self._quit_task:
-                    break
-                self.obj._add_item(item)
-                pct = int(itr/leng*100)
-                if pct >= curr:
-                    curr = pct + 1
-                    self.itemInserted.emit()
-
-            self.finished.emit()
 
     def __init__(self, items=tuple(), tree_levels=tuple(),
                  checked_levels=tuple(), parent=None):
@@ -142,25 +164,46 @@ class PVNameTree(QTreeWidget):
 
         self._item_map = dict()
 
-        self._items = items
         self._pnames = tree_levels
         self._leafs = list()
+        self._nr_checked_items = 0
 
         self._setup_ui()
         self._create_actions()
-
-        self.setHeaderHidden(False)
-        self.setHeaderLabels(['PVName', 'Value', 'Delay'])
 
         self.check_children = True
         self.check_parent = True
 
         self.check_requested_levels(checked_levels)
 
+        self.items = _dcopy(items)
+        self.tree.expanded.connect(
+            lambda idx: self.tree.resizeColumnToContents(idx.column()))
+
     def _setup_ui(self):
-        self._add_items()
-        self.expanded.connect(
-            lambda idx: self.resizeColumnToContents(idx.column()))
+        self._msg = QLabel(self)
+
+        # Add Selection Tree
+        self._check_count = QLabel(self)
+        self.tree = Tree(self)
+        self.tree.setColumnCount(3)
+        self.tree.setHeaderHidden(False)
+        self.tree.setHeaderLabels(['Name', 'Value', 'Delay'])
+
+        self.itemChecked.connect(self._item_checked)
+
+        # Add filter for tree
+        self._filter_le = QLineEdit(self)
+        self._filter_le.setPlaceholderText("Filter Items...")
+        self._filter_le.textChanged.connect(self._filter_items)
+
+        self.setLayout(QVBoxLayout())
+        hl = QHBoxLayout()
+        hl.addWidget(self._msg)
+        hl.addWidget(self._check_count)
+        self.layout().addWidget(self._filter_le)
+        self.layout().addLayout(hl)
+        self.layout().addWidget(self.tree)
 
     def _create_actions(self):
         self._act_check_all = QAction("Check All", self)
@@ -170,14 +213,23 @@ class PVNameTree(QTreeWidget):
         self._act_expand_all = QAction("Expand All", self)
         self._act_expand_all.triggered.connect(self.expand_all)
         self._act_collapse_all = QAction("Collapse All", self)
-        self._act_collapse_all.triggered.connect(lambda: self.collapseAll())
+        self._act_collapse_all.triggered.connect(self.collapse_all)
 
     def clear(self):
         """Clear tree."""
         self._items = tuple()
         self._leafs = list()
         self._item_map = dict()
-        super().clear()
+        self.tree.clear()
+        self._nr_checked_items = 0
+
+    @property
+    def message(self):
+        return self._msg.text()
+
+    @message.setter
+    def message(self, text):
+        return self._msg.setText(text)
 
     @property
     def items(self):
@@ -186,9 +238,10 @@ class PVNameTree(QTreeWidget):
 
     @items.setter
     def items(self, value):
-        self.clear()
-        self._items = value
+        self.tree.clear()
+        self._items = _dcopy(value)
         self._add_items()
+        self._filter_items(self._filter_le.text())
 
     def check_all(self):
         """Check all items."""
@@ -207,6 +260,9 @@ class PVNameTree(QTreeWidget):
         for item in self._item_map.values():
             if item.childCount() > 0:
                 item.setExpanded(True)
+
+    def collapse_all(self):
+        self.tree.collapseAll()
 
     @staticmethod
     def mag_group(name):
@@ -232,8 +288,12 @@ class PVNameTree(QTreeWidget):
             return 'Corrector'
         elif re.match('^FC\w*(-[0-9])?$', name.dev):
             return 'Fast Corrector'
-        elif re.match('(Inj|Eje).*$', name.dev):
-            return 'Pulsed'
+        elif re.match('.*Kckr.*$', name.dev):
+            return 'Kicker'
+        elif re.match('.*Sept.*$', name.dev):
+            return 'Septum'
+        elif re.match('Ping.*$', name.dev):
+            return 'Pinger'
         elif re.match('^Lens.*$', name.dev):
             return 'Lens'
         else:
@@ -256,7 +316,7 @@ class PVNameTree(QTreeWidget):
             row = [item[0], ]
             row.extend([str(i) for i in item[1:]])
         # pvals = []
-        parent = self.invisibleRootItem()
+        parent = self.tree.invisibleRootItem()
         parent_key = ''
         # if pvname.count(':') == 2 and pvname.count('-') == 3:
         try:
@@ -347,19 +407,20 @@ class PVNameTree(QTreeWidget):
 
     def _add_items(self):
         # Connect signals
-        t = self.BuildTree(self)
+        t = BuildTree(self)
         t.finished.connect(t.deleteLater)
         dlg = None
-        # if len(self.items) > 1500:
-        dlg = QProgressDialog(
-            labelText='Building Tree',
-            minimum=0, maximum=100, parent=self)
-        t.itemInserted.connect(lambda: dlg.setValue(dlg.value() + 1))
-        t.finished.connect(dlg.close)
+        if len(self.items) > 1500:
+            dlg = QProgressDialog(
+                labelText='Building Tree',
+                minimum=0, maximum=len(self._items), parent=self)
+            t.itemDone.connect(lambda: dlg.setValue(dlg.value() + 1))
+            t.finished.connect(dlg.close)
         # Start
         t.start()
-        if dlg and len(self._items) > 0:
+        if dlg:
             dlg.exec_()
+        t.wait()
 
     def checked_items(self):
         """Return checked items."""
@@ -369,13 +430,6 @@ class PVNameTree(QTreeWidget):
     def sizeHint(self):
         """Override sizehint."""
         return QSize(600, 600)
-
-    def resizeEvent(self, event):
-        """Resize Event."""
-        self.setColumnWidth(0, self.width()*4/6)
-        self.setColumnWidth(1, self.width()*1.5/6)
-        self.setColumnWidth(2, self.width()*0.5/6)
-        super().resizeEvent(event)
 
     def contextMenuEvent(self, event):
         """Show context menu."""
@@ -387,9 +441,33 @@ class PVNameTree(QTreeWidget):
         menu.addAction(self._act_collapse_all)
         menu.popup(event.globalPos())
 
-    def setData(self, index, role, value):
-        print(index, role, value)
-        super().setData(index, role, value)
+    @Slot(str)
+    def _filter_items(self, text):
+        """Filter pvnames based on text inserted at line edit."""
+        selected_pvs = 0
+        try:
+            pattern = re.compile(text, re.I)
+        except Exception:
+            return
+
+        for node in self._leafs:
+            if pattern.search(node.data(0, 0)):
+                node.setHidden(False)
+                selected_pvs += 1
+            else:
+                # node.setCheckState(0, Qt.Unchecked)
+                node.setHidden(True)
+        self._msg.setText('Showing {} Items.'.format(selected_pvs))
+
+    @Slot(QTreeItem, int, int)
+    def _item_checked(self, item, column, value):
+        if item.childCount() == 0:
+            if value == Qt.Checked:
+                self._nr_checked_items += 1
+            elif value == Qt.Unchecked:
+                self._nr_checked_items -= 1
+        self._check_count.setText(
+            '{} Items checked.'.format(self._nr_checked_items))
 
 
 if __name__ == "__main__":
@@ -403,8 +481,9 @@ if __name__ == "__main__":
         items.extend([('SI-Fam:MA-B1B1{}:PwrState-Sel'.format(i), 1, 0.0),
                       ('BO-Fam:MA-QD{}:Current-SP'.format(i), 1, 0.0),
                       ('BO-Fam:MA-B-{}:PwrState-Sel'.format(i), 1, 0.0)])
-    w = PVNameTree(items=items, tree_levels=('sec', 'mag_group'),
-                   checked_levels=('BOQuadrupole', ))
+    w = PVNameTree(
+        items=items, tree_levels=('sec', 'mag_group'),
+        checked_levels=('BOQuadrupole', ))
     w.show()
     # w.items = items
     # w.check_requested_levels(('BOQuadrupole', ))
