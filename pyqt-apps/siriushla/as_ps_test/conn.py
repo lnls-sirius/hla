@@ -49,6 +49,12 @@ class _Tester:
                 return False
         return True
 
+    def wait_for_connection(self, timeout=0.5):
+        for pv in self._pvs.values():
+            if not pv.wait_for_connection(timeout):
+                return False
+        return True
+
     def reset(self):
         """Reset."""
         self._pvs['Reset-Cmd'].value = 1
@@ -102,9 +108,9 @@ class TesterDCLinkFBP(_Tester):
         super().__init__(device)
         self._pvs = dict()
         for ppty in TesterDCLinkFBP.properties:
-            self._pvs[ppty] = _PV(VACA_PREFIX + device + ':' + ppty,
-                                  connection_timeout=TIMEOUT_CONN)
-            self._pvs[ppty].get()
+            self._pvs[ppty] = _PV(
+                VACA_PREFIX + device + ':' + ppty,
+                connection_timeout=TIMEOUT_CONN)
 
     def check_init_ok(self):
         """Check OpMode in SlowRef."""
@@ -143,9 +149,9 @@ class TesterDCLink(_Tester):
         super().__init__(device)
         self._pvs = dict()
         for ppty in TesterDCLink.properties:
-            self._pvs[ppty] = _PV(VACA_PREFIX + device + ':' + ppty,
-                                  connection_timeout=TIMEOUT_CONN)
-            self._pvs[ppty].get()
+            self._pvs[ppty] = _PV(
+                VACA_PREFIX + device + ':' + ppty,
+                connection_timeout=TIMEOUT_CONN)
 
     def check_init_ok(self):
         """Check OpMode in SlowRef."""
@@ -190,9 +196,9 @@ class TesterPS(_Tester):
         super().__init__(device)
         self._pvs = dict()
         for ppty in TesterPS.properties:
-            self._pvs[ppty] = _PV(VACA_PREFIX + device + ':' + ppty,
-                                  connection_timeout=TIMEOUT_CONN)
-            self._pvs[ppty].get()
+            self._pvs[ppty] = _PV(
+                VACA_PREFIX + device + ':' + ppty,
+                connection_timeout=TIMEOUT_CONN)
 
         maname = MASearch.conv_psname_2_psmaname(device)
         splims = MASearch.conv_maname_2_splims(maname)
@@ -233,9 +239,9 @@ class TesterPSLinac:
         self.device = device
         self._pvs = dict()
         for ppty in TesterPSLinac.properties:
-            self._pvs[ppty] = _PV(VACA_PREFIX + device + ':' + ppty,
-                                  connection_timeout=TIMEOUT_CONN)
-            self._pvs[ppty].get()
+            self._pvs[ppty] = _PV(
+                VACA_PREFIX + device + ':' + ppty,
+                connection_timeout=TIMEOUT_CONN)
 
         splims = PSSearch.conv_pstype_2_splims(
             PSSearch.conv_psname_2_pstype(device))
@@ -245,7 +251,17 @@ class TesterPSLinac:
     @property
     def connected(self):
         """Return wheter PVs are connected."""
-        return all([pv.connected for pv in self._pvs.values()])
+        for pv in self._pvs.values():
+            if not pv.connected:
+                # print(pv.pvname)
+                return False
+        return True
+
+    def wait_for_connection(self, timeout=0.5):
+        for pv in self._pvs.values():
+            if not pv.wait_for_connection(timeout):
+                return False
+        return True
 
     def check_intlk(self):
         """Check interlocks."""

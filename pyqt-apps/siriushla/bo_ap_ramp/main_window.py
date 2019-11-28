@@ -135,10 +135,13 @@ class RampMain(SiriusMainWindow):
             self._undo_stack.clear()
         self._emitLoadSignal()
 
-    def _emitLoadSignal(self):
+    def _emitLoadSignal(self, nconfigs_changed=None):
         try:
             if self.ramp_config.exist():
                 self.ramp_config.load()
+                if nconfigs_changed:
+                    self.config_parameters.mult_ramp.update_nconfigs_windows(
+                        nconfigs_changed)
         except _ConfigDBException as err:
             QMessageBox.critical(self, 'Error', str(err), QMessageBox.Ok)
         else:

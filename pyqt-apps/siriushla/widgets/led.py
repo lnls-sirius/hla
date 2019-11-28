@@ -242,6 +242,11 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         self._update_statuses()
 
     def _check_status(self, address, desired, current):
+        if current is None:
+            return False
+        elif isinstance(current, str) and current == 'UNDEF':
+            return False
+
         kws = dict()
         if isinstance(desired, dict):
             if 'bit' in desired.keys():
@@ -269,10 +274,6 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
 
         if desired_value is None:
             is_desired = True
-        elif current is None:
-            is_desired = False
-        elif isinstance(current, str) and current == 'UNDEF':
-            is_desired = False
         else:
             is_desired = fun(current, desired_value, **kws)
         return is_desired

@@ -105,7 +105,7 @@ class DipoleRamp(QWidget):
     """Widget to set and monitor dipole ramp."""
 
     updateDipoleRampSignal = Signal()
-    applyChanges2MachineSignal = Signal()
+    applyChanges2MachineSignal = Signal(QWidget)
 
     def __init__(self, parent=None, prefix='', ramp_config=None,
                  undo_stack=None):
@@ -159,7 +159,8 @@ class DipoleRamp(QWidget):
         self.bt_apply.setToolTip('Apply Changes to Machine')
         self.bt_apply.setStyleSheet('icon-size: 30px 30px;')
         self.bt_apply.setObjectName('Apply Dipole and Timing')
-        self.bt_apply.clicked.connect(self.applyChanges2MachineSignal.emit)
+        self.bt_apply.clicked.connect(
+            _part(self.applyChanges2MachineSignal.emit, self))
 
         lay = QVBoxLayout(self)
         lay.setAlignment(Qt.AlignTop)
@@ -737,7 +738,7 @@ class MultipolesRamp(QWidget):
 
     updateMultipoleRampSignal = Signal()
     updateOptAdjSettingsSignal = Signal(str, str)
-    applyChanges2MachineSignal = Signal()
+    applyChanges2MachineSignal = Signal(QWidget)
 
     def __init__(self, parent=None, prefix='',
                  ramp_config=None, undo_stack=None,
@@ -831,7 +832,8 @@ class MultipolesRamp(QWidget):
         self.bt_apply.setToolTip('Apply Changes to Machine')
         self.bt_apply.setStyleSheet('icon-size: 30px 30px;')
         self.bt_apply.setObjectName('Apply Multipoles')
-        self.bt_apply.clicked.connect(self.applyChanges2MachineSignal.emit)
+        self.bt_apply.clicked.connect(
+            _part(self.applyChanges2MachineSignal.emit, self))
 
         lay = QVBoxLayout(self)
         lay.setAlignment(Qt.AlignTop)
@@ -1315,13 +1317,17 @@ class MultipolesRamp(QWidget):
                 return
         if ramp_config is not None:
             self.ramp_config = ramp_config
-            self.bonorm_edit_dict = dict()
         self._getNormalizedConfigs()
         self.table.cellChanged.disconnect(self._handleCellChanged)
         self._setupTable()
         self.updateTable()
         self.updateGraph(update_axis=True)
         self._verifyWarnings()
+
+    def update_nconfigs_windows(self, nconfigs_changed):
+        for name, wind in self.bonorm_edit_dict.items():
+            if name in nconfigs_changed.keys():
+                wind.updateName(nconfigs_changed[name])
 
     @Slot(ramp.BoosterNormalized, str)
     def handleNormConfigsChanged(self, nconfig=None, old_nconfig_name=''):
@@ -1341,7 +1347,8 @@ class MultipolesRamp(QWidget):
 
         self.handleLoadRampConfig()
         self.updateMultipoleRampSignal.emit()
-        self.applyChanges2MachineSignal.emit()
+        self.applyChanges2MachineSignal.emit(
+            self.bonorm_edit_dict[nconfig.name])
 
     def updateOpticsAdjustSettings(self, tuneconfig_name, chromconfig_name):
         self._tunecorr_configname = tuneconfig_name
@@ -1353,7 +1360,7 @@ class RFRamp(QWidget):
     """Widget to set and monitor RF ramp."""
 
     updateRFRampSignal = Signal()
-    applyChanges2MachineSignal = Signal()
+    applyChanges2MachineSignal = Signal(QWidget)
 
     def __init__(self, parent=None, prefix='', ramp_config=None,
                  undo_stack=None):
@@ -1397,7 +1404,8 @@ class RFRamp(QWidget):
         self.bt_apply.setToolTip('Apply Changes to Machine')
         self.bt_apply.setStyleSheet('icon-size: 30px 30px;')
         self.bt_apply.setObjectName('Apply RF')
-        self.bt_apply.clicked.connect(self.applyChanges2MachineSignal.emit)
+        self.bt_apply.clicked.connect(
+            _part(self.applyChanges2MachineSignal.emit, self))
 
         lay = QVBoxLayout(self)
         lay.addWidget(label)

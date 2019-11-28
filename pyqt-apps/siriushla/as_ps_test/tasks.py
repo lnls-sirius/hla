@@ -2,32 +2,37 @@ from copy import deepcopy as _dcopy
 import time as _time
 from epics import PV as _PV
 from qtpy.QtCore import Signal, QThread
-from siriuspy.search import HLTimeSearch
+from siriuspy.search import HLTimeSearch as _HLTimeSearch, \
+    PSSearch as _PSSearch
 from siriuspy.csdevice.util import Const
+from siriuspy.namesys import SiriusPVName as _PVName
+from .conn import TesterDCLink, TesterDCLinkFBP, TesterPS, TesterPSLinac
 
 
 TIMEOUT_CHECK = 10
 TIMEOUT_SLEEP = 0.1
+TIMEOUT_CONN = 0.5
 
 
 class BaseTask(QThread):
     """Setter."""
 
+    _testers = dict()
     currentItem = Signal(str)
     itemDone = Signal(str, bool)
     completed = Signal()
 
-    def __init__(self, testers, state=None, is_test=None, parent=None):
+    def __init__(self, devices, state=None, is_test=None, parent=None):
         """Constructor."""
         super().__init__(parent)
-        self._testers = testers
+        self._devices = devices
         self._state = state
         self._is_test = is_test
         self._quit_task = False
 
     def size(self):
         """Task size."""
-        return len(self._testers.keys())
+        return len(self._devices)
 
     def exit_task(self):
         """Set quit flag."""
@@ -45,8 +50,12 @@ class BaseTask(QThread):
 
     def _set(self, method, **kwargs):
         """Set."""
-        for dev, tester in self._testers.items():
+        for dev in self._devices:
             self.currentItem.emit(dev)
+            tester = BaseTask._testers[dev]
+            if not tester.wait_for_connection(TIMEOUT_CONN):
+                self.itemDone.emit(dev, False)
+                continue
             func = getattr(tester, method)
             func(**kwargs)
             self.itemDone.emit(dev, True)
@@ -55,12 +64,13 @@ class BaseTask(QThread):
 
     def _check(self, method, timeout=TIMEOUT_CHECK, **kwargs):
         """Check."""
-        need_check = list(self._testers.keys())
+        need_check = _dcopy(self._devices)
         t = _time.time()
         while _time.time() - t < timeout:
-            for dev, tester in self._testers.items():
+            for dev in self._devices:
                 if dev not in need_check:
                     continue
+                tester = BaseTask._testers[dev]
                 func = getattr(tester, method)
                 if func(**kwargs):
                     self.currentItem.emit(dev)
@@ -74,6 +84,26 @@ class BaseTask(QThread):
         for dev in need_check:
             self.currentItem.emit(dev)
             self.itemDone.emit(dev, False)
+
+
+class CreateTesters(BaseTask):
+
+    def function(self):
+        for dev in self._devices:
+            self.currentItem.emit(dev)
+            if dev not in BaseTask._testers:
+                if _PVName(dev).sec == 'LI':
+                    t = TesterPSLinac(dev)
+                elif _PSSearch.conv_psname_2_psmodel(dev) == 'FBP_DCLink':
+                    t = TesterDCLinkFBP(dev)
+                elif 'bo-dclink' in _PSSearch.conv_psname_2_pstype(dev):
+                    t = TesterDCLink(dev)
+                elif _PVName(dev).dis == 'PS':
+                    t = TesterPS(dev)
+                BaseTask._testers[dev] = t
+            self.itemDone.emit(dev, True)
+            if self._quit_task:
+                break
 
 
 class ResetIntlk(BaseTask):
@@ -179,7 +209,7 @@ class CheckCurrent(BaseTask):
     def function(self):
         """Set PS Current."""
         self._check(method='check_current',
-                    timeout=2*TIMEOUT_CHECK,
+                    timeout=2.2*TIMEOUT_CHECK,
                     test=self._is_test)
 
 
@@ -195,7 +225,7 @@ class TriggerTask(QThread):
     def __init__(self, restore_initial_value=False, parent=None):
         """Constructor."""
         super().__init__(parent)
-        self._triggers = HLTimeSearch.get_hl_triggers(filters={'dev': 'Mags'})
+        self._triggers = _HLTimeSearch.get_hl_triggers(filters={'dev': 'Mags'})
         self._pvs = {trg: _PV(trg + ':State-Sel') for trg in self._triggers}
 
         for trg, pv in self._pvs.items():
