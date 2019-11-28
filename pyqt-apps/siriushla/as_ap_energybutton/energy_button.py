@@ -125,8 +125,6 @@ class EnergyButton(QWidget):
         get_task.itemNotRead.connect(self._read_fail)
         dlg = ProgressDialog(
             ['Connecting', 'Reading'], [conn, get_task], parent=self)
-        dlg.rejected.connect(conn.exit_task)
-        dlg.rejected.connect(get_task.exit_task)
         ret = dlg.exec_()
         if ret == dlg.Rejected:
             return
@@ -150,8 +148,6 @@ class EnergyButton(QWidget):
         dlg = ProgressDialog(
             ['Connecting', 'Setting Dipole', 'Checking Dipole'],
             [conn, set_dip, check_dip], parent=self)
-        dlg.rejected.connect(set_dip.exit_task)
-        dlg.rejected.connect(check_dip.exit_task)
         ret = dlg.exec_()
         if ret == dlg.Rejected:
             return
@@ -169,8 +165,6 @@ class EnergyButton(QWidget):
         dlg = ProgressDialog(
             ['Connecting to Magnets', 'Setting Magnets', 'Checking Magnets'],
             [conn, set_mags, check_mags], parent=self)
-        dlg.rejected.connect(set_mags.exit_task)
-        dlg.rejected.connect(check_mags.exit_task)
         ret = dlg.exec_()
         if ret == dlg.Rejected:
             return
