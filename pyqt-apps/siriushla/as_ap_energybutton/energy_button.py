@@ -132,7 +132,7 @@ class EnergyButton(QWidget):
             return
         if self._items_fail:
             failed = ['Failed to read some PVs', ]
-            failed += self._items_fail + ['Aborting', ]
+            failed += self._items_fail + ['Aborting!', ]
             report = ReportDialog(failed, self)
             report.exec_()
             return
@@ -140,8 +140,8 @@ class EnergyButton(QWidget):
         energy = self.energy_value.value()
         pvs, values = zip(*self._items_success[1:])  # remove dipole
         delays = [0.0, ] * len(pvs)
+        self._items_success = []
 
-        return
         conn = EpicsConnector(self.dip, parent=self)
         set_dip = EpicsSetter(self.dip, [energy, ], [0.0, ], parent=self)
         check_dip = EpicsChecker(self.dip, [energy, ], [0.0, ], parent=self)
@@ -156,7 +156,7 @@ class EnergyButton(QWidget):
         if ret == dlg.Rejected:
             return
         if self._items_fail:
-            failed = ['Failed to set Dipole', 'Aborting']
+            failed = ['Failed to set Dipole. Aborting!']
             report = ReportDialog(failed, self)
             report.exec_()
             return
@@ -178,7 +178,6 @@ class EnergyButton(QWidget):
         failed = []
         if self._items_fail:
             failed = ['Failed to set magnets:', ] + self._items_fail
-            return
         report = ReportDialog(failed, self)
         report.exec_()
 
@@ -190,12 +189,12 @@ class EnergyButton(QWidget):
     def _read_success(self, item, value):
         self._items_success.append((item, value))
 
-    @Slot()
+    @Slot(str, bool)
     def _check_status(self, item, status):
         if status:
-            self._items_fail.append(item)
+            self._items_success.append((item, True))
         else:
-            self._items_success.append(item, True)
+            self._items_fail.append(item)
 
 
 if __name__ == '__main__':
