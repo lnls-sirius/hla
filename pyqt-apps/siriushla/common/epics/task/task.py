@@ -1,5 +1,6 @@
 """EpicsTask interface."""
 from qtpy.QtCore import QThread, Signal
+from ..wrapper import PyEpicsWrapper
 
 
 class EpicsTask(QThread):
@@ -13,12 +14,13 @@ class EpicsTask(QThread):
     exit_task (method)
     """
 
-    PVs = []
+    PVs = dict()
     currentItem = Signal(str)
     itemDone = Signal()
     completed = Signal()
 
-    def __init__(self, pvs, values, delays, cls_epics, parent=None):
+    def __init__(self, pvs, values, delays, cls_epics=PyEpicsWrapper,
+                 parent=None, timeout=PyEpicsWrapper.TIMEOUT):
         """Constructor.
 
         Parameters
@@ -34,6 +36,7 @@ class EpicsTask(QThread):
         self._delays = delays
         self._cls_epics = cls_epics
         self._quit_task = False
+        self._timeout = timeout
 
     def size(self):
         """Task Size."""
@@ -42,3 +45,10 @@ class EpicsTask(QThread):
     def exit_task(self):
         """Set flag to exit thread."""
         self._quit_task = True
+
+    def get_pv(self, pvn):
+        pv = self.PVs.get(pvn)
+        if pv is None:
+            pv = self._cls_epics(pvn)
+            self.PVs[pvn] = pv
+        return pv

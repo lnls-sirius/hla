@@ -65,15 +65,11 @@ class CycleWindow(SiriusMainWindow):
 
         # treeview
         gb_tree = QGroupBox('Select power supplies:')
-        self.search_le = QLineEdit()
-        self.search_le.setPlaceholderText('Filter...')
-        self.search_le.editingFinished.connect(self._filter_psnames)
-        self.pwrsupplies_tree = PVNameTree(get_psnames(), ('sec', 'mag_group'),
-                                           tuple(), self)
-        self.pwrsupplies_tree.setHeaderHidden(True)
-        self.pwrsupplies_tree.setColumnCount(1)
+        self.pwrsupplies_tree = PVNameTree(
+            get_psnames(), ('sec', 'mag_group'), tuple(), self)
+        self.pwrsupplies_tree.tree.setHeaderHidden(True)
+        self.pwrsupplies_tree.tree.setColumnCount(1)
         glay_tree = QVBoxLayout(gb_tree)
-        glay_tree.addWidget(self.search_le)
         glay_tree.addWidget(self.pwrsupplies_tree)
 
         # status
@@ -148,8 +144,8 @@ class CycleWindow(SiriusMainWindow):
         lay_comm.setColumnStretch(3, 7)
 
         # connect tree signals
-        self.pwrsupplies_tree.doubleClicked.connect(self._open_ps_detail)
-        self.pwrsupplies_tree.itemChanged.connect(
+        self.pwrsupplies_tree.tree.doubleClicked.connect(self._open_ps_detail)
+        self.pwrsupplies_tree.tree.itemChanged.connect(
             self._handle_checked_items_changed)
         self.pwrsupplies_tree.check_requested_levels(self._checked_accs)
 
@@ -360,20 +356,6 @@ class CycleWindow(SiriusMainWindow):
         task = CreateCyclers(ps2create)
         dlg = ProgressDialog('Connecting to power supplies...', task, self)
         dlg.exec_()
-
-    def _filter_psnames(self):
-        text = self.search_le.text()
-
-        try:
-            pattern = _re.compile(text, _re.I)
-        except Exception:  # Ignore malformed patterns?
-            pattern = _re.compile("malformed")
-
-        for node in self.pwrsupplies_tree._leafs:
-            if pattern.search(node.data(0, 0)):
-                node.setHidden(False)
-            else:
-                node.setHidden(True)
 
     def _open_ps_detail(self, item):
         app = QApplication.instance()

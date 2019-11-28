@@ -10,15 +10,15 @@ class EpicsSetter(EpicsTask):
     def run(self):
         """Thread execution."""
         if not self._quit_task:
-            for i in range(len(self._pvnames)):
-                pv = EpicsTask.PVs[i]
-                self.currentItem.emit(pv.pvname)
+            for i, pvn in enumerate(self._pvnames):
+                self.currentItem.emit(pvn)
+                pv = self.get_pv(pvn)
                 try:
                     pv.put(self._values[i])
                     time.sleep(self._delays[i])
                 except TypeError:
                     _log.warning('PV {} not set with value: {}'.format(
-                        pv.pvname, self._values[i]))
+                        pvn, self._values[i]))
                 self.itemDone.emit()
                 if self._quit_task:
                     break

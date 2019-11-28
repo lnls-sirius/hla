@@ -69,7 +69,7 @@ class GraphWidget(QWidget):
             QLabel('<h2>'+self.name+'</h2>'), alignment=Qt.AlignCenter)
         self.graph = Graph(self)
         self.graph.setShowLegend(self._legend)
-        self.graph.maxRedrawRate = 5
+        self.graph.maxRedrawRate = 1/2
         self.layout().addWidget(self.graph)
         for i, pvn in enumerate(self._pvslist):
             frac = int(i / (len(self._pvslist)-1) * 255)
@@ -80,9 +80,9 @@ class GraphWidget(QWidget):
                 color=color,
                 redraw_mode=2,
                 lineStyle=1,
-                lineWidth=2,
+                lineWidth=1,
                 symbol=None,
-                symbolSize=10)
+                symbolSize=None)
             self.graph.addChannel(**opts)
             self.curves.append(self.graph.curveAtIndex(i))
 

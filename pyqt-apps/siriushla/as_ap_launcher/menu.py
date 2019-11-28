@@ -376,7 +376,7 @@ def get_object(ismenubar=True, parent=None):
             self.connect_newprocess(corrs, [scr, '--device', 'corrector-slow'])
             psma.addAction(corrs)
 
-            if sec in 'si':
+            if sec == 'si':
                 trims = QAction('Trims', psma)
                 self.connect_newprocess(
                     trims, [scr, '--device', 'trim-quadrupole'])
@@ -386,15 +386,24 @@ def get_object(ismenubar=True, parent=None):
             #         fcorr, [scr, '--device', 'corrector-fast'])
             #     psma.addAction(fcorr)
 
-            pmag = QAction('Pulsed Magnets', psma)
-            if dis == 'ps':
-                script = 'sirius-hla-'+sec+'-pu-control.py'
-            elif dis == 'ma':
-                script = 'sirius-hla-'+sec+'-pm-control.py'
-            self.connect_newprocess(pmag, script)
-            psma.addAction(pmag)
+            dispu = 'pu' if dis == 'ps' else 'pm'
+            script = 'sirius-hla-' + sec + '-' + dispu + '-control.py'
+            if sec == 'si':
+                pmag = QAction(dispu.upper()+' Injection', psma)
+                self.connect_newprocess(pmag, [script, '-s', 'InjSI'])
+                psma.addAction(pmag)
+                pmag = QAction(dispu.upper()+' Pingers', psma)
+                self.connect_newprocess(pmag, [script, '-s', 'Ping'])
+                psma.addAction(pmag)
+            elif sec == 'bo':
+                pmag = QAction(dispu.upper()+' Injection', psma)
+                self.connect_newprocess(pmag, [script, '-s', 'InjBO'])
+                psma.addAction(pmag)
+                pmag = QAction(dispu.upper()+' Ejection', psma)
+                self.connect_newprocess(pmag, [script, '-s', 'EjeBO'])
+                psma.addAction(pmag)
 
-            if sec == 'bo':
+            if sec == 'bo' and dis == 'ps':
                 wfmerr = QAction('Waveform Error', psma)
                 self.connect_newprocess(wfmerr, 'sirius-hla-bo-ps-wfmerror.py')
                 psma.addAction(wfmerr)
