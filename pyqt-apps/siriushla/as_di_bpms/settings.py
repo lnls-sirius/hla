@@ -30,7 +30,8 @@ class ParamsSettings(BaseWidget):
             ('asyn.CNCT', 'Connected'),
             ('asyn.ENBL', 'Enabled'),
             ('RFFEasyn.CNCT', 'RFFE Connected'),
-            ('RFFEasyn.ENBL', 'RFFE Enabled'))
+            ('RFFEasyn.ENBL', 'RFFE Enabled'),
+            ('ADCAD9510PllStatus-Mon', 'Clock Synched'))
         for i, prop in enumerate(props):
             led = SiriusLedState(grpbx, init_channel=self.get_pvname(prop[0]))
             led.setOffColor(led.Red)

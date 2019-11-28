@@ -30,7 +30,8 @@ class BPMMain(BaseWidget):
         hbl.addStretch()
         chan2vals = {
             'asyn.CNCT': 1, 'asyn.ENBL': 1,
-            'RFFEasyn.CNCT': 1, 'RFFEasyn.ENBL': 1}
+            'RFFEasyn.CNCT': 1, 'RFFEasyn.ENBL': 1,
+            'ADCAD9510PllStatus-Mon': 1}
         chan2vals = {self.get_pvname(k): v for k, v in chan2vals.items()}
         led = PyDMLedMultiChannel(self, channels2values=chan2vals)
         hbl.addWidget(led)
