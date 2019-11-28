@@ -398,10 +398,13 @@ class PSTestWindow(SiriusMainWindow):
             {'sec': 'SI', 'sub': 'Fam', 'dis': 'PS', 'dev': '(B|Q.*|S.*)'}))
         psnames.extend(PSSearch.get_psnames(
             {'sec': 'SI', 'sub': '[0-2][0-9].*', 'dis': 'PS',
-             'dev': '(CH|CV|QD.*|QF.*|Q[1-4])'}))
-        psnames.extend(PSSearch.get_psnames(
-            {'sec': 'SI', 'sub': '[0-2][0-9](M1|M2|C1|C3)', 'dis': 'PS',
-             'dev': 'QS'}))
+             'dev': '(CH|CV)'}))
+        # psnames.extend(PSSearch.get_psnames(
+        #     {'sec': 'SI', 'sub': '[0-2][0-9].*', 'dis': 'PS',
+        #      'dev': '(QD.*|QF.*|Q[1-4])'}))
+        # psnames.extend(PSSearch.get_psnames(
+        #     {'sec': 'SI', 'sub': '[0-2][0-9](M1|M2|C1|C3)', 'dis': 'PS',
+        #      'dev': 'QS'}))
         return psnames
 
     def _get_selected_ps(self):
