@@ -56,19 +56,15 @@ class PSTestWindow(SiriusMainWindow):
         self.setCentralWidget(self.central_widget)
 
         # power supplies selection
-        self.search_le = QLineEdit()
-        self.search_le.setPlaceholderText('Filter...')
-        self.search_le.editingFinished.connect(self._filter_psnames)
-
-        self.tree = PVNameTree(items=self._get_tree_names(),
-                               tree_levels=('sec', 'mag_group'), parent=self)
-        self.tree.setHeaderHidden(True)
+        self.tree = PVNameTree(
+            items=self._get_tree_names(),
+            tree_levels=('sec', 'mag_group'), parent=self)
+        self.tree.tree.setHeaderHidden(True)
         self.tree.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
-        self.tree.setColumnCount(1)
-        self.tree.doubleClicked.connect(self._open_detail)
+        self.tree.tree.setColumnCount(1)
+        self.tree.tree.doubleClicked.connect(self._open_detail)
         gbox_select = QGroupBox('Select power supplies: ', self)
         select_layout = QVBoxLayout()
-        select_layout.addWidget(self.search_le)
         select_layout.addWidget(self.tree)
         gbox_select.setLayout(select_layout)
 
@@ -427,20 +423,6 @@ class PSTestWindow(SiriusMainWindow):
             {'sec': 'SI', 'sub': '[0-2][0-9](M1|M2|C1|C3)', 'dis': 'PS',
              'dev': 'QS'}))
         return psnames
-
-    def _filter_psnames(self):
-        text = self.search_le.text()
-
-        try:
-            pattern = _re.compile(text, _re.I)
-        except Exception:  # Ignore malformed patterns?
-            pattern = _re.compile("malformed")
-
-        for node in self.tree._leafs:
-            if pattern.search(node.data(0, 0)):
-                node.setHidden(False)
-            else:
-                node.setHidden(True)
 
     def _get_selected_ps(self):
         devices = self.tree.checked_items()

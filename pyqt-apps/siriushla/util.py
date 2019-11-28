@@ -116,7 +116,7 @@ def get_appropriate_color(section='SI'):
         'TB': '#f8bbd0',
         'BO': '#c8e6c9',
         'TS': '#b2ebf2',
-        'SI': '#bbdefb',
+        'SI': '#56aeff',
     }
     return dic[section]
 

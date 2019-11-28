@@ -56,7 +56,6 @@ class ProgressDialog(QDialog):
         self.setLayout(self.layout)
 
         # Set initial value
-        self._progress_value = 0
         self.progress_bar.setValue(0)
 
         # Set progress bar limits and connect signals
@@ -117,18 +116,16 @@ class ProgressDialog(QDialog):
             pass
 
     def _is_finished(self):
-        if self._progress_value == self.progress_bar.maximum():
+        if self.progress_bar.value() == self.progress_bar.maximum():
             self._exit_dlg(1)
 
     def set_value(self, value):
         """Set progress bar value."""
-        self._progress_value = value
         self.progress_bar.setValue(value)
 
     def inc_value(self):
         """Increase value."""
-        self._progress_value += 1
-        self.progress_bar.setValue(self._progress_value)
+        self.progress_bar.setValue(self.progress_bar.value()+1)
 
     def exec_(self):
         """Override."""

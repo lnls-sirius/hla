@@ -30,7 +30,6 @@ class SelectAndApplyPVsWidget(QWidget):
         self._client = client
         self._wrapper = wrapper
         self._current_config = None
-        self._nr_checked_items = 0
 
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.DEBUG)
@@ -45,30 +44,11 @@ class SelectAndApplyPVsWidget(QWidget):
             '#set_btn{font-size:1.5em; min-width:8em;}')
         self._set_btn.clicked.connect(self._set)
 
-        self._tree_msg = QLabel(self)
-        self._tree_msg.setObjectName('tree_msg')
-
         # Add Selection Tree
-        self._tree_check_count = QLabel(self)
-        self._tree_check_count.setObjectName('tree_check_count')
-        self._tree = PVNameTree(
-            tree_levels=('sec', 'dis', 'dev'))
-        self._tree.setColumnCount(3)
-        self._tree.setObjectName('tree')
-        self._tree.itemChecked.connect(self._item_checked)
-
-        # Add filter for tree
-        self._filter_le = QLineEdit(self)
-        self._filter_le.setPlaceholderText("Filter PVs...")
-        self._filter_le.textChanged.connect(self._filter_pvs)
+        self._tree = PVNameTree(tree_levels=('sec', 'dis', 'dev'))
 
         self.setLayout(QVBoxLayout())
-        hl = QHBoxLayout()
-        hl.addWidget(self._tree_msg)
-        hl.addWidget(self._tree_check_count)
         self.layout().addWidget(QLabel('<h3>Configuration</h3>'))
-        self.layout().addWidget(self._filter_le)
-        self.layout().addLayout(hl)
         self.layout().addWidget(self._tree)
         hl = QHBoxLayout()
         hl.addStretch()
@@ -149,7 +129,6 @@ class SelectAndApplyPVsWidget(QWidget):
     @Slot(str, str)
     def fill_config(self, config_type, config_name):
         self._tree.clear()
-        self._nr_checked_items = 0
         try:
             ret = self._client.get_config_info(
                 config_name, config_type=config_type)
@@ -158,46 +137,13 @@ class SelectAndApplyPVsWidget(QWidget):
             self._current_config = ret
             pvs = self._current_config['value']['pvs']
             self._tree.items = pvs
-            self._tree_msg.setText(
-                'Configuration has {} items'.format(len(pvs)))
             self._tree.check_all()
-            self._tree.collapseAll()
-            self._filter_pvs(self._filter_le.text())
+            self._tree.collapse_all()
         except KeyError:
-            self._tree_msg.setText('Configuration has no field pvs')
+            self._tree.message = 'Configuration has no field pvs'
         except ConfigDBException as err:
-            self._tree_msg.setText(
-                'Failed to retrieve configuration: error {}'.format(
-                    err.server_code))
-
-    @Slot(str)
-    def _filter_pvs(self, text):
-        """Filter pvnames based on text inserted at line edit."""
-        selected_pvs = 0
-        try:
-            pattern = re.compile(text, re.I)
-        except Exception:
-            return
-
-        for node in self._tree._leafs:
-            if pattern.search(node.data(0, 0)):
-                node.setHidden(False)
-                selected_pvs += 1
-            else:
-                # node.setCheckState(0, Qt.Unchecked)
-                node.setHidden(True)
-
-        self._tree_msg.setText('Showing {} PVs.'.format(selected_pvs))
-
-    @Slot(QTreeItem, int, int)
-    def _item_checked(self, item, column, value):
-        if item.childCount() == 0:
-            if value == Qt.Checked:
-                self._nr_checked_items += 1
-            elif value == Qt.Unchecked:
-                self._nr_checked_items -= 1
-        self._tree_check_count.setText(
-            '{} PVs checked.'.format(self._nr_checked_items))
+            self._tree.message = 'Failed to retrieve configuration:' + \
+                ' error {}'.format(err.server_code)
 
 
 class SelectConfigWidget(QWidget):

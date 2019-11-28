@@ -14,7 +14,7 @@ class EpicsTask(QThread):
     exit_task (method)
     """
 
-    PVs = []
+    PVs = dict()
     currentItem = Signal(str)
     itemDone = Signal()
     completed = Signal()
@@ -45,3 +45,10 @@ class EpicsTask(QThread):
     def exit_task(self):
         """Set flag to exit thread."""
         self._quit_task = True
+
+    def get_pv(self, pvn):
+        pv = self.PVs.get(pvn)
+        if pv is None:
+            pv = self._cls_epics(pvn)
+            self.PVs[pvn] = pv
+        return pv
