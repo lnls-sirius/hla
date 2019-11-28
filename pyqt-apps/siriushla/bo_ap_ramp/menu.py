@@ -19,9 +19,8 @@ class Settings(QMenuBar):
     """Widget to choose and to control a BoosterRamp configuration."""
 
     newConfigNameSignal = Signal(str)
-    loadSignal = Signal()
+    loadSignal = Signal(dict)
     opticsSettingsSignal = Signal(str, str)
-    diagSettingsSignal = Signal(list)
     plotUnitSignal = Signal(str)
 
     def __init__(self, parent=None, prefix='', ramp_config=None,
@@ -149,11 +148,11 @@ class Settings(QMenuBar):
                 self.showSaveAsPopup()
                 return
         try:
-            self.ramp_config.save(new_name)
+            nconfgs_changed = self.ramp_config.save(new_name)
         except _ConfigDBException as err:
             QMessageBox.critical(self, 'Error', str(err), QMessageBox.Ok)
         else:
-            self.loadSignal.emit()
+            self.loadSignal.emit(nconfgs_changed)
 
     def _showOpticsSettingsPopup(self):
         self._opticsSettingsPopup = _OpticsAdjustSettings(

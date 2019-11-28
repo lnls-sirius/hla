@@ -387,6 +387,7 @@ class BONormEdit(SiriusMainWindow):
 
     def verifySync(self):
         """Verify sync status related to ConfServer."""
+        self.norm_config.verify_syncronized()
         if not self.norm_config.synchronized:
             self.act_save.setEnabled(True)
             self.label_name.setStyleSheet("color:red;")
@@ -600,9 +601,15 @@ class BONormEdit(SiriusMainWindow):
             self._norm_config_oldname = ''
 
     def updateEnergy(self, energy):
-        """Updta energy and strength limits."""
+        """Update energy and strength limits."""
         self.energy = energy
         self._handleStrengtsLimits(self.cb_checklims.checkState())
+
+    def updateName(self, name):
+        """Update norm. config. name."""
+        self.norm_config.name = name
+        self.label_name.setText('<h2>'+name+'</h2>')
+        self.verifySync()
 
     @Slot(str, str)
     def updateSettings(self, tunecorr_configname, chromcorr_configname):

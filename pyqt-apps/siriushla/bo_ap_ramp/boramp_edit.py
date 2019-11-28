@@ -1317,13 +1317,17 @@ class MultipolesRamp(QWidget):
                 return
         if ramp_config is not None:
             self.ramp_config = ramp_config
-            self.bonorm_edit_dict = dict()
         self._getNormalizedConfigs()
         self.table.cellChanged.disconnect(self._handleCellChanged)
         self._setupTable()
         self.updateTable()
         self.updateGraph(update_axis=True)
         self._verifyWarnings()
+
+    def update_nconfigs_windows(self, nconfigs_changed):
+        for name, wind in self.bonorm_edit_dict.items():
+            if name in nconfigs_changed.keys():
+                wind.updateName(nconfigs_changed[name])
 
     @Slot(ramp.BoosterNormalized, str)
     def handleNormConfigsChanged(self, nconfig=None, old_nconfig_name=''):
