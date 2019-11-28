@@ -22,10 +22,9 @@ class EpicsConnector(EpicsTask):
         if self._quit_task:
             self.completed.emit()
             return
-        EpicsTask.PVs = []
         for pvn in self._pvnames:
             self.currentItem.emit(pvn)
-            EpicsTask.PVs.append(self._cls_epics(pvn))
+            self.get_pv(pvn)
             self.itemDone.emit()
             if self._quit_task:
                 break

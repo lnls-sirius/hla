@@ -17,15 +17,14 @@ class EpicsGetter(EpicsTask):
     def run(self):
         """Thread execution."""
         if not self._quit_task:
-            for i in range(len(self._pvnames)):
-                pv = EpicsTask.PVs[i]
-                self.currentItem.emit(pv.pvname)
-                value = pv.get(self._timeout)
-                self.itemDone.emit()
+            for pvn in self._pvnames:
+                self.currentItem.emit(pvn)
+                value = self.get_pv(pvn).get(self._timeout)
                 if value is not None:
-                    self.itemRead.emit(pv.pvname, QVariant(value))
+                    self.itemRead.emit(pvn, QVariant(value))
                 else:
-                    self.itemNotRead.emit(pv.pvname)
+                    self.itemNotRead.emit(pvn)
+                self.itemDone.emit()
                 if self._quit_task:
                     break
         self.completed.emit()
