@@ -15,6 +15,5 @@ args = parser.parse_args()
 
 app = SiriusApplication()
 app.open_window(
-    PUControlWindow, parent=None, section=args.section, devtype='PU',
-    is_main=False)
+    PUControlWindow, parent=None, section=args.section, is_main=False)
 sys.exit(app.exec_())

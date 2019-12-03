@@ -15,22 +15,15 @@ class PSContainer(QWidget):
 
     def __init__(self, widget, parent=None):
         super().__init__(parent)
-        # Works for PS or MA
         self._widget = widget
         self._name = widget.devname
 
         self._dclinks = list()
-        if self._name == 'BO-Fam:MA-B':
-            psnames = MASearch.conv_maname_2_psnames(self._name)
-            for name in psnames:
-                self._dclinks.extend(PSSearch.conv_psname_2_dclink(name))
-        elif self._name != 'SI-Fam:MA-B1B2':
-            psname = self._name.replace(':MA-', ':PS-')
-            dclinks = PSSearch.conv_psname_2_dclink(psname)
-            if dclinks:
-                dclinks_type = PSSearch.conv_psname_2_psmodel(dclinks[0])
-                if dclinks_type != 'REGATRON_DCLink':
-                    self._dclinks = dclinks
+        dclinks = PSSearch.conv_psname_2_dclink(self._name)
+        if dclinks:
+            dclinks_type = PSSearch.conv_psname_2_psmodel(dclinks[0])
+            if dclinks_type != 'REGATRON_DCLink':
+                self._dclinks = dclinks
 
         self._setup_ui()
         self._create_actions()
@@ -172,7 +165,7 @@ class BasePSControlWidget(QWidget):
     HORIZONTAL = 0
     VERTICAL = 1
 
-    def __init__(self, dev_type, orientation=0, parent=None):
+    def __init__(self, orientation=0, parent=None):
         """Class constructor.
 
         Parameters:
@@ -184,20 +177,12 @@ class BasePSControlWidget(QWidget):
         super(BasePSControlWidget, self).__init__(parent)
         self._orientation = orientation
 
-        self._dev_type = dev_type
-        if dev_type == 'PS':
-            self._dev_list = PSSearch.get_psnames(self._getFilter())
-        elif dev_type == 'MA':
-            self._dev_list = MASearch.get_manames(self._getFilter())
-        else:
-            raise ValueError("Invalid device type, must be either PS or MA.")
+        self._dev_list = PSSearch.get_psnames(self._getFilter())
 
         self.all_props = get_prop2label(self._dev_list[0])
         self.visible_props = {
-            'detail', 'state', 'intlk', 'setpoint', 'monitor'}
-        if 'psconn' in self.all_props:
-            self.visible_props.update(
-                ['psconn', 'strength_sp', 'strength_mon'])
+            'detail', 'state', 'intlk', 'setpoint', 'monitor',
+            'strength_sp', 'strength_mon'}
         if 'trim' in self.all_props:
             self.visible_props.update(['trim', ])
 
@@ -266,9 +251,8 @@ class BasePSControlWidget(QWidget):
             # Loop power supply to create all the widgets of a groupbox
             group_widgets = list()
             for n, psname in enumerate(pwrsupplies):
-                ps_widget = SummaryWidget(name=psname,
-                                          visible_props=self.visible_props,
-                                          parent=self)
+                ps_widget = SummaryWidget(
+                    name=psname, visible_props=self.visible_props, parent=self)
                 pscontainer = PSContainer(ps_widget, self)
                 group_widgets.append(pscontainer)
                 self.containers_dict[psname] = pscontainer
@@ -305,7 +289,7 @@ class BasePSControlWidget(QWidget):
             w_lay.addWidget(widget, alignment=Qt.AlignLeft)
         w_lay.addStretch()
 
-        min_width = '41.5' if self._dev_type == 'PS' else '57.5'
+        min_width = '51.0'
         scr_area = QScrollArea(self)
         scr_area.setObjectName('scr_area')
         scr_area.setStyleSheet('#scr_area{min-width: '+min_width+'em;}')

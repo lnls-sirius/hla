@@ -12,18 +12,14 @@ from .PSTrimWindow import PSTrimWindow
 class PSControlWindow(SiriusMainWindow):
     """Base window to show devices of a section in tabs."""
 
-    def __init__(self, section, discipline, device, parent=None):
+    def __init__(self, section, device, parent=None):
         """Class constructor."""
         super(PSControlWindow, self).__init__(parent)
         self.setObjectName(section+'App')
         self._section = section
-        self._discipline = discipline
         self._device = device
-        if discipline.lower().startswith('ma'):
-            icon = qta.icon('mdi.magnet', color=get_appropriate_color(section))
-        else:
-            icon = qta.icon(
-                'mdi.car-battery', color=get_appropriate_color(section))
+        icon = qta.icon(
+            'mdi.car-battery', color=get_appropriate_color(section))
         self.setWindowIcon(icon)
 
         self._setup_ui()
@@ -33,9 +29,6 @@ class PSControlWindow(SiriusMainWindow):
             'BO': 'Booster ',
             'TS': 'BTS ',
             'SI': 'Storage Ring '}
-        dis2label = {
-            'MA': 'Magnets ',
-            'PS': 'Power Supplies '}
         dev2label = {
             'dipole': 'Dipoles ',
             'quadrupole': 'Quadrupoles ',
@@ -46,12 +39,11 @@ class PSControlWindow(SiriusMainWindow):
         #     'corrector-fast': 'Fast Correctors '}
         self.setWindowTitle(sec2label[section] +
                             (dev2label[device] if device else '') +
-                            dis2label[discipline])
+                            'Power Supplies ')
 
     def _setup_ui(self):
         self.widget = ControlWidgetFactory.factory(
-            parent=self, section=self._section,
-            discipline=self._discipline, device=self._device)
+            parent=self, section=self._section, device=self._device)
         self._connect_buttons(self.widget)
         self.setCentralWidget(self.widget)
 

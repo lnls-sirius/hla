@@ -20,9 +20,7 @@ class PSDetailWindow(SiriusMainWindow):
         else:
             self._psname = [_PVName(psn) for psn in psname]
         name = self._psname[0]
-        dis = name.dis
-        self._is_dclink = (dis == 'PS') and \
-            ('dclink' in PSSearch.conv_psname_2_pstype(name))
+        self._is_dclink = 'dclink' in PSSearch.conv_psname_2_pstype(name)
         secs = {'AS', 'TB', 'BO', 'TS', 'SI', 'LI'}
         if name.sec in secs:
             sec = name.sec
@@ -31,12 +29,8 @@ class PSDetailWindow(SiriusMainWindow):
         else:
             sec = 'AS'
         self.setObjectName(sec+'App')
-        if name.dis.lower().startswith('ma'):
-            icon = qta.icon(
-                'mdi.magnet', color=get_appropriate_color(sec))
-        else:
-            icon = qta.icon(
-                'mdi.car-battery', color=get_appropriate_color(sec))
+        icon = qta.icon(
+            'mdi.car-battery', color=get_appropriate_color(sec))
         self.setWindowIcon(icon)
         self._setup_ui()
 
@@ -51,32 +45,24 @@ class PSDetailWindow(SiriusMainWindow):
         self.setCentralWidget(self.widget)
 
     def _connect_buttons(self, widget):
-        if self._psname[0] == 'BO-Fam:MA-B':
-            w1 = widget.findChild(QPushButton, 'dclink1_button')
-            w2 = widget.findChild(QPushButton, 'dclink2_button')
-            psnames = MASearch.conv_maname_2_psnames(self._psname[0])
-            for psname, w in zip(psnames, (w1, w2)):
-                dclinks = PSSearch.conv_psname_2_dclink(psname)
-                connect_window(w, PSDetailWindow, self, psname=dclinks)
-        elif self._psname[0] != 'SI-Fam:MA-B1B2':
-            w = widget.findChild(QPushButton, 'dclink_button')
-            if w:
-                psname = self._psname[0].replace(':MA-', ':PS-')
-                dclinks = PSSearch.conv_psname_2_dclink(psname)
-                if dclinks:
-                    dclink_type = PSSearch.conv_psname_2_psmodel(dclinks[0])
-                    if dclink_type != 'REGATRON_DCLink':
-                        connect_window(w, PSDetailWindow, self, psname=dclinks)
-                    else:
-                        w.setHidden(True)
+        w = widget.findChild(QPushButton, 'dclink_button')
+        if w:
+            psname = self._psname[0]
+            dclinks = PSSearch.conv_psname_2_dclink(psname)
+            if dclinks:
+                dclink_type = PSSearch.conv_psname_2_psmodel(dclinks[0])
+                if dclink_type != 'REGATRON_DCLink':
+                    connect_window(w, PSDetailWindow, self, psname=dclinks)
                 else:
                     w.setHidden(True)
+            else:
+                w.setHidden(True)
 
 
 if __name__ == '__main__':
     import sys
     from siriushla.sirius_application import SiriusApplication
     app = SiriusApplication()
-    ps = PSDetailWindow('BO-Fam:MA-B')
+    ps = PSDetailWindow('BO-Fam:PS-B-1')
     ps.show()
     sys.exit(app.exec_())
