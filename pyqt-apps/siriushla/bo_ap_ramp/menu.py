@@ -2,14 +2,16 @@
 
 from functools import partial as _part
 
-from qtpy.QtCore import Qt, Signal, Slot
+from qtpy.QtCore import Qt, Signal, Slot, QThread
 from qtpy.QtGui import QKeySequence
-from qtpy.QtWidgets import QMenuBar, QAction, QMessageBox
+from qtpy.QtWidgets import QMenuBar, QAction, QMessageBox, QLabel, QVBoxLayout
 import qtawesome as qta
 
 from siriuspy.clientconfigdb import ConfigDBException as _ConfigDBException
 from siriuspy.ramp import ramp
+from siriuspy.ramp.norm_factory import BONormFactory
 from siriushla import util
+from siriushla.widgets.windows import SiriusDialog
 from siriushla.as_ap_configdb import LoadConfigDialog as _LoadConfigDialog, \
     SaveConfigDialog as _SaveConfigDialog
 from .auxiliary_dialogs import OpticsAdjustSettings as _OpticsAdjustSettings
@@ -22,6 +24,7 @@ class Settings(QMenuBar):
     loadSignal = Signal(dict)
     opticsSettingsSignal = Signal(str, str)
     plotUnitSignal = Signal(str)
+    newNormConfigListSignal = Signal(list)
 
     def __init__(self, parent=None, prefix='', ramp_config=None,
                  tunecorr_configname='', chromcorr_configname=''):
@@ -54,6 +57,12 @@ class Settings(QMenuBar):
         self.act_save_as.setIcon(qta.icon('mdi.content-save-settings'))
         self.act_save_as.setShortcut(QKeySequence(Qt.CTRL+Qt.SHIFT+Qt.Key_S))
         self.act_save_as.triggered.connect(self.showSaveAsPopup)
+        self.config_menu.addSeparator()
+        self.act_construct_from_wfm = self.config_menu.addAction(
+            'Reconstruct norm configs from waveforms...')
+        self.act_construct_from_wfm.setIcon(qta.icon('fa5s.retweet'))
+        self.act_construct_from_wfm.triggered.connect(
+            self._handleReconstructNormFromWfms)
         self.config_menu.addSeparator()
 
         self.ramp_params_menu = self.addMenu('Ramping Parameters')
@@ -168,7 +177,68 @@ class Settings(QMenuBar):
         self.opticsSettingsSignal.emit(
             tunecorr_configname, chromcorr_configname)
 
+    def _handleReconstructNormFromWfms(self):
+        if self.ramp_config is None:
+            return
+        if not self.verifyUnsavedChanges():
+            return
+        ans = QMessageBox.question(
+            self, 'Warning',
+            'This action will permanently replace the list of normalized\n'
+            'configurations. Are you sure you want to proceed?',
+            QMessageBox.Yes | QMessageBox.Cancel)
+        if ans == QMessageBox.Cancel:
+            return
+        th = _WaitThread(self.ramp_config, self)
+        dlg = _WaitDialog(self)
+        th.opendiag.connect(dlg.show)
+        th.closediag.connect(dlg.close)
+        th.normConfigList.connect(self.newNormConfigListSignal.emit)
+        th.precReached.connect(self._showWarningPrecNotOk)
+        th.start()
+
+    @Slot(bool, float)
+    def _showWarningPrecNotOk(self, prec_ok, max_error):
+        if not prec_ok:
+            QMessageBox.warning(
+                self, 'Warning',
+                'Reconstruction was unable to reproduce waveforms\n'
+                'with 1e-5 accuracy (maximum error: {:.4g})!'.format(
+                    max_error))
+
     @Slot(ramp.BoosterRamp)
     def getRampConfig(self, ramp_config):
         """Get new BoosterRamp object."""
         self.ramp_config = ramp_config
+
+
+class _WaitDialog(SiriusDialog):
+    """Auxiliary dialog to show during a long task."""
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle('Wait')
+        lay = QVBoxLayout(self)
+        lay.addWidget(QLabel('Wait a moment...'))
+
+
+class _WaitThread(QThread):
+
+    opendiag = Signal()
+    closediag = Signal()
+    normConfigList = Signal(list)
+    precReached = Signal(bool, float)
+
+    def __init__(self, ramp_config, parent=None):
+        super().__init__(parent)
+        self.ramp_config = ramp_config
+
+    def run(self):
+        self.opendiag.emit()
+        norm_fac = BONormFactory(self.ramp_config)
+        norm_fac.read_waveforms()
+        new_norm_list = norm_fac.normalized_configs
+        self.normConfigList.emit(new_norm_list)
+        ok, max_error = norm_fac.precision_reached
+        self.precReached.emit(ok, max_error)
+        self.closediag.emit()
