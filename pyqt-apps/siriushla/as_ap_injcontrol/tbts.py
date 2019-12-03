@@ -30,14 +30,14 @@ class TLControlWindow(BaseWindow):
         # util.connect_window(LatticeAndTwiss, ShowLatticeAndTwiss,
         #                         parent=self, tl=self.tl)
         # self.menu.addAction(LatticeAndTwiss)
-        MA = QAction("MA", self)
+        PS = QAction("PS", self)
         util.connect_newprocess(
-            MA, 'sirius-hla-'+self.tl+'-ma-control.py', parent=self)
-        self.menu.addAction(MA)
-        PM = QAction("PM", self)
+            PS, 'sirius-hla-'+self.tl+'-ps-control.py', parent=self)
+        self.menu.addAction(PS)
+        PU = QAction("PU", self)
         util.connect_newprocess(
-            PM, 'sirius-hla-'+self.tl+'-pm-control.py', parent=self)
-        self.menu.addAction(PM)
+            PU, 'sirius-hla-'+self.tl+'-pu-control.py', parent=self)
+        self.menu.addAction(PU)
         SOFB = QAction("SOFB", self)
         util.connect_newprocess(
             SOFB, 'sirius-hla-'+self.tl+'-ap-sofb.py', parent=self)
@@ -129,22 +129,22 @@ class TLControlWindow(BaseWindow):
         if self.tl == 'tb':
             devices_dict = {
                 'TB-01:DI-Scrn-1': [['LI-01:PS-CH-7'], ['LI-01:PS-CV-7'], 0],
-                'TB-01:DI-Scrn-2': [['TB-01:MA-CH-1'], ['TB-01:MA-CV-1'], 1],
-                'TB-02:DI-Scrn-1': [['TB-01:MA-CH-2'], ['TB-01:MA-CV-2'], 2],
-                'TB-02:DI-Scrn-2': [['TB-02:MA-CH-1'], ['TB-02:MA-CV-1'], 3],
-                'TB-03:DI-Scrn':   [['TB-02:MA-CH-2'], ['TB-02:MA-CV-2'], 4],
-                'TB-04:DI-Scrn':   [['TB-04:MA-CH-1'], ['TB-04:MA-CV-1'], 5]}
+                'TB-01:DI-Scrn-2': [['TB-01:PS-CH-1'], ['TB-01:PS-CV-1'], 1],
+                'TB-02:DI-Scrn-1': [['TB-01:PS-CH-2'], ['TB-01:PS-CV-2'], 2],
+                'TB-02:DI-Scrn-2': [['TB-02:PS-CH-1'], ['TB-02:PS-CV-1'], 3],
+                'TB-03:DI-Scrn':   [['TB-02:PS-CH-2'], ['TB-02:PS-CV-2'], 4],
+                'TB-04:DI-Scrn':   [['TB-04:PS-CH-1'], ['TB-04:PS-CV-1'], 5]}
         elif self.tl == 'ts':
             devices_dict = {
-                'TS-01:DI-Scrn':   [['TS-01:PM-EjeSeptF', 'TS-01:PM-EjeSeptG'],
+                'TS-01:DI-Scrn':   [['TS-01:PU-EjeSeptF', 'TS-01:PU-EjeSeptG'],
                                     ['TS-01:MA-CV-1'], 0],
-                'TS-02:DI-Scrn':   [['TS-01:MA-CH'], ['TS-01:MA-CV-2'], 1],
-                'TS-03:DI-Scrn':   [['TS-02:MA-CH'], ['TS-02:MA-CV'], 2],
-                'TS-04:DI-Scrn-1': [['TS-03:MA-CH'], ['TS-03:MA-CV'], 3],
-                'TS-04:DI-Scrn-2': [['TS-04:MA-CH'], ['TS-04:MA-CV-1'], 4],
+                'TS-02:DI-Scrn':   [['TS-01:PS-CH'], ['TS-01:PS-CV-2'], 1],
+                'TS-03:DI-Scrn':   [['TS-02:PS-CH'], ['TS-02:PS-CV'], 2],
+                'TS-04:DI-Scrn-1': [['TS-03:PS-CH'], ['TS-03:PS-CV'], 3],
+                'TS-04:DI-Scrn-2': [['TS-04:PS-CH'], ['TS-04:PS-CV-1'], 4],
                 'TS-04:DI-Scrn-3': [
-                    ['TS-04:PM-InjSeptG-1', 'TS-04:PM-InjSeptG-2',
-                     'TS-04:PM-InjSeptF'], ['TS-04:MA-CV-2'], 5]}
+                    ['TS-04:PU-InjSeptG-1', 'TS-04:PU-InjSeptG-2',
+                     'TS-04:PU-InjSeptF'], ['TS-04:PS-CV-2'], 5]}
         return devices_dict
 
     def keyPressEvent(self, event):
