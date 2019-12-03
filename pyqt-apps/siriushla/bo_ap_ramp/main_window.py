@@ -140,7 +140,7 @@ class RampMain(SiriusMainWindow):
             if self.ramp_config.exist():
                 self.ramp_config.load()
                 if nconfigs_changed:
-                    self.config_parameters.mult_ramp.update_nconfigs_windows(
+                    self.config_parameters.mult_ramp.updateNormConfigsWindows(
                         nconfigs_changed)
         except _ConfigDBException as err:
             QMessageBox.critical(self, 'Error', str(err), QMessageBox.Ok)

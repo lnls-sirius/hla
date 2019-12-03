@@ -42,7 +42,7 @@ class BONormEdit(SiriusMainWindow):
         self.setWindowTitle('Edit Normalized Configuration')
         self.setObjectName('BOApp')
         self.prefix = prefix
-        self.norm_config = norm_config
+        self.norm_config = _dcopy(norm_config)
         self.energy = energy
 
         self._aux_magnets = magnets
@@ -597,7 +597,7 @@ class BONormEdit(SiriusMainWindow):
     def _updateRampConfig(self):
         if self.norm_config is not None:
             self.normConfigChanged.emit(
-                self.norm_config, self._norm_config_oldname)
+                _dcopy(self.norm_config), self._norm_config_oldname)
             self._norm_config_oldname = ''
 
     def updateEnergy(self, energy):

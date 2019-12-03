@@ -1324,10 +1324,12 @@ class MultipolesRamp(QWidget):
         self.updateGraph(update_axis=True)
         self._verifyWarnings()
 
-    def update_nconfigs_windows(self, nconfigs_changed):
-        for name, wind in self.bonorm_edit_dict.items():
-            if name in nconfigs_changed.keys():
-                wind.updateName(nconfigs_changed[name])
+    def updateNormConfigsWindows(self, nconfigs_changed):
+        for old_name, new_name in nconfigs_changed.items():
+            if old_name in self.bonorm_edit_dict.keys():
+                w = self.bonorm_edit_dict.pop(old_name)
+                self.bonorm_edit_dict[new_name] = w
+                w.updateName(new_name)
 
     @Slot(ramp.BoosterNormalized, str)
     def handleNormConfigsChanged(self, nconfig=None, old_nconfig_name=''):
