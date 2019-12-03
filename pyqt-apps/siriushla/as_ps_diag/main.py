@@ -54,10 +54,9 @@ class PSDiag(SiriusMainWindow):
         panel.setLayout(panel_lay)
 
         # # Leds Header
-        for i, lab in enumerate(
-                ['', 'PS\nConn?', 'MA\nConn?',
-                 'Power\nState', 'Interlock',
-                 'OpMode\nSlowRef?', 'Current\nDiff']):
+        for i, lab in enumerate([
+                '', 'PS\nConn?', 'Power\nState', 'Interlock',
+                'OpMode\nSlowRef?', 'Current\nDiff']):
             label = QLabel(lab, panel, alignment=Qt.AlignCenter)
             if i > 0:
                 label.setStyleSheet('min-width:3.4em; max-width:3.4em;')
@@ -113,7 +112,6 @@ class PSDiag(SiriusMainWindow):
                     psnames = PSSearch.get_psnames(filters=filt)
                     if not psnames:
                         continue
-                    maconn_chs = list()
                     psconn_chs = list()
                     ps_ch2vals = dict()
                     intlk_ch2vals = dict()
@@ -121,10 +119,6 @@ class PSDiag(SiriusMainWindow):
                     diff_ch2vlas = dict()
                     for name in psnames:
                         pname = self._prefix + name
-                        maname = MASearch.conv_psname_2_psmaname(name)
-                        if maname:
-                            maconn_chs.append(
-                                self._prefix+maname+':Version-Cte')
                         ps_ch2vals[pname+':PwrState-Sts'] = _on
                         if name.dis == 'PS':
                             psconn_chs.append(pname+':Version-Cte')
@@ -150,10 +144,6 @@ class PSDiag(SiriusMainWindow):
                         alignment=Qt.AlignRight | Qt.AlignVCenter)
                     psconn_led = MyLedMultiConnection(
                         filters=f, parent=panel, channels=psconn_chs)
-                    maconn_led = MyLedMultiConnection(
-                        filters=f.replace('PS', 'MA') if psnames[0].dis == 'PS'
-                        else f.replace('PU', 'PM'),
-                        parent=panel, channels=maconn_chs)
                     ps_led = MyLedMultiChannel(
                         filters=f, parent=panel, channels2values=ps_ch2vals)
                     intlk_led = MyLedMultiChannel(
@@ -161,13 +151,11 @@ class PSDiag(SiriusMainWindow):
 
                     suf = sec+filt['dev'].strip('.*')+'_led'
                     psconn_led.setObjectName('psconn' + suf)
-                    maconn_led.setObjectName('maconn' + suf)
                     ps_led.setObjectName('ps' + suf)
                     intlk_led.setObjectName('intlk' + suf)
 
                     panel_lay.addWidget(ps_label, i, 0)
                     panel_lay.addWidget(psconn_led, i, 1)
-                    panel_lay.addWidget(maconn_led, i, 2)
                     panel_lay.addWidget(ps_led, i, 3)
                     panel_lay.addWidget(intlk_led, i, 4)
 
@@ -535,9 +523,10 @@ class LogTable(QTreeView, PyDMWidget):
         """Trigger open PS detail window."""
         idx = self.selectedIndexes()
         text = self._model.data(self._model.index(idx[0].row(), 3))
-        if SiriusPVName(text).dis == 'MA':
+        text = SiriusPVName(text)
+        if text.dis == 'PS':
             _run_newprocess(['sirius-hla-as-ps-detail.py', text])
-        elif SiriusPVName(text).dis == 'PM':
+        elif text.dis == 'PU':
             _run_newprocess(['sirius-hla-as-pu-detail.py', text])
         else:
             try:
