@@ -384,7 +384,7 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
             msg = _MultiChannelStatusDialog(
                 parent=self, pvs=pvs,
                 text='There are PVs with values different\n'
-                     'from the desired values!',
+                     'from the desired ones!',
                 fun_show_diff=self._show_diff)
             msg.exec_()
         super().mouseDoubleClickEvent(ev)
