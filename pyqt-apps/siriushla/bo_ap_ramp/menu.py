@@ -80,13 +80,13 @@ class Settings(QMenuBar):
             self.act_tune, 'sirius-hla-bo-di-tune.py', parent=self)
 
         self.open_menu = self.addMenu('Open...')
-        self.act_ma = QAction('MA', self)
+        self.act_ma = QAction('PS', self)
         self.act_ma.setIcon(qta.icon('mdi.magnet'))
-        util.connect_newprocess(self.act_ma, 'sirius-hla-bo-ma-control.py',
+        util.connect_newprocess(self.act_ma, 'sirius-hla-bo-ps-control.py',
                                 parent=self)
-        self.act_pm = QAction('PM', self)
+        self.act_pm = QAction('PU', self)
         self.act_pm.setIcon(qta.icon('mdi.current-ac'))
-        util.connect_newprocess(self.act_pm, 'sirius-hla-bo-pm-control.py',
+        util.connect_newprocess(self.act_pm, 'sirius-hla-bo-pu-control.py',
                                 parent=self)
         self.act_sofb = QAction('SOFB', self)
         self.act_sofb.setIcon(qta.icon('fa5s.hammer'))

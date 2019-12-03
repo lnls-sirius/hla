@@ -8,7 +8,7 @@ from qtpy.QtCore import Qt, Slot, Signal, QThread
 import qtawesome as qta
 
 from siriuspy.ramp import ramp
-from siriuspy.ramp.conn import ConnMA as _ConnMA, ConnRF as _ConnRF,\
+from siriuspy.ramp.conn import ConnPS as _ConnPS, ConnRF as _ConnRF,\
     ConnTI as _ConnTI
 from siriuspy.csdevice.pwrsupply import Const as _PSc
 from siriuspy.csdevice.timesys import Const as _TIc
@@ -31,7 +31,7 @@ class StatusAndCommands(QGroupBox):
         self.prefix = prefix
         self.ramp_config = ramp_config
         self._setupUi()
-        self.conn_ma = None
+        self.conn_ps = None
         self.conn_rf = None
         self.conn_ti = None
         th = _createConnectorsThread(self, prefix)
@@ -53,10 +53,10 @@ class StatusAndCommands(QGroupBox):
                 min-height:1.55em; max-height:1.55em;}""")
 
     def _setupStatusLayout(self):
-        self.led_ma_conn = PyDMLedMultiConnection(self)
-        self.led_ma_intlk = PyDMLedMultiChannel(self)
-        self.led_ma_setup = PyDMLedMultiChannel(self)
-        self.led_ma_apply = PyDMLedMultiChannel(self)
+        self.led_ps_conn = PyDMLedMultiConnection(self)
+        self.led_ps_intlk = PyDMLedMultiChannel(self)
+        self.led_ps_setup = PyDMLedMultiChannel(self)
+        self.led_ps_apply = PyDMLedMultiChannel(self)
         self.led_rf_conn = PyDMLedMultiConnection(self)
         self.led_rf_intlk = PyDMLedMultiChannel(self)
         self.led_rf_setup = PyDMLedMultiChannel(self)
@@ -68,30 +68,30 @@ class StatusAndCommands(QGroupBox):
 
         lay = QGridLayout()
         lay.addWidget(QLabel('<h4>Status</h4>'), 1, 0)
-        lay.addWidget(QLabel('<h4>MA</h4>'), 1, 1)
+        lay.addWidget(QLabel('<h4>PS</h4>'), 1, 1)
         lay.addWidget(QLabel('<h4>RF</h4>'), 1, 2)
         lay.addWidget(QLabel('<h4>TI</h4>'), 1, 3)
         lay.addWidget(QLabel('Connection', self), 2, 0)
-        lay.addWidget(self.led_ma_conn, 2, 1)
+        lay.addWidget(self.led_ps_conn, 2, 1)
         lay.addWidget(self.led_rf_conn, 2, 2)
         lay.addWidget(self.led_ti_conn, 2, 3)
         lay.addWidget(QLabel('Interlocks', self), 3, 0)
-        lay.addWidget(self.led_ma_intlk, 3, 1)
+        lay.addWidget(self.led_ps_intlk, 3, 1)
         lay.addWidget(self.led_rf_intlk, 3, 2)
         lay.addWidget(self.led_ti_intlk, 3, 3)
         lay.addWidget(QLabel('Basic Setup', self), 4, 0)
-        lay.addWidget(self.led_ma_setup, 4, 1)
+        lay.addWidget(self.led_ps_setup, 4, 1)
         lay.addWidget(self.led_rf_setup, 4, 2)
         lay.addWidget(self.led_ti_setup, 4, 3)
         lay.addWidget(QLabel('Config Applied', self), 5, 0)
-        lay.addWidget(self.led_ma_apply, 5, 1)
+        lay.addWidget(self.led_ps_apply, 5, 1)
         lay.addWidget(self.led_rf_apply, 5, 2)
         lay.addWidget(self.led_ti_apply, 5, 3)
         return lay
 
     def _setupCommandsLayout(self):
         self.bt_prepare_ma = QPushButton('Prepare magnets', self)
-        self.bt_prepare_ma.clicked.connect(self._prepare_ma)
+        self.bt_prepare_ma.clicked.connect(self._prepare_ps)
         self.bt_prepare_ma.setStyleSheet('min-height:1.5em;')
         self.bt_prepare_ti = QPushButton('Prepare timing', self)
         self.bt_prepare_ti.clicked.connect(self._prepare_ti)
@@ -138,7 +138,7 @@ class StatusAndCommands(QGroupBox):
             lay.addWidget(cb, i+1, 1)
         return lay
 
-    def _prepare_ma(self):
+    def _prepare_ps(self):
         tasks = [None]*3
         tasks[0] = _CommandThread(
             parent=self, conn=self.conn_ti,
@@ -146,9 +146,9 @@ class StatusAndCommands(QGroupBox):
                        _TIc.DsblEnbl.Dsbl),
             warn_msgs='Failed to turn magnets trigger off!')
         tasks[1] = _CommandThread(
-            parent=self, conn=self.conn_ma, use_log=True,
-            cmds=self.conn_ma.cmd_opmode_rmpwfm,
-            warn_msgs='Failed to set MA OpMode to RmpWfm!')
+            parent=self, conn=self.conn_ps, use_log=True,
+            cmds=self.conn_ps.cmd_opmode_rmpwfm,
+            warn_msgs='Failed to set PS OpMode to RmpWfm!')
         tasks[2] = _CommandThread(
             parent=self, conn=self.conn_ti,
             cmds=_part(self.conn_ti.cmd_set_magnet_trigger_state,
@@ -156,7 +156,7 @@ class StatusAndCommands(QGroupBox):
             warn_msgs='Failed to turn magnets trigger on!')
 
         labels = ['Turning magnets trigger off...',
-                  'Setting magents OpMode to RmpWfm...',
+                  'Setting power supplies OpMode to RmpWfm...',
                   'Turning magnets trigger on...']
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
@@ -170,12 +170,12 @@ class StatusAndCommands(QGroupBox):
         dlg = ProgressDialog('Preparing TI to ramp...', task, self)
         dlg.exec_()
 
-    def _apply_ma(self, manames=list(), dialog_parent=None):
+    def _apply_ps(self, psnames=list(), dialog_parent=None):
         if dialog_parent is None:
             dialog_parent = self
         task = _CommandThread(
-            parent=self, conn=self.conn_ma, use_log=True, size=len(manames),
-            cmds=_part(self.conn_ma.cmd_wfm, manames),
+            parent=self, conn=self.conn_ps, use_log=True, size=len(psnames),
+            cmds=_part(self.conn_ps.cmd_wfm, psnames),
             warn_msgs='Failed to set waveform!')
         dlg = ProgressDialog(
             'Setting magnets waveforms...', task, dialog_parent)
@@ -218,13 +218,13 @@ class StatusAndCommands(QGroupBox):
 
         sender_name = self.sender().objectName()
 
-        manames = list()
+        psnames = list()
         if not self.ramp_config.ps_normalized_configs:
             mb = QMessageBox()
             mb.setIcon(QMessageBox.Warning)
             mb.setWindowTitle('Message')
             if 'Dipole' in sender_name or 'All' in sender_name:
-                manames = ['BO-Fam:MA-B', ]
+                psnames = ['BO-Fam:PS-B-1', 'BO-Fam:PS-B-2']
                 msg = 'Only Dipole will be applied because there is no '\
                       'normalized configuration defined!'
                 mb.setText(msg)
@@ -235,18 +235,18 @@ class StatusAndCommands(QGroupBox):
                 mb.exec_()
                 return
         else:
-            manames = self.conn_ma.manames
+            psnames = self.conn_ps.psnames
 
         if 'Dipole' in sender_name:
-            self._apply_ma(manames, dialog_parent)
+            self._apply_ps(psnames, dialog_parent)
             self._apply_ti(dialog_parent)
         elif 'Multipoles' in sender_name:
-            self._apply_ma(manames, dialog_parent)
+            self._apply_ps(psnames, dialog_parent)
         elif 'RF' in sender_name:
             self._apply_rf(dialog_parent)
             self._apply_ti(dialog_parent)
         elif 'All' in sender_name:
-            self._apply_ma(manames, dialog_parent)
+            self._apply_ps(psnames, dialog_parent)
             self._apply_rf(dialog_parent)
             self._apply_ti(dialog_parent)
 
@@ -267,25 +267,25 @@ class StatusAndCommands(QGroupBox):
     def handleLoadRampConfig(self, ramp_config):
         """Receive connectors."""
         self.ramp_config = ramp_config
-        self.conn_ma.get_ramp_config(self.ramp_config)
+        self.conn_ps.get_ramp_config(self.ramp_config)
         self.conn_ti.get_ramp_config(self.ramp_config)
         self.conn_rf.get_ramp_config(self.ramp_config)
-        self.update_ma_params()
+        self.update_ps_params()
         self.update_rf_params()
         self.update_ti_params()
 
-    def update_ma_params(self):
-        """Update MA parameters leds channels2values dict."""
+    def update_ps_params(self):
+        """Update PS parameters leds channels2values dict."""
         if self.ramp_config is None:
             return
         if not self.ramp_config.ps_normalized_configs:
             return
         c2v = dict()
-        for maname in self.conn_ma.manames:
-            wf = self.ramp_config.ps_waveform_get(maname)
-            c2v[self.prefix + maname + ':Wfm-RB'] = {
+        for psname in self.conn_ps.psnames:
+            wf = self.ramp_config.ps_waveform_get(psname)
+            c2v[self.prefix + psname + ':Wfm-RB'] = {
                 'value': wf.currents, 'comp': 'cl', 'abs_tol': 1e-5}
-        self.led_ma_apply.set_channels2values(c2v)
+        self.led_ps_apply.set_channels2values(c2v)
 
     def update_rf_params(self):
         """Update RF parameters leds channels2values dict."""
@@ -407,8 +407,8 @@ class _CommandThread(QThread):
 
     def _get_subsystem(self):
         conn_name = self._conn.__class__.__name__
-        if conn_name == 'ConnMA':
-            return 'MA'
+        if conn_name == 'ConnPS':
+            return 'PS'
         elif conn_name == 'ConnTI':
             return 'TI'
         elif conn_name == 'ConnRF':
@@ -456,7 +456,7 @@ class _createConnectorsThread(QThread):
 
     def run(self):
         # Create connectors
-        self.parent.conn_ma = _ConnMA(prefix=self.prefix)
+        self.parent.conn_ps = _ConnPS(prefix=self.prefix)
         self.parent.conn_ti = _ConnTI(prefix=self.prefix)
         self.parent.conn_rf = _ConnRF(prefix=self.prefix)
 
@@ -464,12 +464,12 @@ class _createConnectorsThread(QThread):
         pfx = self.prefix
 
         # # Connection Leds
-        for conn_name in ['conn_ma', 'conn_rf', 'conn_ti']:
+        for conn_name in ['conn_ps', 'conn_rf', 'conn_ti']:
             conn = getattr(self.parent, conn_name)
             c2v_conn = list()
             conn_type = conn.__class__.__name__.strip('Conn')
             for p in conn.properties:
-                if conn_type == 'MA':
+                if conn_type == 'PS':
                     if 'PwrState' in conn[p].name:
                         c2v_conn.append(pfx + conn[p].pvname_rb)
                 else:
@@ -478,8 +478,8 @@ class _createConnectorsThread(QThread):
             led = getattr(self.parent, led_name)
             led.set_channels(c2v_conn)
 
-        # # MA
-        conn = getattr(self.parent, 'conn_ma')
+        # # PS
+        conn = getattr(self.parent, 'conn_ps')
         c2v_intlk = dict()
         c2v_setup = dict()
         c2v_apply = dict()
@@ -492,9 +492,9 @@ class _createConnectorsThread(QThread):
                 c2v_setup[pfx + conn[p].pvname_rb] = _PSc.PwrStateSts.On
             elif 'Wfm' in p:
                 c2v_apply[pfx + conn[p].pvname_rb] = None
-        self.parent.led_ma_intlk.set_channels2values(c2v_intlk)
-        self.parent.led_ma_setup.set_channels2values(c2v_setup)
-        self.parent.led_ma_apply.set_channels2values(c2v_apply)
+        self.parent.led_ps_intlk.set_channels2values(c2v_intlk)
+        self.parent.led_ps_setup.set_channels2values(c2v_setup)
+        self.parent.led_ps_apply.set_channels2values(c2v_apply)
 
         # # RF
         conn = getattr(self.parent, 'conn_rf')
