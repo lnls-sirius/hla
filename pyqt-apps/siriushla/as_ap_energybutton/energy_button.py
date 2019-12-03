@@ -23,7 +23,7 @@ class EnergyButton(QWidget):
         """Setups widget interface."""
         super().__init__(parent)
         self._section = section
-        self.dip, self.mags = init_section(section.upper())
+        self.dips, self.mags = init_section(section.upper())
         self._items_fail = []
         self._items_success = []
         self._setup_ui()
@@ -43,13 +43,13 @@ class EnergyButton(QWidget):
         self.energy_value.setDecimals(4)
 
         if self.section == 'tb':
-            sp_channel = _vaca_prefix + 'TB-Fam:MA-B:Energy-RB'
+            sp_channel = _vaca_prefix + 'TB-Fam:PS-B:Energy-RB'
         elif self.section == 'bo':
-            sp_channel = _vaca_prefix + 'BO-Fam:MA-B:Energy-RB'
+            sp_channel = _vaca_prefix + 'BO-Fam:PS-B-1:Energy-RB'
         elif self.section == 'ts':
-            sp_channel = _vaca_prefix + 'TS-Fam:MA-B:Energy-RB'
+            sp_channel = _vaca_prefix + 'TS-Fam:PS-B:Energy-RB'
         elif self.section == 'si':
-            sp_channel = _vaca_prefix + 'SI-Fam:MA-B1B2:Energy-RB'
+            sp_channel = _vaca_prefix + 'SI-Fam:PS-B1B2-1:Energy-RB'
         else:
             raise RuntimeError
         self.energy_sp = PyDMLabel(self)
@@ -117,7 +117,7 @@ class EnergyButton(QWidget):
         # Get selected PVs
         selected_pvs = set(self._tree.checked_items())
         mags = [mag for mag in self.mags if mag in selected_pvs]
-        pvs = self.dip + mags
+        pvs = self.dips + mags
 
         conn = EpicsConnector(pvs, parent=self)
         get_task = EpicsGetter(pvs, parent=self)
@@ -136,13 +136,18 @@ class EnergyButton(QWidget):
             return
 
         energy = self.energy_value.value()
-        pvs, values = zip(*self._items_success[1:])  # remove dipole
+        # remove dipole
+        pvs, values = zip(*self._items_success[len(self.dips):])
         delays = [0.0, ] * len(pvs)
         self._items_success = []
 
-        conn = EpicsConnector(self.dip, parent=self)
-        set_dip = EpicsSetter(self.dip, [energy, ], [0.0, ], parent=self)
-        check_dip = EpicsChecker(self.dip, [energy, ], [0.0, ], parent=self)
+        conn = EpicsConnector(self.dips, parent=self)
+        set_dip = EpicsSetter(
+            self.dips, [energy, ]*len(self.dips), [0.0, ]*len(self.dips),
+            parent=self)
+        check_dip = EpicsChecker(
+            self.dip, [energy, ]*len(self.dips), [0.0, ]*len(self.dips),
+            parent=self)
         check_dip.itemChecked.connect(self._check_status)
 
         dlg = ProgressDialog(
