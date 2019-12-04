@@ -10,8 +10,7 @@ from qtpy.QtGui import QColor
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.csdevice.orbitcorr import SOFBFactory
 from siriushla.widgets import SiriusConnectionSignal
-from .base import BaseWidget, Graph, InfLine
-from .correctors import CorrectorsWidget
+from .base import Graph, InfLine
 
 
 class ShowMatrixWidget(QWidget):

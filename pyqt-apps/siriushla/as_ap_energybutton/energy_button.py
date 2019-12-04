@@ -2,7 +2,7 @@
 
 from qtpy.QtCore import Slot, QVariant
 from qtpy.QtWidgets import QVBoxLayout, QWidget, QDoubleSpinBox, QPushButton, \
-    QListWidget, QHBoxLayout, QLabel
+    QHBoxLayout, QLabel
 from qtpy.QtGui import QPalette, QColor
 from pydm.widgets import PyDMLabel
 

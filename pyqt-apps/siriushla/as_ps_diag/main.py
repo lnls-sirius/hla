@@ -22,7 +22,6 @@ from siriuspy.envars import vaca_prefix
 from siriuspy.csdevice.pwrsupply import Const as _PSConst, \
     ETypes as _PSEnums
 from siriuspy.search.ps_search import PSSearch
-from siriuspy.search.ma_search import MASearch
 from siriuspy.namesys import SiriusPVName
 
 from siriushla.util import run_newprocess as _run_newprocess

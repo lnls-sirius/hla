@@ -1,4 +1,3 @@
-import time
 import numpy as np
 from epics import PV
 from PyQt5.QtWidgets import QPushButton, QLabel, QGroupBox, QSizePolicy, \

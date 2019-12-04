@@ -1,7 +1,7 @@
 """Define Controllers for the orbits displayed in the graphic."""
 
-from qtpy.QtWidgets import QLabel, QGroupBox, QSpacerItem, QFormLayout, \
-    QGridLayout, QVBoxLayout, QHBoxLayout, QPushButton, QWidget, QTabWidget
+from qtpy.QtWidgets import QLabel, QGroupBox, QFormLayout, \
+    QVBoxLayout, QHBoxLayout, QPushButton, QWidget, QTabWidget
 from qtpy.QtCore import Qt
 import qtawesome as qta
 from pydm.widgets import PyDMLabel, PyDMPushButton

@@ -1,8 +1,7 @@
 import sys
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGroupBox, QLabel, QVBoxLayout, \
-    QHBoxLayout, QGridLayout, QSpacerItem, QSizePolicy as QSzPol, \
-    QMenuBar, QSplitter
+    QHBoxLayout, QGridLayout, QMenuBar, QSplitter
 import qtawesome as qta
 
 from pydm.widgets import PyDMLabel

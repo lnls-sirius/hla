@@ -7,7 +7,7 @@ from qtpy.QtWidgets import QWidget, QVBoxLayout, QGroupBox, \
     QMenu, QInputDialog, QFrame, QPushButton, QSplitter, \
     QSizePolicy as QSzPlcy
 import qtawesome as qta
-from siriuspy.search import PSSearch, MASearch
+from siriuspy.search import PSSearch
 from ..SummaryWidgets import SummaryWidget, SummaryHeader, get_prop2label
 
 

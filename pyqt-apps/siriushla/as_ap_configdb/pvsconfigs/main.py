@@ -1,11 +1,8 @@
-import sys
 
-import siriuspy.envars as _envars
 from siriuspy.clientconfigdb import ConfigDBClient
 
 from qtpy.QtWidgets import QWidget, QPushButton, QHBoxLayout
 
-from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.util import connect_window
 from .load_and_apply import LoadAndApplyConfig2MachineWindow

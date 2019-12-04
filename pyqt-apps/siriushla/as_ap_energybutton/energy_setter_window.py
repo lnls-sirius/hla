@@ -1,7 +1,7 @@
 """Main window."""
 
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QTabWidget, QHBoxLayout, QWidget
+from qtpy.QtWidgets import QTabWidget
 
 from siriushla.widgets import SiriusMainWindow
 from siriushla.as_ap_energybutton.energy_button import EnergyButton

@@ -1,6 +1,4 @@
 """This module defines a factory to get a detailed window."""
-import re
-
 from qtpy.QtWidgets import QWidget, QGridLayout
 from siriuspy.search import PSSearch
 from .PSDetailWidget import PSDetailWidget, FBPDCLinkDetailWidget, \

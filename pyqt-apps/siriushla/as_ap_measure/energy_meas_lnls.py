@@ -1,12 +1,10 @@
 #!/usr/bin/env python-sirius
 
 import numpy as np
-from epics import PV
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QLabel, QGridLayout, QGroupBox, QFormLayout, \
-    QMessageBox, QWidget, QSpinBox, QVBoxLayout, QHBoxLayout, QPushButton,\
-    QFileDialog
+    QWidget, QSpinBox, QVBoxLayout, QHBoxLayout, QPushButton
 import qtawesome as qta
 from pyqtgraph import PlotCurveItem, mkPen
 

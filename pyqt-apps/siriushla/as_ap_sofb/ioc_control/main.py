@@ -3,11 +3,11 @@
 import numpy as _np
 from qtpy.QtWidgets import QLabel, QGroupBox, QPushButton, QFormLayout, \
     QVBoxLayout, QHBoxLayout, QGridLayout, QWidget, QTabWidget
-from qtpy.QtCore import Qt, QSize
+from qtpy.QtCore import Qt
 import qtawesome as qta
 
 from pydm.widgets import PyDMPushButton, PyDMLabel
-from siriushla.widgets import SiriusConnectionSignal, PyDMStateButton, \
+from siriushla.widgets import SiriusConnectionSignal, \
         SiriusLedAlert, SiriusSpinbox
 from siriushla.widgets.windows import create_window_from_widget
 import siriushla.util as _util

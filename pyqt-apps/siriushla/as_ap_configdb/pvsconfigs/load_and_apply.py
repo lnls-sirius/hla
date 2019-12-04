@@ -5,7 +5,7 @@ import time
 
 from qtpy.QtCore import Qt, Slot, QThread, Signal
 from qtpy.QtWidgets import QWidget, QComboBox, QLabel, QPushButton, \
-    QHBoxLayout, QVBoxLayout, QLineEdit, QSplitter, QGridLayout
+    QHBoxLayout, QVBoxLayout, QSplitter
 
 import qtawesome as qta
 
@@ -14,7 +14,7 @@ from siriushla.common.epics.wrapper import PyEpicsWrapper
 from siriushla.common.epics.task import EpicsChecker, EpicsSetter, \
     EpicsConnector
 from siriushla.widgets.windows import SiriusMainWindow
-from siriushla.widgets.pvnames_tree import QTreeItem, PVNameTree
+from siriushla.widgets.pvnames_tree import PVNameTree
 from siriushla.widgets.dialog import ReportDialog, ProgressDialog
 from .. import LoadConfigDialog
 # from siriushla.widgets.horizontal_ruler import HorizontalRuler

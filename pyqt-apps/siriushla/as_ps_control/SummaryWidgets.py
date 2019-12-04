@@ -10,7 +10,7 @@ from pydm.widgets import PyDMPushButton, PyDMLabel, PyDMEnumComboBox
 
 from siriuspy.envars import vaca_prefix as VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as PVName
-from siriuspy.search import MASearch, PSSearch
+from siriuspy.search import PSSearch
 from siriushla.widgets import PyDMStateButton, SiriusLedState, \
     SiriusLedAlert, PyDMLinEditScrollbar, PyDMLedMultiChannel
 
