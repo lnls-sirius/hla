@@ -5,12 +5,14 @@ from functools import partial as _part
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QFrame, QGridLayout, QVBoxLayout, QHBoxLayout, \
-    QLineEdit, QGroupBox, QPushButton, QListWidget, QLabel, QApplication, \
-    QMessageBox, QSizePolicy
+    QSizePolicy, QGroupBox, QPushButton, QListWidget, QLabel, QApplication, \
+    QMessageBox
+import qtawesome as qta
 
 from siriuspy.search import PSSearch
 from siriuspy.namesys import SiriusPVName as PVName
 
+from siriushla.util import get_appropriate_color
 from siriushla.widgets import SiriusMainWindow, PVNameTree
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets.dialog import ProgressDialog
@@ -32,8 +34,10 @@ class PSTestWindow(SiriusMainWindow):
     def __init__(self, parent=None):
         """Constructor."""
         super().__init__(parent)
-        self.setWindowTitle('Power Supply Test')
+        self.setWindowTitle('PS Test')
         self.setObjectName('ASApp')
+        cor = get_appropriate_color(section='AS')
+        self.setWindowIcon(qta.icon('mdi.test-tube', color=cor))
         self._setup_ui()
 
     def _setup_ui(self):

@@ -133,9 +133,11 @@ def get_object(ismenubar=True, parent=None):
             timing.setIcon(qta.icon('mdi.timer'))
             timing.setObjectName('ASApp')
             main = QAction('Main', timing)
+            main.setIcon(qta.icon('mdi.timer'))
             self.connect_newprocess(
                 main, ['sirius-hla-as-ti-control.py', '-t', 'main'])
             summary = QAction('Summary', timing)
+            summary.setIcon(util.get_monitor_icon('mdi.timer'))
             self.connect_newprocess(
                 summary, ['sirius-hla-as-ti-control.py', '-t', 'summary'])
             timing.addAction(main)
@@ -145,12 +147,16 @@ def get_object(ismenubar=True, parent=None):
             pwrsupply.setIcon(qta.icon('mdi.car-battery'))
             pwrsupply.setObjectName('ASApp')
             pscycle = QAction('Cycle', pwrsupply)
+            pscycle.setIcon(qta.icon('mdi.recycle'))
             self.connect_newprocess(pscycle, 'sirius-hla-as-ps-cycle.py')
             psdiag = QAction('Diag', pwrsupply)
+            psdiag.setIcon(qta.icon('mdi.stethoscope'))
             self.connect_newprocess(psdiag, 'sirius-hla-as-ps-diag.py')
             pstest = QAction('Test', pwrsupply)
+            pstest.setIcon(qta.icon('mdi.test-tube'))
             self.connect_newprocess(pstest, 'sirius-hla-as-ps-test.py')
             psmonitor = QAction('Monitor', pwrsupply)
+            psmonitor.setIcon(util.get_monitor_icon('mdi.car-battery'))
             self.connect_newprocess(psmonitor, 'sirius-hla-as-ps-monitor.py')
             pwrsupply.addAction(pscycle)
             pwrsupply.addAction(psdiag)
@@ -268,9 +274,10 @@ def get_object(ismenubar=True, parent=None):
                 self.connect_newprocess(
                     ChargeMon, 'sirius-hla-bo-ap-chargemon.py')
                 optics.addAction(ChargeMon)
-                Ramp = QAction('Ramp', optics)
-                self.connect_newprocess(Ramp, 'sirius-hla-bo-ap-ramp.py')
-                optics.addAction(Ramp)
+                ramp = QAction('Ramp', optics)
+                ramp.setIcon(qta.icon('mdi.escalator', scale_factor=1.5))
+                self.connect_newprocess(ramp, 'sirius-hla-bo-ap-ramp.py')
+                optics.addAction(ramp)
             return optics
 
         def _set_diagnostic_menu(self, sec):
@@ -315,6 +322,7 @@ def get_object(ismenubar=True, parent=None):
             menu.setObjectName(sec.upper()+'App')
             menu.setIcon(qta.icon('mdi.currency-sign'))
             action = menu.addAction('Summary')
+            action.setIcon(util.get_monitor_icon('mdi.currency-sign'))
             self.connect_newprocess(action, cmd + ['Summary', ])
             typs = ('Single Pass', 'Multi Turn')
             acts = ('SPass', 'MTurn')
