@@ -58,8 +58,7 @@ class PSDiag(SiriusMainWindow):
                 '', 'PS\nConn?', 'Power\nState', 'Interlock',
                 'OpMode\nSlowRef?', 'Current\nDiff']):
             label = QLabel(lab, panel, alignment=Qt.AlignCenter)
-            if i > 0:
-                label.setStyleSheet('min-width:3.4em; max-width:3.4em;')
+            label.setStyleSheet('min-width:3.4em; max-width:3.4em;')
             panel_lay.addWidget(label, 0, i)
 
         # # Leds panel
@@ -102,8 +101,8 @@ class PSDiag(SiriusMainWindow):
 
                     panel_lay.addWidget(ps_label, i, 0)
                     panel_lay.addWidget(conn_led, i, 1)
-                    panel_lay.addWidget(ps_led, i, 3)
-                    panel_lay.addWidget(intlk_led, i, 4)
+                    panel_lay.addWidget(ps_led, i, 2)
+                    panel_lay.addWidget(intlk_led, i, 3)
                     i += 1
             else:
                 l2f = sips2filters if sec == 'SI' else asps2filters
@@ -156,8 +155,8 @@ class PSDiag(SiriusMainWindow):
 
                     panel_lay.addWidget(ps_label, i, 0)
                     panel_lay.addWidget(psconn_led, i, 1)
-                    panel_lay.addWidget(ps_led, i, 3)
-                    panel_lay.addWidget(intlk_led, i, 4)
+                    panel_lay.addWidget(ps_led, i, 2)
+                    panel_lay.addWidget(intlk_led, i, 3)
 
                     if psnames[0].dis == 'PS':
                         opm_led = MyLedMultiChannel(
@@ -172,8 +171,8 @@ class PSDiag(SiriusMainWindow):
                         opm_led.setObjectName('opm' + suf)
                         diff_led.setObjectName('diff' + suf)
 
-                        panel_lay.addWidget(opm_led, i, 5)
-                        panel_lay.addWidget(diff_led, i, 6)
+                        panel_lay.addWidget(opm_led, i, 4)
+                        panel_lay.addWidget(diff_led, i, 5)
 
                     i += 1
             panel_lay.addItem(QSpacerItem(1, 10, QSzPlcy.Ignored,
