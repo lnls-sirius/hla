@@ -137,7 +137,7 @@ class TLControlWindow(BaseWindow):
         elif self.tl == 'ts':
             devices_dict = {
                 'TS-01:DI-Scrn':   [['TS-01:PU-EjeSeptF', 'TS-01:PU-EjeSeptG'],
-                                    ['TS-01:MA-CV-1'], 0],
+                                    ['TS-01:PS-CV-1'], 0],
                 'TS-02:DI-Scrn':   [['TS-01:PS-CH'], ['TS-01:PS-CV-2'], 1],
                 'TS-03:DI-Scrn':   [['TS-02:PS-CH'], ['TS-02:PS-CV'], 2],
                 'TS-04:DI-Scrn-1': [['TS-03:PS-CH'], ['TS-03:PS-CV'], 3],
