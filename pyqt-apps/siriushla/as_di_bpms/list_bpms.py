@@ -5,7 +5,7 @@ from qtpy.QtCore import Qt, Slot
 from siriushla.as_di_bpms.base import BaseWidget, GraphTime, GraphWave, \
     get_custom_widget_class
 from siriushla.widgets import PyDMLedMultiChannel
-import siriushla.util as util
+from siriushla.util import connect_newprocess
 
 
 class BPMSummary(BaseWidget):
@@ -26,7 +26,7 @@ class BPMSummary(BaseWidget):
         led = PyDMLedMultiChannel(self, channels2values=chan2vals)
         led.setToolTip(self.bpm)
         hbl.addWidget(led)
-        util.connect_newprocess(
+        connect_newprocess(
             led, ['sirius-hla-as-di-bpm.py', '-p', self.prefix, self.bpm],
             parent=self, signal=led.clicked)
 
@@ -220,10 +220,11 @@ class SinglePassSummary(BaseWidget):
 
 class MultiTurnSummary(BaseWidget):
 
-    def __init__(self, parent=None, prefix='', bpm_list=[]):
+    def __init__(self, parent=None, prefix='', bpm_list=[], mode='pos'):
         super().__init__(
             parent=parent, prefix=prefix, bpm='', data_prefix='GEN_')
         self.bpm_dict = {bpm: '' for bpm in bpm_list}
+        self.mode = mode.lower()
         self.setObjectName(bpm_list[0][:2] + 'App')
         self.setupui()
 
@@ -258,9 +259,8 @@ class MultiTurnSummary(BaseWidget):
             vbl2 = QVBoxLayout(widb)
             vbl2.addWidget(QLabel(
                 '<h3>'+bpm+'</h3>', alignment=Qt.AlignCenter))
-            wbpm = self.create_graph(widb, bpm=bpm, typ='pos')
+            wbpm = self.create_graph(widb, bpm=bpm, typ=self.mode)
             vbl2.addWidget(wbpm)
-
             gdl.addWidget(widb, i // 3, i % 3)
             self.bpm_dict[bpm] = widb
         self.gdl = gdl
@@ -271,7 +271,7 @@ class MultiTurnSummary(BaseWidget):
 
     def create_graph(self, wid, bpm, typ='pos'):
         text, unit, names, colors = self._get_properties(typ)
-        if typ == 'pos':
+        if typ.startswith('pos'):
             unit = unit[1:]
 
         graph = GraphWave(
@@ -290,14 +290,14 @@ class MultiTurnSummary(BaseWidget):
                 lineStyle=1,
                 lineWidth=1)  # NOTE: If > 1: very low performance
             opts['y_channel'] = graph.get_pvname(opts['y_channel'])
-            if typ == 'pos':
+            if typ.startswith('pos'):
                 graph.addChannel(add_scale=1e-9, **opts)
             else:
                 graph.addChannel(**opts)
         return graph
 
     def _get_properties(self, typ):
-        if typ == 'pos':
+        if typ.startswith('pos'):
             text = 'Positions'
             unit = 'nm'
             names = ('X', 'Y', 'Q', 'SUM')
