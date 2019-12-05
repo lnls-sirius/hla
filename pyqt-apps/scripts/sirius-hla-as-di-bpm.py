@@ -10,7 +10,7 @@ from siriushla.sirius_application import SiriusApplication
 from siriuspy.envars import vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.search import BPMSearch
-from siriushla.util import get_appropriate_color
+from siriushla.util import get_appropriate_color, get_monitor_icon
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.as_di_bpms import SelectBPMs, BPMMain, SinglePassSummary, \
     MultiTurnSummary
@@ -29,6 +29,10 @@ parser.add_argument(
     help="type of window to open (default= 'Summary').",
     choices=('SPass', 'MTurn', 'Summary'))
 parser.add_argument(
+    '-m', '--mode', type=str, default='Positions',
+    help="Show Antennas or Positions  (default= 'Positions').",
+    choices=('Positions', 'Antennas'))
+parser.add_argument(
     '-p', "--prefix", type=str, default=vaca_prefix,
     help="Define the prefix for the PVs in the window.")
 args = parser.parse_args()
@@ -44,12 +48,16 @@ if pv.dev == 'BPM':
 else:
     sec = args.bpm_sel.upper()
     bpms_names = BPMSearch.get_names(filters={'sec': sec})
+    icon = qta.icon('mdi.currency-sign', color=get_appropriate_color(sec))
     if args.window == 'Summary':
         clas = SelectBPMs
+        icon = get_monitor_icon(
+            'mdi.currency-sign', color=get_appropriate_color(sec))
     elif args.window == 'SPass':
         clas = SinglePassSummary
     else:
         clas = MultiTurnSummary
+        kwargs['mode'] = args.mode
     slc = slice(None, None)
     maxn = 5 if sec == 'BO' else 20
     if args.subsection != 'all':
@@ -58,7 +66,6 @@ else:
         siz = len(bpms_names)//maxn
         slc = slice(siz*(sub-1), siz*sub)
     bpms_names = bpms_names[slc]
-    icon = qta.icon('mdi.currency-sign', color=get_appropriate_color(sec))
     window = create_window_from_widget(
         clas, title=sec + ' BPM List', is_main=True, icon=icon)
     kwargs.update(dict(prefix=args.prefix, bpm_list=bpms_names))

@@ -10,7 +10,8 @@ from siriuspy.namesys import SiriusPVName
 
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, PyDMLedMultiChannel
-from siriushla.util import run_newprocess
+from siriushla.util import run_newprocess, get_appropriate_color, \
+    get_monitor_icon
 
 from siriushla.as_ps_diag.util import lips2filters, asps2filters, sips2filters
 
@@ -22,7 +23,10 @@ class PSMonitor(SiriusMainWindow):
         """Init."""
         super().__init__(parent)
         self._prefix = prefix
-        self.setWindowTitle('Power Supplies Monitor')
+        self.setWindowTitle('PS Monitor')
+        self.setObjectName('ASApp')
+        cor = get_appropriate_color(section='AS')
+        self.setWindowIcon(get_monitor_icon('mdi.car-battery', cor))
         self._setupUi()
 
     def _setupUi(self):

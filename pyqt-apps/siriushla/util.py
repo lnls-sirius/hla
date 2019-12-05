@@ -6,13 +6,22 @@ import subprocess as _subprocess
 from functools import partial as _part
 
 from qtpy.QtCore import QFile as _QFile, Signal as _Signal, QThread as _QThread
+from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QPushButton, QAction, QApplication, QDialog, \
     QHBoxLayout, QLabel
+import qtawesome as qta
 from pydm.utilities.stylesheet import _get_style_data as pydm_get_style_data
 import siriushla.resources as _resources
 
 
 THREAD = None
+
+
+def get_monitor_icon(icon_name, color=None):
+    color = color or QColor(50, 50, 50)
+    return qta.icon(icon_name, 'mdi.monitor', options=[
+        dict(scale_factor=0.8, color=color, offset=(0.0, -0.07)),
+        dict(scale_factor=1.4, color=color, offset=(0.0, 0.00))])
 
 
 def set_style(app, force_default=False):

@@ -133,9 +133,11 @@ def get_object(ismenubar=True, parent=None):
             timing.setIcon(qta.icon('mdi.timer'))
             timing.setObjectName('ASApp')
             main = QAction('Main', timing)
+            main.setIcon(qta.icon('mdi.timer'))
             self.connect_newprocess(
                 main, ['sirius-hla-as-ti-control.py', '-t', 'main'])
             summary = QAction('Summary', timing)
+            summary.setIcon(util.get_monitor_icon('mdi.timer'))
             self.connect_newprocess(
                 summary, ['sirius-hla-as-ti-control.py', '-t', 'summary'])
             timing.addAction(main)
@@ -145,12 +147,16 @@ def get_object(ismenubar=True, parent=None):
             pwrsupply.setIcon(qta.icon('mdi.car-battery'))
             pwrsupply.setObjectName('ASApp')
             pscycle = QAction('Cycle', pwrsupply)
+            pscycle.setIcon(qta.icon('mdi.recycle'))
             self.connect_newprocess(pscycle, 'sirius-hla-as-ps-cycle.py')
             psdiag = QAction('Diag', pwrsupply)
+            psdiag.setIcon(qta.icon('mdi.stethoscope'))
             self.connect_newprocess(psdiag, 'sirius-hla-as-ps-diag.py')
             pstest = QAction('Test', pwrsupply)
+            pstest.setIcon(qta.icon('mdi.test-tube'))
             self.connect_newprocess(pstest, 'sirius-hla-as-ps-test.py')
             psmonitor = QAction('Monitor', pwrsupply)
+            psmonitor.setIcon(util.get_monitor_icon('mdi.car-battery'))
             self.connect_newprocess(psmonitor, 'sirius-hla-as-ps-monitor.py')
             pwrsupply.addAction(pscycle)
             pwrsupply.addAction(psdiag)
@@ -268,9 +274,10 @@ def get_object(ismenubar=True, parent=None):
                 self.connect_newprocess(
                     ChargeMon, 'sirius-hla-bo-ap-chargemon.py')
                 optics.addAction(ChargeMon)
-                Ramp = QAction('Ramp', optics)
-                self.connect_newprocess(Ramp, 'sirius-hla-bo-ap-ramp.py')
-                optics.addAction(Ramp)
+                ramp = QAction('Ramp', optics)
+                ramp.setIcon(qta.icon('mdi.escalator', scale_factor=1.5))
+                self.connect_newprocess(ramp, 'sirius-hla-bo-ap-ramp.py')
+                optics.addAction(ramp)
             return optics
 
         def _set_diagnostic_menu(self, sec):
@@ -310,41 +317,54 @@ def get_object(ismenubar=True, parent=None):
             return diag
 
         def _set_bpm_menu(self, sec):
-            cmd = ['sirius-hla-as-di-bpm.py', sec, '-w']
+            cmd = ['sirius-hla-as-di-bpm.py', sec]
             menu = QMenu('BPMs', self)
             menu.setObjectName(sec.upper()+'App')
             menu.setIcon(qta.icon('mdi.currency-sign'))
             action = menu.addAction('Summary')
+            action.setIcon(util.get_monitor_icon('mdi.currency-sign'))
             self.connect_newprocess(action, cmd + ['Summary', ])
             typs = ('Single Pass', 'Multi Turn')
             acts = ('SPass', 'MTurn')
             for typ, act in zip(typs, acts):
-                if sec == 'bo':
+                if sec in {'bo', 'si'}:
                     menu2 = menu.addMenu(typ)
                     menu2.setObjectName(sec.upper()+'App')
-                    action2 = menu2.addAction('All')
-                    self.connect_newprocess(action2, cmd + [act, ])
-                    action2 = menu2.addAction('subsec 02-11')
-                    self.connect_newprocess(action2, cmd + [act, '-s', '1'])
-                    action2 = menu2.addAction('subsec 12-21')
-                    self.connect_newprocess(action2, cmd + [act, '-s', '2'])
-                    action2 = menu2.addAction('subsec 22-31')
-                    self.connect_newprocess(action2, cmd + [act, '-s', '3'])
-                    action2 = menu2.addAction('subsec 32-41')
-                    self.connect_newprocess(action2, cmd + [act, '-s', '4'])
-                    action2 = menu2.addAction('subsec 42-01')
-                    self.connect_newprocess(action2, cmd + [act, '-s', '5'])
-                elif sec == 'si':
-                    menu2 = menu.addMenu(typ)
-                    menu2.setObjectName(sec.upper()+'App')
-                    for i in range(1, 21):
-                        sub = '{0:02d}'.format(i)
-                        action = menu2.addAction('SI-' + sub)
-                        self.connect_newprocess(action, cmd + [act, '-s', sub])
+                    if act == 'SPass':
+                        self._create_bpm_actions(sec, menu2, act, cmd)
+                    else:
+                        for mode in ('Antennas', 'Positions'):
+                            menu3 = menu2.addMenu(mode)
+                            menu3.setObjectName(sec.upper()+'App')
+                            cmd2 = cmd + ['-m', mode]
+                            self._create_bpm_actions(sec, menu3, act, cmd2)
                 else:
-                    action = menu.addAction(typ)
-                    self.connect_newprocess(action, cmd + [act, ])
+                    if act == 'SPass':
+                        self._create_bpm_actions(sec, menu, act, cmd, typ)
+                    else:
+                        menu2 = menu.addMenu(typ)
+                        menu2.setObjectName(sec.upper()+'App')
+                        for mode in ('Antennas', 'Positions'):
+                            cmd2 = cmd + ['-m', mode]
+                            self._create_bpm_actions(
+                                sec, menu2, act, cmd2, mode)
             return menu
+
+        def _create_bpm_actions(self, sec, menu, act, cmd, name=None):
+            cmd = cmd + ['-w', act]
+            if sec == 'bo':
+                for i in range(5):
+                    action = menu.addAction('subsec {0:02d}-{1:02d}'.format(
+                        10*i+2, ((10*(i+1)+1)) % 50))
+                    self.connect_newprocess(action, cmd + ['-s', str(i+1)])
+            elif sec == 'si':
+                for i in range(1, 21):
+                    sub = '{0:02d}'.format(i)
+                    action = menu.addAction('SI-' + sub)
+                    self.connect_newprocess(action, cmd + ['-s', sub])
+            else:
+                action = menu.addAction(name)
+                self.connect_newprocess(action, cmd)
 
         def _set_psma_menu(self, sec, dis='ps'):
             scr = 'sirius-hla-' + sec + '-' + dis + '-control.py'

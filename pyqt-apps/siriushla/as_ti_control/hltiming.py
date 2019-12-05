@@ -3,7 +3,7 @@
 import sys as _sys
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, \
-    QGridLayout, QGroupBox, QLabel, QSplitter, QSizePolicy
+    QGridLayout, QLabel, QSplitter, QSizePolicy
 import qtawesome as qta
 
 from pydm.widgets import PyDMPushButton, PyDMLabel
@@ -13,13 +13,11 @@ from siriushla.util import connect_window, get_appropriate_color, \
     connect_newprocess
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets import SiriusMainWindow, PyDMLed, PyDMStateButton
-from .base import MySpinBox as _MySpinBox
 from .evg import EventList as _EventList, EVG as _EVG, BucketList
 from .evr_eve import EVR as _EVR, EVE as _EVE
 from .afc import AFC as _AFC
 from .fout import FOUT as _FOUT
 from .hl_trigger import HLTriggerList as _HLTriggerList
-from .summary import SummaryWindow as _SummaryWindow
 
 
 class TimingMain(SiriusMainWindow):

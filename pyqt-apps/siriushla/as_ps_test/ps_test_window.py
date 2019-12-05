@@ -5,12 +5,14 @@ from functools import partial as _part
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QFrame, QGridLayout, QVBoxLayout, QHBoxLayout, \
-    QLineEdit, QGroupBox, QPushButton, QListWidget, QLabel, QApplication, \
-    QMessageBox, QSizePolicy
+    QSizePolicy, QGroupBox, QPushButton, QListWidget, QLabel, QApplication, \
+    QMessageBox
+import qtawesome as qta
 
 from siriuspy.search import PSSearch
 from siriuspy.namesys import SiriusPVName as PVName
 
+from siriushla.util import get_appropriate_color, connect_newprocess
 from siriushla.widgets import SiriusMainWindow, PVNameTree
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets.dialog import ProgressDialog
@@ -32,8 +34,10 @@ class PSTestWindow(SiriusMainWindow):
     def __init__(self, parent=None):
         """Constructor."""
         super().__init__(parent)
-        self.setWindowTitle('Power Supply Test')
+        self.setWindowTitle('PS Test')
         self.setObjectName('ASApp')
+        cor = get_appropriate_color(section='AS')
+        self.setWindowIcon(qta.icon('mdi.test-tube', color=cor))
         self._setup_ui()
 
     def _setup_ui(self):
@@ -168,11 +172,20 @@ class PSTestWindow(SiriusMainWindow):
                                      alignment=Qt.AlignCenter), 1, 1)
         list_layout.addWidget(self.nok_ps, 2, 1)
 
+        opencycle = QPushButton('Open Cycle Window')
+        connect_newprocess(opencycle, 'sirius-hla-as-ps-cycle.py', parent=self)
+        title_lbl = QLabel(
+            '<h3>Power Supplies Test</h3>', self, alignment=Qt.AlignCenter)
+        hlay = QHBoxLayout()
+        hlay.addWidget(opencycle)
+        hlay.addStretch()
+        hlay.addWidget(title_lbl)
+        hlay.addStretch()
+
         # layout
         lay = QGridLayout()
         lay.setHorizontalSpacing(15)
-        lay.addWidget(QLabel('<h3>Power Supplies Test</h3>', self,
-                             alignment=Qt.AlignCenter), 0, 0, 1, 3)
+        lay.addLayout(hlay, 0, 0, 1, 3)
         lay.addWidget(gbox_select, 1, 0)
         lay.addWidget(gbox_comm, 1, 1)
         lay.addLayout(list_layout, 1, 2)

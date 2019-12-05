@@ -11,6 +11,7 @@ from qtpy.QtCore import Signal, QThread, Qt, QTimer
 from qtpy.QtWidgets import QWidget, QGridLayout, QVBoxLayout, \
     QPushButton, QLabel, QMessageBox, QLineEdit, QApplication, \
     QListWidget, QListWidgetItem, QProgressBar, QGroupBox
+import qtawesome as qta
 
 from siriuspy.envars import vaca_prefix as VACA_PREFIX
 from siriuspy.namesys import Filter, SiriusPVName as PVName
@@ -18,6 +19,7 @@ from siriuspy.cycle import get_psnames, \
     Timing, PSCycler, LinacPSCycler, CycleController
 from siriuspy.search import PSSearch
 
+from siriushla.util import get_appropriate_color
 from siriushla.widgets import SiriusMainWindow, \
     PyDMLedMultiConnection as PyDMLedMultiConn
 from siriushla.widgets.pvnames_tree import PVNameTree
@@ -38,6 +40,8 @@ class CycleWindow(SiriusMainWindow):
         """Constructor."""
         super().__init__(parent)
         self.setObjectName('ASApp')
+        cor = get_appropriate_color(section='AS')
+        self.setWindowIcon(qta.icon('mdi.recycle', color=cor))
         # Data structs
         self._timing = Timing()
         self._ps2cycle = list()
@@ -46,9 +50,8 @@ class CycleWindow(SiriusMainWindow):
         self._checked_accs = checked_accs
         # Flags
         self._is_preparing = ''
-        self._prepared = {'timing': False,
-                          'ps_params': False,
-                          'ps_opmode': False}
+        self._prepared = {
+            'timing': False, 'ps_params': False, 'ps_opmode': False}
         # Setup UI
         self._needs_update_leds = False
         self._setup_ui()
