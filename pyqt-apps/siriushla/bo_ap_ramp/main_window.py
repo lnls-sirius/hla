@@ -76,6 +76,8 @@ class RampMain(SiriusMainWindow):
             self._handleUpdateOpticsAdjustSettings)
         self.settings.plotUnitSignal.connect(
             self.config_parameters.getPlotUnits)
+        self.settings.newNormConfigListSignal.connect(
+            self._receiveNewNormConfigList)
 
         self.config_parameters.dip_ramp.updateDipoleRampSignal.connect(
             self._verifySync)
@@ -134,6 +136,12 @@ class RampMain(SiriusMainWindow):
                                                 auto_update=True)
             self._undo_stack.clear()
         self._emitLoadSignal()
+
+    @Slot(list)
+    def _receiveNewNormConfigList(self, norm_config_list):
+        self.ramp_config.ps_normalized_configs_set(norm_config_list)
+        self.loadSignal.emit(self.ramp_config)
+        self._verifySync()
 
     def _emitLoadSignal(self, nconfigs_changed=None):
         try:
