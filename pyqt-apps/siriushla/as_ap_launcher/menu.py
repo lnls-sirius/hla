@@ -325,7 +325,7 @@ def get_object(ismenubar=True, parent=None):
             menu.setIcon(qta.icon('mdi.currency-sign'))
             action = menu.addAction('Summary')
             action.setIcon(util.get_monitor_icon('mdi.currency-sign'))
-            self.connect_newprocess(action, cmd + ['Summary', ])
+            self.connect_newprocess(action, cmd + ['-w', 'Summary', ])
             typs = ('Single Pass', 'Multi Turn')
             acts = ('SPass', 'MTurn')
             for typ, act in zip(typs, acts):
