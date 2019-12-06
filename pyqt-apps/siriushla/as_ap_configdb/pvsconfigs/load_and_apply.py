@@ -1,23 +1,20 @@
 """Set configuration window."""
 import logging
-import re
-import time
 
-from qtpy.QtCore import Qt, Slot, QThread, Signal
+from qtpy.QtCore import Qt, Slot, Signal
 from qtpy.QtWidgets import QWidget, QComboBox, QLabel, QPushButton, \
-    QHBoxLayout, QVBoxLayout, QLineEdit, QSplitter, QGridLayout
+    QHBoxLayout, QVBoxLayout, QSplitter
 
 import qtawesome as qta
 
 from siriuspy.clientconfigdb import ConfigDBException
 from siriushla.common.epics.wrapper import PyEpicsWrapper
 from siriushla.common.epics.task import EpicsChecker, EpicsSetter, \
-    EpicsConnector
+    EpicsConnector, EpicsWait
 from siriushla.widgets.windows import SiriusMainWindow
-from siriushla.widgets.pvnames_tree import QTreeItem, PVNameTree
+from siriushla.widgets.pvnames_tree import PVNameTree
 from siriushla.widgets.dialog import ReportDialog, ProgressDialog
 from .. import LoadConfigDialog
-# from siriushla.widgets.horizontal_ruler import HorizontalRuler
 from ..models import ConfigPVsTypeModel
 
 
@@ -100,9 +97,7 @@ class SelectAndApplyPVsWidget(QWidget):
         check_task.itemChecked.connect(
             lambda pv, status: failed_items.append(pv) if not status else None)
 
-        sleep_task = Wait(
-            pvs_tuple=check_pvs_tuple, wait_time=2.0,
-            fltr='TB-.*:(PS|MA)-(C|Q).*$')
+        sleep_task = EpicsWait(pvs, wait_time=2.0, parent=self)
 
         # Set/Check PVs values and show wait dialog informing user
         labels = [
@@ -253,60 +248,6 @@ class LoadAndApplyConfig2MachineWindow(SiriusMainWindow):
         self._load_widget.configChanged.connect(self._set_widget.fill_config)
         self._central_widget.addWidget(self._load_widget)
         self._central_widget.addWidget(self._set_widget)
-
-
-class Wait(QThread):
-    """."""
-
-    currentItem = Signal(str)
-    itemDone = Signal()
-    completed = Signal()
-    itemChecked = Signal(str, bool)
-
-    def __init__(self, pvs_tuple, wait_time=1.0, fltr=None, parent=None):
-        """."""
-        super().__init__(parent)
-        self.wait_time = wait_time
-        self.pvs_tuple = pvs_tuple
-        self._size = 2*len(pvs_tuple) // 20
-        self._is_tb_ps = re.compile(fltr)
-        self._quit_task = False
-        self.sleep_flag = True
-        self.check_wait()
-
-    def check_wait(self):
-        """."""
-        self.sleep_flag = False
-        for pvitem in self.pvs_tuple:
-            pv, *_ = pvitem
-            if self._is_tb_ps.match(pv):
-                self.sleep_flag = True
-                break
-
-    def size(self):
-        """Task Size."""
-        return self._size
-
-    def exit_task(self):
-        """Set flag to exit thread."""
-        self._quit_task = True
-
-    def run(self):
-        """."""
-        if not self._quit_task:
-            t0 = time.time()
-            if self.size:
-                for i in range(self._size):
-                    dt = time.time() - t0
-                    self.currentItem.emit(
-                        'Waiting for {:3.2f} s...'.format(self.wait_time - dt))
-                    time.sleep(self.wait_time/self._size)
-
-                    self.itemDone.emit()
-                    self.itemChecked.emit(str(i), True)
-            else:
-                time.sleep(self.wait_time)
-        self.completed.emit()
 
 
 if __name__ == '__main__':
