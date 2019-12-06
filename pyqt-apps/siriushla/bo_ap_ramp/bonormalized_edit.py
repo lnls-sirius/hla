@@ -12,10 +12,11 @@ from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
     QUndoStack, QUndoCommand, QHBoxLayout, QMessageBox, QMenuBar
 import qtawesome as qta
 
-from siriuspy.search import MASearch as _MASearch
+from siriuspy.search import MASearch as _MASearch, PSSearch as _PSSearch
 from siriuspy.ramp import ramp
 from siriuspy.optics.opticscorr import BOTuneCorr, BOChromCorr
 from siriuspy.clientconfigdb import ConfigDBException as _ConfigDBException
+from siriuspy.namesys import SiriusPVName
 
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.as_ap_configdb import SaveConfigDialog as _SaveConfigDialog
@@ -64,6 +65,7 @@ class BONormEdit(SiriusMainWindow):
         self._conn_sofb = conn_sofb
         self._setupUi()
         self._setupMenu()
+        self.verifySync()
 
     # ---------- setup/build layout ----------
 
@@ -133,41 +135,43 @@ class BONormEdit(SiriusMainWindow):
         scrollarea = QScrollArea()
         self.nconfig_data = QWidget()
         flay_configdata = QFormLayout()
-        manames = self._getManames()
-        self._map_manames2wigdets = dict()
-        for ma in manames:
-            if ma == ramp.BoosterRamp.MANAME_DIPOLE:
-                ma_value = QLabel(str(self.norm_config[ma])+' GeV', self)
-                flay_configdata.addRow(QLabel(ma + ': ', self), ma_value)
+        psnames = self._get_PSNames()
+        self._map_psnames2wigdets = dict()
+        for ps in psnames:
+            ps = SiriusPVName(ps)
+            if ps in ramp.BoosterRamp.PSNAME_DIPOLES:
+                ps_value = QLabel(str(self.norm_config[ps])+' GeV', self)
+                flay_configdata.addRow(QLabel(ps + ': ', self), ps_value)
             else:
-                ma_value = _MyDoubleSpinBox(self.nconfig_data)
-                ma_value.setDecimals(6)
+                ps_value = _MyDoubleSpinBox(self.nconfig_data)
+                ps_value.setDecimals(6)
+                ma = _MASearch.conv_psname_2_psmaname(ps)
                 aux = self._aux_magnets[ma]
                 currs = (aux.current_min, aux.current_max)
                 lims = aux.conv_current_2_strength(
                     currents=currs, strengths_dipole=self.energy)
-                ma_value.setMinimum(min(lims))
-                ma_value.setMaximum(max(lims))
-                ma_value.setValue(self.norm_config[ma])
-                ma_value.editingFinished.connect(self._handleStrenghtsSet)
+                ps_value.setMinimum(min(lims))
+                ps_value.setMaximum(max(lims))
+                ps_value.setValue(self.norm_config[ps])
+                ps_value.editingFinished.connect(self._handleStrenghtsSet)
 
-                if 'Q' in ma:
+                if ps.dev in {'QD', 'QF', 'QS'}:
                     unit_txt = '1/m'
-                elif 'S' in ma:
+                elif ps.dev in {'SD', 'SF'}:
                     unit_txt = '1/m²'
                 else:
                     unit_txt = 'urad'
                 label_unit = QLabel(unit_txt, self)
                 label_unit.setStyleSheet("min-width:2.5em; max-width:2.5em;")
                 hb = QHBoxLayout()
-                hb.addWidget(ma_value)
+                hb.addWidget(ps_value)
                 hb.addWidget(label_unit)
 
-                flay_configdata.addRow(QLabel(ma + ': ', self), hb)
+                flay_configdata.addRow(QLabel(ps + ': ', self), hb)
 
-            ma_value.setObjectName(ma)
-            ma_value.setStyleSheet("min-height:1.29em; max-height:1.29em;")
-            self._map_manames2wigdets[ma] = ma_value
+            ps_value.setObjectName(ps)
+            ps_value.setStyleSheet("min-height:1.29em; max-height:1.29em;")
+            self._map_psnames2wigdets[ps] = ps_value
 
         self.nconfig_data.setObjectName('data')
         self.nconfig_data.setStyleSheet("""
@@ -387,7 +391,8 @@ class BONormEdit(SiriusMainWindow):
 
     def verifySync(self):
         """Verify sync status related to ConfServer."""
-        self.norm_config.verify_syncronized()
+        if self.norm_config.exist():
+            self.norm_config.verify_syncronized()
         if not self.norm_config.synchronized:
             self.act_save.setEnabled(True)
             self.label_name.setStyleSheet("color:red;")
@@ -400,47 +405,49 @@ class BONormEdit(SiriusMainWindow):
     # ---------- strengths ----------
 
     def _handleStrenghtsSet(self):
-        maname = self.sender().objectName()
+        psname = self.sender().objectName()
         new_value = self.sender().value()
         self._stack_command(
-            self.sender(), self.norm_config[maname], new_value,
-            message='set '+maname+' strength to {}'.format(new_value))
-        self.norm_config[maname] = new_value
+            self.sender(), self.norm_config[psname], new_value,
+            message='set '+psname+' strength to {}'.format(new_value))
+        self.norm_config[psname] = new_value
         self.verifySync()
 
     def _handleStrengtsLimits(self, state):
-        manames = _dcopy(self.norm_config.manames)
-        manames.remove('BO-Fam:MA-B')
+        psnames = _dcopy(self.norm_config.psnames)
+        psnames.remove('BO-Fam:PS-B-1')
+        psnames.remove('BO-Fam:PS-B-1')
         if state:
-            for ma in manames:
-                ma_value = self.nconfig_data.findChild(QDoubleSpinBox, name=ma)
+            for ps in psnames:
+                ps_value = self.nconfig_data.findChild(QDoubleSpinBox, name=ps)
+                ma = _MASearch.conv_psname_2_psmaname(ps)
                 aux = self._aux_magnets[ma]
                 currs = (aux.current_min, aux.current_max)
                 lims = aux.conv_current_2_strength(
                     currents=currs, strengths_dipole=self.energy)
-                ma_value.setMinimum(min(lims))
-                ma_value.setMaximum(max(lims))
+                ps_value.setMinimum(min(lims))
+                ps_value.setMaximum(max(lims))
         else:
-            for ma in manames:
-                ma_value = self.nconfig_data.findChild(QDoubleSpinBox, name=ma)
-                ma_value.setMinimum(-10000)
-                ma_value.setMaximum(10000)
+            for ps in psnames:
+                ps_value = self.nconfig_data.findChild(QDoubleSpinBox, name=ps)
+                ps_value.setMinimum(-10000)
+                ps_value.setMaximum(10000)
 
-    def _updateStrenghtsWidget(self, matype):
-        manames = self._getManames(matype)
-        wid2change = manames if manames else self.norm_config.manames
+    def _updateStrenghtsWidget(self, pstype):
+        psnames = self._get_PSNames(pstype)
+        wid2change = psnames if psnames else self.norm_config.psnames
         for wid in wid2change:
             value = self.norm_config[wid]
-            self._map_manames2wigdets[wid].setValue(value)
+            self._map_psnames2wigdets[wid].setValue(value)
 
     # ---------- orbit ----------
 
     def _updateCorrKicks(self):
-        for maname, dkick in self._deltas['kicks'].items():
-            corr_factor = self._deltas['factorV'] if 'CV' in maname \
+        for psname, dkick in self._deltas['kicks'].items():
+            corr_factor = self._deltas['factorV'] if 'CV' in psname \
                 else self._deltas['factorH']
             corr_factor /= 100
-            self.norm_config[maname] = self._current_kicks[maname] + \
+            self.norm_config[psname] = self._current_kicks[psname] + \
                 dkick*corr_factor
 
     def _handleGetKicksFromSOFB(self):
@@ -458,8 +465,8 @@ class BONormEdit(SiriusMainWindow):
             return
 
         self._current_kicks = dict()
-        for maname in self._getManames():
-            self._current_kicks[maname] = self.norm_config[maname]
+        for psname in self._get_PSNames():
+            self._current_kicks[psname] = self.norm_config[psname]
 
         self._deltas['kicks'] = dkicks
         self._updateCorrKicks()
@@ -509,10 +516,10 @@ class BONormEdit(SiriusMainWindow):
         self.l_deltaKLQF.setText('{: 4f}'.format(self._deltaKL[0]))
         self.l_deltaKLQD.setText('{: 4f}'.format(self._deltaKL[1]))
 
-        self.norm_config['BO-Fam:MA-QF'] = \
-            self._reference['BO-Fam:MA-QF'] + self._deltaKL[0]
-        self.norm_config['BO-Fam:MA-QD'] = \
-            self._reference['BO-Fam:MA-QD'] + self._deltaKL[1]
+        self.norm_config['BO-Fam:PS-QF'] = \
+            self._reference['BO-Fam:PS-QF'] + self._deltaKL[0]
+        self.norm_config['BO-Fam:PS-QD'] = \
+            self._reference['BO-Fam:PS-QD'] + self._deltaKL[1]
         self._updateStrenghtsWidget('quads')
         self.verifySync()
 
@@ -528,11 +535,11 @@ class BONormEdit(SiriusMainWindow):
     def _estimateChrom(self, use_ref=False):
         nom_SL = self._chromcorr.nominal_intstrengths.flatten()
         if use_ref:
-            curr_SL = _np.array([self._reference['BO-Fam:MA-SF'],
-                                 self._reference['BO-Fam:MA-SD']])
+            curr_SL = _np.array([self._reference['BO-Fam:PS-SF'],
+                                 self._reference['BO-Fam:PS-SD']])
         else:
-            curr_SL = _np.array([self.norm_config['BO-Fam:MA-SF'],
-                                 self.norm_config['BO-Fam:MA-SD']])
+            curr_SL = _np.array([self.norm_config['BO-Fam:PS-SF'],
+                                 self.norm_config['BO-Fam:PS-SD']])
         delta_SL = curr_SL - nom_SL
         return self._chromcorr.calculate_Chrom(delta_SL)
 
@@ -558,10 +565,10 @@ class BONormEdit(SiriusMainWindow):
         self.l_deltaSLSF.setText('{: 4f}'.format(self._deltaSL[0]))
         self.l_deltaSLSD.setText('{: 4f}'.format(self._deltaSL[1]))
 
-        self.norm_config['BO-Fam:MA-SF'] = \
-            self._reference['BO-Fam:MA-SF'] + self._deltaSL[0]
-        self.norm_config['BO-Fam:MA-SD'] = \
-            self._reference['BO-Fam:MA-SD'] + self._deltaSL[1]
+        self.norm_config['BO-Fam:PS-SF'] = \
+            self._reference['BO-Fam:PS-SF'] + self._deltaSL[0]
+        self.norm_config['BO-Fam:PS-SD'] = \
+            self._reference['BO-Fam:PS-SD'] + self._deltaSL[1]
         self._updateStrenghtsWidget('sexts')
 
         self.verifySync()
@@ -576,16 +583,16 @@ class BONormEdit(SiriusMainWindow):
 
     # ---------- update methods ----------
 
-    def _updateReference(self, matype):
-        manames = self._getManames(matype)
-        for ma in manames:
-            self._reference[ma] = self.norm_config[ma]
+    def _updateReference(self, pstype):
+        psnames = self._get_PSNames(pstype)
+        for ps in psnames:
+            self._reference[ps] = self.norm_config[ps]
 
-        if matype == 'corrs':
+        if pstype == 'corrs':
             self._resetOrbitChanges()
-        elif matype == 'quads':
+        elif pstype == 'quads':
             self._resetTuneChanges()
-        elif matype == 'sexts':
+        elif pstype == 'sexts':
             self._resetChromChanges()
         else:
             self._resetOrbitChanges()
@@ -632,25 +639,25 @@ class BONormEdit(SiriusMainWindow):
 
     # ---------- helper methods ----------
 
-    def _getManames(self, matype=None):
-        manames = list()
-        if matype == 'corrs':
-            manames = _MASearch.get_manames(
+    def _get_PSNames(self, pstype=None):
+        psnames = list()
+        if pstype == 'corrs':
+            psnames = _PSSearch.get_psnames(
                 filters={'sec': 'BO', 'dev': 'C(V|H)'})
-        elif matype == 'quads':
-            manames = ['BO-Fam:MA-QF', 'BO-Fam:MA-QD']
-        elif matype == 'sexts':
-            manames = ['BO-Fam:MA-SF', 'BO-Fam:MA-SD']
+        elif pstype == 'quads':
+            psnames = ['BO-Fam:PS-QF', 'BO-Fam:PS-QD']
+        elif pstype == 'sexts':
+            psnames = ['BO-Fam:PS-SF', 'BO-Fam:PS-SD']
         else:
-            manames = _MASearch.get_manames(
+            psnames = _PSSearch.get_psnames(
                 filters={'sec': 'BO', 'sub': 'Fam'})
-            manames.extend(_MASearch.get_manames(
+            psnames.extend(_PSSearch.get_psnames(
                 filters={'sec': 'BO', 'dev': 'QS'}))
-            manames.extend(sorted(_MASearch.get_manames(
+            psnames.extend(sorted(_PSSearch.get_psnames(
                 filters={'sec': 'BO', 'dev': 'CH'})))
-            manames.extend(sorted(_MASearch.get_manames(
+            psnames.extend(sorted(_PSSearch.get_psnames(
                 filters={'sec': 'BO', 'dev': 'CV'})))
-        return manames
+        return psnames
 
     def _show_kicks_graph(self):
         graph = _ShowCorrectorKicks(self, self.norm_config)
@@ -695,7 +702,8 @@ if __name__ == '__main__':
 
     nconfig = ramp.BoosterNormalized('testing')
     aux_magnets = dict()
-    for ma in ramp.BoosterNormalized().manames:
+    for ps in nconfig.psnames:
+        ma = _MASearch.conv_psname_2_psmaname(ps)
         aux_magnets[ma] = Magnet(ma)
     conn_sofb = ConnSOFB(prefix=vaca_prefix)
 

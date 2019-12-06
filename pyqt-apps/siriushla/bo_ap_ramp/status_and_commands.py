@@ -21,7 +21,7 @@ EVT_LIST = ['Linac', 'InjBO', 'InjSI', 'Study',
 
 
 class StatusAndCommands(QGroupBox):
-    """Widget to show general Booster timing and magnets status."""
+    """Widget to show general Booster timing and power supplies status."""
 
     inj_eje_times = Signal(float, float)
 
@@ -90,9 +90,9 @@ class StatusAndCommands(QGroupBox):
         return lay
 
     def _setupCommandsLayout(self):
-        self.bt_prepare_ma = QPushButton('Prepare magnets', self)
-        self.bt_prepare_ma.clicked.connect(self._prepare_ps)
-        self.bt_prepare_ma.setStyleSheet('min-height:1.5em;')
+        self.bt_prepare_ps = QPushButton('Prepare magnets', self)
+        self.bt_prepare_ps.clicked.connect(self._prepare_ps)
+        self.bt_prepare_ps.setStyleSheet('min-height:1.5em;')
         self.bt_prepare_ti = QPushButton('Prepare timing', self)
         self.bt_prepare_ti.clicked.connect(self._prepare_ti)
         self.bt_prepare_ti.setStyleSheet('min-height:1.5em;')
@@ -109,7 +109,7 @@ class StatusAndCommands(QGroupBox):
         lay.setAlignment(Qt.AlignCenter)
         lay.setSpacing(10)
         lay.addStretch()
-        lay.addWidget(self.bt_prepare_ma)
+        lay.addWidget(self.bt_prepare_ps)
         lay.addWidget(self.bt_prepare_ti)
         lay.addStretch()
         lay.addWidget(self.bt_apply_all)
@@ -279,9 +279,11 @@ class StatusAndCommands(QGroupBox):
         if self.ramp_config is None:
             return
         if not self.ramp_config.ps_normalized_configs:
-            return
+            psnames = ramp.BoosterRamp.PSNAME_DIPOLES
+        else:
+            psnames = self.conn_ps.psnames
         c2v = dict()
-        for psname in self.conn_ps.psnames:
+        for psname in psnames:
             wf = self.ramp_config.ps_waveform_get(psname)
             c2v[self.prefix + psname + ':Wfm-RB'] = {
                 'value': wf.currents, 'comp': 'cl', 'abs_tol': 1e-5}

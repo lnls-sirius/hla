@@ -67,7 +67,7 @@ class Settings(QMenuBar):
 
         self.ramp_params_menu = self.addMenu('Ramping Parameters')
         self.menu_plotunits = self.ramp_params_menu.addMenu(
-            'Plot magnet waveforms in...')
+            'Plot waveforms in...')
         self.menu_plotunits.setIcon(qta.icon('mdi.chart-line'))
         self.act_plotcurrents = self.menu_plotunits.addAction('Currents')
         self.act_plotcurrents.triggered.connect(
@@ -89,9 +89,9 @@ class Settings(QMenuBar):
             self.act_tune, 'sirius-hla-bo-di-tune.py', parent=self)
 
         self.open_menu = self.addMenu('Open...')
-        self.act_ma = QAction('PS', self)
-        self.act_ma.setIcon(qta.icon('mdi.magnet'))
-        util.connect_newprocess(self.act_ma, 'sirius-hla-bo-ps-control.py',
+        self.act_ps = QAction('PS', self)
+        self.act_ps.setIcon(qta.icon('mdi.car-battery'))
+        util.connect_newprocess(self.act_ps, 'sirius-hla-bo-ps-control.py',
                                 parent=self)
         self.act_pm = QAction('PU', self)
         self.act_pm.setIcon(qta.icon('mdi.current-ac'))
@@ -105,7 +105,7 @@ class Settings(QMenuBar):
         self.act_ti.setIcon(qta.icon('mdi.timer'))
         util.connect_newprocess(self.act_ti, 'sirius-hla-as-ti-control.py',
                                 parent=self)
-        self.open_menu.addAction(self.act_ma)
+        self.open_menu.addAction(self.act_ps)
         self.open_menu.addAction(self.act_pm)
         self.open_menu.addAction(self.act_sofb)
         self.open_menu.addAction(self.act_ti)
