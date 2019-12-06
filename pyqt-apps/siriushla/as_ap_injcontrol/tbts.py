@@ -4,6 +4,7 @@
 from qtpy.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QAction, \
     QSizePolicy as QSzPlcy, QTabWidget
 from siriuspy.envars import vaca_prefix as _vaca_prefix
+from siriuspy.namesys import SiriusPVName
 from siriushla import util
 from siriushla.as_di_icts import ICTSummary
 from siriushla.as_di_slits import SlitMonitoring
@@ -20,10 +21,11 @@ class TLControlWindow(BaseWindow):
         self.setObjectName(tl.upper()+'App')
         self.tl = tl.lower()
         self.SVG_FILE = tl.upper() + '.svg'
-        self._devices_dict = self._getTLData()
-        self._scrns_dict = {idx: scr for scr, [_, _, idx]
-                            in self._devices_dict.items()}
+        self._devices = self._getTLData()
+        self._scrns = [devs[0] for devs in self._devices]
         self._setupUi()
+        self.lattice_wid.setStyleSheet(
+            'min-width:65em; min-height:12em; max-height:12em;')
 
     def _setupMenu(self):
         # LatticeAndTwiss = QAction("Show Lattice and Twiss", self)
@@ -52,20 +54,20 @@ class TLControlWindow(BaseWindow):
         lay.setContentsMargins(0, 0, 0, 0)
 
         headerline = self._create_headerline(
-            [['', 0],
-             ['Screen', 10], ['Camera', 3.5], ['Type-Sel', 5.8],
-             ['Type-Sts', 5.8],
-             ['', 0],
-             ['', 1.29], ['CH', 10], ['Kick-SP', 7.5], ['Kick-Mon', 5.8],
-             ['', 0],
-             ['', 1.29], ['CV', 10], ['Kick-SP', 7.5], ['Kick-Mon', 5.8],
-             ['', 0]])
+            (('', 0),
+             ('Screen', 6.5), ('Cam', 3.5), ('Type-Sel', 5), ('Type-Sts', 5),
+             ('', 0),
+             ('', 1.29), ('CH', 5), ('Kick-SP', 5), ('Kick-Mon', 5),
+             ('', 0),
+             ('', 1.29), ('CV', 5), ('Kick-SP', 5), ('Kick-Mon', 5),
+             ('', 0)))
         headerline.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
         lay.addWidget(headerline)
 
-        for scrnprefix, devices in self._devices_dict.items():
-            ch_group, cv_group, scrn_idx = devices
+        for scrn_idx, devices in enumerate(self._devices):
+            scrnprefix, ch_group, cv_group = devices
 
+            scrnprefix = SiriusPVName(scrnprefix)
             scrn_details = self._create_scrn_summwidget(scrnprefix, scrn_idx)
             scrn_details.setObjectName(scrnprefix)
             scrn_details.layout().setContentsMargins(0, 9, 0, 9)
@@ -74,6 +76,7 @@ class TLControlWindow(BaseWindow):
             ch_widget.setLayout(QVBoxLayout())
             ch_widget.layout().setContentsMargins(0, 9, 0, 9)
             for ch in ch_group:
+                ch = SiriusPVName(ch)
                 ch_details = self._create_corr_summwidget(ch)
                 ch_details.setObjectName(ch)
                 ch_widget.layout().addWidget(ch_details)
@@ -82,8 +85,9 @@ class TLControlWindow(BaseWindow):
             cv_widget.setLayout(QVBoxLayout())
             cv_widget.layout().setContentsMargins(0, 9, 0, 9)
             for cv in cv_group:
+                cv = SiriusPVName(cv)
                 cv_details = self._create_corr_summwidget(cv)
-                cv_details.setObjectName(ch)
+                cv_details.setObjectName(cv)
                 cv_widget.layout().addWidget(cv_details)
 
             hlay_scrncorr = QHBoxLayout()
@@ -127,25 +131,30 @@ class TLControlWindow(BaseWindow):
     def _getTLData(self):
         """Return transport line data based on input 'tl'."""
         if self.tl == 'tb':
-            devices_dict = {
-                'TB-01:DI-Scrn-1': [['LI-01:PS-CH-7'], ['LI-01:PS-CV-7'], 0],
-                'TB-01:DI-Scrn-2': [['TB-01:MA-CH-1'], ['TB-01:MA-CV-1'], 1],
-                'TB-02:DI-Scrn-1': [['TB-01:MA-CH-2'], ['TB-01:MA-CV-2'], 2],
-                'TB-02:DI-Scrn-2': [['TB-02:MA-CH-1'], ['TB-02:MA-CV-1'], 3],
-                'TB-03:DI-Scrn':   [['TB-02:MA-CH-2'], ['TB-02:MA-CV-2'], 4],
-                'TB-04:DI-Scrn':   [['TB-04:MA-CH-1'], ['TB-04:MA-CV-1'], 5]}
+            devices = (
+                ('TB-01:DI-Scrn-1', ('LI-01:PS-CH-7', ), ('LI-01:PS-CV-7', )),
+                ('TB-01:DI-Scrn-2', ('TB-01:PS-CH-1', ), ('TB-01:PS-CV-1', )),
+                ('TB-02:DI-Scrn-1', ('TB-01:PS-CH-2', ), ('TB-01:PS-CV-2', )),
+                ('TB-02:DI-Scrn-2', ('TB-02:PS-CH-1', ), ('TB-02:PS-CV-1', )),
+                ('TB-03:DI-Scrn', ('TB-02:PS-CH-2', ), ('TB-02:PS-CV-2', )),
+                ('TB-04:DI-Scrn', ('TB-04:PS-CH-1', ), ('TB-04:PS-CV-1', ))
+            )
         elif self.tl == 'ts':
-            devices_dict = {
-                'TS-01:DI-Scrn':   [['TS-01:PM-EjeSeptF', 'TS-01:PM-EjeSeptG'],
-                                    ['TS-01:MA-CV-1'], 0],
-                'TS-02:DI-Scrn':   [['TS-01:MA-CH'], ['TS-01:MA-CV-2'], 1],
-                'TS-03:DI-Scrn':   [['TS-02:MA-CH'], ['TS-02:MA-CV'], 2],
-                'TS-04:DI-Scrn-1': [['TS-03:MA-CH'], ['TS-03:MA-CV'], 3],
-                'TS-04:DI-Scrn-2': [['TS-04:MA-CH'], ['TS-04:MA-CV-1'], 4],
-                'TS-04:DI-Scrn-3': [
-                    ['TS-04:PM-InjSeptG-1', 'TS-04:PM-InjSeptG-2',
-                     'TS-04:PM-InjSeptF'], ['TS-04:MA-CV-2'], 5]}
-        return devices_dict
+            devices = (
+                ('TS-01:DI-Scrn', ('TS-01:PU-EjeSeptF', 'TS-01:PU-EjeSeptG'),
+                 ('TS-01:PS-CV-1', 'TS-01:PS-CV-1E2')),
+                ('TS-02:DI-Scrn', ('TS-01:PS-CH', ),
+                 ('TS-01:PS-CV-2', 'TS-02:PS-CV-0')),
+                ('TS-03:DI-Scrn', ('TS-02:PS-CH', ), ('TS-02:PS-CV', )),
+                ('TS-04:DI-Scrn-1', ('TS-03:PS-CH', ),
+                 ('TS-03:PS-CV', 'TS-04:PS-CV-0')),
+                ('TS-04:DI-Scrn-2', ('TS-04:PS-CH', ),
+                 ('TS-04:PS-CV-1', 'TS-04:PS-CV-1E2 ')),
+                ('TS-04:DI-Scrn-3',
+                 ('TS-04:PU-InjSeptG-1', 'TS-04:PU-InjSeptG-2',
+                  'TS-04:PU-InjSeptF'), ('TS-04:PS-CV-2', ))
+            )
+        return devices
 
     def keyPressEvent(self, event):
         """Override keyPressEvent."""
