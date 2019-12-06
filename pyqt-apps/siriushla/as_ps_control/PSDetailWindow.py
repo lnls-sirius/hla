@@ -3,7 +3,7 @@
 from qtpy.QtWidgets import QPushButton
 import qtawesome as qta
 from siriuspy.namesys import SiriusPVName as _PVName
-from siriuspy.search import PSSearch, MASearch
+from siriuspy.search import PSSearch
 from siriushla.util import connect_window, get_appropriate_color
 from siriushla.widgets import SiriusMainWindow
 from .detail_widget.DetailWidgetFactory import DetailWidgetFactory
