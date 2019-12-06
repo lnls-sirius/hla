@@ -2,13 +2,13 @@
 
 from qtpy.QtCore import Slot, QVariant
 from qtpy.QtWidgets import QVBoxLayout, QWidget, QDoubleSpinBox, QPushButton, \
-    QListWidget, QHBoxLayout, QLabel
+    QHBoxLayout, QLabel
 from qtpy.QtGui import QPalette, QColor
 from pydm.widgets import PyDMLabel
 
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla.common.epics.task import EpicsConnector, EpicsSetter, \
-    EpicsChecker, EpicsGetter
+    EpicsChecker, EpicsGetter, EpicsWait
 from siriushla.widgets.dialog import ReportDialog, ProgressDialog
 from siriushla.widgets.pvnames_tree import PVNameTree
 from siriushla.util import get_appropriate_color
@@ -142,12 +142,14 @@ class EnergyButton(QWidget):
 
         conn = EpicsConnector(self.dip, parent=self)
         set_dip = EpicsSetter(self.dip, [energy, ], [0.0, ], parent=self)
+        sleep_task = EpicsWait([None, ]*10, wait_time=2.0, parent=self)
         check_dip = EpicsChecker(self.dip, [energy, ], [0.0, ], parent=self)
         check_dip.itemChecked.connect(self._check_status)
 
         dlg = ProgressDialog(
-            ['Connecting', 'Setting Dipole', 'Checking Dipole'],
-            [conn, set_dip, check_dip], parent=self)
+            ['Connecting', 'Setting Dipole', 'Waiting Dipole',
+             'Checking Dipole'],
+            [conn, set_dip, sleep_task, check_dip], parent=self)
         ret = dlg.exec_()
         if ret == dlg.Rejected:
             return
@@ -159,12 +161,14 @@ class EnergyButton(QWidget):
 
         conn = EpicsConnector(pvs, parent=self)
         set_mags = EpicsSetter(pvs, values, delays, parent=self)
+        sleep_task = EpicsWait([None, ]*10, wait_time=2.0, parent=self)
         check_mags = EpicsChecker(pvs, values, delays, parent=self)
         check_mags.itemChecked.connect(self._check_status)
 
         dlg = ProgressDialog(
-            ['Connecting to Magnets', 'Setting Magnets', 'Checking Magnets'],
-            [conn, set_mags, check_mags], parent=self)
+            ['Connecting to Magnets', 'Setting Magnets', 'Waiting Magnets',
+             'Checking Magnets'],
+            [conn, set_mags, sleep_task, check_mags], parent=self)
         ret = dlg.exec_()
         if ret == dlg.Rejected:
             return
