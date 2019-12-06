@@ -5,12 +5,15 @@ from qtpy.QtGui import QKeySequence
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, \
                            QUndoStack, QMessageBox
 import qtawesome as qta
+
 from siriuspy.ramp import ramp
 from siriuspy.clientconfigdb import ConfigDBException as _ConfigDBException
+
+from siriushla.util import get_appropriate_color
 from siriushla.widgets.windows import SiriusMainWindow
-from siriushla.bo_ap_ramp.menu import Settings
-from siriushla.bo_ap_ramp.boramp_edit import ConfigParameters
-from siriushla.bo_ap_ramp.status_and_commands import StatusAndCommands
+from .menu import Settings
+from .boramp_edit import ConfigParameters
+from .status_and_commands import StatusAndCommands
 
 
 class RampMain(SiriusMainWindow):
@@ -23,6 +26,10 @@ class RampMain(SiriusMainWindow):
         super().__init__(parent)
         self.setWindowTitle('Booster Energy Ramping')
         self.setObjectName('BOApp')
+        cor = get_appropriate_color(section='BO')
+        self.setWindowIcon(qta.icon(
+            'mdi.escalator', scale_factor=1.5, color=cor))
+
         self.prefix = prefix
         self.ramp_config = None
         self._undo_stack = QUndoStack(self)
@@ -76,6 +83,8 @@ class RampMain(SiriusMainWindow):
             self._handleUpdateOpticsAdjustSettings)
         self.settings.plotUnitSignal.connect(
             self.config_parameters.getPlotUnits)
+        self.settings.newNormConfigListSignal.connect(
+            self._receiveNewNormConfigList)
 
         self.config_parameters.dip_ramp.updateDipoleRampSignal.connect(
             self._verifySync)
@@ -134,6 +143,12 @@ class RampMain(SiriusMainWindow):
                                                 auto_update=True)
             self._undo_stack.clear()
         self._emitLoadSignal()
+
+    @Slot(list)
+    def _receiveNewNormConfigList(self, norm_config_list):
+        self.ramp_config.ps_normalized_configs_set(norm_config_list)
+        self.loadSignal.emit(self.ramp_config)
+        self._verifySync()
 
     def _emitLoadSignal(self, nconfigs_changed=None):
         try:

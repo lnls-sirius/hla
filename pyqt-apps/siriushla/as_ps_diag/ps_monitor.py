@@ -6,10 +6,12 @@ from qtpy.QtWidgets import QWidget, QGroupBox, QGridLayout, QLabel
 from siriuspy.envars import vaca_prefix
 from siriuspy.search import PSSearch
 from siriuspy.csdevice.pwrsupply import Const as _PSc
+from siriuspy.namesys import SiriusPVName
 
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, PyDMLedMultiChannel
-from siriushla.util import run_newprocess
+from siriushla.util import run_newprocess, get_appropriate_color, \
+    get_monitor_icon
 
 from siriushla.as_ps_diag.util import lips2filters, asps2filters, sips2filters
 
@@ -21,7 +23,10 @@ class PSMonitor(SiriusMainWindow):
         """Init."""
         super().__init__(parent)
         self._prefix = prefix
-        self.setWindowTitle('Power Supplies Monitor')
+        self.setWindowTitle('PS Monitor')
+        self.setObjectName('ASApp')
+        cor = get_appropriate_color(section='AS')
+        self.setWindowIcon(get_monitor_icon('mdi.car-battery', cor))
         self._setupUi()
 
     def _setupUi(self):
@@ -173,8 +178,11 @@ class PSMonitor(SiriusMainWindow):
 class MyLed(PyDMLedMultiChannel):
 
     def mouseDoubleClickEvent(self, ev):
-        ps = self.objectName()
-        run_newprocess(['sirius-hla-as-ps-detail.py', ps])
+        dev = self.objectName()
+        if SiriusPVName(dev).dis == 'PS':
+            run_newprocess(['sirius-hla-as-ps-detail.py', dev])
+        elif SiriusPVName(dev).dis == 'PU':
+            run_newprocess(['sirius-hla-as-pu-detail.py', dev])
 
 
 if __name__ == '__main__':

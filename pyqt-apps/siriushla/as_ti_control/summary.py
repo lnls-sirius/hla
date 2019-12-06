@@ -1,14 +1,15 @@
 from qtpy.QtCore import Qt, QPoint
 from qtpy.QtGui import QPainter
-from qtpy.QtWidgets import QLabel, QPushButton, QWidget, QGridLayout, \
-    QGroupBox, QVBoxLayout, QHBoxLayout, QApplication
+from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QGroupBox, \
+    QHBoxLayout, QApplication
 import qtawesome as qta
 
 from siriuspy.namesys import SiriusPVName as PVName
 from siriuspy.search import LLTimeSearch, HLTimeSearch
 from siriushla.widgets import SiriusLedAlert, SiriusMainWindow, \
     PyDMLedMultiChannel
-from siriushla.util import get_appropriate_color, connect_window
+from siriushla.util import get_appropriate_color, connect_window, \
+    get_monitor_icon
 from siriushla.widgets.windows import create_window_from_widget
 if __name__ == '__main__':
     from siriushla.as_ti_control import AFC, EVE, EVR, EVG, FOUT, \
@@ -216,8 +217,8 @@ class SummaryWindow(SiriusMainWindow):
         super().__init__(parent=parent)
         self._setupui()
         self.setObjectName('ASApp')
-        self.setWindowIcon(
-            qta.icon('mdi.timer', color=get_appropriate_color('AS')))
+        self.setWindowIcon(get_monitor_icon(
+            'mdi.timer', color=get_appropriate_color('AS')))
 
     def _setupui(self):
         wid = QWidget(self)

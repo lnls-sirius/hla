@@ -315,9 +315,6 @@ class AcqControlWidget(BaseWidget):
     def _get_single_pass_acq_grpbx(self):
         grp_bx = QWidget(self)
         fbl = QFormLayout(grp_bx)
-        lbl = QLabel('Position', grp_bx, alignment=Qt.AlignCenter)
-        wid = self.create_pair_sel(grp_bx, 'SPassMethod')
-        fbl.addRow(lbl, wid)
         lbl = QLabel('Avg Turns', grp_bx, alignment=Qt.AlignCenter)
         wid = self.create_pair(grp_bx, 'SPassAvgNrTurns')
         fbl.addRow(lbl, wid)

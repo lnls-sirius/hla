@@ -15,16 +15,18 @@ from qtpy.QtWidgets import QWidget, QLabel, QPushButton, \
     QGridLayout, QSpacerItem, QSizePolicy as QSzPlcy, QLineEdit, \
     QTreeView, QItemDelegate, QHeaderView, QAbstractItemView, \
     QStackedLayout, QRadioButton
+import qtawesome as qta
 
 from pydm.widgets.base import PyDMWidget
 
 from siriuspy.envars import vaca_prefix
 from siriuspy.csdevice.pwrsupply import Const as _PSConst, \
     ETypes as _PSEnums
-from siriuspy.search.ps_search import PSSearch
+from siriuspy.search import PSSearch
 from siriuspy.namesys import SiriusPVName
 
-from siriushla.util import run_newprocess as _run_newprocess
+from siriushla.util import run_newprocess as _run_newprocess, \
+    get_appropriate_color as _get_appropriate_color
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, SiriusConnectionSignal, \
     PyDMLedMultiChannel, PyDMLed, PyDMLedMultiConnection, QLed
@@ -39,7 +41,10 @@ class PSDiag(SiriusMainWindow):
         """Init."""
         super().__init__(parent)
         self._prefix = prefix
-        self.setWindowTitle('Power Supplies Diagnostics')
+        self.setWindowTitle('PS Diagnostics')
+        self.setObjectName('ASApp')
+        cor = _get_appropriate_color(section='AS')
+        self.setWindowIcon(qta.icon('mdi.stethoscope', color=cor))
         self._setupUi()
         self._initialized = False
 
