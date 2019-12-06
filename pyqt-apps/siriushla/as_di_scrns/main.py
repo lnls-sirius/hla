@@ -8,7 +8,8 @@ from datetime import datetime
 import numpy as np
 from qtpy.QtWidgets import QGridLayout, QHBoxLayout, QFormLayout, QVBoxLayout,\
     QSpacerItem, QWidget, QGroupBox, QCheckBox, QComboBox, QPushButton, \
-    QLabel, QMessageBox, QSizePolicy as QSzPlcy, QSpinBox, QFileDialog
+    QLabel, QMessageBox, QSizePolicy as QSzPlcy, QSpinBox, QFileDialog, \
+    QTabWidget
 from qtpy.QtCore import Qt, Slot, Signal
 import qtawesome as qta
 
@@ -83,19 +84,28 @@ class SiriusScrnView(QWidget):
         self.cameraview_widget = QWidget()
         self.cameraview_widget.setLayout(self._cameraviewLayout())
 
-        self.settings_groupBox = QGroupBox('Camera Settings', self)
-        self.settings_groupBox.setLayout(self._settingsLayout())
-        self.settings_groupBox.setStyleSheet("""
+        self.settings_widget = QWidget(self)
+        self.settings_widget.setLayout(self._settingsLayout())
+        self.settings_widget.setStyleSheet("""
             .QLabel{
                 min-width: 5em;}
             QLabel{
                 qproperty-alignment: AlignCenter;}""")
 
-        self.calibrationgrid_groupBox = QGroupBox('Calibration')
-        self.calibrationgrid_groupBox.setLayout(self._calibrationgridLayout())
-        self.calibrationgrid_groupBox.setSizePolicy(
+        self.calibrationgrid_widget = QWidget(self)
+        self.calibrationgrid_widget.setLayout(self._calibrationgridLayout())
+        self.calibrationgrid_widget.setSizePolicy(
             QSzPlcy.Expanding, QSzPlcy.Expanding)
-        self.calibrationgrid_groupBox.layout().setAlignment(Qt.AlignHCenter)
+        self.calibrationgrid_widget.layout().setAlignment(Qt.AlignHCenter)
+        self.tab = QTabWidget(self)
+        self.tab.setStyleSheet("""
+            QTabWidget::pane {
+                border-left: 2px solid gray;
+                border-bottom: 2px solid gray;
+                border-right: 2px solid gray;
+            }""")
+        self.tab.addTab(self.settings_widget, 'Camera Settings')
+        self.tab.addTab(self.calibrationgrid_widget, 'Calibration')
 
         self.statistics_groupBox = QGroupBox('Statistics', self)
         self.statistics_groupBox.setLayout(self._statisticsLayout())
@@ -118,21 +128,19 @@ class SiriusScrnView(QWidget):
                 min-width:4.84em; max-width:4.84em;
                 min-height:1.29em; max-height:1.29em;}""")
 
-        vlay1 = QVBoxLayout()
-        vlay1.addWidget(self.settings_groupBox)
-        vlay1.addWidget(self.trigger_groupBox)
-        vlay2 = QVBoxLayout()
-        vlay2.addWidget(self.statistics_groupBox)
-        vlay2.addWidget(self.calibrationgrid_groupBox)
+        vlay = QVBoxLayout()
+        vlay.addWidget(self.statistics_groupBox)
+        vlay.addWidget(self.trigger_groupBox)
+        vlay.setSpacing(10)
 
         lay = QGridLayout(self)
         lay.setHorizontalSpacing(10)
         lay.setVerticalSpacing(10)
         lay.addWidget(self.cameraview_widget, 0, 0, 1, 2)
-        lay.addLayout(vlay1, 1, 0)
-        lay.addLayout(vlay2, 1, 1)
-        lay.setRowStretch(0, 12)
-        lay.setRowStretch(1, 9)
+        lay.addWidget(self.tab, 1, 0)
+        lay.addLayout(vlay, 1, 1)
+        lay.setRowStretch(0, 15)
+        lay.setRowStretch(1, 7)
 
     def _cameraviewLayout(self):
         label = QLabel(self.device, self)
@@ -319,14 +327,22 @@ class SiriusScrnView(QWidget):
         label_i_Center = QLabel('(', self)
         self.PyDMLabel_CenterXDimFei = PyDMLabel(
             parent=self, init_channel=self.scrn_prefix+':CenterXDimFei-Mon')
+        self.PyDMLabel_CenterXDimFei.setStyleSheet(
+            'min-width:5em; max-width:5em;')
         self.PyDMLabel_CenterXNDStats = PyDMLabel(
             parent=self, init_channel=self.scrn_prefix+':CenterXNDStats-Mon')
+        self.PyDMLabel_CenterXNDStats.setStyleSheet(
+            'min-width:5em; max-width:5em;')
         self.PyDMLabel_CenterXNDStats.setVisible(False)
         label_m_Center = QLabel(',', self)
         self.PyDMLabel_CenterYDimFei = PyDMLabel(
             parent=self, init_channel=self.scrn_prefix+':CenterYDimFei-Mon')
+        self.PyDMLabel_CenterYDimFei.setStyleSheet(
+            'min-width:5em; max-width:5em;')
         self.PyDMLabel_CenterYNDStats = PyDMLabel(
             parent=self, init_channel=self.scrn_prefix+':CenterYNDStats-Mon')
+        self.PyDMLabel_CenterYNDStats.setStyleSheet(
+            'min-width:5em; max-width:5em;')
         self.PyDMLabel_CenterYNDStats.setVisible(False)
         label_f_Center = QLabel(')', self)
 
@@ -336,14 +352,22 @@ class SiriusScrnView(QWidget):
         label_i_Sigma = QLabel('(', self)
         self.PyDMLabel_SigmaXDimFei = PyDMLabel(
             parent=self, init_channel=self.scrn_prefix+':SigmaXDimFei-Mon')
+        self.PyDMLabel_SigmaXDimFei.setStyleSheet(
+            'min-width:5em; max-width:5em;')
         self.PyDMLabel_SigmaXNDStats = PyDMLabel(
             parent=self, init_channel=self.scrn_prefix+':SigmaXNDStats-Mon')
+        self.PyDMLabel_SigmaXNDStats.setStyleSheet(
+            'min-width:5em; max-width:5em;')
         self.PyDMLabel_SigmaXNDStats.setVisible(False)
         label_m_Sigma = QLabel(',', self)
         self.PyDMLabel_SigmaYDimFei = PyDMLabel(
             parent=self, init_channel=self.scrn_prefix+':SigmaYDimFei-Mon')
+        self.PyDMLabel_SigmaYDimFei.setStyleSheet(
+            'min-width:5em; max-width:5em;')
         self.PyDMLabel_SigmaYNDStats = PyDMLabel(
             parent=self, init_channel=self.scrn_prefix+':SigmaYNDStats-Mon')
+        self.PyDMLabel_SigmaYNDStats.setStyleSheet(
+            'min-width:5em; max-width:5em;')
         self.PyDMLabel_SigmaYNDStats.setVisible(False)
         label_f_Sigma = QLabel(')', self)
 
@@ -353,8 +377,10 @@ class SiriusScrnView(QWidget):
         label_i_Theta = QLabel('(', self)
         self.PyDMLabel_ThetaDimFei = PyDMLabel(
             parent=self, init_channel=self.scrn_prefix+':ThetaDimFei-Mon')
+        self.PyDMLabel_ThetaDimFei.setStyleSheet("max-width:12em;")
         self.PyDMLabel_ThetaNDStats = PyDMLabel(
             parent=self, init_channel=self.scrn_prefix+':ThetaNDStats-Mon')
+        self.PyDMLabel_ThetaNDStats.setStyleSheet("max-width:12em;")
         self.PyDMLabel_ThetaNDStats.setVisible(False)
         label_f_Theta = QLabel(')', self)
 
