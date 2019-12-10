@@ -87,7 +87,8 @@ class EVG(BaseWidget):
         self.clocks_wid = ClockList(
             name='Clocks', parent=self, prefix=self.prefix,
             props={'name', 'mux_enbl', 'frequency'},
-            obj_names=sorted(_cstime.Const.ClkLL._fields)
+            obj_names=sorted(_cstime.Const.ClkLL._fields),
+            has_search=True,
             )
         splitter.addWidget(self.clocks_wid)
 
@@ -495,8 +496,10 @@ class ClockList(BaseList):
     def __init__(self, name=None, parent=None, prefix='',
                  props=set(), obj_names=list(), has_search=False):
         """Initialize object."""
-        super().__init__(name=name, parent=parent, prefix=prefix, props=props,
-                         obj_names=obj_names, has_search=has_search)
+        super().__init__(
+            name=name, parent=parent, prefix=prefix, props=props,
+            obj_names=obj_names, has_search=has_search,
+            props2search={'name', 'mux_enbl'})
         self.setObjectName('ASApp')
 
     def _createObjs(self, prefix, prop):
