@@ -22,7 +22,6 @@ class PUDetailWidget(QWidget):
         super().__init__(parent)
         self._devname = _PVName(devname)
         self._section = self._devname.sec
-        self._devtype = self._devname.dis
         self._prefdevname = self._devname.substitute(prefix=_VACA_PREFIX)
         self.setObjectName(self._section+'App')
         self.setWindowIcon(
@@ -44,10 +43,9 @@ class PUDetailWidget(QWidget):
         self._voltage_sp_pv = self._prefdevname + ":Voltage-SP"
         self._voltage_rb_pv = self._prefdevname + ":Voltage-RB"
         self._voltage_mon_pv = self._prefdevname + ":Voltage-Mon"
-        if self._devtype == 'PM':
-            self._kick_sp_pv = self._prefdevname + ":Kick-SP"
-            self._kick_rb_pv = self._prefdevname + ":Kick-RB"
-            self._kick_mon_pv = self._prefdevname + ":Kick-Mon"
+        self._kick_sp_pv = self._prefdevname + ":Kick-SP"
+        self._kick_rb_pv = self._prefdevname + ":Kick-RB"
+        self._kick_mon_pv = self._prefdevname + ":Kick-Mon"
         self._pwrstate_sel_pv = self._prefdevname + ":PwrState-Sel"
         self._pwrstate_sts_pv = self._prefdevname + ":PwrState-Sts"
         self._enablepulses_sel_pv = self._prefdevname + ":Pulse-Sel"
@@ -93,10 +91,9 @@ class PUDetailWidget(QWidget):
         voltage_box = QGroupBox(parent=self, title="Voltage")
         voltage_box.setObjectName("voltage_box")
         voltage_box.setLayout(self._voltage_layout())
-        if self._devtype == 'PM':
-            kick_box = QGroupBox(parent=self, title="Kick")
-            kick_box.setObjectName("kick_box")
-            kick_box.setLayout(self._kick_layout())
+        kick_box = QGroupBox(parent=self, title="Kick")
+        kick_box.setObjectName("kick_box")
+        kick_box.setLayout(self._kick_layout())
         timing_box = QGroupBox(parent=self, title='Trigger')
         timing_box.setObjectName('timing_box')
         timing_box.setLayout(self._timing_layout())
@@ -110,8 +107,7 @@ class PUDetailWidget(QWidget):
         self.layout.addLayout(vbl1, 1, 1, 2, 1)
         vbl2 = QVBoxLayout()
         vbl2.addWidget(voltage_box)
-        if self._devtype == 'PM':
-            vbl2.addWidget(kick_box)
+        vbl2.addWidget(kick_box)
         self.layout.addLayout(vbl2, 1, 2, 2, 1)
         self.layout.addWidget(timing_box, 3, 1, 1, 3)
         self.layout.addLayout(self._ctrlmode_layout(), 4, 1, 1, 3)

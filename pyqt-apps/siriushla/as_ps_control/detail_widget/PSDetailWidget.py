@@ -87,25 +87,21 @@ class PSDetailWidget(QWidget):
         self._psname = psname
         self._prefixed_psname = self._vaca_prefix + self._psname
 
-        if ':MA-' in self._psname:
-            self._is_magnet = True
-        else:
-            self._is_magnet = False
-
-        if self._is_magnet:
-            self._magnet_type = self._getElementType()
-            if self._magnet_type == "b":
-                self._metric = "Energy"
-                self._metric_text = "Energy"
-            elif self._magnet_type == "q":
-                self._metric = "KL"
-                self._metric_text = "KL"
-            elif self._magnet_type == "s":
-                self._metric = "SL"
-                self._metric_text = "SL"
-            elif self._magnet_type in ["sc", "fc"]:
-                self._metric = "Kick"
-                self._metric_text = "Kick"
+        magnet_type = self._getElementType()
+        self._metric = ''
+        self._metric_text = ''
+        if magnet_type == "b":
+            self._metric = "Energy"
+            self._metric_text = "Energy"
+        elif magnet_type == "q":
+            self._metric = "KL"
+            self._metric_text = "KL"
+        elif magnet_type == "s":
+            self._metric = "SL"
+            self._metric_text = "SL"
+        elif magnet_type in ["sc", "fc"]:
+            self._metric = "Kick"
+            self._metric_text = "Kick"
 
         self._setup_ui()
         self.setFocus(True)
@@ -139,10 +135,7 @@ class PSDetailWidget(QWidget):
         self.cycle_tabs.addTab(self.wfm_tab, 'Wfm')
         if self._psname.sec == 'BO':
             self.cycle_tabs.setCurrentIndex(1)
-        if self._is_magnet:
-            self.psconn_box = QGroupBox("PS Connection")
-            self.psconn_box.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
-            self.psconn_box.setObjectName("psconn")
+        if self._metric:
             self.metric_box = QGroupBox(self._metric_text)
             self.metric_box.setObjectName("metric")
 
@@ -156,8 +149,7 @@ class PSDetailWidget(QWidget):
         self.current_box.setLayout(self._currentLayout())
         self.wfm_tab.setLayout(self._wfmLayout())
         self.siggen_tab.setLayout(self._siggenLayout())
-        if self._is_magnet:
-            self.psconn_box.setLayout(self._psConnLayout())
+        if self._metric:
             self.metric_box.setLayout(self._metricLayout())
 
         # Add group boxes to laytout
@@ -169,8 +161,6 @@ class PSDetailWidget(QWidget):
     def _setWidgetLayout(self):
         controls = QGridLayout()
         controls.addWidget(self.frmwr_box, 0, 0, 1, 2)
-        if self._is_magnet:
-            controls.addWidget(self.psconn_box, 1, 0, 1, 2)
         controls.addWidget(self.opmode_box, 2, 0)
         controls.addWidget(self.pwrstate_box, 2, 1)
         controls.addWidget(self.ctrlloop_box, 3, 0)
@@ -179,8 +169,7 @@ class PSDetailWidget(QWidget):
 
         analogs = QVBoxLayout()
         analogs.addWidget(self.current_box, Qt.AlignCenter)
-        if self._is_magnet:
-            analogs.addWidget(self.metric_box, Qt.AlignCenter)
+        analogs.addWidget(self.metric_box, Qt.AlignCenter)
         analogs.addWidget(self.cycle_tabs, Qt.AlignCenter)
 
         boxes_layout = QHBoxLayout()
@@ -694,14 +683,14 @@ class PSDetailWidget(QWidget):
         self._update_wfm_diff()
 
     def _getElementType(self):
-        dipole = re.compile("(SI|BO|LI|TS|TB)-(Fam|\w{2,4}):MA-B")
-        quadrupole = re.compile("(SI|BO|LI|TS|TB)-(Fam|\w{2,4}):MA-Q\w+")
-        sextupole = re.compile("(SI|BO|LI|TS|TB)-(Fam|\w{2,4}):MA-S\w+$")
+        dipole = re.compile("(SI|BO|LI|TS|TB)-(Fam|\w{2,4}):PS-B.*$")
+        quadrupole = re.compile("(SI|BO|LI|TS|TB)-(Fam|\w{2,4}):PS-Q\w+")
+        sextupole = re.compile("(SI|BO|LI|TS|TB)-(Fam|\w{2,4}):PS-S\w+$")
         slow_corrector = re.compile(
-            "(SI|BO|LI|TS|TB)-(Fam|\w{2,4}):MA-(CH|CV)(-|\w)*")
+            "(SI|BO|LI|TS|TB)-(Fam|\w{2,4}):PS-(CH|CV)(-|\w)*")
         fast_corrector = re.compile(
-            "(SI|BO|LI|TS|TB)-(Fam|\w{2,4}):MA-(FCH|FCV)(-|\w)*")
-        skew_quad = re.compile("(SI|BO|LI|TS|TB)-(Fam|\w{2,4}):MA-QS")
+            "(SI|BO|LI|TS|TB)-(Fam|\w{2,4}):PS-(FCH|FCV)(-|\w)*")
+        skew_quad = re.compile("(SI|BO|LI|TS|TB)-(Fam|\w{2,4}):PS-QS")
 
         if dipole.match(self._psname):
             return "b"
@@ -715,7 +704,7 @@ class PSDetailWidget(QWidget):
         elif fast_corrector.match(self._psname):
             return "fc"
         else:
-            raise ValueError("Element not defined")
+            return
 
 
 class DCLinkDetailWidget(PSDetailWidget):

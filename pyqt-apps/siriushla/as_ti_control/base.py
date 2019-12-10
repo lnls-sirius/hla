@@ -1,8 +1,8 @@
 import re
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QFormLayout, \
-    QScrollArea, QGroupBox, QLabel, QGridLayout, QSizePolicy as QSzPol, \
-    QFrame, QLineEdit, QPushButton, QMenu
+    QScrollArea, QGroupBox, QLabel, QSizePolicy as QSzPol, QFrame, QMenu, \
+    QLineEdit, QPushButton
 import qtawesome as qta
 from pydm.widgets import PyDMEnumComboBox
 from pydm.widgets.base import PyDMPrimitiveWidget

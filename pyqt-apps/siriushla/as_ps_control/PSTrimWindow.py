@@ -18,7 +18,6 @@ class PSTrimWindow(SiriusMainWindow):
         super(PSTrimWindow, self).__init__(parent)
         self.setObjectName('SIApp')
         self._devname = SiriusPVName(psname)
-        self._devtype = self._devname.dis
         self._setup_ui()
 
     def _setup_ui(self):
@@ -30,7 +29,9 @@ class PSTrimWindow(SiriusMainWindow):
         # Create family MagnetWidget
         self.fam_widget = SummaryWidget(
             name=self._devname, parent=self,
-            visible_props={'detail', 'state', 'intlk', 'setpoint', 'monitor'})
+            visible_props={
+                'detail', 'state', 'intlk', 'setpoint', 'monitor',
+                'strength_sp', 'strength_mon'})
         self.fam_widget.get_trim_button().setEnabled(False)
         # Connect family detail window
         fam_button = self.fam_widget.get_detail_button()
@@ -38,7 +39,7 @@ class PSTrimWindow(SiriusMainWindow):
         # Create TrimWidget
         device = self._devname.split("-")[-1]
         self.trim_widget = SITrimFamControlWidget(
-            dev_type=self._devtype, trim=device, parent=self,
+            trim=device, parent=self,
             orientation=SITrimFamControlWidget.HORIZONTAL)
         # Connect Trim detail buttons
         self._connect_buttons(self.trim_widget)

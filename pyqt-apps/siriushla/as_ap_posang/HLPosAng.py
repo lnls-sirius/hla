@@ -47,22 +47,22 @@ class PosAngCorr(SiriusMainWindow):
         self.setCentralWidget(self.centralwidget)
         self.setWindowTitle(self._tl + ' Position and Angle Correction Window')
 
-        correctors = ['', '', '', '']
+        corrs = ['', '', '', '']
         if tl == 'ts':
-            correctors[0] = Const.TS_CORRH_POSANG[0]
-            correctors[1] = Const.TS_CORRH_POSANG[1]
-            correctors[2] = Const.TS_CORRV_POSANG[0]
-            correctors[3] = Const.TS_CORRV_POSANG[1]
+            corrs[0] = Const.TS_CORRH_POSANG[0]
+            corrs[1] = Const.TS_CORRH_POSANG[1]
+            corrs[2] = Const.TS_CORRV_POSANG[0]
+            corrs[3] = Const.TS_CORRV_POSANG[1]
         elif tl == 'tb':
             if corrtype == 'ch-sept':
                 CORRCH = Const.TB_CORRH_POSANG_CHSEPT
             else:
                 CORRCH = Const.TB_CORRH_POSANG_CHCH
-            correctors[0] = CORRCH[0]
-            correctors[1] = CORRCH[1]
-            correctors[2] = Const.TB_CORRV_POSANG[0]
-            correctors[3] = Const.TB_CORRV_POSANG[1]
-        self._set_correctors_channels(correctors)
+            corrs[0] = CORRCH[0]
+            corrs[1] = CORRCH[1]
+            corrs[2] = Const.TB_CORRV_POSANG[0]
+            corrs[3] = Const.TB_CORRV_POSANG[1]
+        self._set_correctors_channels(corrs)
 
         act_settings = self.menuBar().addAction('Settings')
         _hlautil.connect_window(act_settings, CorrParamsDetailWindow,
@@ -88,31 +88,39 @@ class PosAngCorr(SiriusMainWindow):
             }
         """)
 
-    def _set_correctors_channels(self, correctors):
-        self.centralwidget.pushButton_CH1.setText(correctors[0])
-        _hlautil.connect_window(self.centralwidget.pushButton_CH1,
-                                _PSDetailWindow, self, psname=correctors[0])
+    def _set_correctors_channels(self, corrs):
+        self.centralwidget.pushButton_CH1.setText(corrs[0])
+        _hlautil.connect_window(
+            self.centralwidget.pushButton_CH1, _PSDetailWindow, self,
+            psname=corrs[0])
         self.centralwidget.PyDMLabel_KickRBCH1.channel = (
-            self._prefix + correctors[0] + ':Kick-RB')
+            self._prefix + corrs[0] + ':Kick-RB')
 
-        self.centralwidget.pushButton_CH2.setText(correctors[1])
-        _hlautil.connect_window(self.centralwidget.pushButton_CH2,
-                                _PUDetailWindow, self,
-                                maname=correctors[1])
+        self.centralwidget.pushButton_CH2.setText(corrs[1])
+        if corrs[1].dis == 'PU':
+            _hlautil.connect_window(
+                self.centralwidget.pushButton_CH2, _PUDetailWindow, self,
+                devname=corrs[1])
+        else:
+            _hlautil.connect_window(
+                self.centralwidget.pushButton_CH2, _PSDetailWindow, self,
+                psname=corrs[1])
         self.centralwidget.PyDMLabel_KickRBCH2.channel = (
-            self._prefix + correctors[1] + ':Kick-RB')
+            self._prefix + corrs[1] + ':Kick-RB')
 
-        self.centralwidget.pushButton_CV1.setText(correctors[2])
-        _hlautil.connect_window(self.centralwidget.pushButton_CV1,
-                                _PSDetailWindow, self, psname=correctors[2])
+        self.centralwidget.pushButton_CV1.setText(corrs[2])
+        _hlautil.connect_window(
+            self.centralwidget.pushButton_CV1, _PSDetailWindow, self,
+            psname=corrs[2])
         self.centralwidget.PyDMLabel_KickRBCV1.channel = (
-            self._prefix + correctors[2] + ':Kick-RB')
+            self._prefix + corrs[2] + ':Kick-RB')
 
-        self.centralwidget.pushButton_CV2.setText(correctors[3])
-        _hlautil.connect_window(self.centralwidget.pushButton_CV2,
-                                _PSDetailWindow, self, psname=correctors[3])
+        self.centralwidget.pushButton_CV2.setText(corrs[3])
+        _hlautil.connect_window(
+            self.centralwidget.pushButton_CV2, _PSDetailWindow, self,
+            psname=corrs[3])
         self.centralwidget.PyDMLabel_KickRBCV2.channel = (
-            self._prefix + correctors[3] + ':Kick-RB')
+            self._prefix + corrs[3] + ':Kick-RB')
 
     def _set_status_labels(self):
         for i in range(4):

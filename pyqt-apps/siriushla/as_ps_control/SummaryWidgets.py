@@ -10,20 +10,20 @@ from pydm.widgets import PyDMPushButton, PyDMLabel, PyDMEnumComboBox
 
 from siriuspy.envars import vaca_prefix as VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as PVName
-from siriuspy.search import MASearch, PSSearch
+from siriuspy.search import PSSearch
 from siriushla.widgets import PyDMStateButton, SiriusLedState, \
     SiriusLedAlert, PyDMLinEditScrollbar, PyDMLedMultiChannel
 
 
-Dipole = re.compile("^.*:MA-B.*$")
-Quadrupole = re.compile("^.*:MA-Q.*$")
-QuadrupoleSkew = re.compile("^.*:MA-QS.*$")
-Sextupole = re.compile("^.*:MA-S.*$")
-Corrector = re.compile("^.*:MA-(CH|CV|FCH|FCV).*$")
-IsPulsed = re.compile("^.*:(PU|PM)-.*$")
+Dipole = re.compile("^.*:PS-B.*$")
+Quadrupole = re.compile("^.*:PS-Q.*$")
+QuadrupoleSkew = re.compile("^.*:PS-QS.*$")
+Sextupole = re.compile("^.*:PS-S.*$")
+Corrector = re.compile("^.*:PS-(CH|CV|FCH|FCV).*$")
+IsPulsed = re.compile("^.*:PU-.*$")
 
-HasTrim = re.compile("^.*SI-Fam:(PS|MA)-Q.*$")
-HasSoftHardIntlk = re.compile("^.*:(PS|MA)-.*$")
+HasTrim = re.compile("^.*SI-Fam:PS-Q.*$")
+HasSoftHardIntlk = re.compile("^.*:PS-.*$")
 
 
 def get_analog_name(psname):
@@ -44,41 +44,39 @@ def get_analog_name(psname):
             raise RuntimeError(
                 'Undefined PS model {} setpoint PV name'.format(psmodel))
     else:
-        if psname.dis in {'PS', 'MA'}:
+        if psname.dis == 'PS':
             return 'Current'
-        elif psname.dis in {'PU', 'PM'}:
+        elif psname.dis == 'PU':
             return 'Voltage'
         else:
             raise RuntimeError(
                 'Undefined PS model {} setpoint PV name'.format(psmodel))
 
 
-def get_strength_name(maname):
-    if Dipole.match(maname):
+def get_strength_name(psname):
+    if Dipole.match(psname):
         return "Energy"
-    elif Quadrupole.match(maname):
+    elif Quadrupole.match(psname):
         return "KL"
-    elif Sextupole.match(maname):
+    elif Sextupole.match(psname):
         return "SL"
-    elif Corrector.match(maname):
+    elif Corrector.match(psname):
         return "Kick"
-    elif IsPulsed.match(maname):
+    elif IsPulsed.match(psname):
         return "Kick"
     else:
-        raise AttributeError("Magnet name is not defined.")
+        return
 
 
 def get_prop2width(psname):
     detail_wid = '8.5' if psname.dev != 'DCLink' else '3'
     dic = {'detail': detail_wid}
-    if psname.dis == 'MA':
-        dic.update({'psconn': '4'})
     dic.update({
         'opmode': '8',
         'ctrlmode': '6',
         'state': '6'
     })
-    if psname.dis in {'PU', 'PM'}:
+    if psname.dis == 'PU':
         dic.update({'pulse': '8'})
     dic.update({
         'intlk':  '5',
@@ -88,12 +86,11 @@ def get_prop2width(psname):
         'readback': '6',
         'monitor': '6',
     })
-    if psname.dis in {'MA', 'PM'}:
-        dic.update({
-            'strength_sp': '6',
-            'strength_rb': '6',
-            'strength_mon': '8'
-        })
+    dic.update({
+        'strength_sp': '6',
+        'strength_rb': '6',
+        'strength_mon': '8'
+    })
     if HasTrim.match(psname):
         dic.update({'trim': '2'})
     return dic
@@ -101,24 +98,18 @@ def get_prop2width(psname):
 
 def get_prop2label(psname):
     dic = {'detail': 'Detail'}
-    if psname.dis == 'MA':
-        dic.update({'psconn': 'PSConn'})
     dic.update({
         'opmode': 'OpMode',
         'ctrlmode': 'Control Mode',
         'state': 'PwrState'
     })
-    if psname.dis in {'PU', 'PM'}:
+    if psname.dis == 'PU':
         dic.update({'pulse': 'Pulse'})
     dic.update({
         'intlk':  'Interlocks',
         'reset': 'Reset'
     })
-    if psname.dis == 'MA':
-        name = MASearch.conv_maname_2_psnames(psname)
-        analog = get_analog_name(name[0])
-    else:
-        analog = get_analog_name(psname)
+    analog = get_analog_name(psname)
     if 'CapacitorBank' in analog:
         analog = 'Voltage'
     dic.update({
@@ -128,13 +119,12 @@ def get_prop2label(psname):
         'monitor': analog + '-Mon',
     })
 
-    if psname.dis in {'MA', 'PM'}:
-        strength = get_strength_name(psname)
+    strength = get_strength_name(psname)
+    if strength:
         dic.update({
             'strength_sp': strength + '-SP',
             'strength_rb': strength + '-RB',
-            'strength_mon': strength + '-Mon'
-        })
+            'strength_mon': strength + '-Mon'})
     if HasTrim.match(psname):
         dic.update({'trim': 'Trim'})
     return dic
@@ -149,15 +139,9 @@ class SummaryWidget(QWidget):
         self._name = PVName(name)
         self.visible_props = visible_props
         self._prefixed_name = VACA_PREFIX + name
-        self._is_magnet = self._name.dis in {'MA', 'PM'}
-        self._is_pulsed = self._name.dis in {'PU', 'PM'}
-
-        if self._is_magnet:
-            psnames = MASearch.conv_maname_2_psnames(name)
-            self._analog_name = get_analog_name(psnames[0])
-            self._strength_name = get_strength_name(self._name)
-        else:
-            self._analog_name = get_analog_name(self._name)
+        self._is_pulsed = self._name.dis == 'PU'
+        self._analog_name = get_analog_name(self._name)
+        self._strength_name = get_strength_name(self._name)
         self._has_softhard_intlk = HasSoftHardIntlk.match(self._name)
         self._has_trim = HasTrim.match(self._name)
 
@@ -185,14 +169,6 @@ class SummaryWidget(QWidget):
             [self.detail_bt, ], orientation='v', name='detail')
         self._widgets_dict['detail'] = self.detail_wid
         lay.addWidget(self.detail_wid)
-
-        if self._name.dis == 'MA':
-            self.psconn_led = SiriusLedState(self, self._psconn_mon)
-            self.psconn_led.setOffColor(SiriusLedAlert.Red)
-            self.psconn_wid = self._build_widget(
-                [self.psconn_led, ], name='psconn')
-            self._widgets_dict['psconn'] = self.psconn_wid
-            lay.addWidget(self.psconn_wid)
 
         opmode_list = list()
         if 'Voltage' not in self._analog_name:
@@ -277,30 +253,29 @@ class SummaryWidget(QWidget):
         self._widgets_dict['monitor'] = self.monitor_wid
         lay.addWidget(self.monitor_wid)
 
-        if self._is_magnet:
-            self.strength_sp_le = PyDMLinEditScrollbar(
-                parent=self, channel=self._strength_sp)
-            self.strength_sp_le.sp_scrollbar.setTracking(False)
-            self.strength_sp_wid = self._build_widget(
-                [self.strength_sp_le, ], orientation='v', name='strength_sp')
-            self._widgets_dict['strength_sp'] = self.strength_sp_wid
-            lay.addWidget(self.strength_sp_wid)
+        self.strength_sp_le = PyDMLinEditScrollbar(
+            parent=self, channel=self._strength_sp)
+        self.strength_sp_le.sp_scrollbar.setTracking(False)
+        self.strength_sp_wid = self._build_widget(
+            [self.strength_sp_le, ], orientation='v', name='strength_sp')
+        self._widgets_dict['strength_sp'] = self.strength_sp_wid
+        lay.addWidget(self.strength_sp_wid)
 
-            self.strength_rb_lb = PyDMLabel(
-                parent=self, init_channel=self._strength_rb)
-            self.strength_rb_lb.showUnits = True
-            self.strength_rb_wid = self._build_widget(
-                [self.strength_rb_lb, ], orientation='v', name='strength_rb')
-            self._widgets_dict['strength_rb'] = self.strength_rb_wid
-            lay.addWidget(self.strength_rb_wid)
+        self.strength_rb_lb = PyDMLabel(
+            parent=self, init_channel=self._strength_rb)
+        self.strength_rb_lb.showUnits = True
+        self.strength_rb_wid = self._build_widget(
+            [self.strength_rb_lb, ], orientation='v', name='strength_rb')
+        self._widgets_dict['strength_rb'] = self.strength_rb_wid
+        lay.addWidget(self.strength_rb_wid)
 
-            self.strength_mon_lb = PyDMLabel(
-                parent=self, init_channel=self._strength_mon)
-            self.strength_mon_lb.showUnits = True
-            self.strength_mon_wid = self._build_widget(
-                [self.strength_mon_lb, ], orientation='v', name='strength_mon')
-            self._widgets_dict['strength_mon'] = self.strength_mon_wid
-            lay.addWidget(self.strength_mon_wid)
+        self.strength_mon_lb = PyDMLabel(
+            parent=self, init_channel=self._strength_mon)
+        self.strength_mon_lb.showUnits = True
+        self.strength_mon_wid = self._build_widget(
+            [self.strength_mon_lb, ], orientation='v', name='strength_mon')
+        self._widgets_dict['strength_mon'] = self.strength_mon_wid
+        lay.addWidget(self.strength_mon_wid)
 
         # Add trim button
         if self._has_trim:
@@ -362,13 +337,10 @@ class SummaryWidget(QWidget):
         self._analog_rb = self._prefixed_name + ':{}-RB'.format(sp)
         self._analog_mon = self._prefixed_name + ':{}-Mon'.format(sp)
 
-        if self._is_magnet:
-            st = self._strength_name
-            self._strength_sp = self._prefixed_name + ':{}-SP'.format(st)
-            self._strength_rb = self._prefixed_name + ':{}-RB'.format(st)
-            self._strength_mon = self._prefixed_name + ':{}-Mon'.format(st)
-            if self._name.dis == 'MA':
-                self._psconn_mon = self._prefixed_name + ':PSConnStatus-Mon'
+        st = self._strength_name
+        self._strength_sp = self._prefixed_name + ':{}-SP'.format(st)
+        self._strength_rb = self._prefixed_name + ':{}-RB'.format(st)
+        self._strength_mon = self._prefixed_name + ':{}-Mon'.format(st)
 
         if self._is_pulsed:
             self._pulse_sel = self._prefixed_name + ':Pulse-Sel'
@@ -450,7 +422,7 @@ class SummaryHeader(QWidget):
         lay.setSpacing(10)
         lay.setContentsMargins(0, 0, 0, 0)
 
-        if self._name.dis in {'PS', 'MA'} and 'DCLink' not in self._name.dev:
+        if self._name.dis == 'PS' and 'DCLink' not in self._name.dev:
             hidden = QLabel(' ')
             hidden.setObjectName('HiddenButton')
             hidden.setStyleSheet('min-width: 10px; max-width: 10px;')

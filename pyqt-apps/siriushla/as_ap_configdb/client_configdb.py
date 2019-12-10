@@ -5,8 +5,7 @@ import time
 from qtpy.QtWidgets import QGridLayout, QHBoxLayout, QVBoxLayout, \
     QWidget, QFrame, QLabel, QComboBox, QPushButton, QMessageBox, QTabWidget, \
     QTableView, QTreeView, QHeaderView
-from qtpy.QtCore import Qt, Slot, Signal, QModelIndex, \
-    QAbstractItemModel
+from qtpy.QtCore import Qt, Slot, QModelIndex, QAbstractItemModel
 
 from siriuspy.clientconfigdb import ConfigDBException
 from siriushla.widgets.windows import SiriusMainWindow

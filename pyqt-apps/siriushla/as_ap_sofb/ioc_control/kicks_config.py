@@ -1,12 +1,11 @@
 """Define Controllers for the orbits displayed in the graphic."""
 
-from qtpy.QtGui import QIcon
 from qtpy.QtWidgets import QFormLayout, QHBoxLayout, QLabel, QVBoxLayout, \
     QGroupBox, QPushButton, QWidget, QTabWidget
 import qtawesome as qta
 
 from pydm.widgets import PyDMPushButton
-from siriushla.widgets import PyDMStateButton, SiriusLedAlert
+from siriushla.widgets import SiriusLedAlert
 
 from siriushla.as_ap_sofb.ioc_control.base import BaseWidget
 from siriushla.widgets.windows import create_window_from_widget

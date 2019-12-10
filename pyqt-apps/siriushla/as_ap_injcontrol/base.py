@@ -228,8 +228,8 @@ class BaseWindow(SiriusMainWindow):
                 util.connect_window(
                     pb, PUDetailWindow, parent=self, devname=corr)
             else:
-                util.connect_window(pb, PSDetailWindow,
-                                    parent=self, psname=corr)
+                util.connect_window(
+                    pb, PSDetailWindow, parent=self, psname=corr)
             pb.setStyleSheet("""
                 min-width:6em; max-width:6em; min-height:1.29em;""")
             lay.addWidget(pb, 1, 2)

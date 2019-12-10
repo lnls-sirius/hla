@@ -3,7 +3,7 @@
 from qtpy.QtCore import Qt, Slot
 from qtpy.QtWidgets import QWidget, QVBoxLayout, QTabWidget, QAction, QMenu
 import qtawesome as qta
-from siriuspy.search import PSSearch, MASearch
+from siriuspy.search import PSSearch
 from siriushla.util import get_appropriate_color
 from siriushla.widgets import SiriusMainWindow
 from siriushla.as_ps_control.SummaryWidgets import SummaryWidget, SummaryHeader
@@ -14,11 +14,10 @@ from .DetailWindow import PUDetailWindow
 class PUControlWindow(SiriusMainWindow):
     """Window to control pulsed magnets."""
 
-    def __init__(self, parent=None, section=None, devtype='PU', is_main=True):
+    def __init__(self, parent=None, section=None, is_main=True):
         """Constructor."""
         super().__init__(parent)
         self._section = section
-        self._devtype = devtype
         self._is_main = is_main
         self.setWindowTitle(section.upper() + ' Pulsed Magnets Control Window')
         if section in {'InjBO', 'EjeBO'}:
@@ -58,25 +57,20 @@ class PUControlWindow(SiriusMainWindow):
         widget = QWidget(self)
         lay = QVBoxLayout(widget)
 
-        if self._devtype == 'PU':
-            fsearch = PSSearch.get_psnames
-        else:
-            fsearch = MASearch.get_manames
-
         if sec in {'TB', 'BO', 'TS', 'SI'}:
-            devices = fsearch({'sec': sec, 'dis': self._devtype})
+            devices = PSSearch.get_psnames({'sec': sec, 'dis': 'PU'})
         elif sec == 'InjBO':
-            devices = fsearch(
-                {'sec': '(TB|BO)', 'dis': self._devtype, 'dev': 'Inj'})
+            devices = PSSearch.get_psnames(
+                {'sec': '(TB|BO)', 'dis': 'PU', 'dev': 'Inj'})
         elif sec == 'EjeBO':
-            devices = fsearch(
-                {'sec': '(BO|TS)', 'dis': self._devtype, 'dev': 'Eje'})
+            devices = PSSearch.get_psnames(
+                {'sec': '(BO|TS)', 'dis': 'PU', 'dev': 'Eje'})
         elif sec == 'InjSI':
-            devices = fsearch(
-                {'sec': '(TS|SI)', 'dis': self._devtype, 'dev': 'Inj'})
+            devices = PSSearch.get_psnames(
+                {'sec': '(TS|SI)', 'dis': 'PU', 'dev': 'Inj'})
         elif sec == 'Ping':
-            devices = fsearch(
-                {'sec': 'SI', 'dis': self._devtype, 'dev': 'Ping'})
+            devices = PSSearch.get_psnames(
+                {'sec': 'SI', 'dis': 'PU', 'dev': 'Ping'})
 
         visible_props = {'detail', 'state', 'reset', 'intlk',
                          'setpoint', 'monitor', 'pulse',

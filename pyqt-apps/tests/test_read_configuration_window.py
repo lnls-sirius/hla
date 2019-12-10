@@ -11,16 +11,16 @@ from siriushla.as_ap_configdb.pvsconfigs import ReadConfigurationWindow
 path = 'siriushla.as_ap_configdb.pvsconfigs'
 fake_url = 'FakeURL'
 db_types_ret = ['Type1', 'Type2']
-pvs = [['SI-01M1:MA-CH:PwrState-Sel', 1],
-       ['SI-01M1:MA-CH:Current-SP', 1.0],
-       ['SI-01M1:MA-CH:OpMode-Sel', 'SlowRef'],
-       ['SI-02M1:MA-CH:PwrState-Sel', False],
-       ['SI-02M1:MA-CH:OpMode-Sel', array(list(range(10)))]]
-ret_pvs = [['SI-01M1:MA-CH:PwrState-Sel', 2],
-           ['SI-01M1:MA-CH:Current-SP', 2.0],
-           ['SI-01M1:MA-CH:OpMode-Sel', 'SlowRefSync'],
-           ['SI-02M1:MA-CH:PwrState-Sel', True],
-           ['SI-02M1:MA-CH:OpMode-Sel', array(list(range(1, 11)))]]
+pvs = [['SI-01M1:PS-CH:PwrState-Sel', 1],
+       ['SI-01M1:PS-CH:Current-SP', 1.0],
+       ['SI-01M1:PS-CH:OpMode-Sel', 'SlowRef'],
+       ['SI-02M1:PS-CH:PwrState-Sel', False],
+       ['SI-02M1:PS-CH:OpMode-Sel', array(list(range(10)))]]
+ret_pvs = [['SI-01M1:PS-CH:PwrState-Sel', 2],
+           ['SI-01M1:PS-CH:Current-SP', 2.0],
+           ['SI-01M1:PS-CH:OpMode-Sel', 'SlowRefSync'],
+           ['SI-02M1:PS-CH:PwrState-Sel', True],
+           ['SI-02M1:PS-CH:OpMode-Sel', array(list(range(1, 11)))]]
 configs = {
     'Type1': {
         'config_name': 'Type1',

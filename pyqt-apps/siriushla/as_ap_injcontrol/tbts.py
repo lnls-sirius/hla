@@ -32,14 +32,14 @@ class TLControlWindow(BaseWindow):
         # util.connect_window(LatticeAndTwiss, ShowLatticeAndTwiss,
         #                         parent=self, tl=self.tl)
         # self.menu.addAction(LatticeAndTwiss)
-        MA = QAction("MA", self)
+        PS = QAction("PS", self)
         util.connect_newprocess(
-            MA, 'sirius-hla-'+self.tl+'-ma-control.py', parent=self)
-        self.menu.addAction(MA)
-        PM = QAction("PM", self)
+            PS, 'sirius-hla-'+self.tl+'-ps-control.py', parent=self)
+        self.menu.addAction(PS)
+        PU = QAction("PU", self)
         util.connect_newprocess(
-            PM, 'sirius-hla-'+self.tl+'-pm-control.py', parent=self)
-        self.menu.addAction(PM)
+            PU, 'sirius-hla-'+self.tl+'-pu-control.py', parent=self)
+        self.menu.addAction(PU)
         SOFB = QAction("SOFB", self)
         util.connect_newprocess(
             SOFB, 'sirius-hla-'+self.tl+'-ap-sofb.py', parent=self)
