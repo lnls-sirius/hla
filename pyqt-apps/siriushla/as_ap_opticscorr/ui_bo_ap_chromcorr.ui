@@ -440,7 +440,7 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
        </widget>
       </item>
       <item row="3" column="1">
-       <widget class="QPushButton" name="pushButton_SFMADetail">
+       <widget class="QPushButton" name="pushButton_SFPSDetail">
         <property name="minimumSize">
          <size>
           <width>122</width>
@@ -458,12 +458,12 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
 max-width:8em;</string>
         </property>
         <property name="text">
-         <string>BO-Fam:MA-SF</string>
+         <string>BO-Fam:PS-SF</string>
         </property>
        </widget>
       </item>
       <item row="4" column="1">
-       <widget class="QPushButton" name="pushButton_SDMADetail">
+       <widget class="QPushButton" name="pushButton_SDPSDetail">
         <property name="minimumSize">
          <size>
           <width>122</width>
@@ -481,7 +481,7 @@ max-width:8em;</string>
 max-width:8em;</string>
         </property>
         <property name="text">
-         <string>BO-Fam:MA-SD</string>
+         <string>BO-Fam:PS-SD</string>
         </property>
        </widget>
       </item>
@@ -512,7 +512,7 @@ max-width:8em;</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>${PREFIX}BO-Fam:MA-SD:SL-RB</string>
+         <string>${PREFIX}BO-Fam:PS-SD:SL-RB</string>
         </property>
        </widget>
       </item>
@@ -574,7 +574,7 @@ max-width:8em;</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>${PREFIX}BO-Fam:MA-SF:SL-RB</string>
+         <string>${PREFIX}BO-Fam:PS-SF:SL-RB</string>
         </property>
        </widget>
       </item>
@@ -861,7 +861,7 @@ min-height:12em;
          <string>Config Sextupoles</string>
         </property>
         <property name="channel" stdset="0">
-         <string>${PREFIX}BO-Glob:AP-ChromCorr:ConfigMA-Cmd</string>
+         <string>${PREFIX}BO-Glob:AP-ChromCorr:ConfigPS-Cmd</string>
         </property>
         <property name="pressValue" stdset="0">
          <string>0</string>

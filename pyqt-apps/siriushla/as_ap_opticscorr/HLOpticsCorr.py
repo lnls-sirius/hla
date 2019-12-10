@@ -41,7 +41,7 @@ class OpticsCorrWindow(SiriusMainWindow):
             ' Correction')
 
         for button in self.centralwidget.findChildren(QPushButton):
-            if 'MADetail' in button.objectName():
+            if 'PSDetail' in button.objectName():
                 ma = button.text()
                 _hlautil.connect_window(button, _PSDetailWindow, self,
                                         psname=ma)

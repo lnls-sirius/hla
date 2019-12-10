@@ -24,15 +24,14 @@ class PSTabControlWindow(PSControlWindow):
                "trim-quadrupole": "Trims",
                }
 
-    def __init__(self, section, discipline, parent=None):
+    def __init__(self, section, parent=None):
         """Class constructor."""
         super().__init__(section=section,
-                         discipline=discipline,
                          device=None,
                          parent=parent)
 
     def _setup_ui(self):
-        self.setWindowTitle(self._section+' '+self._discipline+' Control')
+        self.setWindowTitle(self._section+' PS Control')
         # Create Tabs
         self.tabs = QTabWidget()
         self.tabs.setObjectName(self._section + "Tab")
@@ -43,7 +42,7 @@ class PSTabControlWindow(PSControlWindow):
     def _addTabs(self):
         for device in self.Devices[self._section]:
             widget = ControlWidgetFactory.factory(
-                self, self._section, self._discipline, device)
+                self, self._section, device)
             self._connect_buttons(widget)
             self.tabs.addTab(widget, self.TabName[device])
 

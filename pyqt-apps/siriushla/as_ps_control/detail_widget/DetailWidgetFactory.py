@@ -1,11 +1,8 @@
 """This module defines a factory to get a detailed window."""
-import re
-
 from qtpy.QtWidgets import QWidget, QGridLayout
 from siriuspy.search import PSSearch
 from .PSDetailWidget import PSDetailWidget, FBPDCLinkDetailWidget, \
     FACDCLinkDetailWidget
-from .DipoleDetailWidget import DipoleDetailWidget
 
 
 class DetailWidgetFactory:
@@ -31,9 +28,7 @@ class DetailWidgetFactory:
 
     @staticmethod
     def _item(psname, parent=None):
-        if re.match("(SI|BO)-Fam:MA-B.*", psname):
-            return DipoleDetailWidget(psname, parent)
-        elif 'DCLink' in psname:
+        if 'DCLink' in psname:
             model = PSSearch.conv_psname_2_psmodel(psname)
             if model == 'FBP_DCLink':
                 return FBPDCLinkDetailWidget(psname, parent)

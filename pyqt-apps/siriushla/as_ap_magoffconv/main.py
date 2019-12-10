@@ -8,7 +8,7 @@ from qtpy.QtWidgets import QWidget, QGroupBox, QComboBox, QLabel, \
     QSizePolicy as QSzPlcy, QApplication, QMessageBox
 
 from siriuspy.envars import vaca_prefix
-from siriuspy.search.ma_search import MASearch
+from siriuspy.search import MASearch
 from siriuspy.factory import NormalizerFactory
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow

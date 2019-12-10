@@ -1212,7 +1212,7 @@ max-width:8.71em;</string>
        </widget>
       </item>
       <item row="5" column="2" colspan="2">
-       <widget class="PyDMPushButton" name="PyDMPushButton_ConfigMA">
+       <widget class="PyDMPushButton" name="PyDMPushButton_ConfigPS">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -1273,7 +1273,7 @@ max-width:8.71em;</string>
          <string>Config Correctors</string>
         </property>
         <property name="channel" stdset="0">
-         <string>${PREFIX}${TRANSPORTLINE}-Glob:AP-PosAng:ConfigMA-Cmd</string>
+         <string>${PREFIX}${TRANSPORTLINE}-Glob:AP-PosAng:ConfigPS-Cmd</string>
         </property>
         <property name="pressValue" stdset="0">
          <string>1</string>

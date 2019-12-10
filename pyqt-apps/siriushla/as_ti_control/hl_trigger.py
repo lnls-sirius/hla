@@ -3,8 +3,8 @@ from copy import deepcopy as _dcopy
 import numpy as _np
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGroupBox, QLabel, QPushButton, QFormLayout, \
-    QVBoxLayout, QGridLayout, QSizePolicy as QSzPol, QWidget, QDoubleSpinBox, \
-    QFrame, QScrollArea, QHBoxLayout
+    QVBoxLayout, QGridLayout, QWidget, QDoubleSpinBox, QHBoxLayout, \
+    QFrame, QScrollArea
 import qtawesome as qta
 
 from pydm.widgets import PyDMLabel

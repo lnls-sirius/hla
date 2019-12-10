@@ -2,7 +2,7 @@
 import re
 
 from qtpy.QtCore import Qt, Signal, Slot, QItemSelection
-from qtpy.QtWidgets import QWidget, QLineEdit, QTableView, QVBoxLayout, \
+from qtpy.QtWidgets import QLineEdit, QTableView, QVBoxLayout, \
     QLabel, QHBoxLayout, QFrame
 
 from siriuspy.clientconfigdb import ConfigDBException

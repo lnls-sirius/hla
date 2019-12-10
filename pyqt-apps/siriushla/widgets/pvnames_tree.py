@@ -478,9 +478,9 @@ if __name__ == "__main__":
 
     items = []
     for i in range(800):
-        items.extend([('SI-Fam:MA-B1B1{}:PwrState-Sel'.format(i), 1, 0.0),
-                      ('BO-Fam:MA-QD{}:Current-SP'.format(i), 1, 0.0),
-                      ('BO-Fam:MA-B-{}:PwrState-Sel'.format(i), 1, 0.0)])
+        items.extend([('SI-Fam:PS-B1B1{}:PwrState-Sel'.format(i), 1, 0.0),
+                      ('BO-Fam:PS-QD{}:Current-SP'.format(i), 1, 0.0),
+                      ('BO-Fam:PS-B-{}:PwrState-Sel'.format(i), 1, 0.0)])
     w = PVNameTree(
         items=items, tree_levels=('sec', 'mag_group'),
         checked_levels=('BOQuadrupole', ))

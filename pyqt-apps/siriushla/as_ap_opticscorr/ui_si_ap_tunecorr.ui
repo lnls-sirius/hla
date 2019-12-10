@@ -338,7 +338,7 @@
          <string>Config Quadrupoles</string>
         </property>
         <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Glob:AP-TuneCorr:ConfigMA-Cmd</string>
+         <string>${PREFIX}SI-Glob:AP-TuneCorr:ConfigPS-Cmd</string>
         </property>
         <property name="pressValue" stdset="0">
          <string>0</string>
@@ -499,7 +499,7 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
      </property>
      <layout class="QGridLayout" name="gridLayout_6">
       <item row="5" column="0">
-       <widget class="QPushButton" name="pushButton_QFBMADetail">
+       <widget class="QPushButton" name="pushButton_QFBPSDetail">
         <property name="minimumSize">
          <size>
           <width>122</width>
@@ -517,12 +517,12 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
 max-width:8em;</string>
         </property>
         <property name="text">
-         <string>SI-Fam:MA-QFB</string>
+         <string>SI-Fam:PS-QFB</string>
         </property>
        </widget>
       </item>
       <item row="15" column="0">
-       <widget class="QPushButton" name="pushButton_QDP1MADetail">
+       <widget class="QPushButton" name="pushButton_QDP1PSDetail">
         <property name="minimumSize">
          <size>
           <width>122</width>
@@ -540,7 +540,7 @@ max-width:8em;</string>
 max-width:8em;</string>
         </property>
         <property name="text">
-         <string>SI-Fam:MA-QDP1</string>
+         <string>SI-Fam:PS-QDP1</string>
         </property>
        </widget>
       </item>
@@ -638,7 +638,7 @@ max-width:8em;</string>
        </widget>
       </item>
       <item row="4" column="0">
-       <widget class="QPushButton" name="pushButton_QFAMADetail">
+       <widget class="QPushButton" name="pushButton_QFAPSDetail">
         <property name="minimumSize">
          <size>
           <width>122</width>
@@ -656,7 +656,7 @@ max-width:8em;</string>
 max-width:8em;</string>
         </property>
         <property name="text">
-         <string>SI-Fam:MA-QFA</string>
+         <string>SI-Fam:PS-QFA</string>
         </property>
        </widget>
       </item>
@@ -718,7 +718,7 @@ max-width:8em;</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Fam:MA-QFA:KL-RB</string>
+         <string>${PREFIX}SI-Fam:PS-QFA:KL-RB</string>
         </property>
        </widget>
       </item>
@@ -749,7 +749,7 @@ max-width:8em;</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Fam:MA-QFB:KL-RB</string>
+         <string>${PREFIX}SI-Fam:PS-QFB:KL-RB</string>
         </property>
        </widget>
       </item>
@@ -785,7 +785,7 @@ max-width:8em;</string>
        </widget>
       </item>
       <item row="10" column="0">
-       <widget class="QPushButton" name="pushButton_QDB1MADetail">
+       <widget class="QPushButton" name="pushButton_QDB1PSDetail">
         <property name="minimumSize">
          <size>
           <width>122</width>
@@ -803,7 +803,7 @@ max-width:8em;</string>
 max-width:8em;</string>
         </property>
         <property name="text">
-         <string>SI-Fam:MA-QDB1</string>
+         <string>SI-Fam:PS-QDB1</string>
         </property>
        </widget>
       </item>
@@ -870,7 +870,7 @@ max-width:8em;</string>
        </widget>
       </item>
       <item row="8" column="0">
-       <widget class="QPushButton" name="pushButton_QDAMADetail">
+       <widget class="QPushButton" name="pushButton_QDAPSDetail">
         <property name="minimumSize">
          <size>
           <width>122</width>
@@ -888,7 +888,7 @@ max-width:8em;</string>
 max-width:8em;</string>
         </property>
         <property name="text">
-         <string>SI-Fam:MA-QDA</string>
+         <string>SI-Fam:PS-QDA</string>
         </property>
        </widget>
       </item>
@@ -919,7 +919,7 @@ max-width:8em;</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Fam:MA-QDA:KL-RB</string>
+         <string>${PREFIX}SI-Fam:PS-QDA:KL-RB</string>
         </property>
        </widget>
       </item>
@@ -981,7 +981,7 @@ max-width:8em;</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Fam:MA-QDP2:KL-RB</string>
+         <string>${PREFIX}SI-Fam:PS-QDP2:KL-RB</string>
         </property>
        </widget>
       </item>
@@ -1012,7 +1012,7 @@ max-width:8em;</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Fam:MA-QDP1:KL-RB</string>
+         <string>${PREFIX}SI-Fam:PS-QDP1:KL-RB</string>
         </property>
        </widget>
       </item>
@@ -1141,7 +1141,7 @@ max-width:8em;</string>
        </widget>
       </item>
       <item row="7" column="0">
-       <widget class="QPushButton" name="pushButton_QFPMADetail">
+       <widget class="QPushButton" name="pushButton_QFPPSDetail">
         <property name="minimumSize">
          <size>
           <width>122</width>
@@ -1159,7 +1159,7 @@ max-width:8em;</string>
 max-width:8em;</string>
         </property>
         <property name="text">
-         <string>SI-Fam:MA-QFP</string>
+         <string>SI-Fam:PS-QFP</string>
         </property>
        </widget>
       </item>
@@ -1190,7 +1190,7 @@ max-width:8em;</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Fam:MA-QDB1:KL-RB</string>
+         <string>${PREFIX}SI-Fam:PS-QDB1:KL-RB</string>
         </property>
        </widget>
       </item>
@@ -1257,7 +1257,7 @@ max-width:8em;</string>
        </widget>
       </item>
       <item row="13" column="0">
-       <widget class="QPushButton" name="pushButton_QDB2MADetail">
+       <widget class="QPushButton" name="pushButton_QDB2PSDetail">
         <property name="minimumSize">
          <size>
           <width>122</width>
@@ -1275,7 +1275,7 @@ max-width:8em;</string>
 max-width:8em;</string>
         </property>
         <property name="text">
-         <string>SI-Fam:MA-QDB2</string>
+         <string>SI-Fam:PS-QDB2</string>
         </property>
        </widget>
       </item>
@@ -1306,7 +1306,7 @@ max-width:8em;</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Fam:MA-QDB2:KL-RB</string>
+         <string>${PREFIX}SI-Fam:PS-QDB2:KL-RB</string>
         </property>
        </widget>
       </item>
@@ -1337,7 +1337,7 @@ max-width:8em;</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>${PREFIX}SI-Fam:MA-QFP:KL-RB</string>
+         <string>${PREFIX}SI-Fam:PS-QFP:KL-RB</string>
         </property>
        </widget>
       </item>
@@ -1373,7 +1373,7 @@ max-width:8em;</string>
        </widget>
       </item>
       <item row="17" column="0">
-       <widget class="QPushButton" name="pushButton_QDP2MADetail">
+       <widget class="QPushButton" name="pushButton_QDP2PSDetail">
         <property name="minimumSize">
          <size>
           <width>104</width>
@@ -1391,7 +1391,7 @@ max-width:8em;</string>
 max-width:8em;</string>
         </property>
         <property name="text">
-         <string>SI-Fam:MA-QDP2</string>
+         <string>SI-Fam:PS-QDP2</string>
         </property>
        </widget>
       </item>

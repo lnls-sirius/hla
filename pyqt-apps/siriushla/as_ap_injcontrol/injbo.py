@@ -47,7 +47,7 @@ class InjBOControlWindow(BaseWindow):
         lay_screens.setContentsMargins(0, 0, 0, 0)
         header_screens = self._create_headerline(
             [['', 0],
-             ['Screen', 10], ['Camera', 3.5], ['Type-Sel', 5.8],
+             ['Screen', 8], ['Camera', 3.5], ['Type-Sel', 5.8],
              ['Type-Sts', 5.8],
              ['', 0]])
         header_screens.setObjectName('header_screens')
@@ -85,12 +85,12 @@ class InjBOControlWindow(BaseWindow):
         header_corrs.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
         lay_corr.addWidget(header_corrs, 0, 0, 1, 2)
 
-        for corr, row, col in [['TB-04:MA-CH-1', 1, 0],
-                               ['TB-04:MA-CH-2', 2, 0],
-                               ['TB-04:MA-CV-1', 1, 1],
-                               ['TB-04:MA-CV-2', 2, 1],
-                               ['TB-04:PM-InjSept', 3, 0],
-                               ['BO-01D:PM-InjKckr', 3, 1]]:
+        for corr, row, col in [['TB-04:PS-CH-1', 1, 0],
+                               ['TB-04:PS-CH-2', 2, 0],
+                               ['TB-04:PS-CV-1', 1, 1],
+                               ['TB-04:PS-CV-2', 2, 1],
+                               ['TB-04:PU-InjSept', 3, 0],
+                               ['BO-01D:PU-InjKckr', 3, 1]]:
             w = self._create_corr_summwidget(corr)
             w.layout().setContentsMargins(9, 9, 9, 9)
             lay_corr.addWidget(w, row, col)

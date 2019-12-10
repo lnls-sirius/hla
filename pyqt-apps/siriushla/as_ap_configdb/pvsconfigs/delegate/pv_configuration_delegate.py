@@ -1,11 +1,10 @@
 """Configuration Delegate."""
 
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QItemDelegate, QDoubleSpinBox, QLineEdit
+from qtpy.QtWidgets import QItemDelegate, QDoubleSpinBox
 
 
 class PVConfigurationDelegate(QItemDelegate):
-
 
     def createEditor(self, parent, option, index):
         """Override.

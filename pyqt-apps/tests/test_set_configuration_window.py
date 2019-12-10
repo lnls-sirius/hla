@@ -18,18 +18,18 @@ names_by_type = {'Type1': ['T1C1', 'T1C2', 'T1C3'],
                  'Type3': []}
 db_names_fail = {'code': 505, 'message': 'FakeErrorMessage'}
 
-pvs = [('SI-01M1:MA-CH:PwrState-Sel', 1),
-       ('SI-01M1:MA-CH:Current-SP', 1.0),
-       ('SI-01M1:MA-CH:OpMode-Sel', 1),
-       ('SI-02M1:MA-CH:PwrState-Sel', 1),
-       ('SI-02M1:MA-CH:Current-SP', 1.0),
-       ('SI-02M1:MA-CH:OpMode-Sel', 1),
-       ('BO-02:MA-CH:PwrState-Sel', 1),
-       ('BO-02:MA-CH:Current-SP', 1.0),
-       ('BO-02:MA-CH:OpMode-Sel', 1),
-       ('BO-01:MA-QF:PwrState-Sel', 1),
-       ('BO-01:MA-QF:Current-SP', 1.0),
-       ('BO-01:MA-QF:OpMode-Sel', 1)]
+pvs = [('SI-01M1:PS-CH:PwrState-Sel', 1),
+       ('SI-01M1:PS-CH:Current-SP', 1.0),
+       ('SI-01M1:PS-CH:OpMode-Sel', 1),
+       ('SI-02M1:PS-CH:PwrState-Sel', 1),
+       ('SI-02M1:PS-CH:Current-SP', 1.0),
+       ('SI-02M1:PS-CH:OpMode-Sel', 1),
+       ('BO-02:PS-CH:PwrState-Sel', 1),
+       ('BO-02:PS-CH:Current-SP', 1.0),
+       ('BO-02:PS-CH:OpMode-Sel', 1),
+       ('BO-01:PS-QF:PwrState-Sel', 1),
+       ('BO-01:PS-QF:Current-SP', 1.0),
+       ('BO-01:PS-QF:OpMode-Sel', 1)]
 configs = {
     'Type1': {
         'T1C1': {

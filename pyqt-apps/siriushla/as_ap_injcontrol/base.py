@@ -229,12 +229,12 @@ class BaseWindow(SiriusMainWindow):
             lay.addWidget(led, 1, 1)
 
             pb = QPushButton(corr, self)
-            if corr.split('-')[1].split(':')[1] == 'PM':
-                util.connect_window(pb, PUDetailWindow,
-                                    parent=self, maname=corr)
+            if corr.split('-')[1].split(':')[1] == 'PU':
+                util.connect_window(
+                    pb, PUDetailWindow, parent=self, devname=corr)
             else:
-                util.connect_window(pb, PSDetailWindow,
-                                    parent=self, psname=corr)
+                util.connect_window(
+                    pb, PSDetailWindow, parent=self, psname=corr)
             pb.setStyleSheet("""
                 min-width:10em; max-width:10em; min-height:1.29em;""")
             lay.addWidget(pb, 1, 2)

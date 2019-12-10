@@ -205,14 +205,16 @@ def get_object(ismenubar=True, parent=None):
             menu = LEVEL1(name, self)
             menu.setObjectName(sec.upper()+'App')
 
-            PS = self._set_psma_menu(sec, dis='ps')
+            PS = self._set_ps_menu(sec)
             PS.setIcon(qta.icon('mdi.car-battery'))
-            MA = self._set_psma_menu(sec, dis='ma')
-            MA.setIcon(qta.icon('mdi.magnet'))
+            if sec in {'bo', 'si'}:
+                PU = self._set_pu_menu(sec)
+                PU.setIcon(qta.icon('mdi.current-ac'))
             OPT = self._set_optics_menu(sec)
             DIG = self._set_diagnostic_menu(sec)
             self.add_object_to_level1(menu, PS)
-            self.add_object_to_level1(menu, MA)
+            if sec in {'bo', 'si'}:
+                self.add_object_to_level1(menu, PU)
             self.add_object_to_level1(menu, DIG)
             self.add_object_to_level1(menu, OPT)
 
@@ -323,7 +325,7 @@ def get_object(ismenubar=True, parent=None):
             menu.setIcon(qta.icon('mdi.currency-sign'))
             action = menu.addAction('Summary')
             action.setIcon(util.get_monitor_icon('mdi.currency-sign'))
-            self.connect_newprocess(action, cmd + ['Summary', ])
+            self.connect_newprocess(action, cmd + ['-w', 'Summary', ])
             typs = ('Single Pass', 'Multi Turn')
             acts = ('SPass', 'MTurn')
             for typ, act in zip(typs, acts):
@@ -366,69 +368,70 @@ def get_object(ismenubar=True, parent=None):
                 action = menu.addAction(name)
                 self.connect_newprocess(action, cmd)
 
-        def _set_psma_menu(self, sec, dis='ps'):
-            scr = 'sirius-hla-' + sec + '-' + dis + '-control.py'
-            psma = LEVEL2M(
-                'MA' if dis == 'ma' else 'PS', self)
-            psma.setObjectName(sec.upper()+'App')
+        def _set_ps_menu(self, sec):
+            scr = 'sirius-hla-' + sec + '-ps-control.py'
+            psmenu = LEVEL2M('PS', self)
+            psmenu.setObjectName(sec.upper()+'App')
 
-            all_dev = QAction('All', psma)
+            all_dev = QAction('All', psmenu)
             self.connect_newprocess(all_dev, scr)
-            dip = QAction('Dipoles', psma)
+            dip = QAction('Dipoles', psmenu)
             self.connect_newprocess(dip, [scr, '--device', 'dipole'])
-            quad = QAction('Quadrupoles', psma)
+            quad = QAction('Quadrupoles', psmenu)
             self.connect_newprocess(quad, [scr, '--device', 'quadrupole'])
-            psma.addAction(all_dev)
-            psma.addAction(dip)
-            psma.addAction(quad)
+            psmenu.addAction(all_dev)
+            psmenu.addAction(dip)
+            psmenu.addAction(quad)
 
             if sec in {'bo', 'si'}:
-                sext = QAction('Sextupoles', psma)
+                sext = QAction('Sextupoles', psmenu)
                 self.connect_newprocess(sext, [scr, '--device', 'sextupole'])
-                psma.addAction(sext)
+                psmenu.addAction(sext)
 
-                skew = QAction('Skew Quadrupoles', psma)
+                skew = QAction('Skew Quadrupoles', psmenu)
                 self.connect_newprocess(
                     skew, [scr, '--device', 'skew-quadrupole'])
-                psma.addAction(skew)
+                psmenu.addAction(skew)
 
-            corrs = QAction('Correctors', psma)
+            corrs = QAction('Correctors', psmenu)
             self.connect_newprocess(corrs, [scr, '--device', 'corrector-slow'])
-            psma.addAction(corrs)
+            psmenu.addAction(corrs)
 
             if sec == 'si':
-                trims = QAction('Trims', psma)
+                trims = QAction('Trims', psmenu)
                 self.connect_newprocess(
                     trims, [scr, '--device', 'trim-quadrupole'])
-                psma.addAction(trims)
-            #     fcorr = QAction('Fast Correctors', psma)
+                psmenu.addAction(trims)
+            #     fcorr = QAction('Fast Correctors', psmenu)
             #     self.connect_newprocess(
             #         fcorr, [scr, '--device', 'corrector-fast'])
-            #     psma.addAction(fcorr)
+            #     psmenu.addAction(fcorr)
 
-            dispu = 'pu' if dis == 'ps' else 'pm'
-            script = 'sirius-hla-' + sec + '-' + dispu + '-control.py'
-            if sec == 'si':
-                pmag = QAction(dispu.upper()+' Injection', psma)
-                self.connect_newprocess(pmag, [script, '-s', 'InjSI'])
-                psma.addAction(pmag)
-                pmag = QAction(dispu.upper()+' Pingers', psma)
-                self.connect_newprocess(pmag, [script, '-s', 'Ping'])
-                psma.addAction(pmag)
-            elif sec == 'bo':
-                pmag = QAction(dispu.upper()+' Injection', psma)
-                self.connect_newprocess(pmag, [script, '-s', 'InjBO'])
-                psma.addAction(pmag)
-                pmag = QAction(dispu.upper()+' Ejection', psma)
-                self.connect_newprocess(pmag, [script, '-s', 'EjeBO'])
-                psma.addAction(pmag)
-
-            if sec == 'bo' and dis == 'ps':
-                wfmerr = QAction('Waveform Error', psma)
+            if sec == 'bo':
+                wfmerr = QAction('Waveform Error', psmenu)
                 self.connect_newprocess(wfmerr, 'sirius-hla-bo-ps-wfmerror.py')
-                psma.addAction(wfmerr)
+                psmenu.addAction(wfmerr)
+            return psmenu
 
-            return psma
+        def _set_pu_menu(self, sec):
+            pumenu = LEVEL2M('PU', self)
+            pumenu.setObjectName(sec.upper()+'App')
+            script = 'sirius-hla-' + sec + '-pu-control.py'
+            if sec == 'si':
+                pmag = QAction('PU Injection', pumenu)
+                self.connect_newprocess(pmag, [script, '-s', 'InjSI'])
+                pumenu.addAction(pmag)
+                pmag = QAction('PU Pingers', pumenu)
+                self.connect_newprocess(pmag, [script, '-s', 'Ping'])
+                pumenu.addAction(pmag)
+            elif sec == 'bo':
+                pmag = QAction('PU Injection', pumenu)
+                self.connect_newprocess(pmag, [script, '-s', 'InjBO'])
+                pumenu.addAction(pmag)
+                pmag = QAction('PU Ejection', pumenu)
+                self.connect_newprocess(pmag, [script, '-s', 'EjeBO'])
+                pumenu.addAction(pmag)
+            return pumenu
 
         def _set_rf_menu(self, sec):
             menu = LEVEL2M('RF', self)

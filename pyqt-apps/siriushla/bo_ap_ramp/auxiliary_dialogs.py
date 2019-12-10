@@ -11,8 +11,9 @@ from siriuspy.csdevice.orbitcorr import SOFBFactory
 from siriuspy.clientconfigdb import ConfigDBClient as _ConfigDBClient, \
     ConfigDBDocument as _ConfigDBDocument, \
     ConfigDBException as _ConfigDBException
-from siriuspy.search import MASearch
+from siriuspy.search import PSSearch
 from siriuspy.ramp import ramp
+from siriuspy.namesys import SiriusPVName as _PVName
 
 from siriushla.widgets.windows import SiriusDialog
 from .custom_widgets import \
@@ -95,7 +96,7 @@ class InsertNormalizedConfig(SiriusDialog):
         try:
             self.norm_config.name = configname
             self.norm_config.load()
-            energy = self.norm_config[ramp.BoosterRamp.MANAME_DIPOLE]
+            energy = self.norm_config[ramp.BoosterRamp.PSNAME_DIPOLE_REF]
             time = self.ramp_config.ps_waveform_interp_time(energy)
             self.sb_time.setValue(time)
         except _ConfigDBException as err:
@@ -504,17 +505,17 @@ class OpticsAdjustSettings(SiriusDialog):
         self.close()
 
 
-class ChooseMagnetsToPlot(SiriusDialog):
+class ChoosePSToPlot(SiriusDialog):
     """Auxiliar window to select which magnets will to be shown in plot."""
 
     choosePlotSignal = Signal(list)
 
-    def __init__(self, parent, manames, current_plots):
+    def __init__(self, parent, psnames, current_plots):
         """Initialize object."""
         super().__init__(parent)
-        self.setWindowTitle('Choose Magnets To Plot')
+        self.setWindowTitle('Choose Power Supplies To Plot')
         self.setObjectName('BOApp')
-        self.manames = manames
+        self.psnames = psnames
         self.current_plots = current_plots
         self._setupUi()
 
@@ -552,22 +553,22 @@ class ChooseMagnetsToPlot(SiriusDialog):
         self.all_cv_sel.clicked.connect(self._handleSelectGroups)
         vlay_cv.addWidget(self.all_cv_sel)
 
-        for maname in self.manames:
-            if 'Q' in maname:
-                cb_maname = QCheckBox(maname, self.quads)
-                vlay_quad.addWidget(cb_maname)
-            elif 'S' in maname:
-                cb_maname = QCheckBox(maname, self.sexts)
-                vlay_sext.addWidget(cb_maname)
-            elif 'CH' in maname:
-                cb_maname = QCheckBox(maname, self.chs)
-                vlay_ch.addWidget(cb_maname)
-            elif 'CV' in maname:
-                cb_maname = QCheckBox(maname, self.cvs)
-                vlay_cv.addWidget(cb_maname)
-            if maname in self.current_plots:
-                cb_maname.setChecked(True)
-            cb_maname.setObjectName(maname)
+        for psname in self.psnames:
+            if psname.dev in {'QF', 'QD', 'QS'}:
+                cb_psname = QCheckBox(psname, self.quads)
+                vlay_quad.addWidget(cb_psname)
+            elif psname.dev in {'SF', 'SD'}:
+                cb_psname = QCheckBox(psname, self.sexts)
+                vlay_sext.addWidget(cb_psname)
+            elif psname.dev == 'CH':
+                cb_psname = QCheckBox(psname, self.chs)
+                vlay_ch.addWidget(cb_psname)
+            elif psname.dev == 'CV':
+                cb_psname = QCheckBox(psname, self.cvs)
+                vlay_cv.addWidget(cb_psname)
+            if psname in self.current_plots:
+                cb_psname.setChecked(True)
+            cb_psname.setObjectName(psname)
 
         self.pb_choose = QPushButton('Choose', self)
         self.pb_choose.clicked.connect(self._emitChoosePlot)
@@ -588,7 +589,7 @@ class ChooseMagnetsToPlot(SiriusDialog):
                 child.setChecked(sender.isChecked())
 
     def _emitChoosePlot(self):
-        maname_list = list()
+        psname_list = list()
         children = list()
         for w in [self.quads, self.sexts, self.chs, self.cvs]:
             for child in w.children():
@@ -596,9 +597,9 @@ class ChooseMagnetsToPlot(SiriusDialog):
         for child in children:
             if (isinstance(child, QCheckBox) and child.isChecked() and
                     'BO' in child.objectName()):
-                maname_list.append(child.objectName())
+                psname_list.append(_PVName(child.objectName()))
 
-        self.choosePlotSignal.emit(maname_list)
+        self.choosePlotSignal.emit(psname_list)
         self.close()
 
 
@@ -617,8 +618,7 @@ class ShowCorrectorKicks(SiriusDialog):
     def _setupUi(self):
         self.kicks = dict()
         for dev in ['CV', 'CH']:
-            f = {'sec': 'BO', 'dev': dev}
-            names = MASearch.get_manames(filters=f)
+            names = PSSearch.get_psnames({'sec': 'BO', 'dev': dev})
             corr2kicks = {n.strip(':Kick-SP'): k
                           for n, k, d in self.norm_config.value['pvs']}
             self.kicks[dev] = _np.array([corr2kicks[n] for n in names])

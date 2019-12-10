@@ -18,17 +18,18 @@ from matplotlib.backends.backend_qt5agg import (
 from matplotlib.figure import Figure
 
 from siriuspy.csdevice.pwrsupply import MAX_WFMSIZE
-from siriuspy.search import MASearch as _MASearch
+from siriuspy.search import MASearch as _MASearch, PSSearch as _PSSearch
 from siriuspy.ramp import ramp, exceptions
 from siriuspy.ramp.magnet import get_magnet as _get_magnet
 from siriuspy.ramp.conn import ConnSOFB as _ConnSOFB
+from siriuspy.namesys import SiriusPVName as _PVName
 
 from siriushla.widgets import SiriusFigureCanvas
 from siriushla.bo_ap_ramp.auxiliary_dialogs import \
     InsertNormalizedConfig as _InsertNormConfig, \
     DeleteNormalizedConfig as _DeleteNormConfig, \
     DuplicateNormConfig as _DuplicateNormConfig, \
-    ChooseMagnetsToPlot as _ChooseMagnetsToPlot
+    ChoosePSToPlot as _ChoosePSToPlot
 from siriushla.bo_ap_ramp.custom_widgets import \
     SpinBoxDelegate as _SpinBoxDelegate, \
     CustomTableWidgetItem as _CustomTableWidgetItem, \
@@ -564,8 +565,8 @@ class DipoleRamp(QWidget):
             self.updateTable()
 
     def _verifyWarnings(self):
-        if 'BO-Fam:MA-B' in self.ramp_config.ps_waveform_manames_exclimits:
-            self.label_exclim.setText('<h6>Waveform is exceeding current '
+        if 'BO-Fam:PS-B-1' in self.ramp_config.ps_waveform_psnames_exclimits:
+            self.label_exclim.setText('<h6>Waveforms are exceeding current '
                                       'limits.</h6>')
             self.pb_exclim.setVisible(True)
         else:
@@ -573,11 +574,12 @@ class DipoleRamp(QWidget):
             self.pb_exclim.setVisible(False)
 
     def _showExcLimPopup(self):
-        manames_exclimits = self.ramp_config.ps_waveform_manames_exclimits
-        if 'BO-Fam:MA-B' in manames_exclimits:
-            text = 'The waveform of the following magnets\n' \
+        psnames_exclimits = self.ramp_config.ps_waveform_psnames_exclimits
+        if 'BO-Fam:PS-B-1' in psnames_exclimits:
+            text = 'The waveform of the following power supplies\n' \
                    'are exceeding current limits:\n' \
-                   '    - BO-Fam:MA-B'
+                   '    - BO-Fam:PS-B-1' \
+                   '    - BO-Fam:PS-B-2'
         QMessageBox.warning(self, 'Warning', text, QMessageBox.Ok)
 
     def updateGraph(self, update_axis=False):
@@ -585,13 +587,14 @@ class DipoleRamp(QWidget):
         if self.ramp_config is None:
             return
 
-        xdata = self.ramp_config.ps_waveform_get_times('BO-Fam:MA-B')
+        dip_name = ramp.BoosterRamp.PSNAME_DIPOLE_REF
+        xdata = self.ramp_config.ps_waveform_get_times(dip_name)
         if self.plot_unit == 'Strengths':
             self.ax.set_ylabel('E [GeV]')
-            ydata = self.ramp_config.ps_waveform_get_strengths('BO-Fam:MA-B')
+            ydata = self.ramp_config.ps_waveform_get_strengths(dip_name)
         elif self.plot_unit == 'Currents':
             self.ax.set_ylabel('Current [A]')
-            ydata = self.ramp_config.ps_waveform_get_currents('BO-Fam:MA-B')
+            ydata = self.ramp_config.ps_waveform_get_currents(dip_name)
         self.line.set_xdata(xdata)
         self.line.set_ydata(ydata)
         if update_axis:
@@ -621,11 +624,11 @@ class DipoleRamp(QWidget):
 
         inj_time = self.ramp_config.ti_params_injection_time
         self.m_inj.set_xdata(inj_time)
-        self.m_inj.set_ydata(func('BO-Fam:MA-B', inj_time))
+        self.m_inj.set_ydata(func(dip_name, inj_time))
 
         ej_time = self.ramp_config.ti_params_ejection_time
         self.m_ej.set_xdata(ej_time)
-        self.m_ej.set_ydata(func('BO-Fam:MA-B', ej_time))
+        self.m_ej.set_ydata(func(dip_name, ej_time))
 
         self.graph.figure.canvas.draw()
         self.graph.figure.canvas.flush_events()
@@ -752,7 +755,7 @@ class MultipolesRamp(QWidget):
         self.normalized_configs = list()
         self.bonorm_edit_dict = dict()
 
-        self._magnets_to_plot = []
+        self._ps_to_plot = []
         self.plot_unit = 'Strengths'
 
         self._tunecorr_configname = tunecorr_configname
@@ -762,14 +765,17 @@ class MultipolesRamp(QWidget):
         self._manames = _MASearch.get_manames({'sec': 'BO', 'dis': 'MA'})
         th = _createMagnets(self, self._manames)
         th.start()
-        self._manames.remove('BO-Fam:MA-B')
+        self._psnames = _PSSearch.get_psnames({'sec': 'BO', 'dis': 'PS'})
+        self._psnames.remove('BO-Fam:PS-B-1')
+        self._psnames.remove('BO-Fam:PS-B-2')
+        self._psnames = [_PVName(ps) for ps in self._psnames]
 
         self.setObjectName('MultipolesRampWidget')
         self._setupUi()
 
     @property
-    def manames(self):
-        return self._manames
+    def psnames(self):
+        return self._psnames
 
     def _setupUi(self):
         label = QLabel('<h3>Multipoles Ramp</h3>', self)
@@ -786,10 +792,10 @@ class MultipolesRamp(QWidget):
         icon = qta.icon('mdi.chart-line', 'mdi.dots-horizontal',
                         options=[{'offset': [0, -0.2]},
                                  {'offset': [0, 0.4]}])
-        self.bt_maname = QPushButton(icon, '', self)
-        self.bt_maname.setStyleSheet('icon-size: 20px 20px;')
-        self.bt_maname.setToolTip('Choose magnets to plot')
-        self.bt_maname.clicked.connect(self._showChooseMagnetToPlot)
+        self.bt_plot = QPushButton(icon, '', self)
+        self.bt_plot.setStyleSheet('icon-size: 20px 20px;')
+        self.bt_plot.setToolTip('Choose power supplies to plot')
+        self.bt_plot.clicked.connect(self._showChoosePSToPlot)
 
         self.bt_insert = QPushButton(qta.icon('fa5s.plus'), '', self)
         self.bt_insert.setObjectName('bt_insert')
@@ -810,7 +816,7 @@ class MultipolesRamp(QWidget):
         self.bt_delete.clicked.connect(self._showDeleteNormConfigPopup)
         hlay_chart_ins_del = QHBoxLayout()
         hlay_chart_ins_del.setSpacing(12)
-        hlay_chart_ins_del.addWidget(self.bt_maname)
+        hlay_chart_ins_del.addWidget(self.bt_plot)
         hlay_chart_ins_del.addStretch()
         hlay_chart_ins_del.addWidget(self.bt_insert)
         hlay_chart_ins_del.addWidget(self.bt_delete)
@@ -858,7 +864,7 @@ class MultipolesRamp(QWidget):
         self.ax.grid()
         self.ax.set_xlabel('t [ms]')
         self.lines = dict()
-        th = _createGraphCurves(self, self._manames, self.ax, self.lines)
+        th = _createGraphCurves(self, self._psnames, self.ax, self.lines)
         th.start()
         self.m_inj, = self.ax.plot([0], [0], ls='', marker='o', c='#787878')
         self.m_ej, = self.ax.plot([0], [0], ls='', marker='o', c='#787878')
@@ -1055,16 +1061,16 @@ class MultipolesRamp(QWidget):
         self.handleLoadRampConfig()
         self.updateMultipoleRampSignal.emit()
 
-    def _showChooseMagnetToPlot(self):
-        self._chooseMagnetsPopup = _ChooseMagnetsToPlot(
-            self, self.manames, self._magnets_to_plot)
-        self._chooseMagnetsPopup.choosePlotSignal.connect(
-            self._handleChooseMagnetToPlot)
-        self._chooseMagnetsPopup.open()
+    def _showChoosePSToPlot(self):
+        self._choosePSPopup = _ChoosePSToPlot(
+            self, self.psnames, self._ps_to_plot)
+        self._choosePSPopup.choosePlotSignal.connect(
+            self._handleChoosePSToPlot)
+        self._choosePSPopup.open()
 
     @Slot(list)
-    def _handleChooseMagnetToPlot(self, maname_list):
-        self._magnets_to_plot = maname_list
+    def _handleChoosePSToPlot(self, psname_list):
+        self._ps_to_plot = psname_list
         self.updateGraph(update_axis=True)
 
     def _showNormConfigMenu(self, pos):
@@ -1094,7 +1100,7 @@ class MultipolesRamp(QWidget):
         menu.exec_(self.table.mapToGlobal(pos))
 
     def _showEditNormConfigWindow(self, pos):
-        for maname in self.manames:
+        for maname in self._manames:
             if maname not in _aux_magnets.keys():
                 QMessageBox.warning(
                     self, 'Wait...',
@@ -1148,10 +1154,12 @@ class MultipolesRamp(QWidget):
         return row, col, nconfig_name, time, energy
 
     def _verifyWarnings(self):
-        manames_exclimits = self.ramp_config.ps_waveform_manames_exclimits
-        if 'BO-Fam:MA-B' in manames_exclimits:
-            manames_exclimits.remove('BO-Fam:MA-B')
-        if len(manames_exclimits) > 0:
+        psnames_exclimits = self.ramp_config.ps_waveform_psnames_exclimits
+        if 'BO-Fam:PS-B-1' in psnames_exclimits:
+            psnames_exclimits.remove('BO-Fam:PS-B-1')
+        if 'BO-Fam:PS-B-2' in psnames_exclimits:
+            psnames_exclimits.remove('BO-Fam:PS-B-2')
+        if len(psnames_exclimits) > 0:
             self.label_exclim.setText('<h6>There are waveforms exceeding '
                                       'current limits.</h6>')
             self.pb_exclim.setVisible(True)
@@ -1160,13 +1168,15 @@ class MultipolesRamp(QWidget):
             self.pb_exclim.setVisible(False)
 
     def _showExcLimPopup(self):
-        manames_exclimits = self.ramp_config.ps_waveform_manames_exclimits
-        if 'BO-Fam:MA-B' in manames_exclimits:
-            manames_exclimits.remove('BO-Fam:MA-B')
-        text = 'The waveform of the following magnets\n' \
+        psnames_exclimits = self.ramp_config.ps_waveform_psnames_exclimits
+        if 'BO-Fam:PS-B-1' in psnames_exclimits:
+            psnames_exclimits.remove('BO-Fam:PS-B-1')
+        if 'BO-Fam:PS-B-2' in psnames_exclimits:
+            psnames_exclimits.remove('BO-Fam:PS-B-2')
+        text = 'The waveform of the following power supplies\n' \
                'are exceeding current limits:\n'
-        for maname in manames_exclimits:
-            text += '    - ' + maname + '\n'
+        for psname in psnames_exclimits:
+            text += '    - ' + psname + '\n'
         QMessageBox.warning(self, 'Warning', text, QMessageBox.Ok)
 
     def updateGraph(self, update_axis=False):
@@ -1174,8 +1184,8 @@ class MultipolesRamp(QWidget):
         if self.ramp_config is None:
             return
         if not self.ramp_config.ps_normalized_configs:
-            for maname in self.manames:
-                self.lines[maname].set_linewidth(0)
+            for psname in self.psnames:
+                self.lines[psname].set_linewidth(0)
             self.m_inj.set_xdata([])
             self.m_inj.set_ydata([])
             self.m_ej.set_xdata([])
@@ -1185,24 +1195,24 @@ class MultipolesRamp(QWidget):
             xds_max = list()
             yds_min = list()
             yds_max = list()
-            for maname in self.manames:
-                if maname in self._magnets_to_plot:
-                    self.lines[maname].set_linewidth(1.5)
+            for psname in self.psnames:
+                if psname in self._ps_to_plot:
+                    self.lines[psname].set_linewidth(1.5)
                     # x data
-                    xd = self.ramp_config.ps_waveform_get_times(maname)
+                    xd = self.ramp_config.ps_waveform_get_times(psname)
                     xds_min.append(xd.min())
                     xds_max.append(xd.max())
-                    self.lines[maname].set_xdata(xd)
+                    self.lines[psname].set_xdata(xd)
                     # y data
                     if self.plot_unit == 'Strengths':
-                        yd = self.ramp_config.ps_waveform_get_strengths(maname)
+                        yd = self.ramp_config.ps_waveform_get_strengths(psname)
                     elif self.plot_unit == 'Currents':
-                        yd = self.ramp_config.ps_waveform_get_currents(maname)
+                        yd = self.ramp_config.ps_waveform_get_currents(psname)
                     yds_min.append(yd.min())
                     yds_max.append(yd.max())
-                    self.lines[maname].set_ydata(yd)
+                    self.lines[psname].set_ydata(yd)
                 else:
-                    self.lines[maname].set_linewidth(0)
+                    self.lines[psname].set_linewidth(0)
 
             if update_axis and len(xds_min) > 0:
                 xds_min = np.array(xds_min)
@@ -1219,18 +1229,18 @@ class MultipolesRamp(QWidget):
 
             if self.plot_unit == 'Strengths':
                 ylabel = None
-                for maname in self._magnets_to_plot:
-                    if 'MA-Q' not in maname:
+                for psname in self._ps_to_plot:
+                    if psname.dev not in {'QD', 'QF', 'QS'}:
                         break
                 else:
                     ylabel = 'KL [1/m]'
-                for maname in self._magnets_to_plot:
-                    if 'MA-S' not in maname:
+                for psname in self._ps_to_plot:
+                    if psname.dev not in {'SD', 'SF'}:
                         break
                 else:
                     ylabel = 'SL [1/m$^2$]'
-                for maname in self._magnets_to_plot:
-                    if 'MA-C' not in maname:
+                for psname in self._ps_to_plot:
+                    if psname.dev not in {'CH', 'CV'}:
                         break
                 else:
                     ylabel = 'Kick [urad]'
@@ -1253,9 +1263,9 @@ class MultipolesRamp(QWidget):
                 func = self.ramp_config.ps_waveform_interp_strengths
             else:
                 func = self.ramp_config.ps_waveform_interp_currents
-            for maname in self._magnets_to_plot:
-                inj_marker_value.append(func(maname, inj_time))
-                ej_marker_value.append(func(maname, ej_time))
+            for psname in self._ps_to_plot:
+                inj_marker_value.append(func(psname, inj_time))
+                ej_marker_value.append(func(psname, ej_time))
             self.m_inj.set_ydata(inj_marker_value)
             self.m_ej.set_ydata(ej_marker_value)
 
@@ -1308,8 +1318,8 @@ class MultipolesRamp(QWidget):
     @Slot(ramp.BoosterRamp)
     def handleLoadRampConfig(self, ramp_config=None):
         """Update all widgets in loading BoosterRamp config."""
-        for maname in self.manames:
-            if maname not in self.lines.keys():
+        for psname in self.psnames:
+            if psname not in self.lines.keys():
                 QMessageBox.warning(
                     self, 'Wait...',
                     'Loading magnets curves... \n'
@@ -1703,7 +1713,7 @@ class RFRamp(QWidget):
         self.m_ej.set_ydata(
             self.ramp_config.rf_ramp_interp_voltages(ej_time))
 
-        ph_times = self.ramp_config.ps_waveform_get_times('BO-Fam:MA-B')
+        ph_times = self.ramp_config.ps_waveform_get_times('BO-Fam:PS-B-1')
         ph = self._calc_syncphase(ph_times)
         self.line2.set_xdata(ph_times)
         self.line2.set_ydata(ph)
@@ -1802,15 +1812,15 @@ class _createMagnets(QThread):
 
 class _createGraphCurves(QThread):
 
-    def __init__(self, parent, manames, axis, lines):
+    def __init__(self, parent, psnames, axis, lines):
         super().__init__(parent)
-        self.manames = manames
+        self.psnames = psnames
         self.axis = axis
         self.lines = lines
 
     def run(self):
-        for maname in self.manames:
-            self.lines[maname], = self.axis.plot([0], [0], '-b')
+        for psname in self.psnames:
+            self.lines[psname], = self.axis.plot([0], [0], '-b')
 
 
 # ----- undo/redo auxiliar classes -----
