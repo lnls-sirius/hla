@@ -416,7 +416,7 @@ class BONormEdit(SiriusMainWindow):
     def _handleStrengtsLimits(self, state):
         psnames = _dcopy(self.norm_config.psnames)
         psnames.remove('BO-Fam:PS-B-1')
-        psnames.remove('BO-Fam:PS-B-1')
+        psnames.remove('BO-Fam:PS-B-2')
         if state:
             for ps in psnames:
                 ps_value = self.nconfig_data.findChild(QDoubleSpinBox, name=ps)
