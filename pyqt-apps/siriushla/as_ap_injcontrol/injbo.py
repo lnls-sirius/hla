@@ -7,7 +7,7 @@ from qtpy.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QWidget, \
     QSizePolicy as QSzPlcy, QGroupBox, QLabel, QPushButton, QAction
 
 from pydm.widgets import PyDMSpinbox, PyDMLabel, PyDMPushButton
-
+from siriuspy.namesys import SiriusPVName
 from siriushla import util
 from siriushla.as_ap_posang import CorrParamsDetailWindow
 from siriushla.as_ap_injcontrol.base import BaseWindow
@@ -21,11 +21,12 @@ class InjBOControlWindow(BaseWindow):
         self.setWindowTitle('Booster Injection Control Window')
         self.setObjectName('BOApp')
         self.SVG_FILE = 'TB-BO.svg'
-        self._scrns_dict = {0: 'BO-01D:DI-Scrn-1',
-                            1: 'BO-01D:DI-Scrn-2',
-                            2: 'BO-02U:DI-Scrn'}
+        self._scrns = ('BO-01D:DI-Scrn-1',
+                       'BO-01D:DI-Scrn-2',
+                       'BO-02U:DI-Scrn')
         self._setupUi()
-        self.lattice_wid.setStyleSheet('min-width:88em; min-height:18em;')
+        self.lattice_wid.setStyleSheet(
+            'min-width:65em; min-height:14em; max-height:14em;')
 
     def _setupMenu(self):
         PosAng = QAction("PosAng CH-Sept", self)
@@ -39,17 +40,17 @@ class InjBOControlWindow(BaseWindow):
         self.menu.addAction(PosAngCHCH)
 
     def _setupDiagWidget(self):
-        self.auxdig_wid = QWidget(self)
+        return
 
     def _setupScrnsCorrsWidget(self):
         # screens
         lay_screens = QVBoxLayout()
         lay_screens.setContentsMargins(0, 0, 0, 0)
         header_screens = self._create_headerline(
-            [['', 0],
-             ['Screen', 8], ['Camera', 3.5], ['Type-Sel', 5.8],
-             ['Type-Sts', 5.8],
-             ['', 0]])
+            (('', 0),
+             ('Screen', 6.5), ('Cam', 3.5), ('Type-Sel', 5),
+             ('Type-Sts', 5),
+             ('', 0)))
         header_screens.setObjectName('header_screens')
         header_screens.setStyleSheet(
             '#header_screens {border-bottom: 2px solid gray;}')
@@ -57,7 +58,8 @@ class InjBOControlWindow(BaseWindow):
         header_screens.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
         lay_screens.addWidget(header_screens)
 
-        for idx, scrn_prefix in self._scrns_dict.items():
+        for idx, scrn_prefix in enumerate(self._scrns):
+            scrn_prefix = SiriusPVName(scrn_prefix)
             w = self._create_scrn_summwidget(scrn_prefix, idx)
             w.layout().setContentsMargins(9, 9, 9, 9)
             lay_screens.addWidget(w)
@@ -69,15 +71,15 @@ class InjBOControlWindow(BaseWindow):
             '#w_corr {border-left: 2px solid gray;}')
         lay_corr = QGridLayout(w_corr)
         lay_corr.setContentsMargins(0, 0, 0, 0)
-        lay_corr.setVerticalSpacing(60)
+        lay_corr.setVerticalSpacing(25)
         lay_corr.setHorizontalSpacing(15)
         lay_corr.setAlignment(Qt.AlignTop)
         header_corrs = self._create_headerline(
-            [['', 0],
-             ['', 1.29], ['', 10], ['Kick-SP', 7.5], ['Kick-Mon', 5.8],
-             ['', 0],
-             ['', 1.29], ['', 10], ['Kick-SP', 7.5], ['Kick-Mon', 5.8],
-             ['', 0]])
+            (('', 0),
+             ('', 1.29), ('', 5), ('Kick-SP', 5), ('Kick-Mon', 5),
+             ('', 0),
+             ('', 1.29), ('', 5), ('Kick-SP', 5), ('Kick-Mon', 5),
+             ('', 0)))
         header_corrs.setObjectName('header_corrs')
         header_corrs.setStyleSheet(
             '#header_corrs {border-bottom: 2px solid gray;}')
@@ -85,12 +87,13 @@ class InjBOControlWindow(BaseWindow):
         header_corrs.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
         lay_corr.addWidget(header_corrs, 0, 0, 1, 2)
 
-        for corr, row, col in [['TB-04:PS-CH-1', 1, 0],
-                               ['TB-04:PS-CH-2', 2, 0],
-                               ['TB-04:PS-CV-1', 1, 1],
-                               ['TB-04:PS-CV-2', 2, 1],
-                               ['TB-04:PU-InjSept', 3, 0],
-                               ['BO-01D:PU-InjKckr', 3, 1]]:
+        for corr, row, col in (('TB-04:PS-CH-1', 1, 0),
+                               ('TB-04:PS-CH-2', 2, 0),
+                               ('TB-04:PS-CV-1', 1, 1),
+                               ('TB-04:PS-CV-2', 2, 1),
+                               ('TB-04:PU-InjSept', 3, 0),
+                               ('BO-01D:PU-InjKckr', 3, 1)):
+            corr = SiriusPVName(corr)
             w = self._create_corr_summwidget(corr)
             w.layout().setContentsMargins(9, 9, 9, 9)
             lay_corr.addWidget(w, row, col)
@@ -108,9 +111,9 @@ class InjBOControlWindow(BaseWindow):
         lay_posang.setHorizontalSpacing(15)
 
         header_posang = self._create_headerline(
-            [['', 0],
-             ['', 1.29], ['Position and Angle Correction', 48.0],
-             ['', 0]])
+            (('', 0),
+             ('', 1.29), ('Position and Angle Correction', 30),
+             ('', 0)))
         header_posang.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
         lay_posang.addWidget(header_posang, 0, 0, 1, 2)
 
@@ -121,7 +124,7 @@ class InjBOControlWindow(BaseWindow):
         self.pb_update_ref.setStyleSheet('min-height: 2em;')
         lay_posang.addWidget(self.pb_update_ref, 1, 0, 1, 2)
 
-        for col, title, axis in [[0, 'Horizontal', 'X'], [1, 'Vertical', 'Y']]:
+        for col, title, axis in ((0, 'Horizontal', 'X'), (1, 'Vertical', 'Y')):
             lb_pos = QLabel('<h4>Δ'+axis.lower()+'</h4>', self,
                             alignment=Qt.AlignRight)
             lb_pos.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
@@ -163,7 +166,7 @@ class InjBOControlWindow(BaseWindow):
         lay_posangref.setVerticalSpacing(9)
         lay_posangref.addWidget(QLabel('<h4>Reference Kicks</h4>', self,
                                        alignment=Qt.AlignCenter), 0, 0, 1, 7)
-        for corr in ['CH1', 'CH2', 'CV1', 'CV2']:
+        for corr in ('CH1', 'CH2', 'CV1', 'CV2'):
             lb_corr = PyDMLabel(
                 parent=self, init_channel=posang_prefix+':'+corr+'-Cte')
             lb_corr.setStyleSheet('font-weight:bold;')
@@ -186,9 +189,9 @@ class InjBOControlWindow(BaseWindow):
         lay_corr.addWidget(w_posang, 4, 0, 1, 2)
 
         lay_corr.setRowStretch(0, 1)
-        lay_corr.setRowStretch(1, 3)
-        lay_corr.setRowStretch(2, 3)
-        lay_corr.setRowStretch(3, 3)
+        lay_corr.setRowStretch(1, 2)
+        lay_corr.setRowStretch(2, 2)
+        lay_corr.setRowStretch(3, 2)
         lay_corr.setRowStretch(4, 10)
 
         lay = QHBoxLayout()

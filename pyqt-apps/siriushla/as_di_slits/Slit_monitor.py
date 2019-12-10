@@ -6,8 +6,8 @@ import os as _os
 from qtpy.uic import loadUi
 from qtpy.QtCore import QPoint, Qt, QEvent
 from qtpy.QtWidgets import QWidget, QVBoxLayout, QGridLayout, QFormLayout, \
-                           QSpacerItem,  QSizePolicy as QSzPlcy, \
-                           QLabel, QGroupBox
+    QSpacerItem,  QSizePolicy as QSzPlcy, QLabel, QGroupBox, QPushButton
+import qtawesome as qta
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 from pydm.widgets import PyDMLabel, PyDMPushButton
 from siriuspy.namesys import SiriusPVName as _PVName
@@ -94,8 +94,14 @@ class SlitMonitoring(QWidget):
         multiled_status.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Fixed)
         self.centralwidget.lay_status.addWidget(multiled_status)
 
-        util.connect_window(self.centralwidget.pb_details, _SlitDetails,
-                            parent=self, slit_prefix=slit_prefix)
+        pb_details = QPushButton(qta.icon('fa5s.ellipsis-h'), '', self)
+        pb_details.setToolTip('Open details')
+        pb_details.setObjectName('detail')
+        pb_details.setStyleSheet(
+            "#detail{min-width:25px; max-width:25px; icon-size:20px;}")
+        util.connect_window(pb_details, _SlitDetails, parent=self,
+                            slit_prefix=slit_prefix)
+        self.centralwidget.lay_status.addWidget(pb_details)
 
     def _setSlitPos(self, new_value):
         """Set Slits Widget positions."""
