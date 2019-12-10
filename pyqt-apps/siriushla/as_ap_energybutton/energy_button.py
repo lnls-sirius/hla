@@ -117,6 +117,11 @@ class EnergyButton(QWidget):
         # Get selected PVs
         selected_pvs = set(self._tree.checked_items())
         mags = [mag for mag in self.mags if mag in selected_pvs]
+        if not mags:
+            report = ReportDialog(['Select at least one PS!'], self)
+            report.exec_()
+            return
+
         pvs = self.dips + mags
 
         conn = EpicsConnector(pvs, parent=self)
@@ -141,10 +146,12 @@ class EnergyButton(QWidget):
         delays = [0.0, ] * len(pvs)
         self._items_success = []
 
-        conn = EpicsConnector(self.dip, parent=self)
-        set_dip = EpicsSetter(self.dip, [energy, ], [0.0, ], parent=self)
+        energies = [energy, ] * len(self.dips)
+        dly_dips = [0.0, ] * len(self.dips)
+        conn = EpicsConnector(self.dips, parent=self)
+        set_dip = EpicsSetter(self.dips, energies, dly_dips, parent=self)
         sleep_task = EpicsWait([None, ]*10, wait_time=2.0, parent=self)
-        check_dip = EpicsChecker(self.dip, [energy, ], [0.0, ], parent=self)
+        check_dip = EpicsChecker(self.dips, energies, dly_dips, parent=self)
         check_dip.itemChecked.connect(self._check_status)
 
         dlg = ProgressDialog(
