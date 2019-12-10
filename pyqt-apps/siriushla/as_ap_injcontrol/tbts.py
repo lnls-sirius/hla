@@ -149,7 +149,7 @@ class TLControlWindow(BaseWindow):
                 ('TS-04:DI-Scrn-1', ('TS-03:PS-CH', ),
                  ('TS-03:PS-CV', 'TS-04:PS-CV-0')),
                 ('TS-04:DI-Scrn-2', ('TS-04:PS-CH', ),
-                 ('TS-04:PS-CV-1', 'TS-04:PS-CV-1E2 ')),
+                 ('TS-04:PS-CV-1', 'TS-04:PS-CV-1E2')),
                 ('TS-04:DI-Scrn-3',
                  ('TS-04:PU-InjSeptG-1', 'TS-04:PU-InjSeptG-2',
                   'TS-04:PU-InjSeptF'), ('TS-04:PS-CV-2', ))
