@@ -447,7 +447,7 @@ class BONormEdit(SiriusMainWindow):
             corr_factor = self._deltas['factorV'] if 'CV' in psname \
                 else self._deltas['factorH']
             corr_factor /= 100
-            self.norm_config[psname] = self._current_kicks[psname] + \
+            self.norm_config[psname] = self._reference[psname] + \
                 dkick*corr_factor
 
     def _handleGetKicksFromSOFB(self):
@@ -463,10 +463,6 @@ class BONormEdit(SiriusMainWindow):
                 self, 'Could not get kicks',
                 'Could not get kicks from SOFB!', QMessageBox.Ok)
             return
-
-        self._current_kicks = dict()
-        for psname in self._get_PSNames():
-            self._current_kicks[psname] = self.norm_config[psname]
 
         self._deltas['kicks'] = dkicks
         self._updateCorrKicks()
