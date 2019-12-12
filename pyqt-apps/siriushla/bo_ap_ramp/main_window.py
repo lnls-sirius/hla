@@ -1,7 +1,7 @@
 """Booster Ramp Main Window."""
 
 from qtpy.QtCore import Qt, Slot, Signal
-from qtpy.QtGui import QKeySequence
+from qtpy.QtGui import QKeySequence, QPalette
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, \
                            QUndoStack, QMessageBox
 import qtawesome as qta
@@ -168,12 +168,14 @@ class RampMain(SiriusMainWindow):
         """Verify sync status related to ConfServer."""
         if self.ramp_config is not None:
             if not self.ramp_config.synchronized:
-                self.config_parameters.setStyleSheet(
-                    '#ConfigParameters {color: red;}')
+                pal = self.config_parameters.palette()
+                pal.setColor(QPalette.Text, Qt.red)
+                self.config_parameters.setPalette(pal)
                 self.config_parameters.setToolTip('There are unsaved changes')
             else:
-                self.config_parameters.setStyleSheet(
-                    '#ConfigParameters {color: black;}')
+                pal = self.config_parameters.palette()
+                pal.setColor(QPalette.Text, Qt.black)
+                self.config_parameters.setPalette(pal)
                 self.config_parameters.setToolTip('')
 
     def closeEvent(self, ev):

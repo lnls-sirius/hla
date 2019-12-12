@@ -6,7 +6,7 @@ from functools import partial as _part
 import numpy as _np
 
 from qtpy.QtCore import Qt, Signal, Slot
-from qtpy.QtGui import QKeySequence
+from qtpy.QtGui import QKeySequence, QPalette
 from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
     QGridLayout, QScrollArea, QFormLayout, QCheckBox, QDoubleSpinBox, \
     QUndoStack, QUndoCommand, QHBoxLayout, QMessageBox, QMenuBar
@@ -395,11 +395,15 @@ class BONormEdit(SiriusMainWindow):
             self.norm_config.verify_syncronized()
         if not self.norm_config.synchronized:
             self.act_save.setEnabled(True)
-            self.label_name.setStyleSheet("color:red;")
+            pal = self.label_name.palette()
+            pal.setColor(QPalette.WindowText, Qt.red)
+            self.label_name.setPalette(pal)
             self.setToolTip("There are unsaved changes")
         else:
             self.act_save.setEnabled(False)
-            self.label_name.setStyleSheet("")
+            pal = self.label_name.palette()
+            pal.setColor(QPalette.WindowText, Qt.black)
+            self.label_name.setPalette(pal)
             self.setToolTip("")
 
     # ---------- strengths ----------
@@ -416,7 +420,7 @@ class BONormEdit(SiriusMainWindow):
     def _handleStrengtsLimits(self, state):
         psnames = _dcopy(self.norm_config.psnames)
         psnames.remove('BO-Fam:PS-B-1')
-        psnames.remove('BO-Fam:PS-B-1')
+        psnames.remove('BO-Fam:PS-B-2')
         if state:
             for ps in psnames:
                 ps_value = self.nconfig_data.findChild(QDoubleSpinBox, name=ps)

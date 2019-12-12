@@ -433,15 +433,15 @@ class _CommandThread(QThread):
                 return
             for cmd, msg in zip(self._cmds, self._warn_msgs):
                 cmd_success, problems = cmd()
-                if not self._use_log:
-                    self.itemDone.emit('')
                 if not cmd_success:
                     self.sentWarning.emit(msg, problems)
+                if not self._use_log:
+                    self.itemDone.emit('')
                 if self._quit_task:
                     break
-        self.completed.emit()
         if self._use_log:
             self._conn.logger = None
+        self.completed.emit()
 
     def update(self, item):
         self.currentItem.emit(item)
