@@ -25,9 +25,9 @@ parser.add_argument(
     help='Show the ith subgroup of the bpms.' +
          ' The maximum number of groups for BO is 5 and for SI is 20')
 parser.add_argument(
-    '-w', '--window', type=str, default='Summary',
-    help="type of window to open (default= 'Summary').",
-    choices=('SPass', 'MTurn', 'Summary'))
+    '-w', '--window', type=str, default='Monitor',
+    help="type of window to open (default= 'Monitor').",
+    choices=('SPass', 'MTurn', 'Monitor'))
 parser.add_argument(
     '-m', '--mode', type=str, default='Positions',
     help="Show Antennas or Positions  (default= 'Positions').",
@@ -49,7 +49,7 @@ else:
     sec = args.bpm_sel.upper()
     bpms_names = BPMSearch.get_names(filters={'sec': sec})
     icon = qta.icon('mdi.currency-sign', color=get_appropriate_color(sec))
-    if args.window == 'Summary':
+    if args.window == 'Monitor':
         clas = SelectBPMs
         icon = get_monitor_icon(
             'mdi.currency-sign', color=get_appropriate_color(sec))
