@@ -24,6 +24,21 @@ def _create_objects(section):
     """."""
     dipnames = DIPNAMES[section]
     psnames = _PSSearch.get_psnames({'sec': section})
+    kckrs = [
+        _SiriusPVName('BO-01D:PU-InjKckr'),
+        _SiriusPVName('BO-48D:PU-EjeKckr'),
+        _SiriusPVName('SI-01SA:PU-InjDpKckr'),
+        _SiriusPVName('SI-01SA:PU-InjNLKckr')]
+    # Add Kickers to TLs:
+    if section == 'TS':
+        psnames.extend(kckrs[1:])
+        psnames = sorted(psnames)
+    elif section == 'TB':
+        psnames.append(kckrs[0])
+        psnames = sorted(psnames)
+    else:
+        psnames = sorted(set(psnames) - set(kckrs))
+
     magnets = []
     dipoles = []
     for psname in psnames:
