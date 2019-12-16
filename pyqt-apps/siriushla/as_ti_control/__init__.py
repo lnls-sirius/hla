@@ -1,5 +1,5 @@
 from .hltiming import TimingMain
-from .summary import SummaryWindow
+from .monitor import MonitorWindow
 from .evg import EVG, EventList, ClockList, BucketList
 from .fout import FOUT
 from .afc import AFC

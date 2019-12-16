@@ -94,11 +94,11 @@ class HLButton(QWidget):
             Window, parent=None, prefix=trigger + ':'))
 
 
-class SummaryHL(QGroupBox):
+class MonitorHL(QGroupBox):
 
     def __init__(self, parent=None, prefix=''):
         self.prefix = prefix
-        super().__init__('High Level Summary', parent=parent)
+        super().__init__('High Level Monitor', parent=parent)
         self._setupui()
         self.setObjectName('ASApp')
 
@@ -124,10 +124,10 @@ class SummaryHL(QGroupBox):
                 lay.addWidget(but, row, i % nrcols)
 
 
-class SummaryLL(QGroupBox):
+class MonitorLL(QGroupBox):
 
     def __init__(self, parent=None, prefix=''):
-        super().__init__('Low Level Summary', parent=parent)
+        super().__init__('Low Level Monitor', parent=parent)
         self.prefix = prefix
         self._setupui()
         self.setObjectName('ASApp')
@@ -210,7 +210,7 @@ class SummaryLL(QGroupBox):
         return painter
 
 
-class SummaryWindow(SiriusMainWindow):
+class MonitorWindow(SiriusMainWindow):
 
     def __init__(self, parent=None, prefix=''):
         self.prefix = prefix
@@ -225,9 +225,9 @@ class SummaryWindow(SiriusMainWindow):
         self.setCentralWidget(wid)
         gl = QGridLayout(wid)
         gl.addWidget(QLabel(
-            '<h1>Timing Summary</h1>', alignment=Qt.AlignCenter), 0, 0, 1, 2)
-        gl.addWidget(SummaryLL(self, prefix=self.prefix), 1, 0)
-        gl.addWidget(SummaryHL(self, prefix=self.prefix), 1, 1)
+            '<h1>Timing Monitor</h1>', alignment=Qt.AlignCenter), 0, 0, 1, 2)
+        gl.addWidget(MonitorLL(self, prefix=self.prefix), 1, 0)
+        gl.addWidget(MonitorHL(self, prefix=self.prefix), 1, 1)
 
 
 if __name__ == '__main__':
@@ -238,6 +238,6 @@ if __name__ == '__main__':
 
     props = {'detailed', 'state', 'pulses', 'duration'}
     app = SiriusApplication()
-    win = SummaryWindow()
+    win = MonitorWindow()
     win.show()
     sys.exit(app.exec_())

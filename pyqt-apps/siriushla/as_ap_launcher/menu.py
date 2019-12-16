@@ -136,10 +136,10 @@ def get_object(ismenubar=True, parent=None):
             main.setIcon(qta.icon('mdi.timer'))
             self.connect_newprocess(
                 main, ['sirius-hla-as-ti-control.py', '-t', 'main'])
-            summary = QAction('Summary', timing)
+            summary = QAction('Monitor', timing)
             summary.setIcon(util.get_monitor_icon('mdi.timer'))
             self.connect_newprocess(
-                summary, ['sirius-hla-as-ti-control.py', '-t', 'summary'])
+                summary, ['sirius-hla-as-ti-control.py', '-t', 'monitor'])
             timing.addAction(main)
             timing.addAction(summary)
 
@@ -323,9 +323,9 @@ def get_object(ismenubar=True, parent=None):
             menu = QMenu('BPMs', self)
             menu.setObjectName(sec.upper()+'App')
             menu.setIcon(qta.icon('mdi.currency-sign'))
-            action = menu.addAction('Summary')
+            action = menu.addAction('Monitor')
             action.setIcon(util.get_monitor_icon('mdi.currency-sign'))
-            self.connect_newprocess(action, cmd + ['-w', 'Summary', ])
+            self.connect_newprocess(action, cmd + ['-w', 'Monitor', ])
             typs = ('Single Pass', 'Multi Turn')
             acts = ('SPass', 'MTurn')
             for typ, act in zip(typs, acts):

@@ -171,9 +171,9 @@ class TimingMain(SiriusMainWindow):
             Window = create_window_from_widget(_FOUT, title=fout, icon=icon)
             connect_window(action, Window, None, prefix=prefix+fout+':')
 
-        action = main_menu.addAction('&Summary')
+        action = main_menu.addAction('&Monitor')
         connect_newprocess(
-            action, ['sirius-hla-as-ti-control.py', '-t', 'summary'],
+            action, ['sirius-hla-as-ti-control.py', '-t', 'monitor'],
             parent=self, is_window=True)
 
     def _create_prop_widget(self, name, parent, wids, align_ver=True):
