@@ -2034,7 +2034,7 @@ max-width:8em;</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>${PREFIX}SI-17C4:DI-TunePkupV:TuneY-Mon</string>
+         <string>${PREFIX}SI-Glob:DI-Tune-V:TuneFrac-Mon</string>
         </property>
        </widget>
       </item>
@@ -2083,7 +2083,7 @@ max-width:8em;</string>
          <set>Qt::AlignCenter</set>
         </property>
         <property name="channel" stdset="0">
-         <string>${PREFIX}SI-18SB:DI-TunePkupH:TuneX-Mon</string>
+         <string>${PREFIX}SI-Glob:DI-Tune-H:TuneFrac-Mon</string>
         </property>
        </widget>
       </item>
