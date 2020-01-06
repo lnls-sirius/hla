@@ -184,13 +184,15 @@ class GraphTime(BaseGraph):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.graph.timeSpan = 20
+        self.graph.timeSpan = 100
 
     def addYChannel(self, **opts):
         scale = opts.pop('add_scale', None)
+        ychan = opts['y_channel']
+        if scale:
+            opts['y_channel'] = 'A'
         self.graph.addYChannel(**opts)
+        if scale:
+            self._add_scale(ychan, scale)
         name = opts.get('name', '')
         self._add_channel(name)
-        if scale:
-            channel = opts.get('y_channel', '')
-            self._add_scale(channel, scale)
