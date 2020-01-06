@@ -15,8 +15,6 @@ class PhysicalTriggers(BaseWidget):
 
     def setupui(self):
         gdl = QGridLayout(self)
-        gdl.setHorizontalSpacing(40)
-        gdl.setVerticalSpacing(40)
         lab = QLabel('<h2>' + self.bpm + ' Physical Triggers</h2>')
         lab.setAlignment(Qt.AlignCenter)
         gdl.addWidget(lab, 0, 0, 1, 2)
@@ -54,7 +52,6 @@ class PhysicalTriggers(BaseWidget):
 
         lab = QLabel('', grpbx)
         hbl = QHBoxLayout()
-        hbl.setContentsMargins(0, 20, 0, 0)
         fbl.addRow(lab, hbl)
         lab = QLabel('Receiver', grpbx)
         lab.setAlignment(Qt.AlignCenter)
@@ -130,8 +127,6 @@ class LogicalTriggers(BaseWidget):
 
     def setupui(self):
         gdl = QGridLayout(self)
-        gdl.setHorizontalSpacing(40)
-        gdl.setVerticalSpacing(40)
         name = self.bpm
         if self.trig_tp:
             name += ' ' + self.trig_tp[1:]
@@ -149,7 +144,6 @@ class LogicalTriggers(BaseWidget):
 
         lab = QLabel('', grpbx)
         hbl = QHBoxLayout()
-        # hbl.setContentsMargins(0, 20, 0, 0)
         fbl.addRow(lab, hbl)
         name = 'Receiver'
         if not self.trig_tp:
