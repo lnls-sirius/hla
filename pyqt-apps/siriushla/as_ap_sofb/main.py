@@ -130,11 +130,11 @@ class MainWindow(SiriusMainWindow):
 
         menuopen = QMenu('Open', menubar)
         actions = (
-            ("&SOFB Control", "SOFB Control", '', True),
-            ("IOC &Log", "IOC Log", '', True),
-            ("Orbit &Registers", "Orbit Registers", '', True))
+            ("&SOFB Control", "SOFB Control", '', True, self.sofb_control),
+            ("IOC &Log", "IOC Log", '', True, self.ioc_log),
+            ("&Registers", "Orbit Registers", '', True, self.orbit_regist))
         self.setMenuBar(menubar)
-        for name, tool, short, check in actions:
+        for name, tool, short, check, doc in actions:
             action = QAction(name, self)
             action.setToolTip(tool)
             action.setShortcut(short)
@@ -142,7 +142,8 @@ class MainWindow(SiriusMainWindow):
             action.setChecked(check)
             action.setEnabled(True)
             action.setVisible(True)
-            action.toggled.connect(self.deal_with_action)
+            action.toggled.connect(doc.setVisible)
+            doc.visibilityChanged.connect(action.setChecked)
             menuopen.addAction(action)
         menubar.addAction(menuopen.menuAction())
 
@@ -155,15 +156,6 @@ class MainWindow(SiriusMainWindow):
         statusbar = QStatusBar(self)
         statusbar.setEnabled(True)
         self.setStatusBar(statusbar)
-
-    def deal_with_action(self, boo):
-        action = self.sender()
-        if 'SOFB' in action.text():
-            self.sofb_control.setVisible(boo)
-        if 'IOC' in action.text():
-            self.ioc_log.setVisible(boo)
-        if 'Orbit' in action.text():
-            self.orbit_regist.setVisible(boo)
 
 
 if __name__ == '__main__':
