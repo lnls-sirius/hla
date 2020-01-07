@@ -1,10 +1,11 @@
+import logging as _log
 import numpy as np
 from epics import PV
-from PyQt5.QtWidgets import QPushButton, QLabel, QGroupBox, QSizePolicy, \
+from qtpy.QtWidgets import QPushButton, QLabel, QGroupBox, QSizePolicy, \
     QWidget, QComboBox, QSpinBox, QVBoxLayout, QHBoxLayout, QCheckBox, \
     QFormLayout
-from PyQt5.QtGui import QColor
-from PyQt5.QtCore import QSize, pyqtSlot
+from qtpy.QtGui import QColor
+from qtpy.QtCore import QSize, Slot
 from pydm.widgets import PyDMImageView
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as Canvas
@@ -16,6 +17,9 @@ import mathphys.constants as _consts
 
 C = _consts.light_speed
 E0 = _consts.electron_rest_energy / _consts.elementary_charge * 1e-6  # in MeV
+
+
+_log.basicConfig(format='%(levelname)7s ::: %(message)s')
 
 
 def gettransmat(elem, L, K1=None, B=None):
@@ -146,7 +150,7 @@ class ImageView(PyDMImageView):
         super().__init__(**kwargs)
         self.colorMap = self.Jet
 
-    @pyqtSlot(np.ndarray)
+    @Slot(np.ndarray)
     def image_value_changed(self, image):
         image = self.callback(image, self._image_width)
         super().image_value_changed(image)
