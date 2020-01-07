@@ -111,6 +111,9 @@ class PUControlWindow(SiriusMainWindow):
         self.reset_act = QAction("Reset Interlocks", wid)
         self.reset_act.triggered.connect(self._reset_interlocks)
 
+        self.reset_act = QAction("Set Voltage to 0.0", wid)
+        self.reset_act.triggered.connect(self._set_voltage)
+
     # # Overloaded method
     def contextMenuEvent(self, event):
         """Show a custom context menu."""
@@ -126,7 +129,7 @@ class PUControlWindow(SiriusMainWindow):
     @Slot(bool)
     def _set_pwrstate(self, state):
         """Execute turn on/off actions."""
-        for key, widget in self.pu_widgets_dict.items():
+        for widget in self.pu_widgets_dict.values():
             try:
                 if state:
                     widget.turn_on()
@@ -138,7 +141,7 @@ class PUControlWindow(SiriusMainWindow):
     @Slot(bool)
     def _set_pulse(self, state):
         """Execute turn on/off actions."""
-        for key, widget in self.pu_widgets_dict.items():
+        for widget in self.pu_widgets_dict.values():
             try:
                 if state:
                     widget.pulse_on()
@@ -150,9 +153,19 @@ class PUControlWindow(SiriusMainWindow):
     @Slot()
     def _reset_interlocks(self):
         """Reset interlocks."""
-        for key, widget in self.pu_widgets_dict.items():
+        for widget in self.pu_widgets_dict.values():
             try:
                 widget.reset()
+            except TypeError:
+                pass
+
+    @Slot()
+    def _set_voltage(self):
+        """Reset interlocks."""
+        for widget in self.pu_widgets_dict.values():
+            try:
+                widget.setpoint.sp_lineedit.setText('0.0')
+                widget.setpoint.sp_lineedit.send_value()
             except TypeError:
                 pass
 
