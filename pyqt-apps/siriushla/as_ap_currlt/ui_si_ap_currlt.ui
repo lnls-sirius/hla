@@ -772,51 +772,6 @@ max-width:6.45em;</string>
            </property>
           </widget>
          </item>
-         <item row="10" column="2">
-          <widget class="QLabel" name="label_6">
-           <property name="text">
-            <string>Buff. Auto Reset: </string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="10" column="5">
-          <widget class="PyDMLabel" name="PyDMLabel_4">
-           <property name="toolTip">
-            <string/>
-           </property>
-           <property name="whatsThis">
-            <string/>
-           </property>
-           <property name="frameShape">
-            <enum>QFrame::NoFrame</enum>
-           </property>
-           <property name="frameShadow">
-            <enum>QFrame::Plain</enum>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-           <property name="channel" stdset="0">
-            <string>${PREFIX}SI-Glob:AP-CurrInfo:BuffAutoRst-Sel</string>
-           </property>
-          </widget>
-         </item>
-         <item row="10" column="4">
-          <widget class="PyDMEnumComboBox" name="PyDMEnumComboBox_3">
-           <property name="toolTip">
-            <string/>
-           </property>
-           <property name="whatsThis">
-            <string/>
-           </property>
-           <property name="channel" stdset="0">
-            <string>${PREFIX}SI-Glob:AP-CurrInfo:BuffAutoRst-Sel</string>
-           </property>
-          </widget>
-         </item>
          <item row="12" column="2">
           <widget class="QLabel" name="Buffer">
            <property name="sizePolicy">
@@ -1077,6 +1032,87 @@ max-width:6.45em;</string>
            </property>
           </widget>
          </item>
+         <item row="13" column="2">
+          <widget class="QLabel" name="label_6">
+           <property name="text">
+            <string>Buff. Auto Reset: </string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="13" column="4">
+          <widget class="PyDMEnumComboBox" name="PyDMEnumComboBox_3">
+           <property name="toolTip">
+            <string/>
+           </property>
+           <property name="whatsThis">
+            <string/>
+           </property>
+           <property name="channel" stdset="0">
+            <string>${PREFIX}SI-Glob:AP-CurrInfo:BuffAutoRst-Sel</string>
+           </property>
+          </widget>
+         </item>
+         <item row="13" column="5">
+          <widget class="PyDMLabel" name="PyDMLabel_4">
+           <property name="toolTip">
+            <string/>
+           </property>
+           <property name="whatsThis">
+            <string/>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Plain</enum>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+           <property name="channel" stdset="0">
+            <string>${PREFIX}SI-Glob:AP-CurrInfo:BuffAutoRst-Sel</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="2">
+          <widget class="QLabel" name="label_10">
+           <property name="text">
+            <string>Curr. Offset [mA]:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="4">
+          <widget class="SiriusSpinbox" name="SiriusSpinbox">
+           <property name="toolTip">
+            <string/>
+           </property>
+           <property name="channel" stdset="0">
+            <string>${PREFIX}SI-Glob:AP-CurrInfo:CurrOffset-SP</string>
+           </property>
+           <property name="showStepExponent" stdset="0">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="5">
+          <widget class="PyDMLabel" name="PyDMLabel_3">
+           <property name="toolTip">
+            <string/>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+           <property name="channel" stdset="0">
+            <string>${PREFIX}SI-Glob:AP-CurrInfo:CurrOffset-RB</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </widget>
       </item>
@@ -1265,6 +1301,11 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
    <class>PyDMStateButton</class>
    <extends>QFrame</extends>
    <header>siriushla.widgets.state_button</header>
+  </customwidget>
+  <customwidget>
+   <class>SiriusSpinbox</class>
+   <extends>PyDMSpinbox</extends>
+   <header>siriushla.widgets.spinbox</header>
   </customwidget>
   <customwidget>
    <class>QLed</class>
