@@ -1,12 +1,13 @@
 #!/usr/bin/env python-sirius
 
+import logging as _log
 from threading import Thread, Event
 import numpy as np
 from epics import PV
 from qtpy.QtWidgets import QPushButton, QLabel, QGridLayout, QGroupBox, \
     QFormLayout, QMessageBox, QWidget, QComboBox, QSpinBox, QVBoxLayout, \
     QDoubleSpinBox, QFileDialog
-
+from pydm.widgets.logdisplay import PyDMLogDisplay
 from matplotlib import rcParams
 
 from .utils import MatplotlibWidget, ProcessImage, gettransmat, E0
@@ -72,9 +73,18 @@ class EmittanceMeasure(QWidget):
 
     def _acquire_data(self):
         samples = self.spbox_samples.value()
+        outlier = self.spbox_outliers.value()
+        if samples <= outlier:
+            _log.warning(
+                'Number of samples must be larger than number o outliers.')
+            _log.warning('Acquisition aborted.')
+            return
         nsteps = self.spbox_steps.value()
         I_ini = self.spbox_I_ini.value()
         I_end = self.spbox_I_end.value()
+
+        outs = outlier // 2    # outliers below median
+        outg = outlier - outs  # outliers above median
 
         self.line_sigmax.set_xdata([])
         self.line_sigmax.set_ydata([])
@@ -89,7 +99,7 @@ class EmittanceMeasure(QWidget):
         sigma = []
         I_meas = []
         for i, I in enumerate(curr_list):
-            print('setting Quadrupole to ', I)
+            _log.info('setting quadrupole to {0:8.3f} A'.format(I))
             if not SIMUL:
                 self.quad_I_sp.put(I, wait=True)
             self._measuring.wait(5 if i else 15)
@@ -100,9 +110,9 @@ class EmittanceMeasure(QWidget):
                 if self._measuring.is_set():
                     self.pb_stop.setEnabled(False)
                     self.pb_start.setEnabled(True)
-                    print('Stopped')
+                    _log.info('Stopped')
                     return
-                print('measuring sample', j)
+                _log.info('    sample {0:02d}'.format(j))
                 I_now = self.quad_I_rb.value
                 cen_x, sigma_x, cen_y, sigma_y = self.plt_image.get_params()
                 mu, sig = (cen_x, sigma_x) if pl == 'x' else (cen_y, sigma_y)
@@ -117,9 +127,9 @@ class EmittanceMeasure(QWidget):
             ind = np.argsort(sig_tmp)
             I_tmp = np.array(I_tmp)[ind]
             sig_tmp = np.array(sig_tmp)[ind]
-            I_meas.extend(I_tmp[6:-6])
-            sigma.extend(sig_tmp[6:-6])
-            if pl=='x':
+            I_meas.extend(I_tmp[outs:-outg])
+            sigma.extend(sig_tmp[outs:-outg])
+            if pl == 'x':
                 self.line_sigmax.set_xdata(I_meas)
                 self.line_sigmax.set_ydata(np.array(sigma)*1e3)
             else:
@@ -133,7 +143,7 @@ class EmittanceMeasure(QWidget):
         self._measuring.set()
         self.pb_stop.setEnabled(False)
         self.pb_start.setEnabled(True)
-        print('Finished!')
+        _log.info('Finished!')
         self.I_meas = I_meas
         self.sigma = sigma
         self.plane_meas = pl
@@ -177,7 +187,7 @@ class EmittanceMeasure(QWidget):
     def _get_K1_from_I(self, I_meas):
         energy = self.spbox_energy.value() * 1e-3  # energy in GeV
         KL = self.conv2kl.conv_current_2_strength(
-                                            I_meas, strengths_dipole=energy)
+            I_meas, strengths_dipole=energy)
         return KL/self.QUAD_L
 
     def _trans_matrix_analysis(self, K1, sigma, pl='x'):
@@ -301,9 +311,13 @@ class EmittanceMeasure(QWidget):
         self.spbox_steps.setValue(11)
         fl.addRow(QLabel('Nr Steps', gb), self.spbox_steps)
         self.spbox_samples = QSpinBox(gb)
-        self.spbox_samples.setMinimum(12)
+        self.spbox_samples.setMinimum(1)
         self.spbox_samples.setValue(16)
         fl.addRow(QLabel('Nr Samples per step', gb), self.spbox_samples)
+        self.spbox_outliers = QSpinBox(gb)
+        self.spbox_outliers.setMinimum(0)
+        self.spbox_outliers.setValue(12)
+        fl.addRow(QLabel('Nr Outliers', gb), self.spbox_outliers)
         self.spbox_I_ini = QDoubleSpinBox(gb)
         self.spbox_I_ini.setMinimum(-4)
         self.spbox_I_ini.setMaximum(4)
@@ -340,6 +354,8 @@ class EmittanceMeasure(QWidget):
         self.pb_analyse_data = QPushButton('Analyse', gb)
         self.pb_analyse_data.clicked.connect(self.pb_analyse_data_clicked)
         fl.addRow(self.pb_analyse_data)
+        self.logdisplay = PyDMLogDisplay(self, level=_log.INFO)
+        fl.addRow(self.logdisplay)
 
         gb = QGroupBox('Results', self)
         vl.addWidget(gb)
@@ -386,9 +402,7 @@ class EmittanceMeasure(QWidget):
             msg.exec_()
             return
         fname = QFileDialog.getSaveFileName(
-                    self, 'Save file',
-                    '/home/fernando/Desktop/Sirius_IOCs_Screens',
-                    "Text Files (*.txt *.dat)")
+                self, 'Save file', '', 'Text Files (*.txt *.dat)')
         if fname[0]:
             self.save_to_file(fname[0])
 
@@ -400,9 +414,7 @@ class EmittanceMeasure(QWidget):
 
     def pb_load_data_clicked(self):
         fname = QFileDialog.getOpenFileName(
-                    self, 'Open file',
-                    '/home/fernando/Desktop/Sirius_IOCs_Screens',
-                    "Text Files (*.txt *.dat)")
+            self, 'Open file', '', 'Text Files (*.txt *.dat)')
         if fname[0]:
             self.load_from_file(fname[0])
 
@@ -452,7 +464,7 @@ class EmittanceMeasure(QWidget):
         """
         Slot documentation goes here.
         """
-        print('Starting...')
+        _log.info('Starting...')
         if self.measurement is not None and self.measurement.isAlive():
             return
         self.pb_stop.setEnabled(True)
@@ -465,5 +477,5 @@ class EmittanceMeasure(QWidget):
         """
         Slot documentation goes here.
         """
-        print('Stopping...')
+        _log.info('Stopping...')
         self._measuring.set()

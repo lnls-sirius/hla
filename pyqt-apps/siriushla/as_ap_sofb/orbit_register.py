@@ -40,6 +40,9 @@ class OrbitRegisters(QWidget):
             'off': [
                 SiriusConnectionSignal(pre + 'OfflineOrbX-SP'),
                 SiriusConnectionSignal(pre + 'OfflineOrbY-SP')],
+            'bpm': [
+                SiriusConnectionSignal(pre + 'BPMOffsetX-Mon'),
+                SiriusConnectionSignal(pre + 'BPMOffsetY-Mon')],
             'mat': SiriusConnectionSignal(pre + 'RespMat-RB'),
             }
         self.setupui()
@@ -189,6 +192,9 @@ class OrbitRegister(QWidget):
         act = menu2.addAction('&OfflineOrb')
         act.setIcon(qta.icon('mdi.signal-off'))
         act.triggered.connect(_part(self._register_orbit, 'off'))
+        act = menu2.addAction('&BPM Offsets')
+        act.setIcon(qta.icon('mdi.currency-sign'))
+        act.triggered.connect(_part(self._register_orbit, 'bpm'))
         act = menu2.addAction('RespMat')
         act.setIcon(qta.icon('mdi.matrix'))
         act.triggered.connect(self._open_matrix_sel)
@@ -216,7 +222,7 @@ class OrbitRegister(QWidget):
             return
         if not pvx.connected or not pvy.connected:
             self._update_and_emit(
-                'Error: PV {0:s} not connected.'.format(pvx.pvname))
+                'Error: PV {0:s} not connected.'.format(pvx.address))
             return
         self._update_and_emit(
             'Orbit Registered.', pvx.getvalue(), pvy.getvalue())

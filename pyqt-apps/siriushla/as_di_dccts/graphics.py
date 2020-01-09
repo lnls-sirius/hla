@@ -31,15 +31,15 @@ class DCCTMonitor(QWidget):
         self.dcct_prefix = prefix + device + ':'
 
         self.acqmode_channel = SignalChannel(self.dcct_prefix+'MeasMode-Sel')
-        self.acqmode_channel.new_value_signal[int].connect(self.setNrSamples)
+        self.acqmode_channel.new_value_signal[int].connect(self.updateParams)
         self.normalnrsamp_channel = SignalChannel(
             self.dcct_prefix + 'SampleCnt-RB')
         self.normalnrsamp_channel.new_value_signal[int].connect(
-            self.setNrSamples)
+            self.updateParams)
         self.fastnrsamp_channel = SignalChannel(
             self.dcct_prefix + 'FastSampleCnt-RB')
         self.fastnrsamp_channel.new_value_signal[int].connect(
-            self.setNrSamples)
+            self.updateParams)
         self._acq_mode = None
         self._acq_normalnrsamp = None
         self._acq_fastnrsamp = None
@@ -238,7 +238,7 @@ class DCCTMonitor(QWidget):
         self._smooth_buffer = list()
         self._updateCurve()
 
-    def setNrSamples(self, new_value):
+    def updateParams(self, new_value):
         address = self.sender().address
         if 'Mode' in address:
             self._acq_mode = new_value
