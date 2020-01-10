@@ -1418,6 +1418,7 @@ class RFRamp(QWidget):
         self.bt_apply.setObjectName('Apply RF')
         self.bt_apply.clicked.connect(
             _part(self.applyChanges2MachineSignal.emit, self))
+        self.bt_apply.setEnabled(False)
 
         lay = QVBoxLayout(self)
         lay.addWidget(label)
