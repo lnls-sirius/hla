@@ -195,6 +195,7 @@ class Settings(QMenuBar):
         th.closediag.connect(dlg.close)
         th.normConfigList.connect(self.newNormConfigListSignal.emit)
         th.precReached.connect(self._showWarningPrecNotOk)
+        th.error.connect(self._showErrorNormFactory)
         th.start()
 
     @Slot(bool, float)
@@ -205,6 +206,10 @@ class Settings(QMenuBar):
                 'Reconstruction was unable to reproduce waveforms\n'
                 'with 1e-5 accuracy (maximum error: {:.4g})!'.format(
                     max_error))
+
+    @Slot(str)
+    def _showErrorNormFactory(self, text):
+        QMessageBox.critical(self, 'Error', text)
 
     @Slot(ramp.BoosterRamp)
     def getRampConfig(self, ramp_config):
@@ -228,6 +233,7 @@ class _WaitThread(QThread):
     closediag = Signal()
     normConfigList = Signal(list)
     precReached = Signal(bool, float)
+    error = Signal(str)
 
     def __init__(self, ramp_config, parent=None):
         super().__init__(parent)
@@ -236,9 +242,14 @@ class _WaitThread(QThread):
     def run(self):
         self.opendiag.emit()
         norm_fac = BONormFactory(self.ramp_config)
-        norm_fac.read_waveforms()
-        new_norm_list = norm_fac.normalized_configs
-        self.normConfigList.emit(new_norm_list)
-        ok, max_error = norm_fac.precision_reached
-        self.precReached.emit(ok, max_error)
-        self.closediag.emit()
+        try:
+            norm_fac.read_waveforms()
+            new_norm_list = norm_fac.normalized_configs
+        except Exception as e:
+            self.error.emit(str(e))
+        else:
+            self.normConfigList.emit(new_norm_list)
+            ok, max_error = norm_fac.precision_reached
+            self.precReached.emit(ok, max_error)
+        finally:
+            self.closediag.emit()
