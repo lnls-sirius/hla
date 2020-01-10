@@ -111,9 +111,7 @@ class RampMain(SiriusMainWindow):
         self.config_parameters.rf_ramp.updateRFRampSignal.connect(
             self.status_and_commands.update_rf_params)
         self.config_parameters.rf_ramp.updateRFRampSignal.connect(
-            self.config_parameters.rf_ramp.updateTable)
-        self.config_parameters.rf_ramp.updateRFRampSignal.connect(
-            self.config_parameters.rf_ramp.updateGraph)
+            self.status_and_commands.update_ti_params)
         self.config_parameters.rf_ramp.applyChanges2MachineSignal.connect(
             self.status_and_commands.apply_changes)
 
