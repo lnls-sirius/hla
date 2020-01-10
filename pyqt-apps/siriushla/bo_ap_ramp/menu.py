@@ -164,11 +164,10 @@ class Settings(QMenuBar):
             self.loadSignal.emit(nconfgs_changed)
 
     def _showOpticsSettingsPopup(self):
-        self._opticsSettingsPopup = _OpticsAdjustSettings(
+        opticsSettingsPopup = _OpticsAdjustSettings(
             self._tunecorr_configname, self._chromcorr_configname, self)
-        self._opticsSettingsPopup.updateSettings.connect(
-            self._emitOpticsSettings)
-        self._opticsSettingsPopup.open()
+        opticsSettingsPopup.updateSettings.connect(self._emitOpticsSettings)
+        opticsSettingsPopup.open()
 
     @Slot(str, str)
     def _emitOpticsSettings(self, tunecorr_configname, chromcorr_configname):
