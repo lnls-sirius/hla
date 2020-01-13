@@ -1,5 +1,7 @@
 """Booster Ramp Main Window."""
 
+from copy import deepcopy as _dcopy
+
 from qtpy.QtCore import Qt, Slot, Signal
 from qtpy.QtGui import QKeySequence, QPalette
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, \
@@ -143,11 +145,18 @@ class RampMain(SiriusMainWindow):
 
     @Slot(dict)
     def _receiveNewNormConfigs(self, norm_configs):
+        old_norm_configs = _dcopy(
+            self.config_parameters.mult_ramp.normalized_configs)
         self.ramp_config.ps_normalized_configs_set(norm_configs)
         self.loadSignal.emit(self.ramp_config)
         self._verifySync()
+        new_norm_configs = _dcopy(
+            self.config_parameters.mult_ramp.normalized_configs)
+        self.config_parameters.mult_ramp.stackUndoMultipoleTableCommand(
+            description='reconstruct normalized configs from waveforms',
+            old=old_norm_configs, new=new_norm_configs)
 
-    def _emitLoadSignal(self, nconfigs_changed=None):
+    def _emitLoadSignal(self):
         try:
             if self.ramp_config.exist():
                 self.ramp_config.load()

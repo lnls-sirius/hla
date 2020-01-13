@@ -176,9 +176,7 @@ class Settings(QMenuBar):
         if not self.verifyUnsavedChanges():
             return
         ans = QMessageBox.question(
-            self, 'Warning',
-            'This action will permanently replace the list of normalized\n'
-            'configurations. Are you sure you want to proceed?',
+            self, 'Question', 'Are you sure you want to proceed?',
             QMessageBox.Yes | QMessageBox.Cancel)
         if ans == QMessageBox.Cancel:
             return
