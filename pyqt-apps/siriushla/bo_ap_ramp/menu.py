@@ -21,10 +21,10 @@ class Settings(QMenuBar):
     """Widget to choose and to control a BoosterRamp configuration."""
 
     newConfigNameSignal = Signal(str)
-    loadSignal = Signal(dict)
+    loadSignal = Signal()
     opticsSettingsSignal = Signal(str, str)
     plotUnitSignal = Signal(str)
-    newNormConfigListSignal = Signal(list)
+    newNormConfigsSignal = Signal(dict)
 
     def __init__(self, parent=None, prefix='', ramp_config=None,
                  tunecorr_configname='', chromcorr_configname=''):
@@ -151,11 +151,11 @@ class Settings(QMenuBar):
                 self.showSaveAsPopup()
                 return
         try:
-            nconfgs_changed = self.ramp_config.save(new_name)
+            self.ramp_config.save(new_name)
         except _ConfigDBException as err:
             QMessageBox.critical(self, 'Error', str(err), QMessageBox.Ok)
         else:
-            self.loadSignal.emit(nconfgs_changed)
+            self.loadSignal.emit()
 
     def _showOpticsSettingsPopup(self):
         opticsSettingsPopup = _OpticsAdjustSettings(
@@ -186,7 +186,7 @@ class Settings(QMenuBar):
         dlg = _WaitDialog(self)
         th.opendiag.connect(dlg.show)
         th.closediag.connect(dlg.close)
-        th.normConfigList.connect(self.newNormConfigListSignal.emit)
+        th.normConfigs.connect(self.newNormConfigsSignal.emit)
         th.precReached.connect(self._showWarningPrecNotOk)
         th.error.connect(self._showErrorNormFactory)
         th.start()
@@ -224,7 +224,7 @@ class _WaitThread(QThread):
 
     opendiag = Signal()
     closediag = Signal()
-    normConfigList = Signal(list)
+    normConfigs = Signal(dict)
     precReached = Signal(bool, float)
     error = Signal(str)
 
@@ -237,11 +237,11 @@ class _WaitThread(QThread):
         norm_fac = BONormFactory(self.ramp_config)
         try:
             norm_fac.read_waveforms()
-            new_norm_list = norm_fac.normalized_configs
+            new_norm_configs = norm_fac.normalized_configs
         except Exception as e:
             self.error.emit(str(e))
         else:
-            self.normConfigList.emit(new_norm_list)
+            self.normConfigs.emit(new_norm_configs)
             ok, max_error = norm_fac.precision_reached
             self.precReached.emit(ok, max_error)
         finally:
