@@ -146,13 +146,8 @@ class BONormEdit(SiriusMainWindow):
             else:
                 ps_value = _MyDoubleSpinBox(self.nconfig_data)
                 ps_value.setDecimals(6)
-                ma = _MASearch.conv_psname_2_psmaname(ps)
-                aux = self._aux_magnets[ma]
-                currs = (aux.current_min, aux.current_max)
-                lims = aux.conv_current_2_strength(
-                    currents=currs, strengths_dipole=self.energy)
-                ps_value.setMinimum(min(lims))
-                ps_value.setMaximum(max(lims))
+                ps_value.setMinimum(-10000)
+                ps_value.setMaximum(10000)
                 ps_value.setValue(self.norm_config[ps])
                 ps_value.valueChanged.connect(self._handleStrenghtsSet)
 
@@ -181,7 +176,7 @@ class BONormEdit(SiriusMainWindow):
         scrollarea.setWidget(self.nconfig_data)
 
         self.cb_checklims = QCheckBox('Set limits according to energy', self)
-        self.cb_checklims.setChecked(True)
+        self.cb_checklims.setChecked(False)
         self.cb_checklims.stateChanged.connect(self._handleStrengtsLimits)
 
         self.bt_graph = QPushButton(qta.icon('mdi.chart-line'), '', self)
