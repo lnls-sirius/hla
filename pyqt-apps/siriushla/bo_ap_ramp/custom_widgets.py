@@ -103,8 +103,12 @@ class MyDoubleSpinBox(QDoubleSpinBox):
 
 class ConfigLineEdit(QLineEdit):
 
+    def __init__(self, config_type, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._configtype = config_type
+
     def mouseReleaseEvent(self, ev):
-        popup = _LoadConfigDialog('bo_normalized')
+        popup = _LoadConfigDialog(self._configtype)
         popup.configname.connect(self.setText)
         popup.exec_()
 

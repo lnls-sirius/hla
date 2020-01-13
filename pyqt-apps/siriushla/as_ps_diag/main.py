@@ -527,17 +527,10 @@ class LogTable(QTreeView, PyDMWidget):
         idx = self.selectedIndexes()
         text = self._model.data(self._model.index(idx[0].row(), 3))
         text = SiriusPVName(text)
-        if text.dis == 'PS':
+        if text.dis == 'PS' and text.sec != 'LI':
             _run_newprocess(['sirius-hla-as-ps-detail.py', text])
         elif text.dis == 'PU':
             _run_newprocess(['sirius-hla-as-pu-detail.py', text])
-        else:
-            try:
-                PSSearch.conv_psname_2_dclink(text)
-            except KeyError:
-                pass
-            else:
-                _run_newprocess(['sirius-hla-as-ps-detail.py', text])
         super().mouseDoubleClickEvent(ev)
 
 

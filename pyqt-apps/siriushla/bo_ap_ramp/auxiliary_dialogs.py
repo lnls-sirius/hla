@@ -4,7 +4,7 @@ import numpy as _np
 from qtpy.QtCore import Qt, Signal, Slot
 from qtpy.QtWidgets import QLabel, QWidget, QAbstractItemView, QMessageBox, \
     QHBoxLayout, QVBoxLayout, QGridLayout, QLineEdit, QPushButton, QCheckBox, \
-    QTableWidget, QTableWidgetItem, QRadioButton, QDoubleSpinBox, QComboBox, \
+    QTableWidget, QTableWidgetItem, QRadioButton, QDoubleSpinBox, \
     QSpinBox, QSpacerItem, QTabWidget, QHeaderView, QSizePolicy as QSzPlcy
 
 from siriuspy.csdevice.orbitcorr import SOFBFactory
@@ -257,27 +257,13 @@ class OpticsAdjustSettings(SiriusDialog):
             config_type='bo_chromcorr_params')
         self._setupUi()
 
-        try:
-            infos = self.conn_tuneparams.find_configs()
-            for info in infos:
-                self.cb_tuneconfig.addItem(info['name'])
-
-            infos = self.conn_chromparams.find_configs()
-            for info in infos:
-                self.cb_chromconfig.addItem(info['name'])
-        except _ConfigDBException as err:
-            QMessageBox.critical(self, 'Error', str(err), QMessageBox.Ok)
-        finally:
-            self.cb_tuneconfig.setCurrentText(self.tuneconfig_currname)
-            self._showTuneConfigData()
-            self.cb_chromconfig.setCurrentText(self.chromconfig_currname)
-            self._showChromConfigData()
-
     def _setupUi(self):
         self.tune_settings = QWidget(self)
         self.tune_settings.setLayout(self._setupTuneSettings())
+        self.le_tuneconfig.setText(self.tuneconfig_currname)
         self.chrom_settings = QWidget(self)
         self.chrom_settings.setLayout(self._setupChromSettings())
+        self.le_chromconfig.setText(self.chromconfig_currname)
         self.bt_apply = QPushButton('Apply Settings', self)
         self.bt_apply.setStyleSheet("""min-width:8em; max-width:8em;""")
         self.bt_apply.clicked.connect(self._emitSettings)
@@ -295,15 +281,14 @@ class OpticsAdjustSettings(SiriusDialog):
         lay = QVBoxLayout()
         lay.addWidget(tabs)
         lay.addLayout(hlay_apply)
-
         self.setLayout(lay)
 
     def _setupTuneSettings(self):
         l_tuneconfig = QLabel('<h3>Tune Variation Config</h3>', self)
         l_tuneconfig.setAlignment(Qt.AlignCenter)
-        self.cb_tuneconfig = QComboBox(self)
-        self.cb_tuneconfig.setEditable(True)
-        self.cb_tuneconfig.currentTextChanged.connect(self._showTuneConfigData)
+        self.le_tuneconfig = _ConfigLineEdit(
+            parent=self, config_type='bo_tunecorr_params')
+        self.le_tuneconfig.textChanged.connect(self._showTuneConfigData)
 
         label_tunemat = QLabel('<h4>Matrix</h4>', self)
         label_tunemat.setAlignment(Qt.AlignCenter)
@@ -359,7 +344,7 @@ class OpticsAdjustSettings(SiriusDialog):
 
         lay = QVBoxLayout()
         lay.addWidget(l_tuneconfig)
-        lay.addWidget(self.cb_tuneconfig)
+        lay.addWidget(self.le_tuneconfig)
         lay.addItem(QSpacerItem(20, 10, QSzPlcy.Ignored, QSzPlcy.Expanding))
         lay.addWidget(label_tunemat)
         lay.addWidget(self.table_tunemat)
@@ -373,10 +358,9 @@ class OpticsAdjustSettings(SiriusDialog):
     def _setupChromSettings(self):
         l_chromconfig = QLabel('<h3>Chromaticity Variation Config</h3>', self)
         l_chromconfig.setAlignment(Qt.AlignCenter)
-        self.cb_chromconfig = QComboBox(self)
-        self.cb_chromconfig.setEditable(True)
-        self.cb_chromconfig.currentTextChanged.connect(
-            self._showChromConfigData)
+        self.le_chromconfig = _ConfigLineEdit(
+            parent=self, config_type='bo_chromcorr_params')
+        self.le_chromconfig.textChanged.connect(self._showChromConfigData)
 
         l_chrommat = QLabel('<h4>Matrix</h4>', self)
         l_chrommat.setAlignment(Qt.AlignCenter)
@@ -437,7 +421,7 @@ class OpticsAdjustSettings(SiriusDialog):
 
         lay = QVBoxLayout()
         lay.addWidget(l_chromconfig)
-        lay.addWidget(self.cb_chromconfig)
+        lay.addWidget(self.le_chromconfig)
         lay.addItem(QSpacerItem(20, 10, QSzPlcy.Expanding, QSzPlcy.Expanding))
         lay.addWidget(l_chrommat)
         lay.addWidget(self.table_chrommat)
@@ -450,16 +434,16 @@ class OpticsAdjustSettings(SiriusDialog):
 
         return lay
 
-    @Slot(str)
     def _showTuneConfigData(self):
         try:
-            config = self.conn_tuneparams.get_config_value(
-                name=self.tuneconfig_currname)
+            name = self.le_tuneconfig.text()
+            config = self.conn_tuneparams.get_config_value(name=name)
             mat = config['matrix']
             nomKL = config['nominal KLs']
         except _ConfigDBException as err:
             QMessageBox.critical(self, 'Error', str(err), QMessageBox.Ok)
         else:
+            self.tuneconfig_currname = name
             self.table_tunemat.setItem(0, 0, QTableWidgetItem(str(mat[0][0])))
             self.table_tunemat.setItem(0, 1, QTableWidgetItem(str(mat[0][1])))
             self.table_tunemat.setItem(1, 0, QTableWidgetItem(str(mat[1][0])))
@@ -473,17 +457,17 @@ class OpticsAdjustSettings(SiriusDialog):
             self.table_nomKL.item(0, 0).setFlags(Qt.ItemIsEnabled)
             self.table_nomKL.item(0, 1).setFlags(Qt.ItemIsEnabled)
 
-    @Slot(str)
     def _showChromConfigData(self):
         try:
-            config = self.conn_chromparams.get_config_value(
-                name=self.chromconfig_currname)
+            name = self.le_chromconfig.text()
+            config = self.conn_chromparams.get_config_value(name=name)
             mat = config['matrix']
             nomSL = config['nominal SLs']
             nomChrom = config['nominal chrom']
         except _ConfigDBException as err:
             QMessageBox.critical(self, 'Error', str(err), QMessageBox.Ok)
         else:
+            self.chromconfig_currname = name
             self.table_chrommat.setItem(0, 0, QTableWidgetItem(str(mat[0][0])))
             self.table_chrommat.setItem(0, 1, QTableWidgetItem(str(mat[0][1])))
             self.table_chrommat.setItem(1, 0, QTableWidgetItem(str(mat[1][0])))
@@ -499,8 +483,8 @@ class OpticsAdjustSettings(SiriusDialog):
             self.label_nomchrom.setText(str(nomChrom))
 
     def _emitSettings(self):
-        tuneconfig_name = self.cb_tuneconfig.currentText()
-        chromconfig_name = self.cb_chromconfig.currentText()
+        tuneconfig_name = self.le_tuneconfig.text()
+        chromconfig_name = self.le_chromconfig.text()
         self.updateSettings.emit(tuneconfig_name, chromconfig_name)
         self.close()
 

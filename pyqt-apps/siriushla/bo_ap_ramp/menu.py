@@ -4,7 +4,7 @@ from functools import partial as _part
 
 from qtpy.QtCore import Qt, Signal, Slot, QThread
 from qtpy.QtGui import QKeySequence
-from qtpy.QtWidgets import QMenuBar, QAction, QMessageBox, QLabel, QVBoxLayout
+from qtpy.QtWidgets import QMenuBar, QMessageBox, QLabel, QVBoxLayout
 import qtawesome as qta
 
 from siriuspy.clientconfigdb import ConfigDBException as _ConfigDBException
@@ -79,36 +79,30 @@ class Settings(QMenuBar):
         self.act_optics = self.addAction('Optics Adjustments Settings')
         self.act_optics.triggered.connect(self._showOpticsSettingsPopup)
 
-        self.diag_menu = self.addMenu('Ramp Diagnosis')
-        self.act_dcct = self.diag_menu.addAction('DCCT')
+        self.open_menu = self.addMenu('Open...')
+        self.act_ps = self.open_menu.addAction('PS')
+        self.act_ps.setIcon(qta.icon('mdi.car-battery'))
+        util.connect_newprocess(
+            self.act_ps, 'sirius-hla-bo-ps-control.py', parent=self)
+        self.act_pm = self.open_menu.addAction('PU')
+        self.act_pm.setIcon(qta.icon('mdi.current-ac'))
+        util.connect_newprocess(
+            self.act_pm, 'sirius-hla-bo-pu-control.py', parent=self)
+        self.act_sofb = self.open_menu.addAction('SOFB')
+        self.act_sofb.setIcon(qta.icon('fa5s.hammer'))
+        util.connect_newprocess(
+            self.act_sofb, 'sirius-hla-bo-ap-sofb.py', parent=self)
+        self.act_ti = self.open_menu.addAction('Timing')
+        self.act_ti.setIcon(qta.icon('mdi.timer'))
+        util.connect_newprocess(
+            self.act_ti, 'sirius-hla-as-ti-control.py', parent=self)
+        self.act_dcct = self.open_menu.addAction('DCCT')
         self.act_dcct.setIcon(qta.icon('mdi.current-dc'))
         util.connect_newprocess(
             self.act_dcct, ['sirius-hla-as-di-dcct.py', 'BO'], parent=self)
-        self.act_tune = self.diag_menu.addAction('Tune')
+        self.act_tune = self.open_menu.addAction('Tune')
         util.connect_newprocess(
             self.act_tune, 'sirius-hla-bo-di-tune.py', parent=self)
-
-        self.open_menu = self.addMenu('Open...')
-        self.act_ps = QAction('PS', self)
-        self.act_ps.setIcon(qta.icon('mdi.car-battery'))
-        util.connect_newprocess(self.act_ps, 'sirius-hla-bo-ps-control.py',
-                                parent=self)
-        self.act_pm = QAction('PU', self)
-        self.act_pm.setIcon(qta.icon('mdi.current-ac'))
-        util.connect_newprocess(self.act_pm, 'sirius-hla-bo-pu-control.py',
-                                parent=self)
-        self.act_sofb = QAction('SOFB', self)
-        self.act_sofb.setIcon(qta.icon('fa5s.hammer'))
-        util.connect_newprocess(self.act_sofb, 'sirius-hla-bo-ap-sofb.py',
-                                parent=self)
-        self.act_ti = QAction('Timing', self)
-        self.act_ti.setIcon(qta.icon('mdi.timer'))
-        util.connect_newprocess(self.act_ti, 'sirius-hla-as-ti-control.py',
-                                parent=self)
-        self.open_menu.addAction(self.act_ps)
-        self.open_menu.addAction(self.act_pm)
-        self.open_menu.addAction(self.act_sofb)
-        self.open_menu.addAction(self.act_ti)
 
     def verifyUnsavedChanges(self):
         if self.ramp_config is None or self.ramp_config.synchronized:
@@ -164,11 +158,10 @@ class Settings(QMenuBar):
             self.loadSignal.emit(nconfgs_changed)
 
     def _showOpticsSettingsPopup(self):
-        self._opticsSettingsPopup = _OpticsAdjustSettings(
+        opticsSettingsPopup = _OpticsAdjustSettings(
             self._tunecorr_configname, self._chromcorr_configname, self)
-        self._opticsSettingsPopup.updateSettings.connect(
-            self._emitOpticsSettings)
-        self._opticsSettingsPopup.open()
+        opticsSettingsPopup.updateSettings.connect(self._emitOpticsSettings)
+        opticsSettingsPopup.open()
 
     @Slot(str, str)
     def _emitOpticsSettings(self, tunecorr_configname, chromcorr_configname):
@@ -195,6 +188,7 @@ class Settings(QMenuBar):
         th.closediag.connect(dlg.close)
         th.normConfigList.connect(self.newNormConfigListSignal.emit)
         th.precReached.connect(self._showWarningPrecNotOk)
+        th.error.connect(self._showErrorNormFactory)
         th.start()
 
     @Slot(bool, float)
@@ -205,6 +199,10 @@ class Settings(QMenuBar):
                 'Reconstruction was unable to reproduce waveforms\n'
                 'with 1e-5 accuracy (maximum error: {:.4g})!'.format(
                     max_error))
+
+    @Slot(str)
+    def _showErrorNormFactory(self, text):
+        QMessageBox.critical(self, 'Error', text)
 
     @Slot(ramp.BoosterRamp)
     def getRampConfig(self, ramp_config):
@@ -228,6 +226,7 @@ class _WaitThread(QThread):
     closediag = Signal()
     normConfigList = Signal(list)
     precReached = Signal(bool, float)
+    error = Signal(str)
 
     def __init__(self, ramp_config, parent=None):
         super().__init__(parent)
@@ -236,9 +235,14 @@ class _WaitThread(QThread):
     def run(self):
         self.opendiag.emit()
         norm_fac = BONormFactory(self.ramp_config)
-        norm_fac.read_waveforms()
-        new_norm_list = norm_fac.normalized_configs
-        self.normConfigList.emit(new_norm_list)
-        ok, max_error = norm_fac.precision_reached
-        self.precReached.emit(ok, max_error)
-        self.closediag.emit()
+        try:
+            norm_fac.read_waveforms()
+            new_norm_list = norm_fac.normalized_configs
+        except Exception as e:
+            self.error.emit(str(e))
+        else:
+            self.normConfigList.emit(new_norm_list)
+            ok, max_error = norm_fac.precision_reached
+            self.precReached.emit(ok, max_error)
+        finally:
+            self.closediag.emit()
