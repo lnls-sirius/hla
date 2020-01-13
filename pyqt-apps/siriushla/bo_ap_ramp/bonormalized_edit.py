@@ -72,7 +72,10 @@ class BONormEdit(SiriusMainWindow):
     # ---------- setup/build layout ----------
 
     def _setupUi(self):
-        self.label_time = QLabel('<h2>'+str(self.time)+'</h2>', self)
+        self.label_description = QLabel(
+            '<h2>'+self.norm_config['label']+'</h2>', self)
+        self.label_description.setAlignment(Qt.AlignCenter)
+        self.label_time = QLabel('<h2>T = '+str(self.time)+'ms</h2>', self)
         self.label_time.setAlignment(Qt.AlignCenter)
 
         self.strengths = self._setupStrengthWidget()
@@ -89,19 +92,21 @@ class BONormEdit(SiriusMainWindow):
         lay = QGridLayout()
         lay.setVerticalSpacing(10)
         lay.setHorizontalSpacing(10)
-        lay.addWidget(self.label_time, 0, 0, 1, 2)
-        lay.addWidget(self.strengths, 1, 0, 4, 1)
-        lay.addWidget(self.orbit, 1, 1)
-        lay.addWidget(self.tune, 2, 1)
-        lay.addWidget(self.chrom, 3, 1)
-        lay.addWidget(self.bt_apply, 4, 1)
+        lay.addWidget(self.label_description, 0, 0, 1, 2)
+        lay.addWidget(self.label_time, 1, 0, 1, 2)
+        lay.addWidget(self.strengths, 2, 0, 4, 1)
+        lay.addWidget(self.orbit, 2, 1)
+        lay.addWidget(self.tune, 3, 1)
+        lay.addWidget(self.chrom, 4, 1)
+        lay.addWidget(self.bt_apply, 5, 1)
         lay.setColumnStretch(0, 2)
         lay.setColumnStretch(1, 2)
         lay.setRowStretch(0, 2)
-        lay.setRowStretch(1, 8)
+        lay.setRowStretch(1, 2)
         lay.setRowStretch(2, 8)
         lay.setRowStretch(3, 8)
-        lay.setRowStretch(4, 1)
+        lay.setRowStretch(4, 8)
+        lay.setRowStretch(5, 1)
         cw.setLayout(lay)
 
         cw.setStyleSheet("""
@@ -149,7 +154,7 @@ class BONormEdit(SiriusMainWindow):
                 ps_value.setMinimum(min(lims))
                 ps_value.setMaximum(max(lims))
                 ps_value.setValue(self.norm_config[ps])
-                ps_value.editingFinished.connect(self._handleStrenghtsSet)
+                ps_value.valueChanged.connect(self._handleStrenghtsSet)
 
                 if ps.dev in {'QD', 'QF', 'QS'}:
                     unit_txt = '1/m'
@@ -371,16 +376,17 @@ class BONormEdit(SiriusMainWindow):
         if not self.ramp_config.verify_ps_normalized_synchronized(
                 self.time, value=self.norm_config):
             self.label_time.setStyleSheet('color: red;')
+            self.label_description.setStyleSheet('color: red;')
             self.setToolTip("There are unsaved changes")
         else:
             self.label_time.setStyleSheet('color: black;')
+            self.label_description.setStyleSheet('color: black;')
             self.setToolTip("")
 
     # ---------- strengths ----------
 
-    def _handleStrenghtsSet(self):
+    def _handleStrenghtsSet(self, new_value):
         psname = self.sender().objectName()
-        new_value = self.sender().value()
         self._stack_command(
             self.sender(), self.norm_config[psname], new_value,
             message='set '+psname+' strength to {}'.format(new_value))
@@ -388,9 +394,10 @@ class BONormEdit(SiriusMainWindow):
         self.verifySync()
 
     def _handleStrengtsLimits(self, state):
-        psnames = _dcopy(self.norm_config.psnames)
+        psnames = list(self.norm_config.keys())
         psnames.remove('BO-Fam:PS-B-1')
         psnames.remove('BO-Fam:PS-B-2')
+        psnames.remove('label')
         if state:
             for ps in psnames:
                 ps_value = self.nconfig_data.findChild(QDoubleSpinBox, name=ps)
@@ -576,14 +583,18 @@ class BONormEdit(SiriusMainWindow):
         if self.norm_config is not None:
             self.normConfigChanged.emit(self.time, _dcopy(self.norm_config))
 
-    def updateEnergy(self, energy):
-        """Update energy and strength limits."""
-        self.energy = energy
-        self._handleStrengtsLimits(self.cb_checklims.checkState())
-
     def updateTime(self, time):
         """Update norm config time."""
-        self.label_time.setText('<h2>'+str(time)+'</h2>')
+        self.time = time
+        self.label_time.setText('<h2>T = '+str(time)+'ms</h2>')
+        self.energy = self.ramp_config.ps_waveform_interp_energy(time)
+        self._handleStrengtsLimits(self.cb_checklims.checkState())
+        self.verifySync()
+
+    def updateLabel(self, label):
+        """Update norm config label."""
+        self.norm_config['label'] = label
+        self.label_description.setText('<h2>'+label+'</h2>')
         self.verifySync()
 
     @Slot(str, str)

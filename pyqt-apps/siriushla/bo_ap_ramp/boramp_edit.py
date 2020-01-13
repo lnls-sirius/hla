@@ -885,7 +885,7 @@ class MultipolesRamp(QWidget):
         self.table_map = {
             'rows': {0: 'Injection',
                      len(self.normalized_configs)+1: 'Ejection'},
-            'columns': {0: '',
+            'columns': {0: 'Label',
                         1: 'T [ms]',
                         2: 'E [GeV]',
                         3: 'Index'}}
@@ -1002,24 +1002,18 @@ class MultipolesRamp(QWidget):
             self._verifyWarnings()
 
             new_norm_configs = _dcopy(self.normalized_configs)
-            global _flag_stack_next_command, _flag_stacking
-            if _flag_stack_next_command:
-                _flag_stacking = True
-                command = _UndoRedoMultipoleTable(
-                    self, old_norm_configs, new_norm_configs,
-                    'change time of normalized config from '
-                    '{0} to {1}'.format(old_value, new_value))
-                self._undo_stack.push(command)
-            else:
-                _flag_stack_next_command = True
+            self.stackUndoMultipoleTableCommand(
+                description='change time of normalized config from '
+                            '{0} to {1}'.format(old_value, new_value),
+                old=old_norm_configs, new=new_norm_configs,
+                undocall=_part(self._updateNormConfigWindowTime,
+                               new_value, old_value),
+                redocall=_part(self._updateNormConfigWindowTime,
+                               old_value, new_value))
         finally:
             self.updateTable()
 
-            nconfig_time = self.table.item(row, 1).data(Qt.DisplayRole)
-            if nconfig_time in self.bonorm_edit_dict.keys():
-                energy = float(self.table.item(row, 2).data(Qt.DisplayRole))
-                w = self.bonorm_edit_dict[nconfig_time]
-                w.updateEnergy(energy)
+            self._updateNormConfigWindowTime(old_value, new_value)
 
     def _showInsertNormConfigPopup(self):
         if self.ramp_config is None:
@@ -1052,15 +1046,9 @@ class MultipolesRamp(QWidget):
             self.updateMultipoleRampSignal.emit()
 
             new_norm_configs = _dcopy(self.normalized_configs)
-            global _flag_stack_next_command, _flag_stacking
-            if _flag_stack_next_command:
-                _flag_stacking = True
-                command = _UndoRedoMultipoleTable(
-                    self, old_norm_configs, new_norm_configs,
-                    'insert normalized config in time {}'.format(time))
-                self._undo_stack.push(command)
-            else:
-                _flag_stack_next_command = True
+            self.stackUndoMultipoleTableCommand(
+                description='insert normalized config in time {}'.format(time),
+                old=old_norm_configs, new=new_norm_configs)
 
     def _showDeleteNormConfigPopup(self, selected_row=None):
         if self.ramp_config is None:
@@ -1083,15 +1071,9 @@ class MultipolesRamp(QWidget):
             self.updateMultipoleRampSignal.emit()
 
             new_norm_configs = _dcopy(self.normalized_configs)
-            global _flag_stack_next_command, _flag_stacking
-            if _flag_stack_next_command:
-                _flag_stacking = True
-                command = _UndoRedoMultipoleTable(
-                    self, old_norm_configs, new_norm_configs,
-                    'delete normalized config in time {}'.format(time))
-                self._undo_stack.push(command)
-            else:
-                _flag_stack_next_command = True
+            self.stackUndoMultipoleTableCommand(
+                description='delete normalized config in time {}'.format(time),
+                old=old_norm_configs, new=new_norm_configs)
 
     def _showChoosePSToPlot(self):
         self._choosePSPopup = _ChoosePSToPlot(
@@ -1191,6 +1173,7 @@ class MultipolesRamp(QWidget):
             return
 
         try:
+            old_value = label
             old_norm_configs = _dcopy(self.normalized_configs)
             self.ramp_config.ps_normalized_configs_change_label(
                 time, new_value)
@@ -1201,16 +1184,16 @@ class MultipolesRamp(QWidget):
             self.updateMultipoleRampSignal.emit()
 
             new_norm_configs = _dcopy(self.normalized_configs)
-            global _flag_stack_next_command, _flag_stacking
-            if _flag_stack_next_command:
-                _flag_stacking = True
-                command = _UndoRedoMultipoleTable(
-                    self, old_norm_configs, new_norm_configs,
-                    'change label of normalized config in time '
-                    '{}'.format(time))
-                self._undo_stack.push(command)
-            else:
-                _flag_stack_next_command = True
+            self.stackUndoMultipoleTableCommand(
+                description='change label of normalized config in time '
+                            '{}'.format(time),
+                old=old_norm_configs, new=new_norm_configs,
+                undocall=_part(self._updateNormConfigWindowLabel,
+                               time, old_value),
+                redocall=_part(self._updateNormConfigWindowLabel,
+                               time, new_value))
+
+            self._updateNormConfigWindowLabel(time, new_value)
 
     def _get_data_in_pos(self, pos):
         item = self.table.itemAt(pos)
@@ -1251,6 +1234,29 @@ class MultipolesRamp(QWidget):
         for psname in psnames_exclimits:
             text += '    - ' + psname + '\n'
         QMessageBox.warning(self, 'Warning', text, QMessageBox.Ok)
+
+    def _updateNormConfigWindowTime(self, old_value, new_value):
+        if old_value in self.bonorm_edit_dict.keys():
+            w = self.bonorm_edit_dict.pop(old_value)
+            self.bonorm_edit_dict[new_value] = w
+            w.updateTime(new_value)
+
+    def _updateNormConfigWindowLabel(self, time, label):
+        if time in self.bonorm_edit_dict.keys():
+            w = self.bonorm_edit_dict[time]
+            w.updateLabel(label)
+
+    def stackUndoMultipoleTableCommand(self, description, old, new,
+                                       undocall=None, redocall=None):
+        global _flag_stack_next_command, _flag_stacking
+        if _flag_stack_next_command:
+            _flag_stacking = True
+            command = _UndoRedoMultipoleTable(
+                self, old, new, description,
+                undocall=undocall, redocall=redocall)
+            self._undo_stack.push(command)
+        else:
+            _flag_stack_next_command = True
 
     def updateGraph(self, update_axis=False):
         """Update and redraw graph."""
@@ -1905,7 +1911,7 @@ class _UndoRedoMultipoleTable(QUndoCommand):
     """Class to define command to change table."""
 
     def __init__(self, widget, old_normalized_configs, new_normalized_configs,
-                 description):
+                 description, undocall=None, redocall=None):
         super().__init__(description)
         self.widget = widget
         self.old_normalized_configs = dict()
@@ -1914,12 +1920,16 @@ class _UndoRedoMultipoleTable(QUndoCommand):
         self.new_normalized_configs = dict()
         for k, v in new_normalized_configs.items():
             self.new_normalized_configs['{:.3f}'.format(k)] = v
+        self.undocall = undocall
+        self.redocall = redocall
 
     def undo(self):
         self.widget.ramp_config.ps_normalized_configs_set(
             self.old_normalized_configs)
         self.widget.handleLoadRampConfig()
         self.widget.updateMultipoleRampSignal.emit()
+        if self.undocall is not None:
+            self.undocall()
 
     def redo(self):
         global _flag_stacking
@@ -1928,6 +1938,8 @@ class _UndoRedoMultipoleTable(QUndoCommand):
                 self.new_normalized_configs)
             self.widget.handleLoadRampConfig()
             self.widget.updateMultipoleRampSignal.emit()
+            if self.redocall is not None:
+                self.redocall()
         else:
             _flag_stacking = False
 
