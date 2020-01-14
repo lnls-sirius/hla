@@ -9,7 +9,6 @@ from qtpy.QtWidgets import QLabel, QWidget, QAbstractItemView, QMessageBox, \
 
 from siriuspy.csdevice.orbitcorr import SOFBFactory
 from siriuspy.clientconfigdb import ConfigDBClient as _ConfigDBClient, \
-    ConfigDBDocument as _ConfigDBDocument, \
     ConfigDBException as _ConfigDBException
 from siriuspy.search import PSSearch
 from siriuspy.ramp import ramp
@@ -24,38 +23,36 @@ from .custom_widgets import \
 class InsertNormalizedConfig(SiriusDialog):
     """Auxiliary window to insert a new normalized config."""
 
-    insertConfig = Signal(list)
+    insertConfig = Signal(float, str, dict)
 
     def __init__(self, parent, ramp_config):
         """Initialize object."""
         super().__init__(parent)
         self.setObjectName('BOApp')
         self.ramp_config = ramp_config
-        self.norm_config = ramp.BoosterNormalized()
         self.setWindowTitle('Insert Normalized Configuration')
         self._setupUi()
 
     def _setupUi(self):
         # selection widgets
         self.rb_interp = QRadioButton('Interpolate')
-        self.rb_confsrv = QRadioButton('Take from Config Server')
+        self.rb_confsrv = QRadioButton('Take value from Config Server')
         self.rb_create = QRadioButton('Create from template')
 
         # data widget
         self.config_data = QWidget()
         glay_data = QGridLayout(self.config_data)
-        self.le_interp_name = QLineEdit(self)  # interpolate
-        self.le_interp_name.setText(_ConfigDBDocument.generate_config_name())
-        self.le_confsrv_name = _ConfigLineEdit(self)  # from ConfigDB
+        self.le_interp_label = QLineEdit(self)  # interpolate
+        self.le_confsrv_name = _ConfigLineEdit(
+            parent=self, config_type='bo_normalized')  # from ConfigDB
         self.le_confsrv_name.textChanged.connect(
             self._handleInsertExistingConfig)
         self.le_confsrv_name.setVisible(False)
-        self.le_nominal_name = QLineEdit(self)  # from template
-        self.le_nominal_name.setText(_ConfigDBDocument.generate_config_name())
-        self.le_nominal_name.setVisible(False)
+        self.le_nominal_label = QLineEdit(self)  # from template
+        self.le_nominal_label.setVisible(False)
         self.sb_time = QDoubleSpinBox(self)
         self.sb_time.setMaximum(490)
-        self.sb_time.setDecimals(6)
+        self.sb_time.setDecimals(3)
         self.bt_insert = QPushButton('Insert', self)
         self.bt_insert.setAutoDefault(False)
         self.bt_insert.setDefault(False)
@@ -64,20 +61,20 @@ class InsertNormalizedConfig(SiriusDialog):
         self.bt_cancel.setAutoDefault(False)
         self.bt_cancel.setDefault(False)
         self.bt_cancel.clicked.connect(self.close)
-        glay_data.addWidget(QLabel('Name: ', self), 0, 0)
-        glay_data.addWidget(self.le_interp_name, 0, 1)
+        glay_data.addWidget(QLabel('Label: ', self), 0, 0)
+        glay_data.addWidget(self.le_interp_label, 0, 1)
         glay_data.addWidget(self.le_confsrv_name, 0, 1)
-        glay_data.addWidget(self.le_nominal_name, 0, 1)
+        glay_data.addWidget(self.le_nominal_label, 0, 1)
         glay_data.addWidget(QLabel('Time [ms]: ', self), 1, 0)
         glay_data.addWidget(self.sb_time, 1, 1)
         glay_data.addWidget(self.bt_cancel, 2, 0)
         glay_data.addWidget(self.bt_insert, 2, 1)
 
         # connect visibility signals
-        self.rb_interp.toggled.connect(self.le_interp_name.setVisible)
+        self.rb_interp.toggled.connect(self.le_interp_label.setVisible)
         self.rb_interp.setChecked(True)
         self.rb_confsrv.toggled.connect(self.le_confsrv_name.setVisible)
-        self.rb_create.toggled.connect(self.le_nominal_name.setVisible)
+        self.rb_create.toggled.connect(self.le_nominal_label.setVisible)
 
         # layout
         lay = QVBoxLayout()
@@ -94,6 +91,7 @@ class InsertNormalizedConfig(SiriusDialog):
     @Slot(str)
     def _handleInsertExistingConfig(self, configname):
         try:
+            self.norm_config = ramp.BoosterNormalized()
             self.norm_config.name = configname
             self.norm_config.load()
             energy = self.norm_config[ramp.BoosterRamp.PSNAME_DIPOLE_REF]
@@ -104,44 +102,40 @@ class InsertNormalizedConfig(SiriusDialog):
 
     def _emitConfigData(self):
         time = self.sb_time.value()
-        if self.le_interp_name.isVisible():
-            name = self.le_interp_name.text()
-            nconf = None
+        if self.le_interp_label.isVisible():
+            label = self.le_interp_label.text()
+            psname2strength = dict()
         elif self.le_confsrv_name.isVisible():
-            name = self.le_confsrv_name.text()
-            nconf = None
-            try:
-                # self.norm_config.name = name
-                # self.norm_config.load()
-                nconf = self.norm_config.value
-            except _ConfigDBException as err:
-                QMessageBox.critical(self, 'Error', str(err), QMessageBox.Ok)
-        elif self.le_nominal_name.isVisible():
-            name = self.le_nominal_name.text()
-            nconf = self.norm_config.get_value_template()
-        self.insertConfig.emit([time, name, nconf])
+            label = self.le_confsrv_name.text()
+            psname2strength = {
+                _PVName(k).device_name: v
+                for k, v, d in self.norm_config.value['pvs']}
+        elif self.le_nominal_label.isVisible():
+            label = self.le_nominal_label.text()
+            psname2strength = \
+                self.ramp_config.ps_normalized_config_nominal_values
+        self.insertConfig.emit(time, label, psname2strength)
         self.close()
 
 
 class DuplicateNormConfig(SiriusDialog):
     """Auxiliary window to duplicate a normalized config."""
 
-    insertConfig = Signal(list)
+    insertConfig = Signal(float, str, dict)
 
-    def __init__(self, parent, data):
+    def __init__(self, parent, psname2strength):
         """Initialize object."""
         super().__init__(parent)
         self.setObjectName('BOApp')
         self.setWindowTitle('Duplicate Normalized Configuration')
-        self.data = data
+        self.psname2strength = psname2strength
         self._setupUi()
 
     def _setupUi(self):
-        self.le_name = QLineEdit(self)
-        self.le_name.setText(_ConfigDBDocument.generate_config_name())
+        self.le_label = QLineEdit(self)
         self.sb_time = QDoubleSpinBox(self)
         self.sb_time.setMaximum(490)
-        self.sb_time.setDecimals(6)
+        self.sb_time.setDecimals(3)
         self.bt_duplic = QPushButton('Duplicate', self)
         self.bt_duplic.setAutoDefault(False)
         self.bt_duplic.setDefault(False)
@@ -158,10 +152,10 @@ class DuplicateNormConfig(SiriusDialog):
             QLabel('<h4>Duplicate Normalized Configuration</h4>', self),
             0, 0, 1, 2, alignment=Qt.AlignCenter)
         lay.addWidget(
-            QLabel('Choose a name and a time to insert\n'
+            QLabel('Choose a label and a time to insert\n'
                    'the new configuration:', self), 1, 0, 1, 2)
-        lay.addWidget(QLabel('Name: ', self), 2, 0)
-        lay.addWidget(self.le_name, 2, 1)
+        lay.addWidget(QLabel('Label: ', self), 2, 0)
+        lay.addWidget(self.le_label, 2, 1)
         lay.addWidget(QLabel('Time [ms]: ', self), 3, 0)
         lay.addWidget(self.sb_time, 3, 1)
         lay.addWidget(self.bt_cancel, 4, 0)
@@ -170,16 +164,16 @@ class DuplicateNormConfig(SiriusDialog):
 
     def _emitConfigData(self):
         time = self.sb_time.value()
-        name = self.le_name.text()
-        nconf = self.data
-        self.insertConfig.emit([time, name, nconf])
+        label = self.le_label.text()
+        psname2strength = self.psname2strength
+        self.insertConfig.emit(time, label, psname2strength)
         self.close()
 
 
 class DeleteNormalizedConfig(SiriusDialog):
     """Auxiliary window to delete a normalized config."""
 
-    deleteConfig = Signal(str)
+    deleteConfig = Signal(float)
 
     def __init__(self, parent, table_map, selected_row):
         """Initialize object."""
@@ -202,9 +196,9 @@ class DeleteNormalizedConfig(SiriusDialog):
         self.bt_delete.setDefault(False)
         self.bt_delete.clicked.connect(self._emitConfigData)
 
-        self.l_configname = QLabel('', self)
-        self.l_configname.setSizePolicy(QSzPlcy.MinimumExpanding,
-                                        QSzPlcy.Expanding)
+        self.l_configid = QLabel('', self)
+        self.l_configid.setSizePolicy(
+            QSzPlcy.MinimumExpanding, QSzPlcy.Expanding)
         self.sb_confignumber.setValue(self.selected_row+1)
         self._searchConfigByIndex(self.selected_row+1)
 
@@ -220,7 +214,7 @@ class DeleteNormalizedConfig(SiriusDialog):
         label.setAlignment(Qt.AlignCenter)
         glay.addWidget(label, 0, 0, 1, 2)
         glay.addWidget(self.sb_confignumber, 2, 0)
-        glay.addWidget(self.l_configname, 2, 1)
+        glay.addWidget(self.l_configid, 2, 1)
         glay.addWidget(self.bt_cancel, 4, 0)
         glay.addWidget(self.bt_delete, 4, 1)
         self.setLayout(glay)
@@ -228,14 +222,14 @@ class DeleteNormalizedConfig(SiriusDialog):
     @Slot(int)
     def _searchConfigByIndex(self, config_idx):
         label = self.table_map['rows'][config_idx - 1]
-        self.l_configname.setText(label)
+        self.l_configid.setText(str(label))
         if label in ['Injection', 'Ejection']:
             self.bt_delete.setEnabled(False)
         else:
             self.bt_delete.setEnabled(True)
 
     def _emitConfigData(self):
-        self.deleteConfig.emit(self.l_configname.text())
+        self.deleteConfig.emit(float(self.l_configid.text()))
         self.close()
 
 
@@ -590,12 +584,13 @@ class ChoosePSToPlot(SiriusDialog):
 class ShowCorrectorKicks(SiriusDialog):
     """Auxiliar window to show corrector kicks waveform."""
 
-    def __init__(self, parent, norm_config):
+    def __init__(self, parent, time, strengths_dict):
         """Init."""
         super().__init__(parent)
         self.setWindowTitle('Kicks')
         self.setObjectName('BOApp')
-        self.norm_config = norm_config
+        self.time = time
+        self.strengths_dict = strengths_dict
         self.consts = SOFBFactory.create('BO')
         self._setupUi()
 
@@ -603,8 +598,7 @@ class ShowCorrectorKicks(SiriusDialog):
         self.kicks = dict()
         for dev in ['CV', 'CH']:
             names = PSSearch.get_psnames({'sec': 'BO', 'dev': dev})
-            corr2kicks = {n.strip(':Kick-SP'): k
-                          for n, k, d in self.norm_config.value['pvs']}
+            corr2kicks = {n: self.strengths_dict[n] for n in names}
             self.kicks[dev] = _np.array([corr2kicks[n] for n in names])
 
         label_ch = QLabel('<h3>Horizontal</h3>', self,
@@ -638,7 +632,7 @@ class ShowCorrectorKicks(SiriusDialog):
 
         lay = QVBoxLayout(self)
         lay.setSpacing(10)
-        lay.addWidget(QLabel('<h3>'+self.norm_config.name+'</h3>', self,
+        lay.addWidget(QLabel('<h3>'+str(self.time)+'</h3>', self,
                              alignment=Qt.AlignCenter))
         lay.addWidget(label_ch)
         lay.addWidget(self.graph_ch)

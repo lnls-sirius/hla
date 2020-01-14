@@ -6,7 +6,7 @@ from functools import partial as _part
 import numpy as _np
 
 from qtpy.QtCore import Qt, Signal, Slot
-from qtpy.QtGui import QKeySequence, QPalette
+from qtpy.QtGui import QKeySequence
 from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
     QGridLayout, QScrollArea, QFormLayout, QCheckBox, QDoubleSpinBox, \
     QUndoStack, QUndoCommand, QHBoxLayout, QMessageBox, QMenuBar
@@ -33,24 +33,27 @@ _flag_stacking = False
 class BONormEdit(SiriusMainWindow):
     """Widget to perform optics adjust in normalized configurations."""
 
-    normConfigChanged = Signal(ramp.BoosterNormalized, str)
+    normConfigChanged = Signal(float, dict)
 
-    def __init__(self, parent=None, prefix='', norm_config=None,
-                 time=None, energy=None, magnets=dict(), conn_sofb=None,
+    def __init__(self, parent=None, prefix='', ramp_config=None,
+                 norm_config=None, time=None, energy=None,
+                 magnets=dict(), conn_sofb=None,
                  tunecorr_configname=None, chromcorr_configname=None):
         """Initialize object."""
         super().__init__(parent)
         self.setWindowTitle('Edit Normalized Configuration')
         self.setObjectName('BOApp')
         self.prefix = prefix
+        self.ramp_config = ramp_config
         self.norm_config = _dcopy(norm_config)
+        self.time = time
         self.energy = energy
 
         self._aux_magnets = magnets
+        self._conn_sofb = conn_sofb
         self._tunecorr = BOTuneCorr(tunecorr_configname)
         self._chromcorr = BOChromCorr(chromcorr_configname)
 
-        self._norm_config_oldname = ''
         self._reference = _dcopy(norm_config)
         self._currChrom = self._estimateChrom(use_ref=True)
         self._deltas = {
@@ -62,7 +65,6 @@ class BONormEdit(SiriusMainWindow):
             'chromX': self._currChrom[0],
             'chromY': self._currChrom[1],
         }
-        self._conn_sofb = conn_sofb
         self._setupUi()
         self._setupMenu()
         self.verifySync()
@@ -70,8 +72,11 @@ class BONormEdit(SiriusMainWindow):
     # ---------- setup/build layout ----------
 
     def _setupUi(self):
-        self.label_name = QLabel('<h2>'+self.norm_config.name+'</h2>', self)
-        self.label_name.setAlignment(Qt.AlignCenter)
+        self.label_description = QLabel(
+            '<h2>'+self.norm_config['label']+'</h2>', self)
+        self.label_description.setAlignment(Qt.AlignCenter)
+        self.label_time = QLabel('<h2>T = '+str(self.time)+'ms</h2>', self)
+        self.label_time.setAlignment(Qt.AlignCenter)
 
         self.strengths = self._setupStrengthWidget()
         self.orbit = self._setupOrbitWidget()
@@ -87,19 +92,21 @@ class BONormEdit(SiriusMainWindow):
         lay = QGridLayout()
         lay.setVerticalSpacing(10)
         lay.setHorizontalSpacing(10)
-        lay.addWidget(self.label_name, 0, 0, 1, 2)
-        lay.addWidget(self.strengths, 1, 0, 4, 1)
-        lay.addWidget(self.orbit, 1, 1)
-        lay.addWidget(self.tune, 2, 1)
-        lay.addWidget(self.chrom, 3, 1)
-        lay.addWidget(self.bt_apply, 4, 1)
+        lay.addWidget(self.label_description, 0, 0, 1, 2)
+        lay.addWidget(self.label_time, 1, 0, 1, 2)
+        lay.addWidget(self.strengths, 2, 0, 4, 1)
+        lay.addWidget(self.orbit, 2, 1)
+        lay.addWidget(self.tune, 3, 1)
+        lay.addWidget(self.chrom, 4, 1)
+        lay.addWidget(self.bt_apply, 5, 1)
         lay.setColumnStretch(0, 2)
         lay.setColumnStretch(1, 2)
         lay.setRowStretch(0, 2)
-        lay.setRowStretch(1, 8)
+        lay.setRowStretch(1, 2)
         lay.setRowStretch(2, 8)
         lay.setRowStretch(3, 8)
-        lay.setRowStretch(4, 1)
+        lay.setRowStretch(4, 8)
+        lay.setRowStretch(5, 1)
         cw.setLayout(lay)
 
         cw.setStyleSheet("""
@@ -114,12 +121,6 @@ class BONormEdit(SiriusMainWindow):
         self.menubar = QMenuBar(self)
         self.layout().setMenuBar(self.menubar)
         self.menu = self.menubar.addMenu('Options')
-        self.act_load = self.menu.addAction('Load')
-        self.act_load.triggered.connect(self._load)
-        if not self.norm_config.exist():
-            self.act_load.setEnabled(False)
-        self.act_save = self.menu.addAction('Save')
-        self.act_save.triggered.connect(self._save)
         self.act_saveas = self.menu.addAction('Save as...')
         self.act_saveas.triggered.connect(self._showSaveAsPopup)
 
@@ -145,15 +146,10 @@ class BONormEdit(SiriusMainWindow):
             else:
                 ps_value = _MyDoubleSpinBox(self.nconfig_data)
                 ps_value.setDecimals(6)
-                ma = _MASearch.conv_psname_2_psmaname(ps)
-                aux = self._aux_magnets[ma]
-                currs = (aux.current_min, aux.current_max)
-                lims = aux.conv_current_2_strength(
-                    currents=currs, strengths_dipole=self.energy)
-                ps_value.setMinimum(min(lims))
-                ps_value.setMaximum(max(lims))
+                ps_value.setMinimum(-10000)
+                ps_value.setMaximum(10000)
                 ps_value.setValue(self.norm_config[ps])
-                ps_value.editingFinished.connect(self._handleStrenghtsSet)
+                ps_value.valueChanged.connect(self._handleStrenghtsSet)
 
                 if ps.dev in {'QD', 'QF', 'QS'}:
                     unit_txt = '1/m'
@@ -180,7 +176,7 @@ class BONormEdit(SiriusMainWindow):
         scrollarea.setWidget(self.nconfig_data)
 
         self.cb_checklims = QCheckBox('Set limits according to energy', self)
-        self.cb_checklims.setChecked(True)
+        self.cb_checklims.setChecked(False)
         self.cb_checklims.stateChanged.connect(self._handleStrengtsLimits)
 
         self.bt_graph = QPushButton(qta.icon('mdi.chart-line'), '', self)
@@ -356,33 +352,13 @@ class BONormEdit(SiriusMainWindow):
 
     # ---------- server communication ----------
 
-    def _load(self):
+    def _save(self, name):
         try:
-            self.norm_config.load()
+            nconf = ramp.BoosterNormalized()
+            nconf.value = self.norm_config
+            nconf.save(new_name=name)
         except _ConfigDBException as err:
             QMessageBox.critical(self, 'Error', str(err), QMessageBox.Ok)
-        else:
-            self._resetTuneChanges()
-            self._resetChromChanges()
-            self._resetOrbitChanges()
-            self.verifySync()
-
-    def _save(self, new_name=None):
-        try:
-            self._norm_config_oldname = self.norm_config.name
-            if self.norm_config.exist():
-                if not new_name:
-                    new_name = self.norm_config.generate_config_name(
-                        self._norm_config_oldname)
-                self.norm_config.save(new_name)
-            else:
-                self.norm_config.save(new_name)
-                self.act_load.setEnabled(True)
-        except _ConfigDBException as err:
-            QMessageBox.critical(self, 'Error', str(err), QMessageBox.Ok)
-        finally:
-            self.label_name.setText('<h2>'+self.norm_config.name+'</h2>')
-            self.verifySync()
 
     def _showSaveAsPopup(self):
         self._saveAsPopup = _SaveConfigDialog('bo_normalized', self)
@@ -390,27 +366,22 @@ class BONormEdit(SiriusMainWindow):
         self._saveAsPopup.open()
 
     def verifySync(self):
-        """Verify sync status related to ConfServer."""
-        if self.norm_config.exist():
-            self.norm_config.verify_syncronized()
-        if not self.norm_config.synchronized:
-            self.act_save.setEnabled(True)
-            pal = self.label_name.palette()
-            pal.setColor(QPalette.WindowText, Qt.red)
-            self.label_name.setPalette(pal)
+        if self.ramp_config is None:
+            return
+        if not self.ramp_config.verify_ps_normalized_synchronized(
+                self.time, value=self.norm_config):
+            self.label_time.setStyleSheet('color: red;')
+            self.label_description.setStyleSheet('color: red;')
             self.setToolTip("There are unsaved changes")
         else:
-            self.act_save.setEnabled(False)
-            pal = self.label_name.palette()
-            pal.setColor(QPalette.WindowText, Qt.black)
-            self.label_name.setPalette(pal)
+            self.label_time.setStyleSheet('color: black;')
+            self.label_description.setStyleSheet('color: black;')
             self.setToolTip("")
 
     # ---------- strengths ----------
 
-    def _handleStrenghtsSet(self):
+    def _handleStrenghtsSet(self, new_value):
         psname = self.sender().objectName()
-        new_value = self.sender().value()
         self._stack_command(
             self.sender(), self.norm_config[psname], new_value,
             message='set '+psname+' strength to {}'.format(new_value))
@@ -418,9 +389,10 @@ class BONormEdit(SiriusMainWindow):
         self.verifySync()
 
     def _handleStrengtsLimits(self, state):
-        psnames = _dcopy(self.norm_config.psnames)
+        psnames = list(self.norm_config.keys())
         psnames.remove('BO-Fam:PS-B-1')
         psnames.remove('BO-Fam:PS-B-2')
+        psnames.remove('label')
         if state:
             for ps in psnames:
                 ps_value = self.nconfig_data.findChild(QDoubleSpinBox, name=ps)
@@ -439,7 +411,7 @@ class BONormEdit(SiriusMainWindow):
 
     def _updateStrenghtsWidget(self, pstype):
         psnames = self._get_PSNames(pstype)
-        wid2change = psnames if psnames else self.norm_config.psnames
+        wid2change = psnames if psnames else list(self.norm_config.keys())
         for wid in wid2change:
             value = self.norm_config[wid]
             self._map_psnames2wigdets[wid].setValue(value)
@@ -520,6 +492,7 @@ class BONormEdit(SiriusMainWindow):
             self._reference['BO-Fam:PS-QF'] + self._deltaKL[0]
         self.norm_config['BO-Fam:PS-QD'] = \
             self._reference['BO-Fam:PS-QD'] + self._deltaKL[1]
+
         self._updateStrenghtsWidget('quads')
         self.verifySync()
 
@@ -569,8 +542,8 @@ class BONormEdit(SiriusMainWindow):
             self._reference['BO-Fam:PS-SF'] + self._deltaSL[0]
         self.norm_config['BO-Fam:PS-SD'] = \
             self._reference['BO-Fam:PS-SD'] + self._deltaSL[1]
-        self._updateStrenghtsWidget('sexts')
 
+        self._updateStrenghtsWidget('sexts')
         self.verifySync()
 
     def _resetChromChanges(self):
@@ -603,19 +576,20 @@ class BONormEdit(SiriusMainWindow):
 
     def _updateRampConfig(self):
         if self.norm_config is not None:
-            self.normConfigChanged.emit(
-                _dcopy(self.norm_config), self._norm_config_oldname)
-            self._norm_config_oldname = ''
+            self.normConfigChanged.emit(self.time, _dcopy(self.norm_config))
 
-    def updateEnergy(self, energy):
-        """Update energy and strength limits."""
-        self.energy = energy
+    def updateTime(self, time):
+        """Update norm config time."""
+        self.time = time
+        self.label_time.setText('<h2>T = '+str(time)+'ms</h2>')
+        self.energy = self.ramp_config.ps_waveform_interp_energy(time)
         self._handleStrengtsLimits(self.cb_checklims.checkState())
+        self.verifySync()
 
-    def updateName(self, name):
-        """Update norm. config. name."""
-        self.norm_config.name = name
-        self.label_name.setText('<h2>'+name+'</h2>')
+    def updateLabel(self, label):
+        """Update norm config label."""
+        self.norm_config['label'] = label
+        self.label_description.setText('<h2>'+label+'</h2>')
         self.verifySync()
 
     @Slot(str, str)
@@ -642,25 +616,22 @@ class BONormEdit(SiriusMainWindow):
     def _get_PSNames(self, pstype=None):
         psnames = list()
         if pstype == 'corrs':
-            psnames = _PSSearch.get_psnames(
-                filters={'sec': 'BO', 'dev': 'C(V|H)'})
+            psnames = _PSSearch.get_psnames({'sec': 'BO', 'dev': 'C(V|H)'})
         elif pstype == 'quads':
             psnames = ['BO-Fam:PS-QF', 'BO-Fam:PS-QD']
         elif pstype == 'sexts':
             psnames = ['BO-Fam:PS-SF', 'BO-Fam:PS-SD']
         else:
-            psnames = _PSSearch.get_psnames(
-                filters={'sec': 'BO', 'sub': 'Fam'})
-            psnames.extend(_PSSearch.get_psnames(
-                filters={'sec': 'BO', 'dev': 'QS'}))
-            psnames.extend(sorted(_PSSearch.get_psnames(
-                filters={'sec': 'BO', 'dev': 'CH'})))
-            psnames.extend(sorted(_PSSearch.get_psnames(
-                filters={'sec': 'BO', 'dev': 'CV'})))
+            psnames = _PSSearch.get_psnames({'sec': 'BO', 'sub': 'Fam'})
+            psnames.extend(_PSSearch.get_psnames({'sec': 'BO', 'dev': 'QS'}))
+            psnames.extend(_PSSearch.get_psnames({'sec': 'BO', 'dev': 'CH'}))
+            psnames.extend(_PSSearch.get_psnames({'sec': 'BO', 'dev': 'CV'}))
         return psnames
 
     def _show_kicks_graph(self):
-        graph = _ShowCorrectorKicks(self, self.norm_config)
+        strenghts_dict = _dcopy(self.norm_config)
+        strenghts_dict.pop('label')
+        graph = _ShowCorrectorKicks(self, self.time, strenghts_dict)
         graph.show()
 
 
@@ -693,22 +664,23 @@ if __name__ == '__main__':
     """Run Example."""
     import sys
     from siriuspy.envars import vaca_prefix
-    from siriuspy.ramp import ramp
     from siriuspy.ramp.conn import ConnSOFB
-    from siriuspy.ramp.magnet import Magnet
+    from siriuspy.ramp.magnet import get_magnet
     from siriushla.sirius_application import SiriusApplication
 
     app = SiriusApplication()
 
     nconfig = ramp.BoosterNormalized('testing')
     aux_magnets = dict()
+    psnames2strengths = dict()
     for ps in nconfig.psnames:
+        psnames2strengths[ps] = nconfig[ps]
         ma = _MASearch.conv_psname_2_psmaname(ps)
-        aux_magnets[ma] = Magnet(ma)
+        aux_magnets[ma] = get_magnet(ma)
     conn_sofb = ConnSOFB(prefix=vaca_prefix)
 
     w = BONormEdit(
-        parent=None, prefix=vaca_prefix, norm_config=nconfig,
+        parent=None, prefix=vaca_prefix, norm_config=psnames2strengths,
         time=100, energy=0.985, magnets=aux_magnets, conn_sofb=conn_sofb,
         tunecorr_configname='Default', chromcorr_configname='Default')
     w.show()

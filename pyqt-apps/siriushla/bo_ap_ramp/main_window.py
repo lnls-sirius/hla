@@ -1,5 +1,7 @@
 """Booster Ramp Main Window."""
 
+from copy import deepcopy as _dcopy
+
 from qtpy.QtCore import Qt, Slot, Signal
 from qtpy.QtGui import QKeySequence, QPalette
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, \
@@ -83,8 +85,7 @@ class RampMain(SiriusMainWindow):
             self._handleUpdateOpticsAdjustSettings)
         self.settings.plotUnitSignal.connect(
             self.config_parameters.getPlotUnits)
-        self.settings.newNormConfigListSignal.connect(
-            self._receiveNewNormConfigList)
+        self.settings.newNormConfigsSignal.connect(self._receiveNewNormConfigs)
 
         self.config_parameters.dip_ramp.updateDipoleRampSignal.connect(
             self._verifySync)
@@ -142,19 +143,23 @@ class RampMain(SiriusMainWindow):
             self._undo_stack.clear()
         self._emitLoadSignal()
 
-    @Slot(list)
-    def _receiveNewNormConfigList(self, norm_config_list):
-        self.ramp_config.ps_normalized_configs_set(norm_config_list)
+    @Slot(dict)
+    def _receiveNewNormConfigs(self, norm_configs):
+        old_norm_configs = _dcopy(
+            self.config_parameters.mult_ramp.normalized_configs)
+        self.ramp_config.ps_normalized_configs_set(norm_configs)
         self.loadSignal.emit(self.ramp_config)
         self._verifySync()
+        new_norm_configs = _dcopy(
+            self.config_parameters.mult_ramp.normalized_configs)
+        self.config_parameters.mult_ramp.stackUndoMultipoleTableCommand(
+            description='reconstruct normalized configs from waveforms',
+            old=old_norm_configs, new=new_norm_configs)
 
-    def _emitLoadSignal(self, nconfigs_changed=None):
+    def _emitLoadSignal(self):
         try:
             if self.ramp_config.exist():
                 self.ramp_config.load()
-                if nconfigs_changed:
-                    self.config_parameters.mult_ramp.updateNormConfigsWindows(
-                        nconfigs_changed)
         except _ConfigDBException as err:
             QMessageBox.critical(self, 'Error', str(err), QMessageBox.Ok)
         else:
