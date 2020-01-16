@@ -78,14 +78,13 @@ class PSTestWindow(SiriusMainWindow):
         self.setslowref_bt.clicked.connect(self._set_lastcomm)
         self.setslowref_bt.clicked.connect(self._set_check_opmode)
 
+        self.currzero_bt1 = QPushButton('Set PS Current to zero', self)
+        self.currzero_bt1.clicked.connect(self._set_lastcomm)
+        self.currzero_bt1.clicked.connect(self._zero_current)
+
         self.reset_bt = QPushButton('Reset PS and DCLinks', self)
         self.reset_bt.clicked.connect(self._set_lastcomm)
         self.reset_bt.clicked.connect(self._reset_intlk)
-
-        self.turnoff_ps_bt = QPushButton('Turn PS Off', self)
-        self.turnoff_ps_bt.clicked.connect(self._set_lastcomm)
-        self.turnoff_ps_bt.clicked.connect(
-            _part(self._set_check_pwrstate, 'off'))
 
         self.turnon_dcl_bt = QPushButton('Turn DCLinks On', self)
         self.turnon_dcl_bt.clicked.connect(self._set_lastcomm)
@@ -106,13 +105,13 @@ class PSTestWindow(SiriusMainWindow):
         self.turnon_ps_bt.clicked.connect(
             _part(self._set_check_pwrstate, 'on'))
 
-        self.test_bt = QPushButton('Test PS', self)
+        self.test_bt = QPushButton('Set PS Current to test value', self)
         self.test_bt.clicked.connect(self._set_lastcomm)
         self.test_bt.clicked.connect(self._test_ps)
 
-        self.currzero_bt = QPushButton('Set PS Current to zero', self)
-        self.currzero_bt.clicked.connect(self._set_lastcomm)
-        self.currzero_bt.clicked.connect(self._zero_current)
+        self.currzero_bt2 = QPushButton('Set PS Current to zero', self)
+        self.currzero_bt2.clicked.connect(self._set_lastcomm)
+        self.currzero_bt2.clicked.connect(self._zero_current)
 
         self.restoretrigger_bt = QPushButton('Restore triggers', self)
         self.restoretrigger_bt.clicked.connect(self._set_lastcomm)
@@ -126,8 +125,8 @@ class PSTestWindow(SiriusMainWindow):
                                      alignment=Qt.AlignCenter))
         comm_layout.addWidget(self.dsbltrigger_bt)
         comm_layout.addWidget(self.setslowref_bt)
+        comm_layout.addWidget(self.currzero_bt1)
         comm_layout.addWidget(self.reset_bt)
-        comm_layout.addWidget(self.turnoff_ps_bt)
         comm_layout.addWidget(QLabel(''))
         comm_layout.addWidget(QLabel('<h4>Config DCLinks</h4>', self,
                                      alignment=Qt.AlignCenter))
@@ -139,7 +138,7 @@ class PSTestWindow(SiriusMainWindow):
                                      alignment=Qt.AlignCenter))
         comm_layout.addWidget(self.turnon_ps_bt)
         comm_layout.addWidget(self.test_bt)
-        comm_layout.addWidget(self.currzero_bt)
+        comm_layout.addWidget(self.currzero_bt2)
         comm_layout.addWidget(QLabel(''))
         comm_layout.addWidget(QLabel('<h4>Restore</h4>', self,
                                      alignment=Qt.AlignCenter))
