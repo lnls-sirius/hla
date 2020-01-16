@@ -5,7 +5,7 @@ from qtpy.QtCore import Signal, QThread
 from siriuspy.search import HLTimeSearch as _HLTimeSearch, \
     PSSearch as _PSSearch
 from siriuspy.csdevice.util import Const
-from siriuspy.namesys import SiriusPVName as _PVName
+from siriuspy.namesys import Filter, SiriusPVName as _PVName
 from .conn import TesterDCLink, TesterDCLinkFBP, TesterPS, TesterPSLinac
 
 
@@ -106,12 +106,22 @@ class CreateTesters(BaseTask):
                 break
 
 
+class CheckStatus(BaseTask):
+    """Check Status."""
+
+    def function(self):
+        self._check(method='check_status')
+
+
 class ResetIntlk(BaseTask):
     """Reset Interlocks."""
 
     def function(self):
         """Reset PS."""
         self._set(method='reset')
+        if Filter.process_filters(
+                pvnames=self._devices, filters={'sec': 'SI', 'sub': 'Fam'}):
+            _time.sleep(2.0)
 
 
 class CheckIntlk(BaseTask):

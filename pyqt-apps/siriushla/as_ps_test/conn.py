@@ -1,4 +1,5 @@
 
+import numpy as _np
 from epics import PV as _PV
 
 from siriuspy.envars import vaca_prefix as VACA_PREFIX
@@ -134,6 +135,9 @@ class TesterDCLinkFBP(_Tester):
         """Do not need to check."""
         return True
 
+    def check_status(self):
+        return self.check_intlk()
+
 
 class TesterDCLink(_Tester):
     """DCLink tester."""
@@ -142,7 +146,8 @@ class TesterDCLink(_Tester):
                   'OpMode-Sel', 'OpMode-Sts',
                   'PwrState-Sel', 'PwrState-Sts',
                   'CtrlLoop-Sel', 'CtrlLoop-Sts',
-                  'CapacitorBankVoltage-SP', 'CapacitorBankVoltage-Mon']
+                  'CapacitorBankVoltage-SP', 'CapacitorBankVoltageRef-Mon',
+                  'CapacitorBankVoltage-Mon']
 
     def __init__(self, device):
         """Init."""
@@ -176,6 +181,16 @@ class TesterDCLink(_Tester):
         return self._cmp(self._pvs['CapacitorBankVoltage-Mon'].value,
                          DEFAULT_CAP_BANK_VOLT[self.device])
 
+    def check_status(self):
+        status = True
+        status &= self.check_intlk()
+        if self.check_pwrstate():
+            status &= _np.isclose(
+                self._pvs['CapacitorBankVoltage-Mon'].value,
+                self._pvs['CapacitorBankVoltageRef-Mon'].value,
+                atol=1.0)
+        return status
+
     def _cmp(self, value, target):
         if value >= target:
             return True
@@ -189,7 +204,7 @@ class TesterPS(_Tester):
     properties = ['Reset-Cmd', 'IntlkSoft-Mon', 'IntlkHard-Mon',
                   'OpMode-Sel', 'OpMode-Sts',
                   'PwrState-Sel', 'PwrState-Sts',
-                  'Current-SP', 'Current-Mon']
+                  'Current-SP', 'CurrentRef-Mon', 'Current-Mon']
 
     def __init__(self, device):
         """Init."""
@@ -219,6 +234,15 @@ class TesterPS(_Tester):
                                self.test_current)
         else:
             status = self._cmp(self._pvs['Current-Mon'].value, 0)
+        return status
+
+    def check_status(self):
+        status = True
+        status &= self.check_intlk()
+        if self.check_pwrstate():
+            status &= self._cmp(
+                self._pvs['Current-Mon'].value,
+                self._pvs['CurrentRef-Mon'].value)
         return status
 
     def _cmp(self, value, target):
@@ -296,6 +320,15 @@ class TesterPSLinac:
             status = self._cmp(self._pvs['rdi'].value, self.test_current)
         else:
             status = self._cmp(self._pvs['rdi'].value, 0)
+        return status
+
+    def check_status(self):
+        status = True
+        status &= self.check_intlk()
+        if self.check_pwrstate():
+            status &= self._cmp(
+                self._pvs['seti'].value,
+                self._pvs['rdi'].value)
         return status
 
     def _cmp(self, value, target):
