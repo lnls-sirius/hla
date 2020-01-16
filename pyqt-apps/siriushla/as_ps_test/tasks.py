@@ -15,7 +15,7 @@ TIMEOUT_CONN = 0.5
 
 
 class BaseTask(QThread):
-    """Setter."""
+    """Base Task."""
 
     _testers = dict()
     currentItem = Signal(str)
