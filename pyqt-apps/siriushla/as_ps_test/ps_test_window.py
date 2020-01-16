@@ -19,6 +19,7 @@ from siriushla.widgets.dialog import ProgressDialog
 from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
 from siriushla.as_ti_control import HLTriggerDetailed
 from .tasks import CreateTesters, \
+    CheckStatus, \
     ResetIntlk, CheckIntlk, \
     SetOpModeSlowRef, CheckOpModeSlowRef, \
     SetPwrState, CheckPwrState, CheckInitOk, \
@@ -69,6 +70,13 @@ class PSTestWindow(SiriusMainWindow):
         gbox_select.setLayout(select_layout)
 
         # commands
+        self.checkstatus_bt = QPushButton('Check Status', self)
+        self.checkstatus_bt.clicked.connect(self._set_lastcomm)
+        self.checkstatus_bt.clicked.connect(self._check_status)
+        self.checkstatus_bt.setToolTip(
+            'Check interlock status and, if powered on, '
+            'check if it is following reference')
+
         self.dsbltrigger_bt = QPushButton('Disable triggers', self)
         self.dsbltrigger_bt.clicked.connect(self._set_lastcomm)
         self.dsbltrigger_bt.clicked.connect(self._disable_triggers)
@@ -120,6 +128,10 @@ class PSTestWindow(SiriusMainWindow):
         gbox_comm = QGroupBox('Commands', self)
         comm_layout = QVBoxLayout()
         comm_layout.setContentsMargins(20, 9, 20, 9)
+        comm_layout.addWidget(QLabel(''))
+        comm_layout.addWidget(QLabel('<h4>Check</h4>', self,
+                                     alignment=Qt.AlignCenter))
+        comm_layout.addWidget(self.checkstatus_bt)
         comm_layout.addWidget(QLabel(''))
         comm_layout.addWidget(QLabel('<h4>Prepare</h4>', self,
                                      alignment=Qt.AlignCenter))
@@ -196,6 +208,25 @@ class PSTestWindow(SiriusMainWindow):
         self.central_widget.setLayout(lay)
 
     # ---------- commands ------------
+
+    def _check_status(self):
+        self.ok_ps.clear()
+        self.nok_ps.clear()
+        devices = self._get_selected_ps()
+        if not devices:
+            return
+        dclinks = self._get_related_dclinks(devices)
+        devices.extend(dclinks)
+
+        task0 = CreateTesters(devices, parent=self)
+        task1 = CheckStatus(devices, parent=self)
+        task1.itemDone.connect(self._log)
+
+        labels = ['Connecting to devices...',
+                  'Checking PS and DCLinks Status...']
+        tasks = [task0, task1]
+        dlg = ProgressDialog(labels, tasks, self)
+        dlg.exec_()
 
     def _disable_triggers(self):
         self.ok_ps.clear()
