@@ -96,7 +96,8 @@ class PSTestWindow(SiriusMainWindow):
 
         self.turnon_dcl_bt = QPushButton('Turn DCLinks On', self)
         self.turnon_dcl_bt.clicked.connect(self._set_lastcomm)
-        self.turnon_dcl_bt.clicked.connect(self._turn_on_dclinks)
+        self.turnon_dcl_bt.clicked.connect(
+            _part(self._set_check_pwrstate_dclinks, 'on'))
 
         self.setctrlloop_dcl_bt = QPushButton('Set DCLinks CtrlLoop', self)
         self.setctrlloop_dcl_bt.clicked.connect(self._set_lastcomm)
@@ -111,7 +112,7 @@ class PSTestWindow(SiriusMainWindow):
         self.turnon_ps_bt = QPushButton('Turn PS On', self)
         self.turnon_ps_bt.clicked.connect(self._set_lastcomm)
         self.turnon_ps_bt.clicked.connect(
-            _part(self._set_check_pwrstate, 'on'))
+            _part(self._set_check_pwrstate_ps, 'on'))
 
         self.test_bt = QPushButton('Set PS Current to test value', self)
         self.test_bt.clicked.connect(self._set_lastcomm)
@@ -183,20 +184,28 @@ class PSTestWindow(SiriusMainWindow):
                                      alignment=Qt.AlignCenter), 1, 1)
         list_layout.addWidget(self.nok_ps, 2, 1)
 
-        opencycle = QPushButton('Open Cycle Window')
-        connect_newprocess(opencycle, 'sirius-hla-as-ps-cycle.py', parent=self)
-        title_lbl = QLabel(
-            '<h3>Power Supplies Test</h3>', self, alignment=Qt.AlignCenter)
-        hlay = QHBoxLayout()
-        hlay.addWidget(opencycle)
-        hlay.addStretch()
-        hlay.addWidget(title_lbl)
-        hlay.addStretch()
+        # menu
+        self.menu = self.menuBar()
+        self.act_cycle = self.menu.addAction('Open Cycle Window')
+        connect_newprocess(
+            self.act_cycle, 'sirius-hla-as-ps-cycle.py', parent=self)
+        self.aux_comm = self.menu.addMenu('Auxiliar commands')
+        self.act_turnoff_ps = self.aux_comm.addAction('Turn PS Off')
+        self.act_turnoff_ps.triggered.connect(self._set_lastcomm)
+        self.act_turnoff_ps.triggered.connect(
+            _part(self._set_check_pwrstate_ps, 'off'))
+        self.act_turnoff_dclink = self.aux_comm.addAction('Turn DCLinks Off')
+        self.act_turnoff_dclink.triggered.connect(self._set_lastcomm)
+        self.act_turnoff_dclink.triggered.connect(
+            _part(self._set_check_pwrstate_dclinks, 'off'))
 
         # layout
         lay = QGridLayout()
         lay.setHorizontalSpacing(15)
-        lay.addLayout(hlay, 0, 0, 1, 3)
+        lay.setVerticalSpacing(5)
+        lay.addWidget(QLabel(
+            '<h3>Power Supplies Test</h3>', self, alignment=Qt.AlignCenter),
+            0, 0, 1, 3)
         lay.addWidget(gbox_select, 1, 0)
         lay.addWidget(gbox_comm, 1, 1)
         lay.addLayout(list_layout, 1, 2)
@@ -283,7 +292,7 @@ class PSTestWindow(SiriusMainWindow):
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
-    def _set_check_pwrstate(self, state):
+    def _set_check_pwrstate_ps(self, state):
         self.ok_ps.clear()
         self.nok_ps.clear()
         devices = self._get_selected_ps()
@@ -302,7 +311,7 @@ class PSTestWindow(SiriusMainWindow):
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
-    def _turn_on_dclinks(self):
+    def _set_check_pwrstate_dclinks(self, state='on'):
         self.ok_ps.clear()
         self.nok_ps.clear()
         pwrsupplies = self._get_selected_ps()
@@ -313,15 +322,21 @@ class PSTestWindow(SiriusMainWindow):
             return
 
         task0 = CreateTesters(devices, parent=self)
-        task1 = SetPwrState(devices, state='on', parent=self)
-        task2 = CheckPwrState(devices, state='on', parent=self)
-        task3 = CheckInitOk(devices, parent=self)
-        task3.itemDone.connect(self._log)
+        task1 = SetPwrState(devices, state=state, parent=self)
+        task2 = CheckPwrState(devices, state=state, parent=self)
         labels = ['Connecting to devices...',
-                  'Turning DCLinks On...',
-                  'Checking DCLinks powered on...',
-                  'Wait DCLinks OpMode turn to SlowRef...']
-        tasks = [task0, task1, task2, task3]
+                  'Turning DCLinks '+state+'...',
+                  'Checking DCLinks powered '+state+'...']
+        tasks = [task0, task1, task2]
+
+        if state == 'on':
+            task3 = CheckInitOk(devices, parent=self)
+            task3.itemDone.connect(self._log)
+            tasks.append(task3)
+            labels.append('Wait DCLinks OpMode turn to SlowRef...')
+        else:
+            task2.itemDone.connect(self._log)
+
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
