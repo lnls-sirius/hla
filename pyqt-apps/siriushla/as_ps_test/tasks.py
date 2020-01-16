@@ -119,6 +119,9 @@ class ResetIntlk(BaseTask):
     def function(self):
         """Reset PS."""
         self._set(method='reset')
+        if Filter.process_filters(
+                pvnames=self._devices, filters={'sec': 'SI', 'sub': 'Fam'}):
+            _time.sleep(2.0)
 
 
 class CheckIntlk(BaseTask):
