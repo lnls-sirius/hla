@@ -87,7 +87,8 @@ class QDoubleScrollBar(QScrollBar):
 
     def setMinimum(self, value):
         """Set minimum value."""
-        super().setMinimum(round(value*self._scale))
+        mini = max(-2**31, round(value*self._scale))
+        super().setMinimum(mini)
 
     minimum = Property(float, getMinimum, setMinimum)
 
@@ -97,7 +98,8 @@ class QDoubleScrollBar(QScrollBar):
 
     def setMaximum(self, value):
         """Set maximum value."""
-        super().setMaximum(round(value*self._scale))
+        maxi = min(2**31-1, round(value*self._scale))
+        super().setMaximum(maxi)
 
     maximum = Property(float, getMaximum, setMaximum)
 
