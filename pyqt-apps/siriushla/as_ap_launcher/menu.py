@@ -374,7 +374,8 @@ def get_object(ismenubar=True, parent=None):
             psmenu = LEVEL2M('PS', self)
             psmenu.setObjectName(sec.upper()+'App')
 
-            all_dev = QAction('All', psmenu)
+            all_dev = QAction(
+                'All'+('' if sec != 'si' else ' Families'), psmenu)
             self.connect_newprocess(all_dev, scr)
             dip = QAction('Dipoles', psmenu)
             self.connect_newprocess(dip, [scr, '--device', 'dipole'])
