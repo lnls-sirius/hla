@@ -6,7 +6,7 @@ from .BasePSControlWidget import BasePSControlWidget
 class SIFamSextupoleControlWidget(BasePSControlWidget):
     """Storage ring sextupoles."""
 
-    def _getFilter(self):
+    def _getFilter(self, subsection=None):
         return {"sec": "SI", "sub": "Fam", "dev": "S[DF].*"}
 
     def _getStrength(self):
@@ -26,7 +26,7 @@ class SIFamSextupoleControlWidget(BasePSControlWidget):
 class BOFamSextupoleControlWidget(SIFamSextupoleControlWidget):
     """Booster sextupoles."""
 
-    def _getFilter(self):
+    def _getFilter(self, subsection=None):
         return {"sec": "BO", "sub": "Fam", "dev": "S[DF].*"}
 
     def _hasScrollArea(self):

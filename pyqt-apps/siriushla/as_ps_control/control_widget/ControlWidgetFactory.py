@@ -29,7 +29,7 @@ class ControlWidgetFactory:
         raise AttributeError("{} not defined for {}".format(device, section))
 
     @staticmethod
-    def factory(parent, section, device, orientation=0):
+    def factory(parent, section, device, subsection=None, orientation=0):
         if section == "TB":
             if device == "dipole":
                 return TBDipoleControlWidget(
@@ -39,7 +39,8 @@ class ControlWidgetFactory:
                     orientation=orientation, parent=parent)
             elif device == "corrector-slow":
                 return TBSlowCorrectorControlWidget(
-                    orientation=orientation, parent=parent)
+                    subsection=subsection, orientation=orientation,
+                    parent=parent)
             else:
                 ControlWidgetFactory._device_not_found(section, device)
         elif section == "BO":
@@ -54,10 +55,12 @@ class ControlWidgetFactory:
                     orientation=orientation, parent=parent)
             elif device == "corrector-slow":
                 return BoSlowCorrectorControlWidget(
-                    orientation=orientation, parent=parent)
+                    subsection=subsection, orientation=orientation,
+                    parent=parent)
             elif device == "skew-quadrupole":
                 return BOSkewQuadControlWidget(
-                    orientation=orientation, parent=parent)
+                    subsection=subsection, orientation=orientation,
+                    parent=parent)
             else:
                 ControlWidgetFactory._device_not_found(section, device)
         elif section == "TS":
@@ -69,7 +72,8 @@ class ControlWidgetFactory:
                     orientation=orientation, parent=parent)
             elif device == "corrector-slow":
                 return TSSlowCorrectorControlWidget(
-                    orientation=orientation, parent=parent)
+                    subsection=subsection, orientation=orientation,
+                    parent=parent)
             else:
                 ControlWidgetFactory._device_not_found(section, device)
         elif section == "SI":
@@ -84,16 +88,20 @@ class ControlWidgetFactory:
                     orientation=orientation, parent=parent)
             elif device == "corrector-slow":
                 return SISlowCorrectorControlWidget(
-                    orientation=orientation, parent=parent)
+                    subsection=subsection, orientation=orientation,
+                    parent=parent)
             elif device == "corrector-fast":
                 return SIFastCorrectorControlWidget(
-                    orientation=orientation, parent=parent)
+                    subsection=subsection, orientation=orientation,
+                    parent=parent)
             elif device == "skew-quadrupole":
                 return SISkewQuadControlWidget(
-                    orientation=orientation, parent=parent)
+                    subsection=subsection, orientation=orientation,
+                    parent=parent)
             elif device == "trim-quadrupole":
                 return SITrimAllControlWidget(
-                    orientation=orientation, parent=parent)
+                    subsection=subsection, orientation=orientation,
+                    parent=parent)
             else:
                 ControlWidgetFactory._device_not_found(section, device)
         else:

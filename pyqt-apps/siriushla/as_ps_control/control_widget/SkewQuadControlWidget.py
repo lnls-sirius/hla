@@ -6,8 +6,11 @@ from .BasePSControlWidget import BasePSControlWidget
 class SISkewQuadControlWidget(BasePSControlWidget):
     """Storage ring skew quads."""
 
-    def _getFilter(self):
-        return {"sec": "SI", "sub": "\w{4}", "dev": "QS"}
+    def _getFilter(self, subsection=None):
+        filt = {"sec": "SI", "sub": "\w{4}", "dev": "QS"}
+        if subsection:
+            filt.update({'sub': subsection})
+        return filt
 
     def _getStrength(self):
         return "KL"
@@ -25,8 +28,11 @@ class SISkewQuadControlWidget(BasePSControlWidget):
 class BOSkewQuadControlWidget(SISkewQuadControlWidget):
     """Booster skew quads."""
 
-    def _getFilter(self):
-        return {"sec": "BO", "sub": "\w{3}", "dev": "QS"}
+    def _getFilter(self, subsection=None):
+        filt = {"sec": "BO", "sub": "\w{3}", "dev": "QS"}
+        if subsection:
+            filt.update({'sub': subsection})
+        return filt
 
     def _hasScrollArea(self):
         return False

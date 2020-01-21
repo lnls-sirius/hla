@@ -5,7 +5,7 @@ from .BasePSControlWidget import BasePSControlWidget
 class SIFastCorrectorControlWidget(BasePSControlWidget):
     """Storage ring fast correctors."""
 
-    def _getFilter(self):
+    def _getFilter(self, subsection=None):
         return {"sec": "SI", "sub": "\w{4}", "dev": "(FCH|FCV).*"}
 
     def _hasTrimButton(self):

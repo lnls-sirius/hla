@@ -11,6 +11,8 @@ import qtawesome as qta
 
 from siriuspy.envars import vaca_prefix as _prefix
 from siriuspy.clientconfigdb import ConfigDBClient
+from siriuspy.search import PSSearch
+from siriuspy.namesys import SiriusPVName
 
 from siriushla import util
 from siriushla.widgets.windows import create_window_from_widget
@@ -215,12 +217,11 @@ def get_object(ismenubar=True, parent=None):
             self.add_object_to_level1(menu, PS)
             if sec in {'bo', 'si'}:
                 self.add_object_to_level1(menu, PU)
-            self.add_object_to_level1(menu, DIG)
-            self.add_object_to_level1(menu, OPT)
-
             if sec == 'bo':
                 RF = self._set_rf_menu(sec)
                 self.add_object_to_level1(menu, RF)
+            self.add_object_to_level1(menu, DIG)
+            self.add_object_to_level1(menu, OPT)
             return menu
 
         def _set_optics_menu(self, sec):
@@ -388,20 +389,67 @@ def get_object(ismenubar=True, parent=None):
                 self.connect_newprocess(sext, [scr, '--device', 'sextupole'])
                 psmenu.addAction(sext)
 
-                skew = QAction('Skew Quadrupoles', psmenu)
-                self.connect_newprocess(
-                    skew, [scr, '--device', 'skew-quadrupole'])
-                psmenu.addAction(skew)
+                if sec == 'bo':
+                    skew = QAction('Skew Quadrupoles', psmenu)
+                    self.connect_newprocess(
+                        skew, [scr, '--device', 'skew-quadrupole'])
+                    psmenu.addAction(skew)
+                else:
+                    skew_menu = psmenu.addMenu('Skew Quadrupoles')
+                    skew_menu.setObjectName(sec.upper()+'App')
+                    skew_all_act = skew_menu.addAction('All')
+                    self.connect_newprocess(
+                        skew_all_act, [scr, '--device', 'skew-quadrupole'])
+                    skew_sec_menu = skew_menu.addMenu('Subsectors')
+                    skew_sec_menu.setObjectName('SIApp')
+                    for i in range(1, 21):
+                        act = skew_sec_menu.addAction('SI-{:02d}'.format(i))
+                        self.connect_newprocess(
+                            act, [scr, '--device', 'skew-quadrupole',
+                                  '--subsection', '{:02d}.*'.format(i)])
 
-            corrs = QAction('Correctors', psmenu)
-            self.connect_newprocess(corrs, [scr, '--device', 'corrector-slow'])
-            psmenu.addAction(corrs)
+            if sec in {'tb', 'ts', 'bo'}:
+                corrs = QAction('Correctors', psmenu)
+                self.connect_newprocess(
+                    corrs, [scr, '--device', 'corrector-slow'])
+                psmenu.addAction(corrs)
+            else:
+                corrs_menu = psmenu.addMenu('Correctors')
+                corrs_menu.setObjectName('SIApp')
+                corrs_all_act = corrs_menu.addAction('All')
+                self.connect_newprocess(
+                    corrs_all_act, [scr, '--device', 'corrector-slow'])
+                corrs_sec_menu = corrs_menu.addMenu('Subsectors')
+                corrs_sec_menu.setObjectName('SIApp')
+                for i in range(1, 21):
+                    act = corrs_sec_menu.addAction('SI-{:02d}'.format(i))
+                    self.connect_newprocess(
+                        act, [scr, '--device', 'corrector-slow',
+                              '--subsection', '{:02d}.*'.format(i)])
 
             if sec == 'si':
-                trims = QAction('Trims', psmenu)
+                trims_menu = psmenu.addMenu('Trims')
+                trims_menu.setObjectName(sec.upper()+'App')
+                trims_all_act = trims_menu.addAction('All')
                 self.connect_newprocess(
-                    trims, [scr, '--device', 'trim-quadrupole'])
-                psmenu.addAction(trims)
+                    trims_all_act, [scr, '--device', 'trim-quadrupole'])
+                trims_sec_menu = trims_menu.addMenu('Subsectors')
+                trims_sec_menu.setObjectName('SIApp')
+                for i in range(1, 21):
+                    act = trims_sec_menu.addAction('SI-{:02d}'.format(i))
+                    self.connect_newprocess(
+                        act, [scr, '--device', 'trim-quadrupole',
+                              '--subsection', '{:02d}.*'.format(i)])
+                trims_fam_menu = trims_menu.addMenu('Families')
+                trims_fam_menu.setObjectName('SIApp')
+                fams = PSSearch.get_psnames(
+                    {'sec': 'SI', 'sub': 'Fam', 'dev': 'Q(D|F|[1-4]).*'})
+                for fam in fams:
+                    fam = SiriusPVName(fam)
+                    act = trims_fam_menu.addAction(fam.dev)
+                    self.connect_newprocess(
+                        act, [scr, '--device', fam, '-istrim'])
+
             #     fcorr = QAction('Fast Correctors', psmenu)
             #     self.connect_newprocess(
             #         fcorr, [scr, '--device', 'corrector-fast'])

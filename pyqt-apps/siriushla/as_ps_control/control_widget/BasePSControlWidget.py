@@ -165,7 +165,7 @@ class BasePSControlWidget(QWidget):
     HORIZONTAL = 0
     VERTICAL = 1
 
-    def __init__(self, orientation=0, parent=None):
+    def __init__(self, subsection=None, orientation=0, parent=None):
         """Class constructor.
 
         Parameters:
@@ -176,8 +176,8 @@ class BasePSControlWidget(QWidget):
         """
         super(BasePSControlWidget, self).__init__(parent)
         self._orientation = orientation
-
-        self._dev_list = PSSearch.get_psnames(self._getFilter())
+        self._subsection = subsection
+        self._dev_list = PSSearch.get_psnames(self._getFilter(subsection))
 
         self.all_props = get_prop2label(self._dev_list[0])
         self.visible_props = {

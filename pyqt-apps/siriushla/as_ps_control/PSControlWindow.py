@@ -12,12 +12,13 @@ from .PSTrimWindow import PSTrimWindow
 class PSControlWindow(SiriusMainWindow):
     """Base window to show devices of a section in tabs."""
 
-    def __init__(self, section, device, parent=None):
+    def __init__(self, section, device, subsection=None, parent=None):
         """Class constructor."""
         super(PSControlWindow, self).__init__(parent)
         self.setObjectName(section+'App')
         self._section = section
         self._device = device
+        self._subsection = subsection
         icon = qta.icon(
             'mdi.car-battery', color=get_appropriate_color(section))
         self.setWindowIcon(icon)
@@ -37,13 +38,16 @@ class PSControlWindow(SiriusMainWindow):
             'trim-quadrupole': 'Trims ',
             'corrector-slow': 'Slow Correctors '}
         #     'corrector-fast': 'Fast Correctors '}
-        self.setWindowTitle(sec2label[section] +
-                            (dev2label[device] if device else '') +
-                            'Power Supplies ')
+        self.setWindowTitle(
+            sec2label[section] +
+            (dev2label[device] if device else '') +
+            'Power Supplies ' +
+            ('- Subsection '+subsection if subsection else ''))
 
     def _setup_ui(self):
         self.widget = ControlWidgetFactory.factory(
-            parent=self, section=self._section, device=self._device)
+            parent=self, section=self._section,
+            subsection=self._subsection, device=self._device)
         self._connect_buttons(self.widget)
         self.setCentralWidget(self.widget)
 
@@ -58,4 +62,4 @@ class PSControlWindow(SiriusMainWindow):
 
             trim_bt = w.get_trim_button()
             if trim_bt is not None:
-                connect_window(trim_bt, PSTrimWindow, self, psname=psname)
+                connect_window(trim_bt, PSTrimWindow, self, device=psname)
