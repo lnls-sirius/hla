@@ -10,7 +10,7 @@ class SITrimFamControlWidget(BasePSControlWidget):
         self._trim = trim
         super().__init__(**kwargs)
 
-    def _getFilter(self):
+    def _getFilter(self, subsection=None):
         return {"sec": "SI", "sub": "\w{4}", "dev": self._trim}
 
     def _hasTrimButton(self):

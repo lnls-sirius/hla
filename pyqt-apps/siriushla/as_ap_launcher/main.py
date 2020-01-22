@@ -4,7 +4,7 @@ import qtawesome as qta
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
-    QGridLayout
+    QGridLayout, QApplication
 
 from siriuspy.envars import vaca_prefix
 from siriuspy.search import LLTimeSearch as _LLTimeSearch
@@ -35,7 +35,10 @@ class MainOperation(SiriusMainWindow):
         self.setWindowTitle('Main Controls')
         self.setWindowIcon(
             qta.icon('mdi.rocket', color=get_appropriate_color('AS')))
-        self.move(0, 20)
+        screens = QApplication.screens()
+        screen_idx = 3 if len(screens) == 8 else 0
+        topleft = screens[screen_idx].geometry().topLeft()
+        self.move(topleft.x(), topleft.y()+20)
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.setObjectName('ASApp')
 

@@ -13,11 +13,11 @@ from .SummaryWidgets import SummaryWidget
 class PSTrimWindow(SiriusMainWindow):
     """Allow controlling the trims of a given magnet."""
 
-    def __init__(self, psname, parent=None):
+    def __init__(self, device, parent=None):
         """Class constructor."""
         super(PSTrimWindow, self).__init__(parent)
         self.setObjectName('SIApp')
-        self._devname = SiriusPVName(psname)
+        self._devname = SiriusPVName(device)
         self._setup_ui()
 
     def _setup_ui(self):
@@ -31,8 +31,8 @@ class PSTrimWindow(SiriusMainWindow):
             name=self._devname, parent=self,
             visible_props={
                 'detail', 'state', 'intlk', 'setpoint', 'monitor',
-                'strength_sp', 'strength_mon'})
-        self.fam_widget.get_trim_button().setEnabled(False)
+                'strength_sp', 'strength_mon', 'trim'})
+        self.fam_widget.get_trim_button().setVisible(False)
         # Connect family detail window
         fam_button = self.fam_widget.get_detail_button()
         connect_window(fam_button, PSDetailWindow, self, psname=self._devname)

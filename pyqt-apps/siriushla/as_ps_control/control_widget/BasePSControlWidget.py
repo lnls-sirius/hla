@@ -8,6 +8,8 @@ from qtpy.QtWidgets import QWidget, QVBoxLayout, QGroupBox, \
     QSizePolicy as QSzPlcy
 import qtawesome as qta
 from siriuspy.search import PSSearch
+from siriushla.util import connect_window
+from ..PSDetailWindow import PSDetailWindow
 from ..SummaryWidgets import SummaryWidget, SummaryHeader, get_prop2label
 
 
@@ -16,17 +18,28 @@ class PSContainer(QWidget):
     def __init__(self, widget, parent=None):
         super().__init__(parent)
         self._widget = widget
-        self._name = widget.devname
+        self.name = widget.devname
+        self.bbbname = widget.bbbname
+        self.udcname = widget.udcname
 
-        self._dclinks = list()
-        dclinks = PSSearch.conv_psname_2_dclink(self._name)
+        self.dclinks = list()
+        self.dclink_widgets = list()
+        self.dclinksbbbname = set()
+        self.dclinksudcname = set()
+        dclinks = PSSearch.conv_psname_2_dclink(self.name)
         if dclinks:
             dclinks_type = PSSearch.conv_psname_2_psmodel(dclinks[0])
             if dclinks_type != 'REGATRON_DCLink':
-                self._dclinks = dclinks
+                self.dclinks = dclinks
+                for dc in dclinks:
+                    self.dclinksbbbname.add(PSSearch.conv_psname_2_bbbname(dc))
+                    self.dclinksudcname.add(PSSearch.conv_psname_2_udc(dc))
 
+        self.visible_props = {
+            'detail', 'state', 'intlk', 'setpoint', 'monitor'}
         self._setup_ui()
         self._create_actions()
+        self._enable_actions()
         self.setStyleSheet("""
             #HideButton {
                 min-width: 10px;
@@ -47,13 +60,8 @@ class PSContainer(QWidget):
         self._dclink_container = QWidget(self)
         self._dclink_container.setObjectName('DCLinkContainer')
         self._dclink_container.setLayout(QVBoxLayout())
-        if self._dclinks:
-            visible_props = {'detail', 'state', 'intlk', 'setpoint', 'monitor'}
-            self._dclink_container.layout().addWidget(
-                SummaryHeader(self._dclinks[0], visible_props, self))
-            for dclink_name in self._dclinks:
-                w = SummaryWidget(dclink_name, visible_props, self)
-                self._dclink_container.layout().addWidget(w)
+        self._dclink_is_filled = False
+        if self.dclinks:
             self._hide = QPushButton(qta.icon('mdi.plus'), '', self)
         else:
             self._hide = QPushButton('', self)
@@ -72,43 +80,81 @@ class PSContainer(QWidget):
 
     def _toggle_dclink(self):
         if self._dclink_container.isHidden():
+            if not self._dclink_is_filled:
+                self._fill_dclink_container()
+                self._enable_actions()
             self._hide.setIcon(qta.icon('mdi.minus'))
             self._dclink_container.setHidden(False)
         else:
             self._hide.setIcon(qta.icon('mdi.plus'))
             self._dclink_container.setHidden(True)
 
+    def _fill_dclink_container(self):
+        self._dclink_is_filled = True
+        self._dclink_container.layout().addWidget(
+            SummaryHeader(self.dclinks[0], self.visible_props, self))
+        for dclink_name in self.dclinks:
+            w = SummaryWidget(dclink_name, self.visible_props, self)
+            connect_window(w.detail_bt, PSDetailWindow,
+                           self, psname=dclink_name)
+            self._dclink_container.layout().addWidget(w)
+            self.dclink_widgets.append(w)
+
+    def update_visible_props(self, new_value):
+        self.visible_props = new_value
+        self._enable_actions()
+
     # Action methods
     def _create_actions(self):
         self._turn_on_action = QAction('Turn DCLinks On', self)
         self._turn_on_action.triggered.connect(
             lambda: self._set_dclink_pwrstate(True))
+        self._turn_on_action.setEnabled(False)
         self._turn_off_action = QAction('Turn DCLinks Off', self)
         self._turn_off_action.triggered.connect(
             lambda: self._set_dclink_pwrstate(False))
+        self._turn_off_action.setEnabled(False)
         self._open_loop_action = QAction('Open DCLinks Control Loop', self)
         self._open_loop_action.triggered.connect(
             lambda: self._set_dclink_control_loop(False))
+        self._open_loop_action.setEnabled(False)
         self._close_loop_action = QAction('Close DCLinks Control Loop', self)
         self._close_loop_action.triggered.connect(
             lambda: self._set_dclink_control_loop(True))
+        self._close_loop_action.setEnabled(False)
         self._set_setpoint_action = QAction('Set DCLinks Voltage', self)
         self._set_setpoint_action.triggered.connect(self._set_setpoint)
+        self._set_setpoint_action.setEnabled(False)
         self._reset_intlk_action = QAction('Reset DCLinks Interlocks', self)
+        self._reset_intlk_action.triggered.connect(self._reset_intlk)
+        self._reset_intlk_action.setEnabled(False)
+
+    def _enable_actions(self):
+        if 'state' in self.visible_props and \
+                not self._turn_on_action.isEnabled():
+            self._turn_on_action.setEnabled(True)
+            self._turn_off_action.setEnabled(True)
+        if 'ctrlloop' in self.visible_props and \
+                not self._open_loop_action.isEnabled():
+            self._open_loop_action.setEnabled(True)
+            self._close_loop_action.setEnabled(True)
+        if 'setpoint' in self.visible_props and \
+                not self._set_setpoint_action.isEnabled():
+            self._set_setpoint_action.setEnabled(True)
+        if 'reset' in self.visible_props and \
+                not self._reset_intlk_action.isEnabled():
+            self._reset_intlk_action.setEnabled(True)
 
     def _set_dclink_pwrstate(self, value):
-        for dclink in self.dclink_widgets():
-            btn = dclink.state_btn
+        for dclink in self.dclink_widgets:
             if value:
-                if not btn._bit_val:
-                    btn.send_value()
+                dclink.turn_on()
             else:
-                if btn._bit_val:
-                    btn.send_value()
+                dclink.turn_off()
 
     def _set_dclink_control_loop(self, value):
-        for dclink in self.dclink_widgets():
-            btn = dclink.control_btn
+        for dclink in self.dclink_widgets:
+            btn = dclink.ctrlloop_bt
             if value:
                 if btn._bit_val:
                     btn.send_value()
@@ -123,7 +169,7 @@ class PSContainer(QWidget):
         new_value, ok = dlg.getDouble(
             self, "New setpoint", "Value")
         if ok:
-            for dclink in self.dclink_widgets():
+            for dclink in self.dclink_widgets:
                 sp = dclink.setpoint.sp_lineedit
                 sp.setText(str(new_value))
                 try:
@@ -132,8 +178,8 @@ class PSContainer(QWidget):
                     pass
 
     def _reset_intlk(self):
-        for dclink in self.dclink_widgets():
-            dclink.reset.click()
+        for dclink in self.dclink_widgets:
+            dclink.reset()
 
     # Overloaded method
     def contextMenuEvent(self, event):
@@ -165,7 +211,7 @@ class BasePSControlWidget(QWidget):
     HORIZONTAL = 0
     VERTICAL = 1
 
-    def __init__(self, orientation=0, parent=None):
+    def __init__(self, subsection=None, orientation=0, parent=None):
         """Class constructor.
 
         Parameters:
@@ -176,15 +222,15 @@ class BasePSControlWidget(QWidget):
         """
         super(BasePSControlWidget, self).__init__(parent)
         self._orientation = orientation
-
-        self._dev_list = PSSearch.get_psnames(self._getFilter())
+        self._subsection = subsection
+        self._dev_list = PSSearch.get_psnames(self._getFilter(subsection))
 
         self.all_props = get_prop2label(self._dev_list[0])
         self.visible_props = {
             'detail', 'state', 'intlk', 'setpoint', 'monitor',
             'strength_sp', 'strength_mon'}
         if 'trim' in self.all_props:
-            self.visible_props.update(['trim', ])
+            self.visible_props.add('trim')
 
         # Data used to filter the widgets
         self.ps_widgets_dict = dict()
@@ -195,6 +241,7 @@ class BasePSControlWidget(QWidget):
         self.groups = self._getGroups()
         self._setup_ui()
         self._create_actions()
+        self._enable_actions()
         if len(self.groups) in [1, 3]:
             self.setObjectName('cw')
             self.setStyleSheet('#cw{min-height: 40em;}')
@@ -320,8 +367,19 @@ class BasePSControlWidget(QWidget):
 
         # Clear filtered widgets and add the ones that match the new pattern
         self.filtered_widgets.clear()
-        for name in self.containers_dict.keys():
-            if pattern.search(name) or 'header' in name:
+        for name, container in self.containers_dict.items():
+            cond = 'header' in name
+            if not cond:
+                cond |= bool(pattern.search(name))
+                cond |= bool(pattern.search(container.bbbname))
+                cond |= bool(pattern.search(container.udcname))
+                for dc in container.dclinks:
+                    cond |= bool(pattern.search(dc))
+                for dc in container.dclinksbbbname:
+                    cond |= bool(pattern.search(dc))
+                for dc in container.dclinksudcname:
+                    cond |= bool(pattern.search(dc))
+            if cond:
                 self.filtered_widgets.add(name)
 
         # Set widgets visibility and the number of widgets matched
@@ -338,7 +396,10 @@ class BasePSControlWidget(QWidget):
         """Set visibility of the widgets."""
         props = {act.objectName() for act in self.search_menu.actions()
                  if act.isChecked()}
+        self.visible_props = props
+        self._enable_actions()
         for key, wid in self.containers_dict.items():
+            wid.update_visible_props(props)
             if 'header' in key:
                 for ob in wid.findChildren(QWidget):
                     name = ob.objectName()
@@ -355,24 +416,42 @@ class BasePSControlWidget(QWidget):
                         QWidget, options=Qt.FindDirectChildrenOnly)
                     for c in chil:
                         name = c.objectName()
+                        if isinstance(ob, SummaryWidget) and name in props:
+                            ob.fillWidget(name)
                         c.setVisible(name in props)
 
     # Actions methods
     def _create_actions(self):
         self.turn_on_act = QAction("Turn On", self)
         self.turn_on_act.triggered.connect(lambda: self._set_pwrstate(True))
-
+        self.turn_on_act.setEnabled(False)
         self.turn_off_act = QAction("Turn Off", self)
         self.turn_off_act.triggered.connect(lambda: self._set_pwrstate(False))
-
+        self.turn_off_act.setEnabled(False)
         self.set_slowref_act = QAction("Set OpMode to SlowRef", self)
         self.set_slowref_act.triggered.connect(self._set_slowref)
-
+        self.set_slowref_act.setEnabled(False)
         self.set_current_sp_act = QAction("Set Current SP", self)
         self.set_current_sp_act.triggered.connect(self._set_current_sp)
-
+        self.set_current_sp_act.setEnabled(False)
         self.reset_act = QAction("Reset Interlocks", self)
         self.reset_act.triggered.connect(self._reset_interlocks)
+        self.reset_act.setEnabled(False)
+
+    def _enable_actions(self):
+        if 'state' in self.visible_props and \
+                not self.turn_on_act.isEnabled():
+            self.turn_on_act.setEnabled(True)
+            self.turn_off_act.setEnabled(True)
+        if 'opmode' in self.visible_props and \
+                not self.set_slowref_act.isEnabled():
+            self.set_slowref_act.setEnabled(True)
+        if 'setpoint' in self.visible_props and \
+                not self.set_current_sp_act.isEnabled():
+            self.set_current_sp_act.setEnabled(True)
+        if 'reset' in self.visible_props and \
+                not self.reset_act.isEnabled():
+            self.reset_act.setEnabled(True)
 
     @Slot(bool)
     def _set_pwrstate(self, state):
@@ -407,9 +486,10 @@ class BasePSControlWidget(QWidget):
         if ok:
             for key, widget in self.ps_widgets_dict.items():
                 if key in self.filtered_widgets:
-                    widget.setpoint.sp_lineedit.setText(str(new_value))
+                    sp = widget.setpoint.sp_lineedit
+                    sp.setText(str(new_value))
                     try:
-                        widget.setpoint.sp_lineedit.send_value()
+                        sp.send_value()
                     except TypeError:
                         pass
 

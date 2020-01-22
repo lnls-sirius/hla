@@ -6,7 +6,7 @@ from .BasePSControlWidget import BasePSControlWidget
 class TBQuadrupoleControlWidget(BasePSControlWidget):
     """Class to control a quads from the TB transport line."""
 
-    def _getFilter(self):
+    def _getFilter(self, subsection=None):
         return {"sec": "TB", "dev": "Q.*"}
 
     def _hasScrollArea(self):
@@ -20,7 +20,7 @@ class TBQuadrupoleControlWidget(BasePSControlWidget):
 class TSQuadrupoleControlWidget(BasePSControlWidget):
     """Class to control a quads from the TB transport line."""
 
-    def _getFilter(self):
+    def _getFilter(self, subsection=None):
         return {"sec": "TS", "dev": "Q.*"}
 
     def _hasScrollArea(self):
@@ -34,7 +34,7 @@ class TSQuadrupoleControlWidget(BasePSControlWidget):
 class SIFamQuadrupoleControlWidget(BasePSControlWidget):
     """Class to control a Fam Quad from the Sirius section."""
 
-    def _getFilter(self):
+    def _getFilter(self, subsection=None):
         return {"sec": "SI", "sub": "Fam", "dev": "Q[DF0-9].*"}
 
     def _hasTrimButton(self):
@@ -52,7 +52,7 @@ class SIFamQuadrupoleControlWidget(BasePSControlWidget):
 class BOFamQuadrupoleControlWidget(SIFamQuadrupoleControlWidget):
     """Class to control a Fam Quad from the Booster section."""
 
-    def _getFilter(self):
+    def _getFilter(self, subsection=None):
         return {"sec": "BO", "sub": "Fam", "dev": "Q[DF0-9].*"}
 
     def _hasTrimButton(self):
