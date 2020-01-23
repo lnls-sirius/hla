@@ -76,6 +76,7 @@ setup(
         'scripts/sirius-hla-si-ap-currlt.py',
         'scripts/sirius-hla-si-ap-sofb.py',
         'scripts/sirius-hla-si-ap-tunecorr.py',
+        'scripts/sirius-hla-si-di-tune.py',
         'scripts/sirius-hla-si-di-vlight.py',
         'scripts/sirius-hla-si-offconfig.py',
         'scripts/sirius-hla-si-ps-control.py',

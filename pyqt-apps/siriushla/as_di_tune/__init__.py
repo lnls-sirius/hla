@@ -1,1 +1,1 @@
-from .main import BOTune
+from .main import Tune
