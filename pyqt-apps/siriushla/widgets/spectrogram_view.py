@@ -620,6 +620,7 @@ class SiriusSpectrogramView(
             self._image_width = new_image.size/self._image_height
 
     @Slot(np.ndarray)
+    @Slot(float)
     def xaxis_value_changed(self, new_array):
         """
         Callback invoked when the Image Width Channel value is changed.
@@ -631,6 +632,8 @@ class SiriusSpectrogramView(
         """
         if new_array is None:
             return
+        if isinstance(new_array, float):
+            new_array = np.array([new_array, ])
         self._last_xaxis_data = new_array
         if self._reading_order == self.Clike:
             self._image_width = new_array.size
@@ -638,6 +641,7 @@ class SiriusSpectrogramView(
             self._image_height = new_array.size
 
     @Slot(np.ndarray)
+    @Slot(float)
     def yaxis_value_changed(self, new_array):
         """
         Callback invoked when the TimeAxis Channel value is changed.
@@ -649,6 +653,8 @@ class SiriusSpectrogramView(
         """
         if new_array is None:
             return
+        if isinstance(new_array, float):
+            new_array = np.array([new_array, ])
         self._last_yaxis_data = new_array
         if self._reading_order == self.Fortranlike:
             self._image_width = new_array.size
