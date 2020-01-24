@@ -7,7 +7,8 @@ from qtpy.QtGui import QKeySequence
 from qtpy.QtWidgets import QMenuBar, QMessageBox, QLabel, QVBoxLayout
 import qtawesome as qta
 
-from siriuspy.clientconfigdb import ConfigDBException as _ConfigDBException
+from siriuspy.clientconfigdb import ConfigDBException as _ConfigDBException, \
+    PVsConfig as _PVsConfig
 from siriuspy.ramp import ramp
 from siriuspy.ramp.norm_factory import BONormFactory
 from siriushla import util
@@ -156,6 +157,14 @@ class Settings(QMenuBar):
             QMessageBox.critical(self, 'Error', str(err), QMessageBox.Ok)
         else:
             self.loadSignal.emit()
+
+        resp = QMessageBox.question(
+            self, 'Question',
+            'Save a global_config with name {}?'.format(
+                self.ramp_config.name))
+        if resp == QMessageBox.Yes:
+            global_config = _PVsConfig(config_type='global_config')
+            global_config.read_and_save(self.ramp_config.name)
 
     def _showOpticsSettingsPopup(self):
         opticsSettingsPopup = _OpticsAdjustSettings(
