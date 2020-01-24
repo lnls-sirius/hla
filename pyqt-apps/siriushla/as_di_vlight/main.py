@@ -11,16 +11,18 @@ from siriushla.common.cam_basler import SiriusImageView, create_propty_layout,\
 from siriushla.widgets.windows import create_window_from_widget
 
 
-class BOVLightCamView(QWidget):
+class VLightCamView(QWidget):
     """VLight Cam Viewer."""
 
-    def __init__(self, parent=None, prefix=vaca_prefix):
+    def __init__(self, parent=None, prefix=vaca_prefix, section=''):
         """Init."""
         super().__init__(parent)
-        self.device = 'BO-50U:DI-VLightCam'
         self.prefix = prefix
+        self.section = section.upper()
+        self.device = \
+            ('BO-50U' if self.section == 'BO' else 'SI-01C2FE')+':DI-VLightCam'
         self.cam_prefix = prefix + self.device
-        self.setObjectName('BOApp')
+        self.setObjectName(self.section + 'App')
         self.setWindowTitle(self.device + ' View')
         self._setupUi()
 

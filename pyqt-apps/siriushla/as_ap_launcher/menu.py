@@ -305,12 +305,13 @@ def get_object(ismenubar=True, parent=None):
                 Slits = QAction('Slits', diag)
                 self.connect_newprocess(Slits, 'sirius-hla-tb-di-slits.py')
                 diag.addAction(Slits)
-            if 'bo' in sec:
+            if sec in {'bo', 'si'}:
                 Tune = QAction('Tune', diag)
-                self.connect_newprocess(Tune, 'sirius-hla-bo-di-tune.py')
+                self.connect_newprocess(Tune, 'sirius-hla-'+sec+'-di-tune.py')
                 diag.addAction(Tune)
                 VLight = QAction('VLight', diag)
-                self.connect_newprocess(VLight, 'sirius-hla-bo-di-vlight.py')
+                self.connect_newprocess(
+                    VLight, 'sirius-hla-'+sec+'-di-vlight.py')
                 diag.addAction(VLight)
             if 'si' not in sec:
                 Scrns = QAction('Screens', diag)

@@ -1,35 +1,49 @@
 from qtpy.QtGui import QPalette
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QWidget, QLabel, QPushButton, \
+from qtpy.QtWidgets import QWidget, QLabel, QPushButton, QMenu, \
     QFormLayout, QHBoxLayout, QSpacerItem, QSizePolicy as QSzPlcy
 import qtawesome as qta
 
 from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMLineEdit, \
-    PyDMEnumComboBox
+    PyDMEnumComboBox, PyDMPushButton
 
 from siriuspy.namesys import SiriusPVName
 import siriushla.util as util
 from siriushla.widgets import PyDMLedMultiChannel, PyDMLed, \
     PyDMStateButton, SiriusLedState, SiriusConnectionSignal
-from .details import BOTuneDetails
+from .details import TuneDetails, SITuneMarkerDetails
+from .util import marker_color
 
 
-class BOTuneControls(QWidget):
-    """BO Tune Controls."""
+class TuneControls(QWidget):
+    """Tune Controls."""
 
-    def __init__(self, parent=None, prefix='', orientation='H',
+    def __init__(self, parent=None, prefix='', section='', orientation='H',
                  background=None):
         """Init."""
         super().__init__(parent)
-        self.device = SiriusPVName(prefix + 'BO-Glob:DI-Tune-' + orientation)
-        self.trigger = SiriusPVName('BO-Glob:TI-TuneProc')
         self.prefix = prefix
+        self.section = section.upper()
         self.orientation = orientation
+        self.device = SiriusPVName(
+            prefix+self.section+'-Glob:DI-Tune-'+orientation)
+        if self.section == 'BO':
+            self.trigger = SiriusPVName('BO-Glob:TI-TuneProc')
         self.background = background
         self._setupUi()
 
     def _setupUi(self):
         # # Measurement
+        if self.section == 'SI':
+            # Tune
+            label_tunefreq = QLabel('Tune Frequency [Hz]')
+            self.lb_tunefreq = PyDMLabel(
+                parent=self, init_channel=self.device+':TuneFreq-Mon')
+            self.lb_tunefreq.setStyleSheet('min-width:8em;max-width:8em;')
+            label_tunefrac = QLabel('Tune Fraction')
+            self.lb_tunefrac = PyDMLabel(
+                parent=self, init_channel=self.device+':TuneFrac-Mon')
+
         # Acquisition
         lbl_acq = QLabel('Acquisition', self)
         self.bt_acq = PyDMStateButton(
@@ -53,26 +67,45 @@ class BOTuneControls(QWidget):
         hbox_drive.addWidget(self.bt_drive)
         hbox_drive.addWidget(self.led_drive)
 
-        # Frame Count
-        lbl_acqcnt = QLabel('Frame Count', self)
-        dev = self.device.substitute(dev='TuneProc')
-        self.lb_acqcnt = PyDMLabel(
-            parent=self, init_channel=dev + ':FrameCount-Mon')
-        self.lb_acqcnt.setAlignment(Qt.AlignCenter)
-        self.led_acqcnt = PyDMLedMultiChannel(parent=self)
-        self.trigNrPulseChannel = SiriusConnectionSignal(
-            self.prefix+self.trigger+':NrPulses-RB')
-        self.trigNrPulseChannel.new_value_signal[int].connect(
-            self._updateNrAcq)
-        hbox_acqcnt = QHBoxLayout()
-        hbox_acqcnt.addWidget(self.lb_acqcnt)
-        hbox_acqcnt.addWidget(self.led_acqcnt)
+        if self.section == 'BO':
+            # Frame Count
+            lbl_acqcnt = QLabel('Frame Count', self)
+            dev = self.device.substitute(dev='TuneProc')
+            self.lb_acqcnt = PyDMLabel(
+                parent=self, init_channel=dev + ':FrameCount-Mon')
+            self.lb_acqcnt.setAlignment(Qt.AlignCenter)
+            self.led_acqcnt = PyDMLedMultiChannel(parent=self)
+            self.trigNrPulseChannel = SiriusConnectionSignal(
+                self.prefix+self.trigger+':NrPulses-RB')
+            self.trigNrPulseChannel.new_value_signal[int].connect(
+                self._updateNrAcq)
+            hbox_acqcnt = QHBoxLayout()
+            hbox_acqcnt.addWidget(self.lb_acqcnt)
+            hbox_acqcnt.addWidget(self.led_acqcnt)
 
+        # Nr. Samples p/ spec
         # Nr. Samples p/ spec
         lbl_nrsmp = QLabel('Nr. Samples p/ Spec.', self)
         self.lb_nrsmp = PyDMLabel(
-            parent=self,
-            init_channel=self.device.substitute(dev='TuneProc')+':SwePts-RB')
+            parent=self, init_channel=self.device.substitute(
+                dev='TuneProc', propty_name='SwePts',
+                propty_suffix='RB'))
+
+        if self.section == 'SI':
+            # Acquisition Time
+            lbl_acqtime = QLabel('Acq. Time', self)
+            self.cb_acqtime = PyDMEnumComboBox(
+                parent=self, init_channel=self.device.substitute(
+                    dev='TuneProc', propty_name='Trace',
+                    propty_suffix='Mon', field='SCAN'))
+
+            # Sweep time
+            lbl_swetime = QLabel('Sweep Time [ms]', self)
+            self.lb_swetime = PyDMLabel(
+                parent=self,
+                init_channel=self.device.substitute(
+                    dev='TuneProc', propty_name='SweTime',
+                    propty_suffix='Mon'))
 
         # Span
         lbl_span = QLabel('Span [kHz]', self)
@@ -147,69 +180,127 @@ class BOTuneControls(QWidget):
         hbox_autoFc.addWidget(self.bt_autoFc)
         hbox_autoFc.addWidget(self.led_autoFc)
 
-        # # ROI
-        # StartX
-        lbl_roistartx = QLabel('Start X [MHz]', self)
-        self.le_roistartx = PyDMLineEdit(
-            parent=self, init_channel=self.device + ':ROIOffsetX-SP')
-        self.le_roistartx.precisionFromPV = True
-        self.lb_roistartx = PyDMLabel(
-            parent=self, init_channel=self.device + ':ROIOffsetX-RB')
-        hbox_roistartx = QHBoxLayout()
-        hbox_roistartx.addWidget(self.le_roistartx)
-        hbox_roistartx.addWidget(self.lb_roistartx)
+        if self.section == 'BO':
+            # # ROI
+            # StartX
+            lbl_roistartx = QLabel('Start X [MHz]', self)
+            self.le_roistartx = PyDMLineEdit(
+                parent=self, init_channel=self.device + ':ROIOffsetX-SP')
+            self.le_roistartx.precisionFromPV = True
+            self.lb_roistartx = PyDMLabel(
+                parent=self, init_channel=self.device + ':ROIOffsetX-RB')
+            hbox_roistartx = QHBoxLayout()
+            hbox_roistartx.addWidget(self.le_roistartx)
+            hbox_roistartx.addWidget(self.lb_roistartx)
 
-        # Width
-        lbl_roiwidth = QLabel('Width [MHz]', self)
-        self.le_roiwidth = PyDMLineEdit(
-            parent=self, init_channel=self.device + ':ROIWidth-SP')
-        self.le_roiwidth.precisionFromPV = True
-        self.lb_roiwidth = PyDMLabel(
-            parent=self, init_channel=self.device + ':ROIWidth-RB')
-        hbox_roiwidth = QHBoxLayout()
-        hbox_roiwidth.addWidget(self.le_roiwidth)
-        hbox_roiwidth.addWidget(self.lb_roiwidth)
+            # Width
+            lbl_roiwidth = QLabel('Width [MHz]', self)
+            self.le_roiwidth = PyDMLineEdit(
+                parent=self, init_channel=self.device + ':ROIWidth-SP')
+            self.le_roiwidth.precisionFromPV = True
+            self.lb_roiwidth = PyDMLabel(
+                parent=self, init_channel=self.device + ':ROIWidth-RB')
+            hbox_roiwidth = QHBoxLayout()
+            hbox_roiwidth.addWidget(self.le_roiwidth)
+            hbox_roiwidth.addWidget(self.lb_roiwidth)
 
-        # StartY
-        lbl_roistarty = QLabel('Start Y [ms]', self)
-        self.le_roistarty = PyDMLineEdit(
-            parent=self, init_channel=self.device + ':ROIOffsetY-SP')
-        self.le_roistarty.precisionFromPV = True
-        self.lb_roistarty = PyDMLabel(
-            parent=self, init_channel=self.device + ':ROIOffsetY-RB')
-        hbox_roistarty = QHBoxLayout()
-        hbox_roistarty.addWidget(self.le_roistarty)
-        hbox_roistarty.addWidget(self.lb_roistarty)
+            # StartY
+            lbl_roistarty = QLabel('Start Y [ms]', self)
+            self.le_roistarty = PyDMLineEdit(
+                parent=self, init_channel=self.device + ':ROIOffsetY-SP')
+            self.le_roistarty.precisionFromPV = True
+            self.lb_roistarty = PyDMLabel(
+                parent=self, init_channel=self.device + ':ROIOffsetY-RB')
+            hbox_roistarty = QHBoxLayout()
+            hbox_roistarty.addWidget(self.le_roistarty)
+            hbox_roistarty.addWidget(self.lb_roistarty)
 
-        # Height
-        lbl_roiheight = QLabel('Height [ms]', self)
-        self.le_roiheight = PyDMLineEdit(
-            parent=self, init_channel=self.device + ':ROIHeight-SP')
-        self.le_roiheight.precisionFromPV = True
-        self.lb_roiheight = PyDMLabel(
-            parent=self, init_channel=self.device + ':ROIHeight-RB')
-        hbox_roiheight = QHBoxLayout()
-        hbox_roiheight.addWidget(self.le_roiheight)
-        hbox_roiheight.addWidget(self.lb_roiheight)
+            # Height
+            lbl_roiheight = QLabel('Height [ms]', self)
+            self.le_roiheight = PyDMLineEdit(
+                parent=self, init_channel=self.device + ':ROIHeight-SP')
+            self.le_roiheight.precisionFromPV = True
+            self.lb_roiheight = PyDMLabel(
+                parent=self, init_channel=self.device + ':ROIHeight-RB')
+            hbox_roiheight = QHBoxLayout()
+            hbox_roiheight.addWidget(self.le_roiheight)
+            hbox_roiheight.addWidget(self.lb_roiheight)
 
-        # Auto adjust
-        lbl_roiauto = QLabel('Auto Positioning', self)
-        self.bt_roiauto = PyDMStateButton(
-            parent=self, init_channel=self.device + ':ROIAuto-Sel')
-        self.bt_roiauto.shape = 1
-        self.led_roiauto = SiriusLedState(
-            parent=self, init_channel=self.device + ':ROIAuto-Sts')
-        hbox_roiauto = QHBoxLayout()
-        hbox_roiauto.addWidget(self.bt_roiauto)
-        hbox_roiauto.addWidget(self.led_roiauto)
+            # Auto adjust
+            lbl_roiauto = QLabel('Auto Positioning', self)
+            self.bt_roiauto = PyDMStateButton(
+                parent=self, init_channel=self.device + ':ROIAuto-Sel')
+            self.bt_roiauto.shape = 1
+            self.led_roiauto = SiriusLedState(
+                parent=self, init_channel=self.device + ':ROIAuto-Sts')
+            hbox_roiauto = QHBoxLayout()
+            hbox_roiauto.addWidget(self.bt_roiauto)
+            hbox_roiauto.addWidget(self.led_roiauto)
+        else:
+            # # Markers
+            self.pb_markers = QPushButton(
+                qta.icon('mdi.view-headline'), '', self)
+            self.pb_markers.setObjectName('mark_menu')
+            menu_markers = QMenu(self)
+            self.pb_markers.setMenu(menu_markers)
+            self.pb_deltamarkers = QPushButton(
+                qta.icon('mdi.view-headline'), '', self)
+            self.pb_deltamarkers.setObjectName('mark_menu')
+            menu_deltamarkers = QMenu(self)
+            self.pb_deltamarkers.setMenu(menu_deltamarkers)
+
+            for i in range(1, 5):
+                act_m = menu_markers.addAction(
+                    qta.icon('mdi.circle-medium',
+                             color=marker_color['Mark'][str(i)]),
+                    'Marker '+str(i))
+                util.connect_window(
+                    act_m, SITuneMarkerDetails, self,
+                    prefix=self.prefix, orientation=self.orientation,
+                    index=i, background=self.background)
+                act_dm = menu_deltamarkers.addAction(
+                    qta.icon('mdi.circle-medium',
+                             color=marker_color['DMark'][str(i)]),
+                    'Delta Marker '+str(i))
+                util.connect_window(
+                    act_dm, SITuneMarkerDetails, self,
+                    prefix=self.prefix, orientation=self.orientation,
+                    index=i, isdelta=True, background=self.background)
+
+            label_marker = QLabel('Markers', self)
+            label_marker.setObjectName('label_marker')
+            self.bt_dsblmark = PyDMPushButton(
+                parent=self, icon=qta.icon('mdi.window-close'),  pressValue=1,
+                init_channel=self.device.substitute(
+                    dev='TuneProc', propty_name='MarkAOff',
+                    propty_suffix='Cmd'))
+            self.bt_dsblmark.setObjectName('mark_dsbl')
+            hbox_marker = QHBoxLayout()
+            hbox_marker.setAlignment(Qt.AlignCenter)
+            hbox_marker.addWidget(self.pb_markers)
+            hbox_marker.addWidget(label_marker)
+            hbox_marker.addWidget(self.bt_dsblmark)
+
+            label_dmarker = QLabel('Delta Markers', self)
+            label_dmarker.setObjectName('label_marker')
+            self.bt_dsbldmark = PyDMPushButton(
+                parent=self, icon=qta.icon('mdi.window-close'),  pressValue=1,
+                init_channel=self.device.substitute(
+                    dev='TuneProc', propty_name='DMarkAOff',
+                    propty_suffix='Cmd'))
+            self.bt_dsbldmark.setObjectName('mark_dsbl')
+            hbox_deltamarker = QHBoxLayout()
+            hbox_deltamarker.setAlignment(Qt.AlignCenter)
+            hbox_deltamarker.addWidget(self.pb_deltamarkers)
+            hbox_deltamarker.addWidget(label_dmarker)
+            hbox_deltamarker.addWidget(self.bt_dsbldmark)
 
         # Details
         self.pb_details = QPushButton(qta.icon('fa5s.ellipsis-h'), '', self)
         self.pb_details.setObjectName('detail')
-        self.pb_details.setStyleSheet(
-            "#detail{min-width:25px; max-width:25px; icon-size:20px;}")
-        util.connect_window(self.pb_details, BOTuneDetails, parent=self,
-                            prefix=self.prefix, orientation=self.orientation,
+        util.connect_window(self.pb_details, TuneDetails, parent=self,
+                            prefix=self.prefix, section=self.section,
+                            orientation=self.orientation,
                             background=self.background)
         hbox_details = QHBoxLayout()
         hbox_details.addStretch()
@@ -219,13 +310,22 @@ class BOTuneControls(QWidget):
         lay = QFormLayout(self)
         lay.setLabelAlignment(Qt.AlignRight)
         lay.setFormAlignment(Qt.AlignCenter)
+        if self.section == 'SI':
+            lay.addRow(QLabel('<h4>Measure</h4>'))
+            lay.addRow(label_tunefreq, self.lb_tunefreq)
+            lay.addRow(label_tunefrac, self.lb_tunefrac)
+            lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
         lay.addRow(QLabel('<h4>Measurement Settings</h4>'))
         lay.addRow(lbl_acq, hbox_acq)
         lay.addRow(lbl_drive, hbox_drive)
-        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
-        lay.addRow(lbl_acqcnt, hbox_acqcnt)
+        if self.section == 'BO':
+            lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
+            lay.addRow(lbl_acqcnt, hbox_acqcnt)
         lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
         lay.addRow(lbl_nrsmp, self.lb_nrsmp)
+        if self.section == 'SI':
+            lay.addRow(lbl_acqtime, self.cb_acqtime)
+            lay.addRow(lbl_swetime, self.lb_swetime)
         lay.addRow(lbl_span, hbox_span)
         lay.addRow(lbl_rbw, hbox_rbw)
         lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
@@ -234,18 +334,33 @@ class BOTuneControls(QWidget):
         lay.addRow(lbl_foff, hbox_foff)
         lay.addRow(lbl_Fc, hbox_Fc)
         lay.addRow(lbl_autoFc, hbox_autoFc)
-        lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
-        lay.addRow(QLabel('<h4>ROI</h4>'))
-        lay.addRow(lbl_roistartx, hbox_roistartx)
-        lay.addRow(lbl_roiwidth, hbox_roiwidth)
-        lay.addRow(lbl_roistarty, hbox_roistarty)
-        lay.addRow(lbl_roiheight, hbox_roiheight)
-        lay.addRow(lbl_roiauto, hbox_roiauto)
+        if self.section == 'BO':
+            lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
+            lay.addRow(QLabel('<h4>ROI</h4>'))
+            lay.addRow(lbl_roistartx, hbox_roistartx)
+            lay.addRow(lbl_roiwidth, hbox_roiwidth)
+            lay.addRow(lbl_roistarty, hbox_roistarty)
+            lay.addRow(lbl_roiheight, hbox_roiheight)
+            lay.addRow(lbl_roiauto, hbox_roiauto)
+        else:
+            lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
+            lay.addRow(QLabel('<h4>Markers</h4>'))
+            lay.addRow(hbox_marker)
+            lay.addRow(hbox_deltamarker)
         lay.addRow(hbox_details)
 
         self.setStyleSheet("""
             QLed{
                 min-width:1.29em; max-width:1.29em;
+            }
+            #label_marker{
+                min-width:7em; max-width:7em;
+            }
+            #mark_dsbl, #detail{
+                min-width:25px; max-width:25px; icon-size:20px;
+            }
+            #mark_menu, #detail{
+                min-width:35px; max-width:35px; icon-size:20px;
             }
             PyDMLabel, PyDMSpinbox, PyDMStateButton,
             PyDMLineEdit, PyDMEnumComboBox{

@@ -1,1 +1,1 @@
-from .main import BOVLightCamView
+from .main import VLightCamView

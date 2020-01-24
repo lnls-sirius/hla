@@ -6,7 +6,7 @@ import sys
 import argparse as _argparse
 from siriushla.sirius_application import SiriusApplication
 from siriuspy.envars import vaca_prefix
-from siriushla.as_di_tune import BOTune
+from siriushla.as_di_tune import Tune
 
 
 parser = _argparse.ArgumentParser(
@@ -17,5 +17,5 @@ parser.add_argument(
 args = parser.parse_args()
 
 app = SiriusApplication()
-app.open_window(BOTune, parent=None, prefix=args.prefix)
+app.open_window(Tune, parent=None, prefix=args.prefix, section='BO')
 sys.exit(app.exec_())
