@@ -1,7 +1,7 @@
 """Sirius Windows module."""
 from qtpy.QtGui import QKeySequence
-from qtpy.QtCore import QEvent
-from qtpy.QtWidgets import QMainWindow, QDialog, QHBoxLayout, QApplication
+from qtpy.QtWidgets import QMainWindow, QDialog, QHBoxLayout, QApplication, \
+    QWidget
 import pyqtgraph as pg
 
 
@@ -31,48 +31,50 @@ def _create_siriuswindow(qt_type):
             if event.matches(QKeySequence.ZoomIn):
                 font.setPointSize(font.pointSize() + 1)
                 self.app.setFont(font)
+                self.changeFontSize()
             elif event.matches(QKeySequence.ZoomOut) and font.pointSize() > 6:
                 font.setPointSize(font.pointSize() - 1)
                 self.app.setFont(font)
+                self.changeFontSize()
             super().keyPressEvent(event)
 
-        def changeEvent(self, event):
-            if event.type() == QEvent.FontChange:
-                fontsize = self.app.font().pointSize()
-                self.ensurePolished()
-                self.setStyleSheet(
-                    self.Stylesheet + self.FontSizeSS.format(fontsize))
-                self.adjustSize()
+        def changeFontSize(self):
+            fontsize = self.app.font().pointSize()
+            self.ensurePolished()
+            for w in self.findChildren(QWidget):
+                font = w.font()
+                font.setPointSize(fontsize)
+                w.setFont(font)
+            self.adjustSize()
 
-                # handle resizing of pyqtgraph plots labels
-                fontsize_str = str(fontsize)+'pt'
-                for w in self.findChildren(pg.PlotWidget):
-                    # axes labels
-                    for ax in w.getPlotItem().axes.values():
-                        sty = ax['item'].labelStyle
-                        sty['font-size'] = fontsize_str
-                        ax['item'].setLabel(text=None, **sty)
-                    # legend
-                    if w.plotItem.legend:
-                        legw = 0
-                        for item in w.plotItem.legend.items:
-                            item[1].opts['size'] = fontsize_str
-                            item[1].setText(text=item[1].text, **item[1].opts)
-                            legw = max(legw, 20+item[1].width())
-                        w.plotItem.legend.updateSize()
-                        w.plotItem.legend.setFixedWidth(legw)
-                    # title
-                    wtitle = w.plotItem.titleLabel
-                    wtitle.opts['size'] = fontsize_str
-                    wtitle.setText(text=wtitle.text, **wtitle.opts)
-                for w in self.findChildren(pg.GraphicsLayoutWidget):
-                    sty = w.xaxis.labelStyle
+            # handle resizing of pyqtgraph plots labels
+            fontsize_str = str(fontsize)+'pt'
+            for w in self.findChildren(pg.PlotWidget):
+                # axes labels
+                for ax in w.getPlotItem().axes.values():
+                    sty = ax['item'].labelStyle
                     sty['font-size'] = fontsize_str
-                    w.xaxis.setLabel(text=None, **sty)
-                    sty = w.yaxis.labelStyle
-                    sty['font-size'] = fontsize_str
-                    w.yaxis.setLabel(text=None, **sty)
-            super().changeEvent(event)
+                    ax['item'].setLabel(text=None, **sty)
+                # legend
+                if w.plotItem.legend:
+                    legw = 0
+                    for item in w.plotItem.legend.items:
+                        item[1].opts['size'] = fontsize_str
+                        item[1].setText(text=item[1].text, **item[1].opts)
+                        legw = max(legw, 20+item[1].width())
+                    w.plotItem.legend.updateSize()
+                    w.plotItem.legend.setFixedWidth(legw)
+                # title
+                wtitle = w.plotItem.titleLabel
+                wtitle.opts['size'] = fontsize_str
+                wtitle.setText(text=wtitle.text, **wtitle.opts)
+            for w in self.findChildren(pg.GraphicsLayoutWidget):
+                sty = w.xaxis.labelStyle
+                sty['font-size'] = fontsize_str
+                w.xaxis.setLabel(text=None, **sty)
+                sty = w.yaxis.labelStyle
+                sty['font-size'] = fontsize_str
+                w.yaxis.setLabel(text=None, **sty)
 
     return _SiriusWindow
 
