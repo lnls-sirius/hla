@@ -153,8 +153,11 @@ class SummaryWidget(QWidget):
         self._has_softhard_intlk = HasSoftHardIntlk.match(self._name)
         self._has_trim = HasTrim.match(self._name)
         self._is_dclink = IsDCLink.match(self._name)
-        self._bbb_name = PSSearch.conv_psname_2_bbbname(self._name)
-        self._udc_name = PSSearch.conv_psname_2_udc(self._name)
+        self._bbb_name = ''
+        self._udc_name = ''
+        if not self._is_pulsed:
+            self._bbb_name = PSSearch.conv_psname_2_bbbname(self._name)
+            self._udc_name = PSSearch.conv_psname_2_udc(self._name)
 
         self._create_pvs()
         self._setup_ui()
