@@ -2,10 +2,9 @@
 """HLA Current and Lifetime Modules."""
 
 import os as _os
-import epics as _epics
 import numpy as _np
 from qtpy.uic import loadUi
-from qtpy.QtCore import Slot
+from qtpy.QtCore import Slot, Qt
 from qtpy.QtWidgets import QHBoxLayout
 import qtawesome as qta
 from pyqtgraph import ViewBox
@@ -14,7 +13,7 @@ from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 from pydm.widgets.timeplot import PyDMTimePlot, TimePlotCurveItem
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla.util import connect_window
-from siriushla.widgets import SiriusMainWindow
+from siriushla.widgets import SiriusMainWindow, SiriusConnectionSignal
 from siriushla.as_di_dccts import DCCTMain
 
 
@@ -35,13 +34,18 @@ class CurrLTWindow(SiriusMainWindow):
         self.setCentralWidget(self.centralwidget)
         self.setWindowTitle('SI Current Info: Current and Lifetime')
         self._setupUi()
+        self.setFocus(True)
+        self.setFocusPolicy(Qt.StrongFocus)
 
     def _setupUi(self):
         # set params in widgets in .ui
-        self.lifetime_pv = _epics.PV(
+        self.lifetime_dcct_pv = SiriusConnectionSignal(
             self.prefix+'SI-Glob:AP-CurrInfo:Lifetime-Mon')
-        self.lifetime_pv.add_callback(self.formatLifetime)
-        self.centralwidget.CurrLT.setText("0:00:00")
+        self.lifetime_bpm_pv = SiriusConnectionSignal(
+            self.prefix+'SI-Glob:AP-CurrInfo:LifetimeBPM-Mon')
+        self.lifetime_dcct_pv.new_value_signal[float].connect(
+            self.formatLifetime)
+        self.centralwidget.label_lifetime.setText("0:00:00")
 
         self.centralwidget.DCCT13C4_detail.setObjectName('DCCT13C4_dtl')
         self.centralwidget.DCCT13C4_detail.setStyleSheet(
@@ -58,11 +62,15 @@ class CurrLTWindow(SiriusMainWindow):
             self.centralwidget.DCCT14C4_detail, DCCTMain, self,
             prefix=self.prefix, device='SI-14C4:DI-DCCT')
 
+        self.centralwidget.BufferSize.channel = \
+            self.prefix+'SI-Glob:AP-CurrInfo:BuffSize-Mon'
         self.centralwidget.ResetBuffer.setObjectName('reset')
         self.centralwidget.ResetBuffer.setStyleSheet(
             "#reset{min-width:25px; max-width:25px; icon-size:20px;}")
         self.centralwidget.ResetBuffer.setIcon(qta.icon('mdi.delete-empty'))
 
+        self.centralwidget.comboBox_lifetime.currentTextChanged.connect(
+            self.handle_lifetime_pv)
         self.centralwidget.spinBox_BuffSize.valueChanged.connect(
             self.setGraphBufferSize)
         self.centralwidget.spinBox_TimeSpan.valueChanged.connect(
@@ -73,25 +81,40 @@ class CurrLTWindow(SiriusMainWindow):
         self.graph.plotItem.getAxis('left').setLabel(
             'Current [mA]', color='blue')
         self.graph.plotItem.getAxis('right').setLabel(
-            'Lifetime [s]', color='red')
+            'Lifetime [h]', color='red')
         self.graph.showLegend = False
         self.graph.showXGrid = True
         self.graph.showYGrid = True
         self.graph.autoRangeY = True
         self.setGraphBufferSize(6000)
         self.setGraphTimeSpan(600)
+
         self.graph.addYChannel(
             y_channel=self.prefix+'SI-Glob:AP-CurrInfo:Current-Mon',
             axis='left', name='Current', color='blue', lineWidth=2)
+        self._curve_current = self.graph.curveAtIndex(0)
+
         self.graph.addYChannel(
-            y_channel=self.prefix+'SI-Glob:AP-CurrInfo:Lifetime-Mon',
-            axis='right', name='Lifetime', color='red', lineWidth=2)
+            y_channel='FAKE:Lifetime', axis='right', name='Lifetime',
+            color='red', lineWidth=2)
+        self._curve_lifetimedcct = self.graph.curveAtIndex(1)
+
+        self.graph.addYChannel(
+            y_channel='FAKE:LifetimeBPM', axis='right', name='Lifetime',
+            color='red', lineWidth=2)
+        self._curve_lifetimebpm = self.graph.curveAtIndex(2)
+        self._curve_lifetimebpm.setVisible(False)
+
+        self.lifetime_dcct_pv.new_value_signal[float].connect(
+            self._updategraph)
+        self.lifetime_bpm_pv.new_value_signal[float].connect(
+            self._updategraph)
 
         self.centralwidget.graphs_wid.setLayout(QHBoxLayout())
         self.centralwidget.graphs_wid.layout().setContentsMargins(0, 0, 0, 0)
         self.centralwidget.graphs_wid.layout().addWidget(self.graph)
 
-    def formatLifetime(self, value, **kws):
+    def formatLifetime(self, value):
         """Format lifetime label."""
         lt = value
         if not _np.isnan(lt):
@@ -99,7 +122,7 @@ class CurrLTWindow(SiriusMainWindow):
             m = int((lt % 3600) // 60)
             s = int((lt % 3600) % 60)
             lt_str = '{:d}:{:02d}:{:02d}'.format(H, m, s)
-            self.centralwidget.CurrLT.setText(lt_str)
+            self.centralwidget.label_lifetime.setText(lt_str)
 
     @Slot(int)
     def setGraphBufferSize(self, value):
@@ -110,6 +133,34 @@ class CurrLTWindow(SiriusMainWindow):
     def setGraphTimeSpan(self, value):
         """Set graph time span."""
         self.graph.setTimeSpan(float(value))
+
+    @Slot(str)
+    def handle_lifetime_pv(self, text):
+        cond = bool(text == 'DCCT')
+        self._curve_lifetimedcct.setVisible(cond)
+        self._curve_lifetimebpm.setVisible(not cond)
+        if not cond:
+            self.lifetime_dcct_pv.new_value_signal[float].disconnect(
+                self.formatLifetime)
+            self.lifetime_bpm_pv.new_value_signal[float].connect(
+                self.formatLifetime)
+            self.centralwidget.BufferSize.channel = \
+                self.prefix+'SI-Glob:AP-CurrInfo:BuffSizeBPM-Mon'
+        else:
+            self.lifetime_dcct_pv.new_value_signal[float].connect(
+                self.formatLifetime)
+            self.centralwidget.BufferSize.channel = \
+                self.prefix+'SI-Glob:AP-CurrInfo:BuffSize-Mon'
+            self.lifetime_bpm_pv.new_value_signal[float].disconnect(
+                self.formatLifetime)
+
+    @Slot(float)
+    def _updategraph(self, value):
+        if 'BPM' in self.sender().address:
+            self._curve_lifetimebpm.receiveNewValue(value/3600)
+        else:
+            self._curve_lifetimedcct.receiveNewValue(value/3600)
+
 
 
 class MyGraph(PyDMTimePlot):
