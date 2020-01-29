@@ -61,7 +61,7 @@ class ReadAndSaveConfig2ServerWindow(SiriusMainWindow):
         self._valid_config = False
 
         self.logger = logging.getLogger(__name__)
-        self.logger.setLevel(logging.DEBUG)
+        self.logger.setLevel(logging.INFO)
 
         self._setup_ui()
         self._central_widget.setStyleSheet("""
@@ -160,7 +160,7 @@ class ReadAndSaveConfig2ServerWindow(SiriusMainWindow):
 
     @Slot()
     def _fill_value(self, row, value):
-        self.logger.info('Setting value {} in row {}'.format(value, row))
+        self.logger.debug('Setting value {} in row {}'.format(value, row))
         index = self._table.model().createIndex(row, 1)
         self._table.model().setData(index, value)
 

@@ -20,7 +20,7 @@ class _BaseConfigManipulation(SiriusDialog):
         self._client = ConfigDBClient()
         self._config_type = config_type
         self._logger = logging.getLogger(__name__)
-        self._logger.setLevel(logging.DEBUG)
+        self._logger.setLevel(logging.INFO)
         self._setupui()
         self._config = ''
         self._status = False
