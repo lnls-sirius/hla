@@ -29,7 +29,7 @@ class SelectAndApplyPVsWidget(QWidget):
         self._current_config = None
 
         self.logger = logging.getLogger(__name__)
-        self.logger.setLevel(logging.DEBUG)
+        self.logger.setLevel(logging.INFO)
 
         self.setupui()
 
@@ -106,7 +106,7 @@ class SelectAndApplyPVsWidget(QWidget):
             'Waiting IOCs updates',
             'Checking PV values']
         tasks = [conn_task, set_task, sleep_task, check_task]
-        self.logger.info(
+        self.logger.debug(
             'Setting {} configuration'.format(self._current_config['name']))
         dlg = ProgressDialog(labels, tasks, self)
         dlg.rejected.connect(set_task.exit_task)

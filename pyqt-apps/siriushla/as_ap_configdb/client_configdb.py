@@ -205,7 +205,7 @@ class ConfigurationManager(SiriusMainWindow):
         super().__init__(parent)
         self._model = model
         self._logger = logging.getLogger(__name__)
-        self._logger.setLevel(logging.DEBUG)
+        self._logger.setLevel(logging.INFO)
         self._setup_ui()
         self.setWindowTitle("Configuration Manager")
 
