@@ -71,6 +71,18 @@ class TuneSpectraView(PyDMWaveformPlot):
                 self.prefix+'SI-Glob:DI-TuneProc-V:Trace-Mon')
             self.curveV_y_channel.new_value_signal[np.ndarray].connect(
                 self.receiveDataV)
+            self.freqrevH_channel = SiriusConnectionSignal(
+                self.prefix+'SI-Glob:DI-Tune-H:FreqRev-Mon')
+            self.freqrevV_channel = SiriusConnectionSignal(
+                self.prefix+'SI-Glob:DI-Tune-V:FreqRev-Mon')
+            self.freqrevnH_channel = SiriusConnectionSignal(
+                self.prefix+'SI-Glob:DI-Tune-H:FreqRevN-Mon')
+            self.freqrevnV_channel = SiriusConnectionSignal(
+                self.prefix+'SI-Glob:DI-Tune-V:FreqRevN-Mon')
+            self.revnH_channel = SiriusConnectionSignal(
+                self.prefix+'SI-Glob:DI-Tune-H:RevN-RB')
+            self.revnV_channel = SiriusConnectionSignal(
+                self.prefix+'SI-Glob:DI-Tune-V:RevN-RB')
 
             self.markers = dict()
             ci = 2
@@ -118,7 +130,6 @@ class TuneSpectraView(PyDMWaveformPlot):
                             lineWidth=2, lineStyle=1,
                             symbol='o', symbolSize=10)
                         mark_dict['curve'] = self.curveAtIndex(ci)
-                        mark_dict['curve'].setVisible(False)
                         ci += 1
                         self.markers[ax][mtyp+'Mark'+si] = mark_dict
 
@@ -131,8 +142,7 @@ class TuneSpectraView(PyDMWaveformPlot):
                 for name, data in markers.items():
                     if data['Enbl'].connected:
                         curve = getattr(self, 'curve'+ori)
-                        show = curve.isVisible() and data['Enbl'].value and \
-                            (self.x_channel == 'Freq')
+                        show = curve.isVisible() and data['Enbl'].value
                     else:
                         show = False
                     data['curve'].setVisible(show)
@@ -143,8 +153,7 @@ class TuneSpectraView(PyDMWaveformPlot):
         if self.section == 'SI':
             for name, data in self.markers['H'].items():
                 if data['Enbl'].connected:
-                    show = bool(show) and data['Enbl'].value and \
-                        (self.x_channel == 'Freq')
+                    show = bool(show) and data['Enbl'].value
                 else:
                     show = False
                 data['curve'].setVisible(show)
@@ -155,8 +164,7 @@ class TuneSpectraView(PyDMWaveformPlot):
         if self.section == 'SI':
             for name, data in self.markers['V'].items():
                 if data['Enbl'].connected:
-                    show = bool(show) and data['Enbl'].value and \
-                        self.x_channel == 'Freq'
+                    show = bool(show) and data['Enbl'].value
                 else:
                     show = False
                 data['curve'].setVisible(show)
@@ -179,7 +187,7 @@ class TuneSpectraView(PyDMWaveformPlot):
         idx = self.sender().idx
         ori = self.sender().orientation
         curve = getattr(self, 'curve'+ori)
-        show = (value and curve.isVisible() and self.x_channel == 'Freq')
+        show = (value and curve.isVisible())
         self.markers[ori][mtyp+idx]['curve'].setVisible(show)
 
     def _update_markers_value(self, value):
@@ -190,6 +198,21 @@ class TuneSpectraView(PyDMWaveformPlot):
         axis = self.sender().axis
         func = getattr(self.markers[ori][mtyp+idx]['curve'],
                        'receive'+axis+'Waveform')
+        if self.x_channel == 'Tune' and axis == 'X':
+            fr_ch = getattr(self, 'freqrev'+ori+'_channel')
+            fr = fr_ch.value
+            fh_ch = getattr(self, 'freqrevn'+ori+'_channel')
+            fh = fh_ch.value
+            h_ch = getattr(self, 'revn'+ori+'_channel')
+            h = h_ch.value
+            if not fr or not h or not fh:
+                self.markers[ori][mtyp+idx]['curve'].setVisible(False)
+                return
+            else:
+                if getattr(self, 'curve'+ori).isVisible() and\
+                        self.markers[ori][mtyp+idx]['Enbl'].value:
+                    self.markers[ori][mtyp+idx]['curve'].setVisible(True)
+            value = (value*1e6 - fh*1e3)/fr + h
         func(np.array([value, ]))
 
 
