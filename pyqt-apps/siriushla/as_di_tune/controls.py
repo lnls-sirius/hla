@@ -154,7 +154,7 @@ class TuneControls(QWidget):
         hbox_h.addWidget(self.lb_h)
 
         # Harmonic Frequency
-        lbl_Fh = QLabel('Harm. Freq. [MHz]', self)
+        lbl_Fh = QLabel('Harm. Freq. [kHz]', self)
         self.lb_Fh = PyDMLabel(parent=self)
         self.lb_Fh.setToolTip('Frf/(h*n)')
         self.lb_Fh.channel = self.device + ':FreqRevN-Mon'
