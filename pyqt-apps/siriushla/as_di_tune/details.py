@@ -11,7 +11,8 @@ from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox, \
 from siriuspy.namesys import SiriusPVName
 import siriushla.util as util
 from siriushla.widgets import PyDMLedMultiChannel, SiriusMainWindow, PyDMLed, \
-    PyDMStateButton, SiriusLedState, SiriusLedAlert, SiriusConnectionSignal
+    PyDMStateButton, SiriusLedState, SiriusLedAlert, SiriusConnectionSignal, \
+    SiriusComboBox
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.as_ti_control import HLTriggerDetailed
 
@@ -199,8 +200,20 @@ class TuneDetails(SiriusMainWindow):
 
         # RBW
         lbl_rbw = QLabel('RBW', self)
-        self.cb_rbw = PyDMEnumComboBox(
-            parent=self, init_channel=self.device + ':SpecAnaRBW-Sel')
+        if self.section == 'BO':
+            self.cb_rbw = PyDMEnumComboBox(
+                parent=self, init_channel=self.device + ':SpecAnaRBW-Sel')
+        else:
+            items = ['1 Hz', '2 Hz', '3 Hz', '5 Hz',
+                     '10 Hz', '20 Hz', '30 Hz', '50 Hz',
+                     '100 Hz', '200 Hz', '300 Hz', '500 Hz',
+                     '1 kHz', '2 kHz', '3 kHz', '5 kHz', '6.25 kHz',
+                     '10 kHz', '20 kHz', '30 kHz', '50 kHz',
+                     '100 kHz', '200 kHz', '300 kHz', '500 kHz',
+                     '1 MHz', '2 MHz', '3 MHz', '5 MHz', '10 MHz']
+            self.cb_rbw = SiriusComboBox(
+                parent=self, init_channel=self.device + ':SpecAnaRBW-Sel',
+                items=items)
         self.lb_rbw = PyDMLabel(
             parent=self, init_channel=self.device + ':SpecAnaRBW-Sts')
         hbox_rbw = QHBoxLayout()
