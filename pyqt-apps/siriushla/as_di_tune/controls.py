@@ -9,7 +9,7 @@ from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMLineEdit, \
 
 from siriuspy.namesys import SiriusPVName
 import siriushla.util as util
-from siriushla.widgets import PyDMLedMultiChannel, PyDMLed, \
+from siriushla.widgets import PyDMLedMultiChannel, PyDMLed, SiriusComboBox, \
     PyDMStateButton, SiriusLedState, SiriusConnectionSignal
 from .details import TuneDetails, SITuneMarkerDetails
 from .util import marker_color
@@ -60,8 +60,9 @@ class TuneControls(QWidget):
         self.bt_drive = PyDMStateButton(
             parent=self, init_channel=self.device + ':Enbl-Sel')
         self.bt_drive.shape = 1
+        value = 0b111 if self.section == 'BO' else 1
         self.led_drive = PyDMLedMultiChannel(
-            parent=self, channels2values={self.device + ':Enbl-Sts': 0b111})
+            parent=self, channels2values={self.device + ':Enbl-Sts': value})
         self.led_drive.setOffColor(PyDMLed.DarkGreen)
         hbox_drive = QHBoxLayout()
         hbox_drive.addWidget(self.bt_drive)
@@ -99,7 +100,7 @@ class TuneControls(QWidget):
                     dev='TuneProc', propty_name='Trace',
                     propty_suffix='Mon', field='SCAN'))
 
-            # Sweep time
+            # Sweep timeEnbl-
             lbl_swetime = QLabel('Sweep Time [ms]', self)
             self.lb_swetime = PyDMLabel(
                 parent=self,
@@ -120,8 +121,20 @@ class TuneControls(QWidget):
 
         # RBW
         lbl_rbw = QLabel('RBW', self)
-        self.cb_rbw = PyDMEnumComboBox(
-            parent=self, init_channel=self.device + ':SpecAnaRBW-Sel')
+        if self.section == 'BO':
+            self.cb_rbw = PyDMEnumComboBox(
+                parent=self, init_channel=self.device + ':SpecAnaRBW-Sel')
+        else:
+            items = ['1 Hz', '2 Hz', '3 Hz', '5 Hz',
+                     '10 Hz', '20 Hz', '30 Hz', '50 Hz',
+                     '100 Hz', '200 Hz', '300 Hz', '500 Hz',
+                     '1 kHz', '2 kHz', '3 kHz', '5 kHz', '6.25 kHz',
+                     '10 kHz', '20 kHz', '30 kHz', '50 kHz',
+                     '100 kHz', '200 kHz', '300 kHz', '500 kHz',
+                     '1 MHz', '2 MHz', '3 MHz', '5 MHz', '10 MHz']
+            self.cb_rbw = SiriusComboBox(
+                parent=self, init_channel=self.device + ':SpecAnaRBW-Sel',
+                items=items)
         self.lb_rbw = PyDMLabel(
             parent=self, init_channel=self.device + ':SpecAnaRBW-Sts')
         hbox_rbw = QHBoxLayout()
@@ -141,7 +154,7 @@ class TuneControls(QWidget):
         hbox_h.addWidget(self.lb_h)
 
         # Harmonic Frequency
-        lbl_Fh = QLabel('Harm. Freq. [MHz]', self)
+        lbl_Fh = QLabel('Harm. Freq. [kHz]', self)
         self.lb_Fh = PyDMLabel(parent=self)
         self.lb_Fh.setToolTip('Frf/(h*n)')
         self.lb_Fh.channel = self.device + ':FreqRevN-Mon'
