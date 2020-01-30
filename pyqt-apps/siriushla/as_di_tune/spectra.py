@@ -143,6 +143,10 @@ class TuneSpectraView(PyDMWaveformPlot):
                     if data['Enbl'].connected:
                         curve = getattr(self, 'curve'+ori)
                         show = curve.isVisible() and data['Enbl'].value
+                        self._update_marker_value(
+                            data['X'].value, ori, name, 'X')
+                        self._update_marker_value(
+                            data['Y'].value, ori, name, 'Y')
                     else:
                         show = False
                     data['curve'].setVisible(show)
@@ -196,7 +200,10 @@ class TuneSpectraView(PyDMWaveformPlot):
         idx = self.sender().idx
         ori = self.sender().orientation
         axis = self.sender().axis
-        func = getattr(self.markers[ori][mtyp+idx]['curve'],
+        self._update_marker_value(value, ori, mtyp+idx, axis)
+
+    def _update_marker_value(self, value, ori, name, axis):
+        func = getattr(self.markers[ori][name]['curve'],
                        'receive'+axis+'Waveform')
         if self.x_channel == 'Tune' and axis == 'X':
             fr_ch = getattr(self, 'freqrev'+ori+'_channel')
@@ -206,12 +213,12 @@ class TuneSpectraView(PyDMWaveformPlot):
             h_ch = getattr(self, 'revn'+ori+'_channel')
             h = h_ch.value
             if not fr or not h or not fh:
-                self.markers[ori][mtyp+idx]['curve'].setVisible(False)
+                self.markers[ori][name]['curve'].setVisible(False)
                 return
             else:
                 if getattr(self, 'curve'+ori).isVisible() and\
-                        self.markers[ori][mtyp+idx]['Enbl'].value:
-                    self.markers[ori][mtyp+idx]['curve'].setVisible(True)
+                        self.markers[ori][name]['Enbl'].value:
+                    self.markers[ori][name]['curve'].setVisible(True)
             value = (value*1e6 - fh*1e3)/fr + h
         func(np.array([value, ]))
 
