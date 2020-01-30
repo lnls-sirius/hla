@@ -11,6 +11,7 @@ from qtpy.QtCore import Qt
 
 from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriuspy.csdevice.posang import Const
+from siriuspy.namesys import SiriusPVName as _PVName
 
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 from pydm.widgets import PyDMWaveformTable, PyDMLabel, PyDMLineEdit
@@ -49,19 +50,19 @@ class PosAngCorr(SiriusMainWindow):
 
         corrs = ['', '', '', '']
         if tl == 'ts':
-            corrs[0] = Const.TS_CORRH_POSANG[0]
-            corrs[1] = Const.TS_CORRH_POSANG[1]
-            corrs[2] = Const.TS_CORRV_POSANG[0]
-            corrs[3] = Const.TS_CORRV_POSANG[1]
+            corrs[0] = _PVName(Const.TS_CORRH_POSANG[0])
+            corrs[1] = _PVName(Const.TS_CORRH_POSANG[1])
+            corrs[2] = _PVName(Const.TS_CORRV_POSANG[0])
+            corrs[3] = _PVName(Const.TS_CORRV_POSANG[1])
         elif tl == 'tb':
             if corrtype == 'ch-sept':
                 CORRCH = Const.TB_CORRH_POSANG_CHSEPT
             else:
                 CORRCH = Const.TB_CORRH_POSANG_CHCH
-            corrs[0] = CORRCH[0]
-            corrs[1] = CORRCH[1]
-            corrs[2] = Const.TB_CORRV_POSANG[0]
-            corrs[3] = Const.TB_CORRV_POSANG[1]
+            corrs[0] = _PVName(CORRCH[0])
+            corrs[1] = _PVName(CORRCH[1])
+            corrs[2] = _PVName(Const.TB_CORRV_POSANG[0])
+            corrs[3] = _PVName(Const.TB_CORRV_POSANG[1])
         self._set_correctors_channels(corrs)
 
         act_settings = self.menuBar().addAction('Settings')
