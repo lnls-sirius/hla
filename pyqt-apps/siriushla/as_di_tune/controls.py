@@ -60,8 +60,9 @@ class TuneControls(QWidget):
         self.bt_drive = PyDMStateButton(
             parent=self, init_channel=self.device + ':Enbl-Sel')
         self.bt_drive.shape = 1
+        value = 0b111 if self.section == 'BO' else 1
         self.led_drive = PyDMLedMultiChannel(
-            parent=self, channels2values={self.device + ':Enbl-Sts': 0b111})
+            parent=self, channels2values={self.device + ':Enbl-Sts': value})
         self.led_drive.setOffColor(PyDMLed.DarkGreen)
         hbox_drive = QHBoxLayout()
         hbox_drive.addWidget(self.bt_drive)
@@ -99,7 +100,7 @@ class TuneControls(QWidget):
                     dev='TuneProc', propty_name='Trace',
                     propty_suffix='Mon', field='SCAN'))
 
-            # Sweep time
+            # Sweep timeEnbl-
             lbl_swetime = QLabel('Sweep Time [ms]', self)
             self.lb_swetime = PyDMLabel(
                 parent=self,
