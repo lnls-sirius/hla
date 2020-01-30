@@ -207,7 +207,7 @@ class DCCTSettingsDetails(QWidget):
 
         self.gbox_trigger = self._setupTriggerWidget()
 
-        self.gbox_calib = self._setupCalibrationWidget()
+        self.gbox_config = self._setupConfigurationWidget()
 
         self.gbox_normalmode = self._setupMeasSettingsWidget('Normal')
         self.gbox_fastmode = self._setupMeasSettingsWidget('Fast')
@@ -224,7 +224,7 @@ class DCCTSettingsDetails(QWidget):
                    alignment=Qt.AlignCenter), 0, 0, 1, 2)
         lay.addWidget(self.gbox_reliablemeas, 1, 0)
         lay.addWidget(self.gbox_generalsettings, 2, 0)
-        lay.addWidget(self.gbox_calib, 3, 0)
+        lay.addWidget(self.gbox_config, 3, 0)
         lay.addWidget(self.gbox_trigger, 3, 1)
         lay.addLayout(lay_mode, 1, 1, 2, 1)
         lay.setVerticalSpacing(15)
@@ -510,22 +510,30 @@ class DCCTSettingsDetails(QWidget):
                 min-width:6em; max-width:6em;}""")
         return gbox_modesettings
 
-    def _setupCalibrationWidget(self):
-        l_test = QLabel('Enable test current: ', self)
+    def _setupConfigurationWidget(self):
         statebutton_Test = PyDMStateButton(
             parent=self, init_channel=self.dcct_prefix+'Test-Sel')
         statebutton_Test.shape = 1
         statebutton_Test.setStyleSheet('min-width:6em; max-width:6em;')
         label_Test = PyDMLabel(
             parent=self, init_channel=self.dcct_prefix+'Test-Sts')
-
-        gbox_test = QGroupBox('Calibration')
-        hlay_test = QHBoxLayout(gbox_test)
-        hlay_test.addWidget(l_test)
+        hlay_test = QHBoxLayout()
         hlay_test.addWidget(statebutton_Test)
         hlay_test.addWidget(label_Test)
-        gbox_test.setStyleSheet("""
-            .QLabel{qproperty-alignment: 'AlignRight | AlignVCenter';}""")
+
+        self.bt_dl = PyDMPushButton(
+            parent=self, init_channel=self.dcct_prefix+'Download-Cmd',
+            pressValue=1, icon=qta.icon('fa5s.sync'))
+        self.bt_dl.setObjectName('bt_dl')
+        self.bt_dl.setStyleSheet(
+            '#bt_dl{min-width:25px; max-width:25px; icon-size:20px;}')
+
+        gbox_test = QGroupBox('Configurations')
+        lay = QFormLayout(gbox_test)
+        lay.setLabelAlignment(Qt.AlignRight)
+        lay.setFormAlignment(Qt.AlignCenter)
+        lay.addRow('Enable test current: ', hlay_test)
+        lay.addRow('Download Configurations: ', self.bt_dl)
         return gbox_test
 
     def _setupTriggerWidget(self):
