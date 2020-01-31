@@ -1,4 +1,5 @@
 """Util module."""
+from copy import deepcopy as _dcopy
 
 # Constants
 
@@ -16,6 +17,11 @@ asps2filters = {'B': {'sub': '.*', 'dev': 'B.*'},
                 'CH/CV': {'sub': '.*', 'dev': 'C(H|V).*'},
                 'PM': {'sub': '.*', 'dev': '(Inj|Eje).*'},
                 }
+
+bops2filters = _dcopy(asps2filters)
+bops2filters.pop('CH/CV')
+bops2filters['CH'] = {'sub': '.*', 'dev': 'CH.*'}
+bops2filters['CV'] = {'sub': '.*', 'dev': 'CV.*'}
 
 sips2filters = {'B': {'sec': 'SI', 'sub': '.*', 'dev': 'B.*'},
                 'Q': {'sec': 'SI', 'sub': 'Fam', 'dev': 'Q(F|D|[1-4]).*'},
