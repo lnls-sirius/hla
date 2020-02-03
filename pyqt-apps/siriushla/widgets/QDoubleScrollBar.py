@@ -1,7 +1,12 @@
 """QDoubleScrollBar module."""
 
+import logging
+
 from qtpy.QtWidgets import QInputDialog, QScrollBar, QMenu, QToolTip
 from qtpy.QtCore import Qt, Signal, Slot, Property, QPoint
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 
 class QDoubleScrollBar(QScrollBar):
@@ -87,8 +92,13 @@ class QDoubleScrollBar(QScrollBar):
 
     def setMinimum(self, value):
         """Set minimum value."""
-        mini = max(-2**31, round(value*self._scale))
-        super().setMinimum(mini)
+        try:
+            mini = round(value*self._scale)
+            mini = min(mini, 2**31-1)
+            mini = max(-2**31, mini)
+            super().setMinimum(mini)
+        except OverflowError as e:
+            logging.warning(str(e), '(value=' + str(value) + ')')
 
     minimum = Property(float, getMinimum, setMinimum)
 
@@ -98,8 +108,13 @@ class QDoubleScrollBar(QScrollBar):
 
     def setMaximum(self, value):
         """Set maximum value."""
-        maxi = min(2**31-1, round(value*self._scale))
-        super().setMaximum(maxi)
+        try:
+            maxi = round(value*self._scale)
+            maxi = min(maxi, 2**31-1)
+            maxi = max(-2**31, maxi)
+            super().setMaximum(maxi)
+        except OverflowError as e:
+            logging.warning(str(e), '(value=' + str(value) + ')')
 
     maximum = Property(float, getMaximum, setMaximum)
 
@@ -144,8 +159,15 @@ class QDoubleScrollBar(QScrollBar):
     @Slot(float)
     def setValue(self, value):
         """Set value."""
-        if value is not None:
-            super().setValue(round(value*self._scale))
+        if value is None:
+            return
+        try:
+            val = round(value*self._scale)
+            val = min(val, 2**31-1)
+            val = max(-2**31, val)
+            super().setValue(val)
+        except OverflowError as e:
+            logging.warning(str(e), '(value=' + str(value) + ')')
 
     value = Property(float, getValue, setValue)
 
@@ -155,7 +177,10 @@ class QDoubleScrollBar(QScrollBar):
 
     def setSliderPosition(self, value):
         """Set slider position."""
-        super().setSliderPosition(round(value*self._scale))
+        pos = round(value*self._scale)
+        pos = min(pos, 2**31-1)
+        pos = max(-2**31, pos)
+        super().setSliderPosition(pos)
 
     sliderPosition = Property(float, getSliderPosition, setSliderPosition)
 
@@ -186,7 +211,9 @@ class QDoubleScrollBar(QScrollBar):
     @Slot(float, float)
     def setRange(self, mini, maxi):
         """Set range."""
-        super().setRange(round(mini/self._scale), round(maxi*self._scale))
+        mini = max(-2**31, round(mini/self._scale))
+        maxi = min(round(maxi*self._scale), 2**31-1)
+        super().setRange(mini, maxi)
 
     @Slot(int, int)
     def _intercept_rangeChanged(self, mini, maxi):

@@ -13,7 +13,8 @@ from siriushla.widgets import SiriusMainWindow, PyDMLedMultiChannel
 from siriushla.util import run_newprocess, get_appropriate_color, \
     get_monitor_icon
 
-from siriushla.as_ps_diag.util import lips2filters, asps2filters, sips2filters
+from siriushla.as_ps_diag.util import lips2filters, asps2filters, \
+    bops2filters, sips2filters
 
 
 class PSMonitor(SiriusMainWindow):
@@ -34,29 +35,37 @@ class PSMonitor(SiriusMainWindow):
         layout = QGridLayout()
         layout.setHorizontalSpacing(15)
 
+        layout.addWidget(QLabel(
+            '<h2>PS Monitor</h2>', alignment=Qt.AlignCenter),
+            0, 0, 1, 2)
         for sec in ['LI', 'TB', 'BO', 'TS', 'SI']:
             status = self._make_magnets_groupbox(sec)
             if sec == 'LI':
                 layout.addWidget(status, 1, 0)
             elif sec == 'TB':
-                layout.addWidget(status, 2, 0)
-            elif sec == 'BO':
                 layout.addWidget(status, 1, 1)
+            elif sec == 'BO':
+                layout.addWidget(status, 2, 0)
             elif sec == 'TS':
                 layout.addWidget(status, 2, 1)
             elif sec == 'SI':
-                layout.addWidget(status, 1, 2, 2, 1)
+                layout.addWidget(status, 3, 0, 1, 2)
         cw.setLayout(layout)
         self.setCentralWidget(cw)
+
+        self.setStyleSheet("""
+            QLed {
+                min-height: 1.1em; max-height: 1.1em;
+                min-width: 1.1em; max-width: 1.1em;}
+        """)
 
     def _make_magnets_groupbox(self, sec):
         status = QGroupBox(sec, self)
         status_lay = QGridLayout()
         status_lay.setAlignment(Qt.AlignTop)
-        if sec == 'SI':
-            status_lay.setVerticalSpacing(20)
-            status_lay.setHorizontalSpacing(20)
-        status.setStyleSheet("""QLabel{max-height: 1.5em;}""")
+        status_lay.setVerticalSpacing(16)
+        status_lay.setHorizontalSpacing(16)
+        status.setStyleSheet("""QLabel{max-height: 1.4em;}""")
         status.setLayout(status_lay)
 
         def get_ps2labels_dict(sec):
@@ -64,6 +73,8 @@ class PSMonitor(SiriusMainWindow):
                 return lips2filters
             elif sec == 'SI':
                 return sips2filters
+            elif sec == 'BO':
+                return bops2filters
             else:
                 return asps2filters
 
@@ -96,81 +107,161 @@ class PSMonitor(SiriusMainWindow):
             else:
                 return {self._prefix+name+':DiagStatus-Mon': 0}
 
-        def update_gridpos(row, col):
-            new_col = 0 if col == col_count-1 else col+1
-            new_row = row+1 if new_col == 0 else row
+        def update_gridpos(row, col, col_count, offset=0):
+            new_col = offset if col == offset+col_count-1 else col+1
+            new_row = row+1 if new_col == offset else row
             return [new_row, new_col]
 
-        def get_si_secpos(label):
-            if 'B' in label:
-                return (0, 0, 2, 1)
-            elif 'QS' in label:
-                return (4, 0, 1, 3)
-            elif 'Q' in label:
-                return (0, 1, 2, 1)
-            elif 'S' in label:
-                return (0, 2, 2, 1)
-            elif 'PM' in label:
-                return (1, 0, 1, 1)
-            elif 'CH' in label:
-                return (2, 0, 1, 3)
-            elif 'CV' in label:
-                return (3, 0, 1, 3)
-            elif 'Trims' in label:
-                return (5, 0, 1, 3)
-            # elif 'FCH' in label:
-            #     return (3, 1, 3, 1)
-            # elif 'FCV' in label:
-            #     return (3, 2, 3, 1)
+        def get_as_secpos(sec, label):
+            sec2label2secpos = {
+                'LI': {
+                    'Lens': (0, 0, 1, 1),
+                    'Q': (0, 1, 1, 1),
+                    'Spect': (0, 2, 1, 1),
+                    'CH/CV': (1, 0, 1, 2),
+                    'Slnd': (2, 0, 1, 3),
+                },
+                'TB': {
+                    'B': (0, 0, 1, 2),
+                    'Q': (1, 0, 1, 4),
+                    'PM': (0, 2, 1, 2),
+                    'CH/CV': (2, 0, 1, 4),
+                },
+                'BO': {
+                    'B': (0, 0, 1, 1),
+                    'QS': (1, 1, 1, 1),
+                    'Q': (0, 1, 1, 1),
+                    'S': (1, 0, 1, 1),
+                    'PM': (2, 0, 1, 1),
+                    'CH': (0, 2, 3, 3),
+                    'CV': (0, 5, 3, 3),
+                },
+                'TS': {
+                    'B': (0, 0, 1, 2),
+                    'Q': (1, 0, 1, 4),
+                    'PM': (0, 2, 1, 2),
+                    'CH/CV': (2, 0, 1, 4),
+                },
+                'SI': {
+                    'B': (0, 1, 1, 1),
+                    'QS': (1, 1, 1, 1),
+                    'Q': (0, 3, 1, 1),
+                    'S': (0, 4, 1, 1),
+                    'PM': (0, 2, 1, 1),
+                    'CH': (1, 2, 1, 1),
+                    'CV': (1, 3, 1, 1),
+                    'Trims': (1, 4, 1, 1),
+                    # 'FCH': (3, 1, 1, 1),
+                    # 'FCV': (3, 2, 1, 1),
+                },
+            }
+            return sec2label2secpos[sec][label]
 
         def get_col_count(sec, label):
-            if 'QS' in label:
-                return 8 if sec != 'SI' else 30
-            elif 'CH' in label:
-                return 8 if sec != 'SI' else 30
-            elif 'CV' in label:
-                return 8 if sec != 'SI' else 30
+            if label == 'QS':
+                return 4
+            elif label == 'CH':
+                return 5 if sec != 'SI' else 6
+            elif label == 'CV':
+                return 5 if sec != 'SI' else 8
             elif 'Trims' in label:
-                return 8 if sec != 'SI' else 30
+                return 14
+            elif label == 'S':
+                return 10 if sec != 'SI' else 14
+            elif label == 'Q':
+                return 10 if sec != 'SI' else 8
+            elif label == 'CH/CV':
+                return 20 if sec == 'BO' else 14
+            elif label == 'Slnd':
+                return 16
             else:
-                return 8
+                return 10
+
+        def get_sub_labels(label):
+            sub2labels = {
+                'QS': ('M1', 'M2', 'C1', 'C3'),
+                'CH': ('M1', 'M2', 'C1', 'C2', 'C3', 'C4'),
+                'CV': ('M1', 'M2', 'C1', 'C2', ' ', 'C3', ' ', 'C4'),
+                'Trims': ('M1', ' ', ' ', 'M2', ' ', ' ', 'C1', ' ',
+                          'C2', ' ', 'C3', ' ', 'C4', ' ')}
+            return sub2labels[label]
 
         row, col = 0, 0
         for label, ps in get_ps2labels_dict(sec).items():
             psnames = get_psnames(sec, ps)
-            col_count = get_col_count(sec, label)
             if not psnames:
                 continue
+            grid = QGridLayout()
+            grid.setVerticalSpacing(6)
+            grid.setHorizontalSpacing(6)
             if sec != 'SI':
-                status_lay.addWidget(QLabel(label, self),
-                                     row, col, 1, col_count)
-                row += 1
-                for name in psnames:
-                    led = MyLed(self, get_ch2vals(sec, name))
-                    led.setObjectName(name)
-                    led.setToolTip(name)
-                    status_lay.addWidget(led, row, col)
-                    row, col = update_gridpos(row, col)
-                row, col = row+1, 0
-            else:
-                grid = QGridLayout()
-                grid.setVerticalSpacing(6)
-                grid.setHorizontalSpacing(6)
-                grid.addWidget(QLabel(label, self), 0, 0, 1, 5)
-                aux_row, aux_col = 1, 0
+                if sec == 'BO' and label in ['CH', 'CV']:
+                    grid.addWidget(QLabel(label, self), 0, 0)
+                    for i in range(5):
+                        lbh = QLabel('{0:02d}'.format(i*2+1),
+                                     self, alignment=Qt.AlignCenter)
+                        grid.addWidget(lbh, 0, i+1)
+                        lbv = QLabel('{0:02d}'.format(i*10),
+                                     self, alignment=Qt.AlignCenter)
+                        grid.addWidget(lbv, i+1, 0)
+                    aux_row, aux_col, offset = 1, 1, 1
+                    if label == 'CV':
+                        aux = psnames.pop(-1)
+                        psnames.insert(0, aux)
+                else:
+                    grid.addWidget(QLabel(label, self), 0, 0, 1, 4)
+                    aux_row, aux_col, offset = 1, 0, 0
                 for name in psnames:
                     led = MyLed(self, get_ch2vals(sec, name))
                     led.setObjectName(name)
                     led.setToolTip(name)
                     grid.addWidget(led, aux_row, aux_col)
-                    aux_row, aux_col = update_gridpos(aux_row, aux_col)
-                row, col, rowc, colc = get_si_secpos(label)
+                    aux_row, aux_col = update_gridpos(
+                        aux_row, aux_col, get_col_count(sec, label), offset)
+                row, col, rowc, colc = get_as_secpos(sec, label)
+                status_lay.addLayout(grid, row, col, rowc, colc,
+                                     alignment=Qt.AlignTop)
+            else:
+                aux = psnames.pop(-1)
+                psnames.insert(0, aux)
+                if label == 'Trims':
+                    aux = psnames.pop(-1)
+                    psnames.insert(0, aux)
+                aux_row, aux_col, offset = 2, 0, 0
+                if label in ['QS', 'Trims']:
+                    aux_col, offset = 1, (1 if label == 'QS' else 0)
+                    for i in range(1, 21):
+                        lb = QLabel('{0:02d}'.format(i), self)
+                        grid.addWidget(lb, i+1, (0 if label == 'QS' else 15))
+                if label in ['QS', 'CH', 'CV', 'Trims']:
+                    i = 0
+                    for text in get_sub_labels(label):
+                        lbh = QLabel(text, self, alignment=Qt.AlignCenter)
+                        grid.addWidget(lbh, 1, offset+i)
+                        i += 1
+                else:
+                    aux_row, aux_col, offset = 1, 0, 0
+                grid.addWidget(QLabel(label, self), 0, offset, 1, 4)
+                for name in psnames:
+                    if label == 'Trims' and aux_row in (2, 6, 10, 14, 18) \
+                            and aux_col in (0, 3):
+                        grid.addWidget(QLabel(''), aux_row, aux_col)
+                        aux_col += 1
+                    led = MyLed(self, get_ch2vals(sec, name))
+                    led.setObjectName(name)
+                    led.setToolTip(name)
+                    grid.addWidget(led, aux_row, aux_col)
+                    aux_row, aux_col = update_gridpos(
+                        aux_row, aux_col, get_col_count(sec, label), offset)
+                row, col, rowc, colc = get_as_secpos(sec, label)
                 status_lay.addLayout(grid, row, col, rowc, colc,
                                      alignment=Qt.AlignTop)
         if sec == 'SI':
             status_lay.setColumnStretch(0, 1)
-            status_lay.setColumnStretch(1, 1)
-            status_lay.setColumnStretch(2, 1)
+            status_lay.setColumnStretch(1, 4)
+            status_lay.setColumnStretch(2, 6)
+            status_lay.setColumnStretch(3, 8)
+            status_lay.setColumnStretch(4, 14)
 
         return status
 

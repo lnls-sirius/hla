@@ -1,7 +1,7 @@
 from qtpy.QtCore import Qt, QPoint
 from qtpy.QtGui import QPainter
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QGroupBox, \
-    QHBoxLayout, QApplication
+    QHBoxLayout, QApplication, QVBoxLayout
 import qtawesome as qta
 
 from siriuspy.namesys import SiriusPVName as PVName
@@ -34,8 +34,6 @@ class LLButton(QWidget):
         self.setupui()
 
     def setupui(self):
-        lbl0 = QLabel(self.link, self)
-
         name = self.prefix.sub + '-'
         if self.prefix.dev == 'AMCFPGAEVR':
             name += 'AMC'
@@ -71,9 +69,12 @@ class LLButton(QWidget):
         connect_window(
             led, Window, None, signal=led.clicked, prefix=self.prefix + ':')
 
-        lay = QHBoxLayout(self)
-        lay.addWidget(lbl0)
-        lay.addWidget(led)
+        lay = QVBoxLayout(self)
+        lay.setContentsMargins(4, 4, 4, 4)
+        lay.setSpacing(4)
+        if self.link:
+            lay.addWidget(QLabel(self.link, self))
+        lay.addWidget(led, alignment=Qt.AlignCenter)
 
 
 class HLButton(QWidget):
@@ -112,7 +113,7 @@ class MonitorHL(QGroupBox):
         for trig in hltrigs:
             secs[trig.sec].append(trig)
 
-        for sec in sorted(secs):
+        for sec in ('AS', 'LI', 'TB', 'BO', 'TS', 'SI'):
             lab = QLabel(sec)
             lab.setStyleSheet('font-weight: bold;')
             lay.addWidget(lab, lay.rowCount(), 0, 1, nrcols)
@@ -155,19 +156,18 @@ class MonitorLL(QGroupBox):
             g3.append(self.setupdown(downs))
 
         lay = QGridLayout(self)
-        lay.setVerticalSpacing(30)
-        align = Qt.AlignVCenter | Qt.AlignLeft
-        lay.addWidget(g1, 0, 0, len(g3), 1, align)
+        lay.setHorizontalSpacing(16)
+        lay.setVerticalSpacing(20)
+        align = Qt.AlignHCenter | Qt.AlignTop
+        lay.addWidget(g1, 0, 0, 1, len(g3), align)
         for i, g in enumerate(g2):
-            lay.addWidget(g, i, 1, align)
+            lay.addWidget(g, 1, i, align)
         self.g3 = list()
         for i, gs in enumerate(g3):
             for j, g in enumerate(gs):
                 if not j:
                     self.g3.append(g)
-                lay.addWidget(g, i, j+2)
-        lay.setColumnMinimumWidth(0, 100)
-        lay.setColumnMinimumWidth(1, 120)
+                lay.addWidget(g, j+2, i)
 
     def setupdown(self, down):
         return [LLButton(self.prefix+pre, lnk, self) for lnk, pre in down]
@@ -175,14 +175,14 @@ class MonitorLL(QGroupBox):
     def paintEvent(self, event):
         super().paintEvent(event)
         sz = self.g1.size()
-        p1 = self.g1.pos() + QPoint(sz.width(), sz.height()//2)
+        p1 = self.g1.pos() + QPoint(sz.width()//2, sz.height())
         for i, g2 in enumerate(self.g2):
             sz = g2.size()
-            p2 = g2.pos() + QPoint(0, sz.height()//2)
+            p2 = g2.pos() + QPoint(sz.width()//2, 0)
             self.drawarrow(p1, p2)
-            p2 += QPoint(sz.width(), 0)
+            p2 += QPoint(0, sz.height())
             g3 = self.g3[i]
-            p3 = g3.pos() + QPoint(0, g3.size().height()//2)
+            p3 = g3.pos() + QPoint(g3.size().width()//2, 0)
             self.drawarrow(p2, p3)
 
     def drawarrow(self, p1, p2):
@@ -223,11 +223,16 @@ class MonitorWindow(SiriusMainWindow):
     def _setupui(self):
         wid = QWidget(self)
         self.setCentralWidget(wid)
-        gl = QGridLayout(wid)
-        gl.addWidget(QLabel(
-            '<h1>Timing Monitor</h1>', alignment=Qt.AlignCenter), 0, 0, 1, 2)
-        gl.addWidget(MonitorLL(self, prefix=self.prefix), 1, 0)
-        gl.addWidget(MonitorHL(self, prefix=self.prefix), 1, 1)
+        vl = QVBoxLayout(wid)
+        vl.addWidget(QLabel(
+            '<h2>Timing Monitor</h2>', alignment=Qt.AlignCenter))
+        vl.addWidget(MonitorLL(self, prefix=self.prefix))
+        vl.addWidget(MonitorHL(self, prefix=self.prefix))
+        self.setStyleSheet("""
+            QLed {
+                min-height: 1.1em; max-height: 1.1em;
+                min-width: 1.1em; max-width: 1.1em;}
+        """)
 
 
 if __name__ == '__main__':

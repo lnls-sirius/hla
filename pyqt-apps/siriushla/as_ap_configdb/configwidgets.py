@@ -34,7 +34,7 @@ class ConfigTableWidget(QTableView):
         # self.horizontalHeader().setResizeMode(QHeaderView.Stretch)
         self.hideColumn(0)
         self.hideColumn(3)
-        self.sortByColumn(2, Qt.DescendingOrder)
+        self.model().sort(2, Qt.DescendingOrder)
 
         # Signals
         self.selectionModel().selectionChanged.connect(
@@ -50,7 +50,7 @@ class ConfigTableWidget(QTableView):
     def config_type(self, name):
         self._config_type = name
         self.model().config_type = self._config_type
-        self.sortByColumn(2, Qt.DescendingOrder)
+        self.model().sort(2, Qt.DescendingOrder)
 
     @property
     def config_name(self):
