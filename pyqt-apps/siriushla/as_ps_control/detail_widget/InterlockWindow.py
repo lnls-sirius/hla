@@ -4,14 +4,13 @@ from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QGridLayout, \
     QLabel, QTabWidget
 from siriuspy.envars import vaca_prefix as _VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
-from siriuspy.search import MASearch, PSSearch
-from siriuspy.csdevice.pwrsupply import \
-    get_ps_propty_database, get_ma_propty_database
+from siriuspy.search import PSSearch
+from siriuspy.csdevice.pwrsupply import get_ps_propty_database
 from siriushla.widgets import SiriusMainWindow, SiriusLedAlert
 
 
 class InterlockWidget(QWidget):
-
+    """InterlockWidget class."""
     def __init__(self, parent=None, init_channel='', bit=-1, label=''):
         super().__init__(parent)
         self.led = SiriusLedAlert(self, init_channel, bit)
@@ -33,16 +32,10 @@ class InterlockListWidget(QWidget):
         self._setup_ui()
 
     def _setup_ui(self):
-        if self._devname.dis == 'PS':
-            psmodel = PSSearch.conv_psname_2_psmodel(self._devname)
-            pstype = PSSearch.conv_psname_2_pstype(self._devname)
-            db = get_ps_propty_database(psmodel, pstype)
-            labels = db['Intlk'+self._interlock+'Labels-Cte']['value']
-        else:
-            db = get_ma_propty_database(self._devname)
-            psname = MASearch.conv_maname_2_psnames(self._devname)[0]
-            labels = db[psname]['Intlk'+self._interlock+'Labels-Cte']['value']
-
+        psmodel = PSSearch.conv_psname_2_psmodel(self._devname)
+        pstype = PSSearch.conv_psname_2_pstype(self._devname)
+        db = get_ps_propty_database(psmodel, pstype)
+        labels = db['Intlk'+self._interlock+'Labels-Cte']['value']
         lay = QGridLayout()
         for bit, label in enumerate(labels):
             # Add led and label to layout
@@ -54,6 +47,7 @@ class InterlockListWidget(QWidget):
 
 
 class InterlockWindow(SiriusMainWindow):
+    """InterlockWindow class."""
 
     def __init__(self, parent=None, devname='', interlock=0):
         super().__init__(parent)
@@ -80,8 +74,6 @@ class InterlockWindow(SiriusMainWindow):
         lay.addWidget(QLabel("<h3>" + self._interlock + " Interlock</h3>"))
 
         ps_list = [self._devname, ]
-        if self._devname.dis == 'MA':
-            ps_list = MASearch.conv_maname_2_psnames(self._devname)
         if len(ps_list) == 1:
             wid = InterlockListWidget(parent=self, devname=self._devname,
                                       interlock=self._interlock)
