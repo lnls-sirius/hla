@@ -1,9 +1,10 @@
+"""Conn module."""
 
 import numpy as _np
 from epics import PV as _PV
 
 from siriuspy.envars import vaca_prefix as VACA_PREFIX
-from siriuspy.search import MASearch, PSSearch
+from siriuspy.search import PSSearch
 from siriuspy.csdevice.pwrsupply import Const as _PSC
 
 
@@ -215,8 +216,7 @@ class TesterPS(_Tester):
                 VACA_PREFIX + device + ':' + ppty,
                 connection_timeout=TIMEOUT_CONN)
 
-        maname = MASearch.conv_psname_2_psmaname(device)
-        splims = MASearch.conv_maname_2_splims(maname)
+        splims = PSSearch.conv_psname_2_splims(device)
         self.test_current = splims['TSTV']
         self.test_tol = splims['TSTR']
 
