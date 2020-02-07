@@ -85,9 +85,9 @@ class PSDiag(SiriusMainWindow):
                     conn_chs = list()
                     for name in psnames:
                         pname = self._prefix + name
-                        conn_chs.append(pname+':rdpwm')
-                        ps_ch2vals[pname + ':rdpwm'] = 1
-                        intlk_ch2vals[pname + ':interlock'] = \
+                        conn_chs.append(pname+':PwrState-Sts')
+                        ps_ch2vals[pname + ':PwrState-Sts'] = 1
+                        intlk_ch2vals[pname + ':StatusIntlk-Mon'] = \
                             {'value': 55, 'comp': 'lt'}
 
                     f = 'LI-.*:PS-'+filt['dev']

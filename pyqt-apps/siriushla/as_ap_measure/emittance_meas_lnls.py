@@ -52,8 +52,8 @@ class EmittanceMeasure(QWidget):
         if self._place.lower().startswith('li'):
             self.plt_image = ProcessImage(self, place='LI-Emittance')
             self.conv2kl = _NormFact.create('LI-01:MA-QF3')
-            self.quad_I_sp = PV('LI-01:PS-QF3:seti')
-            self.quad_I_rb = PV('LI-01:PS-QF3:rdi')
+            self.quad_I_sp = PV('LI-01:PS-QF3:Current-SP')
+            self.quad_I_rb = PV('LI-01:PS-QF3:Current-Mon')
             self.DIST = 2.8775
             self.QUAD_L = 0.112
         if self._place.lower().startswith('tb-qd2a'):

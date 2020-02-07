@@ -458,7 +458,7 @@ class CycleWindow(SiriusMainWindow):
 
         ps_ch = list()
         for name in psnames:
-            ppty = ':Version-Cte' if PVName(name).sec != 'LI' else ':setpwm'
+            ppty = ':Version-Cte'
             ps_ch.append(VACA_PREFIX + name + ppty)
         self.psconn_led.set_channels(ps_ch)
 

@@ -386,8 +386,8 @@ class EnergyMeasure(QWidget):
         vl = QVBoxLayout()
         wid = QWidget(gb_ctrl)
         wid.setLayout(QHBoxLayout())
-        spnbox = SiriusSpinbox(wid, init_channel='LI-01:PS-Spect:seti')
-        lbl = SiriusLabel(wid, init_channel='LI-01:PS-Spect:rdi')
+        spnbox = SiriusSpinbox(wid, init_channel='LI-01:PS-Spect:Current-SP')
+        lbl = SiriusLabel(wid, init_channel='LI-01:PS-Spect:Current-Mon')
         spnbox.showStepExponent = False
         wid.layout().addWidget(spnbox)
         wid.layout().addWidget(lbl)
