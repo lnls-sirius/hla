@@ -114,8 +114,9 @@ class TuneDetails(SiriusMainWindow):
         self.bt_drive = PyDMStateButton(
             parent=self, init_channel=self.device + ':Enbl-Sel')
         self.bt_drive.shape = 1
+        value = 0b111 if self.section == 'BO' else 1
         self.led_drive = PyDMLedMultiChannel(
-            parent=self, channels2values={self.device + ':Enbl-Sts': 0b111})
+            parent=self, channels2values={self.device + ':Enbl-Sts': value})
         self.led_drive.setOffColor(PyDMLed.DarkGreen)
         hbox_drive = QHBoxLayout()
         hbox_drive.addWidget(self.bt_drive)
@@ -310,10 +311,8 @@ class TuneDetails(SiriusMainWindow):
         else:
             # Noise Amplitude
             lbl_trkgenlvl = QLabel('Trk. Gen. Power [dBm]', self)
-            self.sb_trkgenlvl = PyDMSpinbox(
+            self.sb_trkgenlvl = PyDMLineEdit(
                 parent=self, init_channel=self.device + ':SpecAnaTrkGenLvl-SP')
-            self.sb_trkgenlvl.showStepExponent = False
-            self.sb_trkgenlvl.precisionFromPV = True
             self.lb_trkgenlvl = PyDMLabel(
                 parent=self, init_channel=self.device + ':SpecAnaTrkGenLvl-RB')
             hbox_trkgenlvl = QHBoxLayout()

@@ -126,7 +126,7 @@ class TuneSpectraView(PyDMWaveformPlot):
                             y_channel='FAKE:'+mtyp+'MarkY',
                             x_channel='FAKE:'+mtyp+'MarkX',
                             name=mtyp+'Mark '+si, redraw_mode=2,
-                            color=marker_color[mtyp+'Mark'][si],
+                            color=marker_color[mtyp+'Mark'][ax][si],
                             lineWidth=2, lineStyle=1,
                             symbol='o', symbolSize=10)
                         mark_dict['curve'] = self.curveAtIndex(ci)
