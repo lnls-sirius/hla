@@ -441,6 +441,14 @@ class BasePSControlWidget(QWidget):
         self.reset_act = QAction("Reset Interlocks", self)
         self.reset_act.triggered.connect(self._reset_interlocks)
         self.reset_act.setEnabled(False)
+        self.wfmupdate_on_act = QAction("Wfm Update Auto Enable", self)
+        self.wfmupdate_on_act.triggered.connect(
+            lambda: self._set_wfmupdate(True))
+        self.wfmupdate_on_act.setEnabled(False)
+        self.wfmupdate_off_act = QAction("Wfm Update Auto Disable", self)
+        self.wfmupdate_off_act.triggered.connect(
+            lambda: self._set_wfmupdate(False))
+        self.wfmupdate_off_act.setEnabled(False)
 
     def _enable_actions(self):
         if 'state' in self.visible_props and \
@@ -456,6 +464,10 @@ class BasePSControlWidget(QWidget):
         if 'reset' in self.visible_props and \
                 not self.reset_act.isEnabled():
             self.reset_act.setEnabled(True)
+        if 'wfmupdate' in self.visible_props and \
+                not self.wfmupdate_on_act.isEnabled():
+            self.wfmupdate_on_act.setEnabled(True)
+            self.wfmupdate_off_act.setEnabled(True)
 
     @Slot(bool)
     def _set_pwrstate(self, state):
@@ -507,6 +519,19 @@ class BasePSControlWidget(QWidget):
                 except TypeError:
                     pass
 
+    @Slot(bool)
+    def _set_wfmupdate(self, state):
+        """Execute turn WfmUpdateAuto on/off actions."""
+        for key, widget in self.ps_widgets_dict.items():
+            if key in self.filtered_widgets:
+                try:
+                    if state:
+                        widget.wfmupdate_on()
+                    else:
+                        widget.wfmupdate_off()
+                except TypeError:
+                    pass
+
     # Overloaded method
     def contextMenuEvent(self, event):
         """Show a custom context menu."""
@@ -517,6 +542,8 @@ class BasePSControlWidget(QWidget):
         menu.addAction(self.set_slowref_act)
         menu.addAction(self.set_current_sp_act)
         menu.addAction(self.reset_act)
+        menu.addAction(self.wfmupdate_on_act)
+        menu.addAction(self.wfmupdate_off_act)
         menu.popup(self.mapToGlobal(point))
 
     def get_summary_widgets(self):

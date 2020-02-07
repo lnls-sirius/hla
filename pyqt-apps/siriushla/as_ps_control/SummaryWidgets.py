@@ -88,6 +88,7 @@ def get_prop2width(psname):
             'ctrlmode': '6',
             'reset': '4',
             'ctrlloop': '8',
+            'wfmupdate': '8',
         })
     else:
         dic['conn'] = '5'
@@ -124,6 +125,7 @@ def get_prop2label(psname):
             'ctrlmode': 'Control Mode',
             'reset': 'Reset',
             'ctrlloop': 'Control Loop',
+            'wfmupdate': 'Wfm Update',
         })
     else:
         dic['conn'] = 'Connected'
@@ -143,7 +145,7 @@ def get_prop2label(psname):
 def sort_propties(labels):
     default_order = (
         'detail', 'bbb', 'udc', 'opmode', 'ctrlmode', 'state', 'pulse',
-        'conn', 'intlk', 'reset', 'ctrlloop', 'setpoint',
+        'conn', 'intlk', 'reset', 'ctrlloop', 'wfmupdate', 'setpoint',
         'readback', 'monitor', 'strength_sp', 'strength_rb', 'strength_mon',
         'trim')
     idcs = list()
@@ -244,6 +246,10 @@ class SummaryWidget(QWidget):
         self._widgets_dict['ctrlloop'] = self.ctrlloop_wid
         lay.addWidget(self.ctrlloop_wid)
 
+        self.wfmupdate_wid = self._build_widget(name='wfmupdate')
+        self._widgets_dict['wfmupdate'] = self.wfmupdate_wid
+        lay.addWidget(self.wfmupdate_wid)
+
         self.setpoint_wid = self._build_widget(
             name='setpoint', orientation='v')
         self._widgets_dict['setpoint'] = self.setpoint_wid
@@ -319,6 +325,8 @@ class SummaryWidget(QWidget):
         self._pwrstate_sts = self._prefixed_name + ':PwrState-Sts'
         self._ctrlloop_sel = self._prefixed_name + ':CtrlLoop-Sel'
         self._ctrlloop_sts = self._prefixed_name + ':CtrlLoop-Sts'
+        self._wfmupdate_sel = self._prefixed_name + ':WfmUpdateAuto-Sel'
+        self._wfmupdate_sts = self._prefixed_name + ':WfmUpdateAuto-Sts'
 
         if self._has_softhard_intlk:
             self._soft_intlk = self._prefixed_name + ':IntlkSoft-Mon'
@@ -419,6 +427,11 @@ class SummaryWidget(QWidget):
             self.ctrlloop_lb = PyDMLabel(self, self._ctrlloop_sts)
             self.ctrlloop_wid.layout().addWidget(self.ctrlloop_bt)
             self.ctrlloop_wid.layout().addWidget(self.ctrlloop_lb)
+        elif name == 'wfmupdate':
+            self.wfmupdate_bt = PyDMStateButton(self, self._wfmupdate_sel)
+            self.wfmupdate_led = SiriusLedState(self, self._wfmupdate_sts)
+            self.wfmupdate_wid.layout().addWidget(self.wfmupdate_bt)
+            self.wfmupdate_wid.layout().addWidget(self.wfmupdate_led)
         elif name == 'setpoint':
             self.setpoint = PyDMLinEditScrollbar(self._analog_sp, self)
             self.setpoint.sp_scrollbar.setTracking(False)
@@ -488,6 +501,18 @@ class SummaryWidget(QWidget):
         if self.pulse_bt.isEnabled():
             if self.pulse_bt.value:
                 self.pulse_bt.send_value()
+
+    def wfmupdate_on(self):
+        """Enable WfmUpdateAuto."""
+        if self.wfmupdate_bt.isEnabled():
+            if not self.wfmupdate_bt.value:
+                self.wfmupdate_bt.send_value()
+
+    def wfmupdate_off(self):
+        """Disable WfmUpdateAuto."""
+        if self.wfmupdate_bt.isEnabled():
+            if self.wfmupdate_bt.value:
+                self.wfmupdate_bt.send_value()
 
     def reset(self):
         """Reset power supply."""
