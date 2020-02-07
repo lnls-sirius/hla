@@ -8,9 +8,11 @@ from qtpy.QtWidgets import QWidget, QVBoxLayout, QGroupBox, \
     QSizePolicy as QSzPlcy
 import qtawesome as qta
 from siriuspy.search import PSSearch
+from siriuspy.namesys import SiriusPVName as PVName
 from siriushla.util import connect_window
 from ..PSDetailWindow import PSDetailWindow
-from ..SummaryWidgets import SummaryWidget, SummaryHeader, get_prop2label
+from ..SummaryWidgets import SummaryWidget, SummaryHeader, \
+    get_prop2label, sort_propties
 
 
 class PSContainer(QWidget):
@@ -34,9 +36,10 @@ class PSContainer(QWidget):
                 for dc in dclinks:
                     self.dclinksbbbname.add(PSSearch.conv_psname_2_bbbname(dc))
                     self.dclinksudcname.add(PSSearch.conv_psname_2_udc(dc))
+            self.all_props = get_prop2label(PVName(dclinks[0]))
 
-        self.visible_props = {
-            'detail', 'state', 'intlk', 'setpoint', 'monitor'}
+        self.visible_props = sort_propties([
+            'detail', 'state', 'intlk', 'setpoint', 'monitor'])
         self._setup_ui()
         self._create_actions()
         self._enable_actions()
@@ -101,7 +104,7 @@ class PSContainer(QWidget):
             self.dclink_widgets.append(w)
 
     def update_visible_props(self, new_value):
-        self.visible_props = new_value
+        self.visible_props = sort_propties(new_value)
         self._enable_actions()
 
     # Action methods
@@ -226,11 +229,12 @@ class BasePSControlWidget(QWidget):
         self._dev_list = PSSearch.get_psnames(self._getFilter(subsection))
 
         self.all_props = get_prop2label(self._dev_list[0])
-        self.visible_props = {
+        self.all_props = get_prop2label(self._dev_list[0])
+        self.visible_props = sort_propties([
             'detail', 'state', 'intlk', 'setpoint', 'monitor',
-            'strength_sp', 'strength_mon'}
+            'strength_sp', 'strength_mon'])
         if 'trim' in self.all_props:
-            self.visible_props.add('trim')
+            self.visible_props.append('trim')
 
         # Data used to filter the widgets
         self.ps_widgets_dict = dict()
@@ -394,9 +398,9 @@ class BasePSControlWidget(QWidget):
 
     def _set_widgets_visibility(self):
         """Set visibility of the widgets."""
-        props = {act.objectName() for act in self.search_menu.actions()
-                 if act.isChecked()}
-        self.visible_props = props
+        props = [act.objectName() for act in self.search_menu.actions()
+                 if act.isChecked()]
+        self.visible_props = sort_propties(props)
         self._enable_actions()
         for key, wid in self.containers_dict.items():
             wid.update_visible_props(props)
