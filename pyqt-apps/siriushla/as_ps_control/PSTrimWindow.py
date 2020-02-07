@@ -29,9 +29,9 @@ class PSTrimWindow(SiriusMainWindow):
         # Create family MagnetWidget
         self.fam_widget = SummaryWidget(
             name=self._devname, parent=self,
-            visible_props={
+            visible_props=[
                 'detail', 'state', 'intlk', 'setpoint', 'monitor',
-                'strength_sp', 'strength_mon', 'trim'})
+                'strength_sp', 'strength_mon', 'trim'])
         self.fam_widget.get_trim_button().setVisible(False)
         # Connect family detail window
         fam_button = self.fam_widget.get_detail_button()

@@ -6,7 +6,8 @@ import qtawesome as qta
 from siriuspy.search import PSSearch
 from siriushla.util import get_appropriate_color
 from siriushla.widgets import SiriusMainWindow
-from siriushla.as_ps_control.SummaryWidgets import SummaryWidget, SummaryHeader
+from siriushla.as_ps_control.SummaryWidgets import SummaryWidget, \
+    SummaryHeader, sort_propties
 from siriushla.util import connect_window
 from .DetailWindow import PUDetailWindow
 
@@ -72,9 +73,9 @@ class PUControlWindow(SiriusMainWindow):
             devices = PSSearch.get_psnames(
                 {'sec': 'SI', 'dis': 'PU', 'dev': 'Ping'})
 
-        visible_props = {'detail', 'state', 'reset', 'intlk',
-                         'setpoint', 'monitor', 'pulse',
-                         'strength_sp', 'strength_mon'}
+        visible_props = sort_propties(
+            ['detail', 'state', 'reset', 'intlk', 'setpoint', 'monitor',
+             'pulse', 'strength_sp', 'strength_mon'])
 
         lay.addWidget(SummaryHeader(devices[0], visible_props, self))
         for device in devices:

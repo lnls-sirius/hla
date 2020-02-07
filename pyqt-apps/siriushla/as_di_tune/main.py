@@ -1,8 +1,8 @@
 from qtpy.QtGui import QColor
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGridLayout, QTabWidget, QVBoxLayout, \
-    QLabel
-
+    QLabel, QHBoxLayout
+from pydm.widgets import PyDMLabel
 from siriuspy.envars import vaca_prefix
 from siriushla.widgets import SiriusMainWindow
 from .spectrogram import BOTuneSpectrogramControls
@@ -28,6 +28,36 @@ class Tune(SiriusMainWindow):
                        alignment=Qt.AlignHCenter)
         label.setObjectName('label')
         label.setStyleSheet('#label{min-height: 1.29em; max-height: 1.29em;}')
+
+        if self.section == 'SI':
+            # Tune
+            self.lb_tunefrach = PyDMLabel(
+                parent=self, init_channel='SI-Glob:DI-Tune-H:TuneFrac-Mon')
+            self.lb_tunefrach.setAlignment(Qt.AlignHCenter)
+            self.lb_tunefrach.setStyleSheet('QLabel{font-size: 40px;}')
+            wid_tuneh = QWidget()
+            wid_tuneh.setObjectName('wid_tuneh')
+            wid_tuneh.setStyleSheet('background-color:#B3E5FF;')
+            vbox_tuneh = QVBoxLayout(wid_tuneh)
+            vbox_tuneh.addWidget(QLabel('<h4>Horizontal</h4>', self,
+                                        alignment=Qt.AlignHCenter))
+            vbox_tuneh.addWidget(self.lb_tunefrach)
+
+            self.lb_tunefracv = PyDMLabel(
+                parent=self, init_channel='SI-Glob:DI-Tune-V:TuneFrac-Mon')
+            self.lb_tunefracv.setAlignment(Qt.AlignHCenter)
+            self.lb_tunefracv.setStyleSheet('QLabel{font-size: 40px;}')
+            wid_tunev = QWidget()
+            wid_tunev.setObjectName('wid_tunev')
+            wid_tunev.setStyleSheet('background-color:#FFB3B3;')
+            vbox_tunev = QVBoxLayout(wid_tunev)
+            vbox_tunev.setAlignment(Qt.AlignHCenter)
+            vbox_tunev.addWidget(QLabel('<h4>Vertical</h4>', self,
+                                        alignment=Qt.AlignHCenter))
+            vbox_tunev.addWidget(self.lb_tunefracv)
+            hlay_tune = QHBoxLayout()
+            hlay_tune.addWidget(wid_tuneh)
+            hlay_tune.addWidget(wid_tunev)
 
         # Settings
         self.tabCtrl = QTabWidget(self)
@@ -104,20 +134,28 @@ class Tune(SiriusMainWindow):
 
         self.setStyleSheet(
             "#specH, #specV {min-width:40em;}"
-            "#spectra_view {min-width:40em;}")
+            "#spectra_view {min-width:40em;}"
+            "#wid_tuneh, #wid_tunev {border:2px solid gray;}")
 
         cw = QWidget(self)
         lay = QGridLayout(cw)
-        lay.addWidget(label, 0, 0, 1, 3)
-        lay.addLayout(vbox_sett, 1, 0)
+        if self.section == 'SI':
+            col_count = 2
+            row = 1
+            lay.addLayout(hlay_tune, row, 0, 1, col_count)
+        else:
+            col_count = 3
+            row = 0
+        lay.addWidget(label, 0, 0, 1, col_count)
+        lay.addLayout(vbox_sett, row+1, 0)
         if self.section == 'BO':
-            lay.addLayout(vbox_meas, 1, 1)
-            lay.addWidget(self.spectra_view, 1, 2)
+            lay.addLayout(vbox_meas, row+1, 1)
+            lay.addWidget(self.spectra_view, row+1, 2)
             lay.setColumnStretch(0, 1)
             lay.setColumnStretch(1, 1)
             lay.setColumnStretch(2, 1)
         else:
-            lay.addWidget(self.spectra_view, 1, 1)
+            lay.addWidget(self.spectra_view, row+1, 1)
             lay.setColumnStretch(0, 1)
             lay.setColumnStretch(1, 1)
         self.setCentralWidget(cw)

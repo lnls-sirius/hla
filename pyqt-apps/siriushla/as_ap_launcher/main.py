@@ -17,6 +17,7 @@ from siriushla.widgets import SiriusMainWindow, PyDMStateButton, \
     SiriusLedState, SiriusLedAlert
 from siriushla.common.epics.wrapper import PyEpicsWrapper
 from .menu import get_object
+from .standby_widgets import InjSysStandbyButton, InjSysStandbyStatusLed
 
 
 class MainOperation(SiriusMainWindow):
@@ -61,6 +62,19 @@ class MainOperation(SiriusMainWindow):
         egun_lay.addWidget(egun_trigger_enable, 1, 0)
         egun_lay.addWidget(egun_trigger_status, 2, 0)
         egun.setLayout(egun_lay)
+
+        # Injection System
+        injsys = QGroupBox('Injection System')
+        injsys_state_sel = InjSysStandbyButton(self)
+        injsys_state_sts = InjSysStandbyStatusLed(self)
+
+        injsys_lay = QGridLayout()
+        injsys_lay.setVerticalSpacing(5)
+        injsys_lay.setHorizontalSpacing(15)
+        injsys_lay.addWidget(QLabel(''))
+        injsys_lay.addWidget(injsys_state_sel, 1, 0)
+        injsys_lay.addWidget(injsys_state_sts, 2, 0)
+        injsys.setLayout(injsys_lay)
 
         # EVG control
         timing = QGroupBox('EVG Control')
@@ -134,9 +148,10 @@ class MainOperation(SiriusMainWindow):
 
         layout = QGridLayout()
         layout.addWidget(egun, 0, 0)
-        layout.addWidget(timing, 0, 1)
-        layout.addWidget(pbt, 0, 2, alignment=Qt.AlignLeft | Qt.AlignBottom)
-        layout.addWidget(self.expandwid, 2, 0, 1, 3)
+        layout.addWidget(injsys, 0, 1)
+        layout.addWidget(timing, 0, 2)
+        layout.addWidget(pbt, 0, 3, alignment=Qt.AlignLeft | Qt.AlignBottom)
+        layout.addWidget(self.expandwid, 2, 0, 1, 4)
 
         cw = QWidget(self)
         cw.setLayout(layout)

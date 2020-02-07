@@ -1,7 +1,8 @@
 from qtpy.QtGui import QPalette
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QWidget, QLabel, QPushButton, QMenu, \
-    QFormLayout, QHBoxLayout, QSpacerItem, QSizePolicy as QSzPlcy
+from qtpy.QtWidgets import QWidget, QLabel, QPushButton, QGridLayout, \
+    QFormLayout, QHBoxLayout, QSpacerItem, QSizePolicy as QSzPlcy, \
+    QTabWidget
 import qtawesome as qta
 
 from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMLineEdit, \
@@ -36,9 +37,22 @@ class TuneControls(QWidget):
         # # Measurement
         if self.section == 'SI':
             # Tune
-            label_tunefreq = QLabel('Tune Frequency [Hz]')
-            self.lb_tunefreq = PyDMLabel(
-                parent=self, init_channel=self.device+':TuneFreq-Mon')
+            label_tunefreq = QLabel('Tune Frequency')
+            self.lb_tunefreq = PyDMLabel(self)
+            self.lb_tunefreq._unit = 'kHz'
+            self.lb_tunefreq.showUnits = True
+            self.lb_tunefreq.precisionFromPV = False
+            self.lb_tunefreq.precision = 3
+            self.tunefreq_currval = 0.0
+            self.freqrevn_currval = 0.0
+            self.tunefreq_ch = SiriusConnectionSignal(
+                self.device+':TuneFreq-Mon')
+            self.tunefreq_ch.new_value_signal[float].connect(
+                self._calc_tunefreq)
+            self.freqrevn_ch = SiriusConnectionSignal(
+                self.device+':FreqRevN-Mon')
+            self.freqrevn_ch.new_value_signal[float].connect(
+                self._calc_tunefreq)
             self.lb_tunefreq.setStyleSheet('min-width:8em;max-width:8em;')
             label_tunefrac = QLabel('Tune Fraction')
             self.lb_tunefrac = PyDMLabel(
@@ -84,7 +98,6 @@ class TuneControls(QWidget):
             hbox_acqcnt.addWidget(self.lb_acqcnt)
             hbox_acqcnt.addWidget(self.led_acqcnt)
 
-        # Nr. Samples p/ spec
         # Nr. Samples p/ spec
         lbl_nrsmp = QLabel('Nr. Samples p/ Spec.', self)
         self.lb_nrsmp = PyDMLabel(
@@ -250,63 +263,79 @@ class TuneControls(QWidget):
             hbox_roiauto.addWidget(self.bt_roiauto)
             hbox_roiauto.addWidget(self.led_roiauto)
         else:
+            tab_markers = QTabWidget(self)
+            tab_markers.setStyleSheet("""
+                QTabWidget::pane {
+                    border-left: 2px solid gray;
+                    border-bottom: 2px solid gray;
+                    border-right: 2px solid gray;
+                }
+                QTabBar::tab:first {
+                    background-color: transparent;
+                }
+                QTabBar::tab:last {
+                    background-color: transparent;
+                }""")
             # # Markers
-            self.pb_markers = QPushButton(
-                qta.icon('mdi.view-headline'), '', self)
-            self.pb_markers.setObjectName('mark_menu')
-            menu_markers = QMenu(self)
-            self.pb_markers.setMenu(menu_markers)
-            self.pb_deltamarkers = QPushButton(
-                qta.icon('mdi.view-headline'), '', self)
-            self.pb_deltamarkers.setObjectName('mark_menu')
-            menu_deltamarkers = QMenu(self)
-            self.pb_deltamarkers.setMenu(menu_deltamarkers)
+            for mtyp in ['', 'D']:
+                wid_markers = QWidget()
+                grid_markers = QGridLayout(wid_markers)
+                bt_dsblmark = PyDMPushButton(
+                    parent=self, icon=qta.icon('mdi.window-close'),
+                    pressValue=1)
+                bt_dsblmark.setToolTip(
+                    'Disable All '+('Delta ' if mtyp else '')+'Markers')
+                bt_dsblmark.channel = self.device.substitute(
+                    dev='TuneProc', propty_name=mtyp+'MarkAOff',
+                    propty_suffix='Cmd')
+                bt_dsblmark.setObjectName('mark_dsbl')
+                grid_markers.addWidget(bt_dsblmark, 0, 0)
+                grid_markers.addWidget(
+                    QLabel('Enable', self, alignment=Qt.AlignHCenter),
+                    0, 1, 1, 2)
+                grid_markers.addWidget(
+                    QLabel('Auto Max', self, alignment=Qt.AlignHCenter),
+                    0, 3, 1, 2)
 
-            for i in range(1, 5):
-                act_m = menu_markers.addAction(
-                    qta.icon('mdi.circle-medium',
-                             color=marker_color['Mark'][str(i)]),
-                    'Marker '+str(i))
-                util.connect_window(
-                    act_m, SITuneMarkerDetails, self,
-                    prefix=self.prefix, orientation=self.orientation,
-                    index=i, background=self.background)
-                act_dm = menu_deltamarkers.addAction(
-                    qta.icon('mdi.circle-medium',
-                             color=marker_color['DMark'][str(i)]),
-                    'Delta Marker '+str(i))
-                util.connect_window(
-                    act_dm, SITuneMarkerDetails, self,
-                    prefix=self.prefix, orientation=self.orientation,
-                    index=i, isdelta=True, background=self.background)
-
-            label_marker = QLabel('Markers', self)
-            label_marker.setObjectName('label_marker')
-            self.bt_dsblmark = PyDMPushButton(
-                parent=self, icon=qta.icon('mdi.window-close'),  pressValue=1,
-                init_channel=self.device.substitute(
-                    dev='TuneProc', propty_name='MarkAOff',
-                    propty_suffix='Cmd'))
-            self.bt_dsblmark.setObjectName('mark_dsbl')
-            hbox_marker = QHBoxLayout()
-            hbox_marker.setAlignment(Qt.AlignCenter)
-            hbox_marker.addWidget(self.pb_markers)
-            hbox_marker.addWidget(label_marker)
-            hbox_marker.addWidget(self.bt_dsblmark)
-
-            label_dmarker = QLabel('Delta Markers', self)
-            label_dmarker.setObjectName('label_marker')
-            self.bt_dsbldmark = PyDMPushButton(
-                parent=self, icon=qta.icon('mdi.window-close'),  pressValue=1,
-                init_channel=self.device.substitute(
-                    dev='TuneProc', propty_name='DMarkAOff',
-                    propty_suffix='Cmd'))
-            self.bt_dsbldmark.setObjectName('mark_dsbl')
-            hbox_deltamarker = QHBoxLayout()
-            hbox_deltamarker.setAlignment(Qt.AlignCenter)
-            hbox_deltamarker.addWidget(self.pb_deltamarkers)
-            hbox_deltamarker.addWidget(label_dmarker)
-            hbox_deltamarker.addWidget(self.bt_dsbldmark)
+                for i in range(1, 5):
+                    bt_enbl = PyDMStateButton(
+                        self, self.device.substitute(
+                            dev='TuneProc', propty_name='Enbl'+mtyp+'Mark' +
+                                str(i), propty_suffix='Sel'))
+                    bt_enbl.setStyleSheet('min-width:2.5em; max-width:2.5em;')
+                    led_enbl = SiriusLedState(
+                        self, self.device.substitute(
+                            dev='TuneProc', propty_name='Enbl'+mtyp+'Mark' +
+                                str(i), propty_suffix='Sts'))
+                    bt_max = PyDMStateButton(
+                        self, self.device.substitute(
+                            dev='TuneProc', propty_name='Enbl'+mtyp+'MaxAuto' +
+                                str(i), propty_suffix='Sel'))
+                    bt_max.setStyleSheet('min-width:2.5em;max-width:2.5em;')
+                    led_max = SiriusLedState(
+                        self, self.device.substitute(
+                            dev='TuneProc', propty_name='Enbl'+mtyp+'MaxAuto' +
+                                str(i), propty_suffix='Sts'))
+                    color = marker_color[mtyp+'Mark'][self.orientation][str(i)]
+                    pb_m = QPushButton(
+                        qta.icon('mdi.record-circle-outline', color=color),
+                        str(i), self)
+                    pb_m.setObjectName('mark_dtl')
+                    util.connect_window(
+                        pb_m, SITuneMarkerDetails, self,
+                        prefix=self.prefix, orientation=self.orientation,
+                        index=i, background=self.background)
+                    grid_markers.addWidget(pb_m, i, 0)
+                    grid_markers.addWidget(
+                        bt_enbl, i, 1, alignment=Qt.AlignRight)
+                    grid_markers.addWidget(
+                        led_enbl, i, 2, alignment=Qt.AlignLeft)
+                    grid_markers.addWidget(
+                        bt_max, i, 3, alignment=Qt.AlignRight)
+                    grid_markers.addWidget(
+                        led_max, i, 4, alignment=Qt.AlignLeft)
+                tab_markers.addTab(wid_markers,
+                                   ('Delta' if mtyp else '')+'Markers')
 
         # Details
         self.pb_details = QPushButton(qta.icon('fa5s.ellipsis-h'), '', self)
@@ -355,24 +384,19 @@ class TuneControls(QWidget):
             lay.addRow(lbl_roistarty, hbox_roistarty)
             lay.addRow(lbl_roiheight, hbox_roiheight)
             lay.addRow(lbl_roiauto, hbox_roiauto)
-        else:
-            lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
-            lay.addRow(QLabel('<h4>Markers</h4>'))
-            lay.addRow(hbox_marker)
-            lay.addRow(hbox_deltamarker)
         lay.addRow(hbox_details)
+        if self.section == 'SI':
+            lay.addItem(QSpacerItem(1, 6, QSzPlcy.Ignored, QSzPlcy.Fixed))
+            lay.addRow(tab_markers)
 
         self.setStyleSheet("""
             QLed{
                 min-width:1.29em; max-width:1.29em;
             }
-            #label_marker{
-                min-width:7em; max-width:7em;
-            }
-            #mark_dsbl, #detail{
+            #mark_dsbl{
                 min-width:25px; max-width:25px; icon-size:20px;
             }
-            #mark_menu, #detail{
+            #detail, #mark_dtl{
                 min-width:35px; max-width:35px; icon-size:20px;
             }
             PyDMLabel, PyDMSpinbox, PyDMStateButton,
@@ -388,3 +412,13 @@ class TuneControls(QWidget):
         dev = self.device.substitute(dev='TuneProc')
         self.led_acqcnt.set_channels2values(
             {dev + ':FrameCount-Mon': new_value})
+
+    def _calc_tunefreq(self, val):
+        address = self.sender().address
+        if 'TuneFreq' in address:
+            self.tunefreq_currval = val
+        elif 'FreqRevN' in address:
+            self.freqrevn_currval = val
+        delta = self.tunefreq_currval - self.freqrevn_currval*1e3
+        delta /= 1e3
+        self.lb_tunefreq.value_changed(delta)

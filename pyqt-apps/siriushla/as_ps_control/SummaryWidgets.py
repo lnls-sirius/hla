@@ -29,12 +29,11 @@ HasSoftHardIntlk = re.compile("^.*:PS-.*$")
 
 def get_analog_name(psname):
     psname = PVName(psname)
+    psmodel = PSSearch.conv_psname_2_psmodel(psname)
     try:
-        psmodel = PSSearch.conv_psname_2_psmodel(psname)
         pstype = PSSearch.conv_psname_2_pstype(psname)
     except KeyError:
         pstype = ''
-        psmodel = ''
 
     if 'dclink' in pstype:
         if psmodel == 'FBP_DCLink':
@@ -44,6 +43,8 @@ def get_analog_name(psname):
         else:
             raise RuntimeError(
                 'Undefined PS model {} setpoint PV name'.format(psmodel))
+    elif psmodel == 'REGATRON_DCLink':
+        return 'Voltage'
     else:
         if psname.dis == 'PS':
             return 'Current'
@@ -73,68 +74,87 @@ def get_prop2width(psname):
     detail_wid = '8.5' if psname.dev != 'DCLink' else '3'
     dic = {
         'detail': detail_wid,
-        'bbb': 10,
-        'udc': 10}
-    dic.update({
-        'opmode': '8',
-        'ctrlmode': '6',
-        'state': '6'
-    })
-    if psname.dis == 'PU':
-        dic.update({'pulse': '8'})
-    dic.update({
+        'state': '6',
         'intlk':  '5',
-        'reset': '4',
-        'ctrlloop': '8',
         'setpoint': '6',
         'readback': '6',
         'monitor': '6',
-    })
-    dic.update({
-        'strength_sp': '6',
-        'strength_rb': '6',
-        'strength_mon': '8'
-    })
+    }
+    if psname.sec != 'LI':
+        dic.update({
+            'bbb': 10,
+            'udc': 10,
+            'opmode': '8',
+            'ctrlmode': '6',
+            'reset': '4',
+            'ctrlloop': '8',
+            'wfmupdate': '8',
+        })
+    else:
+        dic['conn'] = '5'
+    if get_strength_name(psname):
+        dic.update({
+            'strength_sp': '6',
+            'strength_rb': '6',
+            'strength_mon': '8'
+        })
+    if psname.dis == 'PU':
+        dic.update({'pulse': '8'})
     if HasTrim.match(psname):
         dic.update({'trim': '2'})
-    return dic
+    return sort_propties(dic)
 
 
 def get_prop2label(psname):
-    dic = {
-        'detail': 'Detail',
-        'bbb': 'Beagle Bone',
-        'udc': 'UDC'}
-    dic.update({
-        'opmode': 'OpMode',
-        'ctrlmode': 'Control Mode',
-        'state': 'PwrState'
-    })
-    if psname.dis == 'PU':
-        dic.update({'pulse': 'Pulse'})
-    dic.update({
-        'intlk':  'Interlocks',
-        'reset': 'Reset'
-    })
     analog = get_analog_name(psname)
     if 'CapacitorBank' in analog:
         analog = 'Voltage'
-    dic.update({
-        'ctrlloop': 'Control Loop',
+    dic = {
+        'detail': 'Detail',
+        'state': 'PwrState',
+        'intlk': 'Interlocks',
         'setpoint': analog + '-SP',
         'readback': analog + '-RB',
         'monitor': analog + '-Mon',
-    })
-
+    }
+    if psname.sec != 'LI':
+        dic.update({
+            'bbb': 'Beagle Bone',
+            'udc': 'UDC',
+            'opmode': 'OpMode',
+            'ctrlmode': 'Control Mode',
+            'reset': 'Reset',
+            'ctrlloop': 'Control Loop',
+            'wfmupdate': 'Wfm Update',
+        })
+    else:
+        dic['conn'] = 'Connected'
     strength = get_strength_name(psname)
     if strength:
         dic.update({
             'strength_sp': strength + '-SP',
             'strength_rb': strength + '-RB',
             'strength_mon': strength + '-Mon'})
+    if psname.dis == 'PU':
+        dic.update({'pulse': 'Pulse'})
     if HasTrim.match(psname):
         dic.update({'trim': 'Trim'})
-    return dic
+    return sort_propties(dic)
+
+
+def sort_propties(labels):
+    default_order = (
+        'detail', 'bbb', 'udc', 'opmode', 'ctrlmode', 'state', 'pulse',
+        'conn', 'intlk', 'reset', 'ctrlloop', 'wfmupdate', 'setpoint',
+        'readback', 'monitor', 'strength_sp', 'strength_rb', 'strength_mon',
+        'trim')
+    idcs = list()
+    for lbl in labels:
+        idcs.append(default_order.index(lbl))
+    if isinstance(labels, list):
+        return [x for _, x in sorted(zip(idcs, labels))]
+    elif isinstance(labels, dict):
+        return {x: labels[x] for _, x in sorted(zip(idcs, labels.keys()))}
 
 
 class SummaryWidget(QWidget):
@@ -144,7 +164,7 @@ class SummaryWidget(QWidget):
         """Build UI with dclink name."""
         super().__init__(parent)
         self._name = PVName(name)
-        self.visible_props = visible_props
+        self.visible_props = sort_propties(visible_props)
         self.filled_widgets = set()
         self._prefixed_name = VACA_PREFIX + name
         self._is_pulsed = self._name.dis == 'PU'
@@ -226,6 +246,10 @@ class SummaryWidget(QWidget):
         self._widgets_dict['ctrlloop'] = self.ctrlloop_wid
         lay.addWidget(self.ctrlloop_wid)
 
+        self.wfmupdate_wid = self._build_widget(name='wfmupdate')
+        self._widgets_dict['wfmupdate'] = self.wfmupdate_wid
+        lay.addWidget(self.wfmupdate_wid)
+
         self.setpoint_wid = self._build_widget(
             name='setpoint', orientation='v')
         self._widgets_dict['setpoint'] = self.setpoint_wid
@@ -301,6 +325,8 @@ class SummaryWidget(QWidget):
         self._pwrstate_sts = self._prefixed_name + ':PwrState-Sts'
         self._ctrlloop_sel = self._prefixed_name + ':CtrlLoop-Sel'
         self._ctrlloop_sts = self._prefixed_name + ':CtrlLoop-Sts'
+        self._wfmupdate_sel = self._prefixed_name + ':WfmUpdateAuto-Sel'
+        self._wfmupdate_sts = self._prefixed_name + ':WfmUpdateAuto-Sts'
 
         if self._has_softhard_intlk:
             self._soft_intlk = self._prefixed_name + ':IntlkSoft-Mon'
@@ -401,6 +427,11 @@ class SummaryWidget(QWidget):
             self.ctrlloop_lb = PyDMLabel(self, self._ctrlloop_sts)
             self.ctrlloop_wid.layout().addWidget(self.ctrlloop_bt)
             self.ctrlloop_wid.layout().addWidget(self.ctrlloop_lb)
+        elif name == 'wfmupdate':
+            self.wfmupdate_bt = PyDMStateButton(self, self._wfmupdate_sel)
+            self.wfmupdate_led = SiriusLedState(self, self._wfmupdate_sts)
+            self.wfmupdate_wid.layout().addWidget(self.wfmupdate_bt)
+            self.wfmupdate_wid.layout().addWidget(self.wfmupdate_led)
         elif name == 'setpoint':
             self.setpoint = PyDMLinEditScrollbar(self._analog_sp, self)
             self.setpoint.sp_scrollbar.setTracking(False)
@@ -471,6 +502,18 @@ class SummaryWidget(QWidget):
             if self.pulse_bt.value:
                 self.pulse_bt.send_value()
 
+    def wfmupdate_on(self):
+        """Enable WfmUpdateAuto."""
+        if self.wfmupdate_bt.isEnabled():
+            if not self.wfmupdate_bt.value:
+                self.wfmupdate_bt.send_value()
+
+    def wfmupdate_off(self):
+        """Disable WfmUpdateAuto."""
+        if self.wfmupdate_bt.isEnabled():
+            if self.wfmupdate_bt.value:
+                self.wfmupdate_bt.send_value()
+
     def reset(self):
         """Reset power supply."""
         if self.reset_bt.isEnabled():
@@ -483,12 +526,12 @@ class SummaryHeader(QWidget):
         """Build UI."""
         super().__init__(parent)
         self._name = PVName(name)
-        self.visible_props = visible_props
+        self.all_props = get_prop2label(self._name)
+        self.visible_props = sort_propties(visible_props)
         self._setup_ui()
 
     def _setup_ui(self):
         _widths = get_prop2width(self._name)
-        _labels = get_prop2label(self._name)
 
         lay = QHBoxLayout()
         lay.setSpacing(10)
@@ -499,7 +542,7 @@ class SummaryHeader(QWidget):
             hidden.setObjectName('HiddenButton')
             hidden.setStyleSheet('min-width: 10px; max-width: 10px;')
             lay.addWidget(hidden)
-        for idt, label in _labels.items():
+        for idt, label in self.all_props.items():
             widget = QLabel(label, self)
             widget.setObjectName(idt)
             width = _widths[idt]
@@ -513,7 +556,7 @@ class SummaryHeader(QWidget):
         self.setLayout(lay)
 
     def update_visible_props(self, new_value):
-        self.visible_props = new_value
+        self.visible_props = sort_propties(new_value)
 
 
 class MyComboBox(PyDMEnumComboBox):
@@ -541,8 +584,9 @@ if __name__ == '__main__':
     # name = 'PA-RaPSF01:PS-DCLink-BO'
     # name = 'BO-Fam:MA-B'
     name = 'BO-Fam:PS-B-1'
-    visible_props = {'detail', 'opmode', 'state', 'intlk', 'reset',
-                     'setpoint', 'monitor'}
+    visible_props = sort_propties(
+        ['detail', 'opmode', 'state', 'intlk', 'reset',
+         'setpoint', 'monitor'])
 
     w = QWidget()
     lay = QVBoxLayout(w)

@@ -15,7 +15,7 @@ from siriushla.widgets import SiriusMainWindow
 
 
 Dipole = re.compile("^.*:MA-(B|Spect).*$")
-Quadrupole = re.compile("^.*:MA-Q.*$")
+Quadrupole = re.compile("^.*Fam:MA-Q.*$")
 Sextupole = re.compile("^.*:MA-S.*$")
 Corrector = re.compile("^.*:MA-(CH|CV|FCH|FCV).*$")
 PulsedMagnet = re.compile("^.*:PM-.*$")
@@ -163,6 +163,8 @@ class MagOffConvApp(SiriusMainWindow):
             text_strength = 'Energy [GeV]: '
         elif Quadrupole.match(text):
             text_strength = 'KL [1/m]: '
+        elif Trim.match(text):
+            text_strength = 'KL (Fam + Trim) [1/m]: '
         elif Sextupole.match(text):
             text_strength = 'SL [1/m²]: '
         elif Corrector.match(text):
