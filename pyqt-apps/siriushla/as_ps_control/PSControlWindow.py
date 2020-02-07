@@ -26,18 +26,22 @@ class PSControlWindow(SiriusMainWindow):
         self._setup_ui()
 
         sec2label = {
+            'LI': 'Linac',
             'TB': 'LTB ',
             'BO': 'Booster ',
             'TS': 'BTS ',
             'SI': 'Storage Ring '}
         dev2label = {
-            'dipole': 'Dipoles ',
-            'quadrupole': 'Quadrupoles ',
-            'sextupole': 'Sextupoles ',
-            'skew-quadrupole': 'Skew Quadrupoles ',
-            'trim-quadrupole': 'Trims ',
-            'corrector-slow': 'Slow Correctors '}
-        #     'corrector-fast': 'Fast Correctors '}
+            "dipole": "Dipoles",
+            "spectrometer": "Spectrometer",
+            "quadrupole": "Quadrupoles",
+            "sextupole": "Sextupoles",
+            "solenoid": "Solenoids",
+            "corrector-slow": "Slow Correctors",
+            "skew-quadrupole": "Quadrupoles Skew",
+            "trim-quadrupole": "Trims",
+            "lens": "Lens",
+            }
         self.setWindowTitle(
             sec2label[section] +
             (dev2label[device] if device else '') +

@@ -227,9 +227,21 @@ class BasePSControlWidget(QWidget):
         self._orientation = orientation
         self._subsection = subsection
         self._dev_list = PSSearch.get_psnames(self._getFilter(subsection))
-
-        self.all_props = get_prop2label(self._dev_list[0])
-        self.all_props = get_prop2label(self._dev_list[0])
+        dev0 = PVName(self._dev_list[0])
+        if dev0.sec == 'LI':
+            if dev0.dev == 'Slnd':
+                idcs = [int(PVName(dev).idx) for dev in self._dev_list]
+                self._dev_list = [
+                    x for _, x in sorted(zip(idcs, self._dev_list))]
+            if 'Q' in dev0.dev:
+                all_props = dict()
+                for dev in self._dev_list:
+                    all_props.update(get_prop2label(dev))
+                self.all_props = sort_propties(all_props)
+            else:
+                self.all_props = get_prop2label(self._dev_list[0])
+        else:
+            self.all_props = get_prop2label(self._dev_list[0])
         self.visible_props = sort_propties([
             'detail', 'state', 'intlk', 'setpoint', 'monitor',
             'strength_sp', 'strength_mon'])

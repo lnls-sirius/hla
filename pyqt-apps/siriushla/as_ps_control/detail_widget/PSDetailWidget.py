@@ -16,7 +16,7 @@ from pydm.widgets import PyDMLabel, PyDMEnumComboBox, PyDMPushButton, \
 from siriushla import util
 from siriushla.widgets import PyDMStateButton, PyDMLinEditScrollbar, \
     SiriusConnectionSignal, SiriusLedState, SiriusLedAlert
-from .InterlockWindow import InterlockWindow
+from .InterlockWindow import InterlockWindow, LIInterlockWindow
 
 
 class PSDetailWidget(QWidget):
@@ -87,21 +87,7 @@ class PSDetailWidget(QWidget):
         self._psname = psname
         self._prefixed_psname = self._vaca_prefix + self._psname
 
-        magnet_type = self._getElementType()
-        self._metric = ''
-        self._metric_text = ''
-        if magnet_type == "b":
-            self._metric = "Energy"
-            self._metric_text = "Energy"
-        elif magnet_type == "q":
-            self._metric = "KL"
-            self._metric_text = "KL"
-        elif magnet_type == "s":
-            self._metric = "SL"
-            self._metric_text = "SL"
-        elif magnet_type in ["sc", "fc"]:
-            self._metric = "Kick"
-            self._metric_text = "Kick"
+        self._metric = self._getElementMetric()
 
         self._setup_ui()
         self.setFocus(True)
@@ -136,7 +122,7 @@ class PSDetailWidget(QWidget):
         if self._psname.sec == 'BO':
             self.cycle_tabs.setCurrentIndex(1)
         if self._metric:
-            self.metric_box = QGroupBox(self._metric_text)
+            self.metric_box = QGroupBox(self._metric)
             self.metric_box.setObjectName("metric")
 
         # Set group boxes layouts
@@ -267,7 +253,7 @@ class PSDetailWidget(QWidget):
         self.soft_intlk_bt.setStyleSheet(
             '#soft_intlk_bt{min-width:25px; max-width:25px; icon-size:20px;}')
         util.connect_window(self.soft_intlk_bt, InterlockWindow, self,
-                            **{'devname': self._psname, 'interlock': 0})
+                            **{'devname': self._psname, 'interlock': 'Soft'})
         self.soft_intlk_led = SiriusLedAlert(
             parent=self, init_channel=self._prefixed_psname + ":IntlkSoft-Mon")
 
@@ -276,7 +262,7 @@ class PSDetailWidget(QWidget):
         self.hard_intlk_bt.setStyleSheet(
             '#hard_intlk_bt{min-width:25px; max-width:25px; icon-size:20px;}')
         util.connect_window(self.hard_intlk_bt, InterlockWindow, self,
-                            **{'devname': self._psname, 'interlock': 1})
+                            **{'devname': self._psname, 'interlock': 'Hard'})
         self.hard_intlk_led = SiriusLedAlert(
             parent=self, init_channel=self._prefixed_psname + ":IntlkHard-Mon")
 
@@ -682,29 +668,224 @@ class PSDetailWidget(QWidget):
         self._set_wfm_nrpts_label()
         self._update_wfm_diff()
 
-    def _getElementType(self):
-        dipole = re.compile("(SI|BO|LI|TS|TB)-(Fam|\w{2,4}):PS-B.*$")
-        quadrupole = re.compile("(SI|BO|LI|TS|TB)-(Fam|\w{2,4}):PS-Q\w+")
-        sextupole = re.compile("(SI|BO|LI|TS|TB)-(Fam|\w{2,4}):PS-S\w+$")
+    def _getElementMetric(self):
+        dipole = re.compile("(SI|BO|LI|TS|TB)-(Fam|\w{2,4}):PS-(B.*|Spect)$")
+        quadrupole = re.compile("(SI|BO|TS|TB)-(Fam|\w{2,4}):PS-Q\w+")
+        liquad = re.compile("LI-(Fam|\w{2,4}):PS-Q(?!(F|D)1)")
+        sextupole = re.compile("(SI|BO|TS|TB)-(Fam|\w{2,4}):PS-S(?!lnd)\w+$")
         slow_corrector = re.compile(
-            "(SI|BO|LI|TS|TB)-(Fam|\w{2,4}):PS-(CH|CV)(-|\w)*")
+            "(SI|BO|TS|TB)-(Fam|\w{2,4}):PS-(CH|CV)(-|\w)*")
         fast_corrector = re.compile(
-            "(SI|BO|LI|TS|TB)-(Fam|\w{2,4}):PS-(FCH|FCV)(-|\w)*")
-        skew_quad = re.compile("(SI|BO|LI|TS|TB)-(Fam|\w{2,4}):PS-QS")
+            "(SI|BO|TS|TB)-(Fam|\w{2,4}):PS-(FCH|FCV)(-|\w)*")
+        skew_quad = re.compile("(SI|BO|TS|TB)-(Fam|\w{2,4}):PS-QS")
 
         if dipole.match(self._psname):
-            return "b"
+            return "Energy"
         elif quadrupole.match(self._psname) or \
-                skew_quad.match(self._psname):
-            return "q"
+                skew_quad.match(self._psname) or \
+                liquad.match(self._psname):
+            return "KL"
         elif sextupole.match(self._psname):
-            return "s"
-        elif slow_corrector.match(self._psname):
-            return "sc"
-        elif fast_corrector.match(self._psname):
-            return "fc"
+            return "SL"
+        elif slow_corrector.match(self._psname) or \
+                fast_corrector.match(self._psname):
+            return "Kick"
         else:
             return
+
+
+class LIPSDetailWidget(PSDetailWidget):
+
+    def _setup_ui(self):
+        # Group boxes that compose the widget
+        self.frmwr_box = QGroupBox("IOC && Net")
+        self.frmwr_box.setObjectName("version")
+        self.frmwr_box.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+        self.pwrstate_box = QGroupBox("PwrState")
+        self.pwrstate_box.setObjectName("power_state")
+        self.interlock_box = QGroupBox("Interlock")
+        self.interlock_box.setObjectName("interlock")
+        self.params_box = QGroupBox('Params')
+        self.params_box.setObjectName('params_box')
+        self.current_box = QGroupBox("Current")
+        self.current_box.setObjectName("current")
+        if self._metric:
+            self.metric_box = QGroupBox(self._metric)
+            self.metric_box.setObjectName("metric")
+
+        # Set group boxes layouts
+        self.frmwr_box.setLayout(self._frmwrLayout())
+        self.pwrstate_box.setLayout(self._powerStateLayout())
+        self.interlock_box.setLayout(self._interlockLayout())
+        self.params_box.setLayout(self._paramsLayout())
+        self.current_box.setLayout(self._currentLayout())
+        if self._metric:
+            self.metric_box.setLayout(self._metricLayout())
+
+        # Add group boxes to laytout
+        self.layout = self._setWidgetLayout()
+
+        # Set widget layout
+        self.setLayout(self.layout)
+
+    def _setWidgetLayout(self):
+        controls = QGridLayout()
+        controls.addWidget(self.frmwr_box, 0, 0, 1, 2)
+        controls.addWidget(self.pwrstate_box, 1, 0)
+        controls.addWidget(self.interlock_box, 1, 1)
+
+        analogs = QVBoxLayout()
+        analogs.addWidget(self.current_box, Qt.AlignCenter)
+
+        if self._metric:
+            analogs.addWidget(self.metric_box, Qt.AlignCenter)
+            controls.addWidget(self.params_box, 2, 0, 1, 2)
+        else:
+            analogs.addWidget(self.params_box, Qt.AlignCenter)
+
+        boxes_layout = QHBoxLayout()
+        boxes_layout.addLayout(controls)
+        boxes_layout.addLayout(analogs)
+        boxes_layout.setStretch(0, 1)
+        boxes_layout.setStretch(1, 1)
+
+        layout = QVBoxLayout()
+        layout.addWidget(QLabel("<h2>" + self._psname + "</h2>"))
+        layout.addLayout(boxes_layout)
+        return layout
+
+    def _frmwrLayout(self):
+        self.version_label = QLabel('Version')
+        self.version_label.setObjectName("version_label")
+        self.version_label.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        self.version_cte = PyDMLabel(
+            self, self._prefixed_psname + ":Version-Cte")
+        self.version_cte.setObjectName("version_cte_label")
+        self.version_cte.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+
+        self.tstamp_boot_label = QLabel('IOC Boot')
+        self.tstamp_boot_label.setObjectName("tstamp_label")
+        self.tstamp_boot_label.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        self.tstamp_boot_cte = PyDMLabel(
+            self, self._prefixed_psname + ":TimestampBoot-Cte")
+        self.tstamp_boot_cte.setObjectName("tstamp_cte_label")
+        self.tstamp_boot_cte.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+
+        self.conn_label = QLabel('Net Status')
+        self.conn_label.setObjectName("net_label")
+        self.conn_label.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        self.conn_sts = PyDMLabel(
+            self, self._prefixed_psname + ":Connected-Mon")
+        self.conn_sts.setObjectName("net_cte_label")
+        self.conn_sts.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+
+        layout = QGridLayout()
+        layout.addWidget(self.version_label, 0, 0, Qt.AlignHCenter)
+        layout.addWidget(self.version_cte, 0, 1, Qt.AlignHCenter)
+        layout.addWidget(self.tstamp_boot_label, 1, 0, Qt.AlignHCenter)
+        layout.addWidget(self.tstamp_boot_cte, 1, 1, Qt.AlignHCenter)
+        layout.addWidget(self.conn_label, 2, 0, Qt.AlignHCenter)
+        layout.addWidget(self.conn_sts, 2, 1, Qt.AlignHCenter)
+        return layout
+
+    def _currentLayout(self):
+        self.current_sp_label = QLabel("Setpoint")
+        self.current_rb_label = QLabel("Readback")
+        self.current_mon_label = QLabel("Mon")
+
+        self.current_sp_widget = PyDMLinEditScrollbar(
+            parent=self, channel=self._prefixed_psname + ":Current-SP")
+        self.current_sp_widget.layout.setContentsMargins(0, 0, 0, 0)
+        self.current_sp_widget.sp_scrollbar.setTracking(False)
+        self.current_rb_val = PyDMLabel(
+            parent=self, init_channel=self._prefixed_psname+":Current-RB")
+        self.current_rb_val.showUnits = True
+        self.current_rb_val.precFromPV = True
+        self.current_mon_val = PyDMLabel(
+            parent=self, init_channel=self._prefixed_psname+":Current-Mon")
+        self.current_mon_val.showUnits = True
+        self.current_mon_val.precFromPV = True
+
+        layout = QGridLayout()
+        layout.addWidget(self.current_sp_label, 0, 0, Qt.AlignRight)
+        layout.addWidget(self.current_sp_widget, 0, 1)
+        layout.addWidget(self.current_rb_label, 1, 0, Qt.AlignRight)
+        layout.addWidget(self.current_rb_val, 1, 1)
+        layout.addWidget(self.current_mon_label, 3, 0, Qt.AlignRight)
+        layout.addWidget(self.current_mon_val, 3, 1)
+        layout.setColumnStretch(2, 1)
+        return layout
+
+    def _metricLayout(self):
+        metric_sp_ch = self._prefixed_psname+":"+self._metric+"-SP"
+        metric_rb_ch = self._prefixed_psname+":"+self._metric+"-RB"
+        metric_mon_ch = self._prefixed_psname+":"+self._metric+"-Mon"
+
+        self.metric_sp_label = QLabel("Setpoint")
+        self.metric_rb_label = QLabel("Readback")
+        self.metric_mon_label = QLabel("Mon")
+
+        self.metric_sp_widget = PyDMLinEditScrollbar(
+            parent=self, channel=metric_sp_ch)
+        self.metric_sp_widget.layout.setContentsMargins(0, 0, 0, 0)
+        self.metric_sp_widget.sp_scrollbar.setTracking(False)
+        self.metric_rb_val = PyDMLabel(
+            parent=self, init_channel=metric_rb_ch)
+        self.metric_rb_val.showUnits = True
+        self.metric_rb_val.precFromPV = True
+        self.metric_mon_val = PyDMLabel(
+            parent=self, init_channel=metric_mon_ch)
+        self.metric_mon_val.showUnits = True
+        self.metric_mon_val.precFromPV = True
+
+        layout = QGridLayout()
+        layout.addWidget(self.metric_sp_label, 0, 0, Qt.AlignRight)
+        layout.addWidget(self.metric_sp_widget, 0, 1)
+        layout.addWidget(self.metric_rb_label, 1, 0, Qt.AlignRight)
+        layout.addWidget(self.metric_rb_val, 1, 1)
+        layout.addWidget(self.metric_mon_label, 3, 0, Qt.AlignRight)
+        layout.addWidget(self.metric_mon_val, 3, 1)
+        layout.setColumnStretch(3, 1)
+        return layout
+
+    def _interlockLayout(self):
+        self.intlk_bt = QPushButton(qta.icon('fa5s.list-ul'), '', self)
+        self.intlk_bt.setObjectName('intlk_bt')
+        self.intlk_bt.setStyleSheet(
+            '#intlk_bt{min-width:25px; max-width:25px; icon-size:20px;}')
+        util.connect_window(self.intlk_bt, LIInterlockWindow, self,
+                            **{'devname': self._psname})
+        self.intlk_led = SiriusLedAlert(
+            parent=self, init_channel=self._prefixed_psname+":StatusIntlk-Mon")
+
+        layout = QGridLayout()
+        layout.setAlignment(Qt.AlignCenter)
+        layout.addWidget(self.intlk_bt, 0, 0)
+        layout.addWidget(QLabel('Intlk', self, alignment=Qt.AlignCenter), 0, 1)
+        layout.addWidget(self.intlk_led, 0, 2)
+        return layout
+
+    def _paramsLayout(self):
+        temp_label = QLabel('Temperature', self)
+        self.temp_mon_label = PyDMLabel(
+            self, self._prefixed_psname + ':Temperature-Mon')
+
+        loadv_label = QLabel('Load Voltage', self)
+        self.loadv_mon_label = PyDMLabel(
+            self, self._prefixed_psname + ':LoadVoltage-Mon')
+
+        busv_label = QLabel('Bus Voltage', self)
+        self.busv_mon_label = PyDMLabel(
+            self, self._prefixed_psname + ':BusVoltage-Mon')
+
+        layout = QGridLayout()
+        layout.addWidget(temp_label, 0, 0, Qt.AlignRight)
+        layout.addWidget(self.temp_mon_label, 0, 1)
+        layout.addWidget(loadv_label, 1, 0, Qt.AlignRight)
+        layout.addWidget(self.loadv_mon_label, 1, 1)
+        layout.addWidget(busv_label, 2, 0, Qt.AlignRight)
+        layout.addWidget(self.busv_mon_label, 2, 1)
+        return layout
 
 
 class DCLinkDetailWidget(PSDetailWidget):

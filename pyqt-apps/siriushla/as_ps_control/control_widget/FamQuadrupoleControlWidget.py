@@ -3,8 +3,22 @@
 from .BasePSControlWidget import BasePSControlWidget
 
 
+class LIQuadrupoleControlWidget(BasePSControlWidget):
+    """Class to control all quads from the LI section."""
+
+    def _getFilter(self, subsection=None):
+        return {"sec": "LI", "dev": "Q.*"}
+
+    def _hasScrollArea(self):
+        return False
+
+    def _getGroups(self):
+        return [('Focusing Quadrupoles', "-QF"),
+                ('Defocusing Quadrupoles', '-QD')]
+
+
 class TBQuadrupoleControlWidget(BasePSControlWidget):
-    """Class to control a quads from the TB transport line."""
+    """Class to control all quads from the TB transport line."""
 
     def _getFilter(self, subsection=None):
         return {"sec": "TB", "dev": "Q.*"}
@@ -18,7 +32,7 @@ class TBQuadrupoleControlWidget(BasePSControlWidget):
 
 
 class TSQuadrupoleControlWidget(BasePSControlWidget):
-    """Class to control a quads from the TB transport line."""
+    """Class to control all quads from the TB transport line."""
 
     def _getFilter(self, subsection=None):
         return {"sec": "TS", "dev": "Q.*"}
@@ -32,7 +46,7 @@ class TSQuadrupoleControlWidget(BasePSControlWidget):
 
 
 class SIFamQuadrupoleControlWidget(BasePSControlWidget):
-    """Class to control a Fam Quad from the Sirius section."""
+    """Class to control all Fam Quad from the Sirius section."""
 
     def _getFilter(self, subsection=None):
         return {"sec": "SI", "sub": "Fam", "dev": "Q[DF0-9].*"}
@@ -50,7 +64,7 @@ class SIFamQuadrupoleControlWidget(BasePSControlWidget):
 
 
 class BOFamQuadrupoleControlWidget(SIFamQuadrupoleControlWidget):
-    """Class to control a Fam Quad from the Booster section."""
+    """Class to control all Fam Quad from the Booster section."""
 
     def _getFilter(self, subsection=None):
         return {"sec": "BO", "sub": "Fam", "dev": "Q[DF0-9].*"}

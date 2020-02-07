@@ -73,6 +73,7 @@ setup(
         'scripts/sirius-hla-li-ap-emittance.py',
         'scripts/sirius-hla-li-ap-energy.py',
         'scripts/sirius-hla-li-ap-mpsmon.py',
+        'scripts/sirius-hla-li-ps-control.py',
         'scripts/sirius-hla-si-ap-chromcorr.py',
         'scripts/sirius-hla-si-ap-currlt.py',
         'scripts/sirius-hla-si-ap-sofb.py',

@@ -3,6 +3,16 @@
 from .BasePSControlWidget import BasePSControlWidget
 
 
+class LISpectControlWidget(BasePSControlWidget):
+    """Class to control Dipole power supplies."""
+
+    def _getFilter(self, subsection=None):
+        return {"sec": "LI", "dev": "Spect.*"}
+
+    def _getGroups(self):
+        return [('Spectrometer', "-Spect.*")]
+
+
 class TBDipoleControlWidget(BasePSControlWidget):
     """Class to control Dipole power supplies."""
 

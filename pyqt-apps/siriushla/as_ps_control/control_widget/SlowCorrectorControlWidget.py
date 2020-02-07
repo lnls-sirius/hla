@@ -56,3 +56,13 @@ class TSSlowCorrectorControlWidget(SISlowCorrectorControlWidget):
 
     def _hasScrollArea(self):
         return False
+
+
+class LISlowCorrectorControlWidget(SISlowCorrectorControlWidget):
+    """To booster transport line slow corrector."""
+
+    def _getFilter(self, subsection=None):
+        return {"sec": "LI", "sub": "\d{2}", "dev": "(CH|CV).*"}
+
+    def _hasScrollArea(self):
+        return False

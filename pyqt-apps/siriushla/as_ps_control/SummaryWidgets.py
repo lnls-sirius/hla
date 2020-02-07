@@ -15,16 +15,17 @@ from siriushla.widgets import PyDMStateButton, SiriusLedState, \
     SiriusLedAlert, PyDMLinEditScrollbar, PyDMLedMultiChannel
 
 
-Dipole = re.compile("^.*:PS-B.*$")
+Dipole = re.compile("^.*:PS-(B.*|Spect)$")
 Quadrupole = re.compile("^.*:PS-Q.*$")
 QuadrupoleSkew = re.compile("^.*:PS-QS.*$")
 Sextupole = re.compile("^.*:PS-S.*$")
 Corrector = re.compile("^.*:PS-(CH|CV|FCH|FCV).*$")
 IsPulsed = re.compile("^.*:PU-.*$")
 IsDCLink = re.compile("^.*:PS-DCLink.*$")
-
+IsLinac = re.compile("^LI-.*$")
 HasTrim = re.compile("^.*SI-Fam:PS-Q.*$")
-HasSoftHardIntlk = re.compile("^.*:PS-.*$")
+HasSoftHardIntlk = re.compile("^(?!LI).*:PS-.*$")
+LIQuadHasNotStrength = re.compile("^LI-.*:PS-(QF1|QD1)$")
 
 
 def get_analog_name(psname):
@@ -60,9 +61,9 @@ def get_strength_name(psname):
         return "Energy"
     elif Quadrupole.match(psname):
         return "KL"
-    elif Sextupole.match(psname):
+    elif Sextupole.match(psname) and not IsLinac.match(psname):
         return "SL"
-    elif Corrector.match(psname):
+    elif Corrector.match(psname) and not IsLinac.match(psname):
         return "Kick"
     elif IsPulsed.match(psname):
         return "Kick"
@@ -170,12 +171,16 @@ class SummaryWidget(QWidget):
         self._is_pulsed = self._name.dis == 'PU'
         self._analog_name = get_analog_name(self._name)
         self._strength_name = get_strength_name(self._name)
+        self._li_has_not_strength = LIQuadHasNotStrength.match(self._name)
         self._has_softhard_intlk = HasSoftHardIntlk.match(self._name)
         self._has_trim = HasTrim.match(self._name)
+        self._has_strength = bool(
+            self._strength_name and not self._li_has_not_strength)
         self._is_dclink = IsDCLink.match(self._name)
+        self._is_linac = IsLinac.match(self._name)
         self._bbb_name = ''
         self._udc_name = ''
-        if not self._is_pulsed:
+        if not self._is_pulsed and not self._name.sec == 'LI':
             self._bbb_name = PSSearch.conv_psname_2_bbbname(self._name)
             self._udc_name = PSSearch.conv_psname_2_udc(self._name)
 
@@ -208,22 +213,24 @@ class SummaryWidget(QWidget):
         self._widgets_dict['detail'] = self.detail_wid
         lay.addWidget(self.detail_wid)
 
-        self.bbb_wid = self._build_widget(name='bbb', orientation='v')
-        self._widgets_dict['bbb'] = self.bbb_wid
-        lay.addWidget(self.bbb_wid)
+        if not self._is_linac:
+            self.bbb_wid = self._build_widget(name='bbb', orientation='v')
+            self._widgets_dict['bbb'] = self.bbb_wid
+            lay.addWidget(self.bbb_wid)
 
-        self.udc_wid = self._build_widget(name='udc', orientation='v')
-        self._widgets_dict['udc'] = self.udc_wid
-        lay.addWidget(self.udc_wid)
+            self.udc_wid = self._build_widget(name='udc', orientation='v')
+            self._widgets_dict['udc'] = self.udc_wid
+            lay.addWidget(self.udc_wid)
 
-        self.opmode_wid = self._build_widget(name='opmode', orientation='v')
-        self._widgets_dict['opmode'] = self.opmode_wid
-        lay.addWidget(self.opmode_wid)
+            self.opmode_wid = self._build_widget(
+                name='opmode', orientation='v')
+            self._widgets_dict['opmode'] = self.opmode_wid
+            lay.addWidget(self.opmode_wid)
 
-        self.ctrlmode_wid = self._build_widget(
-            name='ctrlmode', orientation='v')
-        self._widgets_dict['ctrlmode'] = self.ctrlmode_wid
-        lay.addWidget(self.ctrlmode_wid)
+            self.ctrlmode_wid = self._build_widget(
+                name='ctrlmode', orientation='v')
+            self._widgets_dict['ctrlmode'] = self.ctrlmode_wid
+            lay.addWidget(self.ctrlmode_wid)
 
         self.state_wid = self._build_widget(name='state')
         self._widgets_dict['state'] = self.state_wid
@@ -238,17 +245,23 @@ class SummaryWidget(QWidget):
         self._widgets_dict['intlk'] = self.intlk_wid
         lay.addWidget(self.intlk_wid)
 
-        self.reset_wid = self._build_widget(name='reset')
-        self._widgets_dict['reset'] = self.reset_wid
-        lay.addWidget(self.reset_wid)
+        if not self._is_linac:
+            self.reset_wid = self._build_widget(name='reset')
+            self._widgets_dict['reset'] = self.reset_wid
+            lay.addWidget(self.reset_wid)
 
-        self.ctrlloop_wid = self._build_widget(name='ctrlloop')
-        self._widgets_dict['ctrlloop'] = self.ctrlloop_wid
-        lay.addWidget(self.ctrlloop_wid)
+            self.ctrlloop_wid = self._build_widget(name='ctrlloop')
+            self._widgets_dict['ctrlloop'] = self.ctrlloop_wid
+            lay.addWidget(self.ctrlloop_wid)
 
-        self.wfmupdate_wid = self._build_widget(name='wfmupdate')
-        self._widgets_dict['wfmupdate'] = self.wfmupdate_wid
-        lay.addWidget(self.wfmupdate_wid)
+            self.wfmupdate_wid = self._build_widget(name='wfmupdate')
+            self._widgets_dict['wfmupdate'] = self.wfmupdate_wid
+            lay.addWidget(self.wfmupdate_wid)
+
+        else:
+            self.conn_wid = self._build_widget(name='conn')
+            self._widgets_dict['conn'] = self.conn_wid
+            lay.addWidget(self.conn_wid)
 
         self.setpoint_wid = self._build_widget(
             name='setpoint', orientation='v')
@@ -265,7 +278,7 @@ class SummaryWidget(QWidget):
         self._widgets_dict['monitor'] = self.monitor_wid
         lay.addWidget(self.monitor_wid)
 
-        if not self._is_dclink:
+        if self._has_strength:
             self.strength_sp_wid = self._build_widget(
                 name='strength_sp', orientation='v')
             self._widgets_dict['strength_sp'] = self.strength_sp_wid
@@ -318,36 +331,43 @@ class SummaryWidget(QWidget):
             self.fillWidget(prop)
 
     def _create_pvs(self):
-        self._opmode_sel = self._prefixed_name + ':OpMode-Sel'
-        self._opmode_sts = self._prefixed_name + ':OpMode-Sts'
-        self._ctrlmode_sts = self._prefixed_name + ':CtrlMode-Mon'
         self._pwrstate_sel = self._prefixed_name + ':PwrState-Sel'
         self._pwrstate_sts = self._prefixed_name + ':PwrState-Sts'
-        self._ctrlloop_sel = self._prefixed_name + ':CtrlLoop-Sel'
-        self._ctrlloop_sts = self._prefixed_name + ':CtrlLoop-Sts'
-        self._wfmupdate_sel = self._prefixed_name + ':WfmUpdateAuto-Sel'
-        self._wfmupdate_sts = self._prefixed_name + ':WfmUpdateAuto-Sts'
 
         if self._has_softhard_intlk:
             self._soft_intlk = self._prefixed_name + ':IntlkSoft-Mon'
             self._hard_intlk = self._prefixed_name + ':IntlkHard-Mon'
-        else:
+        elif self._is_pulsed:
             self._intlk = list()
             for i in range(1, 8):
                 self._intlk.append(self._prefixed_name+":Intlk"+str(i)+"-Mon")
             if 'Sept' not in self._name.dev:
                 self._intlk.append(self._prefixed_name+":Intlk8-Mon")
-        self._reset_intlk = self._prefixed_name + ':Reset-Cmd'
+        else:
+            self._intlk = self._prefixed_name + ":Intlk-Mon"
 
         sp = self._analog_name
         self._analog_sp = self._prefixed_name + ':{}-SP'.format(sp)
         self._analog_rb = self._prefixed_name + ':{}-RB'.format(sp)
         self._analog_mon = self._prefixed_name + ':{}-Mon'.format(sp)
 
-        st = self._strength_name
-        self._strength_sp = self._prefixed_name + ':{}-SP'.format(st)
-        self._strength_rb = self._prefixed_name + ':{}-RB'.format(st)
-        self._strength_mon = self._prefixed_name + ':{}-Mon'.format(st)
+        if self._has_strength:
+            st = self._strength_name
+            self._strength_sp = self._prefixed_name + ':{}-SP'.format(st)
+            self._strength_rb = self._prefixed_name + ':{}-RB'.format(st)
+            self._strength_mon = self._prefixed_name + ':{}-Mon'.format(st)
+
+        if not self._is_linac:
+            self._opmode_sel = self._prefixed_name + ':OpMode-Sel'
+            self._opmode_sts = self._prefixed_name + ':OpMode-Sts'
+            self._ctrlmode_sts = self._prefixed_name + ':CtrlMode-Mon'
+            self._ctrlloop_sel = self._prefixed_name + ':CtrlLoop-Sel'
+            self._ctrlloop_sts = self._prefixed_name + ':CtrlLoop-Sts'
+            self._wfmupdate_sel = self._prefixed_name + ':WfmUpdateAuto-Sel'
+            self._wfmupdate_sts = self._prefixed_name + ':WfmUpdateAuto-Sts'
+            self._reset_intlk = self._prefixed_name + ':Reset-Cmd'
+        else:
+            self._conn = self._prefixed_name + ':Connected-Mon'
 
         if self._is_pulsed:
             self._pulse_sel = self._prefixed_name + ':Pulse-Sel'
@@ -409,10 +429,19 @@ class SummaryWidget(QWidget):
                 self.hard_intlk_led = SiriusLedAlert(self, self._hard_intlk)
                 self.intlk_wid.layout().addWidget(self.soft_intlk_led)
                 self.intlk_wid.layout().addWidget(self.hard_intlk_led)
-            else:
+            elif self._is_pulsed:
                 self.intlk_led = PyDMLedMultiChannel(
                     self, channels2values={ch: 1 for ch in self._intlk})
                 self.intlk_wid.layout().addWidget(self.intlk_led)
+            else:
+                self.intlk_led = PyDMLedMultiChannel(
+                    self, channels2values={
+                        self._intlk: {'value': 55, 'comp': 'lt'}})
+                self.intlk_wid.layout().addWidget(self.intlk_led)
+        elif name == 'conn' and self._is_linac:
+            self.conn_led = PyDMLedMultiChannel(
+                self, channels2values={self._conn: 0})
+            self.conn_wid.layout().addWidget(self.conn_led)
         elif name == 'reset':
             self.reset_bt = PyDMPushButton(
                 parent=self, init_channel=self._reset_intlk, pressValue=1)
@@ -442,17 +471,17 @@ class SummaryWidget(QWidget):
         elif name == 'monitor':
             self.monitor = PyDMLabel(self, self._analog_mon)
             self.monitor_wid.layout().addWidget(self.monitor)
-        elif name == 'strength_sp' and not self._is_dclink:
+        elif name == 'strength_sp' and self._has_strength:
             self.strength_sp_le = PyDMLinEditScrollbar(
                 parent=self, channel=self._strength_sp)
             self.strength_sp_le.sp_scrollbar.setTracking(False)
             self.strength_sp_wid.layout().addWidget(self.strength_sp_le)
-        elif name == 'strength_rb' and not self._is_dclink:
+        elif name == 'strength_rb' and self._has_strength:
             self.strength_rb_lb = PyDMLabel(
                 parent=self, init_channel=self._strength_rb)
             self.strength_rb_lb.showUnits = True
             self.strength_rb_wid.layout().addWidget(self.strength_rb_lb)
-        elif name == 'strength_mon' and not self._is_dclink:
+        elif name == 'strength_mon' and self._has_strength:
             self.strength_mon_lb = PyDMLabel(
                 parent=self, init_channel=self._strength_mon)
             self.strength_mon_lb.showUnits = True
