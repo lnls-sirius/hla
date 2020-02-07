@@ -37,9 +37,22 @@ class TuneControls(QWidget):
         # # Measurement
         if self.section == 'SI':
             # Tune
-            label_tunefreq = QLabel('Tune Frequency [Hz]')
-            self.lb_tunefreq = PyDMLabel(
-                parent=self, init_channel=self.device+':TuneFreq-Mon')
+            label_tunefreq = QLabel('Tune Frequency')
+            self.lb_tunefreq = PyDMLabel(self)
+            self.lb_tunefreq._unit = 'kHz'
+            self.lb_tunefreq.showUnits = True
+            self.lb_tunefreq.precisionFromPV = False
+            self.lb_tunefreq.precision = 3
+            self.tunefreq_currval = 0.0
+            self.freqrevn_currval = 0.0
+            self.tunefreq_ch = SiriusConnectionSignal(
+                self.device+':TuneFreq-Mon')
+            self.tunefreq_ch.new_value_signal[float].connect(
+                self._calc_tunefreq)
+            self.freqrevn_ch = SiriusConnectionSignal(
+                self.device+':FreqRevN-Mon')
+            self.freqrevn_ch.new_value_signal[float].connect(
+                self._calc_tunefreq)
             self.lb_tunefreq.setStyleSheet('min-width:8em;max-width:8em;')
             label_tunefrac = QLabel('Tune Fraction')
             self.lb_tunefrac = PyDMLabel(
@@ -399,3 +412,13 @@ class TuneControls(QWidget):
         dev = self.device.substitute(dev='TuneProc')
         self.led_acqcnt.set_channels2values(
             {dev + ':FrameCount-Mon': new_value})
+
+    def _calc_tunefreq(self, val):
+        address = self.sender().address
+        if 'TuneFreq' in address:
+            self.tunefreq_currval = val
+        elif 'FreqRevN' in address:
+            self.freqrevn_currval = val
+        delta = self.tunefreq_currval - self.freqrevn_currval*1e3
+        delta /= 1e3
+        self.lb_tunefreq.value_changed(delta)
