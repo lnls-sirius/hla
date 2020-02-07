@@ -188,6 +188,13 @@ def get_object(ismenubar=True, parent=None):
             util.connect_newprocess(launcher, 'sirius-hla-li-ap-launcher.sh',
                                     is_window=False)
 
+            mps = LEVEL2M('MPS', menu)
+            mps.setObjectName('LIApp')
+            mpsmon = QAction('Monitor', mps)
+            mpsmon.setIcon(qta.icon('mdi.monitor-dashboard'))
+            self.connect_newprocess(mpsmon, 'sirius-hla-li-ap-mpsmon.py')
+            mps.addAction(mpsmon)
+
             optics = LEVEL2M('Optics', menu)
             optics.setObjectName('LIApp')
             energy = QAction('Energy Meas', optics)
@@ -198,6 +205,7 @@ def get_object(ismenubar=True, parent=None):
             optics.addAction(energy)
             optics.addAction(emit)
 
+            self.add_object_to_level1(menu, mps)
             self.add_object_to_level1(menu, launcher)
             self.add_object_to_level1(menu, optics)
             return menu
