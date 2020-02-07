@@ -85,9 +85,9 @@ class PSDiag(SiriusMainWindow):
                     conn_chs = list()
                     for name in psnames:
                         pname = self._prefix + name
-                        conn_chs.append(pname+':rdpwm')
-                        ps_ch2vals[pname + ':rdpwm'] = 1
-                        intlk_ch2vals[pname + ':interlock'] = \
+                        conn_chs.append(pname+':PwrState-Sts')
+                        ps_ch2vals[pname + ':PwrState-Sts'] = 1
+                        intlk_ch2vals[pname + ':StatusIntlk-Mon'] = \
                             {'value': 55, 'comp': 'lt'}
 
                     f = 'LI-.*:PS-'+filt['dev']
@@ -527,7 +527,7 @@ class LogTable(QTreeView, PyDMWidget):
         idx = self.selectedIndexes()
         text = self._model.data(self._model.index(idx[0].row(), 3))
         text = SiriusPVName(text)
-        if text.dis == 'PS' and text.sec != 'LI':
+        if text.dis == 'PS':
             _run_newprocess(['sirius-hla-as-ps-detail.py', text])
         elif text.dis == 'PU':
             _run_newprocess(['sirius-hla-as-pu-detail.py', text])

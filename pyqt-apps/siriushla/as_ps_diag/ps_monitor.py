@@ -85,9 +85,9 @@ class PSMonitor(SiriusMainWindow):
 
         def get_ch2vals(sec, name):
             if sec == 'LI':
-                return {self._prefix+name+':rdpwm': 1,
-                        self._prefix+name+':interlock': {'value': 55,
-                                                         'comp': 'lt'}}
+                return {self._prefix+name+':PwrState-Sts': 1,
+                        self._prefix+name+':StatusIntlk-Mon': {'value': 55,
+                                                               'comp': 'lt'}}
             elif name.dis == 'PU':
                 ch2vals = {
                     self._prefix+name+':PwrState-Sts': _PSc.PwrStateSts.On,
@@ -270,7 +270,7 @@ class MyLed(PyDMLedMultiChannel):
 
     def mouseDoubleClickEvent(self, ev):
         dev = SiriusPVName(self.objectName())
-        if dev.dis == 'PS' and dev.sec != 'LI':
+        if dev.dis == 'PS':
             run_newprocess(['sirius-hla-as-ps-detail.py', dev])
         elif dev.dis == 'PU':
             run_newprocess(['sirius-hla-as-pu-detail.py', dev])

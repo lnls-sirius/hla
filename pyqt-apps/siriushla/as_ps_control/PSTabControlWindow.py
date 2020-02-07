@@ -11,19 +11,24 @@ class PSTabControlWindow(PSControlWindow):
     """Base window to show devices of a section in tabs."""
 
     Devices = {
+        "LI": ["lens", "corrector-slow", "solenoid", "quadrupole",
+               "spectrometer"],
         "TB": ["dipole", "quadrupole", "corrector-slow"],
         "BO": ["dipole", "quadrupole", "sextupole", "corrector-slow",
                "skew-quadrupole"],
         "TS": ["dipole", "quadrupole", "corrector-slow"],
         "SI": ["dipole", "quadrupole", "sextupole"]}
-        #       "corrector-slow", "trim-quadrupole", "skew-quadrupole"]}
+    #       "corrector-slow", "trim-quadrupole", "skew-quadrupole"]}
 
     TabName = {"dipole": "Dipoles",
+               "spectrometer": "Spectrometer",
                "quadrupole": "Quadrupoles",
                "sextupole": "Sextupoles",
+               "solenoid": "Solenoids",
                "corrector-slow": "Slow Correctors",
                "skew-quadrupole": "Quadrupoles Skew",
                "trim-quadrupole": "Trims",
+               "lens": "Lens",
                }
 
     tabFilled = Signal()

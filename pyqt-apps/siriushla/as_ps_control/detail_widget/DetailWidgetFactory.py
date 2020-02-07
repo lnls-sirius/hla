@@ -2,7 +2,7 @@
 from qtpy.QtWidgets import QWidget, QGridLayout
 from siriuspy.search import PSSearch
 from .PSDetailWidget import PSDetailWidget, FBPDCLinkDetailWidget, \
-    FACDCLinkDetailWidget
+    FACDCLinkDetailWidget, LIPSDetailWidget
 
 
 class DetailWidgetFactory:
@@ -36,5 +36,7 @@ class DetailWidgetFactory:
                 return FACDCLinkDetailWidget(psname, parent)
             else:
                 raise ValueError('Undefined PS model: {}'.format(model))
+        elif 'LI' in psname:
+            return LIPSDetailWidget(psname, parent)
         else:
             return PSDetailWidget(psname, parent)

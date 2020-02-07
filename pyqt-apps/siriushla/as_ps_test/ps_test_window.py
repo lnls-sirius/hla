@@ -487,9 +487,7 @@ class PSTestWindow(SiriusMainWindow):
     def _open_detail(self, index):
         app = QApplication.instance()
         name = PVName(index.data())
-        if name.sec == 'LI':
-            return
-        elif name.dis == 'TI':
+        if name.dis == 'TI':
             wind = create_window_from_widget(HLTriggerDetailed, title=name,
                                              is_main=True)
             app.open_window(wind, parent=self, **{'prefix': name})

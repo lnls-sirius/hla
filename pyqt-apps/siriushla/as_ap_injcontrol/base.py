@@ -180,7 +180,7 @@ class BaseWindow(SiriusMainWindow):
 
         if corr.sec == 'LI':
             led = SiriusLedAlert(
-                parent=self, init_channel=self.prefix+corr+':rdpwm')
+                parent=self, init_channel=self.prefix+corr+':PwrState-Sts')
             led.onColor = SiriusLedAlert.LightGreen
             led.offColor = SiriusLedAlert.DarkGreen
             led.alarmSensitiveBorder = False
@@ -194,7 +194,7 @@ class BaseWindow(SiriusMainWindow):
             lay.addWidget(lb_corr, 1, 2)
 
             sp_current = PyDMLinEditScrollbar(
-                parent=self, channel=self.prefix+corr+':seti')
+                parent=self, channel=self.prefix+corr+':Current-SP')
             sp_current.layout.setContentsMargins(0, 0, 0, 0)
             sp_current.layout.setSpacing(3)
             sp_current.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
@@ -208,7 +208,7 @@ class BaseWindow(SiriusMainWindow):
             lay.addWidget(sp_current, 1, 3, 2, 1)
 
             lb_current = PyDMLabel(
-                parent=self, init_channel=self.prefix+corr+':rdi')
+                parent=self, init_channel=self.prefix+corr+':Current-Mon')
             lb_current.unit_changed('A')
             lb_current.showUnits = True
             lb_current.setStyleSheet("""

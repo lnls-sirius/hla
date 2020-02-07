@@ -376,9 +376,7 @@ class CycleWindow(SiriusMainWindow):
     def _open_ps_detail(self, item):
         app = QApplication.instance()
         psname = item.data()
-        if PVName(psname).sec == 'LI':
-            return
-        elif not _re.match('.*-.*:.*-.*', psname):
+        if not _re.match('.*-.*:.*-.*', psname):
             if item.model().rowCount(item) == 1:
                 psname = item.child(0, 0).data()
             else:
@@ -458,7 +456,7 @@ class CycleWindow(SiriusMainWindow):
 
         ps_ch = list()
         for name in psnames:
-            ppty = ':Version-Cte' if PVName(name).sec != 'LI' else ':setpwm'
+            ppty = ':Version-Cte'
             ps_ch.append(VACA_PREFIX + name + ppty)
         self.psconn_led.set_channels(ps_ch)
 

@@ -255,9 +255,9 @@ class TesterPS(_Tester):
 class TesterPSLinac:
     """Linac PS tester."""
 
-    properties = ['interlock',
-                  'setpwm', 'rdpwm',
-                  'seti', 'rdi']
+    properties = ['StatusIntlk-Mon',
+                  'PwrState-Sel', 'PwrState-Sts',
+                  'Current-SP', 'Current-Mon']
 
     def __init__(self, device):
         self.device = device
@@ -289,7 +289,7 @@ class TesterPSLinac:
 
     def check_intlk(self):
         """Check interlocks."""
-        return self._pvs['interlock'].value < 55
+        return self._pvs['StatusIntlk-Mon'].value < 55
 
     def set_pwrstate(self, state='on'):
         """Set PwrState."""
@@ -297,7 +297,7 @@ class TesterPSLinac:
             state = _PSC.PwrStateSel.On
         else:
             state = _PSC.PwrStateSel.Off
-        self._pvs['setpwm'].value = state
+        self._pvs['PwrState-Sel'].value = state
 
     def check_pwrstate(self, state='on'):
         """Check PwrState."""
@@ -305,21 +305,22 @@ class TesterPSLinac:
             state = _PSC.PwrStateSel.On
         else:
             state = _PSC.PwrStateSel.Off
-        return (self._pvs['rdpwm'].value == state)
+        return (self._pvs['PwrState-Sts'].value == state)
 
     def set_current(self, test=False):
         """Set current."""
         if test:
-            self._pvs['seti'].value = self.test_current
+            self._pvs['Current-SP'].value = self.test_current
         else:
-            self._pvs['seti'].value = 0
+            self._pvs['Current-SP'].value = 0
 
     def check_current(self, test=False):
         """Check current."""
         if test:
-            status = self._cmp(self._pvs['rdi'].value, self.test_current)
+            status = self._cmp(
+                self._pvs['Current-Mon'].value, self.test_current)
         else:
-            status = self._cmp(self._pvs['rdi'].value, 0)
+            status = self._cmp(self._pvs['Current-Mon'].value, 0)
         return status
 
     def check_status(self):
@@ -327,8 +328,8 @@ class TesterPSLinac:
         status &= self.check_intlk()
         if self.check_pwrstate():
             status &= self._cmp(
-                self._pvs['seti'].value,
-                self._pvs['rdi'].value)
+                self._pvs['Current-SP'].value,
+                self._pvs['Current-Mon'].value)
         return status
 
     def _cmp(self, value, target):

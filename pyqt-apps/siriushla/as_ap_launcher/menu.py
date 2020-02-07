@@ -190,6 +190,9 @@ def get_object(ismenubar=True, parent=None):
             util.connect_newprocess(launcher, 'sirius-hla-li-ap-launcher.sh',
                                     is_window=False)
 
+            PS = self._set_ps_menu('li')
+            PS.setIcon(qta.icon('mdi.car-battery'))
+
             mps = LEVEL2M('MPS', menu)
             mps.setObjectName('LIApp')
             mpsmon = QAction('Monitor', mps)
@@ -207,6 +210,7 @@ def get_object(ismenubar=True, parent=None):
             optics.addAction(energy)
             optics.addAction(emit)
 
+            self.add_object_to_level1(menu, PS)
             self.add_object_to_level1(menu, mps)
             self.add_object_to_level1(menu, launcher)
             self.add_object_to_level1(menu, optics)
@@ -394,12 +398,20 @@ def get_object(ismenubar=True, parent=None):
             all_dev = QAction(
                 'All'+('' if sec != 'si' else ' Families'), psmenu)
             self.connect_newprocess(all_dev, scr)
-            dip = QAction('Dipoles', psmenu)
-            self.connect_newprocess(dip, [scr, '--device', 'dipole'])
+            psmenu.addAction(all_dev)
+
+            if sec != 'li':
+                dip = QAction('Dipoles', psmenu)
+                self.connect_newprocess(dip, [scr, '--device', 'dipole'])
+                psmenu.addAction(dip)
+            else:
+                spect = QAction('Spectrometer', psmenu)
+                self.connect_newprocess(
+                    spect, [scr, '--device', 'spectrometer'])
+                psmenu.addAction(spect)
+
             quad = QAction('Quadrupoles', psmenu)
             self.connect_newprocess(quad, [scr, '--device', 'quadrupole'])
-            psmenu.addAction(all_dev)
-            psmenu.addAction(dip)
             psmenu.addAction(quad)
 
             if sec in {'bo', 'si'}:
@@ -426,7 +438,7 @@ def get_object(ismenubar=True, parent=None):
                             act, [scr, '--device', 'skew-quadrupole',
                                   '--subsection', '{:02d}.*'.format(i)])
 
-            if sec in {'tb', 'ts', 'bo'}:
+            if sec in {'li', 'tb', 'ts', 'bo'}:
                 corrs = QAction('Correctors', psmenu)
                 self.connect_newprocess(
                     corrs, [scr, '--device', 'corrector-slow'])
@@ -473,10 +485,19 @@ def get_object(ismenubar=True, parent=None):
             #         fcorr, [scr, '--device', 'corrector-fast'])
             #     psmenu.addAction(fcorr)
 
-            if sec == 'bo':
+            elif sec == 'bo':
                 wfmerr = QAction('Waveform Error', psmenu)
                 self.connect_newprocess(wfmerr, 'sirius-hla-bo-ps-wfmerror.py')
                 psmenu.addAction(wfmerr)
+
+            elif sec == 'li':
+                lens = QAction('Lens', psmenu)
+                self.connect_newprocess(lens, [scr, '--device', 'lens'])
+                psmenu.addAction(lens)
+                slnd = QAction('Solenoids', psmenu)
+                self.connect_newprocess(slnd, [scr, '--device', 'solenoid'])
+                psmenu.addAction(slnd)
+
             return psmenu
 
         def _set_pu_menu(self, sec):

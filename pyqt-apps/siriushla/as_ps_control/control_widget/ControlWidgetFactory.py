@@ -1,18 +1,20 @@
 """Define factory class to get a control widget."""
-from .DipoleControlWidget import \
+from .DipoleControlWidget import LISpectControlWidget, \
     TBDipoleControlWidget, BODipoleControlWidget,\
     TSDipoleControlWidget, SIDipoleControlWidget
-from .FamQuadrupoleControlWidget import \
+from .FamQuadrupoleControlWidget import LIQuadrupoleControlWidget, \
     TBQuadrupoleControlWidget, BOFamQuadrupoleControlWidget,\
     TSQuadrupoleControlWidget, SIFamQuadrupoleControlWidget
 from .FamSextupoleControlWidget import \
     BOFamSextupoleControlWidget, SIFamSextupoleControlWidget
-from .SlowCorrectorControlWidget import \
+from .SlowCorrectorControlWidget import LISlowCorrectorControlWidget, \
     TBSlowCorrectorControlWidget, BoSlowCorrectorControlWidget, \
     TSSlowCorrectorControlWidget, SISlowCorrectorControlWidget
 from .SkewQuadControlWidget import BOSkewQuadControlWidget, \
     SISkewQuadControlWidget
 from .TrimAllControlWidget import SITrimAllControlWidget
+from .SolenoidControlWidget import LISolenoidControlWidget
+from .LensControlWidget import LILensControlWidget
 from .FastCorrectorControlWidget import \
     SIFastCorrectorControlWidget
 
@@ -30,7 +32,25 @@ class ControlWidgetFactory:
 
     @staticmethod
     def factory(parent, section, device, subsection=None, orientation=0):
-        if section == "TB":
+        if section == "LI":
+            if device == "spectrometer":
+                return LISpectControlWidget(
+                    orientation=orientation, parent=parent)
+            elif device == "lens":
+                return LILensControlWidget(
+                    orientation=orientation, parent=parent)
+            elif device == "corrector-slow":
+                return LISlowCorrectorControlWidget(
+                    orientation=orientation, parent=parent)
+            elif device == "solenoid":
+                return LISolenoidControlWidget(
+                    orientation=orientation, parent=parent)
+            elif device == "quadrupole":
+                return LIQuadrupoleControlWidget(
+                    orientation=orientation, parent=parent)
+            else:
+                ControlWidgetFactory._device_not_found(section, device)
+        elif section == "TB":
             if device == "dipole":
                 return TBDipoleControlWidget(
                     orientation=orientation, parent=parent)
