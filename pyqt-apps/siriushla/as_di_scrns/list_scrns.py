@@ -7,6 +7,20 @@ from siriuspy.envars import vaca_prefix as _vaca_prefix
 from siriushla import util
 
 
+def get_scrn_list(sec):
+    if sec == 'TB':
+        return ['TB-01:DI-Scrn-1', 'TB-01:DI-Scrn-2',
+                'TB-02:DI-Scrn-1', 'TB-02:DI-Scrn-2',
+                'TB-03:DI-Scrn', 'TB-04:DI-Scrn']
+    elif sec == 'BO':
+        return ['BO-01D:DI-Scrn-1', 'BO-01D:DI-Scrn-2',
+                'BO-02U:DI-Scrn']
+    elif sec == 'TS':
+        return ['TS-01:DI-Scrn', 'TS-02:DI-Scrn',
+                'TS-03:DI-Scrn', 'TS-04:DI-Scrn-1',
+                'TS-04:DI-Scrn-2', 'TS-04:DI-Scrn-3']
+
+
 class ScrnSummary(QWidget):
     """Screen Summary."""
 
@@ -37,17 +51,7 @@ class SelectScrns(QWidget):
         super().__init__(parent=parent)
         self._prefix = prefix
         self._sec = sec
-        if self._sec == 'TB':
-            self.scrn_list = ['TB-01:DI-Scrn-1', 'TB-01:DI-Scrn-2',
-                              'TB-02:DI-Scrn-1', 'TB-02:DI-Scrn-2',
-                              'TB-03:DI-Scrn', 'TB-04:DI-Scrn']
-        elif self._sec == 'BO':
-            self.scrn_list = ['BO-01D:DI-Scrn-1', 'BO-01D:DI-Scrn-2',
-                              'BO-02U:DI-Scrn']
-        elif self._sec == 'TS':
-            self.scrn_list = ['TS-01:DI-Scrn', 'TS-02:DI-Scrn',
-                              'TS-03:DI-Scrn', 'TS-04:DI-Scrn-1',
-                              'TS-04:DI-Scrn-2', 'TS-04:DI-Scrn-3']
+        self.scrn_list = get_scrn_list(self._sec)
         self.setObjectName(sec+'App')
         self._setupUi()
 

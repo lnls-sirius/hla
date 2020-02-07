@@ -17,6 +17,8 @@ from siriuspy.namesys import SiriusPVName
 from siriushla import util
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.as_ap_configdb.pvsconfigs import SelectAndApplyPVsWidget
+from siriushla.as_di_scrns.list_scrns import get_scrn_list
+from siriushla.as_di_dccts.main import get_dcct_list
 
 
 def get_pushbutton(name, parent):
@@ -304,11 +306,14 @@ def get_object(ismenubar=True, parent=None):
                 ICTs = QAction('ICTs', diag)
                 self.connect_newprocess(ICTs, 'sirius-hla-'+sec+'-di-icts.py')
                 diag.addAction(ICTs)
-            elif sec in {'si', 'bo'}:
-                DCCT = QAction('DCCTs', diag)
-                self.connect_newprocess(
-                    DCCT, ['sirius-hla-as-di-dcct.py', sec.upper()])
-                diag.addAction(DCCT)
+            elif sec in {'bo', 'si'}:
+                DCCT = QMenu('DCCTs', diag)
+                DCCT.setObjectName('SIApp')
+                for dev in get_dcct_list(sec.upper()):
+                    act_dev = DCCT.addAction(dev)
+                    self.connect_newprocess(
+                        act_dev, ['sirius-hla-as-di-dcct.py', dev])
+                diag.addMenu(DCCT)
             if 'tb' in sec:
                 Slits = QAction('Slits', diag)
                 self.connect_newprocess(Slits, 'sirius-hla-tb-di-slits.py')
@@ -322,10 +327,13 @@ def get_object(ismenubar=True, parent=None):
                     VLight, 'sirius-hla-'+sec+'-di-vlight.py')
                 diag.addAction(VLight)
             if 'si' not in sec:
-                Scrns = QAction('Screens', diag)
-                self.connect_newprocess(
-                    Scrns, ['sirius-hla-as-di-scrn.py', sec.upper()])
-                diag.addAction(Scrns)
+                Scrns = QMenu('Screens', diag)
+                Scrns.setObjectName(sec.upper()+'App')
+                for dev in get_scrn_list(sec.upper()):
+                    act_dev = Scrns.addAction(dev)
+                    self.connect_newprocess(
+                        act_dev, ['sirius-hla-as-di-scrn.py', dev])
+                diag.addMenu(Scrns)
             return diag
 
         def _set_bpm_menu(self, sec):

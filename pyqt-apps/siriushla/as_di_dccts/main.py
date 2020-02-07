@@ -10,6 +10,13 @@ from siriushla.as_di_dccts.graphics import DCCTMonitor, BORampEffMonitor
 from siriushla.as_di_dccts.settings import DCCTSettings
 
 
+def get_dcct_list(sec):
+    if sec == 'SI':
+        return ['SI-13C4:DI-DCCT', 'SI-14C4:DI-DCCT']
+    else:
+        return ['BO-35D:DI-DCCT']
+
+
 class DCCTMain(SiriusMainWindow):
     """DCCT Main Window."""
 
@@ -56,7 +63,7 @@ class SISelectDCCT(QWidget):
         super().__init__(parent=parent)
         self.prefix = prefix
         self.setObjectName('SIApp')
-        self.dcct_list = ['SI-13C4:DI-DCCT', 'SI-14C4:DI-DCCT']
+        self.dcct_list = get_dcct_list('SI')
         self.setWindowTitle('Select a DCCT')
         self._setupUi()
 
