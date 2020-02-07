@@ -527,7 +527,7 @@ class LogTable(QTreeView, PyDMWidget):
         idx = self.selectedIndexes()
         text = self._model.data(self._model.index(idx[0].row(), 3))
         text = SiriusPVName(text)
-        if text.dis == 'PS' and text.sec != 'LI':
+        if text.dis == 'PS':
             _run_newprocess(['sirius-hla-as-ps-detail.py', text])
         elif text.dis == 'PU':
             _run_newprocess(['sirius-hla-as-pu-detail.py', text])

@@ -270,7 +270,7 @@ class MyLed(PyDMLedMultiChannel):
 
     def mouseDoubleClickEvent(self, ev):
         dev = SiriusPVName(self.objectName())
-        if dev.dis == 'PS' and dev.sec != 'LI':
+        if dev.dis == 'PS':
             run_newprocess(['sirius-hla-as-ps-detail.py', dev])
         elif dev.dis == 'PU':
             run_newprocess(['sirius-hla-as-pu-detail.py', dev])

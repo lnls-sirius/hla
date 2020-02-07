@@ -40,8 +40,6 @@ class PSList(QListView):
     def _open_detail(self, index):
         app = QApplication.instance()
         psname = index.data()
-        if 'LI' in psname:
-            return
         app.open_window(PSDetailWindow, parent=self, **{'psname': psname})
 
 
