@@ -5,7 +5,7 @@ from qtpy.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, \
     QLabel, QDockWidget
 from pydm.widgets import PyDMLabel, PyDMCheckbox
 
-from siriuspy.envars import vaca_prefix as _VACA_PREFIX
+from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, SiriusLedState
 from siriushla.as_ap_injection.CustomExceptions import PVConnectionError

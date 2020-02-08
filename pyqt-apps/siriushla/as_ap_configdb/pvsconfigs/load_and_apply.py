@@ -257,7 +257,7 @@ if __name__ == '__main__':
     from siriushla.sirius_application import SiriusApplication
 
     app = SiriusApplication()
-    clt = ConfigDBClient(_envars.server_url_configdb)
+    clt = ConfigDBClient(_envars.SRVURL_CONFIGDB)
     w = LoadAndApplyConfig2MachineWindow(clt)
     w.show()
 

@@ -364,6 +364,6 @@ def _main(prefix):
 if __name__ == '__main__':
     from siriushla.sirius_application import SiriusApplication
     from siriushla.widgets import SiriusDialog
-    from siriuspy.envars import vaca_prefix
+    from siriuspy.envars import VACA_PREFIX
     import sys
-    _main(vaca_prefix)
+    _main(VACA_PREFIX)

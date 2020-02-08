@@ -333,7 +333,7 @@ def _main():
 if __name__ == '__main__':
     from siriushla.sirius_application import SiriusApplication
     from siriushla.widgets import SiriusDialog
-    from siriuspy.envars import vaca_prefix as pref
+    from siriuspy.envars import VACA_PREFIX as pref
     import sys
 
     _main()

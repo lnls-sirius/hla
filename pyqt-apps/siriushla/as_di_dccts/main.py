@@ -3,7 +3,7 @@
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QLabel, QGridLayout, QVBoxLayout, \
     QPushButton
-from siriuspy.envars import vaca_prefix as _vaca_prefix
+from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriushla.widgets import SiriusMainWindow
 from siriushla import util
 from siriushla.as_di_dccts.graphics import DCCTMonitor, BORampEffMonitor
@@ -58,7 +58,7 @@ class DCCTMain(SiriusMainWindow):
 class SISelectDCCT(QWidget):
     """Select Screens."""
 
-    def __init__(self, parent=None, prefix=_vaca_prefix):
+    def __init__(self, parent=None, prefix=_VACA_PREFIX):
         """Init."""
         super().__init__(parent=parent)
         self.prefix = prefix
@@ -87,11 +87,11 @@ class SISelectDCCT(QWidget):
 if __name__ == '__main__':
     """Run test."""
     import sys as _sys
-    from siriuspy.envars import vaca_prefix as _vaca_prefix
+    from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
     from siriushla.sirius_application import SiriusApplication
 
     app = SiriusApplication()
     device = 'BO-35D:DI-DCCT'
-    window = DCCTMain(None, prefix=_vaca_prefix, device=device)
+    window = DCCTMain(None, prefix=_VACA_PREFIX, device=device)
     window.show()
     _sys.exit(app.exec_())

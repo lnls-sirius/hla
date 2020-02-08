@@ -9,7 +9,7 @@ from qtpy.QtWidgets import QGridLayout, QLabel, QGroupBox, QAbstractItemView, \
                            QHeaderView
 from qtpy.QtCore import Qt
 
-from siriuspy.envars import vaca_prefix as _vaca_prefix
+from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.csdevice.posang import Const
 from siriuspy.namesys import SiriusPVName as _PVName
 
@@ -34,7 +34,7 @@ class PosAngCorr(SiriusMainWindow):
         """Class construc."""
         super(PosAngCorr, self).__init__(parent)
         if not prefix:
-            self._prefix = _vaca_prefix
+            self._prefix = _VACA_PREFIX
         else:
             self._prefix = prefix
         self._tl = tl.upper()

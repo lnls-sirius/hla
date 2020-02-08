@@ -1,6 +1,6 @@
 """Booster Injection Control HLA module."""
 
-from siriuspy.envars import vaca_prefix as _vaca_prefix
+from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QWidget, \
@@ -16,7 +16,7 @@ from siriushla.as_ap_injcontrol.base import BaseWindow
 class InjBOControlWindow(BaseWindow):
     """Booster Injection Control HLA."""
 
-    def __init__(self, parent=None, prefix=_vaca_prefix):
+    def __init__(self, parent=None, prefix=_VACA_PREFIX):
         super().__init__(parent, prefix)
         self.setWindowTitle('Booster Injection Control Window')
         self.setObjectName('BOApp')

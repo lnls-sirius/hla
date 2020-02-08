@@ -331,7 +331,7 @@ if __name__ == '__main__':
     """Run test."""
     import sys as _sys
     import argparse as _argparse
-    from siriuspy.envars import vaca_prefix as _vaca_prefix
+    from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
     from siriushla.sirius_application import SiriusApplication
     from siriushla.widgets.windows import create_window_from_widget as \
         _create_window_from_widget
@@ -348,11 +348,11 @@ if __name__ == '__main__':
         BORampEffWindow = _create_window_from_widget(
             BORampEffMonitor, 'Booster Ramp Efficiency',
             is_main=True)
-        window = BORampEffWindow(None, prefix=_vaca_prefix)
+        window = BORampEffWindow(None, prefix=_VACA_PREFIX)
     else:
         device = 'BO-35D:DI-DCCT'
         Monitor = _create_window_from_widget(
             DCCTMonitor, 'Booster Ramp Efficiency', is_main=True)
-        window = Monitor(None, prefix=_vaca_prefix, device=device)
+        window = Monitor(None, prefix=_VACA_PREFIX, device=device)
     window.show()
     _sys.exit(app.exec_())

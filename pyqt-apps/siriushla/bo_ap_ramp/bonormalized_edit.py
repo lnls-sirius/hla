@@ -663,7 +663,7 @@ class _UndoRedoSpinbox(QUndoCommand):
 if __name__ == '__main__':
     """Run Example."""
     import sys
-    from siriuspy.envars import vaca_prefix
+    from siriuspy.envars import VACA_PREFIX
     from siriuspy.ramp.conn import ConnSOFB
     from siriuspy.ramp.magnet import get_magnet
     from siriushla.sirius_application import SiriusApplication
@@ -677,10 +677,10 @@ if __name__ == '__main__':
         psnames2strengths[ps] = nconfig[ps]
         ma = _MASearch.conv_psname_2_psmaname(ps)
         aux_magnets[ma] = get_magnet(ma)
-    conn_sofb = ConnSOFB(prefix=vaca_prefix)
+    conn_sofb = ConnSOFB(prefix=VACA_PREFIX)
 
     w = BONormEdit(
-        parent=None, prefix=vaca_prefix, norm_config=psnames2strengths,
+        parent=None, prefix=VACA_PREFIX, norm_config=psnames2strengths,
         time=100, energy=0.985, magnets=aux_magnets, conn_sofb=conn_sofb,
         tunecorr_configname='Default', chromcorr_configname='Default')
     w.show()

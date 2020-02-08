@@ -6,7 +6,7 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
     QGridLayout, QApplication
 
-from siriuspy.envars import vaca_prefix
+from siriuspy.envars import VACA_PREFIX
 from siriuspy.search import LLTimeSearch as _LLTimeSearch
 
 from pydm.widgets import PyDMPushButton
@@ -24,7 +24,7 @@ class MainOperation(SiriusMainWindow):
     """Main Operation."""
 
     def __init__(self, parent=None, wrapper=PyEpicsWrapper,
-                 prefix=vaca_prefix):
+                 prefix=VACA_PREFIX):
         """Init."""
         super().__init__(parent)
         self._prefix = prefix

@@ -17,7 +17,7 @@ from pydm.widgets import PyDMLabel, PyDMEnumComboBox, PyDMSpinbox, \
 from pydm.widgets.waveformplot import WaveformCurveItem
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 from siriuspy.namesys import SiriusPVName as _PVName
-from siriuspy.envars import vaca_prefix as _vaca_prefix
+from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, SiriusDialog, \
     SiriusLedAlert, PyDMStateButton, PyDMLedMultiChannel
@@ -31,7 +31,7 @@ POINTS_TO_PLOT = 500
 class ICTSummary(QWidget):
     """ICT Monitor Summary."""
 
-    def __init__(self, parent=None, prefix=_vaca_prefix, tl=''):
+    def __init__(self, parent=None, prefix=_VACA_PREFIX, tl=''):
         super().__init__(parent)
         self.prefix = prefix
         self.tl = tl
@@ -668,6 +668,6 @@ class _MyWaveformPlot(PyDMWaveformPlot):
 if __name__ == '__main__':
     """Run Example."""
     app = SiriusApplication()
-    w = ICTMonitoring(tl='TB', prefix=_vaca_prefix)
+    w = ICTMonitoring(tl='TB', prefix=_VACA_PREFIX)
     w.show()
     sys.exit(app.exec_())

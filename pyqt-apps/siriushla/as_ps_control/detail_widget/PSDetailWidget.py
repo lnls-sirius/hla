@@ -10,7 +10,7 @@ from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
 from qtpy.QtGui import QColor
 import qtawesome as qta
 
-from siriuspy.envars import vaca_prefix
+from siriuspy.envars import VACA_PREFIX
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox, PyDMPushButton, \
     PyDMLineEdit, PyDMWaveformPlot
 from siriushla import util
@@ -83,9 +83,9 @@ class PSDetailWidget(QWidget):
     def __init__(self, psname, parent=None):
         """Class constructor."""
         super(PSDetailWidget, self).__init__(parent)
-        self._vaca_prefix = vaca_prefix
+        self._VACA_PREFIX = VACA_PREFIX
         self._psname = psname
-        self._prefixed_psname = self._vaca_prefix + self._psname
+        self._prefixed_psname = self._VACA_PREFIX + self._psname
 
         self._metric = self._getElementMetric()
 

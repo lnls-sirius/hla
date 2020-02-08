@@ -206,9 +206,9 @@ if __name__ == '__main__':
     """Run Example."""
     import sys
     from siriushla.sirius_application import SiriusApplication
-    from siriuspy.envars import vaca_prefix as _vaca_prefix
+    from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 
     app = SiriusApplication()
-    w = RampMain(prefix=_vaca_prefix)
+    w = RampMain(prefix=_VACA_PREFIX)
     w.show()
     sys.exit(app.exec_())

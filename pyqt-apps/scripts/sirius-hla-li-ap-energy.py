@@ -6,7 +6,7 @@ import os
 import sys
 import argparse as _argparse
 import qtawesome as qta
-from siriuspy.envars import vaca_prefix
+from siriuspy.envars import VACA_PREFIX
 import siriushla.util as _util
 from siriushla.sirius_application import SiriusApplication
 from siriushla.as_ap_measure import EnergyMeasure
@@ -19,7 +19,7 @@ os.environ['EPICS_CA_MAX_ARRAY_BYTES'] = '21000000'
 parser = _argparse.ArgumentParser(
     description="Run Interface of energy measurement in LI.")
 parser.add_argument(
-    '-p', "--prefix", type=str, default=vaca_prefix,
+    '-p', "--prefix", type=str, default=VACA_PREFIX,
     help="Define the prefix for the PVs in the window.")
 args = parser.parse_args()
 

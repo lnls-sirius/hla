@@ -3,7 +3,7 @@
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QGridLayout, \
     QLabel, QTabWidget
-from siriuspy.envars import vaca_prefix as _VACA_PREFIX
+from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.search import PSSearch
 from siriuspy.csdevice.pwrsupply import get_ps_propty_database

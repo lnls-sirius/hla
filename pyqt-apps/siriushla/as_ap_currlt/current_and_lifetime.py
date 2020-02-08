@@ -11,7 +11,7 @@ from pyqtgraph import ViewBox
 from pydm import utilities
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 from pydm.widgets.timeplot import PyDMTimePlot, TimePlotCurveItem
-from siriuspy.envars import vaca_prefix as _vaca_prefix
+from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriushla.util import connect_window
 from siriushla.widgets import SiriusMainWindow, SiriusConnectionSignal
 from siriushla.as_di_dccts import DCCTMain
@@ -20,7 +20,7 @@ from siriushla.as_di_dccts import DCCTMain
 class CurrLTWindow(SiriusMainWindow):
     """Class to include some intelligence in the .ui file."""
 
-    def __init__(self, parent=None, prefix=_vaca_prefix):
+    def __init__(self, parent=None, prefix=_VACA_PREFIX):
         """Initialize some widgets."""
         super(CurrLTWindow, self).__init__(parent)
 

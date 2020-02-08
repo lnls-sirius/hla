@@ -3,7 +3,7 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGridLayout, QTabWidget, QVBoxLayout, \
     QLabel, QHBoxLayout
 from pydm.widgets import PyDMLabel
-from siriuspy.envars import vaca_prefix
+from siriuspy.envars import VACA_PREFIX
 from siriushla.widgets import SiriusMainWindow
 from .spectrogram import BOTuneSpectrogramControls
 from .spectra import TuneSpectraControls
@@ -14,7 +14,7 @@ from .details import BOTuneTrigger
 class Tune(SiriusMainWindow):
     """Tune Window."""
 
-    def __init__(self, parent=None, prefix=vaca_prefix, section=''):
+    def __init__(self, parent=None, prefix=VACA_PREFIX, section=''):
         super().__init__(parent)
         self.prefix = prefix
         self.section = section.upper()

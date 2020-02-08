@@ -193,7 +193,7 @@ class TimingMain(SiriusMainWindow):
 
 if __name__ == '__main__':
     """Run Example."""
-    from siriuspy.envars import vaca_prefix as PREFIX
+    from siriuspy.envars import VACA_PREFIX as PREFIX
     from siriushla.sirius_application import SiriusApplication
     app = SiriusApplication()
     HLTiming = TimingMain(prefix=PREFIX)

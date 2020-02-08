@@ -9,7 +9,7 @@ from qtpy.QtWidgets import QVBoxLayout, QMessageBox, QMenuBar, \
     QInputDialog
 import qtawesome as qta
 
-from siriuspy.envars import vaca_prefix as _prefix
+from siriuspy.envars import VACA_PREFIX as _prefix
 from siriuspy.clientconfigdb import ConfigDBClient
 from siriuspy.search import PSSearch
 from siriuspy.namesys import SiriusPVName
