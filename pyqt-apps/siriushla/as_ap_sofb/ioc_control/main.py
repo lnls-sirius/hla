@@ -7,10 +7,14 @@ from qtpy.QtCore import Qt
 import qtawesome as qta
 
 from pydm.widgets import PyDMPushButton, PyDMLabel
+
+from siriuspy.clientconfigdb import ConfigDBClient, ConfigDBException
+
 from siriushla.widgets import SiriusConnectionSignal, \
         SiriusLedAlert, SiriusSpinbox
 from siriushla.widgets.windows import create_window_from_widget
 import siriushla.util as _util
+from siriushla.as_ap_configdb import LoadConfigDialog
 
 from siriushla.as_ap_sofb.ioc_control.status import StatusWidget
 from siriushla.as_ap_sofb.ioc_control.kicks_config import KicksConfigWidget
@@ -249,6 +253,8 @@ class RefControl(BaseCombo):
         setpoint['y'] = SiriusConnectionSignal(prefix+'RefOrbY-SP')
         readback['x'] = SiriusConnectionSignal(prefix+'RefOrbX-RB')
         readback['y'] = SiriusConnectionSignal(prefix+'RefOrbY-RB')
+        self._config_type = acc.lower() + '_orbit'
+        self._client = ConfigDBClient(config_type=self._config_type)
         super().__init__(parent, ctrls, setpoint, readback, acc)
 
     def _selection_changed(self, text):
@@ -259,10 +265,20 @@ class RefControl(BaseCombo):
                     self.orbits[pln] *= 0
                     self.setpoint[pln].send_value_signal[_np.ndarray].emit(
                         self.orbits[pln])
+        elif text.lower().startswith('servconf'):
+            win = LoadConfigDialog(self._config_type, self)
+            confname, status = win.exec_()
+            if not status:
+                return
+            data = self._client.get_config_value(confname)
+            for pln in ('x', 'y'):
+                self.orbits[pln] = _np.array(data[pln])
+                self.setpoint[pln].send_value_signal[_np.ndarray].emit(
+                    self.orbits[pln])
         super()._selection_changed(text, sigs)
 
     def setup_ui(self):
-        super().setup_ui(['Zero', ])
+        super().setup_ui(['Zero', 'ServConf'])
 
 
 class OfflineOrbControl(BaseCombo):

@@ -77,6 +77,7 @@ class BaseCombo(QComboBox, PyDMPrimitiveWidget):
             'y': _part(self._watch_if_changed, 'y')}
 
         self.setup_ui()
+        self.connect_signals()
 
     @property
     def acc(self):
@@ -110,7 +111,11 @@ class BaseCombo(QComboBox, PyDMPrimitiveWidget):
             self.addItem(reg)
         self.addItem('Out of Date')
         self.setCurrentIndex(self.count()-1)
-        self.currentTextChanged.connect(self._selection_changed)
+        self.activated.connect(self._item_selected)
+
+    def _item_selected(self, index):
+        text = self.itemText(index)
+        self._selection_changed(text)
 
     def _selection_changed(self, text, sigs=None):
         sigs = sigs or dict()
