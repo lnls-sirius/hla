@@ -53,17 +53,6 @@ class SOFBControl(BaseWidget):
         fbl = QGridLayout(grpbx)
         vbl.addWidget(grpbx)
 
-        # Window = create_window_from_widget(
-        #     AcqControlWidget, title='Orbit Acquisition')
-        # dtail = QPushButton('', grpbx)
-        # dtail.setToolTip('Open Detailed Configs Window')
-        # dtail.setIcon(qta.icon('fa5s.ellipsis-h'))
-        # dtail.setObjectName('dtail')
-        # dtail.setStyleSheet(
-        #     '#dtail{min-width:25px; max-width:25px; icon-size:20px;}')
-        # _util.connect_window(
-        #     dtail, Window, self, prefix=self.prefix, acc=self.acc)
-
         conf = PyDMPushButton(
             grpbx, init_channel=self.prefix+'TrigAcqConfig-Cmd', pressValue=1)
         conf.setToolTip('Refresh Configurations')
@@ -92,7 +81,6 @@ class SOFBControl(BaseWidget):
         lbl = QLabel('Status:', grpbx)
         hbl = QHBoxLayout()
         hbl.setSpacing(9)
-        # hbl.addWidget(dtail)
         hbl.addStretch()
         hbl.addWidget(lbl)
         hbl.addWidget(pdm_led)
@@ -229,10 +217,6 @@ class SOFBControl(BaseWidget):
         vbl2 = QVBoxLayout(grpbx)
         vbl.addWidget(grpbx)
 
-        # rules = (
-        #     '[{"name": "EnblRule", "property": "Enable", ' +
-        #     '"expression": "ch[0] in (1, )", "channels": [{"channel": "' +
-        #     self.prefix+'SOFBMode-Sts'+'", "trigger": true}]}]')
         lbl = QLabel('State', grpbx)
         wid = self.create_pair_sel(grpbx, 'ClosedLoop')
         hbl = QHBoxLayout()
