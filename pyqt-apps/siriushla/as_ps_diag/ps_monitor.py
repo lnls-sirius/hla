@@ -3,7 +3,7 @@
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGroupBox, QGridLayout, QLabel
 
-from siriuspy.envars import vaca_prefix
+from siriuspy.envars import VACA_PREFIX
 from siriuspy.search import PSSearch
 from siriuspy.csdevice.pwrsupply import Const as _PSc
 from siriuspy.namesys import SiriusPVName
@@ -20,7 +20,7 @@ from siriushla.as_ps_diag.util import lips2filters, asps2filters, \
 class PSMonitor(SiriusMainWindow):
     """Power Supplies Monitor."""
 
-    def __init__(self, parent=None, prefix=vaca_prefix):
+    def __init__(self, parent=None, prefix=VACA_PREFIX):
         """Init."""
         super().__init__(parent)
         self._prefix = prefix

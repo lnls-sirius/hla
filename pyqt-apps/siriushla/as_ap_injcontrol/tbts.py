@@ -3,7 +3,7 @@
 
 from qtpy.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QAction, \
     QSizePolicy as QSzPlcy, QTabWidget
-from siriuspy.envars import vaca_prefix as _vaca_prefix
+from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.namesys import SiriusPVName
 from siriushla import util
 from siriushla.as_di_icts import ICTSummary
@@ -14,7 +14,7 @@ from siriushla.as_ap_injcontrol.base import BaseWindow
 class TLControlWindow(BaseWindow):
     """Class to create the main window for TB and TS HLA."""
 
-    def __init__(self, parent=None, prefix=_vaca_prefix, tl=None):
+    def __init__(self, parent=None, prefix=_VACA_PREFIX, tl=None):
         """Initialize widgets in main window."""
         super().__init__(parent, prefix)
         self.setWindowTitle(tl.upper() + ' Control Window')
@@ -215,6 +215,6 @@ if __name__ == '__main__':
     app = SiriusApplication()
     os.environ['EPICS_CA_MAX_ARRAY_BYTES'] = '200000000'
     app = SiriusApplication()
-    window = TLControlWindow(prefix=_vaca_prefix, tl='tb')
+    window = TLControlWindow(prefix=_VACA_PREFIX, tl='tb')
     window.show()
     sys.exit(app.exec_())

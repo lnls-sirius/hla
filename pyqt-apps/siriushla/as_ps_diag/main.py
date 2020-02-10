@@ -19,7 +19,7 @@ import qtawesome as qta
 
 from pydm.widgets.base import PyDMWidget
 
-from siriuspy.envars import vaca_prefix
+from siriuspy.envars import VACA_PREFIX
 from siriuspy.csdevice.pwrsupply import Const as _PSConst, \
     ETypes as _PSEnums
 from siriuspy.search import PSSearch
@@ -37,7 +37,7 @@ from siriushla.as_ps_diag.util import asps2filters, lips2filters, sips2filters
 class PSDiag(SiriusMainWindow):
     """Power Supply Diagnostic."""
 
-    def __init__(self, parent=None, prefix=vaca_prefix):
+    def __init__(self, parent=None, prefix=VACA_PREFIX):
         """Init."""
         super().__init__(parent)
         self._prefix = prefix

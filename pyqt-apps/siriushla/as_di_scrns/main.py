@@ -15,7 +15,7 @@ import qtawesome as qta
 
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox, PyDMPushButton
 
-from siriuspy.envars import vaca_prefix as _vaca_prefix
+from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.namesys import SiriusPVName
 
 from siriushla import util
@@ -39,7 +39,7 @@ class SiriusScrnView(QWidget):
 
     save_files = Signal()
 
-    def __init__(self, parent=None, prefix=_vaca_prefix, device=None):
+    def __init__(self, parent=None, prefix=_VACA_PREFIX, device=None):
         """Initialize object."""
         QWidget.__init__(self, parent=parent)
         self.prefix = prefix
@@ -577,7 +577,7 @@ class SiriusScrnView(QWidget):
 class IndividualScrn(QWidget):
     """Individual Screen."""
 
-    def __init__(self, parent=None, prefix=_vaca_prefix, scrn=''):
+    def __init__(self, parent=None, prefix=_VACA_PREFIX, scrn=''):
         """Init."""
         super().__init__(parent=parent)
         self._prefix = prefix
@@ -620,7 +620,7 @@ if __name__ == '__main__':
     app = SiriusApplication()
 
     scrn = 'TB-01:DI-Scrn-1'
-    window = IndividualScrn(None, prefix=_vaca_prefix, scrn=scrn)
+    window = IndividualScrn(None, prefix=_VACA_PREFIX, scrn=scrn)
     window.setWindowTitle('Screen View: '+scrn)
     window.show()
     sys.exit(app.exec_())

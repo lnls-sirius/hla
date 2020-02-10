@@ -603,7 +603,7 @@ def _create_trigger_layout(parent, prefix, device, label_align=Qt.AlignRight):
 if __name__ == '__main__':
     """Run test."""
     import sys
-    from siriuspy.envars import vaca_prefix as _vaca_prefix
+    from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
     from siriushla.sirius_application import SiriusApplication
     app = SiriusApplication()
 
@@ -611,6 +611,6 @@ if __name__ == '__main__':
     DCCTSettingsWindow = create_window_from_widget(
         DCCTSettings, device+' Settings', is_main=True)
     window = DCCTSettingsWindow(
-        None, prefix=_vaca_prefix, device=device, show_smooth_settings=False)
+        None, prefix=_VACA_PREFIX, device=device, show_smooth_settings=False)
     window.show()
     sys.exit(app.exec_())

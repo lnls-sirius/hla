@@ -3,7 +3,7 @@
 from qtpy.QtWidgets import QWidget, QLabel, QPushButton, \
     QVBoxLayout, QHBoxLayout
 from qtpy.QtCore import Qt
-from siriuspy.envars import vaca_prefix as _vaca_prefix
+from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriushla import util
 
 
@@ -24,7 +24,7 @@ def get_scrn_list(sec):
 class ScrnSummary(QWidget):
     """Screen Summary."""
 
-    def __init__(self, parent=None, prefix=_vaca_prefix, scrn=''):
+    def __init__(self, parent=None, prefix=_VACA_PREFIX, scrn=''):
         """Init."""
         super().__init__(parent=parent)
         self._prefix = prefix
@@ -46,7 +46,7 @@ class ScrnSummary(QWidget):
 class SelectScrns(QWidget):
     """Select Screens."""
 
-    def __init__(self, parent=None, prefix=_vaca_prefix, sec=''):
+    def __init__(self, parent=None, prefix=_VACA_PREFIX, sec=''):
         """Init."""
         super().__init__(parent=parent)
         self._prefix = prefix

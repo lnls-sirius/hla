@@ -4,13 +4,13 @@
 import sys
 import argparse as _argparse
 from siriushla.sirius_application import SiriusApplication
-from siriuspy.envars import vaca_prefix
+from siriuspy.envars import VACA_PREFIX
 from siriushla.as_ap_injcontrol import InjBOControlWindow
 
 
 parser = _argparse.ArgumentParser(description="Run InjBO HLA Interface.")
 parser.add_argument(
-    '-p', "--prefix", type=str, default=vaca_prefix,
+    '-p', "--prefix", type=str, default=VACA_PREFIX,
     help="Define the prefix for the PVs in the window.")
 args = parser.parse_args()
 

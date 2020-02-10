@@ -7,7 +7,7 @@ from qtpy.QtWidgets import QWidget, QGroupBox, QComboBox, QLabel, \
     QDoubleSpinBox, QVBoxLayout, QHBoxLayout, QGridLayout, QSpacerItem, \
     QSizePolicy as QSzPlcy, QApplication, QMessageBox
 
-from siriuspy.envars import vaca_prefix
+from siriuspy.envars import VACA_PREFIX
 from siriuspy.search import MASearch
 from siriuspy.factory import NormalizerFactory
 from siriushla.sirius_application import SiriusApplication
@@ -253,6 +253,6 @@ if __name__ == '__main__':
     import sys
 
     app = SiriusApplication()
-    w = MagOffConvApp(prefix=vaca_prefix)
+    w = MagOffConvApp(prefix=VACA_PREFIX)
     w.show()
     sys.exit(app.exec_())

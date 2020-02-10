@@ -4,7 +4,7 @@ from qtpy.QtCore import Qt
 from pydm.widgets import PyDMPushButton
 import qtawesome as qta
 
-from siriuspy.envars import vaca_prefix
+from siriuspy.envars import VACA_PREFIX
 from siriushla import util
 from siriushla.common.cam_basler import SiriusImageView, create_propty_layout,\
     BaslerCamSettings
@@ -14,7 +14,7 @@ from siriushla.widgets.windows import create_window_from_widget
 class VLightCamView(QWidget):
     """VLight Cam Viewer."""
 
-    def __init__(self, parent=None, prefix=vaca_prefix, section=''):
+    def __init__(self, parent=None, prefix=VACA_PREFIX, section=''):
         """Init."""
         super().__init__(parent)
         self.prefix = prefix

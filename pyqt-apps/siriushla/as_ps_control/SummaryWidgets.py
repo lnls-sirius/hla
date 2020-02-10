@@ -8,7 +8,7 @@ from qtpy.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QPushButton, \
 import qtawesome as qta
 from pydm.widgets import PyDMPushButton, PyDMLabel, PyDMEnumComboBox
 
-from siriuspy.envars import vaca_prefix as VACA_PREFIX
+from siriuspy.envars import VACA_PREFIX as VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as PVName
 from siriuspy.search import PSSearch
 from siriushla.widgets import PyDMStateButton, SiriusLedState, \

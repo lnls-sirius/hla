@@ -1,7 +1,7 @@
 import epics
 from math import isclose
 import numpy as _np
-from siriuspy.envars import vaca_prefix as _VACA_PREFIX
+from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 
 _TIMEOUT = 0.5
 

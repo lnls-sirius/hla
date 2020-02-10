@@ -8,7 +8,7 @@ from qtpy.QtWidgets import QHBoxLayout, QVBoxLayout, QGridLayout, QWidget, \
     QButtonGroup, QMenuBar
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox
 
-from siriuspy.envars import vaca_prefix as _vaca_prefix
+from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 
 from siriushla import util
 from siriushla.widgets import SiriusMainWindow, PyDMLed, SiriusLedAlert, \
@@ -21,7 +21,7 @@ from siriushla.as_pu_control import PUDetailWindow
 class BaseWindow(SiriusMainWindow):
     """Base class."""
 
-    def __init__(self, parent=None, prefix=_vaca_prefix):
+    def __init__(self, parent=None, prefix=_VACA_PREFIX):
         """Init."""
         super().__init__(parent)
         self.prefix = prefix

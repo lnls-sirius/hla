@@ -11,7 +11,7 @@ import qtawesome as qta
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 from pydm.widgets import PyDMLabel, PyDMPushButton
 from siriuspy.namesys import SiriusPVName as _PVName
-from siriuspy.envars import vaca_prefix as _vaca_prefix
+from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, SiriusDialog, PyDMLed, \
                               SiriusConnectionSignal, PyDMLedMultiChannel
@@ -62,7 +62,7 @@ class SlitMonitoring(QWidget):
         """Init."""
         super(SlitMonitoring, self).__init__(parent)
         if not prefix:
-            self.prefix = _vaca_prefix
+            self.prefix = _VACA_PREFIX
         else:
             self.prefix = prefix
         self.slit_orientation = slit_orientation.upper()
@@ -276,7 +276,7 @@ class _SlitDetails(SiriusDialog):
 if __name__ == '__main__':
     """Run Example."""
     app = SiriusApplication()
-    w = SlitMonitoring(slit_orientation='H', prefix=_vaca_prefix)
+    w = SlitMonitoring(slit_orientation='H', prefix=_VACA_PREFIX)
     window = SiriusMainWindow()
     window.setCentralWidget(w)
     window.setWindowTitle('SlitH Monitor')

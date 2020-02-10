@@ -4,7 +4,7 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QLabel, QCheckBox, \
     QVBoxLayout, QGridLayout, QDoubleSpinBox, QApplication
 from pydm.widgets import PyDMTimePlot
-from siriuspy.envars import vaca_prefix
+from siriuspy.envars import VACA_PREFIX
 from siriuspy.clientarch import ClientArchiver
 from siriushla.widgets import SiriusMainWindow, SiriusConnectionSignal
 
@@ -12,7 +12,7 @@ from siriushla.widgets import SiriusMainWindow, SiriusConnectionSignal
 class BOMonitor(SiriusMainWindow):
     """BO charges monitor."""
 
-    def __init__(self, parent=None, prefix=vaca_prefix):
+    def __init__(self, parent=None, prefix=VACA_PREFIX):
         super().__init__(parent)
         self.setObjectName('BOApp')
         self.setWindowTitle('BO Charge Monitor')

@@ -7,13 +7,13 @@ import sys
 import argparse
 from siriushla.sirius_application import SiriusApplication
 from siriushla.as_ap_injcontrol import TLControlWindow
-from siriuspy.envars import vaca_prefix as _vaca_prefix
+from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 
 
 parser = argparse.ArgumentParser(
     description="Run TS Control HLA Interface.")
 parser.add_argument(
-    '-p', "--prefix", type=str, default=_vaca_prefix,
+    '-p', "--prefix", type=str, default=_VACA_PREFIX,
     help="Define the prefix for the PVs in the window.")
 args = parser.parse_args()
 

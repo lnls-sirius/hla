@@ -7,7 +7,7 @@ import argparse as _argparse
 import qtawesome as qta
 
 from siriushla.sirius_application import SiriusApplication
-from siriuspy.envars import vaca_prefix
+from siriuspy.envars import VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.search import BPMSearch
 from siriushla.util import get_appropriate_color, get_monitor_icon
@@ -33,7 +33,7 @@ parser.add_argument(
     help="Show Antennas or Positions  (default= 'Positions').",
     choices=('Positions', 'Antennas'))
 parser.add_argument(
-    '-p', "--prefix", type=str, default=vaca_prefix,
+    '-p', "--prefix", type=str, default=VACA_PREFIX,
     help="Define the prefix for the PVs in the window.")
 args = parser.parse_args()
 

@@ -9,7 +9,7 @@ from qtpy.QtWidgets import QPushButton, QGridLayout, QLabel, QSpacerItem, \
 from pydm.widgets import PyDMEnumComboBox, PyDMLabel, PyDMLineEdit, \
     PyDMWaveformTable
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
-from siriuspy.envars import vaca_prefix as _vaca_prefix
+from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.csdevice.opticscorr import Const as _Const
 from siriushla import util as _hlautil
 from siriushla.widgets import PyDMStateButton
@@ -27,7 +27,7 @@ class OpticsCorrWindow(SiriusMainWindow):
         self.opticsparam = opticsparam
         self._acc = acc.upper()
         if not prefix:
-            prefix = _vaca_prefix
+            prefix = _VACA_PREFIX
 
         UI_FILE = (_os.path.abspath(_os.path.dirname(__file__)) + '/ui_' +
                    acc + '_ap_' + opticsparam + 'corr.ui')

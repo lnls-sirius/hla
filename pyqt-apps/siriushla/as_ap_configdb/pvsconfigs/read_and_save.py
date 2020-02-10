@@ -7,7 +7,7 @@ from qtpy.QtGui import QKeySequence, QKeyEvent
 from qtpy.QtWidgets import QWidget, QComboBox, QPushButton, \
     QVBoxLayout, QTableView, QMessageBox, QApplication
 
-from siriuspy.envars import vaca_prefix as _VACA_PREFIX
+from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.clientconfigdb import ConfigDBException, ConfigDBClient
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.common.epics.wrapper import PyEpicsWrapper
@@ -207,11 +207,11 @@ class ReadAndSaveConfig2ServerWindow(SiriusMainWindow):
 
 if __name__ == '__main__':
     import sys
-    from siriuspy.envars import server_url_configdb
+    from siriuspy.envars import SRVURL_CONFIGDB
     from siriushla.sirius_application import SiriusApplication
 
     app = SiriusApplication()
-    client = ConfigDBClient(url=server_url_configdb)
+    client = ConfigDBClient(url=SRVURL_CONFIGDB)
     w = ReadAndSaveConfig2ServerWindow(client)
     w.show()
 

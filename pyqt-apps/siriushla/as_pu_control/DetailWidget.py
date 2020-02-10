@@ -6,7 +6,7 @@ from qtpy.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, \
 from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMPushButton
 
 from siriuspy.namesys import SiriusPVName as _PVName
-from siriuspy.envars import vaca_prefix as _VACA_PREFIX
+from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriushla import util
 from siriushla.widgets import SiriusLedState, SiriusLedAlert, PyDMLed, \
     PyDMStateButton, PyDMLinEditScrollbar, PyDMLedMultiChannel

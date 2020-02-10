@@ -11,7 +11,7 @@ from qtpy.QtWidgets import QWidget, QGridLayout, QVBoxLayout, \
     QListWidget, QListWidgetItem, QProgressBar
 import qtawesome as qta
 
-from siriuspy.envars import vaca_prefix as VACA_PREFIX
+from siriuspy.envars import VACA_PREFIX as VACA_PREFIX
 from siriuspy.namesys import Filter, SiriusPVName as PVName
 from siriuspy.cycle import get_psnames, Timing
 from siriuspy.search import PSSearch
