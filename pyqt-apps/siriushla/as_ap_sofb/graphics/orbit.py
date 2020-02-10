@@ -87,10 +87,9 @@ class OrbitWidget(BaseWidget):
         pvs = [
             'SPassOrbX-Mon', 'SPassOrbY-Mon',
             'OfflineOrbX-RB', 'OfflineOrbY-RB',
-            'RefOrbX-RB', 'RefOrbY-RB',
-            'BPMOffsetX-Mon', 'BPMOffsetY-Mon']
+            'RefOrbX-RB', 'RefOrbY-RB']
         orbs = [
-            'SPassOrb', 'OfflineOrb', 'RefOrb', 'BPMs Offset']
+            'SPassOrb', 'OfflineOrb', 'RefOrb']
         if isring:
             pvs.extend([
                 'SlowOrbX-Mon', 'SlowOrbY-Mon',
