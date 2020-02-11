@@ -146,7 +146,7 @@ def get_prop2label(psname):
 def sort_propties(labels):
     default_order = (
         'detail', 'bbb', 'udc', 'opmode', 'ctrlmode', 'state', 'pulse',
-        'conn', 'intlk', 'reset', 'ctrlloop', 'wfmupdate', 'setpoint',
+        'intlk', 'reset', 'conn', 'ctrlloop', 'wfmupdate', 'setpoint',
         'readback', 'monitor', 'strength_sp', 'strength_rb', 'strength_mon',
         'trim')
     idcs = list()
@@ -344,7 +344,7 @@ class SummaryWidget(QWidget):
             if 'Sept' not in self._name.dev:
                 self._intlk.append(self._prefixed_name+":Intlk8-Mon")
         else:
-            self._intlk = self._prefixed_name + ":Intlk-Mon"
+            self._intlk = self._prefixed_name + ":StatusIntlk-Mon"
 
         sp = self._analog_name
         self._analog_sp = self._prefixed_name + ':{}-SP'.format(sp)

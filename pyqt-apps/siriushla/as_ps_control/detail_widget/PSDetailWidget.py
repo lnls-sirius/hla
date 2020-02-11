@@ -15,7 +15,7 @@ from pydm.widgets import PyDMLabel, PyDMEnumComboBox, PyDMPushButton, \
     PyDMLineEdit, PyDMWaveformPlot
 from siriushla import util
 from siriushla.widgets import PyDMStateButton, PyDMLinEditScrollbar, \
-    SiriusConnectionSignal, SiriusLedState, SiriusLedAlert
+    SiriusConnectionSignal, SiriusLedState, SiriusLedAlert, PyDMLedMultiChannel
 from .InterlockWindow import InterlockWindow, LIInterlockWindow
 
 
@@ -230,21 +230,6 @@ class PSDetailWidget(QWidget):
     def _tstamp_boot_met(self, value):
         time_str = self.conv_time_string(value)
         self.tstamp_boot.setText(time_str)
-
-    def _psConnLayout(self):
-        self.psconnsts_led = SiriusLedState(
-            self, self._prefixed_psname + ":PSConnStatus-Mon")
-        self.psconnsts_led.setOffColor(SiriusLedState.Red)
-        self.psconnsts_led.setObjectName("ctrlmode1_psconn_led")
-        self.psconnsts_label = PyDMLabel(
-            self, self._prefixed_psname + ":PSConnStatus-Mon")
-        self.psconnsts_label.setObjectName("ctrlmode1_psconn_label")
-
-        layout = QHBoxLayout()
-        layout.setAlignment(Qt.AlignCenter)
-        layout.addWidget(self.psconnsts_led)
-        layout.addWidget(self.psconnsts_label)
-        return layout
 
     def _interlockLayout(self):
         # Widgets
@@ -855,8 +840,9 @@ class LIPSDetailWidget(PSDetailWidget):
             '#intlk_bt{min-width:25px; max-width:25px; icon-size:20px;}')
         util.connect_window(self.intlk_bt, LIInterlockWindow, self,
                             **{'devname': self._psname})
-        self.intlk_led = SiriusLedAlert(
-            parent=self, init_channel=self._prefixed_psname+":StatusIntlk-Mon")
+        ch2vals = {self._prefixed_psname+':StatusIntlk-Mon': {'value': 55,
+                                                              'comp': 'lt'}}
+        self.intlk_led = PyDMLedMultiChannel(self, channels2values=ch2vals)
 
         layout = QGridLayout()
         layout.setAlignment(Qt.AlignCenter)
