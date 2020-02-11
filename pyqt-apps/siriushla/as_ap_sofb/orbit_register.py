@@ -234,6 +234,7 @@ class OrbitRegister(QWidget):
 
         cbbox = QComboBox(wid)
         cbbox.setEditable(True)
+        cbbox.setMaxVisibleItems(10)
         corrnames = self._csorb.CH_NAMES + self._csorb.CV_NAMES
         if self._csorb.acc == 'SI':
             corrnames.append('RF')
