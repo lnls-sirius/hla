@@ -265,6 +265,12 @@ class RefControl(BaseCombo):
                     self.orbits[pln] *= 0
                     self.setpoint[pln].send_value_signal[_np.ndarray].emit(
                         self.orbits[pln])
+        elif text.lower().startswith('bba_orb'):
+            data = self._client.get_config_value('bba_orb')
+            for pln in ('x', 'y'):
+                self.orbits[pln] = _np.array(data[pln])
+                self.setpoint[pln].send_value_signal[_np.ndarray].emit(
+                    self.orbits[pln])
         elif text.lower().startswith('servconf'):
             win = LoadConfigDialog(self._config_type, self)
             confname, status = win.exec_()
@@ -278,7 +284,7 @@ class RefControl(BaseCombo):
         super()._selection_changed(text, sigs)
 
     def setup_ui(self):
-        super().setup_ui(['Zero', 'ServConf'])
+        super().setup_ui(['Zero', 'bba_orb', 'ServConf'])
 
 
 class OfflineOrbControl(BaseCombo):
