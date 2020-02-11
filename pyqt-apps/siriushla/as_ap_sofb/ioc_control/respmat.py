@@ -210,6 +210,8 @@ class RespMatWidget(BaseWidget):
         pbtn = QPushButton('ServConf', grpbx)
         pbtn.clicked.connect(self._open_save_config_servconf)
         gdl.addWidget(pbtn, 1, 2)
+        self.respmat_label = QLabel('')
+        gdl.addWidget(self.respmat_label, 2, 0, 1, 3)
 
         gdl.addItem(
             QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding),
@@ -242,6 +244,7 @@ class RespMatWidget(BaseWidget):
             return
         respm = _np.loadtxt(filename[0])
         self._respmat_sp.send_value_signal[_np.ndarray].emit(respm.flatten())
+        self.respmat_label.setText('Loaded from file: \n\n' + filename[0])
 
     def _open_load_config_servconf(self):
         win = LoadConfigDialog(self._config_type, self)
@@ -252,6 +255,7 @@ class RespMatWidget(BaseWidget):
         data = self._client.get_config_value(confname)
         self._respmat_sp.send_value_signal[_np.ndarray].emit(
             _np.array(data).flatten())
+        self.respmat_label.setText('Loaded from ServConf: \n\n' + confname)
 
     def _open_save_config_servconf(self):
         win = SaveConfigDialog(self._config_type, self)

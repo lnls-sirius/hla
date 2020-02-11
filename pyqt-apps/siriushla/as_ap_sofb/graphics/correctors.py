@@ -1,9 +1,10 @@
 """Control the Correctors Graphic Displnay."""
 
 from pyqtgraph import mkPen
-from qtpy.QtWidgets import QCheckBox, \
+from qtpy.QtWidgets import QCheckBox, QLabel, \
     QVBoxLayout, QHBoxLayout, QGroupBox
 from qtpy.QtGui import QColor
+from pydm.widgets import PyDMLabel
 from siriushla.widgets import SiriusConnectionSignal
 from siriushla.as_ap_sofb.graphics.base import BaseWidget, InfLine
 
@@ -23,7 +24,31 @@ class CorrectorsWidget(BaseWidget):
         self.updater[1].some_changed('val', 'Kicks')
         self.updater[1].some_changed('ref', 'Zero')
 
+        if acc == 'SI':
+            self.add_RF_kicks()
         self.add_kicklimits_curves()
+
+    def add_RF_kicks(self):
+        grpbx = QGroupBox('RF', self)
+        vbl = QVBoxLayout(grpbx)
+        self.hbl.addWidget(grpbx)
+        self.hbl.addStretch(1)
+
+        hbl = QHBoxLayout()
+        vbl.addLayout(hbl)
+        lbl = QLabel('Frequency', grpbx)
+        hbl.addWidget(lbl)
+        lbl = PyDMLabel(grpbx, self.prefix + 'KickRF-Mon')
+        lbl.showUnits = True
+        hbl.addWidget(lbl)
+
+        hbl = QHBoxLayout()
+        vbl.addLayout(hbl)
+        lbl = QLabel('Delta Freq.', grpbx)
+        hbl.addWidget(lbl)
+        lbl = PyDMLabel(grpbx, self.prefix + 'DeltaKickRF-Mon')
+        lbl.showUnits = True
+        hbl.addWidget(lbl)
 
     def add_kicklimits_curves(self):
         grpbx = QGroupBox('Show Kick Limits', self)

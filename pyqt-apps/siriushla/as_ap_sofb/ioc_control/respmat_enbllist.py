@@ -103,7 +103,9 @@ class SelectionMatrix(BaseWidget):
     def __init__(self, parent, prefix, acc='SI'):
         super().__init__(parent, prefix, acc)
         tab = QTabWidget(self)
-        QHBoxLayout(self).addWidget(tab)
+        hbl = QHBoxLayout(self)
+        hbl.addWidget(tab)
+        hbl.setContentsMargins(0, 0, 0, 0)
 
         for dev in ('BPMX', 'BPMY', 'CH', 'CV'):
             tab.addTab(
@@ -166,13 +168,25 @@ class SingleSelMatrix(BaseWidget):
         side_headers_wids = []
         top_headers_wids = []
         for i, head in enumerate(self.top_headers):
-            head_wid = QLabel(head, alignment=Qt.AlignCenter)
+            head_wid = QPushButton(head)
+            head_wid.setStyleSheet('min-width:2em;')
+            head_wid.clicked.connect(_part(self._sel_wids_at, i, isrow=False))
             top_headers_wids.append(head_wid)
         for i, head in enumerate(self.side_headers):
-            head_wid = QLabel(head, alignment=Qt.AlignCenter)
+            head_wid = QPushButton(head)
+            head_wid.setStyleSheet('min-width:2em;')
+            head_wid.clicked.connect(_part(self._sel_wids_at, i, isrow=True))
             side_headers_wids.append(head_wid)
         self.top_headers_wids = top_headers_wids
         self.side_headers_wids = side_headers_wids
+
+    def _sel_wids_at(self, idx, isrow=False):
+        for i, led in enumerate(self.pvs.led_list):
+            row, col = self._get_position(i)
+            if isrow and row == idx:
+                led.toggle()
+            if not isrow and col == idx:
+                led.toggle()
 
     def _setup_ui(self):
         name = self.dev + "List"
@@ -207,9 +221,15 @@ class SingleSelMatrix(BaseWidget):
         wid.setObjectName('scrollarea')
         grid_l.addWidget(wid, 2, 0, 1, 1)
         hbl = QHBoxLayout(wid)
+        hbl.addStretch()
+        hbl.addWidget(self.pvs.btn_unsel_all)
+        hbl.addStretch()
         hbl.addWidget(self.pvs.btn_dsbl_all)
+        hbl.addStretch()
         hbl.addWidget(self.pvs.btn_enbl_all)
+        hbl.addStretch()
         hbl.addWidget(self.pvs.btn_send)
+        hbl.addStretch()
         if self.dev.lower().startswith('bpm'):
             hbl.addWidget(self.pvs.btn_send_otpl)
         grid_l.setSizeConstraint(grid_l.SetMinimumSize)
