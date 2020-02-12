@@ -755,6 +755,23 @@ class LIPSDetailWidget(PSDetailWidget):
             self, self._prefixed_psname + ":TimestampBoot-Cte")
         self.tstamp_boot_cte.setObjectName("tstamp_cte_label")
         self.tstamp_boot_cte.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        self.tstamp_boot_cte_ch = SiriusConnectionSignal(
+            self._prefixed_psname + ":TimestampBoot-Cte")
+        self.tstamp_boot_cte_ch.new_value_signal[float].connect(
+            self._tstamp_boot_cte_met)
+
+        self.tstamp_update_label = QLabel('IOC Update')
+        self.tstamp_update_label.setObjectName("tstampupdate_label")
+        self.tstamp_update_label.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        self.tstamp_update_mon = PyDMLabel(
+            self, self._prefixed_psname + ":TimestampUpdate-Mon")
+        self.tstamp_update_mon.setObjectName("tstampupdate_mon_label")
+        self.tstamp_update_mon.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        self.tstamp_update_mon_ch = SiriusConnectionSignal(
+            self._prefixed_psname + ":TimestampUpdate-Mon")
+        self.tstamp_update_mon_ch.new_value_signal[float].connect(
+            self._tstamp_update_mon_met)
+
 
         self.conn_label = QLabel('Net Status')
         self.conn_label.setObjectName("net_label")
@@ -769,9 +786,19 @@ class LIPSDetailWidget(PSDetailWidget):
         layout.addWidget(self.version_cte, 0, 1, Qt.AlignHCenter)
         layout.addWidget(self.tstamp_boot_label, 1, 0, Qt.AlignHCenter)
         layout.addWidget(self.tstamp_boot_cte, 1, 1, Qt.AlignHCenter)
-        layout.addWidget(self.conn_label, 2, 0, Qt.AlignHCenter)
-        layout.addWidget(self.conn_sts, 2, 1, Qt.AlignHCenter)
+        layout.addWidget(self.tstamp_update_label, 2, 0, Qt.AlignHCenter)
+        layout.addWidget(self.tstamp_update_mon, 2, 1, Qt.AlignHCenter)
+        layout.addWidget(self.conn_label, 3, 0, Qt.AlignHCenter)
+        layout.addWidget(self.conn_sts, 3, 1, Qt.AlignHCenter)
         return layout
+
+    def _tstamp_update_mon_met(self, value):
+        time_str = self.conv_time_string(value)
+        self.tstamp_update_mon.setText(time_str)
+
+    def _tstamp_boot_cte_met(self, value):
+        time_str = self.conv_time_string(value)
+        self.tstamp_boot_cte.setText(time_str)
 
     def _currentLayout(self):
         self.current_sp_label = QLabel("Setpoint")
