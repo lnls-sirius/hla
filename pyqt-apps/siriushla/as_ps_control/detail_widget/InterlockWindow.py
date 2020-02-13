@@ -6,6 +6,7 @@ from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QGridLayout, \
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.search import PSSearch
+from siriuspy.csdevice.pwrsupply import ETypes as _et
 from siriuspy.csdevice.pwrsupply import get_ps_propty_database
 from siriushla.widgets import SiriusMainWindow, SiriusLedAlert, PyDMLed
 
@@ -14,6 +15,7 @@ class InterlockWidget(QWidget):
     """InterlockWidget class."""
 
     def __init__(self, parent=None, init_channel='', bit=-1, label=''):
+        """."""
         super().__init__(parent)
         self.led = SiriusLedAlert(self, init_channel, bit)
         self.label = QLabel(label, self)
@@ -27,6 +29,7 @@ class InterlockListWidget(QWidget):
     """Widget with interlock information."""
 
     def __init__(self, parent=None, devname='', interlock=''):
+        """."""
         super().__init__(parent)
         self._devname = _PVName(devname)
         self.setObjectName(self._devname.sec+'App')
@@ -52,6 +55,7 @@ class InterlockWindow(SiriusMainWindow):
     """InterlockWindow class."""
 
     def __init__(self, parent=None, devname='', interlock=0):
+        """."""
         super().__init__(parent)
         self._devname = _PVName(devname)
 
@@ -93,44 +97,12 @@ class LIInterlockWindow(SiriusMainWindow):
     """LIInterlockWindow class."""
 
     BIT_MAPS = {
-        'IntlkWarn-Mon': {
-            0: 'LoadI 0C Shutdown',
-            1: 'LoadI 0C Interlock',
-            2: 'LoadV 0V Shutdown',
-            3: 'LoadV 0V Interlock',
-            4: 'Ext Interlock Fault',
-            5: 'LoadI Over Thrs',
-            6: 'TestPoint',
-            7: 'ADC Cali',
-        },
-        'IntlkSignalIn-Mon': {
-            0: 'FAN',
-            1: '',
-            2: '',
-            3: '',
-            4: '',
-            5: '',
-            6: '',
-            7: '',
-            8: '',
-            9: 'INTERLK1',
-            10: 'INTERLK2',
-            11: '0T',
-            12: 'DCCT',
-            13: '0C',
-            14: '0V',
-            15: 'DCLink',
-        },
-        'IntlkSignalOut-Mon': {
-            0: 'Main Relay1',
-            1: '',
-            2: '',
-            3: '',
-            4: '',
-            5: '',
-            6: '',
-            7: 'Out Interlock',
-        },
+        'IntlkWarn-Mon':
+            {idx: name for idx, name in enumerate(_et.LINAC_INTLCK_WARN)},
+        'IntlkSignalIn-Mon':
+            {idx: name for idx, name in enumerate(_et.LINAC_INTLCK_SGIN)},
+        'IntlkSignalOut-Mon':
+            {idx: name for idx, name in enumerate(_et.LINAC_INTLCK_SGOUT)},
     }
     COLOR_MAPS = {
         'IntlkWarn-Mon': {
@@ -156,6 +128,7 @@ class LIInterlockWindow(SiriusMainWindow):
     }
 
     def __init__(self, parent=None, devname=''):
+        """."""
         super().__init__(parent)
         self._devname = _PVName(devname)
         self.setObjectName('LIApp')
