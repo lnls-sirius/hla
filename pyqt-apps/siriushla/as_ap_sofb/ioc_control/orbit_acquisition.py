@@ -7,7 +7,7 @@ import qtawesome as qta
 from pydm.widgets import PyDMLabel, PyDMPushButton
 from siriushla.util import connect_window
 from siriushla.widgets import SiriusLedAlert, SiriusSpinbox, PyDMStateButton, \
-    SiriusLedState
+    SiriusLedState, SiriusLabel
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.as_ti_control import HLTriggerDetailed as _HLTriggerDetailed
 
@@ -293,9 +293,10 @@ class AcqControlWidget(BaseWidget):
         lbl = QLabel('Index', grp_bx, alignment=Qt.AlignCenter)
         wid = self.create_pair(grp_bx, 'MTurnIdx')
         fbl.addRow(lbl, wid)
-        lbl = QLabel('Time [ms]', grp_bx, alignment=Qt.AlignCenter)
-        pdm_lbl = PyDMLabel(
+        lbl = QLabel('Index Time', grp_bx, alignment=Qt.AlignCenter)
+        pdm_lbl = SiriusLabel(
             grp_bx, init_channel=self.prefix+'MTurnIdxTime-Mon')
+        pdm_lbl.showUnits = True
         pdm_lbl.setAlignment(Qt.AlignCenter)
         fbl.addRow(lbl, pdm_lbl)
         lbl = QLabel('TbT Sync', grp_bx, alignment=Qt.AlignCenter)
