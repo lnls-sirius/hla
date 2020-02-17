@@ -9,6 +9,7 @@ from pydm.widgets.base import PyDMPrimitiveWidget
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.csdevice.orbitcorr import SOFBFactory
 from siriuspy.clientconfigdb import ConfigDBClient
+from siriushla.widgets import SiriusSpinbox, PyDMStateButton, SiriusLedState
 from siriushla.as_ap_configdb import LoadConfigDialog
 
 
@@ -56,6 +57,18 @@ class BaseWidget(QWidget):
         pdm_lbl.setAlignment(Qt.AlignCenter)
         hbl.addWidget(pdm_cbbx)
         hbl.addWidget(pdm_lbl)
+        return wid
+
+    def create_pair_butled(self, parent, pvname, prefix=None):
+        prefix = prefix or self.prefix
+        wid = QWidget(parent)
+        hbl = QHBoxLayout(wid)
+        hbl.setContentsMargins(0, 0, 0, 0)
+        spnt = PyDMStateButton(
+            wid, init_channel=prefix+pvname+'-Sel')
+        rdb = SiriusLedState(wid, init_channel=prefix+pvname+'-Sts')
+        hbl.addWidget(spnt)
+        hbl.addWidget(rdb)
         return wid
 
 
@@ -108,6 +121,7 @@ class BaseCombo(QComboBox, PyDMPrimitiveWidget):
         sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
         self.setSizePolicy(sz_pol)
         self.setEditable(True)
+        add_items.extend(['Zero', 'ServConf'])
         for item in add_items:
             self.addItem(item)
         for reg in sorted(self.ctrls.keys()):
@@ -122,7 +136,23 @@ class BaseCombo(QComboBox, PyDMPrimitiveWidget):
 
     def _selection_changed(self, text, sigs=None):
         sigs = sigs or dict()
-        if text in self.ctrls:
+        if text.lower().startswith('zero'):
+            for pln in ('x', 'y'):
+                if self.orbits[pln] is not None:
+                    self.orbits[pln] *= 0
+                    self.setpoint[pln].send_value_signal[_np.ndarray].emit(
+                        self.orbits[pln])
+        elif text.lower().startswith('servconf'):
+            win = LoadConfigDialog(self._config_type, self)
+            confname, status = win.exec_()
+            if not status:
+                return
+            data = self._client.get_config_value(confname)
+            for pln in ('x', 'y'):
+                self.orbits[pln] = _np.array(data[pln])
+                self.setpoint[pln].send_value_signal[_np.ndarray].emit(
+                    self.orbits[pln])
+        elif text in self.ctrls:
             for pln in ('x', 'y'):
                 orb = self.ctrls[text][pln]['getvalue']()
                 if orb is None:
