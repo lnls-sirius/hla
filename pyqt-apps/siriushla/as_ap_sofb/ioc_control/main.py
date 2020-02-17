@@ -222,7 +222,7 @@ class SOFBControl(BaseWidget):
         vbl.addWidget(grpbx)
 
         lbl = QLabel('State', grpbx)
-        wid = self.create_pair_sel(grpbx, 'ClosedLoop')
+        wid = self.create_pair_butled(grpbx, 'ClosedLoop')
         hbl = QHBoxLayout()
         hbl.addWidget(lbl)
         hbl.addWidget(wid)

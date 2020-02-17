@@ -8,7 +8,8 @@ from pydm.widgets import PyDMLabel, PyDMEnumComboBox
 from pydm.widgets.base import PyDMPrimitiveWidget
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.csdevice.orbitcorr import SOFBFactory
-from siriushla.widgets import SiriusSpinbox
+from siriuspy.clientconfigdb import ConfigDBClient
+from siriushla.as_ap_configdb import LoadConfigDialog
 
 
 class BaseWidget(QWidget):
@@ -68,6 +69,8 @@ class BaseCombo(QComboBox, PyDMPrimitiveWidget):
         self.readback = readback
         self.ctrls = ctrls
         self._csorb = SOFBFactory.create(acc)
+        self._config_type = acc.lower() + '_orbit'
+        self._client = ConfigDBClient(config_type=self._config_type)
         self.orbits = {
             'x': _np.zeros(self._csorb.NR_BPMS, dtype=float),
             'y': _np.zeros(self._csorb.NR_BPMS, dtype=float)}
