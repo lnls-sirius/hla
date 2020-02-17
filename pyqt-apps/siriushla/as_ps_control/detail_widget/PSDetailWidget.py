@@ -830,9 +830,6 @@ class LIPSDetailWidget(PSDetailWidget):
         return layout
 
     def _metricLayout(self):
-
-        print(self._metric)
-
         metric_sp_ch = self._prefixed_psname+":"+self._metric+"-SP"
         metric_rb_ch = self._prefixed_psname+":"+self._metric+"-RB"
         metric_mon_ch = self._prefixed_psname+":"+self._metric+"-Mon"
