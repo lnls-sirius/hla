@@ -79,7 +79,6 @@ class KicksConfigWidget(BaseWidget):
             grpbx = QWidget(tabw)
             grpbx.setObjectName('gbx')
             grpbx.setStyleSheet('#gbx{min-height:5.5em; max-height:5.5em;}')
-            # grpbx.setVisible(pvname.startswith('Delta'))
             fbl = QFormLayout(grpbx)
             for unit, pln in zip(units, planes):
                 lbl = QLabel(pln+' '+unit+'  ', grpbx)
@@ -92,9 +91,9 @@ class KicksConfigWidget(BaseWidget):
             tabw.addTab(grpbx, tab)
         for i, name in enumerate(names):
             tabw.setTabToolTip(i, name)
-        if self.isring:
+        if self.acc == 'SI':
             lbl = QLabel('Synchronize', gbox)
-            wid = self.create_pair_sel(gbox, 'CorrSync')
+            wid = self.create_pair_butled(gbox, 'CorrSync')
             hbl = QHBoxLayout()
             hbl.addWidget(lbl)
             hbl.addWidget(wid)
