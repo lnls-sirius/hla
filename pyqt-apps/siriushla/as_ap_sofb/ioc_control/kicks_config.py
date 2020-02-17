@@ -79,7 +79,6 @@ class KicksConfigWidget(BaseWidget):
             grpbx = QWidget(tabw)
             grpbx.setObjectName('gbx')
             grpbx.setStyleSheet('#gbx{min-height:5.5em; max-height:5.5em;}')
-            # grpbx.setVisible(pvname.startswith('Delta'))
             fbl = QFormLayout(grpbx)
             for unit, pln in zip(units, planes):
                 lbl = QLabel(pln+' '+unit+'  ', grpbx)
