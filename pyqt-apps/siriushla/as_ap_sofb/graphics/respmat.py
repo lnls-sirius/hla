@@ -150,6 +150,7 @@ class SingularValues(QWidget):
         vbl.addWidget(lab)
         graph = Graph()
         graph.setShowLegend(False)
+        graph.plotItem.setLogMode(y=True)
         graph.setLabel('left', text='Singular Values', units='m/rad')
         graph.setLabel('bottom', text='Index')
         vbl.addWidget(graph)
