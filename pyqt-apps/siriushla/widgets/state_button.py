@@ -1492,6 +1492,9 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
 
     def paintEvent(self, event):
         """Treat appearence changes based on connection state and value."""
+        self.style().unpolish(self)
+        self.style().polish(self)
+
         if not self.isEnabled():
             state = 'Disconnected'
         elif self._bit_val == self._on:
