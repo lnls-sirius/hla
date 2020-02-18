@@ -654,15 +654,15 @@ class PSDetailWidget(QWidget):
         self._update_wfm_diff()
 
     def _getElementMetric(self):
-        dipole = re.compile("(SI|BO|LI|TS|TB)-(Fam|\w{2,4}):PS-(B.*|Spect)$")
-        quadrupole = re.compile("(SI|BO|TS|TB)-(Fam|\w{2,4}):PS-Q\w+")
+        dipole = re.compile("(SI|TS|BO|TB)-(Fam|\w{2,4}):PS-B.*$")
+        quadrupole = re.compile("(SI|TS|BO|TB)-(Fam|\w{2,4}):PS-Q\w+")
         liquad = re.compile("LI-(Fam|\w{2,4}):PS-Q(?!(F|D)1)")
-        sextupole = re.compile("(SI|BO|TS|TB)-(Fam|\w{2,4}):PS-S(?!lnd)\w+$")
-        slow_corrector = re.compile(
-            "(SI|BO|TS|TB)-(Fam|\w{2,4}):PS-(CH|CV)(-|\w)*")
+        lispect = re.compile("LI-01:PS-Spect")
+        sextupole = re.compile("(SI|TS|BO|TB)-(Fam|\w{2,4}):PS-S(?!lnd)\w+$")
+        slow_corrector = re.compile("(SI|TS|BO|TB|LI)-(Fam|\w{2,4}):PS-(CH|CV)(-|\w)*")
         fast_corrector = re.compile(
             "(SI|BO|TS|TB)-(Fam|\w{2,4}):PS-(FCH|FCV)(-|\w)*")
-        skew_quad = re.compile("(SI|BO|TS|TB)-(Fam|\w{2,4}):PS-QS")
+        skew_quad = re.compile("(SI|TS|BO|TB)-(Fam|\w{2,4}):PS-QS")
 
         if dipole.match(self._psname):
             return "Energy"
@@ -673,7 +673,8 @@ class PSDetailWidget(QWidget):
         elif sextupole.match(self._psname):
             return "SL"
         elif slow_corrector.match(self._psname) or \
-                fast_corrector.match(self._psname):
+                fast_corrector.match(self._psname) or \
+                lispect.math(self._psname):
             return "Kick"
         else:
             return

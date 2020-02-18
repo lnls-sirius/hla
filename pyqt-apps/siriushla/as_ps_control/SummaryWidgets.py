@@ -15,7 +15,7 @@ from siriushla.widgets import PyDMStateButton, SiriusLedState, \
     SiriusLedAlert, PyDMLinEditScrollbar, PyDMLedMultiChannel
 
 
-Dipole = re.compile("^.*:PS-(B.*|Spect)$")
+Dipole = re.compile("^.*:PS-B.*$")
 Quadrupole = re.compile("^.*:PS-Q.*$")
 QuadrupoleSkew = re.compile("^.*:PS-QS.*$")
 Sextupole = re.compile("^.*:PS-S.*$")
@@ -23,12 +23,14 @@ Corrector = re.compile("^.*:PS-(CH|CV|FCH|FCV).*$")
 IsPulsed = re.compile("^.*:PU-.*$")
 IsDCLink = re.compile("^.*:PS-DCLink.*$")
 IsLinac = re.compile("^LI-.*$")
+IsLinacSpect = re.compile("^LI-01:PS-Spect$")
 HasTrim = re.compile("^.*SI-Fam:PS-Q.*$")
 HasSoftHardIntlk = re.compile("^(?!LI).*:PS-.*$")
 LIQuadHasNotStrength = re.compile("^LI-.*:PS-(QF1|QD1)$")
 
 
 def get_analog_name(psname):
+    """."""
     psname = PVName(psname)
     psmodel = PSSearch.conv_psname_2_psmodel(psname)
     try:
@@ -57,6 +59,7 @@ def get_analog_name(psname):
 
 
 def get_strength_name(psname):
+    """."""
     if Dipole.match(psname):
         return "Energy"
     elif Quadrupole.match(psname):
@@ -66,6 +69,8 @@ def get_strength_name(psname):
     elif Corrector.match(psname) and not IsLinac.match(psname):
         return "Kick"
     elif IsPulsed.match(psname):
+        return "Kick"
+    elif IsLinacSpect.match(psname):
         return "Kick"
     else:
         return
