@@ -214,12 +214,12 @@ class SetCurrent(BaseTask):
 
 
 class CheckCurrent(BaseTask):
-    """Set current value and check if it RB is achieved."""
+    """Check current value and check if it RB is achieved."""
 
     def function(self):
-        """Set PS Current."""
+        """Check PS Current."""
         self._check(method='check_current',
-                    timeout=2.2*TIMEOUT_CHECK,
+                    timeout=4.1*TIMEOUT_CHECK,
                     test=self._is_test)
 
 
