@@ -288,7 +288,7 @@ class CycleWindow(SiriusMainWindow):
         self.cycle_bt.setEnabled(False)
 
         create_task = CreateCyclers(parent=self, psnames=pwrsupplies)
-        dlg = ProgressDialog('Creating cycles...', create_task, self)
+        dlg = ProgressDialog('Creating cyclers...', create_task, self)
         ret = dlg.exec_()
         if ret == dlg.Rejected:
             self._allButtons_setEnabled(True)
