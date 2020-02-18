@@ -154,13 +154,14 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         self._connected = False
 
         self._operations_dict = {'eq': self._eq,
-                                 'cl': self._isclose,
+                                 'cl': self._cl,
                                  'ne': self._ne,
                                  'gt': self._gt,
                                  'lt': self._lt,
                                  'ge': self._ge,
                                  'le': self._le,
-                                 'in': self._in}
+                                 'in': self._in,
+                                 'wt': self._wt}
 
         self._address2values = dict()
         self._address2channel = dict()
@@ -265,7 +266,7 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         else:
             fun = self._operations_dict['eq']
             desired_value = desired
-        if (desired_value is not None) and \
+        if fun != self._wt and (desired_value is not None) and \
                 (type(current) != type(desired_value)) and \
                 isinstance(current, _np.ndarray):
             _log.warning('PyDMLedMultiChannel received a numpy array to ' +
@@ -312,7 +313,7 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         return is_equal
 
     @staticmethod
-    def _isclose(val1, val2, **kws):
+    def _cl(val1, val2, **kws):
         if type(val1) != type(val2):
             return False
         if isinstance(val1, (_np.ndarray, tuple, list)) and \
@@ -374,6 +375,10 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
     @staticmethod
     def _in(val1, val2, **kws):
         return val1 in val2
+
+    @staticmethod
+    def _wt(val1, val2, **kws):
+        return val2[0] < val1 < val2[1]
 
     def mouseDoubleClickEvent(self, ev):
         pvs = set()
@@ -577,6 +582,10 @@ class _DiffStatus(SiriusDialog):
                     self._current, self._desired)
         elif self._current == 'UNDEF':
             self._text = 'PV is disconnected!'
+        elif isinstance(self._desired, (tuple, list)):
+            self._text = 'Current value ({}) is not within\n' \
+                         'desired interval ({})!'.format(
+                             self._current, self._desired)
         else:
             self._text = 'Current value (of type {}) has type\n' \
                          'different from desired ({})!'.format(

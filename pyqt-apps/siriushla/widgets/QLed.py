@@ -12,7 +12,6 @@ from qtpy.QtGui import QPainter, QColor
 from qtpy.QtCore import Signal, Qt, QSize, QTimer, QByteArray, \
                         QRectF, Property, Q_ENUMS, QFile
 from qtpy.QtSvg import QSvgRenderer
-import siriushla.resources
 
 __path__ = _os.path.dirname(__file__)
 
@@ -174,6 +173,8 @@ class QLed(QFrame, ShapeMap):
 
     def paintEvent(self, event):
         """Handle appearence of the widget on state updates."""
+        self.style().unpolish(self)
+        self.style().polish(self)
         option = QStyleOption()
         option.initFrom(self)
 

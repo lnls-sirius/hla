@@ -2,26 +2,35 @@ from qtpy.QtCore import Slot
 from pydm.widgets.base import PyDMWidget
 from pydm.widgets.channel import PyDMChannel
 from siriuspy.csdevice.timesys import Const as TIConst
+from siriuspy.csdevice.pwrsupply import Const as PSConst
 from siriushla.widgets import PyDMStateButton, PyDMLedMultiChannel, PyDMLed
 
 
 TRG_ENBL_VAL = TIConst.DsblEnbl.Enbl
 TRG_DSBL_VAL = TIConst.DsblEnbl.Dsbl
+PU_ENBL_VAL = PSConst.DsblEnbl.Enbl
+PU_DSBL_VAL = PSConst.DsblEnbl.Dsbl
 
 CHANNELS_2_VALUES = {
-    'TB-04:TI-InjSept:State-Sel': (TRG_DSBL_VAL, TRG_ENBL_VAL),
-    'BO-Glob:TI-Mags-Fams:State-Sel': (TRG_DSBL_VAL, TRG_ENBL_VAL),
-    'BO-Glob:TI-Mags-Corrs:State-Sel': (TRG_DSBL_VAL, TRG_ENBL_VAL),
-    'BO-01D:TI-InjKckr:State-Sel': (TRG_DSBL_VAL, TRG_ENBL_VAL),
-    'BO-48D:TI-EjeKckr:State-Sel': (TRG_DSBL_VAL, TRG_ENBL_VAL),
+    'TB-04:PU-InjSept:Pulse-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
+    'TB-04:PU-InjSept:PwrState-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
+    'BO-01D:PU-InjKckr:Pulse-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
+    'BO-01D:PU-InjKckr:PwrState-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
+    'BO-48D:PU-EjeKckr:Pulse-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
+    'BO-48D:PU-EjeKckr:PwrState-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
     'BR-RF-DLLRF-01:RmpEnbl-Sel': (TRG_DSBL_VAL, TRG_ENBL_VAL),
-    'TS-01:TI-EjeSeptF:State-Sel': (TRG_DSBL_VAL, TRG_ENBL_VAL),
-    'TS-01:TI-EjeSeptG:State-Sel': (TRG_DSBL_VAL, TRG_ENBL_VAL),
-    'TS-04:TI-InjSeptF:State-Sel': (TRG_DSBL_VAL, TRG_ENBL_VAL),
-    'TS-04:TI-InjSeptG-1:State-Sel': (TRG_DSBL_VAL, TRG_ENBL_VAL),
-    'TS-04:TI-InjSeptG-2:State-Sel': (TRG_DSBL_VAL, TRG_ENBL_VAL),
-    'SI-01SA:TI-InjDpKckr:State-Sel': (TRG_DSBL_VAL, TRG_ENBL_VAL),
-    'SI-01SA:TI-InjNLKckr:State-Sel': (TRG_DSBL_VAL, TRG_ENBL_VAL),
+    'TS-01:PU-EjeSeptF:Pulse-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
+    'TS-01:PU-EjeSeptF:PwrState-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
+    'TS-01:PU-EjeSeptG:Pulse-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
+    'TS-01:PU-EjeSeptG:PwrState-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
+    'TS-04:PU-InjSeptF:Pulse-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
+    'TS-04:PU-InjSeptF:PwrState-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
+    'TS-04:PU-InjSeptG-1:Pulse-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
+    'TS-04:PU-InjSeptG-1:PwrState-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
+    'TS-04:PU-InjSeptG-2:Pulse-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
+    'TS-04:PU-InjSeptG-2:PwrState-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
+    'SI-01SA:PU-InjDpKckr:Pulse-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
+    'SI-01SA:PU-InjDpKckr:PwrState-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
 }
 
 

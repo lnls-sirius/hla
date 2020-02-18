@@ -26,7 +26,6 @@ class TuneSpectraView(PyDMWaveformPlot):
 
         self.autoRangeX = True
         self.autoRangeY = True
-        self.showLegend = False
         self.showXGrid = True
         self.showYGrid = True
         self.axisColor = QColor(0, 0, 0)
