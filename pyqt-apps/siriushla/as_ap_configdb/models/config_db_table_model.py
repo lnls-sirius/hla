@@ -54,10 +54,10 @@ class ConfigDbTableModel(QAbstractTableModel):
             return self._configs[index.row()][columnName]
         elif columnName == 'created':
             tmstmp = self._configs[index.row()][columnName]
-            tmstr = time.strftime('%d/%m/%Y %H:%M:%S', time.localtime(tmstmp))
-            return tmstr
+            return time.strftime('%d/%m/%Y %H:%M:%S', time.localtime(tmstmp))
         elif columnName == 'modified':
-            return len(self._configs[index.row()][columnName])
+            tmstmp = self._configs[index.row()][columnName][-1]
+            return time.strftime('%d/%m/%Y %H:%M:%S', time.localtime(tmstmp))
         else:
             return str(self._configs[index.row()][columnName])
 
