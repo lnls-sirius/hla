@@ -674,7 +674,7 @@ class PSDetailWidget(QWidget):
             return "SL"
         elif slow_corrector.match(self._psname) or \
                 fast_corrector.match(self._psname) or \
-                lispect.math(self._psname):
+                lispect.match(self._psname):
             return "Kick"
         else:
             return
