@@ -30,14 +30,17 @@ class CavityStatusDetails(SiriusDialog):
         lay_celltemp.addRow(lb_temp1)
         for idx, cell in enumerate(self.chs['Cav Sts']['Temp']['Cells']):
             lb = PyDMLabel(self, cell[0])
+            lb.showUnits = True
+            lb.setStyleSheet('min-width:3.5em; max-width:3.5em;')
             led = SiriusLedAlert(self, cell[0].replace('T-Mon', 'Tms-Mon'))
             hb = QHBoxLayout()
+            hb.setAlignment(Qt.AlignLeft)
             hb.addWidget(lb)
             hb.addWidget(led)
-            hb.addStretch()
             lay_celltemp.addRow('Cell '+str(idx + 1)+': ', hb)
         lb_coupler = PyDMLabel(
             self, self.chs['Cav Sts']['Temp']['Coupler'][0])
+        lb_coupler.showUnits = True
         lay_celltemp.addRow('Coupler: ', lb_coupler)
 
         lay_otemp = QFormLayout()
@@ -88,16 +91,29 @@ class CavityStatusDetails(SiriusDialog):
         lay_vac.addRow('Pressure Sensor: ', self.led_CoupPressure)
         lay_vac.addRow('Vacuum: ', self.led_Pressure)
 
+        lb = QLabel('Cavity - Detailed Status', self)
+        lb.setStyleSheet(
+            'font-weight:bold; qproperty-alignment:AlignCenter;')
         lay = QGridLayout(self)
         lay.setHorizontalSpacing(30)
         lay.setVerticalSpacing(20)
-        lay.addWidget(
-            QLabel('<h4>Cavity - Detailed Status</h4>', self,
-                   alignment=Qt.AlignCenter), 0, 0, 1, 3)
+        lay.addWidget(lb, 0, 0, 1, 3)
         lay.addLayout(lay_celltemp, 1, 0, 2, 1)
         lay.addLayout(lay_otemp, 1, 1, 2, 1)
         lay.addLayout(lay_flwrt, 1, 2)
         lay.addLayout(lay_vac, 2, 2)
+
+        self.setStyleSheet("""
+            PyDMLabel{
+                qproperty-alignment: AlignLeft;
+            }
+            QLed{
+                max-width: 1.29em;
+            }
+            .QLabel{
+                max-height:1.5em;
+                qproperty-alignment: AlignRight;
+            }""")
 
 
 class TransmLineStatusDetails(SiriusDialog):
@@ -115,10 +131,12 @@ class TransmLineStatusDetails(SiriusDialog):
     def _setupUi(self):
         self.lb_CircTin = PyDMLabel(
             self, self.prefix+self.chs['TL Sts']['Circ TIn'])
-        self.lb_CircTin.setAlignment(Qt.AlignLeft)
+        self.lb_CircTin.showUnits = True
+        self.lb_CircTin.setStyleSheet('qproperty-alignment: AlignLeft;')
         self.lb_CircTout = PyDMLabel(
             self, self.prefix+self.chs['TL Sts']['Circ TOut'])
-        self.lb_CircTout.setAlignment(Qt.AlignLeft)
+        self.lb_CircTout.showUnits = True
+        self.lb_CircTout.setStyleSheet('qproperty-alignment: AlignLeft;')
         self.led_LoadFlwRt = SiriusLedAlert(
             self, self.prefix+self.chs['TL Sts']['Load FlwRt'])
         self.led_CircFlwRt = SiriusLedAlert(

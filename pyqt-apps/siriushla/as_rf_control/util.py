@@ -232,7 +232,7 @@ SEC_2_CHANNELS = {
                 'PreDrive': 'SR-RF-DLLRF-01:INPRE1:AMP',
             },
             '2': {
-                'Name': 'SSA 01',
+                'Name': 'SSA 02',
                 'Status': 'RA-ToSIA02:RF-SSAmpTower:Sts-Mon',
                 'Power': 'RA-ToSIA02:RF-SSAmpTower:PwrFwdOut1-Mon',
                 'SRC 1': {
