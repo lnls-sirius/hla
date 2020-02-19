@@ -940,7 +940,14 @@ class RFMainControl(SiriusMainWindow):
             channels={
                 'on': chs_dict['SRC 1']['PV'].replace('-Sts', 'Enbl-Sel'),
                 'off': chs_dict['SRC 1']['PV'].replace('-Sts', 'Dsbl-Sel')})
-        led_src1 = SiriusLedState(self, chs_dict['SRC 1']['PV'])
+        if self.section == 'BO':
+            ch2vals = {
+                'BO-ToBO:RF-ACDCPanel:300Vdc-Mon': {'comp': 'gt',
+                                                    'value': 280.0},
+                chs_dict['SRC 1']['PV']: 1}
+            led_src1 = PyDMLedMultiChannel(self, ch2vals)
+        else:
+            led_src1 = SiriusLedState(self, chs_dict['SRC 1']['PV'])
         lay_amp.addLayout(self._create_vlay(bt_src1, led_src1), row, 4)
 
         bt_src2 = RFEnblDsblButton(
