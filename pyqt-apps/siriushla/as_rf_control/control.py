@@ -963,10 +963,16 @@ class RFMainControl(SiriusMainWindow):
             channels={
                 'on': chs_dict['PinSw'].replace('-Mon', 'Enbl-Sel'),
                 'off': chs_dict['PinSw'].replace('-Mon', 'Dsbl-Sel')})
+        rules = (
+            '[{"name": "EnblRule", "property": "Enable", ' +
+            '"expression": "ch[0] < 3.0", "channels": [' +
+            '{"channel": "'+chs_dict['PreDrive']+'", "trigger": true}]}]')
+        bt_pinsw.pb_on.rules = rules
         led_pinsw = SiriusLedState(self, chs_dict['PinSw'])
         lay_amp.addLayout(self._create_vlay(bt_pinsw, led_pinsw), row, 6)
 
         lb_drive = PyDMLabel(self, chs_dict['PreDrive'])
+        lb_drive.showUnits = True
         led_drive = PyDMLedMultiChannel(
             parent=self, channels2values={
                 chs_dict['PreDrive']: {'comp': 'lt', 'value': 3}})
