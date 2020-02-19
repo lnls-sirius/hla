@@ -517,10 +517,9 @@ class RFMainControl(SiriusMainWindow):
         self.ramp_graph.plotItem.getAxis('bottom').setStyle(tickTextOffset=15)
         self.ramp_graph.plotItem.getAxis('left').setStyle(tickTextOffset=5)
         self.ramp_graph.addChannel(
-            x_channel='RA-RF:PowerSensor1:TimeAxis-Mon',
-            y_channel='RA-RF:PowerSensor1:TracData-Mon',
-            redraw_mode=2, name='Power',
-            color=QColor('blue'))
+            y_channel='BR-RF-DLLRF-01:VCavRampWf:W.AVAL',
+            x_channel='BR-RF-DLLRF-01:DiagWf32Scale.AVAL',
+            redraw_mode=2, name='Power', color=QColor('blue'))
 
         self.lb_PwrFwdBot = PyDMLabel(self, 'BO-05D:RF-P5Cav:PwrFwdBot-Mon')
         self.lb_PwrFwdBot.showUnits = True
