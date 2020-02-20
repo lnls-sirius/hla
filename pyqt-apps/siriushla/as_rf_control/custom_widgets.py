@@ -1,9 +1,12 @@
+from functools import partial as _part
 import numpy as np
 import time
 from qtpy.QtCore import Qt, Slot
-from qtpy.QtWidgets import QHBoxLayout, QWidget
+from qtpy.QtWidgets import QHBoxLayout, QWidget, QPushButton
+import qtawesome as qta
 from pyqtgraph.graphicsItems.ViewBox.ViewBoxMenu import ViewBoxMenu
 from pydm.widgets import PyDMPushButton
+from pydm.widgets.base import PyDMWritableWidget
 from pydm.widgets.timeplot import TimePlotCurveItem, PyDMTimePlot, \
     DEFAULT_X_MIN
 
@@ -26,6 +29,25 @@ class RFEnblDsblButton(QWidget):
         lay.setSpacing(3)
         lay.addWidget(self.pb_off)
         lay.addWidget(self.pb_on)
+
+
+class RFResetButton(PyDMWritableWidget, QPushButton):
+
+    def __init__(self, parent=None, init_channel=None,
+                 pressValue=1, releaseValue=0):
+        QPushButton.__init__(self, qta.icon('fa5s.sync'), '', parent)
+        PyDMWritableWidget.__init__(self, init_channel=init_channel)
+        self._alarm_sensitive_border = False
+        self.pressValue = pressValue
+        self.releaseValue = releaseValue
+        self.pressed.connect(_part(self.sendValue, self.pressValue))
+        self.released.connect(_part(self.sendValue, self.releaseValue))
+
+    @Slot()
+    def sendValue(self, value):
+        """Send value."""
+        self.send_value_signal[self.channeltype].emit(
+            self.channeltype(value))
 
 
 class MyTimePlotItem(TimePlotCurveItem):

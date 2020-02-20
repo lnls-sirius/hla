@@ -5,15 +5,15 @@ from qtpy.QtWidgets import QGridLayout, QFormLayout, QHBoxLayout, QVBoxLayout,\
     QSizePolicy as QSzPlcy, QPushButton
 from qtpy.QtGui import QColor
 import qtawesome as qta
-from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMLineEdit, PyDMPushButton,\
-    PyDMEnumComboBox, PyDMWaveformPlot
+from pydm.widgets import PyDMLineEdit, PyDMEnumComboBox, PyDMWaveformPlot, \
+    PyDMLabel, PyDMSpinbox
 from siriushla.widgets import SiriusMainWindow, PyDMStateButton, PyDMLed, \
     SiriusLedAlert, SiriusLedState, PyDMLedMultiChannel, SiriusConnectionSignal
 from siriushla.util import connect_window, get_appropriate_color
 from pyqtgraph import InfiniteLine, mkPen
 from .details import TransmLineStatusDetails, CavityStatusDetails, \
     LLRFInterlockDetails
-from .custom_widgets import RFEnblDsblButton, MyTimePlot
+from .custom_widgets import RFEnblDsblButton, RFResetButton, MyTimePlot
 from .util import SEC_2_CHANNELS
 
 
@@ -156,17 +156,15 @@ class RFMainControl(SiriusMainWindow):
         hlay_tlsts.addWidget(self.pb_tldtls)
 
         # Reset Global
-        self.pb_globreset = PyDMPushButton(
-            icon=qta.icon('fa5s.sync'), label='', parent=self, pressValue=1,
-            init_channel=self.chs['Reset']['Global'])
+        self.pb_globreset = RFResetButton(
+            parent=self, init_channel=self.chs['Reset']['Global'])
         self.pb_globreset.setObjectName('pb_globreset')
         self.pb_globreset.setStyleSheet(
             '#pb_globreset{min-width:25px; max-width:25px; icon-size:20px;}')
 
         # Reset LLRF
-        self.pb_llrfreset = PyDMPushButton(
-            icon=qta.icon('fa5s.sync'), label='', parent=self, pressValue=1,
-            init_channel=self.chs['Reset']['LLRF'])
+        self.pb_llrfreset = RFResetButton(
+            parent=self, init_channel=self.chs['Reset']['LLRF'])
         self.pb_llrfreset.setObjectName('pb_llrfreset')
         self.pb_llrfreset.setStyleSheet(
             '#pb_llrfreset{min-width:25px; max-width:25px; icon-size:20px;}')
