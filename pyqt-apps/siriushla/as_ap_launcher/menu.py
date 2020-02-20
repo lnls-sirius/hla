@@ -231,8 +231,8 @@ def get_object(ismenubar=True, parent=None):
             self.add_object_to_level1(menu, PS)
             if sec in {'bo', 'si'}:
                 self.add_object_to_level1(menu, PU)
-            if sec == 'bo':
                 RF = self._set_rf_menu(sec)
+                RF.setIcon(qta.icon('mdi.waves'))
                 self.add_object_to_level1(menu, RF)
             self.add_object_to_level1(menu, DIG)
             self.add_object_to_level1(menu, OPT)
@@ -524,7 +524,8 @@ def get_object(ismenubar=True, parent=None):
             menu = LEVEL2M('RF', self)
             menu.setObjectName(sec.upper()+'App')
 
-            status = QAction('Status', menu)
+            status = QAction('Main', menu)
+            status.setIcon(qta.icon('mdi.waves'))
             self.connect_newprocess(
                 status, 'sirius-hla-'+sec.lower()+'-rf-control.py')
             menu.addAction(status)

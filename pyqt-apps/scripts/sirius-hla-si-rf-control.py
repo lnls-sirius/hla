@@ -1,6 +1,6 @@
 #!/usr/bin/env python-sirius
 
-"""BO RF Control Window."""
+"""SI RF Control Window."""
 
 import sys
 import argparse as _argparse
@@ -17,5 +17,5 @@ parser.add_argument(
 args = parser.parse_args()
 
 app = SiriusApplication()
-app.open_window(RFMainControl, prefix=args.prefix, section='BO')
+app.open_window(RFMainControl, prefix=args.prefix, section='SI')
 sys.exit(app.exec_())

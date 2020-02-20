@@ -1,1 +1,1 @@
-from .main import RFStatus
+from .control import RFMainControl

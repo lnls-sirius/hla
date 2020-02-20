@@ -83,6 +83,7 @@ setup(
         'scripts/sirius-hla-si-offconfig.py',
         'scripts/sirius-hla-si-ps-control.py',
         'scripts/sirius-hla-si-pu-control.py',
+        'scripts/sirius-hla-si-rf-control.py',
         'scripts/sirius-hla-tb-ap-control.py',
         'scripts/sirius-hla-tb-ap-emittance.py',
         'scripts/sirius-hla-tb-ap-posang-chch.py',
