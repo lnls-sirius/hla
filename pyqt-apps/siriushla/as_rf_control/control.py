@@ -2,7 +2,7 @@ from functools import partial as _part
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGridLayout, QFormLayout, QHBoxLayout, QVBoxLayout,\
     QComboBox, QGroupBox, QTabWidget, QLabel, QCheckBox, QSpacerItem, QWidget,\
-    QSizePolicy as QSzPlcy, QPushButton
+    QSizePolicy as QSzPlcy, QPushButton, QRadioButton
 from qtpy.QtGui import QColor
 import qtawesome as qta
 from pydm.widgets import PyDMLineEdit, PyDMEnumComboBox, PyDMWaveformPlot, \
@@ -486,7 +486,7 @@ class RFMainControl(SiriusMainWindow):
                              alignment=Qt.AlignRight), 13, 0)
         lay.addWidget(self.sb_RmpPhsTop, 13, 1)
         lay.addWidget(self.lb_RmpPhsTop, 13, 2)
-        lay.addWidget(QLabel('Voltage:', self,
+        lay.addWidget(QLabel('Gap Voltage:', self,
                              alignment=Qt.AlignRight), 14, 0)
         lay.addWidget(self.sb_RmpVoltTop, 14, 1)
         lay.addWidget(self.lb_RmpVoltTop, 14, 2)
@@ -495,7 +495,7 @@ class RFMainControl(SiriusMainWindow):
                              alignment=Qt.AlignRight), 16, 0)
         lay.addWidget(self.sb_RmpPhsBot, 16, 1)
         lay.addWidget(self.lb_RmpPhsBot, 16, 2)
-        lay.addWidget(QLabel('Voltage:', self,
+        lay.addWidget(QLabel('Gap Voltage:', self,
                              alignment=Qt.AlignRight), 17, 0)
         lay.addWidget(self.sb_RmpVoltBot, 17, 1)
         lay.addWidget(self.lb_RmpVoltBot, 17, 2)
@@ -522,9 +522,24 @@ class RFMainControl(SiriusMainWindow):
         self.ramp_graph.plotItem.getAxis('bottom').setStyle(tickTextOffset=15)
         self.ramp_graph.plotItem.getAxis('left').setStyle(tickTextOffset=5)
         self.ramp_graph.addChannel(
+            y_channel='BR-RF-DLLRF-01:VCavRampWf.AVAL',
+            x_channel='BR-RF-DLLRF-01:DiagWf32Scale.AVAL',
+            redraw_mode=2, name='VGav kV', color=QColor('blue'))
+        self.curve_VGav = self.ramp_graph.curveAtIndex(0)
+        self.rb_VGav = QRadioButton('VGav [kV]', self)
+        self.rb_VGav.setChecked(True)
+        self.rb_VGav.toggled.connect(_part(self._handle_rmpwfm_visibility, 0))
+        self.ramp_graph.addChannel(
             y_channel='BR-RF-DLLRF-01:VCavRampWf:W.AVAL',
             x_channel='BR-RF-DLLRF-01:DiagWf32Scale.AVAL',
-            redraw_mode=2, name='Power', color=QColor('blue'))
+            redraw_mode=2, name='Power [W]', color=QColor('blue'))
+        self.curve_Pwr = self.ramp_graph.curveAtIndex(1)
+        self.curve_Pwr.setVisible(False)
+        self.rb_Pwr = QRadioButton('Power [W]', self)
+        self.rb_Pwr.toggled.connect(_part(self._handle_rmpwfm_visibility, 1))
+        hbox_rb = QHBoxLayout()
+        hbox_rb.addWidget(self.rb_VGav)
+        hbox_rb.addWidget(self.rb_Pwr)
 
         self.lb_PwrFwdBot = PyDMLabel(self, 'BO-05D:RF-P5Cav:PwrFwdBot-Mon')
         self.lb_PwrFwdBot.showUnits = True
@@ -568,8 +583,9 @@ class RFMainControl(SiriusMainWindow):
         lay.addWidget(self.lb_C3PhsTop, 5, 2)
         lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed), 6, 0)
         lay.addWidget(self.ramp_graph, 7, 0, 1, 3)
+        lay.addLayout(hbox_rb, 8, 0, 1, 3)
         lay.addItem(
-            QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Expanding), 8, 0)
+            QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Expanding), 9, 0)
         return lay
 
     def _cwMonLayout(self):
@@ -1016,3 +1032,7 @@ class RFMainControl(SiriusMainWindow):
         val = 100 if value == 1 else 3
         ch2vals = {chs_dict['PreDrive']: {'comp': 'lt', 'value': val}}
         led_drive.set_channels2values(ch2vals)
+
+    def _handle_rmpwfm_visibility(self, index):
+        self.curve_VGav.setVisible(not index)
+        self.curve_Pwr.setVisible(index)
