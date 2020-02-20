@@ -192,7 +192,14 @@ class RFMainControl(SiriusMainWindow):
         self.lb_genenbl = SiriusLedState(self, 'RF-Gen:GeneralRF-Sts')
         # Frequência
         self.le_genfreq = PyDMLineEdit(self, 'RF-Gen:GeneralFreq-SP')
+        self.le_genfreq.setStyleSheet('min-width:7em; max-width:7em;')
+        self.le_genfreq.precisionFromPV = False
+        self.le_genfreq.precision = 2
         self.lb_genfreq = PyDMLabel(self, 'RF-Gen:GeneralFreq-RB')
+        self.lb_genfreq.setStyleSheet(
+            'min-width:7em; max-width:7em; qproperty-alignment:AlignLeft;')
+        self.lb_genfreq.precisionFromPV = False
+        self.lb_genfreq.precision = 2
         vl_freq = QVBoxLayout()
         vl_freq.addWidget(self.le_genfreq)
         vl_freq.addWidget(self.lb_genfreq)
