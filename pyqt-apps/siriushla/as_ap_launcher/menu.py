@@ -136,6 +136,7 @@ def get_object(ismenubar=True, parent=None):
             menu.setObjectName('ASApp')
 
             injection = LEVEL2A('Injection', menu)
+            injection.setIcon(qta.icon('fa5s.syringe'))
             self.connect_newprocess(injection, 'sirius-hla-as-ap-injection.py')
             timing = LEVEL2M('Timing', menu)
             timing.setIcon(qta.icon('mdi.timer'))
@@ -303,8 +304,13 @@ def get_object(ismenubar=True, parent=None):
                 optics.addAction(Emittance)
             if sec in {'bo', 'si'}:
                 TuneCorr = QAction('Tune Correction', optics)
+                icon = qta.icon('mdi.pulse', 'mdi.hammer', options=[
+                    dict(scale_factor=1.3, offset=(0.0, 0.05)),
+                    dict(scale_factor=0.72, offset=(-0.1, -0.3), hflip=True)])
+                TuneCorr.setIcon(icon)
                 self.connect_newprocess(
                     TuneCorr, 'sirius-hla-'+sec+'-ap-tunecorr.py')
+
                 ChromCorr = QAction('Chromaticity Correction', optics)
                 optics.addAction(TuneCorr)
                 self.connect_newprocess(
@@ -341,7 +347,8 @@ def get_object(ismenubar=True, parent=None):
                 diag.addAction(ICTs)
             elif sec in {'bo', 'si'}:
                 DCCT = QMenu('DCCTs', diag)
-                DCCT.setObjectName('SIApp')
+                DCCT.setObjectName(sec.upper()+'App')
+                DCCT.setIcon(qta.icon('mdi.current-dc'))
                 for dev in get_dcct_list(sec.upper()):
                     act_dev = DCCT.addAction(dev)
                     self.connect_newprocess(
@@ -353,6 +360,7 @@ def get_object(ismenubar=True, parent=None):
                 diag.addAction(Slits)
             if sec in {'bo', 'si'}:
                 Tune = QAction('Tune', diag)
+                Tune.setIcon(qta.icon('mdi.pulse', scale_factor=1.3))
                 self.connect_newprocess(Tune, 'sirius-hla-'+sec+'-di-tune.py')
                 diag.addAction(Tune)
                 VLight = QAction('VLight', diag)

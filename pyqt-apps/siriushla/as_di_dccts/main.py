@@ -3,7 +3,9 @@
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QLabel, QGridLayout, QVBoxLayout, \
     QPushButton
+import qtawesome as qta
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
+from siriuspy.namesys import SiriusPVName
 from siriushla.widgets import SiriusMainWindow
 from siriushla import util
 from siriushla.as_di_dccts.graphics import DCCTMonitor, BORampEffMonitor
@@ -24,12 +26,16 @@ class DCCTMain(SiriusMainWindow):
         """Initialize."""
         super().__init__(parent)
         self.prefix = prefix
-        self.device = device
+        self.device = SiriusPVName(device)
+        self.section = self.device.sec
         if 'BO' in device:
             self.setObjectName('BOApp')
         else:
             self.setObjectName('SIApp')
         self.setWindowTitle(device)
+        self.setWindowIcon(
+            qta.icon('mdi.current-dc',
+                     color=util.get_appropriate_color(self.section)))
         self._setupUi()
         self.setFocusPolicy(Qt.StrongFocus)
 
@@ -65,6 +71,8 @@ class SISelectDCCT(QWidget):
         self.setObjectName('SIApp')
         self.dcct_list = get_dcct_list('SI')
         self.setWindowTitle('Select a DCCT')
+        self.setWindowIcon(
+            qta.icon('mdi.current-dc', color=util.get_appropriate_color('SI')))
         self._setupUi()
 
     def _setupUi(self):
