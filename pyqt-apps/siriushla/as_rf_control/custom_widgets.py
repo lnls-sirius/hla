@@ -16,13 +16,11 @@ class RFEnblDsblButton(QWidget):
 
     def __init__(self, parent=None, channels=dict()):
         super().__init__(parent)
-        self.pb_off = PyDMPushButton(
-            parent=self, label='Off', pressValue=1,
-            init_channel=channels['off'])
+        self.pb_off = RFPushButton(
+            parent=self, label='Off', init_channel=channels['off'])
         self.pb_off.setStyleSheet('min-width:1.4em; max-width:1.4em;')
-        self.pb_on = PyDMPushButton(
-            parent=self, label='On', pressValue=1,
-            init_channel=channels['on'])
+        self.pb_on = RFPushButton(
+            parent=self, label='On', init_channel=channels['on'])
         self.pb_on.setStyleSheet('min-width:1.4em; max-width:1.4em;')
         lay = QHBoxLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
@@ -31,11 +29,14 @@ class RFEnblDsblButton(QWidget):
         lay.addWidget(self.pb_on)
 
 
-class RFResetButton(PyDMWritableWidget, QPushButton):
+class RFPushButton(PyDMWritableWidget, QPushButton):
 
-    def __init__(self, parent=None, init_channel=None,
+    def __init__(self, parent=None, init_channel=None, label='', icon=None,
                  pressValue=1, releaseValue=0):
-        QPushButton.__init__(self, qta.icon('fa5s.sync'), '', parent)
+        if not icon:
+            QPushButton.__init__(self, label, parent)
+        else:
+            QPushButton.__init__(self, icon, label, parent)
         PyDMWritableWidget.__init__(self, init_channel=init_channel)
         self._alarm_sensitive_border = False
         self.pressValue = pressValue

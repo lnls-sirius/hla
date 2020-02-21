@@ -67,7 +67,7 @@ class CavityStatusDetails(SiriusDialog):
         lay_flwrt.setVerticalSpacing(9)
         lay_flwrt.setLabelAlignment(Qt.AlignRight)
         lay_flwrt.setFormAlignment(Qt.AlignTop)
-        lb_flwrf = QLabel('Flow Switchs', self)
+        lb_flwrf = QLabel('Flow Switches', self)
         lb_flwrf.setStyleSheet(
             'font-weight:bold; qproperty-alignment:AlignCenter;')
         lay_flwrt.addRow(lb_flwrf)
@@ -111,7 +111,7 @@ class CavityStatusDetails(SiriusDialog):
                 max-width: 1.29em;
             }
             .QLabel{
-                max-height:1.5em;
+                max-height:2em;
                 qproperty-alignment: AlignRight;
             }""")
 
@@ -154,6 +154,18 @@ class TransmLineStatusDetails(SiriusDialog):
         lay.addRow('Load Flow: ', self.led_LoadFlwRt)
         lay.addRow('Circulator Flow: ', self.led_CircFlwRt)
         lay.addRow('Circulator Intlk: ', self.led_CircIntlkOp)
+
+        self.setStyleSheet("""
+            PyDMLabel{
+                qproperty-alignment: AlignLeft;
+            }
+            QLed{
+                max-width: 1.29em;
+            }
+            .QLabel{
+                max-height:2em;
+                qproperty-alignment: AlignRight;
+            }""")
 
 
 class LLRFInterlockDetails(SiriusDialog):
