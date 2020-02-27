@@ -29,8 +29,8 @@ CHANNELS_2_VALUES = {
     'TS-04:PU-InjSeptG-1:PwrState-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
     'TS-04:PU-InjSeptG-2:Pulse-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
     'TS-04:PU-InjSeptG-2:PwrState-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
-    'SI-01SA:PU-InjDpKckr:Pulse-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
-    'SI-01SA:PU-InjDpKckr:PwrState-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
+    'SI-01SA:PU-InjNLKckr:Pulse-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
+    'SI-01SA:PU-InjNLKckr:PwrState-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
 }
 
 

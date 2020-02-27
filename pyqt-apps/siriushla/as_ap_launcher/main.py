@@ -4,7 +4,7 @@ import qtawesome as qta
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
-    QGridLayout, QApplication
+    QGridLayout, QApplication, QMessageBox, QMenu, QAction
 
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.search import LLTimeSearch as _LLTimeSearch
@@ -65,6 +65,7 @@ class MainOperation(SiriusMainWindow):
 
         # Injection System
         injsys = QGroupBox('Injection System')
+        injsys.setObjectName('InjSys')
         injsys_state_sel = InjSysStandbyButton(self)
         injsys_state_sts = InjSysStandbyStatusLed(self)
 
@@ -171,6 +172,32 @@ class MainOperation(SiriusMainWindow):
         self.sender().parent().adjustSize()
         self.centralWidget().adjustSize()
         self.adjustSize()
+
+    def _show_help_message(self):
+        QMessageBox.information(
+            self, 'What does this box control?',
+            'This box controls: \n\n'
+            '- The Pulse-Sel/Sts and PwrState-Sel/Sts PVs of Pulsed Magnets\n'
+            ' (TB-04:PU-InjSept,  BO-01D:PU-InjKckr,\n'
+            '  BO-48D:PU-EjeKckr, TS-01:PU-EjeSeptF, TS-01:PU-EjeSeptG,\n'
+            '  TS-04:PU-InjSeptF, TS-04:PU-InjSeptG-1, TS-04:PU-InjSeptG-2,\n'
+            '  SI-01SA:PU-InjNLKckr);\n\n'
+            '- The RF Ramp (RmpEnbl-Sel/Sts).\n')
+
+    def contextMenuEvent(self, event):
+        """Show a custom context menu."""
+        point = event.pos()
+        widget = self.childAt(event.pos())
+        parent = widget.parent()
+        grand_parent = parent.parent()
+        if widget.objectName() == 'InjSys' or \
+                parent.objectName() == 'InjSys' or \
+                grand_parent.objectName() == 'InjSys':
+            menu = QMenu(self)
+            act = QAction('What does this box control?', self)
+            act.triggered.connect(self._show_help_message)
+            menu.addAction(act)
+            menu.popup(self.mapToGlobal(point))
 
 
 if __name__ == '__main__':

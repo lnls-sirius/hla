@@ -13,7 +13,7 @@ from siriushla.util import connect_window, get_appropriate_color
 from pyqtgraph import InfiniteLine, mkPen
 from .details import TransmLineStatusDetails, CavityStatusDetails, \
     LLRFInterlockDetails
-from .custom_widgets import RFEnblDsblButton, RFResetButton, MyTimePlot
+from .custom_widgets import RFEnblDsblButton, RFPushButton, MyTimePlot
 from .util import SEC_2_CHANNELS
 
 
@@ -156,14 +156,16 @@ class RFMainControl(SiriusMainWindow):
         hlay_tlsts.addWidget(self.pb_tldtls)
 
         # Reset Global
-        self.pb_globreset = RFResetButton(
+        self.pb_globreset = RFPushButton(
+            label='', icon=qta.icon('fa5s.sync'),
             parent=self, init_channel=self.chs['Reset']['Global'])
         self.pb_globreset.setObjectName('pb_globreset')
         self.pb_globreset.setStyleSheet(
             '#pb_globreset{min-width:25px; max-width:25px; icon-size:20px;}')
 
         # Reset LLRF
-        self.pb_llrfreset = RFResetButton(
+        self.pb_llrfreset = RFPushButton(
+            label='', icon=qta.icon('fa5s.sync'),
             parent=self, init_channel=self.chs['Reset']['LLRF'])
         self.pb_llrfreset.setObjectName('pb_llrfreset')
         self.pb_llrfreset.setStyleSheet(
