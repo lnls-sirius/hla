@@ -773,7 +773,6 @@ class LIPSDetailWidget(PSDetailWidget):
         self.tstamp_update_mon_ch.new_value_signal[float].connect(
             self._tstamp_update_mon_met)
 
-
         self.conn_label = QLabel('Net Status')
         self.conn_label.setObjectName("net_label")
         self.conn_label.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
