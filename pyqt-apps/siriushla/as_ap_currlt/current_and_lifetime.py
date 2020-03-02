@@ -2,6 +2,8 @@
 """HLA Current and Lifetime Modules."""
 
 import os as _os
+from functools import partial as _part
+import time as _time
 import numpy as _np
 from qtpy.uic import loadUi
 from qtpy.QtCore import Slot, Qt
@@ -11,6 +13,7 @@ from pyqtgraph import ViewBox
 from pydm import utilities
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 from pydm.widgets.timeplot import PyDMTimePlot, TimePlotCurveItem
+from pyqtgraph import InfiniteLine, mkPen
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriushla.util import connect_window
 from siriushla.widgets import SiriusMainWindow, SiriusConnectionSignal
@@ -41,11 +44,17 @@ class CurrLTWindow(SiriusMainWindow):
         # set params in widgets in .ui
         self.lifetime_dcct_pv = SiriusConnectionSignal(
             self.prefix+'SI-Glob:AP-CurrInfo:Lifetime-Mon')
-        self.lifetime_bpm_pv = SiriusConnectionSignal(
-            self.prefix+'SI-Glob:AP-CurrInfo:LifetimeBPM-Mon')
         self.lifetime_dcct_pv.new_value_signal[float].connect(
             self.formatLifetime)
+        self.lifetime_bpm_pv = SiriusConnectionSignal(
+            self.prefix+'SI-Glob:AP-CurrInfo:LifetimeBPM-Mon')
+        self.lifetime_bpm_pv.new_value_signal[float].connect(
+            self.formatLifetime)
+        self.centralwidget.label_lifetime.channel = \
+            self.prefix+'SI-Glob:AP-CurrInfo:Lifetime-Mon'
         self.centralwidget.label_lifetime.setText("0:00:00")
+        self.centralwidget.label_lifetime.setStyleSheet('font-size: 40px;')
+        self.centralwidget.label_current.setStyleSheet('font-size: 40px;')
 
         self.centralwidget.DCCT13C4_detail.setObjectName('DCCT13C4_dtl')
         self.centralwidget.DCCT13C4_detail.setStyleSheet(
@@ -62,12 +71,13 @@ class CurrLTWindow(SiriusMainWindow):
             self.centralwidget.DCCT14C4_detail, DCCTMain, self,
             prefix=self.prefix, device='SI-14C4:DI-DCCT')
 
-        self.centralwidget.BufferSize.channel = \
+        self.centralwidget.label_buffersize.channel = \
             self.prefix+'SI-Glob:AP-CurrInfo:BuffSize-Mon'
-        self.centralwidget.ResetBuffer.setObjectName('reset')
-        self.centralwidget.ResetBuffer.setStyleSheet(
+        self.centralwidget.button_resetbuffer.setObjectName('reset')
+        self.centralwidget.button_resetbuffer.setIcon(
+            qta.icon('mdi.delete-empty'))
+        self.centralwidget.button_resetbuffer.setStyleSheet(
             "#reset{min-width:25px; max-width:25px; icon-size:20px;}")
-        self.centralwidget.ResetBuffer.setIcon(qta.icon('mdi.delete-empty'))
 
         self.centralwidget.comboBox_lifetime.currentTextChanged.connect(
             self.handle_lifetime_pv)
@@ -86,8 +96,10 @@ class CurrLTWindow(SiriusMainWindow):
         self.graph.showXGrid = True
         self.graph.showYGrid = True
         self.graph.autoRangeY = True
-        self.setGraphBufferSize(6000)
-        self.setGraphTimeSpan(600)
+        self.graph.setObjectName('graph')
+        self.graph.setStyleSheet('#graph{min-width:40em;}')
+        self.setGraphBufferSize(20000)
+        self.setGraphTimeSpan(2000)
 
         self.graph.addYChannel(
             y_channel=self.prefix+'SI-Glob:AP-CurrInfo:Current-Mon',
@@ -105,6 +117,39 @@ class CurrLTWindow(SiriusMainWindow):
         self._curve_lifetimebpm = self.graph.curveAtIndex(2)
         self._curve_lifetimebpm.setVisible(False)
 
+        self._tval_last_smpl_bpm = 0.0
+        self._tval_last_smpl_dcct = 0.0
+        self._terr_last_smpl_bpm = 0.0
+        self._terr_last_smpl_dcct = 0.0
+        pen = mkPen(color='k', width=2, style=Qt.DashLine)
+        self._line_buffdcct_first = InfiniteLine(pos=0.0, angle=90, pen=pen)
+        self._line_buffbpm_first = InfiniteLine(pos=0.0, angle=90, pen=pen)
+        self._line_buffbpm_first.setVisible(False)
+        self._line_buffdcct_last = InfiniteLine(pos=0.0, angle=90, pen=pen)
+        self._line_buffbpm_last = InfiniteLine(pos=0.0, angle=90, pen=pen)
+        self._line_buffbpm_last.setVisible(False)
+        self.graph.addItem(self._line_buffdcct_first)
+        self.graph.addItem(self._line_buffdcct_last)
+        self.graph.addItem(self._line_buffbpm_first)
+        self.graph.addItem(self._line_buffbpm_last)
+
+        self.buffdcct_first_pv = SiriusConnectionSignal(
+            self.prefix+'SI-Glob:AP-CurrInfo:BuffFirstSplTimestamp-Mon')
+        self.buffdcct_first_pv.new_value_signal[float].connect(
+            _part(self._setLinePosition, self._line_buffdcct_first))
+        self.buffdcct_last_pv = SiriusConnectionSignal(
+            self.prefix+'SI-Glob:AP-CurrInfo:BuffLastSplTimestamp-Mon')
+        self.buffdcct_last_pv.new_value_signal[float].connect(
+            _part(self._setLinePosition, self._line_buffdcct_last))
+        self.buffbpm_first_pv = SiriusConnectionSignal(
+            self.prefix+'SI-Glob:AP-CurrInfo:BuffFirstSplTimestampBPM-Mon')
+        self.buffbpm_first_pv.new_value_signal[float].connect(
+            _part(self._setLinePosition, self._line_buffbpm_first))
+        self.buffbpm_last_pv = SiriusConnectionSignal(
+            self.prefix+'SI-Glob:AP-CurrInfo:BuffLastSplTimestampBPM-Mon')
+        self.buffbpm_last_pv.new_value_signal[float].connect(
+            _part(self._setLinePosition, self._line_buffbpm_last))
+
         self.lifetime_dcct_pv.new_value_signal[float].connect(
             self._updategraph)
         self.lifetime_bpm_pv.new_value_signal[float].connect(
@@ -116,13 +161,14 @@ class CurrLTWindow(SiriusMainWindow):
 
     def formatLifetime(self, value):
         """Format lifetime label."""
-        lt = value
-        if not _np.isnan(lt):
-            H = int(lt // 3600)
-            m = int((lt % 3600) // 60)
-            s = int((lt % 3600) % 60)
-            lt_str = '{:d}:{:02d}:{:02d}'.format(H, m, s)
-            self.centralwidget.label_lifetime.setText(lt_str)
+        if self.centralwidget.label_lifetime.channel != self.sender().address:
+            return
+        lt = 0 if _np.isnan(value) else value
+        H = int(lt // 3600)
+        m = int((lt % 3600) // 60)
+        s = int((lt % 3600) % 60)
+        lt_str = '{:d}:{:02d}:{:02d}'.format(H, m, s)
+        self.centralwidget.label_lifetime.setText(lt_str)
 
     @Slot(int)
     def setGraphBufferSize(self, value):
@@ -138,21 +184,21 @@ class CurrLTWindow(SiriusMainWindow):
     def handle_lifetime_pv(self, text):
         cond = bool(text == 'DCCT')
         self._curve_lifetimedcct.setVisible(cond)
+        self._line_buffdcct_first.setVisible(cond)
+        self._line_buffdcct_last.setVisible(cond)
         self._curve_lifetimebpm.setVisible(not cond)
+        self._line_buffbpm_first.setVisible(not cond)
+        self._line_buffbpm_last.setVisible(not cond)
         if not cond:
-            self.lifetime_dcct_pv.new_value_signal[float].disconnect(
-                self.formatLifetime)
-            self.lifetime_bpm_pv.new_value_signal[float].connect(
-                self.formatLifetime)
-            self.centralwidget.BufferSize.channel = \
+            self.centralwidget.label_lifetime.channel = \
+                self.prefix+'SI-Glob:AP-CurrInfo:LifetimeBPM-Mon'
+            self.centralwidget.label_buffersize.channel = \
                 self.prefix+'SI-Glob:AP-CurrInfo:BuffSizeBPM-Mon'
         else:
-            self.lifetime_dcct_pv.new_value_signal[float].connect(
-                self.formatLifetime)
-            self.centralwidget.BufferSize.channel = \
+            self.centralwidget.label_lifetime.channel = \
+                self.prefix+'SI-Glob:AP-CurrInfo:Lifetime-Mon'
+            self.centralwidget.label_buffersize.channel = \
                 self.prefix+'SI-Glob:AP-CurrInfo:BuffSize-Mon'
-            self.lifetime_bpm_pv.new_value_signal[float].disconnect(
-                self.formatLifetime)
 
     @Slot(float)
     def _updategraph(self, value):
@@ -161,6 +207,34 @@ class CurrLTWindow(SiriusMainWindow):
         else:
             self._curve_lifetimedcct.receiveNewValue(value/3600)
 
+    @Slot(float)
+    def _setLinePosition(self, line, value):
+        tn = _time.time()
+        address = self.sender().address
+        self.handle_lifetime_pv(
+            self.centralwidget.comboBox_lifetime.currentText())
+        if value != 0:
+            if 'Last' in address:
+                if 'BPM' in address:
+                    self._tval_last_smpl_bpm = tn
+                    self._terr_last_smpl_bpm = value
+                    linepos = self._tval_last_smpl_bpm
+                else:
+                    self._tval_last_smpl_dcct = tn
+                    self._terr_last_smpl_dcct = value
+                    linepos = self._tval_last_smpl_dcct
+            else:
+                if 'BPM' in address:
+                    linepos = (self._tval_last_smpl_bpm -
+                               self._terr_last_smpl_bpm +
+                               value)
+                else:
+                    linepos = (self._tval_last_smpl_dcct -
+                               self._terr_last_smpl_dcct +
+                               value)
+            line.setValue(linepos)
+        else:
+            line.setVisible(False)
 
 
 class MyGraph(PyDMTimePlot):
