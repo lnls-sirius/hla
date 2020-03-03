@@ -4,7 +4,7 @@ import numpy as _np
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGroupBox, QLabel, QPushButton, QFormLayout, \
     QVBoxLayout, QGridLayout, QWidget, QDoubleSpinBox, QHBoxLayout, \
-    QFrame, QScrollArea
+    QFrame, QScrollArea, QTabWidget
 import qtawesome as qta
 
 from pydm.widgets import PyDMLabel
@@ -126,17 +126,28 @@ class HLTriggerDetailed(BaseWidget):
         rb = PyDMLabel(self, init_channel=init_channel)
         gbdel = self._create_small_GB('Delay [us]', self.ll_list_wid, (sp, rb))
 
+        init_channel = prefix.substitute(propty="DelayRaw-SP")
+        sp = _MySpinBox(self, init_channel=init_channel)
+        sp.showStepExponent = False
+        init_channel = prefix.substitute(propty="DelayRaw-RB")
+        rb = PyDMLabel(self, init_channel=init_channel)
+        gbdelr = self._create_small_GB('Raw Delay', self.ll_list_wid, (sp, rb))
+
+        tabdel = QTabWidget(self)
+        tabdel.addTab(gbdel, '[us]')
+        tabdel.addTab(gbdelr, 'Raw')
+
         if HLTimeSearch.has_delay_type(prefix.device_name):
             init_channel = prefix.substitute(propty="RFDelayType-Sel")
             sp = _MyComboBox(self, init_channel=init_channel)
             init_channel = prefix.substitute(propty="RFDelayType-Sts")
             rb = PyDMLabel(self, init_channel=init_channel)
             gb = self._create_small_GB(
-                        'Delay Type', self.ll_list_wid, (sp, rb))
+                'Delay Type', self.ll_list_wid, (sp, rb))
             ll_list_layout.addWidget(gb, 4, 0)
-            ll_list_layout.addWidget(gbdel, 4, 1)
+            ll_list_layout.addWidget(tabdel, 4, 1)
         else:
-            ll_list_layout.addWidget(gbdel, 4, 0, 1, 2)
+            ll_list_layout.addWidget(tabdel, 4, 0, 1, 2)
 
         gbdelta = self._create_deltadelay()
         ll_list_layout.addWidget(gbdelta, 0, 2, 5, 1)
@@ -198,6 +209,8 @@ class _SpinBox(SiriusSpinbox):
         self.valueBeingSet = True
         if isinstance(value, _np.ndarray):
             self.setValue(value[self._index])
+        else:
+            self.setValue(value)
         self.valueBeingSet = False
         PyDMWritableWidget.value_changed(self, value)
 
@@ -208,9 +221,13 @@ class _SpinBox(SiriusSpinbox):
         """
         value = QDoubleSpinBox.value(self)
         val = _dcopy(self.value)
-        val[self._index] = value
-        if not self.valueBeingSet:
-            self.send_value_signal[_np.ndarray].emit(val)
+        if isinstance(val, _np.ndarray):
+            val[self._index] = value
+            if not self.valueBeingSet:
+                self.send_value_signal[_np.ndarray].emit(val)
+        else:
+            if not self.valueBeingSet:
+                self.send_value_signal[float].emit(value)
 
 
 class _Label(SiriusLabel):
@@ -295,6 +312,7 @@ class HLTriggerList(BaseList):
         'polarity': 6,
         'delay_type': 4.2,
         'delay': 5.5,
+        'delayraw': 5.5,
         }
     _LABELS = {
         'detailed': '',
@@ -307,10 +325,11 @@ class HLTriggerList(BaseList):
         'polarity': 'Polarity',
         'delay_type': 'Type',
         'delay': 'Delay [us]',
+        'delayraw': 'Raw Delay',
         }
     _ALL_PROPS = (
         'detailed', 'status', 'name', 'state', 'source', 'polarity', 'pulses',
-        'duration', 'delay_type', 'delay')
+        'duration', 'delay_type', 'delay', 'delayraw')
 
     def __init__(self, **kwargs):
         srch = set(('source', 'name', 'polarity', 'state'))
@@ -381,6 +400,12 @@ class HLTriggerList(BaseList):
             sp = _MySpinBox(self, init_channel=init_channel)
             sp.showStepExponent = False
             init_channel = prefix.substitute(propty="Delay-RB")
+            rb = PyDMLabel(self, init_channel=init_channel)
+        elif prop == 'delayraw':
+            init_channel = prefix.substitute(propty="DelayRaw-SP")
+            sp = _MySpinBox(self, init_channel=init_channel)
+            sp.showStepExponent = False
+            init_channel = prefix.substitute(propty="DelayRaw-RB")
             rb = PyDMLabel(self, init_channel=init_channel)
         else:
             raise Exception('Property unknown')
