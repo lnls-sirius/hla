@@ -18,8 +18,10 @@ class RFEnblDsblButton(QWidget):
         lay = QHBoxLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
         lay.setSpacing(3)
+        lay.addStretch()
         lay.addWidget(self.pb_off)
         lay.addWidget(self.pb_on)
+        lay.addStretch()
 
 
 class RFPushButton(PyDMWritableWidget, QPushButton):
