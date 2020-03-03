@@ -17,7 +17,7 @@ from siriushla.widgets import SiriusMainWindow, PyDMStateButton, \
     SiriusLedState, SiriusLedAlert
 from siriushla.common.epics.wrapper import PyEpicsWrapper
 from .menu import get_object
-from .standby_widgets import InjSysStandbyButton, InjSysStandbyStatusLed
+from .standby_widgets import InjSysStandbyEnblDsbl, InjSysStandbyStatusLed
 
 
 class MainOperation(SiriusMainWindow):
@@ -66,7 +66,7 @@ class MainOperation(SiriusMainWindow):
         # Injection System
         injsys = QGroupBox('Injection System')
         injsys.setObjectName('InjSys')
-        injsys_state_sel = InjSysStandbyButton(self)
+        injsys_state_sel = InjSysStandbyEnblDsbl(self)
         injsys_state_sts = InjSysStandbyStatusLed(self)
 
         injsys_lay = QGridLayout()

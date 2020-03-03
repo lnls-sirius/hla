@@ -386,7 +386,7 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
             if (not v) or (v == 'UNDEF'):
                 pvs.add(k)
         if pvs:
-            msg = _MultiChannelStatusDialog(
+            msg = MultiChannelStatusDialog(
                 parent=self, pvs=pvs,
                 text='There are PVs with values different\n'
                      'from the desired ones!',
@@ -495,14 +495,14 @@ class PyDMLedMultiConnection(QLed, PyDMWidget):
             if not v:
                 pvs.add(k)
         if pvs:
-            msg = _MultiChannelStatusDialog(
+            msg = MultiChannelStatusDialog(
                 parent=self, pvs=pvs,
                 text='There are disconnected PVs!')
             msg.exec_()
         super().mouseDoubleClickEvent(ev)
 
 
-class _MultiChannelStatusDialog(SiriusDialog):
+class MultiChannelStatusDialog(SiriusDialog):
 
     def __init__(self, parent=None, text='', pvs=set(), fun_show_diff=None):
         super().__init__(parent)
