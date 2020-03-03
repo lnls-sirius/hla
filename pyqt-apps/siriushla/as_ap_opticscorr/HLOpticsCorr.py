@@ -70,6 +70,7 @@ class _CorrParamsDetailWindow(SiriusMainWindow):
         self._acc = acc
         self._opticsparam = opticsparam.title()
         self.setWindowTitle(acc+' '+self._opticsparam+' Correction Parameters')
+        self.setObjectName(acc.upper() + 'App')
         self._prefix = prefix
 
         if opticsparam == 'tune':

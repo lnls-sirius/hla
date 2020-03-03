@@ -122,6 +122,10 @@ def get_object(ismenubar=True, parent=None):
             servconf = LEVEL2A('ConfigDB', menu)
             self.connect_newprocess(servconf, 'sirius-hla-as-ap-configdb.py')
             self.add_object_to_level1(menu, servconf)
+            procserv = LEVEL2A('ProcServ', menu)
+            self.connect_newprocess(
+                procserv, 'sirius-hla-as-ap-pctrl.py', is_pydm=True)
+            self.add_object_to_level1(menu, procserv)
             chart = LEVEL2A('TimeChart', menu)
             self.connect_newprocess(chart, 'timechart')
             self.add_object_to_level1(menu, chart)
@@ -132,6 +136,7 @@ def get_object(ismenubar=True, parent=None):
             menu.setObjectName('ASApp')
 
             injection = LEVEL2A('Injection', menu)
+            injection.setIcon(qta.icon('fa5s.syringe'))
             self.connect_newprocess(injection, 'sirius-hla-as-ap-injection.py')
             timing = LEVEL2M('Timing', menu)
             timing.setIcon(qta.icon('mdi.timer'))
@@ -167,6 +172,26 @@ def get_object(ismenubar=True, parent=None):
             pwrsupply.addAction(pstest)
             pwrsupply.addAction(psmonitor)
 
+            vacuum = LEVEL2M('VA', menu)
+            vacuum.setObjectName('ASApp')
+            agilent = QAction('Agilent', vacuum)
+            self.connect_newprocess(
+                agilent, 'sirius-hla-as-va-agilent4uhv.py', is_pydm=True)
+            mks = QAction('MKS', vacuum)
+            self.connect_newprocess(
+                mks, 'sirius-hla-as-va-mks937b.py', is_pydm=True)
+            gamma = QAction('Gamma Counters', vacuum)
+            self.connect_newprocess(
+                gamma, 'sirius-hla-as-ap-countingpru.py', is_pydm=True)
+            vacuum.addAction(agilent)
+            vacuum.addAction(mks)
+            vacuum.addAction(gamma)
+
+            termo = LEVEL2A('Temp', menu)
+            termo.setIcon(qta.icon('fa5s.thermometer-half'))
+            self.connect_newprocess(
+                termo, 'sirius-hla-as-ap-mbtemp.py', is_pydm=True)
+
             optics = LEVEL2M('Optics', menu)
             optics.setObjectName('ASApp')
             energy_button = QAction('Energy Button', optics)
@@ -180,6 +205,8 @@ def get_object(ismenubar=True, parent=None):
             self.add_object_to_level1(menu, injection)
             self.add_object_to_level1(menu, timing)
             self.add_object_to_level1(menu, pwrsupply)
+            self.add_object_to_level1(menu, termo)
+            self.add_object_to_level1(menu, vacuum)
             self.add_object_to_level1(menu, optics)
             return menu
 
@@ -228,6 +255,8 @@ def get_object(ismenubar=True, parent=None):
                 PU.setIcon(qta.icon('mdi.current-ac'))
             OPT = self._set_optics_menu(sec)
             DIG = self._set_diagnostic_menu(sec)
+            VA = self._set_va_menu(sec)
+
             self.add_object_to_level1(menu, PS)
             if sec in {'bo', 'si'}:
                 self.add_object_to_level1(menu, PU)
@@ -235,6 +264,7 @@ def get_object(ismenubar=True, parent=None):
                 RF.setIcon(qta.icon('mdi.waves'))
                 self.add_object_to_level1(menu, RF)
             self.add_object_to_level1(menu, DIG)
+            self.add_object_to_level1(menu, VA)
             self.add_object_to_level1(menu, OPT)
             return menu
 
@@ -274,8 +304,13 @@ def get_object(ismenubar=True, parent=None):
                 optics.addAction(Emittance)
             if sec in {'bo', 'si'}:
                 TuneCorr = QAction('Tune Correction', optics)
+                icon = qta.icon('mdi.pulse', 'mdi.hammer', options=[
+                    dict(scale_factor=1.3, offset=(0.0, 0.05)),
+                    dict(scale_factor=0.72, offset=(-0.1, -0.3), hflip=True)])
+                TuneCorr.setIcon(icon)
                 self.connect_newprocess(
                     TuneCorr, 'sirius-hla-'+sec+'-ap-tunecorr.py')
+
                 ChromCorr = QAction('Chromaticity Correction', optics)
                 optics.addAction(TuneCorr)
                 self.connect_newprocess(
@@ -312,7 +347,8 @@ def get_object(ismenubar=True, parent=None):
                 diag.addAction(ICTs)
             elif sec in {'bo', 'si'}:
                 DCCT = QMenu('DCCTs', diag)
-                DCCT.setObjectName('SIApp')
+                DCCT.setObjectName(sec.upper()+'App')
+                DCCT.setIcon(qta.icon('mdi.current-dc'))
                 for dev in get_dcct_list(sec.upper()):
                     act_dev = DCCT.addAction(dev)
                     self.connect_newprocess(
@@ -324,6 +360,7 @@ def get_object(ismenubar=True, parent=None):
                 diag.addAction(Slits)
             if sec in {'bo', 'si'}:
                 Tune = QAction('Tune', diag)
+                Tune.setIcon(qta.icon('mdi.pulse', scale_factor=1.3))
                 self.connect_newprocess(Tune, 'sirius-hla-'+sec+'-di-tune.py')
                 diag.addAction(Tune)
                 VLight = QAction('VLight', diag)
@@ -531,8 +568,37 @@ def get_object(ismenubar=True, parent=None):
             menu.addAction(status)
             return menu
 
-        def connect_newprocess(self, button, cmd):
-            util.connect_newprocess(button, cmd, parent=self)
+        def _set_va_menu(self, sec):
+            secl = sec.lower()
+            menu = LEVEL2M('VA', self)
+            menu.setObjectName(sec.upper()+'App')
+
+            agilent = QAction('Agilent', menu)
+            self.connect_newprocess(
+                agilent,
+                'sirius-hla-'+secl+'-va-agilent4uhv-overview.py',
+                is_pydm=True)
+
+            mks = QMenu('MKS', menu)
+            mks.setObjectName(sec.upper()+'App')
+            mks_ov = QAction('Overview', mks)
+            self.connect_newprocess(
+                mks_ov,
+                'sirius-hla-'+secl+'-va-mks937b-overview.py',
+                is_pydm=True)
+            mks.addAction(mks_ov)
+            mks_gr = QAction('Graph', mks)
+            self.connect_newprocess(
+                mks_gr,
+                ['sirius-hla-'+secl+'-va-mks937b-overview.py', '-graph'],
+                is_pydm=True)
+            mks.addAction(mks_gr)
+            menu.addAction(agilent)
+            menu.addMenu(mks)
+            return menu
+
+        def connect_newprocess(self, button, cmd, is_pydm=False):
+            util.connect_newprocess(button, cmd, parent=self, is_pydm=is_pydm)
 
         def _applyconfig(self):
             sender_text = self.sender().text()

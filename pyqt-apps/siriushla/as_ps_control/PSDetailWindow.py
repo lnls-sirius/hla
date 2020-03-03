@@ -1,10 +1,11 @@
 """Define a window with detailed controls for a given magnet."""
 
-from qtpy.QtWidgets import QPushButton
+from qtpy.QtWidgets import QPushButton, QMenu, QAction
 import qtawesome as qta
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.search import PSSearch
-from siriushla.util import connect_window, get_appropriate_color
+from siriushla.util import connect_window, connect_newprocess, \
+    get_appropriate_color
 from siriushla.widgets import SiriusMainWindow
 from .detail_widget.DetailWidgetFactory import DetailWidgetFactory
 
@@ -54,7 +55,20 @@ class PSDetailWindow(SiriusMainWindow):
                 if dclink_type != 'REGATRON_DCLink':
                     connect_window(w, PSDetailWindow, self, psname=dclinks)
                 else:
-                    w.setHidden(True)
+                    if len(dclinks) > 1:
+                        menu = QMenu(w)
+                        for dcl in dclinks:
+                            act = QAction(dcl, menu)
+                            connect_newprocess(
+                                act,
+                                ['sirius-hla-as-ps-regatron-individual.py',
+                                 '-dev', dcl], parent=self, is_pydm=True)
+                            menu.addAction(act)
+                        w.setMenu(menu)
+                    else:
+                        connect_newprocess(
+                            w, ['sirius-hla-as-ps-regatron-individual.py',
+                                '-dev', dclinks[0]], parent=self, is_pydm=True)
             else:
                 w.setHidden(True)
 

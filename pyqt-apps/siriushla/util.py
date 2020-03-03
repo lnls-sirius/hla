@@ -61,32 +61,27 @@ def connect_window(widget, w_class, parent, signal=None, **kwargs):
 
 
 def connect_newprocess(widget, cmd, is_window=True, parent=None, signal=None,
-                       **kwargs):
+                       is_pydm=False, **kwargs):
     """Execute a child program in a new process."""
     signal = signal or get_appropriate_signal(widget)
-    signal.connect(lambda: run_newprocess(cmd, **kwargs))
+    signal.connect(lambda: run_newprocess(cmd, is_pydm=is_pydm, **kwargs))
     if is_window:
-        signal.connect(_part(_show_loading_message, parent, cmd))
+        signal.connect(_part(_show_loading_message, parent, cmd, is_pydm))
 
 
-def check_process(cmd, is_window=True):
+def check_process(cmd, is_window=True, is_pydm=False):
     # Maximize the window if it exists, else create a new one
     scmd = (_subprocess.list2cmdline(cmd) if isinstance(cmd, list) else cmd)
     window = ''
     pid = ''
-    sess = _subprocess.getoutput(
-        'ps -A -o sess,args | grep "[p]s -A -o sess,args" | xargs '
-        '| cut -f1 -d " " -')
-    info = _subprocess.getoutput(
-        'ps h -A -o pid,sess,command= | grep "['+scmd[0]+']'+scmd[1:]+'" | '
-        'grep '+sess)
-    if info and is_window:
-        info = info.split('\n')[0]
-        pid, _, comm = info.split()[:3]
-        window = _check_window_by_pid(pid, comm)
-    if pid and not window:
-        infos = _subprocess.getoutput(
-            'ps h -o pid,command= --ppid ' + pid).split('\n')
+    if is_pydm:
+        _, _, sec, _, app = scmd.split()[0].split('-')[:5]
+        scmd = ('ps h -o pid,command= | grep [s]iriushlacon' +
+                ' | grep ' + app.strip('.py') +
+                ' | grep "/usr/bin/python3 /usr/local/bin/pydm"')
+        if sec in {'bo', 'tb', 'ts', 'si'}:
+            scmd += ' | grep ' + sec.upper()
+        infos = _subprocess.getoutput(scmd).split('\n')
         for info in infos:
             if not info:
                 continue
@@ -95,6 +90,28 @@ def check_process(cmd, is_window=True):
             if window:
                 pid = pidc
                 break
+    else:
+        sess = _subprocess.getoutput(
+            'ps -A -o sess,args | grep "[p]s -A -o sess,args" | xargs '
+            '| cut -f1 -d " " -')
+        info = _subprocess.getoutput(
+            'ps h -A -o pid,sess,command= | grep "['+scmd[0]+']' +
+            scmd[1:]+'" | grep '+sess)
+        if info and is_window:
+            info = info.split('\n')[0]
+            pid, _, comm = info.split()[:3]
+            window = _check_window_by_pid(pid, comm)
+        if pid and not window:
+            infos = _subprocess.getoutput(
+                'ps h -o pid,command= --ppid ' + pid).split('\n')
+            for info in infos:
+                if not info:
+                    continue
+                pidc, comm = info.split()[:2]
+                window = _check_window_by_pid(pidc, comm)
+                if window:
+                    pid = pidc
+                    break
     return pid, window
 
 
@@ -109,8 +126,8 @@ def _check_window_by_pid(pid, comm):
     return window
 
 
-def run_newprocess(cmd, is_window=True, **kwargs):
-    pid, window = check_process(cmd, is_window=is_window)
+def run_newprocess(cmd, is_window=True, is_pydm=False, **kwargs):
+    pid, window = check_process(cmd, is_window=is_window, is_pydm=is_pydm)
     if window:
         _subprocess.run(
             "wmctrl -iR " + window, stdin=_subprocess.PIPE, shell=True)
@@ -140,9 +157,9 @@ def get_appropriate_signal(widget):
     return signal
 
 
-def _show_loading_message(parent, cmd):
+def _show_loading_message(parent, cmd, is_pydm=False):
     global THREAD
-    THREAD = LoadingThread(parent, cmd=cmd)
+    THREAD = LoadingThread(parent, cmd=cmd, is_pydm=is_pydm)
     message = LoadingDialog(parent, 'Wait', '<h3>Loading Window</h3>')
     THREAD.openmessage.connect(message.show)
     THREAD.closemessage.connect(message.close)
@@ -163,15 +180,16 @@ class LoadingThread(_QThread):
     openmessage = _Signal()
     closemessage = _Signal()
 
-    def __init__(self, parent=None, cmd=''):
+    def __init__(self, parent=None, cmd='', is_pydm=False):
         super().__init__(parent=parent)
         self.cmd = cmd
+        self.is_pydm = is_pydm
 
     def run(self):
         self.openmessage.emit()
         wind = ''
         for _ in range(500):
-            _, wind = check_process(self.cmd)
+            _, wind = check_process(self.cmd, is_pydm=self.is_pydm)
             if wind:
                 break
             _time.sleep(0.01)
