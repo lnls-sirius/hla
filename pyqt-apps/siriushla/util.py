@@ -78,7 +78,7 @@ def check_process(cmd, is_window=True, is_pydm=False):
         _, _, sec, _, app = scmd.split()[0].split('-')[:5]
         scmd = ('ps h -o pid,command= | grep [s]iriushlacon' +
                 ' | grep ' + app.strip('.py') +
-                ' | grep "/usr/bin/python3 /usr/local/bin/pydm"')
+                ' | grep "/usr/local/bin/pydm"')
         if sec in {'bo', 'tb', 'ts', 'si'}:
             scmd += ' | grep ' + sec.upper()
         infos = _subprocess.getoutput(scmd).split('\n')

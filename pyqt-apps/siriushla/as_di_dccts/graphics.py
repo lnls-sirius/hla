@@ -276,7 +276,6 @@ class BORampEffMonitor(QWidget):
         self.graph.setAutoRangeX(True)
         self.graph.setAutoRangeY(True)
         self.graph.backgroundColor = QColor(255, 255, 255)
-        self.graph.axisColor = QColor(0, 0, 0)
         self.graph.showLegend = False
         self.graph.showXGrid = True
         self.graph.showYGrid = True
