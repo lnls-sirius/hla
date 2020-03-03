@@ -422,17 +422,16 @@ class EventList(BaseList):
     """Template for control of Events."""
 
     _MIN_WIDs = {
-        'ext_trig': 3, 'mode': 6.6, 'delay_type': 4.2, 'delay': 4.8,
-        'description': 9.7, 'code': 3.2, 'name': 4.8,
+        'ext_trig': 3, 'mode': 6.6, 'delay_type': 4.2, 'delay': 5.2,
+        'delayraw': 5.2, 'description': 9.7, 'code': 3.2, 'name': 4.8,
         }
     _LABELS = {
         'ext_trig': 'Trig.', 'mode': 'Mode', 'description': 'Description',
-        'delay_type': 'Type', 'delay': 'Delay [us]', 'code': 'Code',
-        'name': 'Name',
-        }
+        'delay_type': 'Type', 'delay': 'Delay [us]', 'delayraw': 'Raw Delay',
+        'code': 'Code', 'name': 'Name'}
     _ALL_PROPS = (
-        'ext_trig', 'name', 'mode', 'delay_type', 'delay', 'description',
-        'code')
+        'ext_trig', 'name', 'mode', 'delay_type', 'delay', 'delayraw',
+        'description', 'code')
 
     def __init__(self, **kwargs):
         kwargs['props2search'] = set(
@@ -465,6 +464,10 @@ class EventList(BaseList):
             sp = _MySpinBox(self, init_channel=prefix + "Delay-SP")
             sp.showStepExponent = False
             rb = PyDMLabel(self, init_channel=prefix + "Delay-RB")
+        elif prop == 'delayraw':
+            sp = _MySpinBox(self, init_channel=prefix + "DelayRaw-SP")
+            sp.showStepExponent = False
+            rb = PyDMLabel(self, init_channel=prefix + "DelayRaw-RB")
         elif prop == 'description':
             sp = PyDMLineEdit(self, init_channel=prefix + 'Desc-SP')
             rb = PyDMLabel(self, init_channel=prefix + 'Desc-RB')

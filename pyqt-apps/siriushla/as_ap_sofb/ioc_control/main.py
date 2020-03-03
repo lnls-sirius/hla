@@ -9,7 +9,7 @@ import qtawesome as qta
 from pydm.widgets import PyDMPushButton, PyDMLabel
 
 from siriushla.widgets import SiriusConnectionSignal, \
-        SiriusLedAlert, SiriusSpinbox
+    SiriusLedAlert, SiriusSpinbox
 from siriushla.widgets.windows import create_window_from_widget
 import siriushla.util as _util
 
