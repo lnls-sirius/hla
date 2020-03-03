@@ -17,7 +17,8 @@ from matplotlib.backends.backend_qt5agg import (
     NavigationToolbar2QT as NavigationToolbar)
 from matplotlib.figure import Figure
 
-from siriuspy.csdevice.pwrsupply import MAX_WFMSIZE
+from siriuspy.csdevice.pwrsupply import MAX_WFMSIZE_FBP
+from siriuspy.csdevice.pwrsupply import MAX_WFMSIZE_OTHERS
 from siriuspy.search import MASearch as _MASearch, PSSearch as _PSSearch
 from siriuspy.ramp import ramp, exceptions
 from siriuspy.ramp.magnet import get_magnet as _get_magnet
@@ -231,7 +232,7 @@ class DipoleRamp(QWidget):
                                      alignment=Qt.AlignVCenter)
         self.sb_nrpoints_fams = _MyDoubleSpinBox(self)
         self.sb_nrpoints_fams.setMinimum(1)
-        self.sb_nrpoints_fams.setMaximum(MAX_WFMSIZE)
+        self.sb_nrpoints_fams.setMaximum(MAX_WFMSIZE_OTHERS)
         self.sb_nrpoints_fams.setDecimals(0)
         self.sb_nrpoints_fams.setSingleStep(1)
         self.sb_nrpoints_fams.editingFinished.connect(
@@ -244,7 +245,7 @@ class DipoleRamp(QWidget):
                                       alignment=Qt.AlignVCenter)
         self.sb_nrpoints_corrs = _MyDoubleSpinBox(self)
         self.sb_nrpoints_corrs.setMinimum(1)
-        self.sb_nrpoints_corrs.setMaximum(MAX_WFMSIZE)
+        self.sb_nrpoints_corrs.setMaximum(MAX_WFMSIZE_FBP)
         self.sb_nrpoints_corrs.setDecimals(0)
         self.sb_nrpoints_corrs.setSingleStep(1)
         self.sb_nrpoints_corrs.editingFinished.connect(
