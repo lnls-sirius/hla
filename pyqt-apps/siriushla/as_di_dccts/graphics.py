@@ -9,8 +9,9 @@ from qtpy.QtWidgets import QWidget, QLabel, QPushButton, QGridLayout, \
 import qtawesome as qta
 from siriuspy.namesys import SiriusPVName
 from siriuspy.csdevice.dccts import Const as _DCCTc
-from pydm.widgets import PyDMLabel, PyDMWaveformPlot, PyDMTimePlot
-from siriushla.widgets import SiriusConnectionSignal as SignalChannel
+from pydm.widgets import PyDMLabel, PyDMWaveformPlot
+from siriushla.widgets import SiriusConnectionSignal as SignalChannel, \
+    SiriusTimePlot
 
 
 class DCCTMonitor(QWidget):
@@ -55,28 +56,30 @@ class DCCTMonitor(QWidget):
         text = 'Current Raw Readings' if self.use_raw else 'Current History'
         label = QLabel('<h3>'+text+'</h3>', self, alignment=Qt.AlignCenter)
 
-        self.graph = PyDMWaveformPlot(self)
-        self.graph.autoRangeX = True
-        self.graph.autoRangeY = True
-        self.graph.backgroundColor = QColor(255, 255, 255)
-        self.graph.axisColor = QColor(0, 0, 0)
-        self.graph.showLegend = False
-        self.graph.showXGrid = True
-        self.graph.showYGrid = True
-        self.graph.setLabels(left='Current [mA]', bottom='Index')
         if self.use_raw:
+            self.graph = PyDMWaveformPlot(self)
+            self.graph.setLabels(left='Current [mA]', bottom='Index')
             channel = 'FAKE:Readings'
             self.rawreadings_channel = SignalChannel(
                 self.dcct_prefix + 'RawReadings-Mon')
             self.rawreadings_channel.new_value_signal[np.ndarray].connect(
                 self._updateBuffer)
+            self.graph.addChannel(
+                y_channel=channel, name=text, color='blue',
+                lineWidth=2, lineStyle=Qt.SolidLine)
         else:
-            channel = self.dcct_prefix + 'CurrHstr-Mon'
-        self.graph.addChannel(
-            y_channel=channel, name=text, color='blue',
-            lineWidth=2, lineStyle=Qt.SolidLine)
-        leftAxis = self.graph.getAxis('left')
-        leftAxis.setStyle(autoExpandTextSpace=False, tickTextWidth=25)
+            self.graph = SiriusTimePlot(self)
+            self.graph.timeSpan = 18000
+            channel = self.dcct_prefix + 'Current-Mon'
+            self.graph.addYChannel(
+                y_channel=channel, name=text, color='blue',
+                lineWidth=2, lineStyle=Qt.SolidLine)
+        self.graph.autoRangeX = True
+        self.graph.autoRangeY = True
+        self.graph.backgroundColor = QColor(255, 255, 255)
+        self.graph.showLegend = False
+        self.graph.showXGrid = True
+        self.graph.showYGrid = True
         self.curve = self.graph.curveAtIndex(0)
 
         lay = QGridLayout()
@@ -166,7 +169,7 @@ class DCCTMonitor(QWidget):
         self.setStyleSheet("""
             .QLabel{
                 max-height:1.5em;}
-            PyDMWaveformPlot{
+            PyDMWaveformPlot, PyDMTimePlot{
                 min-width:30em; min-height:20em;}
         """)
 
@@ -268,7 +271,7 @@ class BORampEffMonitor(QWidget):
         label = QLabel('<h3>Booster Ramp Efficiency</h3>', self,
                        alignment=Qt.AlignCenter)
 
-        self.graph = PyDMTimePlot(self)
+        self.graph = SiriusTimePlot(self)
         self.graph.timeSpan = 1000  # [s]
         self.graph.setAutoRangeX(True)
         self.graph.setAutoRangeY(True)

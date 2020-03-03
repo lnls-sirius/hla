@@ -8,12 +8,13 @@ import qtawesome as qta
 from pydm.widgets import PyDMLineEdit, PyDMEnumComboBox, PyDMWaveformPlot, \
     PyDMLabel, PyDMSpinbox
 from siriushla.widgets import SiriusMainWindow, PyDMStateButton, PyDMLed, \
-    SiriusLedAlert, SiriusLedState, PyDMLedMultiChannel, SiriusConnectionSignal
+    SiriusLedAlert, SiriusLedState, PyDMLedMultiChannel, SiriusTimePlot, \
+    SiriusConnectionSignal
 from siriushla.util import connect_window, get_appropriate_color
 from pyqtgraph import InfiniteLine, mkPen
 from .details import TransmLineStatusDetails, CavityStatusDetails, \
     LLRFInterlockDetails
-from .custom_widgets import RFEnblDsblButton, RFPushButton, MyTimePlot
+from .custom_widgets import RFEnblDsblButton, RFPushButton
 from .util import SEC_2_CHANNELS
 
 
@@ -591,7 +592,7 @@ class RFMainControl(SiriusMainWindow):
         return lay
 
     def _cwMonLayout(self):
-        self.pwr_mon_graph = MyTimePlot(self)
+        self.pwr_mon_graph = SiriusTimePlot(self)
         self.pwr_mon_graph.setObjectName('graph')
         self.pwr_mon_graph.setStyleSheet(
             '#graph{min-height:15em;min-width:20em;max-height:15em;}')
@@ -726,7 +727,7 @@ class RFMainControl(SiriusMainWindow):
             self._handle_pwrdata_visibility)
         lay_vals.addWidget(self.cb_units, 0, 2)
 
-        self.pwr_mon_graph = MyTimePlot(self)
+        self.pwr_mon_graph = SiriusTimePlot(self)
         self.pwr_mon_graph.autoRangeX = True
         self.pwr_mon_graph.autoRangeY = True
         self.pwr_mon_graph.backgroundColor = QColor(255, 255, 255)
@@ -826,7 +827,7 @@ class RFMainControl(SiriusMainWindow):
         hbox_temp1_state.addWidget(lb_temp1, alignment=Qt.AlignLeft)
         hbox_temp1_state.addWidget(self.led_temp1ok, alignment=Qt.AlignRight)
 
-        self.temp1_graph = MyTimePlot(self)
+        self.temp1_graph = SiriusTimePlot(self)
         self.temp1_graph.autoRangeX = True
         self.temp1_graph.autoRangeY = True
         self.temp1_graph.backgroundColor = QColor(255, 255, 255)
@@ -883,7 +884,7 @@ class RFMainControl(SiriusMainWindow):
         hbox_temp2_state.addWidget(lb_temp2, alignment=Qt.AlignLeft)
         hbox_temp2_state.addWidget(self.led_temp2ok, alignment=Qt.AlignRight)
 
-        self.temp2_graph = MyTimePlot(self)
+        self.temp2_graph = SiriusTimePlot(self)
         self.temp2_graph.autoRangeX = True
         self.temp2_graph.autoRangeY = True
         self.temp2_graph.backgroundColor = QColor(255, 255, 255)
@@ -913,7 +914,7 @@ class RFMainControl(SiriusMainWindow):
         hbox_vacuum_state.addWidget(lb_vacuum, alignment=Qt.AlignLeft)
         hbox_vacuum_state.addWidget(self.led_condrun, alignment=Qt.AlignRight)
 
-        self.vacuum_graph = MyTimePlot(self)
+        self.vacuum_graph = SiriusTimePlot(self)
         self.vacuum_graph.autoRangeX = True
         self.vacuum_graph.autoRangeY = True
         self.vacuum_graph.backgroundColor = QColor(255, 255, 255)

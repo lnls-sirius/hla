@@ -17,3 +17,4 @@ from .spectrogram_view import SiriusSpectrogramView
 from .label import SiriusLabel
 from .pvnames_tree import PVNameTree
 from .string_combo_box import SiriusComboBox
+from .timeplot import SiriusTimePlot
