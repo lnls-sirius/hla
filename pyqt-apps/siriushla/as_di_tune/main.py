@@ -2,8 +2,10 @@ from qtpy.QtGui import QColor
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGridLayout, QTabWidget, QVBoxLayout, \
     QLabel, QHBoxLayout
+import qtawesome as qta
 from pydm.widgets import PyDMLabel
 from siriuspy.envars import VACA_PREFIX
+from siriushla import util
 from siriushla.widgets import SiriusMainWindow
 from .spectrogram import BOTuneSpectrogramControls
 from .spectra import TuneSpectraControls
@@ -20,6 +22,9 @@ class Tune(SiriusMainWindow):
         self.section = section.upper()
         self.setObjectName(self.section+'App')
         self.setWindowTitle(self.section+' Tune')
+        self.setWindowIcon(
+            qta.icon('mdi.pulse',
+                     color=util.get_appropriate_color(self.section)))
         self._setupUi()
         self.setFocusPolicy(Qt.StrongFocus)
 
