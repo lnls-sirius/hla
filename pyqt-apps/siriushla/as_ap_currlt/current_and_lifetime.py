@@ -2,6 +2,7 @@
 """HLA Current and Lifetime Modules."""
 
 import os as _os
+from datetime import datetime as _datetime, timedelta as _timedelta
 from functools import partial as _part
 import time as _time
 import numpy as _np
@@ -15,6 +16,7 @@ from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 from pydm.widgets.timeplot import PyDMTimePlot, TimePlotCurveItem
 from pyqtgraph import InfiniteLine, mkPen
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
+from siriuspy.clientarch import ClientArchiver
 from siriushla.util import connect_window
 from siriushla.widgets import SiriusMainWindow, SiriusConnectionSignal
 from siriushla.as_di_dccts import DCCTMain
@@ -103,18 +105,29 @@ class CurrLTWindow(SiriusMainWindow):
 
         self.graph.addYChannel(
             y_channel=self.prefix+'SI-Glob:AP-CurrInfo:Current-Mon',
-            axis='left', name='Current', color='blue', lineWidth=2)
+            axis='left', name='Current', color='blue', lineWidth=1)
         self._curve_current = self.graph.curveAtIndex(0)
+        self._fillCurveBuffer(
+            self._curve_current,
+            self.prefix+'SI-Glob:AP-CurrInfo:Current-Mon')
 
         self.graph.addYChannel(
             y_channel='FAKE:Lifetime', axis='right', name='Lifetime',
-            color='red', lineWidth=2)
+            color='red', lineWidth=1)
         self._curve_lifetimedcct = self.graph.curveAtIndex(1)
+        self._fillCurveBuffer(
+            self._curve_lifetimedcct,
+            self.prefix+'SI-Glob:AP-CurrInfo:Lifetime-Mon',
+            factor=3600)
 
         self.graph.addYChannel(
             y_channel='FAKE:LifetimeBPM', axis='right', name='Lifetime',
-            color='red', lineWidth=2)
+            color='red', lineWidth=1)
         self._curve_lifetimebpm = self.graph.curveAtIndex(2)
+        self._fillCurveBuffer(
+            self._curve_lifetimebpm,
+            self.prefix+'SI-Glob:AP-CurrInfo:LifetimeBPM-Mon',
+            factor=3600)
         self._curve_lifetimebpm.setVisible(False)
 
         self._tval_last_smpl_bpm = 0.0
@@ -235,6 +248,42 @@ class CurrLTWindow(SiriusMainWindow):
             line.setValue(linepos)
         else:
             line.setVisible(False)
+
+    def _get_value_from_arch(self, pvname):
+        carch = ClientArchiver()
+        t1 = _datetime.now()
+        t0 = t1 - _timedelta(seconds=2000)
+        t0_str = t0.isoformat() + '-03:00'
+        t1_str = t1.isoformat() + '-03:00'
+        timestamp, value, _, _ = carch.getData(pvname, t0_str, t1_str)
+        # ignore first sample
+        if len(value) > 1:
+            timestamp[0] = t0.timestamp()
+            value[0] = value[1]
+        return timestamp, value
+
+    def _fillCurveBuffer(self, curve, pvname, factor=None):
+        datax, datay = self._get_value_from_arch(pvname)
+        nrpts = len(datax)
+        if not nrpts:
+            return
+
+        buff = _np.zeros((2, self.graph.bufferSize), order='f', dtype=float)
+        if nrpts > self.graph.bufferSize:
+            smpls2discard = nrpts - self.graph.bufferSize
+            datax = datax[smpls2discard:]
+            datay = datay[smpls2discard:]
+            nrpts = len(datax)
+        firstsmpl2fill = self.graph.bufferSize - nrpts
+        buff[0, firstsmpl2fill:] = datax
+        buff[1, firstsmpl2fill:] = datay
+        if factor:
+            buff[1, :] /= factor
+        curve.data_buffer = buff
+        curve.points_accumulated = nrpts
+        curve._min_y_value = min(datay)
+        curve._max_y_value = max(datay)
+        curve.latest_value = datay[-1]
 
 
 class MyGraph(PyDMTimePlot):

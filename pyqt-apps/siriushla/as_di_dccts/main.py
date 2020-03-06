@@ -16,7 +16,7 @@ def get_dcct_list(sec):
     if sec == 'SI':
         return ['SI-13C4:DI-DCCT', 'SI-14C4:DI-DCCT']
     else:
-        return ['BO-35D:DI-DCCT']
+        return ['BO-35D:DI-DCCT', ]
 
 
 class DCCTMain(SiriusMainWindow):

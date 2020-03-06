@@ -17,8 +17,7 @@ from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 from pydm.widgets import PyDMWaveformTable, PyDMLabel, PyDMLineEdit
 
 from siriushla import util as _hlautil
-from siriushla.widgets import SiriusMainWindow, PyDMLedMultiChannel, \
-    SiriusConnectionSignal
+from siriushla.widgets import SiriusMainWindow
 from siriushla.as_ps_control import PSDetailWindow as _PSDetailWindow
 from siriushla.as_pu_control import PUDetailWindow as _PUDetailWindow
 from siriushla.as_ap_configdb import LoadConfigDialog as _LoadConfigDialog
@@ -30,7 +29,7 @@ UI_FILE = (_os.path.abspath(_os.path.dirname(__file__))+'/ui_as_ap_posang.ui')
 class PosAngCorr(SiriusMainWindow):
     """Main Class."""
 
-    def __init__(self, parent=None, prefix='', tl=None, corrtype='ch-sept'):
+    def __init__(self, parent=None, prefix='', tl=None):
         """Class construc."""
         super(PosAngCorr, self).__init__(parent)
         if not prefix:
@@ -39,7 +38,6 @@ class PosAngCorr(SiriusMainWindow):
             self._prefix = prefix
         self._tl = tl.upper()
         self.posang_prefix = self._prefix + self._tl + '-Glob:AP-PosAng'
-        self._corrtype = corrtype
 
         self.setObjectName(tl.upper()+'App')
         tmp_file = _substitute_in_file(UI_FILE, {'TRANSPORTLINE': self._tl,
@@ -55,12 +53,8 @@ class PosAngCorr(SiriusMainWindow):
             corrs[2] = _PVName(Const.TS_CORRV_POSANG[0])
             corrs[3] = _PVName(Const.TS_CORRV_POSANG[1])
         elif tl == 'tb':
-            if corrtype == 'ch-sept':
-                CORRCH = Const.TB_CORRH_POSANG_CHSEPT
-            else:
-                CORRCH = Const.TB_CORRH_POSANG_CHCH
-            corrs[0] = _PVName(CORRCH[0])
-            corrs[1] = _PVName(CORRCH[1])
+            corrs[0] = _PVName(Const.TB_CORRH_POSANG[0])
+            corrs[1] = _PVName(Const.TB_CORRH_POSANG[1])
             corrs[2] = _PVName(Const.TB_CORRV_POSANG[0])
             corrs[3] = _PVName(Const.TB_CORRV_POSANG[1])
         self._set_correctors_channels(corrs)
@@ -70,15 +64,6 @@ class PosAngCorr(SiriusMainWindow):
                                 parent=self, tl=self._tl, prefix=self._prefix)
 
         self._set_status_labels()
-
-        self.corrtype_led = PyDMLedMultiChannel(
-            parent=self,
-            channels2values={self.posang_prefix+':CorrType-Cte': corrtype})
-        self.centralwidget.hlay_corrtype.addWidget(self.corrtype_led)
-        self.corrtype_ch = SiriusConnectionSignal(
-            self.posang_prefix+':CorrType-Cte')
-        self.corrtype_ch.new_value_signal[str].connect(
-            self._set_corrtype_label)
 
         self.setStyleSheet("""
             PyDMSpinbox{
@@ -128,10 +113,6 @@ class PosAngCorr(SiriusMainWindow):
             exec('self.centralwidget.label_status{0}.setText('
                  'Const.STATUSLABELS[{0}])'.format(i))
 
-    def _set_corrtype_label(self, corrtype):
-        text = 'Controlling ' + self._corrtype
-        self.centralwidget.label_corrtype.setText(text)
-
 
 class CorrParamsDetailWindow(SiriusMainWindow):
     """Correction parameters detail window."""
@@ -140,6 +121,7 @@ class CorrParamsDetailWindow(SiriusMainWindow):
         """Class constructor."""
         super(CorrParamsDetailWindow, self).__init__(parent)
         self._tl = tl
+        self.setObjectName(tl.upper()+'App')
         self._prefix = prefix
         self.setWindowTitle(self._tl +
                             ' Position and Angle Correction Parameters')
