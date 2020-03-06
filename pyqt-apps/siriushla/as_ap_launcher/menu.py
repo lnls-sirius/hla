@@ -289,15 +289,11 @@ def get_object(ismenubar=True, parent=None):
             optics.addAction(sofb)
 
             if sec in {'tb', 'ts'}:
-                PosAng = QAction('PosAng CH-Sept', optics)
+                PosAng = QAction('PosAng', optics)
                 self.connect_newprocess(
                     PosAng, 'sirius-hla-'+sec+'-ap-posang.py')
                 optics.addAction(PosAng)
             if 'tb' in sec:
-                PosAngCHCH = QAction('PosAng CH-CH', optics)
-                self.connect_newprocess(
-                    PosAngCHCH, 'sirius-hla-'+sec+'-ap-posang-chch.py')
-                optics.addAction(PosAngCHCH)
                 Emittance = QAction('Emittance Meas', optics)
                 self.connect_newprocess(
                     Emittance, 'sirius-hla-tb-ap-emittance.py')
