@@ -22,10 +22,10 @@ from siriushla import util
 from siriushla.widgets import PyDMLed, SiriusConnectionSignal
 from siriushla.common.cam_basler import \
     SiriusImageView as _SiriusImageView, \
-    create_propty_layout as _create_propty_layout, \
-    create_trigger_layout as _create_trigger_layout
+    create_propty_layout as _create_propty_layout
 from siriushla.as_di_scrns.scrn_details import \
     ScrnSettingsDetails as _ScrnSettingsDetails
+from siriushla.as_ti_control import HLTriggerSimple
 
 
 class SiriusScrnView(QWidget):
@@ -122,7 +122,14 @@ class SiriusScrnView(QWidget):
                 min-height:1.29em; max-height:1.29em;}""")
 
         self.trigger_groupBox = QGroupBox('Trigger', self)
-        self.trigger_groupBox.setLayout(self._triggerLayout())
+        if 'TB' in self.device or 'BO' in self.device:
+            trg_prefix = self.prefix + 'AS-Fam:TI-Scrn-TBBO'
+        elif 'TS' in self.device:
+            trg_prefix = self.prefix + 'TS-Fam:TI-Scrn'
+        hbl = QHBoxLayout(self.trigger_groupBox)
+        hbl.addWidget(HLTriggerSimple(
+            parent=self.trigger_groupBox, prefix=trg_prefix))
+        self.trigger_groupBox.setLayout(hbl)
         self.trigger_groupBox.setStyleSheet("""
             PyDMWidget{
                 min-width:4.84em; max-width:4.84em;
@@ -301,10 +308,6 @@ class SiriusScrnView(QWidget):
         lay.addRow(label_CamGain, hbox_CamGain)
         lay.addRow(label_Reset, hbox_aux)
         return lay
-
-    def _triggerLayout(self):
-        return _create_trigger_layout(
-            parent=self, device=self.device, prefix=self.prefix)
 
     def _statisticsLayout(self):
         # - Method

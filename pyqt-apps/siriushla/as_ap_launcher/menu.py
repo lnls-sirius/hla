@@ -538,17 +538,17 @@ def get_object(ismenubar=True, parent=None):
             pumenu.setObjectName(sec.upper()+'App')
             script = 'sirius-hla-' + sec + '-pu-control.py'
             if sec == 'si':
-                pmag = QAction('PU Injection', pumenu)
+                pmag = QAction('Injection', pumenu)
                 self.connect_newprocess(pmag, [script, '-s', 'InjSI'])
                 pumenu.addAction(pmag)
-                pmag = QAction('PU Pingers', pumenu)
+                pmag = QAction('Pingers', pumenu)
                 self.connect_newprocess(pmag, [script, '-s', 'Ping'])
                 pumenu.addAction(pmag)
             elif sec == 'bo':
-                pmag = QAction('PU Injection', pumenu)
+                pmag = QAction('Injection', pumenu)
                 self.connect_newprocess(pmag, [script, '-s', 'InjBO'])
                 pumenu.addAction(pmag)
-                pmag = QAction('PU Ejection', pumenu)
+                pmag = QAction('Ejection', pumenu)
                 self.connect_newprocess(pmag, [script, '-s', 'EjeBO'])
                 pumenu.addAction(pmag)
             return pumenu

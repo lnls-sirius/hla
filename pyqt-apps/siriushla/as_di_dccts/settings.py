@@ -13,7 +13,8 @@ from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets import PyDMStateButton, SiriusConnectionSignal, \
     SiriusLedState, SiriusLedAlert, PyDMLedMultiChannel
 from siriushla import util as _hlautil
-from siriushla.as_ti_control.hl_trigger import HLTriggerDetailed
+from siriushla.as_ti_control.hl_trigger import HLTriggerDetailed, \
+    HLTriggerSimple
 
 
 class DCCTSettings(QWidget):
@@ -127,8 +128,9 @@ class DCCTSettings(QWidget):
 
         # Trigger
         self.trigger_widget = QGroupBox('Trigger')
-        self.trigger_widget.setLayout(_create_trigger_layout(
-            self, self.prefix, self.device))
+        hbl = QHBoxLayout(self.trigger_widget)
+        trg_prefix = self.prefix + self.device.replace(':DI', ':TI')
+        hbl.addWidget(HLTriggerSimple(self.trigger_widget, trg_prefix))
         lay.addWidget(self.trigger_widget)
         lay.setStretch(2, 3)
 
@@ -538,10 +540,9 @@ class DCCTSettingsDetails(QWidget):
 
     def _setupTriggerWidget(self):
         gbox_trigger = QGroupBox('Trigger', self)
-        lay = _create_trigger_layout(
-            gbox_trigger, self.prefix, self.device, label_align=Qt.AlignRight)
-        lay.setAlignment(Qt.AlignCenter)
-        gbox_trigger.setLayout(lay)
+        hbl = QHBoxLayout(gbox_trigger)
+        trg_prefix = self.prefix + self.device.replace(':DI', ':TI')
+        hbl.addWidget(HLTriggerSimple(gbox_trigger, trg_prefix))
         return gbox_trigger
 
     def _updateReliableMeasLabels(self, pvname, value,  **kwargs):
@@ -557,47 +558,6 @@ class DCCTSettingsDetails(QWidget):
         elif value == _DCCTc.MeasModeSel.Fast:
             self.gbox_normalmode.setVisible(False)
             self.gbox_fastmode.setVisible(True)
-
-
-def _create_trigger_layout(parent, prefix, device, label_align=Qt.AlignRight):
-    trg_prefix = prefix + device.replace('DI', 'TI')
-
-    l_TIstatus = QLabel('Status: ', parent)
-    ledmulti_TIStatus = PyDMLedMultiChannel(
-        parent=parent, channels2values={trg_prefix+':State-Sts': 1,
-                                        trg_prefix+':Status-Mon': 0})
-    pb_trgdetails = QPushButton(qta.icon('fa5s.ellipsis-h'), '', parent)
-    pb_trgdetails.setToolTip('Open details')
-    pb_trgdetails.setObjectName('detail')
-    pb_trgdetails.setStyleSheet(
-        "#detail{min-width:25px; max-width:25px; icon-size:20px;}")
-    pb_trgdetails.setAutoDefault(False)
-    pb_trgdetails.setDefault(False)
-    trg_w = create_window_from_widget(
-        HLTriggerDetailed, title=trg_prefix+' Detailed Settings',
-        is_main=True)
-    _hlautil.connect_window(pb_trgdetails, trg_w, parent=None,
-                            prefix=trg_prefix)
-    hlay_TIstatus = QHBoxLayout()
-    hlay_TIstatus.addWidget(ledmulti_TIStatus)
-    hlay_TIstatus.addWidget(pb_trgdetails, alignment=Qt.AlignLeft)
-
-    l_TIdelay = QLabel('Delay [us]: ', parent)
-    spinbox_TIDelay = PyDMSpinbox(
-        parent=parent, init_channel=trg_prefix+':Delay-SP')
-    spinbox_TIDelay.showStepExponent = False
-    label_TIDelay = PyDMLabel(
-        parent=parent, init_channel=trg_prefix+':Delay-RB')
-    hlay_TIdelay = QHBoxLayout()
-    hlay_TIdelay.addWidget(spinbox_TIDelay)
-    hlay_TIdelay.addWidget(label_TIDelay)
-
-    lay = QGridLayout()
-    lay.addWidget(l_TIstatus, 0, 0, alignment=label_align)
-    lay.addLayout(hlay_TIstatus, 0, 1)
-    lay.addWidget(l_TIdelay, 1, 0, alignment=label_align)
-    lay.addLayout(hlay_TIdelay, 1, 1)
-    return lay
 
 
 if __name__ == '__main__':

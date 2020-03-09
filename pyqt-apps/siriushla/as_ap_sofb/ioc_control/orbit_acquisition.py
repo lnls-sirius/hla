@@ -9,7 +9,7 @@ from siriushla.util import connect_window
 from siriushla.widgets import SiriusLedAlert, SiriusSpinbox, PyDMStateButton, \
     SiriusLedState, SiriusLabel
 from siriushla.widgets.windows import create_window_from_widget
-from siriushla.as_ti_control import HLTriggerDetailed as _HLTriggerDetailed
+from siriushla.as_ti_control import HLTriggerSimple as _HLTriggerSimple
 
 from siriushla.as_ap_sofb.ioc_control.base import BaseWidget
 from siriushla.as_ap_sofb.ioc_control.status import StatusWidget
@@ -55,7 +55,8 @@ class AcqControlWidget(BaseWidget):
         vbl.addStretch()
 
         tabw = QTabWidget(self)
-        grp_bx = self._get_trigext_params_grpbx()
+        pref = self.prefix.prefix + self._csorb.TRIGGER_ACQ_NAME
+        grp_bx = _HLTriggerSimple(parent=tabw, prefix=pref, src=True)
         tabw.addTab(grp_bx, 'External Trigger')
         grp_bx = self._get_trigdata_params_grpbx()
         tabw.addTab(grp_bx, 'Data-Driven Trigger')
@@ -254,34 +255,6 @@ class AcqControlWidget(BaseWidget):
         lbl = QLabel('Polarity', grp_bx, alignment=Qt.AlignCenter)
         wid = self.create_pair_sel(grp_bx, 'TrigDataPol')
         fbl.addRow(lbl, wid)
-        return grp_bx
-
-    def _get_trigext_params_grpbx(self):
-        grp_bx = QWidget(self)
-        pref = self.prefix.prefix + self._csorb.TRIGGER_ACQ_NAME + ':'
-        fbl = QFormLayout(grp_bx)
-        lbl = QLabel('Duration [us]', grp_bx, alignment=Qt.AlignCenter)
-        wid = self.create_pair(grp_bx, 'Duration', prefix=pref)
-        fbl.addRow(lbl, wid)
-        lbl = QLabel('Delay [us]', grp_bx, alignment=Qt.AlignCenter)
-        wid = self.create_pair(grp_bx, 'Delay', prefix=pref)
-        fbl.addRow(lbl, wid)
-        lbl = QLabel('Source', grp_bx, alignment=Qt.AlignCenter)
-        wid = self.create_pair_sel(grp_bx, 'Src', prefix=pref)
-        fbl.addRow(lbl, wid)
-        btn = QPushButton('', grp_bx)
-        btn.setToolTip('Open Trigger Window')
-        btn.setObjectName('btn')
-        btn.setIcon(qta.icon('fa5s.ellipsis-h'))
-        btn.setStyleSheet(
-            '#btn{min-width:25px;max-width:25px;icon-size:20px;}')
-        win = create_window_from_widget(
-            _HLTriggerDetailed, title=self._csorb.TRIGGER_ACQ_NAME)
-        connect_window(btn, win, grp_bx, prefix=pref)
-        hbl = QHBoxLayout()
-        hbl.addStretch()
-        hbl.addWidget(btn)
-        fbl.addRow(hbl)
         return grp_bx
 
     def _get_multturn_acq_grpbx(self):

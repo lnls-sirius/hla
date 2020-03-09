@@ -31,31 +31,44 @@ class BaseWidget(QWidget):
         grpbx.layoutf = fbl
         fbl.setLabelAlignment(Qt.AlignVCenter)
         for pv1, txt in props:
-            hbl = QHBoxLayout()
-            not_enum = pv1.endswith('-SP')
-            pv2 = pv1.replace('-SP', '-RB').replace('-Sel', '-Sts')
-            if pv2 != pv1:
-                if not_enum:
-                    chan1 = self.get_pvname(pv1)
-                    wid = MySpinBox(self, init_channel=chan1)
-                    wid.showStepExponent = False
-                    wid.limitsFromChannel = False
-                else:
-                    wid = MyComboBox(self, init_channel=self.get_pvname(pv1))
-                    wid.setStyleSheet("""min-width:4.8em;""")
-                wid.setObjectName(pv1.replace('-', ''))
-                hbl.addWidget(wid)
-
-            lab = SiriusLabel(self, init_channel=self.get_pvname(pv2))
-            lab.setObjectName(pv2.replace('-', ''))
-            lab.showUnits = True
-            lab.setStyleSheet("""min-width:5.5em;""")
-            hbl.addWidget(lab)
+            hbl = self._create_propty_layout(pv1)
             lab = QLabel(txt)
             lab.setObjectName(pv1.split('-')[0])
             lab.setStyleSheet("""min-width:7em;""")
             fbl.addRow(lab, hbl)
         return grpbx
+
+    def _create_propty_layout(self, propty, width=6.0):
+        """Return layout that handles a property according to 'propty_type'."""
+        layout = QHBoxLayout()
+        not_enum = propty.endswith('-SP')
+        pv2 = propty.replace('-SP', '-RB').replace('-Sel', '-Sts')
+
+        style = """
+        min-width:wvalem; max-width:wvalem;
+        min-height:1.29em;""".replace('wval', str(width))
+
+        if pv2 != propty:
+            chan1 = self.get_pvname(propty)
+            if not_enum:
+                wid = MySpinBox(self, init_channel=chan1)
+                wid.showStepExponent = False
+                wid.setAlignment(Qt.AlignCenter)
+            else:
+                wid = MyComboBox(self, init_channel=chan1)
+            wid.setStyleSheet(style)
+            layout.addWidget(wid)
+
+        label = SiriusLabel(
+            parent=self, init_channel=self.get_pvname(pv2))
+        label.setStyleSheet(style)
+        label.setAlignment(Qt.AlignCenter)
+        label.setObjectName(pv2.replace('-', ''))
+        label.showUnits = True
+        layout.addWidget(label)
+
+        layout.setAlignment(Qt.AlignVCenter)
+        return layout
 
 
 class CustomGroupBox(QGroupBox, PyDMPrimitiveWidget):

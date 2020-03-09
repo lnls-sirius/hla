@@ -11,13 +11,69 @@ from pydm.widgets import PyDMLabel
 from pydm.widgets.base import PyDMWritableWidget
 from siriuspy.search import HLTimeSearch
 from siriuspy.csdevice import timesys
-from siriushla.widgets import PyDMLed, SiriusLedAlert, PyDMStateButton, \
-    SiriusLabel, SiriusSpinbox
+
 from siriushla.util import connect_window, get_appropriate_color
+from siriushla.widgets import PyDMLed, SiriusLedAlert, PyDMStateButton, \
+    SiriusLabel, SiriusSpinbox, PyDMLedMultiChannel
 from siriushla.widgets.windows import create_window_from_widget
 from .base import BaseList, BaseWidget, MySpinBox as _MySpinBox, \
     MyComboBox as _MyComboBox
 from .ll_trigger import LLTriggerList, OTPList, OUTList, AFCOUTList
+
+
+class HLTriggerSimple(BaseWidget):
+
+    def __init__(self, parent, prefix, delay=True, duration=False,
+                 nrpulses=False, src=False):
+        super().__init__(parent=parent, prefix=prefix)
+        flay = QFormLayout(self)
+        flay.setLabelAlignment(Qt.AlignRight)
+        flay.setFormAlignment(Qt.AlignCenter)
+
+        l_TIstatus = QLabel('Status: ', self)
+        ledmulti_TIStatus = PyDMLedMultiChannel(
+            parent=self,
+            channels2values={prefix+':State-Sts': 1, prefix+':Status-Mon': 0})
+        ledmulti_TIStatus.setStyleSheet(
+            "min-width:1.29em; max-width:1.29em;"
+            "min-height:1.29em; max-height:1.29em;")
+        pb_trgdetails = QPushButton(qta.icon('fa5s.ellipsis-h'), '', self)
+        pb_trgdetails.setToolTip('Open details')
+        pb_trgdetails.setObjectName('detail')
+        pb_trgdetails.setStyleSheet(
+            "#detail{min-width:25px; max-width:25px; icon-size:20px;}")
+        trg_w = create_window_from_widget(
+            HLTriggerDetailed, title=prefix+' Detailed Settings',
+            is_main=True)
+        connect_window(pb_trgdetails, trg_w, parent=None, prefix=prefix)
+        hlay_TIstatus = QHBoxLayout()
+        hlay_TIstatus.addWidget(ledmulti_TIStatus)
+        hlay_TIstatus.addWidget(pb_trgdetails)
+        flay.addRow(l_TIstatus, hlay_TIstatus)
+
+        if delay:
+            l_delay = QLabel('Delay [us]: ', self)
+            l_delay.setStyleSheet("min-width:5em;")
+            hlay_delay = self._create_propty_layout(propty='Delay-SP')
+            flay.addRow(l_delay, hlay_delay)
+
+        if duration:
+            l_duration = QLabel('Duration [us]: ', self)
+            l_duration.setStyleSheet("min-width:5em;")
+            hlay_duration = self._create_propty_layout(propty='Duration-SP')
+            flay.addRow(l_duration, hlay_duration)
+
+        if nrpulses:
+            l_nrpulses = QLabel('Nr Pulses: ', self)
+            l_nrpulses.setStyleSheet("min-width:5em;")
+            hlay_nrpulses = self._create_propty_layout(propty='NrPulses-SP')
+            flay.addRow(l_nrpulses, hlay_nrpulses)
+
+        if src:
+            l_src = QLabel('Source: ', self)
+            l_src.setStyleSheet("min-width:5em;")
+            hlay_src = self._create_propty_layout(propty='Src-Sel')
+            flay.addRow(l_src, hlay_src)
 
 
 class HLTriggerDetailed(BaseWidget):

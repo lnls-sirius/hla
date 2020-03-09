@@ -16,8 +16,6 @@ from siriushla.widgets import PyDMStateButton, SiriusLedState, \
     PyDMLedMultiChannel
 from siriushla.widgets.windows import create_window_from_widget
 
-from siriushla.as_ti_control.hl_trigger import HLTriggerDetailed
-
 
 class SiriusImageView(PyDMImageView):
     """A PyDMImageView with methods to handle screens calibration grids."""
@@ -603,64 +601,4 @@ def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
         layout.addWidget(pb)
 
     layout.setAlignment(Qt.AlignVCenter)
-
     return layout
-
-
-def create_trigger_layout(parent, device, prefix, delay=True, duration=False,
-                          nrpulses=False):
-    if 'TB' in device or 'BO' in device:
-        trg_prefix = prefix+'AS-Fam:TI-Scrn-TBBO'
-    elif 'TS' in device:
-        trg_prefix = prefix+'TS-Fam:TI-Scrn'
-
-    flay = QFormLayout()
-    flay.setLabelAlignment(Qt.AlignRight)
-    flay.setFormAlignment(Qt.AlignCenter)
-
-    l_TIstatus = QLabel('Status: ', parent)
-    ledmulti_TIStatus = PyDMLedMultiChannel(
-        parent=parent, channels2values={trg_prefix+':State-Sts': 1,
-                                        trg_prefix+':Status-Mon': 0})
-    ledmulti_TIStatus.setStyleSheet(
-        "min-width:1.29em; max-width:1.29em;"
-        "min-height:1.29em; max-height:1.29em;")
-    pb_trgdetails = QPushButton(qta.icon('fa5s.ellipsis-h'), '', parent)
-    pb_trgdetails.setToolTip('Open details')
-    pb_trgdetails.setObjectName('detail')
-    pb_trgdetails.setStyleSheet(
-        "#detail{min-width:25px; max-width:25px; icon-size:20px;}")
-    trg_w = create_window_from_widget(
-        HLTriggerDetailed, title=trg_prefix+' Detailed Settings',
-        is_main=True)
-    util.connect_window(pb_trgdetails, trg_w, parent=parent,
-                        prefix=trg_prefix)
-    hlay_TIstatus = QHBoxLayout()
-    hlay_TIstatus.addWidget(ledmulti_TIStatus)
-    hlay_TIstatus.addWidget(pb_trgdetails)
-    flay.addRow(l_TIstatus, hlay_TIstatus)
-
-    if delay:
-        l_TIdelay = QLabel('Delay [us]: ', parent)
-        l_TIdelay.setStyleSheet("min-width:5em;")
-        hlay_TIdelay = create_propty_layout(
-            parent=parent, prefix=trg_prefix, propty='Delay',
-            propty_type='sprb', width=6)
-        flay.addRow(l_TIdelay, hlay_TIdelay)
-
-    if duration:
-        l_TIduration = QLabel('Duration [us]: ', parent)
-        l_TIduration.setStyleSheet("min-width:5em;")
-        hlay_TIduration = create_propty_layout(
-            parent=parent, prefix=trg_prefix, propty='Duration',
-            propty_type='sprb', width=6)
-        flay.addRow(l_TIduration, hlay_TIduration)
-
-    if nrpulses:
-        l_TInrpulses = QLabel('Nr Pulses: ', parent)
-        l_TInrpulses.setStyleSheet("min-width:5em;")
-        hlay_TInrpulses = create_propty_layout(
-            parent=parent, prefix=trg_prefix, propty='NrPulses',
-            propty_type='sprb', width=6)
-        flay.addRow(l_TInrpulses, hlay_TInrpulses)
-    return flay
