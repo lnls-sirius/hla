@@ -36,8 +36,8 @@ class RampMain(SiriusMainWindow):
         self.ramp_config = None
         self._undo_stack = QUndoStack(self)
 
-        self._tunecorr_configname = 'Default'
-        self._chromcorr_configname = 'Default'
+        self._tunecorr_configname = 'BO.V05.04.M0'
+        self._chromcorr_configname = 'BO.V05.04.M0'
 
         self._setupUi()
         self._connSignals()
