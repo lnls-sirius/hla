@@ -2,16 +2,15 @@
 import qtawesome as qta
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, \
-    QLabel, QGroupBox, QPushButton, QFormLayout
-from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMPushButton
+    QLabel, QGroupBox, QFormLayout
+from pydm.widgets import PyDMLabel, PyDMPushButton
 
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriushla import util
 from siriushla.widgets import SiriusLedState, SiriusLedAlert, PyDMLed, \
-    PyDMStateButton, PyDMLinEditScrollbar, PyDMLedMultiChannel
-from siriushla.widgets.windows import create_window_from_widget
-from siriushla.as_ti_control.hl_trigger import HLTriggerDetailed
+    PyDMStateButton, PyDMLinEditScrollbar
+from siriushla.as_ti_control.hl_trigger import HLTriggerSimple
 
 
 class PUDetailWidget(QWidget):
@@ -24,9 +23,8 @@ class PUDetailWidget(QWidget):
         self._section = self._devname.sec
         self._prefdevname = self._devname.substitute(prefix=_VACA_PREFIX)
         self.setObjectName(self._section+'App')
-        self.setWindowIcon(
-            qta.icon('mdi.current-ac',
-                     color=util.get_appropriate_color(self._section)))
+        self.setWindowIcon(qta.icon(
+            'mdi.current-ac', color=util.get_appropriate_color(self._section)))
 
         self._create_pvs()
         self._setup_ui()
@@ -71,10 +69,6 @@ class PUDetailWidget(QWidget):
         self._ctrlmode_pv = self._prefdevname + ":CtrlMode-Mon"
 
         self._preftrigname = self._prefdevname.substitute(dis='TI')
-        self._timing_delay_sp = self._preftrigname + ":Delay-SP"
-        self._timing_delay_rb = self._preftrigname + ":Delay-RB"
-        self._timing_status_pv = self._preftrigname + ":Status-Mon"
-        self._timing_state_pv = self._preftrigname + ":State-Sts"
 
     def _setup_ui(self):
         self.header_label = QLabel("<h1>" + self._prefdevname + "</h1>")
@@ -96,7 +90,8 @@ class PUDetailWidget(QWidget):
         kick_box.setLayout(self._kick_layout())
         timing_box = QGroupBox(parent=self, title='Trigger')
         timing_box.setObjectName('timing_box')
-        timing_box.setLayout(self._timing_layout())
+        hbl = QHBoxLayout(timing_box)
+        hbl.addWidget(HLTriggerSimple(timing_box, self._preftrigname))
 
         self.layout = QGridLayout(self)
         self.layout.addWidget(self.header_label, 0, 0, 1, 3)
@@ -219,43 +214,6 @@ class PUDetailWidget(QWidget):
         ctrlmode_layout.addWidget(self.ctrlmode_label)
 
         return ctrlmode_layout
-
-    def _timing_layout(self):
-        self._trigger_status_label = QLabel('Status')
-        self._trigger_status_led = PyDMLedMultiChannel(
-            parent=self, channels2values={self._timing_status_pv: 0,
-                                          self._timing_state_pv: 1})
-        self._trigger_detail_bt = QPushButton(
-            qta.icon('fa5s.ellipsis-h'), '', self)
-        self._trigger_detail_bt.setObjectName('detail')
-        self._trigger_detail_bt.setStyleSheet(
-            '#detail{min-width:25px; max-width:25px; icon-size:20px;}')
-        trg_w = create_window_from_widget(
-            HLTriggerDetailed, title=self._preftrigname+' Detailed Settings',
-            is_main=True)
-        util.connect_window(
-            self._trigger_detail_bt, trg_w, parent=self,
-            prefix=self._preftrigname)
-        hbox_sts = QHBoxLayout()
-        hbox_sts.addWidget(self._trigger_status_led)
-        hbox_sts.addWidget(self._trigger_detail_bt, alignment=Qt.AlignRight)
-
-        self._trigger_delay_label = QLabel('Delay', self)
-        self._trigger_delay_sp = PyDMSpinbox(
-            parent=self, init_channel=self._timing_delay_sp)
-        self._trigger_delay_sp.showStepExponent = False
-        self._trigger_delay_rb = PyDMLabel(
-            parent=self, init_channel=self._timing_delay_rb)
-        hbox_delay = QHBoxLayout()
-        hbox_delay.addWidget(self._trigger_delay_sp)
-        hbox_delay.addWidget(self._trigger_delay_rb)
-
-        layout = QFormLayout()
-        layout.setLabelAlignment(Qt.AlignRight)
-        layout.setFormAlignment(Qt.AlignCenter)
-        layout.addRow(self._trigger_status_label, hbox_sts)
-        layout.addRow(self._trigger_delay_label, hbox_delay)
-        return layout
 
 
 if __name__ == "__main__":
