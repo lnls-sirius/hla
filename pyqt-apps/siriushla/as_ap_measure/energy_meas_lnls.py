@@ -14,6 +14,7 @@ import siriushla.util as _util
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets import SiriusConnectionSignal, SiriusSpinbox, \
     PyDMStateButton, SiriusLabel, SiriusLedState
+from siriushla.as_ti_control import HLTriggerSimple
 
 
 class ProcessImage(QWidget):
@@ -66,8 +67,14 @@ class ProcessImage(QWidget):
         self.image_view.addItem(self.plt_his_y)
         gl.addWidget(self.image_view, 0, 0, 1, 2)
 
+        gb_trig = QGroupBox('Trigger', self)
+        gl.addWidget(gb_trig, 1, 0, 1, 2)
+        hbl = QHBoxLayout(gb_trig)
+        hbl.addWidget(HLTriggerSimple(parent=self, prefix='LI-Fam:TI-Scrn'))
+        gb_trig.setLayout(hbl)
+
         gb_pos = QGroupBox('Image Processing ', self)
-        gl.addWidget(gb_pos, 1, 0, 2, 1)
+        gl.addWidget(gb_pos, 2, 0, 2, 1)
         fl = QFormLayout(gb_pos)
         wid = QWidget(gb_pos)
         wid.setLayout(QHBoxLayout())
@@ -139,8 +146,8 @@ class ProcessImage(QWidget):
 
         gb_posi = QGroupBox('Position [px / mm]', self)
         gb_size = QGroupBox('Size [px / mm]', self)
-        gl.addWidget(gb_posi, 1, 1)
-        gl.addWidget(gb_size, 2, 1)
+        gl.addWidget(gb_posi, 2, 1)
+        gl.addWidget(gb_size, 3, 1)
         fl_posi = QFormLayout(gb_posi)
         fl_size = QFormLayout(gb_size)
 
