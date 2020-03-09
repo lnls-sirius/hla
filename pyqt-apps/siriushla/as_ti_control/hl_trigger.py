@@ -24,7 +24,7 @@ from .ll_trigger import LLTriggerList, OTPList, OUTList, AFCOUTList
 class HLTriggerSimple(BaseWidget):
 
     def __init__(self, parent, prefix, delay=True, duration=False,
-                 nrpulses=False):
+                 nrpulses=False, src=False):
         super().__init__(parent=parent, prefix=prefix)
         flay = QFormLayout(self)
         flay.setLabelAlignment(Qt.AlignRight)
@@ -52,22 +52,28 @@ class HLTriggerSimple(BaseWidget):
         flay.addRow(l_TIstatus, hlay_TIstatus)
 
         if delay:
-            l_TIdelay = QLabel('Delay [us]: ', self)
-            l_TIdelay.setStyleSheet("min-width:5em;")
-            hlay_TIdelay = self.create_propty_layout(propty='Delay')
-            flay.addRow(l_TIdelay, hlay_TIdelay)
+            l_delay = QLabel('Delay [us]: ', self)
+            l_delay.setStyleSheet("min-width:5em;")
+            hlay_delay = self._create_propty_layout(propty='Delay-SP')
+            flay.addRow(l_delay, hlay_delay)
 
         if duration:
-            l_TIduration = QLabel('Duration [us]: ', self)
-            l_TIduration.setStyleSheet("min-width:5em;")
-            hlay_TIduration = self.create_propty_layout(propty='Duration')
-            flay.addRow(l_TIduration, hlay_TIduration)
+            l_duration = QLabel('Duration [us]: ', self)
+            l_duration.setStyleSheet("min-width:5em;")
+            hlay_duration = self._create_propty_layout(propty='Duration-SP')
+            flay.addRow(l_duration, hlay_duration)
 
         if nrpulses:
-            l_TInrpulses = QLabel('Nr Pulses: ', self)
-            l_TInrpulses.setStyleSheet("min-width:5em;")
-            hlay_TInrpulses = self.create_propty_layout(propty='NrPulses')
-            flay.addRow(l_TInrpulses, hlay_TInrpulses)
+            l_nrpulses = QLabel('Nr Pulses: ', self)
+            l_nrpulses.setStyleSheet("min-width:5em;")
+            hlay_nrpulses = self._create_propty_layout(propty='NrPulses-SP')
+            flay.addRow(l_nrpulses, hlay_nrpulses)
+
+        if src:
+            l_src = QLabel('Source: ', self)
+            l_src.setStyleSheet("min-width:5em;")
+            hlay_src = self._create_propty_layout(propty='Src-Sel')
+            flay.addRow(l_src, hlay_src)
 
     def create_propty_layout(self, propty, width=6.0):
         """Return layout that handles a property according to 'propty_type'."""
