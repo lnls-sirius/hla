@@ -11,13 +11,85 @@ from pydm.widgets import PyDMLabel
 from pydm.widgets.base import PyDMWritableWidget
 from siriuspy.search import HLTimeSearch
 from siriuspy.csdevice import timesys
-from siriushla.widgets import PyDMLed, SiriusLedAlert, PyDMStateButton, \
-    SiriusLabel, SiriusSpinbox
+
 from siriushla.util import connect_window, get_appropriate_color
+from siriushla.widgets import PyDMLed, SiriusLedAlert, PyDMStateButton, \
+    SiriusLabel, SiriusSpinbox, PyDMLedMultiChannel
 from siriushla.widgets.windows import create_window_from_widget
 from .base import BaseList, BaseWidget, MySpinBox as _MySpinBox, \
     MyComboBox as _MyComboBox
 from .ll_trigger import LLTriggerList, OTPList, OUTList, AFCOUTList
+
+
+class HLTriggerSimple(BaseWidget):
+
+    def __init__(self, parent, prefix, delay=True, duration=False,
+                 nrpulses=False):
+        super().__init__(parent=parent, prefix=prefix)
+        flay = QFormLayout(self)
+        flay.setLabelAlignment(Qt.AlignRight)
+        flay.setFormAlignment(Qt.AlignCenter)
+
+        l_TIstatus = QLabel('Status: ', self)
+        ledmulti_TIStatus = PyDMLedMultiChannel(
+            parent=self,
+            channels2values={prefix+':State-Sts': 1, prefix+':Status-Mon': 0})
+        ledmulti_TIStatus.setStyleSheet(
+            "min-width:1.29em; max-width:1.29em;"
+            "min-height:1.29em; max-height:1.29em;")
+        pb_trgdetails = QPushButton(qta.icon('fa5s.ellipsis-h'), '', self)
+        pb_trgdetails.setToolTip('Open details')
+        pb_trgdetails.setObjectName('detail')
+        pb_trgdetails.setStyleSheet(
+            "#detail{min-width:25px; max-width:25px; icon-size:20px;}")
+        trg_w = create_window_from_widget(
+            HLTriggerDetailed, title=prefix+' Detailed Settings',
+            is_main=True)
+        connect_window(pb_trgdetails, trg_w, parent=None, prefix=prefix)
+        hlay_TIstatus = QHBoxLayout()
+        hlay_TIstatus.addWidget(ledmulti_TIStatus)
+        hlay_TIstatus.addWidget(pb_trgdetails)
+        flay.addRow(l_TIstatus, hlay_TIstatus)
+
+        if delay:
+            l_TIdelay = QLabel('Delay [us]: ', self)
+            l_TIdelay.setStyleSheet("min-width:5em;")
+            hlay_TIdelay = self.create_propty_layout(propty='Delay')
+            flay.addRow(l_TIdelay, hlay_TIdelay)
+
+        if duration:
+            l_TIduration = QLabel('Duration [us]: ', self)
+            l_TIduration.setStyleSheet("min-width:5em;")
+            hlay_TIduration = self.create_propty_layout(propty='Duration')
+            flay.addRow(l_TIduration, hlay_TIduration)
+
+        if nrpulses:
+            l_TInrpulses = QLabel('Nr Pulses: ', self)
+            l_TInrpulses.setStyleSheet("min-width:5em;")
+            hlay_TInrpulses = self.create_propty_layout(propty='NrPulses')
+            flay.addRow(l_TInrpulses, hlay_TInrpulses)
+
+    def create_propty_layout(self, propty, width=6.0):
+        """Return layout that handles a property according to 'propty_type'."""
+        layout = QHBoxLayout()
+        style = """
+        min-width:wvalem; max-width:wvalem; min-height:1.29em;
+        max-height:1.29em;""".replace('wval', str(width))
+
+        sp = _MySpinBox(
+            parent=self, init_channel=self.prefix+':'+propty+'-SP')
+        sp.showStepExponent = False
+        sp.setStyleSheet(style)
+        sp.setAlignment(Qt.AlignCenter)
+        layout.addWidget(sp)
+        label = PyDMLabel(
+            parent=self, init_channel=self.prefix+':'+propty+'-RB')
+        label.setStyleSheet(style)
+        label.setAlignment(Qt.AlignCenter)
+        layout.addWidget(label)
+
+        layout.setAlignment(Qt.AlignVCenter)
+        return layout
 
 
 class HLTriggerDetailed(BaseWidget):
