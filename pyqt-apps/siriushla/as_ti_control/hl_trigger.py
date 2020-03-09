@@ -75,28 +75,6 @@ class HLTriggerSimple(BaseWidget):
             hlay_src = self._create_propty_layout(propty='Src-Sel')
             flay.addRow(l_src, hlay_src)
 
-    def create_propty_layout(self, propty, width=6.0):
-        """Return layout that handles a property according to 'propty_type'."""
-        layout = QHBoxLayout()
-        style = """
-        min-width:wvalem; max-width:wvalem; min-height:1.29em;
-        max-height:1.29em;""".replace('wval', str(width))
-
-        sp = _MySpinBox(
-            parent=self, init_channel=self.prefix+':'+propty+'-SP')
-        sp.showStepExponent = False
-        sp.setStyleSheet(style)
-        sp.setAlignment(Qt.AlignCenter)
-        layout.addWidget(sp)
-        label = PyDMLabel(
-            parent=self, init_channel=self.prefix+':'+propty+'-RB')
-        label.setStyleSheet(style)
-        label.setAlignment(Qt.AlignCenter)
-        layout.addWidget(label)
-
-        layout.setAlignment(Qt.AlignVCenter)
-        return layout
-
 
 class HLTriggerDetailed(BaseWidget):
     """Template for control of High Level Triggers."""
