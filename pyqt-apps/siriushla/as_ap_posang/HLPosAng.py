@@ -3,21 +3,21 @@
 """HLA as_ap_posang module."""
 
 import os as _os
-from qtpy.uic import loadUi as _loadUi
 from qtpy.QtWidgets import QGridLayout, QLabel, QGroupBox, QAbstractItemView, \
-                           QSizePolicy as QSzPlcy, QSpacerItem, QPushButton, \
-                           QHeaderView
+    QSizePolicy as QSzPlcy, QSpacerItem, QPushButton, QHeaderView, QWidget
 from qtpy.QtCore import Qt
+import qtawesome as qta
 
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.csdevice.posang import Const
 from siriuspy.namesys import SiriusPVName as _PVName
 
-from pydm.utilities.macro import substitute_in_file as _substitute_in_file
-from pydm.widgets import PyDMWaveformTable, PyDMLabel, PyDMLineEdit
+from pydm.widgets import PyDMWaveformTable, PyDMLabel, PyDMLineEdit, \
+    PyDMPushButton, PyDMSpinbox
 
 from siriushla import util as _hlautil
-from siriushla.widgets import SiriusMainWindow
+from siriushla.widgets import SiriusMainWindow, PyDMLogLabel, SiriusLedAlert, \
+    PyDMLinEditScrollbar
 from siriushla.as_ps_control import PSDetailWindow as _PSDetailWindow
 from siriushla.as_pu_control import PUDetailWindow as _PUDetailWindow
 from siriushla.as_ap_configdb import LoadConfigDialog as _LoadConfigDialog
@@ -38,41 +38,277 @@ class PosAngCorr(SiriusMainWindow):
             self._prefix = prefix
         self._tl = tl.upper()
         self.posang_prefix = self._prefix + self._tl + '-Glob:AP-PosAng'
-
         self.setObjectName(tl.upper()+'App')
-        tmp_file = _substitute_in_file(UI_FILE, {'TRANSPORTLINE': self._tl,
-                                                 'PREFIX': self._prefix})
-        self.centralwidget = _loadUi(tmp_file)
-        self.setCentralWidget(self.centralwidget)
         self.setWindowTitle(self._tl + ' Position and Angle Correction Window')
 
-        corrs = ['', '', '', '']
+        self.corrs = list()
         if tl == 'ts':
-            corrs[0] = _PVName(Const.TS_CORRH_POSANG[0])
-            corrs[1] = _PVName(Const.TS_CORRH_POSANG[1])
-            corrs[2] = _PVName(Const.TS_CORRV_POSANG[0])
-            corrs[3] = _PVName(Const.TS_CORRV_POSANG[1])
+            self.corrs.append(_PVName(Const.TS_CORRH_POSANG[0]))
+            self.corrs.append(_PVName(Const.TS_CORRH_POSANG[1]))
+            self.corrs.append(_PVName(Const.TS_CORRV_POSANG[0]))
+            self.corrs.append(_PVName(Const.TS_CORRV_POSANG[1]))
         elif tl == 'tb':
-            corrs[0] = _PVName(Const.TB_CORRH_POSANG[0])
-            corrs[1] = _PVName(Const.TB_CORRH_POSANG[1])
-            corrs[2] = _PVName(Const.TB_CORRV_POSANG[0])
-            corrs[3] = _PVName(Const.TB_CORRV_POSANG[1])
-        self._set_correctors_channels(corrs)
+            self.corrs.append(_PVName(Const.TB_CORRH_POSANG[0]))
+            self.corrs.append(_PVName(Const.TB_CORRH_POSANG[1]))
+            self.corrs.append(_PVName(Const.TB_CORRV_POSANG[0]))
+            self.corrs.append(_PVName(Const.TB_CORRV_POSANG[1]))
+        self._setupUi()
+        self.setFocus(True)
+        self.setFocusPolicy(Qt.StrongFocus)
 
+    def _setupUi(self):
+        cw = QWidget(self)
+        self.setCentralWidget(cw)
+
+        # label
+        lab = QLabel(
+            '<h3>'+self._tl+' Position and Angle Correction</h3>', cw)
+        lab.setStyleSheet("""
+            min-height:1.55em; max-height: 1.55em;
+            qproperty-alignment: 'AlignVCenter | AlignRight';
+            background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273,
+                              x2:0, y2:0, stop:0 rgba(173, 190, 207, 255),
+                              stop:1 rgba(213, 213, 213, 255));""")
+
+        # apply button
+        self.pb_updateref = PyDMPushButton(
+            self, 'Update Reference', pressValue=1,
+            init_channel=self.posang_prefix+':SetNewRefKick-Cmd')
+        self.pb_updateref.setStyleSheet(
+            'min-height: 2.4em; max-height: 2.4em;')
+
+        # delta setters
+        self.hgbox = QGroupBox('Horizontal', self)
+        self.hgbox.setLayout(self._setupDeltaControlLayout('x'))
+
+        self.vgbox = QGroupBox('Vertical', self)
+        self.vgbox.setLayout(self._setupDeltaControlLayout('y'))
+
+        # correctors
+        self.corrgbox = QGroupBox('Correctors', self)
+        self.corrgbox.setLayout(self._setupCorrectorsLayout())
+
+        # status
+        self.statgbox = QGroupBox('Correction Status', self)
+        self.statgbox.setLayout(self._setupStatusLayout())
+
+        glay = QGridLayout(cw)
+        glay.setHorizontalSpacing(12)
+        glay.setVerticalSpacing(12)
+        glay.addWidget(lab, 0, 0, 1, 2)
+        glay.addWidget(self.pb_updateref, 1, 0, 1, 2)
+        glay.addWidget(self.hgbox, 2, 0)
+        glay.addWidget(self.vgbox, 2, 1)
+        glay.addWidget(self.corrgbox, 3, 0, 1, 2)
+        glay.addWidget(self.statgbox, 4, 0, 1, 2)
+
+        # menu
         act_settings = self.menuBar().addAction('Settings')
         _hlautil.connect_window(act_settings, CorrParamsDetailWindow,
                                 parent=self, tl=self._tl, prefix=self._prefix)
 
-        self._set_status_labels()
-
+        # stlesheet
         self.setStyleSheet("""
             PyDMSpinbox{
-                min-width: 5em;
+                min-width: 5em; max-width: 5em;
             }
-            PyDMLabel{
-                min-width: 5em;
+            PyDMLabel, PyDMLinEditScrollbar{
+                min-width: 6em; max-width: 6em;
+            }
+            QPushButton{
+                min-width: 8em;
+            }
+            QLabel{
+                min-height: 1.35em;
+                qproperty-alignment: AlignCenter;
             }
         """)
+
+    def _setupDeltaControlLayout(self, axis=''):
+        # pos
+        label_pos = QLabel("<h4>Δ"+axis+"</h4>", self)
+        sb_deltapos = PyDMSpinbox(
+            self, self.posang_prefix + ':DeltaPos'+axis.upper()+'-SP')
+        sb_deltapos.showStepExponent = False
+        lb_deltapos = PyDMLabel(
+            self, self.posang_prefix + ':DeltaPos'+axis.upper()+'-RB')
+        lb_deltapos.showUnits = True
+        # ang
+        label_ang = QLabel("<h4>Δ"+axis+"'</h4>", self)
+        sb_deltaang = PyDMSpinbox(
+            self, self.posang_prefix + ':DeltaAng'+axis.upper()+'-SP')
+        sb_deltaang.showStepExponent = False
+        lb_deltaang = PyDMLabel(
+            self, self.posang_prefix + ':DeltaAng'+axis.upper()+'-RB')
+        lb_deltaang.showUnits = True
+
+        lay = QGridLayout()
+        lay.setVerticalSpacing(12)
+        lay.setHorizontalSpacing(12)
+        lay.addItem(
+            QSpacerItem(10, 0, QSzPlcy.Expanding, QSzPlcy.Ignored), 0, 0)
+        lay.addWidget(label_pos, 0, 1)
+        lay.addWidget(sb_deltapos, 0, 2)
+        lay.addWidget(lb_deltapos, 0, 3)
+        lay.addWidget(label_ang, 1, 1)
+        lay.addWidget(sb_deltaang, 1, 2)
+        lay.addWidget(lb_deltaang, 1, 3)
+        lay.addItem(
+            QSpacerItem(10, 0, QSzPlcy.Expanding, QSzPlcy.Ignored), 0, 4)
+        return lay
+
+    def _setupCorrectorsLayout(self):
+        lay = QGridLayout()
+        lay.setVerticalSpacing(9)
+        lay.setHorizontalSpacing(9)
+
+        label_kicksp = QLabel('<h4>Kick-SP</h4>', self)
+        label_kickrb = QLabel('<h4>Kick-RB</h4>', self)
+        label_kickref = QLabel('<h4>RefKick-Mon</h4>', self)
+        lay.addWidget(label_kicksp, 0, 2)
+        lay.addWidget(label_kickrb, 0, 3)
+        lay.addWidget(label_kickref, 0, 4)
+
+        for idx, corr in enumerate(self.corrs):
+            pb = QPushButton(qta.icon('fa5s.list-ul'), '', self)
+            pb.setObjectName('pb')
+            pb.setStyleSheet("""
+                #pb{
+                    min-width:25px; max-width:25px;
+                    min-height:25px; max-height:25px;
+                    icon-size:20px;}
+                """)
+            if corr.dis == 'PU':
+                _hlautil.connect_window(
+                    pb, _PUDetailWindow, self, devname=corr)
+            else:
+                _hlautil.connect_window(
+                    pb, _PSDetailWindow, self, psname=corr)
+            lb_name = QLabel(corr, self)
+            le_sp = PyDMLinEditScrollbar(self._prefix+corr+':Kick-SP', self)
+            le_sp.layout.setContentsMargins(0, 0, 0, 0)
+            le_sp.layout.setSpacing(3)
+            le_sp.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+            le_sp.sp_lineedit.setStyleSheet("min-height:1.29em;")
+            le_sp.sp_lineedit.setAlignment(Qt.AlignCenter)
+            le_sp.sp_lineedit.setSizePolicy(QSzPlcy.Ignored, QSzPlcy.Fixed)
+            le_sp.sp_scrollbar.setStyleSheet("max-height:0.7em;")
+            le_sp.sp_scrollbar.limitsFromPV = True
+            lb_rb = PyDMLabel(self, self._prefix+corr+':Kick-RB')
+            if corr.dev == 'CV':
+                corrid = corr.dev + corr.idx
+            elif idx != 1:
+                corrid = 'CH1'
+            else:
+                corrid = 'CH2'
+
+            lb_ref = PyDMLabel(self, self.posang_prefix +
+                               ':RefKick'+corrid+'-Mon')
+            lay.addWidget(pb, idx+1, 0, alignment=Qt.AlignTop)
+            lay.addWidget(
+                lb_name, idx+1, 1, alignment=Qt.AlignLeft | Qt.AlignTop)
+            lay.addWidget(le_sp, idx+1, 2, alignment=Qt.AlignTop)
+            lay.addWidget(lb_rb, idx+1, 3, alignment=Qt.AlignTop)
+            lay.addWidget(lb_ref, idx+1, 4, alignment=Qt.AlignTop)
+
+        if self._tl == 'TB':
+            lay.addItem(QSpacerItem(0, 8, QSzPlcy.Ignored, QSzPlcy.Fixed))
+
+            label_voltsp = QLabel('<h4>Amplitude-SP</h4>', self)
+            label_voltrb = QLabel('<h4>Amplitude-RB</h4>', self)
+            lay.addWidget(label_voltsp, idx+2, 2)
+            lay.addWidget(label_voltrb, idx+2, 3)
+
+            lb_kly2_name = QLabel('Klystron 2', self)
+            le_kly2_sp = PyDMLinEditScrollbar('LA-RF:LLRF:KLY2:SET_AMP', self)
+            le_kly2_sp.layout.setContentsMargins(0, 0, 0, 0)
+            le_kly2_sp.layout.setSpacing(3)
+            le_kly2_sp.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+            le_kly2_sp.sp_lineedit.setStyleSheet("min-height:1.29em;")
+            le_kly2_sp.sp_lineedit.precisionFromPV = False
+            le_kly2_sp.sp_lineedit.precision = 2
+            le_kly2_sp.sp_lineedit.setAlignment(Qt.AlignCenter)
+            le_kly2_sp.sp_lineedit.setSizePolicy(
+                QSzPlcy.Ignored, QSzPlcy.Fixed)
+            le_kly2_sp.sp_scrollbar.setStyleSheet("max-height:0.7em;")
+            le_kly2_sp.sp_scrollbar.limitsFromPV = True
+            lb_kly2_rb = PyDMLabel(self, 'LA-RF:LLRF:KLY2:GET_AMP')
+            lb_kly2_rb.precisionFromPV = False
+            lb_kly2_rb.precision = 2
+            lay.addWidget(lb_kly2_name, idx+3, 1,
+                          alignment=Qt.AlignLeft | Qt.AlignTop)
+            lay.addWidget(le_kly2_sp, idx+3, 2, alignment=Qt.AlignTop)
+            lay.addWidget(lb_kly2_rb, idx+3, 3, alignment=Qt.AlignTop)
+            self._kckr_name = 'BO-01D:PU-InjKckr'
+        else:
+            self._kckr_name = 'SI-01SA:PU-InjNLKckr'
+
+        label_voltsp = QLabel('<h4>Voltage-SP</h4>', self)
+        label_voltrb = QLabel('<h4>Voltage-RB</h4>', self)
+        lay.addWidget(label_voltsp, idx+4, 2)
+        lay.addWidget(label_voltrb, idx+4, 3)
+
+        lay.addItem(QSpacerItem(0, 8, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        pb_kckr = QPushButton(qta.icon('fa5s.list-ul'), '', self)
+        pb_kckr.setObjectName('pb')
+        pb_kckr.setStyleSheet("""
+            #pb{
+                min-width:25px; max-width:25px;
+                min-height:25px; max-height:25px;
+                icon-size:20px;}
+            """)
+        lb_kckr_name = QLabel(self._kckr_name, self)
+        _hlautil.connect_window(
+            pb_kckr, _PUDetailWindow, self, devname=self._kckr_name)
+        lb_kckr_sp = PyDMLinEditScrollbar(self._kckr_name+':Voltage-SP', self)
+        lb_kckr_sp.layout.setContentsMargins(0, 0, 0, 0)
+        lb_kckr_sp.layout.setSpacing(3)
+        lb_kckr_sp.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        lb_kckr_sp.sp_lineedit.setStyleSheet("min-height:1.29em;")
+        lb_kckr_sp.sp_lineedit.setAlignment(Qt.AlignCenter)
+        lb_kckr_sp.sp_lineedit.setSizePolicy(QSzPlcy.Ignored, QSzPlcy.Fixed)
+        lb_kckr_sp.sp_scrollbar.setStyleSheet("max-height:0.7em;")
+        lb_kckr_sp.sp_scrollbar.limitsFromPV = True
+        lb_kckr_rb = PyDMLabel(self, self._kckr_name+':Voltage-RB')
+        lay.addWidget(pb_kckr, idx+5, 0, alignment=Qt.AlignTop)
+        lay.addWidget(
+            lb_kckr_name, idx+5, 1, alignment=Qt.AlignLeft | Qt.AlignTop)
+        lay.addWidget(lb_kckr_sp, idx+5, 2, alignment=Qt.AlignTop)
+        lay.addWidget(lb_kckr_rb, idx+5, 3, alignment=Qt.AlignTop)
+        return lay
+
+    def _setupStatusLayout(self):
+        self.log = PyDMLogLabel(self, self.posang_prefix+':Log-Mon')
+        self.lb_sts0 = QLabel(Const.STATUSLABELS[0], self)
+        self.led_sts0 = SiriusLedAlert(
+            self, self.posang_prefix+':Status-Mon', bit=0)
+        self.lb_sts1 = QLabel(Const.STATUSLABELS[1], self)
+        self.led_sts1 = SiriusLedAlert(
+            self, self.posang_prefix+':Status-Mon', bit=1)
+        self.lb_sts2 = QLabel(Const.STATUSLABELS[2], self)
+        self.led_sts2 = SiriusLedAlert(
+            self, self.posang_prefix+':Status-Mon', bit=2)
+        self.lb_sts3 = QLabel(Const.STATUSLABELS[3], self)
+        self.led_sts3 = SiriusLedAlert(
+            self, self.posang_prefix+':Status-Mon', bit=3)
+        self.pb_config = PyDMPushButton(
+            self, label='Config Correctors', pressValue=1,
+            init_channel=self.posang_prefix+':ConfigPS-Cmd')
+
+        lay = QGridLayout()
+        lay.setVerticalSpacing(12)
+        lay.setHorizontalSpacing(12)
+        lay.addWidget(self.log, 0, 0, 5, 1)
+        lay.addWidget(self.lb_sts0, 0, 2)
+        lay.addWidget(self.led_sts0, 0, 1)
+        lay.addWidget(self.lb_sts1, 1, 2)
+        lay.addWidget(self.led_sts1, 1, 1)
+        lay.addWidget(self.lb_sts2, 2, 2)
+        lay.addWidget(self.led_sts2, 2, 1)
+        lay.addWidget(self.lb_sts3, 3, 2)
+        lay.addWidget(self.led_sts3, 3, 1)
+        lay.addWidget(self.pb_config, 4, 1, 1, 2)
+        return lay
 
     def _set_correctors_channels(self, corrs):
         self.centralwidget.pushButton_CH1.setText(corrs[0])
