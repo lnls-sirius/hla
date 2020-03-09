@@ -112,8 +112,8 @@ class PUControlWindow(SiriusMainWindow):
         self.reset_act = QAction("Reset Interlocks", wid)
         self.reset_act.triggered.connect(self._reset_interlocks)
 
-        self.reset_act = QAction("Set Voltage to 0.0", wid)
-        self.reset_act.triggered.connect(self._set_voltage)
+        self.set_voltage = QAction("Set Voltage to 0.0", wid)
+        self.set_voltage.triggered.connect(self._set_voltage)
 
     # # Overloaded method
     def contextMenuEvent(self, event):
@@ -125,6 +125,7 @@ class PUControlWindow(SiriusMainWindow):
         menu.addAction(self.pulse_on_act)
         menu.addAction(self.pulse_off_act)
         menu.addAction(self.reset_act)
+        menu.addAction(self.set_voltage)
         menu.popup(self.mapToGlobal(point))
 
     @Slot(bool)
