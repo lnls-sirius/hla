@@ -5,7 +5,7 @@ from datetime import datetime as _datetime
 import numpy as _np
 from qtpy.QtWidgets import QMenu, QFileDialog, QWidget, QMessageBox, \
     QScrollArea, QLabel, QPushButton, QSizePolicy, QGridLayout, QVBoxLayout, \
-    QHBoxLayout, QDialog, QComboBox, QLineEdit
+    QHBoxLayout, QDialog, QComboBox, QLineEdit, QDoubleSpinBox
 from qtpy.QtCore import Signal, Qt
 from qtpy.QtGui import QDoubleValidator
 import qtawesome as qta
@@ -242,12 +242,13 @@ class OrbitRegister(QWidget):
         wid.layout().addWidget(QLabel('Choose the corrector:', wid))
         wid.layout().addWidget(cbbox)
 
-        ledit = QLineEdit(wid)
-        ledit.setValidator(QDoubleValidator())
-        ledit.setText('1.0')
+        ledit = QDoubleSpinBox(wid)
+        ledit.setMinimum(float('-inf'))
+        ledit.setMaximum(float('inf'))
+        ledit.setValue(1.0)
         wid.layout().addWidget(QLabel('Choose the Kick [urad]:', wid))
         wid.layout().addWidget(ledit)
-        ledit.textChanged.connect(_part(self._accept_mat_sel, ledit, cbbox))
+        ledit.valueChanged.connect(_part(self._accept_mat_sel, ledit, cbbox))
         cbbox.currentIndexChanged.connect(
             _part(self._accept_mat_sel, ledit, cbbox))
 
@@ -256,6 +257,7 @@ class OrbitRegister(QWidget):
         confirm = QPushButton('Ok', wid)
         cancel.clicked.connect(wid.reject)
         confirm.clicked.connect(wid.accept)
+        confirm.clicked.connect(_part(self._accept_mat_sel, ledit, cbbox))
         confirm.setDefault(True)
         hlay.addStretch()
         hlay.addWidget(cancel)
@@ -271,9 +273,7 @@ class OrbitRegister(QWidget):
     def _accept_mat_sel(self, ledit, cbbox, _):
         idx = cbbox.currentIndex()
         corr = cbbox.currentText()
-        if not ledit.text():
-            return
-        kick = float(ledit.text())
+        kick = ledit.value()
         pvm = self._orbits.get('mat')
         if pvm is None or not pvm.connected:
             self._update_and_emit(
