@@ -1109,7 +1109,7 @@ class RFMainControl(SiriusMainWindow):
 
     def _handle_curves_visibility(self, state):
         cid = self.sender().objectName()
-        if self.section == 'SI':
+        if cid in self.pwr_curve_colors.keys():
             if self.cb_units.currentText() == 'W':
                 cid += ' W'
         curve = self.curves[cid]
