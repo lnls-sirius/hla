@@ -10,7 +10,8 @@ import qtawesome as qta
 from siriuspy.clientconfigdb import ConfigDBException as _ConfigDBException, \
     PVsConfig as _PVsConfig
 from siriuspy.ramp import ramp
-from siriuspy.ramp.norm_factory import BONormFactory
+from siriuspy.ramp.reconst_factory import BONormListFactory, BORFRampFactory, \
+    BOTIRampFactory
 from siriushla import util
 from siriushla.widgets.windows import SiriusDialog
 from siriushla.as_ap_configdb import LoadConfigDialog as _LoadConfigDialog, \
@@ -26,6 +27,8 @@ class Settings(QMenuBar):
     opticsSettingsSignal = Signal(str, str)
     plotUnitSignal = Signal(str)
     newNormConfigsSignal = Signal(dict)
+    newTIConfig = Signal(dict)
+    newRFConfig = Signal(dict)
 
     def __init__(self, parent=None, prefix='', ramp_config=None,
                  tunecorr_configname='', chromcorr_configname=''):
@@ -59,11 +62,21 @@ class Settings(QMenuBar):
         self.act_save_as.setShortcut(QKeySequence(Qt.CTRL+Qt.SHIFT+Qt.Key_S))
         self.act_save_as.triggered.connect(self.showSaveAsPopup)
         self.config_menu.addSeparator()
-        self.act_construct_from_wfm = self.config_menu.addAction(
+        self.act_reconst_normconf_fromwfm = self.config_menu.addAction(
             'Reconstruct norm configs from waveforms...')
-        self.act_construct_from_wfm.setIcon(qta.icon('fa5s.retweet'))
-        self.act_construct_from_wfm.triggered.connect(
-            self._handleReconstructNormFromWfms)
+        self.act_reconst_normconf_fromwfm.setIcon(qta.icon('mdi.laravel'))
+        self.act_reconst_normconf_fromwfm.triggered.connect(
+            _part(self._handleReconstructConfig, 'normconfigs'))
+        self.act_reconst_rfparams_frompvs = self.config_menu.addAction(
+            'Reconstruct RF parameters from PVs...')
+        self.act_reconst_rfparams_frompvs.setIcon(qta.icon('mdi.laravel'))
+        self.act_reconst_rfparams_frompvs.triggered.connect(
+            _part(self._handleReconstructConfig, 'rf'))
+        self.act_reconst_tiparams_frompvs = self.config_menu.addAction(
+            'Reconstruct TI parameters from PVs...')
+        self.act_reconst_tiparams_frompvs.setIcon(qta.icon('mdi.laravel'))
+        self.act_reconst_tiparams_frompvs.triggered.connect(
+            _part(self._handleReconstructConfig, 'ti'))
         self.config_menu.addSeparator()
 
         self.ramp_params_menu = self.addMenu('Ramping Parameters')
@@ -181,7 +194,7 @@ class Settings(QMenuBar):
         self.opticsSettingsSignal.emit(
             tunecorr_configname, chromcorr_configname)
 
-    def _handleReconstructNormFromWfms(self):
+    def _handleReconstructConfig(self, params2reconstruct):
         if self.ramp_config is None:
             return
         if not self.verifyUnsavedChanges():
@@ -191,13 +204,23 @@ class Settings(QMenuBar):
             QMessageBox.Yes | QMessageBox.Cancel)
         if ans == QMessageBox.Cancel:
             return
-        th = _WaitThread(self.ramp_config, self)
+
+        if params2reconstruct == 'normconfigs':
+            th = _WaitThread(params2reconstruct='normconfigs',
+                             ramp_config=self.ramp_config,
+                             parent=self)
+            th.configData.connect(self.newNormConfigsSignal.emit)
+            th.precReached.connect(self._showWarningPrecNotOk)
+        elif params2reconstruct == 'ti':
+            th = _WaitThread(params2reconstruct='ti', parent=self)
+            th.configData.connect(self.newTIConfig.emit)
+        elif params2reconstruct == 'rf':
+            th = _WaitThread(params2reconstruct='rf', parent=self)
+            th.configData.connect(self.newRFConfig.emit)
         dlg = _WaitDialog(self)
         th.opendiag.connect(dlg.show)
         th.closediag.connect(dlg.close)
-        th.normConfigs.connect(self.newNormConfigsSignal.emit)
-        th.precReached.connect(self._showWarningPrecNotOk)
-        th.error.connect(self._showErrorNormFactory)
+        th.error.connect(self._showErrorMessage)
         th.start()
 
     @Slot(bool, float)
@@ -210,7 +233,7 @@ class Settings(QMenuBar):
                     max_error))
 
     @Slot(str)
-    def _showErrorNormFactory(self, text):
+    def _showErrorMessage(self, text):
         QMessageBox.critical(self, 'Error', text)
 
     @Slot(ramp.BoosterRamp)
@@ -233,25 +256,34 @@ class _WaitThread(QThread):
 
     opendiag = Signal()
     closediag = Signal()
-    normConfigs = Signal(dict)
+    configData = Signal(dict)
     precReached = Signal(bool, float)
     error = Signal(str)
 
-    def __init__(self, ramp_config, parent=None):
+    def __init__(self, params2reconstruct='', ramp_config=None, parent=None):
         super().__init__(parent)
+        self.params2reconstruct = params2reconstruct
         self.ramp_config = ramp_config
 
     def run(self):
         self.opendiag.emit()
-        norm_fac = BONormFactory(self.ramp_config)
         try:
-            norm_fac.read_waveforms()
-            new_norm_configs = norm_fac.normalized_configs
+            if self.params2reconstruct == 'normconfigs':
+                norm_fac = BONormListFactory(self.ramp_config)
+                norm_fac.read_waveforms()
+                params = norm_fac.normalized_configs
+            elif self.params2reconstruct == 'ti':
+                ti_fac = BOTIRampFactory()
+                params = ti_fac.ti_params
+            else:
+                rf_fac = BORFRampFactory()
+                params = rf_fac.rf_params
         except Exception as e:
             self.error.emit(str(e))
         else:
-            self.normConfigs.emit(new_norm_configs)
-            ok, max_error = norm_fac.precision_reached
-            self.precReached.emit(ok, max_error)
+            self.configData.emit(params)
+            if self.params2reconstruct == 'normconfigs':
+                ok, max_error = norm_fac.precision_reached
+                self.precReached.emit(ok, max_error)
         finally:
             self.closediag.emit()

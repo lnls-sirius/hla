@@ -86,6 +86,8 @@ class RampMain(SiriusMainWindow):
         self.settings.plotUnitSignal.connect(
             self.config_parameters.getPlotUnits)
         self.settings.newNormConfigsSignal.connect(self._receiveNewNormConfigs)
+        self.settings.newTIConfig.connect(self._receiveNewTIConfig)
+        self.settings.newRFConfig.connect(self._receiveNewRFConfig)
 
         self.config_parameters.dip_ramp.updateDipoleRampSignal.connect(
             self._verifySync)
@@ -155,6 +157,37 @@ class RampMain(SiriusMainWindow):
         self.config_parameters.mult_ramp.stackUndoMultipoleTableCommand(
             description='reconstruct normalized configs from waveforms',
             old=old_norm_configs, new=new_norm_configs)
+
+    @Slot(dict)
+    def _receiveNewTIConfig(self, params):
+        for param, value in params.items():
+            attr_name = 'ti_params_'+param
+            setattr(self.ramp_config, attr_name, value)
+        self.loadSignal.emit(self.ramp_config)
+        self._verifySync()
+
+    @Slot(dict)
+    def _receiveNewRFConfig(self, params):
+        for param, value in params.items():
+            if 'duration' in param:
+                continue
+            attr_name = 'rf_ramp_'+param
+            setattr(self.ramp_config, attr_name, value)
+        self.ramp_config.rf_ramp_rampup_start_time = params['bottom_duration']
+        self.ramp_config.rf_ramp_rampup_stop_time = \
+            params['bottom_duration'] + \
+            params['rampup_duration']
+        self.ramp_config.rf_ramp_rampdown_start_time = \
+            params['bottom_duration'] + \
+            params['rampup_duration'] + \
+            params['top_duration']
+        self.ramp_config.rf_ramp_rampdown_stop_time = \
+            params['bottom_duration'] + \
+            params['rampup_duration'] + \
+            params['top_duration'] + \
+            params['rampdown_duration']
+        self.loadSignal.emit(self.ramp_config)
+        self._verifySync()
 
     def _emitLoadSignal(self):
         try:
