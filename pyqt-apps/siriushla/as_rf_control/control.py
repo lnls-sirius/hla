@@ -621,12 +621,23 @@ class RFMainControl(SiriusMainWindow):
             x_channel='BR-RF-DLLRF-01:DiagWf32Scale.AVAL',
             redraw_mode=2, name='Power [W]', color=QColor('blue'))
         self.curve_Pwr = self.ramp_graph.curveAtIndex(1)
-        self.curve_Pwr.setVisible(False)
         self.rb_Pwr = QRadioButton('Power [W]', self)
         self.rb_Pwr.toggled.connect(_part(self._handle_rmpwfm_visibility, 1))
+        self.ramp_graph.addChannel(
+            y_channel='RA-RF:PowerSensor1:TracData-Mon',
+            x_channel=' RA-RF:PowerSensor1:TimeAxis-Mon',
+            redraw_mode=2, name='Power [W]', color=QColor('blue'))
+        self.curve_PwrMtr = self.ramp_graph.curveAtIndex(2)
+        self.rb_PwrMtr = QRadioButton('Power Meter Signal', self)
+        self.rb_PwrMtr.toggled.connect(
+            _part(self._handle_rmpwfm_visibility, 2))
         hbox_rb = QHBoxLayout()
         hbox_rb.addWidget(self.rb_VGav)
         hbox_rb.addWidget(self.rb_Pwr)
+        hbox_rb.addWidget(self.rb_PwrMtr)
+
+        self.curve_Pwr.setVisible(False)
+        self.curve_PwrMtr.setVisible(False)
 
         self.lb_PwrFwdBot = PyDMLabel(self, 'BO-05D:RF-P5Cav:PwrFwdBot-Mon')
         self.lb_PwrFwdBot.showUnits = True
@@ -1121,5 +1132,6 @@ class RFMainControl(SiriusMainWindow):
         led_drive.set_channels2values(ch2vals)
 
     def _handle_rmpwfm_visibility(self, index):
-        self.curve_VGav.setVisible(not index)
-        self.curve_Pwr.setVisible(index)
+        self.curve_VGav.setVisible(index == 0)
+        self.curve_Pwr.setVisible(index == 1)
+        self.curve_PwrMtr.setVisible(index == 2)
