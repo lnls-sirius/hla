@@ -92,7 +92,7 @@ class InjSysStandbyEnblDsbl(QWidget):
         super().__init__(parent)
         self.pb_off = InjSysStandbyButton(
             parent=self, pressValue=0,
-            icon=qta.icon('fa5.circle'))
+            icon=qta.icon('mdi.power-off'))
         self.pb_off.setToolTip('Click to Turn Off')
         self.pb_off.setObjectName('pb_off')
         self.pb_off.setStyleSheet("""
@@ -103,7 +103,7 @@ class InjSysStandbyEnblDsbl(QWidget):
             """)
         self.pb_on = InjSysStandbyButton(
             parent=self, pressValue=1,
-            icon=qta.icon('fa5s.minus'))
+            icon=qta.icon('mdi.power-on'))
         self.pb_on.setToolTip('Click to Turn On')
         self.pb_on.setObjectName('pb_on')
         self.pb_on.setStyleSheet("""
