@@ -69,11 +69,11 @@ class DCCTMonitor(QWidget):
                 lineWidth=2, lineStyle=Qt.SolidLine)
         else:
             self.graph = SiriusTimePlot(self)
-            self.graph.timeSpan = 18000
+            self.graph.timeSpan = 600
             channel = self.dcct_prefix + 'Current-Mon'
             self.graph.addYChannel(
                 y_channel=channel, name=text, color='blue',
-                lineWidth=2, lineStyle=Qt.SolidLine)
+                lineWidth=1, lineStyle=Qt.SolidLine)
         self.graph.autoRangeX = True
         self.graph.autoRangeY = True
         self.graph.backgroundColor = QColor(255, 255, 255)
