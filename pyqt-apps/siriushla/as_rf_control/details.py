@@ -137,10 +137,15 @@ class TransmLineStatusDetails(SiriusDialog):
             self, self.prefix+self.chs['TL Sts']['Circ TOut'])
         self.lb_CircTout.showUnits = True
         self.lb_CircTout.setStyleSheet('qproperty-alignment: AlignLeft;')
-        self.led_LoadFlwRt = SiriusLedAlert(
-            self, self.prefix+self.chs['TL Sts']['Load FlwRt'])
+        self.led_CircArc = SiriusLedAlert(
+            self, self.prefix+self.chs['TL Sts']['Circ Arc'])
+        if self.section == 'SI':
+            self.led_LoadArc = SiriusLedAlert(
+                self, self.prefix+self.chs['TL Sts']['Load Arc'])
         self.led_CircFlwRt = SiriusLedAlert(
             self, self.prefix+self.chs['TL Sts']['Circ FlwRt'])
+        self.led_LoadFlwRt = SiriusLedAlert(
+            self, self.prefix+self.chs['TL Sts']['Load FlwRt'])
         self.led_CircIntlkOp = SiriusLedAlert(
             self, self.prefix+self.chs['TL Sts']['Circ Intlk'])
 
@@ -151,8 +156,11 @@ class TransmLineStatusDetails(SiriusDialog):
         lay.addRow('Circulator T In: ', self.lb_CircTin)
         lay.addRow('Circulator T Out: ', self.lb_CircTout)
         lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
-        lay.addRow('Load Flow: ', self.led_LoadFlwRt)
+        lay.addRow('Circulator Arc Detector: ', self.led_CircArc)
+        if self.section == 'SI':
+            lay.addRow('Load Arc Detector: ', self.led_LoadArc)
         lay.addRow('Circulator Flow: ', self.led_CircFlwRt)
+        lay.addRow('Load Flow: ', self.led_LoadFlwRt)
         lay.addRow('Circulator Intlk: ', self.led_CircIntlkOp)
 
         self.setStyleSheet("""
