@@ -1,15 +1,14 @@
 from qtpy.QtGui import QColor
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGridLayout, QTabWidget, QVBoxLayout, \
-    QLabel, QHBoxLayout
+    QLabel
 import qtawesome as qta
-from pydm.widgets import PyDMLabel
 from siriuspy.envars import VACA_PREFIX
 from siriushla import util
 from siriushla.widgets import SiriusMainWindow
 from .spectrogram import BOTuneSpectrogramControls
 from .spectra import TuneSpectraControls
-from .controls import TuneControls
+from .controls import TuneControls, SITuneMonitor
 from .details import BOTuneTrigger
 
 
@@ -36,33 +35,7 @@ class Tune(SiriusMainWindow):
 
         if self.section == 'SI':
             # Tune
-            self.lb_tunefrach = PyDMLabel(
-                parent=self, init_channel='SI-Glob:DI-Tune-H:TuneFrac-Mon')
-            self.lb_tunefrach.setAlignment(Qt.AlignHCenter)
-            self.lb_tunefrach.setStyleSheet('QLabel{font-size: 40px;}')
-            wid_tuneh = QWidget()
-            wid_tuneh.setObjectName('wid_tuneh')
-            wid_tuneh.setStyleSheet('background-color:#B3E5FF;')
-            vbox_tuneh = QVBoxLayout(wid_tuneh)
-            vbox_tuneh.addWidget(QLabel('<h4>Horizontal</h4>', self,
-                                        alignment=Qt.AlignHCenter))
-            vbox_tuneh.addWidget(self.lb_tunefrach)
-
-            self.lb_tunefracv = PyDMLabel(
-                parent=self, init_channel='SI-Glob:DI-Tune-V:TuneFrac-Mon')
-            self.lb_tunefracv.setAlignment(Qt.AlignHCenter)
-            self.lb_tunefracv.setStyleSheet('QLabel{font-size: 40px;}')
-            wid_tunev = QWidget()
-            wid_tunev.setObjectName('wid_tunev')
-            wid_tunev.setStyleSheet('background-color:#FFB3B3;')
-            vbox_tunev = QVBoxLayout(wid_tunev)
-            vbox_tunev.setAlignment(Qt.AlignHCenter)
-            vbox_tunev.addWidget(QLabel('<h4>Vertical</h4>', self,
-                                        alignment=Qt.AlignHCenter))
-            vbox_tunev.addWidget(self.lb_tunefracv)
-            hlay_tune = QHBoxLayout()
-            hlay_tune.addWidget(wid_tuneh)
-            hlay_tune.addWidget(wid_tunev)
+            self.wid_tune_mon = SITuneMonitor(self, self.prefix)
 
         # Settings
         self.tabCtrl = QTabWidget(self)
@@ -147,7 +120,7 @@ class Tune(SiriusMainWindow):
         if self.section == 'SI':
             col_count = 2
             row = 1
-            lay.addLayout(hlay_tune, row, 0, 1, col_count)
+            lay.addWidget(self.wid_tune_mon, row, 0, 1, col_count)
         else:
             col_count = 3
             row = 0
