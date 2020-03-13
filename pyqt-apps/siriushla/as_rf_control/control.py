@@ -54,6 +54,11 @@ class RFMainControl(SiriusMainWindow):
         else:
             wid_startctrl = QTabWidget(self)
             wid_startctrl.setObjectName(self.section+'Tab')
+            wid_startctrl.setStyleSheet(
+                "#"+self.section+'Tab'+"::pane {"
+                "    border-left: 2px solid gray;"
+                "    border-bottom: 2px solid gray;"
+                "    border-right: 2px solid gray;}")
             wid_control = QWidget(self)
             wid_control.setLayout(self._startControlLayout())
             wid_startctrl.addTab(wid_control, 'Start Controls')
@@ -70,6 +75,11 @@ class RFMainControl(SiriusMainWindow):
         else:
             wid_pwrmon = QTabWidget(self)
             wid_pwrmon.setObjectName(self.section+'Tab')
+            wid_pwrmon.setStyleSheet(
+                "#"+self.section+'Tab'+"::pane {"
+                "    border-left: 2px solid gray;"
+                "    border-bottom: 2px solid gray;"
+                "    border-right: 2px solid gray;}")
             wid_rampmon = QWidget(self)
             wid_rampmon.setLayout(self._rampMonLayout())
             wid_pwrmon.addTab(wid_rampmon, 'Ramp')
@@ -101,11 +111,6 @@ class RFMainControl(SiriusMainWindow):
             }
             QLed{
                 max-width: 1.29em;
-            }
-            QTabWidget::pane {
-                border-left: 2px solid gray;
-                border-bottom: 2px solid gray;
-                border-right: 2px solid gray;
             }
             QLabel{
                 max-height:1.5em; min-width:5em;
@@ -231,8 +236,6 @@ class RFMainControl(SiriusMainWindow):
         lay_amp = QGridLayout()
         lay_amp.setHorizontalSpacing(8)
         lay_amp.setVerticalSpacing(20)
-        lay_amp.addWidget(QLabel('<h3> • Solid State Amplifiers</h3>', self,
-                                 alignment=Qt.AlignLeft), 0, 0, 1, 9)
         lay_amp.addItem(QSpacerItem(
             10, 0, QSzPlcy.Expanding, QSzPlcy.Ignored), 0, 0)
         lay_amp.addWidget(QLabel('<h4>Power</h4>', self,
@@ -254,7 +257,8 @@ class RFMainControl(SiriusMainWindow):
             for k, v in self.chs['SSA'].items():
                 self._create_ssa_wid(lay_amp, int(k)+1, v)
 
-        # Slow Loop Control
+        # LLRF
+        # # Slow Loop Control
         self.lb_slmode = PyDMLabel(self, self.chs['SL']['Mode'])
         self.led_slmode = PyDMLedMultiChannel(
             self, {self.chs['SL']['Mode']: 0})
@@ -345,58 +349,138 @@ class RFMainControl(SiriusMainWindow):
         lay_slmon.addWidget(self.lb_phserr, 2, 4)
         lay_slmon.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
 
-        lay_sl = QGridLayout()
+        wid_sl = QWidget()
+        lay_sl = QGridLayout(wid_sl)
         lay_sl.setAlignment(Qt.AlignTop)
         lay_sl.setSpacing(20)
-        lay_sl.addWidget(QLabel('<h3> • Slow Loop Control</h3>', self,
-                                alignment=Qt.AlignLeft), 0, 0, 1, 3)
         lay_sl.addItem(
             QSpacerItem(10, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 1, 0)
         lay_sl.addLayout(lay_over, 1, 1)
-        lay_sl.addLayout(lay_slctrl, 2, 1)
-        lay_sl.addLayout(lay_slmon, 3, 1)
+        lay_sl.addItem(
+            QSpacerItem(0, 25, QSzPlcy.Ignored, QSzPlcy.Fixed), 2, 1)
+        lay_sl.addLayout(lay_slctrl, 3, 1)
+        lay_sl.addItem(
+            QSpacerItem(0, 25, QSzPlcy.Ignored, QSzPlcy.Fixed), 4, 1)
+        lay_sl.addLayout(lay_slmon, 5, 1)
         lay_sl.addItem(
             QSpacerItem(10, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 1, 3)
 
-        # Tuning
+        # # Tuning
+        # # # Tuning settings
+        lb_autotun = QLabel('Auto Tuning: ', self, alignment=Qt.AlignRight)
         self.bt_autotun = PyDMStateButton(self, self.chs['Tun']['Auto']+':S')
         self.lb_autotun = SiriusLedState(self, self.chs['Tun']['Auto'])
-
+        lb_dtune = QLabel('DTune: ', self, alignment=Qt.AlignRight)
         self.sb_dtune = PyDMSpinbox(
             self, self.chs['Tun']['DTune'].replace('RB', 'SP'))
         self.sb_dtune.showStepExponent = False
         self.lb_dtune = PyDMLabel(self, self.chs['Tun']['DTune'])
         self.lb_dtune.showUnits = True
-
+        lb_dphase = QLabel('Dephase: ', self, alignment=Qt.AlignRight)
         self.lb_dphase = PyDMLabel(self, self.chs['Tun']['DPhase'])
         self.lb_dphase.showUnits = True
+        lay_tunset = QGridLayout()
+        lay_tunset.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
+        lay_tunset.setVerticalSpacing(12)
+        lay_tunset.addItem(
+            QSpacerItem(10, 0, QSzPlcy.Expanding, QSzPlcy.Ignored), 1, 0)
+        lay_tunset.addWidget(lb_autotun, 1, 1)
+        lay_tunset.addWidget(self.bt_autotun, 1, 2)
+        lay_tunset.addWidget(self.lb_autotun, 1, 3)
+        lay_tunset.addWidget(lb_dtune, 2, 1)
+        lay_tunset.addWidget(self.sb_dtune, 2, 2)
+        lay_tunset.addWidget(self.lb_dtune, 2, 3)
+        lay_tunset.addWidget(lb_dphase, 3, 1)
+        lay_tunset.addWidget(self.lb_dphase, 3, 2)
+        lay_tunset.addItem(
+            QSpacerItem(10, 0, QSzPlcy.Expanding, QSzPlcy.Ignored), 1, 4)
 
-        lay_tun = QGridLayout()
-        lay_tun.setVerticalSpacing(12)
-        lay_tun.addWidget(QLabel('<h3> • Tuning</h3>', self,
-                                 alignment=Qt.AlignLeft), 0, 0, 1, 5)
-        lay_tun.addItem(
-            QSpacerItem(10, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 1, 0)
-        lay_tun.addWidget(QLabel('Auto Tuning: ', self,
-                                 alignment=Qt.AlignRight), 1, 1)
-        lay_tun.addWidget(self.bt_autotun, 1, 2)
-        lay_tun.addWidget(self.lb_autotun, 1, 3)
-        lay_tun.addWidget(QLabel('DTune: ', self,
-                                 alignment=Qt.AlignRight), 2, 1)
-        lay_tun.addWidget(self.sb_dtune, 2, 2)
-        lay_tun.addWidget(self.lb_dtune, 2, 3)
-        lay_tun.addWidget(QLabel('Dephase: ', self,
-                                 alignment=Qt.AlignRight), 3, 1)
-        lay_tun.addWidget(self.lb_dphase, 3, 2)
-        lay_tun.addItem(
-            QSpacerItem(10, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 1, 5)
+        # # # Plungers motors
+        lb_plg1 = QLabel('Plunger 1')
+        lb_plg2 = QLabel('Plunger 2')
+        lb_down = QLabel('Down')
+        lb_up = QLabel('Up')
+        self.led_Plg1_Dn = PyDMLed(self, self.chs['Tun']['Pl1Down'])
+        self.led_Plg1_Dn.offColor = QColor(64, 64, 64)
+        self.led_Plg1_Dn.onColor = QColor('blue')
+        self.led_Plg1_Dn.shape = PyDMLed.ShapeMap.Square
+        self.led_Plg1_Up = PyDMLed(self, self.chs['Tun']['Pl1Up'])
+        self.led_Plg1_Up.offColor = QColor(64, 64, 64)
+        self.led_Plg1_Up.onColor = QColor('blue')
+        self.led_Plg1_Up.shape = PyDMLed.ShapeMap.Square
+        self.led_Plg2_Dn = PyDMLed(self, self.chs['Tun']['Pl2Down'])
+        self.led_Plg2_Dn.offColor = QColor(64, 64, 64)
+        self.led_Plg2_Dn.onColor = QColor('blue')
+        self.led_Plg2_Dn.shape = PyDMLed.ShapeMap.Square
+        self.led_Plg2_Up = PyDMLed(self, self.chs['Tun']['Pl2Up'])
+        self.led_Plg2_Up.offColor = QColor(64, 64, 64)
+        self.led_Plg2_Up.onColor = QColor('blue')
+        self.led_Plg2_Up.shape = PyDMLed.ShapeMap.Square
+        lay_plunmon = QGridLayout()
+        lay_plunmon.addItem(
+            QSpacerItem(10, 10, QSzPlcy.Expanding, QSzPlcy.Expanding), 0, 0)
+        lay_plunmon.addWidget(lb_down, 1, 2)
+        lay_plunmon.addWidget(lb_up, 1, 3)
+        lay_plunmon.addWidget(lb_plg1, 2, 1)
+        lay_plunmon.addWidget(lb_plg2, 3, 1)
+        lay_plunmon.addWidget(self.led_Plg1_Dn, 2, 2)
+        lay_plunmon.addWidget(self.led_Plg1_Up, 2, 3)
+        lay_plunmon.addWidget(self.led_Plg2_Dn, 3, 2)
+        lay_plunmon.addWidget(self.led_Plg2_Up, 3, 3)
+        lay_plunmon.addItem(
+            QSpacerItem(10, 10, QSzPlcy.Expanding, QSzPlcy.Expanding), 4, 4)
+
+        self.graph_plunmotors = SiriusTimePlot(self)
+        self.graph_plunmotors.setObjectName('graph')
+        self.graph_plunmotors.setStyleSheet(
+            '#graph{min-height:15em;min-width:20em;max-height:15em;}')
+        self.graph_plunmotors.autoRangeX = True
+        self.graph_plunmotors.autoRangeY = True
+        self.graph_plunmotors.backgroundColor = QColor(255, 255, 255)
+        self.graph_plunmotors.showXGrid = True
+        self.graph_plunmotors.showYGrid = True
+        self.graph_plunmotors.showLegend = True
+        self.graph_plunmotors.timeSpan = 1800
+        self.graph_plunmotors.addYChannel(
+            y_channel=self.chs['Tun']['PlM1Curr'], color='blue',
+            name='Motor 1', lineStyle=Qt.SolidLine, lineWidth=1)
+        self.graph_plunmotors.addYChannel(
+            y_channel=self.chs['Tun']['PlM2Curr'], color='red',
+            name='Motor 2', lineStyle=Qt.SolidLine, lineWidth=1)
+
+        wid_tun = QWidget()
+        lay_plun = QGridLayout(wid_tun)
+        lay_plun.addWidget(QLabel('<h3> • Settings</h3>', self,
+                                  alignment=Qt.AlignLeft), 0, 0, 1, 3)
+        lay_plun.addLayout(lay_tunset, 1, 0, 1, 3)
+        lay_plun.addItem(
+            QSpacerItem(0, 25, QSzPlcy.Ignored, QSzPlcy.Fixed), 2, 0)
+        lay_plun.addWidget(QLabel('<h3> • Plungers</h3>', self,
+                                  alignment=Qt.AlignLeft), 3, 0)
+        lay_plun.addLayout(lay_plunmon, 4, 0)
+        lay_plun.addWidget(self.graph_plunmotors, 4, 1, 1, 2)
+
+        wid_llrf = QTabWidget(self)
+        color = 'green' if self.section == 'BO' else 'blue'
+        wid_llrf.setStyleSheet("""
+            QTabBar::tab:selected, QTabBar::tab:hover {
+                background-color: """+color+""";
+                color: white;
+                border: 0.1em solid white;
+            }""")
+        wid_llrf.addTab(wid_sl, 'Slow Loop Control')
+        wid_llrf.addTab(wid_tun, 'Tuning')
 
         # Layout
         vlay = QVBoxLayout()
-        vlay.setSpacing(30)
+        vlay.addWidget(QLabel('<h3> • Solid State Amplifiers</h3>', self,
+                              alignment=Qt.AlignLeft))
         vlay.addLayout(lay_amp)
-        vlay.addLayout(lay_sl)
-        vlay.addLayout(lay_tun)
+        vlay.addItem(QSpacerItem(0, 50, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        vlay.addWidget(QLabel('<h3> • LLRF</h3>', self,
+                              alignment=Qt.AlignLeft))
+        vlay.addWidget(wid_llrf)
+        vlay.addStretch()
         return vlay
 
     def _rampControlLayout(self):

@@ -123,6 +123,12 @@ SEC_2_CHANNELS = {
             'Auto': 'BR-RF-DLLRF-01:TUNE',
             'DTune': 'BR-RF-DLLRF-01:DTune-RB',
             'DPhase': 'BR-RF-DLLRF-01:TUNE:DEPHS',
+            'Pl1Down': 'BR-RF-DLLRF-01:PLG1:MOVE:DN',
+            'Pl1Up': 'BR-RF-DLLRF-01:PLG1:MOVE:UP',
+            'Pl2Down': 'BR-RF-DLLRF-01:PLG2:MOVE:DN',
+            'Pl2Up': 'BR-RF-DLLRF-01:PLG2:MOVE:UP',
+            'PlM1Curr': 'RA-RaBO01:RF-CavPlDrivers:Dr1Current-Mon',
+            'PlM2Curr': 'RA-RaBO01:RF-CavPlDrivers:Dr2Current-Mon',
         }
     },
     'SI': {
@@ -270,6 +276,12 @@ SEC_2_CHANNELS = {
             'Auto': 'SR-RF-DLLRF-01:TUNE',
             'DTune': 'SR-RF-DLLRF-01:DTune-RB',
             'DPhase': 'SR-RF-DLLRF-01:TUNE:DEPHS',
+            'Pl1Down': 'SR-RF-DLLRF-01:PLG1:MOVE:DN',
+            'Pl1Up': 'SR-RF-DLLRF-01:PLG1:MOVE:UP',
+            'Pl2Down': 'SR-RF-DLLRF-01:PLG2:MOVE:DN',
+            'Pl2Up': 'SR-RF-DLLRF-01:PLG2:MOVE:UP',
+            'PlM1Curr': 'RA-RaSIA01:RF-CavPlDrivers:Dr1Current-Mon',
+            'PlM2Curr': 'RA-RaSIA01:RF-CavPlDrivers:Dr2Current-Mon',
         }
     },
 }
