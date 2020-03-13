@@ -100,8 +100,10 @@ class Settings(QMenuBar):
         self.act_dcct = self.open_menu.addAction('DCCT')
         self.act_dcct.setIcon(qta.icon('mdi.current-dc'))
         util.connect_newprocess(
-            self.act_dcct, ['sirius-hla-as-di-dcct.py', 'BO'], parent=self)
+            self.act_dcct,
+            ['sirius-hla-as-di-dcct.py', 'BO-35D:DI-DCCT'], parent=self)
         self.act_tune = self.open_menu.addAction('Tune')
+        self.act_tune.setIcon(qta.icon('mdi.pulse'))
         util.connect_newprocess(
             self.act_tune, 'sirius-hla-bo-di-tune.py', parent=self)
 
@@ -160,7 +162,7 @@ class Settings(QMenuBar):
 
         resp = QMessageBox.question(
             self, 'Question',
-            'Save a global_config with name {}?'.format(
+            "Save a GLOBAL_CONFIG with name '{}'?".format(
                 self.ramp_config.name))
         if resp == QMessageBox.Yes:
             global_config = _PVsConfig(config_type='global_config')
