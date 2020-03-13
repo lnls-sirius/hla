@@ -11,10 +11,9 @@ from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox, \
 from siriuspy.csdevice.dccts import Const as _DCCTc
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets import PyDMStateButton, SiriusConnectionSignal, \
-    SiriusLedState, SiriusLedAlert, PyDMLedMultiChannel
+    SiriusLedState, SiriusLedAlert
 from siriushla import util as _hlautil
-from siriushla.as_ti_control.hl_trigger import HLTriggerDetailed, \
-    HLTriggerSimple
+from siriushla.as_ti_control.hl_trigger import HLTriggerSimple
 
 
 class DCCTSettings(QWidget):
