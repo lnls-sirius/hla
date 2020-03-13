@@ -88,6 +88,10 @@ class RFMainControl(SiriusMainWindow):
             wid_pwrmon.addTab(wid_cw, 'CW')
 
         gbox_graphs = QGroupBox('Graphs', self)
+        gbox_graphs.setStyleSheet("""
+            #temp1_graph, #temp2_graph, #vacuum_graph{
+                min-width: 30em; min-height: 12em;
+        }""")
         gbox_graphs.setLayout(self._graphsLayout())
 
         lay = QGridLayout(cw)
@@ -591,13 +595,11 @@ class RFMainControl(SiriusMainWindow):
         return lay
 
     def _rampMonLayout(self):
-        mon_label = QLabel('<h3> • Monitor</h3>', self,
-                           alignment=Qt.AlignLeft)
         self.ramp_graph = PyDMWaveformPlot(
             parent=self, background=QColor(255, 255, 255))
         self.ramp_graph.setObjectName('graph')
         self.ramp_graph.setStyleSheet(
-            '#graph{min-height:15em;min-width:20em;max-height:15em;}')
+            '#graph{min-height:15em;min-width:23em;max-height:15em;}')
         self.ramp_graph.maxRedrawRate = 2
         self.ramp_graph.mouseEnabledX = True
         self.ramp_graph.setShowXGrid(True)
@@ -658,7 +660,6 @@ class RFMainControl(SiriusMainWindow):
 
         lay = QGridLayout()
         lay.setVerticalSpacing(15)
-        lay.addWidget(mon_label, 0, 0)
         lay.addWidget(QLabel('<h4>Bottom</h4>', self,
                              alignment=Qt.AlignCenter), 1, 1)
         lay.addWidget(QLabel('<h4>Top</h4>', self,
@@ -833,9 +834,6 @@ class RFMainControl(SiriusMainWindow):
         lay_vals.setColumnStretch(4, 1)
 
         lay = QGridLayout()
-        lay.setHorizontalSpacing(25)
-        lay.addWidget(QLabel('<h3> • Monitor</h3>', self,
-                             alignment=Qt.AlignLeft), 0, 0)
         lay.addLayout(lay_vals, 1, 0)
         lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 2, 0)
         lay.addWidget(self.pwr_mon_graph, 3, 0)
@@ -964,12 +962,12 @@ class RFMainControl(SiriusMainWindow):
             self.pwr_mon_graph.addYChannel(
                 y_channel='RA-RaSIA01:RF-LLRFCalSys:PwrdBm'+sch+'-Mon',
                 name='CH '+sch, color=color,
-                lineStyle=Qt.SolidLine, lineWidth=2)
+                lineStyle=Qt.SolidLine, lineWidth=1)
             self.curves['CH '+sch] = self.pwr_mon_graph.curveAtIndex(2*idx)
             self.pwr_mon_graph.addYChannel(
                 y_channel='RA-RaSIA01:RF-LLRFCalSys:PwrW'+sch+'-Mon',
                 name='CH '+sch+' W', color=color,
-                lineStyle=Qt.SolidLine, lineWidth=2)
+                lineStyle=Qt.SolidLine, lineWidth=1)
             self.curves['CH '+sch+' W'] = \
                 self.pwr_mon_graph.curveAtIndex(2*idx+1)
 
@@ -1004,19 +1002,19 @@ class RFMainControl(SiriusMainWindow):
         hbox_temp1_state.addWidget(self.led_temp1ok, alignment=Qt.AlignRight)
 
         self.temp1_graph = SiriusTimePlot(self)
+        self.temp1_graph.setObjectName('temp1_graph')
         self.temp1_graph.autoRangeX = True
         self.temp1_graph.autoRangeY = True
         self.temp1_graph.backgroundColor = QColor(255, 255, 255)
         self.temp1_graph.showXGrid = True
         self.temp1_graph.showYGrid = True
         self.temp1_graph.timeSpan = 1800
-
         hbox_cbs = QHBoxLayout()
 
         self.temp1_graph.addYChannel(
             y_channel=self.chs['Cav Sts']['Temp']['Coupler'][0],
             color=self.chs['Cav Sts']['Temp']['Coupler'][1],
-            name='Coupler', lineStyle=Qt.SolidLine, lineWidth=2)
+            name='Coupler', lineStyle=Qt.SolidLine, lineWidth=1)
         self.curves['Coupler'] = self.temp1_graph.curveAtIndex(0)
         cb = QCheckBox('Coupler', self)
         cb.setChecked(True)
@@ -1033,7 +1031,7 @@ class RFMainControl(SiriusMainWindow):
 
             self.temp1_graph.addYChannel(
                 y_channel=ch, name=cid, color=color,
-                lineStyle=Qt.SolidLine, lineWidth=2)
+                lineStyle=Qt.SolidLine, lineWidth=1)
             self.curves[cid] = self.temp1_graph.curveAtIndex(idx + 1)
 
             cb = QCheckBox(cid, self)
@@ -1061,6 +1059,7 @@ class RFMainControl(SiriusMainWindow):
         hbox_temp2_state.addWidget(self.led_temp2ok, alignment=Qt.AlignRight)
 
         self.temp2_graph = SiriusTimePlot(self)
+        self.temp2_graph.setObjectName('temp2_graph')
         self.temp2_graph.autoRangeX = True
         self.temp2_graph.autoRangeY = True
         self.temp2_graph.backgroundColor = QColor(255, 255, 255)
@@ -1069,10 +1068,10 @@ class RFMainControl(SiriusMainWindow):
         self.temp2_graph.timeSpan = 1800
         self.temp2_graph.addYChannel(
             y_channel=self.chs['TL Sts']['Circ TIn'], name='CTIn',
-            color='magenta', lineStyle=Qt.SolidLine, lineWidth=2)
+            color='magenta', lineStyle=Qt.SolidLine, lineWidth=1)
         self.temp2_graph.addYChannel(
             y_channel=self.chs['TL Sts']['Circ TOut'], name='CTOut',
-            color='darkRed', lineStyle=Qt.SolidLine, lineWidth=2)
+            color='darkRed', lineStyle=Qt.SolidLine, lineWidth=1)
 
         self.line_max2_lim = InfiniteLine(pos=25.0, angle=0, pen=pen)
         self.line_min2_lim = InfiniteLine(pos=18.0, angle=0, pen=pen)
@@ -1091,6 +1090,7 @@ class RFMainControl(SiriusMainWindow):
         hbox_vacuum_state.addWidget(self.led_condrun, alignment=Qt.AlignRight)
 
         self.vacuum_graph = SiriusTimePlot(self)
+        self.vacuum_graph.setObjectName('vacuum_graph')
         self.vacuum_graph.autoRangeX = True
         self.vacuum_graph.autoRangeY = True
         self.vacuum_graph.backgroundColor = QColor(255, 255, 255)
@@ -1099,7 +1099,7 @@ class RFMainControl(SiriusMainWindow):
         self.vacuum_graph.timeSpan = 1800
         self.vacuum_graph.addYChannel(
             y_channel=self.chs['Cav Sts']['Vac']['Cells'], name='Vacuum',
-            color='black', lineStyle=Qt.SolidLine, lineWidth=2)
+            color='black', lineStyle=Qt.SolidLine, lineWidth=1)
 
         lay = QVBoxLayout()
         lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
