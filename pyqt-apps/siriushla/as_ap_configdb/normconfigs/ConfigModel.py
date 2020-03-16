@@ -295,9 +295,9 @@ class ConfigModel(QAbstractTableModel):
         self._vertical_header = list()
         client = ConfigDBClient()
         if self._config_type == 'bo_normalized':
-            pvs = client.get_value_template('bo_normalized')['pvs']
+            pvs = client.get_value_from_template('bo_normalized')['pvs']
         elif self._config_type == 'si_normalized':
-            pvs = client.get_value_template('si_normalized')['pvs']
+            pvs = client.get_value_from_template('si_normalized')['pvs']
         else:
             raise Exception("Module {} not found".format(self._config_type))
         # pvs = get_dict()["value"]

@@ -72,7 +72,7 @@ class PVConfigurationTableModel(QAbstractTableModel):
         if self._config_type is None:
             return
         self.beginResetModel()
-        config = ConfigDBClient().get_value_template(self._config_type)
+        config = ConfigDBClient().get_value_from_template(self._config_type)
         if 'pvs' in config:
             self._data = config['pvs']
             # self._data.sort(key=lambda x: x[0])

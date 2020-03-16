@@ -4,6 +4,7 @@ from qtpy.QtCore import Qt, QAbstractListModel
 
 
 class ConfigTypeModel(QAbstractListModel):
+    """."""
 
     def __init__(self, connection, parent=None):
         """Constructor."""
@@ -33,11 +34,15 @@ class ConfigTypeModel(QAbstractListModel):
         """Set model data up."""
         self.beginResetModel()
         self._configs = ['Select a configuration type...', ]
-        self._configs.extend(self._connection.get_config_types())
+        dbase = self._connection.get_config_types()
+        templ = self._connection.get_config_types_from_templates()
+        config_types = sorted(set(dbase + templ))
+        self._configs.extend(config_types)
         self.endResetModel()
 
 
 class ConfigPVsTypeModel(ConfigTypeModel):
+    """."""
 
     def setupModelData(self):
         """Set model data up."""
@@ -46,8 +51,9 @@ class ConfigPVsTypeModel(ConfigTypeModel):
 
         # sort all configs of PV type
         conn = self._connection
-        allconfs = conn.get_config_types()
-        configs = [c for c in allconfs if 'pvs' in conn.get_value_template(c)]
+        allconfs = conn.get_config_types_from_template()
+        configs = [c for c in allconfs if 'pvs' in
+                   conn.get_value_from_template(c)]
         configs = sorted(configs)
 
         # move 'global_config' to begin, if it exists
