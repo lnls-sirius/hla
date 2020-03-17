@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1245</width>
-    <height>687</height>
+    <height>642</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -301,7 +301,7 @@ max-width:6.45em;</string>
          <item row="1" column="0">
           <widget class="QLabel" name="label_2">
            <property name="text">
-            <string>DCCT Fault Check</string>
+            <string>DCCT Fault Check:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -397,7 +397,7 @@ max-width:6.45em;</string>
             </size>
            </property>
            <property name="text">
-            <string>Select DCCT</string>
+            <string>Select DCCT:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -695,32 +695,18 @@ max-width:6.45em;</string>
          <string>Lifetime Settings</string>
         </property>
         <layout class="QGridLayout" name="gridLayout_2">
-         <item row="10" column="3" colspan="3">
-          <widget class="QLabel" name="label_12">
-           <property name="styleSheet">
-            <string notr="true">font-weight:bold;</string>
+         <item row="0" column="4">
+          <widget class="PyDMEnumComboBox" name="PyDMEnumComboBox">
+           <property name="toolTip">
+            <string/>
            </property>
-           <property name="text">
-            <string>Buffer</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
+           <property name="channel" stdset="0">
+            <string>${PREFIX}SI-Glob:AP-CurrInfo:LtFitMode-Sel</string>
            </property>
           </widget>
          </item>
-         <item row="4" column="3">
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string>Sampling
-Interval [s]:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="5">
-          <widget class="PyDMLabel" name="PyDMLabel_3">
+         <item row="0" column="5">
+          <widget class="SiriusLabel" name="SiriusLabel">
            <property name="toolTip">
             <string/>
            </property>
@@ -728,7 +714,33 @@ Interval [s]:</string>
             <set>Qt::AlignCenter</set>
            </property>
            <property name="channel" stdset="0">
-            <string>${PREFIX}SI-Glob:AP-CurrInfo:CurrOffset-RB</string>
+            <string>${PREFIX}SI-Glob:AP-CurrInfo:LtFitMode-Sts</string>
+           </property>
+          </widget>
+         </item>
+         <item row="8" column="2" colspan="4">
+          <spacer name="verticalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::MinimumExpanding</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>10</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="0" column="2" colspan="2">
+          <widget class="QLabel" name="label_7">
+           <property name="text">
+            <string>Calc Mode:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
           </widget>
          </item>
@@ -785,16 +797,6 @@ Interval [s]:</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="4">
-          <widget class="PyDMEnumComboBox" name="PyDMEnumComboBox">
-           <property name="toolTip">
-            <string/>
-           </property>
-           <property name="channel" stdset="0">
-            <string>${PREFIX}SI-Glob:AP-CurrInfo:LtFitMode-Sel</string>
-           </property>
-          </widget>
-         </item>
          <item row="4" column="5">
           <widget class="PyDMLabel" name="PyDMLabel">
            <property name="toolTip">
@@ -811,143 +813,8 @@ Interval [s]:</string>
            </property>
           </widget>
          </item>
-         <item row="16" column="4" colspan="2">
-          <layout class="QHBoxLayout" name="horizontalLayout_3">
-           <item>
-            <widget class="PyDMLabel" name="label_buffersize">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>79</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="toolTip">
-              <string/>
-             </property>
-             <property name="whatsThis">
-              <string/>
-             </property>
-             <property name="autoFillBackground">
-              <bool>false</bool>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">min-width:5em; max-width:5em;</string>
-             </property>
-             <property name="inputMethodHints">
-              <set>Qt::ImhNone</set>
-             </property>
-             <property name="frameShape">
-              <enum>QFrame::NoFrame</enum>
-             </property>
-             <property name="frameShadow">
-              <enum>QFrame::Plain</enum>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="precision" stdset="0">
-              <number>0</number>
-             </property>
-             <property name="channel" stdset="0">
-              <string/>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="PyDMPushButton" name="button_resetbuffer">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>16777215</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="toolTip">
-              <string/>
-             </property>
-             <property name="whatsThis">
-              <string>
-    Basic PushButton to send a fixed value.
-
-    The PyDMPushButton is meant to hold a specific value, and send that value
-    to a channel when it is clicked, much like the MessageButton does in EDM.
-    The PyDMPushButton works in two different modes of operation, first, a
-    fixed value can be given to the :attr:`.pressValue` attribute, whenever the
-    button is clicked a signal containing this value will be sent to the
-    connected channel. This is the default behavior of the button. However, if
-    the :attr:`.relativeChange` is set to True, the fixed value will be added
-    to the current value of the channel. This means that the button will
-    increment a channel by a fixed amount with every click, a consistent
-    relative move
-
-    Parameters
-    ----------
-    pressValue : int, float, str
-        Value to be sent when the button is clicked
-
-    channel : str
-        ID of channel to manipulate
-
-    parent : QObject, optional
-        Parent of PyDMPushButton
-
-    label : str, optional
-        String to place on button
-
-    icon : QIcon, optional
-        An Icon to display on the PyDMPushButton
-
-
-    relative : bool, optional
-        Choice to have the button peform a relative put, instead of always
-        setting to an absolute value
-    </string>
-             </property>
-             <property name="autoDefault">
-              <bool>true</bool>
-             </property>
-             <property name="channel" stdset="0">
-              <string>${PREFIX}SI-Glob:AP-CurrInfo:BuffRst-Cmd</string>
-             </property>
-             <property name="pressValue" stdset="0">
-              <string>0</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer_5">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </item>
-         <item row="0" column="5">
-          <widget class="SiriusLabel" name="SiriusLabel">
+         <item row="6" column="5">
+          <widget class="PyDMLabel" name="PyDMLabel_3">
            <property name="toolTip">
             <string/>
            </property>
@@ -955,109 +822,7 @@ Interval [s]:</string>
             <set>Qt::AlignCenter</set>
            </property>
            <property name="channel" stdset="0">
-            <string>${PREFIX}SI-Glob:AP-CurrInfo:LtFitMode-Sts</string>
-           </property>
-          </widget>
-         </item>
-         <item row="17" column="5">
-          <widget class="PyDMLabel" name="PyDMLabel_4">
-           <property name="toolTip">
-            <string/>
-           </property>
-           <property name="whatsThis">
-            <string/>
-           </property>
-           <property name="frameShape">
-            <enum>QFrame::NoFrame</enum>
-           </property>
-           <property name="frameShadow">
-            <enum>QFrame::Plain</enum>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-           <property name="channel" stdset="0">
-            <string>${PREFIX}SI-Glob:AP-CurrInfo:BuffAutoRst-Sel</string>
-           </property>
-          </widget>
-         </item>
-         <item row="8" column="2" colspan="4">
-          <spacer name="verticalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::MinimumExpanding</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>10</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="0" column="2" colspan="2">
-          <widget class="QLabel" name="label_7">
-           <property name="text">
-            <string>Calc Mode:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="16" column="2" colspan="2">
-          <widget class="QLabel" name="Buffer">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Size: </string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="17" column="2" colspan="2">
-          <widget class="QLabel" name="label_6">
-           <property name="text">
-            <string>Auto Reset: </string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="3">
-          <widget class="QLabel" name="label_10">
-           <property name="text">
-            <string>Current
-Offset [mA]:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="3">
-          <widget class="QLabel" name="label_9">
-           <property name="text">
-            <string>Interval Between
-Samples [s]:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            <string>${PREFIX}SI-Glob:AP-CurrInfo:CurrOffset-RB</string>
            </property>
           </widget>
          </item>
@@ -1093,50 +858,134 @@ Samples [s]:</string>
            </property>
           </widget>
          </item>
-         <item row="17" column="4">
-          <widget class="PyDMStateButton" name="PyDMStateButton_2">
-           <property name="toolTip">
-            <string/>
+         <item row="16" column="2" colspan="2">
+          <widget class="QLabel" name="Buffer">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
            </property>
-           <property name="channel" stdset="0">
-            <string>${PREFIX}SI-Glob:AP-CurrInfo:BuffAutoRst-Sel</string>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
            </property>
-           <property name="shape" stdset="0">
-            <enum>PyDMStateButton::Rounded</enum>
-           </property>
-          </widget>
-         </item>
-         <item row="18" column="3">
-          <widget class="QLabel" name="label_13">
            <property name="text">
-            <string>Auto Reset
-Delta Current [mA]:</string>
+            <string> Total size: </string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
           </widget>
          </item>
-         <item row="18" column="5">
-          <widget class="PyDMLabel" name="PyDMLabel_5">
-           <property name="toolTip">
-            <string/>
+         <item row="6" column="3">
+          <widget class="QLabel" name="label_10">
+           <property name="text">
+            <string>Current
+Offset [mA]:</string>
            </property>
-           <property name="channel" stdset="0">
-            <string>${PREFIX}SI-Glob:AP-CurrInfo:BuffAutoRstDCurr-RB</string>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
           </widget>
          </item>
-         <item row="18" column="4">
-          <widget class="PyDMSpinbox" name="PyDMSpinbox_3">
+         <item row="5" column="3">
+          <widget class="QLabel" name="label_9">
+           <property name="text">
+            <string>Interval Between
+Samples [s]:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="3">
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Sampling
+Interval [s]:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="9" column="3" colspan="3">
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>&lt;h4&gt;Buffer&lt;/h4&gt;</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="17" column="3">
+          <widget class="QLabel" name="label_6">
+           <property name="text">
+            <string>Samples in use:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="17" column="4">
+          <widget class="PyDMLabel" name="label_buffersize">
            <property name="toolTip">
             <string/>
            </property>
-           <property name="channel" stdset="0">
-            <string>${PREFIX}SI-Glob:AP-CurrInfo:BuffAutoRstDCurr-SP</string>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
            </property>
-           <property name="showStepExponent" stdset="0">
+          </widget>
+         </item>
+         <item row="16" column="4">
+          <widget class="PyDMLabel" name="label_buffersize_tot">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>79</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string/>
+           </property>
+           <property name="whatsThis">
+            <string/>
+           </property>
+           <property name="autoFillBackground">
             <bool>false</bool>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">min-width:5em; max-width:5em;</string>
+           </property>
+           <property name="inputMethodHints">
+            <set>Qt::ImhNone</set>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Plain</enum>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+           <property name="precision" stdset="0">
+            <number>0</number>
+           </property>
+           <property name="channel" stdset="0">
+            <string/>
            </property>
           </widget>
          </item>
@@ -1155,19 +1004,6 @@ Delta Current [mA]:</string>
          <string>Graphs Settings</string>
         </property>
         <layout class="QGridLayout" name="gridLayout_5">
-         <item row="4" column="2">
-          <widget class="QSpinBox" name="spinBox_TimeSpan">
-           <property name="minimum">
-            <number>1</number>
-           </property>
-           <property name="maximum">
-            <number>1000000</number>
-           </property>
-           <property name="value">
-            <number>2000</number>
-           </property>
-          </widget>
-         </item>
          <item row="2" column="3">
           <spacer name="horizontalSpacer_8">
            <property name="orientation">
@@ -1177,68 +1013,6 @@ Delta Current [mA]:</string>
             <size>
              <width>40</width>
              <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="2" column="1">
-          <widget class="QLabel" name="label_3">
-           <property name="text">
-            <string>Buffer Size: </string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="2">
-          <widget class="QSpinBox" name="spinBox_BuffSize">
-           <property name="minimum">
-            <number>1</number>
-           </property>
-           <property name="maximum">
-            <number>1000000</number>
-           </property>
-           <property name="value">
-            <number>20000</number>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <spacer name="horizontalSpacer_9">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="4" column="1">
-          <widget class="QLabel" name="label_5">
-           <property name="text">
-            <string>Time Span [s]: </string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="1" colspan="2">
-          <spacer name="verticalSpacer_14">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::MinimumExpanding</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>10</height>
             </size>
            </property>
           </spacer>
@@ -1279,6 +1053,42 @@ Delta Current [mA]:</string>
             </size>
            </property>
           </spacer>
+         </item>
+         <item row="2" column="0">
+          <spacer name="horizontalSpacer_9">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="2" column="1">
+          <widget class="QLabel" name="label_5">
+           <property name="text">
+            <string>Time Span [s]: </string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="2">
+          <widget class="QSpinBox" name="spinBox_TimeSpan">
+           <property name="minimum">
+            <number>1</number>
+           </property>
+           <property name="maximum">
+            <number>1000000</number>
+           </property>
+           <property name="value">
+            <number>2000</number>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -1325,11 +1135,6 @@ background-color: qlineargradient(spread:pad, x1:1, y1:0.0227273, x2:0, y2:0, st
    <class>PyDMEnumComboBox</class>
    <extends>QComboBox</extends>
    <header>pydm.widgets.enum_combo_box</header>
-  </customwidget>
-  <customwidget>
-   <class>PyDMPushButton</class>
-   <extends>QPushButton</extends>
-   <header>pydm.widgets.pushbutton</header>
   </customwidget>
   <customwidget>
    <class>PyDMSpinbox</class>

@@ -14,7 +14,6 @@ from pyqtgraph import ViewBox
 from pydm import utilities
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 from pydm.widgets.timeplot import PyDMTimePlot, TimePlotCurveItem
-from pyqtgraph import InfiniteLine, mkPen
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.clientarch import ClientArchiver
 from siriushla.util import connect_window
@@ -43,7 +42,7 @@ class CurrLTWindow(SiriusMainWindow):
         self.setFocusPolicy(Qt.StrongFocus)
 
     def _setupUi(self):
-        # set params in widgets in .ui
+        # channels
         self.lifetime_dcct_pv = SiriusConnectionSignal(
             self.prefix+'SI-Glob:AP-CurrInfo:Lifetime-Mon')
         self.lifetime_dcct_pv.new_value_signal[float].connect(
@@ -52,6 +51,16 @@ class CurrLTWindow(SiriusMainWindow):
             self.prefix+'SI-Glob:AP-CurrInfo:LifetimeBPM-Mon')
         self.lifetime_bpm_pv.new_value_signal[float].connect(
             self.formatLifetime)
+        self.dcct_buff_y_pv = SiriusConnectionSignal(
+            self.prefix+'SI-Glob:AP-CurrInfo:BufferValue-Mon')
+        self.dcct_buff_x_pv = SiriusConnectionSignal(
+            self.prefix+'SI-Glob:AP-CurrInfo:BufferTimestamp-Mon')
+        self.bpm_buff_y_pv = SiriusConnectionSignal(
+            self.prefix+'SI-Glob:AP-CurrInfo:BufferValueBPM-Mon')
+        self.bpm_buff_x_pv = SiriusConnectionSignal(
+            self.prefix+'SI-Glob:AP-CurrInfo:BufferTimestampBPM-Mon')
+
+        # set params in widgets in .ui
         self.centralwidget.label_lifetime.channel = \
             self.prefix+'SI-Glob:AP-CurrInfo:Lifetime-Mon'
         self.centralwidget.label_lifetime.setText("0:00:00")
@@ -73,18 +82,13 @@ class CurrLTWindow(SiriusMainWindow):
             self.centralwidget.DCCT14C4_detail, DCCTMain, self,
             prefix=self.prefix, device='SI-14C4:DI-DCCT')
 
+        self.centralwidget.label_buffersize_tot.channel = \
+            self.prefix+'SI-Glob:AP-CurrInfo:BuffSizeTot-Mon'
         self.centralwidget.label_buffersize.channel = \
             self.prefix+'SI-Glob:AP-CurrInfo:BuffSize-Mon'
-        self.centralwidget.button_resetbuffer.setObjectName('reset')
-        self.centralwidget.button_resetbuffer.setIcon(
-            qta.icon('mdi.delete-empty'))
-        self.centralwidget.button_resetbuffer.setStyleSheet(
-            "#reset{min-width:25px; max-width:25px; icon-size:20px;}")
 
         self.centralwidget.comboBox_lifetime.currentTextChanged.connect(
             self.handle_lifetime_pv)
-        self.centralwidget.spinBox_BuffSize.valueChanged.connect(
-            self.setGraphBufferSize)
         self.centralwidget.spinBox_TimeSpan.valueChanged.connect(
             self.setGraphTimeSpan)
 
@@ -100,22 +104,29 @@ class CurrLTWindow(SiriusMainWindow):
         self.graph.autoRangeY = True
         self.graph.setObjectName('graph')
         self.graph.setStyleSheet('#graph{min-width:40em;}')
-        self.setGraphBufferSize(20000)
+        self.graph.bufferSize = 20000
         self.setGraphTimeSpan(2000)
 
         self.graph.addYChannel(
             y_channel=self.prefix+'SI-Glob:AP-CurrInfo:Current-Mon',
             axis='left', name='Current', color='blue', lineWidth=1)
         self._curve_current = self.graph.curveAtIndex(0)
-        self._fillCurveBuffer(
+        self._fillCurveWithArchData(
             self._curve_current,
             self.prefix+'SI-Glob:AP-CurrInfo:Current-Mon')
 
         self.graph.addYChannel(
+            y_channel=self.prefix+'SI-01M1:DI-BPM:Sum-Mon',
+            axis='left', name='Current', color='blue', lineWidth=1)
+        self._curve_bpmsum = self.graph.curveAtIndex(1)
+        self._fillCurveWithArchData(
+            self._curve_bpmsum, self.prefix+'SI-01M1:DI-BPM:Sum-Mon')
+
+        self.graph.addYChannel(
             y_channel='FAKE:Lifetime', axis='right', name='Lifetime',
             color='red', lineWidth=1)
-        self._curve_lifetimedcct = self.graph.curveAtIndex(1)
-        self._fillCurveBuffer(
+        self._curve_lifetimedcct = self.graph.curveAtIndex(2)
+        self._fillCurveWithArchData(
             self._curve_lifetimedcct,
             self.prefix+'SI-Glob:AP-CurrInfo:Lifetime-Mon',
             factor=3600)
@@ -123,50 +134,46 @@ class CurrLTWindow(SiriusMainWindow):
         self.graph.addYChannel(
             y_channel='FAKE:LifetimeBPM', axis='right', name='Lifetime',
             color='red', lineWidth=1)
-        self._curve_lifetimebpm = self.graph.curveAtIndex(2)
-        self._fillCurveBuffer(
+        self._curve_lifetimebpm = self.graph.curveAtIndex(3)
+        self._fillCurveWithArchData(
             self._curve_lifetimebpm,
             self.prefix+'SI-Glob:AP-CurrInfo:LifetimeBPM-Mon',
             factor=3600)
-        self._curve_lifetimebpm.setVisible(False)
-
-        self._tval_last_smpl_bpm = 0.0
-        self._tval_last_smpl_dcct = 0.0
-        self._terr_last_smpl_bpm = 0.0
-        self._terr_last_smpl_dcct = 0.0
-        pen = mkPen(color='k', width=2, style=Qt.DashLine)
-        self._line_buffdcct_first = InfiniteLine(pos=0.0, angle=90, pen=pen)
-        self._line_buffbpm_first = InfiniteLine(pos=0.0, angle=90, pen=pen)
-        self._line_buffbpm_first.setVisible(False)
-        self._line_buffdcct_last = InfiniteLine(pos=0.0, angle=90, pen=pen)
-        self._line_buffbpm_last = InfiniteLine(pos=0.0, angle=90, pen=pen)
-        self._line_buffbpm_last.setVisible(False)
-        self.graph.addItem(self._line_buffdcct_first)
-        self.graph.addItem(self._line_buffdcct_last)
-        self.graph.addItem(self._line_buffbpm_first)
-        self.graph.addItem(self._line_buffbpm_last)
-
-        self.buffdcct_first_pv = SiriusConnectionSignal(
-            self.prefix+'SI-Glob:AP-CurrInfo:BuffFirstSplTimestamp-Mon')
-        self.buffdcct_first_pv.new_value_signal[float].connect(
-            _part(self._setLinePosition, self._line_buffdcct_first))
-        self.buffdcct_last_pv = SiriusConnectionSignal(
-            self.prefix+'SI-Glob:AP-CurrInfo:BuffLastSplTimestamp-Mon')
-        self.buffdcct_last_pv.new_value_signal[float].connect(
-            _part(self._setLinePosition, self._line_buffdcct_last))
-        self.buffbpm_first_pv = SiriusConnectionSignal(
-            self.prefix+'SI-Glob:AP-CurrInfo:BuffFirstSplTimestampBPM-Mon')
-        self.buffbpm_first_pv.new_value_signal[float].connect(
-            _part(self._setLinePosition, self._line_buffbpm_first))
-        self.buffbpm_last_pv = SiriusConnectionSignal(
-            self.prefix+'SI-Glob:AP-CurrInfo:BuffLastSplTimestampBPM-Mon')
-        self.buffbpm_last_pv.new_value_signal[float].connect(
-            _part(self._setLinePosition, self._line_buffbpm_last))
 
         self.lifetime_dcct_pv.new_value_signal[float].connect(
             self._updategraph)
         self.lifetime_bpm_pv.new_value_signal[float].connect(
             self._updategraph)
+
+        self._flag_need_dcctx = True
+        self._flag_need_dccty = True
+        self._flag_need_bpmx = True
+        self._flag_need_bpmy = True
+        self.dcct_wavx = _np.array([])
+        self.dcct_wavy = _np.array([])
+        self.bpm_wavx = _np.array([])
+        self.bpm_wavy = _np.array([])
+        self.dcct_buff_y_pv.new_value_signal[_np.ndarray].connect(
+            self._update_waveforms)
+        self.dcct_buff_x_pv.new_value_signal[_np.ndarray].connect(
+            self._update_waveforms)
+        self.bpm_buff_y_pv.new_value_signal[_np.ndarray].connect(
+            self._update_waveforms)
+        self.bpm_buff_x_pv.new_value_signal[_np.ndarray].connect(
+            self._update_waveforms)
+
+        self.graph.addYChannel(
+            y_channel='FAKE:DCCTBuffer', axis='left', name='DCCTBuffer',
+            color='blue', lineStyle=Qt.NoPen, symbolSize=10, symbol='o')
+        self._curve_dcct_buff = self.graph.curveAtIndex(4)
+        self.graph.addYChannel(
+            y_channel='FAKE:BPMBuffer', axis='left', name='BPMBuffer',
+            color='blue', lineStyle=Qt.NoPen, symbolSize=10, symbol='o')
+        self._curve_bpm_buff = self.graph.curveAtIndex(5)
+
+        self._curve_bpmsum.setVisible(False)
+        self._curve_lifetimebpm.setVisible(False)
+        self._curve_bpm_buff.setVisible(False)
 
         self.centralwidget.graphs_wid.setLayout(QHBoxLayout())
         self.centralwidget.graphs_wid.layout().setContentsMargins(0, 0, 0, 0)
@@ -184,11 +191,6 @@ class CurrLTWindow(SiriusMainWindow):
         self.centralwidget.label_lifetime.setText(lt_str)
 
     @Slot(int)
-    def setGraphBufferSize(self, value):
-        """Set graph buffer size."""
-        self.graph.setBufferSize(value)
-
-    @Slot(int)
     def setGraphTimeSpan(self, value):
         """Set graph time span."""
         self.graph.setTimeSpan(float(value))
@@ -196,20 +198,28 @@ class CurrLTWindow(SiriusMainWindow):
     @Slot(str)
     def handle_lifetime_pv(self, text):
         cond = bool(text == 'DCCT')
+        self._curve_current.setVisible(cond)
         self._curve_lifetimedcct.setVisible(cond)
-        self._line_buffdcct_first.setVisible(cond)
-        self._line_buffdcct_last.setVisible(cond)
+        self._curve_dcct_buff.setVisible(cond)
+        self._curve_bpmsum.setVisible(not cond)
         self._curve_lifetimebpm.setVisible(not cond)
-        self._line_buffbpm_first.setVisible(not cond)
-        self._line_buffbpm_last.setVisible(not cond)
+        self._curve_bpm_buff.setVisible(not cond)
         if not cond:
+            self.graph.plotItem.getAxis('left').setLabel(
+                '01M1 BPM Sum', color='blue')
             self.centralwidget.label_lifetime.channel = \
                 self.prefix+'SI-Glob:AP-CurrInfo:LifetimeBPM-Mon'
+            self.centralwidget.label_buffersize_tot.channel = \
+                self.prefix+'SI-Glob:AP-CurrInfo:BuffSizeTotBPM-Mon'
             self.centralwidget.label_buffersize.channel = \
                 self.prefix+'SI-Glob:AP-CurrInfo:BuffSizeBPM-Mon'
         else:
+            self.graph.plotItem.getAxis('left').setLabel(
+                'Current [mA]', color='blue')
             self.centralwidget.label_lifetime.channel = \
                 self.prefix+'SI-Glob:AP-CurrInfo:Lifetime-Mon'
+            self.centralwidget.label_buffersize_tot.channel = \
+                self.prefix+'SI-Glob:AP-CurrInfo:BuffSizeTot-Mon'
             self.centralwidget.label_buffersize.channel = \
                 self.prefix+'SI-Glob:AP-CurrInfo:BuffSize-Mon'
 
@@ -220,34 +230,33 @@ class CurrLTWindow(SiriusMainWindow):
         else:
             self._curve_lifetimedcct.receiveNewValue(value/3600)
 
-    @Slot(float)
-    def _setLinePosition(self, line, value):
-        tn = _time.time()
+    @Slot(_np.ndarray)
+    def _update_waveforms(self, value):
         address = self.sender().address
-        self.handle_lifetime_pv(
-            self.centralwidget.comboBox_lifetime.currentText())
-        if value != 0:
-            if 'Last' in address:
-                if 'BPM' in address:
-                    self._tval_last_smpl_bpm = tn
-                    self._terr_last_smpl_bpm = value
-                    linepos = self._tval_last_smpl_bpm
-                else:
-                    self._tval_last_smpl_dcct = tn
-                    self._terr_last_smpl_dcct = value
-                    linepos = self._tval_last_smpl_dcct
-            else:
-                if 'BPM' in address:
-                    linepos = (self._tval_last_smpl_bpm -
-                               self._terr_last_smpl_bpm +
-                               value)
-                else:
-                    linepos = (self._tval_last_smpl_dcct -
-                               self._terr_last_smpl_dcct +
-                               value)
-            line.setValue(linepos)
+        if 'BPM' in address:
+            if 'Timestamp' in address:
+                self.bpm_wavx = value + _time.time()
+                self._flag_need_bpmx = False
+            elif 'Value' in address:
+                self.bpm_wavy = value
+                self._flag_need_bpmy = False
+            if not self._flag_need_bpmy and not self._flag_need_bpmx:
+                self._fillCurveBuffer(
+                    self._curve_bpm_buff, self.bpm_wavx, self.bpm_wavy)
+                self._flag_need_bpmx = True
+                self._flag_need_bpmy = True
         else:
-            line.setVisible(False)
+            if 'Timestamp' in address:
+                self.dcct_wavx = value + _time.time()
+                self._flag_need_dcctx = False
+            elif 'Value' in address:
+                self.dcct_wavy = value
+                self._flag_need_dccty = False
+            if not self._flag_need_dccty and not self._flag_need_dcctx:
+                self._fillCurveBuffer(
+                    self._curve_dcct_buff, self.dcct_wavx, self.dcct_wavy)
+                self._flag_need_dcctx = True
+                self._flag_need_dccty = True
 
     def _get_value_from_arch(self, pvname):
         carch = ClientArchiver()
@@ -255,19 +264,27 @@ class CurrLTWindow(SiriusMainWindow):
         t0 = t1 - _timedelta(seconds=2000)
         t0_str = t0.isoformat() + '-03:00'
         t1_str = t1.isoformat() + '-03:00'
-        timestamp, value, _, _ = carch.getData(pvname, t0_str, t1_str)
+        data = carch.getData(pvname, t0_str, t1_str)
+        if not data:
+            return
+        timestamp, value, _, _ = data
         # ignore first sample
         if len(value) > 1:
             timestamp[0] = t0.timestamp()
             value[0] = value[1]
         return timestamp, value
 
-    def _fillCurveBuffer(self, curve, pvname, factor=None):
-        datax, datay = self._get_value_from_arch(pvname)
+    def _fillCurveWithArchData(self, curve, pvname, factor=None):
+        data = self._get_value_from_arch(pvname)
+        if not data:
+            return
+        datax, datay = data
+        self._fillCurveBuffer(curve, datax, datay)
+
+    def _fillCurveBuffer(self, curve, datax, datay, factor=None):
         nrpts = len(datax)
         if not nrpts:
             return
-
         buff = _np.zeros((2, self.graph.bufferSize), order='f', dtype=float)
         if nrpts > self.graph.bufferSize:
             smpls2discard = nrpts - self.graph.bufferSize
