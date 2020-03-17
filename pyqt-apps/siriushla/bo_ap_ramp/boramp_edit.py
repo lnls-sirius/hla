@@ -291,7 +291,6 @@ class DipoleRamp(QWidget):
                 background-color: #1F64FF;
             }
             QTableWidget {
-                background-color: #D3E1FF;
                 gridline-color: #003065;
             }
             QTableWidget QTableCornerButton::section {
@@ -318,45 +317,57 @@ class DipoleRamp(QWidget):
             e_item = QTableWidgetItem('0')
             np_item = QTableWidgetItem('0')
 
+            gray = QColor(220, 220, 220)
+            dark_orchid = QColor(194, 131, 181)
+            light_orchid = QColor(241, 217, 248)
+            white = QColor('white')
+            light_blue = QColor(211, 225, 255)
+
             label_item.setFlags(Qt.ItemIsEnabled)
             np_item.setFlags(Qt.ItemIsEnabled)
-            if vlabel in ['Injection', 'Ejection']:
-                gray = QColor(220, 220, 220)
+            if vlabel == 'Start':
+                label_item.setBackground(QBrush(light_blue))
+                t_item.setFlags(Qt.ItemIsEnabled)
+                t_item.setBackground(QBrush(light_blue))
+                e_item.setBackground(QBrush(white))
+                np_item.setBackground(QBrush(light_blue))
+            elif vlabel in ['Injection', 'Ejection']:
                 label_item.setBackground(QBrush(gray))
+                t_item.setBackground(QBrush(white))
+                e_item.setFlags(Qt.ItemIsEnabled)
                 e_item.setBackground(QBrush(gray))
                 np_item.setBackground(QBrush(gray))
+            elif vlabel == 'Stop':
+                label_item.setBackground(QBrush(light_blue))
+                t_item.setBackground(QBrush(white))
+                e_item.setFlags(Qt.ItemIsEnabled)
+                e_item.setBackground(QBrush(light_blue))
+                np_item.setBackground(QBrush(light_blue))
             elif vlabel == 'Smoothing Areas':
-                dark_orchid = QColor(194, 131, 181)
                 label_item.setBackground(QBrush(dark_orchid))
                 label_item.setTextAlignment(Qt.AlignCenter)
                 t_item.setBackground(QBrush(dark_orchid))
                 t_item.setTextAlignment(Qt.AlignCenter)
+                t_item.setFlags(Qt.ItemIsEnabled)
+                t_item.setData(Qt.DisplayRole, 'Interval [ms]')
                 e_item.setBackground(QBrush(dark_orchid))
                 e_item.setTextAlignment(Qt.AlignCenter)
+                e_item.setFlags(Qt.ItemIsEnabled)
+                e_item.setData(Qt.DisplayRole, 'E Range [GeV]')
                 np_item.setBackground(QBrush(dark_orchid))
                 np_item.setTextAlignment(Qt.AlignCenter)
+                np_item.setData(Qt.DisplayRole, ' ')
             elif vlabel in ['RampUp', 'RampDown']:
-                light_orchid = QColor(241, 217, 248)
                 label_item.setBackground(QBrush(light_orchid))
-                e_item.setBackground(QBrush(light_orchid))
+                t_item.setBackground(QBrush(white))
+                e_item.setBackground(QBrush(white))
                 np_item.setBackground(QBrush(light_orchid))
                 np_item.setData(Qt.DisplayRole, '-')
-
-            if vlabel in ['Start', ]:
-                t_item.setFlags(Qt.ItemIsEnabled)
-                e_item.setBackground(QBrush(QColor("white")))
-            elif vlabel in ['Injection', 'Ejection', 'Stop']:
-                t_item.setBackground(QBrush(QColor("white")))
-                e_item.setFlags(Qt.ItemIsEnabled)
-            elif vlabel == 'Smoothing Areas':
-                t_item.setFlags(Qt.ItemIsEnabled)
-                e_item.setFlags(Qt.ItemIsEnabled)
-                t_item.setData(Qt.DisplayRole, 'Interval [ms]')
-                e_item.setData(Qt.DisplayRole, 'E Range [GeV]')
-                np_item.setData(Qt.DisplayRole, ' ')
             else:
-                t_item.setBackground(QBrush(QColor("white")))
-                e_item.setBackground(QBrush(QColor("white")))
+                label_item.setBackground(QBrush(light_blue))
+                t_item.setBackground(QBrush(white))
+                e_item.setBackground(QBrush(white))
+                np_item.setBackground(QBrush(light_blue))
 
             self.table.setItem(row, 0, label_item)
             self.table.setItem(row, 1, t_item)
@@ -905,7 +916,7 @@ class MultipolesRamp(QWidget):
                 background-color: #FF6666;
             }
             QTableWidget {
-                background-color: #FFE6E6;
+                background-color: #C8E6C9;
                 gridline-color: #BD0000;
             }
             QTableWidget QTableCornerButton::section {
@@ -936,19 +947,25 @@ class MultipolesRamp(QWidget):
             e_item = _CustomTableWidgetItem('0')
             np_item = _CustomTableWidgetItem('0')
 
+            gray = QColor(220, 220, 220)
+            light_orange = QColor(255, 230, 230)
+            white = QColor('white')
+
             np_item.setFlags(Qt.ItemIsEnabled)
             e_item.setFlags(Qt.ItemIsEnabled)
             if vlabel in ['Injection', 'Ejection']:
                 label_item.setFlags(Qt.ItemIsEnabled)
-                label_item.setBackground(QBrush(QColor(220, 220, 220)))
+                label_item.setBackground(QBrush(gray))
                 t_item.setFlags(Qt.ItemIsEnabled)
-                t_item.setBackground(QBrush(QColor(220, 220, 220)))
-                np_item.setBackground(QBrush(QColor(220, 220, 220)))
-                e_item.setBackground(QBrush(QColor(220, 220, 220)))
+                t_item.setBackground(QBrush(gray))
+                e_item.setBackground(QBrush(gray))
+                np_item.setBackground(QBrush(gray))
             else:
                 label_item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsSelectable)
-                label_item.setBackground(QBrush(QColor("white")))
-                t_item.setBackground(QBrush(QColor("white")))
+                label_item.setBackground(QBrush(white))
+                t_item.setBackground(QBrush(white))
+                e_item.setBackground(QBrush(light_orange))
+                np_item.setBackground(QBrush(light_orange))
 
             self.table.setItem(row, 0, label_item)
             self.table.setItem(row, 1, t_item)
@@ -1473,7 +1490,6 @@ class RFRamp(QWidget):
         self.bt_apply.setObjectName('Apply RF')
         self.bt_apply.clicked.connect(
             _part(self.applyChanges2MachineSignal.emit, self))
-        self.bt_apply.setEnabled(False)
 
         lay = QVBoxLayout(self)
         lay.addWidget(label)
@@ -1562,7 +1578,6 @@ class RFRamp(QWidget):
                 background-color: #B30047;
             }
             QTableWidget {
-                background-color: #FFE6EE;
                 gridline-color: #990033;
             }
             QTableWidget QTableCornerButton::section {
@@ -1590,21 +1605,29 @@ class RFRamp(QWidget):
             e_item = QTableWidgetItem('0')
             # phsinc_item = QTableWidgetItem('0')
 
+            light_pink = QColor(255, 230, 238)
+            white = QColor('white')
+
             label_item.setFlags(Qt.ItemIsEnabled)
+            label_item.setBackground(QBrush(light_pink))
             e_item.setFlags(Qt.ItemIsEnabled)
+            e_item.setBackground(QBrush(light_pink))
             # phsinc_item.setFlags(Qt.ItemIsEnabled)
             if vlabel == 'Start':
                 t_item.setFlags(Qt.ItemIsEnabled)
-                Ph_item.setBackground(QBrush(QColor("white")))
-                Vgap_item.setBackground(QBrush(QColor("white")))
+                t_item.setBackground(QBrush(light_pink))
+                Ph_item.setBackground(QBrush(white))
+                Vgap_item.setBackground(QBrush(white))
             elif vlabel == 'RampUp-Stop':
-                t_item.setBackground(QBrush(QColor("white")))
-                Ph_item.setBackground(QBrush(QColor("white")))
-                Vgap_item.setBackground(QBrush(QColor("white")))
+                t_item.setBackground(QBrush(white))
+                Ph_item.setBackground(QBrush(white))
+                Vgap_item.setBackground(QBrush(white))
             else:
-                t_item.setBackground(QBrush(QColor("white")))
+                t_item.setBackground(QBrush(white))
                 Ph_item.setFlags(Qt.ItemIsEnabled)
+                Ph_item.setBackground(QBrush(light_pink))
                 Vgap_item.setFlags(Qt.ItemIsEnabled)
+                Vgap_item.setBackground(QBrush(light_pink))
 
             self.table.setItem(row, 0, label_item)
             self.table.setItem(row, 1, t_item)

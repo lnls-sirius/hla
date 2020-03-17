@@ -54,6 +54,11 @@ class RFMainControl(SiriusMainWindow):
         else:
             wid_startctrl = QTabWidget(self)
             wid_startctrl.setObjectName(self.section+'Tab')
+            wid_startctrl.setStyleSheet(
+                "#"+self.section+'Tab'+"::pane {"
+                "    border-left: 2px solid gray;"
+                "    border-bottom: 2px solid gray;"
+                "    border-right: 2px solid gray;}")
             wid_control = QWidget(self)
             wid_control.setLayout(self._startControlLayout())
             wid_startctrl.addTab(wid_control, 'Start Controls')
@@ -70,6 +75,11 @@ class RFMainControl(SiriusMainWindow):
         else:
             wid_pwrmon = QTabWidget(self)
             wid_pwrmon.setObjectName(self.section+'Tab')
+            wid_pwrmon.setStyleSheet(
+                "#"+self.section+'Tab'+"::pane {"
+                "    border-left: 2px solid gray;"
+                "    border-bottom: 2px solid gray;"
+                "    border-right: 2px solid gray;}")
             wid_rampmon = QWidget(self)
             wid_rampmon.setLayout(self._rampMonLayout())
             wid_pwrmon.addTab(wid_rampmon, 'Ramp')
@@ -78,6 +88,10 @@ class RFMainControl(SiriusMainWindow):
             wid_pwrmon.addTab(wid_cw, 'CW')
 
         gbox_graphs = QGroupBox('Graphs', self)
+        gbox_graphs.setStyleSheet("""
+            #temp1_graph, #temp2_graph, #vacuum_graph{
+                min-width: 30em; min-height: 12em;
+        }""")
         gbox_graphs.setLayout(self._graphsLayout())
 
         lay = QGridLayout(cw)
@@ -101,11 +115,6 @@ class RFMainControl(SiriusMainWindow):
             }
             QLed{
                 max-width: 1.29em;
-            }
-            QTabWidget::pane {
-                border-left: 2px solid gray;
-                border-bottom: 2px solid gray;
-                border-right: 2px solid gray;
             }
             QLabel{
                 max-height:1.5em; min-width:5em;
@@ -231,8 +240,6 @@ class RFMainControl(SiriusMainWindow):
         lay_amp = QGridLayout()
         lay_amp.setHorizontalSpacing(8)
         lay_amp.setVerticalSpacing(20)
-        lay_amp.addWidget(QLabel('<h3> • Solid State Amplifiers</h3>', self,
-                                 alignment=Qt.AlignLeft), 0, 0, 1, 9)
         lay_amp.addItem(QSpacerItem(
             10, 0, QSzPlcy.Expanding, QSzPlcy.Ignored), 0, 0)
         lay_amp.addWidget(QLabel('<h4>Power</h4>', self,
@@ -254,7 +261,8 @@ class RFMainControl(SiriusMainWindow):
             for k, v in self.chs['SSA'].items():
                 self._create_ssa_wid(lay_amp, int(k)+1, v)
 
-        # Slow Loop Control
+        # LLRF
+        # # Slow Loop Control
         self.lb_slmode = PyDMLabel(self, self.chs['SL']['Mode'])
         self.led_slmode = PyDMLedMultiChannel(
             self, {self.chs['SL']['Mode']: 0})
@@ -345,58 +353,138 @@ class RFMainControl(SiriusMainWindow):
         lay_slmon.addWidget(self.lb_phserr, 2, 4)
         lay_slmon.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
 
-        lay_sl = QGridLayout()
+        wid_sl = QWidget()
+        lay_sl = QGridLayout(wid_sl)
         lay_sl.setAlignment(Qt.AlignTop)
         lay_sl.setSpacing(20)
-        lay_sl.addWidget(QLabel('<h3> • Slow Loop Control</h3>', self,
-                                alignment=Qt.AlignLeft), 0, 0, 1, 3)
         lay_sl.addItem(
             QSpacerItem(10, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 1, 0)
         lay_sl.addLayout(lay_over, 1, 1)
-        lay_sl.addLayout(lay_slctrl, 2, 1)
-        lay_sl.addLayout(lay_slmon, 3, 1)
+        lay_sl.addItem(
+            QSpacerItem(0, 25, QSzPlcy.Ignored, QSzPlcy.Fixed), 2, 1)
+        lay_sl.addLayout(lay_slctrl, 3, 1)
+        lay_sl.addItem(
+            QSpacerItem(0, 25, QSzPlcy.Ignored, QSzPlcy.Fixed), 4, 1)
+        lay_sl.addLayout(lay_slmon, 5, 1)
         lay_sl.addItem(
             QSpacerItem(10, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 1, 3)
 
-        # Tuning
+        # # Tuning
+        # # # Tuning settings
+        lb_autotun = QLabel('Auto Tuning: ', self, alignment=Qt.AlignRight)
         self.bt_autotun = PyDMStateButton(self, self.chs['Tun']['Auto']+':S')
         self.lb_autotun = SiriusLedState(self, self.chs['Tun']['Auto'])
-
+        lb_dtune = QLabel('DTune: ', self, alignment=Qt.AlignRight)
         self.sb_dtune = PyDMSpinbox(
             self, self.chs['Tun']['DTune'].replace('RB', 'SP'))
         self.sb_dtune.showStepExponent = False
         self.lb_dtune = PyDMLabel(self, self.chs['Tun']['DTune'])
         self.lb_dtune.showUnits = True
-
+        lb_dphase = QLabel('Dephase: ', self, alignment=Qt.AlignRight)
         self.lb_dphase = PyDMLabel(self, self.chs['Tun']['DPhase'])
         self.lb_dphase.showUnits = True
+        lay_tunset = QGridLayout()
+        lay_tunset.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
+        lay_tunset.setVerticalSpacing(12)
+        lay_tunset.addItem(
+            QSpacerItem(10, 0, QSzPlcy.Expanding, QSzPlcy.Ignored), 1, 0)
+        lay_tunset.addWidget(lb_autotun, 1, 1)
+        lay_tunset.addWidget(self.bt_autotun, 1, 2)
+        lay_tunset.addWidget(self.lb_autotun, 1, 3)
+        lay_tunset.addWidget(lb_dtune, 2, 1)
+        lay_tunset.addWidget(self.sb_dtune, 2, 2)
+        lay_tunset.addWidget(self.lb_dtune, 2, 3)
+        lay_tunset.addWidget(lb_dphase, 3, 1)
+        lay_tunset.addWidget(self.lb_dphase, 3, 2)
+        lay_tunset.addItem(
+            QSpacerItem(10, 0, QSzPlcy.Expanding, QSzPlcy.Ignored), 1, 4)
 
-        lay_tun = QGridLayout()
-        lay_tun.setVerticalSpacing(12)
-        lay_tun.addWidget(QLabel('<h3> • Tuning</h3>', self,
-                                 alignment=Qt.AlignLeft), 0, 0, 1, 5)
-        lay_tun.addItem(
-            QSpacerItem(10, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 1, 0)
-        lay_tun.addWidget(QLabel('Auto Tuning: ', self,
-                                 alignment=Qt.AlignRight), 1, 1)
-        lay_tun.addWidget(self.bt_autotun, 1, 2)
-        lay_tun.addWidget(self.lb_autotun, 1, 3)
-        lay_tun.addWidget(QLabel('DTune: ', self,
-                                 alignment=Qt.AlignRight), 2, 1)
-        lay_tun.addWidget(self.sb_dtune, 2, 2)
-        lay_tun.addWidget(self.lb_dtune, 2, 3)
-        lay_tun.addWidget(QLabel('Dephase: ', self,
-                                 alignment=Qt.AlignRight), 3, 1)
-        lay_tun.addWidget(self.lb_dphase, 3, 2)
-        lay_tun.addItem(
-            QSpacerItem(10, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 1, 5)
+        # # # Plungers motors
+        lb_plg1 = QLabel('Plunger 1')
+        lb_plg2 = QLabel('Plunger 2')
+        lb_down = QLabel('Down')
+        lb_up = QLabel('Up')
+        self.led_Plg1_Dn = PyDMLed(self, self.chs['Tun']['Pl1Down'])
+        self.led_Plg1_Dn.offColor = QColor(64, 64, 64)
+        self.led_Plg1_Dn.onColor = QColor('blue')
+        self.led_Plg1_Dn.shape = PyDMLed.ShapeMap.Square
+        self.led_Plg1_Up = PyDMLed(self, self.chs['Tun']['Pl1Up'])
+        self.led_Plg1_Up.offColor = QColor(64, 64, 64)
+        self.led_Plg1_Up.onColor = QColor('blue')
+        self.led_Plg1_Up.shape = PyDMLed.ShapeMap.Square
+        self.led_Plg2_Dn = PyDMLed(self, self.chs['Tun']['Pl2Down'])
+        self.led_Plg2_Dn.offColor = QColor(64, 64, 64)
+        self.led_Plg2_Dn.onColor = QColor('blue')
+        self.led_Plg2_Dn.shape = PyDMLed.ShapeMap.Square
+        self.led_Plg2_Up = PyDMLed(self, self.chs['Tun']['Pl2Up'])
+        self.led_Plg2_Up.offColor = QColor(64, 64, 64)
+        self.led_Plg2_Up.onColor = QColor('blue')
+        self.led_Plg2_Up.shape = PyDMLed.ShapeMap.Square
+        lay_plunmon = QGridLayout()
+        lay_plunmon.addItem(
+            QSpacerItem(10, 10, QSzPlcy.Expanding, QSzPlcy.Expanding), 0, 0)
+        lay_plunmon.addWidget(lb_down, 1, 2)
+        lay_plunmon.addWidget(lb_up, 1, 3)
+        lay_plunmon.addWidget(lb_plg1, 2, 1)
+        lay_plunmon.addWidget(lb_plg2, 3, 1)
+        lay_plunmon.addWidget(self.led_Plg1_Dn, 2, 2)
+        lay_plunmon.addWidget(self.led_Plg1_Up, 2, 3)
+        lay_plunmon.addWidget(self.led_Plg2_Dn, 3, 2)
+        lay_plunmon.addWidget(self.led_Plg2_Up, 3, 3)
+        lay_plunmon.addItem(
+            QSpacerItem(10, 10, QSzPlcy.Expanding, QSzPlcy.Expanding), 4, 4)
+
+        self.graph_plunmotors = SiriusTimePlot(self)
+        self.graph_plunmotors.setObjectName('graph')
+        self.graph_plunmotors.setStyleSheet(
+            '#graph{min-height:15em;min-width:20em;max-height:15em;}')
+        self.graph_plunmotors.autoRangeX = True
+        self.graph_plunmotors.autoRangeY = True
+        self.graph_plunmotors.backgroundColor = QColor(255, 255, 255)
+        self.graph_plunmotors.showXGrid = True
+        self.graph_plunmotors.showYGrid = True
+        self.graph_plunmotors.showLegend = True
+        self.graph_plunmotors.timeSpan = 1800
+        self.graph_plunmotors.addYChannel(
+            y_channel=self.chs['Tun']['PlM1Curr'], color='blue',
+            name='Motor 1', lineStyle=Qt.SolidLine, lineWidth=1)
+        self.graph_plunmotors.addYChannel(
+            y_channel=self.chs['Tun']['PlM2Curr'], color='red',
+            name='Motor 2', lineStyle=Qt.SolidLine, lineWidth=1)
+
+        wid_tun = QWidget()
+        lay_plun = QGridLayout(wid_tun)
+        lay_plun.addWidget(QLabel('<h3> • Settings</h3>', self,
+                                  alignment=Qt.AlignLeft), 0, 0, 1, 3)
+        lay_plun.addLayout(lay_tunset, 1, 0, 1, 3)
+        lay_plun.addItem(
+            QSpacerItem(0, 25, QSzPlcy.Ignored, QSzPlcy.Fixed), 2, 0)
+        lay_plun.addWidget(QLabel('<h3> • Plungers</h3>', self,
+                                  alignment=Qt.AlignLeft), 3, 0)
+        lay_plun.addLayout(lay_plunmon, 4, 0)
+        lay_plun.addWidget(self.graph_plunmotors, 4, 1, 1, 2)
+
+        wid_llrf = QTabWidget(self)
+        color = 'green' if self.section == 'BO' else 'blue'
+        wid_llrf.setStyleSheet("""
+            QTabBar::tab:selected, QTabBar::tab:hover {
+                background-color: """+color+""";
+                color: white;
+                border: 0.1em solid white;
+            }""")
+        wid_llrf.addTab(wid_sl, 'Slow Loop Control')
+        wid_llrf.addTab(wid_tun, 'Tuning')
 
         # Layout
         vlay = QVBoxLayout()
-        vlay.setSpacing(30)
+        vlay.addWidget(QLabel('<h3> • Solid State Amplifiers</h3>', self,
+                              alignment=Qt.AlignLeft))
         vlay.addLayout(lay_amp)
-        vlay.addLayout(lay_sl)
-        vlay.addLayout(lay_tun)
+        vlay.addItem(QSpacerItem(0, 50, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        vlay.addWidget(QLabel('<h3> • LLRF</h3>', self,
+                              alignment=Qt.AlignLeft))
+        vlay.addWidget(wid_llrf)
+        vlay.addStretch()
         return vlay
 
     def _rampControlLayout(self):
@@ -507,13 +595,11 @@ class RFMainControl(SiriusMainWindow):
         return lay
 
     def _rampMonLayout(self):
-        mon_label = QLabel('<h3> • Monitor</h3>', self,
-                           alignment=Qt.AlignLeft)
         self.ramp_graph = PyDMWaveformPlot(
             parent=self, background=QColor(255, 255, 255))
         self.ramp_graph.setObjectName('graph')
         self.ramp_graph.setStyleSheet(
-            '#graph{min-height:15em;min-width:20em;max-height:15em;}')
+            '#graph{min-height:15em;min-width:23em;max-height:15em;}')
         self.ramp_graph.maxRedrawRate = 2
         self.ramp_graph.mouseEnabledX = True
         self.ramp_graph.setShowXGrid(True)
@@ -537,12 +623,23 @@ class RFMainControl(SiriusMainWindow):
             x_channel='BR-RF-DLLRF-01:DiagWf32Scale.AVAL',
             redraw_mode=2, name='Power [W]', color=QColor('blue'))
         self.curve_Pwr = self.ramp_graph.curveAtIndex(1)
-        self.curve_Pwr.setVisible(False)
         self.rb_Pwr = QRadioButton('Power [W]', self)
         self.rb_Pwr.toggled.connect(_part(self._handle_rmpwfm_visibility, 1))
+        self.ramp_graph.addChannel(
+            y_channel='RA-RF:PowerSensor1:TracData-Mon',
+            x_channel=' RA-RF:PowerSensor1:TimeAxis-Mon',
+            redraw_mode=2, name='Power [W]', color=QColor('blue'))
+        self.curve_PwrMtr = self.ramp_graph.curveAtIndex(2)
+        self.rb_PwrMtr = QRadioButton('Power Meter Signal', self)
+        self.rb_PwrMtr.toggled.connect(
+            _part(self._handle_rmpwfm_visibility, 2))
         hbox_rb = QHBoxLayout()
         hbox_rb.addWidget(self.rb_VGav)
         hbox_rb.addWidget(self.rb_Pwr)
+        hbox_rb.addWidget(self.rb_PwrMtr)
+
+        self.curve_Pwr.setVisible(False)
+        self.curve_PwrMtr.setVisible(False)
 
         self.lb_PwrFwdBot = PyDMLabel(self, 'BO-05D:RF-P5Cav:PwrFwdBot-Mon')
         self.lb_PwrFwdBot.showUnits = True
@@ -563,7 +660,6 @@ class RFMainControl(SiriusMainWindow):
 
         lay = QGridLayout()
         lay.setVerticalSpacing(15)
-        lay.addWidget(mon_label, 0, 0)
         lay.addWidget(QLabel('<h4>Bottom</h4>', self,
                              alignment=Qt.AlignCenter), 1, 1)
         lay.addWidget(QLabel('<h4>Top</h4>', self,
@@ -592,74 +688,152 @@ class RFMainControl(SiriusMainWindow):
         return lay
 
     def _cwMonLayout(self):
+        self.cb_units = QComboBox(self)
+        self.cb_units.setStyleSheet('font-weight: bold;')
+        self.cb_units.addItems(['dBm', 'W'])
+        self.cb_units.currentTextChanged.connect(
+            self._handle_pwrdata_visibility)
+        self.pwr_curve_colors = {
+            'Cell3Pwr': 'blue',
+            'PwrFwd': 'darkGreen',
+            'PwrRev': 'red',
+        }
+        self._pm_dBm_labels = set()
+        self._pm_W_labels = set()
+
+        self.cb_Cell3Pwr = QCheckBox(self)
+        self.cb_Cell3Pwr.setStyleSheet(
+            'color:'+self.pwr_curve_colors['Cell3Pwr']+'; max-width: 1.2em;')
+        self.lb_Cell3PwrDsc = QLabel('Cavity Power', self)
+        self.lb_Cell3PwrDsc.setStyleSheet(
+            'color:'+self.pwr_curve_colors['Cell3Pwr']+';')
+        self.cb_Cell3Pwr.setObjectName('Cell3Pwr')
+        self.cb_Cell3Pwr.setChecked(True)
+        self.cb_Cell3Pwr.stateChanged.connect(self._handle_curves_visibility)
+        self.lb_Cell3PwrdBm = PyDMLabel(
+            self, 'BO-05D:RF-P5Cav:Cell3PwrdBm-Mon')
+        self.lb_Cell3PwrdBm.showUnits = True
+        self._pm_dBm_labels.add(self.lb_Cell3PwrdBm)
+        self.lb_Cell3PwrW = PyDMLabel(self, 'BO-05D:RF-P5Cav:Cell3Pwr-Mon')
+        self.lb_Cell3PwrW.showUnits = True
+        self.lb_Cell3PwrW.setVisible(False)
+        self._pm_W_labels.add(self.lb_Cell3PwrW)
+
+        self.cb_PwrFwd = QCheckBox(self)
+        self.cb_PwrFwd.setStyleSheet(
+            'color:'+self.pwr_curve_colors['PwrFwd']+'; max-width: 1.2em;')
+        self.lb_PwrFwdDsc = QLabel('Power Forward', self)
+        self.lb_PwrFwdDsc.setStyleSheet(
+            'color:'+self.pwr_curve_colors['PwrFwd']+';')
+        self.cb_PwrFwd.setObjectName('PwrFwd')
+        self.cb_PwrFwd.setChecked(True)
+        self.cb_PwrFwd.stateChanged.connect(self._handle_curves_visibility)
+        self.lb_PwrFwddBm = PyDMLabel(self, 'BO-05D:RF-P5Cav:PwrFwddBm-Mon')
+        self.lb_PwrFwddBm.showUnits = True
+        self._pm_dBm_labels.add(self.lb_PwrFwddBm)
+        self.lb_PwrFwdW = PyDMLabel(self, 'BO-05D:RF-P5Cav:PwrFwd-Mon')
+        self.lb_PwrFwdW.showUnits = True
+        self.lb_PwrFwdW.setVisible(False)
+        self._pm_W_labels.add(self.lb_PwrFwdW)
+
+        self.cb_PwrRev = QCheckBox(self)
+        self.cb_PwrRev.setStyleSheet(
+            'color:'+self.pwr_curve_colors['PwrRev']+'; max-width: 1.2em;')
+        self.lb_PwrRevDsc = QLabel('Power Reverse', self)
+        self.lb_PwrRevDsc.setStyleSheet(
+            'color:'+self.pwr_curve_colors['PwrRev']+';')
+        self.cb_PwrRev.setObjectName('PwrRev')
+        self.cb_PwrRev.setChecked(True)
+        self.cb_PwrRev.stateChanged.connect(self._handle_curves_visibility)
+        self.lb_PwrRevdBm = PyDMLabel(self, 'BO-05D:RF-P5Cav:PwrRevdBm-Mon')
+        self.lb_PwrRevdBm.showUnits = True
+        self._pm_dBm_labels.add(self.lb_PwrRevdBm)
+        self.lb_PwrRevW = PyDMLabel(self, 'BO-05D:RF-P5Cav:PwrRev-Mon')
+        self.lb_PwrRevW.showUnits = True
+        self.lb_PwrRevW.setVisible(False)
+        self._pm_W_labels.add(self.lb_PwrRevW)
+
+        lb_CavPhs = QLabel('Phase', self, alignment=Qt.AlignCenter)
+        self.lb_CavPhs = PyDMLabel(self, 'BR-RF-DLLRF-01:CAV:PHS')
+        self.lb_CavPhs.showUnits = True
+
         self.pwr_mon_graph = SiriusTimePlot(self)
         self.pwr_mon_graph.setObjectName('graph')
         self.pwr_mon_graph.setStyleSheet(
-            '#graph{min-height:15em;min-width:20em;max-height:15em;}')
+            '#graph{min-height:15em;min-width:23em;max-height:15em;}')
         self.pwr_mon_graph.autoRangeX = True
         self.pwr_mon_graph.autoRangeY = True
         self.pwr_mon_graph.backgroundColor = QColor(255, 255, 255)
         self.pwr_mon_graph.showXGrid = True
         self.pwr_mon_graph.showYGrid = True
         self.pwr_mon_graph.timeSpan = 1800
+
         self.pwr_mon_graph.addYChannel(
-            y_channel='BO-05D:RF-P5Cav:Cell3Pwr-Mon', name='Cell3Pwr',
-            color='blue', lineStyle=Qt.SolidLine, lineWidth=2)
+            y_channel='BO-05D:RF-P5Cav:Cell3PwrdBm-Mon', name='Cell3Pwr dBm',
+            color=self.pwr_curve_colors['Cell3Pwr'],
+            lineStyle=Qt.SolidLine, lineWidth=1)
         self.curves['Cell3Pwr'] = self.pwr_mon_graph.curveAtIndex(0)
         self.pwr_mon_graph.addYChannel(
-            y_channel='BO-05D:RF-P5Cav:PwrFwd-Mon', name='PwrFwd',
-            color='darkGreen', lineStyle=Qt.SolidLine, lineWidth=2)
+            y_channel='BO-05D:RF-P5Cav:PwrFwddBm-Mon', name='PwrFwd dBm',
+            color=self.pwr_curve_colors['PwrFwd'],
+            lineStyle=Qt.SolidLine, lineWidth=1)
         self.curves['PwrFwd'] = self.pwr_mon_graph.curveAtIndex(1)
         self.pwr_mon_graph.addYChannel(
-            y_channel='BO-05D:RF-P5Cav:PwrRev-Mon', name='PwrRev',
-            color='red', lineStyle=Qt.SolidLine, lineWidth=2)
+            y_channel='BO-05D:RF-P5Cav:PwrRevdBm-Mon', name='PwrRev dBm',
+            color=self.pwr_curve_colors['PwrRev'],
+            lineStyle=Qt.SolidLine, lineWidth=1)
         self.curves['PwrRev'] = self.pwr_mon_graph.curveAtIndex(2)
 
-        self.cb_Cell3Pwr = QCheckBox('Cavity Power', self)
-        self.cb_Cell3Pwr.setStyleSheet('color: blue;')
-        self.cb_Cell3Pwr.setObjectName('Cell3Pwr')
-        self.cb_Cell3Pwr.setChecked(True)
-        self.cb_Cell3Pwr.stateChanged.connect(self._handle_curves_visibility)
-        self.lb_Cell3Pwr = PyDMLabel(self, 'BO-05D:RF-P5Cav:Cell3Pwr-Mon')
-        self.lb_Cell3Pwr.showUnits = True
-        self.cb_PwrFwd = QCheckBox('Power Forward', self)
-        self.cb_PwrFwd.setStyleSheet('color: darkGreen;')
-        self.cb_PwrFwd.setObjectName('PwrFwd')
-        self.cb_PwrFwd.setChecked(True)
-        self.cb_PwrFwd.stateChanged.connect(self._handle_curves_visibility)
-        self.lb_PwrFwd = PyDMLabel(self, 'BO-05D:RF-P5Cav:PwrFwd-Mon')
-        self.lb_PwrFwd.showUnits = True
-        self.cb_PwrRev = QCheckBox('Power Reverse', self)
-        self.cb_PwrRev.setStyleSheet('color: red;')
-        self.cb_PwrRev.setObjectName('PwrRev')
-        self.cb_PwrRev.setChecked(True)
-        self.cb_PwrRev.stateChanged.connect(self._handle_curves_visibility)
-        self.lb_PwrRev = PyDMLabel(self, 'BO-05D:RF-P5Cav:PwrRev-Mon')
-        self.lb_PwrRev.showUnits = True
-        lb_CavPhs = QLabel('Phase', self, alignment=Qt.AlignCenter)
-        self.lb_CavPhs = PyDMLabel(self, 'BR-RF-DLLRF-01:CAV:PHS')
-        self.lb_CavPhs.showUnits = True
+        self.pwr_mon_graph.addYChannel(
+            y_channel='BO-05D:RF-P5Cav:Cell3Pwr-Mon', name='Cell3Pwr W',
+            color=self.pwr_curve_colors['Cell3Pwr'],
+            lineStyle=Qt.SolidLine, lineWidth=1)
+        self.curves['Cell3Pwr W'] = self.pwr_mon_graph.curveAtIndex(3)
+        self.pwr_mon_graph.addYChannel(
+            y_channel='BO-05D:RF-P5Cav:PwrFwd-Mon', name='PwrFwd W',
+            color=self.pwr_curve_colors['PwrFwd'],
+            lineStyle=Qt.SolidLine, lineWidth=1)
+        self.curves['PwrFwd W'] = self.pwr_mon_graph.curveAtIndex(4)
+        self.pwr_mon_graph.addYChannel(
+            y_channel='BO-05D:RF-P5Cav:PwrRev-Mon', name='PwrRev W',
+            color=self.pwr_curve_colors['PwrRev'],
+            lineStyle=Qt.SolidLine, lineWidth=1)
+        self.curves['PwrRev W'] = self.pwr_mon_graph.curveAtIndex(5)
+
+        for cid in self.pwr_curve_colors.keys():
+            self.curves[cid+' W'].setVisible(False)
 
         lay_vals = QGridLayout()
         lay_vals.setAlignment(Qt.AlignCenter)
-        lay_vals.setVerticalSpacing(10)
+        lay_vals.setVerticalSpacing(15)
         lay_vals.addItem(QSpacerItem(
-            0, 10, QSzPlcy.Ignored, QSzPlcy.MinimumExpanding), 0, 0)
-        lay_vals.addWidget(self.cb_Cell3Pwr, 1, 0, alignment=Qt.AlignCenter)
-        lay_vals.addWidget(self.lb_Cell3Pwr, 1, 1)
-        lay_vals.addWidget(self.cb_PwrFwd, 2, 0, alignment=Qt.AlignCenter)
-        lay_vals.addWidget(self.lb_PwrFwd, 2, 1)
-        lay_vals.addWidget(self.cb_PwrRev, 3, 0, alignment=Qt.AlignCenter)
-        lay_vals.addWidget(self.lb_PwrRev, 3, 1)
-        lay_vals.addWidget(lb_CavPhs, 4, 0, alignment=Qt.AlignCenter)
-        lay_vals.addWidget(self.lb_CavPhs, 4, 1)
+            20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 0, 0)
+        lay_vals.addWidget(QLabel('<h4>Channel</h4>'), 1, 2,
+                           alignment=Qt.AlignCenter)
+        lay_vals.addWidget(self.cb_units, 1, 3, alignment=Qt.AlignCenter)
+        lay_vals.addWidget(self.cb_Cell3Pwr, 2, 1)
+        lay_vals.addWidget(self.lb_Cell3PwrDsc, 2, 2, alignment=Qt.AlignCenter)
+        lay_vals.addWidget(self.lb_Cell3PwrW, 2, 3)
+        lay_vals.addWidget(self.lb_Cell3PwrdBm, 2, 3)
+        lay_vals.addWidget(self.cb_PwrFwd, 3, 1)
+        lay_vals.addWidget(self.lb_PwrFwdDsc, 3, 2, alignment=Qt.AlignCenter)
+        lay_vals.addWidget(self.lb_PwrFwdW, 3, 3)
+        lay_vals.addWidget(self.lb_PwrFwddBm, 3, 3)
+        lay_vals.addWidget(self.cb_PwrRev, 4, 1)
+        lay_vals.addWidget(self.lb_PwrRevDsc, 4, 2, alignment=Qt.AlignCenter)
+        lay_vals.addWidget(self.lb_PwrRevW, 4, 3)
+        lay_vals.addWidget(self.lb_PwrRevdBm, 4, 3)
+        lay_vals.addWidget(lb_CavPhs, 5, 2, alignment=Qt.AlignCenter)
+        lay_vals.addWidget(self.lb_CavPhs, 5, 3)
         lay_vals.addItem(QSpacerItem(
-            0, 10, QSzPlcy.Ignored, QSzPlcy.MinimumExpanding), 5, 0)
+            20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 6, 4)
+        lay_vals.setColumnStretch(0, 1)
+        lay_vals.setColumnStretch(1, 1)
+        lay_vals.setColumnStretch(2, 3)
+        lay_vals.setColumnStretch(3, 3)
+        lay_vals.setColumnStretch(4, 1)
 
         lay = QGridLayout()
-        lay.setHorizontalSpacing(25)
-        lay.addWidget(QLabel('<h3> • Monitor</h3>', self,
-                             alignment=Qt.AlignLeft), 0, 0)
         lay.addLayout(lay_vals, 1, 0)
         lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 2, 0)
         lay.addWidget(self.pwr_mon_graph, 3, 0)
@@ -788,12 +962,12 @@ class RFMainControl(SiriusMainWindow):
             self.pwr_mon_graph.addYChannel(
                 y_channel='RA-RaSIA01:RF-LLRFCalSys:PwrdBm'+sch+'-Mon',
                 name='CH '+sch, color=color,
-                lineStyle=Qt.SolidLine, lineWidth=2)
+                lineStyle=Qt.SolidLine, lineWidth=1)
             self.curves['CH '+sch] = self.pwr_mon_graph.curveAtIndex(2*idx)
             self.pwr_mon_graph.addYChannel(
                 y_channel='RA-RaSIA01:RF-LLRFCalSys:PwrW'+sch+'-Mon',
                 name='CH '+sch+' W', color=color,
-                lineStyle=Qt.SolidLine, lineWidth=2)
+                lineStyle=Qt.SolidLine, lineWidth=1)
             self.curves['CH '+sch+' W'] = \
                 self.pwr_mon_graph.curveAtIndex(2*idx+1)
 
@@ -828,19 +1002,19 @@ class RFMainControl(SiriusMainWindow):
         hbox_temp1_state.addWidget(self.led_temp1ok, alignment=Qt.AlignRight)
 
         self.temp1_graph = SiriusTimePlot(self)
+        self.temp1_graph.setObjectName('temp1_graph')
         self.temp1_graph.autoRangeX = True
         self.temp1_graph.autoRangeY = True
         self.temp1_graph.backgroundColor = QColor(255, 255, 255)
         self.temp1_graph.showXGrid = True
         self.temp1_graph.showYGrid = True
         self.temp1_graph.timeSpan = 1800
-
         hbox_cbs = QHBoxLayout()
 
         self.temp1_graph.addYChannel(
             y_channel=self.chs['Cav Sts']['Temp']['Coupler'][0],
             color=self.chs['Cav Sts']['Temp']['Coupler'][1],
-            name='Coupler', lineStyle=Qt.SolidLine, lineWidth=2)
+            name='Coupler', lineStyle=Qt.SolidLine, lineWidth=1)
         self.curves['Coupler'] = self.temp1_graph.curveAtIndex(0)
         cb = QCheckBox('Coupler', self)
         cb.setChecked(True)
@@ -857,7 +1031,7 @@ class RFMainControl(SiriusMainWindow):
 
             self.temp1_graph.addYChannel(
                 y_channel=ch, name=cid, color=color,
-                lineStyle=Qt.SolidLine, lineWidth=2)
+                lineStyle=Qt.SolidLine, lineWidth=1)
             self.curves[cid] = self.temp1_graph.curveAtIndex(idx + 1)
 
             cb = QCheckBox(cid, self)
@@ -885,6 +1059,7 @@ class RFMainControl(SiriusMainWindow):
         hbox_temp2_state.addWidget(self.led_temp2ok, alignment=Qt.AlignRight)
 
         self.temp2_graph = SiriusTimePlot(self)
+        self.temp2_graph.setObjectName('temp2_graph')
         self.temp2_graph.autoRangeX = True
         self.temp2_graph.autoRangeY = True
         self.temp2_graph.backgroundColor = QColor(255, 255, 255)
@@ -893,10 +1068,10 @@ class RFMainControl(SiriusMainWindow):
         self.temp2_graph.timeSpan = 1800
         self.temp2_graph.addYChannel(
             y_channel=self.chs['TL Sts']['Circ TIn'], name='CTIn',
-            color='magenta', lineStyle=Qt.SolidLine, lineWidth=2)
+            color='magenta', lineStyle=Qt.SolidLine, lineWidth=1)
         self.temp2_graph.addYChannel(
             y_channel=self.chs['TL Sts']['Circ TOut'], name='CTOut',
-            color='darkRed', lineStyle=Qt.SolidLine, lineWidth=2)
+            color='darkRed', lineStyle=Qt.SolidLine, lineWidth=1)
 
         self.line_max2_lim = InfiniteLine(pos=25.0, angle=0, pen=pen)
         self.line_min2_lim = InfiniteLine(pos=18.0, angle=0, pen=pen)
@@ -915,6 +1090,7 @@ class RFMainControl(SiriusMainWindow):
         hbox_vacuum_state.addWidget(self.led_condrun, alignment=Qt.AlignRight)
 
         self.vacuum_graph = SiriusTimePlot(self)
+        self.vacuum_graph.setObjectName('vacuum_graph')
         self.vacuum_graph.autoRangeX = True
         self.vacuum_graph.autoRangeY = True
         self.vacuum_graph.backgroundColor = QColor(255, 255, 255)
@@ -923,7 +1099,7 @@ class RFMainControl(SiriusMainWindow):
         self.vacuum_graph.timeSpan = 1800
         self.vacuum_graph.addYChannel(
             y_channel=self.chs['Cav Sts']['Vac']['Cells'], name='Vacuum',
-            color='black', lineStyle=Qt.SolidLine, lineWidth=2)
+            color='black', lineStyle=Qt.SolidLine, lineWidth=1)
 
         lay = QVBoxLayout()
         lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
@@ -1025,7 +1201,7 @@ class RFMainControl(SiriusMainWindow):
 
     def _handle_curves_visibility(self, state):
         cid = self.sender().objectName()
-        if self.section == 'SI':
+        if cid in self.pwr_curve_colors.keys():
             if self.cb_units.currentText() == 'W':
                 cid += ' W'
         curve = self.curves[cid]
@@ -1037,5 +1213,6 @@ class RFMainControl(SiriusMainWindow):
         led_drive.set_channels2values(ch2vals)
 
     def _handle_rmpwfm_visibility(self, index):
-        self.curve_VGav.setVisible(not index)
-        self.curve_Pwr.setVisible(index)
+        self.curve_VGav.setVisible(index == 0)
+        self.curve_Pwr.setVisible(index == 1)
+        self.curve_PwrMtr.setVisible(index == 2)

@@ -2,7 +2,7 @@ from qtpy.QtGui import QPalette
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QLabel, QPushButton, QGridLayout, \
     QFormLayout, QHBoxLayout, QSpacerItem, QSizePolicy as QSzPlcy, \
-    QTabWidget
+    QTabWidget, QVBoxLayout
 import qtawesome as qta
 
 from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMLineEdit, \
@@ -422,3 +422,50 @@ class TuneControls(QWidget):
         delta = self.tunefreq_currval - self.freqrevn_currval*1e3
         delta /= 1e3
         self.lb_tunefreq.value_changed(delta)
+
+
+class SITuneMonitor(QWidget):
+
+    def __init__(self, parent=None, prefix='', showTitle=False):
+        super().__init__(parent)
+        self.prefix = prefix
+        self.showTitle = showTitle
+        self._setupUi()
+
+    def _setupUi(self):
+        lay_tune = QGridLayout(self)
+
+        row = 0
+        if self.showTitle:
+            title = QLabel('<h4>Tune</h4>', self, alignment=Qt.AlignCenter)
+            lay_tune.addWidget(title, 0, 0, 1, 2)
+            row += 1
+
+        self.lb_tunefrach = PyDMLabel(
+            parent=self,
+            init_channel=self.prefix+'SI-Glob:DI-Tune-H:TuneFrac-Mon')
+        self.lb_tunefrach.setAlignment(Qt.AlignHCenter)
+        self.lb_tunefrach.setStyleSheet('QLabel{font-size: 40px;}')
+        wid_tuneh = QWidget()
+        wid_tuneh.setObjectName('wid_tuneh')
+        wid_tuneh.setStyleSheet('background-color:#B3E5FF;')
+        vbox_tuneh = QVBoxLayout(wid_tuneh)
+        vbox_tuneh.addWidget(QLabel('<h4>Horizontal</h4>', self,
+                                    alignment=Qt.AlignHCenter))
+        vbox_tuneh.addWidget(self.lb_tunefrach)
+        lay_tune.addWidget(wid_tuneh, row, 0)
+
+        self.lb_tunefracv = PyDMLabel(
+            parent=self,
+            init_channel=self.prefix+'SI-Glob:DI-Tune-V:TuneFrac-Mon')
+        self.lb_tunefracv.setAlignment(Qt.AlignHCenter)
+        self.lb_tunefracv.setStyleSheet('QLabel{font-size: 40px;}')
+        wid_tunev = QWidget()
+        wid_tunev.setObjectName('wid_tunev')
+        wid_tunev.setStyleSheet('background-color:#FFB3B3;')
+        vbox_tunev = QVBoxLayout(wid_tunev)
+        vbox_tunev.setAlignment(Qt.AlignHCenter)
+        vbox_tunev.addWidget(QLabel('<h4>Vertical</h4>', self,
+                                    alignment=Qt.AlignHCenter))
+        vbox_tunev.addWidget(self.lb_tunefracv)
+        lay_tune.addWidget(wid_tunev, row, 1)

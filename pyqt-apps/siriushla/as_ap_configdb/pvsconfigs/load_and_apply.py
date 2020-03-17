@@ -42,7 +42,7 @@ class SelectAndApplyPVsWidget(QWidget):
         self._set_btn.clicked.connect(self._set)
 
         # Add Selection Tree
-        self._tree = PVNameTree(tree_levels=('sec', 'dis', 'dev'))
+        self._tree = PVNameTree(tree_levels=('sec', 'dis', 'dev', 'idx'))
 
         self.setLayout(QVBoxLayout())
         self.layout().addWidget(QLabel('<h3>Configuration</h3>'))
