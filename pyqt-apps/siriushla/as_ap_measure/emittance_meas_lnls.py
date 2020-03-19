@@ -6,12 +6,14 @@ import numpy as np
 from epics import PV
 from qtpy.QtWidgets import QPushButton, QLabel, QGridLayout, QGroupBox, \
     QFormLayout, QMessageBox, QWidget, QComboBox, QSpinBox, QVBoxLayout, \
-    QDoubleSpinBox, QFileDialog
+    QDoubleSpinBox, QFileDialog, QHBoxLayout
 from pydm.widgets.logdisplay import PyDMLogDisplay
 from matplotlib import rcParams
 
 from .utils import MatplotlibWidget, ProcessImage, gettransmat, E0
 from siriuspy.factory import NormalizerFactory as _NormFact
+
+from siriushla.widgets import SiriusSpinbox, SiriusLabel
 
 rcParams['font.size'] = 9
 
@@ -24,6 +26,7 @@ class EmittanceMeasure(QWidget):
     def __init__(self, parent=None, place='LI'):
         super().__init__(parent=parent)
         self._place = place or 'LI'
+        self.setObjectName(self._place + 'App')
         self._select_experimental_setup()
         self.nemitx_tm = []
         self.nemity_tm = []
@@ -294,6 +297,16 @@ class EmittanceMeasure(QWidget):
 
         vl = QVBoxLayout()
         gl.addItem(vl, 0, 1, 3, 1)
+
+        gb = QGroupBox('QF3 Current [A]', self)
+        vl.addWidget(gb)
+        gb.setLayout(QHBoxLayout())
+        spnbox = SiriusSpinbox(gb, init_channel='LI-01:PS-QF3:Current-SP')
+        lbl = SiriusLabel(gb, init_channel='LI-01:PS-QF3:Current-Mon')
+        spnbox.showStepExponent = False
+        gb.layout().addWidget(spnbox)
+        gb.layout().addWidget(lbl)
+
         gb = QGroupBox('Data Acquisition Configs.', self)
         fl = QFormLayout(gb)
         vl.addWidget(gb)

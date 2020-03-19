@@ -15,6 +15,8 @@ from pyqtgraph import PlotCurveItem, mkPen
 from scipy.optimize import curve_fit
 import mathphys.constants as _consts
 
+from siriushla.as_ti_control import HLTriggerSimple
+
 C = _consts.light_speed
 E0 = _consts.electron_rest_energy / _consts.elementary_charge * 1e-6  # in MeV
 
@@ -177,12 +179,14 @@ class ProcessImage(QWidget):
             self.conv_coefy = PV(prof + ':Y:Gauss:Coef')
             self.image_channel = prof + ':RAW:ArrayData'
             self.width_channel = prof + ':ROI:MaxSizeX_RBV'
+            self.trig_name = 'LI-Fam:TI-Scrn'
         elif self._place.lower().startswith('li-emit'):
             prof = 'LA-BI:PRF5'
             self.conv_coefx = PV(prof + ':X:Gauss:Coef')
             self.conv_coefy = PV(prof + ':Y:Gauss:Coef')
             self.image_channel = prof + ':RAW:ArrayData'
             self.width_channel = prof + ':ROI:MaxSizeX_RBV'
+            self.trig_name = 'LI-Fam:TI-Scrn'
         elif self._place.lower().startswith('tb-emit'):
             prof = 'TB-02:DI-ScrnCam-2'
             self.conv_coefx = PV(prof + ':ImgScaleFactorX-RB')
@@ -190,6 +194,7 @@ class ProcessImage(QWidget):
             prof = 'TB-02:DI-Scrn-2'
             self.image_channel = prof + ':ImgData-Mon'
             self.width_channel = prof + ':ImgROIWidth-RB'
+            self.trig_name = 'TB-Fam:TI-Scrn'
         else:
             raise Exception('Wrong value for "place".')
 
@@ -221,6 +226,11 @@ class ProcessImage(QWidget):
         self.image_view.addItem(self.plt_his_x)
         self.image_view.addItem(self.plt_his_y)
         vl.addWidget(self.image_view)
+
+        gb_trig = QGroupBox('Trigger', self)
+        vl.addWidget(gb_trig)
+        gb_trig.setLayout(QVBoxLayout())
+        gb_trig.layout().addWidget(HLTriggerSimple(gb_trig, self.trig_name))
 
         gb_pos = QGroupBox('Position [mm]', self)
         vl.addWidget(gb_pos)
