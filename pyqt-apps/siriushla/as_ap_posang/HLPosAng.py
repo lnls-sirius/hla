@@ -3,6 +3,7 @@
 """HLA as_ap_posang module."""
 
 import os as _os
+from epics import PV as _PV
 from qtpy.QtWidgets import QGridLayout, QLabel, QGroupBox, QAbstractItemView, \
     QSizePolicy as QSzPlcy, QSpacerItem, QPushButton, QHeaderView, QWidget
 from qtpy.QtCore import Qt
@@ -17,7 +18,7 @@ from pydm.widgets import PyDMWaveformTable, PyDMLabel, PyDMLineEdit, \
 
 from siriushla import util as _hlautil
 from siriushla.widgets import SiriusMainWindow, PyDMLogLabel, SiriusLedAlert, \
-    PyDMLinEditScrollbar
+    PyDMLinEditScrollbar, PyDMLedMultiChannel
 from siriushla.as_ps_control import PSDetailWindow as _PSDetailWindow
 from siriushla.as_pu_control import PUDetailWindow as _PUDetailWindow
 from siriushla.as_ap_configdb import LoadConfigDialog as _LoadConfigDialog
@@ -38,20 +39,32 @@ class PosAngCorr(SiriusMainWindow):
             self._prefix = prefix
         self._tl = tl.upper()
         self.posang_prefix = self._prefix + self._tl + '-Glob:AP-PosAng'
-        self.setObjectName(tl.upper()+'App')
+        self.setObjectName(self._tl+'App')
         self.setWindowTitle(self._tl + ' Position and Angle Correction Window')
 
-        self.corrs = list()
+        if self._tl == 'TS':
+            self._is_chsept = False
+            ch3_pv = _PV(self.posang_prefix+':CH3-Cte',
+                         connection_timeout=0.1)
+            if not ch3_pv.wait_for_connection():
+                self._is_chsept = True
+
         if tl == 'ts':
-            self.corrs.append(_PVName(Const.TS_CORRH_POSANG[0]))
-            self.corrs.append(_PVName(Const.TS_CORRH_POSANG[1]))
-            self.corrs.append(_PVName(Const.TS_CORRV_POSANG[0]))
-            self.corrs.append(_PVName(Const.TS_CORRV_POSANG[1]))
+            CORRH = (Const.TS_CORRH_POSANG_CHSEPT if self._is_chsept
+                     else Const.TS_CORRH_POSANG_SEPTSEPT)
+            CORRV = Const.TS_CORRV_POSANG
         elif tl == 'tb':
-            self.corrs.append(_PVName(Const.TB_CORRH_POSANG[0]))
-            self.corrs.append(_PVName(Const.TB_CORRH_POSANG[1]))
-            self.corrs.append(_PVName(Const.TB_CORRV_POSANG[0]))
-            self.corrs.append(_PVName(Const.TB_CORRV_POSANG[1]))
+            CORRH = Const.TB_CORRH_POSANG
+            CORRV = Const.TB_CORRV_POSANG
+
+        self.corrs = dict()
+        self.corrs['CH1'] = _PVName(CORRH[0])
+        self.corrs['CH2'] = _PVName(CORRH[1])
+        if len(CORRH) == 3:
+            self.corrs['CH3'] = _PVName(CORRH[2])
+        self.corrs['CV1'] = _PVName(CORRV[0])
+        self.corrs['CV2'] = _PVName(CORRV[1])
+
         self._setupUi()
         self.setFocus(True)
         self.setFocusPolicy(Qt.StrongFocus)
@@ -169,7 +182,8 @@ class PosAngCorr(SiriusMainWindow):
         lay.addWidget(label_kickrb, 0, 3)
         lay.addWidget(label_kickref, 0, 4)
 
-        for idx, corr in enumerate(self.corrs):
+        idx = 1
+        for corrid, corr in self.corrs.items():
             pb = QPushButton(qta.icon('fa5s.list-ul'), '', self)
             pb.setObjectName('pb')
             pb.setStyleSheet("""
@@ -195,21 +209,16 @@ class PosAngCorr(SiriusMainWindow):
             le_sp.sp_scrollbar.setStyleSheet("max-height:0.7em;")
             le_sp.sp_scrollbar.limitsFromPV = True
             lb_rb = PyDMLabel(self, self._prefix+corr+':Kick-RB')
-            if corr.dev == 'CV':
-                corrid = corr.dev + corr.idx
-            elif idx != 1:
-                corrid = 'CH1'
-            else:
-                corrid = 'CH2'
+            lb_ref = PyDMLabel(
+                self, self.posang_prefix+':RefKick'+corrid+'-Mon')
 
-            lb_ref = PyDMLabel(self, self.posang_prefix +
-                               ':RefKick'+corrid+'-Mon')
-            lay.addWidget(pb, idx+1, 0, alignment=Qt.AlignTop)
+            lay.addWidget(pb, idx, 0, alignment=Qt.AlignTop)
             lay.addWidget(
-                lb_name, idx+1, 1, alignment=Qt.AlignLeft | Qt.AlignTop)
-            lay.addWidget(le_sp, idx+1, 2, alignment=Qt.AlignTop)
-            lay.addWidget(lb_rb, idx+1, 3, alignment=Qt.AlignTop)
-            lay.addWidget(lb_ref, idx+1, 4, alignment=Qt.AlignTop)
+                lb_name, idx, 1, alignment=Qt.AlignLeft | Qt.AlignTop)
+            lay.addWidget(le_sp, idx, 2, alignment=Qt.AlignTop)
+            lay.addWidget(lb_rb, idx, 3, alignment=Qt.AlignTop)
+            lay.addWidget(lb_ref, idx, 4, alignment=Qt.AlignTop)
+            idx += 1
 
         if self._tl == 'TB':
             lay.addItem(QSpacerItem(0, 8, QSzPlcy.Ignored, QSzPlcy.Fixed))
@@ -298,16 +307,24 @@ class PosAngCorr(SiriusMainWindow):
         lay = QGridLayout()
         lay.setVerticalSpacing(12)
         lay.setHorizontalSpacing(12)
-        lay.addWidget(self.log, 0, 0, 5, 1)
-        lay.addWidget(self.lb_sts0, 0, 2)
-        lay.addWidget(self.led_sts0, 0, 1)
-        lay.addWidget(self.lb_sts1, 1, 2)
-        lay.addWidget(self.led_sts1, 1, 1)
-        lay.addWidget(self.lb_sts2, 2, 2)
-        lay.addWidget(self.led_sts2, 2, 1)
-        lay.addWidget(self.lb_sts3, 3, 2)
-        lay.addWidget(self.led_sts3, 3, 1)
-        lay.addWidget(self.pb_config, 4, 1, 1, 2)
+        lay.addWidget(self.log, 0, 0, 6, 1)
+        lay.addWidget(self.lb_sts0, 1, 2)
+        lay.addWidget(self.led_sts0, 1, 1)
+        lay.addWidget(self.lb_sts1, 2, 2)
+        lay.addWidget(self.led_sts1, 2, 1)
+        lay.addWidget(self.lb_sts2, 3, 2)
+        lay.addWidget(self.led_sts2, 3, 1)
+        lay.addWidget(self.lb_sts3, 4, 2)
+        lay.addWidget(self.led_sts3, 4, 1)
+        lay.addWidget(self.pb_config, 5, 1, 1, 2)
+
+        if self._tl == 'TS':
+            self.led_corrtype = PyDMLedMultiChannel(
+                self, {self.posang_prefix+':CH1-Cte': self.corrs['CH1']})
+            self.lb_corrtype = QLabel(
+                'Control ' + ('CH-Sept' if self._is_chsept else 'Sept-Sept'))
+            lay.addWidget(self.led_corrtype, 0, 1)
+            lay.addWidget(self.lb_corrtype, 0, 2)
         return lay
 
     def _set_correctors_channels(self, corrs):
