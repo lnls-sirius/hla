@@ -20,7 +20,7 @@ import qtawesome as qta
 from pydm.widgets.base import PyDMWidget
 
 from siriuspy.envars import VACA_PREFIX
-from siriuspy.csdevice.pwrsupply import Const as _PSConst, \
+from siriuspy.pwrsupply.csdev import Const as _PSConst, \
     ETypes as _PSEnums
 from siriuspy.search import PSSearch
 from siriuspy.namesys import SiriusPVName

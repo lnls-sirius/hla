@@ -5,7 +5,7 @@ from qtpy.QtWidgets import QWidget, QGroupBox, QGridLayout, QLabel
 
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.search import PSSearch
-from siriuspy.csdevice.pwrsupply import Const as _PSc
+from siriuspy.pwrsupply.csdev import Const as _PSc
 from siriuspy.namesys import SiriusPVName
 
 from siriushla.sirius_application import SiriusApplication

@@ -4,7 +4,7 @@ import qtawesome as qta
 from pydm.widgets.base import PyDMWidget, PyDMWritableWidget
 from pydm.widgets.channel import PyDMChannel
 from siriuspy.csdevice.timesys import Const as TIConst
-from siriuspy.csdevice.pwrsupply import Const as PSConst
+from siriuspy.pwrsupply.csdev import Const as PSConst
 from siriushla.widgets import PyDMLedMultiChannel, PyDMLed, QLed
 from siriushla.widgets.led import MultiChannelStatusDialog
 

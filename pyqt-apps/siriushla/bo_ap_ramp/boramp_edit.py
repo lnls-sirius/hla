@@ -17,8 +17,8 @@ from matplotlib.backends.backend_qt5agg import (
     NavigationToolbar2QT as NavigationToolbar)
 from matplotlib.figure import Figure
 
-from siriuspy.csdevice.pwrsupply import MAX_WFMSIZE_FBP
-from siriuspy.csdevice.pwrsupply import MAX_WFMSIZE_OTHERS
+from siriuspy.pwrsupply.csdev import MAX_WFMSIZE_FBP
+from siriuspy.pwrsupply.csdev import MAX_WFMSIZE_OTHERS
 from siriuspy.search import MASearch as _MASearch, PSSearch as _PSSearch
 from siriuspy.ramp import ramp, exceptions
 from siriuspy.ramp.magnet import get_magnet as _get_magnet
