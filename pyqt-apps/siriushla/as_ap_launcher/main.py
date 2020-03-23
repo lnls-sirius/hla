@@ -5,16 +5,16 @@ import qtawesome as qta
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
     QGridLayout, QApplication, QMessageBox, QMenu, QAction
+from pydm.widgets import PyDMPushButton
 
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.search import LLTimeSearch as _LLTimeSearch
 
-from pydm.widgets import PyDMPushButton
 from siriushla.util import get_appropriate_color
 from siriushla.sirius_application import SiriusApplication
 from siriushla.as_ti_control import BucketList
 from siriushla.widgets import SiriusMainWindow, PyDMStateButton, \
-    SiriusLedState, SiriusLedAlert, PyDMLed
+    SiriusLedAlert, PyDMLed
 from siriushla.common.epics.wrapper import PyEpicsWrapper
 from .menu import get_object
 from .standby_widgets import InjSysStandbyEnblDsbl, InjSysStandbyStatusLed
@@ -86,9 +86,15 @@ class MainOperation(SiriusMainWindow):
         evg_continuous_sel = PyDMStateButton(
             parent=self,
             init_channel=self._prefix+evg_name+':ContinuousEvt-Sel')
-        evg_continuous_sts = SiriusLedState(
+        color_list = 7*[PyDMLed.LightGreen, ]
+        color_list[0] = PyDMLed.DarkGreen  # Initializing
+        color_list[1] = PyDMLed.DarkGreen  # Stopped
+        color_list[4] = PyDMLed.Yellow  # Preparing Continuous
+        color_list[6] = PyDMLed.Yellow  # Restarting Continuous
+        evg_continuous_sts = PyDMLed(
             parent=self,
-            init_channel=self._prefix+evg_name+':ContinuousEvt-Sts')
+            init_channel=self._prefix+evg_name+':STATEMACHINE',
+            color_list=color_list)
 
         evg_injection_label = QLabel(
             '<h4>Injection</h4>', self, alignment=Qt.AlignCenter)
