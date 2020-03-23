@@ -371,6 +371,10 @@ def get_object(ismenubar=True, parent=None):
                     self.connect_newprocess(
                         act_dev, ['sirius-hla-as-di-scrn.py', dev])
                 diag.addMenu(Scrns)
+            else:
+                Scrap = QAction('Scrapers', diag)
+                self.connect_newprocess(Scrap, 'sirius-hla-si-di-scraps.py')
+                diag.addAction(Scrap)
             return diag
 
         def _set_bpm_menu(self, sec):
