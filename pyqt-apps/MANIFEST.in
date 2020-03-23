@@ -11,3 +11,5 @@ include siriushla/as_ap_injcontrol/TB-BO.svg
 include siriushla/as_di_slits/ui_tb_ap_slithmon.ui
 include siriushla/as_di_slits/ui_tb_ap_slitvmon.ui
 include siriushla/as_di_icts/ui_ictmon.ui
+include siriushla/common/diff_ctrl/ui_as_ap_devhmon.ui
+include siriushla/common/diff_ctrl/ui_as_ap_devvmon.ui
