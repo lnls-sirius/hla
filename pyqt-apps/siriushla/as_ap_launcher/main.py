@@ -14,7 +14,7 @@ from siriushla.util import get_appropriate_color
 from siriushla.sirius_application import SiriusApplication
 from siriushla.as_ti_control import BucketList
 from siriushla.widgets import SiriusMainWindow, PyDMStateButton, \
-    SiriusLedState, SiriusLedAlert
+    SiriusLedState, SiriusLedAlert, PyDMLed
 from siriushla.common.epics.wrapper import PyEpicsWrapper
 from .menu import get_object
 from .standby_widgets import InjSysStandbyEnblDsbl, InjSysStandbyStatusLed
@@ -95,9 +95,13 @@ class MainOperation(SiriusMainWindow):
         evg_injection_sel = PyDMStateButton(
             parent=self,
             init_channel=self._prefix+evg_name+':InjectionEvt-Sel')
-        evg_injection_sts = SiriusLedState(
+        color_list = 7*[PyDMLed.DarkGreen, ]
+        color_list[3] = PyDMLed.LightGreen  # Injection
+        color_list[5] = PyDMLed.Yellow  # Preparing Injection
+        evg_injection_sts = PyDMLed(
             parent=self,
-            init_channel=self._prefix+evg_name+':InjectionEvt-Sts')
+            ini_channel=self._prefix+evg_name+':STATEMACHINE',
+            color_list=color_list)
 
         evg_update_label = QLabel(
             '<h4>Update</h4>', self, alignment=Qt.AlignCenter)
