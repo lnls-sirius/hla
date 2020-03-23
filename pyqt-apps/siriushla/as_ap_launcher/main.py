@@ -100,7 +100,7 @@ class MainOperation(SiriusMainWindow):
         color_list[5] = PyDMLed.Yellow  # Preparing Injection
         evg_injection_sts = PyDMLed(
             parent=self,
-            ini_channel=self._prefix+evg_name+':STATEMACHINE',
+            init_channel=self._prefix+evg_name+':STATEMACHINE',
             color_list=color_list)
 
         evg_update_label = QLabel(
