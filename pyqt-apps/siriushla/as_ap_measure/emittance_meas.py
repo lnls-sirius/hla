@@ -22,7 +22,7 @@ from pydm.widgets.logdisplay import PyDMLogDisplay
 import mathphys.constants as _consts
 from siriuspy.factory import NormalizerFactory as _NormFact
 
-from siriushla.widgets import SiriusSpinbox, SiriusLabel, SiriusFigureCanvas
+from siriushla.widgets import SiriusSpinbox, SiriusLabel, MatplotlibWidget
 from siriushla.as_ti_control import HLTriggerSimple
 
 rcParams['font.size'] = 9
@@ -264,7 +264,7 @@ class EmittanceMeasure(QWidget):
 
     def _setupUi(self):
         gl = QGridLayout(self)
-        wid = SiriusFigureCanvas(parent=self)
+        wid = MatplotlibWidget(parent=self)
         axes = wid.figure.add_subplot(111)
         axes.set_xlabel('Index')
         axes.set_ylabel('Normalized Emit. [mm.mrad]')
@@ -283,7 +283,7 @@ class EmittanceMeasure(QWidget):
         self.plt_nemit = wid
         self.plt_nemit.setStyleSheet('min-width: 25em;')
 
-        wid = SiriusFigureCanvas(parent=self)
+        wid = MatplotlibWidget(parent=self)
         axes = wid.figure.add_subplot(111)
         axes.set_xlabel('Index')
         axes.set_ylabel(r'$\beta$ [m]')
@@ -300,7 +300,7 @@ class EmittanceMeasure(QWidget):
             self.betay_parf, '--rd', lw=1, label='Vert. Parab. Fit')[0]
         self.plt_beta = wid
 
-        wid = SiriusFigureCanvas(parent=self)
+        wid = MatplotlibWidget(parent=self)
         axes = wid.figure.add_subplot(111)
         axes.set_xlabel('Index')
         axes.set_ylabel(r'$\alpha$')
@@ -424,7 +424,7 @@ class EmittanceMeasure(QWidget):
                 setattr(self, 'lb_' + name, lb)
                 gl2.addWidget(lb, i+2, j+1)
 
-        wid = SiriusFigureCanvas(parent=self)
+        wid = MatplotlibWidget(parent=self)
         axes = wid.figure.add_subplot(111)
         axes.set_xlabel('Quad. Current [A]')
         axes.set_ylabel('Beam Size [mm]')

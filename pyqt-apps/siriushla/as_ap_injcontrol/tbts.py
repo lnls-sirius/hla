@@ -166,7 +166,7 @@ class TLControlWindow(BaseWindow):
 
 # import pyaccel as _pyaccel
 # import pymodels as _pymodels
-# from siriushla.widgets import SiriusFigureCanvas
+# from siriushla.widgets import MatplotlibWidget
 #
 #
 # class ShowLatticeAndTwiss(SiriusMainWindow):
@@ -198,7 +198,7 @@ class TLControlWindow(BaseWindow):
 #                                                     show_label=True)
 #         self.centralwidget = QWidget()
 #         self.centralwidget.setLayout(QVBoxLayout())
-#         self.canvas = SiriusFigureCanvas(self._fig)
+#         self.canvas = MatplotlibWidget(self._fig)
 #         self.canvas.setParent(self.centralwidget)
 #         self.centralwidget.layout().addWidget(self.canvas)
 #         self.centralwidget.layout().setContentsMargins(0, 0, 0, 0)

@@ -6,8 +6,8 @@ from matplotlib.backends.backend_qt5agg import \
 from matplotlib.figure import Figure
 
 
-class SiriusFigureCanvas(FigureCanvas):
-    """SiriusFigureCanvas class."""
+class MatplotlibWidget(FigureCanvas):
+    """MatplotlibWidget class."""
 
     def __init__(self, figure=None, parent=None):
         figure = figure or Figure()
