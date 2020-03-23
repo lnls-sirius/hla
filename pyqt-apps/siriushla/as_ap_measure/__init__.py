@@ -1,2 +1,2 @@
-from .energy_meas_lnls import EnergyMeasure
-from .emittance_meas_lnls import EmittanceMeasure
+from .energy_meas import EnergyMeasure
+from .emittance_meas import EmittanceMeasure
