@@ -248,9 +248,8 @@ class EmittanceMeasure(QWidget):
     def _setupUi(self):
         gl = QGridLayout(self)
         wid = MatplotlibWidget(self)
-        gl.addWidget(wid, 0, 0)
         wid.axes.set_xlabel('Index')
-        wid.axes.set_ylabel('Normalized Emittance [mm.mrad]')
+        wid.axes.set_ylabel('Normalized Emit. [mm.mrad]')
         wid.axes.grid(True)
         wid.axes.set_aspect('auto')
         wid.figure.set_tight_layout(True)
@@ -264,9 +263,9 @@ class EmittanceMeasure(QWidget):
             self.nemity_parf, '--rd', lw=1, label='Vert. Parab. Fit')[0]
         wid.axes.legend(loc='best')
         self.plt_nemit = wid
+        self.plt_nemit.setStyleSheet('min-width: 25em;')
 
         wid = MatplotlibWidget(self)
-        gl.addWidget(wid, 1, 0)
         wid.axes.set_xlabel('Index')
         wid.axes.set_ylabel(r'$\beta$ [m]')
         wid.axes.grid(True)
@@ -283,7 +282,6 @@ class EmittanceMeasure(QWidget):
         self.plt_beta = wid
 
         wid = MatplotlibWidget(self)
-        gl.addWidget(wid, 2, 0)
         wid.axes.set_xlabel('Index')
         wid.axes.set_ylabel(r'$\alpha$')
         wid.axes.grid(True)
@@ -299,11 +297,10 @@ class EmittanceMeasure(QWidget):
             self.alphay_parf, '--rd', lw=1, label='Vert. Parab. Fit')[0]
         self.plt_alpha = wid
 
-        vl = QVBoxLayout()
-        gl.addItem(vl, 0, 1, 3, 1)
+        measlay = QVBoxLayout()
 
         gb = QGroupBox('QF3 Current [A]', self)
-        vl.addWidget(gb)
+        measlay.addWidget(gb)
         gb.setLayout(QHBoxLayout())
         spnbox = SiriusSpinbox(gb, init_channel='LI-01:PS-QF3:Current-SP')
         lbl = SiriusLabel(gb, init_channel='LI-01:PS-QF3:Current-Mon')
@@ -313,7 +310,7 @@ class EmittanceMeasure(QWidget):
 
         gb = QGroupBox('Data Acquisition Configs.', self)
         fl = QFormLayout(gb)
-        vl.addWidget(gb)
+        measlay.addWidget(gb)
         self.pb_start = QPushButton('Start', gb)
         self.pb_start.clicked.connect(self.pb_start_clicked)
         self.pb_stop = QPushButton('Stop', gb)
@@ -354,47 +351,53 @@ class EmittanceMeasure(QWidget):
         self.spbox_threshold.setDecimals(2)
         fl.addRow(QLabel('Max. Size Accpbl. [mm]', gb), self.spbox_threshold)
 
+        anllay = QVBoxLayout()
+
         gb = QGroupBox('Analysis Configs.', self)
-        fl = QFormLayout(gb)
-        vl.addWidget(gb)
+        vl = QVBoxLayout(gb)
+        anllay.addWidget(gb)
         self.spbox_energy = QDoubleSpinBox(gb)
         self.spbox_energy.setMinimum(0.511)
         self.spbox_energy.setMaximum(200)
         self.spbox_energy.setValue(150)
         self.spbox_energy.setDecimals(2)
-        fl.addRow(QLabel('Energy [MeV]', gb), self.spbox_energy)
+        self.pb_analyse_data = QPushButton('Analyse', gb)
+        self.pb_analyse_data.clicked.connect(self.pb_analyse_data_clicked)
+        hl = QHBoxLayout()
+        hl.addWidget(QLabel('Energy [MeV]', gb))
+        hl.addWidget(self.spbox_energy)
+        hl.addWidget(self.pb_analyse_data)
+        vl.addLayout(hl)
         self.pb_save_data = QPushButton('Save Raw', gb)
         self.pb_save_data.clicked.connect(self.pb_save_data_clicked)
         self.pb_load_data = QPushButton('Load Raw', gb)
         self.pb_load_data.clicked.connect(self.pb_load_data_clicked)
-        fl.addRow(self.pb_save_data, self.pb_load_data)
-        self.pb_analyse_data = QPushButton('Analyse', gb)
-        self.pb_analyse_data.clicked.connect(self.pb_analyse_data_clicked)
-        fl.addRow(self.pb_analyse_data)
+        hl = QHBoxLayout()
+        hl.addWidget(self.pb_save_data)
+        hl.addWidget(self.pb_load_data)
+        vl.addLayout(hl)
         self.logdisplay = PyDMLogDisplay(self, level=_log.INFO)
-        fl.addRow(self.logdisplay)
+        vl.addWidget(self.logdisplay)
 
-        gb = QGroupBox('Results', self)
-        vl.addWidget(gb)
-        gl2 = QGridLayout(gb)
-        gl2.addWidget(QLabel('Trans. Matrix', gb), 0, 1, 1, 2)
-        gl2.addWidget(QLabel('Parabola Fit', gb), 0, 3, 1, 2)
-        gl2.addWidget(QLabel('Hor.', gb), 1, 1)
-        gl2.addWidget(QLabel('Vert.', gb), 1, 2)
-        gl2.addWidget(QLabel('Hor.', gb), 1, 3)
-        gl2.addWidget(QLabel('Vert.', gb), 1, 4)
-        gl2.addWidget(QLabel('Norm. emitt. [mm.mrad]', gb), 2, 0)
-        gl2.addWidget(QLabel('beta [m]', gb), 3, 0)
-        gl2.addWidget(QLabel('alpha', gb), 4, 0)
+        resultsgb = QGroupBox('Results', self)
+        gl2 = QGridLayout(resultsgb)
+        gl2.addWidget(QLabel('Trans. Matrix', resultsgb), 0, 1, 1, 2)
+        gl2.addWidget(QLabel('Parabola Fit', resultsgb), 0, 3, 1, 2)
+        gl2.addWidget(QLabel('Hor.', resultsgb), 1, 1)
+        gl2.addWidget(QLabel('Vert.', resultsgb), 1, 2)
+        gl2.addWidget(QLabel('Hor.', resultsgb), 1, 3)
+        gl2.addWidget(QLabel('Vert.', resultsgb), 1, 4)
+        gl2.addWidget(QLabel('Norm. emitt. [mm.mrad]', resultsgb), 2, 0)
+        gl2.addWidget(QLabel('beta [m]', resultsgb), 3, 0)
+        gl2.addWidget(QLabel('alpha', resultsgb), 4, 0)
         for i, pref in enumerate(('nemit', 'beta', 'alpha')):
             for j, tp in enumerate(('x_tm', 'y_tm', 'x_parf', 'y_parf')):
                 name = pref + tp
-                lb = QLabel('----', gb)
+                lb = QLabel('----', resultsgb)
                 setattr(self, 'lb_' + name, lb)
                 gl2.addWidget(lb, i+2, j+1)
 
         wid = MatplotlibWidget(self)
-        gl.addWidget(wid, 0, 2)
         wid.axes.set_xlabel('Quad. Current [A]')
         wid.axes.set_ylabel('Beam Size [mm]')
         wid.axes.grid(True)
@@ -404,8 +407,16 @@ class EmittanceMeasure(QWidget):
         self.line_sigmay = wid.axes.plot([], 'ro', lw=1, label='Vertical')[0]
         self.line_fit = wid.axes.plot([], '-k', lw=1)[0]
         self.plt_sigma = wid
+        self.plt_sigma.setStyleSheet('min-width: 25em;')
 
-        gl.addWidget(self.plt_image, 1, 2, 2, 1)
+        gl.addWidget(self.plt_image, 0, 0, 3, 1)
+        gl.addItem(measlay, 0, 1, 2, 1)
+        gl.addWidget(self.plt_sigma, 2, 1)
+        gl.addItem(anllay, 0, 2, 2, 1)
+        gl.addWidget(resultsgb, 2, 2)
+        gl.addWidget(self.plt_nemit, 0, 3)
+        gl.addWidget(self.plt_beta, 1, 3)
+        gl.addWidget(self.plt_alpha, 2, 3)
 
     def pb_save_data_clicked(self):
         if self.I_meas is None or self.sigma is None:
