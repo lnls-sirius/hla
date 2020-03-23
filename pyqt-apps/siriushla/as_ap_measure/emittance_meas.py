@@ -14,7 +14,7 @@ from qtpy.QtWidgets import QPushButton, QLabel, QGridLayout, QGroupBox, \
     QFormLayout, QMessageBox, QWidget, QComboBox, QSpinBox, QVBoxLayout, \
     QDoubleSpinBox, QFileDialog, QHBoxLayout, QSizePolicy, QCheckBox
 from qtpy.QtGui import QColor
-from qtpy.QtCore import QSize, Slot
+from qtpy.QtCore import Qt, QSize, Slot
 
 from pyqtgraph import PlotCurveItem, mkPen
 
@@ -324,6 +324,7 @@ class EmittanceMeasure(QWidget):
         spnbox.showStepExponent = False
         gb.layout().addWidget(spnbox)
         gb.layout().addWidget(lbl)
+        gb.layout().setAlignment(Qt.AlignTop)
 
         gb = QGroupBox('Data Acquisition Configs.', self)
         fl = QFormLayout(gb)
@@ -333,7 +334,10 @@ class EmittanceMeasure(QWidget):
         self.pb_stop = QPushButton('Stop', gb)
         self.pb_stop.clicked.connect(self.pb_stop_clicked)
         self.pb_stop.setEnabled(False)
-        fl.addRow(self.pb_start, self.pb_stop)
+        hbox_bts = QHBoxLayout()
+        hbox_bts.addWidget(self.pb_start)
+        hbox_bts.addWidget(self.pb_stop)
+        fl.addRow(hbox_bts)
         self.cbbox_plane = QComboBox(gb)
         self.cbbox_plane.addItem('Horizontal')
         self.cbbox_plane.addItem('Vertical')
@@ -367,6 +371,9 @@ class EmittanceMeasure(QWidget):
         self.spbox_threshold.setValue(4)
         self.spbox_threshold.setDecimals(2)
         fl.addRow(QLabel('Max. Size Accpbl. [mm]', gb), self.spbox_threshold)
+
+        measlay.setStretch(0, 2)
+        measlay.setStretch(1, 8)
 
         anllay = QVBoxLayout()
 
@@ -404,8 +411,8 @@ class EmittanceMeasure(QWidget):
         gl2.addWidget(QLabel('Vert.', resultsgb), 1, 2)
         gl2.addWidget(QLabel('Hor.', resultsgb), 1, 3)
         gl2.addWidget(QLabel('Vert.', resultsgb), 1, 4)
-        gl2.addWidget(QLabel('Norm. emitt. [mm.mrad]', resultsgb), 2, 0)
-        gl2.addWidget(QLabel('beta [m]', resultsgb), 3, 0)
+        gl2.addWidget(QLabel('Norm. emitt.\n[mm.mrad]', resultsgb), 2, 0)
+        gl2.addWidget(QLabel('beta\n[m]', resultsgb), 3, 0)
         gl2.addWidget(QLabel('alpha', resultsgb), 4, 0)
         for i, pref in enumerate(('nemit', 'beta', 'alpha')):
             for j, tp in enumerate(('x_tm', 'y_tm', 'x_parf', 'y_parf')):
@@ -738,7 +745,7 @@ class ProcessImage(QWidget):
         vl.addWidget(gb_pos)
         hl = QHBoxLayout(gb_pos)
         fl = QFormLayout()
-        hl.addItem(fl)
+        hl.addLayout(fl)
         self.cbox_method = QComboBox(gb_pos)
         self.cbox_method.addItem('Gauss Fit')
         self.cbox_method.addItem('Moments')
@@ -780,7 +787,7 @@ class ProcessImage(QWidget):
         self.pb_reset_bg.clicked.connect(self.pb_reset_bg_clicked)
         fl.addRow(self.pb_reset_bg)
         fl = QFormLayout()
-        hl.addItem(fl)
+        hl.addLayout(fl)
         self.lb_xave = QLabel('0', gb_pos)
         self.lb_yave = QLabel('0', gb_pos)
         self.lb_xstd = QLabel('0', gb_pos)
@@ -791,6 +798,10 @@ class ProcessImage(QWidget):
         fl.addRow(QLabel('Beam Size', gb_pos))
         fl.addRow(QLabel('x = ', gb_pos), self.lb_xstd)
         fl.addRow(QLabel('y = ', gb_pos), self.lb_ystd)
+
+        hl.setSpacing(12)
+        hl.setStretch(0, 1)
+        hl.setStretch(1, 1)
 
     def cbbox_auto_center_clicked(self, clicked):
         self.spbox_roi_center_x.setEnabled(not clicked)
