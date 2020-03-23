@@ -6,7 +6,7 @@ import sys
 import argparse as _argparse
 from siriushla.sirius_application import SiriusApplication
 from siriuspy.envars import VACA_PREFIX
-from siriushla.as_di_slits import SlitsView
+from siriushla.tb_di_slits import SlitsView
 from siriushla.widgets.windows import create_window_from_widget
 
 
@@ -20,6 +20,6 @@ args = parser.parse_args()
 app = SiriusApplication()
 prefix = args.prefix
 window = create_window_from_widget(
-    SlitsView, title='Slits View', is_main=True)
+    SlitsView, title='TB Slits View', is_main=True)
 app.open_window(window, parent=None, prefix=prefix)
 sys.exit(app.exec_())
