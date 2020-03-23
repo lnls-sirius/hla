@@ -99,6 +99,7 @@ class EmittanceMeasure(QWidget):
 
         pl = 'y' if self.cbbox_plane.currentIndex() else 'x'
         curr_list = np.linspace(I_ini, I_end, nsteps)
+        init_curr = self.quad_I_sp.value
         sigma = []
         I_meas = []
         for i, I in enumerate(curr_list):
@@ -144,6 +145,9 @@ class EmittanceMeasure(QWidget):
                     [min(sigma)*(1-DT)*1e3, max(sigma)*(1+DT)*1e3])
             self.plt_sigma.figure.canvas.draw()
         self._measuring.set()
+        _log.info('Returning Quad to Initial Current')
+        self.quad_I_sp.put(init_curr, wait=True)
+
         self.pb_stop.setEnabled(False)
         self.pb_start.setEnabled(True)
         _log.info('Finished!')
