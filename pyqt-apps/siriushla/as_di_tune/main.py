@@ -1,15 +1,15 @@
 from qtpy.QtGui import QColor
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGridLayout, QTabWidget, QVBoxLayout, \
-    QLabel
+    QLabel, QGroupBox, QHBoxLayout
 import qtawesome as qta
 from siriuspy.envars import VACA_PREFIX
 from siriushla import util
 from siriushla.widgets import SiriusMainWindow
+from siriushla.as_ti_control import HLTriggerSimple
 from .spectrogram import BOTuneSpectrogramControls
 from .spectra import TuneSpectraControls
 from .controls import TuneControls, SITuneMonitor
-from .details import BOTuneTrigger
 
 
 class Tune(SiriusMainWindow):
@@ -71,7 +71,12 @@ class Tune(SiriusMainWindow):
         self.spectra_view.setObjectName('spectra_view')
 
         if self.section == 'BO':
-            self.trig_gbox = BOTuneTrigger(self, self.prefix)
+            self.trig_gbox = QGroupBox('Trigger', self)
+            self.trig_gbox.setLayout(QHBoxLayout())
+            self.trig_gbox.layout().addWidget(HLTriggerSimple(
+                self.trig_gbox,
+                self.prefix + 'BO-Glob:TI-TuneProc',
+                duration=True, nrpulses=True))
             vbox_sett.addWidget(self.trig_gbox)
 
             # Sepctrograms

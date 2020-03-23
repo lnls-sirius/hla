@@ -2,19 +2,15 @@
 from qtpy.QtGui import QPalette
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QLabel, QFormLayout, QHBoxLayout, QVBoxLayout, \
-    QGridLayout, QGroupBox, QWidget, QPushButton, QSpacerItem, \
-    QSizePolicy as QSzPlcy
+    QGridLayout, QGroupBox, QWidget, QSpacerItem, QSizePolicy as QSzPlcy
 import qtawesome as qta
 from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox, \
     PyDMPushButton, PyDMLineEdit
 
 from siriuspy.namesys import SiriusPVName
-import siriushla.util as util
 from siriushla.widgets import PyDMLedMultiChannel, SiriusMainWindow, PyDMLed, \
-    PyDMStateButton, SiriusLedState, SiriusLedAlert, SiriusConnectionSignal, \
-    SiriusComboBox
-from siriushla.widgets.windows import create_window_from_widget
-from siriushla.as_ti_control import HLTriggerDetailed
+    PyDMStateButton, SiriusLedState, SiriusConnectionSignal, SiriusComboBox
+from siriushla.as_ti_control import HLTriggerSimple
 
 
 class TuneDetails(SiriusMainWindow):
@@ -60,7 +56,12 @@ class TuneDetails(SiriusMainWindow):
 
         if self.section == 'BO':
             # trigger
-            self.trg_gbox = BOTuneTrigger(self, self.prefix)
+            self.trg_gbox = QGroupBox('Trigger', self)
+            self.trg_gbox.setLayout(QHBoxLayout())
+            self.trg_gbox.layout().addWidget(HLTriggerSimple(
+                self.trg_gbox,
+                self.prefix + 'BO-Glob:TI-TuneProc',
+                duration=True, nrpulses=True))
             # spectrogram view
             self.spec_gbox = QGroupBox('Spectrogram View', self)
             self.spec_gbox.setLayout(self._specViewLayout())
@@ -482,83 +483,6 @@ class TuneDetails(SiriusMainWindow):
         dev = self.device.substitute(dev='TuneProc')
         self.led_acqcnt.set_channels2values(
             {dev + ':FrameCount-Mon': new_value})
-
-
-class BOTuneTrigger(QGroupBox):
-
-    def __init__(self, parent=None, prefix=''):
-        """Init."""
-        super().__init__('Trigger', parent)
-        self.trigger = SiriusPVName(prefix + 'BO-Glob:TI-TuneProc')
-        self.prefix = prefix
-        self._setupUi()
-
-    def _setupUi(self):
-        lbl_sts = QLabel('Status', self)
-        self.led_sts = SiriusLedAlert(
-            parent=self, init_channel=self.prefix+self.trigger+':Status-Mon')
-        self.bt_trig_dtl = QPushButton(qta.icon('fa5s.ellipsis-h'), '', self)
-        self.bt_trig_dtl.setObjectName('trg_dtl')
-        self.bt_trig_dtl.setStyleSheet(
-            "#trg_dtl{min-width:25px; max-width:25px; icon-size:20px;}")
-        trg_w = create_window_from_widget(
-            HLTriggerDetailed, is_main=True,
-            title=self.prefix+self.trigger+' Detailed Settings')
-        util.connect_window(
-            self.bt_trig_dtl, trg_w, parent=self, prefix=self.trigger)
-        hbox_resume = QHBoxLayout()
-        hbox_resume.addWidget(self.led_sts)
-        hbox_resume.addWidget(self.bt_trig_dtl)
-
-        # NrPulses
-        lbl_nrp = QLabel('NrPulses', self)
-        self.sb_nrp = PyDMSpinbox(
-            parent=self, init_channel=self.prefix+self.trigger+':NrPulses-SP')
-        self.sb_nrp.showStepExponent = False
-        self.lb_nrp = PyDMLabel(
-            parent=self, init_channel=self.prefix+self.trigger+':NrPulses-RB')
-        hbox_nrp = QHBoxLayout()
-        hbox_nrp.addWidget(self.sb_nrp)
-        hbox_nrp.addWidget(self.lb_nrp)
-
-        # Duration
-        lbl_dur = QLabel('Duration [us]', self)
-        self.sb_dur = PyDMSpinbox(
-            parent=self, init_channel=self.prefix+self.trigger+':Duration-SP')
-        self.sb_dur.showStepExponent = False
-        self.lb_dur = PyDMLabel(
-            parent=self, init_channel=self.prefix+self.trigger+':Duration-RB')
-        hbox_dur = QHBoxLayout()
-        hbox_dur.addWidget(self.sb_dur)
-        hbox_dur.addWidget(self.lb_dur)
-
-        # Delay
-        lbl_dly = QLabel('Delay [us]', self)
-        self.sb_dly = PyDMSpinbox(
-            parent=self, init_channel=self.prefix+self.trigger+':Delay-SP')
-        self.sb_dly.showStepExponent = False
-        self.lb_dly = PyDMLabel(
-            parent=self, init_channel=self.prefix+self.trigger+':Delay-RB')
-        hbox_dly = QHBoxLayout()
-        hbox_dly.addWidget(self.sb_dly)
-        hbox_dly.addWidget(self.lb_dly)
-
-        lay = QFormLayout(self)
-        lay.setLabelAlignment(Qt.AlignRight)
-        lay.setFormAlignment(Qt.AlignCenter)
-        lay.addRow(lbl_sts, hbox_resume)
-        lay.addRow(lbl_nrp, hbox_nrp)
-        lay.addRow(lbl_dur, hbox_dur)
-        lay.addRow(lbl_dly, hbox_dly)
-
-        self.setStyleSheet("""
-            QLed{
-                min-width:1.29em; max-width:1.29em;
-            }
-            PyDMLabel, PyDMSpinbox, PyDMEnumComboBox,
-            PyDMStateButton{
-                min-width:6em; max-width:6em;
-            }""")
 
 
 class SITuneMarkerDetails(SiriusMainWindow):
