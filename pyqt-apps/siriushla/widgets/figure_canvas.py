@@ -1,12 +1,20 @@
 """Derive matplotlib FigureCanvas to resize labels in ZoomIn/ZoomOut."""
 from qtpy.QtCore import QEvent
-from qtpy.QtWidgets import QApplication
-from matplotlib.backends.backend_qt5agg import (
-    FigureCanvasQTAgg as FigureCanvas)
+from qtpy.QtWidgets import QApplication, QSizePolicy
+from matplotlib.backends.backend_qt5agg import \
+    FigureCanvasQTAgg as FigureCanvas
+from matplotlib.figure import Figure
 
 
 class SiriusFigureCanvas(FigureCanvas):
     """SiriusFigureCanvas class."""
+
+    def __init__(self, figure=None, parent=None):
+        figure = figure or Figure()
+        super().__init__(figure)
+        self.setParent(parent)
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.updateGeometry()
 
     def changeEvent(self, event):
         """Reimplement changeEvent to handle labels resizing."""

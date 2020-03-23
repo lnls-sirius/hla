@@ -6,8 +6,6 @@ import numpy as np
 from scipy.optimize import curve_fit
 from epics import PV
 
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as Canvas
-from matplotlib.figure import Figure
 from matplotlib import rcParams
 
 from qtpy.QtWidgets import QPushButton, QLabel, QGridLayout, QGroupBox, \
@@ -24,7 +22,7 @@ from pydm.widgets.logdisplay import PyDMLogDisplay
 import mathphys.constants as _consts
 from siriuspy.factory import NormalizerFactory as _NormFact
 
-from siriushla.widgets import SiriusSpinbox, SiriusLabel
+from siriushla.widgets import SiriusSpinbox, SiriusLabel, SiriusFigureCanvas
 from siriushla.as_ti_control import HLTriggerSimple
 
 rcParams['font.size'] = 9
@@ -156,9 +154,9 @@ class EmittanceMeasure(QWidget):
             else:
                 self.line_sigmay.set_xdata(I_meas)
                 self.line_sigmay.set_ydata(np.array(sigma)*1e3)
-            self.plt_sigma.axes.set_xlim(
+            self.plt_sigma.figure.axes[0].set_xlim(
                     [min(I_meas)*(1-DT*10), max(I_meas)*(1+DT*10)])
-            self.plt_sigma.axes.set_ylim(
+            self.plt_sigma.figure.axes[0].set_ylim(
                     [min(sigma)*(1-DT)*1e3, max(sigma)*(1+DT)*1e3])
             self.plt_sigma.figure.canvas.draw()
         self._measuring.set()
@@ -204,8 +202,10 @@ class EmittanceMeasure(QWidget):
                 params.extend(getattr(self, pref + var))
             params = np.array(params)
             plt = getattr(self, 'plt_' + pref)
-            plt.axes.set_xlim([-0.1, params.shape[0]+0.1])
-            plt.axes.set_ylim([params.min()*(1-DT), params.max()*(1+DT)])
+            plt.figure.axes[0].set_xlim(
+                [-0.1, params.shape[0]+0.1])
+            plt.figure.axes[0].set_ylim(
+                [params.min()*(1-DT), params.max()*(1+DT)])
             plt.figure.canvas.draw()
 
     def _get_K1_from_I(self, I_meas):
@@ -264,53 +264,56 @@ class EmittanceMeasure(QWidget):
 
     def _setupUi(self):
         gl = QGridLayout(self)
-        wid = MatplotlibWidget(self)
-        wid.axes.set_xlabel('Index')
-        wid.axes.set_ylabel('Normalized Emit. [mm.mrad]')
-        wid.axes.grid(True)
-        wid.axes.set_aspect('auto')
+        wid = SiriusFigureCanvas(parent=self)
+        axes = wid.figure.add_subplot(111)
+        axes.set_xlabel('Index')
+        axes.set_ylabel('Normalized Emit. [mm.mrad]')
+        axes.grid(True)
+        axes.set_aspect('auto')
         wid.figure.set_tight_layout(True)
-        self.line_nemitx_tm = wid.axes.plot(
+        self.line_nemitx_tm = axes.plot(
             self.nemitx_tm, '-bo', lw=1, label='Hor. Trans. Mat.')[0]
-        self.line_nemitx_parf = wid.axes.plot(
+        self.line_nemitx_parf = axes.plot(
             self.nemitx_parf, '--bd', lw=1, label='Hor. Parab. Fit')[0]
-        self.line_nemity_tm = wid.axes.plot(
+        self.line_nemity_tm = axes.plot(
             self.nemity_tm, '--ro', lw=1, label='Vert. Trans. Mat.')[0]
-        self.line_nemity_parf = wid.axes.plot(
+        self.line_nemity_parf = axes.plot(
             self.nemity_parf, '--rd', lw=1, label='Vert. Parab. Fit')[0]
-        wid.axes.legend(loc='best')
+        axes.legend(loc='best')
         self.plt_nemit = wid
         self.plt_nemit.setStyleSheet('min-width: 25em;')
 
-        wid = MatplotlibWidget(self)
-        wid.axes.set_xlabel('Index')
-        wid.axes.set_ylabel(r'$\beta$ [m]')
-        wid.axes.grid(True)
-        wid.axes.set_aspect('auto')
+        wid = SiriusFigureCanvas(parent=self)
+        axes = wid.figure.add_subplot(111)
+        axes.set_xlabel('Index')
+        axes.set_ylabel(r'$\beta$ [m]')
+        axes.grid(True)
+        axes.set_aspect('auto')
         wid.figure.set_tight_layout(True)
-        self.line_betax_tm = wid.axes.plot(
+        self.line_betax_tm = axes.plot(
             self.betax_tm, '-bo', lw=1, label='Hor. Trans. Mat.')[0]
-        self.line_betax_parf = wid.axes.plot(
+        self.line_betax_parf = axes.plot(
             self.betax_parf, '--bd', lw=1, label='Hor. Parab. Fit')[0]
-        self.line_betay_tm = wid.axes.plot(
+        self.line_betay_tm = axes.plot(
             self.betay_tm, '--ro', lw=1, label='Vert. Trans. Mat.')[0]
-        self.line_betay_parf = wid.axes.plot(
+        self.line_betay_parf = axes.plot(
             self.betay_parf, '--rd', lw=1, label='Vert. Parab. Fit')[0]
         self.plt_beta = wid
 
-        wid = MatplotlibWidget(self)
-        wid.axes.set_xlabel('Index')
-        wid.axes.set_ylabel(r'$\alpha$')
-        wid.axes.grid(True)
-        wid.axes.set_aspect('auto')
+        wid = SiriusFigureCanvas(parent=self)
+        axes = wid.figure.add_subplot(111)
+        axes.set_xlabel('Index')
+        axes.set_ylabel(r'$\alpha$')
+        axes.grid(True)
+        axes.set_aspect('auto')
         wid.figure.set_tight_layout(True)
-        self.line_alphax_tm = wid.axes.plot(
+        self.line_alphax_tm = axes.plot(
             self.alphax_tm, '-bo', lw=1, label='Hor. Trans. Mat.')[0]
-        self.line_alphax_parf = wid.axes.plot(
+        self.line_alphax_parf = axes.plot(
             self.alphax_parf, '--bd', lw=1, label='Hor. Parab. Fit')[0]
-        self.line_alphay_tm = wid.axes.plot(
+        self.line_alphay_tm = axes.plot(
             self.alphay_tm, '--ro', lw=1, label='Vert. Trans. Mat.')[0]
-        self.line_alphay_parf = wid.axes.plot(
+        self.line_alphay_parf = axes.plot(
             self.alphay_parf, '--rd', lw=1, label='Vert. Parab. Fit')[0]
         self.plt_alpha = wid
 
@@ -421,15 +424,16 @@ class EmittanceMeasure(QWidget):
                 setattr(self, 'lb_' + name, lb)
                 gl2.addWidget(lb, i+2, j+1)
 
-        wid = MatplotlibWidget(self)
-        wid.axes.set_xlabel('Quad. Current [A]')
-        wid.axes.set_ylabel('Beam Size [mm]')
-        wid.axes.grid(True)
-        wid.axes.set_aspect('auto')
+        wid = SiriusFigureCanvas(parent=self)
+        axes = wid.figure.add_subplot(111)
+        axes.set_xlabel('Quad. Current [A]')
+        axes.set_ylabel('Beam Size [mm]')
+        axes.grid(True)
+        axes.set_aspect('auto')
         wid.figure.set_tight_layout(True)
-        self.line_sigmax = wid.axes.plot([], 'bo', lw=1, label='Horizontal')[0]
-        self.line_sigmay = wid.axes.plot([], 'ro', lw=1, label='Vertical')[0]
-        self.line_fit = wid.axes.plot([], '-k', lw=1)[0]
+        self.line_sigmax = axes.plot([], 'bo', lw=1, label='Horizontal')[0]
+        self.line_sigmay = axes.plot([], 'ro', lw=1, label='Vertical')[0]
+        self.line_fit = axes.plot([], '-k', lw=1)[0]
         self.plt_sigma = wid
         self.plt_sigma.setStyleSheet('min-width: 25em;')
 
@@ -493,9 +497,9 @@ class EmittanceMeasure(QWidget):
         else:
             self.line_sigmay.set_xdata(self.I_meas)
             self.line_sigmay.set_ydata(np.array(self.sigma)*1e3)
-        self.plt_sigma.axes.set_xlim(
+        self.plt_sigma.figure.axes[0].set_xlim(
                 [min(self.I_meas)*(1-DT*10), max(self.I_meas)*(1+DT*10)])
-        self.plt_sigma.axes.set_ylim(
+        self.plt_sigma.figure.axes[0].set_ylim(
                 [min(self.sigma)*(1-DT)*1e3, max(self.sigma)*(1+DT)*1e3])
         self.plt_sigma.figure.canvas.draw()
 
@@ -591,67 +595,6 @@ def _fit_gaussian(x, y, amp=None, mu=None, sigma=None, y0=None):
         p_opt = (amp, mu, sigma, y0)
         print('Fitting Problem')
     return p_opt
-
-
-class MatplotlibWidget(Canvas):
-    """
-    Options: option_name (default_value)
-    -------
-    parent (None): parent widget
-    title (''): figure title
-    xlabel (''): X-axis label
-    ylabel (''): Y-axis label
-    xlim (None): X-axis limits ([min, max])
-    ylim (None): Y-axis limits ([min, max])
-    xscale ('linear'): X-axis scale
-    yscale ('linear'): Y-axis scale
-    width (4): width in inches
-    height (3): height in inches
-    dpi (100): resolution in dpi
-    hold (False): if False, figure will be cleared each time plot is called
-
-    Widget attributes:
-    -----------------
-    figure: instance of matplotlib.figure.Figure
-    axes: figure axes
-
-    Example:
-    -------
-    self.widget = MatplotlibWidget(self, yscale='log', hold=True)
-    from numpy import linspace
-    x = linspace(-10, 10)
-    self.widget.axes.plot(x, x**2)
-    self.wdiget.axes.plot(x, x**3)
-    """
-
-    def __init__(self, parent=None, title='', xlabel='', ylabel='',
-                 xlim=None, ylim=None, xscale='linear', yscale='linear',
-                 width=4, height=3, dpi=100, hold=False):
-        self.figure = Figure(figsize=(width, height), dpi=dpi)
-        self.axes = self.figure.add_subplot(111)
-        self.axes.set_title(title)
-        self.axes.set_xlabel(xlabel)
-        self.axes.set_ylabel(ylabel)
-        if xscale is not None:
-            self.axes.set_xscale(xscale)
-        if yscale is not None:
-            self.axes.set_yscale(yscale)
-        if xlim is not None:
-            self.axes.set_xlim(*xlim)
-        if ylim is not None:
-            self.axes.set_ylim(*ylim)
-
-        super().__init__(self.figure)
-        self.setParent(parent)
-        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.updateGeometry()
-
-    def sizeHint(self):
-        w, h = self.get_width_height()
-        return QSize(w, h)
-
-    def minimumSizeHint(self):
-        return QSize(10, 10)
 
 
 class ImageView(PyDMImageView):
