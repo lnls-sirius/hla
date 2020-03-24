@@ -61,10 +61,12 @@ class DiffCtrlDevMonitor(QWidget):
         self.lb_descCtrl1 = QLabel(
             '', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.sb_Ctrl1 = PyDMSpinbox(self)
+        self.sb_Ctrl1.showStepExponent = False
         self.lb_Ctrl1 = PyDMLabel(self)
         self.lb_descCtrl2 = QLabel(
             '', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.sb_Ctrl2 = PyDMSpinbox(self)
+        self.sb_Ctrl2.showStepExponent = False
         self.lb_Ctrl2 = PyDMLabel(self)
 
         self.pb_open = PyDMPushButton(
@@ -149,8 +151,8 @@ class DiffCtrlView(QWidget):
         self.setLayout(lay)
 
     def changeEvent(self, event):
-        """Override keyPressEvent."""
+        """Reimplement changeEvent."""
         if event.type() == QEvent.FontChange:
-            self.devh.updateDevWidget()
-            self.devv.updateDevWidget()
+            self.dev_h.updateDevWidget()
+            self.dev_v.updateDevWidget()
         super().changeEvent(event)

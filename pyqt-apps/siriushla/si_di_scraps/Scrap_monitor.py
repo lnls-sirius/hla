@@ -50,6 +50,8 @@ class ScraperMonitoring(DiffCtrlDevMonitor):
 
     def updateDevWidget(self):
         """Update Scraper illustration."""
+        self.style().unpolish(self.dev_widget.widget_draw)
+        self.style().polish(self.dev_widget.widget_draw)
         widget_w = self.dev_widget.widget_draw.width()
         widget_h = self.dev_widget.widget_draw.height()
         vacuum_chamber_d = 36  # mm
@@ -61,16 +63,13 @@ class ScraperMonitoring(DiffCtrlDevMonitor):
             factor = circle_d/vacuum_chamber_d
             xpos = widget_h/2 - self._scrap_pospos*factor
             xneg = widget_h/2 - self._scrap_negpos*factor
+            left = round(xpos - rect_w)
+            right = round(xneg)
 
-            self.dev_widget.PyDMDrawingRectangle_HLeft.resize(
-                rect_w, rect_h)
-            self.dev_widget.PyDMDrawingRectangle_HRight.resize(
-                rect_w, rect_h)
-
-            left = (xpos - rect_w)
-            right = xneg
+            self.dev_widget.PyDMDrawingRectangle_HLeft.resize(rect_w, rect_h)
             self.dev_widget.PyDMDrawingRectangle_HLeft.move(
                 QPoint(left, (widget_h-rect_h)/2))
+            self.dev_widget.PyDMDrawingRectangle_HRight.resize(rect_w, rect_h)
             self.dev_widget.PyDMDrawingRectangle_HRight.move(
                 QPoint(right, (widget_h-rect_h)/2))
 
@@ -81,16 +80,13 @@ class ScraperMonitoring(DiffCtrlDevMonitor):
             factor = circle_d/vacuum_chamber_d
             xpos = widget_h/2 - self._scrap_pospos*factor
             xneg = widget_h/2 - self._scrap_negpos*factor
+            up = round(xpos - rect_h)
+            down = round(xneg)
 
-            self.dev_widget.PyDMDrawingRectangle_VUp.resize(
-                rect_w, rect_h)
-            self.dev_widget.PyDMDrawingRectangle_VDown.resize(
-                rect_w, rect_h)
-
-            up = (xpos - rect_h)
-            down = xneg
+            self.dev_widget.PyDMDrawingRectangle_VUp.resize(rect_w, rect_h)
             self.dev_widget.PyDMDrawingRectangle_VUp.move(
                 QPoint((widget_w-rect_w)/2, up))
+            self.dev_widget.PyDMDrawingRectangle_VDown.resize(rect_w, rect_h)
             self.dev_widget.PyDMDrawingRectangle_VDown.move(
                 QPoint((widget_w-rect_w)/2, down))
 

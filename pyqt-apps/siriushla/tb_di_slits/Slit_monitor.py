@@ -40,6 +40,8 @@ class SlitMonitoring(DiffCtrlDevMonitor):
 
     def updateDevWidget(self):
         """Update Slit illustration."""
+        self.style().unpolish(self.dev_widget.widget_draw)
+        self.style().polish(self.dev_widget.widget_draw)
         widget_w = self.dev_widget.widget_draw.width()
         widget_h = self.dev_widget.widget_draw.height()
         vacuum_chamber_d = 36  # mm
@@ -51,15 +53,13 @@ class SlitMonitoring(DiffCtrlDevMonitor):
             factor = circle_d/vacuum_chamber_d
             xc = (widget_w/2 - self._slit_center*factor)
             xw = self._slit_width*factor
-
-            self.dev_widget.PyDMDrawingRectangle_HLeft.resize(
-                rect_w, rect_h)
-            self.dev_widget.PyDMDrawingRectangle_HRight.resize(
-                rect_w, rect_h)
             left = round(xc - rect_w - xw/2)
             right = round(xc + xw/2)
+
+            self.dev_widget.PyDMDrawingRectangle_HLeft.resize(rect_w, rect_h)
             self.dev_widget.PyDMDrawingRectangle_HLeft.move(
                 QPoint(left, (widget_h-rect_h)/2))
+            self.dev_widget.PyDMDrawingRectangle_HRight.resize(rect_w, rect_h)
             self.dev_widget.PyDMDrawingRectangle_HRight.move(
                 QPoint(right, (widget_h-rect_h)/2))
 
@@ -70,15 +70,13 @@ class SlitMonitoring(DiffCtrlDevMonitor):
             factor = circle_d/vacuum_chamber_d
             xc = (widget_h/2 - self._slit_center*factor)
             xw = self._slit_width*factor
-
-            self.dev_widget.PyDMDrawingRectangle_VUp.resize(
-                rect_w, rect_h)
-            self.dev_widget.PyDMDrawingRectangle_VDown.resize(
-                rect_w, rect_h)
             up = round(xc - rect_h - xw/2)
             down = round(xc + xw/2)
+
+            self.dev_widget.PyDMDrawingRectangle_VUp.resize(rect_w, rect_h)
             self.dev_widget.PyDMDrawingRectangle_VUp.move(
                 QPoint((widget_w-rect_w)/2, up))
+            self.dev_widget.PyDMDrawingRectangle_VDown.resize(rect_w, rect_h)
             self.dev_widget.PyDMDrawingRectangle_VDown.move(
                 QPoint((widget_w-rect_w)/2, down))
 
