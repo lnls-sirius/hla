@@ -415,7 +415,7 @@ class EmittanceMeasure(QWidget):
         gl2.addWidget(QLabel('Hor.', resultsgb), 1, 3)
         gl2.addWidget(QLabel('Vert.', resultsgb), 1, 4)
         gl2.addWidget(QLabel('Norm. emitt.\n[mm.mrad]', resultsgb), 2, 0)
-        gl2.addWidget(QLabel('beta\n[m]', resultsgb), 3, 0)
+        gl2.addWidget(QLabel('beta [m]', resultsgb), 3, 0)
         gl2.addWidget(QLabel('alpha', resultsgb), 4, 0)
         for i, pref in enumerate(('nemit', 'beta', 'alpha')):
             for j, tp in enumerate(('x_tm', 'y_tm', 'x_parf', 'y_parf')):
