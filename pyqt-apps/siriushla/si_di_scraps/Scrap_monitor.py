@@ -54,7 +54,7 @@ class ScraperMonitoring(DiffCtrlDevMonitor):
         self.style().polish(self.dev_widget.widget_draw)
         widget_w = self.dev_widget.widget_draw.width()
         widget_h = self.dev_widget.widget_draw.height()
-        vacuum_chamber_d = 36  # mm
+        vacuum_chamber_d = 24  # mm
 
         if self.orientation == 'H':
             rect_h = widget_h*3/5
