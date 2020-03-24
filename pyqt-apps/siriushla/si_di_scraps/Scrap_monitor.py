@@ -94,6 +94,10 @@ class ScraperMonitoring(DiffCtrlDevMonitor):
         self.dev_widget.PyDMDrawingCircle.move(QPoint(
             (widget_w-circle_d)/2, (widget_h-circle_d)/2))
 
+        axis_w = self.dev_widget.axis.width()
+        axis_h = self.dev_widget.axis.height()
+        self.dev_widget.axis.move(QPoint((widget_w-axis_w), (widget_h-axis_h)))
+
     def channels(self):
         """Return channels."""
         return [self.conn_scrap_pospos, self.conn_scrap_negpos]

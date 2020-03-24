@@ -227,95 +227,105 @@ height:3em;</string>
        </brush>
       </property>
      </widget>
-     <widget class="PyDMDrawingTriangle" name="PyDMDrawingTriangle_2">
-      <property name="geometry">
-       <rect>
-        <x>140</x>
-        <y>120</y>
-        <width>10</width>
-        <height>10</height>
-       </rect>
-      </property>
-      <property name="toolTip">
-       <string/>
-      </property>
-      <property name="rotation" stdset="0">
-       <double>-45.000000000000000</double>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label">
-      <property name="geometry">
-       <rect>
-        <x>150</x>
-        <y>120</y>
-        <width>16</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>y</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_2">
+     <widget class="QWidget" name="axis" native="true">
       <property name="geometry">
        <rect>
         <x>120</x>
-        <y>150</y>
-        <width>16</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>x</string>
-      </property>
-     </widget>
-     <widget class="PyDMDrawingLine" name="PyDMDrawingLine">
-      <property name="geometry">
-       <rect>
-        <x>120</x>
-        <y>130</y>
-        <width>31</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="toolTip">
-       <string/>
-      </property>
-      <property name="rotation" stdset="0">
-       <double>45.000000000000000</double>
-      </property>
-     </widget>
-     <widget class="PyDMDrawingLine" name="PyDMDrawingLine_2">
-      <property name="geometry">
-       <rect>
-        <x>130</x>
         <y>120</y>
-        <width>31</width>
-        <height>31</height>
+        <width>51</width>
+        <height>51</height>
        </rect>
       </property>
-      <property name="toolTip">
-       <string/>
-      </property>
-      <property name="rotation" stdset="0">
-       <double>135.000000000000000</double>
-      </property>
-     </widget>
-     <widget class="PyDMDrawingTriangle" name="PyDMDrawingTriangle">
-      <property name="geometry">
-       <rect>
-        <x>120</x>
-        <y>140</y>
-        <width>10</width>
-        <height>10</height>
-       </rect>
-      </property>
-      <property name="toolTip">
-       <string/>
-      </property>
-      <property name="rotation" stdset="0">
-       <double>45.000000000000000</double>
-      </property>
+      <widget class="PyDMDrawingLine" name="axisX">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>10</y>
+         <width>31</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="rotation" stdset="0">
+        <double>45.000000000000000</double>
+       </property>
+      </widget>
+      <widget class="PyDMDrawingTriangle" name="arrowY">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>0</y>
+         <width>10</width>
+         <height>10</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="rotation" stdset="0">
+        <double>-45.000000000000000</double>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_axisX">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>30</y>
+         <width>16</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>x</string>
+       </property>
+      </widget>
+      <widget class="PyDMDrawingLine" name="axisY">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>0</y>
+         <width>31</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="rotation" stdset="0">
+        <double>135.000000000000000</double>
+       </property>
+      </widget>
+      <widget class="PyDMDrawingTriangle" name="arrowX">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>20</y>
+         <width>10</width>
+         <height>10</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="rotation" stdset="0">
+        <double>45.000000000000000</double>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_axisY">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>0</y>
+         <width>16</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>y</string>
+       </property>
+      </widget>
      </widget>
     </widget>
    </item>
