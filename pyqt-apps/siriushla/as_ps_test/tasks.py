@@ -4,7 +4,7 @@ from epics import PV as _PV
 from qtpy.QtCore import Signal, QThread
 from siriuspy.search import HLTimeSearch as _HLTimeSearch, \
     PSSearch as _PSSearch
-from siriuspy.csdevice.util import Const
+from siriuspy.csdev import Const
 from siriuspy.namesys import Filter, SiriusPVName as _PVName
 from .conn import TesterDCLink, TesterDCLinkFBP, TesterPS, TesterPSLinac
 
