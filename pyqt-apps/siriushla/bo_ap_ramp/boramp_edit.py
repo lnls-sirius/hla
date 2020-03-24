@@ -25,7 +25,7 @@ from siriuspy.ramp.magnet import get_magnet as _get_magnet
 from siriuspy.ramp.conn import ConnSOFB as _ConnSOFB
 from siriuspy.namesys import SiriusPVName as _PVName
 
-from siriushla.widgets import SiriusFigureCanvas
+from siriushla.widgets import MatplotlibWidget
 from siriushla.bo_ap_ramp.auxiliary_dialogs import \
     InsertNormalizedConfig as _InsertNormConfig, \
     DeleteNormalizedConfig as _DeleteNormConfig, \
@@ -177,7 +177,7 @@ class DipoleRamp(QWidget):
         lay.addWidget(self.bt_apply, alignment=Qt.AlignRight)
 
     def _setupGraph(self):
-        self.graph = SiriusFigureCanvas(Figure())
+        self.graph = MatplotlibWidget(Figure())
         self.graph.setObjectName('DipoleGraph')
         self.graph.setStyleSheet("""
             #DipoleGraph{min-width:30em;min-height:18em;max-height:18em;}""")
@@ -864,7 +864,7 @@ class MultipolesRamp(QWidget):
         lay.addWidget(self.bt_apply, alignment=Qt.AlignRight)
 
     def _setupGraph(self):
-        self.graph = SiriusFigureCanvas(Figure())
+        self.graph = MatplotlibWidget(Figure())
         self.graph.setObjectName('MultipolesGraph')
         self.graph.setStyleSheet("""
             #MultipolesGraph{
@@ -1502,7 +1502,7 @@ class RFRamp(QWidget):
         lay.addWidget(self.bt_apply, alignment=Qt.AlignRight)
 
     def _setupGraph(self):
-        self.graph = SiriusFigureCanvas(Figure())
+        self.graph = MatplotlibWidget(Figure())
         self.graph.setObjectName('RFGraph')
         self.graph.setStyleSheet(
             '#RFGraph{min-width:30em;min-height:18em;max-height:18em;}')
