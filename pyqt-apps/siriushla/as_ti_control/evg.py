@@ -8,7 +8,7 @@ import qtawesome as qta
 
 from pydm.widgets import PyDMLabel, PyDMLineEdit, PyDMPushButton
 from siriuspy.search import LLTimeSearch
-from siriuspy.csdevice import timesys as _cstime
+from siriuspy.timesys import csdev as _cstime
 from siriushla.util import connect_window, get_appropriate_color
 from siriushla.widgets import PyDMLed, SiriusLedAlert, PyDMStateButton, \
     SiriusLabel
