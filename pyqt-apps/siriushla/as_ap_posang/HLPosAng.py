@@ -10,7 +10,7 @@ from qtpy.QtCore import Qt
 import qtawesome as qta
 
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
-from siriuspy.csdevice.posang import Const
+from siriuspy.posang.csdev import Const
 from siriuspy.namesys import SiriusPVName as _PVName
 
 from pydm.widgets import PyDMWaveformTable, PyDMLabel, PyDMLineEdit, \

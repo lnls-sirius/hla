@@ -10,7 +10,7 @@ from pydm.widgets import PyDMEnumComboBox, PyDMLabel, PyDMLineEdit, \
     PyDMWaveformTable
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
-from siriuspy.csdevice.opticscorr import Const as _Const
+from siriuspy.opticscorr.csdev import Const as _Const
 from siriushla import util as _hlautil
 from siriushla.widgets import PyDMStateButton
 from siriushla.widgets.windows import SiriusMainWindow
