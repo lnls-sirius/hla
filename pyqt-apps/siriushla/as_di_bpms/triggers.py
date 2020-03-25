@@ -1,7 +1,7 @@
 from qtpy.QtWidgets import QHBoxLayout, QGridLayout, QLabel, QFormLayout
 from qtpy.QtCore import Qt
 from pydm.widgets import PyDMPushButton, PyDMEnumComboBox
-from siriuspy.diag.bpm import csdev as csbpms
+from siriuspy.diag.bpm.csdev import Const as _csbpm
 from siriushla.widgets import SiriusLabel, SiriusSpinbox
 from siriushla.as_di_bpms.base import BaseWidget, CustomGroupBox
 
@@ -24,7 +24,7 @@ class PhysicalTriggers(BaseWidget):
 
     def get_trigger_groupbox(self, idx):
         trig = 'TRIGGER{0:d}'.format(idx)
-        name = trig + ': ' + csbpms.TrigExtern._fields[idx]
+        name = trig + ': ' + _csbpm.TrigExtern._fields[idx]
         grpbx = CustomGroupBox(name, self)
         fbl = QFormLayout(grpbx)
 
@@ -147,7 +147,7 @@ class LogicalTriggers(BaseWidget):
         fbl.addRow(lab, hbl)
         name = 'Receiver'
         if not self.trig_tp:
-            tname = csbpms.LogTrigIntern._fields[idx]
+            tname = _csbpm.LogTrigIntern._fields[idx]
             if not tname.startswith('Unconn'):
                 name += ': ' + tname
         lab = QLabel(name, grpbx)
