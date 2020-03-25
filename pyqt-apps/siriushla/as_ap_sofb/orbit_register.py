@@ -10,7 +10,7 @@ from qtpy.QtCore import Signal, Qt
 from qtpy.QtGui import QDoubleValidator
 import qtawesome as qta
 
-from siriuspy.csdevice.orbitcorr import SOFBFactory
+from siriuspy.sofb.csdev import SOFBFactory
 from siriuspy.clientconfigdb import ConfigDBClient, ConfigDBException
 from siriushla.as_ap_configdb import LoadConfigDialog, SaveConfigDialog
 from siriushla.widgets import SiriusConnectionSignal

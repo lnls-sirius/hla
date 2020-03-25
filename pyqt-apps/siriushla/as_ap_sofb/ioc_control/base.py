@@ -7,7 +7,7 @@ from qtpy.QtWidgets import QWidget, QHBoxLayout, QSizePolicy, QComboBox
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox
 from pydm.widgets.base import PyDMPrimitiveWidget
 from siriuspy.namesys import SiriusPVName as _PVName
-from siriuspy.csdevice.orbitcorr import SOFBFactory
+from siriuspy.sofb.csdev import SOFBFactory
 from siriuspy.clientconfigdb import ConfigDBClient
 from siriushla.widgets import SiriusSpinbox, PyDMStateButton, SiriusLedState
 from siriushla.as_ap_configdb import LoadConfigDialog

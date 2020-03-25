@@ -7,7 +7,7 @@ from qtpy.QtWidgets import QLabel, QWidget, QAbstractItemView, QMessageBox, \
     QTableWidget, QTableWidgetItem, QRadioButton, QDoubleSpinBox, \
     QSpinBox, QSpacerItem, QTabWidget, QHeaderView, QSizePolicy as QSzPlcy
 
-from siriuspy.csdevice.orbitcorr import SOFBFactory
+from siriuspy.sofb.csdev import SOFBFactory
 from siriuspy.clientconfigdb import ConfigDBClient as _ConfigDBClient, \
     ConfigDBException as _ConfigDBException
 from siriuspy.search import PSSearch

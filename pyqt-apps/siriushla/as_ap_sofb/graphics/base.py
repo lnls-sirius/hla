@@ -14,7 +14,7 @@ import qtawesome as qta
 
 from pydm.widgets import PyDMWaveformPlot
 from siriushla.widgets import SiriusConnectionSignal
-from siriuspy.csdevice.orbitcorr import SOFBFactory
+from siriuspy.sofb.csdev import SOFBFactory
 
 
 class BaseWidget(QWidget):
