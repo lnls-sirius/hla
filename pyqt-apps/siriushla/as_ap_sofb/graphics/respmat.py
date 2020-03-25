@@ -8,7 +8,7 @@ from qtpy.QtWidgets import QWidget, QLabel, QVBoxLayout, QHBoxLayout, \
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
 from siriuspy.namesys import SiriusPVName as _PVName
-from siriuspy.csdevice.orbitcorr import SOFBFactory
+from siriuspy.sofb.csdev import SOFBFactory
 from siriushla.widgets import SiriusConnectionSignal
 from .base import Graph, InfLine
 

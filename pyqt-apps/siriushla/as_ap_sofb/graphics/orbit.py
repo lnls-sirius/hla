@@ -7,7 +7,7 @@ from qtpy.QtWidgets import QWidget, QLabel, QVBoxLayout, QPushButton, \
     QHBoxLayout, QGroupBox, QComboBox, QToolTip, QGridLayout
 from qtpy.QtCore import Qt, Signal
 from siriuspy.namesys import SiriusPVName as _PVName
-from siriuspy.csdevice.orbitcorr import SOFBFactory
+from siriuspy.sofb.csdev import SOFBFactory
 import siriushla.util as _util
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets import SiriusSpectrogramView, SiriusConnectionSignal, \

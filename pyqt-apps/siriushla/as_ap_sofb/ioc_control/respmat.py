@@ -10,7 +10,7 @@ from qtpy.QtCore import Qt
 import qtawesome as qta
 
 from pydm.widgets import PyDMLabel, PyDMPushButton, PyDMCheckbox
-from siriuspy.csdevice.orbitcorr import ConstTLines
+from siriuspy.sofb.csdev import ConstTLines
 from siriuspy.clientconfigdb import ConfigDBClient, ConfigDBException
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets import SiriusLedState, SiriusConnectionSignal

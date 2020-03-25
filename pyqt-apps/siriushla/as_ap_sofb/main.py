@@ -6,7 +6,7 @@ from qtpy.QtWidgets import QWidget, QDockWidget, QSizePolicy, QVBoxLayout, \
 import qtawesome as qta
 
 from siriuspy.envars import VACA_PREFIX as LL_PREF
-from siriuspy.csdevice.orbitcorr import SOFBFactory
+from siriuspy.sofb.csdev import SOFBFactory
 from siriushla import util
 from siriushla.widgets import SiriusMainWindow
 from siriushla.widgets import PyDMLogLabel
