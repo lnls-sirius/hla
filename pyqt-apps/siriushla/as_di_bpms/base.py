@@ -7,11 +7,11 @@ from qtpy.QtGui import QColor
 from pydm.widgets import PyDMWaveformPlot, PyDMTimePlot, PyDMEnumComboBox
 from pydm.widgets.base import PyDMPrimitiveWidget
 from siriuspy.namesys import SiriusPVName as _PVName
-from siriuspy.csdevice.bpms import get_bpm_database
+from siriuspy.diag.bpm.csdev import Const as _csbpm
 from siriushla.widgets import SiriusConnectionSignal, SiriusLabel, \
     SiriusSpinbox
 
-_BPMDB = get_bpm_database()
+_BPMDB = _csbpm.get_bpm_database()
 
 
 class BaseWidget(QWidget):
