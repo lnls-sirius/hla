@@ -10,8 +10,8 @@ import qtawesome as qta
 from siriuspy.ramp import ramp
 from siriuspy.ramp.conn import ConnPS as _ConnPS, ConnRF as _ConnRF,\
     ConnTI as _ConnTI
-from siriuspy.csdevice.pwrsupply import Const as _PSc
-from siriuspy.csdevice.timesys import Const as _TIc
+from siriuspy.pwrsupply.csdev import Const as _PSc
+from siriuspy.timesys.csdev import Const as _TIc
 
 from siriushla.widgets import PyDMLedMultiChannel, PyDMLedMultiConnection
 from siriushla.widgets.dialog import ProgressDialog

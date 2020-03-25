@@ -10,7 +10,7 @@ import qtawesome as qta
 from pydm.widgets import PyDMLabel
 from pydm.widgets.base import PyDMWritableWidget
 from siriuspy.search import HLTimeSearch
-from siriuspy.csdevice import timesys
+from siriuspy.timesys import csdev as _cstime
 
 from siriushla.util import connect_window, get_appropriate_color
 from siriushla.widgets import PyDMLed, SiriusLedAlert, PyDMStateButton, \
@@ -104,7 +104,7 @@ class HLTriggerDetailed(BaseWidget):
         status_layout = QFormLayout(self.status_wid)
         status_layout.setHorizontalSpacing(20)
         status_layout.setVerticalSpacing(20)
-        for bit, label in enumerate(timesys.Const.HLTrigStatusLabels):
+        for bit, label in enumerate(_cstime.Const.HLTrigStatusLabels):
             led = SiriusLedAlert(
                     self, self.prefix.substitute(propty='Status-Mon'), bit)
             lab = QLabel(label, self)

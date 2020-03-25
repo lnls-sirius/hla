@@ -7,7 +7,7 @@ from qtpy.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, \
 import qtawesome as qta
 
 from pydm.widgets import PyDMPushButton, PyDMLabel
-from siriuspy.csdevice import timesys as _cstime
+from siriuspy.timesys import csdev as _cstime
 from siriuspy.search import LLTimeSearch, HLTimeSearch
 from siriushla.util import connect_window, get_appropriate_color, \
     connect_newprocess

@@ -5,7 +5,7 @@ from epics import PV as _PV
 
 from siriuspy.envars import VACA_PREFIX as VACA_PREFIX
 from siriuspy.search import PSSearch
-from siriuspy.csdevice.pwrsupply import Const as _PSC
+from siriuspy.pwrsupply.csdev import Const as _PSC
 
 
 DEFAULT_CAP_BANK_VOLT = {

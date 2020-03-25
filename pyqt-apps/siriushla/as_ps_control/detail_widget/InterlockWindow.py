@@ -6,8 +6,8 @@ from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QGridLayout, \
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.search import PSSearch
-from siriuspy.csdevice.pwrsupply import ETypes as _et
-from siriuspy.csdevice.pwrsupply import get_ps_propty_database
+from siriuspy.pwrsupply.csdev import ETypes as _et
+from siriuspy.pwrsupply.csdev import get_ps_propty_database
 from siriushla.widgets import SiriusMainWindow, SiriusLedAlert, PyDMLed
 
 
