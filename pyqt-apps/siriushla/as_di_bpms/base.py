@@ -7,7 +7,7 @@ from qtpy.QtGui import QColor
 from pydm.widgets import PyDMWaveformPlot, PyDMTimePlot, PyDMEnumComboBox
 from pydm.widgets.base import PyDMPrimitiveWidget
 from siriuspy.namesys import SiriusPVName as _PVName
-from siriuspy.csdevice.bpms import get_bpm_database
+from siriuspy.diag.bpm.csdev import get_bpm_database
 from siriushla.widgets import SiriusConnectionSignal, SiriusLabel, \
     SiriusSpinbox
 
