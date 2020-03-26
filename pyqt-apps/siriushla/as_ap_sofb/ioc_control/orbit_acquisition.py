@@ -139,6 +139,9 @@ class AcqControlWidget(BaseWidget):
     def _get_acq_commom_params_grpbx(self):
         grp_bx = QGroupBox('Common Parameters', self)
         fbl = QFormLayout(grp_bx)
+        lbl = QLabel('Non-linear Corr.', grp_bx, alignment=Qt.AlignCenter)
+        wid = self.create_pair_butled(grp_bx, 'PolyCalibration')
+        fbl.addRow(lbl, wid)
         lbl = QLabel('Channel Rate', grp_bx, alignment=Qt.AlignCenter)
         wid = self.create_pair_sel(grp_bx, 'TrigAcqChan')
         fbl.addRow(lbl, wid)
@@ -146,7 +149,7 @@ class AcqControlWidget(BaseWidget):
         wid = self.create_pair_sel(grp_bx, 'TrigAcqTrigger')
         fbl.addRow(lbl, wid)
         lbl = QLabel('Repeat', grp_bx, alignment=Qt.AlignCenter)
-        wid = self.create_pair_sel(grp_bx, 'TrigAcqRepeat')
+        wid = self.create_pair_butled(grp_bx, 'TrigAcqRepeat')
         fbl.addRow(lbl, wid)
         if self.isring:
             lbl = QLabel('Nr of Shots', grp_bx, alignment=Qt.AlignCenter)
@@ -273,10 +276,10 @@ class AcqControlWidget(BaseWidget):
         pdm_lbl.setAlignment(Qt.AlignCenter)
         fbl.addRow(lbl, pdm_lbl)
         lbl = QLabel('TbT Sync', grp_bx, alignment=Qt.AlignCenter)
-        wid = self.create_pair_sel(grp_bx, 'MTurnSyncTim')
+        wid = self.create_pair_butled(grp_bx, 'MTurnSyncTim')
         fbl.addRow(lbl, wid)
         lbl = QLabel('TbT Mask', grp_bx, alignment=Qt.AlignCenter)
-        wid = self.create_pair_sel(grp_bx, 'MTurnUseMask')
+        wid = self.create_pair_butled(grp_bx, 'MTurnUseMask')
         fbl.addRow(lbl, wid)
         lbl = QLabel('Mask Begin', grp_bx, alignment=Qt.AlignCenter)
         wid = self.create_pair(grp_bx, 'MTurnMaskSplBeg')
@@ -313,7 +316,7 @@ class AcqControlWidget(BaseWidget):
         lbl = QLabel('BG acq.:', grp_bx, alignment=Qt.AlignCenter)
         fbl.addRow(lbl, wid)
         lbl = QLabel('Use BG', grp_bx, alignment=Qt.AlignCenter)
-        wid = self.create_pair_sel(grp_bx, 'SPassUseBg')
+        wid = self.create_pair_butled(grp_bx, 'SPassUseBg')
         fbl.addRow(lbl, wid)
         return grp_bx
 
