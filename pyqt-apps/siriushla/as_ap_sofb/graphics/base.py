@@ -415,8 +415,8 @@ class UpdateGraph(QObject):
                 'x': _part(self._update_vectors, 'ref', 'x'),
                 'y': _part(self._update_vectors, 'ref', 'y')}}
         nbpms = self._csorb.NR_BPMS * self._csorb.MAX_RINGSZ
-        szx = nbpms if self.is_orb else self._csorb.NR_CH
-        szy = nbpms if self.is_orb else self._csorb.NR_CV
+        szx = nbpms if self.is_orb else self._csorb.nr_ch
+        szy = nbpms if self.is_orb else self._csorb.nr_cv
         self.vectors = {
             'val': {
                 'x': _np.zeros(szx, dtype=float),

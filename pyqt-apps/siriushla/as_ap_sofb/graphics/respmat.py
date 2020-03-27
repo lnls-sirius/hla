@@ -57,9 +57,9 @@ class ShowMatrixWidget(QWidget):
         graph.setLabel('left', text='Matrix', units='m/rad')
         for i in range(self._csorb.NR_CORRS):
             color = 'blue'
-            if i >= self._csorb.NR_CH:
+            if i >= self._csorb.nr_ch:
                 color = 'red'
-            if i >= self._csorb.NR_CH+self._csorb.NR_CV:
+            if i >= self._csorb.nr_ch+self._csorb.nr_cv:
                 color = 'black'
             opts = dict(
                 y_channel='',
