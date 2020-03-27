@@ -76,11 +76,11 @@ class ShowMatrixWidget(QWidget):
         self.graph = graph
 
     def _show_tooltip(self, pos):
-        names = self._csorb.BPM_NICKNAMES
-        cname = self._csorb.CH_NICKNAMES + self._csorb.CV_NICKNAMES
+        names = self._csorb.bpm_nicknames
+        cname = self._csorb.ch_nicknames + self._csorb.cv_nicknames
         if self._csorb.acc == 'SI':
             cname += ['RF', ]
-        posi = self._csorb.BPM_POS
+        posi = self._csorb.bpm_pos
         unit = 'count'
 
         graph = self.graph
@@ -113,7 +113,7 @@ class ShowMatrixWidget(QWidget):
         val = self.rsize.getvalue()
         if val is None:
             val = 1
-        bpm_pos = _np.array(self._csorb.BPM_POS)
+        bpm_pos = _np.array(self._csorb.bpm_pos)
         bpm_pos = [bpm_pos + i*self._csorb.C0 for i in range(2*val)]
         bpm_pos = _np.hstack(bpm_pos)
         for i in range(self._csorb.NR_CORRS):

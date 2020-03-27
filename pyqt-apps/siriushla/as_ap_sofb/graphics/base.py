@@ -265,15 +265,15 @@ class BaseWidget(QWidget):
     def _show_tooltip(self, pos, pln='x'):
         unit = 'rad'
         if self.is_orb:
-            names = self._csorb.BPM_NICKNAMES
-            posi = self._csorb.BPM_POS
+            names = self._csorb.bpm_nicknames
+            posi = self._csorb.bpm_pos
             unit = 'm'
         elif pln == 'x':
-            names = self._csorb.CH_NICKNAMES
-            posi = self._csorb.CH_POS
+            names = self._csorb.ch_nicknames
+            posi = self._csorb.ch_pos
         else:
-            names = self._csorb.CV_NICKNAMES
-            posi = self._csorb.CV_POS
+            names = self._csorb.cv_nicknames
+            posi = self._csorb.cv_pos
 
         graph = self.graph[pln]
         curve = graph.curveAtIndex(0)
@@ -333,11 +333,11 @@ class BaseWidget(QWidget):
             trc.opts['symbolSize'] = sizes
 
     def _update_waveform(self, curve, plane, idx, data):
-        bpm_pos = self._csorb.BPM_POS
+        bpm_pos = self._csorb.bpm_pos
         if not self.is_orb and plane == 'x':
-            bpm_pos = self._csorb.CH_POS
+            bpm_pos = self._csorb.ch_pos
         elif not self.is_orb and plane == 'y':
-            bpm_pos = self._csorb.CV_POS
+            bpm_pos = self._csorb.cv_pos
         bpm_pos = _np.array(bpm_pos)
 
         enbl = self.enbl_pvs[plane].value

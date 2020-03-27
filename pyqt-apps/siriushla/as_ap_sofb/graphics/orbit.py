@@ -329,8 +329,8 @@ class SinglePassSumWidget(QWidget):
         self.graph = graph
 
     def _show_tooltip(self, pos):
-        names = self._csorb.BPM_NICKNAMES
-        posi = self._csorb.BPM_POS
+        names = self._csorb.bpm_nicknames
+        posi = self._csorb.bpm_pos
         unit = 'count'
 
         graph = self.graph

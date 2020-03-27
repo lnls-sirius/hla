@@ -150,7 +150,7 @@ class MainWindow(SiriusMainWindow):
         actbpm = QAction('Show BPM List', menubar)
         Window = create_window_from_widget(SelectBPMs, title='BPM List')
         util.connect_window(
-            actbpm, Window, self, bpm_list=self._csorb.BPM_NAMES)
+            actbpm, Window, self, bpm_list=self._csorb.bpm_names)
         menubar.addAction(actbpm)
 
         statusbar = QStatusBar(self)

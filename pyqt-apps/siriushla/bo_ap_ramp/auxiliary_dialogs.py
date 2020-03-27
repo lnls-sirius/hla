@@ -605,9 +605,9 @@ class ShowCorrectorKicks(SiriusDialog):
                           alignment=Qt.AlignCenter)
         self.graph_ch = _GraphKicks(
             parent=self,
-            xdata=_np.array(self.consts.CH_POS),
+            xdata=_np.array(self.consts.ch_pos),
             ydata=self.kicks['CH'],
-            tooltip_names=self.consts.CH_NICKNAMES,
+            tooltip_names=self.consts.ch_nicknames,
             c0=self.consts.C0,
             color='blue')
 
@@ -615,9 +615,9 @@ class ShowCorrectorKicks(SiriusDialog):
                           alignment=Qt.AlignCenter)
         self.graph_cv = _GraphKicks(
             parent=self,
-            xdata=_np.array(self.consts.CV_POS),
+            xdata=_np.array(self.consts.cv_pos),
             ydata=self.kicks['CV'],
-            tooltip_names=self.consts.CV_NICKNAMES,
+            tooltip_names=self.consts.cv_nicknames,
             c0=self.consts.C0,
             color='red')
 
