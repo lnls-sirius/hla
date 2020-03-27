@@ -85,8 +85,8 @@ class BaseCombo(QComboBox, PyDMPrimitiveWidget):
         self._config_type = acc.lower() + '_orbit'
         self._client = ConfigDBClient(config_type=self._config_type)
         self.orbits = {
-            'x': _np.zeros(self._csorb.NR_BPMS, dtype=float),
-            'y': _np.zeros(self._csorb.NR_BPMS, dtype=float)}
+            'x': _np.zeros(self._csorb.nr_bpms, dtype=float),
+            'y': _np.zeros(self._csorb.nr_bpms, dtype=float)}
         self.signals_to_watch = dict()
         self.slots = {
             'x': _part(self._watch_if_changed, 'x'),

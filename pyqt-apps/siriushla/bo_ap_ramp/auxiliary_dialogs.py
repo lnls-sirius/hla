@@ -608,7 +608,7 @@ class ShowCorrectorKicks(SiriusDialog):
             xdata=_np.array(self.consts.ch_pos),
             ydata=self.kicks['CH'],
             tooltip_names=self.consts.ch_nicknames,
-            c0=self.consts.C0,
+            c0=self.consts.circum,
             color='blue')
 
         label_cv = QLabel('<h3>Vertical</h3>', self,
@@ -618,7 +618,7 @@ class ShowCorrectorKicks(SiriusDialog):
             xdata=_np.array(self.consts.cv_pos),
             ydata=self.kicks['CV'],
             tooltip_names=self.consts.cv_nicknames,
-            c0=self.consts.C0,
+            c0=self.consts.circum,
             color='red')
 
         lb_stats = QLabel('<h4>Statistics: </h4>', self,

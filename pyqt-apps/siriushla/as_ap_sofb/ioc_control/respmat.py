@@ -31,7 +31,7 @@ class RespMatWidget(BaseWidget):
         self.setupui()
         self._config_type = acc.lower() + '_orbcorr_respm'
         self._client = ConfigDBClient(config_type=self._config_type)
-        self.EXT = self._csorb.RESPMAT_FILENAME.split('.')[1]
+        self.EXT = self._csorb.respmat_fname.split('.')[1]
         self.EXT_FLT = 'RespMat Files (*.{})'.format(self.EXT)
         self.last_dir = self.DEFAULT_DIR
 
@@ -232,7 +232,7 @@ class RespMatWidget(BaseWidget):
             return
         fname += '' if fname.endswith(self.EXT) else ('.' + self.EXT)
         respm = self._respmat_rb.getvalue()
-        respm = respm.reshape(-1, self._csorb.NR_CORRS)
+        respm = respm.reshape(-1, self._csorb.nr_corrs)
         _np.savetxt(fname, respm, header=header)
 
     def _load_respmat_from_file(self):
@@ -264,7 +264,7 @@ class RespMatWidget(BaseWidget):
 
     def _save_respm(self, confname):
         val = self._respmat_rb.getvalue()
-        val = val.reshape(-1, self._csorb.NR_CORRS)
+        val = val.reshape(-1, self._csorb.nr_corrs)
         try:
             self._client.insert_config(confname, val.tolist())
         except (ConfigDBException, TypeError) as err:

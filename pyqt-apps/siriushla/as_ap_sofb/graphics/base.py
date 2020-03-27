@@ -279,7 +279,7 @@ class BaseWidget(QWidget):
         curve = graph.curveAtIndex(0)
         posx = curve.scatter.mapFromScene(pos).x()
         if self._csorb.isring:
-            posx = posx % self._csorb.C0
+            posx = posx % self._csorb.circum
         ind = _np.argmin(_np.abs(_np.array(posi)-posx))
         posy = curve.scatter.mapFromScene(pos).y()
 
@@ -346,7 +346,7 @@ class BaseWidget(QWidget):
             self._update_enable_list(plane, enbl[:sz], curve, idx)
             nring = sz // bpm_pos.size
             if nring > 1:
-                bpm_pos = [bpm_pos + i*self._csorb.C0 for i in range(nring)]
+                bpm_pos = [bpm_pos + i*self._csorb.circum for i in range(nring)]
                 bpm_pos = _np.hstack(bpm_pos)
             curve.receiveXWaveform(bpm_pos)
             curve.receiveYWaveform(data[:sz])
@@ -414,7 +414,7 @@ class UpdateGraph(QObject):
             'ref': {
                 'x': _part(self._update_vectors, 'ref', 'x'),
                 'y': _part(self._update_vectors, 'ref', 'y')}}
-        nbpms = self._csorb.NR_BPMS * self._csorb.MAX_RINGSZ
+        nbpms = self._csorb.nr_bpms * self._csorb.MAX_RINGSZ
         szx = nbpms if self.is_orb else self._csorb.nr_ch
         szy = nbpms if self.is_orb else self._csorb.nr_cv
         self.vectors = {

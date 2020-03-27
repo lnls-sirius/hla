@@ -122,7 +122,7 @@ class SingleSelMatrix(BaseWidget):
         self.dev = dev
         max_rz = self._csorb.MAX_RINGSZ
         bpms = np.array(self._csorb.bpm_pos)
-        bpm_pos = [bpms + i*self._csorb.C0 for i in range(max_rz)]
+        bpm_pos = [bpms + i*self._csorb.circum for i in range(max_rz)]
         bpm_pos = np.hstack(bpm_pos)
         bpm_name = self._csorb.bpm_names * max_rz
         bpm_nknm = self._csorb.bpm_nicknames * max_rz

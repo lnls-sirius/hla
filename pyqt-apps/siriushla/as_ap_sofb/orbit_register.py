@@ -124,8 +124,8 @@ class OrbitRegister(QWidget):
         self._orbits = orbits
         self.last_dir = self.DEFAULT_DIR
         self.filename = ''
-        self._orbx = _np.zeros(self._csorb.NR_BPMS)
-        self._orby = _np.zeros(self._csorb.NR_BPMS)
+        self._orbx = _np.zeros(self._csorb.nr_bpms)
+        self._orby = _np.zeros(self._csorb.nr_bpms)
 
         self.new_string_signal.emit(self.string_status)
 
@@ -279,7 +279,7 @@ class OrbitRegister(QWidget):
             self._update_and_emit(
                 'Error: PV {0:s} not connected.'.format(pvm.pvname))
         val = pvm.getvalue()
-        orbs = val.reshape(-1, self._csorb.NR_CORRS)[:, idx]
+        orbs = val.reshape(-1, self._csorb.nr_corrs)[:, idx]
         orbx = orbs[:len(orbs)//2] * kick
         orby = orbs[len(orbs)//2:] * kick
         self._update_and_emit(
