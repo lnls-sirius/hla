@@ -70,19 +70,19 @@ class BOMonitor(SiriusMainWindow):
                 self._update_charges)
 
             self.timeplot.addYChannel('Charge'+e, color=colors[i], lineWidth=2)
-
-            data = self._get_value_from_arch(pvname)
-            buff = np.zeros((2, 2*timespan), order='f', dtype=float)
-            buff[0, (2*timespan-len(data[0])):] = data[0]
-            buff[1, (2*timespan-len(data[0])):] = data[1]
-            nrpts = len(data[0])
             curve = self.timeplot.curveAtIndex(-1)
-            curve.data_buffer = buff
-            curve.points_accumulated = nrpts
-            curve._min_y_value = min(data[1])
-            curve._max_y_value = max(data[1])
-            curve.latest_value = data[1][-1]
             self._curves[e] = curve
+            data = self._get_value_from_arch(pvname)
+            if data:
+                buff = np.zeros((2, 2*timespan), order='f', dtype=float)
+                buff[0, (2*timespan-len(data[0])):] = data[0]
+                buff[1, (2*timespan-len(data[0])):] = data[1]
+                nrpts = len(data[0])
+                curve.data_buffer = buff
+                curve.points_accumulated = nrpts
+                curve._min_y_value = min(data[1])
+                curve._max_y_value = max(data[1])
+                curve.latest_value = data[1][-1]
 
             cb = QCheckBox(e)
             cb.setChecked(True)
@@ -118,7 +118,10 @@ class BOMonitor(SiriusMainWindow):
         t0 = t1 - _timedelta(hours=6)
         t0_str = t0.isoformat() + '-03:00'
         t1_str = t1.isoformat() + '-03:00'
-        timestamp, value, _, _ = carch.getData(pvname, t0_str, t1_str)
+        data = carch.getData(pvname, t0_str, t1_str)
+        if not data:
+            return
+        timestamp, value, _, _ = data
         # ignore first sample
         if len(value) > 1:
             timestamp[0] = t0.timestamp()
