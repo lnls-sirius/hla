@@ -329,15 +329,15 @@ class SinglePassSumWidget(QWidget):
         self.graph = graph
 
     def _show_tooltip(self, pos):
-        names = self._csorb.BPM_NICKNAMES
-        posi = self._csorb.BPM_POS
+        names = self._csorb.bpm_nicknames
+        posi = self._csorb.bpm_pos
         unit = 'count'
 
         graph = self.graph
         curve = graph.curveAtIndex(0)
         posx = curve.scatter.mapFromScene(pos).x()
         if self._csorb.isring:
-            posx = posx % self._csorb.C0
+            posx = posx % self._csorb.circum
         ind = _np.argmin(_np.abs(_np.array(posi)-posx))
         posy = curve.scatter.mapFromScene(pos).y()
 

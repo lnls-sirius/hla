@@ -605,20 +605,20 @@ class ShowCorrectorKicks(SiriusDialog):
                           alignment=Qt.AlignCenter)
         self.graph_ch = _GraphKicks(
             parent=self,
-            xdata=_np.array(self.consts.CH_POS),
+            xdata=_np.array(self.consts.ch_pos),
             ydata=self.kicks['CH'],
-            tooltip_names=self.consts.CH_NICKNAMES,
-            c0=self.consts.C0,
+            tooltip_names=self.consts.ch_nicknames,
+            c0=self.consts.circum,
             color='blue')
 
         label_cv = QLabel('<h3>Vertical</h3>', self,
                           alignment=Qt.AlignCenter)
         self.graph_cv = _GraphKicks(
             parent=self,
-            xdata=_np.array(self.consts.CV_POS),
+            xdata=_np.array(self.consts.cv_pos),
             ydata=self.kicks['CV'],
-            tooltip_names=self.consts.CV_NICKNAMES,
-            c0=self.consts.C0,
+            tooltip_names=self.consts.cv_nicknames,
+            c0=self.consts.circum,
             color='red')
 
         lb_stats = QLabel('<h4>Statistics: </h4>', self,

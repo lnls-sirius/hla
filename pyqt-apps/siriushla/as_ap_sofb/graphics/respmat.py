@@ -55,11 +55,11 @@ class ShowMatrixWidget(QWidget):
         graph.setShowLegend(False)
         graph.setLabel('bottom', text='BPM Position', units='m')
         graph.setLabel('left', text='Matrix', units='m/rad')
-        for i in range(self._csorb.NR_CORRS):
+        for i in range(self._csorb.nr_corrs):
             color = 'blue'
-            if i >= self._csorb.NR_CH:
+            if i >= self._csorb.nr_ch:
                 color = 'red'
-            if i >= self._csorb.NR_CH+self._csorb.NR_CV:
+            if i >= self._csorb.nr_ch+self._csorb.nr_cv:
                 color = 'black'
             opts = dict(
                 y_channel='',
@@ -76,18 +76,18 @@ class ShowMatrixWidget(QWidget):
         self.graph = graph
 
     def _show_tooltip(self, pos):
-        names = self._csorb.BPM_NICKNAMES
-        cname = self._csorb.CH_NICKNAMES + self._csorb.CV_NICKNAMES
+        names = self._csorb.bpm_nicknames
+        cname = self._csorb.ch_nicknames + self._csorb.cv_nicknames
         if self._csorb.acc == 'SI':
             cname += ['RF', ]
-        posi = self._csorb.BPM_POS
+        posi = self._csorb.bpm_pos
         unit = 'count'
 
         graph = self.graph
         curve = graph.curveAtIndex(0)
         posx = curve.scatter.mapFromScene(pos).x()
         if self._csorb.isring:
-            posx = posx % self._csorb.C0
+            posx = posx % self._csorb.circum
         ind = _np.argmin(_np.abs(_np.array(posi)-posx))
         posy = curve.scatter.mapFromScene(pos).y()
 
@@ -104,8 +104,8 @@ class ShowMatrixWidget(QWidget):
         val = self.mat.value
         if val is None:
             return
-        val = val.reshape(-1, self._csorb.NR_CORRS)
-        for i in range(self._csorb.NR_CORRS):
+        val = val.reshape(-1, self._csorb.nr_corrs)
+        for i in range(self._csorb.nr_corrs):
             cur = self.graph.curveAtIndex(i)
             cur.receiveYWaveform(sep*i + val[:, i])
 
@@ -113,10 +113,10 @@ class ShowMatrixWidget(QWidget):
         val = self.rsize.getvalue()
         if val is None:
             val = 1
-        bpm_pos = _np.array(self._csorb.BPM_POS)
-        bpm_pos = [bpm_pos + i*self._csorb.C0 for i in range(2*val)]
+        bpm_pos = _np.array(self._csorb.bpm_pos)
+        bpm_pos = [bpm_pos + i*self._csorb.circum for i in range(2*val)]
         bpm_pos = _np.hstack(bpm_pos)
-        for i in range(self._csorb.NR_CORRS):
+        for i in range(self._csorb.nr_corrs):
             cur = self.graph.curveAtIndex(i)
             cur.receiveXWaveform(bpm_pos)
 
@@ -128,7 +128,7 @@ class ShowMatrixWidget(QWidget):
             if i == val:
                 dic = {'style': 1, 'width': 3, 'color': '000'}
             pen = mkPen(**dic)
-            line = InfLine(pos=i*self._csorb.C0+bpm_pos[0]/2, pen=pen)
+            line = InfLine(pos=i*self._csorb.circum+bpm_pos[0]/2, pen=pen)
             self._inflines.append(line)
             self.graph.addItem(line)
 

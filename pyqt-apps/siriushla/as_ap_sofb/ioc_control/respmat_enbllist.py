@@ -121,23 +121,23 @@ class SingleSelMatrix(BaseWidget):
         self.setObjectName(acc.upper()+'App')
         self.dev = dev
         max_rz = self._csorb.MAX_RINGSZ
-        bpms = np.array(self._csorb.BPM_POS)
-        bpm_pos = [bpms + i*self._csorb.C0 for i in range(max_rz)]
+        bpms = np.array(self._csorb.bpm_pos)
+        bpm_pos = [bpms + i*self._csorb.circum for i in range(max_rz)]
         bpm_pos = np.hstack(bpm_pos)
-        bpm_name = self._csorb.BPM_NAMES * max_rz
-        bpm_nknm = self._csorb.BPM_NICKNAMES * max_rz
+        bpm_name = self._csorb.bpm_names * max_rz
+        bpm_nknm = self._csorb.bpm_nicknames * max_rz
         self.devpos = {
             'BPMX': bpm_pos,
             'BPMY': bpm_pos,
-            'CH': self._csorb.CH_POS,
-            'CV': self._csorb.CV_POS}
+            'CH': self._csorb.ch_pos,
+            'CV': self._csorb.cv_pos}
         self.devotpl = {
             'BPMX': 'BPMY', 'BPMY': 'BPMX', 'CH': 'CV', 'CV': 'CH'}
         self.devnames = {
             'BPMX': (bpm_name, bpm_nknm),
             'BPMY': (bpm_name, bpm_nknm),
-            'CH': (self._csorb.CH_NAMES, self._csorb.CH_NICKNAMES),
-            'CV': (self._csorb.CV_NAMES, self._csorb.CV_NICKNAMES)}
+            'CH': (self._csorb.ch_names, self._csorb.ch_nicknames),
+            'CV': (self._csorb.cv_names, self._csorb.cv_nicknames)}
         self._get_headers()
         self.prefix = prefix
         self._setup_ui()

@@ -55,7 +55,7 @@ class AcqControlWidget(BaseWidget):
         vbl.addStretch()
 
         tabw = QTabWidget(self)
-        pref = self.prefix.prefix + self._csorb.TRIGGER_ACQ_NAME
+        pref = self.prefix.prefix + self._csorb.trigger_acq_name
         grp_bx = _HLTriggerSimple(parent=tabw, prefix=pref, src=True)
         tabw.addTab(grp_bx, 'External Trigger')
         grp_bx = self._get_trigdata_params_grpbx()

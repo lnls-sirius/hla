@@ -265,21 +265,21 @@ class BaseWidget(QWidget):
     def _show_tooltip(self, pos, pln='x'):
         unit = 'rad'
         if self.is_orb:
-            names = self._csorb.BPM_NICKNAMES
-            posi = self._csorb.BPM_POS
+            names = self._csorb.bpm_nicknames
+            posi = self._csorb.bpm_pos
             unit = 'm'
         elif pln == 'x':
-            names = self._csorb.CH_NICKNAMES
-            posi = self._csorb.CH_POS
+            names = self._csorb.ch_nicknames
+            posi = self._csorb.ch_pos
         else:
-            names = self._csorb.CV_NICKNAMES
-            posi = self._csorb.CV_POS
+            names = self._csorb.cv_nicknames
+            posi = self._csorb.cv_pos
 
         graph = self.graph[pln]
         curve = graph.curveAtIndex(0)
         posx = curve.scatter.mapFromScene(pos).x()
         if self._csorb.isring:
-            posx = posx % self._csorb.C0
+            posx = posx % self._csorb.circum
         ind = _np.argmin(_np.abs(_np.array(posi)-posx))
         posy = curve.scatter.mapFromScene(pos).y()
 
@@ -333,11 +333,11 @@ class BaseWidget(QWidget):
             trc.opts['symbolSize'] = sizes
 
     def _update_waveform(self, curve, plane, idx, data):
-        bpm_pos = self._csorb.BPM_POS
+        bpm_pos = self._csorb.bpm_pos
         if not self.is_orb and plane == 'x':
-            bpm_pos = self._csorb.CH_POS
+            bpm_pos = self._csorb.ch_pos
         elif not self.is_orb and plane == 'y':
-            bpm_pos = self._csorb.CV_POS
+            bpm_pos = self._csorb.cv_pos
         bpm_pos = _np.array(bpm_pos)
 
         enbl = self.enbl_pvs[plane].value
@@ -346,7 +346,7 @@ class BaseWidget(QWidget):
             self._update_enable_list(plane, enbl[:sz], curve, idx)
             nring = sz // bpm_pos.size
             if nring > 1:
-                bpm_pos = [bpm_pos + i*self._csorb.C0 for i in range(nring)]
+                bpm_pos = [bpm_pos + i*self._csorb.circum for i in range(nring)]
                 bpm_pos = _np.hstack(bpm_pos)
             curve.receiveXWaveform(bpm_pos)
             curve.receiveYWaveform(data[:sz])
@@ -414,9 +414,9 @@ class UpdateGraph(QObject):
             'ref': {
                 'x': _part(self._update_vectors, 'ref', 'x'),
                 'y': _part(self._update_vectors, 'ref', 'y')}}
-        nbpms = self._csorb.NR_BPMS * self._csorb.MAX_RINGSZ
-        szx = nbpms if self.is_orb else self._csorb.NR_CH
-        szy = nbpms if self.is_orb else self._csorb.NR_CV
+        nbpms = self._csorb.nr_bpms * self._csorb.MAX_RINGSZ
+        szx = nbpms if self.is_orb else self._csorb.nr_ch
+        szy = nbpms if self.is_orb else self._csorb.nr_cv
         self.vectors = {
             'val': {
                 'x': _np.zeros(szx, dtype=float),
