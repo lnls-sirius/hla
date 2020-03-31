@@ -51,7 +51,7 @@ class ConfigPVsTypeModel(ConfigTypeModel):
 
         # sort all configs of PV type
         conn = self._connection
-        allconfs = conn.get_config_types_from_template()
+        allconfs = conn.get_config_types_from_templates()
         configs = [c for c in allconfs if 'pvs' in
                    conn.get_value_from_template(c)]
         configs = sorted(configs)
