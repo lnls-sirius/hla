@@ -6,15 +6,16 @@ from qtpy.QtWidgets import QWidget, QGroupBox, QGridLayout, QLabel
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.search import PSSearch
 from siriuspy.pwrsupply.csdev import Const as _PSc
+from siriuspy.psdiag.csdev import ETypes as _Et
 from siriuspy.namesys import SiriusPVName
 
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, PyDMLedMultiChannel
+from siriushla.widgets.dialog.pv_status_dialog import StatusDetailDialog
 from siriushla.util import run_newprocess, get_appropriate_color, \
     get_monitor_icon
 
-from siriushla.as_ps_diag.util import lips2filters, asps2filters, \
-    bops2filters, sips2filters
+from .util import lips2filters, asps2filters, bops2filters, sips2filters
 
 
 class PSMonitor(SiriusMainWindow):
@@ -268,12 +269,24 @@ class PSMonitor(SiriusMainWindow):
 
 class MyLed(PyDMLedMultiChannel):
 
-    def mouseDoubleClickEvent(self, ev):
+    def mouseDoubleClickEvent(self, _):
+        """Reimplement mouseDoubleClickEvent."""
         dev = SiriusPVName(self.objectName())
         if dev.dis == 'PS':
             run_newprocess(['sirius-hla-as-ps-detail.py', dev])
         elif dev.dis == 'PU':
             run_newprocess(['sirius-hla-as-pu-detail.py', dev])
+
+    def mousePressEvent(self, event):
+        """Reimplement mousePressEvent."""
+        pvn = SiriusPVName(self.channels()[0].address)
+        if pvn.sec != 'LI' and pvn.dis == 'PS':
+            if event.button() == Qt.RightButton:
+                self.msg = StatusDetailDialog(
+                    parent=self.parent(), pvname=pvn,
+                    labels=_Et.DIAG_STATUS)
+                self.msg.open()
+        super().mousePressEvent(event)
 
 
 if __name__ == '__main__':
