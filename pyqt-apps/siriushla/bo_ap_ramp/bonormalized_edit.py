@@ -14,7 +14,7 @@ import qtawesome as qta
 
 from siriuspy.search import MASearch as _MASearch, PSSearch as _PSSearch
 from siriuspy.ramp import ramp
-from siriuspy.optics.opticscorr import BOTuneCorr, BOChromCorr
+from siriuspy.opticscorr.opticscorr import BOTuneCorr, BOChromCorr
 from siriuspy.clientconfigdb import ConfigDBException as _ConfigDBException
 from siriuspy.namesys import SiriusPVName
 
