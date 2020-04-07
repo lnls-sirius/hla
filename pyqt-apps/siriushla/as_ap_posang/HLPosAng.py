@@ -8,13 +8,12 @@ from qtpy.QtWidgets import QGridLayout, QLabel, QGroupBox, QAbstractItemView, \
     QSizePolicy as QSzPlcy, QSpacerItem, QPushButton, QHeaderView, QWidget
 from qtpy.QtCore import Qt
 import qtawesome as qta
+from pydm.widgets import PyDMWaveformTable, PyDMLabel, PyDMLineEdit, \
+    PyDMPushButton, PyDMSpinbox
 
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.posang.csdev import Const
 from siriuspy.namesys import SiriusPVName as _PVName
-
-from pydm.widgets import PyDMWaveformTable, PyDMLabel, PyDMLineEdit, \
-    PyDMPushButton, PyDMSpinbox
 
 from siriushla import util as _hlautil
 from siriushla.widgets import SiriusMainWindow, PyDMLogLabel, SiriusLedAlert, \
@@ -50,32 +49,32 @@ class PosAngCorr(SiriusMainWindow):
                 self._is_chsept = True
 
         if tl == 'ts':
-            CORRH = (Const.TS_CORRH_POSANG_CHSEPT if self._is_chsept
-                     else Const.TS_CORRH_POSANG_SEPTSEPT)
-            CORRV = Const.TS_CORRV_POSANG
+            corr_h = (Const.TS_CORRH_POSANG_CHSEPT if self._is_chsept
+                      else Const.TS_CORRH_POSANG_SEPTSEPT)
+            corr_v = Const.TS_CORRV_POSANG
         elif tl == 'tb':
-            CORRH = Const.TB_CORRH_POSANG
-            CORRV = Const.TB_CORRV_POSANG
+            corr_h = Const.TB_CORRH_POSANG
+            corr_v = Const.TB_CORRV_POSANG
 
         self.corrs = dict()
-        self.corrs['CH1'] = _PVName(CORRH[0])
-        self.corrs['CH2'] = _PVName(CORRH[1])
-        if len(CORRH) == 3:
-            self.corrs['CH3'] = _PVName(CORRH[2])
-        self.corrs['CV1'] = _PVName(CORRV[0])
-        self.corrs['CV2'] = _PVName(CORRV[1])
+        self.corrs['CH1'] = _PVName(corr_h[0])
+        self.corrs['CH2'] = _PVName(corr_h[1])
+        if len(corr_h) == 3:
+            self.corrs['CH3'] = _PVName(corr_h[2])
+        self.corrs['CV1'] = _PVName(corr_v[0])
+        self.corrs['CV2'] = _PVName(corr_v[1])
 
         self._setupUi()
         self.setFocus(True)
         self.setFocusPolicy(Qt.StrongFocus)
 
     def _setupUi(self):
-        cw = QWidget(self)
-        self.setCentralWidget(cw)
+        cwt = QWidget(self)
+        self.setCentralWidget(cwt)
 
         # label
         lab = QLabel(
-            '<h3>'+self._tl+' Position and Angle Correction</h3>', cw)
+            '<h3>'+self._tl+' Position and Angle Correction</h3>', cwt)
         lab.setStyleSheet("""
             min-height:1.55em; max-height: 1.55em;
             qproperty-alignment: 'AlignVCenter | AlignRight';
@@ -105,7 +104,7 @@ class PosAngCorr(SiriusMainWindow):
         self.statgbox = QGroupBox('Correction Status', self)
         self.statgbox.setLayout(self._setupStatusLayout())
 
-        glay = QGridLayout(cw)
+        glay = QGridLayout(cwt)
         glay.setHorizontalSpacing(12)
         glay.setVerticalSpacing(12)
         glay.addWidget(lab, 0, 0, 1, 2)
@@ -184,20 +183,20 @@ class PosAngCorr(SiriusMainWindow):
 
         idx = 1
         for corrid, corr in self.corrs.items():
-            pb = QPushButton(qta.icon('fa5s.list-ul'), '', self)
-            pb.setObjectName('pb')
-            pb.setStyleSheet("""
-                #pb{
+            pbt = QPushButton(qta.icon('fa5s.list-ul'), '', self)
+            pbt.setObjectName('pbt')
+            pbt.setStyleSheet("""
+                #pbt{
                     min-width:25px; max-width:25px;
                     min-height:25px; max-height:25px;
                     icon-size:20px;}
                 """)
             if corr.dis == 'PU':
                 _hlautil.connect_window(
-                    pb, _PUDetailWindow, self, devname=corr)
+                    pbt, _PUDetailWindow, self, devname=corr)
             else:
                 _hlautil.connect_window(
-                    pb, _PSDetailWindow, self, psname=corr)
+                    pbt, _PSDetailWindow, self, psname=corr)
             lb_name = QLabel(corr, self)
             le_sp = PyDMLinEditScrollbar(self._prefix+corr+':Kick-SP', self)
             le_sp.layout.setContentsMargins(0, 0, 0, 0)
@@ -212,7 +211,7 @@ class PosAngCorr(SiriusMainWindow):
             lb_ref = PyDMLabel(
                 self, self.posang_prefix+':RefKick'+corrid+'-Mon')
 
-            lay.addWidget(pb, idx, 0, alignment=Qt.AlignTop)
+            lay.addWidget(pbt, idx, 0, alignment=Qt.AlignTop)
             lay.addWidget(
                 lb_name, idx, 1, alignment=Qt.AlignLeft | Qt.AlignTop)
             lay.addWidget(le_sp, idx, 2, alignment=Qt.AlignTop)
@@ -361,11 +360,6 @@ class PosAngCorr(SiriusMainWindow):
         self.centralwidget.PyDMLabel_KickRBCV2.channel = (
             self._prefix + corrs[3] + ':Kick-RB')
 
-    def _set_status_labels(self):
-        for i in range(4):
-            exec('self.centralwidget.label_status{0}.setText('
-                 'Const.STATUSLABELS[{0}])'.format(i))
-
 
 class CorrParamsDetailWindow(SiriusMainWindow):
     """Correction parameters detail window."""
@@ -390,48 +384,48 @@ class CorrParamsDetailWindow(SiriusMainWindow):
             parent=self,
             init_channel=self._prefix+self._tl+'-Glob:AP-PosAng:ConfigName-RB')
 
-        label_matrix_X = QLabel('<h4>Matrix X</h4>', self,
+        label_matrix_x = QLabel('<h4>Matrix X</h4>', self,
                                 alignment=Qt.AlignCenter)
-        self.table_matrix_X = PyDMWaveformTable(
+        self.table_matrix_x = PyDMWaveformTable(
             parent=self,
             init_channel=self._prefix+self._tl+'-Glob:AP-PosAng:RespMatX-Mon')
-        self.table_matrix_X.setObjectName('table_matrix_X')
-        self.table_matrix_X.setStyleSheet("""
-            #table_matrix_X{
+        self.table_matrix_x.setObjectName('table_matrix_x')
+        self.table_matrix_x.setStyleSheet("""
+            #table_matrix_x{
                 min-width:20.72em;
                 min-height:4.65em; max-height:4.65em;}""")
-        self.table_matrix_X.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.table_matrix_X.setRowCount(2)
-        self.table_matrix_X.setColumnCount(2)
-        self.table_matrix_X.horizontalHeader().setSectionResizeMode(
+        self.table_matrix_x.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.table_matrix_x.setRowCount(2)
+        self.table_matrix_x.setColumnCount(2)
+        self.table_matrix_x.horizontalHeader().setSectionResizeMode(
             QHeaderView.Stretch)
-        self.table_matrix_X.horizontalHeader().setVisible(False)
-        self.table_matrix_X.verticalHeader().setSectionResizeMode(
+        self.table_matrix_x.horizontalHeader().setVisible(False)
+        self.table_matrix_x.verticalHeader().setSectionResizeMode(
             QHeaderView.Stretch)
-        self.table_matrix_X.verticalHeader().setVisible(False)
-        self.table_matrix_X.setSizePolicy(QSzPlcy.MinimumExpanding,
+        self.table_matrix_x.verticalHeader().setVisible(False)
+        self.table_matrix_x.setSizePolicy(QSzPlcy.MinimumExpanding,
                                           QSzPlcy.Preferred)
 
-        label_matrix_Y = QLabel('<h4>Matrix Y</h4>', self,
+        label_matrix_y = QLabel('<h4>Matrix Y</h4>', self,
                                 alignment=Qt.AlignCenter)
-        self.table_matrix_Y = PyDMWaveformTable(
+        self.table_matrix_y = PyDMWaveformTable(
             parent=self,
             init_channel=self._prefix+self._tl+'-Glob:AP-PosAng:RespMatY-Mon')
-        self.table_matrix_Y.setObjectName('table_matrix_Y')
-        self.table_matrix_Y.setStyleSheet("""
-            #table_matrix_Y{
+        self.table_matrix_y.setObjectName('table_matrix_y')
+        self.table_matrix_y.setStyleSheet("""
+            #table_matrix_y{
                 min-width:20.72em;
                 min-height:4.65em; max-height:4.65em;}""")
-        self.table_matrix_Y.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.table_matrix_Y.setRowCount(2)
-        self.table_matrix_Y.setColumnCount(2)
-        self.table_matrix_Y.horizontalHeader().setSectionResizeMode(
+        self.table_matrix_y.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.table_matrix_y.setRowCount(2)
+        self.table_matrix_y.setColumnCount(2)
+        self.table_matrix_y.horizontalHeader().setSectionResizeMode(
             QHeaderView.Stretch)
-        self.table_matrix_Y.horizontalHeader().setVisible(False)
-        self.table_matrix_Y.verticalHeader().setSectionResizeMode(
+        self.table_matrix_y.horizontalHeader().setVisible(False)
+        self.table_matrix_y.verticalHeader().setSectionResizeMode(
             QHeaderView.Stretch)
-        self.table_matrix_Y.verticalHeader().setVisible(False)
-        self.table_matrix_Y.setSizePolicy(QSzPlcy.MinimumExpanding,
+        self.table_matrix_y.verticalHeader().setVisible(False)
+        self.table_matrix_y.setSizePolicy(QSzPlcy.MinimumExpanding,
                                           QSzPlcy.Preferred)
 
         self.bt_apply = QPushButton('Ok', self)
@@ -445,12 +439,12 @@ class CorrParamsDetailWindow(SiriusMainWindow):
         lay.addWidget(self.pydmlabel_configname, 2, 2)
         lay.addItem(
             QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Expanding), 3, 1)
-        lay.addWidget(label_matrix_X, 4, 1, 1, 2)
-        lay.addWidget(self.table_matrix_X, 5, 1, 1, 2)
+        lay.addWidget(label_matrix_x, 4, 1, 1, 2)
+        lay.addWidget(self.table_matrix_x, 5, 1, 1, 2)
         lay.addItem(
             QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Expanding), 6, 1)
-        lay.addWidget(label_matrix_Y, 7, 1, 1, 2)
-        lay.addWidget(self.table_matrix_Y, 8, 1, 1, 2)
+        lay.addWidget(label_matrix_y, 7, 1, 1, 2)
+        lay.addWidget(self.table_matrix_y, 8, 1, 1, 2)
         lay.addItem(
             QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Expanding), 9, 1)
         lay.addWidget(self.bt_apply, 10, 2)
@@ -460,8 +454,10 @@ class CorrParamsDetailWindow(SiriusMainWindow):
 
 
 class _ConfigLineEdit(PyDMLineEdit):
+    """Configuration line edit."""
 
-    def mouseReleaseEvent(self, ev):
+    def mouseReleaseEvent(self, _):
+        """Reimplement mouseReleaseEvent."""
         if 'TB' in self.channel:
             config_type = 'tb_posang_respm'
         elif 'TS' in self.channel:
