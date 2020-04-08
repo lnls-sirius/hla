@@ -3,9 +3,9 @@
 
 import sys as _sys
 import argparse as _argparse
-from siriushla.sirius_application import SiriusApplication
 from siriuspy.envars import VACA_PREFIX
-from siriushla.as_ap_opticscorr.HLOpticsCorr import OpticsCorrWindow
+from siriushla.sirius_application import SiriusApplication
+from siriushla.as_ap_opticscorr import OpticsCorrWindow
 
 
 parser = _argparse.ArgumentParser(

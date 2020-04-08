@@ -1,3 +1,3 @@
 """Optics Correction HLA Module."""
 
-__all__ = ('HLOpticsCorr',)
+from .main import OpticsCorrWindow

@@ -1,10 +1,5 @@
 include siriushla/as_ap_currlt/ui_bo_ap_currlt.ui
 include siriushla/as_ap_currlt/ui_si_ap_currlt.ui
-include siriushla/as_ap_opticscorr/ui_bo_ap_chromcorr.ui
-include siriushla/as_ap_opticscorr/ui_si_ap_chromcorr.ui
-include siriushla/as_ap_opticscorr/ui_bo_ap_tunecorr.ui
-include siriushla/as_ap_opticscorr/ui_si_ap_tunecorr.ui
-include siriushla/as_ap_posang/ui_as_ap_posang.ui
 include siriushla/as_ap_injcontrol/TB.svg
 include siriushla/as_ap_injcontrol/TS.svg
 include siriushla/as_ap_injcontrol/TB-BO.svg
