@@ -20,7 +20,7 @@ from pydm.widgets import PyDMImageView
 from pydm.widgets.logdisplay import PyDMLogDisplay
 
 import mathphys.constants as _consts
-from siriuspy.factory import NormalizerFactory as _NormFact
+from siriuspy.magnet.factory import NormalizerFactory as _NormFact
 
 from siriushla.widgets import SiriusSpinbox, SiriusLabel, MatplotlibWidget
 from siriushla.as_ti_control import HLTriggerSimple
@@ -31,7 +31,7 @@ DT = 0.001
 SIMUL = False
 
 C = _consts.light_speed
-E0 = _consts.electron_rest_energy / _consts.elementary_charge * 1e-6  # in MeV
+E0 = _consts.electron_rest_energy / _consts.elementary_charge * 1e-6  # [MeV]
 
 _log.basicConfig(format='%(levelname)7s ::: %(message)s')
 

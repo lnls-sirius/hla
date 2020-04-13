@@ -9,7 +9,7 @@ from qtpy.QtWidgets import QWidget, QGroupBox, QComboBox, QLabel, \
 
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.search import MASearch
-from siriuspy.factory import NormalizerFactory
+from siriuspy.magnet.factory import NormalizerFactory
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow
 
