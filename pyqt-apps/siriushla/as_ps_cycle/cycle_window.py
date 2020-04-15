@@ -428,9 +428,8 @@ class CycleWindow(SiriusMainWindow):
                 self.progress_bar.setPalette(pal)
                 if self._is_preparing:
                     self._prepared[self._is_preparing] = False
-                else:
-                    self._prepared = {k: False for k in self._prepared.keys()}
-                self._allButtons_setEnabled(True)
+                cycle = all(self._prepared.values())
+                self._allButtons_setEnabled(True, cycle=cycle)
             elif warning:
                 item.setForeground(warncolor)
             elif 'finished' in text:
@@ -441,9 +440,8 @@ class CycleWindow(SiriusMainWindow):
                     cycle = all(self._prepared.values())
                 else:
                     self._prepared = {k: False for k in self._prepared.keys()}
-                    self.cycle_bt.setEnabled(False)
                     cycle = False
-                self._allButtons_setEnabled(True, cycle)
+                self._allButtons_setEnabled(True, cycle=cycle)
 
             self.progress_list.addItem(item)
             self.progress_list.scrollToBottom()
