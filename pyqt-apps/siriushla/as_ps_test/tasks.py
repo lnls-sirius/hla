@@ -6,7 +6,8 @@ from siriuspy.search import HLTimeSearch as _HLTimeSearch, \
     PSSearch as _PSSearch
 from siriuspy.csdev import Const
 from siriuspy.namesys import Filter, SiriusPVName as _PVName
-from .conn import TesterDCLink, TesterDCLinkFBP, TesterPS, TesterPSLinac
+from .conn import TesterDCLink, TesterDCLinkFBP, TesterPS, TesterPSLinac, \
+    DEFAULT_CAP_BANK_VOLT
 
 
 TIMEOUT_CHECK = 10
@@ -202,7 +203,13 @@ class CheckCapBankVolt(BaseTask):
 
     def function(self):
         """Check DCLink Capacitor Bank Voltage."""
-        self._check(method='check_capvolt', timeout=6*TIMEOUT_CHECK)
+        psn = {k for k in DEFAULT_CAP_BANK_VOLT.keys()
+               if k != 'FBP_DCLink'}
+        if any(n in self._devices for n in psn):
+            timeout = 6*TIMEOUT_CHECK
+        else:
+            timeout = TIMEOUT_CHECK
+        self._check(method='check_capvolt', timeout=timeout)
 
 
 class SetCurrent(BaseTask):
@@ -218,8 +225,13 @@ class CheckCurrent(BaseTask):
 
     def function(self):
         """Check PS Current."""
+        psn = {'SI-Fam:PS-B1B2-1', 'SI-Fam:PS-B1B2-2'}
+        if any(n in self._devices for n in psn):
+            timeout = 4.1*TIMEOUT_CHECK
+        else:
+            timeout = 2.1*TIMEOUT_CHECK
         self._check(method='check_current',
-                    timeout=4.1*TIMEOUT_CHECK,
+                    timeout=timeout,
                     test=self._is_test)
 
 
