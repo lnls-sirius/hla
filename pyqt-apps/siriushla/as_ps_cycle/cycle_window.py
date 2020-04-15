@@ -55,7 +55,7 @@ class CycleWindow(SiriusMainWindow):
         self._setup_ui()
         self._update_setup_timer = QTimer(self)
         self._update_setup_timer.timeout.connect(self._update_setup)
-        self._update_setup_timer.setInterval(500)
+        self._update_setup_timer.setInterval(250)
         self._update_setup_timer.start()
         self.setWindowTitle('PS Cycle')
 
