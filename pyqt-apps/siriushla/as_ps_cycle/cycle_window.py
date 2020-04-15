@@ -8,7 +8,7 @@ from qtpy.QtGui import QColor, QPalette
 from qtpy.QtCore import Signal, QThread, Qt, QTimer
 from qtpy.QtWidgets import QWidget, QGridLayout, QVBoxLayout, \
     QPushButton, QLabel, QMessageBox, QApplication, QGroupBox, \
-    QListWidget, QListWidgetItem, QProgressBar
+    QListWidget, QListWidgetItem, QProgressBar, QHBoxLayout
 import qtawesome as qta
 
 from siriuspy.envars import VACA_PREFIX as VACA_PREFIX
@@ -100,30 +100,33 @@ class CycleWindow(SiriusMainWindow):
             '2. Prepare PS\nParameters', self)
         self.prepare_ps_params_bt.setToolTip(
             'Set power supplies current to zero and \n'
-            'configure cycle parameters or waveform.')
+            'configure cycle parameters.')
         self.prepare_ps_params_bt.clicked.connect(
             _part(self._prepare, 'ps', 'params'))
         self.prepare_ps_opmode_bt = QPushButton(
             '3. Prepare PS\nOpMode', self)
         self.prepare_ps_opmode_bt.setToolTip(
-            'Set power supplies OpMode to Cycle or RmpWfm.')
+            'Set power supplies OpMode to Cycle.')
         self.prepare_ps_opmode_bt.clicked.connect(
             _part(self._prepare, 'ps', 'opmode'))
         self.cycle_bt = QPushButton('4. Cycle', self)
-        self.cycle_bt.setToolTip('Check all configurations and trigger cycle.')
+        self.cycle_bt.setToolTip(
+            'Check all configurations, enable triggers and run cycle.')
         self.cycle_bt.clicked.connect(self._cycle)
         self.cycle_bt.setEnabled(False)
         self.progress_list = QListWidget(self)
         self.progress_bar = MyProgressBar(self)
-        cyclelay = QGridLayout()
-        cyclelay.addWidget(self.prepare_timing_bt, 0, 0)
-        cyclelay.addWidget(self.prepare_ps_params_bt, 0, 1)
-        cyclelay.addWidget(self.prepare_ps_opmode_bt, 0, 2)
-        cyclelay.addWidget(self.cycle_bt, 0, 3)
-        cyclelay.addWidget(self.progress_list, 1, 0, 1, 4)
-        cyclelay.addWidget(self.progress_bar, 2, 0, 1, 4)
+        butlay = QHBoxLayout()
+        butlay.addWidget(self.prepare_timing_bt)
+        butlay.addWidget(self.prepare_ps_params_bt)
+        butlay.addWidget(self.prepare_ps_opmode_bt)
+        butlay.addWidget(self.cycle_bt)
+        cyclelay = QVBoxLayout()
+        cyclelay.addLayout(butlay)
+        cyclelay.addWidget(self.progress_list)
+        cyclelay.addWidget(self.progress_bar)
 
-        # commands
+        # auxiliar commands
         gb_comm = QGroupBox('Auxiliar Commands', self)
         self.restore_ti_bt = QPushButton('Restore Initial State')
         self.restore_ti_bt.clicked.connect(self._restore_timing)
