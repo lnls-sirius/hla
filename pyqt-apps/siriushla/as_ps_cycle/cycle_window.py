@@ -51,12 +51,12 @@ class CycleWindow(SiriusMainWindow):
         self._prepared = {
             'timing': False, 'ps_params': False, 'ps_opmode': False}
         # Setup UI
-        self._needs_update_leds = False
+        self._needs_update_setup = False
         self._setup_ui()
-        self._update_led_timer = QTimer(self)
-        self._update_led_timer.timeout.connect(self._update_led_channels)
-        self._update_led_timer.setInterval(500)
-        self._update_led_timer.start()
+        self._update_setup_timer = QTimer(self)
+        self._update_setup_timer.timeout.connect(self._update_setup)
+        self._update_setup_timer.setInterval(500)
+        self._update_setup_timer.start()
         self.setWindowTitle('PS Cycle')
 
     def _setup_ui(self):
@@ -398,7 +398,7 @@ class CycleWindow(SiriusMainWindow):
             state2change = item2check.checkState(0)
             if state2change != state2set:
                 item2check.setCheckState(0, state2set)
-        self._needs_update_leds = True
+        self._needs_update_setup = True
 
     def _get_ps_not_ready_2_cycle(self, psname, status):
         if not status:
@@ -446,10 +446,12 @@ class CycleWindow(SiriusMainWindow):
             self.progress_list.addItem(item)
             self.progress_list.scrollToBottom()
 
-    def _update_led_channels(self):
-        if not self._needs_update_leds:
+    def _update_setup(self):
+        if not self._needs_update_setup:
             return
+        self._needs_update_setup = False
 
+        # update leds
         psnames = self.pwrsupplies_tree.checked_items()
         ti_ch = [VACA_PREFIX + name
                  for name in self._timing.get_pvnames_by_psnames(psnames)]
@@ -461,8 +463,6 @@ class CycleWindow(SiriusMainWindow):
             ps_ch.append(VACA_PREFIX + name + ppty)
         self.psconn_led.set_channels(ps_ch)
 
-        self._needs_update_leds = False
-
     def _allButtons_setEnabled(self, enable, cycle=False):
         self.prepare_timing_bt.setEnabled(enable)
         self.prepare_ps_params_bt.setEnabled(enable)
@@ -470,11 +470,10 @@ class CycleWindow(SiriusMainWindow):
         self.restore_ti_bt.setEnabled(enable)
         self.set_ps_2_slowref_bt.setEnabled(enable)
         self.zero_ps_curr_bt.setEnabled(enable)
-        if cycle:
-            self.cycle_bt.setEnabled(enable)
+        self.cycle_bt.setEnabled(cycle)
 
     def closeEvent(self, ev):
-        self._update_led_timer.stop()
+        self._update_setup_timer.stop()
         super().closeEvent(ev)
 
 
