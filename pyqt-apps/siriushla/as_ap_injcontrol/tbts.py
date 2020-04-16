@@ -7,7 +7,7 @@ from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.namesys import SiriusPVName
 from siriushla import util
 from siriushla.as_di_icts import ICTSummary
-from siriushla.as_di_slits import SlitMonitoring
+from siriushla.tb_di_slits import SlitMonitoring
 from siriushla.as_ap_injcontrol.base import BaseWindow
 
 
@@ -115,9 +115,9 @@ class TLControlWindow(BaseWindow):
             self.auxdig_wid.setStyleSheet("""
                 QTabBar::tab{margin-top: 0em;}""")
             self.auxdig_wid.addTab(self.ictmon, 'ICTs')
-            self.slith = SlitMonitoring('H', self, self.prefix)
+            self.slith = SlitMonitoring(self, self.prefix, 'TB-01:DI-SlitH')
             self.auxdig_wid.addTab(self.slith, 'Slit H')
-            self.slitv = SlitMonitoring('V', self, self.prefix)
+            self.slitv = SlitMonitoring(self, self.prefix, 'TB-01:DI-SlitV')
             self.auxdig_wid.addTab(self.slitv, 'Slit V')
         elif self.tl == 'ts':
             self.auxdig_wid = QWidget()
