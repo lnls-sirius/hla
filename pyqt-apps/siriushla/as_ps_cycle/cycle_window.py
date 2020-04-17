@@ -24,7 +24,7 @@ from siriushla.widgets.dialog import ProgressDialog, PSStatusDialog
 from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
 from siriushla.as_ps_cycle.tasks import CreateCyclers, VerifyPS, \
     ZeroPSCurrent, ResetPSOpMode, RestoreTiming, PreparePSParams, \
-    PreparePSOpMode, PrepareTiming, Cycle
+    PreparePSOpMode, PrepareTiming, Cycle, CycleTrims
 
 
 errorcolor = QColor(255, 0, 0)
@@ -45,11 +45,15 @@ class CycleWindow(SiriusMainWindow):
         self._ps2cycle = list()
         self._ps_ready = list()
         self._ps_failed = list()
+        self._last_ps_selected = list()
         self._checked_accs = checked_accs
         # Flags
         self._is_preparing = ''
         self._prepared = {
-            'timing': False, 'ps_params': False, 'ps_opmode': False}
+            'timing': False,
+            'ps_params': False,
+            'ps_opmode': False,
+            'trims': True}
         # Setup UI
         self._needs_update_setup = False
         self._setup_ui()
@@ -109,7 +113,12 @@ class CycleWindow(SiriusMainWindow):
             'Set power supplies OpMode to Cycle.')
         self.prepare_ps_opmode_bt.clicked.connect(
             _part(self._prepare, 'ps', 'opmode'))
-        self.cycle_bt = QPushButton('4. Cycle', self)
+        self.cycle_trims_bt = QPushButton('4. Cycle\nTrims', self)
+        self.cycle_trims_bt.setToolTip(
+            'Cycle trims:\nStep 1) CH, QS and QTrims\nStep 2) CV')
+        self.cycle_trims_bt.clicked.connect(_part(self._cycle, True))
+        self.cycle_trims_bt.setVisible(False)
+        self.cycle_bt = QPushButton('5. Cycle', self)
         self.cycle_bt.setToolTip(
             'Check all configurations, enable triggers and run cycle.')
         self.cycle_bt.clicked.connect(self._cycle)
@@ -120,6 +129,7 @@ class CycleWindow(SiriusMainWindow):
         butlay.addWidget(self.prepare_timing_bt)
         butlay.addWidget(self.prepare_ps_params_bt)
         butlay.addWidget(self.prepare_ps_opmode_bt)
+        butlay.addWidget(self.cycle_trims_bt)
         butlay.addWidget(self.cycle_bt)
         cyclelay = QVBoxLayout()
         cyclelay.addLayout(butlay)
@@ -202,6 +212,8 @@ class CycleWindow(SiriusMainWindow):
         if not pwrsupplies:
             QMessageBox.critical(self, 'Message', 'No power supply selected!')
             return
+        self._ps_selection_changed = self._last_ps_selected != pwrsupplies
+        self._last_ps_selected = pwrsupplies
 
         self._allButtons_setEnabled(False)
         self.progress_list.clear()
@@ -242,14 +254,17 @@ class CycleWindow(SiriusMainWindow):
             self._is_preparing = 'ps_' + ppty
             if ppty == 'params':
                 prepare_task = PreparePSParams(
-                    parent=self, psnames=pwrsupplies, timing=self._timing)
+                    parent=self, psnames=pwrsupplies, timing=self._timing,
+                    create_new_controller=self._ps_selection_changed)
             else:
                 prepare_task = PreparePSOpMode(
-                    parent=self, psnames=pwrsupplies, timing=self._timing)
+                    parent=self, psnames=pwrsupplies, timing=self._timing,
+                    create_new_controller=self._ps_selection_changed)
         else:
             self._is_preparing = 'timing'
             prepare_task = PrepareTiming(
-                parent=self, psnames=pwrsupplies, timing=self._timing)
+                parent=self, psnames=pwrsupplies, timing=self._timing,
+                create_new_controller=self._ps_selection_changed)
 
         prepare_task.updated.connect(self._update_progress)
         duration = prepare_task.duration()
@@ -265,7 +280,7 @@ class CycleWindow(SiriusMainWindow):
         prepare_task.start()
         self.update_bar.start()
 
-    def _cycle(self):
+    def _cycle(self, is_trim=False):
         if not self._check_connected('timing'):
             return
         if not self._check_connected('ps'):
@@ -287,8 +302,7 @@ class CycleWindow(SiriusMainWindow):
             self._allButtons_setEnabled(True)
             return
 
-        self._is_preparing = ''
-        self.cycle_bt.setEnabled(False)
+        self._is_preparing = '' if not is_trim else 'trims'
 
         create_task = CreateCyclers(parent=self, psnames=pwrsupplies)
         dlg = ProgressDialog('Creating cyclers...', create_task, self)
@@ -297,8 +311,9 @@ class CycleWindow(SiriusMainWindow):
             self._allButtons_setEnabled(True)
             return
 
-        cycle_task = Cycle(parent=self, psnames=pwrsupplies,
-                           timing=self._timing)
+        cycle_class = Cycle if not is_trim else CycleTrims
+        cycle_task = cycle_class(parent=self, psnames=pwrsupplies,
+                                 timing=self._timing)
         cycle_task.updated.connect(self._update_progress)
         duration = cycle_task.duration()
         self.progress_bar.setMinimum(0)
@@ -463,10 +478,28 @@ class CycleWindow(SiriusMainWindow):
             ps_ch.append(VACA_PREFIX + name + ppty)
         self.psconn_led.set_channels(ps_ch)
 
+        # update buttons and self._prepared dict
+        si_fams = PSSearch.get_psnames(
+            {'sec': 'SI', 'sub': 'Fam', 'dis': 'PS'})
+        has_sifam = False
+        for psn in si_fams:
+            item = self.pwrsupplies_tree._item_map[psn]
+            has_sifam |= item.checkState(0) != 0
+
+        if not has_sifam:
+            self.cycle_bt.setText('4.Cycle')
+            self.cycle_trims_bt.setVisible(False)
+            self._prepared['trims'] = True
+        else:
+            self.cycle_bt.setText('5.Cycle')
+            self.cycle_trims_bt.setVisible(True)
+            self._prepared['trims'] = False
+
     def _allButtons_setEnabled(self, enable, cycle=False):
         self.prepare_timing_bt.setEnabled(enable)
         self.prepare_ps_params_bt.setEnabled(enable)
         self.prepare_ps_opmode_bt.setEnabled(enable)
+        self.cycle_trims_bt.setEnabled(enable)
         self.restore_ti_bt.setEnabled(enable)
         self.set_ps_2_slowref_bt.setEnabled(enable)
         self.zero_ps_curr_bt.setEnabled(enable)
