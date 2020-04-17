@@ -937,17 +937,17 @@ class RFMainControl(SiriusMainWindow):
             cb.setStyleSheet('color:'+color+'; max-width: 1.2em;')
             cb.stateChanged.connect(self._handle_curves_visibility)
 
-            dch = 'RA-RaSIA01:RF-LLRFCalSys:PwrdBm{}-Mon.DESC'.format(sch)
+            dch = 'RA-RaSIA01:RF-RFCalSys:PwrdBm{}-Mon.DESC'.format(sch)
             lb_desc = PyDMLabel(self, dch)
             lb_desc.setStyleSheet(
                 'min-height: 1.5em; color:'+color+'; max-width: 6em;')
 
-            dbch = 'RA-RaSIA01:RF-LLRFCalSys:PwrdBm{}-Mon'.format(sch)
+            dbch = 'RA-RaSIA01:RF-RFCalSys:PwrdBm{}-Mon'.format(sch)
             lb_dbmpwr = PyDMLabel(self, dbch)
             lb_dbmpwr.showUnits = True
             self._pm_dBm_labels.add(lb_dbmpwr)
 
-            wch = 'RA-RaSIA01:RF-LLRFCalSys:PwrW{}-Mon'.format(sch)
+            wch = 'RA-RaSIA01:RF-RFCalSys:PwrW{}-Mon'.format(sch)
             lb_wpwr = PyDMLabel(self, wch)
             lb_wpwr.showUnits = True
             lb_wpwr.setVisible(False)
@@ -960,12 +960,12 @@ class RFMainControl(SiriusMainWindow):
 
             # Graph
             self.pwr_mon_graph.addYChannel(
-                y_channel='RA-RaSIA01:RF-LLRFCalSys:PwrdBm'+sch+'-Mon',
+                y_channel='RA-RaSIA01:RF-RFCalSys:PwrdBm'+sch+'-Mon',
                 name='CH '+sch, color=color,
                 lineStyle=Qt.SolidLine, lineWidth=1)
             self.curves['CH '+sch] = self.pwr_mon_graph.curveAtIndex(2*idx)
             self.pwr_mon_graph.addYChannel(
-                y_channel='RA-RaSIA01:RF-LLRFCalSys:PwrW'+sch+'-Mon',
+                y_channel='RA-RaSIA01:RF-RFCalSys:PwrW'+sch+'-Mon',
                 name='CH '+sch+' W', color=color,
                 lineStyle=Qt.SolidLine, lineWidth=1)
             self.curves['CH '+sch+' W'] = \
