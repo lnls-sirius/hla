@@ -137,7 +137,7 @@ class OpticsCorrWindow(SiriusMainWindow):
         lb_y = QLabel('<h4>Y</h4>', self, alignment=Qt.AlignCenter)
         lb_sp = QLabel('<h4>SP</h4>', self, alignment=Qt.AlignCenter)
         lb_rb = QLabel('<h4>RB</h4>', self, alignment=Qt.AlignCenter)
-        lb_mon = QLabel('<h4>Estimative</h4>', self)
+        lb_mon = QLabel('<h4>Estimative</h4>', self, alignment=Qt.AlignCenter)
 
         self.sb_paramx = PyDMSpinbox(
             self, self.ioc_prefix+':'+self.param_pv.format('X', 'SP'))
@@ -372,29 +372,30 @@ class OpticsCorrWindow(SiriusMainWindow):
             lay.addWidget(lb_meas_conf, row+1, 0, 1, 3)
 
             mag_type = 'Q' if self.param == 'tune' else 'S'
+            unit = '[1/m]' if self.param == 'tune' else '[1/m2]'
 
             lb_meas_conf_dfamF = QLabel(
-                'Δ'+self.intstrength+' '+mag_type+'F [1/m]', self)
+                'Fam. Δ'+self.intstrength+' '+mag_type+'F '+unit, self)
             self.sb_meas_conf_dfamF = PyDMSpinbox(
                 self, self.ioc_prefix+':MeasConfigDelta' +
-                self.intstrength+mag_type+'F-SP')
+                self.intstrength+'Fam'+mag_type+'F-SP')
             self.sb_meas_conf_dfamF.showStepExponent = False
             self.lb_meas_conf_dfamF = PyDMLabel(
                 self, self.ioc_prefix+':MeasConfigDelta' +
-                self.intstrength+mag_type+'F-RB')
+                self.intstrength+'Fam'+mag_type+'F-RB')
             lay.addWidget(lb_meas_conf_dfamF, row+2, 0)
             lay.addWidget(self.sb_meas_conf_dfamF, row+2, 1)
             lay.addWidget(self.lb_meas_conf_dfamF, row+2, 2)
 
             lb_meas_conf_dfamD = QLabel(
-                'Δ'+self.intstrength+' '+mag_type+'D [1/m]', self)
+                'Fam. Δ'+self.intstrength+' '+mag_type+'D '+unit, self)
             self.sb_meas_conf_dfamD = PyDMSpinbox(
                 self, self.ioc_prefix+':MeasConfigDelta' +
-                self.intstrength+mag_type+'D-SP')
+                self.intstrength+'Fam'+mag_type+'D-SP')
             self.sb_meas_conf_dfamD.showStepExponent = False
             self.lb_meas_conf_dfamD = PyDMLabel(
                 self, self.ioc_prefix+':MeasConfigDelta' +
-                self.intstrength+mag_type+'D-RB')
+                self.intstrength+'Fam'+mag_type+'D-RB')
             lay.addWidget(lb_meas_conf_dfamD, row+3, 0)
             lay.addWidget(self.sb_meas_conf_dfamD, row+3, 1)
             lay.addWidget(self.lb_meas_conf_dfamD, row+3, 2)
