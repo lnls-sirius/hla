@@ -16,22 +16,26 @@ class BaseTask(QThread):
     """Base Task."""
 
     _cyclers = dict()
+    _controller = None
     currentItem = Signal(str)
     itemDone = Signal(str, bool)
     completed = Signal()
     updated = Signal(str, bool, bool, bool)
 
     def __init__(self, parent=None, psnames=list(), timing=None,
-                 need_controller=False):
+                 need_controller=False, create_new_controller=False):
         super().__init__(parent)
         self._psnames = psnames
         self._timing = timing
         if need_controller:
-            cyclers = dict()
-            for ps in psnames:
-                cyclers[ps] = BaseTask._cyclers[ps]
-            self._controller = CycleController(
-                cyclers=cyclers, timing=timing, logger=self)
+            if not BaseTask._controller or create_new_controller:
+                cyclers = dict()
+                for ps in psnames:
+                    cyclers[ps] = BaseTask._cyclers[ps]
+                BaseTask._controller = CycleController(
+                    cyclers=cyclers, timing=timing, logger=self)
+            else:
+                BaseTask._controller.logger = self
         self._quit_task = False
 
     def size(self):
@@ -213,6 +217,23 @@ class PrepareTiming(BaseTask):
 
     def function(self):
         self._controller.prepare_timing()
+
+
+class CycleTrims(BaseTask):
+    """Cycle."""
+
+    def __init__(self, **kwargs):
+        super().__init__(need_controller=True, **kwargs)
+
+    def size(self):
+        return self._controller.cycle_trims_size
+
+    def duration(self):
+        """Return task maximum duration."""
+        return self._controller.cycle_trims_max_duration
+
+    def function(self):
+        self._controller.cycle_all_trims()
 
 
 class Cycle(BaseTask):

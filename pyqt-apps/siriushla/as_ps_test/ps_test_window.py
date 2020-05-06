@@ -451,18 +451,23 @@ class PSTestWindow(SiriusMainWindow):
     # ---------- devices control ----------
 
     def _get_tree_names(self):
+        # add LI, TB, BO, TS
         psnames = PSSearch.get_psnames({'sec': '(LI|TB|BO|TS)', 'dis': 'PS'})
+        # add SI Fams
         psnames.extend(PSSearch.get_psnames(
-            {'sec': 'SI', 'sub': 'Fam', 'dis': 'PS', 'dev': '(B|Q.*|S.*)'}))
+            {'sec': 'SI', 'sub': 'Fam', 'dis': 'PS', 'dev': '(B.*|Q.*|S.*)'}))
+        # add SI Corrs
         psnames.extend(PSSearch.get_psnames(
             {'sec': 'SI', 'sub': '[0-2][0-9].*', 'dis': 'PS',
              'dev': '(CH|CV)'}))
-        # psnames.extend(PSSearch.get_psnames(
-        #     {'sec': 'SI', 'sub': '[0-2][0-9].*', 'dis': 'PS',
-        #      'dev': '(QD.*|QF.*|Q[1-4])'}))
-        # psnames.extend(PSSearch.get_psnames(
-        #     {'sec': 'SI', 'sub': '[0-2][0-9](M1|M2|C1|C3)', 'dis': 'PS',
-        #      'dev': 'QS'}))
+        # add SI QTrims
+        psnames.extend(PSSearch.get_psnames(
+            {'sec': 'SI', 'sub': '[0-2][0-9].*', 'dis': 'PS',
+             'dev': '(QD.*|QF.*|Q[1-4])'}))
+        # add SI QSkews
+        psnames.extend(PSSearch.get_psnames(
+            {'sec': 'SI', 'sub': '[0-2][0-9](M1|M2|C1|C3)', 'dis': 'PS',
+             'dev': 'QS'}))
         return psnames
 
     def _get_selected_ps(self):

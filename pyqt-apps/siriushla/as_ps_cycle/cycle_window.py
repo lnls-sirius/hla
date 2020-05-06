@@ -8,7 +8,7 @@ from qtpy.QtGui import QColor, QPalette
 from qtpy.QtCore import Signal, QThread, Qt, QTimer
 from qtpy.QtWidgets import QWidget, QGridLayout, QVBoxLayout, \
     QPushButton, QLabel, QMessageBox, QApplication, QGroupBox, \
-    QListWidget, QListWidgetItem, QProgressBar
+    QListWidget, QListWidgetItem, QProgressBar, QHBoxLayout
 import qtawesome as qta
 
 from siriuspy.envars import VACA_PREFIX as VACA_PREFIX
@@ -24,7 +24,7 @@ from siriushla.widgets.dialog import ProgressDialog, PSStatusDialog
 from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
 from siriushla.as_ps_cycle.tasks import CreateCyclers, VerifyPS, \
     ZeroPSCurrent, ResetPSOpMode, RestoreTiming, PreparePSParams, \
-    PreparePSOpMode, PrepareTiming, Cycle
+    PreparePSOpMode, PrepareTiming, Cycle, CycleTrims
 
 
 errorcolor = QColor(255, 0, 0)
@@ -45,18 +45,22 @@ class CycleWindow(SiriusMainWindow):
         self._ps2cycle = list()
         self._ps_ready = list()
         self._ps_failed = list()
+        self._last_ps_selected = list()
         self._checked_accs = checked_accs
         # Flags
         self._is_preparing = ''
         self._prepared = {
-            'timing': False, 'ps_params': False, 'ps_opmode': False}
+            'timing': False,
+            'ps_params': False,
+            'ps_opmode': False,
+            'trims': True}
         # Setup UI
-        self._needs_update_leds = False
+        self._needs_update_setup = False
         self._setup_ui()
-        self._update_led_timer = QTimer(self)
-        self._update_led_timer.timeout.connect(self._update_led_channels)
-        self._update_led_timer.setInterval(500)
-        self._update_led_timer.start()
+        self._update_setup_timer = QTimer(self)
+        self._update_setup_timer.timeout.connect(self._update_setup)
+        self._update_setup_timer.setInterval(250)
+        self._update_setup_timer.start()
         self.setWindowTitle('PS Cycle')
 
     def _setup_ui(self):
@@ -100,30 +104,39 @@ class CycleWindow(SiriusMainWindow):
             '2. Prepare PS\nParameters', self)
         self.prepare_ps_params_bt.setToolTip(
             'Set power supplies current to zero and \n'
-            'configure cycle parameters or waveform.')
+            'configure cycle parameters.')
         self.prepare_ps_params_bt.clicked.connect(
             _part(self._prepare, 'ps', 'params'))
         self.prepare_ps_opmode_bt = QPushButton(
             '3. Prepare PS\nOpMode', self)
         self.prepare_ps_opmode_bt.setToolTip(
-            'Set power supplies OpMode to Cycle or RmpWfm.')
+            'Set power supplies OpMode to Cycle.')
         self.prepare_ps_opmode_bt.clicked.connect(
             _part(self._prepare, 'ps', 'opmode'))
-        self.cycle_bt = QPushButton('4. Cycle', self)
-        self.cycle_bt.setToolTip('Check all configurations and trigger cycle.')
+        self.cycle_trims_bt = QPushButton('4. Cycle\nTrims', self)
+        self.cycle_trims_bt.setToolTip(
+            'Cycle trims:\nStep 1) CH, QS and QTrims\nStep 2) CV')
+        self.cycle_trims_bt.clicked.connect(_part(self._cycle, True))
+        self.cycle_trims_bt.setVisible(False)
+        self.cycle_bt = QPushButton('5. Cycle', self)
+        self.cycle_bt.setToolTip(
+            'Check all configurations, enable triggers and run cycle.')
         self.cycle_bt.clicked.connect(self._cycle)
         self.cycle_bt.setEnabled(False)
         self.progress_list = QListWidget(self)
         self.progress_bar = MyProgressBar(self)
-        cyclelay = QGridLayout()
-        cyclelay.addWidget(self.prepare_timing_bt, 0, 0)
-        cyclelay.addWidget(self.prepare_ps_params_bt, 0, 1)
-        cyclelay.addWidget(self.prepare_ps_opmode_bt, 0, 2)
-        cyclelay.addWidget(self.cycle_bt, 0, 3)
-        cyclelay.addWidget(self.progress_list, 1, 0, 1, 4)
-        cyclelay.addWidget(self.progress_bar, 2, 0, 1, 4)
+        butlay = QHBoxLayout()
+        butlay.addWidget(self.prepare_timing_bt)
+        butlay.addWidget(self.prepare_ps_params_bt)
+        butlay.addWidget(self.prepare_ps_opmode_bt)
+        butlay.addWidget(self.cycle_trims_bt)
+        butlay.addWidget(self.cycle_bt)
+        cyclelay = QVBoxLayout()
+        cyclelay.addLayout(butlay)
+        cyclelay.addWidget(self.progress_list)
+        cyclelay.addWidget(self.progress_bar)
 
-        # commands
+        # auxiliar commands
         gb_comm = QGroupBox('Auxiliar Commands', self)
         self.restore_ti_bt = QPushButton('Restore Initial State')
         self.restore_ti_bt.clicked.connect(self._restore_timing)
@@ -199,6 +212,8 @@ class CycleWindow(SiriusMainWindow):
         if not pwrsupplies:
             QMessageBox.critical(self, 'Message', 'No power supply selected!')
             return
+        self._ps_selection_changed = self._last_ps_selected != pwrsupplies
+        self._last_ps_selected = pwrsupplies
 
         self._allButtons_setEnabled(False)
         self.progress_list.clear()
@@ -239,14 +254,17 @@ class CycleWindow(SiriusMainWindow):
             self._is_preparing = 'ps_' + ppty
             if ppty == 'params':
                 prepare_task = PreparePSParams(
-                    parent=self, psnames=pwrsupplies, timing=self._timing)
+                    parent=self, psnames=pwrsupplies, timing=self._timing,
+                    create_new_controller=self._ps_selection_changed)
             else:
                 prepare_task = PreparePSOpMode(
-                    parent=self, psnames=pwrsupplies, timing=self._timing)
+                    parent=self, psnames=pwrsupplies, timing=self._timing,
+                    create_new_controller=self._ps_selection_changed)
         else:
             self._is_preparing = 'timing'
             prepare_task = PrepareTiming(
-                parent=self, psnames=pwrsupplies, timing=self._timing)
+                parent=self, psnames=pwrsupplies, timing=self._timing,
+                create_new_controller=self._ps_selection_changed)
 
         prepare_task.updated.connect(self._update_progress)
         duration = prepare_task.duration()
@@ -262,7 +280,7 @@ class CycleWindow(SiriusMainWindow):
         prepare_task.start()
         self.update_bar.start()
 
-    def _cycle(self):
+    def _cycle(self, is_trim=False):
         if not self._check_connected('timing'):
             return
         if not self._check_connected('ps'):
@@ -284,8 +302,7 @@ class CycleWindow(SiriusMainWindow):
             self._allButtons_setEnabled(True)
             return
 
-        self._is_preparing = ''
-        self.cycle_bt.setEnabled(False)
+        self._is_preparing = '' if not is_trim else 'trims'
 
         create_task = CreateCyclers(parent=self, psnames=pwrsupplies)
         dlg = ProgressDialog('Creating cyclers...', create_task, self)
@@ -294,8 +311,9 @@ class CycleWindow(SiriusMainWindow):
             self._allButtons_setEnabled(True)
             return
 
-        cycle_task = Cycle(parent=self, psnames=pwrsupplies,
-                           timing=self._timing)
+        cycle_class = Cycle if not is_trim else CycleTrims
+        cycle_task = cycle_class(parent=self, psnames=pwrsupplies,
+                                 timing=self._timing)
         cycle_task.updated.connect(self._update_progress)
         duration = cycle_task.duration()
         self.progress_bar.setMinimum(0)
@@ -395,7 +413,7 @@ class CycleWindow(SiriusMainWindow):
             state2change = item2check.checkState(0)
             if state2change != state2set:
                 item2check.setCheckState(0, state2set)
-        self._needs_update_leds = True
+        self._needs_update_setup = True
 
     def _get_ps_not_ready_2_cycle(self, psname, status):
         if not status:
@@ -425,9 +443,8 @@ class CycleWindow(SiriusMainWindow):
                 self.progress_bar.setPalette(pal)
                 if self._is_preparing:
                     self._prepared[self._is_preparing] = False
-                else:
-                    self._prepared = {k: False for k in self._prepared.keys()}
-                self._allButtons_setEnabled(True)
+                cycle = all(self._prepared.values())
+                self._allButtons_setEnabled(True, cycle=cycle)
             elif warning:
                 item.setForeground(warncolor)
             elif 'finished' in text:
@@ -438,17 +455,18 @@ class CycleWindow(SiriusMainWindow):
                     cycle = all(self._prepared.values())
                 else:
                     self._prepared = {k: False for k in self._prepared.keys()}
-                    self.cycle_bt.setEnabled(False)
                     cycle = False
-                self._allButtons_setEnabled(True, cycle)
+                self._allButtons_setEnabled(True, cycle=cycle)
 
             self.progress_list.addItem(item)
             self.progress_list.scrollToBottom()
 
-    def _update_led_channels(self):
-        if not self._needs_update_leds:
+    def _update_setup(self):
+        if not self._needs_update_setup:
             return
+        self._needs_update_setup = False
 
+        # update leds
         psnames = self.pwrsupplies_tree.checked_items()
         ti_ch = [VACA_PREFIX + name
                  for name in self._timing.get_pvnames_by_psnames(psnames)]
@@ -460,20 +478,35 @@ class CycleWindow(SiriusMainWindow):
             ps_ch.append(VACA_PREFIX + name + ppty)
         self.psconn_led.set_channels(ps_ch)
 
-        self._needs_update_leds = False
+        # update buttons and self._prepared dict
+        si_fams = PSSearch.get_psnames(
+            {'sec': 'SI', 'sub': 'Fam', 'dis': 'PS'})
+        has_sifam = False
+        for psn in si_fams:
+            item = self.pwrsupplies_tree._item_map[psn]
+            has_sifam |= item.checkState(0) != 0
+
+        if not has_sifam:
+            self.cycle_bt.setText('4.Cycle')
+            self.cycle_trims_bt.setVisible(False)
+            self._prepared['trims'] = True
+        else:
+            self.cycle_bt.setText('5.Cycle')
+            self.cycle_trims_bt.setVisible(True)
+            self._prepared['trims'] = False
 
     def _allButtons_setEnabled(self, enable, cycle=False):
         self.prepare_timing_bt.setEnabled(enable)
         self.prepare_ps_params_bt.setEnabled(enable)
         self.prepare_ps_opmode_bt.setEnabled(enable)
+        self.cycle_trims_bt.setEnabled(enable)
         self.restore_ti_bt.setEnabled(enable)
         self.set_ps_2_slowref_bt.setEnabled(enable)
         self.zero_ps_curr_bt.setEnabled(enable)
-        if cycle:
-            self.cycle_bt.setEnabled(enable)
+        self.cycle_bt.setEnabled(cycle)
 
     def closeEvent(self, ev):
-        self._update_led_timer.stop()
+        self._update_setup_timer.stop()
         super().closeEvent(ev)
 
 
