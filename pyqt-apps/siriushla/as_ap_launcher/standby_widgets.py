@@ -1,3 +1,4 @@
+from copy import deepcopy as _dcopy
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QPushButton
 from qtpy.QtCore import Slot
 import qtawesome as qta
@@ -15,7 +16,7 @@ TRG_DSBL_VAL = TIConst.DsblEnbl.Dsbl
 PU_ENBL_VAL = PSConst.DsblEnbl.Enbl
 PU_DSBL_VAL = PSConst.DsblEnbl.Dsbl
 
-CHANNELS_2_VALUES = {
+CHANNELS_2_VALUES_BUTTON = {
     'TB-04:PU-InjSept:Pulse-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
     'TB-04:PU-InjSept:PwrState-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
     'BO-01D:PU-InjKckr:Pulse-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
@@ -36,6 +37,10 @@ CHANNELS_2_VALUES = {
     'SI-01SA:PU-InjNLKckr:Pulse-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
     'SI-01SA:PU-InjNLKckr:PwrState-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
 }
+CHANNELS_2_VALUES_LED = _dcopy(CHANNELS_2_VALUES_BUTTON)
+CHANNELS_2_VALUES_LED.update({
+    'BR-RF-DLLRF-01:RmpReady-Mon': (TRG_DSBL_VAL, TRG_ENBL_VAL),
+})
 
 
 class InjSysStandbyButton(PyDMWritableWidget, QPushButton):
@@ -52,7 +57,7 @@ class InjSysStandbyButton(PyDMWritableWidget, QPushButton):
         self._address2values = dict()
         self._address2channel = dict()
         self._address2conn = dict()
-        for address, values in CHANNELS_2_VALUES.items():
+        for address, values in CHANNELS_2_VALUES_BUTTON.items():
             self._address2conn[address] = False
             channel = PyDMChannel(
                 address=address,
@@ -128,7 +133,7 @@ class InjSysStandbyStatusLed(PyDMLedMultiChannel):
 
     def __init__(self, parent=None):
         channels2values = {k.replace('Sel', 'Sts'): v[1]
-                           for k, v in CHANNELS_2_VALUES.items()}
+                           for k, v in CHANNELS_2_VALUES_LED.items()}
         super().__init__(parent, channels2values)
         self.stateColors = [PyDMLed.DarkGreen, PyDMLed.LightGreen,
                             PyDMLed.Yellow, PyDMLed.Gray]
