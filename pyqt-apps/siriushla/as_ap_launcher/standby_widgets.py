@@ -2,6 +2,7 @@ from copy import deepcopy as _dcopy
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QPushButton
 from qtpy.QtCore import Slot
 import qtawesome as qta
+import pydm
 from pydm.widgets.base import PyDMWidget, PyDMWritableWidget
 from pydm.widgets.channel import PyDMChannel
 
@@ -40,6 +41,8 @@ CHANNELS_2_VALUES_BUTTON = {
 CHANNELS_2_VALUES_LED = _dcopy(CHANNELS_2_VALUES_BUTTON)
 CHANNELS_2_VALUES_LED.update({
     'BR-RF-DLLRF-01:RmpReady-Mon': (TRG_DSBL_VAL, TRG_ENBL_VAL),
+    'BO-Glob:TI-Mags-Fams:State-Sts': (TRG_DSBL_VAL, TRG_ENBL_VAL),
+    'BO-Glob:TI-Mags-Corrs:State-Sts': (TRG_DSBL_VAL, TRG_ENBL_VAL),
 })
 
 
@@ -66,15 +69,16 @@ class InjSysStandbyButton(PyDMWritableWidget, QPushButton):
             channel.connect()
             self._address2channel[address] = channel
             self._address2values[address] = values[pressValue]
-        self.clicked.connect(self.sendValue)
+        self.released.connect(self.sendValue)
 
     def sendValue(self):
         """Send values to PVs."""
         if not self._connected:
             return
         for addr, val in self._address2values.items():
-            channel = self._address2channel[addr]
-            channel.value_signal[int].emit(val)
+            plugin = pydm.data_plugins.plugin_for_address(addr)
+            conn = plugin.connections[addr]
+            conn.put_value(val)
 
     @Slot(bool)
     def connection_changed(self, conn):
