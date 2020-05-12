@@ -99,7 +99,7 @@ class CurrLTWindow(SiriusMainWindow):
         self.graph.autoRangeY = True
         self.graph.setObjectName('graph')
         self.graph.setStyleSheet('#graph{min-width:40em;}')
-        self.graph.bufferSize = 20000
+        self.graph.bufferSize = 36000
         self._set_graph_timespan(2000)
 
         self.graph.addYChannel(
