@@ -342,6 +342,17 @@ class CurrLTWindow(SiriusMainWindow):
         self._lb_firstsmpl = PyDMLabel(
             self, self.device_prefix+':FrstSplTime-RB')
         self._lb_firstsmpl.setVisible(False)
+        self._pb_firstnow = QPushButton(
+            qta.icon('mdi.clock-end'), '', self)
+        self._pb_firstnow.setObjectName('firstnow')
+        self._pb_firstnow.setStyleSheet(
+            '#firstnow{min-width:25px; max-width:25px; icon-size:20px;}')
+        self._pb_firstnow.released.connect(self._update_first_time)
+        self._pb_firstnow.setVisible(False)
+        hbox_sp_first = QHBoxLayout()
+        hbox_sp_first.addWidget(self._le_firstsmpl)
+        hbox_sp_first.addWidget(self._pb_firstnow)
+
         self._ld_lastsmpl = QLabel(
             'Last Time [s]:', self,
             alignment=Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
@@ -352,6 +363,17 @@ class CurrLTWindow(SiriusMainWindow):
         self._lb_lastsmpl = PyDMLabel(
             self, self.device_prefix+':LastSplTime-RB')
         self._lb_lastsmpl.setVisible(False)
+        self._pb_lastnow = QPushButton(
+            qta.icon('mdi.clock-end'), '', self)
+        self._pb_lastnow.setObjectName('lastnow')
+        self._pb_lastnow.setStyleSheet(
+            '#lastnow{min-width:25px; max-width:25px; icon-size:20px;}')
+        self._pb_lastnow.released.connect(self._update_last_time)
+        self._pb_lastnow.setVisible(False)
+        hbox_sp_last = QHBoxLayout()
+        hbox_sp_last.addWidget(self._le_lastsmpl)
+        hbox_sp_last.addWidget(self._pb_lastnow)
+
         self._ld_smplintvl = QLabel(
             'Samples\nInterval [s]:', self,
             alignment=Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
@@ -427,10 +449,10 @@ class CurrLTWindow(SiriusMainWindow):
         lay.addWidget(self._sb_maxintvl, 4, 1)
         lay.addWidget(self._lb_maxintvl, 4, 2)
         lay.addWidget(self._ld_firstsmpl, 5, 0)
-        lay.addWidget(self._le_firstsmpl, 5, 1, 1, 2)
+        lay.addLayout(hbox_sp_first, 5, 1, 1, 2)
         lay.addWidget(self._lb_firstsmpl, 6, 1, 1, 2)
         lay.addWidget(self._ld_lastsmpl, 7, 0)
-        lay.addWidget(self._le_lastsmpl, 7, 1, 1, 2)
+        lay.addLayout(hbox_sp_last, 7, 1, 1, 2)
         lay.addWidget(self._lb_lastsmpl, 8, 1, 1, 2)
         lay.addWidget(self._ld_smplintvl, 9, 0)
         lay.addWidget(self._lb_smplintvl, 9, 1)
@@ -558,9 +580,11 @@ class CurrLTWindow(SiriusMainWindow):
         self._ld_firstsmpl.setVisible(visi)
         self._le_firstsmpl.setVisible(visi)
         self._lb_firstsmpl.setVisible(visi)
+        self._pb_firstnow.setVisible(visi)
         self._ld_lastsmpl.setVisible(visi)
         self._le_lastsmpl.setVisible(visi)
         self._lb_lastsmpl.setVisible(visi)
+        self._pb_lastnow.setVisible(visi)
         self.sender().setText('+' if text == '-' else '-')
 
     @Slot(int)
@@ -573,6 +597,16 @@ class CurrLTWindow(SiriusMainWindow):
     def _set_graph_timespan(self, value):
         """Set graph time span."""
         self.graph.setTimeSpan(float(value))
+
+    def _update_first_time(self):
+        """Update first sample time to current timestamp."""
+        now = _time.time()
+        self._le_firstsmpl.send_value_signal[float].emit(now)
+
+    def _update_last_time(self):
+        """Update last sample time to current timestamp."""
+        now = _time.time()
+        self._le_lastsmpl.send_value_signal[float].emit(now)
 
     @Slot(float)
     def _update_graph(self, value):
