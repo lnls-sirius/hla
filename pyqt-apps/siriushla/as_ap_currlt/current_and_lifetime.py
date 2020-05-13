@@ -317,6 +317,14 @@ class CurrLTWindow(SiriusMainWindow):
         self._ld_maxintvl = QLabel(
             'Max. Sampling\nInterval [s]:', self,
             alignment=Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
+        self._ld_maxintvl.setToolTip(
+            "Timestamp settings use 2 parameters to define the\n"
+            "timestamp interval.\n\n"
+            "If 'Max. Sampling Interval' == -1:\n"
+            "    use 'Last Time' and 'First Time' parameters.\n"
+            "Else:\n"
+            "    use 'Max. Sampling Interval' and last timestamp set.\n\n"
+            "Default: use 'Max. Sampling Interval' and 'Last Time'.")
         hlay_maxintvl = QHBoxLayout()
         hlay_maxintvl.addWidget(self._pb_plussett)
         hlay_maxintvl.addWidget(self._ld_maxintvl)
@@ -344,6 +352,7 @@ class CurrLTWindow(SiriusMainWindow):
         self._pb_firstnow.setObjectName('firstnow')
         self._pb_firstnow.setStyleSheet(
             '#firstnow{min-width:25px; max-width:25px; icon-size:20px;}')
+        self._pb_firstnow.setToolTip('Click to set current timestamp')
         self._pb_firstnow.released.connect(self._update_first_time)
         self._pb_firstnow.setVisible(False)
         hbox_sp_first = QHBoxLayout()
@@ -353,6 +362,8 @@ class CurrLTWindow(SiriusMainWindow):
         self._ld_lastsmpl = QLabel(
             'Last Time [s]:', self,
             alignment=Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
+        self._ld_lastsmpl.setToolTip(
+            "If 'Last Time' == -1, use current timestamp.")
         self._ld_lastsmpl.setVisible(False)
         self._le_lastsmpl = PyDMLineEdit(
             self, self.device_prefix+':LastSplTime-SP')
@@ -365,6 +376,7 @@ class CurrLTWindow(SiriusMainWindow):
         self._pb_lastnow.setObjectName('lastnow')
         self._pb_lastnow.setStyleSheet(
             '#lastnow{min-width:25px; max-width:25px; icon-size:20px;}')
+        self._pb_lastnow.setToolTip('Click to set current timestamp')
         self._pb_lastnow.released.connect(self._update_last_time)
         self._pb_lastnow.setVisible(False)
         hbox_sp_last = QHBoxLayout()
