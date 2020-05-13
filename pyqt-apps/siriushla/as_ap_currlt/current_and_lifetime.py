@@ -344,9 +344,12 @@ class CurrLTWindow(SiriusMainWindow):
         self._le_firstsmpl = PyDMLineEdit(
             self, self.device_prefix+':FrstSplTime-SP')
         self._le_firstsmpl.setVisible(False)
-        self._lb_firstsmpl = PyDMLabel(
+        self._lb_firstsmpl_dcct = PyDMLabel(
             self, self.device_prefix+':FrstSplTime-RB')
-        self._lb_firstsmpl.setVisible(False)
+        self._lb_firstsmpl_dcct.setVisible(False)
+        self._lb_firstsmpl_bpm = PyDMLabel(
+            self, self.device_prefix+':FrstSplTimeBPM-RB')
+        self._lb_firstsmpl_bpm.setVisible(False)
         self._pb_firstnow = QPushButton(
             qta.icon('mdi.clock-end'), '', self)
         self._pb_firstnow.setObjectName('firstnow')
@@ -368,9 +371,12 @@ class CurrLTWindow(SiriusMainWindow):
         self._le_lastsmpl = PyDMLineEdit(
             self, self.device_prefix+':LastSplTime-SP')
         self._le_lastsmpl.setVisible(False)
-        self._lb_lastsmpl = PyDMLabel(
+        self._lb_lastsmpl_dcct = PyDMLabel(
             self, self.device_prefix+':LastSplTime-RB')
-        self._lb_lastsmpl.setVisible(False)
+        self._lb_lastsmpl_dcct.setVisible(False)
+        self._lb_lastsmpl_bpm = PyDMLabel(
+            self, self.device_prefix+':LastSplTimeBPM-RB')
+        self._lb_lastsmpl_bpm.setVisible(False)
         self._pb_lastnow = QPushButton(
             qta.icon('mdi.clock-end'), '', self)
         self._pb_lastnow.setObjectName('lastnow')
@@ -386,8 +392,11 @@ class CurrLTWindow(SiriusMainWindow):
         self._ld_smplintvl = QLabel(
             'Samples\nInterval [s]:', self,
             alignment=Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
-        self._lb_smplintvl = PyDMLabel(
+        self._lb_smplintvl_dcct = PyDMLabel(
             self, self.device_prefix+':SplIntvl-Mon')
+        self._lb_smplintvl_bpm = PyDMLabel(
+            self, self.device_prefix+':SplIntvlBPM-Mon')
+        self._lb_smplintvl_bpm.setVisible(False)
 
         self._ld_intvlbtwspl = QLabel(
             'Interval Between\nSamples [s]:', self,
@@ -421,9 +430,13 @@ class CurrLTWindow(SiriusMainWindow):
         self._ld_bufsize = QLabel(
             'Size:', self,
             alignment=Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
-        self._lb_bufsize = PyDMLabel(
+        self._lb_bufsize_dcct = PyDMLabel(
             self, self.device_prefix+':BuffSize-Mon')
-        self._lb_bufsize.setAlignment(Qt.AlignCenter)
+        self._lb_bufsize_dcct.setAlignment(Qt.AlignCenter)
+        self._lb_bufsize_bpm = PyDMLabel(
+            self, self.device_prefix+':BuffSizeBPM-Mon')
+        self._lb_bufsize_bpm.setAlignment(Qt.AlignCenter)
+        self._lb_bufsize_bpm.setVisible(False)
         self._pb_bufreset = PyDMPushButton(
             self, label='', icon=qta.icon('mdi.delete-empty'), pressValue=1,
             init_channel=self.device_prefix+':BuffRst-Cmd')
@@ -431,17 +444,30 @@ class CurrLTWindow(SiriusMainWindow):
         self._pb_bufreset.setStyleSheet(
             "#reset{min-width:25px; max-width:25px; icon-size:20px;}")
         self._ld_sep = QLabel('/', self)
-        self._lb_bufsizetot = PyDMLabel(
+        self._lb_bufsizetot_dcct = PyDMLabel(
             self, self.device_prefix+':BuffSizeTot-Mon')
-        self._lb_bufsizetot.setStyleSheet(
+        self._lb_bufsizetot_dcct.setStyleSheet(
             "min-width:5em; max-width:5em;")
-        self._lb_bufsizetot.setAlignment(Qt.AlignCenter)
-        self._lb_bufsizetot.precision = 0
-        hlay_bufsize = QHBoxLayout()
-        hlay_bufsize.addWidget(self._lb_bufsize)
-        hlay_bufsize.addWidget(self._pb_bufreset)
-        hlay_bufsize.addWidget(self._ld_sep)
-        hlay_bufsize.addWidget(self._lb_bufsizetot)
+        self._lb_bufsizetot_dcct.setAlignment(Qt.AlignCenter)
+        self._lb_bufsizetot_dcct.precision = 0
+        self._lb_bufsizetot_bpm = PyDMLabel(
+            self, self.device_prefix+':BuffSizeTotBPM-Mon')
+        self._lb_bufsizetot_bpm.setStyleSheet(
+            "min-width:5em; max-width:5em;")
+        self._lb_bufsizetot_bpm.setAlignment(Qt.AlignCenter)
+        self._lb_bufsizetot_bpm.precision = 0
+        self._lb_bufsizetot_bpm.setVisible(False)
+        glay_bufsize = QGridLayout()
+        glay_bufsize.addWidget(self._lb_bufsize_dcct, 0, 0)
+        glay_bufsize.addWidget(self._lb_bufsize_bpm, 0, 0)
+        glay_bufsize.addWidget(self._pb_bufreset, 0, 1)
+        glay_bufsize.addWidget(self._ld_sep, 0, 2)
+        glay_bufsize.addWidget(self._lb_bufsizetot_dcct, 0, 3)
+        glay_bufsize.addWidget(self._lb_bufsizetot_bpm, 0, 3)
+        glay_bufsize.setColumnStretch(0, 5)
+        glay_bufsize.setColumnStretch(1, 2)
+        glay_bufsize.setColumnStretch(2, 1)
+        glay_bufsize.setColumnStretch(3, 5)
 
         gbox = QGroupBox('Lifetime Settings', self)
         lay = QGridLayout(gbox)
@@ -459,12 +485,15 @@ class CurrLTWindow(SiriusMainWindow):
         lay.addWidget(self._lb_maxintvl, 4, 2)
         lay.addWidget(self._ld_firstsmpl, 5, 0)
         lay.addLayout(hbox_sp_first, 5, 1, 1, 2)
-        lay.addWidget(self._lb_firstsmpl, 6, 1, 1, 2)
+        lay.addWidget(self._lb_firstsmpl_dcct, 6, 1, 1, 2)
+        lay.addWidget(self._lb_firstsmpl_bpm, 6, 1, 1, 2)
         lay.addWidget(self._ld_lastsmpl, 7, 0)
         lay.addLayout(hbox_sp_last, 7, 1, 1, 2)
-        lay.addWidget(self._lb_lastsmpl, 8, 1, 1, 2)
+        lay.addWidget(self._lb_lastsmpl_dcct, 8, 1, 1, 2)
+        lay.addWidget(self._lb_lastsmpl_bpm, 8, 1, 1, 2)
         lay.addWidget(self._ld_smplintvl, 9, 0)
-        lay.addWidget(self._lb_smplintvl, 9, 1)
+        lay.addWidget(self._lb_smplintvl_dcct, 9, 1)
+        lay.addWidget(self._lb_smplintvl_bpm, 9, 1)
         lay.addWidget(self._ld_intvlbtwspl, 10, 0)
         lay.addWidget(self._sb_intvlbtwspl, 10, 1)
         lay.addWidget(self._lb_intvlbtwspl, 10, 2)
@@ -479,7 +508,7 @@ class CurrLTWindow(SiriusMainWindow):
         lay.addItem(
             QSpacerItem(20, 5, QSzPlcy.Minimum, QSzPlcy.Fixed), 14, 1)
         lay.addWidget(self._ld_bufsize, 15, 0)
-        lay.addLayout(hlay_bufsize, 15, 1, 1, 2)
+        lay.addLayout(glay_bufsize, 15, 1, 1, 2)
         return gbox
 
     def _setupGraphSettingsWidget(self):
@@ -548,39 +577,33 @@ class CurrLTWindow(SiriusMainWindow):
         self._curve_current.setVisible(cond)
         self._curve_lifetimedcct.setVisible(cond)
         self._curve_dcct_buff.setVisible(cond)
+        self._lb_bufsizetot_dcct.setVisible(cond)
+        self._lb_bufsize_dcct.setVisible(cond)
+        self._lb_smplintvl_dcct.setVisible(cond)
+
         self._curve_bpmsum.setVisible(not cond)
         self._curve_lifetimebpm.setVisible(not cond)
         self._curve_bpm_buff.setVisible(not cond)
+        self._lb_bufsizetot_bpm.setVisible(not cond)
+        self._lb_bufsize_bpm.setVisible(not cond)
+        self._lb_smplintvl_bpm.setVisible(not cond)
+
+        visi = self._pb_plussett.text() == '-'
+        self._lb_firstsmpl_dcct.setVisible(cond and visi)
+        self._lb_lastsmpl_dcct.setVisible(cond and visi)
+        self._lb_firstsmpl_bpm.setVisible(not cond and visi)
+        self._lb_lastsmpl_bpm.setVisible(not cond and visi)
+
         if not cond:
             self.graph.plotItem.getAxis('left').setLabel(
                 '01M1 BPM Sum', color='blue')
             self._lb_lifetime.channel = \
                 self.device_prefix+':LifetimeBPM-Mon'
-            self._lb_bufsizetot.channel = \
-                self.device_prefix+':BuffSizeTotBPM-Mon'
-            self._lb_bufsize.channel = \
-                self.device_prefix+':BuffSizeBPM-Mon'
-            self._lb_firstsmpl.channel = \
-                self.device_prefix+':FrstSplTimeBPM-RB'
-            self._lb_lastsmpl.channel = \
-                self.device_prefix+':LastSplTimeBPM-RB'
-            self._lb_smplintvl.channel = \
-                self.device_prefix+':SplIntvlBPM-Mon'
         else:
             self.graph.plotItem.getAxis('left').setLabel(
                 'Current [mA]', color='blue')
             self._lb_lifetime.channel = \
                 self.device_prefix+':Lifetime-Mon'
-            self._lb_bufsizetot.channel = \
-                self.device_prefix+':BuffSizeTot-Mon'
-            self._lb_bufsize.channel = \
-                self.device_prefix+':BuffSize-Mon'
-            self._lb_firstsmpl.channel = \
-                self.device_prefix+':FrstSplTime-RB'
-            self._lb_lastsmpl.channel = \
-                self.device_prefix+':LastSplTime-RB'
-            self._lb_smplintvl.channel = \
-                self.device_prefix+':SplIntvl-Mon'
 
     def _handle_intvl_sett_visibility(self):
         """Handle sampling interval settings."""
@@ -588,12 +611,17 @@ class CurrLTWindow(SiriusMainWindow):
         visi = text == '+'
         self._ld_firstsmpl.setVisible(visi)
         self._le_firstsmpl.setVisible(visi)
-        self._lb_firstsmpl.setVisible(visi)
         self._pb_firstnow.setVisible(visi)
         self._ld_lastsmpl.setVisible(visi)
         self._le_lastsmpl.setVisible(visi)
-        self._lb_lastsmpl.setVisible(visi)
         self._pb_lastnow.setVisible(visi)
+
+        showingdcct = self._cb_ltfrom.currentText() == 'DCCT'
+        self._lb_firstsmpl_dcct.setVisible(showingdcct and visi)
+        self._lb_lastsmpl_dcct.setVisible(showingdcct and visi)
+        self._lb_firstsmpl_bpm.setVisible(not showingdcct and visi)
+        self._lb_lastsmpl_bpm.setVisible(not showingdcct and visi)
+
         self.sender().setText('+' if text == '-' else '-')
 
     @Slot(int)
