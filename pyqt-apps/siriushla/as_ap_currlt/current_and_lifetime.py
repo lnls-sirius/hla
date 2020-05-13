@@ -209,9 +209,6 @@ class CurrLTWindow(SiriusMainWindow):
         self._bt_dcctfault.shape = PyDMStateButton.Rounded
         self._led_dcctfault = SiriusLedState(
             self, self.device_prefix+':DCCTFltCheck-Sts')
-        hlay_dcctfault = QHBoxLayout()
-        hlay_dcctfault.addWidget(self._bt_dcctfault)
-        hlay_dcctfault.addWidget(self._led_dcctfault)
 
         self._ld_seldcct = QLabel('Select DCCT:', self)
         self._ld_seldcct.setAlignment(
@@ -222,9 +219,6 @@ class CurrLTWindow(SiriusMainWindow):
             self, self.device_prefix+':DCCT-Sts')
         self._lb_seldcct.setAlignment(Qt.AlignCenter)
         self._lb_seldcct.precision = 0
-        hlay_seldcct = QHBoxLayout()
-        hlay_seldcct.addWidget(self._cb_seldcct)
-        hlay_seldcct.addWidget(self._lb_seldcct)
 
         self._led_dcct13c4 = SiriusLedAlert(
             self, self.prefix+'SI-13C4:DI-DCCT:ReliableMeas-Mon')
@@ -279,15 +273,18 @@ class CurrLTWindow(SiriusMainWindow):
         lay.addWidget(self._ld_storedebeam, 0, 0)
         lay.addWidget(self._led_storedebeam, 0, 1)
         lay.addWidget(self._ld_dcctfault, 1, 0)
-        lay.addLayout(hlay_dcctfault, 1, 1)
+        lay.addWidget(self._bt_dcctfault, 1, 1)
+        lay.addWidget(self._led_dcctfault, 1, 2)
         lay.addWidget(self._ld_seldcct, 2, 0)
-        lay.addLayout(hlay_seldcct, 2, 1)
+        lay.addWidget(self._cb_seldcct, 2, 1)
+        lay.addWidget(self._lb_seldcct, 2, 2)
         lay.addItem(
             QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Minimum), 3, 0)
-        lay.addLayout(hlay_dcct13c4, 4, 0, 1, 2)
-        lay.addLayout(hlay_dcct14c4, 5, 0, 1, 2)
-        lay.setColumnStretch(0, 1)
+        lay.addLayout(hlay_dcct13c4, 4, 0, 1, 3)
+        lay.addLayout(hlay_dcct14c4, 5, 0, 1, 3)
+        lay.setColumnStretch(0, 2)
         lay.setColumnStretch(1, 1)
+        lay.setColumnStretch(2, 1)
         return gbox
 
     def _setupLifetimeSettigsWidget(self):
