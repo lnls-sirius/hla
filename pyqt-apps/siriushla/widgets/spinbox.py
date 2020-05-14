@@ -1,6 +1,6 @@
 from qtpy.QtCore import Property
 from pydm.widgets import PyDMSpinbox
-from pydm.widgets.base import PyDMWritableWidget
+from pydm.widgets.base import PyDMWritableWidget, TextFormatter
 
 
 class SiriusSpinbox(PyDMSpinbox):
@@ -66,7 +66,7 @@ class SiriusSpinbox(PyDMSpinbox):
         new_precison : int or float
             The new precision value
         """
-        super(SiriusSpinbox, self).precision_changed(new_precision)
+        TextFormatter.precision_changed(self, new_precision)
         self.update_limits()
 
     @Property(bool)
