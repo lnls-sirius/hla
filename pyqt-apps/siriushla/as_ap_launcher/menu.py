@@ -233,6 +233,14 @@ def get_object(ismenubar=True, parent=None):
             self.connect_newprocess(mpsmon, 'sirius-hla-li-ap-mpsmon.py')
             mps.addAction(mpsmon)
 
+            llrf = LEVEL2M('LLRF', menu)
+            llrf.setObjectName('LIApp')
+            llrf.setIcon(qta.icon('mdi.waves'))
+            llrfa = QAction('Main', llrf)
+            llrfa.setIcon(qta.icon('mdi.waves'))
+            self.connect_newprocess(llrfa, 'sirius-hla-li-rf-llrf.py')
+            llrf.addAction(llrfa)
+
             optics = LEVEL2M('Optics', menu)
             optics.setObjectName('LIApp')
             energy = QAction('Energy Meas', optics)
@@ -245,6 +253,7 @@ def get_object(ismenubar=True, parent=None):
 
             self.add_object_to_level1(menu, PS)
             self.add_object_to_level1(menu, mps)
+            self.add_object_to_level1(menu, llrf)
             self.add_object_to_level1(menu, launcher)
             self.add_object_to_level1(menu, optics)
             return menu

@@ -138,8 +138,8 @@ def run_newprocess(cmd, is_window=True, is_pydm=False, **kwargs):
 def get_appropriate_color(section='SI'):
     dic = {
         'AS': '#d7ccc8',
-        'LI': '#ffcdd2',
-        'TB': '#f8bbd0',
+        'LI': '#f3d2d5',
+        'TB': '#fcaac7',
         'BO': '#c8e6c9',
         'TS': '#b2ebf2',
         'SI': '#56aeff',
