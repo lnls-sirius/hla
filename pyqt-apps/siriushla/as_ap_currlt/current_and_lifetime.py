@@ -627,8 +627,9 @@ class CurrLTWindow(SiriusMainWindow):
     @Slot(int)
     def _handle_samples_visibility(self, state):
         """Handle samples visibility."""
-        self._curve_dcct_buff.setVisible(state)
-        self._curve_bpm_buff.setVisible(state)
+        showingdcct = self._cb_ltfrom.currentText() == 'DCCT'
+        self._curve_dcct_buff.setVisible(showingdcct and state)
+        self._curve_bpm_buff.setVisible(not showingdcct and state)
 
     @Slot(int)
     def _set_graph_timespan(self, value):
