@@ -16,6 +16,7 @@ from ..widgets import SiriusSpinbox, PyDMStateButton, SiriusLedState, \
 
 class DEVICES(_enum.IntEnum):
     """."""
+
     SHB = (0, 'Sub-harmonic Buncher', 'BUN1')
     Kly1 = (1, 'Klystron 1', 'KLY1')
     Kly2 = (2, 'Klystron 2', 'KLY2')
@@ -76,10 +77,9 @@ class ControlBox(QWidget):
     def __init__(self, parent=None, dev=None):
         """."""
         super().__init__(parent=parent)
-        try:
-            self.dev = DEVICES(dev)
-        except ValueError:
-            self.dev = DEVICES.Kly1
+        if dev not in DEVICES:
+            dev = DEVICES.Kly1
+        self.dev = dev
         self._setupui()
 
     def _setupui(self):
@@ -159,10 +159,9 @@ class GraphIvsQ(QWidget):
     def __init__(self, parent=None, dev=None):
         """."""
         super().__init__(parent=parent)
-        try:
-            self.dev = DEVICES(dev)
-        except ValueError:
-            self.dev = DEVICES.Kly1
+        if dev not in DEVICES:
+            dev = DEVICES.Kly1
+        self.dev = dev
         self._setupui()
 
     def _setupui(self):
@@ -228,10 +227,9 @@ class GraphAmpPha(QWidget):
     def __init__(self, parent=None, dev=None, prop='Amp'):
         """."""
         super().__init__(parent=parent)
-        try:
-            self.dev = DEVICES(dev)
-        except ValueError:
-            self.dev = DEVICES.Kly1
+        if dev not in DEVICES:
+            dev = DEVICES.Kly1
+        self.dev = dev
         self.prop = prop
         self._setupui()
 
