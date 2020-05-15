@@ -153,8 +153,6 @@ class ControlBox(QWidget):
         lay1.addLayout(hlay, row, 0, 1, 3)
 
 
-
-
 class GraphIvsQ(QWidget):
     """."""
 
