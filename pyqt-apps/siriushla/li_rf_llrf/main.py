@@ -38,8 +38,7 @@ class MainWindow(SiriusMainWindow):
         self.setObjectName('LIApp')
         self.setWindowTitle('LI LLRF')
         self.setWindowIcon(_qta.icon(
-            'mdi.current-ac',
-            color=_util.get_appropriate_color('LI')))
+            'mdi.waves', color=_util.get_appropriate_color('LI')))
 
         self._setupui()
 

@@ -235,8 +235,9 @@ def get_object(ismenubar=True, parent=None):
 
             llrf = LEVEL2M('LLRF', menu)
             llrf.setObjectName('LIApp')
+            llrf.setIcon(qta.icon('mdi.waves'))
             llrfa = QAction('Main', llrf)
-            llrfa.setIcon(qta.icon('mdi.current-ac'))
+            llrfa.setIcon(qta.icon('mdi.waves'))
             self.connect_newprocess(llrfa, 'sirius-hla-li-rf-llrf.py')
             llrf.addAction(llrfa)
 
