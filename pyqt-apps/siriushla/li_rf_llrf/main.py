@@ -255,13 +255,15 @@ class GraphAmpPha(QWidget):
         axx.setTicks([])
         axx.setHeight(0)
         graph.setAxisColor(QColor(0, 0, 0))
+        graph.plotItem.setLabel('bottom', 'Time')
+        graph.setTimeSpan(360)
+        graph.setUpdateInterval(1/3)
         if self.prop == 'Amp':
             graph.setLabel('left', 'Amplitude')
             chname = 'LA-RF:LLRF:' + self.dev.pvname + ':GET_CH1_AMP'
         else:
             graph.setLabel('left', 'Phase')
             chname = 'LA-RF:LLRF:' + self.dev.pvname + ':GET_CH1_PHASE'
-        graph.plotItem.setLabel('bottom', 'Time')
 
         opts = dict(
             y_channel=chname,
