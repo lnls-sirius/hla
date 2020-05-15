@@ -54,7 +54,7 @@ class MainWindow(SiriusMainWindow):
             lay = QGridLayout()
             lay.setContentsMargins(0, 0, 0, 0)
             grbox.setLayout(lay)
-            lay.addWidget(ControlBox(grbox, DEVICES.SHB), 0, 0)
+            lay.addWidget(ControlBox(grbox, dev), 0, 0)
             ivsq = GraphIvsQ(wid, dev)
             amp = GraphAmpPha(wid, dev)
             pha = GraphAmpPha(wid, dev, prop='Phase')
