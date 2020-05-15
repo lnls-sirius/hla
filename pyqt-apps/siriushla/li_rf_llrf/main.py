@@ -4,14 +4,14 @@ import enum as _enum
 
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
-from qtpy.QtWidgets import QGroupBox, QGridLayout, QWidget, QLabel
+from qtpy.QtWidgets import QGroupBox, QGridLayout, QWidget, QLabel, QHBoxLayout
 from pydm.widgets import PyDMWaveformPlot, PyDMTimePlot
 import qtawesome as _qta
 
 from .. import util as _util
 from ..widgets import SiriusMainWindow
 from ..widgets import SiriusSpinbox, PyDMStateButton, SiriusLedState, \
-    SiriusLabel
+    SiriusLabel, SiriusLedAlert
 
 
 class DEVICES(_enum.IntEnum):
@@ -127,6 +127,7 @@ class ControlBox(QWidget):
             lay1.addWidget(rba, row, 2)
 
         row += 1
+        hlay = QHBoxLayout()
         if self.dev == DEVICES.SHB:
             labc = QLabel('Phase Diff [°]', self)
             rbpv = 'LA-RF:LLRF:' + self.dev.pvname + ':GET_PHASE_DIFF'
@@ -135,6 +136,23 @@ class ControlBox(QWidget):
             rbc.precision = 2
             lay1.addWidget(labc, row, 0, 1, 2)
             lay1.addWidget(rbc, row, 2)
+            row += 1
+        else:
+            rbpv = 'LA-RF:LLRF:' + self.dev.pvname + ':GET_INTERLOCK'
+            rb1 = SiriusLedAlert(self, init_channel=rbpv)
+            hlay.addWidget(QLabel('Refl. Pow. Intlk'))
+            hlay.addWidget(rb1)
+
+        hlay.addStretch()
+        rbpv = 'LA-RF:LLRF:' + self.dev.pvname + ':GET_TRIGGER_STATUS'
+        rb2 = SiriusLedAlert(self, init_channel=rbpv)
+        rb2.setOnColor(rb2.LightGreen)
+        rb2.setOffColor(rb2.Red)
+        hlay.addWidget(QLabel('Trig. Stts'))
+        hlay.addWidget(rb2)
+        lay1.addLayout(hlay, row, 0, 1, 3)
+
+
 
 
 class GraphIvsQ(QWidget):
