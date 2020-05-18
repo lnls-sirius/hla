@@ -13,6 +13,9 @@ from qtpy.QtCore import Signal, Qt, QSize, QTimer, QByteArray, \
                         QRectF, Property, Q_ENUMS, QFile
 from qtpy.QtSvg import QSvgRenderer
 
+# This line is necessary for correct imports in designer-qt
+import siriushla.resources
+
 __path__ = _os.path.dirname(__file__)
 
 
