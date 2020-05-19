@@ -67,6 +67,7 @@ class SiriusSpinbox(PyDMSpinbox):
             The new precision value
         """
         TextFormatter.precision_changed(self, new_precision)
+        self.setDecimals(self.precision)
         self.update_limits()
 
     @Property(bool)
