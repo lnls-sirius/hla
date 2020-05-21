@@ -176,6 +176,8 @@ class BaseCombo(QComboBox, PyDMPrimitiveWidget):
 
     def _orbit_changed(self, pln, orb):
         myorb = self.orbits[pln]
-        if myorb is not None and _np.allclose(orb, myorb, rtol=1e-7):
+        
+        if myorb is not None and myorb.size == orb.size and \
+                _np.allclose(orb, myorb, rtol=1e-7):
             return
         self.setCurrentIndex(self.count()-1)
