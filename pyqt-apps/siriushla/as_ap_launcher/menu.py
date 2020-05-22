@@ -265,22 +265,30 @@ def get_object(ismenubar=True, parent=None):
 
             PS = self._set_ps_menu(sec)
             PS.setIcon(qta.icon('mdi.car-battery'))
+            self.add_object_to_level1(menu, PS)
+
             if sec in {'bo', 'si'}:
                 PU = self._set_pu_menu(sec)
                 PU.setIcon(qta.icon('mdi.current-ac'))
-            OPT = self._set_optics_menu(sec)
-            DIG = self._set_diagnostic_menu(sec)
-            VA = self._set_va_menu(sec)
-
-            self.add_object_to_level1(menu, PS)
-            if sec in {'bo', 'si'}:
                 self.add_object_to_level1(menu, PU)
+
                 RF = self._set_rf_menu(sec)
                 RF.setIcon(qta.icon('mdi.waves'))
                 self.add_object_to_level1(menu, RF)
+
+            DIG = self._set_diagnostic_menu(sec)
             self.add_object_to_level1(menu, DIG)
+
+            VA = self._set_va_menu(sec)
             self.add_object_to_level1(menu, VA)
+
+            if sec == 'si':
+                ID = self._set_ids_menu()
+                self.add_object_to_level1(menu, ID)
+
+            OPT = self._set_optics_menu(sec)
             self.add_object_to_level1(menu, OPT)
+
             return menu
 
         def _set_optics_menu(self, sec):
@@ -655,6 +663,18 @@ def get_object(ismenubar=True, parent=None):
             mks.addAction(mks_gr)
             menu.addAction(agilent)
             menu.addMenu(mks)
+            return menu
+
+        def _set_ids_menu(self):
+            menu = LEVEL2M('IDs', self)
+            menu.setObjectName('SIApp')
+
+            APU09SA = QAction('APU22 09SA (high β)', menu)
+            self.connect_newprocess(
+                APU09SA, ['sirius-hla-si-id-control.py',
+                          '-dev', 'SI-09SA:ID-APU22'])
+            menu.addAction(APU09SA)
+
             return menu
 
         def connect_newprocess(self, button, cmd, is_pydm=False):
