@@ -231,6 +231,7 @@ class PSGraphMon(SiriusMainWindow):
         self._create_pvs(self._property_line)
         self._create_pvs(self._property_symb)
         self._graph.psnames = self._psnames
+        self._psnames = self._graph.psnames
         self._graph.symbols = self._get_values(self._property_symb)
         self._graph.y_data = self._get_values(self._property_line)
 
