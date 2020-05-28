@@ -17,7 +17,7 @@ class MyGraph(PyDMTimePlot):
         self.plotItem.showAxis('right')
         self._updateViews()
         self.plotItem.vb.sigResized.connect(self._updateViews)
-        self.updatesAsynchronously = True
+        self.maxRedrawRate = 2
 
     def addCurve(self, plot_item, axis='left', curve_color=None):
         if curve_color is None:
