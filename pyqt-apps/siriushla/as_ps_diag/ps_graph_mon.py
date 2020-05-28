@@ -11,6 +11,7 @@ import qtawesome as qta
 from pyqtgraph import mkPen, mkBrush
 from pydm.widgets import PyDMWaveformPlot
 
+from siriuspy.util import get_strength_label
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName
 from siriuspy.search import PSSearch as _PSSearch, \
@@ -39,6 +40,9 @@ class PSGraphMon(SiriusMainWindow):
         self._psnames = _PSSearch.get_psnames(filters)
         self._property_line = 'Current-Mon'
         self._property_symb = 'DiagStatus-Mon'
+        self._magfunc = _PSSearch.conv_psname_2_magfunc(self._psnames[0])
+        self._intstr_propty = get_strength_label(self._magfunc)
+        self._intstr_suffix = ['-Mon', '-SP', '-RB', 'Ref-Mon']
 
         self._choose_sec = ['TB', 'BO', 'TS', 'SI']
 
@@ -71,6 +75,8 @@ class PSGraphMon(SiriusMainWindow):
             'Current-Mon', 'Current-SP', 'Current-RB', 'CurrentRef-Mon',
             'DiagCurrentDiff-Mon', 'WfmSyncPulseCount-Mon',
             'PRUCtrlQueueSize-Mon']
+        for suf in self._intstr_suffix:
+            self._choose_prop_line.append(self._intstr_propty+suf)
 
         self._setupUi()
 
@@ -195,7 +201,19 @@ class PSGraphMon(SiriusMainWindow):
 
         self._psnames = _PSSearch.get_psnames(
             {'sec': sec, 'sub': '(?!Fam)'+sub, 'dis': 'PS', 'dev': dev})
+        self._change_matype()
         self._update_graph()
+
+    def _change_matype(self):
+        currindex = self._cb_prop_line.currentIndex()
+        for suf in self._intstr_suffix:
+            index = self._cb_prop_line.findText(self._intstr_propty+suf)
+            self._cb_prop_line.removeItem(index)
+        self._magfunc = _PSSearch.conv_psname_2_magfunc(self._psnames[0])
+        self._intstr_propty = get_strength_label(self._magfunc)
+        for suf in self._intstr_suffix:
+            self._cb_prop_line.addItem(self._intstr_propty+suf)
+        self._cb_prop_line.setCurrentIndex(currindex)
 
     def _handle_cb_visibility(self):
         current_sec = self.sender().currentText()
