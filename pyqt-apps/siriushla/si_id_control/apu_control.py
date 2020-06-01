@@ -48,12 +48,12 @@ class APUControlWindow(SiriusMainWindow):
         self.setCentralWidget(cw)
 
     def _mainControlsWidget(self):
-        self._ld_phs = QLabel('Phase', self)
+        self._ld_phs = QLabel('Phase [mm]', self)
         self._sb_phs = PyDMSpinbox(self, self.dev_pref+':Phase-SP')
         self._sb_phs.showStepExponent = False
         self._lb_phs = PyDMLabel(self, self.dev_pref+':Phase-Mon')
 
-        self._ld_phsspd = QLabel('Phase Speed', self)
+        self._ld_phsspd = QLabel('Phase Speed\n[mm/s]', self)
         self._sb_phsspd = PyDMSpinbox(self, self.dev_pref+':PhaseSpeed-SP')
         self._sb_phsspd.showStepExponent = False
         self._lb_phsspd = PyDMLabel(self, self.dev_pref+':PhaseSpeed-Mon')
@@ -182,6 +182,11 @@ class APUControlWindow(SiriusMainWindow):
         return gbox_blines
 
     def _auxCommandsWidget(self):
+        self._ld_speedlim = QLabel('Max Phase Speed\n[mm/s]', self)
+        self._sb_speedlim = PyDMSpinbox(
+            self, self.dev_pref+':PhaseSpeed-SP.DRVH')
+        self._sb_speedlim.showStepExponent = False
+
         self._ld_homeaxis = QLabel('Do homing', self)
         self._pb_home = PyDMPushButton(
             self, label='', icon=qta.icon('mdi.keyboard-return'))
@@ -221,16 +226,20 @@ class APUControlWindow(SiriusMainWindow):
 
         gbox_auxcmd = QGroupBox('Auxiliary Commands', self)
         lay_auxcmd = QGridLayout(gbox_auxcmd)
-        lay_auxcmd.addWidget(self._ld_homeaxis, 1, 0)
-        lay_auxcmd.addWidget(self._cb_homeaxis, 1, 1)
-        lay_auxcmd.addWidget(self._pb_home, 1, 2)
-        lay_auxcmd.addWidget(self._ld_calib, 2, 0, 1, 2)
-        lay_auxcmd.addWidget(self._pb_calib, 2, 2)
-        lay_auxcmd.addWidget(self._ld_standby, 3, 0, 1, 2)
-        lay_auxcmd.addWidget(self._pb_standby, 3, 2)
-        lay_auxcmd.addWidget(self._ld_lastcomm, 4, 0)
-        lay_auxcmd.addWidget(self._lb_lastcomm, 4, 1, 1, 2)
-        lay_auxcmd.setColumnStretch(0, 6)
+        lay_auxcmd.addWidget(self._ld_speedlim, 0, 0)
+        lay_auxcmd.addWidget(self._sb_speedlim, 0, 1, 1, 2)
+        lay_auxcmd.addItem(
+            QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, 0)
+        lay_auxcmd.addWidget(self._ld_homeaxis, 2, 0)
+        lay_auxcmd.addWidget(self._cb_homeaxis, 2, 1)
+        lay_auxcmd.addWidget(self._pb_home, 2, 2)
+        lay_auxcmd.addWidget(self._ld_calib, 3, 0, 1, 2)
+        lay_auxcmd.addWidget(self._pb_calib, 3, 2)
+        lay_auxcmd.addWidget(self._ld_standby, 4, 0, 1, 2)
+        lay_auxcmd.addWidget(self._pb_standby, 4, 2)
+        lay_auxcmd.addWidget(self._ld_lastcomm, 5, 0)
+        lay_auxcmd.addWidget(self._lb_lastcomm, 5, 1, 1, 2)
+        lay_auxcmd.setColumnStretch(0, 4)
         lay_auxcmd.setColumnStretch(1, 2)
         lay_auxcmd.setColumnStretch(2, 1)
         return gbox_auxcmd
