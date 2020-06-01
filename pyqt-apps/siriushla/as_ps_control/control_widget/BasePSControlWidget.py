@@ -242,11 +242,14 @@ class BasePSControlWidget(QWidget):
                 self.all_props = get_prop2label(self._dev_list[0])
         else:
             self.all_props = get_prop2label(self._dev_list[0])
-        self.visible_props = sort_propties([
-            'detail', 'state', 'intlk', 'setpoint', 'monitor',
-            'strength_sp', 'strength_mon'])
+
+        visible_props = self._getVisibleProps()
+        self.visible_props = visible_props if visible_props is not None else\
+            ['detail', 'state', 'intlk', 'setpoint', 'monitor',
+             'strength_sp', 'strength_mon']
         if 'trim' in self.all_props:
             self.visible_props.append('trim')
+        self.visible_props = sort_propties(self.visible_props)
 
         # Data used to filter the widgets
         self.ps_widgets_dict = dict()
@@ -373,6 +376,10 @@ class BasePSControlWidget(QWidget):
             return QSplitter(Qt.Horizontal)
         else:
             return QSplitter(Qt.Vertical)
+
+    def _getVisibleProps(self):
+        """Reimplement in derived classes."""
+        return None
 
     def _filter_pwrsupplies(self, text):
         """Filter power supply widgets based on text inserted at line edit."""
