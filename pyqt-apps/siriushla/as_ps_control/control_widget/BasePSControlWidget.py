@@ -326,24 +326,27 @@ class BasePSControlWidget(QWidget):
                 self.ps_widgets_dict[psname] = ps_widget
 
             # Create group
-            group_box = self._createGroupBox(group[0], header, group_widgets)
+            wid_type = 'groupbox' if group[0] else 'widget'
+            group_wid = self._createGroupWidget(
+                group[0], header, group_widgets, wid_type=wid_type)
 
             # Add group box to grid layout
             if len(self.groups) == 3:
                 if idx in [0, 1]:
-                    splitt_v.addWidget(group_box)
+                    splitt_v.addWidget(group_wid)
                 else:
                     self.pwrsupplies_layout.addWidget(splitt_v)
-                    self.pwrsupplies_layout.addWidget(group_box)
+                    self.pwrsupplies_layout.addWidget(group_wid)
             else:
-                self.pwrsupplies_layout.addWidget(group_box)
+                self.pwrsupplies_layout.addWidget(group_wid)
 
         self.count_label.setText(
             "Showing {} power supplies.".format(
                 len(self.filtered_widgets)-len(self.groups)))
         self.setLayout(self.layout)
 
-    def _createGroupBox(self, title, header, widget_group):
+    def _createGroupWidget(self, title, header, widget_group,
+                           wid_type='groupbox'):
         scr_area_wid = QWidget(self)
         scr_area_wid.setObjectName('scr_ar_wid')
         scr_area_wid.setStyleSheet(
@@ -365,11 +368,12 @@ class BasePSControlWidget(QWidget):
         scr_area.setFrameShape(QFrame.NoFrame)
         scr_area.setWidget(scr_area_wid)
 
-        group_box = QGroupBox(title, parent=self)
-        gb_lay = QVBoxLayout(group_box)
+        wid = QGroupBox(title, self) if wid_type == 'groupbox' \
+            else QWidget(self)
+        gb_lay = QVBoxLayout(wid)
         gb_lay.addWidget(header, alignment=Qt.AlignLeft)
         gb_lay.addWidget(scr_area)
-        return group_box
+        return wid
 
     def _getSplitter(self):
         if self._orientation == self.HORIZONTAL:
