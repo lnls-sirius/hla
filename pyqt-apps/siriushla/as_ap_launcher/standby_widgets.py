@@ -1,4 +1,3 @@
-from copy import deepcopy as _dcopy
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QPushButton
 from qtpy.QtCore import Slot
 import qtawesome as qta
@@ -24,7 +23,7 @@ CHANNELS_2_VALUES_BUTTON = {
     'BO-01D:PU-InjKckr:PwrState-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
     'BO-48D:PU-EjeKckr:Pulse-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
     'BO-48D:PU-EjeKckr:PwrState-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
-    'BR-RF-DLLRF-01:RmpEnbl-Sel': (TRG_DSBL_VAL, TRG_ENBL_VAL),
+    'BO-Glob:TI-LLRF-Rmp:State-Sel': (TRG_DSBL_VAL, TRG_ENBL_VAL),
     'TS-01:PU-EjeSeptF:Pulse-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
     'TS-01:PU-EjeSeptF:PwrState-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
     'TS-01:PU-EjeSeptG:Pulse-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
@@ -38,8 +37,9 @@ CHANNELS_2_VALUES_BUTTON = {
     'SI-01SA:PU-InjNLKckr:Pulse-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
     'SI-01SA:PU-InjNLKckr:PwrState-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
 }
-CHANNELS_2_VALUES_LED = _dcopy(CHANNELS_2_VALUES_BUTTON)
+CHANNELS_2_VALUES_LED = CHANNELS_2_VALUES_BUTTON.copy()
 CHANNELS_2_VALUES_LED.update({
+    'BR-RF-DLLRF-01:RmpEnbl-Sts': (TRG_DSBL_VAL, TRG_ENBL_VAL),
     'BR-RF-DLLRF-01:RmpReady-Mon': (TRG_DSBL_VAL, TRG_ENBL_VAL),
     'BO-Glob:TI-Mags-Fams:State-Sts': (TRG_DSBL_VAL, TRG_ENBL_VAL),
     'BO-Glob:TI-Mags-Corrs:State-Sts': (TRG_DSBL_VAL, TRG_ENBL_VAL),

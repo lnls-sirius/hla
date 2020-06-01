@@ -555,9 +555,10 @@ class _DiffStatus(SiriusDialog):
         if isinstance(self._desired, type(self._current)):
             if isinstance(self._desired, (_np.ndarray, tuple, list)):
                 if len(self._desired) != len(self._current):
-                    self._text = 'Current and desired values have different\n'\
-                                 'lenghts: {} and {}, respectively!'.format(
-                                     len(self._desired), len(self._current))
+                    self._text = \
+                        'Implemented and desired values have different\n'\
+                        'lenghts: {} and {}, respectively!'.format(
+                            len(self._current), len(self._desired))
                 else:
                     self._text = 'Difference: '
                     self._plot = PyDMWaveformPlot()
@@ -578,16 +579,16 @@ class _DiffStatus(SiriusDialog):
                     self._diff_curve.receiveYWaveform(diff)
                     self._diff_curve.redrawCurve()
             elif isinstance(self._desired, (int, float, str)):
-                self._text = 'Current: {}\nDesired: {}'.format(
+                self._text = 'Implemented: {}\nDesired: {}'.format(
                     self._current, self._desired)
         elif self._current == 'UNDEF':
             self._text = 'PV is disconnected!'
         elif isinstance(self._desired, (tuple, list)):
-            self._text = 'Current value ({}) is not within\n' \
+            self._text = 'Implemented value ({}) is not within\n' \
                          'desired interval ({})!'.format(
                              self._current, self._desired)
         else:
-            self._text = 'Current value (of type {}) has type\n' \
+            self._text = 'Implemented value (of type {}) has type\n' \
                          'different from desired ({})!'.format(
                              type(self._current), type(self._desired))
 
@@ -602,7 +603,7 @@ class _DiffStatus(SiriusDialog):
             self.show_des.setStyleSheet('color: blue;')
             self.show_des.stateChanged.connect(self._desired_curve.setVisible)
             lay.addWidget(self.show_des, 2, 0)
-            self.show_cur = QCheckBox('Current')
+            self.show_cur = QCheckBox('Implemented')
             self.show_cur.setChecked(True)
             self.show_cur.setStyleSheet('color: black;')
             self.show_cur.stateChanged.connect(self._current_curve.setVisible)

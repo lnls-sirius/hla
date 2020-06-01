@@ -5,7 +5,7 @@ import qtawesome as qta
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
     QGridLayout, QApplication, QMessageBox, QMenu, QAction
-from pydm.widgets import PyDMPushButton
+from pydm.widgets import PyDMPushButton, PyDMEnumComboBox, PyDMLabel
 
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.search import LLTimeSearch as _LLTimeSearch
@@ -44,6 +44,25 @@ class MainOperation(SiriusMainWindow):
         self.setObjectName('ASApp')
 
     def _setupUi(self):
+        # Machine Shift
+        machshift = QGroupBox('Machine Shift')
+        machshift.setStyleSheet('min-width: 6em;')
+
+        machshift_mode_sel = PyDMEnumComboBox(
+            parent=self,
+            init_channel=self._prefix+'AS-Glob:AP-MachShift:Mode-Sel')
+        machshift_mode_sts = PyDMLabel(
+            parent=self,
+            init_channel=self._prefix+'AS-Glob:AP-MachShift:Mode-Sts')
+        machshift_mode_sts.setAlignment(Qt.AlignCenter)
+
+        machshift_lay = QGridLayout(machshift)
+        machshift_lay.setVerticalSpacing(5)
+        machshift_lay.setHorizontalSpacing(15)
+        machshift_lay.addWidget(QLabel(''))
+        machshift_lay.addWidget(machshift_mode_sel, 1, 0)
+        machshift_lay.addWidget(machshift_mode_sts, 2, 0)
+
         # Egun triggers
         egun = QGroupBox('Egun Trigger')
         egun.setStyleSheet('min-width: 5em;')
@@ -158,11 +177,12 @@ class MainOperation(SiriusMainWindow):
         self.expandwid.setVisible(False)
 
         layout = QGridLayout()
-        layout.addWidget(egun, 0, 0)
-        layout.addWidget(injsys, 0, 1)
-        layout.addWidget(timing, 0, 2)
-        layout.addWidget(pbt, 0, 3, alignment=Qt.AlignLeft | Qt.AlignBottom)
-        layout.addWidget(self.expandwid, 2, 0, 1, 4)
+        layout.addWidget(machshift, 0, 0)
+        layout.addWidget(egun, 0, 1)
+        layout.addWidget(injsys, 0, 2)
+        layout.addWidget(timing, 0, 3)
+        layout.addWidget(pbt, 0, 4, alignment=Qt.AlignLeft | Qt.AlignBottom)
+        layout.addWidget(self.expandwid, 2, 0, 1, 5)
 
         cw = QWidget(self)
         cw.setLayout(layout)

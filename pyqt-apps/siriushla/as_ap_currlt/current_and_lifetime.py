@@ -712,11 +712,7 @@ class CurrLTWindow(SiriusMainWindow):
         if not data:
             return
         datax, datay = data
-        datax = _np.array(datax)
-        datay = _np.array(datay)
-        if 'Lifetime' in pvname:
-            datay = datay/60/60
-        self._fill_curve_buffer(curve, datax, datay)
+        self._fill_curve_buffer(curve, datax, datay, factor)
 
     def _fill_curve_buffer(self, curve, datax, datay, factor=None):
         """Fill curve buffer."""

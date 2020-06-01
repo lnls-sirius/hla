@@ -33,11 +33,6 @@ class InjBOControlWindow(BaseWindow):
         util.connect_newprocess(
             PosAng, 'sirius-hla-tb-ap-posang.py', parent=self)
         self.menu.addAction(PosAng)
-        PosAngCHCH = QAction("PosAng CH-CH", self)
-        util.connect_newprocess(
-            PosAngCHCH, 'sirius-hla-tb-ap-posang-chch.py',
-            parent=self)
-        self.menu.addAction(PosAngCHCH)
 
     def _setupDiagWidget(self):
         return
