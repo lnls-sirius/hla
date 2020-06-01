@@ -32,13 +32,16 @@ class PSMonitor(SiriusMainWindow):
         self._setupUi()
 
     def _setupUi(self):
-        cw = QWidget()
-        layout = QGridLayout()
-        layout.setHorizontalSpacing(15)
+        label = QLabel('<h2>PS Monitor</h2>', alignment=Qt.AlignCenter)
+        label.setStyleSheet('max-height:1.29em;')
 
-        layout.addWidget(QLabel(
-            '<h2>PS Monitor</h2>', alignment=Qt.AlignCenter),
-            0, 0, 1, 2)
+        cw = QWidget()
+        self.setCentralWidget(cw)
+
+        layout = QGridLayout(cw)
+        layout.setHorizontalSpacing(12)
+
+        layout.addWidget(label, 0, 0, 1, 2)
         for sec in ['LI', 'TB', 'BO', 'TS', 'SI']:
             status = self._make_magnets_groupbox(sec)
             if sec == 'LI':
@@ -51,8 +54,6 @@ class PSMonitor(SiriusMainWindow):
                 layout.addWidget(status, 2, 1)
             elif sec == 'SI':
                 layout.addWidget(status, 3, 0, 1, 2)
-        cw.setLayout(layout)
-        self.setCentralWidget(cw)
 
         self.setStyleSheet("""
             QLed {
@@ -64,7 +65,7 @@ class PSMonitor(SiriusMainWindow):
         status = QGroupBox(sec, self)
         status_lay = QGridLayout()
         status_lay.setAlignment(Qt.AlignTop)
-        status_lay.setVerticalSpacing(16)
+        status_lay.setVerticalSpacing(14)
         status_lay.setHorizontalSpacing(16)
         status.setStyleSheet("""QLabel{max-height: 1.4em;}""")
         status.setLayout(status_lay)
@@ -145,13 +146,15 @@ class PSMonitor(SiriusMainWindow):
                 },
                 'SI': {
                     'B': (0, 1, 1, 1),
-                    'QS': (1, 1, 1, 1),
-                    'Q': (0, 3, 1, 1),
-                    'S': (0, 4, 1, 1),
                     'PM': (0, 2, 1, 1),
-                    'CH': (1, 2, 1, 1),
-                    'CV': (1, 3, 1, 1),
-                    'Trims': (1, 4, 1, 1),
+                    'ID-CH': (0, 3, 1, 1),
+                    'ID-CV': (0, 4, 1, 1),
+                    'Q': (0, 5, 1, 1),
+                    'S': (0, 6, 1, 1),
+                    'QS': (1, 1, 1, 2),
+                    'CH': (1, 3, 1, 2),
+                    'CV': (1, 5, 1, 2),
+                    'Trims': (1, 6, 1, 1),
                     # 'FCH': (3, 1, 1, 1),
                     # 'FCV': (3, 2, 1, 1),
                 },
@@ -175,6 +178,8 @@ class PSMonitor(SiriusMainWindow):
                 return 20 if sec == 'BO' else 14
             elif label == 'Slnd':
                 return 16
+            elif label in ['ID-CH', 'ID-CV']:
+                return 2
             else:
                 return 10
 
@@ -223,8 +228,9 @@ class PSMonitor(SiriusMainWindow):
                 status_lay.addLayout(grid, row, col, rowc, colc,
                                      alignment=Qt.AlignTop)
             else:
-                aux = psnames.pop(-1)
-                psnames.insert(0, aux)
+                if 'ID' not in label:
+                    aux = psnames.pop(-1)
+                    psnames.insert(0, aux)
                 if label == 'Trims':
                     aux = psnames.pop(-1)
                     psnames.insert(0, aux)

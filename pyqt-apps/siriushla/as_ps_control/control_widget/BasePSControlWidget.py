@@ -242,11 +242,14 @@ class BasePSControlWidget(QWidget):
                 self.all_props = get_prop2label(self._dev_list[0])
         else:
             self.all_props = get_prop2label(self._dev_list[0])
-        self.visible_props = sort_propties([
-            'detail', 'state', 'intlk', 'setpoint', 'monitor',
-            'strength_sp', 'strength_mon'])
+
+        visible_props = self._getVisibleProps()
+        self.visible_props = visible_props if visible_props is not None else\
+            ['detail', 'state', 'intlk', 'setpoint', 'monitor',
+             'strength_sp', 'strength_mon']
         if 'trim' in self.all_props:
             self.visible_props.append('trim')
+        self.visible_props = sort_propties(self.visible_props)
 
         # Data used to filter the widgets
         self.ps_widgets_dict = dict()
@@ -323,24 +326,27 @@ class BasePSControlWidget(QWidget):
                 self.ps_widgets_dict[psname] = ps_widget
 
             # Create group
-            group_box = self._createGroupBox(group[0], header, group_widgets)
+            wid_type = 'groupbox' if group[0] else 'widget'
+            group_wid = self._createGroupWidget(
+                group[0], header, group_widgets, wid_type=wid_type)
 
             # Add group box to grid layout
             if len(self.groups) == 3:
                 if idx in [0, 1]:
-                    splitt_v.addWidget(group_box)
+                    splitt_v.addWidget(group_wid)
                 else:
                     self.pwrsupplies_layout.addWidget(splitt_v)
-                    self.pwrsupplies_layout.addWidget(group_box)
+                    self.pwrsupplies_layout.addWidget(group_wid)
             else:
-                self.pwrsupplies_layout.addWidget(group_box)
+                self.pwrsupplies_layout.addWidget(group_wid)
 
         self.count_label.setText(
             "Showing {} power supplies.".format(
                 len(self.filtered_widgets)-len(self.groups)))
         self.setLayout(self.layout)
 
-    def _createGroupBox(self, title, header, widget_group):
+    def _createGroupWidget(self, title, header, widget_group,
+                           wid_type='groupbox'):
         scr_area_wid = QWidget(self)
         scr_area_wid.setObjectName('scr_ar_wid')
         scr_area_wid.setStyleSheet(
@@ -352,27 +358,29 @@ class BasePSControlWidget(QWidget):
             w_lay.addWidget(widget, alignment=Qt.AlignLeft)
         w_lay.addStretch()
 
-        min_width = '51.0'
         scr_area = QScrollArea(self)
-        scr_area.setObjectName('scr_area')
-        scr_area.setStyleSheet('#scr_area{min-width: '+min_width+'em;}')
         scr_area.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         scr_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         scr_area.setWidgetResizable(True)
         scr_area.setFrameShape(QFrame.NoFrame)
         scr_area.setWidget(scr_area_wid)
 
-        group_box = QGroupBox(title, parent=self)
-        gb_lay = QVBoxLayout(group_box)
+        wid = QGroupBox(title, self) if wid_type == 'groupbox' \
+            else QWidget(self)
+        gb_lay = QVBoxLayout(wid)
         gb_lay.addWidget(header, alignment=Qt.AlignLeft)
         gb_lay.addWidget(scr_area)
-        return group_box
+        return wid
 
     def _getSplitter(self):
         if self._orientation == self.HORIZONTAL:
             return QSplitter(Qt.Horizontal)
         else:
             return QSplitter(Qt.Vertical)
+
+    def _getVisibleProps(self):
+        """Reimplement in derived classes."""
+        return None
 
     def _filter_pwrsupplies(self, text):
         """Filter power supply widgets based on text inserted at line edit."""

@@ -83,6 +83,7 @@ setup(
         'scripts/sirius-hla-si-di-scraps.py',
         'scripts/sirius-hla-si-di-tune.py',
         'scripts/sirius-hla-si-di-vlight.py',
+        'scripts/sirius-hla-si-id-control.py',
         'scripts/sirius-hla-si-offconfig.py',
         'scripts/sirius-hla-si-ps-control.py',
         'scripts/sirius-hla-si-pu-control.py',

@@ -9,7 +9,8 @@ from .FamSextupoleControlWidget import \
     BOFamSextupoleControlWidget, SIFamSextupoleControlWidget
 from .SlowCorrectorControlWidget import LISlowCorrectorControlWidget, \
     TBSlowCorrectorControlWidget, BoSlowCorrectorControlWidget, \
-    TSSlowCorrectorControlWidget, SISlowCorrectorControlWidget
+    TSSlowCorrectorControlWidget, SISlowCorrectorControlWidget, \
+    IDSlowCorrectorControlWidget
 from .SkewQuadControlWidget import BOSkewQuadControlWidget, \
     SISkewQuadControlWidget
 from .TrimAllControlWidget import SITrimAllControlWidget
@@ -112,6 +113,10 @@ class ControlWidgetFactory:
                     parent=parent)
             elif device == "corrector-fast":
                 return SIFastCorrectorControlWidget(
+                    subsection=subsection, orientation=orientation,
+                    parent=parent)
+            elif device == "corrector-undulator":
+                return IDSlowCorrectorControlWidget(
                     subsection=subsection, orientation=orientation,
                     parent=parent)
             elif device == "skew-quadrupole":
