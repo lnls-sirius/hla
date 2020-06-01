@@ -8,9 +8,12 @@ from pydm.widgets import PyDMLabel, PyDMEnumComboBox, PyDMPushButton, \
     PyDMSpinbox
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
+from siriuspy.namesys import SiriusPVName as _PVName
+
 from siriushla.util import connect_window
 from siriushla.widgets import SiriusMainWindow, PyDMLed, SiriusLedAlert, \
     SiriusLedState, PyDMLedMultiChannel, PyDMStateButton
+from siriushla.as_ps_control import ControlWidgetFactory, PSDetailWindow
 from .auxiliary_dialogs import APUAlarmDetails, APUInterlockDetails, \
     APUHardLLDetails
 
@@ -22,7 +25,7 @@ class APUControlWindow(SiriusMainWindow):
         """Init."""
         super().__init__(parent)
         self._prefix = prefix
-        self._device = device
+        self._device = _PVName(device)
         self.dev_pref = prefix + device
         self.setWindowTitle(device+' Control Window')
         self.setObjectName('SIApp')
@@ -36,12 +39,13 @@ class APUControlWindow(SiriusMainWindow):
 
         cw = QWidget()
         lay = QGridLayout(cw)
-        lay.addWidget(self._label_title, 0, 0, 1, 2)
+        lay.addWidget(self._label_title, 0, 0, 1, 3)
         lay.addWidget(self._mainControlsWidget(), 1, 0, 1, 2)
         lay.addWidget(self._statusWidget(), 2, 0, 2, 1)
         lay.addWidget(self._ctrlModeWidget(), 2, 1)
         lay.addWidget(self._beamLinesCtrlWidget(), 3, 1)
         lay.addWidget(self._auxCommandsWidget(), 4, 0, 1, 2)
+        lay.addWidget(self._corrsControlWidget(), 1, 2, 4, 1)
         lay.setRowStretch(0, 1)
         lay.setRowStretch(1, 5)
         lay.setRowStretch(2, 2)
@@ -276,3 +280,26 @@ class APUControlWindow(SiriusMainWindow):
         lay_auxcmd.setColumnStretch(1, 2)
         lay_auxcmd.setColumnStretch(2, 1)
         return gbox_auxcmd
+
+    def _corrsControlWidget(self):
+        corrs_wid = ControlWidgetFactory.factory(
+            parent=self, section='SI', subsection=self._device.sub,
+            device="corrector-undulator", orientation=Qt.Vertical)
+        corrs_wid.setObjectName('cw')
+        corrs_wid.setStyleSheet('#cw{min-height: 36em; min-width:39em;}')
+        corrs_wid.layout.setContentsMargins(0, 0, 0, 0)
+        self._connect_corrs_buttons(corrs_wid)
+
+        gbox = QGroupBox('Correctors', self)
+        lay_corrs = QGridLayout(gbox)
+        lay_corrs.addWidget(corrs_wid)
+        return gbox
+
+    def _connect_corrs_buttons(self, widget):
+        for w in widget.get_summary_widgets():
+            detail_bt = w.get_detail_button()
+            psname = detail_bt.text()
+            if not psname:
+                psname = detail_bt.toolTip()
+            psname = _PVName(psname)
+            connect_window(detail_bt, PSDetailWindow, self, psname=psname)
