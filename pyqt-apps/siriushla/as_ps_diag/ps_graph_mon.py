@@ -6,11 +6,12 @@ from qtpy.QtCore import Qt, QSize, QTimer
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QGridLayout, QWidget, QLabel, QHBoxLayout, \
     QComboBox, QToolTip, QSpacerItem, QSizePolicy as QSzPlcy, QApplication, \
-    QGraphicsScene
+    QGraphicsScene, QInputDialog, QAction, QMenu
 import qtawesome as qta
 from pyqtgraph import mkPen, mkBrush
 from pydm.widgets import PyDMWaveformPlot
 
+from siriuspy.util import get_strength_label
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName
 from siriuspy.search import PSSearch as _PSSearch, \
@@ -39,6 +40,9 @@ class PSGraphMon(SiriusMainWindow):
         self._psnames = _PSSearch.get_psnames(filters)
         self._property_line = 'Current-Mon'
         self._property_symb = 'DiagStatus-Mon'
+        self._magfunc = _PSSearch.conv_psname_2_magfunc(self._psnames[0])
+        self._intstr_propty = get_strength_label(self._magfunc)
+        self._intstr_suffix = ['-Mon', '-SP', '-RB', 'Ref-Mon']
 
         self._choose_sec = ['TB', 'BO', 'TS', 'SI']
 
@@ -71,8 +75,11 @@ class PSGraphMon(SiriusMainWindow):
             'Current-Mon', 'Current-SP', 'Current-RB', 'CurrentRef-Mon',
             'DiagCurrentDiff-Mon', 'WfmSyncPulseCount-Mon',
             'PRUCtrlQueueSize-Mon']
+        for suf in self._intstr_suffix:
+            self._choose_prop_line.append(self._intstr_propty+suf)
 
         self._setupUi()
+        self._create_commands()
 
         self._timer = QTimer()
         self._timer.timeout.connect(self._update_graph)
@@ -195,7 +202,19 @@ class PSGraphMon(SiriusMainWindow):
 
         self._psnames = _PSSearch.get_psnames(
             {'sec': sec, 'sub': '(?!Fam)'+sub, 'dis': 'PS', 'dev': dev})
+        self._change_matype()
         self._update_graph()
+
+    def _change_matype(self):
+        currindex = self._cb_prop_line.currentIndex()
+        for suf in self._intstr_suffix:
+            index = self._cb_prop_line.findText(self._intstr_propty+suf)
+            self._cb_prop_line.removeItem(index)
+        self._magfunc = _PSSearch.conv_psname_2_magfunc(self._psnames[0])
+        self._intstr_propty = get_strength_label(self._magfunc)
+        for suf in self._intstr_suffix:
+            self._cb_prop_line.addItem(self._intstr_propty+suf)
+        self._cb_prop_line.setCurrentIndex(currindex)
 
     def _handle_cb_visibility(self):
         current_sec = self.sender().currentText()
@@ -213,6 +232,7 @@ class PSGraphMon(SiriusMainWindow):
         self._create_pvs(self._property_line)
         self._create_pvs(self._property_symb)
         self._graph.psnames = self._psnames
+        self._psnames = self._graph.psnames
         self._graph.symbols = self._get_values(self._property_symb)
         self._graph.y_data = self._get_values(self._property_line)
 
@@ -242,6 +262,71 @@ class PSGraphMon(SiriusMainWindow):
                 val = 1 if val == defval else 0
             values.append(val)
         return values
+
+    def _set_values(self, propty, value):
+        for psn in self._psnames:
+            pvname = self._prefix+psn+':'+propty
+            pv = PSGraphMon._pvs[pvname]
+            if pv.wait_for_connection():
+                pv.put(value)
+
+    def _cmd_set_opmode_slowref(self):
+        """Set power supplies OpMode to SlowRef."""
+        self._create_pvs('OpMode-Sel')
+        self._set_values('OpMode-Sel', _PSConst.OpMode.SlowRef)
+
+    def _cmd_turn_on(self):
+        """Turn power supplies on."""
+        self._create_pvs('PwrState-Sel')
+        self._set_values('PwrState-Sel', _PSConst.PwrStateSel.On)
+
+    def _cmd_turn_off(self):
+        """Turn power supplies off."""
+        self._create_pvs('PwrState-Sel')
+        self._set_values('PwrState-Sel', _PSConst.PwrStateSel.Off)
+
+    def _cmd_set_current(self):
+        """Set power supplies current."""
+        self._create_pvs('Current-SP')
+        value, ok = QInputDialog.getDouble(
+            self, "Insert current setpoint", "Value")
+        if ok:
+            self._set_values('Current-SP', value)
+
+    def _cmd_reset(self):
+        """Reset power supplies."""
+        self._create_pvs('Reset-Cmd')
+        self._set_values('Reset-Cmd', 1)
+
+    def _create_commands(self):
+        self.cmd_turnon_act = QAction("Turn On", self)
+        self.cmd_turnon_act.triggered.connect(self._cmd_turn_on)
+
+        self.cmd_turnoff_act = QAction("Turn Off", self)
+        self.cmd_turnoff_act.triggered.connect(self._cmd_turn_off)
+
+        self.cmd_setslowref_act = QAction("Set OpMode to SlowRef", self)
+        self.cmd_setslowref_act.triggered.connect(self._cmd_set_opmode_slowref)
+
+        self.cmd_setcurrent_act = QAction("Set Current SP", self)
+        self.cmd_setcurrent_act.triggered.connect(self._cmd_set_current)
+
+        self.cmd_reset_act = QAction("Reset Interlocks", self)
+        self.cmd_reset_act.triggered.connect(self._cmd_reset)
+
+    def contextMenuEvent(self, event):
+        """Show a custom context menu."""
+        point = event.pos()
+        widget = self.childAt(point)
+        parent = widget.parent()
+        if widget != self._graph and parent != self._graph:
+            menu = QMenu("Actions", self)
+            menu.addAction(self.cmd_turnon_act)
+            menu.addAction(self.cmd_turnoff_act)
+            menu.addAction(self.cmd_setslowref_act)
+            menu.addAction(self.cmd_setcurrent_act)
+            menu.addAction(self.cmd_reset_act)
+            menu.popup(self.mapToGlobal(point))
 
 
 class PSGraph(PyDMWaveformPlot):
