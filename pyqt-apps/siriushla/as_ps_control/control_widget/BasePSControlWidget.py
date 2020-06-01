@@ -358,10 +358,7 @@ class BasePSControlWidget(QWidget):
             w_lay.addWidget(widget, alignment=Qt.AlignLeft)
         w_lay.addStretch()
 
-        min_width = '51.0'
         scr_area = QScrollArea(self)
-        scr_area.setObjectName('scr_area')
-        scr_area.setStyleSheet('#scr_area{min-width: '+min_width+'em;}')
         scr_area.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         scr_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         scr_area.setWidgetResizable(True)
