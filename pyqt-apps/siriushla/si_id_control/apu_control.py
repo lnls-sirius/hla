@@ -55,6 +55,11 @@ class APUControlWindow(SiriusMainWindow):
         self._sb_phs.showStepExponent = False
         self._lb_phs = PyDMLabel(self, self.dev_pref+':Phase-Mon')
 
+        self._ld_kx = QLabel('Kx', self)
+        self._sb_kx = PyDMSpinbox(self, self.dev_pref+':Kx-SP')
+        self._sb_kx.showStepExponent = False
+        self._lb_kx = PyDMLabel(self, self.dev_pref+':Kx-Mon')
+
         self._ld_phsspd = QLabel('Phase Speed\n[mm/s]', self)
         self._sb_phsspd = PyDMSpinbox(self, self.dev_pref+':PhaseSpeed-SP')
         self._sb_phsspd.showStepExponent = False
@@ -92,9 +97,12 @@ class APUControlWindow(SiriusMainWindow):
         lay_main.addWidget(self._ld_phs, 0, 0)
         lay_main.addWidget(self._sb_phs, 0, 1)
         lay_main.addWidget(self._lb_phs, 0, 2)
-        lay_main.addWidget(self._ld_phsspd, 1, 0)
-        lay_main.addWidget(self._sb_phsspd, 1, 1)
-        lay_main.addWidget(self._lb_phsspd, 1, 2)
+        lay_main.addWidget(self._ld_kx, 1, 0)
+        lay_main.addWidget(self._sb_kx, 1, 1)
+        lay_main.addWidget(self._lb_kx, 1, 2)
+        lay_main.addWidget(self._ld_phsspd, 2, 0)
+        lay_main.addWidget(self._sb_phsspd, 2, 1)
+        lay_main.addWidget(self._lb_phsspd, 2, 2)
         lay_main.addItem(
             QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 3, 0)
         lay_main.addWidget(self._ld_ismov, 4, 0)
