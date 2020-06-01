@@ -11,7 +11,8 @@ from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriushla.util import connect_window
 from siriushla.widgets import SiriusMainWindow, PyDMLed, SiriusLedAlert, \
     SiriusLedState, PyDMLedMultiChannel, PyDMStateButton
-from .auxiliary_dialogs import APUAlarmDetails, APUInterlockDetails
+from .auxiliary_dialogs import APUAlarmDetails, APUInterlockDetails, \
+    APUHardLLDetails
 
 
 class APUControlWindow(SiriusMainWindow):
@@ -31,20 +32,21 @@ class APUControlWindow(SiriusMainWindow):
         self._label_title = QLabel(
             '<h3>'+self._device+' Control</h3>', self,
             alignment=Qt.AlignCenter)
+        self._label_title.setStyleSheet('max-height:1.29em;')
 
         cw = QWidget()
         lay = QGridLayout(cw)
-        lay.addWidget(self._label_title, 0, 0, 1, 4)
-        lay.addWidget(self._mainControlsWidget(), 1, 0, 2, 1)
-        lay.addWidget(self._alarmAndInterlockWidget(), 1, 1, 2, 1)
-        lay.addWidget(self._ctrlModeWidget(), 1, 2)
-        lay.addWidget(self._beamLinesCtrlWidget(), 2, 2)
-        lay.addWidget(self._auxCommandsWidget(), 3, 0)
-        lay.addWidget(self._harwareAndLLWidget(), 3, 1, 1, 2)
+        lay.addWidget(self._label_title, 0, 0, 1, 2)
+        lay.addWidget(self._mainControlsWidget(), 1, 0, 1, 2)
+        lay.addWidget(self._statusWidget(), 2, 0, 2, 1)
+        lay.addWidget(self._ctrlModeWidget(), 2, 1)
+        lay.addWidget(self._beamLinesCtrlWidget(), 3, 1)
+        lay.addWidget(self._auxCommandsWidget(), 4, 0, 1, 2)
         lay.setRowStretch(0, 1)
-        lay.setRowStretch(1, 2)
+        lay.setRowStretch(1, 5)
         lay.setRowStretch(2, 2)
-        lay.setRowStretch(2, 5)
+        lay.setRowStretch(3, 3)
+        lay.setRowStretch(4, 5)
         self.setCentralWidget(cw)
 
     def _mainControlsWidget(self):
@@ -57,9 +59,7 @@ class APUControlWindow(SiriusMainWindow):
         self._sb_phsspd = PyDMSpinbox(self, self.dev_pref+':PhaseSpeed-SP')
         self._sb_phsspd.showStepExponent = False
         self._lb_phsspd = PyDMLabel(self, self.dev_pref+':PhaseSpeed-Mon')
-
         self._ld_ismov = QLabel('Motion', self)
-        self._led_ismov = SiriusLedState(self, self.dev_pref+':Moving-Mon')
         self._pb_start = PyDMPushButton(
             self, label='', icon=qta.icon('fa5s.play'))
         self._pb_start.setToolTip(
@@ -77,10 +77,15 @@ class APUControlWindow(SiriusMainWindow):
         self._pb_stop.setObjectName('Stop')
         self._pb_stop.setStyleSheet(
             '#Stop{min-width:30px; max-width:30px; icon-size:25px;}')
+        self._led_ismov = SiriusLedState(self, self.dev_pref+':Moving-Mon')
+        self._led_motenbl = SiriusLedState(
+            self, self.dev_pref+':MotorsEnbld-Mon')
         hbox_motion = QHBoxLayout()
+        hbox_motion.setSpacing(15)
         hbox_motion.addWidget(self._pb_start)
         hbox_motion.addWidget(self._pb_stop)
         hbox_motion.addWidget(self._led_ismov)
+        hbox_motion.addWidget(self._led_motenbl)
 
         gbox_main = QGroupBox('Main Controls', self)
         lay_main = QGridLayout(gbox_main)
@@ -96,7 +101,7 @@ class APUControlWindow(SiriusMainWindow):
         lay_main.addLayout(hbox_motion, 4, 1, 1, 2)
         return gbox_main
 
-    def _alarmAndInterlockWidget(self):
+    def _statusWidget(self):
         self._ld_alarm = QLabel(
             'Alarms', self, alignment=Qt.AlignCenter)
         self._led_alarm = SiriusLedAlert(self, self.dev_pref+':Alarm-Mon')
@@ -126,6 +131,23 @@ class APUControlWindow(SiriusMainWindow):
             self._pb_intlkdetail, APUInterlockDetails, self,
             prefix=self._prefix, device=self._device)
 
+        self._ld_hwsys = QLabel(
+            'Hardware\n&LowLevel', self, alignment=Qt.AlignCenter)
+        self._led_hwsysresume = PyDMLedMultiChannel(
+            self,
+            {self.dev_pref+':StateHw-Mon': {'value': [0x4C, 0x3C],
+                                            'comp': 'in'},
+             self.dev_pref+':State-Mon': 1,
+             self.dev_pref+':IsOperational-Mon': 1})
+        self._pb_hwsysdetail = QPushButton(
+            qta.icon('fa5s.ellipsis-h'), '', self)
+        self._pb_hwsysdetail.setObjectName('dtl')
+        self._pb_hwsysdetail.setStyleSheet(
+            "#dtl{min-width:25px; max-width:25px; icon-size:20px;}")
+        connect_window(
+            self._pb_hwsysdetail, APUHardLLDetails, self,
+            prefix=self._prefix, device=self._device)
+
         self._ld_reset = QLabel(
             'Reset', self, alignment=Qt.AlignCenter)
         self._pb_reset = PyDMPushButton(
@@ -137,7 +159,7 @@ class APUControlWindow(SiriusMainWindow):
         self._pb_reset.setStyleSheet(
             '#Reset{min-width:30px; max-width:30px; icon-size:25px;}')
 
-        gbox_alrmintlk = QGroupBox('Alarm&&Interlock')
+        gbox_alrmintlk = QGroupBox('Status')
         lay_alrmintlk = QGridLayout(gbox_alrmintlk)
         lay_alrmintlk.addWidget(self._pb_alarmdetail, 0, 0)
         lay_alrmintlk.addWidget(self._ld_alarm, 0, 1)
@@ -145,8 +167,11 @@ class APUControlWindow(SiriusMainWindow):
         lay_alrmintlk.addWidget(self._pb_intlkdetail, 1, 0)
         lay_alrmintlk.addWidget(self._ld_intlk, 1, 1)
         lay_alrmintlk.addWidget(self._led_intlkresume, 1, 2)
-        lay_alrmintlk.addWidget(self._ld_reset, 2, 1)
-        lay_alrmintlk.addWidget(self._pb_reset, 2, 2)
+        lay_alrmintlk.addWidget(self._pb_hwsysdetail, 2, 0)
+        lay_alrmintlk.addWidget(self._ld_hwsys, 2, 1)
+        lay_alrmintlk.addWidget(self._led_hwsysresume, 2, 2)
+        lay_alrmintlk.addWidget(self._ld_reset, 3, 1)
+        lay_alrmintlk.addWidget(self._pb_reset, 3, 2)
         return gbox_alrmintlk
 
     def _ctrlModeWidget(self):
@@ -243,52 +268,3 @@ class APUControlWindow(SiriusMainWindow):
         lay_auxcmd.setColumnStretch(1, 2)
         lay_auxcmd.setColumnStretch(2, 1)
         return gbox_auxcmd
-
-    def _harwareAndLLWidget(self):
-        self._ld_stthw = QLabel('Hardware state', self)
-        self._led_stthw = PyDMLedMultiChannel(
-            self, channels2values={
-                self.dev_pref+':StateHw-Mon':
-                    {'value': [0x4C, 0x3C], 'comp': 'in'}})  # in [Op, Ready]
-        self._led_stthw.offColor = PyDMLed.Yellow
-        self._led_stthw.onColor = PyDMLed.LightGreen
-        self._led_stthw.setStyleSheet('max-width: 1.29em;')
-        self._led_stthw.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Preferred)
-        self._lb_stthw = PyDMLabel(self, self.dev_pref+':StateHw-Mon')
-        hbox_stthw = QHBoxLayout()
-        hbox_stthw.addWidget(self._led_stthw)
-        hbox_stthw.addWidget(self._lb_stthw)
-
-        self._ld_sttsys = QLabel('System state', self)
-        self._led_sttsys = PyDMLedMultiChannel(
-            self, channels2values={self.dev_pref+':State-Mon': 1})  # 1: Op
-        self._led_sttsys.offColor = PyDMLed.Yellow
-        self._led_sttsys.onColor = PyDMLed.LightGreen
-        self._led_sttsys.setStyleSheet('max-width: 1.29em;')
-        self._led_sttsys.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Preferred)
-        self._lb_sttsys = PyDMLabel(self, self.dev_pref+':State-Mon')
-        hbox_sttsys = QHBoxLayout()
-        hbox_sttsys.addWidget(self._led_sttsys)
-        hbox_sttsys.addWidget(self._lb_sttsys)
-
-        self._ld_isopr = QLabel('Is operational', self)
-        self._led_isopr = PyDMLed(self, self.dev_pref+':IsOperational-Mon')
-        self._led_isopr.offColor = PyDMLed.Red
-        self._led_isopr.onColor = PyDMLed.LightGreen
-
-        self._ld_motenbl = QLabel('Motors Enabled', self)
-        self._led_motenbl = PyDMLed(self, self.dev_pref+':MotorsEnbld-Mon')
-        self._led_motenbl.offColor = PyDMLed.Red
-        self._led_motenbl.onColor = PyDMLed.LightGreen
-
-        gbox_hwsys = QGroupBox('Hardware&&LowLevel')
-        lay_hwsys = QGridLayout(gbox_hwsys)
-        lay_hwsys.addWidget(self._ld_stthw, 2, 0)
-        lay_hwsys.addLayout(hbox_stthw, 2, 1)
-        lay_hwsys.addWidget(self._ld_sttsys, 3, 0)
-        lay_hwsys.addLayout(hbox_sttsys, 3, 1)
-        lay_hwsys.addWidget(self._ld_isopr, 4, 0)
-        lay_hwsys.addWidget(self._led_isopr, 4, 1)
-        lay_hwsys.addWidget(self._ld_motenbl, 5, 0)
-        lay_hwsys.addWidget(self._led_motenbl, 5, 1)
-        return gbox_hwsys

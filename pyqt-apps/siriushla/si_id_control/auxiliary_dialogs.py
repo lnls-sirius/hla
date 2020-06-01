@@ -5,7 +5,7 @@ from qtpy.QtWidgets import QLabel, QHBoxLayout, QGridLayout, \
 
 from pydm.widgets import PyDMLabel
 
-from siriushla.widgets import SiriusDialog, PyDMLed
+from siriushla.widgets import SiriusDialog, PyDMLed, PyDMLedMultiChannel
 
 
 class APUAlarmDetails(SiriusDialog):
@@ -122,6 +122,7 @@ class APUInterlockDetails(SiriusDialog):
         self._ld_ilkogapopn = QLabel('Gap Opened\n(Output)', self)
         self._lb_ilkogapopn = PyDMLabel(
             self, self.dev_pref+':IntlkOutGapStt-Mon')
+        self._lb_ilkogapopn.setAlignment(Qt.AlignCenter)
 
         self._ld_ilkostsok = QLabel('Status Ok\n(Output)', self)
         self._led_ilkostsok = PyDMLed(self, self.dev_pref+':IntlkOutStsOk-Mon')
@@ -156,3 +157,57 @@ class APUInterlockDetails(SiriusDialog):
         lay.addWidget(self._led_ilkoccps, 5, 1)
         lay.addWidget(self._ld_ilkopwr, 6, 0)
         lay.addWidget(self._led_ilkopwr, 6, 1)
+
+
+class APUHardLLDetails(SiriusDialog):
+    """APU Hardware and LowLevel Details Dialog."""
+
+    def __init__(self, parent=None, prefix='', device=''):
+        super().__init__(parent)
+        self._prefix = prefix
+        self._device = device
+        self.dev_pref = prefix + device
+        self.setObjectName('SIApp')
+        self.setWindowTitle(device+' Hardware and LowLevel Details')
+        self._setupUi()
+
+    def _setupUi(self):
+        self._ld_stthw = QLabel('Hardware state', self)
+        self._led_stthw = PyDMLedMultiChannel(
+            self, channels2values={
+                self.dev_pref+':StateHw-Mon':
+                    {'value': [0x4C, 0x3C], 'comp': 'in'}})  # in [Op, Ready]
+        self._led_stthw.offColor = PyDMLed.Yellow
+        self._led_stthw.onColor = PyDMLed.LightGreen
+        self._led_stthw.setStyleSheet('max-width: 1.29em;')
+        self._led_stthw.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Preferred)
+        self._lb_stthw = PyDMLabel(self, self.dev_pref+':StateHw-Mon')
+
+        self._ld_sttsys = QLabel('System state', self)
+        self._led_sttsys = PyDMLedMultiChannel(
+            self, channels2values={self.dev_pref+':State-Mon': 1})  # 1: Op
+        self._led_sttsys.offColor = PyDMLed.Yellow
+        self._led_sttsys.onColor = PyDMLed.LightGreen
+        self._led_sttsys.setStyleSheet('max-width: 1.29em;')
+        self._led_sttsys.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Preferred)
+        self._lb_sttsys = PyDMLabel(self, self.dev_pref+':State-Mon')
+
+        self._ld_isopr = QLabel('Is operational', self)
+        self._led_isopr = PyDMLed(self, self.dev_pref+':IsOperational-Mon')
+        self._led_isopr.offColor = PyDMLed.Red
+        self._led_isopr.onColor = PyDMLed.LightGreen
+        self._led_isopr.setStyleSheet('max-width: 1.29em;')
+        self._led_isopr.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Preferred)
+
+        lay_hwsys = QGridLayout(self)
+        lay_hwsys.addWidget(
+            QLabel('<h4>Hardware&&LowLevel</h4>', self,
+                   alignment=Qt.AlignCenter), 0, 0, 1, 3)
+        lay_hwsys.addWidget(self._ld_stthw, 2, 0)
+        lay_hwsys.addWidget(self._led_stthw, 2, 1)
+        lay_hwsys.addWidget(self._lb_stthw, 2, 2)
+        lay_hwsys.addWidget(self._ld_sttsys, 3, 0)
+        lay_hwsys.addWidget(self._led_sttsys, 3, 1)
+        lay_hwsys.addWidget(self._lb_sttsys, 3, 2)
+        lay_hwsys.addWidget(self._ld_isopr, 4, 0)
+        lay_hwsys.addWidget(self._led_isopr, 4, 1)
