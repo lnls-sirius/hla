@@ -314,18 +314,26 @@ class RFMainControl(SiriusMainWindow):
 
         self.lb_iref = PyDMLabel(self, self.chs['SL']['IRef'])
         self.lb_iref.showUnits = True
+        self.lb_iinp = PyDMLabel(self, self.chs['SL']['IInp'])
+        self.lb_iinp.showUnits = True
         self.lb_ierr = PyDMLabel(self, self.chs['SL']['IErr'])
         self.lb_ierr.showUnits = True
         self.lb_qref = PyDMLabel(self, self.chs['SL']['QRef'])
         self.lb_qref.showUnits = True
+        self.lb_qinp = PyDMLabel(self, self.chs['SL']['QInp'])
+        self.lb_qinp.showUnits = True
         self.lb_qerr = PyDMLabel(self, self.chs['SL']['QErr'])
         self.lb_qerr.showUnits = True
         self.lb_ampref = PyDMLabel(self, self.chs['SL']['ARef'])
         self.lb_ampref.showUnits = True
+        self.lb_ampinp = PyDMLabel(self, self.chs['SL']['AInp'])
+        self.lb_ampinp.showUnits = True
         self.lb_amperr = PyDMLabel(self, self.chs['SL']['AErr'])
         self.lb_amperr.showUnits = True
         self.lb_phsref = PyDMLabel(self, self.chs['SL']['PRef'])
         self.lb_phsref.showUnits = True
+        self.lb_phsinp = PyDMLabel(self, self.chs['SL']['PInp'])
+        self.lb_phsinp.showUnits = True
         self.lb_phserr = PyDMLabel(self, self.chs['SL']['PErr'])
         self.lb_phserr.showUnits = True
         lay_slmon = QGridLayout()
@@ -334,24 +342,31 @@ class RFMainControl(SiriusMainWindow):
         lay_slmon.addWidget(
             QLabel('<h4>Reference</h4>', self, alignment=Qt.AlignCenter), 1, 0)
         lay_slmon.addWidget(
-            QLabel('<h4>Error</h4>', self, alignment=Qt.AlignCenter), 2, 0)
+            QLabel('<h4>Input</h4>', self, alignment=Qt.AlignCenter), 2, 0)
+        lay_slmon.addWidget(
+            QLabel('<h4>Error</h4>', self, alignment=Qt.AlignCenter), 3, 0)
         lay_slmon.addWidget(
             QLabel('<h4>I</h4>', self, alignment=Qt.AlignCenter), 0, 1)
         lay_slmon.addWidget(self.lb_iref, 1, 1)
-        lay_slmon.addWidget(self.lb_ierr, 2, 1)
+        lay_slmon.addWidget(self.lb_iinp, 2, 1)
+        lay_slmon.addWidget(self.lb_ierr, 3, 1)
         lay_slmon.addWidget(
             QLabel('<h4>Q</h4>', self, alignment=Qt.AlignCenter), 0, 2)
         lay_slmon.addWidget(self.lb_qref, 1, 2)
-        lay_slmon.addWidget(self.lb_qerr, 2, 2)
+        lay_slmon.addWidget(self.lb_qinp, 2, 2)
+        lay_slmon.addWidget(self.lb_qerr, 3, 2)
         lay_slmon.addWidget(
             QLabel('<h4>Amp.</h4>', self, alignment=Qt.AlignCenter), 0, 3)
         lay_slmon.addWidget(self.lb_ampref, 1, 3)
-        lay_slmon.addWidget(self.lb_amperr, 2, 3)
+        lay_slmon.addWidget(self.lb_ampinp, 2, 3)
+        lay_slmon.addWidget(self.lb_amperr, 3, 3)
         lay_slmon.addWidget(
             QLabel('<h4>Phase</h4>', self, alignment=Qt.AlignCenter), 0, 4)
         lay_slmon.addWidget(self.lb_phsref, 1, 4)
-        lay_slmon.addWidget(self.lb_phserr, 2, 4)
-        lay_slmon.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        lay_slmon.addWidget(self.lb_phsinp, 2, 4)
+        lay_slmon.addWidget(self.lb_phserr, 3, 4)
+        lay_slmon.addItem(
+            QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Expanding), 4, 0)
 
         wid_sl = QWidget()
         lay_sl = QGridLayout(wid_sl)
