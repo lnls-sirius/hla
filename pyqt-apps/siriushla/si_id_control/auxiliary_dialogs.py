@@ -124,17 +124,6 @@ class APUInterlockDetails(SiriusDialog):
             self, self.dev_pref+':IntlkOutGapStt-Mon')
         self._lb_ilkogapopn.setAlignment(Qt.AlignCenter)
 
-        self._ld_ilkostsok = QLabel('Status Ok\n(Output)', self)
-        self._led_ilkostsok = PyDMLed(self, self.dev_pref+':IntlkOutStsOk-Mon')
-        self._led_ilkostsok.offColor = PyDMLed.Red
-        self._led_ilkostsok.onColor = PyDMLed.LightGreen
-
-        self._ld_ilkoccps = QLabel('CCPS Enabled\n(Output)', self)
-        self._led_ilkoccps = PyDMLed(
-            self, self.dev_pref+':IntlkOutCCPSEnbld-Mon')
-        self._led_ilkoccps.offColor = PyDMLed.Red
-        self._led_ilkoccps.onColor = PyDMLed.LightGreen
-
         self._ld_ilkopwr = QLabel('Power Enabled\n(Output)', self)
         self._led_ilkopwr = PyDMLed(
             self, self.dev_pref+':IntlkOutPwrEnbld-Mon')
@@ -151,12 +140,8 @@ class APUInterlockDetails(SiriusDialog):
         lay.addLayout(hbox_eopngap, 2, 1)
         lay.addWidget(self._ld_ilkogapopn, 3, 0)
         lay.addWidget(self._lb_ilkogapopn, 3, 1)
-        lay.addWidget(self._ld_ilkostsok, 4, 0)
-        lay.addWidget(self._led_ilkostsok, 4, 1)
-        lay.addWidget(self._ld_ilkoccps, 5, 0)
-        lay.addWidget(self._led_ilkoccps, 5, 1)
-        lay.addWidget(self._ld_ilkopwr, 6, 0)
-        lay.addWidget(self._led_ilkopwr, 6, 1)
+        lay.addWidget(self._ld_ilkopwr, 4, 0)
+        lay.addWidget(self._led_ilkopwr, 4, 1)
 
 
 class APUHardLLDetails(SiriusDialog):

@@ -139,8 +139,6 @@ class APUControlWindow(SiriusMainWindow):
         self._led_intlkresume = PyDMLedMultiChannel(
             self, {self.dev_pref+':IntlkInStop-Mon': 0,
                    self.dev_pref+':IntlkInEOpnGap-Mon': 0,
-                   self.dev_pref+':IntlkOutStsOk-Mon': 1,
-                   self.dev_pref+':IntlkOutCCPSEnbld-Mon': 1,
                    self.dev_pref+':IntlkOutPwrEnbld-Mon': 1})
         self._pb_intlkdetail = QPushButton(
             qta.icon('fa5s.ellipsis-h'), '', self)
