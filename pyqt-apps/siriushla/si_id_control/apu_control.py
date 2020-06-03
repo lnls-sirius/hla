@@ -241,16 +241,6 @@ class APUControlWindow(SiriusMainWindow):
         self._pb_home.setStyleSheet(
             '#Home{min-width:30px; max-width:30px; icon-size:25px;}')
 
-        self._ld_calib = QLabel('Calibrate Tilt Meters', self)
-        self._pb_calib = PyDMPushButton(
-            self, label='', icon=qta.icon('fa5s.crosshairs'))
-        self._pb_calib.setToolTip('Calibrate tilt meters.')
-        self._pb_calib.channel = self.dev_pref+':DevCtrl-Cmd'  # CalibTilt
-        self._pb_calib.pressValue = 4
-        self._pb_calib.setObjectName('CalibTilt')
-        self._pb_calib.setStyleSheet(
-            '#CalibTilt{min-width:30px; max-width:30px; icon-size:25px;}')
-
         self._ld_standby = QLabel('Enable Standby Mode', self)
         self._pb_standby = PyDMPushButton(
             self, label='', icon=qta.icon('mdi.alpha-a-box-outline'))
@@ -273,16 +263,13 @@ class APUControlWindow(SiriusMainWindow):
         lay_auxcmd.addItem(
             QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, 0)
         lay_auxcmd.addWidget(self._ld_homeaxis, 2, 0)
-        lay_auxcmd.addWidget(self._pb_home, 2, 2)
-        lay_auxcmd.addWidget(self._ld_calib, 3, 0, 1, 2)
-        lay_auxcmd.addWidget(self._pb_calib, 3, 2)
-        lay_auxcmd.addWidget(self._ld_standby, 4, 0, 1, 2)
-        lay_auxcmd.addWidget(self._pb_standby, 4, 2)
-        lay_auxcmd.addWidget(self._ld_lastcomm, 5, 0)
-        lay_auxcmd.addWidget(self._lb_lastcomm, 5, 1, 1, 2)
-        lay_auxcmd.setColumnStretch(0, 4)
-        lay_auxcmd.setColumnStretch(1, 2)
-        lay_auxcmd.setColumnStretch(2, 1)
+        lay_auxcmd.addWidget(self._pb_home, 2, 1, 1, 2,
+                             alignment=Qt.AlignCenter)
+        lay_auxcmd.addWidget(self._ld_standby, 3, 0)
+        lay_auxcmd.addWidget(self._pb_standby, 3, 1, 1, 2,
+                             alignment=Qt.AlignCenter)
+        lay_auxcmd.addWidget(self._ld_lastcomm, 4, 0)
+        lay_auxcmd.addWidget(self._lb_lastcomm, 4, 1, 1, 2)
         return gbox_auxcmd
 
     def _corrsControlWidget(self):
