@@ -4,8 +4,7 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGroupBox, QGridLayout, QLabel, \
     QHBoxLayout, QSizePolicy as QSzPlcy, QSpacerItem, QPushButton
 import qtawesome as qta
-from pydm.widgets import PyDMLabel, PyDMEnumComboBox, PyDMPushButton, \
-    PyDMSpinbox
+from pydm.widgets import PyDMLabel, PyDMPushButton, PyDMSpinbox
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
@@ -241,8 +240,6 @@ class APUControlWindow(SiriusMainWindow):
         self._pb_home.setObjectName('Home')
         self._pb_home.setStyleSheet(
             '#Home{min-width:30px; max-width:30px; icon-size:25px;}')
-        self._cb_homeaxis = PyDMEnumComboBox(
-            self, self.dev_pref+':HomeAxis-Sel')
 
         self._ld_calib = QLabel('Calibrate Tilt Meters', self)
         self._pb_calib = PyDMPushButton(
@@ -276,7 +273,6 @@ class APUControlWindow(SiriusMainWindow):
         lay_auxcmd.addItem(
             QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, 0)
         lay_auxcmd.addWidget(self._ld_homeaxis, 2, 0)
-        lay_auxcmd.addWidget(self._cb_homeaxis, 2, 1)
         lay_auxcmd.addWidget(self._pb_home, 2, 2)
         lay_auxcmd.addWidget(self._ld_calib, 3, 0, 1, 2)
         lay_auxcmd.addWidget(self._pb_calib, 3, 2)
