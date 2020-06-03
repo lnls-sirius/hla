@@ -9,8 +9,9 @@ from pydm.widgets import PyDMLabel, PyDMEnumComboBox, PyDMPushButton, \
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
+from siriuspy.search import IDSearch
 
-from siriushla.util import connect_window
+from siriushla.util import connect_window, get_appropriate_color
 from siriushla.widgets import SiriusMainWindow, PyDMLed, SiriusLedAlert, \
     SiriusLedState, PyDMLedMultiChannel, PyDMStateButton
 from siriushla.as_ps_control import ControlWidgetFactory, PSDetailWindow
@@ -26,14 +27,21 @@ class APUControlWindow(SiriusMainWindow):
         super().__init__(parent)
         self._prefix = prefix
         self._device = _PVName(device)
+        self._beamline = IDSearch.conv_subsection_2_beamline(self._device.sub)
         self.dev_pref = prefix + device
-        self.setWindowTitle(device+' Control Window')
-        self.setObjectName('SIApp')
+        self.setWindowTitle(device+' Control Window - '+self._beamline)
+        self.setObjectName('IDApp')
+        color = get_appropriate_color('ID')
+        self.setWindowIcon(
+            qta.icon('mdi.current-ac', 'mdi.current-ac', 'mdi.equal', options=[
+                dict(scale_factor=0.48, color=color, offset=(-0.16, -0.01)),
+                dict(scale_factor=0.48, color=color, offset=(0.16, -0.01)),
+                dict(scale_factor=2.4, color=color, offset=(0.0, 0.0))]))
         self._setupUi()
 
     def _setupUi(self):
         self._label_title = QLabel(
-            '<h3>'+self._device+' Control</h3>', self,
+            '<h3>'+self._device+' Control - '+self._beamline+'</h3 >', self,
             alignment=Qt.AlignCenter)
         self._label_title.setStyleSheet('max-height:1.29em;')
 

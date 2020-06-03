@@ -16,7 +16,7 @@ class APUAlarmDetails(SiriusDialog):
         self._prefix = prefix
         self._device = device
         self.dev_pref = prefix + device
-        self.setObjectName('SIApp')
+        self.setObjectName('IDApp')
         self.setWindowTitle(device+' Alarm Details')
         self._setupUi()
 
@@ -95,7 +95,7 @@ class APUInterlockDetails(SiriusDialog):
         self._prefix = prefix
         self._device = device
         self.dev_pref = prefix + device
-        self.setObjectName('SIApp')
+        self.setObjectName('IDApp')
         self.setWindowTitle(device+' Interlock Details')
         self._setupUi()
 
@@ -167,7 +167,7 @@ class APUHardLLDetails(SiriusDialog):
         self._prefix = prefix
         self._device = device
         self.dev_pref = prefix + device
-        self.setObjectName('SIApp')
+        self.setObjectName('IDApp')
         self.setWindowTitle(device+' Hardware and LowLevel Details')
         self._setupUi()
 
