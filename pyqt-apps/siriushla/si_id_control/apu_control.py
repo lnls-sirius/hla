@@ -226,10 +226,12 @@ class APUControlWindow(SiriusMainWindow):
         return gbox_blines
 
     def _auxCommandsWidget(self):
-        self._ld_speedlim = QLabel('Max Phase Speed\n[mm/s]', self)
+        self._ld_speedlim = QLabel('Max Phase Speed [mm/s]', self)
         self._sb_speedlim = PyDMSpinbox(
-            self, self.dev_pref+':PhaseSpeed-SP.DRVH')
+            self, self.dev_pref+':MaxPhaseSpeed-SP')
         self._sb_speedlim.showStepExponent = False
+        self._lb_speedlim = PyDMLabel(
+            self, self.dev_pref+':MaxPhaseSpeed-RB')
 
         self._ld_homeaxis = QLabel('Do homing', self)
         self._pb_home = PyDMPushButton(
@@ -259,7 +261,8 @@ class APUControlWindow(SiriusMainWindow):
         gbox_auxcmd = QGroupBox('Auxiliary Commands', self)
         lay_auxcmd = QGridLayout(gbox_auxcmd)
         lay_auxcmd.addWidget(self._ld_speedlim, 0, 0)
-        lay_auxcmd.addWidget(self._sb_speedlim, 0, 1, 1, 2)
+        lay_auxcmd.addWidget(self._sb_speedlim, 0, 1)
+        lay_auxcmd.addWidget(self._lb_speedlim, 0, 2)
         lay_auxcmd.addItem(
             QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, 0)
         lay_auxcmd.addWidget(self._ld_homeaxis, 2, 0)
