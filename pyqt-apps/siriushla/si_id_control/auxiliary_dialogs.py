@@ -170,7 +170,9 @@ class APUHardLLDetails(SiriusDialog):
 
         self._ld_sttsys = QLabel('System state', self)
         self._led_sttsys = PyDMLedMultiChannel(
-            self, channels2values={self.dev_pref+':State-Mon': 1})  # 1: Op
+            self, channels2values={
+                self.dev_pref+':State-Mon':
+                    {'value': [1, 4], 'comp': 'in'}})  # in [Op, Standby]
         self._led_sttsys.offColor = PyDMLed.Yellow
         self._led_sttsys.onColor = PyDMLed.LightGreen
         self._led_sttsys.setStyleSheet('max-width: 1.29em;')

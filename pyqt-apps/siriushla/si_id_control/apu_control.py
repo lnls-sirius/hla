@@ -155,8 +155,10 @@ class APUControlWindow(SiriusMainWindow):
             self,
             {self.dev_pref+':StateHw-Mon': {'value': [0x4C, 0x3C],
                                             'comp': 'in'},
-             self.dev_pref+':State-Mon': 1,
+             self.dev_pref+':State-Mon': {'value': [1, 4], 'comp': 'in'},
              self.dev_pref+':IsOperational-Mon': 1})
+        self._led_hwsysresume.offColor = PyDMLed.Yellow
+        self._led_hwsysresume.onColor = PyDMLed.LightGreen
         self._pb_hwsysdetail = QPushButton(
             qta.icon('fa5s.ellipsis-h'), '', self)
         self._pb_hwsysdetail.setObjectName('dtl')
