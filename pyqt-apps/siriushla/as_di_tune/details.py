@@ -8,8 +8,9 @@ from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox, \
     PyDMPushButton, PyDMLineEdit
 
 from siriuspy.namesys import SiriusPVName
-from siriushla.widgets import PyDMLedMultiChannel, SiriusMainWindow, PyDMLed, \
-    PyDMStateButton, SiriusLedState, SiriusConnectionSignal, SiriusComboBox
+from siriushla.widgets import PyDMLedMultiChannel, SiriusMainWindow, \
+    PyDMStateButton, SiriusLedState, SiriusConnectionSignal, PyDMLed, \
+    SiriusStringComboBox
 from siriushla.as_ti_control import HLTriggerSimple
 
 
@@ -213,7 +214,7 @@ class TuneDetails(SiriusMainWindow):
                      '10 kHz', '20 kHz', '30 kHz', '50 kHz',
                      '100 kHz', '200 kHz', '300 kHz', '500 kHz',
                      '1 MHz', '2 MHz', '3 MHz', '5 MHz', '10 MHz']
-            self.cb_rbw = SiriusComboBox(
+            self.cb_rbw = SiriusStringComboBox(
                 parent=self, init_channel=self.device + ':SpecAnaRBW-Sel',
                 items=items)
         self.lb_rbw = PyDMLabel(

@@ -10,8 +10,8 @@ from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMLineEdit, \
 
 from siriuspy.namesys import SiriusPVName
 import siriushla.util as util
-from siriushla.widgets import PyDMLedMultiChannel, PyDMLed, SiriusComboBox, \
-    PyDMStateButton, SiriusLedState, SiriusConnectionSignal
+from siriushla.widgets import PyDMLedMultiChannel, PyDMLed, PyDMStateButton, \
+    SiriusStringComboBox, SiriusLedState, SiriusConnectionSignal
 from .details import TuneDetails, SITuneMarkerDetails
 from .util import marker_color
 
@@ -145,7 +145,7 @@ class TuneControls(QWidget):
                      '10 kHz', '20 kHz', '30 kHz', '50 kHz',
                      '100 kHz', '200 kHz', '300 kHz', '500 kHz',
                      '1 MHz', '2 MHz', '3 MHz', '5 MHz', '10 MHz']
-            self.cb_rbw = SiriusComboBox(
+            self.cb_rbw = SiriusStringComboBox(
                 parent=self, init_channel=self.device + ':SpecAnaRBW-Sel',
                 items=items)
         self.lb_rbw = PyDMLabel(
