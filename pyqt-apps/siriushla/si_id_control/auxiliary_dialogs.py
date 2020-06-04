@@ -5,7 +5,11 @@ from qtpy.QtWidgets import QLabel, QHBoxLayout, QGridLayout, \
 
 from pydm.widgets import PyDMLabel
 
+from siriuspy.namesys import SiriusPVName as _PVName
+
+from siriushla.util import connect_window
 from siriushla.widgets import SiriusDialog, PyDMLed, PyDMLedMultiChannel
+from siriushla.as_ps_control import ControlWidgetFactory, PSDetailWindow
 
 
 class APUAlarmDetails(SiriusDialog):
@@ -198,3 +202,36 @@ class APUHardLLDetails(SiriusDialog):
         lay_hwsys.addWidget(self._lb_sttsys, 3, 2)
         lay_hwsys.addWidget(self._ld_isopr, 4, 0)
         lay_hwsys.addWidget(self._led_isopr, 4, 1)
+
+
+class APUCorrs(SiriusDialog):
+
+    def __init__(self, parent=None, prefix='', device=''):
+        super().__init__(parent)
+        self._prefix = prefix
+        self._device = device
+        self.dev_pref = prefix + device
+        self.setObjectName('IDApp')
+        self.setWindowTitle(device+' Correctors Details')
+        self._setupUi()
+
+    def _setupUi(self):
+        corrs_wid = ControlWidgetFactory.factory(
+            parent=self, section='SI', subsection=self._device.sub,
+            device="corrector-undulator", orientation=Qt.Vertical)
+        corrs_wid.setObjectName('cw')
+        corrs_wid.setStyleSheet('#cw{min-height: 36em; min-width:39em;}')
+        corrs_wid.layout.setContentsMargins(0, 0, 0, 0)
+        self._connect_corrs_buttons(corrs_wid)
+
+        lay_corrs = QGridLayout(self)
+        lay_corrs.addWidget(corrs_wid)
+
+    def _connect_corrs_buttons(self, widget):
+        for w in widget.get_summary_widgets():
+            detail_bt = w.get_detail_button()
+            psname = detail_bt.text()
+            if not psname:
+                psname = detail_bt.toolTip()
+            psname = _PVName(psname)
+            connect_window(detail_bt, PSDetailWindow, self, psname=psname)

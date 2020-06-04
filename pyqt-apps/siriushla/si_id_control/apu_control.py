@@ -13,9 +13,10 @@ from siriuspy.search import IDSearch
 from siriushla.util import connect_window, get_appropriate_color
 from siriushla.widgets import SiriusMainWindow, PyDMLed, SiriusLedAlert, \
     SiriusLedState, PyDMLedMultiChannel, PyDMStateButton
-from siriushla.as_ps_control import ControlWidgetFactory, PSDetailWindow
+from siriushla.as_ps_diag import PSGraphMonWidget
+
 from .auxiliary_dialogs import APUAlarmDetails, APUInterlockDetails, \
-    APUHardLLDetails
+    APUHardLLDetails, APUCorrs
 
 
 class APUControlWindow(SiriusMainWindow):
@@ -47,16 +48,15 @@ class APUControlWindow(SiriusMainWindow):
         cw = QWidget()
         lay = QGridLayout(cw)
         lay.addWidget(self._label_title, 0, 0, 1, 3)
-        lay.addWidget(self._mainControlsWidget(), 1, 0, 1, 2)
-        lay.addWidget(self._statusWidget(), 2, 0, 2, 1)
-        lay.addWidget(self._ctrlModeWidget(), 2, 1)
-        lay.addWidget(self._beamLinesCtrlWidget(), 3, 1)
-        lay.addWidget(self._auxCommandsWidget(), 4, 0, 1, 2)
-        lay.addWidget(self._corrsControlWidget(), 1, 2, 4, 1)
+        lay.addWidget(self._mainControlsWidget(), 1, 0, 2, 1)
+        lay.addWidget(self._ctrlModeWidget(), 1, 1)
+        lay.addWidget(self._beamLinesCtrlWidget(), 2, 1)
+        lay.addWidget(self._auxCommandsWidget(), 3, 0)
+        lay.addWidget(self._statusWidget(), 3, 1)
+        lay.addWidget(self._corrsControlWidget(), 4, 0, 1, 2)
         lay.setRowStretch(0, 1)
-        lay.setRowStretch(1, 5)
-        lay.setRowStretch(2, 2)
-        lay.setRowStretch(3, 3)
+        lay.setRowStretch(1, 2)
+        lay.setRowStretch(2, 3)
         lay.setRowStretch(4, 5)
         self.setCentralWidget(cw)
 
@@ -226,7 +226,7 @@ class APUControlWindow(SiriusMainWindow):
         return gbox_blines
 
     def _auxCommandsWidget(self):
-        self._ld_speedlim = QLabel('Max Phase Speed [mm/s]', self)
+        self._ld_speedlim = QLabel('Max Phase Speed\n[mm/s]', self)
         self._sb_speedlim = PyDMSpinbox(
             self, self.dev_pref+':MaxPhaseSpeed-SP')
         self._sb_speedlim.showStepExponent = False
@@ -276,24 +276,23 @@ class APUControlWindow(SiriusMainWindow):
         return gbox_auxcmd
 
     def _corrsControlWidget(self):
-        corrs_wid = ControlWidgetFactory.factory(
-            parent=self, section='SI', subsection=self._device.sub,
-            device="corrector-undulator", orientation=Qt.Vertical)
-        corrs_wid.setObjectName('cw')
-        corrs_wid.setStyleSheet('#cw{min-height: 36em; min-width:39em;}')
-        corrs_wid.layout.setContentsMargins(0, 0, 0, 0)
-        self._connect_corrs_buttons(corrs_wid)
+        filt = {'sec': 'SI', 'dev': 'C.*', 'sub': self._device.sub}
+        self.corrs = PSGraphMonWidget(self, self._prefix, filters=filt)
+        self.corrs._graph.setStyleSheet(
+            '#graph{min-width:16em;min-height:10em;}')
+        self.corrs.layout().setContentsMargins(0, 0, 0, 0)
+
+        self._pb_dtls = QPushButton(
+            qta.icon('fa5s.ellipsis-h'), '', self)
+        self._pb_dtls.setObjectName('dtls')
+        self._pb_dtls.setStyleSheet(
+            '#dtls{min-width:30px; max-width:30px; icon-size:25px;}')
+        connect_window(
+            self._pb_dtls, APUCorrs, self,
+            prefix=self._prefix, device=self._device)
 
         gbox = QGroupBox('Correctors', self)
-        lay_corrs = QGridLayout(gbox)
-        lay_corrs.addWidget(corrs_wid)
+        lay = QGridLayout(gbox)
+        lay.addWidget(self.corrs, 0, 0)
+        lay.addWidget(self._pb_dtls, 1, 0, alignment=Qt.AlignRight)
         return gbox
-
-    def _connect_corrs_buttons(self, widget):
-        for w in widget.get_summary_widgets():
-            detail_bt = w.get_detail_button()
-            psname = detail_bt.text()
-            if not psname:
-                psname = detail_bt.toolTip()
-            psname = _PVName(psname)
-            connect_window(detail_bt, PSDetailWindow, self, psname=psname)
