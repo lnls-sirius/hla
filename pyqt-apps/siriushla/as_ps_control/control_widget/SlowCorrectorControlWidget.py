@@ -82,6 +82,3 @@ class IDSlowCorrectorControlWidget(SISlowCorrectorControlWidget):
 
     def _getVisibleProps(self):
         return ['detail', 'state', 'intlk', 'strength_sp', 'strength_mon']
-
-    def _getGroups(self):
-        return [('', '(CH|CV)'), ]
