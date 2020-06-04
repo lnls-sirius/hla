@@ -276,11 +276,23 @@ class APUControlWindow(SiriusMainWindow):
         return gbox_auxcmd
 
     def _corrsControlWidget(self):
-        filt = {'sec': 'SI', 'dev': 'C.*', 'sub': self._device.sub}
-        self.corrs = PSGraphMonWidget(self, self._prefix, filters=filt)
-        self.corrs._graph.setStyleSheet(
-            '#graph{min-width:16em;min-height:10em;}')
-        self.corrs.layout().setContentsMargins(0, 0, 0, 0)
+        filt = {'sec': 'SI', 'dev': 'CH', 'sub': self._device.sub}
+        self.corrsH = PSGraphMonWidget(self, self._prefix, filters=filt)
+        self.corrsH.graph.setStyleSheet(
+            '#graph{min-width:14em;min-height:6em;}')
+        self.corrsH.layout().setContentsMargins(0, 0, 0, 0)
+
+        filt = {'sec': 'SI', 'dev': 'CV', 'sub': self._device.sub}
+        self.corrsV = PSGraphMonWidget(
+            self, self._prefix, filters=filt, show_propties=False)
+        self.corrsV.graph.setStyleSheet(
+            '#graph{min-width:14em;min-height:6em;}')
+        self.corrsV.layout().setContentsMargins(0, 0, 0, 0)
+
+        self.corrsH.cb_prop_line.currentTextChanged.connect(
+            self.corrsV.update_property_line)
+        self.corrsH.cb_prop_symb.currentTextChanged.connect(
+            self.corrsV.update_property_symb)
 
         self._pb_dtls = QPushButton(
             qta.icon('fa5s.ellipsis-h'), '', self)
@@ -293,6 +305,7 @@ class APUControlWindow(SiriusMainWindow):
 
         gbox = QGroupBox('Correctors', self)
         lay = QGridLayout(gbox)
-        lay.addWidget(self.corrs, 0, 0)
-        lay.addWidget(self._pb_dtls, 1, 0, alignment=Qt.AlignRight)
+        lay.addWidget(self.corrsH, 0, 0)
+        lay.addWidget(self.corrsV, 1, 0)
+        lay.addWidget(self._pb_dtls, 2, 0, alignment=Qt.AlignRight)
         return gbox
