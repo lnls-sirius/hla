@@ -98,8 +98,8 @@ class PSGraphMonWidget(QWidget):
             'OpMode-Sel': _PSConst.OpMode.SlowRef,
             'OpMode-Sts': _PSConst.States.SlowRef,
             'CtrlMode-Mon': _PSConst.Interface.Remote,
-            'CtrlLoop-Sel': _PSConst.OpenLoop.Open,
-            'CtrlLoop-Sts': _PSConst.OpenLoop.Open,
+            'CtrlLoop-Sel': _PSConst.OpenLoop.Closed,
+            'CtrlLoop-Sts': _PSConst.OpenLoop.Closed,
             'CycleEnbl-Mon': _PSConst.DsblEnbl.Enbl}
         self._choose_prop_line = [
             'Current-Mon', 'Current-SP', 'Current-RB', 'CurrentRef-Mon',
