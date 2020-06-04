@@ -11,11 +11,10 @@ from siriuspy.search import LLTimeSearch
 from siriuspy.timesys import csdev as _cstime
 from siriushla.util import connect_window, get_appropriate_color
 from siriushla.widgets import PyDMLed, SiriusLedAlert, PyDMStateButton, \
-    SiriusLabel
+    SiriusLabel, SiriusEnumComboBox as _MyComboBox
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla import as_ti_control as _ti_ctrl
-from .base import BaseList, BaseWidget, \
-    MySpinBox as _MySpinBox, MyComboBox as _MyComboBox
+from .base import BaseList, BaseWidget, MySpinBox as _MySpinBox
 
 
 class BucketListLineEdit(PyDMLineEdit):

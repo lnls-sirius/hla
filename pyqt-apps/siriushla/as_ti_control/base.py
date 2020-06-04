@@ -4,10 +4,9 @@ from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QFormLayout, \
     QScrollArea, QGroupBox, QLabel, QSizePolicy as QSzPol, QFrame, QMenu, \
     QLineEdit, QPushButton
 import qtawesome as qta
-from pydm.widgets import PyDMEnumComboBox
 from pydm.widgets.base import PyDMPrimitiveWidget
 from siriuspy.namesys import SiriusPVName as _PVName
-from siriushla.widgets import SiriusLabel, SiriusSpinbox
+from siriushla.widgets import SiriusLabel, SiriusSpinbox, SiriusEnumComboBox
 
 
 class BaseWidget(QWidget):
@@ -55,7 +54,7 @@ class BaseWidget(QWidget):
                 wid.showStepExponent = False
                 wid.setAlignment(Qt.AlignCenter)
             else:
-                wid = MyComboBox(self, init_channel=chan1)
+                wid = SiriusEnumComboBox(self, init_channel=chan1)
             wid.setStyleSheet(style)
             layout.addWidget(wid)
 
@@ -275,22 +274,6 @@ class BaseList(CustomGroupBox):
 
 class MySpinBox(SiriusSpinbox):
     """Subclass QDoubleSpinBox to reimplement whellEvent."""
-
-    def __init__(self, parent, init_channel=None):
-        """Initialize object."""
-        super().__init__(parent=parent, init_channel=init_channel)
-        self.setFocusPolicy(Qt.StrongFocus)
-
-    def wheelEvent(self, event):
-        """Reimplement wheel event to ignore event when out of focus."""
-        if not self.hasFocus():
-            event.ignore()
-        else:
-            super().wheelEvent(event)
-
-
-class MyComboBox(PyDMEnumComboBox):
-    """Subclass PyDMEnumComboBox to reimplement whellEvent."""
 
     def __init__(self, parent, init_channel=None):
         """Initialize object."""

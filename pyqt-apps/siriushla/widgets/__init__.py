@@ -18,3 +18,4 @@ from .label import SiriusLabel
 from .pvnames_tree import PVNameTree
 from .string_combo_box import SiriusStringComboBox
 from .timeplot import SiriusTimePlot
+from .enum_combo_box import SiriusEnumComboBox
