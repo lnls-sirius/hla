@@ -361,6 +361,7 @@ class PSGraph(PyDMWaveformPlot):
         self.setAutoRangeY(True)
         self.setShowXGrid(True)
         self.setShowYGrid(True)
+        self.plotItem.setLabel('bottom', 's', units='m')
         self._nok_pen = mkPen(QColor(color))
         self._nok_brush = mkBrush(QColor(255, 0, 0))
         self._ok_pen = mkPen(QColor(color))
@@ -481,7 +482,7 @@ class PSGraph(PyDMWaveformPlot):
         posx = self.curve.scatter.mapFromScene(pos).x()
         posx = posx % self._c0
         ind = _np.argmin(_np.abs(_np.array(self._x_data)-posx))
-        txt = '{0:s}, y = {1:.3f} m'.format(self.tooltips[ind], posx)
+        txt = '{0:s}, x = {1:.3f} m'.format(self.tooltips[ind], posx)
         QToolTip.showText(
             self.mapToGlobal(pos), txt, self, self.geometry(), 500)
         super().mouseMoveEvent(event)
