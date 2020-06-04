@@ -293,10 +293,11 @@ def get_object(ismenubar=True, parent=None):
             menu = LEVEL1('IDs', self)
             menu.setObjectName('IDApp')
 
-            idt, sub = 'APU22', '09SA'
-            beamline = IDSearch.conv_subsection_2_beamline(sub)
-            APU09SA = QAction(
-                '{0} - {1} ({2})'.format(idt, sub, beamline), menu)
+            # SI-09SA:ID-APU22
+            idname = SiriusPVName('SI-09SA:ID-APU22')
+            beamline = IDSearch.conv_idname_2_beamline(idname)
+            APU09SA = QAction('{0} - {1} ({2})'.format(
+                idname.dev, idname.sub, beamline), menu)
             self.connect_newprocess(
                 APU09SA, ['sirius-hla-si-id-control.py',
                           '-dev', 'SI-09SA:ID-APU22'])

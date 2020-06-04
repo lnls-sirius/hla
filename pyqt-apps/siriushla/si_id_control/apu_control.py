@@ -26,7 +26,7 @@ class APUControlWindow(SiriusMainWindow):
         super().__init__(parent)
         self._prefix = prefix
         self._device = _PVName(device)
-        self._beamline = IDSearch.conv_subsection_2_beamline(self._device.sub)
+        self._beamline = IDSearch.conv_idname_2_beamline(self._device)
         self.dev_pref = prefix + device
         self.setWindowTitle(device+' Control Window - '+self._beamline)
         self.setObjectName('IDApp')
