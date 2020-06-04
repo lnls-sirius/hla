@@ -22,14 +22,41 @@ from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
 from siriushla.widgets import SiriusMainWindow
 
 
-class PSGraphMon(SiriusMainWindow):
-    """Power supply graph monitor."""
+class PSGraphMonWindow(SiriusMainWindow):
+    """Power supply graph monitor window."""
+
+    def __init__(self, parent=None, prefix=_vaca_prefix, filters=''):
+        super().__init__(parent)
+        self.setWindowTitle('Power Supplies Graph Monitor')
+        self._prefix = prefix
+        self._filters = filters
+        if not filters:
+            self.setObjectName('ASApp')
+        else:
+            self.setObjectName(filters['sec']+'App')
+        self._setupUi()
+
+    def _setupUi(self):
+        aux_label = '' if not self._filters \
+            else ' - '+self._filters['sec']+' '+self._filters['dev']
+        self._label = QLabel('<h3>PS Graph Monitor'+aux_label+'</h3>',
+                             self, alignment=Qt.AlignCenter)
+        wid = PSGraphMonWidget(self, self._prefix, self._filters)
+
+        cw = QWidget()
+        lay = QGridLayout(cw)
+        lay.addWidget(self._label, 0, 0)
+        lay.addWidget(wid, 1, 0)
+        self.setCentralWidget(cw)
+
+
+class PSGraphMonWidget(QWidget):
+    """Power supply graph monitor widget."""
 
     _pvs = dict()
 
     def __init__(self, parent=None, prefix=_vaca_prefix, filters=''):
         super().__init__(parent)
-        self.setWindowTitle('Power Supplies Graph Monitor')
         self._filters = filters
         if not filters:
             self.setObjectName('ASApp')
@@ -48,8 +75,9 @@ class PSGraphMon(SiriusMainWindow):
 
         self._choose_sub = ['All', ]
         self._choose_sub.extend(['{0:02d}.*'.format(i+1) for i in range(20)])
-        self._choose_sub.extend(
-            ['.*M1', '.*M2', '.*C1', '.*C2', '.*C3', '.*C4'])
+        self._choose_sub.extend(['.*M1', '.*M2',
+                                 '.*C1', '.*C2', '.*C3', '.*C4',
+                                 '.*SA', '.*SB', '.*SP'])
 
         self._choose_dev = {
             sec: ['CH', 'CV', 'C(H|V)'] for sec in self._choose_sec}
@@ -87,11 +115,6 @@ class PSGraphMon(SiriusMainWindow):
         self._timer.start()
 
     def _setupUi(self):
-        aux_label = '' if not self._filters \
-            else ' - '+self._filters['sec']+' '+self._filters['dev']
-        self._label = QLabel('<h3>PS Graph Monitor'+aux_label+'</h3>',
-                             self, alignment=Qt.AlignCenter)
-
         if not self._filters:
             self._cb_sec = QComboBox(self)
             for item in self._choose_sec:
@@ -159,16 +182,14 @@ class PSGraphMon(SiriusMainWindow):
         hbox_prop_line.addWidget(self._cb_prop_line)
 
         self._graph = PSGraph(self)
+        self._graph.setObjectName('graph')
         self._graph.psnames = self._psnames
         self._create_pvs(self._property_symb)
         self._graph.symbols = self._get_values(self._property_symb)
         self._create_pvs(self._property_line)
         self._graph.y_data = self._get_values(self._property_line)
 
-        cw = QWidget()
-        self.setCentralWidget(cw)
-        lay = QGridLayout(cw)
-        lay.addWidget(self._label, 0, 0, 1, 4)
+        lay = QGridLayout(self)
         lay.addItem(
             QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, 0, 1, 4)
         if not self._filters:
@@ -185,11 +206,12 @@ class PSGraphMon(SiriusMainWindow):
         lay.addItem(
             QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 4, 0, 1, 4)
         lay.addWidget(self._graph, 5, 0, 1, 4)
-
         lay.setColumnStretch(0, 1)
         lay.setColumnStretch(1, 2)
         lay.setColumnStretch(2, 2)
         lay.setColumnStretch(3, 5)
+
+        self.setStyleSheet('#graph{min-width:60em;min-height:12em;}')
 
     def _set_psnames(self):
         sec = self._cb_sec.currentText()
@@ -242,20 +264,20 @@ class PSGraphMon(SiriusMainWindow):
         new_pvs = dict()
         for psn in self._psnames:
             pvname = self._prefix+psn+':'+propty
-            if pvname in PSGraphMon._pvs:
+            if pvname in PSGraphMonWidget._pvs:
                 continue
             new_pvs[pvname] = _PV(pvname, connection_timeout=0.05)
-        PSGraphMon._pvs.update(new_pvs)
+        PSGraphMonWidget._pvs.update(new_pvs)
 
     def _get_values(self, propty):
         for psn in self._psnames:
             pvname = self._prefix+psn+':'+propty
-            PSGraphMon._pvs[pvname].wait_for_connection()
+            PSGraphMonWidget._pvs[pvname].wait_for_connection()
 
         values = list()
         for psn in self._psnames:
             pvname = self._prefix+psn+':'+propty
-            val = PSGraphMon._pvs[pvname].get()
+            val = PSGraphMonWidget._pvs[pvname].get()
             val = val if val is not None else 0
             if propty in self._choose_prop_symb.keys():
                 defval = self._choose_prop_symb[propty]
@@ -266,7 +288,7 @@ class PSGraphMon(SiriusMainWindow):
     def _set_values(self, propty, value):
         for psn in self._psnames:
             pvname = self._prefix+psn+':'+propty
-            pv = PSGraphMon._pvs[pvname]
+            pv = PSGraphMonWidget._pvs[pvname]
             if pv.wait_for_connection():
                 pv.put(value)
 
@@ -317,9 +339,7 @@ class PSGraphMon(SiriusMainWindow):
     def contextMenuEvent(self, event):
         """Show a custom context menu."""
         point = event.pos()
-        widget = self.childAt(point)
-        parent = widget.parent()
-        if widget != self._graph and parent != self._graph:
+        if not self._graph.geometry().contains(point):
             menu = QMenu("Actions", self)
             menu.addAction(self.cmd_turnon_act)
             menu.addAction(self.cmd_turnoff_act)
@@ -341,8 +361,6 @@ class PSGraph(PyDMWaveformPlot):
         self.setAutoRangeY(True)
         self.setShowXGrid(True)
         self.setShowYGrid(True)
-        self.setObjectName('graph')
-        self.setStyleSheet('#graph{min-width:60em;min-height:12em;}')
         self._nok_pen = mkPen(QColor(color))
         self._nok_brush = mkBrush(QColor(255, 0, 0))
         self._ok_pen = mkPen(QColor(color))
