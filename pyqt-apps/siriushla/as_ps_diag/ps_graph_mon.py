@@ -2,7 +2,7 @@
 import numpy as _np
 from epics import PV as _PV
 
-from qtpy.QtCore import Qt, QSize, QTimer
+from qtpy.QtCore import Qt, QSize, QTimer, Slot
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QGridLayout, QWidget, QLabel, QHBoxLayout, \
     QComboBox, QToolTip, QSpacerItem, QSizePolicy as QSzPlcy, QApplication, \
@@ -55,7 +55,8 @@ class PSGraphMonWidget(QWidget):
 
     _pvs = dict()
 
-    def __init__(self, parent=None, prefix=_vaca_prefix, filters=''):
+    def __init__(self, parent=None, prefix=_vaca_prefix, filters='',
+                 show_propties=True):
         super().__init__(parent)
         self._filters = filters
         if not filters:
@@ -65,6 +66,7 @@ class PSGraphMonWidget(QWidget):
             self.setObjectName(filters['sec']+'App')
         self._prefix = prefix
         self._psnames = _PSSearch.get_psnames(filters)
+        self._show_propties = show_propties
         self._property_line = 'Current-Mon'
         self._property_symb = 'DiagStatus-Mon'
         self._magfunc = _PSSearch.conv_psname_2_magfunc(self._psnames[0])
@@ -149,45 +151,56 @@ class PSGraphMonWidget(QWidget):
 
                 glay_choose.addWidget(self._cb_dev[sec], 0, 1)
 
+        self._label_prop = QLabel('Properties: ')
+
         self._label_symb = QLabel()
         icon = qta.icon('mdi.record-circle-outline')
         pixmap = icon.pixmap(icon.actualSize(QSize(20, 20)))
         self._label_symb.setPixmap(pixmap)
         self._label_symb.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Fixed)
-        self._cb_prop_symb = QComboBox(self)
-        self._cb_prop_symb.currentTextChanged.connect(
-            self._update_property_symb)
-        self._cb_prop_symb.setSizePolicy(QSzPlcy.Expanding, QSzPlcy.Preferred)
-        self._cb_prop_symb.setMaxVisibleItems(10)
+        self.cb_prop_symb = QComboBox(self)
+        self.cb_prop_symb.currentTextChanged.connect(
+            self.update_property_symb)
+        self.cb_prop_symb.setSizePolicy(
+            QSzPlcy.Expanding, QSzPlcy.Preferred)
+        self.cb_prop_symb.setMaxVisibleItems(10)
         for item in self._choose_prop_symb.keys():
-            self._cb_prop_symb.addItem(item)
+            self.cb_prop_symb.addItem(item)
         hbox_prop_symb = QHBoxLayout()
         hbox_prop_symb.addWidget(self._label_symb)
-        hbox_prop_symb.addWidget(self._cb_prop_symb)
+        hbox_prop_symb.addWidget(self.cb_prop_symb)
 
         self._label_line = QLabel()
         icon = qta.icon('mdi.pulse')
         pixmap = icon.pixmap(icon.actualSize(QSize(20, 20)))
         self._label_line.setPixmap(pixmap)
         self._label_line.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Fixed)
-        self._cb_prop_line = QComboBox(self)
-        self._cb_prop_line.currentTextChanged.connect(
-            self._update_property_line)
-        self._cb_prop_line.setSizePolicy(QSzPlcy.Expanding, QSzPlcy.Preferred)
-        self._cb_prop_line.setMaxVisibleItems(10)
+        self.cb_prop_line = QComboBox(self)
+        self.cb_prop_line.currentTextChanged.connect(
+            self.update_property_line)
+        self.cb_prop_line.setSizePolicy(
+            QSzPlcy.Expanding, QSzPlcy.Preferred)
+        self.cb_prop_line.setMaxVisibleItems(10)
         for item in self._choose_prop_line:
-            self._cb_prop_line.addItem(item)
+            self.cb_prop_line.addItem(item)
         hbox_prop_line = QHBoxLayout()
         hbox_prop_line.addWidget(self._label_line)
-        hbox_prop_line.addWidget(self._cb_prop_line)
+        hbox_prop_line.addWidget(self.cb_prop_line)
 
-        self._graph = PSGraph(self)
-        self._graph.setObjectName('graph')
-        self._graph.psnames = self._psnames
+        if not self._show_propties:
+            self._label_prop.setVisible(False)
+            self._label_symb.setVisible(False)
+            self.cb_prop_symb.setVisible(False)
+            self._label_line.setVisible(False)
+            self.cb_prop_line.setVisible(False)
+
+        self.graph = PSGraph(self)
+        self.graph.setObjectName('graph')
+        self.graph.psnames = self._psnames
         self._create_pvs(self._property_symb)
-        self._graph.symbols = self._get_values(self._property_symb)
+        self.graph.symbols = self._get_values(self._property_symb)
         self._create_pvs(self._property_line)
-        self._graph.y_data = self._get_values(self._property_line)
+        self.graph.y_data = self._get_values(self._property_line)
 
         lay = QGridLayout(self)
         lay.addItem(
@@ -198,14 +211,14 @@ class PSGraphMonWidget(QWidget):
             lay.addLayout(glay_choose, 2, 2)
             lay.addItem(
                 QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Ignored), 2, 3)
-        lay.addWidget(QLabel('Properties: '), 3, 0)
+        lay.addWidget(self._label_prop, 3, 0)
         lay.addLayout(hbox_prop_symb, 3, 1)
         lay.addLayout(hbox_prop_line, 3, 2)
         lay.addItem(
             QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Ignored), 3, 3)
         lay.addItem(
             QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 4, 0, 1, 4)
-        lay.addWidget(self._graph, 5, 0, 1, 4)
+        lay.addWidget(self.graph, 5, 0, 1, 4)
         lay.setColumnStretch(0, 1)
         lay.setColumnStretch(1, 2)
         lay.setColumnStretch(2, 2)
@@ -228,15 +241,15 @@ class PSGraphMonWidget(QWidget):
         self._update_graph()
 
     def _change_matype(self):
-        currindex = self._cb_prop_line.currentIndex()
+        currindex = self.cb_prop_line.currentIndex()
         for suf in self._intstr_suffix:
-            index = self._cb_prop_line.findText(self._intstr_propty+suf)
-            self._cb_prop_line.removeItem(index)
+            index = self.cb_prop_line.findText(self._intstr_propty+suf)
+            self.cb_prop_line.removeItem(index)
         self._magfunc = _PSSearch.conv_psname_2_magfunc(self._psnames[0])
         self._intstr_propty = get_strength_label(self._magfunc)
         for suf in self._intstr_suffix:
-            self._cb_prop_line.addItem(self._intstr_propty+suf)
-        self._cb_prop_line.setCurrentIndex(currindex)
+            self.cb_prop_line.addItem(self._intstr_propty+suf)
+        self.cb_prop_line.setCurrentIndex(currindex)
 
     def _handle_cb_visibility(self):
         current_sec = self.sender().currentText()
@@ -244,19 +257,21 @@ class PSGraphMonWidget(QWidget):
         for sec in self._choose_sec:
             self._cb_dev[sec].setVisible(current_sec == sec)
 
-    def _update_property_line(self):
-        self._property_line = self._cb_prop_line.currentText()
+    @Slot(str)
+    def update_property_line(self, text):
+        self._property_line = text
 
-    def _update_property_symb(self):
-        self._property_symb = self._cb_prop_symb.currentText()
+    @Slot(str)
+    def update_property_symb(self, text):
+        self._property_symb = text
 
     def _update_graph(self):
         self._create_pvs(self._property_line)
         self._create_pvs(self._property_symb)
-        self._graph.psnames = self._psnames
-        self._psnames = self._graph.psnames
-        self._graph.symbols = self._get_values(self._property_symb)
-        self._graph.y_data = self._get_values(self._property_line)
+        self.graph.psnames = self._psnames
+        self._psnames = self.graph.psnames
+        self.graph.symbols = self._get_values(self._property_symb)
+        self.graph.y_data = self._get_values(self._property_line)
 
     # ---------- pv handler methods ----------
 
@@ -339,7 +354,7 @@ class PSGraphMonWidget(QWidget):
     def contextMenuEvent(self, event):
         """Show a custom context menu."""
         point = event.pos()
-        if not self._graph.geometry().contains(point):
+        if not self.graph.geometry().contains(point):
             menu = QMenu("Actions", self)
             menu.addAction(self.cmd_turnon_act)
             menu.addAction(self.cmd_turnoff_act)
