@@ -235,7 +235,6 @@ class BaseWidget(QWidget):
         combo.setObjectName('ComboBox_' + orb_tp + str(idx))
         sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         combo.setSizePolicy(sz_pol)
-        combo.setEditable(True)
         combo.setMaxVisibleItems(10)
         for name in sorted(self.controls.keys()):
             combo.addItem(name)
