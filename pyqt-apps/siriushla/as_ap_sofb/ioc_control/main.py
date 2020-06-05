@@ -54,7 +54,7 @@ class SOFBControl(BaseWidget):
         # ####################################################################
         grpbx = QGroupBox('Orbit', parent)
         grpbx.setObjectName('grp')
-        grpbx.setStyleSheet('#grp{min-height: 10em; max-height: 10em;}')
+        grpbx.setStyleSheet('#grp{min-height: 10em; max-height: 12em;}')
         fbl = QGridLayout(grpbx)
         vbl.addWidget(grpbx)
 
@@ -75,8 +75,7 @@ class SOFBControl(BaseWidget):
         icon = qta.icon(
             'fa5s.hammer', color=_util.get_appropriate_color(self.acc))
         window = create_window_from_widget(
-            StatusWidget, title='Orbit Status',
-            icon=icon)
+            StatusWidget, title='Orbit Status', icon=icon)
         _util.connect_window(
             sts, window, grpbx, prefix=self.prefix, acc=self.acc, is_orb=True)
 
@@ -252,7 +251,10 @@ class SOFBControl(BaseWidget):
 
 
 class RefControl(BaseCombo):
+    """."""
+
     def __init__(self, parent, prefix, ctrls, acc='SI'):
+        """."""
         setpoint = dict()
         readback = dict()
         setpoint['x'] = SiriusConnectionSignal(prefix+'RefOrbX-SP')
@@ -272,6 +274,7 @@ class RefControl(BaseCombo):
         super()._selection_changed(text, sigs)
 
     def setup_ui(self):
+        """."""
         if self.acc == 'SI':
             super().setup_ui(['bba_orb', ])
         else:
@@ -279,7 +282,10 @@ class RefControl(BaseCombo):
 
 
 class OfflineOrbControl(BaseCombo):
+    """."""
+
     def __init__(self, parent, prefix, ctrls, acc='SI'):
+        """."""
         setpoint = dict()
         readback = dict()
         setpoint['x'] = SiriusConnectionSignal(prefix+'OfflineOrbX-SP')
