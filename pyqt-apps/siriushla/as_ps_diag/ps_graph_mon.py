@@ -37,6 +37,7 @@ class PSGraphMonWindow(SiriusMainWindow):
         else:
             self.setObjectName(filters['sec']+'App')
         self._psnames = _PSSearch.get_psnames(filters)
+        self._magfunc = _PSSearch.conv_psname_2_magfunc(self._psnames[0])
         self._setupUi()
 
     def _setupUi(self):
@@ -46,6 +47,7 @@ class PSGraphMonWindow(SiriusMainWindow):
                              self, alignment=Qt.AlignCenter)
 
         self.propty_sel = PSGraphProptySelWidget(self)
+        self.propty_sel.change_matype(self._magfunc)
 
         self.graph = PSGraphMonWidget(
             self, self._prefix, self._psnames)
@@ -56,7 +58,6 @@ class PSGraphMonWindow(SiriusMainWindow):
 
         if not self._filters:
             self.dev_sel = PSGraphDevicesSelWidget(self, self._psnames)
-            self.propty_sel.change_matype(self.dev_sel.magfunc)
             self.dev_sel.matype_changed.connect(self.propty_sel.change_matype)
             self.dev_sel.psnames_changed.connect(self.graph.update_psnames)
 
