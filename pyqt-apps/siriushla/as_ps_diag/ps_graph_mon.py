@@ -3,7 +3,7 @@ from copy import deepcopy as _dcopy
 import numpy as _np
 from epics import PV as _PV
 
-from qtpy.QtCore import Qt, QSize, QTimer, Slot
+from qtpy.QtCore import Qt, QSize, QTimer, Slot, Signal
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QGridLayout, QWidget, QLabel, QHBoxLayout, \
     QComboBox, QToolTip, QSpacerItem, QSizePolicy as QSzPlcy, QApplication, \
@@ -33,8 +33,10 @@ class PSGraphMonWindow(SiriusMainWindow):
         self._filters = filters
         if not filters:
             self.setObjectName('ASApp')
+            filters = {'sec': 'SI', 'dis': 'PS', 'dev': 'CH'}
         else:
             self.setObjectName(filters['sec']+'App')
+        self._psnames = _PSSearch.get_psnames(filters)
         self._setupUi()
 
     def _setupUi(self):
@@ -42,37 +44,52 @@ class PSGraphMonWindow(SiriusMainWindow):
             else ' - '+self._filters['sec']+' '+self._filters['dev']
         self._label = QLabel('<h3>PS Graph Monitor'+aux_label+'</h3>',
                              self, alignment=Qt.AlignCenter)
-        wid = PSGraphMonWidget(self, self._prefix, self._filters)
+
+        self.dev_sel = PSGraphDevicesSelWidget(self, self._psnames)
+
+        self.propty_sel = PSGraphProptySelWidget(self)
+        self.propty_sel.change_matype(self.dev_sel.magfunc)
+        self.dev_sel.matype_changed.connect(self.propty_sel.change_matype)
+
+        self.graph = PSGraphMonWidget(
+            self, self._prefix, self._psnames)
+        self.dev_sel.psnames_changed.connect(self.graph.update_psnames)
+        self.propty_sel.propty_symb_changed.connect(
+            self.graph.update_property_symb)
+        self.propty_sel.propty_line_changed.connect(
+            self.graph.update_property_line)
 
         cw = QWidget()
         lay = QGridLayout(cw)
-        lay.addWidget(self._label, 0, 0)
-        lay.addWidget(wid, 1, 0)
+        lay.setVerticalSpacing(9)
+        lay.addWidget(self._label, 0, 0, 1, 2)
+        lay.addWidget(self.dev_sel, 1, 0)
+        lay.addItem(
+            QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Ignored), 1, 1)
+        lay.addWidget(self.propty_sel, 2, 0)
+        lay.addItem(
+            QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Ignored), 2, 1)
+        lay.addWidget(self.graph, 3, 0, 1, 2)
+        lay.setColumnStretch(0, 1)
+        lay.setColumnStretch(1, 1)
         self.setCentralWidget(cw)
 
+    def contextMenuEvent(self, event):
+        point = event.pos()
+        menu = self.graph.contextMenuEvent(event, return_menu=True)
+        menu.popup(self.mapToGlobal(point))
 
-class PSGraphMonWidget(QWidget):
-    """Power supply graph monitor widget."""
 
-    _pvs = dict()
+class PSGraphDevicesSelWidget(QWidget):
+    """Power supply selection widget."""
 
-    def __init__(self, parent=None, prefix=_vaca_prefix, filters='',
-                 show_propties=True):
+    psnames_changed = Signal(list)
+    matype_changed = Signal(str)
+
+    def __init__(self, parent, psnames):
         super().__init__(parent)
-        self._filters = filters
-        if not filters:
-            self.setObjectName('ASApp')
-            filters = {'sec': 'SI', 'dis': 'PS', 'dev': 'CH'}
-        else:
-            self.setObjectName(filters['sec']+'App')
-        self._prefix = prefix
-        self._psnames = _PSSearch.get_psnames(filters)
-        self._show_propties = show_propties
-        self._property_line = 'Current-Mon'
-        self._property_symb = 'DiagStatus-Mon'
-        self._magfunc = _PSSearch.conv_psname_2_magfunc(self._psnames[0])
-        self._intstr_propty = get_strength_label(self._magfunc)
-        self._intstr_suffix = ['-Mon', '-SP', '-RB', 'Ref-Mon']
+
+        self._psnames = psnames
 
         self._choose_sec = ['TB', 'BO', 'TS', 'SI']
 
@@ -90,18 +107,96 @@ class PSGraphMonWidget(QWidget):
              'Q1', 'Q2', 'Q3', 'Q4', 'Q[1-4]',
              'Q(D|F).*', 'Q(F|D|[1-4]).*'])
 
-        self._choose_prop_symb = {
-            'DiagStatus-Mon': 0,
-            'IntlkSoft-Mon': 0,
-            'IntlkHard-Mon': 0,
-            'PwrState-Sel': _PSConst.PwrStateSel.On,
-            'PwrState-Sts': _PSConst.PwrStateSts.On,
-            'OpMode-Sel': _PSConst.OpMode.SlowRef,
-            'OpMode-Sts': _PSConst.States.SlowRef,
-            'CtrlMode-Mon': _PSConst.Interface.Remote,
-            'CtrlLoop-Sel': _PSConst.OpenLoop.Closed,
-            'CtrlLoop-Sts': _PSConst.OpenLoop.Closed,
-            'CycleEnbl-Mon': _PSConst.DsblEnbl.Enbl}
+        self.magfunc = _PSSearch.conv_psname_2_magfunc(self._psnames[0])
+
+        self._setupUi()
+
+    def _setupUi(self):
+        self._label_dev = QLabel('Power supply: ', self)
+        self._label_dev.setStyleSheet(
+            'min-width: 8em; max-width: 8em;')
+
+        self.cb_sec = QComboBox(self)
+        for item in self._choose_sec:
+            self.cb_sec.addItem(item)
+        self.cb_sec.setCurrentText('SI')
+        self.cb_sec.currentTextChanged.connect(
+            self._handle_cb_visibility)
+        self.cb_sec.currentTextChanged.connect(
+            self._set_psnames)
+
+        self.cb_sub = QComboBox(self)
+        self.cb_sub.setEditable(True)
+        self.cb_sub.setMaxVisibleItems(10)
+        for item in self._choose_sub:
+            self.cb_sub.addItem(item)
+        self.cb_sub.currentTextChanged.connect(
+            self._set_psnames)
+
+        glay_choose = QGridLayout()
+        glay_choose.addWidget(self.cb_sub, 0, 0)
+        self.cb_dev = dict()
+        for sec in self._choose_sec:
+            visible = sec == 'SI'
+
+            self.cb_dev[sec] = QComboBox(self)
+            self.cb_dev[sec].setMaxVisibleItems(10)
+            self.cb_dev[sec].setVisible(visible)
+            for item in self._choose_dev[sec]:
+                self.cb_dev[sec].addItem(item)
+            self.cb_dev[sec].currentTextChanged.connect(
+                self._set_psnames)
+
+            glay_choose.addWidget(self.cb_dev[sec], 0, 1)
+
+        lay = QGridLayout(self)
+        lay.setContentsMargins(0, 0, 0, 0)
+        lay.addWidget(self._label_dev, 0, 0)
+        lay.addWidget(self.cb_sec, 0, 1)
+        lay.addLayout(glay_choose, 0, 2)
+
+    def _set_psnames(self):
+        sec = self.cb_sec.currentText()
+        if sec == 'SI':
+            sub = self.cb_sub.currentText()
+            sub = sub if sub != 'All' else '.*'
+        else:
+            sub = '.*'
+        dev = self.cb_dev[sec].currentText()
+
+        self._psnames = _PSSearch.get_psnames(
+            {'sec': sec, 'sub': '(?!Fam)'+sub, 'dis': 'PS', 'dev': dev})
+
+        if self._psnames and self.sender() == self.cb_dev[sec]:
+            self.magfunc = _PSSearch.conv_psname_2_magfunc(self._psnames[0])
+            self.matype_changed.emit(self.magfunc)
+
+        self.psnames_changed.emit(self._psnames)
+
+    def _handle_cb_visibility(self):
+        current_sec = self.sender().currentText()
+        self.cb_sub.setVisible(current_sec == 'SI')
+        for sec in self._choose_sec:
+            self.cb_dev[sec].setVisible(current_sec == sec)
+
+
+class PSGraphProptySelWidget(QWidget):
+    """Power supply property selection widget."""
+
+    propty_symb_changed = Signal(str)
+    propty_line_changed = Signal(str)
+
+    def __init__(self, parent):
+        super().__init__(parent)
+
+        self._magfunc = None
+        self._intstr_propty = ''
+        self._intstr_suffix = ['-Mon', '-SP', '-RB', 'Ref-Mon']
+
+        self._choose_prop_symb = [
+            'DiagStatus-Mon', 'IntlkSoft-Mon', 'IntlkHard-Mon',
+            'PwrState-Sel', 'PwrState-Sts', 'OpMode-Sel', 'OpMode-Sts',
+            'CtrlMode-Mon', 'CtrlLoop-Sel', 'CtrlLoop-Sts', 'CycleEnbl-Mon']
         self._choose_prop_line = [
             'Current-Mon', 'Current-SP', 'Current-RB', 'CurrentRef-Mon',
             'DiagCurrentDiff-Mon', 'WfmSyncPulseCount-Mon',
@@ -110,49 +205,11 @@ class PSGraphMonWidget(QWidget):
             self._choose_prop_line.append(self._intstr_propty+suf)
 
         self._setupUi()
-        self._create_commands()
-
-        self._timer = QTimer()
-        self._timer.timeout.connect(self._update_graph)
-        self._timer.setInterval(250)
-        self._timer.start()
 
     def _setupUi(self):
-        if not self._filters:
-            self._cb_sec = QComboBox(self)
-            for item in self._choose_sec:
-                self._cb_sec.addItem(item)
-            self._cb_sec.setCurrentText('SI')
-            self._cb_sec.currentTextChanged.connect(
-                self._handle_cb_visibility)
-            self._cb_sec.currentTextChanged.connect(
-                self._set_psnames)
-
-            self._cb_sub = QComboBox(self)
-            self._cb_sub.setEditable(True)
-            self._cb_sub.setMaxVisibleItems(10)
-            for item in self._choose_sub:
-                self._cb_sub.addItem(item)
-            self._cb_sub.currentTextChanged.connect(
-                self._set_psnames)
-
-            glay_choose = QGridLayout()
-            glay_choose.addWidget(self._cb_sub, 0, 0)
-            self._cb_dev = dict()
-            for sec in self._choose_sec:
-                visible = sec == 'SI'
-
-                self._cb_dev[sec] = QComboBox(self)
-                self._cb_dev[sec].setMaxVisibleItems(10)
-                self._cb_dev[sec].setVisible(visible)
-                for item in self._choose_dev[sec]:
-                    self._cb_dev[sec].addItem(item)
-                self._cb_dev[sec].currentTextChanged.connect(
-                    self._set_psnames)
-
-                glay_choose.addWidget(self._cb_dev[sec], 0, 1)
-
-        self._label_prop = QLabel('Properties: ')
+        self._label_prop = QLabel('Properties: ', self)
+        self._label_prop.setStyleSheet(
+            'min-width: 8em; max-width: 8em;')
 
         self._label_symb = QLabel()
         icon = qta.icon('mdi.record-circle-outline')
@@ -161,11 +218,11 @@ class PSGraphMonWidget(QWidget):
         self._label_symb.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Fixed)
         self.cb_prop_symb = QComboBox(self)
         self.cb_prop_symb.currentTextChanged.connect(
-            self.update_property_symb)
+            self.propty_symb_changed.emit)
         self.cb_prop_symb.setSizePolicy(
             QSzPlcy.Expanding, QSzPlcy.Preferred)
         self.cb_prop_symb.setMaxVisibleItems(10)
-        for item in self._choose_prop_symb.keys():
+        for item in self._choose_prop_symb:
             self.cb_prop_symb.addItem(item)
         hbox_prop_symb = QHBoxLayout()
         hbox_prop_symb.addWidget(self._label_symb)
@@ -178,7 +235,7 @@ class PSGraphMonWidget(QWidget):
         self._label_line.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Fixed)
         self.cb_prop_line = QComboBox(self)
         self.cb_prop_line.currentTextChanged.connect(
-            self.update_property_line)
+            self.propty_line_changed.emit)
         self.cb_prop_line.setSizePolicy(
             QSzPlcy.Expanding, QSzPlcy.Preferred)
         self.cb_prop_line.setMaxVisibleItems(10)
@@ -188,181 +245,24 @@ class PSGraphMonWidget(QWidget):
         hbox_prop_line.addWidget(self._label_line)
         hbox_prop_line.addWidget(self.cb_prop_line)
 
-        if not self._show_propties:
-            self._label_prop.setVisible(False)
-            self._label_symb.setVisible(False)
-            self.cb_prop_symb.setVisible(False)
-            self._label_line.setVisible(False)
-            self.cb_prop_line.setVisible(False)
-
-        self.graph = PSGraph(self)
-        self.graph.setObjectName('graph')
-        self.graph.psnames = self._psnames
-        self._create_pvs(self._property_symb)
-        self.graph.symbols = self._get_values(self._property_symb)
-        self._create_pvs(self._property_line)
-        self.graph.y_data = self._get_values(self._property_line)
-
         lay = QGridLayout(self)
-        lay.addItem(
-            QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, 0, 1, 4)
-        if not self._filters:
-            lay.addWidget(QLabel('Power supply: '), 2, 0)
-            lay.addWidget(self._cb_sec, 2, 1)
-            lay.addLayout(glay_choose, 2, 2)
-            lay.addItem(
-                QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Ignored), 2, 3)
-        lay.addWidget(self._label_prop, 3, 0)
-        lay.addLayout(hbox_prop_symb, 3, 1)
-        lay.addLayout(hbox_prop_line, 3, 2)
-        lay.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Ignored), 3, 3)
-        lay.addItem(
-            QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 4, 0, 1, 4)
-        lay.addWidget(self.graph, 5, 0, 1, 4)
-        lay.setColumnStretch(0, 1)
-        lay.setColumnStretch(1, 2)
-        lay.setColumnStretch(2, 2)
-        lay.setColumnStretch(3, 5)
+        lay.setContentsMargins(0, 0, 0, 0)
+        lay.addWidget(self._label_prop, 0, 0)
+        lay.addLayout(hbox_prop_symb, 0, 1)
+        lay.addLayout(hbox_prop_line, 0, 2)
 
-        self.setStyleSheet('#graph{min-width:60em;min-height:12em;}')
-
-    def _set_psnames(self):
-        sec = self._cb_sec.currentText()
-        if sec == 'SI':
-            sub = self._cb_sub.currentText()
-            sub = sub if sub != 'All' else '.*'
-        else:
-            sub = '.*'
-        dev = self._cb_dev[sec].currentText()
-
-        self._psnames = _PSSearch.get_psnames(
-            {'sec': sec, 'sub': '(?!Fam)'+sub, 'dis': 'PS', 'dev': dev})
-        self._change_matype()
-        self._update_graph()
-
-    def _change_matype(self):
+    def change_matype(self, magfunc):
         currindex = self.cb_prop_line.currentIndex()
         for suf in self._intstr_suffix:
             index = self.cb_prop_line.findText(self._intstr_propty+suf)
             self.cb_prop_line.removeItem(index)
-        self._magfunc = _PSSearch.conv_psname_2_magfunc(self._psnames[0])
+
+        self._magfunc = magfunc
+
         self._intstr_propty = get_strength_label(self._magfunc)
         for suf in self._intstr_suffix:
             self.cb_prop_line.addItem(self._intstr_propty+suf)
         self.cb_prop_line.setCurrentIndex(currindex)
-
-    def _handle_cb_visibility(self):
-        current_sec = self.sender().currentText()
-        self._cb_sub.setVisible(current_sec == 'SI')
-        for sec in self._choose_sec:
-            self._cb_dev[sec].setVisible(current_sec == sec)
-
-    @Slot(str)
-    def update_property_line(self, text):
-        self._property_line = text
-
-    @Slot(str)
-    def update_property_symb(self, text):
-        self._property_symb = text
-
-    def _update_graph(self):
-        self._create_pvs(self._property_line)
-        self._create_pvs(self._property_symb)
-        self.graph.psnames = self._psnames
-        self._psnames = self.graph.psnames
-        self.graph.symbols = self._get_values(self._property_symb)
-        self.graph.y_data = self._get_values(self._property_line)
-
-    # ---------- pv handler methods ----------
-
-    def _create_pvs(self, propty):
-        new_pvs = dict()
-        for psn in self._psnames:
-            pvname = self._prefix+psn+':'+propty
-            if pvname in PSGraphMonWidget._pvs:
-                continue
-            new_pvs[pvname] = _PV(pvname, connection_timeout=0.05)
-        PSGraphMonWidget._pvs.update(new_pvs)
-
-    def _get_values(self, propty):
-        for psn in self._psnames:
-            pvname = self._prefix+psn+':'+propty
-            PSGraphMonWidget._pvs[pvname].wait_for_connection()
-
-        values = list()
-        for psn in self._psnames:
-            pvname = self._prefix+psn+':'+propty
-            val = PSGraphMonWidget._pvs[pvname].get()
-            val = val if val is not None else 0
-            if propty in self._choose_prop_symb.keys():
-                defval = self._choose_prop_symb[propty]
-                val = 1 if val == defval else 0
-            values.append(val)
-        return values
-
-    def _set_values(self, propty, value):
-        for psn in self._psnames:
-            pvname = self._prefix+psn+':'+propty
-            pv = PSGraphMonWidget._pvs[pvname]
-            if pv.wait_for_connection():
-                pv.put(value)
-
-    def _cmd_set_opmode_slowref(self):
-        """Set power supplies OpMode to SlowRef."""
-        self._create_pvs('OpMode-Sel')
-        self._set_values('OpMode-Sel', _PSConst.OpMode.SlowRef)
-
-    def _cmd_turn_on(self):
-        """Turn power supplies on."""
-        self._create_pvs('PwrState-Sel')
-        self._set_values('PwrState-Sel', _PSConst.PwrStateSel.On)
-
-    def _cmd_turn_off(self):
-        """Turn power supplies off."""
-        self._create_pvs('PwrState-Sel')
-        self._set_values('PwrState-Sel', _PSConst.PwrStateSel.Off)
-
-    def _cmd_set_current(self):
-        """Set power supplies current."""
-        self._create_pvs('Current-SP')
-        value, ok = QInputDialog.getDouble(
-            self, "Insert current setpoint", "Value")
-        if ok:
-            self._set_values('Current-SP', value)
-
-    def _cmd_reset(self):
-        """Reset power supplies."""
-        self._create_pvs('Reset-Cmd')
-        self._set_values('Reset-Cmd', 1)
-
-    def _create_commands(self):
-        self.cmd_turnon_act = QAction("Turn On", self)
-        self.cmd_turnon_act.triggered.connect(self._cmd_turn_on)
-
-        self.cmd_turnoff_act = QAction("Turn Off", self)
-        self.cmd_turnoff_act.triggered.connect(self._cmd_turn_off)
-
-        self.cmd_setslowref_act = QAction("Set OpMode to SlowRef", self)
-        self.cmd_setslowref_act.triggered.connect(self._cmd_set_opmode_slowref)
-
-        self.cmd_setcurrent_act = QAction("Set Current SP", self)
-        self.cmd_setcurrent_act.triggered.connect(self._cmd_set_current)
-
-        self.cmd_reset_act = QAction("Reset Interlocks", self)
-        self.cmd_reset_act.triggered.connect(self._cmd_reset)
-
-    def contextMenuEvent(self, event):
-        """Show a custom context menu."""
-        point = event.pos()
-        if not self.graph.geometry().contains(point):
-            menu = QMenu("Actions", self)
-            menu.addAction(self.cmd_turnon_act)
-            menu.addAction(self.cmd_turnoff_act)
-            menu.addAction(self.cmd_setslowref_act)
-            menu.addAction(self.cmd_setcurrent_act)
-            menu.addAction(self.cmd_reset_act)
-            menu.popup(self.mapToGlobal(point))
 
 
 class PSGraph(PyDMWaveformPlot):
@@ -548,3 +448,164 @@ class PSGraph(PyDMWaveformPlot):
         QGraphicsScene.mouseReleaseEvent(sceneObj, event)
 
         sceneObj.sendHoverEvents(event)
+
+
+class PSGraphMonWidget(QWidget):
+    """Power supply graph monitor widget."""
+
+    _pvs = dict()
+
+    def __init__(self, parent=None, prefix=_vaca_prefix, psnames=''):
+        super().__init__(parent)
+
+        self._prefix = prefix
+        self._psnames = psnames
+        self._property_line = 'Current-Mon'
+        self._property_symb = 'DiagStatus-Mon'
+
+        self.propsymb_2_defval = {
+            'DiagStatus-Mon': 0,
+            'IntlkSoft-Mon': 0,
+            'IntlkHard-Mon': 0,
+            'PwrState-Sel': _PSConst.PwrStateSel.On,
+            'PwrState-Sts': _PSConst.PwrStateSts.On,
+            'OpMode-Sel': _PSConst.OpMode.SlowRef,
+            'OpMode-Sts': _PSConst.States.SlowRef,
+            'CtrlMode-Mon': _PSConst.Interface.Remote,
+            'CtrlLoop-Sel': _PSConst.OpenLoop.Closed,
+            'CtrlLoop-Sts': _PSConst.OpenLoop.Closed,
+            'CycleEnbl-Mon': _PSConst.DsblEnbl.Enbl}
+
+        self._setupUi()
+        self._create_commands()
+
+        self._timer = QTimer()
+        self._timer.timeout.connect(self._update_graph)
+        self._timer.setInterval(250)
+        self._timer.start()
+
+    def _setupUi(self):
+        self.graph = PSGraph(self)
+        self.graph.setObjectName('graph')
+        self._update_graph()
+
+        lay = QGridLayout(self)
+        lay.addWidget(self.graph, 0, 0)
+
+        self.setStyleSheet('#graph{min-width:60em;min-height:12em;}')
+
+    def update_psnames(self, psnames):
+        self._psnames = _dcopy(psnames)
+        self._update_graph()
+
+    @Slot(str)
+    def update_property_line(self, text):
+        self._property_line = text
+
+    @Slot(str)
+    def update_property_symb(self, text):
+        self._property_symb = text
+
+    def _update_graph(self):
+        self._create_pvs(self._property_line)
+        self._create_pvs(self._property_symb)
+        self.graph.psnames = _dcopy(self._psnames)
+        self._psnames = self.graph.psnames
+        self.graph.symbols = self._get_values(self._property_symb)
+        self.graph.y_data = self._get_values(self._property_line)
+
+    # ---------- pv handler methods ----------
+
+    def _create_pvs(self, propty):
+        new_pvs = dict()
+        for psn in self._psnames:
+            pvname = self._prefix+psn+':'+propty
+            if pvname in PSGraphMonWidget._pvs:
+                continue
+            new_pvs[pvname] = _PV(pvname, connection_timeout=0.05)
+        PSGraphMonWidget._pvs.update(new_pvs)
+
+    def _get_values(self, propty):
+        if not self._psnames:
+            return []
+
+        for psn in self._psnames:
+            pvname = self._prefix+psn+':'+propty
+            PSGraphMonWidget._pvs[pvname].wait_for_connection()
+
+        values = list()
+        for psn in self._psnames:
+            pvname = self._prefix+psn+':'+propty
+            val = PSGraphMonWidget._pvs[pvname].get()
+            val = val if val is not None else 0
+            if propty in self.propsymb_2_defval.keys():
+                defval = self.propsymb_2_defval[propty]
+                val = 1 if val == defval else 0
+            values.append(val)
+        return values
+
+    def _set_values(self, propty, value):
+        for psn in self._psnames:
+            pvname = self._prefix+psn+':'+propty
+            pv = PSGraphMonWidget._pvs[pvname]
+            if pv.wait_for_connection():
+                pv.put(value)
+
+    def _cmd_set_opmode_slowref(self):
+        """Set power supplies OpMode to SlowRef."""
+        self._create_pvs('OpMode-Sel')
+        self._set_values('OpMode-Sel', _PSConst.OpMode.SlowRef)
+
+    def _cmd_turn_on(self):
+        """Turn power supplies on."""
+        self._create_pvs('PwrState-Sel')
+        self._set_values('PwrState-Sel', _PSConst.PwrStateSel.On)
+
+    def _cmd_turn_off(self):
+        """Turn power supplies off."""
+        self._create_pvs('PwrState-Sel')
+        self._set_values('PwrState-Sel', _PSConst.PwrStateSel.Off)
+
+    def _cmd_set_current(self):
+        """Set power supplies current."""
+        self._create_pvs('Current-SP')
+        value, ok = QInputDialog.getDouble(
+            self, "Insert current setpoint", "Value")
+        if ok:
+            self._set_values('Current-SP', value)
+
+    def _cmd_reset(self):
+        """Reset power supplies."""
+        self._create_pvs('Reset-Cmd')
+        self._set_values('Reset-Cmd', 1)
+
+    def _create_commands(self):
+        self.cmd_turnon_act = QAction("Turn On", self)
+        self.cmd_turnon_act.triggered.connect(self._cmd_turn_on)
+
+        self.cmd_turnoff_act = QAction("Turn Off", self)
+        self.cmd_turnoff_act.triggered.connect(self._cmd_turn_off)
+
+        self.cmd_setslowref_act = QAction("Set OpMode to SlowRef", self)
+        self.cmd_setslowref_act.triggered.connect(self._cmd_set_opmode_slowref)
+
+        self.cmd_setcurrent_act = QAction("Set Current SP", self)
+        self.cmd_setcurrent_act.triggered.connect(self._cmd_set_current)
+
+        self.cmd_reset_act = QAction("Reset Interlocks", self)
+        self.cmd_reset_act.triggered.connect(self._cmd_reset)
+
+    def contextMenuEvent(self, event, return_menu=False):
+        """Show a custom context menu."""
+        point = event.pos()
+        if not self.graph.geometry().contains(point) or return_menu:
+            menu = QMenu("Actions", self)
+            menu.addAction(self.cmd_turnon_act)
+            menu.addAction(self.cmd_turnoff_act)
+            menu.addAction(self.cmd_setslowref_act)
+            menu.addAction(self.cmd_setcurrent_act)
+            menu.addAction(self.cmd_reset_act)
+            if return_menu:
+                return menu
+            else:
+                menu.popup(self.mapToGlobal(point))
