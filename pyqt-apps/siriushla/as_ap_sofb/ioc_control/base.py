@@ -2,7 +2,7 @@
 
 from functools import partial as _part
 import numpy as _np
-from qtpy.QtCore import Qt
+from qtpy.QtCore import Qt, Signal
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QSizePolicy, QComboBox
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox
 from pydm.widgets.base import PyDMPrimitiveWidget
@@ -74,6 +74,8 @@ class BaseWidget(QWidget):
 
 class BaseCombo(QComboBox, PyDMPrimitiveWidget):
 
+    configname = Signal(str)
+
     def __init__(self, parent, ctrls, setpoint=dict(),
                  readback=dict(), acc='SI'):
         QComboBox.__init__(self, parent)
@@ -135,6 +137,8 @@ class BaseCombo(QComboBox, PyDMPrimitiveWidget):
 
     def _selection_changed(self, text, sigs=None):
         sigs = sigs or dict()
+        if not text.lower().startswith('servconf'):
+            self.configname.emit('')
         if text.lower().startswith('zero'):
             for pln in ('x', 'y'):
                 if self.orbits[pln] is not None:
@@ -147,6 +151,7 @@ class BaseCombo(QComboBox, PyDMPrimitiveWidget):
             if not status:
                 return
             data = self._client.get_config_value(confname)
+            self.configname.emit(confname)
             for pln in ('x', 'y'):
                 self.orbits[pln] = _np.array(data[pln])
                 self.setpoint[pln].send_value_signal[_np.ndarray].emit(
@@ -180,3 +185,4 @@ class BaseCombo(QComboBox, PyDMPrimitiveWidget):
                 _np.allclose(orb, myorb, rtol=1e-7):
             return
         self.setCurrentIndex(self.count()-1)
+        self.configname.emit('')

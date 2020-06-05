@@ -109,8 +109,13 @@ class SOFBControl(BaseWidget):
 
         lbl = QLabel('RefOrb:', grpbx)
         combo = RefControl(self, self.prefix, self.ctrls, self.acc)
+        lbl2 = QLabel('', grpbx)
+        combo.configname.connect(lbl2.setText)
+        vbl_ref = QVBoxLayout()
+        vbl_ref.addWidget(combo)
+        vbl_ref.addWidget(lbl2)
         fbl.addWidget(lbl, 3, 0, alignment=Qt.AlignVCenter)
-        fbl.addWidget(combo, 3, 1, alignment=Qt.AlignBottom)
+        fbl.addLayout(vbl_ref, 3, 1)
 
         lbl = QLabel('Num. Pts.', grpbx)
         stp = SiriusSpinbox(grpbx, init_channel=self.prefix+'SmoothNrPts-SP')
