@@ -45,27 +45,29 @@ class PSGraphMonWindow(SiriusMainWindow):
         self._label = QLabel('<h3>PS Graph Monitor'+aux_label+'</h3>',
                              self, alignment=Qt.AlignCenter)
 
-        self.dev_sel = PSGraphDevicesSelWidget(self, self._psnames)
-
         self.propty_sel = PSGraphProptySelWidget(self)
-        self.propty_sel.change_matype(self.dev_sel.magfunc)
-        self.dev_sel.matype_changed.connect(self.propty_sel.change_matype)
 
         self.graph = PSGraphMonWidget(
             self, self._prefix, self._psnames)
-        self.dev_sel.psnames_changed.connect(self.graph.update_psnames)
         self.propty_sel.propty_symb_changed.connect(
             self.graph.update_property_symb)
         self.propty_sel.propty_line_changed.connect(
             self.graph.update_property_line)
 
+        if not self._filters:
+            self.dev_sel = PSGraphDevicesSelWidget(self, self._psnames)
+            self.propty_sel.change_matype(self.dev_sel.magfunc)
+            self.dev_sel.matype_changed.connect(self.propty_sel.change_matype)
+            self.dev_sel.psnames_changed.connect(self.graph.update_psnames)
+
         cw = QWidget()
         lay = QGridLayout(cw)
         lay.setVerticalSpacing(9)
         lay.addWidget(self._label, 0, 0, 1, 2)
-        lay.addWidget(self.dev_sel, 1, 0)
-        lay.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Ignored), 1, 1)
+        if not self._filters:
+            lay.addWidget(self.dev_sel, 1, 0)
+            lay.addItem(
+                QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Ignored), 1, 1)
         lay.addWidget(self.propty_sel, 2, 0)
         lay.addItem(
             QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Ignored), 2, 1)
