@@ -1,4 +1,5 @@
 """PS Graph Monitor."""
+from copy import deepcopy as _dcopy
 import numpy as _np
 from epics import PV as _PV
 
@@ -381,6 +382,8 @@ class PSGraph(PyDMWaveformPlot):
         self._nok_brush = mkBrush(QColor(255, 0, 0))
         self._ok_pen = mkPen(QColor(color))
         self._ok_brush = mkBrush(QColor(0, 200, 0))
+        self._none_pen = mkPen(QColor(color))
+        self._none_brush = mkBrush(QColor(220, 220, 220))
         self._all_pen = [self._nok_pen, ]
         self._all_brush = [self._nok_brush, ]
 
@@ -404,24 +407,24 @@ class PSGraph(PyDMWaveformPlot):
     @property
     def psnames(self):
         """Return psnames."""
-        return self._psnames
+        return _dcopy(self._psnames)
 
     @psnames.setter
     def psnames(self, new):
         if not new:
-            self.curve.receiveXWaveform(_np.array([0, ]))
-            self.curve.receiveYWaveform(_np.array([0, ]))
-            self.mean.receiveXWaveform(_np.array([0, ]))
-            self.mean.receiveYWaveform(_np.array([0, ]))
-            return
+            self._psnames = new
+            self._x_data = _np.array([0, ])
+            self._tooltips = ['', ]
+            self._sector = ''
+        else:
+            self._x_data = _np.array(_MASearch.get_mapositions(map(
+                lambda x: x.substitute(dis='MA'), new)))
+            self._psnames = [psn for _, psn in sorted(zip(self._x_data, new))]
+            self._x_data = _np.sort(self._x_data)
+            self._tooltips = [
+                psn.get_nickname(dev=True) for psn in self._psnames]
+            self._sector = SiriusPVName(new[0]).sec
 
-        self._x_data = _np.array(_MASearch.get_mapositions(map(
-            lambda x: x.substitute(dis='MA'), new)))
-        self._psnames = [psn for _, psn in sorted(zip(self._x_data, new))]
-        self._x_data = _np.sort(self._x_data)
-        self._tooltips = [psn.get_nickname(dev=True) for psn in self._psnames]
-
-        self._sector = SiriusPVName(new[0]).sec
         if self._sector == 'TB':
             self._c0 = 21.2477
         elif self._sector == 'TS':
@@ -430,6 +433,8 @@ class PSGraph(PyDMWaveformPlot):
             self._c0 = 496.8
         elif self._sector == 'SI':
             self._c0 = 518.396
+        else:
+            self._c0 = 1.0
 
         self.curve.receiveXWaveform(self._x_data)
         self.mean.receiveXWaveform(self._x_data)
@@ -477,19 +482,21 @@ class PSGraph(PyDMWaveformPlot):
 
     @symbols.setter
     def symbols(self, new):
-        if not new:
-            return
         self._symbols = new
-        all_brush, all_pen = [], []
-        for sym in self._symbols:
-            if sym:
-                all_pen.append(self._ok_pen)
-                all_brush.append(self._ok_brush)
-            else:
-                all_pen.append(self._nok_pen)
-                all_brush.append(self._nok_brush)
-        self._all_pen = all_pen
-        self._all_brush = all_brush
+        if new:
+            all_brush, all_pen = [], []
+            for sym in self._symbols:
+                if sym:
+                    all_pen.append(self._ok_pen)
+                    all_brush.append(self._ok_brush)
+                else:
+                    all_pen.append(self._nok_pen)
+                    all_brush.append(self._nok_brush)
+            self._all_pen = all_pen
+            self._all_brush = all_brush
+        else:
+            self._all_pen = [self._none_pen, ]
+            self._all_brush = [self._none_brush, ]
 
     def mouseMoveEvent(self, event):
         """Reimplement mouseMoveEvent."""
