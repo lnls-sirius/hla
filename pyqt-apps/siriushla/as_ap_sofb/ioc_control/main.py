@@ -21,13 +21,16 @@ from siriushla.as_ap_sofb.ioc_control.base import BaseWidget, BaseCombo
 
 
 class SOFBControl(BaseWidget):
+    """."""
 
     def __init__(self, parent, prefix, ctrls, acc='SI'):
+        """."""
         super().__init__(parent, prefix, acc=acc)
         self.ctrls = ctrls
         self.setupui()
 
     def setupui(self):
+        """."""
         vbl = QVBoxLayout(self)
         vbl.setContentsMargins(0, 0, 0, 0)
         tabw = QTabWidget(self)
@@ -41,6 +44,7 @@ class SOFBControl(BaseWidget):
         tabw.addTab(wid, 'Orbit')
 
     def get_mainvbl(self, parent):
+        """."""
         vbl = QVBoxLayout()
         vbl.setContentsMargins(0, 0, 0, 0)
         vbl.setSpacing(10)
@@ -70,11 +74,11 @@ class SOFBControl(BaseWidget):
             '#sts{min-width:25px; max-width:25px; icon-size:20px;}')
         icon = qta.icon(
             'fa5s.hammer', color=_util.get_appropriate_color(self.acc))
-        Window = create_window_from_widget(
+        window = create_window_from_widget(
             StatusWidget, title='Orbit Status',
             icon=icon)
         _util.connect_window(
-            sts, Window, grpbx, prefix=self.prefix, acc=self.acc, is_orb=True)
+            sts, window, grpbx, prefix=self.prefix, acc=self.acc, is_orb=True)
 
         pdm_led = SiriusLedAlert(
             grpbx, init_channel=self.prefix+'OrbStatus-Mon')

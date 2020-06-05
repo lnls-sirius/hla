@@ -17,8 +17,10 @@ from siriushla.widgets import SiriusConnectionSignal
 
 
 class OrbitRegisters(QWidget):
+    """."""
 
     def __init__(self, parent, prefix, acc=None, nr_registers=9):
+        """."""
         super(OrbitRegisters, self).__init__(parent)
         self._nr_registers = nr_registers
         self.prefix = prefix
@@ -48,12 +50,14 @@ class OrbitRegisters(QWidget):
         self.setupui()
 
     def channels(self):
+        """."""
         chans = []
         for v in self._orbits.values():
             chans.extend(v)
         return chans
 
     def setupui(self):
+        """."""
         gdl = QGridLayout(self)
         gdl.setContentsMargins(0, 0, 0, 0)
 
@@ -84,6 +88,7 @@ class OrbitRegisters(QWidget):
             self.registers.append(reg)
 
     def get_registers_control(self):
+        """."""
         ctrls = dict()
         for reg in self.registers:
             ctrls[reg.name] = dict()
@@ -142,7 +147,7 @@ class OrbitRegister(QWidget):
     orby = property(fget=getorby)
 
     def setup_ui(self):
-        """Setup Ui of Context Menu."""
+        """Set up Ui of Context Menu."""
         self.setStyleSheet("""
             #{}{{
                 min-width:11.29em;
@@ -344,14 +349,15 @@ class OrbitRegister(QWidget):
         wid.layout().addItem(hlay)
         res = wid.exec_()
 
-        if res == QDialog.Accepted:
-            mltx = float(multx.text())
-            mlty = float(multy.text())
-            plusx = float(addx.text())
-            plusy = float(addy.text())
-            orbx = mltx * orbx + plusx
-            orby = mlty * orby + plusy
-            self._update_and_emit('Orbit Edited', orbx, orby)
+        if res != QDialog.Accepted:
+            return
+        mltx = float(multx.text())
+        mlty = float(multy.text())
+        plusx = float(addx.text())
+        plusy = float(addy.text())
+        orbx = mltx * orbx + plusx
+        orby = mlty * orby + plusy
+        self._update_and_emit('Orbit Edited', orbx, orby)
 
     def _save_orbit_to_file(self, _):
         header = '# ' + _datetime.now().strftime('%Y/%m/%d-%H:%M:%S') + '\n'
