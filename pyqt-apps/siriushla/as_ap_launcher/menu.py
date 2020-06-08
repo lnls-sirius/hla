@@ -11,7 +11,7 @@ import qtawesome as qta
 
 from siriuspy.envars import VACA_PREFIX as _prefix
 from siriuspy.clientconfigdb import ConfigDBClient
-from siriuspy.search import PSSearch
+from siriuspy.search import PSSearch, IDSearch
 from siriuspy.namesys import SiriusPVName
 
 from siriushla import util
@@ -48,14 +48,15 @@ def get_object(ismenubar=True, parent=None):
                 }""")
 
         def _setup_ui(self):
+            config = self._create_config_menu()
             as_apps = self._create_as_menu()
             li_apps = self._create_li_menu()
             tb_apps = self._create_section_menu('TB', 'TB')
             bo_apps = self._create_section_menu('BO', 'BO')
             ts_apps = self._create_section_menu('TS', 'TS')
             si_apps = self._create_section_menu('SI', 'SI')
+            id_apps = self._create_id_menu()
             tool_apps = self._create_tool_menu()
-            config = self._create_config_menu()
 
             self.add_object_to_level0(config)
             self.add_object_to_level0(as_apps)
@@ -64,6 +65,7 @@ def get_object(ismenubar=True, parent=None):
             self.add_object_to_level0(bo_apps)
             self.add_object_to_level0(ts_apps)
             self.add_object_to_level0(si_apps)
+            self.add_object_to_level0(id_apps)
             self.add_object_to_level0(tool_apps)
 
         def add_object_to_level0(self, widget):
@@ -282,12 +284,24 @@ def get_object(ismenubar=True, parent=None):
             VA = self._set_va_menu(sec)
             self.add_object_to_level1(menu, VA)
 
-            if sec == 'si':
-                ID = self._set_ids_menu()
-                self.add_object_to_level1(menu, ID)
-
             OPT = self._set_optics_menu(sec)
             self.add_object_to_level1(menu, OPT)
+
+            return menu
+
+        def _create_id_menu(self):
+            menu = LEVEL1('IDs', self)
+            menu.setObjectName('IDApp')
+
+            # SI-09SA:ID-APU22
+            idname = SiriusPVName('SI-09SA:ID-APU22')
+            beamline = IDSearch.conv_idname_2_beamline(idname)
+            APU09SA = QAction('{0} - {1} ({2})'.format(
+                idname.dev, idname.sub, beamline), menu)
+            self.connect_newprocess(
+                APU09SA, ['sirius-hla-si-id-control.py',
+                          '-dev', 'SI-09SA:ID-APU22'])
+            menu.addAction(APU09SA)
 
             return menu
 
@@ -663,18 +677,6 @@ def get_object(ismenubar=True, parent=None):
             mks.addAction(mks_gr)
             menu.addAction(agilent)
             menu.addMenu(mks)
-            return menu
-
-        def _set_ids_menu(self):
-            menu = LEVEL2M('IDs', self)
-            menu.setObjectName('SIApp')
-
-            APU09SA = QAction('APU22 09SA (high β)', menu)
-            self.connect_newprocess(
-                APU09SA, ['sirius-hla-si-id-control.py',
-                          '-dev', 'SI-09SA:ID-APU22'])
-            menu.addAction(APU09SA)
-
             return menu
 
         def connect_newprocess(self, button, cmd, is_pydm=False):

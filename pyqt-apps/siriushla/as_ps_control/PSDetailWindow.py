@@ -23,7 +23,9 @@ class PSDetailWindow(SiriusMainWindow):
         name = self._psname[0]
         self._is_dclink = 'dclink' in PSSearch.conv_psname_2_pstype(name)
         secs = {'AS', 'TB', 'BO', 'TS', 'SI', 'LI'}
-        if name.sec in secs:
+        if name.sub.endswith(('SA', 'SB', 'SP', 'ID')):
+            sec = 'ID'
+        elif name.sec in secs:
             sec = name.sec
         elif name.idx[:2] in secs:
             sec = name.idx[:2]

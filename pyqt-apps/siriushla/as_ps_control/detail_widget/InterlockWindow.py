@@ -32,7 +32,6 @@ class InterlockListWidget(QWidget):
         """."""
         super().__init__(parent)
         self._devname = _PVName(devname)
-        self.setObjectName(self._devname.sec+'App')
         self._interlock = interlock
         self._setup_ui()
 
@@ -60,7 +59,9 @@ class InterlockWindow(SiriusMainWindow):
         self._devname = _PVName(devname)
 
         secs = {'AS', 'TB', 'BO', 'TS', 'SI'}
-        if self._devname.sec in secs:
+        if self._devname.sub.endswith(('SA', 'SB', 'SP', 'ID')):
+            self.setObjectName('IDApp')
+        elif self._devname.sec in secs:
             self.setObjectName(self._devname.sec+'App')
         elif self._devname.idx[:2] in secs:
             self.setObjectName(self._devname.idx[:2]+'App')

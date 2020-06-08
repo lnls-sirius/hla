@@ -6,7 +6,7 @@ import sys
 import argparse as _argparse
 from siriushla.sirius_application import SiriusApplication
 from siriuspy.envars import VACA_PREFIX
-from siriushla.as_ps_diag.ps_graph_mon import PSGraphMon
+from siriushla.as_ps_diag.ps_graph_mon import PSGraphMonWindow
 
 
 parser = _argparse.ArgumentParser(
@@ -24,5 +24,5 @@ else:
     filters = ''
 app = SiriusApplication()
 app.open_window(
-    PSGraphMon, parent=None, prefix=args.prefix, filters=filters)
+    PSGraphMonWindow, parent=None, prefix=args.prefix, filters=filters)
 sys.exit(app.exec_())
