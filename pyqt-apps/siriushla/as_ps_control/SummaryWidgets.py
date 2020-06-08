@@ -2,17 +2,17 @@
 
 import re
 
-from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QPushButton, \
     QLabel, QSizePolicy as QSzPlcy
 import qtawesome as qta
-from pydm.widgets import PyDMPushButton, PyDMLabel, PyDMEnumComboBox
+from pydm.widgets import PyDMPushButton, PyDMLabel
 
 from siriuspy.envars import VACA_PREFIX as VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as PVName
 from siriuspy.search import PSSearch
 from siriushla.widgets import PyDMStateButton, SiriusLedState, \
-    SiriusLedAlert, PyDMLinEditScrollbar, PyDMLedMultiChannel
+    SiriusLedAlert, PyDMLinEditScrollbar, PyDMLedMultiChannel, \
+    SiriusEnumComboBox
 
 
 Dipole = re.compile("^.*:PS-B.*$")
@@ -409,7 +409,7 @@ class SummaryWidget(QWidget):
         elif name == 'opmode':
             opmode_list = list()
             if 'Voltage' not in self._analog_name:
-                self.opmode_cb = MyComboBox(self, self._opmode_sel)
+                self.opmode_cb = SiriusEnumComboBox(self, self._opmode_sel)
                 opmode_list.append(self.opmode_cb)
             self.opmode_lb = PyDMLabel(self, self._opmode_sts)
             opmode_list.append(self.opmode_lb)
@@ -591,22 +591,6 @@ class SummaryHeader(QWidget):
 
     def update_visible_props(self, new_value):
         self.visible_props = sort_propties(new_value)
-
-
-class MyComboBox(PyDMEnumComboBox):
-    """Subclass PyDMEnumComboBox to reimplement whellEvent."""
-
-    def __init__(self, parent, init_channel=None):
-        """Initialize object."""
-        super().__init__(parent=parent, init_channel=init_channel)
-        self.setFocusPolicy(Qt.StrongFocus)
-
-    def wheelEvent(self, event):
-        """Reimplement wheel event to ignore event when out of focus."""
-        if not self.hasFocus():
-            event.ignore()
-        else:
-            super().wheelEvent(event)
 
 
 if __name__ == '__main__':

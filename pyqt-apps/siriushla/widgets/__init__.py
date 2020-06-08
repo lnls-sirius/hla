@@ -16,5 +16,6 @@ from .widget_factory import pydmwidget_factory
 from .spectrogram_view import SiriusSpectrogramView
 from .label import SiriusLabel
 from .pvnames_tree import PVNameTree
-from .string_combo_box import SiriusComboBox
+from .string_combo_box import SiriusStringComboBox
 from .timeplot import SiriusTimePlot
+from .enum_combo_box import SiriusEnumComboBox
