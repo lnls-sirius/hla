@@ -69,7 +69,7 @@ class KicksConfigWidget(BaseWidget):
         if self.acc == 'SI':
             unitss = (
                 ('[%]', '[%]', '[%]'),
-                ('[urad]', '[urad]', '[Hz]'),
+                ('[urad]', '[urad]', None),
                 ('[urad]', '[urad]', '[Hz]'), )
             planes = ('CH', 'CV', 'RF')
 
@@ -81,6 +81,8 @@ class KicksConfigWidget(BaseWidget):
             grpbx.setStyleSheet('#gbx{min-height:5.5em; max-height:5.5em;}')
             fbl = QFormLayout(grpbx)
             for unit, pln in zip(units, planes):
+                if unit is None:
+                    continue
                 lbl = QLabel(pln+' '+unit+'  ', grpbx)
                 lbl.setObjectName('lbl')
                 lbl.setStyleSheet('#lbl{min-height:1em;}')

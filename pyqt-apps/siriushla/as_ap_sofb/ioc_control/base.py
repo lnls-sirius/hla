@@ -2,7 +2,7 @@
 
 from functools import partial as _part
 import numpy as _np
-from qtpy.QtCore import Qt
+from qtpy.QtCore import Qt, Signal
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QSizePolicy, QComboBox
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox
 from pydm.widgets.base import PyDMPrimitiveWidget
@@ -14,8 +14,10 @@ from siriushla.as_ap_configdb import LoadConfigDialog
 
 
 class BaseWidget(QWidget):
+    """."""
 
     def __init__(self, parent, prefix, acc='SI'):
+        """."""
         super().__init__(parent)
         self.setObjectName(acc.upper()+'App')
         self.prefix = _PVName(prefix)
@@ -23,17 +25,21 @@ class BaseWidget(QWidget):
 
     @property
     def acc(self):
+        """."""
         return self._csorb.acc
 
     @property
     def acc_idx(self):
+        """."""
         return self._csorb.acc_idx
 
     @property
     def isring(self):
+        """."""
         return self._csorb.isring
 
     def create_pair(self, parent, pvname, prefix=None):
+        """."""
         prefix = prefix or self.prefix
         wid = QWidget(parent)
         hbl = QHBoxLayout(wid)
@@ -47,6 +53,7 @@ class BaseWidget(QWidget):
         return wid
 
     def create_pair_sel(self, parent, pvname, prefix=None):
+        """."""
         prefix = prefix or self.prefix
         wid = QWidget(parent)
         hbl = QHBoxLayout(wid)
@@ -60,6 +67,7 @@ class BaseWidget(QWidget):
         return wid
 
     def create_pair_butled(self, parent, pvname, prefix=None):
+        """."""
         prefix = prefix or self.prefix
         wid = QWidget(parent)
         hbl = QHBoxLayout(wid)
@@ -73,13 +81,17 @@ class BaseWidget(QWidget):
 
 
 class BaseCombo(QComboBox, PyDMPrimitiveWidget):
+    """."""
 
-    def __init__(self, parent, ctrls, setpoint=dict(),
-                 readback=dict(), acc='SI'):
+    configname = Signal(str)
+
+    def __init__(
+            self, parent, ctrls, setpoint=None, readback=None, acc='SI'):
+        """."""
         QComboBox.__init__(self, parent)
         PyDMPrimitiveWidget.__init__(self)
-        self.setpoint = setpoint
-        self.readback = readback
+        self.setpoint = setpoint or dict()
+        self.readback = readback or dict()
         self.ctrls = ctrls
         self._csorb = SOFBFactory.create(acc)
         self._config_type = acc.lower() + '_orbit'
@@ -97,30 +109,36 @@ class BaseCombo(QComboBox, PyDMPrimitiveWidget):
 
     @property
     def acc(self):
+        """."""
         return self._csorb.acc
 
     @property
     def acc_idx(self):
+        """."""
         return self._csorb.acc_idx
 
     @property
     def isring(self):
+        """."""
         return self._csorb.isring
 
     def channels(self):
+        """."""
         chans = list(self.readback.values())
         chans += list(self.setpoint.values())
         return chans
 
     def connect_signals(self):
+        """."""
         for pln in ('x', 'y'):
             self.readback[pln].new_value_signal[_np.ndarray].connect(
                 _part(self.ioc_orbit_changed, pln))
 
-    def setup_ui(self, add_items=[]):
+    def setup_ui(self, add_items=None):
+        """."""
         sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
         self.setSizePolicy(sz_pol)
-        self.setEditable(True)
+        add_items = add_items or []
         add_items.extend(['Zero', 'ServConf'])
         for item in add_items:
             self.addItem(item)
@@ -136,6 +154,8 @@ class BaseCombo(QComboBox, PyDMPrimitiveWidget):
 
     def _selection_changed(self, text, sigs=None):
         sigs = sigs or dict()
+        if not text.lower().startswith('servconf'):
+            self.configname.emit('')
         if text.lower().startswith('zero'):
             for pln in ('x', 'y'):
                 if self.orbits[pln] is not None:
@@ -148,6 +168,7 @@ class BaseCombo(QComboBox, PyDMPrimitiveWidget):
             if not status:
                 return
             data = self._client.get_config_value(confname)
+            self.configname.emit(confname)
             for pln in ('x', 'y'):
                 self.orbits[pln] = _np.array(data[pln])
                 self.setpoint[pln].send_value_signal[_np.ndarray].emit(
@@ -169,6 +190,7 @@ class BaseCombo(QComboBox, PyDMPrimitiveWidget):
         self.signals_to_watch = sigs
 
     def ioc_orbit_changed(self, pln, orb):
+        """."""
         self._orbit_changed(pln, orb)
 
     def _watch_if_changed(self, pln, orb):
@@ -176,8 +198,8 @@ class BaseCombo(QComboBox, PyDMPrimitiveWidget):
 
     def _orbit_changed(self, pln, orb):
         myorb = self.orbits[pln]
-        
         if myorb is not None and myorb.size == orb.size and \
                 _np.allclose(orb, myorb, rtol=1e-7):
             return
         self.setCurrentIndex(self.count()-1)
+        self.configname.emit('')

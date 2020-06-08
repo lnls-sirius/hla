@@ -18,11 +18,13 @@ from siriuspy.sofb.csdev import SOFBFactory
 
 
 class BaseWidget(QWidget):
+    """."""
     DEFAULT_DIR = _pathlib.Path.home().as_posix()
     EXT = '.txt'
     EXT_FLT = 'Text Files (*.txt)'
 
     def __init__(self, parent, prefix, ctrls, names, is_orb, acc='SI'):
+        """."""
         super(BaseWidget, self).__init__(parent)
         self.setObjectName(acc.upper()+'App')
         self.line_names = names
@@ -63,22 +65,27 @@ class BaseWidget(QWidget):
 
     @property
     def acc(self):
+        """."""
         return self._csorb.acc
 
     @property
     def acc_idx(self):
+        """."""
         return self._csorb.acc_idx
 
     @property
     def isring(self):
+        """."""
         return self._csorb.isring
 
     def channels(self):
+        """."""
         chans = list(self.enbl_pvs.values())
         chans.extend(self.enbl_pvs_set.values())
         return chans
 
     def setupui(self):
+        """."""
         vbl = QVBoxLayout(self)
         vbl.setAlignment(Qt.AlignCenter)
 
@@ -108,6 +115,7 @@ class BaseWidget(QWidget):
             self.hbl.addStretch(1)
 
     def uigetgraph(self, pln, size):
+        """."""
         graph = Graph(self)
         graph.doubleclick.connect(_part(self._set_enable_list, pln))
         graph.plotItem.scene().sigMouseMoved.connect(
@@ -169,6 +177,7 @@ class BaseWidget(QWidget):
         return graph
 
     def uicreate_groupbox(self, idx):
+        """."""
         grpbx = QGroupBox(self.line_names[idx], self)
         grpbx.setCheckable(True)
         grpbx.setChecked(not idx)
@@ -221,11 +230,11 @@ class BaseWidget(QWidget):
         return grpbx
 
     def uicreate_combobox(self, parent, orb_tp, idx):
+        """."""
         combo = QComboBox(parent)
         combo.setObjectName('ComboBox_' + orb_tp + str(idx))
         sz_pol = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         combo.setSizePolicy(sz_pol)
-        combo.setEditable(True)
         combo.setMaxVisibleItems(10)
         for name in sorted(self.controls.keys()):
             combo.addItem(name)
@@ -236,6 +245,7 @@ class BaseWidget(QWidget):
         return combo
 
     def uicreate_label(self, lab, parent):
+        """."""
         label = QLabel(lab, parent)
         sz_pol = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
         label.setSizePolicy(sz_pol)
@@ -244,6 +254,7 @@ class BaseWidget(QWidget):
         return label
 
     def connect_signals(self):
+        """."""
         for i in range(len(self.line_names)):
             grpbx = self.findChild(QGroupBox, 'GroupBox' + str(i))
             for pln in ('x', 'y'):
@@ -340,13 +351,15 @@ class BaseWidget(QWidget):
             bpm_pos = self._csorb.cv_pos
         bpm_pos = _np.array(bpm_pos)
 
-        enbl = self.enbl_pvs[plane].value
-        if enbl is not None:
+        data = _np.asarray(data)
+        enbl = _np.asarray(self.enbl_pvs[plane].value, dtype=bool)
+        if enbl is not None and enbl.size > 1:
             sz = min(enbl.size, data.size)
             self._update_enable_list(plane, enbl[:sz], curve, idx)
             nring = sz // bpm_pos.size
             if nring > 1:
-                bpm_pos = [bpm_pos + i*self._csorb.circum for i in range(nring)]
+                bpm_pos = [
+                    bpm_pos + i*self._csorb.circum for i in range(nring)]
                 bpm_pos = _np.hstack(bpm_pos)
             curve.receiveXWaveform(bpm_pos)
             curve.receiveYWaveform(data[:sz])
@@ -437,6 +450,7 @@ class UpdateGraph(QObject):
         sig_y[_np.ndarray].connect(self.slots['val']['y'])
 
     def some_changed(self, orb_tp, text):
+        """."""
         if text not in (self.ctrls.keys() | {'Zero'}):
             return
         slot_x = self.slots[orb_tp]['x']
@@ -463,9 +477,11 @@ class UpdateGraph(QObject):
                 slot_y(self.vectors[orb_tp]['y']*0)
 
     def set_visible(self, boo):
+        """."""
         self._isvisible = boo
 
     def set_enbl_list(self, pln, enbls):
+        """."""
         self.enbl_list[pln] = _np.array(enbls, dtype=bool)
 
     def _update_vectors(self, orb_tp, pln, orb):
@@ -474,6 +490,7 @@ class UpdateGraph(QObject):
             self.raw_ref_sig[pln].emit(orb)
 
     def update_graphic(self, pln=None):
+        """."""
         if not self._isvisible:
             return
         plns = ('x', 'y') if pln is None else (pln, )
@@ -502,13 +519,17 @@ class UpdateGraph(QObject):
 
 
 class Label(QLabel):
+    """."""
+
     FMT = '{0:.2f}'
 
     def __init__(self, unit, *args, **kwargs):
+        """."""
         super().__init__(*args, **kwargs)
         self.unit = unit
 
     def setFloat(self, val):
+        """."""
         sc, prf = functions.siScale(val)
         val *= sc
         text = self.FMT.format(val)
@@ -517,9 +538,12 @@ class Label(QLabel):
 
 
 class Graph(PyDMWaveformPlot):
+    """."""
+
     doubleclick = Signal(int)
 
     def __init__(self, *args, **kwargs):
+        """."""
         super().__init__(*args, **kwargs)
         self.setObjectName('graph')
         self.setStyleSheet('#graph {min-height: 15em; min-width: 25em;}')
@@ -539,6 +563,7 @@ class Graph(PyDMWaveformPlot):
         self.plotItem.getAxis('left').setStyle(tickTextOffset=5)
 
     def mouseDoubleClickEvent(self, ev):
+        """."""
         if ev.button() == Qt.LeftButton:
             posx = self.curveAtIndex(0).xData
             vb = self.plotItem.getViewBox()
@@ -549,12 +574,15 @@ class Graph(PyDMWaveformPlot):
 
 
 class InfLine(InfiniteLine):
+    """."""
 
     def __init__(self, conv=1, pos=None, **kwargs):
+        """."""
         if pos is not None:
             pos *= conv
         super().__init__(pos=pos, **kwargs)
         self.conv = conv
 
     def setValue(self, value):
+        """."""
         super().setValue(value*self.conv)

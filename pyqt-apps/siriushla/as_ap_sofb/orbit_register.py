@@ -1,6 +1,7 @@
 """Creates the Contextes Menus for the Register."""
 
 from functools import partial as _part
+import math as _math
 from datetime import datetime as _datetime
 import numpy as _np
 from qtpy.QtWidgets import QMenu, QFileDialog, QWidget, QMessageBox, \
@@ -17,8 +18,10 @@ from siriushla.widgets import SiriusConnectionSignal
 
 
 class OrbitRegisters(QWidget):
+    """."""
 
     def __init__(self, parent, prefix, acc=None, nr_registers=9):
+        """."""
         super(OrbitRegisters, self).__init__(parent)
         self._nr_registers = nr_registers
         self.prefix = prefix
@@ -48,12 +51,14 @@ class OrbitRegisters(QWidget):
         self.setupui()
 
     def channels(self):
+        """."""
         chans = []
         for v in self._orbits.values():
             chans.extend(v)
         return chans
 
     def setupui(self):
+        """."""
         gdl = QGridLayout(self)
         gdl.setContentsMargins(0, 0, 0, 0)
 
@@ -84,6 +89,7 @@ class OrbitRegisters(QWidget):
             self.registers.append(reg)
 
     def get_registers_control(self):
+        """."""
         ctrls = dict()
         for reg in self.registers:
             ctrls[reg.name] = dict()
@@ -142,7 +148,7 @@ class OrbitRegister(QWidget):
     orby = property(fget=getorby)
 
     def setup_ui(self):
-        """Setup Ui of Context Menu."""
+        """Set up Ui of Context Menu."""
         self.setStyleSheet("""
             #{}{{
                 min-width:11.29em;
@@ -201,6 +207,10 @@ class OrbitRegister(QWidget):
         act = menu.addAction('&Edit Orbit')
         act.setIcon(qta.icon('mdi.table-edit'))
         act.triggered.connect(self._edit_orbit)
+        act = menu.addAction('&Create Bump')
+        act.setIcon(qta.icon(
+            'mdi.chart-bell-curve', scale_factor=1.2, offset=(-0.2, 0.2)))
+        act.triggered.connect(self._create_bump)
         act = menu.addAction('&Clear')
         act.setIcon(qta.icon('mdi.delete-empty'))
         act.triggered.connect(self._reset_orbit)
@@ -344,14 +354,145 @@ class OrbitRegister(QWidget):
         wid.layout().addItem(hlay)
         res = wid.exec_()
 
-        if res == QDialog.Accepted:
-            mltx = float(multx.text())
-            mlty = float(multy.text())
-            plusx = float(addx.text())
-            plusy = float(addy.text())
-            orbx = mltx * orbx + plusx
-            orby = mlty * orby + plusy
-            self._update_and_emit('Orbit Edited', orbx, orby)
+        if res != QDialog.Accepted:
+            return
+        mltx = float(multx.text())
+        mlty = float(multy.text())
+        plusx = float(addx.text())
+        plusy = float(addy.text())
+        orbx = mltx * orbx + plusx
+        orby = mlty * orby + plusy
+        self._update_and_emit('Orbit Edited', orbx, orby)
+
+    def _create_bump(self):
+
+        def _add_entry(index):
+            cbox = self.sender()
+            text = cbox.itemText(index)
+            if not text.startswith('other'):
+                return
+            win = LoadConfigDialog(self._config_type, self)
+            confname, status = win.exec_()
+            if not status:
+                cbox.setCurrentIndex(0)
+                return
+            cbox.insertItem(index, confname)
+            cbox.setCurrentIndex(index)
+
+        wid = QDialog(self)
+        wid.setObjectName(self._csorb.acc+'App')
+        lay = QGridLayout()
+        wid.setLayout(lay)
+
+        row = 0
+        lay.addWidget(QLabel('Base Orbit ', wid), row, 0)
+        orbcombo = QComboBox(wid)
+        orbcombo.addItems(['bba_orb', 'Register', 'other...'])
+        orbcombo.activated.connect(_add_entry)
+        lay.addWidget(orbcombo, row, 1)
+
+        row += 1
+        lay.addWidget(QLabel('Straight Sec.', wid), row, 0)
+        sscombo = QComboBox(wid)
+        sub = ['SA', 'SB', 'SP', 'SB']
+        ssnames = [f'{d+1:02d}{sub[d%len(sub)]}' for d in range(20)]
+        sscombo.addItems(ssnames)
+        lay.addWidget(sscombo, row, 1)
+
+        row += 1
+        lay.addWidget(QLabel('\u03B8<sub>x</sub> [urad]', wid), row, 0)
+        angx = QLineEdit(wid)
+        angx.setValidator(QDoubleValidator())
+        angx.setText('0.0')
+        angx.setAlignment(Qt.AlignCenter)
+        angx.setStyleSheet('max-width:5em;')
+        lay.addWidget(angx, row, 1)
+
+        row += 1
+        lay.addWidget(QLabel('X [um] ', wid), row, 0)
+        posx = QLineEdit(wid)
+        posx.setValidator(QDoubleValidator())
+        posx.setText('0.0')
+        posx.setAlignment(Qt.AlignCenter)
+        posx.setStyleSheet('max-width:5em;')
+        lay.addWidget(posx, row, 1)
+
+        row += 1
+        lay.addWidget(QLabel('\u03B8<sub>y</sub> [urad]', wid), row, 0)
+        angy = QLineEdit(wid)
+        angy.setValidator(QDoubleValidator())
+        angy.setText('0.0')
+        angy.setAlignment(Qt.AlignCenter)
+        angy.setStyleSheet('max-width:5em;')
+        lay.addWidget(angy, row, 1)
+
+        row += 1
+        lay.addWidget(QLabel('Y [um] ', wid), row, 0)
+        posy = QLineEdit(wid)
+        posy.setValidator(QDoubleValidator())
+        posy.setText('0.0')
+        posy.setAlignment(Qt.AlignCenter)
+        posy.setStyleSheet('max-width:5em;')
+        lay.addWidget(posy, row, 1)
+
+        row += 1
+        hlay = QHBoxLayout()
+        cancel = QPushButton('Cancel', wid)
+        confirm = QPushButton('Ok', wid)
+        cancel.clicked.connect(wid.reject)
+        confirm.clicked.connect(wid.accept)
+        hlay.addStretch()
+        hlay.addWidget(cancel)
+        hlay.addStretch()
+        hlay.addWidget(confirm)
+        hlay.addStretch()
+        wid.layout().addItem(hlay, row, 0, 1, 2)
+        res = wid.exec_()
+        if res != QDialog.Accepted:
+            return
+
+        index = orbcombo.currentIndex()
+        confname = orbcombo.itemText(index)
+        if index == 1:
+            orbx = _np.array(self.orbx)
+            orby = _np.array(self.orby)
+        elif index == orbcombo.count()-1:
+            return
+        else:
+            orbs = self._client.get_config_value(confname)
+            orbx = _np.array(orbs['x'])
+            orby = _np.array(orbs['y'])
+
+        agx = float(angx.text())
+        agy = float(angy.text())
+        psx = float(posx.text())
+        psy = float(posy.text())
+        idx = sscombo.currentIndex()
+        sub = sscombo.currentText()
+        # Straight section length is different in 'SA' sections:
+        ss_len = 7.0358 if sub.endswith('SA') else 6.1758
+        # distance from BPM to SS center [um].
+        dbpm = ss_len / 2 * 1e6
+        bpm_m1 = idx * 8 - 1  # BPM from M1
+        bpm_m2 = idx * 8      # BPM from M2
+
+        # angle bump
+        dpx = dbpm*_math.tan(agx/1e6)
+        dpy = dbpm*_math.tan(agy/1e6)
+        orbx[bpm_m1] -= dpx
+        orby[bpm_m1] -= dpy
+        orbx[bpm_m2] += dpx
+        orby[bpm_m2] += dpy
+
+        # position bump
+        orbx[bpm_m1] += psx
+        orby[bpm_m1] += psy
+        orbx[bpm_m2] += psx
+        orby[bpm_m2] += psy
+
+        txt = f'Bump@{sub}: ref={confname}\n'
+        txt += f'ax={agx:.1f} ay={agy:.1f} dx={psx:.1f} dx={psx:.1f}'
+        self._update_and_emit(txt, orbx, orby)
 
     def _save_orbit_to_file(self, _):
         header = '# ' + _datetime.now().strftime('%Y/%m/%d-%H:%M:%S') + '\n'

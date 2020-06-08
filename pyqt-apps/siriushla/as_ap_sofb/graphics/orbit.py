@@ -18,8 +18,10 @@ from siriushla.as_ap_sofb.graphics.correctors import CorrectorsWidget
 
 
 class OrbitWidget(BaseWidget):
+    """."""
 
-    def __init__(self, parent, prefix, ctrls=dict(), acc='SI'):
+    def __init__(self, parent, prefix, ctrls=None, acc='SI'):
+        """."""
         self._chans = []
         if not ctrls:
             self._chans, ctrls = self.get_default_ctrls(prefix)
@@ -43,6 +45,7 @@ class OrbitWidget(BaseWidget):
         self.add_buttons_for_images()
 
     def add_buttons_for_images(self):
+        """."""
         grpbx = QGroupBox('Other Graphs', self)
         gdl = QGridLayout(grpbx)
         self.hbl.addWidget(grpbx)
@@ -75,15 +78,17 @@ class OrbitWidget(BaseWidget):
         Window = create_window_from_widget(
             SinglePassSumWidget, title='Single Pass Sum')
         _util.connect_window(
-                    btn, Window, self, prefix=self.prefix, acc=self.acc)
+            btn, Window, self, prefix=self.prefix, acc=self.acc)
 
     def channels(self):
+        """."""
         chans = super().channels()
         chans.extend(self._chans)
         return chans
 
     @staticmethod
     def get_default_ctrls(prefix, isring=True):
+        """."""
         pvs = [
             'SPassOrbX-Mon', 'SPassOrbY-Mon',
             'OfflineOrbX-RB', 'OfflineOrbY-RB',
@@ -113,8 +118,10 @@ class OrbitWidget(BaseWidget):
 
 
 class MultiTurnWidget(QWidget):
+    """."""
 
     def __init__(self, parent, sigs, prefix):
+        """."""
         super().__init__(parent)
         self.prefix = _PVName(prefix)
         self.setObjectName(self.prefix.sec+'App')
@@ -125,14 +132,17 @@ class MultiTurnWidget(QWidget):
             'y': _part(self.setreforbits, 'y')}
 
     def showEvent(self, _):
+        """."""
         for pln, sig in self.sigs.items():
             sig.connect(self.fun2setref[pln])
 
     def hideEvent(self, _):
+        """."""
         for pln, sig in self.sigs.items():
             sig.disconnect(self.fun2setref[pln])
 
     def setupui(self):
+        """."""
         hbl = QHBoxLayout(self)
         self.spectx = MultiTurnSumWidget(self, self.prefix, orbtype='X')
         self.specty = MultiTurnSumWidget(self, self.prefix, orbtype='Y')
@@ -141,6 +151,7 @@ class MultiTurnWidget(QWidget):
         hbl.addWidget(self.specty)
 
     def setreforbits(self, pln, orb):
+        """."""
         if pln.lower() == 'x':
             self.spectx.spect.setreforbit(orb)
         else:
@@ -148,8 +159,10 @@ class MultiTurnWidget(QWidget):
 
 
 class MultiTurnSumWidget(QWidget):
+    """."""
 
     def __init__(self, parent, prefix, orbtype='sum'):
+        """."""
         super().__init__(parent)
         self.prefix = _PVName(prefix)
         self.orbtype = orbtype.lower()
@@ -157,6 +170,7 @@ class MultiTurnSumWidget(QWidget):
         self.setupui()
 
     def setupui(self):
+        """."""
         vbl = QVBoxLayout(self)
         if self.orbtype.startswith('sum'):
             img_propty = 'MTurnSum-Mon'
@@ -251,6 +265,7 @@ class MultiTurnSumWidget(QWidget):
         graph.setShowLegend(False)
 
     def update_graph(self, data):
+        """."""
         scale = 1e-6
         if self.orbtype.startswith('sum'):
             scale = 1
@@ -258,9 +273,12 @@ class MultiTurnSumWidget(QWidget):
 
 
 class Spectrogram(SiriusSpectrogramView):
+    """."""
+
     new_data_sig = Signal(_np.ndarray)
 
     def __init__(self, prefix='', **kwargs):
+        """."""
         self._reforb = None
         super().__init__(**kwargs)
         self.setObjectName('graph')
@@ -270,21 +288,25 @@ class Spectrogram(SiriusSpectrogramView):
                                 self.prefix + 'MTurnIdx-SP')
 
     def channels(self):
+        """."""
         chans = super().channels()
         chans.append(self.multiturnidx)
         return chans
 
     def setreforbit(self, orb):
+        """."""
         self._reforb = orb
         self.needs_redraw = True
 
     def process_image(self, img):
+        """."""
         if self._reforb is not None and img.shape[1] == self._reforb.size:
             img = img - self._reforb[None, :]
         self.new_data_sig.emit(img)
         return img
 
     def mouseDoubleClickEvent(self, ev):
+        """."""
         if ev.button() == Qt.LeftButton:
             pos = self._image_item.mapFromDevice(ev.pos())
             if pos.y() > 0 and pos.y() <= self._image_item.height():
@@ -293,8 +315,10 @@ class Spectrogram(SiriusSpectrogramView):
 
 
 class SinglePassSumWidget(QWidget):
+    """."""
 
     def __init__(self, parent, prefix, acc):
+        """."""
         super().__init__(parent)
         self.prefix = _PVName(prefix)
         self.setObjectName(self.prefix.sec+'App')
@@ -303,6 +327,7 @@ class SinglePassSumWidget(QWidget):
         self.setupui()
 
     def setupui(self):
+        """."""
         vbl = QVBoxLayout(self)
 
         lab = QLabel('SinglePass Sum BPMs', self, alignment=Qt.AlignCenter)
