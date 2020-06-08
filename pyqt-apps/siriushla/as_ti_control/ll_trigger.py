@@ -5,12 +5,12 @@ import qtawesome as qta
 
 from pydm.widgets import PyDMLabel
 from siriuspy.search import LLTimeSearch, HLTimeSearch
-from siriushla.widgets import PyDMLed, PyDMStateButton
+from siriushla.widgets import PyDMLed, PyDMStateButton, \
+    SiriusEnumComboBox as _MyComboBox
 from siriushla.util import connect_window, get_appropriate_color
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla import as_ti_control as _ti_ctrl
-from .base import BaseList, \
-    MySpinBox as _MySpinBox, MyComboBox as _MyComboBox
+from .base import BaseList, MySpinBox as _MySpinBox
 
 
 class LLTriggerList(BaseList):

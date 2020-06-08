@@ -1,3 +1,5 @@
+"""Sirius String ComboBox."""
+
 import logging
 from qtpy.QtWidgets import QComboBox
 from qtpy.QtCore import Qt
@@ -7,7 +9,7 @@ from pydm.widgets.base import PyDMWritableWidget
 logger = logging.getLogger(__name__)
 
 
-class SiriusComboBox(QComboBox, PyDMWritableWidget):
+class SiriusStringComboBox(QComboBox, PyDMWritableWidget):
     """A ComboBox with a channel to handle PVs of string type."""
 
     def __init__(self, parent=None, init_channel=None, items=None):
@@ -26,7 +28,7 @@ class SiriusComboBox(QComboBox, PyDMWritableWidget):
             idx = self.findText(new_val)
             if idx == -1:
                 logger.error("Can not change value to %r. "
-                             "Not an option in SiriusComboBox",
+                             "Not an option in SiriusStringComboBox",
                              new_val)
                 return
             self.setCurrentIndex(idx)

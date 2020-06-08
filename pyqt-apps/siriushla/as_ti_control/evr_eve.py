@@ -8,10 +8,10 @@ from pydm.widgets import PyDMLabel
 from siriuspy.search import LLTimeSearch
 from siriushla.util import connect_window, get_appropriate_color
 from siriushla.widgets import PyDMLed, SiriusLedAlert, PyDMStateButton, \
-    SiriusLedState
+    SiriusLedState, SiriusEnumComboBox as _MyComboBox
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla import as_ti_control as _ti_ctrl
-from .base import BaseWidget, MyComboBox as _MyComboBox
+from .base import BaseWidget
 from .ll_trigger import OTPList, OUTList
 
 

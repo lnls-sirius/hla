@@ -23,7 +23,7 @@ CHANNELS_2_VALUES_BUTTON = {
     'BO-01D:PU-InjKckr:PwrState-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
     'BO-48D:PU-EjeKckr:Pulse-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
     'BO-48D:PU-EjeKckr:PwrState-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
-    'BO-Glob:TI-LLRF-Rmp:State-Sel': (TRG_DSBL_VAL, TRG_ENBL_VAL),
+    'BR-RF-DLLRF-01:RmpEnbl-Sel': (TRG_DSBL_VAL, TRG_ENBL_VAL),
     'TS-01:PU-EjeSeptF:Pulse-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
     'TS-01:PU-EjeSeptF:PwrState-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
     'TS-01:PU-EjeSeptG:Pulse-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
@@ -39,10 +39,17 @@ CHANNELS_2_VALUES_BUTTON = {
 }
 CHANNELS_2_VALUES_LED = CHANNELS_2_VALUES_BUTTON.copy()
 CHANNELS_2_VALUES_LED.update({
-    'BR-RF-DLLRF-01:RmpEnbl-Sts': (TRG_DSBL_VAL, TRG_ENBL_VAL),
+    'TB-04:TI-InjSept:State-Sts': (TRG_DSBL_VAL, TRG_ENBL_VAL),
     'BR-RF-DLLRF-01:RmpReady-Mon': (TRG_DSBL_VAL, TRG_ENBL_VAL),
+    'BO-Glob:TI-LLRF-Rmp:State-Sts': (TRG_DSBL_VAL, TRG_ENBL_VAL),
     'BO-Glob:TI-Mags-Fams:State-Sts': (TRG_DSBL_VAL, TRG_ENBL_VAL),
     'BO-Glob:TI-Mags-Corrs:State-Sts': (TRG_DSBL_VAL, TRG_ENBL_VAL),
+    'TS-01:TI-EjeSeptF:State-Sts': (TRG_DSBL_VAL, TRG_ENBL_VAL),
+    'TS-01:TI-EjeSeptG:State-Sts': (TRG_DSBL_VAL, TRG_ENBL_VAL),
+    'TS-04:TI-InjSeptF:State-Sts': (TRG_DSBL_VAL, TRG_ENBL_VAL),
+    'TS-04:TI-InjSeptG-1:State-Sts': (TRG_DSBL_VAL, TRG_ENBL_VAL),
+    'TS-04:TI-InjSeptG-2:State-Sts': (TRG_DSBL_VAL, TRG_ENBL_VAL),
+    'SI-01SA:TI-InjNLKckr:State-Sts': (TRG_DSBL_VAL, TRG_ENBL_VAL),
 })
 
 
