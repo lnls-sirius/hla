@@ -374,25 +374,22 @@ class CorrParamsDetailWindow(SiriusMainWindow):
         self._tl = tl
         self.setObjectName(tl.upper()+'App')
         self._prefix = prefix
-        self.setWindowTitle(self._tl +
-                            ' Position and Angle Correction Parameters')
+        self.setWindowTitle(
+            self._tl + ' Position and Angle Correction Parameters')
         self._setupUi()
 
     def _setupUi(self):
         label_configname = QLabel('<h4>Configuration Name</h4>', self,
                                   alignment=Qt.AlignCenter)
         self.pydmlinedit_configname = _ConfigLineEdit(
-            parent=self,
-            init_channel=self._prefix+self._tl+'-Glob:AP-PosAng:ConfigName-SP')
+            self, self._prefix+self._tl+'-Glob:AP-PosAng:ConfigName-SP')
         self.pydmlabel_configname = PyDMLabel(
-            parent=self,
-            init_channel=self._prefix+self._tl+'-Glob:AP-PosAng:ConfigName-RB')
+            self, self._prefix+self._tl+'-Glob:AP-PosAng:ConfigName-RB')
 
         label_matrix_x = QLabel('<h4>Matrix X</h4>', self,
                                 alignment=Qt.AlignCenter)
         self.table_matrix_x = PyDMWaveformTable(
-            parent=self,
-            init_channel=self._prefix+self._tl+'-Glob:AP-PosAng:RespMatX-Mon')
+            self, self._prefix+self._tl+'-Glob:AP-PosAng:RespMatX-Mon')
         self.table_matrix_x.setObjectName('table_matrix_x')
         self.table_matrix_x.setStyleSheet("""
             #table_matrix_x{
@@ -407,14 +404,13 @@ class CorrParamsDetailWindow(SiriusMainWindow):
         self.table_matrix_x.verticalHeader().setSectionResizeMode(
             QHeaderView.Stretch)
         self.table_matrix_x.verticalHeader().setVisible(False)
-        self.table_matrix_x.setSizePolicy(QSzPlcy.MinimumExpanding,
-                                          QSzPlcy.Preferred)
+        self.table_matrix_x.setSizePolicy(
+           QSzPlcy.MinimumExpanding, QSzPlcy.Preferred)
 
         label_matrix_y = QLabel('<h4>Matrix Y</h4>', self,
                                 alignment=Qt.AlignCenter)
         self.table_matrix_y = PyDMWaveformTable(
-            parent=self,
-            init_channel=self._prefix+self._tl+'-Glob:AP-PosAng:RespMatY-Mon')
+            self, self._prefix+self._tl+'-Glob:AP-PosAng:RespMatY-Mon')
         self.table_matrix_y.setObjectName('table_matrix_y')
         self.table_matrix_y.setStyleSheet("""
             #table_matrix_y{
@@ -429,8 +425,8 @@ class CorrParamsDetailWindow(SiriusMainWindow):
         self.table_matrix_y.verticalHeader().setSectionResizeMode(
             QHeaderView.Stretch)
         self.table_matrix_y.verticalHeader().setVisible(False)
-        self.table_matrix_y.setSizePolicy(QSzPlcy.MinimumExpanding,
-                                          QSzPlcy.Preferred)
+        self.table_matrix_y.setSizePolicy(
+            QSzPlcy.MinimumExpanding, QSzPlcy.Preferred)
 
         self.bt_apply = QPushButton('Ok', self)
         self.bt_apply.clicked.connect(self.close)
