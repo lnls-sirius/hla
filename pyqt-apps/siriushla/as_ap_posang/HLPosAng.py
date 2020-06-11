@@ -228,7 +228,8 @@ class PosAngCorr(SiriusMainWindow):
             lay.addWidget(label_voltrb, idx+2, 3)
 
             lb_kly2_name = QLabel('Klystron 2', self)
-            le_kly2_sp = PyDMLinEditScrollbar('LA-RF:LLRF:KLY2:SET_AMP', self)
+            le_kly2_sp = PyDMLinEditScrollbar(
+                self._prefix+'LA-RF:LLRF:KLY2:SET_AMP', self)
             le_kly2_sp.layout.setContentsMargins(0, 0, 0, 0)
             le_kly2_sp.layout.setSpacing(3)
             le_kly2_sp.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
@@ -240,7 +241,8 @@ class PosAngCorr(SiriusMainWindow):
                 QSzPlcy.Ignored, QSzPlcy.Fixed)
             le_kly2_sp.sp_scrollbar.setStyleSheet("max-height:0.7em;")
             le_kly2_sp.sp_scrollbar.limitsFromPV = True
-            lb_kly2_rb = PyDMLabel(self, 'LA-RF:LLRF:KLY2:GET_AMP')
+            lb_kly2_rb = PyDMLabel(
+                self, self._prefix+'LA-RF:LLRF:KLY2:GET_AMP')
             lb_kly2_rb.precisionFromPV = False
             lb_kly2_rb.precision = 2
             lay.addWidget(lb_kly2_name, idx+3, 1,
@@ -268,7 +270,8 @@ class PosAngCorr(SiriusMainWindow):
         lb_kckr_name = QLabel(self._kckr_name, self)
         _hlautil.connect_window(
             pb_kckr, _PUDetailWindow, self, devname=self._kckr_name)
-        lb_kckr_sp = PyDMLinEditScrollbar(self._kckr_name+':Voltage-SP', self)
+        lb_kckr_sp = PyDMLinEditScrollbar(
+            self._prefix+self._kckr_name+':Voltage-SP', self)
         lb_kckr_sp.layout.setContentsMargins(0, 0, 0, 0)
         lb_kckr_sp.layout.setSpacing(3)
         lb_kckr_sp.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
@@ -277,7 +280,8 @@ class PosAngCorr(SiriusMainWindow):
         lb_kckr_sp.sp_lineedit.setSizePolicy(QSzPlcy.Ignored, QSzPlcy.Fixed)
         lb_kckr_sp.sp_scrollbar.setStyleSheet("max-height:0.7em;")
         lb_kckr_sp.sp_scrollbar.limitsFromPV = True
-        lb_kckr_rb = PyDMLabel(self, self._kckr_name+':Voltage-RB')
+        lb_kckr_rb = PyDMLabel(
+            self, self._prefix+self._kckr_name+':Voltage-RB')
         lay.addWidget(pb_kckr, idx+5, 0, alignment=Qt.AlignTop)
         lay.addWidget(
             lb_kckr_name, idx+5, 1, alignment=Qt.AlignLeft | Qt.AlignTop)
