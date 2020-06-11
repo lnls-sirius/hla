@@ -236,13 +236,11 @@ class APUControlWindow(SiriusMainWindow):
     def _auxCommandsWidget(self):
         self._ld_speedlim = QLabel('Max Phase Speed\n[mm/s]', self)
         self._sb_speedlim = PyDMSpinbox(
-            # self, self.dev_pref+':MaxPhaseSpeed-SP')
-            self, self.dev_pref+':PhaseSpeed-SP.DRVH')
+            self, self.dev_pref+':MaxPhaseSpeed-SP')
         self._sb_speedlim.showStepExponent = False
         self._sb_speedlim.setStyleSheet('max-width:4.5em;')
         self._lb_speedlim = PyDMLabel(
-            # self, self.dev_pref+':MaxPhaseSpeed-RB')
-            self, self.dev_pref+':PhaseSpeed-SP.DRVH')
+            self, self.dev_pref+':MaxPhaseSpeed-RB')
 
         self._ld_homeaxis = QLabel('Do homing', self)
         self._pb_home = PyDMPushButton(
