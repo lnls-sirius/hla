@@ -705,7 +705,7 @@ class RFMainControl(SiriusMainWindow):
     def _cwMonLayout(self):
         self.cb_units = QComboBox(self)
         self.cb_units.setStyleSheet('font-weight: bold;')
-        self.cb_units.addItems(['dBm', 'W'])
+        self.cb_units.addItems(['W', 'dBm'])
         self.cb_units.currentTextChanged.connect(
             self._handle_pwrdata_visibility)
         self.pwr_curve_colors = {
@@ -728,10 +728,10 @@ class RFMainControl(SiriusMainWindow):
         self.lb_Cell3PwrdBm = PyDMLabel(
             self, 'BO-05D:RF-P5Cav:Cell3PwrdBm-Mon')
         self.lb_Cell3PwrdBm.showUnits = True
+        self.lb_Cell3PwrdBm.setVisible(False)
         self._pm_dBm_labels.add(self.lb_Cell3PwrdBm)
         self.lb_Cell3PwrW = PyDMLabel(self, 'BO-05D:RF-P5Cav:Cell3Pwr-Mon')
         self.lb_Cell3PwrW.showUnits = True
-        self.lb_Cell3PwrW.setVisible(False)
         self._pm_W_labels.add(self.lb_Cell3PwrW)
 
         self.cb_PwrFwd = QCheckBox(self)
@@ -745,10 +745,10 @@ class RFMainControl(SiriusMainWindow):
         self.cb_PwrFwd.stateChanged.connect(self._handle_curves_visibility)
         self.lb_PwrFwddBm = PyDMLabel(self, 'BO-05D:RF-P5Cav:PwrFwddBm-Mon')
         self.lb_PwrFwddBm.showUnits = True
+        self.lb_PwrFwddBm.setVisible(False)
         self._pm_dBm_labels.add(self.lb_PwrFwddBm)
         self.lb_PwrFwdW = PyDMLabel(self, 'BO-05D:RF-P5Cav:PwrFwd-Mon')
         self.lb_PwrFwdW.showUnits = True
-        self.lb_PwrFwdW.setVisible(False)
         self._pm_W_labels.add(self.lb_PwrFwdW)
 
         self.cb_PwrRev = QCheckBox(self)
@@ -762,10 +762,10 @@ class RFMainControl(SiriusMainWindow):
         self.cb_PwrRev.stateChanged.connect(self._handle_curves_visibility)
         self.lb_PwrRevdBm = PyDMLabel(self, 'BO-05D:RF-P5Cav:PwrRevdBm-Mon')
         self.lb_PwrRevdBm.showUnits = True
+        self.lb_PwrRevdBm.setVisible(False)
         self._pm_dBm_labels.add(self.lb_PwrRevdBm)
         self.lb_PwrRevW = PyDMLabel(self, 'BO-05D:RF-P5Cav:PwrRev-Mon')
         self.lb_PwrRevW.showUnits = True
-        self.lb_PwrRevW.setVisible(False)
         self._pm_W_labels.add(self.lb_PwrRevW)
 
         lb_CavPhs = QLabel('Phase', self, alignment=Qt.AlignCenter)
@@ -816,7 +816,7 @@ class RFMainControl(SiriusMainWindow):
         self.curves['PwrRev W'] = self.pwr_mon_graph.curveAtIndex(5)
 
         for cid in self.pwr_curve_colors.keys():
-            self.curves[cid+' W'].setVisible(False)
+            self.curves[cid].setVisible(False)
 
         lay_vals = QGridLayout()
         lay_vals.setAlignment(Qt.AlignCenter)
@@ -911,7 +911,7 @@ class RFMainControl(SiriusMainWindow):
             QLabel('<h4>Channel</h4>', self, alignment=Qt.AlignCenter), 0, 1)
         self.cb_units = QComboBox(self)
         self.cb_units.setStyleSheet('font-weight: bold;')
-        self.cb_units.addItems(['dBm', 'W'])
+        self.cb_units.addItems(['W', 'dBm'])
         self.cb_units.currentTextChanged.connect(
             self._handle_pwrdata_visibility)
         lay_vals.addWidget(self.cb_units, 0, 2)
@@ -960,12 +960,12 @@ class RFMainControl(SiriusMainWindow):
             dbch = 'RA-RaSIA01:RF-RFCalSys:PwrdBm{}-Mon'.format(sch)
             lb_dbmpwr = PyDMLabel(self, dbch)
             lb_dbmpwr.showUnits = True
+            lb_dbmpwr.setVisible(False)
             self._pm_dBm_labels.add(lb_dbmpwr)
 
             wch = 'RA-RaSIA01:RF-RFCalSys:PwrW{}-Mon'.format(sch)
             lb_wpwr = PyDMLabel(self, wch)
             lb_wpwr.showUnits = True
-            lb_wpwr.setVisible(False)
             self._pm_W_labels.add(lb_wpwr)
 
             lay_vals.addWidget(cb, row, 0)
@@ -991,7 +991,7 @@ class RFMainControl(SiriusMainWindow):
                 self.curves[cid].setVisible(False)
                 self.curves[cid+' W'].setVisible(False)
             else:
-                self.curves[cid+' W'].setVisible(False)
+                self.curves[cid].setVisible(False)
 
         lay = QGridLayout()
         lay.setHorizontalSpacing(25)
