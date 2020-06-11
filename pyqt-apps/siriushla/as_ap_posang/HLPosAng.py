@@ -63,6 +63,9 @@ class PosAngCorr(SiriusMainWindow):
             self.corrs['CH3'] = _PVName(corr_h[2])
         self.corrs['CV1'] = _PVName(corr_v[0])
         self.corrs['CV2'] = _PVName(corr_v[1])
+        if len(corr_v) == 4:
+            self.corrs['CV3'] = _PVName(corr_v[2])
+            self.corrs['CV4'] = _PVName(corr_v[3])
 
         self._setupUi()
         self.setFocus(True)
@@ -393,7 +396,7 @@ class CorrParamsDetailWindow(SiriusMainWindow):
         self.table_matrix_x.setObjectName('table_matrix_x')
         self.table_matrix_x.setStyleSheet("""
             #table_matrix_x{
-                min-width:20.72em;
+                min-width:12em; max-width:12em;
                 min-height:4.65em; max-height:4.65em;}""")
         self.table_matrix_x.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table_matrix_x.setRowCount(2)
@@ -407,6 +410,8 @@ class CorrParamsDetailWindow(SiriusMainWindow):
         self.table_matrix_x.setSizePolicy(
            QSzPlcy.MinimumExpanding, QSzPlcy.Preferred)
 
+        columns = 2 if self._tl == 'TB' else 4
+        width = 12 if self._tl == 'TB' else 24
         label_matrix_y = QLabel('<h4>Matrix Y</h4>', self,
                                 alignment=Qt.AlignCenter)
         self.table_matrix_y = PyDMWaveformTable(
@@ -414,11 +419,12 @@ class CorrParamsDetailWindow(SiriusMainWindow):
         self.table_matrix_y.setObjectName('table_matrix_y')
         self.table_matrix_y.setStyleSheet("""
             #table_matrix_y{
-                min-width:20.72em;
-                min-height:4.65em; max-height:4.65em;}""")
+                min-width:valem; max-width:valem;
+                min-height:4.65em; max-height:4.65em;}""".replace(
+                    'val', str(width)))
         self.table_matrix_y.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table_matrix_y.setRowCount(2)
-        self.table_matrix_y.setColumnCount(2)
+        self.table_matrix_y.setColumnCount(columns)
         self.table_matrix_y.horizontalHeader().setSectionResizeMode(
             QHeaderView.Stretch)
         self.table_matrix_y.horizontalHeader().setVisible(False)
@@ -433,24 +439,31 @@ class CorrParamsDetailWindow(SiriusMainWindow):
 
         lay = QGridLayout()
         lay.addItem(
-            QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Expanding), 0, 1)
-        lay.addWidget(label_configname, 1, 1, 1, 2)
-        lay.addWidget(self.pydmlinedit_configname, 2, 1)
-        lay.addWidget(self.pydmlabel_configname, 2, 2)
+            QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Expanding), 0, 0)
+        lay.addWidget(label_configname, 1, 0, 1, columns)
+        lay.addWidget(self.pydmlinedit_configname, 2, 0, 1, columns)
+        lay.addWidget(self.pydmlabel_configname, 3, 0, 1, columns)
         lay.addItem(
-            QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Expanding), 3, 1)
-        lay.addWidget(label_matrix_x, 4, 1, 1, 2)
-        lay.addWidget(self.table_matrix_x, 5, 1, 1, 2)
+            QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Expanding), 4, 0)
+        lay.addWidget(label_matrix_x, 5, 0, 1, columns)
+        lay.addWidget(self.table_matrix_x, 6, (columns/2)-1, 1, columns)
         lay.addItem(
-            QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Expanding), 6, 1)
-        lay.addWidget(label_matrix_y, 7, 1, 1, 2)
-        lay.addWidget(self.table_matrix_y, 8, 1, 1, 2)
+            QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Expanding), 7, 0)
+        lay.addWidget(label_matrix_y, 8, 0, 1, columns)
+        lay.addWidget(self.table_matrix_y, 9, 0, 1, columns)
         lay.addItem(
-            QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Expanding), 9, 1)
-        lay.addWidget(self.bt_apply, 10, 2)
+            QSpacerItem(20, 10, QSzPlcy.Minimum, QSzPlcy.Expanding), 10, 0)
+        lay.addWidget(self.bt_apply, 11, columns-1)
+        for i in range(columns):
+            lay.setColumnStretch(i, 1)
         self.centralwidget = QGroupBox('Correction Parameters')
         self.centralwidget.setLayout(lay)
         self.setCentralWidget(self.centralwidget)
+
+        self.setStyleSheet("""
+            PyDMLabel{
+                min-width:valem; max-width:valem;
+            }""".replace('val', str(width)))
 
 
 class _ConfigLineEdit(PyDMLineEdit):
