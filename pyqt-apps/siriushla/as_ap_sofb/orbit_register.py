@@ -397,6 +397,7 @@ class OrbitRegister(QWidget):
         sub = ['SA', 'SB', 'SP', 'SB']
         ssnames = [f'{d+1:02d}{sub[d%len(sub)]}' for d in range(20)]
         sscombo.addItems(ssnames)
+        sscombo.setCurrentIndex(8)
         lay.addWidget(sscombo, row, 1)
 
         row += 1
