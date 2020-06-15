@@ -57,6 +57,8 @@ class TuneControls(QWidget):
             label_tunefrac = QLabel('Tune Fraction')
             self.lb_tunefrac = PyDMLabel(
                 parent=self, init_channel=self.device+':TuneFrac-Mon')
+            self.lb_tunefrac.precisionFromPV = False
+            self.lb_tunefrac.precision = 4
 
         # Acquisition
         lbl_acq = QLabel('Acquisition', self)
@@ -444,6 +446,8 @@ class SITuneMonitor(QWidget):
         self.lb_tunefrach = PyDMLabel(
             parent=self,
             init_channel=self.prefix+'SI-Glob:DI-Tune-H:TuneFrac-Mon')
+        self.lb_tunefrach.precisionFromPV = False
+        self.lb_tunefrach.precision = 4
         self.lb_tunefrach.setAlignment(Qt.AlignHCenter)
         self.lb_tunefrach.setStyleSheet('QLabel{font-size: 40px;}')
         wid_tuneh = QWidget()
@@ -458,6 +462,8 @@ class SITuneMonitor(QWidget):
         self.lb_tunefracv = PyDMLabel(
             parent=self,
             init_channel=self.prefix+'SI-Glob:DI-Tune-V:TuneFrac-Mon')
+        self.lb_tunefracv.precisionFromPV = False
+        self.lb_tunefracv.precision = 4
         self.lb_tunefracv.setAlignment(Qt.AlignHCenter)
         self.lb_tunefracv.setStyleSheet('QLabel{font-size: 40px;}')
         wid_tunev = QWidget()

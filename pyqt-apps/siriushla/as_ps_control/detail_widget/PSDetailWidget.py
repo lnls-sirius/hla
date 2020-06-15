@@ -557,6 +557,7 @@ class PSDetailWidget(QWidget):
         self.wfm.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
         self.wfm.autoRangeX = True
         self.wfm.autoRangeY = True
+        self.wfm.plotItem.showButtons()
         self.wfm.setBackgroundColor(QColor(255, 255, 255))
         # self.wfm.setShowLegend(True)
         self.wfm.addChannel(y_channel=wfm_data_sp_ch, name='Wfm-SP',

@@ -34,8 +34,8 @@ class ICTSummary(QWidget):
     def __init__(self, parent=None, prefix=_VACA_PREFIX, tl=''):
         super().__init__(parent)
         self.prefix = prefix
-        self.tl = tl
-        if tl == 'tb':
+        self.tl = tl.upper()
+        if self.tl == 'TB':
             self.ICT1 = 'TB-02:DI-ICT'
             self.ICT2 = 'TB-04:DI-ICT'
         else:
@@ -50,7 +50,7 @@ class ICTSummary(QWidget):
 
         self.lb_transpeff = PyDMLabel(
             parent=self,
-            init_channel=self.prefix+self.tl+'-Glob:AP-TranspEff:Eff-Mon')
+            init_channel=self.prefix+self.tl+'-Glob:AP-CurrInfo:TranspEff-Mon')
         self.lb_transpeff.setAlignment(Qt.AlignCenter)
         lay_transpeff = QVBoxLayout()
         lay_transpeff.addWidget(QLabel('<h4>Transport Efficiency [%]</h4>',

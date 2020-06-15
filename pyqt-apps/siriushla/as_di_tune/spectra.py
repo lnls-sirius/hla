@@ -31,6 +31,7 @@ class TuneSpectraView(PyDMWaveformPlot):
         self.axisColor = QColor(0, 0, 0)
         self.backgroundColor = QColor(255, 255, 255)
         self.showLegend = False
+        self.plotItem.showButtons()
         leftAxis = self.getAxis('left')
         leftAxis.setStyle(autoExpandTextSpace=False, tickTextWidth=25)
 

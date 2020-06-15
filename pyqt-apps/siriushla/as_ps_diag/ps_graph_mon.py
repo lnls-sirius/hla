@@ -280,6 +280,7 @@ class PSGraph(PyDMWaveformPlot):
         self.setAutoRangeY(True)
         self.setShowXGrid(True)
         self.setShowYGrid(True)
+        self.plotItem.showButtons()
         self.plotItem.setLabel('bottom', 's', units='m')
         self._nok_pen = mkPen(QColor(color))
         self._nok_brush = mkBrush(QColor(255, 0, 0))
