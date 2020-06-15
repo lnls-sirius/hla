@@ -623,6 +623,7 @@ class RFMainControl(SiriusMainWindow):
         self.ramp_graph.setAutoRangeX(True)
         self.ramp_graph.setAutoRangeY(True)
         self.ramp_graph.setAxisColor(QColor(0, 0, 0))
+        self.ramp_graph.plotItem.showButtons()
         self.ramp_graph.plotItem.getAxis('bottom').setStyle(tickTextOffset=15)
         self.ramp_graph.plotItem.getAxis('left').setStyle(tickTextOffset=5)
         self.ramp_graph.addChannel(

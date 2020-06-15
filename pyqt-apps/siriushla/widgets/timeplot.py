@@ -22,6 +22,7 @@ class SiriusTimePlot(PyDMTimePlot):
     def __init__(self, *args, **kws):
         super().__init__(*args, **kws)
         self._min_time = time.time()
+        self.plotItem.showButtons()
 
     def addYChannel(self, y_channel=None, name=None, color=None,
                     lineStyle=None, lineWidth=None, symbol=None,

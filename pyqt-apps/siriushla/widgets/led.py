@@ -564,6 +564,7 @@ class _DiffStatus(SiriusDialog):
                     self._plot = PyDMWaveformPlot()
                     self._plot.autoRangeX = True
                     self._plot.autoRangeY = True
+                    self._plot.plotItem.showButtons()
                     self._plot.setBackgroundColor(QColor(255, 255, 255))
                     self._plot.addChannel(y_channel='DES', color='blue')
                     self._plot.addChannel(y_channel='CURR', color='black')

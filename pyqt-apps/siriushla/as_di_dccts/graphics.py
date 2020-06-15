@@ -80,6 +80,7 @@ class DCCTMonitor(QWidget):
         self.graph.showLegend = False
         self.graph.showXGrid = True
         self.graph.showYGrid = True
+        self.graph.plotItem.showButtons()
         self.curve = self.graph.curveAtIndex(0)
 
         lay = QGridLayout()
@@ -279,6 +280,7 @@ class BORampEffMonitor(QWidget):
         self.graph.showLegend = False
         self.graph.showXGrid = True
         self.graph.showYGrid = True
+        self.graph.plotItem.showButtons()
         self.graph.setLabels(left='Ramp Efficiency [%]')
         self.graph.addYChannel(
             y_channel='BO-Glob:AP-CurrInfo:RampEff-Mon', name='Efficiency',
