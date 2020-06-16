@@ -133,11 +133,12 @@ class OpticsCorrWindow(SiriusMainWindow):
         return lay
 
     def _setupOpticsParamLayout(self):
-        lb_x = QLabel('<h4>X</h4>', self, alignment=Qt.AlignCenter)
-        lb_y = QLabel('<h4>Y</h4>', self, alignment=Qt.AlignCenter)
-        lb_sp = QLabel('<h4>SP</h4>', self, alignment=Qt.AlignCenter)
-        lb_rb = QLabel('<h4>RB</h4>', self, alignment=Qt.AlignCenter)
-        lb_mon = QLabel('<h4>Estimative</h4>', self, alignment=Qt.AlignCenter)
+        self.lb_x = QLabel('<h4>X</h4>', self, alignment=Qt.AlignCenter)
+        self.lb_y = QLabel('<h4>Y</h4>', self, alignment=Qt.AlignCenter)
+        self.lb_sp = QLabel('<h4>SP</h4>', self, alignment=Qt.AlignCenter)
+        self.lb_rb = QLabel('<h4>RB</h4>', self, alignment=Qt.AlignCenter)
+        self.lb_mon = QLabel(
+            '<h4>Estimative</h4>', self, alignment=Qt.AlignCenter)
 
         self.sb_paramx = PyDMSpinbox(
             self, self.ioc_prefix+':'+self.param_pv.format('X', 'SP'))
@@ -161,15 +162,15 @@ class OpticsCorrWindow(SiriusMainWindow):
             init_channel=self.ioc_prefix+':ApplyDelta-Cmd')
 
         lay = QGridLayout()
-        lay.addWidget(lb_sp, 0, 1)
-        lay.addWidget(lb_rb, 0, 2)
-        lay.addWidget(lb_x, 1, 0)
+        lay.addWidget(self.lb_sp, 0, 1)
+        lay.addWidget(self.lb_rb, 0, 2)
+        lay.addWidget(self.lb_x, 1, 0)
         lay.addWidget(self.sb_paramx, 1, 1)
         lay.addWidget(self.lb_paramx, 1, 2)
-        lay.addWidget(lb_y, 2, 0)
+        lay.addWidget(self.lb_y, 2, 0)
         lay.addWidget(self.sb_paramy, 2, 1)
         lay.addWidget(self.lb_paramy, 2, 2)
-        lay.addWidget(lb_mon, 0, 3)
+        lay.addWidget(self.lb_mon, 0, 3)
         lay.addWidget(self.lb_prmmonx, 1, 3)
         lay.addWidget(self.lb_prmmony, 2, 3)
         lay.addWidget(self.bt_apply, 3, 1)
@@ -177,6 +178,40 @@ class OpticsCorrWindow(SiriusMainWindow):
         lay.setColumnStretch(1, 5)
         lay.setColumnStretch(2, 5)
         lay.setColumnStretch(3, 5)
+
+        if self.acc == 'SI' and self.param == 'chrom':
+            self._icon_absval = qta.icon(
+                'mdi.alpha-a', 'mdi.alpha-b', 'mdi.alpha-s', options=[
+                    dict(scale_factor=1.5, offset=(-0.4, 0.0)),
+                    dict(scale_factor=1.5, offset=(0.0, 0.0)),
+                    dict(scale_factor=1.5, offset=(+0.4, 0.0))])
+            self._icon_delta = qta.icon('mdi.delta')
+            self._is_setting = 'absolut'
+            self.pb_change_sp = QPushButton(self._icon_delta, '', self)
+            self.pb_change_sp.clicked.connect(self._change_chrom_sp)
+
+            self.sb_paramx_delta = PyDMSpinbox(
+                self, self.ioc_prefix+':DeltaChromX-SP')
+            self.sb_paramx_delta.showStepExponent = False
+            self.sb_paramx_delta.setVisible(False)
+
+            self.sb_paramy_delta = PyDMSpinbox(
+                self, self.ioc_prefix+':DeltaChromY-SP')
+            self.sb_paramy_delta.showStepExponent = False
+            self.sb_paramy_delta.setVisible(False)
+
+            self.lb_paramx_delta = PyDMLabel(
+                self, self.ioc_prefix+':DeltaChromX-RB')
+            self.lb_paramx_delta.setVisible(False)
+            self.lb_paramy_delta = PyDMLabel(
+                self, self.ioc_prefix+':DeltaChromY-RB')
+            self.lb_paramy_delta.setVisible(False)
+
+            lay.addWidget(self.pb_change_sp, 0, 0)
+            lay.addWidget(self.sb_paramx_delta, 1, 1)
+            lay.addWidget(self.sb_paramy_delta, 2, 1)
+            lay.addWidget(self.lb_paramx_delta, 1, 2)
+            lay.addWidget(self.lb_paramy_delta, 2, 2)
         return lay
 
     def _setupDigMonLayout(self):
@@ -501,3 +536,21 @@ class OpticsCorrWindow(SiriusMainWindow):
         lay.addItem(
             QSpacerItem(1, 20, QSzPly.Ignored, QSzPly.Expanding), row, 0)
         return lay
+
+    def _change_chrom_sp(self):
+        cond = self._is_setting == 'absolut'
+        self._is_setting = 'delta' if cond else 'absolut'
+        icon = self._icon_absval if cond else self._icon_delta
+        textX = '<h4>Δ-SP</h4>' if cond else '<h4>SP</h4>'
+        textY = '<h4>Δ-RB</h4>' if cond else '<h4>RB</h4>'
+        self.sb_paramx.setVisible(not cond)
+        self.lb_paramx.setVisible(not cond)
+        self.sb_paramy.setVisible(not cond)
+        self.lb_paramy.setVisible(not cond)
+        self.sb_paramx_delta.setVisible(cond)
+        self.lb_paramx_delta.setVisible(cond)
+        self.sb_paramy_delta.setVisible(cond)
+        self.lb_paramy_delta.setVisible(cond)
+        self.pb_change_sp.setIcon(icon)
+        self.lb_sp.setText(textX)
+        self.lb_rb.setText(textY)
