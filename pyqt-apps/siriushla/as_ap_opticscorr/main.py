@@ -207,11 +207,25 @@ class OpticsCorrWindow(SiriusMainWindow):
                 self, self.ioc_prefix+':DeltaChromY-RB')
             self.lb_paramy_delta.setVisible(False)
 
+            self.lb_mon.setText('Implem.\nEstimative')
+            self.lb_mon.setStyleSheet('font-weight: bold;')
+            self.lb_calcmon = QLabel(
+                'Calcd.\nEstimative', self, alignment=Qt.AlignCenter)
+            self.lb_calcmon.setStyleSheet('font-weight: bold;')
+
+            self.lb_prmcalcmonx = PyDMLabel(
+                self, self.ioc_prefix+':CalcChromX-Mon')
+            self.lb_prmcalcmony = PyDMLabel(
+                self, self.ioc_prefix+':CalcChromY-Mon')
+
             lay.addWidget(self.pb_change_sp, 0, 0)
             lay.addWidget(self.sb_paramx_delta, 1, 1)
             lay.addWidget(self.sb_paramy_delta, 2, 1)
             lay.addWidget(self.lb_paramx_delta, 1, 2)
             lay.addWidget(self.lb_paramy_delta, 2, 2)
+            lay.addWidget(self.lb_calcmon, 0, 4)
+            lay.addWidget(self.lb_prmcalcmonx, 1, 4)
+            lay.addWidget(self.lb_prmcalcmony, 2, 4)
         return lay
 
     def _setupDigMonLayout(self):
