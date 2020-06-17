@@ -185,7 +185,7 @@ class BaseWidget(QWidget):
         vbl = QVBoxLayout(grpbx)
         gdl = QGridLayout()
         gdl.setSpacing(4)
-        vbl.addItem(gdl)
+        vbl.addLayout(gdl)
 
         if self.is_orb:
             lbl_orb = self.uicreate_label('Show', grpbx)
@@ -209,32 +209,34 @@ class BaseWidget(QWidget):
         for pln in ('x', 'y'):
             wid = QWidget(grpbx)
             vbl.addWidget(wid)
+            vbl.setSpacing(2)
             hbl = QHBoxLayout(wid)
+            hbl.setSpacing(0)
             cbx = QCheckBox('{0:s}:'.format(pln.upper()), wid)
             cbx.setObjectName(pln + 'checkbox')
             cbx.setChecked(False)
             hbl.addWidget(cbx)
 
-            lab_avg = Label(unit, '-100.000 mrad', wid)
+            lab_avg = Label(unit, '-100.00 mrad', wid)
             self.updater[idx].ave[pln].connect(lab_avg.setFloat)
-            lab_avg.setStyleSheet("""min-width:5.8em;""")
+            lab_avg.setStyleSheet("""min-width:4.5em;""")
             lab_avg.setAlignment(Qt.AlignRight)
             hbl.addWidget(lab_avg)
             hbl.addWidget(QLabel(
-                "<html><head/><body><p>&#177;</p></body></html>", wid))
-            lab_std = Label(unit, '100.000 mrad', wid)
+                " <html><head/><body><p>&#177;</p></body></html> ", wid))
+            lab_std = Label(unit, '100.00 mrad', wid)
             self.updater[idx].std[pln].connect(lab_std.setFloat)
-            lab_std.setStyleSheet("""min-width:5.8em;""")
+            lab_std.setStyleSheet("""min-width:4.5em;""")
             lab_std.setAlignment(Qt.AlignLeft)
             hbl.addWidget(lab_std)
 
-            hbl.addWidget(QLabel('( pp ', wid))
-            lab_p2p = Label(unit, '100.000 mrad', wid)
+            hbl.addWidget(QLabel('(pp. ', wid))
+            lab_p2p = Label(unit, '100.00 mrad', wid)
             self.updater[idx].p2p[pln].connect(lab_p2p.setFloat)
-            lab_p2p.setStyleSheet("""min-width:5.8em;""")
+            lab_p2p.setStyleSheet("""min-width:4.5em;""")
             lab_p2p.setAlignment(Qt.AlignLeft)
             hbl.addWidget(lab_p2p)
-            hbl.addWidget(QLabel(' )', wid))
+            hbl.addWidget(QLabel(')', wid))
         return grpbx
 
     def uicreate_combobox(self, parent, orb_tp, idx):
@@ -304,7 +306,7 @@ class BaseWidget(QWidget):
 
         sca, prf = functions.siScale(posy)
         txt = '{0:s}, y = {1:.3f} {2:s}'.format(
-                                names[ind], sca*posy, prf+unit)
+            names[ind], sca*posy, prf+unit)
         QToolTip.showText(
             graph.mapToGlobal(pos.toPoint()),
             txt, graph, graph.geometry(), 500)
