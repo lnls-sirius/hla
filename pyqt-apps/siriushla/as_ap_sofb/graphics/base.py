@@ -161,7 +161,7 @@ class BaseWidget(QWidget):
             graph.addItem(cave)
             cdta = graph.curveAtIndex(-1)
             self.updater[i].data_sig[pln].connect(
-                    _part(self._update_waveform, cdta, pln, i))
+                _part(self._update_waveform, cdta, pln, i))
             cdta.setVisible(not i)
             cdta.curve.setZValue(-4*i)
             cdta.scatter.setZValue(-4*i)
@@ -227,6 +227,14 @@ class BaseWidget(QWidget):
             lab_std.setStyleSheet("""min-width:5.8em;""")
             lab_std.setAlignment(Qt.AlignLeft)
             hbl.addWidget(lab_std)
+
+            hbl.addWidget(QLabel('( pp ', wid))
+            lab_p2p = Label(unit, '100.000 mrad', wid)
+            self.updater[idx].p2p[pln].connect(lab_p2p.setFloat)
+            lab_p2p.setStyleSheet("""min-width:5.8em;""")
+            lab_p2p.setAlignment(Qt.AlignLeft)
+            hbl.addWidget(lab_p2p)
+            hbl.addWidget(QLabel(' )', wid))
         return grpbx
 
     def uicreate_combobox(self, parent, orb_tp, idx):
@@ -391,12 +399,14 @@ class UpdateGraph(QObject):
     """Worker to update graphics."""
     avex = Signal([float])
     stdx = Signal([float])
+    p2px = Signal([float])
     ave_pstdx = Signal([float])
     ave_mstdx = Signal([float])
     data_sigx = Signal([_np.ndarray])
     ref_sigx = Signal([_np.ndarray])
     avey = Signal([float])
     stdy = Signal([float])
+    p2py = Signal([float])
     ave_pstdy = Signal([float])
     ave_mstdy = Signal([float])
     data_sigy = Signal([_np.ndarray])
@@ -415,6 +425,7 @@ class UpdateGraph(QObject):
         text = sorted(ctrls)[0]
         self.current_text = {'val': text, 'ref': text}
         self.ave = {'x': self.avex, 'y': self.avey}
+        self.p2p = {'x': self.p2px, 'y': self.p2py}
         self.std = {'x': self.stdx, 'y': self.stdy}
         self.ave_pstd = {'x': self.ave_pstdx, 'y': self.ave_pstdy}
         self.ave_mstd = {'x': self.ave_mstdx, 'y': self.ave_mstdy}
@@ -509,11 +520,13 @@ class UpdateGraph(QObject):
             else:
                 mask = diff
             ave = float(mask.mean()) if mask.size > 0 else 0.0
+            p2p = float(mask.max() - mask.min()) if mask.size > 1 else 0.0
             std = float(mask.std(ddof=1)) if mask.size > 1 else 0.0
 
             self.data_sig[pln].emit(diff)
             self.ave[pln].emit(ave)
             self.std[pln].emit(std)
+            self.p2p[pln].emit(p2p)
             self.ave_pstd[pln].emit(ave-std)
             self.ave_mstd[pln].emit(ave+std)
 
