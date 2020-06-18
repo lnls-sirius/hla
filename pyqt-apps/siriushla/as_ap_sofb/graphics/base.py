@@ -19,14 +19,15 @@ from siriuspy.sofb.csdev import SOFBFactory
 
 class BaseWidget(QWidget):
     """."""
-    DEFAULT_DIR = _pathlib.Path.home().as_posix()
-    EXT = '.txt'
-    EXT_FLT = 'Text Files (*.txt)'
+
+    DEFAULT_DIR = '/home/sirius/screens-iocs'
 
     def __init__(self, parent, prefix, ctrls, names, is_orb, acc='SI'):
         """."""
         super(BaseWidget, self).__init__(parent)
         self.setObjectName(acc.upper()+'App')
+        self.EXT = f'.{acc.lower()}dorb'
+        self.EXT_FLT = f'Sirius Delta Orbit Files (*.{acc.lower()}dorb)'
         self.line_names = names
         self.controls = ctrls
         self._csorb = SOFBFactory.create(acc)
@@ -388,13 +389,18 @@ class BaseWidget(QWidget):
         sz = min(valx.size, refx.size, valy.size, refy.size)
         diffx = valx[:sz] - refx[:sz]
         diffy = valy[:sz] - refy[:sz]
-        header = '# ' + _datetime.now().strftime('%Y/%m/%d-%H:%M:%S') + '\n'
+        header = '# This is an orbit variation, not a pure orbit. \n'
+        header += '# ' + _datetime.now().strftime('%Y/%m/%d-%H:%M:%S') + '\n'
+        header += '# ' + 'BPMX [um]       BPMY [um]' + '\n'
         filename = QFileDialog.getSaveFileName(
             caption='Define a File Name to Save the Orbit',
             directory=self.last_dir, filter=self.EXT_FLT)
         fname = filename[0]
+        if not fname:
+            return
         fname += '' if fname.endswith(self.EXT) else self.EXT
         _np.savetxt(fname, _np.vstack([diffx, diffy]).T, header=header)
+        self.last_dir = fname.rsplit('/', 1)[0]
 
 
 class UpdateGraph(QObject):
