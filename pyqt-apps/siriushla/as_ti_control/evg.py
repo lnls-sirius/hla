@@ -1,9 +1,12 @@
+"""EVG module."""
+
 import sys
 import numpy as _np
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGroupBox, QLabel, QWidget, QMenuBar, \
     QVBoxLayout, QHBoxLayout, QGridLayout, QSizePolicy as QSzPol, \
-    QSplitter
+    QSplitter, QPushButton, QDialog, QLineEdit
+from qtpy.QtGui import QIntValidator
 import qtawesome as qta
 
 from pydm.widgets import PyDMLabel, PyDMLineEdit, PyDMPushButton
@@ -351,24 +354,29 @@ class BucketList(BaseWidget):
         lay = QHBoxLayout(wid)
         prefix = self.prefix
 
-        tm = 'min-width:{0:d}em; max-width:{0:d}em; max-height:1.15em;'.format(
-            self._min_size)
+        tm = 'min-width:{0:d}em; max-width:{0:d}em; max-height:1.15em;'
         sp = BucketListLineEdit(wid, init_channel=prefix + "BucketList-SP")
-        sp.setStyleSheet(tm)
+        self.bucket_ledit = sp
+        sp.setStyleSheet(tm.format(self._min_size-1))
         sp.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
         lab = QLabel('SP : ', wid)
+        pushbtn = QPushButton(wid)
+        pushbtn.setIcon(qta.icon('mdi.basket-fill'))
+        pushbtn.clicked.connect(self._set_bucket_list)
         lay_sp = QHBoxLayout()
         lay_sp.addWidget(lab)
         lay_sp.addWidget(sp)
+        lay_sp.addWidget(pushbtn)
+
         rb = BucketListLabel(wid, init_channel=prefix + "BucketList-RB")
-        rb.setStyleSheet(tm)
+        rb.setStyleSheet(tm.format(self._min_size))
         rb.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
         lab = QLabel('RB : ', wid)
         lay_rb = QHBoxLayout()
         lay_rb.addWidget(lab)
         lay_rb.addWidget(rb)
         mn = BucketListLabel(wid, init_channel=prefix + "BucketList-Mon")
-        mn.setStyleSheet(tm)
+        mn.setStyleSheet(tm.format(self._min_size))
         mn.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
         lab = QLabel('Mon: ', wid)
         lay_mn = QHBoxLayout()
@@ -415,6 +423,72 @@ class BucketList(BaseWidget):
         vlay.addItem(hlay)
         hlay.addWidget(sp)
         hlay.addWidget(rb)
+
+    def _set_bucket_list(self):
+
+        wid = QDialog(self)
+        wid.setObjectName('ASApp')
+        lay = QGridLayout()
+        wid.setLayout(lay)
+
+        row = 0
+        lay.addWidget(QLabel('Start', wid), row, 0)
+        start = QLineEdit(wid)
+        val = QIntValidator()
+        val.setRange(1, 864)
+        start.setValidator(val)
+        start.setText('1')
+        start.setAlignment(Qt.AlignCenter)
+        start.setStyleSheet('max-width:5em;')
+        lay.addWidget(start, row, 1)
+
+        row += 1
+        lay.addWidget(QLabel('Stop', wid), row, 0)
+        stop = QLineEdit(wid)
+        val = QIntValidator()
+        val.setRange(1, 864)
+        stop.setValidator(val)
+        stop.setText('864')
+        stop.setAlignment(Qt.AlignCenter)
+        stop.setStyleSheet('max-width:5em;')
+        lay.addWidget(stop, row, 1)
+
+        row += 1
+        lay.addWidget(QLabel('Step', wid), row, 0)
+        step = QLineEdit(wid)
+        val = QIntValidator()
+        val.setRange(1, 863)
+        step.setValidator(val)
+        step.setText('50')
+        step.setAlignment(Qt.AlignCenter)
+        step.setStyleSheet('max-width:5em;')
+        lay.addWidget(step, row, 1)
+
+        row += 1
+        hlay = QHBoxLayout()
+        cancel = QPushButton('Cancel', wid)
+        confirm = QPushButton('Ok', wid)
+        confirm.setDefault(True)
+        cancel.clicked.connect(wid.reject)
+        confirm.clicked.connect(wid.accept)
+        hlay.addStretch()
+        hlay.addWidget(cancel)
+        hlay.addStretch()
+        hlay.addWidget(confirm)
+        hlay.addStretch()
+        wid.layout().addItem(hlay, row, 0, 1, 2)
+        res = wid.exec_()
+        if res != QDialog.Accepted:
+            return
+
+        start_ = int(start.text())
+        stop_ = int(stop.text())
+        step_ = int(step.text())
+        lst = list(range(start_, stop_, step_))
+        if lst:
+            txt = ' '.join(str(i) for i in lst)
+            self.bucket_ledit.setText(txt)
+            self.bucket_ledit.returnPressed.emit()
 
 
 class EventList(BaseList):
