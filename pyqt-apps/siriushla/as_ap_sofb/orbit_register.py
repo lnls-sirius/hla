@@ -105,7 +105,7 @@ class OrbitRegisters(QWidget):
 class OrbitRegister(QWidget):
     """Create the Context Menu for the Registers."""
 
-    DEFAULT_DIR = '/home/fac/sirius-iocs/si-ap-sofb'
+    DEFAULT_DIR = '/home/sirius/mounts/screens-iocs'
 
     new_orbx_signal = Signal(_np.ndarray)
     new_orby_signal = Signal(_np.ndarray)
@@ -118,8 +118,9 @@ class OrbitRegister(QWidget):
         self.prefix = prefix
         text = acc.lower() + 'orb'
         self.setObjectName(text+str(idx))
-        self.EXT = '.' + text
-        self.EXT_FLT = 'Sirius Orbit Files (*.{})'.format(text)
+        self.EXT = (f'.{acc.lower()}orb', f'.{acc.lower()}dorb')
+        self.EXT_FLT = f'Sirius Orbit Files (*.{text});;' +\
+            f'Sirius Delta Orbit Files (*.{acc.lower()}dorb)'
         self._config_type = acc.lower() + '_orbit'
         self._client = ConfigDBClient(config_type=self._config_type)
         self._csorb = SOFBFactory.create(acc.upper())
@@ -505,14 +506,14 @@ class OrbitRegister(QWidget):
         fname = filename[0]
         if not fname:
             return
-        fname += '' if fname.endswith(self.EXT) else self.EXT
+        fname += '' if fname.endswith(self.EXT) else self.EXT[0]
         _np.savetxt(fname, _np.vstack([self.orbx, self.orby]).T, header=header)
         self._update_and_emit('Orbit Saved: ', self.orbx, self.orby, fname)
 
     def _load_orbit_from_file(self):
-        filename = QFileDialog.getOpenFileName(caption='Select an Orbit File.',
-                                               directory=self.last_dir,
-                                               filter=self.EXT_FLT)
+        filename = QFileDialog.getOpenFileName(
+            caption='Select an Orbit File.', directory=self.last_dir,
+            filter=self.EXT_FLT)
         if not filename[0]:
             return
         orbx, orby = _np.loadtxt(filename[0], unpack=True)

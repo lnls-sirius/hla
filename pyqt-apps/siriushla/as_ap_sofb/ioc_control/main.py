@@ -271,12 +271,18 @@ class RefControl(BaseCombo):
                 self.orbits[pln] = _np.array(data[pln])
                 self.setpoint[pln].send_value_signal[_np.ndarray].emit(
                     self.orbits[pln])
+        elif text.lower().startswith('ref_orb'):
+            data = self._client.get_config_value('ref_orb')
+            for pln in ('x', 'y'):
+                self.orbits[pln] = _np.array(data[pln])
+                self.setpoint[pln].send_value_signal[_np.ndarray].emit(
+                    self.orbits[pln])
         super()._selection_changed(text, sigs)
 
     def setup_ui(self):
         """."""
         if self.acc == 'SI':
-            super().setup_ui(['bba_orb', ])
+            super().setup_ui(['bba_orb', 'ref_orb'])
         else:
             super().setup_ui()
 
