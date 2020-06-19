@@ -3,6 +3,7 @@ import os as _os
 import time as _time
 import pathlib as _pathlib
 import subprocess as _subprocess
+import pkg_resources as _pkg_resources
 from functools import partial as _part
 
 from qtpy.QtCore import QFile as _QFile, Signal as _Signal, QThread as _QThread
@@ -15,6 +16,13 @@ import siriushla.resources as _resources
 
 
 THREAD = None
+
+
+def get_package_version():
+    fname = _pkg_resources.resource_filename(__name__, 'VERSION')
+    with open(fname, 'r') as _f:
+        version = _f.read().strip()
+    return version
 
 
 def get_monitor_icon(icon_name, color=None):
