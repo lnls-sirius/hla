@@ -20,7 +20,7 @@ from siriuspy.sofb.csdev import SOFBFactory
 class BaseWidget(QWidget):
     """."""
 
-    DEFAULT_DIR = '/home/sirius/screens-iocs'
+    DEFAULT_DIR = '/home/sirius/mounts/screens-iocs'
 
     def __init__(self, parent, prefix, ctrls, names, is_orb, acc='SI'):
         """."""
