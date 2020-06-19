@@ -18,16 +18,17 @@ parser.add_argument(
 args = parser.parse_args()
 
 need_new_window = True
-info = _subprocess.getoutput(
+returnval = _subprocess.getoutput(
     'ps h -A -o pid,sess,command= | grep "[s]irius-hla-as-ap-launcher.py"')
-if info:
-    info = info.split('\n')[0]
-    pid, _, comm = info.split()[:3]
-    window = util.check_window_by_pid(pid, comm)
-    if window:
-        need_new_window = False
-        _subprocess.run(
-            "wmctrl -iR " + window, stdin=_subprocess.PIPE, shell=True)
+if returnval:
+    for info in returnval.split('\n'):
+        pid, _, comm = info.split()[:3]
+        window = util.check_window_by_pid(pid, comm)
+        if window:
+            need_new_window = False
+            _subprocess.run(
+                "wmctrl -iR " + window, stdin=_subprocess.PIPE, shell=True)
+            break
 
 if need_new_window:
     app = SiriusApplication()
