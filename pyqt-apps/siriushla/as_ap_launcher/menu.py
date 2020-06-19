@@ -290,18 +290,19 @@ def get_object(ismenubar=True, parent=None):
             return menu
 
         def _create_id_menu(self):
-            menu = LEVEL1('IDs', self)
+            menu = LEVEL1('ID', self)
             menu.setObjectName('IDApp')
 
             # SI-09SA:ID-APU22
             idname = SiriusPVName('SI-09SA:ID-APU22')
             beamline = IDSearch.conv_idname_2_beamline(idname)
-            APU09SA = QAction('{0} - {1} ({2})'.format(
-                idname.dev, idname.sub, beamline), menu)
+            text = '{0} - {1} ({2})'.format(
+                idname.dev, idname.sub, beamline) \
+                if LEVEL2A == QAction else beamline
+            APU09SA = LEVEL2A(text, menu)
             self.connect_newprocess(
-                APU09SA, ['sirius-hla-si-id-control.py',
-                          '-dev', 'SI-09SA:ID-APU22'])
-            menu.addAction(APU09SA)
+                APU09SA, ['sirius-hla-si-id-control.py', '-dev', idname])
+            self.add_object_to_level1(menu, APU09SA)
 
             return menu
 
