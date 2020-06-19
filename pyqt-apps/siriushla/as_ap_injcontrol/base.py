@@ -25,7 +25,7 @@ class BaseWindow(SiriusMainWindow):
         """Init."""
         super().__init__(parent)
         self.prefix = prefix
-        self._curr_dir = _os.path.abspath(_os.path.dirname(__file__)) + '/'
+        self._curr_dir = _os.path.abspath(_os.path.dirname(__file__))
 
     def _setupUi(self):
         # menubar
@@ -40,7 +40,8 @@ class BaseWindow(SiriusMainWindow):
         self._setupDiagWidget()
 
         # lattice widget
-        self.lattice_wid = QSvgWidget(self._curr_dir + self.SVG_FILE)
+        self.lattice_wid = QSvgWidget(
+            _os.path.join(self._curr_dir, self.SVG_FILE))
 
         # screens view widget (create only one ScrnView)
         self._scrns_wids_dict = dict()
