@@ -86,7 +86,7 @@ def check_process(cmd, is_window=True, is_pydm=False):
             if not info:
                 continue
             pidc, comm = info.split()[:2]
-            window = _check_window_by_pid(pidc, comm)
+            window = check_window_by_pid(pidc, comm)
             if window:
                 pid = pidc
                 break
@@ -100,7 +100,7 @@ def check_process(cmd, is_window=True, is_pydm=False):
         if info and is_window:
             info = info.split('\n')[0]
             pid, _, comm = info.split()[:3]
-            window = _check_window_by_pid(pid, comm)
+            window = check_window_by_pid(pid, comm)
         if pid and not window:
             infos = _subprocess.getoutput(
                 'ps h -o pid,command= --ppid ' + pid).split('\n')
@@ -108,14 +108,14 @@ def check_process(cmd, is_window=True, is_pydm=False):
                 if not info:
                     continue
                 pidc, comm = info.split()[:2]
-                window = _check_window_by_pid(pidc, comm)
+                window = check_window_by_pid(pidc, comm)
                 if window:
                     pid = pidc
                     break
     return pid, window
 
 
-def _check_window_by_pid(pid, comm):
+def check_window_by_pid(pid, comm):
     if 'edm' in comm:
         wind = _subprocess.getoutput('wmctrl -lpx | grep edm | grep SIRIUS')
     else:
