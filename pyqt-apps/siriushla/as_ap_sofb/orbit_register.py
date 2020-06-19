@@ -105,7 +105,7 @@ class OrbitRegisters(QWidget):
 class OrbitRegister(QWidget):
     """Create the Context Menu for the Registers."""
 
-    DEFAULT_DIR = '/home/sirius/screens-iocs'
+    DEFAULT_DIR = '/home/sirius/mounts/screens-iocs'
 
     new_orbx_signal = Signal(_np.ndarray)
     new_orby_signal = Signal(_np.ndarray)
