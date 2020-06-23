@@ -662,22 +662,14 @@ def get_object(ismenubar=True, parent=None):
                 'sirius-hla-'+secl+'-va-agilent4uhv-overview.py',
                 is_pydm=True)
 
-            mks = QMenu('MKS', menu)
-            mks.setObjectName(sec.upper()+'App')
-            mks_ov = QAction('Overview', mks)
+            mks = QAction('MKS', menu)
             self.connect_newprocess(
-                mks_ov,
+                mks,
                 'sirius-hla-'+secl+'-va-mks937b-overview.py',
                 is_pydm=True)
-            mks.addAction(mks_ov)
-            mks_gr = QAction('Graph', mks)
-            self.connect_newprocess(
-                mks_gr,
-                ['sirius-hla-'+secl+'-va-mks937b-overview.py', '-graph'],
-                is_pydm=True)
-            mks.addAction(mks_gr)
+
             menu.addAction(agilent)
-            menu.addMenu(mks)
+            menu.addAction(mks)
             return menu
 
         def connect_newprocess(self, button, cmd, is_pydm=False):
