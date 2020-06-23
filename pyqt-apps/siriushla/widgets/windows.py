@@ -1,8 +1,10 @@
 """Sirius Windows module."""
 from qtpy.QtGui import QKeySequence
+from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QMainWindow, QDialog, QHBoxLayout, QApplication, \
-    QWidget
+    QWidget, QLabel
 import pyqtgraph as pg
+from siriushla.util import get_package_version
 
 
 def _create_siriuswindow(qt_type):
@@ -24,6 +26,12 @@ def _create_siriuswindow(qt_type):
             super().__init__(*args, **kwargs)
             self.setFocus(True)
             self.app = QApplication.instance()
+            if isinstance(self, SiriusMainWindow):
+                self.label_version = QLabel(
+                    'siriushla version: ' + get_package_version(),
+                    self, alignment=Qt.AlignRight)
+                self.label_version.setStyleSheet('font-size: 6pt;')
+                self.statusBar().addPermanentWidget(self.label_version)
 
         def keyPressEvent(self, event):
             """Override keyPressEvent."""

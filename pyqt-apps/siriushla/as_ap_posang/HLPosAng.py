@@ -144,6 +144,8 @@ class PosAngCorr(SiriusMainWindow):
         label_pos = QLabel("<h4>Δ"+axis+"</h4>", self)
         sb_deltapos = PyDMSpinbox(
             self, self.posang_prefix + ':DeltaPos'+axis.upper()+'-SP')
+        sb_deltapos.step_exponent = -2
+        sb_deltapos.update_step_size()
         sb_deltapos.showStepExponent = False
         lb_deltapos = PyDMLabel(
             self, self.posang_prefix + ':DeltaPos'+axis.upper()+'-RB')
@@ -152,6 +154,8 @@ class PosAngCorr(SiriusMainWindow):
         label_ang = QLabel("<h4>Δ"+axis+"'</h4>", self)
         sb_deltaang = PyDMSpinbox(
             self, self.posang_prefix + ':DeltaAng'+axis.upper()+'-SP')
+        sb_deltaang.step_exponent = -2
+        sb_deltaang.update_step_size()
         sb_deltaang.showStepExponent = False
         lb_deltaang = PyDMLabel(
             self, self.posang_prefix + ':DeltaAng'+axis.upper()+'-RB')

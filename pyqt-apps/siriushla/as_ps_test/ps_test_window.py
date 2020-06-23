@@ -70,11 +70,11 @@ class PSTestWindow(SiriusMainWindow):
         gbox_select.setLayout(select_layout)
 
         # commands
-        self.checkstatus_bt = QPushButton('Check Status', self)
+        self.checkstatus_bt = QPushButton('Show Status Summary', self)
         self.checkstatus_bt.clicked.connect(self._set_lastcomm)
         self.checkstatus_bt.clicked.connect(self._check_status)
         self.checkstatus_bt.setToolTip(
-            'Check interlock status and, if powered on, '
+            'Check PS and DCLinks interlock status and, if powered on, '
             'check if it is following reference')
 
         self.dsbltrigger_bt = QPushButton('Disable triggers', self)
@@ -232,7 +232,7 @@ class PSTestWindow(SiriusMainWindow):
         task1.itemDone.connect(self._log)
 
         labels = ['Connecting to devices...',
-                  'Checking PS and DCLinks Status...']
+                  'Reading PS and DCLinks Status...']
         tasks = [task0, task1]
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
