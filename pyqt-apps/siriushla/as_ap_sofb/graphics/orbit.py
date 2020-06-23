@@ -48,10 +48,11 @@ class OrbitWidget(BaseWidget):
         """."""
         grpbx = QGroupBox('Other Graphs', self)
         gdl = QGridLayout(grpbx)
+        gdl.setSpacing(2)
         self.hbl.addWidget(grpbx)
         self.hbl.addStretch(1)
 
-        btn = QPushButton('Correctors', grpbx)
+        btn = QPushButton('Corrs', grpbx)
         gdl.addWidget(btn, 0, 0)
         Window = create_window_from_widget(
             CorrectorsWidget, title='Correctors')
@@ -59,7 +60,7 @@ class OrbitWidget(BaseWidget):
             btn, Window, self, prefix=self.prefix, acc=self.acc)
 
         if self.isring:
-            btn = QPushButton('MultiTurn Orbit', grpbx)
+            btn = QPushButton('MultiTurn Orb', grpbx)
             gdl.addWidget(btn, 1, 0)
             Window = create_window_from_widget(
                 MultiTurnWidget, title='Multi Turn')
@@ -67,13 +68,13 @@ class OrbitWidget(BaseWidget):
                 btn, Window, self,
                 sigs=self.updater[0].raw_ref_sig, prefix=self.prefix)
 
-            btn = QPushButton('MultiTurn Sum', grpbx)
+            btn = QPushButton('MultTurn Sum', grpbx)
             gdl.addWidget(btn, 1, 1)
             Window = create_window_from_widget(
                 MultiTurnSumWidget, title='Multi Turn Sum')
             _util.connect_window(btn, Window, self, prefix=self.prefix)
 
-        btn = QPushButton('SinglePass Sum', grpbx)
+        btn = QPushButton('SingPass Sum', grpbx)
         gdl.addWidget(btn, 0, 1)
         Window = create_window_from_widget(
             SinglePassSumWidget, title='Single Pass Sum')
