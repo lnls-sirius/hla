@@ -1,29 +1,40 @@
+import time as _time
+from epics import PV as _PV
+
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QPushButton
 from qtpy.QtCore import Slot
 import qtawesome as qta
+
 import pydm
 from pydm.widgets.base import PyDMWidget, PyDMWritableWidget
 from pydm.widgets.channel import PyDMChannel
 
+from siriuspy.envars import VACA_PREFIX as _vaca_prefix
+from siriuspy.search import PSSearch
 from siriuspy.timesys.csdev import Const as TIConst
 from siriuspy.pwrsupply.csdev import Const as PSConst
+
 from siriushla.widgets import PyDMLedMultiChannel, PyDMLed, QLed
 from siriushla.widgets.led import MultiChannelStatusDialog
 
-
+TIMEOUT_WAIT = 2
 TRG_ENBL_VAL = TIConst.DsblEnbl.Enbl
 TRG_DSBL_VAL = TIConst.DsblEnbl.Dsbl
 PU_ENBL_VAL = PSConst.DsblEnbl.Enbl
 PU_DSBL_VAL = PSConst.DsblEnbl.Dsbl
+PS_OPM_SLWREF = PSConst.OpMode.SlowRef
+PS_STS_SLWREF = PSConst.States.SlowRef
+PS_OPM_RMPWFM = PSConst.OpMode.RmpWfm
+PS_STS_RMPWFM = PSConst.States.RmpWfm
 
 CHANNELS_2_VALUES_BUTTON = {
+    # PU Pulse and PwrState
     'TB-04:PU-InjSept:Pulse-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
     'TB-04:PU-InjSept:PwrState-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
     'BO-01D:PU-InjKckr:Pulse-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
     'BO-01D:PU-InjKckr:PwrState-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
     'BO-48D:PU-EjeKckr:Pulse-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
     'BO-48D:PU-EjeKckr:PwrState-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
-    'BR-RF-DLLRF-01:RmpEnbl-Sel': (TRG_DSBL_VAL, TRG_ENBL_VAL),
     'TS-01:PU-EjeSeptF:Pulse-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
     'TS-01:PU-EjeSeptF:PwrState-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
     'TS-01:PU-EjeSeptG:Pulse-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
@@ -36,27 +47,102 @@ CHANNELS_2_VALUES_BUTTON = {
     'TS-04:PU-InjSeptG-2:PwrState-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
     'SI-01SA:PU-InjNLKckr:Pulse-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
     'SI-01SA:PU-InjNLKckr:PwrState-Sel': (PU_DSBL_VAL, PU_ENBL_VAL),
+    'SI-01SA:PU-InjDpKckr:Pulse-Sel': (PU_DSBL_VAL, None),
+    'SI-01SA:PU-InjDpKckr:PwrState-Sel': (PU_DSBL_VAL, None),
+    # BO RF ramp enable
+    'BR-RF-DLLRF-01:RmpEnbl-Sel': (TRG_DSBL_VAL, TRG_ENBL_VAL),
+    # BO PS trigger
+    'BO-Glob:TI-Mags-Fams:State-Sel': (TRG_DSBL_VAL, TRG_ENBL_VAL),
+    'BO-Glob:TI-Mags-Corrs:State-Sel': (TRG_DSBL_VAL, TRG_ENBL_VAL),
 }
 CHANNELS_2_VALUES_LED = CHANNELS_2_VALUES_BUTTON.copy()
 CHANNELS_2_VALUES_LED.update({
+    # PU triggers
     'TB-04:TI-InjSept:State-Sts': (TRG_DSBL_VAL, TRG_ENBL_VAL),
-    'BR-RF-DLLRF-01:RmpReady-Mon': (TRG_DSBL_VAL, TRG_ENBL_VAL),
-    'BO-Glob:TI-LLRF-Rmp:State-Sts': (TRG_DSBL_VAL, TRG_ENBL_VAL),
-    'BO-Glob:TI-Mags-Fams:State-Sts': (TRG_DSBL_VAL, TRG_ENBL_VAL),
-    'BO-Glob:TI-Mags-Corrs:State-Sts': (TRG_DSBL_VAL, TRG_ENBL_VAL),
     'TS-01:TI-EjeSeptF:State-Sts': (TRG_DSBL_VAL, TRG_ENBL_VAL),
     'TS-01:TI-EjeSeptG:State-Sts': (TRG_DSBL_VAL, TRG_ENBL_VAL),
     'TS-04:TI-InjSeptF:State-Sts': (TRG_DSBL_VAL, TRG_ENBL_VAL),
     'TS-04:TI-InjSeptG-1:State-Sts': (TRG_DSBL_VAL, TRG_ENBL_VAL),
     'TS-04:TI-InjSeptG-2:State-Sts': (TRG_DSBL_VAL, TRG_ENBL_VAL),
     'SI-01SA:TI-InjNLKckr:State-Sts': (TRG_DSBL_VAL, TRG_ENBL_VAL),
+    # BO RF trigger and ramp ready
+    'BO-Glob:TI-LLRF-Rmp:State-Sts': (TRG_DSBL_VAL, TRG_ENBL_VAL),
+    'BR-RF-DLLRF-01:RmpReady-Mon': (TRG_DSBL_VAL, TRG_ENBL_VAL),
 })
+# BO PS opmode and current
+for psn in PSSearch.get_psnames({'sec': 'BO', 'dis': 'PS'}):
+    CHANNELS_2_VALUES_LED[psn+':OpMode-Sts'] = (PS_STS_SLWREF, PS_STS_RMPWFM)
+
+
+class BoRampStandbyHandler:
+    """Booster PS Ramp Standby Mode Handler."""
+
+    _pvs = dict()
+
+    def __init__(self):
+        """Init."""
+        self._psnames = PSSearch.get_psnames({'sec': 'BO', 'dis': 'PS'})
+        self._create_pvs()
+
+    def _create_pvs(self):
+        """Create PVs."""
+        _pvs = dict()
+        for psn in self._psnames:
+            for propty in ['OpMode-Sel', 'OpMode-Sts', 'Current-SP']:
+                pvname = psn+':'+propty
+                _pvs[pvname] = _PV(
+                    _vaca_prefix+pvname, connection_timeout=0.05)
+        BoRampStandbyHandler._pvs.update(_pvs)
+
+    def _set_pvs(self, propty, value):
+        """Set propty to value."""
+        for psn in self._psnames:
+            pvname = psn+':'+propty
+            pv = BoRampStandbyHandler._pvs[pvname]
+            if pv.wait_for_connection():
+                pv.put(value)
+
+    def _wait_pvs(self, propty, value):
+        """Wait for PS propty to reach value."""
+        need_check = {psn+':'+propty: True for psn in self._psnames}
+
+        _time0 = _time.time()
+        while any(need_check.values()):
+            for pvn, tocheck in need_check.items():
+                if not tocheck:
+                    continue
+                pv = BoRampStandbyHandler._pvs[pvn]
+                need_check[pvn] = not pv.value == value
+            _time.sleep(0.1)
+            if _time.time() - _time0 > TIMEOUT_WAIT:
+                break
+
+    def turn_off(self):
+        # wait duration of a ramp for PS change opmode
+        _time.sleep(0.5)
+
+        # set slowref
+        self._set_pvs('OpMode-Sel', PS_OPM_SLWREF)
+
+        # wait for PS change opmode
+        self._wait_pvs('OpMode-Sts', PS_STS_SLWREF)
+
+        # set current to zero
+        self._set_pvs('Current-SP', 0.0)
+
+    def turn_on(self):
+        # set rmpwfm
+        self._set_pvs('OpMode-Sel', PS_OPM_RMPWFM)
+
+        # wait for PS change opmode
+        self._wait_pvs('OpMode-Sts', PS_STS_RMPWFM)
 
 
 class InjSysStandbyButton(PyDMWritableWidget, QPushButton):
     """Button to set several PVs to standby state."""
 
-    def __init__(self, parent=None, label='', icon=None, pressValue=1):
+    def __init__(self, parent=None, label='', icon=None, pressValue=1,
+                 booster_handler=None):
         if not icon:
             QPushButton.__init__(self, label, parent)
         else:
@@ -78,14 +164,25 @@ class InjSysStandbyButton(PyDMWritableWidget, QPushButton):
             self._address2values[address] = values[pressValue]
         self.released.connect(self.sendValue)
 
+        self._booster_handler = booster_handler
+
     def sendValue(self):
         """Send values to PVs."""
         if not self._connected:
             return
+
+        if self._pressvalue == 1:
+            self._booster_handler.turn_on()
+
         for addr, val in self._address2values.items():
+            if val is None:
+                continue
             plugin = pydm.data_plugins.plugin_for_address(addr)
             conn = plugin.connections[addr]
             conn.put_value(val)
+
+        if self._pressvalue == 0:
+            self._booster_handler.turn_off()
 
     @Slot(bool)
     def connection_changed(self, conn):
@@ -107,9 +204,12 @@ class InjSysStandbyEnblDsbl(QWidget):
 
     def __init__(self, parent=None):
         super().__init__(parent)
+        self._booster_handler = BoRampStandbyHandler()
+
         self.pb_off = InjSysStandbyButton(
             parent=self, pressValue=0,
-            icon=qta.icon('mdi.power-off'))
+            icon=qta.icon('mdi.power-off'),
+            booster_handler=self._booster_handler)
         self.pb_off.setToolTip('Click to Turn Off')
         self.pb_off.setObjectName('pb_off')
         self.pb_off.setStyleSheet("""
@@ -120,7 +220,8 @@ class InjSysStandbyEnblDsbl(QWidget):
             """)
         self.pb_on = InjSysStandbyButton(
             parent=self, pressValue=1,
-            icon=qta.icon('mdi.power-on'))
+            icon=qta.icon('mdi.power-on'),
+            booster_handler=self._booster_handler)
         self.pb_on.setToolTip('Click to Turn On')
         self.pb_on.setObjectName('pb_on')
         self.pb_on.setStyleSheet("""
