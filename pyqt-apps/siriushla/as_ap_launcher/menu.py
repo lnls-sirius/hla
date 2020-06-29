@@ -413,6 +413,10 @@ def get_object(ismenubar=True, parent=None):
                 Scrap = QAction('Scrapers', diag)
                 self.connect_newprocess(Scrap, 'sirius-hla-si-di-scraps.py')
                 diag.addAction(Scrap)
+
+                BbB = QAction('BbB', diag)
+                self.connect_newprocess(BbB, 'sirius-hla-si-di-bbb.py')
+                diag.addAction(BbB)
             return diag
 
         def _set_bpm_menu(self, sec):
