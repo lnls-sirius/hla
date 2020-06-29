@@ -12,6 +12,8 @@ from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 
+from siriushla.util import connect_window
+from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets import SiriusMainWindow, SiriusLedAlert, \
     PyDMStateButton, PyDMLedMultiChannel
 from .acquisition import BbBAcqSRAM, BbBAcqBRAM, BbBAcqSB
@@ -242,6 +244,14 @@ class BbBMainSettingsWidget(QWidget):
                 self.dev_pref+':FID_ERR': 0,
             }
             self._led_status = PyDMLedMultiChannel(self, chs2vals)
+            self._led_status.setStyleSheet(
+                'min-width:1.29em; max-width:1.29em;')
+            wind = create_window_from_widget(
+                BbBStatusWidget, title='BbB Status Details')
+            connect_window(
+                self._led_status, wind, resume=True,
+                parent=self, signal=self._led_status.clicked,
+                prefix=self._prefix, device=self._device)
 
             wid = QWidget()
             lay = QGridLayout(wid)
@@ -249,70 +259,96 @@ class BbBMainSettingsWidget(QWidget):
             lay.addWidget(self._ld_status, 0, 0)
             lay.addWidget(self._led_status, 0, 1)
         else:
-            self._ld_clkmis = QLabel('Clock missing', alignment=Qt.AlignCenter)
-            self._led_clkmis = SiriusLedAlert(self, self.dev_pref+':CLKMISS')
-            self._lb_clkmis = PyDMLabel(self, self.dev_pref+':CLKMISS_COUNT')
-
-            self._ld_pllulk = QLabel('PLL Unlocked', alignment=Qt.AlignCenter)
-            self._led_pllulk = SiriusLedAlert(
-                self, self.dev_pref+':PLL_UNLOCK')
-            self._lb_pllulk = PyDMLabel(
-                self, self.dev_pref+':PLL_UNLOCK_COUNT')
-
-            self._ld_dcmulk = QLabel('DCM unlocked', alignment=Qt.AlignCenter)
-            self._led_dcmulk = SiriusLedAlert(
-                self, self.dev_pref+':DCM_UNLOCK')
-            self._lb_dcmulk = PyDMLabel(
-                self, self.dev_pref+':DCM_UNLOCK_COUNT')
-
-            self._ld_avcovr = QLabel('AVC Overrange', alignment=Qt.AlignCenter)
-            self._led_avcovr = SiriusLedAlert(self, self.dev_pref+':ADC_OVR')
-            self._lb_avcovr = PyDMLabel(self, self.dev_pref+':ADC_OVR_COUNT')
-
-            self._ld_outsat = QLabel(
-                'Output satured', alignment=Qt.AlignCenter)
-            self._led_outsat = SiriusLedAlert(self, self.dev_pref+':SAT')
-            self._lb_outsat = PyDMLabel(self, self.dev_pref+':SAT_COUNT')
-
-            self._ld_fiderr = QLabel(
-                'Fiducial Error', alignment=Qt.AlignCenter)
-            self._led_fiderr = SiriusLedAlert(self, self.dev_pref+':FID_ERR')
-            self._lb_fiderr = PyDMLabel(self, self.dev_pref+':FID_ERR_COUNT')
-
-            self._ld_intvl = QLabel('Interval [s]', alignment=Qt.AlignCenter)
-            self._lb_intvl = PyDMLabel(self, self.dev_pref+':RST_COUNT')
-            self._cb_intvl = PyDMEnumComboBox(self, self.dev_pref+':CNTRST')
+            status = BbBStatusWidget(self, self._prefix, self._device)
 
             wid = QGroupBox('Status', self)
             lay = QGridLayout(wid)
-            lay.addWidget(QLabel('<h4>Description</h4>', self,
-                                 alignment=Qt.AlignCenter), 0, 1)
-            lay.addWidget(QLabel('<h4>Count</h4>', self,
-                                 alignment=Qt.AlignCenter), 0, 2)
-            lay.addWidget(self._led_clkmis, 1, 0)
-            lay.addWidget(self._ld_clkmis, 1, 1)
-            lay.addWidget(self._lb_clkmis, 1, 2)
-            lay.addWidget(self._led_pllulk, 2, 0)
-            lay.addWidget(self._ld_pllulk, 2, 1)
-            lay.addWidget(self._lb_pllulk, 2, 2)
-            lay.addWidget(self._led_dcmulk, 3, 0)
-            lay.addWidget(self._ld_dcmulk, 3, 1)
-            lay.addWidget(self._lb_dcmulk, 3, 2)
-            lay.addWidget(self._led_avcovr, 4, 0)
-            lay.addWidget(self._ld_avcovr, 4, 1)
-            lay.addWidget(self._lb_avcovr, 4, 2)
-            lay.addWidget(self._led_outsat, 5, 0)
-            lay.addWidget(self._ld_outsat, 5, 1)
-            lay.addWidget(self._lb_outsat, 5, 2)
-            lay.addWidget(self._led_fiderr, 6, 0)
-            lay.addWidget(self._ld_fiderr, 6, 1)
-            lay.addWidget(self._lb_fiderr, 6, 2)
-            lay.addItem(
-                QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 7, 0)
-            lay.addWidget(self._ld_intvl, 8, 0)
-            lay.addWidget(self._lb_intvl, 8, 1)
-            lay.addWidget(self._cb_intvl, 8, 2)
+            lay.addWidget(status, 0, 0)
         return wid
+
+
+class BbBStatusWidget(QWidget):
+
+    def __init__(self, parent=None, prefix=_vaca_prefix, device='',
+                 resume=False):
+        """Init."""
+        super().__init__(parent)
+        self.setObjectName('SIApp')
+        self._prefix = prefix
+        self._device = device
+        self.dev_pref = prefix + device
+        self._is_resumed = resume
+        self._setupUi()
+
+    def _setupUi(self):
+        self._ld_clkmis = QLabel('Clock missing', alignment=Qt.AlignCenter)
+        self._led_clkmis = SiriusLedAlert(self, self.dev_pref+':CLKMISS')
+        self._lb_clkmis = PyDMLabel(self, self.dev_pref+':CLKMISS_COUNT')
+
+        self._ld_pllulk = QLabel('PLL Unlocked', alignment=Qt.AlignCenter)
+        self._led_pllulk = SiriusLedAlert(
+            self, self.dev_pref+':PLL_UNLOCK')
+        self._lb_pllulk = PyDMLabel(
+            self, self.dev_pref+':PLL_UNLOCK_COUNT')
+
+        self._ld_dcmulk = QLabel('DCM unlocked', alignment=Qt.AlignCenter)
+        self._led_dcmulk = SiriusLedAlert(
+            self, self.dev_pref+':DCM_UNLOCK')
+        self._lb_dcmulk = PyDMLabel(
+            self, self.dev_pref+':DCM_UNLOCK_COUNT')
+
+        self._ld_avcovr = QLabel('AVC Overrange', alignment=Qt.AlignCenter)
+        self._led_avcovr = SiriusLedAlert(self, self.dev_pref+':ADC_OVR')
+        self._lb_avcovr = PyDMLabel(self, self.dev_pref+':ADC_OVR_COUNT')
+
+        self._ld_outsat = QLabel(
+            'Output satured', alignment=Qt.AlignCenter)
+        self._led_outsat = SiriusLedAlert(self, self.dev_pref+':SAT')
+        self._lb_outsat = PyDMLabel(self, self.dev_pref+':SAT_COUNT')
+
+        self._ld_fiderr = QLabel(
+            'Fiducial Error', alignment=Qt.AlignCenter)
+        self._led_fiderr = SiriusLedAlert(self, self.dev_pref+':FID_ERR')
+        self._lb_fiderr = PyDMLabel(self, self.dev_pref+':FID_ERR_COUNT')
+
+        self._ld_intvl = QLabel('Interval [s]', alignment=Qt.AlignCenter)
+        self._lb_intvl = PyDMLabel(self, self.dev_pref+':RST_COUNT')
+        self._cb_intvl = PyDMEnumComboBox(self, self.dev_pref+':CNTRST')
+
+        lay = QGridLayout(self)
+        lay.setContentsMargins(0, 0, 0, 0)
+        if self._is_resumed:
+            lay.addWidget(QLabel('<h3>Status</h3>', self,
+                                 alignment=Qt.AlignCenter), 0, 0, 1, 3)
+            lay.addItem(
+                QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, 0)
+        lay.addWidget(QLabel('<h4>Description</h4>', self,
+                             alignment=Qt.AlignCenter), 2, 1)
+        lay.addWidget(QLabel('<h4>Count</h4>', self,
+                             alignment=Qt.AlignCenter), 2, 2)
+        lay.addWidget(self._led_clkmis, 3, 0)
+        lay.addWidget(self._ld_clkmis, 3, 1)
+        lay.addWidget(self._lb_clkmis, 3, 2)
+        lay.addWidget(self._led_pllulk, 4, 0)
+        lay.addWidget(self._ld_pllulk, 4, 1)
+        lay.addWidget(self._lb_pllulk, 4, 2)
+        lay.addWidget(self._led_dcmulk, 5, 0)
+        lay.addWidget(self._ld_dcmulk, 5, 1)
+        lay.addWidget(self._lb_dcmulk, 5, 2)
+        lay.addWidget(self._led_avcovr, 6, 0)
+        lay.addWidget(self._ld_avcovr, 6, 1)
+        lay.addWidget(self._lb_avcovr, 6, 2)
+        lay.addWidget(self._led_outsat, 7, 0)
+        lay.addWidget(self._ld_outsat, 7, 1)
+        lay.addWidget(self._lb_outsat, 7, 2)
+        lay.addWidget(self._led_fiderr, 8, 0)
+        lay.addWidget(self._ld_fiderr, 8, 1)
+        lay.addWidget(self._lb_fiderr, 8, 2)
+        lay.addItem(
+            QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 8, 0)
+        lay.addWidget(self._ld_intvl, 9, 0)
+        lay.addWidget(self._lb_intvl, 9, 1)
+        lay.addWidget(self._cb_intvl, 9, 2)
 
 
 if __name__ == '__main__':
