@@ -1,8 +1,9 @@
-"""Kyma APU Control module."""
+"""APU22 Control Module."""
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGroupBox, QGridLayout, QLabel, \
-    QHBoxLayout, QSizePolicy as QSzPlcy, QSpacerItem, QPushButton
+    QHBoxLayout, QSizePolicy as QSzPlcy, QSpacerItem, QPushButton, \
+    QVBoxLayout
 import qtawesome as qta
 from pydm.widgets import PyDMLabel, PyDMPushButton, PyDMSpinbox
 
@@ -10,17 +11,18 @@ from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.search import IDSearch, PSSearch
 
-from siriushla.util import connect_window, get_appropriate_color
+from siriushla.util import connect_window, connect_newprocess
 from siriushla.widgets import SiriusMainWindow, PyDMLed, SiriusLedAlert, \
     SiriusLedState, PyDMLedMultiChannel, PyDMStateButton
 from siriushla.as_ps_diag import PSGraphMonWidget, PSGraphProptySelWidget
 
 from .auxiliary_dialogs import APUAlarmDetails, APUInterlockDetails, \
     APUHardLLDetails, APUCorrs
+from .util import get_id_icon
 
 
-class APUControlWindow(SiriusMainWindow):
-    """Kyma APU Control Window."""
+class APU22ControlWindow(SiriusMainWindow):
+    """APU22 Control Window."""
 
     def __init__(self, parent=None, prefix=_vaca_prefix, device=''):
         """Init."""
@@ -31,12 +33,7 @@ class APUControlWindow(SiriusMainWindow):
         self.dev_pref = prefix + device
         self.setWindowTitle(device+' Control Window - '+self._beamline)
         self.setObjectName('IDApp')
-        color = get_appropriate_color('ID')
-        self.setWindowIcon(
-            qta.icon('mdi.current-ac', 'mdi.current-ac', 'mdi.equal', options=[
-                dict(scale_factor=0.48, color=color, offset=(-0.16, -0.01)),
-                dict(scale_factor=0.48, color=color, offset=(0.16, -0.01)),
-                dict(scale_factor=2.4, color=color, offset=(0.0, 0.0))]))
+        self.setWindowIcon(get_id_icon())
         self._setupUi()
 
     def _setupUi(self):
@@ -50,9 +47,9 @@ class APUControlWindow(SiriusMainWindow):
         self.wid_beamLinesCtrl = self._beamLinesCtrlWidget()
         self.wid_auxCommands = self._auxCommandsWidget()
         self.wid_status = self._statusWidget()
-        self.wid_corrsControl = self._corrsControlWidget()
 
         cw = QWidget()
+        self.setCentralWidget(cw)
         lay = QGridLayout(cw)
         lay.addWidget(self._label_title, 0, 0, 1, 3)
         lay.addWidget(self.wid_mainControls, 1, 0, 2, 1)
@@ -60,13 +57,17 @@ class APUControlWindow(SiriusMainWindow):
         lay.addWidget(self.wid_beamLinesCtrl, 2, 1)
         lay.addWidget(self.wid_auxCommands, 3, 0)
         lay.addWidget(self.wid_status, 3, 1)
-        lay.addWidget(self.wid_corrsControl, 4, 0, 1, 2)
         lay.setRowStretch(0, 1)
         lay.setRowStretch(1, 1)
         lay.setRowStretch(2, 2)
         lay.setRowStretch(3, 3)
-        lay.setRowStretch(4, 6)
-        self.setCentralWidget(cw)
+
+        self._corrs = PSSearch.get_psnames(
+            {'sec': 'SI', 'dev': 'C(H|V)', 'sub': self._device.sub})
+        if self._corrs:
+            self.wid_corrsControl = self._corrsControlWidget()
+            lay.addWidget(self.wid_corrsControl, 4, 0, 1, 2)
+            lay.setRowStretch(4, 6)
 
     def _mainControlsWidget(self):
         self._ld_phs = QLabel('Phase [mm]', self)
@@ -83,6 +84,7 @@ class APUControlWindow(SiriusMainWindow):
         self._sb_phsspd = PyDMSpinbox(self, self.dev_pref+':PhaseSpeed-SP')
         self._sb_phsspd.showStepExponent = False
         self._lb_phsspd = PyDMLabel(self, self.dev_pref+':PhaseSpeed-Mon')
+
         self._ld_ismov = QLabel('Motion', self)
         self._pb_start = PyDMPushButton(
             self, label='', icon=qta.icon('fa5s.play'))
@@ -285,8 +287,6 @@ class APUControlWindow(SiriusMainWindow):
         return gbox_auxcmd
 
     def _corrsControlWidget(self):
-        sub = self._device.sub
-
         self._pb_dtls = QPushButton(
             qta.icon('fa5s.ellipsis-h'), '', self)
         self._pb_dtls.setObjectName('dtls')
@@ -307,8 +307,7 @@ class APUControlWindow(SiriusMainWindow):
             '<h4>CH</h4>', self, alignment=Qt.AlignCenter)
         self.corrsH = PSGraphMonWidget(
             self, self._prefix,
-            PSSearch.get_psnames(
-                {'sec': 'SI', 'dev': 'CH', 'sub': sub}))
+            [corr for corr in self._corrs if 'CH' in corr])
         self.corrsH.graph.setStyleSheet(
             '#graph{min-width:10em;min-height:10em;}')
         self.corrsH.layout().setContentsMargins(0, 0, 0, 0)
@@ -317,8 +316,7 @@ class APUControlWindow(SiriusMainWindow):
             '<h4>CV</h4>', self, alignment=Qt.AlignCenter)
         self.corrsV = PSGraphMonWidget(
             self, self._prefix,
-            PSSearch.get_psnames(
-                {'sec': 'SI', 'dev': 'CV', 'sub': sub}))
+            [corr for corr in self._corrs if 'CV' in corr])
         self.corrsV.graph.setStyleSheet(
             '#graph{min-width:10em;min-height:10em;}')
         self.corrsV.layout().setContentsMargins(0, 0, 0, 0)
@@ -352,3 +350,165 @@ class APUControlWindow(SiriusMainWindow):
         if self._label_corrsV.underMouse():
             menu = self.corrsV.contextMenuEvent(event, return_menu=True)
             menu.popup(self.mapToGlobal(point))
+
+
+class APU22SummaryBase(QWidget):
+    """APU22 Summary Base Widget."""
+
+    def __init__(self, parent=None):
+        """Init."""
+        super().__init__(parent)
+        self.setObjectName('IDApp')
+
+        self.widgets_widths = (
+            ('Beamline', 8),
+            ('Device', 8),
+            ('Alarms', 4),
+            ('Phase', 6),
+            ('Kx', 6),
+            ('Phase Speed', 6),
+            ('Start', 4),
+            ('Stop', 4),
+            ('Moving', 4),
+            ('BeamLine Enable', 6),
+            ('Beamline Control', 4),
+        )
+
+
+class APU22SummaryHeader(APU22SummaryBase):
+    """APU22 Summary Header."""
+
+    def __init__(self, parent=None):
+        """Init."""
+        super().__init__(parent)
+        self._setupUi()
+
+    def _setupUi(self):
+        layout = QHBoxLayout(self)
+        for name, size in self.widgets_widths:
+            text = name.replace(' ', '\n')
+            label = QLabel(text, self, alignment=Qt.AlignCenter)
+            label.setStyleSheet(
+                'min-width:{0}em; max-width:{0}em;'
+                'font-weight:bold;'.format(str(size)))
+            label.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Preferred)
+            layout.addWidget(label)
+
+
+class APU22SummaryWidget(APU22SummaryBase):
+    """APU22 Summary Widget."""
+
+    def __init__(self, parent=None, prefix=_vaca_prefix, device=''):
+        """Init."""
+        super().__init__(parent)
+        self._prefix = prefix
+        self._device = _PVName(device)
+        self._beamline = IDSearch.conv_idname_2_beamline(self._device)
+        self.dev_pref = prefix + device
+        self._setupUi()
+
+    def _setupUi(self):
+        self._lb_bl = QLabel(
+            '<h4>'+self._beamline+'</h4>', self, alignment=Qt.AlignCenter)
+
+        self._pb_dev = QPushButton(self._device, self)
+        connect_newprocess(
+            self._pb_dev,
+            ['sirius-hla-si-id-control.py', '-dev', self._device])
+
+        self._sb_phs = PyDMSpinbox(self, self.dev_pref+':Phase-SP')
+        self._sb_phs.showStepExponent = False
+        self._lb_phs = PyDMLabel(self, self.dev_pref+':Phase-Mon')
+
+        self._sb_kx = PyDMSpinbox(self, self.dev_pref+':Kx-SP')
+        self._sb_kx.showStepExponent = False
+        self._lb_kx = PyDMLabel(self, self.dev_pref+':Kx-Mon')
+
+        self._sb_phsspd = PyDMSpinbox(self, self.dev_pref+':PhaseSpeed-SP')
+        self._sb_phsspd.showStepExponent = False
+        self._lb_phsspd = PyDMLabel(self, self.dev_pref+':PhaseSpeed-Mon')
+
+        self._pb_start = PyDMPushButton(
+            self, label='', icon=qta.icon('fa5s.play'))
+        self._pb_start.setToolTip(
+            'Start automatic motion towards previously entered setpoint.')
+        self._pb_start.channel = self.dev_pref+':DevCtrl-Cmd'
+        self._pb_start.pressValue = 3  # Start
+        self._pb_start.setObjectName('Start')
+        self._pb_start.setStyleSheet(
+            '#Start{min-width:30px; max-width:30px; icon-size:25px;}')
+
+        self._pb_stop = PyDMPushButton(
+            self, label='', icon=qta.icon('fa5s.stop'))
+        self._pb_stop.setToolTip('Stop all motion, lock all brakes.')
+        self._pb_stop.channel = self.dev_pref+':DevCtrl-Cmd'
+        self._pb_stop.pressValue = 1  # Stop
+        self._pb_stop.setObjectName('Stop')
+        self._pb_stop.setStyleSheet(
+            '#Stop{min-width:30px; max-width:30px; icon-size:25px;}')
+
+        self._led_ismov = SiriusLedState(self, self.dev_pref+':Moving-Mon')
+
+        self._led_status = PyDMLedMultiChannel(
+            self,
+            {self.dev_pref+':Alarm-Mon': 0,
+             self.dev_pref+':IntlkInStop-Mon': 0,
+             self.dev_pref+':IntlkInEOpnGap-Mon': 0,
+             self.dev_pref+':IntlkOutPwrEnbld-Mon': 1,
+             self.dev_pref+':IsOperational-Mon': 1})
+
+        self._sb_blenbl = PyDMStateButton(
+            self, self.dev_pref+':BeamLineCtrlEnbl-Sel')
+        self._led_blenbl = SiriusLedState(
+            self, self.dev_pref+':BeamLineCtrlEnbl-Sts')
+
+        self._led_blmon = SiriusLedState(
+            self, self.dev_pref+':BeamLineCtrl-Mon')
+
+        self.widgets = {
+            'Beamline': ([self._lb_bl, ], 'v'),
+            'Device': ([self._pb_dev, ], 'v'),
+            'Alarms': ([self._led_status, ], 'v'),
+            'Phase': ([self._sb_phs, self._lb_phs], 'v'),
+            'Kx': ([self._sb_kx, self._lb_kx], 'v'),
+            'Phase Speed': ([self._sb_phsspd, self._lb_phsspd], 'v'),
+            'Start': ([self._pb_start, ], 'v'),
+            'Stop': ([self._pb_stop, ], 'v'),
+            'Moving': ([self._led_ismov, ], 'v'),
+            'BeamLine Enable': ([self._sb_blenbl, self._led_blenbl], 'h'),
+            'Beamline Control': ([self._led_blmon, ], 'v'),
+        }
+
+        layout = QHBoxLayout(self)
+        for name, size in self.widgets_widths:
+            objname = name.replace(' ', '')
+            group = self.widgets[name]
+            items, ori = group
+
+            widget = QWidget(self)
+            lay = QVBoxLayout() if ori == 'v' else QHBoxLayout()
+            lay.setContentsMargins(0, 0, 0, 0)
+            lay.setAlignment(Qt.AlignCenter)
+            lay.setSpacing(0)
+            widget.setLayout(lay)
+
+            for item in items:
+                lay.addWidget(item)
+
+            widget.setObjectName(objname)
+            widget.setStyleSheet(
+                '#'+objname+'{{min-width:{0}em; max-width:{0}em;}}'.format(
+                    str(size)))
+            layout.addWidget(widget)
+
+    def enable_beamline_control(self):
+        """Enable beamline control."""
+        if self._sb_blenbl.isEnabled():
+            if not self._sb_blenbl.value:
+                self._sb_blenbl.send_value()
+
+    def disable_beamline_control(self):
+        """Disable beamline control."""
+        if self._sb_blenbl.isEnabled():
+            if self._sb_blenbl.value:
+                self._sb_blenbl.send_value()
