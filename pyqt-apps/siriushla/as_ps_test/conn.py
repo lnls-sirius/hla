@@ -317,3 +317,137 @@ class TesterPSLinac(_TesterBase):
 
     def _cmp(self, value, target):
         return abs(value - target) < self.test_tol
+
+
+class _TesterPUBase(_TesterBase):
+    """Tester PU base."""
+
+    properties = []
+
+    def __init__(self, device):
+        """Init."""
+        super().__init__(device)
+        self._pvs = dict()
+        for ppty in self.properties:
+            self._pvs[ppty] = _PV(
+                VACA_PREFIX + device + ':' + ppty,
+                connection_timeout=TIMEOUT_CONN)
+
+        splims = PSSearch.conv_psname_2_splims(device)
+        self.test_voltage = splims['TSTV']
+        self.test_tol = splims['TSTR']
+
+    def reset(self):
+        """Reset."""
+        self._pvs['Reset-Cmd'].value = 1
+
+    def check_intlk(self):
+        """Check interlocks."""
+        raise NotImplementedError
+
+    def set_pulse(self, state='on'):
+        """Set Pulse."""
+        if state == 'on':
+            state = _PSC.OffOn.On
+        else:
+            state = _PSC.OffOn.Off
+        self._pvs['Pulse-Sel'].value = state
+
+    def check_pulse(self, state='on'):
+        """Check Pulse."""
+        if state == 'on':
+            state = _PSC.OffOn.On
+        else:
+            state = _PSC.OffOn.Off
+        return self._pvs['Pulse-Sts'].value == state
+
+    def set_pwrstate(self, state='on'):
+        """Set PwrState."""
+        if state == 'on':
+            state = _PSC.OffOn.On
+        else:
+            state = _PSC.OffOn.Off
+        self._pvs['PwrState-Sel'].value = state
+
+    def check_pwrstate(self, state='on'):
+        """Check PwrState."""
+        if state == 'on':
+            state = _PSC.OffOn.On
+        else:
+            state = _PSC.OffOn.Off
+        return self._pvs['PwrState-Sts'].value == state
+
+    def set_voltage(self, test=False):
+        """Set voltage."""
+        if test:
+            self._pvs['Voltage-SP'].value = self.test_voltage
+        else:
+            self._pvs['Voltage-SP'].value = 0
+
+    def check_voltage(self, test=False):
+        """Check voltage."""
+        if test:
+            status = self._cmp(self._pvs['Voltage-Mon'].value,
+                               self.test_voltage)
+        else:
+            status = self._cmp(self._pvs['Voltage-Mon'].value, 0)
+        return status
+
+    def check_status(self):
+        status = True
+        status &= self.check_intlk()
+        if self.check_pwrstate():
+            status &= self._cmp(
+                self._pvs['Voltage-Mon'].value,
+                self._pvs['Voltage-RB'].value)
+        return status
+
+    def _cmp(self, value, target):
+        return abs(value - target) < self.test_tol
+
+
+class TesterPUKckr(_TesterPUBase):
+    """Kicker tester."""
+
+    properties = [
+        'Reset-Cmd',
+        'Intlk1-Mon', 'Intlk2-Mon', 'Intlk3-Mon', 'Intlk4-Mon',
+        'Intlk5-Mon', 'Intlk6-Mon', 'Intlk7-Mon', 'Intlk8-Mon',
+        'PwrState-Sel', 'PwrState-Sts',
+        'Pulse-Sel', 'Pulse-Sts',
+        'Voltage-SP', 'Voltage-RB', 'Voltage-Mon']
+
+    def check_intlk(self):
+        """Check interlocks."""
+        status = (self._pvs['Intlk1-Mon'].value == 1)
+        status &= (self._pvs['Intlk2-Mon'].value == 1)
+        status &= (self._pvs['Intlk3-Mon'].value == 1)
+        status &= (self._pvs['Intlk4-Mon'].value == 1)
+        status &= (self._pvs['Intlk5-Mon'].value == 1)
+        status &= (self._pvs['Intlk6-Mon'].value == 1)
+        status &= (self._pvs['Intlk7-Mon'].value == 1)
+        status &= (self._pvs['Intlk8-Mon'].value == 1)
+        return status
+
+
+class TesterPUSept(_TesterPUBase):
+    """Septum tester."""
+
+    properties = [
+        'Reset-Cmd',
+        'Intlk1-Mon', 'Intlk2-Mon', 'Intlk3-Mon', 'Intlk4-Mon',
+        'Intlk5-Mon', 'Intlk6-Mon', 'Intlk7-Mon',
+        'PwrState-Sel', 'PwrState-Sts',
+        'Pulse-Sel', 'Pulse-Sts',
+        'Voltage-SP', 'Voltage-RB', 'Voltage-Mon']
+
+    def check_intlk(self):
+        """Check interlocks."""
+        status = (self._pvs['Intlk1-Mon'].value == 1)
+        status &= (self._pvs['Intlk2-Mon'].value == 1)
+        status &= (self._pvs['Intlk3-Mon'].value == 1)
+        status &= (self._pvs['Intlk4-Mon'].value == 1)
+        status &= (self._pvs['Intlk5-Mon'].value == 1)
+        status &= (self._pvs['Intlk6-Mon'].value == 1)
+        status &= (self._pvs['Intlk7-Mon'].value == 1)
+        return status

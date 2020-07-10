@@ -7,7 +7,7 @@ from siriuspy.search import HLTimeSearch as _HLTimeSearch, \
 from siriuspy.csdev import Const
 from siriuspy.namesys import Filter, SiriusPVName as _PVName
 from .conn import TesterDCLink, TesterDCLinkFBP, TesterPS, TesterPSLinac, \
-    DEFAULT_CAP_BANK_VOLT
+    TesterPUKckr, TesterPUSept, DEFAULT_CAP_BANK_VOLT
 
 
 TIMEOUT_CHECK = 10
@@ -102,6 +102,10 @@ class CreateTesters(BaseTask):
                     t = TesterDCLink(dev)
                 elif devname.dis == 'PS':
                     t = TesterPS(dev)
+                elif devname.dis == 'PU' and 'Kckr' in devname.dev:
+                    t = TesterPUKckr(dev)
+                elif devname.dis == 'PU' and 'Sept' in devname.dev:
+                    t = TesterPUSept(dev)
                 else:
                     raise NotImplementedError(
                         'There is no Tester defined to '+dev+'.')
@@ -169,6 +173,23 @@ class CheckPwrState(BaseTask):
         """Check PS PwrState."""
         self._check(method='check_pwrstate', state=self._state,
                     timeout=3*TIMEOUT_CHECK)
+
+
+class SetPulse(BaseTask):
+    """Set PU Pulse."""
+
+    def function(self):
+        """Set PU Pulse."""
+        self._set(method='set_pulse', state=self._state)
+
+
+class CheckPulse(BaseTask):
+    """Check PU Pulse."""
+
+    def function(self):
+        """Check PU Pulse."""
+        self._check(method='check_pulse', state=self._state,
+                    timeout=TIMEOUT_CHECK)
 
 
 class CheckInitOk(BaseTask):
@@ -240,6 +261,23 @@ class CheckCurrent(BaseTask):
                     test=self._is_test)
 
 
+class SetVoltage(BaseTask):
+    """Set voltage value."""
+
+    def function(self):
+        """Set PU Voltage."""
+        self._set(method='set_voltage', test=self._is_test)
+
+
+class CheckVoltage(BaseTask):
+    """Check voltage value."""
+
+    def function(self):
+        """Check PU Voltage."""
+        self._check(method='check_voltage', timeout=10,
+                    test=self._is_test)
+
+
 class TriggerTask(QThread):
     """Base task to handle triggers."""
 
@@ -249,10 +287,12 @@ class TriggerTask(QThread):
     itemDone = Signal(str, bool)
     completed = Signal()
 
-    def __init__(self, restore_initial_value=False, parent=None):
+    def __init__(self, restore_initial_value=False, parent=None,
+                 dis='PS', state='on'):
         """Constructor."""
         super().__init__(parent)
-        self._triggers = _HLTimeSearch.get_hl_triggers(filters={'dev': 'Mags'})
+        filt = {'dev': 'Mags'} if dis == 'PS' else {'dev': '.*(Kckr|Sept).*'}
+        self._triggers = _HLTimeSearch.get_hl_triggers(filters=filt)
         self._pvs = {trg: _PV(trg + ':State-Sel') for trg in self._triggers}
 
         for trg, pv in self._pvs.items():
@@ -263,8 +303,8 @@ class TriggerTask(QThread):
         if restore_initial_value:
             self.trig2val = TriggerTask.initial_triggers_state
         else:
-            self.trig2val = {trig: Const.DsblEnbl.Dsbl
-                             for trig in self._pvs.keys()}
+            val = Const.DsblEnbl.Enbl if state == 'on' else Const.DsblEnbl.Dsbl
+            self.trig2val = {trig: val for trig in self._pvs.keys()}
         self._quit_task = False
 
     def size(self):
@@ -284,29 +324,21 @@ class TriggerTask(QThread):
     def function(self):
         raise NotImplementedError
 
-
-class SetTriggerState(TriggerTask):
-    """Disable magnets triggers."""
-
-    def function(self):
-        for trig, val in self.trig2val.items():
+    def _set(self):
+        for trig, pv in self._pvs.items():
             self.currentItem.emit(trig)
-            pv = self._pvs[trig]
+            val = self.trig2val[trig]
             pv.value = val
             self.itemDone.emit(trig, True)
 
-
-class CheckTriggerState(TriggerTask):
-    """Disable magnets triggers."""
-
-    def function(self):
+    def _check(self):
         need_check = _dcopy(self.trig2val)
         t0 = _time.time()
         while _time.time() - t0 < TIMEOUT_CHECK/2:
-            for trig, val in self.trig2val.items():
+            for trig, pv in self._pvs.items():
                 if trig not in need_check:
                     continue
-                pv = self._pvs[trig]
+                val = self.trig2val[trig]
                 if pv.value == val:
                     self.currentItem.emit(trig)
                     self.itemDone.emit(trig, True)
@@ -319,3 +351,17 @@ class CheckTriggerState(TriggerTask):
         for trig in need_check:
             self.currentItem.emit(trig)
             self.itemDone.emit(trig, False)
+
+
+class SetTriggerState(TriggerTask):
+    """Set magnet trigger state."""
+
+    def function(self):
+        self._set()
+
+
+class CheckTriggerState(TriggerTask):
+    """Check magnet trigger state."""
+
+    def function(self):
+        self._check()
