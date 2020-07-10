@@ -293,16 +293,21 @@ def get_object(ismenubar=True, parent=None):
             menu = LEVEL1('ID', self)
             menu.setObjectName('IDApp')
 
-            # SI-09SA:ID-APU22
-            idname = SiriusPVName('SI-09SA:ID-APU22')
-            beamline = IDSearch.conv_idname_2_beamline(idname)
-            text = '{0} - {1} ({2})'.format(
-                idname.dev, idname.sub, beamline) \
-                if LEVEL2A == QAction else beamline
-            APU09SA = LEVEL2A(text, menu)
+            All = LEVEL2A('All', menu)
             self.connect_newprocess(
-                APU09SA, ['sirius-hla-si-id-control.py', '-dev', idname])
-            self.add_object_to_level1(menu, APU09SA)
+                All, ['sirius-hla-si-id-control.py', '-isall'])
+            self.add_object_to_level1(menu, All)
+
+            for idname in ['SI-07SP:ID-APU22', 'SI-09SA:ID-APU22']:
+                idname = SiriusPVName(idname)
+                beamline = IDSearch.conv_idname_2_beamline(idname)
+                text = '{0} - {1} ({2})'.format(
+                    idname.dev, idname.sub, beamline) \
+                    if LEVEL2A == QAction else beamline
+                APU = LEVEL2A(text, menu)
+                self.connect_newprocess(
+                    APU, ['sirius-hla-si-id-control.py', '-dev', idname])
+                self.add_object_to_level1(menu, APU)
 
             return menu
 

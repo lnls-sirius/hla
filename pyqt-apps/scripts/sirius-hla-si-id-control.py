@@ -6,7 +6,7 @@ import sys
 import argparse as _argparse
 from siriushla.sirius_application import SiriusApplication
 from siriuspy.envars import VACA_PREFIX
-from siriushla.si_id_control import APUControlWindow
+from siriushla.si_id_control import IDControl, APU22ControlWindow
 
 
 parser = _argparse.ArgumentParser(
@@ -14,10 +14,19 @@ parser = _argparse.ArgumentParser(
 parser.add_argument(
     '-p', "--prefix", type=str, default=VACA_PREFIX,
     help="Define the prefix for the PVs in the window.")
-parser.add_argument('-dev', '--device', type=str, default='')
+parser.add_argument(
+    '-dev', '--device', type=str, default='',
+    help="Define the device.")
+parser.add_argument('-isall', action='store_true')
 args = parser.parse_args()
+prefix = args.prefix
+device = args.device
+isall = args.isall
 
 app = SiriusApplication()
-app.open_window(
-    APUControlWindow, parent=None, prefix=args.prefix, device=args.device)
+if 'APU' in args.device:
+    app.open_window(
+        APU22ControlWindow, parent=None, prefix=prefix, device=device)
+elif not device or isall:
+    app.open_window(IDControl, parent=None, prefix=prefix)
 sys.exit(app.exec_())
