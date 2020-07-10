@@ -324,10 +324,11 @@ class PSTestWindow(SiriusMainWindow):
         task0 = CreateTesters(devices, parent=self)
         task1 = SetPwrState(devices, state=state, parent=self)
         task2 = CheckPwrState(devices, state=state, parent=self)
+        tasks = [task0, task1, task2]
+
         labels = ['Connecting to devices...',
                   'Turning DCLinks '+state+'...',
                   'Checking DCLinks powered '+state+'...']
-        tasks = [task0, task1, task2]
 
         if state == 'on':
             task3 = CheckInitOk(devices, parent=self)
@@ -393,11 +394,12 @@ class PSTestWindow(SiriusMainWindow):
         task1 = SetCurrent(devices, is_test=True, parent=self)
         task2 = CheckCurrent(devices, is_test=True, parent=self)
         task2.itemDone.connect(self._log)
+        tasks = [task0, task1, task2]
 
         labels = ['Connecting to devices...',
                   'Testing PS... Setting current...',
                   'Testing PS... Checking current value...']
-        tasks = [task0, task1, task2]
+
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
@@ -412,11 +414,12 @@ class PSTestWindow(SiriusMainWindow):
         task1 = SetCurrent(devices, parent=self)
         task2 = CheckCurrent(devices, parent=self)
         task2.itemDone.connect(self._log)
+        tasks = [task0, task1, task2]
 
         labels = ['Connecting to devices...',
                   'Setting current to zero...',
                   'Checking current value...']
-        tasks = [task0, task1, task2]
+
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
@@ -427,7 +430,10 @@ class PSTestWindow(SiriusMainWindow):
         task2 = CheckTriggerState(restore_initial_value=True, parent=self)
         task2.itemDone.connect(self._log)
         tasks = [task1, task2]
-        labels = ['Restoring trigger states...', 'Checking trigger states...']
+
+        labels = ['Restoring trigger states...',
+                  'Checking trigger states...']
+
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 

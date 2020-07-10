@@ -35,7 +35,7 @@ TIMEOUT_CONN = 0.05
 TEST_TOLERANCE = 1e-1
 
 
-class _Tester:
+class _TesterBase:
     """Tester base."""
 
     def __init__(self, device):
@@ -56,6 +56,10 @@ class _Tester:
             if not pv.wait_for_connection(timeout):
                 return False
         return True
+
+
+class _TesterPSBase(_TesterBase):
+    """Tester PS base."""
 
     def reset(self):
         """Reset."""
@@ -96,7 +100,7 @@ class _Tester:
         return ok
 
 
-class TesterDCLinkFBP(_Tester):
+class TesterDCLinkFBP(_TesterPSBase):
     """FBP DCLink tester."""
 
     properties = ['Reset-Cmd', 'IntlkSoft-Mon', 'IntlkHard-Mon',
@@ -140,7 +144,7 @@ class TesterDCLinkFBP(_Tester):
         return self.check_intlk()
 
 
-class TesterDCLink(_Tester):
+class TesterDCLink(_TesterPSBase):
     """DCLink tester."""
 
     properties = ['Reset-Cmd', 'IntlkSoft-Mon', 'IntlkHard-Mon',
@@ -193,13 +197,10 @@ class TesterDCLink(_Tester):
         return status
 
     def _cmp(self, value, target):
-        if value >= target:
-            return True
-        else:
-            return False
+        return value >= target
 
 
-class TesterPS(_Tester):
+class TesterPS(_TesterPSBase):
     """PS tester."""
 
     properties = ['Reset-Cmd', 'IntlkSoft-Mon', 'IntlkHard-Mon',
@@ -246,13 +247,10 @@ class TesterPS(_Tester):
         return status
 
     def _cmp(self, value, target):
-        if abs(value - target) < self.test_tol:
-            return True
-        else:
-            return False
+        return abs(value - target) < self.test_tol
 
 
-class TesterPSLinac:
+class TesterPSLinac(_TesterBase):
     """Linac PS tester."""
 
     properties = ['StatusIntlk-Mon',
@@ -260,7 +258,7 @@ class TesterPSLinac:
                   'Current-SP', 'Current-Mon']
 
     def __init__(self, device):
-        self.device = device
+        super().__init__(device)
         self._pvs = dict()
         for ppty in TesterPSLinac.properties:
             self._pvs[ppty] = _PV(
@@ -271,21 +269,6 @@ class TesterPSLinac:
             PSSearch.conv_psname_2_pstype(device))
         self.test_current = splims['HIGH']/2.0
         self.test_tol = TEST_TOLERANCE
-
-    @property
-    def connected(self):
-        """Return wheter PVs are connected."""
-        for pv in self._pvs.values():
-            if not pv.connected:
-                # print(pv.pvname)
-                return False
-        return True
-
-    def wait_for_connection(self, timeout=0.5):
-        for pv in self._pvs.values():
-            if not pv.wait_for_connection(timeout):
-                return False
-        return True
 
     def check_intlk(self):
         """Check interlocks."""
@@ -333,7 +316,4 @@ class TesterPSLinac:
         return status
 
     def _cmp(self, value, target):
-        if abs(value - target) < self.test_tol:
-            return True
-        else:
-            return False
+        return abs(value - target) < self.test_tol

@@ -23,7 +23,7 @@ class BaseTask(QThread):
     itemDone = Signal(str, bool)
     completed = Signal()
 
-    def __init__(self, devices, state=None, is_test=None, parent=None):
+    def __init__(self, devices, state=None, is_test=False, parent=None):
         """Constructor."""
         super().__init__(parent)
         self._devices = devices
@@ -93,14 +93,18 @@ class CreateTesters(BaseTask):
         for dev in self._devices:
             self.currentItem.emit(dev)
             if dev not in BaseTask._testers:
-                if _PVName(dev).sec == 'LI':
+                devname = _PVName(dev)
+                if devname.sec == 'LI':
                     t = TesterPSLinac(dev)
                 elif _PSSearch.conv_psname_2_psmodel(dev) == 'FBP_DCLink':
                     t = TesterDCLinkFBP(dev)
                 elif 'bo-dclink' in _PSSearch.conv_psname_2_pstype(dev):
                     t = TesterDCLink(dev)
-                elif _PVName(dev).dis == 'PS':
+                elif devname.dis == 'PS':
                     t = TesterPS(dev)
+                else:
+                    raise NotImplementedError(
+                        'There is no Tester defined to '+dev+'.')
                 BaseTask._testers[dev] = t
             self.itemDone.emit(dev, True)
             if self._quit_task:
@@ -111,6 +115,7 @@ class CheckStatus(BaseTask):
     """Check Status."""
 
     def function(self):
+        """Check status."""
         self._check(method='check_status')
 
 
@@ -118,7 +123,7 @@ class ResetIntlk(BaseTask):
     """Reset Interlocks."""
 
     def function(self):
-        """Reset PS."""
+        """Reset."""
         self._set(method='reset')
         if Filter.process_filters(
                 pvnames=self._devices, filters={'sec': 'SI', 'sub': 'Fam'}):
@@ -129,7 +134,7 @@ class CheckIntlk(BaseTask):
     """Check Interlocks."""
 
     def function(self):
-        """Check PS interlocks."""
+        """Check interlocks."""
         self._check(method='check_intlk')
 
 
@@ -213,7 +218,7 @@ class CheckCapBankVolt(BaseTask):
 
 
 class SetCurrent(BaseTask):
-    """Set current value and check if it RB is achieved."""
+    """Set current value."""
 
     def function(self):
         """Set PS Current."""
@@ -221,7 +226,7 @@ class SetCurrent(BaseTask):
 
 
 class CheckCurrent(BaseTask):
-    """Check current value and check if it RB is achieved."""
+    """Check current value."""
 
     def function(self):
         """Check PS Current."""
