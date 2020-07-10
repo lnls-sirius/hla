@@ -2,7 +2,8 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QFormLayout, QLabel, QSpacerItem, \
     QSizePolicy as QSzPlcy, QGridLayout, QHBoxLayout
 from pydm.widgets import PyDMLabel
-from siriushla.widgets import SiriusDialog, SiriusLedAlert
+from siriushla.widgets import SiriusDialog, SiriusLedAlert, \
+    PyDMLedMultiChannel
 from .util import SEC_2_CHANNELS
 
 
@@ -19,42 +20,80 @@ class CavityStatusDetails(SiriusDialog):
         self._setupUi()
 
     def _setupUi(self):
-        lay_celltemp = QFormLayout()
-        lay_celltemp.setHorizontalSpacing(9)
-        lay_celltemp.setVerticalSpacing(9)
-        lay_celltemp.setLabelAlignment(Qt.AlignRight)
-        lay_celltemp.setFormAlignment(Qt.AlignTop)
-        lb_temp1 = QLabel('Cell and Coupler\nTemperatures', self)
+        lay_temp1 = QFormLayout()
+        lay_temp1.setHorizontalSpacing(9)
+        lay_temp1.setVerticalSpacing(9)
+        lay_temp1.setLabelAlignment(Qt.AlignRight)
+        lay_temp1.setFormAlignment(Qt.AlignTop)
+        lb_temp1 = QLabel('Cell and Coupler\nTemperatures\nPT100', self)
         lb_temp1.setStyleSheet(
             'font-weight:bold; qproperty-alignment:AlignCenter;')
-        lay_celltemp.addRow(lb_temp1)
+        lay_temp1.addRow(lb_temp1)
+        lims = [25.0, 35.0]
         for idx, cell in enumerate(self.chs['Cav Sts']['Temp']['Cells']):
             lb = PyDMLabel(self, cell[0])
             lb.showUnits = True
             lb.setStyleSheet('min-width:3.5em; max-width:3.5em;')
-            led = SiriusLedAlert(self, cell[0].replace('T-Mon', 'Tms-Mon'))
+            led = PyDMLedMultiChannel(
+                self,
+                {cell[0]: {'comp': 'wt', 'value': lims},
+                 cell[0].replace('T-Mon', 'TUp-Mon'): 0,
+                 cell[0].replace('T-Mon', 'TDown-Mon'): 0})
+            led.setToolTip(
+                'Interlock limits: \n'
+                'Min: '+str(lims[0])+'°C, Max: '+str(lims[1])+'°C')
             hb = QHBoxLayout()
             hb.setAlignment(Qt.AlignLeft)
             hb.addWidget(lb)
             hb.addWidget(led)
-            lay_celltemp.addRow('Cell '+str(idx + 1)+': ', hb)
-        lb_coupler = PyDMLabel(
-            self, self.chs['Cav Sts']['Temp']['Coupler'][0])
-        lb_coupler.showUnits = True
-        lay_celltemp.addRow('Coupler: ', lb_coupler)
+            lay_temp1.addRow('Cell '+str(idx + 1)+': ', hb)
+        ch_coup = self.chs['Cav Sts']['Temp']['Coupler'][0]
+        lb_coup = PyDMLabel(self, ch_coup)
+        lb_coup.setStyleSheet('min-width:3.5em; max-width:3.5em;')
+        lb_coup.showUnits = True
+        led_coup = PyDMLedMultiChannel(
+            self,
+            {ch_coup: {'comp': 'wt', 'value': lims},
+             ch_coup.replace('T-Mon', 'TUp-Mon'): 0,
+             ch_coup.replace('T-Mon', 'TDown-Mon'): 0})
+        led_coup.setToolTip(
+            'Interlock limits: \n'
+            'Min: '+str(lims[0])+'°C, Max: '+str(lims[1])+'°C')
+        hb_coup = QHBoxLayout()
+        hb_coup.setAlignment(Qt.AlignLeft)
+        hb_coup.addWidget(lb_coup)
+        hb_coup.addWidget(led_coup)
+        lay_temp1.addRow('Coupler: ', hb_coup)
 
-        lay_otemp = QFormLayout()
-        lay_otemp.setHorizontalSpacing(9)
-        lay_otemp.setVerticalSpacing(9)
-        lay_otemp.setLabelAlignment(Qt.AlignRight)
-        lay_otemp.setFormAlignment(Qt.AlignTop | Qt.AlignHCenter)
-        lb_temp2 = QLabel('Other\nTemperatures', self)
+        lay_temp2 = QFormLayout()
+        lay_temp2.setHorizontalSpacing(9)
+        lay_temp2.setVerticalSpacing(9)
+        lay_temp2.setLabelAlignment(Qt.AlignRight)
+        lay_temp2.setFormAlignment(Qt.AlignTop | Qt.AlignHCenter)
+        lb_temp2 = QLabel('Cell\nTemperatures\nThermostats', self)
         lb_temp2.setStyleSheet(
             'font-weight:bold; qproperty-alignment:AlignCenter;')
-        lay_otemp.addRow(lb_temp2)
+        lay_temp2.addRow(lb_temp2)
+        for idx, cell in enumerate(self.chs['Cav Sts']['Temp']['Cells']):
+            led = SiriusLedAlert(self)
+            led.setToolTip('Interlock limits:\nMax: 60°C')
+            led.channel = cell[0].replace('T-Mon', 'Tms-Mon')
+            lay_temp2.addRow('Cell '+str(idx + 1)+': ', led)
+
+        lay_dtemp = QFormLayout()
+        lay_dtemp.setHorizontalSpacing(9)
+        lay_dtemp.setVerticalSpacing(9)
+        lay_dtemp.setLabelAlignment(Qt.AlignRight)
+        lay_dtemp.setFormAlignment(Qt.AlignTop | Qt.AlignHCenter)
+        lb_dtemp = QLabel('Disc\nTemperatures\nThermostats', self)
+        lb_dtemp.setStyleSheet(
+            'font-weight:bold; qproperty-alignment:AlignCenter;')
+        lay_dtemp.addRow(lb_dtemp)
         for idx, disc in enumerate(self.chs['Cav Sts']['Temp']['Discs']):
-            led = SiriusLedAlert(self, disc)
-            lay_otemp.addRow('Disc '+str(idx)+': ', led)
+            led = SiriusLedAlert(self)
+            led.setToolTip('Interlock limits:\nMax: 60°C')
+            led.channel = disc
+            lay_dtemp.addRow('Disc '+str(idx)+': ', led)
 
         self.led_HDFlwRt1 = SiriusLedAlert(
             self, self.prefix+self.chs['Cav Sts']['FlwRt'][0])
@@ -77,8 +116,10 @@ class CavityStatusDetails(SiriusDialog):
 
         self.led_CoupPressure = SiriusLedAlert(
             self, self.prefix+self.chs['Cav Sts']['Vac']['Coupler ok'])
-        self.led_Pressure = SiriusLedAlert(
-            self, self.prefix+self.chs['Cav Sts']['Vac']['Cells ok'])
+        self.led_Pressure = SiriusLedAlert(self)
+        self.led_Pressure.setToolTip('Interlock limits:\nMax: 5e-7mBar')
+        self.led_Pressure.channel = \
+            self.prefix+self.chs['Cav Sts']['Vac']['Cells ok']
         lay_vac = QFormLayout()
         lay_vac.setHorizontalSpacing(9)
         lay_vac.setVerticalSpacing(9)
@@ -97,11 +138,12 @@ class CavityStatusDetails(SiriusDialog):
         lay = QGridLayout(self)
         lay.setHorizontalSpacing(30)
         lay.setVerticalSpacing(20)
-        lay.addWidget(lb, 0, 0, 1, 3)
-        lay.addLayout(lay_celltemp, 1, 0, 2, 1)
-        lay.addLayout(lay_otemp, 1, 1, 2, 1)
-        lay.addLayout(lay_flwrt, 1, 2)
-        lay.addLayout(lay_vac, 2, 2)
+        lay.addWidget(lb, 0, 0, 1, 4)
+        lay.addLayout(lay_temp1, 1, 0, 2, 1)
+        lay.addLayout(lay_temp2, 1, 1, 2, 1)
+        lay.addLayout(lay_dtemp, 1, 2, 2, 1)
+        lay.addLayout(lay_flwrt, 1, 3)
+        lay.addLayout(lay_vac, 2, 3)
 
         self.setStyleSheet("""
             PyDMLabel{
@@ -111,7 +153,7 @@ class CavityStatusDetails(SiriusDialog):
                 max-width: 1.29em;
             }
             .QLabel{
-                max-height:2em;
+                max-height:4em;
                 qproperty-alignment: AlignRight;
             }""")
 
