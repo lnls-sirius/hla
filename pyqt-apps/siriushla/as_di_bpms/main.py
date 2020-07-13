@@ -146,31 +146,21 @@ class PostMortemAcquisition(BaseWidget):
         self.setupui()
 
     def setupui(self):
-        vbl = QVBoxLayout(self)
+        vbl = QGridLayout(self)
         lab = QLabel('<h2>' + self.bpm + ' Post Mortem</h2>')
         lab.setAlignment(Qt.AlignCenter)
-        vbl.addWidget(lab)
-        vbl.setStretch(0, 3)
-        vbl.addSpacing(10)
+        vbl.addWidget(lab, 0, 0, 1, 2)
         multi_pass = MultiTurnData(
             parent=self, acq_type='ACQ_PM', prefix=self.prefix, bpm=self.bpm)
         multi_pass.setObjectName('multi_pass')
-        vbl.addWidget(multi_pass)
-        vbl.setStretch(1, 48)
-        vbl.addSpacing(30)
+        vbl.addWidget(multi_pass, 1, 0)
         config = ACQTrigConfigs(
             parent=self, prefix=self.prefix, bpm=self.bpm,
             data_prefix='ACQ_PM')
         config.setObjectName('config')
-        vbl.addWidget(config)
-        vbl.setStretch(2, 21)
-        vbl.addSpacing(10)
+        vbl.addWidget(config, 1, 1)
 
-        self.setObjectName('PostMortemAcquisition')
         self.setStyleSheet("""
-            #PostMortemAcquisition{
-                min-width:52em;
-                min-height:72em;}
             #multi_pass{
                 min-height:48em;}
             #config{
