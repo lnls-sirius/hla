@@ -41,7 +41,7 @@ class EmittanceMeasure(QWidget):
     def __init__(self, parent=None, place='LI'):
         super().__init__(parent=parent)
         self._place = place or 'LI'
-        self.setObjectName(self._place + 'App')
+        self.setObjectName(self._place[0:2] + 'App')
         self._select_experimental_setup()
         self.nemitx_tm = []
         self.nemity_tm = []

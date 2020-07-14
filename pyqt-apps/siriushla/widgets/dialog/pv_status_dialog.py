@@ -2,6 +2,7 @@
 
 import time as _time
 
+from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGridLayout, QLabel
 
 from siriuspy.namesys import SiriusPVName
@@ -32,9 +33,12 @@ class StatusDetailDialog(SiriusDialog):
         self._setupUi()
 
     def _setupUi(self):
+        label = QLabel('<h4>'+self.pvname.device_name+'</h4>',
+                       self, alignment=Qt.AlignCenter)
         lay = QGridLayout(self)
+        lay.addWidget(label, 0, 0, 1, 2)
         for idx, desc in enumerate(self.labels):
             led = SiriusLedAlert(self, self.pvname, bit=idx)
             lbl = QLabel(desc, self)
-            lay.addWidget(led, idx, 0)
-            lay.addWidget(lbl, idx, 1)
+            lay.addWidget(led, idx+1, 0)
+            lay.addWidget(lbl, idx+1, 1)

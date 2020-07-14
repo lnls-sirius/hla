@@ -19,7 +19,7 @@ from siriuspy.search import PSSearch as _PSSearch, \
     MASearch as _MASearch
 from siriuspy.pwrsupply.csdev import Const as _PSConst
 
-from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
+from siriushla.util import run_newprocess
 from siriushla.widgets import SiriusMainWindow
 
 
@@ -425,8 +425,7 @@ class PSGraph(PyDMWaveformPlot):
 
     def _open_ps_detail(self, psname):
         """Open PSDetailWindow."""
-        app = QApplication.instance()
-        app.open_window(PSDetailWindow, parent=self, **{'psname': psname})
+        run_newprocess(['sirius-hla-as-ps-detail.py', psname])
 
     def _sceneObj_mouseReleaseEvent(self, event):
         """Copy sceneObj.mouseReleaseEvent and fix bug."""

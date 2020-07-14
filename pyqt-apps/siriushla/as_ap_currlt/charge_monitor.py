@@ -137,10 +137,11 @@ class BOMonitor(SiriusMainWindow):
         # update widgets
         curve = self._curves[energy]
         latest_offset = self._latest_offsets[energy]
-        curve.receiveNewValue(value - latest_offset)
+        new_value = value - latest_offset
+        curve.receiveNewValue(new_value)
         curve.redrawCurve()
         lb = self._pvs_labels[energy]
-        lb.setText('{:.4f} nC'.format(value - latest_offset))
+        lb.setText('{:.4e} nC'.format(new_value))
 
     def _update_offset(self):
         sender = self.sender()
