@@ -1,2 +1,3 @@
 pydm>=1.8.0
 QtAwesome>=0.7.2
+pyqtgraph>=0.11.0
