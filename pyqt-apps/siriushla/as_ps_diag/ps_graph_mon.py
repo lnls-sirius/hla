@@ -6,8 +6,8 @@ from epics import PV as _PV
 from qtpy.QtCore import Qt, QSize, QTimer, Slot, Signal
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QGridLayout, QWidget, QLabel, QHBoxLayout, \
-    QComboBox, QToolTip, QSpacerItem, QSizePolicy as QSzPlcy, QApplication, \
-    QGraphicsScene, QInputDialog, QAction, QMenu
+    QComboBox, QToolTip, QSpacerItem, QSizePolicy as QSzPlcy, QInputDialog, \
+    QAction, QMenu
 import qtawesome as qta
 from pyqtgraph import mkPen, mkBrush
 from pydm.widgets import PyDMWaveformPlot
@@ -305,9 +305,6 @@ class PSGraph(PyDMWaveformPlot):
         self.symbols = symbols
         self.y_data = y_data
 
-        # try to fix bug in pyqtgraph
-        self.sceneObj.mouseReleaseEvent = self._sceneObj_mouseReleaseEvent
-
     @property
     def psnames(self):
         """Return psnames."""
@@ -426,31 +423,6 @@ class PSGraph(PyDMWaveformPlot):
     def _open_ps_detail(self, psname):
         """Open PSDetailWindow."""
         run_newprocess(['sirius-hla-as-ps-detail.py', psname])
-
-    def _sceneObj_mouseReleaseEvent(self, event):
-        """Copy sceneObj.mouseReleaseEvent and fix bug."""
-        sceneObj = self.sceneObj
-        if sceneObj.mouseGrabberItem() is None:
-            if event.button() in sceneObj.dragButtons:
-                if sceneObj.sendDragEvent(event, final=True):
-                    event.accept()
-                sceneObj.dragButtons.remove(event.button())
-            else:
-                cev = [e for e in sceneObj.clickEvents
-                       if int(e.button()) == int(event.button())]
-                if cev:  # change: handle IndexError raised when cev is empty
-                    if sceneObj.sendClickEvent(cev[0]):
-                        event.accept()
-                    sceneObj.clickEvents.remove(cev[0])
-
-        if int(event.buttons()) == 0:
-            sceneObj.dragItem = None
-            sceneObj.dragButtons = []
-            sceneObj.clickEvents = []
-            sceneObj.lastDrag = None
-        QGraphicsScene.mouseReleaseEvent(sceneObj, event)
-
-        sceneObj.sendHoverEvents(event)
 
 
 class PSGraphMonWidget(QWidget):
