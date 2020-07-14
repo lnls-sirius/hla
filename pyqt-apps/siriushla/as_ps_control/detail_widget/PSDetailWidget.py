@@ -599,13 +599,10 @@ class PSDetailWidget(QWidget):
                             color='green', lineWidth=2)
         self.wfm.addChannel(y_channel=wfm_data_mo_ch, name='Wfm-Mon',
                             color='black', lineWidth=2)
-        self.wfm.addChannel(y_channel='FAKE:DiffMon2Ref', name='Mon - Ref',
-                            color='magenta', lineWidth=2)
         self._wfm_curves = {'Wfm-SP': self.wfm.curveAtIndex(0),
                             'Wfm-RB': self.wfm.curveAtIndex(1),
                             'WfmRef-Mon': self.wfm.curveAtIndex(2),
-                            'Wfm-Mon': self.wfm.curveAtIndex(3),
-                            'Mon - Ref': self.wfm.curveAtIndex(4)}
+                            'Wfm-Mon': self.wfm.curveAtIndex(3)}
 
         # Show
         self.show_wfm_sp = QCheckBox('SP')
@@ -623,23 +620,18 @@ class PSDetailWidget(QWidget):
         self.show_wfm_rm.setStyleSheet('color: green;')
         self.show_wfm_rm.stateChanged.connect(
             self._wfm_curves['WfmRef-Mon'].setVisible)
-        self.show_wfm_mo = QCheckBox('Mon')
+        monlabel = 'Mon' + (' (Error)' if self._psname.sec == 'BO' else '')
+        self.show_wfm_mo = QCheckBox(monlabel)
         self.show_wfm_mo.setChecked(True)
         self.show_wfm_mo.setStyleSheet('color: black;')
         self.show_wfm_mo.stateChanged.connect(
             self._wfm_curves['Wfm-Mon'].setVisible)
-        self.show_wfm_diff = QCheckBox('Mon - Ref')
-        self.show_wfm_diff.setChecked(True)
-        self.show_wfm_diff.setStyleSheet('color: magenta;')
-        self.show_wfm_diff.stateChanged.connect(
-            self._wfm_curves['Mon - Ref'].setVisible)
         hbox_show = QHBoxLayout()
         hbox_show.setSpacing(9)
         hbox_show.addWidget(self.show_wfm_sp)
         hbox_show.addWidget(self.show_wfm_rb)
         hbox_show.addWidget(self.show_wfm_rm)
         hbox_show.addWidget(self.show_wfm_mo)
-        hbox_show.addWidget(self.show_wfm_diff)
 
         # Add widgets
         layout = QVBoxLayout()
@@ -657,14 +649,6 @@ class PSDetailWidget(QWidget):
                 self._wfm_nrpts_rm,
                 self._wfm_nrpts_mo))
 
-    def _update_wfm_diff(self):
-        if self._wfm_nrpts_rm != self._wfm_nrpts_mo:
-            self._wfm_curves['Mon - Ref'].receiveYWaveform(_np.array([]))
-        else:
-            self._wfm_curves['Mon - Ref'].receiveYWaveform(
-                self._wfm_data_rm - self._wfm_data_mo)
-        self._wfm_curves['Mon - Ref'].redrawCurve()
-
     def _wfm_update_rb(self, value):
         self._wfm_nrpts_rb = len(value)
         self._set_wfm_nrpts_label()
@@ -677,13 +661,11 @@ class PSDetailWidget(QWidget):
         self._wfm_data_rm = value
         self._wfm_nrpts_rm = len(value)
         self._set_wfm_nrpts_label()
-        self._update_wfm_diff()
 
     def _wfm_update_mo(self, value):
         self._wfm_data_mo = value
         self._wfm_nrpts_mo = len(value)
         self._set_wfm_nrpts_label()
-        self._update_wfm_diff()
 
     def _getElementMetric(self):
         dipole = re.compile("(SI|TS|BO|TB)-(Fam|\w{2,4}):PS-B.*$")
