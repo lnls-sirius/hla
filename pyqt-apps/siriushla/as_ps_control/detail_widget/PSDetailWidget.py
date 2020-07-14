@@ -108,8 +108,12 @@ class PSDetailWidget(QWidget):
         self.opmode_box.setObjectName("operation_mode")
         self.ctrlloop_box = QGroupBox('Control Loop')
         self.ctrlloop_box.setObjectName('ctrlloop_box')
-        self.params_box = QGroupBox('Params')
-        self.params_box.setObjectName('params_box')
+        self.wfmparams_box = QGroupBox('Wfm Params')
+        self.wfmparams_box.setObjectName('wfmparams_box')
+        self.sofbparams_box = QGroupBox('SOFB Params')
+        self.sofbparams_box.setObjectName('sofbparams_box')
+        self.genparams_box = QGroupBox('General Params')
+        self.genparams_box.setObjectName('genparams_box')
         self.current_box = QGroupBox("Current")
         self.current_box.setObjectName("current")
         self.wfm_tab = QWidget()
@@ -131,7 +135,9 @@ class PSDetailWidget(QWidget):
         self.pwrstate_box.setLayout(self._powerStateLayout())
         self.opmode_box.setLayout(self._opModeLayout())
         self.ctrlloop_box.setLayout(self._ctrlLoopLayout())
-        self.params_box.setLayout(self._paramsLayout())
+        self.wfmparams_box.setLayout(self._wfmParamsLayout())
+        self.sofbparams_box.setLayout(self._sofbParamsLayout())
+        self.genparams_box.setLayout(self._genParamsLayout())
         self.current_box.setLayout(self._currentLayout())
         self.wfm_tab.setLayout(self._wfmLayout())
         self.siggen_tab.setLayout(self._siggenLayout())
@@ -151,7 +157,9 @@ class PSDetailWidget(QWidget):
         controls.addWidget(self.pwrstate_box, 2, 1)
         controls.addWidget(self.ctrlloop_box, 3, 0)
         controls.addWidget(self.interlock_box, 3, 1)
-        controls.addWidget(self.params_box, 4, 0, 1, 2)
+        controls.addWidget(self.genparams_box, 4, 0)
+        controls.addWidget(self.sofbparams_box, 4, 1)
+        controls.addWidget(self.wfmparams_box, 5, 0, 1, 2)
 
         analogs = QVBoxLayout()
         analogs.addWidget(self.current_box, Qt.AlignCenter)
@@ -473,33 +481,63 @@ class PSDetailWidget(QWidget):
         layout.addWidget(self.cycle_auxparam_rb_label, 7, 2)
         return layout
 
-    def _paramsLayout(self):
+    def _wfmParamsLayout(self):
+        wfm_index_ca = self._prefixed_psname + ':WfmIndex-Mon'
+        wfm_count_ca = self._prefixed_psname + ':WfmSyncPulseCount-Mon'
+        wfm_updateauto_ca = self._prefixed_psname + ':WfmUpdateAuto-Sts'
+        wfm_updateauto_sel = self._prefixed_psname + ':WfmUpdateAuto-Sel'
+
+        wfm_index_label = QLabel('Wfm Index', self)
+        wfm_index_rb_label = PyDMLabel(self, wfm_index_ca)
+
+        wfm_count_label = QLabel('Wfm Pulse Count', self)
+        wfm_count_rb_label = PyDMLabel(self, wfm_count_ca)
+
+        wfm_updateauto_label = QLabel('Wfm UpdateAuto', self)
+        wfm_updateauto_sts_led = SiriusLedState(self, wfm_updateauto_ca)
+        wfm_updateauto_btn = PyDMStateButton(self, wfm_updateauto_sel)
+
+        layout = QGridLayout()
+        layout.setAlignment(Qt.AlignTop)
+        layout.setColumnStretch(3, 1)
+        layout.addWidget(wfm_index_label, 0, 0, Qt.AlignRight)
+        layout.addWidget(wfm_index_rb_label, 0, 1)
+        layout.addWidget(wfm_count_label, 1, 0, Qt.AlignRight)
+        layout.addWidget(wfm_count_rb_label, 1, 1)
+        layout.addWidget(wfm_updateauto_label, 2, 0, Qt.AlignRight)
+        layout.addWidget(wfm_updateauto_btn, 2, 1, Qt.AlignHCenter)
+        layout.addWidget(wfm_updateauto_sts_led, 2, 2)
+        return layout
+
+    def _sofbParamsLayout(self):
+        sofb_mode_ca = self._prefixed_psname + ':SOFBMode-Sts'
+        sofb_mode_sel = self._prefixed_psname + ':SOFBMode-Sel'
+
+        sofb_mode_label = QLabel('SOFB Mode', self)
+        sofb_mode_btn = PyDMStateButton(self, sofb_mode_sel)
+        sofb_mode_sts_led = SiriusLedState(self, sofb_mode_ca)
+
+        layout = QGridLayout()
+        layout.setAlignment(Qt.AlignTop)
+        layout.setColumnStretch(3, 1)
+        layout.addWidget(sofb_mode_label, 0, 0, Qt.AlignRight)
+        layout.addWidget(sofb_mode_btn, 0, 1, Qt.AlignHCenter)
+        layout.addWidget(sofb_mode_sts_led, 0, 2)
+        return layout
+
+    def _genParamsLayout(self):
         queue_size_ca = self._prefixed_psname + ':PRUCtrlQueueSize-Mon'
         queue_size_label = QLabel('IOC Queue Size', self)
         queue_size_rb_label = PyDMLabel(self, queue_size_ca)
 
         layout = QGridLayout()
+        layout.setAlignment(Qt.AlignTop)
         layout.setColumnStretch(3, 1)
         layout.addWidget(queue_size_label, 0, 0, Qt.AlignRight)
         layout.addWidget(queue_size_rb_label, 0, 1)
 
         if 'DCLink' not in self._prefixed_psname:
-            wfm_index_ca = self._prefixed_psname + ':WfmIndex-Mon'
-            wfm_count_ca = self._prefixed_psname + ':WfmSyncPulseCount-Mon'
-            wfm_updateauto_ca = self._prefixed_psname + ':WfmUpdateAuto-Sts'
-            wfm_updateauto_sel = self._prefixed_psname + ':WfmUpdateAuto-Sel'
             syncpulse_cmd_ca = self._prefixed_psname + ':SyncPulse-Cmd'
-
-            wfm_index_label = QLabel('Wfm Index', self)
-            wfm_index_rb_label = PyDMLabel(self, wfm_index_ca)
-
-            wfm_count_label = QLabel('Wfm Pulse Count', self)
-            wfm_count_rb_label = PyDMLabel(self, wfm_count_ca)
-
-            wfm_updateauto_label = QLabel('Wfm UpdateAuto', self)
-            wfm_updateauto_sts_led = SiriusLedState(self, wfm_updateauto_ca)
-            wfm_updateauto_btn = PyDMStateButton(self, wfm_updateauto_sel)
-
             syncpulse_cmd_lb = QLabel('Sync Pulse Cmd', self)
             syncpulse_cmd_btn = PyDMPushButton(
                 parent=self, icon=qta.icon('fa5s.step-forward'), pressValue=1,
@@ -508,15 +546,8 @@ class PSDetailWidget(QWidget):
             syncpulse_cmd_btn.setStyleSheet(
                 '#syncpulse{min-width:25px; max-width:32px; icon-size:20px;}')
 
-            layout.addWidget(wfm_index_label, 1, 0, Qt.AlignRight)
-            layout.addWidget(wfm_index_rb_label, 1, 1)
-            layout.addWidget(wfm_count_label, 2, 0, Qt.AlignRight)
-            layout.addWidget(wfm_count_rb_label, 2, 1)
-            layout.addWidget(wfm_updateauto_label, 3, 0, Qt.AlignRight)
-            layout.addWidget(wfm_updateauto_btn, 3, 1, Qt.AlignHCenter)
-            layout.addWidget(wfm_updateauto_sts_led, 3, 2)
-            layout.addWidget(syncpulse_cmd_lb, 4, 0, Qt.AlignRight)
-            layout.addWidget(syncpulse_cmd_btn, 4, 1)
+            layout.addWidget(syncpulse_cmd_lb, 1, 0, Qt.AlignRight)
+            layout.addWidget(syncpulse_cmd_btn, 1, 1)
         return layout
 
     def _wfmLayout(self):
@@ -568,13 +599,10 @@ class PSDetailWidget(QWidget):
                             color='green', lineWidth=2)
         self.wfm.addChannel(y_channel=wfm_data_mo_ch, name='Wfm-Mon',
                             color='black', lineWidth=2)
-        self.wfm.addChannel(y_channel='FAKE:DiffMon2Ref', name='Mon - Ref',
-                            color='magenta', lineWidth=2)
         self._wfm_curves = {'Wfm-SP': self.wfm.curveAtIndex(0),
                             'Wfm-RB': self.wfm.curveAtIndex(1),
                             'WfmRef-Mon': self.wfm.curveAtIndex(2),
-                            'Wfm-Mon': self.wfm.curveAtIndex(3),
-                            'Mon - Ref': self.wfm.curveAtIndex(4)}
+                            'Wfm-Mon': self.wfm.curveAtIndex(3)}
 
         # Show
         self.show_wfm_sp = QCheckBox('SP')
@@ -592,23 +620,18 @@ class PSDetailWidget(QWidget):
         self.show_wfm_rm.setStyleSheet('color: green;')
         self.show_wfm_rm.stateChanged.connect(
             self._wfm_curves['WfmRef-Mon'].setVisible)
-        self.show_wfm_mo = QCheckBox('Mon')
+        monlabel = 'Mon' + (' (Error)' if self._psname.sec == 'BO' else '')
+        self.show_wfm_mo = QCheckBox(monlabel)
         self.show_wfm_mo.setChecked(True)
         self.show_wfm_mo.setStyleSheet('color: black;')
         self.show_wfm_mo.stateChanged.connect(
             self._wfm_curves['Wfm-Mon'].setVisible)
-        self.show_wfm_diff = QCheckBox('Mon - Ref')
-        self.show_wfm_diff.setChecked(True)
-        self.show_wfm_diff.setStyleSheet('color: magenta;')
-        self.show_wfm_diff.stateChanged.connect(
-            self._wfm_curves['Mon - Ref'].setVisible)
         hbox_show = QHBoxLayout()
         hbox_show.setSpacing(9)
         hbox_show.addWidget(self.show_wfm_sp)
         hbox_show.addWidget(self.show_wfm_rb)
         hbox_show.addWidget(self.show_wfm_rm)
         hbox_show.addWidget(self.show_wfm_mo)
-        hbox_show.addWidget(self.show_wfm_diff)
 
         # Add widgets
         layout = QVBoxLayout()
@@ -626,14 +649,6 @@ class PSDetailWidget(QWidget):
                 self._wfm_nrpts_rm,
                 self._wfm_nrpts_mo))
 
-    def _update_wfm_diff(self):
-        if self._wfm_nrpts_rm != self._wfm_nrpts_mo:
-            self._wfm_curves['Mon - Ref'].receiveYWaveform(_np.array([]))
-        else:
-            self._wfm_curves['Mon - Ref'].receiveYWaveform(
-                self._wfm_data_rm - self._wfm_data_mo)
-        self._wfm_curves['Mon - Ref'].redrawCurve()
-
     def _wfm_update_rb(self, value):
         self._wfm_nrpts_rb = len(value)
         self._set_wfm_nrpts_label()
@@ -646,13 +661,11 @@ class PSDetailWidget(QWidget):
         self._wfm_data_rm = value
         self._wfm_nrpts_rm = len(value)
         self._set_wfm_nrpts_label()
-        self._update_wfm_diff()
 
     def _wfm_update_mo(self, value):
         self._wfm_data_mo = value
         self._wfm_nrpts_mo = len(value)
         self._set_wfm_nrpts_label()
-        self._update_wfm_diff()
 
     def _getElementMetric(self):
         dipole = re.compile("(SI|TS|BO|TB)-(Fam|\w{2,4}):PS-B.*$")
@@ -916,11 +929,11 @@ class DCLinkDetailWidget(PSDetailWidget):
         self.opmode_box.setObjectName('operation_mode')
         self.ctrlloop_box = QGroupBox('Control Loop')
         self.ctrlloop_box.setObjectName('ctrlloop_box')
-        self.params_box = QGroupBox('Params')
-        self.params_box.setObjectName('params_box')
+        self.params_box = QGroupBox('General Params')
+        self.params_box.setObjectName('genparams_box')
         self.analog_box = QGroupBox(self._analog_varname)
         self.analog_box.setObjectName('current')
-        self.aux_box = QGroupBox('Other Params')
+        self.aux_box = QGroupBox('DCLink Auxiliar Params')
         self.aux_box.setObjectName('aux_box')
 
         # Set group boxes layouts
@@ -929,7 +942,7 @@ class DCLinkDetailWidget(PSDetailWidget):
         self.pwrstate_box.setLayout(self._powerStateLayout())
         self.opmode_box.setLayout(self._opModeLayout())
         self.ctrlloop_box.setLayout(self._ctrlLoopLayout())
-        self.params_box.setLayout(self._paramsLayout())
+        self.params_box.setLayout(self._genParamsLayout())
         self.analog_box.setLayout(self._analogLayout())
         self.aux_box.setLayout(self._auxLayout())
 
