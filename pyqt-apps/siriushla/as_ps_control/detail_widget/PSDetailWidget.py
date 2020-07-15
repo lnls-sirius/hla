@@ -115,8 +115,9 @@ class PSDetailWidget(QWidget):
         self.ctrlloop_box.setObjectName('ctrlloop_box')
         self.wfmparams_box = QGroupBox('Wfm Params')
         self.wfmparams_box.setObjectName('wfmparams_box')
-        self.sofbparams_box = QGroupBox('SOFB Params')
-        self.sofbparams_box.setObjectName('sofbparams_box')
+        if self._psmodel == 'FBP':
+            self.sofbparams_box = QGroupBox('SOFB Params')
+            self.sofbparams_box.setObjectName('sofbparams_box')
         self.genparams_box = QGroupBox('General Params')
         self.genparams_box.setObjectName('genparams_box')
         self.current_box = QGroupBox("Current")
@@ -141,7 +142,8 @@ class PSDetailWidget(QWidget):
         self.opmode_box.setLayout(self._opModeLayout())
         self.ctrlloop_box.setLayout(self._ctrlLoopLayout())
         self.wfmparams_box.setLayout(self._wfmParamsLayout())
-        self.sofbparams_box.setLayout(self._sofbParamsLayout())
+        if self._psmodel == 'FBP':
+            self.sofbparams_box.setLayout(self._sofbParamsLayout())
         self.genparams_box.setLayout(self._genParamsLayout())
         self.current_box.setLayout(self._currentLayout())
         self.wfm_tab.setLayout(self._wfmLayout())
@@ -162,8 +164,11 @@ class PSDetailWidget(QWidget):
         controls.addWidget(self.pwrstate_box, 2, 1)
         controls.addWidget(self.ctrlloop_box, 3, 0)
         controls.addWidget(self.interlock_box, 3, 1)
-        controls.addWidget(self.genparams_box, 4, 0)
-        controls.addWidget(self.sofbparams_box, 4, 1)
+        if self._psmodel == 'FBP':
+            controls.addWidget(self.genparams_box, 4, 0)
+            controls.addWidget(self.sofbparams_box, 4, 1)
+        else:
+            controls.addWidget(self.genparams_box, 4, 0, 1, 2)
         controls.addWidget(self.wfmparams_box, 5, 0, 1, 2)
 
         analogs = QVBoxLayout()
