@@ -283,6 +283,24 @@ class PSDetailWidget(QWidget):
                 self, {self._prefixed_psname+":"+intlk+"-Mon": 0
                        for intlk in iib_intlks})
 
+        # NOTE: this is a temporary solution to PS firmware migration
+        # iib_alarms = [k.replace('Labels-Cte', '') for k in self._db
+        #               if re.match('AlarmsIIB.*Labels-Cte', k)]
+        # if iib_alarms:
+        if self._psname.dev in ['Q1', 'Q2', 'Q3', 'Q4']:
+            iib_alarms = ['AlarmsIIB', ]
+            self.alarm_label = QLabel('Alarms', self, alignment=Qt.AlignCenter)
+            self.alarm_bt = QPushButton(qta.icon('fa5s.list-ul'), '', self)
+            self.alarm_bt.setObjectName('alarm_bt')
+            self.alarm_bt.setStyleSheet(
+                '#alarm_bt{min-width:25px;max-width:25px;icon-size:20px;}')
+            util.connect_window(
+                self.alarm_bt, InterlockWindow, self,
+                devname=self._psname, interlock=iib_alarms)
+            self.alarm_led = PyDMLedMultiChannel(
+                self, {self._prefixed_psname+":"+alarm+"-Mon": 0
+                       for alarm in iib_alarms})
+
         self.reset_bt = PyDMPushButton(
             parent=self, icon=qta.icon('fa5s.sync'), pressValue=1,
             init_channel=self._prefixed_psname + ":Reset-Cmd")
@@ -303,6 +321,11 @@ class PSDetailWidget(QWidget):
             layout.addWidget(self.iib_intlk_bt, 2, 0)
             layout.addWidget(self.iib_label, 2, 1)
             layout.addWidget(self.iib_intlk_led, 2, 2)
+        # if iib_alarms:
+        if self._psname.dev in ['Q1', 'Q2', 'Q3', 'Q4']:
+            layout.addWidget(self.alarm_bt, 3, 0)
+            layout.addWidget(self.alarm_label, 3, 1)
+            layout.addWidget(self.alarm_led, 3, 2)
         layout.addWidget(self.reset_bt, 4, 2)
         return layout
 
