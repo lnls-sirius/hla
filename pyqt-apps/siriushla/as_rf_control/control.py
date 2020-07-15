@@ -946,6 +946,14 @@ class RFMainControl(SiriusMainWindow):
             color = self.pwr_curve_colors['CH '+sch]
             row = idx+1
 
+            dch = 'RA-RaSIA01:RF-RFCalSys:PwrdBm{}-Mon.DESC'.format(sch)
+            if sch == '1':
+                dbch = 'SI-02SB:RF-P7Cav:PwrCell4dBm-Mon'
+                wch = 'SI-02SB:RF-P7Cav:PwrCell4-Mon'
+            else:
+                dbch = 'RA-RaSIA01:RF-RFCalSys:PwrdBm{}-Mon'.format(sch)
+                wch = 'RA-RaSIA01:RF-RFCalSys:PwrW{}-Mon'.format(sch)
+
             # Table
             cb = QCheckBox(self)
             cb.setChecked(ch in {2, 3})
@@ -953,18 +961,15 @@ class RFMainControl(SiriusMainWindow):
             cb.setStyleSheet('color:'+color+'; max-width: 1.2em;')
             cb.stateChanged.connect(self._handle_curves_visibility)
 
-            dch = 'RA-RaSIA01:RF-RFCalSys:PwrdBm{}-Mon.DESC'.format(sch)
             lb_desc = PyDMLabel(self, dch)
             lb_desc.setStyleSheet(
                 'min-height: 1.5em; color:'+color+'; max-width: 6em;')
 
-            dbch = 'RA-RaSIA01:RF-RFCalSys:PwrdBm{}-Mon'.format(sch)
             lb_dbmpwr = PyDMLabel(self, dbch)
             lb_dbmpwr.showUnits = True
             lb_dbmpwr.setVisible(False)
             self._pm_dBm_labels.add(lb_dbmpwr)
 
-            wch = 'RA-RaSIA01:RF-RFCalSys:PwrW{}-Mon'.format(sch)
             lb_wpwr = PyDMLabel(self, wch)
             lb_wpwr.showUnits = True
             self._pm_W_labels.add(lb_wpwr)
@@ -976,13 +981,11 @@ class RFMainControl(SiriusMainWindow):
 
             # Graph
             self.pwr_mon_graph.addYChannel(
-                y_channel='RA-RaSIA01:RF-RFCalSys:PwrdBm'+sch+'-Mon',
-                name='CH '+sch, color=color,
+                y_channel=dbch, name='CH '+sch, color=color,
                 lineStyle=Qt.SolidLine, lineWidth=1)
             self.curves['CH '+sch] = self.pwr_mon_graph.curveAtIndex(2*idx)
             self.pwr_mon_graph.addYChannel(
-                y_channel='RA-RaSIA01:RF-RFCalSys:PwrW'+sch+'-Mon',
-                name='CH '+sch+' W', color=color,
+                y_channel=wch, name='CH '+sch+' W', color=color,
                 lineStyle=Qt.SolidLine, lineWidth=1)
             self.curves['CH '+sch+' W'] = \
                 self.pwr_mon_graph.curveAtIndex(2*idx+1)
