@@ -363,6 +363,12 @@ class _TesterPUBase(_TesterBase):
 
     def set_pwrstate(self, state='on'):
         """Set PwrState."""
+        # if pulsed magnet was in interlock state and was reset,
+        # we need to send a PwrState-Sel = Off before continue
+        if self._pvs['PwrState-Sel'].value == _PSC.OffOn.On \
+                and self.check_pwrstate('off'):
+            self._pvs['PwrState-Sel'].value = _PSC.OffOn.Off
+
         if state == 'on':
             state = _PSC.OffOn.On
         else:
