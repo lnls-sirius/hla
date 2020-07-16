@@ -301,7 +301,9 @@ class TriggerTask(QThread):
                 TriggerTask.initial_triggers_state[trg] = pv.value
 
         if restore_initial_value:
-            self.trig2val = TriggerTask.initial_triggers_state
+            self.trig2val = {
+                k: v for k, v in TriggerTask.initial_triggers_state.items()
+                if k in self._pvs.keys()}
         else:
             val = Const.DsblEnbl.Enbl if state == 'on' else Const.DsblEnbl.Dsbl
             self.trig2val = {trig: val for trig in self._pvs.keys()}
