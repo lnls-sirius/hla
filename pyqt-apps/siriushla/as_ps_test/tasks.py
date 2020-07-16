@@ -274,7 +274,18 @@ class CheckVoltage(BaseTask):
 
     def function(self):
         """Check PU Voltage."""
-        self._check(method='check_voltage', timeout=10,
+        if self._is_test:
+            timeout = 10
+        else:
+            if 'BO-48D:PU-EjeKckr' in self._devices:
+                timeout = 45
+            elif 'SI-01SA:PU-InjNLKckr' in self._devices:
+                timeout = 35
+            elif 'SI-01SA:PU-InjDpKckr' in self._devices:
+                timeout = 17
+            else:
+                timeout = 10
+        self._check(method='check_voltage', timeout=timeout,
                     test=self._is_test)
 
 
