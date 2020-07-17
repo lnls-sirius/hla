@@ -273,9 +273,12 @@ class PSDetailWidget(QWidget):
         self.hard_intlk_led = SiriusLedAlert(
             parent=self, init_channel=self._prefixed_psname + ":IntlkHard-Mon")
 
-        iib_intlks = [k.replace('Labels-Cte', '') for k in self._db
-                      if re.match('IntlkIIB.*Labels-Cte', k)]
-        if iib_intlks:
+        # NOTE: this is a temporary solution to PS firmware migration
+        # iib_intlks = [k.replace('Labels-Cte', '') for k in self._db
+        #               if re.match('IntlkIIB.*Labels-Cte', k)]
+        # if iib_intlks:
+        if self._psname.dev in ['Q1', 'Q2', 'Q3', 'Q4']:
+            iib_intlks = ['IntlkIIB', ]
             self.iib_label = QLabel('IIB', self, alignment=Qt.AlignCenter)
             self.iib_intlk_bt = QPushButton(qta.icon('fa5s.list-ul'), '', self)
             self.iib_intlk_bt.setObjectName('iib_intlk_bt')
@@ -322,7 +325,8 @@ class PSDetailWidget(QWidget):
         layout.addWidget(self.hard_intlk_bt, 1, 0)
         layout.addWidget(self.hard_label, 1, 1)
         layout.addWidget(self.hard_intlk_led, 1, 2)
-        if iib_intlks:
+        # if iib_intlks:
+        if self._psname.dev in ['Q1', 'Q2', 'Q3', 'Q4']:
             layout.addWidget(self.iib_intlk_bt, 2, 0)
             layout.addWidget(self.iib_label, 2, 1)
             layout.addWidget(self.iib_intlk_led, 2, 2)
