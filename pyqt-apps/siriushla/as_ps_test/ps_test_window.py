@@ -503,12 +503,21 @@ class PSTestWindow(SiriusMainWindow):
         if not devices:
             return
 
+        if state == 'off':
+            self._check_ps_pwrstate_off(pwrsupplies)
+            if self.nok_ps.count() > 0:
+                QMessageBox.critical(
+                    self, 'Message',
+                    'Make sure all related power supplies\n'
+                    'are turned off before turning DCLinks off!')
+                return
+
         task0 = CreateTesters(devices, parent=self)
         task1 = SetPwrState(devices, state=state, parent=self)
         task2 = CheckPwrState(devices, state=state, parent=self)
         tasks = [task0, task1, task2]
 
-        labels = ['Connecting to devices...',
+        labels = ['Connecting to DCLinks...',
                   'Turning DCLinks '+state+'...',
                   'Checking DCLinks powered '+state+'...']
 
@@ -519,6 +528,21 @@ class PSTestWindow(SiriusMainWindow):
             labels.append('Wait DCLinks OpMode turn to SlowRef...')
         else:
             task2.itemDone.connect(self._log)
+
+        dlg = ProgressDialog(labels, tasks, self)
+        dlg.exec_()
+
+    def _check_ps_pwrstate_off(self, pwrsupplies):
+        self.ok_ps.clear()
+        self.nok_ps.clear()
+
+        task0 = CreateTesters(pwrsupplies, parent=self)
+        task1 = CheckPwrState(pwrsupplies, state='off', parent=self)
+        task1.itemDone.connect(self._log)
+        tasks = [task0, task1]
+
+        labels = ['Connecting to PS...',
+                  'Checking PS powered off...']
 
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
