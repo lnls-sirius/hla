@@ -1,5 +1,6 @@
 """Conn module."""
 
+import time as _time
 import numpy as _np
 from epics import PV as _PV
 
@@ -368,6 +369,7 @@ class _TesterPUBase(_TesterBase):
         if self._pvs['PwrState-Sel'].value == _PSC.OffOn.On \
                 and self.check_pwrstate('off'):
             self._pvs['PwrState-Sel'].value = _PSC.OffOn.Off
+            _time.sleep(0.5)
 
         if state == 'on':
             state = _PSC.OffOn.On
