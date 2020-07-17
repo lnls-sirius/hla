@@ -9,6 +9,7 @@ from siriuspy.search import PSSearch
 from siriuspy.pwrsupply.csdev import ETypes as _et
 from siriuspy.pwrsupply.csdev import get_ps_propty_database
 from siriushla.widgets import SiriusMainWindow, SiriusLedAlert, PyDMLed
+from .auxiliary_intlk_data import INTERLOCK_LABELS_Q1234
 
 
 class InterlockWidget(QWidget):
@@ -36,14 +37,20 @@ class InterlockListWidget(QWidget):
         self._setup_ui()
 
     def _setup_ui(self):
-        psmodel = PSSearch.conv_psname_2_psmodel(self._devname)
-        pstype = PSSearch.conv_psname_2_pstype(self._devname)
-        db = get_ps_propty_database(psmodel, pstype)
-        labels = db['Intlk'+self._interlock+'Labels-Cte']['value']
+        key = self._interlock+'Labels-Cte'
+        # NOTE: this is a temporary solution to PS firmware migration
+        if self._devname.dev in ['Q1', 'Q2', 'Q3', 'Q4']:
+            labels = INTERLOCK_LABELS_Q1234[key]
+        else:
+            psmodel = PSSearch.conv_psname_2_psmodel(self._devname)
+            pstype = PSSearch.conv_psname_2_pstype(self._devname)
+            db = get_ps_propty_database(psmodel, pstype)
+            labels = db[key]['value']
+
         lay = QGridLayout()
         for bit, label in enumerate(labels):
             # Add led and label to layout
-            ch = _VACA_PREFIX+self._devname+':Intlk'+self._interlock+'-Mon'
+            ch = _VACA_PREFIX+self._devname+':'+self._interlock+'-Mon'
             line = bit % 8
             column = int(bit / 8)
             lay.addWidget(InterlockWidget(self, ch, bit, label), line, column)
@@ -53,10 +60,13 @@ class InterlockListWidget(QWidget):
 class InterlockWindow(SiriusMainWindow):
     """InterlockWindow class."""
 
-    def __init__(self, parent=None, devname='', interlock=0):
+    def __init__(self, parent=None, devname='', interlock=None):
         """."""
         super().__init__(parent)
         self._devname = _PVName(devname)
+        self._interlock = interlock
+        if isinstance(interlock, str):
+            self._interlock = [interlock, ]
 
         secs = {'AS', 'TB', 'BO', 'TS', 'SI'}
         if self._devname.sub.endswith(('SA', 'SB', 'SP', 'ID')):
@@ -68,9 +78,15 @@ class InterlockWindow(SiriusMainWindow):
         else:
             self.setObjectName('ASApp')
 
-        self._interlock = interlock
-        self.setWindowTitle(self._devname + ' ' +
-                            self._interlock + 'Interlock')
+        if len(self._interlock) == 1:
+            intlktype = self._interlock[0].replace(
+                'Alarms', '').replace('Intlk', '')
+            auxlabel = (' Interlocks' if 'Intlk' in
+                        self._interlock[0] else ' Alarms')
+            self._intlkname = intlktype + auxlabel
+        else:
+            self._intlkname = 'Interlocks'
+        self.setWindowTitle(self._devname + ' ' + self._intlkname)
         self._setup_ui()
 
     def _setup_ui(self):
@@ -78,19 +94,18 @@ class InterlockWindow(SiriusMainWindow):
         self.setCentralWidget(self.cw)
         lay = QVBoxLayout(self.cw)
         lay.addWidget(QLabel("<h1>" + self._devname + "</h1>"))
-        lay.addWidget(QLabel("<h3>" + self._interlock + "Interlock</h3>"))
+        lay.addWidget(QLabel("<h3>" + self._intlkname + "</h3>"))
 
-        ps_list = [self._devname, ]
-        if len(ps_list) == 1:
+        if len(self._interlock) == 1:
             wid = InterlockListWidget(parent=self, devname=self._devname,
-                                      interlock=self._interlock)
+                                      interlock=self._interlock[0])
             lay.addWidget(wid)
         else:
             self._tab_widget = QTabWidget(self)
-            for ps in ps_list:
-                wid = InterlockListWidget(parent=self, devname=ps,
-                                          interlock=self._interlock)
-                self._tab_widget.addTab(wid, ps)
+            for intlk in self._interlock:
+                wid = InterlockListWidget(parent=self, devname=self._devname,
+                                          interlock=intlk)
+                self._tab_widget.addTab(wid, intlk)
             lay.addWidget(self._tab_widget)
 
 

@@ -11,6 +11,8 @@ from qtpy.QtGui import QColor
 import qtawesome as qta
 
 from siriuspy.envars import VACA_PREFIX
+from siriuspy.search import PSSearch
+from siriuspy.pwrsupply.csdev import get_ps_propty_database
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox, PyDMPushButton, \
     PyDMLineEdit, PyDMWaveformPlot
 from siriushla import util
@@ -85,6 +87,9 @@ class PSDetailWidget(QWidget):
         super(PSDetailWidget, self).__init__(parent)
         self._VACA_PREFIX = VACA_PREFIX
         self._psname = psname
+        self._psmodel = PSSearch.conv_psname_2_psmodel(psname)
+        self._pstype = PSSearch.conv_psname_2_pstype(self._psname)
+        self._db = get_ps_propty_database(self._psmodel, self._pstype)
         self._prefixed_psname = self._VACA_PREFIX + self._psname
 
         self._metric = self._getElementMetric()
@@ -110,8 +115,9 @@ class PSDetailWidget(QWidget):
         self.ctrlloop_box.setObjectName('ctrlloop_box')
         self.wfmparams_box = QGroupBox('Wfm Params')
         self.wfmparams_box.setObjectName('wfmparams_box')
-        self.sofbparams_box = QGroupBox('SOFB Params')
-        self.sofbparams_box.setObjectName('sofbparams_box')
+        if self._psmodel == 'FBP':
+            self.sofbparams_box = QGroupBox('SOFB Params')
+            self.sofbparams_box.setObjectName('sofbparams_box')
         self.genparams_box = QGroupBox('General Params')
         self.genparams_box.setObjectName('genparams_box')
         self.current_box = QGroupBox("Current")
@@ -136,7 +142,8 @@ class PSDetailWidget(QWidget):
         self.opmode_box.setLayout(self._opModeLayout())
         self.ctrlloop_box.setLayout(self._ctrlLoopLayout())
         self.wfmparams_box.setLayout(self._wfmParamsLayout())
-        self.sofbparams_box.setLayout(self._sofbParamsLayout())
+        if self._psmodel == 'FBP':
+            self.sofbparams_box.setLayout(self._sofbParamsLayout())
         self.genparams_box.setLayout(self._genParamsLayout())
         self.current_box.setLayout(self._currentLayout())
         self.wfm_tab.setLayout(self._wfmLayout())
@@ -157,8 +164,11 @@ class PSDetailWidget(QWidget):
         controls.addWidget(self.pwrstate_box, 2, 1)
         controls.addWidget(self.ctrlloop_box, 3, 0)
         controls.addWidget(self.interlock_box, 3, 1)
-        controls.addWidget(self.genparams_box, 4, 0)
-        controls.addWidget(self.sofbparams_box, 4, 1)
+        if self._psmodel == 'FBP':
+            controls.addWidget(self.genparams_box, 4, 0)
+            controls.addWidget(self.sofbparams_box, 4, 1)
+        else:
+            controls.addWidget(self.genparams_box, 4, 0, 1, 2)
         controls.addWidget(self.wfmparams_box, 5, 0, 1, 2)
 
         analogs = QVBoxLayout()
@@ -241,23 +251,63 @@ class PSDetailWidget(QWidget):
 
     def _interlockLayout(self):
         # Widgets
+        self.soft_label = QLabel('Soft', self, alignment=Qt.AlignCenter)
         self.soft_intlk_bt = QPushButton(qta.icon('fa5s.list-ul'), '', self)
         self.soft_intlk_bt.setObjectName('soft_intlk_bt')
         self.soft_intlk_bt.setStyleSheet(
             '#soft_intlk_bt{min-width:25px; max-width:25px; icon-size:20px;}')
-        util.connect_window(self.soft_intlk_bt, InterlockWindow, self,
-                            **{'devname': self._psname, 'interlock': 'Soft'})
+        util.connect_window(
+            self.soft_intlk_bt, InterlockWindow, self,
+            devname=self._psname, interlock='IntlkSoft')
         self.soft_intlk_led = SiriusLedAlert(
             parent=self, init_channel=self._prefixed_psname + ":IntlkSoft-Mon")
 
+        self.hard_label = QLabel('Hard', self, alignment=Qt.AlignCenter)
         self.hard_intlk_bt = QPushButton(qta.icon('fa5s.list-ul'), '', self)
         self.hard_intlk_bt.setObjectName('hard_intlk_bt')
         self.hard_intlk_bt.setStyleSheet(
             '#hard_intlk_bt{min-width:25px; max-width:25px; icon-size:20px;}')
-        util.connect_window(self.hard_intlk_bt, InterlockWindow, self,
-                            **{'devname': self._psname, 'interlock': 'Hard'})
+        util.connect_window(
+            self.hard_intlk_bt, InterlockWindow, self,
+            devname=self._psname, interlock='IntlkHard')
         self.hard_intlk_led = SiriusLedAlert(
             parent=self, init_channel=self._prefixed_psname + ":IntlkHard-Mon")
+
+        # NOTE: this is a temporary solution to PS firmware migration
+        # iib_intlks = [k.replace('Labels-Cte', '') for k in self._db
+        #               if re.match('IntlkIIB.*Labels-Cte', k)]
+        # if iib_intlks:
+        if self._psname.dev in ['Q1', 'Q2', 'Q3', 'Q4']:
+            iib_intlks = ['IntlkIIB', ]
+            self.iib_label = QLabel('IIB', self, alignment=Qt.AlignCenter)
+            self.iib_intlk_bt = QPushButton(qta.icon('fa5s.list-ul'), '', self)
+            self.iib_intlk_bt.setObjectName('iib_intlk_bt')
+            self.iib_intlk_bt.setStyleSheet(
+                '#iib_intlk_bt{min-width:25px;max-width:25px;icon-size:20px;}')
+            util.connect_window(
+                self.iib_intlk_bt, InterlockWindow, self,
+                devname=self._psname, interlock=iib_intlks)
+            self.iib_intlk_led = PyDMLedMultiChannel(
+                self, {self._prefixed_psname+":"+intlk+"-Mon": 0
+                       for intlk in iib_intlks})
+
+        # NOTE: this is a temporary solution to PS firmware migration
+        # iib_alarms = [k.replace('Labels-Cte', '') for k in self._db
+        #               if re.match('AlarmsIIB.*Labels-Cte', k)]
+        # if iib_alarms:
+        if self._psname.dev in ['Q1', 'Q2', 'Q3', 'Q4']:
+            iib_alarms = ['AlarmsIIB', ]
+            self.alarm_label = QLabel('Alarms', self, alignment=Qt.AlignCenter)
+            self.alarm_bt = QPushButton(qta.icon('fa5s.list-ul'), '', self)
+            self.alarm_bt.setObjectName('alarm_bt')
+            self.alarm_bt.setStyleSheet(
+                '#alarm_bt{min-width:25px;max-width:25px;icon-size:20px;}')
+            util.connect_window(
+                self.alarm_bt, InterlockWindow, self,
+                devname=self._psname, interlock=iib_alarms)
+            self.alarm_led = PyDMLedMultiChannel(
+                self, {self._prefixed_psname+":"+alarm+"-Mon": 0
+                       for alarm in iib_alarms})
 
         self.reset_bt = PyDMPushButton(
             parent=self, icon=qta.icon('fa5s.sync'), pressValue=1,
@@ -270,12 +320,22 @@ class PSDetailWidget(QWidget):
         layout = QGridLayout()
         layout.setAlignment(Qt.AlignCenter)
         layout.addWidget(self.soft_intlk_bt, 0, 0)
-        layout.addWidget(QLabel('Soft', self, alignment=Qt.AlignCenter), 0, 1)
+        layout.addWidget(self.soft_label, 0, 1)
         layout.addWidget(self.soft_intlk_led, 0, 2)
         layout.addWidget(self.hard_intlk_bt, 1, 0)
-        layout.addWidget(QLabel('Hard', self, alignment=Qt.AlignCenter), 1, 1)
+        layout.addWidget(self.hard_label, 1, 1)
         layout.addWidget(self.hard_intlk_led, 1, 2)
-        layout.addWidget(self.reset_bt, 2, 2)
+        # if iib_intlks:
+        if self._psname.dev in ['Q1', 'Q2', 'Q3', 'Q4']:
+            layout.addWidget(self.iib_intlk_bt, 2, 0)
+            layout.addWidget(self.iib_label, 2, 1)
+            layout.addWidget(self.iib_intlk_led, 2, 2)
+        # if iib_alarms:
+        if self._psname.dev in ['Q1', 'Q2', 'Q3', 'Q4']:
+            layout.addWidget(self.alarm_bt, 3, 0)
+            layout.addWidget(self.alarm_label, 3, 1)
+            layout.addWidget(self.alarm_led, 3, 2)
+        layout.addWidget(self.reset_bt, 4, 2)
         return layout
 
     def _powerStateLayout(self):
@@ -955,10 +1015,10 @@ class DCLinkDetailWidget(PSDetailWidget):
     def _setWidgetLayout(self):
         controls = QGridLayout()
         controls.addWidget(self.frmwr_box, 0, 0, 1, 2)
-        controls.addWidget(self.interlock_box, 1, 0)
-        controls.addWidget(self.opmode_box, 1, 1)
-        controls.addWidget(self.pwrstate_box, 2, 0)
-        controls.addWidget(self.ctrlloop_box, 2, 1)
+        controls.addWidget(self.opmode_box, 1, 0)
+        controls.addWidget(self.pwrstate_box, 1, 1)
+        controls.addWidget(self.ctrlloop_box, 2, 0)
+        controls.addWidget(self.interlock_box, 2, 1)
         controls.addWidget(self.params_box, 3, 0, 1, 2)
 
         analogs = QVBoxLayout()
