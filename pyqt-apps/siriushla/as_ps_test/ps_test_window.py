@@ -326,20 +326,29 @@ class PSTestWindow(SiriusMainWindow):
         connect_newprocess(
             self.act_cycle, 'sirius-hla-as-ps-cycle.py', parent=self)
         self.aux_comm = self.menu.addMenu('Auxiliary commands')
+
         self.act_turnoff_ps = self.aux_comm.addAction('Turn PS Off')
         self.act_turnoff_ps.triggered.connect(_part(self._set_lastcomm, 'PS'))
         self.act_turnoff_ps.triggered.connect(
             _part(self._set_check_pwrstate, 'PS', 'off'))
+
         self.act_turnoff_dclink = self.aux_comm.addAction('Turn DCLinks Off')
         self.act_turnoff_dclink.triggered.connect(
             _part(self._set_lastcomm, 'PS'))
         self.act_turnoff_dclink.triggered.connect(
             _part(self._set_check_pwrstate_dclinks, 'off'))
+
         self.act_turnoff_pu = self.aux_comm.addAction('Turn PU Off')
         self.act_turnoff_pu.triggered.connect(
             _part(self._set_lastcomm, 'PU'))
         self.act_turnoff_pu.triggered.connect(
             _part(self._set_check_pwrstate, 'PU', 'off'))
+
+        self.act_dsblpulse_pu = self.aux_comm.addAction('Disable PU Pulse')
+        self.act_dsblpulse_pu.triggered.connect(
+            _part(self._set_lastcomm, 'PU'))
+        self.act_dsblpulse_pu.triggered.connect(
+            _part(self._set_check_pulse, 'off'))
 
         # layout
         lay = QGridLayout()
