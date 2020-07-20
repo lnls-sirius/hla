@@ -233,7 +233,7 @@ class PSTestWindow(SiriusMainWindow):
 
         self.voltzero_pu_bt1 = QPushButton('Set PU Voltage to zero', self)
         self.voltzero_pu_bt1.clicked.connect(_part(self._set_lastcomm, 'PU'))
-        self.voltzero_pu_bt1.clicked.connect(self._set_zero_pu)
+        self.voltzero_pu_bt1.clicked.connect(_part(self._set_zero_pu, False))
 
         self.reset_pu_bt = QPushButton('Reset PU', self)
         self.reset_pu_bt.clicked.connect(_part(self._set_lastcomm, 'PU'))
@@ -260,7 +260,7 @@ class PSTestWindow(SiriusMainWindow):
 
         self.voltzero_pu_bt2 = QPushButton('Set PU Voltage to zero', self)
         self.voltzero_pu_bt2.clicked.connect(_part(self._set_lastcomm, 'PU'))
-        self.voltzero_pu_bt2.clicked.connect(self._set_zero_pu)
+        self.voltzero_pu_bt2.clicked.connect(_part(self._set_zero_pu, True))
 
         self.restoretrigger_pu_bt = QPushButton('Restore PU triggers', self)
         self.restoretrigger_pu_bt.clicked.connect(
@@ -663,7 +663,7 @@ class PSTestWindow(SiriusMainWindow):
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
-    def _set_zero_pu(self):
+    def _set_zero_pu(self, check=True):
         self.ok_ps.clear()
         self.nok_ps.clear()
         devices = self._get_selected_pu()
@@ -672,13 +672,18 @@ class PSTestWindow(SiriusMainWindow):
 
         task0 = CreateTesters(devices, parent=self)
         task1 = SetVoltage(devices, parent=self)
-        task2 = CheckVoltage(devices, parent=self)
-        task2.itemDone.connect(self._log)
-        tasks = [task0, task1, task2]
+        tasks = [task0, task1]
 
         labels = ['Connecting to devices...',
-                  'Setting voltage to zero...',
-                  'Checking voltage value...']
+                  'Setting voltage to zero...']
+
+        if check:
+            task2 = CheckVoltage(devices, parent=self)
+            task2.itemDone.connect(self._log)
+            tasks.append(task2)
+            labels.append('Checking voltage value...')
+        else:
+            task1.itemDone.connect(self._log)
 
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
