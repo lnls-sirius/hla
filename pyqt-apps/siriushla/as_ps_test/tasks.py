@@ -7,7 +7,7 @@ from siriuspy.search import HLTimeSearch as _HLTimeSearch, \
 from siriuspy.csdev import Const
 from siriuspy.namesys import Filter, SiriusPVName as _PVName
 from .conn import TesterDCLink, TesterDCLinkFBP, TesterPS, TesterPSLinac, \
-    DEFAULT_CAP_BANK_VOLT
+    TesterPUKckr, TesterPUSept, DEFAULT_CAP_BANK_VOLT
 
 
 TIMEOUT_CHECK = 10
@@ -23,7 +23,7 @@ class BaseTask(QThread):
     itemDone = Signal(str, bool)
     completed = Signal()
 
-    def __init__(self, devices, state=None, is_test=None, parent=None):
+    def __init__(self, devices, state=None, is_test=False, parent=None):
         """Constructor."""
         super().__init__(parent)
         self._devices = devices
@@ -93,14 +93,22 @@ class CreateTesters(BaseTask):
         for dev in self._devices:
             self.currentItem.emit(dev)
             if dev not in BaseTask._testers:
-                if _PVName(dev).sec == 'LI':
+                devname = _PVName(dev)
+                if devname.sec == 'LI':
                     t = TesterPSLinac(dev)
                 elif _PSSearch.conv_psname_2_psmodel(dev) == 'FBP_DCLink':
                     t = TesterDCLinkFBP(dev)
                 elif 'bo-dclink' in _PSSearch.conv_psname_2_pstype(dev):
                     t = TesterDCLink(dev)
-                elif _PVName(dev).dis == 'PS':
+                elif devname.dis == 'PS':
                     t = TesterPS(dev)
+                elif devname.dis == 'PU' and 'Kckr' in devname.dev:
+                    t = TesterPUKckr(dev)
+                elif devname.dis == 'PU' and 'Sept' in devname.dev:
+                    t = TesterPUSept(dev)
+                else:
+                    raise NotImplementedError(
+                        'There is no Tester defined to '+dev+'.')
                 BaseTask._testers[dev] = t
             self.itemDone.emit(dev, True)
             if self._quit_task:
@@ -111,6 +119,7 @@ class CheckStatus(BaseTask):
     """Check Status."""
 
     def function(self):
+        """Check status."""
         self._check(method='check_status')
 
 
@@ -118,7 +127,7 @@ class ResetIntlk(BaseTask):
     """Reset Interlocks."""
 
     def function(self):
-        """Reset PS."""
+        """Reset."""
         self._set(method='reset')
         if Filter.process_filters(
                 pvnames=self._devices, filters={'sec': 'SI', 'sub': 'Fam'}):
@@ -129,7 +138,7 @@ class CheckIntlk(BaseTask):
     """Check Interlocks."""
 
     def function(self):
-        """Check PS interlocks."""
+        """Check interlocks."""
         self._check(method='check_intlk')
 
 
@@ -164,6 +173,23 @@ class CheckPwrState(BaseTask):
         """Check PS PwrState."""
         self._check(method='check_pwrstate', state=self._state,
                     timeout=3*TIMEOUT_CHECK)
+
+
+class SetPulse(BaseTask):
+    """Set PU Pulse."""
+
+    def function(self):
+        """Set PU Pulse."""
+        self._set(method='set_pulse', state=self._state)
+
+
+class CheckPulse(BaseTask):
+    """Check PU Pulse."""
+
+    def function(self):
+        """Check PU Pulse."""
+        self._check(method='check_pulse', state=self._state,
+                    timeout=TIMEOUT_CHECK)
 
 
 class CheckInitOk(BaseTask):
@@ -213,7 +239,7 @@ class CheckCapBankVolt(BaseTask):
 
 
 class SetCurrent(BaseTask):
-    """Set current value and check if it RB is achieved."""
+    """Set current value."""
 
     def function(self):
         """Set PS Current."""
@@ -221,7 +247,7 @@ class SetCurrent(BaseTask):
 
 
 class CheckCurrent(BaseTask):
-    """Check current value and check if it RB is achieved."""
+    """Check current value."""
 
     def function(self):
         """Check PS Current."""
@@ -235,6 +261,34 @@ class CheckCurrent(BaseTask):
                     test=self._is_test)
 
 
+class SetVoltage(BaseTask):
+    """Set voltage value."""
+
+    def function(self):
+        """Set PU Voltage."""
+        self._set(method='set_voltage', test=self._is_test)
+
+
+class CheckVoltage(BaseTask):
+    """Check voltage value."""
+
+    def function(self):
+        """Check PU Voltage."""
+        if self._is_test:
+            timeout = 10
+        else:
+            if 'BO-48D:PU-EjeKckr' in self._devices:
+                timeout = 45
+            elif 'SI-01SA:PU-InjNLKckr' in self._devices:
+                timeout = 35
+            elif 'SI-01SA:PU-InjDpKckr' in self._devices:
+                timeout = 17
+            else:
+                timeout = 10
+        self._check(method='check_voltage', timeout=timeout,
+                    test=self._is_test)
+
+
 class TriggerTask(QThread):
     """Base task to handle triggers."""
 
@@ -244,10 +298,12 @@ class TriggerTask(QThread):
     itemDone = Signal(str, bool)
     completed = Signal()
 
-    def __init__(self, restore_initial_value=False, parent=None):
+    def __init__(self, restore_initial_value=False, parent=None,
+                 dis='PS', state='on'):
         """Constructor."""
         super().__init__(parent)
-        self._triggers = _HLTimeSearch.get_hl_triggers(filters={'dev': 'Mags'})
+        filt = {'dev': 'Mags'} if dis == 'PS' else {'dev': '.*(Kckr|Sept).*'}
+        self._triggers = _HLTimeSearch.get_hl_triggers(filters=filt)
         self._pvs = {trg: _PV(trg + ':State-Sel') for trg in self._triggers}
 
         for trg, pv in self._pvs.items():
@@ -256,10 +312,12 @@ class TriggerTask(QThread):
                 TriggerTask.initial_triggers_state[trg] = pv.value
 
         if restore_initial_value:
-            self.trig2val = TriggerTask.initial_triggers_state
+            self.trig2val = {
+                k: v for k, v in TriggerTask.initial_triggers_state.items()
+                if k in self._pvs.keys()}
         else:
-            self.trig2val = {trig: Const.DsblEnbl.Dsbl
-                             for trig in self._pvs.keys()}
+            val = Const.DsblEnbl.Enbl if state == 'on' else Const.DsblEnbl.Dsbl
+            self.trig2val = {trig: val for trig in self._pvs.keys()}
         self._quit_task = False
 
     def size(self):
@@ -279,29 +337,21 @@ class TriggerTask(QThread):
     def function(self):
         raise NotImplementedError
 
-
-class SetTriggerState(TriggerTask):
-    """Disable magnets triggers."""
-
-    def function(self):
-        for trig, val in self.trig2val.items():
+    def _set(self):
+        for trig, pv in self._pvs.items():
             self.currentItem.emit(trig)
-            pv = self._pvs[trig]
+            val = self.trig2val[trig]
             pv.value = val
             self.itemDone.emit(trig, True)
 
-
-class CheckTriggerState(TriggerTask):
-    """Disable magnets triggers."""
-
-    def function(self):
+    def _check(self):
         need_check = _dcopy(self.trig2val)
         t0 = _time.time()
         while _time.time() - t0 < TIMEOUT_CHECK/2:
-            for trig, val in self.trig2val.items():
+            for trig, pv in self._pvs.items():
                 if trig not in need_check:
                     continue
-                pv = self._pvs[trig]
+                val = self.trig2val[trig]
                 if pv.value == val:
                     self.currentItem.emit(trig)
                     self.itemDone.emit(trig, True)
@@ -314,3 +364,17 @@ class CheckTriggerState(TriggerTask):
         for trig in need_check:
             self.currentItem.emit(trig)
             self.itemDone.emit(trig, False)
+
+
+class SetTriggerState(TriggerTask):
+    """Set magnet trigger state."""
+
+    def function(self):
+        self._set()
+
+
+class CheckTriggerState(TriggerTask):
+    """Check magnet trigger state."""
+
+    def function(self):
+        self._check()

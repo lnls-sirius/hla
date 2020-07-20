@@ -1,5 +1,6 @@
 """Conn module."""
 
+import time as _time
 import numpy as _np
 from epics import PV as _PV
 
@@ -35,7 +36,7 @@ TIMEOUT_CONN = 0.05
 TEST_TOLERANCE = 1e-1
 
 
-class _Tester:
+class _TesterBase:
     """Tester base."""
 
     def __init__(self, device):
@@ -56,6 +57,10 @@ class _Tester:
             if not pv.wait_for_connection(timeout):
                 return False
         return True
+
+
+class _TesterPSBase(_TesterBase):
+    """Tester PS base."""
 
     def reset(self):
         """Reset."""
@@ -96,7 +101,7 @@ class _Tester:
         return ok
 
 
-class TesterDCLinkFBP(_Tester):
+class TesterDCLinkFBP(_TesterPSBase):
     """FBP DCLink tester."""
 
     properties = ['Reset-Cmd', 'IntlkSoft-Mon', 'IntlkHard-Mon',
@@ -140,7 +145,7 @@ class TesterDCLinkFBP(_Tester):
         return self.check_intlk()
 
 
-class TesterDCLink(_Tester):
+class TesterDCLink(_TesterPSBase):
     """DCLink tester."""
 
     properties = ['Reset-Cmd', 'IntlkSoft-Mon', 'IntlkHard-Mon',
@@ -193,13 +198,10 @@ class TesterDCLink(_Tester):
         return status
 
     def _cmp(self, value, target):
-        if value >= target:
-            return True
-        else:
-            return False
+        return value >= target
 
 
-class TesterPS(_Tester):
+class TesterPS(_TesterPSBase):
     """PS tester."""
 
     properties = ['Reset-Cmd', 'IntlkSoft-Mon', 'IntlkHard-Mon',
@@ -246,13 +248,10 @@ class TesterPS(_Tester):
         return status
 
     def _cmp(self, value, target):
-        if abs(value - target) < self.test_tol:
-            return True
-        else:
-            return False
+        return abs(value - target) < self.test_tol
 
 
-class TesterPSLinac:
+class TesterPSLinac(_TesterBase):
     """Linac PS tester."""
 
     properties = ['StatusIntlk-Mon',
@@ -260,7 +259,7 @@ class TesterPSLinac:
                   'Current-SP', 'Current-Mon']
 
     def __init__(self, device):
-        self.device = device
+        super().__init__(device)
         self._pvs = dict()
         for ppty in TesterPSLinac.properties:
             self._pvs[ppty] = _PV(
@@ -271,21 +270,6 @@ class TesterPSLinac:
             PSSearch.conv_psname_2_pstype(device))
         self.test_current = splims['HIGH']/2.0
         self.test_tol = TEST_TOLERANCE
-
-    @property
-    def connected(self):
-        """Return wheter PVs are connected."""
-        for pv in self._pvs.values():
-            if not pv.connected:
-                # print(pv.pvname)
-                return False
-        return True
-
-    def wait_for_connection(self, timeout=0.5):
-        for pv in self._pvs.values():
-            if not pv.wait_for_connection(timeout):
-                return False
-        return True
 
     def check_intlk(self):
         """Check interlocks."""
@@ -333,7 +317,152 @@ class TesterPSLinac:
         return status
 
     def _cmp(self, value, target):
-        if abs(value - target) < self.test_tol:
-            return True
+        return abs(value - target) < self.test_tol
+
+
+class _TesterPUBase(_TesterBase):
+    """Tester PU base."""
+
+    properties = []
+
+    def __init__(self, device):
+        """Init."""
+        super().__init__(device)
+        self._pvs = dict()
+        for ppty in self.properties:
+            self._pvs[ppty] = _PV(
+                VACA_PREFIX + device + ':' + ppty,
+                connection_timeout=TIMEOUT_CONN)
+
+        splims = PSSearch.conv_psname_2_splims(device)
+        self.test_voltage = splims['TSTV']
+        self.test_tol = splims['TSTR']
+
+    def reset(self):
+        """Reset."""
+        self._pvs['Reset-Cmd'].value = 1
+
+    def check_intlk(self):
+        """Check interlocks."""
+        raise NotImplementedError
+
+    def set_pulse(self, state='on'):
+        """Set Pulse."""
+        # if pulsed magnet was in interlock state and was reset,
+        # we need to send a Pulse-Sel = Off before continue
+        if self._pvs['Pulse-Sel'].value == _PSC.OffOn.On \
+                and self.check_pulse('off'):
+            self._pvs['Pulse-Sel'].value = _PSC.OffOn.Off
+            _time.sleep(0.5)
+
+        if state == 'on':
+            state = _PSC.OffOn.On
         else:
-            return False
+            state = _PSC.OffOn.Off
+        self._pvs['Pulse-Sel'].value = state
+
+    def check_pulse(self, state='on'):
+        """Check Pulse."""
+        if state == 'on':
+            state = _PSC.OffOn.On
+        else:
+            state = _PSC.OffOn.Off
+        return self._pvs['Pulse-Sts'].value == state
+
+    def set_pwrstate(self, state='on'):
+        """Set PwrState."""
+        # if pulsed magnet was in interlock state and was reset,
+        # we need to send a PwrState-Sel = Off before continue
+        if self._pvs['PwrState-Sel'].value == _PSC.OffOn.On \
+                and self.check_pwrstate('off'):
+            self._pvs['PwrState-Sel'].value = _PSC.OffOn.Off
+            _time.sleep(0.5)
+
+        if state == 'on':
+            state = _PSC.OffOn.On
+        else:
+            state = _PSC.OffOn.Off
+        self._pvs['PwrState-Sel'].value = state
+
+    def check_pwrstate(self, state='on'):
+        """Check PwrState."""
+        if state == 'on':
+            state = _PSC.OffOn.On
+        else:
+            state = _PSC.OffOn.Off
+        return self._pvs['PwrState-Sts'].value == state
+
+    def set_voltage(self, test=False):
+        """Set voltage."""
+        if test:
+            self._pvs['Voltage-SP'].value = self.test_voltage
+        else:
+            self._pvs['Voltage-SP'].value = 0
+
+    def check_voltage(self, test=False):
+        """Check voltage."""
+        if test:
+            status = self._cmp(self._pvs['Voltage-Mon'].value,
+                               self.test_voltage)
+        else:
+            status = self._cmp(self._pvs['Voltage-Mon'].value, 0)
+        return status
+
+    def check_status(self):
+        status = True
+        status &= self.check_intlk()
+        if self.check_pwrstate():
+            status &= self._cmp(
+                self._pvs['Voltage-Mon'].value,
+                self._pvs['Voltage-RB'].value)
+        return status
+
+    def _cmp(self, value, target):
+        return abs(value - target) < self.test_tol
+
+
+class TesterPUKckr(_TesterPUBase):
+    """Kicker tester."""
+
+    properties = [
+        'Reset-Cmd',
+        'Intlk1-Mon', 'Intlk2-Mon', 'Intlk3-Mon', 'Intlk4-Mon',
+        'Intlk5-Mon', 'Intlk6-Mon', 'Intlk7-Mon', 'Intlk8-Mon',
+        'PwrState-Sel', 'PwrState-Sts',
+        'Pulse-Sel', 'Pulse-Sts',
+        'Voltage-SP', 'Voltage-RB', 'Voltage-Mon']
+
+    def check_intlk(self):
+        """Check interlocks."""
+        status = (self._pvs['Intlk1-Mon'].value == 1)
+        status &= (self._pvs['Intlk2-Mon'].value == 1)
+        status &= (self._pvs['Intlk3-Mon'].value == 1)
+        status &= (self._pvs['Intlk4-Mon'].value == 1)
+        status &= (self._pvs['Intlk5-Mon'].value == 1)
+        status &= (self._pvs['Intlk6-Mon'].value == 1)
+        status &= (self._pvs['Intlk7-Mon'].value == 1)
+        status &= (self._pvs['Intlk8-Mon'].value == 1)
+        return status
+
+
+class TesterPUSept(_TesterPUBase):
+    """Septum tester."""
+
+    properties = [
+        'Reset-Cmd',
+        'Intlk1-Mon', 'Intlk2-Mon', 'Intlk3-Mon', 'Intlk4-Mon',
+        'Intlk5-Mon', 'Intlk6-Mon', 'Intlk7-Mon',
+        'PwrState-Sel', 'PwrState-Sts',
+        'Pulse-Sel', 'Pulse-Sts',
+        'Voltage-SP', 'Voltage-RB', 'Voltage-Mon']
+
+    def check_intlk(self):
+        """Check interlocks."""
+        status = (self._pvs['Intlk1-Mon'].value == 1)
+        status &= (self._pvs['Intlk2-Mon'].value == 1)
+        status &= (self._pvs['Intlk3-Mon'].value == 1)
+        status &= (self._pvs['Intlk4-Mon'].value == 1)
+        status &= (self._pvs['Intlk5-Mon'].value == 1)
+        status &= (self._pvs['Intlk6-Mon'].value == 1)
+        status &= (self._pvs['Intlk7-Mon'].value == 1)
+        return status

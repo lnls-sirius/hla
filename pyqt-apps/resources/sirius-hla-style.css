@@ -107,6 +107,11 @@ QTabBar::tab:selected, QTabBar::tab:hover {
   color: white;
   border: 0.1em solid white;
 }
+#ASTab QTabBar::tab:selected, #ASTab QTabBar::tab:hover {
+  background-color: rgb(153, 149, 147);
+  color: white;
+  border: 0.1em solid white;
+}
 
 QTabBar::tab:!selected {
     margin-top: 0.2em; /* make non-selected tabs look smaller */

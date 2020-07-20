@@ -92,8 +92,8 @@ class PSMonitor(SiriusMainWindow):
                                                                'comp': 'lt'}}
             elif name.dis == 'PU':
                 ch2vals = {
-                    self._prefix+name+':PwrState-Sts': _PSc.PwrStateSts.On,
-                    self._prefix+name+':Pulse-Sts': _PSc.DsblEnbl.Enbl,
+                    self._prefix+name+':PwrState-Sts': _PSc.OffOn.On,
+                    self._prefix+name+':Pulse-Sts': _PSc.OffOn.On,
                     self._prefix+name+':Intlk1-Mon': 1,
                     self._prefix+name+':Intlk2-Mon': 1,
                     self._prefix+name+':Intlk3-Mon': 1,
