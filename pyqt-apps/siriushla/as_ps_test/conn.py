@@ -348,6 +348,13 @@ class _TesterPUBase(_TesterBase):
 
     def set_pulse(self, state='on'):
         """Set Pulse."""
+        # if pulsed magnet was in interlock state and was reset,
+        # we need to send a Pulse-Sel = Off before continue
+        if self._pvs['Pulse-Sel'].value == _PSC.OffOn.On \
+                and self.check_pulse('off'):
+            self._pvs['Pulse-Sel'].value = _PSC.OffOn.Off
+            _time.sleep(0.5)
+
         if state == 'on':
             state = _PSC.OffOn.On
         else:
