@@ -231,6 +231,10 @@ class PSTestWindow(SiriusMainWindow):
             'Check PU interlock status and, if powered on, '
             'check if it is following voltage setpoint')
 
+        self.voltzero_pu_bt1 = QPushButton('Set PU Voltage to zero', self)
+        self.voltzero_pu_bt1.clicked.connect(_part(self._set_lastcomm, 'PU'))
+        self.voltzero_pu_bt1.clicked.connect(self._set_zero_pu)
+
         self.reset_pu_bt = QPushButton('Reset PU', self)
         self.reset_pu_bt.clicked.connect(_part(self._set_lastcomm, 'PU'))
         self.reset_pu_bt.clicked.connect(_part(self._reset_intlk, 'PU'))
@@ -254,9 +258,9 @@ class PSTestWindow(SiriusMainWindow):
         self.test_pu_bt.clicked.connect(_part(self._set_lastcomm, 'PU'))
         self.test_pu_bt.clicked.connect(self._set_test_pu)
 
-        self.voltzero_pu_bt = QPushButton('Set PU Voltage to zero', self)
-        self.voltzero_pu_bt.clicked.connect(_part(self._set_lastcomm, 'PU'))
-        self.voltzero_pu_bt.clicked.connect(self._set_zero_pu)
+        self.voltzero_pu_bt2 = QPushButton('Set PU Voltage to zero', self)
+        self.voltzero_pu_bt2.clicked.connect(_part(self._set_lastcomm, 'PU'))
+        self.voltzero_pu_bt2.clicked.connect(self._set_zero_pu)
 
         self.restoretrigger_pu_bt = QPushButton('Restore PU triggers', self)
         self.restoretrigger_pu_bt.clicked.connect(
@@ -276,6 +280,7 @@ class PSTestWindow(SiriusMainWindow):
         lay_pu_comm.addWidget(QLabel(''))
         lay_pu_comm.addWidget(QLabel('<h4>Prepare</h4>', self,
                                      alignment=Qt.AlignCenter))
+        lay_pu_comm.addWidget(self.voltzero_pu_bt1)
         lay_pu_comm.addWidget(self.reset_pu_bt)
         lay_pu_comm.addWidget(QLabel(''))
         lay_pu_comm.addWidget(QLabel('<h4>Test</h4>', self,
@@ -284,7 +289,7 @@ class PSTestWindow(SiriusMainWindow):
         lay_pu_comm.addWidget(self.enblpulse_pu_bt)
         lay_pu_comm.addWidget(self.enbltrigger_pu_bt)
         lay_pu_comm.addWidget(self.test_pu_bt)
-        lay_pu_comm.addWidget(self.voltzero_pu_bt)
+        lay_pu_comm.addWidget(self.voltzero_pu_bt2)
         lay_pu_comm.addWidget(QLabel(''))
         lay_pu_comm.addWidget(QLabel('<h4>Restore</h4>', self,
                                      alignment=Qt.AlignCenter))
