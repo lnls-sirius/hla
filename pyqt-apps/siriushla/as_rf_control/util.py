@@ -133,7 +133,15 @@ SEC_2_CHANNELS = {
             'Pl2Up': 'BR-RF-DLLRF-01:PLG2:MOVE:UP',
             'PlM1Curr': 'RA-RaBO01:RF-CavPlDrivers:Dr1Current-Mon',
             'PlM2Curr': 'RA-RaBO01:RF-CavPlDrivers:Dr2Current-Mon',
-        }
+        },
+        'PwrMtr': [
+            ['Cavity Power', 'BO-05D:RF-P5Cav:Cell3Pwr-Mon',
+             'BO-05D:RF-P5Cav:Cell3PwrdBm-Mon', 'blue'],
+            ['Power Forward', 'BO-05D:RF-P5Cav:PwrFwd-Mon',
+             'BO-05D:RF-P5Cav:PwrFwddBm-Mon', 'darkGreen'],
+            ['Power Reverse', 'BO-05D:RF-P5Cav:PwrRev-Mon',
+             'BO-05D:RF-P5Cav:PwrRevdBm-Mon', 'red'],
+        ]
     },
     'SI': {
         'Emergency': 'RA-RaSIA02:RF-IntlkCtrl:EStop-Mon',
@@ -290,6 +298,24 @@ SEC_2_CHANNELS = {
             'Pl2Up': 'SR-RF-DLLRF-01:PLG2:MOVE:UP',
             'PlM1Curr': 'RA-RaSIA01:RF-CavPlDrivers:Dr1Current-Mon',
             'PlM2Curr': 'RA-RaSIA01:RF-CavPlDrivers:Dr2Current-Mon',
-        }
+        },
+        'PwrMtr': [
+            ['Cav - Cell 4', 'SI-02SB:RF-P7Cav:PwrCell4-Mon',
+             'SI-02SB:RF-P7Cav:PwrCell4dBm-Mon', 'black'],
+            ['Cav - Coup Fwd', 'SI-02SB:RF-P7Cav:PwrFwd-Mon',
+             'SI-02SB:RF-P7Cav:PwrFwddBm-Mon', 'blue'],
+            ['Cav - Coup Rev', 'SI-02SB:RF-P7Cav:PwrRev-Mon',
+             'SI-02SB:RF-P7Cav:PwrRevdBm-Mon', 'red'],
+            ['SSA1 - Fwd Out', 'RA-ToSIA01:RF-SSAmpTower:PwrFwdOutLLRF-Mon',
+             'RA-ToSIA01:RF-SSAmpTower:PwrFwdOutdBm-Mon', 'magenta'],
+            ['SSA1 - Rev Out', 'RA-ToSIA01:RF-SSAmpTower:PwrRevOutLLRF-Mon',
+             'RA-ToSIA01:RF-SSAmpTower:PwrRevOutdBm-Mon', 'darkGreen'],
+            ['SSA2 - Fwd Out', 'RA-ToSIA02:RF-SSAmpTower:PwrFwdOutLLRF-Mon',
+             'RA-ToSIA02:RF-SSAmpTower:PwrFwdOutdBm-Mon', 'yellow'],
+            ['SSA2 - Rev Out', 'RA-ToSIA02:RF-SSAmpTower:PwrRevOutLLRF-Mon',
+             'RA-ToSIA02:RF-SSAmpTower:PwrRevOutdBm-Mon', 'cyan'],
+            ['Circ - Fwd Out', 'RA-TL:RF-Circulator-SIA:PwrFwdOut-Mon',
+             'RA-TL:RF-Circulator-SIA:PwrFwdOutdBm-Mon', 'darkCyan'],
+        ]
     },
 }
