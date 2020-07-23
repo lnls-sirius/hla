@@ -19,7 +19,7 @@ from siriushla.widgets import PyDMLedMultiChannel, PyDMLed, QLed
 from siriushla.widgets.led import MultiChannelStatusDialog
 from siriushla.widgets.dialog import PSStatusDialog
 
-TIMEOUT_WAIT = 2
+TIMEOUT_WAIT = 3
 TRG_ENBL_VAL = TIConst.DsblEnbl.Enbl
 TRG_DSBL_VAL = TIConst.DsblEnbl.Dsbl
 PU_ENBL_VAL = PSConst.DsblEnbl.Enbl
@@ -91,8 +91,10 @@ class BoRampStandbyHandler:
     def _create_pvs(self):
         """Create PVs."""
         _pvs = dict()
+
+        pspropties = ['OpMode-Sel', 'OpMode-Sts', 'Current-SP', 'Current-RB']
         for psn in self._psnames:
-            for propty in ['OpMode-Sel', 'OpMode-Sts', 'Current-SP']:
+            for propty in pspropties:
                 pvname = psn+':'+propty
                 _pvs[pvname] = _PV(
                     _vaca_prefix+pvname, connection_timeout=0.05)
@@ -158,6 +160,14 @@ class BoRampStandbyHandler:
         # set current to zero
         pvs2set = [psn+':Current-SP' for psn in self._psnames]
         self._set_pvs(pvs2set, 0.0)
+
+        # wait current change to zero
+        pvs2wait = [psn+':Current-RB' for psn in self._psnames]
+        retval = self._wait_pvs(pvs2wait, 0.0)
+        if not retval[0]:
+            text = 'Check for BO PS to be with current zero\n'\
+                   'timed out without sucess!\nVerify BO PS!'
+            return [False, text, retval[1]]
 
         return True, '', []
 
