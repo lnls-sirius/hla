@@ -25,21 +25,15 @@ class OrbitRegisters(QWidget):
         super(OrbitRegisters, self).__init__(parent)
         self._nr_registers = nr_registers
         self.prefix = prefix
-        self.acc = acc
+        self.acc = acc.upper()
         pre = self.prefix
         self._orbits = {
             'ref': [
                 SiriusConnectionSignal(pre + 'RefOrbX-RB'),
                 SiriusConnectionSignal(pre + 'RefOrbY-RB')],
-            'mti': [
-                SiriusConnectionSignal(pre + 'MTurnIdxOrbX-Mon'),
-                SiriusConnectionSignal(pre + 'MTurnIdxOrbY-Mon')],
             'sp': [
                 SiriusConnectionSignal(pre + 'SPassOrbX-Mon'),
                 SiriusConnectionSignal(pre + 'SPassOrbY-Mon')],
-            'orb': [
-                SiriusConnectionSignal(pre + 'SlowOrbX-Mon'),
-                SiriusConnectionSignal(pre + 'SlowOrbY-Mon')],
             'off': [
                 SiriusConnectionSignal(pre + 'OfflineOrbX-SP'),
                 SiriusConnectionSignal(pre + 'OfflineOrbY-SP')],
@@ -48,6 +42,14 @@ class OrbitRegisters(QWidget):
                 SiriusConnectionSignal(pre + 'BPMOffsetY-Mon')],
             'mat': SiriusConnectionSignal(pre + 'RespMat-RB'),
             }
+        if self.acc == 'SI':
+            self._orbits['orb'] = [
+                SiriusConnectionSignal(pre + 'SlowOrbX-Mon'),
+                SiriusConnectionSignal(pre + 'SlowOrbY-Mon')]
+        if self.acc in {'SI', 'BO'}:
+            self._orbits['mti'] = [
+                SiriusConnectionSignal(pre + 'MTurnIdxOrbX-Mon'),
+                SiriusConnectionSignal(pre + 'MTurnIdxOrbY-Mon')]
         self.setupui()
 
     def channels(self):
@@ -184,10 +186,11 @@ class OrbitRegister(QWidget):
         act.triggered.connect(self._load_orbit_from_servconf)
         menu2 = menu.addMenu('Get from &PV')
         menu2.setIcon(qta.icon('mdi.download-network-outline'))
-        if self._csorb.isring:
+        if self._csorb.acc == 'SI':
             act = menu2.addAction('&SlowOrb')
             act.setIcon(qta.icon('mdi.turtle'))
             act.triggered.connect(_part(self._register_orbit, 'orb'))
+        if self._csorb.isring:
             act = menu2.addAction('&MTurnOrb')
             act.setIcon(qta.icon('mdi.alarm-multiple'))
             act.triggered.connect(_part(self._register_orbit, 'mti'))
@@ -493,7 +496,7 @@ class OrbitRegister(QWidget):
         orby[bpm_m2] += psy
 
         txt = f'Bump@{sub}: ref={confname}\n'
-        txt += f'ax={agx:.1f} ay={agy:.1f} dx={psx:.1f} dx={psx:.1f}'
+        txt += f'ax={agx:.1f} ay={agy:.1f} dx={psx:.1f} dy={psy:.1f}'
         self._update_and_emit(txt, orbx, orby)
 
     def _save_orbit_to_file(self, _):

@@ -23,7 +23,6 @@ class KicksConfigWidget(BaseWidget):
     def setupui(self):
         gbox = QGroupBox('Correctors', self)
         gbox.setObjectName('grbx')
-        gbox.setStyleSheet('#grbx{min-height:13.0em; max-height:13.0em;}')
         self.setLayout(QVBoxLayout())
         self.layout().addWidget(gbox)
         vbl = QVBoxLayout(gbox)
@@ -78,7 +77,6 @@ class KicksConfigWidget(BaseWidget):
         for tab, pvname, units in zip(tabs, pvnames, unitss):
             grpbx = QWidget(tabw)
             grpbx.setObjectName('gbx')
-            grpbx.setStyleSheet('#gbx{min-height:5.5em; max-height:5.5em;}')
             fbl = QFormLayout(grpbx)
             for unit, pln in zip(units, planes):
                 if unit is None:
@@ -94,12 +92,35 @@ class KicksConfigWidget(BaseWidget):
         for i, name in enumerate(names):
             tabw.setTabToolTip(i, name)
         if self.acc == 'SI':
-            lbl = QLabel('Synchronize', gbox)
-            wid = self.create_pair_butled(gbox, 'CorrSync')
+            grpbx = QWidget(tabw)
+            grpbx.setObjectName('gbx')
+            vertlay = QVBoxLayout(grpbx)
+            tabw.addTab(grpbx, 'Details')
+
+            lbl = QLabel('Synchronize', grpbx)
+            wid = self.create_pair_sel(grpbx, 'CorrSync')
             hbl = QHBoxLayout()
             hbl.addWidget(lbl)
             hbl.addWidget(wid)
-            vbl.addItem(hbl)
+            vertlay.addItem(hbl)
+            lbl = QLabel('Trigger Delay', grpbx)
+            wid = self.create_pair(grpbx, 'CorrDelay')
+            hbl = QHBoxLayout()
+            hbl.addWidget(lbl)
+            hbl.addWidget(wid)
+            vertlay.addItem(hbl)
+            lbl = QLabel('Enable PSSOFB', grpbx)
+            wid = self.create_pair_butled(grpbx, 'CorrPSSOFBEnbl')
+            hbl = QHBoxLayout()
+            hbl.addWidget(lbl)
+            hbl.addWidget(wid)
+            vertlay.addItem(hbl)
+            lbl = QLabel('Wait PSSOFB', grpbx)
+            wid = self.create_pair_butled(grpbx, 'CorrPSSOFBWait')
+            hbl = QHBoxLayout()
+            hbl.addWidget(lbl)
+            hbl.addWidget(wid)
+            vertlay.addItem(hbl)
 
 
 def _main():

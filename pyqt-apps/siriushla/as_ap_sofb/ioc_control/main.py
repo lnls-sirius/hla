@@ -17,7 +17,8 @@ from siriushla.as_ap_sofb.ioc_control.status import StatusWidget
 from siriushla.as_ap_sofb.ioc_control.kicks_config import KicksConfigWidget
 from siriushla.as_ap_sofb.ioc_control.orbit_acquisition import AcqControlWidget
 from siriushla.as_ap_sofb.ioc_control.respmat import RespMatWidget
-from siriushla.as_ap_sofb.ioc_control.base import BaseWidget, BaseCombo
+from siriushla.as_ap_sofb.ioc_control.base import BaseWidget, BaseCombo, \
+    CALabel
 
 
 class SOFBControl(BaseWidget):
@@ -47,7 +48,6 @@ class SOFBControl(BaseWidget):
         """."""
         vbl = QVBoxLayout()
         vbl.setContentsMargins(0, 0, 0, 0)
-        vbl.setSpacing(10)
 
         # ####################################################################
         # ########################## Orbit PVs ###############################
@@ -57,6 +57,7 @@ class SOFBControl(BaseWidget):
         grpbx.setStyleSheet('#grp{min-height: 10em; max-height: 12em;}')
         fbl = QGridLayout(grpbx)
         vbl.addWidget(grpbx)
+        vbl.addStretch()
 
         conf = PyDMPushButton(
             grpbx, init_channel=self.prefix+'TrigAcqConfig-Cmd', pressValue=1)
@@ -97,12 +98,14 @@ class SOFBControl(BaseWidget):
         fbl.addWidget(lbl, 1, 0, alignment=Qt.AlignVCenter)
         fbl.addWidget(wid, 1, 1)
 
-        lbl = QLabel('OfflineOrb:', grpbx)
+        lbl = CALabel('OfflineOrb:', grpbx)
         combo = OfflineOrbControl(self, self.prefix, self.ctrls, self.acc)
-        combo.rules = (
-            '[{"name": "EnblRule", "property": "Enable", ' +
+        rules = (
+            '[{"name": "EnblRule", "property": "Visible", ' +
             '"expression": "not ch[0]", "channels": [{"channel": "' +
             self.prefix+'SOFBMode-Sts'+'", "trigger": true}]}]')
+        combo.rules = rules
+        lbl.rules = rules
         fbl.addWidget(lbl, 2, 0, alignment=Qt.AlignVCenter)
         fbl.addWidget(combo, 2, 1, alignment=Qt.AlignBottom)
 
@@ -149,6 +152,7 @@ class SOFBControl(BaseWidget):
         wid = KicksConfigWidget(parent, self.prefix, self.acc)
         wid.layout().setContentsMargins(0, 0, 0, 0)
         vbl.addWidget(wid)
+        vbl.addStretch()
 
         # ####################################################################
         # ###################### Manual Correction ###########################
@@ -159,6 +163,7 @@ class SOFBControl(BaseWidget):
         gdl = QGridLayout(grpbx)
         gdl.setSpacing(9)
         vbl.addWidget(grpbx)
+        vbl.addStretch()
 
         calc = PyDMPushButton(
             grpbx, '', pressValue=1, init_channel=self.prefix+'CalcDelta-Cmd')
@@ -225,6 +230,7 @@ class SOFBControl(BaseWidget):
         grpbx.setStyleSheet('#grp{min-height: 5em; max-height: 5em;}')
         vbl2 = QVBoxLayout(grpbx)
         vbl.addWidget(grpbx)
+        vbl.addStretch()
 
         lbl = QLabel('State', grpbx)
         wid = self.create_pair_butled(grpbx, 'ClosedLoop')
