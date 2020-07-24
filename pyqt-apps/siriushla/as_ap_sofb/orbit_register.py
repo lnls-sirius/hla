@@ -496,7 +496,7 @@ class OrbitRegister(QWidget):
         orby[bpm_m2] += psy
 
         txt = f'Bump@{sub}: ref={confname}\n'
-        txt += f'ax={agx:.1f} ay={agy:.1f} dx={psx:.1f} dx={psx:.1f}'
+        txt += f'ax={agx:.1f} ay={agy:.1f} dx={psx:.1f} dy={psy:.1f}'
         self._update_and_emit(txt, orbx, orby)
 
     def _save_orbit_to_file(self, _):
