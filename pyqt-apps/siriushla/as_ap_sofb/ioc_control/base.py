@@ -3,7 +3,7 @@
 from functools import partial as _part
 import numpy as _np
 from qtpy.QtCore import Qt, Signal
-from qtpy.QtWidgets import QWidget, QHBoxLayout, QSizePolicy, QComboBox
+from qtpy.QtWidgets import QWidget, QHBoxLayout, QSizePolicy, QComboBox, QLabel
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox
 from pydm.widgets.base import PyDMPrimitiveWidget
 from siriuspy.namesys import SiriusPVName as _PVName
@@ -203,3 +203,7 @@ class BaseCombo(QComboBox, PyDMPrimitiveWidget):
             return
         self.setCurrentIndex(self.count()-1)
         self.configname.emit('')
+
+
+class CALabel(QLabel, PyDMPrimitiveWidget):
+    """."""
