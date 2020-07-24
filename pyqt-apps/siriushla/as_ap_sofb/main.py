@@ -60,7 +60,7 @@ class MainWindow(SiriusMainWindow):
 
     def _create_central_widget(self):
         ctrls = self.orb_regtr.get_registers_control()
-        chans, ctr = OrbitWidget.get_default_ctrls(self.prefix, self.isring)
+        chans, ctr = OrbitWidget.get_default_ctrls(self.prefix, self.acc)
         self._channels = chans
         ctrls.update(ctr)
         return OrbitWidget(self, self.prefix, ctrls, self.acc)

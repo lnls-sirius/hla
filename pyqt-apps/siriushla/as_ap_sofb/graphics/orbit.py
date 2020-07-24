@@ -24,14 +24,17 @@ class OrbitWidget(BaseWidget):
         """."""
         self._chans = []
         if not ctrls:
-            self._chans, ctrls = self.get_default_ctrls(prefix)
+            self._chans, ctrls = self.get_default_ctrls(
+                prefix, acc=acc.upper())
 
         names = ['Line {0:d}'.format(i+1) for i in range(2)]
         super().__init__(parent, prefix, ctrls, names, True, acc)
 
         txt1, txt2 = 'SPassOrb', 'RefOrb'
-        if self.isring:
+        if self.acc == 'SI':
             txt1 = 'SlowOrb'
+        elif self.acc == 'BO':
+            txt1 = 'MTurnOrb'
 
         self.updater[0].some_changed('val', txt1)
         self.updater[0].some_changed('ref', txt2)
@@ -88,7 +91,7 @@ class OrbitWidget(BaseWidget):
         return chans
 
     @staticmethod
-    def get_default_ctrls(prefix, isring=True):
+    def get_default_ctrls(prefix, acc='SI'):
         """."""
         pvs = [
             'SPassOrbX-Mon', 'SPassOrbY-Mon',
@@ -96,11 +99,12 @@ class OrbitWidget(BaseWidget):
             'RefOrbX-RB', 'RefOrbY-RB']
         orbs = [
             'SPassOrb', 'OfflineOrb', 'RefOrb']
-        if isring:
-            pvs.extend([
-                'SlowOrbX-Mon', 'SlowOrbY-Mon',
-                'MTurnIdxOrbX-Mon', 'MTurnIdxOrbY-Mon'])
-            orbs.extend(['SlowOrb', 'MTurnOrb'])
+        if acc.upper() == 'SI':
+            pvs.extend(['SlowOrbX-Mon', 'SlowOrbY-Mon'])
+            orbs.append('SlowOrb')
+        if acc.upper() in {'SI', 'BO'}:
+            pvs.extend(['MTurnIdxOrbX-Mon', 'MTurnIdxOrbY-Mon'])
+            orbs.append('MTurnOrb')
 
         chans = [SiriusConnectionSignal(prefix+pv) for pv in pvs]
         ctrls = dict()
