@@ -1,7 +1,7 @@
 """Define Controllers for the orbits displayed in the graphic."""
 
 from qtpy.QtWidgets import QLabel, QGroupBox, QFormLayout, \
-    QVBoxLayout, QHBoxLayout, QPushButton, QWidget, QTabWidget
+    QVBoxLayout, QHBoxLayout, QPushButton, QWidget, QTabWidget, QCheckBox
 from qtpy.QtCore import Qt
 import qtawesome as qta
 from pydm.widgets import PyDMLabel, PyDMPushButton
@@ -26,18 +26,17 @@ class AcqControlWidget(BaseWidget):
 
     def setupui(self):
         vbl = QVBoxLayout(self)
-        vbl.setSpacing(10)
+
+        self.details = QCheckBox('Details', self)
+        vbl.addWidget(self.details, alignment=Qt.AlignRight)
 
         grp_bx = self._get_sofbmode_grpbx()
         vbl.addWidget(grp_bx)
         vbl.addStretch()
 
-        tabw = QTabWidget(self)
-        grp_bx = self._get_orbit_smoothing_grpbx()
-        tabw.addTab(grp_bx, 'Smoothing')
         grp_bx = self._get_acqrates_grpbx()
-        tabw.addTab(grp_bx, 'Acq. Rates')
-        vbl.addWidget(tabw)
+        self._set_detailed(grp_bx)
+        vbl.addWidget(grp_bx)
         vbl.addStretch()
 
         grp_bx = self._get_acq_commom_params_grpbx()
@@ -55,6 +54,7 @@ class AcqControlWidget(BaseWidget):
         vbl.addStretch()
 
         tabw = QTabWidget(self)
+        self._set_detailed(tabw)
         pref = self.prefix.prefix + self._csorb.trigger_acq_name
         grp_bx = _HLTriggerSimple(parent=tabw, prefix=pref, src=True)
         tabw.addTab(grp_bx, 'External Trigger')
@@ -67,14 +67,26 @@ class AcqControlWidget(BaseWidget):
         fbl = QFormLayout(grp_bx)
         wid = self.create_pair_sel(grp_bx, 'SOFBMode')
         fbl.addRow(wid)
+        grp = self._get_orbit_smoothing_grpbx(grp_bx)
+        fbl.addRow(grp)
         if self.isring:
             lbl = QLabel('Extend Ring', grp_bx, alignment=Qt.AlignCenter)
             wid = self.create_pair(grp_bx, 'RingSize')
             fbl.addRow(lbl, wid)
+            self._set_detailed([lbl, wid])
+
         return grp_bx
 
+    def _set_detailed(self, wids):
+        if not isinstance(wids, (list, tuple)):
+            wids = [wids]
+
+        for wid in wids:
+            wid.setVisible(False)
+            self.details.stateChanged.connect(wid.setVisible)
+
     def _get_acqrates_grpbx(self):
-        grp_bx = QWidget(self)
+        grp_bx = QGroupBox('Acq. Rates', self)
         hbl = QHBoxLayout(grp_bx)
         fbl = QFormLayout()
         hbl.addItem(fbl)
@@ -103,12 +115,13 @@ class AcqControlWidget(BaseWidget):
         hbl.addWidget(rdb)
         return grp_bx
 
-    def _get_orbit_smoothing_grpbx(self):
-        grp_bx = QWidget(self)
+    def _get_orbit_smoothing_grpbx(self, parent):
+        grp_bx = QWidget(parent)
         fbl = QFormLayout(grp_bx)
         lbl = QLabel('Method', grp_bx, alignment=Qt.AlignCenter)
         wid = self.create_pair_sel(grp_bx, 'SmoothMethod')
         fbl.addRow(lbl, wid)
+        self._set_detailed([lbl, wid])
 
         lbl = QLabel('Num. Pts.', grp_bx, alignment=Qt.AlignCenter)
         stp = SiriusSpinbox(grp_bx, init_channel=self.prefix+'SmoothNrPts-SP')
@@ -139,22 +152,32 @@ class AcqControlWidget(BaseWidget):
     def _get_acq_commom_params_grpbx(self):
         grp_bx = QGroupBox('Common Parameters', self)
         fbl = QFormLayout(grp_bx)
+
         lbl = QLabel('Non-linear Corr.', grp_bx, alignment=Qt.AlignCenter)
         wid = self.create_pair_butled(grp_bx, 'PolyCalibration')
         fbl.addRow(lbl, wid)
+        self._set_detailed([lbl, wid])
+
         lbl = QLabel('Channel Rate', grp_bx, alignment=Qt.AlignCenter)
         wid = self.create_pair_sel(grp_bx, 'TrigAcqChan')
         fbl.addRow(lbl, wid)
+
         lbl = QLabel('Trigger Type', grp_bx, alignment=Qt.AlignCenter)
         wid = self.create_pair_sel(grp_bx, 'TrigAcqTrigger')
         fbl.addRow(lbl, wid)
+        self._set_detailed([lbl, wid])
+
         lbl = QLabel('Repeat', grp_bx, alignment=Qt.AlignCenter)
         wid = self.create_pair_butled(grp_bx, 'TrigAcqRepeat')
         fbl.addRow(lbl, wid)
+        self._set_detailed([lbl, wid])
+
         if self.isring:
             lbl = QLabel('Nr of Shots', grp_bx, alignment=Qt.AlignCenter)
             wid = self.create_pair(grp_bx, 'TrigNrShots')
             fbl.addRow(lbl, wid)
+            self._set_detailed([lbl, wid])
+
         lbl = QLabel('SamplesPre', grp_bx, alignment=Qt.AlignCenter)
         wid = self.create_pair(grp_bx, 'TrigNrSamplesPre')
         fbl.addRow(lbl, wid)
@@ -266,6 +289,7 @@ class AcqControlWidget(BaseWidget):
         lbl = QLabel('Downsampling', grp_bx, alignment=Qt.AlignCenter)
         wid = self.create_pair(grp_bx, 'MTurnDownSample')
         fbl.addRow(lbl, wid)
+
         lbl = QLabel('Index', grp_bx, alignment=Qt.AlignCenter)
         wid = self.create_pair(grp_bx, 'MTurnIdx')
         fbl.addRow(lbl, wid)
@@ -275,18 +299,26 @@ class AcqControlWidget(BaseWidget):
         pdm_lbl.showUnits = True
         pdm_lbl.setAlignment(Qt.AlignCenter)
         fbl.addRow(lbl, pdm_lbl)
+
         lbl = QLabel('TbT Sync', grp_bx, alignment=Qt.AlignCenter)
         wid = self.create_pair_butled(grp_bx, 'MTurnSyncTim')
         fbl.addRow(lbl, wid)
+        self._set_detailed([lbl, wid])
+
         lbl = QLabel('TbT Mask', grp_bx, alignment=Qt.AlignCenter)
         wid = self.create_pair_butled(grp_bx, 'MTurnUseMask')
         fbl.addRow(lbl, wid)
+        self._set_detailed([lbl, wid])
+
         lbl = QLabel('Mask Begin', grp_bx, alignment=Qt.AlignCenter)
         wid = self.create_pair(grp_bx, 'MTurnMaskSplBeg')
         fbl.addRow(lbl, wid)
+        self._set_detailed([lbl, wid])
+
         lbl = QLabel('Mask End', grp_bx, alignment=Qt.AlignCenter)
         wid = self.create_pair(grp_bx, 'MTurnMaskSplEnd')
         fbl.addRow(lbl, wid)
+        self._set_detailed([lbl, wid])
         return grp_bx
 
     def _get_single_pass_acq_grpbx(self):
@@ -295,13 +327,19 @@ class AcqControlWidget(BaseWidget):
         lbl = QLabel('Avg Turns', grp_bx, alignment=Qt.AlignCenter)
         wid = self.create_pair(grp_bx, 'SPassAvgNrTurns')
         fbl.addRow(lbl, wid)
+
         lbl = QLabel('Mask Begin', grp_bx, alignment=Qt.AlignCenter)
         wid = self.create_pair(grp_bx, 'SPassMaskSplBeg')
         fbl.addRow(lbl, wid)
+        self._set_detailed([lbl, wid])
+
         lbl = QLabel('Mask End', grp_bx, alignment=Qt.AlignCenter)
         wid = self.create_pair(grp_bx, 'SPassMaskSplEnd')
         fbl.addRow(lbl, wid)
+        self._set_detailed([lbl, wid])
+
         wid = QWidget(grp_bx)
+        self._set_detailed(wid)
         hbl = QHBoxLayout(wid)
         pdm_btn1 = PyDMPushButton(
             init_channel=self.prefix+'SPassBgCtrl-Cmd',

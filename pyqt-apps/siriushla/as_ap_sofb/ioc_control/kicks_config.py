@@ -23,7 +23,6 @@ class KicksConfigWidget(BaseWidget):
     def setupui(self):
         gbox = QGroupBox('Correctors', self)
         gbox.setObjectName('grbx')
-        gbox.setStyleSheet('#grbx{min-height:13.0em; max-height:13.0em;}')
         self.setLayout(QVBoxLayout())
         self.layout().addWidget(gbox)
         vbl = QVBoxLayout(gbox)
@@ -78,7 +77,6 @@ class KicksConfigWidget(BaseWidget):
         for tab, pvname, units in zip(tabs, pvnames, unitss):
             grpbx = QWidget(tabw)
             grpbx.setObjectName('gbx')
-            grpbx.setStyleSheet('#gbx{min-height:5.5em; max-height:5.5em;}')
             fbl = QFormLayout(grpbx)
             for unit, pln in zip(units, planes):
                 if unit is None:
@@ -96,7 +94,6 @@ class KicksConfigWidget(BaseWidget):
         if self.acc == 'SI':
             grpbx = QWidget(tabw)
             grpbx.setObjectName('gbx')
-            grpbx.setStyleSheet('#gbx{min-height:5.5em; max-height:5.5em;}')
             vertlay = QVBoxLayout(grpbx)
             tabw.addTab(grpbx, 'Details')
 
