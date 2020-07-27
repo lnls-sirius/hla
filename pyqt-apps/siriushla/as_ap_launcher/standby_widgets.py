@@ -180,6 +180,7 @@ class InjSysStandbyButton(PyDMWritableWidget, QPushButton):
             plugin = pydm.data_plugins.plugin_for_address(addr)
             conn = plugin.connections[addr]
             conn.put_value(val)
+            _time.sleep(0.1)
 
         if self._pressvalue == 0:
             self._booster_handler.turn_off()
