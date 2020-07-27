@@ -139,7 +139,7 @@ class BoRampStandbyHandler:
         retval = self._wait_pvs(pvs2wait, TRG_DSBL_VAL)
         if not retval[0]:
             text = 'Check for BO Triggers to be disabled\n'\
-                   'timed out without sucess!\nVerify BO Mags Triggers!'
+                   'timed out without success!\nVerify BO Mags Triggers!'
             return [False, text, retval[1]]
 
         # wait duration of a ramp for PS change opmode
@@ -154,7 +154,7 @@ class BoRampStandbyHandler:
         retval = self._wait_pvs(pvs2wait, PS_STS_SLWREF)
         if not retval[0]:
             text = 'Check for BO PS to be in OpMode SlowRef\n'\
-                   'timed out without sucess!\nVerify BO PS!'
+                   'timed out without success!\nVerify BO PS!'
             return [False, text, retval[1]]
 
         # set current to zero
@@ -166,7 +166,7 @@ class BoRampStandbyHandler:
         retval = self._wait_pvs(pvs2wait, 0.0)
         if not retval[0]:
             text = 'Check for BO PS to be with current zero\n'\
-                   'timed out without sucess!\nVerify BO PS!'
+                   'timed out without success!\nVerify BO PS!'
             return [False, text, retval[1]]
 
         return True, '', []
@@ -181,7 +181,7 @@ class BoRampStandbyHandler:
         retval = self._wait_pvs(pvs2wait, PS_STS_RMPWFM)
         if not retval[0]:
             text = 'Check for BO PS to be in OpMode RmpWfm\n'\
-                   'timed out without sucess!\nVerify BO PS!'
+                   'timed out without success!\nVerify BO PS!'
             return [False, text, retval[1]]
 
         return True, '', []
