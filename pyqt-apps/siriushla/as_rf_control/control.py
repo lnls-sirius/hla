@@ -84,7 +84,7 @@ class RFMainControl(SiriusMainWindow):
             wid_rampmon.setLayout(self._rampMonLayout())
             wid_pwrmon.addTab(wid_rampmon, 'Ramp')
             wid_cw = QWidget(self)
-            wid_cw.setLayout(self._cwMonLayout())
+            wid_cw.setLayout(self._powerMeterLayout())
             wid_pwrmon.addTab(wid_cw, 'CW')
 
         gbox_graphs = QGroupBox('Graphs', self)
@@ -703,160 +703,6 @@ class RFMainControl(SiriusMainWindow):
             QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Expanding), 9, 0)
         return lay
 
-    def _cwMonLayout(self):
-        self.cb_units = QComboBox(self)
-        self.cb_units.setStyleSheet('font-weight: bold;')
-        self.cb_units.addItems(['W', 'dBm'])
-        self.cb_units.currentTextChanged.connect(
-            self._handle_pwrdata_visibility)
-        self.pwr_curve_colors = {
-            'Cell3Pwr': 'blue',
-            'PwrFwd': 'darkGreen',
-            'PwrRev': 'red',
-        }
-        self._pm_dBm_labels = set()
-        self._pm_W_labels = set()
-
-        self.cb_Cell3Pwr = QCheckBox(self)
-        self.cb_Cell3Pwr.setStyleSheet(
-            'color:'+self.pwr_curve_colors['Cell3Pwr']+'; max-width: 1.2em;')
-        self.lb_Cell3PwrDsc = QLabel('Cavity Power', self)
-        self.lb_Cell3PwrDsc.setStyleSheet(
-            'color:'+self.pwr_curve_colors['Cell3Pwr']+';')
-        self.cb_Cell3Pwr.setObjectName('Cell3Pwr')
-        self.cb_Cell3Pwr.setChecked(True)
-        self.cb_Cell3Pwr.stateChanged.connect(self._handle_curves_visibility)
-        self.lb_Cell3PwrdBm = PyDMLabel(
-            self, 'BO-05D:RF-P5Cav:Cell3PwrdBm-Mon')
-        self.lb_Cell3PwrdBm.showUnits = True
-        self.lb_Cell3PwrdBm.setVisible(False)
-        self._pm_dBm_labels.add(self.lb_Cell3PwrdBm)
-        self.lb_Cell3PwrW = PyDMLabel(self, 'BO-05D:RF-P5Cav:Cell3Pwr-Mon')
-        self.lb_Cell3PwrW.showUnits = True
-        self._pm_W_labels.add(self.lb_Cell3PwrW)
-
-        self.cb_PwrFwd = QCheckBox(self)
-        self.cb_PwrFwd.setStyleSheet(
-            'color:'+self.pwr_curve_colors['PwrFwd']+'; max-width: 1.2em;')
-        self.lb_PwrFwdDsc = QLabel('Power Forward', self)
-        self.lb_PwrFwdDsc.setStyleSheet(
-            'color:'+self.pwr_curve_colors['PwrFwd']+';')
-        self.cb_PwrFwd.setObjectName('PwrFwd')
-        self.cb_PwrFwd.setChecked(True)
-        self.cb_PwrFwd.stateChanged.connect(self._handle_curves_visibility)
-        self.lb_PwrFwddBm = PyDMLabel(self, 'BO-05D:RF-P5Cav:PwrFwddBm-Mon')
-        self.lb_PwrFwddBm.showUnits = True
-        self.lb_PwrFwddBm.setVisible(False)
-        self._pm_dBm_labels.add(self.lb_PwrFwddBm)
-        self.lb_PwrFwdW = PyDMLabel(self, 'BO-05D:RF-P5Cav:PwrFwd-Mon')
-        self.lb_PwrFwdW.showUnits = True
-        self._pm_W_labels.add(self.lb_PwrFwdW)
-
-        self.cb_PwrRev = QCheckBox(self)
-        self.cb_PwrRev.setStyleSheet(
-            'color:'+self.pwr_curve_colors['PwrRev']+'; max-width: 1.2em;')
-        self.lb_PwrRevDsc = QLabel('Power Reverse', self)
-        self.lb_PwrRevDsc.setStyleSheet(
-            'color:'+self.pwr_curve_colors['PwrRev']+';')
-        self.cb_PwrRev.setObjectName('PwrRev')
-        self.cb_PwrRev.setChecked(True)
-        self.cb_PwrRev.stateChanged.connect(self._handle_curves_visibility)
-        self.lb_PwrRevdBm = PyDMLabel(self, 'BO-05D:RF-P5Cav:PwrRevdBm-Mon')
-        self.lb_PwrRevdBm.showUnits = True
-        self.lb_PwrRevdBm.setVisible(False)
-        self._pm_dBm_labels.add(self.lb_PwrRevdBm)
-        self.lb_PwrRevW = PyDMLabel(self, 'BO-05D:RF-P5Cav:PwrRev-Mon')
-        self.lb_PwrRevW.showUnits = True
-        self._pm_W_labels.add(self.lb_PwrRevW)
-
-        lb_CavPhs = QLabel('Phase', self, alignment=Qt.AlignCenter)
-        self.lb_CavPhs = PyDMLabel(self, 'BR-RF-DLLRF-01:CAV:PHS')
-        self.lb_CavPhs.showUnits = True
-
-        self.pwr_mon_graph = SiriusTimePlot(self)
-        self.pwr_mon_graph.setObjectName('graph')
-        self.pwr_mon_graph.setStyleSheet(
-            '#graph{min-height:15em;min-width:23em;max-height:15em;}')
-        self.pwr_mon_graph.autoRangeX = True
-        self.pwr_mon_graph.autoRangeY = True
-        self.pwr_mon_graph.backgroundColor = QColor(255, 255, 255)
-        self.pwr_mon_graph.showXGrid = True
-        self.pwr_mon_graph.showYGrid = True
-        self.pwr_mon_graph.timeSpan = 1800
-
-        self.pwr_mon_graph.addYChannel(
-            y_channel='BO-05D:RF-P5Cav:Cell3PwrdBm-Mon', name='Cell3Pwr dBm',
-            color=self.pwr_curve_colors['Cell3Pwr'],
-            lineStyle=Qt.SolidLine, lineWidth=1)
-        self.curves['Cell3Pwr'] = self.pwr_mon_graph.curveAtIndex(0)
-        self.pwr_mon_graph.addYChannel(
-            y_channel='BO-05D:RF-P5Cav:PwrFwddBm-Mon', name='PwrFwd dBm',
-            color=self.pwr_curve_colors['PwrFwd'],
-            lineStyle=Qt.SolidLine, lineWidth=1)
-        self.curves['PwrFwd'] = self.pwr_mon_graph.curveAtIndex(1)
-        self.pwr_mon_graph.addYChannel(
-            y_channel='BO-05D:RF-P5Cav:PwrRevdBm-Mon', name='PwrRev dBm',
-            color=self.pwr_curve_colors['PwrRev'],
-            lineStyle=Qt.SolidLine, lineWidth=1)
-        self.curves['PwrRev'] = self.pwr_mon_graph.curveAtIndex(2)
-
-        self.pwr_mon_graph.addYChannel(
-            y_channel='BO-05D:RF-P5Cav:Cell3Pwr-Mon', name='Cell3Pwr W',
-            color=self.pwr_curve_colors['Cell3Pwr'],
-            lineStyle=Qt.SolidLine, lineWidth=1)
-        self.curves['Cell3Pwr W'] = self.pwr_mon_graph.curveAtIndex(3)
-        self.pwr_mon_graph.addYChannel(
-            y_channel='BO-05D:RF-P5Cav:PwrFwd-Mon', name='PwrFwd W',
-            color=self.pwr_curve_colors['PwrFwd'],
-            lineStyle=Qt.SolidLine, lineWidth=1)
-        self.curves['PwrFwd W'] = self.pwr_mon_graph.curveAtIndex(4)
-        self.pwr_mon_graph.addYChannel(
-            y_channel='BO-05D:RF-P5Cav:PwrRev-Mon', name='PwrRev W',
-            color=self.pwr_curve_colors['PwrRev'],
-            lineStyle=Qt.SolidLine, lineWidth=1)
-        self.curves['PwrRev W'] = self.pwr_mon_graph.curveAtIndex(5)
-
-        for cid in self.pwr_curve_colors.keys():
-            self.curves[cid].setVisible(False)
-
-        lay_vals = QGridLayout()
-        lay_vals.setAlignment(Qt.AlignCenter)
-        lay_vals.setVerticalSpacing(15)
-        lay_vals.addItem(QSpacerItem(
-            20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 0, 0)
-        lay_vals.addWidget(QLabel('<h4>Channel</h4>'), 1, 2,
-                           alignment=Qt.AlignCenter)
-        lay_vals.addWidget(self.cb_units, 1, 3, alignment=Qt.AlignCenter)
-        lay_vals.addWidget(self.cb_Cell3Pwr, 2, 1)
-        lay_vals.addWidget(self.lb_Cell3PwrDsc, 2, 2, alignment=Qt.AlignCenter)
-        lay_vals.addWidget(self.lb_Cell3PwrW, 2, 3)
-        lay_vals.addWidget(self.lb_Cell3PwrdBm, 2, 3)
-        lay_vals.addWidget(self.cb_PwrFwd, 3, 1)
-        lay_vals.addWidget(self.lb_PwrFwdDsc, 3, 2, alignment=Qt.AlignCenter)
-        lay_vals.addWidget(self.lb_PwrFwdW, 3, 3)
-        lay_vals.addWidget(self.lb_PwrFwddBm, 3, 3)
-        lay_vals.addWidget(self.cb_PwrRev, 4, 1)
-        lay_vals.addWidget(self.lb_PwrRevDsc, 4, 2, alignment=Qt.AlignCenter)
-        lay_vals.addWidget(self.lb_PwrRevW, 4, 3)
-        lay_vals.addWidget(self.lb_PwrRevdBm, 4, 3)
-        lay_vals.addWidget(lb_CavPhs, 5, 2, alignment=Qt.AlignCenter)
-        lay_vals.addWidget(self.lb_CavPhs, 5, 3)
-        lay_vals.addItem(QSpacerItem(
-            20, 20, QSzPlcy.Fixed, QSzPlcy.Fixed), 6, 4)
-        lay_vals.setColumnStretch(0, 1)
-        lay_vals.setColumnStretch(1, 1)
-        lay_vals.setColumnStretch(2, 3)
-        lay_vals.setColumnStretch(3, 3)
-        lay_vals.setColumnStretch(4, 1)
-
-        lay = QGridLayout()
-        lay.addLayout(lay_vals, 1, 0)
-        lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 2, 0)
-        lay.addWidget(self.pwr_mon_graph, 3, 0)
-        lay.addItem(QSpacerItem(
-            0, 10, QSzPlcy.Ignored, QSzPlcy.MinimumExpanding), 4, 0)
-        return lay
-
     def _autoStartLayout(self):
         self.bt_autostart = PyDMStateButton(self, 'BR-RF-DLLRF-01:AUTOSTART:S')
         self.led_autostart = SiriusLedState(self, 'BR-RF-DLLRF-01:AUTOSTART')
@@ -927,43 +773,27 @@ class RFMainControl(SiriusMainWindow):
         self.pwr_mon_graph.setObjectName('pwrmon_graph')
         self.pwr_mon_graph.setStyleSheet(
             '#pwrmon_graph{min-width: 23.5em; min-height: 20em;}')
-        self.pwr_curve_colors = {
-            'CH 1': 'black',
-            'CH 2': 'blue',
-            'CH 3': 'red',
-            'CH 5': 'magenta',
-            'CH 6': 'darkGreen',
-            'CH 9': 'yellow',
-            'CH 10': 'cyan',
-            'CH 15': 'darkCyan',
-            'CH 16': 'darkRed',
-        }
+
+        data = self.chs['PwrMtr']
 
         self._pm_dBm_labels = set()
         self._pm_W_labels = set()
-        for idx, ch in enumerate([1, 2, 3, 5, 6, 9, 10, 15, 16]):
-            sch = str(ch)
-            color = self.pwr_curve_colors['CH '+sch]
+        for idx, curve_data in enumerate(data):
+            name, wch, dbch, color = curve_data
             row = idx+1
-
-            dch = 'RA-RaSIA01:RF-RFCalSys:PwrdBm{}-Mon.DESC'.format(sch)
-            if sch == '1':
-                dbch = 'SI-02SB:RF-P7Cav:PwrCell4dBm-Mon'
-                wch = 'SI-02SB:RF-P7Cav:PwrCell4-Mon'
-            else:
-                dbch = 'RA-RaSIA01:RF-RFCalSys:PwrdBm{}-Mon'.format(sch)
-                wch = 'RA-RaSIA01:RF-RFCalSys:PwrW{}-Mon'.format(sch)
 
             # Table
             cb = QCheckBox(self)
-            cb.setChecked(ch in {2, 3})
-            cb.setObjectName('CH '+sch)
+            cond = True if self.section == 'BO' else 'Coup' in name
+            cb.setChecked(cond)
+            cb.setObjectName(name)
             cb.setStyleSheet('color:'+color+'; max-width: 1.2em;')
             cb.stateChanged.connect(self._handle_curves_visibility)
 
-            lb_desc = PyDMLabel(self, dch)
+            lb_desc = QLabel(name, self)
             lb_desc.setStyleSheet(
-                'min-height: 1.5em; color:'+color+'; max-width: 6em;')
+                'min-height: 1.5em; color:'+color+'; max-width: 8em;'
+                'qproperty-alignment: AlignCenter;')
 
             lb_dbmpwr = PyDMLabel(self, dbch)
             lb_dbmpwr.showUnits = True
@@ -981,21 +811,31 @@ class RFMainControl(SiriusMainWindow):
 
             # Graph
             self.pwr_mon_graph.addYChannel(
-                y_channel=dbch, name='CH '+sch, color=color,
+                y_channel=dbch, name=name+' dBm', color=color,
                 lineStyle=Qt.SolidLine, lineWidth=1)
-            self.curves['CH '+sch] = self.pwr_mon_graph.curveAtIndex(2*idx)
+            self.curves[name+' dBm'] = self.pwr_mon_graph.curveAtIndex(2*idx)
             self.pwr_mon_graph.addYChannel(
-                y_channel=wch, name='CH '+sch+' W', color=color,
+                y_channel=wch, name=name+' W', color=color,
                 lineStyle=Qt.SolidLine, lineWidth=1)
-            self.curves['CH '+sch+' W'] = \
+            self.curves[name+' W'] = \
                 self.pwr_mon_graph.curveAtIndex(2*idx+1)
 
-        for cid in self.pwr_curve_colors.keys():
-            if cid not in {'CH 2', 'CH 3'}:
-                self.curves[cid].setVisible(False)
-                self.curves[cid+' W'].setVisible(False)
-            else:
-                self.curves[cid].setVisible(False)
+        if self.section == 'BO':
+            for name, _, _, _ in data:
+                self.curves[name+' dBm'].setVisible(False)
+
+            lb_CavPhs = QLabel('Phase', self, alignment=Qt.AlignCenter)
+            self.lb_CavPhs = PyDMLabel(self, 'BR-RF-DLLRF-01:CAV:PHS')
+            self.lb_CavPhs.showUnits = True
+            lay_vals.addWidget(lb_CavPhs, 5, 1, alignment=Qt.AlignCenter)
+            lay_vals.addWidget(self.lb_CavPhs, 5, 2)
+        else:
+            for name, _, _, _ in data:
+                if 'Coup' not in name:
+                    self.curves[name+' dBm'].setVisible(False)
+                    self.curves[name+' W'].setVisible(False)
+                else:
+                    self.curves[name+' dBm'].setVisible(False)
 
         lay = QGridLayout()
         lay.setHorizontalSpacing(25)
@@ -1206,11 +1046,13 @@ class RFMainControl(SiriusMainWindow):
             lb.setVisible(text == 'dBm')
         for lb in self._pm_W_labels:
             lb.setVisible(text == 'W')
-        for cid in self.pwr_curve_colors:
-            cb = self.findChild(QCheckBox, cid)
+
+        pwr_names = [data[0] for data in self.chs['PwrMtr']]
+        for name in pwr_names:
+            cb = self.findChild(QCheckBox, name)
             visi = cb.isChecked()
-            curvedBm = self.curves[cid]
-            curveW = self.curves[cid + ' W']
+            curvedBm = self.curves[name + ' dBm']
+            curveW = self.curves[name + ' W']
             if text == 'dBm':
                 curvedBm.setVisible(visi)
                 curveW.setVisible(False)
@@ -1219,11 +1061,11 @@ class RFMainControl(SiriusMainWindow):
                 curveW.setVisible(visi)
 
     def _handle_curves_visibility(self, state):
-        cid = self.sender().objectName()
-        if cid in self.pwr_curve_colors.keys():
-            if self.cb_units.currentText() == 'W':
-                cid += ' W'
-        curve = self.curves[cid]
+        name = self.sender().objectName()
+        pwr_names = [data[0] for data in self.chs['PwrMtr']]
+        if name in pwr_names:
+            name += (' W' if self.cb_units.currentText() == 'W' else ' dBm')
+        curve = self.curves[name]
         curve.setVisible(state)
 
     def _handle_predrive_led_channels(self, led_drive, chs_dict, value):
