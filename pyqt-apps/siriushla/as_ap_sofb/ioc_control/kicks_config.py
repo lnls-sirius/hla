@@ -104,7 +104,8 @@ class KicksConfigWidget(BaseWidget):
             hbl.addWidget(wid)
             vertlay.addItem(hbl)
             lbl = QLabel('Trigger Delay', grpbx)
-            wid = self.create_pair(grpbx, 'CorrDelay')
+            wid = self.create_pair(
+                grpbx, 'Delay', prefix='SI-Glob:TI-Mags-Corrs:')
             hbl = QHBoxLayout()
             hbl.addWidget(lbl)
             hbl.addWidget(wid)
