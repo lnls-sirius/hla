@@ -239,12 +239,17 @@ class SOFBControl(BaseWidget):
         hbl.addWidget(wid)
         vbl2.addItem(hbl)
 
-        lbl = QLabel('Freq. [Hz]', grpbx)
-        wid = self.create_pair(grpbx, 'ClosedLoopFreq')
         fbl = QFormLayout()
         fbl.setHorizontalSpacing(9)
-        fbl.addRow(lbl, wid)
         vbl2.addItem(fbl)
+
+        lbl = QLabel('Freq. [Hz]', grpbx)
+        wid = self.create_pair(grpbx, 'ClosedLoopFreq')
+        fbl.addRow(lbl, wid)
+
+        lbl = QLabel('Max. Orb. Distortion', grpbx)
+        wid = self.create_pair(grpbx, 'MaxOrbDistortion')
+        fbl.addRow(lbl, wid)
 
         # ####################################################################
         # ###################### Response Matrix #####################

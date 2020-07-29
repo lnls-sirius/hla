@@ -13,7 +13,8 @@ from pydm.widgets import PyDMLabel, PyDMPushButton, PyDMCheckbox
 from siriuspy.sofb.csdev import ConstTLines
 from siriuspy.clientconfigdb import ConfigDBClient, ConfigDBException
 from siriushla.widgets.windows import create_window_from_widget
-from siriushla.widgets import SiriusLedState, SiriusConnectionSignal
+from siriushla.widgets import SiriusLedState, SiriusConnectionSignal, \
+    SiriusLabel
 from siriushla.util import connect_window, get_appropriate_color
 from siriushla.as_ap_configdb import LoadConfigDialog, SaveConfigDialog
 
@@ -48,23 +49,16 @@ class RespMatWidget(BaseWidget):
         tabw = QTabWidget(gbox)
         vbl.addWidget(tabw)
 
-        mainwid = QWidget(tabw)
-        vbl = QVBoxLayout(mainwid)
-        tabw.addTab(mainwid, 'Main')
-
         # ####################################################################
         # ####################### Selection Lists ############################
         # ####################################################################
-        hbl = QHBoxLayout()
-        hbl.setSpacing(6)
-        vbl.addLayout(hbl)
+        grpbx = QWidget(tabw)
+        hbl = QHBoxLayout(grpbx)
+        tabw.addTab(grpbx, 'Sel.')
 
-        grpbx = QGroupBox('Corrs and BPMs selection', mainwid)
-        hbl.addWidget(grpbx)
         icon = qta.icon('fa5s.hammer', color=get_appropriate_color(self.acc))
         Window = create_window_from_widget(
             SelectionMatrix, title='Corrs and BPMs selection', icon=icon)
-        hbl2 = QHBoxLayout(grpbx)
         btn = QPushButton('', grpbx)
         btn.setObjectName('btn')
         btn.setIcon(qta.icon('fa5s.tasks'))
@@ -73,7 +67,7 @@ class RespMatWidget(BaseWidget):
             '#btn{min-width:3.8em; max-width:3.8em;\
             min-height:2em; max-height:2em; icon-size:25px;}')
         connect_window(btn, Window, None, prefix=self.prefix, acc=self.acc)
-        hbl2.addWidget(btn)
+        hbl.addWidget(btn)
 
         if self.acc == 'SI':
             pdm_chbx = PyDMCheckbox(
@@ -81,37 +75,51 @@ class RespMatWidget(BaseWidget):
             pdm_chbx.setText('use RF')
             pdm_led = SiriusLedState(
                 grpbx, init_channel=self.prefix+'RFEnbl-Sts')
-            hbl2.addStretch()
-            hbl2.addWidget(pdm_chbx)
-            hbl2.addWidget(pdm_led)
+            hbl.addStretch()
+            hbl.addWidget(pdm_chbx)
+            hbl.addWidget(pdm_led)
 
-        btn = QPushButton('', mainwid)
+        btn = QPushButton('', grpbx)
         btn.setToolTip('Visualize RespMat')
         btn.setIcon(qta.icon('mdi.chart-line'))
         btn.setObjectName('btn')
         btn.setStyleSheet('#btn{max-width:40px; icon-size:40px;}')
         Window = create_window_from_widget(
             ShowMatrixWidget, title='Check RespMat')
-        connect_window(btn, Window, mainwid, prefix=self.prefix, acc=self.acc)
+        connect_window(btn, Window, grpbx, prefix=self.prefix, acc=self.acc)
         hbl.addWidget(btn)
 
         # ####################################################################
         # ####################### Singular Values ############################
         # ####################################################################
+        grpbx = QWidget(tabw)
+        gdl = QGridLayout(grpbx)
+        tabw.addTab(grpbx, 'SVs')
 
-        grpbx = QGroupBox('Singular Values', mainwid)
-        vbl.addWidget(grpbx)
-        fml = QVBoxLayout(grpbx)
-        wid = self.create_pair(grpbx, 'NrSingValues')
+        wid = self.create_pair(grpbx, 'MinSingValue')
+        lbl = QLabel('Min. SV: ')
+        gdl.addWidget(lbl, 0, 0)
+        gdl.addWidget(wid, 0, 1)
+
+        wid = self.create_pair(grpbx, 'TikhonovRegConst')
+        lbl = QLabel('Tikhonov: ')
+        gdl.addWidget(lbl, 1, 0)
+        gdl.addWidget(wid, 1, 1)
+
+        lbl = QLabel('Nr Sing Vals')
+        lbls = SiriusLabel(self.prefix + 'NrSingValues-Mon', grpbx)
         btn = QPushButton('', grpbx)
         btn.setToolTip('Check Singular Values')
         btn.setIcon(qta.icon('mdi.chart-line'))
         btn.setObjectName('btn')
         btn.setStyleSheet('#btn{max-width:30px; icon-size:30px;}')
         hbl = QHBoxLayout()
-        hbl.addWidget(wid)
         hbl.addWidget(btn)
-        fml.addItem(hbl)
+        hbl.addStretch()
+        hbl.addWidget(lbl)
+        hbl.addWidget(lbls)
+        gdl.addLayout(hbl, 2, 0, 1, 2)
+
         Window = create_window_from_widget(
             SingularValues, title='Check Singular Values')
         connect_window(btn, Window, grpbx, prefix=self.prefix)
@@ -192,7 +200,6 @@ class RespMatWidget(BaseWidget):
         gdl = QGridLayout(grpbx)
         tabw.addTab(grpbx, 'Load/Save')
 
-        # gdl.setVerticalSpacing(15)
         lbl = QLabel('Load from:', grpbx)
         gdl.addWidget(lbl, 0, 0)
         pbtn = QPushButton('File', grpbx)
