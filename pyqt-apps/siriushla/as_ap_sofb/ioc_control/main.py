@@ -276,16 +276,12 @@ class SOFBControl(BaseWidget):
         hbl.addWidget(wid)
         gpbx_lay.addLayout(hbl, 0, 0, 1, 4 if self.acc == 'SI' else 3)
 
-        gpbx_lay.addWidget(
-            QLabel('Kp', gpbx), 1, 1, alignment=Qt.AlignCenter)
-        gpbx_lay.addWidget(
-            QLabel('Ki [Hz]', gpbx), 1, 2, alignment=Qt.AlignCenter)
-        gpbx_lay.addWidget(
-            QLabel('Kd [s]', gpbx), 1, 3, alignment=Qt.AlignCenter)
         gpbx_lay.addWidget(QLabel('CH', gpbx), 2, 0)
         gpbx_lay.addWidget(QLabel('CV', gpbx), 3, 0)
         tmpl = self.prefix + 'LoopPID{:s}{:s}-SP'
         for i, k in enumerate(('Kp', 'Ki', 'Kd'), 1):
+            gpbx_lay.addWidget(
+                QLabel(k, gpbx), 1, i, alignment=Qt.AlignCenter)
             spbx = SiriusSpinbox(wid, init_channel=tmpl.format(k, 'CH'))
             spbx.showStepExponent = False
             gpbx_lay.addWidget(spbx, 2, i)

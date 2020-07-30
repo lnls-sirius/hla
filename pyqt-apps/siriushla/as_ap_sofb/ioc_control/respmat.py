@@ -42,7 +42,6 @@ class RespMatWidget(BaseWidget):
     def setupui(self):
         gbox = QGroupBox('Matrix', self)
         gbox.setObjectName('grbx')
-        gbox.setStyleSheet('#grbx{min-height:13.0em; max-height:13.0em;}')
         self.setLayout(QVBoxLayout())
         self.layout().addWidget(gbox)
         vbl = QVBoxLayout(gbox)
@@ -175,19 +174,16 @@ class RespMatWidget(BaseWidget):
         fml = QFormLayout()
         vbl.addSpacing(20)
         vbl.addItem(fml)
-        lbl = QLabel('CH kick [urad]', grpbx)
+        lbl = QLabel('CH [urad]', grpbx)
         wid = self.create_pair(grpbx, 'MeasRespMatKickCH')
         fml.addRow(lbl, wid)
-        lbl = QLabel('CV kick [urad]', grpbx)
+        lbl = QLabel('CV [urad]', grpbx)
         wid = self.create_pair(grpbx, 'MeasRespMatKickCV')
         fml.addRow(lbl, wid)
         if self.acc == 'SI':
-            lbl = QLabel('RF kick [Hz]', grpbx)
+            lbl = QLabel('RF [Hz]', grpbx)
             wid = self.create_pair(grpbx, 'MeasRespMatKickRF')
             fml.addRow(lbl, wid)
-        fml.addItem(QSpacerItem(
-            20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding))
-
         lbl = QLabel('Wait [s]', grpbx)
         lbl.setToolTip('Time to wait between kicks')
         wid = self.create_pair(grpbx, 'MeasRespMatWait')
