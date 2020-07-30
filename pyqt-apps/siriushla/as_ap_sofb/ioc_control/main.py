@@ -300,7 +300,7 @@ class SOFBControl(BaseWidget):
             gpbx_lay.addWidget(QLabel('RF', gpbx), 4, 0)
 
         # ####################################################################
-        # ###################### Response Matrix #####################
+        # ########################## Response Matrix #########################
         # ####################################################################
         wid = RespMatWidget(parent, self.prefix, self.acc)
         wid.layout().setContentsMargins(0, 0, 0, 0)
