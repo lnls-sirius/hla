@@ -227,29 +227,77 @@ class SOFBControl(BaseWidget):
         # ####################################################################
         grpbx = QGroupBox('Auto Correction', parent)
         grpbx.setObjectName('grp')
-        grpbx.setStyleSheet('#grp{min-height: 5em; max-height: 5em;}')
+        # grpbx.setStyleSheet('#grp{min-height: 13em; max-height: 13em;}')
         vbl2 = QVBoxLayout(grpbx)
         vbl.addWidget(grpbx)
         vbl.addStretch()
 
-        lbl = QLabel('State', grpbx)
-        wid = self.create_pair_butled(grpbx, 'ClosedLoop')
+        tabw = QTabWidget(grpbx)
+        vbl2.addWidget(tabw)
+
+        gpbx = QWidget(tabw)
+        gpbx_lay = QVBoxLayout(gpbx)
+        tabw.addTab(gpbx, 'Main')
+
+        lbl = QLabel('State', gpbx)
+        wid = self.create_pair_butled(gpbx, 'ClosedLoop')
         hbl = QHBoxLayout()
         hbl.addWidget(lbl)
         hbl.addWidget(wid)
-        vbl2.addItem(hbl)
+        gpbx_lay.addLayout(hbl)
 
         fbl = QFormLayout()
         fbl.setHorizontalSpacing(9)
-        vbl2.addItem(fbl)
+        gpbx_lay.addLayout(fbl)
 
-        lbl = QLabel('Freq. [Hz]', grpbx)
-        wid = self.create_pair(grpbx, 'ClosedLoopFreq')
+        lbl = QLabel('Freq. [Hz]', gpbx)
+        wid = self.create_pair(gpbx, 'ClosedLoopFreq')
         fbl.addRow(lbl, wid)
 
-        lbl = QLabel('Max. Orb. Distortion', grpbx)
-        wid = self.create_pair(grpbx, 'MaxOrbDistortion')
+        lbl = QLabel('Max. Orb. Distortion', gpbx)
+        wid = self.create_pair(gpbx, 'MaxOrbDistortion')
         fbl.addRow(lbl, wid)
+
+        gpbx = QWidget(tabw)
+        gpbx_lay = QGridLayout(gpbx)
+        gpbx_lay.setSpacing(1)
+        tabw.addTab(gpbx, 'PID')
+
+        hbl = QHBoxLayout()
+        hbl.addWidget(QLabel('Use PID:'))
+        wid = self.create_pair_butled(gpbx, 'LoopUsePID')
+        hbl.addWidget(wid)
+        hbl.addStretch()
+        hbl.addWidget(QLabel('Reset PID ref'))
+        wid = PyDMPushButton(
+            gpbx, init_channel=self.prefix+'LoopPIDRstRef-Cmd')
+        wid.setToolTip('Reset PID reference')
+        wid.setIcon(qta.icon('fa5s.sync'))
+        hbl.addWidget(wid)
+        gpbx_lay.addLayout(hbl, 0, 0, 1, 4 if self.acc == 'SI' else 3)
+
+        gpbx_lay.addWidget(
+            QLabel('Kp', gpbx), 1, 1, alignment=Qt.AlignCenter)
+        gpbx_lay.addWidget(
+            QLabel('Ki [Hz]', gpbx), 1, 2, alignment=Qt.AlignCenter)
+        gpbx_lay.addWidget(
+            QLabel('Kd [s]', gpbx), 1, 3, alignment=Qt.AlignCenter)
+        gpbx_lay.addWidget(QLabel('CH', gpbx), 2, 0)
+        gpbx_lay.addWidget(QLabel('CV', gpbx), 3, 0)
+        tmpl = self.prefix + 'LoopPID{:s}{:s}-SP'
+        for i, k in enumerate(('Kp', 'Ki', 'Kd'), 1):
+            spbx = SiriusSpinbox(wid, init_channel=tmpl.format(k, 'CH'))
+            spbx.showStepExponent = False
+            gpbx_lay.addWidget(spbx, 2, i)
+            spbx = SiriusSpinbox(wid, init_channel=tmpl.format(k, 'CV'))
+            spbx.showStepExponent = False
+            gpbx_lay.addWidget(spbx, 3, i)
+            if self.acc == 'SI':
+                spbx = SiriusSpinbox(wid, init_channel=tmpl.format(k, 'RF'))
+                spbx.showStepExponent = False
+                gpbx_lay.addWidget(spbx, 4, i)
+        if self.acc == 'SI':
+            gpbx_lay.addWidget(QLabel('RF', gpbx), 4, 0)
 
         # ####################################################################
         # ###################### Response Matrix #####################
