@@ -58,6 +58,7 @@ setup(
         'scripts/sirius-hla-as-ps-test.py',
         'scripts/sirius-hla-as-pu-detail.py',
         'scripts/sirius-hla-as-ti-control.py',
+        'scripts/sirius-hla-bl-ap-manaca.py',
         'scripts/sirius-hla-bo-ap-chargemon.py',
         'scripts/sirius-hla-bo-ap-chromcorr.py',
         'scripts/sirius-hla-bo-ap-injcontrol.py',
