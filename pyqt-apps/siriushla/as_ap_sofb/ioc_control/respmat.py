@@ -106,7 +106,7 @@ class RespMatWidget(BaseWidget):
         gdl.addWidget(wid, 1, 1)
 
         lbl = QLabel('Nr Sing Vals')
-        lbls = SiriusLabel(self.prefix + 'NrSingValues-Mon', grpbx)
+        lbls = SiriusLabel(grpbx, init_channel=self.prefix+'NrSingValues-Mon')
         btn = QPushButton('', grpbx)
         btn.setToolTip('Check Singular Values')
         btn.setIcon(qta.icon('mdi.chart-line'))
