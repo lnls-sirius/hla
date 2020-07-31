@@ -278,6 +278,7 @@ class SOFBControl(BaseWidget):
         hbl.addWidget(QLabel('Reset PID ref'))
         wid = PyDMPushButton(
             gpbx, init_channel=self.prefix+'LoopPIDRstRef-Cmd')
+        wid.pressValue = 1
         wid.setToolTip('Reset PID reference')
         wid.setIcon(qta.icon('fa5s.sync'))
         hbl.addWidget(wid)
