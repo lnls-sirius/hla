@@ -155,15 +155,32 @@ class SOFBControl(BaseWidget):
         vbl.addStretch()
 
         # ####################################################################
+        # ########################## Correction ##############################
+        # ####################################################################
+        corrg = QGroupBox('Correction', parent)
+        vbl.addWidget(corrg)
+        vbl.addStretch()
+        corrg.setLayout(QVBoxLayout())
+
+        lbl = QLabel('Auto Correction State:', corrg)
+        wid = self.create_pair_butled(corrg, 'LoopState')
+        hbl = QHBoxLayout()
+        hbl.addWidget(lbl)
+        hbl.addWidget(wid)
+        corrg.layout().addLayout(hbl)
+
+        tabcorr = QTabWidget(corrg)
+        corrg.layout().addWidget(tabcorr)
+
+        # ####################################################################
         # ###################### Manual Correction ###########################
         # ####################################################################
-        grpbx = QGroupBox('Manual Correction', parent)
+        grpbx = QWidget(tabcorr)
+        tabcorr.addTab(grpbx, 'Manual')
         grpbx.setObjectName('grp')
         grpbx.setStyleSheet('#grp{min-height: 70px; max-height: 70px;}')
         gdl = QGridLayout(grpbx)
         gdl.setSpacing(9)
-        vbl.addWidget(grpbx)
-        vbl.addStretch()
 
         calc = PyDMPushButton(
             grpbx, '', pressValue=1, init_channel=self.prefix+'CalcDelta-Cmd')
@@ -177,7 +194,7 @@ class SOFBControl(BaseWidget):
         rules = (
             '[{"name": "EnblRule", "property": "Enable", ' +
             '"expression": "not ch[0]", "channels": [{"channel": "' +
-            self.prefix+'ClosedLoop-Sts'+'", "trigger": true}]}]')
+            self.prefix+'LoopState-Sts'+'", "trigger": true}]}]')
         calc.rules = rules
 
         exp = 'ch[0] in (1, 2, 3)'
@@ -185,7 +202,7 @@ class SOFBControl(BaseWidget):
         if self.isring:
             exp = 'ch[1] in (1, 2, 3) and not ch[0]'
             ch = '{"channel": "' + self.prefix + \
-                'ClosedLoop-Sts", "trigger": true},'
+                'LoopState-Sts", "trigger": true},'
         rules = (
             '[{"name": "EnblRule", "property": "Enable", ' +
             '"expression": "'+exp+'", "channels": ['+ch +
@@ -225,12 +242,9 @@ class SOFBControl(BaseWidget):
         # ####################################################################
         # ####################### Auto Correction ############################
         # ####################################################################
-        grpbx = QGroupBox('Auto Correction', parent)
-        grpbx.setObjectName('grp')
-        # grpbx.setStyleSheet('#grp{min-height: 13em; max-height: 13em;}')
+        grpbx = QWidget(tabcorr)
+        tabcorr.addTab(grpbx, 'Auto')
         vbl2 = QVBoxLayout(grpbx)
-        vbl.addWidget(grpbx)
-        vbl.addStretch()
 
         tabw = QTabWidget(grpbx)
         vbl2.addWidget(tabw)
@@ -239,19 +253,12 @@ class SOFBControl(BaseWidget):
         gpbx_lay = QVBoxLayout(gpbx)
         tabw.addTab(gpbx, 'Main')
 
-        lbl = QLabel('State', gpbx)
-        wid = self.create_pair_butled(gpbx, 'ClosedLoop')
-        hbl = QHBoxLayout()
-        hbl.addWidget(lbl)
-        hbl.addWidget(wid)
-        gpbx_lay.addLayout(hbl)
-
         fbl = QFormLayout()
         fbl.setHorizontalSpacing(9)
         gpbx_lay.addLayout(fbl)
 
         lbl = QLabel('Freq. [Hz]', gpbx)
-        wid = self.create_pair(gpbx, 'ClosedLoopFreq')
+        wid = self.create_pair(gpbx, 'LoopFreq')
         fbl.addRow(lbl, wid)
 
         lbl = QLabel('Max. Orb. Distortion', gpbx)
