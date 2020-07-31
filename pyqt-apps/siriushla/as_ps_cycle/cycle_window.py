@@ -34,12 +34,13 @@ warncolor = QColor(200, 200, 0)
 class CycleWindow(SiriusMainWindow):
     """Power supplies cycle window."""
 
-    def __init__(self, parent=None, checked_accs=()):
+    def __init__(self, parent=None, checked_accs=(), adv_mode=False):
         """Constructor."""
         super().__init__(parent)
         self.setObjectName('ASApp')
         cor = get_appropriate_color(section='AS')
         self.setWindowIcon(qta.icon('mdi.recycle', color=cor))
+        self._is_adv_mode = adv_mode
         # Data structs
         self._psnames = get_psnames()
         self._timing = Timing()
@@ -406,16 +407,26 @@ class CycleWindow(SiriusMainWindow):
         if not _re.match('.*-.*:.*-.*', psname):
             return
 
-        if (psname.sec in ['BO', 'SI'] and psname.dev in ['B', 'B1B2']):
-            psname2check = PSSearch.get_psnames(
-                {'sec': psname.sec, 'dev': 'B.*'})
+        if not self._is_adv_mode and psname.sec == 'SI':
+            psname2check = Filter.process_filters(
+                self._psnames, filters={'sec': 'SI'})
             psname2check.remove(psname)
-            item2check = self.pwrsupplies_tree._item_map[psname2check[0]]
-
             state2set = item.checkState(0)
-            state2change = item2check.checkState(0)
-            if state2change != state2set:
-                item2check.setCheckState(0, state2set)
+            for psn in psname2check:
+                item2check = self.pwrsupplies_tree._item_map[psn]
+                if item2check.checkState(0) != state2set:
+                    item2check.setCheckState(0, state2set)
+        else:
+            if (psname.sec in ['BO', 'SI'] and psname.dev in ['B', 'B1B2']):
+                psname2check = PSSearch.get_psnames(
+                    {'sec': psname.sec, 'dev': 'B.*'})
+                psname2check.remove(psname)
+                item2check = self.pwrsupplies_tree._item_map[psname2check[0]]
+
+                state2set = item.checkState(0)
+                state2change = item2check.checkState(0)
+                if state2change != state2set:
+                    item2check.setCheckState(0, state2set)
         self._needs_update_setup = True
 
     def _update_setup(self):
