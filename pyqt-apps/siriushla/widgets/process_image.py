@@ -24,9 +24,11 @@ from .led import SiriusLedState
 
 
 class SiriusProcessImage(QWidget):
-    def __init__(self, parent=None, device='', orientation='V'):
+    def __init__(self, parent=None, device='', convertion_set=True,
+                 orientation='V'):
         super().__init__(parent)
         self._dev = SiriusPVName(device)
+        self._conv_set = convertion_set
         self._ori = orientation
         self._setupUi()
 
@@ -136,7 +138,9 @@ class SiriusProcessImage(QWidget):
             '#sts{min-width:25px; max-width:25px; icon-size:20px;}')
         Window = create_window_from_widget(
             _DetailedWidget, title='Image Processing Detailed Configs')
-        connect_window(sts, Window, gb_pos, device=self._dev)
+        connect_window(
+            sts, Window, gb_pos, device=self._dev,
+            convertion_set=self._conv_set)
         hlay = QHBoxLayout()
         hlay.addWidget(sts, alignment=Qt.AlignRight)
         fl.addRow(hlay)
@@ -248,10 +252,11 @@ class SiriusProcessImage(QWidget):
 class _DetailedWidget(QWidget):
     """Process Image Detail Control."""
 
-    def __init__(self, parent=None, device=''):
+    def __init__(self, parent=None, device='', convertion_set=True):
         super().__init__(parent=parent)
         self._dev = SiriusPVName(device)
         sec = 'ID' if 'BL' in self._dev else self._dev.sec
+        self._conv_set = convertion_set
         self.setObjectName(sec+'App')
         self._setupui()
 
@@ -294,21 +299,29 @@ class _DetailedWidget(QWidget):
 
         wid = QWidget(self)
         wid.setLayout(QHBoxLayout())
-        spnbox = SiriusSpinbox(wid, init_channel=self._dev+':Px2mmScaleX-SP')
-        lbl = SiriusLabel(wid, init_channel=self._dev+':Px2mmScaleX-RB')
-        spnbox.showStepExponent = False
-        wid.layout().addWidget(spnbox)
-        wid.layout().addWidget(lbl)
+        if self._conv_set:
+            spb = SiriusSpinbox(wid, init_channel=self._dev+':Px2mmScaleX-SP')
+            lbl = SiriusLabel(wid, init_channel=self._dev+':Px2mmScaleX-RB')
+            spb.showStepExponent = False
+            wid.layout().addWidget(spb)
+            wid.layout().addWidget(lbl)
+        else:
+            lbl = SiriusLabel(wid, init_channel=self._dev+':Px2mmScaleX-Cte')
+            wid.layout().addWidget(lbl)
         self.layout().addRow(QLabel(
             'Pxl 2 mm Scale X', self, alignment=Qt.AlignBottom), wid)
 
         wid = QWidget(self)
         wid.setLayout(QHBoxLayout())
-        spnbox = SiriusSpinbox(wid, init_channel=self._dev+':Px2mmScaleY-SP')
-        lbl = SiriusLabel(wid, init_channel=self._dev+':Px2mmScaleY-RB')
-        spnbox.showStepExponent = False
-        wid.layout().addWidget(spnbox)
-        wid.layout().addWidget(lbl)
+        if self._conv_set:
+            spb = SiriusSpinbox(wid, init_channel=self._dev+':Px2mmScaleY-SP')
+            lbl = SiriusLabel(wid, init_channel=self._dev+':Px2mmScaleY-RB')
+            spb.showStepExponent = False
+            wid.layout().addWidget(spb)
+            wid.layout().addWidget(lbl)
+        else:
+            lbl = SiriusLabel(wid, init_channel=self._dev+':Px2mmScaleY-Cte')
+            wid.layout().addWidget(lbl)
         self.layout().addRow(QLabel(
             'Pxl 2 mm Scale Y', self, alignment=Qt.AlignBottom), wid)
 

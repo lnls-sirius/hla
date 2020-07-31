@@ -35,7 +35,8 @@ class BeamLineMVS2View(SiriusMainWindow):
                        alignment=Qt.AlignCenter)
 
         self._process_image = SiriusProcessImage(
-            self, device=self._device_analysis, orientation='H')
+            self, device=self._device_analysis, orientation='H',
+            convertion_set=False)
 
         # IOC control
         self._ld_enbl = QLabel('Start/Stop Acq.: ')
