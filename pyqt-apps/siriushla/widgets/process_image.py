@@ -24,15 +24,13 @@ from .led import SiriusLedState
 
 
 class SiriusProcessImage(QWidget):
-    def __init__(self, parent=None, device=''):
+    def __init__(self, parent=None, device='', orientation='V'):
         super().__init__(parent)
         self._dev = SiriusPVName(device)
+        self._ori = orientation
         self._setupUi()
 
     def _setupUi(self):
-        gl = QGridLayout(self)
-        gl.setContentsMargins(0, 0, 0, 0)
-
         self.image_view = PyDMImageView(
             parent=self,
             image_channel=self._dev+':Image-RB',
@@ -72,10 +70,8 @@ class SiriusProcessImage(QWidget):
         self.image_view.addItem(self.plt_fit_y)
         self.image_view.addItem(self.plt_his_x)
         self.image_view.addItem(self.plt_his_y)
-        gl.addWidget(self.image_view, 0, 0, 1, 2)
 
         gb_pos = QGroupBox('Image Processing ', self)
-        gl.addWidget(gb_pos, 1, 0, 2, 1)
         fl = QFormLayout(gb_pos)
         wid = QWidget(gb_pos)
         wid.setLayout(QHBoxLayout())
@@ -147,8 +143,6 @@ class SiriusProcessImage(QWidget):
 
         gb_posi = QGroupBox('Position [px / mm]', self)
         gb_size = QGroupBox('Size [px / mm]', self)
-        gl.addWidget(gb_posi, 1, 1)
-        gl.addWidget(gb_size, 2, 1)
         fl_posi = QFormLayout(gb_posi)
         fl_size = QFormLayout(gb_size)
 
@@ -199,6 +193,19 @@ class SiriusProcessImage(QWidget):
         wid.layout().addWidget(yavemm)
         fl_size.addRow(QLabel(
             'Y =', gb_size, alignment=Qt.AlignBottom), wid)
+
+        gl = QGridLayout(self)
+        gl.setContentsMargins(0, 0, 0, 0)
+        if self._ori == 'V':
+            gl.addWidget(self.image_view, 0, 0, 1, 2)
+            gl.addWidget(gb_pos, 1, 0, 2, 1)
+            gl.addWidget(gb_posi, 1, 1)
+            gl.addWidget(gb_size, 2, 1)
+        else:
+            gl.addWidget(self.image_view, 0, 0, 2, 1)
+            gl.addWidget(gb_pos, 0, 1, 1, 2)
+            gl.addWidget(gb_posi, 1, 1)
+            gl.addWidget(gb_size, 1, 2)
 
     def _update_roi(self):
         xaxis = self._roixaxis.getvalue()
