@@ -139,67 +139,21 @@ class VerifyPS(BaseTask):
         self._check(method='check_intlks')
 
 
-class ZeroPSCurrent(BaseTask):
-    """Set power supply current to zero."""
-
-    def function(self):
-        """Set power supplies current to zero."""
-        self._set(method='set_current_zero')
-
-
-class ResetPSOpMode(BaseTask):
-    """Set power supply to SlowRef."""
-
-    def function(self):
-        """Set power supplies to cycling."""
-        self._set(method='set_opmode_slowref')
-
-
-class RestoreTiming(BaseTask):
-    """Restore timing initial state."""
-
-    def size(self):
-        """Return task size."""
-        return 2
-
-    def function(self):
-        self.itemDone.emit('timing', True)
-        self._timing.restore_initial_state()
-        self.itemDone.emit('timing', True)
-
-
-class PreparePSParams(BaseTask):
-    """Prepare power suplies to cycle."""
+class SaveTiming(BaseTask):
+    """Save timing initial state."""
 
     def __init__(self, **kwargs):
         super().__init__(need_controller=True, **kwargs)
 
     def size(self):
-        return self._controller.prepare_ps_size
+        return self._controller.save_timing_size
 
     def duration(self):
         """Return task maximum duration."""
-        return self._controller.prepare_ps_max_duration
+        return self._controller.save_timing_max_duration
 
     def function(self):
-        self._controller.prepare_pwrsupplies_parameters()
-
-
-class PreparePSOpMode(BaseTask):
-    """Prepare power suplies to cycle."""
-
-    def __init__(self, **kwargs):
-        super().__init__(need_controller=True, **kwargs)
-
-    def size(self):
-        return self._controller.prepare_ps_size
-
-    def duration(self):
-        """Return task maximum duration."""
-        return self._controller.prepare_ps_max_duration
-
-    def function(self):
-        self._controller.prepare_pwrsupplies_opmode()
+        self._controller.save_timing_initial_state()
 
 
 class PrepareTiming(BaseTask):
@@ -217,6 +171,74 @@ class PrepareTiming(BaseTask):
 
     def function(self):
         self._controller.prepare_timing()
+
+
+class PreparePSOpModeSlowRef(BaseTask):
+    """Prepare power suplies to cycle."""
+
+    def __init__(self, **kwargs):
+        super().__init__(need_controller=True, **kwargs)
+
+    def size(self):
+        return self._controller.prepare_ps_opmode_slowref_size
+
+    def duration(self):
+        """Return task maximum duration."""
+        return self._controller.prepare_ps_opmode_slowref_max_duration
+
+    def function(self):
+        self._controller.prepare_pwrsupplies_opmode_slowref()
+
+
+class PreparePSCurrentZero(BaseTask):
+    """Prepare power suplies to cycle."""
+
+    def __init__(self, **kwargs):
+        super().__init__(need_controller=True, **kwargs)
+
+    def size(self):
+        return self._controller.prepare_ps_current_zero_size
+
+    def duration(self):
+        """Return task maximum duration."""
+        return self._controller.prepare_ps_current_zero_max_duration
+
+    def function(self):
+        self._controller.prepare_pwrsupplies_current_zero()
+
+
+class PreparePSParams(BaseTask):
+    """Prepare power suplies to cycle."""
+
+    def __init__(self, **kwargs):
+        super().__init__(need_controller=True, **kwargs)
+
+    def size(self):
+        return self._controller.prepare_ps_params_size
+
+    def duration(self):
+        """Return task maximum duration."""
+        return self._controller.prepare_ps_params_max_duration
+
+    def function(self):
+        self._controller.prepare_pwrsupplies_parameters()
+
+
+class PreparePSOpModeCycle(BaseTask):
+    """Prepare power suplies to cycle."""
+
+    def __init__(self, **kwargs):
+        super().__init__(need_controller=True, **kwargs)
+
+    def size(self):
+        return self._controller.prepare_ps_opmode_cycle_size
+
+    def duration(self):
+        """Return task maximum duration."""
+        return self._controller.prepare_ps_opmode_cycle_max_duration
+
+    def function(self):
+        self._controller.prepare_pwrsupplies_opmode_cycle()
 
 
 class CycleTrims(BaseTask):
@@ -251,3 +273,20 @@ class Cycle(BaseTask):
 
     def function(self):
         self._controller.cycle()
+
+
+class RestoreTiming(BaseTask):
+    """Restore timing initial state."""
+
+    def __init__(self, **kwargs):
+        super().__init__(need_controller=True, **kwargs)
+
+    def size(self):
+        return self._controller.restore_timing_size
+
+    def duration(self):
+        """Return task maximum duration."""
+        return self._controller.restore_timing_max_duration
+
+    def function(self):
+        self._controller.restore_timing_initial_state()
