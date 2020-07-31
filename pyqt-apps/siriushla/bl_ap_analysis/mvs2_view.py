@@ -64,22 +64,24 @@ class BeamLineMVS2View(SiriusMainWindow):
         # Camera Acquisition Status
         self._ld_acqtime = QLabel('Acquire Time: ')
         self._lb_acqtime = PyDMLabel(
-            self, self._device_cam+':cam1:AcquireTime')
+            self, self._device_cam+':cam1:AcquireTime_RBV')
+        self._lb_acqtime.showUnits = True
         self._ld_acqperd = QLabel('Acquire Period: ')
         self._lb_acqperd = PyDMLabel(
-            self, self._device_cam+':cam1:AcquirePeriod')
+            self, self._device_cam+':cam1:AcquirePeriod_RBV')
+        self._lb_acqperd.showUnits = True
         self._ld_numimgs = QLabel('# Images: ')
         self._lb_numimgs = PyDMLabel(
-            self, self._device_cam+':cam1:NumImages')
+            self, self._device_cam+':cam1:NumImages_RBV')
         self._ld_imgmode = QLabel('Image Mode: ')
         self._lb_imgmode = PyDMLabel(
-            self, self._device_cam+':cam1:ImageMode')
+            self, self._device_cam+':cam1:ImageMode_RBV')
         self._ld_acqsts = QLabel('Acquire Status: ')
         self._lb_acqsts = PyDMLabel(
-            self, self._device_cam+':cam1:Acquire')
+            self, self._device_cam+':cam1:Acquire_RBV')
         self._ld_capsts = QLabel('Capture Status: ')
         self._lb_capsts = PyDMLabel(
-            self, self._device_cam+':HDF1:Capture')
+            self, self._device_cam+':HDF1:Capture_RBV')
 
         gbox_acqsett = QGroupBox('Camera Acquisition Statuses')
         lay_acqsett = QFormLayout(gbox_acqsett)
