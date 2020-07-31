@@ -2,7 +2,7 @@
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QLabel, QGridLayout, QGroupBox, \
-    QSpacerItem, QSizePolicy as QSzPlcy
+    QSpacerItem, QSizePolicy as QSzPlcy, QFormLayout
 import qtawesome as qta
 from pydm.widgets import PyDMLabel
 
@@ -10,7 +10,8 @@ from siriuspy.envars import VACA_PREFIX
 from siriuspy.namesys import SiriusPVName
 
 from siriushla.util import get_appropriate_color
-from siriushla.widgets import SiriusMainWindow, SiriusProcessImage
+from siriushla.widgets import SiriusMainWindow, SiriusProcessImage, \
+    SiriusSpinbox, PyDMStateButton
 
 
 class BeamLineMVS2View(SiriusMainWindow):
@@ -33,8 +34,34 @@ class BeamLineMVS2View(SiriusMainWindow):
         label = QLabel('<h3>'+self._title+'</h3>', self,
                        alignment=Qt.AlignCenter)
 
-        self._process_image = SiriusProcessImage(self, self._device_analysis)
+        self._process_image = SiriusProcessImage(
+            self, device=self._device_analysis, orientation='H')
 
+        # IOC control
+        self._ld_enbl = QLabel('Start/Stop Acq.: ')
+        self._sb_enbl = PyDMStateButton(
+            self, self._device_analysis+':MeasureCtrl-Sel')
+        self._lb_enbl = PyDMLabel(
+            self, self._device_analysis+':MeasureCtrl-Sts')
+
+        self._ld_rate = QLabel('Acq. Rate: ')
+        self._sb_rate = SiriusSpinbox(
+            self, self._device_analysis+':MeasureRate-SP')
+        self._sb_rate.showStepExponent = False
+        self._lb_rate = PyDMLabel(
+            self, self._device_analysis+':MeasureRate-SP')
+
+        gbox_ctrl = QGroupBox('Analysis Control')
+        lay_ctrl = QGridLayout(gbox_ctrl)
+        lay_ctrl.setAlignment(Qt.AlignTop)
+        lay_ctrl.addWidget(self._ld_enbl, 0, 0)
+        lay_ctrl.addWidget(self._sb_enbl, 0, 1)
+        lay_ctrl.addWidget(self._lb_enbl, 1, 1)
+        lay_ctrl.addWidget(self._ld_rate, 2, 0)
+        lay_ctrl.addWidget(self._sb_rate, 2, 1)
+        lay_ctrl.addWidget(self._lb_rate, 3, 1)
+
+        # Camera Acquisition Status
         self._ld_acqtime = QLabel('Acquire Time: ')
         self._lb_acqtime = PyDMLabel(
             self, self._device_cam+':cam1:AcquireTime')
@@ -54,31 +81,22 @@ class BeamLineMVS2View(SiriusMainWindow):
         self._lb_capsts = PyDMLabel(
             self, self._device_cam+':HDF1:Capture')
 
-        gbox_acqsett = QGroupBox('Acquisition Settings')
-        lay_acqsett = QGridLayout(gbox_acqsett)
-        lay_acqsett.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Ignored), 0, 0)
-        lay_acqsett.addWidget(self._ld_acqtime, 0, 1)
-        lay_acqsett.addWidget(self._lb_acqtime, 0, 2)
-        lay_acqsett.addWidget(self._ld_acqperd, 1, 1)
-        lay_acqsett.addWidget(self._lb_acqperd, 1, 2)
-        lay_acqsett.addWidget(self._ld_numimgs, 2, 1)
-        lay_acqsett.addWidget(self._lb_numimgs, 2, 2)
-        lay_acqsett.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Ignored), 0, 3)
-        lay_acqsett.addWidget(self._ld_imgmode, 0, 4)
-        lay_acqsett.addWidget(self._lb_imgmode, 0, 5)
-        lay_acqsett.addWidget(self._ld_acqsts, 1, 4)
-        lay_acqsett.addWidget(self._lb_acqsts, 1, 5)
-        lay_acqsett.addWidget(self._ld_capsts, 2, 4)
-        lay_acqsett.addWidget(self._lb_capsts, 2, 5)
-        lay_acqsett.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Expanding, QSzPlcy.Ignored), 0, 6)
+        gbox_acqsett = QGroupBox('Camera Acquisition Statuses')
+        lay_acqsett = QFormLayout(gbox_acqsett)
+        lay_acqsett.addRow(self._ld_acqtime, self._lb_acqtime)
+        lay_acqsett.addRow(self._ld_acqperd, self._lb_acqperd)
+        lay_acqsett.addRow(self._ld_numimgs, self._lb_numimgs)
+        lay_acqsett.addRow(self._ld_imgmode, self._lb_imgmode)
+        lay_acqsett.addRow(self._ld_acqsts, self._lb_acqsts)
+        lay_acqsett.addRow(self._ld_capsts, self._lb_capsts)
 
         self.cw = QWidget()
         self.cw.setStyleSheet('PyDMLabel{qproperty-alignment: AlignCenter;}')
         lay = QGridLayout(self.cw)
-        lay.addWidget(label, 0, 0)
-        lay.addWidget(self._process_image, 1, 0)
-        lay.addWidget(gbox_acqsett, 2, 0)
+        lay.addWidget(label, 0, 0, 1, 2)
+        lay.addWidget(self._process_image, 1, 0, 2, 1)
+        lay.addWidget(gbox_ctrl, 1, 1)
+        lay.addWidget(gbox_acqsett, 2, 1)
+        lay.setColumnStretch(0, 7)
+        lay.setColumnStretch(1, 2)
         self.setCentralWidget(self.cw)
