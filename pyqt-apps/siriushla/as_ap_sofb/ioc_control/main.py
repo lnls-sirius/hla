@@ -37,27 +37,29 @@ class SOFBControl(BaseWidget):
         tabw = QTabWidget(self)
         vbl.addWidget(tabw)
 
-        mainwid = QWidget(tabw)
-        mainwid.setLayout(self.get_mainvbl(mainwid))
-        tabw.addTab(mainwid, 'Main')
+        main_wid = self.get_main_widget(tabw)
+        tabw.addTab(main_wid, 'Main')
 
         wid = AcqControlWidget(tabw, prefix=self.prefix, acc=self.acc)
         tabw.addTab(wid, 'Orbit')
 
-    def get_mainvbl(self, parent):
+    def get_main_widget(self, parent):
         """."""
-        orb_wid = self.get_orbit_widget(parent)
-        corr_wid = self.get_correction_widget(parent)
-        mat_wid = RespMatWidget(parent, self.prefix, self.acc)
-
+        main_wid = QWidget(parent)
         vbl = QVBoxLayout()
+        main_wid.setLayout(vbl)
+
+        orb_wid = self.get_orbit_widget(main_wid)
+        corr_wid = self.get_correction_widget(main_wid)
+        mat_wid = RespMatWidget(main_wid, self.prefix, self.acc)
+
         vbl.setContentsMargins(0, 0, 0, 0)
         vbl.addWidget(orb_wid)
         vbl.addStretch()
         vbl.addWidget(corr_wid)
         vbl.addStretch()
         vbl.addWidget(mat_wid)
-        return vbl
+        return main_wid
 
     def get_orbit_widget(self, parent):
         """."""
