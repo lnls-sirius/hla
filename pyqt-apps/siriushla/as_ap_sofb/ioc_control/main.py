@@ -46,28 +46,36 @@ class SOFBControl(BaseWidget):
 
     def get_mainvbl(self, parent):
         """."""
+        orb_wid = self.get_orbit_widget(parent)
+        corr_wid = self.get_correction_widget(parent)
+        mat_wid = RespMatWidget(parent, self.prefix, self.acc)
+
         vbl = QVBoxLayout()
         vbl.setContentsMargins(0, 0, 0, 0)
-
-        # ####################################################################
-        # ########################## Orbit PVs ###############################
-        # ####################################################################
-        grpbx = QGroupBox('Orbit', parent)
-        grpbx.setObjectName('grp')
-        grpbx.setStyleSheet('#grp{min-height: 10em; max-height: 12em;}')
-        fbl = QGridLayout(grpbx)
-        vbl.addWidget(grpbx)
+        vbl.addWidget(orb_wid)
         vbl.addStretch()
+        vbl.addWidget(corr_wid)
+        vbl.addStretch()
+        vbl.addWidget(mat_wid)
+        return vbl
+
+    def get_orbit_widget(self, parent):
+        """."""
+        orb_wid = QGroupBox('Orbit', parent)
+        orb_wid.setObjectName('grp')
+        orb_wid.setStyleSheet('#grp{min-height: 10em; max-height: 12em;}')
+        orb_wid.setLayout(QGridLayout())
 
         conf = PyDMPushButton(
-            grpbx, init_channel=self.prefix+'TrigAcqConfig-Cmd', pressValue=1)
+            orb_wid, init_channel=self.prefix+'TrigAcqConfig-Cmd',
+            pressValue=1)
         conf.setToolTip('Refresh Configurations')
         conf.setIcon(qta.icon('fa5s.sync'))
         conf.setObjectName('conf')
         conf.setStyleSheet(
             '#conf{min-width:25px; max-width:25px; icon-size:20px;}')
 
-        sts = QPushButton('', grpbx)
+        sts = QPushButton('', orb_wid)
         sts.setIcon(qta.icon('fa5s.list-ul'))
         sts.setToolTip('Open Detailed Status View')
         sts.setObjectName('sts')
@@ -78,12 +86,13 @@ class SOFBControl(BaseWidget):
         window = create_window_from_widget(
             StatusWidget, title='Orbit Status', icon=icon)
         _util.connect_window(
-            sts, window, grpbx, prefix=self.prefix, acc=self.acc, is_orb=True)
+            sts, window, orb_wid, prefix=self.prefix, acc=self.acc,
+            is_orb=True)
 
         pdm_led = SiriusLedAlert(
-            grpbx, init_channel=self.prefix+'OrbStatus-Mon')
+            orb_wid, init_channel=self.prefix+'OrbStatus-Mon')
 
-        lbl = QLabel('Status:', grpbx)
+        lbl = QLabel('Status:', orb_wid)
         hbl = QHBoxLayout()
         hbl.setSpacing(9)
         hbl.addStretch()
@@ -91,14 +100,14 @@ class SOFBControl(BaseWidget):
         hbl.addWidget(pdm_led)
         hbl.addWidget(sts)
         hbl.addWidget(conf)
-        fbl.addItem(hbl, 0, 0, 1, 2)
+        orb_wid.layout().addItem(hbl, 0, 0, 1, 2)
 
-        lbl = QLabel('SOFB Mode', grpbx)
-        wid = self.create_pair_sel(grpbx, 'SOFBMode')
-        fbl.addWidget(lbl, 1, 0, alignment=Qt.AlignVCenter)
-        fbl.addWidget(wid, 1, 1)
+        lbl = QLabel('SOFB Mode', orb_wid)
+        wid = self.create_pair_sel(orb_wid, 'SOFBMode')
+        orb_wid.layout().addWidget(lbl, 1, 0, alignment=Qt.AlignVCenter)
+        orb_wid.layout().addWidget(wid, 1, 1)
 
-        lbl = CALabel('OfflineOrb:', grpbx)
+        lbl = CALabel('OfflineOrb:', orb_wid)
         combo = OfflineOrbControl(self, self.prefix, self.ctrls, self.acc)
         rules = (
             '[{"name": "EnblRule", "property": "Visible", ' +
@@ -106,31 +115,31 @@ class SOFBControl(BaseWidget):
             self.prefix+'SOFBMode-Sts'+'", "trigger": true}]}]')
         combo.rules = rules
         lbl.rules = rules
-        fbl.addWidget(lbl, 2, 0, alignment=Qt.AlignVCenter)
-        fbl.addWidget(combo, 2, 1, alignment=Qt.AlignBottom)
+        orb_wid.layout().addWidget(lbl, 2, 0, alignment=Qt.AlignVCenter)
+        orb_wid.layout().addWidget(combo, 2, 1, alignment=Qt.AlignBottom)
 
-        lbl = QLabel('RefOrb:', grpbx)
+        lbl = QLabel('RefOrb:', orb_wid)
         combo = RefControl(self, self.prefix, self.ctrls, self.acc)
-        lbl2 = QLabel('', grpbx)
+        lbl2 = QLabel('', orb_wid)
         combo.configname.connect(lbl2.setText)
         vbl_ref = QVBoxLayout()
         vbl_ref.addWidget(combo)
         vbl_ref.addWidget(lbl2)
-        fbl.addWidget(lbl, 3, 0, alignment=Qt.AlignVCenter)
-        fbl.addLayout(vbl_ref, 3, 1)
+        orb_wid.layout().addWidget(lbl, 3, 0, alignment=Qt.AlignVCenter)
+        orb_wid.layout().addLayout(vbl_ref, 3, 1)
 
-        lbl = QLabel('Num. Pts.', grpbx)
-        stp = SiriusSpinbox(grpbx, init_channel=self.prefix+'SmoothNrPts-SP')
+        lbl = QLabel('Num. Pts.', orb_wid)
+        stp = SiriusSpinbox(orb_wid, init_channel=self.prefix+'SmoothNrPts-SP')
         stp.showStepExponent = False
-        rdb = PyDMLabel(grpbx, init_channel=self.prefix+'SmoothNrPts-RB')
+        rdb = PyDMLabel(orb_wid, init_channel=self.prefix+'SmoothNrPts-RB')
         rdb.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        slsh = QLabel('/', grpbx, alignment=Qt.AlignCenter)
+        slsh = QLabel('/', orb_wid, alignment=Qt.AlignCenter)
         slsh.setStyleSheet('min-width:0.7em; max-width:0.7em;')
-        cnt = PyDMLabel(grpbx, init_channel=self.prefix+'BufferCount-Mon')
+        cnt = PyDMLabel(orb_wid, init_channel=self.prefix+'BufferCount-Mon')
         cnt.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         cnt.setToolTip('Current Buffer Size')
         rst = PyDMPushButton(
-            grpbx, init_channel=self.prefix+'SmoothReset-Cmd', pressValue=1)
+            orb_wid, init_channel=self.prefix+'SmoothReset-Cmd', pressValue=1)
         rst.setToolTip('Reset Buffer')
         rst.setIcon(qta.icon('mdi.delete-empty'))
         rst.setObjectName('rst')
@@ -142,48 +151,52 @@ class SOFBControl(BaseWidget):
         hbl.addWidget(slsh)
         hbl.addWidget(rdb)
         hbl.addWidget(rst)
-        fbl.addWidget(lbl, 4, 0, alignment=Qt.AlignVCenter)
-        fbl.addItem(hbl, 4, 1)
-        fbl.setColumnStretch(1, 2)
+        orb_wid.layout().addWidget(lbl, 4, 0, alignment=Qt.AlignVCenter)
+        orb_wid.layout().addItem(hbl, 4, 1)
+        orb_wid.layout().setColumnStretch(1, 2)
+        return orb_wid
 
-        # ####################################################################
-        # ######################## Kicks Configs. ############################
-        # ####################################################################
-        wid = KicksConfigWidget(parent, self.prefix, self.acc)
-        wid.layout().setContentsMargins(0, 0, 0, 0)
-        vbl.addWidget(wid)
-        vbl.addStretch()
+    def get_correction_widget(self, parent):
+        """."""
+        corr_wid = QGroupBox('Correction', parent)
+        corr_wid.setLayout(QVBoxLayout())
 
-        # ####################################################################
-        # ########################## Correction ##############################
-        # ####################################################################
-        corrg = QGroupBox('Correction', parent)
-        vbl.addWidget(corrg)
-        vbl.addStretch()
-        corrg.setLayout(QVBoxLayout())
-
-        lbl = QLabel('Auto Correction State:', corrg)
-        wid = self.create_pair_butled(corrg, 'LoopState')
+        lbl = QLabel('Auto Correction State:', corr_wid)
+        wid = self.create_pair_butled(corr_wid, 'LoopState')
         hbl = QHBoxLayout()
         hbl.addWidget(lbl)
         hbl.addWidget(wid)
-        corrg.layout().addLayout(hbl)
+        corr_wid.layout().addLayout(hbl)
 
-        tabcorr = QTabWidget(corrg)
-        corrg.layout().addWidget(tabcorr)
+        corr_tab = QTabWidget(corr_wid)
+        corr_wid.layout().addWidget(corr_tab)
 
+        man_wid = self.get_manual_correction_widget(corr_tab)
+        corr_tab.addTab(man_wid, 'Manual')
+
+        auto_wid = self.get_auto_correction_widget(corr_tab)
+        corr_tab.addTab(auto_wid, 'Automatic')
+
+        kicks_wid = KicksConfigWidget(parent, self.prefix, self.acc)
+        corr_tab.addTab(kicks_wid, 'Kicks Config')
+
+        hbl = kicks_wid.get_status_widget(corr_wid)
+        corr_wid.layout().addLayout(hbl)
+        return corr_wid
+
+    def get_manual_correction_widget(self, parent):
+        """."""
         # ####################################################################
         # ###################### Manual Correction ###########################
         # ####################################################################
-        grpbx = QWidget(tabcorr)
-        tabcorr.addTab(grpbx, 'Manual')
-        grpbx.setObjectName('grp')
-        grpbx.setStyleSheet('#grp{min-height: 70px; max-height: 70px;}')
-        gdl = QGridLayout(grpbx)
+        man_wid = QWidget(parent)
+        man_wid.setObjectName('grp')
+        gdl = QGridLayout(man_wid)
         gdl.setSpacing(9)
 
         calc = PyDMPushButton(
-            grpbx, '', pressValue=1, init_channel=self.prefix+'CalcDelta-Cmd')
+            man_wid, '', pressValue=1,
+            init_channel=self.prefix+'CalcDelta-Cmd')
         calc.setIcon(qta.icon('mdi.calculator-variant'))
         calc.setToolTip('Calculate Kicks')
         calc.setObjectName('button')
@@ -217,7 +230,7 @@ class SOFBControl(BaseWidget):
         btns = dict()
         for itm, val in lst:
             btn = PyDMPushButton(
-                grpbx, ' '+itm, pressValue=val,
+                man_wid, ' '+itm, pressValue=val,
                 init_channel=self.prefix+'ApplyDelta-Cmd')
             btn.rules = rules
             btn.setIcon(qta.icon('fa5s.hammer'))
@@ -238,15 +251,18 @@ class SOFBControl(BaseWidget):
         else:
             gdl.addWidget(btns['All'], 1, 1, 1, 2)
         gdl.setColumnMinimumWidth(0, 60)
+        vlay = QVBoxLayout()
+        vlay.addStretch()
+        gdl.addLayout(vlay, 2, 0)
 
-        # ####################################################################
-        # ####################### Auto Correction ############################
-        # ####################################################################
-        grpbx = QWidget(tabcorr)
-        tabcorr.addTab(grpbx, 'Auto')
-        vbl2 = QVBoxLayout(grpbx)
+        return man_wid
 
-        tabw = QTabWidget(grpbx)
+    def get_auto_correction_widget(self, parent):
+        """."""
+        auto_wid = QWidget(parent)
+        vbl2 = QVBoxLayout(auto_wid)
+
+        tabw = QTabWidget(auto_wid)
         vbl2.addWidget(tabw)
 
         gpbx = QWidget(tabw)
@@ -303,14 +319,7 @@ class SOFBControl(BaseWidget):
         if self.acc == 'SI':
             gpbx_lay.addWidget(QLabel('RF', gpbx), 4, 0)
 
-        # ####################################################################
-        # ########################## Response Matrix #########################
-        # ####################################################################
-        wid = RespMatWidget(parent, self.prefix, self.acc)
-        wid.layout().setContentsMargins(0, 0, 0, 0)
-        vbl.addWidget(wid)
-
-        return vbl
+        return auto_wid
 
 
 class RefControl(BaseCombo):

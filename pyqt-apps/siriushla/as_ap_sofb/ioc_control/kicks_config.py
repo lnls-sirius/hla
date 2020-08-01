@@ -21,44 +21,7 @@ class KicksConfigWidget(BaseWidget):
         self.setupui()
 
     def setupui(self):
-        gbox = QGroupBox('Correctors', self)
-        gbox.setObjectName('grbx')
         self.setLayout(QVBoxLayout())
-        self.layout().addWidget(gbox)
-        vbl = QVBoxLayout(gbox)
-
-        conf = PyDMPushButton(
-            gbox,
-            init_channel=self.prefix+'CorrConfig-Cmd', pressValue=1)
-        conf.setToolTip('Refresh Configurations')
-        conf.setIcon(qta.icon('fa5s.sync'))
-        conf.setObjectName('conf')
-        conf.setStyleSheet(
-            '#conf{min-width:25px; max-width:25px; icon-size:20px;}')
-
-        sts = QPushButton('', gbox)
-        sts.setIcon(qta.icon('fa5s.list-ul'))
-        sts.setToolTip('Open Detailed Status View')
-        sts.setObjectName('sts')
-        sts.setStyleSheet(
-            '#sts{min-width:25px; max-width:25px; icon-size:20px;}')
-        Window = create_window_from_widget(
-            StatusWidget, title='Correctors Status')
-        _util.connect_window(
-            sts, Window, self, prefix=self.prefix, acc=self.acc, is_orb=False)
-
-        pdm_led = SiriusLedAlert(
-            gbox, init_channel=self.prefix+'CorrStatus-Mon')
-
-        lbl = QLabel('Status:', gbox)
-        hbl = QHBoxLayout()
-        hbl.setSpacing(9)
-        hbl.addStretch()
-        hbl.addWidget(lbl)
-        hbl.addWidget(pdm_led)
-        hbl.addWidget(sts)
-        hbl.addWidget(conf)
-        vbl.addItem(hbl)
 
         names = ('Correction Factors', 'Maximum Kicks', 'Maximum Delta Kicks')
         tabs = ('%', 'Max \u03b8', 'Max \u0394\u03b8')
@@ -73,7 +36,7 @@ class KicksConfigWidget(BaseWidget):
             planes = ('CH', 'CV', 'RF')
 
         tabw = QTabWidget(self)
-        vbl.addWidget(tabw)
+        self.layout().addWidget(tabw)
         for tab, pvname, units in zip(tabs, pvnames, unitss):
             grpbx = QWidget(tabw)
             grpbx.setObjectName('gbx')
@@ -122,6 +85,42 @@ class KicksConfigWidget(BaseWidget):
             hbl.addWidget(lbl)
             hbl.addWidget(wid)
             vertlay.addItem(hbl)
+            vertlay.addStretch()
+
+    def get_status_widget(self, parent):
+        """."""
+        conf = PyDMPushButton(
+            parent,
+            init_channel=self.prefix+'CorrConfig-Cmd', pressValue=1)
+        conf.setToolTip('Refresh Configurations')
+        conf.setIcon(qta.icon('fa5s.sync'))
+        conf.setObjectName('conf')
+        conf.setStyleSheet(
+            '#conf{min-width:25px; max-width:25px; icon-size:20px;}')
+
+        sts = QPushButton('', parent)
+        sts.setIcon(qta.icon('fa5s.list-ul'))
+        sts.setToolTip('Open Detailed Status View')
+        sts.setObjectName('sts')
+        sts.setStyleSheet(
+            '#sts{min-width:25px; max-width:25px; icon-size:20px;}')
+        Window = create_window_from_widget(
+            StatusWidget, title='Correctors Status')
+        _util.connect_window(
+            sts, Window, self, prefix=self.prefix, acc=self.acc, is_orb=False)
+
+        pdm_led = SiriusLedAlert(
+            parent, init_channel=self.prefix+'CorrStatus-Mon')
+
+        lbl = QLabel('Correctors Status:', parent)
+        hbl = QHBoxLayout()
+        hbl.setSpacing(9)
+        hbl.addWidget(lbl)
+        hbl.addStretch()
+        hbl.addWidget(pdm_led)
+        hbl.addWidget(sts)
+        hbl.addWidget(conf)
+        return hbl
 
 
 def _main():
