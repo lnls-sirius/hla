@@ -343,12 +343,13 @@ class CycleWindow(SiriusMainWindow):
             elif 'finished' in text:
                 self.update_bar.exit_task()
                 self.progress_bar.setValue(self.progress_bar.maximum())
-                if self._is_preparing in self._prepared.keys():
-                    self._prepared[self._is_preparing] = True
-                    cycle = all(self._prepared.values())
-                else:
+                if self._is_preparing == 'cycle':
                     self._prepared = {k: False for k in self._prepared.keys()}
                     cycle = False
+                else:
+                    if self._is_preparing in self._prepared.keys():
+                        self._prepared[self._is_preparing] = True
+                    cycle = all(self._prepared.values())
                 self._handle_buttons_enabled(True, cycle=cycle)
 
             self.progress_list.addItem(item)
