@@ -186,9 +186,6 @@ class SOFBControl(BaseWidget):
 
     def get_manual_correction_widget(self, parent):
         """."""
-        # ####################################################################
-        # ###################### Manual Correction ###########################
-        # ####################################################################
         man_wid = QWidget(parent)
         man_wid.setObjectName('grp')
         gdl = QGridLayout(man_wid)
