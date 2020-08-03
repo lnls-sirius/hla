@@ -78,6 +78,7 @@ setup(
         'scripts/sirius-hla-li-rf-llrf.py',
         'scripts/sirius-hla-si-ap-chromcorr.py',
         'scripts/sirius-hla-si-ap-currlt.py',
+        'scripts/sirius-hla-si-ap-manaca.py',
         'scripts/sirius-hla-si-ap-sofb.py',
         'scripts/sirius-hla-si-ap-tunecorr.py',
         'scripts/sirius-hla-si-di-bbb.py',
