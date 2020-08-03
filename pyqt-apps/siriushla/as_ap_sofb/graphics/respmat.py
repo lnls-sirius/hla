@@ -139,7 +139,7 @@ class SingularValues(QWidget):
         super().__init__(parent)
         self.prefix = _PVName(prefix)
         self.setObjectName(self.prefix.sec+'App')
-        self._chan = SiriusConnectionSignal(self.prefix+'NrSingValues-RB')
+        self._chan = SiriusConnectionSignal(self.prefix+'NrSingValues-Mon')
         self.setupui()
 
     def setupui(self):
@@ -153,8 +153,10 @@ class SingularValues(QWidget):
         graph.plotItem.setLogMode(y=True)
         graph.setLabel('left', text='Singular Values', units='m/rad')
         graph.setLabel('bottom', text='Index')
+        graph.setShowLegend(True)
         vbl.addWidget(graph)
         opts = dict(
+            name='Processed',
             y_channel=self.prefix+'SingValues-Mon',
             color='black',
             redraw_mode=2,
@@ -165,6 +167,17 @@ class SingularValues(QWidget):
         graph.addChannel(**opts)
         cur = graph.curveAtIndex(0)
         cur.setSymbolBrush(0, 0, 0)
+
+        opts = dict(
+            name='Raw',
+            y_channel=self.prefix+'SingValuesRaw-Mon',
+            color='blue',
+            redraw_mode=2,
+            lineStyle=1,
+            lineWidth=2,
+            symbol='o',
+            symbolSize=10)
+        graph.addChannel(**opts)
 
         pen = mkPen(QColor(150, 150, 150))
         pen.setStyle(2)
