@@ -319,7 +319,7 @@ def get_object(ismenubar=True, parent=None):
 
             Manaca = LEVEL2A('MANACA', menu)
             self.connect_newprocess(
-                Manaca, ['sirius-hla-bl-ap-manaca.py'])
+                Manaca, ['sirius-hla-si-ap-manaca.py'])
             self.add_object_to_level1(menu, Manaca)
 
             return menu

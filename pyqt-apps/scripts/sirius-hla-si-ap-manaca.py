@@ -8,7 +8,7 @@ import argparse as _argparse
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.meas.manaca.csdev import Const
 from siriushla.sirius_application import SiriusApplication
-from siriushla.bl_ap_analysis import BeamLineMVS2View
+from siriushla.si_ap_blanalysis import BeamLineMVS2View
 
 
 os.environ['EPICS_CA_MAX_ARRAY_BYTES'] = '6000000'  # image is large

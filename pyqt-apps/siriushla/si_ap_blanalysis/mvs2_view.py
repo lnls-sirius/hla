@@ -2,7 +2,7 @@
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QLabel, QGridLayout, QGroupBox, \
-    QSpacerItem, QSizePolicy as QSzPlcy, QFormLayout
+    QFormLayout
 import qtawesome as qta
 from pydm.widgets import PyDMLabel
 
