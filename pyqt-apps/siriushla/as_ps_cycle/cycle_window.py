@@ -216,6 +216,8 @@ class CycleWindow(SiriusMainWindow):
         lay_lc.setStretch(1, 1)
 
         self.progress_list = QListWidget(self)
+        self.progress_list.itemDoubleClicked.connect(self._open_ps_detail)
+
         self.progress_bar = MyProgressBar(self)
 
         lay_log = QVBoxLayout()
@@ -519,7 +521,16 @@ class CycleWindow(SiriusMainWindow):
             self._ps_failed.add(psname)
 
     def _open_ps_detail(self, item):
-        psname = item.data()
+        if self.sender() == self.progress_list:
+            text_split = item.data(Qt.DisplayRole).split(' ')
+            psname = ''
+            for text in text_split:
+                if _re.match('.*-.*:.*-.*', text):
+                    psname = text
+            if not psname:
+                return
+        else:
+            psname = item.data()
         if not _re.match('.*-.*:.*-.*', psname):
             if item.model().rowCount(item) == 1:
                 psname = item.child(0, 0).data()
