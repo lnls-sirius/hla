@@ -288,14 +288,7 @@ class SOFBControl(BaseWidget):
         hbl = QHBoxLayout()
         hbl.addWidget(QLabel('Use PID:'))
         wid = self.create_pair_butled(gpbx, 'LoopUsePID')
-        hbl.addWidget(wid)
         hbl.addStretch()
-        hbl.addWidget(QLabel('Reset PID ref'))
-        wid = PyDMPushButton(
-            gpbx, init_channel=self.prefix+'LoopPIDRstRef-Cmd')
-        wid.pressValue = 1
-        wid.setToolTip('Reset PID reference')
-        wid.setIcon(qta.icon('fa5s.sync'))
         hbl.addWidget(wid)
         gpbx_lay.addLayout(hbl, 0, 0, 1, 4 if self.acc == 'SI' else 3)
 
