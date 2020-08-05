@@ -12,7 +12,7 @@ class RFKillBeamHandler:
     """RF Kill Beam Action Handler."""
 
     TIMEOUT_WAIT = 0.5
-    TIMEOUT_ACT = 0.2
+    TIMEOUT_ACT = 1.0
 
     _pvs = dict()
 
