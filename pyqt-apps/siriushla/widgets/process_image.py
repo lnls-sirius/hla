@@ -270,9 +270,9 @@ class _DetailedWidget(QWidget):
 
         wid = QWidget(self)
         wid.setLayout(QHBoxLayout())
-        sttbtn = PyDMStateButton(
+        sttbtn = PyDMEnumComboBox(
             wid, init_channel=self._dev+':ReadingOrder-Sel')
-        lbl = SiriusLedState(wid, init_channel=self._dev+':ReadingOrder-Sts')
+        lbl = SiriusLabel(wid, init_channel=self._dev+':ReadingOrder-Sts')
         wid.layout().addWidget(sttbtn)
         wid.layout().addWidget(lbl)
         self.layout().addRow(QLabel(

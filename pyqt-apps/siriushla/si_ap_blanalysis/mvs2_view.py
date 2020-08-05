@@ -92,6 +92,8 @@ class BeamLineMVS2View(SiriusMainWindow):
         self._ld_bmpy = QLabel('Ang. Y: ')
         self._lb_bmpy = SiriusLabel(
             gbox_sofb, self._device_analysis+':SOFBBumpY-Mon')
+        self._lb_bmpx.showUnits = True
+        self._lb_bmpy.showUnits = True
 
         lay_sofb.setAlignment(Qt.AlignTop)
         lay_sofb.addWidget(self._ld_bmpx, 0, 0)
