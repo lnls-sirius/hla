@@ -173,11 +173,11 @@ class SOFBControl(BaseWidget):
         corr_tab = QTabWidget(corr_wid)
         corr_wid.layout().addWidget(corr_tab)
 
-        man_wid = self.get_manual_correction_widget(corr_tab)
-        corr_tab.addTab(man_wid, 'Manual')
-
         auto_wid = self.get_auto_correction_widget(corr_tab)
         corr_tab.addTab(auto_wid, 'Automatic')
+
+        man_wid = self.get_manual_correction_widget(corr_tab)
+        corr_tab.addTab(man_wid, 'Manual')
 
         kicks_wid = KicksConfigWidget(parent, self.prefix, self.acc)
         corr_tab.addTab(kicks_wid, 'Kicks Config')
@@ -288,14 +288,7 @@ class SOFBControl(BaseWidget):
         hbl = QHBoxLayout()
         hbl.addWidget(QLabel('Use PID:'))
         wid = self.create_pair_butled(gpbx, 'LoopUsePID')
-        hbl.addWidget(wid)
         hbl.addStretch()
-        hbl.addWidget(QLabel('Reset PID ref'))
-        wid = PyDMPushButton(
-            gpbx, init_channel=self.prefix+'LoopPIDRstRef-Cmd')
-        wid.pressValue = 1
-        wid.setToolTip('Reset PID reference')
-        wid.setIcon(qta.icon('fa5s.sync'))
         hbl.addWidget(wid)
         gpbx_lay.addLayout(hbl, 0, 0, 1, 4 if self.acc == 'SI' else 3)
 
