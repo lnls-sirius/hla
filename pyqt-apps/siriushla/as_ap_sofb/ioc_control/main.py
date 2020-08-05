@@ -173,11 +173,11 @@ class SOFBControl(BaseWidget):
         corr_tab = QTabWidget(corr_wid)
         corr_wid.layout().addWidget(corr_tab)
 
-        man_wid = self.get_manual_correction_widget(corr_tab)
-        corr_tab.addTab(man_wid, 'Manual')
-
         auto_wid = self.get_auto_correction_widget(corr_tab)
         corr_tab.addTab(auto_wid, 'Automatic')
+
+        man_wid = self.get_manual_correction_widget(corr_tab)
+        corr_tab.addTab(man_wid, 'Manual')
 
         kicks_wid = KicksConfigWidget(parent, self.prefix, self.acc)
         corr_tab.addTab(kicks_wid, 'Kicks Config')
