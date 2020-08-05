@@ -39,35 +39,36 @@ class BeamLineMVS2View(SiriusMainWindow):
             convertion_set=False)
 
         # IOC control
+        gbox_ctrl = QGroupBox('Analysis Control')
+        lay_ctrl = QGridLayout(gbox_ctrl)
+
         self._ld_enbl = QLabel('Start/Stop Acq.: ')
         self._sb_enbl = PyDMStateButton(
-            self, self._device_analysis+':MeasureCtrl-Sel')
+            gbox_ctrl, self._device_analysis+':MeasureCtrl-Sel')
         self._lb_enbl = PyDMLabel(
-            self, self._device_analysis+':MeasureCtrl-Sts')
+            gbox_ctrl, self._device_analysis+':MeasureCtrl-Sts')
 
         self._ld_rate = QLabel('Acq. Rate: ')
         self._sb_rate = SiriusSpinbox(
-            self, self._device_analysis+':MeasureRate-SP')
+            gbox_ctrl, self._device_analysis+':MeasureRate-SP')
         self._sb_rate.showStepExponent = False
         self._lb_rate = PyDMLabel(
-            self, self._device_analysis+':MeasureRate-RB')
+            gbox_ctrl, self._device_analysis+':MeasureRate-RB')
 
         self._ld_tgtx = QLabel('Target X: ')
         self._sb_tgtx = SiriusSpinbox(
-            self, self._device_analysis+':TargetPosX-SP')
+            gbox_ctrl, self._device_analysis+':TargetPosX-SP')
         self._sb_tgtx.showStepExponent = False
         self._lb_tgtx = PyDMLabel(
-            self, self._device_analysis+':TargetPosX-RB')
+            gbox_ctrl, self._device_analysis+':TargetPosX-RB')
 
         self._ld_tgty = QLabel('Target Y: ')
         self._sb_tgty = SiriusSpinbox(
-            self, self._device_analysis+':TargetPosY-SP')
+            gbox_ctrl, self._device_analysis+':TargetPosY-SP')
         self._sb_tgty.showStepExponent = False
         self._lb_tgty = PyDMLabel(
-            self, self._device_analysis+':TargetPosY-RB')
+            gbox_ctrl, self._device_analysis+':TargetPosY-RB')
 
-        gbox_ctrl = QGroupBox('Analysis Control')
-        lay_ctrl = QGridLayout(gbox_ctrl)
         lay_ctrl.setAlignment(Qt.AlignTop)
         lay_ctrl.addWidget(self._ld_enbl, 0, 0)
         lay_ctrl.addWidget(self._sb_enbl, 0, 1)
@@ -82,20 +83,21 @@ class BeamLineMVS2View(SiriusMainWindow):
         lay_ctrl.addWidget(self._sb_tgty, 6, 1)
         lay_ctrl.addWidget(self._lb_tgty, 7, 1)
 
+        gbox_sofb = QGroupBox('SOFB Bump')
+        lay_sofb = QGridLayout(gbox_sofb)
+
         self._ld_bmpx = QLabel('Ang. X: ')
         self._lb_bmpx = SiriusLabel(
-            self, self._device_analysis+':SOFBBumpX-Mon')
+            gbox_sofb, self._device_analysis+':SOFBBumpX-Mon')
         self._ld_bmpy = QLabel('Ang. Y: ')
         self._lb_bmpy = SiriusLabel(
-            self, self._device_analysis+':SOFBBumpY-Mon')
+            gbox_sofb, self._device_analysis+':SOFBBumpY-Mon')
 
-        gbox_ctrl = QGroupBox('SOFB Bump')
-        lay_ctrl = QGridLayout(gbox_ctrl)
-        lay_ctrl.setAlignment(Qt.AlignTop)
-        lay_ctrl.addWidget(self._ld_bmpx, 0, 0)
-        lay_ctrl.addWidget(self._lb_bmpx, 0, 1)
-        lay_ctrl.addWidget(self._ld_bmpy, 1, 0)
-        lay_ctrl.addWidget(self._lb_bmpy, 1, 1)
+        lay_sofb.setAlignment(Qt.AlignTop)
+        lay_sofb.addWidget(self._ld_bmpx, 0, 0)
+        lay_sofb.addWidget(self._lb_bmpx, 0, 1)
+        lay_sofb.addWidget(self._ld_bmpy, 1, 0)
+        lay_sofb.addWidget(self._lb_bmpy, 1, 1)
 
         # Camera Acquisition Status
         self._ld_acqtime = QLabel('Acquire Time: ')
@@ -132,9 +134,10 @@ class BeamLineMVS2View(SiriusMainWindow):
         self.cw.setStyleSheet('PyDMLabel{qproperty-alignment: AlignCenter;}')
         lay = QGridLayout(self.cw)
         lay.addWidget(label, 0, 0, 1, 2)
-        lay.addWidget(self._process_image, 1, 0, 2, 1)
+        lay.addWidget(self._process_image, 1, 0, 3, 1)
         lay.addWidget(gbox_ctrl, 1, 1)
-        lay.addWidget(gbox_acqsett, 2, 1)
+        lay.addWidget(gbox_sofb, 2, 1)
+        lay.addWidget(gbox_acqsett, 3, 1)
         lay.setColumnStretch(0, 7)
         lay.setColumnStretch(1, 2)
         self.setCentralWidget(self.cw)
