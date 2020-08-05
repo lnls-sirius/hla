@@ -37,6 +37,7 @@ class BeamLineMVS2View(SiriusMainWindow):
         self._process_image = SiriusProcessImage(
             self, device=self._device_analysis, orientation='H',
             convertion_set=False)
+        self._process_image.image_view.colorMapMax = 2**16-1
 
         # IOC control
         gbox_ctrl = QGroupBox('Analysis Control')
