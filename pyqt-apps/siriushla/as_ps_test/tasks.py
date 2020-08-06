@@ -298,15 +298,19 @@ class TriggerTask(QThread):
     itemDone = Signal(str, bool)
     completed = Signal()
 
-    def __init__(self, restore_initial_value=False, parent=None,
-                 dis='PS', state='on'):
+    def __init__(self, parent=None, restore_initial_value=False,
+                 dis='PS', state='on', devices=list()):
         """Constructor."""
         super().__init__(parent)
+        self._dis = dis
         filt = {'dev': 'Mags'} if dis == 'PS' else {'dev': '.*(Kckr|Sept).*'}
         self._triggers = _HLTimeSearch.get_hl_triggers(filters=filt)
-        self._pvs = {trg: _PV(trg + ':State-Sel') for trg in self._triggers}
+        self._pvs_sp = {trg: _PV(trg+':State-Sel', connection_timeout=0.05)
+                        for trg in self._triggers}
+        self._pvs_rb = {trg: _PV(trg+':State-Sts', connection_timeout=0.05)
+                        for trg in self._triggers}
 
-        for trg, pv in self._pvs.items():
+        for trg, pv in self._pvs_rb.items():
             pv.get()  # force connection
             if trg not in TriggerTask.initial_triggers_state.keys():
                 TriggerTask.initial_triggers_state[trg] = pv.value
@@ -314,10 +318,14 @@ class TriggerTask(QThread):
         if restore_initial_value:
             self.trig2val = {
                 k: v for k, v in TriggerTask.initial_triggers_state.items()
-                if k in self._pvs.keys()}
+                if k in self._triggers}
         else:
             val = Const.DsblEnbl.Enbl if state == 'on' else Const.DsblEnbl.Dsbl
-            self.trig2val = {trig: val for trig in self._pvs.keys()}
+            self.trig2val = {trig: val for trig in self._triggers}
+
+        self._devices = devices
+        self._trig2ctrl = self._get_trigger_by_psname(self._devices)
+
         self._quit_task = False
 
     def size(self):
@@ -334,28 +342,47 @@ class TriggerTask(QThread):
             self.function()
         self.completed.emit()
 
-    def function(self):
+    def function(self, ):
         raise NotImplementedError
 
+    def _get_trigger_by_psname(self, devices):
+        """Return triggers corresponding to devices."""
+        devices = set(devices)
+        triggers = set()
+        if self._dis == 'PS':
+            for trig in self._triggers:
+                channels_set = set(_HLTimeSearch.get_hl_trigger_channels(trig))
+                dev_set = {ch.device_name for ch in channels_set}
+                if devices & dev_set:
+                    triggers.add(trig)
+        else:
+            for dev in devices:
+                trig = _PVName(dev).substitute(dis='TI')
+                triggers.add(trig)
+        return triggers
+
     def _set(self):
-        for trig, pv in self._pvs.items():
+        for trig in self._trig2ctrl:
             self.currentItem.emit(trig)
+            pv = self._pvs_sp[trig]
             val = self.trig2val[trig]
-            pv.value = val
+            # pv.value = val
+            print(pv.pvname, val)
             self.itemDone.emit(trig, True)
 
     def _check(self):
-        need_check = _dcopy(self.trig2val)
+        need_check = _dcopy(self._trig2ctrl)
         t0 = _time.time()
         while _time.time() - t0 < TIMEOUT_CHECK/2:
-            for trig, pv in self._pvs.items():
+            for trig in self._trig2ctrl:
                 if trig not in need_check:
                     continue
+                pv = self._pvs_rb[trig]
                 val = self.trig2val[trig]
                 if pv.value == val:
                     self.currentItem.emit(trig)
                     self.itemDone.emit(trig, True)
-                    need_check.pop(trig)
+                    need_check.remove(trig)
                 if self._quit_task:
                     break
             if (not need_check) or (self._quit_task):

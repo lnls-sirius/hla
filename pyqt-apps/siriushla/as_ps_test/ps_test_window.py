@@ -400,9 +400,17 @@ class PSTestWindow(SiriusMainWindow):
     def _set_check_trigger_state(self, dev_type, state):
         self.ok_ps.clear()
         self.nok_ps.clear()
+        if dev_type == 'PS':
+            devices = self._get_selected_ps()
+        elif dev_type == 'PU':
+            devices = self._get_selected_pu()
+        if not devices:
+            return
 
-        task1 = SetTriggerState(parent=self, dis=dev_type, state=state)
-        task2 = CheckTriggerState(parent=self, dis=dev_type, state=state)
+        task1 = SetTriggerState(
+            parent=self, dis=dev_type, state=state, devices=devices)
+        task2 = CheckTriggerState(
+            parent=self, dis=dev_type, state=state, devices=devices)
         task2.itemDone.connect(self._log)
         tasks = [task1, task2]
 
@@ -691,11 +699,19 @@ class PSTestWindow(SiriusMainWindow):
     def _restore_triggers_state(self, dev_type):
         self.ok_ps.clear()
         self.nok_ps.clear()
+        if dev_type == 'PS':
+            devices = self._get_selected_ps()
+        elif dev_type == 'PU':
+            devices = self._get_selected_pu()
+        if not devices:
+            return
 
         task1 = SetTriggerState(
-            restore_initial_value=True, parent=self, dis=dev_type)
+            parent=self, restore_initial_value=True, dis=dev_type,
+            devices=devices)
         task2 = CheckTriggerState(
-            restore_initial_value=True, parent=self, dis=dev_type)
+            parent=self, restore_initial_value=True, dis=dev_type,
+            devices=devices)
         task2.itemDone.connect(self._log)
         tasks = [task1, task2]
 
