@@ -18,6 +18,7 @@ from siriushla.widgets import SiriusMainWindow, PyDMStateButton, \
 from siriushla.common.epics.wrapper import PyEpicsWrapper
 from .menu import get_object
 from .standby_widgets import InjSysStandbyEnblDsbl, InjSysStandbyStatusLed
+from .killbeam_widgets import RFKillBeamButton
 
 
 class MainOperation(SiriusMainWindow):
@@ -62,6 +63,13 @@ class MainOperation(SiriusMainWindow):
         machshift_lay.addWidget(QLabel(''))
         machshift_lay.addWidget(machshift_mode_sel, 1, 0)
         machshift_lay.addWidget(machshift_mode_sts, 2, 0)
+
+        # RF Kill Beam
+        rfkill = QGroupBox('RF Kill Beam')
+        rfkill.setObjectName('RFKillBeam')
+        rfkill_bt = RFKillBeamButton(self)
+        rfkill_lay = QGridLayout(rfkill)
+        rfkill_lay.addWidget(rfkill_bt)
 
         # Egun triggers
         egun = QGroupBox('Egun Trigger')
@@ -178,11 +186,12 @@ class MainOperation(SiriusMainWindow):
 
         layout = QGridLayout()
         layout.addWidget(machshift, 0, 0)
-        layout.addWidget(egun, 0, 1)
-        layout.addWidget(injsys, 0, 2)
-        layout.addWidget(timing, 0, 3)
-        layout.addWidget(pbt, 0, 4, alignment=Qt.AlignLeft | Qt.AlignBottom)
-        layout.addWidget(self.expandwid, 2, 0, 1, 5)
+        layout.addWidget(rfkill, 0, 1)
+        layout.addWidget(egun, 0, 2)
+        layout.addWidget(injsys, 0, 3)
+        layout.addWidget(timing, 0, 4)
+        layout.addWidget(pbt, 0, 5, alignment=Qt.AlignLeft | Qt.AlignBottom)
+        layout.addWidget(self.expandwid, 2, 0, 1, 6)
 
         cw = QWidget(self)
         cw.setLayout(layout)
