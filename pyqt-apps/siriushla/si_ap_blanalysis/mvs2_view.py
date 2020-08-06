@@ -11,7 +11,7 @@ from siriuspy.namesys import SiriusPVName
 
 from siriushla.util import get_appropriate_color
 from siriushla.widgets import SiriusMainWindow, SiriusProcessImage, \
-    SiriusSpinbox, PyDMStateButton, SiriusLabel
+    SiriusSpinbox, PyDMStateButton, SiriusLabel, SiriusLedState
 
 
 class BeamLineMVS2View(SiriusMainWindow):
@@ -71,16 +71,16 @@ class BeamLineMVS2View(SiriusMainWindow):
             gbox_ctrl, self._device_analysis+':TargetPosY-RB')
 
         lay_ctrl.setAlignment(Qt.AlignTop)
-        lay_ctrl.addWidget(self._ld_enbl, 0, 0)
+        lay_ctrl.addWidget(self._ld_enbl, 0, 0, 2, 1)
         lay_ctrl.addWidget(self._sb_enbl, 0, 1)
         lay_ctrl.addWidget(self._lb_enbl, 1, 1)
-        lay_ctrl.addWidget(self._ld_rate, 2, 0)
+        lay_ctrl.addWidget(self._ld_rate, 2, 0, 2, 1)
         lay_ctrl.addWidget(self._sb_rate, 2, 1)
         lay_ctrl.addWidget(self._lb_rate, 3, 1)
-        lay_ctrl.addWidget(self._ld_tgtx, 4, 0)
+        lay_ctrl.addWidget(self._ld_tgtx, 4, 0, 2, 1)
         lay_ctrl.addWidget(self._sb_tgtx, 4, 1)
         lay_ctrl.addWidget(self._lb_tgtx, 5, 1)
-        lay_ctrl.addWidget(self._ld_tgty, 6, 0)
+        lay_ctrl.addWidget(self._ld_tgty, 6, 0, 2, 1)
         lay_ctrl.addWidget(self._sb_tgty, 6, 1)
         lay_ctrl.addWidget(self._lb_tgty, 7, 1)
 
@@ -97,41 +97,67 @@ class BeamLineMVS2View(SiriusMainWindow):
         self._lb_bmpy.showUnits = True
 
         lay_sofb.setAlignment(Qt.AlignTop)
-        lay_sofb.addWidget(self._ld_bmpx, 0, 0)
+        lay_sofb.addWidget(self._ld_bmpx, 0, 0, 2, 1)
         lay_sofb.addWidget(self._lb_bmpx, 0, 1)
-        lay_sofb.addWidget(self._ld_bmpy, 1, 0)
+        lay_sofb.addWidget(self._ld_bmpy, 1, 0, 2, 1)
         lay_sofb.addWidget(self._lb_bmpy, 1, 1)
 
         # Camera Acquisition Status
+        gbox_acqsett = QGroupBox('Camera Acquisition Statuses')
+        lay_acqsett = QGridLayout(gbox_acqsett)
+
         self._ld_acqtime = QLabel('Acquire Time: ')
+        self._sb_acqtime = SiriusSpinbox(
+            gbox_ctrl, self._device_analysis+':cam1:AcquireTime')
+        self._sb_acqtime.showStepExponent = False
         self._lb_acqtime = PyDMLabel(
-            self, self._device_cam+':cam1:AcquireTime_RBV')
+            gbox_acqsett, self._device_cam+':cam1:AcquireTime_RBV')
         self._lb_acqtime.showUnits = True
+
         self._ld_acqperd = QLabel('Acquire Period: ')
+        self._sb_acqperd = SiriusSpinbox(
+            gbox_ctrl, self._device_analysis+':cam1:AcquirePeriod')
+        self._sb_acqperd.showStepExponent = False
         self._lb_acqperd = PyDMLabel(
-            self, self._device_cam+':cam1:AcquirePeriod_RBV')
+            gbox_acqsett, self._device_cam+':cam1:AcquirePeriod_RBV')
         self._lb_acqperd.showUnits = True
+
         self._ld_numimgs = QLabel('# Images: ')
         self._lb_numimgs = PyDMLabel(
-            self, self._device_cam+':cam1:NumImages_RBV')
+            gbox_acqsett, self._device_cam+':cam1:NumImages_RBV')
+
         self._ld_imgmode = QLabel('Image Mode: ')
         self._lb_imgmode = PyDMLabel(
-            self, self._device_cam+':cam1:ImageMode_RBV')
-        self._ld_acqsts = QLabel('Acquire Status: ')
-        self._lb_acqsts = PyDMLabel(
-            self, self._device_cam+':cam1:Acquire_RBV')
-        self._ld_capsts = QLabel('Capture Status: ')
-        self._lb_capsts = PyDMLabel(
-            self, self._device_cam+':HDF1:Capture_RBV')
+            gbox_acqsett, self._device_cam+':cam1:ImageMode_RBV')
 
-        gbox_acqsett = QGroupBox('Camera Acquisition Statuses')
-        lay_acqsett = QFormLayout(gbox_acqsett)
-        lay_acqsett.addRow(self._ld_acqtime, self._lb_acqtime)
-        lay_acqsett.addRow(self._ld_acqperd, self._lb_acqperd)
-        lay_acqsett.addRow(self._ld_numimgs, self._lb_numimgs)
-        lay_acqsett.addRow(self._ld_imgmode, self._lb_imgmode)
-        lay_acqsett.addRow(self._ld_acqsts, self._lb_acqsts)
-        lay_acqsett.addRow(self._ld_capsts, self._lb_capsts)
+        self._ld_acqsts = QLabel('Acquire Status: ')
+        self._pb_acqsts = PyDMStateButton(
+            gbox_acqsett, self._device_cam+':cam1:Acquire')
+        self._lb_acqsts = SiriusLedState(
+            gbox_acqsett, self._device_cam+':cam1:Acquire_RBV')
+
+        self._ld_capsts = QLabel('Capture Status: ')
+        self._pb_capsts = PyDMStateButton(
+            gbox_acqsett, self._device_cam+':HDF1:Capture')
+        self._lb_capsts = SiriusLedState(
+            gbox_acqsett, self._device_cam+':HDF1:Capture_RBV')
+
+        lay_acqsett.addWidget(self._ld_acqtime, 0, 0, 2, 1)
+        lay_acqsett.addWidget(self._sp_acqtime, 0, 1)
+        lay_acqsett.addWidget(self._lb_acqtime, 1, 1)
+        lay_acqsett.addWidget(self._ld_acqperd, 2, 0, 2, 1)
+        lay_acqsett.addWidget(self._sp_acqperd, 2, 1)
+        lay_acqsett.addWidget(self._lb_acqperd, 3, 1)
+        lay_acqsett.addWidget(self._ld_acqsts, 4, 0, 2, 1)
+        lay_acqsett.addWidget(self._pb_acqsts, 4, 1)
+        lay_acqsett.addWidget(self._lb_acqsts, 5, 1)
+        lay_acqsett.addWidget(self._ld_capsts, 6, 0, 2, 1)
+        lay_acqsett.addWidget(self._lb_capsts, 6, 1)
+        lay_acqsett.addWidget(self._lb_capsts, 7, 1)
+        lay_acqsett.addWidget(self._ld_numimgs, 8, 0)
+        lay_acqsett.addWidget(self._lb_numimgs, 8, 1)
+        lay_acqsett.addWidget(self._ld_imgmode, 9, 0)
+        lay_acqsett.addWidget(self._lb_imgmode, 9, 1)
 
         self.cw = QWidget()
         self.cw.setStyleSheet('PyDMLabel{qproperty-alignment: AlignCenter;}')
