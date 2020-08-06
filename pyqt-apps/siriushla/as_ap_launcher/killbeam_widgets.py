@@ -68,7 +68,7 @@ class RFKillBeamHandler:
                            '(SR-RF-DLLRF-01:AMPREF:INCRATE:S)!']
         _time.sleep(RFKillBeamHandler.TIMEOUT_WAIT)
 
-        # set Amplitude Reference to 60mV and wait for 0.2 seconds
+        # set Amplitude Reference to 60mV and wait for TIMEOUT_ACT seconds
         if not self._set_pv('SR-RF-DLLRF-01:mV:AL:REF:S', 60):
             return [False, 'Could not set Amplitude Reference PV\n'
                            '(SR-RF-DLLRF-01:mV:AL:REF:S)!']
