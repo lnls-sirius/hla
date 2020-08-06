@@ -270,12 +270,31 @@ class _DetailedWidget(QWidget):
 
         wid = QWidget(self)
         wid.setLayout(QHBoxLayout())
-        sttbtn = PyDMStateButton(wid, init_channel=self._dev+':ImgCropUse-Sel')
-        lbl = SiriusLedState(wid, init_channel=self._dev+':ImgCropUse-Sts')
+        sttbtn = PyDMEnumComboBox(
+            wid, init_channel=self._dev+':ReadingOrder-Sel')
+        lbl = SiriusLabel(wid, init_channel=self._dev+':ReadingOrder-Sts')
         wid.layout().addWidget(sttbtn)
         wid.layout().addWidget(lbl)
         self.layout().addRow(QLabel(
-            'Crop Image Levels', self, alignment=Qt.AlignBottom), wid)
+            'Reading Order', self, alignment=Qt.AlignBottom), wid)
+
+        wid = QWidget(self)
+        wid.setLayout(QHBoxLayout())
+        sttbtn = PyDMStateButton(wid, init_channel=self._dev+':ImgFlipX-Sel')
+        lbl = SiriusLedState(wid, init_channel=self._dev+':ImgFlipX-Sts')
+        wid.layout().addWidget(sttbtn)
+        wid.layout().addWidget(lbl)
+        self.layout().addRow(QLabel(
+            'Flip Horintal', self, alignment=Qt.AlignBottom), wid)
+
+        wid = QWidget(self)
+        wid.setLayout(QHBoxLayout())
+        sttbtn = PyDMStateButton(wid, init_channel=self._dev+':ImgFlipY-Sel')
+        lbl = SiriusLedState(wid, init_channel=self._dev+':ImgFlipY-Sts')
+        wid.layout().addWidget(sttbtn)
+        wid.layout().addWidget(lbl)
+        self.layout().addRow(QLabel(
+            'Flip Vertical', self, alignment=Qt.AlignBottom), wid)
 
         wid = QWidget(self)
         wid.setLayout(QHBoxLayout())
@@ -286,6 +305,15 @@ class _DetailedWidget(QWidget):
         wid.layout().addWidget(lbl)
         self.layout().addRow(QLabel(
             'Min. Pixel Val.', self, alignment=Qt.AlignBottom), wid)
+
+        wid = QWidget(self)
+        wid.setLayout(QHBoxLayout())
+        sttbtn = PyDMStateButton(wid, init_channel=self._dev+':ImgCropUse-Sel')
+        lbl = SiriusLedState(wid, init_channel=self._dev+':ImgCropUse-Sts')
+        wid.layout().addWidget(sttbtn)
+        wid.layout().addWidget(lbl)
+        self.layout().addRow(QLabel(
+            'Crop Image Levels', self, alignment=Qt.AlignBottom), wid)
 
         wid = QWidget(self)
         wid.setLayout(QHBoxLayout())
