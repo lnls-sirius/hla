@@ -108,7 +108,7 @@ class BeamLineMVS2View(SiriusMainWindow):
 
         self._ld_acqtime = QLabel('Acquire Time: ')
         self._sb_acqtime = SiriusSpinbox(
-            gbox_ctrl, self._device_analysis+':cam1:AcquireTime')
+            gbox_ctrl, self._device_cam + ':cam1:AcquireTime')
         self._sb_acqtime.showStepExponent = False
         self._lb_acqtime = PyDMLabel(
             gbox_acqsett, self._device_cam+':cam1:AcquireTime_RBV')
@@ -116,7 +116,7 @@ class BeamLineMVS2View(SiriusMainWindow):
 
         self._ld_acqperd = QLabel('Acquire Period: ')
         self._sb_acqperd = SiriusSpinbox(
-            gbox_ctrl, self._device_analysis+':cam1:AcquirePeriod')
+            gbox_ctrl, self._device_cam + ':cam1:AcquirePeriod')
         self._sb_acqperd.showStepExponent = False
         self._lb_acqperd = PyDMLabel(
             gbox_acqsett, self._device_cam+':cam1:AcquirePeriod_RBV')
