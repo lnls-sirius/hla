@@ -179,7 +179,7 @@ class OrbitRegister(QWidget):
         btn.clicked.connect(btn.showMenu)
 
         act = menu.addAction('Get From &File')
-        act.setIcon(qta.icon('mdi.file-upload-outline'))
+        act.setIcon(qta.icon('mdi.file-download-outline'))
         act.triggered.connect(self._load_orbit_from_file)
         act = menu.addAction('Get From &ServConf')
         act.setIcon(qta.icon('mdi.cloud-download-outline'))
@@ -219,7 +219,7 @@ class OrbitRegister(QWidget):
         act.setIcon(qta.icon('mdi.delete-empty'))
         act.triggered.connect(self._reset_orbit)
         act = menu.addAction('Save To File')
-        act.setIcon(qta.icon('mdi.file-download-outline'))
+        act.setIcon(qta.icon('mdi.file-upload-outline'))
         act.triggered.connect(self._save_orbit_to_file)
         act = menu.addAction('Save To ServConf')
         act.setIcon(qta.icon('mdi.cloud-upload-outline'))
