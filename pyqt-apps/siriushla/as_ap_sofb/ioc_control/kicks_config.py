@@ -65,14 +65,30 @@ class KicksConfigWidget(BaseWidget):
         det_wid.setObjectName('gbx')
         det_lay = QGridLayout(det_wid)
 
-        # syn_lbl = QLabel('Synchronize', det_wid)
-        syn_wid = self.create_pair_sel(det_wid, 'CorrSync', is_vert=True)
+        syn_grp = QGroupBox('Sync.', det_wid)
+        syn_wid = self.create_pair_sel(syn_grp, 'CorrSync', is_vert=True)
         syn_wid.layout().setContentsMargins(0, 1, 0, 1)
+        gdl = QGridLayout(syn_grp)
+        gdl.addWidget(syn_wid, 0, 0)
 
-        del_lbl = QLabel('Delay', det_wid)
+        pssofb_grp = QGroupBox('PSSOFB', det_wid)
+        enbl_lbl = QLabel('Enable:', pssofb_grp)
+        enbl_wid = self.create_pair_butled(pssofb_grp, 'CorrPSSOFBEnbl')
+        enbl_wid.layout().setContentsMargins(0, 0, 0, 0)
+        wait_lbl = QLabel('Wait:', pssofb_grp)
+        wait_wid = self.create_pair_butled(pssofb_grp, 'CorrPSSOFBWait')
+        wait_wid.layout().setContentsMargins(0, 0, 0, 0)
+        gdl = QGridLayout(pssofb_grp)
+        gdl.setSpacing(1)
+        gdl.addWidget(enbl_lbl, 0, 0)
+        gdl.addWidget(wait_lbl, 1, 0)
+        gdl.addWidget(enbl_wid, 0, 1)
+        gdl.addWidget(wait_wid, 1, 1)
+
+        del_grp = QGroupBox('Trigger Delay', det_wid)
         del_wid = self.create_pair(
-            det_wid, 'Delay', prefix='SI-Glob:TI-Mags-Corrs:', is_vert=False)
-        del_det = QPushButton(qta.icon('fa5s.ellipsis-h'), '', det_wid)
+            del_grp, 'Delay', prefix='SI-Glob:TI-Mags-Corrs:', is_vert=False)
+        del_det = QPushButton(qta.icon('fa5s.ellipsis-h'), '', del_grp)
         del_det.setToolTip('Open details')
         del_det.setObjectName('detail')
         del_det.setStyleSheet(
@@ -83,41 +99,17 @@ class KicksConfigWidget(BaseWidget):
         connect_window(
             del_det, trg_w, parent=None,
             prefix='SI-Glob:TI-Mags-Corrs:')
-
-        enbl_lbl = QLabel('Enable:', det_wid)
-        enbl_wid = self.create_pair_butled(det_wid, 'CorrPSSOFBEnbl')
-        enbl_wid.layout().setContentsMargins(0, 0, 0, 0)
-        wait_lbl = QLabel('Wait:', det_wid)
-        wait_wid = self.create_pair_butled(det_wid, 'CorrPSSOFBWait')
-        wait_wid.layout().setContentsMargins(0, 0, 0, 0)
-
-        pssofb_grp = QGroupBox('PSSOFB', det_wid)
-        gdl = QGridLayout(pssofb_grp)
-        # gdl.setContentsMargins(1, 0, 0, 0)
-        gdl.setSpacing(1)
-        gdl.addWidget(enbl_lbl, 0, 0)
-        gdl.addWidget(wait_lbl, 1, 0)
-        gdl.addWidget(enbl_wid, 0, 1)
-        gdl.addWidget(wait_wid, 1, 1)
+        del_lay = QHBoxLayout(del_grp)
+        del_lay.addStretch()
+        del_lay.addWidget(del_wid)
+        del_lay.addWidget(del_det)
+        del_lay.addStretch()
 
         det_lay.addWidget(pssofb_grp, 0, 0)
-
-        syn_grp = QGroupBox('Sync.', det_wid)
-        gdl = QGridLayout(syn_grp)
-        gdl.addWidget(syn_wid, 0, 0)
         det_lay.addWidget(syn_grp, 0, 2)
-
-        hbl = QHBoxLayout()
-        hbl.setContentsMargins(0, 0, 0, 0)
-        hbl.addStretch()
-        hbl.addWidget(del_lbl)
-        hbl.addWidget(del_wid)
-        hbl.addWidget(del_det)
-        hbl.addStretch()
-        det_lay.addLayout(hbl, 2, 0, 1, 3)
+        det_lay.addWidget(del_grp, 2, 0, 1, 3)
         det_lay.setColumnStretch(1, 10)
         det_lay.setRowStretch(1, 10)
-
         return det_wid
 
     def get_status_widget(self, parent):
