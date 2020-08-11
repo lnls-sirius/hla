@@ -3,7 +3,8 @@
 from functools import partial as _part
 import numpy as _np
 from qtpy.QtCore import Qt, Signal
-from qtpy.QtWidgets import QWidget, QHBoxLayout, QSizePolicy, QComboBox, QLabel
+from qtpy.QtWidgets import QWidget, QHBoxLayout, QSizePolicy, QComboBox, \
+    QLabel, QVBoxLayout
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox
 from pydm.widgets.base import PyDMPrimitiveWidget
 from siriuspy.namesys import SiriusPVName as _PVName
@@ -38,45 +39,60 @@ class BaseWidget(QWidget):
         """."""
         return self._csorb.isring
 
-    def create_pair(self, parent, pvname, prefix=None):
+    def create_pair(self, parent, pvname, prefix=None, is_vert=False):
         """."""
         prefix = prefix or self.prefix
         wid = QWidget(parent)
-        hbl = QHBoxLayout(wid)
-        hbl.setContentsMargins(0, 0, 0, 0)
+        if is_vert:
+            lay = QVBoxLayout(wid)
+        else:
+            lay = QHBoxLayout(wid)
+        lay.setContentsMargins(0, 0, 0, 0)
         pdm_spbx = SiriusSpinbox(wid, init_channel=prefix+pvname+'-SP')
         pdm_spbx.showStepExponent = False
         pdm_lbl = PyDMLabel(wid, init_channel=prefix+pvname+'-RB')
         pdm_lbl.setAlignment(Qt.AlignCenter)
-        hbl.addWidget(pdm_spbx)
-        hbl.addWidget(pdm_lbl)
+        lay.addWidget(pdm_spbx)
+        lay.addWidget(pdm_lbl)
+        wid.sp_wid = pdm_spbx
+        wid.rb_wid = pdm_lbl
         return wid
 
-    def create_pair_sel(self, parent, pvname, prefix=None):
+    def create_pair_sel(self, parent, pvname, prefix=None, is_vert=False):
         """."""
         prefix = prefix or self.prefix
         wid = QWidget(parent)
-        hbl = QHBoxLayout(wid)
-        hbl.setContentsMargins(0, 0, 0, 0)
+        if is_vert:
+            lay = QVBoxLayout(wid)
+        else:
+            lay = QHBoxLayout(wid)
+        lay.setContentsMargins(0, 0, 0, 0)
         pdm_cbbx = PyDMEnumComboBox(
             wid, init_channel=prefix+pvname+'-Sel')
         pdm_lbl = PyDMLabel(wid, init_channel=prefix+pvname+'-Sts')
         pdm_lbl.setAlignment(Qt.AlignCenter)
-        hbl.addWidget(pdm_cbbx)
-        hbl.addWidget(pdm_lbl)
+        lay.addWidget(pdm_cbbx)
+        lay.addWidget(pdm_lbl)
+        wid.sp_wid = pdm_cbbx
+        wid.rb_wid = pdm_lbl
         return wid
 
-    def create_pair_butled(self, parent, pvname, prefix=None):
+    def create_pair_butled(self, parent, pvname, prefix=None, is_vert=False):
         """."""
         prefix = prefix or self.prefix
         wid = QWidget(parent)
-        hbl = QHBoxLayout(wid)
-        hbl.setContentsMargins(0, 0, 0, 0)
+        if is_vert:
+            lay = QVBoxLayout(wid)
+        else:
+            lay = QHBoxLayout(wid)
+        lay.setContentsMargins(0, 0, 0, 0)
         spnt = PyDMStateButton(
             wid, init_channel=prefix+pvname+'-Sel')
         rdb = SiriusLedState(wid, init_channel=prefix+pvname+'-Sts')
-        hbl.addWidget(spnt)
-        hbl.addWidget(rdb)
+        lay.addWidget(spnt)
+        lay.addWidget(rdb)
+        wid.sp_wid = spnt
+        wid.rb_wid = spnt
         return wid
 
 

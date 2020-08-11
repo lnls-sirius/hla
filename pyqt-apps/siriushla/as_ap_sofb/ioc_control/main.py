@@ -303,31 +303,42 @@ class SOFBControl(BaseWidget):
         gpbx_lay.setSpacing(1)
         tabw.addTab(gpbx, 'PID')
 
-        hbl = QHBoxLayout()
-        hbl.addWidget(QLabel('Use PID:'))
-        wid = self.create_pair_butled(gpbx, 'LoopUsePID')
-        hbl.addStretch()
-        hbl.addWidget(wid)
-        gpbx_lay.addLayout(hbl, 0, 0, 1, 4 if self.acc == 'SI' else 3)
-
-        gpbx_lay.addWidget(QLabel('CH', gpbx), 2, 0)
-        gpbx_lay.addWidget(QLabel('CV', gpbx), 3, 0)
-        tmpl = self.prefix + 'LoopPID{:s}{:s}-SP'
+        gpbx_lay.addWidget(QLabel('CH', gpbx), 1, 0)
+        gpbx_lay.addWidget(QLabel('CV', gpbx), 2, 0)
+        tmpl = 'LoopPID{:s}{:s}'
+        pairs = []
         for i, k in enumerate(('Kp', 'Ki', 'Kd'), 1):
             gpbx_lay.addWidget(
-                QLabel(k, gpbx), 1, i, alignment=Qt.AlignCenter)
-            spbx = SiriusSpinbox(wid, init_channel=tmpl.format(k, 'CH'))
-            spbx.showStepExponent = False
-            gpbx_lay.addWidget(spbx, 2, i)
-            spbx = SiriusSpinbox(wid, init_channel=tmpl.format(k, 'CV'))
-            spbx.showStepExponent = False
-            gpbx_lay.addWidget(spbx, 3, i)
+                QLabel(k, gpbx), 0, i, alignment=Qt.AlignCenter)
+            pair = self.create_pair(wid, tmpl.format(k, 'CH'), is_vert=True)
+            pairs.append(pair)
+            gpbx_lay.addWidget(pair, 1, i)
+            pair = self.create_pair(wid, tmpl.format(k, 'CV'), is_vert=True)
+            pairs.append(pair)
+            gpbx_lay.addWidget(pair, 2, i)
             if self.acc == 'SI':
-                spbx = SiriusSpinbox(wid, init_channel=tmpl.format(k, 'RF'))
-                spbx.showStepExponent = False
-                gpbx_lay.addWidget(spbx, 4, i)
+                pair = self.create_pair(
+                    wid, tmpl.format(k, 'RF'), is_vert=True)
+                pairs.append(pair)
+                gpbx_lay.addWidget(pair, 3, i)
         if self.acc == 'SI':
-            gpbx_lay.addWidget(QLabel('RF', gpbx), 4, 0)
+            gpbx_lay.addWidget(QLabel('RF', gpbx), 3, 0)
+
+        pbc = QPushButton('SP')
+        pbc.setStyleSheet('max-width:2.2em;')
+        gpbx_lay.addWidget(pbc, 0, 0)
+        pbc.setCheckable(True)
+        pbc.setChecked(False)
+        pbc.toggled.connect(
+            lambda x: pbc.setText('RB' if x else 'SP'))
+        for pair in pairs:
+            pair.rb_wid.setVisible(False)
+            pbc.toggled.connect(pair.rb_wid.setVisible)
+            pbc.toggled.connect(pair.sp_wid.setHidden)
+
+        vlay = QVBoxLayout()
+        vlay.addStretch()
+        gpbx_lay.addLayout(vlay, 4, 0)
 
         return auto_wid
 
