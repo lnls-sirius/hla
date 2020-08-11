@@ -23,14 +23,13 @@ class KicksConfigWidget(BaseWidget):
     def setupui(self):
         self.setLayout(QVBoxLayout())
 
-        names = ('Correction Factors', 'Maximum Kicks', 'Maximum Delta Kicks')
-        tabs = ('%', 'Max \u03b8', 'Max \u0394\u03b8')
-        pvnames = ('DeltaFactor', 'MaxKick', 'MaxDeltaKick')
-        unitss = (('[%]', '[%]'), ('[urad]', '[urad]'), ('[urad]', '[urad]'))
+        names = ('Maximum Kicks', 'Maximum Delta Kicks')
+        tabs = ('Max \u03b8', 'Max \u0394\u03b8')
+        pvnames = ('MaxKick', 'MaxDeltaKick')
+        unitss = (('[urad]', '[urad]'), ('[urad]', '[urad]'))
         planes = ('CH', 'CV')
         if self.acc == 'SI':
             unitss = (
-                ('[%]', '[%]', '[%]'),
                 ('[urad]', '[urad]', None),
                 ('[urad]', '[urad]', '[Hz]'), )
             planes = ('CH', 'CV', 'RF')

@@ -250,10 +250,28 @@ class SOFBControl(BaseWidget):
         else:
             gdl.addWidget(btns['All'], 1, 1, 1, 2)
         gdl.setColumnMinimumWidth(0, 60)
+
+        grpbx = QWidget(man_wid)
+        grpbx.setObjectName('gbx')
+        if self.acc == 'SI':
+            planes = ('CH', 'CV', 'RF')
+            gdl.addWidget(grpbx, 2, 0, 1, 4)
+        else:
+            planes = ('CH', 'CV')
+            gdl.addWidget(grpbx, 2, 0, 1, 3)
+        fbl = QFormLayout(grpbx)
+        for pln in planes:
+            lbl = QLabel(pln+' [%] ', grpbx)
+            lbl.setObjectName('lbl')
+            lbl.setStyleSheet('#lbl{min-height:1em;}')
+            wid = self.create_pair(grpbx, 'ManCorrGain'+pln)
+            wid.setObjectName('wid')
+            wid.setStyleSheet('#wid{min-height:1.2em;}')
+            fbl.addRow(lbl, wid)
+
         vlay = QVBoxLayout()
         vlay.addStretch()
-        gdl.addLayout(vlay, 2, 0)
-
+        gdl.addLayout(vlay, 3, 0)
         return man_wid
 
     def get_auto_correction_widget(self, parent):
