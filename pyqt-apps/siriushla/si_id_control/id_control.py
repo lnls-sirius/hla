@@ -48,7 +48,9 @@ class IDControl(SiriusMainWindow):
         lay.addWidget(self._apu_header)
 
         self._apu_widgets = list()
-        for idname in ['SI-09SA:ID-APU22', 'SI-07SP:ID-APU22']:
+        idlist = ['SI-07SP:ID-APU22', 'SI-08SB:ID-APU22',
+                  'SI-09SA:ID-APU22']
+        for idname in idlist:
             idname = _PVName(idname)
             apu_wid = APU22SummaryWidget(self, self._prefix, idname)
             lay.addWidget(apu_wid)

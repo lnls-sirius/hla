@@ -300,7 +300,9 @@ def get_object(ismenubar=True, parent=None):
                 All, ['sirius-hla-si-id-control.py', '-isall'])
             self.add_object_to_level1(menu, All)
 
-            for idname in ['SI-07SP:ID-APU22', 'SI-09SA:ID-APU22']:
+            idlist = ['SI-07SP:ID-APU22', 'SI-08SB:ID-APU22',
+                      'SI-09SA:ID-APU22']
+            for idname in idlist:
                 idname = SiriusPVName(idname)
                 beamline = IDSearch.conv_idname_2_beamline(idname)
                 text = '{0} - {1} ({2})'.format(
