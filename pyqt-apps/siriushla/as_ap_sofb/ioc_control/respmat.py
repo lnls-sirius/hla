@@ -40,6 +40,7 @@ class RespMatWidget(BaseWidget):
         self._respmat_rb = SiriusConnectionSignal(prefix+'RespMat-RB')
 
     def setupui(self):
+        """."""
         gbox = QGroupBox('Matrix', self)
         gbox.setObjectName('grbx')
         self.setLayout(QVBoxLayout())
@@ -48,17 +49,45 @@ class RespMatWidget(BaseWidget):
         tabw = QTabWidget(gbox)
         vbl.addWidget(tabw)
 
-        # ####################################################################
-        # ####################### Selection Lists ############################
-        # ####################################################################
-        grpbx = QWidget(tabw)
-        hbl = QHBoxLayout(grpbx)
-        tabw.addTab(grpbx, 'Sel.')
+        main_wid = self.get_main_widget(tabw)
+        tabw.addTab(main_wid, 'Main')
+
+        svs_wid = self.get_singular_values_widget(tabw)
+        tabw.addTab(svs_wid, 'SVs')
+
+        meas_wid = self.get_measurement_widget(tabw)
+        tabw.addTab(meas_wid, 'Meas')
+
+    def get_main_widget(self, parent):
+        main_wid = QWidget(parent)
+        main_lay = QVBoxLayout(main_wid)
+        main_lay.setContentsMargins(0, 0, 0, 0)
+
+        sel_gp = QGroupBox('Sel.')
+        sel_gp.setLayout(QHBoxLayout())
+        sel_gp.layout().setContentsMargins(0, 0, 0, 0)
+        sel_wid = self.get_selection_lists_widget(sel_gp)
+        sel_gp.layout().addWidget(sel_wid)
+        main_lay.addWidget(sel_gp)
+
+        svld_gp = QGroupBox('Load and Save')
+        svld_gp.setLayout(QHBoxLayout())
+        svld_gp.layout().setContentsMargins(0, 0, 0, 0)
+        svld_wid = self.get_saveload_widget(svld_gp)
+        svld_gp.layout().addWidget(svld_wid)
+        main_lay.addWidget(svld_gp)
+
+        return main_wid
+
+    def get_selection_lists_widget(self, parent):
+        """."""
+        sel_wid = QWidget(parent)
+        sel_lay = QHBoxLayout(sel_wid)
 
         icon = qta.icon('fa5s.hammer', color=get_appropriate_color(self.acc))
         Window = create_window_from_widget(
             SelectionMatrix, title='Corrs and BPMs selection', icon=icon)
-        btn = QPushButton('', grpbx)
+        btn = QPushButton('', sel_wid)
         btn.setObjectName('btn')
         btn.setIcon(qta.icon('fa5s.tasks'))
         btn.setToolTip('Open window to select BPMs and correctors')
@@ -66,48 +95,49 @@ class RespMatWidget(BaseWidget):
             '#btn{min-width:3.8em; max-width:3.8em;\
             min-height:2em; max-height:2em; icon-size:25px;}')
         connect_window(btn, Window, None, prefix=self.prefix, acc=self.acc)
-        hbl.addWidget(btn)
+        sel_lay.addWidget(btn)
 
         if self.acc == 'SI':
             pdm_chbx = PyDMCheckbox(
-                grpbx, init_channel=self.prefix+'RFEnbl-Sel')
+                sel_wid, init_channel=self.prefix+'RFEnbl-Sel')
             pdm_chbx.setText('use RF')
             pdm_led = SiriusLedState(
-                grpbx, init_channel=self.prefix+'RFEnbl-Sts')
-            hbl.addStretch()
-            hbl.addWidget(pdm_chbx)
-            hbl.addWidget(pdm_led)
+                sel_wid, init_channel=self.prefix+'RFEnbl-Sts')
+            sel_lay.addStretch()
+            sel_lay.addWidget(pdm_chbx)
+            sel_lay.addWidget(pdm_led)
 
-        btn = QPushButton('', grpbx)
+        btn = QPushButton('', sel_wid)
         btn.setToolTip('Visualize RespMat')
         btn.setIcon(qta.icon('mdi.chart-line'))
         btn.setObjectName('btn')
         btn.setStyleSheet('#btn{max-width:40px; icon-size:40px;}')
         Window = create_window_from_widget(
             ShowMatrixWidget, title='Check RespMat')
-        connect_window(btn, Window, grpbx, prefix=self.prefix, acc=self.acc)
-        hbl.addWidget(btn)
+        connect_window(btn, Window, sel_wid, prefix=self.prefix, acc=self.acc)
+        sel_lay.addWidget(btn)
 
-        # ####################################################################
-        # ####################### Singular Values ############################
-        # ####################################################################
-        grpbx = QWidget(tabw)
-        gdl = QGridLayout(grpbx)
-        tabw.addTab(grpbx, 'SVs')
+        return sel_wid
 
-        wid = self.create_pair(grpbx, 'MinSingValue')
+    def get_singular_values_widget(self, parent):
+        """."""
+        svs_wid = QWidget(parent)
+        svs_lay = QGridLayout(svs_wid)
+
+        wid = self.create_pair(svs_wid, 'MinSingValue')
         lbl = QLabel('Min. SV: ')
-        gdl.addWidget(lbl, 0, 0)
-        gdl.addWidget(wid, 0, 1)
+        svs_lay.addWidget(lbl, 0, 0)
+        svs_lay.addWidget(wid, 0, 1)
 
-        wid = self.create_pair(grpbx, 'TikhonovRegConst')
+        wid = self.create_pair(svs_wid, 'TikhonovRegConst')
         lbl = QLabel('Tikhonov: ')
-        gdl.addWidget(lbl, 1, 0)
-        gdl.addWidget(wid, 1, 1)
+        svs_lay.addWidget(lbl, 1, 0)
+        svs_lay.addWidget(wid, 1, 1)
 
         lbl = QLabel('Nr Sing Vals')
-        lbls = SiriusLabel(grpbx, init_channel=self.prefix+'NrSingValues-Mon')
-        btn = QPushButton('', grpbx)
+        lbls = SiriusLabel(
+            svs_wid, init_channel=self.prefix+'NrSingValues-Mon')
+        btn = QPushButton('', svs_wid)
         btn.setToolTip('Check Singular Values')
         btn.setIcon(qta.icon('mdi.chart-line'))
         btn.setObjectName('btn')
@@ -117,21 +147,21 @@ class RespMatWidget(BaseWidget):
         hbl.addStretch()
         hbl.addWidget(lbl)
         hbl.addWidget(lbls)
-        gdl.addLayout(hbl, 2, 0, 1, 2)
+        svs_lay.addLayout(hbl, 2, 0, 1, 2)
 
         Window = create_window_from_widget(
             SingularValues, title='Check Singular Values')
-        connect_window(btn, Window, grpbx, prefix=self.prefix)
+        connect_window(btn, Window, svs_wid, prefix=self.prefix)
 
-        # ####################################################################
-        # ######################### Measurement ##############################
-        # ####################################################################
-        grpbx = QWidget(tabw)
-        vbl = QVBoxLayout(grpbx)
-        tabw.addTab(grpbx, 'Meas')
+        return svs_wid
+
+    def get_measurement_widget(self, parent):
+        """."""
+        meas_wid = QWidget(parent)
+        meas_lay = QVBoxLayout(meas_wid)
 
         strt = PyDMPushButton(
-            grpbx,
+            meas_wid,
             init_channel=self.prefix+"MeasRespMat-Cmd",
             pressValue=ConstTLines.MeasRespMatCmd.Start)
         strt.setEnabled(True)
@@ -141,7 +171,7 @@ class RespMatWidget(BaseWidget):
         strt.setStyleSheet(
             '#strt{min-width:25px; max-width:25px; icon-size:20px;}')
         stop = PyDMPushButton(
-            grpbx,
+            meas_wid,
             init_channel=self.prefix+"MeasRespMat-Cmd",
             pressValue=ConstTLines.MeasRespMatCmd.Stop)
         stop.setEnabled(True)
@@ -151,7 +181,7 @@ class RespMatWidget(BaseWidget):
         stop.setStyleSheet(
             '#stop{min-width:25px; max-width:25px; icon-size:20px;}')
         rst = PyDMPushButton(
-            grpbx,
+            meas_wid,
             init_channel=self.prefix+"MeasRespMat-Cmd",
             pressValue=ConstTLines.MeasRespMatCmd.Reset)
         rst.setEnabled(True)
@@ -160,11 +190,11 @@ class RespMatWidget(BaseWidget):
         rst.setObjectName('conf')
         rst.setStyleSheet(
             '#conf{min-width:25px; max-width:25px; icon-size:20px;}')
-        lbl = PyDMLabel(grpbx, init_channel=self.prefix+'MeasRespMat-Mon')
+        lbl = PyDMLabel(meas_wid, init_channel=self.prefix+'MeasRespMat-Mon')
         lbl.setAlignment(Qt.AlignCenter)
         hbl = QHBoxLayout()
         hbl.setSpacing(8)
-        vbl.addItem(hbl)
+        meas_lay.addItem(hbl)
         hbl.addWidget(strt)
         hbl.addWidget(stop)
         hbl.addWidget(rst)
@@ -172,53 +202,60 @@ class RespMatWidget(BaseWidget):
         hbl.addWidget(lbl)
 
         fml = QFormLayout()
-        vbl.addSpacing(20)
-        vbl.addItem(fml)
-        lbl = QLabel('CH [urad]', grpbx)
-        wid = self.create_pair(grpbx, 'MeasRespMatKickCH')
+        meas_lay.addSpacing(20)
+        meas_lay.addItem(fml)
+        lbl = QLabel('CH [urad]', meas_wid)
+        wid = self.create_pair(meas_wid, 'MeasRespMatKickCH')
         fml.addRow(lbl, wid)
-        lbl = QLabel('CV [urad]', grpbx)
-        wid = self.create_pair(grpbx, 'MeasRespMatKickCV')
+        lbl = QLabel('CV [urad]', meas_wid)
+        wid = self.create_pair(meas_wid, 'MeasRespMatKickCV')
         fml.addRow(lbl, wid)
         if self.acc == 'SI':
-            lbl = QLabel('RF [Hz]', grpbx)
-            wid = self.create_pair(grpbx, 'MeasRespMatKickRF')
+            lbl = QLabel('RF [Hz]', meas_wid)
+            wid = self.create_pair(meas_wid, 'MeasRespMatKickRF')
             fml.addRow(lbl, wid)
-        lbl = QLabel('Wait [s]', grpbx)
+        lbl = QLabel('Wait [s]', meas_wid)
         lbl.setToolTip('Time to wait between kicks')
-        wid = self.create_pair(grpbx, 'MeasRespMatWait')
+        wid = self.create_pair(meas_wid, 'MeasRespMatWait')
         fml.addRow(lbl, wid)
 
-        # ####################################################################
-        # ######################## Load/Save/Set #############################
-        # ####################################################################
-        grpbx = QWidget(tabw)
-        gdl = QGridLayout(grpbx)
-        tabw.addTab(grpbx, 'Load/Save')
+        return meas_wid
 
-        lbl = QLabel('Load from:', grpbx)
-        gdl.addWidget(lbl, 0, 0)
-        pbtn = QPushButton('File', grpbx)
+    def get_saveload_widget(self, parent):
+        """."""
+        svld_wid = QWidget(parent)
+        svld_lay = QGridLayout(svld_wid)
+
+        lbl = QLabel('Load:', svld_wid)
+        svld_lay.addWidget(lbl, 0, 0, alignment=Qt.AlignRight)
+        pbtn = QPushButton('', svld_wid)
+        pbtn.setIcon(qta.icon('mdi.file-upload-outline'))
+        pbtn.setToolTip('Load RespMat from file')
         pbtn.clicked.connect(self._load_respmat_from_file)
-        gdl.addWidget(pbtn, 0, 1)
-        pbtn = QPushButton('ServConf', grpbx)
+        svld_lay.addWidget(pbtn, 0, 1)
+        pbtn = QPushButton('', svld_wid)
+        pbtn.setIcon(qta.icon('mdi.cloud-upload-outline'))
+        pbtn.setToolTip('Load RespMat from ServConf')
         pbtn.clicked.connect(self._open_load_config_servconf)
-        gdl.addWidget(pbtn, 0, 2)
+        svld_lay.addWidget(pbtn, 0, 2)
 
-        lbl = QLabel('Save to:', grpbx)
-        gdl.addWidget(lbl, 1, 0)
-        pbtn = QPushButton('File', grpbx)
+        lbl = QLabel('Save:', svld_wid)
+        svld_lay.addWidget(lbl, 0, 3, alignment=Qt.AlignRight)
+        pbtn = QPushButton('', svld_wid)
+        pbtn.setIcon(qta.icon('mdi.file-download-outline'))
+        pbtn.setToolTip('Save RespMat to file')
         pbtn.clicked.connect(self._save_respmat_to_file)
-        gdl.addWidget(pbtn, 1, 1)
-        pbtn = QPushButton('ServConf', grpbx)
+        svld_lay.addWidget(pbtn, 0, 4)
+        pbtn = QPushButton('', svld_wid)
+        pbtn.setIcon(qta.icon('mdi.cloud-download-outline'))
+        pbtn.setToolTip('Save RespMat to ServConf')
         pbtn.clicked.connect(self._open_save_config_servconf)
-        gdl.addWidget(pbtn, 1, 2)
+        svld_lay.addWidget(pbtn, 0, 5)
         self.respmat_label = QLabel('')
-        gdl.addWidget(self.respmat_label, 2, 0, 1, 3)
+        svld_lay.addWidget(self.respmat_label, 1, 0, 1, 5)
 
-        gdl.addItem(
-            QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding),
-            2, 0, 1, 2)
+        svld_lay.setRowStretch(2, 10)
+        return svld_wid
 
     def _save_respmat_to_file(self, _):
         header = '# ' + _datetime.now().strftime('%Y/%m/%d-%H:%M:%S') + '\n'

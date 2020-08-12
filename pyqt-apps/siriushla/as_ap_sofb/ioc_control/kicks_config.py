@@ -1,16 +1,18 @@
 """Define Controllers for the orbits displayed in the graphic."""
 
 from qtpy.QtWidgets import QFormLayout, QHBoxLayout, QLabel, QVBoxLayout, \
-    QGroupBox, QPushButton, QWidget, QTabWidget
+    QGroupBox, QPushButton, QWidget, QTabWidget, QGridLayout
+from qtpy.QtCore import Qt
 import qtawesome as qta
 
 from pydm.widgets import PyDMPushButton
-from siriushla.widgets import SiriusLedAlert
 
-from siriushla.as_ap_sofb.ioc_control.base import BaseWidget
-from siriushla.widgets.windows import create_window_from_widget
-import siriushla.util as _util
+from ...util import connect_window
+from ...widgets import SiriusLedAlert
+from ...widgets.windows import create_window_from_widget
+from ...as_ti_control import HLTriggerDetailed
 
+from .base import BaseWidget
 from .status import StatusWidget
 
 
@@ -23,14 +25,13 @@ class KicksConfigWidget(BaseWidget):
     def setupui(self):
         self.setLayout(QVBoxLayout())
 
-        names = ('Correction Factors', 'Maximum Kicks', 'Maximum Delta Kicks')
-        tabs = ('%', 'Max \u03b8', 'Max \u0394\u03b8')
-        pvnames = ('DeltaFactor', 'MaxKick', 'MaxDeltaKick')
-        unitss = (('[%]', '[%]'), ('[urad]', '[urad]'), ('[urad]', '[urad]'))
+        names = ('Maximum Kicks', 'Maximum Delta Kicks')
+        tabs = ('Max \u03b8', 'Max \u0394\u03b8')
+        pvnames = ('MaxKick', 'MaxDeltaKick')
+        unitss = (('[urad]', '[urad]'), ('[urad]', '[urad]'))
         planes = ('CH', 'CV')
         if self.acc == 'SI':
             unitss = (
-                ('[%]', '[%]', '[%]'),
                 ('[urad]', '[urad]', None),
                 ('[urad]', '[urad]', '[Hz]'), )
             planes = ('CH', 'CV', 'RF')
@@ -55,37 +56,61 @@ class KicksConfigWidget(BaseWidget):
         for i, name in enumerate(names):
             tabw.setTabToolTip(i, name)
         if self.acc == 'SI':
-            grpbx = QWidget(tabw)
-            grpbx.setObjectName('gbx')
-            vertlay = QVBoxLayout(grpbx)
-            tabw.addTab(grpbx, 'Details')
+            det_wid = self.get_details_widget(tabw)
+            tabw.addTab(det_wid, 'Details')
 
-            lbl = QLabel('Synchronize', grpbx)
-            wid = self.create_pair_sel(grpbx, 'CorrSync')
-            hbl = QHBoxLayout()
-            hbl.addWidget(lbl)
-            hbl.addWidget(wid)
-            vertlay.addItem(hbl)
-            lbl = QLabel('Trigger Delay', grpbx)
-            wid = self.create_pair(
-                grpbx, 'Delay', prefix='SI-Glob:TI-Mags-Corrs:')
-            hbl = QHBoxLayout()
-            hbl.addWidget(lbl)
-            hbl.addWidget(wid)
-            vertlay.addItem(hbl)
-            lbl = QLabel('Enable PSSOFB', grpbx)
-            wid = self.create_pair_butled(grpbx, 'CorrPSSOFBEnbl')
-            hbl = QHBoxLayout()
-            hbl.addWidget(lbl)
-            hbl.addWidget(wid)
-            vertlay.addItem(hbl)
-            lbl = QLabel('Wait PSSOFB', grpbx)
-            wid = self.create_pair_butled(grpbx, 'CorrPSSOFBWait')
-            hbl = QHBoxLayout()
-            hbl.addWidget(lbl)
-            hbl.addWidget(wid)
-            vertlay.addItem(hbl)
-            vertlay.addStretch()
+    def get_details_widget(self, parent):
+        """."""
+        det_wid = QWidget(parent)
+        det_wid.setObjectName('gbx')
+        det_lay = QGridLayout(det_wid)
+
+        syn_grp = QGroupBox('Sync.', det_wid)
+        syn_wid = self.create_pair_sel(syn_grp, 'CorrSync', is_vert=True)
+        syn_wid.layout().setContentsMargins(0, 1, 0, 1)
+        gdl = QGridLayout(syn_grp)
+        gdl.addWidget(syn_wid, 0, 0)
+
+        pssofb_grp = QGroupBox('PSSOFB', det_wid)
+        enbl_lbl = QLabel('Enable:', pssofb_grp)
+        enbl_wid = self.create_pair_butled(pssofb_grp, 'CorrPSSOFBEnbl')
+        enbl_wid.layout().setContentsMargins(0, 0, 0, 0)
+        wait_lbl = QLabel('Wait:', pssofb_grp)
+        wait_wid = self.create_pair_butled(pssofb_grp, 'CorrPSSOFBWait')
+        wait_wid.layout().setContentsMargins(0, 0, 0, 0)
+        gdl = QGridLayout(pssofb_grp)
+        gdl.setSpacing(1)
+        gdl.addWidget(enbl_lbl, 0, 0)
+        gdl.addWidget(wait_lbl, 1, 0)
+        gdl.addWidget(enbl_wid, 0, 1)
+        gdl.addWidget(wait_wid, 1, 1)
+
+        del_grp = QGroupBox('Trigger Delay', det_wid)
+        del_wid = self.create_pair(
+            del_grp, 'Delay', prefix='SI-Glob:TI-Mags-Corrs:', is_vert=False)
+        del_det = QPushButton(qta.icon('fa5s.ellipsis-h'), '', del_grp)
+        del_det.setToolTip('Open details')
+        del_det.setObjectName('detail')
+        del_det.setStyleSheet(
+            "#detail{min-width:25px; max-width:25px; icon-size:20px;}")
+        trg_w = create_window_from_widget(
+            HLTriggerDetailed,
+            title='SI-Glob:TI-Mags-Corrs Detailed Settings', is_main=True)
+        connect_window(
+            del_det, trg_w, parent=None,
+            prefix='SI-Glob:TI-Mags-Corrs:')
+        del_lay = QHBoxLayout(del_grp)
+        del_lay.addStretch()
+        del_lay.addWidget(del_wid)
+        del_lay.addWidget(del_det)
+        del_lay.addStretch()
+
+        det_lay.addWidget(pssofb_grp, 0, 0)
+        det_lay.addWidget(syn_grp, 0, 2)
+        det_lay.addWidget(del_grp, 2, 0, 1, 3)
+        det_lay.setColumnStretch(1, 10)
+        det_lay.setRowStretch(1, 10)
+        return det_wid
 
     def get_status_widget(self, parent):
         """."""
@@ -106,7 +131,7 @@ class KicksConfigWidget(BaseWidget):
             '#sts{min-width:25px; max-width:25px; icon-size:20px;}')
         Window = create_window_from_widget(
             StatusWidget, title='Correctors Status')
-        _util.connect_window(
+        connect_window(
             sts, Window, self, prefix=self.prefix, acc=self.acc, is_orb=False)
 
         pdm_led = SiriusLedAlert(
