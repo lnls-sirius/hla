@@ -391,7 +391,7 @@ class BaseWidget(QWidget):
         diffy = valy[:sz] - refy[:sz]
         header = '# This is an orbit variation, not a pure orbit. \n'
         header += '# ' + _datetime.now().strftime('%Y/%m/%d-%H:%M:%S') + '\n'
-        header += '# ' + 'BPMX [um]       BPMY [um]' + '\n'
+        header += '# ' + 'BPMX [um]         BPMY [um]             Name' + '\n'
         filename = QFileDialog.getSaveFileName(
             caption='Define a File Name to Save the Orbit',
             directory=self.last_dir, filter=self.EXT_FLT)
@@ -399,7 +399,9 @@ class BaseWidget(QWidget):
         if not fname:
             return
         fname += '' if fname.endswith(self.EXT) else self.EXT
-        _np.savetxt(fname, _np.vstack([diffx, diffy]).T, header=header)
+        data = _np.array([diffx, diffy, self._csorb.bpm_names], dtype=object)
+        _np.savetxt(
+            fname, data.T, header=header, fmt='%+18.8e %+18.8e      %s')
         self.last_dir = fname.rsplit('/', 1)[0]
 
 

@@ -501,7 +501,7 @@ class OrbitRegister(QWidget):
 
     def _save_orbit_to_file(self, _):
         header = '# ' + _datetime.now().strftime('%Y/%m/%d-%H:%M:%S') + '\n'
-        header += '# ' + 'BPMX [um]       BPMY [um]' + '\n'
+        header += '# ' + 'BPMX [um]         BPMY [um]             Name' + '\n'
         filename = QFileDialog.getSaveFileName(
             caption='Define a File Name to Save the Orbit',
             directory=self.last_dir,
@@ -510,7 +510,10 @@ class OrbitRegister(QWidget):
         if not fname:
             return
         fname += '' if fname.endswith(self.EXT) else self.EXT[0]
-        _np.savetxt(fname, _np.vstack([self.orbx, self.orby]).T, header=header)
+        data = _np.array(
+            [self.orbx, self.orby, self._csorb.bpm_names], dtype=object)
+        _np.savetxt(
+            fname, data.T, header=header, fmt='%+18.8e %+18.8e      %s')
         self._update_and_emit('Orbit Saved: ', self.orbx, self.orby, fname)
 
     def _load_orbit_from_file(self):
@@ -519,7 +522,7 @@ class OrbitRegister(QWidget):
             filter=self.EXT_FLT)
         if not filename[0]:
             return
-        orbx, orby = _np.loadtxt(filename[0], unpack=True)
+        orbx, orby = _np.loadtxt(filename[0], unpack=True, usecols=(0, 1))
         self._update_and_emit('Orbit Loaded: ', orbx, orby, filename[0])
 
     def _load_orbit_from_servconf(self):
