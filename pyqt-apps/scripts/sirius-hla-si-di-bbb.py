@@ -1,3 +1,4 @@
+#!/usr/bin/env python-sirius
 """Open SI BbB Window."""
 
 import sys
