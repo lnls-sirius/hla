@@ -47,6 +47,16 @@ class DCCTSettings(QWidget):
         hlay_current.addWidget(self.label_current)
         hlay_current.addWidget(self.led_StoredEBeam)
 
+        l_enbl = QLabel('Enable:', self)
+        self.pydmstatebutton_Enbl = PyDMStateButton(
+            parent=self, init_channel=self.dcct_prefix+'Enbl-Sel')
+        self.pydmstatebutton_Enbl.shape = 1
+        self.led_Enbl = SiriusLedState(
+            parent=self, init_channel=self.dcct_prefix+'Enbl-Sts')
+        hlay_enbl = QHBoxLayout()
+        hlay_enbl.addWidget(self.pydmstatebutton_Enbl)
+        hlay_enbl.addWidget(self.led_Enbl)
+
         l_meastrig = QLabel('Trigger Source:', self)
         self.pydmenumcombobox_MeasTrg = PyDMEnumComboBox(
             parent=self, init_channel=self.dcct_prefix+'MeasTrg-Sel')
@@ -106,15 +116,17 @@ class DCCTSettings(QWidget):
         glay_gen.addLayout(hlay_current, 0, 1)
         glay_gen.addWidget(l_reliablemeas, 1, 0)
         glay_gen.addWidget(self.led_ReliableMeas, 1, 1, alignment=Qt.AlignLeft)
-        glay_gen.addWidget(l_meastrig, 2, 0)
-        glay_gen.addLayout(hlay_meastrig, 2, 1)
+        glay_gen.addWidget(l_enbl, 2, 0)
+        glay_gen.addLayout(hlay_enbl, 2, 1)
+        glay_gen.addWidget(l_meastrig, 3, 0)
+        glay_gen.addLayout(hlay_meastrig, 3, 1)
         if 'SI' in self.device:
-            glay_gen.addWidget(l_range, 3, 0)
-            glay_gen.addLayout(hlay_range, 3, 1)
-        glay_gen.addWidget(l_measmode, 4, 0)
-        glay_gen.addLayout(hlay_measmode, 4, 1)
-        glay_gen.addLayout(glay_mode, 5, 0, 1, 2)
-        glay_gen.addWidget(self.pb_details, 6, 0, 1, 2,
+            glay_gen.addWidget(l_range, 4, 0)
+            glay_gen.addLayout(hlay_range, 4, 1)
+        glay_gen.addWidget(l_measmode, 5, 0)
+        glay_gen.addLayout(hlay_measmode, 5, 1)
+        glay_gen.addLayout(glay_mode, 6, 0, 1, 2)
+        glay_gen.addWidget(self.pb_details, 7, 0, 1, 2,
                            alignment=Qt.AlignRight)
         gbox_gen.setStyleSheet("""
             .QLabel{
@@ -280,6 +292,16 @@ class DCCTSettingsDetails(QWidget):
     def _setupGeneralSettingsWidget(self):
         gbox_generalsettings = QGroupBox('General Measurement Settings', self)
 
+        l_enbl = QLabel('Enable:', self)
+        self.pydmstatebutton_Enbl = PyDMStateButton(
+            parent=self, init_channel=self.dcct_prefix+'Enbl-Sel')
+        self.pydmstatebutton_Enbl.shape = 1
+        self.led_Enbl = SiriusLedState(
+            parent=self, init_channel=self.dcct_prefix+'Enbl-Sts')
+        hlay_enbl = QHBoxLayout()
+        hlay_enbl.addWidget(self.pydmstatebutton_Enbl)
+        hlay_enbl.addWidget(self.led_Enbl)
+
         l_meastrig = QLabel('Trigger Source: ', self)
         self.pydmenumcombobox_MeasTrg = PyDMEnumComboBox(
             parent=self, init_channel=self.dcct_prefix+'MeasTrg-Sel')
@@ -288,16 +310,6 @@ class DCCTSettingsDetails(QWidget):
         hlay_meastrig = QHBoxLayout()
         hlay_meastrig.addWidget(self.pydmenumcombobox_MeasTrg)
         hlay_meastrig.addWidget(self.pydmlabel_MeasTrg)
-
-        l_trgdelay = QLabel('Delay After Trigger [s]: ', self)
-        self.pydmspinbox_TrgDelay = PyDMSpinbox(
-            parent=self, init_channel=self.dcct_prefix+'TrgDelay-SP')
-        self.pydmspinbox_TrgDelay.showStepExponent = False
-        self.pydmlabel_TrgDelay = PyDMLabel(
-            parent=self, init_channel=self.dcct_prefix+'TrgDelay-RB')
-        hlay_trgdelay = QHBoxLayout()
-        hlay_trgdelay.addWidget(self.pydmspinbox_TrgDelay)
-        hlay_trgdelay.addWidget(self.pydmlabel_TrgDelay)
 
         l_range = QLabel('Range: ', self)
         self.pydmenumcombobox_Range = PyDMEnumComboBox(
@@ -350,8 +362,8 @@ class DCCTSettingsDetails(QWidget):
         flay_generalsettings = QFormLayout()
         flay_generalsettings.setLabelAlignment(Qt.AlignRight)
         flay_generalsettings.setFormAlignment(Qt.AlignCenter)
+        flay_generalsettings.addRow(l_enbl, hlay_enbl)
         flay_generalsettings.addRow(l_meastrig, hlay_meastrig)
-        flay_generalsettings.addRow(l_trgdelay, hlay_trgdelay)
         flay_generalsettings.addRow(l_range, hlay_range)
         flay_generalsettings.addItem(
             QSpacerItem(1, 10, QSzPly.Ignored, QSzPly.Preferred))
@@ -393,6 +405,10 @@ class DCCTSettingsDetails(QWidget):
         hlay_measperiod = QHBoxLayout()
         hlay_measperiod.addWidget(spinbox_MeasPeriod)
         hlay_measperiod.addWidget(label_MeasPeriod)
+
+        l_measupdateperiod = QLabel('Measured Period [s]: ', self)
+        label_MeasUpdatePeriod = PyDMLabel(
+            parent=self, init_channel=prefix+'MeasUpdatePeriod-Mon')
 
         l_imped = QLabel('Impedance: ', self)
         enumcombobox_Imped = PyDMEnumComboBox(
@@ -437,6 +453,7 @@ class DCCTSettingsDetails(QWidget):
         flay_modesettings.setFormAlignment(Qt.AlignHCenter)
         flay_modesettings.addRow(l_smpcnt, hlay_smpcnt)
         flay_modesettings.addRow(l_measperiod, hlay_measperiod)
+        flay_modesettings.addRow(l_measupdateperiod, label_MeasUpdatePeriod)
         flay_modesettings.addRow(l_imped, hlay_imped)
         flay_modesettings.addRow(l_offset, hlay_offset)
         flay_modesettings.addRow(l_rellvl, hlay_rellvl)
