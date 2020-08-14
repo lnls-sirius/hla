@@ -434,9 +434,19 @@ def get_object(ismenubar=True, parent=None):
                 self.connect_newprocess(Scrap, 'sirius-hla-si-di-scraps.py')
                 diag.addAction(Scrap)
 
-                BbB = QAction('BbB', diag)
-                self.connect_newprocess(BbB, 'sirius-hla-si-di-bbb.py')
-                diag.addAction(BbB)
+                BbB = QMenu('BbB', diag)
+                BbB.setObjectName(sec.upper()+'App')
+
+                AllBbB = BbB.addAction('All')
+                self.connect_newprocess(AllBbB, 'sirius-hla-si-di-bbb.py')
+
+                for idc in ['Horizontal', 'Vertical', 'Longitudinal']:
+                    dev_pref = 'SI-Glob:DI-BbBProc-'+idc[0]
+                    act_dev = BbB.addAction(idc)
+                    self.connect_newprocess(
+                        act_dev, ['sirius-hla-si-di-bbb.py', '-dev', dev_pref])
+
+                diag.addMenu(BbB)
             return diag
 
         def _set_bpm_menu(self, sec):
