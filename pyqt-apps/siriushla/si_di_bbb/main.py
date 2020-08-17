@@ -5,9 +5,9 @@ from qtpy.QtWidgets import QGridLayout, QLabel, QWidget
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 
-from siriushla.util import connect_window
+from siriushla.util import connect_newprocess
 from siriushla.widgets import SiriusMainWindow
-from .bbb import BbBControlWindow, BbBMainSettingsWidget
+from .bbb import BbBMainSettingsWidget
 from .util import get_bbb_icon
 
 
@@ -38,9 +38,10 @@ class BbBMainWindow(SiriusMainWindow):
             dev_pref = 'SI-Glob:DI-BbBProc-'+idc
 
             wid = BbBMainSettingsWidget(self, self.prefix, dev_pref)
-            connect_window(
-                wid.pb_detail, BbBControlWindow, self,
-                prefix=self.prefix, device=dev_pref)
+            connect_newprocess(
+                wid.pb_detail,
+                ['sirius-hla-si-di-bbb.py', '-dev', dev_pref,
+                 '-p', self.prefix])
 
             lay.addWidget(wid, 1, col)
             self._bbb_widgets.append(wid)
