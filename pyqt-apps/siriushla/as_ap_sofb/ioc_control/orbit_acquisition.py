@@ -293,12 +293,23 @@ class AcqControlWidget(BaseWidget):
         lbl = QLabel('Index', grp_bx, alignment=Qt.AlignCenter)
         wid = self.create_pair(grp_bx, 'MTurnIdx')
         fbl.addRow(lbl, wid)
+
         lbl = QLabel('Index Time', grp_bx, alignment=Qt.AlignCenter)
-        pdm_lbl = SiriusLabel(
-            grp_bx, init_channel=self.prefix+'MTurnIdxTime-Mon')
+        wid = QWidget(grp_bx)
+        pdm_lbl = SiriusLabel(wid, init_channel=self.prefix+'MTurnIdxTime-Mon')
         pdm_lbl.showUnits = True
         pdm_lbl.setAlignment(Qt.AlignCenter)
-        fbl.addRow(lbl, pdm_lbl)
+        conf = PyDMPushButton(
+            wid, init_channel=self.prefix+'MTurnAcquire-Cmd', pressValue=1)
+        conf.setToolTip('Update MTurn PVs')
+        conf.setIcon(qta.icon('fa5s.sync'))
+        conf.setObjectName('conf')
+        conf.setStyleSheet(
+            '#conf{min-width:25px; max-width:25px; icon-size:20px;}')
+        hbl = QHBoxLayout(wid)
+        hbl.addWidget(pdm_lbl)
+        hbl.addWidget(conf)
+        fbl.addRow(lbl, wid)
 
         lbl = QLabel('TbT Sync', grp_bx, alignment=Qt.AlignCenter)
         wid = self.create_pair_butled(grp_bx, 'MTurnSyncTim')
