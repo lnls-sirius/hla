@@ -539,16 +539,20 @@ class RFMainControl(SiriusMainWindow):
         self.sb_RmpPhsTop.showStepExponent = False
         self.lb_RmpPhsTop = PyDMLabel(self, 'BR-RF-DLLRF-01:RmpPhsTop-RB')
         self.lb_RmpPhsTop.showUnits = True
-        self.sb_RmpVoltTop = PyDMLineEdit(self, 'BR-RF-DLLRF-01:RmpVoltTop-SP')
-        self.lb_RmpVoltTop = PyDMLabel(self, 'BR-RF-DLLRF-01:RmpVoltTop-RB')
+        self.sb_RmpVoltTop = PyDMLineEdit(
+            self, 'BR-RF-DLLRF-01:mV:RAMP:AMP:TOP-SP')
+        self.lb_RmpVoltTop = PyDMLabel(
+            self, 'BR-RF-DLLRF-01:mV:RAMP:AMP:TOP-RB')
         self.lb_RmpVoltTop.showUnits = True
 
         self.sb_RmpPhsBot = PyDMSpinbox(self, 'BR-RF-DLLRF-01:RmpPhsBot-SP')
         self.sb_RmpPhsBot.showStepExponent = False
         self.lb_RmpPhsBot = PyDMLabel(self, 'BR-RF-DLLRF-01:RmpPhsBot-RB')
         self.lb_RmpPhsBot.showUnits = True
-        self.sb_RmpVoltBot = PyDMLineEdit(self, 'BR-RF-DLLRF-01:RmpVoltBot-SP')
-        self.lb_RmpVoltBot = PyDMLabel(self, 'BR-RF-DLLRF-01:RmpVoltBot-RB')
+        self.sb_RmpVoltBot = PyDMLineEdit(
+            self, 'BR-RF-DLLRF-01:mV:RAMP:AMP:BOT-SP')
+        self.lb_RmpVoltBot = PyDMLabel(
+            self, 'BR-RF-DLLRF-01:mV:RAMP:AMP:BOT-RB')
         self.lb_RmpVoltBot.showUnits = True
 
         lay = QGridLayout()
@@ -592,7 +596,7 @@ class RFMainControl(SiriusMainWindow):
                              alignment=Qt.AlignRight), 13, 0)
         lay.addWidget(self.sb_RmpPhsTop, 13, 1)
         lay.addWidget(self.lb_RmpPhsTop, 13, 2)
-        lay.addWidget(QLabel('Gap Voltage:', self,
+        lay.addWidget(QLabel('Amplitude:', self,
                              alignment=Qt.AlignRight), 14, 0)
         lay.addWidget(self.sb_RmpVoltTop, 14, 1)
         lay.addWidget(self.lb_RmpVoltTop, 14, 2)
@@ -601,7 +605,7 @@ class RFMainControl(SiriusMainWindow):
                              alignment=Qt.AlignRight), 16, 0)
         lay.addWidget(self.sb_RmpPhsBot, 16, 1)
         lay.addWidget(self.lb_RmpPhsBot, 16, 2)
-        lay.addWidget(QLabel('Gap Voltage:', self,
+        lay.addWidget(QLabel('Amplitude:', self,
                              alignment=Qt.AlignRight), 17, 0)
         lay.addWidget(self.sb_RmpVoltBot, 17, 1)
         lay.addWidget(self.lb_RmpVoltBot, 17, 2)
