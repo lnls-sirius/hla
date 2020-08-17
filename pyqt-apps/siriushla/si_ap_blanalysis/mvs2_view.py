@@ -97,9 +97,9 @@ class BeamLineMVS2View(SiriusMainWindow):
         self._lb_bmpy.showUnits = True
 
         lay_sofb.setAlignment(Qt.AlignTop)
-        lay_sofb.addWidget(self._ld_bmpx, 0, 0, 2, 1)
+        lay_sofb.addWidget(self._ld_bmpx, 0, 0)
         lay_sofb.addWidget(self._lb_bmpx, 0, 1)
-        lay_sofb.addWidget(self._ld_bmpy, 1, 0, 2, 1)
+        lay_sofb.addWidget(self._ld_bmpy, 1, 0)
         lay_sofb.addWidget(self._lb_bmpy, 1, 1)
 
         # Camera Acquisition Status
