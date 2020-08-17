@@ -631,35 +631,35 @@ class RFMainControl(SiriusMainWindow):
         self.ramp_graph.plotItem.getAxis('bottom').setStyle(tickTextOffset=15)
         self.ramp_graph.plotItem.getAxis('left').setStyle(tickTextOffset=5)
         self.ramp_graph.addChannel(
+            y_channel='RA-RF:PowerSensor1:TracData-Mon',
+            x_channel=' RA-RF:PowerSensor1:TimeAxis-Mon',
+            redraw_mode=2, name='Power [W]', color=QColor('blue'))
+        self.curve_PwrMtr = self.ramp_graph.curveAtIndex(0)
+        self.rb_PwrMtr = QRadioButton('Power Meter Signal', self)
+        self.rb_PwrMtr.setChecked(True)
+        self.rb_PwrMtr.toggled.connect(
+            _part(self._handle_rmpwfm_visibility, 0))
+        self.ramp_graph.addChannel(
             y_channel='BR-RF-DLLRF-01:VCavRampWf.AVAL',
             x_channel='BR-RF-DLLRF-01:DiagWf32Scale.AVAL',
             redraw_mode=2, name='VGav kV', color=QColor('blue'))
-        self.curve_VGav = self.ramp_graph.curveAtIndex(0)
+        self.curve_VGav = self.ramp_graph.curveAtIndex(1)
         self.rb_VGav = QRadioButton('VGav [kV]', self)
-        self.rb_VGav.setChecked(True)
-        self.rb_VGav.toggled.connect(_part(self._handle_rmpwfm_visibility, 0))
+        self.rb_VGav.toggled.connect(_part(self._handle_rmpwfm_visibility, 1))
         self.ramp_graph.addChannel(
             y_channel='BR-RF-DLLRF-01:VCavRampWf:W.AVAL',
             x_channel='BR-RF-DLLRF-01:DiagWf32Scale.AVAL',
             redraw_mode=2, name='Power [W]', color=QColor('blue'))
-        self.curve_Pwr = self.ramp_graph.curveAtIndex(1)
+        self.curve_Pwr = self.ramp_graph.curveAtIndex(2)
         self.rb_Pwr = QRadioButton('Power [W]', self)
-        self.rb_Pwr.toggled.connect(_part(self._handle_rmpwfm_visibility, 1))
-        self.ramp_graph.addChannel(
-            y_channel='RA-RF:PowerSensor1:TracData-Mon',
-            x_channel=' RA-RF:PowerSensor1:TimeAxis-Mon',
-            redraw_mode=2, name='Power [W]', color=QColor('blue'))
-        self.curve_PwrMtr = self.ramp_graph.curveAtIndex(2)
-        self.rb_PwrMtr = QRadioButton('Power Meter Signal', self)
-        self.rb_PwrMtr.toggled.connect(
-            _part(self._handle_rmpwfm_visibility, 2))
+        self.rb_Pwr.toggled.connect(_part(self._handle_rmpwfm_visibility, 2))
         hbox_rb = QHBoxLayout()
+        hbox_rb.addWidget(self.rb_PwrMtr)
         hbox_rb.addWidget(self.rb_VGav)
         hbox_rb.addWidget(self.rb_Pwr)
-        hbox_rb.addWidget(self.rb_PwrMtr)
 
+        self.curve_VGav.setVisible(False)
         self.curve_Pwr.setVisible(False)
-        self.curve_PwrMtr.setVisible(False)
 
         self.lb_PwrFwdBot = PyDMLabel(self, 'BO-05D:RF-P5Cav:PwrFwdBot-Mon')
         self.lb_PwrFwdBot.showUnits = True
@@ -1078,6 +1078,6 @@ class RFMainControl(SiriusMainWindow):
         led_drive.set_channels2values(ch2vals)
 
     def _handle_rmpwfm_visibility(self, index):
-        self.curve_VGav.setVisible(index == 0)
-        self.curve_Pwr.setVisible(index == 1)
-        self.curve_PwrMtr.setVisible(index == 2)
+        self.curve_PwrMtr.setVisible(index == 0)
+        self.curve_VGav.setVisible(index == 1)
+        self.curve_Pwr.setVisible(index == 2)
