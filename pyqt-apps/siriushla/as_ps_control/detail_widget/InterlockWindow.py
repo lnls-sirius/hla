@@ -9,7 +9,6 @@ from siriuspy.search import PSSearch
 from siriuspy.pwrsupply.csdev import ETypes as _et
 from siriuspy.pwrsupply.csdev import get_ps_propty_database
 from siriushla.widgets import SiriusMainWindow, SiriusLedAlert, PyDMLed
-from .auxiliary_intlk_data import INTERLOCK_LABELS_Q1234
 
 
 class InterlockWidget(QWidget):
@@ -38,14 +37,10 @@ class InterlockListWidget(QWidget):
 
     def _setup_ui(self):
         key = self._interlock+'Labels-Cte'
-        # NOTE: this is a temporary solution to PS firmware migration
-        if self._devname.dev in ['Q1', 'Q2', 'Q3', 'Q4']:
-            labels = INTERLOCK_LABELS_Q1234[key]
-        else:
-            psmodel = PSSearch.conv_psname_2_psmodel(self._devname)
-            pstype = PSSearch.conv_psname_2_pstype(self._devname)
-            db = get_ps_propty_database(psmodel, pstype)
-            labels = db[key]['value']
+        psmodel = PSSearch.conv_psname_2_psmodel(self._devname)
+        pstype = PSSearch.conv_psname_2_pstype(self._devname)
+        db = get_ps_propty_database(psmodel, pstype)
+        labels = db[key]['value']
 
         lay = QGridLayout()
         for bit, label in enumerate(labels):
