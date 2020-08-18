@@ -198,9 +198,11 @@ class RFMainControl(SiriusMainWindow):
 
     def _rfGenLayout(self):
         # On/Off
-        self.bt_genenbl = PyDMStateButton(self, 'RF-Gen:GeneralRF-Sel')
+        self.ld_genenbl = QLabel('Enable: ', self, alignment=Qt.AlignRight)
+        # self.bt_genenbl = PyDMStateButton(self, 'RF-Gen:GeneralRF-Sel')
         self.lb_genenbl = SiriusLedState(self, 'RF-Gen:GeneralRF-Sts')
         # Frequência
+        self.ld_genfreq = QLabel('Frequency: ', self, alignment=Qt.AlignRight)
         self.le_genfreq = PyDMLineEdit(self, 'RF-Gen:GeneralFreq-SP')
         self.le_genfreq.setStyleSheet('min-width:7em; max-width:7em;')
         self.le_genfreq.precisionFromPV = False
@@ -214,24 +216,24 @@ class RFMainControl(SiriusMainWindow):
         vl_freq.addWidget(self.le_genfreq)
         vl_freq.addWidget(self.lb_genfreq)
         # Phase Continuous State
-        self.bt_genphscont = PyDMStateButton(self, 'RF-Gen:FreqPhsCont-Sel')
+        self.ld_genphscont = QLabel('Phase Cont.: ', self,
+                                    alignment=Qt.AlignRight)
+        self.ld_genphscont.setStyleSheet(
+            'min-width:5em; max-width:5em; qproperty-alignment:AlignLeft;')
+        # self.bt_genphscont = PyDMStateButton(self, 'RF-Gen:FreqPhsCont-Sel')
         self.lb_genphscont = SiriusLedState(self, 'RF-Gen:FreqPhsCont-Sts')
 
         lay = QGridLayout()
         lay.setAlignment(Qt.AlignTop)
         lay.setVerticalSpacing(12)
-        lay.addWidget(QLabel('Enable: ', self,
-                             alignment=Qt.AlignRight), 1, 0)
-        lay.addWidget(self.bt_genenbl, 1, 1)
-        lay.addWidget(self.lb_genenbl, 1, 2)
-        lay.addWidget(QLabel('Frequency: ', self,
-                             alignment=Qt.AlignRight), 2, 0,
-                      alignment=Qt.AlignTop)
-        lay.addLayout(vl_freq, 2, 1, 1, 2)
-        lay.addWidget(QLabel('Phase Cont.: ', self,
-                             alignment=Qt.AlignRight), 3, 0)
-        lay.addWidget(self.bt_genphscont, 3, 1)
-        lay.addWidget(self.lb_genphscont, 3, 2)
+        lay.addWidget(self.ld_genenbl, 1, 0)
+        # lay.addWidget(self.bt_genenbl, 1, 1)
+        lay.addWidget(self.lb_genenbl, 1, 1)
+        lay.addWidget(self.ld_genfreq, 2, 0, alignment=Qt.AlignTop)
+        lay.addLayout(vl_freq, 2, 1)
+        lay.addWidget(self.ld_genphscont, 3, 0)
+        # lay.addWidget(self.bt_genphscont, 3, 1)
+        lay.addWidget(self.lb_genphscont, 3, 1)
         return lay
 
     def _startControlLayout(self):
