@@ -462,6 +462,7 @@ class RFMainControl(SiriusMainWindow):
         self.graph_plunmotors.showYGrid = True
         self.graph_plunmotors.showLegend = True
         self.graph_plunmotors.timeSpan = 1800
+        self.graph_plunmotors.maxRedrawRate = 2
         self.graph_plunmotors.addYChannel(
             y_channel=self.chs['Tun']['PlM1Curr'], color='blue',
             name='Motor 1', lineStyle=Qt.SolidLine, lineWidth=1)
@@ -776,6 +777,7 @@ class RFMainControl(SiriusMainWindow):
         self.pwr_mon_graph.showXGrid = True
         self.pwr_mon_graph.showYGrid = True
         self.pwr_mon_graph.timeSpan = 1800
+        self.pwr_mon_graph.maxRedrawRate = 1
         self.pwr_mon_graph.setObjectName('pwrmon_graph')
         self.pwr_mon_graph.setStyleSheet(
             '#pwrmon_graph{min-width: 23.5em; min-height: 20em;}')
@@ -874,6 +876,7 @@ class RFMainControl(SiriusMainWindow):
         self.temp1_graph.showXGrid = True
         self.temp1_graph.showYGrid = True
         self.temp1_graph.timeSpan = 1800
+        self.temp1_graph.maxRedrawRate = 2
         hbox_cbs = QHBoxLayout()
 
         self.temp1_graph.addYChannel(
@@ -931,6 +934,7 @@ class RFMainControl(SiriusMainWindow):
         self.temp2_graph.showXGrid = True
         self.temp2_graph.showYGrid = True
         self.temp2_graph.timeSpan = 1800
+        self.temp2_graph.maxRedrawRate = 1
         self.temp2_graph.addYChannel(
             y_channel=self.chs['TL Sts']['Circ TIn'], name='CTIn',
             color='magenta', lineStyle=Qt.SolidLine, lineWidth=1)
@@ -962,6 +966,7 @@ class RFMainControl(SiriusMainWindow):
         self.vacuum_graph.showXGrid = True
         self.vacuum_graph.showYGrid = True
         self.vacuum_graph.timeSpan = 1800
+        self.vacuum_graph.maxRedrawRate = 1
         self.vacuum_graph.addYChannel(
             y_channel=self.chs['Cav Sts']['Vac']['Cells'], name='Vacuum',
             color='black', lineStyle=Qt.SolidLine, lineWidth=1)
