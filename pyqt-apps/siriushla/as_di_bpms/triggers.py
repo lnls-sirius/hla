@@ -1,7 +1,7 @@
 from qtpy.QtWidgets import QHBoxLayout, QGridLayout, QLabel, QFormLayout
 from qtpy.QtCore import Qt
 from pydm.widgets import PyDMPushButton, PyDMEnumComboBox
-from siriuspy.diag.bpm.csdev import Const as _csbpm
+from siriuspy.diagbeam.bpm.csdev import Const as _csbpm
 from siriushla.widgets import SiriusLabel, SiriusSpinbox
 from siriushla.as_di_bpms.base import BaseWidget, CustomGroupBox
 

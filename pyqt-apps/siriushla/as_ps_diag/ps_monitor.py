@@ -6,7 +6,7 @@ from qtpy.QtWidgets import QWidget, QGroupBox, QGridLayout, QLabel
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.search import PSSearch
 from siriuspy.pwrsupply.csdev import Const as _PSc
-from siriuspy.psdiag.csdev import ETypes as _Et
+from siriuspy.diagsys.psdiag.csdev import get_ps_diag_status_labels
 from siriuspy.namesys import SiriusPVName
 
 from siriushla.sirius_application import SiriusApplication
@@ -288,9 +288,9 @@ class MyLed(PyDMLedMultiChannel):
         pvn = SiriusPVName(self.channels()[0].address)
         if pvn.sec != 'LI' and pvn.dis == 'PS':
             if event.button() == Qt.RightButton:
+                labels = get_ps_diag_status_labels(pvn.device_name)
                 self.msg = StatusDetailDialog(
-                    parent=self.parent(), pvname=pvn,
-                    labels=_Et.DIAG_STATUS)
+                    parent=self.parent(), pvname=pvn, labels=labels)
                 self.msg.open()
         super().mousePressEvent(event)
 

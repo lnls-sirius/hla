@@ -8,7 +8,7 @@ import qtawesome as qta
 import epics
 from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox, \
     PyDMPushButton
-from siriuspy.diag.dcct.csdev import Const as _DCCTc
+from siriuspy.diagbeam.dcct.csdev import Const as _DCCTc
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets import PyDMStateButton, SiriusConnectionSignal, \
     SiriusLedState, SiriusLedAlert
