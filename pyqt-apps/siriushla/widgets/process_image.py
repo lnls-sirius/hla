@@ -178,7 +178,7 @@ class SiriusProcessImage(QWidget):
         lay.addWidget(rsy_lb, 6+1, 1)
         lay.addWidget(ra_ld, 8+0, 0, 2, 1, alignment=Qt.AlignCenter)
         lay.addWidget(ra_bt, 8+0, 1)
-        lay.addWidget(ra_lb, 8+1, 1)
+        lay.addWidget(ra_lb, 8+1, 1, alignment=Qt.AlignCenter)
         lay.addWidget(rcx_ld, 10+0, 0, 2, 1, alignment=Qt.AlignCenter)
         lay.addWidget(rcx_sp, 10+0, 1)
         lay.addWidget(rcx_lb, 10+1, 1)
