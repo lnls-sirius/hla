@@ -274,7 +274,8 @@ class PSDetailWidget(QWidget):
             parent=self, init_channel=self._prefixed_psname + ":IntlkHard-Mon")
 
         # NOTE: this is a temporary solution to PS firmware migration
-        if self._psmodel not in ('FAC_2P4S_ACDC', 'FAC_2P4S_DCDC'):
+        if self._psmodel not in ('FAC_2P4S_ACDC', 'FAC_2P4S_DCDC',
+                                 'FAC_2S_ACDC', 'FAC_2S_DCDC'):
             iib_intlks = [k.replace('Labels-Cte', '') for k in self._db
                           if re.match('IntlkIIB.*Labels-Cte', k)]
             if iib_intlks:
@@ -325,7 +326,8 @@ class PSDetailWidget(QWidget):
         layout.addWidget(self.hard_intlk_bt, 1, 0)
         layout.addWidget(self.hard_label, 1, 1)
         layout.addWidget(self.hard_intlk_led, 1, 2)
-        if self._psmodel not in ('FAC_2P4S_ACDC', 'FAC_2P4S_DCDC'):
+        if self._psmodel not in ('FAC_2P4S_ACDC', 'FAC_2P4S_DCDC',
+                                 'FAC_2S_ACDC', 'FAC_2S_DCDC'):
             if iib_intlks:
                 layout.addWidget(self.iib_intlk_bt, 2, 0)
                 layout.addWidget(self.iib_label, 2, 1)
