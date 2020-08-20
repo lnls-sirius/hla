@@ -10,7 +10,8 @@ from qtpy.QtWidgets import QLabel, QGridLayout, QGroupBox, QFormLayout, \
 import qtawesome as qta
 from pyqtgraph import PlotCurveItem, mkPen
 
-from pydm.widgets import PyDMImageView, PyDMEnumComboBox
+from pydm.widgets import PyDMImageView, PyDMEnumComboBox, PyDMLabel, \
+    PyDMPushButton
 
 from siriuspy.namesys import SiriusPVName
 
@@ -73,82 +74,123 @@ class SiriusProcessImage(QWidget):
         self.image_view.addItem(self.plt_his_x)
         self.image_view.addItem(self.plt_his_y)
 
-        gb_pos = QGroupBox('Image Processing ', self)
-        fl = QFormLayout(gb_pos)
-        wid = QWidget(gb_pos)
-        wid.setLayout(QHBoxLayout())
-        cbox = PyDMEnumComboBox(wid, init_channel=self._dev+':CalcMethod-Sel')
-        lbl = SiriusLabel(wid, init_channel=self._dev+':CalcMethod-Sts')
-        wid.layout().addWidget(cbox)
-        wid.layout().addWidget(lbl)
-        fl.addRow(QLabel('Method', gb_pos, alignment=Qt.AlignBottom), wid)
+        gb_pos = self._get_config_widget(self)
+        gb_posi = self._get_position_widget(self)
+        gb_size = self._get_size_widget(self)
 
-        wid = QWidget(gb_pos)
-        wid.setLayout(QHBoxLayout())
-        spnbox = SiriusSpinbox(wid, init_channel=self._dev+':ROISizeX-SP')
-        lbl = SiriusLabel(wid, init_channel=self._dev+':ROISizeX-RB')
-        spnbox.showStepExponent = False
-        wid.layout().addWidget(spnbox)
-        wid.layout().addWidget(lbl)
-        fl.addRow(QLabel('ROI Size X', gb_pos, alignment=Qt.AlignBottom), wid)
+        gl = QGridLayout(self)
+        gl.setContentsMargins(0, 0, 0, 0)
+        if self._ori == 'V':
+            gl.addWidget(self.image_view, 0, 0, 1, 2)
+            gl.addWidget(gb_pos, 1, 0, 2, 1)
+            gl.addWidget(gb_posi, 1, 1)
+            gl.addWidget(gb_size, 2, 1)
+        else:
+            gl.addWidget(self.image_view, 0, 0, 1, 2)
+            gl.addWidget(gb_pos, 0, 2, 2, 1)
+            gl.addWidget(gb_posi, 1, 0)
+            gl.addWidget(gb_size, 1, 1)
 
-        wid = QWidget(gb_pos)
-        wid.setLayout(QHBoxLayout())
-        spnbox = SiriusSpinbox(wid, init_channel=self._dev+':ROISizeY-SP')
-        lbl = SiriusLabel(wid, init_channel=self._dev+':ROISizeY-RB')
-        spnbox.showStepExponent = False
-        wid.layout().addWidget(spnbox)
-        wid.layout().addWidget(lbl)
-        fl.addRow(QLabel('ROI Size Y', gb_pos, alignment=Qt.AlignBottom), wid)
+    def _get_config_widget(self, parent):
+        gb_pos = QGroupBox('Image Processing ', parent)
 
-        wid = QWidget(gb_pos)
-        wid.setLayout(QHBoxLayout())
-        sttbtn = PyDMStateButton(
-            wid, init_channel=self._dev+':ROIAutoCenter-Sel')
-        lbl = SiriusLabel(wid, init_channel=self._dev+':ROIAutoCenter-Sts')
-        wid.layout().addWidget(sttbtn)
-        wid.layout().addWidget(lbl)
-        fl.addRow(QLabel(
-            'Auto Center:', gb_pos, alignment=Qt.AlignBottom), wid)
+        meth_sp = PyDMEnumComboBox(
+            gb_pos, init_channel=self._dev+':CalcMethod-Sel')
+        meth_lb = SiriusLabel(gb_pos, init_channel=self._dev+':CalcMethod-Sts')
+        meth_ld = QLabel('Method', gb_pos)
 
-        wid = QWidget(gb_pos)
-        wid.setLayout(QHBoxLayout())
-        spnbox = SiriusSpinbox(wid, init_channel=self._dev+':ROICenterX-SP')
-        lbl = SiriusLabel(wid, init_channel=self._dev+':ROICenterX-RB')
-        spnbox.showStepExponent = False
-        wid.layout().addWidget(spnbox)
-        wid.layout().addWidget(lbl)
-        fl.addRow(QLabel(
-            'ROI Center X', gb_pos, alignment=Qt.AlignBottom), wid)
+        nrpt_ld = QLabel('Num. Pts.', gb_pos)
+        nrpt_sp = SiriusSpinbox(gb_pos, init_channel=self._dev+'NrAverages-SP')
+        nrpt_sp.showStepExponent = False
+        rdb = PyDMLabel(gb_pos, init_channel=self._dev+'NrAverages-RB')
+        rdb.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        slsh = QLabel('/', gb_pos, alignment=Qt.AlignCenter)
+        slsh.setStyleSheet('min-width:0.7em; max-width:0.7em;')
+        cnt = PyDMLabel(gb_pos, init_channel=self._dev+'BufferSize-Mon')
+        cnt.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        cnt.setToolTip('Current Buffer Size')
+        nrpt_wd = QWidget(gb_pos)
+        hbl = QHBoxLayout(nrpt_wd)
+        hbl.addWidget(cnt)
+        hbl.addWidget(slsh)
+        hbl.addWidget(rdb)
+        nrpt_pb = PyDMPushButton(
+            gb_pos, init_channel=self._dev+'ResetBuffer-Cmd', pressValue=1)
+        nrpt_pb.setToolTip('Reset Buffer')
+        nrpt_pb.setIcon(qta.icon('mdi.delete-empty'))
+        nrpt_pb.setObjectName('rst')
+        nrpt_pb.setStyleSheet(
+            '#rst{min-width:25px; max-width:25px; icon-size:20px;}')
 
-        wid = QWidget(gb_pos)
-        wid.setLayout(QHBoxLayout())
-        spnbox = SiriusSpinbox(wid, init_channel=self._dev+':ROICenterY-SP')
-        lbl = SiriusLabel(wid, init_channel=self._dev+':ROICenterY-RB')
-        spnbox.showStepExponent = False
-        wid.layout().addWidget(spnbox)
-        wid.layout().addWidget(lbl)
-        fl.addRow(QLabel(
-            'ROI Center Y', gb_pos, alignment=Qt.AlignBottom), wid)
+        rsx_sp = SiriusSpinbox(gb_pos, init_channel=self._dev+':ROISizeX-SP')
+        rsx_sp.showStepExponent = False
+        rsx_lb = SiriusLabel(gb_pos, init_channel=self._dev+':ROISizeX-RB')
+        rsx_ld = QLabel('ROI Size X', gb_pos)
 
-        sts = QPushButton(qta.icon('fa5s.ellipsis-h'), '', gb_pos)
-        sts.setToolTip('Open Detailed Configs')
-        sts.setObjectName('sts')
-        sts.setStyleSheet(
+        rsy_sp = SiriusSpinbox(gb_pos, init_channel=self._dev+':ROISizeY-SP')
+        rsy_sp.showStepExponent = False
+        rsy_lb = SiriusLabel(gb_pos, init_channel=self._dev+':ROISizeY-RB')
+        rsy_ld = QLabel('ROI Size Y', gb_pos)
+
+        ra_bt = PyDMStateButton(
+            gb_pos, init_channel=self._dev+':ROIAutoCenter-Sel')
+        ra_lb = SiriusLabel(
+            gb_pos, init_channel=self._dev+':ROIAutoCenter-Sts')
+        ra_ld = QLabel('Auto Center:', gb_pos)
+
+        rcx_sp = SiriusSpinbox(gb_pos, init_channel=self._dev+':ROICenterX-SP')
+        rcx_sp.showStepExponent = False
+        rcx_lb = SiriusLabel(gb_pos, init_channel=self._dev+':ROICenterX-RB')
+        rcx_ld = QLabel('ROI Center X', gb_pos)
+
+        rcy_sp = SiriusSpinbox(gb_pos, init_channel=self._dev+':ROICenterY-SP')
+        rcy_sp.showStepExponent = False
+        rcy_lb = SiriusLabel(gb_pos, init_channel=self._dev+':ROICenterY-RB')
+        rcy_ld = QLabel('ROI Center Y', gb_pos)
+
+        sts_bt = QPushButton(qta.icon('fa5s.ellipsis-h'), '', gb_pos)
+        sts_bt.setToolTip('Open Detailed Configs')
+        sts_bt.setObjectName('sts')
+        sts_bt.setStyleSheet(
             '#sts{min-width:25px; max-width:25px; icon-size:20px;}')
         Window = create_window_from_widget(
             _DetailedWidget, title='Image Processing Detailed Configs')
         connect_window(
-            sts, Window, gb_pos, device=self._dev,
+            sts_bt, Window, gb_pos, device=self._dev,
             convertion_set=self._conv_set)
         hlay = QHBoxLayout()
-        hlay.addWidget(sts, alignment=Qt.AlignRight)
-        fl.addRow(hlay)
+        hlay.addWidget(sts_bt, alignment=Qt.AlignRight)
 
-        gb_posi = QGroupBox('Position [px / mm]', self)
-        gb_size = QGroupBox('Size [px / mm]', self)
+        lay = QGridLayout(gb_pos)
+        lay.addWidget(meth_ld, 0, 0, 2, 1, alignment=Qt.AlignCenter)
+        lay.addWidget(meth_sp, 0, 1)
+        lay.addWidget(meth_lb, 1, 1)
+        lay.addWidget(nrpt_ld, 2, 0)
+        lay.addWidget(nrpt_pb, 3, 0)
+        lay.addWidget(nrpt_sp, 2, 1)
+        lay.addWidget(nrpt_wd, 3, 1)
+        lay.addWidget(rsx_ld, 4+0, 0, 2, 1, alignment=Qt.AlignCenter)
+        lay.addWidget(rsx_sp, 4+0, 1)
+        lay.addWidget(rsx_lb, 4+1, 1)
+        lay.addWidget(rsy_ld, 6+0, 0, 2, 1, alignment=Qt.AlignCenter)
+        lay.addWidget(rsy_sp, 6+0, 1)
+        lay.addWidget(rsy_lb, 6+1, 1)
+        lay.addWidget(ra_ld, 8+0, 0, 2, 1, alignment=Qt.AlignCenter)
+        lay.addWidget(ra_bt, 8+0, 1)
+        lay.addWidget(ra_lb, 8+1, 1)
+        lay.addWidget(rcx_ld, 10+0, 0, 2, 1, alignment=Qt.AlignCenter)
+        lay.addWidget(rcx_sp, 10+0, 1)
+        lay.addWidget(rcx_lb, 10+1, 1)
+        lay.addWidget(rcy_ld, 12+0, 0, 2, 1, alignment=Qt.AlignCenter)
+        lay.addWidget(rcy_sp, 12+0, 1)
+        lay.addWidget(rcy_lb, 12+1, 1)
+        lay.addWidget(sts_bt, 14, 0, alignment=Qt.AlignLeft)
+
+        return gb_pos
+
+    def _get_position_widget(self, parent):
+        gb_posi = QGroupBox('Position [px / mm]', parent)
         fl_posi = QFormLayout(gb_posi)
-        fl_size = QFormLayout(gb_size)
 
         wid = QWidget(gb_posi)
         wid.setLayout(QHBoxLayout())
@@ -174,6 +216,12 @@ class SiriusProcessImage(QWidget):
         fl_posi.addRow(QLabel(
             'Y =', gb_posi, alignment=Qt.AlignBottom), wid)
 
+        return gb_posi
+
+    def _get_size_widget(self, parent):
+        gb_size = QGroupBox('Size [px / mm]', parent)
+        fl_size = QFormLayout(gb_size)
+
         wid = QWidget(gb_size)
         wid.setLayout(QHBoxLayout())
         xave = SiriusLabel(wid, init_channel=self._dev+':BeamSizeX-Mon')
@@ -198,18 +246,7 @@ class SiriusProcessImage(QWidget):
         fl_size.addRow(QLabel(
             'Y =', gb_size, alignment=Qt.AlignBottom), wid)
 
-        gl = QGridLayout(self)
-        gl.setContentsMargins(0, 0, 0, 0)
-        if self._ori == 'V':
-            gl.addWidget(self.image_view, 0, 0, 1, 2)
-            gl.addWidget(gb_pos, 1, 0, 2, 1)
-            gl.addWidget(gb_posi, 1, 1)
-            gl.addWidget(gb_size, 2, 1)
-        else:
-            gl.addWidget(self.image_view, 0, 0, 2, 1)
-            gl.addWidget(gb_pos, 0, 1, 1, 2)
-            gl.addWidget(gb_posi, 1, 1)
-            gl.addWidget(gb_size, 1, 2)
+        return gb_size
 
     def _update_roi(self):
         xaxis = self._roixaxis.getvalue()
