@@ -100,6 +100,10 @@ class BeamLineMVS2View(SiriusMainWindow):
         pb_app = PyDMPushButton(
             gbox_sofb, 'Apply', pressValue=1,
             init_channel=pre+':ApplyBump-Cmd')
+        pb_app.showConfirmDialog = True
+        pb_app.confirmMessage = \
+            'This action will change the reference orbit used in SOFB.\n' +\
+            pb_app.confirmMessage
         lb_app = PyDMLabel(
             gbox_sofb, init_channel=pre+':ApplyStatus-Mon')
 
