@@ -199,8 +199,10 @@ class SiriusProcessImage(QWidget):
         xavemm = SiriusLabel(wid, init_channel=self._dev+':BeamCentermmX-Mon')
         xave.setAlignment(Qt.AlignVCenter | Qt.AlignRight)
         xavemm.setAlignment(Qt.AlignVCenter | Qt.AlignLeft)
+        sep = QLabel('/', wid)
+        sep.setStyleSheet('max-width:0.7em;')
         wid.layout().addWidget(xave)
-        wid.layout().addWidget(QLabel('/', wid))
+        wid.layout().addWidget(sep)
         wid.layout().addWidget(xavemm)
         fl_posi.addRow(QLabel(
             'X =', gb_posi, alignment=Qt.AlignBottom), wid)
@@ -211,8 +213,10 @@ class SiriusProcessImage(QWidget):
         yavemm = SiriusLabel(wid, init_channel=self._dev+':BeamCentermmY-Mon')
         yave.setAlignment(Qt.AlignVCenter | Qt.AlignRight)
         yavemm.setAlignment(Qt.AlignVCenter | Qt.AlignLeft)
+        sep = QLabel('/', wid)
+        sep.setStyleSheet('max-width:0.7em;')
         wid.layout().addWidget(yave)
-        wid.layout().addWidget(QLabel('/', wid))
+        wid.layout().addWidget(sep)
         wid.layout().addWidget(yavemm)
         fl_posi.addRow(QLabel(
             'Y =', gb_posi, alignment=Qt.AlignBottom), wid)
