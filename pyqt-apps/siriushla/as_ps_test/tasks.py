@@ -384,8 +384,7 @@ class TriggerTask(QThread):
             self.currentItem.emit(trig)
             pv = self._pvs_sp[trig]
             val = self.trig2val[trig]
-            # pv.value = val
-            print(pv.pvname, val)
+            pv.value = val
             self.itemDone.emit(trig, True)
 
     def _check(self):
