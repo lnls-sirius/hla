@@ -342,6 +342,27 @@ class CycleWindow(SiriusMainWindow):
             else:
                 self.progress_list.addItem(text)
                 self.progress_list.scrollToBottom()
+        elif 'Sent ' in text:
+            last_item = self.progress_list.item(self.progress_list.count()-1)
+            if 'Sent ' in last_item.text():
+                last_item.setText(text)
+            else:
+                self.progress_list.addItem(text)
+                self.progress_list.scrollToBottom()
+        elif 'Successfully checked ' in text:
+            last_item = self.progress_list.item(self.progress_list.count()-1)
+            if 'Successfully checked ' in last_item.text():
+                last_item.setText(text)
+            else:
+                self.progress_list.addItem(text)
+                self.progress_list.scrollToBottom()
+        elif 'Created connections ' in text:
+            last_item = self.progress_list.item(self.progress_list.count()-1)
+            if 'Created connections ' in last_item.text():
+                last_item.setText(text)
+            else:
+                self.progress_list.addItem(text)
+                self.progress_list.scrollToBottom()
         else:
             item = QListWidgetItem(text)
             if error:
