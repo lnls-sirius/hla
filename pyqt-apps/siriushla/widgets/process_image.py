@@ -40,7 +40,7 @@ class SiriusProcessImage(QWidget):
             width_channel=self._dev+':Width-RB')
         self.image_view.setObjectName('image')
         self.image_view.setStyleSheet(
-            '#image{min-width:30em; min-height:30em;}')
+            '#image{min-width:20em; min-height:20em;}')
         self.image_view.maxRedrawRate = 5
         self.image_view.colorMap = self.image_view.Jet
         self.image_view.readingOrder = self.image_view.Clike
@@ -90,6 +90,9 @@ class SiriusProcessImage(QWidget):
             gl.addWidget(gb_pos, 0, 2, 2, 1)
             gl.addWidget(gb_posi, 1, 0)
             gl.addWidget(gb_size, 1, 1)
+        gl.setColumnStretch(0, 5)
+        gl.setColumnStretch(1, 5)
+        gl.setColumnStretch(2, 1)
 
     def _get_config_widget(self, parent):
         gb_pos = QGroupBox('Image Processing ', parent)
@@ -110,18 +113,20 @@ class SiriusProcessImage(QWidget):
         cnt = PyDMLabel(gb_pos, init_channel=self._dev+':BufferSize-Mon')
         cnt.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         cnt.setToolTip('Current Buffer Size')
+        pbt = PyDMPushButton(
+            gb_pos, init_channel=self._dev+':ResetBuffer-Cmd', pressValue=1)
+        pbt.setToolTip('Reset Buffer')
+        pbt.setIcon(qta.icon('mdi.delete-empty'))
+        pbt.setObjectName('rst')
+        pbt.setStyleSheet(
+            '#rst{min-width:25px; max-width:25px; icon-size:20px;}')
         nrpt_wd = QWidget(gb_pos)
         hbl = QHBoxLayout(nrpt_wd)
+        hbl.addWidget(pbt)
+        hbl.addStretch()
         hbl.addWidget(cnt)
         hbl.addWidget(slsh)
         hbl.addWidget(rdb)
-        nrpt_pb = PyDMPushButton(
-            gb_pos, init_channel=self._dev+':ResetBuffer-Cmd', pressValue=1)
-        nrpt_pb.setToolTip('Reset Buffer')
-        nrpt_pb.setIcon(qta.icon('mdi.delete-empty'))
-        nrpt_pb.setObjectName('rst')
-        nrpt_pb.setStyleSheet(
-            '#rst{min-width:25px; max-width:25px; icon-size:20px;}')
 
         rsx_sp = SiriusSpinbox(gb_pos, init_channel=self._dev+':ROISizeX-SP')
         rsx_sp.showStepExponent = False
@@ -163,29 +168,29 @@ class SiriusProcessImage(QWidget):
         hlay.addWidget(sts_bt, alignment=Qt.AlignRight)
 
         lay = QGridLayout(gb_pos)
-        lay.addWidget(meth_ld, 0, 0, 2, 1, alignment=Qt.AlignCenter)
+        lay.addWidget(meth_ld, 0, 0, 2, 1, alignment=Qt.AlignLeft)
         lay.addWidget(meth_sp, 0, 1)
         lay.addWidget(meth_lb, 1, 1)
-        lay.addWidget(nrpt_ld, 2, 0)
-        lay.addWidget(nrpt_pb, 3, 0)
+        lay.addWidget(nrpt_ld, 2, 0, alignment=Qt.AlignLeft)
         lay.addWidget(nrpt_sp, 2, 1)
-        lay.addWidget(nrpt_wd, 3, 1)
-        lay.addWidget(rsx_ld, 4+0, 0, 2, 1, alignment=Qt.AlignCenter)
+        lay.addWidget(nrpt_wd, 3, 0, 1, 2)
+        lay.addWidget(rsx_ld, 4+0, 0, 2, 1, alignment=Qt.AlignLeft)
         lay.addWidget(rsx_sp, 4+0, 1)
         lay.addWidget(rsx_lb, 4+1, 1)
-        lay.addWidget(rsy_ld, 6+0, 0, 2, 1, alignment=Qt.AlignCenter)
+        lay.addWidget(rsy_ld, 6+0, 0, 2, 1, alignment=Qt.AlignLeft)
         lay.addWidget(rsy_sp, 6+0, 1)
         lay.addWidget(rsy_lb, 6+1, 1)
-        lay.addWidget(ra_ld, 8+0, 0, 2, 1, alignment=Qt.AlignCenter)
+        lay.addWidget(ra_ld, 8+0, 0, 2, 1, alignment=Qt.AlignLeft)
         lay.addWidget(ra_bt, 8+0, 1)
-        lay.addWidget(ra_lb, 8+1, 1, alignment=Qt.AlignCenter)
-        lay.addWidget(rcx_ld, 10+0, 0, 2, 1, alignment=Qt.AlignCenter)
+        lay.addWidget(ra_lb, 8+1, 1, alignment=Qt.AlignLeft)
+        lay.addWidget(rcx_ld, 10+0, 0, 2, 1, alignment=Qt.AlignLeft)
         lay.addWidget(rcx_sp, 10+0, 1)
         lay.addWidget(rcx_lb, 10+1, 1)
-        lay.addWidget(rcy_ld, 12+0, 0, 2, 1, alignment=Qt.AlignCenter)
+        lay.addWidget(rcy_ld, 12+0, 0, 2, 1, alignment=Qt.AlignLeft)
         lay.addWidget(rcy_sp, 12+0, 1)
         lay.addWidget(rcy_lb, 12+1, 1)
         lay.addWidget(sts_bt, 14, 0, alignment=Qt.AlignLeft)
+        lay.setRowStretch(15, 5)
 
         return gb_pos
 
