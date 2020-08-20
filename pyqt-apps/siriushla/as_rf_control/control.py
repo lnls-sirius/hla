@@ -198,9 +198,11 @@ class RFMainControl(SiriusMainWindow):
 
     def _rfGenLayout(self):
         # On/Off
-        self.bt_genenbl = PyDMStateButton(self, 'RF-Gen:GeneralRF-Sel')
+        self.ld_genenbl = QLabel('Enable: ', self, alignment=Qt.AlignRight)
+        # self.bt_genenbl = PyDMStateButton(self, 'RF-Gen:GeneralRF-Sel')
         self.lb_genenbl = SiriusLedState(self, 'RF-Gen:GeneralRF-Sts')
         # Frequência
+        self.ld_genfreq = QLabel('Frequency: ', self, alignment=Qt.AlignRight)
         self.le_genfreq = PyDMLineEdit(self, 'RF-Gen:GeneralFreq-SP')
         self.le_genfreq.setStyleSheet('min-width:7em; max-width:7em;')
         self.le_genfreq.precisionFromPV = False
@@ -214,24 +216,24 @@ class RFMainControl(SiriusMainWindow):
         vl_freq.addWidget(self.le_genfreq)
         vl_freq.addWidget(self.lb_genfreq)
         # Phase Continuous State
-        self.bt_genphscont = PyDMStateButton(self, 'RF-Gen:FreqPhsCont-Sel')
+        self.ld_genphscont = QLabel('Phase Cont.: ', self,
+                                    alignment=Qt.AlignRight)
+        self.ld_genphscont.setStyleSheet(
+            'min-width:5em; max-width:5em; qproperty-alignment:AlignLeft;')
+        # self.bt_genphscont = PyDMStateButton(self, 'RF-Gen:FreqPhsCont-Sel')
         self.lb_genphscont = SiriusLedState(self, 'RF-Gen:FreqPhsCont-Sts')
 
         lay = QGridLayout()
         lay.setAlignment(Qt.AlignTop)
         lay.setVerticalSpacing(12)
-        lay.addWidget(QLabel('Enable: ', self,
-                             alignment=Qt.AlignRight), 1, 0)
-        lay.addWidget(self.bt_genenbl, 1, 1)
-        lay.addWidget(self.lb_genenbl, 1, 2)
-        lay.addWidget(QLabel('Frequency: ', self,
-                             alignment=Qt.AlignRight), 2, 0,
-                      alignment=Qt.AlignTop)
-        lay.addLayout(vl_freq, 2, 1, 1, 2)
-        lay.addWidget(QLabel('Phase Cont.: ', self,
-                             alignment=Qt.AlignRight), 3, 0)
-        lay.addWidget(self.bt_genphscont, 3, 1)
-        lay.addWidget(self.lb_genphscont, 3, 2)
+        lay.addWidget(self.ld_genenbl, 1, 0)
+        # lay.addWidget(self.bt_genenbl, 1, 1)
+        lay.addWidget(self.lb_genenbl, 1, 1)
+        lay.addWidget(self.ld_genfreq, 2, 0, alignment=Qt.AlignTop)
+        lay.addLayout(vl_freq, 2, 1)
+        lay.addWidget(self.ld_genphscont, 3, 0)
+        # lay.addWidget(self.bt_genphscont, 3, 1)
+        lay.addWidget(self.lb_genphscont, 3, 1)
         return lay
 
     def _startControlLayout(self):
@@ -460,6 +462,7 @@ class RFMainControl(SiriusMainWindow):
         self.graph_plunmotors.showYGrid = True
         self.graph_plunmotors.showLegend = True
         self.graph_plunmotors.timeSpan = 1800
+        self.graph_plunmotors.maxRedrawRate = 2
         self.graph_plunmotors.addYChannel(
             y_channel=self.chs['Tun']['PlM1Curr'], color='blue',
             name='Motor 1', lineStyle=Qt.SolidLine, lineWidth=1)
@@ -539,16 +542,20 @@ class RFMainControl(SiriusMainWindow):
         self.sb_RmpPhsTop.showStepExponent = False
         self.lb_RmpPhsTop = PyDMLabel(self, 'BR-RF-DLLRF-01:RmpPhsTop-RB')
         self.lb_RmpPhsTop.showUnits = True
-        self.sb_RmpVoltTop = PyDMLineEdit(self, 'BR-RF-DLLRF-01:RmpVoltTop-SP')
-        self.lb_RmpVoltTop = PyDMLabel(self, 'BR-RF-DLLRF-01:RmpVoltTop-RB')
+        self.sb_RmpVoltTop = PyDMLineEdit(
+            self, 'BR-RF-DLLRF-01:mV:RAMP:AMP:TOP-SP')
+        self.lb_RmpVoltTop = PyDMLabel(
+            self, 'BR-RF-DLLRF-01:mV:RAMP:AMP:TOP-RB')
         self.lb_RmpVoltTop.showUnits = True
 
         self.sb_RmpPhsBot = PyDMSpinbox(self, 'BR-RF-DLLRF-01:RmpPhsBot-SP')
         self.sb_RmpPhsBot.showStepExponent = False
         self.lb_RmpPhsBot = PyDMLabel(self, 'BR-RF-DLLRF-01:RmpPhsBot-RB')
         self.lb_RmpPhsBot.showUnits = True
-        self.sb_RmpVoltBot = PyDMLineEdit(self, 'BR-RF-DLLRF-01:RmpVoltBot-SP')
-        self.lb_RmpVoltBot = PyDMLabel(self, 'BR-RF-DLLRF-01:RmpVoltBot-RB')
+        self.sb_RmpVoltBot = PyDMLineEdit(
+            self, 'BR-RF-DLLRF-01:mV:RAMP:AMP:BOT-SP')
+        self.lb_RmpVoltBot = PyDMLabel(
+            self, 'BR-RF-DLLRF-01:mV:RAMP:AMP:BOT-RB')
         self.lb_RmpVoltBot.showUnits = True
 
         lay = QGridLayout()
@@ -592,7 +599,7 @@ class RFMainControl(SiriusMainWindow):
                              alignment=Qt.AlignRight), 13, 0)
         lay.addWidget(self.sb_RmpPhsTop, 13, 1)
         lay.addWidget(self.lb_RmpPhsTop, 13, 2)
-        lay.addWidget(QLabel('Gap Voltage:', self,
+        lay.addWidget(QLabel('Amplitude:', self,
                              alignment=Qt.AlignRight), 14, 0)
         lay.addWidget(self.sb_RmpVoltTop, 14, 1)
         lay.addWidget(self.lb_RmpVoltTop, 14, 2)
@@ -601,7 +608,7 @@ class RFMainControl(SiriusMainWindow):
                              alignment=Qt.AlignRight), 16, 0)
         lay.addWidget(self.sb_RmpPhsBot, 16, 1)
         lay.addWidget(self.lb_RmpPhsBot, 16, 2)
-        lay.addWidget(QLabel('Gap Voltage:', self,
+        lay.addWidget(QLabel('Amplitude:', self,
                              alignment=Qt.AlignRight), 17, 0)
         lay.addWidget(self.sb_RmpVoltBot, 17, 1)
         lay.addWidget(self.lb_RmpVoltBot, 17, 2)
@@ -627,35 +634,35 @@ class RFMainControl(SiriusMainWindow):
         self.ramp_graph.plotItem.getAxis('bottom').setStyle(tickTextOffset=15)
         self.ramp_graph.plotItem.getAxis('left').setStyle(tickTextOffset=5)
         self.ramp_graph.addChannel(
+            y_channel='RA-RF:PowerSensor1:TracData-Mon',
+            x_channel=' RA-RF:PowerSensor1:TimeAxis-Mon',
+            redraw_mode=2, name='Power [W]', color=QColor('blue'))
+        self.curve_PwrMtr = self.ramp_graph.curveAtIndex(0)
+        self.rb_PwrMtr = QRadioButton('Power Meter Signal', self)
+        self.rb_PwrMtr.setChecked(True)
+        self.rb_PwrMtr.toggled.connect(
+            _part(self._handle_rmpwfm_visibility, 0))
+        self.ramp_graph.addChannel(
             y_channel='BR-RF-DLLRF-01:VCavRampWf.AVAL',
             x_channel='BR-RF-DLLRF-01:DiagWf32Scale.AVAL',
             redraw_mode=2, name='VGav kV', color=QColor('blue'))
-        self.curve_VGav = self.ramp_graph.curveAtIndex(0)
+        self.curve_VGav = self.ramp_graph.curveAtIndex(1)
         self.rb_VGav = QRadioButton('VGav [kV]', self)
-        self.rb_VGav.setChecked(True)
-        self.rb_VGav.toggled.connect(_part(self._handle_rmpwfm_visibility, 0))
+        self.rb_VGav.toggled.connect(_part(self._handle_rmpwfm_visibility, 1))
         self.ramp_graph.addChannel(
             y_channel='BR-RF-DLLRF-01:VCavRampWf:W.AVAL',
             x_channel='BR-RF-DLLRF-01:DiagWf32Scale.AVAL',
             redraw_mode=2, name='Power [W]', color=QColor('blue'))
-        self.curve_Pwr = self.ramp_graph.curveAtIndex(1)
+        self.curve_Pwr = self.ramp_graph.curveAtIndex(2)
         self.rb_Pwr = QRadioButton('Power [W]', self)
-        self.rb_Pwr.toggled.connect(_part(self._handle_rmpwfm_visibility, 1))
-        self.ramp_graph.addChannel(
-            y_channel='RA-RF:PowerSensor1:TracData-Mon',
-            x_channel=' RA-RF:PowerSensor1:TimeAxis-Mon',
-            redraw_mode=2, name='Power [W]', color=QColor('blue'))
-        self.curve_PwrMtr = self.ramp_graph.curveAtIndex(2)
-        self.rb_PwrMtr = QRadioButton('Power Meter Signal', self)
-        self.rb_PwrMtr.toggled.connect(
-            _part(self._handle_rmpwfm_visibility, 2))
+        self.rb_Pwr.toggled.connect(_part(self._handle_rmpwfm_visibility, 2))
         hbox_rb = QHBoxLayout()
+        hbox_rb.addWidget(self.rb_PwrMtr)
         hbox_rb.addWidget(self.rb_VGav)
         hbox_rb.addWidget(self.rb_Pwr)
-        hbox_rb.addWidget(self.rb_PwrMtr)
 
+        self.curve_VGav.setVisible(False)
         self.curve_Pwr.setVisible(False)
-        self.curve_PwrMtr.setVisible(False)
 
         self.lb_PwrFwdBot = PyDMLabel(self, 'BO-05D:RF-P5Cav:PwrFwdBot-Mon')
         self.lb_PwrFwdBot.showUnits = True
@@ -770,6 +777,7 @@ class RFMainControl(SiriusMainWindow):
         self.pwr_mon_graph.showXGrid = True
         self.pwr_mon_graph.showYGrid = True
         self.pwr_mon_graph.timeSpan = 1800
+        self.pwr_mon_graph.maxRedrawRate = 1
         self.pwr_mon_graph.setObjectName('pwrmon_graph')
         self.pwr_mon_graph.setStyleSheet(
             '#pwrmon_graph{min-width: 23.5em; min-height: 20em;}')
@@ -868,6 +876,7 @@ class RFMainControl(SiriusMainWindow):
         self.temp1_graph.showXGrid = True
         self.temp1_graph.showYGrid = True
         self.temp1_graph.timeSpan = 1800
+        self.temp1_graph.maxRedrawRate = 2
         hbox_cbs = QHBoxLayout()
 
         self.temp1_graph.addYChannel(
@@ -925,6 +934,7 @@ class RFMainControl(SiriusMainWindow):
         self.temp2_graph.showXGrid = True
         self.temp2_graph.showYGrid = True
         self.temp2_graph.timeSpan = 1800
+        self.temp2_graph.maxRedrawRate = 1
         self.temp2_graph.addYChannel(
             y_channel=self.chs['TL Sts']['Circ TIn'], name='CTIn',
             color='magenta', lineStyle=Qt.SolidLine, lineWidth=1)
@@ -956,6 +966,7 @@ class RFMainControl(SiriusMainWindow):
         self.vacuum_graph.showXGrid = True
         self.vacuum_graph.showYGrid = True
         self.vacuum_graph.timeSpan = 1800
+        self.vacuum_graph.maxRedrawRate = 1
         self.vacuum_graph.addYChannel(
             y_channel=self.chs['Cav Sts']['Vac']['Cells'], name='Vacuum',
             color='black', lineStyle=Qt.SolidLine, lineWidth=1)
@@ -1074,6 +1085,6 @@ class RFMainControl(SiriusMainWindow):
         led_drive.set_channels2values(ch2vals)
 
     def _handle_rmpwfm_visibility(self, index):
-        self.curve_VGav.setVisible(index == 0)
-        self.curve_Pwr.setVisible(index == 1)
-        self.curve_PwrMtr.setVisible(index == 2)
+        self.curve_PwrMtr.setVisible(index == 0)
+        self.curve_VGav.setVisible(index == 1)
+        self.curve_Pwr.setVisible(index == 2)
