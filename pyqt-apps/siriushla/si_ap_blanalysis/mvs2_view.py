@@ -98,7 +98,8 @@ class BeamLineMVS2View(SiriusMainWindow):
         lb_bmpx = SiriusLabel(gbox_sofb, pre+':AppliedBumpX-Mon')
         lb_bmpy = SiriusLabel(gbox_sofb, pre+':AppliedBumpY-Mon')
         pb_app = PyDMPushButton(
-            gbox_sofb, 'Apply', pressValue=1, init_channel=pre+'ApplyBump-Cmd')
+            gbox_sofb, 'Apply', pressValue=1,
+            init_channel=pre+':ApplyBump-Cmd')
         lb_app = PyDMLabel(
             gbox_sofb, init_channel=pre+':ApplyStatus-Mon')
 
