@@ -100,13 +100,14 @@ class SiriusProcessImage(QWidget):
         meth_ld = QLabel('Method', gb_pos)
 
         nrpt_ld = QLabel('Num. Pts.', gb_pos)
-        nrpt_sp = SiriusSpinbox(gb_pos, init_channel=self._dev+'NrAverages-SP')
+        nrpt_sp = SiriusSpinbox(
+            gb_pos, init_channel=self._dev+':NrAverages-SP')
         nrpt_sp.showStepExponent = False
-        rdb = PyDMLabel(gb_pos, init_channel=self._dev+'NrAverages-RB')
+        rdb = PyDMLabel(gb_pos, init_channel=self._dev+':NrAverages-RB')
         rdb.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         slsh = QLabel('/', gb_pos, alignment=Qt.AlignCenter)
         slsh.setStyleSheet('min-width:0.7em; max-width:0.7em;')
-        cnt = PyDMLabel(gb_pos, init_channel=self._dev+'BufferSize-Mon')
+        cnt = PyDMLabel(gb_pos, init_channel=self._dev+':BufferSize-Mon')
         cnt.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         cnt.setToolTip('Current Buffer Size')
         nrpt_wd = QWidget(gb_pos)
@@ -115,7 +116,7 @@ class SiriusProcessImage(QWidget):
         hbl.addWidget(slsh)
         hbl.addWidget(rdb)
         nrpt_pb = PyDMPushButton(
-            gb_pos, init_channel=self._dev+'ResetBuffer-Cmd', pressValue=1)
+            gb_pos, init_channel=self._dev+':ResetBuffer-Cmd', pressValue=1)
         nrpt_pb.setToolTip('Reset Buffer')
         nrpt_pb.setIcon(qta.icon('mdi.delete-empty'))
         nrpt_pb.setObjectName('rst')
