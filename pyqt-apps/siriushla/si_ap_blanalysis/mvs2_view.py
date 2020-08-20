@@ -32,8 +32,8 @@ class BeamLineMVS2View(SiriusMainWindow):
         self._setupUi()
 
     def _setupUi(self):
-        label = QLabel('<h3>'+self._title+'</h3>', self,
-                       alignment=Qt.AlignCenter)
+        label = QLabel(
+            '<h3>'+self._title+'</h3>', self, alignment=Qt.AlignCenter)
 
         self._process_image = SiriusProcessImage(
             self, device=self._device_analysis, orientation='H',
@@ -44,7 +44,7 @@ class BeamLineMVS2View(SiriusMainWindow):
         gbox_ctrl = QGroupBox('Analysis Control')
         lay_ctrl = QGridLayout(gbox_ctrl)
 
-        self._ld_enbl = QLabel('Start/Stop Acq.: ')
+        self._ld_enbl = QLabel('Start/Stop: ')
         self._sb_enbl = PyDMStateButton(
             gbox_ctrl, self._device_analysis+':MeasureCtrl-Sel')
         self._lb_enbl = PyDMLabel(
@@ -85,11 +85,11 @@ class BeamLineMVS2View(SiriusMainWindow):
         lay_ctrl.addWidget(self._sb_tgty, 6, 1)
         lay_ctrl.addWidget(self._lb_tgty, 7, 1)
 
-        gbox_sofb = QGroupBox('SOFB Bump')
+        gbox_sofb = QGroupBox('SOFB Bump [urad]')
         lay_sofb = QGridLayout(gbox_sofb)
 
-        ldx = QLabel('Ang. X [urad]:')
-        ldy = QLabel('Ang. Y [urad]:')
+        ldx = QLabel('X:')
+        ldy = QLabel('Y:')
         ldd = QLabel('Delta')
         lda = QLabel('Applied')
         pre = self._device_analysis
@@ -122,6 +122,7 @@ class BeamLineMVS2View(SiriusMainWindow):
         hbl.addWidget(lb_app)
         hbl.addStretch()
         lay_sofb.addLayout(hbl, 3, 0, 1, 3)
+        lay_sofb.setRowStretch(4, 5)
 
         # Camera Acquisition Status
         gbox_acqsett = QGroupBox('Camera Acquisition Statuses')
@@ -183,15 +184,16 @@ class BeamLineMVS2View(SiriusMainWindow):
         lay_acqsett.addWidget(self._lb_numimgs, 8, 1)
         lay_acqsett.addWidget(self._ld_imgmode, 9, 0)
         lay_acqsett.addWidget(self._lb_imgmode, 9, 1)
+        lay_acqsett.setRowStretch(10, 20)
 
         self.cw = QWidget()
         self.cw.setStyleSheet('PyDMLabel{qproperty-alignment: AlignCenter;}')
         lay = QGridLayout(self.cw)
-        lay.addWidget(label, 0, 0, 1, 2)
-        lay.addWidget(self._process_image, 1, 0, 3, 1)
+        lay.addWidget(label, 0, 0, 1, 3)
+        lay.addWidget(self._process_image, 1, 0, 2, 1)
         lay.addWidget(gbox_ctrl, 1, 1)
         lay.addWidget(gbox_sofb, 2, 1)
-        lay.addWidget(gbox_acqsett, 3, 1)
+        lay.addWidget(gbox_acqsett, 1, 2, 2, 1)
         lay.setColumnStretch(0, 7)
         lay.setColumnStretch(1, 2)
         self.setCentralWidget(self.cw)
