@@ -40,14 +40,14 @@ args = parser.parse_args()
 app = SiriusApplication()
 pv = _PVName(args.bpm_sel)
 kwargs = dict()
-if pv.dev == 'BPM':
+if pv.dev in ('BPM', 'PBPM'):
     icon = qta.icon('mdi.currency-sign', color=get_appropriate_color(pv.sec))
     window = create_window_from_widget(
         BPMMain, title=args.bpm_sel, is_main=True, icon=icon)
     kwargs.update(dict(prefix=args.prefix, bpm=pv))
 else:
     sec = args.bpm_sel.upper()
-    bpms_names = BPMSearch.get_names(filters={'sec': sec})
+    bpms_names = BPMSearch.get_names(filters={'sec': sec, 'dev': 'BPM'})
     icon = qta.icon('mdi.currency-sign', color=get_appropriate_color(sec))
     if args.window == 'Monitor':
         clas = SelectBPMs
