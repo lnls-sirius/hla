@@ -23,7 +23,7 @@ from siriushla.widgets.pvnames_tree import PVNameTree
 from siriushla.widgets.dialog import ProgressDialog, PSStatusDialog
 from siriushla.as_ps_cycle.tasks import CreateCyclers, VerifyPS, \
     SaveTiming, PrepareTiming, RestoreTiming, \
-    PreparePSOpModeSlowRef, PreparePSCurrentZero, \
+    PreparePSSOFBMode, PreparePSOpModeSlowRef, PreparePSCurrentZero, \
     PreparePSParams, PreparePSOpModeCycle, Cycle, CycleTrims
 
 
@@ -54,6 +54,7 @@ class CycleWindow(SiriusMainWindow):
         self._is_preparing = ''
         self._prepared = {
             'timing': False,
+            'ps_sofbmode': False,
             'ps_om_slowref': False,
             'ps_current': False,
             'ps_params': False,
@@ -109,8 +110,16 @@ class CycleWindow(SiriusMainWindow):
                             alignment=Qt.AlignCenter)
         self.psconn_led = PyDMLedMultiConn(self)
 
+        self.set_ps_sofbmode_off_bt = QPushButton(
+            '3. Turn off PS SOFBMode', self)
+        self.set_ps_sofbmode_off_bt.setToolTip(
+            'Turn off power supplies SOFBMode.')
+        self.set_ps_sofbmode_off_bt.clicked.connect(
+            _part(self._run_task, 'ps_sofbmode'))
+        self.set_ps_sofbmode_off_bt.clicked.connect(self._set_lastcomm)
+
         self.set_ps_opmode_slowref_bt = QPushButton(
-            '3. Set PS OpMode to SlowRef', self)
+            '4. Set PS OpMode to SlowRef', self)
         self.set_ps_opmode_slowref_bt.setToolTip(
             'Set power supplies OpMode to SlowRef.')
         self.set_ps_opmode_slowref_bt.clicked.connect(
@@ -118,7 +127,7 @@ class CycleWindow(SiriusMainWindow):
         self.set_ps_opmode_slowref_bt.clicked.connect(self._set_lastcomm)
 
         self.set_ps_current_zero_bt = QPushButton(
-            '4. Set PS current to zero', self)
+            '5. Set PS current to zero', self)
         self.set_ps_current_zero_bt.setToolTip(
             'Set power supplies current to zero.')
         self.set_ps_current_zero_bt.clicked.connect(
@@ -126,7 +135,7 @@ class CycleWindow(SiriusMainWindow):
         self.set_ps_current_zero_bt.clicked.connect(self._set_lastcomm)
 
         self.prepare_ps_params_bt = QPushButton(
-            '5. Prepare PS Parameters', self)
+            '6. Prepare PS Parameters', self)
         self.prepare_ps_params_bt.setToolTip(
             'Check power supplies OpMode in SlowRef, check\n'
             'current is zero and configure cycle parameters.')
@@ -135,7 +144,7 @@ class CycleWindow(SiriusMainWindow):
         self.prepare_ps_params_bt.clicked.connect(self._set_lastcomm)
 
         self.prepare_ps_opmode_bt = QPushButton(
-            '6. Prepare PS OpMode', self)
+            '7. Prepare PS OpMode', self)
         self.prepare_ps_opmode_bt.setToolTip(
             'Set power supplies OpMode to Cycle.')
         self.prepare_ps_opmode_bt.clicked.connect(
@@ -145,7 +154,7 @@ class CycleWindow(SiriusMainWindow):
         lb_cycle = QLabel('<h4>Cycle</h4>', self,
                           alignment=Qt.AlignCenter)
 
-        self.cycle_trims_bt = QPushButton('7. Cycle Trims', self)
+        self.cycle_trims_bt = QPushButton('8. Cycle Trims', self)
         self.cycle_trims_bt.setToolTip(
             'Cycle trims:\nStep 1) CH, QS and QTrims\nStep 2) CV')
         self.cycle_trims_bt.clicked.connect(
@@ -153,7 +162,7 @@ class CycleWindow(SiriusMainWindow):
         self.cycle_trims_bt.clicked.connect(self._set_lastcomm)
         self.cycle_trims_bt.setVisible(False)
 
-        self.cycle_bt = QPushButton('7. Cycle', self)
+        self.cycle_bt = QPushButton('8. Cycle', self)
         self.cycle_bt.setToolTip(
             'Check all configurations,\nenable triggers and run cycle.')
         self.cycle_bt.clicked.connect(
@@ -164,7 +173,7 @@ class CycleWindow(SiriusMainWindow):
         lb_rest_ti = QLabel('<h4>Restore Timing</h4>', self,
                             alignment=Qt.AlignCenter)
         self.restore_timing_bt = QPushButton(
-            '8. Restore Timing Initial State', self)
+            '9. Restore Timing Initial State', self)
         self.restore_timing_bt.setToolTip(
             'Restore timing initial state.')
         self.restore_timing_bt.clicked.connect(
@@ -186,21 +195,22 @@ class CycleWindow(SiriusMainWindow):
             QSpacerItem(1, 1, QSzPlcy.Ignored, QSzPlcy.Expanding), 4, 0, 1, 2)
         lay_commsts.addWidget(lb_prep_ps, 5, 0)
         lay_commsts.addWidget(self.psconn_led, 5, 1)
-        lay_commsts.addWidget(self.set_ps_opmode_slowref_bt, 6, 0, 1, 2)
-        lay_commsts.addWidget(self.set_ps_current_zero_bt, 7, 0, 1, 2)
-        lay_commsts.addWidget(self.prepare_ps_params_bt, 8, 0, 1, 2)
-        lay_commsts.addWidget(self.prepare_ps_opmode_bt, 9, 0, 1, 2)
+        lay_commsts.addWidget(self.set_ps_sofbmode_off_bt, 6, 0, 1, 2)
+        lay_commsts.addWidget(self.set_ps_opmode_slowref_bt, 7, 0, 1, 2)
+        lay_commsts.addWidget(self.set_ps_current_zero_bt, 8, 0, 1, 2)
+        lay_commsts.addWidget(self.prepare_ps_params_bt, 9, 0, 1, 2)
+        lay_commsts.addWidget(self.prepare_ps_opmode_bt, 10, 0, 1, 2)
         lay_commsts.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Ignored, QSzPlcy.Expanding), 10, 0, 1, 2)
-        lay_commsts.addWidget(lb_cycle, 11, 0, 1, 2)
-        lay_commsts.addWidget(self.cycle_trims_bt, 12, 0, 1, 2)
-        lay_commsts.addWidget(self.cycle_bt, 13, 0, 1, 2)
+            QSpacerItem(1, 1, QSzPlcy.Ignored, QSzPlcy.Expanding), 11, 0, 1, 2)
+        lay_commsts.addWidget(lb_cycle, 12, 0, 1, 2)
+        lay_commsts.addWidget(self.cycle_trims_bt, 13, 0, 1, 2)
+        lay_commsts.addWidget(self.cycle_bt, 14, 0, 1, 2)
         lay_commsts.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Ignored, QSzPlcy.Expanding), 14, 0, 1, 2)
-        lay_commsts.addWidget(lb_rest_ti, 15, 0, 1, 2)
-        lay_commsts.addWidget(self.restore_timing_bt, 16, 0, 1, 2)
+            QSpacerItem(1, 1, QSzPlcy.Ignored, QSzPlcy.Expanding), 15, 0, 1, 2)
+        lay_commsts.addWidget(lb_rest_ti, 16, 0, 1, 2)
+        lay_commsts.addWidget(self.restore_timing_bt, 17, 0, 1, 2)
         lay_commsts.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Ignored, QSzPlcy.Expanding), 17, 0, 1, 2)
+            QSpacerItem(1, 1, QSzPlcy.Ignored, QSzPlcy.Expanding), 18, 0, 1, 2)
         lay_commsts.setColumnStretch(0, 10)
         lay_commsts.setColumnStretch(1, 1)
         lay_commsts.setVerticalSpacing(12)
@@ -216,6 +226,8 @@ class CycleWindow(SiriusMainWindow):
         lay_lc.setStretch(1, 1)
 
         self.progress_list = QListWidget(self)
+        self.progress_list.setObjectName('progresslist')
+        self.progress_list.setStyleSheet('#progresslist{min-width:20em;}')
         self.progress_list.itemDoubleClicked.connect(self._open_ps_detail)
 
         self.progress_bar = MyProgressBar(self)
@@ -264,6 +276,9 @@ class CycleWindow(SiriusMainWindow):
             create_new_controller = self._ps_selection_changed
         elif control == 'timing':
             task_class = PrepareTiming
+            create_new_controller = self._ps_selection_changed
+        elif control == 'ps_sofbmode':
+            task_class = PreparePSSOFBMode
             create_new_controller = self._ps_selection_changed
         elif control == 'ps_om_slowref':
             task_class = PreparePSOpModeSlowRef
@@ -360,6 +375,7 @@ class CycleWindow(SiriusMainWindow):
     def _handle_buttons_enabled(self, enable, cycle=False):
         self.save_timing_bt.setEnabled(enable)
         self.prepare_timing_bt.setEnabled(enable)
+        self.set_ps_sofbmode_off_bt.setEnabled(enable)
         self.set_ps_opmode_slowref_bt.setEnabled(enable)
         self.set_ps_current_zero_bt.setEnabled(enable)
         self.prepare_ps_params_bt.setEnabled(enable)
@@ -458,13 +474,13 @@ class CycleWindow(SiriusMainWindow):
             has_sifam |= item.checkState(0) != 0
 
         if not has_sifam:
-            self.cycle_bt.setText('7. Cycle')
-            self.restore_timing_bt.setText('8. Restore Timing Initial State')
+            self.cycle_bt.setText('8. Cycle')
+            self.restore_timing_bt.setText('9. Restore Timing Initial State')
             self.cycle_trims_bt.setVisible(False)
             self._prepared['trims'] = True
         else:
-            self.cycle_bt.setText('8. Cycle')
-            self.restore_timing_bt.setText('9. Restore Timing Initial State')
+            self.cycle_bt.setText('9. Cycle')
+            self.restore_timing_bt.setText('10. Restore Timing Initial State')
             self.cycle_trims_bt.setVisible(True)
             self._prepared['trims'] = False
 
