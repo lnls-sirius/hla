@@ -7,7 +7,7 @@ from siriuspy.search import HLTimeSearch as _HLTimeSearch, \
 from siriuspy.csdev import Const
 from siriuspy.namesys import Filter, SiriusPVName as _PVName
 from .conn import TesterDCLink, TesterDCLinkFBP, TesterPS, TesterPSLinac, \
-    TesterPUKckr, TesterPUSept, DEFAULT_CAP_BANK_VOLT
+    TesterPSFBP, TesterPUKckr, TesterPUSept, DEFAULT_CAP_BANK_VOLT
 
 
 TIMEOUT_CHECK = 10
@@ -100,6 +100,8 @@ class CreateTesters(BaseTask):
                     t = TesterDCLinkFBP(dev)
                 elif 'bo-dclink' in _PSSearch.conv_psname_2_pstype(dev):
                     t = TesterDCLink(dev)
+                elif _PSSearch.conv_psname_2_psmodel(dev) == 'FBP':
+                    t = TesterPSFBP(dev)
                 elif devname.dis == 'PS':
                     t = TesterPS(dev)
                 elif devname.dis == 'PU' and 'Kckr' in devname.dev:
@@ -140,6 +142,22 @@ class CheckIntlk(BaseTask):
     def function(self):
         """Check interlocks."""
         self._check(method='check_intlk')
+
+
+class SetSOFBMode(BaseTask):
+    """Set PS SOFBMode."""
+
+    def function(self):
+        """Set PS SOFBMode."""
+        self._set(method='set_sofbmode', state=self._state)
+
+
+class CheckSOFBMode(BaseTask):
+    """Check PS SOFBMode."""
+
+    def function(self):
+        """Check PS SOFBMode."""
+        self._check(method='check_sofbmode', state=self._state)
 
 
 class SetOpModeSlowRef(BaseTask):
@@ -366,8 +384,7 @@ class TriggerTask(QThread):
             self.currentItem.emit(trig)
             pv = self._pvs_sp[trig]
             val = self.trig2val[trig]
-            # pv.value = val
-            print(pv.pvname, val)
+            pv.value = val
             self.itemDone.emit(trig, True)
 
     def _check(self):

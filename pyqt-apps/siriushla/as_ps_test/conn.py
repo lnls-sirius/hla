@@ -213,7 +213,7 @@ class TesterPS(_TesterPSBase):
         """Init."""
         super().__init__(device)
         self._pvs = dict()
-        for ppty in TesterPS.properties:
+        for ppty in self.properties:
             self._pvs[ppty] = _PV(
                 VACA_PREFIX + device + ':' + ppty,
                 connection_timeout=TIMEOUT_CONN)
@@ -249,6 +249,32 @@ class TesterPS(_TesterPSBase):
 
     def _cmp(self, value, target):
         return abs(value - target) < self.test_tol
+
+
+class TesterPSFBP(TesterPS):
+    """PS FBP Tester."""
+
+    properties = ['Reset-Cmd', 'IntlkSoft-Mon', 'IntlkHard-Mon',
+                  'OpMode-Sel', 'OpMode-Sts',
+                  'PwrState-Sel', 'PwrState-Sts',
+                  'Current-SP', 'CurrentRef-Mon', 'Current-Mon',
+                  'SOFBMode-Sel', 'SOFBMode-Sts']
+
+    def set_sofbmode(self, state='on'):
+        """Set SOFBMode."""
+        if state == 'on':
+            state = _PSC.OffOn.On
+        else:
+            state = _PSC.OffOn.Off
+        self._pvs['SOFBMode-Sel'].value = state
+
+    def check_sofbmode(self, state='on'):
+        """Check SOFBMode."""
+        if state == 'on':
+            state = _PSC.OffOn.On
+        else:
+            state = _PSC.OffOn.Off
+        return (self._pvs['SOFBMode-Sts'].value == state)
 
 
 class TesterPSLinac(_TesterBase):

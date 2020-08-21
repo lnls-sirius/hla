@@ -21,6 +21,7 @@ from siriushla.as_ti_control import HLTriggerDetailed
 from .tasks import CreateTesters, \
     CheckStatus, \
     ResetIntlk, CheckIntlk, \
+    SetSOFBMode, CheckSOFBMode, \
     SetOpModeSlowRef, CheckOpModeSlowRef, \
     SetPwrState, CheckPwrState, CheckInitOk, \
     SetPulse, CheckPulse, \
@@ -108,6 +109,11 @@ class PSTestWindow(SiriusMainWindow):
         self.dsbltrigger_ps_bt.clicked.connect(
             _part(self._set_check_trigger_state, 'PS', 'dsbl'))
 
+        self.setsofbmode_ps_bt = QPushButton('Turn Off SOFBMode', self)
+        self.setsofbmode_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
+        self.setsofbmode_ps_bt.clicked.connect(
+            _part(self._set_check_fbp_sofmode, 'off'))
+
         self.setslowref_ps_bt = QPushButton(
             'Set PS and DCLinks to SlowRef', self)
         self.setslowref_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
@@ -169,6 +175,7 @@ class PSTestWindow(SiriusMainWindow):
         lay_ps_comm.addWidget(QLabel('<h4>Prepare</h4>', self,
                                      alignment=Qt.AlignCenter))
         lay_ps_comm.addWidget(self.dsbltrigger_ps_bt)
+        lay_ps_comm.addWidget(self.setsofbmode_ps_bt)
         lay_ps_comm.addWidget(self.setslowref_ps_bt)
         lay_ps_comm.addWidget(self.currzero_ps_bt1)
         lay_ps_comm.addWidget(self.reset_ps_bt)
@@ -608,6 +615,28 @@ class PSTestWindow(SiriusMainWindow):
                   'Setting capacitor bank voltage...',
                   'Checking capacitor bank voltage...']
         tasks = [task0, task1, task2]
+        dlg = ProgressDialog(labels, tasks, self)
+        dlg.exec_()
+
+    def _set_check_fbp_sofmode(self, state):
+        self.ok_ps.clear()
+        self.nok_ps.clear()
+        devices = self._get_selected_ps()
+        devices = [dev for dev in devices
+                   if PSSearch.conv_psname_2_psmodel(dev) == 'FBP']
+        if not devices:
+            return
+
+        task0 = CreateTesters(devices, parent=self)
+        task1 = SetSOFBMode(devices, state=state, parent=self)
+        task2 = CheckSOFBMode(devices, state=state, parent=self)
+        task2.itemDone.connect(self._log)
+        tasks = [task0, task1, task2]
+
+        labels = ['Connecting to devices...',
+                  'Turning PS SOFBMode '+state+'...',
+                  'Checking PS SOFBMode '+state+'...']
+
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
