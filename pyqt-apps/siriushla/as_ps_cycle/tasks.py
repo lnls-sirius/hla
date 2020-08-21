@@ -4,7 +4,8 @@ import time as _time
 from datetime import datetime as _datetime
 from qtpy.QtCore import Signal, QThread
 from siriuspy.namesys import SiriusPVName as PVName
-from siriuspy.cycle import PSCycler, LinacPSCycler, CycleController
+from siriuspy.search import PSSearch
+from siriuspy.cycle import PSCycler, LinacPSCycler, PSCyclerFBP, CycleController
 
 
 TIMEOUT_CHECK = 10
@@ -117,6 +118,8 @@ class CreateCyclers(BaseTask):
             if psname not in BaseTask._cyclers:
                 if PVName(psname).sec == 'LI':
                     c = LinacPSCycler(psname)
+                elif PSSearch.conv_psname_2_psmodel(psname) == 'FBP':
+                    c = PSCyclerFBP(psname)
                 else:
                     c = PSCycler(psname)
                 BaseTask._cyclers[psname] = c
@@ -171,6 +174,23 @@ class PrepareTiming(BaseTask):
 
     def function(self):
         self._controller.prepare_timing()
+
+
+class PreparePSSOFBMode(BaseTask):
+    """Prepare power suplies to cycle."""
+
+    def __init__(self, **kwargs):
+        super().__init__(need_controller=True, **kwargs)
+
+    def size(self):
+        return self._controller.prepare_ps_sofbmode_size
+
+    def duration(self):
+        """Return task maximum duration."""
+        return self._controller.prepare_ps_sofbmode_max_duration
+
+    def function(self):
+        self._controller.prepare_pwrsupplies_sofbmode()
 
 
 class PreparePSOpModeSlowRef(BaseTask):
