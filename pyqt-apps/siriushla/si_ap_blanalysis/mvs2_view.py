@@ -2,9 +2,9 @@
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QLabel, QGridLayout, QGroupBox, \
-    QFormLayout
+    QHBoxLayout
 import qtawesome as qta
-from pydm.widgets import PyDMLabel
+from pydm.widgets import PyDMLabel, PyDMPushButton
 
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.namesys import SiriusPVName
@@ -19,6 +19,7 @@ class BeamLineMVS2View(SiriusMainWindow):
 
     def __init__(self, parent=None, prefix=VACA_PREFIX,
                  device_analysis='', device_cam=''):
+        """."""
         super().__init__(parent)
         self._prefix = prefix
         self._device_analysis = SiriusPVName(device_analysis[:-1])
@@ -31,8 +32,8 @@ class BeamLineMVS2View(SiriusMainWindow):
         self._setupUi()
 
     def _setupUi(self):
-        label = QLabel('<h3>'+self._title+'</h3>', self,
-                       alignment=Qt.AlignCenter)
+        label = QLabel(
+            '<h3>'+self._title+'</h3>', self, alignment=Qt.AlignCenter)
 
         self._process_image = SiriusProcessImage(
             self, device=self._device_analysis, orientation='H',
@@ -43,7 +44,7 @@ class BeamLineMVS2View(SiriusMainWindow):
         gbox_ctrl = QGroupBox('Analysis Control')
         lay_ctrl = QGridLayout(gbox_ctrl)
 
-        self._ld_enbl = QLabel('Start/Stop Acq.: ')
+        self._ld_enbl = QLabel('Start/Stop: ')
         self._sb_enbl = PyDMStateButton(
             gbox_ctrl, self._device_analysis+':MeasureCtrl-Sel')
         self._lb_enbl = PyDMLabel(
@@ -84,23 +85,44 @@ class BeamLineMVS2View(SiriusMainWindow):
         lay_ctrl.addWidget(self._sb_tgty, 6, 1)
         lay_ctrl.addWidget(self._lb_tgty, 7, 1)
 
-        gbox_sofb = QGroupBox('SOFB Bump')
+        gbox_sofb = QGroupBox('SOFB Bump [urad]')
         lay_sofb = QGridLayout(gbox_sofb)
 
-        self._ld_bmpx = QLabel('Ang. X: ')
-        self._lb_bmpx = SiriusLabel(
-            gbox_sofb, self._device_analysis+':SOFBBumpX-Mon')
-        self._ld_bmpy = QLabel('Ang. Y: ')
-        self._lb_bmpy = SiriusLabel(
-            gbox_sofb, self._device_analysis+':SOFBBumpY-Mon')
-        self._lb_bmpx.showUnits = True
-        self._lb_bmpy.showUnits = True
+        ldx = QLabel('X:')
+        ldy = QLabel('Y:')
+        ldd = QLabel('Delta')
+        lda = QLabel('Applied')
+        pre = self._device_analysis
+        lb_dbmpx = SiriusLabel(gbox_sofb, pre+':NeededDeltaBumpX-Mon')
+        lb_dbmpy = SiriusLabel(gbox_sofb, pre+':NeededDeltaBumpY-Mon')
+        lb_bmpx = SiriusLabel(gbox_sofb, pre+':AppliedBumpX-Mon')
+        lb_bmpy = SiriusLabel(gbox_sofb, pre+':AppliedBumpY-Mon')
+        pb_app = PyDMPushButton(
+            gbox_sofb, 'Apply', pressValue=1,
+            init_channel=pre+':ApplyBump-Cmd')
+        pb_app.showConfirmDialog = True
+        pb_app.confirmMessage = \
+            'This action will change the reference orbit used in SOFB.\n' +\
+            pb_app.confirmMessage
+        lb_app = PyDMLabel(
+            gbox_sofb, init_channel=pre+':ApplyStatus-Mon')
 
         lay_sofb.setAlignment(Qt.AlignTop)
-        lay_sofb.addWidget(self._ld_bmpx, 0, 0)
-        lay_sofb.addWidget(self._lb_bmpx, 0, 1)
-        lay_sofb.addWidget(self._ld_bmpy, 1, 0)
-        lay_sofb.addWidget(self._lb_bmpy, 1, 1)
+        lay_sofb.addWidget(ldd, 0, 1, alignment=Qt.AlignCenter)
+        lay_sofb.addWidget(lda, 0, 2, alignment=Qt.AlignCenter)
+        lay_sofb.addWidget(ldx, 1, 0, alignment=Qt.AlignLeft)
+        lay_sofb.addWidget(ldy, 2, 0, alignment=Qt.AlignLeft)
+        lay_sofb.addWidget(lb_dbmpx, 1, 1)
+        lay_sofb.addWidget(lb_dbmpy, 2, 1)
+        lay_sofb.addWidget(lb_bmpx, 1, 2)
+        lay_sofb.addWidget(lb_bmpy, 2, 2)
+        hbl = QHBoxLayout()
+        hbl.addStretch()
+        hbl.addWidget(pb_app)
+        hbl.addWidget(lb_app)
+        hbl.addStretch()
+        lay_sofb.addLayout(hbl, 3, 0, 1, 3)
+        lay_sofb.setRowStretch(4, 5)
 
         # Camera Acquisition Status
         gbox_acqsett = QGroupBox('Camera Acquisition Statuses')
@@ -162,15 +184,16 @@ class BeamLineMVS2View(SiriusMainWindow):
         lay_acqsett.addWidget(self._lb_numimgs, 8, 1)
         lay_acqsett.addWidget(self._ld_imgmode, 9, 0)
         lay_acqsett.addWidget(self._lb_imgmode, 9, 1)
+        lay_acqsett.setRowStretch(10, 20)
 
         self.cw = QWidget()
         self.cw.setStyleSheet('PyDMLabel{qproperty-alignment: AlignCenter;}')
         lay = QGridLayout(self.cw)
-        lay.addWidget(label, 0, 0, 1, 2)
-        lay.addWidget(self._process_image, 1, 0, 3, 1)
+        lay.addWidget(label, 0, 0, 1, 3)
+        lay.addWidget(self._process_image, 1, 0, 2, 1)
         lay.addWidget(gbox_ctrl, 1, 1)
         lay.addWidget(gbox_sofb, 2, 1)
-        lay.addWidget(gbox_acqsett, 3, 1)
+        lay.addWidget(gbox_acqsett, 1, 2, 2, 1)
         lay.setColumnStretch(0, 7)
         lay.setColumnStretch(1, 2)
         self.setCentralWidget(self.cw)
