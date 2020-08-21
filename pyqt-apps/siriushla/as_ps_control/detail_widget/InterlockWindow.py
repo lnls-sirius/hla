@@ -9,7 +9,6 @@ from siriuspy.search import PSSearch
 from siriuspy.pwrsupply.csdev import ETypes as _et
 from siriuspy.pwrsupply.csdev import get_ps_propty_database
 from siriushla.widgets import SiriusMainWindow, SiriusLedAlert, PyDMLed
-from .auxiliary_intlk_data import INTERLOCK_LABELS_Q1234
 
 
 class InterlockWidget(QWidget):
@@ -38,14 +37,10 @@ class InterlockListWidget(QWidget):
 
     def _setup_ui(self):
         key = self._interlock+'Labels-Cte'
-        # NOTE: this is a temporary solution to PS firmware migration
-        if self._devname.dev in ['Q1', 'Q2', 'Q3', 'Q4']:
-            labels = INTERLOCK_LABELS_Q1234[key]
-        else:
-            psmodel = PSSearch.conv_psname_2_psmodel(self._devname)
-            pstype = PSSearch.conv_psname_2_pstype(self._devname)
-            db = get_ps_propty_database(psmodel, pstype)
-            labels = db[key]['value']
+        psmodel = PSSearch.conv_psname_2_psmodel(self._devname)
+        pstype = PSSearch.conv_psname_2_pstype(self._devname)
+        db = get_ps_propty_database(psmodel, pstype)
+        labels = db[key]['value']
 
         lay = QGridLayout()
         for bit, label in enumerate(labels):
@@ -78,15 +73,18 @@ class InterlockWindow(SiriusMainWindow):
         else:
             self.setObjectName('ASApp')
 
-        if len(self._interlock) == 1:
-            intlktype = self._interlock[0].replace(
-                'Alarms', '').replace('Intlk', '')
-            auxlabel = (' Interlocks' if 'Intlk' in
-                        self._interlock[0] else ' Alarms')
-            self._intlkname = intlktype + auxlabel
-        else:
-            self._intlkname = 'Interlocks'
-        self.setWindowTitle(self._devname + ' ' + self._intlkname)
+        auxlabel = 'Interlocks'
+        if 'Soft' in self._interlock[0]:
+            self._intlktype = 'Soft'
+        elif 'Hard' in self._interlock[0]:
+            self._intlktype = 'Hard'
+        elif 'IIB' in self._interlock[0]:
+            self._intlktype = 'IIB'
+            if 'Alarms' in self._interlock[0]:
+                auxlabel = 'Alarms'
+
+        self._intlkname = self._intlktype + ' ' + auxlabel
+        self.setWindowTitle(self._devname + ' - ' + self._intlkname)
         self._setup_ui()
 
     def _setup_ui(self):
@@ -103,9 +101,11 @@ class InterlockWindow(SiriusMainWindow):
         else:
             self._tab_widget = QTabWidget(self)
             for intlk in self._interlock:
+                tab_lbl = intlk.replace(self._intlktype, '').replace(
+                    'Alarms', '').replace('Intlk', '')
                 wid = InterlockListWidget(parent=self, devname=self._devname,
                                           interlock=intlk)
-                self._tab_widget.addTab(wid, intlk)
+                self._tab_widget.addTab(wid, tab_lbl)
             lay.addWidget(self._tab_widget)
 
 
