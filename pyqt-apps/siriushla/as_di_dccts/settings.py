@@ -406,9 +406,10 @@ class DCCTSettingsDetails(QWidget):
         hlay_measperiod.addWidget(spinbox_MeasPeriod)
         hlay_measperiod.addWidget(label_MeasPeriod)
 
-        l_measupdateperiod = QLabel('Measured Period [s]: ', self)
-        label_MeasUpdatePeriod = PyDMLabel(
-            parent=self, init_channel=prefix+'MeasUpdatePeriod-Mon')
+        if mode == 'Normal':
+            l_measupdateperiod = QLabel('Measured Period [s]: ', self)
+            label_MeasUpdatePeriod = PyDMLabel(
+                parent=self, init_channel=prefix+'MeasUpdatePeriod-Mon')
 
         l_imped = QLabel('Impedance: ', self)
         enumcombobox_Imped = PyDMEnumComboBox(
@@ -453,7 +454,9 @@ class DCCTSettingsDetails(QWidget):
         flay_modesettings.setFormAlignment(Qt.AlignHCenter)
         flay_modesettings.addRow(l_smpcnt, hlay_smpcnt)
         flay_modesettings.addRow(l_measperiod, hlay_measperiod)
-        flay_modesettings.addRow(l_measupdateperiod, label_MeasUpdatePeriod)
+        if mode == 'Normal':
+            flay_modesettings.addRow(
+                l_measupdateperiod, label_MeasUpdatePeriod)
         flay_modesettings.addRow(l_imped, hlay_imped)
         flay_modesettings.addRow(l_offset, hlay_offset)
         flay_modesettings.addRow(l_rellvl, hlay_rellvl)
