@@ -13,11 +13,12 @@ from pydm.widgets import PyDMEnumComboBox, PyDMLabel, PyDMLineEdit,\
     PyDMPushButton, PyDMSpinbox
 
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
+from siriuspy.namesys import SiriusPVName
 from siriuspy.clientarch import ClientArchiver
 from siriushla.util import connect_window
 from siriushla.widgets import SiriusLabel, SiriusLedAlert, SiriusLedState,\
     SiriusSpinbox, PyDMStateButton, SiriusMainWindow, SiriusConnectionSignal
-from siriushla.as_di_dccts import DCCTMain
+from siriushla.as_di_dccts import DCCTMain, EffMonitor
 
 from .custom_widgets import MyGraph
 
@@ -29,7 +30,7 @@ class CurrLTWindow(SiriusMainWindow):
         """Initialize some widgets."""
         super(CurrLTWindow, self).__init__(parent)
         self.prefix = prefix
-        self.device = 'SI-Glob:AP-CurrInfo'
+        self.device = SiriusPVName('SI-Glob:AP-CurrInfo')
         self.device_prefix = self.prefix + self.device
         self.setObjectName('SIApp')
         self.setWindowTitle('SI Current Info: Current and Lifetime')
@@ -52,12 +53,24 @@ class CurrLTWindow(SiriusMainWindow):
         vlay.addWidget(self._setupLifetimeSettigsWidget())
         vlay.addWidget(self._setupGraphSettingsWidget())
 
+        self.pb_showeff = QPushButton('v', self)
+        self.pb_showeff.setObjectName('showeff')
+        self.pb_showeff.setToolTip('Show efficiency graph')
+        self.pb_showeff.setStyleSheet(
+            '#showeff{min-width:0.7em;max-width:0.7em;}')
+        self.pb_showeff.released.connect(self._handle_eff_vis)
+
+        self.eff_graph = EffMonitor(self, self.prefix, self.device.sec)
+        self.eff_graph.setVisible(False)
+
         cw = QWidget()
         self.setCentralWidget(cw)
         lay = QGridLayout(cw)
         lay.addWidget(self.label_title, 0, 0, 1, 2)
         lay.addLayout(self._setupGraphPanelLayout(), 1, 0)
         lay.addLayout(vlay, 1, 1)
+        lay.addWidget(self.pb_showeff, 2, 0, 1, 2, alignment=Qt.AlignRight)
+        lay.addWidget(self.eff_graph, 3, 0, 1, 2)
         lay.setColumnStretch(0, 6)
         lay.setColumnStretch(1, 1)
 
@@ -630,6 +643,17 @@ class CurrLTWindow(SiriusMainWindow):
         showingdcct = self._cb_ltfrom.currentText() == 'DCCT'
         self._curve_dcct_buff.setVisible(showingdcct and state)
         self._curve_bpm_buff.setVisible(not showingdcct and state)
+
+    def _handle_eff_vis(self):
+        vis = self.eff_graph.isVisible()
+        text = 'v' if vis else '^'
+        ttip = 'Show' if vis else 'Hide'
+        self.pb_showeff.setText(text)
+        self.pb_showeff.setToolTip(ttip+' efficiency graph')
+        self.eff_graph.setVisible(not vis)
+        self.sender().parent().adjustSize()
+        self.centralWidget().adjustSize()
+        self.adjustSize()
 
     @Slot(int)
     def _set_graph_timespan(self, value):
