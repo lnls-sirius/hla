@@ -5,7 +5,7 @@ import time as _time
 from functools import partial as _part
 
 from qtpy.QtGui import QColor, QPalette
-from qtpy.QtCore import Signal, QThread, Qt, QTimer
+from qtpy.QtCore import Signal, QThread, Qt, QTimer, QSize
 from qtpy.QtWidgets import QWidget, QGridLayout, QVBoxLayout, QHBoxLayout, \
     QPushButton, QLabel, QMessageBox, QGroupBox, QListWidget, QSpacerItem, \
     QListWidgetItem, QProgressBar, QSizePolicy as QSzPlcy
@@ -52,7 +52,7 @@ class CycleWindow(SiriusMainWindow):
         self._checked_accs = checked_accs
         # Flags
         self._is_preparing = ''
-        self._prepared = {
+        self._prepared_init_vals = {
             'timing': False,
             'ps_sofbmode': False,
             'ps_om_slowref': False,
@@ -60,6 +60,13 @@ class CycleWindow(SiriusMainWindow):
             'ps_params': False,
             'ps_om_cycle': False,
             'trims': True}
+        self._prepared = self._prepared_init_vals.copy()
+        self._icon_check = qta.icon('fa5s.check')
+        self._pixmap_check = self._icon_check.pixmap(
+            self._icon_check.actualSize(QSize(16, 16)))
+        self._icon_not = qta.icon('fa5s.times')
+        self._pixmap_not = self._icon_not.pixmap(
+            self._icon_not.actualSize(QSize(16, 16)))
         # Setup UI
         self._needs_update_setup = False
         self._setup_ui()
@@ -106,6 +113,9 @@ class CycleWindow(SiriusMainWindow):
             _part(self._run_task, 'timing'))
         self.prepare_timing_bt.clicked.connect(self._set_lastcomm)
 
+        self.prepare_timing_lb = QLabel(self)
+        self.prepare_timing_lb.setPixmap(self._pixmap_not)
+
         lb_prep_ps = QLabel('<h4>Prepare PS</h4>', self,
                             alignment=Qt.AlignCenter)
         self.psconn_led = PyDMLedMultiConn(self)
@@ -118,6 +128,9 @@ class CycleWindow(SiriusMainWindow):
             _part(self._run_task, 'ps_sofbmode'))
         self.set_ps_sofbmode_off_bt.clicked.connect(self._set_lastcomm)
 
+        self.set_ps_sofbmode_off_lb = QLabel(self)
+        self.set_ps_sofbmode_off_lb.setPixmap(self._pixmap_not)
+
         self.set_ps_opmode_slowref_bt = QPushButton(
             '4. Set PS OpMode to SlowRef', self)
         self.set_ps_opmode_slowref_bt.setToolTip(
@@ -126,6 +139,9 @@ class CycleWindow(SiriusMainWindow):
             _part(self._run_task, 'ps_om_slowref'))
         self.set_ps_opmode_slowref_bt.clicked.connect(self._set_lastcomm)
 
+        self.set_ps_opmode_slowref_lb = QLabel(self)
+        self.set_ps_opmode_slowref_lb.setPixmap(self._pixmap_not)
+
         self.set_ps_current_zero_bt = QPushButton(
             '5. Set PS current to zero', self)
         self.set_ps_current_zero_bt.setToolTip(
@@ -133,6 +149,9 @@ class CycleWindow(SiriusMainWindow):
         self.set_ps_current_zero_bt.clicked.connect(
             _part(self._run_task, 'ps_current'))
         self.set_ps_current_zero_bt.clicked.connect(self._set_lastcomm)
+
+        self.set_ps_current_zero_lb = QLabel(self)
+        self.set_ps_current_zero_lb.setPixmap(self._pixmap_not)
 
         self.prepare_ps_params_bt = QPushButton(
             '6. Prepare PS Parameters', self)
@@ -143,6 +162,9 @@ class CycleWindow(SiriusMainWindow):
             _part(self._run_task, 'ps_params'))
         self.prepare_ps_params_bt.clicked.connect(self._set_lastcomm)
 
+        self.prepare_ps_params_lb = QLabel(self)
+        self.prepare_ps_params_lb.setPixmap(self._pixmap_not)
+
         self.prepare_ps_opmode_bt = QPushButton(
             '7. Prepare PS OpMode', self)
         self.prepare_ps_opmode_bt.setToolTip(
@@ -150,6 +172,9 @@ class CycleWindow(SiriusMainWindow):
         self.prepare_ps_opmode_bt.clicked.connect(
             _part(self._run_task, 'ps_om_cycle'))
         self.prepare_ps_opmode_bt.clicked.connect(self._set_lastcomm)
+
+        self.prepare_ps_opmode_lb = QLabel(self)
+        self.prepare_ps_opmode_lb.setPixmap(self._pixmap_not)
 
         lb_cycle = QLabel('<h4>Cycle</h4>', self,
                           alignment=Qt.AlignCenter)
@@ -161,6 +186,10 @@ class CycleWindow(SiriusMainWindow):
             _part(self._run_task, 'trims'))
         self.cycle_trims_bt.clicked.connect(self._set_lastcomm)
         self.cycle_trims_bt.setVisible(False)
+
+        self.cycle_trims_lb = QLabel(self)
+        self.cycle_trims_lb.setPixmap(self._pixmap_check)
+        self.cycle_trims_lb.setVisible(False)
 
         self.cycle_bt = QPushButton('8. Cycle', self)
         self.cycle_bt.setToolTip(
@@ -180,6 +209,15 @@ class CycleWindow(SiriusMainWindow):
             _part(self._run_task, 'restore_timing'))
         self.restore_timing_bt.clicked.connect(self._set_lastcomm)
 
+        self._prepared_labels = {
+            'timing': self.prepare_timing_lb,
+            'ps_sofbmode': self.set_ps_sofbmode_off_lb,
+            'ps_om_slowref': self.set_ps_opmode_slowref_lb,
+            'ps_current': self.set_ps_current_zero_lb,
+            'ps_params': self.prepare_ps_params_lb,
+            'ps_om_cycle': self.prepare_ps_opmode_lb,
+            'trims': self.cycle_trims_lb}
+
         gb_commsts = QGroupBox()
         gb_commsts.setStyleSheet("""
             QPushButton{min-height:1.5em;}
@@ -189,31 +227,39 @@ class CycleWindow(SiriusMainWindow):
             QSpacerItem(1, 1, QSzPlcy.Ignored, QSzPlcy.Expanding), 0, 0, 1, 2)
         lay_commsts.addWidget(lb_prep_ti, 1, 0)
         lay_commsts.addWidget(self.ticonn_led, 1, 1)
-        lay_commsts.addWidget(self.save_timing_bt, 2, 0, 1, 2)
-        lay_commsts.addWidget(self.prepare_timing_bt, 3, 0, 1, 2)
+        lay_commsts.addWidget(self.save_timing_bt, 2, 0)
+        lay_commsts.addWidget(self.prepare_timing_bt, 3, 0)
+        lay_commsts.addWidget(self.prepare_timing_lb, 3, 1)
         lay_commsts.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Ignored, QSzPlcy.Expanding), 4, 0, 1, 2)
+            QSpacerItem(1, 1, QSzPlcy.Ignored, QSzPlcy.Expanding), 4, 0)
         lay_commsts.addWidget(lb_prep_ps, 5, 0)
         lay_commsts.addWidget(self.psconn_led, 5, 1)
-        lay_commsts.addWidget(self.set_ps_sofbmode_off_bt, 6, 0, 1, 2)
-        lay_commsts.addWidget(self.set_ps_opmode_slowref_bt, 7, 0, 1, 2)
-        lay_commsts.addWidget(self.set_ps_current_zero_bt, 8, 0, 1, 2)
-        lay_commsts.addWidget(self.prepare_ps_params_bt, 9, 0, 1, 2)
-        lay_commsts.addWidget(self.prepare_ps_opmode_bt, 10, 0, 1, 2)
+        lay_commsts.addWidget(self.set_ps_sofbmode_off_bt, 6, 0)
+        lay_commsts.addWidget(self.set_ps_sofbmode_off_lb, 6, 1)
+        lay_commsts.addWidget(self.set_ps_opmode_slowref_bt, 7, 0)
+        lay_commsts.addWidget(self.set_ps_opmode_slowref_lb, 7, 1)
+        lay_commsts.addWidget(self.set_ps_current_zero_bt, 8, 0)
+        lay_commsts.addWidget(self.set_ps_current_zero_lb, 8, 1)
+        lay_commsts.addWidget(self.prepare_ps_params_bt, 9, 0)
+        lay_commsts.addWidget(self.prepare_ps_params_lb, 9, 1)
+        lay_commsts.addWidget(self.prepare_ps_opmode_bt, 10, 0)
+        lay_commsts.addWidget(self.prepare_ps_opmode_lb, 10, 1)
         lay_commsts.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Ignored, QSzPlcy.Expanding), 11, 0, 1, 2)
-        lay_commsts.addWidget(lb_cycle, 12, 0, 1, 2)
-        lay_commsts.addWidget(self.cycle_trims_bt, 13, 0, 1, 2)
-        lay_commsts.addWidget(self.cycle_bt, 14, 0, 1, 2)
+            QSpacerItem(1, 1, QSzPlcy.Ignored, QSzPlcy.Expanding), 11, 0)
+        lay_commsts.addWidget(lb_cycle, 12, 0)
+        lay_commsts.addWidget(self.cycle_trims_bt, 13, 0)
+        lay_commsts.addWidget(self.cycle_trims_lb, 13, 1)
+        lay_commsts.addWidget(self.cycle_bt, 14, 0)
         lay_commsts.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Ignored, QSzPlcy.Expanding), 15, 0, 1, 2)
-        lay_commsts.addWidget(lb_rest_ti, 16, 0, 1, 2)
-        lay_commsts.addWidget(self.restore_timing_bt, 17, 0, 1, 2)
+            QSpacerItem(1, 1, QSzPlcy.Ignored, QSzPlcy.Expanding), 15, 0)
+        lay_commsts.addWidget(lb_rest_ti, 16, 0)
+        lay_commsts.addWidget(self.restore_timing_bt, 17, 0)
         lay_commsts.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Ignored, QSzPlcy.Expanding), 18, 0, 1, 2)
+            QSpacerItem(1, 1, QSzPlcy.Ignored, QSzPlcy.Expanding), 18, 0)
         lay_commsts.setColumnStretch(0, 10)
         lay_commsts.setColumnStretch(1, 1)
         lay_commsts.setVerticalSpacing(12)
+        lay_commsts.setHorizontalSpacing(6)
 
         self.label_lastcomm = QLabel('Last Command: ', self)
         self.clearhist_bt = QPushButton('Clear', self)
@@ -390,6 +436,8 @@ class CycleWindow(SiriusMainWindow):
                     cycle = all(self._prepared.values())
                 self._handle_buttons_enabled(True, cycle=cycle)
 
+            self._handle_stslabels_content()
+
             self.progress_list.addItem(item)
             self.progress_list.scrollToBottom()
 
@@ -405,6 +453,11 @@ class CycleWindow(SiriusMainWindow):
         self.cycle_bt.setEnabled(cycle)
         self.restore_timing_bt.setEnabled(enable)
         self.clearhist_bt.setEnabled(enable)
+
+    def _handle_stslabels_content(self):
+        for prep, value in self._prepared.items():
+            pixmap = self._pixmap_check if value else self._pixmap_not
+            self._prepared_labels[prep].setPixmap(pixmap)
 
     def _set_lastcomm(self):
         sender_text = self.sender().text()
@@ -467,6 +520,8 @@ class CycleWindow(SiriusMainWindow):
                 state2change = item2check.checkState(0)
                 if state2change != state2set:
                     item2check.setCheckState(0, state2set)
+
+        self._prepared.update(self._prepared_init_vals)
         self._needs_update_setup = True
 
     def _update_setup(self):
@@ -498,12 +553,16 @@ class CycleWindow(SiriusMainWindow):
             self.cycle_bt.setText('8. Cycle')
             self.restore_timing_bt.setText('9. Restore Timing Initial State')
             self.cycle_trims_bt.setVisible(False)
+            self.cycle_trims_lb.setVisible(False)
             self._prepared['trims'] = True
         else:
             self.cycle_bt.setText('9. Cycle')
             self.restore_timing_bt.setText('10. Restore Timing Initial State')
             self.cycle_trims_bt.setVisible(True)
+            self.cycle_trims_lb.setVisible(True)
             self._prepared['trims'] = False
+
+        self._handle_stslabels_content()
 
     # --- auxiliary checks ---
 
