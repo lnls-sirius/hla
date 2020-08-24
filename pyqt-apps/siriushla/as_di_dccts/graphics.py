@@ -285,6 +285,7 @@ class EffMonitor(QWidget):
         self.graph.showLegend = False
         self.graph.showXGrid = True
         self.graph.showYGrid = True
+        self.graph.maxRedrawRate = 2
         self.graph.plotItem.showButtons()
         self.graph.setLabels(left='Efficiency [%]')
         self.graph.addYChannel(
