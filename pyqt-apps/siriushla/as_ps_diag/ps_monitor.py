@@ -5,12 +5,12 @@ from qtpy.QtWidgets import QWidget, QGroupBox, QGridLayout, QLabel
 
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.search import PSSearch
-from siriuspy.pwrsupply.csdev import Const as _PSc
 from siriuspy.diagsys.psdiag.csdev import get_ps_diag_status_labels
+from siriuspy.diagsys.pudiag.csdev import get_pu_diag_status_labels
 from siriuspy.namesys import SiriusPVName
 
 from siriushla.sirius_application import SiriusApplication
-from siriushla.widgets import SiriusMainWindow, PyDMLedMultiChannel
+from siriushla.widgets import SiriusMainWindow, SiriusLedAlert
 from siriushla.widgets.dialog.pv_status_dialog import StatusDetailDialog
 from siriushla.util import run_newprocess, get_appropriate_color, \
     get_monitor_icon
@@ -43,7 +43,7 @@ class PSMonitor(SiriusMainWindow):
 
         layout.addWidget(label, 0, 0, 1, 2)
         for sec in ['LI', 'TB', 'BO', 'TS', 'SI']:
-            status = self._make_magnets_groupbox(sec)
+            status = self._make_ps_groupbox(sec)
             if sec == 'LI':
                 layout.addWidget(status, 1, 0)
             elif sec == 'TB':
@@ -61,7 +61,7 @@ class PSMonitor(SiriusMainWindow):
                 min-width: 1.1em; max-width: 1.1em;}
         """)
 
-    def _make_magnets_groupbox(self, sec):
+    def _make_ps_groupbox(self, sec):
         status = QGroupBox(sec, self)
         status_lay = QGridLayout()
         status_lay.setAlignment(Qt.AlignTop)
@@ -84,30 +84,6 @@ class PSMonitor(SiriusMainWindow):
             if sec != 'SI':
                 f['sec'] = sec
             return PSSearch.get_psnames(filters=f)
-
-        def get_ch2vals(sec, name):
-            if sec == 'LI':
-                return {self._prefix+name+':PwrState-Sts': 1,
-                        self._prefix+name+':StatusIntlk-Mon': {'value': 64,
-                                                               'comp': 'lt'}}
-            elif name.dis == 'PU':
-                ch2vals = {
-                    self._prefix+name+':PwrState-Sts': _PSc.OffOn.On,
-                    self._prefix+name+':Pulse-Sts': _PSc.OffOn.On,
-                    self._prefix+name+':Intlk1-Mon': 1,
-                    self._prefix+name+':Intlk2-Mon': 1,
-                    self._prefix+name+':Intlk3-Mon': 1,
-                    self._prefix+name+':Intlk4-Mon': 1,
-                    self._prefix+name+':Intlk5-Mon': 1,
-                    self._prefix+name+':Intlk6-Mon': 1,
-                    self._prefix+name+':Intlk7-Mon': 1,
-                    self._prefix+name+':Intlk8-Mon': 1}
-                if 'Sept' in name:
-                    del ch2vals[self._prefix+name+':Intlk8-Mon']
-                return ch2vals
-
-            else:
-                return {self._prefix+name+':DiagStatus-Mon': 0}
 
         def update_gridpos(row, col, col_count, offset=0):
             new_col = offset if col == offset+col_count-1 else col+1
@@ -218,7 +194,7 @@ class PSMonitor(SiriusMainWindow):
                     grid.addWidget(QLabel(label, self), 0, 0, 1, 4)
                     aux_row, aux_col, offset = 1, 0, 0
                 for name in psnames:
-                    led = MyLed(self, get_ch2vals(sec, name))
+                    led = MyLed(self, self._prefix+name+':DiagStatus-Mon')
                     led.setObjectName(name)
                     led.setToolTip(name)
                     grid.addWidget(led, aux_row, aux_col)
@@ -254,7 +230,7 @@ class PSMonitor(SiriusMainWindow):
                             and aux_col in (0, 3):
                         grid.addWidget(QLabel(''), aux_row, aux_col)
                         aux_col += 1
-                    led = MyLed(self, get_ch2vals(sec, name))
+                    led = MyLed(self, self._prefix+name+':DiagStatus-Mon')
                     led.setObjectName(name)
                     led.setToolTip(name)
                     grid.addWidget(led, aux_row, aux_col)
@@ -273,7 +249,7 @@ class PSMonitor(SiriusMainWindow):
         return status
 
 
-class MyLed(PyDMLedMultiChannel):
+class MyLed(SiriusLedAlert):
 
     def mouseDoubleClickEvent(self, _):
         """Reimplement mouseDoubleClickEvent."""
@@ -286,12 +262,14 @@ class MyLed(PyDMLedMultiChannel):
     def mousePressEvent(self, event):
         """Reimplement mousePressEvent."""
         pvn = SiriusPVName(self.channels()[0].address)
-        if pvn.sec != 'LI' and pvn.dis == 'PS':
-            if event.button() == Qt.RightButton:
+        if event.button() == Qt.RightButton:
+            if pvn.dis == 'PS':
                 labels = get_ps_diag_status_labels(pvn.device_name)
-                self.msg = StatusDetailDialog(
-                    parent=self.parent(), pvname=pvn, labels=labels)
-                self.msg.open()
+            elif pvn.dis == 'PU':
+                labels = get_pu_diag_status_labels()
+            self.msg = StatusDetailDialog(
+                parent=self.parent(), pvname=pvn, labels=labels)
+            self.msg.open()
         super().mousePressEvent(event)
 
 
