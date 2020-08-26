@@ -8,7 +8,7 @@ from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.namesys import SiriusPVName
 from siriushla.widgets import SiriusMainWindow
 from siriushla import util
-from siriushla.as_di_dccts.graphics import DCCTMonitor, BORampEffMonitor
+from siriushla.as_di_dccts.graphics import DCCTMonitor, EffMonitor
 from siriushla.as_di_dccts.settings import DCCTSettings
 
 
@@ -28,10 +28,7 @@ class DCCTMain(SiriusMainWindow):
         self.prefix = prefix
         self.device = SiriusPVName(device)
         self.section = self.device.sec
-        if 'BO' in device:
-            self.setObjectName('BOApp')
-        else:
-            self.setObjectName('SIApp')
+        self.setObjectName(self.section+'App')
         self.setWindowTitle(device)
         self.setWindowIcon(
             qta.icon('mdi.current-dc',
@@ -56,9 +53,28 @@ class DCCTMain(SiriusMainWindow):
         self.curr_graph.layout().addWidget(self.settings, 0, 1, 2, 1)
         self.settings.layout().setContentsMargins(0, 0, 0, 0)
 
-        if 'BO' in self.device:
-            self.ramfeff_graph = BORampEffMonitor(self, self.prefix)
-            lay.addWidget(self.ramfeff_graph, 2, 0, 1, 2)
+        self.pb_showeff = QPushButton('v', self)
+        self.pb_showeff.setObjectName('showeff')
+        self.pb_showeff.setToolTip('Show efficiency graph')
+        self.pb_showeff.setStyleSheet(
+            '#showeff{min-width:0.7em;max-width:0.7em;}')
+        self.pb_showeff.released.connect(self._handle_eff_vis)
+        lay.addWidget(self.pb_showeff, 2, 0, 1, 2, alignment=Qt.AlignRight)
+
+        self.eff_graph = EffMonitor(self, self.prefix, self.section)
+        self.eff_graph.setVisible(False)
+        lay.addWidget(self.eff_graph, 3, 0, 1, 2)
+
+    def _handle_eff_vis(self):
+        vis = self.eff_graph.isVisible()
+        text = 'v' if vis else '^'
+        ttip = 'Show' if vis else 'Hide'
+        self.pb_showeff.setText(text)
+        self.pb_showeff.setToolTip(ttip+' efficiency graph')
+        self.eff_graph.setVisible(not vis)
+        self.sender().parent().adjustSize()
+        self.centralWidget().adjustSize()
+        self.adjustSize()
 
 
 class SISelectDCCT(QWidget):

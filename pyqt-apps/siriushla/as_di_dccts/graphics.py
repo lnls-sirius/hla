@@ -253,15 +253,20 @@ class DCCTMonitor(QWidget):
         self.resetBuffer()
 
 
-class BORampEffMonitor(QWidget):
-    """Booster Ramp Efficiency Graph."""
+class EffMonitor(QWidget):
+    """Efficiency Graph."""
 
-    def __init__(self, parent=None, prefix=''):
+    def __init__(self, parent=None, prefix='', section=''):
         """Initialize object."""
         super().__init__(parent)
         self.prefix = prefix
-        self.device = 'BO-35D:DI-DCCT'
-        self.dcct_prefix = prefix + self.device + ':'
+        self.section = section
+        if self.section == 'BO':
+            self._label = 'Booster Ramp'
+            self._pvname = 'BO-Glob:AP-CurrInfo:RampEff-Mon'
+        else:
+            self._label = 'Injection'
+            self._pvname = 'SI-Glob:AP-CurrInfo:InjEff-Mon'
         self._wavEff = list()
         self._inj_idx = 0
         self._eje_idx = -1
@@ -269,7 +274,7 @@ class BORampEffMonitor(QWidget):
         self._setupUi()
 
     def _setupUi(self):
-        label = QLabel('<h3>Booster Ramp Efficiency</h3>', self,
+        label = QLabel('<h3>'+self._label+' Efficiency</h3>', self,
                        alignment=Qt.AlignCenter)
 
         self.graph = SiriusTimePlot(self)
@@ -280,42 +285,44 @@ class BORampEffMonitor(QWidget):
         self.graph.showLegend = False
         self.graph.showXGrid = True
         self.graph.showYGrid = True
+        self.graph.maxRedrawRate = 2
         self.graph.plotItem.showButtons()
-        self.graph.setLabels(left='Ramp Efficiency [%]')
+        self.graph.setLabels(left='Efficiency [%]')
         self.graph.addYChannel(
-            y_channel='BO-Glob:AP-CurrInfo:RampEff-Mon', name='Efficiency',
+            y_channel=self._pvname, name='Efficiency',
             color='blue', lineWidth=2, lineStyle=Qt.SolidLine,
             symbol='o', symbolSize=2)
         leftAxis = self.graph.getAxis('left')
         leftAxis.setStyle(autoExpandTextSpace=False, tickTextWidth=25)
         self.curve = self.graph.curveAtIndex(0)
 
-        l_injcurr = QLabel('Injected:', self)
-        self.label_injcurr = PyDMLabel(
-            parent=self, init_channel='BO-Glob:AP-CurrInfo:Current150MeV-Mon')
-        self.label_injcurr.showUnits = True
-
-        l_ejecurr = QLabel('Ejected:', self)
-        self.label_ejecurr = PyDMLabel(
-            parent=self, init_channel='BO-Glob:AP-CurrInfo:Current3GeV-Mon')
-        self.label_ejecurr.showUnits = True
-
-        l_rampeff = QLabel('<h4>Efficiency:</h4>', self)
-        self.label_rampeff = PyDMLabel(
-            parent=self, init_channel='BO-Glob:AP-CurrInfo:RampEff-Mon')
-        self.label_rampeff.showUnits = True
+        l_eff = QLabel('<h4>Efficiency:</h4>', self)
+        self.label_eff = PyDMLabel(self, self._pvname)
+        self.label_eff.showUnits = True
 
         hbox_eff = QHBoxLayout()
         hbox_eff.addStretch()
-        hbox_eff.addWidget(l_rampeff)
-        hbox_eff.addWidget(self.label_rampeff)
+        hbox_eff.addWidget(l_eff)
+        hbox_eff.addWidget(self.label_eff)
         hbox_eff.addStretch()
-        hbox_eff.addWidget(l_injcurr)
-        hbox_eff.addWidget(self.label_injcurr)
-        hbox_eff.addStretch()
-        hbox_eff.addWidget(l_ejecurr)
-        hbox_eff.addWidget(self.label_ejecurr)
-        hbox_eff.addStretch()
+
+        if self.section == 'BO':
+            l_injcurr = QLabel('Injected:', self)
+            self.label_injcurr = PyDMLabel(
+                self, 'BO-Glob:AP-CurrInfo:Current150MeV-Mon')
+            self.label_injcurr.showUnits = True
+
+            l_ejecurr = QLabel('Ejected:', self)
+            self.label_ejecurr = PyDMLabel(
+                self, 'BO-Glob:AP-CurrInfo:Current3GeV-Mon')
+            self.label_ejecurr.showUnits = True
+
+            hbox_eff.addWidget(l_injcurr)
+            hbox_eff.addWidget(self.label_injcurr)
+            hbox_eff.addStretch()
+            hbox_eff.addWidget(l_ejecurr)
+            hbox_eff.addWidget(self.label_ejecurr)
+            hbox_eff.addStretch()
 
         lay = QVBoxLayout()
         lay.addWidget(label)
@@ -350,8 +357,7 @@ if __name__ == '__main__':
     app = SiriusApplication()
     if args.option == 'rampeff':
         BORampEffWindow = _create_window_from_widget(
-            BORampEffMonitor, 'Booster Ramp Efficiency',
-            is_main=True)
+            EffMonitor, 'Booster Ramp Efficiency', is_main=True, section='BO')
         window = BORampEffWindow(None, prefix=_VACA_PREFIX)
     else:
         device = 'BO-35D:DI-DCCT'
