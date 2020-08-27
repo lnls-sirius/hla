@@ -160,8 +160,8 @@ class TLControlWindow(BaseWindow):
         """Override keyPressEvent."""
         super().keyPressEvent(event)
         if self.tl == 'tb':
-            self.slith.updateSlitWidget()
-            self.slitv.updateSlitWidget()
+            self.slith.updateDevWidget()
+            self.slitv.updateDevWidget()
 
 
 # import pyaccel as _pyaccel
