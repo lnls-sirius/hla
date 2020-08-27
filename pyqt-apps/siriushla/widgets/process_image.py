@@ -90,9 +90,9 @@ class SiriusProcessImage(QWidget):
             gl.addWidget(gb_pos, 0, 2, 2, 1)
             gl.addWidget(gb_posi, 1, 0)
             gl.addWidget(gb_size, 1, 1)
-        gl.setColumnStretch(0, 5)
-        gl.setColumnStretch(1, 5)
-        gl.setColumnStretch(2, 1)
+            gl.setColumnStretch(0, 5)
+            gl.setColumnStretch(1, 5)
+            gl.setColumnStretch(2, 1)
 
     def _get_config_widget(self, parent):
         gb_pos = QGroupBox('Image Processing ', parent)
