@@ -3,12 +3,14 @@
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QGridLayout, \
     QLabel, QTabWidget
+from pydm.widgets import PyDMLabel
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.search import PSSearch
 from siriuspy.pwrsupply.csdev import ETypes as _et
 from siriuspy.pwrsupply.csdev import get_ps_propty_database
 from siriushla.widgets import SiriusMainWindow, SiriusLedAlert, PyDMLed
+from .auxiliary_intlk_data import INTERLOCK_LABELS_BOQFDCLINKS
 
 
 class InterlockWidget(QWidget):
@@ -39,14 +41,23 @@ class InterlockListWidget(QWidget):
         key = self._interlock+'Labels-Cte'
         psmodel = PSSearch.conv_psname_2_psmodel(self._devname)
         pstype = PSSearch.conv_psname_2_pstype(self._devname)
-        db = get_ps_propty_database(psmodel, pstype)
-        labels = db[key]['value']
+        # NOTE: this is a temporary solution for PS firmware migration
+        if psmodel == 'FAC_2S_ACDC':
+            labels = INTERLOCK_LABELS_BOQFDCLINKS[key]
+        else:
+            db = get_ps_propty_database(psmodel, pstype)
+            labels = db[key]['value']
 
+        ch = _VACA_PREFIX+self._devname+':'+self._interlock+'-Mon'
         lay = QGridLayout()
+        hbox = QHBoxLayout()
+        hbox.addWidget(QLabel('Value: ', self))
+        hbox.addWidget(PyDMLabel(self, ch))
+        hbox.addStretch()
+        lay.addLayout(hbox, 0, 0, 1, len(labels)/8)
         for bit, label in enumerate(labels):
             # Add led and label to layout
-            ch = _VACA_PREFIX+self._devname+':'+self._interlock+'-Mon'
-            line = bit % 8
+            line = (bit % 8) + 1
             column = int(bit / 8)
             lay.addWidget(InterlockWidget(self, ch, bit, label), line, column)
         self.setLayout(lay)

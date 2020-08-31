@@ -273,7 +273,7 @@ class PSDetailWidget(QWidget):
         self.hard_intlk_led = SiriusLedAlert(
             parent=self, init_channel=self._prefixed_psname + ":IntlkHard-Mon")
 
-        # NOTE: this is a temporary solution to PS firmware migration
+        # NOTE: this is a temporary solution for PS firmware migration
         if self._psmodel not in ('FAC_2P4S_ACDC', 'FAC_2P4S_DCDC',
                                  'FAC_2S_ACDC', 'FAC_2S_DCDC'):
             iib_intlks = [k.replace('Labels-Cte', '') for k in self._db
