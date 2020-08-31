@@ -273,42 +273,37 @@ class PSDetailWidget(QWidget):
         self.hard_intlk_led = SiriusLedAlert(
             parent=self, init_channel=self._prefixed_psname + ":IntlkHard-Mon")
 
-        # NOTE: this is a temporary solution for PS firmware migration
-        if self._psmodel not in ('FAC_2P4S_ACDC', 'FAC_2P4S_DCDC',
-                                 'FAC_2S_ACDC', 'FAC_2S_DCDC'):
-            iib_intlks = [k.replace('Labels-Cte', '') for k in self._db
-                          if re.match('IntlkIIB.*Labels-Cte', k)]
-            if iib_intlks:
-                self.iib_label = QLabel('IIB', self, alignment=Qt.AlignCenter)
-                self.iib_intlk_bt = QPushButton(
-                    qta.icon('fa5s.list-ul'), '', self)
-                self.iib_intlk_bt.setObjectName('iib_intlk_bt')
-                self.iib_intlk_bt.setStyleSheet("""
-                    #iib_intlk_bt{
-                        min-width:25px;max-width:25px;icon-size:20px;
-                    }""")
-                util.connect_window(
-                    self.iib_intlk_bt, InterlockWindow, self,
-                    devname=self._psname, interlock=iib_intlks)
-                self.iib_intlk_led = PyDMLedMultiChannel(
-                    self, {self._prefixed_psname+":"+intlk+"-Mon": 0
-                           for intlk in iib_intlks})
+        iib_intlks = [k.replace('Labels-Cte', '') for k in self._db
+                      if re.match('IntlkIIB.*Labels-Cte', k)]
+        if iib_intlks:
+            self.iib_label = QLabel('IIB', self, alignment=Qt.AlignCenter)
+            self.iib_intlk_bt = QPushButton(
+                qta.icon('fa5s.list-ul'), '', self)
+            self.iib_intlk_bt.setObjectName('iib_intlk_bt')
+            self.iib_intlk_bt.setStyleSheet(
+                "#iib_intlk_bt{min-width:25px;max-width:25px;icon-size:20px;}")
+            util.connect_window(
+                self.iib_intlk_bt, InterlockWindow, self,
+                devname=self._psname, interlock=iib_intlks)
+            self.iib_intlk_led = PyDMLedMultiChannel(
+                self, {self._prefixed_psname+":"+intlk+"-Mon": 0
+                       for intlk in iib_intlks})
 
-            iib_alarms = [k.replace('Labels-Cte', '') for k in self._db
-                          if re.match('AlarmsIIB.*Labels-Cte', k)]
-            if iib_alarms:
-                self.alarm_label = QLabel(
-                    'Alarms', self, alignment=Qt.AlignCenter)
-                self.alarm_bt = QPushButton(qta.icon('fa5s.list-ul'), '', self)
-                self.alarm_bt.setObjectName('alarm_bt')
-                self.alarm_bt.setStyleSheet(
-                    '#alarm_bt{min-width:25px;max-width:25px;icon-size:20px;}')
-                util.connect_window(
-                    self.alarm_bt, InterlockWindow, self,
-                    devname=self._psname, interlock=iib_alarms)
-                self.alarm_led = PyDMLedMultiChannel(
-                    self, {self._prefixed_psname+":"+alarm+"-Mon": 0
-                           for alarm in iib_alarms})
+        iib_alarms = [k.replace('Labels-Cte', '') for k in self._db
+                      if re.match('AlarmsIIB.*Labels-Cte', k)]
+        if iib_alarms:
+            self.alarm_label = QLabel(
+                'Alarms', self, alignment=Qt.AlignCenter)
+            self.alarm_bt = QPushButton(qta.icon('fa5s.list-ul'), '', self)
+            self.alarm_bt.setObjectName('alarm_bt')
+            self.alarm_bt.setStyleSheet(
+                '#alarm_bt{min-width:25px;max-width:25px;icon-size:20px;}')
+            util.connect_window(
+                self.alarm_bt, InterlockWindow, self,
+                devname=self._psname, interlock=iib_alarms)
+            self.alarm_led = PyDMLedMultiChannel(
+                self, {self._prefixed_psname+":"+alarm+"-Mon": 0
+                       for alarm in iib_alarms})
 
         self.reset_bt = PyDMPushButton(
             parent=self, icon=qta.icon('fa5s.sync'), pressValue=1,
@@ -326,16 +321,14 @@ class PSDetailWidget(QWidget):
         layout.addWidget(self.hard_intlk_bt, 1, 0)
         layout.addWidget(self.hard_label, 1, 1)
         layout.addWidget(self.hard_intlk_led, 1, 2)
-        if self._psmodel not in ('FAC_2P4S_ACDC', 'FAC_2P4S_DCDC',
-                                 'FAC_2S_ACDC', 'FAC_2S_DCDC'):
-            if iib_intlks:
-                layout.addWidget(self.iib_intlk_bt, 2, 0)
-                layout.addWidget(self.iib_label, 2, 1)
-                layout.addWidget(self.iib_intlk_led, 2, 2)
-            if iib_alarms:
-                layout.addWidget(self.alarm_bt, 3, 0)
-                layout.addWidget(self.alarm_label, 3, 1)
-                layout.addWidget(self.alarm_led, 3, 2)
+        if iib_intlks:
+            layout.addWidget(self.iib_intlk_bt, 2, 0)
+            layout.addWidget(self.iib_label, 2, 1)
+            layout.addWidget(self.iib_intlk_led, 2, 2)
+        if iib_alarms:
+            layout.addWidget(self.alarm_bt, 3, 0)
+            layout.addWidget(self.alarm_label, 3, 1)
+            layout.addWidget(self.alarm_led, 3, 2)
         layout.addWidget(self.reset_bt, 4, 2)
         return layout
 
