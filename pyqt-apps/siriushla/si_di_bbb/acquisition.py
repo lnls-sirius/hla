@@ -1,20 +1,21 @@
 """BbB Acquisition Module."""
+import os as _os
 
 from qtpy.QtCore import Qt
-from qtpy.QtGui import QColor
+from qtpy.QtGui import QColor, QPixmap
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, \
     QGroupBox, QTabWidget, QVBoxLayout, QSizePolicy as QSzPlcy, \
     QSpacerItem
 
 from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox, \
     PyDMLineEdit
-
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
-from siriushla.widgets import SiriusFrame
+
+from ..widgets import SiriusFrame, PyDMStateButton, SiriusLedState
 from .custom_widgets import WfmGraph
 
 
-class _BbBAcqBase(QTabWidget):
+class _BbBAcqBase(QWidget):
     """BbB Acquisition Base Widget."""
 
     TYPE = ''
@@ -29,8 +30,12 @@ class _BbBAcqBase(QTabWidget):
         self._setupUi()
 
     def _setupUi(self):
-        self.addTab(self._setupControlsWidget(), 'Controls')
-        self.addTab(self._setupWaveformsWidget(), 'Waveforms')
+        ctrl_wid = self._setupControlsWidget()
+        wfm_wid = self._setupWaveformsWidget()
+
+        lay = QGridLayout(self)
+        lay.addWidget(ctrl_wid, 0, 0)
+        lay.addWidget(wfm_wid, 0, 1)
 
     def _setupControlsWidget(self):
         self._ld_growenbl = QLabel('Grow/Damp Enable', self)
@@ -42,31 +47,35 @@ class _BbBAcqBase(QTabWidget):
         self._sb_down.showStepExponent = False
 
         self._ld_rawdata = QLabel('Raw Data', self)
-        self._cb_rawdata = PyDMEnumComboBox(
+        self._cb_rawdata = PyDMStateButton(
             self, self.dev_pref+':'+self.TYPE+'_DUMP')
 
-        self._ld_acqtime = QLabel('Acquisition Time [ms]', self)
+        self._ld_acqtime = QLabel('Acquisition Time', self)
         self._sb_acqtime = PyDMSpinbox(
             self, self.dev_pref+':'+self.TYPE+'_ACQTIME')
         self._sb_acqtime.showStepExponent = False
+        self._sb_acqtime.showUnits = True
 
-        self._ld_holdoff = QLabel('Hold-Off Time [ms]', self)
+        self._ld_holdoff = QLabel('Hold-Off Time', self)
         self._sb_holdoff = PyDMSpinbox(
             self, self.dev_pref+':'+self.TYPE+'_HOLDTIME')
         self._sb_holdoff.showStepExponent = False
+        self._sb_holdoff.showUnits = True
 
-        self._ld_posttrg = QLabel('Post Trigger [ms]', self)
+        self._ld_posttrg = QLabel('Post Trigger', self)
         self._sb_posttrg = PyDMSpinbox(
             self, self.dev_pref+':'+self.TYPE+'_POSTTIME')
         self._sb_posttrg.showStepExponent = False
+        self._sb_posttrg.showUnits = True
         self._fr_posttrg = SiriusFrame(
             self, self.dev_pref+':'+self.TYPE+'_POSTREG_SUBWR')
         self._fr_posttrg.add_widget(self._sb_posttrg)
 
-        self._ld_growtime = QLabel('Growth Time [ms]', self)
+        self._ld_growtime = QLabel('Growth Time', self)
         self._sb_growtime = PyDMSpinbox(
             self, self.dev_pref+':'+self.TYPE+'_GDTIME')
         self._sb_growtime.showStepExponent = False
+        self._sb_growtime.showUnits = True
         self._fr_growtime = SiriusFrame(
             self, self.dev_pref+':'+self.TYPE+'_GDREG_SUBWR')
         self._fr_growtime.add_widget(self._sb_growtime)
@@ -121,16 +130,16 @@ class _BbBAcqBase(QTabWidget):
             self, self.dev_pref+':'+self.TYPE+'_TRIG_IN_SEL')
 
         self._ld_trgarm = QLabel('Arm', self)
-        self._cb_trgarm = PyDMEnumComboBox(
+        self._cb_trgarm = PyDMStateButton(
             self, self.dev_pref+':'+self.TYPE+'_ARM')
+        self._lb_armmon = SiriusLedState(
+            self, self.dev_pref+':'+self.TYPE+'_ARM_MON')
 
         self._ld_trgbrarm = QLabel('Auto re-arm', self)
-        self._cb_trgbrarm = PyDMEnumComboBox(
+        self._cb_trgbrarm = PyDMStateButton(
             self, self.dev_pref+':'+self.TYPE+'_BR_ARM')
 
-        self._ld_rst = QLabel('Arm Mon.', self)
-        self._lb_armmon = PyDMLabel(
-            self, self.dev_pref+':'+self.TYPE+'_ARM_MON')
+        self._ld_rst = QLabel('Trigger 1/2 Cap.:', self)
         self._lb_rst1 = PyDMLabel(
             self, self.dev_pref+':'+self.TYPE+'_CAP_TRIG1')
         self._lb_rst2 = PyDMLabel(
@@ -140,27 +149,34 @@ class _BbBAcqBase(QTabWidget):
         lay_trig = QGridLayout(gbox_trig)
         lay_trig.setAlignment(Qt.AlignTop)
         lay_trig.addWidget(self._ld_trgexten, 0, 0)
-        lay_trig.addWidget(self._cb_trgexten, 0, 1, 1, 3)
+        lay_trig.addWidget(self._cb_trgexten, 0, 1, 1, 2)
         lay_trig.addWidget(self._ld_trginsel, 1, 0)
-        lay_trig.addWidget(self._cb_trginsel, 1, 1, 1, 3)
+        lay_trig.addWidget(self._cb_trginsel, 1, 1, 1, 2)
         lay_trig.addWidget(self._ld_trgarm, 2, 0)
-        lay_trig.addWidget(self._cb_trgarm, 2, 1, 1, 3)
+        lay_trig.addWidget(self._cb_trgarm, 2, 1)
+        lay_trig.addWidget(self._lb_armmon, 2, 2)
         lay_trig.addWidget(self._ld_trgbrarm, 3, 0)
-        lay_trig.addWidget(self._cb_trgbrarm, 3, 1, 1, 3)
+        lay_trig.addWidget(self._cb_trgbrarm, 3, 1)
         lay_trig.addWidget(self._ld_rst, 4, 0)
-        lay_trig.addWidget(self._lb_armmon, 4, 1)
-        lay_trig.addWidget(self._lb_rst1, 4, 2)
-        lay_trig.addWidget(self._lb_rst2, 4, 3)
-        gbox_trig.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Expanding)
+        lay_trig.addWidget(self._lb_rst1, 4, 1)
+        lay_trig.addWidget(self._lb_rst2, 4, 2)
+        lay_trig.setRowStretch(5, 2)
+
+        pixmap = QPixmap(_os.path.join(
+            _os.path.abspath(_os.path.dirname(__file__)), 'grow_damp.png'))
+        img_wid = QLabel(self)
+        img_wid.setPixmap(pixmap)
+        img_wid.setScaledContents(True)
 
         wid = QWidget()
         lay = QGridLayout(wid)
         lay.setContentsMargins(0, 0, 0, 0)
-        lay.addWidget(gbox_dtacq, 0, 0, 2, 1)
-        lay.addWidget(gbox_acqtyp, 0, 1)
-        lay.addWidget(gbox_trig, 1, 1)
-        lay.addItem(QSpacerItem(
-            10, 10, QSzPlcy.MinimumExpanding, QSzPlcy.MinimumExpanding), 2, 2)
+        lay.addWidget(gbox_acqtyp, 0, 0)
+        lay.addWidget(gbox_dtacq, 1, 0)
+        lay.addWidget(gbox_trig, 2, 0)
+        lay.addWidget(img_wid, 4, 0)
+        lay.setRowStretch(3, 5)
+        lay.setRowStretch(5, 5)
 
         wid.setStyleSheet("SiriusFrame{max-height: 1.8em;}")
 
@@ -172,37 +188,49 @@ class _BbBAcqBase(QTabWidget):
         self._graph_mean.getAxis('bottom').setLabel('Bunch number')
         self._graph_mean.getAxis('left').setLabel('CNT')
         self._graph_mean.add_scatter_curve(
-            self.dev_pref+':'+self.TYPE+'_MEAN', color=QColor('red'))
+            ychannel=self.dev_pref+':'+self.TYPE+'_MEAN',
+            xchannel=self.dev_pref+':'+self.TYPE+'_XSC',
+            color=QColor('red'),
+            lineStyle=Qt.SolidLine)
 
         self._graph_maxrms = WfmGraph(self)
         self._graph_maxrms.setPlotTitle('Max RMS Channel (filtered)')
         self._graph_maxrms.getAxis('bottom').setLabel('Time (ms)')
         self._graph_maxrms.getAxis('left').setLabel('CNT')
         self._graph_maxrms.add_scatter_curve(
-            self.dev_pref+':'+self.TYPE+'_MAXRMS', color=QColor('blue'))
+            ychannel=self.dev_pref+':'+self.TYPE+'_MAXRMS',
+            xchannel=self.dev_pref+':'+self.TYPE+'_TSC',
+            color=QColor('blue'),
+            lineStyle=Qt.SolidLine)
 
         self._graph_rms = WfmGraph(self)
         self._graph_rms.setPlotTitle('RMS')
         self._graph_rms.getAxis('bottom').setLabel('Bunch number')
         self._graph_rms.getAxis('left').setLabel('CNT')
         self._graph_rms.add_scatter_curve(
-            self.dev_pref+':'+self.TYPE+'_RMS', color=QColor('green'))
+            ychannel=self.dev_pref+':'+self.TYPE+'_RMS',
+            xchannel=self.dev_pref+':'+self.TYPE+'_XSC',
+            color=QColor('green'),
+            lineStyle=Qt.SolidLine)
 
         self._graph_avgspe = WfmGraph(self)
         self._graph_avgspe.setPlotTitle('Average spectrum')
         self._graph_avgspe.getAxis('bottom').setLabel('Frequency (kHz)')
         self._graph_avgspe.getAxis('left').setLabel('dB')
         self._graph_avgspe.add_scatter_curve(
-            self.dev_pref+':'+self.TYPE+'_SPEC', color=QColor('blue'))
+            ychannel=self.dev_pref+':'+self.TYPE+'_SPEC',
+            xchannel=self.dev_pref+':'+self.TYPE+'_FREQ',
+            color=QColor('blue'),
+            lineStyle=Qt.SolidLine)
         self._graph_avgspe.add_marker(
             name='Marker 1',
-            x_channel=self.dev_pref+':'+self.TYPE+'_PEAKFREQ1',
-            y_channel=self.dev_pref+':'+self.TYPE+'_PEAK1',
+            xchannel=self.dev_pref+':'+self.TYPE+'_PEAKFREQ1',
+            ychannel=self.dev_pref+':'+self.TYPE+'_PEAK1',
             color=QColor('red'), symbol='o')
         self._graph_avgspe.add_marker(
             name='Marker 2',
-            x_channel=self.dev_pref+':'+self.TYPE+'_PEAKFREQ2',
-            y_channel=self.dev_pref+':'+self.TYPE+'_PEAK2',
+            xchannel=self.dev_pref+':'+self.TYPE+'_PEAKFREQ2',
+            ychannel=self.dev_pref+':'+self.TYPE+'_PEAK2',
             color=QColor('magenta'), symbol='s')
 
         lay_graph = QGridLayout()
@@ -213,7 +241,7 @@ class _BbBAcqBase(QTabWidget):
         lay_graph.addWidget(self._graph_avgspe, 1, 1)
 
         self._ld_acqenbl = QLabel('Acq. Enable', self)
-        self._cb_acqenbl = PyDMEnumComboBox(
+        self._cb_acqenbl = PyDMStateButton(
             self, self.dev_pref+':'+self.TYPE+'_ACQ_EN')
 
         self._ld_acqsing = QLabel('Acq. Mode', self)
@@ -343,8 +371,8 @@ class BbBAcqBRAM(_BbBAcqBase):
     TYPE = 'BRAM'
 
 
-class BbBAcqSB(QTabWidget):
-    """BbB SB Acquisition Widget."""
+class BbBAcqSB(QWidget):
+    """BbB Tune Tracking Acquisition Widget."""
 
     def __init__(self, parent=None, prefix=_vaca_prefix, device=''):
         """Init."""
@@ -356,8 +384,11 @@ class BbBAcqSB(QTabWidget):
         self._setupUi()
 
     def _setupUi(self):
-        self.addTab(self._setupControlsWidget(), 'Controls')
-        self.addTab(self._setupWaveformsWidget(), 'Waveforms')
+        ctrl_wid = self._setupControlsWidget()
+        wfm_wid = self._setupWaveformsWidget()
+        lay = QGridLayout(self)
+        lay.addWidget(ctrl_wid, 0, 0)
+        lay.addWidget(wfm_wid, 0, 1)
 
     def _setupControlsWidget(self):
         self._ld_acqtime = QLabel('Acquisition Time [ms]', self)
@@ -393,26 +424,23 @@ class BbBAcqSB(QTabWidget):
             self, self.dev_pref+':SB_TRIG_IN_SEL')
 
         self._ld_trgarm = QLabel('Arm', self)
-        self._cb_trgarm = PyDMEnumComboBox(self, self.dev_pref+':SB_ARM')
+        self._cb_trgarm = PyDMStateButton(self, self.dev_pref+':SB_ARM')
+        self._lb_armmon = SiriusLedState(self, self.dev_pref+':SB_ARM_MON')
 
         self._ld_trgbrarm = QLabel('Auto re-arm', self)
-        self._cb_trgbrarm = PyDMEnumComboBox(self, self.dev_pref+':SB_BR_ARM')
-
-        self._ld_armmon = QLabel('Arm Mon.', self)
-        self._lb_armmon = PyDMLabel(self, self.dev_pref+':SB_ARM_MON')
+        self._cb_trgbrarm = PyDMStateButton(self, self.dev_pref+':SB_BR_ARM')
 
         gbox_trig = QGroupBox('Trigger', self)
         lay_trig = QGridLayout(gbox_trig)
         lay_trig.addWidget(self._ld_trgexten, 0, 0)
-        lay_trig.addWidget(self._cb_trgexten, 0, 1)
+        lay_trig.addWidget(self._cb_trgexten, 0, 1, 1, 2)
         lay_trig.addWidget(self._ld_trginsel, 1, 0)
-        lay_trig.addWidget(self._cb_trginsel, 1, 1)
+        lay_trig.addWidget(self._cb_trginsel, 1, 1, 1, 2)
         lay_trig.addWidget(self._ld_trgarm, 2, 0)
         lay_trig.addWidget(self._cb_trgarm, 2, 1)
+        lay_trig.addWidget(self._lb_armmon, 2, 2)
         lay_trig.addWidget(self._ld_trgbrarm, 3, 0)
         lay_trig.addWidget(self._cb_trgbrarm, 3, 1)
-        lay_trig.addWidget(self._ld_armmon, 4, 0)
-        lay_trig.addWidget(self._lb_armmon, 4, 1)
 
         self._ld_phtrkctrl = QLabel(
             '<h4>Controls</h4>', self, alignment=Qt.AlignCenter)
@@ -446,7 +474,7 @@ class BbBAcqSB(QTabWidget):
         self._lb_bw.showUnits = True
 
         self._ld_loopctrl = QLabel('Loop Control', self)
-        self._cb_loopctrl = PyDMEnumComboBox(
+        self._cb_loopctrl = PyDMStateButton(
             self, self.dev_pref+':PHTRK_LOOPCTRL')
 
         lay_phtrkctrl = QGridLayout()
@@ -518,7 +546,7 @@ class BbBAcqSB(QTabWidget):
         lay_phtrk = QGridLayout(gbox_phtrk)
         lay_phtrk.setHorizontalSpacing(20)
         lay_phtrk.addLayout(lay_phtrkctrl, 0, 0)
-        lay_phtrk.addLayout(lay_phtrkdata, 0, 1)
+        lay_phtrk.addLayout(lay_phtrkdata, 1, 0)
 
         gbox_phtrk.setStyleSheet("""
             PyDMLabel{
@@ -528,10 +556,8 @@ class BbBAcqSB(QTabWidget):
         wid = QWidget()
         lay = QGridLayout(wid)
         lay.addWidget(gbox_dtacq, 0, 0)
-        lay.addWidget(gbox_trig, 0, 1)
-        lay.addWidget(gbox_phtrk, 1, 0, 1, 2)
-        lay.addItem(QSpacerItem(
-            10, 10, QSzPlcy.MinimumExpanding, QSzPlcy.MinimumExpanding), 2, 2)
+        lay.addWidget(gbox_trig, 1, 0)
+        lay.addWidget(gbox_phtrk, 2, 0)
         return wid
 
     def _setupWaveformsWidget(self):
@@ -540,14 +566,19 @@ class BbBAcqSB(QTabWidget):
         self._graph_bunsig.getAxis('bottom').setLabel('Time (ms)')
         self._graph_bunsig.getAxis('left').setLabel('CNT')
         self._graph_bunsig.add_scatter_curve(
-            self.dev_pref+':SB_RAW', color=QColor('blue'))
+            ychannel=self.dev_pref+':SB_RAW',
+            xchannel=self.dev_pref+':SB_TSC',
+            color=QColor('blue'), lineStyle=Qt.SolidLine,
+            nchannel=self.dev_pref+':SB_RAW_SAMPLES')
 
         self._graph_mag = WfmGraph(self)
         self._graph_mag.setPlotTitle('Magnitude')
         self._graph_mag.getAxis('bottom').setLabel('Frequency (kHz)')
         self._graph_mag.getAxis('left').setLabel('dB')
         self._graph_mag.add_scatter_curve(
-            self.dev_pref+':SB_MAG', color=QColor('blue'))
+            ychannel=self.dev_pref+':SB_MAG',
+            xchannel=self.dev_pref+':SB_FREQ',
+            color=QColor('blue'), lineStyle=Qt.SolidLine)
         self._graph_mag.add_marker(
             self.dev_pref+':SB_PEAKFREQ1',
             self.dev_pref+':SB_PEAK1',
@@ -558,7 +589,9 @@ class BbBAcqSB(QTabWidget):
         self._graph_phs.getAxis('bottom').setLabel('Frequency (kHz)')
         self._graph_phs.getAxis('left').setLabel('deg')
         self._graph_phs.add_scatter_curve(
-            self.dev_pref+':SB_PHASE', color=QColor('blue'))
+            ychannel=self.dev_pref+':SB_PHASE',
+            xchannel=self.dev_pref+':SB_FREQ',
+            color=QColor('blue'), lineStyle=Qt.SolidLine)
         self._graph_phs.add_marker(
             self.dev_pref+':SB_PEAKFREQ1',
             self.dev_pref+':SB_PHASE1',
@@ -601,7 +634,7 @@ class BbBAcqSB(QTabWidget):
         lay_graph.addWidget(self._graph_phs, 1, 1)
 
         self._ld_acqenbl = QLabel('Acq. Enable', self)
-        self._cb_acqenbl = PyDMEnumComboBox(self, self.dev_pref+':SB_ACQ_EN')
+        self._cb_acqenbl = PyDMStateButton(self, self.dev_pref+':SB_ACQ_EN')
 
         self._ld_acqsing = QLabel('Acq. Mode', self)
         self._cb_acqsing = PyDMEnumComboBox(
