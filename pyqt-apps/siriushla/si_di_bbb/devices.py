@@ -4,7 +4,7 @@ from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QTabWidget, \
     QGroupBox, QHBoxLayout, QSpacerItem, QSizePolicy as QSzPlcy, \
-    QVBoxLayout
+    QVBoxLayout, QSpacerItem
 
 from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox, \
     PyDMLineEdit
@@ -172,19 +172,13 @@ class BbBMainDevicesWidget(QWidget):
         lay_fir.addStretch()
 
         lay = QGridLayout(self)
-        lay.setVerticalSpacing(15)
-        lay.addItem(
-            QSpacerItem(60, 1, QSzPlcy.MinimumExpanding, QSzPlcy.Fixed), 0, 0)
         lay.addWidget(self._ld_maindev, 0, 1, 1, 2)
         lay.addWidget(gbox_delaylines, 1, 1)
         lay.addWidget(gbox_thoff, 1, 2)
         lay.addLayout(lay_fir, 2, 1, 1, 2)
-        lay.addItem(
-            QSpacerItem(60, 1, QSzPlcy.MinimumExpanding, QSzPlcy.Fixed), 0, 3)
-        lay.setColumnStretch(0, 2)
-        lay.setColumnStretch(1, 2)
-        lay.setColumnStretch(2, 3)
-        lay.setColumnStretch(3, 2)
+        lay.setColumnStretch(0, 3)
+        lay.setColumnStretch(3, 3)
+        lay.setRowStretch(3, 3)
 
         self.setStyleSheet("""
             SiriusFrame{
@@ -425,7 +419,7 @@ class BbBADCWidget(QWidget):
         lay.addWidget(self._si_adcch7, 4, 3)
 
 
-class BbBPwrAmpsWidget(QTabWidget):
+class BbBPwrAmpsWidget(QWidget):
     """BbB Power Amplifiers Settings Widget."""
 
     def __init__(self, parent=None, prefix=_vaca_prefix, device=''):
@@ -438,22 +432,22 @@ class BbBPwrAmpsWidget(QTabWidget):
         self._setupUi()
 
     def _setupUi(self):
-        wid_serial = self._setupSerialAmpWidget()
-        self.addTab(wid_serial, 'Serial/USB amplifier')
+        # wid_serial = self._setupSerialAmpWidget()
+        # self.addTab(wid_serial, 'Serial/USB amplifier')
 
-        wid_mm = QWidget()
-        lay_mm = QGridLayout(wid_mm)
-        lay_mm.setContentsMargins(0, 0, 0, 0)
-        lay_mm.addWidget(self._setupMilmegaWidget(0), 0, 0)
-        lay_mm.addWidget(self._setupMilmegaWidget(1), 0, 1)
-        self.addTab(wid_mm, 'Milmegas')
+        # wid_mm = QWidget()
+        # lay_mm = QGridLayout(wid_mm)
+        # lay_mm.setContentsMargins(0, 0, 0, 0)
+        # lay_mm.addWidget(self._setupMilmegaWidget(0), 0, 0)
+        # lay_mm.addWidget(self._setupMilmegaWidget(1), 0, 1)
+        # self.addTab(wid_mm, 'Milmegas')
 
-        wid_mc = QWidget()
-        lay_mc = QGridLayout(wid_mc)
+        lay_mc = QGridLayout(self)
         lay_mc.setContentsMargins(0, 0, 0, 0)
-        lay_mc.addWidget(self._setupMiniCircWidget(0), 0, 0)
-        lay_mc.addWidget(self._setupMiniCircWidget(1), 0, 1)
-        self.addTab(wid_mc, 'Mini-Circuits')
+        if self._device.endswith('-L'):
+            lay_mc.addWidget(self._setupMiniCircWidget(0), 0, 0)
+            lay_mc.addWidget(self._setupMiniCircWidget(1), 0, 1)
+        # self.addTab(wid_mc, 'Mini-Circuits')
 
     def _setupSerialAmpWidget(self):
         self._ld_serial = QLabel(
@@ -722,35 +716,47 @@ class BbBMasksWidget(QWidget):
         self._setupUi()
 
     def _setupUi(self):
-        self._ld_masks = QLabel(
-            '<h3>Masks</h3>', self, alignment=Qt.AlignCenter)
+        self._ld_exct_masks = QLabel(
+            '<h3>Excitation Masks</h3>', self,
+            alignment=Qt.AlignCenter)
+        self._ld_spec_masks = QLabel(
+            '<h3>Spectrum Averaging Masks</h3>', self,
+            alignment=Qt.AlignCenter)
 
-        self._graph_fb = WfmGraph(self)
-        self._graph_fb.setPlotTitle('Feedback mask')
-        self._graph_fb.axisColor = QColor('black')
-        self._graph_fb.add_scatter_curve(
-            self.dev_pref+':FB_MASK', '', QColor('green'))
-
-        self._graph_drive = WfmGraph(self)
-        self._graph_drive.setPlotTitle('Drive Mask')
-        self._graph_drive.axisColor = QColor('black')
-        self._graph_drive.add_scatter_curve(
-            self.dev_pref+':DRIVE_MASK', '', QColor('red'))
+        self._graph_exct = WfmGraph(self)
+        self._graph_exct.showLegend = True
+        self._graph_exct.axisColor = QColor('black')
+        self._graph_exct.add_scatter_curve(
+            ychannel=self.dev_pref+':FB_MASK',
+            xchannel=self.dev_pref+':SRAM_XSC',
+            name='Feedback', color=QColor('blue'))
+        self._graph_exct.add_scatter_curve(
+            ychannel=self.dev_pref+':CF_MASK',
+            xchannel=self.dev_pref+':SRAM_XSC',
+            name='Alternate', color=QColor('green'))
+        self._graph_exct.add_scatter_curve(
+            ychannel=self.dev_pref+':DRIVE_MASK',
+            xchannel=self.dev_pref+':SRAM_XSC',
+            name='Drive', color=QColor('red'))
 
         self._graph_spec = WfmGraph(self)
         self._graph_spec.showLegend = True
-        self._graph_spec.setPlotTitle('Spectrum averaging masks')
         self._graph_spec.axisColor = QColor('black')
         self._graph_spec.add_scatter_curve(
-            self.dev_pref+':SRAM_ACQ_MASK', 'SRAM Mask', QColor('red'))
+            ychannel=self.dev_pref+':SRAM_ACQ_MASK',
+            xchannel=self.dev_pref+':SRAM_XSC',
+            name='SRAM', color=QColor('red'))
         self._graph_spec.add_scatter_curve(
-            self.dev_pref+':BRAM_ACQ_MASK', 'BRAM Mask', QColor('blue'))
+            ychannel=self.dev_pref+':BRAM_ACQ_MASK',
+            xchannel=self.dev_pref+':BRAM_XSC',
+            name='BRAM', color=QColor('blue'))
 
-        lay = QVBoxLayout(self)
-        lay.addWidget(self._ld_masks)
-        lay.addWidget(self._graph_fb)
-        lay.addWidget(self._graph_drive)
-        lay.addWidget(self._graph_spec)
+        lay = QGridLayout(self)
+        lay.addWidget(self._ld_exct_masks, 0, 0)
+        lay.addWidget(self._graph_exct, 1, 0)
+        lay.addItem(QSpacerItem(20, 20), 2, 0)
+        lay.addWidget(self._ld_spec_masks, 3, 0)
+        lay.addWidget(self._graph_spec, 4, 0)
 
 
 class BbBInfoWidget(QWidget):
