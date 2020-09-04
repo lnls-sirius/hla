@@ -5,8 +5,9 @@ from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, \
     QGroupBox, QHBoxLayout, QVBoxLayout
 
 from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox
-
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
+
+from ..widgets import PyDMStateButton
 from .custom_widgets import MyScaleIndicator
 
 
@@ -35,11 +36,14 @@ class BbBGPIOWidget(QWidget):
         vlay2.addWidget(self._setupThermoWidget())
 
         lay = QGridLayout(self)
-        lay.addWidget(self._ld_gpio, 0, 0, 1, 2)
-        lay.addWidget(self._setupGPIOSelectionWidget(), 1, 0, 1, 2)
-        lay.addLayout(vlay1, 2, 0)
-        lay.addLayout(vlay2, 2, 1)
-        lay.addWidget(self._setupMonitorsWidget(), 3, 0, 1, 2)
+        lay.addWidget(self._ld_gpio, 0, 1, 1, 2)
+        # lay.addWidget(self._setupGPIOSelectionWidget(), 1, 0, 1, 2)
+        lay.addLayout(vlay1, 1, 1)
+        lay.addLayout(vlay2, 1, 2)
+        lay.addWidget(self._setupMonitorsWidget(), 2, 1, 1, 2)
+        lay.setColumnStretch(0, 3)
+        lay.setColumnStretch(3, 3)
+        lay.setRowStretch(3, 3)
 
         self.setStyleSheet("""
             PyDMLabel{
@@ -95,36 +99,43 @@ class BbBGPIOWidget(QWidget):
         self._lb_gpiovph = PyDMLabel(self, self.dev_pref+':FBE_Y_PHASE')
         self._lb_gpiolph = PyDMLabel(self, self.dev_pref+':FBE_Z_PHASE')
         lay_phases = QGridLayout()
-        lay_phases.addWidget(self._ld_gpiophss, 0, 0, 1, 3)
-        lay_phases.addWidget(self._lb_gpiohph, 1, 0)
-        lay_phases.addWidget(self._lb_gpiovph, 1, 1)
+        lay_phases.addWidget(self._ld_gpiophss, 0, 0, 1, 10)
+        lay_phases.addWidget(QLabel('L:'), 1, 1)
         lay_phases.addWidget(self._lb_gpiolph, 1, 2)
+        lay_phases.addWidget(QLabel('H:'), 1, 4)
+        lay_phases.addWidget(self._lb_gpiohph, 1, 5)
+        lay_phases.addWidget(QLabel('V:'), 1, 7)
+        lay_phases.addWidget(self._lb_gpiovph, 1, 8)
+        lay_phases.setColumnStretch(0, 2)
+        lay_phases.setColumnStretch(3, 2)
+        lay_phases.setColumnStretch(6, 2)
+        lay_phases.setColumnStretch(9, 2)
 
         gbox_fbend = QGroupBox('Front/back end registers', self)
         lay_fbend = QGridLayout(gbox_fbend)
-        lay_fbend.addWidget(self._ld_gpiohph, 0, 0)
-        lay_fbend.addWidget(self._sb_gpiohph, 0, 1)
-        lay_fbend.addWidget(self._ld_gpiohat, 1, 0)
-        lay_fbend.addWidget(self._sb_gpiohat, 1, 1)
-        lay_fbend.addWidget(self._ld_gpiovph, 2, 0)
-        lay_fbend.addWidget(self._sb_gpiovph, 2, 1)
+        lay_fbend.addWidget(self._ld_gpiobeat, 0, 0)
+        lay_fbend.addWidget(self._sb_gpiobeat, 0, 1)
+        lay_fbend.addWidget(self._ld_gpiolat, 1, 0)
+        lay_fbend.addWidget(self._sb_gpiolat, 1, 1)
+        lay_fbend.addWidget(self._ld_gpiohat, 2, 0)
+        lay_fbend.addWidget(self._sb_gpiohat, 2, 1)
         lay_fbend.addWidget(self._ld_gpiovat, 3, 0)
         lay_fbend.addWidget(self._sb_gpiovat, 3, 1)
-        lay_fbend.addWidget(self._ld_gpiolph, 4, 0)
-        lay_fbend.addWidget(self._sb_gpiolph, 4, 1)
-        lay_fbend.addWidget(self._ld_gpiolat, 5, 0)
-        lay_fbend.addWidget(self._sb_gpiolat, 5, 1)
-        lay_fbend.addWidget(self._ld_gpiobeph, 6, 0)
-        lay_fbend.addWidget(self._sb_gpiobeph, 6, 1)
-        lay_fbend.addWidget(self._ld_gpiobeat, 7, 0)
-        lay_fbend.addWidget(self._sb_gpiobeat, 7, 1)
+        lay_fbend.addWidget(self._ld_gpiobeph, 4, 0)
+        lay_fbend.addWidget(self._sb_gpiobeph, 4, 1)
+        lay_fbend.addWidget(self._ld_gpiolph, 5, 0)
+        lay_fbend.addWidget(self._sb_gpiolph, 5, 1)
+        lay_fbend.addWidget(self._ld_gpiohph, 6, 0)
+        lay_fbend.addWidget(self._sb_gpiohph, 6, 1)
+        lay_fbend.addWidget(self._ld_gpiovph, 7, 0)
+        lay_fbend.addWidget(self._sb_gpiovph, 7, 1)
         lay_fbend.addLayout(lay_phases, 8, 0, 1, 2)
         return gbox_fbend
 
     def _setupPhaseServoLoopWidget(self):
         # # Phase Servo Loop
         self._ld_gpiolctrl = QLabel('Loop Ctrl', self)
-        self._cb_gpiolctrl = PyDMEnumComboBox(
+        self._cb_gpiolctrl = PyDMStateButton(
             self, self.dev_pref+':FBELT_SERVO_MODE')
 
         self._ld_gpiolsign = QLabel('Loop Sign', self)
@@ -142,11 +153,11 @@ class BbBGPIOWidget(QWidget):
         self._sb_gpiooff.showStepExponent = False
 
         self._ld_gpiohtrk = QLabel('Hor. Trk.', self)
-        self._cb_gpiohtrk = PyDMEnumComboBox(
+        self._cb_gpiohtrk = PyDMStateButton(
             self, self.dev_pref+':FBELT_SERVO_X_TRACK')
 
         self._ld_gpiovtrk = QLabel('Vert. Trk.', self)
-        self._cb_gpiovtrk = PyDMEnumComboBox(
+        self._cb_gpiovtrk = PyDMStateButton(
             self, self.dev_pref+':FBELT_SERVO_Y_TRACK')
 
         gbox_phsloop = QGroupBox('Phase Servo Loop', self)
@@ -206,7 +217,7 @@ class BbBGPIOWidget(QWidget):
     def _setupOtherControlsWidget(self):
         # # FBE
         self._ld_gpiomode = QLabel('Mode', self)
-        self._cb_gpiomode = PyDMEnumComboBox(
+        self._cb_gpiomode = PyDMStateButton(
             self, self.dev_pref+':FBELT_FAN_MODE')
 
         self._ld_gpiofanspd = QLabel('Fan Speed', self)
@@ -218,7 +229,7 @@ class BbBGPIOWidget(QWidget):
             self, self.dev_pref+':FBELT_FAN_SETPT')
         self._sb_gpiotempsp.showStepExponent = False
 
-        gbox_fbe = QGroupBox(self)
+        gbox_fbe = QGroupBox('Fan Control', self)
         lay_fbe = QGridLayout(gbox_fbe)
         lay_fbe.addWidget(self._ld_gpiomode, 0, 0)
         lay_fbe.addWidget(self._cb_gpiomode, 0, 1)
