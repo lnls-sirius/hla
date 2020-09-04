@@ -98,9 +98,12 @@ class BbBTimingWidget(QWidget):
         lay_fcnts.addWidget(self._lb_fcntch4, 4, 1)
 
         lay = QGridLayout(self)
-        lay.addWidget(self._ld_timing, 0, 0, 1, 2)
-        lay.addWidget(gbox_fbti, 1, 0)
-        lay.addWidget(gbox_tictrl, 1, 1)
-        lay.addWidget(gbox_fcnts, 2, 0, 1, 2)
+        lay.addWidget(self._ld_timing, 0, 1, 1, 2)
+        lay.addWidget(gbox_fbti, 1, 1)
+        lay.addWidget(gbox_tictrl, 1, 2)
+        lay.addWidget(gbox_fcnts, 2, 1, 1, 2)
+        lay.setColumnStretch(0, 3)
+        lay.setColumnStretch(3, 3)
+        lay.setRowStretch(3, 3)
 
         self.setStyleSheet("SiriusFrame{max-height: 1.8em;}")
