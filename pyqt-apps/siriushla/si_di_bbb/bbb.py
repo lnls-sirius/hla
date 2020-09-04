@@ -22,7 +22,6 @@ from .devices import BbBMainDevicesWidget, BbBInfoWidget, \
     BbBSlowDACsWidget, BbBADCWidget, BbBPwrAmpsWidget, BbBMasksWidget
 from .drive import BbBDriveSettingsWidget
 from .environment import BbBEnvironmMonWidget
-from .gpio import BbBGPIOWidget
 from .timing import BbBTimingWidget
 from .util import get_bbb_icon
 
@@ -41,16 +40,21 @@ class BbBControlWindow(SiriusMainWindow):
         self._setupUi()
 
     def _setupUi(self):
-        self._label = QLabel('<h3>'+self.device+' Control Window</h3>',
-                             self, alignment=Qt.AlignCenter)
+        self._label = QLabel(
+            '<h3>'+self.device+' Control Window</h3>',
+            self, alignment=Qt.AlignCenter)
 
-        self._main_wid = BbBMainSettingsWidget(
-            self, self.prefix, self.device, resume=False)
+        self._main_wid = QWidget(self)
+        lay = QGridLayout(self._main_wid)
+        lay.addWidget(BbBMainSettingsWidget(
+            self._main_wid, self.prefix, self.device, resume=False), 0, 1)
+        lay.addWidget(BbBInfoWidget(self, self.prefix, self.device), 0, 2)
+        lay.setColumnStretch(0, 3)
+        lay.setColumnStretch(3, 3)
+        lay.setRowStretch(1, 3)
 
         self._coeff_wid = BbBCoefficientsWidget(
             self, self.prefix, self.device)
-
-        self._dev_wid = self._setupDevicesWidget()
 
         self._drive_wid = BbBDriveSettingsWidget(
             self, self.prefix, self.device)
@@ -64,63 +68,49 @@ class BbBControlWindow(SiriusMainWindow):
         self._sb_wid = BbBAcqSB(
             self, self.prefix, self.device)
 
-        self._env_wid = BbBEnvironmMonWidget(
-            self, self.prefix, self.device)
+        self._mask_wid = BbBMasksWidget(self, self.prefix, self.device)
+
+        self._timing_wid = BbBTimingWidget(self, self.prefix, self.device)
+        self._pwr_amp_wid = BbBPwrAmpsWidget(self, self.prefix, self.device)
+
+        self._env_wid = BbBEnvironmMonWidget(self, self.prefix, self.device)
+
+        self._dac_wid = BbBSlowDACsWidget(self, self.prefix, self.device)
+        self._adc_wid = BbBADCWidget(self, self.prefix, self.device)
+        self._devs_wid = BbBMainDevicesWidget(self, self.prefix, self.device)
+
+        self._advanced_wid = QWidget(self)
+        lay = QGridLayout(self._advanced_wid)
+        lay.addWidget(self._devs_wid, 1, 1, 1, 3)
+        lay.addWidget(self._adc_wid, 3, 1)
+        lay.addWidget(self._dac_wid, 3, 3)
+        lay.setColumnStretch(0, 3)
+        lay.setColumnStretch(2, 3)
+        lay.setColumnStretch(4, 3)
+        lay.setRowStretch(0, 3)
+        lay.setRowStretch(2, 3)
+        lay.setRowStretch(4, 3)
 
         self._tab = QTabWidget(self)
         self._tab.setObjectName('SITab')
         self._tab.addTab(self._main_wid, 'Main')
-        self._tab.addTab(self._coeff_wid, 'Coefficients')
-        self._tab.addTab(self._dev_wid, 'Devices')
-        self._tab.addTab(self._drive_wid, 'Drive')
         self._tab.addTab(self._sram_wid, 'SRAM')
         self._tab.addTab(self._bram_wid, 'BRAM')
-        self._tab.addTab(self._sb_wid, 'SB')
+        self._tab.addTab(self._mask_wid, 'Masks')
+        self._tab.addTab(self._coeff_wid, 'Coefficients')
+        self._tab.addTab(self._drive_wid, 'Drive')
+        self._tab.addTab(self._sb_wid, 'Tune Tracking')
+        self._tab.addTab(self._pwr_amp_wid, 'Pwr. Amps.')
+        self._tab.addTab(self._timing_wid, 'Timing')
+        self._tab.addTab(self._advanced_wid, 'Advanced Conf.')
         self._tab.addTab(self._env_wid, 'Environment')
+        self._tab.setCurrentIndex(1)
 
         cw = QWidget(self)
         self.setCentralWidget(cw)
         lay = QGridLayout(cw)
         lay.addWidget(self._label, 0, 0)
         lay.addWidget(self._tab, 1, 0)
-
-    def _setupDevicesWidget(self):
-        self._dev_stack = QStackedWidget(self)
-
-        self._gbox_rdbts = QGroupBox(self)
-        vbox_rdbt = QVBoxLayout(self._gbox_rdbts)
-        vbox_rdbt.addStretch()
-        self._dev_rdbts = list()
-
-        self._dev_widgets = {
-            'Main': BbBMainDevicesWidget(self, self.prefix, self.device),
-            'Slow DACs': BbBSlowDACsWidget(self, self.prefix, self.device),
-            'ADC': BbBADCWidget(self, self.prefix, self.device),
-            'GPIO': BbBGPIOWidget(self, self.prefix, self.device),
-            'Timing': BbBTimingWidget(self, self.prefix, self.device),
-            'Pwr Amplifiers': BbBPwrAmpsWidget(self, self.prefix, self.device),
-            'Masks': BbBMasksWidget(self, self.prefix, self.device),
-            'Info': BbBInfoWidget(self, self.prefix, self.device),
-        }
-
-        for label, wid in self._dev_widgets.items():
-            idx = self._dev_stack.addWidget(wid)
-            rbt = QRadioButton(label, self)
-            rbt.toggled.connect(
-                _part(self._handle_devices_visibility, idx))
-            if label == 'Main':
-                rbt.setChecked(True)
-            if not isinstance(wid, QTabWidget):
-                wid.layout().setAlignment(Qt.AlignTop | Qt.AlignCenter)
-            vbox_rdbt.addWidget(rbt)
-            vbox_rdbt.addStretch()
-            self._dev_rdbts.append(rbt)
-
-        wid = QWidget()
-        lay = QGridLayout(wid)
-        lay.addWidget(self._gbox_rdbts, 0, 0)
-        lay.addWidget(self._dev_stack, 0, 1)
-        return wid
 
     def _handle_devices_visibility(self, idx, checked):
         if checked:
