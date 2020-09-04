@@ -6,6 +6,7 @@ import numpy as np
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QFrame, QLabel, QSizePolicy as QSzPlcy
+from pyqtgraph import mkBrush
 
 from pydm.widgets import PyDMWaveformPlot
 from pydm.widgets.base import PyDMWidget
@@ -38,27 +39,43 @@ class WfmGraph(PyDMWaveformPlot):
         self.plotItem.showButtons()
 
         self._markers = dict()
+        self._curves_names = []
 
-    def add_scatter_curve(self, channel='', name='', color=QColor('blue'),
-                          lineStyle=Qt.NoPen, lineWidth=1):
+    def add_scatter_curve(
+            self, ychannel='', xchannel='', name='', color=QColor('blue'),
+            lineStyle=Qt.NoPen, lineWidth=1, symbolSize=10, nchannel=None):
         self.addChannel(
-            y_channel=channel, name=name, color=color,
-            lineStyle=lineStyle, lineWidth=lineWidth,
-            symbol='o', symbolSize=10)
+            x_channel='', y_channel='',
+            name=name, color=color, lineStyle=lineStyle, lineWidth=lineWidth,
+            symbol='o', symbolSize=symbolSize)
+        curve = self.curveAtIndex(-1)
+        curve.opts['symbolBrush'] = mkBrush(color)
+        curve.nchannel = None
+        if nchannel is not None:
+            curve.nchannel = SiriusConnectionSignal(nchannel)
+        x_chan_obj = SiriusConnectionSignal(xchannel)
+        x_chan_obj.new_value_signal[np.ndarray].connect(
+            _part(self._update_waveform_value, curve, 'X'))
+        y_chan_obj = SiriusConnectionSignal(ychannel)
+        y_chan_obj.new_value_signal[np.ndarray].connect(
+            _part(self._update_waveform_value, curve, 'Y'))
+        self._curves_names.append(((x_chan_obj, y_chan_obj), curve))
 
-    def add_marker(self, x_channel, y_channel, name,
-                   color=QColor('blue'), symbol='o', symbolSize=10):
+    def add_marker(
+            self, xchannel, ychannel, name,
+            color=QColor('blue'), symbol='o', symbolSize=10):
         self.addChannel(
             x_channel='FAKE:X', y_channel='FAKE:Y',
             name=name, color=color,
             lineStyle=Qt.NoPen, lineWidth=1,
             symbol=symbol, symbolSize=symbolSize)
         curve = self.curveAtIndex(-1)
+        curve.opts['symbolBrush'] = mkBrush(color)
 
-        x_chan_obj = SiriusConnectionSignal(x_channel)
+        x_chan_obj = SiriusConnectionSignal(xchannel)
         x_chan_obj.new_value_signal[float].connect(
             _part(self._update_marker_value, curve, 'X'))
-        y_chan_obj = SiriusConnectionSignal(y_channel)
+        y_chan_obj = SiriusConnectionSignal(ychannel)
         y_chan_obj.new_value_signal[float].connect(
             _part(self._update_marker_value, curve, 'Y'))
         self._markers[name] = [(x_chan_obj, y_chan_obj), curve]
@@ -66,6 +83,17 @@ class WfmGraph(PyDMWaveformPlot):
     def _update_marker_value(self, curve, axis, value):
         func = getattr(curve, 'receive'+axis+'Waveform')
         func(np.array([value, ]))
+
+    def _update_waveform_value(self, curve, axis, value):
+        func = getattr(curve, 'receive'+axis+'Waveform')
+        if curve.nchannel is None:
+            func(value)
+            return
+        npoints = curve.nchannel.value
+        if npoints is None:
+            func(value)
+        else:
+            func(value[:npoints])
 
 
 class TimeGraph(SiriusTimePlot):
