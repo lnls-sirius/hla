@@ -1,14 +1,18 @@
 """BbB Main Module."""
 
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QGridLayout, QLabel, QWidget
+from qtpy.QtWidgets import QGridLayout, QLabel, QWidget, QHBoxLayout, \
+    QPushButton
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 
-from siriushla.util import connect_newprocess
-from siriushla.widgets import SiriusMainWindow
+from ..util import connect_newprocess, connect_window
+from ..widgets import SiriusMainWindow
+from ..widgets.windows import create_window_from_widget
+
 from .bbb import BbBMainSettingsWidget
 from .util import get_bbb_icon
+from .gpio import BbBGPIOWidget
 
 
 class BbBMainWindow(SiriusMainWindow):
@@ -26,13 +30,26 @@ class BbBMainWindow(SiriusMainWindow):
         self._ld_bbb = QLabel(
             '<h3>BbB Control Window</h3>', self, alignment=Qt.AlignCenter)
 
+        self._but_fbe = QPushButton('FBE', self)
+
+        window = create_window_from_widget(
+            BbBGPIOWidget, title='Front-Back End', icon=get_bbb_icon())
+        connect_window(
+            self._but_fbe, window, self, prefix=self.prefix,
+            device='SI-Glob:DI-BbBProc-L')
+
+        hlay = QHBoxLayout()
+        hlay.addWidget(self._but_fbe)
+        hlay.addStretch()
+        hlay.addWidget(self._ld_bbb)
+        hlay.addStretch()
+
         self._bbb_widgets = list()
         idcs_types = ['H', 'V', 'L']
 
         cwt = QWidget(self)
         self.setCentralWidget(cwt)
         lay = QGridLayout(cwt)
-        lay.addWidget(self._ld_bbb, 0, 0, 1, len(idcs_types))
 
         for col, idc in enumerate(idcs_types):
             dev_pref = 'SI-Glob:DI-BbBProc-'+idc
@@ -46,6 +63,7 @@ class BbBMainWindow(SiriusMainWindow):
             lay.addWidget(wid, 1, col)
             self._bbb_widgets.append(wid)
 
+        lay.addLayout(hlay, 0, 0, 1, len(idcs_types))
         lay.setRowStretch(0, 1)
         lay.setRowStretch(1, 6)
 
