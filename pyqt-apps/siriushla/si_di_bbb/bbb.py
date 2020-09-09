@@ -18,8 +18,9 @@ from siriushla.widgets import SiriusMainWindow, SiriusLedAlert, \
     PyDMStateButton, PyDMLedMultiChannel
 from .acquisition import BbBAcqSRAM, BbBAcqBRAM, BbBAcqSB
 from .coefficients import BbBCoefficientsWidget
-from .devices import BbBMainDevicesWidget, BbBInfoWidget, \
-    BbBSlowDACsWidget, BbBADCWidget, BbBPwrAmpsWidget, BbBMasksWidget
+from .advanced_settings import BbBAdvancedSettingsWidget
+from .pwr_amps import BbBPwrAmpsWidget
+from .masks import BbBMasksWidget
 from .drive import BbBDriveSettingsWidget
 from .environment import BbBEnvironmMonWidget
 from .timing import BbBTimingWidget
@@ -44,17 +45,10 @@ class BbBControlWindow(SiriusMainWindow):
             '<h3>'+self.device+' Control Window</h3>',
             self, alignment=Qt.AlignCenter)
 
-        self._main_wid = QWidget(self)
-        lay = QGridLayout(self._main_wid)
-        lay.addWidget(BbBMainSettingsWidget(
-            self._main_wid, self.prefix, self.device, resume=False), 0, 1)
-        lay.addWidget(BbBInfoWidget(self, self.prefix, self.device), 0, 2)
-        lay.setColumnStretch(0, 3)
-        lay.setColumnStretch(3, 3)
-        lay.setRowStretch(1, 3)
+        self._main_wid = BbBMainSettingsWidget(
+            self, self.prefix, self.device, resume=False)
 
-        self._coeff_wid = BbBCoefficientsWidget(
-            self, self.prefix, self.device)
+        self._coeff_wid = BbBCoefficientsWidget(self, self.prefix, self.device)
 
         self._drive_wid = BbBDriveSettingsWidget(
             self, self.prefix, self.device)
@@ -75,21 +69,8 @@ class BbBControlWindow(SiriusMainWindow):
 
         self._env_wid = BbBEnvironmMonWidget(self, self.prefix, self.device)
 
-        self._dac_wid = BbBSlowDACsWidget(self, self.prefix, self.device)
-        self._adc_wid = BbBADCWidget(self, self.prefix, self.device)
-        self._devs_wid = BbBMainDevicesWidget(self, self.prefix, self.device)
-
-        self._advanced_wid = QWidget(self)
-        lay = QGridLayout(self._advanced_wid)
-        lay.addWidget(self._devs_wid, 1, 1, 1, 3)
-        lay.addWidget(self._adc_wid, 3, 1)
-        lay.addWidget(self._dac_wid, 3, 3)
-        lay.setColumnStretch(0, 3)
-        lay.setColumnStretch(2, 3)
-        lay.setColumnStretch(4, 3)
-        lay.setRowStretch(0, 3)
-        lay.setRowStretch(2, 3)
-        lay.setRowStretch(4, 3)
+        self._advanced_wid = BbBAdvancedSettingsWidget(
+            self, self.prefix, self.device)
 
         self._tab = QTabWidget(self)
         self._tab.setObjectName('SITab')
@@ -169,8 +150,13 @@ class BbBMainSettingsWidget(QWidget):
             lay.setContentsMargins(0, 0, 0, 0)
             lay.addWidget(gbox)
         else:
-            lay.addWidget(self._fbsett_wid, 0, 0)
-            lay.addWidget(self._status_wid, 0, 1)
+            info_wid = BbBInfoWidget(self, self._prefix, self._device)
+            lay.addWidget(self._fbsett_wid, 0, 1)
+            lay.addWidget(self._status_wid, 0, 2)
+            lay.addWidget(info_wid, 0, 3)
+            lay.setColumnStretch(0, 3)
+            lay.setColumnStretch(4, 3)
+            lay.setRowStretch(1, 3)
 
     def _setupFeedbackSettings(self):
         self._ld_fbenbl = QLabel('Enable', self)
@@ -339,6 +325,55 @@ class BbBStatusWidget(QWidget):
         lay.addWidget(self._ld_intvl, 9, 0)
         lay.addWidget(self._lb_intvl, 9, 1)
         lay.addWidget(self._cb_intvl, 9, 2)
+
+
+class BbBInfoWidget(QGroupBox):
+    """BbB Info Widget."""
+
+    def __init__(self, parent=None, prefix=_vaca_prefix, device=''):
+        """Init."""
+        super().__init__(parent)
+        self.setObjectName('SIApp')
+        self._prefix = prefix
+        self._device = device
+        self.dev_pref = prefix + device
+        self._setupUi()
+
+    def _setupUi(self):
+        self.setTitle('System Information')
+
+        self._ld_rffreq = QLabel('Nominal RF Frequency', self)
+        self._lb_rffreq = PyDMLabel(self, self.dev_pref+':RF_FREQ')
+        self._lb_rffreq.showUnits = True
+
+        self._ld_hn = QLabel('Harmonic Number', self)
+        self._lb_hn = PyDMLabel(self, self.dev_pref+':HARM_NUM')
+
+        self._ld_gtwrvw = QLabel('Gateway Revision', self)
+        self._lb_gtwrvw = PyDMLabel(self, self.dev_pref+':REVISION')
+
+        self._ld_gtwtyp = QLabel('Gateway Type', self)
+        self._lb_gtwtyp = PyDMLabel(self, self.dev_pref+':GW_TYPE')
+        self._lb_gtwtyp.displayFormat = PyDMLabel.DisplayFormat.Hex
+
+        self._ld_ipaddr = QLabel('IP Address', self)
+        self._lb_ipaddr = PyDMLabel(self, self.dev_pref+':IP_ADDR')
+
+        lay = QGridLayout(self)
+        lay.setVerticalSpacing(15)
+        lay.addWidget(self._ld_rffreq, 0, 0)
+        lay.addWidget(self._lb_rffreq, 0, 1)
+        lay.addWidget(self._ld_hn, 1, 0)
+        lay.addWidget(self._lb_hn, 1, 1)
+        lay.addWidget(self._ld_gtwrvw, 2, 0)
+        lay.addWidget(self._lb_gtwrvw, 2, 1)
+        lay.addWidget(self._ld_gtwtyp, 3, 0)
+        lay.addWidget(self._lb_gtwtyp, 3, 1)
+        lay.addWidget(self._ld_ipaddr, 4, 0)
+        lay.addWidget(self._lb_ipaddr, 4, 1)
+
+        self.setStyleSheet(
+            "PyDMLabel{qproperty-alignment: AlignCenter;}")
 
 
 if __name__ == '__main__':
