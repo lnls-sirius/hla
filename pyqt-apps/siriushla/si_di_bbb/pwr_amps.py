@@ -2,16 +2,15 @@
 
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
-from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QTabWidget, \
-    QGroupBox, QHBoxLayout, QSpacerItem, QSizePolicy as QSzPlcy, \
-    QVBoxLayout, QSpacerItem
-
-from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox, \
-    PyDMLineEdit
+from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QGroupBox, \
+    QHBoxLayout, QSizePolicy as QSzPlcy, QSpacerItem
+from pydm.widgets import PyDMLabel, PyDMLineEdit
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
-from siriushla.widgets import PyDMStateButton, PyDMLed, SiriusFrame
-from .custom_widgets import WfmGraph, MyScaleIndicator
+
+from ..widgets import PyDMStateButton, PyDMLed
+
+from .custom_widgets import MyScaleIndicator
 
 
 class BbBPwrAmpsWidget(QWidget):
@@ -45,75 +44,68 @@ class BbBPwrAmpsWidget(QWidget):
         # self.addTab(wid_mc, 'Mini-Circuits')
 
     def _setupSerialAmpWidget(self):
-        self._ld_serial = QLabel(
-            '<h3>Serial/USB amplifier</h3>', self,
-            alignment=Qt.AlignCenter)
+        ld_serial = QLabel(
+            '<h3>Serial/USB amplifier</h3>', self, alignment=Qt.AlignCenter)
 
-        self._ld_lctrl = QLabel('Line Control', self)
-        self._bt_lctrl = PyDMStateButton(
-            self, self.dev_pref+':SERIAL_CTRL_LINE')
+        ld_lctrl = QLabel('Line Control', self)
+        bt_lctrl = PyDMStateButton(self, self.dev_pref+':SERIAL_CTRL_LINE')
 
-        self._ld_rfctrl = QLabel('RF Control', self)
-        self._bt_rfctrl = PyDMStateButton(
-            self, self.dev_pref+':SERIAL_CTRL_RF')
+        ld_rfctrl = QLabel('RF Control', self)
+        bt_rfctrl = PyDMStateButton(self, self.dev_pref+':SERIAL_CTRL_RF')
 
-        self._ld_pwrfreq = QLabel(
+        ld_pwrfreq = QLabel(
             'Power Meter Calibration Frequency',
             self, alignment=Qt.AlignCenter)
-        self._le_pwrfreq = PyDMLineEdit(self, self.dev_pref+':SERIAL_CALFREQ')
-        self._le_pwrfreq.showUnits = True
+        le_pwrfreq = PyDMLineEdit(self, self.dev_pref+':SERIAL_CALFREQ')
+        le_pwrfreq.showUnits = True
 
         gbox_ctrl = QGroupBox(self)
         lay_ctrl = QGridLayout(gbox_ctrl)
-        lay_ctrl.addWidget(self._ld_lctrl, 0, 0, alignment=Qt.AlignRight)
-        lay_ctrl.addWidget(self._bt_lctrl, 0, 1, alignment=Qt.AlignLeft)
-        lay_ctrl.addWidget(self._ld_rfctrl, 0, 2, alignment=Qt.AlignRight)
-        lay_ctrl.addWidget(self._bt_rfctrl, 0, 3, alignment=Qt.AlignLeft)
-        lay_ctrl.addWidget(self._ld_pwrfreq, 1, 0, 1, 2,
-                           alignment=Qt.AlignRight)
-        lay_ctrl.addWidget(self._le_pwrfreq, 1, 2, 1, 2,
-                           alignment=Qt.AlignLeft)
+        lay_ctrl.addWidget(ld_lctrl, 0, 0, alignment=Qt.AlignRight)
+        lay_ctrl.addWidget(bt_lctrl, 0, 1, alignment=Qt.AlignLeft)
+        lay_ctrl.addWidget(ld_rfctrl, 0, 2, alignment=Qt.AlignRight)
+        lay_ctrl.addWidget(bt_rfctrl, 0, 3, alignment=Qt.AlignLeft)
+        lay_ctrl.addWidget(ld_pwrfreq, 1, 0, 1, 2, alignment=Qt.AlignRight)
+        lay_ctrl.addWidget(le_pwrfreq, 1, 2, 1, 2, alignment=Qt.AlignLeft)
         lay_ctrl.setColumnStretch(0, 1)
         lay_ctrl.setColumnStretch(1, 1)
         lay_ctrl.setColumnStretch(2, 1)
         lay_ctrl.setColumnStretch(3, 1)
 
-        self._ld_fwrpwr = QLabel(
+        ld_fwrpwr = QLabel(
             '<h4>Forward Power</h4>', self, alignment=Qt.AlignCenter)
-        self._si_fwrpwr = MyScaleIndicator(self, self.dev_pref+':SERIAL_FWD')
-        self._si_fwrpwr.indicatorColor = QColor('blue')
-        self._si_fwrpwr.barIndicator = True
-        self._si_fwrpwr.showUnits = True
-        self._si_fwrpwr.setObjectName('fwrpwr')
-        self._si_fwrpwr.setStyleSheet(
-            '#fwrpwr{min-height:6em; min-width:8em;}')
+        si_fwrpwr = MyScaleIndicator(self, self.dev_pref+':SERIAL_FWD')
+        si_fwrpwr.indicatorColor = QColor('blue')
+        si_fwrpwr.barIndicator = True
+        si_fwrpwr.showUnits = True
+        si_fwrpwr.setObjectName('fwrpwr')
+        si_fwrpwr.setStyleSheet('#fwrpwr{min-height:6em; min-width:8em;}')
 
-        self._ld_revpwr = QLabel(
+        ld_revpwr = QLabel(
             '<h4>Reverse Power</h4>', self, alignment=Qt.AlignCenter)
-        self._si_revpwr = MyScaleIndicator(self, self.dev_pref+':SERIAL_REV')
-        self._si_revpwr.indicatorColor = QColor('red')
-        self._si_revpwr.barIndicator = True
-        self._si_revpwr.showUnits = True
-        self._si_revpwr.setObjectName('revpwr')
-        self._si_revpwr.setStyleSheet(
-            '#revpwr{min-height:6em; min-width:8em;}')
+        si_revpwr = MyScaleIndicator(self, self.dev_pref+':SERIAL_REV')
+        si_revpwr.indicatorColor = QColor('red')
+        si_revpwr.barIndicator = True
+        si_revpwr.showUnits = True
+        si_revpwr.setObjectName('revpwr')
+        si_revpwr.setStyleSheet('#revpwr{min-height:6em; min-width:8em;}')
 
-        self._ld_id = QLabel('ID', self)
-        self._lb_id = PyDMLabel(self, self.dev_pref+':SERIAL_ID')
-        self._lb_id.displayFormat = PyDMLabel.DisplayFormat.String
+        ld_id = QLabel('ID', self)
+        lb_id = PyDMLabel(self, self.dev_pref+':SERIAL_ID')
+        lb_id.displayFormat = PyDMLabel.DisplayFormat.String
         hbox_id = QHBoxLayout()
         hbox_id.setContentsMargins(0, 0, 0, 0)
-        hbox_id.addWidget(self._ld_id)
-        hbox_id.addWidget(self._lb_id)
+        hbox_id.addWidget(ld_id)
+        hbox_id.addWidget(lb_id)
         hbox_id.setStretch(0, 1)
         hbox_id.setStretch(1, 5)
 
         gbox_mon = QGroupBox(self)
         lay_mon = QGridLayout(gbox_mon)
-        lay_mon.addWidget(self._ld_fwrpwr, 0, 0)
-        lay_mon.addWidget(self._si_fwrpwr, 1, 0)
-        lay_mon.addWidget(self._ld_revpwr, 0, 1)
-        lay_mon.addWidget(self._si_revpwr, 1, 1)
+        lay_mon.addWidget(ld_fwrpwr, 0, 0)
+        lay_mon.addWidget(si_fwrpwr, 1, 0)
+        lay_mon.addWidget(ld_revpwr, 0, 1)
+        lay_mon.addWidget(si_revpwr, 1, 1)
         lay_mon.addLayout(hbox_id, 2, 0, 1, 2)
 
         wid = QWidget()
@@ -121,7 +113,7 @@ class BbBPwrAmpsWidget(QWidget):
         lay.setAlignment(Qt.AlignCenter)
         lay.addItem(
             QSpacerItem(10, 1, QSzPlcy.MinimumExpanding, QSzPlcy.Fixed), 0, 0)
-        lay.addWidget(self._ld_serial, 0, 1)
+        lay.addWidget(ld_serial, 0, 1)
         lay.addWidget(gbox_ctrl, 1, 1)
         lay.addWidget(gbox_mon, 2, 1)
         lay.addItem(
@@ -132,8 +124,8 @@ class BbBPwrAmpsWidget(QWidget):
     def _setupMilmegaWidget(self, unit):
         unit_label = str(unit)
         ld_mmdb15 = QLabel(
-            '<h3>Milmega DB-15 '+unit_label+'</h3>',
-            self, alignment=Qt.AlignCenter)
+            '<h3>Milmega DB-15 '+unit_label+'</h3>', self,
+            alignment=Qt.AlignCenter)
         ld_mmdesc = QLabel(
             'Milmega via DB-15 custom cable\nand '
             '8 channel ADC (unit '+unit_label+')',
@@ -185,8 +177,7 @@ class BbBPwrAmpsWidget(QWidget):
         si_fwrpwr.indicatorColor = QColor('blue')
         si_fwrpwr.showUnits = True
         si_fwrpwr.setObjectName('fwrpwr')
-        si_fwrpwr.setStyleSheet(
-            '#fwrpwr{min-height:6em; min-width:8em;}')
+        si_fwrpwr.setStyleSheet('#fwrpwr{min-height:6em; min-width:8em;}')
 
         ld_revpwr = QLabel(
             '<h4>Reverse Power</h4>', self, alignment=Qt.AlignCenter)
@@ -196,8 +187,7 @@ class BbBPwrAmpsWidget(QWidget):
         si_revpwr.indicatorColor = QColor('red')
         si_revpwr.showUnits = True
         si_revpwr.setObjectName('revpwr')
-        si_revpwr.setStyleSheet(
-            '#revpwr{min-height:6em; min-width:8em;}')
+        si_revpwr.setStyleSheet('#revpwr{min-height:6em; min-width:8em;}')
 
         gbox_mon = QGroupBox(self)
         lay_mon = QGridLayout(gbox_mon)
@@ -226,16 +216,14 @@ class BbBPwrAmpsWidget(QWidget):
             alignment=Qt.AlignCenter)
 
         ld_fault = QLabel('RF Status', self)
-        led_fault = PyDMLed(
-            self, self.dev_pref+':MCLRAW_'+unit_label+'_FAULT')
+        led_fault = PyDMLed(self, self.dev_pref+':MCLRAW_'+unit_label+'_FAULT')
         led_fault.onColor = PyDMLed.LightGreen
         led_fault.offColor = PyDMLed.Red
         lb_fault = PyDMLabel(
             self, self.dev_pref+':MCLRAW_'+unit_label+'_FAULT')
 
         ld_temp = QLabel('Temperature', self)
-        lb_temp = PyDMLabel(
-            self, self.dev_pref+':MCLRAW_'+unit_label+'_TEMP')
+        lb_temp = PyDMLabel(self, self.dev_pref+':MCLRAW_'+unit_label+'_TEMP')
         lb_temp.showUnits = True
 
         ld_fwrloss = QLabel('Fwd Loss', self)
@@ -267,8 +255,7 @@ class BbBPwrAmpsWidget(QWidget):
         si_fwrpwr.indicatorColor = QColor('blue')
         si_fwrpwr.showUnits = True
         si_fwrpwr.setObjectName('fwrpwr')
-        si_fwrpwr.setStyleSheet(
-            '#fwrpwr{min-height:6em; min-width:8em;}')
+        si_fwrpwr.setStyleSheet('#fwrpwr{min-height:6em; min-width:8em;}')
 
         ld_revpwr = QLabel(
             '<h4>Reverse Power</h4>', self, alignment=Qt.AlignCenter)
@@ -278,8 +265,7 @@ class BbBPwrAmpsWidget(QWidget):
         si_revpwr.indicatorColor = QColor('red')
         si_revpwr.showUnits = True
         si_revpwr.setObjectName('revpwr')
-        si_revpwr.setStyleSheet(
-            '#revpwr{min-height:6em; min-width:8em;}')
+        si_revpwr.setStyleSheet('#revpwr{min-height:6em; min-width:8em;}')
 
         gbox_mon = QGroupBox(self)
         lay_mon = QGridLayout(gbox_mon)

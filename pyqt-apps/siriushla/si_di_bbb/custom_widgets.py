@@ -1,24 +1,23 @@
 """Custom Widgets Module."""
 
 from functools import partial as _part
-import numpy as np
 
+import numpy as np
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
-from qtpy.QtWidgets import QFrame, QLabel, QSizePolicy as QSzPlcy
+from qtpy.QtWidgets import QLabel, QSizePolicy as QSzPlcy
 from pyqtgraph import mkBrush
-
 from pydm.widgets import PyDMWaveformPlot
-from pydm.widgets.base import PyDMWidget
 from pydm.widgets.scale import QScale, PyDMScaleIndicator
 
-from siriushla.widgets import SiriusTimePlot, SiriusConnectionSignal
+from ..widgets import SiriusTimePlot, SiriusConnectionSignal
 
 
 class WfmGraph(PyDMWaveformPlot):
     """PyDMWaveformPlot rederivation."""
 
     def __init__(self, *args, **kwargs):
+        """."""
         super().__init__(*args, **kwargs)
         self.setObjectName('graph')
         self.setStyleSheet(
@@ -44,6 +43,7 @@ class WfmGraph(PyDMWaveformPlot):
     def add_scatter_curve(
             self, ychannel='', xchannel='', name='', color=QColor('blue'),
             lineStyle=Qt.NoPen, lineWidth=1, symbolSize=10, nchannel=None):
+        """."""
         self.addChannel(
             x_channel='', y_channel='',
             name=name, color=color, lineStyle=lineStyle, lineWidth=lineWidth,
@@ -64,6 +64,7 @@ class WfmGraph(PyDMWaveformPlot):
     def add_marker(
             self, xchannel, ychannel, name,
             color=QColor('blue'), symbol='o', symbolSize=10):
+        """."""
         self.addChannel(
             x_channel='FAKE:X', y_channel='FAKE:Y',
             name=name, color=color,
@@ -100,6 +101,7 @@ class TimeGraph(SiriusTimePlot):
     """SiriusTimePlot rederivation."""
 
     def __init__(self, *args, **kwargs):
+        """."""
         super().__init__(*args, **kwargs)
         self.setObjectName('graph')
         self.setStyleSheet(
@@ -139,8 +141,8 @@ class MyScaleIndicator(PyDMScaleIndicator):
     """PyDMScaleIndicator rederivation."""
 
     def __init__(self, parent=None, init_channel=None):
-        QFrame.__init__(self, parent)
-        PyDMWidget.__init__(self, init_channel=init_channel)
+        """."""
+        super().__init__(self, parent, init_channel=init_channel)
         self._show_value = True
         self._show_limits = True
 
@@ -158,7 +160,6 @@ class MyScaleIndicator(PyDMScaleIndicator):
         self._user_lower_limit = 0
         self._user_upper_limit = 0
 
-        self.value_label.setSizePolicy(
-            QSzPlcy.Minimum, QSzPlcy.Minimum)
+        self.value_label.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Minimum)
         self.setup_widgets_for_orientation(
             Qt.Horizontal, False, False, self._value_position)

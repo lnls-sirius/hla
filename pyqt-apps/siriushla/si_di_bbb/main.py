@@ -19,11 +19,13 @@ class BbBMainWindow(SiriusMainWindow):
     """BbB Main Window."""
 
     def __init__(self, parent=None, prefix=_vaca_prefix):
+        """."""
         super().__init__(parent)
         self.prefix = prefix
         self.setWindowTitle('BbB Control Window')
         self.setObjectName('SIApp')
         self.setWindowIcon(get_bbb_icon())
+        self._bbb_widgets = list()
         self._setupUi()
 
     def _setupUi(self):
@@ -44,7 +46,6 @@ class BbBMainWindow(SiriusMainWindow):
         hlay.addWidget(self._ld_bbb)
         hlay.addStretch()
 
-        self._bbb_widgets = list()
         idcs_types = ['H', 'V', 'L']
 
         cwt = QWidget(self)
@@ -56,24 +57,13 @@ class BbBMainWindow(SiriusMainWindow):
 
             wid = BbBMainSettingsWidget(self, self.prefix, dev_pref)
             connect_newprocess(
-                wid.pb_detail,
-                ['sirius-hla-si-di-bbb.py', '-dev', dev_pref,
-                 '-p', self.prefix])
-
+                wid.pb_detail, [
+                    'sirius-hla-si-di-bbb.py', '-dev', dev_pref, '-p',
+                    self.prefix]
+                )
             lay.addWidget(wid, 1, col)
             self._bbb_widgets.append(wid)
 
         lay.addLayout(hlay, 0, 0, 1, len(idcs_types))
         lay.setRowStretch(0, 1)
         lay.setRowStretch(1, 6)
-
-
-if __name__ == '__main__':
-    """Run Example."""
-    import sys
-    from siriushla.sirius_application import SiriusApplication
-
-    app = SiriusApplication()
-    w = BbBMainWindow(prefix=_vaca_prefix)
-    w.show()
-    sys.exit(app.exec_())
