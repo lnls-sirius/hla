@@ -142,7 +142,7 @@ class MyScaleIndicator(PyDMScaleIndicator):
 
     def __init__(self, parent=None, init_channel=None):
         """."""
-        super().__init__(self, parent, init_channel=init_channel)
+        super().__init__(parent, init_channel=init_channel)
         self._show_value = True
         self._show_limits = True
 
