@@ -1,23 +1,23 @@
 """Custom Widgets Module."""
 
 from functools import partial as _part
-import numpy as np
 
+import numpy as np
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
-from qtpy.QtWidgets import QFrame, QLabel, QSizePolicy as QSzPlcy
-
+from qtpy.QtWidgets import QLabel, QSizePolicy as QSzPlcy
+from pyqtgraph import mkBrush
 from pydm.widgets import PyDMWaveformPlot
-from pydm.widgets.base import PyDMWidget
 from pydm.widgets.scale import QScale, PyDMScaleIndicator
 
-from siriushla.widgets import SiriusTimePlot, SiriusConnectionSignal
+from ..widgets import SiriusTimePlot, SiriusConnectionSignal
 
 
 class WfmGraph(PyDMWaveformPlot):
     """PyDMWaveformPlot rederivation."""
 
     def __init__(self, *args, **kwargs):
+        """."""
         super().__init__(*args, **kwargs)
         self.setObjectName('graph')
         self.setStyleSheet(
@@ -38,27 +38,45 @@ class WfmGraph(PyDMWaveformPlot):
         self.plotItem.showButtons()
 
         self._markers = dict()
+        self._curves_names = []
 
-    def add_scatter_curve(self, channel='', name='', color=QColor('blue'),
-                          lineStyle=Qt.NoPen, lineWidth=1):
+    def add_scatter_curve(
+            self, ychannel='', xchannel='', name='', color=QColor('blue'),
+            lineStyle=Qt.NoPen, lineWidth=1, symbolSize=10, nchannel=None):
+        """."""
         self.addChannel(
-            y_channel=channel, name=name, color=color,
-            lineStyle=lineStyle, lineWidth=lineWidth,
-            symbol='o', symbolSize=10)
+            x_channel='', y_channel='',
+            name=name, color=color, lineStyle=lineStyle, lineWidth=lineWidth,
+            symbol='o', symbolSize=symbolSize)
+        curve = self.curveAtIndex(-1)
+        curve.opts['symbolBrush'] = mkBrush(color)
+        curve.nchannel = None
+        if nchannel is not None:
+            curve.nchannel = SiriusConnectionSignal(nchannel)
+        x_chan_obj = SiriusConnectionSignal(xchannel)
+        x_chan_obj.new_value_signal[np.ndarray].connect(
+            _part(self._update_waveform_value, curve, 'X'))
+        y_chan_obj = SiriusConnectionSignal(ychannel)
+        y_chan_obj.new_value_signal[np.ndarray].connect(
+            _part(self._update_waveform_value, curve, 'Y'))
+        self._curves_names.append(((x_chan_obj, y_chan_obj), curve))
 
-    def add_marker(self, x_channel, y_channel, name,
-                   color=QColor('blue'), symbol='o', symbolSize=10):
+    def add_marker(
+            self, xchannel, ychannel, name,
+            color=QColor('blue'), symbol='o', symbolSize=10):
+        """."""
         self.addChannel(
             x_channel='FAKE:X', y_channel='FAKE:Y',
             name=name, color=color,
             lineStyle=Qt.NoPen, lineWidth=1,
             symbol=symbol, symbolSize=symbolSize)
         curve = self.curveAtIndex(-1)
+        curve.opts['symbolBrush'] = mkBrush(color)
 
-        x_chan_obj = SiriusConnectionSignal(x_channel)
+        x_chan_obj = SiriusConnectionSignal(xchannel)
         x_chan_obj.new_value_signal[float].connect(
             _part(self._update_marker_value, curve, 'X'))
-        y_chan_obj = SiriusConnectionSignal(y_channel)
+        y_chan_obj = SiriusConnectionSignal(ychannel)
         y_chan_obj.new_value_signal[float].connect(
             _part(self._update_marker_value, curve, 'Y'))
         self._markers[name] = [(x_chan_obj, y_chan_obj), curve]
@@ -67,11 +85,23 @@ class WfmGraph(PyDMWaveformPlot):
         func = getattr(curve, 'receive'+axis+'Waveform')
         func(np.array([value, ]))
 
+    def _update_waveform_value(self, curve, axis, value):
+        func = getattr(curve, 'receive'+axis+'Waveform')
+        if curve.nchannel is None:
+            func(value)
+            return
+        npoints = curve.nchannel.value
+        if npoints is None:
+            func(value)
+        else:
+            func(value[:npoints])
+
 
 class TimeGraph(SiriusTimePlot):
     """SiriusTimePlot rederivation."""
 
     def __init__(self, *args, **kwargs):
+        """."""
         super().__init__(*args, **kwargs)
         self.setObjectName('graph')
         self.setStyleSheet(
@@ -111,8 +141,8 @@ class MyScaleIndicator(PyDMScaleIndicator):
     """PyDMScaleIndicator rederivation."""
 
     def __init__(self, parent=None, init_channel=None):
-        QFrame.__init__(self, parent)
-        PyDMWidget.__init__(self, init_channel=init_channel)
+        """."""
+        super().__init__(parent, init_channel=init_channel)
         self._show_value = True
         self._show_limits = True
 
@@ -130,7 +160,6 @@ class MyScaleIndicator(PyDMScaleIndicator):
         self._user_lower_limit = 0
         self._user_upper_limit = 0
 
-        self.value_label.setSizePolicy(
-            QSzPlcy.Minimum, QSzPlcy.Minimum)
+        self.value_label.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Minimum)
         self.setup_widgets_for_orientation(
             Qt.Horizontal, False, False, self._value_position)

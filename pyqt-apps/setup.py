@@ -36,7 +36,10 @@ setup(
         ],
     packages=find_packages(),
     install_requires=_requirements,
-    package_data={'siriushla': ['VERSION', '*/*.py']},
+    package_data={
+        'siriushla': ['VERSION', '*/*.py'],
+        'siriushla.si_di_bbb': ['*.png', ],
+    },
     include_package_data=True,
     scripts=[
         'scripts/sirius-hla-as-ap-energybutton.py',
