@@ -1,3 +1,5 @@
+"""."""
+
 from qtpy.QtCore import Qt, QPoint
 from qtpy.QtGui import QPainter
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QGroupBox, \
@@ -6,20 +8,15 @@ import qtawesome as qta
 
 from siriuspy.namesys import SiriusPVName as PVName
 from siriuspy.search import LLTimeSearch, HLTimeSearch
-from siriushla.widgets import SiriusLedAlert, SiriusMainWindow, \
+
+from ..widgets import SiriusLedAlert, SiriusMainWindow, \
     PyDMLedMultiChannel
-from siriushla.util import get_appropriate_color, connect_window, \
+from ..util import get_appropriate_color, connect_window, \
     get_monitor_icon
-from siriushla.widgets.windows import create_window_from_widget
-if __name__ == '__main__':
-    from siriushla.as_ti_control import AFC, EVE, EVR, EVG, FOUT, \
-        HLTriggerDetailed
-else:
-    from .afc import AFC
-    from .evg import EVG
-    from .evr_eve import EVR, EVE
-    from .fout import FOUT
-    from .hl_trigger import HLTriggerDetailed
+from ..widgets.windows import create_window_from_widget
+
+from .low_level_devices import EVG, FOUT, AFC, EVR, EVE
+from .hl_trigger import HLTriggerDetailed
 
 
 class LLButton(QWidget):
@@ -233,16 +230,3 @@ class MonitorWindow(SiriusMainWindow):
                 min-height: 1.1em; max-height: 1.1em;
                 min-width: 1.1em; max-width: 1.1em;}
         """)
-
-
-if __name__ == '__main__':
-    """Run Example."""
-    import sys
-    from siriushla.sirius_application import SiriusApplication
-    from siriushla.widgets.windows import SiriusMainWindow
-
-    props = {'detailed', 'state', 'pulses', 'duration'}
-    app = SiriusApplication()
-    win = MonitorWindow()
-    win.show()
-    sys.exit(app.exec_())

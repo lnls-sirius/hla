@@ -1,12 +1,16 @@
+"""."""
 import re
+
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QFormLayout, \
     QScrollArea, QGroupBox, QLabel, QSizePolicy as QSzPol, QFrame, QMenu, \
     QLineEdit, QPushButton
 import qtawesome as qta
 from pydm.widgets.base import PyDMPrimitiveWidget
+
 from siriuspy.namesys import SiriusPVName as _PVName
-from siriushla.widgets import SiriusLabel, SiriusSpinbox, SiriusEnumComboBox
+
+from ..widgets import SiriusLabel, SiriusSpinbox, SiriusEnumComboBox
 
 
 class BaseWidget(QWidget):
@@ -248,7 +252,8 @@ class BaseList(CustomGroupBox):
         self._set_lines_visibility()
 
     def _set_lines_visibility(self):
-        props = {act.text() for act in self.search_menu.actions() if act.isChecked()}
+        props = {
+            a.text() for a in self.search_menu.actions() if a.isChecked()}
         for key, objs in self.lines.items():
             if key in self.filtered_lines:
                 for _, layout in objs:
