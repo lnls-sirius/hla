@@ -786,8 +786,7 @@ class PSTestWindow(SiriusMainWindow):
              'dev': '(QD.*|QF.*|Q[1-4])'}))
         # add SI QSkews
         psnames.extend(PSSearch.get_psnames(
-            {'sec': 'SI', 'sub': '[0-2][0-9](M1|M2|C1|C3)', 'dis': 'PS',
-             'dev': 'QS'}))
+            {'sec': 'SI', 'dis': 'PS', 'dev': 'QS'}))
         return psnames
 
     def _get_pu_tree_names(self):
