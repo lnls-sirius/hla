@@ -3,7 +3,8 @@
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, \
     QGroupBox
-from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox
+import qtawesome as qta
+from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMPushButton
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 
@@ -48,7 +49,13 @@ class BbBTimingWidget(QWidget):
 
         # Timing Control
         ld_clkrst = QLabel('Clock Reset', self)
-        cb_clkrst = PyDMEnumComboBox(self, self.dev_pref+':CLKRST')
+        pb_clkrst = PyDMPushButton(
+            self, init_channel=self.dev_pref+':CLKRST', pressValue=1)
+        pb_clkrst.setText('Reset')
+        pb_clkrst.setToolTip('Reset Clock')
+        pb_clkrst.setIcon(qta.icon('fa5s.sync'))
+        pb_clkrst.setObjectName('conf')
+
         ld_fidsigoff = QLabel('FID Signal Offset [ps]', self)
         sb_fidsigoff = PyDMSpinbox(self, self.dev_pref+':OFF_FIDS')
         sb_fidsigoff.showStepExponent = False
@@ -61,7 +68,7 @@ class BbBTimingWidget(QWidget):
         gbox_tictrl = QGroupBox('Timing Control', self)
         lay_tictrl = QGridLayout(gbox_tictrl)
         lay_tictrl.addWidget(ld_clkrst, 0, 0)
-        lay_tictrl.addWidget(cb_clkrst, 0, 1)
+        lay_tictrl.addWidget(pb_clkrst, 0, 1)
         lay_tictrl.addWidget(ld_fidsigoff, 1, 0)
         lay_tictrl.addWidget(sb_fidsigoff, 1, 1)
         lay_tictrl.addWidget(ld_fiddelay, 2, 0)
