@@ -42,6 +42,7 @@ class _TesterBase:
     def __init__(self, device):
         """Init."""
         self.device = device
+        self._pvs = dict()
 
     @property
     def connected(self):
@@ -113,7 +114,6 @@ class TesterDCLinkFBP(_TesterPSBase):
     def __init__(self, device):
         """Init."""
         super().__init__(device)
-        self._pvs = dict()
         for ppty in TesterDCLinkFBP.properties:
             self._pvs[ppty] = _PV(
                 VACA_PREFIX + device + ':' + ppty,
@@ -158,7 +158,6 @@ class TesterDCLink(_TesterPSBase):
     def __init__(self, device):
         """Init."""
         super().__init__(device)
-        self._pvs = dict()
         for ppty in TesterDCLink.properties:
             self._pvs[ppty] = _PV(
                 VACA_PREFIX + device + ':' + ppty,
@@ -212,7 +211,6 @@ class TesterPS(_TesterPSBase):
     def __init__(self, device):
         """Init."""
         super().__init__(device)
-        self._pvs = dict()
         for ppty in self.properties:
             self._pvs[ppty] = _PV(
                 VACA_PREFIX + device + ':' + ppty,
@@ -286,7 +284,6 @@ class TesterPSLinac(_TesterBase):
 
     def __init__(self, device):
         super().__init__(device)
-        self._pvs = dict()
         for ppty in TesterPSLinac.properties:
             self._pvs[ppty] = _PV(
                 VACA_PREFIX + device + ':' + ppty,
@@ -354,7 +351,6 @@ class _TesterPUBase(_TesterBase):
     def __init__(self, device):
         """Init."""
         super().__init__(device)
-        self._pvs = dict()
         for ppty in self.properties:
             self._pvs[ppty] = _PV(
                 VACA_PREFIX + device + ':' + ppty,
