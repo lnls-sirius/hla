@@ -980,9 +980,9 @@ class LLTriggerList(BaseList):
         'fine_delay': 6.5,
         'rf_delay_type': 6.5,
         'hl_trigger': 10,
-        'dir': 10,
-        'evtcnt': 10,
-        'evtcntrst': 10,
+        'dir': 4,
+        'evtcnt': 5,
+        'evtcntrst': 4,
         }
     _LABELS = {
         'name': 'Name',
