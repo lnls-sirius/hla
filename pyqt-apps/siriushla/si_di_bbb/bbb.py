@@ -4,7 +4,8 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QLabel, QTabWidget, QWidget, QGridLayout, \
     QGroupBox, QSpacerItem, QSizePolicy as QSzPlcy, QPushButton, QHBoxLayout
 import qtawesome as qta
-from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox
+from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox, \
+    PyDMPushButton
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 
@@ -263,7 +264,12 @@ class BbBStatusWidget(QWidget):
 
         ld_intvl = QLabel('Interval [s]', alignment=Qt.AlignCenter)
         lb_intvl = PyDMLabel(self, self.dev_pref+':RST_COUNT')
-        cb_intvl = PyDMEnumComboBox(self, self.dev_pref+':CNTRST')
+        pb_intvl = PyDMPushButton(
+            self, init_channel=self.dev_pref+':CNTRST', pressValue=1)
+        pb_intvl.setText('Reset')
+        pb_intvl.setToolTip('Reset Counts')
+        pb_intvl.setIcon(qta.icon('fa5s.sync'))
+        pb_intvl.setObjectName('conf')
 
         lay = QGridLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
@@ -297,9 +303,12 @@ class BbBStatusWidget(QWidget):
         lay.addWidget(ld_fiderr, 8, 1)
         lay.addWidget(lb_fiderr, 8, 2)
         lay.addItem(QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 8, 0)
-        lay.addWidget(ld_intvl, 9, 0)
-        lay.addWidget(lb_intvl, 9, 1)
-        lay.addWidget(cb_intvl, 9, 2)
+        hlay = QHBoxLayout()
+        lay.addLayout(hlay, 9, 0, 1, 3)
+        hlay.addWidget(ld_intvl)
+        hlay.addWidget(lb_intvl)
+        hlay.addStretch()
+        hlay.addWidget(pb_intvl)
 
 
 class BbBInfoWidget(QGroupBox):

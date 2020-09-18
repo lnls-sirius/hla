@@ -4,11 +4,13 @@ from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QGroupBox, \
     QHBoxLayout, QSizePolicy as QSzPlcy, QSpacerItem
-from pydm.widgets import PyDMLabel, PyDMLineEdit
+import qtawesome as qta
+from pydm.widgets import PyDMLabel, PyDMLineEdit, PyDMPushButton
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 
-from ..widgets import PyDMStateButton, PyDMLed
+from ..widgets import PyDMStateButton, SiriusLedState, SiriusSpinbox, \
+    SiriusLabel, PyDMLed
 
 from .custom_widgets import MyScaleIndicator
 
@@ -26,22 +28,13 @@ class BbBPwrAmpsWidget(QWidget):
         self._setupUi()
 
     def _setupUi(self):
-        # wid_serial = self._setupSerialAmpWidget()
-        # self.addTab(wid_serial, 'Serial/USB amplifier')
-
-        # wid_mm = QWidget()
-        # lay_mm = QGridLayout(wid_mm)
-        # lay_mm.setContentsMargins(0, 0, 0, 0)
-        # lay_mm.addWidget(self._setupMilmegaWidget(0), 0, 0)
-        # lay_mm.addWidget(self._setupMilmegaWidget(1), 0, 1)
-        # self.addTab(wid_mm, 'Milmegas')
-
         lay_mc = QGridLayout(self)
         lay_mc.setContentsMargins(0, 0, 0, 0)
         if self._device.endswith('-L'):
             lay_mc.addWidget(self._setupMiniCircWidget(0), 0, 0)
             lay_mc.addWidget(self._setupMiniCircWidget(1), 0, 1)
-        # self.addTab(wid_mc, 'Mini-Circuits')
+        else:
+            lay_mc.addWidget(self._setupTransverse(), 0, 0)
 
     def _setupSerialAmpWidget(self):
         ld_serial = QLabel(
@@ -281,4 +274,58 @@ class BbBPwrAmpsWidget(QWidget):
         lay.addWidget(ld_mcdesc)
         lay.addWidget(gbox_ctrl)
         lay.addWidget(gbox_mon)
+        return wid
+
+    def _setupTransverse(self):
+        pref = 'SI-Glob:DI-BbBAmp' + self.dev_pref[-1]
+
+        ld_main = QLabel(
+            '<h3>AR Amplifier</h3>', self, alignment=Qt.AlignCenter)
+
+        conf = PyDMPushButton(
+            self, init_channel=pref+':Rst-Cmd', pressValue=1)
+        conf.setText('Reset')
+        conf.setToolTip('Reset State')
+        conf.setIcon(qta.icon('fa5s.sync'))
+        conf.setObjectName('conf')
+        conf_lay = QHBoxLayout()
+        conf_lay.addStretch()
+        conf_lay.addWidget(conf)
+        conf_lay.addStretch()
+
+        ld_enbl = QLabel('Enable', self)
+        led_enbl = SiriusLedState(self, pref+':Enbl-Sts')
+        pb_enbl = PyDMStateButton(self, pref+':Enbl-Sel')
+
+        ld_gainauto = QLabel('Gain lock\n(dB to steps)', self)
+        led_gainauto = SiriusLedState(self, pref+':GainAuto-Sts')
+        pb_gainauto = PyDMStateButton(self, pref+':GainAuto-Sel')
+
+        ld_gain_db = QLabel('Gain [dB]', self)
+        sp_gain_db = SiriusSpinbox(self, pref+':Gain-SP')
+        sp_gain_db.showStepExponent = False
+        lb_gain_db = SiriusLabel(self, init_channel=pref+':Gain-RB')
+
+        ld_gain_st = QLabel('Gain [steps]', self)
+        sp_gain_st = SiriusSpinbox(self, pref+':GainStep-SP')
+        sp_gain_st.showStepExponent = False
+        lb_gain_st = SiriusLabel(self, init_channel=pref+':GainStep-RB')
+
+        wid = QWidget()
+        lay = QGridLayout(wid)
+        lay.setAlignment(Qt.AlignCenter | Qt.AlignTop)
+        lay.addWidget(ld_main, 0, 0, 1, 3)
+        lay.addLayout(conf_lay, 1, 0, 1, 3)
+        lay.addWidget(ld_enbl, 2, 0)
+        lay.addWidget(pb_enbl, 2, 1)
+        lay.addWidget(led_enbl, 2, 2)
+        lay.addWidget(ld_gainauto, 3, 0)
+        lay.addWidget(pb_gainauto, 3, 1)
+        lay.addWidget(led_gainauto, 3, 2)
+        lay.addWidget(ld_gain_db, 4, 0)
+        lay.addWidget(sp_gain_db, 4, 1)
+        lay.addWidget(lb_gain_db, 4, 2)
+        lay.addWidget(ld_gain_st, 5, 0)
+        lay.addWidget(sp_gain_st, 5, 1)
+        lay.addWidget(lb_gain_st, 5, 2)
         return wid
