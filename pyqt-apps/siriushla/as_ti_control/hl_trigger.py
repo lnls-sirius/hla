@@ -1,24 +1,26 @@
-import sys
+"""."""
 from copy import deepcopy as _dcopy
+
 import numpy as _np
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGroupBox, QLabel, QPushButton, QFormLayout, \
     QVBoxLayout, QGridLayout, QWidget, QDoubleSpinBox, QHBoxLayout, \
     QFrame, QScrollArea, QTabWidget
 import qtawesome as qta
-
 from pydm.widgets import PyDMLabel
 from pydm.widgets.base import PyDMWritableWidget
+
 from siriuspy.search import HLTimeSearch
 from siriuspy.timesys import csdev as _cstime
 
-from siriushla.util import connect_window, get_appropriate_color
-from siriushla.widgets import PyDMLed, SiriusLedAlert, PyDMStateButton, \
+from ..util import connect_window, get_appropriate_color
+from ..widgets import PyDMLed, SiriusLedAlert, PyDMStateButton, \
     SiriusLabel, SiriusSpinbox, PyDMLedMultiChannel, \
     SiriusEnumComboBox as _MyComboBox
-from siriushla.widgets.windows import create_window_from_widget
+from ..widgets.windows import create_window_from_widget
+
 from .base import BaseList, BaseWidget, MySpinBox as _MySpinBox
-from .ll_trigger import LLTriggerList, OTPList, OUTList, AFCOUTList
+from .low_level_devices import LLTriggerList, OTPList, OUTList, AFCOUTList
 
 
 class HLTriggerSimple(BaseWidget):
@@ -468,19 +470,3 @@ class HLTriggerList(BaseList):
         if rb is None:
             return (sp, )
         return sp, rb
-
-
-if __name__ == '__main__':
-    """Run Example."""
-    from siriushla.sirius_application import SiriusApplication
-    from siriushla.widgets.windows import SiriusMainWindow
-
-    props = {'detailed', 'state', 'pulses', 'duration'}
-    app = SiriusApplication()
-    win = SiriusMainWindow()
-    list_ctrl = HLTriggerList(
-        name="Triggers", props=props,
-        obj_names=['BO-Glob:TI-Mags-Corrs', 'SI-Glob:TI-Mags-Corrs'])
-    win.setCentralWidget(list_ctrl)
-    win.show()
-    sys.exit(app.exec_())

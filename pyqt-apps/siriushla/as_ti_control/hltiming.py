@@ -1,22 +1,21 @@
 """Control of EVG Timing Device."""
 
-import sys as _sys
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, \
     QGridLayout, QLabel, QSplitter, QSizePolicy
 import qtawesome as qta
-
 from pydm.widgets import PyDMPushButton, PyDMLabel
+
 from siriuspy.timesys import csdev as _cstime
 from siriuspy.search import LLTimeSearch, HLTimeSearch
-from siriushla.util import connect_window, get_appropriate_color, \
+
+from ..util import connect_window, get_appropriate_color, \
     connect_newprocess
-from siriushla.widgets.windows import create_window_from_widget
-from siriushla.widgets import SiriusMainWindow, PyDMLed, PyDMStateButton
-from .evg import EventList as _EventList, EVG as _EVG, BucketList
-from .evr_eve import EVR as _EVR, EVE as _EVE
-from .afc import AFC as _AFC
-from .fout import FOUT as _FOUT
+from ..widgets.windows import create_window_from_widget
+from ..widgets import SiriusMainWindow, PyDMLed, PyDMStateButton
+
+from .low_level_devices import EventList as _EventList, EVG as _EVG, \
+    BucketList, EVR as _EVR, EVE as _EVE, AFC as _AFC, FOUT as _FOUT
 from .hl_trigger import HLTriggerList as _HLTriggerList
 
 
@@ -189,13 +188,3 @@ class TimingMain(SiriusMainWindow):
             wid.setParent(pwid)
             hbl.addWidget(wid)
         return pwid
-
-
-if __name__ == '__main__':
-    """Run Example."""
-    from siriuspy.envars import VACA_PREFIX as PREFIX
-    from siriushla.sirius_application import SiriusApplication
-    app = SiriusApplication()
-    HLTiming = TimingMain(prefix=PREFIX)
-    HLTiming.show()
-    _sys.exit(app.exec_())
