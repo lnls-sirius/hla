@@ -163,7 +163,7 @@ class PSMonitor(SiriusMainWindow):
 
         def get_col_count(sec, label):
             if label == 'QS':
-                return 4
+                return 5
             elif label == 'CH':
                 return 5 if sec != 'SI' else 6
             elif label == 'CV':
@@ -185,7 +185,7 @@ class PSMonitor(SiriusMainWindow):
 
         def get_sub_labels(label):
             sub2labels = {
-                'QS': ('M1', 'M2', 'C1', 'C3'),
+                'QS': ('M1', 'M2', 'C1', 'C2', 'C3'),
                 'CH': ('M1', 'M2', 'C1', 'C2', 'C3', 'C4'),
                 'CV': ('M1', 'M2', 'C1', 'C2', ' ', 'C3', ' ', 'C4'),
                 'Trims': ('M1', ' ', ' ', 'M2', ' ', ' ', 'C1', ' ',
