@@ -128,7 +128,7 @@ class LIInterlockWindow(SiriusMainWindow):
     }
     COLOR_MAPS = {
         'IntlkWarn-Mon': {
-            'on': PyDMLed.Red,
+            'on': PyDMLed.Yellow,
             'off': PyDMLed.LightGreen,
         },
         'IntlkSignalIn-Mon': {
@@ -137,7 +137,7 @@ class LIInterlockWindow(SiriusMainWindow):
         },
         'IntlkRdSignalInMask-Mon': {
             'on': PyDMLed.LightGreen,
-            'off': PyDMLed.Gray,
+            'off': PyDMLed.DarkGreen,
         },
         'IntlkSignalOut-Mon': {
             'on': PyDMLed.Yellow,
@@ -145,7 +145,7 @@ class LIInterlockWindow(SiriusMainWindow):
         },
         'IntlkRdSignalOutMask-Mon': {
             'on': PyDMLed.LightGreen,
-            'off': PyDMLed.Gray,
+            'off': PyDMLed.DarkGreen,
         },
     }
 

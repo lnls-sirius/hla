@@ -88,7 +88,7 @@ class PSMonitor(SiriusMainWindow):
         def get_ch2vals(sec, name):
             if sec == 'LI':
                 return {self._prefix+name+':PwrState-Sts': 1,
-                        self._prefix+name+':StatusIntlk-Mon': {'value': 55,
+                        self._prefix+name+':StatusIntlk-Mon': {'value': 64,
                                                                'comp': 'lt'}}
             elif name.dis == 'PU':
                 ch2vals = {

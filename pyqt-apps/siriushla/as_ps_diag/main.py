@@ -88,7 +88,7 @@ class PSDiag(SiriusMainWindow):
                         conn_chs.append(pname+':PwrState-Sts')
                         ps_ch2vals[pname + ':PwrState-Sts'] = 1
                         intlk_ch2vals[pname + ':StatusIntlk-Mon'] = \
-                            {'value': 55, 'comp': 'lt'}
+                            {'value': 64, 'comp': 'lt'}
 
                     f = 'LI-.*:PS-'+filt['dev']
                     conn_led = MyLedMultiConnection(
