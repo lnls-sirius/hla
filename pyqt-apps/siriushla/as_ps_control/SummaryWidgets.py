@@ -441,7 +441,7 @@ class SummaryWidget(QWidget):
             else:
                 self.intlk_led = PyDMLedMultiChannel(
                     self, channels2values={
-                        self._intlk: {'value': 55, 'comp': 'lt'}})
+                        self._intlk: {'value': 60, 'comp': 'lt'}})
                 self.intlk_wid.layout().addWidget(self.intlk_led)
         elif name == 'conn' and self._is_linac:
             self.conn_led = PyDMLedMultiChannel(

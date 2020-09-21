@@ -935,7 +935,7 @@ class LIPSDetailWidget(PSDetailWidget):
             '#intlk_bt{min-width:25px; max-width:25px; icon-size:20px;}')
         util.connect_window(self.intlk_bt, LIInterlockWindow, self,
                             **{'devname': self._psname})
-        ch2vals = {self._prefixed_psname+':StatusIntlk-Mon': {'value': 55,
+        ch2vals = {self._prefixed_psname+':StatusIntlk-Mon': {'value': 60,
                                                               'comp': 'lt'}}
         self.intlk_led = PyDMLedMultiChannel(self, channels2values=ch2vals)
 

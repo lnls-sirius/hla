@@ -296,7 +296,7 @@ class TesterPSLinac(_TesterBase):
 
     def check_intlk(self):
         """Check interlocks."""
-        return self._pvs['StatusIntlk-Mon'].value < 55
+        return self._pvs['StatusIntlk-Mon'].value < 60
 
     def set_pwrstate(self, state='on'):
         """Set PwrState."""
