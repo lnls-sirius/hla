@@ -7,6 +7,7 @@ from siriuspy.envars import VACA_PREFIX
 from siriuspy.diagsys.psdiag.csdev import get_ps_diag_status_labels
 from siriuspy.diagsys.pudiag.csdev import get_pu_diag_status_labels
 from siriuspy.diagsys.lidiag.csdev import get_li_diag_status_labels
+from siriuspy.diagsys.rfdiag.csdev import get_rf_diag_status_labels
 from siriuspy.namesys import SiriusPVName
 
 from siriushla.sirius_application import SiriusApplication
@@ -256,6 +257,11 @@ class MyLed(SiriusLedAlert):
             run_newprocess(['sirius-hla-as-ps-detail.py', dev])
         elif dev.dis == 'PU':
             run_newprocess(['sirius-hla-as-pu-detail.py', dev])
+        elif dev.dis == 'RF':
+            if dev.sec == 'LI':
+                run_newprocess('sirius-hla-li-rf-llrf.py')
+            else:
+                run_newprocess('sirius-hla-'+dev.sec.lower()+'-rf-control.py')
 
     def mousePressEvent(self, event):
         """Reimplement mousePressEvent."""
@@ -267,6 +273,8 @@ class MyLed(SiriusLedAlert):
                 labels = get_pu_diag_status_labels()
             elif pvn.sec == 'LI':
                 labels = get_li_diag_status_labels(pvn.device_name)
+            elif pvn.dis == 'RF':
+                labels = get_rf_diag_status_labels(pvn.device_name)
             self.msg = StatusDetailDialog(
                 parent=self.parent(), pvname=pvn, labels=labels)
             self.msg.open()
