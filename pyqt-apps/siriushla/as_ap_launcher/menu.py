@@ -128,7 +128,7 @@ def get_object(ismenubar=True, parent=None):
             self.add_object_to_level1(menu, servconf)
             procserv = LEVEL2A('ProcServ', menu)
             self.connect_newprocess(
-                procserv, 'sirius-hla-as-ap-pctrl.py', is_pydm=True)
+                procserv, 'sirius-hla-as-ap-pctrl', is_pydm=True)
             self.add_object_to_level1(menu, procserv)
             chart = LEVEL2A('TimeChart', menu)
             self.connect_newprocess(chart, 'timechart')
@@ -186,13 +186,13 @@ def get_object(ismenubar=True, parent=None):
             vacuum.setObjectName('ASApp')
             agilent = QAction('Agilent', vacuum)
             self.connect_newprocess(
-                agilent, 'sirius-hla-as-va-agilent4uhv.py', is_pydm=True)
+                agilent, 'sirius-hla-as-va-agilent4uhv', is_pydm=True)
             mks = QAction('MKS', vacuum)
             self.connect_newprocess(
-                mks, 'sirius-hla-as-va-mks937b.py', is_pydm=True)
+                mks, 'sirius-hla-as-va-mks937b', is_pydm=True)
             gamma = QAction('Gamma Counters', vacuum)
             self.connect_newprocess(
-                gamma, 'sirius-hla-as-ap-countingpru.py', is_pydm=True)
+                gamma, 'sirius-hla-as-ap-countingpru', is_pydm=True)
             vacuum.addAction(agilent)
             vacuum.addAction(mks)
             vacuum.addAction(gamma)
@@ -200,7 +200,7 @@ def get_object(ismenubar=True, parent=None):
             termo = LEVEL2A('Temp', menu)
             termo.setIcon(qta.icon('fa5s.thermometer-half'))
             self.connect_newprocess(
-                termo, 'sirius-hla-as-ap-mbtemp.py', is_pydm=True)
+                termo, 'sirius-hla-as-ap-mbtemp', is_pydm=True)
 
             optics = LEVEL2M('Optics', menu)
             optics.setObjectName('ASApp')
@@ -693,13 +693,13 @@ def get_object(ismenubar=True, parent=None):
             agilent = QAction('Agilent', menu)
             self.connect_newprocess(
                 agilent,
-                'sirius-hla-'+secl+'-va-agilent4uhv-overview.py',
+                'sirius-hla-'+secl+'-va-agilent4uhv-overview',
                 is_pydm=True)
 
             mks = QAction('MKS', menu)
             self.connect_newprocess(
                 mks,
-                'sirius-hla-'+secl+'-va-mks937b-overview.py',
+                'sirius-hla-'+secl+'-va-mks937b-overview',
                 is_pydm=True)
 
             menu.addAction(agilent)
