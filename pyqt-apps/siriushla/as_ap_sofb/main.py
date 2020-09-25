@@ -153,10 +153,6 @@ class MainWindow(SiriusMainWindow):
             actbpm, Window, self, bpm_list=self._csorb.bpm_names)
         menubar.addAction(actbpm)
 
-        statusbar = QStatusBar(self)
-        statusbar.setEnabled(True)
-        self.setStatusBar(statusbar)
-
 
 if __name__ == '__main__':
     import sys as _sys
