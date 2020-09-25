@@ -11,6 +11,7 @@ from qtpy.QtWidgets import QGridLayout, QWidget, QLabel, QHBoxLayout, \
 import qtawesome as qta
 from pyqtgraph import mkPen, mkBrush
 from pydm.widgets import PyDMWaveformPlot
+from pydm.connection_inspector import ConnectionInspector
 
 from siriuspy.util import get_strength_label
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
@@ -80,7 +81,16 @@ class PSGraphMonWindow(SiriusMainWindow):
     def contextMenuEvent(self, event):
         point = event.pos()
         menu = self.graph.contextMenuEvent(event, return_menu=True)
+        menu.addSeparator()
+        action = menu.addAction('Show Connections...')
+        action.triggered.connect(self.show_connections)
         menu.popup(self.mapToGlobal(point))
+
+    def show_connections(self, checked):
+        """."""
+        _ = checked
+        c = ConnectionInspector(self)
+        c.show()
 
 
 class PSGraphDevicesSelWidget(QWidget):
