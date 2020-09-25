@@ -3,6 +3,7 @@
 from qtpy.QtCore import Qt, Slot
 from qtpy.QtWidgets import QVBoxLayout, QWidget, QGroupBox, QGridLayout, \
     QLabel, QAction, QMenu
+from pydm.connection_inspector import ConnectionInspector
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
@@ -84,4 +85,13 @@ class IDControl(SiriusMainWindow):
         menu = QMenu("Actions", self)
         menu.addAction(self.blctrl_enbl_act)
         menu.addAction(self.blctrl_dsbl_act)
+        menu.addSeparator()
+        action = menu.addAction('Show Connections...')
+        action.triggered.connect(self.show_connections)
         menu.popup(self.mapToGlobal(point))
+
+    def show_connections(self, checked):
+        """."""
+        _ = checked
+        c = ConnectionInspector(self)
+        c.show()

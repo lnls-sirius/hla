@@ -7,6 +7,8 @@ from qtpy.QtWidgets import QWidget, QVBoxLayout, QGroupBox, \
     QMenu, QInputDialog, QFrame, QPushButton, QSplitter, \
     QSizePolicy as QSzPlcy
 import qtawesome as qta
+from pydm.connection_inspector import ConnectionInspector
+
 from siriuspy.search import PSSearch
 from siriuspy.namesys import SiriusPVName as PVName
 from siriushla.util import connect_window
@@ -203,9 +205,18 @@ class PSContainer(QWidget):
             menu.addAction(self._set_setpoint_action)
             menu.addSeparator()
             menu.addAction(self._reset_intlk_action)
+            menu.addSeparator()
+            action = menu.addAction('Show Connections...')
+            action.triggered.connect(self.show_connections)
             menu.popup(event.globalPos())
         else:
             super().contextMenuEvent(event)
+
+    def show_connections(self, checked):
+        """."""
+        _ = checked
+        c = ConnectionInspector(self)
+        c.show()
 
 
 class BasePSControlWidget(QWidget):
@@ -564,7 +575,16 @@ class BasePSControlWidget(QWidget):
         menu.addAction(self.reset_act)
         menu.addAction(self.wfmupdate_on_act)
         menu.addAction(self.wfmupdate_off_act)
+        menu.addSeparator()
+        action = menu.addAction('Show Connections...')
+        action.triggered.connect(self.show_connections)
         menu.popup(self.mapToGlobal(point))
+
+    def show_connections(self, checked):
+        """."""
+        _ = checked
+        c = ConnectionInspector(self)
+        c.show()
 
     def get_summary_widgets(self):
         """Return Summary Widgets."""

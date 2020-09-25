@@ -3,6 +3,8 @@
 from qtpy.QtCore import Qt, Slot
 from qtpy.QtWidgets import QWidget, QVBoxLayout, QTabWidget, QAction, QMenu
 import qtawesome as qta
+from pydm.connection_inspector import ConnectionInspector
+
 from siriuspy.search import PSSearch
 from siriushla.util import get_appropriate_color
 from siriushla.widgets import SiriusMainWindow
@@ -126,7 +128,16 @@ class PUControlWindow(SiriusMainWindow):
         menu.addAction(self.pulse_off_act)
         menu.addAction(self.reset_act)
         menu.addAction(self.set_voltage)
+        menu.addSeparator()
+        action = menu.addAction('Show Connections...')
+        action.triggered.connect(self.show_connections)
         menu.popup(self.mapToGlobal(point))
+
+    def show_connections(self, checked):
+        """."""
+        _ = checked
+        c = ConnectionInspector(self)
+        c.show()
 
     @Slot(bool)
     def _set_pwrstate(self, state):
