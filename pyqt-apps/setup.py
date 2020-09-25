@@ -58,6 +58,7 @@ setup(
         'scripts/sirius-hla-as-ps-detail.py',
         'scripts/sirius-hla-as-ps-diag.py',
         'scripts/sirius-hla-as-ps-graphmon.py',
+        'scripts/sirius-hla-as-ps-monitor.py',
         'scripts/sirius-hla-as-ps-test.py',
         'scripts/sirius-hla-as-pu-detail.py',
         'scripts/sirius-hla-as-ti-control.py',

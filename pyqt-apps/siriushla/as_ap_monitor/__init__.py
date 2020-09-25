@@ -1,1 +1,1 @@
-from .monitor import ASMonitor
+from .main import SiriusMonitor

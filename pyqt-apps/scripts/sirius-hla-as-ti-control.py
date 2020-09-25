@@ -6,6 +6,7 @@ import sys
 import argparse as _argparse
 from siriushla.sirius_application import SiriusApplication
 from siriuspy.envars import VACA_PREFIX
+from siriushla.widgets.windows import create_window_from_widget
 from siriushla.as_ti_control import TimingMain, MonitorWindow
 
 
@@ -22,5 +23,7 @@ app = SiriusApplication(None, sys.argv)
 if args.type.lower() == 'main':
     app.open_window(TimingMain, parent=None, prefix=args.prefix)
 else:
-    app.open_window(MonitorWindow, parent=None, prefix=args.prefix)
+    window = create_window_from_widget(
+        MonitorWindow, title='Timing Monitor', is_main=True)
+    app.open_window(window, parent=None, prefix=args.prefix)
 sys.exit(app.exec_())
