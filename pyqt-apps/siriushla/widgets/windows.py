@@ -2,9 +2,11 @@
 from qtpy.QtGui import QKeySequence
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QMainWindow, QDialog, QHBoxLayout, QApplication, \
-    QWidget, QLabel
+    QWidget, QLabel, QMenu, QPushButton
 import pyqtgraph as pg
-from siriushla.util import get_package_version
+from pydm.connection_inspector import ConnectionInspector
+
+from ..util import get_package_version
 
 
 def _create_siriuswindow(qt_type):
@@ -16,6 +18,7 @@ def _create_siriuswindow(qt_type):
         ----------
         parent : QWidget
             The parent widget for the SiriusMainWindow
+
         """
 
         Stylesheet = ""
@@ -31,7 +34,11 @@ def _create_siriuswindow(qt_type):
                     'siriushla version: ' + get_package_version(),
                     self, alignment=Qt.AlignRight)
                 self.label_version.setStyleSheet('font-size: 6pt;')
+                self.conn_but = QPushButton('Show Connections...', self)
+                self.conn_but.clicked.connect(self.show_connections)
+                self.conn_but.setStyleSheet('min-width:9em;font-size:6pt;')
                 self.statusBar().addPermanentWidget(self.label_version)
+                self.statusBar().addWidget(self.conn_but)
 
         def keyPressEvent(self, event):
             """Override keyPressEvent."""
@@ -46,7 +53,21 @@ def _create_siriuswindow(qt_type):
                 self.changeFontSize()
             super().keyPressEvent(event)
 
+        def contextMenuEvent(self, event):
+            """."""
+            context_menu = QMenu(self)
+            action = context_menu.addAction('Show Connections...')
+            action.triggered.connect(self.show_connections)
+            context_menu.exec_(self.mapToGlobal(event.pos()))
+
+        def show_connections(self, checked):
+            """."""
+            _ = checked
+            c = ConnectionInspector(self)
+            c.show()
+
         def changeFontSize(self):
+            """."""
             fontsize = self.app.font().pointSize()
             self.ensurePolished()
             for w in self.findChildren(QWidget):
