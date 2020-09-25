@@ -84,9 +84,9 @@ def check_process(cmd, is_window=True, is_pydm=False):
     pid = ''
     if is_pydm:
         _, _, sec, _, app = scmd.split()[0].split('-')[:5]
-        scmd = ('ps h -o pid,command= | grep [s]iriushlacon' +
-                ' | grep ' + app.strip('.py') +
-                ' | grep "/usr/local/bin/pydm"')
+        app = app.strip('.py')
+        scmd = ('ps hx -o pid,command= | grep [s]iriushlacon' +
+                f' | grep {app} | grep "/bin/pydm"')
         if sec in {'bo', 'tb', 'ts', 'si'}:
             scmd += ' | grep ' + sec.upper()
         infos = _subprocess.getoutput(scmd).split('\n')
