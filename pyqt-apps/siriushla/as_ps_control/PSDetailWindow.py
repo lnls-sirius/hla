@@ -63,13 +63,13 @@ class PSDetailWindow(SiriusMainWindow):
                             act = QAction(dcl, menu)
                             connect_newprocess(
                                 act,
-                                ['sirius-hla-as-ps-regatron-individual.py',
+                                ['sirius-hla-as-ps-regatron-individual',
                                  '-dev', dcl], parent=self, is_pydm=True)
                             menu.addAction(act)
                         w.setMenu(menu)
                     else:
                         connect_newprocess(
-                            w, ['sirius-hla-as-ps-regatron-individual.py',
+                            w, ['sirius-hla-as-ps-regatron-individual',
                                 '-dev', dclinks[0]], parent=self, is_pydm=True)
             else:
                 w.setHidden(True)
