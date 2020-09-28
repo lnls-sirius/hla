@@ -30,6 +30,8 @@ class CavityStatusDetails(SiriusDialog):
             'font-weight:bold; qproperty-alignment:AlignCenter;')
         lay_temp1.addRow(lb_temp1)
         lims = [25.0, 35.0]
+        tooltip = 'Interlock limits: \nMin: ' + str(lims[0]) + \
+            '°C, Max: '+str(lims[1])+'°C'
         for idx, cell in enumerate(self.chs['Cav Sts']['Temp']['Cells']):
             lb = PyDMLabel(self, cell[0])
             lb.showUnits = True
@@ -39,26 +41,25 @@ class CavityStatusDetails(SiriusDialog):
                 {cell[0]: {'comp': 'wt', 'value': lims},
                  cell[0].replace('T-Mon', 'TUp-Mon'): 0,
                  cell[0].replace('T-Mon', 'TDown-Mon'): 0})
-            led.setToolTip(
-                'Interlock limits: \n'
-                'Min: '+str(lims[0])+'°C, Max: '+str(lims[1])+'°C')
+            led.setToolTip(tooltip)
             hb = QHBoxLayout()
             hb.setAlignment(Qt.AlignLeft)
             hb.addWidget(lb)
             hb.addWidget(led)
             lay_temp1.addRow('Cell '+str(idx + 1)+': ', hb)
         ch_coup = self.chs['Cav Sts']['Temp']['Coupler'][0]
+        lims_coup = [25.0, 50.0]
         lb_coup = PyDMLabel(self, ch_coup)
         lb_coup.setStyleSheet('min-width:3.5em; max-width:3.5em;')
         lb_coup.showUnits = True
         led_coup = PyDMLedMultiChannel(
             self,
-            {ch_coup: {'comp': 'wt', 'value': lims},
+            {ch_coup: {'comp': 'wt', 'value': lims_coup},
              ch_coup.replace('T-Mon', 'TUp-Mon'): 0,
              ch_coup.replace('T-Mon', 'TDown-Mon'): 0})
         led_coup.setToolTip(
             'Interlock limits: \n'
-            'Min: '+str(lims[0])+'°C, Max: '+str(lims[1])+'°C')
+            'Min: '+str(lims_coup[0])+'°C, Max: '+str(lims_coup[1])+'°C')
         hb_coup = QHBoxLayout()
         hb_coup.setAlignment(Qt.AlignLeft)
         hb_coup.addWidget(lb_coup)

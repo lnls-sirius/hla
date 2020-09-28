@@ -862,7 +862,8 @@ class RFMainControl(SiriusMainWindow):
         comp_val = {'comp': 'wt', 'value': [25.0, 35.0]}
         ch2vals = {c[0]: comp_val
                    for c in self.chs['Cav Sts']['Temp']['Cells']}
-        ch2vals[self.chs['Cav Sts']['Temp']['Coupler'][0]] = comp_val
+        ch2vals[self.chs['Cav Sts']['Temp']['Coupler'][0]] = {
+            'comp': 'wt', 'value': [25.0, 50.0]}
         self.led_temp1ok = PyDMLedMultiChannel(self, ch2vals)
         hbox_temp1_state = QHBoxLayout()
         hbox_temp1_state.addWidget(lb_temp1, alignment=Qt.AlignLeft)
@@ -914,6 +915,9 @@ class RFMainControl(SiriusMainWindow):
         self.line_min1_lim = InfiniteLine(pos=25.0, angle=0, pen=pen)
         self.temp1_graph.addItem(self.line_max1_lim)
         self.temp1_graph.addItem(self.line_min1_lim)
+        if self.section == 'SI':
+            self.line_maxcp_lim = InfiniteLine(pos=50.0, angle=0, pen=pen)
+            self.temp1_graph.addItem(self.line_maxcp_lim)
 
         # Circulator Temperatures
         lb_temp2 = QLabel('<h3> • Circulator Temperatures [°C]</h3>', self)
