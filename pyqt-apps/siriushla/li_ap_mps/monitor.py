@@ -2,12 +2,11 @@
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGridLayout, QLabel, QGroupBox
-from siriushla.widgets import SiriusMainWindow, PyDMLed, \
-    PyDMLedMultiChannel
+from siriushla.widgets import PyDMLed, PyDMLedMultiChannel
 from .util import MPS_PREFIX, SEC_2_POS, SEC_2_STATUS
 
 
-class MPSMonitor(SiriusMainWindow):
+class MPSMonitor(QWidget):
 
     def __init__(self, parent=None, prefix=''):
         super().__init__(parent)
@@ -17,12 +16,10 @@ class MPSMonitor(SiriusMainWindow):
         self._setupUi()
 
     def _setupUi(self):
-        cw = QWidget()
-        lay = QGridLayout(cw)
+        lay = QGridLayout(self)
         lay.setAlignment(Qt.AlignTop)
-        self.setCentralWidget(cw)
 
-        lbl = QLabel('<h2>LI MPS Monitor</h2>', self)
+        lbl = QLabel('<h2>LI MPS</h2>', self)
         lay.addWidget(lbl, 0, 0, 1, 2)
 
         for sec, status in SEC_2_STATUS.items():

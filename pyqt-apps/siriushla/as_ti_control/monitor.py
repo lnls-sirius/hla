@@ -207,7 +207,7 @@ class MonitorLL(QGroupBox):
         return painter
 
 
-class MonitorWindow(SiriusMainWindow):
+class MonitorWindow(QWidget):
 
     def __init__(self, parent=None, prefix=''):
         self.prefix = prefix
@@ -218,11 +218,9 @@ class MonitorWindow(SiriusMainWindow):
             'mdi.timer', color=get_appropriate_color('AS')))
 
     def _setupui(self):
-        wid = QWidget(self)
-        self.setCentralWidget(wid)
-        vl = QVBoxLayout(wid)
+        vl = QVBoxLayout(self)
         vl.addWidget(QLabel(
-            '<h2>Timing Monitor</h2>', alignment=Qt.AlignCenter))
+            '<h2>Timing</h2>', alignment=Qt.AlignCenter))
         vl.addWidget(MonitorLL(self, prefix=self.prefix))
         vl.addWidget(MonitorHL(self, prefix=self.prefix))
         self.setStyleSheet("""

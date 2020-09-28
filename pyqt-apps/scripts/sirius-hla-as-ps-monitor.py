@@ -1,21 +1,23 @@
 #!/usr/bin/env python-sirius
 
-"""Interface to handle general status."""
+"""PS Monitor."""
 
 import sys
 import argparse as _argparse
 from siriushla.sirius_application import SiriusApplication
 from siriuspy.envars import VACA_PREFIX
 from siriushla.as_ps_diag import PSMonitor
-
+from siriushla.widgets.windows import create_window_from_widget
 
 parser = _argparse.ArgumentParser(
-    description="Run Power Supply Monitor Interface.")
+    description="Run PS Monitor Interface.")
 parser.add_argument(
     '-p', "--prefix", type=str, default=VACA_PREFIX,
     help="Define the prefix for the PVs in the window.")
 args = parser.parse_args()
 
 app = SiriusApplication()
-app.open_window(PSMonitor, parent=None, prefix=args.prefix)
+window = create_window_from_widget(
+    PSMonitor, title='PS & PU Monitor', is_main=True)
+app.open_window(window, parent=None, prefix=args.prefix)
 sys.exit(app.exec_())
