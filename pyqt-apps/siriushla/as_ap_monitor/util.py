@@ -10,7 +10,7 @@ def get_label2devices(sec):
     data = get_pslabel2devices(sec).copy()
     if sec == 'LI':
         data['Egun'] = ['LI-01:EG-HVPS', 'LI-01:EG-FilaPS']
-        data['RF'] = ['LI-01:RF-Kly-1', 'LI-01:RF-Kly-2', 'LI-01:RF-SHB']
+        data['RF'] = ['LI-01:RF-SHB', 'LI-01:RF-Kly-1', 'LI-01:RF-Kly-2']
     elif sec == 'BO':
         data['RF'] = ['BO-05D:RF-P5Cav', ]
     elif sec == 'SI':
