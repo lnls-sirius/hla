@@ -178,10 +178,12 @@ class GraphIvsQ(QWidget):
         graph.setShowYGrid(True)
         graph.setBackgroundColor(QColor(_util.get_appropriate_color('LI')))
         graph.setShowLegend(True)
-        graph.setAutoRangeX(True)
-        graph.setAutoRangeY(True)
-        graph.setMinXRange(0.0)
+        graph.setAutoRangeX(False)
+        graph.setAutoRangeY(False)
+        graph.setMinXRange(-1.0)
         graph.setMaxXRange(1.0)
+        graph.setMinYRange(-1.0)
+        graph.setMaxYRange(1.0)
         graph.plotItem.showButtons()
         graph.setAxisColor(QColor(0, 0, 0))
         graph.setYLabels('Q')
@@ -196,8 +198,8 @@ class GraphIvsQ(QWidget):
         axx.setHeight(0)
 
         opts = dict(
-            y_channel='LA-RF:LLRF:' + self.dev.pvname + ':GET_CH1_I',
-            x_channel='LA-RF:LLRF:' + self.dev.pvname + ':GET_CH1_Q',
+            y_channel='LA-RF:LLRF:' + self.dev.pvname + ':GET_CH1_Q',
+            x_channel='LA-RF:LLRF:' + self.dev.pvname + ':GET_CH1_I',
             name='Data',
             color='red',
             redraw_mode=2,
@@ -207,8 +209,8 @@ class GraphIvsQ(QWidget):
             symbolSize=10)
         graph.addChannel(**opts)
         opts = dict(
-            y_channel='LA-RF:LLRF:' + self.dev.pvname + ':GET_CH1_SETTING_I',
-            x_channel='LA-RF:LLRF:' + self.dev.pvname + ':GET_CH1_SETTING_Q',
+            y_channel='LA-RF:LLRF:' + self.dev.pvname + ':GET_CH1_SETTING_Q',
+            x_channel='LA-RF:LLRF:' + self.dev.pvname + ':GET_CH1_SETTING_I',
             name='Setpoint',
             color='blue',
             redraw_mode=2,
