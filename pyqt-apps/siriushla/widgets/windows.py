@@ -2,7 +2,7 @@
 from qtpy.QtGui import QKeySequence
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QMainWindow, QDialog, QHBoxLayout, QApplication, \
-    QWidget, QLabel, QMenu, QPushButton
+    QWidget, QLabel, QMenu, QPushButton, QGraphicsView
 import pyqtgraph as pg
 from pydm.connection_inspector import ConnectionInspector
 
@@ -55,10 +55,27 @@ def _create_siriuswindow(qt_type):
 
         def contextMenuEvent(self, event):
             """."""
+            pos = self.mapToGlobal(event.pos())
+            if self._is_graph(pos):
+                return
             context_menu = QMenu(self)
             action = context_menu.addAction('Show Connections...')
             action.triggered.connect(self.show_connections)
-            context_menu.exec_(self.mapToGlobal(event.pos()))
+            context_menu.exec_(pos)
+
+        def _is_graph(self, pos):
+            wid = self.app.widgetAt(pos)
+            is_graph = False
+            widgets = []
+            while wid and not is_graph:
+                is_graph |= isinstance(wid, QGraphicsView)
+                wid.setAttribute(Qt.WA_TransparentForMouseEvents, True)
+                widgets.append(wid)
+                wid = self.app.widgetAt(pos)
+
+            for wid in widgets:
+                wid.setAttribute(Qt.WA_TransparentForMouseEvents, False)
+            return is_graph
 
         def show_connections(self, checked):
             """."""
