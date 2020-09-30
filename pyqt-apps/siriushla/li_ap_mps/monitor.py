@@ -19,8 +19,8 @@ class MPSMonitor(QWidget):
         lay = QGridLayout(self)
         lay.setAlignment(Qt.AlignTop)
 
-        lbl = QLabel('<h2>LI MPS</h2>', self)
-        lay.addWidget(lbl, 0, 0, 1, 2)
+        self.title = QLabel('<h2>LI MPS Monitor</h2>', self)
+        lay.addWidget(self.title, 0, 0, 1, 2)
 
         for sec, status in SEC_2_STATUS.items():
             gbox = QGroupBox(sec, self)

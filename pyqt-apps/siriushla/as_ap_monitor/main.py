@@ -29,7 +29,7 @@ class SiriusMonitor(SiriusMainWindow):
         self._setupUi()
 
     def _setupUi(self):
-        label = QLabel('<h2>Sirius Monitor</h2>',
+        label = QLabel('<h3>Sirius Monitor</h3>',
                        alignment=Qt.AlignCenter)
         label.setStyleSheet('max-height:1.29em;')
 
@@ -40,12 +40,27 @@ class SiriusMonitor(SiriusMainWindow):
             self, self._prefix,
             get_label2devices_method=get_label2devices,
             get_sec2devlaypos_method=get_sec2dev_laypos)
-        self.wid_asmon.title.setText('<h2>PS, PU & RF</h2>')
+        self.wid_asmon.title.setText('<h3>PS, PU & RF</h3>')
+        self.wid_asmon.setStyleSheet("""
+            QLed{
+                min-height: 0.98em; max-height: 0.98em;
+                min-width: 0.98em; max-width: 0.98em;}""")
 
         self.wid_timon = TIMonitor(self, self._prefix)
+        self.wid_timon.title.setText('<h3>TI</h3>')
+        self.wid_timon.setStyleSheet("""
+            QLed{
+                min-height: 0.98em; max-height: 0.98em;
+                min-width: 0.98em; max-width: 0.98em;}""")
 
         self.wid_mpsmon = LIMPSMonitor(self, self._prefix)
+        self.wid_mpsmon.title.setText('<h3>LI MPS</h3>')
         self.wid_mpsmon.setObjectName('ASApp')
+        self.wid_mpsmon.setStyleSheet("""
+            QLabel { qproperty-alignment: AlignCenter; }
+            QLed{
+                min-height: 0.98em; max-height: 0.98em;
+                min-width: 0.98em; max-width: 0.98em;}""")
 
         layout = QGridLayout(cw)
         layout.setHorizontalSpacing(12)
