@@ -196,13 +196,13 @@ class LIEgunWindow(SiriusMainWindow):
             self, self.prefix+'LI-01:EG-FilaPS:currentoutsoft')
         self._sb_filacurrsp.showStepExponent = False
 
-        self._ld_filavoltrb = QLabel('Voltage RB [V]', self)
-        self._lb_filavoltrb = PyDMLabel(
-            self, self.prefix+'LI-01:EG-FilaPS:voltinsoft')
-
         self._ld_filacurrrb = QLabel('Current RB [A]', self)
         self._lb_filacurrrb = PyDMLabel(
             self, self.prefix+'LI-01:EG-FilaPS:currentinsoft')
+
+        self._ld_filavoltrb = QLabel('Voltage RB [V]', self)
+        self._lb_filavoltrb = PyDMLabel(
+            self, self.prefix+'LI-01:EG-FilaPS:voltinsoft')
 
         wid = QGroupBox('Filament Power Supply', self)
         lay = QGridLayout(wid)
@@ -212,10 +212,10 @@ class LIEgunWindow(SiriusMainWindow):
         lay.addWidget(self._led_filasswtsts, 1, 1)
         lay.addWidget(self._ld_filacurrsp, 0, 2)
         lay.addWidget(self._sb_filacurrsp, 1, 2)
-        lay.addWidget(self._ld_filavoltrb, 0, 3)
-        lay.addWidget(self._lb_filavoltrb, 1, 3)
-        lay.addWidget(self._ld_filacurrrb, 0, 4)
-        lay.addWidget(self._lb_filacurrrb, 1, 4)
+        lay.addWidget(self._ld_filacurrrb, 0, 3)
+        lay.addWidget(self._lb_filacurrrb, 1, 3)
+        lay.addWidget(self._ld_filavoltrb, 0, 4)
+        lay.addWidget(self._lb_filavoltrb, 1, 4)
         return wid
 
     def _setupBiasPSWidget(self):
