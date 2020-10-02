@@ -218,9 +218,10 @@ class MonitorWindow(QWidget):
             'mdi.timer', color=get_appropriate_color('AS')))
 
     def _setupui(self):
+        self.title = QLabel(
+            '<h2>Timing Monitor</h2>', alignment=Qt.AlignCenter)
         vl = QVBoxLayout(self)
-        vl.addWidget(QLabel(
-            '<h2>Timing</h2>', alignment=Qt.AlignCenter))
+        vl.addWidget(self.title)
         vl.addWidget(MonitorLL(self, prefix=self.prefix))
         vl.addWidget(MonitorHL(self, prefix=self.prefix))
         self.setStyleSheet("""
