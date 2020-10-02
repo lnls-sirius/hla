@@ -25,7 +25,6 @@ IsDCLink = re.compile("^.*:PS-DCLink.*$")
 IsLinac = re.compile("^LI-.*$")
 IsLinacSpect = re.compile("^LI-01:PS-Spect$")
 HasTrim = re.compile("^.*SI-Fam:PS-Q.*$")
-HasSoftHardIntlk = re.compile("^(?!LI).*:PS-.*$")
 LIQuadHasNotStrength = re.compile("^LI-.*:PS-(QF1|QD1)$")
 
 
@@ -33,21 +32,18 @@ def get_analog_name(psname):
     """."""
     psname = PVName(psname)
     psmodel = PSSearch.conv_psname_2_psmodel(psname)
-    try:
-        pstype = PSSearch.conv_psname_2_pstype(psname)
-    except KeyError:
-        pstype = ''
+    pstype = PSSearch.conv_psname_2_pstype(psname)
 
     if 'dclink' in pstype:
         if psmodel == 'FBP_DCLink':
             return 'Voltage'
         elif psmodel in {'FAC_ACDC', 'FAC_2S_ACDC', 'FAC_2P4S_ACDC'}:
             return 'CapacitorBankVoltage'
+        elif psmodel == 'REGATRON_DCLink':
+            return 'Voltage'
         else:
             raise RuntimeError(
                 'Undefined PS model {} setpoint PV name'.format(psmodel))
-    elif psmodel == 'REGATRON_DCLink':
-        return 'Voltage'
     else:
         if psname.dis == 'PS':
             return 'Current'
@@ -77,25 +73,30 @@ def get_strength_name(psname):
 
 
 def get_prop2width(psname):
+    psmodel = PSSearch.conv_psname_2_psmodel(psname)
     detail_wid = '8.5' if psname.dev != 'DCLink' else '3'
     dic = {
         'detail': detail_wid,
         'state': '6',
         'intlk':  '5',
         'setpoint': '6',
-        'readback': '6',
         'monitor': '6',
     }
+    if psmodel != 'REGATRON_DCLink':
+        dic.update({'readback': '6'})
     if psname.sec != 'LI':
         dic.update({
-            'bbb': 10,
-            'udc': 10,
             'opmode': '8',
-            'ctrlmode': '6',
             'reset': '4',
-            'ctrlloop': '8',
-            'wfmupdate': '8',
         })
+        if psmodel != 'REGATRON_DCLink':
+            dic.update({
+                'bbb': 10,
+                'udc': 10,
+                'ctrlmode': '6',
+                'ctrlloop': '8',
+                'wfmupdate': '8',
+            })
     else:
         dic['conn'] = '5'
     if get_strength_name(psname):
@@ -112,6 +113,8 @@ def get_prop2width(psname):
 
 
 def get_prop2label(psname):
+    psmodel = PSSearch.conv_psname_2_psmodel(psname)
+
     analog = get_analog_name(psname)
     if 'CapacitorBank' in analog:
         analog = 'Voltage'
@@ -120,19 +123,23 @@ def get_prop2label(psname):
         'state': 'PwrState',
         'intlk': 'Interlocks',
         'setpoint': analog + '-SP',
-        'readback': analog + '-RB',
         'monitor': analog + '-Mon',
     }
+    if psmodel != 'REGATRON_DCLink':
+        dic.update({'readback': analog + '-RB'})
     if psname.sec != 'LI':
         dic.update({
-            'bbb': 'Beagle Bone',
-            'udc': 'UDC',
             'opmode': 'OpMode',
-            'ctrlmode': 'Control Mode',
             'reset': 'Reset',
-            'ctrlloop': 'Control Loop',
-            'wfmupdate': 'Wfm Update',
         })
+        if psmodel != 'REGATRON_DCLink':
+            dic.update({
+                'bbb': 'Beagle Bone',
+                'udc': 'UDC',
+                'ctrlmode': 'Control Mode',
+                'ctrlloop': 'Control Loop',
+                'wfmupdate': 'Wfm Update',
+            })
     else:
         dic['conn'] = 'Connected'
     strength = get_strength_name(psname)
@@ -170,22 +177,24 @@ class SummaryWidget(QWidget):
         """Build UI with dclink name."""
         super().__init__(parent)
         self._name = PVName(name)
+        self._psmodel = PSSearch.conv_psname_2_psmodel(name)
         self.visible_props = sort_propties(visible_props)
         self.filled_widgets = set()
         self._prefixed_name = VACA_PREFIX + name
-        self._is_pulsed = self._name.dis == 'PU'
         self._analog_name = get_analog_name(self._name)
         self._strength_name = get_strength_name(self._name)
+        self._is_pulsed = IsPulsed.match(self._name)
+        self._is_linac = IsLinac.match(self._name)
         self._li_has_not_strength = LIQuadHasNotStrength.match(self._name)
-        self._has_softhard_intlk = HasSoftHardIntlk.match(self._name)
         self._has_trim = HasTrim.match(self._name)
         self._has_strength = bool(
             self._strength_name and not self._li_has_not_strength)
         self._is_dclink = IsDCLink.match(self._name)
-        self._is_linac = IsLinac.match(self._name)
+        self._is_regatron = self._psmodel == 'REGATRON_DCLink'
         self._bbb_name = ''
         self._udc_name = ''
-        if not self._is_pulsed and not self._name.sec == 'LI':
+        if not self._is_pulsed and not self._is_linac and \
+                not self._is_regatron:
             self._bbb_name = PSSearch.conv_psname_2_bbbname(self._name)
             self._udc_name = PSSearch.conv_psname_2_udc(self._name)
 
@@ -218,7 +227,7 @@ class SummaryWidget(QWidget):
         self._widgets_dict['detail'] = self.detail_wid
         lay.addWidget(self.detail_wid)
 
-        if not self._is_linac:
+        if not self._is_linac and not self._is_regatron:
             self.bbb_wid = self._build_widget(name='bbb', orientation='v')
             self._widgets_dict['bbb'] = self.bbb_wid
             lay.addWidget(self.bbb_wid)
@@ -236,6 +245,11 @@ class SummaryWidget(QWidget):
                 name='ctrlmode', orientation='v')
             self._widgets_dict['ctrlmode'] = self.ctrlmode_wid
             lay.addWidget(self.ctrlmode_wid)
+        elif self._is_regatron:
+            self.opmode_wid = self._build_widget(
+                name='opmode', orientation='v')
+            self._widgets_dict['opmode'] = self.opmode_wid
+            lay.addWidget(self.opmode_wid)
 
         self.state_wid = self._build_widget(name='state')
         self._widgets_dict['state'] = self.state_wid
@@ -250,33 +264,34 @@ class SummaryWidget(QWidget):
         self._widgets_dict['intlk'] = self.intlk_wid
         lay.addWidget(self.intlk_wid)
 
-        if not self._is_linac:
+        if self._is_linac:
+            self.conn_wid = self._build_widget(name='conn')
+            self._widgets_dict['conn'] = self.conn_wid
+            lay.addWidget(self.conn_wid)
+        else:
             self.reset_wid = self._build_widget(name='reset')
             self._widgets_dict['reset'] = self.reset_wid
             lay.addWidget(self.reset_wid)
 
-            self.ctrlloop_wid = self._build_widget(name='ctrlloop')
-            self._widgets_dict['ctrlloop'] = self.ctrlloop_wid
-            lay.addWidget(self.ctrlloop_wid)
+            if not self._is_regatron:
+                self.ctrlloop_wid = self._build_widget(name='ctrlloop')
+                self._widgets_dict['ctrlloop'] = self.ctrlloop_wid
+                lay.addWidget(self.ctrlloop_wid)
 
-            self.wfmupdate_wid = self._build_widget(name='wfmupdate')
-            self._widgets_dict['wfmupdate'] = self.wfmupdate_wid
-            lay.addWidget(self.wfmupdate_wid)
-
-        else:
-            self.conn_wid = self._build_widget(name='conn')
-            self._widgets_dict['conn'] = self.conn_wid
-            lay.addWidget(self.conn_wid)
+                self.wfmupdate_wid = self._build_widget(name='wfmupdate')
+                self._widgets_dict['wfmupdate'] = self.wfmupdate_wid
+                lay.addWidget(self.wfmupdate_wid)
 
         self.setpoint_wid = self._build_widget(
             name='setpoint', orientation='v')
         self._widgets_dict['setpoint'] = self.setpoint_wid
         lay.addWidget(self.setpoint_wid)
 
-        self.readback_wid = self._build_widget(
-            name='readback', orientation='v')
-        self._widgets_dict['readback'] = self.readback_wid
-        lay.addWidget(self.readback_wid)
+        if not self._is_regatron:
+            self.readback_wid = self._build_widget(
+                name='readback', orientation='v')
+            self._widgets_dict['readback'] = self.readback_wid
+            lay.addWidget(self.readback_wid)
 
         self.monitor_wid = self._build_widget(
             name='monitor', orientation='v')
@@ -339,21 +354,24 @@ class SummaryWidget(QWidget):
         self._pwrstate_sel = self._prefixed_name + ':PwrState-Sel'
         self._pwrstate_sts = self._prefixed_name + ':PwrState-Sts'
 
-        if self._has_softhard_intlk:
-            self._soft_intlk = self._prefixed_name + ':IntlkSoft-Mon'
-            self._hard_intlk = self._prefixed_name + ':IntlkHard-Mon'
-        elif self._is_pulsed:
+        if self._is_pulsed:
             self._intlk = list()
             for i in range(1, 8):
                 self._intlk.append(self._prefixed_name+":Intlk"+str(i)+"-Mon")
             if 'Sept' not in self._name.dev:
                 self._intlk.append(self._prefixed_name+":Intlk8-Mon")
-        else:
+        elif self._is_linac:
             self._intlk = self._prefixed_name + ":StatusIntlk-Mon"
+        elif self._is_regatron:
+            self._intlk = self._prefixed_name + ":Intlk-Mon"
+        else:
+            self._soft_intlk = self._prefixed_name + ':IntlkSoft-Mon'
+            self._hard_intlk = self._prefixed_name + ':IntlkHard-Mon'
 
         sp = self._analog_name
         self._analog_sp = self._prefixed_name + ':{}-SP'.format(sp)
-        self._analog_rb = self._prefixed_name + ':{}-RB'.format(sp)
+        if not self._is_regatron:
+            self._analog_rb = self._prefixed_name + ':{}-RB'.format(sp)
         self._analog_mon = self._prefixed_name + ':{}-Mon'.format(sp)
 
         if self._has_strength:
@@ -362,17 +380,18 @@ class SummaryWidget(QWidget):
             self._strength_rb = self._prefixed_name + ':{}-RB'.format(st)
             self._strength_mon = self._prefixed_name + ':{}-Mon'.format(st)
 
-        if not self._is_linac:
-            self._opmode_sel = self._prefixed_name + ':OpMode-Sel'
-            self._opmode_sts = self._prefixed_name + ':OpMode-Sts'
-            self._ctrlmode_sts = self._prefixed_name + ':CtrlMode-Mon'
-            self._ctrlloop_sel = self._prefixed_name + ':CtrlLoop-Sel'
-            self._ctrlloop_sts = self._prefixed_name + ':CtrlLoop-Sts'
-            self._wfmupdate_sel = self._prefixed_name + ':WfmUpdateAuto-Sel'
-            self._wfmupdate_sts = self._prefixed_name + ':WfmUpdateAuto-Sts'
-            self._reset_intlk = self._prefixed_name + ':Reset-Cmd'
-        else:
+        if self._is_linac:
             self._conn = self._prefixed_name + ':Connected-Mon'
+        else:
+            self._opmode_sts = self._prefixed_name + ':OpMode-Sts'
+            self._reset_intlk = self._prefixed_name + ':Reset-Cmd'
+            if not self._is_regatron:
+                self._opmode_sel = self._prefixed_name + ':OpMode-Sel'
+                self._ctrlmode_sts = self._prefixed_name+':CtrlMode-Mon'
+                self._ctrlloop_sel = self._prefixed_name+':CtrlLoop-Sel'
+                self._ctrlloop_sts = self._prefixed_name+':CtrlLoop-Sts'
+                self._wfmupdate_sel = self._prefixed_name+':WfmUpdateAuto-Sel'
+                self._wfmupdate_sts = self._prefixed_name+':WfmUpdateAuto-Sts'
 
         if self._is_pulsed:
             self._pulse_sel = self._prefixed_name + ':Pulse-Sel'
@@ -400,10 +419,10 @@ class SummaryWidget(QWidget):
                     qta.icon('fa5s.list-ul'), '', self)
                 self.detail_bt.setToolTip(self._name)
             self.detail_wid.layout().addWidget(self.detail_bt)
-        elif name == 'bbb':
+        elif name == 'bbb' and not self._is_regatron:
             self.bbb_lb = QLabel(self._bbb_name, self)
             self.bbb_wid.layout().addWidget(self.bbb_lb)
-        elif name == 'udc':
+        elif name == 'udc' and not self._is_regatron:
             self.udc_lb = QLabel(self._udc_name, self)
             self.udc_wid.layout().addWidget(self.udc_lb)
         elif name == 'opmode':
@@ -415,7 +434,7 @@ class SummaryWidget(QWidget):
             opmode_list.append(self.opmode_lb)
             for wid in opmode_list:
                 self.opmode_wid.layout().addWidget(wid)
-        elif name == 'ctrlmode':
+        elif name == 'ctrlmode' and not self._is_regatron:
             self.ctrlmode_lb = PyDMLabel(self, self._ctrlmode_sts)
             self.ctrlmode_wid.layout().addWidget(self.ctrlmode_lb)
         elif name == 'state':
@@ -429,20 +448,23 @@ class SummaryWidget(QWidget):
             self.pulse_wid.layout().addWidget(self.pulse_bt)
             self.pulse_wid.layout().addWidget(self.pulse_led)
         elif name == 'intlk':
-            if self._has_softhard_intlk:
-                self.soft_intlk_led = SiriusLedAlert(self, self._soft_intlk)
-                self.hard_intlk_led = SiriusLedAlert(self, self._hard_intlk)
-                self.intlk_wid.layout().addWidget(self.soft_intlk_led)
-                self.intlk_wid.layout().addWidget(self.hard_intlk_led)
-            elif self._is_pulsed:
+            if self._is_pulsed:
                 self.intlk_led = PyDMLedMultiChannel(
                     self, channels2values={ch: 1 for ch in self._intlk})
                 self.intlk_wid.layout().addWidget(self.intlk_led)
-            else:
+            elif self._is_linac:
                 self.intlk_led = PyDMLedMultiChannel(
                     self, channels2values={
                         self._intlk: {'value': 64, 'comp': 'lt'}})
                 self.intlk_wid.layout().addWidget(self.intlk_led)
+            elif self._is_regatron:
+                self.intlk_led = SiriusLedAlert(self, self._intlk)
+                self.intlk_wid.layout().addWidget(self.intlk_led)
+            else:
+                self.soft_intlk_led = SiriusLedAlert(self, self._soft_intlk)
+                self.hard_intlk_led = SiriusLedAlert(self, self._hard_intlk)
+                self.intlk_wid.layout().addWidget(self.soft_intlk_led)
+                self.intlk_wid.layout().addWidget(self.hard_intlk_led)
         elif name == 'conn' and self._is_linac:
             self.conn_led = PyDMLedMultiChannel(
                 self, channels2values={self._conn: 0})
@@ -455,13 +477,13 @@ class SummaryWidget(QWidget):
             self.reset_bt.setStyleSheet(
                 '#reset_bt{min-width:25px; max-width:25px; icon-size:20px;}')
             self.reset_wid.layout().addWidget(self.reset_bt)
-        elif name == 'ctrlloop':
+        elif name == 'ctrlloop' and not self._is_regatron:
             self.ctrlloop_bt = PyDMStateButton(
                 self, self._ctrlloop_sel, invert=True)
             self.ctrlloop_lb = PyDMLabel(self, self._ctrlloop_sts)
             self.ctrlloop_wid.layout().addWidget(self.ctrlloop_bt)
             self.ctrlloop_wid.layout().addWidget(self.ctrlloop_lb)
-        elif name == 'wfmupdate':
+        elif name == 'wfmupdate' and not self._is_regatron:
             self.wfmupdate_bt = PyDMStateButton(self, self._wfmupdate_sel)
             self.wfmupdate_led = SiriusLedState(self, self._wfmupdate_sts)
             self.wfmupdate_wid.layout().addWidget(self.wfmupdate_bt)
@@ -470,7 +492,7 @@ class SummaryWidget(QWidget):
             self.setpoint = PyDMLinEditScrollbar(self._analog_sp, self)
             self.setpoint.sp_scrollbar.setTracking(False)
             self.setpoint_wid.layout().addWidget(self.setpoint)
-        elif name == 'readback':
+        elif name == 'readback' and not self._is_regatron:
             self.readback = PyDMLabel(self, self._analog_rb)
             self.readback_wid.layout().addWidget(self.readback)
         elif name == 'monitor':
