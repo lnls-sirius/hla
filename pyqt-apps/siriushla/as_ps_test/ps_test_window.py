@@ -18,6 +18,8 @@ from siriushla.widgets import SiriusMainWindow, PVNameTree
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets.dialog import ProgressDialog
 from siriushla.as_ti_control import HLTriggerDetailed
+
+from .conn import REGATRONS_2_CONTROL
 from .tasks import CreateTesters, \
     CheckStatus, \
     ResetIntlk, CheckIntlk, \
@@ -386,7 +388,8 @@ class PSTestWindow(SiriusMainWindow):
             devices = self._get_selected_ps()
             if not devices:
                 return
-            dclinks = self._get_related_dclinks(devices)
+            dclinks = self._get_related_dclinks(
+                devices, include_regatrons=True)
             devices.extend(dclinks)
             label1 = 'Reading PS and DCLinks Status...'
         elif dev_type == 'PU':
@@ -456,7 +459,8 @@ class PSTestWindow(SiriusMainWindow):
             devices = self._get_selected_ps()
             if not devices:
                 return
-            dclinks = self._get_related_dclinks(devices)
+            dclinks = self._get_related_dclinks(
+                devices, include_regatrons=True)
             devices.extend(dclinks)
             dev_label = 'PS and DCLinks'
         elif dev_type == 'PU':
@@ -528,7 +532,8 @@ class PSTestWindow(SiriusMainWindow):
         pwrsupplies = self._get_selected_ps()
         if not pwrsupplies:
             return
-        devices = self._get_related_dclinks(pwrsupplies)
+        devices = self._get_related_dclinks(
+            pwrsupplies, include_regatrons=True)
         if not devices:
             return
 
@@ -554,7 +559,7 @@ class PSTestWindow(SiriusMainWindow):
             task3 = CheckInitOk(devices, parent=self)
             task3.itemDone.connect(self._log)
             tasks.append(task3)
-            labels.append('Wait DCLinks OpMode turn to SlowRef...')
+            labels.append('Wait DCLinks initialize...')
         else:
             task2.itemDone.connect(self._log)
 
@@ -603,12 +608,16 @@ class PSTestWindow(SiriusMainWindow):
         pwrsupplies = self._get_selected_ps()
         if not pwrsupplies:
             return
-        devices = self._get_related_dclinks(pwrsupplies)
+        devices = self._get_related_dclinks(
+            pwrsupplies, include_regatrons=True)
+        dev_exc_regatrons = {
+            dev for dev in devices
+            if PSSearch.conv_psname_2_psmodel(dev) != 'REGATRON_DCLink'}
         if not devices:
             return
 
         task0 = CreateTesters(devices, parent=self)
-        task1 = SetCapBankVolt(devices, parent=self)
+        task1 = SetCapBankVolt(dev_exc_regatrons, parent=self)
         task2 = CheckCapBankVolt(devices, parent=self)
         task2.itemDone.connect(self._log)
         labels = ['Connecting to devices...',
@@ -809,7 +818,7 @@ class PSTestWindow(SiriusMainWindow):
             return False
         return devices
 
-    def _get_related_dclinks(self, psnames):
+    def _get_related_dclinks(self, psnames, include_regatrons=False):
         alldclinks = set()
         for name in psnames:
             if 'LI' in name:
@@ -819,6 +828,10 @@ class PSTestWindow(SiriusMainWindow):
                 dclink_type = PSSearch.conv_psname_2_psmodel(dclinks[0])
                 if dclink_type != 'REGATRON_DCLink':
                     alldclinks.update(dclinks)
+                elif include_regatrons:
+                    for dcl in dclinks:
+                        if dcl in REGATRONS_2_CONTROL:
+                            alldclinks.add(dcl)
         return list(alldclinks)
 
     def _open_detail(self, index):

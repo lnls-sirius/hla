@@ -31,6 +31,40 @@ DEFAULT_CAP_BANK_VOLT = {
     'PA-RaPSC03:PS-DCLink-BO2': 300,
 }
 
+REGATRONS_2_CONTROL = [
+    # Dipoles
+    'PA-RaPSD01:PS-DCLink-1A',
+    'PA-RaPSD03:PS-DCLink-2A',
+    'PA-RaPSD01:PS-DCLink-3A',
+    'PA-RaPSD03:PS-DCLink-4A',
+    'PA-RaPSD05:PS-DCLink-1A',
+    'PA-RaPSD07:PS-DCLink-2A',
+    'PA-RaPSD05:PS-DCLink-3A',
+    'PA-RaPSD07:PS-DCLink-4A',
+    # Quadrupoles
+    'PA-RaPSA01:PS-DCLink-QFAP',
+    'PA-RaPSA01:PS-DCLink-QFB',
+    'PA-RaPSA03:PS-DCLink-QDAP',
+    'PA-RaPSA04:PS-DCLink-QDB',
+    'PA-RaPSA06:PS-DCLink-Q13A',
+    'PA-RaPSA07:PS-DCLink-Q24A',
+    # Sextupoles
+    'PA-RaPSB01:PS-DCLink-SDAP0',
+    'PA-RaPSB01:PS-DCLink-SDB0',
+    'PA-RaPSB03:PS-DCLink-SFAP0',
+    'PA-RaPSB03:PS-DCLink-SFB0',
+    'PA-RaPSB04:PS-DCLink-SDB1',
+    'PA-RaPSB04:PS-DCLink-SDA12',
+    'PA-RaPSB05:PS-DCLink-SDA3SFA1',
+    'PA-RaPSB05:PS-DCLink-SDB2',
+    'PA-RaPSB07:PS-DCLink-SFA2SDP1',
+    'PA-RaPSB07:PS-DCLink-SDB3',
+    'PA-RaPSB08:PS-DCLink-SDP23',
+    'PA-RaPSB08:PS-DCLink-SFB1',
+    'PA-RaPSB10:PS-DCLink-SFP12',
+    'PA-RaPSB10:PS-DCLink-SFB2',
+]
+
 
 TIMEOUT_CONN = 0.05
 TEST_TOLERANCE = 1e-1
@@ -198,6 +232,70 @@ class TesterDCLink(_TesterPSBase):
 
     def _cmp(self, value, target):
         return value >= target
+
+
+class TesterDCLinkRegatron(_TesterBase):
+    """DCLink tester."""
+
+    properties = ['Reset-Cmd', 'Intlk-Mon', 'OpMode-Sts',
+                  'PwrState-Sel', 'PwrState-Sts',
+                  'Voltage-SP', 'VoltageRef-Mon', 'Voltage-Mon']
+
+    _OPMODE_STS_OFF = 14  # Stop
+    _OPMODE_STS_ON = 8  # Run
+    _OPMODE_STS_OPR = 4  # Ready
+    _OPMODE_STS_OK = [_OPMODE_STS_OPR, _OPMODE_STS_ON]
+
+    def __init__(self, device):
+        """Init."""
+        super().__init__(device)
+        for ppty in TesterDCLinkRegatron.properties:
+            self._pvs[ppty] = _PV(
+                VACA_PREFIX + device + ':' + ppty,
+                connection_timeout=TIMEOUT_CONN)
+
+    def reset(self):
+        """Reset."""
+        self._pvs['Reset-Cmd'].value = 1
+
+    def check_intlk(self):
+        """Check interlocks."""
+        return self._pvs['Intlk-Mon'].value == 0
+
+    def set_pwrstate(self, state='on'):
+        """Set PwrState."""
+        if state == 'on':
+            state = _PSC.OffOn.On
+        else:
+            state = _PSC.OffOn.Off
+        self._pvs['PwrState-Sel'].value = state
+
+    def check_pwrstate(self, state='on'):
+        """Check PwrState."""
+        if state == 'on':
+            ok = self._pvs['PwrState-Sts'].value == _PSC.OffOn.On
+            ok &= self._pvs['OpMode-Sts'].value in self._OPMODE_STS_OK
+        else:
+            ok = self._pvs['PwrState-Sts'].value == _PSC.OffOn.Off
+            ok &= self._pvs['OpMode-Sts'].value == self._OPMODE_STS_OFF
+        return ok
+
+    def check_init_ok(self):
+        """Check OpMode Ok."""
+        return self._pvs['OpMode-Sts'].value in self._OPMODE_STS_OK
+
+    def check_capvolt(self):
+        """Check voltage."""
+        return _np.isclose(self._pvs['Voltage-Mon'].value,
+                           self._pvs['VoltageRef-Mon'].value,
+                           rtol=0.05)
+
+    def check_status(self):
+        status = True
+        status &= self.check_intlk()
+        if self.check_pwrstate():
+            status &= self.check_capvolt()
+        return status
 
 
 class TesterPS(_TesterPSBase):
