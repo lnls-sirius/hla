@@ -2,9 +2,9 @@
 
 import numpy as _np
 
-from qtpy.QtCore import Qt, Slot
+from qtpy.QtCore import Qt, Slot, QEvent
 from qtpy.QtWidgets import QWidget, QGridLayout, QLabel, \
-    QVBoxLayout, QGroupBox, QHBoxLayout
+    QVBoxLayout, QGroupBox, QHBoxLayout, QApplication
 from qtpy.QtGui import QColor, QFont
 
 import qtawesome as qta
@@ -27,6 +27,7 @@ class SIGenStatusWindow(SiriusMainWindow):
     def __init__(self, prefix=VACA_PREFIX, parent=None):
         super().__init__(parent)
         self.prefix = prefix
+        self.app = QApplication.instance()
         self.setObjectName('ASApp')
         self.setWindowTitle('Sirius General Status')
         self.setWindowIcon(
@@ -39,20 +40,29 @@ class SIGenStatusWindow(SiriusMainWindow):
                             alignment=Qt.AlignCenter)
 
         # controls
-        self._ld_machsht = QLabel(
+        self.ld_machsht = QLabel(
             '<h4>Shift: </h4>', self, alignment=Qt.AlignCenter)
-        self._lb_machsht = PyDMLabel(
+        self.lb_machsht = PyDMLabel(
             self, self.prefix+'AS-Glob:AP-MachShift:Mode-Sts')
-        self._lb_machsht.setStyleSheet("""
-            QLabel{
-                font-size: 18px; min-width: 5em;
-                qproperty-alignment: AlignCenter;}""")
-        self._gbox_machsht = QGroupBox()
-        lay_mach = QHBoxLayout(self._gbox_machsht)
-        lay_mach.addWidget(self._ld_machsht)
-        lay_mach.addWidget(self._lb_machsht)
-        lay_mach.setStretch(0, 1)
-        lay_mach.setStretch(1, 4)
+        self.lb_machsht.setAlignment(Qt.AlignCenter)
+        self.lb_machsht.setStyleSheet('QLabel{font-size: 13.5pt;}')
+        color_list = [
+            SiriusFrame.Yellow,  # Users
+            SiriusFrame.LightGreen,  # Commissioning
+            SiriusFrame.LightBlue,  # Conditioning
+            SiriusFrame.Red,  # Injection
+            SiriusFrame.LightGreen,  # MachineStudy
+            SiriusFrame.LightSalmon,  # Maintenance
+        ]
+        self.frm_machsht = SiriusFrame(
+            self, self.prefix+'AS-Glob:AP-MachShift:Mode-Sts',
+            color_list=color_list, is_float=False)
+        self.frm_machsht.add_widget(self.lb_machsht)
+        box_mach = QHBoxLayout()
+        box_mach.addWidget(self.ld_machsht)
+        box_mach.addWidget(self.frm_machsht)
+        box_mach.setStretch(0, 1)
+        box_mach.setStretch(1, 4)
 
         self._led_siriusintlk = SiriusLedAlert(
             self, self.prefix+'SI-02SB:RF-Intlk:SIA-Mon')
@@ -101,16 +111,14 @@ class SIGenStatusWindow(SiriusMainWindow):
         self.ld_curr.setStyleSheet('max-height: 2em;')
         self.lb_curr = PyDMLabel(
             self, self.prefix+'SI-Glob:AP-CurrInfo:Current-Mon')
+        self.lb_curr.setAlignment(Qt.AlignCenter)
+        self.lb_curr.setStyleSheet(
+            'QLabel{background-color: #d7ccc8;font-size: 30pt;}')
         self.lb_curr.showUnits = True
-        self.lb_curr.setStyleSheet("""
-            QLabel{
-                background-color: #d7ccc8;
-                font-size: 40px; min-width: 5em;
-                qproperty-alignment: AlignCenter;}""")
         self.frm_curr = SiriusFrame(
-            self, self.prefix+'SI-Glob:AP-CurrInfo:StoredEBeam-Mon')
-        self.frm_curr.onColor = SiriusFrame.LightGreen
-        self.frm_curr.offColor = SiriusFrame.DarkGreen
+            self, self.prefix+'SI-Glob:AP-CurrInfo:StoredEBeam-Mon',
+            color_list=[SiriusFrame.DarkGreen, SiriusFrame.LightGreen],
+            is_float=False)
         self.frm_curr.borderWidth = 5
         self.frm_curr.add_widget(self.lb_curr)
         box_curr = QGridLayout()
@@ -123,11 +131,8 @@ class SIGenStatusWindow(SiriusMainWindow):
         self.ld_lifetime = QLabel(
             '<h4>Lifetime</h4>', self, alignment=Qt.AlignCenter)
         self.ld_lifetime.setStyleSheet('max-height: 2em;')
-        self.lb_lifetime = QLabel('0:00:00', self)
-        self.lb_lifetime.setStyleSheet("""
-            QLabel{
-                font-size: 40px; min-width: 5em;
-                qproperty-alignment: AlignCenter;}""")
+        self.lb_lifetime = QLabel('0:00:00', self, alignment=Qt.AlignCenter)
+        self.lb_lifetime.setStyleSheet('QLabel{font-size: 30pt;}')
         self.ch_lifetime = SiriusConnectionSignal(
             self.prefix+'SI-Glob:AP-CurrInfo:Lifetime-Mon')
         self.ch_lifetime.new_value_signal[float].connect(
@@ -150,7 +155,7 @@ class SIGenStatusWindow(SiriusMainWindow):
         self.curr_graph.setYLabels(['Current [mA]'])
         for ax in self.curr_graph.getPlotItem().axes.values():
             sty = ax['item'].labelStyle
-            sty['font-size'] = '14pt'
+            sty['font-size'] = '12pt'
             ax['item'].setLabel(text=None, **sty)
         font = QFont()
         font.setPointSize(12)
@@ -189,8 +194,7 @@ class SIGenStatusWindow(SiriusMainWindow):
         lay = QGridLayout(cw)
         lay.setVerticalSpacing(16)
         lay.setHorizontalSpacing(14)
-        lay.addWidget(self.title, 0, 1)
-        lay.addWidget(self._gbox_machsht, 0, 2)
+        lay.addLayout(box_mach, 0, 1)
         lay.addLayout(hlay1, 1, 0, 1, 3)
         lay.addWidget(self.curr_graph, 2, 0, 1, 3)
         lay.addLayout(hlay2, 3, 0, 1, 3)
@@ -223,3 +227,34 @@ class SIGenStatusWindow(SiriusMainWindow):
             lay.addWidget(wid)
         lay.addStretch()
         return gbox
+
+    def changeEvent(self, event):
+        if event.type() == QEvent.FontChange:
+            fontsize = self.app.font().pointSize()
+
+            # labels
+            self._lb_machsht.setStyleSheet(
+                'QLabel{font-size: '+str(fontsize+3.5)+'pt;}')
+            self.lb_curr.setStyleSheet(
+                'QLabel{background-color: #d7ccc8;'
+                'font-size: '+str(fontsize+20)+'pt;}')
+            self.lb_lifetime.setStyleSheet(
+                'QLabel{font-size: '+str(fontsize+20)+'pt;}')
+
+            # graph
+            graph_fontsize = fontsize + 2
+            for ax in self.curr_graph.getPlotItem().axes.values():
+                sty = ax['item'].labelStyle
+                sty['font-size'] = str(graph_fontsize) + 'pt'
+                ax['item'].setLabel(text=None, **sty)
+
+            font = QFont()
+            font.setPointSize(graph_fontsize)
+            self.curr_graph.plotItem.getAxis('bottom').setStyle(
+                tickTextOffset=5, autoExpandTextSpace=False,
+                tickTextWidth=80, tickFont=font)
+            self.curr_graph.plotItem.getAxis('left').setStyle(
+                tickTextOffset=5, autoExpandTextSpace=False,
+                tickTextWidth=80, tickFont=font)
+
+            self.ensurePolished()
