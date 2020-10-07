@@ -107,14 +107,13 @@ class SIGenStatusWindow(SiriusMainWindow):
 
         # current
         self.ld_curr = QLabel(
-            '<h4>Current</h4>', self, alignment=Qt.AlignCenter)
+            '<h4>Current [mA]</h4>', self, alignment=Qt.AlignCenter)
         self.ld_curr.setStyleSheet('max-height: 2em;')
         self.lb_curr = PyDMLabel(
             self, self.prefix+'SI-Glob:AP-CurrInfo:Current-Mon')
         self.lb_curr.setAlignment(Qt.AlignCenter)
         self.lb_curr.setStyleSheet(
             'QLabel{background-color: #d7ccc8;font-size: 30pt;}')
-        self.lb_curr.showUnits = True
         self.frm_curr = SiriusFrame(
             self, self.prefix+'SI-Glob:AP-CurrInfo:StoredEBeam-Mon',
             color_list=[SiriusFrame.DarkGreen, SiriusFrame.LightGreen],
