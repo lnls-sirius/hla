@@ -59,6 +59,8 @@ class BbBTimingWidget(QWidget):
         ld_fidsigoff = QLabel('FID Signal Offset [ps]', self)
         sb_fidsigoff = PyDMSpinbox(self, self.dev_pref+':OFF_FIDS')
         sb_fidsigoff.showStepExponent = False
+        sb_fidsigoff.limitsFromChannel = False
+        sb_fidsigoff.setRange(0, 3000)
         ld_fiddelay = QLabel('Fiducial Delay', self)
         sb_fiddelay = PyDMSpinbox(self, self.dev_pref+':FID_DELAY')
         sb_fiddelay.showStepExponent = False
