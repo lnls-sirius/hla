@@ -48,11 +48,11 @@ class SIGenStatusWindow(SiriusMainWindow):
         self.lb_machsht.setStyleSheet('QLabel{font-size: 13.5pt;}')
         color_list = [
             SiriusFrame.Yellow,  # Users
-            SiriusFrame.LightGreen,  # Commissioning
-            SiriusFrame.LightBlue,  # Conditioning
-            SiriusFrame.Red,  # Injection
-            SiriusFrame.LightGreen,  # MachineStudy
-            SiriusFrame.LightSalmon,  # Maintenance
+            SiriusFrame.LightBlue,  # Commissioning
+            SiriusFrame.LightViolet,  # Conditioning
+            SiriusFrame.LightSalmon,  # Injection
+            SiriusFrame.LightBlue,  # MachineStudy
+            SiriusFrame.LightGreen,  # Maintenance
         ]
         self.frm_machsht = SiriusFrame(
             self, self.prefix+'AS-Glob:AP-MachShift:Mode-Sts',
