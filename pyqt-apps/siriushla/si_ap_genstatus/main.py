@@ -121,12 +121,13 @@ class SIGenStatusWindow(SiriusMainWindow):
             is_float=False)
         self.frm_curr.borderWidth = 5
         self.frm_curr.add_widget(self.lb_curr)
-        box_curr = QGridLayout()
-        box_curr.setAlignment(Qt.AlignCenter)
-        box_curr.addWidget(self.ld_curr, 0, 0)
-        box_curr.addWidget(self.frm_curr, 1, 0)
-        box_curr.setColumnStretch(0, 5)
-        box_curr.setColumnStretch(1, 1)
+        box_curr = QWidget()
+        lay_curr = QGridLayout(box_curr)
+        lay_curr.setAlignment(Qt.AlignVCenter)
+        lay_curr.addWidget(self.ld_curr, 0, 0)
+        lay_curr.addWidget(self.frm_curr, 1, 0)
+        lay_curr.setColumnStretch(0, 5)
+        lay_curr.setColumnStretch(1, 1)
 
         self.ld_lifetime = QLabel(
             '<h4>Lifetime</h4>', self, alignment=Qt.AlignCenter)
@@ -137,10 +138,11 @@ class SIGenStatusWindow(SiriusMainWindow):
             self.prefix+'SI-Glob:AP-CurrInfo:Lifetime-Mon')
         self.ch_lifetime.new_value_signal[float].connect(
             self.formatLifetimeLabel)
-        box_lt = QGridLayout()
-        box_lt.setAlignment(Qt.AlignCenter)
-        box_lt.addWidget(self.ld_lifetime, 0, 0)
-        box_lt.addWidget(self.lb_lifetime, 1, 0)
+        box_lt = QWidget()
+        lay_lt = QGridLayout(box_lt)
+        lay_lt.setAlignment(Qt.AlignVCenter)
+        lay_lt.addWidget(self.ld_lifetime, 0, 0)
+        lay_lt.addWidget(self.lb_lifetime, 1, 0)
 
         self.tune_mon = SITuneMonitor(self, self.prefix, description='short',
                                       use_color_labels=False)
@@ -175,10 +177,10 @@ class SIGenStatusWindow(SiriusMainWindow):
 
         cw = QWidget()
         hlay1 = QHBoxLayout()
-        hlay1.setSpacing(14)
+        hlay1.setSpacing(30)
         hlay1.setAlignment(Qt.AlignVCenter)
-        hlay1.addLayout(box_curr)
-        hlay1.addLayout(box_lt)
+        hlay1.addWidget(box_curr)
+        hlay1.addWidget(box_lt)
         hlay1.addWidget(self.tune_mon)
 
         hlay2 = QHBoxLayout()
