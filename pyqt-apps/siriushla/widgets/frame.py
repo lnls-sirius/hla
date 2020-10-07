@@ -9,6 +9,7 @@ class SiriusFrame(PyDMFrame):
     """Sirius Frame."""
 
     LightGreen = (0, 255, 0)
+    DarkGreen = (20, 80, 10)
     Red = (255, 0, 0)
     Gray = (90, 90, 90)
 
