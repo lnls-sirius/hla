@@ -428,11 +428,13 @@ class TuneControls(QWidget):
 
 class SITuneMonitor(QWidget):
 
-    def __init__(self, parent=None, prefix='', description='long'):
+    def __init__(self, parent=None, prefix='', description='long',
+                 use_color_labels=True):
         super().__init__(parent)
         self.prefix = prefix
         self.app = QApplication.instance()
         self.description = description
+        self.use_color_labels = use_color_labels
         if self.description == 'long':
             self.hdesc = 'Horizontal'
             self.vdesc = 'Vertical'
@@ -455,7 +457,8 @@ class SITuneMonitor(QWidget):
         self.lb_tunefrach.setStyleSheet('QLabel{font-size: 30pt;}')
         wid_tuneh = QWidget()
         wid_tuneh.setObjectName('wid_tuneh')
-        wid_tuneh.setStyleSheet('background-color:#B3E5FF;')
+        if self.use_color_labels:
+            wid_tuneh.setStyleSheet('background-color:#B3E5FF;')
         vbox_tuneh = QVBoxLayout(wid_tuneh)
         vbox_tuneh.addWidget(self.ld_tunefrach)
         vbox_tuneh.addWidget(self.lb_tunefrach)
@@ -472,7 +475,8 @@ class SITuneMonitor(QWidget):
         self.lb_tunefracv.setStyleSheet('QLabel{font-size: 30pt;}')
         wid_tunev = QWidget()
         wid_tunev.setObjectName('wid_tunev')
-        wid_tunev.setStyleSheet('background-color:#FFB3B3;')
+        if self.use_color_labels:
+            wid_tunev.setStyleSheet('background-color:#FFB3B3;')
         vbox_tunev = QVBoxLayout(wid_tunev)
         vbox_tunev.setAlignment(Qt.AlignHCenter)
         vbox_tunev.addWidget(self.ld_tunefracv)
