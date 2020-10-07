@@ -137,7 +137,7 @@ class SIGenStatusWindow(SiriusMainWindow):
         box_lt.addWidget(self.ld_lifetime, 0, 0)
         box_lt.addWidget(self.lb_lifetime, 1, 0)
 
-        self.tune_mon = SITuneMonitor(self, self.prefix, showTitle=True)
+        self.tune_mon = SITuneMonitor(self, self.prefix, description='short')
 
         self.curr_graph = SiriusTimePlot(self)
         self.curr_graph.setObjectName('curr_graph')

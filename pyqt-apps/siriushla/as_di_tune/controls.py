@@ -1,8 +1,8 @@
 from qtpy.QtGui import QPalette
-from qtpy.QtCore import Qt
+from qtpy.QtCore import Qt, QEvent
 from qtpy.QtWidgets import QWidget, QLabel, QPushButton, QGridLayout, \
     QFormLayout, QHBoxLayout, QSpacerItem, QSizePolicy as QSzPlcy, \
-    QTabWidget, QVBoxLayout
+    QTabWidget, QVBoxLayout, QApplication
 import qtawesome as qta
 
 from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMLineEdit, \
@@ -428,50 +428,63 @@ class TuneControls(QWidget):
 
 class SITuneMonitor(QWidget):
 
-    def __init__(self, parent=None, prefix='', showTitle=False):
+    def __init__(self, parent=None, prefix='', description='long'):
         super().__init__(parent)
         self.prefix = prefix
-        self.showTitle = showTitle
+        self.app = QApplication.instance()
+        self.description = description
+        if self.description == 'long':
+            self.hdesc = 'Horizontal'
+            self.vdesc = 'Vertical'
+        else:
+            self.hdesc = 'Tune-H'
+            self.vdesc = 'Tune-V'
         self._setupUi()
 
     def _setupUi(self):
         lay_tune = QGridLayout(self)
 
-        row = 0
-        if self.showTitle:
-            title = QLabel('<h4>Tune</h4>', self, alignment=Qt.AlignCenter)
-            lay_tune.addWidget(title, 0, 0, 1, 2)
-            row += 1
-
+        self.ld_tunefrach = QLabel('<h4>'+self.hdesc+'</h4>', self,
+                                   alignment=Qt.AlignHCenter)
         self.lb_tunefrach = PyDMLabel(
             parent=self,
             init_channel=self.prefix+'SI-Glob:DI-Tune-H:TuneFrac-Mon')
         self.lb_tunefrach.precisionFromPV = False
         self.lb_tunefrach.precision = 4
         self.lb_tunefrach.setAlignment(Qt.AlignHCenter)
-        self.lb_tunefrach.setStyleSheet('QLabel{font-size: 40px;}')
+        self.lb_tunefrach.setStyleSheet('QLabel{font-size: 30pt;}')
         wid_tuneh = QWidget()
         wid_tuneh.setObjectName('wid_tuneh')
         wid_tuneh.setStyleSheet('background-color:#B3E5FF;')
         vbox_tuneh = QVBoxLayout(wid_tuneh)
-        vbox_tuneh.addWidget(QLabel('<h4>Horizontal</h4>', self,
-                                    alignment=Qt.AlignHCenter))
+        vbox_tuneh.addWidget(self.ld_tunefrach)
         vbox_tuneh.addWidget(self.lb_tunefrach)
-        lay_tune.addWidget(wid_tuneh, row, 0)
+        lay_tune.addWidget(wid_tuneh, 0, 0)
 
+        self.ld_tunefracv = QLabel('<h4>'+self.vdesc+'</h4>', self,
+                                   alignment=Qt.AlignHCenter)
         self.lb_tunefracv = PyDMLabel(
             parent=self,
             init_channel=self.prefix+'SI-Glob:DI-Tune-V:TuneFrac-Mon')
         self.lb_tunefracv.precisionFromPV = False
         self.lb_tunefracv.precision = 4
         self.lb_tunefracv.setAlignment(Qt.AlignHCenter)
-        self.lb_tunefracv.setStyleSheet('QLabel{font-size: 40px;}')
+        self.lb_tunefracv.setStyleSheet('QLabel{font-size: 30pt;}')
         wid_tunev = QWidget()
         wid_tunev.setObjectName('wid_tunev')
         wid_tunev.setStyleSheet('background-color:#FFB3B3;')
         vbox_tunev = QVBoxLayout(wid_tunev)
         vbox_tunev.setAlignment(Qt.AlignHCenter)
-        vbox_tunev.addWidget(QLabel('<h4>Vertical</h4>', self,
-                                    alignment=Qt.AlignHCenter))
+        vbox_tunev.addWidget(self.ld_tunefracv)
         vbox_tunev.addWidget(self.lb_tunefracv)
-        lay_tune.addWidget(wid_tunev, row, 1)
+        lay_tune.addWidget(wid_tunev, 0, 1)
+
+    def changeEvent(self, event):
+        if event.type() == QEvent.FontChange:
+            fontsize = self.app.font().pointSize() + 20
+            self.lb_tunefrach.setStyleSheet(
+                'QLabel{font-size: '+str(fontsize)+'pt;}')
+            self.lb_tunefracv.setStyleSheet(
+                'QLabel{font-size: '+str(fontsize)+'pt;}')
+
+            self.ensurePolished()
