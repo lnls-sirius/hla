@@ -302,6 +302,9 @@ class LIEgunWindow(SiriusMainWindow):
         self._ld_mpulspwrsp = QLabel('Power SP [V]', self)
         self._sb_mpulspwrsp = SiriusSpinbox(
             self, self.prefix+'LI-01:EG-PulsePS:poweroutsoft')
+        self._sb_mpulspwrsp.limitsFromChannel = False
+        self._sb_mpulspwrsp.setMinimum(0)
+        self._sb_mpulspwrsp.setMaximum(300)
         self._sb_mpulspwrsp.showStepExponent = False
         self._ld_mpulspwrrb = QLabel('Power RB [V]', self)
         self._lb_mpulspwrrb = PyDMLabel(
