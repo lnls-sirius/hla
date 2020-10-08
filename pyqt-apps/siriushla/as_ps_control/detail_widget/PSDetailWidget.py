@@ -12,7 +12,8 @@ import qtawesome as qta
 
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.search import PSSearch
-from siriuspy.pwrsupply.csdev import get_ps_propty_database
+from siriuspy.pwrsupply.csdev import get_ps_propty_database, \
+    DEF_WFMSIZE_FBP, DEF_WFMSIZE_OTHERS
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox, PyDMPushButton, \
     PyDMLineEdit, PyDMWaveformPlot
 from siriushla import util
@@ -75,11 +76,6 @@ class PSDetailWidget(QWidget):
             min-height: 14.4em;
             max-height: 14.4em;
         }
-        QTabWidget::pane {
-            border-left: 2px solid gray;
-            border-bottom: 2px solid gray;
-            border-right: 2px solid gray;
-        }
     """
 
     def __init__(self, psname, parent=None):
@@ -127,6 +123,13 @@ class PSDetailWidget(QWidget):
         self.siggen_tab = QWidget()
         self.siggen_tab.setObjectName('cycle_tab')
         self.cycle_tabs = QTabWidget()
+        self.cycle_tabs.setObjectName('curve_tabs')
+        self.cycle_tabs.setStyleSheet("""
+            #curve_tabs::pane {
+                border-left: 2px solid gray;
+                border-bottom: 2px solid gray;
+                border-right: 2px solid gray;
+        }""")
         self.cycle_tabs.addTab(self.siggen_tab, 'SigGen')
         self.cycle_tabs.addTab(self.wfm_tab, 'Wfm')
         if self._psname.sec == 'BO':
@@ -484,55 +487,100 @@ class PSDetailWidget(QWidget):
         offset_rb_ca = self._prefixed_psname + ':CycleOffset-RB'
         auxparam_sp_ca = self._prefixed_psname + ':CycleAuxParam-SP'
         auxparam_rb_ca = self._prefixed_psname + ':CycleAuxParam-RB'
-        # Labels
+
+        # Params
         self.cycle_enbl_label = QLabel('Enabled', self)
-        self.cycle_type_label = QLabel('Type', self)
-        self.cycle_nr_label = QLabel('Nr. Cycles', self)
-        self.cycle_index_label = QLabel('Index', self)
-        self.cycle_freq_label = QLabel('Frequency', self)
-        self.cycle_ampl_label = QLabel('Amplitude', self)
-        self.cycle_offset_label = QLabel('Offset', self)
-        self.cycle_auxparam_label = QLabel('AuxParams', self)
-        # Widgets
         self.cycle_enbl_mon_led = SiriusLedState(self, enbl_mon_ca)
+
+        self.cycle_type_label = QLabel('Type', self)
         self.cycle_type_sp_cb = PyDMEnumComboBox(self, type_sp_ca)
         self.cycle_type_rb_label = PyDMLabel(self, type_rb_ca)
+
+        self.cycle_nr_label = QLabel('Nr. Cycles', self)
         self.cycle_nr_sp_sb = PyDMLineEdit(self, nrcycles_sp_ca)
         self.cycle_nr_rb_label = PyDMLabel(self, nrcycles_rb_ca)
+
+        self.cycle_index_label = QLabel('Index', self)
         self.cycle_index_mon_label = PyDMLabel(self, index_ca)
+
+        self.cycle_freq_label = QLabel('Frequency', self)
         self.cycle_freq_sp_sb = PyDMLineEdit(self, freq_sp_ca)
         self.cycle_freq_rb_label = PyDMLabel(self, freq_rb_ca)
+
+        self.cycle_ampl_label = QLabel('Amplitude', self)
         self.cycle_ampl_sp_sb = PyDMLineEdit(self, ampl_sp_ca)
         self.cycle_ampl_rb_label = PyDMLabel(self, ampl_rb_ca)
+
+        self.cycle_offset_label = QLabel('Offset', self)
         self.cycle_offset_sp_sb = PyDMLineEdit(self, offset_sp_ca)
         self.cycle_offset_rb_label = PyDMLabel(self, offset_rb_ca)
+
+        self.cycle_auxparam_label = QLabel('AuxParams', self)
         self.cycle_auxparam_sp_le = PyDMLineEdit(self, auxparam_sp_ca)
         self.cycle_auxparam_rb_label = PyDMLabel(self, auxparam_rb_ca)
-        # Layout
+
+        parms = QWidget()
+        lay_parms = QGridLayout(parms)
+        lay_parms.setAlignment(Qt.AlignTop)
+        lay_parms.addWidget(self.cycle_enbl_label, 0, 0, Qt.AlignRight)
+        lay_parms.addWidget(self.cycle_enbl_mon_led, 0, 1, Qt.AlignCenter)
+        lay_parms.addWidget(self.cycle_type_label, 1, 0, Qt.AlignRight)
+        lay_parms.addWidget(self.cycle_type_sp_cb, 1, 1)
+        lay_parms.addWidget(self.cycle_type_rb_label, 1, 2)
+        lay_parms.addWidget(self.cycle_nr_label, 2, 0, Qt.AlignRight)
+        lay_parms.addWidget(self.cycle_nr_sp_sb, 2, 1)
+        lay_parms.addWidget(self.cycle_nr_rb_label, 2, 2)
+        lay_parms.addWidget(self.cycle_index_label, 3, 0, Qt.AlignRight)
+        lay_parms.addWidget(self.cycle_index_mon_label, 3, 2)
+        lay_parms.addWidget(self.cycle_freq_label, 4, 0, Qt.AlignRight)
+        lay_parms.addWidget(self.cycle_freq_sp_sb, 4, 1)
+        lay_parms.addWidget(self.cycle_freq_rb_label, 4, 2)
+        lay_parms.addWidget(self.cycle_ampl_label, 5, 0, Qt.AlignRight)
+        lay_parms.addWidget(self.cycle_ampl_sp_sb, 5, 1)
+        lay_parms.addWidget(self.cycle_ampl_rb_label, 5, 2)
+        lay_parms.addWidget(self.cycle_offset_label, 6, 0, Qt.AlignRight)
+        lay_parms.addWidget(self.cycle_offset_sp_sb, 6, 1)
+        lay_parms.addWidget(self.cycle_offset_rb_label, 6, 2)
+        lay_parms.addWidget(self.cycle_auxparam_label, 7, 0, Qt.AlignRight)
+        lay_parms.addWidget(self.cycle_auxparam_sp_le, 7, 1)
+        lay_parms.addWidget(self.cycle_auxparam_rb_label, 7, 2)
+
+        # Default Curve
+        self._siggen = PSSearch.conv_psname_2_siggenconf(self._psname)
+        self._siggen_nrpts = DEF_WFMSIZE_FBP if self._psmodel == 'FBP' \
+            else DEF_WFMSIZE_OTHERS
+        self._siggen_w = self._siggen.get_waveform(self._siggen_nrpts)
+
+        self.curve_siggen = PyDMWaveformPlot()
+        self.curve_siggen.setObjectName('graph')
+        self.curve_siggen.setStyleSheet(
+            '#graph{max-height:15em; max-width:16.5em;}')
+        self.curve_siggen.setLabels(left='Current [A]', bottom='T [s]')
+        self.curve_siggen.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        self.curve_siggen.autoRangeX = True
+        self.curve_siggen.autoRangeY = True
+        self.curve_siggen.plotItem.showButtons()
+        self.curve_siggen.setBackgroundColor(QColor(255, 255, 255))
+        self.curve_siggen.addChannel(
+            y_channel='SigGen', x_channel='T [s]',
+            color='black', lineWidth=2)
+        self.curve_siggen.curve = self.curve_siggen.curveAtIndex(0)
+        self.curve_siggen.curve.receiveXWaveform(_np.array(self._siggen_w[1]))
+        self.curve_siggen.curve.receiveYWaveform(_np.array(self._siggen_w[0]))
+        self.curve_siggen.curve.redrawCurve()
+
+        defcurve = QWidget()
+        lay_defcurve = QGridLayout(defcurve)
+        lay_defcurve.addWidget(self.curve_siggen)
+
+        # Tab
+        self.tab_siggen = QTabWidget(self)
+        self.tab_siggen.addTab(parms, 'Params')
+        self.tab_siggen.addTab(defcurve, 'Default Curve')
+
         layout = QGridLayout()
-        layout.setAlignment(Qt.AlignTop)
-        layout.addWidget(self.cycle_enbl_label, 0, 0, Qt.AlignRight)
-        layout.addWidget(self.cycle_enbl_mon_led, 0, 1, Qt.AlignCenter)
-        layout.addWidget(self.cycle_type_label, 1, 0, Qt.AlignRight)
-        layout.addWidget(self.cycle_type_sp_cb, 1, 1)
-        layout.addWidget(self.cycle_type_rb_label, 1, 2)
-        layout.addWidget(self.cycle_nr_label, 2, 0, Qt.AlignRight)
-        layout.addWidget(self.cycle_nr_sp_sb, 2, 1)
-        layout.addWidget(self.cycle_nr_rb_label, 2, 2)
-        layout.addWidget(self.cycle_index_label, 3, 0, Qt.AlignRight)
-        layout.addWidget(self.cycle_index_mon_label, 3, 2)
-        layout.addWidget(self.cycle_freq_label, 4, 0, Qt.AlignRight)
-        layout.addWidget(self.cycle_freq_sp_sb, 4, 1)
-        layout.addWidget(self.cycle_freq_rb_label, 4, 2)
-        layout.addWidget(self.cycle_ampl_label, 5, 0, Qt.AlignRight)
-        layout.addWidget(self.cycle_ampl_sp_sb, 5, 1)
-        layout.addWidget(self.cycle_ampl_rb_label, 5, 2)
-        layout.addWidget(self.cycle_offset_label, 6, 0, Qt.AlignRight)
-        layout.addWidget(self.cycle_offset_sp_sb, 6, 1)
-        layout.addWidget(self.cycle_offset_rb_label, 6, 2)
-        layout.addWidget(self.cycle_auxparam_label, 7, 0, Qt.AlignRight)
-        layout.addWidget(self.cycle_auxparam_sp_le, 7, 1)
-        layout.addWidget(self.cycle_auxparam_rb_label, 7, 2)
+        layout.setContentsMargins(0, 6, 0, 0)
+        layout.addWidget(self.tab_siggen, 0, 0)
         return layout
 
     def _wfmParamsLayout(self):
