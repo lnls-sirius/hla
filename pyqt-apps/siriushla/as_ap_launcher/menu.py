@@ -139,6 +139,10 @@ def get_object(ismenubar=True, parent=None):
             menu = LEVEL1('AS', self)
             menu.setObjectName('ASApp')
 
+            genstatus = LEVEL2A('Status', menu)
+            genstatus.setIcon(qta.icon('mdi.view-split-vertical'))
+            self.connect_newprocess(genstatus, 'sirius-hla-si-ap-genstatus.py')
+
             monitor = LEVEL2A('Monitor', menu)
             monitor.setIcon(qta.icon('mdi.monitor-dashboard'))
             self.connect_newprocess(monitor, 'sirius-hla-as-ap-monitor.py')
@@ -215,6 +219,7 @@ def get_object(ismenubar=True, parent=None):
             optics.addAction(energy_button)
             optics.addAction(offconv)
 
+            self.add_object_to_level1(menu, genstatus)
             self.add_object_to_level1(menu, monitor)
             self.add_object_to_level1(menu, injection)
             self.add_object_to_level1(menu, timing)
