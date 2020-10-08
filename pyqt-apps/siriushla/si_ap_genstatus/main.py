@@ -121,12 +121,10 @@ class SIGenStatusWindow(SiriusMainWindow):
         self.frm_curr.borderWidth = 5
         self.frm_curr.add_widget(self.lb_curr)
         box_curr = QWidget()
-        lay_curr = QGridLayout(box_curr)
+        lay_curr = QVBoxLayout(box_curr)
         lay_curr.setAlignment(Qt.AlignVCenter)
-        lay_curr.addWidget(self.ld_curr, 0, 0)
-        lay_curr.addWidget(self.frm_curr, 1, 0)
-        lay_curr.setColumnStretch(0, 5)
-        lay_curr.setColumnStretch(1, 1)
+        lay_curr.addWidget(self.ld_curr)
+        lay_curr.addWidget(self.frm_curr)
 
         self.ld_lifetime = QLabel(
             '<h4>Lifetime</h4>', self, alignment=Qt.AlignCenter)
@@ -138,10 +136,10 @@ class SIGenStatusWindow(SiriusMainWindow):
         self.ch_lifetime.new_value_signal[float].connect(
             self.formatLifetimeLabel)
         box_lt = QWidget()
-        lay_lt = QGridLayout(box_lt)
+        lay_lt = QVBoxLayout(box_lt)
         lay_lt.setAlignment(Qt.AlignVCenter)
-        lay_lt.addWidget(self.ld_lifetime, 0, 0)
-        lay_lt.addWidget(self.lb_lifetime, 1, 0)
+        lay_lt.addWidget(self.ld_lifetime)
+        lay_lt.addWidget(self.lb_lifetime)
 
         self.tune_mon = SITuneMonitor(self, self.prefix, description='short',
                                       use_color_labels=False)
