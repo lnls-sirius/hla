@@ -12,7 +12,7 @@ from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from ..util import connect_window
 from ..widgets.windows import create_window_from_widget
 from ..widgets import SiriusMainWindow, SiriusLedAlert, PyDMStateButton, \
-    PyDMLedMultiChannel
+    PyDMLedMultiChannel, DetachableTabWidget
 
 from .acquisition import BbBAcqSRAM, BbBAcqBRAM, BbBAcqSB
 from .coefficients import BbBCoefficientsWidget
@@ -58,8 +58,8 @@ class BbBControlWindow(SiriusMainWindow):
         advanced_wid = BbBAdvancedSettingsWidget(
             self, self.prefix, self.device)
 
-        tab = QTabWidget(self)
-        tab.setObjectName('SITab')
+        tab = DetachableTabWidget(self)
+        tab.setObjectName('SIApp')
         tab.addTab(main_wid, 'Main')
         tab.addTab(sram_wid, 'SRAM')
         tab.addTab(bram_wid, 'BRAM')
