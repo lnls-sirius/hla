@@ -128,7 +128,7 @@ class DetachedTab(SiriusMainWindow):
         """."""
         SiriusMainWindow.__init__(self, parent)
         self._do_close = False
-        self.setObjectName(name)
+        self.setObjectName(name[:2] + 'App')
         self.setWindowTitle(text)
 
         self.menuBar().addAction('Attach Tab', self._retach_tab)

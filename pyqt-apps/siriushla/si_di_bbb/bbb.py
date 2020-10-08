@@ -59,7 +59,7 @@ class BbBControlWindow(SiriusMainWindow):
             self, self.prefix, self.device)
 
         tab = DetachableTabWidget(self)
-        tab.setObjectName('SIApp')
+        tab.setObjectName('SITab')
         tab.addTab(main_wid, 'Main')
         tab.addTab(sram_wid, 'SRAM')
         tab.addTab(bram_wid, 'BRAM')
