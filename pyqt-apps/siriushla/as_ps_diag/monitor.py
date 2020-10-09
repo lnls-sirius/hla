@@ -190,6 +190,8 @@ class MyLed(SiriusLedAlert):
                 run_newprocess('sirius-hla-li-rf-llrf.py')
             else:
                 run_newprocess('sirius-hla-'+dev.sec.lower()+'-rf-control.py')
+        elif dev.dis == 'EG':
+            run_newprocess('sirius-hla-li-eg-control.py')
 
     def mousePressEvent(self, event):
         """Reimplement mousePressEvent."""

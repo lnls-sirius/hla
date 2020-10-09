@@ -8,7 +8,7 @@ from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMPushButton
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 
-from ..widgets import SiriusFrame
+from ..widgets import SiriusFrame, SiriusSpinbox
 
 
 class BbBTimingWidget(QWidget):
@@ -57,8 +57,11 @@ class BbBTimingWidget(QWidget):
         pb_clkrst.setObjectName('conf')
 
         ld_fidsigoff = QLabel('FID Signal Offset [ps]', self)
-        sb_fidsigoff = PyDMSpinbox(self, self.dev_pref+':OFF_FIDS')
+        sb_fidsigoff = SiriusSpinbox(self, self.dev_pref+':OFF_FIDS')
         sb_fidsigoff.showStepExponent = False
+        sb_fidsigoff.limitsFromChannel = False
+        sb_fidsigoff.setMinimum(0)
+        sb_fidsigoff.setMaximum(3000)
         ld_fiddelay = QLabel('Fiducial Delay', self)
         sb_fiddelay = PyDMSpinbox(self, self.dev_pref+':FID_DELAY')
         sb_fiddelay.showStepExponent = False

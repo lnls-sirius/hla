@@ -139,6 +139,10 @@ def get_object(ismenubar=True, parent=None):
             menu = LEVEL1('AS', self)
             menu.setObjectName('ASApp')
 
+            genstatus = LEVEL2A('Status', menu)
+            genstatus.setIcon(qta.icon('mdi.view-split-vertical'))
+            self.connect_newprocess(genstatus, 'sirius-hla-si-ap-genstatus.py')
+
             monitor = LEVEL2A('Monitor', menu)
             monitor.setIcon(qta.icon('mdi.monitor-dashboard'))
             self.connect_newprocess(monitor, 'sirius-hla-as-ap-monitor.py')
@@ -215,6 +219,7 @@ def get_object(ismenubar=True, parent=None):
             optics.addAction(energy_button)
             optics.addAction(offconv)
 
+            self.add_object_to_level1(menu, genstatus)
             self.add_object_to_level1(menu, monitor)
             self.add_object_to_level1(menu, injection)
             self.add_object_to_level1(menu, timing)
@@ -241,6 +246,10 @@ def get_object(ismenubar=True, parent=None):
             self.connect_newprocess(mpsmon, 'sirius-hla-li-ap-mpsmon.py')
             mps.addAction(mpsmon)
 
+            egun = LEVEL2A('Egun', menu)
+            egun.setIcon(qta.icon('mdi.spotlight-beam'))
+            self.connect_newprocess(egun, 'sirius-hla-li-eg-control.py')
+
             llrf = LEVEL2M('LLRF', menu)
             llrf.setObjectName('LIApp')
             llrf.setIcon(qta.icon('mdi.waves'))
@@ -261,6 +270,7 @@ def get_object(ismenubar=True, parent=None):
 
             self.add_object_to_level1(menu, PS)
             self.add_object_to_level1(menu, mps)
+            self.add_object_to_level1(menu, egun)
             self.add_object_to_level1(menu, llrf)
             self.add_object_to_level1(menu, launcher)
             self.add_object_to_level1(menu, optics)
