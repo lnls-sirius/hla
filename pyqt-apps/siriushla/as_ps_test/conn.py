@@ -274,7 +274,7 @@ class TesterDCLinkRegatron(_TesterBase):
         """Check PwrState."""
         if state == 'on':
             ok = self._pvs['PwrState-Sts'].value == _PSC.OffOn.On
-            ok &= self._pvs['OpMode-Sts'].value in self._OPMODE_STS_ON
+            ok &= self._pvs['OpMode-Sts'].value == self._OPMODE_STS_ON
         else:
             ok = self._pvs['PwrState-Sts'].value == _PSC.OffOn.Off
             ok &= self._pvs['OpMode-Sts'].value == self._OPMODE_STS_OFF
