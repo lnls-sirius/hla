@@ -241,7 +241,7 @@ class TesterDCLinkRegatron(_TesterBase):
                   'PwrState-Sel', 'PwrState-Sts',
                   'Voltage-SP', 'VoltageRef-Mon', 'Voltage-Mon']
 
-    _OPMODE_STS_OFF = 14  # Stop
+    _OPMODE_STS_OFF = 4  # Ready
     _OPMODE_STS_ON = 8  # Run
     _OPMODE_STS_OPR = 4  # Ready
     _OPMODE_STS_OK = [_OPMODE_STS_OPR, _OPMODE_STS_ON]
