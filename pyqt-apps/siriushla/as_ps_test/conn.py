@@ -241,10 +241,8 @@ class TesterDCLinkRegatron(_TesterBase):
                   'PwrState-Sel', 'PwrState-Sts',
                   'Voltage-SP', 'VoltageRef-Mon', 'Voltage-Mon']
 
-    _OPMODE_STS_OFF = 4  # Ready
-    _OPMODE_STS_ON = 8  # Run
-    _OPMODE_STS_OPR = 4  # Ready
-    _OPMODE_STS_OK = [_OPMODE_STS_OPR, _OPMODE_STS_ON]
+    _OPMODE_STS_OFF = 4  # READY
+    _OPMODE_STS_ON = 8  # RUN
 
     def __init__(self, device):
         """Init."""
@@ -282,7 +280,7 @@ class TesterDCLinkRegatron(_TesterBase):
 
     def check_init_ok(self):
         """Check OpMode Ok."""
-        return self._pvs['OpMode-Sts'].value in self._OPMODE_STS_OK
+        return self._pvs['OpMode-Sts'].value == self._OPMODE_STS_ON
 
     def check_capvolt(self):
         """Check voltage."""
