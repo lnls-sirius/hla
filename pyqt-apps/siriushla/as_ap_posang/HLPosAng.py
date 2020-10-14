@@ -5,7 +5,8 @@
 import os as _os
 from epics import PV as _PV
 from qtpy.QtWidgets import QGridLayout, QLabel, QGroupBox, QAbstractItemView, \
-    QSizePolicy as QSzPlcy, QSpacerItem, QPushButton, QHeaderView, QWidget
+    QSizePolicy as QSzPlcy, QSpacerItem, QPushButton, QHeaderView, QWidget, \
+    QMessageBox, QApplication, QHBoxLayout
 from qtpy.QtCore import Qt
 import qtawesome as qta
 from pydm.widgets import PyDMWaveformTable, PyDMLabel, PyDMLineEdit, \
@@ -17,7 +18,7 @@ from siriuspy.namesys import SiriusPVName as _PVName
 
 from siriushla import util as _hlautil
 from siriushla.widgets import SiriusMainWindow, PyDMLogLabel, SiriusLedAlert, \
-    PyDMLinEditScrollbar, PyDMLedMultiChannel
+    PyDMLinEditScrollbar, PyDMLedMultiChannel, SiriusConnectionSignal
 from siriushla.as_ps_control import PSDetailWindow as _PSDetailWindow
 from siriushla.as_pu_control import PUDetailWindow as _PUDetailWindow
 from siriushla.as_ap_configdb import LoadConfigDialog as _LoadConfigDialog
@@ -67,9 +68,22 @@ class PosAngCorr(SiriusMainWindow):
             self.corrs['CV3'] = _PVName(corr_v[2])
             self.corrs['CV4'] = _PVName(corr_v[3])
 
+        self._just_need_update = False
+        self._update_ref_action = False
+        self._my_input_widgets = list()
         self._setupUi()
         self.setFocus(True)
         self.setFocusPolicy(Qt.StrongFocus)
+
+        self._ask_message = QMessageBox(self)
+        self._ask_message.setWindowTitle('Message')
+        self._ask_message.setText(
+            'The '+self._tl+' PosAng IOC indicates reference needs to '
+            'be updated! Do you want to update the reference?')
+        self._ask_message.setStandardButtons(QMessageBox.No | QMessageBox.Yes)
+        self._ask_message.setDefaultButton(QMessageBox.No)
+        self.app = QApplication.instance()
+        self.app.focusChanged.connect(self._spinbox_onfocus)
 
     def _setupUi(self):
         cwt = QWidget(self)
@@ -91,6 +105,18 @@ class PosAngCorr(SiriusMainWindow):
             init_channel=self.posang_prefix+':SetNewRefKick-Cmd')
         self.pb_updateref.setStyleSheet(
             'min-height: 2.4em; max-height: 2.4em;')
+        self.led_needrefupdt = SiriusLedAlert(
+            self, self.posang_prefix+':NeedRefUpdate-Mon')
+        self.ch_needrefupdt = SiriusConnectionSignal(
+            self.posang_prefix+':NeedRefUpdate-Mon')
+        self.ch_needrefupdt.new_value_signal[int].connect(
+            self._handle_need_update_ref_led)
+        self.led_needrefupdt.setStyleSheet(
+            'QLed{min-width: 1.29em; max-width: 1.29em;}')
+        box_ref = QHBoxLayout()
+        box_ref.setContentsMargins(0, 0, 0, 0)
+        box_ref.addWidget(self.pb_updateref)
+        box_ref.addWidget(self.led_needrefupdt)
 
         # delta setters
         self.hgbox = QGroupBox('Horizontal', self)
@@ -111,7 +137,7 @@ class PosAngCorr(SiriusMainWindow):
         glay.setHorizontalSpacing(12)
         glay.setVerticalSpacing(12)
         glay.addWidget(lab, 0, 0, 1, 2)
-        glay.addWidget(self.pb_updateref, 1, 0, 1, 2)
+        glay.addLayout(box_ref, 1, 0, 1, 2)
         glay.addWidget(self.hgbox, 2, 0)
         glay.addWidget(self.vgbox, 2, 1)
         glay.addWidget(self.corrgbox, 3, 0, 1, 2)
@@ -150,6 +176,7 @@ class PosAngCorr(SiriusMainWindow):
         lb_deltapos = PyDMLabel(
             self, self.posang_prefix + ':DeltaPos'+axis.upper()+'-RB')
         lb_deltapos.showUnits = True
+        self._my_input_widgets.append(sb_deltapos)
         # ang
         label_ang = QLabel("<h4>Δ"+axis+"'</h4>", self)
         sb_deltaang = PyDMSpinbox(
@@ -160,6 +187,7 @@ class PosAngCorr(SiriusMainWindow):
         lb_deltaang = PyDMLabel(
             self, self.posang_prefix + ':DeltaAng'+axis.upper()+'-RB')
         lb_deltaang.showUnits = True
+        self._my_input_widgets.append(sb_deltaang)
 
         lay = QGridLayout()
         lay.setVerticalSpacing(12)
@@ -370,6 +398,23 @@ class PosAngCorr(SiriusMainWindow):
             psname=corrs[3])
         self.centralwidget.PyDMLabel_KickRBCV2.channel = (
             self._prefix + corrs[3] + ':Kick-RB')
+
+    def _handle_need_update_ref_led(self, value):
+        self._just_need_update = bool(value)
+
+    def _spinbox_onfocus(self, old_focus, new_focus):
+        if not self._update_ref_action and not self._just_need_update:
+            return
+
+        if self.led_needrefupdt.value != 0:
+            if new_focus in self._my_input_widgets and self._just_need_update:
+                ans = self._ask_message.exec_()
+                if ans == QMessageBox.No:
+                    self._update_ref_action = False
+                else:
+                    self._update_ref_action = True
+                    self.pb_updateref.sendValue()
+                self._just_need_update = False
 
 
 class CorrParamsDetailWindow(SiriusMainWindow):
