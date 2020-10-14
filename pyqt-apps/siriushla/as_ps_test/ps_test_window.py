@@ -19,7 +19,6 @@ from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets.dialog import ProgressDialog
 from siriushla.as_ti_control import HLTriggerDetailed
 
-from .conn import REGATRONS_2_CONTROL
 from .tasks import CreateTesters, \
     CheckStatus, \
     ResetIntlk, CheckIntlk, \
@@ -825,12 +824,13 @@ class PSTestWindow(SiriusMainWindow):
                 continue
             dclinks = PSSearch.conv_psname_2_dclink(name)
             if dclinks:
-                dclink_type = PSSearch.conv_psname_2_psmodel(dclinks[0])
-                if dclink_type != 'REGATRON_DCLink':
+                dclink_model = PSSearch.conv_psname_2_psmodel(dclinks[0])
+                if dclink_model != 'REGATRON_DCLink':
                     alldclinks.update(dclinks)
                 elif include_regatrons:
                     for dcl in dclinks:
-                        if dcl in REGATRONS_2_CONTROL:
+                        dcl_typ = PSSearch.conv_psname_2_pstype(dcl)
+                        if dcl_typ == 'as-dclink-regatron-master':
                             alldclinks.add(dcl)
         return list(alldclinks)
 

@@ -178,6 +178,7 @@ class SummaryWidget(QWidget):
         super().__init__(parent)
         self._name = PVName(name)
         self._psmodel = PSSearch.conv_psname_2_psmodel(name)
+        self._pstype = PSSearch.conv_psname_2_pstype(name)
         self.visible_props = sort_propties(visible_props)
         self.filled_widgets = set()
         self._prefixed_name = VACA_PREFIX + name
@@ -191,6 +192,7 @@ class SummaryWidget(QWidget):
             self._strength_name and not self._li_has_not_strength)
         self._is_dclink = IsDCLink.match(self._name)
         self._is_regatron = self._psmodel == 'REGATRON_DCLink'
+        self._is_reg_slave = self._pstype == 'as-dclink-regatron-slave'
         self._bbb_name = ''
         self._udc_name = ''
         if not self._is_pulsed and not self._is_linac and \
@@ -351,8 +353,9 @@ class SummaryWidget(QWidget):
             self.fillWidget(prop)
 
     def _create_pvs(self):
-        self._pwrstate_sel = self._prefixed_name + ':PwrState-Sel'
-        self._pwrstate_sts = self._prefixed_name + ':PwrState-Sts'
+        if not self._is_reg_slave:
+            self._pwrstate_sel = self._prefixed_name + ':PwrState-Sel'
+            self._pwrstate_sts = self._prefixed_name + ':PwrState-Sts'
 
         if self._is_pulsed:
             self._intlk = list()
@@ -363,16 +366,20 @@ class SummaryWidget(QWidget):
         elif self._is_linac:
             self._intlk = self._prefixed_name + ":StatusIntlk-Mon"
         elif self._is_regatron:
-            self._intlk = self._prefixed_name + ":Intlk-Mon"
+            if not self._is_reg_slave:
+                self._intlk = self._prefixed_name + ":Intlk-Mon"
         else:
             self._soft_intlk = self._prefixed_name + ':IntlkSoft-Mon'
             self._hard_intlk = self._prefixed_name + ':IntlkHard-Mon'
 
         sp = self._analog_name
-        self._analog_sp = self._prefixed_name + ':{}-SP'.format(sp)
+        if not self._is_reg_slave:
+            self._analog_sp = self._prefixed_name + ':{}-SP'.format(sp)
+            self._analog_mon = self._prefixed_name + ':{}-Mon'.format(sp)
+        else:
+            self._analog_mon = self._prefixed_name + ':ModOutVolt-Mon'
         if not self._is_regatron:
             self._analog_rb = self._prefixed_name + ':{}-RB'.format(sp)
-        self._analog_mon = self._prefixed_name + ':{}-Mon'.format(sp)
 
         if self._has_strength:
             st = self._strength_name
@@ -383,8 +390,11 @@ class SummaryWidget(QWidget):
         if self._is_linac:
             self._conn = self._prefixed_name + ':Connected-Mon'
         else:
-            self._opmode_sts = self._prefixed_name + ':OpMode-Sts'
-            self._reset_intlk = self._prefixed_name + ':Reset-Cmd'
+            if not self._is_reg_slave:
+                self._opmode_sts = self._prefixed_name + ':OpMode-Sts'
+                self._reset_intlk = self._prefixed_name + ':Reset-Cmd'
+            else:
+                self._opmode_sts = self._prefixed_name + ':ModState-Mon'
             if not self._is_regatron:
                 self._opmode_sel = self._prefixed_name + ':OpMode-Sel'
                 self._ctrlmode_sts = self._prefixed_name+':CtrlMode-Mon'
@@ -437,7 +447,7 @@ class SummaryWidget(QWidget):
         elif name == 'ctrlmode' and not self._is_regatron:
             self.ctrlmode_lb = PyDMLabel(self, self._ctrlmode_sts)
             self.ctrlmode_wid.layout().addWidget(self.ctrlmode_lb)
-        elif name == 'state':
+        elif name == 'state' and not self._is_reg_slave:
             self.state_bt = PyDMStateButton(self, self._pwrstate_sel)
             self.state_led = SiriusLedState(self, self._pwrstate_sts)
             self.state_wid.layout().addWidget(self.state_bt)
@@ -458,8 +468,9 @@ class SummaryWidget(QWidget):
                         self._intlk: {'value': 64, 'comp': 'lt'}})
                 self.intlk_wid.layout().addWidget(self.intlk_led)
             elif self._is_regatron:
-                self.intlk_led = SiriusLedAlert(self, self._intlk)
-                self.intlk_wid.layout().addWidget(self.intlk_led)
+                if not self._is_reg_slave:
+                    self.intlk_led = SiriusLedAlert(self, self._intlk)
+                    self.intlk_wid.layout().addWidget(self.intlk_led)
             else:
                 self.soft_intlk_led = SiriusLedAlert(self, self._soft_intlk)
                 self.hard_intlk_led = SiriusLedAlert(self, self._hard_intlk)
@@ -469,7 +480,7 @@ class SummaryWidget(QWidget):
             self.conn_led = PyDMLedMultiChannel(
                 self, channels2values={self._conn: 0})
             self.conn_wid.layout().addWidget(self.conn_led)
-        elif name == 'reset':
+        elif name == 'reset' and not self._is_reg_slave:
             self.reset_bt = PyDMPushButton(
                 parent=self, init_channel=self._reset_intlk, pressValue=1)
             self.reset_bt.setIcon(qta.icon('fa5s.sync'))
@@ -488,7 +499,7 @@ class SummaryWidget(QWidget):
             self.wfmupdate_led = SiriusLedState(self, self._wfmupdate_sts)
             self.wfmupdate_wid.layout().addWidget(self.wfmupdate_bt)
             self.wfmupdate_wid.layout().addWidget(self.wfmupdate_led)
-        elif name == 'setpoint':
+        elif name == 'setpoint' and not self._is_reg_slave:
             self.setpoint = PyDMLinEditScrollbar(self._analog_sp, self)
             self.setpoint.sp_scrollbar.setTracking(False)
             self.setpoint_wid.layout().addWidget(self.setpoint)

@@ -31,40 +31,6 @@ DEFAULT_CAP_BANK_VOLT = {
     'PA-RaPSC03:PS-DCLink-BO2': 300,
 }
 
-REGATRONS_2_CONTROL = [
-    # Dipoles
-    'PA-RaPSD01:PS-DCLink-1A',
-    'PA-RaPSD03:PS-DCLink-2A',
-    'PA-RaPSD01:PS-DCLink-3A',
-    'PA-RaPSD03:PS-DCLink-4A',
-    'PA-RaPSD05:PS-DCLink-1A',
-    'PA-RaPSD07:PS-DCLink-2A',
-    'PA-RaPSD05:PS-DCLink-3A',
-    'PA-RaPSD07:PS-DCLink-4A',
-    # Quadrupoles
-    'PA-RaPSA01:PS-DCLink-QFAP',
-    'PA-RaPSA01:PS-DCLink-QFB',
-    'PA-RaPSA03:PS-DCLink-QDAP',
-    'PA-RaPSA04:PS-DCLink-QDB',
-    'PA-RaPSA06:PS-DCLink-Q13A',
-    'PA-RaPSA07:PS-DCLink-Q24A',
-    # Sextupoles
-    'PA-RaPSB01:PS-DCLink-SDAP0',
-    'PA-RaPSB01:PS-DCLink-SDB0',
-    'PA-RaPSB03:PS-DCLink-SFAP0',
-    'PA-RaPSB03:PS-DCLink-SFB0',
-    'PA-RaPSB04:PS-DCLink-SDB1',
-    'PA-RaPSB04:PS-DCLink-SDA12',
-    'PA-RaPSB05:PS-DCLink-SDA3SFA1',
-    'PA-RaPSB05:PS-DCLink-SDB2',
-    'PA-RaPSB07:PS-DCLink-SFA2SDP1',
-    'PA-RaPSB07:PS-DCLink-SDB3',
-    'PA-RaPSB08:PS-DCLink-SDP23',
-    'PA-RaPSB08:PS-DCLink-SFB1',
-    'PA-RaPSB10:PS-DCLink-SFP12',
-    'PA-RaPSB10:PS-DCLink-SFB2',
-]
-
 
 TIMEOUT_CONN = 0.05
 TEST_TOLERANCE = 1e-1
