@@ -109,6 +109,8 @@ class RampMain(SiriusMainWindow):
             self.status_and_commands.update_ps_params)
         self.config_parameters.mult_ramp.applyChanges2MachineSignal.connect(
             self.status_and_commands.apply_changes)
+        self.config_parameters.mult_ramp.plotUnitSignal.connect(
+            self.config_parameters.getPlotUnits)
         self.config_parameters.rf_ramp.updateRFRampSignal.connect(
             self._verifySync)
         self.config_parameters.rf_ramp.updateRFRampSignal.connect(

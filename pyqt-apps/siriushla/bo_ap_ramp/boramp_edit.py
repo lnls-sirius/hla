@@ -754,6 +754,7 @@ class MultipolesRamp(QWidget):
     updateMultipoleRampSignal = Signal()
     updateOptAdjSettingsSignal = Signal(str, str)
     applyChanges2MachineSignal = Signal(QWidget)
+    plotUnitSignal = Signal(str)
 
     def __init__(self, parent=None, prefix='',
                  ramp_config=None, undo_stack=None,
@@ -801,13 +802,29 @@ class MultipolesRamp(QWidget):
             open_window_fun=self._showEditNormConfigWindow)
         self._setupTable()
 
-        icon = qta.icon('mdi.chart-line', 'mdi.dots-horizontal',
-                        options=[{'offset': [0, -0.2]},
-                                 {'offset': [0, 0.4]}])
-        self.bt_plot = QPushButton(icon, '', self)
-        self.bt_plot.setStyleSheet('icon-size: 20px 20px;')
-        self.bt_plot.setToolTip('Choose power supplies to plot')
-        self.bt_plot.clicked.connect(self._showChoosePSToPlot)
+        icon_curves = qta.icon('mdi.chart-line', 'mdi.dots-horizontal',
+                               options=[{'offset': [0, -0.2]},
+                                        {'offset': [0, 0.4]}])
+        self.bt_curves = QPushButton(icon_curves, '', self)
+        self.bt_curves.setStyleSheet('icon-size: 20px 20px;')
+        self.bt_curves.setToolTip('Choose power supplies to plot')
+        self.bt_curves.clicked.connect(self._showChoosePSToPlot)
+
+        icon_units = qta.icon('mdi.code-brackets', 'mdi.dots-horizontal',
+                              options=[{'offset': [0, -0.2]},
+                                       {'offset': [0, 0.4]}])
+        self.bt_units = QPushButton(icon_units, '', self)
+        self.bt_units.setStyleSheet('icon-size: 20px 20px;')
+        self.bt_units.setToolTip('Choose power supplies to plot')
+        menu_units = QMenu()
+        menu_units.setIcon(qta.icon('mdi.chart-line'))
+        act_unitcurr = menu_units.addAction('Currents')
+        act_unitcurr.triggered.connect(
+            _part(self.plotUnitSignal.emit, 'Currents'))
+        act_unitstrg = menu_units.addAction('Strengths')
+        act_unitstrg.triggered.connect(
+            _part(self.plotUnitSignal.emit, 'Strengths'))
+        self.bt_units.setMenu(menu_units)
 
         self.bt_insert = QPushButton(qta.icon('fa5s.plus'), '', self)
         self.bt_insert.setObjectName('bt_insert')
@@ -828,7 +845,8 @@ class MultipolesRamp(QWidget):
         self.bt_delete.clicked.connect(self._showDeleteNormConfigPopup)
         hlay_chart_ins_del = QHBoxLayout()
         hlay_chart_ins_del.setSpacing(12)
-        hlay_chart_ins_del.addWidget(self.bt_plot)
+        hlay_chart_ins_del.addWidget(self.bt_curves)
+        hlay_chart_ins_del.addWidget(self.bt_units)
         hlay_chart_ins_del.addStretch()
         hlay_chart_ins_del.addWidget(self.bt_insert)
         hlay_chart_ins_del.addWidget(self.bt_delete)
