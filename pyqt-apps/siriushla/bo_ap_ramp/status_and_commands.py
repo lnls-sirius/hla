@@ -285,7 +285,7 @@ class StatusAndCommands(QGroupBox):
         c2v = dict()
         for psname in psnames:
             wf = self.ramp_config.ps_waveform_get(psname)
-            c2v[self.prefix + psname + ':Wfm-RB'] = {
+            c2v[self.prefix + psname + ':WfmRef-Mon'] = {
                 'value': wf.currents, 'comp': 'cl', 'abs_tol': 1e-5}
         self.led_ps_apply.set_channels2values(c2v)
 
@@ -493,7 +493,8 @@ class _createConnectorsThread(QThread):
             elif 'PwrState' in p:
                 c2v_setup[pfx + conn[p].pvname_rb] = _PSc.PwrStateSts.On
             elif 'Wfm' in p:
-                c2v_apply[pfx + conn[p].pvname_rb] = None
+                c2v_apply[pfx + conn[p].pvname_sp.replace(
+                    'Wfm-SP', 'WfmRef-Mon')] = None
         self.parent.led_ps_intlk.set_channels2values(c2v_intlk)
         self.parent.led_ps_setup.set_channels2values(c2v_setup)
         self.parent.led_ps_apply.set_channels2values(c2v_apply)
