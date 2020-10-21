@@ -367,7 +367,8 @@ class SummaryWidget(QWidget):
             self._intlk = self._prefixed_name + ":StatusIntlk-Mon"
         elif self._is_regatron:
             if not self._is_reg_slave:
-                self._intlk = self._prefixed_name + ":Intlk-Mon"
+                self._generr = self._prefixed_name + ":GenErr-Mon"
+                self._genwrn = self._prefixed_name + ":GenWarn-Mon"
         else:
             self._soft_intlk = self._prefixed_name + ':IntlkSoft-Mon'
             self._hard_intlk = self._prefixed_name + ':IntlkHard-Mon'
@@ -469,8 +470,10 @@ class SummaryWidget(QWidget):
                 self.intlk_wid.layout().addWidget(self.intlk_led)
             elif self._is_regatron:
                 if not self._is_reg_slave:
-                    self.intlk_led = SiriusLedAlert(self, self._intlk)
-                    self.intlk_wid.layout().addWidget(self.intlk_led)
+                    self.generr_led = SiriusLedAlert(self, self._generr)
+                    self.genwrn_led = SiriusLedAlert(self, self._genwrn)
+                    self.intlk_wid.layout().addWidget(self.generr_led)
+                    self.intlk_wid.layout().addWidget(self.genwrn_led)
             else:
                 self.soft_intlk_led = SiriusLedAlert(self, self._soft_intlk)
                 self.hard_intlk_led = SiriusLedAlert(self, self._hard_intlk)
