@@ -859,11 +859,13 @@ class RFMainControl(SiriusMainWindow):
         # Cell and Coupler Temperatures
         lb_temp1 = QLabel(
             '<h3> • Cell and Coupler Temperatures [°C]</h3>', self)
-        comp_val = {'comp': 'wt', 'value': [25.0, 35.0]}
+        lims = [25.0, 35.0] if self.section == 'SI' else [25.0, 40.0]
+        lims_coup = [25.0, 50.0] if self.section == 'SI' else [25.0, 35.0]
+        comp_val = {'comp': 'wt', 'value': lims}
         ch2vals = {c[0]: comp_val
                    for c in self.chs['Cav Sts']['Temp']['Cells']}
         ch2vals[self.chs['Cav Sts']['Temp']['Coupler'][0]] = {
-            'comp': 'wt', 'value': [25.0, 50.0]}
+            'comp': 'wt', 'value': lims_coup}
         self.led_temp1ok = PyDMLedMultiChannel(self, ch2vals)
         hbox_temp1_state = QHBoxLayout()
         hbox_temp1_state.addWidget(lb_temp1, alignment=Qt.AlignLeft)
@@ -911,12 +913,13 @@ class RFMainControl(SiriusMainWindow):
             hbox_cbs.addWidget(cb)
 
         pen = mkPen(color='k', width=2, style=Qt.DashLine)
-        self.line_max1_lim = InfiniteLine(pos=35.0, angle=0, pen=pen)
-        self.line_min1_lim = InfiniteLine(pos=25.0, angle=0, pen=pen)
+        self.line_max1_lim = InfiniteLine(pos=lims[1], angle=0, pen=pen)
+        self.line_min1_lim = InfiniteLine(pos=lims[0], angle=0, pen=pen)
         self.temp1_graph.addItem(self.line_max1_lim)
         self.temp1_graph.addItem(self.line_min1_lim)
         if self.section == 'SI':
-            self.line_maxcp_lim = InfiniteLine(pos=50.0, angle=0, pen=pen)
+            self.line_maxcp_lim = InfiniteLine(
+                pos=lims_coup[1], angle=0, pen=pen)
             self.temp1_graph.addItem(self.line_maxcp_lim)
 
         # Circulator Temperatures

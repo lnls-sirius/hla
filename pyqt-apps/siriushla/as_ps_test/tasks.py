@@ -74,6 +74,8 @@ class BaseTask(QThread):
                 if dev not in need_check:
                     continue
                 tester = BaseTask._testers[dev]
+                if not tester.wait_for_connection(TIMEOUT_CONN):
+                    continue
                 func = getattr(tester, method)
                 if func(**kwargs):
                     self.currentItem.emit(dev)
@@ -386,6 +388,9 @@ class TriggerTask(QThread):
             self.currentItem.emit(trig)
             pv = self._pvs_sp[trig]
             val = self.trig2val[trig]
+            if not pv.wait_for_connection(TIMEOUT_CONN):
+                self.itemDone.emit(trig, False)
+                continue
             pv.value = val
             self.itemDone.emit(trig, True)
 
@@ -398,6 +403,8 @@ class TriggerTask(QThread):
                     continue
                 pv = self._pvs_rb[trig]
                 val = self.trig2val[trig]
+                if not pv.wait_for_connection(TIMEOUT_CONN):
+                    continue
                 if pv.value == val:
                     self.currentItem.emit(trig)
                     self.itemDone.emit(trig, True)
