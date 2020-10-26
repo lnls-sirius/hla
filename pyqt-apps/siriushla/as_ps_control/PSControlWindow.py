@@ -2,7 +2,9 @@
 import qtawesome as qta
 
 from siriuspy.namesys import SiriusPVName as _PVName
-from siriushla.util import connect_window, get_appropriate_color
+from siriuspy.search import PSSearch
+from siriushla.util import connect_window, get_appropriate_color, \
+    connect_newprocess
 from siriushla.widgets import SiriusMainWindow
 from .control_widget.ControlWidgetFactory import ControlWidgetFactory
 from .PSDetailWindow import PSDetailWindow
@@ -62,7 +64,12 @@ class PSControlWindow(SiriusMainWindow):
             if not psname:
                 psname = detail_bt.toolTip()
             psname = _PVName(psname)
-            connect_window(detail_bt, PSDetailWindow, self, psname=psname)
+            if PSSearch.conv_psname_2_psmodel(psname) == 'REGATRON_DCLink':
+                connect_newprocess(
+                    w, ['sirius-hla-as-ps-regatron-individual',
+                        '-dev', psname], parent=self, is_pydm=True)
+            else:
+                connect_window(detail_bt, PSDetailWindow, self, psname=psname)
 
             trim_bt = w.get_trim_button()
             if trim_bt is not None:

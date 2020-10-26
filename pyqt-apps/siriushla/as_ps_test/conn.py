@@ -200,6 +200,70 @@ class TesterDCLink(_TesterPSBase):
         return value >= target
 
 
+class TesterDCLinkRegatron(_TesterBase):
+    """DCLink tester."""
+
+    properties = ['Reset-Cmd', 'GenIntlk-Mon', 'GenWarn-Mon', 'OpMode-Sts',
+                  'PwrState-Sel', 'PwrState-Sts',
+                  'Voltage-SP', 'VoltageRef-Mon', 'Voltage-Mon']
+
+    _OPMODE_STS_OFF = 4  # READY
+    _OPMODE_STS_ON = 8  # RUN
+
+    def __init__(self, device):
+        """Init."""
+        super().__init__(device)
+        for ppty in TesterDCLinkRegatron.properties:
+            self._pvs[ppty] = _PV(
+                VACA_PREFIX + device + ':' + ppty,
+                connection_timeout=TIMEOUT_CONN)
+
+    def reset(self):
+        """Reset."""
+        self._pvs['Reset-Cmd'].value = 1
+
+    def check_intlk(self):
+        """Check interlocks."""
+        status = (self._pvs['GenIntlk-Mon'].value == 0)
+        status &= (self._pvs['GenWarn-Mon'].value == 0)
+        return status
+
+    def set_pwrstate(self, state='on'):
+        """Set PwrState."""
+        if state == 'on':
+            state = _PSC.OffOn.On
+        else:
+            state = _PSC.OffOn.Off
+        self._pvs['PwrState-Sel'].value = state
+
+    def check_pwrstate(self, state='on'):
+        """Check PwrState."""
+        if state == 'on':
+            ok = self._pvs['PwrState-Sts'].value == _PSC.OffOn.On
+            ok &= self._pvs['OpMode-Sts'].value == self._OPMODE_STS_ON
+        else:
+            ok = self._pvs['PwrState-Sts'].value == _PSC.OffOn.Off
+            ok &= self._pvs['OpMode-Sts'].value == self._OPMODE_STS_OFF
+        return ok
+
+    def check_init_ok(self):
+        """Check OpMode Ok."""
+        return self._pvs['OpMode-Sts'].value == self._OPMODE_STS_ON
+
+    def check_capvolt(self):
+        """Check voltage."""
+        return _np.isclose(self._pvs['Voltage-Mon'].value,
+                           self._pvs['VoltageRef-Mon'].value,
+                           rtol=0.05)
+
+    def check_status(self):
+        status = True
+        status &= self.check_intlk()
+        if self.check_pwrstate():
+            status &= self.check_capvolt()
+        return status
+
+
 class TesterPS(_TesterPSBase):
     """PS tester."""
 

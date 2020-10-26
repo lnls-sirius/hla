@@ -9,7 +9,8 @@ from siriuspy.search import HLTimeSearch as _HLTimeSearch, \
 from siriuspy.csdev import Const
 from siriuspy.namesys import Filter, SiriusPVName as _PVName
 from .conn import TesterDCLink, TesterDCLinkFBP, TesterPS, TesterPSLinac, \
-    TesterPSFBP, TesterPUKckr, TesterPUSept, DEFAULT_CAP_BANK_VOLT
+    TesterPSFBP, TesterPUKckr, TesterPUSept, TesterDCLinkRegatron, \
+    DEFAULT_CAP_BANK_VOLT
 
 
 TIMEOUT_CHECK = 10
@@ -104,6 +105,8 @@ class CreateTesters(BaseTask):
                     t = TesterDCLinkFBP(dev)
                 elif 'bo-dclink' in _PSSearch.conv_psname_2_pstype(dev):
                     t = TesterDCLink(dev)
+                elif _PSSearch.conv_psname_2_psmodel(dev) == 'REGATRON_DCLink':
+                    t = TesterDCLinkRegatron(dev)
                 elif _PSSearch.conv_psname_2_psmodel(dev) == 'FBP':
                     t = TesterPSFBP(dev)
                 elif devname.dis == 'PS':

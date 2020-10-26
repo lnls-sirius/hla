@@ -11,7 +11,7 @@ from pydm.connection_inspector import ConnectionInspector
 
 from siriuspy.search import PSSearch
 from siriuspy.namesys import SiriusPVName as PVName
-from siriushla.util import connect_window
+from siriushla.util import connect_window, connect_newprocess
 from ..PSDetailWindow import PSDetailWindow
 from ..SummaryWidgets import SummaryWidget, SummaryHeader, \
     get_prop2label, sort_propties
@@ -27,14 +27,15 @@ class PSContainer(QWidget):
         self.udcname = widget.udcname
 
         self.dclinks = list()
+        self.dclinks_type = ''
         self.dclink_widgets = list()
         self.dclinksbbbname = set()
         self.dclinksudcname = set()
         dclinks = PSSearch.conv_psname_2_dclink(self.name)
         if dclinks:
-            dclinks_type = PSSearch.conv_psname_2_psmodel(dclinks[0])
-            if dclinks_type != 'REGATRON_DCLink':
-                self.dclinks = dclinks
+            self.dclinks = dclinks
+            self.dclinks_type = PSSearch.conv_psname_2_psmodel(dclinks[0])
+            if self.dclinks_type != 'REGATRON_DCLink':
                 for dc in dclinks:
                     self.dclinksbbbname.add(PSSearch.conv_psname_2_bbbname(dc))
                     self.dclinksudcname.add(PSSearch.conv_psname_2_udc(dc))
@@ -100,8 +101,15 @@ class PSContainer(QWidget):
             SummaryHeader(self.dclinks[0], self.visible_props, self))
         for dclink_name in self.dclinks:
             w = SummaryWidget(dclink_name, self.visible_props, self)
-            connect_window(w.detail_bt, PSDetailWindow,
-                           self, psname=dclink_name)
+            if self.dclinks_type == 'REGATRON_DCLink':
+                connect_newprocess(
+                    w.detail_bt,
+                    ['sirius-hla-as-ps-regatron-individual',
+                     '-dev', dclink_name],
+                    parent=self, is_pydm=True)
+            else:
+                connect_window(w.detail_bt, PSDetailWindow,
+                               self, psname=dclink_name)
             self._dclink_container.layout().addWidget(w)
             self.dclink_widgets.append(w)
 
