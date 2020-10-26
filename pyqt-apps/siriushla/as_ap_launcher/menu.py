@@ -315,7 +315,8 @@ def get_object(ismenubar=True, parent=None):
             self.add_object_to_level1(menu, All)
 
             idlist = ['SI-06SB:ID-APU22', 'SI-07SP:ID-APU22',
-                      'SI-08SB:ID-APU22', 'SI-09SA:ID-APU22']
+                      'SI-08SB:ID-APU22', 'SI-09SA:ID-APU22',
+                      'SI-11SP:ID-APU58']
             for idname in idlist:
                 idname = SiriusPVName(idname)
                 beamline = IDSearch.conv_idname_2_beamline(idname)
