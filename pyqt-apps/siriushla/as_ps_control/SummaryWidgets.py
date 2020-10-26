@@ -367,7 +367,7 @@ class SummaryWidget(QWidget):
             self._intlk = self._prefixed_name + ":StatusIntlk-Mon"
         elif self._is_regatron:
             if not self._is_reg_slave:
-                self._generr = self._prefixed_name + ":GenErr-Mon"
+                self._generr = self._prefixed_name + ":GenIntlk-Mon"
                 self._genwrn = self._prefixed_name + ":GenWarn-Mon"
         else:
             self._soft_intlk = self._prefixed_name + ':IntlkSoft-Mon'

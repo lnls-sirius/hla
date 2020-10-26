@@ -203,7 +203,7 @@ class TesterDCLink(_TesterPSBase):
 class TesterDCLinkRegatron(_TesterBase):
     """DCLink tester."""
 
-    properties = ['Reset-Cmd', 'GenErr-Mon', 'GenWarn-Mon', 'OpMode-Sts',
+    properties = ['Reset-Cmd', 'GenIntlk-Mon', 'GenWarn-Mon', 'OpMode-Sts',
                   'PwrState-Sel', 'PwrState-Sts',
                   'Voltage-SP', 'VoltageRef-Mon', 'Voltage-Mon']
 
@@ -224,7 +224,7 @@ class TesterDCLinkRegatron(_TesterBase):
 
     def check_intlk(self):
         """Check interlocks."""
-        status = (self._pvs['GenErr-Mon'].value == 0)
+        status = (self._pvs['GenIntlk-Mon'].value == 0)
         status &= (self._pvs['GenWarn-Mon'].value == 0)
         return status
 
