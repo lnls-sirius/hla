@@ -10,7 +10,7 @@ from siriuspy.namesys import SiriusPVName as _PVName
 
 from siriushla.widgets import SiriusMainWindow
 
-from .apu_control import APU22SummaryHeader, APU22SummaryWidget
+from .apu_control import APUSummaryHeader, APUSummaryWidget
 from .util import get_id_icon
 
 
@@ -45,7 +45,7 @@ class IDControl(SiriusMainWindow):
         lay = QVBoxLayout()
         lay.setAlignment(Qt.AlignTop)
 
-        self._apu_header = APU22SummaryHeader(self)
+        self._apu_header = APUSummaryHeader(self)
         lay.addWidget(self._apu_header)
 
         self._apu_widgets = list()
@@ -53,7 +53,7 @@ class IDControl(SiriusMainWindow):
                   'SI-08SB:ID-APU22', 'SI-09SA:ID-APU22']
         for idname in idlist:
             idname = _PVName(idname)
-            apu_wid = APU22SummaryWidget(self, self._prefix, idname)
+            apu_wid = APUSummaryWidget(self, self._prefix, idname)
             lay.addWidget(apu_wid)
             self._apu_widgets.append(apu_wid)
 

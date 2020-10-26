@@ -1,4 +1,4 @@
-"""APU22 Control Module."""
+"""APU Control Module."""
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGroupBox, QGridLayout, QLabel, \
@@ -21,8 +21,8 @@ from .auxiliary_dialogs import APUAlarmDetails, APUInterlockDetails, \
 from .util import get_id_icon
 
 
-class APU22ControlWindow(SiriusMainWindow):
-    """APU22 Control Window."""
+class APUControlWindow(SiriusMainWindow):
+    """APU Control Window."""
 
     def __init__(self, parent=None, prefix=_vaca_prefix, device=''):
         """Init."""
@@ -352,8 +352,8 @@ class APU22ControlWindow(SiriusMainWindow):
             menu.popup(self.mapToGlobal(point))
 
 
-class APU22SummaryBase(QWidget):
-    """APU22 Summary Base Widget."""
+class APUSummaryBase(QWidget):
+    """APU Summary Base Widget."""
 
     def __init__(self, parent=None):
         """Init."""
@@ -375,8 +375,8 @@ class APU22SummaryBase(QWidget):
         )
 
 
-class APU22SummaryHeader(APU22SummaryBase):
-    """APU22 Summary Header."""
+class APUSummaryHeader(APUSummaryBase):
+    """APU Summary Header."""
 
     def __init__(self, parent=None):
         """Init."""
@@ -395,8 +395,8 @@ class APU22SummaryHeader(APU22SummaryBase):
             layout.addWidget(label)
 
 
-class APU22SummaryWidget(APU22SummaryBase):
-    """APU22 Summary Widget."""
+class APUSummaryWidget(APUSummaryBase):
+    """APU Summary Widget."""
 
     def __init__(self, parent=None, prefix=_vaca_prefix, device=''):
         """Init."""
