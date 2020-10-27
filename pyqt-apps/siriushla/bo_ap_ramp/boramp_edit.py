@@ -117,6 +117,7 @@ class DipoleRamp(QWidget):
         self.ramp_config = ramp_config
         self._undo_stack = undo_stack
         self.plot_unit = 'Strengths'
+        self._psname_exclims = list()
         self.setObjectName('DipoleRampWidget')
         self._setupUi()
 
@@ -577,7 +578,8 @@ class DipoleRamp(QWidget):
             self.updateTable()
 
     def _verifyWarnings(self):
-        if 'BO-Fam:PS-B-1' in self.ramp_config.ps_waveform_psnames_exclimits:
+        self._psnames_exclims = self.ramp_config.ps_waveform_psnames_exclimits
+        if 'BO-Fam:PS-B-1' in self._psnames_exclims:
             self.label_exclim.setText('<h6>Waveforms are exceeding current '
                                       'limits.</h6>')
             self.pb_exclim.setVisible(True)
@@ -586,8 +588,7 @@ class DipoleRamp(QWidget):
             self.pb_exclim.setVisible(False)
 
     def _showExcLimPopup(self):
-        psnames_exclimits = self.ramp_config.ps_waveform_psnames_exclimits
-        if 'BO-Fam:PS-B-1' in psnames_exclimits:
+        if 'BO-Fam:PS-B-1' in self._psnames_exclims:
             text = 'The waveform of the following power supplies\n' \
                    'are exceeding current limits:\n' \
                    '    - BO-Fam:PS-B-1' \
@@ -782,6 +783,8 @@ class MultipolesRamp(QWidget):
         self._psnames.remove('BO-Fam:PS-B-1')
         self._psnames.remove('BO-Fam:PS-B-2')
         self._psnames = [_PVName(ps) for ps in self._psnames]
+        self._psname_exclims = list()
+        self._psnames_diff = list()
 
         self.setObjectName('MultipolesRampWidget')
         self._setupUi()
@@ -864,6 +867,18 @@ class MultipolesRamp(QWidget):
         lay_exclim.addWidget(self.pb_exclim)
         lay_exclim.addStretch()
 
+        self.label_diff = QLabel('', self)
+        self.label_diff.setStyleSheet("""
+            min-height:1.55em; max-height:1.55em;""")
+        self.pb_diff = QPushButton('?', self)
+        self.pb_diff.setStyleSheet("""
+            background-color:red; min-width:1.55em; max-width:1.55em;""")
+        self.pb_diff.setVisible(False)
+        self.pb_diff.clicked.connect(self._showWavDiffPopup)
+        lay_diff = QHBoxLayout()
+        lay_diff.addWidget(self.label_diff)
+        lay_diff.addWidget(self.pb_diff)
+
         self.bt_apply = QPushButton(qta.icon('fa5s.angle-right'), '', self)
         self.bt_apply.setToolTip('Apply Changes to Machine')
         self.bt_apply.setStyleSheet('icon-size: 30px 30px;')
@@ -879,6 +894,7 @@ class MultipolesRamp(QWidget):
         lay.addLayout(hlay_chart_ins_del)
         lay.addWidget(self.table)
         lay.addLayout(lay_exclim)
+        lay.addLayout(lay_diff)
         lay.addWidget(self.bt_apply, alignment=Qt.AlignRight)
 
     def _setupGraph(self):
@@ -1251,23 +1267,36 @@ class MultipolesRamp(QWidget):
             psnames_exclimits.remove('BO-Fam:PS-B-1')
         if 'BO-Fam:PS-B-2' in psnames_exclimits:
             psnames_exclimits.remove('BO-Fam:PS-B-2')
-        if len(psnames_exclimits) > 0:
-            self.label_exclim.setText('<h6>There are waveforms exceeding '
-                                      'current limits.</h6>')
+        self._psname_exclims = psnames_exclimits
+        if self._psname_exclims:
+            self.label_exclim.setText(
+                '<h6>There are waveforms exceeding current limits.</h6>')
             self.pb_exclim.setVisible(True)
         else:
             self.label_exclim.setText('')
             self.pb_exclim.setVisible(False)
 
+        self._psnames_diff = self.ramp_config.ps_waveform_psnames_init_end_diff
+        if self._psnames_diff:
+            self.label_diff.setText(
+                '<h6>There are waveforms with difference '
+                'between the first and the last points.</h6>')
+            self.pb_diff.setVisible(True)
+        else:
+            self.label_diff.setText('')
+            self.pb_diff.setVisible(False)
+
     def _showExcLimPopup(self):
-        psnames_exclimits = self.ramp_config.ps_waveform_psnames_exclimits
-        if 'BO-Fam:PS-B-1' in psnames_exclimits:
-            psnames_exclimits.remove('BO-Fam:PS-B-1')
-        if 'BO-Fam:PS-B-2' in psnames_exclimits:
-            psnames_exclimits.remove('BO-Fam:PS-B-2')
         text = 'The waveform of the following power supplies\n' \
                'are exceeding current limits:\n'
-        for psname in psnames_exclimits:
+        for psname in self._psname_exclims:
+            text += '    - ' + psname + '\n'
+        QMessageBox.warning(self, 'Warning', text, QMessageBox.Ok)
+
+    def _showWavDiffPopup(self):
+        text = 'The first and last points of the waveform of\n' \
+               'the following power supplies are different:\n'
+        for psname in self._psnames_diff:
             text += '    - ' + psname + '\n'
         QMessageBox.warning(self, 'Warning', text, QMessageBox.Ok)
 
