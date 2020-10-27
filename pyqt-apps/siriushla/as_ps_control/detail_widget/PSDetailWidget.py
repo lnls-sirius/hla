@@ -13,7 +13,8 @@ import qtawesome as qta
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.search import PSSearch
 from siriuspy.pwrsupply.csdev import get_ps_propty_database, \
-    DEF_WFMSIZE_FBP, DEF_WFMSIZE_OTHERS
+    DEF_WFMSIZE_FBP, DEF_WFMSIZE_OTHERS, \
+    PS_LI_INTLK_THRS as _PS_LI_INTLK
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox, PyDMPushButton, \
     PyDMLineEdit, PyDMWaveformPlot
 from siriushla import util
@@ -983,8 +984,8 @@ class LIPSDetailWidget(PSDetailWidget):
             '#intlk_bt{min-width:25px; max-width:25px; icon-size:20px;}')
         util.connect_window(self.intlk_bt, LIInterlockWindow, self,
                             **{'devname': self._psname})
-        ch2vals = {self._prefixed_psname+':StatusIntlk-Mon': {'value': 64,
-                                                              'comp': 'lt'}}
+        ch2vals = {self._prefixed_psname+':StatusIntlk-Mon': {
+            'value': _PS_LI_INTLK, 'comp': 'lt'}}
         self.intlk_led = PyDMLedMultiChannel(self, channels2values=ch2vals)
 
         layout = QGridLayout()

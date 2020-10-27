@@ -10,6 +10,7 @@ from pydm.widgets import PyDMPushButton, PyDMLabel
 from siriuspy.envars import VACA_PREFIX as VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as PVName
 from siriuspy.search import PSSearch
+from siriuspy.pwrsupply.csdev import PS_LI_INTLK_THRS as _PS_LI_INTLK
 from siriushla.widgets import PyDMStateButton, SiriusLedState, \
     SiriusLedAlert, PyDMLinEditScrollbar, PyDMLedMultiChannel, \
     SiriusEnumComboBox
@@ -466,7 +467,7 @@ class SummaryWidget(QWidget):
             elif self._is_linac:
                 self.intlk_led = PyDMLedMultiChannel(
                     self, channels2values={
-                        self._intlk: {'value': 64, 'comp': 'lt'}})
+                        self._intlk: {'value': _PS_LI_INTLK, 'comp': 'lt'}})
                 self.intlk_wid.layout().addWidget(self.intlk_led)
             elif self._is_regatron:
                 if not self._is_reg_slave:

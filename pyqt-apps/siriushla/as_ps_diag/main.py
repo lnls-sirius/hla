@@ -21,7 +21,7 @@ from pydm.widgets.base import PyDMWidget
 
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.pwrsupply.csdev import Const as _PSConst, \
-    ETypes as _PSEnums
+    ETypes as _PSEnums, PS_LI_INTLK_THRS as _PS_LI_INTLK
 from siriuspy.search import PSSearch
 from siriuspy.namesys import SiriusPVName
 
@@ -88,7 +88,7 @@ class PSDiag(SiriusMainWindow):
                         conn_chs.append(pname+':PwrState-Sts')
                         ps_ch2vals[pname + ':PwrState-Sts'] = 1
                         intlk_ch2vals[pname + ':StatusIntlk-Mon'] = \
-                            {'value': 64, 'comp': 'lt'}
+                            {'value': _PS_LI_INTLK, 'comp': 'lt'}
 
                     f = 'LI-.*:PS-'+filt['dev']
                     conn_led = MyLedMultiConnection(
