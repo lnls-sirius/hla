@@ -3,7 +3,7 @@ import sys
 import re as _re
 from functools import partial as _part
 
-from qtpy.QtCore import Qt
+from qtpy.QtCore import Qt, QTimer
 from qtpy.QtWidgets import QFrame, QGridLayout, QVBoxLayout, QHBoxLayout, \
     QSizePolicy, QGroupBox, QPushButton, QListWidget, QLabel, QApplication, \
     QMessageBox, QTabWidget, QWidget
@@ -23,7 +23,7 @@ from .tasks import CreateTesters, \
     CheckStatus, \
     ResetIntlk, CheckIntlk, \
     SetSOFBMode, CheckSOFBMode, \
-    SetOpModeSlowRef, CheckOpModeSlowRef, \
+    SetOpModeSlowRef, CheckOpModeSlowRef, CheckOpModeInit, \
     SetPwrState, CheckPwrState, CheckInitOk, \
     SetPulse, CheckPulse, \
     SetCtrlLoop, CheckCtrlLoop, \
@@ -43,7 +43,15 @@ class PSTestWindow(SiriusMainWindow):
         self.setObjectName('ASApp')
         cor = get_appropriate_color(section='AS')
         self.setWindowIcon(qta.icon('mdi.test-tube', color=cor))
+
+        self._si_fam_psnames = PSSearch.get_psnames(
+            filters={'sec': 'SI', 'sub': 'Fam', 'dis': 'PS'})
+        self._needs_update_setup = False
         self._setup_ui()
+        self._update_setup_timer = QTimer(self)
+        self._update_setup_timer.timeout.connect(self._update_setup)
+        self._update_setup_timer.setInterval(250)
+        self._update_setup_timer.start()
 
     def _setup_ui(self):
         # setup central widget
@@ -83,6 +91,8 @@ class PSTestWindow(SiriusMainWindow):
             QSizePolicy.Preferred, QSizePolicy.Preferred)
         self.ps_tree.tree.setColumnCount(1)
         self.ps_tree.tree.doubleClicked.connect(self._open_detail)
+        self.ps_tree.tree.itemChanged.connect(
+            self._handle_checked_items_changed)
 
         gbox_ps_select = QGroupBox('Select PS: ', self)
         gbox_ps_select.setObjectName('select')
@@ -127,6 +137,11 @@ class PSTestWindow(SiriusMainWindow):
         self.reset_ps_bt = QPushButton('Reset PS and DCLinks', self)
         self.reset_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.reset_ps_bt.clicked.connect(_part(self._reset_intlk, 'PS'))
+
+        self.init_sips_bt = QPushButton('Initialize SI Fam PS', self)
+        self.init_sips_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
+        self.init_sips_bt.clicked.connect(self._set_check_pwrstateinit)
+        self.init_sips_bt.setVisible(False)
 
         self.turnon_dcl_bt = QPushButton('Turn DCLinks On', self)
         self.turnon_dcl_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
@@ -180,6 +195,7 @@ class PSTestWindow(SiriusMainWindow):
         lay_ps_comm.addWidget(self.setslowref_ps_bt)
         lay_ps_comm.addWidget(self.currzero_ps_bt1)
         lay_ps_comm.addWidget(self.reset_ps_bt)
+        lay_ps_comm.addWidget(self.init_sips_bt)
         lay_ps_comm.addWidget(QLabel(''))
         lay_ps_comm.addWidget(QLabel('<h4>Config DCLinks</h4>', self,
                                      alignment=Qt.AlignCenter))
@@ -487,13 +503,15 @@ class PSTestWindow(SiriusMainWindow):
         self.nok_ps.clear()
         if dev_type == 'PS':
             devices = self._get_selected_ps()
+            devices_wth_sifam = list(
+                set(devices) - set(self._si_fam_psnames))
         elif dev_type == 'PU':
             devices = self._get_selected_pu()
         if not devices:
             return
 
         task0 = CreateTesters(devices, parent=self)
-        task1 = SetPwrState(devices, state=state, parent=self)
+        task1 = SetPwrState(devices_wth_sifam, state=state, parent=self)
         task2 = CheckPwrState(devices, state=state, parent=self)
         task2.itemDone.connect(self._log)
         tasks = [task0, task1, task2]
@@ -501,6 +519,27 @@ class PSTestWindow(SiriusMainWindow):
         labels = ['Connecting to devices...',
                   'Turning '+dev_type+' '+state+'...',
                   'Checking '+dev_type+' powered '+state+'...']
+
+        dlg = ProgressDialog(labels, tasks, self)
+        dlg.exec_()
+
+    def _set_check_pwrstateinit(self):
+        self.ok_ps.clear()
+        self.nok_ps.clear()
+        selected = self._get_selected_ps()
+        devices = [ps for ps in selected if ps in self._si_fam_psnames]
+        if not devices:
+            return
+
+        task0 = CreateTesters(devices, parent=self)
+        task1 = SetPwrState(devices, parent=self)
+        task2 = CheckOpModeInit(devices, parent=self)
+        task2.itemDone.connect(self._log)
+        tasks = [task0, task1, task2]
+
+        labels = ['Connecting to devices...',
+                  'Initializing SI Fam PS...',
+                  'Checking SI Fam PS initilized...']
 
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
@@ -851,6 +890,25 @@ class PSTestWindow(SiriusMainWindow):
             run_newprocess(['sirius-hla-as-ps-detail.py', name])
         elif name.dis == 'PU':
             run_newprocess(['sirius-hla-as-pu-detail.py', name])
+
+    # ---------- update setup ----------
+
+    def _handle_checked_items_changed(self, item):
+        self._needs_update_setup = True
+
+    def _update_setup(self):
+        if not self._needs_update_setup:
+            return
+        self._needs_update_setup = False
+
+        si_fams = PSSearch.get_psnames(
+            {'sec': 'SI', 'sub': 'Fam', 'dis': 'PS'})
+        has_sifam = False
+        for psn in si_fams:
+            item = self.ps_tree._item_map[psn]
+            has_sifam |= item.checkState(0) != 0
+
+        self.init_sips_bt.setVisible(has_sifam)
 
 
 if __name__ == '__main__':

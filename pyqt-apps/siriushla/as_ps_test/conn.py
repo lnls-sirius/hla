@@ -73,18 +73,28 @@ class _TesterPSBase(_TesterBase):
         status &= (self._pvs['IntlkSoft-Mon'].value == 0)
         return status
 
-    def set_slowref(self):
+    def set_opmode_slowref(self):
         """Set OpMode to SlowRef."""
         self._pvs['OpMode-Sel'].value = _PSC.OpMode.SlowRef
 
-    def check_slowref(self):
+    def check_opmode_slowref(self):
         """Check OpMode in SlowRef."""
         return (self._pvs['OpMode-Sts'].value in [_PSC.States.SlowRef,
                                                   _PSC.States.Off,
                                                   _PSC.States.Interlock])
 
+    def check_opmode_initializing(self):
+        """Check OpMode in Initializing."""
+        status = self._pvs['PwrState-Sts'].value in [
+            _PSC.PwrStateSts.Initializing,  _PSC.PwrStateSts.On]
+        status &= self._pvs['OpMode-Sts'].value in [
+            _PSC.States.Initializing, _PSC.States.SlowRef]
+        return status
+
     def set_pwrstate(self, state='on'):
         """Set PwrState."""
+        if self.check_pwrstate(state):
+            return
         if state == 'on':
             state = _PSC.PwrStateSel.On
         else:

@@ -172,15 +172,23 @@ class SetOpModeSlowRef(BaseTask):
 
     def function(self):
         """Set PS OpMode to SlowRef."""
-        self._set(method='set_slowref')
+        self._set(method='set_opmode_slowref')
 
 
 class CheckOpModeSlowRef(BaseTask):
-    """Check if PS OpMode is in SlowRef."""
+    """Check whether PS OpMode is in SlowRef."""
 
     def function(self):
         """Check PS OpMode in SlowRef."""
-        self._check(method='check_slowref')
+        self._check(method='check_opmode_slowref')
+
+
+class CheckOpModeInit(BaseTask):
+    """Check whether PS OpMode is in Initializing."""
+
+    def function(self):
+        """Check PS OpMode in Initializing."""
+        self._check(method='check_opmode_initializing')
 
 
 class SetPwrState(BaseTask):
