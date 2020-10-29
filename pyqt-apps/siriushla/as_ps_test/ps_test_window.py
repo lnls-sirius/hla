@@ -533,6 +533,15 @@ class PSTestWindow(SiriusMainWindow):
         if not devices:
             return
 
+        # if power state is on, do nothing
+        self._check_pwrstate(devices, state='on', show=False)
+        if len(self.ok_ps_aux_list) == len(devices):
+            for dev in self.ok_ps_aux_list:
+                self._log(dev, True)
+            self.ok_ps_aux_list = list()
+            self.nok_ps_aux_list = list()
+            return
+
         task0 = CreateTesters(devices, parent=self)
         task1 = SetPwrState(devices, parent=self)
         task2 = CheckOpModeInit(devices, parent=self)
