@@ -576,7 +576,7 @@ class PSTestWindow(SiriusMainWindow):
             return
 
         if state == 'off':
-            self._check_ps_pwrstate_off(pwrsupplies)
+            self._check_pwrstate(pwrsupplies, state='off')
             if self.nok_ps.count() > 0:
                 QMessageBox.critical(
                     self, 'Message',
@@ -604,17 +604,17 @@ class PSTestWindow(SiriusMainWindow):
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
-    def _check_ps_pwrstate_off(self, pwrsupplies):
+    def _check_pwrstate(self, devices, state):
         self.ok_ps.clear()
         self.nok_ps.clear()
 
-        task0 = CreateTesters(pwrsupplies, parent=self)
-        task1 = CheckPwrState(pwrsupplies, state='off', parent=self)
+        task0 = CreateTesters(devices, parent=self)
+        task1 = CheckPwrState(devices, state=state, parent=self)
         task1.itemDone.connect(self._log)
         tasks = [task0, task1]
 
-        labels = ['Connecting to PS...',
-                  'Checking PS powered off...']
+        labels = ['Connecting to devices...',
+                  'Checking devices powered '+state+'...']
 
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
