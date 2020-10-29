@@ -572,13 +572,13 @@ class PSTestWindow(SiriusMainWindow):
         pwrsupplies = self._get_selected_ps()
         if not pwrsupplies:
             return
-        devices = self._get_related_dclinks(
-            pwrsupplies, include_regatrons=True)
+        devices, pwrsupplies2check = self._get_related_dclinks(
+            pwrsupplies, include_regatrons=True, return_psnames=True)
         if not devices:
             return
 
         if state == 'off':
-            self._check_pwrstate(pwrsupplies, state='off', show=False)
+            self._check_pwrstate(pwrsupplies2check, state='off', show=False)
             if len(self.nok_ps_aux_list) > 0:
                 for dev in self.ok_ps_aux_list:
                     self._log(dev, True)
@@ -870,8 +870,10 @@ class PSTestWindow(SiriusMainWindow):
             return False
         return devices
 
-    def _get_related_dclinks(self, psnames, include_regatrons=False):
+    def _get_related_dclinks(self, psnames, include_regatrons=False,
+                             return_psnames=False):
         alldclinks = set()
+        relpsnames = set()
         for name in psnames:
             if 'LI' in name:
                 continue
@@ -879,13 +881,18 @@ class PSTestWindow(SiriusMainWindow):
             if dclinks:
                 dclink_model = PSSearch.conv_psname_2_psmodel(dclinks[0])
                 if dclink_model != 'REGATRON_DCLink':
+                    relpsnames.add(name)
                     alldclinks.update(dclinks)
                 elif include_regatrons:
                     for dcl in dclinks:
                         dcl_typ = PSSearch.conv_psname_2_pstype(dcl)
                         if dcl_typ == 'as-dclink-regatron-master':
+                            relpsnames.add(name)
                             alldclinks.add(dcl)
-        return list(alldclinks)
+        if return_psnames:
+            return list(alldclinks), list(relpsnames)
+        else:
+            return list(alldclinks)
 
     def _open_detail(self, index):
         name = PVName(index.data())
