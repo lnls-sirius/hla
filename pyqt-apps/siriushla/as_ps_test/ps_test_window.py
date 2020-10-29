@@ -883,7 +883,7 @@ class PSTestWindow(SiriusMainWindow):
             return
         elif not _re.match('.*-.*:.*-.*', name):
             if index.model().rowCount(index) == 1:
-                name = index.child(0, 0).data()
+                name = PVName(index.child(0, 0).data())
             else:
                 return
         if name.dis == 'PS':
