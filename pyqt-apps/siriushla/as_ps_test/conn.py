@@ -93,8 +93,6 @@ class _TesterPSBase(_TesterBase):
 
     def set_pwrstate(self, state='on'):
         """Set PwrState."""
-        if self.check_pwrstate(state):
-            return
         if state == 'on':
             state = _PSC.PwrStateSel.On
         else:
