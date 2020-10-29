@@ -334,6 +334,8 @@ class PSTestWindow(SiriusMainWindow):
         self.nok_ps.doubleClicked.connect(self._open_detail)
         self.clearlists_bt = QPushButton('Clear', self)
         self.clearlists_bt.clicked.connect(self._clear_lastcomm)
+        self.ok_ps_aux_list = list()
+        self.nok_ps_aux_list = list()
         hbox = QHBoxLayout()
         hbox.addWidget(self.label_lastcomm)
         hbox.addWidget(self.clearlists_bt, alignment=Qt.AlignRight)
@@ -576,8 +578,14 @@ class PSTestWindow(SiriusMainWindow):
             return
 
         if state == 'off':
-            self._check_pwrstate(pwrsupplies, state='off')
-            if self.nok_ps.count() > 0:
+            self._check_pwrstate(pwrsupplies, state='off', show=False)
+            if len(self.nok_ps_aux_list) > 0:
+                for dev in self.ok_ps_aux_list:
+                    self._log(dev, True)
+                for dev in self.nok_ps_aux_list:
+                    self._log(dev, False)
+                self.ok_ps_aux_list = list()
+                self.nok_ps_aux_list = list()
                 QMessageBox.critical(
                     self, 'Message',
                     'Make sure all related power supplies\n'
@@ -604,13 +612,13 @@ class PSTestWindow(SiriusMainWindow):
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
-    def _check_pwrstate(self, devices, state):
+    def _check_pwrstate(self, devices, state, show=True):
         self.ok_ps.clear()
         self.nok_ps.clear()
 
         task0 = CreateTesters(devices, parent=self)
         task1 = CheckPwrState(devices, state=state, parent=self)
-        task1.itemDone.connect(self._log)
+        task1.itemDone.connect(_part(self._log, show=show))
         tasks = [task0, task1]
 
         labels = ['Connecting to devices...',
@@ -809,11 +817,17 @@ class PSTestWindow(SiriusMainWindow):
         self.nok_ps.clear()
         self.label_lastcomm.setText('Last Command: ')
 
-    def _log(self, name, status):
-        if status:
-            self.ok_ps.addItem(name)
+    def _log(self, name, status, show=True):
+        if show:
+            if status:
+                self.ok_ps.addItem(name)
+            else:
+                self.nok_ps.addItem(name)
         else:
-            self.nok_ps.addItem(name)
+            if status:
+                self.ok_ps_aux_list.append(name)
+            else:
+                self.nok_ps_aux_list.append(name)
 
     # ---------- devices control ----------
 
