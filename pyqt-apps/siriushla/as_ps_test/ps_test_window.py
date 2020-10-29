@@ -530,6 +530,7 @@ class PSTestWindow(SiriusMainWindow):
         self.nok_ps.clear()
         selected = self._get_selected_ps()
         devices = [ps for ps in selected if ps in self._si_fam_psnames]
+        dclinks = self._get_related_dclinks(devices, include_regatrons=True)
         if not devices:
             return
 
@@ -542,6 +543,22 @@ class PSTestWindow(SiriusMainWindow):
             self.nok_ps_aux_list = list()
             return
 
+        # if need initializing, check if DCLinks are turned off before continue
+        self._check_pwrstate(dclinks, state='off', show=False)
+        if len(self.nok_ps_aux_list) > 0:
+            for dev in self.ok_ps_aux_list:
+                self._log(dev, True)
+            for dev in self.nok_ps_aux_list:
+                self._log(dev, False)
+            self.ok_ps_aux_list = list()
+            self.nok_ps_aux_list = list()
+            QMessageBox.critical(
+                self, 'Message',
+                'Make sure related DCLinks are turned\n'
+                'off before initialize SI Fam PS!')
+            return
+
+        # then, initialize SI Fam PS
         task0 = CreateTesters(devices, parent=self)
         task1 = SetPwrState(devices, parent=self)
         task2 = CheckOpModeInit(devices, parent=self)
