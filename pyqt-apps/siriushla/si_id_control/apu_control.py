@@ -9,15 +9,14 @@ from pydm.widgets import PyDMLabel, PyDMPushButton, PyDMSpinbox
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
-from siriuspy.search import IDSearch, PSSearch
+from siriuspy.search import IDSearch
 
 from siriushla.util import connect_window, connect_newprocess
 from siriushla.widgets import SiriusMainWindow, PyDMLed, SiriusLedAlert, \
     SiriusLedState, PyDMLedMultiChannel, PyDMStateButton
-from siriushla.as_ps_diag import PSGraphMonWidget, PSGraphProptySelWidget
 
 from .auxiliary_dialogs import APUAlarmDetails, APUInterlockDetails, \
-    APUHardLLDetails, APUCorrs
+    APUHardLLDetails
 from .util import get_id_icon
 
 
@@ -61,13 +60,6 @@ class APU22ControlWindow(SiriusMainWindow):
         lay.setRowStretch(1, 1)
         lay.setRowStretch(2, 2)
         lay.setRowStretch(3, 3)
-
-        self._corrs = PSSearch.get_psnames(
-            {'sec': 'SI', 'dev': 'C(H|V)', 'sub': self._device.sub})
-        if self._corrs:
-            self.wid_corrsControl = self._corrsControlWidget()
-            lay.addWidget(self.wid_corrsControl, 4, 0, 1, 2)
-            lay.setRowStretch(4, 6)
 
     def _mainControlsWidget(self):
         self._ld_phs = QLabel('Phase [mm]', self)
@@ -285,62 +277,6 @@ class APU22ControlWindow(SiriusMainWindow):
         lay_auxcmd.addWidget(self._ld_lastcomm, 4, 0)
         lay_auxcmd.addWidget(self._lb_lastcomm, 4, 1, 1, 2)
         return gbox_auxcmd
-
-    def _corrsControlWidget(self):
-        self._pb_dtls = QPushButton(
-            qta.icon('fa5s.ellipsis-h'), '', self)
-        self._pb_dtls.setObjectName('dtls')
-        self._pb_dtls.setStyleSheet(
-            '#dtls{min-width:30px; max-width:30px; icon-size:25px;}')
-        connect_window(
-            self._pb_dtls, APUCorrs, self,
-            prefix=self._prefix, device=self._device)
-
-        self.propsel = PSGraphProptySelWidget(self)
-        self.propsel.change_matype('corrector-horizontal')
-
-        hbox_dtl = QHBoxLayout()
-        hbox_dtl.addWidget(self._pb_dtls, alignment=Qt.AlignLeft)
-        hbox_dtl.addWidget(self.propsel)
-
-        self._label_corrsH = QLabel(
-            '<h4>CH</h4>', self, alignment=Qt.AlignCenter)
-        self.corrsH = PSGraphMonWidget(
-            self, self._prefix,
-            [corr for corr in self._corrs if 'CH' in corr])
-        self.corrsH.graph.setStyleSheet(
-            '#graph{min-width:10em;min-height:10em;}')
-        self.corrsH.layout().setContentsMargins(0, 0, 0, 0)
-
-        self._label_corrsV = QLabel(
-            '<h4>CV</h4>', self, alignment=Qt.AlignCenter)
-        self.corrsV = PSGraphMonWidget(
-            self, self._prefix,
-            [corr for corr in self._corrs if 'CV' in corr])
-        self.corrsV.graph.setStyleSheet(
-            '#graph{min-width:10em;min-height:10em;}')
-        self.corrsV.layout().setContentsMargins(0, 0, 0, 0)
-
-        self.propsel.propty_line_changed.connect(
-            self.corrsH.update_property_line)
-        self.propsel.propty_symb_changed.connect(
-            self.corrsH.update_property_symb)
-        self.propsel.propty_line_changed.connect(
-            self.corrsV.update_property_line)
-        self.propsel.propty_symb_changed.connect(
-            self.corrsV.update_property_symb)
-
-        gbox = QGroupBox('Correctors', self)
-        lay = QGridLayout(gbox)
-        lay.addLayout(hbox_dtl, 0, 0, 1, 2)
-        lay.addWidget(self._label_corrsH, 1, 0)
-        lay.addWidget(self._label_corrsV, 1, 1)
-        lay.addWidget(self.corrsH, 2, 0)
-        lay.addWidget(self.corrsV, 2, 1)
-        lay.setRowStretch(0, 1)
-        lay.setRowStretch(1, 1)
-        lay.setRowStretch(2, 4)
-        return gbox
 
     def contextMenuEvent(self, event):
         point = event.pos()

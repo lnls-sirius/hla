@@ -26,5 +26,5 @@ def get_sec2dev_laypos(sec, label):
     SEC2LABEL2SECPOS['BO'].update({
         'RF': (2, 1, 1, 1)})
     SEC2LABEL2SECPOS['SI'].update({
-        'RF': (0, 7, 1, 1)})
+        'RF': (0, 3, 1, 1)})
     return SEC2LABEL2SECPOS[sec][label]
