@@ -6,7 +6,8 @@ from epics import PV as _PV
 
 from siriuspy.envars import VACA_PREFIX as VACA_PREFIX
 from siriuspy.search import PSSearch
-from siriuspy.pwrsupply.csdev import Const as _PSC
+from siriuspy.pwrsupply.csdev import Const as _PSC, \
+    PS_LI_INTLK_THRS as _PS_LI_INTLK
 
 
 DEFAULT_CAP_BANK_VOLT = {
@@ -360,7 +361,7 @@ class TesterPSLinac(_TesterBase):
 
     def check_intlk(self):
         """Check interlocks."""
-        return self._pvs['StatusIntlk-Mon'].value < 64
+        return self._pvs['StatusIntlk-Mon'].value < _PS_LI_INTLK
 
     def set_pwrstate(self, state='on'):
         """Set PwrState."""
