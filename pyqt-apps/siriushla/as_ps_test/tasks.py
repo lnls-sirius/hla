@@ -204,8 +204,15 @@ class CheckPwrState(BaseTask):
 
     def function(self):
         """Check PS PwrState."""
+        if 'TS-Fam:PS-B' in self._devices:
+            timeout = 20
+        elif 'SI-Fam:PS-B1B2-1' in self._devices or \
+                'SI-Fam:PS-B1B2-2' in self._devices:
+            timeout = 20
+        else:
+            timeout = 5
         self._check(method='check_pwrstate', state=self._state,
-                    timeout=3*TIMEOUT_CHECK)
+                    timeout=timeout)
 
 
 class SetPulse(BaseTask):
