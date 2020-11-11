@@ -85,11 +85,7 @@ class _TesterPSBase(_TesterBase):
 
     def check_opmode_initializing(self):
         """Check OpMode in Initializing."""
-        status = self._pvs['PwrState-Sts'].value in [
-            _PSC.PwrStateSts.Initializing,  _PSC.PwrStateSts.On]
-        status &= self._pvs['OpMode-Sts'].value in [
-            _PSC.States.Initializing, _PSC.States.SlowRef]
-        return status
+        return self._pvs['OpMode-Sts'].value == _PSC.States.Initializing
 
     def set_pwrstate(self, state='on'):
         """Set PwrState."""
