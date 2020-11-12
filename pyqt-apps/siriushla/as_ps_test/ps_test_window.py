@@ -567,7 +567,7 @@ class PSTestWindow(SiriusMainWindow):
 
         # then, initialize SI Fam PS
         task0 = CreateTesters(devices, parent=self)
-        task1 = SetPwrState(devices, parent=self)
+        task1 = SetPwrState(devices, state='on', parent=self)
         task2 = CheckOpModeInit(devices, parent=self)
         task2.itemDone.connect(self._log)
         tasks = [task0, task1, task2]
