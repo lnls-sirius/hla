@@ -542,23 +542,23 @@ class PSTestWindow(SiriusMainWindow):
             return
 
         # if power state is on, do nothing
+        self.ok_ps_aux_list = list()
+        self.nok_ps_aux_list = list()
         self._check_pwrstate(devices, state='on', show=False)
         if len(self.ok_ps_aux_list) == len(devices):
             for dev in self.ok_ps_aux_list:
                 self._log(dev, True)
-            self.ok_ps_aux_list = list()
-            self.nok_ps_aux_list = list()
             return
 
         # if need initializing, check if DCLinks are turned off before continue
+        self.ok_ps_aux_list = list()
+        self.nok_ps_aux_list = list()
         self._check_pwrstate(dclinks, state='off', show=False)
         if len(self.nok_ps_aux_list) > 0:
             for dev in self.ok_ps_aux_list:
                 self._log(dev, True)
             for dev in self.nok_ps_aux_list:
                 self._log(dev, False)
-            self.ok_ps_aux_list = list()
-            self.nok_ps_aux_list = list()
             QMessageBox.critical(
                 self, 'Message',
                 'Make sure related DCLinks are turned\n'
@@ -574,7 +574,7 @@ class PSTestWindow(SiriusMainWindow):
 
         labels = ['Connecting to devices...',
                   'Initializing SI Fam PS...',
-                  'Checking SI Fam PS initilized...']
+                  'Checking SI Fam PS initialized...']
 
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
@@ -611,6 +611,8 @@ class PSTestWindow(SiriusMainWindow):
             return
 
         if state == 'off':
+            self.ok_ps_aux_list = list()
+            self.nok_ps_aux_list = list()
             self._check_pwrstate(ps2check, state='offintlk', show=False)
             if len(self.nok_ps_aux_list) > 0:
                 for dev in self.ok_ps_aux_list:
