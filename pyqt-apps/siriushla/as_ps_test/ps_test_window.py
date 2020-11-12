@@ -44,12 +44,8 @@ class PSTestWindow(SiriusMainWindow):
         cor = get_appropriate_color(section='AS')
         self.setWindowIcon(qta.icon('mdi.test-tube', color=cor))
 
-        # first step
         self._si_fam_psnames = PSSearch.get_psnames(
-            filters={'sec': 'SI', 'sub': 'Fam', 'dis': 'PS', 'dev': 'B.*'})
-        # final version
-        # self._si_fam_psnames = PSSearch.get_psnames(
-        #     filters={'sec': 'SI', 'sub': 'Fam', 'dis': 'PS'})
+            filters={'sec': 'SI', 'sub': 'Fam', 'dis': 'PS'})
         self._needs_update_setup = False
         self._setup_ui()
         self._update_setup_timer = QTimer(self)
