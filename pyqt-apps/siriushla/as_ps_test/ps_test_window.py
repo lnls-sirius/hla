@@ -520,7 +520,10 @@ class PSTestWindow(SiriusMainWindow):
             return
 
         task0 = CreateTesters(devices, parent=self)
-        task1 = SetPwrState(devices_wth_sifam, state=state, parent=self)
+        if state == 'on':
+            task1 = SetPwrState(devices_wth_sifam, state=state, parent=self)
+        else:
+            task1 = SetPwrState(devices, state=state, parent=self)
         task2 = CheckPwrState(devices, state=state, parent=self)
         task2.itemDone.connect(self._log)
         tasks = [task0, task1, task2]
