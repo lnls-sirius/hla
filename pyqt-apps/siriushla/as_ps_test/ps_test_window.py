@@ -524,7 +524,7 @@ class PSTestWindow(SiriusMainWindow):
             task1 = SetPwrState(devices_wth_sifam, state=state, parent=self)
         else:
             task1 = SetPwrState(devices, state=state, parent=self)
-        task2 = CheckPwrState(devices, state=state, parent=self)
+        task2 = CheckPwrState(devices, state=state, is_test=True, parent=self)
         task2.itemDone.connect(self._log)
         tasks = [task0, task1, task2]
 
@@ -547,7 +547,7 @@ class PSTestWindow(SiriusMainWindow):
         # if power state is on, do nothing
         self.ok_ps_aux_list = list()
         self.nok_ps_aux_list = list()
-        self._check_pwrstate(devices, state='on', show=False)
+        self._check_pwrstate(devices, state='on', is_test=False, show=False)
         if len(self.ok_ps_aux_list) == len(devices):
             for dev in self.ok_ps_aux_list:
                 self._log(dev, True)
@@ -556,7 +556,7 @@ class PSTestWindow(SiriusMainWindow):
         # if need initializing, check if DCLinks are turned off before continue
         self.ok_ps_aux_list = list()
         self.nok_ps_aux_list = list()
-        self._check_pwrstate(dclinks, state='off', show=False)
+        self._check_pwrstate(dclinks, state='off', is_test=False, show=False)
         if len(self.nok_ps_aux_list) > 0:
             for dev in self.ok_ps_aux_list:
                 self._log(dev, True)
@@ -632,7 +632,7 @@ class PSTestWindow(SiriusMainWindow):
 
         task0 = CreateTesters(devices, parent=self)
         task1 = SetPwrState(devices, state=state, parent=self)
-        task2 = CheckPwrState(devices, state=state, parent=self)
+        task2 = CheckPwrState(devices, state=state, is_test=True, parent=self)
         tasks = [task0, task1, task2]
 
         labels = ['Connecting to DCLinks...',
@@ -650,7 +650,7 @@ class PSTestWindow(SiriusMainWindow):
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
-    def _check_pwrstate(self, devices, state, show=True):
+    def _check_pwrstate(self, devices, state, is_test=True, show=True):
         self.ok_ps.clear()
         self.nok_ps.clear()
 
@@ -659,7 +659,8 @@ class PSTestWindow(SiriusMainWindow):
         if state == 'offintlk':
             task1 = CheckOpModeOff(devices, parent=self)
         else:
-            task1 = CheckPwrState(devices, state=state, parent=self)
+            task1 = CheckPwrState(
+                devices, state=state, is_test=is_test, parent=self)
         task1.itemDone.connect(_part(self._log, show=show))
         tasks = [task0, task1]
 

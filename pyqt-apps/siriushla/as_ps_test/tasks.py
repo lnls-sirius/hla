@@ -212,8 +212,11 @@ class CheckPwrState(BaseTask):
 
     def function(self):
         """Check PS PwrState."""
-        if 'SI-Fam:PS-B1B2-1' in self._devices or \
-                'SI-Fam:PS-B1B2-2' in self._devices:
+        if not self._is_test:
+            timeout = 2
+        elif self._state == 'on' and \
+                ('SI-Fam:PS-B1B2-1' in self._devices or
+                 'SI-Fam:PS-B1B2-2' in self._devices):
             timeout = 15
         else:
             timeout = 5
