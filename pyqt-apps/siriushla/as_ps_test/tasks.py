@@ -218,6 +218,10 @@ class CheckPwrState(BaseTask):
                 ('SI-Fam:PS-B1B2-1' in self._devices or
                  'SI-Fam:PS-B1B2-2' in self._devices):
             timeout = 15
+        elif self._state == 'off' and \
+                (set(_PSSearch.get_pstype_2_psnames_dict()[
+                    'as-dclink-regatron-master']) & set(self._devices)):
+            timeout = 10
         else:
             timeout = 5
         self._check(method='check_pwrstate', state=self._state,
