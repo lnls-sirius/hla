@@ -23,7 +23,7 @@ from .tasks import CreateTesters, \
     CheckStatus, \
     ResetIntlk, CheckIntlk, \
     SetSOFBMode, CheckSOFBMode, \
-    SetOpModeSlowRef, CheckOpModeSlowRef, CheckOpModeInit, \
+    SetOpModeSlowRef, CheckOpModeSlowRef, CheckOpModeInit, CheckOpModeOff, \
     SetPwrState, CheckPwrState, CheckInitOk, \
     SetPulse, CheckPulse, \
     CheckCtrlLoop, \
@@ -605,13 +605,13 @@ class PSTestWindow(SiriusMainWindow):
         pwrsupplies = self._get_selected_ps()
         if not pwrsupplies:
             return
-        devices, pwrsupplies2check = self._get_related_dclinks(
+        devices, ps2check = self._get_related_dclinks(
             pwrsupplies, include_regatrons=True, return_psnames=True)
         if not devices:
             return
 
         if state == 'off':
-            self._check_pwrstate(pwrsupplies2check, state='off', show=False)
+            self._check_pwrstate(ps2check, state='offintlk', show=False)
             if len(self.nok_ps_aux_list) > 0:
                 for dev in self.ok_ps_aux_list:
                     self._log(dev, True)
@@ -650,7 +650,11 @@ class PSTestWindow(SiriusMainWindow):
         self.nok_ps.clear()
 
         task0 = CreateTesters(devices, parent=self)
-        task1 = CheckPwrState(devices, state=state, parent=self)
+
+        if state == 'offintlk':
+            task1 = CheckOpModeOff(devices, parent=self)
+        else:
+            task1 = CheckPwrState(devices, state=state, parent=self)
         task1.itemDone.connect(_part(self._log, show=show))
         tasks = [task0, task1]
 

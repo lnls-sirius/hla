@@ -191,6 +191,14 @@ class CheckOpModeInit(BaseTask):
         self._check(method='check_opmode_initializing')
 
 
+class CheckOpModeOff(BaseTask):
+    """Check PS OpMode Off."""
+
+    def function(self):
+        """Check PS OpMode Off."""
+        self._check(method='check_opmode_off')
+
+
 class SetPwrState(BaseTask):
     """Set PS PwrState."""
 
