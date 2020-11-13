@@ -364,7 +364,7 @@ class TriggerTask(QThread):
                         for trg in self._triggers}
 
         for trg, pv in self._pvs_rb.items():
-            pv.get()  # force connection
+            pv.wait_for_connection(TIMEOUT_CONN)
             if trg not in TriggerTask.initial_triggers_state.keys():
                 TriggerTask.initial_triggers_state[trg] = pv.value
 
@@ -422,7 +422,8 @@ class TriggerTask(QThread):
             if not pv.wait_for_connection(TIMEOUT_CONN):
                 self.itemDone.emit(trig, False)
                 continue
-            pv.value = val
+            if val is not None:
+                pv.value = val
             self.itemDone.emit(trig, True)
 
     def _check(self):
