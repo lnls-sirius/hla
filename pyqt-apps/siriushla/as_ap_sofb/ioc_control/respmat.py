@@ -14,7 +14,7 @@ from siriuspy.sofb.csdev import ConstTLines
 from siriuspy.clientconfigdb import ConfigDBClient, ConfigDBException
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets import SiriusLedState, SiriusConnectionSignal, \
-    SiriusLabel
+    SiriusLabel, SiriusEnumComboBox
 from siriushla.util import connect_window, get_appropriate_color
 from siriushla.as_ap_configdb import LoadConfigDialog, SaveConfigDialog
 
@@ -97,15 +97,27 @@ class RespMatWidget(BaseWidget):
         connect_window(btn, Window, None, prefix=self.prefix, acc=self.acc)
         sel_lay.addWidget(btn)
 
+        lay = QVBoxLayout()
+        sel_lay.addStretch()
+        sel_lay.addLayout(lay)
+
+        hlay = QHBoxLayout()
+        lay.addLayout(hlay)
+        hlay.addWidget(SiriusEnumComboBox(
+            sel_wid, init_channel=self.prefix+'RespMatMode-Sel'))
+        hlay.addWidget(SiriusLabel(
+            sel_wid, init_channel=self.prefix+'RespMatMode-Sts'))
+
         if self.acc == 'SI':
+            hlay = QHBoxLayout()
+            lay.addLayout(hlay)
             pdm_chbx = PyDMCheckbox(
                 sel_wid, init_channel=self.prefix+'RFEnbl-Sel')
             pdm_chbx.setText('use RF')
             pdm_led = SiriusLedState(
                 sel_wid, init_channel=self.prefix+'RFEnbl-Sts')
-            sel_lay.addStretch()
-            sel_lay.addWidget(pdm_chbx)
-            sel_lay.addWidget(pdm_led)
+            hlay.addWidget(pdm_chbx)
+            hlay.addWidget(pdm_led)
 
         btn = QPushButton('', sel_wid)
         btn.setToolTip('Visualize RespMat')
