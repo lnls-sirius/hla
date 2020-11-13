@@ -66,19 +66,3 @@ class LISlowCorrectorControlWidget(SISlowCorrectorControlWidget):
 
     def _hasScrollArea(self):
         return False
-
-
-class IDSlowCorrectorControlWidget(SISlowCorrectorControlWidget):
-    """To booster transport line slow corrector."""
-
-    def _getFilter(self, subsection=None):
-        filt = {"sec": "SI", "sub": "\d{2}", "dev": "(CH|CV).*"}
-        if subsection:
-            filt.update({'sub': subsection})
-        return filt
-
-    def _hasScrollArea(self):
-        return False
-
-    def _getVisibleProps(self):
-        return ['detail', 'state', 'intlk', 'strength_sp', 'strength_mon']
