@@ -74,15 +74,24 @@ class _TesterPSBase(_TesterBase):
         status &= (self._pvs['IntlkSoft-Mon'].value == 0)
         return status
 
-    def set_slowref(self):
+    def set_opmode_slowref(self):
         """Set OpMode to SlowRef."""
         self._pvs['OpMode-Sel'].value = _PSC.OpMode.SlowRef
 
-    def check_slowref(self):
+    def check_opmode_slowref(self):
         """Check OpMode in SlowRef."""
         return (self._pvs['OpMode-Sts'].value in [_PSC.States.SlowRef,
                                                   _PSC.States.Off,
                                                   _PSC.States.Interlock])
+
+    def check_opmode_initializing(self):
+        """Check OpMode in Initializing."""
+        return self._pvs['OpMode-Sts'].value == _PSC.States.Initializing
+
+    def check_opmode_off(self):
+        """Check OpMode in Off."""
+        return self._pvs['OpMode-Sts'].value in [_PSC.States.Off,
+                                                 _PSC.States.Interlock]
 
     def set_pwrstate(self, state='on'):
         """Set PwrState."""
@@ -101,6 +110,14 @@ class _TesterPSBase(_TesterBase):
             ok = self._pvs['PwrState-Sts'].value == _PSC.PwrStateSts.Off
             ok &= self._pvs['OpMode-Sts'].value == _PSC.States.Off
         return ok
+
+    def set_ctrlloop(self):
+        """Set CtrlLoop."""
+        self._pvs['CtrlLoop-Sel'].value = _PSC.OpenLoop.Closed
+
+    def check_ctrlloop(self):
+        """Check CtrlLoop."""
+        return self._pvs['CtrlLoop-Sts'].value == _PSC.OpenLoop.Closed
 
 
 class TesterDCLinkFBP(_TesterPSBase):
@@ -168,14 +185,6 @@ class TesterDCLink(_TesterPSBase):
         """Check OpMode in SlowRef."""
         status = (self._pvs['OpMode-Sts'].value == _PSC.States.SlowRef)
         return status
-
-    def set_ctrlloop(self):
-        """Set CtrlLoop."""
-        self._pvs['CtrlLoop-Sel'].value = _PSC.OpenLoop.Closed
-
-    def check_ctrlloop(self):
-        """Check CtrlLoop."""
-        return (self._pvs['CtrlLoop-Sts'].value == _PSC.OpenLoop.Closed)
 
     def set_capvolt(self):
         """Set capacitor bank voltage."""
@@ -271,6 +280,7 @@ class TesterPS(_TesterPSBase):
     properties = ['Reset-Cmd', 'IntlkSoft-Mon', 'IntlkHard-Mon',
                   'OpMode-Sel', 'OpMode-Sts',
                   'PwrState-Sel', 'PwrState-Sts',
+                  'CtrlLoop-Sel', 'CtrlLoop-Sts',
                   'Current-SP', 'CurrentRef-Mon', 'Current-Mon']
 
     def __init__(self, device):
@@ -320,6 +330,7 @@ class TesterPSFBP(TesterPS):
     properties = ['Reset-Cmd', 'IntlkSoft-Mon', 'IntlkHard-Mon',
                   'OpMode-Sel', 'OpMode-Sts',
                   'PwrState-Sel', 'PwrState-Sts',
+                  'CtrlLoop-Sel', 'CtrlLoop-Sts',
                   'Current-SP', 'CurrentRef-Mon', 'Current-Mon',
                   'SOFBMode-Sel', 'SOFBMode-Sts']
 

@@ -3,7 +3,7 @@ import sys
 import re as _re
 from functools import partial as _part
 
-from qtpy.QtCore import Qt
+from qtpy.QtCore import Qt, QTimer
 from qtpy.QtWidgets import QFrame, QGridLayout, QVBoxLayout, QHBoxLayout, \
     QSizePolicy, QGroupBox, QPushButton, QListWidget, QLabel, QApplication, \
     QMessageBox, QTabWidget, QWidget
@@ -23,10 +23,10 @@ from .tasks import CreateTesters, \
     CheckStatus, \
     ResetIntlk, CheckIntlk, \
     SetSOFBMode, CheckSOFBMode, \
-    SetOpModeSlowRef, CheckOpModeSlowRef, \
+    SetOpModeSlowRef, CheckOpModeSlowRef, CheckOpModeInit, CheckOpModeOff, \
     SetPwrState, CheckPwrState, CheckInitOk, \
     SetPulse, CheckPulse, \
-    SetCtrlLoop, CheckCtrlLoop, \
+    CheckCtrlLoop, \
     SetCapBankVolt, CheckCapBankVolt, \
     SetCurrent, CheckCurrent, \
     SetVoltage, CheckVoltage, \
@@ -43,7 +43,15 @@ class PSTestWindow(SiriusMainWindow):
         self.setObjectName('ASApp')
         cor = get_appropriate_color(section='AS')
         self.setWindowIcon(qta.icon('mdi.test-tube', color=cor))
+
+        self._si_fam_psnames = PSSearch.get_psnames(
+            filters={'sec': 'SI', 'sub': 'Fam', 'dis': 'PS'})
+        self._needs_update_setup = False
         self._setup_ui()
+        self._update_setup_timer = QTimer(self)
+        self._update_setup_timer.timeout.connect(self._update_setup)
+        self._update_setup_timer.setInterval(250)
+        self._update_setup_timer.start()
 
     def _setup_ui(self):
         # setup central widget
@@ -83,6 +91,8 @@ class PSTestWindow(SiriusMainWindow):
             QSizePolicy.Preferred, QSizePolicy.Preferred)
         self.ps_tree.tree.setColumnCount(1)
         self.ps_tree.tree.doubleClicked.connect(self._open_detail)
+        self.ps_tree.tree.itemChanged.connect(
+            self._handle_checked_items_changed)
 
         gbox_ps_select = QGroupBox('Select PS: ', self)
         gbox_ps_select.setObjectName('select')
@@ -128,16 +138,21 @@ class PSTestWindow(SiriusMainWindow):
         self.reset_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.reset_ps_bt.clicked.connect(_part(self._reset_intlk, 'PS'))
 
+        self.init_sips_bt = QPushButton('Initialize SI Fam PS', self)
+        self.init_sips_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
+        self.init_sips_bt.clicked.connect(self._set_check_pwrstateinit)
+        self.init_sips_bt.setVisible(False)
+
         self.turnon_dcl_bt = QPushButton('Turn DCLinks On', self)
         self.turnon_dcl_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.turnon_dcl_bt.clicked.connect(
             _part(self._set_check_pwrstate_dclinks, 'on'))
 
-        self.setctrlloop_dcl_bt = QPushButton('Set DCLinks CtrlLoop', self)
-        self.setctrlloop_dcl_bt.clicked.connect(
+        self.checkctrlloop_dcl_bt = QPushButton('Check DCLinks CtrlLoop', self)
+        self.checkctrlloop_dcl_bt.clicked.connect(
             _part(self._set_lastcomm, 'PS'))
-        self.setctrlloop_dcl_bt.clicked.connect(
-            self._set_check_dclinks_ctrlloop)
+        self.checkctrlloop_dcl_bt.clicked.connect(
+            _part(self._check_ctrlloop, 'dclink'))
 
         self.setvolt_dcl_bt = QPushButton('Set DCLinks Voltage', self)
         self.setvolt_dcl_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
@@ -148,6 +163,12 @@ class PSTestWindow(SiriusMainWindow):
         self.turnon_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.turnon_ps_bt.clicked.connect(
             _part(self._set_check_pwrstate, 'PS', 'on'))
+
+        self.checkctrlloop_ps_bt = QPushButton('Check PS CtrlLoop', self)
+        self.checkctrlloop_ps_bt.clicked.connect(
+            _part(self._set_lastcomm, 'PS'))
+        self.checkctrlloop_ps_bt.clicked.connect(
+            _part(self._check_ctrlloop, 'pwrsupply'))
 
         self.test_ps_bt = QPushButton('Set PS Current to test value', self)
         self.test_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
@@ -180,16 +201,18 @@ class PSTestWindow(SiriusMainWindow):
         lay_ps_comm.addWidget(self.setslowref_ps_bt)
         lay_ps_comm.addWidget(self.currzero_ps_bt1)
         lay_ps_comm.addWidget(self.reset_ps_bt)
+        lay_ps_comm.addWidget(self.init_sips_bt)
         lay_ps_comm.addWidget(QLabel(''))
         lay_ps_comm.addWidget(QLabel('<h4>Config DCLinks</h4>', self,
                                      alignment=Qt.AlignCenter))
         lay_ps_comm.addWidget(self.turnon_dcl_bt)
-        lay_ps_comm.addWidget(self.setctrlloop_dcl_bt)
+        lay_ps_comm.addWidget(self.checkctrlloop_dcl_bt)
         lay_ps_comm.addWidget(self.setvolt_dcl_bt)
         lay_ps_comm.addWidget(QLabel(''))
         lay_ps_comm.addWidget(QLabel('<h4>Test</h4>', self,
                                      alignment=Qt.AlignCenter))
         lay_ps_comm.addWidget(self.turnon_ps_bt)
+        lay_ps_comm.addWidget(self.checkctrlloop_ps_bt)
         lay_ps_comm.addWidget(self.test_ps_bt)
         lay_ps_comm.addWidget(self.currzero_ps_bt2)
         lay_ps_comm.addWidget(QLabel(''))
@@ -318,6 +341,8 @@ class PSTestWindow(SiriusMainWindow):
         self.nok_ps.doubleClicked.connect(self._open_detail)
         self.clearlists_bt = QPushButton('Clear', self)
         self.clearlists_bt.clicked.connect(self._clear_lastcomm)
+        self.ok_ps_aux_list = list()
+        self.nok_ps_aux_list = list()
         hbox = QHBoxLayout()
         hbox.addWidget(self.label_lastcomm)
         hbox.addWidget(self.clearlists_bt, alignment=Qt.AlignRight)
@@ -487,20 +512,72 @@ class PSTestWindow(SiriusMainWindow):
         self.nok_ps.clear()
         if dev_type == 'PS':
             devices = self._get_selected_ps()
+            devices_wth_sifam = list(
+                set(devices) - set(self._si_fam_psnames))
         elif dev_type == 'PU':
             devices = self._get_selected_pu()
         if not devices:
             return
 
         task0 = CreateTesters(devices, parent=self)
-        task1 = SetPwrState(devices, state=state, parent=self)
-        task2 = CheckPwrState(devices, state=state, parent=self)
+        if state == 'on':
+            task1 = SetPwrState(devices_wth_sifam, state=state, parent=self)
+        else:
+            task1 = SetPwrState(devices, state=state, parent=self)
+        task2 = CheckPwrState(devices, state=state, is_test=True, parent=self)
         task2.itemDone.connect(self._log)
         tasks = [task0, task1, task2]
 
         labels = ['Connecting to devices...',
                   'Turning '+dev_type+' '+state+'...',
                   'Checking '+dev_type+' powered '+state+'...']
+
+        dlg = ProgressDialog(labels, tasks, self)
+        dlg.exec_()
+
+    def _set_check_pwrstateinit(self):
+        self.ok_ps.clear()
+        self.nok_ps.clear()
+        selected = self._get_selected_ps()
+        devices = [ps for ps in selected if ps in self._si_fam_psnames]
+        dclinks = self._get_related_dclinks(devices, include_regatrons=True)
+        if not devices:
+            return
+
+        # if power state is on, do nothing
+        self.ok_ps_aux_list = list()
+        self.nok_ps_aux_list = list()
+        self._check_pwrstate(devices, state='on', is_test=False, show=False)
+        if len(self.ok_ps_aux_list) == len(devices):
+            for dev in self.ok_ps_aux_list:
+                self._log(dev, True)
+            return
+
+        # if need initializing, check if DCLinks are turned off before continue
+        self.ok_ps_aux_list = list()
+        self.nok_ps_aux_list = list()
+        self._check_pwrstate(dclinks, state='off', is_test=False, show=False)
+        if len(self.nok_ps_aux_list) > 0:
+            for dev in self.ok_ps_aux_list:
+                self._log(dev, True)
+            for dev in self.nok_ps_aux_list:
+                self._log(dev, False)
+            QMessageBox.critical(
+                self, 'Message',
+                'Make sure related DCLinks are turned\n'
+                'off before initialize SI Fam PS!')
+            return
+
+        # then, initialize SI Fam PS
+        task0 = CreateTesters(devices, parent=self)
+        task1 = SetPwrState(devices, state='on', parent=self)
+        task2 = CheckOpModeInit(devices, parent=self)
+        task2.itemDone.connect(self._log)
+        tasks = [task0, task1, task2]
+
+        labels = ['Connecting to devices...',
+                  'Initializing SI Fam PS...',
+                  'Checking SI Fam PS initialized...']
 
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
@@ -531,14 +608,22 @@ class PSTestWindow(SiriusMainWindow):
         pwrsupplies = self._get_selected_ps()
         if not pwrsupplies:
             return
-        devices = self._get_related_dclinks(
-            pwrsupplies, include_regatrons=True)
+        devices, ps2check = self._get_related_dclinks(
+            pwrsupplies, include_regatrons=True, return_psnames=True)
         if not devices:
             return
 
         if state == 'off':
-            self._check_ps_pwrstate_off(pwrsupplies)
-            if self.nok_ps.count() > 0:
+            self.ok_ps_aux_list = list()
+            self.nok_ps_aux_list = list()
+            self._check_pwrstate(ps2check, state='offintlk', show=False)
+            if len(self.nok_ps_aux_list) > 0:
+                for dev in self.ok_ps_aux_list:
+                    self._log(dev, True)
+                for dev in self.nok_ps_aux_list:
+                    self._log(dev, False)
+                self.ok_ps_aux_list = list()
+                self.nok_ps_aux_list = list()
                 QMessageBox.critical(
                     self, 'Message',
                     'Make sure all related power supplies\n'
@@ -547,7 +632,7 @@ class PSTestWindow(SiriusMainWindow):
 
         task0 = CreateTesters(devices, parent=self)
         task1 = SetPwrState(devices, state=state, parent=self)
-        task2 = CheckPwrState(devices, state=state, parent=self)
+        task2 = CheckPwrState(devices, state=state, is_test=True, parent=self)
         tasks = [task0, task1, task2]
 
         labels = ['Connecting to DCLinks...',
@@ -565,39 +650,45 @@ class PSTestWindow(SiriusMainWindow):
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
-    def _check_ps_pwrstate_off(self, pwrsupplies):
+    def _check_pwrstate(self, devices, state, is_test=True, show=True):
         self.ok_ps.clear()
         self.nok_ps.clear()
 
-        task0 = CreateTesters(pwrsupplies, parent=self)
-        task1 = CheckPwrState(pwrsupplies, state='off', parent=self)
-        task1.itemDone.connect(self._log)
+        task0 = CreateTesters(devices, parent=self)
+
+        if state == 'offintlk':
+            task1 = CheckOpModeOff(devices, parent=self)
+        else:
+            task1 = CheckPwrState(
+                devices, state=state, is_test=is_test, parent=self)
+        task1.itemDone.connect(_part(self._log, show=show))
         tasks = [task0, task1]
 
-        labels = ['Connecting to PS...',
-                  'Checking PS powered off...']
+        labels = ['Connecting to devices...',
+                  'Checking devices powered '+state+'...']
 
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
-    def _set_check_dclinks_ctrlloop(self):
+    def _check_ctrlloop(self, dev_type='pwrsupply'):
         self.ok_ps.clear()
         self.nok_ps.clear()
         pwrsupplies = self._get_selected_ps()
         if not pwrsupplies:
             return
-        devices = self._get_related_dclinks(pwrsupplies)
+        if dev_type == 'pwrsupply':
+            devices = {dev for dev in pwrsupplies if 'LI' not in dev}
+        else:
+            devices = self._get_related_dclinks(pwrsupplies)
         if not devices:
             return
 
         task0 = CreateTesters(devices, parent=self)
-        task1 = SetCtrlLoop(devices, parent=self)
-        task2 = CheckCtrlLoop(devices, parent=self)
-        task2.itemDone.connect(self._log)
+        task1 = CheckCtrlLoop(devices, parent=self)
+        task1.itemDone.connect(self._log)
         labels = ['Connecting to devices...',
-                  'Setting DCLinks CtrlLoop...',
-                  'Checking DCLinks CtrlLoop state...']
-        tasks = [task0, task1, task2]
+                  'Checking CtrlLoop state...']
+        tasks = [task0, task1]
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
@@ -770,11 +861,17 @@ class PSTestWindow(SiriusMainWindow):
         self.nok_ps.clear()
         self.label_lastcomm.setText('Last Command: ')
 
-    def _log(self, name, status):
-        if status:
-            self.ok_ps.addItem(name)
+    def _log(self, name, status, show=True):
+        if show:
+            if status:
+                self.ok_ps.addItem(name)
+            else:
+                self.nok_ps.addItem(name)
         else:
-            self.nok_ps.addItem(name)
+            if status:
+                self.ok_ps_aux_list.append(name)
+            else:
+                self.nok_ps_aux_list.append(name)
 
     # ---------- devices control ----------
 
@@ -817,8 +914,10 @@ class PSTestWindow(SiriusMainWindow):
             return False
         return devices
 
-    def _get_related_dclinks(self, psnames, include_regatrons=False):
+    def _get_related_dclinks(self, psnames, include_regatrons=False,
+                             return_psnames=False):
         alldclinks = set()
+        relpsnames = set()
         for name in psnames:
             if 'LI' in name:
                 continue
@@ -826,13 +925,18 @@ class PSTestWindow(SiriusMainWindow):
             if dclinks:
                 dclink_model = PSSearch.conv_psname_2_psmodel(dclinks[0])
                 if dclink_model != 'REGATRON_DCLink':
+                    relpsnames.add(name)
                     alldclinks.update(dclinks)
                 elif include_regatrons:
                     for dcl in dclinks:
                         dcl_typ = PSSearch.conv_psname_2_pstype(dcl)
                         if dcl_typ == 'as-dclink-regatron-master':
+                            relpsnames.add(name)
                             alldclinks.add(dcl)
-        return list(alldclinks)
+        if return_psnames:
+            return list(alldclinks), list(relpsnames)
+        else:
+            return list(alldclinks)
 
     def _open_detail(self, index):
         name = PVName(index.data())
@@ -844,13 +948,30 @@ class PSTestWindow(SiriusMainWindow):
             return
         elif not _re.match('.*-.*:.*-.*', name):
             if index.model().rowCount(index) == 1:
-                name = index.child(0, 0).data()
+                name = PVName(index.child(0, 0).data())
             else:
                 return
         if name.dis == 'PS':
             run_newprocess(['sirius-hla-as-ps-detail.py', name])
         elif name.dis == 'PU':
             run_newprocess(['sirius-hla-as-pu-detail.py', name])
+
+    # ---------- update setup ----------
+
+    def _handle_checked_items_changed(self, item):
+        self._needs_update_setup = True
+
+    def _update_setup(self):
+        if not self._needs_update_setup:
+            return
+        self._needs_update_setup = False
+
+        has_sifam = False
+        for psn in self._si_fam_psnames:
+            item = self.ps_tree._item_map[psn]
+            has_sifam |= item.checkState(0) != 0
+
+        self.init_sips_bt.setVisible(has_sifam)
 
 
 if __name__ == '__main__':

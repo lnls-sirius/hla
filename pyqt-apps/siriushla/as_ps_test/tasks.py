@@ -172,15 +172,31 @@ class SetOpModeSlowRef(BaseTask):
 
     def function(self):
         """Set PS OpMode to SlowRef."""
-        self._set(method='set_slowref')
+        self._set(method='set_opmode_slowref')
 
 
 class CheckOpModeSlowRef(BaseTask):
-    """Check if PS OpMode is in SlowRef."""
+    """Check whether PS OpMode is in SlowRef."""
 
     def function(self):
         """Check PS OpMode in SlowRef."""
-        self._check(method='check_slowref')
+        self._check(method='check_opmode_slowref')
+
+
+class CheckOpModeInit(BaseTask):
+    """Check whether PS OpMode is in Initializing."""
+
+    def function(self):
+        """Check PS OpMode in Initializing."""
+        self._check(method='check_opmode_initializing')
+
+
+class CheckOpModeOff(BaseTask):
+    """Check PS OpMode Off."""
+
+    def function(self):
+        """Check PS OpMode Off."""
+        self._check(method='check_opmode_off')
 
 
 class SetPwrState(BaseTask):
@@ -196,8 +212,20 @@ class CheckPwrState(BaseTask):
 
     def function(self):
         """Check PS PwrState."""
+        if not self._is_test:
+            timeout = 2
+        elif self._state == 'on' and \
+                ('SI-Fam:PS-B1B2-1' in self._devices or
+                 'SI-Fam:PS-B1B2-2' in self._devices):
+            timeout = 15
+        elif self._state == 'off' and \
+                (set(_PSSearch.get_pstype_2_psnames_dict()[
+                    'as-dclink-regatron-master']) & set(self._devices)):
+            timeout = 10
+        else:
+            timeout = 5
         self._check(method='check_pwrstate', state=self._state,
-                    timeout=3*TIMEOUT_CHECK)
+                    timeout=timeout)
 
 
 class SetPulse(BaseTask):
@@ -336,7 +364,7 @@ class TriggerTask(QThread):
                         for trg in self._triggers}
 
         for trg, pv in self._pvs_rb.items():
-            pv.get()  # force connection
+            pv.wait_for_connection(TIMEOUT_CONN)
             if trg not in TriggerTask.initial_triggers_state.keys():
                 TriggerTask.initial_triggers_state[trg] = pv.value
 
@@ -394,7 +422,8 @@ class TriggerTask(QThread):
             if not pv.wait_for_connection(TIMEOUT_CONN):
                 self.itemDone.emit(trig, False)
                 continue
-            pv.value = val
+            if val is not None:
+                pv.value = val
             self.itemDone.emit(trig, True)
 
     def _check(self):
