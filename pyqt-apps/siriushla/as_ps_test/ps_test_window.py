@@ -36,7 +36,7 @@ from .tasks import CreateTesters, \
 class PSTestWindow(SiriusMainWindow):
     """PS test window."""
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, adv_mode=False):
         """Constructor."""
         super().__init__(parent)
         self.setWindowTitle('PS/PU Test')
@@ -44,8 +44,20 @@ class PSTestWindow(SiriusMainWindow):
         cor = get_appropriate_color(section='AS')
         self.setWindowIcon(qta.icon('mdi.test-tube', color=cor))
 
+        # auxiliar data for initializing PS
+        self._is_adv_mode = adv_mode
         self._si_fam_psnames = PSSearch.get_psnames(
             filters={'sec': 'SI', 'sub': 'Fam', 'dis': 'PS'})
+        self._si_fam_dclink2ps = dict()
+        for ps in self._si_fam_psnames:
+            dclinks = PSSearch.conv_psname_2_dclink(ps)
+            if not dclinks:
+                continue
+            for dcl in dclinks:
+                if dcl not in self._si_fam_dclink2ps:
+                    self._si_fam_dclink2ps[dcl] = list()
+                self._si_fam_dclink2ps[dcl].append(ps)
+
         self._needs_update_setup = False
         self._setup_ui()
         self._update_setup_timer = QTimer(self)
@@ -138,10 +150,18 @@ class PSTestWindow(SiriusMainWindow):
         self.reset_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.reset_ps_bt.clicked.connect(_part(self._reset_intlk, 'PS'))
 
+        self.prep_sidclink_bt = QPushButton('Prepare SI Fam DCLinks', self)
+        self.prep_sidclink_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
+        self.prep_sidclink_bt.clicked.connect(self._prepare_sidclinks)
+        self.prep_sidclink_bt.setVisible(False)
+
         self.init_sips_bt = QPushButton('Initialize SI Fam PS', self)
         self.init_sips_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.init_sips_bt.clicked.connect(self._set_check_pwrstateinit)
         self.init_sips_bt.setVisible(False)
+
+        self.aux_label = QLabel('')
+        self.aux_label.setVisible(False)
 
         self.turnon_dcl_bt = QPushButton('Turn DCLinks On', self)
         self.turnon_dcl_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
@@ -162,7 +182,7 @@ class PSTestWindow(SiriusMainWindow):
         self.turnon_ps_bt = QPushButton('Turn PS On', self)
         self.turnon_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.turnon_ps_bt.clicked.connect(
-            _part(self._set_check_pwrstate, 'PS', 'on'))
+            _part(self._set_check_pwrstate, 'PS', 'on', True))
 
         self.checkctrlloop_ps_bt = QPushButton('Check PS CtrlLoop', self)
         self.checkctrlloop_ps_bt.clicked.connect(
@@ -201,8 +221,10 @@ class PSTestWindow(SiriusMainWindow):
         lay_ps_comm.addWidget(self.setslowref_ps_bt)
         lay_ps_comm.addWidget(self.currzero_ps_bt1)
         lay_ps_comm.addWidget(self.reset_ps_bt)
-        lay_ps_comm.addWidget(self.init_sips_bt)
         lay_ps_comm.addWidget(QLabel(''))
+        lay_ps_comm.addWidget(self.prep_sidclink_bt)
+        lay_ps_comm.addWidget(self.init_sips_bt)
+        lay_ps_comm.addWidget(self.aux_label)
         lay_ps_comm.addWidget(QLabel('<h4>Config DCLinks</h4>', self,
                                      alignment=Qt.AlignCenter))
         lay_ps_comm.addWidget(self.turnon_dcl_bt)
@@ -273,7 +295,7 @@ class PSTestWindow(SiriusMainWindow):
         self.turnon_pu_bt = QPushButton('Turn PU On', self)
         self.turnon_pu_bt.clicked.connect(_part(self._set_lastcomm, 'PU'))
         self.turnon_pu_bt.clicked.connect(
-            _part(self._set_check_pwrstate, 'PU', 'on'))
+            _part(self._set_check_pwrstate, 'PU', 'on', True))
 
         self.enblpulse_pu_bt = QPushButton('Enable PU Pulse', self)
         self.enblpulse_pu_bt.clicked.connect(_part(self._set_lastcomm, 'PU'))
@@ -368,7 +390,7 @@ class PSTestWindow(SiriusMainWindow):
         self.act_turnoff_ps = self.aux_comm.addAction('Turn PS Off')
         self.act_turnoff_ps.triggered.connect(_part(self._set_lastcomm, 'PS'))
         self.act_turnoff_ps.triggered.connect(
-            _part(self._set_check_pwrstate, 'PS', 'off'))
+            _part(self._set_check_pwrstate, 'PS', 'off', True))
 
         self.act_turnoff_dclink = self.aux_comm.addAction('Turn DCLinks Off')
         self.act_turnoff_dclink.triggered.connect(
@@ -380,7 +402,7 @@ class PSTestWindow(SiriusMainWindow):
         self.act_turnoff_pu.triggered.connect(
             _part(self._set_lastcomm, 'PU'))
         self.act_turnoff_pu.triggered.connect(
-            _part(self._set_check_pwrstate, 'PU', 'off'))
+            _part(self._set_check_pwrstate, 'PU', 'off', True))
 
         self.act_dsblpulse_pu = self.aux_comm.addAction('Disable PU Pulse')
         self.act_dsblpulse_pu.triggered.connect(
@@ -507,15 +529,19 @@ class PSTestWindow(SiriusMainWindow):
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
-    def _set_check_pwrstate(self, dev_type, state):
+    def _set_check_pwrstate(self, dev_type, state, show=True):
         self.ok_ps.clear()
         self.nok_ps.clear()
-        if dev_type == 'PS':
-            devices = self._get_selected_ps()
-            devices_wth_sifam = list(
-                set(devices) - set(self._si_fam_psnames))
-        elif dev_type == 'PU':
-            devices = self._get_selected_pu()
+        if isinstance(dev_type, list):
+            devices = list(dev_type)
+            dev_type = PVName(devices[0]).dis
+        else:
+            if dev_type == 'PS':
+                devices = self._get_selected_ps()
+                devices_wth_sifam = list(
+                    set(devices) - set(self._si_fam_psnames))
+            elif dev_type == 'PU':
+                devices = self._get_selected_pu()
         if not devices:
             return
 
@@ -525,7 +551,7 @@ class PSTestWindow(SiriusMainWindow):
         else:
             task1 = SetPwrState(devices, state=state, parent=self)
         task2 = CheckPwrState(devices, state=state, is_test=True, parent=self)
-        task2.itemDone.connect(self._log)
+        task2.itemDone.connect(_part(self._log, show=show))
         tasks = [task0, task1, task2]
 
         labels = ['Connecting to devices...',
@@ -535,12 +561,87 @@ class PSTestWindow(SiriusMainWindow):
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
+    def _prepare_sidclinks(self):
+        self.ok_ps.clear()
+        self.nok_ps.clear()
+        selected = self._get_selected_ps()
+        ps2check = [ps for ps in selected if ps in self._si_fam_psnames]
+        dclinks = self._get_related_dclinks(ps2check, include_regatrons=True)
+        if not ps2check:
+            return
+
+        # if power state is on, do nothing
+        self.ok_ps_aux_list = list()
+        self.nok_ps_aux_list = list()
+        self._check_pwrstate(ps2check, state='on', is_test=False, show=False)
+        if len(self.ok_ps_aux_list) == len(ps2check):
+            for dev in dclinks:
+                self._log(dev, True)
+            return
+
+        ps2act = list(self.nok_ps_aux_list)  # act in PS off
+        dcl2act = self._get_related_dclinks(ps2act, include_regatrons=True)
+        # print('act', ps2act, dcl2act)
+
+        # if need initializing, check if DCLinks are turned off
+        self.ok_ps_aux_list = list()
+        self.nok_ps_aux_list = list()
+        self._check_pwrstate(dcl2act, state='off', is_test=False, show=False)
+        if not self.nok_ps_aux_list:
+            for dev in dclinks:
+                self._log(dev, True)
+            return
+
+        dcl2ctrl = list(self.nok_ps_aux_list)  # control DCLink on
+        ps2ctrl = set()  # get related psnames
+        for ps in self._si_fam_psnames:
+            dcl = self._get_related_dclinks(ps, include_regatrons=True)
+            if set(dcl) & set(dcl2ctrl):
+                ps2ctrl.add(ps)
+        # print('ctrl', ps2ctrl, dcl2ctrl)
+
+        # if some DCLink is on, make sure related PS are turned off
+
+        # check if related ps are off
+        self.ok_ps_aux_list = list()
+        self.nok_ps_aux_list = list()
+        self._check_pwrstate(ps2ctrl, state='off', is_test=False, show=False)
+        if len(self.ok_ps_aux_list) == len(ps2ctrl):
+            for dev in dclinks:
+                self._log(dev, True)
+            return
+
+        # if not, turn off ps
+        ps2ctrl = list(self.nok_ps_aux_list)
+
+        self.ok_ps_aux_list = list()
+        self.nok_ps_aux_list = list()
+        self._set_zero_ps(ps2ctrl, show=False)
+
+        self.ok_ps_aux_list = list()
+        self.nok_ps_aux_list = list()
+        self._set_check_pwrstate(dev_type=ps2ctrl, state='off', show=False)
+
+        if self.nok_ps_aux_list:
+            for dev in set(self.ok_ps_aux_list):
+                self._log(dev, True)
+            for dev in set(self.nok_ps_aux_list):
+                self._log(dev, False)
+            text = 'The listed PS seems to be taking too\n'\
+                   'long to turn off.\n'\
+                   'Try to execute this step once again.'
+            QMessageBox.warning(self, 'Message', text)
+            return
+
+        # finally, turn DCLinks off
+        self._set_check_pwrstate_dclinks(
+            state='off', devices=dcl2ctrl, ps2check=ps2ctrl)
+
     def _set_check_pwrstateinit(self):
         self.ok_ps.clear()
         self.nok_ps.clear()
         selected = self._get_selected_ps()
         devices = [ps for ps in selected if ps in self._si_fam_psnames]
-        dclinks = self._get_related_dclinks(devices, include_regatrons=True)
         if not devices:
             return
 
@@ -554,9 +655,14 @@ class PSTestWindow(SiriusMainWindow):
             return
 
         # if need initializing, check if DCLinks are turned off before continue
+        # (keeping this step in case prepare_sidclinks step is skipped)
+        ps2ctrl = list(self.nok_ps_aux_list)  # check PS off
+        dcl2check = self._get_related_dclinks(ps2ctrl, include_regatrons=True)
+        # print('set_check_pwrstateinit', ps2ctrl)
+
         self.ok_ps_aux_list = list()
         self.nok_ps_aux_list = list()
-        self._check_pwrstate(dclinks, state='off', is_test=False, show=False)
+        self._check_pwrstate(dcl2check, state='off', is_test=False, show=False)
         if len(self.nok_ps_aux_list) > 0:
             for dev in self.ok_ps_aux_list:
                 self._log(dev, True)
@@ -569,9 +675,9 @@ class PSTestWindow(SiriusMainWindow):
             return
 
         # then, initialize SI Fam PS
-        task0 = CreateTesters(devices, parent=self)
-        task1 = SetPwrState(devices, state='on', parent=self)
-        task2 = CheckOpModeInit(devices, parent=self)
+        task0 = CreateTesters(ps2ctrl, parent=self)
+        task1 = SetPwrState(ps2ctrl, state='on', parent=self)
+        task2 = CheckOpModeInit(ps2ctrl, parent=self)
         task2.itemDone.connect(self._log)
         tasks = [task0, task1, task2]
 
@@ -602,14 +708,16 @@ class PSTestWindow(SiriusMainWindow):
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
-    def _set_check_pwrstate_dclinks(self, state):
+    def _set_check_pwrstate_dclinks(self, state, devices=list(),
+                                    ps2check=list()):
         self.ok_ps.clear()
         self.nok_ps.clear()
-        pwrsupplies = self._get_selected_ps()
-        if not pwrsupplies:
-            return
-        devices, ps2check = self._get_related_dclinks(
-            pwrsupplies, include_regatrons=True, return_psnames=True)
+        if not devices:
+            pwrsupplies = self._get_selected_ps()
+            if not pwrsupplies:
+                return
+            devices, ps2check = self._get_related_dclinks(
+                pwrsupplies, include_regatrons=True, return_psnames=True)
         if not devices:
             return
 
@@ -759,17 +867,18 @@ class PSTestWindow(SiriusMainWindow):
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
-    def _set_zero_ps(self):
+    def _set_zero_ps(self, devices=list(), show=True):
         self.ok_ps.clear()
         self.nok_ps.clear()
-        devices = self._get_selected_ps()
+        if not devices:
+            devices = self._get_selected_ps()
         if not devices:
             return
 
         task0 = CreateTesters(devices, parent=self)
         task1 = SetCurrent(devices, parent=self)
         task2 = CheckCurrent(devices, parent=self)
-        task2.itemDone.connect(self._log)
+        task2.itemDone.connect(_part(self._log, show=show))
         tasks = [task0, task1, task2]
 
         labels = ['Connecting to devices...',
@@ -916,6 +1025,8 @@ class PSTestWindow(SiriusMainWindow):
 
     def _get_related_dclinks(self, psnames, include_regatrons=False,
                              return_psnames=False):
+        if isinstance(psnames, str):
+            psnames = [psnames, ]
         alldclinks = set()
         relpsnames = set()
         for name in psnames:
@@ -959,6 +1070,24 @@ class PSTestWindow(SiriusMainWindow):
     # ---------- update setup ----------
 
     def _handle_checked_items_changed(self, item):
+        devname = PVName(item.data(0, Qt.DisplayRole))
+        if not _re.match('.*-.*:.*-.*', devname):
+            return
+        state2set = item.checkState(0)
+
+        if devname in self._si_fam_psnames and not self._is_adv_mode:
+            dclinks = PSSearch.conv_psname_2_dclink(devname)
+            if dclinks:
+                psname2check = set()
+                for dcl in dclinks:
+                    relps = list(self._si_fam_dclink2ps[dcl])
+                    relps.remove(devname)
+                    psname2check.update(relps)
+                for psn in psname2check:
+                    item2check = self.ps_tree._item_map[psn]
+                    if item2check.checkState(0) != state2set:
+                        item2check.setCheckState(0, state2set)
+
         self._needs_update_setup = True
 
     def _update_setup(self):
@@ -971,7 +1100,9 @@ class PSTestWindow(SiriusMainWindow):
             item = self.ps_tree._item_map[psn]
             has_sifam |= item.checkState(0) != 0
 
+        self.prep_sidclink_bt.setVisible(has_sifam)
         self.init_sips_bt.setVisible(has_sifam)
+        self.aux_label.setVisible(has_sifam)
 
 
 if __name__ == '__main__':
