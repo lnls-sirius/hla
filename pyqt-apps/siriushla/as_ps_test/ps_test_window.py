@@ -36,7 +36,7 @@ from .tasks import CreateTesters, \
 class PSTestWindow(SiriusMainWindow):
     """PS test window."""
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, adv_mode=False):
         """Constructor."""
         super().__init__(parent)
         self.setWindowTitle('PS/PU Test')
@@ -44,8 +44,20 @@ class PSTestWindow(SiriusMainWindow):
         cor = get_appropriate_color(section='AS')
         self.setWindowIcon(qta.icon('mdi.test-tube', color=cor))
 
+        # auxiliar data for initializing PS
+        self._is_adv_mode = adv_mode
         self._si_fam_psnames = PSSearch.get_psnames(
             filters={'sec': 'SI', 'sub': 'Fam', 'dis': 'PS'})
+        self._si_fam_dclink2ps = dict()
+        for ps in self._si_fam_psnames:
+            dclinks = PSSearch.conv_psname_2_dclink(ps)
+            if not dclinks:
+                continue
+            for dcl in dclinks:
+                if dcl not in self._si_fam_dclink2ps:
+                    self._si_fam_dclink2ps[dcl] = list()
+                self._si_fam_dclink2ps[dcl].append(ps)
+
         self._needs_update_setup = False
         self._setup_ui()
         self._update_setup_timer = QTimer(self)
@@ -1058,6 +1070,24 @@ class PSTestWindow(SiriusMainWindow):
     # ---------- update setup ----------
 
     def _handle_checked_items_changed(self, item):
+        devname = PVName(item.data(0, Qt.DisplayRole))
+        if not _re.match('.*-.*:.*-.*', devname):
+            return
+        state2set = item.checkState(0)
+
+        if devname in self._si_fam_psnames and not self._is_adv_mode:
+            dclinks = PSSearch.conv_psname_2_dclink(devname)
+            if dclinks:
+                psname2check = set()
+                for dcl in dclinks:
+                    relps = list(self._si_fam_dclink2ps[dcl])
+                    relps.remove(devname)
+                    psname2check.update(relps)
+                for psn in psname2check:
+                    item2check = self.ps_tree._item_map[psn]
+                    if item2check.checkState(0) != state2set:
+                        item2check.setCheckState(0, state2set)
+
         self._needs_update_setup = True
 
     def _update_setup(self):
