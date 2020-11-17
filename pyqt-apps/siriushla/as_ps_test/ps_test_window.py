@@ -540,7 +540,6 @@ class PSTestWindow(SiriusMainWindow):
         self.nok_ps.clear()
         selected = self._get_selected_ps()
         devices = [ps for ps in selected if ps in self._si_fam_psnames]
-        dclinks = self._get_related_dclinks(devices, include_regatrons=True)
         if not devices:
             return
 
@@ -554,9 +553,13 @@ class PSTestWindow(SiriusMainWindow):
             return
 
         # if need initializing, check if DCLinks are turned off before continue
+        ps2ctrl = list(self.nok_ps_aux_list)  # check PS off
+        dcl2check = self._get_related_dclinks(ps2ctrl, include_regatrons=True)
+        # print('set_check_pwrstateinit', ps2ctrl)
+
         self.ok_ps_aux_list = list()
         self.nok_ps_aux_list = list()
-        self._check_pwrstate(dclinks, state='off', is_test=False, show=False)
+        self._check_pwrstate(dcl2check, state='off', is_test=False, show=False)
         if len(self.nok_ps_aux_list) > 0:
             for dev in self.ok_ps_aux_list:
                 self._log(dev, True)
@@ -569,9 +572,9 @@ class PSTestWindow(SiriusMainWindow):
             return
 
         # then, initialize SI Fam PS
-        task0 = CreateTesters(devices, parent=self)
-        task1 = SetPwrState(devices, state='on', parent=self)
-        task2 = CheckOpModeInit(devices, parent=self)
+        task0 = CreateTesters(ps2ctrl, parent=self)
+        task1 = SetPwrState(ps2ctrl, state='on', parent=self)
+        task2 = CheckOpModeInit(ps2ctrl, parent=self)
         task2.itemDone.connect(self._log)
         tasks = [task0, task1, task2]
 
