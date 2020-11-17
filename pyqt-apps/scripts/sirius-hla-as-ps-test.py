@@ -9,7 +9,7 @@ from siriushla.as_ps_test.ps_test_window import PSTestWindow
 
 
 parser = _argparse.ArgumentParser(
-    description="Run Power Supply Cycling Interface.")
+    description="Run Power Supply Test Interface.")
 parser.add_argument('-isadv', action='store_true')
 args = parser.parse_args()
 isadv = args.isadv
