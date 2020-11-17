@@ -919,6 +919,8 @@ class PSTestWindow(SiriusMainWindow):
 
     def _get_related_dclinks(self, psnames, include_regatrons=False,
                              return_psnames=False):
+        if isinstance(psnames, str):
+            psnames = [psnames, ]
         alldclinks = set()
         relpsnames = set()
         for name in psnames:
