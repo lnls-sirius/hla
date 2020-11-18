@@ -3,9 +3,9 @@
 import pathlib as _pathlib
 from datetime import datetime as _datetime
 import numpy as _np
-from qtpy.QtWidgets import QLabel, QGroupBox, QPushButton, QFormLayout, \
-    QGridLayout, QVBoxLayout, QHBoxLayout, QSpacerItem, QSizePolicy, \
-    QMessageBox, QFileDialog, QWidget, QTabWidget
+from qtpy.QtWidgets import QFileDialog, QGroupBox, QPushButton, QFormLayout, \
+    QGridLayout, QVBoxLayout, QHBoxLayout, QMessageBox, QLabel, QWidget, \
+    QTabWidget
 from qtpy.QtCore import Qt
 import qtawesome as qta
 
@@ -15,12 +15,13 @@ from siriuspy.clientconfigdb import ConfigDBClient, ConfigDBException
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets import SiriusLedState, SiriusConnectionSignal, \
     SiriusLabel, SiriusEnumComboBox
-from siriushla.util import connect_window, get_appropriate_color
+from siriushla.util import connect_window, get_appropriate_color, \
+    connect_newprocess
 from siriushla.as_ap_configdb import LoadConfigDialog, SaveConfigDialog
 
 from .respmat_enbllist import SelectionMatrix
 from .base import BaseWidget
-from ..graphics import SingularValues, ShowMatrixWidget
+from ..graphics import SingularValues
 
 
 class RespMatWidget(BaseWidget):
@@ -124,9 +125,8 @@ class RespMatWidget(BaseWidget):
         btn.setIcon(qta.icon('mdi.chart-line'))
         btn.setObjectName('btn')
         btn.setStyleSheet('#btn{max-width:40px; icon-size:40px;}')
-        Window = create_window_from_widget(
-            ShowMatrixWidget, title='Check RespMat')
-        connect_window(btn, Window, sel_wid, prefix=self.prefix, acc=self.acc)
+        connect_newprocess(
+            btn, [f'sirius-hla-{self.acc.lower():s}-ap-sofb.py', '--matrix'])
         sel_lay.addWidget(btn)
 
         return sel_wid
