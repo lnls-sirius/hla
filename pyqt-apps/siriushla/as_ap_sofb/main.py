@@ -153,6 +153,10 @@ class MainWindow(SiriusMainWindow):
             actbpm, Window, self, bpm_list=self._csorb.bpm_names)
         menubar.addAction(actbpm)
 
+        acttrajfit = QAction('Open Traj. Fit', menubar)
+        util.connect_newprocess(acttrajfit, ['sirius-hla-si-ap-trajfit.py', ])
+        menubar.addAction(acttrajfit)
+
 
 if __name__ == '__main__':
     import sys as _sys
