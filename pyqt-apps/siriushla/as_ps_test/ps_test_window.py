@@ -48,15 +48,6 @@ class PSTestWindow(SiriusMainWindow):
         self._is_adv_mode = adv_mode
         self._si_fam_psnames = PSSearch.get_psnames(
             filters={'sec': 'SI', 'sub': 'Fam', 'dis': 'PS'})
-        self._si_fam_dclink2ps = dict()
-        for ps in self._si_fam_psnames:
-            dclinks = PSSearch.conv_psname_2_dclink(ps)
-            if not dclinks:
-                continue
-            for dcl in dclinks:
-                if dcl not in self._si_fam_dclink2ps:
-                    self._si_fam_dclink2ps[dcl] = list()
-                self._si_fam_dclink2ps[dcl].append(ps)
 
         self._needs_update_setup = False
         self._setup_ui()
@@ -713,8 +704,11 @@ class PSTestWindow(SiriusMainWindow):
             pwrsupplies = self._get_selected_ps()
             if not pwrsupplies:
                 return
-            devices, ps2check = self._get_related_dclinks(
-                pwrsupplies, include_regatrons=True, return_psnames=True)
+            devices = self._get_related_dclinks(
+                pwrsupplies, include_regatrons=True)
+            ps2check = set()
+            for dev in devices:
+                ps2check.update(PSSearch.conv_dclink_2_psname(dev))
         if not devices:
             return
 
@@ -760,15 +754,17 @@ class PSTestWindow(SiriusMainWindow):
         task0 = CreateTesters(devices, parent=self)
 
         if state == 'offintlk':
+            text = 'off or interlock'
             task1 = CheckOpModeOff(devices, parent=self)
         else:
+            text = state
             task1 = CheckPwrState(
                 devices, state=state, is_test=is_test, parent=self)
         task1.itemDone.connect(_part(self._log, show=show))
         tasks = [task0, task1]
 
         labels = ['Connecting to devices...',
-                  'Checking devices powered '+state+'...']
+                  'Checking devices powered '+text+'...']
 
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
@@ -1018,12 +1014,10 @@ class PSTestWindow(SiriusMainWindow):
             return False
         return devices
 
-    def _get_related_dclinks(self, psnames, include_regatrons=False,
-                             return_psnames=False):
+    def _get_related_dclinks(self, psnames, include_regatrons=False):
         if isinstance(psnames, str):
             psnames = [psnames, ]
         alldclinks = set()
-        relpsnames = set()
         for name in psnames:
             if 'LI' in name:
                 continue
@@ -1031,18 +1025,13 @@ class PSTestWindow(SiriusMainWindow):
             if dclinks:
                 dclink_model = PSSearch.conv_psname_2_psmodel(dclinks[0])
                 if dclink_model != 'REGATRON_DCLink':
-                    relpsnames.add(name)
                     alldclinks.update(dclinks)
                 elif include_regatrons:
                     for dcl in dclinks:
                         dcl_typ = PSSearch.conv_psname_2_pstype(dcl)
                         if dcl_typ == 'as-dclink-regatron-master':
-                            relpsnames.add(name)
                             alldclinks.add(dcl)
-        if return_psnames:
-            return list(alldclinks), list(relpsnames)
-        else:
-            return list(alldclinks)
+        return list(alldclinks)
 
     def _open_detail(self, index):
         name = PVName(index.data())
@@ -1075,7 +1064,7 @@ class PSTestWindow(SiriusMainWindow):
             if dclinks:
                 psname2check = set()
                 for dcl in dclinks:
-                    relps = list(self._si_fam_dclink2ps[dcl])
+                    relps = PSSearch.conv_dclink_2_psname(dcl)
                     relps.remove(devname)
                     psname2check.update(relps)
                 for psn in psname2check:
