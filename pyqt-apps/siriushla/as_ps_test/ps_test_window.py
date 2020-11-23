@@ -586,10 +586,9 @@ class PSTestWindow(SiriusMainWindow):
         dcl2ctrl = list(self.nok_ps_aux_list)  # control DCLink on
         dcl_ok = set(dclinks) - set(dcl2ctrl)
         ps2ctrl = set()  # get related psnames
-        for ps in self._si_fam_psnames:
-            dcl = self._get_related_dclinks(ps, include_regatrons=True)
-            if set(dcl) & set(dcl2ctrl):
-                ps2ctrl.add(ps)
+        for dcl in dcl2ctrl:
+            pss = PSSearch.conv_dclink_2_psname(dcl)
+            ps2ctrl.update(pss)
         # print('ctrl', ps2ctrl, dcl2ctrl)
 
         # if some DCLink is on, make sure related PS are turned off
