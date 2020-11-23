@@ -33,6 +33,7 @@ DEFAULT_CAP_BANK_VOLT = {
 }
 
 
+TIMEOUT_REGATRON_TURNOFF = 15
 TIMEOUT_CONN = 0.05
 TEST_TOLERANCE = 1e-1
 
@@ -245,6 +246,9 @@ class TesterDCLinkRegatron(_TesterBase):
         else:
             state = _PSC.OffOn.Off
         self._pvs['PwrState-Sel'].value = state
+
+        # NOTE: wait for related PS to update readings
+        _time.sleep(TIMEOUT_REGATRON_TURNOFF)
 
     def check_pwrstate(self, state='on'):
         """Check PwrState."""
