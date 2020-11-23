@@ -584,6 +584,7 @@ class PSTestWindow(SiriusMainWindow):
             return
 
         dcl2ctrl = list(self.nok_ps_aux_list)  # control DCLink on
+        dcl_ok = set(dclinks) - set(dcl2ctrl)
         ps2ctrl = set()  # get related psnames
         for ps in self._si_fam_psnames:
             dcl = self._get_related_dclinks(ps, include_regatrons=True)
@@ -620,6 +621,9 @@ class PSTestWindow(SiriusMainWindow):
         # finally, turn DCLinks off
         self._set_check_pwrstate_dclinks(
             state='off', devices=dcl2ctrl, ps2check=ps2ctrl)
+        # log DCLinks Ok
+        for dev in dcl_ok:
+            self._log(dev, True)
 
     def _set_check_pwrstateinit(self):
         self.ok_ps.clear()
