@@ -571,10 +571,10 @@ class PSTestWindow(SiriusMainWindow):
             return
 
         # if power state is on, do nothing
-        self.ok_ps_aux_list = list()
-        self.nok_ps_aux_list = list()
+        self.ok_ps_aux_list.clear()
+        self.nok_ps_aux_list.clear()
         self._check_pwrstate(ps2check, state='on', is_test=False, show=False)
-        if len(self.ok_ps_aux_list) == len(ps2check):
+        if set(self.ok_ps_aux_list) == set(ps2check):
             for dev in dclinks:
                 self._log(dev, True)
             return
@@ -584,8 +584,8 @@ class PSTestWindow(SiriusMainWindow):
         # print('act', ps2act, dcl2act)
 
         # if need initializing, check if DCLinks are turned off
-        self.ok_ps_aux_list = list()
-        self.nok_ps_aux_list = list()
+        self.ok_ps_aux_list.clear()
+        self.nok_ps_aux_list.clear()
         self._check_pwrstate(dcl2act, state='off', is_test=False, show=False)
         if not self.nok_ps_aux_list:
             for dev in dclinks:
@@ -601,37 +601,30 @@ class PSTestWindow(SiriusMainWindow):
         # print('ctrl', ps2ctrl, dcl2ctrl)
 
         # if some DCLink is on, make sure related PS are turned off
-
-        # check if related ps are off
-        self.ok_ps_aux_list = list()
-        self.nok_ps_aux_list = list()
+        self.ok_ps_aux_list.clear()
+        self.nok_ps_aux_list.clear()
         self._check_pwrstate(ps2ctrl, state='off', is_test=False, show=False)
-        if len(self.ok_ps_aux_list) == len(ps2ctrl):
-            for dev in dclinks:
-                self._log(dev, True)
-            return
-
-        # if not, turn off ps
-        ps2ctrl = list(self.nok_ps_aux_list)
-
-        self.ok_ps_aux_list = list()
-        self.nok_ps_aux_list = list()
-        self._set_zero_ps(ps2ctrl, show=False)
-
-        self.ok_ps_aux_list = list()
-        self.nok_ps_aux_list = list()
-        self._set_check_pwrstate(dev_type=ps2ctrl, state='off', show=False)
-
         if self.nok_ps_aux_list:
-            for dev in set(self.ok_ps_aux_list):
-                self._log(dev, True)
-            for dev in set(self.nok_ps_aux_list):
-                self._log(dev, False)
-            text = 'The listed PS seems to be taking too\n'\
-                   'long to turn off.\n'\
-                   'Try to execute this step once again.'
-            QMessageBox.warning(self, 'Message', text)
-            return
+            ps2ctrl = list(self.nok_ps_aux_list)
+
+            self.ok_ps_aux_list.clear()
+            self.nok_ps_aux_list.clear()
+            self._set_zero_ps(ps2ctrl, show=False)
+
+            self.ok_ps_aux_list.clear()
+            self.nok_ps_aux_list.clear()
+            self._set_check_pwrstate(dev_type=ps2ctrl, state='off', show=False)
+
+            if self.nok_ps_aux_list:
+                for dev in self.ok_ps_aux_list:
+                    self._log(dev, True)
+                for dev in self.nok_ps_aux_list:
+                    self._log(dev, False)
+                text = 'The listed PS seems to be taking too\n'\
+                    'long to turn off.\n'\
+                    'Try to execute this step once again.'
+                QMessageBox.warning(self, 'Message', text)
+                return
 
         # finally, turn DCLinks off
         self._set_check_pwrstate_dclinks(
@@ -646,8 +639,8 @@ class PSTestWindow(SiriusMainWindow):
             return
 
         # if power state is on, do nothing
-        self.ok_ps_aux_list = list()
-        self.nok_ps_aux_list = list()
+        self.ok_ps_aux_list.clear()
+        self.nok_ps_aux_list.clear()
         self._check_pwrstate(devices, state='on', is_test=False, show=False)
         if len(self.ok_ps_aux_list) == len(devices):
             for dev in self.ok_ps_aux_list:
@@ -655,13 +648,13 @@ class PSTestWindow(SiriusMainWindow):
             return
 
         # if need initializing, check if DCLinks are turned off before continue
-        # (keeping this step in case prepare_sidclinks step is skipped)
+        ps_ok = list(self.ok_ps_aux_list)
         ps2ctrl = list(self.nok_ps_aux_list)  # check PS off
         dcl2check = self._get_related_dclinks(ps2ctrl, include_regatrons=True)
         # print('set_check_pwrstateinit', ps2ctrl)
 
-        self.ok_ps_aux_list = list()
-        self.nok_ps_aux_list = list()
+        self.ok_ps_aux_list.clear()
+        self.nok_ps_aux_list.clear()
         self._check_pwrstate(dcl2check, state='off', is_test=False, show=False)
         if len(self.nok_ps_aux_list) > 0:
             for dev in self.ok_ps_aux_list:
@@ -673,6 +666,10 @@ class PSTestWindow(SiriusMainWindow):
                 'Make sure related DCLinks are turned\n'
                 'off before initialize SI Fam PS!')
             return
+
+        # list in Ok PS already on
+        for dev in ps_ok:
+            self._log(dev, True)
 
         # then, initialize SI Fam PS
         task0 = CreateTesters(ps2ctrl, parent=self)
@@ -722,16 +719,14 @@ class PSTestWindow(SiriusMainWindow):
             return
 
         if state == 'off':
-            self.ok_ps_aux_list = list()
-            self.nok_ps_aux_list = list()
+            self.ok_ps_aux_list.clear()
+            self.nok_ps_aux_list.clear()
             self._check_pwrstate(ps2check, state='offintlk', show=False)
             if len(self.nok_ps_aux_list) > 0:
                 for dev in self.ok_ps_aux_list:
                     self._log(dev, True)
                 for dev in self.nok_ps_aux_list:
                     self._log(dev, False)
-                self.ok_ps_aux_list = list()
-                self.nok_ps_aux_list = list()
                 QMessageBox.critical(
                     self, 'Message',
                     'Make sure all related power supplies\n'
