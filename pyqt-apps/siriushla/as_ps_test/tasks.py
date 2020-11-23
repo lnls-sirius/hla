@@ -206,6 +206,13 @@ class SetPwrState(BaseTask):
         """Set PS PwrState."""
         self._set(method='set_pwrstate', state=self._state)
 
+        # NOTE: in turn regatrons off, wait for related PS to update readings
+        regatrons_idcs = ['1A', '1B', '2A', '2B', '3A', '3B', '4A', '4B']
+        if self._state == 'off':
+            if any([_PVName(dev).idx in regatrons_idcs
+                    for dev in self._devices]):
+                _time.sleep(15)
+
 
 class CheckPwrState(BaseTask):
     """Check PS PwrState."""
