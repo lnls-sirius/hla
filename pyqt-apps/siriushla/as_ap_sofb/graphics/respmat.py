@@ -23,7 +23,7 @@ class ShowMatrixWidget(QWidget):
         self._csorb = SOFBFactory.create(acc)
         self._inflines = []
         self.setupui()
-        self.mat = SiriusConnectionSignal(prefix+'RespMat-RB')
+        self.mat = SiriusConnectionSignal(prefix+'RespMat-Mon')
         self.mat.new_value_signal[_np.ndarray].connect(self._update_graph)
         self.rsize = SiriusConnectionSignal(prefix+'RingSize-RB')
         self.rsize.new_value_signal[int].connect(self._update_horizontal)
