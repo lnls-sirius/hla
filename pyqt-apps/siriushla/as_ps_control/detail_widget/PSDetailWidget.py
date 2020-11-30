@@ -87,6 +87,10 @@ class PSDetailWidget(QWidget):
         self._psmodel = PSSearch.conv_psname_2_psmodel(psname)
         self._pstype = PSSearch.conv_psname_2_pstype(self._psname)
         self._db = get_ps_propty_database(self._psmodel, self._pstype)
+        self._auxdev = list()
+        if self._psname in ['BO-Fam:PS-B-1', 'BO-Fam:PS-B-2']:
+            self._auxdev = ['a', 'b', 'c']
+
         self._prefixed_psname = self._VACA_PREFIX + self._psname
 
         self._metric = self._getElementMetric()
@@ -262,7 +266,7 @@ class PSDetailWidget(QWidget):
             '#soft_intlk_bt{min-width:25px; max-width:25px; icon-size:20px;}')
         util.connect_window(
             self.soft_intlk_bt, InterlockWindow, self,
-            devname=self._psname, interlock='IntlkSoft')
+            devname=self._psname, interlock='IntlkSoft', auxdev=self._auxdev)
         self.soft_intlk_led = SiriusLedAlert(
             parent=self, init_channel=self._prefixed_psname + ":IntlkSoft-Mon")
 
@@ -273,7 +277,7 @@ class PSDetailWidget(QWidget):
             '#hard_intlk_bt{min-width:25px; max-width:25px; icon-size:20px;}')
         util.connect_window(
             self.hard_intlk_bt, InterlockWindow, self,
-            devname=self._psname, interlock='IntlkHard')
+            devname=self._psname, interlock='IntlkHard', auxdev=self._auxdev)
         self.hard_intlk_led = SiriusLedAlert(
             parent=self, init_channel=self._prefixed_psname + ":IntlkHard-Mon")
 
@@ -288,10 +292,17 @@ class PSDetailWidget(QWidget):
                 "#iib_intlk_bt{min-width:25px;max-width:25px;icon-size:20px;}")
             util.connect_window(
                 self.iib_intlk_bt, InterlockWindow, self,
-                devname=self._psname, interlock=iib_intlks)
-            self.iib_intlk_led = PyDMLedMultiChannel(
-                self, {self._prefixed_psname+":"+intlk+"-Mon": 0
-                       for intlk in iib_intlks})
+                devname=self._psname, interlock=iib_intlks,
+                auxdev=self._auxdev)
+
+            chs2vals = {self._prefixed_psname+":"+intlk+"-Mon": 0
+                        for intlk in iib_intlks}
+            if self._auxdev:
+                for aux in self._auxdev:
+                    chs2vals.update(
+                        {self._prefixed_psname+aux+":"+intlk+"-Mon": 0
+                         for intlk in iib_intlks})
+            self.iib_intlk_led = PyDMLedMultiChannel(self, chs2vals)
 
         iib_alarms = [k.replace('Labels-Cte', '') for k in self._db
                       if re.match('AlarmsIIB.*Labels-Cte', k)]
@@ -304,10 +315,17 @@ class PSDetailWidget(QWidget):
                 '#alarm_bt{min-width:25px;max-width:25px;icon-size:20px;}')
             util.connect_window(
                 self.alarm_bt, InterlockWindow, self,
-                devname=self._psname, interlock=iib_alarms)
-            self.alarm_led = PyDMLedMultiChannel(
-                self, {self._prefixed_psname+":"+alarm+"-Mon": 0
-                       for alarm in iib_alarms})
+                devname=self._psname, interlock=iib_alarms,
+                auxdev=self._auxdev)
+
+            chs2vals = {self._prefixed_psname+":"+alarm+"-Mon": 0
+                        for alarm in iib_alarms}
+            if self._auxdev:
+                for aux in self._auxdev:
+                    chs2vals.update(
+                        {self._prefixed_psname+aux+":"+alarm+"-Mon": 0
+                         for alarm in iib_alarms})
+            self.alarm_led = PyDMLedMultiChannel(self, chs2vals)
 
         self.reset_bt = PyDMPushButton(
             parent=self, icon=qta.icon('fa5s.sync'), pressValue=1,
