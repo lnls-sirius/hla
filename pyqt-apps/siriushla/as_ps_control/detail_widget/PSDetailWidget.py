@@ -12,14 +12,15 @@ import qtawesome as qta
 
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.search import PSSearch
-from siriuspy.pwrsupply.csdev import get_ps_propty_database, \
+from siriuspy.pwrsupply.csdev import get_ps_propty_database, get_ps_modules, \
     DEF_WFMSIZE_FBP, DEF_WFMSIZE_OTHERS, \
     PS_LI_INTLK_THRS as _PS_LI_INTLK
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox, PyDMPushButton, \
     PyDMLineEdit, PyDMWaveformPlot
 from siriushla import util
 from siriushla.widgets import PyDMStateButton, PyDMLinEditScrollbar, \
-    SiriusConnectionSignal, SiriusLedState, SiriusLedAlert, PyDMLedMultiChannel
+    SiriusConnectionSignal, SiriusLedState, SiriusLedAlert, \
+    PyDMLedMultiChannel, SiriusDialog
 from .InterlockWindow import InterlockWindow, LIInterlockWindow
 
 
@@ -79,6 +80,40 @@ class PSDetailWidget(QWidget):
         }
     """
 
+    AuxMeas = [
+        'Current1-Mon',
+        'Current2-Mon',
+        'Arm1Current-Mon',
+        'Arm2Current-Mon',
+        'PWMDutyCycle-Mon',
+        'PWMDutyCycleArmsDiff-Mon',
+        'PWMDutyDiff-Mon',
+        'VoltageInputIIB-Mon',
+        'VoltageOutputIIB-Mon',
+        'LoadVoltage-Mon',
+        'DCLinkVoltage-Mon',
+        'CurrentInputIIB-Mon',
+        'CurrentOutputIIB-Mon',
+        'RectifierCurrent-Mon',
+        'LeakCurrentIIB-Mon',
+        'IGBTDriverVoltageIIB-Mon',
+        'IGBT1DriverCurrentIIB-Mon',
+        'IGBT2DriverCurrentIIB-Mon',
+        'IGBT1Current-Mon',
+        'IGBT2Current-Mon',
+        'IGBT1CurrentIIB-Mon',
+        'IGBT2CurrentIIB-Mon',
+        'IGBT1PWMDutyCycle-Mon',
+        'IGBT2PWMDutyCycle-Mon',
+        'IGBT1TemperatureIIB-Mon',
+        'IGBT2TemperatureIIB-Mon',
+        'InductorTemperatureIIB-Mon',
+        'InductorsTemperatureIIB-Mon',
+        'HeatSinkTemperatureIIB-Mon',
+        'BoardTemperatureIIB-Mon',
+        'RelativeHumidityIIB-Mon',
+    ]
+
     def __init__(self, psname, parent=None):
         """Class constructor."""
         super(PSDetailWidget, self).__init__(parent)
@@ -87,6 +122,13 @@ class PSDetailWidget(QWidget):
         self._psmodel = PSSearch.conv_psname_2_psmodel(psname)
         self._pstype = PSSearch.conv_psname_2_pstype(self._psname)
         self._db = get_ps_propty_database(self._psmodel, self._pstype)
+        self._mods = get_ps_modules(psmodel=self._psmodel)
+        self._mod2db = {mod: [pv for pv in self._db if 'Mod'+mod in pv and
+                              'Intlk' not in pv and 'Alarm' not in pv]
+                        for mod in self._mods}
+        self._auxmeasures = [aux for aux in self.AuxMeas if aux in self._db]
+        self._params = [prm for prm in self._db
+                        if 'Param' in prm and '-Cte' in prm]
         self._auxdev = list()
         if self._psname in ['BO-Fam:PS-B-1', 'BO-Fam:PS-B-2']:
             self._auxdev = ['a', 'b', 'c']
@@ -94,6 +136,8 @@ class PSDetailWidget(QWidget):
         self._prefixed_psname = self._VACA_PREFIX + self._psname
 
         self._metric = self._getElementMetric()
+
+        self.setObjectName(parent.objectName())
 
         self._setup_ui()
         self.setFocus(True)
@@ -669,6 +713,30 @@ class PSDetailWidget(QWidget):
 
             layout.addWidget(syncpulse_cmd_lb, 1, 0, Qt.AlignRight)
             layout.addWidget(syncpulse_cmd_btn, 1, 1)
+
+            if self._mods:
+                pbmod = QPushButton(
+                    qta.icon('mdi.open-in-new'), 'Module Details', self)
+                util.connect_window(
+                    pbmod, PSModuleDetailWidget, self, psname=self._psname,
+                    mod2dbase=self._mod2db)
+                layout.addWidget(pbmod, 2, 0, 1, 2)
+
+            if self._auxmeasures:
+                pbaux = QPushButton(
+                    qta.icon('mdi.open-in-new'), 'Aux. Measures', self)
+                util.connect_window(
+                    pbaux, PSAuxMeasWidget, self, psname=self._psname,
+                    auxmeas=self._auxmeasures)
+                layout.addWidget(pbaux, 3, 0, 1, 2)
+
+            pbprm = QPushButton(qta.icon('mdi.open-in-new'),
+                                'Parameters', self)
+            util.connect_window(
+                pbprm, PSParamsWidget, self, psname=self._psname,
+                params=self._params)
+            layout.addWidget(pbprm, 4, 0, 1, 2)
+
         return layout
 
     def _wfmLayout(self):
@@ -1226,22 +1294,190 @@ class FACDCLinkDetailWidget(DCLinkDetailWidget):
         return layout
 
     def _auxLayout(self):
-        self.rectifier_voltage_mon = PyDMLabel(
-            self, self._prefixed_psname + ':RectifierVoltage-Mon')
-        self.rectifier_current_mon = PyDMLabel(
-            self, self._prefixed_psname + ':RectifierCurrent-Mon')
-        self.heatsink_temperature = PyDMLabel(
-            self, self._prefixed_psname + ':HeatSinkTemperature-Mon')
-        self.inductors_temperature = PyDMLabel(
-            self,
-            self._prefixed_psname + ':InductorsTemperature-Mon')
-        self.duty_cycle = PyDMLabel(
-            self, self._prefixed_psname + ':PWMDutyCycle-Mon')
-
         layout = QFormLayout()
-        layout.addRow('Rectifier Voltage', self.rectifier_voltage_mon)
-        layout.addRow('Rectifier Current', self.rectifier_current_mon)
-        layout.addRow('Heatsink Temperatue', self.heatsink_temperature)
-        layout.addRow('Inductors Temperature', self.inductors_temperature)
-        layout.addRow('PWM Duty Cycle', self.duty_cycle)
+
+        for auxmeas in self._auxmeasures:
+            pydmlbl = PyDMLabel(
+                self, self._prefixed_psname + ':' + auxmeas)
+            layout.addRow(auxmeas.split('-')[0], pydmlbl)
+
+        if self._mods:
+            pbmod = QPushButton(qta.icon('mdi.open-in-new'),
+                                'Module details', self)
+            util.connect_window(
+                pbmod, PSModuleDetailWidget, self, psname=self._psname,
+                mod2dbase=self._mod2db)
+            layout.addRow(pbmod)
+
         return layout
+
+
+class PSModuleDetailWidget(SiriusDialog):
+    """PS Modules Detail Widget."""
+
+    def __init__(self, parent, psname, mod2dbase):
+        """Init."""
+        super().__init__(parent)
+        self._psname = psname
+        if psname in ['BO-Fam:PS-B-1', 'BO-Fam:PS-B-2']:
+            self._psname = [psname, ]
+            for aux in ['a', 'b', 'c']:
+                self._psname.append(psname+aux)
+        self._VACA_PREFIX = VACA_PREFIX
+
+        self.mod2dbase = mod2dbase
+
+        self.setWindowTitle(psname + ' - Modules Details')
+
+        self.setObjectName(parent.objectName())
+
+        self._setupUi()
+        self.setStyleSheet('PyDMLabel{qproperty-alignment: AlignCenter;}')
+
+    def _setupUi(self):
+        lay = QGridLayout(self)
+
+        if isinstance(self._psname, list):
+            nrols = 2
+            ncols = len(self._psname)//nrols
+            for idx, psn in enumerate(self._psname):
+                wid = self._setupPSWidget(psn)
+                lay.addWidget(wid, idx//nrols, idx % ncols)
+        else:
+            wid = self._setupPSWidget(self._psname)
+            lay.addWidget(wid)
+
+    def _setupPSWidget(self, psname):
+        wid = QWidget()
+        lay = QGridLayout(wid)
+        lay.setHorizontalSpacing(20)
+        lay.setVerticalSpacing(20)
+
+        text_psname = QLabel('<h3>' + psname + '</h3>', self,
+                             alignment=Qt.AlignCenter)
+        lay.addWidget(text_psname, 0, 0, 1, len(self.mod2dbase))
+
+        mods = sorted(self.mod2dbase.keys())
+        for mod, dbase in self.mod2dbase.items():
+            idx = mods.index(mod)
+            lay.addWidget(self._setupModWidget(psname, mod, dbase), 1, idx)
+
+        return wid
+
+    def _setupModWidget(self, psname, mod, dbase):
+        wid = QWidget()
+        lay = QVBoxLayout(wid)
+        lay.setAlignment(Qt.AlignTop)
+
+        self.title = QLabel('<h3>Mod'+mod+'</h3>', self,
+                            alignment=Qt.AlignCenter)
+        lay.addWidget(self.title)
+
+        prefixed_psname = self._VACA_PREFIX + psname
+
+        flay = QFormLayout()
+        for pv in dbase:
+            text = pv.split('Mod'+mod)[0]
+            lbl = PyDMLabel(self, prefixed_psname + ':' + pv)
+            flay.addRow(text, lbl)
+        lay.addLayout(flay)
+
+        return wid
+
+
+class PSAuxMeasWidget(SiriusDialog):
+    """PS Auxiliary Measures Widget."""
+
+    def __init__(self, parent, psname, auxmeas):
+        """Init."""
+        super().__init__(parent)
+        self._psname = psname
+        if psname in ['BO-Fam:PS-B-1', 'BO-Fam:PS-B-2']:
+            self._psname = [psname, ]
+            for aux in ['a', 'b', 'c']:
+                self._psname.append(psname+aux)
+        self._VACA_PREFIX = VACA_PREFIX
+
+        self.auxmeas = auxmeas
+
+        self.title_text = psname + ' - Auxiliary Measures'
+        self.setWindowTitle(self.title_text)
+
+        self.setObjectName(parent.objectName())
+
+        self._setupUi()
+        self.setStyleSheet('PyDMLabel{qproperty-alignment: AlignCenter;}')
+
+    def _setupUi(self):
+        lay = QGridLayout(self)
+        lay.setHorizontalSpacing(20)
+        lay.setVerticalSpacing(20)
+
+        if isinstance(self._psname, list):
+            nrols = 2
+            ncols = len(self._psname)//nrols
+            for idx, psn in enumerate(self._psname):
+                wid = self._setupPSWidget(psn)
+                lay.addWidget(wid, idx//nrols, idx % ncols)
+        else:
+            wid = self._setupPSWidget(self._psname)
+            lay.addWidget(wid)
+
+    def _setupPSWidget(self, psname):
+        wid = QWidget()
+        lay = QVBoxLayout(wid)
+
+        text_psname = QLabel('<h3>' + psname + '</h3>', self,
+                             alignment=Qt.AlignCenter)
+        lay.addWidget(text_psname)
+
+        prefixed_psname = self._VACA_PREFIX + psname
+
+        flay = QFormLayout()
+        for pv in self.auxmeas:
+            text = pv.split('-')[0]
+            lbl = PyDMLabel(self, prefixed_psname + ':' + pv)
+            flay.addRow(text, lbl)
+        lay.addLayout(flay)
+
+        return wid
+
+
+class PSParamsWidget(SiriusDialog):
+    """PS Parameters Widget."""
+
+    def __init__(self, parent, psname, params):
+        """Init."""
+        super().__init__(parent)
+        self._psname = psname
+        self._VACA_PREFIX = VACA_PREFIX
+        self._prefixed_psname = self._VACA_PREFIX + self._psname
+
+        self.params = params
+
+        self.title_text = psname + ' - Parameters'
+        self.setWindowTitle(self.title_text)
+
+        self.setObjectName(parent.objectName())
+
+        self._setupUi()
+        self.setStyleSheet('PyDMLabel{qproperty-alignment: AlignHCenter;}')
+
+    def _setupUi(self):
+        lay = QVBoxLayout(self)
+
+        text_psname = QLabel('<h3>' + self._psname + '</h3>', self,
+                             alignment=Qt.AlignCenter)
+        lay.addWidget(text_psname)
+
+        flay = QFormLayout()
+        for pv in self.params:
+            text = pv.split('-')[0].split('Param')[1]
+            lbl = PyDMLabel(self, self._prefixed_psname + ':' + pv)
+            if 'PSName' in pv:
+                lbl.displayFormat = PyDMLabel.DisplayFormat.String
+            lbl.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+            lbl.setObjectName(pv)
+            lbl.setStyleSheet('#'+pv+'{max-width:28em; max-height:1.29em;}')
+            flay.addRow(text, lbl)
+        lay.addLayout(flay)
