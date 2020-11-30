@@ -545,50 +545,58 @@ class SummaryWidget(QWidget):
 
     def set_opmode_slowref(self):
         """Set power supply OpMode to SlowRef."""
-        if self.opmode_cb.isEnabled():
-            index = self.opmode_cb.findText('SlowRef')
-            self.opmode_cb.internal_combo_box_activated_int(index)
+        if hasattr(self, 'opmode_cb'):
+            if self.opmode_cb.isEnabled():
+                index = self.opmode_cb.findText('SlowRef')
+                self.opmode_cb.internal_combo_box_activated_int(index)
 
     def turn_on(self):
         """Turn power supply on."""
-        if self.state_bt.isEnabled():
-            if not self.state_bt.value:
-                self.state_bt.send_value()
+        if hasattr(self, 'state_bt'):
+            if self.state_bt.isEnabled():
+                if not self.state_bt.value:
+                    self.state_bt.send_value()
 
     def turn_off(self):
         """Turn power supply off."""
-        if self.state_bt.isEnabled():
-            if self.state_bt.value:
-                self.state_bt.send_value()
+        if hasattr(self, 'state_bt'):
+            if self.state_bt.isEnabled():
+                if self.state_bt.value:
+                    self.state_bt.send_value()
 
     def pulse_on(self):
         """Turn power supply on."""
-        if self.pulse_bt.isEnabled():
-            if not self.pulse_bt.value:
-                self.pulse_bt.send_value()
+        if hasattr(self, 'pulse_bt'):
+            if self.pulse_bt.isEnabled():
+                if not self.pulse_bt.value:
+                    self.pulse_bt.send_value()
 
     def pulse_off(self):
         """Turn power supply off."""
-        if self.pulse_bt.isEnabled():
-            if self.pulse_bt.value:
-                self.pulse_bt.send_value()
+        if hasattr(self, 'pulse_bt'):
+            if self.pulse_bt.isEnabled():
+                if self.pulse_bt.value:
+                    self.pulse_bt.send_value()
 
     def wfmupdate_on(self):
         """Enable WfmUpdateAuto."""
-        if self.wfmupdate_bt.isEnabled():
-            if not self.wfmupdate_bt.value:
-                self.wfmupdate_bt.send_value()
+        if hasattr(self, 'wfmupdate_bt'):
+            if self.wfmupdate_bt.isEnabled():
+                if not self.wfmupdate_bt.value:
+                    self.wfmupdate_bt.send_value()
 
     def wfmupdate_off(self):
         """Disable WfmUpdateAuto."""
-        if self.wfmupdate_bt.isEnabled():
-            if self.wfmupdate_bt.value:
-                self.wfmupdate_bt.send_value()
+        if hasattr(self, 'wfmupdate_bt'):
+            if self.wfmupdate_bt.isEnabled():
+                if self.wfmupdate_bt.value:
+                    self.wfmupdate_bt.send_value()
 
     def reset(self):
         """Reset power supply."""
-        if self.reset_bt.isEnabled():
-            self.reset_bt.sendValue()
+        if hasattr(self, 'reset_bt'):
+            if self.reset_bt.isEnabled():
+                self.reset_bt.sendValue()
 
 
 class SummaryHeader(QWidget):
