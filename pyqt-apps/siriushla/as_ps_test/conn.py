@@ -7,7 +7,7 @@ from epics import PV as _PV
 from siriuspy.envars import VACA_PREFIX as VACA_PREFIX
 from siriuspy.search import PSSearch
 from siriuspy.pwrsupply.csdev import Const as _PSC, \
-    PS_LI_INTLK_THRS as _PS_LI_INTLK
+    PS_LI_INTLK_THRS as _PS_LI_INTLK, get_ps_interlocks
 
 
 DEFAULT_CAP_BANK_VOLT = {
@@ -67,12 +67,6 @@ class _TesterPSBase(_TesterBase):
     def reset(self):
         """Reset."""
         self._pvs['Reset-Cmd'].value = 1
-
-    def check_intlk(self):
-        """Check interlocks."""
-        status = (self._pvs['IntlkHard-Mon'].value == 0)
-        status &= (self._pvs['IntlkSoft-Mon'].value == 0)
-        return status
 
     def set_opmode_slowref(self):
         """Set OpMode to SlowRef."""
@@ -137,6 +131,12 @@ class TesterDCLinkFBP(_TesterPSBase):
                 VACA_PREFIX + device + ':' + ppty,
                 connection_timeout=TIMEOUT_CONN)
 
+    def check_intlk(self):
+        """Check interlocks."""
+        status = (self._pvs['IntlkHard-Mon'].value == 0)
+        status &= (self._pvs['IntlkSoft-Mon'].value == 0)
+        return status
+
     def check_init_ok(self):
         """Check OpMode in SlowRef."""
         status = (self._pvs['OpMode-Sts'].value == _PSC.States.SlowRef)
@@ -166,7 +166,7 @@ class TesterDCLinkFBP(_TesterPSBase):
 class TesterDCLink(_TesterPSBase):
     """DCLink tester."""
 
-    properties = ['Reset-Cmd', 'IntlkSoft-Mon', 'IntlkHard-Mon',
+    properties = ['Reset-Cmd',
                   'OpMode-Sel', 'OpMode-Sts',
                   'PwrState-Sel', 'PwrState-Sts',
                   'CtrlLoop-Sel', 'CtrlLoop-Sts',
@@ -176,10 +176,21 @@ class TesterDCLink(_TesterPSBase):
     def __init__(self, device):
         """Init."""
         super().__init__(device)
+
+        self._intlk_pvs = get_ps_interlocks(psname=self.device)
+        TesterDCLink.properties.extend(self._intlk_pvs)
+
         for ppty in TesterDCLink.properties:
             self._pvs[ppty] = _PV(
                 VACA_PREFIX + device + ':' + ppty,
                 connection_timeout=TIMEOUT_CONN)
+
+    def check_intlk(self):
+        """Check interlocks."""
+        status = True
+        for intlk in self._intlk_pvs:
+            status &= (self._pvs[intlk].value == 0)
+        return status
 
     def check_init_ok(self):
         """Check OpMode in SlowRef."""
@@ -277,7 +288,7 @@ class TesterDCLinkRegatron(_TesterBase):
 class TesterPS(_TesterPSBase):
     """PS tester."""
 
-    properties = ['Reset-Cmd', 'IntlkSoft-Mon', 'IntlkHard-Mon',
+    properties = ['Reset-Cmd',
                   'OpMode-Sel', 'OpMode-Sts',
                   'PwrState-Sel', 'PwrState-Sts',
                   'CtrlLoop-Sel', 'CtrlLoop-Sts',
@@ -286,6 +297,10 @@ class TesterPS(_TesterPSBase):
     def __init__(self, device):
         """Init."""
         super().__init__(device)
+
+        self._intlk_pvs = get_ps_interlocks(psname=self.device)
+        self.properties.extend(self._intlk_pvs)
+
         for ppty in self.properties:
             self._pvs[ppty] = _PV(
                 VACA_PREFIX + device + ':' + ppty,
@@ -294,6 +309,13 @@ class TesterPS(_TesterPSBase):
         splims = PSSearch.conv_psname_2_splims(device)
         self.test_current = splims['TSTV']
         self.test_tol = splims['TSTR']
+
+    def check_intlk(self):
+        """Check interlocks."""
+        status = True
+        for intlk in self._intlk_pvs:
+            status &= (self._pvs[intlk].value == 0)
+        return status
 
     def set_current(self, test=False):
         """Set current."""
@@ -327,7 +349,7 @@ class TesterPS(_TesterPSBase):
 class TesterPSFBP(TesterPS):
     """PS FBP Tester."""
 
-    properties = ['Reset-Cmd', 'IntlkSoft-Mon', 'IntlkHard-Mon',
+    properties = ['Reset-Cmd',
                   'OpMode-Sel', 'OpMode-Sts',
                   'PwrState-Sel', 'PwrState-Sts',
                   'CtrlLoop-Sel', 'CtrlLoop-Sts',
