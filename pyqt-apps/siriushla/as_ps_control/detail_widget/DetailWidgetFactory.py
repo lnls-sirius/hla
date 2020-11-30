@@ -18,7 +18,7 @@ class DetailWidgetFactory:
                 n_lines = int(len(psname)/4) or 1
                 for idx, name in enumerate(psname):
                     widget.layout.addWidget(
-                        DetailWidgetFactory._item(name, widget),
+                        DetailWidgetFactory._item(name, parent),
                         idx % n_lines,
                         int(idx / n_lines))
                 return widget
