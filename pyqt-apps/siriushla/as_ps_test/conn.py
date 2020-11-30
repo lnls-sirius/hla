@@ -211,14 +211,13 @@ class TesterDCLink(_TesterPSBase):
         status = True
         status &= self.check_intlk()
         if self.check_pwrstate():
-            status &= _np.isclose(
+            status &= self._cmp(
                 self._pvs['CapacitorBankVoltage-Mon'].value,
-                self._pvs['CapacitorBankVoltageRef-Mon'].value,
-                atol=1.0)
+                self._pvs['CapacitorBankVoltageRef-Mon'].value)
         return status
 
     def _cmp(self, value, target):
-        return value >= target
+        return _np.isclose(value, target, rtol=0.05)
 
 
 class TesterDCLinkRegatron(_TesterBase):
