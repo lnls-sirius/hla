@@ -373,38 +373,47 @@ class PSTestWindow(SiriusMainWindow):
 
         # menu
         self.menu = self.menuBar()
+
         self.act_cycle = self.menu.addAction('Open Cycle Window')
         connect_newprocess(
             self.act_cycle, 'sirius-hla-as-ps-cycle.py', parent=self)
+
         self.aux_comm = self.menu.addMenu('Auxiliary commands')
 
-        self.act_turnoff_ps = self.aux_comm.addAction('Turn PS Off')
+        # # PS
+        self.ps_menu = self.aux_comm.addMenu('PS')
+
+        self.act_turnoff_ps = self.ps_menu.addAction('Turn PS Off')
         self.act_turnoff_ps.triggered.connect(_part(self._set_lastcomm, 'PS'))
         self.act_turnoff_ps.triggered.connect(
             _part(self._set_check_pwrstate, 'PS', 'off', True))
 
-        self.act_turnoff_dclink = self.aux_comm.addAction('Turn DCLinks Off')
+        self.act_turnoff_dclink = self.ps_menu.addAction('Turn DCLinks Off')
         self.act_turnoff_dclink.triggered.connect(
             _part(self._set_lastcomm, 'PS'))
         self.act_turnoff_dclink.triggered.connect(
             _part(self._set_check_pwrstate_dclinks, 'off'))
 
-        self.act_turnoff_pu = self.aux_comm.addAction('Turn PU Off')
+        self.act_setcurrent_ps = self.ps_menu.addAction('Set PS Current')
+        self.act_setcurrent_ps.triggered.connect(
+            _part(self._set_lastcomm, 'PS'))
+        self.act_setcurrent_ps.triggered.connect(self._set_check_current)
+
+        # # PU
+        self.pu_menu = self.aux_comm.addMenu('PU')
+
+        self.act_turnoff_pu = self.pu_menu.addAction('Turn PU Off')
         self.act_turnoff_pu.triggered.connect(
             _part(self._set_lastcomm, 'PU'))
         self.act_turnoff_pu.triggered.connect(
             _part(self._set_check_pwrstate, 'PU', 'off', True))
 
-        self.act_dsblpulse_pu = self.aux_comm.addAction('Disable PU Pulse')
+        self.act_dsblpulse_pu = self.pu_menu.addAction('Disable PU Pulse')
         self.act_dsblpulse_pu.triggered.connect(
             _part(self._set_lastcomm, 'PU'))
         self.act_dsblpulse_pu.triggered.connect(
             _part(self._set_check_pulse, 'off'))
 
-        self.act_setcurrent_ps = self.aux_comm.addAction('Set PS Current')
-        self.act_setcurrent_ps.triggered.connect(
-            _part(self._set_lastcomm, 'PS'))
-        self.act_setcurrent_ps.triggered.connect(self._set_check_current)
 
         # layout
         lay = QGridLayout()
