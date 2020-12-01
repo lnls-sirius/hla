@@ -6,7 +6,7 @@ from functools import partial as _part
 from qtpy.QtCore import Qt, QTimer
 from qtpy.QtWidgets import QFrame, QGridLayout, QVBoxLayout, QHBoxLayout, \
     QSizePolicy, QGroupBox, QPushButton, QListWidget, QLabel, QApplication, \
-    QMessageBox, QTabWidget, QWidget
+    QMessageBox, QTabWidget, QWidget, QInputDialog
 import qtawesome as qta
 
 from siriuspy.search import PSSearch
@@ -400,6 +400,11 @@ class PSTestWindow(SiriusMainWindow):
             _part(self._set_lastcomm, 'PU'))
         self.act_dsblpulse_pu.triggered.connect(
             _part(self._set_check_pulse, 'off'))
+
+        self.act_setcurrent_ps = self.aux_comm.addAction('Set PS Current')
+        self.act_setcurrent_ps.triggered.connect(
+            _part(self._set_lastcomm, 'PS'))
+        self.act_setcurrent_ps.triggered.connect(self._set_check_current)
 
         # layout
         lay = QGridLayout()
@@ -877,6 +882,31 @@ class PSTestWindow(SiriusMainWindow):
 
         labels = ['Connecting to devices...',
                   'Setting current to zero...',
+                  'Checking current value...']
+
+        dlg = ProgressDialog(labels, tasks, self)
+        dlg.exec_()
+
+    def _set_check_current(self):
+        self.ok_ps.clear()
+        self.nok_ps.clear()
+        devices = self._get_selected_ps()
+        if not devices:
+            return
+
+        value, ok = QInputDialog.getDouble(
+            self, "Insert current setpoint: ", "Value")
+        if not ok:
+            return
+
+        task0 = CreateTesters(devices, parent=self)
+        task1 = SetCurrent(devices, value=value, parent=self)
+        task2 = CheckCurrent(devices, value=value, parent=self)
+        task2.itemDone.connect(self._log)
+        tasks = [task0, task1, task2]
+
+        labels = ['Connecting to devices...',
+                  'Setting current...',
                   'Checking current value...']
 
         dlg = ProgressDialog(labels, tasks, self)

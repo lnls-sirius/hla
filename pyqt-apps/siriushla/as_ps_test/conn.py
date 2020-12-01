@@ -316,20 +316,23 @@ class TesterPS(_TesterPSBase):
             status &= (self._pvs[intlk].value == 0)
         return status
 
-    def set_current(self, test=False):
+    def set_current(self, test=False, value=None):
         """Set current."""
-        if test:
-            self._pvs['Current-SP'].value = self.test_current
-        else:
-            self._pvs['Current-SP'].value = 0
+        if value is None:
+            if test:
+                value = self.test_current
+            else:
+                value = 0
+        self._pvs['Current-SP'].value = value
 
-    def check_current(self, test=False):
+    def check_current(self, test=False, value=None):
         """Check current."""
-        if test:
-            status = self._cmp(self._pvs['Current-Mon'].value,
-                               self.test_current)
-        else:
-            status = self._cmp(self._pvs['Current-Mon'].value, 0)
+        if value is None:
+            if test:
+                value = self.test_current
+            else:
+                value = 0
+        status = self._cmp(self._pvs['Current-Mon'].value, value)
         return status
 
     def check_status(self):
@@ -411,20 +414,23 @@ class TesterPSLinac(_TesterBase):
             state = _PSC.PwrStateSel.Off
         return (self._pvs['PwrState-Sts'].value == state)
 
-    def set_current(self, test=False):
+    def set_current(self, test=False, value=None):
         """Set current."""
-        if test:
-            self._pvs['Current-SP'].value = self.test_current
-        else:
-            self._pvs['Current-SP'].value = 0
+        if value is None:
+            if test:
+                value = self.test_current
+            else:
+                value = 0
+        self._pvs['Current-SP'].value = value
 
-    def check_current(self, test=False):
+    def check_current(self, test=False, value=None):
         """Check current."""
-        if test:
-            status = self._cmp(
-                self._pvs['Current-Mon'].value, self.test_current)
-        else:
-            status = self._cmp(self._pvs['Current-Mon'].value, 0)
+        if value is None:
+            if test:
+                value = self.test_current
+            else:
+                value = 0
+        status = self._cmp(self._pvs['Current-Mon'].value, value)
         return status
 
     def check_status(self):
