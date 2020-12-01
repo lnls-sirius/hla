@@ -895,7 +895,7 @@ class PSTestWindow(SiriusMainWindow):
             return
 
         value, ok = QInputDialog.getDouble(
-            self, "Insert current setpoint: ", "Value")
+            self, "Setpoint Input", "Insert current setpoint: ")
         if not ok:
             return
 
