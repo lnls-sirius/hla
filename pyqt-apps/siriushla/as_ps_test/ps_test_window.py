@@ -534,18 +534,18 @@ class PSTestWindow(SiriusMainWindow):
         else:
             if dev_type == 'PS':
                 devices = self._get_selected_ps()
-                devices_wth_sifam = list(
-                    set(devices) - set(self._si_fam_psnames))
             elif dev_type == 'PU':
                 devices = self._get_selected_pu()
         if not devices:
             return
 
-        task0 = CreateTesters(devices, parent=self)
-        if state == 'on':
-            task1 = SetPwrState(devices_wth_sifam, state=state, parent=self)
+        if state == 'on' and dev_type == 'PS':
+            dev2ctrl = list(set(devices) - set(self._si_fam_psnames))
         else:
-            task1 = SetPwrState(devices, state=state, parent=self)
+            dev2ctrl = devices
+
+        task0 = CreateTesters(devices, parent=self)
+        task1 = SetPwrState(dev2ctrl, state=state, parent=self)
         task2 = CheckPwrState(devices, state=state, is_test=True, parent=self)
         task2.itemDone.connect(_part(self._log, show=show))
         tasks = [task0, task1, task2]
