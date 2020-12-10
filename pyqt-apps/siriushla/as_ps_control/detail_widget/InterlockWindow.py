@@ -61,11 +61,13 @@ class InterlockListWidget(QWidget):
 class InterlockWindow(SiriusMainWindow):
     """InterlockWindow class."""
 
-    def __init__(self, parent=None, devname='', interlock=None, auxdev=list()):
+    def __init__(self, parent=None, devname='', interlock=None, auxdev=list(),
+                 auxdev2mod=dict()):
         """."""
         super().__init__(parent)
         self._devname = _PVName(devname)
         self._auxdev = auxdev
+        self._auxdev2mod = auxdev2mod
         self._interlock = interlock
         if isinstance(interlock, str):
             self._interlock = [interlock, ]
@@ -107,15 +109,13 @@ class InterlockWindow(SiriusMainWindow):
             lay.addWidget(wid)
         else:
             self._tab_widget = QTabWidget(self)
-            for intlk in self._interlock:
-                tab_lbl = intlk.replace(self._intlktype, '').replace(
-                    'Alarms', '').replace('Intlk', '')
-                wid = InterlockListWidget(parent=self, devname=self._devname,
-                                          interlock=intlk)
-                self._tab_widget.addTab(wid, tab_lbl)
-                for aux in self._auxdev:
+            for aux in self._auxdev:
+                for intlk in self._interlock:
                     tab_lbl = intlk.replace(self._intlktype, '').replace(
-                        'Alarms', '').replace('Intlk', '') + ' ' + aux
+                        'Alarms', '').replace('Intlk', '')
+                    if self._devname+aux in self._auxdev2mod:
+                        tab_lbl = 'Mod' + self._auxdev2mod[
+                            self._devname+aux][tab_lbl.split('Mod')[1]]
                     wid = InterlockListWidget(
                         parent=self, devname=self._devname+aux,
                         interlock=intlk)

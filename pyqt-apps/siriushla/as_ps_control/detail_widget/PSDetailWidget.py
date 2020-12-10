@@ -6,21 +6,23 @@ from datetime import datetime as _datetime
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
     QGridLayout, QVBoxLayout, QHBoxLayout, QFormLayout, QTabWidget, \
-    QSizePolicy as QSzPlcy, QCheckBox
+    QSizePolicy as QSzPlcy, QCheckBox, QHeaderView, QAbstractItemView, \
+    QSpacerItem
 from qtpy.QtGui import QColor
 import qtawesome as qta
 
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.search import PSSearch
 from siriuspy.pwrsupply.csdev import get_ps_propty_database, get_ps_modules, \
-    DEF_WFMSIZE_FBP, DEF_WFMSIZE_OTHERS, \
-    PS_LI_INTLK_THRS as _PS_LI_INTLK
+    DEF_WFMSIZE_FBP, DEF_WFMSIZE_OTHERS, PS_LI_INTLK_THRS as _PS_LI_INTLK, \
+    ETypes as _PSet
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox, PyDMPushButton, \
     PyDMLineEdit, PyDMWaveformPlot
+from pydm.widgets.display_format import parse_value_for_display
 from siriushla import util
 from siriushla.widgets import PyDMStateButton, PyDMLinEditScrollbar, \
     SiriusConnectionSignal, SiriusLedState, SiriusLedAlert, \
-    PyDMLedMultiChannel, SiriusDialog
+    PyDMLedMultiChannel, SiriusDialog, SiriusWaveformTable
 from .InterlockWindow import InterlockWindow, LIInterlockWindow
 
 
@@ -80,38 +82,40 @@ class PSDetailWidget(QWidget):
         }
     """
 
-    AuxMeas = [
-        'Current1-Mon',
-        'Current2-Mon',
-        'Arm1Current-Mon',
-        'Arm2Current-Mon',
-        'PWMDutyCycle-Mon',
-        'PWMDutyCycleArmsDiff-Mon',
-        'PWMDutyDiff-Mon',
-        'VoltageInputIIB-Mon',
-        'VoltageOutputIIB-Mon',
-        'LoadVoltage-Mon',
-        'DCLinkVoltage-Mon',
-        'CurrentInputIIB-Mon',
-        'CurrentOutputIIB-Mon',
-        'RectifierCurrent-Mon',
-        'LeakCurrentIIB-Mon',
-        'IGBTDriverVoltageIIB-Mon',
-        'IGBT1DriverCurrentIIB-Mon',
-        'IGBT2DriverCurrentIIB-Mon',
-        'IGBT1Current-Mon',
-        'IGBT2Current-Mon',
-        'IGBT1CurrentIIB-Mon',
-        'IGBT2CurrentIIB-Mon',
-        'IGBT1PWMDutyCycle-Mon',
-        'IGBT2PWMDutyCycle-Mon',
-        'IGBT1TemperatureIIB-Mon',
-        'IGBT2TemperatureIIB-Mon',
-        'InductorTemperatureIIB-Mon',
-        'InductorsTemperatureIIB-Mon',
-        'HeatSinkTemperatureIIB-Mon',
-        'BoardTemperatureIIB-Mon',
-        'RelativeHumidityIIB-Mon',
+    AuxDev2ModDict = {
+        'BO-Fam:PS-B-1': {'A': '1', 'B': '2'},
+        'BO-Fam:PS-B-1a': {'A': '3', 'B': '4'},
+        'BO-Fam:PS-B-1b': {'A': '5', 'B': '6'},
+        'BO-Fam:PS-B-1c': {'A': '7', 'B': '8'},
+        'BO-Fam:PS-B-2': {'A': '1', 'B': '2'},
+        'BO-Fam:PS-B-2a': {'A': '3', 'B': '4'},
+        'BO-Fam:PS-B-2b': {'A': '5', 'B': '6'},
+        'BO-Fam:PS-B-2c': {'A': '7', 'B': '8'},
+    }
+
+    BasicParams = [
+        'Version-Cte', 'Properties-Cte',
+        'Reset-Cmd', 'Abort-Cmd', 'WfmUpdate-Cmd',
+        'TimestampBoot-Cte', 'TimestampUpdate-Mon',
+        'PwrState-Sel', 'PwrState-Sts',
+        'OpMode-Sel', 'OpMode-Sts', 'CtrlMode-Mon',
+        'CtrlLoop-Sel', 'CtrlLoop-Sts',
+        'Current-SP', 'Current-RB', 'CurrentRef-Mon', 'Current-Mon',
+        'CycleEnbl-Mon', 'CycleIndex-Mon',
+        'CycleType-Sel', 'CycleType-Sts',
+        'CycleNrCycles-SP', 'CycleNrCycles-RB',
+        'CycleFreq-SP', 'CycleFreq-RB',
+        'CycleAmpl-SP', 'CycleAmpl-RB',
+        'CycleOffset-SP', 'CycleOffset-RB',
+        'CycleAuxParam-SP', 'CycleAuxParam-RB',
+        'WfmIndex-Mon', 'WfmSyncPulseCount-Mon',
+        'WfmUpdateAuto-Sel', 'WfmUpdateAuto-Sts',
+        'SOFBMode-Sel', 'SOFBMode-Sts',
+        'PRUCtrlQueueSize-Mon', 'SyncPulse-Cmd',
+        'Wfm-SP', 'Wfm-RB', 'WfmRef-Mon', 'Wfm-Mon',
+        'Voltage-SP', 'Voltage-RB', 'VoltageRef-Mon', 'Voltage-Mon',
+        'CapacitorBankVoltage-SP', 'CapacitorBankVoltage-RB',
+        'CapacitorBankVoltageRef-Mon', 'CapacitorBankVoltage-Mon',
     ]
 
     def __init__(self, psname, parent=None):
@@ -121,21 +125,32 @@ class PSDetailWidget(QWidget):
         self._psname = psname
         self._psmodel = PSSearch.conv_psname_2_psmodel(psname)
         self._pstype = PSSearch.conv_psname_2_pstype(self._psname)
+        self._metric = self._getElementMetric()
+
         self._db = get_ps_propty_database(self._psmodel, self._pstype)
         self._mods = get_ps_modules(psmodel=self._psmodel)
-        self._mod2db = {mod: [pv for pv in self._db if 'Mod'+mod in pv and
-                              'Intlk' not in pv and 'Alarm' not in pv]
-                        for mod in self._mods}
-        self._auxmeasures = [aux for aux in self.AuxMeas if aux in self._db]
+        if self._mods:
+            self._mod2db = {mod: [pv for pv in self._db
+                                  if 'Mod'+mod in pv and 'IIB' in pv and
+                                  'Intlk' not in pv and 'Alarm' not in pv]
+                            for mod in self._mods}
+        else:
+            self._mod2db = {'main': [pv for pv in self._db if 'IIB' in pv and
+                                     'Intlk' not in pv and 'Alarm' not in pv]}
+        self._auxmeasures = [pv for pv in self._db
+                             if pv not in self.BasicParams and
+                             'Intlk' not in pv and 'Alarm' not in pv and
+                             (self._metric not in pv if self._metric else True) and
+                             'IIB' not in pv and 'Param' not in pv]
         self._params = [prm for prm in self._db
                         if 'Param' in prm and '-Cte' in prm]
-        self._auxdev = list()
-        if self._psname in ['BO-Fam:PS-B-1', 'BO-Fam:PS-B-2']:
-            self._auxdev = ['a', 'b', 'c']
+
+        self._auxdev = ['', ]
+        self._auxdev2mod = self.AuxDev2ModDict
+        if self._psname in self._auxdev2mod:
+            self._auxdev = ['', 'a', 'b', 'c']
 
         self._prefixed_psname = self._VACA_PREFIX + self._psname
-
-        self._metric = self._getElementMetric()
 
         self.setObjectName(parent.objectName())
 
@@ -310,7 +325,8 @@ class PSDetailWidget(QWidget):
             '#soft_intlk_bt{min-width:25px; max-width:25px; icon-size:20px;}')
         util.connect_window(
             self.soft_intlk_bt, InterlockWindow, self,
-            devname=self._psname, interlock='IntlkSoft', auxdev=self._auxdev)
+            devname=self._psname, interlock='IntlkSoft',
+            auxdev=self._auxdev, auxdev2mod=self._auxdev2mod)
         self.soft_intlk_led = SiriusLedAlert(
             parent=self, init_channel=self._prefixed_psname + ":IntlkSoft-Mon")
 
@@ -321,7 +337,8 @@ class PSDetailWidget(QWidget):
             '#hard_intlk_bt{min-width:25px; max-width:25px; icon-size:20px;}')
         util.connect_window(
             self.hard_intlk_bt, InterlockWindow, self,
-            devname=self._psname, interlock='IntlkHard', auxdev=self._auxdev)
+            devname=self._psname, interlock='IntlkHard',
+            auxdev=self._auxdev, auxdev2mod=self._auxdev2mod)
         self.hard_intlk_led = SiriusLedAlert(
             parent=self, init_channel=self._prefixed_psname + ":IntlkHard-Mon")
 
@@ -337,15 +354,12 @@ class PSDetailWidget(QWidget):
             util.connect_window(
                 self.iib_intlk_bt, InterlockWindow, self,
                 devname=self._psname, interlock=iib_intlks,
-                auxdev=self._auxdev)
+                auxdev=self._auxdev, auxdev2mod=self._auxdev2mod)
 
-            chs2vals = {self._prefixed_psname+":"+intlk+"-Mon": 0
-                        for intlk in iib_intlks}
-            if self._auxdev:
-                for aux in self._auxdev:
-                    chs2vals.update(
-                        {self._prefixed_psname+aux+":"+intlk+"-Mon": 0
-                         for intlk in iib_intlks})
+            chs2vals = dict()
+            for aux in self._auxdev:
+                chs2vals.update({self._prefixed_psname+aux+":"+intlk+"-Mon": 0
+                                 for intlk in iib_intlks})
             self.iib_intlk_led = PyDMLedMultiChannel(self, chs2vals)
 
         iib_alarms = [k.replace('Labels-Cte', '') for k in self._db
@@ -360,15 +374,12 @@ class PSDetailWidget(QWidget):
             util.connect_window(
                 self.alarm_bt, InterlockWindow, self,
                 devname=self._psname, interlock=iib_alarms,
-                auxdev=self._auxdev)
+                auxdev=self._auxdev, auxdev2mod=self._auxdev2mod)
 
-            chs2vals = {self._prefixed_psname+":"+alarm+"-Mon": 0
-                        for alarm in iib_alarms}
-            if self._auxdev:
-                for aux in self._auxdev:
-                    chs2vals.update(
-                        {self._prefixed_psname+aux+":"+alarm+"-Mon": 0
-                         for alarm in iib_alarms})
+            chs2vals = dict()
+            for aux in self._auxdev:
+                chs2vals.update({self._prefixed_psname+aux+":"+alarm+"-Mon": 0
+                                 for alarm in iib_alarms})
             self.alarm_led = PyDMLedMultiChannel(self, chs2vals)
 
         self.reset_bt = PyDMPushButton(
@@ -714,28 +725,20 @@ class PSDetailWidget(QWidget):
             layout.addWidget(syncpulse_cmd_lb, 1, 0, Qt.AlignRight)
             layout.addWidget(syncpulse_cmd_btn, 1, 1)
 
-            if self._mods:
-                pbmod = QPushButton(
-                    qta.icon('mdi.open-in-new'), 'Module Details', self)
-                util.connect_window(
-                    pbmod, PSModuleDetailWidget, self, psname=self._psname,
-                    mod2dbase=self._mod2db)
-                layout.addWidget(pbmod, 2, 0, 1, 2)
-
-            if self._auxmeasures:
-                pbaux = QPushButton(
-                    qta.icon('mdi.open-in-new'), 'Aux. Measures', self)
-                util.connect_window(
-                    pbaux, PSAuxMeasWidget, self, psname=self._psname,
-                    auxmeas=self._auxmeasures)
-                layout.addWidget(pbaux, 3, 0, 1, 2)
+            pbaux = QPushButton(
+                qta.icon('mdi.open-in-new'), 'Aux. Measures', self)
+            util.connect_window(
+                pbaux, PSAuxMeasWidget, self, psname=self._psname,
+                auxmeas=self._auxmeasures, mod2dbase=self._mod2db,
+                auxdev=self._auxdev, auxdev2mod=self._auxdev2mod)
+            layout.addWidget(pbaux, 2, 0, 1, 2)
 
             pbprm = QPushButton(qta.icon('mdi.open-in-new'),
                                 'Parameters', self)
             util.connect_window(
                 pbprm, PSParamsWidget, self, psname=self._psname,
                 params=self._params)
-            layout.addWidget(pbprm, 4, 0, 1, 2)
+            layout.addWidget(pbprm, 3, 0, 1, 2)
 
         return layout
 
@@ -880,7 +883,7 @@ class PSDetailWidget(QWidget):
                 lispect.match(self._psname):
             return "Kick"
         else:
-            return
+            return ""
 
 
 class LIPSDetailWidget(PSDetailWidget):
@@ -1242,12 +1245,19 @@ class FBPDCLinkDetailWidget(DCLinkDetailWidget):
         self._mod_status_mon = PyDMLabel(
             self, self._prefixed_psname + ':ModulesStatus-Mon')
 
+        pbprm = QPushButton(qta.icon('mdi.open-in-new'),
+                            'Parameters', self)
+        util.connect_window(
+            pbprm, PSParamsWidget, self, psname=self._psname,
+            params=self._params)
+
         layout = QFormLayout()
         layout.addRow('Voltage 1', self._out_1_mon)
         layout.addRow('Voltage 2', self._out_2_mon)
         layout.addRow('Voltage 3', self._out_3_mon)
         layout.addRow('Voltage dig', self._out_dig_mon)
         layout.addRow('Module Status', self._mod_status_mon)
+        layout.addRow(pbprm)
         return layout
 
 
@@ -1301,104 +1311,41 @@ class FACDCLinkDetailWidget(DCLinkDetailWidget):
                 self, self._prefixed_psname + ':' + auxmeas)
             layout.addRow(auxmeas.split('-')[0], pydmlbl)
 
-        if self._mods:
-            pbmod = QPushButton(qta.icon('mdi.open-in-new'),
-                                'Module details', self)
-            util.connect_window(
-                pbmod, PSModuleDetailWidget, self, psname=self._psname,
-                mod2dbase=self._mod2db)
-            layout.addRow(pbmod)
+        pbaux = QPushButton(
+            qta.icon('mdi.open-in-new'), 'Aux. Measures', self)
+        util.connect_window(
+            pbaux, PSAuxMeasWidget, self, psname=self._psname,
+            auxmeas=list(), mod2dbase=self._mod2db,
+            auxdev=self._auxdev, auxdev2mod=self._auxdev2mod)
+        layout.addRow(pbaux)
+
+        pbprm = QPushButton(qta.icon('mdi.open-in-new'),
+                            'Parameters', self)
+        util.connect_window(
+            pbprm, PSParamsWidget, self, psname=self._psname,
+            params=self._params)
+        layout.addRow(pbprm)
 
         return layout
 
 
-class PSModuleDetailWidget(SiriusDialog):
+class PSAuxMeasWidget(SiriusDialog):
     """PS Modules Detail Widget."""
 
-    def __init__(self, parent, psname, mod2dbase):
+    def __init__(self, parent, psname, auxmeas, mod2dbase,
+                 auxdev, auxdev2mod):
         """Init."""
         super().__init__(parent)
-        self._psname = psname
-        if psname in ['BO-Fam:PS-B-1', 'BO-Fam:PS-B-2']:
-            self._psname = [psname, ]
-            for aux in ['a', 'b', 'c']:
+        self._psname = [psname, ]
+        if auxdev:
+            self._psname = list()
+            for aux in auxdev:
                 self._psname.append(psname+aux)
-        self._VACA_PREFIX = VACA_PREFIX
-
-        self.mod2dbase = mod2dbase
-
-        self.setWindowTitle(psname + ' - Modules Details')
-
-        self.setObjectName(parent.objectName())
-
-        self._setupUi()
-        self.setStyleSheet('PyDMLabel{qproperty-alignment: AlignCenter;}')
-
-    def _setupUi(self):
-        lay = QGridLayout(self)
-
-        if isinstance(self._psname, list):
-            nrols = 2
-            ncols = len(self._psname)//nrols
-            for idx, psn in enumerate(self._psname):
-                wid = self._setupPSWidget(psn)
-                lay.addWidget(wid, idx//nrols, idx % ncols)
-        else:
-            wid = self._setupPSWidget(self._psname)
-            lay.addWidget(wid)
-
-    def _setupPSWidget(self, psname):
-        wid = QWidget()
-        lay = QGridLayout(wid)
-        lay.setHorizontalSpacing(20)
-        lay.setVerticalSpacing(20)
-
-        text_psname = QLabel('<h3>' + psname + '</h3>', self,
-                             alignment=Qt.AlignCenter)
-        lay.addWidget(text_psname, 0, 0, 1, len(self.mod2dbase))
-
-        mods = sorted(self.mod2dbase.keys())
-        for mod, dbase in self.mod2dbase.items():
-            idx = mods.index(mod)
-            lay.addWidget(self._setupModWidget(psname, mod, dbase), 1, idx)
-
-        return wid
-
-    def _setupModWidget(self, psname, mod, dbase):
-        wid = QWidget()
-        lay = QVBoxLayout(wid)
-        lay.setAlignment(Qt.AlignTop)
-
-        self.title = QLabel('<h3>Mod'+mod+'</h3>', self,
-                            alignment=Qt.AlignCenter)
-        lay.addWidget(self.title)
-
-        prefixed_psname = self._VACA_PREFIX + psname
-
-        flay = QFormLayout()
-        for pv in dbase:
-            text = pv.split('Mod'+mod)[0]
-            lbl = PyDMLabel(self, prefixed_psname + ':' + pv)
-            flay.addRow(text, lbl)
-        lay.addLayout(flay)
-
-        return wid
-
-
-class PSAuxMeasWidget(SiriusDialog):
-    """PS Auxiliary Measures Widget."""
-
-    def __init__(self, parent, psname, auxmeas):
-        """Init."""
-        super().__init__(parent)
-        self._psname = psname
-        if psname in ['BO-Fam:PS-B-1', 'BO-Fam:PS-B-2']:
-            self._psname = [psname, ]
-            for aux in ['a', 'b', 'c']:
-                self._psname.append(psname+aux)
-        self._VACA_PREFIX = VACA_PREFIX
+        self._prefixed_psname = VACA_PREFIX + psname
 
         self.auxmeas = auxmeas
+        self.mod2dbase = mod2dbase
+        self.auxdev2mod = auxdev2mod
 
         self.title_text = psname + ' - Auxiliary Measures'
         self.setWindowTitle(self.title_text)
@@ -1409,34 +1356,111 @@ class PSAuxMeasWidget(SiriusDialog):
         self.setStyleSheet('PyDMLabel{qproperty-alignment: AlignCenter;}')
 
     def _setupUi(self):
-        lay = QGridLayout(self)
-        lay.setHorizontalSpacing(20)
-        lay.setVerticalSpacing(20)
+        text_psname = QLabel('<h3>' + self._psname[0] + '</h3>', self,
+                             alignment=Qt.AlignCenter)
 
-        if isinstance(self._psname, list):
-            nrols = 2
-            ncols = len(self._psname)//nrols
-            for idx, psn in enumerate(self._psname):
-                wid = self._setupPSWidget(psn)
-                lay.addWidget(wid, idx//nrols, idx % ncols)
+        pswid = None
+        if self.auxmeas:
+            title_main = QLabel('<h3>Main Measures</h3>', self,
+                                alignment=Qt.AlignCenter)
+            pswid = self._setupPSWidget()
+
+        if len(self.mod2dbase) > 1:
+            title_iib = QLabel('<h3>IIB Measures</h3>', self,
+                               alignment=Qt.AlignCenter)
+            lay_mod = QGridLayout()
+            ncols = 4 if len(self.mod2dbase)*len(self._psname) > 4 else 2
+            idx = 0
+            for psn in self._psname:
+                for mod, dbase in self.mod2dbase.items():
+                    modwid = self._setupModWidget(psn, mod, dbase)
+                    lay_mod.addWidget(modwid, idx//ncols, idx % ncols)
+                    idx += 1
+
+            lay = QGridLayout(self)
+            lay.setHorizontalSpacing(20)
+            lay.setVerticalSpacing(20)
+            if pswid:
+                lay.addWidget(text_psname, 0, 0, 1, 2)
+                lay.addWidget(title_main, 1, 0)
+                lay.addWidget(pswid, 2, 0)
+                lay.addWidget(title_iib, 1, 1)
+                lay.addLayout(lay_mod, 2, 1)
+            else:
+                lay.addWidget(text_psname, 0, 0)
+                lay.addWidget(title_iib, 1, 0)
+                lay.addLayout(lay_mod, 2, 0)
         else:
-            wid = self._setupPSWidget(self._psname)
-            lay.addWidget(wid)
+            lay = QVBoxLayout(self)
+            lay.setSpacing(15)
+            lay.addWidget(text_psname)
 
-    def _setupPSWidget(self, psname):
+            if pswid:
+                lay.addWidget(title_main)
+                lay.addWidget(pswid)
+
+            dbase = self.mod2dbase['main']
+            if dbase:
+                title_iib = QLabel('<h3>IIB Measures</h3>', self,
+                                   alignment=Qt.AlignCenter)
+                modwid = self._setupModWidget(self._psname[0], 'main', dbase)
+                lay.addWidget(title_iib)
+                lay.addWidget(modwid)
+
+    def _setupPSWidget(self):
+        wid = QWidget()
+        if len(self.auxmeas) > 32:
+            lay = QHBoxLayout(wid)
+            lay.setSpacing(20)
+
+            half1 = self.auxmeas[:20]
+            flay1 = QFormLayout()
+            flay1.setVerticalSpacing(9)
+            for pv in half1:
+                text = pv.split('-')[0]
+                lbl = PyDMLabel(self, self._prefixed_psname + ':' + pv)
+                lbl.showUnits = True
+                flay1.addRow(text, lbl)
+
+            half2 = self.auxmeas[20:]
+            flay2 = QFormLayout()
+            flay2.setVerticalSpacing(9)
+            for pv in half2:
+                text = pv.split('-')[0]
+                lbl = PyDMLabel(self, self._prefixed_psname + ':' + pv)
+                lbl.showUnits = True
+                flay2.addRow(text, lbl)
+
+            lay.addLayout(flay1)
+            lay.addLayout(flay2)
+        else:
+            flay = QFormLayout(wid)
+            for pv in self.auxmeas:
+                text = pv.split('-')[0]
+                lbl = PyDMLabel(self, self._prefixed_psname + ':' + pv)
+                lbl.showUnits = True
+                flay.addRow(text, lbl)
+        return wid
+
+    def _setupModWidget(self, psname, mod, dbase):
         wid = QWidget()
         lay = QVBoxLayout(wid)
+        lay.setAlignment(Qt.AlignTop)
 
-        text_psname = QLabel('<h3>' + psname + '</h3>', self,
-                             alignment=Qt.AlignCenter)
-        lay.addWidget(text_psname)
+        modname = mod
+        if psname in self.auxdev2mod:
+            modname = self.auxdev2mod[psname][mod]
 
-        prefixed_psname = self._VACA_PREFIX + psname
+        if mod != 'main':
+            self.title = QLabel('<h3>Mod'+modname+'</h3>', self,
+                                alignment=Qt.AlignCenter)
+            lay.addWidget(self.title)
 
         flay = QFormLayout()
-        for pv in self.auxmeas:
-            text = pv.split('-')[0]
-            lbl = PyDMLabel(self, prefixed_psname + ':' + pv)
+        for pv in dbase:
+            text = pv.split('Mod'+mod)[0].split('IIB')[0]
+            lbl = PyDMLabel(self, psname + ':' + pv)
+            lbl.showUnits = True
             flay.addRow(text, lbl)
         lay.addLayout(flay)
 
@@ -1461,23 +1485,95 @@ class PSParamsWidget(SiriusDialog):
         self.setObjectName(parent.objectName())
 
         self._setupUi()
-        self.setStyleSheet('PyDMLabel{qproperty-alignment: AlignHCenter;}')
+        self.setStyleSheet(
+            'PyDMLabel{qproperty-alignment: AlignVCenter;}')
 
     def _setupUi(self):
-        lay = QVBoxLayout(self)
+        lay = QGridLayout(self)
+        # lay.setSpacing(15)
 
         text_psname = QLabel('<h3>' + self._psname + '</h3>', self,
                              alignment=Qt.AlignCenter)
-        lay.addWidget(text_psname)
+        lay.addWidget(text_psname, 0, 0, 1, 11)
 
-        flay = QFormLayout()
-        for pv in self.params:
-            text = pv.split('-')[0].split('Param')[1]
-            lbl = PyDMLabel(self, self._prefixed_psname + ':' + pv)
-            if 'PSName' in pv:
-                lbl.displayFormat = PyDMLabel.DisplayFormat.String
-            lbl.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
-            lbl.setObjectName(pv)
-            lbl.setStyleSheet('#'+pv+'{max-width:28em; max-height:1.29em;}')
-            flay.addRow(text, lbl)
-        lay.addLayout(flay)
+        lay.addItem(QSpacerItem(1, 10, QSzPlcy.Fixed, QSzPlcy.Fixed), 1, 0)
+        lay.addItem(QSpacerItem(10, 1, QSzPlcy.Fixed, QSzPlcy.Fixed), 2, 2)
+        lay.addItem(QSpacerItem(10, 1, QSzPlcy.Fixed, QSzPlcy.Fixed), 2, 5)
+        lay.addItem(QSpacerItem(10, 1, QSzPlcy.Fixed, QSzPlcy.Fixed), 2, 8)
+
+        for idx, param in enumerate(self.params):
+            pvname = self._prefixed_psname + ':' + param
+            text = param.split('-')[0].split('Param')[1]
+            if 'Intlk' in pvname or 'Analog' in pvname:
+                wid = self._create_table_wid(pvname)
+                text += ' [us]'
+            else:
+                wid = self._create_label_wid(pvname)
+            lbl = QLabel(text, self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            row = (idx % (len(self.params)/4))+2
+            lay.addWidget(lbl, row, (idx // (len(self.params)/4))*2)
+            lay.addWidget(wid, row, (idx // (len(self.params)/4))*2 + 1)
+
+    def _create_label_wid(self, pvname):
+        lbl = CustomLabel(self)
+        if 'PSName' in pvname:
+            lbl.displayFormat = PyDMLabel.DisplayFormat.String
+        elif 'PSModel' in pvname:
+            lbl.enum_strings = _PSet.MODELS
+        elif 'SigGenType' in pvname:
+            lbl.enum_strings = _PSet.CYCLE_TYPES
+        elif 'WfmRefSyncMode' in pvname:
+            lbl.enum_strins = _PSet.WFMREF_SYNCMODE
+        else:
+            lbl.showUnits = True
+        lbl.channel = pvname
+        return lbl
+
+    def _create_table_wid(self, pvname):
+        table = SiriusWaveformTable(self, pvname)
+        table.showUnits = True
+        col_count = 32 if 'Intlk' in pvname else 64
+        table.setColumnCount(col_count)
+        table.setObjectName('table')
+        table.setStyleSheet('#table{max-width:24em; max-height: 3em;}')
+        table.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        table.horizontalHeader().setStyleSheet(
+            "min-height:1em; max-height:1em;")
+        table.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        table.verticalHeader().setVisible(False)
+        table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        table.columnHeaderLabels = [str(i) for i in range(col_count)]
+        table.rowHeaderLabels = []
+        return table
+
+
+class CustomLabel(PyDMLabel):
+
+    def value_changed(self, new_value):
+        super(PyDMLabel, self).value_changed(new_value)
+        new_value = parse_value_for_display(
+            value=new_value, precision=self.precision,
+            display_format_type=self._display_format_type,
+            string_encoding=self._string_encoding, widget=self)
+        if isinstance(new_value, str):
+            if self._show_units and self._unit != "":
+                new_value = "{} {}".format(new_value, self._unit)
+            self.setText(new_value)
+            return
+        if self.enum_strings is not None and \
+                isinstance(new_value, (int, float)):
+            try:
+                self.setText(self.enum_strings[int(new_value)])
+            except IndexError:
+                self.setText("**INVALID**")
+            return
+        elif self.enum_strings is not None and \
+                isinstance(new_value, _np.ndarray):
+            text = '['+','.join([self.enum_strings[int(idx)]
+                                 for idx in new_value])+']'
+            self.setText(text)
+            return
+        if isinstance(new_value, (int, float)):
+            self.setText(self.format_string.format(new_value))
+            return
+        self.setText(str(new_value))
