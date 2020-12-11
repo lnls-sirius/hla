@@ -5,12 +5,12 @@ from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QGroupBox, \
     QHBoxLayout, QSizePolicy as QSzPlcy, QSpacerItem
 import qtawesome as qta
-from pydm.widgets import PyDMLabel, PyDMLineEdit, PyDMPushButton
+from pydm.widgets import PyDMLabel, PyDMLineEdit
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 
 from ..widgets import PyDMStateButton, SiriusLedState, SiriusSpinbox, \
-    SiriusLabel, PyDMLed
+    SiriusLabel, PyDMLed, SiriusPushButton
 
 from .custom_widgets import MyScaleIndicator
 
@@ -282,7 +282,7 @@ class BbBPwrAmpsWidget(QWidget):
         ld_main = QLabel(
             '<h3>AR Amplifier</h3>', self, alignment=Qt.AlignCenter)
 
-        conf = PyDMPushButton(
+        conf = SiriusPushButton(
             self, init_channel=pref+':Rst-Cmd', pressValue=1)
         conf.setText('Reset')
         conf.setToolTip('Reset State')
