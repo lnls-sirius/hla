@@ -10,17 +10,19 @@ class EpicsGetter(EpicsTask):
     itemRead = Signal(str, QVariant)
     itemNotRead = Signal(str)
 
-    def __init__(self, pvs, cls_epics=PyEpicsWrapper, parent=None,
-                 timeout=PyEpicsWrapper.TIMEOUT):
-        super().__init__(pvs, None, None, cls_epics, parent, timeout)
+    def __init__(self, pvs, defvals=None, cls_epics=PyEpicsWrapper,
+                 parent=None, timeout=PyEpicsWrapper.TIMEOUT):
+        super().__init__(pvs, defvals, None, cls_epics, parent, timeout)
 
     def run(self):
         """Thread execution."""
         if not self._quit_task:
-            for pvn in self._pvnames:
+            for i, pvn in enumerate(self._pvnames):
                 self.currentItem.emit(pvn)
                 value = self.get_pv(pvn).get(self._timeout)
-                if value is not None:
+                if pvn.endswith('-Cmd') and self._values is not None:
+                    self.itemRead.emit(pvn, QVariant(self._values[i]))
+                elif value is not None:
                     self.itemRead.emit(pvn, QVariant(value))
                 else:
                     self.itemNotRead.emit(pvn)
