@@ -1,14 +1,16 @@
 """DCCT settings module."""
 
+import epics
+
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QLabel, QPushButton, QGroupBox, \
     QGridLayout, QHBoxLayout, QVBoxLayout, QFormLayout, QSpacerItem, \
     QSizePolicy as QSzPly
 import qtawesome as qta
-import epics
+
 from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox, \
     PyDMPushButton
-from siriuspy.diagbeam.dcct.csdev import Const as _DCCTc
+from siriuspy.diagbeam.dcct.csdev import Const as _DCCTc, get_dcct_database
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets import PyDMStateButton, SiriusConnectionSignal, \
     SiriusLedState, SiriusLedAlert
@@ -211,6 +213,7 @@ class DCCTSettingsDetails(QWidget):
         else:
             self.setObjectName('SIApp')
         self.dcct_prefix = self.prefix + device + ':'
+        self._db = get_dcct_database()
         self._setupUi()
 
     def _setupUi(self):
@@ -256,37 +259,29 @@ class DCCTSettingsDetails(QWidget):
                 min-width:6em; max-width:6em;}""")
 
     def _setupReliableMeasWidget(self):
-        self.label_reliablemeas0 = QLabel('', self)
-        self.led_ReliableMeas0 = SiriusLedAlert(
-            parent=self, init_channel=self.dcct_prefix+'ReliableMeas-Mon',
-            bit=0)
-        self.label_reliablemeas1 = QLabel('', self)
-        self.led_ReliableMeas1 = SiriusLedAlert(
-            parent=self, init_channel=self.dcct_prefix+'ReliableMeas-Mon',
-            bit=1)
-        self.label_reliablemeas2 = QLabel('', self)
-        self.led_ReliableMeas2 = SiriusLedAlert(
-            parent=self, init_channel=self.dcct_prefix+'ReliableMeas-Mon',
-            bit=2)
+        gbox_reliablemeas = QGroupBox('Measure Reliability Status', self)
+        gbox_reliablemeas.setStyleSheet("""
+            .QLabel{min-height:1.29em; max-height:1.29em;}
+        """)
+
+        lay_reliablemeas = QGridLayout(gbox_reliablemeas)
+        relmeas_count = self._db['ReliableMeasLabels-Cte']['count']
+        self.relmeas_labels = list()
+        for idx in range(relmeas_count):
+            led = SiriusLedAlert(
+                parent=self, init_channel=self.dcct_prefix+'ReliableMeas-Mon',
+                bit=idx)
+            lay_reliablemeas.addWidget(led, idx, 0)
+            lbl = QLabel('', self)
+            self.relmeas_labels.append(lbl)
+            lay_reliablemeas.addWidget(lbl, idx, 1)
+        lay_reliablemeas.setColumnStretch(0, 1)
+        lay_reliablemeas.setColumnStretch(1, 10)
 
         self.reliablemeas_channel = epics.PV(
             self.dcct_prefix+'ReliableMeasLabels-Cte',
             callback=self._updateReliableMeasLabels)
 
-        gbox_reliablemeas = QGroupBox('Measure Reliability Status', self)
-        lay_reliablemeas = QGridLayout()
-        lay_reliablemeas.setColumnStretch(0, 1)
-        lay_reliablemeas.setColumnStretch(1, 10)
-        lay_reliablemeas.addWidget(self.led_ReliableMeas0, 0, 0)
-        lay_reliablemeas.addWidget(self.label_reliablemeas0, 0, 1)
-        lay_reliablemeas.addWidget(self.led_ReliableMeas1, 1, 0)
-        lay_reliablemeas.addWidget(self.label_reliablemeas1, 1, 1)
-        lay_reliablemeas.addWidget(self.led_ReliableMeas2, 2, 0)
-        lay_reliablemeas.addWidget(self.label_reliablemeas2, 2, 1)
-        gbox_reliablemeas.setLayout(lay_reliablemeas)
-        gbox_reliablemeas.setStyleSheet("""
-            .QLabel{min-height:1.29em; max-height:1.29em;}
-        """)
         return gbox_reliablemeas
 
     def _setupGeneralSettingsWidget(self):
@@ -565,9 +560,8 @@ class DCCTSettingsDetails(QWidget):
 
     def _updateReliableMeasLabels(self, pvname, value,  **kwargs):
         if value:
-            self.label_reliablemeas0.setText(value[0])
-            self.label_reliablemeas1.setText(value[1])
-            self.label_reliablemeas2.setText(value[2])
+            for idx, lbl in enumerate(self.relmeas_labels):
+                lbl.setText(value[idx])
 
     def _showMeasModeSettings(self, value):
         if value == _DCCTc.MeasModeSel.Normal:
