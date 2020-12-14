@@ -1,7 +1,5 @@
 """DCCT settings module."""
 
-import epics
-
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QLabel, QPushButton, QGroupBox, \
     QGridLayout, QHBoxLayout, QVBoxLayout, QFormLayout, QSpacerItem, \
@@ -11,6 +9,8 @@ import qtawesome as qta
 from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox, \
     PyDMPushButton
 from siriuspy.diagbeam.dcct.csdev import Const as _DCCTc, get_dcct_database
+from siriuspy.epics import PV as _PV
+
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets import PyDMStateButton, SiriusConnectionSignal, \
     SiriusLedState, SiriusLedAlert
@@ -278,7 +278,7 @@ class DCCTSettingsDetails(QWidget):
         lay_reliablemeas.setColumnStretch(0, 1)
         lay_reliablemeas.setColumnStretch(1, 10)
 
-        self.reliablemeas_channel = epics.PV(
+        self.reliablemeas_channel = _PV(
             self.dcct_prefix+'ReliableMeasLabels-Cte',
             callback=self._updateReliableMeasLabels)
 
