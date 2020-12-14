@@ -29,7 +29,7 @@ class CavityStatusDetails(SiriusDialog):
         lb_temp1.setStyleSheet(
             'font-weight:bold; qproperty-alignment:AlignCenter;')
         lay_temp1.addRow(lb_temp1)
-        lims = [25.0, 35.0] if self.section == 'SI' else [25.0, 40.0]
+        lims = self.chs['Cav Sts']['Temp']['Cells Limits']
         tooltip = 'Interlock limits: \nMin: ' + str(lims[0]) + \
             '°C, Max: '+str(lims[1])+'°C'
         for idx, cell in enumerate(self.chs['Cav Sts']['Temp']['Cells']):
@@ -48,7 +48,7 @@ class CavityStatusDetails(SiriusDialog):
             hb.addWidget(led)
             lay_temp1.addRow('Cell '+str(idx + 1)+': ', hb)
         ch_coup = self.chs['Cav Sts']['Temp']['Coupler'][0]
-        lims_coup = [25.0, 50.0] if self.section == 'SI' else [25.0, 35.0]
+        lims_coup = self.chs['Cav Sts']['Temp']['Coupler Limits']
         lb_coup = PyDMLabel(self, ch_coup)
         lb_coup.setStyleSheet('min-width:3.5em; max-width:3.5em;')
         lb_coup.showUnits = True

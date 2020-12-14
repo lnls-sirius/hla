@@ -9,12 +9,12 @@ from pydm.widgets import PyDMLineEdit, PyDMEnumComboBox, PyDMWaveformPlot, \
     PyDMLabel, PyDMSpinbox
 from siriushla.widgets import SiriusMainWindow, PyDMStateButton, PyDMLed, \
     SiriusLedAlert, SiriusLedState, PyDMLedMultiChannel, SiriusTimePlot, \
-    SiriusConnectionSignal
+    SiriusConnectionSignal, SiriusPushButton
 from siriushla.util import connect_window, get_appropriate_color
 from pyqtgraph import InfiniteLine, mkPen
 from .details import TransmLineStatusDetails, CavityStatusDetails, \
     LLRFInterlockDetails
-from .custom_widgets import RFEnblDsblButton, RFPushButton
+from .custom_widgets import RFEnblDsblButton
 from .util import SEC_2_CHANNELS
 
 
@@ -88,10 +88,6 @@ class RFMainControl(SiriusMainWindow):
             wid_pwrmon.addTab(wid_cw, 'CW')
 
         gbox_graphs = QGroupBox('Graphs', self)
-        gbox_graphs.setStyleSheet("""
-            #temp1_graph, #temp2_graph, #vacuum_graph{
-                min-width: 30em; min-height: 12em;
-        }""")
         gbox_graphs.setLayout(self._graphsLayout())
 
         lay = QGridLayout(cw)
@@ -166,7 +162,7 @@ class RFMainControl(SiriusMainWindow):
         hlay_tlsts.addWidget(self.pb_tldtls)
 
         # Reset Global
-        self.pb_globreset = RFPushButton(
+        self.pb_globreset = SiriusPushButton(
             label='', icon=qta.icon('fa5s.sync'),
             parent=self, init_channel=self.chs['Reset']['Global'])
         self.pb_globreset.setObjectName('pb_globreset')
@@ -174,7 +170,7 @@ class RFMainControl(SiriusMainWindow):
             '#pb_globreset{min-width:25px; max-width:25px; icon-size:20px;}')
 
         # Reset LLRF
-        self.pb_llrfreset = RFPushButton(
+        self.pb_llrfreset = SiriusPushButton(
             label='', icon=qta.icon('fa5s.sync'),
             parent=self, init_channel=self.chs['Reset']['LLRF'])
         self.pb_llrfreset.setObjectName('pb_llrfreset')
@@ -856,54 +852,60 @@ class RFMainControl(SiriusMainWindow):
         return lay
 
     def _graphsLayout(self):
-        # Cell and Coupler Temperatures
-        lb_temp1 = QLabel(
-            '<h3> • Cell and Coupler Temperatures [°C]</h3>', self)
-        lims = [25.0, 35.0] if self.section == 'SI' else [25.0, 40.0]
-        lims_coup = [25.0, 50.0] if self.section == 'SI' else [25.0, 35.0]
+        # Temperatures
+        self.temp_wid = QWidget()
+        self.temp_wid.setStyleSheet("""
+            #tempcell_graph, #tempcoup_graph, #tempcirc_graph{
+                min-width: 30em; min-height: 10.5em; max-height: 10.5em;}
+            QTabWidget::pane{
+                border-bottom: 2px solid gray;}
+        """)
+
+        lb_temp = QLabel('<h3>Temperatures [°C]</h3>', self)
+        self.temp_tab = QTabWidget(self)
+        self.temp_tab.setObjectName(self.section+'Tab')
+        self.temp_tab.setContentsMargins(0, 0, 0, 0)
+
+        lay_temp = QVBoxLayout(self.temp_wid)
+        lay_temp.setSpacing(4)
+        lay_temp.addWidget(lb_temp)
+        lay_temp.addWidget(self.temp_tab)
+        lay_temp.setStretch(0, 1)
+        lay_temp.setStretch(0, 10)
+
+        # Cavity
+        # # Cells
+        lb_tempcell = QLabel('<h3> • Cell</h3>', self)
+        lims = self.chs['Cav Sts']['Temp']['Cells Limits']
         comp_val = {'comp': 'wt', 'value': lims}
         ch2vals = {c[0]: comp_val
                    for c in self.chs['Cav Sts']['Temp']['Cells']}
-        ch2vals[self.chs['Cav Sts']['Temp']['Coupler'][0]] = {
-            'comp': 'wt', 'value': lims_coup}
-        self.led_temp1ok = PyDMLedMultiChannel(self, ch2vals)
-        hbox_temp1_state = QHBoxLayout()
-        hbox_temp1_state.addWidget(lb_temp1, alignment=Qt.AlignLeft)
-        hbox_temp1_state.addWidget(self.led_temp1ok, alignment=Qt.AlignRight)
+        self.led_tempcellok = PyDMLedMultiChannel(self, ch2vals)
+        hbox_tempcell_state = QHBoxLayout()
+        hbox_tempcell_state.addWidget(lb_tempcell, alignment=Qt.AlignLeft)
+        hbox_tempcell_state.addWidget(
+            self.led_tempcellok, alignment=Qt.AlignRight)
 
-        self.temp1_graph = SiriusTimePlot(self)
-        self.temp1_graph.setObjectName('temp1_graph')
-        self.temp1_graph.autoRangeX = True
-        self.temp1_graph.autoRangeY = True
-        self.temp1_graph.backgroundColor = QColor(255, 255, 255)
-        self.temp1_graph.showXGrid = True
-        self.temp1_graph.showYGrid = True
-        self.temp1_graph.timeSpan = 1800
-        self.temp1_graph.maxRedrawRate = 2
+        self.tempcell_graph = SiriusTimePlot(self)
+        self.tempcell_graph.setObjectName('tempcell_graph')
+        self.tempcell_graph.autoRangeX = True
+        self.tempcell_graph.autoRangeY = True
+        self.tempcell_graph.backgroundColor = QColor(255, 255, 255)
+        self.tempcell_graph.showXGrid = True
+        self.tempcell_graph.showYGrid = True
+        self.tempcell_graph.timeSpan = 1800
+        self.tempcell_graph.maxRedrawRate = 2
         hbox_cbs = QHBoxLayout()
-
-        self.temp1_graph.addYChannel(
-            y_channel=self.chs['Cav Sts']['Temp']['Coupler'][0],
-            color=self.chs['Cav Sts']['Temp']['Coupler'][1],
-            name='Coupler', lineStyle=Qt.SolidLine, lineWidth=1)
-        self.curves['Coupler'] = self.temp1_graph.curveAtIndex(0)
-        cb = QCheckBox('Coupler', self)
-        cb.setChecked(True)
-        cb.setObjectName('Coupler')
-        cb.setStyleSheet(
-            'color:'+self.chs['Cav Sts']['Temp']['Coupler'][1]+';')
-        cb.stateChanged.connect(self._handle_curves_visibility)
-        hbox_cbs.addWidget(cb)
 
         for idx in range(len(self.chs['Cav Sts']['Temp']['Cells'])):
             cid = 'Cell ' + str(idx + 1)
             ch = self.chs['Cav Sts']['Temp']['Cells'][idx][0]
             color = self.chs['Cav Sts']['Temp']['Cells'][idx][1]
 
-            self.temp1_graph.addYChannel(
+            self.tempcell_graph.addYChannel(
                 y_channel=ch, name=cid, color=color,
                 lineStyle=Qt.SolidLine, lineWidth=1)
-            self.curves[cid] = self.temp1_graph.curveAtIndex(idx + 1)
+            self.curves[cid] = self.tempcell_graph.curveAtIndex(idx)
 
             cb = QCheckBox(cid, self)
             cb.setChecked(True)
@@ -913,49 +915,104 @@ class RFMainControl(SiriusMainWindow):
             hbox_cbs.addWidget(cb)
 
         pen = mkPen(color='k', width=2, style=Qt.DashLine)
-        self.line_max1_lim = InfiniteLine(pos=lims[1], angle=0, pen=pen)
-        self.line_min1_lim = InfiniteLine(pos=lims[0], angle=0, pen=pen)
-        self.temp1_graph.addItem(self.line_max1_lim)
-        self.temp1_graph.addItem(self.line_min1_lim)
-        if self.section == 'SI':
-            self.line_maxcp_lim = InfiniteLine(
-                pos=lims_coup[1], angle=0, pen=pen)
-            self.temp1_graph.addItem(self.line_maxcp_lim)
+        self.line_cell_maxlim = InfiniteLine(pos=lims[1], angle=0, pen=pen)
+        self.line_cell_minlim = InfiniteLine(pos=lims[0], angle=0, pen=pen)
+        self.tempcell_graph.addItem(self.line_cell_maxlim)
+        self.tempcell_graph.addItem(self.line_cell_minlim)
 
-        # Circulator Temperatures
-        lb_temp2 = QLabel('<h3> • Circulator Temperatures [°C]</h3>', self)
-        self.led_temp2ok = PyDMLedMultiChannel(
-            self, {self.chs['TL Sts']['Circ TIn']: {'comp': 'wt',
-                                                    'value': [18.0, 25.0]},
-                   self.chs['TL Sts']['Circ TOut']: {'comp': 'wt',
-                                                     'value': [18.0, 25.0]}})
-        hbox_temp2_state = QHBoxLayout()
-        hbox_temp2_state.addWidget(lb_temp2, alignment=Qt.AlignLeft)
-        hbox_temp2_state.addWidget(self.led_temp2ok, alignment=Qt.AlignRight)
+        # # Coupler
+        lb_tempcoup = QLabel('<h3> • Coupler</h3>', self)
+        lims_coup = self.chs['Cav Sts']['Temp']['Coupler Limits']
+        self.led_tempcoupok = PyDMLedMultiChannel(
+            self, {self.chs['Cav Sts']['Temp']['Coupler'][0]: {
+                    'comp': 'wt', 'value': lims_coup}})
+        hbox_tempcoup_state = QHBoxLayout()
+        hbox_tempcoup_state.addWidget(lb_tempcoup, alignment=Qt.AlignLeft)
+        hbox_tempcoup_state.addWidget(
+            self.led_tempcoupok, alignment=Qt.AlignRight)
 
-        self.temp2_graph = SiriusTimePlot(self)
-        self.temp2_graph.setObjectName('temp2_graph')
-        self.temp2_graph.autoRangeX = True
-        self.temp2_graph.autoRangeY = True
-        self.temp2_graph.backgroundColor = QColor(255, 255, 255)
-        self.temp2_graph.showXGrid = True
-        self.temp2_graph.showYGrid = True
-        self.temp2_graph.timeSpan = 1800
-        self.temp2_graph.maxRedrawRate = 1
-        self.temp2_graph.addYChannel(
+        self.tempcoup_graph = SiriusTimePlot(self)
+        self.tempcoup_graph.setObjectName('tempcoup_graph')
+        self.tempcoup_graph.autoRangeX = True
+        self.tempcoup_graph.autoRangeY = True
+        self.tempcoup_graph.backgroundColor = QColor(255, 255, 255)
+        self.tempcoup_graph.showXGrid = True
+        self.tempcoup_graph.showYGrid = True
+        self.tempcoup_graph.timeSpan = 1800
+        self.tempcoup_graph.maxRedrawRate = 2
+
+        self.tempcoup_graph.addYChannel(
+            y_channel=self.chs['Cav Sts']['Temp']['Coupler'][0],
+            color=self.chs['Cav Sts']['Temp']['Coupler'][1],
+            name='Coupler', lineStyle=Qt.SolidLine, lineWidth=1)
+        self.curves['Coupler'] = self.tempcoup_graph.curveAtIndex(0)
+        self.line_coup_maxlim = InfiniteLine(
+            pos=lims_coup[1], angle=0, pen=pen)
+        self.line_coup_minlim = InfiniteLine(
+            pos=lims_coup[0], angle=0, pen=pen)
+        self.tempcoup_graph.addItem(self.line_coup_maxlim)
+        self.tempcoup_graph.addItem(self.line_coup_minlim)
+
+        self.cavtemp_wid = QWidget()
+        lay_cavtemp = QVBoxLayout(self.cavtemp_wid)
+        lay_cavtemp.setAlignment(Qt.AlignTop)
+        lay_cavtemp.setContentsMargins(0, 0, 0, 9)
+        lay_cavtemp.addLayout(hbox_tempcell_state)
+        lay_cavtemp.addWidget(self.tempcell_graph)
+        lay_cavtemp.addLayout(hbox_cbs)
+        lay_cavtemp.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        lay_cavtemp.addLayout(hbox_tempcoup_state)
+        lay_cavtemp.addWidget(self.tempcoup_graph)
+
+        self.temp_tab.addTab(self.cavtemp_wid, 'Cavity')
+
+        # Transm.Line Temperatures
+        lb_tempcirc = QLabel('<h3> • Circulator</h3>', self)
+        lims_circ = self.chs['TL Sts']['Circ Limits']
+        self.led_tempcircok = PyDMLedMultiChannel(
+            self, {self.chs['TL Sts']['Circ TIn']: {
+                    'comp': 'wt', 'value': lims_circ},
+                   self.chs['TL Sts']['Circ TOut']: {
+                    'comp': 'wt', 'value': lims_circ}})
+        hbox_tempcirc_state = QHBoxLayout()
+        hbox_tempcirc_state.addWidget(lb_tempcirc, alignment=Qt.AlignLeft)
+        hbox_tempcirc_state.addWidget(
+            self.led_tempcircok, alignment=Qt.AlignRight)
+
+        self.tempcirc_graph = SiriusTimePlot(self)
+        self.tempcirc_graph.setObjectName('tempcirc_graph')
+        self.tempcirc_graph.autoRangeX = True
+        self.tempcirc_graph.autoRangeY = True
+        self.tempcirc_graph.backgroundColor = QColor(255, 255, 255)
+        self.tempcirc_graph.showXGrid = True
+        self.tempcirc_graph.showYGrid = True
+        self.tempcirc_graph.timeSpan = 1800
+        self.tempcirc_graph.maxRedrawRate = 1
+        self.tempcirc_graph.addYChannel(
             y_channel=self.chs['TL Sts']['Circ TIn'], name='CTIn',
             color='magenta', lineStyle=Qt.SolidLine, lineWidth=1)
-        self.temp2_graph.addYChannel(
+        self.tempcirc_graph.addYChannel(
             y_channel=self.chs['TL Sts']['Circ TOut'], name='CTOut',
             color='darkRed', lineStyle=Qt.SolidLine, lineWidth=1)
 
-        self.line_max2_lim = InfiniteLine(pos=25.0, angle=0, pen=pen)
-        self.line_min2_lim = InfiniteLine(pos=18.0, angle=0, pen=pen)
-        self.temp2_graph.addItem(self.line_max2_lim)
-        self.temp2_graph.addItem(self.line_min2_lim)
+        self.line_circ_maxlim = InfiniteLine(
+            pos=lims_circ[1], angle=0, pen=pen)
+        self.line_circ_minlim = InfiniteLine(
+            pos=lims_circ[0], angle=0, pen=pen)
+        self.tempcirc_graph.addItem(self.line_circ_maxlim)
+        self.tempcirc_graph.addItem(self.line_circ_minlim)
+
+        self.trltemp_wid = QWidget()
+        lay_trltemp = QVBoxLayout(self.trltemp_wid)
+        lay_trltemp.setAlignment(Qt.AlignTop)
+        lay_trltemp.setContentsMargins(0, 0, 0, 9)
+        lay_trltemp.addLayout(hbox_tempcirc_state)
+        lay_trltemp.addWidget(self.tempcirc_graph)
+
+        self.temp_tab.addTab(self.trltemp_wid, 'Transm. Line')
 
         # Vacuum
-        lb_vacuum = QLabel('<h3> • Vacuum: Pressure [mBar]</h3>', self)
+        lb_vacuum = QLabel('<h3>Vacuum: Pressure [mBar]</h3>', self)
         self.led_condrun = PyDMLed(self)
         self.led_condrun.setToolTip('Conditioning acting')
         self.led_condrun.channel = (self.chs['Cav Sts']['Vac']['Cond'])
@@ -978,17 +1035,22 @@ class RFMainControl(SiriusMainWindow):
             y_channel=self.chs['Cav Sts']['Vac']['Cells'], name='Vacuum',
             color='black', lineStyle=Qt.SolidLine, lineWidth=1)
 
-        lay = QVBoxLayout()
-        lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
-        lay.addLayout(hbox_temp1_state)
-        lay.addWidget(self.temp1_graph)
-        lay.addLayout(hbox_cbs)
-        lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
-        lay.addLayout(hbox_temp2_state)
-        lay.addWidget(self.temp2_graph)
-        lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
-        lay.addLayout(hbox_vacuum_state)
-        lay.addWidget(self.vacuum_graph)
+        self.vac_wid = QWidget()
+        self.vac_wid.setStyleSheet("""
+            #vacuum_graph{
+                min-width: 30em; min-height: 10.5em; max-height: 10.5em;}
+        """)
+        lay_vac = QVBoxLayout(self.vac_wid)
+        lay_vac.setAlignment(Qt.AlignTop)
+        lay_vac.addLayout(hbox_vacuum_state)
+        lay_vac.addWidget(self.vacuum_graph)
+
+        lay = QGridLayout()
+        lay.setContentsMargins(0, 0, 0, 0)
+        lay.addWidget(self.temp_wid, 0, 0)
+        lay.addWidget(self.vac_wid, 1, 0)
+        lay.setRowStretch(0, 7)
+        lay.setRowStretch(1, 3)
         return lay
 
     def _create_vlay(self, widget1, widget2):

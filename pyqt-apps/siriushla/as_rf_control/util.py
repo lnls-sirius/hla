@@ -57,7 +57,9 @@ SEC_2_CHANNELS = {
                     ('BO-05D:RF-P5Cav:Cylin4T-Mon', 'magenta'),
                     ('BO-05D:RF-P5Cav:Cylin5T-Mon', 'darkCyan'),
                 ),
+                'Cells Limits': (25.0, 40.0),
                 'Coupler': ('BO-05D:RF-P5Cav:CoupT-Mon', 'black'),
+                'Coupler Limits': (25.0, 40.0),
                 'Discs': (
                     'BO-05D:RF-P5Cav:Disc1Tms-Mon',
                     'BO-05D:RF-P5Cav:Disc2Tms-Mon',
@@ -87,6 +89,7 @@ SEC_2_CHANNELS = {
             'Circ FlwRt': 'RA-TL:RF-Circulator-BO:FlwRt-Mon',
             'Load FlwRt': 'RA-TL:RF-Load-BO:FlwRt-Mon',
             'Circ Intlk': 'RA-TL:RF-Circulator-BO:IntlkOp-Mon',
+            'Circ Limits': (18.0, 25.0),
         },
         'SSA': {
             'Name': 'SSA',
@@ -202,7 +205,9 @@ SEC_2_CHANNELS = {
                     ('SI-02SB:RF-P7Cav:Cylin6T-Mon', 'darkCyan'),
                     ('SI-02SB:RF-P7Cav:Cylin7T-Mon', 'darkRed'),
                 ),
+                'Cells Limits': (25.0, 45.0),
                 'Coupler': ('SI-02SB:RF-P7Cav:CoupT-Mon', 'black'),
+                'Coupler Limits': (25.0, 55.0),
                 'Discs': (
                     'SI-02SB:RF-P7Cav:Disc1Tms-Mon',
                     'SI-02SB:RF-P7Cav:Disc2Tms-Mon',
@@ -235,6 +240,7 @@ SEC_2_CHANNELS = {
             'Circ FlwRt': 'RA-TL:RF-Circulator-SIA:FlwRt-Mon',
             'Load FlwRt': 'RA-TL:RF-Load-SIA:FlwRt-Mon',
             'Circ Intlk': 'RA-TL:RF-Circulator-SIA:IntlkOp-Mon',
+            'Circ Limits': (18.0, 25.0),
         },
         'SSA': {
             '1': {

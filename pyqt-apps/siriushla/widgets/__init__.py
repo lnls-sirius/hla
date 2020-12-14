@@ -22,4 +22,5 @@ from .enum_combo_box import SiriusEnumComboBox
 from .frame import SiriusFrame
 from .process_image import SiriusProcessImage
 from .detachable_tabwidget import DetachableTabWidget
+from .pushbutton import SiriusPushButton
 from .waveformtable import SiriusWaveformTable

@@ -4,11 +4,11 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, \
     QGroupBox
 import qtawesome as qta
-from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMPushButton
+from pydm.widgets import PyDMLabel, PyDMSpinbox
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 
-from ..widgets import SiriusFrame, SiriusSpinbox
+from ..widgets import SiriusFrame, SiriusSpinbox, SiriusPushButton
 
 
 class BbBTimingWidget(QWidget):
@@ -49,7 +49,7 @@ class BbBTimingWidget(QWidget):
 
         # Timing Control
         ld_clkrst = QLabel('Clock Reset', self)
-        pb_clkrst = PyDMPushButton(
+        pb_clkrst = SiriusPushButton(
             self, init_channel=self.dev_pref+':CLKRST', pressValue=1)
         pb_clkrst.setText('Reset')
         pb_clkrst.setToolTip('Reset Clock')
