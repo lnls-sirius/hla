@@ -7,7 +7,7 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
     QGridLayout, QVBoxLayout, QHBoxLayout, QFormLayout, QTabWidget, \
     QSizePolicy as QSzPlcy, QCheckBox, QHeaderView, QAbstractItemView, \
-    QSpacerItem
+    QScrollArea, QFrame
 from qtpy.QtGui import QColor
 import qtawesome as qta
 
@@ -1489,18 +1489,25 @@ class PSParamsWidget(SiriusDialog):
             'PyDMLabel{qproperty-alignment: AlignVCenter;}')
 
     def _setupUi(self):
-        lay = QGridLayout(self)
-        # lay.setSpacing(15)
+        lay = QVBoxLayout(self)
+        lay.setSpacing(15)
 
         text_psname = QLabel('<h3>' + self._psname + '</h3>', self,
                              alignment=Qt.AlignCenter)
-        lay.addWidget(text_psname, 0, 0, 1, 11)
+        lay.addWidget(text_psname)
 
-        lay.addItem(QSpacerItem(1, 10, QSzPlcy.Fixed, QSzPlcy.Fixed), 1, 0)
-        lay.addItem(QSpacerItem(10, 1, QSzPlcy.Fixed, QSzPlcy.Fixed), 2, 2)
-        lay.addItem(QSpacerItem(10, 1, QSzPlcy.Fixed, QSzPlcy.Fixed), 2, 5)
-        lay.addItem(QSpacerItem(10, 1, QSzPlcy.Fixed, QSzPlcy.Fixed), 2, 8)
-
+        scr_area = QScrollArea(self)
+        scr_area.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        scr_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        scr_area.setWidgetResizable(True)
+        scr_area.setFrameShape(QFrame.NoFrame)
+        scr_area_wid = QWidget()
+        scr_area_wid.setObjectName('scr_ar_wid')
+        scr_area_wid.setStyleSheet(
+            '#scr_ar_wid {background-color: transparent;}')
+        scr_area.setWidget(scr_area_wid)
+        flay = QFormLayout(scr_area_wid)
+        flay.setLabelAlignment(Qt.AlignRight | Qt.AlignVCenter)
         for idx, param in enumerate(self.params):
             pvname = self._prefixed_psname + ':' + param
             text = param.split('-')[0].split('Param')[1]
@@ -1509,10 +1516,8 @@ class PSParamsWidget(SiriusDialog):
                 text += ' [us]'
             else:
                 wid = self._create_label_wid(pvname)
-            lbl = QLabel(text, self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-            row = (idx % (len(self.params)/4))+2
-            lay.addWidget(lbl, row, (idx // (len(self.params)/4))*2)
-            lay.addWidget(wid, row, (idx // (len(self.params)/4))*2 + 1)
+            flay.addRow(text, wid)
+        lay.addWidget(scr_area)
 
     def _create_label_wid(self, pvname):
         lbl = CustomLabel(self)
