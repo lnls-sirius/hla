@@ -1575,7 +1575,8 @@ class CustomLabel(PyDMLabel):
         elif self.enum_strings is not None and \
                 isinstance(new_value, _np.ndarray):
             text = '['+', '.join([self.enum_strings[int(idx)]
-                                 for idx in new_value])+']'
+                                  if idx < len(self.enum_strings) else 'UNDEF'
+                                  for idx in new_value])+']'
             self.setText(text)
             return
         if isinstance(new_value, (int, float)):
