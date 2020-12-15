@@ -1528,7 +1528,7 @@ class PSParamsWidget(SiriusDialog):
         elif 'SigGenType' in pvname:
             lbl.enum_strings = _PSet.CYCLE_TYPES
         elif 'WfmRefSyncMode' in pvname:
-            lbl.enum_strins = _PSet.WFMREF_SYNCMODE
+            lbl.enum_strings = _PSet.WFMREF_SYNCMODE
         else:
             lbl.showUnits = True
         lbl.channel = pvname
@@ -1574,7 +1574,7 @@ class CustomLabel(PyDMLabel):
             return
         elif self.enum_strings is not None and \
                 isinstance(new_value, _np.ndarray):
-            text = '['+','.join([self.enum_strings[int(idx)]
+            text = '['+', '.join([self.enum_strings[int(idx)]
                                  for idx in new_value])+']'
             self.setText(text)
             return
