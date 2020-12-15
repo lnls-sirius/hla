@@ -26,12 +26,14 @@ class BaseTask(QThread):
     itemDone = Signal(str, bool)
     completed = Signal()
 
-    def __init__(self, devices, state=None, is_test=False, parent=None):
+    def __init__(self, devices, state=None, is_test=False, value=None,
+                 parent=None):
         """Constructor."""
         super().__init__(parent)
         self._devices = devices
         self._state = state
         self._is_test = is_test
+        self._value = value
         self._quit_task = False
 
     def size(self):
@@ -303,7 +305,7 @@ class SetCurrent(BaseTask):
 
     def function(self):
         """Set PS Current."""
-        self._set(method='set_current', test=self._is_test)
+        self._set(method='set_current', test=self._is_test, value=self._value)
 
 
 class CheckCurrent(BaseTask):
@@ -318,7 +320,8 @@ class CheckCurrent(BaseTask):
             timeout = 2.1*TIMEOUT_CHECK
         self._check(method='check_current',
                     timeout=timeout,
-                    test=self._is_test)
+                    test=self._is_test,
+                    value=self._value)
 
 
 class SetVoltage(BaseTask):

@@ -6,7 +6,7 @@ from functools import partial as _part
 from qtpy.QtCore import Qt, QTimer
 from qtpy.QtWidgets import QFrame, QGridLayout, QVBoxLayout, QHBoxLayout, \
     QSizePolicy, QGroupBox, QPushButton, QListWidget, QLabel, QApplication, \
-    QMessageBox, QTabWidget, QWidget
+    QMessageBox, QTabWidget, QWidget, QInputDialog
 import qtawesome as qta
 
 from siriuspy.search import PSSearch
@@ -373,33 +373,47 @@ class PSTestWindow(SiriusMainWindow):
 
         # menu
         self.menu = self.menuBar()
+
         self.act_cycle = self.menu.addAction('Open Cycle Window')
         connect_newprocess(
             self.act_cycle, 'sirius-hla-as-ps-cycle.py', parent=self)
+
         self.aux_comm = self.menu.addMenu('Auxiliary commands')
 
-        self.act_turnoff_ps = self.aux_comm.addAction('Turn PS Off')
+        # # PS
+        self.ps_menu = self.aux_comm.addMenu('PS')
+
+        self.act_turnoff_ps = self.ps_menu.addAction('Turn PS Off')
         self.act_turnoff_ps.triggered.connect(_part(self._set_lastcomm, 'PS'))
         self.act_turnoff_ps.triggered.connect(
             _part(self._set_check_pwrstate, 'PS', 'off', True))
 
-        self.act_turnoff_dclink = self.aux_comm.addAction('Turn DCLinks Off')
+        self.act_turnoff_dclink = self.ps_menu.addAction('Turn DCLinks Off')
         self.act_turnoff_dclink.triggered.connect(
             _part(self._set_lastcomm, 'PS'))
         self.act_turnoff_dclink.triggered.connect(
             _part(self._set_check_pwrstate_dclinks, 'off'))
 
-        self.act_turnoff_pu = self.aux_comm.addAction('Turn PU Off')
+        self.act_setcurrent_ps = self.ps_menu.addAction('Set PS Current')
+        self.act_setcurrent_ps.triggered.connect(
+            _part(self._set_lastcomm, 'PS'))
+        self.act_setcurrent_ps.triggered.connect(self._set_check_current)
+
+        # # PU
+        self.pu_menu = self.aux_comm.addMenu('PU')
+
+        self.act_turnoff_pu = self.pu_menu.addAction('Turn PU Off')
         self.act_turnoff_pu.triggered.connect(
             _part(self._set_lastcomm, 'PU'))
         self.act_turnoff_pu.triggered.connect(
             _part(self._set_check_pwrstate, 'PU', 'off', True))
 
-        self.act_dsblpulse_pu = self.aux_comm.addAction('Disable PU Pulse')
+        self.act_dsblpulse_pu = self.pu_menu.addAction('Disable PU Pulse')
         self.act_dsblpulse_pu.triggered.connect(
             _part(self._set_lastcomm, 'PU'))
         self.act_dsblpulse_pu.triggered.connect(
             _part(self._set_check_pulse, 'off'))
+
 
         # layout
         lay = QGridLayout()
@@ -529,18 +543,18 @@ class PSTestWindow(SiriusMainWindow):
         else:
             if dev_type == 'PS':
                 devices = self._get_selected_ps()
-                devices_wth_sifam = list(
-                    set(devices) - set(self._si_fam_psnames))
             elif dev_type == 'PU':
                 devices = self._get_selected_pu()
         if not devices:
             return
 
-        task0 = CreateTesters(devices, parent=self)
-        if state == 'on':
-            task1 = SetPwrState(devices_wth_sifam, state=state, parent=self)
+        if state == 'on' and dev_type == 'PS':
+            dev2ctrl = list(set(devices) - set(self._si_fam_psnames))
         else:
-            task1 = SetPwrState(devices, state=state, parent=self)
+            dev2ctrl = devices
+
+        task0 = CreateTesters(devices, parent=self)
+        task1 = SetPwrState(dev2ctrl, state=state, parent=self)
         task2 = CheckPwrState(devices, state=state, is_test=True, parent=self)
         task2.itemDone.connect(_part(self._log, show=show))
         tasks = [task0, task1, task2]
@@ -877,6 +891,31 @@ class PSTestWindow(SiriusMainWindow):
 
         labels = ['Connecting to devices...',
                   'Setting current to zero...',
+                  'Checking current value...']
+
+        dlg = ProgressDialog(labels, tasks, self)
+        dlg.exec_()
+
+    def _set_check_current(self):
+        self.ok_ps.clear()
+        self.nok_ps.clear()
+        devices = self._get_selected_ps()
+        if not devices:
+            return
+
+        value, ok = QInputDialog.getDouble(
+            self, "Setpoint Input", "Insert current setpoint: ")
+        if not ok:
+            return
+
+        task0 = CreateTesters(devices, parent=self)
+        task1 = SetCurrent(devices, value=value, parent=self)
+        task2 = CheckCurrent(devices, value=value, parent=self)
+        task2.itemDone.connect(self._log)
+        tasks = [task0, task1, task2]
+
+        labels = ['Connecting to devices...',
+                  'Setting current...',
                   'Checking current value...']
 
         dlg = ProgressDialog(labels, tasks, self)
