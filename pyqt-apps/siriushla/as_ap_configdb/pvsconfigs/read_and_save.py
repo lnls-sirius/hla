@@ -130,7 +130,8 @@ class ReadAndSaveConfig2ServerWindow(SiriusMainWindow):
         tbl_data = self._table.model().model_data
         # Get PVs
         vp = _VACA_PREFIX
-        pvs = {tbl_data[i][0]: i for i in range(len(tbl_data))}
+        pvs = {data[0]: i for i, data in enumerate(tbl_data)}
+        defvals = [data[1] for data in tbl_data]
         if len(pvs) != len(tbl_data):
             QMessageBox.warning(
                 self, 'Error', 'Configuration has duplicated values')
@@ -138,7 +139,7 @@ class ReadAndSaveConfig2ServerWindow(SiriusMainWindow):
         # Create thread to read PVs
         pvsl = list(pvs)
         connt = EpicsConnector(pvsl, self._wrapper, parent=self)
-        task = EpicsGetter(pvsl, self._wrapper, parent=self)
+        task = EpicsGetter(pvsl, defvals, self._wrapper, parent=self)
         task.itemRead.connect(
             lambda pv, value: self._fill_value(pvs[pv.replace(vp, '')], value))
         task.itemNotRead.connect(failed_items.append)
