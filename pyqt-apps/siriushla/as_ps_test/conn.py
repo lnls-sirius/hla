@@ -50,13 +50,14 @@ class _TesterBase:
         """Return wheter PVs are connected."""
         for pv in self._pvs.values():
             if not pv.connected:
-                # print(pv.pvname)
+                # print(self.device, pv.pvname)
                 return False
         return True
 
     def wait_for_connection(self, timeout=0.5):
         for pv in self._pvs.values():
             if not pv.wait_for_connection(timeout):
+                # print(self.device, pv.pvname)
                 return False
         return True
 
@@ -117,16 +118,18 @@ class _TesterPSBase(_TesterBase):
 class TesterDCLinkFBP(_TesterPSBase):
     """FBP DCLink tester."""
 
-    properties = ['Reset-Cmd', 'IntlkSoft-Mon', 'IntlkHard-Mon',
-                  'OpMode-Sel', 'OpMode-Sts',
-                  'PwrState-Sel', 'PwrState-Sts',
-                  'CtrlLoop-Sel', 'CtrlLoop-Sts',
-                  'Voltage-SP', 'Voltage-Mon']
-
     def __init__(self, device):
         """Init."""
         super().__init__(device)
-        for ppty in TesterDCLinkFBP.properties:
+
+        self.properties = [
+            'Reset-Cmd', 'IntlkSoft-Mon', 'IntlkHard-Mon',
+            'OpMode-Sel', 'OpMode-Sts',
+            'PwrState-Sel', 'PwrState-Sts',
+            'CtrlLoop-Sel', 'CtrlLoop-Sts',
+            'Voltage-SP', 'Voltage-Mon']
+
+        for ppty in self.properties:
             self._pvs[ppty] = _PV(
                 VACA_PREFIX + device + ':' + ppty,
                 connection_timeout=TIMEOUT_CONN)
@@ -166,21 +169,21 @@ class TesterDCLinkFBP(_TesterPSBase):
 class TesterDCLink(_TesterPSBase):
     """DCLink tester."""
 
-    properties = ['Reset-Cmd',
-                  'OpMode-Sel', 'OpMode-Sts',
-                  'PwrState-Sel', 'PwrState-Sts',
-                  'CtrlLoop-Sel', 'CtrlLoop-Sts',
-                  'CapacitorBankVoltage-SP', 'CapacitorBankVoltageRef-Mon',
-                  'CapacitorBankVoltage-Mon']
-
     def __init__(self, device):
         """Init."""
         super().__init__(device)
 
+        self.properties = [
+            'Reset-Cmd',
+            'OpMode-Sel', 'OpMode-Sts',
+            'PwrState-Sel', 'PwrState-Sts',
+            'CtrlLoop-Sel', 'CtrlLoop-Sts',
+            'CapacitorBankVoltage-SP', 'CapacitorBankVoltageRef-Mon',
+            'CapacitorBankVoltage-Mon']
         self._intlk_pvs = get_ps_interlocks(psname=self.device)
-        TesterDCLink.properties.extend(self._intlk_pvs)
+        self.properties.extend(self._intlk_pvs)
 
-        for ppty in TesterDCLink.properties:
+        for ppty in self.properties:
             self._pvs[ppty] = _PV(
                 VACA_PREFIX + device + ':' + ppty,
                 connection_timeout=TIMEOUT_CONN)
@@ -223,17 +226,19 @@ class TesterDCLink(_TesterPSBase):
 class TesterDCLinkRegatron(_TesterBase):
     """DCLink tester."""
 
-    properties = ['Reset-Cmd', 'GenIntlk-Mon', 'GenWarn-Mon', 'OpMode-Sts',
-                  'PwrState-Sel', 'PwrState-Sts',
-                  'Voltage-SP', 'VoltageRef-Mon', 'Voltage-Mon']
-
     _OPMODE_STS_OFF = 4  # READY
     _OPMODE_STS_ON = 8  # RUN
 
     def __init__(self, device):
         """Init."""
         super().__init__(device)
-        for ppty in TesterDCLinkRegatron.properties:
+
+        self.properties = [
+            'Reset-Cmd', 'GenIntlk-Mon', 'GenWarn-Mon', 'OpMode-Sts',
+            'PwrState-Sel', 'PwrState-Sts',
+            'Voltage-SP', 'VoltageRef-Mon', 'Voltage-Mon']
+
+        for ppty in self.properties:
             self._pvs[ppty] = _PV(
                 VACA_PREFIX + device + ':' + ppty,
                 connection_timeout=TIMEOUT_CONN)
@@ -287,18 +292,21 @@ class TesterDCLinkRegatron(_TesterBase):
 class TesterPS(_TesterPSBase):
     """PS tester."""
 
-    properties = ['Reset-Cmd',
-                  'OpMode-Sel', 'OpMode-Sts',
-                  'PwrState-Sel', 'PwrState-Sts',
-                  'CtrlLoop-Sel', 'CtrlLoop-Sts',
-                  'Current-SP', 'CurrentRef-Mon', 'Current-Mon']
-
     def __init__(self, device):
         """Init."""
         super().__init__(device)
 
+        self.properties = [
+            'Reset-Cmd',
+            'OpMode-Sel', 'OpMode-Sts',
+            'PwrState-Sel', 'PwrState-Sts',
+            'CtrlLoop-Sel', 'CtrlLoop-Sts',
+            'Current-SP', 'CurrentRef-Mon', 'Current-Mon']
         self._intlk_pvs = get_ps_interlocks(psname=self.device)
         self.properties.extend(self._intlk_pvs)
+
+        if PSSearch.conv_psname_2_psmodel(self.device) == 'FBP':
+            self.properties.extend(['SOFBMode-Sel', 'SOFBMode-Sts'])
 
         for ppty in self.properties:
             self._pvs[ppty] = _PV(
@@ -350,13 +358,6 @@ class TesterPS(_TesterPSBase):
 
 class TesterPSFBP(TesterPS):
     """PS FBP Tester."""
-
-    properties = ['Reset-Cmd',
-                  'OpMode-Sel', 'OpMode-Sts',
-                  'PwrState-Sel', 'PwrState-Sts',
-                  'CtrlLoop-Sel', 'CtrlLoop-Sts',
-                  'Current-SP', 'CurrentRef-Mon', 'Current-Mon',
-                  'SOFBMode-Sel', 'SOFBMode-Sts']
 
     def set_sofbmode(self, state='on'):
         """Set SOFBMode."""
@@ -449,11 +450,20 @@ class TesterPSLinac(_TesterBase):
 class _TesterPUBase(_TesterBase):
     """Tester PU base."""
 
-    properties = []
-
     def __init__(self, device):
         """Init."""
         super().__init__(device)
+
+        self.properties = [
+            'Reset-Cmd',
+            'Intlk1-Mon', 'Intlk2-Mon', 'Intlk3-Mon', 'Intlk4-Mon',
+            'Intlk5-Mon', 'Intlk6-Mon', 'Intlk7-Mon',
+            'PwrState-Sel', 'PwrState-Sts',
+            'Pulse-Sel', 'Pulse-Sts',
+            'Voltage-SP', 'Voltage-RB', 'Voltage-Mon']
+        if 'Kckr' in self.device:
+            self.properties.append('Intlk8-Mon')
+
         for ppty in self.properties:
             self._pvs[ppty] = _PV(
                 VACA_PREFIX + device + ':' + ppty,
@@ -549,14 +559,6 @@ class _TesterPUBase(_TesterBase):
 class TesterPUKckr(_TesterPUBase):
     """Kicker tester."""
 
-    properties = [
-        'Reset-Cmd',
-        'Intlk1-Mon', 'Intlk2-Mon', 'Intlk3-Mon', 'Intlk4-Mon',
-        'Intlk5-Mon', 'Intlk6-Mon', 'Intlk7-Mon', 'Intlk8-Mon',
-        'PwrState-Sel', 'PwrState-Sts',
-        'Pulse-Sel', 'Pulse-Sts',
-        'Voltage-SP', 'Voltage-RB', 'Voltage-Mon']
-
     def check_intlk(self):
         """Check interlocks."""
         status = (self._pvs['Intlk1-Mon'].value == 1)
@@ -572,14 +574,6 @@ class TesterPUKckr(_TesterPUBase):
 
 class TesterPUSept(_TesterPUBase):
     """Septum tester."""
-
-    properties = [
-        'Reset-Cmd',
-        'Intlk1-Mon', 'Intlk2-Mon', 'Intlk3-Mon', 'Intlk4-Mon',
-        'Intlk5-Mon', 'Intlk6-Mon', 'Intlk7-Mon',
-        'PwrState-Sel', 'PwrState-Sts',
-        'Pulse-Sel', 'Pulse-Sts',
-        'Voltage-SP', 'Voltage-RB', 'Voltage-Mon']
 
     def check_intlk(self):
         """Check interlocks."""
