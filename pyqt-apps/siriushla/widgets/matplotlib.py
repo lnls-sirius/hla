@@ -1,15 +1,16 @@
 """Derive matplotlib FigureCanvas to resize labels in ZoomIn/ZoomOut."""
 from qtpy.QtCore import QEvent
-from qtpy.QtWidgets import QApplication, QSizePolicy
+from qtpy.QtWidgets import QApplication, QSizePolicy, QWidget, QVBoxLayout
 from matplotlib.backends.backend_qt5agg import \
-    FigureCanvasQTAgg as FigureCanvas
+    FigureCanvasQTAgg as FigureCanvas, NavigationToolbar2QT
 from matplotlib.figure import Figure
 
 
-class MatplotlibWidget(FigureCanvas):
-    """MatplotlibWidget class."""
+class MatplotlibCanvas(FigureCanvas):
+    """MatplotlibCanvas class."""
 
     def __init__(self, figure=None, parent=None):
+        """."""
         figure = figure or Figure()
         super().__init__(figure)
         self.setParent(parent)
@@ -41,3 +42,16 @@ class MatplotlibWidget(FigureCanvas):
                 axes[0].legend(handles, labels, fontsize=fontsize)
 
             self.figure.canvas.draw()
+
+
+class MatplotlibWidget(QWidget):
+    """MatplotlibWidget class."""
+
+    def __init__(self, figure=None, parent=None):
+        """."""
+        super().__init__(parent)
+        self.setLayout(QVBoxLayout())
+        self.canvas = MatplotlibCanvas(figure, self)
+        self.navtool = NavigationToolbar2QT(self.canvas, self)
+        self.layout().addWidget(self.navtool)
+        self.layout().addWidget(self.canvas)
