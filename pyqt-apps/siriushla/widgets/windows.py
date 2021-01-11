@@ -8,6 +8,8 @@ from pydm.connection_inspector import ConnectionInspector
 
 from ..util import get_package_version
 
+from .matplotlib import MatplotlibCanvas
+
 
 def _create_siriuswindow(qt_type):
     """Create a _SiriusWindow that inherits from qt_type."""
@@ -68,7 +70,7 @@ def _create_siriuswindow(qt_type):
             is_graph = False
             widgets = []
             while wid and not is_graph:
-                is_graph |= isinstance(wid, QGraphicsView)
+                is_graph |= isinstance(wid, (QGraphicsView, MatplotlibCanvas))
                 wid.setAttribute(Qt.WA_TransparentForMouseEvents, True)
                 widgets.append(wid)
                 wid = self.app.widgetAt(pos)
