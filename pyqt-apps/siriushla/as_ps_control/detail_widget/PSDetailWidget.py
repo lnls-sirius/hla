@@ -11,6 +11,7 @@ from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
 from qtpy.QtGui import QColor
 import qtawesome as qta
 
+from siriuspy.namesys import SiriusPVName
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.search import PSSearch
 from siriuspy.pwrsupply.csdev import get_ps_propty_database, get_ps_modules, \
@@ -24,6 +25,7 @@ from siriushla.widgets import PyDMStateButton, PyDMLinEditScrollbar, \
     SiriusConnectionSignal, SiriusLedState, SiriusLedAlert, \
     PyDMLedMultiChannel, SiriusDialog, SiriusWaveformTable
 from .InterlockWindow import InterlockWindow, LIInterlockWindow
+from .custom_widgets import LISpectIntlkLed
 
 
 class PSDetailWidget(QWidget):
@@ -122,7 +124,7 @@ class PSDetailWidget(QWidget):
         """Class constructor."""
         super(PSDetailWidget, self).__init__(parent)
         self._VACA_PREFIX = VACA_PREFIX
-        self._psname = psname
+        self._psname = SiriusPVName(psname)
         self._psmodel = PSSearch.conv_psname_2_psmodel(psname)
         self._pstype = PSSearch.conv_psname_2_pstype(self._psname)
         self._metric = self._getElementMetric()
@@ -1073,9 +1075,12 @@ class LIPSDetailWidget(PSDetailWidget):
             '#intlk_bt{min-width:25px; max-width:25px; icon-size:20px;}')
         util.connect_window(self.intlk_bt, LIInterlockWindow, self,
                             **{'devname': self._psname})
-        ch2vals = {self._prefixed_psname+':StatusIntlk-Mon': {
-            'value': _PS_LI_INTLK, 'comp': 'lt'}}
-        self.intlk_led = PyDMLedMultiChannel(self, channels2values=ch2vals)
+        if self._psname.dev == 'Spect':
+            self.intlk_led = LISpectIntlkLed(self)
+        else:
+            ch2vals = {self._prefixed_psname+':StatusIntlk-Mon': {
+                'value': _PS_LI_INTLK, 'comp': 'lt'}}
+            self.intlk_led = PyDMLedMultiChannel(self, channels2values=ch2vals)
 
         layout = QGridLayout()
         layout.setAlignment(Qt.AlignCenter)

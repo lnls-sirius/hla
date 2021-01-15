@@ -14,6 +14,7 @@ from siriuspy.pwrsupply.csdev import PS_LI_INTLK_THRS as _PS_LI_INTLK
 from siriushla.widgets import PyDMStateButton, SiriusLedState, \
     SiriusLedAlert, PyDMLinEditScrollbar, PyDMLedMultiChannel, \
     SiriusEnumComboBox
+from .detail_widget.custom_widgets import LISpectIntlkLed
 
 
 Dipole = re.compile("^.*:PS-B.*$")
@@ -465,9 +466,13 @@ class SummaryWidget(QWidget):
                     self, channels2values={ch: 1 for ch in self._intlk})
                 self.intlk_wid.layout().addWidget(self.intlk_led)
             elif self._is_linac:
-                self.intlk_led = PyDMLedMultiChannel(
-                    self, channels2values={
-                        self._intlk: {'value': _PS_LI_INTLK, 'comp': 'lt'}})
+                if IsLinacSpect.match(self.devname):
+                    self.intlk_led = LISpectIntlkLed(self)
+                else:
+                    self.intlk_led = PyDMLedMultiChannel(
+                        self, channels2values={
+                            self._intlk: {'value': _PS_LI_INTLK,
+                                          'comp': 'lt'}})
                 self.intlk_wid.layout().addWidget(self.intlk_led)
             elif self._is_regatron:
                 if not self._is_reg_slave:
