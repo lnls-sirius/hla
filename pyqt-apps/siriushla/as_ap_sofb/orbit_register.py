@@ -211,7 +211,7 @@ class OrbitRegister(QWidget):
         act = menu.addAction('&Edit Orbit')
         act.setIcon(qta.icon('mdi.table-edit'))
         act.triggered.connect(self._edit_orbit)
-        act = menu.addAction('&Create Bump')
+        act = menu.addAction('Create &Bump')
         act.setIcon(qta.icon(
             'mdi.chart-bell-curve', scale_factor=1.2, offset=(-0.2, 0.2)))
         act.triggered.connect(self._create_bump)
@@ -391,7 +391,8 @@ class OrbitRegister(QWidget):
         row = 0
         lay.addWidget(QLabel('Base Orbit ', wid), row, 0)
         orbcombo = QComboBox(wid)
-        orbcombo.addItems(['bba_orb', 'Register', 'other...'])
+        orbcombo.addItems(['Register', 'ref_orb', 'bba_orb', 'other...'])
+        orbcombo.setCurrentIndex(1)
         orbcombo.activated.connect(_add_entry)
         lay.addWidget(orbcombo, row, 1)
 
@@ -458,7 +459,7 @@ class OrbitRegister(QWidget):
 
         index = orbcombo.currentIndex()
         confname = orbcombo.itemText(index)
-        if index == 1:
+        if not index:
             orbx = _np.array(self.orbx)
             orby = _np.array(self.orby)
         elif index == orbcombo.count()-1:
