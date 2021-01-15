@@ -203,9 +203,7 @@ class DipoleRamp(QWidget):
         self.m_inj, = self.ax.plot([0], [0], marker='o', c='#787878')
         self.m_ej, = self.ax.plot([0], [0], marker='o', c='#787878')
 
-        self.toolbar = NavigationToolbar(self.graph, self)
-        self.toolbar.setObjectName('toolbar')
-        self.toolbar.setStyleSheet("""
+        self.graph.setStyleSheet("""
             #toolbar{min-height:2em; max-height:2em;}""")
 
         lay = QVBoxLayout()
@@ -213,7 +211,6 @@ class DipoleRamp(QWidget):
         lay.setSpacing(0)
         lay.setAlignment(Qt.AlignTop)
         lay.addWidget(self.graph)
-        lay.addWidget(self.toolbar)
         self.graphview.setLayout(lay)
 
     def _setupPSDelayAndWfmNrPoints(self):
@@ -915,16 +912,13 @@ class MultipolesRamp(QWidget):
         self.m_inj, = self.ax.plot([0], [0], ls='', marker='o', c='#787878')
         self.m_ej, = self.ax.plot([0], [0], ls='', marker='o', c='#787878')
 
-        self.toolbar = NavigationToolbar(self.graph, self)
-        self.toolbar.setObjectName('toolbar')
-        self.toolbar.setStyleSheet("""
+        self.graph.setStyleSheet("""
             #toolbar{min-height:2em; max-height:2em;}""")
 
         lay = QGridLayout()
         lay.setContentsMargins(0, 0, 0, 0)
         lay.setSpacing(0)
         lay.addWidget(self.graph, 0, 0, 1, 2)
-        lay.addWidget(self.toolbar, 1, 0)
         self.graphview.setLayout(lay)
 
     def _setupTable(self):
@@ -1569,9 +1563,7 @@ class RFRamp(QWidget):
         self.ax2.set_ylabel('Φs [°]')
         self.line2, = self.ax2.plot([0], [0], '-', c='#990033')
 
-        self.toolbar = NavigationToolbar(self.graph, self)
-        self.toolbar.setObjectName('toolbar')
-        self.toolbar.setStyleSheet("""
+        self.graph.setStyleSheet("""
             #toolbar{min-height:2em; max-height:2em;}""")
 
         lay = QVBoxLayout()
@@ -1579,7 +1571,6 @@ class RFRamp(QWidget):
         lay.setSpacing(0)
         lay.setAlignment(Qt.AlignTop)
         lay.addWidget(self.graph)
-        lay.addWidget(self.toolbar)
         self.graphview.setLayout(lay)
 
     def _setupRFDelay(self):
