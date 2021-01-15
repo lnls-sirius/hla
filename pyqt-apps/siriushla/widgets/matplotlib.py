@@ -51,6 +51,7 @@ class MatplotlibWidget(QWidget):
         """."""
         super().__init__(parent)
         self.setLayout(QVBoxLayout())
+        self.figure = figure
         self.canvas = MatplotlibCanvas(figure, self)
         self.navtool = NavigationToolbar2QT(self.canvas, self)
         self.layout().addWidget(self.navtool)
