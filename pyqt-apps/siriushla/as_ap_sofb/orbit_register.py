@@ -367,7 +367,10 @@ class OrbitRegister(QWidget):
         plusy = float(addy.text())
         orbx = mltx * orbx + plusx
         orby = mlty * orby + plusy
-        self._update_and_emit('Orbit Edited', orbx, orby)
+        txt = ''
+        txt += f'multx = {mltx:5.1f} offx = {plusx:7.1f}\n'
+        txt += f'multy = {mlty:5.1f} offy = {plusy:7.1f}'
+        self._update_and_emit(txt, orbx, orby)
 
     def _create_bump(self):
 
