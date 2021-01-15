@@ -152,7 +152,8 @@ class PSDetailWidget(QWidget):
         if self._psname in self._auxdev2mod:
             self._auxdev = ['', 'a', 'b', 'c']
 
-        self._prefixed_psname = self._VACA_PREFIX + self._psname
+        self._prefixed_psname = self._psname.substitute(
+            prefix=self._VACA_PREFIX)
 
         self.setObjectName(parent.objectName())
 
@@ -1074,7 +1075,7 @@ class LIPSDetailWidget(PSDetailWidget):
         self.intlk_bt.setStyleSheet(
             '#intlk_bt{min-width:25px; max-width:25px; icon-size:20px;}')
         util.connect_window(self.intlk_bt, LIInterlockWindow, self,
-                            **{'devname': self._psname})
+                            **{'devname': self._prefixed_psname})
         if self._psname.dev == 'Spect':
             self.intlk_led = LISpectIntlkLed(self)
         else:
