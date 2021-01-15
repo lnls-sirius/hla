@@ -30,11 +30,11 @@ class OrbitWidget(BaseWidget):
         names = ['Line {0:d}'.format(i+1) for i in range(2)]
         super().__init__(parent, prefix, ctrls, names, True, acc)
 
-        txt1, txt2 = 'SPassOrb', 'RefOrb'
+        txt1, txt2 = 'IOC-SPassOrb', 'IOC-RefOrb'
         if self.acc == 'SI':
-            txt1 = 'SlowOrb'
+            txt1 = 'IOC-SlowOrb'
         elif self.acc == 'BO':
-            txt1 = 'MTurnOrb'
+            txt1 = 'IOC-MTurnOrb'
 
         self.updater[0].some_changed('val', txt1)
         self.updater[0].some_changed('ref', txt2)
@@ -98,13 +98,13 @@ class OrbitWidget(BaseWidget):
             'OfflineOrbX-RB', 'OfflineOrbY-RB',
             'RefOrbX-RB', 'RefOrbY-RB']
         orbs = [
-            'SPassOrb', 'OfflineOrb', 'RefOrb']
+            'IOC-SPassOrb', 'IOC-OfflineOrb', 'IOC-RefOrb']
         if acc.upper() == 'SI':
             pvs.extend(['SlowOrbX-Mon', 'SlowOrbY-Mon'])
-            orbs.append('SlowOrb')
+            orbs.append('IOC-SlowOrb')
         if acc.upper() in {'SI', 'BO'}:
             pvs.extend(['MTurnIdxOrbX-Mon', 'MTurnIdxOrbY-Mon'])
-            orbs.append('MTurnOrb')
+            orbs.append('IOC-MTurnOrb')
 
         chans = [SiriusConnectionSignal(prefix+pv) for pv in pvs]
         ctrls = dict()

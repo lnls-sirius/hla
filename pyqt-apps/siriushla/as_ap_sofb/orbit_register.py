@@ -184,7 +184,7 @@ class OrbitRegister(QWidget):
         act = menu.addAction('Get From &ServConf')
         act.setIcon(qta.icon('mdi.cloud-download-outline'))
         act.triggered.connect(self._load_orbit_from_servconf)
-        menu2 = menu.addMenu('Get from &PV')
+        menu2 = menu.addMenu('Get from &IOC')
         menu2.setIcon(qta.icon('mdi.download-network-outline'))
         if self._csorb.acc == 'SI':
             act = menu2.addAction('&SlowOrb')
