@@ -1,12 +1,12 @@
 from datetime import datetime as _datetime, timedelta as _timedelta
-import numpy as np
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QLabel, QCheckBox, \
     QVBoxLayout, QGridLayout, QDoubleSpinBox, QApplication
-from pydm.widgets import PyDMTimePlot
+
 from siriuspy.envars import VACA_PREFIX
-from siriuspy.clientarch import ClientArchiver
-from siriushla.widgets import SiriusMainWindow, SiriusConnectionSignal
+from siriuspy.clientarch.time import Time
+from siriushla.widgets import SiriusMainWindow, SiriusConnectionSignal, \
+    SiriusTimePlot
 
 
 class BOMonitor(SiriusMainWindow):
@@ -38,7 +38,7 @@ class BOMonitor(SiriusMainWindow):
                        self, alignment=Qt.AlignCenter)
 
         # timeplot
-        self.timeplot = PyDMTimePlot(parent=self, background='w')
+        self.timeplot = SiriusTimePlot(parent=self, background='w')
         timespan = 3600*6
         colors = ['blue', 'red', 'green', 'magenta']
         self.timeplot.timeSpan = timespan  # [s]
@@ -50,6 +50,10 @@ class BOMonitor(SiriusMainWindow):
         self.timeplot.setObjectName('timeplot')
         self.timeplot.setStyleSheet(
             '#timeplot{min-width:28em; min-height: 18em;}')
+        t_end = Time(datetime=_datetime.now())
+        t_init = Time(datetime=t_end - _timedelta(hours=6))
+        t_end = t_end.get_iso8601()
+        t_init = t_init.get_iso8601()
 
         self._channels = dict()
         self._curves = dict()
@@ -72,17 +76,8 @@ class BOMonitor(SiriusMainWindow):
             self.timeplot.addYChannel('Charge'+e, color=colors[i], lineWidth=2)
             curve = self.timeplot.curveAtIndex(-1)
             self._curves[e] = curve
-            data = self._get_value_from_arch(pvname)
-            if data:
-                buff = np.zeros((2, 2*timespan), order='f', dtype=float)
-                buff[0, (2*timespan-len(data[0])):] = data[0]
-                buff[1, (2*timespan-len(data[0])):] = data[1]
-                nrpts = len(data[0])
-                curve.data_buffer = buff
-                curve.points_accumulated = nrpts
-                curve._min_y_value = min(data[1])
-                curve._max_y_value = max(data[1])
-                curve.latest_value = data[1][-1]
+            self.timeplot.fill_curve_with_archdata(
+                self._curves[e], pvname, t_init=t_init, t_end=t_end)
 
             cb = QCheckBox(e)
             cb.setChecked(True)
@@ -111,22 +106,6 @@ class BOMonitor(SiriusMainWindow):
         lay.addWidget(label)
         lay.addWidget(self.timeplot)
         lay.addLayout(glay_aux)
-
-    def _get_value_from_arch(self, pvname):
-        carch = ClientArchiver()
-        t1 = _datetime.now()
-        t0 = t1 - _timedelta(hours=6)
-        t0_str = t0.isoformat() + '-03:00'
-        t1_str = t1.isoformat() + '-03:00'
-        data = carch.getData(pvname, t0_str, t1_str)
-        if not data:
-            return
-        timestamp, value, _, _ = data
-        # ignore first sample
-        if len(value) > 1:
-            timestamp[0] = t0.timestamp()
-            value[0] = value[1]
-        return timestamp, value
 
     def _update_charges(self, value):
         if self.sender() is None:
