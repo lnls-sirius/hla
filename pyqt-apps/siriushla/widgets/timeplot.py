@@ -27,8 +27,8 @@ class SiriusTimePlotItem(TimePlotCurveItem):
         self._min_y_value = min(old_data_buffer[1])
         self._max_y_value = max(old_data_buffer[1])
 
-        self.data_buffer = _np.zeros((2, self._bufferSize),
-                                     order='f', dtype=float)
+        self.data_buffer = _np.zeros(
+            (2, self._bufferSize), order='f', dtype=float)
         for i in range(self.points_accumulated):
             self.data_buffer = _np.roll(self.data_buffer, -1)
             self.data_buffer[0, self._bufferSize-1] = old_data_buffer[0, i]
