@@ -1,6 +1,6 @@
 from datetime import datetime as _datetime, timedelta as _timedelta
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QWidget, QLabel, QCheckBox, \
+from qtpy.QtWidgets import QWidget, QLabel, QCheckBox, QPushButton, \
     QVBoxLayout, QGridLayout, QDoubleSpinBox, QApplication
 
 from siriuspy.envars import VACA_PREFIX
@@ -102,6 +102,11 @@ class BOMonitor(SiriusMainWindow):
             glay_aux.addWidget(lb, 1, i+1, alignment=Qt.AlignCenter)
             glay_aux.addWidget(sb, 2, i+1, alignment=Qt.AlignCenter)
 
+        self.pb_offset = QPushButton('Update offset', self)
+        self.pb_offset.clicked.connect(self._set_current_values_2_offset)
+        self.pb_offset.setToolTip('Set offsets to current charge values.')
+        glay_aux.addWidget(self.pb_offset, 1, 0)
+
         lay = QVBoxLayout(cw)
         lay.addWidget(label)
         lay.addWidget(self.timeplot)
@@ -128,6 +133,18 @@ class BOMonitor(SiriusMainWindow):
         value = sender.value()
         if value == self._latest_offsets[energy]:
             return
+        self._update_curve_and_label(energy, value)
+
+    def _set_current_values_2_offset(self):
+        for e in self._energies:
+            charge = self._latest_charges[e]
+            if charge == self._latest_offsets[e]:
+                continue
+            sb = self._cb_offsets[e]
+            sb.setValue(charge)
+            self._update_curve_and_label(e, charge)
+
+    def _update_curve_and_label(self, energy, value):
         self._curves[energy].blockSignals(True)
         self._curves[energy].data_buffer[1] += \
             self._latest_offsets[energy]
