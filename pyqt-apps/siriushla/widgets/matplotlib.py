@@ -59,8 +59,8 @@ class MatplotlibWidget(QWidget):
         self.navtool = NavigationToolbar2QT(self.canvas, self)
         self.navtool.setObjectName('toolbar')
         if toolbar_position.lower().startswith('bottom'):
-            self.layout().addWidget(self.navtool)
             self.layout().addWidget(self.canvas)
+            self.layout().addWidget(self.navtool)
         else:
-            self.layout().addWidget(self.canvas)
             self.layout().addWidget(self.navtool)
+            self.layout().addWidget(self.canvas)
