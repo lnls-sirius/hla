@@ -315,7 +315,6 @@ class EmittanceMeasure(QWidget):
             self.alphay_tm, '--ro', lw=1, label='Vert. Trans. Mat.')[0]
         self.line_alphay_parf = axes.plot(
             self.alphay_parf, '--rd', lw=1, label='Vert. Parab. Fit')[0]
-        self.fig_res.figure.set_tight_layout(True)
 
         measlay = QVBoxLayout()
 
