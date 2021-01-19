@@ -53,6 +53,9 @@ class MatplotlibWidget(QWidget):
         self.setLayout(QVBoxLayout())
         self.figure = figure or Figure()
         self.canvas = MatplotlibCanvas(self.figure, self)
+        if toolbar_position is None:
+            self.navtool = None
+            return
         self.navtool = NavigationToolbar2QT(self.canvas, self)
         self.navtool.setObjectName('toolbar')
         if toolbar_position.lower().startswith('bottom'):
