@@ -8,14 +8,10 @@ import math as _math
 from qtpy.QtCore import Qt, Signal, Slot, QThread
 from qtpy.QtGui import QBrush, QColor
 from qtpy.QtWidgets import QGroupBox, QLabel, QWidget, QMessageBox, \
-    QVBoxLayout, QHBoxLayout, QGridLayout, QCheckBox, QPushButton, \
+    QVBoxLayout, QHBoxLayout, QCheckBox, QPushButton, \
     QHeaderView, QUndoCommand, QAbstractItemView, QMenu, QInputDialog, \
     QTableWidget, QTableWidgetItem, QSizePolicy as QSzPlcy
 import qtawesome as qta
-
-from matplotlib.backends.backend_qt5agg import (
-    NavigationToolbar2QT as NavigationToolbar)
-from matplotlib.figure import Figure
 
 from siriuspy.pwrsupply.csdev import MAX_WFMSIZE_FBP
 from siriuspy.pwrsupply.csdev import MAX_WFMSIZE_OTHERS
@@ -125,7 +121,7 @@ class DipoleRamp(QWidget):
         label = QLabel('<h3>Dipole Ramp</h3>', self)
         label.setStyleSheet('min-height:1.55em; max-height:1.55em;')
 
-        self.graphview = QWidget()
+        self.graph = MatplotlibWidget()
         self._setupGraph()
 
         self.l_rampup1v = QLabel('RmpU1 0 [GeV/s]', self)
@@ -168,7 +164,7 @@ class DipoleRamp(QWidget):
         lay = QVBoxLayout(self)
         lay.setAlignment(Qt.AlignTop)
         lay.addWidget(label)
-        lay.addWidget(self.graphview)
+        lay.addWidget(self.graph)
         lay.addLayout(lay_v)
         lay.addWidget(QLabel(''))
         lay.addWidget(self.set_psdelay_and_nrpoints)
@@ -178,10 +174,10 @@ class DipoleRamp(QWidget):
         lay.addWidget(self.bt_apply, alignment=Qt.AlignRight)
 
     def _setupGraph(self):
-        self.graph = MatplotlibWidget(Figure())
         self.graph.setObjectName('DipoleGraph')
         self.graph.setStyleSheet("""
-            #DipoleGraph{min-width:30em;min-height:18em;max-height:18em;}""")
+            #DipoleGraph{min-width:30em;min-height:18em;max-height:18em;}
+            #toolbar{min-height:2em; max-height:2em;}""")
         self.graph.setSizePolicy(QSzPlcy.Expanding, QSzPlcy.Preferred)
         self.graph.figure.set_tight_layout({'pad': .0})
         self.ax = self.graph.figure.subplots()
@@ -202,16 +198,6 @@ class DipoleRamp(QWidget):
             [0], [0], '-.', color='orchid')
         self.m_inj, = self.ax.plot([0], [0], marker='o', c='#787878')
         self.m_ej, = self.ax.plot([0], [0], marker='o', c='#787878')
-
-        self.graph.setStyleSheet("""
-            #toolbar{min-height:2em; max-height:2em;}""")
-
-        lay = QVBoxLayout()
-        lay.setContentsMargins(0, 0, 0, 0)
-        lay.setSpacing(0)
-        lay.setAlignment(Qt.AlignTop)
-        lay.addWidget(self.graph)
-        self.graphview.setLayout(lay)
 
     def _setupPSDelayAndWfmNrPoints(self):
         label_psdelay = QLabel('PS Delay [ms]:', self,
@@ -640,8 +626,8 @@ class DipoleRamp(QWidget):
         self.m_ej.set_xdata(ej_time)
         self.m_ej.set_ydata(func(dip_name, ej_time))
 
-        self.graph.figure.canvas.draw()
-        self.graph.figure.canvas.flush_events()
+        self.graph.canvas.draw()
+        self.graph.canvas.flush_events()
 
     def updatePSDelay(self):
         """Update PS delay when ramp_config is loaded."""
@@ -794,7 +780,7 @@ class MultipolesRamp(QWidget):
         label = QLabel('<h3>Multipoles Ramp</h3>', self)
         label.setStyleSheet('min-height: 1.55em; max-height: 1.55em;')
 
-        self.graphview = QWidget()
+        self.graph = MatplotlibWidget()
         self._setupGraph()
 
         self.table = _MyTableWidget(
@@ -886,7 +872,7 @@ class MultipolesRamp(QWidget):
         lay = QVBoxLayout(self)
         lay.setAlignment(Qt.AlignTop)
         lay.addWidget(label)
-        lay.addWidget(self.graphview)
+        lay.addWidget(self.graph)
         lay.addWidget(QLabel(''))
         lay.addLayout(hlay_chart_ins_del)
         lay.addWidget(self.table)
@@ -895,12 +881,10 @@ class MultipolesRamp(QWidget):
         lay.addWidget(self.bt_apply, alignment=Qt.AlignRight)
 
     def _setupGraph(self):
-        self.graph = MatplotlibWidget(Figure())
         self.graph.setObjectName('MultipolesGraph')
         self.graph.setStyleSheet("""
-            #MultipolesGraph{
-                min-width:30em;min-height:18em;max-height:18em;
-            }""")
+            #MultipolesGraph{min-width:30em;min-height:18em;max-height:18em;}
+            #toolbar{min-height:2em; max-height:2em;}""")
         self.graph.setSizePolicy(QSzPlcy.MinimumExpanding, QSzPlcy.Preferred)
         self.graph.figure.set_tight_layout({'pad': .0})
         self.ax = self.graph.figure.subplots()
@@ -911,15 +895,6 @@ class MultipolesRamp(QWidget):
         th.start()
         self.m_inj, = self.ax.plot([0], [0], ls='', marker='o', c='#787878')
         self.m_ej, = self.ax.plot([0], [0], ls='', marker='o', c='#787878')
-
-        self.graph.setStyleSheet("""
-            #toolbar{min-height:2em; max-height:2em;}""")
-
-        lay = QGridLayout()
-        lay.setContentsMargins(0, 0, 0, 0)
-        lay.setSpacing(0)
-        lay.addWidget(self.graph, 0, 0, 1, 2)
-        self.graphview.setLayout(lay)
 
     def _setupTable(self):
         self.table_map = {
@@ -1407,8 +1382,8 @@ class MultipolesRamp(QWidget):
             self.m_inj.set_ydata(inj_marker_value)
             self.m_ej.set_ydata(ej_marker_value)
 
-        self.graph.figure.canvas.draw()
-        self.graph.figure.canvas.flush_events()
+        self.graph.canvas.draw()
+        self.graph.canvas.flush_events()
 
     def updateTable(self):
         """Update and rebuild table."""
@@ -1501,7 +1476,7 @@ class RFRamp(QWidget):
         label = QLabel('<h3>RF Ramp</h3>', self)
         label.setStyleSheet('min-height:1.55em; max-height: 1.55em;')
 
-        self.graphview = QWidget()
+        self.graph = MatplotlibWidget()
         self._setupGraph()
 
         self.set_rfdelay = QWidget()
@@ -1534,7 +1509,7 @@ class RFRamp(QWidget):
 
         lay = QVBoxLayout(self)
         lay.addWidget(label)
-        lay.addWidget(self.graphview)
+        lay.addWidget(self.graph)
         lay.addLayout(lay_v_showsyncphase)
         lay.addWidget(QLabel(''))
         lay.addWidget(self.set_rfdelay)
@@ -1543,10 +1518,10 @@ class RFRamp(QWidget):
         lay.addWidget(self.bt_apply, alignment=Qt.AlignRight)
 
     def _setupGraph(self):
-        self.graph = MatplotlibWidget(Figure())
         self.graph.setObjectName('RFGraph')
-        self.graph.setStyleSheet(
-            '#RFGraph{min-width:30em;min-height:18em;max-height:18em;}')
+        self.graph.setStyleSheet("""
+            #RFGraph{min-width:30em;min-height:18em;max-height:18em;}
+            #toolbar{min-height:2em; max-height:2em;}""")
         self.graph.setSizePolicy(QSzPlcy.MinimumExpanding, QSzPlcy.Preferred)
         self.graph.figure.set_tight_layout({'pad': .0})
 
@@ -1562,16 +1537,6 @@ class RFRamp(QWidget):
         self.ax2.grid()
         self.ax2.set_ylabel('Φs [°]')
         self.line2, = self.ax2.plot([0], [0], '-', c='#990033')
-
-        self.graph.setStyleSheet("""
-            #toolbar{min-height:2em; max-height:2em;}""")
-
-        lay = QVBoxLayout()
-        lay.setContentsMargins(0, 0, 0, 0)
-        lay.setSpacing(0)
-        lay.setAlignment(Qt.AlignTop)
-        lay.addWidget(self.graph)
-        self.graphview.setLayout(lay)
 
     def _setupRFDelay(self):
         label_rfdelay = QLabel('RF delay [ms]:', self,
@@ -1840,8 +1805,8 @@ class RFRamp(QWidget):
             self.ax1.set_ylim(min(ydata)*0.95, max(ydata)*1.05)
             self.ax2.set_ylim(min(ph)*0.95, max(ph)*1.05)
 
-        self.graph.figure.canvas.draw()
-        self.graph.figure.canvas.flush_events()
+        self.graph.canvas.draw()
+        self.graph.canvas.flush_events()
 
     def updateRFDelay(self):
         """Update rf delay when ramp_config is loaded."""
