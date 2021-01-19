@@ -435,12 +435,12 @@ class EmittanceMeasure(QWidget):
         wid.setStyleSheet('#fig_sigma{min-width: 25em;}')
         self.fig_sigma = wid
 
-        gl.addWidget(self.plt_image, 0, 0, 3, 1)
-        gl.addItem(measlay, 0, 1, 2, 1)
-        gl.addWidget(self.fig_sigma, 2, 1)
-        gl.addItem(anllay, 0, 2, 2, 1)
-        gl.addWidget(resultsgb, 2, 2)
-        gl.addWidget(self.fig_res, 0, 3, 3, 1)
+        gl.addWidget(self.plt_image, 0, 0, 2, 1)
+        gl.addItem(measlay, 0, 1)
+        gl.addWidget(self.fig_sigma, 1, 1)
+        gl.addItem(anllay, 0, 2)
+        gl.addWidget(resultsgb, 1, 2)
+        gl.addWidget(self.fig_res, 0, 3, 2, 1)
 
     def pb_save_data_clicked(self):
         if self.I_meas is None or self.sigma is None:
