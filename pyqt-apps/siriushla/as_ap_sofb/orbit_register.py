@@ -184,7 +184,7 @@ class OrbitRegister(QWidget):
         act = menu.addAction('Get From &ServConf')
         act.setIcon(qta.icon('mdi.cloud-download-outline'))
         act.triggered.connect(self._load_orbit_from_servconf)
-        menu2 = menu.addMenu('Get from &PV')
+        menu2 = menu.addMenu('Get from &IOC')
         menu2.setIcon(qta.icon('mdi.download-network-outline'))
         if self._csorb.acc == 'SI':
             act = menu2.addAction('&SlowOrb')
@@ -211,7 +211,7 @@ class OrbitRegister(QWidget):
         act = menu.addAction('&Edit Orbit')
         act.setIcon(qta.icon('mdi.table-edit'))
         act.triggered.connect(self._edit_orbit)
-        act = menu.addAction('&Create Bump')
+        act = menu.addAction('Create &Bump')
         act.setIcon(qta.icon(
             'mdi.chart-bell-curve', scale_factor=1.2, offset=(-0.2, 0.2)))
         act.triggered.connect(self._create_bump)
@@ -348,6 +348,7 @@ class OrbitRegister(QWidget):
         hlay = QHBoxLayout()
         cancel = QPushButton('Cancel', wid)
         confirm = QPushButton('Ok', wid)
+        confirm.setDefault(True)
         cancel.clicked.connect(wid.reject)
         confirm.clicked.connect(wid.accept)
         hlay.addStretch()
@@ -366,7 +367,10 @@ class OrbitRegister(QWidget):
         plusy = float(addy.text())
         orbx = mltx * orbx + plusx
         orby = mlty * orby + plusy
-        self._update_and_emit('Orbit Edited', orbx, orby)
+        txt = ''
+        txt += f'multx = {mltx:5.1f} offx = {plusx:7.1f}\n'
+        txt += f'multy = {mlty:5.1f} offy = {plusy:7.1f}'
+        self._update_and_emit(txt, orbx, orby)
 
     def _create_bump(self):
 
@@ -391,7 +395,8 @@ class OrbitRegister(QWidget):
         row = 0
         lay.addWidget(QLabel('Base Orbit ', wid), row, 0)
         orbcombo = QComboBox(wid)
-        orbcombo.addItems(['bba_orb', 'Register', 'other...'])
+        orbcombo.addItems(['Register', 'ref_orb', 'bba_orb', 'other...'])
+        orbcombo.setCurrentIndex(1)
         orbcombo.activated.connect(_add_entry)
         lay.addWidget(orbcombo, row, 1)
 
@@ -444,6 +449,7 @@ class OrbitRegister(QWidget):
         hlay = QHBoxLayout()
         cancel = QPushButton('Cancel', wid)
         confirm = QPushButton('Ok', wid)
+        confirm.setDefault(True)
         cancel.clicked.connect(wid.reject)
         confirm.clicked.connect(wid.accept)
         hlay.addStretch()
@@ -458,7 +464,7 @@ class OrbitRegister(QWidget):
 
         index = orbcombo.currentIndex()
         confname = orbcombo.itemText(index)
-        if index == 1:
+        if not index:
             orbx = _np.array(self.orbx)
             orby = _np.array(self.orby)
         elif index == orbcombo.count()-1:
