@@ -54,6 +54,7 @@ class MatplotlibWidget(QWidget):
         self.figure = figure or Figure()
         self.canvas = MatplotlibCanvas(self.figure, self)
         if toolbar_position is None:
+            self.layout().addWidget(self.canvas)
             self.navtool = None
             return
         self.navtool = NavigationToolbar2QT(self.canvas, self)
