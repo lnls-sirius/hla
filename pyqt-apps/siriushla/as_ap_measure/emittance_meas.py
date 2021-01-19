@@ -6,6 +6,8 @@ import numpy as np
 from scipy.optimize import curve_fit
 from epics import PV
 
+import matplotlib.pyplot as mplt
+import matplotlib.gridspec as mgs
 from matplotlib import rcParams
 
 from qtpy.QtWidgets import QPushButton, QLabel, QGridLayout, QGroupBox, \
@@ -25,7 +27,9 @@ from siriuspy.magnet.factory import NormalizerFactory as _NormFact
 from siriushla.widgets import SiriusSpinbox, SiriusLabel, MatplotlibWidget
 from siriushla.as_ti_control import HLTriggerSimple
 
-rcParams['font.size'] = 9
+rcParams.update({
+    'font.size': 9, 'axes.grid': True, 'grid.linestyle': '--',
+    'grid.alpha': 0.5})
 
 DT = 0.001
 SIMUL = False
@@ -264,13 +268,20 @@ class EmittanceMeasure(QWidget):
 
     def _setupUi(self):
         gl = QGridLayout(self)
-        wid = MatplotlibWidget(parent=self)
-        axes = wid.figure.add_subplot(111)
+        fig = mplt.figure()
+        wid = MatplotlibWidget(fig, parent=self)
+        wid.setObjectName('fig_result')
+        wid.setStyleSheet('#fig_result{min-width: 25em;}')
+        self.fig_res = wid
+
+        gs = mgs.GridSpec(3, 1)
+        gs.update(left=0.18, right=0.98, top=0.97, bottom=0.08, hspace=0.25)
+
+        axes = wid.figure.add_subplot(gs[0, 0])
         axes.set_xlabel('Index')
         axes.set_ylabel('Normalized Emit. [mm.mrad]')
         axes.grid(True)
         axes.set_aspect('auto')
-        wid.figure.set_tight_layout(True)
         self.line_nemitx_tm = axes.plot(
             self.nemitx_tm, '-bo', lw=1, label='Hor. Trans. Mat.')[0]
         self.line_nemitx_parf = axes.plot(
@@ -280,16 +291,10 @@ class EmittanceMeasure(QWidget):
         self.line_nemity_parf = axes.plot(
             self.nemity_parf, '--rd', lw=1, label='Vert. Parab. Fit')[0]
         axes.legend(loc='best')
-        self.plt_nemit = wid
-        self.plt_nemit.setStyleSheet('min-width: 25em;')
 
-        wid = MatplotlibWidget(parent=self)
-        axes = wid.figure.add_subplot(111)
+        axes = wid.figure.add_subplot(gs[1, 0])
         axes.set_xlabel('Index')
         axes.set_ylabel(r'$\beta$ [m]')
-        axes.grid(True)
-        axes.set_aspect('auto')
-        wid.figure.set_tight_layout(True)
         self.line_betax_tm = axes.plot(
             self.betax_tm, '-bo', lw=1, label='Hor. Trans. Mat.')[0]
         self.line_betax_parf = axes.plot(
@@ -298,15 +303,10 @@ class EmittanceMeasure(QWidget):
             self.betay_tm, '--ro', lw=1, label='Vert. Trans. Mat.')[0]
         self.line_betay_parf = axes.plot(
             self.betay_parf, '--rd', lw=1, label='Vert. Parab. Fit')[0]
-        self.plt_beta = wid
 
-        wid = MatplotlibWidget(parent=self)
-        axes = wid.figure.add_subplot(111)
+        axes = wid.figure.add_subplot(gs[2, 0])
         axes.set_xlabel('Index')
         axes.set_ylabel(r'$\alpha$')
-        axes.grid(True)
-        axes.set_aspect('auto')
-        wid.figure.set_tight_layout(True)
         self.line_alphax_tm = axes.plot(
             self.alphax_tm, '-bo', lw=1, label='Hor. Trans. Mat.')[0]
         self.line_alphax_parf = axes.plot(
@@ -315,7 +315,7 @@ class EmittanceMeasure(QWidget):
             self.alphay_tm, '--ro', lw=1, label='Vert. Trans. Mat.')[0]
         self.line_alphay_parf = axes.plot(
             self.alphay_parf, '--rd', lw=1, label='Vert. Parab. Fit')[0]
-        self.plt_alpha = wid
+        self.fig_res.figure.set_tight_layout(True)
 
         measlay = QVBoxLayout()
 
@@ -428,23 +428,20 @@ class EmittanceMeasure(QWidget):
         axes = wid.figure.add_subplot(111)
         axes.set_xlabel('Quad. Current [A]')
         axes.set_ylabel('Beam Size [mm]')
-        axes.grid(True)
-        axes.set_aspect('auto')
         wid.figure.set_tight_layout(True)
         self.line_sigmax = axes.plot([], 'bo', lw=1, label='Horizontal')[0]
         self.line_sigmay = axes.plot([], 'ro', lw=1, label='Vertical')[0]
         self.line_fit = axes.plot([], '-k', lw=1)[0]
-        self.plt_sigma = wid
-        self.plt_sigma.setStyleSheet('min-width: 25em;')
+        wid.setObjectName('fig_sigma')
+        wid.setStyleSheet('#fig_sigma{min-width: 25em;}')
+        self.fig_sigma = wid
 
         gl.addWidget(self.plt_image, 0, 0, 3, 1)
         gl.addItem(measlay, 0, 1, 2, 1)
-        gl.addWidget(self.plt_sigma, 2, 1)
+        gl.addWidget(self.fig_sigma, 2, 1)
         gl.addItem(anllay, 0, 2, 2, 1)
         gl.addWidget(resultsgb, 2, 2)
-        gl.addWidget(self.plt_nemit, 0, 3)
-        gl.addWidget(self.plt_beta, 1, 3)
-        gl.addWidget(self.plt_alpha, 2, 3)
+        gl.addWidget(self.fig_res, 0, 3, 3, 1)
 
     def pb_save_data_clicked(self):
         if self.I_meas is None or self.sigma is None:
