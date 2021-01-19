@@ -1859,7 +1859,7 @@ class RFRamp(QWidget):
                 #     item.setData(Qt.DisplayRole, '{0:.3f}'.format(value))
 
         rampupv = ((self.ramp_config.rf_ramp_top_voltage -
-                   self.ramp_config.rf_ramp_bottom_voltage) /
+                    self.ramp_config.rf_ramp_bottom_voltage) /
                    self.ramp_config.rf_ramp_rampup_duration)
         self.l_rampupv.setText('RmpU {: .3f} [kV/s]'.format(1000*rampupv))
 
