@@ -306,71 +306,47 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
 
     @staticmethod
     def _eq(val1, val2, **kws):
-        if isinstance(val1, _np.ndarray):
-            is_equal = _np.all(val1 == val2)
-        else:
-            is_equal = (val1 == val2)
-        return is_equal
+        return not PyDMLedMultiChannel._ne(val1, val2, **kws)
 
     @staticmethod
     def _cl(val1, val2, **kws):
-        if type(val1) != type(val2):
+        val1 = _np.asarray(val1)
+        val2 = _np.asarray(val2)
+        if val1.dtype != val2.dtype or val1.size != val2.size:
             return False
-        if isinstance(val1, (_np.ndarray, tuple, list)) and \
-                len(val1) != len(val2):
-            return False
-        if 'abs_tol' in kws.keys():
-            atol = kws['abs_tol']
-        else:
-            atol = 1e-8
-        if 'rel_tol' in kws.keys():
-            rtol = kws['rel_tol']
-        else:
-            rtol = 1e-5
-        isclose = _np.isclose(val1, val2, atol=atol, rtol=rtol)
-        if isinstance(val1, (_np.ndarray, tuple, list)):
-            isclose = all(isclose)
-        return isclose
+        atol = kws.get('abs_tol', 1e-8)
+        rtol = kws.get('rel_tol', 1e-5)
+        return _np.allclose(val1, val2, atol=atol, rtol=rtol)
 
     @staticmethod
     def _ne(val1, val2, **kws):
-        if isinstance(val1, _np.ndarray):
-            is_not_equal = _np.all(val1 != val2)
-        else:
-            is_not_equal = (val1 != val2)
-        return is_not_equal
+        val1 = _np.asarray(val1)
+        val2 = _np.asarray(val2)
+        return _np.all(val1 != val2)
 
     @staticmethod
     def _gt(val1, val2, **kws):
-        if isinstance(val1, _np.ndarray):
-            is_greater = _np.all(val1 > val2)
-        else:
-            is_greater = (val1 > val2)
-        return is_greater
+        val1 = _np.asarray(val1)
+        val2 = _np.asarray(val2)
+        return _np.all(val1 > val2)
 
     @staticmethod
     def _lt(val1, val2, **kws):
-        if isinstance(val1, _np.ndarray):
-            is_less = _np.all(val1 < val2)
-        else:
-            is_less = (val1 < val2)
-        return is_less
+        val1 = _np.asarray(val1)
+        val2 = _np.asarray(val2)
+        return _np.all(val1 < val2)
 
     @staticmethod
     def _ge(val1, val2, **kws):
-        if isinstance(val1, _np.ndarray):
-            is_greater_or_equal = _np.all(val1 >= val2)
-        else:
-            is_greater_or_equal = (val1 >= val2)
-        return is_greater_or_equal
+        val1 = _np.asarray(val1)
+        val2 = _np.asarray(val2)
+        return _np.all(val1 >= val2)
 
     @staticmethod
     def _le(val1, val2, **kws):
-        if isinstance(val1, _np.ndarray):
-            is_less_or_equal = _np.all(val1 <= val2)
-        else:
-            is_less_or_equal = (val1 <= val2)
-        return is_less_or_equal
+        val1 = _np.asarray(val1)
+        val2 = _np.asarray(val2)
+        return _np.all(val1 <= val2)
 
     @staticmethod
     def _in(val1, val2, **kws):
