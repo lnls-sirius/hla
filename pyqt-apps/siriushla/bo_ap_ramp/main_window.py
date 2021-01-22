@@ -87,8 +87,8 @@ class RampMain(SiriusMainWindow):
             self.config_parameters.getPlotUnits)
         self.settings.newDipConfigSignal.connect(self._receiveNewDipConfig)
         self.settings.newNormConfigsSignal.connect(self._receiveNewNormConfigs)
-        self.settings.newTIConfig.connect(self._receiveNewTIConfig)
-        self.settings.newRFConfig.connect(self._receiveNewRFConfig)
+        self.settings.newTIConfigSignal.connect(self._receiveNewTIConfig)
+        self.settings.newRFConfigSignal.connect(self._receiveNewRFConfig)
 
         self.config_parameters.dip_ramp.updateDipoleRampSignal.connect(
             self._verifySync)

@@ -29,8 +29,8 @@ class Settings(QMenuBar):
     plotUnitSignal = Signal(str)
     newDipConfigSignal = Signal(dict)
     newNormConfigsSignal = Signal(dict)
-    newTIConfig = Signal(dict)
-    newRFConfig = Signal(dict)
+    newTIConfigSignal = Signal(dict)
+    newRFConfigSignal = Signal(dict)
 
     def __init__(self, parent=None, prefix='', ramp_config=None,
                  tunecorr_configname='', chromcorr_configname=''):
@@ -70,7 +70,7 @@ class Settings(QMenuBar):
         self.act_reconst_dipconf_fromwfm.triggered.connect(
             _part(self._handleReconstructConfig, 'dipole'))
         self.act_reconst_normconf_fromwfm = self.config_menu.addAction(
-            'Reconstruct norm configs from waveforms...')
+            'Reconstruct norm. configurations from waveforms...')
         self.act_reconst_normconf_fromwfm.setIcon(qta.icon('mdi.laravel'))
         self.act_reconst_normconf_fromwfm.triggered.connect(
             _part(self._handleReconstructConfig, 'normconfigs'))
@@ -232,10 +232,10 @@ class Settings(QMenuBar):
             th.precReached.connect(self._showWarningPrecNotOk)
         elif params2reconstruct == 'ti':
             th = _WaitThread(params2reconstruct='ti', parent=self)
-            th.configData.connect(self.newTIConfig.emit)
+            th.configData.connect(self.newTIConfigSignal.emit)
         elif params2reconstruct == 'rf':
             th = _WaitThread(params2reconstruct='rf', parent=self)
-            th.configData.connect(self.newRFConfig.emit)
+            th.configData.connect(self.newRFConfigSignal.emit)
         dlg = _WaitDialog(self)
         th.opendiag.connect(dlg.show)
         th.closediag.connect(dlg.close)
