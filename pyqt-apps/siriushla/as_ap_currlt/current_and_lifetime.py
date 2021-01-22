@@ -14,13 +14,12 @@ from pydm.widgets import PyDMEnumComboBox, PyDMLabel, PyDMLineEdit,\
 
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.namesys import SiriusPVName
-from siriuspy.clientarch import ClientArchiver
+from siriuspy.clientarch.time import Time
 from siriushla.util import connect_window
 from siriushla.widgets import SiriusLabel, SiriusLedAlert, SiriusLedState,\
-    SiriusSpinbox, PyDMStateButton, SiriusMainWindow, SiriusConnectionSignal
+    SiriusSpinbox, PyDMStateButton, SiriusMainWindow, SiriusConnectionSignal,\
+    SiriusTimePlot
 from siriushla.as_di_dccts import DCCTMain, EffMonitor
-
-from .custom_widgets import MyGraph
 
 
 class CurrLTWindow(SiriusMainWindow):
@@ -101,7 +100,7 @@ class CurrLTWindow(SiriusMainWindow):
             self._format_lifetime_label)
 
         # # Graph
-        self.graph = MyGraph(self, background='w')
+        self.graph = SiriusTimePlot(self, background='w')
         self.graph.plotItem.getAxis('left').setLabel(
             'Current [mA]', color='blue')
         self.graph.plotItem.getAxis('right').setLabel(
@@ -115,38 +114,42 @@ class CurrLTWindow(SiriusMainWindow):
         self.graph.bufferSize = 36000
         self._set_graph_timespan(2000)
 
+        t_end = Time(datetime=_datetime.now())
+        t_init = Time(datetime=t_end - _timedelta(seconds=2000))
+        t_end = t_end.get_iso8601()
+        t_init = t_init.get_iso8601()
+
         self.graph.addYChannel(
             y_channel=self.device_prefix+':Current-Mon',
             axis='left', name='Current', color='blue', lineWidth=1)
         self._curve_current = self.graph.curveAtIndex(0)
-        self._fill_curve_with_archdata(
-            self._curve_current,
-            self.device_prefix+':Current-Mon')
+        self.graph.fill_curve_with_archdata(
+            self._curve_current, self.device_prefix+':Current-Mon',
+            t_init=t_init, t_end=t_end)
 
         self.graph.addYChannel(
             y_channel=self.prefix+'SI-01M1:DI-BPM:Sum-Mon',
             axis='left', name='Current', color='blue', lineWidth=1)
         self._curve_bpmsum = self.graph.curveAtIndex(1)
-        self._fill_curve_with_archdata(
-            self._curve_bpmsum, self.prefix+'SI-01M1:DI-BPM:Sum-Mon')
+        self.graph.fill_curve_with_archdata(
+            self._curve_bpmsum, self.prefix+'SI-01M1:DI-BPM:Sum-Mon',
+            t_init=t_init, t_end=t_end)
 
         self.graph.addYChannel(
             y_channel='FAKE:Lifetime', axis='right', name='Lifetime',
             color='red', lineWidth=1)
         self._curve_lifetimedcct = self.graph.curveAtIndex(2)
-        self._fill_curve_with_archdata(
-            self._curve_lifetimedcct,
-            self.device_prefix+':Lifetime-Mon',
-            factor=3600)
+        self.graph.fill_curve_with_archdata(
+            self._curve_lifetimedcct, self.device_prefix+':Lifetime-Mon',
+            t_init=t_init, t_end=t_end, factor=3600)
 
         self.graph.addYChannel(
             y_channel='FAKE:LifetimeBPM', axis='right', name='Lifetime',
             color='red', lineWidth=1)
         self._curve_lifetimebpm = self.graph.curveAtIndex(3)
-        self._fill_curve_with_archdata(
-            self._curve_lifetimebpm,
-            self.device_prefix+':LifetimeBPM-Mon',
-            factor=3600)
+        self.graph.fill_curve_with_archdata(
+            self._curve_lifetimebpm, self.device_prefix+':LifetimeBPM-Mon',
+            t_init=t_init, t_end=t_end, factor=3600)
 
         self.lifetime_dcct_pv.new_value_signal[float].connect(
             self._update_graph)
@@ -692,7 +695,7 @@ class CurrLTWindow(SiriusMainWindow):
             if not self._flag_need_bpmy and not self._flag_need_bpmx:
                 if len(self.bpm_wavx) != len(self.bpm_wavy):
                     return
-                self._fill_curve_buffer(
+                self.graph.fill_curve_buffer(
                     self._curve_bpm_buff, self.bpm_wavx, self.bpm_wavy)
                 self._flag_need_bpmx = True
                 self._flag_need_bpmy = True
@@ -706,56 +709,7 @@ class CurrLTWindow(SiriusMainWindow):
             if not self._flag_need_dccty and not self._flag_need_dcctx:
                 if len(self.dcct_wavx) != len(self.dcct_wavy):
                     return
-                self._fill_curve_buffer(
+                self.graph.fill_curve_buffer(
                     self._curve_dcct_buff, self.dcct_wavx, self.dcct_wavy)
                 self._flag_need_dcctx = True
                 self._flag_need_dccty = True
-
-    # ---------- handle archiver data ----------
-
-    def _get_value_from_arch(self, pvname):
-        """Get values from archiver."""
-        carch = ClientArchiver()
-        t1 = _datetime.now()
-        t0 = t1 - _timedelta(seconds=2000)
-        t0_str = t0.isoformat() + '-03:00'
-        t1_str = t1.isoformat() + '-03:00'
-        data = carch.getData(pvname, t0_str, t1_str)
-        if not data:
-            return
-        timestamp, value, _, _ = data
-        # ignore first sample
-        if len(value) > 1:
-            timestamp[0] = t0.timestamp()
-            value[0] = value[1]
-        return timestamp, value
-
-    def _fill_curve_with_archdata(self, curve, pvname, factor=None):
-        """Fill curve with archiver data."""
-        data = self._get_value_from_arch(pvname)
-        if not data:
-            return
-        datax, datay = data
-        self._fill_curve_buffer(curve, datax, datay, factor)
-
-    def _fill_curve_buffer(self, curve, datax, datay, factor=None):
-        """Fill curve buffer."""
-        nrpts = len(datax)
-        if not nrpts:
-            return
-        buff = _np.zeros((2, self.graph.bufferSize), order='f', dtype=float)
-        if nrpts > self.graph.bufferSize:
-            smpls2discard = nrpts - self.graph.bufferSize
-            datax = datax[smpls2discard:]
-            datay = datay[smpls2discard:]
-            nrpts = len(datax)
-        firstsmpl2fill = self.graph.bufferSize - nrpts
-        buff[0, firstsmpl2fill:] = datax
-        buff[1, firstsmpl2fill:] = datay
-        if factor:
-            buff[1, :] /= factor
-        curve.data_buffer = buff
-        curve.points_accumulated = nrpts
-        curve._min_y_value = min(datay)
-        curve._max_y_value = max(datay)
-        curve.latest_value = datay[-1]
