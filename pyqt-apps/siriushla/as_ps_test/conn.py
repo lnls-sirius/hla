@@ -4,11 +4,12 @@ import time as _time
 import numpy as _np
 from epics import PV as _PV
 
+from siriuspy.util import get_bit
+from siriuspy.namesys import SiriusPVName
 from siriuspy.envars import VACA_PREFIX as VACA_PREFIX
 from siriuspy.search import PSSearch
-from siriuspy.pwrsupply.csdev import Const as _PSC, \
+from siriuspy.pwrsupply.csdev import Const as _PSC, ETypes as _PSe, \
     PS_LI_INTLK_THRS as _PS_LI_INTLK, get_ps_interlocks
-
 
 DEFAULT_CAP_BANK_VOLT = {
     'FBP_DCLink': 100,
@@ -42,7 +43,7 @@ class _TesterBase:
 
     def __init__(self, device):
         """Init."""
-        self.device = device
+        self.device = SiriusPVName(device)
         self._pvs = dict()
 
     @property
@@ -379,7 +380,7 @@ class TesterPSFBP(TesterPS):
 class TesterPSLinac(_TesterBase):
     """Linac PS tester."""
 
-    properties = ['StatusIntlk-Mon',
+    properties = ['StatusIntlk-Mon', 'IntlkWarn-Mon',
                   'PwrState-Sel', 'PwrState-Sts',
                   'Current-SP', 'Current-Mon']
 
@@ -390,6 +391,8 @@ class TesterPSLinac(_TesterBase):
                 VACA_PREFIX + device + ':' + ppty,
                 connection_timeout=TIMEOUT_CONN)
 
+        self.intlkwarn_bit = _PSe.LINAC_INTLCK_WARN.index('LoadI Over Thrs')
+
         splims = PSSearch.conv_pstype_2_splims(
             PSSearch.conv_psname_2_pstype(device))
         self.test_current = splims['HIGH']/2.0
@@ -397,7 +400,12 @@ class TesterPSLinac(_TesterBase):
 
     def check_intlk(self):
         """Check interlocks."""
-        return self._pvs['StatusIntlk-Mon'].value < _PS_LI_INTLK
+        intlkval = self._pvs['StatusIntlk-Mon'].value
+        if self.device.dev == 'Spect':
+            intlkwarn = self._pvs['IntlkWarn-Mon'].value
+            if get_bit(intlkwarn, self.intlkwarn_bit):
+                intlkval -= 2**self.intlkwarn_bit
+        return intlkval < _PS_LI_INTLK
 
     def set_pwrstate(self, state='on'):
         """Set PwrState."""

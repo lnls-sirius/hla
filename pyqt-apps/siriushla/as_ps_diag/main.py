@@ -30,7 +30,8 @@ from siriushla.util import run_newprocess as _run_newprocess, \
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, SiriusConnectionSignal, \
     PyDMLedMultiChannel, PyDMLed, PyDMLedMultiConnection, QLed
-
+from siriushla.as_ps_control.detail_widget.custom_widgets import \
+    LISpectIntlkLed
 from siriushla.as_ps_diag.util import asps2filters, lips2filters, sips2filters
 
 
@@ -95,8 +96,12 @@ class PSDiag(SiriusMainWindow):
                         filters=f, parent=panel, channels=conn_chs)
                     ps_led = MyLedMultiChannel(
                         filters=f, parent=panel, channels2values=ps_ch2vals)
-                    intlk_led = MyLedMultiChannel(
-                        filters=f, parent=panel, channels2values=intlk_ch2vals)
+                    if 'Spect' in filt['dev']:
+                        intlk_led = LISpectIntlkLed(panel, filters=f)
+                    else:
+                        intlk_led = MyLedMultiChannel(
+                            filters=f, parent=panel,
+                            channels2values=intlk_ch2vals)
 
                     suf = sec+filt['dev'].strip('.*')+'_led'
                     conn_led.setObjectName('conn' + suf)
