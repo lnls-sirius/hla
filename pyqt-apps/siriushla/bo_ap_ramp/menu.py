@@ -11,7 +11,7 @@ from siriuspy.clientconfigdb import ConfigDBException as _ConfigDBException, \
     PVsConfig as _PVsConfig
 from siriuspy.ramp import ramp
 from siriuspy.ramp.reconst_factory import BONormListFactory, BORFRampFactory, \
-    BOTIRampFactory
+    BOTIRampFactory, BODipRampFactory
 from siriushla import util
 from siriushla.widgets.windows import SiriusDialog
 from siriushla.as_ap_configdb import LoadConfigDialog as _LoadConfigDialog, \
@@ -27,6 +27,7 @@ class Settings(QMenuBar):
     loadSignal = Signal()
     opticsSettingsSignal = Signal(str, str)
     plotUnitSignal = Signal(str)
+    newDipConfigSignal = Signal(dict)
     newNormConfigsSignal = Signal(dict)
     newTIConfig = Signal(dict)
     newRFConfig = Signal(dict)
@@ -63,6 +64,11 @@ class Settings(QMenuBar):
         self.act_save_as.setShortcut(QKeySequence(Qt.CTRL+Qt.SHIFT+Qt.Key_S))
         self.act_save_as.triggered.connect(self.showSaveAsPopup)
         self.config_menu.addSeparator()
+        self.act_reconst_dipconf_fromwfm = self.config_menu.addAction(
+            'Reconstruct dipole configuration from waveform...')
+        self.act_reconst_dipconf_fromwfm.setIcon(qta.icon('mdi.laravel'))
+        self.act_reconst_dipconf_fromwfm.triggered.connect(
+            _part(self._handleReconstructConfig, 'dipole'))
         self.act_reconst_normconf_fromwfm = self.config_menu.addAction(
             'Reconstruct norm configs from waveforms...')
         self.act_reconst_normconf_fromwfm.setIcon(qta.icon('mdi.laravel'))
@@ -213,7 +219,12 @@ class Settings(QMenuBar):
         if ans == QMessageBox.Cancel:
             return
 
-        if params2reconstruct == 'normconfigs':
+        if params2reconstruct == 'dipole':
+            th = _WaitThread(params2reconstruct='dipole',
+                             ramp_config=self.ramp_config,
+                             parent=self)
+            th.configData.connect(self.newDipConfigSignal.emit)
+        elif params2reconstruct == 'normconfigs':
             th = _WaitThread(params2reconstruct='normconfigs',
                              ramp_config=self.ramp_config,
                              parent=self)
@@ -276,7 +287,11 @@ class _WaitThread(QThread):
     def run(self):
         self.opendiag.emit()
         try:
-            if self.params2reconstruct == 'normconfigs':
+            if self.params2reconstruct == 'dipole':
+                dip_fac = BODipRampFactory(self.ramp_config)
+                dip_fac.read_waveform()
+                params = dip_fac.dip_params
+            elif self.params2reconstruct == 'normconfigs':
                 norm_fac = BONormListFactory(self.ramp_config)
                 norm_fac.read_waveforms()
                 params = norm_fac.normalized_configs
