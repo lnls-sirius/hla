@@ -253,6 +253,6 @@ if __name__ == '__main__':
     import sys
 
     app = SiriusApplication()
-    w = MagOffConvApp(prefix=VACA_PREFIX)
-    w.show()
+    wind = MagOffConvApp()
+    wind.show()
     sys.exit(app.exec_())

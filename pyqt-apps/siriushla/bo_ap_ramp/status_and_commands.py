@@ -293,26 +293,11 @@ class StatusAndCommands(QGroupBox):
         """Update RF parameters leds channels2values dict."""
         if self.ramp_config is None:
             return
-        c = self.conn_rf.Const
-        r = self.ramp_config
-        p = self.prefix
+        d2c = self.conn_rf.get_propty_2_config_ramp_dict()
         c2v = dict()
-        c2v[p+c.Rmp_Ts1.replace('SP', 'RB')] = {
-            'value': r.rf_ramp_bottom_duration, 'comp': 'cl', 'rel_tol': 0.1}
-        c2v[p+c.Rmp_Ts2.replace('SP', 'RB')] = {
-            'value': r.rf_ramp_rampup_duration, 'comp': 'cl', 'rel_tol': 0.1}
-        c2v[p+c.Rmp_Ts3.replace('SP', 'RB')] = {
-            'value': r.rf_ramp_top_duration, 'comp': 'cl', 'rel_tol': 0.1}
-        c2v[p+c.Rmp_Ts4.replace('SP', 'RB')] = {
-            'value': r.rf_ramp_rampdown_duration, 'comp': 'cl', 'rel_tol': 0.1}
-        c2v[p+c.Rmp_VoltBot.replace('SP', 'RB')] = {
-            'value': r.rf_ramp_bottom_voltage, 'comp': 'cl', 'rel_tol': 0.1}
-        c2v[p+c.Rmp_VoltTop.replace('SP', 'RB')] = {
-            'value': r.rf_ramp_top_voltage, 'comp': 'cl', 'rel_tol': 0.1}
-        c2v[p+c.Rmp_PhsBot.replace('SP', 'RB')] = {
-            'value': r.rf_ramp_bottom_phase, 'comp': 'cl', 'rel_tol': 0.1}
-        c2v[p+c.Rmp_PhsTop.replace('SP', 'RB')] = {
-            'value': r.rf_ramp_top_phase, 'comp': 'cl', 'rel_tol': 0.1}
+        for pv, val in d2c.items():
+            c2v[self.prefix+pv.replace('SP', 'RB')] = {
+                'value': val, 'comp': 'cl', 'rel_tol': 0.001}
         self.led_rf_apply.set_channels2values(c2v)
 
     def update_ti_params(self):

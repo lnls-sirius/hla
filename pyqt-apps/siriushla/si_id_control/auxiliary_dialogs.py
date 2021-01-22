@@ -164,7 +164,8 @@ class APUHardLLDetails(SiriusDialog):
                     {'value': [0x4C, 0x3C], 'comp': 'in'}})  # in [Op, Ready]
         self._led_stthw.offColor = PyDMLed.Yellow
         self._led_stthw.onColor = PyDMLed.LightGreen
-        self._led_stthw.setStyleSheet('max-width: 1.29em;')
+        self._led_stthw.setObjectName('led')
+        self._led_stthw.setStyleSheet('#led{max-width: 1.29em;}')
         self._led_stthw.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Preferred)
         self._lb_stthw = PyDMLabel(self, self.dev_pref+':StateHw-Mon')
 
@@ -175,7 +176,8 @@ class APUHardLLDetails(SiriusDialog):
                     {'value': [1, 4], 'comp': 'in'}})  # in [Op, Standby]
         self._led_sttsys.offColor = PyDMLed.Yellow
         self._led_sttsys.onColor = PyDMLed.LightGreen
-        self._led_sttsys.setStyleSheet('max-width: 1.29em;')
+        self._led_sttsys.setObjectName('led')
+        self._led_sttsys.setStyleSheet('#led{max-width: 1.29em;}')
         self._led_sttsys.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Preferred)
         self._lb_sttsys = PyDMLabel(self, self.dev_pref+':State-Mon')
 

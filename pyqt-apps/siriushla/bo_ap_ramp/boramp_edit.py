@@ -1644,10 +1644,10 @@ class RFRamp(QWidget):
                                 mini=0, maxi=500, prec=3))
         self.table.setItemDelegateForColumn(
             2, _SpinBoxDelegate(parent=self.table,
-                                mini=0, maxi=1200, prec=2))
+                                mini=0, maxi=1200, prec=3))
         self.table.setItemDelegateForColumn(
             3, _SpinBoxDelegate(parent=self.table,
-                                mini=-180, maxi=180, prec=2))
+                                mini=-180, maxi=180, prec=3))
         self.table.cellChanged.connect(self._handleCellChanged)
 
     @Slot(int, int)
