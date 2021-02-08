@@ -143,7 +143,7 @@ class RFMainControl(SiriusMainWindow):
         hlay_intlksts.addWidget(self.led_intlk)
         hlay_intlksts.addWidget(self.pb_intlkdtls)
 
-        # Status Cavidade
+        # Status Cavity
         self.led_cavsts = PyDMLedMultiChannel(
             self, {self.chs['Cav Sts']['Geral']: 1})
         self.pb_cavdtls = QPushButton(qta.icon('fa5s.ellipsis-h'), '', self)
@@ -639,7 +639,7 @@ class RFMainControl(SiriusMainWindow):
         self.ramp_graph.plotItem.getAxis('left').setStyle(tickTextOffset=5)
         self.ramp_graph.addChannel(
             y_channel='RA-RF:PowerSensor1:TracData-Mon',
-            x_channel=' RA-RF:PowerSensor1:TimeAxis-Mon',
+            x_channel='RA-RF:PowerSensor1:TimeAxis-Mon',
             redraw_mode=2, name='Power [W]', color=QColor('blue'))
         self.curve_PwrMtr = self.ramp_graph.curveAtIndex(0)
         self.rb_PwrMtr = QRadioButton('Power Meter Signal', self)
