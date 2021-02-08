@@ -22,22 +22,13 @@ class AcqControlWidget(BaseWidget):
         self.setupui()
         name = acc + 'App'
         self.setObjectName(name)
-        self.setStyleSheet("#"+name+"{min-width:20em; min-height:58em;}")
+        self.setStyleSheet("#"+name+"{min-width:20em; min-height:40em;}")
 
     def setupui(self):
         vbl = QVBoxLayout(self)
 
         self.details = QCheckBox('Details', self)
         vbl.addWidget(self.details, alignment=Qt.AlignRight)
-
-        grp_bx = self._get_sofbmode_grpbx()
-        vbl.addWidget(grp_bx)
-        vbl.addStretch()
-
-        grp_bx = self._get_acqrates_grpbx()
-        self._set_detailed(grp_bx)
-        vbl.addWidget(grp_bx)
-        vbl.addStretch()
 
         grp_bx = self._get_acq_commom_params_grpbx()
         vbl.addWidget(grp_bx)
@@ -62,21 +53,6 @@ class AcqControlWidget(BaseWidget):
         tabw.addTab(grp_bx, 'Data-Driven Trigger')
         vbl.addWidget(tabw)
 
-    def _get_sofbmode_grpbx(self):
-        grp_bx = QGroupBox('SOFB Mode', self)
-        fbl = QFormLayout(grp_bx)
-        wid = self.create_pair_sel(grp_bx, 'SOFBMode')
-        fbl.addRow(wid)
-        grp = self._get_orbit_smoothing_grpbx(grp_bx)
-        fbl.addRow(grp)
-        if self.isring:
-            lbl = QLabel('Extend Ring', grp_bx, alignment=Qt.AlignCenter)
-            wid = self.create_pair(grp_bx, 'RingSize')
-            fbl.addRow(lbl, wid)
-            self._set_detailed([lbl, wid])
-
-        return grp_bx
-
     def _set_detailed(self, wids):
         if not isinstance(wids, (list, tuple)):
             wids = [wids]
@@ -84,70 +60,6 @@ class AcqControlWidget(BaseWidget):
         for wid in wids:
             wid.setVisible(False)
             self.details.stateChanged.connect(wid.setVisible)
-
-    def _get_acqrates_grpbx(self):
-        grp_bx = QGroupBox('Acq. Rates', self)
-        hbl = QHBoxLayout(grp_bx)
-        fbl = QFormLayout()
-        hbl.addItem(fbl)
-        lbl = QLabel('Orbit [Hz]', grp_bx, alignment=Qt.AlignCenter)
-        wid = self.create_pair(grp_bx, 'OrbAcqRate')
-        fbl.addRow(lbl, wid)
-        lbl = QLabel('Kicks [Hz]', grp_bx, alignment=Qt.AlignCenter)
-        wid = self.create_pair(grp_bx, 'KickAcqRate')
-        fbl.addRow(lbl, wid)
-
-        wid = QWidget(grp_bx)
-        wid.setStyleSheet('max-width:6em;')
-        hbl.addWidget(wid)
-        vbl = QVBoxLayout(wid)
-        vbl.setContentsMargins(0, 0, 0, 0)
-        lab = QLabel('Sync. Injection', wid, alignment=Qt.AlignCenter)
-        vbl.addWidget(lab)
-        hbl = QHBoxLayout()
-        hbl.setContentsMargins(0, 0, 0, 0)
-        vbl.addItem(hbl)
-        spt = PyDMStateButton(
-            wid, init_channel=self.prefix+'SyncWithInjection-Sel')
-        rdb = SiriusLedState(
-            wid, init_channel=self.prefix+'SyncWithInjection-Sts')
-        hbl.addWidget(spt)
-        hbl.addWidget(rdb)
-        return grp_bx
-
-    def _get_orbit_smoothing_grpbx(self, parent):
-        grp_bx = QWidget(parent)
-        fbl = QFormLayout(grp_bx)
-        lbl = QLabel('Method', grp_bx, alignment=Qt.AlignCenter)
-        wid = self.create_pair_sel(grp_bx, 'SmoothMethod')
-        fbl.addRow(lbl, wid)
-        self._set_detailed([lbl, wid])
-
-        lbl = QLabel('Num. Pts.', grp_bx, alignment=Qt.AlignCenter)
-        stp = SiriusSpinbox(grp_bx, init_channel=self.prefix+'SmoothNrPts-SP')
-        stp.showStepExponent = False
-        rdb = PyDMLabel(grp_bx, init_channel=self.prefix+'SmoothNrPts-RB')
-        rdb.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        slsh = QLabel('/', grp_bx, alignment=Qt.AlignCenter)
-        slsh.setStyleSheet('min-width:0.7em; max-width:0.7em;')
-        cnt = PyDMLabel(grp_bx, init_channel=self.prefix+'BufferCount-Mon')
-        cnt.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        cnt.setToolTip('Current Buffer Size')
-        rst = PyDMPushButton(
-            grp_bx, init_channel=self.prefix+'SmoothReset-Cmd', pressValue=1)
-        rst.setToolTip('Reset Buffer')
-        rst.setIcon(qta.icon('mdi.delete-empty'))
-        rst.setObjectName('rst')
-        rst.setStyleSheet(
-            '#rst{min-width:25px; max-width:25px; icon-size:20px;}')
-        hbl = QHBoxLayout()
-        hbl.addWidget(stp)
-        hbl.addWidget(cnt)
-        hbl.addWidget(slsh)
-        hbl.addWidget(rdb)
-        hbl.addWidget(rst)
-        fbl.addRow(lbl, hbl)
-        return grp_bx
 
     def _get_acq_commom_params_grpbx(self):
         grp_bx = QGroupBox('Common Parameters', self)
