@@ -5,9 +5,9 @@ from qtpy.QtWidgets import QWidget, QLabel, QGridLayout
 
 from siriuspy.envars import VACA_PREFIX
 
-from .as_ti_control import MonitorWindow as TIMonitor
-from .li_ap_mps import MPSMonitor as LIMPSMonitor
-from .as_ps_diag import PSMonitor
+from ..as_ti_control import MonitorWindow as TIMonitor
+from ..li_ap_mps import MPSMonitor as LIMPSMonitor
+from ..as_ps_diag import PSMonitor
 from .util import get_label2devices, get_sec2dev_laypos
 
 
