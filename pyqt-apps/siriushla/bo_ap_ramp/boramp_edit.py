@@ -902,7 +902,7 @@ class MultipolesRamp(QWidget):
             'columns': {0: 'Label',
                         1: 'T [ms]',
                         2: 'E [GeV]',
-                        3: 'Index'}}
+                        3: 'Index Fam / Corr'}}
         idx = 1
         for config in self.normalized_configs.keys():
             self.table_map['rows'][idx] = config
@@ -1414,11 +1414,13 @@ class MultipolesRamp(QWidget):
 
         for row in self.table_map['rows'].keys():
             D = self.ramp_config.ps_ramp_duration
-            N = self.ramp_config.ps_ramp_wfm_nrpoints_fams
+            N1 = self.ramp_config.ps_ramp_wfm_nrpoints_fams
+            N2 = self.ramp_config.ps_ramp_wfm_nrpoints_corrs
             T = float(self.table.item(row, 1).data(Qt.DisplayRole))
-            value = round(T*N/D)
+            value1 = round(T*N1/D)
+            value2 = round(T*N2/D)
             item = self.table.item(row, 3)  # index column
-            item.setData(Qt.DisplayRole, str(value))
+            item.setData(Qt.DisplayRole, str(value1) + ' / ' + str(value2))
         self._sortTable()
 
         self.table.cellChanged.connect(self._handleCellChanged)
