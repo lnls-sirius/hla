@@ -16,23 +16,26 @@ from siriuspy.clientarch import ClientArchiver
 class SiriusTimePlotItem(TimePlotCurveItem):
     """Reimplement to do not receive inf values."""
 
-    def setBufferSize(self, value):
+    def setBufferSize(self, value, initialize_buffer=False):
         """Reimplement."""
         if self._bufferSize == int(value):
             return
         self._bufferSize = max(int(value), 2)
 
-        old_data_buffer = _np.copy(self.data_buffer)
-        self.points_accumulated = old_data_buffer.shape[1]
-        self._min_y_value = min(old_data_buffer[1])
-        self._max_y_value = max(old_data_buffer[1])
+        if initialize_buffer:
+            self.initialize_buffer()
+        else:
+            old_data_buffer = _np.copy(self.data_buffer)
+            self.points_accumulated = old_data_buffer.shape[1]
+            self._min_y_value = min(old_data_buffer[1])
+            self._max_y_value = max(old_data_buffer[1])
 
-        self.data_buffer = _np.zeros(
-            (2, self._bufferSize), order='f', dtype=float)
-        for i in range(self.points_accumulated):
-            self.data_buffer = _np.roll(self.data_buffer, -1)
-            self.data_buffer[0, self._bufferSize-1] = old_data_buffer[0, i]
-            self.data_buffer[1, self._bufferSize-1] = old_data_buffer[1, i]
+            self.data_buffer = _np.zeros(
+                (2, self._bufferSize), order='f', dtype=float)
+            for i in range(self.points_accumulated):
+                self.data_buffer = _np.roll(self.data_buffer, -1)
+                self.data_buffer[0, self._bufferSize-1] = old_data_buffer[0, i]
+                self.data_buffer[1, self._bufferSize-1] = old_data_buffer[1, i]
 
     @Slot(float)
     @Slot(int)
@@ -99,7 +102,7 @@ class SiriusTimePlot(PyDMTimePlot):
             plot_by_timestamps=self._plot_by_timestamps,
             name=name, color=color, **plot_opts)
         new_curve.setUpdatesAsynchronously(self.updatesAsynchronously)
-        new_curve.setBufferSize(self._bufferSize)
+        new_curve.setBufferSize(self._bufferSize, initialize_buffer=True)
 
         self.update_timer.timeout.connect(new_curve.asyncUpdate)
         self.addCurve(new_curve, axis, curve_color=color)
