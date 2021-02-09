@@ -25,11 +25,19 @@ class RFMainControl(SiriusMainWindow):
         super().__init__(parent)
         self.section = section.upper()
         self.chs = SEC_2_CHANNELS[self.section]
+        for group in ['Coupler', 'Cells']:
+            key = group+' Limits PVs'
+            for pv in self.chs['Cav Sts']['Temp'][key]:
+                channel = SiriusConnectionSignal(pv)
+                channel.new_value_signal[float].connect(
+                    self._update_temp_limits)
+
         self.setObjectName(self.section + 'App')
         self.setWindowTitle(self.section + ' RF Control Overview Window')
         self.setWindowIcon(
             qta.icon('mdi.waves', color=get_appropriate_color(self.section)))
         self.curves = dict()
+
         self._setupUi()
         self.setFocusPolicy(Qt.StrongFocus)
 
@@ -135,7 +143,7 @@ class RFMainControl(SiriusMainWindow):
         hlay_intlksts.addWidget(self.led_intlk)
         hlay_intlksts.addWidget(self.pb_intlkdtls)
 
-        # Status Cavidade
+        # Status Cavity
         self.led_cavsts = PyDMLedMultiChannel(
             self, {self.chs['Cav Sts']['Geral']: 1})
         self.pb_cavdtls = QPushButton(qta.icon('fa5s.ellipsis-h'), '', self)
@@ -631,7 +639,7 @@ class RFMainControl(SiriusMainWindow):
         self.ramp_graph.plotItem.getAxis('left').setStyle(tickTextOffset=5)
         self.ramp_graph.addChannel(
             y_channel='RA-RF:PowerSensor1:TracData-Mon',
-            x_channel=' RA-RF:PowerSensor1:TimeAxis-Mon',
+            x_channel='RA-RF:PowerSensor1:TimeAxis-Mon',
             redraw_mode=2, name='Power [W]', color=QColor('blue'))
         self.curve_PwrMtr = self.ramp_graph.curveAtIndex(0)
         self.rb_PwrMtr = QRadioButton('Power Meter Signal', self)
@@ -876,11 +884,7 @@ class RFMainControl(SiriusMainWindow):
         # Cavity
         # # Cells
         lb_tempcell = QLabel('<h3> • Cell</h3>', self)
-        lims = self.chs['Cav Sts']['Temp']['Cells Limits']
-        comp_val = {'comp': 'wt', 'value': lims}
-        ch2vals = {c[0]: comp_val
-                   for c in self.chs['Cav Sts']['Temp']['Cells']}
-        self.led_tempcellok = PyDMLedMultiChannel(self, ch2vals)
+        self.led_tempcellok = PyDMLedMultiChannel(self)
         hbox_tempcell_state = QHBoxLayout()
         hbox_tempcell_state.addWidget(lb_tempcell, alignment=Qt.AlignLeft)
         hbox_tempcell_state.addWidget(
@@ -915,17 +919,14 @@ class RFMainControl(SiriusMainWindow):
             hbox_cbs.addWidget(cb)
 
         pen = mkPen(color='k', width=2, style=Qt.DashLine)
-        self.line_cell_maxlim = InfiniteLine(pos=lims[1], angle=0, pen=pen)
-        self.line_cell_minlim = InfiniteLine(pos=lims[0], angle=0, pen=pen)
+        self.line_cell_maxlim = InfiniteLine(angle=0, pen=pen)
+        self.line_cell_minlim = InfiniteLine(angle=0, pen=pen)
         self.tempcell_graph.addItem(self.line_cell_maxlim)
         self.tempcell_graph.addItem(self.line_cell_minlim)
 
         # # Coupler
         lb_tempcoup = QLabel('<h3> • Coupler</h3>', self)
-        lims_coup = self.chs['Cav Sts']['Temp']['Coupler Limits']
-        self.led_tempcoupok = PyDMLedMultiChannel(
-            self, {self.chs['Cav Sts']['Temp']['Coupler'][0]: {
-                    'comp': 'wt', 'value': lims_coup}})
+        self.led_tempcoupok = PyDMLedMultiChannel(self)
         hbox_tempcoup_state = QHBoxLayout()
         hbox_tempcoup_state.addWidget(lb_tempcoup, alignment=Qt.AlignLeft)
         hbox_tempcoup_state.addWidget(
@@ -946,10 +947,8 @@ class RFMainControl(SiriusMainWindow):
             color=self.chs['Cav Sts']['Temp']['Coupler'][1],
             name='Coupler', lineStyle=Qt.SolidLine, lineWidth=1)
         self.curves['Coupler'] = self.tempcoup_graph.curveAtIndex(0)
-        self.line_coup_maxlim = InfiniteLine(
-            pos=lims_coup[1], angle=0, pen=pen)
-        self.line_coup_minlim = InfiniteLine(
-            pos=lims_coup[0], angle=0, pen=pen)
+        self.line_coup_maxlim = InfiniteLine(angle=0, pen=pen)
+        self.line_coup_minlim = InfiniteLine(angle=0, pen=pen)
         self.tempcoup_graph.addItem(self.line_coup_maxlim)
         self.tempcoup_graph.addItem(self.line_coup_minlim)
 
@@ -1157,3 +1156,30 @@ class RFMainControl(SiriusMainWindow):
         self.curve_PwrMtr.setVisible(index == 0)
         self.curve_VGav.setVisible(index == 1)
         self.curve_Pwr.setVisible(index == 2)
+
+    def _update_temp_limits(self, value):
+        address = self.sender().address
+        if 'Coup' in address:
+            if 'Lower' in address:
+                self.chs['Cav Sts']['Temp']['Coupler Limits'][0] = value
+            else:
+                self.chs['Cav Sts']['Temp']['Coupler Limits'][1] = value
+
+            lims = self.chs['Cav Sts']['Temp']['Coupler Limits']
+            ch2vals = {self.chs['Cav Sts']['Temp']['Coupler'][0]: {
+                       'comp': 'wt', 'value': lims}}
+            self.led_tempcellok.set_channels2values(ch2vals)
+            self.line_coup_minlim.setPos(lims[0])
+            self.line_coup_maxlim.setPos(lims[1])
+        else:
+            if 'Lower' in address:
+                self.chs['Cav Sts']['Temp']['Cells Limits'][0] = value
+            else:
+                self.chs['Cav Sts']['Temp']['Cells Limits'][1] = value
+
+            lims = self.chs['Cav Sts']['Temp']['Cells Limits']
+            ch2vals = {c[0]: {'comp': 'wt', 'value': lims}
+                       for c in self.chs['Cav Sts']['Temp']['Cells']}
+            self.led_tempcoupok.set_channels2values(ch2vals)
+            self.line_cell_minlim.setPos(lims[0])
+            self.line_cell_maxlim.setPos(lims[1])

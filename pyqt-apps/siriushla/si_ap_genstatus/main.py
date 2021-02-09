@@ -65,7 +65,7 @@ class SIGenStatusWindow(SiriusMainWindow):
         box_mach.setStretch(1, 4)
 
         self._led_siriusintlk = SiriusLedAlert(
-            self, self.prefix+'SI-02SB:RF-Intlk:SIA-Mon')
+            self, self.prefix+'RA-RaSIA02:RF-IntlkCtrl:IntlkSirius-Mon')
         self._led_siriusintlk.setStyleSheet(
             'min-width:2em; min-height:2em;')
         self._gbox_siriusintlk = self._create_groupbox(

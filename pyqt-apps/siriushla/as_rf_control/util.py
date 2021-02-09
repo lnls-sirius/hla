@@ -2,8 +2,8 @@
 SEC_2_CHANNELS = {
     'BO': {
         'Emergency': 'BO-05D:RF-Intlk:EStop-Mon',
-        'Sirius Intlk': 'BO-05D:RF-Intlk:BO-Mon',
-        'LLRF Intlk': 'BO-05D:RF-LLRF:Status-Mon',
+        'Sirius Intlk': 'RA-RaBO02:RF-IntlkCtrl:IntlkSirius-Mon',
+        'LLRF Intlk': 'RA-RaBO01:RF-LLRF:Intlk-Mon',
         'Intlk Details': {
             'Input': {
                 'PV': 'BR-RF-DLLRF-01:Intlk-Mon',
@@ -44,7 +44,7 @@ SEC_2_CHANNELS = {
             }
         },
         'Reset': {
-            'Global': 'BO-05D:RF-Intlk:Reset-Sel',
+            'Global': 'RA-RaBO02:RF-Intlk:Reset-Cmd',
             'LLRF': 'BR-RF-DLLRF-01:Reset-Cmd',
         },
         'Cav Sts': {
@@ -57,9 +57,13 @@ SEC_2_CHANNELS = {
                     ('BO-05D:RF-P5Cav:Cylin4T-Mon', 'magenta'),
                     ('BO-05D:RF-P5Cav:Cylin5T-Mon', 'darkCyan'),
                 ),
-                'Cells Limits': (25.0, 40.0),
+                'Cells Limits PVs': ('BO-05D:RF-P5Cav:Cylin1TLowerLimit-Cte',
+                                     'BO-05D:RF-P5Cav:Cylin1TUpperLimit-Cte'),
+                'Cells Limits': [0.0, 0.0],
                 'Coupler': ('BO-05D:RF-P5Cav:CoupT-Mon', 'black'),
-                'Coupler Limits': (25.0, 40.0),
+                'Coupler Limits PVs': ('BO-05D:RF-P5Cav:CoupTLowerLimit-Cte',
+                                       'BO-05D:RF-P5Cav:CoupTUpperLimit-Cte'),
+                'Coupler Limits': [0.0, 0.0],
                 'Discs': (
                     'BO-05D:RF-P5Cav:Disc1Tms-Mon',
                     'BO-05D:RF-P5Cav:Disc2Tms-Mon',
@@ -82,13 +86,13 @@ SEC_2_CHANNELS = {
             }
         },
         'TL Sts': {
-            'Geral': 'RA-TL:RF-TrLine-BO:Sts-Mon',
-            'Circ TIn': 'RA-TL:RF-Circulator-BO:Tin-Mon',
-            'Circ TOut': 'RA-TL:RF-Circulator-BO:Tout-Mon',
-            'Circ Arc': 'RA-TL:RF-Circulator-BO:Arc-Mon',
-            'Circ FlwRt': 'RA-TL:RF-Circulator-BO:FlwRt-Mon',
-            'Load FlwRt': 'RA-TL:RF-Load-BO:FlwRt-Mon',
-            'Circ Intlk': 'RA-TL:RF-Circulator-BO:IntlkOp-Mon',
+            'Geral': 'RA-TLBO:RF-TrLine:Sts-Mon',
+            'Circ TIn': 'RA-TLBO:RF-Circulator:Tin-Mon',
+            'Circ TOut': 'RA-TLBO:RF-Circulator:Tout-Mon',
+            'Circ Arc': 'RA-TLBO:RF-Circulator:Arc-Mon',
+            'Circ FlwRt': 'RA-TLBO:RF-Circulator:FlwRt-Mon',
+            'Load FlwRt': 'RA-TLBO:RF-Load:FlwRt-Mon',
+            'Circ Intlk': 'RA-TLBO:RF-Circulator:IntlkOp-Mon',
             'Circ Limits': (18.0, 25.0),
         },
         'SSA': {
@@ -148,8 +152,8 @@ SEC_2_CHANNELS = {
     },
     'SI': {
         'Emergency': 'RA-RaSIA02:RF-IntlkCtrl:EStop-Mon',
-        'Sirius Intlk': 'SI-02SB:RF-Intlk:SIA-Mon',
-        'LLRF Intlk': 'SI-02SB:RF-LLRF:Intlk-Mon',
+        'Sirius Intlk': 'RA-RaSIA02:RF-IntlkCtrl:IntlkSirius-Mon',
+        'LLRF Intlk': 'RA-RaSIA01:RF-LLRF:Intlk-Mon',
         'Intlk Details': {
             'Input': {
                 'PV': 'SR-RF-DLLRF-01:Intlk-Mon',
@@ -190,7 +194,7 @@ SEC_2_CHANNELS = {
             }
         },
         'Reset': {
-            'Global': 'SI-02SB:RF-Intlk:Reset-Sel',
+            'Global': 'RA-RaSIA02:RF-Intlk:Reset-Cmd',
             'LLRF': 'SR-RF-DLLRF-01:Reset-Cmd',
         },
         'Cav Sts': {
@@ -205,9 +209,13 @@ SEC_2_CHANNELS = {
                     ('SI-02SB:RF-P7Cav:Cylin6T-Mon', 'darkCyan'),
                     ('SI-02SB:RF-P7Cav:Cylin7T-Mon', 'darkRed'),
                 ),
-                'Cells Limits': (25.0, 45.0),
+                'Cells Limits PVs': ('SI-02SB:RF-P7Cav:Cylin1TLowerLimit-Cte',
+                                     'SI-02SB:RF-P7Cav:Cylin1TUpperLimit-Cte'),
+                'Cells Limits': [0.0, 0.0],
                 'Coupler': ('SI-02SB:RF-P7Cav:CoupT-Mon', 'black'),
-                'Coupler Limits': (25.0, 55.0),
+                'Coupler Limits PVs': ('SI-02SB:RF-P7Cav:CoupTLowerLimit-Cte',
+                                       'SI-02SB:RF-P7Cav:CoupTUpperLimit-Cte'),
+                'Coupler Limits': [0.0, 0.0],
                 'Discs': (
                     'SI-02SB:RF-P7Cav:Disc1Tms-Mon',
                     'SI-02SB:RF-P7Cav:Disc2Tms-Mon',
@@ -232,14 +240,14 @@ SEC_2_CHANNELS = {
             }
         },
         'TL Sts': {
-            'Geral': 'RA-TL:RF-TrLine-SIA:Sts-Mon',
-            'Circ TIn': 'RA-TL:RF-Circulator-SIA:Tin-Mon',
-            'Circ TOut': 'RA-TL:RF-Circulator-SIA:Tout-Mon',
-            'Circ Arc': 'RA-TL:RF-Circulator-SIA:Arc-Mon',
-            'Load Arc': 'RA-TL:RF-Load-SIA:Arc-Mon',
-            'Circ FlwRt': 'RA-TL:RF-Circulator-SIA:FlwRt-Mon',
-            'Load FlwRt': 'RA-TL:RF-Load-SIA:FlwRt-Mon',
-            'Circ Intlk': 'RA-TL:RF-Circulator-SIA:IntlkOp-Mon',
+            'Geral': 'RA-TLSIA:RF-TrLine:Sts-Mon',
+            'Circ TIn': 'RA-TLSIA:RF-Circulator:Tin-Mon',
+            'Circ TOut': 'RA-TLSIA:RF-Circulator:Tout-Mon',
+            'Circ Arc': 'RA-TLSIA:RF-Circulator:Arc-Mon',
+            'Load Arc': 'RA-TLSIA:RF-Load:Arc-Mon',
+            'Circ FlwRt': 'RA-TLSIA:RF-Circulator:FlwRt-Mon',
+            'Load FlwRt': 'RA-TLSIA:RF-Load:FlwRt-Mon',
+            'Circ Intlk': 'RA-TLSIA:RF-Circulator:IntlkOp-Mon',
             'Circ Limits': (18.0, 25.0),
         },
         'SSA': {
