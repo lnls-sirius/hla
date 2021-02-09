@@ -2,7 +2,7 @@
 from qtpy.QtGui import QKeySequence
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QMainWindow, QDialog, QHBoxLayout, QApplication, \
-    QWidget, QLabel, QMenu, QPushButton, QGraphicsView
+    QWidget, QLabel, QMenu, QPushButton, QGraphicsView, QScrollArea
 import pyqtgraph as pg
 from pydm.connection_inspector import ConnectionInspector
 
@@ -131,7 +131,9 @@ SiriusMainWindow = _create_siriuswindow(QMainWindow)
 SiriusDialog = _create_siriuswindow(QDialog)
 
 
-def create_window_from_widget(WidgetClass, title='', icon=None, is_main=False):
+def create_window_from_widget(
+        WidgetClass, title='', icon=None, is_main=False, withscroll=False):
+    """."""
 
     if is_main:
         class MyWindow(SiriusMainWindow):
@@ -139,7 +141,15 @@ def create_window_from_widget(WidgetClass, title='', icon=None, is_main=False):
             def __init__(self, parent, *args, **kwargs):
                 super().__init__(parent)
                 self.widget = WidgetClass(self, *args, **kwargs)
-                self.setCentralWidget(self.widget)
+                if withscroll:
+                    scroll = QScrollArea(self)
+                    scroll.setWidget(self.widget)
+                    scroll.setWidgetResizable(True)
+                    scroll.setSizeAdjustPolicy(
+                        QScrollArea.AdjustToContentsOnFirstShow)
+                    self.setCentralWidget(scroll)
+                else:
+                    self.setCentralWidget(self.widget)
                 self.setWindowTitle(title)
                 if icon:
                     self.setWindowIcon(icon)

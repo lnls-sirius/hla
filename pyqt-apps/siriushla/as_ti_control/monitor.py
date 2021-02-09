@@ -9,10 +9,8 @@ import qtawesome as qta
 from siriuspy.namesys import SiriusPVName as PVName
 from siriuspy.search import LLTimeSearch, HLTimeSearch
 
-from ..widgets import SiriusLedAlert, SiriusMainWindow, \
-    PyDMLedMultiChannel
-from ..util import get_appropriate_color, connect_window, \
-    get_monitor_icon
+from ..widgets import SiriusLedAlert, PyDMLedMultiChannel
+from ..util import get_appropriate_color, connect_window
 from ..widgets.windows import create_window_from_widget
 
 from .low_level_devices import EVG, FOUT, AFC, EVR, EVE
@@ -214,8 +212,6 @@ class MonitorWindow(QWidget):
         super().__init__(parent=parent)
         self._setupui()
         self.setObjectName('ASApp')
-        self.setWindowIcon(get_monitor_icon(
-            'mdi.timer', color=get_appropriate_color('AS')))
 
     def _setupui(self):
         self.title = QLabel(

@@ -18,6 +18,6 @@ args = parser.parse_args()
 
 app = SiriusApplication()
 window = create_window_from_widget(
-    PSMonitor, title='PS & PU Monitor', is_main=True)
+    PSMonitor, title='PS & PU Monitor', is_main=True, withscroll=True)
 app.open_window(window, parent=None, prefix=args.prefix)
 sys.exit(app.exec_())
