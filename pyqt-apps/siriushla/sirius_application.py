@@ -3,7 +3,6 @@ import sys
 import os
 import time
 import traceback
-import subprocess as sub
 import logging as _log
 from io import StringIO
 from qtpy.QtWidgets import QMessageBox
