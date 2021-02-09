@@ -106,7 +106,7 @@ class MainWindow(SiriusMainWindow):
         docwid.setSizePolicy(sz_pol)
         docwid.setFloating(False)
         docwid.setObjectName('doc_IOCLog')
-        docwid.setStyleSheet("#doc_IOCLog{min-width:20em; min-height:34em;}")
+        docwid.setStyleSheet("#doc_IOCLog{min-width:20em; min-height:30em;}")
         wid_cont = QWidget()
         docwid.setWidget(wid_cont)
         vbl = QVBoxLayout(wid_cont)

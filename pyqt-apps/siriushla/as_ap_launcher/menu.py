@@ -379,22 +379,33 @@ def get_object(ismenubar=True, parent=None):
                 TuneCorr.setIcon(icon)
                 self.connect_newprocess(
                     TuneCorr, 'sirius-hla-'+sec+'-ap-tunecorr.py')
+                optics.addAction(TuneCorr)
 
                 ChromCorr = QAction('Chromaticity Correction', optics)
-                optics.addAction(TuneCorr)
                 self.connect_newprocess(
                     ChromCorr, 'sirius-hla-'+sec+'-ap-chromcorr.py')
                 optics.addAction(ChromCorr)
+
+                trajfit = QAction('Trajectory Fitting', optics)
+                self.connect_newprocess(
+                    trajfit, 'sirius-hla-'+sec+'-ap-trajfit.py')
+                optics.addAction(trajfit)
             if 'si' in sec:
                 CurrLT = QAction('Current and Lifetime', optics)
                 self.connect_newprocess(
-                    CurrLT, 'sirius-hla-'+sec+'-ap-currlt.py')
+                    CurrLT, 'sirius-hla-si-ap-currlt.py')
                 optics.addAction(CurrLT)
+
+                coupm = QAction('Coupling Meas', optics)
+                self.connect_newprocess(
+                    coupm, 'sirius-hla-si-ap-coupmeas.py')
+                optics.addAction(coupm)
             if 'bo' in sec:
                 ChargeMon = QAction('Charge Monitor', optics)
                 self.connect_newprocess(
                     ChargeMon, 'sirius-hla-bo-ap-chargemon.py')
                 optics.addAction(ChargeMon)
+
                 ramp = QAction('Ramp', optics)
                 ramp.setIcon(qta.icon('mdi.escalator', scale_factor=1.5))
                 self.connect_newprocess(ramp, 'sirius-hla-bo-ap-ramp.py')

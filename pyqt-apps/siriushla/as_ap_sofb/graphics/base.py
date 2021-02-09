@@ -90,19 +90,25 @@ class BaseWidget(QWidget):
         vbl = QVBoxLayout(self)
         vbl.setAlignment(Qt.AlignCenter)
 
-        graphx = self.uigetgraph('x', (65, 20))
-        graphy = self.uigetgraph('y', (65, 20))
+        graphx = self.uigetgraph('x', (45, 15))
+        graphy = self.uigetgraph('y', (45, 15))
         suf = 'Orbit' if self.is_orb else 'Correctors'
         lab = QLabel('<h2>Horizontal ' + suf + '</h2>', self,
-                     alignment=Qt.AlignCenter)
-        lab.setStyleSheet("""min-height:2em; max-height:2em;""")
-        vbl.addWidget(lab)
+                     alignment=Qt.AlignLeft)
+        lab.setStyleSheet("""min-height:1.5em; max-height:1.5em;""")
+        self.hbl_nameh = QHBoxLayout()
+        vbl.addItem(self.hbl_nameh)
+        self.hbl_nameh.addWidget(lab)
+        self.hbl_nameh.addStretch(1)
         vbl.addWidget(graphx)
         vbl.addSpacing(30)
         lab = QLabel('<h2>Vertical ' + suf + '</h2>', self,
-                     alignment=Qt.AlignCenter)
-        lab.setStyleSheet("""min-height:2em; max-height:2em;""")
-        vbl.addWidget(lab)
+                     alignment=Qt.AlignLeft)
+        lab.setStyleSheet("""min-height:1.5em; max-height:1.5em;""")
+        self.hbl_namev = QHBoxLayout()
+        vbl.addItem(self.hbl_namev)
+        self.hbl_namev.addWidget(lab)
+        self.hbl_namev.addStretch(1)
         vbl.addWidget(graphy)
         self.graph = {'x': graphx, 'y': graphy}
 
@@ -569,7 +575,7 @@ class Graph(PyDMWaveformPlot):
         """."""
         super().__init__(*args, **kwargs)
         self.setObjectName('graph')
-        self.setStyleSheet('#graph {min-height: 15em; min-width: 25em;}')
+        self.setStyleSheet('#graph {min-height: 13em; min-width: 20em;}')
         self.maxRedrawRate = 2
         self.mouseEnabledX = True
         self.setShowXGrid(True)

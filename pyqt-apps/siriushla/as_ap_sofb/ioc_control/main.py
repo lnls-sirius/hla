@@ -9,7 +9,7 @@ import qtawesome as qta
 from pydm.widgets import PyDMPushButton, PyDMLabel
 
 from siriushla.widgets import SiriusConnectionSignal, \
-    SiriusLedAlert, SiriusSpinbox
+    SiriusLedAlert, SiriusSpinbox, PyDMStateButton, SiriusLedState
 from siriushla.widgets.windows import create_window_from_widget
 import siriushla.util as _util
 
@@ -41,7 +41,7 @@ class SOFBControl(BaseWidget):
         tabw.addTab(main_wid, 'Main')
 
         wid = AcqControlWidget(tabw, prefix=self.prefix, acc=self.acc)
-        tabw.addTab(wid, 'Orbit')
+        tabw.addTab(wid, 'Trig. Acq. Control')
 
     def get_main_widget(self, parent):
         """."""
@@ -49,12 +49,17 @@ class SOFBControl(BaseWidget):
         vbl = QVBoxLayout()
         main_wid.setLayout(vbl)
 
-        orb_wid = self.get_orbit_widget(main_wid)
+        tabw = QTabWidget(main_wid)
+        orb_wid = self.get_orbit_widget(tabw)
+        acqrt_wid = self.get_orbitdetails_widget(tabw)
+        tabw.addTab(orb_wid, 'Orbit')
+        tabw.addTab(acqrt_wid, 'Details')
+
         corr_wid = self.get_correction_widget(main_wid)
         mat_wid = RespMatWidget(main_wid, self.prefix, self.acc)
 
         vbl.setContentsMargins(0, 0, 0, 0)
-        vbl.addWidget(orb_wid)
+        vbl.addWidget(tabw)
         vbl.addStretch()
         vbl.addWidget(corr_wid)
         vbl.addStretch()
@@ -63,9 +68,10 @@ class SOFBControl(BaseWidget):
 
     def get_orbit_widget(self, parent):
         """."""
-        orb_wid = QGroupBox('Orbit', parent)
+        orb_wid = QWidget(parent)
+        # orb_wid = QGroupBox('Orbit', parent)
         orb_wid.setObjectName('grp')
-        orb_wid.setStyleSheet('#grp{min-height: 10em; max-height: 12em;}')
+        orb_wid.setStyleSheet('#grp{min-height: 11em; max-height: 15em;}')
         orb_wid.setLayout(QGridLayout())
 
         conf = PyDMPushButton(
@@ -109,17 +115,6 @@ class SOFBControl(BaseWidget):
         orb_wid.layout().addWidget(lbl, 1, 0, alignment=Qt.AlignVCenter)
         orb_wid.layout().addWidget(wid, 1, 1)
 
-        lbl = CALabel('OfflineOrb:', orb_wid)
-        combo = OfflineOrbControl(self, self.prefix, self.ctrls, self.acc)
-        rules = (
-            '[{"name": "EnblRule", "property": "Visible", ' +
-            '"expression": "not ch[0]", "channels": [{"channel": "' +
-            self.prefix+'SOFBMode-Sts'+'", "trigger": true}]}]')
-        combo.rules = rules
-        lbl.rules = rules
-        orb_wid.layout().addWidget(lbl, 2, 0, alignment=Qt.AlignVCenter)
-        orb_wid.layout().addWidget(combo, 2, 1, alignment=Qt.AlignBottom)
-
         lbl = QLabel('RefOrb:', orb_wid)
         combo = RefControl(self, self.prefix, self.ctrls, self.acc)
         lbl2 = QLabel('', orb_wid)
@@ -155,8 +150,68 @@ class SOFBControl(BaseWidget):
         hbl.addWidget(rst)
         orb_wid.layout().addWidget(lbl, 4, 0, alignment=Qt.AlignVCenter)
         orb_wid.layout().addItem(hbl, 4, 1)
+
         orb_wid.layout().setColumnStretch(1, 2)
         return orb_wid
+
+    def get_orbitdetails_widget(self, parent):
+        """."""
+        grp_bx = QWidget(parent)
+        grp_bx.setLayout(QVBoxLayout())
+
+        lbl = CALabel('OfflineOrb:', grp_bx)
+        combo = OfflineOrbControl(grp_bx, self.prefix, self.ctrls, self.acc)
+        rules = (
+            '[{"name": "EnblRule", "property": "Visible", ' +
+            '"expression": "not ch[0]", "channels": [{"channel": "' +
+            self.prefix+'SOFBMode-Sts'+'", "trigger": true}]}]')
+        combo.rules = rules
+        lbl.rules = rules
+        fbl = QFormLayout()
+        grp_bx.layout().addLayout(fbl)
+        fbl.addRow(lbl, combo)
+        grp_bx.layout().addStretch()
+
+        hbl = QHBoxLayout()
+        grp_bx.layout().addLayout(hbl)
+        fbl = QFormLayout()
+        hbl.addItem(fbl)
+        lbl = QLabel('Orbit [Hz]', grp_bx, alignment=Qt.AlignCenter)
+        wid = self.create_pair(grp_bx, 'OrbAcqRate')
+        fbl.addRow(lbl, wid)
+        lbl = QLabel('Kicks [Hz]', grp_bx, alignment=Qt.AlignCenter)
+        wid = self.create_pair(grp_bx, 'KickAcqRate')
+        fbl.addRow(lbl, wid)
+
+        wid = QWidget(grp_bx)
+        wid.setStyleSheet('max-width:6em;')
+        hbl.addWidget(wid)
+        vbl = QVBoxLayout(wid)
+        vbl.setContentsMargins(0, 0, 0, 0)
+        lab = QLabel('Sync. Injection', wid, alignment=Qt.AlignCenter)
+        vbl.addWidget(lab)
+        hbl = QHBoxLayout()
+        hbl.setContentsMargins(0, 0, 0, 0)
+        vbl.addItem(hbl)
+        spt = PyDMStateButton(
+            wid, init_channel=self.prefix+'SyncWithInjection-Sel')
+        rdb = SiriusLedState(
+            wid, init_channel=self.prefix+'SyncWithInjection-Sts')
+        hbl.addWidget(spt)
+        hbl.addWidget(rdb)
+        grp_bx.layout().addStretch()
+
+        fbl = QFormLayout()
+        grp_bx.layout().addLayout(fbl)
+        lbl = QLabel('Smooth Method', grp_bx, alignment=Qt.AlignCenter)
+        wid = self.create_pair_sel(grp_bx, 'SmoothMethod')
+        fbl.addRow(lbl, wid)
+        if self.isring:
+            lbl = QLabel('Extend Ring', grp_bx, alignment=Qt.AlignCenter)
+            wid = self.create_pair(grp_bx, 'RingSize')
+            fbl.addRow(lbl, wid)
+
+        return grp_bx
 
     def get_correction_widget(self, parent):
         """."""
