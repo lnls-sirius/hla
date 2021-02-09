@@ -23,6 +23,7 @@ class OrbitWidget(BaseWidget):
     def __init__(self, parent, prefix, ctrls=None, acc='SI'):
         """."""
         self._chans = []
+        self._csorb = SOFBFactory.create(acc)
         if not ctrls:
             self._chans, ctrls = self.get_default_ctrls(
                 prefix, acc=acc.upper())
@@ -52,8 +53,7 @@ class OrbitWidget(BaseWidget):
         grpbx = QGroupBox('Other Graphs', self)
         gdl = QGridLayout(grpbx)
         gdl.setSpacing(2)
-        self.hbl.addWidget(grpbx)
-        self.hbl.addStretch(1)
+        self.hbl_nameh.addWidget(grpbx)
 
         btn = QPushButton('Corrs', grpbx)
         gdl.addWidget(btn, 0, 0)
@@ -63,26 +63,29 @@ class OrbitWidget(BaseWidget):
             btn, Window, self, prefix=self.prefix, acc=self.acc)
 
         if self.isring:
-            btn = QPushButton('MultiTurn Orb', grpbx)
-            gdl.addWidget(btn, 1, 0)
+            btn = QPushButton('MTurn Orb', grpbx)
+            gdl.addWidget(btn, 0, 1)
             Window = create_window_from_widget(
                 MultiTurnWidget, title='Multi Turn')
             _util.connect_window(
                 btn, Window, self,
-                sigs=self.updater[0].raw_ref_sig, prefix=self.prefix)
+                sigs=self.updater[0].raw_ref_sig, prefix=self.prefix,
+                csorb=self._csorb)
 
-            btn = QPushButton('MultTurn Sum', grpbx)
-            gdl.addWidget(btn, 1, 1)
+            btn = QPushButton('MTurn Sum', grpbx)
+            gdl.addWidget(btn, 0, 2)
             Window = create_window_from_widget(
                 MultiTurnSumWidget, title='Multi Turn Sum')
-            _util.connect_window(btn, Window, self, prefix=self.prefix)
+            _util.connect_window(
+                btn, Window, self, prefix=self.prefix,
+                csorb=self._csorb)
 
         btn = QPushButton('SingPass Sum', grpbx)
-        gdl.addWidget(btn, 0, 1)
+        gdl.addWidget(btn, 0, 3)
         Window = create_window_from_widget(
             SinglePassSumWidget, title='Single Pass Sum')
         _util.connect_window(
-            btn, Window, self, prefix=self.prefix, acc=self.acc)
+            btn, Window, self, prefix=self.prefix, csorb=self._csorb)
 
     def channels(self):
         """."""
@@ -125,11 +128,12 @@ class OrbitWidget(BaseWidget):
 class MultiTurnWidget(QWidget):
     """."""
 
-    def __init__(self, parent, sigs, prefix):
+    def __init__(self, parent, sigs, prefix, csorb):
         """."""
         super().__init__(parent)
+        self._csorb = csorb
         self.prefix = _PVName(prefix)
-        self.setObjectName(self.prefix.sec+'App')
+        self.setObjectName(csorb.acc + 'App')
         self.setupui()
         self.sigs = sigs
         self.fun2setref = {
@@ -149,8 +153,10 @@ class MultiTurnWidget(QWidget):
     def setupui(self):
         """."""
         hbl = QHBoxLayout(self)
-        self.spectx = MultiTurnSumWidget(self, self.prefix, orbtype='X')
-        self.specty = MultiTurnSumWidget(self, self.prefix, orbtype='Y')
+        self.spectx = MultiTurnSumWidget(
+            self, self.prefix, orbtype='X', csorb=self._csorb)
+        self.specty = MultiTurnSumWidget(
+            self, self.prefix, orbtype='Y', csorb=self._csorb)
         hbl.addWidget(self.spectx)
         hbl.addSpacing(50)
         hbl.addWidget(self.specty)
@@ -166,12 +172,14 @@ class MultiTurnWidget(QWidget):
 class MultiTurnSumWidget(QWidget):
     """."""
 
-    def __init__(self, parent, prefix, orbtype='sum'):
+    def __init__(self, parent, prefix, orbtype='sum', csorb=None):
         """."""
         super().__init__(parent)
         self.prefix = _PVName(prefix)
         self.orbtype = orbtype.lower()
+        self._csorb = csorb
         self.setObjectName(self.prefix.sec+'App')
+        self.multiturnidx = SiriusConnectionSignal(self.prefix+'MTurnIdx-SP')
         self.setupui()
 
     def setupui(self):
@@ -210,7 +218,7 @@ class MultiTurnSumWidget(QWidget):
         vbl.addWidget(lab)
         vbl.addWidget(self.spect)
 
-        vbl.addSpacing(50)
+        vbl.addStretch()
         lab = QLabel(
             'Average ' + lbl_text + ' vs Time', self, alignment=Qt.AlignCenter)
         lab.setStyleSheet("font-weight: bold;")
@@ -231,12 +239,14 @@ class MultiTurnSumWidget(QWidget):
             symbolSize=10)
         graph.addChannel(**opts)
         graph.setShowLegend(False)
+        graph.plotItem.scene().sigMouseMoved.connect(self._show_tooltip_time)
         self.curve = graph.curveAtIndex(0)
+        self.graph_time = graph
 
         if not self.orbtype.startswith('sum'):
             return
 
-        vbl.addSpacing(50)
+        vbl.addStretch()
         wid = QWidget(self)
         lab = QLabel(
             lbl_text + ' orbit at index:', wid,
@@ -268,6 +278,55 @@ class MultiTurnSumWidget(QWidget):
             symbolSize=10)
         graph.addChannel(**opts)
         graph.setShowLegend(False)
+        graph.plotItem.scene().sigMouseMoved.connect(self._show_tooltip)
+        self.graph = graph
+
+    def mouseDoubleClickEvent(self, ev):
+        """."""
+        if ev.button() != Qt.LeftButton:
+            return super().mouseDoubleClickEvent(ev)
+        graph = self.graph_time
+        curve = graph.curveAtIndex(0)
+        posx = curve.scatter.mapFromScene(ev.pos()).x()
+        times = curve.getData()[0]
+        if times is None:
+            return super().mouseDoubleClickEvent(ev)
+        ind = _np.argmin(_np.abs(times-posx))
+        self.multiturnidx.send_value_signal[int].emit(int(ind))
+        super().mouseDoubleClickEvent(ev)
+
+    def _show_tooltip(self, pos):
+        names = self._csorb.bpm_nicknames
+        posi = self._csorb.bpm_pos
+        unit = 'count'
+
+        graph = self.graph
+        curve = graph.curveAtIndex(0)
+        posx = curve.scatter.mapFromScene(pos).x()
+        if self._csorb.isring:
+            posx = posx % self._csorb.circum
+        ind = _np.argmin(_np.abs(_np.array(posi)-posx))
+        posy = curve.scatter.mapFromScene(pos).y()
+
+        sca, prf = functions.siScale(posy)
+        txt = '{0:s}, y = {1:.3f} {2:s}'.format(
+                                names[ind], sca*posy, prf+unit)
+        QToolTip.showText(
+            graph.mapToGlobal(pos.toPoint()),
+            txt, graph, graph.geometry(), 500)
+
+    def _show_tooltip_time(self, pos):
+        graph = self.graph_time
+        curve = graph.curveAtIndex(0)
+        posx = curve.scatter.mapFromScene(pos).x()
+        times = curve.getData()[0]
+        if times is None:
+            return
+        ind = _np.argmin(_np.abs(times-posx))
+        txt = f'index = {ind:d}'
+        QToolTip.showText(
+            graph.mapToGlobal(pos.toPoint()),
+            txt, graph, graph.geometry(), 500)
 
     def update_graph(self, data):
         """."""
@@ -287,10 +346,9 @@ class Spectrogram(SiriusSpectrogramView):
         self._reforb = None
         super().__init__(**kwargs)
         self.setObjectName('graph')
-        self.setStyleSheet('#graph {min-height: 15em; min-width: 25em;}')
+        self.setStyleSheet('#graph {min-height: 15em; min-width: 20em;}')
         self.prefix = prefix
-        self.multiturnidx = SiriusConnectionSignal(
-                                self.prefix + 'MTurnIdx-SP')
+        self.multiturnidx = SiriusConnectionSignal(self.prefix+'MTurnIdx-SP')
 
     def channels(self):
         """."""
@@ -322,13 +380,12 @@ class Spectrogram(SiriusSpectrogramView):
 class SinglePassSumWidget(QWidget):
     """."""
 
-    def __init__(self, parent, prefix, acc):
+    def __init__(self, parent, prefix, csorb):
         """."""
         super().__init__(parent)
         self.prefix = _PVName(prefix)
-        self.setObjectName(self.prefix.sec+'App')
-        self.acc = acc.upper()
-        self._csorb = SOFBFactory.create(acc)
+        self.setObjectName(csorb.acc+'App')
+        self._csorb = csorb
         self.setupui()
 
     def setupui(self):
