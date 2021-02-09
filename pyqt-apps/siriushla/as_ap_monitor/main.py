@@ -3,19 +3,15 @@
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QLabel, QGridLayout
 
-import qtawesome as qta
-
 from siriuspy.envars import VACA_PREFIX
 
-from siriushla.widgets import SiriusMainWindow
-from siriushla.as_ti_control import MonitorWindow as TIMonitor
-from siriushla.li_ap_mps import MPSMonitor as LIMPSMonitor
-from siriushla.util import get_appropriate_color
-from siriushla.as_ps_diag import PSMonitor
+from .as_ti_control import MonitorWindow as TIMonitor
+from .li_ap_mps import MPSMonitor as LIMPSMonitor
+from .as_ps_diag import PSMonitor
 from .util import get_label2devices, get_sec2dev_laypos
 
 
-class SiriusMonitor(SiriusMainWindow):
+class SiriusMonitor(QWidget):
     """Sirius Monitor."""
 
     def __init__(self, parent=None, prefix=VACA_PREFIX):
@@ -23,18 +19,12 @@ class SiriusMonitor(SiriusMainWindow):
         super().__init__(parent)
         self._prefix = prefix
         self.setObjectName('ASApp')
-        self.setWindowTitle('Sirius Monitor')
-        color = get_appropriate_color(section='AS')
-        self.setWindowIcon(qta.icon('mdi.monitor-dashboard', color=color))
         self._setupUi()
 
     def _setupUi(self):
         label = QLabel('<h3>Sirius Monitor</h3>',
                        alignment=Qt.AlignCenter)
         label.setStyleSheet('max-height:1.29em;')
-
-        cw = QWidget()
-        self.setCentralWidget(cw)
 
         self.wid_asmon = PSMonitor(
             self, self._prefix,
@@ -62,7 +52,7 @@ class SiriusMonitor(SiriusMainWindow):
                 min-height: 0.98em; max-height: 0.98em;
                 min-width: 0.98em; max-width: 0.98em;}""")
 
-        layout = QGridLayout(cw)
+        layout = QGridLayout(self)
         layout.setHorizontalSpacing(12)
         layout.addWidget(label, 0, 0, 1, 3)
         layout.addWidget(self.wid_asmon, 1, 0, alignment=Qt.AlignTop)
