@@ -148,7 +148,10 @@ class MultiTurnWidget(QWidget):
     def hideEvent(self, _):
         """."""
         for pln, sig in self.sigs.items():
-            sig.disconnect(self.fun2setref[pln])
+            try:
+                sig.disconnect(self.fun2setref[pln])
+            except TypeError:
+                pass
 
     def setupui(self):
         """."""
