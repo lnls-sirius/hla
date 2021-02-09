@@ -29,15 +29,6 @@ _log.basicConfig(
     filename=LOGFILE, filemode='a')
 
 
-# Set QT_SCALE_FACTOR
-res = sub.getoutput('xrandr')
-if 'current' in res:
-    res = sub.getoutput('xrandr | grep current')
-    res = int(res.split(',')[1].split()[3])
-    if res > 2000:
-        os.environ['QT_SCALE_FACTOR'] = '1.5'
-
-
 # https://riverbankcomputing.com/pipermail/pyqt/2009-May/022961.html
 def excepthook(exctype, excvalue, tracebackobj):
     """
