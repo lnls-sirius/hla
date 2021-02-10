@@ -125,7 +125,7 @@ class RFMainControl(SiriusMainWindow):
                 max-width: 1.29em;
             }
             QLabel{
-                max-height:1.5em; min-width:5em;
+                max-height:1.5em; min-width:4em;
             }""")
 
     def _statusLayout(self):
@@ -135,7 +135,7 @@ class RFMainControl(SiriusMainWindow):
 
         # # Emergency
         self.ld_emerg = QLabel('Emergency Stop', self, alignment=Qt.AlignRight)
-        self.ld_emerg.setStyleSheet('min-width: 7.5em;')
+        self.ld_emerg.setStyleSheet('min-width: 6.8em;')
         self.led_emerg = SiriusLedAlert(self, self.chs['Emergency'])
 
         # # Sirius Interlock
