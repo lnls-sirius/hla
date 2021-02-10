@@ -50,7 +50,7 @@ class PUControlWindow(SiriusMainWindow):
             self.scrollwidget = QWidget()
             self.scrollwidget.setObjectName('scrollwid')
             self.main_widget.setStyleSheet(
-                '#main{min-width:70em; min-height:54em;}'
+                '#main{min-width:64em; min-height:48em;}'
                 '#scrollwid{background-color: transparent;}')
             slay = QVBoxLayout(self.scrollwidget)
             self.main_widget.setWidget(self.scrollwidget)
