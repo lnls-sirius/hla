@@ -1099,8 +1099,8 @@ class RFMainControl(SiriusMainWindow):
         bt_pinsw = RFEnblDsblButton(
             parent=self,
             channels={
-                'on': chs_dict['PinSw'].replace('-Mon', 'Enbl-Sel'),
-                'off': chs_dict['PinSw'].replace('-Mon', 'Dsbl-Sel')})
+                'on': chs_dict['PinSw'].replace('-Mon', 'Enbl-Cmd'),
+                'off': chs_dict['PinSw'].replace('-Mon', 'Dsbl-Cmd')})
         rules = (
             '[{"name": "EnblRule", "property": "Enable", ' +
             '"expression": "ch[0] < 3.0", "channels": [' +
