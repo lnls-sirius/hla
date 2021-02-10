@@ -105,6 +105,10 @@ class RFMainControl(SiriusMainWindow):
         lay.addWidget(wid_startctrl, 1, 1, 2, 1)
         lay.addWidget(wid_pwrmon, 1, 2, 2, 1)
         lay.addWidget(gbox_graphs, 1, 3, 2, 1)
+        lay.setColumnStretch(0, 2)
+        lay.setColumnStretch(1, 5)
+        lay.setColumnStretch(2, 3)
+        lay.setColumnStretch(3, 4)
 
         self.setStyleSheet("""
             QSpinBox, QComboBox, QPushButton, PyDMLineEdit,
@@ -125,51 +129,71 @@ class RFMainControl(SiriusMainWindow):
             }""")
 
     def _statusLayout(self):
-        # Emergency
+        # Interlocks
+        self._ld_intlks = QLabel(
+            '<h4>Interlocks</h4>', self, alignment=Qt.AlignLeft)
+
+        # # Emergency
+        self.ld_emerg = QLabel('Emergency Stop', self, alignment=Qt.AlignRight)
+        self.ld_emerg.setStyleSheet('min-width: 7.5em;')
         self.led_emerg = SiriusLedAlert(self, self.chs['Emergency'])
 
-        # Sirius Interlock
+        # # Sirius Interlock
+        self.ld_siriusintlk = QLabel(
+            'Sirius Interlock', self, alignment=Qt.AlignRight)
         self.led_siriusintlk = SiriusLedAlert(self, self.chs['Sirius Intlk'])
 
-        # LLRF Interlock
+        # # LLRF Interlock
+        self.ld_intlk = QLabel('LLRF Interlock', self, alignment=Qt.AlignRight)
         self.led_intlk = SiriusLedAlert(self, self.chs['LLRF Intlk'])
-        self.pb_intlkdtls = QPushButton(qta.icon('fa5s.ellipsis-h'), '', self)
+        self.pb_intlkdtls = QPushButton(qta.icon('fa5s.ellipsis-v'), '', self)
         self.pb_intlkdtls.setObjectName('dtls')
         self.pb_intlkdtls.setStyleSheet(
-            '#dtls{min-width:25px;max-width:25px;icon-size:20px;}')
+            '#dtls{min-width:18px;max-width:18px;icon-size:20px;}')
         connect_window(self.pb_intlkdtls, LLRFInterlockDetails, parent=self,
                        section=self.section)
         hlay_intlksts = QHBoxLayout()
         hlay_intlksts.addWidget(self.led_intlk)
         hlay_intlksts.addWidget(self.pb_intlkdtls)
 
-        # Status Cavity
+        # Status
+        self._ld_stats = QLabel(
+            '<h4>Status</h4>', self, alignment=Qt.AlignLeft)
+
+        # # Status Cavity
+        self.ld_cavsts = QLabel('Cavity', self, alignment=Qt.AlignRight)
         self.led_cavsts = PyDMLedMultiChannel(
             self, {self.chs['Cav Sts']['Geral']: 1})
-        self.pb_cavdtls = QPushButton(qta.icon('fa5s.ellipsis-h'), '', self)
+        self.pb_cavdtls = QPushButton(qta.icon('fa5s.ellipsis-v'), '', self)
         self.pb_cavdtls.setObjectName('dtls')
         self.pb_cavdtls.setStyleSheet(
-            '#dtls{min-width:25px;max-width:25px;icon-size:20px;}')
+            '#dtls{min-width:18px;max-width:18px;icon-size:20px;}')
         connect_window(self.pb_cavdtls, CavityStatusDetails, parent=self,
                        section=self.section)
         hlay_cavsts = QHBoxLayout()
         hlay_cavsts.addWidget(self.led_cavsts)
         hlay_cavsts.addWidget(self.pb_cavdtls)
 
-        # Status Transmission Line
+        # # Status Transmission Line
+        self.ld_tlsts = QLabel('Transm. Line', self, alignment=Qt.AlignRight)
         self.led_tlsts = PyDMLedMultiChannel(
             self, {self.chs['TL Sts']['Geral']: 1})
-        self.pb_tldtls = QPushButton(qta.icon('fa5s.ellipsis-h'), '', self)
+        self.pb_tldtls = QPushButton(qta.icon('fa5s.ellipsis-v'), '', self)
         self.pb_tldtls.setObjectName('dtls')
         self.pb_tldtls.setStyleSheet(
-            '#dtls{min-width:25px;max-width:25px;icon-size:20px;}')
+            '#dtls{min-width:18px;max-width:18px;icon-size:20px;}')
         connect_window(self.pb_tldtls, TransmLineStatusDetails, parent=self,
                        section=self.section)
         hlay_tlsts = QHBoxLayout()
         hlay_tlsts.addWidget(self.led_tlsts)
         hlay_tlsts.addWidget(self.pb_tldtls)
 
-        # Reset Global
+        # Reset
+        self._ld_reset = QLabel('<h4>Reset</h4>', self, alignment=Qt.AlignLeft)
+
+        # # Reset Global
+        self.ld_globreset = QLabel(
+            'Reset Global', self, alignment=Qt.AlignRight)
         self.pb_globreset = SiriusPushButton(
             label='', icon=qta.icon('fa5s.sync'),
             parent=self, init_channel=self.chs['Reset']['Global'])
@@ -177,7 +201,8 @@ class RFMainControl(SiriusMainWindow):
         self.pb_globreset.setStyleSheet(
             '#pb_globreset{min-width:25px; max-width:25px; icon-size:20px;}')
 
-        # Reset LLRF
+        # # Reset LLRF
+        self.ld_llrfreset = QLabel('Reset LLRF', self, alignment=Qt.AlignRight)
         self.pb_llrfreset = SiriusPushButton(
             label='', icon=qta.icon('fa5s.sync'),
             parent=self, init_channel=self.chs['Reset']['LLRF'])
@@ -185,28 +210,34 @@ class RFMainControl(SiriusMainWindow):
         self.pb_llrfreset.setStyleSheet(
             '#pb_llrfreset{min-width:25px; max-width:25px; icon-size:20px;}')
 
-        lay = QFormLayout()
-        lay.setLabelAlignment(Qt.AlignRight)
-        lay.setFormAlignment(Qt.AlignCenter)
-        lay.addRow(QLabel('<h4>Interlocks</h4>', self, alignment=Qt.AlignLeft))
-        lay.addRow('Emergency Stop', self.led_emerg)
-        lay.addRow('Sirius Interlock', self.led_siriusintlk)
-        lay.addRow('LLRF Interlock', hlay_intlksts)
-        lay.addRow(QLabel('<h4>Status</h4>', self, alignment=Qt.AlignLeft))
-        lay.addRow('Cavity', hlay_cavsts)
-        lay.addRow('Transm. Line', hlay_tlsts)
-        lay.addRow(QLabel('<h4>Reset</h4>', self, alignment=Qt.AlignLeft))
-        lay.addRow('Reset Global', self.pb_globreset)
-        lay.addRow('Reset LLRF', self.pb_llrfreset)
+        lay = QGridLayout()
+        lay.addWidget(self._ld_intlks, 0, 0, 1, 2)
+        lay.addWidget(self.ld_emerg, 1, 0)
+        lay.addWidget(self.led_emerg, 1, 1)
+        lay.addWidget(self.ld_siriusintlk, 2, 0)
+        lay.addWidget(self.led_siriusintlk, 2, 1)
+        lay.addWidget(self.ld_intlk, 3, 0)
+        lay.addLayout(hlay_intlksts, 3, 1)
+        lay.addWidget(self._ld_stats, 4, 0, 1, 2)
+        lay.addWidget(self.ld_cavsts, 5, 0)
+        lay.addLayout(hlay_cavsts, 5, 1)
+        lay.addWidget(self.ld_tlsts, 6, 0)
+        lay.addLayout(hlay_tlsts, 6, 1)
+        lay.addWidget(self._ld_reset, 7, 0, 1, 2)
+        lay.addWidget(self.ld_globreset, 8, 0)
+        lay.addWidget(self.pb_globreset, 8, 1)
+        lay.addWidget(self.ld_llrfreset, 9, 0)
+        lay.addWidget(self.pb_llrfreset, 9, 1)
         return lay
 
     def _rfGenLayout(self):
         # On/Off
-        self.ld_genenbl = QLabel('Enable: ', self, alignment=Qt.AlignRight)
+        self.ld_genenbl = QLabel('Enable', self, alignment=Qt.AlignCenter)
         # self.bt_genenbl = PyDMStateButton(self, 'RF-Gen:GeneralRF-Sel')
         self.lb_genenbl = SiriusLedState(self, 'RF-Gen:GeneralRF-Sts')
+
         # Frequência
-        self.ld_genfreq = QLabel('Frequency: ', self, alignment=Qt.AlignRight)
+        self.ld_genfreq = QLabel('Frequency', self, alignment=Qt.AlignCenter)
         self.le_genfreq = PyDMLineEdit(self, 'RF-Gen:GeneralFreq-SP')
         self.le_genfreq.setStyleSheet('min-width:7em; max-width:7em;')
         self.le_genfreq.precisionFromPV = False
@@ -216,28 +247,27 @@ class RFMainControl(SiriusMainWindow):
             'min-width:7em; max-width:7em; qproperty-alignment:AlignLeft;')
         self.lb_genfreq.precisionFromPV = False
         self.lb_genfreq.precision = 2
-        vl_freq = QVBoxLayout()
-        vl_freq.addWidget(self.le_genfreq)
-        vl_freq.addWidget(self.lb_genfreq)
+
         # Phase Continuous State
-        self.ld_genphscont = QLabel('Phase Cont.: ', self,
-                                    alignment=Qt.AlignRight)
-        self.ld_genphscont.setStyleSheet(
-            'min-width:5em; max-width:5em; qproperty-alignment:AlignLeft;')
+        self.ld_genphscont = QLabel(
+            'Phase Cont.', self, alignment=Qt.AlignCenter)
         # self.bt_genphscont = PyDMStateButton(self, 'RF-Gen:FreqPhsCont-Sel')
         self.lb_genphscont = SiriusLedState(self, 'RF-Gen:FreqPhsCont-Sts')
 
-        lay = QGridLayout()
-        lay.setAlignment(Qt.AlignTop)
-        lay.setVerticalSpacing(12)
-        lay.addWidget(self.ld_genenbl, 1, 0)
-        # lay.addWidget(self.bt_genenbl, 1, 1)
-        lay.addWidget(self.lb_genenbl, 1, 1)
-        lay.addWidget(self.ld_genfreq, 2, 0, alignment=Qt.AlignTop)
-        lay.addLayout(vl_freq, 2, 1)
-        lay.addWidget(self.ld_genphscont, 3, 0)
-        # lay.addWidget(self.bt_genphscont, 3, 1)
-        lay.addWidget(self.lb_genphscont, 3, 1)
+        lay = QVBoxLayout()
+        lay.setAlignment(Qt.AlignCenter)
+        lay.addWidget(self.ld_genenbl)
+        # lay.addWidget(self.bt_genenbl)
+        lay.addWidget(self.lb_genenbl, alignment=Qt.AlignCenter)
+        lay.addStretch()
+        lay.addWidget(self.ld_genfreq)
+        lay.addWidget(self.le_genfreq)
+        lay.addWidget(self.lb_genfreq)
+        lay.addStretch()
+        lay.addWidget(self.ld_genphscont)
+        # lay.addWidget(self.bt_genphscont)
+        lay.addWidget(self.lb_genphscont, alignment=Qt.AlignCenter)
+        lay.addStretch()
         return lay
 
     def _startControlLayout(self):
@@ -625,7 +655,7 @@ class RFMainControl(SiriusMainWindow):
             parent=self, background=QColor(255, 255, 255))
         self.ramp_graph.setObjectName('graph')
         self.ramp_graph.setStyleSheet(
-            '#graph{min-height:15em;min-width:23em;max-height:15em;}')
+            '#graph{min-height:15em;min-width:21em;max-height:15em;}')
         self.ramp_graph.maxRedrawRate = 2
         self.ramp_graph.mouseEnabledX = True
         self.ramp_graph.setShowXGrid(True)
@@ -784,7 +814,7 @@ class RFMainControl(SiriusMainWindow):
         self.pwr_mon_graph.maxRedrawRate = 1
         self.pwr_mon_graph.setObjectName('pwrmon_graph')
         self.pwr_mon_graph.setStyleSheet(
-            '#pwrmon_graph{min-width: 23.5em; min-height: 20em;}')
+            '#pwrmon_graph{min-width: 21em; min-height: 18em;}')
 
         data = self.chs['PwrMtr']
 
@@ -864,7 +894,7 @@ class RFMainControl(SiriusMainWindow):
         self.temp_wid = QWidget()
         self.temp_wid.setStyleSheet("""
             #tempcell_graph, #tempcoup_graph, #tempcirc_graph{
-                min-width: 30em; min-height: 10.5em; max-height: 10.5em;}
+                min-width: 26em; min-height: 10.5em; max-height: 10.5em;}
             QTabWidget::pane{
                 border-bottom: 2px solid gray;}
         """)
