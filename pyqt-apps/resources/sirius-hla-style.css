@@ -189,8 +189,8 @@ ProgressDialog {
 /* Servconf */
 #ServConf {
     padding: 0 20px 10px 20px;
-    min-width: 100em;
-    min-height: 60em;
+    min-width: 80em;
+    min-height: 54em;
 }
 #ServConf #Header {
     margin: 0 0 0 0;
