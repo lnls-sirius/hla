@@ -52,7 +52,7 @@ class BaseWidget(QWidget):
                 if not_enum:
                     chan1 = self.get_pvname(pv1, is_data=isdata)
                     wid = SiriusSpinbox(self, init_channel=chan1)
-                    wid.setStyleSheet("""min-width:5em;""")
+                    wid.setStyleSheet("min-width:5em;")
                     wid.showStepExponent = False
                     wid.limitsFromChannel = False
                     pvn = self.data_prefix + pv1
@@ -62,7 +62,7 @@ class BaseWidget(QWidget):
                     wid = PyDMEnumComboBox(
                         self,
                         init_channel=self.get_pvname(pv1, is_data=isdata))
-                    wid.setStyleSheet("""min-width:5em;""")
+                    wid.setStyleSheet("min-width:5em;")
                 wid.setObjectName(pv1.replace('-', ''))
                 hbl.addWidget(wid)
 
@@ -70,11 +70,11 @@ class BaseWidget(QWidget):
                 self, init_channel=self.get_pvname(pv2, is_data=isdata))
             lab.setObjectName(pv2.replace('-', ''))
             lab.showUnits = True
-            lab.setStyleSheet("""min-width:5em;""")
+            lab.setStyleSheet("min-width:5em;")
             hbl.addWidget(lab)
             lab = QLabel(txt)
             lab.setObjectName(pv1.split('-')[0])
-            lab.setStyleSheet("""min-width:8em;""")
+            lab.setStyleSheet("min-width:8em;")
             fbl.addRow(lab, hbl)
         return grpbx
 
@@ -126,7 +126,7 @@ class BaseGraph(BaseWidget):
         graph.setAxisColor(QColor(0, 0, 0))
         graph.plotItem.getAxis('bottom').setStyle(tickTextOffset=15)
         graph.plotItem.getAxis('left').setStyle(
-            tickTextOffset=5, autoExpandTextSpace=False, tickTextWidth=80)
+            tickTextOffset=5, autoExpandTextSpace=False, tickTextWidth=30)
 
     def setupui(self):
         hbl = QHBoxLayout(self)
