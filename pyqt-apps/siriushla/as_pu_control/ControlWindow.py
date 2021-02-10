@@ -1,7 +1,8 @@
 """Modulet that defines the window class that control pulsed mangets."""
 
 from qtpy.QtCore import Qt, Slot
-from qtpy.QtWidgets import QWidget, QVBoxLayout, QTabWidget, QAction, QMenu
+from qtpy.QtWidgets import QWidget, QVBoxLayout, QGroupBox, QAction, QMenu, \
+    QScrollArea
 import qtawesome as qta
 from pydm.connection_inspector import ConnectionInspector
 
@@ -17,11 +18,13 @@ from .DetailWindow import PUDetailWindow
 class PUControlWindow(SiriusMainWindow):
     """Window to control pulsed magnets."""
 
-    def __init__(self, parent=None, section=None, is_main=True):
+    def __init__(self, parent=None, section=None, is_main=True,
+                 main_secs=('TB', 'BO', 'TS', 'SI')):
         """Constructor."""
         super().__init__(parent)
         self._section = section
         self._is_main = is_main
+        self._main_secs = main_secs
         self.setWindowTitle(section.upper() + ' Pulsed Magnets Control Window')
         if section in {'InjBO', 'EjeBO'}:
             color = get_appropriate_color('BO')
@@ -41,22 +44,31 @@ class PUControlWindow(SiriusMainWindow):
 
     def _setup_ui(self):
         if self._is_main:
-            self.main_widget = QTabWidget(self)
-            self.main_widget.layout = QVBoxLayout()
-            self.main_widget.setLayout(self.main_widget.layout)
-            self.main_widget.addTab(self._make_tab_widget('TB'), 'TB')
-            self.main_widget.addTab(self._make_tab_widget('BO'), 'Booster')
-            self.main_widget.addTab(self._make_tab_widget('TS'), 'TS')
-            self.main_widget.addTab(
-                self._make_tab_widget('SI'), 'Storage Ring')
+            self.main_widget = QScrollArea(self)
+            self.main_widget.setObjectName('main')
+            self.main_widget.setWidgetResizable(True)
+            self.scrollwidget = QWidget()
+            self.scrollwidget.setObjectName('scrollwid')
+            self.main_widget.setStyleSheet(
+                '#main{min-width:70em; min-height:54em;}'
+                '#scrollwid{background-color: transparent;}')
+            slay = QVBoxLayout(self.scrollwidget)
+            self.main_widget.setWidget(self.scrollwidget)
+            for sec in self._main_secs:
+                name = 'BO' if 'BO' in sec else 'SI' if 'SI' in sec else sec
+                gbox = QGroupBox(sec, self)
+                gbox.setObjectName(name+'App')
+                glay = QVBoxLayout(gbox)
+                glay.addWidget(self._make_sec_widget(sec))
+                slay.addWidget(gbox)
             self._connect_buttons()
         elif self._section is not None:
-            self.main_widget = self._make_tab_widget(self._section)
+            self.main_widget = self._make_sec_widget(self._section)
             self._connect_buttons()
         else:
             raise ValueError('Invalid \'section\' argument!')
 
-    def _make_tab_widget(self, sec):
+    def _make_sec_widget(self, sec):
         widget = QWidget(self)
         lay = QVBoxLayout(widget)
 
