@@ -69,6 +69,7 @@ class ICTSummary(QWidget):
             lb_charge = PyDMLabel(
                 parent=self, init_channel=self.prefix+ict+':Charge-Mon')
             lb_charge.setObjectName(ict+'_charge')
+            lb_charge.setStyleSheet('max-width: 10em;')
             lay_ict = QGridLayout()
             lay_ict.addWidget(QLabel(ict, self, alignment=Qt.AlignCenter),
                               0, 0, 1, 2)
