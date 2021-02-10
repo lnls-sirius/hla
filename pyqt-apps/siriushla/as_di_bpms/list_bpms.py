@@ -90,7 +90,9 @@ class SinglePassSummary(BaseWidget):
         super().__init__(
             parent=parent, prefix=prefix, bpm='', data_prefix='SP_')
         self.bpm_dict = {bpm: '' for bpm in bpm_list}
-        self.setObjectName(bpm_list[0][:2] + 'App')
+        self._name = bpm_list[0][:2] + 'App'
+        self.setObjectName(self._name)
+        self.setStyleSheet('#'+self._name+'{min-width:65em;min-height:38em;}')
         self.setupui()
 
     def setupui(self):
@@ -132,7 +134,6 @@ class SinglePassSummary(BaseWidget):
         self.gdl = gdl
         vbl.addWidget(scarea)
         scarea.setWidget(wid)
-        self.setStyleSheet('GraphWave{min-width:20em;min-height:15em;}')
         self.scarea = scarea
 
     def create_graph(self, wid, bpm, typ='pos'):
@@ -174,6 +175,8 @@ class SinglePassSummary(BaseWidget):
                 opts['name'] = text[:3] + name
                 opts['y_channel'] = graph.get_pvname(opts['y_channel'])
                 graph.addChannel(**opts)
+        graph.setObjectName('graph')
+        graph.setStyleSheet('#graph{min-width: 18em; min-height: 12em;}')
         return graph
 
     def _get_properties(self, typ='pos'):
@@ -225,7 +228,9 @@ class MultiTurnSummary(BaseWidget):
             parent=parent, prefix=prefix, bpm='', data_prefix='GEN_')
         self.bpm_dict = {bpm: '' for bpm in bpm_list}
         self.mode = mode.lower()
-        self.setObjectName(bpm_list[0][:2] + 'App')
+        self._name = bpm_list[0][:2] + 'App'
+        self.setObjectName(self._name)
+        self.setStyleSheet('#'+self._name+'{min-width:65em;min-height:38em;}')
         self.setupui()
 
     def setupui(self):
@@ -266,7 +271,6 @@ class MultiTurnSummary(BaseWidget):
         self.gdl = gdl
         vbl.addWidget(scarea)
         scarea.setWidget(wid)
-        self.setStyleSheet('GraphWave{min-width:20em;min-height:15em;}')
         self.scarea = scarea
 
     def create_graph(self, wid, bpm, typ='pos'):
@@ -294,6 +298,8 @@ class MultiTurnSummary(BaseWidget):
                 graph.addChannel(add_scale=1e-9, **opts)
             else:
                 graph.addChannel(**opts)
+        graph.setObjectName('graph')
+        graph.setStyleSheet('#graph{min-width: 18em; min-height: 12em;}')
         return graph
 
     def _get_properties(self, typ):
