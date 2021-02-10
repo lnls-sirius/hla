@@ -166,7 +166,7 @@ class SiriusScrnView(QWidget):
         self.image_view.readingOrder = self.image_view.Clike
         self.image_view.maxRedrawRate = 15
         self.image_view.setStyleSheet("""
-            #ScrnView{min-width:42em; min-height:32em;}""")
+            #ScrnView{min-width:32em; min-height:24em;}""")
         self.image_view.failToSaveGrid.connect(self._showFailToSaveGridMsg)
         self.image_view.receivedData.connect(self._setReceivedDataFlag)
 
@@ -181,20 +181,20 @@ class SiriusScrnView(QWidget):
         self.checkBox_showgrid = QCheckBox('Show', self)
         self.checkBox_showgrid.setEnabled(False)
         self.checkBox_showgrid.setStyleSheet("""
-            min-width:4.36em;\nmax-width:4.36em;\n
-            min-height:1.29em;\nmax-height:1.29em;\n""")
+            min-width:4em; max-width:4em;
+            min-height:1.29em; max-height:1.29em;""")
         self.checkBox_showgrid.toggled.connect(
             self.image_view.showCalibrationGrid)
         self.pushbutton_savegrid = QPushButton('Save', self)
         self.pushbutton_savegrid.setEnabled(False)
         self.pushbutton_savegrid.setStyleSheet("""
-            min-width:4.36em;\nmax-width:4.36em;\n
-            min-height:1.29em;\nmax-height:1.29em;\n""")
+            min-width:4em; max-width:4em;\n
+            min-height:1.29em; max-height:1.29em;\n""")
         self.pushbutton_savegrid.clicked.connect(self._saveCalibrationGrid)
         self.pushbutton_loadgrid = QPushButton('Load', self)
         self.pushbutton_loadgrid.setStyleSheet("""
-            min-width:4.36em;\nmax-width:4.36em;\n
-            min-height:1.29em;\nmax-height:1.29em;\n""")
+            min-width:4em; max-width:4em;
+            min-height:1.29em; max-height:1.29em;""")
         self.pushbutton_loadgrid.clicked.connect(self._loadCalibrationGrid)
         hbox_grid = QHBoxLayout()
         hbox_grid.addWidget(self.checkBox_showgrid)
@@ -211,7 +211,7 @@ class SiriusScrnView(QWidget):
         self.spinbox_gridfilterfactor.editingFinished.connect(
             self._setCalibrationGridFilterFactor)
         self.spinbox_gridfilterfactor.setStyleSheet("""
-            min-width:4em;\nmax-width:4em;""")
+            min-width:4em; max-width:4em;""")
         hbox_filter = QHBoxLayout()
         hbox_filter.setSpacing(0)
         hbox_filter.addWidget(lb)
@@ -261,16 +261,16 @@ class SiriusScrnView(QWidget):
         label_CamAcqPeriod = QLabel('Acquire\nPeriod [s]:', self)
         hbox_CamAcqPeriod = _create_propty_layout(
             parent=self, prefix=self.scrn_prefix, propty='CamAcqPeriod',
-            propty_type='sprb')
+            propty_type='sprb', width=5.0)
 
         label_CamExposureTime = QLabel('Exposure\nTime [us]:', self)
         hbox_CamExposureTime = _create_propty_layout(
             parent=self, prefix=self.scrn_prefix, propty='CamExposureTime',
-            propty_type='sprb')
+            propty_type='sprb', width=5.0)
 
         label_CamGain = QLabel('Gain[dB]:', self)
         hbox_CamGain = _create_propty_layout(
-            parent=self, prefix=self.scrn_prefix, propty='CamGain',
+            parent=self, prefix=self.scrn_prefix, propty='CamGain', width=5.0,
             propty_type='sprb', cmd={'label': '', 'pressValue': 1,
                                      'icon': qta.icon('mdi.auto-fix'),
                                      'width': '25', 'height': '25',

@@ -4,17 +4,13 @@ import time
 from copy import deepcopy as _dcopy
 import numpy as np
 from qtpy.QtWidgets import QHBoxLayout, QSizePolicy as QSzPlcy, QVBoxLayout, \
-    QToolTip, QLabel, QPushButton, QFormLayout
+    QToolTip
 from qtpy.QtCore import Qt, Slot, Signal, Property
-import qtawesome as qta
 from pydm.widgets import PyDMImageView, PyDMLabel, PyDMSpinbox, \
     PyDMPushButton, PyDMEnumComboBox, PyDMLineEdit
 from pydm.widgets.channel import PyDMChannel
 
-from siriushla import util
-from siriushla.widgets import PyDMStateButton, SiriusLedState, \
-    PyDMLedMultiChannel
-from siriushla.widgets.windows import create_window_from_widget
+from siriushla.widgets import PyDMStateButton, SiriusLedState
 
 
 class SiriusImageView(PyDMImageView):
