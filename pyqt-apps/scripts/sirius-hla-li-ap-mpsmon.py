@@ -18,6 +18,7 @@ args = parser.parse_args()
 
 app = SiriusApplication()
 window = create_window_from_widget(
-    MPSMonitor, title='LI MPS Monitor', is_main=True)
-app.open_window(MPSMonitor, parent=None, prefix=args.prefix)
+    MPSMonitor, title='LI MPS Monitor', is_main=True,
+    withscroll=True, min_width=25)
+app.open_window(window, parent=None, prefix=args.prefix)
 sys.exit(app.exec_())
