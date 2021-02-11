@@ -269,7 +269,7 @@ SEC_2_CHANNELS = {
             '2': {
                 'Name': 'SSA 02',
                 'Status': 'RA-ToSIA02:RF-SSAmpTower:Sts-Mon',
-                'Power': 'RA-ToSIA02:RF-SSAmpTower:PwrFwdOut1-Mon',
+                'Power': 'RA-ToSIA02:RF-SSAmpTower:PwrFwdOut4-Mon',
                 'SRC 1': {
                     'Label': 'AC TDK',
                     'PV': 'RA-ToSIA02:RF-ACPanel:PwrAC-Sts',
