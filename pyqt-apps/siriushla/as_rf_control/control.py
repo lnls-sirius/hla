@@ -1096,6 +1096,7 @@ class RFMainControl(SiriusMainWindow):
 
         lb_name = QLabel('<h4>'+chs_dict['Name']+'</h4>', self,
                          alignment=Qt.AlignLeft)
+        lb_name.setStyleSheet('max-height: 1.29em;')
         lay_amp.addWidget(lb_name, row, 2)
 
         lb_pwr = PyDMLabel(self, chs_dict['Power'])
