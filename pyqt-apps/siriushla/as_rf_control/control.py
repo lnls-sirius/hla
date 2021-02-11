@@ -550,6 +550,11 @@ class RFMainControl(SiriusMainWindow):
         self.led_RmpReady.onColor = PyDMLed.LightGreen
         self.led_RmpReady.offColor = PyDMLed.Red
 
+        self.led_RmpTrig = PyDMLed(
+            parent=self, init_channel='BR-RF-DLLRF-01:5HZTRIG')
+        self.led_RmpTrig.onColor = PyDMLed.LightGreen
+        self.led_RmpTrig.offColor = PyDMLed.Red
+
         self.cb_RmpIncTs = PyDMSpinbox(self, 'BR-RF-DLLRF-01:RmpIncTs-SP')
         self.cb_RmpIncTs.showStepExponent = False
         self.lb_RmpIncTs = PyDMLabel(self, 'BR-RF-DLLRF-01:RmpIncTs-RB')
@@ -604,50 +609,53 @@ class RFMainControl(SiriusMainWindow):
         lay.addWidget(QLabel('Ramp Ready: ', self,
                              alignment=Qt.AlignRight), 3, 0)
         lay.addWidget(self.led_RmpReady, 3, 1, alignment=Qt.AlignLeft)
+        lay.addWidget(QLabel('Receiving trigger: ', self,
+                             alignment=Qt.AlignRight), 4, 0)
+        lay.addWidget(self.led_RmpTrig, 4, 1, alignment=Qt.AlignLeft)
         lay.addItem(
-            QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 4, 0)
-        lay.addWidget(QLabel('<h4>Durations</h4>', self), 5, 0, 1, 3)
+            QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 5, 0)
+        lay.addWidget(QLabel('<h4>Durations</h4>', self), 6, 0, 1, 3)
         lay.addWidget(QLabel('Bottom: ', self,
-                             alignment=Qt.AlignRight), 6, 0)
-        lay.addWidget(self.sb_RmpTs1, 6, 1)
-        lay.addWidget(self.lb_RmpTs1, 6, 2)
-        lay.addWidget(QLabel('Rampup: ', self,
                              alignment=Qt.AlignRight), 7, 0)
-        lay.addWidget(self.sb_RmpTs2, 7, 1)
-        lay.addWidget(self.lb_RmpTs2, 7, 2)
-        lay.addWidget(QLabel('Top: ', self,
+        lay.addWidget(self.sb_RmpTs1, 7, 1)
+        lay.addWidget(self.lb_RmpTs1, 7, 2)
+        lay.addWidget(QLabel('Rampup: ', self,
                              alignment=Qt.AlignRight), 8, 0)
-        lay.addWidget(self.sb_RmpTs3, 8, 1)
-        lay.addWidget(self.lb_RmpTs3, 8, 2)
-        lay.addWidget(QLabel('Rampdown:', self,
+        lay.addWidget(self.sb_RmpTs2, 8, 1)
+        lay.addWidget(self.lb_RmpTs2, 8, 2)
+        lay.addWidget(QLabel('Top: ', self,
                              alignment=Qt.AlignRight), 9, 0)
-        lay.addWidget(self.sb_RmpTs4, 9, 1)
-        lay.addWidget(self.lb_RmpTs4, 9, 2)
-        lay.addWidget(QLabel('Ramp Inc. Rate: ', self,
+        lay.addWidget(self.sb_RmpTs3, 9, 1)
+        lay.addWidget(self.lb_RmpTs3, 9, 2)
+        lay.addWidget(QLabel('Rampdown:', self,
                              alignment=Qt.AlignRight), 10, 0)
-        lay.addWidget(self.cb_RmpIncTs, 10, 1)
-        lay.addWidget(self.lb_RmpIncTs, 10, 2, alignment=Qt.AlignLeft)
-        lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 11, 0)
-        lay.addWidget(QLabel('<h4>Top</h4>', self), 12, 0, 1, 3)
+        lay.addWidget(self.sb_RmpTs4, 10, 1)
+        lay.addWidget(self.lb_RmpTs4, 10, 2)
+        lay.addWidget(QLabel('Ramp Inc. Rate: ', self,
+                             alignment=Qt.AlignRight), 11, 0)
+        lay.addWidget(self.cb_RmpIncTs, 11, 1)
+        lay.addWidget(self.lb_RmpIncTs, 11, 2, alignment=Qt.AlignLeft)
+        lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 12, 0)
+        lay.addWidget(QLabel('<h4>Top</h4>', self), 13, 0, 1, 3)
         lay.addWidget(QLabel('Phase:', self,
-                             alignment=Qt.AlignRight), 13, 0)
-        lay.addWidget(self.sb_RmpPhsTop, 13, 1)
-        lay.addWidget(self.lb_RmpPhsTop, 13, 2)
-        lay.addWidget(QLabel('Amplitude:', self,
                              alignment=Qt.AlignRight), 14, 0)
-        lay.addWidget(self.sb_RmpVoltTop, 14, 1)
-        lay.addWidget(self.lb_RmpVoltTop, 14, 2)
-        lay.addWidget(QLabel('<h4>Bottom</h4>', self), 15, 0, 1, 3)
-        lay.addWidget(QLabel('Phase:', self,
-                             alignment=Qt.AlignRight), 16, 0)
-        lay.addWidget(self.sb_RmpPhsBot, 16, 1)
-        lay.addWidget(self.lb_RmpPhsBot, 16, 2)
+        lay.addWidget(self.sb_RmpPhsTop, 14, 1)
+        lay.addWidget(self.lb_RmpPhsTop, 14, 2)
         lay.addWidget(QLabel('Amplitude:', self,
+                             alignment=Qt.AlignRight), 15, 0)
+        lay.addWidget(self.sb_RmpVoltTop, 15, 1)
+        lay.addWidget(self.lb_RmpVoltTop, 15, 2)
+        lay.addWidget(QLabel('<h4>Bottom</h4>', self), 16, 0, 1, 3)
+        lay.addWidget(QLabel('Phase:', self,
                              alignment=Qt.AlignRight), 17, 0)
-        lay.addWidget(self.sb_RmpVoltBot, 17, 1)
-        lay.addWidget(self.lb_RmpVoltBot, 17, 2)
+        lay.addWidget(self.sb_RmpPhsBot, 17, 1)
+        lay.addWidget(self.lb_RmpPhsBot, 17, 2)
+        lay.addWidget(QLabel('Amplitude:', self,
+                             alignment=Qt.AlignRight), 18, 0)
+        lay.addWidget(self.sb_RmpVoltBot, 18, 1)
+        lay.addWidget(self.lb_RmpVoltBot, 18, 2)
         lay.addItem(QSpacerItem(
-            10, 10, QSzPlcy.MinimumExpanding, QSzPlcy.MinimumExpanding), 18, 3)
+            10, 10, QSzPlcy.MinimumExpanding, QSzPlcy.MinimumExpanding), 19, 3)
         return lay
 
     def _rampMonLayout(self):
