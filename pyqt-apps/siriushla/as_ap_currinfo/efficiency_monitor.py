@@ -85,6 +85,7 @@ class EfficiencyMonitor(SiriusMainWindow):
             self._cb_show[pvn] = cb
 
             lb = PyDMLabel(self, pvname)
+            lb.showUnits = True
             self._pvs_labels[pvn] = lb
 
             glay_aux.addWidget(cb, i+1, 0, alignment=Qt.AlignLeft)
