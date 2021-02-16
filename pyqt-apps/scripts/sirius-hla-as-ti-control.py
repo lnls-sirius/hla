@@ -27,6 +27,6 @@ else:
     icon = get_monitor_icon('mdi.timer', color=get_appropriate_color('AS'))
     window = create_window_from_widget(
         MonitorWindow, title='Timing Monitor', icon=icon,
-        is_main=True, withscroll=True)
+        is_main=True, withscroll=True, min_width=25)
     app.open_window(window, parent=None, prefix=args.prefix)
 sys.exit(app.exec_())

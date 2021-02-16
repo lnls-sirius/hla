@@ -26,7 +26,7 @@ class InjBOControlWindow(BaseWindow):
                        'BO-02U:DI-Scrn')
         self._setupUi()
         self.lattice_wid.setStyleSheet(
-            'min-width:65em; min-height:14em; max-height:14em;')
+            'min-width:60em; min-height:14em; max-height:14em;')
 
     def _setupMenu(self):
         PosAng = QAction("PosAng CH-Sept", self)

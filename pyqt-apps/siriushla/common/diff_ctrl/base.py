@@ -5,7 +5,7 @@ import os as _os
 from qtpy.uic import loadUi
 from qtpy.QtCore import Qt, QEvent
 from qtpy.QtWidgets import QWidget, QVBoxLayout, QGroupBox, QPushButton, \
-    QLabel, QGridLayout, QSpacerItem, QSizePolicy as QSzPlcy
+    QLabel, QGridLayout, QScrollArea
 import qtawesome as qta
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 from pydm.widgets import PyDMSpinbox, PyDMLabel, PyDMPushButton
@@ -77,22 +77,27 @@ class DiffCtrlDevMonitor(QWidget):
             _os.path.abspath(_os.path.dirname(__file__))+'/ui_as_ap_dev' +
             self.orientation.lower()+'mon.ui', {'PREFIX': self.prefix})
         self.dev_widget = loadUi(tmp_file)
+        self.dev_widget.setObjectName('dev')
+        self.dev_widget_scrarea = QScrollArea()
+        self.dev_widget_scrarea.setObjectName('scrarea')
+        self.dev_widget_scrarea.setStyleSheet(
+            '#scrarea{background-color: transparent; max-width: 15em;}'
+            '#dev{background-color:transparent;}')
+        self.dev_widget_scrarea.setWidget(self.dev_widget)
 
         lay = QGridLayout(self)
         lay.setAlignment(Qt.AlignTop)
         lay.addWidget(label_status, 0, 0)
         lay.addWidget(self.multiled_status, 0, 1)
         lay.addWidget(self.pb_details, 0, 2, alignment=Qt.AlignRight)
-        lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
-        lay.addWidget(self.lb_descCtrl1, 2, 0)
-        lay.addWidget(self.sb_Ctrl1, 2, 1)
-        lay.addWidget(self.lb_Ctrl1, 2, 2)
-        lay.addWidget(self.lb_descCtrl2, 3, 0)
-        lay.addWidget(self.sb_Ctrl2, 3, 1)
-        lay.addWidget(self.lb_Ctrl2, 3, 2)
-        lay.addWidget(self.pb_open, 4, 1, 1, 2)
-        lay.addWidget(self.dev_widget, 0, 3, 5, 1)
-        lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        lay.addWidget(self.lb_descCtrl1, 1, 0)
+        lay.addWidget(self.sb_Ctrl1, 1, 1)
+        lay.addWidget(self.lb_Ctrl1, 1, 2)
+        lay.addWidget(self.lb_descCtrl2, 2, 0)
+        lay.addWidget(self.sb_Ctrl2, 2, 1)
+        lay.addWidget(self.lb_Ctrl2, 2, 2)
+        lay.addWidget(self.pb_open, 3, 1, 1, 2)
+        lay.addWidget(self.dev_widget_scrarea, 0, 3, 4, 1)
 
     def _createConnectors(self):
         """Create connectors to monitor device positions."""

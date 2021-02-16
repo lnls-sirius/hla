@@ -142,16 +142,16 @@ class BaseWindow(SiriusMainWindow):
 
         led_camenbl = SiriusLedState(
             parent=self, init_channel=self.prefix+scrn_device+':CamEnbl-Sts')
-        led_camenbl.setStyleSheet("min-width:3.5em; max-width:3.5em;")
+        led_camenbl.setStyleSheet("min-width:3.2em; max-width:3.2em;")
 
         cb_scrntype = PyDMEnumComboBox(
             parent=self, init_channel=self.prefix+scrn_device+':ScrnType-Sel')
         cb_scrntype.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Fixed)
-        cb_scrntype.setStyleSheet("min-width:5em;max-width:5em;")
+        cb_scrntype.setStyleSheet("min-width:4.5em;max-width:4.5em;")
 
         lb_scrntype = PyDMLabel(
             parent=self, init_channel=self.prefix+scrn_device+':ScrnType-Sts')
-        lb_scrntype.setStyleSheet("min-width:5em; max-width:5em;")
+        lb_scrntype.setStyleSheet("min-width:4.5em; max-width:4.5em;")
         lb_scrntype.setAlignment(Qt.AlignCenter)
 
         led_scrntype = PyDMLed(
@@ -159,7 +159,7 @@ class BaseWindow(SiriusMainWindow):
             color_list=[PyDMLed.LightGreen, PyDMLed.Red, PyDMLed.Red,
                         PyDMLed.Yellow])
         led_scrntype.shape = 2
-        led_scrntype.setStyleSheet("""min-width:5em; max-width:5em;""")
+        led_scrntype.setStyleSheet("""min-width:4.5em; max-width:4.5em;""")
 
         wid = QWidget()
         lay = QGridLayout(wid)
@@ -200,11 +200,11 @@ class BaseWindow(SiriusMainWindow):
             sp_current.layout.setSpacing(3)
             sp_current.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
             sp_current.sp_lineedit.setStyleSheet("""
-                min-width:5em; max-width:5em; min-height:1.29em;""")
+                min-width:4em; max-width:4em; min-height:1.29em;""")
             sp_current.sp_lineedit.setAlignment(Qt.AlignCenter)
             sp_current.sp_lineedit.setSizePolicy(
                 QSzPlcy.Ignored, QSzPlcy.Fixed)
-            sp_current.sp_scrollbar.setStyleSheet("""max-width:5em;""")
+            sp_current.sp_scrollbar.setStyleSheet("""max-width:4em;""")
             sp_current.sp_scrollbar.limitsFromPV = True
             lay.addWidget(sp_current, 1, 3, 2, 1)
 
@@ -241,13 +241,13 @@ class BaseWindow(SiriusMainWindow):
             sp_kick.layout.setSpacing(3)
             sp_kick.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Maximum)
             sp_kick.sp_lineedit.setStyleSheet("""
-                min-width:5em; max-width:5em; min-height:1.29em;""")
+                min-width:4em; max-width:4em; min-height:1.29em;""")
             sp_kick.sp_lineedit.setAlignment(Qt.AlignCenter)
             sp_kick.sp_lineedit.setSizePolicy(
                 QSzPlcy.Minimum, QSzPlcy.Minimum)
             sp_kick.sp_lineedit.precisionFromPV = False
             sp_kick.sp_lineedit.precision = 1
-            sp_kick.sp_scrollbar.setStyleSheet("""max-width:5em;""")
+            sp_kick.sp_scrollbar.setStyleSheet("""max-width:4em;""")
             sp_kick.sp_scrollbar.limitsFromPV = True
             lay.addWidget(sp_kick, 1, 3, 2, 1)
 

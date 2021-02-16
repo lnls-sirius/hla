@@ -189,6 +189,9 @@ def get_object(ismenubar=True, parent=None):
             pwrsupply.addAction(psgraph)
             pwrsupply.addAction(psmonitor)
 
+            pulsedps = self._set_pu_menu('as')
+            pulsedps.setIcon(qta.icon('mdi.current-ac'))
+
             vacuum = LEVEL2M('VA', menu)
             vacuum.setObjectName('ASApp')
             agilent = QAction('Agilent', vacuum)
@@ -224,6 +227,7 @@ def get_object(ismenubar=True, parent=None):
             self.add_object_to_level1(menu, injection)
             self.add_object_to_level1(menu, timing)
             self.add_object_to_level1(menu, pwrsupply)
+            self.add_object_to_level1(menu, pulsedps)
             self.add_object_to_level1(menu, termo)
             self.add_object_to_level1(menu, vacuum)
             self.add_object_to_level1(menu, optics)
@@ -697,6 +701,15 @@ def get_object(ismenubar=True, parent=None):
                 pumenu.addAction(pmag)
                 pmag = QAction('Ejection', pumenu)
                 self.connect_newprocess(pmag, [script, '-s', 'EjeBO'])
+                pumenu.addAction(pmag)
+            elif sec == 'as':
+                pmag = QAction('InjBO, EjeBO && InjSI', pumenu)
+                self.connect_newprocess(
+                    pmag, 'sirius-hla-as-pu-control.py')
+                pumenu.addAction(pmag)
+                pmag = QAction('TB, BO, TS && SI', pumenu)
+                self.connect_newprocess(
+                    pmag, ['sirius-hla-as-pu-control.py', '-g', 'sectors'])
                 pumenu.addAction(pmag)
             return pumenu
 

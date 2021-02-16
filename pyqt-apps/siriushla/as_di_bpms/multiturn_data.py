@@ -105,12 +105,7 @@ class MultiTurnData(BaseWidget):
                 pb, Window, parent=stack1, prefix=self.prefix,
                 bpm=self.bpm, data_prefix=self.data_prefix, position=True)
 
-        self.setObjectName('MultiTurnData')
         self.setStyleSheet("""
-            #MultiTurnData{
-                min-width:48em;
-                min-height:32em;
-            }
             #MultiTurnDataGraph{
                 min-width:48em;
                 min-height:24em;

@@ -42,16 +42,14 @@ class DCCTMain(SiriusMainWindow):
         lay.setVerticalSpacing(10)
         self.setCentralWidget(cw)
 
-        self.curr_graph = DCCTMonitor(self, self.prefix, self.device,
-                                      layout_with_settings=True)
+        self.curr_graph = DCCTMonitor(self, self.prefix, self.device)
         self.settings = DCCTSettings(self, self.prefix, self.device)
 
         lay.addWidget(
             QLabel('<h3>'+self.device+'</h3>', alignment=Qt.AlignCenter),
             0, 0, 1, 2)
         lay.addWidget(self.curr_graph, 1, 0)
-        self.curr_graph.layout().addWidget(self.settings, 0, 1, 2, 1)
-        self.settings.layout().setContentsMargins(0, 0, 0, 0)
+        lay.addWidget(self.settings, 1, 1)
 
         self.pb_showeff = QPushButton('v', self)
         self.pb_showeff.setObjectName('showeff')

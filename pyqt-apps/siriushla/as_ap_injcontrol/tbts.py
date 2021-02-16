@@ -25,7 +25,7 @@ class TLControlWindow(BaseWindow):
         self._scrns = [devs[0] for devs in self._devices]
         self._setupUi()
         self.lattice_wid.setStyleSheet(
-            'min-width:65em; min-height:12em; max-height:12em;')
+            'min-width:62em; min-height:10em; max-height:10em;')
 
     def _setupMenu(self):
         # LatticeAndTwiss = QAction("Show Lattice and Twiss", self)
@@ -116,8 +116,12 @@ class TLControlWindow(BaseWindow):
                 QTabBar::tab{margin-top: 0em;}""")
             self.auxdig_wid.addTab(self.ictmon, 'ICTs')
             self.slith = SlitMonitoring(self, self.prefix, 'TB-01:DI-SlitH')
+            self.slith.setObjectName('slith')
+            self.slith.setStyleSheet('#slith{max-height:8.5em;}')
             self.auxdig_wid.addTab(self.slith, 'Slit H')
             self.slitv = SlitMonitoring(self, self.prefix, 'TB-01:DI-SlitV')
+            self.slitv.setObjectName('slitv')
+            self.slitv.setStyleSheet('#slitv{max-height:8.5em;}')
             self.auxdig_wid.addTab(self.slitv, 'Slit V')
         elif self.tl == 'ts':
             self.auxdig_wid = QWidget()

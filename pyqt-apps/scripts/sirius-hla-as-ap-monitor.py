@@ -26,6 +26,6 @@ color = get_appropriate_color(section='AS')
 icon = qta.icon('mdi.monitor-dashboard', color=color)
 window = create_window_from_widget(
     SiriusMonitor, title='Sirius Monitor', icon=icon,
-    is_main=True, withscroll=True)
+    is_main=True, withscroll=True, min_width=96)
 app.open_window(window, parent=None, prefix=args.prefix)
 sys.exit(app.exec_())

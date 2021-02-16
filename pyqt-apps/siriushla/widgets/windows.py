@@ -132,7 +132,8 @@ SiriusDialog = _create_siriuswindow(QDialog)
 
 
 def create_window_from_widget(
-        WidgetClass, title='', icon=None, is_main=False, withscroll=False):
+        WidgetClass, title='', icon=None, is_main=False, withscroll=False,
+        min_width=None):
     """."""
 
     if is_main:
@@ -143,11 +144,15 @@ def create_window_from_widget(
                 self.widget = WidgetClass(self, *args, **kwargs)
                 if withscroll:
                     scroll = QScrollArea(self)
+                    scroll.setObjectName('scroll')
                     scroll.setWidget(self.widget)
                     scroll.setWidgetResizable(True)
                     scroll.setSizeAdjustPolicy(
                         QScrollArea.AdjustToContentsOnFirstShow)
                     self.setCentralWidget(scroll)
+                    if min_width:
+                        scroll.setStyleSheet(
+                            '#scroll{min-width: '+str(min_width)+'em;}')
                 else:
                     self.setCentralWidget(self.widget)
                 self.setWindowTitle(title)

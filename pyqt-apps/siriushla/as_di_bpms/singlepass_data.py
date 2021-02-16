@@ -54,12 +54,7 @@ class SinglePassData(BaseWidget):
         graph = self.create_graph(stack2, 'amp')
         vbl.addWidget(graph)
 
-        self.setObjectName('SinglePassData')
         self.setStyleSheet("""
-            #SinglePassData{
-                min-width:48em;
-                min-height:32em;
-            }
             #SinglePassDataGraph{
                 min-width:48em;
                 min-height:24em;
@@ -120,6 +115,7 @@ class SinglePassData(BaseWidget):
             wid, prefix=self.prefix, bpm=self.bpm,
             data_prefix=self.data_prefix)
         graph.setLabel('left', text=text, units=unit)
+        graph.setObjectName('SinglePassDataGraph')
         for name, cor in zip(names, colors):
             opts = dict(
                 y_channel=name+suff,

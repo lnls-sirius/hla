@@ -124,9 +124,9 @@ class DipoleRamp(QWidget):
         self.graph = MatplotlibWidget()
         self._setupGraph()
 
-        self.l_rampup1v = QLabel('RmpU1 0 [GeV/s]', self)
-        self.l_rampup2v = QLabel('RmpU2 0 [GeV/s]', self)
-        self.l_rampdownv = QLabel('RmpD  0 [GeV/s]', self)
+        self.l_rampup1v = QLabel('RmpU1\n0 [GeV/s]', self)
+        self.l_rampup2v = QLabel('RmpU2\n0 [GeV/s]', self)
+        self.l_rampdownv = QLabel('RmpD\n 0 [GeV/s]', self)
         lay_v = QHBoxLayout()
         lay_v.setContentsMargins(0, 0, 0, 0)
         lay_v.setSpacing(40)
@@ -176,7 +176,7 @@ class DipoleRamp(QWidget):
     def _setupGraph(self):
         self.graph.setObjectName('DipoleGraph')
         self.graph.setStyleSheet("""
-            #DipoleGraph{min-width:30em;min-height:18em;max-height:18em;}
+            #DipoleGraph{min-width:24em;min-height:18em;max-height:18em;}
             #toolbar{min-height:2em; max-height:2em;}""")
         self.graph.setSizePolicy(QSzPlcy.Expanding, QSzPlcy.Preferred)
         self.graph.figure.set_tight_layout({'pad': .0})
@@ -200,7 +200,7 @@ class DipoleRamp(QWidget):
         self.m_ej, = self.ax.plot([0], [0], marker='o', c='#787878')
 
     def _setupPSDelayAndWfmNrPoints(self):
-        label_psdelay = QLabel('PS Delay [ms]:', self,
+        label_psdelay = QLabel('PS delay [ms]:', self,
                                alignment=Qt.AlignVCenter)
         self.sb_psdelay = _MyDoubleSpinBox(self)
         self.sb_psdelay.setMinimum(0)
@@ -209,10 +209,9 @@ class DipoleRamp(QWidget):
         self.sb_psdelay.setSingleStep(0.000008)
         self.sb_psdelay.editingFinished.connect(self._handleChangePSDelay)
         self.sb_psdelay.setObjectName('sb_psdelay')
-        self.sb_psdelay.setStyleSheet(
-            '#sb_psdelay{min-width:5em;max-width:5em;}')
+        self.sb_psdelay.setStyleSheet('#sb_psdelay{max-width:5em;}')
 
-        label_nrpoints_fams = QLabel('# of points: fams:', self,
+        label_nrpoints_fams = QLabel('# points: fams:', self,
                                      alignment=Qt.AlignVCenter)
         self.sb_nrpoints_fams = _MyDoubleSpinBox(self)
         self.sb_nrpoints_fams.setMinimum(1)
@@ -223,7 +222,7 @@ class DipoleRamp(QWidget):
             self._handleChangeNrPointsFams)
         self.sb_nrpoints_fams.setObjectName('sb_nrpoints_fams')
         self.sb_nrpoints_fams.setStyleSheet(
-            '#sb_nrpoints_fams{min-width:3.5em;max-width:3.5em;}')
+            '#sb_nrpoints_fams{max-width:3.5em;}')
 
         label_nrpoints_corrs = QLabel('corrs:', self,
                                       alignment=Qt.AlignVCenter)
@@ -236,7 +235,7 @@ class DipoleRamp(QWidget):
             self._handleChangeNrPointsCorrs)
         self.sb_nrpoints_corrs.setObjectName('sb_nrpoints_corrs')
         self.sb_nrpoints_corrs.setStyleSheet(
-            '#sb_nrpoints_corrs{min-width:3.5em;max-width:3.5em;}')
+            '#sb_nrpoints_corrs{max-width:3.5em;}')
 
         lay = QHBoxLayout(self.set_psdelay_and_nrpoints)
         lay.setContentsMargins(9, 0, 9, 0)
@@ -268,7 +267,7 @@ class DipoleRamp(QWidget):
         self.table.setObjectName('DipoleTable')
         self.table.setStyleSheet("""
             #DipoleTable{
-                min-width: 30em;
+                min-width: 24em;
                 min-height: 21em; max-height: 21em;
             }
             QHeaderView::section {
@@ -695,11 +694,11 @@ class DipoleRamp(QWidget):
             item = self.table.item(row, 3)  # index column
             item.setData(Qt.DisplayRole, str(value))
 
-        self.l_rampup1v.setText('RmpU1 {: .3f} [GeV/s]'.format(
+        self.l_rampup1v.setText('RmpU1\n{: .3f} [GeV/s]'.format(
             self.ramp_config.ps_ramp_rampup1_slope))
-        self.l_rampup2v.setText('RmpU2 {: .3f} [GeV/s]'.format(
+        self.l_rampup2v.setText('RmpU2\n{: .3f} [GeV/s]'.format(
             self.ramp_config.ps_ramp_rampup2_slope))
-        self.l_rampdownv.setText('RmpD  {: .3f} [GeV/s]'.format(
+        self.l_rampdownv.setText('RmpD\n{: .3f} [GeV/s]'.format(
             self.ramp_config.ps_ramp_rampdown_slope))
 
         self.table.cellChanged.connect(self._handleCellChanged)
@@ -883,7 +882,7 @@ class MultipolesRamp(QWidget):
     def _setupGraph(self):
         self.graph.setObjectName('MultipolesGraph')
         self.graph.setStyleSheet("""
-            #MultipolesGraph{min-width:30em;min-height:18em;max-height:18em;}
+            #MultipolesGraph{min-width:28em;min-height:18em;max-height:18em;}
             #toolbar{min-height:2em; max-height:2em;}""")
         self.graph.setSizePolicy(QSzPlcy.MinimumExpanding, QSzPlcy.Preferred)
         self.graph.figure.set_tight_layout({'pad': .0})
@@ -903,7 +902,7 @@ class MultipolesRamp(QWidget):
             'columns': {0: 'Label',
                         1: 'T [ms]',
                         2: 'E [GeV]',
-                        3: 'Index'}}
+                        3: 'Index Fam / Corr'}}
         idx = 1
         for config in self.normalized_configs.keys():
             self.table_map['rows'][idx] = config
@@ -912,7 +911,7 @@ class MultipolesRamp(QWidget):
         self.table.setObjectName('MultipoleTable')
         self.table.setStyleSheet("""
             #MultipoleTable{
-                min-width: 30em;
+                min-width: 28em;
                 min-height: 22.5em;
             }
             QHeaderView::section {
@@ -1415,11 +1414,13 @@ class MultipolesRamp(QWidget):
 
         for row in self.table_map['rows'].keys():
             D = self.ramp_config.ps_ramp_duration
-            N = self.ramp_config.ps_ramp_wfm_nrpoints_fams
+            N1 = self.ramp_config.ps_ramp_wfm_nrpoints_fams
+            N2 = self.ramp_config.ps_ramp_wfm_nrpoints_corrs
             T = float(self.table.item(row, 1).data(Qt.DisplayRole))
-            value = round(T*N/D)
+            value1 = round(T*N1/D)
+            value2 = round(T*N2/D)
             item = self.table.item(row, 3)  # index column
-            item.setData(Qt.DisplayRole, str(value))
+            item.setData(Qt.DisplayRole, str(value1) + ' / ' + str(value2))
         self._sortTable()
 
         self.table.cellChanged.connect(self._handleCellChanged)
@@ -1485,8 +1486,8 @@ class RFRamp(QWidget):
         self.table = QTableWidget(self)
         self._setupTable()
 
-        self.l_rampupv = QLabel('RmpU 0 [kV/s]')
-        self.l_rampdownv = QLabel('RmpD 0 [kV/s]')
+        self.l_rampupv = QLabel('RmpU\n0 [kV/s]')
+        self.l_rampdownv = QLabel('RmpD\n0 [kV/s]')
         self.cb_show_syncphase = QCheckBox('Show Φs', self)
         self.cb_show_syncphase.setChecked(1)
         self.cb_show_syncphase.stateChanged.connect(
@@ -1520,7 +1521,7 @@ class RFRamp(QWidget):
     def _setupGraph(self):
         self.graph.setObjectName('RFGraph')
         self.graph.setStyleSheet("""
-            #RFGraph{min-width:30em;min-height:18em;max-height:18em;}
+            #RFGraph{min-width:28em;min-height:18em;max-height:18em;}
             #toolbar{min-height:2em; max-height:2em;}""")
         self.graph.setSizePolicy(QSzPlcy.MinimumExpanding, QSzPlcy.Preferred)
         self.graph.figure.set_tight_layout({'pad': .0})
@@ -1574,7 +1575,7 @@ class RFRamp(QWidget):
         self.table.setStyleSheet(
             """
             #RFTable{
-                min-width: 30em;
+                min-width: 28em;
                 min-height: 10.5em; max-height: 10.5em;
             }
             QHeaderView::section {
@@ -1861,12 +1862,12 @@ class RFRamp(QWidget):
         rampupv = ((self.ramp_config.rf_ramp_top_voltage -
                     self.ramp_config.rf_ramp_bottom_voltage) /
                    self.ramp_config.rf_ramp_rampup_duration)
-        self.l_rampupv.setText('RmpU {: .3f} [kV/s]'.format(1000*rampupv))
+        self.l_rampupv.setText('RmpU\n{: .3f} [kV/s]'.format(1000*rampupv))
 
         rampdownv = ((self.ramp_config.rf_ramp_bottom_voltage -
                       self.ramp_config.rf_ramp_top_voltage) /
                      self.ramp_config.rf_ramp_rampdown_duration)
-        self.l_rampdownv.setText('RmpD {: .3f} [kV/s]'.format(1000*rampdownv))
+        self.l_rampdownv.setText('RmpD\n{: .3f} [kV/s]'.format(1000*rampdownv))
 
         self.table.cellChanged.connect(self._handleCellChanged)
 

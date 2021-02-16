@@ -19,14 +19,12 @@ class DCCTMonitor(QWidget):
 
     _buffSizeUpdate = Signal(str)
 
-    def __init__(self, parent=None, prefix='', device='',
-                 layout_with_settings=False):
+    def __init__(self, parent=None, prefix='', device=''):
         """Initialize object."""
         super().__init__(parent)
         self.prefix = SiriusPVName(prefix)
         self.device = SiriusPVName(device)
         self.use_raw = False
-        self.layout_with_settings = layout_with_settings
         if self.device.sec == 'BO':
             self.use_raw = True
         self.dcct_prefix = prefix + device + ':'
@@ -88,10 +86,7 @@ class DCCTMonitor(QWidget):
         lay.setRowStretch(0, 1)
         lay.setRowStretch(1, 9)
         lay.addWidget(label, 0, 0)
-        if self.layout_with_settings:
-            lay.addWidget(self.graph, 1, 0, 2, 1)
-        else:
-            lay.addWidget(self.graph, 1, 0)
+        lay.addWidget(self.graph, 1, 0)
         self.setLayout(lay)
 
         # Smoothing
@@ -132,35 +127,23 @@ class DCCTMonitor(QWidget):
 
             gbox_smooth = QGroupBox('Smoothing of Readings')
             glay_smooth = QGridLayout(gbox_smooth)
-            if self.layout_with_settings:
-                glay_smooth.addWidget(l_smoothmethod, 0, 0)
-                glay_smooth.addWidget(self.cb_smoothmethod, 0, 1)
-                glay_smooth.addWidget(l_smoothnracq, 1, 0)
-                glay_smooth.addWidget(self.sb_smoothnracq, 1, 1)
-                glay_smooth.addWidget(l_smoothbuff, 2, 0)
-                glay_smooth.addLayout(hlay_buff, 2, 1)
-                glay_smooth.addWidget(l_down, 3, 0)
-                glay_smooth.addWidget(self.sb_down, 3, 1)
-                glay_smooth.setAlignment(Qt.AlignCenter)
-                lay.addWidget(gbox_smooth, 2, 1)
-            else:
-                glay_smooth.addWidget(l_smoothmethod, 0, 0)
-                glay_smooth.addWidget(self.cb_smoothmethod, 0, 1)
-                glay_smooth.addWidget(l_smoothnracq, 1, 0)
-                glay_smooth.addWidget(self.sb_smoothnracq, 1, 1)
-                glay_smooth.addWidget(QLabel(''), 0, 2)
-                glay_smooth.addWidget(l_smoothbuff, 0, 3)
-                glay_smooth.addLayout(hlay_buff, 0, 4, 1, 2)
-                glay_smooth.addWidget(l_down, 1, 3)
-                glay_smooth.addWidget(self.sb_down, 1, 4, 1, 2)
-                glay_smooth.setColumnStretch(0, 10)
-                glay_smooth.setColumnStretch(1, 10)
-                glay_smooth.setColumnStretch(2, 2)
-                glay_smooth.setColumnStretch(3, 10)
-                glay_smooth.setColumnStretch(4, 5)
-                glay_smooth.setColumnStretch(5, 5)
-                lay.addWidget(gbox_smooth, 2, 0)
-                lay.setRowStretch(2, 3)
+            glay_smooth.addWidget(l_smoothmethod, 0, 0)
+            glay_smooth.addWidget(self.cb_smoothmethod, 0, 1)
+            glay_smooth.addWidget(l_smoothnracq, 1, 0)
+            glay_smooth.addWidget(self.sb_smoothnracq, 1, 1)
+            glay_smooth.addWidget(QLabel(''), 0, 2)
+            glay_smooth.addWidget(l_smoothbuff, 0, 3)
+            glay_smooth.addLayout(hlay_buff, 0, 4, 1, 2)
+            glay_smooth.addWidget(l_down, 1, 3)
+            glay_smooth.addWidget(self.sb_down, 1, 4, 1, 2)
+            glay_smooth.setColumnStretch(0, 10)
+            glay_smooth.setColumnStretch(1, 10)
+            glay_smooth.setColumnStretch(2, 2)
+            glay_smooth.setColumnStretch(3, 10)
+            glay_smooth.setColumnStretch(4, 5)
+            glay_smooth.setColumnStretch(5, 5)
+            lay.addWidget(gbox_smooth, 2, 0)
+            lay.setRowStretch(2, 3)
             gbox_smooth.setStyleSheet("""
                 .QLabel{
                     qproperty-alignment: 'AlignVCenter | AlignRight';}
