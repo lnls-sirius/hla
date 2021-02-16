@@ -240,7 +240,8 @@ class InjSysStandbyButton(PyDMWritableWidget, QPushButton):
             conn = plugin.connections[addr]
             conn.put_value(val)
 
-            timeout = 1 if 'PU' in addr else 0.1
+            timeout = 0.1 if 'PU' not in addr else 0.5 \
+                if 'Pulse-Sel' in addr else 1
             _time.sleep(timeout)
 
         if self._pressvalue == 0:
