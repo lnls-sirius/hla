@@ -254,16 +254,6 @@ class TuneSpectraControls(QWidget):
         self.cb_choose_x.currentIndexChanged.connect(
             self._toggle_registers_axis)
 
-        hbox_ctrls = QHBoxLayout()
-        hbox_ctrls.setContentsMargins(0, 0, 0, 0)
-        hbox_ctrls.setSpacing(6)
-        hbox_ctrls.addWidget(lb_show_trace, alignment=Qt.AlignLeft)
-        hbox_ctrls.addWidget(self.cb_show_x, alignment=Qt.AlignLeft)
-        hbox_ctrls.addWidget(self.cb_show_y, alignment=Qt.AlignLeft)
-        hbox_ctrls.addStretch()
-        hbox_ctrls.addWidget(QLabel('X Axis: '), alignment=Qt.AlignRight)
-        hbox_ctrls.addWidget(self.cb_choose_x, alignment=Qt.AlignRight)
-
         # Registers
         self.registers = {i: None for i in range(4)}
         self.spectra.curveReg = [None, None, None, None]
@@ -274,7 +264,8 @@ class TuneSpectraControls(QWidget):
         self.bt_save = {i: QPushButton(qta.icon('fa5s.save'), '', self)
                         for i in range(4)}
         self.colors = ['cyan', 'darkGreen', 'magenta', 'darkRed']
-        glay_reg = QGridLayout()
+        self.registers_widget = QWidget()
+        glay_reg = QGridLayout(self.registers_widget)
         shift = 2 if self.section == 'BO' else 18
         for i in range(4):
             # checks
@@ -311,12 +302,31 @@ class TuneSpectraControls(QWidget):
             self.bt_save[i].clicked.connect(_part(self._export_data, i))
             glay_reg.addWidget(self.bt_save[i], i, 4, alignment=Qt.AlignRight)
 
+        self.pb_showregs = QPushButton('^', self)
+        self.pb_showregs.setObjectName('showregs')
+        self.pb_showregs.setToolTip('Hide registers')
+        self.pb_showregs.setStyleSheet(
+            '#showregs{min-width:1em;max-width:1em;}')
+        self.pb_showregs.released.connect(self._handle_registers_vis)
+
+        hbox_ctrls = QHBoxLayout()
+        hbox_ctrls.setContentsMargins(0, 0, 0, 0)
+        hbox_ctrls.setSpacing(6)
+        hbox_ctrls.addWidget(lb_show_trace, alignment=Qt.AlignLeft)
+        hbox_ctrls.addWidget(self.cb_show_x, alignment=Qt.AlignLeft)
+        hbox_ctrls.addWidget(self.cb_show_y, alignment=Qt.AlignLeft)
+        hbox_ctrls.addStretch()
+        hbox_ctrls.addWidget(QLabel('X Axis: '), alignment=Qt.AlignRight)
+        hbox_ctrls.addWidget(self.cb_choose_x, alignment=Qt.AlignRight)
+        hbox_ctrls.addItem(QSpacerItem(15, 1, QSzPlcy.Fixed, QSzPlcy.Ignored))
+        hbox_ctrls.addWidget(self.pb_showregs, alignment=Qt.AlignLeft)
+
         lay = QVBoxLayout(self)
         lay.setSpacing(10)
         lay.setContentsMargins(10, 6, 6, 6)
         lay.addWidget(self.spectra)
         lay.addLayout(hbox_ctrls)
-        lay.addLayout(glay_reg)
+        lay.addWidget(self.registers_widget)
 
     def _registerData(self, idx, tune):
         curve = self.spectra.curveH if tune == 'H' else self.spectra.curveV
@@ -375,3 +385,13 @@ class TuneSpectraControls(QWidget):
 
         data = np.array([self.registers[idx][0], self.registers[idx][1]]).T
         np.savetxt(fn, data)
+
+    def _handle_registers_vis(self):
+        vis = self.registers_widget.isVisible()
+        text = 'v' if vis else '^'
+        ttip = 'Show' if vis else 'Hide'
+        self.pb_showregs.setText(text)
+        self.pb_showregs.setToolTip(ttip+' registers')
+        self.registers_widget.setVisible(not vis)
+        self.spectra.adjustSize()
+        self.adjustSize()
