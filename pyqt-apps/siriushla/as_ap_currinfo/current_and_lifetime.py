@@ -46,18 +46,31 @@ class CurrLTWindow(SiriusMainWindow):
                               stop:1 rgba(213, 213, 213, 255));""")
         self.label_title.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
 
-        vlay = QVBoxLayout()
-        vlay.setContentsMargins(0, 0, 0, 0)
-        vlay.addWidget(self._setupCurrentSettingsWidget())
-        vlay.addWidget(self._setupLifetimeSettigsWidget())
-        vlay.addWidget(self._setupGraphSettingsWidget())
+        self.settings = QWidget()
+        vlay_sett = QVBoxLayout(self.settings)
+        vlay_sett.setContentsMargins(0, 0, 0, 0)
+        vlay_sett.addWidget(self._setupCurrentSettingsWidget())
+        vlay_sett.addWidget(self._setupLifetimeSettigsWidget())
+        vlay_sett.addWidget(self._setupGraphSettingsWidget())
+
+        self.pb_showsett = QPushButton('<', self)
+        self.pb_showsett.setObjectName('showsett')
+        self.pb_showsett.setToolTip('Hide settings')
+        self.pb_showsett.setStyleSheet(
+            '#showsett{min-width:0.7em;max-width:0.7em;}')
+        self.pb_showsett.released.connect(self._handle_settings_vis)
 
         self.pb_showeff = QPushButton('v', self)
         self.pb_showeff.setObjectName('showeff')
         self.pb_showeff.setToolTip('Show efficiency graph')
         self.pb_showeff.setStyleSheet(
             '#showeff{min-width:0.7em;max-width:0.7em;}')
-        self.pb_showeff.released.connect(self._handle_eff_vis)
+        self.pb_showeff.released.connect(self._handle_efficiency_vis)
+
+        hbox_visi = QHBoxLayout()
+        hbox_visi.addStretch()
+        hbox_visi.addWidget(self.pb_showsett)
+        hbox_visi.addWidget(self.pb_showeff)
 
         self.eff_graph = EffMonitor(self, self.prefix, self.device.sec)
         self.eff_graph.setVisible(False)
@@ -67,8 +80,8 @@ class CurrLTWindow(SiriusMainWindow):
         lay = QGridLayout(cw)
         lay.addWidget(self.label_title, 0, 0, 1, 2)
         lay.addLayout(self._setupGraphPanelLayout(), 1, 0)
-        lay.addLayout(vlay, 1, 1)
-        lay.addWidget(self.pb_showeff, 2, 0, 1, 2, alignment=Qt.AlignRight)
+        lay.addWidget(self.settings, 1, 1)
+        lay.addLayout(hbox_visi, 2, 0, 1, 2, alignment=Qt.AlignRight)
         lay.addWidget(self.eff_graph, 3, 0, 1, 2)
         lay.setColumnStretch(0, 6)
         lay.setColumnStretch(1, 1)
@@ -110,7 +123,7 @@ class CurrLTWindow(SiriusMainWindow):
         self.graph.showYGrid = True
         self.graph.autoRangeY = True
         self.graph.setObjectName('graph')
-        self.graph.setStyleSheet('#graph{min-width:40em;}')
+        self.graph.setStyleSheet('#graph{min-width:40em;min-height:32em;}')
         self.graph.bufferSize = 36000
         self._set_graph_timespan(2000)
 
@@ -647,7 +660,18 @@ class CurrLTWindow(SiriusMainWindow):
         self._curve_dcct_buff.setVisible(showingdcct and state)
         self._curve_bpm_buff.setVisible(not showingdcct and state)
 
-    def _handle_eff_vis(self):
+    def _handle_settings_vis(self):
+        vis = self.settings.isVisible()
+        text = '>' if vis else '<'
+        ttip = 'Show' if vis else 'Hide'
+        self.pb_showsett.setText(text)
+        self.pb_showsett.setToolTip(ttip+' settings')
+        self.settings.setVisible(not vis)
+        self.sender().parent().adjustSize()
+        self.centralWidget().adjustSize()
+        self.adjustSize()
+
+    def _handle_efficiency_vis(self):
         vis = self.eff_graph.isVisible()
         text = 'v' if vis else '^'
         ttip = 'Show' if vis else 'Hide'
