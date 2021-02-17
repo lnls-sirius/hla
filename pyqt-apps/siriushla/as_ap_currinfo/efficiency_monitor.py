@@ -2,7 +2,8 @@
 
 from datetime import datetime as _datetime, timedelta as _timedelta
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QWidget, QLabel, QCheckBox, QGridLayout
+from qtpy.QtWidgets import QWidget, QLabel, QCheckBox, QGridLayout, \
+    QApplication
 
 import qtawesome as qta
 
@@ -25,14 +26,18 @@ class EfficiencyMonitor(SiriusMainWindow):
         self.setWindowIcon(qta.icon('mdi.percent-outline', color=color))
         self._prefix = prefix
         self._eff_list = (
-            ('LI-Glob:AP-CurrInfo:TranspEff-Mon', 'red'),
-            ('TB-Glob:AP-CurrInfo:TranspEff-Mon', 'darkCyan'),
-            # ('BO-Glob:AP-CurrInfo:InjEff-Mon', 'darkRed'),
-            ('BO-Glob:AP-CurrInfo:RampEff-Mon', 'green'),
-            ('TS-Glob:AP-CurrInfo:TranspEff-Mon', 'black'),
-            ('SI-Glob:AP-CurrInfo:InjEff-Mon', 'blue'),
-            # ('AS-Glob:AP-CurrInfo:InjEff-Mon', 'magenta'),
+            ('LI', 'LI-Glob:AP-CurrInfo:TranspEff-Mon', 'red'),
+            ('TB', 'TB-Glob:AP-CurrInfo:TranspEff-Mon', 'darkCyan'),
+            # ('LI-BO Inj', 'BO-Glob:AP-CurrInfo:InjEff-Mon', 'darkRed'),
+            ('BO Ramp', 'BO-Glob:AP-CurrInfo:RampEff-Mon', 'green'),
+            ('TS', 'TS-Glob:AP-CurrInfo:TranspEff-Mon', 'black'),
+            ('BO-SI Inj', 'SI-Glob:AP-CurrInfo:InjEff-Mon', 'blue'),
+            # ('LI-SI Inj', 'AS-Glob:AP-CurrInfo:InjEff-Mon', 'magenta'),
         )
+        self._app = QApplication.instance()
+        font = self._app.font()
+        font.setPointSize(20)
+        self._app.setFont(font)
         self._setupUi()
 
     def _setupUi(self):
@@ -68,7 +73,7 @@ class EfficiencyMonitor(SiriusMainWindow):
         glay_aux.setVerticalSpacing(10)
 
         for i, data in enumerate(self._eff_list):
-            pvn, color = data
+            text, pvn, color = data
             pvname = self._prefix + pvn
 
             self.timeplot.addYChannel(
@@ -78,7 +83,7 @@ class EfficiencyMonitor(SiriusMainWindow):
             self.timeplot.fill_curve_with_archdata(
                 self._curves[pvn], pvname, t_init=t_init, t_end=t_end)
 
-            cb = QCheckBox(pvn, self)
+            cb = QCheckBox(text, self)
             cb.setChecked(True)
             cb.setStyleSheet('color:'+color+';')
             cb.stateChanged.connect(curve.setVisible)
