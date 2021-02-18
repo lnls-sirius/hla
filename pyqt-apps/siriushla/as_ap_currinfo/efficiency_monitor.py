@@ -52,7 +52,9 @@ class EfficiencyMonitor(SiriusMainWindow):
         timespan_minutes = 30
         self.timeplot = SiriusTimePlot(parent=self, background='w')
         self.timeplot.timeSpan = timespan_minutes*60  # [s]
-        self.timeplot.autoRangeY = True
+        self.timeplot.autoRangeY = False
+        self.timeplot.maxYRange = 150.0
+        self.timeplot.minYRange = 0.0
         self.timeplot.showXGrid = True
         self.timeplot.showYGrid = True
         self.timeplot.setLabel('left', text='Efficiency', units='%')
