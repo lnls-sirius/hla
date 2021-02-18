@@ -1,7 +1,7 @@
 from qtpy.QtGui import QColor
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGridLayout, QTabWidget, QVBoxLayout, \
-    QLabel, QGroupBox, QHBoxLayout
+    QLabel, QGroupBox, QHBoxLayout, QPushButton
 import qtawesome as qta
 from siriuspy.envars import VACA_PREFIX
 from siriushla import util
@@ -62,7 +62,8 @@ class Tune(SiriusMainWindow):
                 background-color: #FFB3B3;
             }
             """)
-        vbox_sett = QVBoxLayout()
+        self.settings = QWidget()
+        vbox_sett = QVBoxLayout(self.settings)
         vbox_sett.addWidget(self.tabCtrl)
 
         # Spectra view
@@ -115,30 +116,54 @@ class Tune(SiriusMainWindow):
             self.specV.spectrogram.new_data.connect(
                 self.spectra_view.spectra.receiveDataV)
 
+        self.pb_showsett = QPushButton('>', self)
+        self.pb_showsett.setObjectName('showsett')
+        self.pb_showsett.setToolTip('Hide settings')
+        self.pb_showsett.setStyleSheet(
+            '#showsett{min-width:0.7em;max-width:0.7em;}')
+        self.pb_showsett.released.connect(self._handle_settings_vis)
+        hbox_vis = QHBoxLayout()
+        hbox_vis.addWidget(self.pb_showsett, alignment=Qt.AlignLeft)
+
         self.setStyleSheet(
-            "#specH, #specV {min-width:40em;}"
-            "#spectra_view {min-width:40em;}"
+            "#specH, #specV {min-width:40em; min-height: 18em;}"
+            "#spectra_view {min-width:40em; min-height: 36em;}"
             "#wid_tuneh, #wid_tunev {border:2px solid gray;}")
 
         cw = QWidget(self)
-        lay = QGridLayout(cw)
-        if self.section == 'SI':
-            col_count = 2
-            row = 1
-            lay.addWidget(self.wid_tune_mon, row, 0, 1, col_count)
-        else:
-            col_count = 3
-            row = 0
-        lay.addWidget(label, 0, 0, 1, col_count)
-        lay.addLayout(vbox_sett, row+1, 0)
-        if self.section == 'BO':
-            lay.addLayout(vbox_meas, row+1, 1)
-            lay.addWidget(self.spectra_view, row+1, 2)
-            lay.setColumnStretch(0, 1)
-            lay.setColumnStretch(1, 1)
-            lay.setColumnStretch(2, 1)
-        else:
-            lay.addWidget(self.spectra_view, row+1, 1)
-            lay.setColumnStretch(0, 1)
-            lay.setColumnStretch(1, 1)
         self.setCentralWidget(cw)
+        lay = QVBoxLayout(cw)
+        if self.section == 'BO':
+            hbox = QHBoxLayout()
+            hbox.addWidget(self.settings)
+            hbox.addLayout(vbox_meas)
+            hbox.addWidget(self.spectra_view)
+            hbox.setStretch(0, 1)
+            hbox.setStretch(1, 1)
+            hbox.setStretch(2, 1)
+
+            lay.addWidget(label)
+            lay.addLayout(hbox)
+            lay.addLayout(hbox_vis)
+        else:
+            hbox = QHBoxLayout()
+            hbox.addWidget(self.settings)
+            hbox.addWidget(self.spectra_view)
+            hbox.setStretch(0, 1)
+            hbox.setStretch(1, 1)
+
+            lay.addWidget(label)
+            lay.addWidget(self.wid_tune_mon)
+            lay.addLayout(hbox)
+            lay.addLayout(hbox_vis)
+
+    def _handle_settings_vis(self):
+        vis = self.settings.isVisible()
+        text = '<' if vis else '>'
+        ttip = 'Show' if vis else 'Hide'
+        self.pb_showsett.setText(text)
+        self.pb_showsett.setToolTip(ttip+' settings')
+        self.settings.setVisible(not vis)
+        self.sender().parent().adjustSize()
+        self.centralWidget().adjustSize()
+        self.adjustSize()

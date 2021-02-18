@@ -6,7 +6,7 @@ import sys as sys
 import argparse as argparse
 from siriushla.sirius_application import SiriusApplication
 from siriuspy.envars import VACA_PREFIX
-from siriushla.as_ap_currlt.current_and_lifetime import CurrLTWindow
+from siriushla.as_ap_currinfo.current_and_lifetime import CurrLTWindow
 
 
 parser = argparse.ArgumentParser(

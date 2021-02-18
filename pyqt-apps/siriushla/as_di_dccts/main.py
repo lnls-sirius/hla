@@ -2,7 +2,7 @@
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QLabel, QGridLayout, QVBoxLayout, \
-    QPushButton
+    QPushButton, QHBoxLayout
 import qtawesome as qta
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.namesys import SiriusPVName
@@ -37,33 +37,58 @@ class DCCTMain(SiriusMainWindow):
         self.setFocusPolicy(Qt.StrongFocus)
 
     def _setupUi(self):
-        cw = QWidget()
-        lay = QGridLayout(cw)
-        lay.setVerticalSpacing(10)
-        self.setCentralWidget(cw)
+        self.title = QLabel('<h3>'+self.device+'</h3>',
+                            alignment=Qt.AlignCenter)
 
         self.curr_graph = DCCTMonitor(self, self.prefix, self.device)
         self.settings = DCCTSettings(self, self.prefix, self.device)
+        hbox_dcct = QHBoxLayout()
+        hbox_dcct.addWidget(self.curr_graph)
+        hbox_dcct.addWidget(self.settings)
 
-        lay.addWidget(
-            QLabel('<h3>'+self.device+'</h3>', alignment=Qt.AlignCenter),
-            0, 0, 1, 2)
-        lay.addWidget(self.curr_graph, 1, 0)
-        lay.addWidget(self.settings, 1, 1)
+        self.pb_showsett = QPushButton('<', self)
+        self.pb_showsett.setObjectName('showsett')
+        self.pb_showsett.setToolTip('Hide settings')
+        self.pb_showsett.setStyleSheet(
+            '#showsett{min-width:0.7em;max-width:0.7em;}')
+        self.pb_showsett.released.connect(self._handle_settings_vis)
 
         self.pb_showeff = QPushButton('v', self)
         self.pb_showeff.setObjectName('showeff')
         self.pb_showeff.setToolTip('Show efficiency graph')
         self.pb_showeff.setStyleSheet(
             '#showeff{min-width:0.7em;max-width:0.7em;}')
-        self.pb_showeff.released.connect(self._handle_eff_vis)
-        lay.addWidget(self.pb_showeff, 2, 0, 1, 2, alignment=Qt.AlignRight)
+        self.pb_showeff.released.connect(self._handle_efficiency_vis)
+
+        hbox_visi = QHBoxLayout()
+        hbox_visi.addStretch()
+        hbox_visi.addWidget(self.pb_showsett)
+        hbox_visi.addWidget(self.pb_showeff)
 
         self.eff_graph = EffMonitor(self, self.prefix, self.section)
         self.eff_graph.setVisible(False)
-        lay.addWidget(self.eff_graph, 3, 0, 1, 2)
 
-    def _handle_eff_vis(self):
+        cw = QWidget()
+        self.setCentralWidget(cw)
+        lay = QVBoxLayout(cw)
+        lay.setSpacing(10)
+        lay.addWidget(self.title)
+        lay.addLayout(hbox_dcct)
+        lay.addLayout(hbox_visi)
+        lay.addWidget(self.eff_graph)
+
+    def _handle_settings_vis(self):
+        vis = self.settings.isVisible()
+        text = '>' if vis else '<'
+        ttip = 'Show' if vis else 'Hide'
+        self.pb_showsett.setText(text)
+        self.pb_showsett.setToolTip(ttip+' settings')
+        self.settings.setVisible(not vis)
+        self.sender().parent().adjustSize()
+        self.centralWidget().adjustSize()
+        self.adjustSize()
+
+    def _handle_efficiency_vis(self):
         vis = self.eff_graph.isVisible()
         text = 'v' if vis else '^'
         ttip = 'Show' if vis else 'Hide'

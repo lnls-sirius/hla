@@ -8,7 +8,7 @@ del _os
 
 _all_ = [
     'as_ap_configdb',
-    'as_ap_currlt',
+    'as_ap_currinfo',
     'as_ap_energybutton',
     'as_ap_injcontrol',
     'as_ap_injection',

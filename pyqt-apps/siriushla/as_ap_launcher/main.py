@@ -65,6 +65,8 @@ class MainOperation(SiriusMainWindow):
         self.move(topleft.x(), topleft.y()+20)
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.setObjectName('ASApp')
+        self.setFocus(True)
+        self.setFocusPolicy(Qt.StrongFocus)
 
     def _setupUi(self):
         # Machine Shift

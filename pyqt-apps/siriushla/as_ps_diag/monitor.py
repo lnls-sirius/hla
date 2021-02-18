@@ -1,7 +1,12 @@
 """Interface to handle general status."""
 
+import numpy as _np
+import logging as _log
+
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGroupBox, QGridLayout, QLabel
+
+from pydm.widgets.base import PyDMWidget
 
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.diagsys.psdiag.csdev import get_ps_diag_status_labels
@@ -9,9 +14,10 @@ from siriuspy.diagsys.pudiag.csdev import get_pu_diag_status_labels
 from siriuspy.diagsys.lidiag.csdev import get_li_diag_status_labels
 from siriuspy.diagsys.rfdiag.csdev import get_rf_diag_status_labels
 from siriuspy.namesys import SiriusPVName
+from siriuspy.util import get_bit
 
 from siriushla.sirius_application import SiriusApplication
-from siriushla.widgets import SiriusLedAlert
+from siriushla.widgets import PyDMLed
 from siriushla.widgets.dialog.pv_status_dialog import StatusDetailDialog
 from siriushla.util import run_newprocess
 from .util import get_label2devices, get_dev2sub_labels, get_col2dev_count, \
@@ -132,10 +138,7 @@ class PSMonitor(QWidget):
                         and aux_col in (0, 3):
                     grid.addWidget(QLabel(''), aux_row, aux_col)
                     aux_col += 1
-                led = MyLed(self)
-                led.setObjectName(name)
-                led.setToolTip(name)
-                led.channel = self._prefix+name+':DiagStatus-Mon'
+                led = MyLed(self, self._prefix+name+':DiagStatus-Mon', name)
                 grid.addWidget(led, aux_row, aux_col)
                 aux_row, aux_col = update_gridpos(
                     aux_row, aux_col, self.get_col2dev_count(sec, label),
@@ -176,39 +179,72 @@ class PSMonitor(QWidget):
         return status
 
 
-class MyLed(SiriusLedAlert):
+class MyLed(PyDMLed):
+    """Monitor Led."""
+
+    default_colorlist = [PyDMLed.LightGreen, PyDMLed.Yellow, PyDMLed.Red]
+
+    def __init__(self, parent=None, init_channel=None, init_tooltip='', **kws):
+        super().__init__(parent, **kws)
+        self.setToolTip(init_tooltip)
+        self.channel = init_channel
+
+        self.pvname = SiriusPVName(self.channels()[0].address)
+        dev = self.pvname.device_name
+
+        self.labels = list()
+        if self.pvname.dis == 'PS':
+            self.labels = get_ps_diag_status_labels(dev)
+        elif self.pvname.dis == 'PU':
+            self.labels = get_pu_diag_status_labels()
+        elif self.pvname.sec == 'LI':
+            self.labels = get_li_diag_status_labels(dev)
+        elif self.pvname.dis == 'RF':
+            self.labels = get_rf_diag_status_labels(dev)
+
+        self.dc_command = ''
+        if dev.dis == 'PS':
+            self.dc_command = ['sirius-hla-as-ps-detail.py', dev]
+        elif dev.dis == 'PU':
+            self.dc_command = ['sirius-hla-as-pu-detail.py', dev]
+        elif dev.dis == 'RF':
+            if dev.sec == 'LI':
+                self.dc_command = 'sirius-hla-li-rf-llrf.py'
+            else:
+                sec = self.pvname.sec.lower()
+                self.dc_command = 'sirius-hla-'+sec+'-rf-control.py'
+        elif dev.dis == 'EG':
+            self.dc_command = 'sirius-hla-li-eg-control.py'
 
     def mouseDoubleClickEvent(self, _):
         """Reimplement mouseDoubleClickEvent."""
-        dev = SiriusPVName(self.objectName())
-        if dev.dis == 'PS':
-            run_newprocess(['sirius-hla-as-ps-detail.py', dev])
-        elif dev.dis == 'PU':
-            run_newprocess(['sirius-hla-as-pu-detail.py', dev])
-        elif dev.dis == 'RF':
-            if dev.sec == 'LI':
-                run_newprocess('sirius-hla-li-rf-llrf.py')
-            else:
-                run_newprocess('sirius-hla-'+dev.sec.lower()+'-rf-control.py')
-        elif dev.dis == 'EG':
-            run_newprocess('sirius-hla-li-eg-control.py')
+        if self.dc_command:
+            run_newprocess(self.dc_command)
 
     def mousePressEvent(self, event):
         """Reimplement mousePressEvent."""
-        pvn = SiriusPVName(self.channels()[0].address)
-        if event.button() == Qt.RightButton:
-            if pvn.dis == 'PS':
-                labels = get_ps_diag_status_labels(pvn.device_name)
-            elif pvn.dis == 'PU':
-                labels = get_pu_diag_status_labels()
-            elif pvn.sec == 'LI':
-                labels = get_li_diag_status_labels(pvn.device_name)
-            elif pvn.dis == 'RF':
-                labels = get_rf_diag_status_labels(pvn.device_name)
+        if event.button() == Qt.RightButton and self.labels:
             self.msg = StatusDetailDialog(
-                parent=self.parent(), pvname=pvn, labels=labels)
+                parent=self.parent(), pvname=self.pvname,
+                labels=self.labels)
             self.msg.open()
         super().mousePressEvent(event)
+
+    def value_changed(self, new_val):
+        PyDMWidget.value_changed(self, new_val)
+        if new_val is None:
+            return
+        if isinstance(new_val, _np.ndarray):
+            _log.warning('PyDMLed received a numpy array to ' +
+                         self.channel+' ('+str(new_val)+')!')
+            return
+
+        bits_set = [text for bit, text in enumerate(self.labels)
+                    if get_bit(int(new_val), bit)]
+        state = 0 if len(bits_set) == 0 \
+            else 1 if len(bits_set) == 1 and \
+            bits_set[0] == 'Alarms' else 2
+        self.setState(state)
 
 
 if __name__ == '__main__':
