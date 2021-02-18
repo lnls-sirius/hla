@@ -26,13 +26,13 @@ class EfficiencyMonitor(SiriusMainWindow):
         self.setWindowIcon(qta.icon('mdi.percent-outline', color=color))
         self._prefix = prefix
         self._eff_list = (
-            ('LI', 'LI-Glob:AP-CurrInfo:TranspEff-Mon', 'red'),
-            ('TB', 'TB-Glob:AP-CurrInfo:TranspEff-Mon', 'darkCyan'),
-            # ('LI-BO Inj', 'BO-Glob:AP-CurrInfo:InjEff-Mon', 'darkRed'),
-            ('BO Ramp', 'BO-Glob:AP-CurrInfo:RampEff-Mon', 'green'),
-            ('TS', 'TS-Glob:AP-CurrInfo:TranspEff-Mon', 'black'),
-            ('BO-SI Inj', 'SI-Glob:AP-CurrInfo:InjEff-Mon', 'blue'),
             # ('LI-SI Inj', 'AS-Glob:AP-CurrInfo:InjEff-Mon', 'magenta'),
+            ('BO-SI Inj', 'SI-Glob:AP-CurrInfo:InjEff-Mon', 'blue'),
+            ('TS', 'TS-Glob:AP-CurrInfo:TranspEff-Mon', 'black'),
+            ('BO Ramp', 'BO-Glob:AP-CurrInfo:RampEff-Mon', 'green'),
+            # ('LI-BO Inj', 'BO-Glob:AP-CurrInfo:InjEff-Mon', 'darkRed'),
+            ('TB', 'TB-Glob:AP-CurrInfo:TranspEff-Mon', 'darkCyan'),
+            ('LI', 'LI-Glob:AP-CurrInfo:TranspEff-Mon', 'red'),
         )
         self._app = QApplication.instance()
         font = self._app.font()
