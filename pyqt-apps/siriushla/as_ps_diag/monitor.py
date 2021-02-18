@@ -192,6 +192,7 @@ class MyLed(PyDMLed):
         self.pvname = SiriusPVName(self.channels()[0].address)
         dev = self.pvname.device_name
 
+        self.labels = list()
         if self.pvname.dis == 'PS':
             self.labels = get_ps_diag_status_labels(dev)
         elif self.pvname.dis == 'PU':
@@ -201,6 +202,7 @@ class MyLed(PyDMLed):
         elif self.pvname.dis == 'RF':
             self.labels = get_rf_diag_status_labels(dev)
 
+        self.dc_command = ''
         if dev.dis == 'PS':
             self.dc_command = ['sirius-hla-as-ps-detail.py', dev]
         elif dev.dis == 'PU':
@@ -216,11 +218,12 @@ class MyLed(PyDMLed):
 
     def mouseDoubleClickEvent(self, _):
         """Reimplement mouseDoubleClickEvent."""
-        run_newprocess(self.dc_command)
+        if self.dc_command:
+            run_newprocess(self.dc_command)
 
     def mousePressEvent(self, event):
         """Reimplement mousePressEvent."""
-        if event.button() == Qt.RightButton:
+        if event.button() == Qt.RightButton and self.labels:
             self.msg = StatusDetailDialog(
                 parent=self.parent(), pvname=self.pvname,
                 labels=self.labels)
