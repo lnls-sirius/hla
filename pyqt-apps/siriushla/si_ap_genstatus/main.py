@@ -157,10 +157,10 @@ class SIGenStatusWindow(SiriusMainWindow):
         self.curr_graph.setYLabels(['Current [mA]'])
         for ax in self.curr_graph.getPlotItem().axes.values():
             sty = ax['item'].labelStyle
-            sty['font-size'] = '12pt'
+            sty['font-size'] = '18pt'
             ax['item'].setLabel(text=None, **sty)
         font = QFont()
-        font.setPointSize(12)
+        font.setPointSize(18)
         self.curr_graph.plotItem.getAxis('bottom').setStyle(
             tickTextOffset=5, autoExpandTextSpace=False,
             tickTextWidth=50, tickFont=font)
