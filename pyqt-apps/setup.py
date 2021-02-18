@@ -43,6 +43,7 @@ setup(
     include_package_data=True,
     scripts=[
         'scripts/sirius-hla-as-ap-configdb.py',
+        'scripts/sirius-hla-as-ap-effmon.py',
         'scripts/sirius-hla-as-ap-energybutton.py',
         'scripts/sirius-hla-as-ap-injection.py',
         'scripts/sirius-hla-as-ap-launcher.py',

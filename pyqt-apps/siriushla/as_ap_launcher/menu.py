@@ -151,6 +151,10 @@ def get_object(ismenubar=True, parent=None):
             injection.setIcon(qta.icon('fa5s.syringe'))
             self.connect_newprocess(injection, 'sirius-hla-as-ap-injection.py')
 
+            effmon = LEVEL2A('Efficiency', menu)
+            effmon.setIcon(qta.icon('mdi.percent-outline'))
+            self.connect_newprocess(effmon, 'sirius-hla-as-ap-effmon.py')
+
             timing = LEVEL2M('Timing', menu)
             timing.setIcon(qta.icon('mdi.timer'))
             timing.setObjectName('ASApp')
@@ -225,6 +229,7 @@ def get_object(ismenubar=True, parent=None):
             self.add_object_to_level1(menu, genstatus)
             self.add_object_to_level1(menu, monitor)
             self.add_object_to_level1(menu, injection)
+            self.add_object_to_level1(menu, effmon)
             self.add_object_to_level1(menu, timing)
             self.add_object_to_level1(menu, pwrsupply)
             self.add_object_to_level1(menu, pulsedps)
