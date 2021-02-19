@@ -1,15 +1,20 @@
 """DCCT graphics module."""
 
 import numpy as np
+
 from qtpy.QtCore import Qt, Signal
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QWidget, QLabel, QPushButton, QGridLayout, \
     QHBoxLayout, QGroupBox, QSpinBox, QComboBox, QSizePolicy as QSzPly, \
     QVBoxLayout, QCheckBox
+
 import qtawesome as qta
+
+from pydm.widgets import PyDMLabel, PyDMWaveformPlot
+
 from siriuspy.namesys import SiriusPVName
 from siriuspy.diagbeam.dcct.csdev import Const as _DCCTc
-from pydm.widgets import PyDMLabel, PyDMWaveformPlot
+from siriuspy.search import LLTimeSearch as _LLTimeSearch
 from siriushla.widgets import SiriusConnectionSignal as SignalChannel, \
     SiriusTimePlot
 
@@ -91,13 +96,17 @@ class DCCTMonitor(QWidget):
 
         # Smoothing
         if self.use_raw:
-            self._evnt_dly = SignalChannel('AS-RaMO:TI-EVG:DigBODelay-RB')
+            self._evnt_dly = SignalChannel(
+                _LLTimeSearch.get_evg_name()+':Dig'+self.device.sec+'Delay-RB')
             self._evnt_dly.new_value_signal[float].connect(self.updateXAxis)
-            self._trig_dly = SignalChannel('BO-35D:TI-DCCT:Delay-RB')
+            self._trig_dly = SignalChannel(
+                self.dcct_prefix.replace('DI', 'TI') + 'Delay-RB')
             self._trig_dly.new_value_signal[float].connect(self.updateXAxis)
-            self._smpl_cnt = SignalChannel('BO-35D:DI-DCCT:FastSampleCnt-RB')
+            self._smpl_cnt = SignalChannel(
+                self.dcct_prefix + 'FastSampleCnt-RB')
             self._smpl_cnt.new_value_signal[float].connect(self.updateXAxis)
-            self._meas_per = SignalChannel('BO-35D:DI-DCCT:FastMeasPeriod-RB')
+            self._meas_per = SignalChannel(
+                self.dcct_prefix + 'FastMeasPeriod-RB')
             self._meas_per.new_value_signal[float].connect(self.updateXAxis)
 
             self.cb_timeaxis = QCheckBox('Use time axis', self)
