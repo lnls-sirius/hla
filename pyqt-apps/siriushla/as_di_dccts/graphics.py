@@ -5,7 +5,7 @@ from qtpy.QtCore import Qt, Signal
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QWidget, QLabel, QPushButton, QGridLayout, \
     QHBoxLayout, QGroupBox, QSpinBox, QComboBox, QSizePolicy as QSzPly, \
-    QVBoxLayout
+    QVBoxLayout, QCheckBox
 import qtawesome as qta
 from siriuspy.namesys import SiriusPVName
 from siriuspy.diagbeam.dcct.csdev import Const as _DCCTc
@@ -91,6 +91,21 @@ class DCCTMonitor(QWidget):
 
         # Smoothing
         if self.use_raw:
+            self._evnt_dly = SignalChannel('AS-RaMO:TI-EVG:DigBODelay-RB')
+            self._evnt_dly.new_value_signal[float].connect(self.updateXAxis)
+            self._trig_dly = SignalChannel('BO-35D:TI-DCCT:Delay-RB')
+            self._trig_dly.new_value_signal[float].connect(self.updateXAxis)
+            self._smpl_cnt = SignalChannel('BO-35D:DI-DCCT:FastSampleCnt-RB')
+            self._smpl_cnt.new_value_signal[float].connect(self.updateXAxis)
+            self._meas_per = SignalChannel('BO-35D:DI-DCCT:FastMeasPeriod-RB')
+            self._meas_per.new_value_signal[float].connect(self.updateXAxis)
+
+            self.cb_timeaxis = QCheckBox('Use time axis', self)
+            self.cb_timeaxis.stateChanged.connect(self.updateXAxis)
+            self.cb_timeaxis.setLayoutDirection(Qt.RightToLeft)
+            lay.addWidget(self.cb_timeaxis, 2, 0, alignment=Qt.AlignLeft)
+            lay.setRowStretch(2, 1)
+
             l_smoothmethod = QLabel('Method: ', self)
             self.cb_smoothmethod = QComboBox(self)
             self.cb_smoothmethod.addItems(['Average', 'Median'])
@@ -142,8 +157,8 @@ class DCCTMonitor(QWidget):
             glay_smooth.setColumnStretch(3, 10)
             glay_smooth.setColumnStretch(4, 5)
             glay_smooth.setColumnStretch(5, 5)
-            lay.addWidget(gbox_smooth, 2, 0)
-            lay.setRowStretch(2, 3)
+            lay.addWidget(gbox_smooth, 3, 0)
+            lay.setRowStretch(3, 3)
             gbox_smooth.setStyleSheet("""
                 .QLabel{
                     qproperty-alignment: 'AlignVCenter | AlignRight';}
@@ -234,6 +249,26 @@ class DCCTMonitor(QWidget):
         else:
             self._acq_normalnrsamp = new_value
         self.resetBuffer()
+
+    def updateXAxis(self):
+        smpl = self._smpl_cnt.getvalue()
+        if self.cb_timeaxis.checkState():
+            evnt = self._evnt_dly.getvalue()
+            trig = self._trig_dly.getvalue()
+            init = (evnt+trig)/1e3
+            peri = self._meas_per.getvalue()
+            endt = init + peri*1e3
+
+            if any([val is None for val in [evnt, trig, smpl, peri]]):
+                return
+
+            xdata = np.linspace(init, endt, smpl)
+            xlabel = 'Time [ms]'
+        else:
+            xdata = np.arange(0, smpl)
+            xlabel = 'Index'
+        self.graph.setLabels(bottom=xlabel)
+        self.curve.receiveXWaveform(xdata)
 
 
 class EffMonitor(QWidget):
