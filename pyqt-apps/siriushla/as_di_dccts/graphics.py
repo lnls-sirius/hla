@@ -101,6 +101,7 @@ class DCCTMonitor(QWidget):
             self._meas_per.new_value_signal[float].connect(self.updateXAxis)
 
             self.cb_timeaxis = QCheckBox('Use time axis', self)
+            self.cb_timeaxis.setChecked(True)
             self.cb_timeaxis.stateChanged.connect(self.updateXAxis)
             self.cb_timeaxis.setLayoutDirection(Qt.RightToLeft)
             lay.addWidget(self.cb_timeaxis, 2, 0, alignment=Qt.AlignLeft)
@@ -255,12 +256,13 @@ class DCCTMonitor(QWidget):
         if self.cb_timeaxis.checkState():
             evnt = self._evnt_dly.getvalue()
             trig = self._trig_dly.getvalue()
-            init = (evnt+trig)/1e3
             peri = self._meas_per.getvalue()
-            endt = init + peri*1e3
 
             if any([val is None for val in [evnt, trig, smpl, peri]]):
                 return
+
+            init = (evnt+trig)/1e3
+            endt = init + peri*1e3
 
             xdata = np.linspace(init, endt, smpl)
             xlabel = 'Time [ms]'
