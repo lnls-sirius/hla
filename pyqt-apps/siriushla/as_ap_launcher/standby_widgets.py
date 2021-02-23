@@ -12,12 +12,16 @@ from pydm.widgets.channel import PyDMChannel
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.search import PSSearch, HLTimeSearch
-from siriuspy.timesys.csdev import Const as TIConst
+from siriuspy.timesys.csdev import Const as TIConst, \
+    get_hl_trigger_database as _get_trig_db
 from siriuspy.pwrsupply.csdev import Const as PSConst
 
 from siriushla.widgets import PyDMLedMultiChannel, PyDMLed, QLed
 from siriushla.widgets.led import MultiChannelStatusDialog
 from siriushla.widgets.dialog import PSStatusDialog
+
+_BO_FAMS_TRIG_DB = _get_trig_db('BO-Glob:TI-Mags-Fams')
+_BO_CORRS_TRIG_DB = _get_trig_db('BO-Glob:TI-Mags-Corrs')
 
 TIMEOUT_WAIT = 3
 TRG_ENBL_VAL = TIConst.DsblEnbl.Enbl
@@ -28,13 +32,17 @@ PS_OPM_SLWREF = PSConst.OpMode.SlowRef
 PS_STS_SLWREF = PSConst.States.SlowRef
 PS_OPM_RMPWFM = PSConst.OpMode.RmpWfm
 PS_STS_RMPWFM = PSConst.States.RmpWfm
+BO_FAMS_EVT_INDEX = _BO_FAMS_TRIG_DB['Src-Sel']['enums'].index('RmpBO')
+BO_CORRS_EVT_INDEX = _BO_CORRS_TRIG_DB['Src-Sel']['enums'].index('RmpBO')
 
 CHANNELS_2_VALUES_BUTTON = (
     # BO RF ramp enable
     ('BR-RF-DLLRF-01:RmpEnbl-Sel', (TRG_DSBL_VAL, TRG_ENBL_VAL)),
     # BO PS trigger
     ('BO-Glob:TI-Mags-Fams:State-Sel', (TRG_DSBL_VAL, TRG_ENBL_VAL)),
+    ('BO-Glob:TI-Mags-Fams:Src-Sel', (None, BO_FAMS_EVT_INDEX)),
     ('BO-Glob:TI-Mags-Corrs:State-Sel', (TRG_DSBL_VAL, TRG_ENBL_VAL)),
+    ('BO-Glob:TI-Mags-Corrs:Src-Sel', (None, BO_CORRS_EVT_INDEX)),
     # PU Pulse
     ('TB-04:PU-InjSept:Pulse-Sel', (PU_DSBL_VAL, PU_ENBL_VAL)),
     ('BO-01D:PU-InjKckr:Pulse-Sel', (PU_DSBL_VAL, PU_ENBL_VAL)),
