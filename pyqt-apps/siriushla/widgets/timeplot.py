@@ -2,7 +2,7 @@ import numpy as _np
 import time
 
 from qtpy.QtCore import Qt, Slot
-from qtpy.QtWidgets import QMenu
+from qtpy.QtWidgets import QMenu, QInputDialog
 
 from pyqtgraph import ViewBox
 
@@ -201,6 +201,8 @@ class SiriusTimePlot(PyDMTimePlot):
             menu.addSeparator()
             rst_act = menu.addAction("Clear buffers")
             rst_act.triggered.connect(self._resetBuffers)
+            tsp_act = menu.addAction("Change time span")
+            tsp_act.triggered.connect(self._changeTimeSpan)
             menu.exec_(self.mapToGlobal(ev.pos()))
         else:
             super().mouseReleaseEvent(ev)
@@ -209,3 +211,9 @@ class SiriusTimePlot(PyDMTimePlot):
         for curve in self._curves:
             curve.initialize_buffer()
             self._min_time = time.time()
+
+    def _changeTimeSpan(self):
+        new_time_span, ok = QInputDialog.getInt(
+            self, 'Input', 'Set new time span value [s]: ')
+        if ok:
+            self.timeSpan = new_time_span
