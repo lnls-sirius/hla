@@ -628,7 +628,7 @@ class SiriusSpectrogramView(
         Parameters
         ----------
         new_array : np.ndarray
-            The new frequency array
+            The new x axis array
         """
         if new_array is None:
             return
@@ -639,6 +639,7 @@ class SiriusSpectrogramView(
             self._image_width = new_array.size
         else:
             self._image_height = new_array.size
+        self.needs_redraw = True
 
     @Slot(np.ndarray)
     @Slot(float)
@@ -649,7 +650,7 @@ class SiriusSpectrogramView(
         Parameters
         ----------
         new_array : np.array
-            The new time array
+            The new y axis array
         """
         if new_array is None:
             return
@@ -660,6 +661,7 @@ class SiriusSpectrogramView(
             self._image_width = new_array.size
         else:
             self._image_height = new_array.size
+        self.needs_redraw = True
 
     @Slot(int)
     def roioffsetx_value_changed(self, new_offset):
