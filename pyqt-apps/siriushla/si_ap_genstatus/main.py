@@ -152,8 +152,6 @@ class SIGenStatusWindow(SiriusMainWindow):
         self.curr_graph.showXGrid = True
         self.curr_graph.showYGrid = True
         self.curr_graph.backgroundColor = QColor(255, 255, 255)
-        timespan_minutes = 30
-        self.curr_graph.timeSpan = timespan_minutes*60
         self.curr_graph.setYLabels(['Current [mA]'])
         for ax in self.curr_graph.getPlotItem().axes.values():
             sty = ax['item'].labelStyle
@@ -174,12 +172,18 @@ class SIGenStatusWindow(SiriusMainWindow):
         self.curve = self.curr_graph.curveAtIndex(0)
         self.curve.setFillLevel(0)
         self.curve.setBrush(QBrush(QGradient(QGradient.ColdEvening)))
+
+        timespan_hours = 12
+        self.curr_graph.timeSpan = timespan_hours*60*60
+        self.curr_graph.bufferSize = timespan_hours*60*60*10
+        self.curr_graph.maxRedrawRate = 2
         t_end = Time(datetime=_datetime.now())
-        t_init = Time(datetime=t_end - _timedelta(minutes=timespan_minutes))
+        t_init = Time(datetime=t_end - _timedelta(hours=timespan_hours))
         t_end = t_end.get_iso8601()
         t_init = t_init.get_iso8601()
         self.curr_graph.fill_curve_with_archdata(
-            self.curve, curr_pvname, t_init=t_init, t_end=t_end)
+            self.curve, curr_pvname, t_init=t_init, t_end=t_end,
+            process_type='mean', process_bin_intvl=1)
 
         cw = QWidget()
         hlay1 = QHBoxLayout()
