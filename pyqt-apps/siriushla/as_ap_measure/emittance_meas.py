@@ -114,7 +114,7 @@ class EmittanceMeasure(QWidget):
         self.line_sigmay.set_ydata([])
         self.line_fit.set_xdata([])
         self.line_fit.set_ydata([])
-        self.plt_sigma.figure.canvas.draw()
+        self.fig_sigma.figure.canvas.draw()
 
         pl = 'y' if self.cbbox_plane.currentIndex() else 'x'
         curr_list = np.linspace(I_ini, I_end, nsteps)
@@ -158,11 +158,11 @@ class EmittanceMeasure(QWidget):
             else:
                 self.line_sigmay.set_xdata(I_meas)
                 self.line_sigmay.set_ydata(np.array(sigma)*1e3)
-            self.plt_sigma.figure.axes[0].set_xlim(
+            self.fig_sigma.figure.axes[0].set_xlim(
                     [min(I_meas)*(1-DT*10), max(I_meas)*(1+DT*10)])
-            self.plt_sigma.figure.axes[0].set_ylim(
+            self.fig_sigma.figure.axes[0].set_ylim(
                     [min(sigma)*(1-DT)*1e3, max(sigma)*(1+DT)*1e3])
-            self.plt_sigma.figure.canvas.draw()
+            self.fig_sigma.figure.canvas.draw()
         self._measuring.set()
         _log.info('Returning Quad to Initial Current')
         self.quad_I_sp.put(init_curr, wait=True)
@@ -205,12 +205,10 @@ class EmittanceMeasure(QWidget):
             for var in ('x_tm', 'y_tm', 'x_parf', 'y_parf'):
                 params.extend(getattr(self, pref + var))
             params = np.array(params)
-            plt = getattr(self, 'plt_' + pref)
-            plt.figure.axes[0].set_xlim(
-                [-0.1, params.shape[0]+0.1])
-            plt.figure.axes[0].set_ylim(
-                [params.min()*(1-DT), params.max()*(1+DT)])
-            plt.figure.canvas.draw()
+            axes = getattr(self, 'line_' + pref + 'x_parf').axes
+            axes.set_xlim([-0.1, params.shape[0]+0.1])
+            axes.set_ylim([params.min()*(1-DT), params.max()*(1+DT)])
+            self.fig_res.figure.canvas.draw()
 
     def _get_K1_from_I(self, I_meas):
         energy = self.spbox_energy.value() * 1e-3  # energy in GeV
@@ -233,7 +231,7 @@ class EmittanceMeasure(QWidget):
         yd = np.sqrt(np.polyval([a, b, c], K1))
         self.line_fit.set_xdata(self.I_meas)
         self.line_fit.set_ydata(yd*1e3)
-        self.plt_sigma.figure.canvas.draw()
+        self.fig_sigma.figure.canvas.draw()
 
         d = self.DIST + self.QUAD_L/2
         l = self.QUAD_L
@@ -493,11 +491,11 @@ class EmittanceMeasure(QWidget):
         else:
             self.line_sigmay.set_xdata(self.I_meas)
             self.line_sigmay.set_ydata(np.array(self.sigma)*1e3)
-        self.plt_sigma.figure.axes[0].set_xlim(
+        self.fig_sigma.figure.axes[0].set_xlim(
                 [min(self.I_meas)*(1-DT*10), max(self.I_meas)*(1+DT*10)])
-        self.plt_sigma.figure.axes[0].set_ylim(
+        self.fig_sigma.figure.axes[0].set_ylim(
                 [min(self.sigma)*(1-DT)*1e3, max(self.sigma)*(1+DT)*1e3])
-        self.plt_sigma.figure.canvas.draw()
+        self.fig_sigma.figure.canvas.draw()
 
     def pb_analyse_data_clicked(self):
         if self.I_meas is None or self.sigma is None:
