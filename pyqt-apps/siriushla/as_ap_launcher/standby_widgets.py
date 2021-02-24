@@ -13,12 +13,12 @@ from siriushla.widgets.led import MultiChannelStatusDialog
 from siriushla.widgets.dialog import PSStatusDialog
 from .standby_handlers import TRG_ENBL_VAL, TRG_DSBL_VAL, \
     PU_ENBL_VAL, PU_DSBL_VAL, LILLRF_ENBL_VAL, LILLRF_DSBL_VAL, \
-    PS_STS_SLWREF, PS_STS_RMPWFM, \
+    PS_STS_SLWREF, PS_STS_RMPWFM, PS_ENBL_VAL, \
     BO_FAMS_EVT_INDEX, BO_CORRS_EVT_INDEX, \
     LILLRFStandbyHandler, BORampStandbyHandler
 
 
-CHANNELS_2_VALUES_BUTTON = (
+CHANNELS_2_VALUES_BUTTON = [
     # BO RF ramp enable
     ('BR-RF-DLLRF-01:RmpEnbl-Sel', (TRG_DSBL_VAL, TRG_ENBL_VAL)),
     # BO PS trigger
@@ -48,7 +48,12 @@ CHANNELS_2_VALUES_BUTTON = (
     ('TS-04:PU-InjSeptG-2:PwrState-Sel', (PU_DSBL_VAL, PU_ENBL_VAL)),
     ('SI-01SA:PU-InjNLKckr:PwrState-Sel', (PU_DSBL_VAL, PU_ENBL_VAL)),
     ('SI-01SA:PU-InjDpKckr:PwrState-Sel', (PU_DSBL_VAL, None)),
-)
+]
+# BO PS wfm update auto
+for dev in BORampStandbyHandler.DEVICES:
+    CHANNELS_2_VALUES_BUTTON.append(
+        (dev+':WfmUpdateAuto-Sel', (None, PS_ENBL_VAL)))
+
 CHANNELS_2_VALUES_LED = {pvn.replace('Sel', 'Sts'): vals
                          for pvn, vals in CHANNELS_2_VALUES_BUTTON}
 CHANNELS_2_VALUES_LED.update({
