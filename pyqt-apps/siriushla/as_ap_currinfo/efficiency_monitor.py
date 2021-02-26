@@ -26,17 +26,17 @@ class EfficiencyMonitor(SiriusMainWindow):
         self.setWindowIcon(qta.icon('mdi.percent-outline', color=color))
         self._prefix = prefix
         self._eff_list = (
-            ('LI', 'LI-Glob:AP-CurrInfo:TranspEff-Mon', 'red'),
-            ('TB', 'TB-Glob:AP-CurrInfo:TranspEff-Mon', 'darkCyan'),
-            # ('LI-BO Inj', 'BO-Glob:AP-CurrInfo:InjEff-Mon', 'darkRed'),
-            ('BO Ramp', 'BO-Glob:AP-CurrInfo:RampEff-Mon', 'green'),
-            ('TS', 'TS-Glob:AP-CurrInfo:TranspEff-Mon', 'black'),
-            ('BO-SI Inj', 'SI-Glob:AP-CurrInfo:InjEff-Mon', 'blue'),
             # ('LI-SI Inj', 'AS-Glob:AP-CurrInfo:InjEff-Mon', 'magenta'),
+            ('BO-SI Inj', 'SI-Glob:AP-CurrInfo:InjEff-Mon', 'blue'),
+            ('TS', 'TS-Glob:AP-CurrInfo:TranspEff-Mon', 'black'),
+            ('BO Ramp', 'BO-Glob:AP-CurrInfo:RampEff-Mon', 'green'),
+            # ('LI-BO Inj', 'BO-Glob:AP-CurrInfo:InjEff-Mon', 'darkRed'),
+            ('TB', 'TB-Glob:AP-CurrInfo:TranspEff-Mon', 'darkCyan'),
+            ('LI', 'LI-Glob:AP-CurrInfo:TranspEff-Mon', 'red'),
         )
         self._app = QApplication.instance()
         font = self._app.font()
-        font.setPointSize(20)
+        font.setPointSize(22)
         self._app.setFont(font)
         self._setupUi()
 
@@ -45,21 +45,24 @@ class EfficiencyMonitor(SiriusMainWindow):
         self.setCentralWidget(cw)
         self.setFocusPolicy(Qt.StrongFocus)
 
-        label = QLabel('<h2>Efficiency Monitor</h2>',
+        label = QLabel('<h3>Efficiency Monitor</h3>',
                        self, alignment=Qt.AlignCenter)
 
         # timeplot
+        timespan_minutes = 30
         self.timeplot = SiriusTimePlot(parent=self, background='w')
-        self.timeplot.timeSpan = 30*60  # [s]
-        self.timeplot.autoRangeY = True
+        self.timeplot.timeSpan = timespan_minutes*60  # [s]
+        self.timeplot.autoRangeY = False
+        self.timeplot.maxYRange = 150.0
+        self.timeplot.minYRange = 0.0
         self.timeplot.showXGrid = True
         self.timeplot.showYGrid = True
         self.timeplot.setLabel('left', text='Efficiency', units='%')
         self.timeplot.setObjectName('timeplot')
         self.timeplot.setStyleSheet(
-            '#timeplot{min-width:28em; min-height: 18em;}')
+            '#timeplot{min-width:24em; min-height: 10em;}')
         t_end = Time(datetime=_datetime.now())
-        t_init = Time(datetime=t_end - _timedelta(minutes=30))
+        t_init = Time(datetime=t_end - _timedelta(minutes=timespan_minutes))
         t_end = t_end.get_iso8601()
         t_init = t_init.get_iso8601()
 
@@ -90,6 +93,7 @@ class EfficiencyMonitor(SiriusMainWindow):
             self._cb_show[pvn] = cb
 
             lb = PyDMLabel(self, pvname)
+            lb.setStyleSheet('font-weight: bold;')
             lb.showUnits = True
             self._pvs_labels[pvn] = lb
 

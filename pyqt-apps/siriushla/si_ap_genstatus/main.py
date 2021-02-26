@@ -1,18 +1,19 @@
 """Sirius General Status Window."""
 
 import numpy as _np
+from datetime import datetime as _datetime, timedelta as _timedelta
 
 from qtpy.QtCore import Qt, Slot, QEvent
 from qtpy.QtWidgets import QWidget, QGridLayout, QLabel, \
     QVBoxLayout, QGroupBox, QHBoxLayout, QApplication
-from qtpy.QtGui import QColor, QFont
+from qtpy.QtGui import QColor, QFont, QBrush, QGradient
 
 import qtawesome as qta
-# from pyqtgraph import mkBrush
 
 from pydm.widgets import PyDMLabel
 
 from siriuspy.envars import VACA_PREFIX
+from siriuspy.clientarch.time import Time
 
 from siriushla.util import get_appropriate_color
 from siriushla.widgets import SiriusMainWindow, SiriusTimePlot, SiriusFrame, \
@@ -28,11 +29,11 @@ class SIGenStatusWindow(SiriusMainWindow):
         super().__init__(parent)
         self.prefix = prefix
         self.app = QApplication.instance()
-        self.setObjectName('ASApp')
+        self.app_color = get_appropriate_color('SI')
+        self.setObjectName('SIApp')
         self.setWindowTitle('Sirius General Status')
         self.setWindowIcon(
-            qta.icon('mdi.view-split-vertical',
-                     color=get_appropriate_color('AS')))
+            qta.icon('mdi.view-split-vertical', color=self.app_color))
         self._setupUi()
 
     def _setupUi(self):
@@ -113,7 +114,7 @@ class SIGenStatusWindow(SiriusMainWindow):
             self, self.prefix+'SI-Glob:AP-CurrInfo:Current-Mon')
         self.lb_curr.setAlignment(Qt.AlignCenter)
         self.lb_curr.setStyleSheet(
-            'QLabel{background-color: #d7ccc8;font-size: 30pt;}')
+            'QLabel{background-color: '+self.app_color+';font-size: 30pt;}')
         self.frm_curr = SiriusFrame(
             self, self.prefix+'SI-Glob:AP-CurrInfo:StoredEBeam-Mon',
             color_list=[SiriusFrame.DarkGreen, SiriusFrame.LightGreen],
@@ -147,30 +148,42 @@ class SIGenStatusWindow(SiriusMainWindow):
         self.curr_graph = SiriusTimePlot(self)
         self.curr_graph.setObjectName('curr_graph')
         self.curr_graph.setStyleSheet(
-            '#curr_graph{min-width: 20em; min-height: 20em;}')
+            '#curr_graph{min-width: 20em; min-height: 14em;}')
         self.curr_graph.showXGrid = True
         self.curr_graph.showYGrid = True
         self.curr_graph.backgroundColor = QColor(255, 255, 255)
-        self.curr_graph.timeSpan = 30*60
         self.curr_graph.setYLabels(['Current [mA]'])
         for ax in self.curr_graph.getPlotItem().axes.values():
             sty = ax['item'].labelStyle
-            sty['font-size'] = '12pt'
+            sty['font-size'] = '18pt'
             ax['item'].setLabel(text=None, **sty)
         font = QFont()
-        font.setPointSize(12)
+        font.setPointSize(18)
         self.curr_graph.plotItem.getAxis('bottom').setStyle(
             tickTextOffset=5, autoExpandTextSpace=False,
-            tickTextWidth=80, tickFont=font)
+            tickTextWidth=50, tickFont=font)
         self.curr_graph.plotItem.getAxis('left').setStyle(
             tickTextOffset=5, autoExpandTextSpace=False,
-            tickTextWidth=80, tickFont=font)
+            tickTextWidth=50, tickFont=font)
+        curr_pvname = self.prefix+'SI-Glob:AP-CurrInfo:Current-Mon'
         self.curr_graph.addYChannel(
-            y_channel=self.prefix+'SI-Glob:AP-CurrInfo:Current-Mon',
-            name='Current', color='blue', lineStyle=Qt.SolidLine, lineWidth=1)
+            y_channel=curr_pvname, name='Current',
+            color='blue', lineStyle=Qt.SolidLine, lineWidth=2)
         self.curve = self.curr_graph.curveAtIndex(0)
-        # self.curve.setFillLevel(0)
-        # self.curve.setBrush(mkBrush(color='b'))
+        self.curve.setFillLevel(0)
+        self.curve.setBrush(QBrush(QGradient(QGradient.ColdEvening)))
+
+        timespan_hours = 12
+        self.curr_graph.timeSpan = timespan_hours*60*60
+        self.curr_graph.bufferSize = timespan_hours*60*60*10
+        self.curr_graph.maxRedrawRate = 2
+        t_end = Time(datetime=_datetime.now())
+        t_init = Time(datetime=t_end - _timedelta(hours=timespan_hours))
+        t_end = t_end.get_iso8601()
+        t_init = t_init.get_iso8601()
+        self.curr_graph.fill_curve_with_archdata(
+            self.curve, curr_pvname, t_init=t_init, t_end=t_end,
+            process_type='mean', process_bin_intvl=1)
 
         cw = QWidget()
         hlay1 = QHBoxLayout()
@@ -236,7 +249,7 @@ class SIGenStatusWindow(SiriusMainWindow):
             self._lb_machsht.setStyleSheet(
                 'QLabel{font-size: '+str(fontsize+3.5)+'pt;}')
             self.lb_curr.setStyleSheet(
-                'QLabel{background-color: #d7ccc8;'
+                'QLabel{background-color: '+self.app_color+';'
                 'font-size: '+str(fontsize+20)+'pt;}')
             self.lb_lifetime.setStyleSheet(
                 'QLabel{font-size: '+str(fontsize+20)+'pt;}')
