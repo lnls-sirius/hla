@@ -8,8 +8,8 @@ import numpy as _np
 from qtpy.QtCore import Qt, Signal, Slot
 from qtpy.QtGui import QKeySequence
 from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
-    QGridLayout, QScrollArea, QFormLayout, QCheckBox, QDoubleSpinBox, \
-    QUndoStack, QUndoCommand, QHBoxLayout, QMessageBox, QMenuBar
+    QGridLayout, QScrollArea, QFormLayout, QCheckBox, QMenuBar, \
+    QUndoStack, QUndoCommand, QHBoxLayout, QMessageBox
 import qtawesome as qta
 
 from siriuspy.search import MASearch as _MASearch, PSSearch as _PSSearch
@@ -18,10 +18,8 @@ from siriuspy.opticscorr.opticscorr import BOTuneCorr, BOChromCorr
 from siriuspy.clientconfigdb import ConfigDBException as _ConfigDBException
 from siriuspy.namesys import SiriusPVName
 
-from siriushla.widgets.windows import SiriusMainWindow
+from siriushla.widgets import SiriusMainWindow, QDoubleSpinBoxPlus
 from siriushla.as_ap_configdb import SaveConfigDialog as _SaveConfigDialog
-from siriushla.bo_ap_ramp.custom_widgets import \
-    MyDoubleSpinBox as _MyDoubleSpinBox
 from siriushla.bo_ap_ramp.auxiliary_dialogs import \
     ShowCorrectorKicks as _ShowCorrectorKicks
 
@@ -144,7 +142,7 @@ class BONormEdit(SiriusMainWindow):
                 ps_value = QLabel(str(self.norm_config[ps])+' GeV', self)
                 flay_configdata.addRow(QLabel(ps + ': ', self), ps_value)
             else:
-                ps_value = _MyDoubleSpinBox(self.nconfig_data)
+                ps_value = QDoubleSpinBoxPlus(self.nconfig_data)
                 ps_value.setDecimals(6)
                 ps_value.setMinimum(-10000)
                 ps_value.setMaximum(10000)
@@ -198,7 +196,7 @@ class BONormEdit(SiriusMainWindow):
 
         label_correctH = QLabel('Correct H', self,
                                 alignment=Qt.AlignRight | Qt.AlignVCenter)
-        self.sb_correctH = _MyDoubleSpinBox(self)
+        self.sb_correctH = QDoubleSpinBoxPlus(self)
         self.sb_correctH.setValue(self._deltas['factorH'])
         self.sb_correctH.setDecimals(1)
         self.sb_correctH.setMinimum(-10000)
@@ -210,7 +208,7 @@ class BONormEdit(SiriusMainWindow):
 
         label_correctV = QLabel('Correct V', self,
                                 alignment=Qt.AlignRight | Qt.AlignVCenter)
-        self.sb_correctV = _MyDoubleSpinBox(self)
+        self.sb_correctV = QDoubleSpinBoxPlus(self)
         self.sb_correctV.setValue(self._deltas['factorV'])
         self.sb_correctV.setDecimals(1)
         self.sb_correctV.setMinimum(-10000)
@@ -248,7 +246,7 @@ class BONormEdit(SiriusMainWindow):
             lab = getattr(self, 'label_deltaTune'+cord)
             lab.setStyleSheet("min-width:1.55em; max-width:1.55em;")
 
-            setattr(self, 'sb_deltaTune'+cord, _MyDoubleSpinBox(self))
+            setattr(self, 'sb_deltaTune'+cord, QDoubleSpinBoxPlus(self))
             sb = getattr(self, 'sb_deltaTune'+cord)
             sb.setDecimals(6)
             sb.setMinimum(-5)
@@ -302,7 +300,7 @@ class BONormEdit(SiriusMainWindow):
             lab = getattr(self, 'label_Chrom'+cord)
             lab.setStyleSheet("min-width:1.55em; max-width:1.55em;")
 
-            setattr(self, 'sb_Chrom'+cord, _MyDoubleSpinBox(self))
+            setattr(self, 'sb_Chrom'+cord, QDoubleSpinBoxPlus(self))
             sb = getattr(self, 'sb_Chrom'+cord)
             sb.setDecimals(6)
             sb.setMinimum(-5)
@@ -395,7 +393,8 @@ class BONormEdit(SiriusMainWindow):
         psnames.remove('label')
         if state:
             for ps in psnames:
-                ps_value = self.nconfig_data.findChild(QDoubleSpinBox, name=ps)
+                ps_value = self.nconfig_data.findChild(
+                    QDoubleSpinBoxPlus, name=ps)
                 ma = _MASearch.conv_psname_2_psmaname(ps)
                 aux = self._aux_magnets[ma]
                 currs = (aux.current_min, aux.current_max)
@@ -405,7 +404,8 @@ class BONormEdit(SiriusMainWindow):
                 ps_value.setMaximum(max(lims))
         else:
             for ps in psnames:
-                ps_value = self.nconfig_data.findChild(QDoubleSpinBox, name=ps)
+                ps_value = self.nconfig_data.findChild(
+                    QDoubleSpinBoxPlus, name=ps)
                 ps_value.setMinimum(-10000)
                 ps_value.setMaximum(10000)
 

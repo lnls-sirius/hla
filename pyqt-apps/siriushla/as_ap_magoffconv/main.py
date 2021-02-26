@@ -7,11 +7,11 @@ from qtpy.QtWidgets import QWidget, QGroupBox, QComboBox, QLabel, \
     QDoubleSpinBox, QVBoxLayout, QHBoxLayout, QGridLayout, QSpacerItem, \
     QSizePolicy as QSzPlcy, QApplication, QMessageBox
 
-from siriuspy.envars import VACA_PREFIX
+from siriushla.sirius_application import SiriusApplication
+from siriushla.widgets import SiriusMainWindow, QDoubleSpinBoxPlus
+
 from siriuspy.search import MASearch
 from siriuspy.magnet.factory import NormalizerFactory
-from siriushla.sirius_application import SiriusApplication
-from siriushla.widgets import SiriusMainWindow
 
 
 Dipole = re.compile("^.*:MA-(B|Spect).*$")
@@ -62,7 +62,7 @@ class MagOffConvApp(SiriusMainWindow):
 
         for name in ['_sb_current', '_sb_strength',
                      '_sb_energy', '_sb_quadfam_kl']:
-            setattr(self, name, MyDoubleSpinBox())
+            setattr(self, name, QDoubleSpinBoxPlus())
             sb = getattr(self, name)
             sb.setObjectName(name)
             sb.setValue(0)

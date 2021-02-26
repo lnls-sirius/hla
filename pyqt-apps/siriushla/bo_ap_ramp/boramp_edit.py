@@ -21,7 +21,7 @@ from siriuspy.ramp.magnet import get_magnet as _get_magnet
 from siriuspy.ramp.conn import ConnSOFB as _ConnSOFB
 from siriuspy.namesys import SiriusPVName as _PVName
 
-from siriushla.widgets import MatplotlibWidget
+from siriushla.widgets import MatplotlibWidget, QDoubleSpinBoxPlus
 from siriushla.bo_ap_ramp.auxiliary_dialogs import \
     InsertNormalizedConfig as _InsertNormConfig, \
     DeleteNormalizedConfig as _DeleteNormConfig, \
@@ -30,7 +30,6 @@ from siriushla.bo_ap_ramp.auxiliary_dialogs import \
 from siriushla.bo_ap_ramp.custom_widgets import \
     SpinBoxDelegate as _SpinBoxDelegate, \
     CustomTableWidgetItem as _CustomTableWidgetItem, \
-    MyDoubleSpinBox as _MyDoubleSpinBox, \
     MyTableWidget as _MyTableWidget
 from siriushla.bo_ap_ramp.bonormalized_edit import BONormEdit as _BONormEdit
 
@@ -202,7 +201,7 @@ class DipoleRamp(QWidget):
     def _setupPSDelayAndWfmNrPoints(self):
         label_psdelay = QLabel('PS delay [ms]:', self,
                                alignment=Qt.AlignVCenter)
-        self.sb_psdelay = _MyDoubleSpinBox(self)
+        self.sb_psdelay = QDoubleSpinBoxPlus(self)
         self.sb_psdelay.setMinimum(0)
         self.sb_psdelay.setMaximum(490)
         self.sb_psdelay.setDecimals(6)
@@ -213,7 +212,7 @@ class DipoleRamp(QWidget):
 
         label_nrpoints_fams = QLabel('# points: fams:', self,
                                      alignment=Qt.AlignVCenter)
-        self.sb_nrpoints_fams = _MyDoubleSpinBox(self)
+        self.sb_nrpoints_fams = QDoubleSpinBoxPlus(self)
         self.sb_nrpoints_fams.setMinimum(1)
         self.sb_nrpoints_fams.setMaximum(MAX_WFMSIZE_OTHERS)
         self.sb_nrpoints_fams.setDecimals(0)
@@ -226,7 +225,7 @@ class DipoleRamp(QWidget):
 
         label_nrpoints_corrs = QLabel('corrs:', self,
                                       alignment=Qt.AlignVCenter)
-        self.sb_nrpoints_corrs = _MyDoubleSpinBox(self)
+        self.sb_nrpoints_corrs = QDoubleSpinBoxPlus(self)
         self.sb_nrpoints_corrs.setMinimum(1)
         self.sb_nrpoints_corrs.setMaximum(MAX_WFMSIZE_FBP)
         self.sb_nrpoints_corrs.setDecimals(0)
@@ -1542,7 +1541,7 @@ class RFRamp(QWidget):
     def _setupRFDelay(self):
         label_rfdelay = QLabel('RF delay [ms]:', self,
                                alignment=Qt.AlignVCenter)
-        self.sb_rfdelay = _MyDoubleSpinBox(self)
+        self.sb_rfdelay = QDoubleSpinBoxPlus(self)
         self.sb_rfdelay.setMinimum(0)
         self.sb_rfdelay.setMaximum(410)
         self.sb_rfdelay.setDecimals(6)

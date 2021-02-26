@@ -82,25 +82,6 @@ class CustomTableWidgetItem(QTableWidgetItem):
             return QTableWidgetItem.__lt__(self, other)
 
 
-class MyDoubleSpinBox(QDoubleSpinBox):
-    """Subclass QDoubleSpinBox to reimplement wheelEvent."""
-
-    def __init__(self, parent):
-        """Initialize object."""
-        super().__init__(parent)
-        locale = QLocale(QLocale.English, country=QLocale.UnitedStates)
-        locale.setNumberOptions(locale.RejectGroupSeparator)
-        self.setLocale(locale)
-        self.setFocusPolicy(Qt.StrongFocus)
-
-    def wheelEvent(self, event):
-        """Reimplement wheel event to ignore event when out of focus."""
-        if not self.hasFocus():
-            event.ignore()
-        else:
-            super().wheelEvent(event)
-
-
 class ConfigLineEdit(QLineEdit):
 
     def __init__(self, config_type, *args, **kwargs):
