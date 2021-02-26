@@ -16,7 +16,7 @@ from siriuspy.timesys import csdev as _cstime
 from ..util import connect_window, get_appropriate_color
 from ..widgets import PyDMLed, SiriusLedAlert, PyDMStateButton, \
     SiriusLabel, SiriusSpinbox, PyDMLedMultiChannel, \
-    SiriusEnumComboBox as _MyComboBox
+    SiriusEnumComboBox as _MyComboBox, SiriusLedState
 from ..widgets.windows import create_window_from_widget
 
 from .base import BaseList, BaseWidget, MySpinBox as _MySpinBox
@@ -91,15 +91,22 @@ class HLTriggerDetailed(BaseWidget):
     def _setupUi(self):
         self.my_layout = QGridLayout(self)
         self.my_layout.setHorizontalSpacing(20)
-        self.my_layout.setVerticalSpacing(20)
+        self.my_layout.setVerticalSpacing(0)
         lab = QLabel('<h1>' + self.prefix.device_name + '</h1>', self)
         self.my_layout.addWidget(lab, 0, 0, 1, 2)
         self.my_layout.setAlignment(lab, Qt.AlignCenter)
+
         self.status_wid = QGroupBox('Status', self)
         self.my_layout.addWidget(self.status_wid, 1, 0)
         self._setup_status_wid()
+
+        init_channel = self.prefix.substitute(propty="InInjTable-Mon")
+        rb = SiriusLedState(self, init_channel=init_channel)
+        gbinjtab = self._create_small_GB('In Injection Table?', self, (rb, ))
+        self.my_layout.addWidget(gbinjtab, 2, 0)
+
         self.ll_list_wid = QGroupBox('Configs', self)
-        self.my_layout.addWidget(self.ll_list_wid, 1, 1)
+        self.my_layout.addWidget(self.ll_list_wid, 1, 1, 2, 1)
         self._setup_ll_list_wid()
 
     def _setup_status_wid(self):
@@ -182,18 +189,36 @@ class HLTriggerDetailed(BaseWidget):
         sp.showStepExponent = False
         init_channel = prefix.substitute(propty="Delay-RB")
         rb = PyDMLabel(self, init_channel=init_channel)
-        gbdel = self._create_small_GB('Delay [us]', self.ll_list_wid, (sp, rb))
+        gbdel = self._create_small_GB('[us]', self.ll_list_wid, (sp, rb))
 
         init_channel = prefix.substitute(propty="DelayRaw-SP")
         sp = _MySpinBox(self, init_channel=init_channel)
         sp.showStepExponent = False
         init_channel = prefix.substitute(propty="DelayRaw-RB")
         rb = PyDMLabel(self, init_channel=init_channel)
-        gbdelr = self._create_small_GB('Raw Delay', self.ll_list_wid, (sp, rb))
+        gbdelr = self._create_small_GB('Raw', self.ll_list_wid, (sp, rb))
+
+        init_channel = prefix.substitute(propty="TotalDelay-Mon")
+        rb = PyDMLabel(self, init_channel=init_channel)
+        gbtdel = self._create_small_GB('[us]', self.ll_list_wid, (rb, ))
+
+        init_channel = prefix.substitute(propty="TotalDelayRaw-Mon")
+        rb = PyDMLabel(self, init_channel=init_channel)
+        gbtdelr = self._create_small_GB('Raw', self.ll_list_wid, (rb, ))
+
+        widd = QWidget(self.ll_list_wid)
+        widd.setLayout(QHBoxLayout())
+        widd.layout().addWidget(gbdel)
+        widd.layout().addWidget(gbdelr)
+
+        widt = QWidget(self.ll_list_wid)
+        widt.setLayout(QHBoxLayout())
+        widt.layout().addWidget(gbtdel)
+        widt.layout().addWidget(gbtdelr)
 
         tabdel = QTabWidget(self)
-        tabdel.addTab(gbdel, '[us]')
-        tabdel.addTab(gbdelr, 'Raw')
+        tabdel.addTab(widd, 'Delay')
+        tabdel.addTab(widt, 'Total Delay')
 
         if HLTimeSearch.has_delay_type(prefix.device_name):
             init_channel = prefix.substitute(propty="RFDelayType-Sel")
@@ -371,6 +396,9 @@ class HLTriggerList(BaseList):
         'delay_type': 4.2,
         'delay': 5.5,
         'delayraw': 5.5,
+        'total_delay': 6,
+        'total_delayraw': 6,
+        'ininjtable': 5,
         }
     _LABELS = {
         'detailed': '',
@@ -383,11 +411,15 @@ class HLTriggerList(BaseList):
         'polarity': 'Polarity',
         'delay_type': 'Type',
         'delay': 'Delay [us]',
-        'delayraw': 'Raw Delay',
+        'delayraw': 'DelayRaw',
+        'total_delay': 'Total Dly [us]',
+        'total_delayraw': 'Total DlyRaw',
+        'ininjtable': 'InInjTable',
         }
     _ALL_PROPS = (
         'detailed', 'status', 'name', 'state', 'source', 'polarity', 'pulses',
-        'duration', 'delay_type', 'delay', 'delayraw')
+        'duration', 'delay_type', 'delay', 'delayraw', 'total_delay',
+        'total_delayraw', 'ininjtable')
 
     def __init__(self, **kwargs):
         srch = set(('source', 'name', 'polarity', 'state'))
@@ -465,6 +497,15 @@ class HLTriggerList(BaseList):
             sp.showStepExponent = False
             init_channel = prefix.substitute(propty="DelayRaw-RB")
             rb = PyDMLabel(self, init_channel=init_channel)
+        elif prop == 'total_delay':
+            init_channel = prefix.substitute(propty="TotalDelay-Mon")
+            sp = PyDMLabel(self, init_channel=init_channel)
+        elif prop == 'total_delayraw':
+            init_channel = prefix.substitute(propty="TotalDelayRaw-Mon")
+            sp = PyDMLabel(self, init_channel=init_channel)
+        elif prop == 'ininjtable':
+            init_channel = prefix.substitute(propty="InInjTable-Mon")
+            sp = SiriusLedState(self, init_channel=init_channel)
         else:
             raise Exception('Property unknown')
         if rb is None:
