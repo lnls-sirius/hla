@@ -43,8 +43,6 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
                          background=background)
         self.normalizeData = True
         self.ROIColor = QColor('cyan')
-        # self.autoSetColorbarLims = False
-        # self.colorbar.setLimits([-120, 0])
         self.format_tooltip = '{0:.3f}, {1:.3f}'
         self._idx2send = 0
         self.buffer = list()
