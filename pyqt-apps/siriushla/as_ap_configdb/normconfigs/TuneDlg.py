@@ -1,5 +1,6 @@
-from qtpy.QtWidgets import QDialog, QDoubleSpinBox, QDialogButtonBox, \
+from qtpy.QtWidgets import QDialog, QDialogButtonBox, \
     QGridLayout, QLabel
+from siriushla.widgets import QDoubleSpinBoxPlus
 
 
 class TuneDlg(QDialog):
@@ -16,9 +17,9 @@ class TuneDlg(QDialog):
 
         self.tune_x_label = QLabel("\u0394\u03bd<sub>x</sub>", self)
         self.tune_y_label = QLabel("\u0394\u03bd<sub>y</sub>", self)
-        self.tune_x = QDoubleSpinBox(self)
+        self.tune_x = QDoubleSpinBoxPlus(self)
         self.tune_x.setSingleStep(0.1)
-        self.tune_y = QDoubleSpinBox(self)
+        self.tune_y = QDoubleSpinBoxPlus(self)
         self.tune_y.setSingleStep(0.1)
 
         self.button_box = QDialogButtonBox(

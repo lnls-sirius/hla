@@ -12,9 +12,9 @@ from matplotlib import rcParams
 
 from qtpy.QtWidgets import QPushButton, QLabel, QGridLayout, QGroupBox, \
     QFormLayout, QMessageBox, QWidget, QComboBox, QSpinBox, QVBoxLayout, \
-    QDoubleSpinBox, QFileDialog, QHBoxLayout, QSizePolicy, QCheckBox
+    QFileDialog, QHBoxLayout, QCheckBox
 from qtpy.QtGui import QColor
-from qtpy.QtCore import Qt, QSize, Slot
+from qtpy.QtCore import Qt, Slot
 
 from pyqtgraph import PlotCurveItem, mkPen
 
@@ -24,7 +24,8 @@ from pydm.widgets.logdisplay import PyDMLogDisplay
 import mathphys.constants as _consts
 from siriuspy.magnet.factory import NormalizerFactory as _NormFact
 
-from siriushla.widgets import SiriusSpinbox, SiriusLabel, MatplotlibWidget
+from siriushla.widgets import SiriusSpinbox, SiriusLabel, MatplotlibWidget, \
+    QDoubleSpinBoxPlus
 from siriushla.as_ti_control import HLTriggerSimple
 
 rcParams.update({
@@ -353,19 +354,19 @@ class EmittanceMeasure(QWidget):
         self.spbox_outliers.setMinimum(0)
         self.spbox_outliers.setValue(12)
         fl.addRow(QLabel('Nr Outliers', gb), self.spbox_outliers)
-        self.spbox_I_ini = QDoubleSpinBox(gb)
+        self.spbox_I_ini = QDoubleSpinBoxPlus(gb)
         self.spbox_I_ini.setMinimum(-4)
         self.spbox_I_ini.setMaximum(4)
         self.spbox_I_ini.setValue(-0.7)
         self.spbox_I_ini.setDecimals(3)
         fl.addRow(QLabel('Initial Current [A]', gb), self.spbox_I_ini)
-        self.spbox_I_end = QDoubleSpinBox(gb)
+        self.spbox_I_end = QDoubleSpinBoxPlus(gb)
         self.spbox_I_end.setMinimum(-4)
         self.spbox_I_end.setMaximum(4)
         self.spbox_I_end.setValue(0.7)
         self.spbox_I_end.setDecimals(3)
         fl.addRow(QLabel('Final Current [A]', gb), self.spbox_I_end)
-        self.spbox_threshold = QDoubleSpinBox(gb)
+        self.spbox_threshold = QDoubleSpinBoxPlus(gb)
         self.spbox_threshold.setMinimum(0)
         self.spbox_threshold.setMaximum(20)
         self.spbox_threshold.setValue(4)
@@ -380,7 +381,7 @@ class EmittanceMeasure(QWidget):
         gb = QGroupBox('Analysis Configs.', self)
         vl = QVBoxLayout(gb)
         anllay.addWidget(gb)
-        self.spbox_energy = QDoubleSpinBox(gb)
+        self.spbox_energy = QDoubleSpinBoxPlus(gb)
         self.spbox_energy.setMinimum(0.511)
         self.spbox_energy.setMaximum(200)
         self.spbox_energy.setValue(150)

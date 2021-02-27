@@ -5,12 +5,13 @@ import numpy as _np
 from qtpy.QtCore import Signal, Qt
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QSpinBox, \
-     QLabel, QGridLayout, QDoubleSpinBox
+     QLabel, QGridLayout
 
 from pydm.widgets import PyDMWaveformPlot
 
 from siriuspy.search import PSSearch
-from siriushla.widgets import SiriusConnectionSignal, SiriusMainWindow
+from siriushla.widgets import SiriusConnectionSignal, SiriusMainWindow, \
+    QDoubleSpinBoxPlus
 
 
 class Graph(PyDMWaveformPlot):
@@ -58,6 +59,8 @@ class GraphWidget(QWidget):
         self._delta = delta
         self.curves = []
         self.setupui()
+        self.setFocus(True)
+        self.setFocusPolicy(Qt.StrongFocus)
         self.chans = [SiriusConnectionSignal(ps+':Wfm-Mon') for ps in pslist]
         for idx, chan in enumerate(self.chans):
             chan.new_value_signal[_np.ndarray].connect(
@@ -92,7 +95,7 @@ class GraphWidget(QWidget):
         spinini.setValue(self._idx_ini)
         spinini.editingFinished.connect(self._update_idx_ini)
 
-        spindlt = QDoubleSpinBox(self)
+        spindlt = QDoubleSpinBoxPlus(self)
         spindlt.setMinimum(0)
         spindlt.setMaximum(4)
         spindlt.setValue(self._delta)

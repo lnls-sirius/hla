@@ -4,10 +4,11 @@ import numpy as _np
 from qtpy.QtGui import QColor
 from qtpy.QtCore import Qt, QLocale
 from qtpy.QtWidgets import QLineEdit, QTableWidget, QTableWidgetItem, \
-    QStyledItemDelegate, QDoubleSpinBox, QToolTip
+    QStyledItemDelegate, QToolTip
 from pyqtgraph import functions
 from pydm.widgets import PyDMWaveformPlot
 
+from siriushla.widgets import QDoubleSpinBoxPlus
 from siriushla.as_ap_configdb import LoadConfigDialog as _LoadConfigDialog
 
 
@@ -40,7 +41,7 @@ class SpinBoxDelegate(QStyledItemDelegate):
 
     def createEditor(self, parent, option, index):
         """Create editor."""
-        editor = QDoubleSpinBox(parent)
+        editor = QDoubleSpinBoxPlus(parent)
         editor.setMinimum(self.mini)
         editor.setMaximum(self.maxi)
         editor.setDecimals(self.prec)

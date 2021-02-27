@@ -4,8 +4,8 @@ import re
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGroupBox, QComboBox, QLabel, \
-    QDoubleSpinBox, QVBoxLayout, QHBoxLayout, QGridLayout, QSpacerItem, \
-    QSizePolicy as QSzPlcy, QApplication, QMessageBox
+    QVBoxLayout, QHBoxLayout, QGridLayout, QSpacerItem, QMessageBox, \
+    QSizePolicy as QSzPlcy
 
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, QDoubleSpinBoxPlus
@@ -229,23 +229,6 @@ class MagOffConvApp(SiriusMainWindow):
             current = self._normalizer.conv_strength_2_current(
                 strengths=strength)
         return current
-
-
-class MyDoubleSpinBox(QDoubleSpinBox):
-
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.step_exponent = 0
-
-    def keyPressEvent(self, ev):
-        app = QApplication.instance()
-        ctrl_hold = app.queryKeyboardModifiers() == Qt.ControlModifier
-        if ctrl_hold and (ev.key() in (Qt.Key_Left, Qt.Key_Right)):
-            self.step_exponent += 1 if ev.key() == Qt.Key_Left else -1
-            self.step_exponent = max(-self.decimals(), self.step_exponent)
-            self.setSingleStep(10 ** self.step_exponent)
-        else:
-            super().keyPressEvent(ev)
 
 
 if __name__ == '__main__':
