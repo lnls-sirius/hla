@@ -1,13 +1,14 @@
 """GUI for injection."""
 from qtpy.QtCore import Slot, QTimer, Qt
 from qtpy.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, \
-    QRadioButton, QPushButton, QSpinBox, QGridLayout, QMessageBox, QDialog, \
+    QRadioButton, QPushButton, QGridLayout, QMessageBox, QDialog, \
     QLabel, QDockWidget
 from pydm.widgets import PyDMLabel, PyDMCheckbox
 
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriushla.sirius_application import SiriusApplication
-from siriushla.widgets import SiriusMainWindow, SiriusLedState
+from siriushla.widgets import SiriusMainWindow, SiriusLedState, \
+    QSpinBoxPlus
 from siriushla.as_ap_injection.CustomExceptions import PVConnectionError
 from siriushla.as_ap_injection.InjectionController import InjectionController
 from siriushla.widgets.bar_graph import BarGraphWidget, PyDMBarGraph
@@ -303,7 +304,7 @@ class InjectionWindow(SiriusMainWindow):
         radio_layout.addWidget(self.singleBunchRadio)
 
         cycle_layout = QHBoxLayout()
-        # self.cycleSpinBox = QSpinBox(self.central_widget)
+        # self.cycleSpinBox = QSpinBoxPlus(self.central_widget)
         # self.cycleSpinBox.setObjectName("cycleSpinBox")
         pv = _VACA_PREFIX + "AS-Glob:TI-EVG:InjectionCyc-Sel"
         self.cycleCheckBox = PyDMCheckbox(parent=self, init_channel=pv)
@@ -328,17 +329,17 @@ class InjectionWindow(SiriusMainWindow):
         bucket_list_layout = QVBoxLayout()
         self.initialBucketLabel = QLabel("&Initial bucket")
         self.initialBucketLabel.setObjectName("initialBucketLabel")
-        self.initialBucketSpinBox = QSpinBox(self.central_widget)
+        self.initialBucketSpinBox = QSpinBoxPlus(self.central_widget)
         self.initialBucketSpinBox.setObjectName("initialBucketSpinBox")
         self.initialBucketLabel.setBuddy(self.initialBucketSpinBox)
         self.finalBucketLabel = QLabel("&Final bucket")
         self.finalBucketLabel.setObjectName("finalBucketLabel")
-        self.finalBucketSpinBox = QSpinBox(self.central_widget)
+        self.finalBucketSpinBox = QSpinBoxPlus(self.central_widget)
         self.finalBucketSpinBox.setObjectName("finalBucketSpinBox")
         self.finalBucketLabel.setBuddy(self.finalBucketSpinBox)
         self.stepLabel = QLabel("&Step")
         self.stepLabel.setObjectName("stepLabel")
-        self.stepSpinBox = QSpinBox(self.central_widget)
+        self.stepSpinBox = QSpinBoxPlus(self.central_widget)
         self.stepSpinBox.setObjectName("stepSpinBox")
         self.stepLabel.setBuddy(self.stepSpinBox)
         bucket_list_layout.addWidget(self.initialBucketLabel)

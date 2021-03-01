@@ -54,7 +54,7 @@ class BaseWidget(QWidget):
         if pv2 != propty:
             chan1 = self.get_pvname(propty)
             if not_enum:
-                wid = MySpinBox(self, init_channel=chan1)
+                wid = SiriusSpinbox(self, init_channel=chan1)
                 wid.showStepExponent = False
                 wid.setAlignment(Qt.AlignCenter)
             else:
@@ -275,19 +275,3 @@ class BaseList(CustomGroupBox):
 
     def _createObjs(self, prefix, prop):
         return tuple()  # return tuple of widgets
-
-
-class MySpinBox(SiriusSpinbox):
-    """Subclass QDoubleSpinBox to reimplement whellEvent."""
-
-    def __init__(self, parent, init_channel=None):
-        """Initialize object."""
-        super().__init__(parent=parent, init_channel=init_channel)
-        self.setFocusPolicy(Qt.StrongFocus)
-
-    def wheelEvent(self, event):
-        """Reimplement wheel event to ignore event when out of focus."""
-        if not self.hasFocus():
-            event.ignore()
-        else:
-            super().wheelEvent(event)

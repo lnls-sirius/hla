@@ -3,11 +3,11 @@ import numpy as np
 from qtpy.QtGui import QPalette, QColor
 from qtpy.QtCore import Qt, Slot, Signal
 from qtpy.QtWidgets import QWidget, QGridLayout, QHBoxLayout, \
-    QComboBox, QCheckBox, QLabel, QSpinBox, QPushButton
+    QComboBox, QCheckBox, QLabel, QPushButton
 import qtawesome as qta
 
 from siriuspy.namesys import SiriusPVName
-from siriushla.widgets import SiriusSpectrogramView
+from siriushla.widgets import SiriusSpectrogramView, QSpinBoxPlus
 
 
 class BOTuneSpectrogram(SiriusSpectrogramView):
@@ -168,13 +168,13 @@ class BOTuneSpectrogramControls(QWidget):
         self.cb_show_roi.stateChanged.connect(self.spectrogram.showROI)
         self.cb_show_roi.setChecked(True)
 
-        self.sb_idx2plot = QSpinBox(self)
+        self.sb_idx2plot = QSpinBoxPlus(self)
         self.sb_idx2plot.editingFinished.connect(self.update_idx2plot)
         self.lb_idx2plot = QLabel('0')
         self.spectrogram.idx2send_changed.connect(self.update_idx2plot)
         self.spectrogram.buffer_data_size.connect(self.sb_idx2plot.setMaximum)
 
-        self.sb_buffsz = QSpinBox(self)
+        self.sb_buffsz = QSpinBoxPlus(self)
         self.sb_buffsz.setValue(1)
         self.sb_buffsz.setMinimum(1)
         self.sb_buffsz.setMaximum(100)

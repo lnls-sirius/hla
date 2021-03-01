@@ -8,8 +8,7 @@ from datetime import datetime
 import numpy as np
 from qtpy.QtWidgets import QGridLayout, QHBoxLayout, QFormLayout, QVBoxLayout,\
     QSpacerItem, QWidget, QGroupBox, QCheckBox, QComboBox, QPushButton, \
-    QLabel, QMessageBox, QSizePolicy as QSzPlcy, QSpinBox, QFileDialog, \
-    QTabWidget
+    QLabel, QMessageBox, QSizePolicy as QSzPlcy, QFileDialog, QTabWidget
 from qtpy.QtCore import Qt, Slot, Signal
 import qtawesome as qta
 
@@ -19,7 +18,7 @@ from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.namesys import SiriusPVName
 
 from siriushla import util
-from siriushla.widgets import PyDMLed, SiriusConnectionSignal
+from siriushla.widgets import PyDMLed, SiriusConnectionSignal, QSpinBoxPlus
 from siriushla.common.cam_basler import \
     SiriusImageView as _SiriusImageView, \
     create_propty_layout as _create_propty_layout
@@ -64,6 +63,8 @@ class SiriusScrnView(QWidget):
             self.scrn_prefix+':ImgROIOffsetY-RB')
 
         self._setupUi()
+        self.setFocus(True)
+        self.setFocusPolicy(Qt.StrongFocus)
         self._loadCalibrationGrid(default=True)
 
     @property
@@ -203,7 +204,7 @@ class SiriusScrnView(QWidget):
 
         lb = QLabel('Show levels <')
         lb.setStyleSheet("min-width:7em;max-width:7em;")
-        self.spinbox_gridfilterfactor = QSpinBox()
+        self.spinbox_gridfilterfactor = QSpinBoxPlus()
         self.spinbox_gridfilterfactor.setMaximum(100)
         self.spinbox_gridfilterfactor.setMinimum(0)
         self.spinbox_gridfilterfactor.setValue(
@@ -220,7 +221,7 @@ class SiriusScrnView(QWidget):
 
         lb = QLabel('Remove border: ')
         lb.setStyleSheet("min-width:7em;max-width:7em;")
-        self.spinbox_removeborder = QSpinBox()
+        self.spinbox_removeborder = QSpinBoxPlus()
         self.spinbox_removeborder.setMaximum(512)
         self.spinbox_removeborder.setMinimum(0)
         self.spinbox_removeborder.setValue(

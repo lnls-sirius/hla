@@ -14,11 +14,12 @@ from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.timesys import csdev as _cstime
 
 from ..widgets import PyDMLed, PyDMStateButton, SiriusLedState, \
-    SiriusEnumComboBox as _MyComboBox, SiriusLedAlert, SiriusLabel
+    SiriusEnumComboBox as _MyComboBox, SiriusLedAlert, SiriusLabel, \
+    SiriusSpinbox
 from ..widgets.windows import create_window_from_widget
 from ..util import connect_window, get_appropriate_color
 
-from .base import BaseList, MySpinBox as _MySpinBox, BaseWidget
+from .base import BaseList, BaseWidget
 
 
 # ###################### Event Generator ######################
@@ -132,7 +133,7 @@ class EVG(BaseWidget):
         layrow.addWidget(self._create_prop_widget(
                         'Dev Enable', self.configs_wid, (sp, rb)))
 
-        sp = _MySpinBox(self, init_channel=prefix + "RFDiv-SP")
+        sp = SiriusSpinbox(self, init_channel=prefix + "RFDiv-SP")
         sp.showStepExponent = False
         rb = PyDMLabel(self, init_channel=prefix + "RFDiv-RB")
         layrow.addWidget(self._create_prop_widget(
@@ -184,7 +185,7 @@ class EVG(BaseWidget):
         configlayout.addLayout(layrow)
         configlayout.addStretch()
 
-        sp = _MySpinBox(self, init_channel=prefix + "InjRate-SP")
+        sp = SiriusSpinbox(self, init_channel=prefix + "InjRate-SP")
         sp.showStepExponent = False
         rb = PyDMLabel(self, init_channel=prefix + "InjRate-RB")
         layrow.addWidget(self._create_prop_widget(
@@ -411,7 +412,7 @@ class BucketList(BaseWidget):
         vlay.addWidget(lab)
         vlay.addWidget(rb)
 
-        sp = _MySpinBox(wid, init_channel=prefix + "RepeatBucketList-SP")
+        sp = SiriusSpinbox(wid, init_channel=prefix + "RepeatBucketList-SP")
         sp.showStepExponent = False
         rb = PyDMLabel(wid, init_channel=prefix + "RepeatBucketList-RB")
         rb.setStyleSheet("min-width:2.5em; max-height:1.15em;")
@@ -535,11 +536,11 @@ class EventList(BaseList):
             sp = _MyComboBox(self, init_channel=prefix+"DelayType-Sel")
             rb = PyDMLabel(self, init_channel=prefix+"DelayType-Sts")
         elif prop == 'delay':
-            sp = _MySpinBox(self, init_channel=prefix + "Delay-SP")
+            sp = SiriusSpinbox(self, init_channel=prefix + "Delay-SP")
             sp.showStepExponent = False
             rb = PyDMLabel(self, init_channel=prefix + "Delay-RB")
         elif prop == 'delayraw':
-            sp = _MySpinBox(self, init_channel=prefix + "DelayRaw-SP")
+            sp = SiriusSpinbox(self, init_channel=prefix + "DelayRaw-SP")
             sp.showStepExponent = False
             rb = PyDMLabel(self, init_channel=prefix + "DelayRaw-RB")
         elif prop == 'description':
@@ -581,7 +582,7 @@ class ClockList(BaseList):
 
     def _createObjs(self, prefix, prop):
         if prop == 'frequency':
-            sp = _MySpinBox(self, init_channel=prefix + "Freq-SP")
+            sp = SiriusSpinbox(self, init_channel=prefix + "Freq-SP")
             sp.showStepExponent = False
             rb = PyDMLabel(self, init_channel=prefix + "Freq-RB")
         elif prop == 'name':
@@ -592,7 +593,7 @@ class ClockList(BaseList):
             sp = PyDMStateButton(self, init_channel=prefix + "MuxEnbl-Sel")
             rb = PyDMLed(self, init_channel=prefix + "MuxEnbl-Sts")
         elif prop == 'mux_div':
-            sp = _MySpinBox(self, init_channel=prefix + "MuxDiv-SP")
+            sp = SiriusSpinbox(self, init_channel=prefix + "MuxDiv-SP")
             sp.showStepExponent = False
             rb = PyDMLabel(self, init_channel=prefix + "MuxDiv-RB")
         return sp, rb
@@ -1052,21 +1053,21 @@ class LLTriggerList(BaseList):
             rb = PyDMLed(self, init_channel=pvname)
         elif prop == 'event':
             pvname = intlb.substitute(propty=intlb.propty+'Evt-SP')
-            sp = _MySpinBox(self, init_channel=pvname)
+            sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
             pvname = intlb.substitute(propty=intlb.propty+'Evt-RB')
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'widthraw':
             pvname = intlb.substitute(propty=intlb.propty+"WidthRaw-SP")
-            sp = _MySpinBox(self, init_channel=pvname)
+            sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
             pvname = intlb.substitute(propty=intlb.propty+"WidthRaw-RB")
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'width':
             pvname = intlb.substitute(propty=intlb.propty+"Width-SP")
-            sp = _MySpinBox(self, init_channel=pvname)
+            sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
             pvname = intlb.substitute(propty=intlb.propty+"Width-RB")
             rb = PyDMLabel(self, init_channel=pvname)
@@ -1079,21 +1080,21 @@ class LLTriggerList(BaseList):
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'pulses':
             pvname = intlb.substitute(propty=intlb.propty+"NrPulses-SP")
-            sp = _MySpinBox(self, init_channel=pvname)
+            sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
             pvname = intlb.substitute(propty=intlb.propty+"NrPulses-RB")
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'delayraw':
             pvname = intlb.substitute(propty=intlb.propty+"DelayRaw-SP")
-            sp = _MySpinBox(self, init_channel=pvname)
+            sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
             pvname = intlb.substitute(propty=intlb.propty+"DelayRaw-RB")
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'delay':
             pvname = intlb.substitute(propty=intlb.propty+"Delay-SP")
-            sp = _MySpinBox(self, init_channel=pvname)
+            sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
             pvname = intlb.substitute(propty=intlb.propty+"Delay-RB")
             rb = PyDMLabel(self, init_channel=pvname)
@@ -1111,21 +1112,21 @@ class LLTriggerList(BaseList):
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'trigger':
             pvname = outlb.substitute(propty=outlb.propty+"SrcTrig-SP")
-            sp = _MySpinBox(self, init_channel=pvname)
+            sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
             pvname = outlb.substitute(propty=outlb.propty+"SrcTrig-RB")
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'rf_delayraw':
             pvname = outlb.substitute(propty=outlb.propty+"RFDelayRaw-SP")
-            sp = _MySpinBox(self, init_channel=pvname)
+            sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
             pvname = outlb.substitute(propty=outlb.propty+"RFDelayRaw-RB")
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'rf_delay':
             pvname = outlb.substitute(propty=outlb.propty+"RFDelay-SP")
-            sp = _MySpinBox(self, init_channel=pvname)
+            sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
             pvname = outlb.substitute(propty=outlb.propty+"RFDelay-RB")
             rb = PyDMLabel(self, init_channel=pvname)
@@ -1138,14 +1139,14 @@ class LLTriggerList(BaseList):
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'fine_delayraw':
             pvname = outlb.substitute(propty=outlb.propty+"FineDelayRaw-SP")
-            sp = _MySpinBox(self, init_channel=pvname)
+            sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
             pvname = outlb.substitute(propty=outlb.propty+"FineDelayRaw-RB")
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'fine_delay':
             pvname = outlb.substitute(propty=outlb.propty+"FineDelay-SP")
-            sp = _MySpinBox(self, init_channel=pvname)
+            sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
             pvname = outlb.substitute(propty=outlb.propty+"FineDelay-RB")
             rb = PyDMLabel(self, init_channel=pvname)

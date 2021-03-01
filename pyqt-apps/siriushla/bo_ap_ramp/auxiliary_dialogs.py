@@ -4,8 +4,8 @@ import numpy as _np
 from qtpy.QtCore import Qt, Signal, Slot
 from qtpy.QtWidgets import QLabel, QWidget, QAbstractItemView, QMessageBox, \
     QHBoxLayout, QVBoxLayout, QGridLayout, QLineEdit, QPushButton, QCheckBox, \
-    QTableWidget, QTableWidgetItem, QRadioButton, QDoubleSpinBox, \
-    QSpinBox, QSpacerItem, QTabWidget, QHeaderView, QSizePolicy as QSzPlcy
+    QTableWidget, QTableWidgetItem, QRadioButton, QSizePolicy as QSzPlcy, \
+    QSpacerItem, QTabWidget, QHeaderView
 
 from siriuspy.sofb.csdev import SOFBFactory
 from siriuspy.clientconfigdb import ConfigDBClient as _ConfigDBClient, \
@@ -14,7 +14,7 @@ from siriuspy.search import PSSearch
 from siriuspy.ramp import ramp, conn
 from siriuspy.namesys import SiriusPVName as _PVName
 
-from siriushla.widgets.windows import SiriusDialog
+from siriushla.widgets import SiriusDialog, QDoubleSpinBoxPlus, QSpinBoxPlus
 from .custom_widgets import \
     ConfigLineEdit as _ConfigLineEdit, \
     GraphKicks as _GraphKicks
@@ -50,7 +50,7 @@ class InsertNormalizedConfig(SiriusDialog):
         self.le_confsrv_name.setVisible(False)
         self.le_nominal_label = QLineEdit(self)  # from template
         self.le_nominal_label.setVisible(False)
-        self.sb_time = QDoubleSpinBox(self)
+        self.sb_time = QDoubleSpinBoxPlus(self)
         self.sb_time.setMaximum(490)
         self.sb_time.setDecimals(3)
         self.bt_insert = QPushButton('Insert', self)
@@ -133,7 +133,7 @@ class DuplicateNormConfig(SiriusDialog):
 
     def _setupUi(self):
         self.le_label = QLineEdit(self)
-        self.sb_time = QDoubleSpinBox(self)
+        self.sb_time = QDoubleSpinBoxPlus(self)
         self.sb_time.setMaximum(490)
         self.sb_time.setDecimals(3)
         self.bt_duplic = QPushButton('Duplicate', self)
@@ -185,7 +185,7 @@ class DeleteNormalizedConfig(SiriusDialog):
         self._setupUi()
 
     def _setupUi(self):
-        self.sb_confignumber = QSpinBox(self)
+        self.sb_confignumber = QSpinBoxPlus(self)
         self.sb_confignumber.setMinimum(1)
         self.sb_confignumber.setMaximum(max(self.table_map['rows'].keys())+1)
         self.sb_confignumber.setStyleSheet("""max-width:5em;""")
@@ -649,6 +649,8 @@ class AuxiliaryRFVoltConv(SiriusDialog):
         super().__init__(parent)
         self._aux_conv = conn.AuxConvRF()
         self._setupUi()
+        self.setFocus()
+        self.setFocusPolicy(Qt.StrongFocus)
 
     def _setupUi(self):
         self.title = QLabel('<h3>RF VGap ↔ FPGA units convertion</h3>', self,
@@ -659,7 +661,7 @@ class AuxiliaryRFVoltConv(SiriusDialog):
         lb_arrow.setStyleSheet('min-width:1.2em; max-width:1.2em;')
         self._lb_raw = QLabel('V<sub>FPGA</sub> [mV]: ')
 
-        self._sb_vgap = QDoubleSpinBox(self)
+        self._sb_vgap = QDoubleSpinBoxPlus(self)
         self._sb_vgap.setObjectName('sb_vgap')
         self._sb_vgap.setValue(0)
         self._sb_vgap.setMinimum(0)
@@ -668,7 +670,7 @@ class AuxiliaryRFVoltConv(SiriusDialog):
         self._sb_vgap.setStyleSheet("min-width:8em; max-width:8em;")
         self._sb_vgap.editingFinished.connect(self._update_inputs)
 
-        self._sb_raw = QDoubleSpinBox(self)
+        self._sb_raw = QDoubleSpinBoxPlus(self)
         self._sb_raw.setObjectName('sb_raw')
         self._sb_raw.setValue(0)
         self._sb_raw.setMinimum(0)
@@ -679,7 +681,8 @@ class AuxiliaryRFVoltConv(SiriusDialog):
 
         layout = QGridLayout(self)
         layout.addWidget(self.title, 0, 0, 1, 3)
-        layout.addItem(QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, 0, 1, 3)
+        layout.addItem(
+            QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, 0, 1, 3)
         layout.addWidget(self._lb_vgap, 2, 0)
         layout.addWidget(lb_arrow, 2, 1)
         layout.addWidget(self._lb_raw, 2, 2)

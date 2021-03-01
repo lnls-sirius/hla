@@ -1,7 +1,7 @@
 """Interface to set dipole energies with constant normalization."""
 
 from qtpy.QtCore import Slot, QVariant
-from qtpy.QtWidgets import QVBoxLayout, QWidget, QDoubleSpinBox, QPushButton, \
+from qtpy.QtWidgets import QVBoxLayout, QWidget, QPushButton, \
     QHBoxLayout, QLabel
 from qtpy.QtGui import QPalette, QColor
 from pydm.widgets import PyDMLabel
@@ -10,7 +10,7 @@ from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriushla.common.epics.task import EpicsConnector, EpicsSetter, \
     EpicsChecker, EpicsGetter, EpicsWait
 from siriushla.widgets.dialog import ReportDialog, ProgressDialog
-from siriushla.widgets.pvnames_tree import PVNameTree
+from siriushla.widgets import PVNameTree, QDoubleSpinBoxPlus
 from siriushla.util import get_appropriate_color
 
 from .set_energy import init_section
@@ -36,7 +36,7 @@ class EnergyButton(QWidget):
     def _setup_ui(self):
         self.setLayout(QVBoxLayout())
 
-        self.energy_value = QDoubleSpinBox(self)
+        self.energy_value = QDoubleSpinBoxPlus(self)
         self.energy_value.setSingleStep(0.01)
         self.energy_value.setMinimum(self.lower_limit)
         self.energy_value.setMaximum(self.upper_limit)

@@ -4,12 +4,12 @@ import numpy as np
 
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QLabel, QGridLayout, QGroupBox, QFormLayout, \
-    QWidget, QSpinBox, QVBoxLayout, QHBoxLayout, QPushButton
+    QWidget, QVBoxLayout, QHBoxLayout, QPushButton
 
 from pydm.widgets import PyDMTimePlot
 
 from siriushla.widgets import SiriusSpinbox, PyDMStateButton, SiriusLabel, \
-    SiriusLedState, SiriusProcessImage
+    SiriusLedState, SiriusProcessImage, QSpinBoxPlus
 from siriushla.as_ti_control import HLTriggerSimple
 
 
@@ -103,7 +103,7 @@ class EnergyMeasure(QWidget):
 
         hl_span = QHBoxLayout()
         hl_span.setSpacing(0)
-        self.spbox_npoints = QSpinBox(self)
+        self.spbox_npoints = QSpinBoxPlus(self)
         self.spbox_npoints.setKeyboardTracking(False)
         self.spbox_npoints.setMinimum(10)
         self.spbox_npoints.setMaximum(200000)

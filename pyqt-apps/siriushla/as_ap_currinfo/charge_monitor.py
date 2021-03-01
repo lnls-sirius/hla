@@ -1,12 +1,12 @@
 from datetime import datetime as _datetime, timedelta as _timedelta
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QLabel, QCheckBox, QPushButton, \
-    QVBoxLayout, QGridLayout, QDoubleSpinBox, QApplication
+    QVBoxLayout, QGridLayout, QApplication
 
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.clientarch.time import Time
 from siriushla.widgets import SiriusMainWindow, SiriusConnectionSignal, \
-    SiriusTimePlot
+    SiriusTimePlot, QDoubleSpinBoxPlus
 
 
 class BOMonitor(SiriusMainWindow):
@@ -88,7 +88,7 @@ class BOMonitor(SiriusMainWindow):
             lb = QLabel('', self, alignment=Qt.AlignCenter)
             self._pvs_labels[e] = lb
 
-            sb = QDoubleSpinBox(self)
+            sb = QDoubleSpinBoxPlus(self)
             sb.energy = e
             sb.setMinimum(0)
             sb.setMaximum(1e6)

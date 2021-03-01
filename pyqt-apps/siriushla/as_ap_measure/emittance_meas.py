@@ -11,10 +11,10 @@ import matplotlib.gridspec as mgs
 from matplotlib import rcParams
 
 from qtpy.QtWidgets import QPushButton, QLabel, QGridLayout, QGroupBox, \
-    QFormLayout, QMessageBox, QWidget, QComboBox, QSpinBox, QVBoxLayout, \
-    QDoubleSpinBox, QFileDialog, QHBoxLayout, QSizePolicy, QCheckBox
+    QFormLayout, QMessageBox, QWidget, QComboBox, QVBoxLayout, \
+    QFileDialog, QHBoxLayout, QCheckBox
 from qtpy.QtGui import QColor
-from qtpy.QtCore import Qt, QSize, Slot
+from qtpy.QtCore import Qt, Slot
 
 from pyqtgraph import PlotCurveItem, mkPen
 
@@ -24,7 +24,8 @@ from pydm.widgets.logdisplay import PyDMLogDisplay
 import mathphys.constants as _consts
 from siriuspy.magnet.factory import NormalizerFactory as _NormFact
 
-from siriushla.widgets import SiriusSpinbox, SiriusLabel, MatplotlibWidget
+from siriushla.widgets import SiriusSpinbox, SiriusLabel, MatplotlibWidget, \
+    QSpinBoxPlus, QDoubleSpinBoxPlus
 from siriushla.as_ti_control import HLTriggerSimple
 
 rcParams.update({
@@ -342,30 +343,30 @@ class EmittanceMeasure(QWidget):
         self.cbbox_plane.addItem('Horizontal')
         self.cbbox_plane.addItem('Vertical')
         fl.addRow(QLabel('Plane', gb), self.cbbox_plane)
-        self.spbox_steps = QSpinBox(gb)
+        self.spbox_steps = QSpinBoxPlus(gb)
         self.spbox_steps.setValue(11)
         fl.addRow(QLabel('Nr Steps', gb), self.spbox_steps)
-        self.spbox_samples = QSpinBox(gb)
+        self.spbox_samples = QSpinBoxPlus(gb)
         self.spbox_samples.setMinimum(1)
         self.spbox_samples.setValue(16)
         fl.addRow(QLabel('Nr Samples per step', gb), self.spbox_samples)
-        self.spbox_outliers = QSpinBox(gb)
+        self.spbox_outliers = QSpinBoxPlus(gb)
         self.spbox_outliers.setMinimum(0)
         self.spbox_outliers.setValue(12)
         fl.addRow(QLabel('Nr Outliers', gb), self.spbox_outliers)
-        self.spbox_I_ini = QDoubleSpinBox(gb)
+        self.spbox_I_ini = QDoubleSpinBoxPlus(gb)
         self.spbox_I_ini.setMinimum(-4)
         self.spbox_I_ini.setMaximum(4)
         self.spbox_I_ini.setValue(-0.7)
         self.spbox_I_ini.setDecimals(3)
         fl.addRow(QLabel('Initial Current [A]', gb), self.spbox_I_ini)
-        self.spbox_I_end = QDoubleSpinBox(gb)
+        self.spbox_I_end = QDoubleSpinBoxPlus(gb)
         self.spbox_I_end.setMinimum(-4)
         self.spbox_I_end.setMaximum(4)
         self.spbox_I_end.setValue(0.7)
         self.spbox_I_end.setDecimals(3)
         fl.addRow(QLabel('Final Current [A]', gb), self.spbox_I_end)
-        self.spbox_threshold = QDoubleSpinBox(gb)
+        self.spbox_threshold = QDoubleSpinBoxPlus(gb)
         self.spbox_threshold.setMinimum(0)
         self.spbox_threshold.setMaximum(20)
         self.spbox_threshold.setValue(4)
@@ -380,7 +381,7 @@ class EmittanceMeasure(QWidget):
         gb = QGroupBox('Analysis Configs.', self)
         vl = QVBoxLayout(gb)
         anllay.addWidget(gb)
-        self.spbox_energy = QDoubleSpinBox(gb)
+        self.spbox_energy = QDoubleSpinBoxPlus(gb)
         self.spbox_energy.setMinimum(0.511)
         self.spbox_energy.setMaximum(200)
         self.spbox_energy.setValue(150)
@@ -687,10 +688,10 @@ class ProcessImage(QWidget):
         self.cbox_method.addItem('Gauss Fit')
         self.cbox_method.addItem('Moments')
         fl.addRow(QLabel('Method', gb_pos), self.cbox_method)
-        self.spbox_roi_size_x = QSpinBox(gb_pos)
-        self.spbox_roi_size_y = QSpinBox(gb_pos)
-        self.spbox_roi_center_x = QSpinBox(gb_pos)
-        self.spbox_roi_center_y = QSpinBox(gb_pos)
+        self.spbox_roi_size_x = QSpinBoxPlus(gb_pos)
+        self.spbox_roi_size_y = QSpinBoxPlus(gb_pos)
+        self.spbox_roi_center_x = QSpinBoxPlus(gb_pos)
+        self.spbox_roi_center_y = QSpinBoxPlus(gb_pos)
         self.spbox_roi_size_x.setKeyboardTracking(False)
         self.spbox_roi_size_y.setKeyboardTracking(False)
         self.spbox_roi_center_x.setKeyboardTracking(False)
@@ -711,7 +712,7 @@ class ProcessImage(QWidget):
         fl.addRow(self.cbbox_auto_center)
         fl.addRow(QLabel('ROI Center X', gb_pos), self.spbox_roi_center_x)
         fl.addRow(QLabel('ROI Center Y', gb_pos), self.spbox_roi_center_y)
-        self.spbox_img_max = QSpinBox(gb_pos)
+        self.spbox_img_max = QSpinBoxPlus(gb_pos)
         self.spbox_img_max.setKeyboardTracking(False)
         self.spbox_img_max.setMinimum(0)
         self.spbox_img_max.setMaximum(2448)

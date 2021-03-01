@@ -6,7 +6,7 @@ from datetime import datetime as _datetime
 import numpy as _np
 from qtpy.QtWidgets import QMenu, QFileDialog, QWidget, QMessageBox, \
     QScrollArea, QLabel, QPushButton, QSizePolicy, QGridLayout, QVBoxLayout, \
-    QHBoxLayout, QDialog, QComboBox, QLineEdit, QDoubleSpinBox
+    QHBoxLayout, QDialog, QComboBox, QLineEdit
 from qtpy.QtCore import Signal, Qt
 from qtpy.QtGui import QDoubleValidator
 import qtawesome as qta
@@ -14,7 +14,7 @@ import qtawesome as qta
 from siriuspy.sofb.csdev import SOFBFactory
 from siriuspy.clientconfigdb import ConfigDBClient, ConfigDBException
 from siriushla.as_ap_configdb import LoadConfigDialog, SaveConfigDialog
-from siriushla.widgets import SiriusConnectionSignal
+from siriushla.widgets import SiriusConnectionSignal, QDoubleSpinBoxPlus
 
 
 class OrbitRegisters(QWidget):
@@ -256,7 +256,7 @@ class OrbitRegister(QWidget):
         wid.layout().addWidget(QLabel('Choose the corrector:', wid))
         wid.layout().addWidget(cbbox)
 
-        ledit = QDoubleSpinBox(wid)
+        ledit = QDoubleSpinBoxPlus(wid)
         ledit.setMinimum(float('-inf'))
         ledit.setMaximum(float('inf'))
         ledit.setValue(1.0)
