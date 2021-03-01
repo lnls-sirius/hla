@@ -5,7 +5,7 @@ from qtpy.QtCore import Qt, Signal, Slot
 from qtpy.QtWidgets import QLabel, QWidget, QAbstractItemView, QMessageBox, \
     QHBoxLayout, QVBoxLayout, QGridLayout, QLineEdit, QPushButton, QCheckBox, \
     QTableWidget, QTableWidgetItem, QRadioButton, QSizePolicy as QSzPlcy, \
-    QSpinBox, QSpacerItem, QTabWidget, QHeaderView
+    QSpacerItem, QTabWidget, QHeaderView
 
 from siriuspy.sofb.csdev import SOFBFactory
 from siriuspy.clientconfigdb import ConfigDBClient as _ConfigDBClient, \
@@ -14,7 +14,7 @@ from siriuspy.search import PSSearch
 from siriuspy.ramp import ramp, conn
 from siriuspy.namesys import SiriusPVName as _PVName
 
-from siriushla.widgets import SiriusDialog, QDoubleSpinBoxPlus
+from siriushla.widgets import SiriusDialog, QDoubleSpinBoxPlus, QSpinBoxPlus
 from .custom_widgets import \
     ConfigLineEdit as _ConfigLineEdit, \
     GraphKicks as _GraphKicks
@@ -185,7 +185,7 @@ class DeleteNormalizedConfig(SiriusDialog):
         self._setupUi()
 
     def _setupUi(self):
-        self.sb_confignumber = QSpinBox(self)
+        self.sb_confignumber = QSpinBoxPlus(self)
         self.sb_confignumber.setMinimum(1)
         self.sb_confignumber.setMaximum(max(self.table_map['rows'].keys())+1)
         self.sb_confignumber.setStyleSheet("""max-width:5em;""")
