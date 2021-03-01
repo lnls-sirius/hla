@@ -1,4 +1,4 @@
-from qtpy.QtCore import Property
+from qtpy.QtCore import Property, Qt
 from pydm.widgets import PyDMSpinbox
 from pydm.widgets.base import PyDMWritableWidget, TextFormatter
 
@@ -19,6 +19,7 @@ class SiriusSpinbox(PyDMSpinbox):
         self._limits_from_channel = True
         self._user_lower_limit = self.minimum()
         self._user_upper_limit = self.maximum()
+        self.setFocusPolicy(Qt.StrongFocus)
 
     def ctrl_limit_changed(self, which, new_limit):
         """
@@ -150,3 +151,10 @@ class SiriusSpinbox(PyDMSpinbox):
             2-tuple with the user defined minimum and maximum.
         """
         return (self._user_lower_limit, self._user_upper_limit)
+
+    def wheelEvent(self, event):
+        """Reimplement wheel event to ignore event when out of focus."""
+        if not self.hasFocus():
+            event.ignore()
+        else:
+            super().wheelEvent(event)
