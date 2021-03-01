@@ -4,14 +4,14 @@ import numpy as _np
 
 from qtpy.QtCore import Signal, Qt
 from qtpy.QtGui import QColor
-from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QSpinBox, \
-     QLabel, QGridLayout
+from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, \
+    QGridLayout
 
 from pydm.widgets import PyDMWaveformPlot
 
 from siriuspy.search import PSSearch
 from siriushla.widgets import SiriusConnectionSignal, SiriusMainWindow, \
-    QDoubleSpinBoxPlus
+    QSpinBoxPlus, QDoubleSpinBoxPlus
 
 
 class Graph(PyDMWaveformPlot):
@@ -89,7 +89,7 @@ class GraphWidget(QWidget):
             self.graph.addChannel(**opts)
             self.curves.append(self.graph.curveAtIndex(i))
 
-        spinini = QSpinBox(self)
+        spinini = QSpinBoxPlus(self)
         spinini.setMinimum(0)
         spinini.setMaximum(4000)
         spinini.setValue(self._idx_ini)
@@ -101,7 +101,7 @@ class GraphWidget(QWidget):
         spindlt.setValue(self._delta)
         spindlt.editingFinished.connect(self._update_delta)
 
-        spinfin = QSpinBox(self)
+        spinfin = QSpinBoxPlus(self)
         spinfin.setMinimum(0)
         spinfin.setMaximum(4000)
         spinfin.setValue(self._idx_fin)

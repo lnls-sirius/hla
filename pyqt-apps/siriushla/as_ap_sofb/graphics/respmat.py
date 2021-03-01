@@ -4,12 +4,12 @@ from functools import partial as _part
 import numpy as _np
 from pyqtgraph import functions, mkPen
 from qtpy.QtWidgets import QWidget, QLabel, QVBoxLayout, QHBoxLayout, \
-    QToolTip, QSpinBox
+    QToolTip
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.sofb.csdev import SOFBFactory
-from siriushla.widgets import SiriusConnectionSignal
+from siriushla.widgets import SiriusConnectionSignal, QSpinBoxPlus
 from .base import Graph, InfLine
 
 
@@ -40,7 +40,7 @@ class ShowMatrixWidget(QWidget):
         graph = Graph(self)
         vbl.addWidget(graph)
 
-        self.spbox = QSpinBox(self)
+        self.spbox = QSpinBoxPlus(self)
         self.spbox.setMaximum(1000)
         self.spbox.setValue(80)
         self.spbox.setKeyboardTracking(False)

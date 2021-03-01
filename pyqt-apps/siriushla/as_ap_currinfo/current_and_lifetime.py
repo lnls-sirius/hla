@@ -6,7 +6,7 @@ import numpy as _np
 
 from qtpy.QtCore import Slot, Qt
 from qtpy.QtWidgets import QLabel, QGroupBox, QWidget, QSpacerItem,\
-    QSizePolicy as QSzPlcy, QComboBox, QSpinBox, QPushButton, QCheckBox,\
+    QSizePolicy as QSzPlcy, QComboBox, QPushButton, QCheckBox,\
     QGridLayout, QHBoxLayout, QVBoxLayout
 import qtawesome as qta
 from pydm.widgets import PyDMEnumComboBox, PyDMLabel, PyDMLineEdit,\
@@ -18,7 +18,7 @@ from siriuspy.clientarch.time import Time
 from siriushla.util import connect_window
 from siriushla.widgets import SiriusLabel, SiriusLedAlert, SiriusLedState,\
     SiriusSpinbox, PyDMStateButton, SiriusMainWindow, SiriusConnectionSignal,\
-    SiriusTimePlot
+    SiriusTimePlot, QSpinBoxPlus
 from siriushla.as_di_dccts import DCCTMain, EffMonitor
 
 
@@ -553,7 +553,7 @@ class CurrLTWindow(SiriusMainWindow):
         self._lb_timespan = QLabel(
             'Time Span [s]:', self,
             alignment=Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
-        self._sb_timespan = QSpinBox()
+        self._sb_timespan = QSpinBoxPlus()
         self._sb_timespan.setMinimum(1)
         self._sb_timespan.setMaximum(1000000)
         self._sb_timespan.setValue(2000)

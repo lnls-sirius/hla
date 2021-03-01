@@ -5,7 +5,7 @@ import numpy as np
 from qtpy.QtCore import Qt, Signal
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QWidget, QLabel, QPushButton, QGridLayout, \
-    QHBoxLayout, QGroupBox, QSpinBox, QComboBox, QSizePolicy as QSzPly, \
+    QHBoxLayout, QGroupBox, QComboBox, QSizePolicy as QSzPly, \
     QVBoxLayout, QCheckBox
 
 import qtawesome as qta
@@ -16,7 +16,7 @@ from siriuspy.namesys import SiriusPVName
 from siriuspy.diagbeam.dcct.csdev import Const as _DCCTc
 from siriuspy.search import LLTimeSearch as _LLTimeSearch
 from siriushla.widgets import SiriusConnectionSignal as SignalChannel, \
-    SiriusTimePlot
+    SiriusTimePlot, QSpinBoxPlus
 
 
 class DCCTMonitor(QWidget):
@@ -123,7 +123,7 @@ class DCCTMonitor(QWidget):
                 self.setSmoothMethod)
 
             l_smoothnracq = QLabel('Nr.Acqs.: ', self)
-            self.sb_smoothnracq = QSpinBox(self)
+            self.sb_smoothnracq = QSpinBoxPlus(self)
             self.sb_smoothnracq.setValue(1)
             self.sb_smoothnracq.valueChanged.connect(
                 self.setSmoothNrAcq)
@@ -146,7 +146,7 @@ class DCCTMonitor(QWidget):
             hlay_buff.addWidget(self.pb_resetbuff)
 
             l_down = QLabel('Downsampling: ', self)
-            self.sb_down = QSpinBox(self)
+            self.sb_down = QSpinBoxPlus(self)
             self.sb_down.setValue(1)
             self.sb_down.valueChanged.connect(self.setDownsampling)
 

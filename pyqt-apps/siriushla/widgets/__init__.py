@@ -12,7 +12,7 @@ from .ledit_scrollbar import PyDMLinEditScrollbar
 from .line_edit import SiriusLineEdit
 from .loading_dialog import LoadingDialog
 from .signal_channel import SiriusConnectionSignal
-from .QDoubleSpinBoxPlus import QDoubleSpinBoxPlus
+from .QSpinBoxPlus import QSpinBoxPlus, QDoubleSpinBoxPlus
 from .spinbox import SiriusSpinbox
 from .widget_factory import pydmwidget_factory
 from .spectrogram_view import SiriusSpectrogramView

@@ -10,7 +10,7 @@ from qtpy.QtCore import Slot, Qt
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QFormLayout, QGridLayout, QHBoxLayout, QVBoxLayout,\
                            QSizePolicy as QSzPlcy, QLabel, QPushButton,\
-                           QSpacerItem, QGroupBox, QWidget, QSpinBox
+                           QSpacerItem, QGroupBox, QWidget
 import qtawesome as qta
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox, PyDMSpinbox, \
                          PyDMPushButton, PyDMWaveformPlot
@@ -20,7 +20,7 @@ from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, SiriusDialog, \
-    SiriusLedAlert, PyDMStateButton, PyDMLedMultiChannel
+    SiriusLedAlert, PyDMStateButton, PyDMLedMultiChannel, QSpinBoxPlus
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla import util
 from siriushla.as_ti_control.hl_trigger import HLTriggerDetailed
@@ -604,7 +604,7 @@ class _ICTCalibration(QWidget):
         l_plot = QLabel('Plot first', self,
                         alignment=Qt.AlignRight | Qt.AlignVCenter)
         l_points = QLabel(' points ', self)
-        self.sb_nrpoints = QSpinBox(self)
+        self.sb_nrpoints = QSpinBoxPlus(self)
         self.sb_nrpoints.setMinimum(0)
         self.sb_nrpoints.setMaximum(1000)
         self.sb_nrpoints.setValue(POINTS_TO_PLOT)
