@@ -1,5 +1,4 @@
 import time as _time
-from epics import PV as _PV
 
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QPushButton, QMessageBox
 from qtpy.QtCore import Slot, Signal
@@ -9,32 +8,24 @@ import pydm
 from pydm.widgets.base import PyDMWidget, PyDMWritableWidget
 from pydm.widgets.channel import PyDMChannel
 
-from siriuspy.envars import VACA_PREFIX as _vaca_prefix
-from siriuspy.namesys import SiriusPVName as _PVName
-from siriuspy.search import PSSearch, HLTimeSearch
-from siriuspy.timesys.csdev import Const as TIConst
-from siriuspy.pwrsupply.csdev import Const as PSConst
-
 from siriushla.widgets import PyDMLedMultiChannel, PyDMLed, QLed
 from siriushla.widgets.led import MultiChannelStatusDialog
 from siriushla.widgets.dialog import PSStatusDialog
+from .standby_handlers import TRG_ENBL_VAL, TRG_DSBL_VAL, \
+    PU_ENBL_VAL, PU_DSBL_VAL, LILLRF_ENBL_VAL, LILLRF_DSBL_VAL, \
+    PS_STS_SLWREF, PS_STS_RMPWFM, PS_ENBL_VAL, \
+    BO_FAMS_EVT_INDEX, BO_CORRS_EVT_INDEX, \
+    LILLRFStandbyHandler, BORampStandbyHandler
 
-TIMEOUT_WAIT = 3
-TRG_ENBL_VAL = TIConst.DsblEnbl.Enbl
-TRG_DSBL_VAL = TIConst.DsblEnbl.Dsbl
-PU_ENBL_VAL = PSConst.DsblEnbl.Enbl
-PU_DSBL_VAL = PSConst.DsblEnbl.Dsbl
-PS_OPM_SLWREF = PSConst.OpMode.SlowRef
-PS_STS_SLWREF = PSConst.States.SlowRef
-PS_OPM_RMPWFM = PSConst.OpMode.RmpWfm
-PS_STS_RMPWFM = PSConst.States.RmpWfm
 
-CHANNELS_2_VALUES_BUTTON = (
+CHANNELS_2_VALUES_BUTTON = [
     # BO RF ramp enable
     ('BR-RF-DLLRF-01:RmpEnbl-Sel', (TRG_DSBL_VAL, TRG_ENBL_VAL)),
     # BO PS trigger
     ('BO-Glob:TI-Mags-Fams:State-Sel', (TRG_DSBL_VAL, TRG_ENBL_VAL)),
+    ('BO-Glob:TI-Mags-Fams:Src-Sel', (None, BO_FAMS_EVT_INDEX)),
     ('BO-Glob:TI-Mags-Corrs:State-Sel', (TRG_DSBL_VAL, TRG_ENBL_VAL)),
+    ('BO-Glob:TI-Mags-Corrs:Src-Sel', (None, BO_CORRS_EVT_INDEX)),
     # PU Pulse
     ('TB-04:PU-InjSept:Pulse-Sel', (PU_DSBL_VAL, PU_ENBL_VAL)),
     ('BO-01D:PU-InjKckr:Pulse-Sel', (PU_DSBL_VAL, PU_ENBL_VAL)),
@@ -57,8 +48,14 @@ CHANNELS_2_VALUES_BUTTON = (
     ('TS-04:PU-InjSeptG-2:PwrState-Sel', (PU_DSBL_VAL, PU_ENBL_VAL)),
     ('SI-01SA:PU-InjNLKckr:PwrState-Sel', (PU_DSBL_VAL, PU_ENBL_VAL)),
     ('SI-01SA:PU-InjDpKckr:PwrState-Sel', (PU_DSBL_VAL, None)),
-)
-CHANNELS_2_VALUES_LED = {pvn: vals for pvn, vals in CHANNELS_2_VALUES_BUTTON}
+]
+# BO PS wfm update auto
+for dev in BORampStandbyHandler.DEVICES:
+    CHANNELS_2_VALUES_BUTTON.append(
+        (dev+':WfmUpdateAuto-Sel', (None, PS_ENBL_VAL)))
+
+CHANNELS_2_VALUES_LED = {pvn.replace('Sel', 'Sts'): vals
+                         for pvn, vals in CHANNELS_2_VALUES_BUTTON}
 CHANNELS_2_VALUES_LED.update({
     # PU triggers
     'TB-04:TI-InjSept:State-Sts': (TRG_DSBL_VAL, TRG_ENBL_VAL),
@@ -72,120 +69,15 @@ CHANNELS_2_VALUES_LED.update({
     'BO-Glob:TI-LLRF-Rmp:State-Sts': (TRG_DSBL_VAL, TRG_ENBL_VAL),
     'BR-RF-DLLRF-01:RmpReady-Mon': (TRG_DSBL_VAL, TRG_ENBL_VAL),
 })
-# BO PS opmode and current
-for psn in PSSearch.get_psnames({'sec': 'BO', 'dis': 'PS'}):
-    CHANNELS_2_VALUES_LED[psn+':OpMode-Sts'] = (PS_STS_SLWREF, PS_STS_RMPWFM)
-
-
-class BoRampStandbyHandler:
-    """Booster PS Ramp Standby Mode Handler."""
-
-    _pvs = dict()
-
-    def __init__(self):
-        """Init."""
-        self._psnames = PSSearch.get_psnames({'sec': 'BO', 'dis': 'PS'})
-        self._triggers = HLTimeSearch.get_hl_triggers(
-            {'sec': 'BO', 'dev': 'Mags'})
-        self._create_pvs()
-
-    def _create_pvs(self):
-        """Create PVs."""
-        _pvs = dict()
-
-        pspropties = ['OpMode-Sel', 'OpMode-Sts', 'Current-SP', 'Current-RB']
-        for psn in self._psnames:
-            for propty in pspropties:
-                pvname = psn+':'+propty
-                _pvs[pvname] = _PV(
-                    _vaca_prefix+pvname, connection_timeout=0.05)
-
-        for trg in self._triggers:
-            pvname = trg+':State-Sts'
-            _pvs[pvname] = _PV(_vaca_prefix+pvname, connection_timeout=0.05)
-
-        BoRampStandbyHandler._pvs.update(_pvs)
-
-    def _set_pvs(self, pvnames, value):
-        """Set PVs to value."""
-        for pvname in pvnames:
-            pv = BoRampStandbyHandler._pvs[pvname]
-            if pv.wait_for_connection():
-                pv.put(value)
-
-    def _wait_pvs(self, pvnames, value):
-        """Wait for PVs to reach value."""
-        need_check = {pvn: True for pvn in pvnames}
-
-        _time0 = _time.time()
-        while any(need_check.values()):
-            for pvn, tocheck in need_check.items():
-                if not tocheck:
-                    continue
-                pv = BoRampStandbyHandler._pvs[pvn]
-                need_check[pvn] = not pv.value == value
-            _time.sleep(0.1)
-            if _time.time() - _time0 > TIMEOUT_WAIT:
-                break
-
-        prob = [str(_PVName(psn).device_name) for psn,
-                val in need_check.items() if val]
-        if prob:
-            return False, prob
-        return True, []
-
-    def turn_off(self):
-        # wait for triggers disable
-        pvs2wait = [trg+':State-Sts' for trg in self._triggers]
-        retval = self._wait_pvs(pvs2wait, TRG_DSBL_VAL)
-        if not retval[0]:
-            text = 'Check for BO Triggers to be disabled\n'\
-                   'timed out without success!\nVerify BO Mags Triggers!'
-            return [False, text, retval[1]]
-
-        # wait duration of a ramp for PS change opmode
-        _time.sleep(0.5)
-
-        # set slowref
-        pvs2set = [psn+':OpMode-Sel' for psn in self._psnames]
-        self._set_pvs(pvs2set, PS_OPM_SLWREF)
-
-        # wait for PS change opmode
-        pvs2wait = [psn+':OpMode-Sts' for psn in self._psnames]
-        retval = self._wait_pvs(pvs2wait, PS_STS_SLWREF)
-        if not retval[0]:
-            text = 'Check for BO PS to be in OpMode SlowRef\n'\
-                   'timed out without success!\nVerify BO PS!'
-            return [False, text, retval[1]]
-
-        # set current to zero
-        pvs2set = [psn+':Current-SP' for psn in self._psnames]
-        self._set_pvs(pvs2set, 0.0)
-
-        # wait current change to zero
-        pvs2wait = [psn+':Current-RB' for psn in self._psnames]
-        retval = self._wait_pvs(pvs2wait, 0.0)
-        if not retval[0]:
-            text = 'Check for BO PS to be with current zero\n'\
-                   'timed out without success!\nVerify BO PS!'
-            return [False, text, retval[1]]
-
-        return True, '', []
-
-    def turn_on(self):
-        # set rmpwfm
-        pvs2set = [psn+':OpMode-Sel' for psn in self._psnames]
-        self._set_pvs(pvs2set, PS_OPM_RMPWFM)
-
-        # wait for PS change opmode
-        pvs2wait = [psn+':OpMode-Sts' for psn in self._psnames]
-        retval = self._wait_pvs(pvs2wait, PS_STS_RMPWFM)
-        if not retval[0]:
-            text = 'Check for BO PS to be in OpMode RmpWfm\n'\
-                   'timed out without success!\nVerify BO PS!'
-            return [False, text, retval[1]]
-
-        return True, '', []
+# LI LLRF loop
+for dev in LILLRFStandbyHandler.DEVICES:
+    CHANNELS_2_VALUES_LED[dev + ':GET_INTEGRAL_ENABLE'] = \
+        (LILLRF_DSBL_VAL, LILLRF_ENBL_VAL)
+    CHANNELS_2_VALUES_LED[dev + ':GET_FB_MODE'] = \
+        (LILLRF_DSBL_VAL, LILLRF_ENBL_VAL)
+# BO PS opmode
+for dev in BORampStandbyHandler.DEVICES:
+    CHANNELS_2_VALUES_LED[dev+':OpMode-Sts'] = (PS_STS_SLWREF, PS_STS_RMPWFM)
 
 
 class InjSysStandbyButton(PyDMWritableWidget, QPushButton):
@@ -195,7 +87,7 @@ class InjSysStandbyButton(PyDMWritableWidget, QPushButton):
     justSent = Signal()
 
     def __init__(self, parent=None, label='', icon=None, pressValue=1,
-                 booster_handler=None):
+                 linac_handler=None, booster_handler=None):
         if not icon:
             QPushButton.__init__(self, label, parent)
         else:
@@ -219,6 +111,7 @@ class InjSysStandbyButton(PyDMWritableWidget, QPushButton):
         self.pressed.connect(self.willSend.emit)
         self.released.connect(self.sendValue)
 
+        self._linac_handler = linac_handler
         self._booster_handler = booster_handler
 
     def sendValue(self):
@@ -228,6 +121,12 @@ class InjSysStandbyButton(PyDMWritableWidget, QPushButton):
 
         if self._pressvalue == 1:
             retval = self._booster_handler.turn_on()
+            if not retval[0]:
+                self._show_aux_message_box(retval[1], retval[2])
+                self.justSent.emit()
+                return
+
+            retval = self._linac_handler.turn_on()
             if not retval[0]:
                 self._show_aux_message_box(retval[1], retval[2])
                 self.justSent.emit()
@@ -246,6 +145,12 @@ class InjSysStandbyButton(PyDMWritableWidget, QPushButton):
 
         if self._pressvalue == 0:
             retval = self._booster_handler.turn_off()
+            if not retval[0]:
+                self._show_aux_message_box(retval[1], retval[2])
+                self.justSent.emit()
+                return
+
+            retval = self._linac_handler.turn_off()
             if not retval[0]:
                 self._show_aux_message_box(retval[1], retval[2])
                 self.justSent.emit()
@@ -287,11 +192,13 @@ class InjSysStandbyEnblDsbl(QWidget):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self._booster_handler = BoRampStandbyHandler()
+        self._linac_handler = LILLRFStandbyHandler()
+        self._booster_handler = BORampStandbyHandler()
 
         self.pb_off = InjSysStandbyButton(
             parent=self, pressValue=0,
             icon=qta.icon('mdi.power-off'),
+            linac_handler=self._linac_handler,
             booster_handler=self._booster_handler)
         self.pb_off.willSend.connect(self.show_wait_icon)
         self.pb_off.justSent.connect(self.show_init_icon)
@@ -306,6 +213,7 @@ class InjSysStandbyEnblDsbl(QWidget):
         self.pb_on = InjSysStandbyButton(
             parent=self, pressValue=1,
             icon=qta.icon('mdi.power-on'),
+            linac_handler=self._linac_handler,
             booster_handler=self._booster_handler)
         self.pb_on.willSend.connect(self.show_wait_icon)
         self.pb_on.justSent.connect(self.show_init_icon)
@@ -339,8 +247,7 @@ class InjSysStandbyStatusLed(PyDMLedMultiChannel):
     """Led to check whether several PVs are in stanby state."""
 
     def __init__(self, parent=None):
-        channels2values = {k.replace('Sel', 'Sts'): v[1]
-                           for k, v in CHANNELS_2_VALUES_LED.items()}
+        channels2values = {k: v[1] for k, v in CHANNELS_2_VALUES_LED.items()}
         super().__init__(parent, channels2values)
         self.stateColors = [PyDMLed.DarkGreen, PyDMLed.LightGreen,
                             PyDMLed.Yellow, PyDMLed.Gray]
