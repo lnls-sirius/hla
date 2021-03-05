@@ -1,7 +1,6 @@
 """Creates the Contextes Menus for the Register."""
 
 from functools import partial as _part
-import math as _math
 from datetime import datetime as _datetime
 import numpy as _np
 from qtpy.QtWidgets import QMenu, QFileDialog, QWidget, QMessageBox, \
@@ -12,6 +11,7 @@ from qtpy.QtGui import QDoubleValidator
 import qtawesome as qta
 
 from siriuspy.sofb.csdev import SOFBFactory
+from siriuspy.sofb.utils import si_calculate_bump as _calculate_bump
 from siriuspy.clientconfigdb import ConfigDBClient, ConfigDBException
 from siriushla.as_ap_configdb import LoadConfigDialog, SaveConfigDialog
 from siriushla.widgets import SiriusConnectionSignal, QDoubleSpinBoxPlus
@@ -211,10 +211,11 @@ class OrbitRegister(QWidget):
         act = menu.addAction('&Edit Orbit')
         act.setIcon(qta.icon('mdi.table-edit'))
         act.triggered.connect(self._edit_orbit)
-        act = menu.addAction('Create &Bump')
-        act.setIcon(qta.icon(
-            'mdi.chart-bell-curve', scale_factor=1.2, offset=(-0.2, 0.2)))
-        act.triggered.connect(self._create_bump)
+        if self._csorb.acc == 'SI':
+            act = menu.addAction('Create &Bump')
+            act.setIcon(qta.icon(
+                'mdi.chart-bell-curve', scale_factor=1.2, offset=(-0.2, 0.2)))
+            act.triggered.connect(self._create_bump)
         act = menu.addAction('&Clear')
         act.setIcon(qta.icon('mdi.delete-empty'))
         act.triggered.connect(self._reset_orbit)
@@ -401,12 +402,15 @@ class OrbitRegister(QWidget):
         lay.addWidget(orbcombo, row, 1)
 
         row += 1
-        lay.addWidget(QLabel('Straight Sec.', wid), row, 0)
+        lay.addWidget(QLabel('Subsection', wid), row, 0)
         sscombo = QComboBox(wid)
         sub = ['SA', 'SB', 'SP', 'SB']
         ssnames = [f'{d+1:02d}{sub[d%len(sub)]}' for d in range(20)]
-        sscombo.addItems(ssnames)
-        sscombo.setCurrentIndex(8)
+        bcnames = [f'{d+1:02d}BC' for d in range(20)]
+        names = []
+        for aaa, bbb in zip(ssnames, bcnames):
+            names.extend([aaa, bbb])
+        sscombo.addItems(names)
         lay.addWidget(sscombo, row, 1)
 
         row += 1
@@ -478,28 +482,8 @@ class OrbitRegister(QWidget):
         agy = float(angy.text())
         psx = float(posx.text())
         psy = float(posy.text())
-        idx = sscombo.currentIndex()
         sub = sscombo.currentText()
-        # Straight section length is different in 'SA' sections:
-        ss_len = 7.0358 if sub.endswith('SA') else 6.1758
-        # distance from BPM to SS center [um].
-        dbpm = ss_len / 2 * 1e6
-        bpm_m1 = idx * 8 - 1  # BPM from M1
-        bpm_m2 = idx * 8      # BPM from M2
-
-        # angle bump
-        dpx = dbpm*_math.tan(agx/1e6)
-        dpy = dbpm*_math.tan(agy/1e6)
-        orbx[bpm_m1] -= dpx
-        orby[bpm_m1] -= dpy
-        orbx[bpm_m2] += dpx
-        orby[bpm_m2] += dpy
-
-        # position bump
-        orbx[bpm_m1] += psx
-        orby[bpm_m1] += psy
-        orbx[bpm_m2] += psx
-        orby[bpm_m2] += psy
+        orbx, orby = _calculate_bump(orbx, orby, sub, agx, agy, psx, psy)
 
         txt = f'Bump@{sub}: ref={confname}\n'
         txt += f'ax={agx:.1f} ay={agy:.1f} dx={psx:.1f} dy={psy:.1f}'
