@@ -3,7 +3,8 @@ import re
 import numpy as _np
 from datetime import datetime as _datetime
 
-from qtpy.QtCore import Qt
+from qtpy.QtCore import Qt, QRegExp
+from qtpy.QtGui import QRegExpValidator
 from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
     QGridLayout, QVBoxLayout, QHBoxLayout, QFormLayout, QTabWidget, \
     QSizePolicy as QSzPlcy, QCheckBox, QHeaderView, QAbstractItemView, \
@@ -23,7 +24,7 @@ from pydm.widgets.display_format import parse_value_for_display
 from siriushla import util
 from siriushla.widgets import PyDMStateButton, PyDMLinEditScrollbar, \
     SiriusConnectionSignal, SiriusLedState, SiriusLedAlert, \
-    PyDMLedMultiChannel, SiriusDialog, SiriusWaveformTable
+    PyDMLedMultiChannel, SiriusDialog, SiriusWaveformTable, SiriusSpinbox
 from .InterlockWindow import InterlockWindow, LIInterlockWindow
 from .custom_widgets import LISpectIntlkLed
 
@@ -185,22 +186,25 @@ class PSDetailWidget(QWidget):
         self.genparams_box.setObjectName('genparams_box')
         self.current_box = QGroupBox("Current")
         self.current_box.setObjectName("current")
-        self.wfm_tab = QWidget()
-        self.wfm_tab.setObjectName("wfm_tab")
         self.siggen_tab = QWidget()
         self.siggen_tab.setObjectName('cycle_tab')
-        self.cycle_tabs = QTabWidget()
-        self.cycle_tabs.setObjectName('curve_tabs')
-        self.cycle_tabs.setStyleSheet("""
+        self.wfm_tab = QWidget()
+        self.wfm_tab.setObjectName("wfm_tab")
+        self.scope_tab = QWidget()
+        self.scope_tab.setObjectName('scope_tab')
+        self.curve_tabs = QTabWidget()
+        self.curve_tabs.setObjectName('curve_tabs')
+        self.curve_tabs.setStyleSheet("""
             #curve_tabs::pane {
                 border-left: 2px solid gray;
                 border-bottom: 2px solid gray;
                 border-right: 2px solid gray;
         }""")
-        self.cycle_tabs.addTab(self.siggen_tab, 'SigGen')
-        self.cycle_tabs.addTab(self.wfm_tab, 'Wfm')
+        self.curve_tabs.addTab(self.siggen_tab, 'SigGen')
+        self.curve_tabs.addTab(self.wfm_tab, 'Wfm')
+        self.curve_tabs.addTab(self.scope_tab, 'Scope')
         if self._psname.sec == 'BO':
-            self.cycle_tabs.setCurrentIndex(1)
+            self.curve_tabs.setCurrentIndex(1)
         if self._metric:
             self.metric_box = QGroupBox(self._metric)
             self.metric_box.setObjectName("metric")
@@ -216,8 +220,9 @@ class PSDetailWidget(QWidget):
             self.sofbparams_box.setLayout(self._sofbParamsLayout())
         self.genparams_box.setLayout(self._genParamsLayout())
         self.current_box.setLayout(self._currentLayout())
-        self.wfm_tab.setLayout(self._wfmLayout())
         self.siggen_tab.setLayout(self._siggenLayout())
+        self.wfm_tab.setLayout(self._wfmLayout())
+        self.scope_tab.setLayout(self._scopeLayout())
         if self._metric:
             self.metric_box.setLayout(self._metricLayout())
 
@@ -244,7 +249,7 @@ class PSDetailWidget(QWidget):
         analogs = QVBoxLayout()
         analogs.addWidget(self.current_box, Qt.AlignCenter)
         analogs.addWidget(self.metric_box, Qt.AlignCenter)
-        analogs.addWidget(self.cycle_tabs, Qt.AlignCenter)
+        analogs.addWidget(self.curve_tabs, Qt.AlignCenter)
 
         boxes_layout = QHBoxLayout()
         boxes_layout.addLayout(controls)
@@ -861,6 +866,46 @@ class PSDetailWidget(QWidget):
         self._wfm_data_mo = value
         self._wfm_nrpts_mo = len(value)
         self._set_wfm_nrpts_label()
+
+    def _scopeLayout(self):
+        src_sp = self._prefixed_psname + ':ScopeSrcAddr-SP'
+        src_rb = self._prefixed_psname + ':ScopeSrcAddr-RB'
+        freq_sp = self._prefixed_psname + ':ScopeFreq-SP'
+        freq_rb = self._prefixed_psname + ':ScopeFreq-RB'
+        dur_sp = self._prefixed_psname + ':ScopeDuration-SP'
+        dur_rb = self._prefixed_psname + ':ScopeDuration-RB'
+
+        self.scope_src_label = QLabel('Source', self)
+        self.scope_src_sp_sb = CustomSpinBox(self, src_sp)
+        self.scope_src_sp_sb.showStepExponent = False
+        self.scope_src_rb_lb = PyDMLabel(self, src_rb)
+        self.scope_src_rb_lb.displayFormat = PyDMLabel.DisplayFormat.Hex
+
+        self.scope_freq_label = QLabel('Frequency', self)
+        self.scope_freq_sp_sb = SiriusSpinbox(self, freq_sp)
+        self.scope_freq_sp_sb.showStepExponent = False
+        self.scope_freq_rb_label = PyDMLabel(self, freq_rb)
+        self.scope_freq_rb_label.showUnits = True
+
+        self.scope_dur_label = QLabel('Duration', self)
+        self.scope_dur_sp_sb = SiriusSpinbox(self, dur_sp)
+        self.scope_dur_sp_sb.showStepExponent = False
+        self.scope_dur_rb_label = PyDMLabel(self, dur_rb)
+        self.scope_dur_rb_label.showUnits = True
+
+        layout = QGridLayout()
+        layout.setAlignment(Qt.AlignTop)
+        layout.setContentsMargins(0, 6, 0, 0)
+        layout.addWidget(self.scope_src_label, 0, 0, Qt.AlignRight)
+        layout.addWidget(self.scope_src_sp_sb, 0, 1)
+        layout.addWidget(self.scope_src_rb_lb, 0, 2)
+        layout.addWidget(self.scope_freq_label, 1, 0, Qt.AlignRight)
+        layout.addWidget(self.scope_freq_sp_sb, 1, 1)
+        layout.addWidget(self.scope_freq_rb_label, 1, 2)
+        layout.addWidget(self.scope_dur_label, 2, 0, Qt.AlignRight)
+        layout.addWidget(self.scope_dur_sp_sb, 2, 1)
+        layout.addWidget(self.scope_dur_rb_label, 2, 2)
+        return layout
 
     def _getElementMetric(self):
         dipole = re.compile("(SI|TS|BO|TB)-(Fam|\w{2,4}):PS-B.*$")
@@ -1589,3 +1634,38 @@ class CustomLabel(PyDMLabel):
             self.setText(self.format_string.format(new_value))
             return
         self.setText(str(new_value))
+
+
+class CustomSpinBox(SiriusSpinbox):
+
+    def valueFromText(self, text):
+        return int(str(text), 16)
+
+    def textFromValue(self, value):
+        return hex(int(value))
+
+    def validate(self, text, pos):
+        regex = QRegExp("0x[0-9A-Fa-f]{1,8}")
+        regex.setCaseSensitivity(Qt.CaseInsensitive)
+        return QRegExpValidator(regex, self).validate(text, pos)
+
+    def update_step_size(self):
+        """Reimplement to use hexa base."""
+        self.setSingleStep(16 ** self.step_exponent)
+        self.update_format_string()
+
+    def update_format_string(self):
+        """Reimplement to use hexa base."""
+        if self._show_units:
+            units = " {}".format(self._unit)
+        else:
+            units = ""
+
+        if self._show_step_exponent:
+            self.setSuffix(
+                '{0} Step: 16**{1}'.format(units, self.step_exponent))
+            self.lineEdit().setToolTip("")
+        else:
+            self.setSuffix(units)
+            self.lineEdit().setToolTip(
+                'Step: 16**{0:+d}'.format(self.step_exponent))
