@@ -22,6 +22,7 @@ from siriushla.as_di_dccts.main import get_dcct_list
 
 
 def get_pushbutton(name, parent):
+    """."""
     wid = QPushButton(name, parent)
     menu = QMenu(wid)
     wid.setMenu(menu)
@@ -29,6 +30,7 @@ def get_pushbutton(name, parent):
 
 
 def get_object(ismenubar=True, parent=None):
+    """."""
     SUPER = QMenuBar if ismenubar else QWidget
     LEVEL1 = QMenu if ismenubar else QGroupBox
     LEVEL2M = QMenu if ismenubar else get_pushbutton
@@ -242,8 +244,8 @@ def get_object(ismenubar=True, parent=None):
             menu = LEVEL1('LI', self)
             menu.setObjectName('LIApp')
             launcher = LEVEL2A('Launcher', menu)
-            util.connect_newprocess(launcher, 'sirius-hla-li-ap-launcher.sh',
-                                    is_window=False)
+            util.connect_newprocess(
+                launcher, 'sirius-hla-li-ap-launcher.sh', is_window=False)
 
             PS = self._set_ps_menu('li')
             PS.setIcon(qta.icon('mdi.car-battery'))
