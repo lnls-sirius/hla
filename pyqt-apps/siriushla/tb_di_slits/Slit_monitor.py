@@ -99,15 +99,3 @@ class SlitsView(DiffCtrlView):
 
     DEVICE_PREFIX = 'TB-01:DI-Slit'
     DEVICE_CLASS = SlitMonitoring
-
-
-if __name__ == '__main__':
-    """Run Example."""
-    app = SiriusApplication()
-    device = 'TB-01:DI-SlitH'
-    w = SlitMonitoring(prefix=_VACA_PREFIX, device=device)
-    window = SiriusMainWindow()
-    window.setCentralWidget(w)
-    window.setWindowTitle(device+' Monitor')
-    window.show()
-    sys.exit(app.exec_())

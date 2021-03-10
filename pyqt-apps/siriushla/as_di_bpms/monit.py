@@ -46,18 +46,3 @@ class MonitData(BaseWidget):
                 lineStyle=1,
                 lineWidth=1)  # NOTE: If > 1: very low performance
             graph.addYChannel(**opts)
-
-
-if __name__ == '__main__':
-    from siriushla.sirius_application import SiriusApplication
-    from siriushla.widgets import SiriusDialog
-    import sys
-
-    app = SiriusApplication()
-    wind = SiriusDialog()
-    hbl = QHBoxLayout(wind)
-    bpm_name = 'SI-07SP:DI-BPM-1'
-    wid = MonitData(bpm=bpm_name)
-    hbl.addWidget(wid)
-    wind.show()
-    sys.exit(app.exec_())

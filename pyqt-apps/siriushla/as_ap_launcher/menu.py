@@ -797,18 +797,3 @@ def get_object(ismenubar=True, parent=None):
             wind.exec_()
 
     return MainMenuBar(parent=parent)
-
-
-if __name__ == '__main__':
-    import sys
-    from siriushla.sirius_application import SiriusApplication
-    from siriushla.widgets import SiriusMainWindow
-
-    app = SiriusApplication()
-    main = SiriusMainWindow()
-    menubar = get_object(ismenubar=True)
-    main.setMenuBar(menubar)
-    wid = get_object(ismenubar=False)
-    main.setCentralWidget(wid)
-    main.show()
-    sys.exit(app.exec_())

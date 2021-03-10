@@ -1129,12 +1129,3 @@ class PSTestWindow(SiriusMainWindow):
         self.prep_sidclink_bt.setVisible(has_sifam)
         self.init_sips_bt.setVisible(has_sifam)
         self.aux_label.setVisible(has_sifam)
-
-
-if __name__ == '__main__':
-    from siriushla.sirius_application import SiriusApplication
-
-    application = SiriusApplication()
-    w = PSTestWindow()
-    w.show()
-    sys.exit(application.exec_())

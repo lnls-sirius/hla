@@ -229,13 +229,3 @@ class MagOffConvApp(SiriusMainWindow):
             current = self._normalizer.conv_strength_2_current(
                 strengths=strength)
         return current
-
-
-if __name__ == '__main__':
-    """Run Example."""
-    import sys
-
-    app = SiriusApplication()
-    wind = MagOffConvApp()
-    wind.show()
-    sys.exit(app.exec_())

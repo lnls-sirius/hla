@@ -321,23 +321,3 @@ class RespMatWidget(BaseWidget):
             self._client.insert_config(confname, val.tolist())
         except (ConfigDBException, TypeError) as err:
             QMessageBox.warning(self, 'Warning', str(err), QMessageBox.Ok)
-
-
-def _main():
-    app = SiriusApplication()
-    win = SiriusDialog()
-    hbl = QHBoxLayout(win)
-    acc = 'BO'
-    prefix = pref+acc+'-Glob:AP-SOFB:'
-    wid = RespMatWidget(win, prefix, acc)
-    hbl.addWidget(wid)
-    win.show()
-    sys.exit(app.exec_())
-
-
-if __name__ == '__main__':
-    from siriushla.sirius_application import SiriusApplication
-    from siriushla.widgets import SiriusDialog
-    from siriuspy.envars import VACA_PREFIX as pref
-    import sys
-    _main()

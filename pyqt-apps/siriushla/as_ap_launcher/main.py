@@ -236,12 +236,3 @@ class MainOperation(SiriusMainWindow):
         self.sender().parent().adjustSize()
         self.centralWidget().adjustSize()
         self.adjustSize()
-
-
-if __name__ == '__main__':
-    import sys
-
-    app = SiriusApplication()
-    window = MainOperation()
-    window.show()
-    sys.exit(app.exec_())

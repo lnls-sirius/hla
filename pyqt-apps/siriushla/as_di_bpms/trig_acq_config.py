@@ -80,18 +80,3 @@ class ACQTrigConfigs(BaseWidget):
             '"expression": "ch[0] '+opr+' '+val+'", "channels": ' +
             '[{"channel": "'+chan+'", "trigger": true}]}]')
         return rules
-
-
-if __name__ == '__main__':
-    from siriushla.sirius_application import SiriusApplication
-    from siriushla.widgets import SiriusDialog
-    import sys
-
-    app = SiriusApplication()
-    wind = SiriusDialog()
-    hbl = QHBoxLayout(wind)
-    bpm_name = 'SI-07SP:DI-BPM-1'
-    widm = ACQTrigConfigs(bpm=bpm_name)
-    hbl.addWidget(widm)
-    wind.show()
-    sys.exit(app.exec_())

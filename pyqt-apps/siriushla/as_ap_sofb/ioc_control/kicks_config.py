@@ -146,22 +146,3 @@ class KicksConfigWidget(BaseWidget):
         hbl.addWidget(sts)
         hbl.addWidget(conf)
         return hbl
-
-
-def _main():
-    app = SiriusApplication()
-    win = SiriusDialog()
-    hbl = QHBoxLayout(win)
-    prefix = pref+'SI-Glob:AP-SOFB:'
-    wid = KicksConfigWidget(win, prefix, 'SI', True)
-    hbl.addWidget(wid)
-    win.show()
-    sys.exit(app.exec_())
-
-
-if __name__ == '__main__':
-    from siriushla.sirius_application import SiriusApplication
-    from siriushla.widgets import SiriusDialog
-    from siriuspy.envars import VACA_PREFIX as pref
-    import sys
-    _main()

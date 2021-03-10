@@ -195,13 +195,3 @@ class InjBOControlWindow(BaseWindow):
         lay.addLayout(lay_screens)
         lay.addWidget(w_corr)
         self.corr_wid.setLayout(lay)
-
-
-if __name__ == '__main__':
-    import sys as _sys
-    from siriushla.sirius_application import SiriusApplication
-
-    application = SiriusApplication()
-    w = InjBOControlWindow()
-    w.show()
-    _sys.exit(application.exec_())

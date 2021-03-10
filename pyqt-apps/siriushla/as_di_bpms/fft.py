@@ -122,18 +122,3 @@ class FFTData(BaseWidget):
         util.connect_window(
             pb, Window, parent=self, prefix=self.prefix, bpm=self.bpm,
             data_prefix=self.data_prefix, position=self.position)
-
-
-if __name__ == '__main__':
-    from siriushla.sirius_application import SiriusApplication
-    from siriushla.widgets import SiriusDialog
-    import sys
-
-    app = SiriusApplication()
-    wind = SiriusDialog()
-    hbl = QHBoxLayout(wind)
-    bpm_name = 'SI-07SP:DI-BPM-1'
-    widm = FFTData(bpm=bpm_name, data_prefix='GEN_', position=False)
-    hbl.addWidget(widm)
-    wind.show()
-    sys.exit(app.exec_())

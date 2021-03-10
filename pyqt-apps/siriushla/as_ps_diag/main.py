@@ -578,12 +578,3 @@ def create_led_class(type='multichannel'):
 
 MyLedMultiChannel = create_led_class('multichannel')
 MyLedMultiConnection = create_led_class('multiconn')
-
-
-if __name__ == '__main__':
-    import sys
-
-    app = SiriusApplication()
-    window = PSDiag()
-    window.show()
-    sys.exit(app.exec_())
