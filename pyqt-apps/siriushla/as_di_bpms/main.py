@@ -165,18 +165,3 @@ class PostMortemAcquisition(BaseWidget):
                 min-height:48em;}
             #config{
                 min-height:21em;}""")
-
-
-if __name__ == '__main__':
-    from siriushla.sirius_application import SiriusApplication
-    from siriushla.widgets import SiriusDialog
-    import sys
-
-    app = SiriusApplication()
-    wind = SiriusDialog()
-    hbl = QHBoxLayout(wind)
-    bpm_name = 'SI-07SP:DI-BPM-1'
-    widm = BPMMain(wind, bpm=bpm_name)
-    hbl.addWidget(widm)
-    wind.show()
-    sys.exit(app.exec_())

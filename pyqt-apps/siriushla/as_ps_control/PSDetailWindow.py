@@ -73,12 +73,3 @@ class PSDetailWindow(SiriusMainWindow):
                                 '-dev', dclinks[0]], parent=self, is_pydm=True)
             else:
                 w.setHidden(True)
-
-
-if __name__ == '__main__':
-    import sys
-    from siriushla.sirius_application import SiriusApplication
-    app = SiriusApplication()
-    ps = PSDetailWindow('BO-Fam:PS-B-1')
-    ps.show()
-    sys.exit(app.exec_())

@@ -437,22 +437,3 @@ class SinglePassSumWidget(QWidget):
         QToolTip.showText(
             graph.mapToGlobal(pos.toPoint()),
             txt, graph, graph.geometry(), 500)
-
-
-def _main(prefix):
-    app = SiriusApplication()
-    win = SiriusDialog()
-    hbl = QHBoxLayout(win)
-    prefix = prefix + 'SI-Glob:AP-SOFB:'
-    wid = OrbitWidget(win, prefix)
-    hbl.addWidget(wid)
-    win.show()
-    sys.exit(app.exec_())
-
-
-if __name__ == '__main__':
-    from siriushla.sirius_application import SiriusApplication
-    from siriushla.widgets import SiriusDialog
-    from siriuspy.envars import VACA_PREFIX
-    import sys
-    _main(VACA_PREFIX)

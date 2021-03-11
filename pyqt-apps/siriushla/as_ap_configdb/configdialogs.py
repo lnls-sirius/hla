@@ -190,27 +190,3 @@ class RenameConfigDialog(SaveConfigDialog):
             labltext = '<b>Name Valid</b>'
         self.label_exist.setText(labltext)
         self.ok_button.setText(rnmetext)
-
-
-if __name__ == '__main__':
-    import sys
-    from siriushla.sirius_application import SiriusApplication
-
-    def test(a):
-        """Test."""
-        print(a)
-    app = SiriusApplication()
-    print(SaveConfigDialog('bo_normalized').exec_())
-    print(LoadConfigDialog('bo_normalized').exec_())
-    print(RenameConfigDialog('bo_normalized').exec_())
-
-    win = SaveConfigDialog('bo_normalized')
-    win.configname.connect(test)
-    win.show()
-    win2 = LoadConfigDialog('bo_normalized')
-    win2.configname.connect(test)
-    win2.show()
-    win3 = RenameConfigDialog('bo_normalized')
-    win3.configname.connect(test)
-    win3.show()
-    sys.exit(app.exec_())

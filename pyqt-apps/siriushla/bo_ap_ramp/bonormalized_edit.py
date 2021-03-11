@@ -658,30 +658,3 @@ class _UndoRedoSpinbox(QUndoCommand):
             self.spinbox.editingFinished.emit()
         else:
             _flag_stacking = False
-
-
-if __name__ == '__main__':
-    """Run Example."""
-    import sys
-    from siriuspy.envars import VACA_PREFIX
-    from siriuspy.ramp.conn import ConnSOFB
-    from siriuspy.ramp.magnet import get_magnet
-    from siriushla.sirius_application import SiriusApplication
-
-    app = SiriusApplication()
-
-    nconfig = ramp.BoosterNormalized('testing')
-    aux_magnets = dict()
-    psnames2strengths = dict()
-    for ps in nconfig.psnames:
-        psnames2strengths[ps] = nconfig[ps]
-        ma = _MASearch.conv_psname_2_psmaname(ps)
-        aux_magnets[ma] = get_magnet(ma)
-    conn_sofb = ConnSOFB(prefix=VACA_PREFIX)
-
-    w = BONormEdit(
-        parent=None, prefix=VACA_PREFIX, norm_config=psnames2strengths,
-        time=100, energy=0.985, magnets=aux_magnets, conn_sofb=conn_sofb,
-        tunecorr_configname='Default', chromcorr_configname='Default')
-    w.show()
-    sys.exit(app.exec_())

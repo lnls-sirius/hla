@@ -245,12 +245,3 @@ class MyLed(PyDMLed):
             else 1 if len(bits_set) == 1 and \
             bits_set[0] == 'Alarms' else 2
         self.setState(state)
-
-
-if __name__ == '__main__':
-    import sys
-
-    app = SiriusApplication()
-    window = PSMonitor()
-    window.show()
-    sys.exit(app.exec_())

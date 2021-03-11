@@ -208,17 +208,3 @@ class TLControlWindow(BaseWindow):
 #         self.centralwidget.layout().setContentsMargins(0, 0, 0, 0)
 #         self.setCentralWidget(self.centralwidget)
 #         self.centralwidget.setStyleSheet("""min-width:90em;max-width:90em;""")
-
-
-if __name__ == '__main__':
-    """Run Example."""
-    import os
-    import sys
-    from siriushla.sirius_application import SiriusApplication
-
-    app = SiriusApplication()
-    os.environ['EPICS_CA_MAX_ARRAY_BYTES'] = '200000000'
-    app = SiriusApplication()
-    window = TLControlWindow(prefix=_VACA_PREFIX, tl='tb')
-    window.show()
-    sys.exit(app.exec_())

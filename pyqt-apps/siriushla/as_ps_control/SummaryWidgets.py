@@ -641,24 +641,3 @@ class SummaryHeader(QWidget):
 
     def update_visible_props(self, new_value):
         self.visible_props = sort_propties(new_value)
-
-
-if __name__ == '__main__':
-    import sys
-    from siriushla.sirius_application import SiriusApplication
-
-    app = SiriusApplication()
-
-    # name = 'PA-RaPSF01:PS-DCLink-BO'
-    # name = 'BO-Fam:MA-B'
-    name = 'BO-Fam:PS-B-1'
-    visible_props = sort_propties(
-        ['detail', 'opmode', 'state', 'intlk', 'reset',
-         'setpoint', 'monitor'])
-
-    w = QWidget()
-    lay = QVBoxLayout(w)
-    lay.addWidget(SummaryHeader(name, visible_props))
-    lay.addWidget(SummaryWidget(name, visible_props))
-    w.show()
-    sys.exit(app.exec_())

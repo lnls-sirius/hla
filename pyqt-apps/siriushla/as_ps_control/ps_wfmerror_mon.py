@@ -176,12 +176,3 @@ class PlotWfmErrorWindow(SiriusMainWindow):
         wid.layout().addWidget(quadwid, 1, 0)
         wid.layout().addWidget(sextwid, 1, 1)
         wid.layout().addWidget(dipwid, 2, 0, 1, 2)
-
-
-if __name__ == '__main__':
-    import sys
-    from siriushla.sirius_application import SiriusApplication
-
-    app = SiriusApplication()
-    app.open_window(PlotWfmErrorWindow, parent=None)
-    sys.exit(app.exec_())

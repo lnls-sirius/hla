@@ -365,33 +365,3 @@ class EffMonitor(QWidget):
             PyDMTimePlot{
                 min-width:30em; min-height:20em;}
         """)
-
-
-if __name__ == '__main__':
-    """Run test."""
-    import sys as _sys
-    import argparse as _argparse
-    from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
-    from siriushla.sirius_application import SiriusApplication
-    from siriushla.widgets.windows import create_window_from_widget as \
-        _create_window_from_widget
-
-    parser = _argparse.ArgumentParser(description="DCCT graphics.")
-    parser.add_argument(
-        '-o', "--option", type=str, default='monitor',
-        help="Use 'monitor' to show current monitoring and "
-             "'rampeff' to show Booster ramp efficiency graph.")
-    args = parser.parse_args()
-
-    app = SiriusApplication()
-    if args.option == 'rampeff':
-        BORampEffWindow = _create_window_from_widget(
-            EffMonitor, 'Booster Ramp Efficiency', is_main=True, section='BO')
-        window = BORampEffWindow(None, prefix=_VACA_PREFIX)
-    else:
-        device = 'BO-35D:DI-DCCT'
-        Monitor = _create_window_from_widget(
-            DCCTMonitor, 'Booster Ramp Efficiency', is_main=True)
-        window = Monitor(None, prefix=_VACA_PREFIX, device=device)
-    window.show()
-    _sys.exit(app.exec_())

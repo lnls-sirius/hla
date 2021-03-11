@@ -201,13 +201,3 @@ class EnergyButton(QWidget):
             self._items_success.append((item, True))
         else:
             self._items_fail.append(item)
-
-
-if __name__ == '__main__':
-    import sys
-    from siriushla.sirius_application import SiriusApplication
-
-    app = SiriusApplication()
-    w = EnergyButton('tb')
-    w.show()
-    sys.exit(app.exec_())

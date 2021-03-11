@@ -555,22 +555,3 @@ class OrbitRegister(QWidget):
         self.new_orbx_signal.emit(orbx)
         self.new_orby_signal.emit(orby)
         self.new_string_signal.emit(self.string_status)
-
-
-def _main():
-    app = SiriusApplication()
-    win = SiriusDialog()
-    hbl = QHBoxLayout(win)
-    wid = OrbitRegisters(win, pref + 'SI-Glob:AP-SOFB:', 'SI')
-    hbl.addWidget(wid)
-    win.show()
-    sys.exit(app.exec_())
-
-
-if __name__ == '__main__':
-    from siriushla.sirius_application import SiriusApplication
-    from siriushla.widgets import SiriusDialog
-    from siriuspy.envars import VACA_PREFIX as pref
-    import sys
-
-    _main()

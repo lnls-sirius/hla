@@ -678,15 +678,3 @@ class UpdateProgressBar(QThread):
                 break
             _time.sleep(1)
             self.increment.emit()
-
-
-if __name__ == '__main__':
-    import sys
-    from siriushla.sirius_application import SiriusApplication
-
-    application = SiriusApplication()
-
-    w = CycleWindow()
-    w.show()
-
-    sys.exit(application.exec_())

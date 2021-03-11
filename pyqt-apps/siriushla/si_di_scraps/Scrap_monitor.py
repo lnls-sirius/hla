@@ -108,15 +108,3 @@ class ScrapersView(DiffCtrlView):
 
     DEVICE_PREFIX = 'SI-01SA:DI-Scrap'
     DEVICE_CLASS = ScraperMonitoring
-
-
-if __name__ == '__main__':
-    """Run Example."""
-    app = SiriusApplication()
-    device = 'SI-01SA:DI-ScrapH'
-    w = ScraperMonitoring(prefix=_VACA_PREFIX, device=device)
-    window = SiriusMainWindow()
-    window.setCentralWidget(w)
-    window.setWindowTitle(device+' Monitor')
-    window.show()
-    sys.exit(app.exec_())

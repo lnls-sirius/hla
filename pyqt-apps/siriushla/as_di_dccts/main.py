@@ -129,16 +129,3 @@ class SISelectDCCT(QWidget):
             util.connect_window(pbt, DCCTMain, parent=None,
                                 prefix=self.prefix, device=dcct)
             vlay.addWidget(pbt)
-
-
-if __name__ == '__main__':
-    """Run test."""
-    import sys as _sys
-    from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
-    from siriushla.sirius_application import SiriusApplication
-
-    app = SiriusApplication()
-    device = 'BO-35D:DI-DCCT'
-    window = DCCTMain(None, prefix=_VACA_PREFIX, device=device)
-    window.show()
-    _sys.exit(app.exec_())

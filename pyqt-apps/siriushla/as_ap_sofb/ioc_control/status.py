@@ -60,26 +60,3 @@ class StatusWidget(BaseWidget):
             lab = QLabel(label, self)
             fbl.addRow(led, lab)
         return wid
-
-
-def _main():
-    app = SiriusApplication()
-    win = SiriusDialog()
-    vbl = QVBoxLayout(win)
-    acc = 'BO'
-    prefix = pref+acc+'-Glob:AP-SOFB:'
-    wid = StatusWidget(win, prefix, acc, True)
-    vbl.addWidget(wid)
-    vbl.addSpacing(40)
-    wid = StatusWidget(win, prefix, acc, False)
-    vbl.addWidget(wid)
-    win.show()
-    sys.exit(app.exec_())
-
-
-if __name__ == '__main__':
-    from siriushla.sirius_application import SiriusApplication
-    from siriushla.widgets import SiriusDialog
-    from siriuspy.envars import VACA_PREFIX as pref
-    import sys
-    _main()

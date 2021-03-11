@@ -249,17 +249,3 @@ class LoadAndApplyConfig2MachineWindow(SiriusMainWindow):
         self._load_widget.configChanged.connect(self._set_widget.fill_config)
         self._central_widget.addWidget(self._load_widget)
         self._central_widget.addWidget(self._set_widget)
-
-
-if __name__ == '__main__':
-    import sys
-    import siriuspy.envars as _envars
-    from siriuspy.clientconfigdb import ConfigDBClient
-    from siriushla.sirius_application import SiriusApplication
-
-    app = SiriusApplication()
-    clt = ConfigDBClient(_envars.SRVURL_CONFIGDB)
-    w = LoadAndApplyConfig2MachineWindow(clt)
-    w.show()
-
-    sys.exit(app.exec_())

@@ -235,15 +235,3 @@ class RampMain(SiriusMainWindow):
         self._chromcorr_configname = chrom_cname
         self.config_parameters.updateOpticsAdjustSettings(
             tune_cname, chrom_cname)
-
-
-if __name__ == '__main__':
-    """Run Example."""
-    import sys
-    from siriushla.sirius_application import SiriusApplication
-    from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
-
-    app = SiriusApplication()
-    w = RampMain(prefix=_VACA_PREFIX)
-    w.show()
-    sys.exit(app.exec_())

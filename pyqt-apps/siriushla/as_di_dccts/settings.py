@@ -570,19 +570,3 @@ class DCCTSettingsDetails(QWidget):
         elif value == _DCCTc.MeasModeSel.Fast:
             self.gbox_normalmode.setVisible(False)
             self.gbox_fastmode.setVisible(True)
-
-
-if __name__ == '__main__':
-    """Run test."""
-    import sys
-    from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
-    from siriushla.sirius_application import SiriusApplication
-    app = SiriusApplication()
-
-    device = 'BO-35D:DI-DCCT'
-    DCCTSettingsWindow = create_window_from_widget(
-        DCCTSettings, device+' Settings', is_main=True)
-    window = DCCTSettingsWindow(
-        None, prefix=_VACA_PREFIX, device=device, show_smooth_settings=False)
-    window.show()
-    sys.exit(app.exec_())

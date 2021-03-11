@@ -27,13 +27,3 @@ class EnergySetterWindow(SiriusMainWindow):
         self.setCentralWidget(cwid)
         cwid.setObjectName('cwid')
         cwid.setStyleSheet('#cwid{width: 20em; height: 25em;}')
-
-
-if __name__ == '__main__':
-    import sys
-    from siriushla.sirius_application import SiriusApplication
-
-    app = SiriusApplication()
-    w = EnergySetterWindow()
-    w.show()
-    sys.exit(app.exec_())
