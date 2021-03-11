@@ -50,6 +50,8 @@ for trg in PUStandbyHandler.TRIGGERS:
 class InjSysStandbyButton(PyDMWidget, QPushButton):
     """Button to set several PVs to standby state."""
 
+    finished = Signal()
+
     def __init__(self, parent=None, label='', icon=None,
                  handlers=None, function=None, order=None):
         if not icon:
@@ -89,8 +91,7 @@ class InjSysStandbyButton(PyDMWidget, QPushButton):
     def _show_wait_icon(self):
         """Show wait icon."""
         self.setIcon(
-            qta.icon('fa5s.spinner', color='gray',
-                     animation=qta.Spin(self)))
+            qta.icon('fa5s.spinner', animation=qta.Spin(self)))
 
     def _show_init_icon(self):
         """Show initial icon."""
@@ -104,6 +105,7 @@ class InjSysStandbyButton(PyDMWidget, QPushButton):
             self._handlers, self._order, self._function, self)
         thread.sendWarning.connect(self._show_aux_message_box)
         thread.finished.connect(self._show_init_icon)
+        thread.finished.connect(self.finished.emit)
         thread.start()
 
     def _show_aux_message_box(self, text, data_list):
@@ -148,6 +150,8 @@ class InjSysStandbyEnblDsbl(QWidget):
                 min-height:25px; max-height:25px;
                 icon-size:20px;}
             """)
+        self.pb_off.released.connect(self._disable_commands)
+        self.pb_off.finished.connect(self._enable_commands)
 
         self.pb_on = InjSysStandbyButton(
             parent=self, icon=qta.icon('mdi.power-on'),
@@ -161,6 +165,8 @@ class InjSysStandbyEnblDsbl(QWidget):
                 min-height:25px; max-height:25px;
                 icon-size:20px;}
             """)
+        self.pb_on.released.connect(self._disable_commands)
+        self.pb_on.finished.connect(self._enable_commands)
 
         lay = QHBoxLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
@@ -169,6 +175,14 @@ class InjSysStandbyEnblDsbl(QWidget):
         lay.addWidget(self.pb_off)
         lay.addWidget(self.pb_on)
         lay.addStretch()
+
+    def _disable_commands(self):
+        self.pb_off.setEnabled(False)
+        self.pb_on.setEnabled(False)
+
+    def _enable_commands(self):
+        self.pb_off.setEnabled(True)
+        self.pb_on.setEnabled(True)
 
 
 class InjSysStandbySender(QThread):
