@@ -64,7 +64,11 @@ class _BaseHandler:
         for pvn, val in need_check.items():
             if val:
                 try:
-                    prob.append(str(_PVName(pvn).device_name))
+                    devname = str(_PVName(pvn).device_name)
+                    if devname != EVG_NAME:
+                        prob.append(devname)
+                    else:
+                        prob.append(str(pvn))
                 except Exception:
                     prob.append(str(pvn))
         allok = not prob
