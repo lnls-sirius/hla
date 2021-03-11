@@ -146,6 +146,7 @@ class SiriusTimePlot(PyDMTimePlot):
         """Get values from archiver."""
         if self.carch is None:
             self.carch = ClientArchiver()
+        self.carch.timeout = 30
         data = self.carch.getData(pvname, t_init, t_end,
                                   process_type, process_bin_intvl)
         if not data:
