@@ -86,7 +86,3 @@ def run_test(psname_list=None):
     window = SIFamQuadrupoleControlWidget(dev_type='PS')
     window.show()
     sys.exit(app.exec_())
-
-
-if __name__ == '__main__':
-    run_test()

@@ -204,16 +204,3 @@ class ReadAndSaveConfig2ServerWindow(SiriusMainWindow):
         else:
             self._config_valid = False
         self._read_btn.setEnabled(self._config_valid)
-
-
-if __name__ == '__main__':
-    import sys
-    from siriuspy.envars import SRVURL_CONFIGDB
-    from siriushla.sirius_application import SiriusApplication
-
-    app = SiriusApplication()
-    client = ConfigDBClient(url=SRVURL_CONFIGDB)
-    w = ReadAndSaveConfig2ServerWindow(client)
-    w.show()
-
-    sys.exit(app.exec_())

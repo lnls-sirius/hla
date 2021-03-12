@@ -664,11 +664,3 @@ class _MyWaveformPlot(PyDMWaveformPlot):
         self.channel_pairs[(y_channel, x_channel)] = curve
         self.addCurve(curve, curve_color=color)
         curve.data_changed.connect(self.set_needs_redraw)
-
-
-if __name__ == '__main__':
-    """Run Example."""
-    app = SiriusApplication()
-    w = ICTMonitoring(tl='TB', prefix=_VACA_PREFIX)
-    w.show()
-    sys.exit(app.exec_())

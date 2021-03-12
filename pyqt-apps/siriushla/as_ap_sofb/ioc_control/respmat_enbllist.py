@@ -333,27 +333,3 @@ class MyWidget(QWidget):
             y2 = pos.y()+sz.height()/2 > self.end.y()
             if x1 != x2 and y1 != y2:
                 led.toggle()
-
-
-def _main():
-    app = SiriusApplication()
-    win = SiriusDialog()
-    hbl = QHBoxLayout(win)
-    acc = 'BO'
-    widb = SelectionMatrix(win, 'BPMX', pref+acc+'-Glob:AP-SOFB:', acc)
-    widh = SelectionMatrix(win, 'CH', pref+acc+'-Glob:AP-SOFB:', acc)
-    widv = SelectionMatrix(win, 'CV', pref+acc+'-Glob:AP-SOFB:', acc)
-    hbl.addWidget(widb)
-    hbl.addWidget(widh)
-    hbl.addWidget(widv)
-    win.show()
-    sys.exit(app.exec_())
-
-
-if __name__ == '__main__':
-    from siriushla.sirius_application import SiriusApplication
-    from siriushla.widgets import SiriusDialog
-    from siriuspy.envars import VACA_PREFIX as pref
-    import sys
-
-    _main()

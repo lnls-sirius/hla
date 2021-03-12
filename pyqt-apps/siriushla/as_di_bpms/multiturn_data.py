@@ -194,18 +194,3 @@ class MultiTurnData(BaseWidget):
         bo = not text.startswith('adc')
         self.radio_buttons[1].setVisible(bo)
         self.radio_buttons[0].setChecked(True)
-
-
-if __name__ == '__main__':
-    from siriushla.sirius_application import SiriusApplication
-    from siriushla.widgets import SiriusDialog
-    import sys
-
-    app = SiriusApplication()
-    wind = SiriusDialog()
-    hbl = QHBoxLayout(wind)
-    bpm_name = 'SI-07SP:DI-BPM-1'
-    widm = MultiTurnData(bpm=bpm_name)
-    hbl.addWidget(widm)
-    wind.show()
-    sys.exit(app.exec_())

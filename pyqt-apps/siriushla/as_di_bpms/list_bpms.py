@@ -337,26 +337,3 @@ class MultiTurnSummary(BaseWidget):
             self.gdl.addWidget(wid, i // 3, i % 3)
         # Sroll to top
         self.scarea.verticalScrollBar().setValue(0)
-
-
-if __name__ == '__main__':
-    from siriushla.sirius_application import SiriusApplication
-    from siriushla.widgets import SiriusDialog
-    import sys
-
-    app = SiriusApplication()
-    wind = SiriusDialog()
-    hbl = QHBoxLayout(wind)
-    bpm_names = [
-        'SI-07SP:DI-BPM-1', 'SI-07SP:DI-BPM-2',
-        'SI-01M1:DI-BPM', 'SI-01M2:DI-BPM',
-        'SI-02M1:DI-BPM', 'SI-02M2:DI-BPM',
-        'SI-03M1:DI-BPM', 'SI-03M2:DI-BPM',
-        'SI-04M1:DI-BPM', 'SI-04M2:DI-BPM',
-        'SI-05M1:DI-BPM', 'SI-05M2:DI-BPM',
-        'SI-06M1:DI-BPM', 'SI-06M2:DI-BPM',
-        ]
-    widm = SelectBPMs(bpm_list=bpm_names)
-    hbl.addWidget(widm)
-    wind.show()
-    sys.exit(app.exec_())

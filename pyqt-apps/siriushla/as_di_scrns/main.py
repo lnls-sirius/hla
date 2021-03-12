@@ -614,17 +614,3 @@ class IndividualScrn(QWidget):
         lay.addItem(QSpacerItem(20, 40, QSzPlcy.Fixed, QSzPlcy.Fixed), 4, 0)
         lay.addWidget(self.scrn_view, 5, 0, 1, 4)
         self.setLayout(lay)
-
-
-if __name__ == '__main__':
-    """Run test."""
-    from siriushla.sirius_application import SiriusApplication
-
-    os.environ['EPICS_CA_MAX_ARRAY_BYTES'] = '200000000'
-    app = SiriusApplication()
-
-    scrn = 'TB-01:DI-Scrn-1'
-    window = IndividualScrn(None, prefix=_VACA_PREFIX, scrn=scrn)
-    window.setWindowTitle('Screen View: '+scrn)
-    window.show()
-    sys.exit(app.exec_())
