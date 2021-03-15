@@ -13,6 +13,7 @@ class RFKillBeamHandler:
 
     TIMEOUT_WAIT = 0.5
     TIMEOUT_ACT = 1.0
+    INCRATE_IMMEDIATELY = 15
 
     _pvs = dict()
 
@@ -63,7 +64,8 @@ class RFKillBeamHandler:
                            '(SR-RF-DLLRF-01:mV:AL:REF)!']
 
         # set Amplitude Increase Rate to Immediately
-        if not self._set_pv('SR-RF-DLLRF-01:AMPREF:INCRATE:S', 7):
+        if not self._set_pv('SR-RF-DLLRF-01:AMPREF:INCRATE:S',
+                            RFKillBeamHandler.INCRATE_IMMEDIATELY):
             return [False, 'Could not set RF Amplitude Increase Rate PV\n'
                            '(SR-RF-DLLRF-01:AMPREF:INCRATE:S)!']
         _time.sleep(RFKillBeamHandler.TIMEOUT_WAIT)
