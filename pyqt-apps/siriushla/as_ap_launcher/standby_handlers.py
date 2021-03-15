@@ -42,6 +42,7 @@ class _BaseHandler:
             pv = self._pvs[pvname]
             if pv.wait_for_connection():
                 pv.put(value)
+                _time.sleep(wait)
 
     def _wait_pvs(self, pvnames, value):
         """Wait for PVs to reach value."""
