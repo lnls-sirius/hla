@@ -45,7 +45,7 @@ class PosAngCorr(SiriusMainWindow):
         if self._tl == 'TS':
             self._is_chsept = False
             ch3_pv = _PV(self.posang_prefix+':CH3-Cte',
-                         connection_timeout=0.1)
+                         connection_timeout=1)
             if not ch3_pv.wait_for_connection():
                 self._is_chsept = True
 
