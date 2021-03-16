@@ -187,7 +187,7 @@ class OpticsCorrWindow(SiriusMainWindow):
                     dict(scale_factor=1.5, offset=(+0.4, 0.0))])
             self._icon_delta = qta.icon('mdi.delta')
             self._is_setting = 'absolut'
-            self.pb_change_sp = QPushButton(self._icon_delta, '', self)
+            self.pb_change_sp = QPushButton(self._icon_absval, '', self)
             self.pb_change_sp.clicked.connect(self._change_chrom_sp)
 
             self.sb_paramx_delta = PyDMSpinbox(
@@ -554,7 +554,7 @@ class OpticsCorrWindow(SiriusMainWindow):
     def _change_chrom_sp(self):
         cond = self._is_setting == 'absolut'
         self._is_setting = 'delta' if cond else 'absolut'
-        icon = self._icon_absval if cond else self._icon_delta
+        icon = self._icon_delta if cond else self._icon_absval
         textX = '<h4>Δ-SP</h4>' if cond else '<h4>SP</h4>'
         textY = '<h4>Δ-RB</h4>' if cond else '<h4>RB</h4>'
         self.sb_paramx.setVisible(not cond)
