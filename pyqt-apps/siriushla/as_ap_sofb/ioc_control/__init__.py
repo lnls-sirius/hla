@@ -5,3 +5,4 @@ from .respmat_enbllist import SelectionMatrix
 from .status import StatusWidget
 from .main import SOFBControl
 from .orbit_acquisition import AcqControlWidget
+from .drive_window import DriveControl

@@ -2,19 +2,21 @@
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QDockWidget, QSizePolicy, QVBoxLayout, \
-    QPushButton, QHBoxLayout, QMenu, QMenuBar, QAction, QStatusBar
+    QPushButton, QHBoxLayout, QMenu, QMenuBar, QAction
 import qtawesome as qta
 
 from siriuspy.envars import VACA_PREFIX as LL_PREF
 from siriuspy.sofb.csdev import SOFBFactory
-from siriushla import util
-from siriushla.widgets import SiriusMainWindow
-from siriushla.widgets import PyDMLogLabel
-from siriushla.widgets.windows import create_window_from_widget
-from siriushla.as_ap_sofb.orbit_register import OrbitRegisters
-from siriushla.as_ap_sofb.graphics import OrbitWidget
-from siriushla.as_ap_sofb.ioc_control import SOFBControl
-from siriushla.as_di_bpms import SelectBPMs
+
+from .. import util as _util
+from ..widgets import SiriusMainWindow
+from ..widgets import PyDMLogLabel
+from ..widgets.windows import create_window_from_widget
+from ..as_di_bpms import SelectBPMs
+
+from .orbit_register import OrbitRegisters
+from .graphics import OrbitWidget
+from .ioc_control import SOFBControl, DriveControl
 
 
 class MainWindow(SiriusMainWindow):
@@ -25,7 +27,7 @@ class MainWindow(SiriusMainWindow):
         self.setupui()
         self.setObjectName(acc+'App')
         self.setWindowIcon(
-            qta.icon('fa5s.hammer', color=util.get_appropriate_color(acc)))
+            qta.icon('fa5s.hammer', color=_util.get_appropriate_color(acc)))
 
     @property
     def acc(self):
@@ -147,15 +149,24 @@ class MainWindow(SiriusMainWindow):
             menuopen.addAction(action)
         menubar.addAction(menuopen.menuAction())
 
+        if self.acc == 'SI':
+            actdrive = QAction('Drive Control', menubar)
+            Window = create_window_from_widget(
+                DriveControl, title='Drive Control')
+            _util.connect_window(
+                actdrive, Window,
+                parent=self, prefix=self.prefix, acc=self.acc)
+            menubar.addAction(actdrive)
+
         actbpm = QAction('Show BPM List', menubar)
         Window = create_window_from_widget(SelectBPMs, title='BPM List')
-        util.connect_window(
+        _util.connect_window(
             actbpm, Window, self, bpm_list=self._csorb.bpm_names)
         menubar.addAction(actbpm)
 
         if self.isring:
             acttrajfit = QAction('Open Traj. Fit', menubar)
-            util.connect_newprocess(
+            _util.connect_newprocess(
                 acttrajfit,
                 [f'sirius-hla-{self.acc.lower()}-ap-trajfit.py', ])
             menubar.addAction(acttrajfit)
