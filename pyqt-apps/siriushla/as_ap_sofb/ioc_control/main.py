@@ -8,17 +8,16 @@ import qtawesome as qta
 
 from pydm.widgets import PyDMPushButton, PyDMLabel
 
-from siriushla.widgets import SiriusConnectionSignal, \
+from ...widgets import SiriusConnectionSignal, \
     SiriusLedAlert, SiriusSpinbox, PyDMStateButton, SiriusLedState
-from siriushla.widgets.windows import create_window_from_widget
-import siriushla.util as _util
+from ...widgets.windows import create_window_from_widget
+from ... import util as _util
 
-from siriushla.as_ap_sofb.ioc_control.status import StatusWidget
-from siriushla.as_ap_sofb.ioc_control.kicks_config import KicksConfigWidget
-from siriushla.as_ap_sofb.ioc_control.orbit_acquisition import AcqControlWidget
-from siriushla.as_ap_sofb.ioc_control.respmat import RespMatWidget
-from siriushla.as_ap_sofb.ioc_control.base import BaseWidget, BaseCombo, \
-    CALabel
+from .status import StatusWidget
+from .kicks_config import KicksConfigWidget
+from .orbit_acquisition import AcqControlWidget
+from .respmat import RespMatWidget
+from .base import BaseWidget, BaseCombo, CALabel
 
 
 class SOFBControl(BaseWidget):
@@ -337,6 +336,7 @@ class SOFBControl(BaseWidget):
         tabw = QTabWidget(auto_wid)
         vbl2.addWidget(tabw)
 
+        # Add Main Tab
         gpbx = QWidget(tabw)
         gpbx_lay = QVBoxLayout(gpbx)
         tabw.addTab(gpbx, 'Main')
@@ -353,6 +353,7 @@ class SOFBControl(BaseWidget):
         wid = self.create_pair(gpbx, 'LoopMaxOrbDistortion')
         fbl.addRow(lbl, wid)
 
+        # Add PID Tab
         gpbx = QWidget(tabw)
         gpbx_lay = QGridLayout(gpbx)
         gpbx_lay.setSpacing(1)
@@ -390,11 +391,7 @@ class SOFBControl(BaseWidget):
             pair.rb_wid.setVisible(False)
             pbc.toggled.connect(pair.rb_wid.setVisible)
             pbc.toggled.connect(pair.sp_wid.setHidden)
-
-        vlay = QVBoxLayout()
-        vlay.addStretch()
-        gpbx_lay.addLayout(vlay, 4, 0)
-
+        gpbx_lay.setRowStretch(4, 2)
         return auto_wid
 
 
