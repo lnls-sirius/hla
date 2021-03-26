@@ -168,8 +168,8 @@ class MainOperation(SiriusMainWindow):
             'QLabel{max-width: 3.5em;}')
 
         evg_injection_sts_lay = QHBoxLayout()
-        evg_injection_sts_lay.setSpacing(3)
         evg_injection_sts_lay.addWidget(evg_injection_sts)
+        evg_injection_sts_lay.addStretch()
         evg_injection_sts_lay.addWidget(evg_injection_injcnt)
 
         evg_update_label = QLabel(
