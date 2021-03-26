@@ -4,14 +4,13 @@ import qtawesome as qta
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
-    QGridLayout, QApplication, QMessageBox, QMenu, QAction
+    QGridLayout, QApplication, QMessageBox, QMenu, QAction, QHBoxLayout
 from pydm.widgets import PyDMPushButton, PyDMLabel
 
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.search import LLTimeSearch as _LLTimeSearch
 
 from siriushla.util import get_appropriate_color
-from siriushla.sirius_application import SiriusApplication
 from siriushla.as_ti_control import BucketList
 from siriushla.widgets import SiriusMainWindow, PyDMStateButton, \
     SiriusLedAlert, PyDMLed, SiriusEnumComboBox
@@ -160,6 +159,18 @@ class MainOperation(SiriusMainWindow):
             parent=self,
             init_channel=self._prefix+evg_name+':STATEMACHINE',
             color_list=color_list)
+        evg_injection_injcnt = PyDMLabel(self)
+        evg_injection_injcnt.setToolTip(
+            'Count injection pulses when Egun Trigger is enabled.')
+        evg_injection_injcnt.channel = \
+            self._prefix+'AS-Glob:AP-CurrInfo:InjCount-Mon'
+        evg_injection_injcnt.setStyleSheet(
+            'QLabel{max-width: 3.5em;}')
+
+        evg_injection_sts_lay = QHBoxLayout()
+        evg_injection_sts_lay.setSpacing(3)
+        evg_injection_sts_lay.addWidget(evg_injection_sts)
+        evg_injection_sts_lay.addWidget(evg_injection_injcnt)
 
         evg_update_label = QLabel(
             '<h4>Update</h4>', self, alignment=Qt.AlignCenter)
@@ -197,9 +208,9 @@ class MainOperation(SiriusMainWindow):
         timing_lay.addWidget(evg_continuous_sts, 2, 1)
         timing_lay.addWidget(evg_injection_label, 0, 2)
         timing_lay.addWidget(evg_injection_sel, 1, 2)
-        timing_lay.addWidget(evg_injection_sts, 2, 2)
-        timing_lay.addWidget(pbt, 2, 3)
-        timing_lay.addWidget(evg_bucket_list, 0, 4, 3, 1)
+        timing_lay.addLayout(evg_injection_sts_lay, 2, 2)
+        timing_lay.addWidget(pbt, 2, 4)
+        timing_lay.addWidget(evg_bucket_list, 0, 5, 3, 1)
         timing.setLayout(timing_lay)
 
         pbt = QPushButton('v', self)
