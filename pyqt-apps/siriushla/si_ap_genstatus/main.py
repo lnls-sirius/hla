@@ -178,12 +178,11 @@ class SIGenStatusWindow(SiriusMainWindow):
         self.curr_graph.bufferSize = timespan_hours*60*60*10
         self.curr_graph.maxRedrawRate = 2
         t_end = Time(datetime=_datetime.now())
-        t_init = Time(datetime=t_end - _timedelta(hours=timespan_hours))
-        t_end = t_end.get_iso8601()
-        t_init = t_init.get_iso8601()
+        t_init = t_end - _timedelta(hours=timespan_hours)
         self.curr_graph.fill_curve_with_archdata(
-            self.curve, curr_pvname, t_init=t_init, t_end=t_end,
-            process_type='mean', process_bin_intvl=1)
+            self.curve, curr_pvname,
+            t_init=t_init.get_iso8601(), t_end=t_end.get_iso8601(),
+            process_type='mean', process_bin_intvl=10)
 
         cw = QWidget()
         hlay1 = QHBoxLayout()

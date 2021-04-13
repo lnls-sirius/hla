@@ -62,9 +62,7 @@ class EfficiencyMonitor(SiriusMainWindow):
         self.timeplot.setStyleSheet(
             '#timeplot{min-width:24em; min-height: 10em;}')
         t_end = Time(datetime=_datetime.now())
-        t_init = Time(datetime=t_end - _timedelta(minutes=timespan_minutes))
-        t_end = t_end.get_iso8601()
-        t_init = t_init.get_iso8601()
+        t_init = t_end - _timedelta(minutes=timespan_minutes)
 
         self._channels = dict()
         self._curves = dict()
@@ -84,7 +82,8 @@ class EfficiencyMonitor(SiriusMainWindow):
             curve = self.timeplot.curveAtIndex(-1)
             self._curves[pvn] = curve
             self.timeplot.fill_curve_with_archdata(
-                self._curves[pvn], pvname, t_init=t_init, t_end=t_end)
+                self._curves[pvn], pvname,
+                t_init=t_init.get_iso8601(), t_end=t_end.get_iso8601())
 
             cb = QCheckBox(text, self)
             cb.setChecked(True)
