@@ -83,12 +83,20 @@ def check_process(cmd, is_window=True, is_pydm=False):
     window = ''
     pid = ''
     if is_pydm:
-        _, _, sec, _, app = scmd.split()[0].split('-')[:5]
-        app = app.strip('.py')
+        cmdsplit = scmd.split()
+        _, _, sec, _, app = cmdsplit[0].split('-')[:5]
+        options = cmdsplit[-1] if len(cmdsplit) > 1 else ''
+        app = app.split('.py')[0]
         scmd = ('ps hx -o pid,command= | grep [s]iriushlacon' +
                 f' | grep {app} | grep "/bin/pydm"')
+        if options:
+            scmd += f' | grep "{options}"'
         if sec in {'bo', 'tb', 'ts', 'si'}:
             scmd += ' | grep ' + sec.upper()
+        elif sec == 'as':
+            name1 = _os.path.join(app, 'main')
+            name2 = _os.path.join(app, app)
+            scmd += f' | grep "{name1}\\|{name2}"'
         infos = _subprocess.getoutput(scmd).split('\n')
         for info in infos:
             if not info:
