@@ -1,7 +1,6 @@
 """Sirius General Status Window."""
 
 import numpy as _np
-from datetime import datetime as _datetime, timedelta as _timedelta
 
 from qtpy.QtCore import Qt, Slot, QEvent
 from qtpy.QtWidgets import QWidget, QGridLayout, QLabel, \
@@ -173,12 +172,12 @@ class SIGenStatusWindow(SiriusMainWindow):
         self.curve.setFillLevel(0)
         self.curve.setBrush(QBrush(QGradient(QGradient.ColdEvening)))
 
-        timespan_hours = 12
-        self.curr_graph.timeSpan = timespan_hours*60*60
-        self.curr_graph.bufferSize = timespan_hours*60*60*10
+        timespan = 12*60*60
+        self.curr_graph.timeSpan = timespan
+        self.curr_graph.bufferSize = timespan*10
         self.curr_graph.maxRedrawRate = 2
-        t_end = Time(datetime=_datetime.now())
-        t_init = t_end - _timedelta(hours=timespan_hours)
+        t_end = Time.now()
+        t_init = t_end - timespan
         self.curr_graph.fill_curve_with_archdata(
             self.curve, curr_pvname,
             t_init=t_init.get_iso8601(), t_end=t_end.get_iso8601(),

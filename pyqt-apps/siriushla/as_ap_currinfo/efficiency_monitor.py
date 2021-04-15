@@ -1,6 +1,5 @@
 """Efficiency Monitor."""
 
-from datetime import datetime as _datetime, timedelta as _timedelta
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QLabel, QCheckBox, QGridLayout, \
     QApplication
@@ -49,9 +48,9 @@ class EfficiencyMonitor(SiriusMainWindow):
                        self, alignment=Qt.AlignCenter)
 
         # timeplot
-        timespan_minutes = 30
+        timespan = 30*60  # [s]
         self.timeplot = SiriusTimePlot(parent=self, background='w')
-        self.timeplot.timeSpan = timespan_minutes*60  # [s]
+        self.timeplot.timeSpan = timespan
         self.timeplot.autoRangeY = False
         self.timeplot.maxYRange = 150.0
         self.timeplot.minYRange = 0.0
@@ -61,8 +60,8 @@ class EfficiencyMonitor(SiriusMainWindow):
         self.timeplot.setObjectName('timeplot')
         self.timeplot.setStyleSheet(
             '#timeplot{min-width:24em; min-height: 10em;}')
-        t_end = Time(datetime=_datetime.now())
-        t_init = t_end - _timedelta(minutes=timespan_minutes)
+        t_end = Time.now()
+        t_init = t_end - timespan
 
         self._channels = dict()
         self._curves = dict()

@@ -1,6 +1,5 @@
 """Current and Lifetime Window."""
 
-from datetime import datetime as _datetime, timedelta as _timedelta
 import time as _time
 import numpy as _np
 
@@ -124,11 +123,11 @@ class CurrLTWindow(SiriusMainWindow):
         self.graph.autoRangeY = True
         self.graph.setObjectName('graph')
         self.graph.setStyleSheet('#graph{min-width:40em;min-height:32em;}')
-        self.graph.bufferSize = 36000
-        self._set_graph_timespan(2000)
+        self.graph.bufferSize = 60*60*10
+        self._set_graph_timespan(30*60)
 
-        t_end = Time(datetime=_datetime.now())
-        t_init = t_end - _timedelta(seconds=2000)
+        t_end = Time.now()
+        t_init = t_end - 30*60
         t_end_iso = t_end.get_iso8601()
         t_init_iso = t_init.get_iso8601()
 
