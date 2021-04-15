@@ -1,5 +1,5 @@
 """This module defines a factory to get a detailed window."""
-from qtpy.QtWidgets import QWidget, QGridLayout
+from qtpy.QtWidgets import QWidget, QGridLayout, QScrollArea
 from siriuspy.search import PSSearch
 from .PSDetailWidget import PSDetailWidget, FBPDCLinkDetailWidget, \
     FACDCLinkDetailWidget, LIPSDetailWidget
@@ -13,14 +13,25 @@ class DetailWidgetFactory:
         """Return a DetailWidget."""
         if isinstance(psname, (list, tuple)):
             if len(psname) > 1:
-                widget = QWidget(parent)
-                widget.layout = QGridLayout(widget)
+                scrwidget = QWidget(parent)
+                scrwidget.layout = QGridLayout(scrwidget)
+                scrwidget.setObjectName('scrwidget')
+                scrwidget.setStyleSheet(
+                    '#scrwidget{background-color: transparent;}')
+                scroll = QScrollArea(parent)
+                scroll.setWidget(scrwidget)
+                scroll.setWidgetResizable(True)
+                scroll.setSizeAdjustPolicy(
+                    QScrollArea.AdjustToContentsOnFirstShow)
                 n_lines = int(len(psname)/4) or 1
                 for idx, name in enumerate(psname):
-                    widget.layout.addWidget(
+                    scrwidget.layout.addWidget(
                         DetailWidgetFactory._item(name, parent),
                         idx % n_lines,
                         int(idx / n_lines))
+                widget = QWidget()
+                lay = QGridLayout(widget)
+                lay.addWidget(scroll)
                 return widget
             else:
                 psname = psname[0]
