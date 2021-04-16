@@ -65,6 +65,10 @@ class LIEgunWindow(SiriusMainWindow):
             }""")
 
     def _setupSysStatusWidget(self):
+        self._ld_sysexternal = QLabel('Ext. Intlk', self)
+        self._led_sysexternal = SiriusLedState(
+            self, self.prefix+'LI-01:EG-External:status')
+
         self._ld_sysvalve = QLabel('Valve', self)
         self._led_sysvalve = SiriusLedState(
             self, self.prefix+'LI-01:EG-Valve:status')
@@ -88,16 +92,18 @@ class LIEgunWindow(SiriusMainWindow):
 
         wid = QGroupBox('System Status', self)
         lay = QGridLayout(wid)
-        lay.addWidget(self._ld_sysvalve, 0, 0)
-        lay.addWidget(self._led_sysvalve, 0, 1)
-        lay.addWidget(self._ld_sysgate, 1, 0)
-        lay.addWidget(self._led_sysgate, 1, 1)
-        lay.addWidget(self._ld_sysvac, 2, 0)
-        lay.addWidget(self._led_sysvac, 2, 1)
-        lay.addWidget(self._ld_sysplc, 3, 0)
-        lay.addWidget(self._led_sysplc, 3, 1)
-        lay.addWidget(self._ld_syssysstart, 4, 0)
-        lay.addWidget(self._bt_syssysstart, 4, 1)
+        lay.addWidget(self._ld_sysexternal, 0, 0)
+        lay.addWidget(self._led_sysexternal, 0, 1)
+        lay.addWidget(self._ld_sysvalve, 1, 0)
+        lay.addWidget(self._led_sysvalve, 1, 1)
+        lay.addWidget(self._ld_sysgate, 2, 0)
+        lay.addWidget(self._led_sysgate, 2, 1)
+        lay.addWidget(self._ld_sysvac, 3, 0)
+        lay.addWidget(self._led_sysvac, 3, 1)
+        lay.addWidget(self._ld_sysplc, 4, 0)
+        lay.addWidget(self._led_sysplc, 4, 1)
+        lay.addWidget(self._ld_syssysstart, 5, 0)
+        lay.addWidget(self._bt_syssysstart, 5, 1)
         return wid
 
     def _setupHVPSWidget(self):
