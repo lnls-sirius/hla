@@ -11,6 +11,7 @@ import qtawesome as qta
 
 from siriuspy.search import PSSearch
 from siriuspy.namesys import SiriusPVName as PVName
+from siriuspy.pwrsupply.csdev import Const as _PSC, ETypes as _PSE
 
 from siriushla.util import get_appropriate_color, connect_newprocess, \
     run_newprocess
@@ -23,7 +24,7 @@ from .tasks import CreateTesters, \
     CheckStatus, \
     ResetIntlk, CheckIntlk, \
     SetSOFBMode, CheckSOFBMode, \
-    SetOpModeSlowRef, CheckOpModeSlowRef, CheckOpModeInit, CheckOpModeOff, \
+    SetOpMode, CheckOpMode, \
     SetPwrState, CheckPwrState, CheckInitOk, \
     SetPulse, CheckPulse, \
     CheckCtrlLoop, \
@@ -131,7 +132,7 @@ class PSTestWindow(SiriusMainWindow):
         self.setslowref_ps_bt = QPushButton(
             'Set PS and DCLinks to SlowRef', self)
         self.setslowref_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
-        self.setslowref_ps_bt.clicked.connect(self._set_check_opmode)
+        self.setslowref_ps_bt.clicked.connect(self._set_check_opmode_slowref)
 
         self.currzero_ps_bt1 = QPushButton('Set PS Current to zero', self)
         self.currzero_ps_bt1.clicked.connect(_part(self._set_lastcomm, 'PS'))
@@ -399,6 +400,11 @@ class PSTestWindow(SiriusMainWindow):
             _part(self._set_lastcomm, 'PS'))
         self.act_setcurrent_ps.triggered.connect(self._set_check_current)
 
+        self.act_opmode_ps = self.ps_menu.addAction('Set PS OpMode')
+        self.act_opmode_ps.triggered.connect(
+            _part(self._set_lastcomm, 'PS'))
+        self.act_opmode_ps.triggered.connect(self._set_check_opmode)
+
         # # PU
         self.pu_menu = self.aux_comm.addMenu('PU')
 
@@ -481,7 +487,7 @@ class PSTestWindow(SiriusMainWindow):
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
-    def _set_check_opmode(self):
+    def _set_check_opmode_slowref(self):
         self.ok_ps.clear()
         self.nok_ps.clear()
         devices = self._get_selected_ps()
@@ -492,8 +498,12 @@ class PSTestWindow(SiriusMainWindow):
         devices = [dev for dev in devices if 'LI-' not in dev]
 
         task0 = CreateTesters(devices, parent=self)
-        task1 = SetOpModeSlowRef(devices, parent=self)
-        task2 = CheckOpModeSlowRef(devices, parent=self)
+        task1 = SetOpMode(devices, state=_PSC.OpMode.SlowRef, parent=self)
+        task2 = CheckOpMode(
+            devices,
+            state=[_PSC.States.SlowRef, _PSC.States.Off,
+                   _PSC.States.Interlock],
+            parent=self)
         task2.itemDone.connect(self._log)
 
         labels = ['Connecting to devices...',
@@ -682,7 +692,8 @@ class PSTestWindow(SiriusMainWindow):
         # then, initialize SI Fam PS
         task0 = CreateTesters(ps2ctrl, parent=self)
         task1 = SetPwrState(ps2ctrl, state='on', parent=self)
-        task2 = CheckOpModeInit(ps2ctrl, parent=self)
+        task2 = CheckOpMode(
+            ps2ctrl, state=_PSC.States.Initializing, parent=self)
         task2.itemDone.connect(self._log)
         tasks = [task0, task1, task2]
 
@@ -772,7 +783,9 @@ class PSTestWindow(SiriusMainWindow):
 
         if state == 'offintlk':
             text = 'off or interlock'
-            task1 = CheckOpModeOff(devices, parent=self)
+            task1 = CheckOpMode(
+                devices, state=[_PSC.States.Off, _PSC.States.Interlock],
+                parent=self)
         else:
             text = state
             task1 = CheckPwrState(
@@ -918,6 +931,34 @@ class PSTestWindow(SiriusMainWindow):
                   'Setting current...',
                   'Checking current value...']
 
+        dlg = ProgressDialog(labels, tasks, self)
+        dlg.exec_()
+
+    def _set_check_opmode(self):
+        self.ok_ps.clear()
+        self.nok_ps.clear()
+        devices = self._get_selected_ps()
+        if not devices:
+            return
+        devices = [dev for dev in devices if 'LI-' not in dev]
+
+        state, ok = QInputDialog.getItem(
+            self, "OpMode Input", "Select OpMode: ",
+            _PSE.OPMODES, editable=False)
+        if not ok:
+            return
+        state2set = getattr(_PSC.OpMode, state)
+        state2check = getattr(_PSC.States, state)
+
+        task0 = CreateTesters(devices, parent=self)
+        task1 = SetOpMode(devices, state=state2set, parent=self)
+        task2 = CheckOpMode(devices, state=state2check, parent=self)
+        task2.itemDone.connect(self._log)
+
+        labels = ['Connecting to devices...',
+                  'Setting PS OpMode to '+state+'...',
+                  'Checking PS OpMode in '+state+'...']
+        tasks = [task0, task1, task2]
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 

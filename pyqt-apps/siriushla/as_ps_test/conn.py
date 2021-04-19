@@ -70,24 +70,16 @@ class _TesterPSBase(_TesterBase):
         """Reset."""
         self._pvs['Reset-Cmd'].value = 1
 
-    def set_opmode_slowref(self):
-        """Set OpMode to SlowRef."""
-        self._pvs['OpMode-Sel'].value = _PSC.OpMode.SlowRef
+    def set_opmode(self, state):
+        """Set OpMode."""
+        self._pvs['OpMode-Sel'].value = state
 
-    def check_opmode_slowref(self):
-        """Check OpMode in SlowRef."""
-        return (self._pvs['OpMode-Sts'].value in [_PSC.States.SlowRef,
-                                                  _PSC.States.Off,
-                                                  _PSC.States.Interlock])
-
-    def check_opmode_initializing(self):
-        """Check OpMode in Initializing."""
-        return self._pvs['OpMode-Sts'].value == _PSC.States.Initializing
-
-    def check_opmode_off(self):
-        """Check OpMode in Off."""
-        return self._pvs['OpMode-Sts'].value in [_PSC.States.Off,
-                                                 _PSC.States.Interlock]
+    def check_opmode(self, state):
+        """Check OpMode."""
+        if isinstance(state, (list, tuple)):
+            return self._pvs['OpMode-Sts'].value in state
+        else:
+            return self._pvs['OpMode-Sts'].value == state
 
     def set_pwrstate(self, state='on'):
         """Set PwrState."""
