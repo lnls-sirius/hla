@@ -239,10 +239,10 @@ class CheckPulse(BaseTask):
 
 
 class CheckInitOk(BaseTask):
-    """Check if PS OpMode is in SlowRef."""
+    """Check if PS initialized."""
 
     def function(self):
-        """Check PS OpMode in SlowRef."""
+        """Check PS initialized."""
         self._check(method='check_init_ok', timeout=3*TIMEOUT_CHECK)
 
 

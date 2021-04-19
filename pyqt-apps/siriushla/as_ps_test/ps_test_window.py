@@ -1,5 +1,5 @@
 """Window to test power supplies."""
-import sys
+
 import re as _re
 from functools import partial as _part
 
@@ -381,7 +381,7 @@ class PSTestWindow(SiriusMainWindow):
 
         self.aux_comm = self.menu.addMenu('Auxiliary commands')
 
-        # # PS
+        # # auxialiary PS
         self.ps_menu = self.aux_comm.addMenu('PS')
 
         self.act_turnoff_ps = self.ps_menu.addAction('Turn PS Off')
@@ -405,7 +405,7 @@ class PSTestWindow(SiriusMainWindow):
             _part(self._set_lastcomm, 'PS'))
         self.act_opmode_ps.triggered.connect(self._set_check_opmode)
 
-        # # PU
+        # # auxialiary PU
         self.pu_menu = self.aux_comm.addMenu('PU')
 
         self.act_turnoff_pu = self.pu_menu.addAction('Turn PU Off')
@@ -419,7 +419,6 @@ class PSTestWindow(SiriusMainWindow):
             _part(self._set_lastcomm, 'PU'))
         self.act_dsblpulse_pu.triggered.connect(
             _part(self._set_check_pulse, 'off'))
-
 
         # layout
         lay = QGridLayout()

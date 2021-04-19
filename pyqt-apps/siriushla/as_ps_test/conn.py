@@ -8,7 +8,7 @@ from siriuspy.util import get_bit
 from siriuspy.namesys import SiriusPVName
 from siriuspy.envars import VACA_PREFIX as VACA_PREFIX
 from siriuspy.search import PSSearch
-from siriuspy.pwrsupply.csdev import Const as _PSC, ETypes as _PSe, \
+from siriuspy.pwrsupply.csdev import Const as _PSC, ETypes as _PSE, \
     PS_LI_INTLK_THRS as _PS_LI_INTLK, get_ps_interlocks
 
 DEFAULT_CAP_BANK_VOLT = {
@@ -383,7 +383,7 @@ class TesterPSLinac(_TesterBase):
                 VACA_PREFIX + device + ':' + ppty,
                 connection_timeout=TIMEOUT_CONN)
 
-        self.intlkwarn_bit = _PSe.LINAC_INTLCK_WARN.index('LoadI Over Thrs')
+        self.intlkwarn_bit = _PSE.LINAC_INTLCK_WARN.index('LoadI Over Thrs')
 
         splims = PSSearch.conv_pstype_2_splims(
             PSSearch.conv_psname_2_pstype(device))
