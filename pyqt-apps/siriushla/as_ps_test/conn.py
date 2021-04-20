@@ -8,7 +8,7 @@ from siriuspy.util import get_bit
 from siriuspy.namesys import SiriusPVName
 from siriuspy.envars import VACA_PREFIX as VACA_PREFIX
 from siriuspy.search import PSSearch
-from siriuspy.pwrsupply.csdev import Const as _PSC, ETypes as _PSe, \
+from siriuspy.pwrsupply.csdev import Const as _PSC, ETypes as _PSE, \
     PS_LI_INTLK_THRS as _PS_LI_INTLK, get_ps_interlocks
 
 DEFAULT_CAP_BANK_VOLT = {
@@ -70,24 +70,16 @@ class _TesterPSBase(_TesterBase):
         """Reset."""
         self._pvs['Reset-Cmd'].value = 1
 
-    def set_opmode_slowref(self):
-        """Set OpMode to SlowRef."""
-        self._pvs['OpMode-Sel'].value = _PSC.OpMode.SlowRef
+    def set_opmode(self, state):
+        """Set OpMode."""
+        self._pvs['OpMode-Sel'].value = state
 
-    def check_opmode_slowref(self):
-        """Check OpMode in SlowRef."""
-        return (self._pvs['OpMode-Sts'].value in [_PSC.States.SlowRef,
-                                                  _PSC.States.Off,
-                                                  _PSC.States.Interlock])
-
-    def check_opmode_initializing(self):
-        """Check OpMode in Initializing."""
-        return self._pvs['OpMode-Sts'].value == _PSC.States.Initializing
-
-    def check_opmode_off(self):
-        """Check OpMode in Off."""
-        return self._pvs['OpMode-Sts'].value in [_PSC.States.Off,
-                                                 _PSC.States.Interlock]
+    def check_opmode(self, state):
+        """Check OpMode."""
+        if isinstance(state, (list, tuple)):
+            return self._pvs['OpMode-Sts'].value in state
+        else:
+            return self._pvs['OpMode-Sts'].value == state
 
     def set_pwrstate(self, state='on'):
         """Set PwrState."""
@@ -391,7 +383,7 @@ class TesterPSLinac(_TesterBase):
                 VACA_PREFIX + device + ':' + ppty,
                 connection_timeout=TIMEOUT_CONN)
 
-        self.intlkwarn_bit = _PSe.LINAC_INTLCK_WARN.index('LoadI Over Thrs')
+        self.intlkwarn_bit = _PSE.LINAC_INTLCK_WARN.index('LoadI Over Thrs')
 
         splims = PSSearch.conv_pstype_2_splims(
             PSSearch.conv_psname_2_pstype(device))
