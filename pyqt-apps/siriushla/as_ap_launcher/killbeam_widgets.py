@@ -1,7 +1,7 @@
 import time as _time
 from epics import PV as _PV
 
-from qtpy.QtCore import Qt
+from qtpy.QtCore import Qt, QThread, Signal
 from qtpy.QtWidgets import QPushButton, QMessageBox
 import qtawesome as qta
 
@@ -11,9 +11,9 @@ from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 class RFKillBeamHandler:
     """RF Kill Beam Action Handler."""
 
-    TIMEOUT_WAIT = 0.5
-    TIMEOUT_ACT = 1.0
-    INCRATE_IMMEDIATELY = 15
+    TIMEOUT_WAIT = 3.0  # s
+    INCRATE_VALUE = 14  # 50 mV/s
+    REFMIN_VALUE = 60  # Minimum Amplitude Reference
 
     _pvs = dict()
 
@@ -37,16 +37,26 @@ class RFKillBeamHandler:
 
     def _get_pv(self, pvname):
         """Get PV value."""
-        pv = RFKillBeamHandler._pvs[pvname]
-        if pv.wait_for_connection():
-            return pv.get()
+        pvo = RFKillBeamHandler._pvs[pvname]
+        if pvo.wait_for_connection():
+            return pvo.get()
         return None
 
     def _set_pv(self, pvname, value):
         """Set PV to value."""
-        pv = RFKillBeamHandler._pvs[pvname]
-        if pv.wait_for_connection():
-            return pv.put(value)
+        pvo = RFKillBeamHandler._pvs[pvname]
+        if pvo.wait_for_connection():
+            return pvo.put(value)
+        return False
+
+    def _wait_pv(self, pvname, value):
+        """Wait for PV to reach value."""
+        pvo = RFKillBeamHandler._pvs[pvname]
+        _time0 = _time.time()
+        while _time.time() - _time0 < RFKillBeamHandler.TIMEOUT_WAIT:
+            if pvo.value == value:
+                return True
+            _time.sleep(0.1)
         return False
 
     def kill_beam(self):
@@ -63,24 +73,30 @@ class RFKillBeamHandler:
             return [False, 'Could not read Amplitude Reference PV\n'
                            '(SR-RF-DLLRF-01:mV:AL:REF)!']
 
-        # set Amplitude Increase Rate to Immediately
-        if not self._set_pv('SR-RF-DLLRF-01:AMPREF:INCRATE:S',
-                            RFKillBeamHandler.INCRATE_IMMEDIATELY):
+        # set Amplitude Increase Rate to 50 mV/s and wait
+        self._set_pv('SR-RF-DLLRF-01:AMPREF:INCRATE:S',
+                     RFKillBeamHandler.INCRATE_VALUE)
+
+        if not self._wait_pv('SR-RF-DLLRF-01:AMPREF:INCRATE:S',
+                             RFKillBeamHandler.INCRATE_VALUE):
             return [False, 'Could not set RF Amplitude Increase Rate PV\n'
                            '(SR-RF-DLLRF-01:AMPREF:INCRATE:S)!']
-        _time.sleep(RFKillBeamHandler.TIMEOUT_WAIT)
 
-        # set Amplitude Reference to 60mV and wait for TIMEOUT_ACT seconds
-        if not self._set_pv('SR-RF-DLLRF-01:mV:AL:REF:S', 60):
+        # waiting time
+        waitTime = int((ALRef_init - RFKillBeamHandler.REFMIN_VALUE)/50)
+
+        # set Amplitude Reference to 60mV and wait for waitTime seconds
+        if not self._set_pv('SR-RF-DLLRF-01:mV:AL:REF:S',
+                            RFKillBeamHandler.REFMIN_VALUE):
             return [False, 'Could not set Amplitude Reference PV\n'
                            '(SR-RF-DLLRF-01:mV:AL:REF:S)!']
-        _time.sleep(RFKillBeamHandler.TIMEOUT_ACT)
+        _time.sleep(waitTime)
 
         # set Amplitude Reference to initial value
         if not self._set_pv('SR-RF-DLLRF-01:mV:AL:REF:S', ALRef_init):
             return [False, 'Could not set Amplitude Reference PV\n'
                            '(SR-RF-DLLRF-01:mV:AL:REF:S)!']
-        _time.sleep(RFKillBeamHandler.TIMEOUT_WAIT)
+        _time.sleep(waitTime)
 
         # set Amplitude Increase Rate to initial value
         if not self._set_pv('SR-RF-DLLRF-01:AMPREF:INCRATE:S', AIncRate_init):
@@ -95,6 +111,7 @@ class RFKillBeamButton(QPushButton):
 
     def __init__(self, parent=None):
         super().__init__(qta.icon('mdi.skull-outline'), '', parent)
+        self.initial_icon = self.icon()
         self.setObjectName('rfkill')
         self.setStyleSheet("""
             #rfkill{
@@ -121,9 +138,43 @@ class RFKillBeamButton(QPushButton):
         if ans == QMessageBox.No:
             return
 
-        retval = self._rf_handler.kill_beam()
-        if not retval[0]:
-            QMessageBox.critical(self, 'Error', retval[1])
-            return
+        self._show_wait_icon()
+
+        thread = RFKillBeamSender(self._rf_handler, self)
+        thread.sendMessage.connect(self._show_popup)
+        thread.finished.connect(self._show_init_icon)
+        thread.start()
+
+    def _show_popup(self, title, message):
+        if 'Error' in title:
+            QMessageBox.critical(self, title, message)
         else:
-            QMessageBox.information(self, 'Done!', 'Beam was killed!')
+            QMessageBox.information(self, title, message)
+
+    def _show_wait_icon(self):
+        self.setEnabled(False)
+        self.setIcon(
+            qta.icon('fa5s.spinner', animation=qta.Spin(self)))
+
+    def _show_init_icon(self):
+        self.setIcon(self.initial_icon)
+        self.setEnabled(True)
+
+
+class RFKillBeamSender(QThread):
+    """Thread to send Kill Beam command."""
+
+    sendMessage = Signal(str, str)
+
+    def __init__(self, handler, parent=None):
+        """Initialize."""
+        super().__init__(parent)
+        self._handler = handler
+
+    def run(self):
+        """Run."""
+        retval = self._handler.kill_beam()
+        if not retval[0]:
+            self.sendMessage.emit('Error', retval[1])
+        else:
+            self.sendMessage.emit('Done!', 'Beam was killed!')
