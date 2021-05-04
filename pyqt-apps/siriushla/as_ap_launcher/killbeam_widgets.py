@@ -83,20 +83,20 @@ class RFKillBeamHandler:
                            '(SR-RF-DLLRF-01:AMPREF:INCRATE:S)!']
 
         # waiting time
-        waitTime = int((ALRef_init - RFKillBeamHandler.REFMIN_VALUE)/50)
+        wait_time = int((ALRef_init - RFKillBeamHandler.REFMIN_VALUE)/50)
 
-        # set Amplitude Reference to 60mV and wait for waitTime seconds
+        # set Amplitude Reference to 60mV and wait for wait_time seconds
         if not self._set_pv('SR-RF-DLLRF-01:mV:AL:REF:S',
                             RFKillBeamHandler.REFMIN_VALUE):
             return [False, 'Could not set Amplitude Reference PV\n'
                            '(SR-RF-DLLRF-01:mV:AL:REF:S)!']
-        _time.sleep(waitTime)
+        _time.sleep(wait_time)
 
         # set Amplitude Reference to initial value
         if not self._set_pv('SR-RF-DLLRF-01:mV:AL:REF:S', ALRef_init):
             return [False, 'Could not set Amplitude Reference PV\n'
                            '(SR-RF-DLLRF-01:mV:AL:REF:S)!']
-        _time.sleep(waitTime)
+        _time.sleep(wait_time)
 
         # set Amplitude Increase Rate to initial value
         if not self._set_pv('SR-RF-DLLRF-01:AMPREF:INCRATE:S', AIncRate_init):
