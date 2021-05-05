@@ -15,6 +15,9 @@ class SiriusFrame(PyDMFrame):
     LightBlue = (179, 229, 255)
     LightViolet = (204, 179, 255)
     LightSalmon = (255, 179, 179)
+    Salmon = (255, 105, 97)
+    Lavender = (151, 122, 196)
+    DarkCyan = (95, 131, 184)
     Gray = (90, 90, 90)
     default_colorlist = [LightGreen, Red]
 

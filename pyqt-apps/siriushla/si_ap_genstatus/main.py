@@ -36,9 +36,6 @@ class SIGenStatusWindow(SiriusMainWindow):
         self._setupUi()
 
     def _setupUi(self):
-        self.title = QLabel('<h2>Sirius Status</h2>',
-                            alignment=Qt.AlignCenter)
-
         # controls
         self.ld_machsht = QLabel(
             '<h4>Shift: </h4>', self, alignment=Qt.AlignCenter)
@@ -49,10 +46,12 @@ class SIGenStatusWindow(SiriusMainWindow):
         color_list = [
             SiriusFrame.Yellow,  # Users
             SiriusFrame.LightBlue,  # Commissioning
-            SiriusFrame.LightViolet,  # Conditioning
+            SiriusFrame.DarkCyan,  # Conditioning
             SiriusFrame.LightSalmon,  # Injection
             SiriusFrame.LightBlue,  # MachineStudy
             SiriusFrame.LightGreen,  # Maintenance
+            SiriusFrame.Salmon,  # Standby
+            SiriusFrame.Lavender,  # Shutdown
         ]
         self.frm_machsht = SiriusFrame(
             self, self.prefix+'AS-Glob:AP-MachShift:Mode-Sts',
