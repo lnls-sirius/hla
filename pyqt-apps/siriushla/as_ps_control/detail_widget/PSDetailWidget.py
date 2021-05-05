@@ -119,6 +119,9 @@ class PSDetailWidget(QWidget):
         'Voltage-SP', 'Voltage-RB', 'VoltageRef-Mon', 'Voltage-Mon',
         'CapacitorBankVoltage-SP', 'CapacitorBankVoltage-RB',
         'CapacitorBankVoltageRef-Mon', 'CapacitorBankVoltage-Mon',
+        'ScopeSrcAddr-SP', 'ScopeSrcAddr-RB',
+        'ScopeFreq-SP', 'ScopeFreq-RB',
+        'ScopeDuration-SP', 'ScopeDuration-RB',
     ]
 
     def __init__(self, psname, parent=None):
