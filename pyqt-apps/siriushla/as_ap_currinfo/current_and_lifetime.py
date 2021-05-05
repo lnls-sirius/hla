@@ -1,6 +1,5 @@
 """Current and Lifetime Window."""
 
-from datetime import datetime as _datetime, timedelta as _timedelta
 import time as _time
 import numpy as _np
 
@@ -124,13 +123,13 @@ class CurrLTWindow(SiriusMainWindow):
         self.graph.autoRangeY = True
         self.graph.setObjectName('graph')
         self.graph.setStyleSheet('#graph{min-width:40em;min-height:32em;}')
-        self.graph.bufferSize = 36000
-        self._set_graph_timespan(2000)
+        self.graph.bufferSize = 60*60*10
+        self._set_graph_timespan(30*60)
 
-        t_end = Time(datetime=_datetime.now())
-        t_init = Time(datetime=t_end - _timedelta(seconds=2000))
-        t_end = t_end.get_iso8601()
-        t_init = t_init.get_iso8601()
+        t_end = Time.now()
+        t_init = t_end - 30*60
+        t_end_iso = t_end.get_iso8601()
+        t_init_iso = t_init.get_iso8601()
 
         self.graph.addYChannel(
             y_channel=self.device_prefix+':Current-Mon',
@@ -138,7 +137,7 @@ class CurrLTWindow(SiriusMainWindow):
         self._curve_current = self.graph.curveAtIndex(0)
         self.graph.fill_curve_with_archdata(
             self._curve_current, self.device_prefix+':Current-Mon',
-            t_init=t_init, t_end=t_end)
+            t_init=t_init_iso, t_end=t_end_iso)
 
         self.graph.addYChannel(
             y_channel=self.prefix+'SI-01M1:DI-BPM:Sum-Mon',
@@ -146,7 +145,7 @@ class CurrLTWindow(SiriusMainWindow):
         self._curve_bpmsum = self.graph.curveAtIndex(1)
         self.graph.fill_curve_with_archdata(
             self._curve_bpmsum, self.prefix+'SI-01M1:DI-BPM:Sum-Mon',
-            t_init=t_init, t_end=t_end)
+            t_init=t_init_iso, t_end=t_end_iso)
 
         self.graph.addYChannel(
             y_channel='FAKE:Lifetime', axis='right', name='Lifetime',
@@ -154,7 +153,7 @@ class CurrLTWindow(SiriusMainWindow):
         self._curve_lifetimedcct = self.graph.curveAtIndex(2)
         self.graph.fill_curve_with_archdata(
             self._curve_lifetimedcct, self.device_prefix+':Lifetime-Mon',
-            t_init=t_init, t_end=t_end, factor=3600)
+            t_init=t_init_iso, t_end=t_end_iso, factor=3600)
 
         self.graph.addYChannel(
             y_channel='FAKE:LifetimeBPM', axis='right', name='Lifetime',
@@ -162,7 +161,7 @@ class CurrLTWindow(SiriusMainWindow):
         self._curve_lifetimebpm = self.graph.curveAtIndex(3)
         self.graph.fill_curve_with_archdata(
             self._curve_lifetimebpm, self.device_prefix+':LifetimeBPM-Mon',
-            t_init=t_init, t_end=t_end, factor=3600)
+            t_init=t_init_iso, t_end=t_end_iso, factor=3600)
 
         self.lifetime_dcct_pv.new_value_signal[float].connect(
             self._update_graph)

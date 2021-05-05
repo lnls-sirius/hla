@@ -1,4 +1,5 @@
-from datetime import datetime as _datetime, timedelta as _timedelta
+"""Charge Monitor."""
+
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QLabel, QCheckBox, QPushButton, \
     QVBoxLayout, QGridLayout, QApplication
@@ -39,7 +40,7 @@ class BOMonitor(SiriusMainWindow):
 
         # timeplot
         self.timeplot = SiriusTimePlot(parent=self, background='w')
-        timespan = 3600*6
+        timespan = 60*60*6
         colors = ['blue', 'red', 'green', 'magenta']
         self.timeplot.timeSpan = timespan  # [s]
         self.timeplot.bufferSize = 2*timespan  # [2 samples/s]
@@ -50,10 +51,8 @@ class BOMonitor(SiriusMainWindow):
         self.timeplot.setObjectName('timeplot')
         self.timeplot.setStyleSheet(
             '#timeplot{min-width:28em; min-height: 18em;}')
-        t_end = Time(datetime=_datetime.now())
-        t_init = Time(datetime=t_end - _timedelta(hours=6))
-        t_end = t_end.get_iso8601()
-        t_init = t_init.get_iso8601()
+        t_end = Time.now()
+        t_init = t_end - timespan
 
         self._channels = dict()
         self._curves = dict()
@@ -77,7 +76,8 @@ class BOMonitor(SiriusMainWindow):
             curve = self.timeplot.curveAtIndex(-1)
             self._curves[e] = curve
             self.timeplot.fill_curve_with_archdata(
-                self._curves[e], pvname, t_init=t_init, t_end=t_end)
+                self._curves[e], pvname,
+                t_init=t_init.get_iso8601(), t_end=t_end.get_iso8601())
 
             cb = QCheckBox(e)
             cb.setChecked(True)
