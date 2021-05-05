@@ -48,6 +48,7 @@ setup(
         'scripts/sirius-hla-as-ap-energybutton.py',
         'scripts/sirius-hla-as-ap-injection.py',
         'scripts/sirius-hla-as-ap-launcher.py',
+        'scripts/sirius-hla-as-ap-macreport.py',
         'scripts/sirius-hla-as-ap-magoffconv.py',
         'scripts/sirius-hla-as-ap-monitor.py',
         'scripts/sirius-hla-as-ap-pvsconfigs.py',

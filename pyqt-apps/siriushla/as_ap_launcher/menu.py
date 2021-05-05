@@ -135,6 +135,9 @@ def get_object(ismenubar=True, parent=None):
             chart = LEVEL2A('TimeChart', menu)
             self.connect_newprocess(chart, 'timechart')
             self.add_object_to_level1(menu, chart)
+            macreport = LEVEL2A('Machine Reports', menu)
+            self.connect_newprocess(macreport, 'sirius-hla-as-ap-macreport.py')
+            self.add_object_to_level1(menu, macreport)
             return menu
 
         def _create_as_menu(self):
