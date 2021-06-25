@@ -10,6 +10,7 @@ from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox, PyDMLineEdit
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 
 from ..widgets import PyDMStateButton
+from .util import set_bbb_color
 
 
 class BbBDriveSettingsWidget(QWidget):
@@ -19,6 +20,7 @@ class BbBDriveSettingsWidget(QWidget):
         """Init."""
         super().__init__(parent)
         self.setObjectName('SIApp')
+        set_bbb_color(self, device)
         self._prefix = prefix
         self._device = device
         self.dev_pref = prefix + device

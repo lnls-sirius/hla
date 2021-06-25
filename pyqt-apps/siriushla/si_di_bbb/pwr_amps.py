@@ -13,6 +13,7 @@ from ..widgets import PyDMStateButton, SiriusLedState, SiriusSpinbox, \
     SiriusLabel, PyDMLed, SiriusPushButton
 
 from .custom_widgets import MyScaleIndicator
+from .util import set_bbb_color
 
 
 class BbBPwrAmpsWidget(QWidget):
@@ -22,6 +23,7 @@ class BbBPwrAmpsWidget(QWidget):
         """Init."""
         super().__init__(parent)
         self.setObjectName('SIApp')
+        set_bbb_color(self, device)
         self._prefix = prefix
         self._device = device
         self.dev_pref = prefix + device

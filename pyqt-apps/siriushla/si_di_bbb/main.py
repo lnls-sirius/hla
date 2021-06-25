@@ -13,6 +13,7 @@ from ..widgets.windows import create_window_from_widget
 from .bbb import BbBMainSettingsWidget
 from .util import get_bbb_icon
 from .gpio import BbBGPIOWidget
+from .util import set_bbb_color
 
 
 class BbBMainWindow(SiriusMainWindow):
