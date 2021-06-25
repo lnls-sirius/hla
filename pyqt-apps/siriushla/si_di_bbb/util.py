@@ -28,4 +28,4 @@ def set_bbb_color(obj, device):
     elif device.endswith('V'):
         obj.setStyleSheet('background-color:#ffb3b3')
     else:
-        obj.setStyleSheet('background-color:#b3ffb3')
+        obj.setStyleSheet('background-color:#f5f5f0')
