@@ -19,3 +19,13 @@ def get_bbb_icon():
             dict(scale_factor=0.3, offset=(+0.30, +0.20), color=clr),
         ])
     return icon
+
+
+def set_bbb_color(obj, device):
+    """."""
+    if device.endswith('H'):
+        obj.setStyleSheet('background-color:#b3e5ff')
+    elif device.endswith('V'):
+        obj.setStyleSheet('background-color:#ffb3b3')
+    else:
+        obj.setStyleSheet('background-color:#f5f5f0')

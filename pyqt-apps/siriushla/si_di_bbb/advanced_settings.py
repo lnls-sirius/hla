@@ -9,6 +9,7 @@ from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from ..widgets import SiriusFrame
 
 from .custom_widgets import MyScaleIndicator
+from .util import set_bbb_color
 
 
 class BbBAdvancedSettingsWidget(QWidget):
@@ -18,6 +19,7 @@ class BbBAdvancedSettingsWidget(QWidget):
         """Init."""
         super().__init__(parent)
         self.setObjectName('SIApp')
+        set_bbb_color(self, device)
         self.prefix = prefix
         self.device = device
         self._setupUi()

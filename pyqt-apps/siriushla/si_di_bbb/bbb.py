@@ -21,7 +21,7 @@ from .masks import BbBMasksWidget
 from .drive import BbBDriveSettingsWidget
 from .environment import BbBEnvironmMonWidget
 from .timing import BbBTimingWidget
-from .util import get_bbb_icon
+from .util import get_bbb_icon, set_bbb_color
 
 
 class BbBControlWindow(SiriusMainWindow):
@@ -40,7 +40,7 @@ class BbBControlWindow(SiriusMainWindow):
 
     def _setupUi(self):
         label = QLabel(
-            '<h3>'+self.device+' Control Window</h3>', self,
+            '<h1>'+self.device+'</h1>', self,
             alignment=Qt.AlignCenter)
 
         main_wid = BbBMainSettingsWidget(
@@ -59,6 +59,7 @@ class BbBControlWindow(SiriusMainWindow):
 
         tab = DetachableTabWidget(self)
         tab.setObjectName('SITab')
+        set_bbb_color(tab, self.device)
         tab.addTab(main_wid, 'Main')
         tab.addTab(sram_wid, 'SRAM')
         tab.addTab(bram_wid, 'BRAM')
@@ -87,6 +88,7 @@ class BbBMainSettingsWidget(QWidget):
         """Init."""
         super().__init__(parent)
         self.setObjectName('SIApp')
+        set_bbb_color(self, device)
         self._prefix = prefix
         self._device = device
         self.dev_pref = prefix + device

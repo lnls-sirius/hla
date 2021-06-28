@@ -13,6 +13,7 @@ from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from ..widgets import SiriusFrame, PyDMStateButton, SiriusLedState
 
 from .custom_widgets import WfmGraph
+from .util import set_bbb_color
 
 
 class _BbBAcqBase(QWidget):
@@ -24,6 +25,7 @@ class _BbBAcqBase(QWidget):
         """Init."""
         super().__init__(parent)
         self.setObjectName('SIApp')
+        set_bbb_color(self, device)
         self._prefix = prefix
         self._device = device
         self.dev_pref = prefix + device
@@ -356,6 +358,7 @@ class BbBAcqSB(QWidget):
         """Init."""
         super().__init__(parent)
         self.setObjectName('SIApp')
+        set_bbb_color(self, device)
         self._prefix = prefix
         self._device = device
         self.dev_pref = prefix + device

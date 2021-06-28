@@ -7,6 +7,7 @@ from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QSpacerItem
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 
 from .custom_widgets import WfmGraph
+from .util import set_bbb_color
 
 
 class BbBMasksWidget(QWidget):
@@ -16,6 +17,7 @@ class BbBMasksWidget(QWidget):
         """Init."""
         super().__init__(parent)
         self.setObjectName('SIApp')
+        set_bbb_color(self, device)
         self._prefix = prefix
         self._device = device
         self.dev_pref = prefix + device
