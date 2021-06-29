@@ -87,7 +87,6 @@ class BbBMainSettingsWidget(QWidget):
                  resume=True):
         """Init."""
         super().__init__(parent)
-        self.setObjectName('SIApp')
         set_bbb_color(self, device)
         self._prefix = prefix
         self._device = device
@@ -123,15 +122,18 @@ class BbBMainSettingsWidget(QWidget):
             hbox_label.setStretch(1, 10)
             hbox_label.setStretch(2, 1)
 
-            gbox = QGroupBox(self)
-            lay_box = QGridLayout(gbox)
+            wid = QWidget(self)
+            wid.setObjectName('box')
+            wid.setStyleSheet("""
+                #box{border: 2px solid gray;}""")
+            lay_box = QGridLayout(wid)
             lay_box.setVerticalSpacing(15)
             lay_box.addLayout(hbox_label, 0, 0)
             lay_box.addWidget(fbsett_wid, 1, 0)
             lay_box.addWidget(status_wid, 2, 0)
 
             lay.setContentsMargins(0, 0, 0, 0)
-            lay.addWidget(gbox)
+            lay.addWidget(wid)
         else:
             info_wid = BbBInfoWidget(self, self._prefix, self._device)
             lay.addWidget(fbsett_wid, 0, 1)
@@ -231,7 +233,9 @@ class BbBStatusWidget(QWidget):
                  resume=False):
         """Init."""
         super().__init__(parent)
-        self.setObjectName('SIApp')
+        if parent.isWindow():
+            set_bbb_color(parent, device)
+        set_bbb_color(self, device)
         self._prefix = prefix
         self._device = device
         self.dev_pref = prefix + device
@@ -318,7 +322,7 @@ class BbBInfoWidget(QGroupBox):
     def __init__(self, parent=None, prefix=_vaca_prefix, device=''):
         """Init."""
         super().__init__(parent)
-        self.setObjectName('SIApp')
+        set_bbb_color(self, device)
         self._prefix = prefix
         self._device = device
         self.dev_pref = prefix + device
