@@ -326,7 +326,8 @@ class TuneControls(QWidget):
                     util.connect_window(
                         pb_m, SITuneMarkerDetails, self,
                         prefix=self.prefix, orientation=self.orientation,
-                        index=i, background=self.background)
+                        index=i, background=self.background,
+                        isdelta=bool(mtyp))
                     grid_markers.addWidget(pb_m, i, 0)
                     grid_markers.addWidget(
                         bt_enbl, i, 1, alignment=Qt.AlignRight)
