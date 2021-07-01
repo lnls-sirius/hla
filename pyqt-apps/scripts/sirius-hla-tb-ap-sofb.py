@@ -1,6 +1,6 @@
 #!/usr/bin/env python-sirius
 
-"""TB SOFB Application."""
+"""TB TOCA Application."""
 
 import sys
 import argparse as _argparse
@@ -15,7 +15,7 @@ from siriushla.as_ap_sofb.graphics import ShowMatrixWidget
 from siriuspy.envars import VACA_PREFIX
 
 
-parser = _argparse.ArgumentParser(description="Run SOFB HLA Interface.")
+parser = _argparse.ArgumentParser(description="Run TOCA HLA Interface.")
 parser.add_argument(
     '-p', "--prefix", type=str, default=VACA_PREFIX,
     help="Define the prefix for the PVs in the window.")

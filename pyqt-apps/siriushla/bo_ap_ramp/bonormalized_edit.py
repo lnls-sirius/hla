@@ -191,8 +191,8 @@ class BONormEdit(SiriusMainWindow):
         return gbox
 
     def _setupOrbitWidget(self):
-        self.bt_get_kicks = QPushButton('Get Kicks from SOFB', self)
-        self.bt_get_kicks.clicked.connect(self._handleGetKicksFromSOFB)
+        self.bt_get_kicks = QPushButton('Get Kicks from TOCA', self)
+        self.bt_get_kicks.clicked.connect(self._handleGetKicksFromTOCA)
 
         label_correctH = QLabel('Correct H', self,
                                 alignment=Qt.AlignRight | Qt.AlignVCenter)
@@ -426,7 +426,7 @@ class BONormEdit(SiriusMainWindow):
             self.norm_config[psname] = self._reference[psname] + \
                 dkick*corr_factor
 
-    def _handleGetKicksFromSOFB(self):
+    def _handleGetKicksFromTOCA(self):
         if not self._conn_sofb.connected:
             QMessageBox.warning(
                 self, 'Not Connected',
@@ -437,7 +437,7 @@ class BONormEdit(SiriusMainWindow):
         if not dkicks:
             QMessageBox.warning(
                 self, 'Could not get kicks',
-                'Could not get kicks from SOFB!', QMessageBox.Ok)
+                'Could not get kicks from TOCA!', QMessageBox.Ok)
             return
 
         self._deltas['kicks'] = dkicks

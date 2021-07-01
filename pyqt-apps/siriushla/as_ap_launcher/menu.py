@@ -367,7 +367,7 @@ def get_object(ismenubar=True, parent=None):
                     injbo, 'sirius-hla-bo-ap-injcontrol.py')
                 optics.addAction(injbo)
 
-            sofb = QAction('SOFB', optics)
+            sofb = QAction('TOCA', optics)
             sofb.setIcon(qta.icon('fa5s.hammer'))
             self.connect_newprocess(sofb, 'sirius-hla-'+sec+'-ap-sofb.py')
             optics.addAction(sofb)

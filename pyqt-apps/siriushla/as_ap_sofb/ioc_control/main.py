@@ -109,7 +109,7 @@ class SOFBControl(BaseWidget):
         hbl.addWidget(conf)
         orb_wid.layout().addItem(hbl, 0, 0, 1, 2)
 
-        lbl = QLabel('SOFB Mode', orb_wid)
+        lbl = QLabel('TOCA Mode', orb_wid)
         wid = self.create_pair_sel(orb_wid, 'SOFBMode')
         orb_wid.layout().addWidget(lbl, 1, 0, alignment=Qt.AlignVCenter)
         orb_wid.layout().addWidget(wid, 1, 1)

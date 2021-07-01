@@ -106,7 +106,7 @@ class Settings(QMenuBar):
         self.act_pm.setIcon(qta.icon('mdi.current-ac'))
         util.connect_newprocess(
             self.act_pm, 'sirius-hla-bo-pu-control.py', parent=self)
-        self.act_sofb = self.open_menu.addAction('SOFB')
+        self.act_sofb = self.open_menu.addAction('TOCA')
         self.act_sofb.setIcon(qta.icon('fa5s.hammer'))
         util.connect_newprocess(
             self.act_sofb, 'sirius-hla-bo-ap-sofb.py', parent=self)

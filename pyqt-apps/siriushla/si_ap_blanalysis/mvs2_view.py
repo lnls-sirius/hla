@@ -85,7 +85,7 @@ class BeamLineMVS2View(SiriusMainWindow):
         lay_ctrl.addWidget(self._sb_tgty, 6, 1)
         lay_ctrl.addWidget(self._lb_tgty, 7, 1)
 
-        gbox_sofb = QGroupBox('SOFB Bump [urad]')
+        gbox_sofb = QGroupBox('TOCA Bump [urad]')
         lay_sofb = QGridLayout(gbox_sofb)
 
         ldx = QLabel('X:')
@@ -102,7 +102,7 @@ class BeamLineMVS2View(SiriusMainWindow):
             init_channel=pre+':ApplyBump-Cmd')
         pb_app.showConfirmDialog = True
         pb_app.confirmMessage = \
-            'This action will change the reference orbit used in SOFB.\n' +\
+            'This action will change the reference orbit used in TOCA.\n' +\
             pb_app.confirmMessage
         lb_app = PyDMLabel(
             gbox_sofb, init_channel=pre+':ApplyStatus-Mon')

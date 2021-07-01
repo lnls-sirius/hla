@@ -43,7 +43,7 @@ class MainWindow(SiriusMainWindow):
 
     def setupui(self):
         self.setWindowModality(Qt.WindowModal)
-        self.setWindowTitle(self.acc + " - SOFB")
+        self.setWindowTitle(self.acc + " - TOCA")
         self.setDocumentMode(False)
         self.setDockNestingEnabled(True)
 
@@ -132,7 +132,7 @@ class MainWindow(SiriusMainWindow):
 
         menuopen = QMenu('Open', menubar)
         actions = (
-            ("&SOFB Control", "SOFB Control", '', True, self.sofb_control),
+            ("&TOCA Control", "TOCA Control", '', True, self.sofb_control),
             ("IOC &Log", "IOC Log", '', True, self.ioc_log),
             ("&Registers", "Orbit Registers", '', True, self.orbit_regist))
         self.setMenuBar(menubar)

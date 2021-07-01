@@ -40,10 +40,10 @@ class TLControlWindow(BaseWindow):
         util.connect_newprocess(
             PU, 'sirius-hla-'+self.tl+'-pu-control.py', parent=self)
         self.menu.addAction(PU)
-        SOFB = QAction("SOFB", self)
+        TOCA = QAction("TOCA", self)
         util.connect_newprocess(
-            SOFB, 'sirius-hla-'+self.tl+'-ap-sofb.py', parent=self)
-        self.menu.addAction(SOFB)
+            TOCA, 'sirius-hla-'+self.tl+'-ap-sofb.py', parent=self)
+        self.menu.addAction(TOCA)
         ICTs = QAction("ICTs", self)
         util.connect_newprocess(
             ICTs, 'sirius-hla-'+self.tl+'-di-icts.py', parent=self)

@@ -82,7 +82,7 @@ class SIGenStatusWindow(SiriusMainWindow):
             'min-width:2em; min-height:2em;')
         self._led_sofbloop.offColor = SiriusLedState.Red
         self._gbox_sofbloop = self._create_groupbox(
-            'SOFB Loop', self._led_sofbloop)
+            'TOCA Loop', self._led_sofbloop)
 
         bbbdev_pref = 'SI-Glob:DI-BbBProc-L'
         self._led_bbbloop = SiriusLedState(
